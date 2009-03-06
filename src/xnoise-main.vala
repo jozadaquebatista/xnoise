@@ -27,8 +27,9 @@ public class Xnoise.Main : GLib.Object {
 	private static Main _instance;
 
 	public Main() {
-		DbWriter dbb = new DbWriter();
-		dbb.check_db_and_tables_exist();
+		var dbb = new DbWriter();
+//		dbb.check_db_and_tables_exist(); //TODO put this into constructor
+//		dbb = null;
 
 		gPl = new GstPlayer();
 
@@ -37,7 +38,7 @@ public class Xnoise.Main : GLib.Object {
 		connect_signals();
 
 		Parameter paramter = Parameter.instance(); 
-		paramter.read_from_file(); 
+		paramter.read_from_file();
 	}
 
 	private void connect_signals() {

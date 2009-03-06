@@ -21,9 +21,9 @@
 
 using GLib;
 
-public class Xnoise.Parameter : GLib.Object, IConfigure {
+public class Xnoise.Parameter : GLib.Object, IParameter {
 	private static Parameter _instance;
-	private SList<IConfigure> IConfigure_implementors;
+	private SList<IParameter> IParameter_implementors;
 	public int posX         { get; set; default = 300;}
 	public int posY         { get; set; default = 300;}
 	public int winWidth     { get; set; default = 1000;}
@@ -31,7 +31,7 @@ public class Xnoise.Parameter : GLib.Object, IConfigure {
 	public bool winMaxed    { get; set; default = false;}
 
 	public Parameter() {
-			IConfigure_implementors = new GLib.SList<IConfigure>();
+			IParameter_implementors = new GLib.SList<IParameter>();
 			data_register(this);
 	}
 
@@ -42,12 +42,12 @@ public class Xnoise.Parameter : GLib.Object, IConfigure {
 
 	private string _build_file_name() {
 		_create_file_folder();
-		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise/xnoise.conf", null);
+		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise/xnoise.ini", null);
 	}
 
 	private void _create_file_folder() { 
 		string SettingsFolder = GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", null);
-		string SettingsKeyFile = GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise/xnoise.conf", null);
+		string SettingsKeyFile = GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise/xnoise.ini", null);
 		if (FileUtils.test(SettingsFolder, FileTest.EXISTS) == false) {
 			DirUtils.create(SettingsFolder, 0700);
 		}
@@ -56,9 +56,9 @@ public class Xnoise.Parameter : GLib.Object, IConfigure {
 		}
 	}
 
-	public void data_register(IConfigure obj) {
-		IConfigure_implementors.remove(obj);
-		IConfigure_implementors.append(obj);
+	public void data_register(IParameter obj) {
+		IParameter_implementors.remove(obj);
+		IParameter_implementors.append(obj);
 	}
 
 	public void read_from_file() {
@@ -70,7 +70,7 @@ public class Xnoise.Parameter : GLib.Object, IConfigure {
 		} catch (GLib.Error ex) {
 			return;
 		}
-		foreach(weak IConfigure c in IConfigure_implementors) {
+		foreach(weak IParameter c in IParameter_implementors) {
 			try {
 				c.read_data(file);
 			} 
@@ -83,7 +83,7 @@ public class Xnoise.Parameter : GLib.Object, IConfigure {
 		FileStream stream = GLib.FileStream.open(_build_file_name(), "w");
 		uint length;
 		KeyFile file = new GLib.KeyFile();
-		foreach (weak IConfigure c in IConfigure_implementors) {
+		foreach (weak IParameter c in IParameter_implementors) {
 			c.write_data(file);
 		}
 		stream.puts(file.to_data(out length));

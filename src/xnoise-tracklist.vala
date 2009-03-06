@@ -23,7 +23,7 @@ using GLib;
 using Gtk;
 using Gdk;
 
-public class Xnoise.TrackList : TreeView, IConfigure {
+public class Xnoise.TrackList : TreeView, IParameter {
 	private const TargetEntry[] target_list = {
 		{"text/uri-list", 0, 0}
 	};

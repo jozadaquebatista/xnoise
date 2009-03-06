@@ -60,7 +60,7 @@ public enum Xnoise.Direction {
 
 
 
-public interface Xnoise.IConfigure : GLib.Object {
+public interface Xnoise.IParameter : GLib.Object {
 		public abstract void read_data(KeyFile file) throws KeyFileError;
 		public abstract void write_data(KeyFile file);
 }

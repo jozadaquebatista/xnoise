@@ -22,7 +22,7 @@
 using GLib;
 using Gtk;
 
-public class Xnoise.MainWindow : Gtk.Builder, IConfigure {
+public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	private const string MAIN_UI_FILE = Config.DATADIR + "/ui/main_window.ui";
 	private Label song_title_label;
 	private bool _seek;
@@ -473,8 +473,12 @@ public class Xnoise.MainWindow : Gtk.Builder, IConfigure {
 			}
 		
 			hp_position = file.get_integer("settings", "hp_position");
-			if (wi > 0 && he > 0) {
+
+			if (hp_position>0) {
 				this.hpaned.set_position(hp_position);
+			}
+			else {
+				this.hpaned.set_position(100);
 			}
 		}
 

@@ -61,15 +61,17 @@ public class Xnoise.DbWriter : GLib.Object {
 		DATABASE = dbFileName();
 //		make_pattern_spec();
 		if(Database.open(DATABASE, out db)!=Sqlite.OK) { 
-			stderr.printf("Can't open database: %s\n", (string)db.errmsg);
+			stderr.printf("Db Writer: %s %d\n", (string)db.errmsg(), db.errcode());
 		}
 		//TODO: check for db existance
 		this.prepare_statements();
+		//create tables if they do not exist
+		this.check_db_and_tables_exist();
 	}
 
-//	~DbWriter() {
-//		print("destruct dbWriter class\n");
-//	}
+	~DbWriter() {
+		print("destruct dbWriter class\n");
+	}
 
 	private Sqlite.Database db;
 
@@ -188,7 +190,6 @@ public class Xnoise.DbWriter : GLib.Object {
 //			//get mime information
 //			string content_type = info.get_content_type ();
 //			weak string mime = g_content_type_get_mime_type(content_type);
-
 //			if(filetype == FileType.DIRECTORY) {
 //				this.import_tags_for_files(file);
 //			} 
@@ -257,21 +258,23 @@ public class Xnoise.DbWriter : GLib.Object {
 		int rc2 = 0;
 		int rc3 = 0;
 		weak string[] resultArray;
-		string errmsg;
+		string errmsg = null;
 
-		//Check for Table existance
-		current_query = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
-		rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-		if (rc1 != Sqlite.OK) { 
-			stderr.printf("SQL error: %s\n", errmsg);
-			return;
-		}
+		if(FileUtils.test(DATABASE, FileTest.EXISTS)) {
+			//Check for Table existance
+			current_query = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
+			rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
+			if (rc1 != Sqlite.OK) { 
+				stderr.printf("SQL error: %s\n", errmsg);
+				return;
+			}
 
-		//search main table
-		for (int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
-			for (int j = offset*ncolumn; j< (offset+1)*ncolumn;j++) {
-				if (resultArray[j]=="mlib") {
-					db_table_exists = true;
+			//search main table
+			for(int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
+				for(int j = offset*ncolumn; j< (offset+1)*ncolumn;j++) {
+					if(resultArray[j]=="mlib") {
+						db_table_exists = true;
+					}
 				}
 			}
 		}
