@@ -253,7 +253,7 @@ public class Xnoise.DbWriter : GLib.Object {
 				this.import_tags_for_files(file);
 			} 
 			else if(psAudio.match_string(mime)) {
-			stderr.printf("mime %s\n", mime);
+//			stderr.printf("mime %s\n", mime);
 //			else if((mime == "audio/x-vorbis+ogg")|
 //			         (mime == "audio/mpeg")|
 //			         (mime == "audio/x-wav")|
