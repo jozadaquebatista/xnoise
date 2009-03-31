@@ -27,9 +27,8 @@ public class Xnoise.Main : GLib.Object {
 	private static Main _instance;
 
 	public Main() {
-		var dbb = new DbWriter();
-//		dbb.check_db_and_tables_exist(); //TODO put this into constructor
-//		dbb = null;
+		DbWriter dbb = new DbWriter();
+		dbb.check_db_and_tables_exist();
 
 		gPl = new GstPlayer();
 
@@ -37,8 +36,8 @@ public class Xnoise.Main : GLib.Object {
 
 		connect_signals();
 
-		Parameter paramter = Parameter.instance(); 
-		paramter.read_from_file();
+		Params paramter = Params.instance(); 
+		paramter.read_from_file(); 
 	}
 
 	private void connect_signals() {
@@ -56,8 +55,8 @@ public class Xnoise.Main : GLib.Object {
 			main_window.songProgressBar.set_text("00:00 / 00:00");;
 		};
 		gPl.sign_uri_changed += (s, uri) => {
-			main_window.set_displayed_title(uri); //TODO: maybe change this to a gst triggered 
-			                                      //      version so also streams can be handled
+			main_window.set_displayed_title(uri); //TODO: maybe change this to a gst parsed 
+			                                      //      version so also streams will be handled right
 		};
 //		gPl.sign_state_changed += (s, newstate) => {
 //			switch(newstate) {
@@ -121,7 +120,7 @@ public class Xnoise.Main : GLib.Object {
 	public void quit() {
 		this.gPl.stop();
 		this.save_tracklist(); //TODO: use uris? restore!
-		Parameter.instance().write_to_file();
+		Params.instance().write_to_file();
 		print ("closing...\n");
 		Gtk.main_quit();
 	}

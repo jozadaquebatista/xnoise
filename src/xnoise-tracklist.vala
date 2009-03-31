@@ -147,7 +147,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		return rightmenu;
 	}
 
-////REGION IConfigurable
+////REGION IParameter
 	//TODO: do column width ? maybe via cellrenderer width
 	public void read_data(KeyFile file) throws KeyFileError {
 //		weak TreeViewColumn tvc = this.get_column(TrackListColumn.TITLE);
@@ -160,7 +160,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 //		title_width = tvc.width;
 //		file.set_integer("settings", "title_width", title_width);
 	}
-////END REGION IConfigurable
+////END REGION IParameter
 
     public bool on_button_release(TrackList sender, Gdk.EventButton e) {
 		//Called when a button is released
@@ -187,9 +187,9 @@ public class Xnoise.TrackList : TreeView, IParameter {
     
 	public bool on_drag_motion(TrackList sender, Gdk.DragContext context, int x, int y, uint timestamp) {
 		Gtk.TreePath path;
-		Gtk.TreeViewDropPosition position;
-		if(!(this.get_dest_row_at_pos(x, y, out path, out position))) return false;
-        this.set_drag_dest_row(path, position);
+		Gtk.TreeViewDropPosition pos;
+		if(!(this.get_dest_row_at_pos(x, y, out path, out pos))) return false;
+        this.set_drag_dest_row(path, pos);
 		return true; 
     }	
 
@@ -231,7 +231,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		GLib.Value uri;
 		List<weak TreePath> paths;
 		weak Gtk.TreeSelection sel;
-		string[] uris;
+		string[] uris; //TODO: = new string[0] od. neuw {}
 
 		sel = this.get_selection();
 		paths = sel.get_selected_rows(null);
@@ -277,12 +277,12 @@ public class Xnoise.TrackList : TreeView, IParameter {
 			if(path!=null) {
 				//TODO:check if drop position is selected
 				drop_rowref = new TreeRowReference(this.model, path);
-				if (drop_rowref == null || !drop_rowref.valid()) return;
+				if(drop_rowref == null || !drop_rowref.valid()) return;
 			}
 			else {
 				get_last_unselected_path(ref path);
 				drop_rowref = new TreeRowReference(this.model, path);
-				if (drop_rowref == null || !drop_rowref.valid()) {
+				if(drop_rowref == null || !drop_rowref.valid()) {
 					return;
 				}
 			}
@@ -347,18 +347,21 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		if(GLib.FileUtils.test(file, GLib.FileTest.IS_REGULAR)) {
 			DbBrowser dbBr = new DbBrowser();
 			string artist, album, title;
-			if(dbBr.path_is_in_db(file)) {
-				string[] val = dbBr.get_trackdata_for_path(file);
-				artist = val[0];
-				album = val[1];
-				title = val[2];
+			uint tracknumb;
+			if(dbBr.uri_is_in_db(file)) {
+				TrackData val  = dbBr.get_trackdata_for_path(file);
+				artist         = val.Artist;
+				album          = val.Album;
+				title          = val.Title ;
+				tracknumb      = val.Tracknumber; 
 			}
 			else {
 				var tr = new TagReader();
-				string[] tags = tr.read_tag_from_file(file);
-				artist = Markup.printf_escaped("%s", tags[TagReaderField.ARTIST]); //TODO: check if the markup shall be handled elsewhere
-				album  = Markup.printf_escaped("%s", tags[TagReaderField.ALBUM]); 
-				title  = Markup.printf_escaped("%s", tags[TagReaderField.TITLE]); 
+				TrackData tags = tr.read_tag_from_file(file);
+				artist         = Markup.printf_escaped("%s", tags.Artist); 
+				album          = Markup.printf_escaped("%s", tags.Album); 
+				title          = Markup.printf_escaped("%s", tags.Title); 
+				tracknumb      = tags.Tracknumber;
 			}
 			TreeIter first_iter;
 			if(!this.model.get_iter_first(out first_iter)) { 
@@ -381,8 +384,13 @@ public class Xnoise.TrackList : TreeView, IParameter {
 					this.model.insert_after(out new_iter, iter);
 				}
 			}
+			string tracknumberString = null;
+			if(!(tracknumb==0)) {
+				tracknumberString = "%u".printf(tracknumb);
+			}
 			model.set(new_iter,
 				TrackListColumn.STATE, TrackStatus.STOPPED,
+				TrackListColumn.TRACKNUMBER, tracknumberString,
 				TrackListColumn.TITLE, title,
 				TrackListColumn.ALBUM, album,
 				TrackListColumn.ARTIST, artist,
@@ -444,12 +452,17 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		return true; 
 	}
 
-	public TreeIter insert_title(int status = 0, Gdk.Pixbuf? pixbuf, string title, string album, string artist, string uri) {
+	public TreeIter insert_title(int status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri) {
 		TreeIter iter;
+		string tracknumberString = null;;
 		model.append(out iter);
+		if(!(tracknumber==0)) {
+			tracknumberString = "%d".printf(tracknumber);
+		}
 		model.set(iter,
 			TrackListColumn.STATE, status,
 			TrackListColumn.ICON, pixbuf,
+			TrackListColumn.TRACKNUMBER, tracknumberString,
 			TrackListColumn.TITLE, title,
 			TrackListColumn.ALBUM, album,
 			TrackListColumn.ARTIST, artist,
@@ -729,26 +742,29 @@ public class Xnoise.TrackList : TreeView, IParameter {
 	}
 
 	private void create_view() {	
-		Gtk.TreeViewColumn columnStatus, columnPixb, columnArtist, columnAlbum, columnTitle, columnUri;
+		Gtk.TreeViewColumn columnStatus, columnPixb, columnArtist, columnAlbum, columnTitle, columnUri, columnTracknumber;
 	
-		columnPixb 	 = new TreeViewColumn();
-		columnStatus = new TreeViewColumn();
-		columnArtist = new TreeViewColumn();
-		columnAlbum  = new TreeViewColumn();
-		columnTitle  = new TreeViewColumn();
-		columnUri    = new TreeViewColumn();
+		columnPixb 	      = new TreeViewColumn();
+		columnStatus      = new TreeViewColumn();
+		columnTracknumber = new TreeViewColumn();
+		columnArtist      = new TreeViewColumn();
+		columnAlbum       = new TreeViewColumn();
+		columnTitle       = new TreeViewColumn();
+		columnUri         = new TreeViewColumn();
 
-		columnPixb.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-		columnStatus.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-		columnArtist.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-		columnAlbum.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-		columnTitle.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-		columnUri.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+//		columnPixb.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+//		columnStatus.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+//		columnTracknumber.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+//		columnArtist.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+//		columnAlbum.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+//		columnTitle.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+//		columnUri.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
 
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.set_fixed_size(-1,22); //TODO: Automatically determine height; maybe automatically set width once when adding songs
 		var renderer = new CellRendererText();
-		renderer.set_fixed_size(-1,22);
+//		renderer.set_fixed_size(-1,22);
+		renderer.set_fixed_height_from_font(1);
 
 		columnStatus.pack_start(renderer, false);
 		columnStatus.title = "Status";
@@ -760,24 +776,34 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		columnPixb.min_width = 30;
 		this.insert_column(columnPixb, -1);
 
+		columnTracknumber.pack_start(renderer, false);
+		columnTracknumber.add_attribute(renderer, "markup", TrackListColumn.TRACKNUMBER);
+		columnTracknumber.title = "#";
+		columnTracknumber.min_width = 30; 
+		columnTracknumber.resizable = false;
+		this.insert_column(columnTracknumber, -1);
+		
 		columnTitle.pack_start(renderer, false);
 		columnTitle.add_attribute(renderer, "markup", TrackListColumn.TITLE);
 		columnTitle.title = "Title";
-		columnTitle.min_width = 300; //TODO: is it possible to set the min width via number of characters for the used font?
+		columnTitle.min_width = 100; //TODO: is it possible to set the min width via number of characters for the used font?
+		columnTitle.sizing = Gtk.TreeViewColumnSizing.AUTOSIZE;
 		columnTitle.resizable = true;
 		this.insert_column(columnTitle, -1);
 
 		columnAlbum.pack_start(renderer, false);
 		columnAlbum.add_attribute(renderer, "markup", TrackListColumn.ALBUM);
 		columnAlbum.title = "Album";
-		columnAlbum.min_width = 300;
+		columnAlbum.min_width = 100;
+		columnAlbum.sizing = Gtk.TreeViewColumnSizing.AUTOSIZE;
 		columnAlbum.resizable = true;
 		this.insert_column(columnAlbum, -1);
 
 		columnArtist.pack_start(renderer, false);
 		columnArtist.add_attribute(renderer, "markup", TrackListColumn.ARTIST);
 		columnArtist.title = "Artist";
-		columnArtist.min_width = 300;
+		columnArtist.min_width = 100;
+		columnArtist.sizing = Gtk.TreeViewColumnSizing.AUTOSIZE;
 		columnArtist.resizable = true;
 		this.insert_column(columnArtist, -1);
 
@@ -788,7 +814,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 	}
 	
 	private void create_model() {	// DATA
-		model = new ListStore(6, typeof(int), typeof(Gdk.Pixbuf), typeof(string), typeof(string), typeof(string), typeof(string));
+		model = new ListStore(7, typeof(int), typeof(Gdk.Pixbuf), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
 		this.set_model(model); 
 	}
 }

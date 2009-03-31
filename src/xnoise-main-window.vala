@@ -48,7 +48,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		
 	public MainWindow() {
 		create_widgets();
-		Parameter paramter = Parameter.instance();
+		Params paramter = Params.instance();
 		paramter.data_register(this);
 		add_lastused_titles_to_tracklist();
 //		this.sign_volume_changed += volume_slide_changed;
@@ -160,7 +160,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			
 			///MusicBrowser (left)
 			this.musicBr = new MusicBrowser();
-			this.musicBr.set_size_request(800,300);
+			this.musicBr.set_size_request(300,300);
 			var musicBrScrollWin = this.get_object("scroll_music_br") as Gtk.ScrolledWindow;
 			musicBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
 			musicBrScrollWin.add(this.musicBr);
@@ -423,42 +423,44 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 //		}
 //	}
 
-	public void add_uris_to_tracklist(string[]? paths) {
-		if(paths!=null) {
-			if(paths[0]==null) return;
+	public void add_uris_to_tracklist(string[]? uris) {
+		if(uris!=null) {
+			if(uris[0]==null) return;
 			int i = 0;
 			TreeIter iter, iter_2;
 			trackList.reset_play_status_for_title();				
-			foreach(string path in paths) {
+			foreach(string uri in uris) {
 				TagReader tr = new TagReader();
-				string[] t = tr.read_tag_from_file(path);
+				TrackData t = tr.read_tag_from_file(uri);
 				if (i==0) {
 					iter = trackList.insert_title(TrackStatus.PLAYING, 
 					                              null, 
-					                              t[TagReaderField.TITLE], 
-					                              t[TagReaderField.ALBUM], 
-					                              t[TagReaderField.ARTIST], 
-					                              GLib.Filename.to_uri(path));
+					                              (int)t.Tracknumber,
+					                              t.Title, 
+					                              t.Album, 
+					                              t.Artist, 
+					                              uri);
 					trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
 					iter_2 = iter;
 				}
 				else {
 					iter = trackList.insert_title(TrackStatus.STOPPED, 
 					                              null, 
-					                              t[TagReaderField.TITLE], 
-					                              t[TagReaderField.ALBUM], 
-					                              t[TagReaderField.ARTIST], 
-					                              GLib.Filename.to_uri(path));	
+					                              (int)t.Tracknumber,
+					                              t.Title, 
+					                              t.Album, 
+					                              t.Artist, 
+					                              uri);	
 					trackList.set_state_picture_for_title(iter);
 				}
 				tr = null;
 				i++;
 			}
-			Main.instance().add_track_to_gst_player(GLib.Filename.to_uri(paths[0]));
+			Main.instance().add_track_to_gst_player(uris[0]);
 		}
 	}
 
-////REGION IConfigurable
+////REGION IParameter
 	public void read_data(KeyFile file) throws KeyFileError {
 		if(!this.is_fullscreen) {
 			int posX, posY, wi, he, hp_position;
@@ -473,12 +475,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			}
 		
 			hp_position = file.get_integer("settings", "hp_position");
-
-			if (hp_position>0) {
+			if (wi > 0 && he > 0) {
 				this.hpaned.set_position(hp_position);
-			}
-			else {
-				this.hpaned.set_position(100);
 			}
 		}
 
@@ -506,7 +504,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		file.set_integer("settings", "hp_position", this.hpaned.get_position());
 		file.set_double("settings", "volume", current_volume);
 	}
-////END REGION IConfigurable
+////END REGION IParameter
 
 	private void volume_slider_change_cb() {
 		sign_volume_changed(VolumeSlider.get_value());
@@ -746,11 +744,11 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		}
 		if((path!=null) && (path!="")) {
 			var tr = new TagReader();
-			string[] tags = tr.read_tag_from_file(path);
-			string artist = tags[TagReaderField.ARTIST];
-			string album  = tags[TagReaderField.ALBUM]; 
-			string title  = tags[TagReaderField.TITLE]; 
-			if(tags[TagReaderField.ARTIST]!="") {
+			TrackData tags = tr.read_tag_from_file(path);
+			string artist = tags.Artist;
+			string album  = tags.Album; 
+			string title  = tags.Title; 
+			if(tags.Artist!="") {
 				text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>", 
 					title, 
 					_("by"), 

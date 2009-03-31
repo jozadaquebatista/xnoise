@@ -21,8 +21,8 @@
 
 using GLib;
 
-public class Xnoise.Parameter : GLib.Object, IParameter {
-	private static Parameter _instance;
+public class Xnoise.Params : GLib.Object, IParameter { //TODO: Rename Interface nd class
+	private static Params _instance;
 	private SList<IParameter> IParameter_implementors;
 	public int posX         { get; set; default = 300;}
 	public int posY         { get; set; default = 300;}
@@ -30,24 +30,24 @@ public class Xnoise.Parameter : GLib.Object, IParameter {
 	public int winHeight    { get; set; default = 500;}
 	public bool winMaxed    { get; set; default = false;}
 
-	public Parameter() {
+	public Params() {
 			IParameter_implementors = new GLib.SList<IParameter>();
 			data_register(this);
 	}
 
-	public static Parameter instance() {
-		if (_instance == null) _instance = new Parameter();
+	public static Params instance() {
+		if (_instance == null) _instance = new Params();
 		return _instance;
 	}
 
 	private string _build_file_name() {
 		_create_file_folder();
-		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise/xnoise.ini", null);
+		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise/xnoise.conf", null);
 	}
 
 	private void _create_file_folder() { 
 		string SettingsFolder = GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", null);
-		string SettingsKeyFile = GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise/xnoise.ini", null);
+		string SettingsKeyFile = GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise/xnoise.conf", null);
 		if (FileUtils.test(SettingsFolder, FileTest.EXISTS) == false) {
 			DirUtils.create(SettingsFolder, 0700);
 		}

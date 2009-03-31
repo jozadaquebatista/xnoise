@@ -39,11 +39,11 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_DELETE_MLIB_ENTRY = 
 		"DELETE FROM mlib WHERE id = ?";
 	private static const string STMT_UPDATE_ENTRY = 
-		"INSERT INTO mlib (id, artist, album, title, genre, path) VALUES (\"null\", ?, ?, ?, ?, ?)";
+		"INSERT INTO mlib (id, tracknumber, artist, album, title, genre, uri) VALUES (\"null\", ?, ?, ?, ?, ?, ?)";
 	private static const string STMT_INSERT_ENTRY = 
-		"INSERT INTO mlib (artist, album, title, genre, path) VALUES (?, ?, ?, ?, ?)";
+		"INSERT INTO mlib (tracknumber, artist, album, title, genre, uri) VALUES (?, ?, ?, ?, ?, ?)";
 	private static const string STMT_CHECK_TRACK_EXISTS = 
-		"SELECT id FROM mlib WHERE path = ?"; 
+		"SELECT id FROM mlib WHERE uri = ?"; 
 	private static const string STMT_BEGIN = 
 		"BEGIN";
 	private static const string STMT_COMMIT = 
@@ -61,17 +61,15 @@ public class Xnoise.DbWriter : GLib.Object {
 		DATABASE = dbFileName();
 //		make_pattern_spec();
 		if(Database.open(DATABASE, out db)!=Sqlite.OK) { 
-			stderr.printf("Db Writer: %s %d\n", (string)db.errmsg(), db.errcode());
+			stderr.printf("Can't open database: %s\n", (string)db.errmsg);
 		}
 		//TODO: check for db existance
 		this.prepare_statements();
-		//create tables if they do not exist
-		this.check_db_and_tables_exist();
 	}
 
-	~DbWriter() {
-		print("destruct dbWriter class\n");
-	}
+//	~DbWriter() {
+//		print("destruct dbWriter class\n");
+//	}
 
 	private Sqlite.Database db;
 
@@ -106,45 +104,63 @@ public class Xnoise.DbWriter : GLib.Object {
 		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", "db.sqlite", null);
 	}
 		
-	private void db_update_entry(int id, string[4] tags, string pathname, string file) {
-		string artist = tags[0];
-		string title  = tags[1];
-		string album  = tags[2];
-		string genre  = tags[3];
-		string path   = Path.build_filename(pathname, file);//= get_path(pathname, file); 
-		
+	private void db_update_entry(int id, TrackData tags, string pathname, string file) {
+		string artist    = tags.Artist;
+		string title     = tags.Title;
+		string album     = tags.Album;
+		string genre     = tags.Genre;
+		uint tracknumber = tags.Tracknumber;
+		string uri;
+		try {
+			uri = GLib.Filename.to_uri(Path.build_filename(pathname, file));
+		} 
+		catch(GLib.ConvertError e) {
+			stderr.printf("Database update: path to uri conversion error. %s", e.message);	
+			return;
+		}
+		int buffer = (int)tracknumber;
 		if(id>0){
 			delete_mlib_entry_statement.reset();
 			delete_mlib_entry_statement.bind_int(1, id);
 			delete_mlib_entry_statement.step();
 			
 			update_mlib_entry_statement.reset();
-			update_mlib_entry_statement.bind_int(1, id);
-			update_mlib_entry_statement.bind_text(2, artist);
-			update_mlib_entry_statement.bind_text(3, album);
-			update_mlib_entry_statement.bind_text(4, title);
-			update_mlib_entry_statement.bind_text(5, genre);
-			update_mlib_entry_statement.bind_text(6, path);
+			update_mlib_entry_statement.bind_int( 1, id);
+			update_mlib_entry_statement.bind_int( 2, buffer);
+			update_mlib_entry_statement.bind_text(3, artist);
+			update_mlib_entry_statement.bind_text(4, album);
+			update_mlib_entry_statement.bind_text(5, title);
+			update_mlib_entry_statement.bind_text(6, genre);
+			update_mlib_entry_statement.bind_text(7, uri);
 			update_mlib_entry_statement.step();
 		}
 	}
 
-	private void db_insert_entry(string[4] tags, string pathname, string file) {
-		if (tags[0]=="") return;
-		if (tags[1]=="") return;
-		if (tags[2]=="") return;
-		if (tags[3]=="") return;
-		string artist = tags[0]; 
-		string title  = tags[1]; 
-		string album  = tags[2]; 
-		string genre  = tags[3]; 
-		string path   = Path.build_filename(pathname, file);
+	private void db_insert_entry(TrackData tags, string pathname, string file) {
+		if (tags.Artist=="") return;
+		if (tags.Album=="") return;
+		if (tags.Title=="") return;
+		string artist    = tags.Artist;
+		string title     = tags.Title;
+		string album     = tags.Album;
+		string genre     = tags.Genre;
+		uint tracknumber = tags.Tracknumber; 
+		string uri;
+		try {
+			uri = GLib.Filename.to_uri(Path.build_filename(pathname, file));
+		} 
+		catch(GLib.ConvertError e) {
+			stderr.printf("Database insert: path to uri conversion error. %s", e.message);	
+			return;
+		}
+		int buffer       = (int)tracknumber;
 		insert_mlib_entry_statement.reset();
-		if( insert_mlib_entry_statement.bind_text(1, artist)!=Sqlite.OK||
-			insert_mlib_entry_statement.bind_text(2, album) !=Sqlite.OK||
-			insert_mlib_entry_statement.bind_text(3, title) !=Sqlite.OK||
-			insert_mlib_entry_statement.bind_text(4, genre) !=Sqlite.OK||
-			insert_mlib_entry_statement.bind_text(5, path)  !=Sqlite.OK) {
+		if( insert_mlib_entry_statement.bind_int( 1, buffer) !=Sqlite.OK||
+			insert_mlib_entry_statement.bind_text(2, artist) !=Sqlite.OK||
+			insert_mlib_entry_statement.bind_text(3, album)  !=Sqlite.OK||
+			insert_mlib_entry_statement.bind_text(4, title)  !=Sqlite.OK||
+			insert_mlib_entry_statement.bind_text(5, genre)  !=Sqlite.OK||
+			insert_mlib_entry_statement.bind_text(6, uri)   !=Sqlite.OK) {
 			this.db_error();
 		}
 		if(insert_mlib_entry_statement.step()!=Sqlite.DONE) {
@@ -154,9 +170,16 @@ public class Xnoise.DbWriter : GLib.Object {
 
 	private int db_entry_exists(string pathname, string file) {
 		int val = -1;
-		string pathOfFile = Path.build_filename(pathname, file);
+		string uri;
+		try {
+			uri = GLib.Filename.to_uri(Path.build_filename(pathname, file));
+		} 
+		catch(GLib.ConvertError e) {
+			stderr.printf("Database entry existance check: path to uri conversion error. %s", e.message);	
+			return val;
+		}		
 		check_track_exists_statement.reset();
-		if(check_track_exists_statement.bind_text(1, pathOfFile)!=Sqlite.OK) {
+		if(check_track_exists_statement.bind_text(1, uri)!=Sqlite.OK) {
 			this.db_error();
 		}
 		while(check_track_exists_statement.step() == Sqlite.ROW) {
@@ -190,6 +213,7 @@ public class Xnoise.DbWriter : GLib.Object {
 //			//get mime information
 //			string content_type = info.get_content_type ();
 //			weak string mime = g_content_type_get_mime_type(content_type);
+
 //			if(filetype == FileType.DIRECTORY) {
 //				this.import_tags_for_files(file);
 //			} 
@@ -211,38 +235,41 @@ public class Xnoise.DbWriter : GLib.Object {
                                 FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
             enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
         } catch (Error error) {
-            critical("Error accessing directory %s.\n%s\n", dir.get_path (), error.message);
+            critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
             return;
         }
         FileInfo info;
         while((info = enumerator.next_file(null))!=null) {
             string filename = info.get_name();
             string filepath = Path.build_filename(dir.get_path(), filename);
-            File file = File.new_for_path (filepath);
-            FileType filetype = info.get_file_type ();
+            File file = File.new_for_path(filepath);
+            FileType filetype = info.get_file_type();
 
-			//get mime information
-			string content_type = info.get_content_type ();
-			weak string mime = g_content_type_get_mime_type(content_type);
+			string content = info.get_content_type();
+			weak string mime = g_content_type_get_mime_type(content);
+			PatternSpec psAudio = new PatternSpec("audio*");
 
 			if(filetype == FileType.DIRECTORY) {
 				this.import_tags_for_files(file);
 			} 
-			else if ((mime == "audio/x-vorbis+ogg")|
-			         (mime == "audio/mpeg")|
-			         (mime == "audio/x-wav")|
-			         (mime == "audio/x-flac")|
-			         (mime == "audio/x-speex")) {
-				
+			else if(psAudio.match_string(mime)) {
+			stderr.printf("mime %s\n", mime);
+//			else if((mime == "audio/x-vorbis+ogg")|
+//			         (mime == "audio/mpeg")|
+//			         (mime == "audio/x-wav")|
+//			         (mime == "audio/x-flac")|
+//			         (mime == "audio/x-speex"))
+//audio/x-ms-wma {
+				if(mime=="audio/x-mpegurl") print("file %s\n",file.get_path()); 
 				int idbuffer = db_entry_exists(dir.get_path(), info.get_name());
 				if(idbuffer== -1) {
 					var tr = new TagReader();
-					db_insert_entry(tr.read_tag_from_file(filepath), dir.get_path(), info.get_name());
+					this.db_insert_entry(tr.read_tag_from_file(filepath), dir.get_path(), info.get_name());
 					current+=1;
 				}
 				else {
 					var tr = new TagReader();
-					db_update_entry(idbuffer, tr.read_tag_from_file(filepath), dir.get_path(), info.get_name());
+					this.db_update_entry(idbuffer, tr.read_tag_from_file(filepath), dir.get_path(), info.get_name());
 					current+=1;
 				}
 //				sign_import_progress(current, amount);   //TODO: Maybe use this to track import progress        
@@ -258,30 +285,28 @@ public class Xnoise.DbWriter : GLib.Object {
 		int rc2 = 0;
 		int rc3 = 0;
 		weak string[] resultArray;
-		string errmsg = null;
+		string errmsg;
 
-		if(FileUtils.test(DATABASE, FileTest.EXISTS)) {
-			//Check for Table existance
-			current_query = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
-			rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-			if (rc1 != Sqlite.OK) { 
-				stderr.printf("SQL error: %s\n", errmsg);
-				return;
-			}
+		//Check for Table existance
+		current_query = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
+		rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
+		if (rc1 != Sqlite.OK) { 
+			stderr.printf("SQL error: %s\n", errmsg);
+			return;
+		}
 
-			//search main table
-			for(int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
-				for(int j = offset*ncolumn; j< (offset+1)*ncolumn;j++) {
-					if(resultArray[j]=="mlib") {
-						db_table_exists = true;
-					}
+		//search main table
+		for (int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
+			for (int j = offset*ncolumn; j< (offset+1)*ncolumn;j++) {
+				if (resultArray[j]=="mlib") {
+					db_table_exists = true;
 				}
 			}
 		}
 
 		//create Tables if not existant
 		if(db_table_exists == false) {
-			current_query = "CREATE TABLE mlib(id integer primary key, artist text, album text, title text, genre text, path text);";
+			current_query = "CREATE TABLE mlib(id integer primary key, tracknumber integer, artist text, album text, title text, genre text, uri text);";
 			rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
 			current_query = "CREATE TABLE lastused(id integer);";
 			rc2 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
@@ -294,12 +319,11 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 
-	public string[] get_music_folders() { //ref GLib.List<string> mfolders
-		string[] mfolders = new string[0];
+	public string[] get_music_folders() { 
+		string[] mfolders = {};//= new string[0];
 		get_music_folders_statement.reset();
 		while(get_music_folders_statement.step() == Sqlite.ROW) {
 			mfolders += get_music_folders_statement.column_text(0);
-//			mfolders.append(get_music_folders_statement.column_text(0));
 		}
 		return mfolders;
 	}
@@ -320,22 +344,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(delete_mlib_data()==0) return;
 		
 		//TODO: Remove duplicates
-		
-//		uint count = 0;
-//		foreach(string folder in mfolders) { //TODO check this
-//			foreach(string temp_folder in mfolders) {
-//				if (folder == temp_folder) { 
-//					count++;
-//					if (count > 1) mfolders.remove(temp_folder);
-//				}
-//			}
-//		}
-	
-//		foreach(string folder in mfolders) {
-//			File dir = File.new_for_path(folder);
-////			assert(dir!=null && is_dir(dir));
-//			count_songs_from_path(dir);
-//		}
 		
 		this.begin_transaction();	
 			
@@ -376,8 +384,6 @@ public class Xnoise.DbWriter : GLib.Object {
 			stderr.printf("SQL error, while removing old music folders: %s\n", errmsg);//TODO
 			return;
 		}	
-//		print("lala null item: %s\n", final_tracklist[1]);
-//		for(int i=0;i<=(int)(final_tracklist.length)-1;i++) {
 		foreach(string id in final_tracklist) {
 //			this.insert_lastused_id(id);
 		}

@@ -27,17 +27,18 @@ public enum Xnoise.MusicBrModColumn { //TODO: Rename
 	TITLE_ID
 }
 
-public struct Xnoise.trackData {
+public struct Xnoise.TrackData {
 	public string Artist;
 	public string Album;
 	public string Title;
+	public string Genre;
+	public uint Tracknumber;
 }
-
-
 
 public enum Xnoise.TrackListColumn {
 	STATE = 0,
 	ICON,
+	TRACKNUMBER,
 	TITLE,
 	ALBUM,
 	ARTIST,
@@ -51,14 +52,18 @@ public enum Xnoise.TrackStatus { //TODO: Rename
 	POSITION_FLAG
 }
 
-
-
 public enum Xnoise.Direction {
 	NEXT = 0,
 	PREVIOUS,
 }
 
-
+public enum Xnoise.TagReaderField {
+	ARTIST = 0,
+	TITLE,
+	ALBUM,
+	GENRE,
+	TRACKNUMBER
+}
 
 public interface Xnoise.IParameter : GLib.Object {
 		public abstract void read_data(KeyFile file) throws KeyFileError;
