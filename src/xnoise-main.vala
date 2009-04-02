@@ -27,8 +27,7 @@ public class Xnoise.Main : GLib.Object {
 	private static Main _instance;
 
 	public Main() {
-		DbWriter dbb = new DbWriter();
-		dbb.check_db_and_tables_exist();
+		check_database_and_tables();
 
 		gPl = new GstPlayer();
 
@@ -83,6 +82,21 @@ public class Xnoise.Main : GLib.Object {
 		Posix.signal(Posix.SIGTERM, on_posix_finish); //write data to db on posix term signal
 		Posix.signal(Posix.SIGKILL, on_posix_finish); //write data to db on posix kill signal
 	}
+	
+	private string dbFileName() {
+		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", "db.sqlite", null);
+	}
+	
+	private void check_database_and_tables() {
+		DbWriter dbw;
+		if(!GLib.FileUtils.test(dbFileName(), FileTest.EXISTS)) {
+			dbw = new DbWriter(); //creating db instance and destroying it will give me a db file
+			stderr.printf("Creating database file...");
+			dbw = null;
+		}
+		dbw = new DbWriter();
+		dbw.check_db_and_tables_exist();
+	}
 
 	public void add_track_to_gst_player(string uri) { //TODO: maybe return bool and check for fail
 		this.gPl.Uri = uri;
@@ -104,14 +118,11 @@ public class Xnoise.Main : GLib.Object {
 		instance().quit();
 	}
 
-//	private string[] final_tracklist; 
 	private GLib.List<string> final_tracklist; 
-	public void save_tracklist() {
-//		final_tracklist = new string[0];
+	public void save_tracklist() { //TODO: use uris??
 		final_tracklist = new GLib.List<string>();
 		print("write tracks into db....\n");
 		main_window.trackList.get_track_ids(ref final_tracklist);	
-//		print("%s\n", final_tracklist[0]);
 		var dbwr = new DbWriter();
 		dbwr.write_final_track_ids_to_db(ref final_tracklist);
 		final_tracklist = null;

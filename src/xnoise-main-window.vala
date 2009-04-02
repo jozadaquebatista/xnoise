@@ -101,10 +101,10 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			removeSelectedButton.clicked   += this.remove_selected_button_clicked_cb;
 			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
 				
-			this.song_title_label          = this.get_object("song_title_label") as Gtk.Label;
-			this.song_title_label.use_markup = true;
+			this.song_title_label           = this.get_object("song_title_label") as Gtk.Label;
+			this.song_title_label.use_markup= true;
 			
-			this.songProgressBar           = this.get_object("songProgressBar") as Gtk.ProgressBar; 
+			this.songProgressBar            = this.get_object("songProgressBar") as Gtk.ProgressBar; 
 			this.songProgressBar.button_press_event   += on_progressbar_press_cb;
 			this.songProgressBar.button_release_event += on_progressbar_release_cb;
 			this.songProgressBar.set_text("00:00 / 00:00");
