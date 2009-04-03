@@ -179,7 +179,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			var sexyentryBox = this.get_object("sexyentryBox") as Gtk.HBox; 
 			sexyentryBox.add(searchEntryMB);
 			
-			this.window.set_icon_from_file (Config.UIDIR + "/ente.png");
+			this.window.set_icon_from_file (Config.UIDIR + "/xnoise_16x16.png");
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 
@@ -247,7 +247,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 
 	private StatusIcon create_tray_icon() {
 		StatusIcon icon = new StatusIcon();
-		icon.file = Config.UIDIR + "/ente.png";
+		icon.file = Config.UIDIR + "/xnoise_16x16.png";
 		icon.set_tooltip("xnoise");
 		return icon;
 	}

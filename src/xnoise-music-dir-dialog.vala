@@ -81,7 +81,7 @@ public class Xnoise.MusicFolderDialog : Gtk.Builder {
 			cell.set ("foreground_set", true, null);
 			tv.insert_column_with_attributes (-1, "Path", cell, "text", 0, null);
 
-			window.set_icon_from_file (Config.UIDIR + "/ente.png");
+			window.set_icon_from_file (Config.UIDIR + "/xnoise_16x16.png");
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 

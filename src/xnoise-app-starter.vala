@@ -22,10 +22,12 @@
 public class Xnoise.AppStarter : GLib.Object {
 	public static Unique.Response message_received_cb(Unique.App sender, int command, 
 	                                                  Unique.MessageData message_data, uint time) {
-		Main.instance().main_window.window.present();
-		Main.instance().main_window.add_uris_to_tracklist(message_data.get_uris()); 
+		xn.main_window.window.present();
+		xn.main_window.add_uris_to_tracklist(message_data.get_uris()); 
 		return Unique.Response.OK;
 	}
+
+	public static Main xn;
 
 	public static int main (string[] args) {
 		var opt_context = new OptionContext ("xnoise");
@@ -42,12 +44,12 @@ public class Xnoise.AppStarter : GLib.Object {
 
 		Gtk.init(ref args);
 		Unique.App app;
-		AppStarter app_starter = new AppStarter();
+		var app_starter = new AppStarter();
 		app = new Unique.App.with_commands("org.gnome.xnoise", "xnoise", null);
 		int i = 0;
 
 		string[] uris = new string[args.length-1];
-		PatternSpec psOgg = new PatternSpec("*.ogg");
+		PatternSpec psOgg = new PatternSpec("*.ogg");//TODO: Remove this and use mime instead
 		PatternSpec psMp3 = new PatternSpec("*.mp3"); 
 		PatternSpec psWav = new PatternSpec("*.wav"); 
 
@@ -65,7 +67,7 @@ public class Xnoise.AppStarter : GLib.Object {
 				print("Adding tracks to the running instance of xnoise!\n");
 			}
 			else {
-				print("There is already an instance of xnoise running!\n");
+				print("Showing the running instance of xnoise.\n");
 			}
 			Unique.Command command;
 			Unique.Response response;
@@ -79,13 +81,13 @@ public class Xnoise.AppStarter : GLib.Object {
 				print("singleton app response fail.\n");
 		}
 		else {
-			Main vPl = Main.instance();
-			app.watch_window((Gtk.Window)vPl.main_window.window);
+			xn = Main.instance();
+			app.watch_window((Gtk.Window)xn.main_window.window);
 			app.message_received += app_starter.message_received_cb;
 
-			vPl.main_window.window.show_all();
+			xn.main_window.window.show_all();
 			
-			vPl.main_window.add_uris_to_tracklist(uris);
+			xn.main_window.add_uris_to_tracklist(uris);
 			
 			Gtk.main();
 			app = null;

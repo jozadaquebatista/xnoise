@@ -5,7 +5,7 @@ ui_DATA = add_folder.ui \
 	   settings.ui \
 	   album.png \
 	   artist.png \
-	   ente.png \
+	   xnoise_16x16.png \
 	   genre.png \
 	   guitar.png \
 	   note.png \

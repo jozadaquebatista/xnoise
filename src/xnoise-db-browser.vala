@@ -34,23 +34,23 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement tracknumber_for_track_statement;
 	
 	private static const string STMT_COUNT_FOR_URI = 
-		"SELECT COUNT (*) FROM mlib WHERE uri = ?";
-    private static const string STMT_TABLES_EXIST = 
-		"SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = 'mlib';";
-    private static const string STMT_TRACKDATA_FOR_URI = 
-    	"SELECT artist, album, title, tracknumber FROM mlib WHERE uri = ?";
-    private static const string STMT_TRACK_ID_FOR_URI = 
-    	"SELECT id FROM mlib WHERE uri = ?";
-    private static const string STMT_URI_FOR_TRACK = 
-    	"SELECT uri FROM mlib WHERE artist = ? AND album = ? AND title = ?";
-    private static const string STMT_TRACKNUMBER_FOR_TRACK = 
-    	"SELECT tracknumber FROM mlib WHERE artist = ? AND album = ? AND title = ?";
-    private static const string STMT_GET_ARTISTS = 
-    	"SELECT DISTINCT artist FROM mlib ORDER BY LOWER(artist) DESC";
-    private static const string STMT_GET_ALBUMS = 
-    	"SELECT DISTINCT album FROM mlib WHERE artist = ? ORDER BY LOWER(album) DESC";
-    private static const string STMT_GET_TITLES = 
-    	"SELECT DISTINCT title FROM mlib WHERE artist = ? AND album = ? ORDER BY tracknumber DESC"; 
+	    "SELECT COUNT (*) FROM mlib WHERE uri = ?";
+	private static const string STMT_TABLES_EXIST = 
+	    "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = 'mlib';";
+	private static const string STMT_TRACKDATA_FOR_URI = 
+	    "SELECT artist, album, title, tracknumber FROM mlib WHERE uri = ?";
+	private static const string STMT_TRACK_ID_FOR_URI = 
+	    "SELECT id FROM mlib WHERE uri = ?";
+	private static const string STMT_URI_FOR_TRACK = 
+	    "SELECT uri FROM mlib WHERE artist = ? AND album = ? AND title = ?";
+	private static const string STMT_TRACKNUMBER_FOR_TRACK = 
+	    "SELECT tracknumber FROM mlib WHERE artist = ? AND album = ? AND title = ?";
+	private static const string STMT_GET_ARTISTS = 
+	    "SELECT DISTINCT artist FROM mlib ORDER BY LOWER(artist) DESC";
+	private static const string STMT_GET_ALBUMS = 
+	    "SELECT DISTINCT album FROM mlib WHERE artist = ? ORDER BY LOWER(album) DESC";
+	private static const string STMT_GET_TITLES = 
+	    "SELECT DISTINCT title FROM mlib WHERE artist = ? AND album = ? ORDER BY tracknumber DESC"; 
 
 	public DbBrowser() {
 		DATABASE = dbFileName();
@@ -162,7 +162,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	}
 
 	public string[] get_artists() { 
-		string[] val = {};//= new string[0];
+		string[] val = {};
 		get_artist_statement.reset();
 		while(get_artist_statement.step() == Sqlite.ROW) {
 	        val += get_artist_statement.column_text(0);
@@ -171,7 +171,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	}
 
 	public string[] get_albums(string artist) { 
-		string[] val = {};//= new string[0];
+		string[] val = {};
 		get_albums_statement.reset();
 		if(this.get_albums_statement.bind_text(1, artist)!=Sqlite.OK) {
 			this.db_error();
@@ -183,7 +183,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	}
 
 	public string[] get_titles(string artist, string album) { 
-		string[] val = {};//= new string[0];
+		string[] val = {};
 		get_titles_statement.reset();
 		if((this.get_titles_statement.bind_text(1, artist)!=Sqlite.OK)|
 			(get_titles_statement.bind_text(2, album)!=Sqlite.OK)) {
