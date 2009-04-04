@@ -19,6 +19,11 @@
  * Jörn Magens
  */
 
+
+// PROJECT WIDE USED INTERFACES AND ENUMS
+
+//Enums
+
 public enum Xnoise.MusicBrModColumn { //TODO: Rename
 	ICON = 0,
 	VIS_TEXT,
@@ -57,17 +62,12 @@ public enum Xnoise.Direction {
 	PREVIOUS,
 }
 
-public enum Xnoise.TagReaderField {
-	ARTIST = 0,
-	TITLE,
-	ALBUM,
-	GENRE,
-	TRACKNUMBER
-}
+
+//Interfaces
 
 public interface Xnoise.IParameter : GLib.Object {
-		public abstract void read_data(KeyFile file) throws KeyFileError;
-		public abstract void write_data(KeyFile file);
+	public abstract void read_data(KeyFile file) throws KeyFileError;
+	public abstract void write_data(KeyFile file);
 }
 
 

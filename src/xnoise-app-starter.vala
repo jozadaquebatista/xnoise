@@ -20,8 +20,10 @@
  */
 
 public class Xnoise.AppStarter : GLib.Object {
-	public static Unique.Response message_received_cb(Unique.App sender, int command, 
-	                                                  Unique.MessageData message_data, uint time) {
+	public static Unique.Response message_received_cb(Unique.App sender, 
+	                                                  int command, 
+	                                                  Unique.MessageData message_data, 
+	                                                  uint time) {
 		xn.main_window.window.present();
 		xn.main_window.add_uris_to_tracklist(message_data.get_uris()); 
 		return Unique.Response.OK;
@@ -30,7 +32,7 @@ public class Xnoise.AppStarter : GLib.Object {
 	public static Main xn;
 
 	public static int main (string[] args) {
-		var opt_context = new OptionContext ("xnoise");
+		var opt_context = new OptionContext ("xnoise"); //TODO: Do some reset options
 		opt_context.set_description("xnoise is a media player for audio files. \nIt is always running in a unique instance and if music files are clicked, these can be automatically added to xnoise. \nIt is also possible to add songs via commandline.\n");
 		opt_context.set_help_enabled (true);
 		

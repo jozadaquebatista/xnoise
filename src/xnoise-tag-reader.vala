@@ -19,9 +19,10 @@
  * 	Jörn Magens
  */
 
+//This class is a connection to taglib_c
+
 using GLib;
 
-//connection to to taglib_c
 public class Xnoise.TagReader : GLib.Object {
 
 	public TrackData read_tag_from_file(string file) {

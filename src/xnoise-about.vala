@@ -25,10 +25,10 @@ public class Xnoise.AboutDialog : Gtk.AboutDialog {
 	const string[] _authors = {"Jörn Magens", 
 	                           null
 	                          };
-	const string   _copyright = "Copyright \xc2\xa9 2008, 2009 Jörn Magens";
-	const string   _program_name = "xnoise";
-	const string   _version = "0.01";
-	const string   _website = "http://code.google.com/p/xnoise/";
+	const string _copyright = "Copyright \xc2\xa9 2008, 2009 Jörn Magens";
+	const string _program_name = "xnoise";
+	const string _version = "0.01";
+	const string _website = "http://code.google.com/p/xnoise/";
 
 	public AboutDialog() {
 		string contents;
@@ -41,7 +41,7 @@ public class Xnoise.AboutDialog : Gtk.AboutDialog {
 		}
 
 		try {
-			var pixbuf = new Gdk.Pixbuf.from_file (Config.UIDIR + "/xnoise_16x16.png");
+			var pixbuf = new Gdk.Pixbuf.from_file (Config.UIDIR + "/xnoise_48x48.png");
 			logo = pixbuf;
 		}
 		catch (GLib.Error e) {
@@ -55,11 +55,11 @@ public class Xnoise.AboutDialog : Gtk.AboutDialog {
 			stderr.printf("%s\n", e.message);
 		}
 
-		this.authors        = _authors;
-		this.program_name   = _program_name;
-		this.version        = _version;
-		this.website        = _website;
-		this.copyright      = _copyright;
+		this.authors      = _authors;
+		this.program_name = _program_name;
+		this.version      = _version;
+		this.website      = _website;
+		this.copyright    = _copyright;
 	}
 }
 

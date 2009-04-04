@@ -33,7 +33,7 @@ public class Xnoise.MusicBrowser : TreeView {
 	public signal void sign_activated();
 	private const TargetEntry[] target_list = {
 		{"text/uri-list", 0, 0}
-	};
+	};// This is not a very long list but uris are so universal
 
 	public MusicBrowser() {
 		create_model();
@@ -43,12 +43,12 @@ public class Xnoise.MusicBrowser : TreeView {
 		set_model(model); 
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);		
 
-        Gtk.drag_source_set(
-        	this,
-            Gdk.ModifierType.BUTTON1_MASK, 
-            this.target_list,
-            Gdk.DragAction.COPY|
-            Gdk.DragAction.MOVE);
+		Gtk.drag_source_set(
+			this,
+			Gdk.ModifierType.BUTTON1_MASK, 
+			this.target_list,
+			Gdk.DragAction.COPY|
+			Gdk.DragAction.MOVE);
 
 		this.dragging = false;
 		
@@ -62,8 +62,7 @@ public class Xnoise.MusicBrowser : TreeView {
 
 
 
-    public bool on_button_press(MusicBrowser sender, Gdk.EventButton e) {
-		// The popup menu that is displayed when you right click in the playlist
+	public bool on_button_press(MusicBrowser sender, Gdk.EventButton e) {
 		Gtk.TreePath path = null;
 		Gtk.TreeViewColumn column;        
 		Gtk.TreeSelection selection = this.get_selection();
@@ -98,54 +97,52 @@ public class Xnoise.MusicBrowser : TreeView {
 				print("button 3\n");
 				return false; //TODO check if this is right
 			}
-        }
-        if(!(selection.count_selected_rows()>0 )) 
-        	selection.select_path(path);
+		}
+		if(!(selection.count_selected_rows()>0 )) 
+			selection.select_path(path);
 		return false; 
-    }
+	}
 
 
-    public bool on_button_release(MusicBrowser sender, Gdk.EventButton e) {
-		//Called when a button is released
+	public bool on_button_release(MusicBrowser sender, Gdk.EventButton e) {
 		Gtk.TreePath path;
 		Gtk.TreeViewColumn column;
 		int cell_x, cell_y;
 
-        if((e.button != 1)|(this.dragging)) {
-            this.dragging = false;
-            return true;
-        }
-        if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
-        	((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
-            return true;
-        }
+		if((e.button != 1)|(this.dragging)) {
+			this.dragging = false;
+			return true;
+		}
+		if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
+			((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
+			return true;
+		}
 
-        Gtk.TreeSelection selection = this.get_selection();
-        int x = (int)e.x; 
+		Gtk.TreeSelection selection = this.get_selection();
+		int x = (int)e.x; 
 		int y = (int)e.y;
-        if(!this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y)) return false;
-        selection.unselect_all();
-        selection.select_path(path);
+		if(!this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y)) return false;
+		selection.unselect_all();
+		selection.select_path(path);
 
-		return false; //for testing
-    }
-
-	private void on_drag_begin(MusicBrowser sender, DragContext context) {
-        this.dragging = true;
-        Gdk.drag_abort(context, Gtk.get_current_event_time());
-        Gtk.TreeSelection selection = this.get_selection();
-        if(selection.count_selected_rows() > 1) {
-            Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND_MULTIPLE);
-        }
-        else {
-                Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND);
-        }
-        return;
+		return false; 
 	}
 
-    public void on_drag_data_get(MusicBrowser sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime) {
-//      Called when a drag source wants data for this drag operation
-		string[] uris = {};//= new string[0];
+	private void on_drag_begin(MusicBrowser sender, DragContext context) {
+		this.dragging = true;
+		Gdk.drag_abort(context, Gtk.get_current_event_time());
+		Gtk.TreeSelection selection = this.get_selection();
+		if(selection.count_selected_rows() > 1) {
+			Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND_MULTIPLE);
+		}
+		else {
+			Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND);
+		}
+		return;
+	}
+
+	public void on_drag_data_get(MusicBrowser sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime) {
+		string[] uris = {};
 		List<weak TreePath> paths;
 		weak Gtk.TreeSelection sel;
 		sel = this.get_selection();
@@ -158,15 +155,14 @@ public class Xnoise.MusicBrowser : TreeView {
 		}
 		uris += null;
 		selection.set_uris(uris);
-    }
-	public string[] drag_delete;
+	}
 
 	private string[] fill_uri_list(Gtk.TreePath path) {
 		TreeIter iter, iterp, iterp2, iterChild, iterChildChild;
 		string artist = "";
 		string album  = "";
 		string title  = "";
-		string[] urilist = {};//= new string[0];
+		string[] urilist = {};
 	
 		switch(path.get_depth()) {
 			case 1:
@@ -226,7 +222,7 @@ public class Xnoise.MusicBrowser : TreeView {
 		TrackData[] td_list = new TrackData[0]; 
 	
 		switch (path.get_depth()) {
-			case 1:
+			case 1: //ARTIST
 				model.get_iter(out iter, path);
 				model.get(iter, 1, ref artist);
 				for (int i = 0; i < model.iter_n_children(iter); i++) {
@@ -240,12 +236,12 @@ public class Xnoise.MusicBrowser : TreeView {
 						TrackData td = TrackData();
 						td.Artist = artist;
 						td.Album  = currentalbum;
-						td.Title  = currenttitle; //TODO: remove tmp values
+						td.Title  = currenttitle; //TODO: get rid of tmp values
 						td_list += td;
 					}
 				}
 				break;
-			case 2:
+			case 2: //ALBUM
 				model.get_iter(out iter, path);
 				model.get(iter, 1, ref album);
 				if (model.iter_parent(out iterp, iter)) {
@@ -262,7 +258,7 @@ public class Xnoise.MusicBrowser : TreeView {
 					td_list += td;
 				}
 				break;
-			case 3:
+			case 3: //TITLE
 				model.get_iter(out iter, path);
 				model.get(iter, 1, ref title);
 				if (model.iter_parent(out iterp, iter)) {
@@ -281,16 +277,16 @@ public class Xnoise.MusicBrowser : TreeView {
 		return td_list;
 	}
 
-    public void on_drag_end(MusicBrowser sender, Gdk.DragContext context) { //DragTreeView?????
-        this.dragging = false;
-        this.unset_rows_drag_dest();
-        Gtk.drag_dest_set( 
-        	this,
-        	Gtk.DestDefaults.ALL,
+	public void on_drag_end(MusicBrowser sender, Gdk.DragContext context) { 
+		this.dragging = false;
+		this.unset_rows_drag_dest();
+		Gtk.drag_dest_set( 
+			this,
+			Gtk.DestDefaults.ALL,
 			this.target_list, 
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.MOVE);
-    }
+	}
 
 	private void on_row_activated(MusicBrowser sender, TreePath path, TreeViewColumn column){
 		if (path.get_depth()>1) {
@@ -430,7 +426,7 @@ public class Xnoise.MusicBrowser : TreeView {
 		column.pack_start(pixbufRenderer, false);
 		column.add_attribute(pixbufRenderer, "pixbuf", 0);
 		column.pack_start(renderer, false);
-		column.add_attribute(renderer, "text", 1); // no markup!
+		column.add_attribute(renderer, "text", 1); // no markup!!
 		this.insert_column(column, -1);
 		this.enable_tree_lines = true;
 		this.headers_visible = false;

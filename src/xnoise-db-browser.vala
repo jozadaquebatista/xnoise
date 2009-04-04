@@ -34,23 +34,23 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement tracknumber_for_track_statement;
 	
 	private static const string STMT_COUNT_FOR_URI = 
-	    "SELECT COUNT (*) FROM mlib WHERE uri = ?";
+		"SELECT COUNT (*) FROM mlib WHERE uri = ?";
 	private static const string STMT_TABLES_EXIST = 
-	    "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = 'mlib';";
+		"SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = 'mlib';";
 	private static const string STMT_TRACKDATA_FOR_URI = 
-	    "SELECT artist, album, title, tracknumber FROM mlib WHERE uri = ?";
+		"SELECT artist, album, title, tracknumber FROM mlib WHERE uri = ?";
 	private static const string STMT_TRACK_ID_FOR_URI = 
-	    "SELECT id FROM mlib WHERE uri = ?";
+		"SELECT id FROM mlib WHERE uri = ?";
 	private static const string STMT_URI_FOR_TRACK = 
-	    "SELECT uri FROM mlib WHERE artist = ? AND album = ? AND title = ?";
+		"SELECT uri FROM mlib WHERE artist = ? AND album = ? AND title = ?";
 	private static const string STMT_TRACKNUMBER_FOR_TRACK = 
-	    "SELECT tracknumber FROM mlib WHERE artist = ? AND album = ? AND title = ?";
+		"SELECT tracknumber FROM mlib WHERE artist = ? AND album = ? AND title = ?";
 	private static const string STMT_GET_ARTISTS = 
-	    "SELECT DISTINCT artist FROM mlib ORDER BY LOWER(artist) DESC";
+		"SELECT DISTINCT artist FROM mlib ORDER BY LOWER(artist) DESC";
 	private static const string STMT_GET_ALBUMS = 
-	    "SELECT DISTINCT album FROM mlib WHERE artist = ? ORDER BY LOWER(album) DESC";
+		"SELECT DISTINCT album FROM mlib WHERE artist = ? ORDER BY LOWER(album) DESC";
 	private static const string STMT_GET_TITLES = 
-	    "SELECT DISTINCT title FROM mlib WHERE artist = ? AND album = ? ORDER BY tracknumber DESC"; 
+		"SELECT DISTINCT title FROM mlib WHERE artist = ? AND album = ? ORDER BY tracknumber DESC"; 
 
 	public DbBrowser() {
 		DATABASE = dbFileName();
@@ -75,21 +75,21 @@ public class Xnoise.DbBrowser : GLib.Object {
 	}
 
 	private void prepare_statements() { 
-	    this.db.prepare_v2(STMT_COUNT_FOR_URI, -1, 
-	    	out this.count_for_uri_statement); 
-	    this.db.prepare_v2(STMT_GET_ARTISTS, -1, 
-	    	out this.get_artist_statement); 
-	    this.db.prepare_v2(STMT_GET_ALBUMS, -1, 
-	    	out this.get_albums_statement); 
-	    this.db.prepare_v2(STMT_GET_TITLES, -1, 
-	    	out this.get_titles_statement); 
-	    this.db.prepare_v2(STMT_TRACKDATA_FOR_URI , -1, 
-	    	out this.trackdata_for_uri_statement); 
-	    this.db.prepare_v2(STMT_TRACK_ID_FOR_URI, -1, 
-	    	out this.track_id_for_uri_statement); 
-	    this.db.prepare_v2(STMT_URI_FOR_TRACK, -1, 
+		this.db.prepare_v2(STMT_COUNT_FOR_URI, -1, 
+			out this.count_for_uri_statement); 
+		this.db.prepare_v2(STMT_GET_ARTISTS, -1, 
+			out this.get_artist_statement); 
+		this.db.prepare_v2(STMT_GET_ALBUMS, -1, 
+			out this.get_albums_statement); 
+		this.db.prepare_v2(STMT_GET_TITLES, -1, 
+			out this.get_titles_statement); 
+		this.db.prepare_v2(STMT_TRACKDATA_FOR_URI , -1, 
+			out this.trackdata_for_uri_statement); 
+		this.db.prepare_v2(STMT_TRACK_ID_FOR_URI, -1, 
+			out this.track_id_for_uri_statement); 
+		this.db.prepare_v2(STMT_URI_FOR_TRACK, -1, 
 			out this.uri_for_track_statement);
-	    this.db.prepare_v2(STMT_TRACKNUMBER_FOR_TRACK, -1, 
+		this.db.prepare_v2(STMT_TRACKNUMBER_FOR_TRACK, -1, 
 			out this.tracknumber_for_track_statement);
 	}
 	
@@ -101,14 +101,14 @@ public class Xnoise.DbBrowser : GLib.Object {
 			this.db_error();
 		}
 		while(count_for_uri_statement.step() == Sqlite.ROW) {
-	        count = count_for_uri_statement.column_int(0);
+			count = count_for_uri_statement.column_int(0);
 		}
 		if(count>0) return true;
 		return false;
 	}
 	
-	public TrackData get_trackdata_for_path(string uri) { 
-		TrackData val = TrackData();
+	public TrackData get_trackdata_for_uri(string uri) { 
+		var val = TrackData();
 		trackdata_for_uri_statement.reset();
 		trackdata_for_uri_statement.bind_text(1, uri);
 		while(trackdata_for_uri_statement.step() == Sqlite.ROW) {
@@ -128,7 +128,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		track_id_for_uri_statement.reset();
 		track_id_for_uri_statement.bind_text(1, uri);
 		while(track_id_for_uri_statement.step() == Sqlite.ROW) {
-	        val = track_id_for_uri_statement.column_int(0);
+			val = track_id_for_uri_statement.column_int(0);
 		}
 		return val;
 	}
@@ -142,7 +142,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 			this.db_error();
 		}
 		while(uri_for_track_statement.step() == Sqlite.ROW) {
-	        val = uri_for_track_statement.column_text(0);
+			val = uri_for_track_statement.column_text(0);
 		}
 		return val;
 	}
@@ -156,7 +156,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 			this.db_error();
 		}
 		while(tracknumber_for_track_statement.step() == Sqlite.ROW) {
-	        val = tracknumber_for_track_statement.column_int(0);
+			val = tracknumber_for_track_statement.column_int(0);
 		}
 		return val;
 	}
@@ -165,7 +165,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		string[] val = {};
 		get_artist_statement.reset();
 		while(get_artist_statement.step() == Sqlite.ROW) {
-	        val += get_artist_statement.column_text(0);
+			val += get_artist_statement.column_text(0);
 		}
 		return val;
 	}
@@ -177,7 +177,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 			this.db_error();
 		}
 		while(get_albums_statement.step() == Sqlite.ROW) {
-	        val += get_albums_statement.column_text(0);
+			val += get_albums_statement.column_text(0);
 		}
 		return val;
 	}
@@ -191,7 +191,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		}
 		
 		while(get_titles_statement.step() == Sqlite.ROW) {
-	        val += get_titles_statement.column_text(0);
+			val += get_titles_statement.column_text(0);
 		}
 		return val;
 	}

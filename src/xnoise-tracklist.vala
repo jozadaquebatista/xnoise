@@ -29,35 +29,32 @@ public class Xnoise.TrackList : TreeView, IParameter {
 	};
 	private TreeRowReference[] rowref_list;
 	private bool dragging;
-    private Menu menu;
+	private Menu menu;
 	public new ListStore model;
 	
-//	public signal void sign_activated(string uri, TreePath path);
 	public signal void sign_active_path_changed();
-//	public signal void tdata_dragreceive();
 
 	public TrackList() {
 		this.create_model();
 		this.create_view();
 		this.get_selection().set_mode(SelectionMode.MULTIPLE); 
-//		this.sign_activated           += this.on_activated;
 		this.sign_active_path_changed += this.active_path_changed_cb;
 
 		Gtk.drag_source_set(
-        	this,
-            Gdk.ModifierType.BUTTON1_MASK, 
-            this.target_list,
-            Gdk.DragAction.COPY|
-            Gdk.DragAction.MOVE
-            );
+			this,
+			Gdk.ModifierType.BUTTON1_MASK, 
+			this.target_list,
+			Gdk.DragAction.COPY|
+			Gdk.DragAction.MOVE
+			);
 
-        Gtk.drag_dest_set(
-        	this,
-        	Gtk.DestDefaults.ALL,
-        	this.target_list, 
-        	Gdk.DragAction.COPY|
-        	Gdk.DragAction.DEFAULT
-        	);
+		Gtk.drag_dest_set(
+			this,
+			Gtk.DestDefaults.ALL,
+			this.target_list, 
+			Gdk.DragAction.COPY|
+			Gdk.DragAction.DEFAULT
+			);
 
 		this.row_activated        += this.on_row_activated;
 		this.key_release_event    += this.on_key_released;
@@ -66,62 +63,61 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		this.drag_end             += this.on_drag_end;
 		this.drag_motion          += this.on_drag_motion;
 		this.drag_data_received   += this.on_drag_data_received;
-        this.button_release_event += this.on_button_release;
-        this.button_press_event   += this.on_button_press;
-        
-        menu = create_rightclick_menu();
+		this.button_release_event += this.on_button_release;
+		this.button_press_event   += this.on_button_press;
+			
+		menu = create_rightclick_menu();
 	}
 
 	public bool on_button_press(TrackList sender, Gdk.EventButton e) {
-		// The popup menu that is displayed when you right click in the playlist
 		Gtk.TreePath path;
 		Gtk.TreeViewColumn column;        
 		
 		Gtk.TreeSelection selection = this.get_selection();
-        int x = (int)e.x; 
+		int x = (int)e.x; 
 		int y = (int)e.y;
 		int cell_x, cell_y;
-        if(!(this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y))) return true;
-            
-        switch(e.button) {
-        	case 1:
-	        	if(selection.count_selected_rows()<=1) {
-	            	return false;
-	            }
-	            else {
-	                if(selection.path_is_selected(path)) {
-	                    if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
-	                    	((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
-	                    		selection.unselect_path(path);
-	                    } 								
-	                    return true;
-	                }
-	                else if(!(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
-	                    	((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK))) {
-	                    return true;
-	                }
-	                return false;
-	           }
+		if(!(this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y))) return true;
+			
+		switch(e.button) {
+			case 1:
+				if(selection.count_selected_rows()<=1) {
+					return false;
+				}
+				else {
+					if(selection.path_is_selected(path)) {
+						if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
+							((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
+								selection.unselect_path(path);
+						} 								
+						return true;
+					}
+					else if(!(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
+							((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK))) {
+						return true;
+					}
+					return false;
+				}
 			case 2:
 				print("button 2\n");
 				break;
 			case 3:
-                if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
-                	((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
-                		print("uuuns\n");
-                		//TODO handle right click menu opening right
-//                		return false; 
-//                		selection.unselect_path(path);
-                } 								
+				if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
+					((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
+						print("xyz\n");
+						//TODO handle right click menu opening right
+//						return false; 
+//						selection.unselect_path(path);
+				} 								
 //				selection.select_path(path);
 				rightclick_menu_popup(e.time);
 				return true;
-        }
-        if(!(selection.count_selected_rows()>0)) 
-        	selection.select_path(path);
+				}
+		if(!(selection.count_selected_rows()>0)) 
+			selection.select_path(path);
 		return false; 
-    }
-    	
+	}
+		
 	private void rightclick_menu_popup(uint activateTime) {
 		menu.popup(null, null, null, 0, activateTime); 
 	}
@@ -148,7 +144,6 @@ public class Xnoise.TrackList : TreeView, IParameter {
 	}
 
 ////REGION IParameter
-	//TODO: do column width ? maybe via cellrenderer width
 	public void read_data(KeyFile file) throws KeyFileError {
 //		weak TreeViewColumn tvc = this.get_column(TrackListColumn.TITLE);
 //		tvc.width = file.get_integer("settings", "title_width");;
@@ -162,62 +157,59 @@ public class Xnoise.TrackList : TreeView, IParameter {
 	}
 ////END REGION IParameter
 
-    public bool on_button_release(TrackList sender, Gdk.EventButton e) {
-		//Called when a button is released
+	public bool on_button_release(TrackList sender, Gdk.EventButton e) {
 		Gtk.TreePath path;
 		Gtk.TreeViewColumn column;
 		int cell_x, cell_y;
 
-        if((e.button != 1) | (this.dragging)) {
-            this.dragging = false;
-            return true;
-        }
-        if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
-        	((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
-            return true;
-        }
-        Gtk.TreeSelection selection = this.get_selection();
-        int x = (int)e.x; 
+		if((e.button != 1) | (this.dragging)) {
+			this.dragging = false;
+			return true;
+		}
+		if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
+			((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
+			return true;
+		}
+		Gtk.TreeSelection selection = this.get_selection();
+		int x = (int)e.x; 
 		int y = (int)e.y;
-        if(!(this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y))) return false;
-        selection.unselect_all();
-        selection.select_path(path);
+		if(!(this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y))) return false;
+		selection.unselect_all();
+		selection.select_path(path);
 		return false; //for testing
-    }
-    
+	}
+
 	public bool on_drag_motion(TrackList sender, Gdk.DragContext context, int x, int y, uint timestamp) {
 		Gtk.TreePath path;
 		Gtk.TreeViewDropPosition pos;
 		if(!(this.get_dest_row_at_pos(x, y, out path, out pos))) return false;
-        this.set_drag_dest_row(path, pos);
+		this.set_drag_dest_row(path, pos);
 		return true; 
-    }	
+	}	
 
 	private bool reorder_dragging;	
 	private void on_drag_begin(TrackList sender, DragContext context) {
-		// Called when dnd is started
-        this.dragging = true;
-        this.reorder_dragging = true;
+		this.dragging = true;
+		this.reorder_dragging = true;
 
-        Gdk.drag_abort(context, Gtk.get_current_event_time());
-        Gtk.TreeSelection selection = this.get_selection();
-        if(selection.count_selected_rows() > 1) {
-            Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND_MULTIPLE);
-        }
-        else {
+		Gdk.drag_abort(context, Gtk.get_current_event_time());
+		Gtk.TreeSelection selection = this.get_selection();
+		if(selection.count_selected_rows() > 1) {
+			Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND_MULTIPLE);
+		}
+		else {
 			Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND);
-        }
-        return;
+		}
+		return;
 	}
 
 	public void on_drag_end(TrackList sender, Gdk.DragContext context) { 
-		// Called when the dnd is ended
-        this.dragging = false;
-        this.reorder_dragging = false;
-        this.unset_rows_drag_dest();
-        Gtk.drag_dest_set( 
-        	this,
-        	Gtk.DestDefaults.ALL,
+		this.dragging = false;
+		this.reorder_dragging = false;
+		this.unset_rows_drag_dest();
+		Gtk.drag_dest_set( 
+			this,
+			Gtk.DestDefaults.ALL,
 			this.target_list, 
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.MOVE
@@ -225,7 +217,6 @@ public class Xnoise.TrackList : TreeView, IParameter {
 	}
 
 	public void on_drag_data_get(TrackList sender, Gdk.DragContext context, Gtk.SelectionData selection, uint target_type, uint etime) {
-//      Called when a drag source wants data for this drag operation
 		rowref_list = new TreeRowReference[0];
 		TreeIter iter;
 		GLib.Value uri;
@@ -238,17 +229,17 @@ public class Xnoise.TrackList : TreeView, IParameter {
  		int i = 0;
 		uris = new string[(int)paths.length() + 1];
 		foreach(weak TreePath path in paths) {
-            this.model.get_iter(out iter, path);
-            this.model.get_value(iter, TrackListColumn.URI, out uri);
-            uris[i] = uri.get_string();
-            i++;
+			this.model.get_iter(out iter, path);
+			this.model.get_value(iter, TrackListColumn.URI, out uri);
+			uris[i] = uri.get_string();
+			i++;
 			TreeRowReference treerowref = new TreeRowReference(this.model, path);
 			if(treerowref.valid()) {
 				rowref_list += #treerowref; //TODO: Check if this has to be owned in new syntax
 			}
 		}
-        selection.set_uris(uris); 
-    }
+		selection.set_uris(uris); 
+	}
 
 	private Gtk.TreeViewDropPosition position;
 	private void on_drag_data_received (TrackList seder, DragContext context, int x, int y, 
@@ -257,22 +248,16 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		//if reorder = false then data is coming from outside (music browser or nautilus) -> use uri_list
 		Gtk.TreePath path;
 		TreeRowReference drop_rowref;
-		string file = "";
-        string[] uris = selection.get_uris();
+		string file = null;
+		string[] uris = selection.get_uris();
 		this.get_dest_row_at_pos(x, y, out path, out position);
-		if(!this.reorder_dragging) {
+		if(!this.reorder_dragging) { 					// NOT WITHIN TRACKLIST
 			for(int i=(uris.length-1); i>=0;i--) {
-				try {
-					file = GLib.Filename.from_uri(uris[i]); 
-				}
-				catch(GLib.ConvertError e) {
-					print("%s\n", e.message);
-					return;
-				}
+				file = uris[i]; 
 				handle_dropped_file(file, ref path);			
 			}
 		}
-		else {
+		else { 											// WITHIN TRACKLIST
 			drop_rowref = null;
 			if(path!=null) {
 				//TODO:check if drop position is selected
@@ -342,38 +327,58 @@ public class Xnoise.TrackList : TreeView, IParameter {
 //		list_of_uris = null;
 	}
 	
-	private void handle_dropped_file(string file, ref TreePath? path) {
+	private void handle_dropped_file(string fileuri, ref TreePath? path) {
 		TreeIter iter, new_iter;
-		if(GLib.FileUtils.test(file, GLib.FileTest.IS_REGULAR)) {
+		File file;
+		FileType filetype;
+		weak string mime;
+		var psAudio = new PatternSpec("audio*");
+		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		try {
+			file = File.new_for_uri(fileuri);
+			FileInfo info = file.query_info(
+			                    attr, 
+			                    FileQueryInfoFlags.NONE, 
+			                    null);
+			filetype = info.get_file_type();
+			string content = info.get_content_type();
+			mime = g_content_type_get_mime_type(content);
+		}
+		catch(GLib.Error e){
+			stderr.printf("%s\n", e.message);
+			return;
+		}	
+			
+		if((filetype==GLib.FileType.REGULAR)&
+		   (psAudio.match_string(mime))) {
 			DbBrowser dbBr = new DbBrowser();
 			string artist, album, title;
 			uint tracknumb;
-			if(dbBr.uri_is_in_db(file)) {
-				TrackData val  = dbBr.get_trackdata_for_path(file);
-				artist         = val.Artist;
-				album          = val.Album;
-				title          = val.Title ;
-				tracknumb      = val.Tracknumber; 
+			if(dbBr.uri_is_in_db(fileuri)) {
+				var val   = dbBr.get_trackdata_for_uri(fileuri); //strings are already mu escaped
+				artist    = val.Artist;
+				album     = val.Album;
+				title     = val.Title ;
+				tracknumb = val.Tracknumber; 
 			}
 			else {
+				print("%s is not in the db.\n", fileuri);
 				var tr = new TagReader();
-				TrackData tags = tr.read_tag_from_file(file);
+				var tags = tr.read_tag_from_file(file.get_path());
 				artist         = Markup.printf_escaped("%s", tags.Artist); 
 				album          = Markup.printf_escaped("%s", tags.Album); 
 				title          = Markup.printf_escaped("%s", tags.Title); 
 				tracknumb      = tags.Tracknumber;
 			}
 			TreeIter first_iter;
-			if(!this.model.get_iter_first(out first_iter)) { 
-				//dropped on empty list, first uri
+			if(!this.model.get_iter_first(out first_iter)) { //dropped on empty list, first uri
 				this.model.insert(out new_iter, 0);
 			}
-			else if(path==null) {
-				//dropped below all entries, first uri
+			else if(path==null) { //dropped below all entries, first uri
 				model.append(out new_iter);
 			}					
-			else {
-				//all other uris
+			else { //all other uris
 				this.model.get_iter(out iter, path); 
 				if((position == Gtk.TreeViewDropPosition.BEFORE)||
 				   (position == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)||
@@ -394,14 +399,17 @@ public class Xnoise.TrackList : TreeView, IParameter {
 				TrackListColumn.TITLE, title,
 				TrackListColumn.ALBUM, album,
 				TrackListColumn.ARTIST, artist,
-				TrackListColumn.URI, GLib.Filename.to_uri(file),
+				TrackListColumn.URI, fileuri,
 				-1);
 			path = model.get_path(new_iter);
 		}
-		else if(GLib.FileUtils.test(file, GLib.FileTest.IS_DIR)) {
-			print("is directory: %s\n", file);
+		else if(filetype==GLib.FileType.DIRECTORY) {
+			print("is directory: %s\n", fileuri);
 			//TODO: Handle directories
 		}	
+		else {
+			print("Not a regular file or at least no audio file: %s\n", fileuri);
+		}
 	}
 	
 	private void get_last_unselected_path(ref TreePath? path) {
@@ -442,7 +450,6 @@ public class Xnoise.TrackList : TreeView, IParameter {
 				-1);
 		}
 		this.on_activated(uri, path);
-//		this.sign_activated(uri, path);
 	}
 
 	private bool on_key_released(TrackList sender, Gdk.EventKey e) {
@@ -622,39 +629,8 @@ public class Xnoise.TrackList : TreeView, IParameter {
 			-1);
 	}
 
-//	public void update_play_status_for_playlisttitle(bool paused) {
-//		TreeIter iter;
-//		Gtk.Invisible w = new Gtk.Invisible();
-//		Gdk.Pixbuf pixbuf;
-//		int state = PLTrackStatus.STOPPED;
-//		int new_state;
-//		int numberOfRows = model.iter_n_children(null);
-//		
-//		for(int i = 0; i < numberOfRows; i++) {
-//			model.iter_nth_child (out iter, null, i);
-//			model.get(iter,
-//				TrackListColumn.STATE, out state,
-//				-1);
-//			if(state > 0) {
-//				if(paused) {
-//					pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PAUSE, IconSize.BUTTON, null);
-//					new_state = PLTrackStatus.PAUSED;
-//				}
-//				else {
-//					pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
-//					new_state = PLTrackStatus.PLAYING;
-//				}
-//				model.set(iter,
-//					TrackListColumn.STATE, new_state,
-//					TrackListColumn.ICON, pixbuf,
-//					-1);
-//			}
-//		}
-//	}
-
 	private void unbolden_row(ref TreeIter iter) {
 		GLib.Value valArtist, valAlbum, valTitle;
-//		string artist = "", album = "", title = "";
 		this.model.get_value(
 			iter,
 			TrackListColumn.ARTIST,
@@ -709,13 +685,6 @@ public class Xnoise.TrackList : TreeView, IParameter {
 			Main.instance().main_window.playpause_button_set_pause_picture ();
 			Main.instance().gPl.play();
 		}
-//		Gdk.Pixbuf pixbuf;
-//		try {
-//			pixbuf = new Gdk.Pixbuf.from_file("ui/note.png");
-//		}
-//		catch (GLib.Error e) {
-//			print("Error: %s\n", e.message);
-//		}
 		this.model.get_iter(out iter, path);
 		this.reset_play_status_for_title();
 		this.set_state_picture_for_title(iter, TrackStatus.PLAYING);
@@ -742,28 +711,22 @@ public class Xnoise.TrackList : TreeView, IParameter {
 	}
 
 	private void create_view() {	
-		Gtk.TreeViewColumn columnStatus, columnPixb, columnArtist, columnAlbum, columnTitle, columnUri, columnTracknumber;
-	
-		columnPixb 	      = new TreeViewColumn();
-		columnStatus      = new TreeViewColumn();
-		columnTracknumber = new TreeViewColumn();
-		columnArtist      = new TreeViewColumn();
-		columnAlbum       = new TreeViewColumn();
-		columnTitle       = new TreeViewColumn();
-		columnUri         = new TreeViewColumn();
+		var columnPixb 	      = new TreeViewColumn();
+		var columnStatus      = new TreeViewColumn();
+		var columnTracknumber = new TreeViewColumn();
+		var columnArtist      = new TreeViewColumn();
+		var columnAlbum       = new TreeViewColumn();
+		var columnTitle       = new TreeViewColumn();
+		var columnUri         = new TreeViewColumn();
 
-//		columnPixb.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-//		columnStatus.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-//		columnTracknumber.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-//		columnArtist.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-//		columnAlbum.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-//		columnTitle.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-//		columnUri.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+		columnPixb.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+		columnStatus.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+		columnTracknumber.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
+		columnUri.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
 
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.set_fixed_size(-1,22); //TODO: Automatically determine height; maybe automatically set width once when adding songs
 		var renderer = new CellRendererText();
-//		renderer.set_fixed_size(-1,22);
 		renderer.set_fixed_height_from_font(1);
 
 		columnStatus.pack_start(renderer, false);
@@ -773,13 +736,13 @@ public class Xnoise.TrackList : TreeView, IParameter {
 
 		columnPixb.pack_start(pixbufRenderer, false);
 		columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListColumn.ICON);
-		columnPixb.min_width = 30;
+		columnPixb.set_fixed_width(30);
 		this.insert_column(columnPixb, -1);
 
 		columnTracknumber.pack_start(renderer, false);
 		columnTracknumber.add_attribute(renderer, "markup", TrackListColumn.TRACKNUMBER);
 		columnTracknumber.title = "#";
-		columnTracknumber.min_width = 30; 
+		columnTracknumber.set_fixed_width(32);
 		columnTracknumber.resizable = false;
 		this.insert_column(columnTracknumber, -1);
 		

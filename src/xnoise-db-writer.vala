@@ -103,20 +103,13 @@ public class Xnoise.DbWriter : GLib.Object {
 		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", "db.sqlite", null);
 	}
 		
-	private void db_update_entry(int id, TrackData tags, string pathname, string file) {
+	private void db_update_entry(int id, TrackData tags, string uri) {
 		string artist    = tags.Artist;
 		string title     = tags.Title;
 		string album     = tags.Album;
 		string genre     = tags.Genre;
 		uint tracknumber = tags.Tracknumber;
-		string uri;
-		try {
-			uri = GLib.Filename.to_uri(Path.build_filename(pathname, file));
-		} 
-		catch(GLib.ConvertError e) {
-			stderr.printf("Database update: path to uri conversion error. %s", e.message);	
-			return;
-		}
+
 		if(id>0){
 			delete_mlib_entry_statement.reset();
 			delete_mlib_entry_statement.bind_int(1, id);
@@ -134,23 +127,16 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 
-	private void db_insert_entry(TrackData tags, string pathname, string file) {
-		if (tags.Artist=="") return;
-		if (tags.Album=="") return;
-		if (tags.Title=="") return;
+	private void db_insert_entry(TrackData tags, string uri) {
+//		if (tags.Artist=="") return;
+//		if (tags.Album=="") return;
+//		if (tags.Title=="") return;
 		string artist    = tags.Artist;
 		string title     = tags.Title;
 		string album     = tags.Album;
 		string genre     = tags.Genre;
 		uint tracknumber = tags.Tracknumber; 
-		string uri;
-		try {
-			uri = GLib.Filename.to_uri(Path.build_filename(pathname, file));
-		} 
-		catch(GLib.ConvertError e) {
-			stderr.printf("Database insert: path to uri conversion error. %s", e.message);	
-			return;
-		}
+
 		insert_mlib_entry_statement.reset();
 		if( insert_mlib_entry_statement.bind_int( 1, (int)tracknumber) !=Sqlite.OK||
 			insert_mlib_entry_statement.bind_text(2, artist) !=Sqlite.OK||
@@ -165,16 +151,16 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 
-	private int db_entry_exists(string pathname, string file) {
+	private int db_entry_exists(string uri) {
 		int val = -1;
-		string uri;
-		try {
-			uri = GLib.Filename.to_uri(Path.build_filename(pathname, file));
-		} 
-		catch(GLib.ConvertError e) {
-			stderr.printf("Database entry existance check: path to uri conversion error. %s", e.message);	
-			return val;
-		}		
+//		string uri;
+//		try {
+//			uri = GLib.Filename.to_uri(Path.build_filename(pathname, file));
+//		} 
+//		catch(GLib.ConvertError e) {
+//			stderr.printf("Database entry existance check: path to uri conversion error. %s", e.message);	
+//			return val;
+//		}		
 		check_track_exists_statement.reset();
 		if(check_track_exists_statement.bind_text(1, uri)!=Sqlite.OK) {
 			this.db_error();
@@ -189,23 +175,23 @@ public class Xnoise.DbWriter : GLib.Object {
 //	private uint amount = 0;
 	public signal void sign_import_progress(uint current, uint amount);
 
-    private void import_tags_for_files(File dir) {
-        FileEnumerator enumerator;
-        try {
-            string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
-                                FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-                                FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
-            enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
-        } catch (Error error) {
-            critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
-            return;
-        }
-        FileInfo info;
-        while((info = enumerator.next_file(null))!=null) {
-            string filename = info.get_name();
-            string filepath = Path.build_filename(dir.get_path(), filename);
-            File file = File.new_for_path(filepath);
-            FileType filetype = info.get_file_type();
+	private void import_tags_for_files(File dir) {
+		FileEnumerator enumerator;
+		try {
+			string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
+			              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
+		} catch (Error error) {
+			critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
+			return;
+		}
+		FileInfo info;
+		while((info = enumerator.next_file(null))!=null) {
+			string filename = info.get_name();
+			string filepath = Path.build_filename(dir.get_path(), filename);
+			File file = File.new_for_path(filepath);
+			FileType filetype = info.get_file_type();
 
 			string content = info.get_content_type();
 			weak string mime = g_content_type_get_mime_type(content);
@@ -223,22 +209,22 @@ public class Xnoise.DbWriter : GLib.Object {
 //			         (mime == "audio/x-speex"))
 //audio/x-ms-wma {
 //				if(mime=="audio/x-mpegurl") print("file %s\n",file.get_path()); 
-				int idbuffer = db_entry_exists(dir.get_path(), info.get_name());
+				int idbuffer = db_entry_exists(file.get_uri());
 				if(idbuffer== -1) {
 					var tr = new TagReader();
-					this.db_insert_entry(tr.read_tag_from_file(filepath), dir.get_path(), info.get_name());
+					this.db_insert_entry(tr.read_tag_from_file(filepath), file.get_uri());
 					current+=1;
 				}
 				else {
 					var tr = new TagReader();
-					this.db_update_entry(idbuffer, tr.read_tag_from_file(filepath), dir.get_path(), info.get_name());
+					this.db_update_entry(idbuffer, tr.read_tag_from_file(filepath), file.get_uri());
 					current+=1;
 				}
 //				sign_import_progress(current, amount);   //TODO: Maybe use this to track import progress        
 			}
-        }
-    }
-    
+		}
+	}
+
 	public void check_db_and_tables_exist() {
 		bool db_table_exists = false;
 		string current_query = "";

@@ -34,6 +34,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	private ToggleButton toggleStream;
 	private Gtk.VBox notebookVBox;
 	private Gtk.Notebook noteb;
+	private int _posX_buffer;
+	private int _posY_buffer;
 //	private Action menuChildFullScreen;
 
 	public Button playPauseButton; 
@@ -51,23 +53,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		Params paramter = Params.instance();
 		paramter.data_register(this);
 		add_lastused_titles_to_tracklist();
-//		this.sign_volume_changed += volume_slide_changed;
-//		this.sign_volume_changed += (main_window, fraction) => { //handle volume slider change
-//			this.current_volume = fraction; //future
-//			Main.instance().gPl.volume = fraction; 
-//			Main.instance().gPl.playbin.set("volume", fraction); //current volume
-//		};
-//		this.sign_pos_changed += (main_window, fraction) => {
-//			Main.instance().gPl.gst_position = fraction;
-//		};
 	}
 	
-//	private void volume_slide_changed(MainWindow sender, double fraction) {
-//		this.current_volume = fraction; //for saving
-//		Main.instance().gPl.volume = fraction; 
-//		Main.instance().gPl.playbin.set("volume", fraction); //current volume
-//	}
-
 	private void create_widgets() {
 		try {
 			assert(GLib.FileUtils.test(MAIN_UI_FILE, FileTest.EXISTS));
@@ -166,7 +153,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			musicBrScrollWin.add(this.musicBr);
 			noteb = this.get_object("notebook1") as Gtk.Notebook;
 				
-			//search entry (left)
+			//search entry (left) ; TODO: IconEntry has been moved to Gtk+ as of version 2.14 - use Gtk+ IconEntry 
+			//as soon as Fedora 12 and ubuntu 9.04 is there
 			var searchImage = new Image.from_stock(Gtk.STOCK_FIND, IconSize.BUTTON);
 			this.searchEntryMB = new Sexy.IconEntry();
 			this.searchEntryMB.set_icon(Sexy.IconEntryPosition.PRIMARY, searchImage);
@@ -356,18 +344,12 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 //		final_tracklist = null;
 //	}
 
-	private int _posX_buffer;
-	private int _posY_buffer;
-	private bool fullscreen_being_handled;
 	
 	public void fullscreen_cb(Action s) {
-//		if(fullscreen_being_handled) {
 			this.toggle_fullscreen();
-//		}
 	}
 			
 	public void toggle_fullscreen() {
-		fullscreen_being_handled = true;
 		if(is_fullscreen) {
 			print("was fullscreen before\n");
 			this.window.unfullscreen();	
@@ -375,7 +357,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		else {
 			this.window.fullscreen();					
 		}
-		fullscreen_being_handled = false;
 	}
 	
 	public void toggle_window_visbility() {
@@ -641,9 +622,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	}
 	
 	private void remove_selected_button_clicked_cb () {
-//		bool previous_title_marked_active = false; 
-		trackList.remove_selected_row();//ref previous_title_marked_active);
-//		if (!previous_title_marked_active) trackList.mark_last_title_active();
+		trackList.remove_selected_row();
 	}
 
 	private bool on_progressbar_press_cb(Gtk.ProgressBar pb, Gdk.EventButton e) { 
@@ -691,7 +670,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	public void progressbar_set_value(uint pos,uint len) {
 		int dur_min, dur_sec, pos_min, pos_sec;
 		if(len > 0) {
-			double fraction = (double) pos / (double) len;
+			double fraction = (double)pos/(double)len;
 			if(fraction<0.0) fraction = 0.0;
 			if(fraction>1.0) fraction = 1.0;
 			songProgressBar.set_fraction(fraction);
@@ -700,7 +679,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			dur_sec = (int)((len % 60000) / 1000);
 			pos_min = (int)(pos / 60000);
 			pos_sec = (int)((pos % 60000) / 1000);
-			string timeinfo = "%02d:%02d / %02d:%02d".printf(pos_min,pos_sec,dur_min,dur_sec);
+			string timeinfo = "%02d:%02d / %02d:%02d".printf(pos_min, pos_sec, dur_min, dur_sec);
 			songProgressBar.set_text(timeinfo);
 		} 
 		else {
@@ -743,7 +722,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			}
 		}
 		if((path!=null) && (path!="")) {
-			var tr = new TagReader();
+			var tr = new TagReader(); //TODO: Do this with gstreamer, so that streams can be handled, too
 			TrackData tags = tr.read_tag_from_file(path);
 			string artist = tags.Artist;
 			string album  = tags.Album; 
@@ -766,7 +745,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		else {
 			if((!Main.instance().gPl.playing)&&
 				(!Main.instance().gPl.paused)) {
-				text = "<b>XNOISE</b>\nready to rock!";
+				text = "<b>XNOISE</b>\nready to rock! ;-)";
 			}
 			else {
 				text = "<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
