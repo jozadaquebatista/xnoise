@@ -25,14 +25,25 @@ using Gst;
 public class Xnoise.GstPlayer : GLib.Object {
 	private uint _timeout;
 	private int64 length_time;
+	private string _Uri = "";
 	public Element playbin;
 	public bool   paused_last_state;
 	public string location { get; set; } //TODO
 	public bool   seeking  { get; set; } //TODO
 	public double volume   { get; set; }   
-	public string Uri      { get; set; default = ""; }
 	public bool   playing  { get; set; }
 	public bool   paused   { get; set; }
+
+	public string Uri { 
+		get {
+			return _Uri;
+		}
+		set {
+			_Uri = value;
+			this.playbin.set("uri", value);
+		}
+	}
+	
 	public double gst_position {
 		set {
 			if(seeking == false) {

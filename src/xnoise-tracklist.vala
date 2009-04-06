@@ -719,15 +719,14 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		var columnTitle       = new TreeViewColumn();
 		var columnUri         = new TreeViewColumn();
 
-		columnPixb.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-		columnStatus.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-		columnTracknumber.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-		columnUri.set_sizing(Gtk.TreeViewColumnSizing.FIXED);
-
 		var pixbufRenderer = new CellRendererPixbuf();
-		pixbufRenderer.set_fixed_size(-1,22); //TODO: Automatically determine height; maybe automatically set width once when adding songs
+		pixbufRenderer.set_fixed_size(-1,22); 
+
 		var renderer = new CellRendererText();
 		renderer.set_fixed_height_from_font(1);
+//		renderer.ellipsize = Pango.EllipsizeMode.END; //TODO: how does this work?
+//		renderer.ellipsize_set = true;
+
 
 		columnStatus.pack_start(renderer, false);
 		columnStatus.title = "Status";
@@ -750,30 +749,38 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		columnTitle.add_attribute(renderer, "markup", TrackListColumn.TITLE);
 		columnTitle.title = "Title";
 		columnTitle.min_width = 100; //TODO: is it possible to set the min width via number of characters for the used font?
-		columnTitle.sizing = Gtk.TreeViewColumnSizing.AUTOSIZE;
 		columnTitle.resizable = true;
+		columnTitle.reorderable = true;
 		this.insert_column(columnTitle, -1);
 
 		columnAlbum.pack_start(renderer, false);
 		columnAlbum.add_attribute(renderer, "markup", TrackListColumn.ALBUM);
 		columnAlbum.title = "Album";
 		columnAlbum.min_width = 100;
-		columnAlbum.sizing = Gtk.TreeViewColumnSizing.AUTOSIZE;
 		columnAlbum.resizable = true;
+		columnAlbum.reorderable = true;
 		this.insert_column(columnAlbum, -1);
 
 		columnArtist.pack_start(renderer, false);
 		columnArtist.add_attribute(renderer, "markup", TrackListColumn.ARTIST);
 		columnArtist.title = "Artist";
 		columnArtist.min_width = 100;
-		columnArtist.sizing = Gtk.TreeViewColumnSizing.AUTOSIZE;
 		columnArtist.resizable = true;
+		columnArtist.reorderable = true;
 		this.insert_column(columnArtist, -1);
 
 		columnUri.pack_start(renderer, false);
 		columnUri.title = "Uri";
 		columnUri.visible = false;
 		this.insert_column(columnUri, -1);
+
+		columnPixb.sizing        = Gtk.TreeViewColumnSizing.FIXED;
+		columnStatus.sizing      = Gtk.TreeViewColumnSizing.FIXED;
+		columnTracknumber.sizing = Gtk.TreeViewColumnSizing.FIXED;
+		columnUri.sizing         = Gtk.TreeViewColumnSizing.FIXED;
+		columnArtist.sizing      = Gtk.TreeViewColumnSizing.GROW_ONLY;
+		columnAlbum.sizing       = Gtk.TreeViewColumnSizing.GROW_ONLY;
+		columnTitle.sizing       = Gtk.TreeViewColumnSizing.GROW_ONLY;
 	}
 	
 	private void create_model() {	// DATA

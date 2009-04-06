@@ -60,7 +60,15 @@ public class Xnoise.MusicBrowser : TreeView {
 		this.button_press_event   += this.on_button_press;
 	}
 
-
+    private string searchtext = "";
+    public void on_searchtext_changed(Gtk.Entry sender) {
+    	this.searchtext = sender.get_text().down();
+    	change_model_data();
+    	if((this.searchtext!="")&&
+    	   (this.searchtext!=null)) {
+			this.expand_all();
+    	}
+    }
 
 	public bool on_button_press(MusicBrowser sender, Gdk.EventButton e) {
 		Gtk.TreePath path = null;
@@ -80,21 +88,21 @@ public class Xnoise.MusicBrowser : TreeView {
 				}
 				else {
 					if(selection.path_is_selected(path)) {
-						if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
-						   ((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
+						if(((e.state & Gdk.ModifierType.SHIFT_MASK)==Gdk.ModifierType.SHIFT_MASK)|
+						   ((e.state & Gdk.ModifierType.CONTROL_MASK)==Gdk.ModifierType.CONTROL_MASK)) {
 							selection.unselect_path(path);
 						} 
 						return true;
 					}
-					else if(!(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
-							((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK))) {
+					else if(!(((e.state & Gdk.ModifierType.SHIFT_MASK)==Gdk.ModifierType.SHIFT_MASK)|
+							((e.state & Gdk.ModifierType.CONTROL_MASK)==Gdk.ModifierType.CONTROL_MASK))) {
 						return true; 
 					}
 					return false;
 				}
 			}
 			case 3: {
-				print("button 3\n");
+				print("button 3\n"); //TODO
 				return false; //TODO check if this is right
 			}
 		}
@@ -372,21 +380,21 @@ public class Xnoise.MusicBrowser : TreeView {
 		string[] titleArray;
 
 		TreeIter iter_artist, iter_album, iter_title;	
-		artistArray = artists_browser.get_artists();
+		artistArray = artists_browser.get_artists(ref searchtext);
 		foreach(weak string artist in artistArray) { 	              //ARTISTS
 			model.prepend(out iter_artist, null); 
 			model.set(iter_artist,  	
 				MusicBrModColumn.ICON, artist_pixb,		
 				MusicBrModColumn.VIS_TEXT, artist,		
 				-1); 
-			albumArray = albums_browser.get_albums(artist);
+			albumArray = albums_browser.get_albums(artist, ref searchtext);
 			foreach(weak string album in albumArray) { 			    //ALBUMS
 				model.prepend(out iter_album, iter_artist); 
 				model.set(iter_album,  	
 					MusicBrModColumn.ICON, album_pixb,		
 					MusicBrModColumn.VIS_TEXT, album,		
 					-1); 
-				titleArray = titles_browser.get_titles(artist, album);
+				titleArray = titles_browser.get_titles(artist, album, ref searchtext);
 				foreach(weak string title in titleArray) {	         //TITLES
 					model.prepend(out iter_title, iter_album); 
 					model.set(iter_title,  	

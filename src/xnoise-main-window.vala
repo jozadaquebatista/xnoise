@@ -160,10 +160,11 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			this.searchEntryMB.set_icon(Sexy.IconEntryPosition.PRIMARY, searchImage);
 			this.searchEntryMB.set_icon_highlight(Sexy.IconEntryPosition.SECONDARY, true) ;
 			this.searchEntryMB.add_clear_button();
-			this.searchEntryMB.set_sensitive(false);
-			this.searchEntryMB.changed += () => {
-				print("%s\n", this.searchEntryMB.text);
-			};
+			this.searchEntryMB.set_sensitive(true);
+			this.searchEntryMB.changed += musicBr.on_searchtext_changed;
+//			 () => {
+//				print("%s\n", this.searchEntryMB.text);
+//			};
 			var sexyentryBox = this.get_object("sexyentryBox") as Gtk.HBox; 
 			sexyentryBox.add(searchEntryMB);
 			

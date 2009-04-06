@@ -46,11 +46,11 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private static const string STMT_TRACKNUMBER_FOR_TRACK = 
 		"SELECT tracknumber FROM mlib WHERE artist = ? AND album = ? AND title = ?";
 	private static const string STMT_GET_ARTISTS = 
-		"SELECT DISTINCT artist FROM mlib ORDER BY LOWER(artist) DESC";
+		"SELECT DISTINCT artist FROM mlib WHERE LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ? ORDER BY LOWER(artist) DESC";
 	private static const string STMT_GET_ALBUMS = 
-		"SELECT DISTINCT album FROM mlib WHERE artist = ? ORDER BY LOWER(album) DESC";
+		"SELECT DISTINCT album FROM mlib WHERE artist = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) ORDER BY LOWER(album) DESC";
 	private static const string STMT_GET_TITLES = 
-		"SELECT DISTINCT title FROM mlib WHERE artist = ? AND album = ? ORDER BY tracknumber DESC"; 
+		"SELECT DISTINCT title FROM mlib WHERE artist = ? AND album = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) ORDER BY tracknumber DESC"; 
 
 	public DbBrowser() {
 		DATABASE = dbFileName();
@@ -161,19 +161,27 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return val;
 	}
 
-	public string[] get_artists() { 
+	public string[] get_artists(ref string searchtext) { 
 		string[] val = {};
 		get_artist_statement.reset();
+		if((this.get_artist_statement.bind_text(1, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
+		   (this.get_artist_statement.bind_text(2, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
+		   (this.get_artist_statement.bind_text(3, "%%%s%%".printf(searchtext))!=Sqlite.OK)) {
+			this.db_error();
+		}
 		while(get_artist_statement.step() == Sqlite.ROW) {
 			val += get_artist_statement.column_text(0);
 		}
 		return val;
 	}
 
-	public string[] get_albums(string artist) { 
+	public string[] get_albums(string artist, ref string searchtext) { 
 		string[] val = {};
 		get_albums_statement.reset();
-		if(this.get_albums_statement.bind_text(1, artist)!=Sqlite.OK) {
+		if((this.get_albums_statement.bind_text(1, artist)!=Sqlite.OK)|
+		   (this.get_albums_statement.bind_text(2, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
+		   (this.get_albums_statement.bind_text(3, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
+		   (this.get_albums_statement.bind_text(4, "%%%s%%".printf(searchtext))!=Sqlite.OK)) {
 			this.db_error();
 		}
 		while(get_albums_statement.step() == Sqlite.ROW) {
@@ -182,11 +190,14 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return val;
 	}
 
-	public string[] get_titles(string artist, string album) { 
+	public string[] get_titles(string artist, string album, ref string searchtext) { 
 		string[] val = {};
 		get_titles_statement.reset();
 		if((this.get_titles_statement.bind_text(1, artist)!=Sqlite.OK)|
-			(get_titles_statement.bind_text(2, album)!=Sqlite.OK)) {
+		   (this.get_titles_statement.bind_text(2, album)!=Sqlite.OK)|
+		   (this.get_titles_statement.bind_text(3, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
+		   (this.get_titles_statement.bind_text(4, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
+		   (this.get_titles_statement.bind_text(5, "%%%s%%".printf(searchtext))!=Sqlite.OK)) {
 			this.db_error();
 		}
 		
