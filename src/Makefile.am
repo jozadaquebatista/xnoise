@@ -38,6 +38,7 @@ xnoise_VALASOURCES = \
 	xnoise-tag-reader.vala \
 	xnoise-tracklist.vala \
 	xnoise-misc.vala \
+	xnoise-settings-dialog.vala \
 	$(NULL)
 
 xnoise_SOURCES = \

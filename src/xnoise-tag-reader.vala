@@ -23,7 +23,7 @@
 
 using GLib;
 
-public class Xnoise.TagReader : GLib.Object {
+internal class Xnoise.TagReader : GLib.Object {
 
 	public TrackData read_tag_from_file(string file) {
 		TrackData tags; 

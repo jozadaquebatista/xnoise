@@ -38,7 +38,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		this.create_model();
 		this.create_view();
 		this.get_selection().set_mode(SelectionMode.MULTIPLE); 
-		this.sign_active_path_changed += this.active_path_changed_cb;
+		this.sign_active_path_changed += this.on_active_path_changed;
 
 		Gtk.drag_source_set(
 			this,
@@ -235,7 +235,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 			i++;
 			TreeRowReference treerowref = new TreeRowReference(this.model, path);
 			if(treerowref.valid()) {
-				rowref_list += #treerowref; //TODO: Check if this has to be owned in new syntax
+				rowref_list += (owned)treerowref; 
 			}
 		}
 		selection.set_uris(uris); 
@@ -690,7 +690,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		this.set_state_picture_for_title(iter, TrackStatus.PLAYING);
 	}
 
-	private void active_path_changed_cb(TrackList sender){ 
+	private void on_active_path_changed(TrackList sender){ 
 		TreePath path;
 		if (!this.get_active_path(out path)) return;
 		string uri = this.get_uri_for_path(path);
@@ -699,6 +699,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 			Main.instance().gPl.playSong();
 		}
 	}
+	
 	public string get_uri_for_path(TreePath path) {
 		TreeIter iter;
 		string uri = "";
@@ -726,7 +727,6 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		renderer.set_fixed_height_from_font(1);
 //		renderer.ellipsize = Pango.EllipsizeMode.END; //TODO: how does this work?
 //		renderer.ellipsize_set = true;
-
 
 		columnStatus.pack_start(renderer, false);
 		columnStatus.title = "Status";

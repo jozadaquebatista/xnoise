@@ -23,7 +23,7 @@ using GLib;
 
 public class Xnoise.Params : GLib.Object, IParameter { //TODO: Rename Interface nd class
 	private static Params _instance;
-	private SList<IParameter> IParameter_implementors;
+	private SList<IParameter> IParameter_impls;
 	public int posX         { get; set; default = 300;}
 	public int posY         { get; set; default = 300;}
 	public int winWidth     { get; set; default = 1000;}
@@ -31,7 +31,7 @@ public class Xnoise.Params : GLib.Object, IParameter { //TODO: Rename Interface 
 	public bool winMaxed    { get; set; default = false;}
 
 	public Params() {
-			IParameter_implementors = new GLib.SList<IParameter>();
+			IParameter_impls = new GLib.SList<IParameter>();
 			data_register(this);
 	}
 
@@ -56,9 +56,38 @@ public class Xnoise.Params : GLib.Object, IParameter { //TODO: Rename Interface 
 		}
 	}
 
-	public void data_register(IParameter obj) {
-		IParameter_implementors.remove(obj);
-		IParameter_implementors.append(obj);
+	public void data_register(IParameter iparam) {
+		IParameter_impls.remove(iparam);
+		IParameter_impls.append(iparam);
+	}
+
+	public void read_from_file_for_single(IParameter iparam) {
+		KeyFile file;
+		file = new GLib.KeyFile();
+		try {
+			string filename = _build_file_name();
+			file.load_from_file(filename, GLib.KeyFileFlags.NONE);
+		} catch (GLib.Error ex) {
+			return;
+		}
+		try {
+			iparam.read_data(file);
+		} 
+		catch (GLib.KeyFileError e) {
+			stderr.printf("Error reading single\n");
+			stderr.printf("%s\n", e.message);
+		}
+	}
+	
+	public void write_to_file_for_single(IParameter iparam) {
+		FileStream stream = GLib.FileStream.open(_build_file_name(), "w");
+		uint length;
+		KeyFile file = new GLib.KeyFile();
+		foreach (weak IParameter c in IParameter_impls) {
+			c.write_data(file);
+		}
+		iparam.write_data(file);
+		stream.puts(file.to_data(out length));
 	}
 
 	public void read_from_file() {
@@ -70,9 +99,9 @@ public class Xnoise.Params : GLib.Object, IParameter { //TODO: Rename Interface 
 		} catch (GLib.Error ex) {
 			return;
 		}
-		foreach(weak IParameter c in IParameter_implementors) {
+		foreach(weak IParameter ip in IParameter_impls) {
 			try {
-				c.read_data(file);
+				ip.read_data(file);
 			} 
 			catch (GLib.KeyFileError e) {
 			}
@@ -83,7 +112,7 @@ public class Xnoise.Params : GLib.Object, IParameter { //TODO: Rename Interface 
 		FileStream stream = GLib.FileStream.open(_build_file_name(), "w");
 		uint length;
 		KeyFile file = new GLib.KeyFile();
-		foreach (weak IParameter c in IParameter_implementors) {
+		foreach (weak IParameter c in IParameter_impls) {
 			c.write_data(file);
 		}
 		stream.puts(file.to_data(out length));

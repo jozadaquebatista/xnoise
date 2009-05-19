@@ -23,7 +23,7 @@ using GLib;
 
 public class Xnoise.Main : GLib.Object {
 	public MainWindow main_window;
-	public GstPlayer gPl;
+	internal GstPlayer gPl;
 	private static Main _instance;
 
 	public Main() {

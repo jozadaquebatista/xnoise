@@ -14,7 +14,10 @@
    sodipodi:version="0.32"
    inkscape:version="0.46"
    sodipodi:docname="xnoise.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/home/qnull/xnoise/ui/xnoise_16x16.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
   <defs
      id="defs5480">
     <inkscape:perspective
@@ -51,8 +54,8 @@
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     inkscape:window-width="1400"
-     inkscape:window-height="999"
+     inkscape:window-width="1680"
+     inkscape:window-height="995"
      inkscape:window-x="0"
      inkscape:window-y="25" />
   <metadata
@@ -72,17 +75,17 @@
      inkscape:groupmode="layer">
     <path
        sodipodi:type="arc"
-       style="opacity:0.92370571999999995;fill:#c10a00;fill-opacity:1;stroke:#d5c9aa;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter6420)"
+       style="opacity:0.9237057;fill:#c10a00;fill-opacity:1;stroke:#d5c9aa;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter6420)"
        id="path6306"
        sodipodi:cx="23.785715"
        sodipodi:cy="23.714285"
        sodipodi:rx="23.642857"
        sodipodi:ry="23.714285"
        d="M 47.428572,23.714285 A 23.642857,23.714285 0 1 1 0.14285851,23.714285 A 23.642857,23.714285 0 1 1 47.428572,23.714285 z"
-       transform="matrix(0.9882114,0,0,0.9852348,0.5661152,0.7072882)" />
+       transform="matrix(0.8190271,0,0,0.8225842,4.7331417,4.1358596)" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#f6ff00;stroke-width:1.71848201999999994;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 1.0089621,23.367435 C 10.059823,23.213757 10.059823,23.354556 10.059823,23.354556 L 12.894535,12.545606 L 18.837321,47.276752 L 25.912066,0.86610497 L 32.845316,39.900226 L 36.660864,23.097847 L 47.133894,23.110727"
+       style="fill:none;fill-rule:evenodd;stroke:#f6ff00;stroke-width:1.63660049;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 1.8251642,23.050222 C 10.527674,22.905262 10.527674,23.038075 10.527674,23.038075 L 13.253284,12.842206 L 18.967342,45.603408 L 25.769795,1.8251642 L 32.436198,38.645278 L 36.104893,22.795927 L 46.174835,22.808076"
        id="path5488"
        sodipodi:nodetypes="cccccccc" />
   </g>

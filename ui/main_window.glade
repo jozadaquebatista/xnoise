@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Mar  3 21:58:52 2009 -->
+<!--Generated with glade3 3.4.5 on Tue May 19 23:08:21 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window1">
     <child>
@@ -464,47 +464,39 @@ ready to rock</property>
                         <property name="visible">True</property>
                       </widget>
                       <packing>
+                        <property name="fill">False</property>
                         <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkMenuBar" id="menubar2">
+                      <widget class="GtkButton" id="repeatButton">
                         <property name="visible">True</property>
+                        <property name="relief">GTK_RELIEF_NONE</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="response_id">0</property>
                         <child>
-                          <widget class="GtkMenuItem" id="menuitemRepeatMode">
+                          <widget class="GtkHBox" id="hbox4">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Repeat Mode</property>
-                            <property name="use_underline">True</property>
                             <child>
-                              <widget class="GtkMenu" id="menu4">
+                              <widget class="GtkImage" id="repeatImage">
                                 <property name="visible">True</property>
-                                <child>
-                                  <widget class="GtkRadioMenuItem" id="imagemenuNoRepeat">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">No repeat</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="draw_as_radio">True</property>
-                                  </widget>
-                                </child>
-                                <child>
-                                  <widget class="GtkRadioMenuItem" id="menuitemRepeatOne">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">repeat one</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_as_radio">True</property>
-                                  </widget>
-                                </child>
-                                <child>
-                                  <widget class="GtkRadioMenuItem" id="menuitemRepeatAll">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">repeat all</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_as_radio">True</property>
-                                  </widget>
-                                </child>
+                                <property name="stock">gtk-goto-bottom</property>
                               </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="repeatLabel">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">no repeat</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="padding">4</property>
+                                <property name="position">1</property>
+                              </packing>
                             </child>
                           </widget>
                         </child>
@@ -512,6 +504,7 @@ ready to rock</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
+                        <property name="padding">2</property>
                         <property name="position">4</property>
                       </packing>
                     </child>

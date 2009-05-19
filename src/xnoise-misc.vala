@@ -24,7 +24,7 @@
 
 //Enums
 
-public enum Xnoise.MusicBrModColumn { //TODO: Rename
+public enum Xnoise.MusicBrowserColumn { //TODO: Rename
 	ICON = 0,
 	VIS_TEXT,
 	ARTIST_ID,
@@ -32,7 +32,13 @@ public enum Xnoise.MusicBrModColumn { //TODO: Rename
 	TITLE_ID
 }
 
-public struct Xnoise.TrackData {
+public enum Xnoise.Repeat { 
+	NOT_AT_ALL = 0,
+	SINGLE,
+	ALL
+}
+
+public struct Xnoise.TrackData { // meta information structure
 	public string Artist;
 	public string Album;
 	public string Title;

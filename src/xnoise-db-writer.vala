@@ -152,23 +152,15 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	private int db_entry_exists(string uri) {
-		int val = -1;
-//		string uri;
-//		try {
-//			uri = GLib.Filename.to_uri(Path.build_filename(pathname, file));
-//		} 
-//		catch(GLib.ConvertError e) {
-//			stderr.printf("Database entry existance check: path to uri conversion error. %s", e.message);	
-//			return val;
-//		}		
+		int id = -1;
 		check_track_exists_statement.reset();
 		if(check_track_exists_statement.bind_text(1, uri)!=Sqlite.OK) {
 			this.db_error();
 		}
 		while(check_track_exists_statement.step() == Sqlite.ROW) {
-	        val = check_track_exists_statement.column_int(0);
+	        id = check_track_exists_statement.column_int(0);
 		}
-		return val;
+		return id;
 	}
 
 	private uint current = 0; 

@@ -22,13 +22,12 @@
 using GLib;
 using Gst;
 
-public class Xnoise.GstPlayer : GLib.Object {
+internal class Xnoise.GstPlayer : GLib.Object {
 	private uint _timeout;
 	private int64 length_time;
 	private string _Uri = "";
 	public Element playbin;
-	public bool   paused_last_state;
-	public string location { get; set; } //TODO
+//	public bool   paused_last_state;
 	public bool   seeking  { get; set; } //TODO
 	public double volume   { get; set; }   
 	public bool   playing  { get; set; }
@@ -65,7 +64,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		create_elements();
 		_timeout = GLib.Timeout.add (500, cyclic_send_song_position_cb);
 		this.notify += (s, p) => {
-			switch (p.name) {
+			switch(p.name) {
 				case "Uri": {
 					sign_uri_changed(s.Uri);
 					break;
@@ -108,11 +107,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private bool cyclic_send_song_position_cb() {
 		Gst.Format fmt = Gst.Format.TIME;
 		int64 pos, len;
-		if ((playbin.current_state == State.PLAYING)&(playing == false)) {
+		if ((playbin.current_state == State.PLAYING)&&(playing == false)) {
 			playing = true; 
 			paused  = false;
 		}
-		if ((playbin.current_state == State.PAUSED)&(paused == false)) {
+		if ((playbin.current_state == State.PAUSED)&&(paused == false)) {
 			paused = true; 
 			playing = false; 
 		}
@@ -130,20 +129,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private void wait() {
 		State stateOld, stateNew; 
 		playbin.get_state(out stateOld, out stateNew, (Gst.ClockTime)50000000); 
-//		switch(stateNew) {
-//			case (State.PAUSED): 
-//				sign_state_changed(GstPlayerState.PAUSE);
-//				break;
-//			case (State.PLAYING): 
-//				sign_state_changed(GstPlayerState.PLAY);
-//				break;
-//			case (State.NULL): 
-////				sign_state_changed(GstPlayerState.STOP);
-//				break;		
-//			case (State.READY): 
-////				sign_state_changed(GstPlayerState.STOP);
-//				break;			
-//		} 
 	}
 
 	public void play () {
@@ -180,10 +165,4 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 }
-
-//public enum Xnoise.GstPlayerState {
-//	STOP = 0,
-//	PLAY,
-//	PAUSE
-//}
 

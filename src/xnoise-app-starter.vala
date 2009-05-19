@@ -32,7 +32,7 @@ public class Xnoise.AppStarter : GLib.Object {
 	public static Main xn;
 
 	public static int main (string[] args) {
-		var opt_context = new OptionContext ("xnoise"); //TODO: Do some reset options
+		var opt_context = new OptionContext("xnoise"); //TODO: Do some reset options
 		opt_context.set_description("xnoise is a media player for audio files. \nIt is always running in a unique instance and if music files are clicked, these can be automatically added to xnoise. \nIt is also possible to add songs via commandline.\n");
 		opt_context.set_help_enabled (true);
 		

@@ -23,19 +23,21 @@ using GLib;
 using Gtk;
 using Gdk;
 
-public class Xnoise.MusicBrowser : TreeView {
+public class Xnoise.MusicBrowser : TreeView, IParameter {
 	public new TreeStore model;
 	private TreeStore dummymodel;
 	private Gdk.Pixbuf artist_pixb;
 	private Gdk.Pixbuf album_pixb;
 	private Gdk.Pixbuf title_pixb;
 	private bool dragging;
+	internal int fontsizeMB = 8;
 	public signal void sign_activated();
 	private const TargetEntry[] target_list = {
 		{"text/uri-list", 0, 0}
 	};// This is not a very long list but uris are so universal
 
 	public MusicBrowser() {
+		Params.instance().data_register(this);
 		create_model();
 		set_pixbufs();
 		add_data_to_model();
@@ -59,9 +61,17 @@ public class Xnoise.MusicBrowser : TreeView {
 		this.button_release_event += this.on_button_release;
 		this.button_press_event   += this.on_button_press;
 	}
+	
+	public void read_data(KeyFile file) throws KeyFileError {
+		this.fontsizeMB = file.get_integer("settings", "fontsizeMB");
+	}
 
+	public void write_data(KeyFile file) {
+		file.set_integer("settings", "fontsizeMB", fontsizeMB);
+	}
+	
     private string searchtext = "";
-    public void on_searchtext_changed(Gtk.Entry sender) {
+    public void on_searchtext_changed(Sexy.IconEntry sender) {
     	this.searchtext = sender.get_text().down();
     	change_model_data();
     	if((this.searchtext!="")&&
@@ -156,7 +166,7 @@ public class Xnoise.MusicBrowser : TreeView {
 		sel = this.get_selection();
 		paths = sel.get_selected_rows(null);
 		foreach(weak TreePath path in paths) {
-				string[] l = this.fill_uri_list(path);
+				string[] l = this.build_uri_list_for_treepath(path);
 				foreach(weak string u in l) {
 					uris += u;
 				}
@@ -165,7 +175,7 @@ public class Xnoise.MusicBrowser : TreeView {
 		selection.set_uris(uris);
 	}
 
-	private string[] fill_uri_list(Gtk.TreePath path) {
+	private string[] build_uri_list_for_treepath(Gtk.TreePath path) {
 		TreeIter iter, iterp, iterp2, iterChild, iterChildChild;
 		string artist = "";
 		string album  = "";
@@ -222,7 +232,7 @@ public class Xnoise.MusicBrowser : TreeView {
 		return urilist;		
 	}
 
-	private TrackData[] fill_trackdata_list(Gtk.TreePath path) {
+	private TrackData[] get_trackdata_for_treepath(Gtk.TreePath path) {
 		TreeIter iter, iterp, iterp2, iterChild, iterChildChild;
 		string artist = "";
 		string album = "";
@@ -298,7 +308,7 @@ public class Xnoise.MusicBrowser : TreeView {
 
 	private void on_row_activated(MusicBrowser sender, TreePath path, TreeViewColumn column){
 		if (path.get_depth()>1) {
-			TrackData[] td_list = this.fill_trackdata_list(path);
+			TrackData[] td_list = this.get_trackdata_for_treepath(path);
 			this.add_songs(td_list, true);
 			td_list = null;
 		}
@@ -384,22 +394,22 @@ public class Xnoise.MusicBrowser : TreeView {
 		foreach(weak string artist in artistArray) { 	              //ARTISTS
 			model.prepend(out iter_artist, null); 
 			model.set(iter_artist,  	
-				MusicBrModColumn.ICON, artist_pixb,		
-				MusicBrModColumn.VIS_TEXT, artist,		
+				MusicBrowserColumn.ICON, artist_pixb,		
+				MusicBrowserColumn.VIS_TEXT, artist,		
 				-1); 
 			albumArray = albums_browser.get_albums(artist, ref searchtext);
 			foreach(weak string album in albumArray) { 			    //ALBUMS
 				model.prepend(out iter_album, iter_artist); 
 				model.set(iter_album,  	
-					MusicBrModColumn.ICON, album_pixb,		
-					MusicBrModColumn.VIS_TEXT, album,		
+					MusicBrowserColumn.ICON, album_pixb,		
+					MusicBrowserColumn.VIS_TEXT, album,		
 					-1); 
 				titleArray = titles_browser.get_titles(artist, album, ref searchtext);
 				foreach(weak string title in titleArray) {	         //TITLES
 					model.prepend(out iter_title, iter_album); 
 					model.set(iter_title,  	
-						MusicBrModColumn.ICON, title_pixb,		
-						MusicBrModColumn.VIS_TEXT, title,		
+						MusicBrowserColumn.ICON, title_pixb,		
+						MusicBrowserColumn.VIS_TEXT, title,		
 						-1); 
 				}
 			}
@@ -422,9 +432,14 @@ public class Xnoise.MusicBrowser : TreeView {
 	}	
 
 	private void setup_view() {	
+		Params.instance().read_from_file_for_single(this);
+		if(fontsizeMB<7) fontsizeMB = 7;
+
 		this.set_size_request (300,500);
 		var renderer = new CellRendererText();
-		renderer.font="Sans 9"; //TODO: This should not be hard wired
+		renderer.font = "Sans " + fontsizeMB.to_string(); 
+//		renderer.family = "Sans"; //TODO: Does not work!?
+//		renderer.size = 9; //TODO: Does not work!?
 		renderer.set_fixed_height_from_font(1);
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.stock_id = Gtk.STOCK_GO_FORWARD;

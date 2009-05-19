@@ -23,7 +23,7 @@ using GLib;
 using Gtk;
 
 
-public class Xnoise.MusicFolderDialog : Gtk.Builder {
+internal class Xnoise.MusicFolderDialog : Gtk.Builder {
 	private string[] mfolders;
 	private Dialog window;
 	private ListStore listmodel;
@@ -70,10 +70,10 @@ public class Xnoise.MusicFolderDialog : Gtk.Builder {
 			badd       = this.get_object("Addfolderbutton") as Button;
 			brem       = this.get_object("removeButton") as Button;
 
-			bok.clicked+=on_ok_button_clicked_cb;
-			bcancel.clicked+=on_cancel_button_clicked_cb;
-			badd.clicked+=on_add_folder_button_clicked_cb;
-			brem.clicked+=on_remove_button_clicked_cb;
+			bok.clicked+=on_ok_button_clicked;
+			bcancel.clicked+=on_cancel_button_clicked;
+			badd.clicked+=on_add_folder_button_clicked;
+			brem.clicked+=on_remove_button_clicked;
 
 			listmodel = new ListStore(1, typeof(string));
 			tv.set_model(listmodel);
@@ -103,7 +103,7 @@ public class Xnoise.MusicFolderDialog : Gtk.Builder {
 		return false;
 	}
 
-	public void on_ok_button_clicked_cb() {
+	private void on_ok_button_clicked() {
 		Main.instance().main_window.musicBr.set_sensitive(false);
 		bok.sensitive = false;
 		bcancel.sensitive = false;
@@ -119,7 +119,7 @@ public class Xnoise.MusicFolderDialog : Gtk.Builder {
 		window.destroy();
 	}
 	
-	public void* write_music_folder_into_db() { 
+	private void* write_music_folder_into_db() { //THREADING FUNCTION
 		//thread for the song import to the db
 		//sends a signal when finished, this signal is handled by main window
 		DbWriter dbb = new DbWriter();
@@ -130,11 +130,11 @@ public class Xnoise.MusicFolderDialog : Gtk.Builder {
 		return null;
 	}
 
-	public void on_cancel_button_clicked_cb() {
+	private void on_cancel_button_clicked() {
 		this.window.destroy();
 	}
 
-	public void on_add_folder_button_clicked_cb() {
+	private void on_add_folder_button_clicked() {
 		Gtk.FileChooserDialog dialog = new Gtk.FileChooserDialog(
 			"Select music directory",
 			window, 
@@ -152,7 +152,7 @@ public class Xnoise.MusicFolderDialog : Gtk.Builder {
 		dialog = null;
 	}
 
-	public void on_remove_button_clicked_cb() {
+	private void on_remove_button_clicked() {
 		Gtk.TreeSelection selection = tv.get_selection ();
 		if(selection.count_selected_rows() > 0) {
 			selection.get_selected (null, out iter);
