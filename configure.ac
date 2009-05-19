@@ -1,4 +1,4 @@
-AC_INIT(xnoise, 0.1.0, joernmagens(at)SPAMFREE g m x (dot)de, [xnoise])
+AC_INIT(xnoise, 0.1.0, shuerhaak en(at)SPAMFREE g o ogl ema il (dot)com, [xnoise])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([dist-bzip2])
