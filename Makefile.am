@@ -5,6 +5,7 @@ NULL =
 SUBDIRS = \
 	ui \
 	src \
+	misc \
 	po \
 	$(NULL)
 

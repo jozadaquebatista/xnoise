@@ -34,6 +34,7 @@ AC_SUBST(XNOISE_LIBS)
 
 AC_CONFIG_FILES([Makefile
 	ui/Makefile
+	misc/Makefile
 	src/Makefile
 	po/Makefile.in])
 
