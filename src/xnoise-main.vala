@@ -44,7 +44,7 @@ public class Xnoise.Main : GLib.Object {
 				main_window.progressbar_set_value(pos, len);
 		};
 		gPl.sign_eos += () => { //handle endOfStream signal from gst player
-			main_window.change_song(Direction.NEXT);
+			main_window.change_song(Direction.NEXT, true);
 			main_window.progressbar_set_value(0, 0);
 			main_window.songProgressBar.set_text("00:00 / 00:00");;
 		};

@@ -598,7 +598,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		change_song(Direction.PREVIOUS);
 	}
 
-	public void change_song(int direction) {
+	public void change_song(int direction, bool handle_repeat_state = false) {
 		TreeIter iter;
 		TreePath path = null;
 		int rowcount = -1;
@@ -618,29 +618,35 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			return;
 		}
 		
-		if(direction == Direction.NEXT)     path.next();
-		if(direction == Direction.PREVIOUS) path.prev();
+		if(!(handle_repeat_state && (repeatState==Repeat.SINGLE))) {
+			print("handle next or previous\n");
+			if(direction == Direction.NEXT)     path.next();
+			if(direction == Direction.PREVIOUS) path.prev();
+		}
 
-		if(trackList.model.get_iter(out iter, path)) { 
+		if(trackList.model.get_iter(out iter, path)) {       //goto next song, if possible...
+			print("goto next title or same\n");
 			trackList.reset_play_status_for_title();
 			trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
 			if(Main.instance().gPl.paused) this.trackList.set_pause_picture();
 			trackList.set_focus_on_iter(ref iter);
-//			trackList.set_cursor(path, null, false);
 		} 
-		else if((trackList.model.get_iter_first(out iter))) {
+		else if((trackList.model.get_iter_first(out iter))&&
+		        (((handle_repeat_state)&&
+		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) {                                       //...or goto first song, if possible ...
+			print("goto first\n");
 			trackList.reset_play_status_for_title();
 			trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
 			if(Main.instance().gPl.paused) this.trackList.set_pause_picture();
 			trackList.set_focus_on_iter(ref iter);
-//			trackList.set_cursor(new TreePath.from_string("0"), null, false);
 		}
 		else {
-			Main.instance().gPl.stop();
+			print("goto stop\n");
+			Main.instance().gPl.stop();                      //...or stop
 			playpause_button_set_play_picture ();
 			trackList.reset_play_status_for_title();
 			trackList.set_focus_on_iter(ref iter);
-//			trackList.set_cursor(path, null, false);
+			Main.instance().gPl.Uri="";                      //...or stop
 		}
 	}
 
@@ -756,7 +762,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		setingsD = new SettingsDialog();
 	}
 
-	public void set_displayed_title(string newuri) {
+	public void set_displayed_title(string? newuri) {
 		string text;
 		string path = null;
 		if((newuri!=null) && (newuri!="")) {

@@ -66,6 +66,15 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParameter {
 	public void write_data(KeyFile file) {
 		file.set_integer("settings", "fontsizeMB", fontsizeMB);
 	}
+
+	private MusicFolderDialog mfd;
+	private void on_music_add_clicked(Gtk.Button sender) {
+		mfd = new MusicFolderDialog();
+		mfd.sign_finish += () => {
+			mfd = null;
+			Idle.add(Main.instance().main_window.musicBr.change_model_data);	
+		};
+	}
 	
 	private bool setup_widgets() {
 		try {
@@ -74,16 +83,20 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParameter {
 			this.add_from_file(SETTINGS_UI_FILE);
 			this.dialog = this.get_object("dialog1") as Gtk.Dialog;
 
-			var okButton            = this.get_object("button2") as Gtk.Button;
-			okButton.can_focus      = false;
-			okButton.clicked        += this.on_ok_button_clicked;
+			var okButton             = this.get_object("button2") as Gtk.Button;
+			okButton.can_focus       = false;
+			okButton.clicked         += this.on_ok_button_clicked;
 			
-			var cancelButton        = this.get_object("button1") as Gtk.Button;
-			cancelButton.can_focus  = false;
-			cancelButton.clicked    += this.on_cancel_button_clicked;
+			var cancelButton         = this.get_object("button1") as Gtk.Button;
+			cancelButton.can_focus   = false;
+			cancelButton.clicked     += this.on_cancel_button_clicked;
 			
-			sb                      = this.get_object("spinbutton1") as Gtk.SpinButton;
-			sb.changed              += this.on_mb_font_changed;
+			sb                       = this.get_object("spinbutton1") as Gtk.SpinButton;
+			sb.changed               += this.on_mb_font_changed;
+			
+			var musicAddButton       = this.get_object("button3") as Gtk.Button;
+			musicAddButton.can_focus = false;
+			musicAddButton.clicked   += this.on_music_add_clicked;
 			
 			this.dialog.set_icon_from_file (Config.UIDIR + "/xnoise_16x16.png");
 		} 
