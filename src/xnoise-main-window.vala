@@ -41,6 +41,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	public Button playPauseButton; 
 	public Button repeatButton;
 	public Image repeatImage;
+	public Image albumimage;
 	public Label repeatLabel;
 	public ProgressBar songProgressBar;
 	public double current_volume; //keep it global for saving to keyfile
@@ -100,6 +101,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			this.repeatLabel               = this.get_object("repeatLabel") as Gtk.Label;
 			this.repeatImage               = this.get_object("repeatImage") as Gtk.Image;
 				
+			this.albumimage                = this.get_object("albumimage") as Gtk.Image;
+
 			this.song_title_label           = this.get_object("song_title_label") as Gtk.Label;
 			this.song_title_label.use_markup= true;
 			
