@@ -104,6 +104,7 @@ internal class Xnoise.MusicFolderDialog : Gtk.Builder {
 	}
 
 	private void on_ok_button_clicked() {
+		Main.instance().main_window.searchEntryMB.set_sensitive(false);
 		Main.instance().main_window.musicBr.set_sensitive(false);
 		bok.sensitive = false;
 		bcancel.sensitive = false;

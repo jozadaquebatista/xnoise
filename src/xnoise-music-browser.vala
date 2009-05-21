@@ -372,6 +372,7 @@ public class Xnoise.MusicBrowser : TreeView, IParameter {
 		model.clear();
 		add_data_to_model();
 		set_model(model);
+		Main.instance().main_window.searchEntryMB.set_sensitive(true);
 		this.set_sensitive(true);
 		return false;
 	}

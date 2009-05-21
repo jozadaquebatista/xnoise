@@ -20,7 +20,7 @@
  */
 
 public class Xnoise.AppStarter : GLib.Object {
-	public static Unique.Response message_received_cb(Unique.App sender, 
+	public static Unique.Response on_message_received(Unique.App sender, 
 	                                                  int command, 
 	                                                  Unique.MessageData message_data, 
 	                                                  uint time) {
@@ -32,10 +32,10 @@ public class Xnoise.AppStarter : GLib.Object {
 	public static Main xn;
 
 	public static int main (string[] args) {
-		var opt_context = new OptionContext("xnoise"); //TODO: Do some reset options
-		opt_context.set_description("xnoise is a media player for audio files. \nIt is always running in a unique instance and if music files are clicked, these can be automatically added to xnoise. \nIt is also possible to add songs via commandline.\n");
+		var opt_context = new OptionContext("[FILE] [FILE]..."); //TODO: Do some reset options
+		opt_context.set_summary("Xnoise is a media player for audio files.");
+		opt_context.set_description("http://code.google.com/p/xnoise/\n");
 		opt_context.set_help_enabled (true);
-		
 		try {
 			opt_context.parse (ref args);
 		} catch (OptionError e) {
@@ -48,22 +48,37 @@ public class Xnoise.AppStarter : GLib.Object {
 		Unique.App app;
 		var app_starter = new AppStarter();
 		app = new Unique.App.with_commands("org.gnome.xnoise", "xnoise", null);
-		int i = 0;
+		string[] uris = {};
+		File file;
+		FileType filetype;
+		weak string mime;
+		var psAudio = new PatternSpec("audio*");
+		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 
-		string[] uris = new string[args.length-1];
-		PatternSpec psOgg = new PatternSpec("*.ogg");//TODO: Remove this and use mime instead
-		PatternSpec psMp3 = new PatternSpec("*.mp3"); 
-		PatternSpec psWav = new PatternSpec("*.wav"); 
-
-		foreach(string arg in args) { //TODO: Test this; this should handle uris and paths
-			if(GLib.FileUtils.test(arg, GLib.FileTest.IS_REGULAR) & 
-			  (i>0) & //arg 0 is xnoise
-			  (psWav.match_string(arg) | psOgg.match_string(arg) | psMp3.match_string(arg))) {
-				uris[i-1] = arg;
+		for(int j=1;j<args.length;j++) { //TODO: Test this; this should handle uris and paths
+			try {
+				file = File.new_for_commandline_arg(args[j]);
+				FileInfo info = file.query_info(
+					                attr, 
+					                FileQueryInfoFlags.NONE, 
+					                null);
+				filetype = info.get_file_type();
+				string content = info.get_content_type();
+				mime = g_content_type_get_mime_type(content);
 			}
-			i++;
+			catch(GLib.Error e){
+				stderr.printf("argerror: %s\n", e.message);
+				return 1;
+			}	
+			
+			if((filetype==GLib.FileType.REGULAR)&
+			   (psAudio.match_string(mime))) {
+			   	uris += file.get_uri();
+			}
 		}
-
+		uris += null;
+		
 		if (app.is_running) {
 			if(uris.length > 0) {
 				print("Adding tracks to the running instance of xnoise!\n");
@@ -85,7 +100,7 @@ public class Xnoise.AppStarter : GLib.Object {
 		else {
 			xn = Main.instance();
 			app.watch_window((Gtk.Window)xn.main_window.window);
-			app.message_received += app_starter.message_received_cb;
+			app.message_received += app_starter.on_message_received;
 
 			xn.main_window.window.show_all();
 			

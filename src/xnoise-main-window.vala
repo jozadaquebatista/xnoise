@@ -29,7 +29,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	private bool is_fullscreen = false;
 	private HPaned hpaned;
 	private Gtk.VolumeButton VolumeSlider;
-	private Sexy.IconEntry searchEntryMB;
 	private ToggleButton toggleMB;
 	private ToggleButton toggleStream;
 	private Gtk.VBox notebookVBox;
@@ -38,6 +37,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	private int _posY_buffer;
 //	private Action menuChildFullScreen;
 
+	public Sexy.IconEntry searchEntryMB;
 	public Button playPauseButton; 
 	public Button repeatButton;
 	public Image repeatImage;
@@ -442,20 +442,25 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	public void add_uris_to_tracklist(string[]? uris) {
 		if(uris!=null) {
 			if(uris[0]==null) return;
-			int i = 0;
+			int k=0;
 			TreeIter iter, iter_2;
 			trackList.reset_play_status_for_title();				
-			foreach(string uri in uris) {
+			while(uris[k]!=null) { //because foreach is not working for this array coming from libunique
+				File file;
 				TagReader tr = new TagReader();
-				TrackData t = tr.read_tag_from_file(uri);
-				if (i==0) {
+				file = File.new_for_uri(uris[k]);
+
+				//TODO: only for local files, so streams will not lead to a crash
+				TrackData t = tr.read_tag_from_file(file.get_path()); 
+
+				if (k==0) {
 					iter = trackList.insert_title(TrackStatus.PLAYING, 
 					                              null, 
 					                              (int)t.Tracknumber,
 					                              t.Title, 
 					                              t.Album, 
 					                              t.Artist, 
-					                              uri);
+					                              uris[k]);
 					trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
 					iter_2 = iter;
 				}
@@ -466,11 +471,11 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 					                              t.Title, 
 					                              t.Album, 
 					                              t.Artist, 
-					                              uri);	
+					                              uris[k]);	
 					trackList.set_state_picture_for_title(iter);
 				}
 				tr = null;
-				i++;
+				k++;
 			}
 			Main.instance().add_track_to_gst_player(uris[0]);
 		}
