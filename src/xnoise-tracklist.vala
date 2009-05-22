@@ -736,6 +736,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		columnPixb.pack_start(pixbufRenderer, false);
 		columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListColumn.ICON);
 		columnPixb.set_fixed_width(30);
+		columnPixb.reorderable = true;
 		this.insert_column(columnPixb, -1);
 
 		columnTracknumber.pack_start(renderer, false);
@@ -743,6 +744,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		columnTracknumber.title = "#";
 		columnTracknumber.set_fixed_width(32);
 		columnTracknumber.resizable = false;
+		columnTracknumber.reorderable = true;
 		this.insert_column(columnTracknumber, -1);
 		
 		columnTitle.pack_start(renderer, false);

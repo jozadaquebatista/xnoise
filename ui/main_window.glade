@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Wed May 20 18:51:06 2009 -->
+<!--Generated with glade3 3.4.5 on Fri May 22 07:49:05 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="window1">
     <child>
@@ -361,7 +361,7 @@ ready to rock</property>
                     <child>
                       <widget class="GtkLabel" id="label7">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">label</property>
+                        <property name="label" translatable="yes">streams</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -381,7 +381,7 @@ ready to rock</property>
                     </child>
                     <child>
                       <widget class="GtkLabel" id="label8">
-                        <property name="label" translatable="yes">label</property>
+                        <property name="label" translatable="yes">Videos</property>
                       </widget>
                       <packing>
                         <property name="position">2</property>

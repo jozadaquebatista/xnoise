@@ -23,7 +23,7 @@ using GLib;
 using Gtk;
 
 public class Xnoise.MainWindow : Gtk.Builder, IParameter {
-	private const string MAIN_UI_FILE = Config.DATADIR + "/ui/main_window.ui";
+	private const string MAIN_UI_FILE = Config.DATADIR + "ui/main_window.ui";
 	private Label song_title_label;
 	private bool _seek;
 	private bool is_fullscreen = false;
@@ -31,6 +31,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	private Gtk.VolumeButton VolumeSlider;
 	private ToggleButton toggleMB;
 	private ToggleButton toggleStream;
+	private ToggleButton toggleVideo;
 	private Gtk.VBox notebookVBox;
 	private Gtk.Notebook noteb;
 	private int _posX_buffer;
@@ -68,7 +69,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			
 			this.add_from_file(MAIN_UI_FILE);
 			this.window = this.get_object("window1") as Gtk.Window;
-
+			
+			//PLAY, PAUSE, STOP, NEXT, PREVIOUS BUTTONS
 			this.playPauseButton           = this.get_object("playPauseButton") as Gtk.Button;
 			playPauseButton.can_focus      = false;
 			this.playPauseButton.clicked   += this.on_playpause_button_clicked;
@@ -84,7 +86,9 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			var previousButton             = this.get_object("previousButton") as Gtk.Button;
 			previousButton.can_focus       = false;
 			previousButton.clicked         += this.on_previous_button_clicked;
+			//---------------------
 			
+			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = this.get_object("removeAllButton") as Gtk.Button;
 			removeAllButton.can_focus      = false;
 			removeAllButton.clicked        += this.on_remove_all_button_clicked;
@@ -94,47 +98,73 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			removeSelectedButton.can_focus = false;
 			removeSelectedButton.clicked   += this.on_remove_selected_button_clicked;
 			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
+			//--------------------
 			
+			//REPEAT MODE SELECTOR
 			this.repeatButton              = this.get_object("repeatButton") as Gtk.Button;
 			repeatButton.can_focus         = false;
 			this.repeatButton.clicked      += this.on_repeat_button_clicked;
 			this.repeatLabel               = this.get_object("repeatLabel") as Gtk.Label;
 			this.repeatImage               = this.get_object("repeatImage") as Gtk.Image;
-				
+			//--------------------
+			
+			//PLAYING TITLE IMAGE
 			this.albumimage                = this.get_object("albumimage") as Gtk.Image;
+			//--------------------
 
+
+			//PLAYING TITLE NAME
 			this.song_title_label           = this.get_object("song_title_label") as Gtk.Label;
 			this.song_title_label.use_markup= true;
+			//--------------------
 			
+			//PROGRESS BAR
 			this.songProgressBar            = this.get_object("songProgressBar") as Gtk.ProgressBar; 
 			this.songProgressBar.button_press_event   += on_progressbar_press;
 			this.songProgressBar.button_release_event += on_progressbar_release;
 			this.songProgressBar.set_text("00:00 / 00:00");
 			this.songProgressBar.fraction = 0.0;
+			//---------------------
 			
 			this.hpaned = this.get_object("hpaned1") as Gtk.HPaned;
 			
+			int notebookButtonHeight = 24; //TODO: Set height by fontsize
+			
+			//NOTEBOOK SELECTION BUTTONS
 			notebookVBox = this.get_object("vbox6") as Gtk.VBox;
+			
 			toggleMB = new Gtk.ToggleButton(); 
-			toggleMB.label = _("Music Browser");
+			toggleMB.label = _("Music");
 			toggleMB.can_focus = false;
 			toggleMB.active = true; //initial value
 			toggleMB.clicked += notebookMB_clicked;
+			toggleMB.set_size_request(-1, notebookButtonHeight); 
 
 			toggleStream = new Gtk.ToggleButton(); 
-			toggleStream.label = _("Stream Browser") ;
-			toggleStream.can_focus      = false;
+			toggleStream.label = _("Streams") ;
+			toggleStream.can_focus = false;
 			toggleStream.clicked += notebookStream_clicked;
+			toggleStream.set_size_request(-1, notebookButtonHeight); 
 			
+			toggleVideo = new Gtk.ToggleButton(); 
+			toggleVideo.label = _("Videos") ;
+			toggleVideo.can_focus = false;
+			toggleVideo.clicked += notebookVideo_clicked;
+			toggleVideo.set_size_request(-1, notebookButtonHeight); 
+
 			notebookVBox.pack_start(toggleMB, false, false, 0);
 			notebookVBox.pack_start(toggleStream, false, false, 0);
-
+			notebookVBox.pack_start(toggleVideo, false, false, 0);
+			//----------------
+			
+			//VOLUME SLIDE BUTTON
 			this.VolumeSlider = new Gtk.VolumeButton();
 			this.VolumeSlider.can_focus = false;
-			this.VolumeSlider.set_value(0.2);
+			this.VolumeSlider.set_value(0.3); //Default value
 			this.VolumeSlider.value_changed += on_volume_slider_change;
 			var vbVol = this.get_object("vboxVolumeButton") as Gtk.VBox; 
 			vbVol.pack_start(VolumeSlider, false, false, 1);
+			//---------------
 			
 			///MAIN WINDOW MENU	
 			var menuChildAdd          = this.get_object("imagemenuitem1") as Gtk.Action; 
@@ -182,7 +212,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			var sexyentryBox = this.get_object("sexyentryBox") as Gtk.HBox; 
 			sexyentryBox.add(searchEntryMB);
 			
-			this.window.set_icon_from_file (Config.UIDIR + "/xnoise_16x16.png");
+			this.window.set_icon_from_file (Config.UIDIR + "xnoise_16x16.png");
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 
@@ -206,6 +236,9 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 
 	private void notebookMB_clicked(Gtk.ToggleButton sender) {
 		if(sender.active) {
+			this.toggleVideo.clicked -= notebookVideo_clicked;
+			this.toggleVideo.active = false;
+			this.toggleVideo.clicked += notebookVideo_clicked;
 			this.toggleStream.clicked -= notebookStream_clicked;
 			this.toggleStream.active = false;
 			this.toggleStream.clicked += notebookStream_clicked;
@@ -218,8 +251,12 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		}
 	}
 
+
 	private void notebookStream_clicked(Gtk.ToggleButton sender) {
 		if(sender.active) {
+			this.toggleVideo.clicked -= notebookVideo_clicked;
+			this.toggleVideo.active = false;
+			this.toggleVideo.clicked += notebookVideo_clicked;
 			this.toggleMB.clicked -= notebookMB_clicked;
 			this.toggleMB.active = false;
 			this.toggleMB.clicked += notebookMB_clicked;
@@ -231,6 +268,24 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			this.toggleStream.clicked += notebookStream_clicked;
 		}
 	}
+
+	private void notebookVideo_clicked(Gtk.ToggleButton sender) {
+		if(sender.active) {
+			this.toggleMB.clicked -= notebookMB_clicked;
+			this.toggleMB.active = false;
+			this.toggleMB.clicked += notebookMB_clicked;
+			this.toggleStream.clicked -= notebookStream_clicked;
+			this.toggleStream.active = false;
+			this.toggleStream.clicked += notebookStream_clicked;
+			this.noteb.set_current_page(2);
+		}
+		else {
+			this.toggleVideo.clicked -= notebookMB_clicked;
+			this.toggleVideo.active = true;
+			this.toggleVideo.clicked += notebookMB_clicked;
+		}
+	}
+
 
 	private void add_lastused_titles_to_tracklist() {
 		//TODO: write tracks to tracklist
@@ -269,8 +324,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 
 	private StatusIcon create_tray_icon() {
 //		StatusIcon icon = new StatusIcon();
-//		icon.file = Config.UIDIR + "/xnoise_16x16.png";
-		StatusIcon icon = new StatusIcon.from_file(Config.UIDIR + "/xnoise_16x16.png");
+//		icon.file = Config.UIDIR + "xnoise_16x16.png";
+		StatusIcon icon = new StatusIcon.from_file(Config.UIDIR + "xnoise_16x16.png");
 //		icon.set_tooltip_text("xnoise");
 		return icon;
 	}

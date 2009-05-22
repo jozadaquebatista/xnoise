@@ -1,8 +1,9 @@
 NULL = 
 
 AM_CPPFLAGS = \
-	-DDATADIR=\"$(datadir)/xnoise\" \
-	-DUIDIR=\"$(datadir)/xnoise/ui\" \
+	-DDATADIR=\"$(datadir)/xnoise/\" \
+	-DUIDIR=\"$(datadir)/xnoise/ui/\" \
+	-DLICENSEDIR=\"$(datadir)/xnoise/license/\" \
 	$(XNOISE_CFLAGS) \
 	-include $(CONFIG_HEADER) \
 	$(NULL)

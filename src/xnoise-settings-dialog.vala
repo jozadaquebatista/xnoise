@@ -23,7 +23,7 @@ using GLib;
 using Gtk;
 
 public class Xnoise.SettingsDialog : Gtk.Builder, IParameter {
-	private const string SETTINGS_UI_FILE = Config.DATADIR + "/ui/settings.ui";
+	private const string SETTINGS_UI_FILE = Config.DATADIR + "ui/settings.ui";
 	public Gtk.Dialog dialog;
 	private Gtk.SpinButton sb;
 	private int fontsizeMB;
@@ -98,7 +98,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParameter {
 			musicAddButton.can_focus = false;
 			musicAddButton.clicked   += this.on_music_add_clicked;
 			
-			this.dialog.set_icon_from_file (Config.UIDIR + "/xnoise_16x16.png");
+			this.dialog.set_icon_from_file (Config.UIDIR + "xnoise_16x16.png");
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 

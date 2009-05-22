@@ -9,17 +9,15 @@ SUBDIRS = \
 	po \
 	$(NULL)
 
-xnoisedocdir = ${prefix}/doc/xnoisexnoisedoc_DATA = \	
-	ChangeLog \
-	README \
+xnoiselicense_DATA =  \	
 	COPYING \
 	AUTHORS \
-	INSTALL \
-	NEWS\
 	$(NULL)
+	
+xnoiselicensedir = $(datadir)/xnoise/license
 
 EXTRA_DIST = \
-	$(xnoisedoc_DATA) \
+	$(xnoiselicense_DATA) \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in\

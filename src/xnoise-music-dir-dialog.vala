@@ -61,7 +61,7 @@ internal class Xnoise.MusicFolderDialog : Gtk.Builder {
 
 	private void create_widgets() {
 		try {
-			this.add_from_file(Config.UIDIR + "/add_folder.ui");
+			this.add_from_file(Config.UIDIR + "add_folder.ui");
 
 			window     = this.get_object("musicFolderDialog") as Dialog;
 			tv         = this.get_object("tv") as TreeView;
@@ -81,7 +81,7 @@ internal class Xnoise.MusicFolderDialog : Gtk.Builder {
 			cell.set ("foreground_set", true, null);
 			tv.insert_column_with_attributes (-1, "Path", cell, "text", 0, null);
 
-			window.set_icon_from_file (Config.UIDIR + "/xnoise_16x16.png");
+			window.set_icon_from_file (Config.UIDIR + "xnoise_16x16.png");
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 

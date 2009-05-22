@@ -33,25 +33,25 @@ public class Xnoise.AboutDialog : Gtk.AboutDialog {
 	public AboutDialog() {
 		string contents;
 		try {
-			GLib.FileUtils.get_contents (GLib.Path.build_filename ("COPYING"), out contents);
+			GLib.FileUtils.get_contents (GLib.Path.build_filename(Config.LICENSEDIR + "COPYING"), out contents); //TODO: add LICENSEDIR to vapi and to /src/Makefile
 			license = contents;
 		}
-		catch (GLib.Error e) {
+		catch(GLib.Error e) {
 			stderr.printf("%s\n", e.message);
 		}
 
 		try {
-			var pixbuf = new Gdk.Pixbuf.from_file (Config.UIDIR + "/xnoise_48x48.png");
+			var pixbuf = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
 			logo = pixbuf;
 		}
-		catch (GLib.Error e) {
+		catch(GLib.Error e) {
 			stderr.printf("%s\n", e.message);
 		}
 
 		try {
-			set_icon_from_file (Config.UIDIR + "/xnoise_16x16.png");
+			set_icon_from_file(Config.UIDIR + "xnoise_16x16.png");
 		}
-		catch (GLib.Error e) {
+		catch(GLib.Error e) {
 			stderr.printf("%s\n", e.message);
 		}
 

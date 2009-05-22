@@ -423,9 +423,9 @@ public class Xnoise.MusicBrowser : TreeView, IParameter {
 		
 	private void set_pixbufs() {
 		try {
-			artist_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "/guitar.png");
-			album_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "/album.png");
-			title_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "/note.png");
+			artist_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
+			album_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "album.png");
+			title_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "note.png");
 		}
 		catch (GLib.Error e) {
 			print("Error: %s\n",e.message);
