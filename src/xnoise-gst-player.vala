@@ -80,13 +80,13 @@ internal class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private void create_elements() {
-		playbin = ElementFactory.make ("playbin", "playbin");
+		playbin = ElementFactory.make("playbin", "playbin");
 		var bus = new Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
 		bus.message += (bus, msg) => {
 			//	print("Message: %d\n", msg.type);
-			switch (msg.type) {
+			switch(msg.type) {
 				case MessageType.ERROR: {
 					Error err;
 					string debug;

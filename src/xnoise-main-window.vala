@@ -292,7 +292,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 //		print("add_lastused_titles_to_tracklist\n");
 	}
 
-	private void on_repeatState_changed(MainWindow sender) {
+	private void on_repeatState_changed(GLib.ParamSpec pspec) {
 		switch(this.repeatState) {
 			case Repeat.NOT_AT_ALL : {
 				repeatLabel.label = "no repeat";
@@ -682,13 +682,11 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		}
 		
 		if(!(handle_repeat_state && (repeatState==Repeat.SINGLE))) {
-			print("handle next or previous\n");
 			if(direction == Direction.NEXT)     path.next();
 			if(direction == Direction.PREVIOUS) path.prev();
 		}
 
 		if(trackList.model.get_iter(out iter, path)) {       //goto next song, if possible...
-			print("goto next title or same\n");
 			trackList.reset_play_status_for_title();
 			trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
 			if(Main.instance().gPl.paused) this.trackList.set_pause_picture();
@@ -697,14 +695,12 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		else if((trackList.model.get_iter_first(out iter))&&
 		        (((handle_repeat_state)&&
 		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) {                                       //...or goto first song, if possible ...
-			print("goto first\n");
 			trackList.reset_play_status_for_title();
 			trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
 			if(Main.instance().gPl.paused) this.trackList.set_pause_picture();
 			trackList.set_focus_on_iter(ref iter);
 		}
 		else {
-			print("goto stop\n");
 			Main.instance().gPl.stop();                      //...or stop
 			playpause_button_set_play_picture ();
 			trackList.reset_play_status_for_title();
