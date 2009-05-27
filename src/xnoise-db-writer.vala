@@ -29,6 +29,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private Statement delete_mlib_entry_statement;
 	private Statement update_mlib_entry_statement;
 	private Statement insert_mlib_entry_statement;
+	private Statement insert_lastused_entry_statement;
 	private Statement check_track_exists_statement;
 	private Statement begin_statement;
 	private Statement commit_statement;
@@ -49,6 +50,8 @@ public class Xnoise.DbWriter : GLib.Object {
 		"INSERT INTO mlib (id, tracknumber, artist, album, title, genre, uri) VALUES (\"null\", ?, ?, ?, ?, ?, ?)";
 	private static const string STMT_INSERT_ENTRY = 
 		"INSERT INTO mlib (tracknumber, artist, album, title, genre, uri) VALUES (?, ?, ?, ?, ?, ?)";
+	private static const string STMT_INSERT_LASTUSED = 
+		"INSERT INTO lastused (uri) VALUES (?)";
 	private static const string STMT_WRITE_MUSIC_FOLDERS = 
 		"INSERT INTO music_folders (name) VALUES (?)";
 	private static const string STMT_DEL_MUSIC_FOLDERS = 
@@ -86,6 +89,8 @@ public class Xnoise.DbWriter : GLib.Object {
 	    	out this.check_track_exists_statement); 
 	    this.db.prepare_v2(STMT_INSERT_ENTRY, -1, 
 	    	out this.insert_mlib_entry_statement); 
+	    this.db.prepare_v2(STMT_INSERT_LASTUSED, -1, 
+	    	out this.insert_lastused_entry_statement); 
 	    this.db.prepare_v2(STMT_BEGIN, -1, 
 	    	out this.begin_statement); 
 	    this.db.prepare_v2(STMT_COMMIT, -1, 
@@ -249,7 +254,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(db_table_exists == false) {
 			current_query = "CREATE TABLE mlib(id integer primary key, tracknumber integer, artist text, album text, title text, genre text, uri text);";
 			rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-			current_query = "CREATE TABLE lastused(id integer);";
+			current_query = "CREATE TABLE lastused(uri text);";
 			rc2 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
 			current_query = "CREATE TABLE music_folders(name text primary key);";
 			rc3 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
@@ -261,7 +266,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	public string[] get_music_folders() { 
-		string[] mfolders = {};//= new string[0];
+		string[] mfolders = {};
 		get_music_folders_statement.reset();
 		while(get_music_folders_statement.step() == Sqlite.ROW) {
 			mfolders += get_music_folders_statement.column_text(0);
@@ -311,39 +316,32 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 	
-	public void write_final_track_ids_to_db(ref GLib.List<string> final_tracklist) {
+	public void write_final_tracks_to_db(string[] final_tracklist) {
 		string current_query = "";
 		int rc1, nrow, ncolumn;
 		weak string[] resultArray;
 		string errmsg;
 
 		this.begin_transaction();
-		
 		current_query = "DELETE FROM lastused;";
 		rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
 		if (rc1 != Sqlite.OK) { 
 			stderr.printf("SQL error, while removing old music folders: %s\n", errmsg);//TODO
 			return;
 		}	
-		foreach(string id in final_tracklist) {
-//			this.insert_lastused_id(id);
+		foreach(string uri in final_tracklist) {
+			this.insert_lastused_track(uri);
 		}
 		this.commit_transaction();
 	}
 	
-//	private void insert_lastused_id(string id) { //TODO: This table is shit
-//		string current_query = "";
-//		int rc1,nrow,ncolumn;
-//		weak string[] resultArray;
-//		string errmsg;
-//		current_query = "INSERT INTO lastused (id) VALUES (\""+ id + "\");";
-//		rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-//		if (rc1 != Sqlite.OK) { 
-//			print("not ok\n");
-//			stderr.printf("SQL error, while adding new music folder content: %s\n", errmsg);
-//			return;
-//		}	
-//	}
+	private void insert_lastused_track(string uri) { 
+		this.insert_lastused_entry_statement.reset();
+		this.insert_lastused_entry_statement.bind_text(1, uri);
+		if(insert_lastused_entry_statement.step()!=Sqlite.DONE) {
+			this.db_error();
+		}
+	}
 
 	private int delete_mlib_data() {
 		this.del_mlib_statement.reset();

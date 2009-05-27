@@ -37,10 +37,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	private Gtk.Notebook noteb;
 	private int _posX_buffer;
 	private int _posY_buffer;
-//	private Action menuChildFullScreen;
 
 	public Entry searchEntryMB;
-//	public Sexy.IconEntry searchEntryMB;
 	public Button playPauseButton; 
 	public Button repeatButton;
 	public Image repeatImage;
@@ -169,16 +167,16 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			//---------------
 			
 			///MAIN WINDOW MENU	
-			var menuChildAdd          = this.get_object("imagemenuitem1") as Gtk.Action; 
-			menuChildAdd.label        =_("_Add music"); 
-			var menuChildSettings     = this.get_object("imagemenupref") as Gtk.Action;
-			menuChildSettings.label   = _("_Settings"); 
-			var menuChildQuit         = this.get_object("imagemenuitem3") as Gtk.Action; 
-			menuChildQuit.label       = _("_Quit");
-			var menuChildAbout        = this.get_object("imagemenuitem10") as Gtk.Action;
-			menuChildAbout.label      = _("A_bout");
-			var menuChildFullScreen   = this.get_object("menuitemfullscreen") as Gtk.Action;
-			menuChildFullScreen.label = _("_Fullscreen");
+			var menuChildAdd             = this.get_object("imagemenuitem1") as Gtk.ImageMenuItem; 
+			menuChildAdd.label           =_("_Add music"); 
+			var menuChildSettings        = this.get_object("imagemenupref") as Gtk.ImageMenuItem;
+			menuChildSettings.label      = _("_Settings"); 
+			var menuChildQuit            = this.get_object("imagemenuitem3") as Gtk.ImageMenuItem; 
+			menuChildQuit.label          = _("_Quit");
+			var menuChildAbout           = this.get_object("imagemenuitem10") as Gtk.ImageMenuItem;
+			menuChildAbout.label         = _("A_bout");
+			var menuChildFullScreen      = this.get_object("menuitemfullscreen") as Gtk.ImageMenuItem;
+			menuChildFullScreen.label    = _("_Fullscreen");
 
 			menuChildAdd.activate        += this.on_menu_add;
 			menuChildSettings.activate   += this.on_settings_edit;
@@ -188,14 +186,14 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			
 			///Tracklist (right)
 			this.trackList = new TrackList();
-			this.trackList.set_size_request(300,300);
+			this.trackList.set_size_request(100,100);
 			var trackListScrollWin = this.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
 			trackListScrollWin.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.ALWAYS);
 			trackListScrollWin.add(this.trackList);
 			
 			///MusicBrowser (left)
 			this.musicBr = new MusicBrowser();
-			this.musicBr.set_size_request(300,300);
+			this.musicBr.set_size_request(100,100);
 			var musicBrScrollWin = this.get_object("scroll_music_br") as Gtk.ScrolledWindow;
 			musicBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
 			musicBrScrollWin.add(this.musicBr);
@@ -290,8 +288,22 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	}
 
 
-	private void add_lastused_titles_to_tracklist() {
-		//TODO: write tracks to tracklist
+	private void add_lastused_titles_to_tracklist() { //TODO
+		DbBrowser dbBr = new DbBrowser();
+//		int tracknumber;
+//		string title, album, artist;
+		string[] uris = dbBr.get_lastused_uris();
+		foreach(weak string uri in uris) {
+			TrackData td = dbBr.get_trackdata_for_uri(uri);
+			print("%s\n", uri);
+	//		this.trackList.insert_title(0,
+	//			                        null,
+	//			                        (int)td.Tracknumber,
+	//			                        td.Title,
+	//			                        td.Album,
+	//			                        td.Artist,
+	//			                        uri);
+		}
 //		print("add_lastused_titles_to_tracklist\n");
 	}
 
@@ -326,10 +338,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	}
 
 	private StatusIcon create_tray_icon() {
-//		StatusIcon icon = new StatusIcon();
-//		icon.file = Config.UIDIR + "xnoise_16x16.png";
 		StatusIcon icon = new StatusIcon.from_file(Config.UIDIR + "xnoise_16x16.png");
-//		icon.set_tooltip_text("xnoise");
+		icon.set_tooltip_text("Xnoise media player");
 		return icon;
 	}
 
@@ -424,21 +434,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		Main.instance().quit();
 	}
 
-////	private string[] final_tracklist; 
-//	private GLib.List<string> final_tracklist; 
-//	public void save_tracklist() {
-////		final_tracklist = new string[0];
-//		final_tracklist = new GLib.List<string>();
-//		print("write tracks into db....\n");
-//		this.trackList.get_track_ids(ref final_tracklist);	
-////		print("%s\n", final_tracklist[0]);
-//		var dbwr = new DbWriter();
-//		dbwr.write_final_track_ids_to_db(ref final_tracklist);
-//		final_tracklist = null;
-//	}
-
-	
-	private void on_fullscreen_clicked(Action s) {
+	private void on_fullscreen_clicked() {
 			this.toggle_fullscreen();
 	}
 			
@@ -466,36 +462,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			this.window.present();
 		}
 	}
-
-//	private void playlist_play_double_clicked_song_cb(TrackList sender, string uri, TreePath path){ 
-//		Main.instance().gPl.Uri = uri;
-//		Main.instance().gPl.playSong ();
-//		if (Main.instance().gPl.playing == false) {
-//			playpause_button_set_pause_picture ();
-//			Main.instance().gPl.play();
-//		}
-//		Gdk.Pixbuf pixbuf;
-//		TreeIter iter;
-//		try {
-//			pixbuf = new Gdk.Pixbuf.from_file("ui/track.png");
-//		}
-//		catch (GLib.Error e) {
-//			print("Error: %s\n", e.message);
-//		}
-//		trackList.model.get_iter(out iter, path);
-//		trackList.reset_play_status_for_playlisttitle();
-//		trackList.set_state_picture_for_title_in_playlist(iter, PLTrackStatus.PLAYING);
-//	}
-
-//	private void playlist_active_path_changed_cb(TrackList sender){ 
-//		TreePath path;
-//		if (!trackList.get_active_path(out path)) return;
-//		string uri = trackList.get_uri_for_path(path);
-//		if ((uri!=null) && (uri!="")) {
-//			Main.instance().gPl.Uri = uri;
-//			Main.instance().gPl.playSong();
-//		}
-//	}
 
 	public void add_uris_to_tracklist(string[]? uris) {
 		if(uris!=null) {
@@ -713,7 +679,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	}
 
 	private void on_next_button_clicked() {
-		//TODO: Main.instance().gPl.currentTag.reset();
 		this.change_song(Direction.NEXT);
 	}	
 
@@ -728,7 +693,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		temprepeatState += 1;
 		if(temprepeatState>2) temprepeatState = 0;
 		repeatState = temprepeatState;
-//		repeatLabel.label = "repeat single track";
 	}
 	
 	private void on_remove_selected_button_clicked() {
@@ -804,14 +768,14 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		return true;
 	}
 
-	private void on_help_about(Gtk.Action item) {
+	private void on_help_about() {
 		var dialog = new AboutDialog ();
 		dialog.run();
 		dialog.destroy();
 	}
 
 	private MusicFolderDialog mfd;
-	private void on_menu_add(Gtk.Action sender) {
+	private void on_menu_add() {
 		mfd = new MusicFolderDialog();
 		mfd.sign_finish += () => {
 			mfd = null;
@@ -820,41 +784,46 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	}
 	
 	private SettingsDialog setingsD;
-	private void on_settings_edit(Gtk.Action sender) {
+	private void on_settings_edit() {
 		setingsD = new SettingsDialog();
 	}
 
-	public void set_displayed_title(string? newuri) {
-		string text;
-		string path = null;
-		if((newuri!=null) && (newuri!="")) {
-			try {
-				path = GLib.Filename.from_uri(newuri);
-			}
-			catch(GLib.ConvertError e) {
-				print("%s\n", e.message);
-			}
+
+	public void set_displayed_title(string newuri) { //TODO: this should also be used to show embedded images for current title
+		string text, album, artist, title;
+		string basename = null;
+		File file = File.new_for_uri(newuri);
+		basename = file.get_basename();
+		if(Main.instance().gPl.currentartist!=null) {
+			artist = Main.instance().gPl.currentartist;
 		}
-		if((path!=null) && (path!="")) {
-			var tr = new TagReader(); //TODO: Do this with gstreamer, so that streams can be handled, too
-			TrackData tags = tr.read_tag_from_file(path);
-			string artist = tags.Artist;
-			string album  = tags.Album; 
-			string title  = tags.Title; 
-			if(tags.Artist!="") {
-				text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>", 
-					title, 
-					_("by"), 
-					artist, 
-					_("on"), 
-					album
-					);
-			}
-			else { //in this case there is no information for this title (see TagReader)
-				text = Markup.printf_escaped("<b>%s</b>",
-					title
-					);				
-			}
+		else {
+			artist = "unknown artist";
+		}
+		if (Main.instance().gPl.currenttitle!=null) {
+			title = Main.instance().gPl.currenttitle;
+		}
+		else {
+			title = "unknown title";
+		}
+		if (Main.instance().gPl.currentalbum!=null) {
+			album = Main.instance().gPl.currentalbum;
+		}
+		else {
+			album = "unknown album";
+		}
+		if((newuri!=null) && (newuri!="")) {
+			text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>", 
+				title, 
+				_("by"), 
+				artist, 
+				_("on"), 
+				album
+				);
+			if(album=="unknown album" && 
+			   artist=="unknown artist" && 
+			   title=="unknown title") 
+			   	text = Markup.printf_escaped("<b>%s</b>", basename);
 		}
 		else {
 			if((!Main.instance().gPl.playing)&&

@@ -33,6 +33,10 @@ internal class Xnoise.GstPlayer : GLib.Object {
 	public double volume   { get; set; }   
 	public bool   playing  { get; set; }
 	public bool   paused   { get; set; }
+	
+	public string currentartist { get; set; }
+	public string currentalbum  { get; set; }
+	public string currenttitle  { get; set; }
 
 	public string Uri { 
 		get {
@@ -56,20 +60,35 @@ internal class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_song_position_changed(uint msecs, uint ms_total);
 	public signal void sign_stopped();
 	public signal void sign_eos();
-	public signal void sign_uri_changed(string newuri);
+	public signal void sign_tag_changed(string newuri);
 //	public signal void sign_state_changed(int state);
 
 	public GstPlayer() {
 		string[] args = null;
 		Gst.init (ref args);
 		create_elements();
-		_timeout = GLib.Timeout.add (500, cyclic_send_song_position_cb);
+		_timeout = GLib.Timeout.add (500, on_cyclic_send_song_position);
 		this.notify += (s, p) => {
 			switch(p.name) {
 				case "Uri": {
-					sign_uri_changed(s.Uri);
+					this.currentartist = null;
+					this.currentalbum = null;
+					this.currenttitle = null;
 					break;
 				}
+				case "currentartist": {
+					this.sign_tag_changed(s.Uri);
+					break;
+				}
+				case "currentalbum": {
+					this.sign_tag_changed(s.Uri);
+					break;
+				}
+				case "currenttitle": {
+					this.sign_tag_changed(s.Uri);
+					break;
+				}
+				default: break;
 //				case "paused": {
 //					if(this.paused!=this.paused_last_state) {
 //						sign_paused_changed(s.paused);
@@ -100,12 +119,43 @@ internal class Xnoise.GstPlayer : GLib.Object {
 					this.sign_eos();
 					break;
 				}
+				case MessageType.TAG: {
+					TagList tag_list;			
+					msg.parse_tag(out tag_list);
+					tag_list.foreach(foreachtag);					
+				}
 				default: break;
 			}			
 		};				
 	}
 
-	private bool cyclic_send_song_position_cb() {
+	private void foreachtag(TagList list, string tag) {
+		string val = null;
+		switch (tag) {
+		case "artist":
+			if(list.get_string(tag, out val)) 
+				this.currentartist = val;
+			else 
+				this.currentartist = "unknown artist";
+			break;
+		case "album":
+			if(list.get_string(tag, out val)) 
+				this.currentalbum = val;
+			else 
+				this.currentalbum = "unknown album";
+			break;
+		case "title":
+			if(list.get_string(tag, out val)) 
+				this.currenttitle = val;
+			else 
+				this.currenttitle = "unknown title";
+			break;
+		default:
+			break;
+		}
+	}
+
+	private bool on_cyclic_send_song_position() {
 		Gst.Format fmt = Gst.Format.TIME;
 		int64 pos, len;
 		if ((playbin.current_state == State.PLAYING)&&(playing == false)) {
@@ -164,6 +214,5 @@ internal class Xnoise.GstPlayer : GLib.Object {
 		}
 		playbin.set("volume", volume);
 	}
-
 }
 

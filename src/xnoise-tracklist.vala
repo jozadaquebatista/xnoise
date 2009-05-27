@@ -297,7 +297,8 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		rowref_list = null;
 	}
 	
-	private GLib.List<string> list_of_uris;
+//	private GLib.List<string> list_of_uris;
+	private string[] list_of_uris;
 	private bool list_foreach(TreeModel sender, TreePath path, TreeIter iter) { 
 		GLib.Value gv;
 		sender.get_value(
@@ -305,15 +306,17 @@ public class Xnoise.TrackList : TreeView, IParameter {
 			TrackListColumn.URI, 
 			out gv);
 		
-		list_of_uris.prepend(gv.get_string());
+		list_of_uris += gv.get_string();
 		return false;
 	}
 	
-	public void get_track_ids(ref GLib.List<string> final_tracklist) {
-		list_of_uris = new GLib.List<string>();
+	public string[] get_all_tracks() {
+//	public void get_track_ids(ref GLib.List<string> final_tracklist) {
+//		list_of_uris = new GLib.List<string>();
+		list_of_uris = {};
 		this.model.foreach(list_foreach);
-		var dbb = new DbBrowser();
-		foreach(string uri in list_of_uris) {
+//		var dbb = new DbBrowser();
+//		foreach(string uri in list_of_uris) {
 //			final_tracklist.resize(final_tracklist.length + 1);
 //			string buffer = dbb.get_track_id_for_path(GLib.Filename.from_uri(uri));
 //			if(GLib.Filename.from_uri(uri)) print("uri: %s\n", uri);
@@ -322,10 +325,11 @@ public class Xnoise.TrackList : TreeView, IParameter {
 
 			//TODO handle files not in db
 			//TODO change data type
-			final_tracklist.prepend("%d".printf(dbb.get_track_id_for_path(GLib.Filename.from_uri(uri))));
-		}
-		dbb = null;
+//			final_tracklist.prepend("%d".printf(dbb.get_track_id_for_path(GLib.Filename.from_uri(uri))));
+//		}
+//		dbb = null;
 //		list_of_uris = null;
+		return list_of_uris;
 	}
 	
 	private void handle_dropped_file(string fileuri, ref TreePath? path) {

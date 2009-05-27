@@ -26,6 +26,7 @@ using Sqlite;
 public class Xnoise.DbBrowser : GLib.Object {
 	private string DATABASE;
 	private Statement count_for_uri_statement;
+	private Statement get_lastused_statement;
 	private Statement get_artist_statement;
 	private Statement get_albums_statement;
 	private Statement get_titles_statement;
@@ -46,6 +47,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 		"SELECT uri FROM mlib WHERE artist = ? AND album = ? AND title = ?";
 	private static const string STMT_TRACKNUMBER_FOR_TRACK = 
 		"SELECT tracknumber FROM mlib WHERE artist = ? AND album = ? AND title = ?";
+	private static const string STMT_GET_LASTUSED = 
+		"SELECT DISTINCT uri FROM lastused";
 	private static const string STMT_GET_ARTISTS = 
 		"SELECT DISTINCT artist FROM mlib WHERE LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ? ORDER BY LOWER(artist) DESC";
 	private static const string STMT_GET_ALBUMS = 
@@ -80,6 +83,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 			out this.count_for_uri_statement); 
 		this.db.prepare_v2(STMT_GET_ARTISTS, -1, 
 			out this.get_artist_statement); 
+		this.db.prepare_v2(STMT_GET_LASTUSED, -1, 
+			out this.get_lastused_statement); 		
 		this.db.prepare_v2(STMT_GET_ALBUMS, -1, 
 			out this.get_albums_statement); 
 		this.db.prepare_v2(STMT_GET_TITLES, -1, 
@@ -158,6 +163,20 @@ public class Xnoise.DbBrowser : GLib.Object {
 		}
 		while(tracknumber_for_track_statement.step() == Sqlite.ROW) {
 			val = tracknumber_for_track_statement.column_int(0);
+		}
+		return val;
+	}
+
+	public string[] get_lastused_uris() { 
+		string[] val = {};
+		get_lastused_statement.reset();
+//		if((this.get_artist_statement.bind_text(1, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
+//		   (this.get_artist_statement.bind_text(2, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
+//		   (this.get_artist_statement.bind_text(3, "%%%s%%".printf(searchtext))!=Sqlite.OK)) {
+//			this.db_error();
+//		}
+		while(get_lastused_statement.step() == Sqlite.ROW) {
+			val += get_artist_statement.column_text(0);
 		}
 		return val;
 	}

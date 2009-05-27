@@ -54,21 +54,7 @@ public class Xnoise.Main : GLib.Object {
 			main_window.progressbar_set_value(0, 0);
 			main_window.songProgressBar.set_text("00:00 / 00:00");;
 		};
-		gPl.sign_uri_changed += (s, uri) => {
-			main_window.set_displayed_title(uri); //TODO: maybe change this to a gst parsed 
-			                                      //      version so also streams will be handled right
-		};
-//		gPl.sign_state_changed += (s, newstate) => {
-//			switch(newstate) {
-//				case (GstPlayerState.PLAY):
-//					main_window.trackList.update_play_status_for_playlisttitle(false); 
-//					break;
-//				case (GstPlayerState.PAUSE):
-//					main_window.trackList.update_play_status_for_playlisttitle(true); 
-//					break;
-//			} 
-//			print("update tracklist\n");
-//		};
+		gPl.sign_tag_changed += main_window.set_displayed_title;
 
 		//TODO: if the volume change is handled from main window an unlimited number of instances of Main is created. Why?
 		main_window.sign_volume_changed += (main_window, fraction) => { //handle volume slider change
@@ -119,13 +105,13 @@ public class Xnoise.Main : GLib.Object {
 		instance().quit();
 	}
 
-	private GLib.List<string> final_tracklist; 
-	public void save_tracklist() { //TODO: use uris??
-		final_tracklist = new GLib.List<string>();
+
+	private string[] final_tracklist; 
+	public void save_tracklist() {
 		print("write tracks into db....\n");
-		main_window.trackList.get_track_ids(ref final_tracklist);	
+		final_tracklist = this.main_window.trackList.get_all_tracks();	
 		var dbwr = new DbWriter();
-		dbwr.write_final_track_ids_to_db(ref final_tracklist);
+		dbwr.write_final_tracks_to_db(final_tracklist);
 		final_tracklist = null;
 	}
 
