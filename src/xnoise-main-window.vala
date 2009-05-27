@@ -39,7 +39,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	private int _posY_buffer;
 //	private Action menuChildFullScreen;
 
-	public Sexy.IconEntry searchEntryMB;
+	public Entry searchEntryMB;
+//	public Sexy.IconEntry searchEntryMB;
 	public Button playPauseButton; 
 	public Button repeatButton;
 	public Image repeatImage;
@@ -199,16 +200,17 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			musicBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
 			musicBrScrollWin.add(this.musicBr);
 			noteb = this.get_object("notebook1") as Gtk.Notebook;
-				
-			//search entry (left) ; TODO: IconEntry has been moved to Gtk+ as of version 2.14 - use Gtk+ IconEntry 
-			//as soon as Fedora 12 and ubuntu 9.04 is there
-			var searchImage = new Image.from_stock(Gtk.STOCK_FIND, IconSize.BUTTON);
-			this.searchEntryMB = new Sexy.IconEntry();
-			this.searchEntryMB.set_icon(Sexy.IconEntryPosition.PRIMARY, searchImage);
-			this.searchEntryMB.set_icon_highlight(Sexy.IconEntryPosition.SECONDARY, true) ;
-			this.searchEntryMB.add_clear_button();
+			
+			this.searchEntryMB = new Gtk.Entry(); 
+			this.searchEntryMB.primary_icon_stock = Gtk.STOCK_FIND; 
+			this.searchEntryMB.secondary_icon_stock = Gtk.STOCK_CLEAR; 
+			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, true); 
+			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true); 
 			this.searchEntryMB.set_sensitive(true);
 			this.searchEntryMB.changed += musicBr.on_searchtext_changed;
+			this.searchEntryMB.icon_press += (s, p0, p1) => { //s:Entry, p0:Position, p1:Gdk.Event
+				if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
+			};
 
 			var sexyentryBox = this.get_object("sexyentryBox") as Gtk.HBox; 
 			sexyentryBox.add(searchEntryMB);

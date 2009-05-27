@@ -72,7 +72,7 @@ public class Xnoise.MusicBrowser : TreeView, IParameter {
 	}
 	
     private string searchtext = "";
-    public void on_searchtext_changed(Sexy.IconEntry sender) {
+    public void on_searchtext_changed(Gtk.Entry sender) { 
     	this.searchtext = sender.get_text().down();
     	change_model_data();
     	if((this.searchtext!="")&&
