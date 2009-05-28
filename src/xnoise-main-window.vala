@@ -168,7 +168,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			
 			///MAIN WINDOW MENU	
 			var menuChildAdd             = this.get_object("imagemenuitem1") as Gtk.ImageMenuItem; 
-			menuChildAdd.label           =_("_Add music"); 
+			menuChildAdd.label           =_("_Add or Remove music"); 
 			var menuChildSettings        = this.get_object("imagemenupref") as Gtk.ImageMenuItem;
 			menuChildSettings.label      = _("_Settings"); 
 			var menuChildQuit            = this.get_object("imagemenuitem3") as Gtk.ImageMenuItem; 

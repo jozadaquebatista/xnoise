@@ -242,6 +242,23 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		selection.set_uris(uris); 
 	}
 
+	private string[] list_of_uris;
+	private bool list_foreach(TreeModel sender, TreePath path, TreeIter iter) { 
+		GLib.Value gv;
+		sender.get_value(
+			iter, 
+			TrackListColumn.URI, 
+			out gv);
+		list_of_uris += gv.get_string();
+		return false;
+	}
+	
+	public string[] get_all_tracks() {
+		list_of_uris = {};
+		this.model.foreach(list_foreach);
+		return list_of_uris;
+	}
+
 	private Gtk.TreeViewDropPosition position;
 	private void on_drag_data_received (TrackList seder, DragContext context, int x, int y, 
 	                                    SelectionData selection, uint target_type, uint time) {
@@ -254,7 +271,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		FileType filetype;
 		string[] uris = selection.get_uris();
 		this.get_dest_row_at_pos(x, y, out path, out position);
-		if(!this.reorder_dragging) { 					// NOT WITHIN TRACKLIST
+		if(!this.reorder_dragging) { 					// DRAGGING NOT WITHIN TRACKLIST
 			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 			for(int i=(uris.length-1); i>=0;i--) {
@@ -266,8 +283,6 @@ public class Xnoise.TrackList : TreeView, IParameter {
 							            FileQueryInfoFlags.NONE, 
 							            null);
 					filetype = info.get_file_type();
-//					string content = info.get_content_type();
-//					mime = g_content_type_get_mime_type(content);
 				}
 				catch(GLib.Error e){
 					stderr.printf("%s\n", e.message);
@@ -278,11 +293,11 @@ public class Xnoise.TrackList : TreeView, IParameter {
 					handle_dropped_file(filename, ref path);			
 				}
 				else {
-					
+					handle_dropped_files_for_folders(file, ref path);
 				}
 			}
 		}
-		else { 											// WITHIN TRACKLIST
+		else { 											// DRAGGING WITHIN TRACKLIST
 			drop_rowref = null;
 			if(path!=null) {
 				//TODO:check if drop position is selected
@@ -320,25 +335,39 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		}
 		rowref_list = null;
 	}
-	
-	private string[] list_of_uris;
-	private bool list_foreach(TreeModel sender, TreePath path, TreeIter iter) { 
-		GLib.Value gv;
-		sender.get_value(
-			iter, 
-			TrackListColumn.URI, 
-			out gv);
-		list_of_uris += gv.get_string();
-		return false;
+
+	private void handle_dropped_files_for_folders(File dir, ref TreePath? path) { 
+		//Recursive function to import music DIRECTORIES in drag'n'drop
+		//as soon as a file is found it is passed to handle_dropped_file function
+		//the TreePath path is just passed through if it is a directory
+		FileEnumerator enumerator;
+		try {
+			string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
+			              FILE_ATTRIBUTE_STANDARD_TYPE;
+			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
+		} catch (Error error) {
+			critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
+			return;
+		}
+		FileInfo info;
+		while((info = enumerator.next_file(null))!=null) {
+			string filename = info.get_name();
+			string filepath = Path.build_filename(dir.get_path(), filename);
+			File file = File.new_for_path(filepath);
+			FileType filetype = info.get_file_type();
+
+			if(filetype == FileType.DIRECTORY) {
+				this.handle_dropped_files_for_folders(file, ref path);
+			} 
+			else {
+				handle_dropped_file(file.get_uri(), ref path);
+			}
+		}
 	}
-	
-	public string[] get_all_tracks() {
-		list_of_uris = {};
-		this.model.foreach(list_foreach);
-		return list_of_uris;
-	}
+
 	
 	private void handle_dropped_file(string fileuri, ref TreePath? path) {
+		//Function to import music FILES in drag'n'drop
 		TreeIter iter, new_iter;
 		File file;
 		FileType filetype;
@@ -375,7 +404,6 @@ public class Xnoise.TrackList : TreeView, IParameter {
 				tracknumb = td.Tracknumber; 
 			}
 			else {
-				print("%s is not in the db.\n", fileuri);
 				var tr = new TagReader();
 				var tags = tr.read_tag_from_file(file.get_path());
 				artist         = Markup.printf_escaped("%s", tags.Artist); 
@@ -416,8 +444,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 			path = model.get_path(new_iter);
 		}
 		else if(filetype==GLib.FileType.DIRECTORY) {
-			print("%s is a directory\n", fileuri);
-			//TODO: Handle directories
+			assert_not_reached();
 		}	
 		else {
 			print("Not a regular file or at least no audio file: %s\n", fileuri);
