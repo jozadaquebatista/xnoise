@@ -249,13 +249,37 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		//if reorder = false then data is coming from outside (music browser or nautilus) -> use uri_list
 		Gtk.TreePath path;
 		TreeRowReference drop_rowref;
-		string file = null;
+		string filename = null;
+		File file;
+		FileType filetype;
 		string[] uris = selection.get_uris();
 		this.get_dest_row_at_pos(x, y, out path, out position);
 		if(!this.reorder_dragging) { 					// NOT WITHIN TRACKLIST
+			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 			for(int i=(uris.length-1); i>=0;i--) {
-				file = uris[i]; 
-				handle_dropped_file(file, ref path);			
+				filename = uris[i]; 
+				try {
+					file = File.new_for_uri(filename);
+					FileInfo info = file.query_info(
+							            attr, 
+							            FileQueryInfoFlags.NONE, 
+							            null);
+					filetype = info.get_file_type();
+//					string content = info.get_content_type();
+//					mime = g_content_type_get_mime_type(content);
+				}
+				catch(GLib.Error e){
+					stderr.printf("%s\n", e.message);
+					return;
+				}	
+			
+				if(!(filetype==GLib.FileType.DIRECTORY)) {
+					handle_dropped_file(filename, ref path);			
+				}
+				else {
+					
+				}
 			}
 		}
 		else { 											// WITHIN TRACKLIST
@@ -297,7 +321,6 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		rowref_list = null;
 	}
 	
-//	private GLib.List<string> list_of_uris;
 	private string[] list_of_uris;
 	private bool list_foreach(TreeModel sender, TreePath path, TreeIter iter) { 
 		GLib.Value gv;
@@ -305,30 +328,13 @@ public class Xnoise.TrackList : TreeView, IParameter {
 			iter, 
 			TrackListColumn.URI, 
 			out gv);
-		
 		list_of_uris += gv.get_string();
 		return false;
 	}
 	
 	public string[] get_all_tracks() {
-//	public void get_track_ids(ref GLib.List<string> final_tracklist) {
-//		list_of_uris = new GLib.List<string>();
 		list_of_uris = {};
 		this.model.foreach(list_foreach);
-//		var dbb = new DbBrowser();
-//		foreach(string uri in list_of_uris) {
-//			final_tracklist.resize(final_tracklist.length + 1);
-//			string buffer = dbb.get_track_id_for_path(GLib.Filename.from_uri(uri));
-//			if(GLib.Filename.from_uri(uri)) print("uri: %s\n", uri);
-//			final_tracklist[list_of_uris.length-1] = dbb.get_track_id_for_path(GLib.Filename.from_uri(uri));
-//			final_tracklist += dbb.get_track_id_for_path(GLib.Filename.from_uri(uri)); 
-
-			//TODO handle files not in db
-			//TODO change data type
-//			final_tracklist.prepend("%d".printf(dbb.get_track_id_for_path(GLib.Filename.from_uri(uri))));
-//		}
-//		dbb = null;
-//		list_of_uris = null;
 		return list_of_uris;
 	}
 	
@@ -361,11 +367,12 @@ public class Xnoise.TrackList : TreeView, IParameter {
 			string artist, album, title;
 			uint tracknumb;
 			if(dbBr.uri_is_in_db(fileuri)) {
-				var val   = dbBr.get_trackdata_for_uri(fileuri); //strings are already mu escaped
-				artist    = val.Artist;
-				album     = val.Album;
-				title     = val.Title ;
-				tracknumb = val.Tracknumber; 
+				TrackData td; 
+				dbBr.get_trackdata_for_uri(fileuri, out td); //strings are already escaped
+				artist    = td.Artist;
+				album     = td.Album;
+				title     = td.Title ;
+				tracknumb = td.Tracknumber; 
 			}
 			else {
 				print("%s is not in the db.\n", fileuri);
@@ -409,7 +416,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 			path = model.get_path(new_iter);
 		}
 		else if(filetype==GLib.FileType.DIRECTORY) {
-			print("is directory: %s\n", fileuri);
+			print("%s is a directory\n", fileuri);
 			//TODO: Handle directories
 		}	
 		else {

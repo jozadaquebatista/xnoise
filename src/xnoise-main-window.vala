@@ -287,24 +287,21 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		}
 	}
 
-
-	private void add_lastused_titles_to_tracklist() { //TODO
+	private void add_lastused_titles_to_tracklist() { 
 		DbBrowser dbBr = new DbBrowser();
-//		int tracknumber;
-//		string title, album, artist;
 		string[] uris = dbBr.get_lastused_uris();
-		foreach(weak string uri in uris) {
-			TrackData td = dbBr.get_trackdata_for_uri(uri);
-			print("%s\n", uri);
-	//		this.trackList.insert_title(0,
-	//			                        null,
-	//			                        (int)td.Tracknumber,
-	//			                        td.Title,
-	//			                        td.Album,
-	//			                        td.Artist,
-	//			                        uri);
+		foreach(string uri in uris) {
+			TrackData td; 
+			if(dbBr.get_trackdata_for_uri(uri, out td)) {
+				this.trackList.insert_title(0,
+					                        null,
+					                        (int)td.Tracknumber,
+					                        td.Title,
+					                        td.Album,
+					                        td.Artist,
+					                        uri);
+			}
 		}
-//		print("add_lastused_titles_to_tracklist\n");
 	}
 
 	private void on_repeatState_changed(GLib.ParamSpec pspec) {

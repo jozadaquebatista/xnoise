@@ -23,18 +23,18 @@
 using GLib;
 
 public class Xnoise.AboutDialog : Gtk.AboutDialog {
-	const string[] _authors = {"Jörn Magens", 
+	const string[] AUTHORS = {"Jörn Magens", 
 	                           null
-	                          };
-	const string _copyright = "Copyright \xc2\xa9 2008, 2009 Jörn Magens";
-	const string _program_name = "xnoise";
-	const string _version = "0.01";
-	const string _website = "http://code.google.com/p/xnoise/";
+	                          }; //TODO: This should be dynamic, read authors from file
+	const string COPYRIGHT = "Copyright \xc2\xa9 2008, 2009 Jörn Magens";
+	const string PROGRAM_NAME = "xnoise";
+	const string VERSION = "0.01"; //TODO: This should be dynamic
+	const string WEBSITE = "http://code.google.com/p/xnoise/";
 
 	public AboutDialog() {
 		string contents;
 		try {
-			GLib.FileUtils.get_contents (GLib.Path.build_filename(Config.LICENSEDIR + "COPYING"), out contents); //TODO: add LICENSEDIR to vapi and to /src/Makefile
+			GLib.FileUtils.get_contents (GLib.Path.build_filename(Config.LICENSEDIR + "COPYING"), out contents); 
 			license = contents;
 		}
 		catch(GLib.Error e) {
@@ -56,11 +56,11 @@ public class Xnoise.AboutDialog : Gtk.AboutDialog {
 			stderr.printf("%s\n", e.message);
 		}
 
-		this.authors      = _authors;
-		this.program_name = _program_name;
-		this.version      = _version;
-		this.website      = _website;
-		this.copyright    = _copyright;
+		this.authors      = AUTHORS;
+		this.program_name = PROGRAM_NAME;
+		this.version      = VERSION;
+		this.website      = WEBSITE;
+		this.copyright    = COPYRIGHT;
 	}
 }
 
