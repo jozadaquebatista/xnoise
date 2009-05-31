@@ -146,15 +146,20 @@ public class Xnoise.TrackList : TreeView, IParameter {
 
 ////REGION IParameter
 	public void read_data(KeyFile file) throws KeyFileError {
-//		weak TreeViewColumn tvc = this.get_column(TrackListColumn.TITLE);
+//		title_width_chars = file.get_integer("settings", "title_width_chars");
 //		tvc.width = file.get_integer("settings", "title_width");;
 	}
 
 	public void write_data(KeyFile file) {
-//		int title_width = 10;
 //		weak TreeViewColumn tvc = this.get_column(TrackListColumn.TITLE);
-//		title_width = tvc.width;
-//		file.set_integer("settings", "title_width", title_width);
+//		GLib.List<CellRendererText> cell_title = tvc.cell_list.copy();
+//		var abc = (CellRendererText)cell_title.first();//
+////		Gtk.CellRendererText fff = abc..nth_data(0);
+//		
+//		file.set_integer("settings", "title_width_chars", abc.width_chars);
+////		int title_width = 10;
+////		weak TreeViewColumn tvc = this.get_column(TrackListColumn.TITLE);
+////		title_width = tvc.width;
 	}
 ////END REGION IParameter
 
@@ -751,6 +756,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 	}
 
 	private void create_view() {	
+		CellRendererText renderer; 
 		var columnPixb 	      = new TreeViewColumn();
 		var columnStatus      = new TreeViewColumn();
 		var columnTracknumber = new TreeViewColumn();
@@ -759,25 +765,24 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		var columnTitle       = new TreeViewColumn();
 		var columnUri         = new TreeViewColumn();
 
-		var pixbufRenderer = new CellRendererPixbuf();
-		pixbufRenderer.set_fixed_size(-1,22); 
-
-		var renderer = new CellRendererText();
+		renderer = new CellRendererText();
 		renderer.set_fixed_height_from_font(1);
-//		renderer.ellipsize = Pango.EllipsizeMode.END; //TODO: how does this work?
-//		renderer.ellipsize_set = true;
-
+		renderer.ellipsize = Pango.EllipsizeMode.END; 
 		columnStatus.pack_start(renderer, false);
 		columnStatus.title = "Status";
 		columnStatus.visible = false;
 		this.insert_column(columnStatus, -1);
 
+		var pixbufRenderer = new CellRendererPixbuf();
+		pixbufRenderer.set_fixed_size(-1,22); 
 		columnPixb.pack_start(pixbufRenderer, false);
 		columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListColumn.ICON);
 		columnPixb.set_fixed_width(30);
 		columnPixb.reorderable = true;
 		this.insert_column(columnPixb, -1);
 
+		renderer = new CellRendererText();
+		renderer.set_fixed_height_from_font(1);
 		columnTracknumber.pack_start(renderer, false);
 		columnTracknumber.add_attribute(renderer, "markup", TrackListColumn.TRACKNUMBER);
 		columnTracknumber.title = "#";
@@ -786,7 +791,13 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		columnTracknumber.reorderable = true;
 		this.insert_column(columnTracknumber, -1);
 		
-		columnTitle.pack_start(renderer, false);
+		Params params = Params.instance();
+		params.read_from_file_for_single(this);
+		renderer = new CellRendererText();
+		renderer.set_fixed_height_from_font(1);
+		renderer.ellipsize = Pango.EllipsizeMode.END; 
+		renderer.width_chars=30;
+		columnTitle.pack_start(renderer, true);
 		columnTitle.add_attribute(renderer, "markup", TrackListColumn.TITLE);
 		columnTitle.title = "Title";
 		columnTitle.min_width = 100; //TODO: is it possible to set the min width via number of characters for the used font?
@@ -794,7 +805,11 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		columnTitle.reorderable = true;
 		this.insert_column(columnTitle, -1);
 
-		columnAlbum.pack_start(renderer, false);
+		renderer = new CellRendererText();
+		renderer.set_fixed_height_from_font(1);
+		renderer.ellipsize = Pango.EllipsizeMode.END; 
+		renderer.width_chars=22;
+		columnAlbum.pack_start(renderer, true);
 		columnAlbum.add_attribute(renderer, "markup", TrackListColumn.ALBUM);
 		columnAlbum.title = "Album";
 		columnAlbum.min_width = 100;
@@ -802,7 +817,11 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		columnAlbum.reorderable = true;
 		this.insert_column(columnAlbum, -1);
 
-		columnArtist.pack_start(renderer, false);
+		renderer = new CellRendererText();
+		renderer.set_fixed_height_from_font(1);
+		renderer.ellipsize = Pango.EllipsizeMode.END; 
+		renderer.width_chars=22;
+		columnArtist.pack_start(renderer, true);
 		columnArtist.add_attribute(renderer, "markup", TrackListColumn.ARTIST);
 		columnArtist.title = "Artist";
 		columnArtist.min_width = 100;
@@ -810,6 +829,8 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		columnArtist.reorderable = true;
 		this.insert_column(columnArtist, -1);
 
+		renderer = new CellRendererText();
+		renderer.set_fixed_height_from_font(1);
 		columnUri.pack_start(renderer, false);
 		columnUri.title = "Uri";
 		columnUri.visible = false;
