@@ -75,14 +75,13 @@ public class Xnoise.Main : GLib.Object {
 	}
 	
 	private void check_database_and_tables() {
-		DbWriter dbw;
 		if(!GLib.FileUtils.test(dbFileName(), FileTest.EXISTS)) {
-			dbw = new DbWriter(); //creating db instance and destroying it will give me a db file
+			stderr.printf("db file is not yet existing....\n");
+			DbWriter dbw = new DbWriter(); //creating db instance and destroying it will hopefully give me a db file
+			
 			stderr.printf("Creating database file...");
 			dbw = null;
 		}
-		dbw = new DbWriter();
-		dbw.check_db_and_tables_exist();
 	}
 
 	public void add_track_to_gst_player(string uri) { //TODO: maybe return bool and check for fail

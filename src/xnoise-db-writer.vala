@@ -24,7 +24,8 @@ using GLib;
 using Sqlite;
 
 public class Xnoise.DbWriter : GLib.Object {
-	private string DATABASE;
+	private Sqlite.Database db;
+	private static string DATABASE_NAME = "db.sqlite";
 	
 	private Statement delete_mlib_entry_statement;
 	private Statement update_mlib_entry_statement;
@@ -37,7 +38,21 @@ public class Xnoise.DbWriter : GLib.Object {
 	private Statement write_music_folder_statement;
 	private Statement del_music_folder_statement;
 	private Statement del_mlib_statement;
+
+
+	//CREATE TABLE STATEMENTS
+	private static const string STMT_CREATE_MLIB = 
+		"CREATE TABLE mlib(id integer primary key, tracknumber integer, artist text, album text, title text, genre text, uri text);";
+	private static const string STMT_CREATE_LASTUSED = 
+		"CREATE TABLE lastused(uri text);";
+	private static const string STMT_CREATE_MUSICFOLDERS = 
+		"CREATE TABLE music_folders(name text primary key);";
+
+	//FIND TABLE	
+	private static const string STMT_FIND_TABLE = 
+		"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
 	
+	//ALL OTHER DBWRITER STATEMENTS
 	private static const string STMT_BEGIN = 
 		"BEGIN";
 	private static const string STMT_COMMIT = 
@@ -62,11 +77,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		"DELETE FROM mlib WHERE id = ?";
 
 	public DbWriter() {
-		DATABASE = dbFileName();
-		if(Database.open(DATABASE, out db)!=Sqlite.OK) { 
-			stderr.printf("Can't open database: %s\n", (string)db.errmsg);
-		}
-		//TODO: check for db existance
+        this.db = get_db();
 		this.prepare_statements();
 	}
 
@@ -74,7 +85,78 @@ public class Xnoise.DbWriter : GLib.Object {
 //		print("destruct dbWriter class\n");
 //	}
 
-	private Sqlite.Database db;
+	private static Database? get_db () {
+		// there was more luck on creating the db on first start, if using a static function
+		Database database;
+		File home_dir = File.new_for_path(Environment.get_home_dir());
+		File xnoise_home = home_dir.get_child(".xnoise");
+		File xnoisedb = xnoise_home.get_child(DATABASE_NAME);
+		if (!xnoise_home.query_exists(null)) {
+			try {
+				File current_dir = xnoise_home;
+				File[] directory_list = {};
+				while(current_dir != null) {
+				    if (current_dir.query_exists (null)) break;
+					directory_list += current_dir;
+				    current_dir = current_dir.get_parent();
+				}
+				foreach(File dir in directory_list) {
+				    print("Creating config path %s\n", dir.get_path());
+				    dir.make_directory(null);
+				}
+			} 
+			catch (Error e) {
+				stderr.printf("Error with create directory: %s", e.message);
+				return null;
+			}
+		}
+		Database.open_v2(xnoisedb.get_path(), 
+		                 out database, 
+		                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE, 
+		                 null) ;
+		if(xnoisedb.query_exists(null) && database!=null) {
+			bool db_table_exists = false;
+			int nrow,ncolumn;
+			weak string[] resultArray;
+			string errmsg;
+
+			//Check for Table existance
+			if(database.get_table(STMT_FIND_TABLE, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) { 
+				stderr.printf("SQL error: %s\n", errmsg);
+				return null;
+			}
+
+			//search main table
+			for (int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
+				for (int j = offset*ncolumn; j< (offset+1)*ncolumn;j++) {
+					if (resultArray[j]=="mlib") {
+						db_table_exists = true; //assume that if mlib is existing all other tables also exist
+					}
+				}
+			}
+
+			//create Tables if not existant
+			if(db_table_exists == false) {
+				string errormsg;
+
+				if(database.exec(STMT_CREATE_MLIB, null, out errormsg)!= Sqlite.OK) {
+					stderr.printf("Create DB: %s", errormsg);
+					return null;
+				}
+
+				if(database.exec(STMT_CREATE_LASTUSED, null, out errormsg)!= Sqlite.OK) {
+					stderr.printf("Create DB: %s", errormsg);
+					return null;
+				}
+
+				if(database.exec(STMT_CREATE_MUSICFOLDERS, null, out errormsg)!= Sqlite.OK) {
+					stderr.printf("Create DB: %s", errormsg);
+					return null;
+				}
+			}
+		}
+		return database;
+	}
 
 	private void db_error() {
 		stderr.printf("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
@@ -105,9 +187,9 @@ public class Xnoise.DbWriter : GLib.Object {
 	    	out this.del_mlib_statement); 
 	}
 
-	private string dbFileName() {
-		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", "db.sqlite", null);
-	}
+//	private string dbFileName() {
+//		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", "db.sqlite", null);
+//	}
 		
 	private void db_update_entry(int id, TrackData tags, string uri) {
 		string artist    = tags.Artist;
@@ -223,47 +305,47 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 
-	public void check_db_and_tables_exist() {
-		bool db_table_exists = false;
-		string current_query = "";
-		int nrow,ncolumn;
-		int rc1 = 0;
-		int rc2 = 0;
-		int rc3 = 0;
-		weak string[] resultArray;
-		string errmsg;
+//	public void check_create_tables() {
+//		bool db_table_exists = false;
+//		string current_query = "";
+//		int nrow,ncolumn;
+//		int rc1 = 0;
+//		int rc2 = 0;
+//		int rc3 = 0;
+//		weak string[] resultArray;
+//		string errmsg;
 
-		//Check for Table existance
-		current_query = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
-		rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-		if (rc1 != Sqlite.OK) { 
-			stderr.printf("SQL error: %s\n", errmsg);
-			return;
-		}
+//		//Check for Table existance
+//		current_query = "SELECT name FROM sqlite_master WHERE type='table';";
+//		rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
+//		if (rc1 != Sqlite.OK) { 
+//			stderr.printf("SQL error: %s\n", errmsg);
+//			return;
+//		}
 
-		//search main table
-		for (int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
-			for (int j = offset*ncolumn; j< (offset+1)*ncolumn;j++) {
-				if (resultArray[j]=="mlib") {
-					db_table_exists = true;
-				}
-			}
-		}
+//		//search main table
+//		for (int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
+//			for (int j = offset*ncolumn; j< (offset+1)*ncolumn;j++) {
+//				if (resultArray[j]=="mlib") {
+//					db_table_exists = true;
+//				}
+//			}
+//		}
 
-		//create Tables if not existant
-		if(db_table_exists == false) {
-			current_query = "CREATE TABLE mlib(id integer primary key, tracknumber integer, artist text, album text, title text, genre text, uri text);";
-			rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-			current_query = "CREATE TABLE lastused(uri text);";
-			rc2 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-			current_query = "CREATE TABLE music_folders(name text primary key);";
-			rc3 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-		}
-		if ((rc1 != Sqlite.OK)|(rc2 != Sqlite.OK)|(rc3 != Sqlite.OK)) { 
-			stderr.printf("SQL error (table exist): %s\n", errmsg);
-			return;
-		}
-	}
+//		//create Tables if not existant
+//		if(db_table_exists == false) {
+//			current_query = "CREATE TABLE mlib(id integer primary key, tracknumber integer, artist text, album text, title text, genre text, uri text);";
+//			rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
+//			current_query = "CREATE TABLE lastused(uri text);";
+//			rc2 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
+//			current_query = "CREATE TABLE music_folders(name text primary key);";
+//			rc3 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
+//		}
+//		if ((rc1 != Sqlite.OK)|(rc2 != Sqlite.OK)|(rc3 != Sqlite.OK)) { 
+//			stderr.printf("SQL error (table exist): %s\n", errmsg);
+//			return;
+//		}
+//	}
 
 	public string[] get_music_folders() { 
 		string[] mfolders = {};

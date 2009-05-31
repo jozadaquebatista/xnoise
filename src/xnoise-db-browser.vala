@@ -24,7 +24,8 @@ using GLib;
 using Sqlite;
 
 public class Xnoise.DbBrowser : GLib.Object {
-	private string DATABASE;
+	private Database db;
+	private static string DATABASE_NAME = "db.sqlite";
 	private Statement count_for_uri_statement;
 	private Statement get_lastused_statement;
 	private Statement get_artist_statement;
@@ -57,10 +58,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		"SELECT DISTINCT title FROM mlib WHERE artist = ? AND album = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) ORDER BY tracknumber DESC"; 
 
 	public DbBrowser() {
-		DATABASE = dbFileName();
-		if(Database.open(DATABASE, out db)!=Sqlite.OK) { 
-			stderr.printf("Can't open database: %s\n", (string)this.db.errmsg);
-		}
+        this.db = get_db();
 		this.prepare_statements();
 	}
 
@@ -68,10 +66,20 @@ public class Xnoise.DbBrowser : GLib.Object {
 //		print("destruct dbbrowser\n");
 //	}
 
-	private Database db;
-
-	private string dbFileName() {
-		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", "db.sqlite", null);
+	private static Database? get_db () {
+		// For the db browser there has to be an existant db because it should only read
+		Database database;
+		File home_dir = File.new_for_path(Environment.get_home_dir());
+		File xnoise_home = home_dir.get_child(".xnoise");
+		File xnoisedb = xnoise_home.get_child(DATABASE_NAME);
+		Database.open_v2(xnoisedb.get_path(), 
+		                 out database, 
+		                 Sqlite.OPEN_READONLY, 
+		                 null) ;
+		if(!xnoisedb.query_exists(null) || database==null) {
+			return null;
+		}
+		return database;
 	}
 
 	private void db_error() {

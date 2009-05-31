@@ -660,7 +660,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		} 
 		else if((trackList.model.get_iter_first(out iter))&&
 		        (((handle_repeat_state)&&
-		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) {                                       //...or goto first song, if possible ...
+		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { //...or goto first song, if possible ...
 			trackList.reset_play_status_for_title();
 			trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
 			if(Main.instance().gPl.paused) this.trackList.set_pause_picture();
