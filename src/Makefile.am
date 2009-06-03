@@ -12,7 +12,7 @@ VALA_CFLAGS = \
 	--vapidir $(srcdir)/../vapi \
 	--thread \
 	--pkg config \
-	--pkg gtk+-2.0 \ 
+	--pkg gtk+-2.0 \
 	--pkg posix \
 	--pkg sqlite3 \
 	--pkg gio-2.0 \

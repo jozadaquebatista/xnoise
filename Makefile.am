@@ -8,7 +8,7 @@ SUBDIRS = \
 	po \
 	$(NULL)
 
-xnoiselicense_DATA =  \	
+xnoiselicense_DATA =  \
 	COPYING \
 	AUTHORS \
 	$(NULL)
