@@ -1,0 +1,82 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: xnoise\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-06-03 22:50+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
+"Language-Team:  <shuerhaaken@googlemail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: src/xnoise-main-window.vala:95
+msgid "Remove all"
+msgstr "Alle entfernen"
+
+#: src/xnoise-main-window.vala:100
+msgid "Remove selected titles"
+msgstr "Entferne ausgewählte"
+
+#: src/xnoise-main-window.vala:137
+msgid "Music"
+msgstr "Musik"
+
+#: src/xnoise-main-window.vala:144
+msgid "Streams"
+msgstr "Streams"
+
+#: src/xnoise-main-window.vala:150
+msgid "Videos"
+msgstr "Videos"
+
+#: src/xnoise-main-window.vala:171
+msgid "_Add or Remove music"
+msgstr "_Hinzufügen oder Entfernen von Musik"
+
+#: src/xnoise-main-window.vala:173
+msgid "_Settings"
+msgstr "_Einstellungen"
+
+#: src/xnoise-main-window.vala:175
+msgid "_Quit"
+msgstr "_Beenden"
+
+#: src/xnoise-main-window.vala:177
+msgid "A_bout"
+msgstr "Übe_r"
+
+#: src/xnoise-main-window.vala:179
+msgid "_Fullscreen"
+msgstr "_Vollbild"
+
+#: src/xnoise-main-window.vala:815
+#: src/xnoise-main-window.vala:833
+msgid "by"
+msgstr "von"
+
+#: src/xnoise-main-window.vala:817
+#: src/xnoise-main-window.vala:835
+msgid "on"
+msgstr "auf"
+
+#: src/xnoise-main-window.vala:832
+#, c-format
+msgid "unknown title"
+msgstr "unbekannter Titel"
+
+#: src/xnoise-main-window.vala:834
+msgid "unknown artist"
+msgstr "unbekannter Künstler"
+
+#: src/xnoise-main-window.vala:836
+msgid "unknown album"
+msgstr "unbekanntes Album"
+
+#: src/xnoise-tracklist.vala:130
+msgid "Remove selected"
+msgstr "Entferne ausgewählte"
+
