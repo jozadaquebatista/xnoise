@@ -1,3 +1,17 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
-src/mainwindow.vala
+src/xnoise-misc.vala
+src/xnoise-about.vala        
+src/xnoise-music-browser.vala
+src/xnoise-app-starter.vala  
+src/xnoise-music-dir-dialog.vala
+src/xnoise-db-browser.vala   
+src/xnoise-parameter.vala
+src/xnoise-db-writer.vala    
+src/xnoise-settings-dialog.vala
+src/xnoise-gst-player.vala   
+src/xnoise-tag-reader.vala
+src/xnoise-main.vala         
+src/xnoise-tracklist.vala
+src/xnoise-main-window.vala
+
