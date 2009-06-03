@@ -44,7 +44,7 @@ public class Xnoise.AppStarter : GLib.Object {
 			print("Run '%s --help' to see a full list of available command line options.\n", Environment.get_prgname ());
 			return 1;
 		}
-
+//		Gdk.threads_init();
 		Gtk.init(ref args);
 		Unique.App app;
 		var app_starter = new AppStarter();

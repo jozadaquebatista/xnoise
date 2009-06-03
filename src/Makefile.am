@@ -10,6 +10,7 @@ AM_CPPFLAGS = \
 
 VALA_CFLAGS = \
 	--vapidir $(srcdir)/../vapi \
+	--thread \
 	--pkg config \
 	--pkg gtk+-2.0 \ 
 	--pkg posix \

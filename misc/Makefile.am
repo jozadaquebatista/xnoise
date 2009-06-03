@@ -1,13 +1,20 @@
 NULL =
 
-misc_DATA = xnoise.desktop \
-		$(NULL)	
+desktopdir 	 = $(datadir)/applications
+desktop_in_files = xnoise.desktop.in
+desktop_DATA 	 = $(desktop_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
 
-miscdir = $(datadir)/applications
+appicon_DATA = xnoise.png
+appicondir = $(datadir)/icons/hicolor/48x48/apps
 
 EXTRA_DIST = \
-	$(misc_DATA) \
+	$(appicon_DATA) \
+	$(desktop_in_files)	\
 	$(NULL)	
+
+CLEANFILES = \
+	$(desktop_DATA)	
 
 DISTCLEANFILES = \
 	Makefile.in \
