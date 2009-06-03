@@ -3,9 +3,8 @@ NULL =
 #Build in these directories:
 
 SUBDIRS = \
-	ui \
+	data \
 	src \
-	misc \
 	po \
 	$(NULL)
 

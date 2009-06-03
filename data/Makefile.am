@@ -1,0 +1,2 @@
+SUBDIRS = misc ui
+

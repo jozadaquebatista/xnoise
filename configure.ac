@@ -33,8 +33,9 @@ AC_SUBST(XNOISE_CFLAGS)
 AC_SUBST(XNOISE_LIBS)
 
 AC_CONFIG_FILES([Makefile
-	ui/Makefile
-	misc/Makefile
+	data/Makefile
+	data/misc/Makefile
+	data/ui/Makefile
 	src/Makefile
 	po/Makefile.in])
 
