@@ -37,6 +37,7 @@ AC_CONFIG_FILES([Makefile
 	data/misc/Makefile
 	data/ui/Makefile
 	src/Makefile
+	src/xnoise/Makefile
 	po/Makefile.in])
 
 AC_OUTPUT

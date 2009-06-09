@@ -9,7 +9,7 @@ AM_CPPFLAGS = \
 	$(NULL)
 
 VALA_CFLAGS = \
-	--vapidir $(srcdir)/../vapi \
+	--vapidir $(srcdir)/../../vapi \
 	--thread \
 	--pkg config \
 	--pkg gtk+-2.0 \
