@@ -1,4 +1,4 @@
-SUBDIRS = xnoise plugins
+SUBDIRS = testplugin
 
 DISTCLEANFILES = \
 	Makefile.in \

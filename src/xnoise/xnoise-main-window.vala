@@ -584,15 +584,15 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		
 		//save position
 		int rowcount = -1;
-		rowcount = (int)trackList.model.iter_n_children(null);
+		rowcount = (int)trackList.listmodel.iter_n_children(null);
 		if(!(rowcount>0)) {
 			return;
 		}
 		TreeIter iter;
 		TreePath path;
 		trackList.get_active_path(out path);
-		trackList.model.get_iter(out iter, path); 
-		trackList.model.set(iter, TrackListColumn.STATE, TrackStatus.POSITION_FLAG, -1);
+		trackList.listmodel.get_iter(out iter, path); 
+		trackList.listmodel.set(iter, TrackListColumn.STATE, TrackStatus.POSITION_FLAG, -1);
 	}
 
 	private void on_playpause_button_clicked() { //TODO: maybe use the stored position
@@ -619,7 +619,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 				Main.instance().gPl.play();
 		}
 		else { 
-			if (trackList.model.iter_n_children(null)>0) { 
+			if (trackList.listmodel.iter_n_children(null)>0) { 
 				playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
 				playpause_button_set_play_picture();
 				trackList.set_pause_picture();
@@ -639,7 +639,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		TreeIter iter;
 		TreePath path = null;
 		int rowcount = -1;
-		rowcount = (int)trackList.model.iter_n_children(null);
+		rowcount = (int)trackList.listmodel.iter_n_children(null);
 		if(!(rowcount>0)) {
 			stop();
 			return;
@@ -660,13 +660,13 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			if(direction == Direction.PREVIOUS) path.prev();
 		}
 
-		if(trackList.model.get_iter(out iter, path)) {       //goto next song, if possible...
+		if(trackList.listmodel.get_iter(out iter, path)) {       //goto next song, if possible...
 			trackList.reset_play_status_for_title();
 			trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
 			if(Main.instance().gPl.paused) this.trackList.set_pause_picture();
 			trackList.set_focus_on_iter(ref iter);
 		} 
-		else if((trackList.model.get_iter_first(out iter))&&
+		else if((trackList.listmodel.get_iter_first(out iter))&&
 		        (((handle_repeat_state)&&
 		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { //...or goto first song, if possible ...
 			trackList.reset_play_status_for_title();

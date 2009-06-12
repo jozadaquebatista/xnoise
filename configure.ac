@@ -13,7 +13,7 @@ AC_PATH_PROG(VALAC, valac, valac)
 AC_SUBST(VALAC)
 
 GETTEXT_PACKAGE=xnoise
-AH_TEMPLATE([GETTEXT_PACKAGE], [Package name for gettext])
+AH_TEMPLATE([GETTEXT_PACKAGE], [xnoise])
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE")
 AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
@@ -27,7 +27,7 @@ GLIB_REQUIRED=2.12.0
 GTK_REQUIRED=2.16.0
 SQLITE_REQUIRED=3.4
 
-PKG_CHECK_MODULES(XNOISE, glib-2.0 >= $GLIB_REQUIRED gobject-2.0 >= $GLIB_REQUIRED gtk+-2.0 >= $GTK_REQUIRED taglib_c sqlite3 >= $SQLITE_REQUIRED gstreamer-0.10 gio-2.0 unique-1.0)
+PKG_CHECK_MODULES(XNOISE, glib-2.0 >= $GLIB_REQUIRED gobject-2.0 >= $GLIB_REQUIRED gtk+-2.0 >= $GTK_REQUIRED taglib_c sqlite3 >= $SQLITE_REQUIRED gstreamer-0.10 gio-2.0 unique-1.0 gmodule-2.0)
 
 AC_SUBST(XNOISE_CFLAGS)
 AC_SUBST(XNOISE_LIBS)
@@ -38,6 +38,8 @@ AC_CONFIG_FILES([Makefile
 	data/ui/Makefile
 	src/Makefile
 	src/xnoise/Makefile
+	src/plugins/Makefile
+	src/plugins/testplugin/Makefile
 	po/Makefile.in])
 
 AC_OUTPUT

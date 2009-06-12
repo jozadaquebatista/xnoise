@@ -28,13 +28,13 @@
  * 	Jörn Magens
  */
 
-using GLib;
-
 public class Xnoise.Main : GLib.Object {
 	public MainWindow main_window;
+	public PluginLoader plugin_loader;
 	internal GstPlayer gPl;
 	private static Main _instance;
-
+	public Plugin plugin;
+	
 	public Main() {
 		check_database_and_tables();
 
@@ -42,12 +42,29 @@ public class Xnoise.Main : GLib.Object {
 
 		main_window = new MainWindow();
 
+		plugin_loader = new PluginLoader<Plugin>();
+        plugin_loader.plugin_available += on_plugin_loaded;
+		plugin_loader.load();
+//        plugin = (Plugin)plugin_loader.new_object();
+		Plugin plug = plugin_loader.plugin_hash.lookup("Test");
+        plug.activate(ref this);
+        
 		connect_signals();
 
 		Params paramter = Params.instance(); 
 		paramter.read_from_file(); 
 	}
+public void printa() {
+	print("jjjjjjjjjjjjjjjjjj\n");
+}
+	private void on_plugin_loaded (PluginLoader plugin_loader, Plugin plugin) {
+		print("plugin loaded and in main\n");
+		plugin.notify["available"] += this.on_plugin_notify;
+	}
 
+	private void on_plugin_notify() {
+		print("available signal\n");
+	}
 	private void connect_signals() {
 		gPl.sign_song_position_changed += (gPl, pos, len) => {
 				main_window.progressbar_set_value(pos, len);

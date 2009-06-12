@@ -3,14 +3,16 @@ NULL =
 AM_CPPFLAGS = \
 	-DDATADIR=\"$(datadir)/xnoise/\" \
 	-DUIDIR=\"$(datadir)/xnoise/ui/\" \
+	-DPLUGINSDIR=\"$(libdir)/xnoise/\" \
 	-DLICENSEDIR=\"$(datadir)/xnoise/license/\" \
-	$(XNOISE_CFLAGS) \
 	-include $(CONFIG_HEADER) \
+	$(XNOISE_CFLAGS) \
 	$(NULL)
 
 VALA_CFLAGS = \
 	--vapidir $(srcdir)/../../vapi \
 	--thread \
+	--vapi=$(srcdir)/xnoise-1.0.vapi \
 	--pkg config \
 	--pkg gtk+-2.0 \
 	--pkg posix \
@@ -18,7 +20,9 @@ VALA_CFLAGS = \
 	--pkg gio-2.0 \
 	--pkg gstreamer-0.10 \
 	--pkg taglib_c \
-	--pkg unique-1.0
+	--pkg unique-1.0 \
+	--pkg gmodule-2.0 \
+	-H $(srcdir)/xnoise.h
 	--basedir $(top_srcdir)/src
 
 BUILT_SOURCES = xnoise.vala.stamp
@@ -40,6 +44,8 @@ xnoise_VALASOURCES = \
 	xnoise-tracklist.vala \
 	xnoise-misc.vala \
 	xnoise-settings-dialog.vala \
+	xnoise-plugin.vala \
+	xnoise-plugin-loader.vala \
 	$(NULL)
 
 xnoise_SOURCES = \

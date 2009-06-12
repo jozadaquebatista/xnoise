@@ -4,5 +4,6 @@ namespace Config {
 	public const string DATADIR;
 	public const string UIDIR;
 	public const string LICENSEDIR;
+	public const string PLUGINSDIR;
 }
 

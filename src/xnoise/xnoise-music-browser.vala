@@ -50,7 +50,7 @@ public class Xnoise.MusicBrowser : TreeView, IParameter {
 		create_model();
 		set_pixbufs();
 		add_data_to_model();
-		setup_view();
+		create_view();
 		set_model(model); 
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);		
 
@@ -441,7 +441,7 @@ public class Xnoise.MusicBrowser : TreeView, IParameter {
 		}
 	}	
 
-	private void setup_view() {	
+	private void create_view() {	
 		Params.instance().read_from_file_for_single(this);
 		if(fontsizeMB<7) fontsizeMB = 7;
 

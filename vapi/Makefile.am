@@ -1,1 +1,1 @@
-EXTRA_DIST = config.vapi 
+EXTRA_DIST = config.vapi

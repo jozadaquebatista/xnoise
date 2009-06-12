@@ -28,7 +28,6 @@
  * 	Jörn Magens
  */
 
-using GLib;
 using Gst;
 
 internal class Xnoise.GstPlayer : GLib.Object {
