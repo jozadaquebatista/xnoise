@@ -1,0 +1,8 @@
+This script needs python and pygraphviz! 
+
+Execute 
+
+		./generate_class_graph.sh
+
+ in the tools folder to generate a new class graph
+

@@ -464,6 +464,49 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		}
 	}
 	
+	public void add_uris(string[]? uris) {
+		if(uris!=null) {
+			if(uris[0]==null) return;
+			int k=0;
+			TreeIter iter, iter_2;
+			this.reset_play_status_for_title();
+			while(uris[k]!=null) { //because foreach is not working for this array coming from libunique
+				File file;
+				TagReader tr = new TagReader();
+				file = File.new_for_uri(uris[k]);
+
+				//TODO: only for local files, so streams will not lead to a crash
+				TrackData t = tr.read_tag_from_file(file.get_path()); 
+
+				if (k==0) {
+					iter = this.insert_title(TrackStatus.PLAYING, 
+					                              null, 
+					                              (int)t.Tracknumber,
+					                              t.Title, 
+					                              t.Album, 
+					                              t.Artist, 
+					                              uris[k]);
+					this.set_state_picture_for_title(iter, TrackStatus.PLAYING);
+					iter_2 = iter;
+				}
+				else {
+					iter = this.insert_title(TrackStatus.STOPPED, 
+					                              null, 
+					                              (int)t.Tracknumber,
+					                              t.Title, 
+					                              t.Album, 
+					                              t.Artist, 
+					                              uris[k]);	
+					this.set_state_picture_for_title(iter);
+				}
+				tr = null;
+				k++;
+			}
+			Main.instance().add_track_to_gst_player(uris[0]); 
+		}
+	}
+	
+
 	private void get_last_unselected_path(ref TreePath? path) {
 		int rowcount = -1;
 		rowcount = (int)this.listmodel.iter_n_children(null); 
@@ -493,7 +536,7 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		}
 	}
 
-	private void on_row_activated(TrackList tree, TreePath path, TreeViewColumn column) { 
+	private void on_row_activated(TrackList sender, TreePath path, TreeViewColumn column) { 
 		string uri = null;
 		TreeIter iter;
 		if (listmodel.get_iter(out iter, path)) {

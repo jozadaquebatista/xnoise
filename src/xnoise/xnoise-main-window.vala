@@ -468,48 +468,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		}
 	}
 
-	public void add_uris_to_tracklist(string[]? uris) {
-		if(uris!=null) {
-			if(uris[0]==null) return;
-			int k=0;
-			TreeIter iter, iter_2;
-			trackList.reset_play_status_for_title();				
-			while(uris[k]!=null) { //because foreach is not working for this array coming from libunique
-				File file;
-				TagReader tr = new TagReader();
-				file = File.new_for_uri(uris[k]);
-
-				//TODO: only for local files, so streams will not lead to a crash
-				TrackData t = tr.read_tag_from_file(file.get_path()); 
-
-				if (k==0) {
-					iter = trackList.insert_title(TrackStatus.PLAYING, 
-					                              null, 
-					                              (int)t.Tracknumber,
-					                              t.Title, 
-					                              t.Album, 
-					                              t.Artist, 
-					                              uris[k]);
-					trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
-					iter_2 = iter;
-				}
-				else {
-					iter = trackList.insert_title(TrackStatus.STOPPED, 
-					                              null, 
-					                              (int)t.Tracknumber,
-					                              t.Title, 
-					                              t.Album, 
-					                              t.Artist, 
-					                              uris[k]);	
-					trackList.set_state_picture_for_title(iter);
-				}
-				tr = null;
-				k++;
-			}
-			Main.instance().add_track_to_gst_player(uris[0]);
-		}
-	}
-	
 ////REGION IParameter
 	public void read_data(KeyFile file) throws KeyFileError {
 		this.repeatState = file.get_integer("settings", "repeatstate");

@@ -327,11 +327,10 @@ ready to rock</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tab_pos">left</property>
-                    <property name="show_tabs">False</property>
                     <property name="show_border">False</property>
+                    <property name="scrollable">True</property>
                     <property name="tab_border">0</property>
                     <property name="tab_hborder">0</property>
-                    <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkVBox" id="vboxmusicBr">
                         <property name="visible">True</property>
@@ -369,8 +368,12 @@ ready to rock</property>
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="ypad">10</property>
-                        <property name="label" translatable="yes">collection</property>
+                        <property name="label" translatable="yes">Collection</property>
+                        <property name="single_line_mode">True</property>
                         <property name="angle">90</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="tab_fill">False</property>
