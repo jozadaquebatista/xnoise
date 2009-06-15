@@ -41,6 +41,7 @@ public class Xnoise.AppStarter : GLib.Object {
 	public static Main xn;
 
 	public static int main (string[] args) {
+		Gdk.threads_init();
 		var opt_context = new OptionContext("[FILE] [FILE]..."); //TODO: Do some reset options
 		opt_context.set_summary("Xnoise is a media player for audio files.");
 		opt_context.set_description("http://code.google.com/p/xnoise/\n");
@@ -52,7 +53,6 @@ public class Xnoise.AppStarter : GLib.Object {
 			print("Run '%s --help' to see a full list of available command line options.\n", Environment.get_prgname ());
 			return 1;
 		}
-//		Gdk.threads_init();
 		Gtk.init(ref args);
 		Unique.App app;
 		var app_starter = new AppStarter();
@@ -114,8 +114,10 @@ public class Xnoise.AppStarter : GLib.Object {
 			xn.main_window.window.show_all();
 			
 			xn.main_window.trackList.add_uris(uris);
-			
+
+			Gdk.threads_enter();
 			Gtk.main();
+			Gdk.threads_leave();
 			app = null;
 		}
 		return 0;

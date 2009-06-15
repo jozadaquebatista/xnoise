@@ -541,8 +541,8 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		TreeIter iter;
 		if (listmodel.get_iter(out iter, path)) {
 			listmodel.get(iter, 
-				TrackListColumn.URI, out uri, 
-				-1);
+				TrackListColumn.URI, out uri);//, 
+//				-1);
 		}
 		this.on_activated(uri, path);
 	}
@@ -607,8 +607,8 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		for (int i = 0; i < numberOfRows; i++) {
 			listmodel.iter_nth_child(out iter, null, i);
 			listmodel.get(iter, 
-				TrackListColumn.STATE, out status, 
-				-1);
+				TrackListColumn.STATE, out status);//, 
+//				-1);
 			if(status>0) {
 				listmodel.set(iter,
 					TrackListColumn.ICON, pixbuf,
@@ -629,8 +629,8 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		for (int i = 0; i < numberOfRows; i++) {
 			listmodel.iter_nth_child(out iter, null, i);
 			listmodel.get(iter, 
-				TrackListColumn.STATE, out status, 
-				-1);
+				TrackListColumn.STATE, out status);//, 
+//				-1);
 			if(status>0) {
 				listmodel.set(iter,
 					TrackListColumn.ICON, pixbuf,
@@ -694,12 +694,12 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		numberOfRows = listmodel.iter_n_children(null);
 		if (numberOfRows == 0) return;
 		for (int i = 0; i < numberOfRows; i++) {
-			listmodel.iter_nth_child (out iter, null, i);
+			listmodel.iter_nth_child(out iter, null, i);
 			listmodel.set(iter,
-				TrackListColumn.STATE, TrackStatus.STOPPED,
-				TrackListColumn.ICON, null,
-				-1);
-		unbolden_row(ref iter);
+			              TrackListColumn.STATE, TrackStatus.STOPPED,
+			              TrackListColumn.ICON, null,
+			              -1);
+			unbolden_row(ref iter);
 		}
 	}
 
@@ -725,24 +725,20 @@ public class Xnoise.TrackList : TreeView, IParameter {
 	}
 
 	private void unbolden_row(ref TreeIter iter) {
-		GLib.Value valArtist, valAlbum, valTitle;
-		this.listmodel.get_value(
-			iter,
-			TrackListColumn.ARTIST,
-			out valArtist);
-		this.listmodel.get_value(
-			iter,
-			TrackListColumn.ALBUM,
-			out valAlbum);
-		this.listmodel.get_value(
-			iter,
-			TrackListColumn.TITLE,
+		string valArtist = "";
+		string valAlbum = "";
+		string valTitle = "";
+		this.listmodel.get(iter,
+			TrackListColumn.ARTIST, 
+			out valArtist,
+			TrackListColumn.ALBUM, 
+			out valAlbum,
+			TrackListColumn.TITLE, 
 			out valTitle);
-		
-		if(valArtist.get_string().has_prefix("<b>")) {
-			string artist = valArtist.get_string().substring(3, valArtist.get_string().length - 7); 
-			string album  = valAlbum.get_string().substring(3, valAlbum.get_string().length - 7);
-			string title  = valTitle.get_string().substring(3, valTitle.get_string().length - 7);
+		if(valArtist.has_prefix("<b>")) {
+			string artist = valArtist.substring(3, (int)valArtist.length - 7); 
+			string album  = valAlbum.substring(3, (int)valAlbum.length - 7);
+			string title  = valTitle.substring(3, (int)valTitle.length - 7);
 			listmodel.set(iter,
 				TrackListColumn.ARTIST, artist,
 				TrackListColumn.ALBUM, album,
@@ -758,8 +754,8 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		for (int i = 0; i < numberOfRows; i++) {
 			listmodel.iter_nth_child (out iter, null, i);
 			listmodel.get(iter,
-				TrackListColumn.STATE, out status,
-				-1);
+				TrackListColumn.STATE, out status);//,
+//				-1);
 			if (status > 0) {
 				path = listmodel.get_path(iter);
 				return true;
@@ -800,8 +796,8 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		string uri = "";
 		if (listmodel.get_iter(out iter, path)) {
 			listmodel.get(iter,
-				TrackListColumn.URI, out uri,
-				-1);
+				TrackListColumn.URI, out uri);//,
+//				-1);
 		}
 		return uri;
 	}

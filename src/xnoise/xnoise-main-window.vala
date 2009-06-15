@@ -46,7 +46,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	public Button repeatButton;
 	public Gtk.Notebook notebook;
 	public Image repeatImage;
-	public Image albumimage;
+	public AlbumImage albumimage;
+//	public Image albumimage;
 	public Label repeatLabel;
 	public ProgressBar songProgressBar;
 	public double current_volume; //keep it global for saving to keyfile
@@ -113,7 +114,10 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			//--------------------
 			
 			//PLAYING TITLE IMAGE
-			this.albumimage                = this.get_object("albumimage") as Gtk.Image;
+			var albumviewport              = this.get_object("albumviewport") as Gtk.Viewport;
+			
+			this.albumimage = new AlbumImage();
+			albumviewport.add(this.albumimage);
 			//--------------------
 
 
@@ -211,58 +215,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		this.window.key_release_event  += this.on_key_released;
 		this.window.window_state_event += this.on_window_state_change;
 	}
-
-//	private void notebookMB_clicked(Gtk.ToggleButton sender) {
-//		if(sender.active) {
-//			this.toggleVideo.clicked -= notebookVideo_clicked;
-//			this.toggleVideo.active = false;
-//			this.toggleVideo.clicked += notebookVideo_clicked;
-//			this.toggleStream.clicked -= notebookStream_clicked;
-//			this.toggleStream.active = false;
-//			this.toggleStream.clicked += notebookStream_clicked;
-//			this.notebook.set_current_page(0);
-//		}
-//		else {
-//			this.toggleMB.clicked -= notebookMB_clicked;
-//			this.toggleMB.active = true;
-//			this.toggleMB.clicked += notebookMB_clicked;
-//		}
-//	}
-
-
-//	private void notebookStream_clicked(Gtk.ToggleButton sender) {
-//		if(sender.active) {
-//			this.toggleVideo.clicked -= notebookVideo_clicked;
-//			this.toggleVideo.active = false;
-//			this.toggleVideo.clicked += notebookVideo_clicked;
-//			this.toggleMB.clicked -= notebookMB_clicked;
-//			this.toggleMB.active = false;
-//			this.toggleMB.clicked += notebookMB_clicked;
-//			this.notebook.set_current_page(1);
-//		}
-//		else {
-//			this.toggleStream.clicked -= notebookStream_clicked;
-//			this.toggleStream.active = true;
-//			this.toggleStream.clicked += notebookStream_clicked;
-//		}
-//	}
-
-//	private void notebookVideo_clicked(Gtk.ToggleButton sender) {
-//		if(sender.active) {
-//			this.toggleMB.clicked -= notebookMB_clicked;
-//			this.toggleMB.active = false;
-//			this.toggleMB.clicked += notebookMB_clicked;
-//			this.toggleStream.clicked -= notebookStream_clicked;
-//			this.toggleStream.active = false;
-//			this.toggleStream.clicked += notebookStream_clicked;
-//			this.notebook.set_current_page(2);
-//		}
-//		else {
-//			this.toggleVideo.clicked -= notebookMB_clicked;
-//			this.toggleVideo.active = true;
-//			this.toggleVideo.clicked += notebookMB_clicked;
-//		}
-//	}
 
 	private void add_lastused_titles_to_tracklist() { 
 		DbBrowser dbBr = new DbBrowser();

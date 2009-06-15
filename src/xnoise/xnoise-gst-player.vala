@@ -74,7 +74,7 @@ internal class Xnoise.GstPlayer : GLib.Object {
 		string[] args = null;
 		Gst.init (ref args);
 		create_elements();
-		_timeout = GLib.Timeout.add (500, on_cyclic_send_song_position);
+		_timeout = GLib.Timeout.add(500, on_cyclic_send_song_position);
 		this.notify += (s, p) => {
 			switch(p.name) {
 				case "Uri": {

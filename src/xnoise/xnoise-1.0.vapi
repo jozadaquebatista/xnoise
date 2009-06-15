@@ -7,6 +7,13 @@ namespace Xnoise {
 		public AboutDialog ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class AlbumImage : Gtk.Fixed {
+		public void find_album_image (string uri);
+		public void find_google_image (string search_term);
+		public AlbumImage ();
+		public static void* set_albumimage_from_goo ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class AppStarter : GLib.Object {
 		public static Xnoise.Main xn;
 		public static int main (string[] args);
@@ -50,7 +57,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Builder, Xnoise.IParameter {
-		public Gtk.Image albumimage;
+		public Xnoise.AlbumImage albumimage;
 		public double current_volume;
 		public Xnoise.MusicBrowser musicBr;
 		public Gtk.Notebook notebook;

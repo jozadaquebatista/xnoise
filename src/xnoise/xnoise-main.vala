@@ -54,9 +54,11 @@ public class Xnoise.Main : GLib.Object {
 		Params paramter = Params.instance(); 
 		paramter.read_from_file(); 
 	}
-public void printa() {
-	print("jjjjjjjjjjjjjjjjjj\n");
-}
+
+	public void printa() {
+		print("jjjjjjjjjjjjjjjjjj\n");
+	}
+
 	private void on_plugin_loaded (PluginLoader plugin_loader, IPlugin plugin) {
 		print("plugin loaded and in main\n");
 		plugin.notify["available"] += this.on_plugin_notify;
@@ -65,6 +67,7 @@ public void printa() {
 	private void on_plugin_notify() {
 		print("available signal\n");
 	}
+
 	private void connect_signals() {
 		gPl.sign_song_position_changed += (gPl, pos, len) => {
 				main_window.progressbar_set_value(pos, len);
@@ -80,6 +83,7 @@ public void printa() {
 			main_window.songProgressBar.set_text("00:00 / 00:00");;
 		};
 		gPl.sign_tag_changed += main_window.set_displayed_title;
+		gPl.sign_tag_changed += main_window.albumimage.find_album_image;
 
 		//TODO: if the volume change is handled from main window an unlimited number of instances of Main is created. Why?
 		main_window.sign_volume_changed += (main_window, fraction) => { //handle volume slider change

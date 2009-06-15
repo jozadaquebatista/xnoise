@@ -47,6 +47,7 @@ xnoise_VALASOURCES = \
 	xnoise-plugin.vala \
 	xnoise-plugin-loader.vala \
 	xnoise-plugin-interface.vala \
+	xnoise-album-image.vala \
 	$(NULL)
 
 xnoise_SOURCES = \
