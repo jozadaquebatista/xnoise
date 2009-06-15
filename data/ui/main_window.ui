@@ -260,18 +260,14 @@
                 <property name="shadow_type">none</property>
                 <property name="obey_child">False</property>
                 <child>
-                  <object class="GtkViewport" id="viewport1">
+                  <object class="GtkViewport" id="albumviewport">
+                    <property name="width_request">48</property>
+                    <property name="height_request">48</property>
                     <property name="visible">True</property>
                     <property name="resize_mode">queue</property>
                     <property name="shadow_type">none</property>
                     <child>
-                      <object class="GtkImage" id="albumimage">
-                        <property name="width_request">42</property>
-                        <property name="height_request">42</property>
-                        <property name="visible">True</property>
-                        <property name="stock">gtk-cdrom</property>
-                        <property name="icon-size">5</property>
-                      </object>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>

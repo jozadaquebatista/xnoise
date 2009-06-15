@@ -10,6 +10,7 @@ ui_DATA = add_folder.ui \
 		genre.png \
 		guitar.png \
 		note.png \
+		working_animation.gif \
 		$(NULL)	
 
 
