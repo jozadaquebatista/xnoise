@@ -29,16 +29,28 @@
  */
  
 using Xnoise;
+using Gtk;
 
-public class TestPlugin : Xnoise.Plugin {
+public class TestPlugin : Plugin, IPlugin {
 	public TestPlugin(string name, string? title) {
 		base(name, title);
 	}
+
 	private Main xn;
-	public override void activate(ref weak Main xn) {
+	private string tabname = "<b>Test</b>";
+
+//BEGIN REGION IPlugin
+	public void activate(ref weak Main xn) {
 		this.xn = xn;
-		print("Hello world!\n");
-		xn.main_window.window.title = "plugin is working";
+		print("\nloading plugin \"Test\"....\n");
+		Label tablabel = new Label(tabname);
+		tablabel.use_markup = true;
+		tablabel.angle = 90;
+		xn.main_window.notebook.append_page(new Label("Test"), tablabel);
 	}
+
+	public string pname { construct set; get; }
+//END REGION IPlugin
+
 }
 

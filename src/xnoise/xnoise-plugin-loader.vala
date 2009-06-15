@@ -1,4 +1,4 @@
-/* xnoise-testplugin-registration.vala
+/* xnoise-plugin-loader.vala
  *
  * Copyright (C) 2009  Jörn Magens
  *
@@ -28,10 +28,50 @@
  * 	Jörn Magens
  */
  
+public class Xnoise.PluginLoader<T> : Object {
+	private Type type;
+	private Module module;
+    public HashTable<string,IPlugin> plugin_hash;
+	
+    public signal void plugin_available(IPlugin plugin);
+		
+	private delegate Type InitModuleFunction();
 
-[ModuleInit]
-public Type init_module() { //Xnoise.PluginLoader plugin_loader) {  
-//	var test_plugin = new TestPlugin("Test", "Test Streams");
-//	plugin_loader.add_plugin(test_plugin);
-	return typeof(TestPlugin);
+	public PluginLoader() {
+		assert (Module.supported());
+		this.plugin_hash = new HashTable<string,Plugin>(str_hash, str_equal);
+	}
+
+	public bool load () {
+		string path = Config.PLUGINSDIR + "libxnoisetest.la"; 
+		print("path: %s\n", path);
+		module = Module.open(path, ModuleFlags.BIND_LAZY);
+		
+		if (module == null) {
+			return false;
+		}
+		print("Loaded %s\n", module.name());
+
+		void* func;
+		module.symbol("init_module", out func);
+		InitModuleFunction init_module = (InitModuleFunction)func;
+		if(init_module == null) return false;
+		
+//		module.make_resident ();
+		type = init_module();
+		add_plugin();
+		return true;
+	}
+	
+	public void add_plugin() {
+		var plug = (IPlugin)Object.new(type);
+		if(plug == null) {
+			print("add plugin error\n");
+			return;
+		}
+			
+		this.plugin_hash.insert("Test", plug);
+		this.plugin_available(plug);
+	}
 }
+

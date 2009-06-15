@@ -9,12 +9,14 @@ import re
 from lxml import etree
 
 
+
 class ValaMap ():
 
 	def __init__ (self, dir):
 
 		self.dir = os.path.abspath (dir) + "/"
 		self.classfiledict = {}
+		self.sclasscolordict = {}
 		self.root = etree.Element ("valamap")
 		self.root.set ("path", self.dir)
 
@@ -55,6 +57,21 @@ class ValaMap ():
 	
 		dot_style = ""
 		dot_nodes = ""
+		dot_colors = ""
+		
+		# colors / superclasses
+		numcols = len (self.sclasscolordict)
+		lol = 1
+		dot_colors += 'colors [label=<'
+		dot_colors += '<table border="1" cellpadding="6" cellborder="0" cellspacing="0">'
+		for sclass, color in self.sclasscolordict.iteritems():
+			huestep = 1.0 / numcols
+			h = huestep*lol
+			col = self.sclasscolordict[sclass] = str (h) + ' 0.2 0.9'
+			dot_colors += '<tr><td align="left" bgcolor="' + col + '">'
+			dot_colors += ' ' + sclass.strip () + ' </td></tr>'
+			lol += 1
+		dot_colors += "</table>>,shape=box,color=white,fontcolor=white,fontsize=16,fontname=sans,labelloc=b,labeljust=l];\n"
 		
 		# styles & co
 		for child in self.root:
@@ -66,12 +83,15 @@ class ValaMap ():
 			dot_style += 'href="' + self.dir + file + '",'
 			dot_style += 'tooltip="' + file + ' @ ' + lnum + '",'
 			
+			supercolor = self.sclasscolordict[child.get ("super")]
+			dot_style += 'fillcolor="' + supercolor + '",'
+			
 			if child.get ("main") == "True":
-				dot_style += "shape=house"
+				dot_style += 'style="filled",shape=folder'
 			elif child.get ("type") == "public":
-				dot_style += "shape=box"
+				dot_style += 'style="filled",shape=box'
 			else:
-				dot_style += "shape=box, style=rounded"
+				dot_style += 'style="filled,rounded",shape=box'
 			
 			dot_style += "];\n"
 
@@ -91,9 +111,13 @@ class ValaMap ():
 
 		print "digraph G {\n"
 		print 'size="6.0,6.0";'
-		print "node [fontsize=16,fontname=sans,aname=dot];"
+		print 'edge [arrowhead=normal];'
+		print "node [fontsize=16,fontname=sans];"
+		print dot_colors
+#		print 'subgraph cluster_main {'
 		print dot_nodes
 		print dot_style
+#		print "}"
 		print "}"
 
 
@@ -153,7 +177,7 @@ class ValaMap ():
 
 
 	def class_to_xml (self, line, file, linenum, main):
-		exp = "^(\w+)\s+class\s+(\w+\.)?(\w+)(\s*:\s*)?(\w\.+)?(\s*,\s*)?(\w+)?"
+		exp = "^(\w+)\s+class\s+(\w+\.)?(\w+)(\s*:\s*)?([\w\.]+)?(\s*,\s*)?(\w+)?"
 		res = re.search (exp, line)
 		if (res):
 			node = etree.SubElement (self.root, "class")
@@ -161,12 +185,14 @@ class ValaMap ():
 			#node.set ("space", res.group (2).rstrip(".") or "")
 			node.set ("space", res.group (2) or "")
 			node.set ("type", res.group (1))
-			node.set ("super", res.group (5) or "")
+			super = res.group (5) or ""
+			node.set ("super", super)
 			node.set ("interface", res.group (7) or "")
 			node.set ("file", file)
 			node.set ("line", str (linenum))
 			node.set ("main", str (main))
 			self.classfiledict[res.group (3)] = file
+			self.sclasscolordict[super] = "blah"
 
 ################################################################################
 

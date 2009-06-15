@@ -46,6 +46,7 @@ xnoise_VALASOURCES = \
 	xnoise-settings-dialog.vala \
 	xnoise-plugin.vala \
 	xnoise-plugin-loader.vala \
+	xnoise-plugin-interface.vala \
 	$(NULL)
 
 xnoise_SOURCES = \

@@ -331,6 +331,7 @@ ready to rock</property>
                     <property name="scrollable">True</property>
                     <property name="tab_border">0</property>
                     <property name="tab_hborder">0</property>
+                    <property name="tab_vborder">0</property>
                     <child>
                       <object class="GtkVBox" id="vboxmusicBr">
                         <property name="visible">True</property>
@@ -376,44 +377,6 @@ ready to rock</property>
                         </attributes>
                       </object>
                       <packing>
-                        <property name="tab_fill">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label7">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">streams</property>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child type="tab">
-                      <object class="GtkLabel" id="label5">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">page 2</property>
-                        <property name="angle">90</property>
-                      </object>
-                      <packing>
-                        <property name="position">1</property>
-                        <property name="tab_fill">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label8">
-                        <property name="label" translatable="yes">Videos</property>
-                      </object>
-                      <packing>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child type="tab">
-                      <object class="GtkLabel" id="label6">
-                        <property name="label" translatable="yes">page 3</property>
-                        <property name="angle">90</property>
-                      </object>
-                      <packing>
-                        <property name="position">2</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>

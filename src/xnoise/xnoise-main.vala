@@ -46,7 +46,7 @@ public class Xnoise.Main : GLib.Object {
         plugin_loader.plugin_available += on_plugin_loaded;
 		plugin_loader.load();
 //        plugin = (Plugin)plugin_loader.new_object();
-		Plugin plug = plugin_loader.plugin_hash.lookup("Test");
+		IPlugin plug = plugin_loader.plugin_hash.lookup("Test");
         plug.activate(ref this);
         
 		connect_signals();
@@ -57,7 +57,7 @@ public class Xnoise.Main : GLib.Object {
 public void printa() {
 	print("jjjjjjjjjjjjjjjjjj\n");
 }
-	private void on_plugin_loaded (PluginLoader plugin_loader, Plugin plugin) {
+	private void on_plugin_loaded (PluginLoader plugin_loader, IPlugin plugin) {
 		print("plugin loaded and in main\n");
 		plugin.notify["available"] += this.on_plugin_notify;
 	}

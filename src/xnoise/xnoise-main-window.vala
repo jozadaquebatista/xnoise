@@ -38,17 +38,13 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	private bool is_fullscreen = false;
 	private HPaned hpaned;
 	private Gtk.VolumeButton VolumeSlider;
-	private ToggleButton toggleMB;
-	private ToggleButton toggleStream;
-	private ToggleButton toggleVideo;
-	private Gtk.VBox notebookVBox;
-	private Gtk.Notebook noteb;
 	private int _posX_buffer;
 	private int _posY_buffer;
 
 	public Entry searchEntryMB;
 	public Button playPauseButton; 
 	public Button repeatButton;
+	public Gtk.Notebook notebook;
 	public Image repeatImage;
 	public Image albumimage;
 	public Label repeatLabel;
@@ -136,33 +132,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			
 			this.hpaned = this.get_object("hpaned1") as Gtk.HPaned;
 			
-			int notebookButtonHeight = 24; //TODO: Set height by fontsize
-			
-			//NOTEBOOK SELECTION BUTTONS
-			notebookVBox = this.get_object("vbox6") as Gtk.VBox;
-			
-			toggleMB = new Gtk.ToggleButton(); 
-			toggleMB.label = _("Music");
-			toggleMB.can_focus = false;
-			toggleMB.active = true; //initial value
-			toggleMB.clicked += notebookMB_clicked;
-			toggleMB.set_size_request(-1, notebookButtonHeight); 
-
-			toggleStream = new Gtk.ToggleButton(); 
-			toggleStream.label = _("Streams") ;
-			toggleStream.can_focus = false;
-			toggleStream.clicked += notebookStream_clicked;
-			toggleStream.set_size_request(-1, notebookButtonHeight); 
-			
-			toggleVideo = new Gtk.ToggleButton(); 
-			toggleVideo.label = _("Videos") ;
-			toggleVideo.can_focus = false;
-			toggleVideo.clicked += notebookVideo_clicked;
-			toggleVideo.set_size_request(-1, notebookButtonHeight); 
-
-			notebookVBox.pack_start(toggleMB, false, false, 0);
-			notebookVBox.pack_start(toggleStream, false, false, 0);
-			notebookVBox.pack_start(toggleVideo, false, false, 0);
 			//----------------
 			
 			//VOLUME SLIDE BUTTON
@@ -205,7 +174,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			var musicBrScrollWin = this.get_object("scroll_music_br") as Gtk.ScrolledWindow;
 			musicBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
 			musicBrScrollWin.add(this.musicBr);
-			noteb = this.get_object("notebook1") as Gtk.Notebook;
+			notebook = this.get_object("notebook1") as Gtk.Notebook;
 			
 			this.searchEntryMB = new Gtk.Entry(); 
 			this.searchEntryMB.primary_icon_stock = Gtk.STOCK_FIND; 
@@ -243,57 +212,57 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 		this.window.window_state_event += this.on_window_state_change;
 	}
 
-	private void notebookMB_clicked(Gtk.ToggleButton sender) {
-		if(sender.active) {
-			this.toggleVideo.clicked -= notebookVideo_clicked;
-			this.toggleVideo.active = false;
-			this.toggleVideo.clicked += notebookVideo_clicked;
-			this.toggleStream.clicked -= notebookStream_clicked;
-			this.toggleStream.active = false;
-			this.toggleStream.clicked += notebookStream_clicked;
-			this.noteb.set_current_page(0);
-		}
-		else {
-			this.toggleMB.clicked -= notebookMB_clicked;
-			this.toggleMB.active = true;
-			this.toggleMB.clicked += notebookMB_clicked;
-		}
-	}
+//	private void notebookMB_clicked(Gtk.ToggleButton sender) {
+//		if(sender.active) {
+//			this.toggleVideo.clicked -= notebookVideo_clicked;
+//			this.toggleVideo.active = false;
+//			this.toggleVideo.clicked += notebookVideo_clicked;
+//			this.toggleStream.clicked -= notebookStream_clicked;
+//			this.toggleStream.active = false;
+//			this.toggleStream.clicked += notebookStream_clicked;
+//			this.notebook.set_current_page(0);
+//		}
+//		else {
+//			this.toggleMB.clicked -= notebookMB_clicked;
+//			this.toggleMB.active = true;
+//			this.toggleMB.clicked += notebookMB_clicked;
+//		}
+//	}
 
 
-	private void notebookStream_clicked(Gtk.ToggleButton sender) {
-		if(sender.active) {
-			this.toggleVideo.clicked -= notebookVideo_clicked;
-			this.toggleVideo.active = false;
-			this.toggleVideo.clicked += notebookVideo_clicked;
-			this.toggleMB.clicked -= notebookMB_clicked;
-			this.toggleMB.active = false;
-			this.toggleMB.clicked += notebookMB_clicked;
-			this.noteb.set_current_page(1);
-		}
-		else {
-			this.toggleStream.clicked -= notebookStream_clicked;
-			this.toggleStream.active = true;
-			this.toggleStream.clicked += notebookStream_clicked;
-		}
-	}
+//	private void notebookStream_clicked(Gtk.ToggleButton sender) {
+//		if(sender.active) {
+//			this.toggleVideo.clicked -= notebookVideo_clicked;
+//			this.toggleVideo.active = false;
+//			this.toggleVideo.clicked += notebookVideo_clicked;
+//			this.toggleMB.clicked -= notebookMB_clicked;
+//			this.toggleMB.active = false;
+//			this.toggleMB.clicked += notebookMB_clicked;
+//			this.notebook.set_current_page(1);
+//		}
+//		else {
+//			this.toggleStream.clicked -= notebookStream_clicked;
+//			this.toggleStream.active = true;
+//			this.toggleStream.clicked += notebookStream_clicked;
+//		}
+//	}
 
-	private void notebookVideo_clicked(Gtk.ToggleButton sender) {
-		if(sender.active) {
-			this.toggleMB.clicked -= notebookMB_clicked;
-			this.toggleMB.active = false;
-			this.toggleMB.clicked += notebookMB_clicked;
-			this.toggleStream.clicked -= notebookStream_clicked;
-			this.toggleStream.active = false;
-			this.toggleStream.clicked += notebookStream_clicked;
-			this.noteb.set_current_page(2);
-		}
-		else {
-			this.toggleVideo.clicked -= notebookMB_clicked;
-			this.toggleVideo.active = true;
-			this.toggleVideo.clicked += notebookMB_clicked;
-		}
-	}
+//	private void notebookVideo_clicked(Gtk.ToggleButton sender) {
+//		if(sender.active) {
+//			this.toggleMB.clicked -= notebookMB_clicked;
+//			this.toggleMB.active = false;
+//			this.toggleMB.clicked += notebookMB_clicked;
+//			this.toggleStream.clicked -= notebookStream_clicked;
+//			this.toggleStream.active = false;
+//			this.toggleStream.clicked += notebookStream_clicked;
+//			this.notebook.set_current_page(2);
+//		}
+//		else {
+//			this.toggleVideo.clicked -= notebookMB_clicked;
+//			this.toggleVideo.active = true;
+//			this.toggleVideo.clicked += notebookMB_clicked;
+//		}
+//	}
 
 	private void add_lastused_titles_to_tracklist() { 
 		DbBrowser dbBr = new DbBrowser();

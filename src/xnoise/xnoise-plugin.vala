@@ -1,4 +1,4 @@
-/* xnoise-testplugin-registration.vala
+/* xnoise-plugin.vala
  *
  * Copyright (C) 2009  Jörn Magens
  *
@@ -27,11 +27,24 @@
  * Author:
  * 	Jörn Magens
  */
- 
 
-[ModuleInit]
-public Type init_module() { //Xnoise.PluginLoader plugin_loader) {  
-//	var test_plugin = new TestPlugin("Test", "Test Streams");
-//	plugin_loader.add_plugin(test_plugin);
-	return typeof(TestPlugin);
+public abstract class Xnoise.Plugin : GLib.Object {
+	public string name;
+    public string title;
+    public bool available { get; set; }
+	
+//	public abstract void activate(ref weak Main xn);
+	
+    public Plugin(string name, string? title) {
+
+        this.name = name;
+        this.title = title;
+
+        this.available = true;
+
+        if (title == null) {
+            this.title = name;
+        }
+    }
 }
+
