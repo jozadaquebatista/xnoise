@@ -5,5 +5,8 @@ namespace Config {
 	public const string UIDIR;
 	public const string LICENSEDIR;
 	public const string PLUGINSDIR;
+	public const string GETTEXT_PACKAGE;
+	public const string LIBDIR;
+	public const string LOCALE_DIR;
 }
 

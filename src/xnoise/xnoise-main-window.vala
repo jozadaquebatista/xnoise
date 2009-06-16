@@ -118,6 +118,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			
 			this.albumimage = new AlbumImage();
 			albumviewport.add(this.albumimage);
+//			albumimage.albumimage.button_press_event+=on_album_image_enter;
+//			albumimage.leave_notify_event+=on_album_image_leave;
 			//--------------------
 
 
@@ -232,7 +234,17 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			}
 		}
 	}
-
+	
+//	private bool on_album_image_enter() {
+//		print("enter album image\n");
+//		return true;
+//	}
+//	
+//	private bool on_album_image_leave() {
+//		print("leave album image\n");
+//		return true;
+//	}
+	
 	private void on_repeatState_changed(GLib.ParamSpec pspec) {
 		switch(this.repeatState) {
 			case Repeat.NOT_AT_ALL : {

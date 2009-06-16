@@ -37,8 +37,8 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 	// TODO: get image from folder
 	// TODO: get image from service (with api)
 
-	static Gtk.Image albumimage; // this would be that from xnoise
-	static Gtk.Image albumimage_overlay; // UI 2.0 hack ;P
+	public Gtk.Image albumimage; // this would be that from xnoise
+	public Gtk.Image albumimage_overlay; // UI 2.0 hack ;P
 	
 	static string gooc_img_uri = "";
 	static string orig_img_uri = "";
@@ -123,7 +123,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 
 
 	
-	public static void* set_albumimage_from_goo () {
+	public void* set_albumimage_from_goo () {
 		//TODO: check if uri not 404 ?
 
 		Gdk.threads_enter ();
@@ -147,7 +147,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 	    return null;
 	}
 	
-	static void set_albumimage_from_uri (string uri) {
+	private void set_albumimage_from_uri (string uri) {
 		File urifile;
 		int width;
 		int height;

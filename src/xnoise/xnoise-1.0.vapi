@@ -8,10 +8,12 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AlbumImage : Gtk.Fixed {
+		public Gtk.Image albumimage;
+		public Gtk.Image albumimage_overlay;
 		public void find_album_image (string uri);
 		public void find_google_image (string search_term);
 		public AlbumImage ();
-		public static void* set_albumimage_from_goo ();
+		public void* set_albumimage_from_goo ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AppStarter : GLib.Object {

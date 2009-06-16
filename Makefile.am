@@ -15,7 +15,7 @@ xnoiselicense_DATA =  \
 	
 xnoiselicensedir = $(datadir)/xnoise/license
 
-EXTRA_DIST = \
+EXTRA_DIST = config.rpath m4/ChangeLog  \
 	$(xnoiselicense_DATA) \
 	intltool-extract.in \
 	intltool-merge.in \
@@ -46,3 +46,5 @@ DISTCLEANFILES = \
 	po/.intltool-merge-cache \
 	$(NULL)
 
+
+ACLOCAL_AMFLAGS = -I m4
