@@ -60,9 +60,9 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Builder, Xnoise.IParameter {
 		public Xnoise.AlbumImage albumimage;
+		public Gtk.Notebook browsernotebook;
 		public double current_volume;
 		public Xnoise.MusicBrowser musicBr;
-		public Gtk.Notebook notebook;
 		public Gtk.Button playPauseButton;
 		public Gtk.Image playpause_popup_image;
 		public Gtk.Button repeatButton;
@@ -71,6 +71,7 @@ namespace Xnoise {
 		public Gtk.Entry searchEntryMB;
 		public Gtk.ProgressBar songProgressBar;
 		public Xnoise.TrackList trackList;
+		public Gtk.Notebook tracklistnotebook;
 		public Gtk.Window window;
 		public void change_song (int direction, bool handle_repeat_state = false);
 		public MainWindow ();

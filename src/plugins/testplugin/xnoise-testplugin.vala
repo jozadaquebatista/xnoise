@@ -46,7 +46,7 @@ public class TestPlugin : Plugin, IPlugin {
 		Label tablabel = new Label(tabname);
 		tablabel.use_markup = true;
 		tablabel.angle = 90;
-		xn.main_window.notebook.append_page(new Label("Test"), tablabel);
+		xn.main_window.browsernotebook.append_page(new Label("Test"), tablabel);
 	}
 
 	public string pname { construct set; get; }

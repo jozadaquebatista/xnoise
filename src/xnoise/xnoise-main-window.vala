@@ -40,11 +40,14 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	private Gtk.VolumeButton VolumeSlider;
 	private int _posX_buffer;
 	private int _posY_buffer;
-
+	private Button showvideobutton;
+	private Label showvideolabel;
+	private Image showvideoimage;
 	public Entry searchEntryMB;
 	public Button playPauseButton; 
 	public Button repeatButton;
-	public Gtk.Notebook notebook;
+	public Gtk.Notebook browsernotebook;
+	public Gtk.Notebook tracklistnotebook;
 	public Image repeatImage;
 	public AlbumImage albumimage;
 	public Label repeatLabel;
@@ -102,6 +105,16 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			removeSelectedButton.can_focus = false;
 			removeSelectedButton.clicked   += this.on_remove_selected_button_clicked;
 			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
+			//--------------------
+
+			//SHOW VIDEO BUTTON
+			this.showvideobutton            = this.get_object("showvideobutton") as Gtk.Button;
+			showvideobutton.can_focus      = false;
+			showvideobutton.clicked        += this.on_show_video_button_clicked;
+			//--------------------
+			
+			//SHOW VIDEO LABEL
+			this.showvideolabel            = this.get_object("showvideolabel") as Gtk.Label;
 			//--------------------
 			
 			//REPEAT MODE SELECTOR
@@ -179,7 +192,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			var musicBrScrollWin = this.get_object("scroll_music_br") as Gtk.ScrolledWindow;
 			musicBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
 			musicBrScrollWin.add(this.musicBr);
-			notebook = this.get_object("notebook1") as Gtk.Notebook;
+			browsernotebook    = this.get_object("notebook1") as Gtk.Notebook;
+			tracklistnotebook  = this.get_object("tracklistnotebook") as Gtk.Notebook;
 			
 			this.searchEntryMB = new Gtk.Entry(); 
 			this.searchEntryMB.primary_icon_stock = Gtk.STOCK_FIND; 
@@ -592,6 +606,18 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	
 	private void on_remove_selected_button_clicked() {
 		trackList.remove_selected_row();
+	}
+
+	private void on_show_video_button_clicked() {
+		if(this.tracklistnotebook.page==0) {
+			this.tracklistnotebook.set_current_page(1);
+			this.showvideolabel.label =_("Show Tracklist");
+//			this.showvideobutton.label=_("Show Tracklist");
+		}
+		else {
+			this.tracklistnotebook.set_current_page(0);;
+			this.showvideolabel.label =_("Show Video");
+		}
 	}
 
 	private bool on_progressbar_press(Gtk.ProgressBar pb, Gdk.EventButton e) { 
