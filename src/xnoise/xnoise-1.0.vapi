@@ -117,7 +117,7 @@ namespace Xnoise {
 		public bool available { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class PluginLoader<T> : GLib.Object {
+	public class PluginLoader : GLib.Object {
 		public GLib.HashTable<string,Xnoise.IPlugin> plugin_hash;
 		public void add_plugin ();
 		public bool load ();

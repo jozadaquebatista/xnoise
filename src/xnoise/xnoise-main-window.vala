@@ -47,7 +47,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	public Gtk.Notebook notebook;
 	public Image repeatImage;
 	public AlbumImage albumimage;
-//	public Image albumimage;
 	public Label repeatLabel;
 	public ProgressBar songProgressBar;
 	public double current_volume; //keep it global for saving to keyfile
@@ -205,7 +204,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 			return;
 		}
 	
-		this.window.title = "xnoise music player";
+		this.window.title = "xnoise media player";
 
 		this.trayicon = create_tray_icon();
 		this.menu     = add_menu_to_trayicon();				

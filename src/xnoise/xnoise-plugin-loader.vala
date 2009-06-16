@@ -28,7 +28,7 @@
  * 	Jörn Magens
  */
  
-public class Xnoise.PluginLoader<T> : Object {
+public class Xnoise.PluginLoader : Object {
 	private Type type;
 	private Module module;
     public HashTable<string,IPlugin> plugin_hash;

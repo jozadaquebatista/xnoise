@@ -42,7 +42,7 @@ public class Xnoise.Main : GLib.Object {
 
 		main_window = new MainWindow();
 
-		plugin_loader = new PluginLoader<Plugin>();
+		plugin_loader = new PluginLoader();
         plugin_loader.plugin_available += on_plugin_loaded;
 		plugin_loader.load();
 //        plugin = (Plugin)plugin_loader.new_object();
