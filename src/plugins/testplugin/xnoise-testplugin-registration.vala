@@ -28,10 +28,7 @@
  * 	Jörn Magens
  */
  
-
 [ModuleInit]
-public Type init_module() { //Xnoise.PluginLoader plugin_loader) {  
-//	var test_plugin = new TestPlugin("Test", "Test Streams");
-//	plugin_loader.add_plugin(test_plugin);
+public Type init_module() { 
 	return typeof(TestPlugin);
 }

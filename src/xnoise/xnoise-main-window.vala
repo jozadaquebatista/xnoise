@@ -31,7 +31,7 @@
 using GLib;
 using Gtk;
 
-public class Xnoise.MainWindow : Gtk.Builder, IParameter {
+public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	private const string MAIN_UI_FILE = Config.DATADIR + "ui/main_window.ui";
 	private Label song_title_label;
 	private bool _seek;
@@ -42,7 +42,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	private int _posY_buffer;
 	private Button showvideobutton;
 	private Label showvideolabel;
-	private Image showvideoimage;
+//	private Image showvideoimage;
 	public Entry searchEntryMB;
 	public Button playPauseButton; 
 	public Button repeatButton;
@@ -63,8 +63,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	public signal void sign_volume_changed(double fraction);
 		
 	public MainWindow() {
-		Params paramter = Params.instance();
-		paramter.data_register(this);
+		par.data_register(this);
 		create_widgets();
 		notify["repeatState"]+=on_repeatState_changed;
 		add_lastused_titles_to_tracklist();
@@ -415,50 +414,47 @@ public class Xnoise.MainWindow : Gtk.Builder, IParameter {
 	}
 
 ////REGION IParameter
-	public void read_data(KeyFile file) throws KeyFileError {
-		this.repeatState = file.get_integer("settings", "repeatstate");
-		if(!this.is_fullscreen) {
-			int posX, posY, wi, he, hp_position;
-			posX = file.get_integer("settings", "posX");
-			posY = file.get_integer("settings", "posY");
-			this.window.move(posX, posY);
-
-			wi =  file.get_integer("settings", "width");
-			he = file.get_integer("settings", "height");
-			if (wi > 0 && he > 0) {
-				this.window.resize(wi, he);
-			}
-		
-			hp_position = file.get_integer("settings", "hp_position");
-			if (wi > 0 && he > 0) {
-				this.hpaned.set_position(hp_position);
-			}
-		}
-
-		double volSlider = file.get_double("settings", "volume");
+	public void read_params_data() {
+		int posX = par.get_int_value("posX");
+		int posY = par.get_int_value("posY");
+		this.window.move(posX, posY);
+		int wi = par.get_int_value("width");
+		int he = par.get_int_value("height");
+		if (wi > 0 && he > 0) {
+			this.window.resize(wi, he);
+		}		
+		this.repeatState = par.get_int_value("repeatstate");
+		double volSlider = par.get_double_value("volume");
 		if(volSlider > 0.0) {
 			VolumeSlider.set_value(volSlider);
-//			volume_slide_changed(volSlider);
 			sign_volume_changed(volSlider); // will automatically set this.current_volume
 		}
 		else {
 			VolumeSlider.set_value(0.3);
-//			volume_slide_changed(0.2);
 			sign_volume_changed(0.3); // will automatically set this.current_volume
+		}
+		
+		int hp_position = par.get_int_value("hp_position");
+		if (hp_position > 0) {
+			this.hpaned.set_position(hp_position);
 		}
 	}
 
-	public void write_data(KeyFile file) {
+	public void write_params_data() {
 		int posX, posY, wi, he;
-		file.set_integer("settings", "repeatstate", repeatState);
 		this.window.get_position(out posX, out posY);
-		file.set_integer("settings", "posX", posX);
-		file.set_integer("settings", "posY", posY);
+		par.set_int_value("posX", posX);
+		par.set_int_value("posY", posY);
+		
 		this.window.get_size(out wi, out he);
-		file.set_integer("settings", "width", wi);
-		file.set_integer("settings", "height", he);
-		file.set_integer("settings", "hp_position", this.hpaned.get_position());
-		file.set_double("settings", "volume", current_volume);
+		par.set_int_value("width", wi);
+		par.set_int_value("height", he);
+		
+		par.set_int_value("hp_position", this.hpaned.get_position());
+		
+		par.set_int_value("repeatstate", repeatState);
+		
+		par.set_double_value("volume", current_volume);
 	}
 ////END REGION IParameter
 

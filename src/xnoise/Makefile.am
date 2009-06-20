@@ -3,7 +3,7 @@ NULL =
 AM_CPPFLAGS = \
 	-DDATADIR=\"$(datadir)/xnoise/\" \
 	-DUIDIR=\"$(datadir)/xnoise/ui/\" \
-	-DPLUGINSDIR=\"$(libdir)/xnoise/\" \
+	-DPLUGINSDIR=\"$(libdir)/xnoise\" \
 	-DLICENSEDIR=\"$(datadir)/xnoise/license/\" \
 	-include $(CONFIG_HEADER) \
 	$(XNOISE_CFLAGS) \
@@ -46,6 +46,7 @@ xnoise_VALASOURCES = \
 	xnoise-settings-dialog.vala \
 	xnoise-plugin.vala \
 	xnoise-plugin-loader.vala \
+	xnoise-plugin-information.vala \
 	xnoise-plugin-interface.vala \
 	xnoise-album-image.vala \
 	$(NULL)

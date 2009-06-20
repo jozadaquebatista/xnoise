@@ -195,10 +195,6 @@ public class Xnoise.DbWriter : GLib.Object {
 	    	out this.del_mlib_statement); 
 	}
 
-//	private string dbFileName() {
-//		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", "db.sqlite", null);
-//	}
-		
 	private void db_update_entry(int id, TrackData tags, string uri) {
 		string artist    = tags.Artist;
 		string title     = tags.Title;

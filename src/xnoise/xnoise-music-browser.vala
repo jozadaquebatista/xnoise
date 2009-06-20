@@ -32,7 +32,7 @@ using GLib;
 using Gtk;
 using Gdk;
 
-public class Xnoise.MusicBrowser : TreeView, IParameter {
+public class Xnoise.MusicBrowser : TreeView, IParams {
 	public new TreeStore model;
 	private TreeStore dummymodel;
 	private Gdk.Pixbuf artist_pixb;
@@ -46,7 +46,8 @@ public class Xnoise.MusicBrowser : TreeView, IParameter {
 	};// This is not a very long list but uris are so universal
 
 	public MusicBrowser() {
-		Params.instance().data_register(this);
+//		Params.instance().data_register(this);
+		par.data_register(this);
 		create_model();
 		set_pixbufs();
 		add_data_to_model();
@@ -71,12 +72,12 @@ public class Xnoise.MusicBrowser : TreeView, IParameter {
 		this.button_press_event   += this.on_button_press;
 	}
 	
-	public void read_data(KeyFile file) throws KeyFileError {
-		this.fontsizeMB = file.get_integer("settings", "fontsizeMB");
+	public void read_params_data() {
+		this.fontsizeMB = par.get_int_value("fontsizeMB");
 	}
 
-	public void write_data(KeyFile file) {
-		file.set_integer("settings", "fontsizeMB", fontsizeMB);
+	public void write_params_data() {
+		par.set_int_value("fontsizeMB", fontsizeMB);
 	}
 	
     private string searchtext = "";
@@ -442,7 +443,7 @@ public class Xnoise.MusicBrowser : TreeView, IParameter {
 	}	
 
 	private void create_view() {	
-		Params.instance().read_from_file_for_single(this);
+//		Params.instance().read_from_file_for_single(this);
 		if(fontsizeMB<7) fontsizeMB = 7;
 
 		this.set_size_request (300,500);

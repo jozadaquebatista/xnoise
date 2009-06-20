@@ -29,49 +29,74 @@
  */
  
 public class Xnoise.PluginLoader : Object {
-	private Type type;
-	private Module module;
-    public HashTable<string,IPlugin> plugin_hash;
-	
-    public signal void plugin_available(IPlugin plugin);
-		
-	private delegate Type InitModuleFunction();
-
-	public PluginLoader() {
+    public HashTable<string,Plugin> plugin_htable;
+	private Main xn;
+	private PluginInformation info;
+	private string[] pluginInfoFiles = {};
+			
+	public PluginLoader(ref weak Main xn) {
 		assert (Module.supported());
-		this.plugin_hash = new HashTable<string,Plugin>(str_hash, str_equal);
+		this.xn = xn;
+		plugin_htable = new HashTable<string,Plugin>(str_hash, str_equal);
 	}
 
-	public bool load () {
-		string path = Config.PLUGINSDIR + "libxnoisetest.la"; 
-		print("path: %s\n", path);
-		module = Module.open(path, ModuleFlags.BIND_LAZY);
-		
-		if (module == null) {
-			return false;
+	private void get_plugin_information_files(File dir) {
+		//Recoursive scanning of plugin directory.
+		//Module will have to be in the same path as its info file
+		//Modules organized in subdirectories are allowed
+		FileEnumerator enumerator;
+		try {
+			string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
+			              FILE_ATTRIBUTE_STANDARD_TYPE;
+			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
+		} catch (Error error) {
+			critical("Error importing plugin information directory %s. %s\n", dir.get_path(), error.message);
+			return;
 		}
-		print("Loaded %s\n", module.name());
+		FileInfo info;
+		while((info = enumerator.next_file(null))!=null) {
+			string filename = info.get_name();
+			string filepath = Path.build_filename(dir.get_path(), filename);
+			File file = File.new_for_path(filepath);
+			FileType filetype = info.get_file_type();
+			if(filetype == FileType.DIRECTORY) {
+				this.get_plugin_information_files(file);
+			} 
+			else if(filename.has_suffix(".xnplugin")) {
+//				print("found plugin information file: %s\n", filepath);
+				pluginInfoFiles += filepath;	
+			}
+		}
+	}
 
-		void* func;
-		module.symbol("init_module", out func);
-		InitModuleFunction init_module = (InitModuleFunction)func;
-		if(init_module == null) return false;
+	public bool load_all() {
+		Plugin plugin;
+		File dir = File.new_for_path(Config.PLUGINSDIR);
 		
-//		module.make_resident ();
-		type = init_module();
-		add_plugin();
+		this.get_plugin_information_files(dir);
+		
+		foreach(string pluginInfoFile in pluginInfoFiles) {
+			info = new PluginInformation(pluginInfoFile);
+			if(info.load_info()) {
+				plugin = new Plugin(info);
+				plugin.load();
+				plugin_htable.insert(info.name, plugin); //Hold reference to plugin in hash table
+				return true;
+			}
+			else {
+				print("Failed to load %s.\n", pluginInfoFile);
+				return false;
+			}
+		}
+		print("No plugin inforamtion found\n");
 		return true;
 	}
 	
-	public void add_plugin() {
-		var plug = (IPlugin)Object.new(type);
-		if(plug == null) {
-			print("add plugin error\n");
-			return;
-		}
-			
-		this.plugin_hash.insert("Test", plug);
-		this.plugin_available(plug);
+	public bool activate_single_plugin(string name) {
+		return this.plugin_htable.lookup(name).activate(ref xn);
+	}	
+
+	public void deactivate_single_plugin(string name) {
+		this.plugin_htable.lookup(name).deactivate();
 	}
 }
-

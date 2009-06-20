@@ -28,23 +28,55 @@
  * 	Jörn Magens
  */
 
-public abstract class Xnoise.Plugin : GLib.Object {
-	public string name;
-    public string title;
-    public bool available { get; set; }
+public class Xnoise.Plugin : GLib.Object {
+	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT RETURNED FROM MODULE INITIALIZATION 
+	private Module module;
+	private IPlugin loaded_plugin;
+	private Type type;
+	private PluginInformation info;
 	
-//	public abstract void activate(ref weak Main xn);
+	public bool loaded { private set; get; }	
+	public bool activated { private set; get; }
 	
-    public Plugin(string name, string? title) {
-
-        this.name = name;
-        this.title = title;
-
-        this.available = true;
-
-        if (title == null) {
-            this.title = name;
-        }
+	private delegate Type InitModuleFunction();
+	
+	public Plugin(PluginInformation info) {
+		this.info = info;
     }
+    
+    public bool load() {
+		if (this.loaded) return true;
+		string path = Module.build_path(Config.PLUGINSDIR, info.module);
+		module = Module.open(path, ModuleFlags.BIND_LAZY);
+		if (module == null) {
+			print("cannot find module\n");
+			return false;
+		}		
+		void* func;
+		module.symbol("init_module", out func);
+		InitModuleFunction init_module = (InitModuleFunction)func;
+		if(init_module == null) return false;
+		type = init_module();
+		loaded = true;
+		return true;
+	}
+
+	public bool activate (ref weak Main xn) {
+		if(!loaded) return false;
+		if(activated) return true;
+		loaded_plugin = (IPlugin)Object.new(type, 
+		                               "xn", xn,    //set properties via this, because
+		                               null);       //parameters are not allowed 
+		                                            //for this type of Object construction
+		if(loaded_plugin == null) return false;
+		if(!loaded_plugin.init()) return false;
+		activated = true;
+		return true;
+	}
+
+	public void deactivate() {
+		loaded_plugin = null;
+		activated = false;
+	}
 }
 

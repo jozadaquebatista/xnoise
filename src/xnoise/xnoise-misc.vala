@@ -28,6 +28,16 @@
  * 	Jörn Magens
  */
 
+// GENERAL NAMESPACE FUNCTIONS
+namespace Xnoise {
+	
+	public Params par;
+	
+	public void initialize() {
+		par = new Params();
+	}
+}
+
 
 // PROJECT WIDE USED INTERFACES AND ENUMS
 
@@ -80,9 +90,9 @@ public enum Xnoise.Direction {
 
 //Interfaces
 
-public interface Xnoise.IParameter : GLib.Object {
-	public abstract void read_data(KeyFile file) throws KeyFileError;
-	public abstract void write_data(KeyFile file);
+public interface Xnoise.IParams : GLib.Object {
+	public abstract void read_params_data();
+	public abstract void write_params_data();
 }
 
 

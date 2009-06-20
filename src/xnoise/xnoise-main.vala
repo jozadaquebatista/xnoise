@@ -31,41 +31,30 @@
 public class Xnoise.Main : GLib.Object {
 	public MainWindow main_window;
 	public PluginLoader plugin_loader;
-	internal GstPlayer gPl;
+	public GstPlayer gPl;
 	private static Main _instance;
 	public Plugin plugin;
 	
 	public Main() {
+		Xnoise.initialize();
+
 		check_database_and_tables();
 
 		gPl = new GstPlayer();
 
 		main_window = new MainWindow();
+		
+		plugin_loader = new PluginLoader(ref this);
+		plugin_loader.load_all();
 
-		plugin_loader = new PluginLoader();
-        plugin_loader.plugin_available += on_plugin_loaded;
-		plugin_loader.load();
-//        plugin = (Plugin)plugin_loader.new_object();
-		IPlugin plug = plugin_loader.plugin_hash.lookup("Test");
-        plug.activate(ref this);
+		foreach(string s in par.get_string_list_value("activated_plugins")) {
+			if(plugin_loader.activate_single_plugin(s))   print("%s plugin is activated.\n", s);
+			else                                          print("%s plugin is not activated.\n", s);
+		}
+//		plugin_loader.deactivate_single_plugin("Test");
         
 		connect_signals();
-
-		Params paramter = Params.instance(); 
-		paramter.read_from_file(); 
-	}
-
-	public void printa() {
-		print("jjjjjjjjjjjjjjjjjj\n");
-	}
-
-	private void on_plugin_loaded (PluginLoader plugin_loader, IPlugin plugin) {
-		print("plugin loaded and in main\n");
-		plugin.notify["available"] += this.on_plugin_notify;
-	}
-
-	private void on_plugin_notify() {
-		print("available signal\n");
+		par.set_start_parameters_in_implementors();
 	}
 
 	private void connect_signals() {
@@ -145,8 +134,9 @@ public class Xnoise.Main : GLib.Object {
 
 	public void quit() {
 		this.gPl.stop();
-		this.save_tracklist(); //TODO: use uris? restore!
-		Params.instance().write_to_file();
+		this.save_tracklist();
+		par.write_all_parameters_to_file();
+		par = null;
 		print ("closing...\n");
 		Gtk.main_quit();
 	}

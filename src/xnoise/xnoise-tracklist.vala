@@ -32,7 +32,7 @@ using GLib;
 using Gtk;
 using Gdk;
 
-public class Xnoise.TrackList : TreeView, IParameter {
+public class Xnoise.TrackList : TreeView {
 	private const TargetEntry[] target_list = {
 		{"text/uri-list", 0, 0}
 	};
@@ -151,25 +151,6 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		rightmenu.show_all();
 		return rightmenu;
 	}
-
-////REGION IParameter
-	public void read_data(KeyFile file) throws KeyFileError {
-//		title_width_chars = file.get_integer("settings", "title_width_chars");
-//		tvc.width = file.get_integer("settings", "title_width");;
-	}
-
-	public void write_data(KeyFile file) {
-//		weak TreeViewColumn tvc = this.get_column(TrackListColumn.TITLE);
-//		GLib.List<CellRendererText> cell_title = tvc.cell_list.copy();
-//		var abc = (CellRendererText)cell_title.first();//
-////		Gtk.CellRendererText fff = abc..nth_data(0);
-//		
-//		file.set_integer("settings", "title_width_chars", abc.width_chars);
-////		int title_width = 10;
-////		weak TreeViewColumn tvc = this.get_column(TrackListColumn.TITLE);
-////		title_width = tvc.width;
-	}
-////END REGION IParameter
 
 	public bool on_button_release(TrackList sender, Gdk.EventButton e) {
 		Gtk.TreePath path;
@@ -838,8 +819,8 @@ public class Xnoise.TrackList : TreeView, IParameter {
 		columnTracknumber.reorderable = true;
 		this.insert_column(columnTracknumber, -1);
 		
-		Params params = Params.instance();
-		params.read_from_file_for_single(this);
+//		Params params = Params.instance();
+//		params.read_from_file_for_single(this);
 		renderer = new CellRendererText();
 		renderer.set_fixed_height_from_font(1);
 		renderer.ellipsize = Pango.EllipsizeMode.END; 

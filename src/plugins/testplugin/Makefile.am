@@ -56,10 +56,14 @@ libxnoisetest_la_LIBADD = \
 	$(XNOISETEST_LIBS) \
 	$(NULL)
 
+xnoisetestinformation_DATA = xnoisetest.xnplugin
+xnoisetestinformationdir = $(libdir)/xnoise
+
 EXTRA_DIST = \
 	$(libxnoisetest_DATA) \
 	$(libxnoisetest_la_VALASOURCES) \
 	libxnoisetest.vala.stamp \
+	$(xnoisetestinformation_DATA) \
 	$(NULL)
 
 DISTCLEANFILES = \

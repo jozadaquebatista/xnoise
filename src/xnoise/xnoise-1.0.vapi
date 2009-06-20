@@ -46,19 +46,41 @@ namespace Xnoise {
 		public signal void sign_import_progress (uint current, uint amount);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class GstPlayer : GLib.Object {
+		public Gst.Element playbin;
+		public GstPlayer ();
+		public void pause ();
+		public void play ();
+		public void playSong ();
+		public void stop ();
+		public string Uri { get; set; }
+		public string currentalbum { get; set; }
+		public string currentartist { get; set; }
+		public string currenttitle { get; set; }
+		public double gst_position { set; }
+		public bool paused { get; set; }
+		public bool playing { get; set; }
+		public bool seeking { get; set; }
+		public double volume { get; set; }
+		public signal void sign_eos ();
+		public signal void sign_song_position_changed (uint msecs, uint ms_total);
+		public signal void sign_stopped ();
+		public signal void sign_tag_changed (string newuri);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class Main : GLib.Object {
+		public Xnoise.GstPlayer gPl;
 		public Xnoise.MainWindow main_window;
 		public Xnoise.Plugin plugin;
 		public Xnoise.PluginLoader plugin_loader;
 		public void add_track_to_gst_player (string uri);
 		public static Xnoise.Main instance ();
 		public Main ();
-		public void printa ();
 		public void quit ();
 		public void save_tracklist ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class MainWindow : Gtk.Builder, Xnoise.IParameter {
+	public class MainWindow : Gtk.Builder, Xnoise.IParams {
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
 		public double current_volume;
@@ -84,7 +106,7 @@ namespace Xnoise {
 		public signal void sign_volume_changed (double fraction);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class MusicBrowser : Gtk.TreeView, Xnoise.IParameter {
+	public class MusicBrowser : Gtk.TreeView, Xnoise.IParams {
 		public Gtk.TreeStore model;
 		public bool change_model_data ();
 		public MusicBrowser ();
@@ -96,43 +118,59 @@ namespace Xnoise {
 		public signal void sign_activated ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class Params : GLib.Object, Xnoise.IParameter {
-		public void data_register (Xnoise.IParameter iparam);
-		public static Xnoise.Params instance ();
+	public class Params : GLib.Object {
+		public void data_register (Xnoise.IParams iparam);
+		public double get_double_value (string key);
+		public int get_int_value (string key);
+		public string[] get_string_list_value (string key);
+		public string get_string_value (string key);
 		public Params ();
-		public void read_from_file ();
-		public void read_from_file_for_single (Xnoise.IParameter iparam);
-		public void write_to_file ();
-		public void write_to_file_for_single (Xnoise.IParameter iparam);
-		public int posX { get; set; }
-		public int posY { get; set; }
-		public int winHeight { get; set; }
-		public bool winMaxed { get; set; }
-		public int winWidth { get; set; }
+		public void set_double_value (string key, double value);
+		public void set_int_value (string key, int value);
+		public void set_start_parameters_in_implementors ();
+		public void set_string_list_value (string key, string[] value);
+		public void set_string_value (string key, string value);
+		public void write_all_parameters_to_file ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public abstract class Plugin : GLib.Object {
-		public string name;
-		public string title;
-		public Plugin (string name, string? title);
-		public bool available { get; set; }
+	public class Plugin : GLib.Object {
+		public bool activate (ref unowned Xnoise.Main xn);
+		public void deactivate ();
+		public bool load ();
+		public Plugin (Xnoise.PluginInformation info);
+		public bool activated { get; set; }
+		public bool loaded { get; set; }
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class PluginInformation : GLib.Object {
+		public bool load_info ();
+		public PluginInformation (string xplug_file);
+		public string author { get; set; }
+		public string copyright { get; set; }
+		public string description { get; set; }
+		public string icon { get; set; }
+		public string license { get; set; }
+		public string module { get; set; }
+		public string name { get; set; }
+		public string website { get; set; }
+		public string xplug_file { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginLoader : GLib.Object {
-		public GLib.HashTable<string,Xnoise.IPlugin> plugin_hash;
-		public void add_plugin ();
-		public bool load ();
-		public PluginLoader ();
-		public signal void plugin_available (Xnoise.IPlugin plugin);
+		public GLib.HashTable<string,Xnoise.Plugin> plugin_htable;
+		public bool activate_single_plugin (string name);
+		public void deactivate_single_plugin (string name);
+		public bool load_all ();
+		public PluginLoader (ref unowned Xnoise.Main xn);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class SettingsDialog : Gtk.Builder, Xnoise.IParameter {
+	public class SettingsDialog : Gtk.Builder, Xnoise.IParams {
 		public Gtk.Dialog dialog;
 		public SettingsDialog ();
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class TrackList : Gtk.TreeView, Xnoise.IParameter {
+	public class TrackList : Gtk.TreeView {
 		public Gtk.ListStore listmodel;
 		public void add_uris (string[]? uris);
 		public bool get_active_path (out Gtk.TreePath path);
@@ -156,14 +194,14 @@ namespace Xnoise {
 		public signal void sign_active_path_changed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public interface IParameter : GLib.Object {
-		public abstract void read_data (GLib.KeyFile file) throws GLib.KeyFileError;
-		public abstract void write_data (GLib.KeyFile file);
+	public interface IParams : GLib.Object {
+		public abstract void read_params_data ();
+		public abstract void write_params_data ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IPlugin : GLib.Object {
-		public abstract void activate (ref unowned Xnoise.Main xn);
-		public abstract string pname { get; set construct; }
+		public abstract bool init ();
+		public abstract Xnoise.Main xn { get; set; }
 	}
 	[CCode (type_id = "XNOISE_TYPE_TRACK_DATA", cheader_filename = "xnoise.h")]
 	public struct TrackData {
@@ -209,4 +247,8 @@ namespace Xnoise {
 		PAUSED,
 		POSITION_FLAG
 	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.Params par;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static void initialize ();
 }

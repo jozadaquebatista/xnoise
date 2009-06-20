@@ -31,7 +31,7 @@
 using GLib;
 using Gtk;
 
-public class Xnoise.SettingsDialog : Gtk.Builder, IParameter {
+public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 	private const string SETTINGS_UI_FILE = Config.DATADIR + "ui/settings.ui";
 	public Gtk.Dialog dialog;
 	private Gtk.SpinButton sb;
@@ -55,7 +55,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParameter {
 	}
 	
 	private void on_ok_button_clicked() {
-		Params.instance().write_to_file_for_single(this);
+//		Params.instance().write_to_file_for_single(this);
 		this.dialog.destroy();
 	}
 
@@ -64,16 +64,16 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParameter {
 	}
 	
 	private void get_current_settings() {
-		Params.instance().read_from_file_for_single(this);
+//		Params.instance().read_from_file_for_single(this);
 	}
 		
-	public void read_data(KeyFile file) throws KeyFileError {
-		this.fontsizeMB = file.get_integer("settings", "fontsizeMB");
-		this.sb.value = this.fontsizeMB;
+	public void read_params_data() {
+//		this.fontsizeMB = file.get_integer("settings", "fontsizeMB");
+//		this.sb.value = this.fontsizeMB;
 	}
 
-	public void write_data(KeyFile file) {
-		file.set_integer("settings", "fontsizeMB", fontsizeMB);
+	public void write_params_data() {
+//		file.set_integer("settings", "fontsizeMB", fontsizeMB);
 	}
 
 	private MusicFolderDialog mfd;

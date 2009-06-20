@@ -30,107 +30,162 @@
 
 using GLib;
 
-public class Xnoise.Params : GLib.Object, IParameter { //TODO: Rename Interface nd class
-	private static Params _instance;
-	private SList<IParameter> IParameter_impls;
-	public int posX         { get; set; default = 300;}
-	public int posY         { get; set; default = 300;}
-	public int winWidth     { get; set; default = 1000;}
-	public int winHeight    { get; set; default = 500;}
-	public bool winMaxed    { get; set; default = false;}
+public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
+	private const string INIFILE = "xnoise.ini";
+	private const string INIFOLDER = ".xnoise";
+	private List<IParams> IParams_implementers = new GLib.List<IParams>();
+	private const string settings_int                    = "settings_int";
+	private const string settings_double                 = "settings_double";
+	private const string settings_string                 = "settings_string";
+	private GLib.HashTable<string,int> ht_int            = new GLib.HashTable<string,int>(str_hash, str_equal);
+	private GLib.HashTable<string,double?> ht_double     = new GLib.HashTable<string,double?>(str_hash, str_equal);
+	private GLib.HashTable<string,string> ht_string      = new GLib.HashTable<string,string>(str_hash, str_equal);
 
 	public Params() {
-			IParameter_impls = new GLib.SList<IParameter>();
-			data_register(this);
+		read_all_parameters_from_file();
 	}
 
-	public static Params instance() {
-		if (_instance == null) _instance = new Params();
-		return _instance;
+	public void data_register(IParams iparam) {
+		//Each IParams interface implementor goes to the List
+		IParams_implementers.remove(iparam); //..and shouldn't be doubled
+		IParams_implementers.append(iparam);
 	}
 
-	private string _build_file_name() {
-		_create_file_folder();
-		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise/xnoise.conf", null);
-	}
-
-	private void _create_file_folder() { 
-		string SettingsFolder = GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", null);
-		string SettingsKeyFile = GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise/xnoise.conf", null);
-		if (FileUtils.test(SettingsFolder, FileTest.EXISTS) == false) {
-			DirUtils.create(SettingsFolder, 0700);
-		}
-		if (FileUtils.test(SettingsKeyFile, FileTest.EXISTS) == false) {
-//			File.create(SettingsKeyFile, 0700); TODO
-		}
-	}
-
-	public void data_register(IParameter iparam) {
-		IParameter_impls.remove(iparam);
-		IParameter_impls.append(iparam);
-	}
-
-	public void read_from_file_for_single(IParameter iparam) {
-		KeyFile file;
-		file = new GLib.KeyFile();
+	private void read_all_parameters_from_file() {
+		//Put all values to hashtables on startup
+		KeyFile kf = new GLib.KeyFile();
 		try {
-			string filename = _build_file_name();
-			file.load_from_file(filename, GLib.KeyFileFlags.NONE);
-		} catch (GLib.Error ex) {
-			return;
-		}
-		try {
-			iparam.read_data(file);
+			kf.load_from_file(build_file_name(), 
+			                  GLib.KeyFileFlags.NONE);
+			//write settings of type integer to hashtable
+			string[] groups;
+			groups = kf.get_keys(settings_int);
+			foreach(string s in groups) {
+				ht_int.insert(s, kf.get_integer(settings_int, s));
+			}
+			//write settings of type double to hashtable
+			groups = kf.get_keys(settings_double);
+			foreach(string s in groups) {
+				ht_double.insert(s, kf.get_double(settings_double, s));
+			}			
+			//write settings of type string to hashtable
+			groups = kf.get_keys(settings_string);
+			foreach(string s in groups) {
+				ht_string.insert(s, kf.get_string(settings_string, s));
+			}					
 		} 
-		catch (GLib.KeyFileError e) {
-			stderr.printf("Error reading single\n");
-			stderr.printf("%s\n", e.message);
+		catch(GLib.Error ex) {
+			return;
 		}
 	}
 	
-	public void write_to_file_for_single(IParameter iparam) {
-		FileStream stream = GLib.FileStream.open(_build_file_name(), "w");
-		uint length;
-		KeyFile file = new GLib.KeyFile();
-		foreach (weak IParameter c in IParameter_impls) {
-			c.write_data(file);
+	public void set_start_parameters_in_implementors() {
+		foreach(weak IParams ip in IParams_implementers) {
+			ip.read_params_data();
 		}
-		iparam.write_data(file);
-		stream.puts(file.to_data(out length));
 	}
 
-	public void read_from_file() {
-		KeyFile file;
-		file = new GLib.KeyFile();
-		try {
-			string filename = _build_file_name();
-			file.load_from_file(filename, GLib.KeyFileFlags.NONE);
-		} catch (GLib.Error ex) {
-			return;
+	public void write_all_parameters_to_file() {
+		FileStream stream = GLib.FileStream.open(build_file_name(), "w");
+		uint length;
+		KeyFile kf = new GLib.KeyFile();
+		foreach(weak IParams ip in IParams_implementers) {
+			ip.write_params_data();
 		}
-		foreach(weak IParameter ip in IParameter_impls) {
+		foreach(string key in ht_int.get_keys()) {
+			kf.set_integer(settings_int, key, ht_int.lookup(key));
+		}
+		foreach(string key in ht_double.get_keys()) {
+			kf.set_double(settings_double, key, ht_double.lookup(key));
+		}
+		foreach(string key in ht_string.get_keys()) {
+			kf.set_string(settings_string, key, ht_string.lookup(key));
+		}
+		stream.puts(kf.to_data(out length));
+	}
+
+
+	//GETTERS FOR THE HASH TABLE
+	
+	public int get_int_value(string key) {
+		int? val = ht_int.lookup(key);
+		if(val!=null) 
+			return val;
+		else
+			return 0;
+	}
+	public double get_double_value(string key) {
+		double? val = ht_double.lookup(key);
+		if(val!=null) 
+			return val;
+		else
+			return 0.0;		
+	}
+	public string[] get_string_list_value(string key) {
+		string[] list = (ht_string.lookup(key)).split(";", 50);
+		return list;		
+	}
+	public string get_string_value(string key) {
+		string val = ht_string.lookup(key);
+		return val == null ? "" : val;		
+	}
+	
+	
+	
+	//SETTERS FOR THE HASH TABLE
+	
+	public void set_int_value(string key, int value) {
+		ht_int.insert(key,value);
+	}
+	public void set_double_value(string key, double value) {
+		ht_double.insert(key,value);
+	}
+	public void set_string_list_value(string key, string[] value) {
+		string? buffer = null;
+		foreach(string s in value) {
+			if(buffer == null) {
+				buffer = s;
+				continue;
+			}
+			buffer = buffer + ";" + s;
+		}
+		ht_string.insert(key,buffer);
+	}
+	public void set_string_value(string key, string value) {
+		ht_string.insert(key,value);
+	}
+
+
+
+	private string build_file_name() {
+		if(!create_file_folder()) {
+			print("Error with creating configuration directory.\n");
+		}
+		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), INIFOLDER, INIFILE, null);
+	}
+	
+	private bool create_file_folder() { 
+		File home_dir = File.new_for_path(Environment.get_home_dir());
+		File xnoise_home = home_dir.get_child(".xnoise");
+		if (!xnoise_home.query_exists(null)) {
 			try {
-				ip.read_data(file);
+				File current_dir = xnoise_home;
+				File[] directory_list = {};
+				while(current_dir != null) {
+				    if(current_dir.query_exists(null)) break;
+					directory_list += current_dir;
+				    current_dir = current_dir.get_parent();
+				}
+				foreach(File dir in directory_list) {
+				    dir.make_directory(null);
+				}
 			} 
-			catch (GLib.KeyFileError e) {
+			catch (Error e) {
+				stderr.printf("Error with create directory: %s", e.message);
+				return false;
 			}
 		}
-	}
-
-	public void write_to_file() {
-		FileStream stream = GLib.FileStream.open(_build_file_name(), "w");
-		uint length;
-		KeyFile file = new GLib.KeyFile();
-		foreach (weak IParameter c in IParameter_impls) {
-			c.write_data(file);
-		}
-		stream.puts(file.to_data(out length));
-	}
-
-	public void read_data(KeyFile file) throws KeyFileError {
-	}
-
-	public void write_data(KeyFile file) {
+		return true;
 	}
 }
 

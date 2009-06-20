@@ -30,8 +30,8 @@
 
 using Gst;
 
-internal class Xnoise.GstPlayer : GLib.Object {
-	private uint _timeout;
+public class Xnoise.GstPlayer : GLib.Object {
+	private uint timeout;
 	private int64 length_time;
 	private string _Uri = "";
 	public Element playbin;
@@ -41,9 +41,9 @@ internal class Xnoise.GstPlayer : GLib.Object {
 	public bool   playing  { get; set; }
 	public bool   paused   { get; set; }
 	
-	public string currentartist { get; set; }
-	public string currentalbum  { get; set; }
-	public string currenttitle  { get; set; }
+	public string currentartist { get; private set; }
+	public string currentalbum  { get; private set; }
+	public string currenttitle  { get; private set; }
 
 	public string Uri { 
 		get {
@@ -74,7 +74,7 @@ internal class Xnoise.GstPlayer : GLib.Object {
 		string[] args = null;
 		Gst.init (ref args);
 		create_elements();
-		_timeout = GLib.Timeout.add(500, on_cyclic_send_song_position);
+		timeout = GLib.Timeout.add(500, on_cyclic_send_song_position);
 		this.notify += (s, p) => {
 			switch(p.name) {
 				case "Uri": {
@@ -189,28 +189,28 @@ internal class Xnoise.GstPlayer : GLib.Object {
 		playbin.get_state(out stateOld, out stateNew, (Gst.ClockTime)50000000); 
 	}
 
-	public void play () {
+	public void play() {
 		playbin.set_state(State.PLAYING);
 		wait();
 		playing = true;
 		paused = false;
 	}
 
-	public void pause () {
+	public void pause() {
 		playbin.set_state(State.PAUSED);
 		wait();
 		playing = false;
 		paused = true;
 	}
 
-	public void stop () {
+	public void stop() {
 		playbin.set_state(State.READY);
 		wait();
 		playing = false;
 		sign_stopped();
 	}
 
-	public void playSong () { 
+	public void playSong() { 
 		bool buf_playing = playing;
 		playbin.set_state(State.READY);
 		playbin.set("uri", Uri);

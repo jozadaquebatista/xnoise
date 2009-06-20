@@ -31,26 +31,21 @@
 using Xnoise;
 using Gtk;
 
-public class TestPlugin : Plugin, IPlugin {
-	public TestPlugin(string name, string? title) {
-		base(name, title);
-	}
-
-	private Main xn;
-	private string tabname = "<b>Test</b>";
-
-//BEGIN REGION IPlugin
-	public void activate(ref weak Main xn) {
-		this.xn = xn;
-		print("\nloading plugin \"Test\"....\n");
-		Label tablabel = new Label(tabname);
-		tablabel.use_markup = true;
-		tablabel.angle = 90;
-		xn.main_window.browsernotebook.append_page(new Label("Test"), tablabel);
-	}
-
-	public string pname { construct set; get; }
-//END REGION IPlugin
-
+public class TestPlugin : GLib.Object, IPlugin {
+	public Xnoise.Main xn { get; set; }
+	
+//    construct { // In this case it has to be a "construct" method
+//    	print("TestPlugin construction\n");
+//    }
+    
+	public bool init() {
+//    	xn.main_window.window.set_title("hallo");
+//		print("Testplugin: Hello World\n");
+    	return true;
+    }
+    
+//    ~TestPlugin() {
+//    	print("destruct TestPlugin\n");
+//    }
 }
 
