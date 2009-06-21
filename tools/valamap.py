@@ -75,7 +75,7 @@ class ValaMap ():
 		
 		# styles & co
 		for child in self.root:
-			dot_style += '"' + child.get ("name") + '" '
+			dot_style += child.get ("name") + " "
 			dot_style += "["
 			
 			file = child.get ("file")
@@ -97,12 +97,12 @@ class ValaMap ():
 
 		# nodes
 		for child in self.root:
-			name = '"' + child.get ("name") + '"'
+			name = child.get ("name")
 			if len (child) < 1:
 				dot_nodes += name + " "
 			else:
 				for subchild in child:
-					dot_nodes += name + '->"' + subchild.get ("class") + '" '
+					dot_nodes += name + "->" + subchild.get ("class") + " "
 			dot_nodes += ";\n"
 
 		node_list = dot_nodes.split ("\n")
@@ -133,9 +133,7 @@ class ValaMap ():
 
 	def get_references (self, file, classname):
 		f = open (self.dir + file, 'r')
-		#refname = "new " + classname
-		#refname2 = " " + classname + " "
-		refname = classname
+		refname = "new " + classname
 		output = []
 		linenum = 0
 		for line in f:
@@ -145,8 +143,6 @@ class ValaMap ():
 				continue
 			if line.find (refname) > -1:
 				output.append (linenum)
-#			if line.find (refname2) > -1:
-#				output.append (linenum)
 		return output
 
 
@@ -181,14 +177,11 @@ class ValaMap ():
 
 
 	def class_to_xml (self, line, file, linenum, main):
-		exp = "^(\w+)\s+class\s+(\w+\.)?([\w\<\>]+)(\s*:\s*)?([\w\.]+)?(\s*,\s*)?(\w+)?"
+		exp = "^(\w+)\s+class\s+(\w+\.)?(\w+)(\s*:\s*)?([\w\.]+)?(\s*,\s*)?(\w+)?"
 		res = re.search (exp, line)
 		if (res):
-			# lets ignore <?> in classname<?> for now
-			classname = res.group (3).split ("<")[0]
-
 			node = etree.SubElement (self.root, "class")
-			node.set ("name", classname)
+			node.set ("name", res.group (3))
 			#node.set ("space", res.group (2).rstrip(".") or "")
 			node.set ("space", res.group (2) or "")
 			node.set ("type", res.group (1))
@@ -198,10 +191,10 @@ class ValaMap ():
 			node.set ("file", file)
 			node.set ("line", str (linenum))
 			node.set ("main", str (main))
-			self.classfiledict[classname] = file
-			self.sclasscolordict[super] = ""
+			self.classfiledict[res.group (3)] = file
+			self.sclasscolordict[super] = "blah"
 
-################################################################################
+################################################################################ 
 
 if __name__ == "__main__":
 
