@@ -15,10 +15,12 @@ VALA_CFLAGS = \
 	--vapi=$(srcdir)/xnoise-1.0.vapi \
 	--pkg config \
 	--pkg gtk+-2.0 \
+	--pkg gdk-x11-2.0 \
 	--pkg posix \
 	--pkg sqlite3 \
 	--pkg gio-2.0 \
 	--pkg gstreamer-0.10 \
+	--pkg gstreamer-interfaces-0.10 \
 	--pkg taglib_c \
 	--pkg unique-1.0 \
 	--pkg gmodule-2.0 \
@@ -64,15 +66,29 @@ xnoise.vala.stamp: $(xnoise_VALASOURCES)
 xnoise_LDADD = \
 	$(XNOISE_LIBS) \
 	$(NULL)
+	
+VAPI_FILES = xnoise-1.0.vapi
+DEPS_FILES = xnoise-1.0.deps
 
+vapidir = $(VAPIDIR)
+vapi_DATA = \
+	$(VAPI_FILES) \
+	$(DEPS_FILES) \
+	$(NULL)
+
+libxnoiseincdir = $(includedir)/xnoise-1.0
+
+libxnoiseinc_HEADERS = xnoise.h
+	
 EXTRA_DIST = \
 	$(xnoise_VALASOURCES) \
+	$(VAPI_FILES) \
+	$(DEPS_FILES) \
 	xnoise.vala.stamp \
 	$(NULL)
 
 DISTCLEANFILES = \
 	*.c \
-	*.h \
 	xnoise.vala.stamp \
 	Makefile.in \
 	$(NULL)

@@ -31,18 +31,18 @@
 using GLib;
 
 public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
-	private const string INIFILE = "xnoise.ini";
+	private const string INIFILE   = "xnoise.ini";
 	private const string INIFOLDER = ".xnoise";
 	private List<IParams> IParams_implementers = new GLib.List<IParams>();
-	private const string settings_int                    = "settings_int";
-	private const string settings_double                 = "settings_double";
-	private const string settings_string                 = "settings_string";
-	private GLib.HashTable<string,int> ht_int            = new GLib.HashTable<string,int>(str_hash, str_equal);
-	private GLib.HashTable<string,double?> ht_double     = new GLib.HashTable<string,double?>(str_hash, str_equal);
-	private GLib.HashTable<string,string> ht_string      = new GLib.HashTable<string,string>(str_hash, str_equal);
+	private const string settings_int    = "settings_int";
+	private const string settings_double = "settings_double";
+	private const string settings_string = "settings_string";
+	private GLib.HashTable<string,int> ht_int        = new GLib.HashTable<string,int>(str_hash, str_equal);
+	private GLib.HashTable<string,double?> ht_double = new GLib.HashTable<string,double?>(str_hash, str_equal);
+	private GLib.HashTable<string,string> ht_string  = new GLib.HashTable<string,string>(str_hash, str_equal);
 
 	public Params() {
-		read_all_parameters_from_file();
+		read_all_parameters_from_file(); //Fill hash tables on construction time
 	}
 
 	public void data_register(IParams iparam) {
@@ -105,8 +105,8 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	}
 
 
-	//GETTERS FOR THE HASH TABLE
-	
+	//  GETTERS FOR THE HASH TABLE
+	//Type int	
 	public int get_int_value(string key) {
 		int? val = ht_int.lookup(key);
 		if(val!=null) 
@@ -114,6 +114,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		else
 			return 0;
 	}
+	//Type double
 	public double get_double_value(string key) {
 		double? val = ht_double.lookup(key);
 		if(val!=null) 
@@ -121,10 +122,16 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		else
 			return 0.0;		
 	}
-	public string[] get_string_list_value(string key) {
-		string[] list = (ht_string.lookup(key)).split(";", 50);
+	//Type string list
+	public string[]? get_string_list_value(string key) {
+		string? buffer = ht_string.lookup(key);
+		if(buffer==null) { //because split doesn't like null strings
+			return null;
+		}
+		string[] list = (buffer).split(";", 50);
 		return list;		
 	}
+	//Type string
 	public string get_string_value(string key) {
 		string val = ht_string.lookup(key);
 		return val == null ? "" : val;		
@@ -132,14 +139,16 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	
 	
 	
-	//SETTERS FOR THE HASH TABLE
-	
+	//  SETTERS FOR THE HASH TABLE
+	//Type int
 	public void set_int_value(string key, int value) {
 		ht_int.insert(key,value);
 	}
+	//Type double
 	public void set_double_value(string key, double value) {
 		ht_double.insert(key,value);
 	}
+	//Type string list
 	public void set_string_list_value(string key, string[] value) {
 		string? buffer = null;
 		foreach(string s in value) {
@@ -151,6 +160,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		}
 		ht_string.insert(key,buffer);
 	}
+	//Type string
 	public void set_string_value(string key, string value) {
 		ht_string.insert(key,value);
 	}

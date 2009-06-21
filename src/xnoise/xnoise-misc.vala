@@ -31,9 +31,9 @@
 // GENERAL NAMESPACE FUNCTIONS
 namespace Xnoise {
 	
-	public Params par;
+	public static Params par;
 	
-	public void initialize() {
+	public static void initialize() {
 		par = new Params();
 	}
 }

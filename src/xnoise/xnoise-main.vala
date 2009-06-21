@@ -40,9 +40,9 @@ public class Xnoise.Main : GLib.Object {
 
 		check_database_and_tables();
 
-		gPl = new GstPlayer();
-
 		main_window = new MainWindow();
+
+		gPl = new GstPlayer();
 		
 		plugin_loader = new PluginLoader(ref this);
 		plugin_loader.load_all();
@@ -72,7 +72,7 @@ public class Xnoise.Main : GLib.Object {
 			main_window.songProgressBar.set_text("00:00 / 00:00");;
 		};
 		gPl.sign_tag_changed += main_window.set_displayed_title;
-		gPl.sign_tag_changed += main_window.albumimage.find_album_image;
+//		gPl.sign_tag_changed += main_window.albumimage.find_album_image;
 
 		//TODO: if the volume change is handled from main window an unlimited number of instances of Main is created. Why?
 		main_window.sign_volume_changed += (main_window, fraction) => { //handle volume slider change

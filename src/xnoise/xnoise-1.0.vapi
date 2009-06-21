@@ -48,6 +48,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
 		public Gst.Element playbin;
+		public Gst.Element sink;
 		public GstPlayer ();
 		public void pause ();
 		public void play ();
@@ -61,6 +62,7 @@ namespace Xnoise {
 		public bool paused { get; set; }
 		public bool playing { get; set; }
 		public bool seeking { get; set; }
+		public Gst.TagList taglist { get; set; }
 		public double volume { get; set; }
 		public signal void sign_eos ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
@@ -82,8 +84,10 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Builder, Xnoise.IParams {
 		public Xnoise.AlbumImage albumimage;
+		public Gtk.AspectFrame aspectframeVid;
 		public Gtk.Notebook browsernotebook;
 		public double current_volume;
+		public Gtk.DrawingArea drawingarea;
 		public Xnoise.MusicBrowser musicBr;
 		public Gtk.Button playPauseButton;
 		public Gtk.Image playpause_popup_image;
@@ -122,7 +126,7 @@ namespace Xnoise {
 		public void data_register (Xnoise.IParams iparam);
 		public double get_double_value (string key);
 		public int get_int_value (string key);
-		public string[] get_string_list_value (string key);
+		public string[]? get_string_list_value (string key);
 		public string get_string_value (string key);
 		public Params ();
 		public void set_double_value (string key, double value);

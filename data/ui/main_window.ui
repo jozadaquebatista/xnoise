@@ -416,9 +416,15 @@ ready to rock</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label9">
+                      <object class="GtkAspectFrame" id="aspectframeVid">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">label</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="drawingarea1">
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">1</property>

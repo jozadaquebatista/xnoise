@@ -56,6 +56,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	public MusicBrowser musicBr;
 	public TrackList trackList;
 	public Window window;
+	public Gtk.DrawingArea drawingarea;
 
 	public int repeatState { get; set; }
 
@@ -69,6 +70,8 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 		add_lastused_titles_to_tracklist();
 	}
 	
+	public AspectFrame aspectframeVid;	
+
 	private void create_widgets() {
 		try {
 			assert(GLib.FileUtils.test(MAIN_UI_FILE, FileTest.EXISTS));
@@ -93,6 +96,9 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 			previousButton.can_focus       = false;
 			previousButton.clicked         += this.on_previous_button_clicked;
 			//---------------------
+			
+			this.aspectframeVid            = this.get_object("aspectframeVid") as Gtk.AspectFrame;
+			this.drawingarea               = this.get_object("drawingAreaVid") as Gtk.DrawingArea;
 			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = this.get_object("removeAllButton") as Gtk.Button;
@@ -280,6 +286,10 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	private bool on_window_state_change(Gtk.Window sender, Gdk.EventWindowState e) {
 		if(e.new_window_state==Gdk.WindowState.FULLSCREEN) {
 			is_fullscreen = true;
+		}
+		else if(e.new_window_state==Gdk.WindowState.ICONIFIED) {
+			this.window.get_position(out _posX_buffer, out _posY_buffer);
+			is_fullscreen = false;
 		}
 		else {
 			is_fullscreen = false;

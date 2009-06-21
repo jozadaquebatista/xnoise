@@ -34,7 +34,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private uint timeout;
 	private int64 length_time;
 	private string _Uri = "";
+	private TagList _taglist;
 	public Element playbin;
+	public Element sink;
 //	public bool   paused_last_state;
 	public bool   seeking  { get; set; } //TODO
 	public double volume   { get; set; }   
@@ -45,12 +47,25 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public string currentalbum  { get; private set; }
 	public string currenttitle  { get; private set; }
 
+	public TagList taglist { 
+		get { 
+			return _taglist; 
+		}
+		private set {
+			if (value != null) {
+				_taglist = value.copy ();
+			} else
+				_taglist = null;
+		}
+	}
+	
 	public string Uri { 
 		get {
 			return _Uri;
 		}
 		set {
 			_Uri = value;
+			taglist = null;
 			this.playbin.set("uri", value);
 		}
 	}
@@ -71,50 +86,51 @@ public class Xnoise.GstPlayer : GLib.Object {
 //	public signal void sign_state_changed(int state);
 
 	public GstPlayer() {
-		string[] args = null;
-		Gst.init (ref args);
 		create_elements();
-		timeout = GLib.Timeout.add(500, on_cyclic_send_song_position);
+		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
 		this.notify += (s, p) => {
 			switch(p.name) {
 				case "Uri": {
-					this.currentartist = null;
-					this.currentalbum = null;
-					this.currenttitle = null;
+					this.currentartist = "unknown artist";
+					this.currentalbum = "unknown album";
+					this.currenttitle = "unknown title";
 					break;
 				}
 				case "currentartist": {
-					this.sign_tag_changed(s.Uri);
+					this.sign_tag_changed(this.Uri);
 					break;
 				}
 				case "currentalbum": {
-					this.sign_tag_changed(s.Uri);
+					this.sign_tag_changed(this.Uri);
 					break;
 				}
 				case "currenttitle": {
-					this.sign_tag_changed(s.Uri);
+					this.sign_tag_changed(this.Uri);
 					break;
 				}
+				case "taglist": {
+					if(this.taglist == null) return;
+					taglist.foreach(foreachtag);
+				}
 				default: break;
-//				case "paused": {
-//					if(this.paused!=this.paused_last_state) {
-//						sign_paused_changed(s.paused);
-//					}
-//					this.paused_last_state = this.paused;
-//				}
 			}
 		};
 	}
 
 	private void create_elements() {
-		playbin = ElementFactory.make("playbin", "playbin");
+		playbin    = ElementFactory.make("playbin", "playbin");
+        this.sink  = ElementFactory.make("xvimagesink", "sink");
+        taglist = null;
+//		playbin.link(sink);
+//       ((XOverlay) this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid (Main.instance().main_window.drawingarea.window));
+//		playbin.set("video-sink", sink);
 		var bus = new Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
 		bus.message += (bus, msg) => {
 			//	print("Message: %d\n", msg.type);
 			switch(msg.type) {
-				case MessageType.ERROR: {
+				case Gst.MessageType.ERROR: {
 					Error err;
 					string debug;
 					msg.parse_error(out err, out debug);
@@ -122,40 +138,40 @@ public class Xnoise.GstPlayer : GLib.Object {
 					this.sign_eos(); //this is used to go to the next track
 					break;
 				}
-				case MessageType.EOS: {
+				case Gst.MessageType.EOS: {
 					this.sign_eos();
 					break;
 				}
-				case MessageType.TAG: {
+				case Gst.MessageType.TAG: {
 					TagList tag_list;			
 					msg.parse_tag(out tag_list);
-					tag_list.foreach(foreachtag);					
+					if (taglist == null && tag_list != null) {
+						taglist = tag_list;
+					}
+					else {
+						taglist.merge(tag_list, TagMergeMode.REPLACE);
+					}
+					break;
 				}
 				default: break;
 			}			
 		};				
 	}
-
+	
 	private void foreachtag(TagList list, string tag) {
 		string val = null;
 		switch (tag) {
 		case "artist":
 			if(list.get_string(tag, out val)) 
-				this.currentartist = val;
-			else 
-				this.currentartist = "unknown artist";
+				if(val!=this.currentartist) this.currentartist = val;
 			break;
 		case "album":
 			if(list.get_string(tag, out val)) 
-				this.currentalbum = val;
-			else 
-				this.currentalbum = "unknown album";
+				if(val!=this.currentalbum) this.currentalbum = val;
 			break;
 		case "title":
 			if(list.get_string(tag, out val)) 
-				this.currenttitle = val;
-			else 
-				this.currenttitle = "unknown title";
+				if(val!=this.currenttitle) this.currenttitle = val;
 			break;
 		default:
 			break;
@@ -190,6 +206,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	public void play() {
+//		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid(mw.window.drawingarea.window));
 		playbin.set_state(State.PLAYING);
 		wait();
 		playing = true;
@@ -211,9 +228,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	public void playSong() { 
+//		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid(Main.instance().main_window.drawingarea.window));
 		bool buf_playing = playing;
 		playbin.set_state(State.READY);
-		playbin.set("uri", Uri);
+//		playbin.set("uri", Uri);
 		if (buf_playing == true) {
 			playbin.set_state(State.PLAYING);
 			wait();

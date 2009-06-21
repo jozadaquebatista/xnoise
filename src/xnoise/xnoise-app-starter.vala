@@ -60,7 +60,7 @@ public class Xnoise.AppStarter : GLib.Object {
 		}
 		
 		Gtk.init(ref args);
-		
+		Gst.init(ref args);
 		Unique.App app;
 		var app_starter = new AppStarter();
 		app = new Unique.App.with_commands("org.gnome.xnoise", "xnoise", null);

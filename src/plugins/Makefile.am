@@ -1,4 +1,4 @@
-SUBDIRS = testplugin
+SUBDIRS = testplugin titleToDecoration
 
 DISTCLEANFILES = \
 	Makefile.in \

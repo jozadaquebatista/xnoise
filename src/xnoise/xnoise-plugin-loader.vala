@@ -74,21 +74,19 @@ public class Xnoise.PluginLoader : Object {
 		File dir = File.new_for_path(Config.PLUGINSDIR);
 		
 		this.get_plugin_information_files(dir);
-		
 		foreach(string pluginInfoFile in pluginInfoFiles) {
 			info = new PluginInformation(pluginInfoFile);
 			if(info.load_info()) {
 				plugin = new Plugin(info);
 				plugin.load();
 				plugin_htable.insert(info.name, plugin); //Hold reference to plugin in hash table
-				return true;
 			}
 			else {
 				print("Failed to load %s.\n", pluginInfoFile);
 				return false;
 			}
 		}
-		print("No plugin inforamtion found\n");
+		if(pluginInfoFiles.length==0) print("No plugin inforamtion found\n");
 		return true;
 	}
 	

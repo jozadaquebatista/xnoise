@@ -32,8 +32,9 @@ using GLib;
 using Sqlite;
 
 public class Xnoise.DbWriter : GLib.Object {
+	private const string DATABASE_NAME = "db.sqlite";
+	private const string INIFOLDER = ".xnoise";
 	private Sqlite.Database db;
-	private static string DATABASE_NAME = "db.sqlite";
 	
 	private Statement delete_mlib_entry_statement;
 	private Statement update_mlib_entry_statement;
@@ -97,7 +98,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		// there was more luck on creating the db on first start, if using a static function
 		Database database;
 		File home_dir = File.new_for_path(Environment.get_home_dir());
-		File xnoise_home = home_dir.get_child(".xnoise");
+		File xnoise_home = home_dir.get_child(INIFOLDER);
 		File xnoisedb = xnoise_home.get_child(DATABASE_NAME);
 		if (!xnoise_home.query_exists(null)) {
 			try {

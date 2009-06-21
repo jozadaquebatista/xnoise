@@ -27,6 +27,9 @@ else
 fi
 AC_DEFINE_UNQUOTED(LOCALE_DIR, "${PREFIX}/${DATADIRNAME}/locale",[Locale directory])
 
+VAPIDIR=`pkg-config --variable=vapidir vala-1.0`
+
+AC_SUBST(VAPIDIR)
 AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
@@ -42,12 +45,14 @@ AC_SUBST(XNOISE_LIBS)
 
 AC_CONFIG_FILES([Makefile
 	data/Makefile
+	data/misc/xnoise-1.0.pc
 	data/misc/Makefile
 	data/ui/Makefile
 	src/Makefile
 	src/xnoise/Makefile
 	src/plugins/Makefile
 	src/plugins/testplugin/Makefile
+	src/plugins/titleToDecoration/Makefile
 	po/Makefile.in])
 
 AC_OUTPUT

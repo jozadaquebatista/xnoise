@@ -32,6 +32,8 @@ using GLib;
 using Sqlite;
 
 public class Xnoise.DbBrowser : GLib.Object {
+	private const string DATABASE_NAME = "db.sqlite";
+	private const string INIFOLDER = ".xnoise";
 	private string DATABASE;
 	private Statement count_for_uri_statement;
 	private Statement get_lastused_statement;
@@ -66,7 +68,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 
 	public DbBrowser() {
 		DATABASE = dbFileName();
-		if(Database.open(DATABASE, out db)!=Sqlite.OK) { 
+		if(Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) { 
 			stderr.printf("Can't open database: %s\n", (string)this.db.errmsg);
 		}
 		this.prepare_statements();
@@ -79,7 +81,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Database db;
 
 	private string dbFileName() {
-		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", "db.sqlite", null);
+		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), INIFOLDER, DATABASE_NAME, null);
 	}
 
 	private void db_error() {
