@@ -39,6 +39,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	private Gdk.Pixbuf album_pixb;
 	private Gdk.Pixbuf title_pixb;
 	private bool dragging;
+	private bool use_treelines;
 	internal int fontsizeMB = 8;
 	public signal void sign_activated();
 	private const TargetEntry[] target_list = {
@@ -46,7 +47,6 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	};// This is not a very long list but uris are so universal
 
 	public MusicBrowser() {
-//		Params.instance().data_register(this);
 		par.data_register(this);
 		create_model();
 		set_pixbufs();
@@ -77,6 +77,12 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	}
 
 	public void write_params_data() {
+		if(this.use_treelines) {
+			par.set_int_value("use_treelines", 1);
+		}
+		else {
+			par.set_int_value("use_treelines", 0);
+		}
 		par.set_int_value("fontsizeMB", fontsizeMB);
 	}
 	
@@ -462,8 +468,16 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		column.pack_start(renderer, false);
 		column.add_attribute(renderer, "text", 1); // no markup!!
 		this.insert_column(column, -1);
-		this.enable_tree_lines = true;
+
+		if(par.get_int_value("use_treelines")==1) {
+			use_treelines=true;
+		}
+		else {
+			use_treelines=false;
+		}
+		this.enable_tree_lines = use_treelines;
 		this.headers_visible = false;
+		this.enable_search = false;
 	}
 }
 

@@ -62,8 +62,10 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 
 	public signal void sign_pos_changed(double fraction);
 	public signal void sign_volume_changed(double fraction);
-		
-	public MainWindow() {
+	private Main xn;
+	
+	public MainWindow(ref weak Main xn) {
+		this.xn = xn;
 		par.data_register(this);
 		create_widgets();
 		notify["repeatState"]+=on_repeatState_changed;
@@ -712,7 +714,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	
 	private SettingsDialog setingsD;
 	private void on_settings_edit() {
-		setingsD = new SettingsDialog();
+		setingsD = new SettingsDialog(ref xn);
 	}
 
 

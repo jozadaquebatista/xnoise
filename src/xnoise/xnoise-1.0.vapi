@@ -100,7 +100,7 @@ namespace Xnoise {
 		public Gtk.Notebook tracklistnotebook;
 		public Gtk.Window window;
 		public void change_song (int direction, bool handle_repeat_state = false);
-		public MainWindow ();
+		public MainWindow (ref unowned Xnoise.Main xn);
 		public void playpause_button_set_pause_picture ();
 		public void playpause_button_set_play_picture ();
 		public void progressbar_set_value (uint pos, uint len);
@@ -146,6 +146,10 @@ namespace Xnoise {
 		public bool loaded { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class PluginGuiElement : Gtk.HBox {
+		public PluginGuiElement (string name, string description, string icon, string author, string website, string license, string copyright);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginInformation : GLib.Object {
 		public bool load_info ();
 		public PluginInformation (string xplug_file);
@@ -166,11 +170,12 @@ namespace Xnoise {
 		public void deactivate_single_plugin (string name);
 		public bool load_all ();
 		public PluginLoader (ref unowned Xnoise.Main xn);
+		public GLib.List<string> plugin_informations { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class SettingsDialog : Gtk.Builder, Xnoise.IParams {
 		public Gtk.Dialog dialog;
-		public SettingsDialog ();
+		public SettingsDialog (ref unowned Xnoise.Main xn);
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]

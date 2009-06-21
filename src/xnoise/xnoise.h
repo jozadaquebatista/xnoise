@@ -209,6 +209,17 @@ typedef struct _XnoisePluginInformationPrivate XnoisePluginInformationPrivate;
 
 typedef struct _XnoiseIPlugin XnoiseIPlugin;
 typedef struct _XnoiseIPluginIface XnoiseIPluginIface;
+
+#define XNOISE_TYPE_PLUGIN_GUI_ELEMENT (xnoise_plugin_gui_element_get_type ())
+#define XNOISE_PLUGIN_GUI_ELEMENT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLUGIN_GUI_ELEMENT, XnoisePluginGuiElement))
+#define XNOISE_PLUGIN_GUI_ELEMENT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLUGIN_GUI_ELEMENT, XnoisePluginGuiElementClass))
+#define XNOISE_IS_PLUGIN_GUI_ELEMENT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PLUGIN_GUI_ELEMENT))
+#define XNOISE_IS_PLUGIN_GUI_ELEMENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_PLUGIN_GUI_ELEMENT))
+#define XNOISE_PLUGIN_GUI_ELEMENT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_PLUGIN_GUI_ELEMENT, XnoisePluginGuiElementClass))
+
+typedef struct _XnoisePluginGuiElement XnoisePluginGuiElement;
+typedef struct _XnoisePluginGuiElementClass XnoisePluginGuiElementClass;
+typedef struct _XnoisePluginGuiElementPrivate XnoisePluginGuiElementPrivate;
 typedef struct _XnoiseAlbumImagePrivate XnoiseAlbumImagePrivate;
 
 struct _XnoiseAppStarter {
@@ -426,6 +437,15 @@ struct _XnoiseIPluginIface {
 	void (*set_xn) (XnoiseIPlugin* self, XnoiseMain* value);
 };
 
+struct _XnoisePluginGuiElement {
+	GtkHBox parent_instance;
+	XnoisePluginGuiElementPrivate * priv;
+};
+
+struct _XnoisePluginGuiElementClass {
+	GtkHBoxClass parent_class;
+};
+
 struct _XnoiseAlbumImage {
 	GtkFixed parent_instance;
 	XnoiseAlbumImagePrivate * priv;
@@ -480,8 +500,8 @@ GType xnoise_iparams_get_type (void);
 GType xnoise_album_image_get_type (void);
 GType xnoise_music_browser_get_type (void);
 GType xnoise_track_list_get_type (void);
-XnoiseMainWindow* xnoise_main_window_new (void);
-XnoiseMainWindow* xnoise_main_window_construct (GType object_type);
+XnoiseMainWindow* xnoise_main_window_new (XnoiseMain** xn);
+XnoiseMainWindow* xnoise_main_window_construct (GType object_type, XnoiseMain** xn);
 void xnoise_main_window_playpause_button_set_play_picture (XnoiseMainWindow* self);
 void xnoise_main_window_playpause_button_set_pause_picture (XnoiseMainWindow* self);
 void xnoise_main_window_change_song (XnoiseMainWindow* self, gint direction, gboolean handle_repeat_state);
@@ -569,8 +589,8 @@ GType xnoise_direction_get_type (void);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_settings_dialog_get_type (void);
-XnoiseSettingsDialog* xnoise_settings_dialog_new (void);
-XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type);
+XnoiseSettingsDialog* xnoise_settings_dialog_new (XnoiseMain** xn);
+XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type, XnoiseMain** xn);
 GType xnoise_plugin_information_get_type (void);
 XnoisePlugin* xnoise_plugin_new (XnoisePluginInformation* info);
 XnoisePlugin* xnoise_plugin_construct (GType object_type, XnoisePluginInformation* info);
@@ -584,6 +604,7 @@ XnoisePluginLoader* xnoise_plugin_loader_construct (GType object_type, XnoiseMai
 gboolean xnoise_plugin_loader_load_all (XnoisePluginLoader* self);
 gboolean xnoise_plugin_loader_activate_single_plugin (XnoisePluginLoader* self, const char* name);
 void xnoise_plugin_loader_deactivate_single_plugin (XnoisePluginLoader* self, const char* name);
+GList* xnoise_plugin_loader_get_plugin_informations (XnoisePluginLoader* self);
 XnoisePluginInformation* xnoise_plugin_information_new (const char* xplug_file);
 XnoisePluginInformation* xnoise_plugin_information_construct (GType object_type, const char* xplug_file);
 gboolean xnoise_plugin_information_load_info (XnoisePluginInformation* self);
@@ -600,6 +621,9 @@ GType xnoise_iplugin_get_type (void);
 gboolean xnoise_iplugin_init (XnoiseIPlugin* self);
 XnoiseMain* xnoise_iplugin_get_xn (XnoiseIPlugin* self);
 void xnoise_iplugin_set_xn (XnoiseIPlugin* self, XnoiseMain* value);
+GType xnoise_plugin_gui_element_get_type (void);
+XnoisePluginGuiElement* xnoise_plugin_gui_element_new (const char* name, const char* description, const char* icon, const char* author, const char* website, const char* license, const char* copyright);
+XnoisePluginGuiElement* xnoise_plugin_gui_element_construct (GType object_type, const char* name, const char* description, const char* icon, const char* author, const char* website, const char* license, const char* copyright);
 XnoiseAlbumImage* xnoise_album_image_new (void);
 XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
 void xnoise_album_image_find_album_image (XnoiseAlbumImage* self, const char* uri);

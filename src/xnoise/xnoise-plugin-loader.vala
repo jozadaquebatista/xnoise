@@ -33,6 +33,17 @@ public class Xnoise.PluginLoader : Object {
 	private Main xn;
 	private PluginInformation info;
 	private string[] pluginInfoFiles = {};
+	
+	private GLib.List<string> _plugin_informations;
+	public GLib.List<string> plugin_informations {
+		get {
+			 _plugin_informations = new GLib.List<string>();
+			foreach(weak string s in pluginInfoFiles) {
+				_plugin_informations.append(s);
+			}
+			return _plugin_informations;
+		}
+	}
 			
 	public PluginLoader(ref weak Main xn) {
 		assert (Module.supported());

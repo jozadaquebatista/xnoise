@@ -32,18 +32,24 @@ using GLib;
 using Gtk;
 
 public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
-	private const string SETTINGS_UI_FILE = Config.DATADIR + "ui/settings.ui";
+	private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
 	public Gtk.Dialog dialog;
 	private Gtk.SpinButton sb;
 	private int fontsizeMB;
-
+	private Gtk.VBox vboxplugins;
 	public signal void sign_finish();
+	private Main xn;
+	private const string group = "XnoisePlugin";
+	
+	public SettingsDialog(ref weak Main xn) {
+		this.xn = xn;
+		this.setup_widgets();
+		this.get_current_settings();
+		this.dialog.show_all();	
+	}
 
-	public SettingsDialog() {
-		if(setup_widgets()) {
-			this.get_current_settings();
-			this.dialog.show_all();	
-		}
+	~SettingsDialog() {
+		print("destruct SettingsDialog\n");
 	}
 	
 	private void on_mb_font_changed(Gtk.SpinButton sender) {
@@ -53,18 +59,46 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 		Main.instance().main_window.musicBr.fontsizeMB = fontsizeMB;
 		//TODO:immediatly do something with the new value
 	}
-	
+
+	private void write_settings() {
+		
+	}
+		
 	private void on_ok_button_clicked() {
-//		Params.instance().write_to_file_for_single(this);
 		this.dialog.destroy();
 	}
 
+	private void on_accept_button_clicked() {
+	}
+	
 	private void on_cancel_button_clicked() {
 		this.dialog.destroy();
 	}
 	
 	private void get_current_settings() {
-//		Params.instance().read_from_file_for_single(this);
+		foreach(string s in xn.plugin_loader.plugin_informations) {
+			print("plug: %s\n" ,s);
+			string name, description, icon, author, website, license, copyright;
+			try	{
+				var kf = new KeyFile();
+				kf.load_from_file(s, KeyFileFlags.NONE);
+				if (!kf.has_group(group)) continue;
+				name        = kf.get_string(group, "name");
+				print("%s", name);
+				description = kf.get_string(group, "description");
+				icon        = kf.get_string(group, "icon");
+				author      = kf.get_string(group, "author");
+				website     = kf.get_string(group, "website");
+				license     = kf.get_string(group, "license");
+				copyright   = kf.get_string(group, "copyright");
+				PluginGuiElement pge = new PluginGuiElement(name, description, icon, author, website, license, copyright);
+				vboxplugins.pack_start(pge, false, false, 3);
+				//vboxplugins.add(pge);
+			}
+			catch(KeyFileError e) {
+				print("Error plugin information: %s\n", e.message);
+			}
+		}
 	}
 		
 	public void read_params_data() {
@@ -92,22 +126,30 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 			this.add_from_file(SETTINGS_UI_FILE);
 			this.dialog = this.get_object("dialog1") as Gtk.Dialog;
 
-			var okButton             = this.get_object("button2") as Gtk.Button;
+			var okButton             = this.get_object("buttonOK") as Gtk.Button;
 			okButton.can_focus       = false;
 			okButton.clicked         += this.on_ok_button_clicked;
-			
+
+			var acceptButton         = this.get_object("button2") as Gtk.Button;
+			acceptButton.can_focus   = false;
+			acceptButton.clicked     += this.on_accept_button_clicked;
+						
 			var cancelButton         = this.get_object("button1") as Gtk.Button;
 			cancelButton.can_focus   = false;
 			cancelButton.clicked     += this.on_cancel_button_clicked;
 			
 			sb                       = this.get_object("spinbutton1") as Gtk.SpinButton;
+			sb.set_value(8.0);
 			sb.changed               += this.on_mb_font_changed;
 			
 			var musicAddButton       = this.get_object("button3") as Gtk.Button;
 			musicAddButton.can_focus = false;
 			musicAddButton.clicked   += this.on_music_add_clicked;
 			
+			vboxplugins              = this.get_object("vboxplugins") as Gtk.VBox;
+			
 			this.dialog.set_icon_from_file (Config.UIDIR + "xnoise_16x16.png");
+			this.dialog.set_position(Gtk.WindowPosition.CENTER);
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 

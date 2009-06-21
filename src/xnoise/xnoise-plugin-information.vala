@@ -43,7 +43,7 @@ public class Xnoise.PluginInformation : GLib.Object {
 		this.xplug_file = xplug_file;
 	}
 	
-	private string group = "XnoisePlugin";
+	private const string group = "XnoisePlugin";
 
 	public bool load_info() {
 		var kf = new KeyFile();
@@ -58,12 +58,12 @@ public class Xnoise.PluginInformation : GLib.Object {
 			website     = kf.get_string(group, "website");
 			license     = kf.get_string(group, "license");
 			copyright   = kf.get_string(group, "copyright");
-			return true;
 		}
 		catch(KeyFileError e) {
 			print("Error plugin information: %s\n", e.message);
 			return false;
 		}
+		return true;
 	}
 }
 
