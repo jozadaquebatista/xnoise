@@ -146,8 +146,9 @@ namespace Xnoise {
 		public bool loaded { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class PluginGuiElement : Gtk.HBox {
-		public PluginGuiElement (string name, string description, string icon, string author, string website, string license, string copyright);
+	public class PluginGuiElement : Gtk.TreeView {
+		public void create_view ();
+		public PluginGuiElement (GLib.List<string> plugin_informations);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginInformation : GLib.Object {
@@ -231,13 +232,15 @@ namespace Xnoise {
 		VIS_TEXT,
 		ARTIST_ID,
 		ALBUM_ID,
-		TITLE_ID
+		TITLE_ID,
+		N_COLUMNS
 	}
 	[CCode (cprefix = "XNOISE_REPEAT_", cheader_filename = "xnoise.h")]
 	public enum Repeat {
 		NOT_AT_ALL,
 		SINGLE,
-		ALL
+		ALL,
+		N_COLUMNS
 	}
 	[CCode (cprefix = "XNOISE_TRACK_LIST_COLUMN_", cheader_filename = "xnoise.h")]
 	public enum TrackListColumn {

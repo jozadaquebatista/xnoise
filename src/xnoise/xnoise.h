@@ -359,14 +359,16 @@ typedef enum  {
 	XNOISE_MUSIC_BROWSER_COLUMN_VIS_TEXT,
 	XNOISE_MUSIC_BROWSER_COLUMN_ARTIST_ID,
 	XNOISE_MUSIC_BROWSER_COLUMN_ALBUM_ID,
-	XNOISE_MUSIC_BROWSER_COLUMN_TITLE_ID
+	XNOISE_MUSIC_BROWSER_COLUMN_TITLE_ID,
+	XNOISE_MUSIC_BROWSER_COLUMN_N_COLUMNS
 } XnoiseMusicBrowserColumn;
 
 /*TODO: Rename*/
 typedef enum  {
 	XNOISE_REPEAT_NOT_AT_ALL = 0,
 	XNOISE_REPEAT_SINGLE,
-	XNOISE_REPEAT_ALL
+	XNOISE_REPEAT_ALL,
+	XNOISE_REPEAT_N_COLUMNS
 } XnoiseRepeat;
 
 typedef enum  {
@@ -438,12 +440,12 @@ struct _XnoiseIPluginIface {
 };
 
 struct _XnoisePluginGuiElement {
-	GtkHBox parent_instance;
+	GtkTreeView parent_instance;
 	XnoisePluginGuiElementPrivate * priv;
 };
 
 struct _XnoisePluginGuiElementClass {
-	GtkHBoxClass parent_class;
+	GtkTreeViewClass parent_class;
 };
 
 struct _XnoiseAlbumImage {
@@ -622,8 +624,9 @@ gboolean xnoise_iplugin_init (XnoiseIPlugin* self);
 XnoiseMain* xnoise_iplugin_get_xn (XnoiseIPlugin* self);
 void xnoise_iplugin_set_xn (XnoiseIPlugin* self, XnoiseMain* value);
 GType xnoise_plugin_gui_element_get_type (void);
-XnoisePluginGuiElement* xnoise_plugin_gui_element_new (const char* name, const char* description, const char* icon, const char* author, const char* website, const char* license, const char* copyright);
-XnoisePluginGuiElement* xnoise_plugin_gui_element_construct (GType object_type, const char* name, const char* description, const char* icon, const char* author, const char* website, const char* license, const char* copyright);
+XnoisePluginGuiElement* xnoise_plugin_gui_element_new (GList* plugin_informations);
+XnoisePluginGuiElement* xnoise_plugin_gui_element_construct (GType object_type, GList* plugin_informations);
+void xnoise_plugin_gui_element_create_view (XnoisePluginGuiElement* self);
 XnoiseAlbumImage* xnoise_album_image_new (void);
 XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
 void xnoise_album_image_find_album_image (XnoiseAlbumImage* self, const char* uri);

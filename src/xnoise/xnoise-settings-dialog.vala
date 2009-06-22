@@ -39,12 +39,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 	private Gtk.VBox vboxplugins;
 	public signal void sign_finish();
 	private Main xn;
-	private const string group = "XnoisePlugin";
 	
 	public SettingsDialog(ref weak Main xn) {
 		this.xn = xn;
 		this.setup_widgets();
-		this.get_current_settings();
+//		this.get_current_settings();
 		this.dialog.show_all();	
 	}
 
@@ -60,9 +59,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 		//TODO:immediatly do something with the new value
 	}
 
-	private void write_settings() {
-		
-	}
+//	private void write_settings() {
+//		
+//	}
 		
 	private void on_ok_button_clicked() {
 		this.dialog.destroy();
@@ -74,33 +73,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 	private void on_cancel_button_clicked() {
 		this.dialog.destroy();
 	}
-	
-	private void get_current_settings() {
-		foreach(string s in xn.plugin_loader.plugin_informations) {
-			print("plug: %s\n" ,s);
-			string name, description, icon, author, website, license, copyright;
-			try	{
-				var kf = new KeyFile();
-				kf.load_from_file(s, KeyFileFlags.NONE);
-				if (!kf.has_group(group)) continue;
-				name        = kf.get_string(group, "name");
-				print("%s", name);
-				description = kf.get_string(group, "description");
-				icon        = kf.get_string(group, "icon");
-				author      = kf.get_string(group, "author");
-				website     = kf.get_string(group, "website");
-				license     = kf.get_string(group, "license");
-				copyright   = kf.get_string(group, "copyright");
-				PluginGuiElement pge = new PluginGuiElement(name, description, icon, author, website, license, copyright);
-				vboxplugins.pack_start(pge, false, false, 3);
-				//vboxplugins.add(pge);
-			}
-			catch(KeyFileError e) {
-				print("Error plugin information: %s\n", e.message);
-			}
-		}
-	}
-		
+
 	public void read_params_data() {
 //		this.fontsizeMB = file.get_integer("settings", "fontsizeMB");
 //		this.sb.value = this.fontsizeMB;
@@ -150,6 +123,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 			
 			this.dialog.set_icon_from_file (Config.UIDIR + "xnoise_16x16.png");
 			this.dialog.set_position(Gtk.WindowPosition.CENTER);
+			
+			PluginGuiElement pge = new PluginGuiElement(xn.plugin_loader.plugin_informations);
+			vboxplugins.pack_start(pge, true, true, 0);
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 

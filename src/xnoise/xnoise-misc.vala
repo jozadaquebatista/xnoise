@@ -48,13 +48,15 @@ public enum Xnoise.MusicBrowserColumn { //TODO: Rename
 	VIS_TEXT,
 	ARTIST_ID,
 	ALBUM_ID,
-	TITLE_ID
+	TITLE_ID,
+	N_COLUMNS
 }
 
 public enum Xnoise.Repeat { 
 	NOT_AT_ALL = 0,
 	SINGLE,
-	ALL
+	ALL,
+	N_COLUMNS
 }
 
 public struct Xnoise.TrackData { // meta information structure
