@@ -31,28 +31,33 @@
 using GLib;
 using Gtk;
 
-public class Xnoise.PluginGuiElement: TreeView {
-	private ListStore listmodel;
-	private GLib.List<string> plugin_informations;
+public class Xnoise.PluginManagerTree: TreeView {
 	private const string group = "XnoisePlugin";
-
-	public PluginGuiElement(GLib.List<string> plugin_informations) {
-		this.plugin_informations = plugin_informations.copy();
-		this.create_model();
-		this.create_view();
-	}
-
+	private ListStore listmodel;
 	private enum Columns {
 		TOGGLE,
 		TEXT,
 		N_COLUMNS
 	}
+	private Main xn;
+
+	public PluginManagerTree(ref Main xn) {
+		this.xn = xn;
+		this.create_model();
+		this.create_view();
+	}
+	
+//	~PluginManagerTree() {
+//		print("destruct PluginGuiElement\n");
+//	}
+
 
 	public void create_view() {
 		this.set_size_request(200, 200);
 
 		var toggle = new CellRendererToggle();
 		toggle.toggled += (toggle, path) => {
+			print("toggled\n");
 			var tree_path = new TreePath.from_string(path);
 			TreeIter iter;
 			listmodel.get_iter(out iter, tree_path);
@@ -73,13 +78,13 @@ public class Xnoise.PluginGuiElement: TreeView {
 
 		this.set_headers_visible (false);
 
-		foreach(string s in plugin_informations) {
+		foreach(string s in this.xn.plugin_loader.get_info_files()) {
 			print("plug: %s\n" ,s);
 			string name, description, icon, author, website, license, copyright;
 			try	{
 				var kf = new KeyFile();
 				kf.load_from_file(s, KeyFileFlags.NONE);
-				if (!kf.has_group(group)) continue;
+				if(!kf.has_group(group)) continue;
 				name        = kf.get_string(group, "name");
 				print("%s", name);
 				description = kf.get_string(group, "description");
@@ -89,7 +94,7 @@ public class Xnoise.PluginGuiElement: TreeView {
 				license     = kf.get_string(group, "license");
 				copyright   = kf.get_string(group, "copyright");
 				TreeIter iter;
-				listmodel.append (out iter);
+				listmodel.append(out iter);
 				listmodel.set(iter, Columns.TOGGLE, true, Columns.TEXT, name);
 			}
 			catch(KeyFileError e) {
@@ -97,10 +102,11 @@ public class Xnoise.PluginGuiElement: TreeView {
 			}
 		}
 		this.set_model(listmodel);
-//		this.add(listmodel);
 	}
 
 	private void create_model() {
-		listmodel = new ListStore(Columns.N_COLUMNS, typeof (bool), typeof (string));
+		listmodel = new ListStore(Columns.N_COLUMNS, 
+		                          typeof(bool), 
+		                          typeof(string));
 	}
 }

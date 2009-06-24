@@ -210,16 +210,16 @@ typedef struct _XnoisePluginInformationPrivate XnoisePluginInformationPrivate;
 typedef struct _XnoiseIPlugin XnoiseIPlugin;
 typedef struct _XnoiseIPluginIface XnoiseIPluginIface;
 
-#define XNOISE_TYPE_PLUGIN_GUI_ELEMENT (xnoise_plugin_gui_element_get_type ())
-#define XNOISE_PLUGIN_GUI_ELEMENT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLUGIN_GUI_ELEMENT, XnoisePluginGuiElement))
-#define XNOISE_PLUGIN_GUI_ELEMENT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLUGIN_GUI_ELEMENT, XnoisePluginGuiElementClass))
-#define XNOISE_IS_PLUGIN_GUI_ELEMENT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PLUGIN_GUI_ELEMENT))
-#define XNOISE_IS_PLUGIN_GUI_ELEMENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_PLUGIN_GUI_ELEMENT))
-#define XNOISE_PLUGIN_GUI_ELEMENT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_PLUGIN_GUI_ELEMENT, XnoisePluginGuiElementClass))
+#define XNOISE_TYPE_PLUGIN_MANAGER_TREE (xnoise_plugin_manager_tree_get_type ())
+#define XNOISE_PLUGIN_MANAGER_TREE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLUGIN_MANAGER_TREE, XnoisePluginManagerTree))
+#define XNOISE_PLUGIN_MANAGER_TREE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLUGIN_MANAGER_TREE, XnoisePluginManagerTreeClass))
+#define XNOISE_IS_PLUGIN_MANAGER_TREE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PLUGIN_MANAGER_TREE))
+#define XNOISE_IS_PLUGIN_MANAGER_TREE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_PLUGIN_MANAGER_TREE))
+#define XNOISE_PLUGIN_MANAGER_TREE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_PLUGIN_MANAGER_TREE, XnoisePluginManagerTreeClass))
 
-typedef struct _XnoisePluginGuiElement XnoisePluginGuiElement;
-typedef struct _XnoisePluginGuiElementClass XnoisePluginGuiElementClass;
-typedef struct _XnoisePluginGuiElementPrivate XnoisePluginGuiElementPrivate;
+typedef struct _XnoisePluginManagerTree XnoisePluginManagerTree;
+typedef struct _XnoisePluginManagerTreeClass XnoisePluginManagerTreeClass;
+typedef struct _XnoisePluginManagerTreePrivate XnoisePluginManagerTreePrivate;
 typedef struct _XnoiseAlbumImagePrivate XnoiseAlbumImagePrivate;
 
 struct _XnoiseAppStarter {
@@ -357,9 +357,6 @@ Enums*/
 typedef enum  {
 	XNOISE_MUSIC_BROWSER_COLUMN_ICON = 0,
 	XNOISE_MUSIC_BROWSER_COLUMN_VIS_TEXT,
-	XNOISE_MUSIC_BROWSER_COLUMN_ARTIST_ID,
-	XNOISE_MUSIC_BROWSER_COLUMN_ALBUM_ID,
-	XNOISE_MUSIC_BROWSER_COLUMN_TITLE_ID,
 	XNOISE_MUSIC_BROWSER_COLUMN_N_COLUMNS
 } XnoiseMusicBrowserColumn;
 
@@ -367,8 +364,7 @@ typedef enum  {
 typedef enum  {
 	XNOISE_REPEAT_NOT_AT_ALL = 0,
 	XNOISE_REPEAT_SINGLE,
-	XNOISE_REPEAT_ALL,
-	XNOISE_REPEAT_N_COLUMNS
+	XNOISE_REPEAT_ALL
 } XnoiseRepeat;
 
 typedef enum  {
@@ -378,7 +374,8 @@ typedef enum  {
 	XNOISE_TRACK_LIST_COLUMN_TITLE,
 	XNOISE_TRACK_LIST_COLUMN_ALBUM,
 	XNOISE_TRACK_LIST_COLUMN_ARTIST,
-	XNOISE_TRACK_LIST_COLUMN_URI
+	XNOISE_TRACK_LIST_COLUMN_URI,
+	XNOISE_TRACK_LIST_COLUMN_N_COLUMNS
 } XnoiseTrackListColumn;
 
 typedef enum  {
@@ -439,12 +436,12 @@ struct _XnoiseIPluginIface {
 	void (*set_xn) (XnoiseIPlugin* self, XnoiseMain* value);
 };
 
-struct _XnoisePluginGuiElement {
+struct _XnoisePluginManagerTree {
 	GtkTreeView parent_instance;
-	XnoisePluginGuiElementPrivate * priv;
+	XnoisePluginManagerTreePrivate * priv;
 };
 
-struct _XnoisePluginGuiElementClass {
+struct _XnoisePluginManagerTreeClass {
 	GtkTreeViewClass parent_class;
 };
 
@@ -603,10 +600,10 @@ gboolean xnoise_plugin_get_loaded (XnoisePlugin* self);
 gboolean xnoise_plugin_get_activated (XnoisePlugin* self);
 XnoisePluginLoader* xnoise_plugin_loader_new (XnoiseMain** xn);
 XnoisePluginLoader* xnoise_plugin_loader_construct (GType object_type, XnoiseMain** xn);
+GList* xnoise_plugin_loader_get_info_files (XnoisePluginLoader* self);
 gboolean xnoise_plugin_loader_load_all (XnoisePluginLoader* self);
 gboolean xnoise_plugin_loader_activate_single_plugin (XnoisePluginLoader* self, const char* name);
 void xnoise_plugin_loader_deactivate_single_plugin (XnoisePluginLoader* self, const char* name);
-GList* xnoise_plugin_loader_get_plugin_informations (XnoisePluginLoader* self);
 XnoisePluginInformation* xnoise_plugin_information_new (const char* xplug_file);
 XnoisePluginInformation* xnoise_plugin_information_construct (GType object_type, const char* xplug_file);
 gboolean xnoise_plugin_information_load_info (XnoisePluginInformation* self);
@@ -623,10 +620,10 @@ GType xnoise_iplugin_get_type (void);
 gboolean xnoise_iplugin_init (XnoiseIPlugin* self);
 XnoiseMain* xnoise_iplugin_get_xn (XnoiseIPlugin* self);
 void xnoise_iplugin_set_xn (XnoiseIPlugin* self, XnoiseMain* value);
-GType xnoise_plugin_gui_element_get_type (void);
-XnoisePluginGuiElement* xnoise_plugin_gui_element_new (GList* plugin_informations);
-XnoisePluginGuiElement* xnoise_plugin_gui_element_construct (GType object_type, GList* plugin_informations);
-void xnoise_plugin_gui_element_create_view (XnoisePluginGuiElement* self);
+GType xnoise_plugin_manager_tree_get_type (void);
+XnoisePluginManagerTree* xnoise_plugin_manager_tree_new (XnoiseMain** xn);
+XnoisePluginManagerTree* xnoise_plugin_manager_tree_construct (GType object_type, XnoiseMain** xn);
+void xnoise_plugin_manager_tree_create_view (XnoisePluginManagerTree* self);
 XnoiseAlbumImage* xnoise_album_image_new (void);
 XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
 void xnoise_album_image_find_album_image (XnoiseAlbumImage* self, const char* uri);

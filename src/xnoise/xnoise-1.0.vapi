@@ -146,11 +146,6 @@ namespace Xnoise {
 		public bool loaded { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class PluginGuiElement : Gtk.TreeView {
-		public void create_view ();
-		public PluginGuiElement (GLib.List<string> plugin_informations);
-	}
-	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginInformation : GLib.Object {
 		public bool load_info ();
 		public PluginInformation (string xplug_file);
@@ -169,14 +164,19 @@ namespace Xnoise {
 		public GLib.HashTable<string,Xnoise.Plugin> plugin_htable;
 		public bool activate_single_plugin (string name);
 		public void deactivate_single_plugin (string name);
+		public unowned GLib.List<string> get_info_files ();
 		public bool load_all ();
 		public PluginLoader (ref unowned Xnoise.Main xn);
-		public GLib.List<string> plugin_informations { get; }
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class PluginManagerTree : Gtk.TreeView {
+		public void create_view ();
+		public PluginManagerTree (ref Xnoise.Main xn);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class SettingsDialog : Gtk.Builder, Xnoise.IParams {
 		public Gtk.Dialog dialog;
-		public SettingsDialog (ref unowned Xnoise.Main xn);
+		public SettingsDialog (ref Xnoise.Main xn);
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -230,17 +230,13 @@ namespace Xnoise {
 	public enum MusicBrowserColumn {
 		ICON,
 		VIS_TEXT,
-		ARTIST_ID,
-		ALBUM_ID,
-		TITLE_ID,
 		N_COLUMNS
 	}
 	[CCode (cprefix = "XNOISE_REPEAT_", cheader_filename = "xnoise.h")]
 	public enum Repeat {
 		NOT_AT_ALL,
 		SINGLE,
-		ALL,
-		N_COLUMNS
+		ALL
 	}
 	[CCode (cprefix = "XNOISE_TRACK_LIST_COLUMN_", cheader_filename = "xnoise.h")]
 	public enum TrackListColumn {
@@ -250,7 +246,8 @@ namespace Xnoise {
 		TITLE,
 		ALBUM,
 		ARTIST,
-		URI
+		URI,
+		N_COLUMNS
 	}
 	[CCode (cprefix = "XNOISE_TRACK_STATUS_", cheader_filename = "xnoise.h")]
 	public enum TrackStatus {

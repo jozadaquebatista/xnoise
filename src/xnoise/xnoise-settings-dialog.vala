@@ -32,24 +32,25 @@ using GLib;
 using Gtk;
 
 public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
-	private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
 	public Gtk.Dialog dialog;
+	private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
+	private PluginManagerTree plugin_manager_tree;
 	private Gtk.SpinButton sb;
 	private int fontsizeMB;
 	private Gtk.VBox vboxplugins;
-	public signal void sign_finish();
 	private Main xn;
-	
-	public SettingsDialog(ref weak Main xn) {
+
+	public signal void sign_finish();
+		
+	public SettingsDialog(ref Main xn) {
 		this.xn = xn;
 		this.setup_widgets();
-//		this.get_current_settings();
 		this.dialog.show_all();	
 	}
 
-	~SettingsDialog() {
-		print("destruct SettingsDialog\n");
-	}
+//	~SettingsDialog() {
+//		print("destruct SettingsDialog\n");
+//	}
 	
 	private void on_mb_font_changed(Gtk.SpinButton sender) {
 		if((int)(sender.value) < 7 ) sender.value = 7;
@@ -65,6 +66,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 		
 	private void on_ok_button_clicked() {
 		this.dialog.destroy();
+		sign_finish();
 	}
 
 	private void on_accept_button_clicked() {
@@ -72,6 +74,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 	
 	private void on_cancel_button_clicked() {
 		this.dialog.destroy();
+		sign_finish();
 	}
 
 	public void read_params_data() {
@@ -91,7 +94,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 			Idle.add(Main.instance().main_window.musicBr.change_model_data);	
 		};
 	}
-	
+
 	private bool setup_widgets() {
 		try {
 			assert(GLib.FileUtils.test(SETTINGS_UI_FILE, FileTest.EXISTS));
@@ -123,9 +126,8 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 			
 			this.dialog.set_icon_from_file (Config.UIDIR + "xnoise_16x16.png");
 			this.dialog.set_position(Gtk.WindowPosition.CENTER);
-			
-			PluginGuiElement pge = new PluginGuiElement(xn.plugin_loader.plugin_informations);
-			vboxplugins.pack_start(pge, true, true, 0);
+			plugin_manager_tree = new PluginManagerTree(ref xn);
+			vboxplugins.pack_start(plugin_manager_tree, true, true, 0);
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 

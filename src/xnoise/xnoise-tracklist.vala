@@ -879,7 +879,14 @@ public class Xnoise.TrackList : TreeView {
 	}
 	
 	private void create_model() {	// DATA
-		listmodel = new ListStore(7, typeof(int), typeof(Gdk.Pixbuf), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
+		listmodel = new ListStore(TrackListColumn.N_COLUMNS, 
+		                          typeof(int), 
+		                          typeof(Gdk.Pixbuf), 
+		                          typeof(string), 
+		                          typeof(string), 
+		                          typeof(string), 
+		                          typeof(string), 
+		                          typeof(string));
 		this.set_model(listmodel); 
 	}
 }

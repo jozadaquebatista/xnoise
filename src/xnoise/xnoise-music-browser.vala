@@ -394,7 +394,9 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	}
 
 	private void create_model() {	// DATA
-		model = new TreeStore(2, typeof(Gdk.Pixbuf), typeof(string));
+		model = new TreeStore(MusicBrowserColumn.N_COLUMNS, 
+		                      typeof(Gdk.Pixbuf), 
+		                      typeof(string));
 	}
 	
 	private bool add_data_to_model() {

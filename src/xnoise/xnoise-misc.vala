@@ -46,9 +46,6 @@ namespace Xnoise {
 public enum Xnoise.MusicBrowserColumn { //TODO: Rename
 	ICON = 0,
 	VIS_TEXT,
-	ARTIST_ID,
-	ALBUM_ID,
-	TITLE_ID,
 	N_COLUMNS
 }
 
@@ -56,7 +53,6 @@ public enum Xnoise.Repeat {
 	NOT_AT_ALL = 0,
 	SINGLE,
 	ALL,
-	N_COLUMNS
 }
 
 public struct Xnoise.TrackData { // meta information structure
@@ -74,7 +70,8 @@ public enum Xnoise.TrackListColumn {
 	TITLE,
 	ALBUM,
 	ARTIST,
-	URI
+	URI,
+	N_COLUMNS
 }
 
 public enum Xnoise.TrackStatus { //TODO: Rename

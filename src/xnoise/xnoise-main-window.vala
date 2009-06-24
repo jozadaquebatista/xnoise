@@ -715,6 +715,9 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	private SettingsDialog setingsD;
 	private void on_settings_edit() {
 		setingsD = new SettingsDialog(ref xn);
+		setingsD.sign_finish += () => {
+			setingsD = null;
+		};
 	}
 
 

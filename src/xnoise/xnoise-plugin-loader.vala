@@ -32,30 +32,45 @@ public class Xnoise.PluginLoader : Object {
     public HashTable<string,Plugin> plugin_htable;
 	private Main xn;
 	private PluginInformation info;
-	private string[] pluginInfoFiles = {};
+	private GLib.List<string> info_files;
 	
-	private GLib.List<string> _plugin_informations;
-	public GLib.List<string> plugin_informations {
-		get {
-			 _plugin_informations = new GLib.List<string>();
-			foreach(weak string s in pluginInfoFiles) {
-				_plugin_informations.append(s);
-			}
-			return _plugin_informations;
-		}
-	}
-			
 	public PluginLoader(ref weak Main xn) {
 		assert (Module.supported());
 		this.xn = xn;
 		plugin_htable = new HashTable<string,Plugin>(str_hash, str_equal);
 	}
 
+	public unowned GLib.List<string> get_info_files() {
+		return info_files;
+	}
+			
+	public bool load_all() {
+		Plugin plugin;
+		File dir = File.new_for_path(Config.PLUGINSDIR);
+		
+		this.get_plugin_information_files(dir);
+		foreach(string pluginInfoFile in info_files) {
+			info = new PluginInformation(pluginInfoFile);
+			if(info.load_info()) {
+				plugin = new Plugin(info);
+				plugin.load();
+				plugin_htable.insert(info.name, plugin); //Hold reference to plugin in hash table
+			}
+			else {
+				print("Failed to load %s.\n", pluginInfoFile);
+				return false;
+			}
+		}
+		if(info_files.length()==0) print("No plugin inforamtion found\n");
+		return true;
+	}
+	
 	private void get_plugin_information_files(File dir) {
 		//Recoursive scanning of plugin directory.
 		//Module will have to be in the same path as its info file
 		//Modules organized in subdirectories are allowed
 		FileEnumerator enumerator;
+		info_files = new GLib.List<string>();
 		try {
 			string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 			              FILE_ATTRIBUTE_STANDARD_TYPE;
@@ -75,32 +90,11 @@ public class Xnoise.PluginLoader : Object {
 			} 
 			else if(filename.has_suffix(".xnplugin")) {
 //				print("found plugin information file: %s\n", filepath);
-				pluginInfoFiles += filepath;	
+				info_files.append(filepath);
 			}
 		}
 	}
 
-	public bool load_all() {
-		Plugin plugin;
-		File dir = File.new_for_path(Config.PLUGINSDIR);
-		
-		this.get_plugin_information_files(dir);
-		foreach(string pluginInfoFile in pluginInfoFiles) {
-			info = new PluginInformation(pluginInfoFile);
-			if(info.load_info()) {
-				plugin = new Plugin(info);
-				plugin.load();
-				plugin_htable.insert(info.name, plugin); //Hold reference to plugin in hash table
-			}
-			else {
-				print("Failed to load %s.\n", pluginInfoFile);
-				return false;
-			}
-		}
-		if(pluginInfoFiles.length==0) print("No plugin inforamtion found\n");
-		return true;
-	}
-	
 	public bool activate_single_plugin(string name) {
 		return this.plugin_htable.lookup(name).activate(ref xn);
 	}	
