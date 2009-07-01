@@ -38,7 +38,7 @@ GLIB_REQUIRED=2.12.0
 GTK_REQUIRED=2.16.0
 SQLITE_REQUIRED=3.4
 
-PKG_CHECK_MODULES(XNOISE, glib-2.0 >= $GLIB_REQUIRED gobject-2.0 >= $GLIB_REQUIRED gtk+-2.0 >= $GTK_REQUIRED taglib_c sqlite3 >= $SQLITE_REQUIRED gstreamer-0.10 gio-2.0 unique-1.0 gmodule-2.0)
+PKG_CHECK_MODULES(XNOISE, glib-2.0 >= $GLIB_REQUIRED gobject-2.0 >= $GLIB_REQUIRED gtk+-2.0 >= $GTK_REQUIRED taglib_c sqlite3 >= $SQLITE_REQUIRED gstreamer-0.10 gstreamer-interfaces-0.10 gdk-x11-2.0 gio-2.0 unique-1.0 gmodule-2.0)
 
 AC_SUBST(XNOISE_CFLAGS)
 AC_SUBST(XNOISE_LIBS)
@@ -56,3 +56,14 @@ AC_CONFIG_FILES([Makefile
 	po/Makefile.in])
 
 AC_OUTPUT
+
+echo "
+
+    Configuration Info:
+
+    gettext_package:               ${GETTEXT_PACKAGE}
+    prefix:                        ${prefix}
+    vapidir:                       ${VAPIDIR}
+    CFLAGS:                        ${CFLAGS}
+    C Compiler:                    ${CC}
+"
