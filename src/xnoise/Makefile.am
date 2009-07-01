@@ -24,7 +24,7 @@ VALA_CFLAGS = \
 	--pkg taglib_c \
 	--pkg unique-1.0 \
 	--pkg gmodule-2.0 \
-	-H $(srcdir)/xnoise.h
+	-H $(srcdir)/xnoise.h \
 	--basedir $(top_srcdir)/src
 
 BUILT_SOURCES = xnoise.vala.stamp
