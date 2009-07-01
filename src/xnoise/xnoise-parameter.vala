@@ -87,7 +87,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 
 	public void write_all_parameters_to_file() {
 		FileStream stream = GLib.FileStream.open(build_file_name(), "w");
-		uint length;
+		size_t length;
 		KeyFile kf = new GLib.KeyFile();
 		foreach(weak IParams ip in IParams_implementers) {
 			ip.write_params_data();
