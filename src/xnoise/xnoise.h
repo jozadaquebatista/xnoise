@@ -458,12 +458,12 @@ struct _XnoiseAlbumImageClass {
 
 
 GType xnoise_app_starter_get_type (void);
+GType xnoise_main_get_type (void);
 extern XnoiseMain* xnoise_app_starter_xn;
 UniqueResponse xnoise_app_starter_on_message_received (UniqueApp* sender, gint command, UniqueMessageData* message_data, guint time);
 gint xnoise_app_starter_main (char** args, int args_length1);
 XnoiseAppStarter* xnoise_app_starter_new (void);
 XnoiseAppStarter* xnoise_app_starter_construct (GType object_type);
-GType xnoise_main_get_type (void);
 GType xnoise_main_window_get_type (void);
 GType xnoise_plugin_loader_get_type (void);
 GType xnoise_gst_player_get_type (void);
