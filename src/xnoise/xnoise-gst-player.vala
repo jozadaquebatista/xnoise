@@ -29,7 +29,6 @@
  */
 
 using Gst;
-using Gdk;
 using Gtk;
 
 public class Xnoise.GstPlayer : GLib.Object {
@@ -126,6 +125,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         taglist = null;
 //		playbin.link(sink);
 		playbin.set("video-sink", sink);
+		this.xn.main_window.drawingarea = new DrawingArea();
 //		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid (this.xn.main_window.drawingarea.window));
 //       ((XOverlay) this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid (Main.instance().main_window.drawingarea.window));
 		var bus = new Bus ();
@@ -210,6 +210,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	public void play() {
+print("play\n");
 //		ovl = (Gst.XOverlay)((Element)this.sink);
 //		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid(this.xn.main_window.drawingarea.window));
 		playbin.set_state(State.PLAYING);
@@ -233,8 +234,14 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 //	private Gst.XOverlay ovl;
 	public void playSong() { 
-//		ovl = (Gst.XOverlay)((Element)this.sink);
-//		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid(Main.instance().main_window.drawingarea.window));
+print("playsong\n");
+//		ovl = (Gst.XOverlay)this.sink; //((Gst.XOverlay)this.sink)
+print("#1\n");
+		ulong abc = Gdk.x11_drawable_get_xid((Gdk.Drawable)(Main.instance().main_window.drawingarea).window);
+print("#2\n");
+		((Gst.XOverlay)this.sink).set_xwindow_id(abc);
+print("#3\n");
+		//public abstract void set_xwindow_id (ulong xwindow_id);
 		bool buf_playing = playing;
 		playbin.set_state(State.READY);
 //		playbin.set("uri", Uri);
