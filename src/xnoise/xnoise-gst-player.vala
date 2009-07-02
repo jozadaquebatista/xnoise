@@ -37,7 +37,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private TagList _taglist;
 	public Element playbin;
 	public Element sink;
-//	public bool   paused_last_state;
+///	public bool   paused_last_state;
 	public bool   seeking  { get; set; } //TODO
 	public double volume   { get; set; }   
 	public bool   playing  { get; set; }
