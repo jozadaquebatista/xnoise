@@ -29,6 +29,8 @@
  */
 
 using Gst;
+using Gdk;
+using Gtk;
 
 public class Xnoise.GstPlayer : GLib.Object {
 	private uint timeout;
@@ -46,7 +48,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public string currentartist { get; private set; }
 	public string currentalbum  { get; private set; }
 	public string currenttitle  { get; private set; }
-
+	private Main xn;
 	public TagList taglist { 
 		get { 
 			return _taglist; 
@@ -85,7 +87,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_tag_changed(string newuri);
 //	public signal void sign_state_changed(int state);
 
-	public GstPlayer() {
+	public GstPlayer(ref weak Main xn) {
+		this.xn = xn;
 		create_elements();
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
 		this.notify += (s, p) => {
@@ -122,8 +125,9 @@ public class Xnoise.GstPlayer : GLib.Object {
         this.sink  = ElementFactory.make("xvimagesink", "sink");
         taglist = null;
 //		playbin.link(sink);
+		playbin.set("video-sink", sink);
+//		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid (this.xn.main_window.drawingarea.window));
 //       ((XOverlay) this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid (Main.instance().main_window.drawingarea.window));
-//		playbin.set("video-sink", sink);
 		var bus = new Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
@@ -206,7 +210,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	public void play() {
-//		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid(mw.window.drawingarea.window));
+//		ovl = (Gst.XOverlay)((Element)this.sink);
+//		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid(this.xn.main_window.drawingarea.window));
 		playbin.set_state(State.PLAYING);
 		wait();
 		playing = true;
@@ -226,13 +231,15 @@ public class Xnoise.GstPlayer : GLib.Object {
 		playing = false;
 		sign_stopped();
 	}
-
+//	private Gst.XOverlay ovl;
 	public void playSong() { 
+//		ovl = (Gst.XOverlay)((Element)this.sink);
 //		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid(Main.instance().main_window.drawingarea.window));
 		bool buf_playing = playing;
 		playbin.set_state(State.READY);
 //		playbin.set("uri", Uri);
 		if (buf_playing == true) {
+//	       	((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid (this.xn.main_window.drawingarea.window));
 			playbin.set_state(State.PLAYING);
 			wait();
 			playing = true;

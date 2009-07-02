@@ -458,12 +458,12 @@ struct _XnoiseAlbumImageClass {
 
 
 GType xnoise_app_starter_get_type (void);
+GType xnoise_main_get_type (void);
 extern XnoiseMain* xnoise_app_starter_xn;
 UniqueResponse xnoise_app_starter_on_message_received (UniqueApp* sender, gint command, UniqueMessageData* message_data, guint time);
 gint xnoise_app_starter_main (char** args, int args_length1);
 XnoiseAppStarter* xnoise_app_starter_new (void);
 XnoiseAppStarter* xnoise_app_starter_construct (GType object_type);
-GType xnoise_main_get_type (void);
 GType xnoise_main_window_get_type (void);
 GType xnoise_plugin_loader_get_type (void);
 GType xnoise_gst_player_get_type (void);
@@ -474,8 +474,8 @@ void xnoise_main_add_track_to_gst_player (XnoiseMain* self, const char* uri);
 XnoiseMain* xnoise_main_instance (void);
 void xnoise_main_save_tracklist (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
-XnoiseGstPlayer* xnoise_gst_player_new (void);
-XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type);
+XnoiseGstPlayer* xnoise_gst_player_new (XnoiseMain** xn);
+XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type, XnoiseMain** xn);
 void xnoise_gst_player_play (XnoiseGstPlayer* self);
 void xnoise_gst_player_pause (XnoiseGstPlayer* self);
 void xnoise_gst_player_stop (XnoiseGstPlayer* self);

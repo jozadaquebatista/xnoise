@@ -366,8 +366,8 @@ public class Xnoise.TrackList : TreeView {
 		File file;
 		FileType filetype;
 		weak string mime;
-//		var psAudio = new PatternSpec("*");
-		var psAudio = new PatternSpec("audio*");
+		var psAudio = new PatternSpec("*");
+//		var psAudio = new PatternSpec("audio*");
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 		try {

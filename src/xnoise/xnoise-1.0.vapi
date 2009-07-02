@@ -49,7 +49,7 @@ namespace Xnoise {
 	public class GstPlayer : GLib.Object {
 		public Gst.Element playbin;
 		public Gst.Element sink;
-		public GstPlayer ();
+		public GstPlayer (ref unowned Xnoise.Main xn);
 		public void pause ();
 		public void play ();
 		public void playSong ();

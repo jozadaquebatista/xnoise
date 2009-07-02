@@ -29,7 +29,7 @@
  */
 
 public class Xnoise.Plugin : GLib.Object {
-	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT RETURNED FROM MODULE INITIALIZATION 
+	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT TYPE RETURNED FROM MODULE INITIALIZATION 
 	private Module module;
 	private IPlugin loaded_plugin;
 	private Type type;

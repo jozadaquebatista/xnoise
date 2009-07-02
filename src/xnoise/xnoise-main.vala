@@ -42,7 +42,7 @@ public class Xnoise.Main : GLib.Object {
 
 		main_window = new MainWindow(ref this);
 
-		gPl = new GstPlayer();
+		gPl = new GstPlayer(ref this);
 		
 		plugin_loader = new PluginLoader(ref this);
 		plugin_loader.load_all();

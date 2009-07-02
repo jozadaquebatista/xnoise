@@ -59,6 +59,10 @@ public class Xnoise.PluginInformation : GLib.Object {
 			license     = kf.get_string(group, "license");
 			copyright   = kf.get_string(group, "copyright");
 		}
+		catch(FileError e) {
+			print("Error plugin information: %s\n", e.message);
+			return false;
+		}
 		catch(KeyFileError e) {
 			print("Error plugin information: %s\n", e.message);
 			return false;
