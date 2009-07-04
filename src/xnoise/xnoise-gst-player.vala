@@ -65,9 +65,13 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return _Uri;
 		}
 		set {
+			xn.main_window.tracklistnotebook.set_current_page(1);
+			xn.main_window.showvideolabel.label =_("Show Tracklist");
+
 			_Uri = value;
 			taglist = null;
 			this.playbin.set("uri", value);
+			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
 		}
 	}
 	
@@ -119,47 +123,60 @@ public class Xnoise.GstPlayer : GLib.Object {
 		};
 	}
 
+
+	private DrawingArea drawingarea;
 	private void create_elements() {
 		playbin    = ElementFactory.make("playbin", "playbin");
-        this.sink  = ElementFactory.make("xvimagesink", "sink");
         taglist = null;
-//		playbin.link(sink);
-		playbin.set("video-sink", sink);
-		this.xn.main_window.drawingarea = new DrawingArea();
-//		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid (this.xn.main_window.drawingarea.window));
-//       ((XOverlay) this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid (Main.instance().main_window.drawingarea.window));
+		this.drawingarea = new DrawingArea();
+//		this.drawingarea.show_all();
+		this.xn.main_window.aspectframeVid.add(drawingarea);
 		var bus = new Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
-		bus.message += (bus, msg) => {
-			//	print("Message: %d\n", msg.type);
-			switch(msg.type) {
-				case Gst.MessageType.ERROR: {
-					Error err;
-					string debug;
-					msg.parse_error(out err, out debug);
-					stdout.printf("Error: %s\n", err.message);
-					this.sign_eos(); //this is used to go to the next track
-					break;
+		bus.message += this.on_message;
+		bus.enable_sync_message_emission();
+		bus.sync_message += this.on_sync_message;
+	}
+
+	private void on_message(Gst.Message msg) {
+		switch(msg.type) {
+			case Gst.MessageType.ERROR: {
+				Error err;
+				string debug;
+				msg.parse_error(out err, out debug);
+				stdout.printf("Error: %s\n", err.message);
+				this.sign_eos(); //this is used to go to the next track
+				break;
+			}
+			case Gst.MessageType.EOS: {
+				this.sign_eos();
+				break;
+			}
+			case Gst.MessageType.TAG: {
+				TagList tag_list;			
+				msg.parse_tag(out tag_list);
+				if (taglist == null && tag_list != null) {
+					taglist = tag_list;
 				}
-				case Gst.MessageType.EOS: {
-					this.sign_eos();
-					break;
+				else {
+					taglist.merge(tag_list, TagMergeMode.REPLACE);
 				}
-				case Gst.MessageType.TAG: {
-					TagList tag_list;			
-					msg.parse_tag(out tag_list);
-					if (taglist == null && tag_list != null) {
-						taglist = tag_list;
-					}
-					else {
-						taglist.merge(tag_list, TagMergeMode.REPLACE);
-					}
-					break;
-				}
-				default: break;
-			}			
-		};				
+				break;
+			}
+			default: break;
+		}			
+	}
+	
+	private void on_sync_message(Gst.Message msg) {
+		if(msg.structure ==null)
+			return;
+		string message_name = msg.structure.get_name();
+		if(message_name == "prepare-xwindow-id") {
+			var imagesink = (XOverlay)msg.src;
+			imagesink.set_property("force-aspect-ratio", true);
+			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(this.drawingarea.window));
+		}
 	}
 	
 	private void foreachtag(TagList list, string tag) {
@@ -210,9 +227,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	public void play() {
-print("play\n");
-//		ovl = (Gst.XOverlay)((Element)this.sink);
-//		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid(this.xn.main_window.drawingarea.window));
 		playbin.set_state(State.PLAYING);
 		wait();
 		playing = true;
@@ -232,21 +246,12 @@ print("play\n");
 		playing = false;
 		sign_stopped();
 	}
-//	private Gst.XOverlay ovl;
+
 	public void playSong() { 
-print("playsong\n");
-//		ovl = (Gst.XOverlay)this.sink; //((Gst.XOverlay)this.sink)
-print("#1\n");
-		ulong abc = Gdk.x11_drawable_get_xid((Gdk.Drawable)(Main.instance().main_window.drawingarea).window);
-print("#2\n");
-		((Gst.XOverlay)this.sink).set_xwindow_id(abc);
-print("#3\n");
-		//public abstract void set_xwindow_id (ulong xwindow_id);
 		bool buf_playing = playing;
 		playbin.set_state(State.READY);
 //		playbin.set("uri", Uri);
 		if (buf_playing == true) {
-//	       	((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid (this.xn.main_window.drawingarea.window));
 			playbin.set_state(State.PLAYING);
 			wait();
 			playing = true;

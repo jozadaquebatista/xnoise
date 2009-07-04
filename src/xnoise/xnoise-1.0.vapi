@@ -87,7 +87,6 @@ namespace Xnoise {
 		public Gtk.AspectFrame aspectframeVid;
 		public Gtk.Notebook browsernotebook;
 		public double current_volume;
-		public Gtk.DrawingArea drawingarea;
 		public Xnoise.MusicBrowser musicBr;
 		public Gtk.Button playPauseButton;
 		public Gtk.Image playpause_popup_image;
@@ -95,6 +94,7 @@ namespace Xnoise {
 		public Gtk.Image repeatImage;
 		public Gtk.Label repeatLabel;
 		public Gtk.Entry searchEntryMB;
+		public Gtk.Label showvideolabel;
 		public Gtk.ProgressBar songProgressBar;
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;

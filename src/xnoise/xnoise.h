@@ -265,6 +265,7 @@ struct _XnoiseIParamsIface {
 struct _XnoiseMainWindow {
 	GtkBuilder parent_instance;
 	XnoiseMainWindowPrivate * priv;
+	GtkLabel* showvideolabel;
 	GtkEntry* searchEntryMB;
 	GtkButton* playPauseButton;
 	GtkButton* repeatButton;
@@ -278,7 +279,6 @@ struct _XnoiseMainWindow {
 	XnoiseMusicBrowser* musicBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* window;
-	GtkDrawingArea* drawingarea;
 	GtkAspectFrame* aspectframeVid;
 	GtkImage* playpause_popup_image;
 };

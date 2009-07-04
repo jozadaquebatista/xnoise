@@ -41,7 +41,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	private int _posX_buffer;
 	private int _posY_buffer;
 	private Button showvideobutton;
-	private Label showvideolabel;
+	public Label showvideolabel;
 //	private Image showvideoimage;
 	public Entry searchEntryMB;
 	public Button playPauseButton; 
@@ -56,7 +56,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	public MusicBrowser musicBr;
 	public TrackList trackList;
 	public Window window;
-	public Gtk.DrawingArea drawingarea;
+//	public Gtk.DrawingArea drawingarea;
 
 	public int repeatState { get; set; }
 
@@ -100,7 +100,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 			//---------------------
 			
 			this.aspectframeVid            = this.get_object("aspectframeVid") as Gtk.AspectFrame;
-			this.drawingarea               = this.get_object("drawingAreaVid") as Gtk.DrawingArea;
+//			this.drawingarea               = this.get_object("drawingAreaVid") as Gtk.DrawingArea;
 			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = this.get_object("removeAllButton") as Gtk.Button;
@@ -140,7 +140,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 //			albumimage.albumimage.button_press_event+=on_album_image_enter;
 //			albumimage.leave_notify_event+=on_album_image_leave;
 			//--------------------
-
 
 			//PLAYING TITLE NAME
 			this.song_title_label           = this.get_object("song_title_label") as Gtk.Label;
