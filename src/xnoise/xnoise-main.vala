@@ -72,6 +72,9 @@ public class Xnoise.Main : GLib.Object {
 			main_window.songProgressBar.set_text("00:00 / 00:00");;
 		};
 		gPl.sign_tag_changed += main_window.set_displayed_title;
+		gPl.sign_video_playing += () => { //handle stop signal from gst player
+			main_window.tracklistnotebook.set_current_page(1);
+		};
 //		gPl.sign_tag_changed += main_window.albumimage.find_album_image;
 
 		//TODO: if the volume change is handled from main window an unlimited number of instances of Main is created. Why?
@@ -95,9 +98,8 @@ public class Xnoise.Main : GLib.Object {
 	private void check_database_and_tables() {
 		if(!GLib.FileUtils.test(dbFileName(), FileTest.EXISTS)) {
 			stderr.printf("db file is not yet existing....\n");
-			DbWriter dbw = new DbWriter(); //creating db instance and destroying it will hopefully give me a db file
-			
-			stderr.printf("Creating database file...");
+			DbWriter dbw = new DbWriter(); //creating db instance and destroying it will create a db file and tables
+			stderr.printf("Creating new database file...");
 			dbw = null;
 		}
 	}

@@ -68,6 +68,7 @@ public class Xnoise.AppStarter : GLib.Object {
 		File file;
 		FileType filetype;
 		weak string mime;
+		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
@@ -88,8 +89,8 @@ public class Xnoise.AppStarter : GLib.Object {
 				return 1;
 			}	
 			
-			if((filetype==GLib.FileType.REGULAR)&
-			   (psAudio.match_string(mime))) {
+		if((filetype==GLib.FileType.REGULAR)&
+		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
 			   	uris += file.get_uri();
 			}
 		}

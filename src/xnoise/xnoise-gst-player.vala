@@ -31,12 +31,14 @@
 using Gst;
 
 public class Xnoise.GstPlayer : GLib.Object {
+    private const int AudioStream = 1;    // an audio stream 
+    private const int VideoStream = 2;    // a video stream 
 	private uint timeout;
 	private int64 length_time;
 	private string _Uri = "";
 	private TagList _taglist;
 	private Gtk.DrawingArea da;
-	public Element playbin;
+	public dynamic Element playbin;
 //	public bool   paused_last_state;
 	public bool   seeking  { get; set; } //TODO
 	public double volume   { get; set; }   
@@ -114,6 +116,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				case "taglist": {
 					if(this.taglist == null) return;
 					taglist.foreach(foreachtag);
+					break;
 				}
 				default: break;
 			}
@@ -131,8 +134,43 @@ public class Xnoise.GstPlayer : GLib.Object {
 		bus.sync_message += this.on_sync_message;
 	}
 
+	private void get_stream_info() {
+		weak GLib.List <dynamic GLib.Object> stream_info = null;
+		stream_info = this.playbin.stream_info;
+		if(stream_info==null) return;
+		for(int i=0;i<stream_info.length();i++) {
+			dynamic GLib.Object info = stream_info.nth_data(i);
+			if (info == null) {
+				continue;
+			}
+			get_av_info(info);
+		}
+	}
+
+	private void get_av_info(dynamic GLib.Object info) {
+		Pad pad = (Pad)info.object;
+		if(pad==null) return;
+		Gst.Caps caps = pad.get_negotiated_caps();
+		if(caps==null) return;
+		weak Structure structure = caps.get_structure(0);
+		if (structure == null) return;
+		StreamType streamtype = info.type;
+		if(streamtype==StreamType.VIDEO) {
+			sign_video_playing();
+		}
+	}
+	
 	private void on_message(Gst.Message msg) {
 		switch(msg.type) {
+			case Gst.MessageType.STATE_CHANGED: {
+				State newstate;
+				State oldstate;
+				msg.parse_state_changed (out oldstate, out newstate, null);
+				if((newstate==State.PLAYING)&&((oldstate==State.PAUSED)||(oldstate==State.READY))) {
+				    this.get_stream_info();
+		        }
+				break;
+			}			
 			case Gst.MessageType.ERROR: {
 				Error err;
 				string debug;
@@ -159,7 +197,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			default: break;
 		}			
 	}
-	
+
 	private void on_sync_message(Gst.Message msg) {
 		if(msg.structure==null)
 			return;

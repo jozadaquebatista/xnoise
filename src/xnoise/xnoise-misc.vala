@@ -86,6 +86,11 @@ public enum Xnoise.Direction {
 	PREVIOUS,
 }
 
+public enum Gst.StreamType {
+    UNKNOWN = 0,
+    AUDIO   = 1, 
+    VIDEO   = 2,  
+}
 
 //Interfaces
 

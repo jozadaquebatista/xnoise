@@ -178,6 +178,8 @@ typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 
 #define XNOISE_TYPE_DIRECTION (xnoise_direction_get_type ())
 
+#define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
+
 #define XNOISE_TYPE_SETTINGS_DIALOG (xnoise_settings_dialog_get_type ())
 #define XNOISE_SETTINGS_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_SETTINGS_DIALOG, XnoiseSettingsDialog))
 #define XNOISE_SETTINGS_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_SETTINGS_DIALOG, XnoiseSettingsDialogClass))
@@ -390,6 +392,12 @@ typedef enum  {
 	XNOISE_DIRECTION_PREVIOUS
 } XnoiseDirection;
 
+typedef enum  {
+	GST_STREAM_TYPE_UNKNOWN = 0,
+	GST_STREAM_TYPE_AUDIO = 1,
+	GST_STREAM_TYPE_VIDEO = 2
+} GstStreamType;
+
 struct _XnoiseSettingsDialog {
 	GtkBuilder parent_instance;
 	XnoiseSettingsDialogPrivate * priv;
@@ -584,6 +592,7 @@ GType xnoise_repeat_get_type (void);
 GType xnoise_track_list_column_get_type (void);
 GType xnoise_track_status_get_type (void);
 GType xnoise_direction_get_type (void);
+GType gst_stream_type_get_type (void);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_settings_dialog_get_type (void);

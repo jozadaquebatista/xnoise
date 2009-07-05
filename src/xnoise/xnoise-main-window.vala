@@ -259,7 +259,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 		foreach(string uri in uris) {
 			TrackData td; 
 			if(dbBr.get_trackdata_for_uri(uri, out td)) {
-				print("title: %s\n", td.Title);
 				this.trackList.insert_title(0,
 					                        null,
 					                        (int)td.Tracknumber,
