@@ -31,8 +31,6 @@
 using Gst;
 
 public class Xnoise.GstPlayer : GLib.Object {
-    private const int AudioStream = 1;    // an audio stream 
-    private const int VideoStream = 2;    // a video stream 
 	private uint timeout;
 	private int64 length_time;
 	private string _Uri = "";
