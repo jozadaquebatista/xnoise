@@ -29,15 +29,14 @@
  */
 
 using Gst;
-using Gtk;
 
 public class Xnoise.GstPlayer : GLib.Object {
 	private uint timeout;
 	private int64 length_time;
 	private string _Uri = "";
 	private TagList _taglist;
+	private Gtk.DrawingArea da;
 	public Element playbin;
-	public Element sink;
 //	public bool   paused_last_state;
 	public bool   seeking  { get; set; } //TODO
 	public double volume   { get; set; }   
@@ -47,7 +46,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public string currentartist { get; private set; }
 	public string currentalbum  { get; private set; }
 	public string currenttitle  { get; private set; }
-	private Main xn;
+
 	public TagList taglist { 
 		get { 
 			return _taglist; 
@@ -65,7 +64,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return _Uri;
 		}
 		set {
-//			xn.main_window.tracklistnotebook.set_current_page(1);
 			_Uri = value;
 			taglist = null;
 			this.playbin.set("uri", value);
@@ -86,10 +84,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_stopped();
 	public signal void sign_eos();
 	public signal void sign_tag_changed(string newuri);
+	public signal void sign_video_playing();
 //	public signal void sign_state_changed(int state);
 
-	public GstPlayer(ref weak Main xn) {
-		this.xn = xn;
+	public GstPlayer(ref weak Gtk.DrawingArea da) {
+		this.da = da;
 		create_elements();
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
 		this.notify += (s, p) => {
@@ -121,13 +120,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 		};
 	}
 
-	private DrawingArea drawingarea;
 	private void create_elements() {
 		playbin = ElementFactory.make("playbin", "playbin");
         taglist = null;
-		this.drawingarea = new DrawingArea(); // TODO: use a cutom videowidget instead; is new necessary?
-		this.xn.main_window.videovbox.pack_start(drawingarea,true, true, 0); //TODO: check if this can be moved to main_window
-		this.drawingarea.realize();
 		var bus = new Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
@@ -172,7 +167,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if(message_name=="prepare-xwindow-id") {
 			var imagesink = (XOverlay)msg.src;
 			imagesink.set_property("force-aspect-ratio", true);
-			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(this.drawingarea.window));
+			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(da.window));
 		}
 	}
 	

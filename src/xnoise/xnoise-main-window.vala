@@ -43,6 +43,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	private int _posX_buffer;
 	private int _posY_buffer;
 	private Button showvideobutton;
+	public DrawingArea videodrawingarea;
 	public Label showvideolabel;
 //	private Image showvideoimage;
 	public Entry searchEntryMB;
@@ -69,12 +70,14 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 		this.xn = xn;
 		par.data_register(this);
 		create_widgets();
+		
+		//initialization of videodrawingarea
+		videodrawingarea.realize();
+
 		notify["repeatState"]+=on_repeatState_changed;
 		add_lastused_titles_to_tracklist();
 	}
 	
-	public VBox videovbox;
-
 	private void create_widgets() {
 		try {
 			assert(GLib.FileUtils.test(MAIN_UI_FILE, FileTest.EXISTS));
@@ -100,7 +103,10 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 			previousButton.clicked         += this.on_previous_button_clicked;
 			//---------------------
 			
-			this.videovbox                 = this.get_object("videovbox") as Gtk.VBox;
+			//DRAWINGAREA FOR VIDEO
+			videodrawingarea               = this.get_object("videodrawingarea") as Gtk.DrawingArea;
+			videodrawingarea.events        = Gdk.EventMask.BUTTON_PRESS_MASK;
+//			videodrawingarea.event         += on_videodrawingarea_event;
 			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = this.get_object("removeAllButton") as Gtk.Button;
@@ -217,7 +223,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 			var sexyentryBox = this.get_object("sexyentryBox") as Gtk.HBox; 
 			sexyentryBox.add(searchEntryMB);
 			
-			this.window.set_icon_from_file (Config.UIDIR + "xnoise_16x16.png");
+			this.window.set_icon_from_file(Config.UIDIR + "xnoise_16x16.png");
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 
@@ -238,6 +244,14 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 		this.window.key_release_event  += this.on_key_released;
 		this.window.window_state_event += this.on_window_state_change;
 	}
+
+//	private bool on_videodrawingarea_event(Gtk.DrawingArea sender, Gdk.Event e) {
+//		if(e.button.type==Gdk.EventType.BUTTON_PRESS) {
+//			print("fullscreen\n");
+//			videodrawingarea.window.fullscreen();
+//		}
+//		return false;
+//	}
 
 	private void add_lastused_titles_to_tracklist() { 
 		DbBrowser dbBr = new DbBrowser();

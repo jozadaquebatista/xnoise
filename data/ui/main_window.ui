@@ -416,12 +416,8 @@ ready to rock</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVBox" id="videovbox">
+                      <object class="GtkDrawingArea" id="videodrawingarea">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                       <packing>
                         <property name="position">1</property>

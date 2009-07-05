@@ -248,7 +248,6 @@ struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
 	GstElement* playbin;
-	GstElement* sink;
 };
 
 struct _XnoiseGstPlayerClass {
@@ -265,6 +264,7 @@ struct _XnoiseIParamsIface {
 struct _XnoiseMainWindow {
 	GtkBuilder parent_instance;
 	XnoiseMainWindowPrivate * priv;
+	GtkDrawingArea* videodrawingarea;
 	GtkLabel* showvideolabel;
 	GtkEntry* searchEntryMB;
 	GtkButton* playPauseButton;
@@ -279,7 +279,6 @@ struct _XnoiseMainWindow {
 	XnoiseMusicBrowser* musicBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* window;
-	GtkVBox* videovbox;
 	GtkImage* playpause_popup_image;
 };
 
@@ -474,8 +473,8 @@ void xnoise_main_add_track_to_gst_player (XnoiseMain* self, const char* uri);
 XnoiseMain* xnoise_main_instance (void);
 void xnoise_main_save_tracklist (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
-XnoiseGstPlayer* xnoise_gst_player_new (XnoiseMain** xn);
-XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type, XnoiseMain** xn);
+XnoiseGstPlayer* xnoise_gst_player_new (GtkDrawingArea** da);
+XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type, GtkDrawingArea** da);
 void xnoise_gst_player_play (XnoiseGstPlayer* self);
 void xnoise_gst_player_pause (XnoiseGstPlayer* self);
 void xnoise_gst_player_stop (XnoiseGstPlayer* self);
