@@ -97,9 +97,12 @@ public class Xnoise.PluginManagerTree: TreeView {
 				listmodel.append(out iter);
 				listmodel.set(iter, Columns.TOGGLE, true, Columns.TEXT, name);
 			}
-			catch(KeyFileError e) {
+			catch(Error e) {
 				print("Error plugin information: %s\n", e.message);
 			}
+//			catch(KeyFileError e) {
+//				print("Error plugin information: %s\n", e.message);
+//			}	
 		}
 		this.set_model(listmodel);
 	}

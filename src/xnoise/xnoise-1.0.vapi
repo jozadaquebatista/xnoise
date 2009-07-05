@@ -48,8 +48,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
 		public Gst.Element playbin;
-		public Gst.Element sink;
-		public GstPlayer ();
+		public GstPlayer (ref unowned Gtk.DrawingArea da);
 		public void pause ();
 		public void play ();
 		public void playSong ();
@@ -68,6 +67,7 @@ namespace Xnoise {
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
 		public signal void sign_tag_changed (string newuri);
+		public signal void sign_video_playing ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Main : GLib.Object {
@@ -84,10 +84,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Builder, Xnoise.IParams {
 		public Xnoise.AlbumImage albumimage;
-		public Gtk.AspectFrame aspectframeVid;
 		public Gtk.Notebook browsernotebook;
 		public double current_volume;
-		public Gtk.DrawingArea drawingarea;
 		public Xnoise.MusicBrowser musicBr;
 		public Gtk.Button playPauseButton;
 		public Gtk.Image playpause_popup_image;
@@ -95,9 +93,11 @@ namespace Xnoise {
 		public Gtk.Image repeatImage;
 		public Gtk.Label repeatLabel;
 		public Gtk.Entry searchEntryMB;
+		public Gtk.Label showvideolabel;
 		public Gtk.ProgressBar songProgressBar;
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
+		public Gtk.DrawingArea videodrawingarea;
 		public Gtk.Window window;
 		public void change_song (int direction, bool handle_repeat_state = false);
 		public MainWindow (ref unowned Xnoise.Main xn);

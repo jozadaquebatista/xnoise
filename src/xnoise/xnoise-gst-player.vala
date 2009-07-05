@@ -35,8 +35,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private int64 length_time;
 	private string _Uri = "";
 	private TagList _taglist;
+	private Gtk.DrawingArea da;
 	public Element playbin;
-	public Element sink;
 //	public bool   paused_last_state;
 	public bool   seeking  { get; set; } //TODO
 	public double volume   { get; set; }   
@@ -67,6 +67,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			_Uri = value;
 			taglist = null;
 			this.playbin.set("uri", value);
+			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
 		}
 	}
 	
@@ -83,9 +84,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_stopped();
 	public signal void sign_eos();
 	public signal void sign_tag_changed(string newuri);
+	public signal void sign_video_playing();
 //	public signal void sign_state_changed(int state);
 
-	public GstPlayer() {
+	public GstPlayer(ref weak Gtk.DrawingArea da) {
+		this.da = da;
 		create_elements();
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
 		this.notify += (s, p) => {
@@ -118,44 +121,54 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private void create_elements() {
-		playbin    = ElementFactory.make("playbin", "playbin");
-        this.sink  = ElementFactory.make("xvimagesink", "sink");
+		playbin = ElementFactory.make("playbin", "playbin");
         taglist = null;
-//		playbin.link(sink);
-//       ((XOverlay) this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid (Main.instance().main_window.drawingarea.window));
-//		playbin.set("video-sink", sink);
 		var bus = new Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
-		bus.message += (bus, msg) => {
-			//	print("Message: %d\n", msg.type);
-			switch(msg.type) {
-				case Gst.MessageType.ERROR: {
-					Error err;
-					string debug;
-					msg.parse_error(out err, out debug);
-					stdout.printf("Error: %s\n", err.message);
-					this.sign_eos(); //this is used to go to the next track
-					break;
+		bus.message += this.on_message;
+		bus.enable_sync_message_emission();
+		bus.sync_message += this.on_sync_message;
+	}
+
+	private void on_message(Gst.Message msg) {
+		switch(msg.type) {
+			case Gst.MessageType.ERROR: {
+				Error err;
+				string debug;
+				msg.parse_error(out err, out debug);
+				stdout.printf("Error: %s\n", err.message);
+				this.sign_eos(); //this is used to go to the next track
+				break;
+			}
+			case Gst.MessageType.EOS: {
+				this.sign_eos();
+				break;
+			}
+			case Gst.MessageType.TAG: {
+				TagList tag_list;			
+				msg.parse_tag(out tag_list);
+				if (taglist == null && tag_list != null) {
+					taglist = tag_list;
 				}
-				case Gst.MessageType.EOS: {
-					this.sign_eos();
-					break;
+				else {
+					taglist.merge(tag_list, TagMergeMode.REPLACE);
 				}
-				case Gst.MessageType.TAG: {
-					TagList tag_list;			
-					msg.parse_tag(out tag_list);
-					if (taglist == null && tag_list != null) {
-						taglist = tag_list;
-					}
-					else {
-						taglist.merge(tag_list, TagMergeMode.REPLACE);
-					}
-					break;
-				}
-				default: break;
-			}			
-		};				
+				break;
+			}
+			default: break;
+		}			
+	}
+	
+	private void on_sync_message(Gst.Message msg) {
+		if(msg.structure==null)
+			return;
+		string message_name = msg.structure.get_name();
+		if(message_name=="prepare-xwindow-id") {
+			var imagesink = (XOverlay)msg.src;
+			imagesink.set_property("force-aspect-ratio", true);
+			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(da.window));
+		}
 	}
 	
 	private void foreachtag(TagList list, string tag) {
@@ -206,7 +219,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	public void play() {
-//		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid(mw.window.drawingarea.window));
 		playbin.set_state(State.PLAYING);
 		wait();
 		playing = true;
@@ -228,7 +240,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	public void playSong() { 
-//		((Gst.XOverlay)this.sink).set_xwindow_id(Gdk.x11_drawable_get_xid(Main.instance().main_window.drawingarea.window));
 		bool buf_playing = playing;
 		playbin.set_state(State.READY);
 //		playbin.set("uri", Uri);

@@ -1,6 +1,8 @@
+map generation script by osku
+++++++++++++++++++++++++++++++++++++++++++++++++++++
 This script needs python and graphviz! 
 
-Execute 
+Execute:
 
 		./generate_class_graph.sh
 

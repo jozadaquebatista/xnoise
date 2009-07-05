@@ -110,7 +110,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 					print ("FOUND orig_img_uri: %s\n", orig_img_uri);
 				}
 			}
-		} catch (IOError e) {
+		} catch(Error e) {
 			error ("%s\n", e.message);
 		}
 
@@ -169,7 +169,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 			Gdk.flush ();
 			Gdk.threads_leave ();
 		
-		} catch (IOError ex) {
+		} catch(Error ex) {
 			print ("get image error: %s\n", ex.message);
 			//TODO set error/default image
 		}

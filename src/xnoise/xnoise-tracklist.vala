@@ -366,7 +366,7 @@ public class Xnoise.TrackList : TreeView {
 		File file;
 		FileType filetype;
 		weak string mime;
-//		var psAudio = new PatternSpec("*");
+		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
@@ -386,7 +386,7 @@ public class Xnoise.TrackList : TreeView {
 		}	
 			
 		if((filetype==GLib.FileType.REGULAR)&
-		   (psAudio.match_string(mime))) {
+		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
 			DbBrowser dbBr = new DbBrowser();
 			string artist, album, title;
 			uint tracknumb;
@@ -399,7 +399,7 @@ public class Xnoise.TrackList : TreeView {
 				tracknumb = td.Tracknumber; 
 			}
 			else {
-				var tr = new TagReader();
+				var tr = new TagReader(); // TODO: Check dataimport for video
 				var tags = tr.read_tag_from_file(file.get_path());
 				artist         = Markup.printf_escaped("%s", tags.Artist); 
 				album          = Markup.printf_escaped("%s", tags.Album); 
