@@ -65,9 +65,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return _Uri;
 		}
 		set {
-			xn.main_window.tracklistnotebook.set_current_page(1);
-			xn.main_window.showvideolabel.label =_("Show Tracklist");
-
+//			xn.main_window.tracklistnotebook.set_current_page(1);
 			_Uri = value;
 			taglist = null;
 			this.playbin.set("uri", value);
@@ -123,14 +121,13 @@ public class Xnoise.GstPlayer : GLib.Object {
 		};
 	}
 
-
 	private DrawingArea drawingarea;
 	private void create_elements() {
-		playbin    = ElementFactory.make("playbin", "playbin");
+		playbin = ElementFactory.make("playbin", "playbin");
         taglist = null;
-		this.drawingarea = new DrawingArea();
-//		this.drawingarea.show_all();
-		this.xn.main_window.aspectframeVid.add(drawingarea);
+		this.drawingarea = new DrawingArea(); // TODO: use a cutom videowidget instead; is new necessary?
+		this.xn.main_window.videovbox.pack_start(drawingarea,true, true, 0); //TODO: check if this can be moved to main_window
+		this.drawingarea.realize();
 		var bus = new Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
@@ -169,10 +166,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 	
 	private void on_sync_message(Gst.Message msg) {
-		if(msg.structure ==null)
+		if(msg.structure==null)
 			return;
 		string message_name = msg.structure.get_name();
-		if(message_name == "prepare-xwindow-id") {
+		if(message_name=="prepare-xwindow-id") {
 			var imagesink = (XOverlay)msg.src;
 			imagesink.set_property("force-aspect-ratio", true);
 			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(this.drawingarea.window));

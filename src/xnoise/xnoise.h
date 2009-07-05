@@ -279,7 +279,7 @@ struct _XnoiseMainWindow {
 	XnoiseMusicBrowser* musicBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* window;
-	GtkAspectFrame* aspectframeVid;
+	GtkVBox* videovbox;
 	GtkImage* playpause_popup_image;
 };
 

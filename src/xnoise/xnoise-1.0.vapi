@@ -84,7 +84,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Builder, Xnoise.IParams {
 		public Xnoise.AlbumImage albumimage;
-		public Gtk.AspectFrame aspectframeVid;
 		public Gtk.Notebook browsernotebook;
 		public double current_volume;
 		public Xnoise.MusicBrowser musicBr;
@@ -98,6 +97,7 @@ namespace Xnoise {
 		public Gtk.ProgressBar songProgressBar;
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
+		public Gtk.VBox videovbox;
 		public Gtk.Window window;
 		public void change_song (int direction, bool handle_repeat_state = false);
 		public MainWindow (ref unowned Xnoise.Main xn);

@@ -416,10 +416,9 @@ ready to rock</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkAspectFrame" id="aspectframeVid">
+                      <object class="GtkVBox" id="videovbox">
                         <property name="visible">True</property>
-                        <property name="label_xalign">0</property>
-                        <property name="shadow_type">none</property>
+                        <property name="orientation">vertical</property>
                         <child>
                           <placeholder/>
                         </child>

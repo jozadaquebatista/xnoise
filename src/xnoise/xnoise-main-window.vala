@@ -33,6 +33,8 @@ using Gtk;
 
 public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	private const string MAIN_UI_FILE = Config.DATADIR + "ui/main_window.ui";
+	private const string SHOWVIDEO     = _("Show Video");
+	private const string SHOWTRACKLIST = _("Show Tracklist");
 	private Label song_title_label;
 	private bool _seek;
 	private bool is_fullscreen = false;
@@ -56,7 +58,6 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	public MusicBrowser musicBr;
 	public TrackList trackList;
 	public Window window;
-//	public Gtk.DrawingArea drawingarea;
 
 	public int repeatState { get; set; }
 
@@ -72,7 +73,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 		add_lastused_titles_to_tracklist();
 	}
 	
-	public AspectFrame aspectframeVid;	
+	public VBox videovbox;
 
 	private void create_widgets() {
 		try {
@@ -99,8 +100,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 			previousButton.clicked         += this.on_previous_button_clicked;
 			//---------------------
 			
-			this.aspectframeVid            = this.get_object("aspectframeVid") as Gtk.AspectFrame;
-//			this.drawingarea               = this.get_object("drawingAreaVid") as Gtk.DrawingArea;
+			this.videovbox                 = this.get_object("videovbox") as Gtk.VBox;
 			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = this.get_object("removeAllButton") as Gtk.Button;
@@ -114,14 +114,15 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
 			//--------------------
 
+			//SHOW VIDEO LABEL
+			this.showvideolabel            = this.get_object("showvideolabel") as Gtk.Label;
+			this.showvideolabel.set_text(SHOWVIDEO);
+			//--------------------
+			
 			//SHOW VIDEO BUTTON
 			this.showvideobutton            = this.get_object("showvideobutton") as Gtk.Button;
 			showvideobutton.can_focus      = false;
 			showvideobutton.clicked        += this.on_show_video_button_clicked;
-			//--------------------
-			
-			//SHOW VIDEO LABEL
-			this.showvideolabel            = this.get_object("showvideolabel") as Gtk.Label;
 			//--------------------
 			
 			//REPEAT MODE SELECTOR
@@ -200,6 +201,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 			musicBrScrollWin.add(this.musicBr);
 			browsernotebook    = this.get_object("notebook1") as Gtk.Notebook;
 			tracklistnotebook  = this.get_object("tracklistnotebook") as Gtk.Notebook;
+			tracklistnotebook.switch_page+=on_tracklistnotebook_switch_page;
 			
 			this.searchEntryMB = new Gtk.Entry(); 
 			this.searchEntryMB.primary_icon_stock = Gtk.STOCK_FIND; 
@@ -208,7 +210,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true); 
 			this.searchEntryMB.set_sensitive(true);
 			this.searchEntryMB.changed += musicBr.on_searchtext_changed;
-			this.searchEntryMB.icon_press += (s, p0, p1) => { //s:Entry, p0:Position, p1:Gdk.Event
+			this.searchEntryMB.icon_press += (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 				if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
 			};
 
@@ -267,17 +269,17 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	private void on_repeatState_changed(GLib.ParamSpec pspec) {
 		switch(this.repeatState) {
 			case Repeat.NOT_AT_ALL : {
-				repeatLabel.label = "no repeat";
+				repeatLabel.label = _("no repeat");
 				repeatImage.stock = Gtk.STOCK_EXECUTE; //TODO: create some other images
 				break;
 			}
 			case Repeat.SINGLE : {
-				repeatLabel.label = "repeat single";
+				repeatLabel.label = _("repeat single");
 				repeatImage.stock = Gtk.STOCK_REDO; 
 				break;
 			}
 			case Repeat.ALL : {
-				repeatLabel.label = "repeat all";
+				repeatLabel.label = _("repeat all");
 				repeatImage.stock = Gtk.STOCK_REFRESH; 
 				break;
 			}
@@ -312,7 +314,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 		var traymenu = new Menu();
 		playpause_popup_image = new Image();
 		playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
-		var playLabel = new Label("Play/Pause");
+		var playLabel = new Label(_("Play/Pause"));
 		playLabel.set_alignment(0, 0);
 		playLabel.set_width_chars(20);
 		var playpauseItem = new MenuItem();
@@ -326,7 +328,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 
 		var previousImage = new Image();
 		previousImage.set_from_stock(STOCK_MEDIA_PREVIOUS, IconSize.MENU);
-		var previousLabel = new Label("Previous");
+		var previousLabel = new Label(_("Previous"));
 		previousLabel.set_alignment(0, 0);
 		var previousItem = new MenuItem();
 		var previousHbox = new HBox(false,1);
@@ -339,7 +341,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 
 		var nextImage = new Image();
 		nextImage.set_from_stock(STOCK_MEDIA_NEXT, IconSize.MENU);
-		var nextLabel = new Label("Next");
+		var nextLabel = new Label(_("Next"));
 		nextLabel.set_alignment(0, 0);
 		var nextItem = new MenuItem();
 		var nextHbox = new HBox(false,1);
@@ -355,7 +357,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 
 		var exitImage = new Image();
 		exitImage.set_from_stock(STOCK_QUIT, IconSize.MENU);
-		var exitLabel = new Label("Exit");
+		var exitLabel = new Label(_("Exit"));
 		exitLabel.set_alignment(0, 0);
 		var exitItem = new MenuItem();
 		var exitHbox = new HBox(false,1);
@@ -616,14 +618,25 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	}
 
 	private void on_show_video_button_clicked() {
-		if(this.tracklistnotebook.page==0) {
-			this.tracklistnotebook.set_current_page(1);
-			this.showvideolabel.label =_("Show Tracklist");
-//			this.showvideobutton.label=_("Show Tracklist");
+		switch(this.tracklistnotebook.page) {
+			case 0:
+				this.tracklistnotebook.set_current_page(1);
+				break;
+			case 1:
+				this.tracklistnotebook.set_current_page(0);
+				break;
 		}
-		else {
-			this.tracklistnotebook.set_current_page(0);;
-			this.showvideolabel.label =_("Show Video");
+	}
+
+
+	private void on_tracklistnotebook_switch_page(void* sender, uint page) {
+		switch(page) {
+			case 0:
+				this.showvideolabel.set_text(SHOWVIDEO);
+				break;
+			case 1:
+				this.showvideolabel.set_text(SHOWTRACKLIST);
+				break;
 		}
 	}
 
