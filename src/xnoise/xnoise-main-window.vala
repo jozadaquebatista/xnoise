@@ -259,6 +259,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 		foreach(string uri in uris) {
 			TrackData td; 
 			if(dbBr.get_trackdata_for_uri(uri, out td)) {
+				print("title: %s\n", td.Title);
 				this.trackList.insert_title(0,
 					                        null,
 					                        (int)td.Tracknumber,
@@ -758,13 +759,13 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 		else {
 			artist = "unknown artist";
 		}
-		if (Main.instance().gPl.currenttitle!=null) {
+		if(Main.instance().gPl.currenttitle!=null) {
 			title = Main.instance().gPl.currenttitle;
 		}
 		else {
 			title = "unknown title";
 		}
-		if (Main.instance().gPl.currentalbum!=null) {
+		if(Main.instance().gPl.currentalbum!=null) {
 			album = Main.instance().gPl.currentalbum;
 		}
 		else {
@@ -781,7 +782,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 			if(album=="unknown album" && 
 			   artist=="unknown artist" && 
 			   title=="unknown title") 
-			   	text = Markup.printf_escaped("<b>%s</b>", basename);
+				text = Markup.printf_escaped("<b>%s</b>", basename);
 		}
 		else {
 			if((!Main.instance().gPl.playing)&&
