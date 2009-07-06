@@ -7,8 +7,8 @@
 #include <unique/unique.h>
 #include <stdlib.h>
 #include <string.h>
-#include <gtk/gtk.h>
 #include <gst/gst.h>
+#include <gtk/gtk.h>
 #include <float.h>
 #include <math.h>
 #include <gdk/gdk.h>
@@ -264,7 +264,7 @@ struct _XnoiseIParamsIface {
 };
 
 struct _XnoiseMainWindow {
-	GtkBuilder parent_instance;
+	GObject parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	GtkDrawingArea* videodrawingarea;
 	GtkLabel* showvideolabel;
@@ -285,7 +285,7 @@ struct _XnoiseMainWindow {
 };
 
 struct _XnoiseMainWindowClass {
-	GtkBuilderClass parent_class;
+	GObjectClass parent_class;
 };
 
 struct _XnoiseAboutDialog {
@@ -506,6 +506,7 @@ GType xnoise_iparams_get_type (void);
 GType xnoise_album_image_get_type (void);
 GType xnoise_music_browser_get_type (void);
 GType xnoise_track_list_get_type (void);
+GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 XnoiseMainWindow* xnoise_main_window_new (XnoiseMain** xn);
 XnoiseMainWindow* xnoise_main_window_construct (GType object_type, XnoiseMain** xn);
 void xnoise_main_window_playpause_button_set_play_picture (XnoiseMainWindow* self);
