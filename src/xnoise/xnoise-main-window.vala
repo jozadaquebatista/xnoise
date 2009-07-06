@@ -32,7 +32,9 @@ using GLib;
 using Gtk;
 
 public class Xnoise.MainWindow : GLib.Object, IParams {
-	private const string MAIN_UI_FILE = Config.UIDIR + "main_window.ui";
+	private const string MAIN_UI_FILE  = Config.UIDIR + "main_window.ui";
+	private const string MENU_UI_FILE  = Config.UIDIR + "main_ui.xml";
+	private const string APPICON       = Config.UIDIR + "xnoise_16x16.png";
 	private const string SHOWVIDEO     = _("Show Video");
 	private const string SHOWTRACKLIST = _("Show Tracklist");
 	private Label song_title_label;
@@ -46,6 +48,16 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private Gtk.VBox menuvbox;
 	public DrawingArea videodrawingarea;
 	public Label showvideolabel;
+	private const ActionEntry[] action_entries = {
+		{ "FileMenuAction", null, N_("_File") },
+			{ "AddRemoveAction", Gtk.STOCK_ADD, N_("_Add or Remove music"), null, N_("manage the content of the xnoise media library"), on_menu_add},
+			{ "SettingsAction", STOCK_PREFERENCES, null, null, null, on_settings_edit},
+			{ "QuitAction", STOCK_QUIT, null, null, null, quit_now},
+		{ "ViewMenuAction", null, N_("_View") },
+			{ "FullscreenAction", Gtk.STOCK_FULLSCREEN, null, null, null, on_fullscreen_clicked},
+		{ "HelpMenuAction", null, N_("_Help") },
+			{ "AboutAction", STOCK_ABOUT, null, null, null, on_help_about}
+	};
 //	private Image showvideoimage;
 	public Entry searchEntryMB;
 	public Button playPauseButton; 
@@ -647,7 +659,9 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			gb.add_from_file(MAIN_UI_FILE);
 			
 			this.window = gb.get_object("window1") as Gtk.Window;
-			
+			this.window.title = "xnoise media player";
+			this.window.set_icon_from_file(APPICON);
+								
 			//PLAY, PAUSE, STOP, NEXT, PREVIOUS BUTTONS
 			this.playPauseButton           = gb.get_object("playPauseButton") as Gtk.Button;
 			playPauseButton.can_focus      = false;
@@ -770,8 +784,6 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 
 			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox; 
 			sexyentryBox.add(searchEntryMB);
-			
-			this.window.set_icon_from_file(Config.UIDIR + "xnoise_16x16.png");
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 
@@ -780,8 +792,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			return;
 		}
 	
-		this.window.title = "xnoise media player";
-
+		//TRAYICON
 		this.trayicon = create_tray_icon();
 		this.menu     = add_menu_to_trayicon();				
 		
@@ -792,7 +803,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 
 		ui_manager.insert_action_group(action_group, 0);
 		try {
-			ui_manager.add_ui_from_file(Path.build_filename(Config.UIDIR, "main_ui.xml"));
+			ui_manager.add_ui_from_file(MENU_UI_FILE);
 		}
 		catch(GLib.Error e) {
 			print("%s\n", e.message);
@@ -809,16 +820,5 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		this.window.key_release_event  += this.on_key_released;
 		this.window.window_state_event += this.on_window_state_change;
 	}
-
-	private const ActionEntry[] action_entries = {
-		{ "FileMenuAction", null, N_("_File") },
-			{ "AddRemoveAction", Gtk.STOCK_ADD, N_("_Add or Remove music"), null, N_("manage the content of the xnoise media library"), on_menu_add},
-			{ "SettingsAction", STOCK_PREFERENCES, null, null, null, on_settings_edit},
-			{ "QuitAction", STOCK_QUIT, null, null, null, quit_now},
-		{ "ViewMenuAction", null, N_("_View") },
-			{ "FullscreenAction", Gtk.STOCK_FULLSCREEN, null, null, null, on_fullscreen_clicked},
-		{ "HelpMenuAction", null, N_("_Help") },
-			{ "AboutAction", STOCK_ABOUT, null, null, null, on_help_about}
-	};
 }
 
