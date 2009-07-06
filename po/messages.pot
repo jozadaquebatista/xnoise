@@ -1,106 +1,108 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: xnoise\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-07-07 00:16+0200\n"
-"PO-Revision-Date: \n"
-"Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: German\n"
-"X-Poedit-Country: GERMANY\n"
-"X-Poedit-SourceCharset: utf-8\n"
 
 #: src/xnoise/xnoise-main-window.vala:36
 msgid "Show Video"
-msgstr "Zu Video"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:37
 msgid "Show Tracklist"
-msgstr "Zu Tracklist"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:123
 msgid "Remove all"
-msgstr "Entferne Alle"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:128
 msgid "Remove selected titles"
-msgstr "Entferne Ausgewählten"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:341
 msgid "_File"
-msgstr "_Datei"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:342
 msgid "_Add or Remove music"
-msgstr "_Hinzufügen oder Entfernen von Musik"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:342
 msgid "manage the content of the xnoise media library"
-msgstr "Verwalte den Inhalt der Xnoise Medien-Bibliothek "
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:355
 msgid "_View"
-msgstr "_Ansicht"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:357
 msgid "_Help"
-msgstr "_Hilfe"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:418
 msgid "no repeat"
-msgstr "Nicht wiederholen"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:423
 msgid "repeat single"
-msgstr "Wiederhole Einzelnen"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:428
 msgid "repeat all"
-msgstr "Wiederhole Alle"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:463
 msgid "Play/Pause"
-msgstr "Abspielen/Pause"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:477
 msgid "Previous"
-msgstr "Vorheriger"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:490
 msgid "Next"
-msgstr "Nächster"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:506
 msgid "Exit"
-msgstr "Beende"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:908
 #: src/xnoise/xnoise-main-window.vala:926
 msgid "by"
-msgstr "von"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:910
 #: src/xnoise/xnoise-main-window.vala:928
 msgid "on"
-msgstr "auf"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:925
 #, c-format
 msgid "unknown title"
-msgstr "unbekannter Titel"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:927
 msgid "unknown artist"
-msgstr "unbekannter Künstler"
+msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:929
 msgid "unknown album"
-msgstr "unbekanntes Album"
+msgstr ""
 
 #: src/xnoise/xnoise-tracklist.vala:138
 msgid "Remove selected"
-msgstr "Entferne Ausgewählten"
-
+msgstr ""

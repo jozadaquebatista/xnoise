@@ -1,7 +1,9 @@
 NULL =
 
-ui_DATA = add_folder.ui \
+ui_DATA = \
+		add_folder.ui \
 		main_window.ui \
+		main_ui.xml \
 		settings.ui \
 		album.png \
 		artist.png \

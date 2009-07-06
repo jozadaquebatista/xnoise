@@ -31,8 +31,8 @@
 using GLib;
 using Gtk;
 
-public class Xnoise.MainWindow : Gtk.Builder, IParams {
-	private const string MAIN_UI_FILE = Config.DATADIR + "ui/main_window.ui";
+public class Xnoise.MainWindow : GLib.Object, IParams {
+	private const string MAIN_UI_FILE = Config.UIDIR + "main_window.ui";
 	private const string SHOWVIDEO     = _("Show Video");
 	private const string SHOWTRACKLIST = _("Show Tracklist");
 	private Label song_title_label;
@@ -43,6 +43,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	private int _posX_buffer;
 	private int _posY_buffer;
 	private Button showvideobutton;
+	private Gtk.VBox menuvbox;
 	public DrawingArea videodrawingarea;
 	public Label showvideolabel;
 //	private Image showvideoimage;
@@ -55,7 +56,7 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	public AlbumImage albumimage;
 	public Label repeatLabel;
 	public ProgressBar songProgressBar;
-	public double current_volume; //keep it global for saving to keyfile
+	public double current_volume; //keep it global for saving to params
 	public MusicBrowser musicBr;
 	public TrackList trackList;
 	public Window window;
@@ -66,6 +67,15 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 	public signal void sign_volume_changed(double fraction);
 	private Main xn;
 	
+	private ActionGroup action_group;
+	private UIManager ui_manager = new UIManager();
+	
+	public UIManager get_ui_manager ()
+	{
+		return ui_manager;
+	}
+		
+	//CONSTRUCTOR	
 	public MainWindow(ref weak Main xn) {
 		this.xn = xn;
 		par.data_register(this);
@@ -74,185 +84,12 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 		//initialization of videodrawingarea
 		videodrawingarea.realize();
 
-		notify["repeatState"]+=on_repeatState_changed;
+		//restore last state
 		add_lastused_titles_to_tracklist();
+
+		notify["repeatState"]+=on_repeatState_changed;
 	}
 	
-	private void create_widgets() {
-		try {
-			assert(GLib.FileUtils.test(MAIN_UI_FILE, FileTest.EXISTS));
-			
-			this.add_from_file(MAIN_UI_FILE);
-			this.window = this.get_object("window1") as Gtk.Window;
-			
-			//PLAY, PAUSE, STOP, NEXT, PREVIOUS BUTTONS
-			this.playPauseButton           = this.get_object("playPauseButton") as Gtk.Button;
-			playPauseButton.can_focus      = false;
-			this.playPauseButton.clicked   += this.on_playpause_button_clicked;
-			
-			var stopButton                 = this.get_object("stopButton") as Gtk.Button;
-			stopButton.can_focus           = false;
-			stopButton.clicked             += this.on_stop_button_clicked;
-			
-			var nextButton                 = this.get_object("nextButton") as Gtk.Button;
-			nextButton.can_focus           = false;
-			nextButton.clicked             += this.on_next_button_clicked;
-			
-			var previousButton             = this.get_object("previousButton") as Gtk.Button;
-			previousButton.can_focus       = false;
-			previousButton.clicked         += this.on_previous_button_clicked;
-			//---------------------
-			
-			//DRAWINGAREA FOR VIDEO
-			videodrawingarea               = this.get_object("videodrawingarea") as Gtk.DrawingArea;
-			videodrawingarea.events        = Gdk.EventMask.BUTTON_PRESS_MASK;
-//			videodrawingarea.event         += on_videodrawingarea_event;
-			
-			//REMOVE TITLE OR ALL TITLES BUTTONS
-			var removeAllButton            = this.get_object("removeAllButton") as Gtk.Button;
-			removeAllButton.can_focus      = false;
-			removeAllButton.clicked        += this.on_remove_all_button_clicked;
-			removeAllButton.set_tooltip_text(_("Remove all"));
-		
-			var removeSelectedButton       = this.get_object("removeSelectedButton") as Gtk.Button;
-			removeSelectedButton.can_focus = false;
-			removeSelectedButton.clicked   += this.on_remove_selected_button_clicked;
-			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
-			//--------------------
-
-			//SHOW VIDEO LABEL
-			this.showvideolabel            = this.get_object("showvideolabel") as Gtk.Label;
-			this.showvideolabel.set_text(SHOWVIDEO);
-			//--------------------
-			
-			//SHOW VIDEO BUTTON
-			this.showvideobutton            = this.get_object("showvideobutton") as Gtk.Button;
-			showvideobutton.can_focus      = false;
-			showvideobutton.clicked        += this.on_show_video_button_clicked;
-			//--------------------
-			
-			//REPEAT MODE SELECTOR
-			this.repeatButton              = this.get_object("repeatButton") as Gtk.Button;
-			repeatButton.can_focus         = false;
-			this.repeatButton.clicked      += this.on_repeat_button_clicked;
-			this.repeatLabel               = this.get_object("repeatLabel") as Gtk.Label;
-			this.repeatImage               = this.get_object("repeatImage") as Gtk.Image;
-			//--------------------
-			
-			//PLAYING TITLE IMAGE
-			var albumviewport              = this.get_object("albumviewport") as Gtk.Viewport;
-			
-			this.albumimage = new AlbumImage();
-			albumviewport.add(this.albumimage);
-//			albumimage.albumimage.button_press_event+=on_album_image_enter;
-//			albumimage.leave_notify_event+=on_album_image_leave;
-			//--------------------
-
-			//PLAYING TITLE NAME
-			this.song_title_label           = this.get_object("song_title_label") as Gtk.Label;
-			this.song_title_label.use_markup= true;
-			//--------------------
-			
-			//PROGRESS BAR
-			this.songProgressBar            = this.get_object("songProgressBar") as Gtk.ProgressBar; 
-			this.songProgressBar.button_press_event   += on_progressbar_press;
-			this.songProgressBar.button_release_event += on_progressbar_release;
-			this.songProgressBar.set_text("00:00 / 00:00");
-			this.songProgressBar.fraction = 0.0;
-			//---------------------
-			
-			this.hpaned = this.get_object("hpaned1") as Gtk.HPaned;
-			
-			//----------------
-			
-			//VOLUME SLIDE BUTTON
-			this.VolumeSlider = new Gtk.VolumeButton();
-			this.VolumeSlider.can_focus = false;
-			this.VolumeSlider.set_value(0.3); //Default value
-			this.VolumeSlider.value_changed += on_volume_slider_change;
-			var vbVol = this.get_object("vboxVolumeButton") as Gtk.VBox; 
-			vbVol.pack_start(VolumeSlider, false, false, 1);
-			//---------------
-			
-			///MAIN WINDOW MENU	
-			var menuChildAdd             = this.get_object("imagemenuitem1") as Gtk.ImageMenuItem; 
-			menuChildAdd.label           =_("_Add or Remove music"); 
-			var menuChildSettings        = this.get_object("imagemenupref") as Gtk.ImageMenuItem;
-			menuChildSettings.label      = _("_Settings"); 
-			var menuChildQuit            = this.get_object("imagemenuitem3") as Gtk.ImageMenuItem; 
-			menuChildQuit.label          = _("_Quit");
-			var menuChildAbout           = this.get_object("imagemenuitem10") as Gtk.ImageMenuItem;
-			menuChildAbout.label         = _("A_bout");
-			var menuChildFullScreen      = this.get_object("menuitemfullscreen") as Gtk.ImageMenuItem;
-			menuChildFullScreen.label    = _("_Fullscreen");
-
-			menuChildAdd.activate        += this.on_menu_add;
-			menuChildSettings.activate   += this.on_settings_edit;
-			menuChildQuit.activate       += this.quit_now;
-			menuChildAbout.activate      += this.on_help_about;
-			menuChildFullScreen.activate += this.on_fullscreen_clicked; 
-			
-			///Tracklist (right)
-			this.trackList = new TrackList();
-			this.trackList.set_size_request(100,100);
-			var trackListScrollWin = this.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
-			trackListScrollWin.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.ALWAYS);
-			trackListScrollWin.add(this.trackList);
-			
-			///MusicBrowser (left)
-			this.musicBr = new MusicBrowser();
-			this.musicBr.set_size_request(100,100);
-			var musicBrScrollWin = this.get_object("scroll_music_br") as Gtk.ScrolledWindow;
-			musicBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
-			musicBrScrollWin.add(this.musicBr);
-			browsernotebook    = this.get_object("notebook1") as Gtk.Notebook;
-			tracklistnotebook  = this.get_object("tracklistnotebook") as Gtk.Notebook;
-			tracklistnotebook.switch_page+=on_tracklistnotebook_switch_page;
-			
-			this.searchEntryMB = new Gtk.Entry(); 
-			this.searchEntryMB.primary_icon_stock = Gtk.STOCK_FIND; 
-			this.searchEntryMB.secondary_icon_stock = Gtk.STOCK_CLEAR; 
-			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, true); 
-			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true); 
-			this.searchEntryMB.set_sensitive(true);
-			this.searchEntryMB.changed += musicBr.on_searchtext_changed;
-			this.searchEntryMB.icon_press += (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
-				if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
-			};
-
-			var sexyentryBox = this.get_object("sexyentryBox") as Gtk.HBox; 
-			sexyentryBox.add(searchEntryMB);
-			
-			this.window.set_icon_from_file(Config.UIDIR + "xnoise_16x16.png");
-		} 
-		catch (GLib.Error err) {
-			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 
-				Gtk.ButtonsType.OK, "Failed to build main window! \n" + err.message);
-			msg.run();
-			return;
-		}
-	
-		this.window.title = "xnoise media player";
-
-		this.trayicon = create_tray_icon();
-		this.menu     = add_menu_to_trayicon();				
-
-		this.trayicon.popup_menu       += this.trayicon_menu_popup;
-		this.trayicon.activate         += this.toggle_window_visbility;
-		
-		this.window.delete_event       += this.on_close; //only send to tray
-		this.window.key_release_event  += this.on_key_released;
-		this.window.window_state_event += this.on_window_state_change;
-	}
-
-//	private bool on_videodrawingarea_event(Gtk.DrawingArea sender, Gdk.Event e) {
-//		if(e.button.type==Gdk.EventType.BUTTON_PRESS) {
-//			print("fullscreen\n");
-//			videodrawingarea.window.fullscreen();
-//		}
-//		return false;
-//	}
-
 	private void add_lastused_titles_to_tracklist() { 
 		DbBrowser dbBr = new DbBrowser();
 		string[] uris = dbBr.get_lastused_uris();
@@ -801,5 +638,187 @@ public class Xnoise.MainWindow : Gtk.Builder, IParams {
 		song_title_label.set_text(text);
 		song_title_label.use_markup = true;
 	}
+
+	private void create_widgets() {
+		try {
+			assert(GLib.FileUtils.test(MAIN_UI_FILE, FileTest.EXISTS));
+			
+			Builder gb = new Gtk.Builder();
+			gb.add_from_file(MAIN_UI_FILE);
+			
+			this.window = gb.get_object("window1") as Gtk.Window;
+			
+			//PLAY, PAUSE, STOP, NEXT, PREVIOUS BUTTONS
+			this.playPauseButton           = gb.get_object("playPauseButton") as Gtk.Button;
+			playPauseButton.can_focus      = false;
+			this.playPauseButton.clicked   += this.on_playpause_button_clicked;
+			
+			var stopButton                 = gb.get_object("stopButton") as Gtk.Button;
+			stopButton.can_focus           = false;
+			stopButton.clicked             += this.on_stop_button_clicked;
+			
+			var nextButton                 = gb.get_object("nextButton") as Gtk.Button;
+			nextButton.can_focus           = false;
+			nextButton.clicked             += this.on_next_button_clicked;
+			
+			var previousButton             = gb.get_object("previousButton") as Gtk.Button;
+			previousButton.can_focus       = false;
+			previousButton.clicked         += this.on_previous_button_clicked;
+			//---------------------
+			
+			//DRAWINGAREA FOR VIDEO
+			videodrawingarea               = gb.get_object("videodrawingarea") as Gtk.DrawingArea;
+			videodrawingarea.events        = Gdk.EventMask.BUTTON_PRESS_MASK;
+//			videodrawingarea.event         += on_videodrawingarea_event;
+			
+			//REMOVE TITLE OR ALL TITLES BUTTONS
+			var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;
+			removeAllButton.can_focus      = false;
+			removeAllButton.clicked        += this.on_remove_all_button_clicked;
+			removeAllButton.set_tooltip_text(_("Remove all"));
+		
+			var removeSelectedButton       = gb.get_object("removeSelectedButton") as Gtk.Button;
+			removeSelectedButton.can_focus = false;
+			removeSelectedButton.clicked   += this.on_remove_selected_button_clicked;
+			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
+			//--------------------
+
+			//SHOW VIDEO LABEL
+			this.showvideolabel            = gb.get_object("showvideolabel") as Gtk.Label;
+			this.showvideolabel.set_text(SHOWVIDEO);
+			//--------------------
+			
+			//SHOW VIDEO BUTTON
+			this.showvideobutton            = gb.get_object("showvideobutton") as Gtk.Button;
+			showvideobutton.can_focus      = false;
+			showvideobutton.clicked        += this.on_show_video_button_clicked;
+			//--------------------
+			
+			//REPEAT MODE SELECTOR
+			this.repeatButton              = gb.get_object("repeatButton") as Gtk.Button;
+			repeatButton.can_focus         = false;
+			this.repeatButton.clicked      += this.on_repeat_button_clicked;
+			this.repeatLabel               = gb.get_object("repeatLabel") as Gtk.Label;
+			this.repeatImage               = gb.get_object("repeatImage") as Gtk.Image;
+			//--------------------
+			
+			//PLAYING TITLE IMAGE
+			var albumviewport              = gb.get_object("albumviewport") as Gtk.Viewport;
+			
+			this.albumimage = new AlbumImage();
+			albumviewport.add(this.albumimage);
+//			albumimage.albumimage.button_press_event+=on_album_image_enter;
+//			albumimage.leave_notify_event+=on_album_image_leave;
+			//--------------------
+
+			//PLAYING TITLE NAME
+			this.song_title_label           = gb.get_object("song_title_label") as Gtk.Label;
+			this.song_title_label.use_markup= true;
+			//--------------------
+			
+			//PROGRESS BAR
+			this.songProgressBar            = gb.get_object("songProgressBar") as Gtk.ProgressBar; 
+			this.songProgressBar.button_press_event   += on_progressbar_press;
+			this.songProgressBar.button_release_event += on_progressbar_release;
+			this.songProgressBar.set_text("00:00 / 00:00");
+			this.songProgressBar.fraction = 0.0;
+			//---------------------
+			
+			this.hpaned = gb.get_object("hpaned1") as Gtk.HPaned;
+			
+			//----------------
+			
+			//VOLUME SLIDE BUTTON
+			this.VolumeSlider = new Gtk.VolumeButton();
+			this.VolumeSlider.can_focus = false;
+			this.VolumeSlider.set_value(0.3); //Default value
+			this.VolumeSlider.value_changed += on_volume_slider_change;
+			var vbVol = gb.get_object("vboxVolumeButton") as Gtk.VBox; 
+			vbVol.pack_start(VolumeSlider, false, false, 1);
+			//---------------
+
+			///BOX FOR MAIN MENU	
+			menuvbox                     = gb.get_object("menuvbox") as Gtk.VBox; 
+			
+			///Tracklist (right)
+			this.trackList = new TrackList();
+			this.trackList.set_size_request(100,100);
+			var trackListScrollWin = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
+			trackListScrollWin.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.ALWAYS);
+			trackListScrollWin.add(this.trackList);
+			
+			///MusicBrowser (left)
+			this.musicBr = new MusicBrowser();
+			this.musicBr.set_size_request(100,100);
+			var musicBrScrollWin = gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
+			musicBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
+			musicBrScrollWin.add(this.musicBr);
+			browsernotebook    = gb.get_object("notebook1") as Gtk.Notebook;
+			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
+			tracklistnotebook.switch_page+=on_tracklistnotebook_switch_page;
+			
+			this.searchEntryMB = new Gtk.Entry(); 
+			this.searchEntryMB.primary_icon_stock = Gtk.STOCK_FIND; 
+			this.searchEntryMB.secondary_icon_stock = Gtk.STOCK_CLEAR; 
+			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, true); 
+			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true); 
+			this.searchEntryMB.set_sensitive(true);
+			this.searchEntryMB.changed += musicBr.on_searchtext_changed;
+			this.searchEntryMB.icon_press += (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
+				if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
+			};
+
+			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox; 
+			sexyentryBox.add(searchEntryMB);
+			
+			this.window.set_icon_from_file(Config.UIDIR + "xnoise_16x16.png");
+		} 
+		catch (GLib.Error err) {
+			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 
+				Gtk.ButtonsType.OK, "Failed to build main window! \n" + err.message);
+			msg.run();
+			return;
+		}
+	
+		this.window.title = "xnoise media player";
+
+		this.trayicon = create_tray_icon();
+		this.menu     = add_menu_to_trayicon();				
+		
+		//UIMANAGER FOR MENUS, THIS ALLOWS INJECTION OF ENTRIES BY PLUGINS
+		action_group = new ActionGroup("XnoiseActions");
+		action_group.set_translation_domain(Config.GETTEXT_PACKAGE);
+		action_group.add_actions(action_entries, this);
+
+		ui_manager.insert_action_group(action_group, 0);
+		try {
+			ui_manager.add_ui_from_file(Path.build_filename(Config.UIDIR, "main_ui.xml"));
+		}
+		catch(GLib.Error e) {
+			print("%s\n", e.message);
+		}
+		
+		var menubar = (MenuBar)ui_manager.get_widget("/MainMenu");
+		menuvbox.pack_start(menubar, false, false, 0);
+
+		// TODO: Move these popup actions to uimanager		
+		this.trayicon.popup_menu       += this.trayicon_menu_popup;
+		this.trayicon.activate         += this.toggle_window_visbility;
+		
+		this.window.delete_event       += this.on_close; //only send to tray
+		this.window.key_release_event  += this.on_key_released;
+		this.window.window_state_event += this.on_window_state_change;
+	}
+
+	private const ActionEntry[] action_entries = {
+		{ "FileMenuAction", null, N_("_File") },
+			{ "AddRemoveAction", Gtk.STOCK_ADD, N_("_Add or Remove music"), null, N_("manage the content of the xnoise media library"), on_menu_add},
+			{ "SettingsAction", STOCK_PREFERENCES, null, null, null, on_settings_edit},
+			{ "QuitAction", STOCK_QUIT, null, null, null, quit_now},
+		{ "ViewMenuAction", null, N_("_View") },
+			{ "FullscreenAction", Gtk.STOCK_FULLSCREEN, null, null, null, on_fullscreen_clicked},
+		{ "HelpMenuAction", null, N_("_Help") },
+			{ "AboutAction", STOCK_ABOUT, null, null, null, on_help_about}
+	};
 }
 

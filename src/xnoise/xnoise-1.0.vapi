@@ -91,7 +91,7 @@ namespace Xnoise {
 		public void save_tracklist ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class MainWindow : Gtk.Builder, Xnoise.IParams {
+	public class MainWindow : GLib.Object, Xnoise.IParams {
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
 		public double current_volume;
@@ -109,6 +109,7 @@ namespace Xnoise {
 		public Gtk.DrawingArea videodrawingarea;
 		public Gtk.Window window;
 		public void change_song (int direction, bool handle_repeat_state = false);
+		public Gtk.UIManager get_ui_manager ();
 		public MainWindow (ref unowned Xnoise.Main xn);
 		public void playpause_button_set_pause_picture ();
 		public void playpause_button_set_play_picture ();

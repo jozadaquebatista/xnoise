@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<ui>
+	<menubar name="MainMenu">
+		<menu name="FileMenu" action="FileMenuAction">
+			<menuitem action="AddRemoveAction"/>
+			<menuitem action="SettingsAction"/>
+			<menuitem action="QuitAction" />
+		</menu>
+
+		<menu name="ViewMenu" action="ViewMenuAction">
+			<menuitem action="FullscreenAction"/>
+		</menu>
+	
+		<placeholder name="MenuBarOps"/>
+		
+		<menu name="HelpMenu" action="HelpMenuAction">
+			<placeholder name="HelpOps"/>
+			<separator/>
+			<menuitem action="AboutAction"/>
+		</menu>
+		
+	</menubar>
+	
+</ui>
+
