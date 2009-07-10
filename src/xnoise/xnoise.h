@@ -119,6 +119,8 @@ typedef struct _XnoiseMusicBrowserClass XnoiseMusicBrowserClass;
 typedef struct _XnoiseTrackList XnoiseTrackList;
 typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 
+#define XNOISE_TYPE_DIRECTION (xnoise_direction_get_type ())
+
 #define XNOISE_TYPE_ABOUT_DIALOG (xnoise_about_dialog_get_type ())
 #define XNOISE_ABOUT_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ABOUT_DIALOG, XnoiseAboutDialog))
 #define XNOISE_ABOUT_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ABOUT_DIALOG, XnoiseAboutDialogClass))
@@ -168,15 +170,13 @@ typedef struct _XnoiseDbWriterPrivate XnoiseDbWriterPrivate;
 typedef struct _XnoiseMusicBrowserPrivate XnoiseMusicBrowserPrivate;
 typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 
-#define XNOISE_TYPE_MUSIC_BROWSER_COLUMN (xnoise_music_browser_column_get_type ())
+#define XNOISE_TYPE_TRACK_STATE (xnoise_track_state_get_type ())
+
+#define XNOISE_TYPE_BROWSER_COLUMN (xnoise_browser_column_get_type ())
 
 #define XNOISE_TYPE_REPEAT (xnoise_repeat_get_type ())
 
 #define XNOISE_TYPE_TRACK_LIST_COLUMN (xnoise_track_list_column_get_type ())
-
-#define XNOISE_TYPE_TRACK_STATUS (xnoise_track_status_get_type ())
-
-#define XNOISE_TYPE_DIRECTION (xnoise_direction_get_type ())
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
 
@@ -288,6 +288,11 @@ struct _XnoiseMainWindowClass {
 	GObjectClass parent_class;
 };
 
+typedef enum  {
+	XNOISE_DIRECTION_NEXT = 0,
+	XNOISE_DIRECTION_PREVIOUS
+} XnoiseDirection;
+
 struct _XnoiseAboutDialog {
 	GtkAboutDialog parent_instance;
 	XnoiseAboutDialogPrivate * priv;
@@ -353,15 +358,21 @@ struct _XnoiseTrackListClass {
 	GtkTreeViewClass parent_class;
 };
 
-/* PROJECT WIDE USED INTERFACES AND ENUMS
+typedef enum  {
+	XNOISE_TRACK_STATE_STOPPED = 0,
+	XNOISE_TRACK_STATE_PLAYING,
+	XNOISE_TRACK_STATE_PAUSED,
+	XNOISE_TRACK_STATE_POSITION_FLAG
+} XnoiseTrackState;
+
+/* PROJECT WIDE USED STRUCTS, INTERFACES AND ENUMS
 Enums*/
 typedef enum  {
-	XNOISE_MUSIC_BROWSER_COLUMN_ICON = 0,
-	XNOISE_MUSIC_BROWSER_COLUMN_VIS_TEXT,
-	XNOISE_MUSIC_BROWSER_COLUMN_N_COLUMNS
-} XnoiseMusicBrowserColumn;
+	XNOISE_BROWSER_COLUMN_ICON = 0,
+	XNOISE_BROWSER_COLUMN_VIS_TEXT,
+	XNOISE_BROWSER_COLUMN_N_COLUMNS
+} XnoiseBrowserColumn;
 
-/*TODO: Rename*/
 typedef enum  {
 	XNOISE_REPEAT_NOT_AT_ALL = 0,
 	XNOISE_REPEAT_SINGLE,
@@ -378,19 +389,6 @@ typedef enum  {
 	XNOISE_TRACK_LIST_COLUMN_URI,
 	XNOISE_TRACK_LIST_COLUMN_N_COLUMNS
 } XnoiseTrackListColumn;
-
-typedef enum  {
-	XNOISE_TRACK_STATUS_STOPPED = 0,
-	XNOISE_TRACK_STATUS_PLAYING,
-	XNOISE_TRACK_STATUS_PAUSED,
-	XNOISE_TRACK_STATUS_POSITION_FLAG
-} XnoiseTrackStatus;
-
-/*TODO: Rename*/
-typedef enum  {
-	XNOISE_DIRECTION_NEXT = 0,
-	XNOISE_DIRECTION_PREVIOUS
-} XnoiseDirection;
 
 typedef enum  {
 	GST_STREAM_TYPE_UNKNOWN = 0,
@@ -439,6 +437,9 @@ struct _XnoisePluginInformationClass {
 struct _XnoiseIPluginIface {
 	GTypeInterface parent_iface;
 	gboolean (*init) (XnoiseIPlugin* self);
+	gboolean (*has_settings_widget) (XnoiseIPlugin* self);
+	GtkWidget* (*get_settings_widget) (XnoiseIPlugin* self);
+	const char* (*get_name) (XnoiseIPlugin* self);
 	XnoiseMain* (*get_xn) (XnoiseIPlugin* self);
 	void (*set_xn) (XnoiseIPlugin* self, XnoiseMain* value);
 };
@@ -511,7 +512,8 @@ XnoiseMainWindow* xnoise_main_window_new (XnoiseMain** xn);
 XnoiseMainWindow* xnoise_main_window_construct (GType object_type, XnoiseMain** xn);
 void xnoise_main_window_playpause_button_set_play_picture (XnoiseMainWindow* self);
 void xnoise_main_window_playpause_button_set_pause_picture (XnoiseMainWindow* self);
-void xnoise_main_window_change_song (XnoiseMainWindow* self, gint direction, gboolean handle_repeat_state);
+GType xnoise_direction_get_type (void);
+void xnoise_main_window_change_song (XnoiseMainWindow* self, XnoiseDirection direction, gboolean handle_repeat_state);
 void xnoise_main_window_progressbar_set_value (XnoiseMainWindow* self, guint pos, guint len);
 void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, const char* newuri);
 gint xnoise_main_window_get_repeatState (XnoiseMainWindow* self);
@@ -575,8 +577,9 @@ void xnoise_track_list_on_drag_end (XnoiseTrackList* self, XnoiseTrackList* send
 void xnoise_track_list_on_drag_data_get (XnoiseTrackList* self, XnoiseTrackList* sender, GdkDragContext* context, GtkSelectionData* selection, guint target_type, guint etime);
 char** xnoise_track_list_get_all_tracks (XnoiseTrackList* self, int* result_length1);
 void xnoise_track_list_add_uris (XnoiseTrackList* self, char** uris, int uris_length1);
-GtkTreeIter xnoise_track_list_insert_title (XnoiseTrackList* self, gint status, GdkPixbuf* pixbuf, gint tracknumber, const char* title, const char* album, const char* artist, const char* uri);
-void xnoise_track_list_set_state_picture_for_title (XnoiseTrackList* self, GtkTreeIter* iter, gint state);
+GType xnoise_track_state_get_type (void);
+GtkTreeIter xnoise_track_list_insert_title (XnoiseTrackList* self, XnoiseTrackState status, GdkPixbuf* pixbuf, gint tracknumber, const char* title, const char* album, const char* artist, const char* uri);
+void xnoise_track_list_set_state_picture_for_title (XnoiseTrackList* self, GtkTreeIter* iter, XnoiseTrackState state);
 void xnoise_track_list_set_play_picture (XnoiseTrackList* self);
 void xnoise_track_list_set_pause_picture (XnoiseTrackList* self);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
@@ -588,11 +591,9 @@ void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, con
 char* xnoise_track_list_get_uri_for_path (XnoiseTrackList* self, const GtkTreePath* path);
 extern XnoiseParams* xnoise_par;
 void xnoise_initialize (void);
-GType xnoise_music_browser_column_get_type (void);
+GType xnoise_browser_column_get_type (void);
 GType xnoise_repeat_get_type (void);
 GType xnoise_track_list_column_get_type (void);
-GType xnoise_track_status_get_type (void);
-GType xnoise_direction_get_type (void);
 GType gst_stream_type_get_type (void);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
@@ -602,11 +603,12 @@ XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type, Xnois
 GType xnoise_plugin_information_get_type (void);
 XnoisePlugin* xnoise_plugin_new (XnoisePluginInformation* info);
 XnoisePlugin* xnoise_plugin_construct (GType object_type, XnoisePluginInformation* info);
-gboolean xnoise_plugin_load (XnoisePlugin* self);
-gboolean xnoise_plugin_activate (XnoisePlugin* self, XnoiseMain** xn);
-void xnoise_plugin_deactivate (XnoisePlugin* self);
+gboolean xnoise_plugin_load (XnoisePlugin* self, XnoiseMain** xn);
+GtkWidget* xnoise_plugin_settingwidget (XnoisePlugin* self);
 gboolean xnoise_plugin_get_loaded (XnoisePlugin* self);
 gboolean xnoise_plugin_get_activated (XnoisePlugin* self);
+void xnoise_plugin_set_activated (XnoisePlugin* self, gboolean value);
+gboolean xnoise_plugin_get_configurable (XnoisePlugin* self);
 XnoisePluginLoader* xnoise_plugin_loader_new (XnoiseMain** xn);
 XnoisePluginLoader* xnoise_plugin_loader_construct (GType object_type, XnoiseMain** xn);
 GList* xnoise_plugin_loader_get_info_files (XnoisePluginLoader* self);
@@ -627,6 +629,9 @@ const char* xnoise_plugin_information_get_copyright (XnoisePluginInformation* se
 const char* xnoise_plugin_information_get_author (XnoisePluginInformation* self);
 GType xnoise_iplugin_get_type (void);
 gboolean xnoise_iplugin_init (XnoiseIPlugin* self);
+gboolean xnoise_iplugin_has_settings_widget (XnoiseIPlugin* self);
+GtkWidget* xnoise_iplugin_get_settings_widget (XnoiseIPlugin* self);
+const char* xnoise_iplugin_get_name (XnoiseIPlugin* self);
 XnoiseMain* xnoise_iplugin_get_xn (XnoiseIPlugin* self);
 void xnoise_iplugin_set_xn (XnoiseIPlugin* self, XnoiseMain* value);
 GType xnoise_plugin_manager_tree_get_type (void);

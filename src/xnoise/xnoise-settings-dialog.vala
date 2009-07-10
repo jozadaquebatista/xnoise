@@ -32,9 +32,11 @@ using GLib;
 using Gtk;
 
 public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
-	public Gtk.Dialog dialog;
+	private const string group = "XnoisePlugin";
 	private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
+	public Gtk.Dialog dialog;
 	private PluginManagerTree plugin_manager_tree;
+	private Gtk.Notebook notebook;
 	private Gtk.SpinButton sb;
 	private int fontsizeMB;
 	private Gtk.VBox vboxplugins;
@@ -95,12 +97,37 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 		};
 	}
 
+	private void add_plugin_tabs() {
+		foreach(string name in this.xn.plugin_loader.plugin_htable.get_keys()) { 
+			weak Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
+			if((p.activated) && (p.configurable)) {
+			  	Widget? w = p.settingwidget();
+				if(w!=null) notebook.append_page(w, new Gtk.Label(name));
+			}
+		}		
+	}
+	
+	private void remove_plugin_tabs(string name) {
+		//remove all tabs
+		int number_of_plugin_tab = notebook.get_n_pages();
+		for(int i=3;i<=number_of_plugin_tab;i++) { 
+			notebook.remove_page(-1); //remove last page
+		}
+	}
+	
+	private void reset_plugin_tabs(string name) {
+		//just remove all tabs and rebuild them
+		remove_plugin_tabs(name);
+		add_plugin_tabs();
+		this.dialog.show_all();	
+	}
+	
 	private bool setup_widgets() {
 		try {
 			assert(GLib.FileUtils.test(SETTINGS_UI_FILE, FileTest.EXISTS));
 			
 			this.add_from_file(SETTINGS_UI_FILE);
-			this.dialog = this.get_object("dialog1") as Gtk.Dialog;
+			this.dialog              = this.get_object("dialog1") as Gtk.Dialog;
 
 			var okButton             = this.get_object("buttonOK") as Gtk.Button;
 			okButton.can_focus       = false;
@@ -124,10 +151,16 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 			
 			vboxplugins              = this.get_object("vboxplugins") as Gtk.VBox;
 			
+			notebook                 = this.get_object("notebook1") as Gtk.Notebook;
+			
 			this.dialog.set_icon_from_file (Config.UIDIR + "xnoise_16x16.png");
 			this.dialog.set_position(Gtk.WindowPosition.CENTER);
+
+			add_plugin_tabs();
+			
 			plugin_manager_tree = new PluginManagerTree(ref xn);
 			vboxplugins.pack_start(plugin_manager_tree, true, true, 0);
+			plugin_manager_tree.sign_plugin_activestate_changed+=reset_plugin_tabs;
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 

@@ -108,7 +108,7 @@ namespace Xnoise {
 		public Gtk.Notebook tracklistnotebook;
 		public Gtk.DrawingArea videodrawingarea;
 		public Gtk.Window window;
-		public void change_song (int direction, bool handle_repeat_state = false);
+		public void change_song (Xnoise.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
 		public MainWindow (ref unowned Xnoise.Main xn);
 		public void playpause_button_set_pause_picture ();
@@ -148,11 +148,11 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Plugin : GLib.Object {
-		public bool activate (ref unowned Xnoise.Main xn);
-		public void deactivate ();
-		public bool load ();
+		public bool load (ref unowned Xnoise.Main xn);
 		public Plugin (Xnoise.PluginInformation info);
+		public Gtk.Widget? settingwidget ();
 		public bool activated { get; set; }
+		public bool configurable { get; set; }
 		public bool loaded { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -182,6 +182,7 @@ namespace Xnoise {
 	public class PluginManagerTree : Gtk.TreeView {
 		public void create_view ();
 		public PluginManagerTree (ref Xnoise.Main xn);
+		public signal void sign_plugin_activestate_changed (string name);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class SettingsDialog : Gtk.Builder, Xnoise.IParams {
@@ -196,7 +197,7 @@ namespace Xnoise {
 		public bool get_active_path (out Gtk.TreePath path);
 		public string[] get_all_tracks ();
 		public string get_uri_for_path (Gtk.TreePath path);
-		public Gtk.TreeIter insert_title (int status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
+		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
 		public TrackList ();
 		public bool not_empty ();
 		public void on_activated (string uri, Gtk.TreePath path);
@@ -210,7 +211,7 @@ namespace Xnoise {
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
 		public void set_pause_picture ();
 		public void set_play_picture ();
-		public void set_state_picture_for_title (Gtk.TreeIter iter, int state = Xnoise.TrackStatus.STOPPED);
+		public void set_state_picture_for_title (Gtk.TreeIter iter, Xnoise.TrackState state = Xnoise.TrackState.STOPPED);
 		public signal void sign_active_path_changed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -220,7 +221,10 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IPlugin : GLib.Object {
+		public abstract Gtk.Widget? get_settings_widget ();
+		public abstract bool has_settings_widget ();
 		public abstract bool init ();
+		public abstract string name { get; }
 		public abstract Xnoise.Main xn { get; set; }
 	}
 	[CCode (type_id = "XNOISE_TYPE_TRACK_DATA", cheader_filename = "xnoise.h")]
@@ -231,16 +235,16 @@ namespace Xnoise {
 		public string Genre;
 		public uint Tracknumber;
 	}
+	[CCode (cprefix = "XNOISE_BROWSER_COLUMN_", cheader_filename = "xnoise.h")]
+	public enum BrowserColumn {
+		ICON,
+		VIS_TEXT,
+		N_COLUMNS
+	}
 	[CCode (cprefix = "XNOISE_DIRECTION_", cheader_filename = "xnoise.h")]
 	public enum Direction {
 		NEXT,
 		PREVIOUS
-	}
-	[CCode (cprefix = "XNOISE_MUSIC_BROWSER_COLUMN_", cheader_filename = "xnoise.h")]
-	public enum MusicBrowserColumn {
-		ICON,
-		VIS_TEXT,
-		N_COLUMNS
 	}
 	[CCode (cprefix = "XNOISE_REPEAT_", cheader_filename = "xnoise.h")]
 	public enum Repeat {
@@ -259,8 +263,8 @@ namespace Xnoise {
 		URI,
 		N_COLUMNS
 	}
-	[CCode (cprefix = "XNOISE_TRACK_STATUS_", cheader_filename = "xnoise.h")]
-	public enum TrackStatus {
+	[CCode (cprefix = "XNOISE_TRACK_STATE_", cheader_filename = "xnoise.h")]
+	public enum TrackState {
 		STOPPED,
 		PLAYING,
 		PAUSED,

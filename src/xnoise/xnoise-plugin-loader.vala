@@ -53,7 +53,7 @@ public class Xnoise.PluginLoader : Object {
 			info = new PluginInformation(pluginInfoFile);
 			if(info.load_info()) {
 				plugin = new Plugin(info);
-				plugin.load();
+				plugin.load(ref xn);
 				plugin_htable.insert(info.name, plugin); //Hold reference to plugin in hash table
 			}
 			else {
@@ -96,10 +96,10 @@ public class Xnoise.PluginLoader : Object {
 	}
 
 	public bool activate_single_plugin(string name) {
-		return this.plugin_htable.lookup(name).activate(ref xn);
+		return this.plugin_htable.lookup(name).activated=true;//ref xn);
 	}	
 
 	public void deactivate_single_plugin(string name) {
-		this.plugin_htable.lookup(name).deactivate();
+		this.plugin_htable.lookup(name).activated=false;
 	}
 }

@@ -33,7 +33,12 @@ using Gtk;
 
 public class TitleToDecoration : GLib.Object, IPlugin {
 	public Xnoise.Main xn { get; set; }
-	
+	private Gtk.Button b;
+	public string name { 
+		get {
+			return "TitleToDecoration";
+		} 
+	}
 //    construct { // In this case it has to be a "construct" method
 //    	print("TestPlugin construction\n");
 //    }
@@ -97,8 +102,22 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 		xn.main_window.window.set_title(text);
 	}
 	
-    ~TitleToDecoration() {
-    	xn.main_window.window.set_title("xnoise media player");
-    }
+	~TitleToDecoration() {
+		xn.main_window.window.set_title("xnoise media player");
+	}
+
+	private void on_b_clicked(Gtk.Button sender) {
+		sender.label = sender.label + "_1";
+	}
+
+	public Gtk.Widget? get_settings_widget() {
+		b = new Gtk.Button.with_label("bingo");
+		b.clicked+=on_b_clicked;
+		return b;
+	}
+
+	public bool has_settings_widget() {
+		return true;
+	} 
 }
 

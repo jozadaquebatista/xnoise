@@ -42,6 +42,7 @@
                           <object class="GtkImage" id="image1">
                             <property name="visible">True</property>
                             <property name="stock">gtk-media-previous</property>
+                            <property name="icon-size">2</property>
                           </object>
                         </child>
                       </object>
@@ -61,6 +62,7 @@
                           <object class="GtkImage" id="image2">
                             <property name="visible">True</property>
                             <property name="stock">gtk-media-play</property>
+                            <property name="icon-size">2</property>
                           </object>
                         </child>
                       </object>
@@ -80,6 +82,7 @@
                           <object class="GtkImage" id="image3">
                             <property name="visible">True</property>
                             <property name="stock">gtk-media-stop</property>
+                            <property name="icon-size">2</property>
                           </object>
                         </child>
                       </object>
@@ -99,6 +102,7 @@
                           <object class="GtkImage" id="image4">
                             <property name="visible">True</property>
                             <property name="stock">gtk-media-next</property>
+                            <property name="icon-size">2</property>
                           </object>
                         </child>
                       </object>

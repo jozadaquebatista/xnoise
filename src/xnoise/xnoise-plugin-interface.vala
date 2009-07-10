@@ -29,7 +29,10 @@
  */
 
 public interface Xnoise.IPlugin : GLib.Object {
+	public abstract string name { get; }
 	public abstract Main xn { get; set; }
 	public abstract bool init();
+	public abstract bool has_settings_widget();
+	public abstract Gtk.Widget? get_settings_widget();
 }
 

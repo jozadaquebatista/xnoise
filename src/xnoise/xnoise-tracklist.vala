@@ -429,7 +429,7 @@ public class Xnoise.TrackList : TreeView {
 				tracknumberString = "%u".printf(tracknumb);
 			}
 			listmodel.set(new_iter,
-				TrackListColumn.STATE, TrackStatus.STOPPED,
+				TrackListColumn.STATE, TrackState.STOPPED,
 				TrackListColumn.TRACKNUMBER, tracknumberString,
 				TrackListColumn.TITLE, title,
 				TrackListColumn.ALBUM, album,
@@ -461,18 +461,18 @@ public class Xnoise.TrackList : TreeView {
 				TrackData t = tr.read_tag_from_file(file.get_path()); 
 
 				if (k==0) {
-					iter = this.insert_title(TrackStatus.PLAYING, 
+					iter = this.insert_title(TrackState.PLAYING, 
 					                              null, 
 					                              (int)t.Tracknumber,
 					                              t.Title, 
 					                              t.Album, 
 					                              t.Artist, 
 					                              uris[k]);
-					this.set_state_picture_for_title(iter, TrackStatus.PLAYING);
+					this.set_state_picture_for_title(iter, TrackState.PLAYING);
 					iter_2 = iter;
 				}
 				else {
-					iter = this.insert_title(TrackStatus.STOPPED, 
+					iter = this.insert_title(TrackState.STOPPED, 
 					                              null, 
 					                              (int)t.Tracknumber,
 					                              t.Title, 
@@ -536,7 +536,7 @@ public class Xnoise.TrackList : TreeView {
 		return true; 
 	}
 
-	public TreeIter insert_title(int status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri) {
+	public TreeIter insert_title(TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri) {
 		TreeIter iter;
 		string tracknumberString = null;;
 		listmodel.append(out iter);
@@ -555,15 +555,15 @@ public class Xnoise.TrackList : TreeView {
 		return iter;
 	}
 
-	public void set_state_picture_for_title(TreeIter iter, int state = TrackStatus.STOPPED) {
+	public void set_state_picture_for_title(TreeIter iter, TrackState state = TrackState.STOPPED) {
 		Gdk.Pixbuf pixbuf;
-		Gtk.Invisible w = new Gtk.Invisible();
+		var invisible = new Gtk.Invisible();
 	
-		pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
+		pixbuf = invisible.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
 	
-		if(state == TrackStatus.PLAYING) {
+		if(state == TrackState.PLAYING) {
 			listmodel.set(iter,
-				TrackListColumn.STATE, TrackStatus.PLAYING,
+				TrackListColumn.STATE, TrackState.PLAYING,
 				TrackListColumn.ICON, pixbuf,
 				-1);
 			bolden_row(ref iter);
@@ -571,7 +571,7 @@ public class Xnoise.TrackList : TreeView {
 		}
 		else {
 			listmodel.set(iter,
-				TrackListColumn.STATE, TrackStatus.PAUSED,
+				TrackListColumn.STATE, TrackState.PAUSED,
 				TrackListColumn.ICON, null,
 				-1);
 		}
@@ -646,7 +646,7 @@ public class Xnoise.TrackList : TreeView {
 		}
 		if (path_2.prev()) { //TODO: check if this is handled right
 			listmodel.get_iter(out iter, path_2);
-			listmodel.set(iter, TrackListColumn.STATE, TrackStatus.PLAYING, -1);
+			listmodel.set(iter, TrackListColumn.STATE, TrackState.PLAYING, -1);
 			return;
 		}
 		this.mark_last_title_active();
@@ -658,7 +658,7 @@ public class Xnoise.TrackList : TreeView {
 		numberOfRows = listmodel.iter_n_children(null);
 		if (numberOfRows == 0) return;
 		listmodel.iter_nth_child (out iter, null, numberOfRows -1);
-		listmodel.set(iter, TrackListColumn.STATE, TrackStatus.POSITION_FLAG, -1);
+		listmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
 	}
 	
 	public bool not_empty() {
@@ -678,7 +678,7 @@ public class Xnoise.TrackList : TreeView {
 		for (int i = 0; i < numberOfRows; i++) {
 			listmodel.iter_nth_child(out iter, null, i);
 			listmodel.set(iter,
-			              TrackListColumn.STATE, TrackStatus.STOPPED,
+			              TrackListColumn.STATE, TrackState.STOPPED,
 			              TrackListColumn.ICON, null,
 			              -1);
 			unbolden_row(ref iter);
@@ -760,7 +760,7 @@ public class Xnoise.TrackList : TreeView {
 		}
 		this.listmodel.get_iter(out iter, path);
 		this.reset_play_status_for_title();
-		this.set_state_picture_for_title(iter, TrackStatus.PLAYING);
+		this.set_state_picture_for_title(iter, TrackState.PLAYING);
 	}
 
 	private void on_active_path_changed(TrackList sender){ 
@@ -820,8 +820,6 @@ public class Xnoise.TrackList : TreeView {
 		columnTracknumber.reorderable = true;
 		this.insert_column(columnTracknumber, -1);
 		
-//		Params params = Params.instance();
-//		params.read_from_file_for_single(this);
 		renderer = new CellRendererText();
 		renderer.set_fixed_height_from_font(1);
 		renderer.ellipsize = Pango.EllipsizeMode.END; 

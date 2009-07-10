@@ -346,19 +346,19 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 				if(i==0) {
 					Main.instance().add_track_to_gst_player(uri);
 					iter = Main.instance().main_window.trackList.insert_title(
-						TrackStatus.PLAYING, 
+						TrackState.PLAYING, 
 						null, 
 						tracknumber,
 						Markup.printf_escaped("%s", td.Title), 
 						Markup.printf_escaped("%s", td.Album), 
 						Markup.printf_escaped("%s", td.Artist), 
 						uri);
-					Main.instance().main_window.trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
+					Main.instance().main_window.trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
 					iter_2 = iter;
 				}
 				else {
 					iter = Main.instance().main_window.trackList.insert_title(
-					    TrackStatus.STOPPED, 
+					    TrackState.STOPPED, 
 					    null, 
 					    tracknumber,
 					    Markup.printf_escaped("%s", td.Title), 
@@ -370,7 +370,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 			}
 			else {
 					iter = Main.instance().main_window.trackList.insert_title(
-					    TrackStatus.STOPPED, 
+					    TrackState.STOPPED, 
 					    null, 
 					    tracknumber,
 					    Markup.printf_escaped("%s", td.Title), 
@@ -394,7 +394,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	}
 
 	private void create_model() {	// DATA
-		model = new TreeStore(MusicBrowserColumn.N_COLUMNS, 
+		model = new TreeStore(BrowserColumn.N_COLUMNS, 
 		                      typeof(Gdk.Pixbuf), 
 		                      typeof(string));
 	}
@@ -413,22 +413,22 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		foreach(weak string artist in artistArray) { 	              //ARTISTS
 			model.prepend(out iter_artist, null); 
 			model.set(iter_artist,  	
-				MusicBrowserColumn.ICON, artist_pixb,		
-				MusicBrowserColumn.VIS_TEXT, artist,		
+				BrowserColumn.ICON, artist_pixb,		
+				BrowserColumn.VIS_TEXT, artist,		
 				-1); 
 			albumArray = albums_browser.get_albums(artist, ref searchtext);
 			foreach(weak string album in albumArray) { 			    //ALBUMS
 				model.prepend(out iter_album, iter_artist); 
 				model.set(iter_album,  	
-					MusicBrowserColumn.ICON, album_pixb,		
-					MusicBrowserColumn.VIS_TEXT, album,		
+					BrowserColumn.ICON, album_pixb,		
+					BrowserColumn.VIS_TEXT, album,		
 					-1); 
 				titleArray = titles_browser.get_titles(artist, album, ref searchtext);
 				foreach(weak string title in titleArray) {	         //TITLES
 					model.prepend(out iter_title, iter_album); 
 					model.set(iter_title,  	
-						MusicBrowserColumn.ICON, title_pixb,		
-						MusicBrowserColumn.VIS_TEXT, title,		
+						BrowserColumn.ICON, title_pixb,		
+						BrowserColumn.VIS_TEXT, title,		
 						-1); 
 				}
 			}

@@ -32,18 +32,35 @@ using Xnoise;
 using Gtk;
 
 public class TestPlugin : GLib.Object, IPlugin {
+	private Gtk.Button b;
 	public Xnoise.Main xn { get; set; }
-	
+	public string name { 
+		get {
+			return "Test";
+		} 
+	}
 //    construct { // In this case it has to be a "construct" method
 //    	print("TestPlugin construction\n");
 //    }
+    private void on_b_clicked(Gtk.Button sender) {
+    	sender.label = sender.label + "_1";
+    }
     
 	public bool init() {
 //    	xn.main_window.window.set_title("hallo");
 //		print("Testplugin: Hello World\n");
     	return true;
     }
-    
+
+	public Gtk.Widget? get_settings_widget() {
+		b = new Gtk.Button.with_label("bingo");
+		b.clicked+=on_b_clicked;
+		return b;
+	}  
+	
+	public bool has_settings_widget() {
+		return true;
+	}
 //    ~TestPlugin() {
 //    	print("destruct TestPlugin\n");
 //    }

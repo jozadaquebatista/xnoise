@@ -39,11 +39,11 @@ namespace Xnoise {
 }
 
 
-// PROJECT WIDE USED INTERFACES AND ENUMS
+// PROJECT WIDE USED STRUCTS, INTERFACES AND ENUMS
 
 //Enums
 
-public enum Xnoise.MusicBrowserColumn { //TODO: Rename
+public enum Xnoise.BrowserColumn {
 	ICON = 0,
 	VIS_TEXT,
 	N_COLUMNS
@@ -74,7 +74,7 @@ public enum Xnoise.TrackListColumn {
 	N_COLUMNS
 }
 
-public enum Xnoise.TrackStatus { //TODO: Rename
+public enum Xnoise.TrackState {
 	STOPPED = 0,
 	PLAYING,
 	PAUSED,

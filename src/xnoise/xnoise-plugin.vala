@@ -29,22 +29,36 @@
  */
 
 public class Xnoise.Plugin : GLib.Object {
-	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT TYPE RETURNED FROM MODULE INITIALIZATION 
+	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT FROM MODULE
 	private Module module;
 	private IPlugin loaded_plugin;
 	private Type type;
 	private PluginInformation info;
-	
-	public bool loaded { private set; get; }	
-	public bool activated { private set; get; }
+	public bool loaded { get; private set; }	
+	public bool activated { get; set; }
+	public bool configurable { get; private set; }
+    private Main xn;
 	
 	private delegate Type InitModuleFunction();
-	
+  	
 	public Plugin(PluginInformation info) {
 		this.info = info;
+		this.notify += (s, p) => {
+			switch(p.name) {
+				case "activated": {
+					if(s.activated)
+						activate();
+					else
+						deactivate();
+					break;
+				}
+				default: break;
+			}
+		};
     }
     
-    public bool load() {
+    public bool load(ref weak Main xn) {
+    	this.xn = xn;
 		if (this.loaded) return true;
 		string path = Module.build_path(Config.PLUGINSDIR, info.module);
 		module = Module.open(path, ModuleFlags.BIND_LAZY);
@@ -58,25 +72,38 @@ public class Xnoise.Plugin : GLib.Object {
 		if(init_module == null) return false;
 		type = init_module();
 		loaded = true;
+		this.configurable = false;
 		return true;
 	}
 
-	public bool activate (ref weak Main xn) {
-		if(!loaded) return false;
-		if(activated) return true;
+	private void activate() {
+		if(!loaded) return;
 		loaded_plugin = (IPlugin)Object.new(type, 
-		                               "xn", xn,    //set properties via this, because
+		                               "xn", this.xn,    //set properties via this, because
 		                               null);       //parameters are not allowed 
-		                                            //for this type of Object construction
-		if(loaded_plugin == null) return false;
-		if(!loaded_plugin.init()) return false;
-		activated = true;
-		return true;
+		                                            //for this kind of Object construction
+		if(loaded_plugin == null) {
+			message("Failed to load plugin %s. Cannot get type.\n", loaded_plugin.name);
+			activated = false; 
+		}
+		if(!loaded_plugin.init()) {
+			message("Failed to load plugin %s. Cannot get initialize.\n", loaded_plugin.name);
+			activated = false;
+		}
+		this.configurable = this.loaded_plugin.has_settings_widget();
 	}
 
-	public void deactivate() {
+	private void deactivate() {
 		loaded_plugin = null;
-		activated = false;
+	}
+	
+	public Gtk.Widget? settingwidget() {
+		if(this.loaded && this.activated) {
+			return this.loaded_plugin.get_settings_widget();
+		}
+		else {
+			return null;
+		}
 	}
 }
 

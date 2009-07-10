@@ -48,6 +48,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private Gtk.VBox menuvbox;
 	public DrawingArea videodrawingarea;
 	public Label showvideolabel;
+	
 	private const ActionEntry[] action_entries = {
 		{ "FileMenuAction", null, N_("_File") },
 			{ "AddRemoveAction", Gtk.STOCK_ADD, N_("_Add or Remove music"), null, N_("manage the content of the xnoise media library"), on_menu_add},
@@ -58,6 +59,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		{ "HelpMenuAction", null, N_("_Help") },
 			{ "AboutAction", STOCK_ABOUT, null, null, null, on_help_about}
 	};
+	
 //	private Image showvideoimage;
 	public Entry searchEntryMB;
 	public Button playPauseButton; 
@@ -339,12 +341,12 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	}
 
 	public void playpause_button_set_play_picture() {
-		var playImage = new Image.from_stock(STOCK_MEDIA_PLAY, IconSize.BUTTON);
+		var playImage = new Image.from_stock(STOCK_MEDIA_PLAY, IconSize.SMALL_TOOLBAR);
 		playPauseButton.set_image(playImage);
 	}
 
 	public void playpause_button_set_pause_picture() {
-		var pauseImage = new Image.from_stock(STOCK_MEDIA_PAUSE, IconSize.BUTTON);
+		var pauseImage = new Image.from_stock(STOCK_MEDIA_PAUSE, IconSize.SMALL_TOOLBAR);
 		playPauseButton.set_image(pauseImage);
 	}
 
@@ -368,7 +370,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		TreePath path;
 		trackList.get_active_path(out path);
 		trackList.listmodel.get_iter(out iter, path); 
-		trackList.listmodel.set(iter, TrackListColumn.STATE, TrackStatus.POSITION_FLAG, -1);
+		trackList.listmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
 	}
 
 	private void on_playpause_button_clicked() { //TODO: maybe use the stored position
@@ -411,7 +413,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		change_song(Direction.PREVIOUS);
 	}
 
-	public void change_song(int direction, bool handle_repeat_state = false) {
+	public void change_song(Direction direction, bool handle_repeat_state = false) {
 		TreeIter iter;
 		TreePath path = null;
 		int rowcount = -1;
@@ -438,7 +440,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 
 		if(trackList.listmodel.get_iter(out iter, path)) {       //goto next song, if possible...
 			trackList.reset_play_status_for_title();
-			trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
+			trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
 			if(Main.instance().gPl.paused) this.trackList.set_pause_picture();
 			trackList.set_focus_on_iter(ref iter);
 		} 
@@ -446,7 +448,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		        (((handle_repeat_state)&&
 		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { //...or goto first song, if possible ...
 			trackList.reset_play_status_for_title();
-			trackList.set_state_picture_for_title(iter, TrackStatus.PLAYING);
+			trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
 			if(Main.instance().gPl.paused) this.trackList.set_pause_picture();
 			trackList.set_focus_on_iter(ref iter);
 		}
