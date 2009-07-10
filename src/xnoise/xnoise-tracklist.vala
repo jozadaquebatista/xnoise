@@ -113,17 +113,19 @@ public class Xnoise.TrackList : TreeView {
 			case 3:
 				if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
 					((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
-						print("xyz\n");
-						//TODO handle right click menu opening right
-//						return false; 
-//						selection.unselect_path(path);
-				} 								
-//				selection.select_path(path);
+						return false; 
+				}
+				else {
+					int selectioncount = selection.count_selected_rows();
+					if(selectioncount<=1) {
+						selection.unselect_all();
+						selection.select_path(path);
+					}
+				}							
 				rightclick_menu_popup(e.time);
 				return true;
-				}
-		if(!(selection.count_selected_rows()>0)) 
-			selection.select_path(path);
+			}
+		if(!(selection.count_selected_rows()>0)) selection.select_path(path);
 		return false; 
 	}
 		
@@ -217,7 +219,7 @@ public class Xnoise.TrackList : TreeView {
 		GLib.Value uri;
 		List<weak TreePath> paths;
 		weak Gtk.TreeSelection sel;
-		string[] uris; //TODO: = new string[0] od. neuw {}
+		string[] uris; 
 
 		sel = this.get_selection();
 		paths = sel.get_selected_rows(null);
@@ -523,8 +525,7 @@ public class Xnoise.TrackList : TreeView {
 		TreeIter iter;
 		if (listmodel.get_iter(out iter, path)) {
 			listmodel.get(iter, 
-				TrackListColumn.URI, out uri);//, 
-//				-1);
+				TrackListColumn.URI, out uri);
 		}
 		this.on_activated(uri, path);
 	}
@@ -611,8 +612,7 @@ public class Xnoise.TrackList : TreeView {
 		for (int i = 0; i < numberOfRows; i++) {
 			listmodel.iter_nth_child(out iter, null, i);
 			listmodel.get(iter, 
-				TrackListColumn.STATE, out status);//, 
-//				-1);
+				TrackListColumn.STATE, out status);
 			if(status>0) {
 				listmodel.set(iter,
 					TrackListColumn.ICON, pixbuf,
@@ -778,8 +778,7 @@ public class Xnoise.TrackList : TreeView {
 		string uri = "";
 		if (listmodel.get_iter(out iter, path)) {
 			listmodel.get(iter,
-				TrackListColumn.URI, out uri);//,
-//				-1);
+				TrackListColumn.URI, out uri);
 		}
 		return uri;
 	}
