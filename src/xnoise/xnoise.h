@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gst/gst.h>
-#include <gst/interfaces/xoverlay.h>
 #include <gtk/gtk.h>
 #include <float.h>
 #include <math.h>
@@ -251,7 +250,6 @@ struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
 	GstElement* playbin;
-	GstXOverlay* imagesink;
 };
 
 struct _XnoiseGstPlayerClass {

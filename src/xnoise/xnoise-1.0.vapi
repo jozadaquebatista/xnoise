@@ -56,7 +56,6 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
-		public Gst.XOverlay imagesink;
 		public Gst.Element playbin;
 		public GstPlayer (ref unowned Gtk.DrawingArea da);
 		public void pause ();
