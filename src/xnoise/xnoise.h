@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gst/gst.h>
+#include <gst/interfaces/xoverlay.h>
 #include <gtk/gtk.h>
 #include <float.h>
 #include <math.h>
@@ -250,6 +251,7 @@ struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
 	GstElement* playbin;
+	GstXOverlay* imagesink;
 };
 
 struct _XnoiseGstPlayerClass {
@@ -281,6 +283,7 @@ struct _XnoiseMainWindow {
 	XnoiseMusicBrowser* musicBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* window;
+	GtkWindow* fullscreenwindow;
 	GtkImage* playpause_popup_image;
 };
 
@@ -518,6 +521,8 @@ void xnoise_main_window_progressbar_set_value (XnoiseMainWindow* self, guint pos
 void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, const char* newuri);
 gint xnoise_main_window_get_repeatState (XnoiseMainWindow* self);
 void xnoise_main_window_set_repeatState (XnoiseMainWindow* self, gint value);
+gboolean xnoise_main_window_get_fullscreenwindowvisible (XnoiseMainWindow* self);
+void xnoise_main_window_set_fullscreenwindowvisible (XnoiseMainWindow* self, gboolean value);
 GType xnoise_about_dialog_get_type (void);
 XnoiseAboutDialog* xnoise_about_dialog_new (void);
 XnoiseAboutDialog* xnoise_about_dialog_construct (GType object_type);

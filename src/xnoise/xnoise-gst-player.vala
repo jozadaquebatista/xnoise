@@ -195,13 +195,13 @@ public class Xnoise.GstPlayer : GLib.Object {
 			default: break;
 		}			
 	}
-
+	public XOverlay imagesink;
 	private void on_sync_message(Gst.Message msg) {
 		if(msg.structure==null)
 			return;
 		string message_name = msg.structure.get_name();
 		if(message_name=="prepare-xwindow-id") {
-			var imagesink = (XOverlay)msg.src;
+			imagesink = (XOverlay)msg.src;
 			imagesink.set_property("force-aspect-ratio", true);
 			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(da.window));
 		}

@@ -61,9 +61,9 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	};
 	
 //	private Image showvideoimage;
-	public Entry searchEntryMB;
-	public Button playPauseButton; 
-	public Button repeatButton;
+	public Gtk.Entry searchEntryMB;
+	public Gtk.Button playPauseButton; 
+	public Gtk.Button repeatButton;
 	public Gtk.Notebook browsernotebook;
 	public Gtk.Notebook tracklistnotebook;
 	public Image repeatImage;
@@ -73,10 +73,13 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	public double current_volume; //keep it global for saving to params
 	public MusicBrowser musicBr;
 	public TrackList trackList;
-	public Window window;
+	public Gtk.Window window;
+	public Gtk.Window fullscreenwindow;
+	private Gtk.VBox videovbox;
 
 	public int repeatState { get; set; }
-
+	public bool fullscreenwindowvisible { get; set; }
+	
 	public signal void sign_pos_changed(double fraction);
 	public signal void sign_volume_changed(double fraction);
 	private Main xn;
@@ -97,11 +100,17 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		
 		//initialization of videodrawingarea
 		videodrawingarea.realize();
+		videodrawingarea.button_press_event+=on_video_da_button_press;
 
 		//restore last state
 		add_lastused_titles_to_tracklist();
 
 		notify["repeatState"]+=on_repeatState_changed;
+		notify["fullscreenwindowvisible"]+=on_fullscreenwindowvisible;
+	}
+	
+	private void on_fullscreenwindowvisible(GLib.ParamSpec pspec) {
+		this.showvideobutton.set_sensitive(!fullscreenwindowvisible);
 	}
 	
 	private void add_lastused_titles_to_tracklist() { 
@@ -120,6 +129,34 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			}
 		}
 	}
+
+	private bool on_video_da_button_press(Gdk.EventButton e) {
+		if(!(e.button==3)) return false;
+		if(!fullscreenwindowvisible) {
+			int monitor;
+			Gdk.Rectangle rectangle;
+			Gdk.Screen screen = this.videodrawingarea.get_screen();
+			monitor = screen.get_monitor_at_window(this.videodrawingarea.window);
+			screen.get_monitor_geometry(monitor, out rectangle);
+			fullscreenwindow.move(rectangle.x, rectangle.y);
+			this.videodrawingarea.reparent(fullscreenwindow);
+			fullscreenwindow.fullscreen();
+			this.videodrawingarea.window.fullscreen();
+			fullscreenwindow.show_all();
+			this.videodrawingarea.window.process_updates(true);
+			this.tracklistnotebook.set_current_page(0);
+			fullscreenwindowvisible = true;
+		}
+		else {
+			this.videodrawingarea.window.unfullscreen();
+			this.videodrawingarea.reparent(videovbox);
+			fullscreenwindow.hide_all();
+			this.tracklistnotebook.set_current_page(1);
+			fullscreenwindowvisible = false;
+			this.videovbox.show_all();
+		}
+		return false;
+	}	
 	
 //	private bool on_album_image_enter() {
 //		print("enter album image\n");
@@ -485,7 +522,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private void on_show_video_button_clicked() {
 		switch(this.tracklistnotebook.page) {
 			case 0:
-				this.tracklistnotebook.set_current_page(1);
+				if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(1);
 				break;
 			case 1:
 				this.tracklistnotebook.set_current_page(0);
@@ -684,8 +721,9 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			
 			//DRAWINGAREA FOR VIDEO
 			videodrawingarea               = gb.get_object("videodrawingarea") as Gtk.DrawingArea;
+			videodrawingarea.set_double_buffered(false);
 			videodrawingarea.events        = Gdk.EventMask.BUTTON_PRESS_MASK;
-//			videodrawingarea.event         += on_videodrawingarea_event;
+			videovbox                      = gb.get_object("videovbox") as Gtk.VBox;
 			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;
@@ -786,6 +824,12 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 
 			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox; 
 			sexyentryBox.add(searchEntryMB);
+			
+			//Fullscreen window 
+			this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);
+			this.fullscreenwindow.realize();
+			this.fullscreenwindow.set_title("Xnoise media player - Fullscreen");
+			this.fullscreenwindow.set_icon_from_file(APPICON);
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 

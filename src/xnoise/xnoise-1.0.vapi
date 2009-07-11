@@ -56,6 +56,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
+		public Gst.XOverlay imagesink;
 		public Gst.Element playbin;
 		public GstPlayer (ref unowned Gtk.DrawingArea da);
 		public void pause ();
@@ -95,6 +96,7 @@ namespace Xnoise {
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
 		public double current_volume;
+		public Gtk.Window fullscreenwindow;
 		public Xnoise.MusicBrowser musicBr;
 		public Gtk.Button playPauseButton;
 		public Gtk.Image playpause_popup_image;
@@ -115,6 +117,7 @@ namespace Xnoise {
 		public void playpause_button_set_play_picture ();
 		public void progressbar_set_value (uint pos, uint len);
 		public void set_displayed_title (string newuri);
+		public bool fullscreenwindowvisible { get; set; }
 		public int repeatState { get; set; }
 		public signal void sign_pos_changed (double fraction);
 		public signal void sign_volume_changed (double fraction);

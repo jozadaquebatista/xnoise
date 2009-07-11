@@ -73,7 +73,8 @@ public class Xnoise.Main : GLib.Object {
 		};
 		gPl.sign_tag_changed += main_window.set_displayed_title;
 		gPl.sign_video_playing += () => { //handle stop signal from gst player
-			main_window.tracklistnotebook.set_current_page(1);
+			if(!main_window.fullscreenwindowvisible) 
+				main_window.tracklistnotebook.set_current_page(1);
 		};
 //		gPl.sign_tag_changed += main_window.albumimage.find_album_image;
 

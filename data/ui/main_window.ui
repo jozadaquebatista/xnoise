@@ -337,8 +337,18 @@ ready to rock</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkDrawingArea" id="videodrawingarea">
+                      <object class="GtkVBox" id="videovbox">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="videodrawingarea">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">1</property>
