@@ -39,7 +39,7 @@
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <child>
-                          <object class="GtkImage" id="image1">
+                          <object class="GtkImage" id="imageprev">
                             <property name="visible">True</property>
                             <property name="stock">gtk-media-previous</property>
                             <property name="icon-size">2</property>
