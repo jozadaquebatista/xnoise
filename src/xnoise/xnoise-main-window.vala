@@ -52,8 +52,9 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private const ActionEntry[] action_entries = {
 		{ "FileMenuAction", null, N_("_File") },
 			{ "AddRemoveAction", Gtk.STOCK_ADD, N_("_Add or Remove music"), null, N_("manage the content of the xnoise media library"), on_menu_add},
-			{ "SettingsAction", STOCK_PREFERENCES, null, null, null, on_settings_edit},
 			{ "QuitAction", STOCK_QUIT, null, null, null, quit_now},
+		{ "EditMenuAction", null, N_("_Edit") },
+			{ "SettingsAction", STOCK_PREFERENCES, null, null, null, on_settings_edit},
 		{ "ViewMenuAction", null, N_("_View") },
 			{ "FullscreenAction", Gtk.STOCK_FULLSCREEN, null, null, null, on_fullscreen_clicked},
 		{ "HelpMenuAction", null, N_("_Help") },

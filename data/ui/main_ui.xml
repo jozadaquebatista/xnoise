@@ -3,8 +3,11 @@
 	<menubar name="MainMenu">
 		<menu name="FileMenu" action="FileMenuAction">
 			<menuitem action="AddRemoveAction"/>
-			<menuitem action="SettingsAction"/>
 			<menuitem action="QuitAction" />
+		</menu>
+
+		<menu name="EditMenu" action="EditMenuAction">
+			<menuitem action="SettingsAction"/>
 		</menu>
 
 		<menu name="ViewMenu" action="ViewMenuAction">
@@ -20,6 +23,5 @@
 		</menu>
 		
 	</menubar>
-	
 </ui>
 

@@ -33,6 +33,3 @@ public Type init_module() {
 	return typeof(TestPlugin);
 }
 
-//public Gtk.Widget create_settings_widget(TestPlugin thisplugin) {
-//	return thisplugin.create_settings_widget();
-//}
