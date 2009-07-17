@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 12:54+0200\n"
+"POT-Creation-Date: 2009-07-17 19:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgid "_File"
 msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:54
-msgid "_Add or Remove music"
+msgid "_Add or Remove media"
 msgstr ""
 
 #: src/xnoise/xnoise-main-window.vala:54
