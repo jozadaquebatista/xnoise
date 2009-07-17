@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-07 00:16+0200\n"
+"POT-Creation-Date: 2009-07-17 12:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,93 +16,97 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/xnoise/xnoise-main-window.vala:36
+#: src/xnoise/xnoise-main-window.vala:38
 msgid "Show Video"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:37
+#: src/xnoise/xnoise-main-window.vala:39
 msgid "Show Tracklist"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:123
-msgid "Remove all"
-msgstr ""
-
-#: src/xnoise/xnoise-main-window.vala:128
-msgid "Remove selected titles"
-msgstr ""
-
-#: src/xnoise/xnoise-main-window.vala:341
+#: src/xnoise/xnoise-main-window.vala:53
 msgid "_File"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:342
+#: src/xnoise/xnoise-main-window.vala:54
 msgid "_Add or Remove music"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:342
+#: src/xnoise/xnoise-main-window.vala:54
 msgid "manage the content of the xnoise media library"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:355
+#: src/xnoise/xnoise-main-window.vala:56
+msgid "_Edit"
+msgstr ""
+
+#: src/xnoise/xnoise-main-window.vala:58
 msgid "_View"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:357
+#: src/xnoise/xnoise-main-window.vala:60
 msgid "_Help"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:418
+#: src/xnoise/xnoise-main-window.vala:175
 msgid "no repeat"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:423
+#: src/xnoise/xnoise-main-window.vala:180
 msgid "repeat single"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:428
+#: src/xnoise/xnoise-main-window.vala:185
 msgid "repeat all"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:463
+#: src/xnoise/xnoise-main-window.vala:220
 msgid "Play/Pause"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:477
+#: src/xnoise/xnoise-main-window.vala:234
 msgid "Previous"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:490
+#: src/xnoise/xnoise-main-window.vala:247
 msgid "Next"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:506
+#: src/xnoise/xnoise-main-window.vala:263
 msgid "Exit"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:908
-#: src/xnoise/xnoise-main-window.vala:926
+#: src/xnoise/xnoise-main-window.vala:665
+#: src/xnoise/xnoise-main-window.vala:683
 msgid "by"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:910
-#: src/xnoise/xnoise-main-window.vala:928
+#: src/xnoise/xnoise-main-window.vala:667
+#: src/xnoise/xnoise-main-window.vala:685
 msgid "on"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:925
+#: src/xnoise/xnoise-main-window.vala:682
 #, c-format
 msgid "unknown title"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:927
+#: src/xnoise/xnoise-main-window.vala:684
 msgid "unknown artist"
 msgstr ""
 
-#: src/xnoise/xnoise-main-window.vala:929
+#: src/xnoise/xnoise-main-window.vala:686
 msgid "unknown album"
 msgstr ""
 
-#: src/xnoise/xnoise-tracklist.vala:138
+#: src/xnoise/xnoise-main-window.vala:733
+msgid "Remove all"
+msgstr ""
+
+#: src/xnoise/xnoise-main-window.vala:738
+msgid "Remove selected titles"
+msgstr ""
+
+#: src/xnoise/xnoise-tracklist.vala:140
 msgid "Remove selected"
 msgstr ""
