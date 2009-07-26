@@ -158,7 +158,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 			}
 			buffer = buffer + ";" + s;
 		}
-		ht_string.insert(key,buffer);
+		if(buffer!=null) ht_string.insert(key,buffer);
 	}
 	//Type string
 	public void set_string_value(string key, string value) {

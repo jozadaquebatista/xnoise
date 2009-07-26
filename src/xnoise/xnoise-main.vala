@@ -125,6 +125,14 @@ public class Xnoise.Main : GLib.Object {
 		instance().quit();
 	}
 
+	private void save_activated_plugins() {
+		print("\nsaving activated plugins...\n");
+		string[] activatedplugins = {};
+		foreach(weak string name in this.plugin_loader.plugin_htable.get_keys()) {
+			if(this.plugin_loader.plugin_htable.lookup(name).activated) activatedplugins+=name;
+		}
+		par.set_string_list_value("activated_plugins", activatedplugins);
+	}
 
 	private string[] final_tracklist; 
 	public void save_tracklist() {
@@ -138,6 +146,7 @@ public class Xnoise.Main : GLib.Object {
 	public void quit() {
 		this.gPl.stop();
 		this.save_tracklist();
+		this.save_activated_plugins();
 		par.write_all_parameters_to_file();
 		par = null;
 		print ("closing...\n");
