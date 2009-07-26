@@ -53,7 +53,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_CREATE_MLIB = 
 		"CREATE TABLE mlib(id integer primary key, tracknumber integer, artist text, album text, title text, genre text, uri text);";
 	private static const string STMT_CREATE_LASTUSED = 
-		"CREATE TABLE lastused(uri text);";
+		"CREATE TABLE lastused(uri text, mediatype integer);"; //for now 0=audio,1=video
 	private static const string STMT_CREATE_MUSICFOLDERS = 
 		"CREATE TABLE music_folders(name text primary key);";
 
@@ -75,7 +75,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_INSERT_ENTRY = 
 		"INSERT INTO mlib (tracknumber, artist, album, title, genre, uri) VALUES (?, ?, ?, ?, ?, ?)";
 	private static const string STMT_INSERT_LASTUSED = 
-		"INSERT INTO lastused (uri) VALUES (?)";
+		"INSERT INTO lastused (uri,mediatype) VALUES (?,?)";
 	private static const string STMT_WRITE_MUSIC_FOLDERS = 
 		"INSERT INTO music_folders (name) VALUES (?)";
 	private static const string STMT_DEL_MUSIC_FOLDERS = 
@@ -310,48 +310,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 
-//	public void check_create_tables() {
-//		bool db_table_exists = false;
-//		string current_query = "";
-//		int nrow,ncolumn;
-//		int rc1 = 0;
-//		int rc2 = 0;
-//		int rc3 = 0;
-//		weak string[] resultArray;
-//		string errmsg;
-
-//		//Check for Table existance
-//		current_query = "SELECT name FROM sqlite_master WHERE type='table';";
-//		rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-//		if (rc1 != Sqlite.OK) { 
-//			stderr.printf("SQL error: %s\n", errmsg);
-//			return;
-//		}
-
-//		//search main table
-//		for (int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
-//			for (int j = offset*ncolumn; j< (offset+1)*ncolumn;j++) {
-//				if (resultArray[j]=="mlib") {
-//					db_table_exists = true;
-//				}
-//			}
-//		}
-
-//		//create Tables if not existant
-//		if(db_table_exists == false) {
-//			current_query = "CREATE TABLE mlib(id integer primary key, tracknumber integer, artist text, album text, title text, genre text, uri text);";
-//			rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-//			current_query = "CREATE TABLE lastused(uri text);";
-//			rc2 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-//			current_query = "CREATE TABLE music_folders(name text primary key);";
-//			rc3 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-//		}
-//		if ((rc1 != Sqlite.OK)|(rc2 != Sqlite.OK)|(rc3 != Sqlite.OK)) { 
-//			stderr.printf("SQL error (table exist): %s\n", errmsg);
-//			return;
-//		}
-//	}
-
 	public string[] get_music_folders() { 
 		string[] mfolders = {};
 		get_music_folders_statement.reset();
@@ -417,14 +375,15 @@ public class Xnoise.DbWriter : GLib.Object {
 			return;
 		}	
 		foreach(string uri in final_tracklist) {
-			this.insert_lastused_track(uri);
+			this.insert_lastused_track(uri, 0); //TODO: handle media type !=0 (video)
 		}
 		this.commit_transaction();
 	}
 	
-	private void insert_lastused_track(string uri) { 
+	private void insert_lastused_track(string uri, int mediatype) { 
 		this.insert_lastused_entry_statement.reset();
 		this.insert_lastused_entry_statement.bind_text(1, uri);
+		this.insert_lastused_entry_statement.bind_int (2, mediatype);
 		if(insert_lastused_entry_statement.step()!=Sqlite.DONE) {
 			this.db_error();
 		}

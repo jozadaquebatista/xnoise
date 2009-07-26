@@ -186,6 +186,12 @@ public class Xnoise.TrackList : TreeView {
 
 	private bool reorder_dragging;	
 	private void on_drag_begin(TrackList sender, DragContext context) {
+//		Gtk.TreeSelection selection = this.get_selection();
+//		if(selection.count_selected_rows() <= 0) {
+//			Gdk.drag_abort(context, Gtk.get_current_event_time());			
+//			return;
+//		}
+		
 		this.dragging = true;
 		this.reorder_dragging = true;
 
@@ -267,31 +273,34 @@ public class Xnoise.TrackList : TreeView {
 		FileType filetype;
 		string[] uris = selection.get_uris();
 		this.get_dest_row_at_pos(x, y, out path, out position);
+		
 		if(!this.reorder_dragging) { 					// DRAGGING NOT WITHIN TRACKLIST
 			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
-			for(int i=(uris.length-1); i>=0;i--) {
+			bool is_first = true;
+			for(int i=0; i<uris.length;i++) {
 				filename = uris[i]; 
 				try {
 					file = File.new_for_uri(filename);
 					FileInfo info = file.query_info(
-							            attr, 
-							            FileQueryInfoFlags.NONE, 
-							            null);
+								        attr, 
+								        FileQueryInfoFlags.NONE, 
+								        null);
 					filetype = info.get_file_type();
 				}
 				catch(GLib.Error e){
 					stderr.printf("%s\n", e.message);
 					return;
 				}	
-			
+		
 				if(!(filetype==GLib.FileType.DIRECTORY)) {
-					handle_dropped_file(filename, ref path);			
+					handle_dropped_file(filename, ref path, ref is_first);	//FILES
 				}
 				else {
-					handle_dropped_files_for_folders(file, ref path);
+					handle_dropped_files_for_folders(file, ref path, ref is_first); //DIRECTORIES
 				}
 			}
+			is_first = false;
 		}
 		else { 											// DRAGGING WITHIN TRACKLIST
 			drop_rowref = null;
@@ -307,32 +316,41 @@ public class Xnoise.TrackList : TreeView {
 					return;
 				}
 			}
-			foreach(weak TreeRowReference current_row in rowref_list) {
-				if (current_row == null || !current_row.valid()) {
-					return;
+			if((!(position == Gtk.TreeViewDropPosition.BEFORE))&&
+			   (!(position == Gtk.TreeViewDropPosition.INTO_OR_BEFORE))) {
+				for(int i=rowref_list.length-1;i>=0;i--) {
+					if (rowref_list[i] == null || !rowref_list[i].valid()) {
+						return;
+					}
+					weak TreeIter current_iter;
+					weak TreeIter drop_iter;
+					var current_path = rowref_list[i].get_path();
+					this.listmodel.get_iter(out current_iter, current_path); //get iter for current
+					TreePath drop_path = drop_rowref.get_path();
+					this.listmodel.get_iter(out drop_iter, drop_path);//get iter for drop position
+					this.listmodel.move_after(current_iter, drop_iter); //move
 				}
-				var current_path = current_row.get_path();
-				//get iter for current
-				weak TreeIter current_iter;
-				this.listmodel.get_iter(out current_iter, current_path);
-				//get iter for drop position
-				weak TreeIter drop_iter;
-				TreePath drop_path = drop_rowref.get_path();
-				this.listmodel.get_iter(out drop_iter, drop_path);
-				//move
-				if((position == Gtk.TreeViewDropPosition.BEFORE)||
-				   (position == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
-					this.listmodel.move_before(current_iter, drop_iter);	
-				}
-				else {
-					this.listmodel.move_after(current_iter, drop_iter);
+			}
+			else {
+				for(int i=0;i<rowref_list.length;i++) { 
+					if (rowref_list[i] == null || !rowref_list[i].valid()) {
+						return;
+					}
+					weak TreeIter current_iter;
+					weak TreeIter drop_iter;
+					var current_path = rowref_list[i].get_path();
+					this.listmodel.get_iter(out current_iter, current_path); //get iter for current
+					TreePath drop_path = drop_rowref.get_path();
+					this.listmodel.get_iter(out drop_iter, drop_path); //get iter for drop position
+					this.listmodel.move_before(current_iter, drop_iter); //move
 				}
 			}
 		}
+		position = Gtk.TreeViewDropPosition.AFTER; //Default position for next run
 		rowref_list = null;
 	}
 
-	private void handle_dropped_files_for_folders(File dir, ref TreePath? path) { 
+	private void handle_dropped_files_for_folders(File dir, ref TreePath? path, ref bool is_first) { 
 		//Recursive function to import music DIRECTORIES in drag'n'drop
 		//as soon as a file is found it is passed to handle_dropped_file function
 		//the TreePath path is just passed through if it is a directory
@@ -353,16 +371,16 @@ public class Xnoise.TrackList : TreeView {
 			FileType filetype = info.get_file_type();
 
 			if(filetype == FileType.DIRECTORY) {
-				this.handle_dropped_files_for_folders(file, ref path);
+				this.handle_dropped_files_for_folders(file, ref path, ref is_first);
 			} 
 			else {
-				handle_dropped_file(file.get_uri(), ref path);
+				handle_dropped_file(file.get_uri(), ref path, ref is_first);
 			}
 		}
 	}
 
 	
-	private void handle_dropped_file(string fileuri, ref TreePath? path) {
+	private void handle_dropped_file(string fileuri, ref TreePath? path, ref bool is_first) {
 		//Function to import music FILES in drag'n'drop
 		TreeIter iter, new_iter;
 		File file;
@@ -401,12 +419,20 @@ public class Xnoise.TrackList : TreeView {
 				tracknumb = td.Tracknumber; 
 			}
 			else {
-				var tr = new TagReader(); // TODO: Check dataimport for video
-				var tags = tr.read_tag_from_file(file.get_path());
-				artist         = Markup.printf_escaped("%s", tags.Artist); 
-				album          = Markup.printf_escaped("%s", tags.Album); 
-				title          = Markup.printf_escaped("%s", tags.Title); 
-				tracknumb      = tags.Tracknumber;
+				if(!(psVideo.match_string(mime))) {
+					var tr = new TagReader(); // TODO: Check dataimport for video
+					var tags = tr.read_tag_from_file(file.get_path());
+					artist         = Markup.printf_escaped("%s", tags.Artist); 
+					album          = Markup.printf_escaped("%s", tags.Album); 
+					title          = Markup.printf_escaped("%s", tags.Title); 
+					tracknumb      = tags.Tracknumber;
+				}
+				else { //TODO: Handle video data
+					artist         = ""; 
+					album          = ""; 
+					title          = Markup.printf_escaped("%s", file.get_basename()); 
+					tracknumb      = 0;
+				}
 			}
 			TreeIter first_iter;
 			if(!this.listmodel.get_iter_first(out first_iter)) { //dropped on empty list, first uri
@@ -417,10 +443,16 @@ public class Xnoise.TrackList : TreeView {
 			}					
 			else { //all other uris
 				this.listmodel.get_iter(out iter, path); 
-				if((position == Gtk.TreeViewDropPosition.BEFORE)||
-				   (position == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)||
-				   (position == Gtk.TreeViewDropPosition.INTO_OR_AFTER)) {
-					this.listmodel.insert_before(out new_iter, iter);
+				if(is_first) {
+					if((position == Gtk.TreeViewDropPosition.BEFORE)||
+					   (position == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) { 
+					   //Determine drop position for first, insert all others after first
+						this.listmodel.insert_before(out new_iter, iter);
+					}
+					else {
+						this.listmodel.insert_after(out new_iter, iter);
+					}
+					is_first = false;
 				}
 				else {
 					this.listmodel.insert_after(out new_iter, iter);
