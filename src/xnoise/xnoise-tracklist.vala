@@ -28,11 +28,11 @@
  * 	Jörn Magens
  */
 
-using GLib;
 using Gtk;
 using Gdk;
 
 public class Xnoise.TrackList : TreeView {
+	private Main xn;
 	private const TargetEntry[] target_list = {
 		{"text/uri-list", 0, 0}
 	};
@@ -42,8 +42,9 @@ public class Xnoise.TrackList : TreeView {
 	public ListStore listmodel;
 	
 	public signal void sign_active_path_changed();
-
-	public TrackList() {
+	
+	public TrackList(ref weak Main xn) {
+		this.xn = xn;
 		this.create_model();
 		this.create_view();
 		this.get_selection().set_mode(SelectionMode.MULTIPLE); 
@@ -348,6 +349,10 @@ public class Xnoise.TrackList : TreeView {
 		}
 		position = Gtk.TreeViewDropPosition.AFTER; //Default position for next run
 		rowref_list = null;
+		if(xn.main_window.drag_on_da) {
+			xn.main_window.drag_on_da = false;
+			xn.main_window.tracklistnotebook.set_current_page(1);
+		}
 	}
 
 	private void handle_dropped_files_for_folders(File dir, ref TreePath? path, ref bool is_first) { 

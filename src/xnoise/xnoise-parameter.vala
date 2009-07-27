@@ -28,8 +28,6 @@
  * 	Jörn Magens
  */
 
-using GLib;
-
 public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	private const string INIFILE   = "xnoise.ini";
 	private const string INIFOLDER = ".xnoise";

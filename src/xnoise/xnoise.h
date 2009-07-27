@@ -267,6 +267,7 @@ struct _XnoiseMainWindow {
 	XnoiseMainWindowPrivate * priv;
 	GtkDrawingArea* videodrawingarea;
 	GtkLabel* showvideolabel;
+	gboolean drag_on_da;
 	GtkEntry* searchEntryMB;
 	GtkButton* playPauseButton;
 	GtkButton* repeatButton;
@@ -569,8 +570,8 @@ gboolean xnoise_music_browser_on_button_release (XnoiseMusicBrowser* self, Xnois
 void xnoise_music_browser_on_drag_data_get (XnoiseMusicBrowser* self, XnoiseMusicBrowser* sender, GdkDragContext* context, GtkSelectionData* selection, guint info, guint etime);
 void xnoise_music_browser_on_drag_end (XnoiseMusicBrowser* self, XnoiseMusicBrowser* sender, GdkDragContext* context);
 gboolean xnoise_music_browser_change_model_data (XnoiseMusicBrowser* self);
-XnoiseTrackList* xnoise_track_list_new (void);
-XnoiseTrackList* xnoise_track_list_construct (GType object_type);
+XnoiseTrackList* xnoise_track_list_new (XnoiseMain** xn);
+XnoiseTrackList* xnoise_track_list_construct (GType object_type, XnoiseMain** xn);
 gboolean xnoise_track_list_on_button_press (XnoiseTrackList* self, XnoiseTrackList* sender, const GdkEventButton* e);
 gboolean xnoise_track_list_on_button_release (XnoiseTrackList* self, XnoiseTrackList* sender, const GdkEventButton* e);
 gboolean xnoise_track_list_on_drag_motion (XnoiseTrackList* self, XnoiseTrackList* sender, GdkDragContext* context, gint x, gint y, guint timestamp);

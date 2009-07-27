@@ -28,7 +28,6 @@
  * 	Jörn Magens
  */
 
-using GLib;
 using Gtk;
 
 public class Xnoise.PluginManagerTree: Gtk.TreeView {

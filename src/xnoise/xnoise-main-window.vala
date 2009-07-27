@@ -28,7 +28,6 @@
  * 	Jörn Magens
  */
 
-using GLib;
 using Gtk;
 
 public class Xnoise.MainWindow : GLib.Object, IParams {
@@ -48,6 +47,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private Gtk.VBox menuvbox;
 	public DrawingArea videodrawingarea;
 	public Label showvideolabel;
+	public bool drag_on_da = false;
 	
 	private const ActionEntry[] action_entries = {
 		{ "FileMenuAction", null, N_("_File") },
@@ -83,6 +83,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	
 	public signal void sign_pos_changed(double fraction);
 	public signal void sign_volume_changed(double fraction);
+	public signal void sign_drag_over_da();
 	private Main xn;
 	
 	private ActionGroup action_group;
@@ -92,7 +93,11 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	{
 		return ui_manager;
 	}
-		
+	
+	private const TargetEntry[] target_list = {
+		{"text/uri-list", 0, 0}
+	};
+			
 	//CONSTRUCTOR	
 	public MainWindow(ref weak Main xn) {
 		this.xn = xn;
@@ -100,16 +105,39 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		create_widgets();
 		
 		//initialization of videodrawingarea
-		videodrawingarea.realize();
-		videodrawingarea.button_press_event+=on_video_da_button_press;
-
+		initialize_drawing_area();
+		
 		//restore last state
 		add_lastused_titles_to_tracklist();
 
 		notify["repeatState"]+=on_repeatState_changed;
 		notify["fullscreenwindowvisible"]+=on_fullscreenwindowvisible;
 	}
-	
+
+	private void initialize_drawing_area() {
+		videodrawingarea.realize();
+		// dummy drag'n'drop to get drag motion event
+		Gtk.drag_dest_set( 
+			videodrawingarea,
+			Gtk.DestDefaults.MOTION,
+			this.target_list, 
+			Gdk.DragAction.COPY|
+			Gdk.DragAction.DEFAULT
+			);
+		videodrawingarea.button_press_event+=on_video_da_button_press;
+		sign_drag_over_da+=()=> {
+			//switch to tracklist for dropping
+			if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(0);
+		};
+		videodrawingarea.drag_motion+=on_da_drag_motion;
+	}
+
+	private bool on_da_drag_motion(DrawingArea sender, Gdk.DragContext context, int x, int y, uint timestamp) {
+		drag_on_da = true;
+		sign_drag_over_da();
+		return true;
+	}
+		
 	private void on_fullscreenwindowvisible(GLib.ParamSpec pspec) {
 		this.showvideobutton.set_sensitive(!fullscreenwindowvisible);
 	}
@@ -796,7 +824,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			menuvbox                     = gb.get_object("menuvbox") as Gtk.VBox; 
 			
 			///Tracklist (right)
-			this.trackList = new TrackList();
+			this.trackList = new TrackList(ref xn);
 			this.trackList.set_size_request(100,100);
 			var trackListScrollWin = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
 			trackListScrollWin.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.ALWAYS);

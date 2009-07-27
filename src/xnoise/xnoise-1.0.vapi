@@ -94,6 +94,7 @@ namespace Xnoise {
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
 		public double current_volume;
+		public bool drag_on_da;
 		public Gtk.Window fullscreenwindow;
 		public Xnoise.MusicBrowser musicBr;
 		public Gtk.Button playPauseButton;
@@ -117,6 +118,7 @@ namespace Xnoise {
 		public void set_displayed_title (string newuri);
 		public bool fullscreenwindowvisible { get; set; }
 		public int repeatState { get; set; }
+		public signal void sign_drag_over_da ();
 		public signal void sign_pos_changed (double fraction);
 		public signal void sign_volume_changed (double fraction);
 	}
@@ -199,7 +201,7 @@ namespace Xnoise {
 		public string[] get_all_tracks ();
 		public string get_uri_for_path (Gtk.TreePath path);
 		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
-		public TrackList ();
+		public TrackList (ref unowned Xnoise.Main xn);
 		public bool not_empty ();
 		public void on_activated (string uri, Gtk.TreePath path);
 		public bool on_button_press (Xnoise.TrackList sender, Gdk.EventButton e);

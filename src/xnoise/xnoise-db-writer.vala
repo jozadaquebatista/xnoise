@@ -28,7 +28,6 @@
  * 	Jörn Magens
  */
 
-using GLib;
 using Sqlite;
 
 public class Xnoise.DbWriter : GLib.Object {

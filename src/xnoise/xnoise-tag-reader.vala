@@ -28,15 +28,13 @@
  * 	Jörn Magens
  */
 
-//This class is a connection to taglib_c
-
-using GLib;
 
 internal class Xnoise.TagReader : GLib.Object {
 
 	public TrackData read_tag_from_file(string file) {
 		TrackData tags; 
-		TagLib.File taglib_file = new TagLib.File(file);
+		TagLib.File taglib_file = null;
+		taglib_file = new TagLib.File(file);
 		if(taglib_file!=null) {
 			weak TagLib.Tag t = taglib_file.tag; 
 			tags = TrackData();
@@ -48,10 +46,10 @@ internal class Xnoise.TagReader : GLib.Object {
 				tags.Tracknumber = t.track;
 			}
 			finally {
-				if ((tags.Artist == "")||(tags.Artist == null)) tags.Artist = "unknown artist";
-				if ((tags.Title  == "")||(tags.Title  == null)) tags.Title  = "unknown title";
-				if ((tags.Album  == "")||(tags.Album  == null)) tags.Album  = "unknown album";
-				if ((tags.Genre  == "")||(tags.Genre  == null)) tags.Genre  = "unknown genre";
+				if((tags.Artist == "")||(tags.Artist == null)) tags.Artist = "unknown artist";
+				if((tags.Title  == "")||(tags.Title  == null)) tags.Title  = "unknown title";
+				if((tags.Album  == "")||(tags.Album  == null)) tags.Album  = "unknown album";
+				if((tags.Genre  == "")||(tags.Genre  == null)) tags.Genre  = "unknown genre";
 				t = null;
 				taglib_file = null;
 			}
@@ -59,18 +57,14 @@ internal class Xnoise.TagReader : GLib.Object {
 		else {
 			tags = TrackData(); 
 			tags.Artist = "unknown artist";
-			tags.Title = "unknown title";
-			tags.Album = "unknown album";
-			tags.Genre = "unknown genre";
+			tags.Title  = "unknown title";
+			tags.Album  = "unknown album";
+			tags.Genre  = "unknown genre";
 			tags.Tracknumber = (uint)0;
 		}
-		int count = 0;
-		if(tags.Artist == "unknown artist") count++;
-		if(tags.Title  == "unknown title")  count++;
-		if(tags.Album  == "unknown album")  count++;
-		if(count==3) {
-			string fileBasename = GLib.Filename.display_basename(file);
-			tags.Title = fileBasename;
+		
+		if(tags.Title  == "unknown title") {
+			tags.Title = GLib.Filename.display_basename(file);
 		}
 		return tags;
 	}
