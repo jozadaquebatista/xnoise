@@ -68,16 +68,6 @@ typedef struct _XnoisePluginLoaderClass XnoisePluginLoaderClass;
 
 typedef struct _XnoiseGstPlayer XnoiseGstPlayer;
 typedef struct _XnoiseGstPlayerClass XnoiseGstPlayerClass;
-
-#define XNOISE_TYPE_PLUGIN (xnoise_plugin_get_type ())
-#define XNOISE_PLUGIN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLUGIN, XnoisePlugin))
-#define XNOISE_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLUGIN, XnoisePluginClass))
-#define XNOISE_IS_PLUGIN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PLUGIN))
-#define XNOISE_IS_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_PLUGIN))
-#define XNOISE_PLUGIN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_PLUGIN, XnoisePluginClass))
-
-typedef struct _XnoisePlugin XnoisePlugin;
-typedef struct _XnoisePluginClass XnoisePluginClass;
 typedef struct _XnoiseGstPlayerPrivate XnoiseGstPlayerPrivate;
 
 #define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
@@ -190,6 +180,16 @@ typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 typedef struct _XnoiseSettingsDialog XnoiseSettingsDialog;
 typedef struct _XnoiseSettingsDialogClass XnoiseSettingsDialogClass;
 typedef struct _XnoiseSettingsDialogPrivate XnoiseSettingsDialogPrivate;
+
+#define XNOISE_TYPE_PLUGIN (xnoise_plugin_get_type ())
+#define XNOISE_PLUGIN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLUGIN, XnoisePlugin))
+#define XNOISE_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLUGIN, XnoisePluginClass))
+#define XNOISE_IS_PLUGIN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PLUGIN))
+#define XNOISE_IS_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_PLUGIN))
+#define XNOISE_PLUGIN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_PLUGIN, XnoisePluginClass))
+
+typedef struct _XnoisePlugin XnoisePlugin;
+typedef struct _XnoisePluginClass XnoisePluginClass;
 typedef struct _XnoisePluginPrivate XnoisePluginPrivate;
 
 #define XNOISE_TYPE_PLUGIN_INFORMATION (xnoise_plugin_information_get_type ())
@@ -239,7 +239,6 @@ struct _XnoiseMain {
 	XnoiseMainWindow* main_window;
 	XnoisePluginLoader* plugin_loader;
 	XnoiseGstPlayer* gPl;
-	XnoisePlugin* plugin;
 };
 
 struct _XnoiseMainClass {
@@ -476,7 +475,6 @@ XnoiseAppStarter* xnoise_app_starter_construct (GType object_type);
 GType xnoise_main_window_get_type (void);
 GType xnoise_plugin_loader_get_type (void);
 GType xnoise_gst_player_get_type (void);
-GType xnoise_plugin_get_type (void);
 XnoiseMain* xnoise_main_new (void);
 XnoiseMain* xnoise_main_construct (GType object_type);
 void xnoise_main_add_track_to_gst_player (XnoiseMain* self, const char* uri);
@@ -603,6 +601,7 @@ void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_settings_dialog_get_type (void);
 XnoiseSettingsDialog* xnoise_settings_dialog_new (XnoiseMain** xn);
 XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type, XnoiseMain** xn);
+GType xnoise_plugin_get_type (void);
 GType xnoise_plugin_information_get_type (void);
 XnoisePlugin* xnoise_plugin_new (XnoisePluginInformation* info);
 XnoisePlugin* xnoise_plugin_construct (GType object_type, XnoisePluginInformation* info);

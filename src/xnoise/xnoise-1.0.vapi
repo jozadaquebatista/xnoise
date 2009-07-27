@@ -82,7 +82,6 @@ namespace Xnoise {
 	public class Main : GLib.Object {
 		public Xnoise.GstPlayer gPl;
 		public Xnoise.MainWindow main_window;
-		public Xnoise.Plugin plugin;
 		public Xnoise.PluginLoader plugin_loader;
 		public void add_track_to_gst_player (string uri);
 		public static Xnoise.Main instance ();
@@ -144,7 +143,7 @@ namespace Xnoise {
 		public void set_double_value (string key, double value);
 		public void set_int_value (string key, int value);
 		public void set_start_parameters_in_implementors ();
-		public void set_string_list_value (string key, string[] value);
+		public void set_string_list_value (string key, string[]? value);
 		public void set_string_value (string key, string value);
 		public void write_all_parameters_to_file ();
 	}

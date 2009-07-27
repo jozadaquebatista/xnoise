@@ -37,9 +37,9 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	private const string settings_int    = "settings_int";
 	private const string settings_double = "settings_double";
 	private const string settings_string = "settings_string";
-	private GLib.HashTable<string,int> ht_int        = new GLib.HashTable<string,int>(str_hash, str_equal);
+	private GLib.HashTable<string,int>     ht_int    = new GLib.HashTable<string,int>(str_hash, str_equal);
 	private GLib.HashTable<string,double?> ht_double = new GLib.HashTable<string,double?>(str_hash, str_equal);
-	private GLib.HashTable<string,string> ht_string  = new GLib.HashTable<string,string>(str_hash, str_equal);
+	private GLib.HashTable<string,string>  ht_string = new GLib.HashTable<string,string>(str_hash, str_equal);
 
 	public Params() {
 		read_all_parameters_from_file(); //Fill hash tables on construction time
@@ -55,19 +55,16 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		//Put all values to hashtables on startup
 		KeyFile kf = new GLib.KeyFile();
 		try {
-			kf.load_from_file(build_file_name(), 
-			                  GLib.KeyFileFlags.NONE);
+			kf.load_from_file(build_file_name(), GLib.KeyFileFlags.NONE);
 			//write settings of type integer to hashtable
 			string[] groups;
 			groups = kf.get_keys(settings_int);
-			foreach(string s in groups) {
+			foreach(string s in groups) 
 				ht_int.insert(s, kf.get_integer(settings_int, s));
-			}
 			//write settings of type double to hashtable
 			groups = kf.get_keys(settings_double);
-			foreach(string s in groups) {
+			foreach(string s in groups) 
 				ht_double.insert(s, kf.get_double(settings_double, s));
-			}			
 			//write settings of type string to hashtable
 			groups = kf.get_keys(settings_string);
 			foreach(string s in groups) {
@@ -89,18 +86,19 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		FileStream stream = GLib.FileStream.open(build_file_name(), "w");
 		size_t length;
 		KeyFile kf = new GLib.KeyFile();
-		foreach(weak IParams ip in IParams_implementers) {
+
+		foreach(weak IParams ip in IParams_implementers) 
 			ip.write_params_data();
-		}
-		foreach(string key in ht_int.get_keys()) {
+		
+		foreach(string key in ht_int.get_keys()) 
 			kf.set_integer(settings_int, key, ht_int.lookup(key));
-		}
-		foreach(string key in ht_double.get_keys()) {
+		
+		foreach(string key in ht_double.get_keys()) 
 			kf.set_double(settings_double, key, ht_double.lookup(key));
-		}
-		foreach(string key in ht_string.get_keys()) {
+		
+		foreach(string key in ht_string.get_keys()) 
 			kf.set_string(settings_string, key, ht_string.lookup(key));
-		}
+		
 		stream.puts(kf.to_data(out length));
 	}
 
@@ -125,11 +123,10 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	//Type string list
 	public string[]? get_string_list_value(string key) {
 		string? buffer = ht_string.lookup(key);
-		if(buffer==null) { //because split doesn't like null strings
+		if((buffer==null)||(buffer=="#00")) 
 			return null;
-		}
 		string[] list = (buffer).split(";", 50);
-		return list;		
+		return list;	
 	}
 	//Type string
 	public string get_string_value(string key) {
@@ -149,15 +146,21 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		ht_double.insert(key,value);
 	}
 	//Type string list
-	public void set_string_list_value(string key, string[] value) {
+	public void set_string_list_value(string key, string[]? value) {
 		string? buffer = null;
-		foreach(string s in value) {
-			if(buffer == null) {
-				buffer = s;
-				continue;
+		if(value!=null) {
+			foreach(string s in value) {
+				if(buffer==null) {
+					buffer = s;
+					continue;
+				}
+				buffer = buffer + ";" + s;
 			}
-			buffer = buffer + ";" + s;
 		}
+		else {
+			buffer = "#00";
+		}
+			
 		if(buffer!=null) ht_string.insert(key,buffer);
 	}
 	//Type string

@@ -33,7 +33,6 @@ public class Xnoise.Main : GLib.Object {
 	public PluginLoader plugin_loader;
 	public GstPlayer gPl;
 	private static Main _instance;
-	public Plugin plugin;
 	
 	public Main() {
 		Xnoise.initialize();
@@ -47,11 +46,10 @@ public class Xnoise.Main : GLib.Object {
 		plugin_loader = new PluginLoader(ref this);
 		plugin_loader.load_all();
 
-		foreach(string s in par.get_string_list_value("activated_plugins")) {
-			if(plugin_loader.activate_single_plugin(s))   print("%s plugin is activated.\n", s);
-			else                                          print("%s plugin is not activated.\n", s);
+		foreach(string name in par.get_string_list_value("activated_plugins")) {
+			if(plugin_loader.activate_single_plugin(name)) 
+				print("%s plugin is activated.\n", name);
 		}
-//		plugin_loader.deactivate_single_plugin("Test");
         
 		connect_signals();
 		par.set_start_parameters_in_implementors();
@@ -87,9 +85,9 @@ public class Xnoise.Main : GLib.Object {
 		main_window.sign_pos_changed += (main_window, fraction) => {
 			gPl.gst_position = fraction;
 		};
-		Posix.signal(Posix.SIGQUIT, on_posix_finish); //write data to db on posix quit signal
-		Posix.signal(Posix.SIGTERM, on_posix_finish); //write data to db on posix term signal
-		Posix.signal(Posix.SIGKILL, on_posix_finish); //write data to db on posix kill signal
+		Posix.signal(Posix.SIGQUIT, on_posix_finish); // write data to db on posix quit signal
+		Posix.signal(Posix.SIGTERM, on_posix_finish); // write data to db on posix term signal
+		Posix.signal(Posix.SIGKILL, on_posix_finish); // write data to db on posix kill signal
 	}
 	
 	private string dbFileName() {
@@ -116,27 +114,31 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	public static Main instance() {
-		if (_instance == null) _instance = new Main();
+		if (_instance == null) 
+			_instance = new Main();
 		return _instance;
 	}
 
 	private static void on_posix_finish(int signal_number) {
-		print("Posix signal received (%d)\ncleaning up...\n", signal_number);
+		//print("Posix signal received (%d)\ncleaning up...\n", signal_number);
 		instance().quit();
 	}
 
 	private void save_activated_plugins() {
-		print("\nsaving activated plugins...\n");
-		string[] activatedplugins = {};
-		foreach(weak string name in this.plugin_loader.plugin_htable.get_keys()) {
-			if(this.plugin_loader.plugin_htable.lookup(name).activated) activatedplugins+=name;
+		//print("\nsaving activated plugins...\n");
+		string[]? activatedplugins = {};
+		foreach(string name in this.plugin_loader.plugin_htable.get_keys()) {
+			if(this.plugin_loader.plugin_htable.lookup(name).activated) 
+				activatedplugins+=name;
 		}
+		if(activatedplugins.length<=0) 
+			activatedplugins = null;
 		par.set_string_list_value("activated_plugins", activatedplugins);
 	}
 
 	private string[] final_tracklist; 
 	public void save_tracklist() {
-		print("write tracks into db....\n");
+		//print("write tracks into db....\n");
 		final_tracklist = this.main_window.trackList.get_all_tracks();	
 		var dbwr = new DbWriter();
 		dbwr.write_final_tracks_to_db(final_tracklist);
