@@ -146,6 +146,8 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	public void quit() {
+		if(main_window.is_fullscreen) //TODO: Make this work right
+			this.main_window.window.unfullscreen();	
 		this.gPl.stop();
 		this.save_tracklist();
 		this.save_activated_plugins();

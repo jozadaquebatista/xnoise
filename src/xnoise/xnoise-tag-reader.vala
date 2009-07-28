@@ -32,41 +32,43 @@
 internal class Xnoise.TagReader : GLib.Object {
 
 	public TrackData read_tag_from_file(string file) {
-		TrackData tags; 
+		TrackData td; 
 		TagLib.File taglib_file = null;
 		taglib_file = new TagLib.File(file);
 		if(taglib_file!=null) {
 			weak TagLib.Tag t = taglib_file.tag; 
-			tags = TrackData();
+			td = TrackData();
 			try {
-				tags.Artist = t.artist;
-				tags.Title = t.title;
-				tags.Album = t.album;
-				tags.Genre = t.genre;
-				tags.Tracknumber = t.track;
+				td.Artist = t.artist;
+				td.Title = t.title;
+				td.Album = t.album;
+				td.Genre = t.genre;
+				td.Tracknumber = t.track;
+				td.Mediatype   = MediaType.AUDIO;
 			}
 			finally {
-				if((tags.Artist == "")||(tags.Artist == null)) tags.Artist = "unknown artist";
-				if((tags.Title  == "")||(tags.Title  == null)) tags.Title  = "unknown title";
-				if((tags.Album  == "")||(tags.Album  == null)) tags.Album  = "unknown album";
-				if((tags.Genre  == "")||(tags.Genre  == null)) tags.Genre  = "unknown genre";
+				if((td.Artist == "")||(td.Artist == null)) td.Artist = "unknown artist";
+				if((td.Title  == "")||(td.Title  == null)) td.Title  = "unknown title";
+				if((td.Album  == "")||(td.Album  == null)) td.Album  = "unknown album";
+				if((td.Genre  == "")||(td.Genre  == null)) td.Genre  = "unknown genre";
 				t = null;
 				taglib_file = null;
 			}
 		}
 		else {
-			tags = TrackData(); 
-			tags.Artist = "unknown artist";
-			tags.Title  = "unknown title";
-			tags.Album  = "unknown album";
-			tags.Genre  = "unknown genre";
-			tags.Tracknumber = (uint)0;
+			td = TrackData(); 
+			td.Artist = "unknown artist";
+			td.Title  = "unknown title";
+			td.Album  = "unknown album";
+			td.Genre  = "unknown genre";
+			td.Tracknumber = (uint)0;
+			td.Mediatype   = MediaType.UNKNOWN;
 		}
 		
-		if(tags.Title  == "unknown title") {
-			tags.Title = GLib.Filename.display_basename(file);
+		if(td.Title  == "unknown title") {
+			td.Title = GLib.Filename.display_basename(file);
 		}
-		return tags;
+		return td;
 	}
 }
 

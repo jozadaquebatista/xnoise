@@ -96,6 +96,7 @@ namespace Xnoise {
 		public double current_volume;
 		public bool drag_on_da;
 		public Gtk.Window fullscreenwindow;
+		public bool is_fullscreen;
 		public Xnoise.MusicBrowser musicBr;
 		public Gtk.Button playPauseButton;
 		public Gtk.Image playpause_popup_image;
@@ -126,7 +127,7 @@ namespace Xnoise {
 	public class MusicBrowser : Gtk.TreeView, Xnoise.IParams {
 		public Gtk.TreeStore model;
 		public bool change_model_data ();
-		public MusicBrowser ();
+		public MusicBrowser (ref unowned Xnoise.Main xn);
 		public bool on_button_press (Xnoise.MusicBrowser sender, Gdk.EventButton e);
 		public bool on_button_release (Xnoise.MusicBrowser sender, Gdk.EventButton e);
 		public void on_drag_data_get (Xnoise.MusicBrowser sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime);
@@ -237,6 +238,7 @@ namespace Xnoise {
 		public string Title;
 		public string Genre;
 		public uint Tracknumber;
+		public Xnoise.MediaType Mediatype;
 	}
 	[CCode (cprefix = "XNOISE_BROWSER_COLUMN_", cheader_filename = "xnoise.h")]
 	public enum BrowserColumn {
@@ -248,6 +250,14 @@ namespace Xnoise {
 	public enum Direction {
 		NEXT,
 		PREVIOUS
+	}
+	[CCode (cprefix = "XNOISE_MEDIA_TYPE_", cheader_filename = "xnoise.h")]
+	public enum MediaType {
+		UNKNOWN,
+		AUDIO,
+		VIDEO,
+		STREAM,
+		PLAYLISTFILE
 	}
 	[CCode (cprefix = "XNOISE_REPEAT_", cheader_filename = "xnoise.h")]
 	public enum Repeat {

@@ -29,6 +29,7 @@
  */
 
 // GENERAL NAMESPACE FUNCTIONS
+
 namespace Xnoise {
 	
 	public static Params par;
@@ -52,7 +53,15 @@ public enum Xnoise.BrowserColumn {
 public enum Xnoise.Repeat { 
 	NOT_AT_ALL = 0,
 	SINGLE,
-	ALL,
+	ALL
+}
+
+public enum Xnoise.MediaType {
+	UNKNOWN = 0,
+	AUDIO,
+	VIDEO,
+	STREAM,
+	PLAYLISTFILE
 }
 
 public struct Xnoise.TrackData { // meta information structure
@@ -61,6 +70,7 @@ public struct Xnoise.TrackData { // meta information structure
 	public string Title;
 	public string Genre;
 	public uint Tracknumber;
+	public MediaType Mediatype = MediaType.UNKNOWN;
 }
 
 public enum Xnoise.TrackListColumn {
@@ -89,7 +99,7 @@ public enum Xnoise.Direction {
 public enum Gst.StreamType {
     UNKNOWN = 0,
     AUDIO   = 1, 
-    VIDEO   = 2,  
+    VIDEO   = 2
 }
 
 //Interfaces

@@ -38,7 +38,6 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private const string SHOWTRACKLIST = _("Show Tracklist");
 	private Label song_title_label;
 	private bool _seek;
-	private bool is_fullscreen = false;
 	private HPaned hpaned;
 	private Gtk.VolumeButton VolumeSlider;
 	private int _posX_buffer;
@@ -47,6 +46,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private Gtk.VBox menuvbox;
 	public DrawingArea videodrawingarea;
 	public Label showvideolabel;
+	public bool is_fullscreen = false;
 	public bool drag_on_da = false;
 	
 	private const ActionEntry[] action_entries = {
@@ -130,6 +130,12 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(0);
 		};
 		videodrawingarea.drag_motion+=on_da_drag_motion;
+		//TODO: Do background color / image
+//		Gdk.Color color;
+//		Gdk.Color.parse ("blue", out color);
+//		videodrawingarea.get_colormap().alloc_color(color, false, true);
+//		Gdk.GC gc = new Gdk.GC(videodrawingarea.window); 
+//		gc.set_background(color);
 	}
 
 	private bool on_da_drag_motion(DrawingArea sender, Gdk.DragContext context, int x, int y, uint timestamp) {
@@ -329,7 +335,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	}
 
 	private void on_fullscreen_clicked() {
-			this.toggle_fullscreen();
+		this.toggle_fullscreen();
 	}
 			
 	private void toggle_fullscreen() {
@@ -831,7 +837,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			trackListScrollWin.add(this.trackList);
 			
 			///MusicBrowser (left)
-			this.musicBr = new MusicBrowser();
+			this.musicBr = new MusicBrowser(ref xn);
 			this.musicBr.set_size_request(100,100);
 			var musicBrScrollWin = gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
 			musicBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);

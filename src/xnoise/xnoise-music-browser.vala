@@ -34,6 +34,7 @@ using Gdk;
 public class Xnoise.MusicBrowser : TreeView, IParams {
 	public new TreeStore model;
 	private TreeStore dummymodel;
+	private Main xn;
 	private Gdk.Pixbuf artist_pixb;
 	private Gdk.Pixbuf album_pixb;
 	private Gdk.Pixbuf title_pixb;
@@ -45,7 +46,8 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		{"text/uri-list", 0, 0}
 	};// This is not a very long list but uris are so universal
 
-	public MusicBrowser() {
+	public MusicBrowser(ref weak Main xn) {
+		this.xn = xn;
 		par.data_register(this);
 		create_model();
 		set_pixbufs();
@@ -71,6 +73,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		this.button_press_event   += this.on_button_press;
 	}
 	
+	// IParams functions
 	public void read_params_data() {
 		this.fontsizeMB = par.get_int_value("fontsizeMB");
 	}
@@ -84,6 +87,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		}
 		par.set_int_value("fontsizeMB", fontsizeMB);
 	}
+	// end IParams functions
 	
     private string searchtext = "";
     public void on_searchtext_changed(Gtk.Entry sender) { 
@@ -201,11 +205,11 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 			case 1:
 				model.get_iter(out iter, path);
 				model.get(iter, 1, ref artist);
-				for (int i = 0; i < model.iter_n_children(iter); i++) {
+				for(int i = 0; i < model.iter_n_children(iter); i++) {
 					model.iter_nth_child(out iterChild, iter, i);
 					string currentalbum = "";
 					model.get(iterChild, 1, ref currentalbum);
-					for (int j = 0; j <model.iter_n_children(iterChild); j++) {
+					for(int j = 0; j<model.iter_n_children(iterChild); j++) {
 						model.iter_nth_child(out iterChildChild, iterChild, j);
 						string currenttitle = "";
 						model.get(iterChildChild, 1, ref currenttitle);
@@ -218,10 +222,10 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 			case 2:
 				model.get_iter(out iter, path);
 				model.get(iter, 1, ref album);
-				if (model.iter_parent(out iterp, iter)) {
+				if(model.iter_parent(out iterp, iter)) {
 					model.get(iterp, 1, ref artist);
 				}
-				for (int i = 0; i < model.iter_n_children(iter); i++) {
+				for(int i = 0; i < model.iter_n_children(iter); i++) {
 					model.iter_nth_child(out iterChild, iter, i);
 					string currenttitle = "";
 					model.get(iterChild, 1, ref currenttitle);
@@ -233,10 +237,10 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 			case 3:
 				model.get_iter(out iter, path);
 				model.get(iter, 1, ref title);
-				if (model.iter_parent(out iterp, iter)) {
+				if(model.iter_parent(out iterp, iter)) {
 					model.get(iterp, 1, ref album);
 				}
-				if (model.iter_parent(out iterp2, iterp)) {
+				if(model.iter_parent(out iterp2, iterp)) {
 					model.get(iterp2, 1, ref artist);
 				}
 				var dbb = new DbBrowser();
@@ -262,7 +266,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 					model.iter_nth_child(out iterChild, iter, i);
 					string currentalbum = "";
 					model.get(iterChild, 1, ref currentalbum);
-					for (int j = 0; j <model.iter_n_children(iterChild); j++) {
+					for(int j = 0; j <model.iter_n_children(iterChild); j++) {
 						model.iter_nth_child(out iterChildChild, iterChild, j);
 						string currenttitle = "";
 						model.get(iterChildChild, 1, ref currenttitle);
@@ -280,7 +284,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 				if (model.iter_parent(out iterp, iter)) {
 					model.get(iterp, 1, ref artist);
 				}
-				for (int i = 0; i < model.iter_n_children(iter); i++) {
+				for(int i = 0; i < model.iter_n_children(iter); i++) {
 					model.iter_nth_child(out iterChild, iter, i);
 					string currenttitle = "";
 					model.get(iterChild, 1, ref currenttitle);
@@ -294,10 +298,10 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 			case 3: //TITLE
 				model.get_iter(out iter, path);
 				model.get(iter, 1, ref title);
-				if (model.iter_parent(out iterp, iter)) {
+				if(model.iter_parent(out iterp, iter)) {
 					model.get(iterp, 1, ref album);
 				}
-				if (model.iter_parent(out iterp2, iterp)) {
+				if(model.iter_parent(out iterp2, iterp)) {
 					model.get(iterp2, 1, ref artist);
 				}
 				TrackData td = TrackData();
@@ -322,7 +326,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	}
 
 	private void on_row_activated(MusicBrowser sender, TreePath path, TreeViewColumn column){
-		if (path.get_depth()>1) {
+		if(path.get_depth()>1) {
 			TrackData[] td_list = this.get_trackdata_for_treepath(path);
 			this.add_songs(td_list, true);
 			td_list = null;
@@ -337,14 +341,14 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		int i = 0;
 		TreeIter iter;
 		TreeIter iter_2 = TreeIter();
-		if(imediate_play) Main.instance().main_window.trackList.reset_play_status_for_title();
+		if(imediate_play) xn.main_window.trackList.reset_play_status_for_title();
 		foreach(weak TrackData td in td_list) {
 			string uri = dbBr.get_uri_for_title(td.Artist, td.Album, td.Title); 
 			int tracknumber = dbBr.get_tracknumber_for_title(td.Artist, td.Album, td.Title);
 			if(imediate_play) {
 				if(i==0) {
-					Main.instance().add_track_to_gst_player(uri);
-					iter = Main.instance().main_window.trackList.insert_title(
+					xn.add_track_to_gst_player(uri);
+					iter = xn.main_window.trackList.insert_title(
 						TrackState.PLAYING, 
 						null, 
 						tracknumber,
@@ -352,11 +356,11 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 						Markup.printf_escaped("%s", td.Album), 
 						Markup.printf_escaped("%s", td.Artist), 
 						uri);
-					Main.instance().main_window.trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
+					xn.main_window.trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
 					iter_2 = iter;
 				}
 				else {
-					iter = Main.instance().main_window.trackList.insert_title(
+					iter = xn.main_window.trackList.insert_title(
 					    TrackState.STOPPED, 
 					    null, 
 					    tracknumber,
@@ -368,17 +372,17 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 				i++;
 			}
 			else {
-					iter = Main.instance().main_window.trackList.insert_title(
-					    TrackState.STOPPED, 
-					    null, 
-					    tracknumber,
-					    Markup.printf_escaped("%s", td.Title), 
-					    Markup.printf_escaped("%s", td.Album), 
-					    Markup.printf_escaped("%s", td.Artist), 
-					    uri);			
+				iter = xn.main_window.trackList.insert_title(
+				    TrackState.STOPPED, 
+				    null, 
+				    tracknumber,
+				    Markup.printf_escaped("%s", td.Title), 
+				    Markup.printf_escaped("%s", td.Album), 
+				    Markup.printf_escaped("%s", td.Artist), 
+				    uri);			
 			}
 		}
-		if (imediate_play) Main.instance().main_window.trackList.set_focus_on_iter(ref iter_2);		
+		if(imediate_play) xn.main_window.trackList.set_focus_on_iter(ref iter_2);		
 	}
 
 	public bool change_model_data() {
@@ -387,7 +391,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		model.clear();
 		add_data_to_model();
 		set_model(model);
-		Main.instance().main_window.searchEntryMB.set_sensitive(true);
+		xn.main_window.searchEntryMB.set_sensitive(true);
 		this.set_sensitive(true);
 		return false;
 	}

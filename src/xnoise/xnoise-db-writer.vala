@@ -50,7 +50,7 @@ public class Xnoise.DbWriter : GLib.Object {
 
 	//CREATE TABLE STATEMENTS
 	private static const string STMT_CREATE_MLIB = 
-		"CREATE TABLE mlib(id integer primary key, tracknumber integer, artist text, album text, title text, genre text, uri text);";
+		"CREATE TABLE mlib(id integer primary key, tracknumber integer, artist text, album text, title text, genre text, uri text, mediatype integer);";
 	private static const string STMT_CREATE_LASTUSED = 
 		"CREATE TABLE lastused(uri text, mediatype integer);"; //for now 0=audio,1=video
 	private static const string STMT_CREATE_MUSICFOLDERS = 
@@ -70,11 +70,11 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_GET_MUSIC_FOLDERS = 
 		"SELECT * FROM music_folders";
 	private static const string STMT_UPDATE_ENTRY = 
-		"INSERT INTO mlib (id, tracknumber, artist, album, title, genre, uri) VALUES (\"null\", ?, ?, ?, ?, ?, ?)";
+		"INSERT INTO mlib (id, tracknumber, artist, album, title, genre, uri, mediatype) VALUES (\"null\", ?, ?, ?, ?, ?, ?, ?)";
 	private static const string STMT_INSERT_ENTRY = 
-		"INSERT INTO mlib (tracknumber, artist, album, title, genre, uri) VALUES (?, ?, ?, ?, ?, ?)";
+		"INSERT INTO mlib (tracknumber, artist, album, title, genre, uri, mediatype) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	private static const string STMT_INSERT_LASTUSED = 
-		"INSERT INTO lastused (uri,mediatype) VALUES (?,?)";
+		"INSERT INTO lastused (uri, mediatype) VALUES (?,?)";
 	private static const string STMT_WRITE_MUSIC_FOLDERS = 
 		"INSERT INTO music_folders (name) VALUES (?)";
 	private static const string STMT_DEL_MUSIC_FOLDERS = 
@@ -195,12 +195,13 @@ public class Xnoise.DbWriter : GLib.Object {
 	    	out this.del_mlib_statement); 
 	}
 
-	private void db_update_entry(int id, TrackData tags, string uri) {
-		string artist    = tags.Artist;
-		string title     = tags.Title;
-		string album     = tags.Album;
-		string genre     = tags.Genre;
-		uint tracknumber = tags.Tracknumber;
+	private void db_update_entry(int id, TrackData td, string uri) {
+		string artist    = td.Artist;
+		string title     = td.Title;
+		string album     = td.Album;
+		string genre     = td.Genre;
+		uint tracknumber = td.Tracknumber;
+		int mediatype    = (int)td.Mediatype;
 
 		if(id>0){
 			delete_mlib_entry_statement.reset();
@@ -215,27 +216,27 @@ public class Xnoise.DbWriter : GLib.Object {
 			update_mlib_entry_statement.bind_text(5, title);
 			update_mlib_entry_statement.bind_text(6, genre);
 			update_mlib_entry_statement.bind_text(7, uri);
+			update_mlib_entry_statement.bind_int (8, mediatype);
 			update_mlib_entry_statement.step();
 		}
 	}
 
-	private void db_insert_entry(TrackData tags, string uri) {
-//		if (tags.Artist=="") return;
-//		if (tags.Album=="") return;
-//		if (tags.Title=="") return;
-		string artist    = tags.Artist;
-		string title     = tags.Title;
-		string album     = tags.Album;
-		string genre     = tags.Genre;
-		uint tracknumber = tags.Tracknumber; 
-
+	private void db_insert_entry(TrackData td, string uri) {
+		string artist    = td.Artist;
+		string title     = td.Title;
+		string album     = td.Album;
+		string genre     = td.Genre;
+		uint tracknumber = td.Tracknumber; 
+		int mediatype    = (int)td.Mediatype;
+		
 		insert_mlib_entry_statement.reset();
 		if( insert_mlib_entry_statement.bind_int( 1, (int)tracknumber) !=Sqlite.OK||
-			insert_mlib_entry_statement.bind_text(2, artist) !=Sqlite.OK||
-			insert_mlib_entry_statement.bind_text(3, album)  !=Sqlite.OK||
-			insert_mlib_entry_statement.bind_text(4, title)  !=Sqlite.OK||
-			insert_mlib_entry_statement.bind_text(5, genre)  !=Sqlite.OK||
-			insert_mlib_entry_statement.bind_text(6, uri)   !=Sqlite.OK) {
+			insert_mlib_entry_statement.bind_text(2, artist)   !=Sqlite.OK||
+			insert_mlib_entry_statement.bind_text(3, album)    !=Sqlite.OK||
+			insert_mlib_entry_statement.bind_text(4, title)    !=Sqlite.OK||
+			insert_mlib_entry_statement.bind_text(5, genre)    !=Sqlite.OK||
+			insert_mlib_entry_statement.bind_text(6, uri)      !=Sqlite.OK||
+			insert_mlib_entry_statement.bind_int (7, mediatype)!=Sqlite.OK) {
 			this.db_error();
 		}
 		if(insert_mlib_entry_statement.step()!=Sqlite.DONE) {
@@ -279,19 +280,13 @@ public class Xnoise.DbWriter : GLib.Object {
 
 			string content = info.get_content_type();
 			weak string mime = g_content_type_get_mime_type(content);
-			PatternSpec psAudio = new PatternSpec("audio*");
+			PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u seperately
+			PatternSpec psVideo = new PatternSpec("video*");
 
 			if(filetype == FileType.DIRECTORY) {
 				this.import_tags_for_files(file);
 			} 
 			else if(psAudio.match_string(mime)) {
-//			stderr.printf("mime %s\n", mime);
-//			else if((mime == "audio/x-vorbis+ogg")|
-//			         (mime == "audio/mpeg")|
-//			         (mime == "audio/x-wav")|
-//			         (mime == "audio/x-flac")|
-//			         (mime == "audio/x-speex"))
-//audio/x-ms-wma {
 //				if(mime=="audio/x-mpegurl") print("file %s\n",file.get_path()); 
 				int idbuffer = db_entry_exists(file.get_uri());
 				if(idbuffer== -1) {
@@ -305,6 +300,25 @@ public class Xnoise.DbWriter : GLib.Object {
 					current+=1;
 				}
 //				sign_import_progress(current, amount);   //TODO: Maybe use this to track import progress        
+			}
+			else if(psVideo.match_string(mime)) {
+				int idbuffer = db_entry_exists(file.get_uri());
+				TrackData td = TrackData();
+				td.Artist = "VIDEO";
+				td.Album = "VIDEO";
+				td.Title = file.get_basename();
+				td.Genre = "";
+				td.Tracknumber = 0;
+				td.Mediatype   = MediaType.VIDEO;
+				
+				if(idbuffer== -1) {
+					this.db_insert_entry(td, file.get_uri());
+					current+=1;
+				}
+				else {
+					this.db_update_entry(idbuffer, td, file.get_uri());
+					current+=1;
+				}				
 			}
 		}
 	}
