@@ -39,6 +39,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement get_artist_statement;
 	private Statement get_albums_statement;
 	private Statement get_titles_statement;
+	private Statement get_titles_with_mediatypes_statement;
 	private Statement uri_for_track_statement;
 	private Statement track_id_for_uri_statement;
 	private Statement trackdata_for_uri_statement;
@@ -64,7 +65,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 		"SELECT DISTINCT album FROM mlib WHERE artist = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) ORDER BY LOWER(album) DESC";
 	private static const string STMT_GET_TITLES = 
 		"SELECT DISTINCT title FROM mlib WHERE artist = ? AND album = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) ORDER BY tracknumber DESC"; 
-
+	private static const string STMT_GET_TITLES_WITH_MEDIATYPES = 
+		"SELECT DISTINCT title, mediatype FROM mlib WHERE artist = ? AND album = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) ORDER BY tracknumber DESC";
 	public DbBrowser() {
 		DATABASE = dbFileName();
 		if(Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) { 
@@ -98,6 +100,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 			out this.get_albums_statement); 
 		this.db.prepare_v2(STMT_GET_TITLES, -1, 
 			out this.get_titles_statement); 
+		this.db.prepare_v2(STMT_GET_TITLES_WITH_MEDIATYPES, -1, 
+			out this.get_titles_with_mediatypes_statement); 
 		this.db.prepare_v2(STMT_TRACKDATA_FOR_URI , -1, 
 			out this.trackdata_for_uri_statement); 
 		this.db.prepare_v2(STMT_TRACK_ID_FOR_URI, -1, 
@@ -226,6 +230,26 @@ public class Xnoise.DbBrowser : GLib.Object {
 		}
 		while(get_albums_statement.step() == Sqlite.ROW) {
 			val += get_albums_statement.column_text(0);
+		}
+		return val;
+	}
+
+	public Title_with_Type[] get_titles_with_mediatypes(string artist, string album, ref string searchtext) { 
+		Title_with_Type[] val = {};
+		get_titles_with_mediatypes_statement.reset();
+		if((this.get_titles_with_mediatypes_statement.bind_text(1, artist)!=Sqlite.OK)|
+		   (this.get_titles_with_mediatypes_statement.bind_text(2, album)!=Sqlite.OK)|
+		   (this.get_titles_with_mediatypes_statement.bind_text(3, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
+		   (this.get_titles_with_mediatypes_statement.bind_text(4, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
+		   (this.get_titles_with_mediatypes_statement.bind_text(5, "%%%s%%".printf(searchtext))!=Sqlite.OK)) {
+			this.db_error();
+		}
+		
+		while(get_titles_with_mediatypes_statement.step() == Sqlite.ROW) {
+			Title_with_Type twt = Title_with_Type();
+			twt.name = get_titles_with_mediatypes_statement.column_text(0);
+			twt.mediatype = (MediaType) get_titles_with_mediatypes_statement.column_int(1);
+			val += twt;
 		}
 		return val;
 	}

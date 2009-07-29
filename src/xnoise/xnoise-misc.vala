@@ -47,6 +47,7 @@ namespace Xnoise {
 public enum Xnoise.BrowserColumn {
 	ICON = 0,
 	VIS_TEXT,
+	MEDIATYPE,
 	N_COLUMNS
 }
 
@@ -71,6 +72,11 @@ public struct Xnoise.TrackData { // meta information structure
 	public string Genre;
 	public uint Tracknumber;
 	public MediaType Mediatype = MediaType.UNKNOWN;
+}
+
+public struct Xnoise.Title_with_Type {
+	public string name;
+	public MediaType mediatype;
 }
 
 public enum Xnoise.TrackListColumn {

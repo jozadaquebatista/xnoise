@@ -37,6 +37,7 @@ namespace Xnoise {
 		public string[] get_artists (ref string searchtext);
 		public string[] get_lastused_uris ();
 		public string[] get_titles (string artist, string album, ref string searchtext);
+		public Xnoise.Title_with_Type[] get_titles_with_mediatypes (string artist, string album, ref string searchtext);
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_uri (string uri, out Xnoise.TrackData val);
 		public int get_tracknumber_for_title (string artist, string album, string title);
@@ -125,7 +126,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MusicBrowser : Gtk.TreeView, Xnoise.IParams {
-		public Gtk.TreeStore model;
+		public Gtk.TreeStore treemodel;
 		public bool change_model_data ();
 		public MusicBrowser (ref unowned Xnoise.Main xn);
 		public bool on_button_press (Xnoise.MusicBrowser sender, Gdk.EventButton e);
@@ -231,6 +232,11 @@ namespace Xnoise {
 		public abstract string name { get; }
 		public abstract Xnoise.Main xn { get; set; }
 	}
+	[CCode (type_id = "XNOISE_TYPE_TITLE_WITH__TYPE", cheader_filename = "xnoise.h")]
+	public struct Title_with_Type {
+		public string name;
+		public Xnoise.MediaType mediatype;
+	}
 	[CCode (type_id = "XNOISE_TYPE_TRACK_DATA", cheader_filename = "xnoise.h")]
 	public struct TrackData {
 		public string Artist;
@@ -244,6 +250,7 @@ namespace Xnoise {
 	public enum BrowserColumn {
 		ICON,
 		VIS_TEXT,
+		MEDIATYPE,
 		N_COLUMNS
 	}
 	[CCode (cprefix = "XNOISE_DIRECTION_", cheader_filename = "xnoise.h")]

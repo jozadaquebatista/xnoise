@@ -149,6 +149,9 @@ typedef struct _XnoiseDbBrowserPrivate XnoiseDbBrowserPrivate;
 #define XNOISE_TYPE_MEDIA_TYPE (xnoise_media_type_get_type ())
 typedef struct _XnoiseTrackData XnoiseTrackData;
 
+#define XNOISE_TYPE_TITLE_WITH__TYPE (xnoise_title_with__type_get_type ())
+typedef struct _XnoiseTitle_with_Type XnoiseTitle_with_Type;
+
 #define XNOISE_TYPE_DB_WRITER (xnoise_db_writer_get_type ())
 #define XNOISE_DB_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DB_WRITER, XnoiseDbWriter))
 #define XNOISE_DB_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DB_WRITER, XnoiseDbWriterClass))
@@ -341,6 +344,11 @@ struct _XnoiseTrackData {
 	XnoiseMediaType Mediatype;
 };
 
+struct _XnoiseTitle_with_Type {
+	char* name;
+	XnoiseMediaType mediatype;
+};
+
 struct _XnoiseDbWriter {
 	GObject parent_instance;
 	XnoiseDbWriterPrivate * priv;
@@ -353,7 +361,7 @@ struct _XnoiseDbWriterClass {
 struct _XnoiseMusicBrowser {
 	GtkTreeView parent_instance;
 	XnoiseMusicBrowserPrivate * priv;
-	GtkTreeStore* model;
+	GtkTreeStore* treemodel;
 	gint fontsizeMB;
 };
 
@@ -383,6 +391,7 @@ Enums*/
 typedef enum  {
 	XNOISE_BROWSER_COLUMN_ICON = 0,
 	XNOISE_BROWSER_COLUMN_VIS_TEXT,
+	XNOISE_BROWSER_COLUMN_MEDIATYPE,
 	XNOISE_BROWSER_COLUMN_N_COLUMNS
 } XnoiseBrowserColumn;
 
@@ -566,6 +575,12 @@ gint xnoise_db_browser_get_tracknumber_for_title (XnoiseDbBrowser* self, const c
 char** xnoise_db_browser_get_lastused_uris (XnoiseDbBrowser* self, int* result_length1);
 char** xnoise_db_browser_get_artists (XnoiseDbBrowser* self, char** searchtext, int* result_length1);
 char** xnoise_db_browser_get_albums (XnoiseDbBrowser* self, const char* artist, char** searchtext, int* result_length1);
+GType xnoise_title_with__type_get_type (void);
+XnoiseTitle_with_Type* xnoise_title_with__type_dup (const XnoiseTitle_with_Type* self);
+void xnoise_title_with__type_free (XnoiseTitle_with_Type* self);
+void xnoise_title_with__type_copy (const XnoiseTitle_with_Type* self, XnoiseTitle_with_Type* dest);
+void xnoise_title_with__type_destroy (XnoiseTitle_with_Type* self);
+XnoiseTitle_with_Type* xnoise_db_browser_get_titles_with_mediatypes (XnoiseDbBrowser* self, const char* artist, const char* album, char** searchtext, int* result_length1);
 char** xnoise_db_browser_get_titles (XnoiseDbBrowser* self, const char* artist, const char* album, char** searchtext, int* result_length1);
 GType xnoise_db_writer_get_type (void);
 XnoiseDbWriter* xnoise_db_writer_new (void);
