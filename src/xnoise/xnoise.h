@@ -573,6 +573,7 @@ void xnoise_params_set_string_value (XnoiseParams* self, const char* key, const 
 GType xnoise_db_browser_get_type (void);
 XnoiseDbBrowser* xnoise_db_browser_new (void);
 XnoiseDbBrowser* xnoise_db_browser_construct (GType object_type);
+gboolean xnoise_db_browser_videos_available (XnoiseDbBrowser* self);
 gboolean xnoise_db_browser_uri_is_in_db (XnoiseDbBrowser* self, const char* uri);
 gboolean xnoise_db_browser_get_uri_for_id (XnoiseDbBrowser* self, gint id, char** val);
 GType xnoise_track_data_get_type (void);

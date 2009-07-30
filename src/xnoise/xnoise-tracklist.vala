@@ -627,8 +627,7 @@ public class Xnoise.TrackList : TreeView {
 		for (int i = 0; i < numberOfRows; i++) {
 			listmodel.iter_nth_child(out iter, null, i);
 			listmodel.get(iter, 
-				TrackListColumn.STATE, out status);//, 
-//				-1);
+				TrackListColumn.STATE, out status);
 			if(status>0) {
 				listmodel.set(iter,
 					TrackListColumn.ICON, pixbuf,

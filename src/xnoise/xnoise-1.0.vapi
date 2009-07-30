@@ -48,6 +48,7 @@ namespace Xnoise {
 		public string[] get_videos (ref string searchtext);
 		public DbBrowser ();
 		public bool uri_is_in_db (string uri);
+		public bool videos_available ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {

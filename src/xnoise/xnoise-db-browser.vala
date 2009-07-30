@@ -48,7 +48,10 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement trackdata_for_id_statement;
 	private Statement uri_for_id_statement;
 	private Statement tracknumber_for_track_statement;
+	private Statement count_for_mediatype_statement;
 	
+	private static const string STMT_COUNT_FOR_MEDIATYPE = 
+		"SELECT COUNT (*) FROM mlib WHERE mediatype = ?";
 	private static const string STMT_COUNT_FOR_URI = 
 		"SELECT COUNT (*) FROM mlib WHERE uri = ?";
 	private static const string STMT_TABLES_EXIST = 
@@ -102,6 +105,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 	}
 
 	private void prepare_statements() { 
+		this.db.prepare_v2(STMT_COUNT_FOR_MEDIATYPE, -1, 
+			out this.count_for_mediatype_statement); 	
 		this.db.prepare_v2(STMT_COUNT_FOR_URI, -1, 
 			out this.count_for_uri_statement); 
 		this.db.prepare_v2(STMT_GET_ARTISTS, -1, 
@@ -131,7 +136,21 @@ public class Xnoise.DbBrowser : GLib.Object {
 		this.db.prepare_v2(STMT_TRACKDATA_FOR_ID , -1, 
 			out this.trackdata_for_id_statement); 
 	}
-	
+
+	public bool videos_available() {
+		int count = 0;
+		count_for_mediatype_statement.reset();
+		
+		if(count_for_mediatype_statement.bind_int(1, MediaType.VIDEO)!=Sqlite.OK) {
+			this.db_error();
+		}
+		if(count_for_mediatype_statement.step() == Sqlite.ROW) {
+			count = count_for_mediatype_statement.column_int(0);
+		}
+		if(count>0) return true;
+		return false;
+	}
+		
 	public bool uri_is_in_db(string uri) {
 		int count = 0;
 		count_for_uri_statement.reset();

@@ -489,9 +489,8 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 
 	private void put_videos_to_model() {
 		DbBrowser dbb = new DbBrowser();
-
 		Title_MType_Id[] tmis;
-
+		if(!dbb.videos_available()) return;
 		TreeIter iter_videos, iter_singlevideo;
 		treemodel.prepend(out iter_videos, null); 
 		treemodel.set(iter_videos,  	

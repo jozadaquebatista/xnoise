@@ -157,9 +157,9 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 				this.trackList.insert_title(0,
 					                        null,
 					                        (int)td.Tracknumber,
-					                        td.Title,
-					                        td.Album,
-					                        td.Artist,
+					                        Markup.printf_escaped("%s",td.Title),
+					                        Markup.printf_escaped("%s",td.Album),
+					                        Markup.printf_escaped("%s",td.Artist),
 					                        uri);
 			}
 		}
