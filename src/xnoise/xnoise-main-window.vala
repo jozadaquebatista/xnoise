@@ -727,7 +727,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 
 	private void create_widgets() {
 		try {
-			assert(GLib.FileUtils.test(MAIN_UI_FILE, FileTest.EXISTS));
+//			assert(GLib.FileUtils.test(MAIN_UI_FILE, FileTest.EXISTS));
 			
 			Builder gb = new Gtk.Builder();
 			gb.add_from_file(MAIN_UI_FILE);

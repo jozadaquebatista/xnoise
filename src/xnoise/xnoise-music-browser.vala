@@ -39,6 +39,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	private Gdk.Pixbuf album_pixb;
 	private Gdk.Pixbuf title_pixb;
 	private Gdk.Pixbuf video_pixb;
+	private Gdk.Pixbuf videos_pixb;
 	private bool dragging;
 	private bool use_treelines;
 	internal int fontsizeMB = 8;
@@ -472,13 +473,24 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 				tmis = titles_browser.get_titles_with_mediatypes_and_ids(artist, album, ref searchtext);
 				foreach(weak Title_MType_Id tmi in tmis) {	         //TITLES WITH MEDIATYPES
 					treemodel.prepend(out iter_title, iter_album); 
-					treemodel.set(iter_title,  	
-						BrowserColumn.ICON, title_pixb,		
-						BrowserColumn.VIS_TEXT, tmi.name,
-						BrowserColumn.DB_ID, tmi.id,
-						BrowserColumn.MEDIATYPE , (int)tmi.mediatype,
-						BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
-						-1); 
+					if(tmi.mediatype == MediaType.AUDIO) {
+						treemodel.set(iter_title,  	
+							BrowserColumn.ICON, title_pixb,		
+							BrowserColumn.VIS_TEXT, tmi.name,
+							BrowserColumn.DB_ID, tmi.id,
+							BrowserColumn.MEDIATYPE , (int)tmi.mediatype,
+							BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
+							-1); 
+					}
+					else {
+						treemodel.set(iter_title,  	
+							BrowserColumn.ICON, video_pixb,		
+							BrowserColumn.VIS_TEXT, tmi.name,
+							BrowserColumn.DB_ID, tmi.id,
+							BrowserColumn.MEDIATYPE , (int)tmi.mediatype,
+							BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
+							-1); 						
+					}
 				}
 			}
 		}
@@ -494,7 +506,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		TreeIter iter_videos, iter_singlevideo;
 		treemodel.prepend(out iter_videos, null); 
 		treemodel.set(iter_videos,  	
-			BrowserColumn.ICON, video_pixb,
+			BrowserColumn.ICON, videos_pixb,
 			BrowserColumn.VIS_TEXT, "VIDEOS",
 			BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
 			-1); 
@@ -517,7 +529,10 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 			artist_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
 			album_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "album.png");
 			title_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "note.png");
-			video_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "album.png");
+			Gtk.Invisible w = new Gtk.Invisible();
+			videos_pixb  = w.render_icon(Gtk.STOCK_MEDIA_RECORD, IconSize.BUTTON, null); 
+			w = new Gtk.Invisible();
+			video_pixb  = w.render_icon(Gtk.STOCK_FILE, IconSize.BUTTON, null); 
 		}
 		catch (GLib.Error e) {
 			print("Error: %s\n",e.message);
