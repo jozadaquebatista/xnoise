@@ -304,12 +304,12 @@ public class Xnoise.DbWriter : GLib.Object {
 			else if(psVideo.match_string(mime)) {
 				int idbuffer = db_entry_exists(file.get_uri());
 				TrackData td = TrackData();
-				td.Artist = "VIDEO";
-				td.Album = "VIDEO";
+				td.Artist = "unknown artist";
+				td.Album = "unknown album";
 				td.Title = file.get_basename();
 				td.Genre = "";
 				td.Tracknumber = 0;
-				td.Mediatype   = MediaType.VIDEO;
+				td.Mediatype = MediaType.VIDEO;
 				
 				if(idbuffer== -1) {
 					this.db_insert_entry(td, file.get_uri());

@@ -35,7 +35,18 @@ namespace Xnoise {
 	public static Params par;
 	
 	public static void initialize() {
-		par = new Params();
+		if(par==null) par = new Params();
+	}
+	
+	public static string remove_linebreaks(string value) {
+		try {
+			GLib.Regex r = new GLib.Regex("\n");
+			return r.replace(value, -1, 0, " ");
+		}
+		catch(GLib.RegexError e) {
+			print("%s\n", e.message);
+		}
+		return value;
 	}
 }
 
@@ -47,8 +58,17 @@ namespace Xnoise {
 public enum Xnoise.BrowserColumn {
 	ICON = 0,
 	VIS_TEXT,
+	DB_ID,
 	MEDIATYPE,
+	COLL_TYPE,
 	N_COLUMNS
+}
+
+
+public enum Xnoise.BrowserCollectionType {
+	UNKNOWN = 0,
+	HIERARCHICAL = 1,
+	LISTED = 2
 }
 
 public enum Xnoise.Repeat { 
@@ -72,10 +92,12 @@ public struct Xnoise.TrackData { // meta information structure
 	public string Genre;
 	public uint Tracknumber;
 	public MediaType Mediatype = MediaType.UNKNOWN;
+	public string Uri;
 }
 
-public struct Xnoise.Title_with_Type {
+public struct Xnoise.Title_MType_Id {
 	public string name;
+	public int id;
 	public MediaType mediatype;
 }
 

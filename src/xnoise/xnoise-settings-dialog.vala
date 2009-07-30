@@ -57,7 +57,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 		if((int)(sender.value) < 7 ) sender.value = 7;
 		if((int)(sender.value) > 15) sender.value = 15;
 		fontsizeMB = (int)sender.value;
-		Main.instance().main_window.musicBr.fontsizeMB = fontsizeMB;
+		xn.main_window.musicBr.fontsizeMB = fontsizeMB;
 		//TODO:immediatly do something with the new value
 	}
 

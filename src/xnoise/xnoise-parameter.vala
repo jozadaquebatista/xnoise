@@ -43,7 +43,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		read_all_parameters_from_file(); //Fill hash tables on construction time
 	}
 
-	public void data_register(IParams iparam) {
+	public void iparams_register(IParams iparam) {
 		//Each IParams interface implementor goes to the List
 		IParams_implementers.remove(iparam); //..and shouldn't be doubled
 		IParams_implementers.append(iparam);

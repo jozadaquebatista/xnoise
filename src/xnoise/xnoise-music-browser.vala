@@ -38,6 +38,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	private Gdk.Pixbuf artist_pixb;
 	private Gdk.Pixbuf album_pixb;
 	private Gdk.Pixbuf title_pixb;
+	private Gdk.Pixbuf video_pixb;
 	private bool dragging;
 	private bool use_treelines;
 	internal int fontsizeMB = 8;
@@ -48,10 +49,10 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 
 	public MusicBrowser(ref weak Main xn) {
 		this.xn = xn;
-		par.data_register(this);
+		par.iparams_register(this);
 		create_model();
 		set_pixbufs();
-		add_data_to_model();
+		populate_model();
 		create_view();
 		set_model(treemodel); 
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);		
@@ -195,122 +196,144 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	}
 
 	private string[] build_uri_list_for_treepath(Gtk.TreePath path) {
-		TreeIter iter, iterp, iterp2, iterChild, iterChildChild;
-		string artist = "";
-		string album  = "";
-		string title  = "";
+		TreeIter iter, iterChild, iterChildChild; 
 		string[] urilist = {};
-	
+		DbBrowser dbb;
+		int dbid = -1;
+		BrowserCollectionType br_ct = BrowserCollectionType.UNKNOWN;
 		switch(path.get_depth()) {
 			case 1:
 				treemodel.get_iter(out iter, path);
-				treemodel.get(iter, BrowserColumn.VIS_TEXT, ref artist);
-				for(int i = 0; i < treemodel.iter_n_children(iter); i++) {
-					treemodel.iter_nth_child(out iterChild, iter, i);
-					string currentalbum = "";
-					treemodel.get(iterChild, BrowserColumn.VIS_TEXT, ref currentalbum);
-					for(int j = 0; j<treemodel.iter_n_children(iterChild); j++) {
-						treemodel.iter_nth_child(out iterChildChild, iterChild, j);
-						string currenttitle = "";
-						treemodel.get(iterChildChild, BrowserColumn.VIS_TEXT, ref currenttitle);
-						var dbb = new DbBrowser();
-						string uri = dbb.get_uri_for_title(artist, currentalbum, currenttitle);
-						urilist += uri;
+				dbb = new DbBrowser();
+
+				treemodel.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
+				if(br_ct == BrowserCollectionType.LISTED) {
+					dbid = -1;
+					for(int i = 0; i < treemodel.iter_n_children(iter); i++) {
+						dbid = -1;
+						treemodel.iter_nth_child(out iterChild, iter, i);
+						treemodel.get(iterChild, BrowserColumn.DB_ID, ref dbid);
+						if(dbid==-1) break;
+						string uri;
+						if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+					}
+				}
+				else if(br_ct == BrowserCollectionType.HIERARCHICAL) {
+					for(int i = 0; i < treemodel.iter_n_children(iter); i++) {
+						treemodel.iter_nth_child(out iterChild, iter, i);
+						for(int j = 0; j<treemodel.iter_n_children(iterChild); j++) {
+							dbid = -1;
+							treemodel.iter_nth_child(out iterChildChild, iterChild, j);
+							treemodel.get(iterChildChild, BrowserColumn.DB_ID, ref dbid);
+							string uri;
+							if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+						}
 					}
 				}
 				break;
 			case 2:
 				treemodel.get_iter(out iter, path);
-				treemodel.get(iter, BrowserColumn.VIS_TEXT, ref album);
-				if(treemodel.iter_parent(out iterp, iter)) {
-					treemodel.get(iterp, BrowserColumn.VIS_TEXT, ref artist);
+				dbb = new DbBrowser();
+				treemodel.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
+				if(br_ct == BrowserCollectionType.LISTED) {
+					dbid = -1;
+					treemodel.get(iter, BrowserColumn.DB_ID, ref dbid);
+					if(dbid==-1) break;
+					string uri;
+					if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 				}
-				for(int i = 0; i < treemodel.iter_n_children(iter); i++) {
-					treemodel.iter_nth_child(out iterChild, iter, i);
-					string currenttitle = "";
-					treemodel.get(iterChild, BrowserColumn.VIS_TEXT, ref currenttitle);
-					var dbb = new DbBrowser();
-					string uri = dbb.get_uri_for_title(artist, album, currenttitle);
-					urilist += uri;
+				else if(br_ct == BrowserCollectionType.HIERARCHICAL) {
+					
+					for(int i = 0; i < treemodel.iter_n_children(iter); i++) {
+						dbid = -1;
+						treemodel.iter_nth_child(out iterChild, iter, i);
+						treemodel.get(iterChild, BrowserColumn.DB_ID, ref dbid);
+						string uri;
+						if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+					}
 				}
 				break;
-			case 3:
+			case 3: //TITLE
+				dbid = -1;
 				treemodel.get_iter(out iter, path);
-				treemodel.get(iter, BrowserColumn.VIS_TEXT, ref title);
-				if(treemodel.iter_parent(out iterp, iter)) {
-					treemodel.get(iterp, BrowserColumn.VIS_TEXT, ref album);
-				}
-				if(treemodel.iter_parent(out iterp2, iterp)) {
-					treemodel.get(iterp2, BrowserColumn.VIS_TEXT, ref artist);
-				}
-				var dbb = new DbBrowser();
-				string uri = dbb.get_uri_for_title(artist, album, title);
-				urilist += uri;
+				treemodel.get(iter, BrowserColumn.DB_ID, ref dbid);
+				if(dbid==-1) break;
+				dbb = new DbBrowser();
+				string uri;
+				if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 				break;
 		}
 		return urilist;		
 	}
 
-	private TrackData[] get_trackdata_for_treepath(Gtk.TreePath path) {
-		TreeIter iter, iterp, iterp2, iterChild, iterChildChild;
-		string artist = "";
-		string album = "";
-		string title = "";
-		TrackData[] td_list = new TrackData[0]; 
+	private TrackData[] get_trackdata_listed(Gtk.TreePath path) {
+		//this is only used for path.get_depth() == 2 !
+		print("listed\n");
+		DbBrowser dbb;
+		int dbid = -1;
+		TreeIter iter;
+		TrackData[] td_list = {}; 
+		treemodel.get_iter(out iter, path);
+
+		treemodel.get(iter, BrowserColumn.DB_ID, ref dbid);
+		if(dbid==-1) return td_list;
+		
+		dbb = new DbBrowser();
+		TrackData td;
+		if(dbb.get_trackdata_for_id(dbid, out td)) td_list += td;
+
+		return td_list;
+	}
 	
-		switch (path.get_depth()) {
-			case 1: //ARTIST
-				treemodel.get_iter(out iter, path);
-				treemodel.get(iter, 1, ref artist);
-				for (int i = 0; i < treemodel.iter_n_children(iter); i++) {
-					treemodel.iter_nth_child(out iterChild, iter, i);
-					string currentalbum = "";
-					treemodel.get(iterChild, 1, ref currentalbum);
-					for(int j = 0; j <treemodel.iter_n_children(iterChild); j++) {
-						treemodel.iter_nth_child(out iterChildChild, iterChild, j);
-						string currenttitle = "";
-						treemodel.get(iterChildChild, 1, ref currenttitle);
-						TrackData td = TrackData();
-						td.Artist = artist;
-						td.Album  = currentalbum;
-						td.Title  = currenttitle; //TODO: get rid of tmp values
-						td_list += td;
-					}
-				}
+	private TrackData[] get_trackdata_hierarchical(Gtk.TreePath path) {
+		DbBrowser dbb;
+		TreeIter iter, iterChild;
+		int dbid = -1;
+		TrackData[] td_list = {}; 
+		switch(path.get_depth()) {
+			case 1: //ARTIST (this case is currently not used)
 				break;
 			case 2: //ALBUM
 				treemodel.get_iter(out iter, path);
-				treemodel.get(iter, 1, ref album);
-				if (treemodel.iter_parent(out iterp, iter)) {
-					treemodel.get(iterp, 1, ref artist);
-				}
+				
+				dbb = new DbBrowser();
+				
 				for(int i = 0; i < treemodel.iter_n_children(iter); i++) {
+					dbid = -1;
 					treemodel.iter_nth_child(out iterChild, iter, i);
-					string currenttitle = "";
-					treemodel.get(iterChild, 1, ref currenttitle);
-					TrackData td = TrackData();
-					td.Artist = artist;
-					td.Album  = album;
-					td.Title  = currenttitle;
-					td_list += td;
+					treemodel.get(iterChild, BrowserColumn.DB_ID, ref dbid);
+					if(dbid==-1) continue;
+					TrackData td;
+					if(dbb.get_trackdata_for_id(dbid, out td)) td_list += td;
 				}
 				break;
 			case 3: //TITLE
+				dbid = -1;
 				treemodel.get_iter(out iter, path);
-				treemodel.get(iter, 1, ref title);
-				if(treemodel.iter_parent(out iterp, iter)) {
-					treemodel.get(iterp, 1, ref album);
-				}
-				if(treemodel.iter_parent(out iterp2, iterp)) {
-					treemodel.get(iterp2, 1, ref artist);
-				}
-				TrackData td = TrackData();
-				td.Artist = artist;
-				td.Album  = album;
-				td.Title  = title;
-				td_list += td;
+				treemodel.get(iter, BrowserColumn.DB_ID, ref dbid);
+				if(dbid==-1) break;
+				
+				dbb = new DbBrowser();
+				
+				TrackData td;
+				if(dbb.get_trackdata_for_id(dbid, out td)) td_list += td;
 				break;
 		}		
+		return td_list;
+	}
+	
+	public TrackData[] get_trackdata_for_treepath(Gtk.TreePath path) {
+		TreeIter iter;
+		BrowserCollectionType br_ct = BrowserCollectionType.UNKNOWN;
+		TrackData[] td_list = {}; 
+		treemodel.get_iter(out iter, path);
+		treemodel.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
+		if(br_ct == BrowserCollectionType.LISTED) {
+			return get_trackdata_listed(path);
+		}
+		else if(br_ct == BrowserCollectionType.HIERARCHICAL) {
+			return get_trackdata_hierarchical(path);
+		}
 		return td_list;
 	}
 
@@ -328,7 +351,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	private void on_row_activated(MusicBrowser sender, TreePath path, TreeViewColumn column){
 		if(path.get_depth()>1) {
 			TrackData[] td_list = this.get_trackdata_for_treepath(path);
-			this.add_songs(td_list, true);
+			this.add_songs_to_playlist(td_list, true);
 			td_list = null;
 		}
 		else {
@@ -336,15 +359,14 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		}
 	}
 
-	private void add_songs(TrackData[] td_list, bool imediate_play = false)	{
-		var dbBr = new DbBrowser();
+	private void add_songs_to_playlist(TrackData[] td_list, bool imediate_play = false)	{
 		int i = 0;
 		TreeIter iter;
 		TreeIter iter_2 = TreeIter();
 		if(imediate_play) xn.main_window.trackList.reset_play_status_for_title();
 		foreach(weak TrackData td in td_list) {
-			string uri = dbBr.get_uri_for_title(td.Artist, td.Album, td.Title); 
-			int tracknumber = dbBr.get_tracknumber_for_title(td.Artist, td.Album, td.Title);
+			string uri = td.Uri; 
+			int tracknumber = (int)td.Tracknumber;
 			if(imediate_play) {
 				if(i==0) {
 					xn.add_track_to_gst_player(uri);
@@ -386,10 +408,15 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	}
 
 	public bool change_model_data() {
-		dummymodel = new TreeStore(2, typeof(Gdk.Pixbuf), typeof(string), typeof(int));
+		dummymodel = new TreeStore(BrowserColumn.N_COLUMNS,  
+		                           typeof(Gdk.Pixbuf), 
+		                           typeof(string),
+		                           typeof(int),
+		                           typeof(int),
+		                           typeof(int));
 		set_model(dummymodel);
 		treemodel.clear();
-		add_data_to_model();
+		populate_model();
 		set_model(treemodel);
 		xn.main_window.searchEntryMB.set_sensitive(true);
 		this.set_sensitive(true);
@@ -400,10 +427,22 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		treemodel = new TreeStore(BrowserColumn.N_COLUMNS, 
 		                      typeof(Gdk.Pixbuf), 
 		                      typeof(string),
+		                      typeof(int),
+		                      typeof(int),
 		                      typeof(int));
 	}
 	
-	private bool add_data_to_model() {
+	private bool populate_model() {
+		put_hierarchical_data_to_model();
+		put_listed_data_to_model(); // put at last, then it is on top
+		return false;
+	}
+
+	private void put_listed_data_to_model() {
+		put_videos_to_model();
+	}
+			
+	private void put_hierarchical_data_to_model() {
 		DbBrowser artists_browser = new DbBrowser();
 		DbBrowser albums_browser  = new DbBrowser();
 		DbBrowser titles_browser  = new DbBrowser();
@@ -411,30 +450,34 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		string[] artistArray;
 		string[] albumArray;
 		string[] titleArray;
-		Title_with_Type[] twts;
-
+		Title_MType_Id[] tmis;
+		
 		TreeIter iter_artist, iter_album, iter_title;	
 		artistArray = artists_browser.get_artists(ref searchtext);
 		foreach(weak string artist in artistArray) { 	              //ARTISTS
 			treemodel.prepend(out iter_artist, null); 
 			treemodel.set(iter_artist,  	
 				BrowserColumn.ICON, artist_pixb,		
-				BrowserColumn.VIS_TEXT, artist,		
+				BrowserColumn.VIS_TEXT, artist,
+				BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,	
 				-1); 
 			albumArray = albums_browser.get_albums(artist, ref searchtext);
 			foreach(weak string album in albumArray) { 			    //ALBUMS
 				treemodel.prepend(out iter_album, iter_artist); 
 				treemodel.set(iter_album,  	
 					BrowserColumn.ICON, album_pixb,		
-					BrowserColumn.VIS_TEXT, album,		
+					BrowserColumn.VIS_TEXT, album,
+					BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,	
 					-1); 
-				twts = titles_browser.get_titles_with_mediatypes(artist, album, ref searchtext);
-				foreach(weak Title_with_Type twt in twts) {	         //TITLES WITH MEDIATYPES
+				tmis = titles_browser.get_titles_with_mediatypes_and_ids(artist, album, ref searchtext);
+				foreach(weak Title_MType_Id tmi in tmis) {	         //TITLES WITH MEDIATYPES
 					treemodel.prepend(out iter_title, iter_album); 
 					treemodel.set(iter_title,  	
 						BrowserColumn.ICON, title_pixb,		
-						BrowserColumn.VIS_TEXT, twt.name,
-						BrowserColumn.MEDIATYPE , (int)twt.mediatype,
+						BrowserColumn.VIS_TEXT, tmi.name,
+						BrowserColumn.DB_ID, tmi.id,
+						BrowserColumn.MEDIATYPE , (int)tmi.mediatype,
+						BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
 						-1); 
 				}
 			}
@@ -442,7 +485,32 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		artistArray = null;
 		albumArray = null;
 		titleArray = null;
-		return false;
+	}
+
+	private void put_videos_to_model() {
+		DbBrowser dbb = new DbBrowser();
+
+		Title_MType_Id[] tmis;
+
+		TreeIter iter_videos, iter_singlevideo;
+		treemodel.prepend(out iter_videos, null); 
+		treemodel.set(iter_videos,  	
+			BrowserColumn.ICON, video_pixb,
+			BrowserColumn.VIS_TEXT, "VIDEOS",
+			BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
+			-1); 
+		tmis = dbb.get_video_data(ref searchtext);
+		foreach(weak Title_MType_Id tmi in tmis) {
+			treemodel.prepend(out iter_singlevideo, iter_videos); 
+			treemodel.set(iter_singlevideo,  	
+				BrowserColumn.ICON, video_pixb,
+				BrowserColumn.VIS_TEXT, tmi.name,
+				BrowserColumn.DB_ID, tmi.id,
+				BrowserColumn.MEDIATYPE , (int)MediaType.VIDEO,
+				BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
+				-1); 
+		}
+		tmis = null;
 	}
 		
 	private void set_pixbufs() {
@@ -450,6 +518,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 			artist_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
 			album_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "album.png");
 			title_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "note.png");
+			video_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "album.png");
 		}
 		catch (GLib.Error e) {
 			print("Error: %s\n",e.message);
@@ -477,12 +546,12 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		column.add_attribute(renderer, "text", 1); // no markup!!
 		this.insert_column(column, -1);
 
-		renderer = new CellRendererText();
-		column = new TreeViewColumn();
-		column.pack_start(renderer, false);
-		column.add_attribute(renderer, "text", 1); 
-		column.visible = false;
-		this.insert_column(column, -1);
+//		renderer = new CellRendererText();
+//		column = new TreeViewColumn();
+//		column.pack_start(renderer, false);
+//		column.add_attribute(renderer, "text", 1); 
+//		column.visible = false;
+//		this.insert_column(column, -1);
 		
 		if(par.get_int_value("use_treelines")==1) 
 			use_treelines=true;

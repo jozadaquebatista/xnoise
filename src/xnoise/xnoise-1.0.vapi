@@ -37,11 +37,15 @@ namespace Xnoise {
 		public string[] get_artists (ref string searchtext);
 		public string[] get_lastused_uris ();
 		public string[] get_titles (string artist, string album, ref string searchtext);
-		public Xnoise.Title_with_Type[] get_titles_with_mediatypes (string artist, string album, ref string searchtext);
+		public Xnoise.Title_MType_Id[] get_titles_with_mediatypes_and_ids (string artist, string album, ref string searchtext);
 		public int get_track_id_for_path (string uri);
+		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_uri (string uri, out Xnoise.TrackData val);
 		public int get_tracknumber_for_title (string artist, string album, string title);
+		public bool get_uri_for_id (int id, out string val);
 		public string get_uri_for_title (string artist, string album, string title);
+		public Xnoise.Title_MType_Id[] get_video_data (ref string searchtext);
+		public string[] get_videos (ref string searchtext);
 		public DbBrowser ();
 		public bool uri_is_in_db (string uri);
 	}
@@ -128,6 +132,7 @@ namespace Xnoise {
 	public class MusicBrowser : Gtk.TreeView, Xnoise.IParams {
 		public Gtk.TreeStore treemodel;
 		public bool change_model_data ();
+		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath path);
 		public MusicBrowser (ref unowned Xnoise.Main xn);
 		public bool on_button_press (Xnoise.MusicBrowser sender, Gdk.EventButton e);
 		public bool on_button_release (Xnoise.MusicBrowser sender, Gdk.EventButton e);
@@ -138,11 +143,11 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {
-		public void data_register (Xnoise.IParams iparam);
 		public double get_double_value (string key);
 		public int get_int_value (string key);
 		public string[]? get_string_list_value (string key);
 		public string get_string_value (string key);
+		public void iparams_register (Xnoise.IParams iparam);
 		public Params ();
 		public void set_double_value (string key, double value);
 		public void set_int_value (string key, int value);
@@ -232,9 +237,10 @@ namespace Xnoise {
 		public abstract string name { get; }
 		public abstract Xnoise.Main xn { get; set; }
 	}
-	[CCode (type_id = "XNOISE_TYPE_TITLE_WITH__TYPE", cheader_filename = "xnoise.h")]
-	public struct Title_with_Type {
+	[CCode (type_id = "XNOISE_TYPE_TITLE__MTYPE__ID", cheader_filename = "xnoise.h")]
+	public struct Title_MType_Id {
 		public string name;
+		public int id;
 		public Xnoise.MediaType mediatype;
 	}
 	[CCode (type_id = "XNOISE_TYPE_TRACK_DATA", cheader_filename = "xnoise.h")]
@@ -245,12 +251,21 @@ namespace Xnoise {
 		public string Genre;
 		public uint Tracknumber;
 		public Xnoise.MediaType Mediatype;
+		public string Uri;
+	}
+	[CCode (cprefix = "XNOISE_BROWSER_COLLECTION_TYPE_", cheader_filename = "xnoise.h")]
+	public enum BrowserCollectionType {
+		UNKNOWN,
+		HIERARCHICAL,
+		LISTED
 	}
 	[CCode (cprefix = "XNOISE_BROWSER_COLUMN_", cheader_filename = "xnoise.h")]
 	public enum BrowserColumn {
 		ICON,
 		VIS_TEXT,
+		DB_ID,
 		MEDIATYPE,
+		COLL_TYPE,
 		N_COLUMNS
 	}
 	[CCode (cprefix = "XNOISE_DIRECTION_", cheader_filename = "xnoise.h")]
@@ -294,4 +309,6 @@ namespace Xnoise {
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static void initialize ();
+	[CCode (cheader_filename = "xnoise.h")]
+	public static string remove_linebreaks (string value);
 }

@@ -101,7 +101,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	//CONSTRUCTOR	
 	public MainWindow(ref weak Main xn) {
 		this.xn = xn;
-		par.data_register(this);
+		par.iparams_register(this);
 		create_widgets();
 		
 		//initialization of videodrawingarea
@@ -675,20 +675,20 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		string basename = null;
 		File file = File.new_for_uri(newuri);
 		basename = file.get_basename();
-		if(Main.instance().gPl.currentartist!=null) {
-			artist = Main.instance().gPl.currentartist;
+		if(xn.gPl.currentartist!=null) {
+			artist = remove_linebreaks(xn.gPl.currentartist);
 		}
 		else {
 			artist = "unknown artist";
 		}
-		if(Main.instance().gPl.currenttitle!=null) {
-			title = Main.instance().gPl.currenttitle;
+		if(xn.gPl.currenttitle!=null) {
+			title = remove_linebreaks(xn.gPl.currenttitle);
 		}
 		else {
 			title = "unknown title";
 		}
-		if(Main.instance().gPl.currentalbum!=null) {
-			album = Main.instance().gPl.currentalbum;
+		if(xn.gPl.currentalbum!=null) {
+			album = remove_linebreaks(xn.gPl.currentalbum);
 		}
 		else {
 			album = "unknown album";
@@ -707,8 +707,8 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 				text = Markup.printf_escaped("<b>%s</b>", basename);
 		}
 		else {
-			if((!Main.instance().gPl.playing)&&
-				(!Main.instance().gPl.paused)) {
+			if((!xn.gPl.playing)&&
+				(!xn.gPl.paused)) {
 				text = "<b>XNOISE</b>\nready to rock! ;-)";
 			}
 			else {
