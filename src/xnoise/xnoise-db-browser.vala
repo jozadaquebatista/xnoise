@@ -81,7 +81,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private static const string STMT_GET_TITLES = 
 		"SELECT DISTINCT title FROM mlib WHERE artist = ? AND album = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) ORDER BY tracknumber DESC"; 
 	private static const string STMT_GET_TITLES_WITH_MEDIATYPES_AND_IDS = 
-		"SELECT DISTINCT title, mediatype, id FROM mlib WHERE artist = ? AND album = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) ORDER BY tracknumber DESC";
+		"SELECT DISTINCT title, mediatype, id FROM mlib WHERE artist = ? AND album = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) GROUP BY title ORDER BY tracknumber DESC";
 	public DbBrowser() {
 		DATABASE = dbFileName();
 		if(Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) { 
