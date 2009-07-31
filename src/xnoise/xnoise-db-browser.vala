@@ -181,9 +181,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 		trackdata_for_id_statement.reset();
 		trackdata_for_id_statement.bind_int(1, id);
 		if(trackdata_for_id_statement.step() == Sqlite.ROW) {
-			val.Artist      = Markup.printf_escaped("%s", trackdata_for_id_statement.column_text(0));
-			val.Album       = Markup.printf_escaped("%s", trackdata_for_id_statement.column_text(1));
-			val.Title       = Markup.printf_escaped("%s", trackdata_for_id_statement.column_text(2));
+			val.Artist      = trackdata_for_id_statement.column_text(0);
+			val.Album       = trackdata_for_id_statement.column_text(1);
+			val.Title       = trackdata_for_id_statement.column_text(2);
 			val.Tracknumber = trackdata_for_id_statement.column_int(3); 
 			val.Mediatype   = (MediaType)trackdata_for_id_statement.column_int(4);
 			val.Uri         = trackdata_for_id_statement.column_text(5);
@@ -203,7 +203,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		}
 		if(val.Title == "unknown title") {
 			File file = File.new_for_uri(val.Uri);
-			string fileBasename = Markup.printf_escaped("%s", GLib.Filename.display_basename(file.get_path()));//GLib.Filename.display_basename(file.get_path());
+			string fileBasename = GLib.Filename.display_basename(file.get_path());
 			val.Title = fileBasename;
 		}
 		return true;
@@ -214,9 +214,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 		trackdata_for_uri_statement.reset();
 		trackdata_for_uri_statement.bind_text(1, uri);
 		if(trackdata_for_uri_statement.step() == Sqlite.ROW) {
-			val.Artist      = Markup.printf_escaped("%s", trackdata_for_uri_statement.column_text(0));
-			val.Album       = Markup.printf_escaped("%s", trackdata_for_uri_statement.column_text(1));
-			val.Title       = Markup.printf_escaped("%s", trackdata_for_uri_statement.column_text(2));
+			val.Artist      = trackdata_for_uri_statement.column_text(0);
+			val.Album       = trackdata_for_uri_statement.column_text(1);
+			val.Title       = trackdata_for_uri_statement.column_text(2);
 			val.Tracknumber = trackdata_for_uri_statement.column_int(3); 
 		}
 		int count = 0;
@@ -237,8 +237,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 			string fileBasename = GLib.Filename.display_basename(file.get_path());
 			val.Title = fileBasename;
 		}
-		return true; //true: is in db
-//		return false;
+		return true;
 	}
 	
 	public int get_track_id_for_path(string uri) {

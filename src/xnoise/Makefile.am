@@ -40,8 +40,8 @@ xnoise_VALASOURCES = \
 	xnoise-parameter.vala \
 	xnoise-db-browser.vala \
 	xnoise-db-writer.vala \
-	xnoise-music-browser.vala \
-	xnoise-music-dir-dialog.vala \
+	xnoise-media-browser.vala \
+	xnoise-mediafolder-dialog.vala \
 	xnoise-tag-reader.vala \
 	xnoise-tracklist.vala \
 	xnoise-misc.vala \
