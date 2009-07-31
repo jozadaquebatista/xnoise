@@ -31,10 +31,10 @@
 
 internal class Xnoise.TagReader : GLib.Object {
 
-	public TrackData read_tag_from_file(string file) {
+	public TrackData read_tag_from_file(string filename) {
 		TrackData td; 
 		TagLib.File taglib_file = null;
-		taglib_file = new TagLib.File(file);
+		taglib_file = new TagLib.File(filename);
 		if(taglib_file!=null) {
 			weak TagLib.Tag t = taglib_file.tag; 
 			td = TrackData();
@@ -66,7 +66,7 @@ internal class Xnoise.TagReader : GLib.Object {
 		}
 		
 		if(td.Title  == "unknown title") {
-			td.Title = GLib.Filename.display_basename(file);
+			td.Title = GLib.Filename.display_basename(filename);
 		}
 		return td;
 	}

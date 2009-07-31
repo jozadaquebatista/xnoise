@@ -331,7 +331,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	}
 
 	private void quit_now() {
-		Main.instance().quit();
+		xn.quit();
 	}
 
 	private void on_fullscreen_clicked() {
@@ -427,8 +427,8 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	}
 
 	private void stop() {
-		Main.instance().gPl.stop();
-		Main.instance().gPl.Uri = "";
+		xn.gPl.stop();
+		xn.gPl.Uri = "";
 		playpause_button_set_play_picture ();
 		trackList.reset_play_status_for_title();
 		
@@ -446,10 +446,10 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	}
 
 	private void on_playpause_button_clicked() { //TODO: maybe use the stored position
-		if ((Main.instance().gPl.playing == false) 
+		if ((xn.gPl.playing == false) 
 			&& ((trackList.not_empty()) 
-			|| (Main.instance().gPl.Uri != ""))) {   // not running and track available set to play
-				if (Main.instance().gPl.Uri == "") { // play selected track, if available....
+			|| (xn.gPl.Uri != ""))) {   // not running and track available set to play
+				if (xn.gPl.Uri == "") { // play selected track, if available....
 					GLib.List<TreePath> pathlist;
 					weak TreeSelection ts;
 					ts = trackList.get_selection();
@@ -466,14 +466,14 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 				playpause_popup_image.set_from_stock(STOCK_MEDIA_PAUSE, IconSize.MENU);
 				playpause_button_set_pause_picture();
 				trackList.set_play_picture();
-				Main.instance().gPl.play();
+				xn.gPl.play();
 		}
 		else { 
 			if (trackList.listmodel.iter_n_children(null)>0) { 
 				playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
 				playpause_button_set_play_picture();
 				trackList.set_pause_picture();
-				Main.instance().gPl.pause();
+				xn.gPl.pause();
 			}
 			else { //if there is no track -> stop
 				stop();
@@ -500,7 +500,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			return;
 		}
 		
-		if((!Main.instance().gPl.playing)&&(!Main.instance().gPl.paused)) {
+		if((!xn.gPl.playing)&&(!xn.gPl.paused)) {
 			trackList.reset_play_status_for_title();
 			return;
 		}
@@ -513,7 +513,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		if(trackList.listmodel.get_iter(out iter, path)) {       //goto next song, if possible...
 			trackList.reset_play_status_for_title();
 			trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
-			if(Main.instance().gPl.paused) this.trackList.set_pause_picture();
+			if(xn.gPl.paused) this.trackList.set_pause_picture();
 			trackList.set_focus_on_iter(ref iter);
 		} 
 		else if((trackList.listmodel.get_iter_first(out iter))&&
@@ -521,15 +521,15 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { //...or goto first song, if possible ...
 			trackList.reset_play_status_for_title();
 			trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
-			if(Main.instance().gPl.paused) this.trackList.set_pause_picture();
+			if(xn.gPl.paused) this.trackList.set_pause_picture();
 			trackList.set_focus_on_iter(ref iter);
 		}
 		else {
-			Main.instance().gPl.stop();                      //...or stop
+			xn.gPl.stop();                      //...or stop
 			playpause_button_set_play_picture ();
 			trackList.reset_play_status_for_title();
 			trackList.set_focus_on_iter(ref iter);
-			Main.instance().gPl.Uri="";                      //...or stop
+			xn.gPl.Uri="";                      //...or stop
 		}
 	}
 
@@ -578,16 +578,16 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	}
 
 	private bool on_progressbar_press(Gtk.ProgressBar pb, Gdk.EventButton e) { 
-		if((Main.instance().gPl.playing)|(Main.instance().gPl.paused)) {
+		if((xn.gPl.playing)|(xn.gPl.paused)) {
 			_seek = true;
-			Main.instance().gPl.seeking = true;
+			xn.gPl.seeking = true;
 			songProgressBar.motion_notify_event += on_progressbar_motion_notify;				
 		}
 		return false;
 	}
 
 	private bool on_progressbar_release(Gtk.ProgressBar pb, Gdk.EventButton e) { 
-		if((Main.instance().gPl.playing)|(Main.instance().gPl.paused)) {
+		if((xn.gPl.playing)|(xn.gPl.paused)) {
 			double thisFraction; 
 			double mouse_x, mouse_y;
 			mouse_x = e.x;
@@ -596,7 +596,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			thisFraction = mouse_x / progress_loc.width; 
 			songProgressBar.motion_notify_event -= on_progressbar_motion_notify;
 			_seek = false;//TODO: check if this is used any more
-			Main.instance().gPl.seeking = false;
+			xn.gPl.seeking = false;
 			if(thisFraction < 0.0) thisFraction = 0.0;
 			if(thisFraction > 1.0) thisFraction = 1.0;
 			songProgressBar.set_fraction(thisFraction);
