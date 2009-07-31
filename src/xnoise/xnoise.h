@@ -89,15 +89,15 @@ typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 typedef struct _XnoiseAlbumImage XnoiseAlbumImage;
 typedef struct _XnoiseAlbumImageClass XnoiseAlbumImageClass;
 
-#define XNOISE_TYPE_MUSIC_BROWSER (xnoise_music_browser_get_type ())
-#define XNOISE_MUSIC_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MUSIC_BROWSER, XnoiseMusicBrowser))
-#define XNOISE_MUSIC_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MUSIC_BROWSER, XnoiseMusicBrowserClass))
-#define XNOISE_IS_MUSIC_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MUSIC_BROWSER))
-#define XNOISE_IS_MUSIC_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MUSIC_BROWSER))
-#define XNOISE_MUSIC_BROWSER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MUSIC_BROWSER, XnoiseMusicBrowserClass))
+#define XNOISE_TYPE_MEDIA_BROWSER (xnoise_media_browser_get_type ())
+#define XNOISE_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowser))
+#define XNOISE_MEDIA_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowserClass))
+#define XNOISE_IS_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER))
+#define XNOISE_IS_MEDIA_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER))
+#define XNOISE_MEDIA_BROWSER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowserClass))
 
-typedef struct _XnoiseMusicBrowser XnoiseMusicBrowser;
-typedef struct _XnoiseMusicBrowserClass XnoiseMusicBrowserClass;
+typedef struct _XnoiseMediaBrowser XnoiseMediaBrowser;
+typedef struct _XnoiseMediaBrowserClass XnoiseMediaBrowserClass;
 
 #define XNOISE_TYPE_TRACK_LIST (xnoise_track_list_get_type ())
 #define XNOISE_TRACK_LIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_LIST, XnoiseTrackList))
@@ -162,7 +162,7 @@ typedef struct _XnoiseTitle_MType_Id XnoiseTitle_MType_Id;
 typedef struct _XnoiseDbWriter XnoiseDbWriter;
 typedef struct _XnoiseDbWriterClass XnoiseDbWriterClass;
 typedef struct _XnoiseDbWriterPrivate XnoiseDbWriterPrivate;
-typedef struct _XnoiseMusicBrowserPrivate XnoiseMusicBrowserPrivate;
+typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 
 #define XNOISE_TYPE_TRACK_STATE (xnoise_track_state_get_type ())
@@ -286,7 +286,7 @@ struct _XnoiseMainWindow {
 	GtkLabel* repeatLabel;
 	GtkProgressBar* songProgressBar;
 	double current_volume;
-	XnoiseMusicBrowser* musicBr;
+	XnoiseMediaBrowser* mediaBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* window;
 	GtkWindow* fullscreenwindow;
@@ -362,14 +362,14 @@ struct _XnoiseDbWriterClass {
 	GObjectClass parent_class;
 };
 
-struct _XnoiseMusicBrowser {
+struct _XnoiseMediaBrowser {
 	GtkTreeView parent_instance;
-	XnoiseMusicBrowserPrivate * priv;
+	XnoiseMediaBrowserPrivate * priv;
 	GtkTreeStore* treemodel;
 	gint fontsizeMB;
 };
 
-struct _XnoiseMusicBrowserClass {
+struct _XnoiseMediaBrowserClass {
 	GtkTreeViewClass parent_class;
 };
 
@@ -538,7 +538,7 @@ void xnoise_gst_player_set_Uri (XnoiseGstPlayer* self, const char* value);
 void xnoise_gst_player_set_gst_position (XnoiseGstPlayer* self, double value);
 GType xnoise_iparams_get_type (void);
 GType xnoise_album_image_get_type (void);
-GType xnoise_music_browser_get_type (void);
+GType xnoise_media_browser_get_type (void);
 GType xnoise_track_list_get_type (void);
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 XnoiseMainWindow* xnoise_main_window_new (XnoiseMain** xn);
@@ -607,15 +607,15 @@ void xnoise_db_writer_write_music_folder_into_db (XnoiseDbWriter* self, char** m
 void xnoise_db_writer_begin_transaction (XnoiseDbWriter* self);
 void xnoise_db_writer_commit_transaction (XnoiseDbWriter* self);
 void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, char** final_tracklist, int final_tracklist_length1);
-XnoiseMusicBrowser* xnoise_music_browser_new (XnoiseMain** xn);
-XnoiseMusicBrowser* xnoise_music_browser_construct (GType object_type, XnoiseMain** xn);
-void xnoise_music_browser_on_searchtext_changed (XnoiseMusicBrowser* self, GtkEntry* sender);
-gboolean xnoise_music_browser_on_button_press (XnoiseMusicBrowser* self, XnoiseMusicBrowser* sender, const GdkEventButton* e);
-gboolean xnoise_music_browser_on_button_release (XnoiseMusicBrowser* self, XnoiseMusicBrowser* sender, const GdkEventButton* e);
-void xnoise_music_browser_on_drag_data_get (XnoiseMusicBrowser* self, XnoiseMusicBrowser* sender, GdkDragContext* context, GtkSelectionData* selection, guint info, guint etime);
-XnoiseTrackData* xnoise_music_browser_get_trackdata_for_treepath (XnoiseMusicBrowser* self, const GtkTreePath* path, int* result_length1);
-void xnoise_music_browser_on_drag_end (XnoiseMusicBrowser* self, XnoiseMusicBrowser* sender, GdkDragContext* context);
-gboolean xnoise_music_browser_change_model_data (XnoiseMusicBrowser* self);
+XnoiseMediaBrowser* xnoise_media_browser_new (XnoiseMain** xn);
+XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, XnoiseMain** xn);
+void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self, GtkEntry* sender);
+gboolean xnoise_media_browser_on_button_press (XnoiseMediaBrowser* self, XnoiseMediaBrowser* sender, const GdkEventButton* e);
+gboolean xnoise_media_browser_on_button_release (XnoiseMediaBrowser* self, XnoiseMediaBrowser* sender, const GdkEventButton* e);
+void xnoise_media_browser_on_drag_data_get (XnoiseMediaBrowser* self, XnoiseMediaBrowser* sender, GdkDragContext* context, GtkSelectionData* selection, guint info, guint etime);
+XnoiseTrackData* xnoise_media_browser_get_trackdata_for_treepath (XnoiseMediaBrowser* self, const GtkTreePath* path, int* result_length1);
+void xnoise_media_browser_on_drag_end (XnoiseMediaBrowser* self, XnoiseMediaBrowser* sender, GdkDragContext* context);
+gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 XnoiseTrackList* xnoise_track_list_new (XnoiseMain** xn);
 XnoiseTrackList* xnoise_track_list_construct (GType object_type, XnoiseMain** xn);
 gboolean xnoise_track_list_on_button_press (XnoiseTrackList* self, XnoiseTrackList* sender, const GdkEventButton* e);

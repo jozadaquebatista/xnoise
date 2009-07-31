@@ -103,7 +103,7 @@ namespace Xnoise {
 		public bool drag_on_da;
 		public Gtk.Window fullscreenwindow;
 		public bool is_fullscreen;
-		public Xnoise.MusicBrowser musicBr;
+		public Xnoise.MediaBrowser mediaBr;
 		public Gtk.Button playPauseButton;
 		public Gtk.Image playpause_popup_image;
 		public Gtk.Button repeatButton;
@@ -130,15 +130,15 @@ namespace Xnoise {
 		public signal void sign_volume_changed (double fraction);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class MusicBrowser : Gtk.TreeView, Xnoise.IParams {
+	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
 		public Gtk.TreeStore treemodel;
 		public bool change_model_data ();
 		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath path);
-		public MusicBrowser (ref unowned Xnoise.Main xn);
-		public bool on_button_press (Xnoise.MusicBrowser sender, Gdk.EventButton e);
-		public bool on_button_release (Xnoise.MusicBrowser sender, Gdk.EventButton e);
-		public void on_drag_data_get (Xnoise.MusicBrowser sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime);
-		public void on_drag_end (Xnoise.MusicBrowser sender, Gdk.DragContext context);
+		public MediaBrowser (ref unowned Xnoise.Main xn);
+		public bool on_button_press (Xnoise.MediaBrowser sender, Gdk.EventButton e);
+		public bool on_button_release (Xnoise.MediaBrowser sender, Gdk.EventButton e);
+		public void on_drag_data_get (Xnoise.MediaBrowser sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime);
+		public void on_drag_end (Xnoise.MediaBrowser sender, Gdk.DragContext context);
 		public void on_searchtext_changed (Gtk.Entry sender);
 		public signal void sign_activated ();
 	}

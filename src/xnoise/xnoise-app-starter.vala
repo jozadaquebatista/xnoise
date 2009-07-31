@@ -41,7 +41,7 @@ public class Xnoise.AppStarter : GLib.Object {
 	public static Main xn;
 
 	public static int main (string[] args) {
-		Gdk.threads_init();
+//		Gdk.threads_init();
 		
 		GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
 		GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);

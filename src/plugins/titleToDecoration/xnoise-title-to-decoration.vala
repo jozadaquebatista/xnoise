@@ -85,8 +85,8 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 			   	text = Markup.printf_escaped("%s", basename);
 		}
 		else {
-			if((!Main.instance().gPl.playing)&&
-				(!Main.instance().gPl.paused)) {
+			if((!xn.gPl.playing)&&
+				(!xn.gPl.paused)) {
 				text = "xnoise media player";
 			}
 			else {

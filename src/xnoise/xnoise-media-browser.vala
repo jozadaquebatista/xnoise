@@ -31,7 +31,7 @@
 using Gtk;
 using Gdk;
 
-public class Xnoise.MusicBrowser : TreeView, IParams {
+public class Xnoise.MediaBrowser : TreeView, IParams {
 	public TreeStore treemodel;
 	private TreeStore dummymodel;
 	private Main xn;
@@ -48,7 +48,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		{"text/uri-list", 0, 0}
 	};// This is not a very long list but uris are so universal
 
-	public MusicBrowser(ref weak Main xn) {
+	public MediaBrowser(ref weak Main xn) {
 		this.xn = xn;
 		par.iparams_register(this);
 		create_model();
@@ -101,7 +101,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
     	}
     }
 
-	public bool on_button_press(MusicBrowser sender, Gdk.EventButton e) {
+	public bool on_button_press(MediaBrowser sender, Gdk.EventButton e) {
 		Gtk.TreePath path = null;
 		Gtk.TreeViewColumn column;        
 		Gtk.TreeSelection selection = this.get_selection();
@@ -143,7 +143,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 	}
 
 
-	public bool on_button_release(MusicBrowser sender, Gdk.EventButton e) {
+	public bool on_button_release(MediaBrowser sender, Gdk.EventButton e) {
 		Gtk.TreePath path;
 		Gtk.TreeViewColumn column;
 		int cell_x, cell_y;
@@ -167,7 +167,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		return false; 
 	}
 
-	private void on_drag_begin(MusicBrowser sender, DragContext context) {
+	private void on_drag_begin(MediaBrowser sender, DragContext context) {
 		this.dragging = true;
 		Gdk.drag_abort(context, Gtk.get_current_event_time());
 		Gtk.TreeSelection selection = this.get_selection();
@@ -180,7 +180,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		return;
 	}
 
-	public void on_drag_data_get(MusicBrowser sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime) {
+	public void on_drag_data_get(MediaBrowser sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime) {
 		string[] uris = {};
 		List<weak TreePath> paths;
 		weak Gtk.TreeSelection sel;
@@ -338,7 +338,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 		return td_list;
 	}
 
-	public void on_drag_end(MusicBrowser sender, Gdk.DragContext context) { 
+	public void on_drag_end(MediaBrowser sender, Gdk.DragContext context) { 
 		this.dragging = false;
 		this.unset_rows_drag_dest();
 		Gtk.drag_dest_set( 
@@ -349,7 +349,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams {
 			Gdk.DragAction.MOVE);
 	}
 
-	private void on_row_activated(MusicBrowser sender, TreePath path, TreeViewColumn column){
+	private void on_row_activated(MediaBrowser sender, TreePath path, TreeViewColumn column){
 		if(path.get_depth()>1) {
 			TrackData[] td_list = this.get_trackdata_for_treepath(path);
 			this.add_songs_to_playlist(td_list, true);

@@ -57,7 +57,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 		if((int)(sender.value) < 7 ) sender.value = 7;
 		if((int)(sender.value) > 15) sender.value = 15;
 		fontsizeMB = (int)sender.value;
-		xn.main_window.musicBr.fontsizeMB = fontsizeMB;
+		xn.main_window.mediaBr.fontsizeMB = fontsizeMB;
 		//TODO:immediatly do something with the new value
 	}
 
@@ -87,12 +87,12 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 //		file.set_integer("settings", "fontsizeMB", fontsizeMB);
 	}
 
-	private MusicFolderDialog mfd;
+	private MediaFolderDialog mfd;
 	private void on_music_add_clicked(Gtk.Button sender) {
-		mfd = new MusicFolderDialog();
+		mfd = new MediaFolderDialog();
 		mfd.sign_finish += () => {
 			mfd = null;
-			Idle.add(Main.instance().main_window.musicBr.change_model_data);	
+			Idle.add(xn.main_window.mediaBr.change_model_data);	
 		};
 	}
 

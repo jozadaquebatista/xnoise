@@ -72,7 +72,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	public Label repeatLabel;
 	public ProgressBar songProgressBar;
 	public double current_volume; //keep it global for saving to params
-	public MusicBrowser musicBr;
+	public MediaBrowser mediaBr;
 	public TrackList trackList;
 	public Gtk.Window window;
 	public Gtk.Window fullscreenwindow;
@@ -652,12 +652,12 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		dialog.destroy();
 	}
 
-	private MusicFolderDialog mfd;
+	private MediaFolderDialog mfd;
 	private void on_menu_add() {
-		mfd = new MusicFolderDialog();
+		mfd = new MediaFolderDialog();
 		mfd.sign_finish += () => {
 			mfd = null;
-			Idle.add(musicBr.change_model_data);	
+			Idle.add(mediaBr.change_model_data);	
 		};
 	}
 	
@@ -836,12 +836,12 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			trackListScrollWin.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.ALWAYS);
 			trackListScrollWin.add(this.trackList);
 			
-			///MusicBrowser (left)
-			this.musicBr = new MusicBrowser(ref xn);
-			this.musicBr.set_size_request(100,100);
-			var musicBrScrollWin = gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
-			musicBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
-			musicBrScrollWin.add(this.musicBr);
+			///MediaBrowser (left)
+			this.mediaBr = new MediaBrowser(ref xn);
+			this.mediaBr.set_size_request(100,100);
+			var mediaBrScrollWin = gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
+			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
+			mediaBrScrollWin.add(this.mediaBr);
 			browsernotebook    = gb.get_object("notebook1") as Gtk.Notebook;
 			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
 			tracklistnotebook.switch_page+=on_tracklistnotebook_switch_page;
@@ -852,7 +852,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, true); 
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true); 
 			this.searchEntryMB.set_sensitive(true);
-			this.searchEntryMB.changed += musicBr.on_searchtext_changed;
+			this.searchEntryMB.changed += mediaBr.on_searchtext_changed;
 			this.searchEntryMB.icon_press += (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 				if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
 			};

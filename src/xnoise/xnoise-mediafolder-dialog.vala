@@ -31,7 +31,7 @@
 using Gtk;
 
 
-internal class Xnoise.MusicFolderDialog : Gtk.Builder {
+internal class Xnoise.MediaFolderDialog : Gtk.Builder {
 	private string[] mfolders;
 	private Dialog window;
 	private ListStore listmodel;
@@ -45,7 +45,7 @@ internal class Xnoise.MusicFolderDialog : Gtk.Builder {
 
 	public signal void sign_finish();
 	
-	public MusicFolderDialog() {
+	public MediaFolderDialog() {
 		create_widgets();
 
 		DbWriter dbb = new DbWriter();
@@ -58,7 +58,7 @@ internal class Xnoise.MusicFolderDialog : Gtk.Builder {
 		this.window.show_all();	
 	}
 
-	~MusicFolderDialog() {
+	~MediaFolderDialog() {
 		print("destruct mfd\n");	
 	}
 
@@ -113,7 +113,7 @@ internal class Xnoise.MusicFolderDialog : Gtk.Builder {
 
 	private void on_ok_button_clicked() {
 		Main.instance().main_window.searchEntryMB.set_sensitive(false);
-		Main.instance().main_window.musicBr.set_sensitive(false);
+		Main.instance().main_window.mediaBr.set_sensitive(false);
 		bok.sensitive = false;
 		bcancel.sensitive = false;
 		badd.sensitive = false;

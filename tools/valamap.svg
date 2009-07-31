@@ -32,14 +32,14 @@
 </g>
 <!-- DbBrowser -->
 <g id="node2" class="node"><title>DbBrowser</title>
-<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-db-browser.vala" xlink:title="xnoise&#45;db&#45;browser.vala @ 34">
+<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-db-browser.vala" xlink:title="xnoise&#45;db&#45;browser.vala @ 33">
 <polygon style="fill:#b7e5d1;stroke:black;" points="190,-252 88,-252 88,-216 190,-216 190,-252"/>
 <text text-anchor="middle" x="139" y="-229.6" style="font-family:sans;font-size:16.00;">DbBrowser</text>
 </a>
 </g>
 <!-- MusicBrowser -->
 <g id="node4" class="node"><title>MusicBrowser</title>
-<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-music-browser.vala" xlink:title="xnoise&#45;music&#45;browser.vala @ 35">
+<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-media-browser.vala" xlink:title="xnoise&#45;media&#45;browser.vala @ 34">
 <polygon style="fill:#e5b7b7;stroke:black;" points="135,-180 9,-180 9,-144 135,-144 135,-180"/>
 <text text-anchor="middle" x="72" y="-157.6" style="font-family:sans;font-size:16.00;">MusicBrowser</text>
 </a>
@@ -63,7 +63,7 @@
 </g>
 <!-- TrackList -->
 <g id="node8" class="node"><title>TrackList</title>
-<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-tracklist.vala" xlink:title="xnoise&#45;tracklist.vala @ 35">
+<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-tracklist.vala" xlink:title="xnoise&#45;tracklist.vala @ 34">
 <polygon style="fill:#e5b7b7;stroke:black;" points="371,-180 285,-180 285,-144 371,-144 371,-180"/>
 <text text-anchor="middle" x="328" y="-157.6" style="font-family:sans;font-size:16.00;">TrackList</text>
 </a>
@@ -75,7 +75,7 @@
 </g>
 <!-- MainWindow -->
 <g id="node10" class="node"><title>MainWindow</title>
-<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-main-window.vala" xlink:title="xnoise&#45;main&#45;window.vala @ 34">
+<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-main-window.vala" xlink:title="xnoise&#45;main&#45;window.vala @ 33">
 <polygon style="fill:#b7e5d1;stroke:black;" points="422,-108 306,-108 306,-72 422,-72 422,-108"/>
 <text text-anchor="middle" x="364" y="-85.6" style="font-family:sans;font-size:16.00;">MainWindow</text>
 </a>
@@ -114,7 +114,7 @@
 </g>
 <!-- MusicFolderDialog -->
 <g id="node11" class="node"><title>MusicFolderDialog</title>
-<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-music-dir-dialog.vala" xlink:title="xnoise&#45;music&#45;dir&#45;dialog.vala @ 35">
+<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-mediafolder-dialog.vala" xlink:title="xnoise&#45;mediafolder&#45;dialog.vala @ 34">
 <polygon style="fill:#e5b7de;stroke:#e5b7de;" points="461,-252 325,-252 313,-240 313,-228 325,-216 461,-216 473,-228 473,-240 461,-252"/>
 <path style="fill:#e5b7de;stroke:#e5b7de;" d="M325,-252C319,-252 313,-246 313,-240"/>
 <path style="fill:#e5b7de;stroke:#e5b7de;" d="M313,-228C313,-222 319,-216 325,-216"/>
@@ -138,7 +138,7 @@
 </g>
 <!-- SettingsDialog -->
 <g id="node13" class="node"><title>SettingsDialog</title>
-<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-settings-dialog.vala" xlink:title="xnoise&#45;settings&#45;dialog.vala @ 34">
+<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-settings-dialog.vala" xlink:title="xnoise&#45;settings&#45;dialog.vala @ 33">
 <polygon style="fill:#e5b7de;stroke:black;" points="557,-180 427,-180 427,-144 557,-144 557,-180"/>
 <text text-anchor="middle" x="492" y="-157.6" style="font-family:sans;font-size:16.00;">SettingsDialog</text>
 </a>
@@ -189,7 +189,7 @@
 </g>
 <!-- DbWriter -->
 <g id="node21" class="node"><title>DbWriter</title>
-<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-db-writer.vala" xlink:title="xnoise&#45;db&#45;writer.vala @ 34">
+<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-db-writer.vala" xlink:title="xnoise&#45;db&#45;writer.vala @ 33">
 <polygon style="fill:#b7e5d1;stroke:black;" points="436,-324 350,-324 350,-288 436,-288 436,-324"/>
 <text text-anchor="middle" x="393" y="-301.6" style="font-family:sans;font-size:16.00;">DbWriter</text>
 </a>
@@ -206,7 +206,7 @@
 </g>
 <!-- TagReader -->
 <g id="node24" class="node"><title>TagReader</title>
-<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-tag-reader.vala" xlink:title="xnoise&#45;tag&#45;reader.vala @ 35">
+<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-tag-reader.vala" xlink:title="xnoise&#45;tag&#45;reader.vala @ 32">
 <polygon style="fill:#b7e5d1;stroke:#b7e5d1;" points="376,-481 302,-481 290,-469 290,-457 302,-445 376,-445 388,-457 388,-469 376,-481"/>
 <path style="fill:#b7e5d1;stroke:#b7e5d1;" d="M302,-481C296,-481 290,-475 290,-469"/>
 <path style="fill:#b7e5d1;stroke:#b7e5d1;" d="M290,-457C290,-451 296,-445 302,-445"/>
@@ -235,7 +235,7 @@
 </g>
 <!-- PluginManagerTree -->
 <g id="node27" class="node"><title>PluginManagerTree</title>
-<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-plugin-manager-tree.vala" xlink:title="xnoise&#45;plugin&#45;manager&#45;tree.vala @ 34">
+<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-plugin-manager-tree.vala" xlink:title="xnoise&#45;plugin&#45;manager&#45;tree.vala @ 33">
 <polygon style="fill:#e5deb7;stroke:black;" points="659,-252 491,-252 491,-216 659,-216 659,-252"/>
 <text text-anchor="middle" x="575" y="-229.6" style="font-family:sans;font-size:16.00;">PluginManagerTree</text>
 </a>
@@ -290,7 +290,7 @@
 </g>
 <!-- Params -->
 <g id="node42" class="node"><title>Params</title>
-<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-parameter.vala" xlink:title="xnoise&#45;parameter.vala @ 33">
+<a xlink:href="/home/qnull/xnoise/src/xnoise/xnoise-parameter.vala" xlink:title="xnoise&#45;parameter.vala @ 31">
 <polygon style="fill:#b7e5d1;stroke:black;" points="598,-481 524,-481 524,-445 598,-445 598,-481"/>
 <text text-anchor="middle" x="561" y="-458.6" style="font-family:sans;font-size:16.00;">Params</text>
 </a>
