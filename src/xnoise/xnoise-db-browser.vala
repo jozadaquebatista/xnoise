@@ -200,8 +200,6 @@ public class Xnoise.DbBrowser : GLib.Object {
 		}
 		if((val.Title== "") | (val.Title== null)) {
 			val.Title = "unknown title";
-		}
-		if(val.Title == "unknown title") {
 			File file = File.new_for_uri(val.Uri);
 			string fileBasename = GLib.Filename.display_basename(file.get_path());
 			val.Title = fileBasename;
@@ -217,22 +215,16 @@ public class Xnoise.DbBrowser : GLib.Object {
 			val.Artist      = trackdata_for_uri_statement.column_text(0);
 			val.Album       = trackdata_for_uri_statement.column_text(1);
 			val.Title       = trackdata_for_uri_statement.column_text(2);
-			val.Tracknumber = trackdata_for_uri_statement.column_int(3); 
+			val.Tracknumber = (uint)trackdata_for_uri_statement.column_int(3); 
 		}
-		int count = 0;
 		if((val.Artist=="") | (val.Artist==null)) {
 			val.Artist = "unknown artist";
-			count++;
 		}
 		if((val.Album== "") | (val.Album== null)) {
 			val.Album = "unknown album";
-			count++;
 		}
 		if((val.Title== "") | (val.Title== null)) {
 			val.Title = "unknown title";
-			count++;
-		}
-		if(count==3) {
 			File file = File.new_for_uri(uri);
 			string fileBasename = GLib.Filename.display_basename(file.get_path());
 			val.Title = fileBasename;

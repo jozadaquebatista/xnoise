@@ -416,11 +416,11 @@ public class Xnoise.TrackList : TreeView {
 			string artist, album, title;
 			uint tracknumb;
 			if(dbBr.uri_is_in_db(fileuri)) {
-				TrackData td; 
-				dbBr.get_trackdata_for_uri(fileuri, out td); //strings are already escaped
-				artist    = td.Artist;
-				album     = td.Album;
-				title     = td.Title ;
+				TrackData td = TrackData(); 
+				dbBr.get_trackdata_for_uri(fileuri, out td); 
+				artist    = Markup.printf_escaped("%s", td.Artist);
+				album     = Markup.printf_escaped("%s", td.Album);
+				title     = Markup.printf_escaped("%s", td.Title);
 				tracknumb = td.Tracknumber; 
 			}
 			else {
