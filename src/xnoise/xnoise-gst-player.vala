@@ -35,11 +35,23 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private int64 length_time;
 	private string _Uri = "";
 	private TagList _taglist;
-	private Gtk.DrawingArea da;
+	public Gtk.DrawingArea videodrawingarea;
 	public dynamic Element playbin;
 //	public bool   paused_last_state;
 	public bool   seeking  { get; set; } //TODO
-	public double volume   { get; set; }   
+	
+	public double volume { 
+		get {
+			double val;
+			this.playbin.get("volume", out val);
+			return val;
+		} 
+		set {
+			sign_volume_changed(value); 
+			this.playbin.set("volume", value);
+		}
+	}
+	   
 	public bool   playing  { get; set; }
 	public bool   paused   { get; set; }
 	
@@ -85,10 +97,13 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_eos();
 	public signal void sign_tag_changed(string newuri);
 	public signal void sign_video_playing();
-//	public signal void sign_state_changed(int state);
+	//public signal void sign_state_changed(int state);
+	public signal void sign_paused();
+	public signal void sign_playing();
+	public signal void sign_volume_changed(double volume);
 
-	public GstPlayer(ref weak Gtk.DrawingArea da) {
-		this.da = da;
+	public GstPlayer() {
+		videodrawingarea = new Gtk.DrawingArea();
 		create_elements();
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
 		this.notify += (s, p) => {
@@ -120,7 +135,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			}
 		};
 	}
-
+	
 	private void create_elements() {
 		playbin = ElementFactory.make("playbin", "playbin");
         taglist = null;
@@ -203,7 +218,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if(message_name=="prepare-xwindow-id") {
 			var imagesink = (XOverlay)msg.src;
 			imagesink.set_property("force-aspect-ratio", true);
-			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(da.window));
+			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videodrawingarea.window));
 		}
 	}
 	
@@ -259,6 +274,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		wait();
 		playing = true;
 		paused = false;
+		sign_playing();
 	}
 
 	public void pause() {
@@ -266,6 +282,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		wait();
 		playing = false;
 		paused = true;
+		sign_paused();
 	}
 
 	public void stop() {

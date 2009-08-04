@@ -39,9 +39,11 @@ public class Xnoise.Main : GLib.Object {
 
 		check_database_and_tables();
 
+		_instance = this;
+		gPl = new GstPlayer();
 		main_window = new MainWindow(ref this);
 
-		gPl = new GstPlayer(ref main_window.videodrawingarea);
+		
 		
 		plugin_loader = new PluginLoader(ref this);
 		plugin_loader.load_all();
@@ -56,18 +58,8 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	private void connect_signals() {
-		gPl.sign_song_position_changed += (gPl, pos, len) => {
-				main_window.progressbar_set_value(pos, len);
-		};
 		gPl.sign_eos += () => { //handle endOfStream signal from gst player
 			main_window.change_song(Direction.NEXT, true);
-			main_window.progressbar_set_value(0, 0);
-			main_window.songProgressBar.set_text("00:00 / 00:00");;
-		};
-		gPl.sign_stopped += () => { //handle stop signal from gst player
-			main_window.playpause_button_set_play_picture(); 
-			main_window.progressbar_set_value(0, 0);
-			main_window.songProgressBar.set_text("00:00 / 00:00");;
 		};
 		gPl.sign_tag_changed += main_window.set_displayed_title;
 		gPl.sign_video_playing += () => { //handle stop signal from gst player
@@ -76,12 +68,6 @@ public class Xnoise.Main : GLib.Object {
 		};
 //		gPl.sign_tag_changed += main_window.albumimage.find_album_image;
 
-		//TODO: if the volume change is handled from main window an unlimited number of instances of Main is created. Why?
-		main_window.sign_volume_changed += (main_window, fraction) => { //handle volume slider change
-			main_window.current_volume = fraction; //future
-			gPl.volume = fraction; 
-			gPl.playbin.set("volume", fraction); //current volume
-		};
 		main_window.sign_pos_changed += (main_window, fraction) => {
 			gPl.gst_position = fraction;
 		};
@@ -108,7 +94,7 @@ public class Xnoise.Main : GLib.Object {
 		this.gPl.playSong ();
 		if (this.gPl.playing == false) {
 			this.main_window.playpause_popup_image.set_from_stock(Gtk.STOCK_MEDIA_PAUSE, Gtk.IconSize.MENU);
-			this.main_window.playpause_button_set_pause_picture ();
+			this.main_window.playPauseButton.set_pause_picture ();
 			this.gPl.play();
 		}
 	}

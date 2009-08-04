@@ -63,7 +63,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
 		public Gst.Element playbin;
-		public GstPlayer (ref unowned Gtk.DrawingArea da);
+		public Gtk.DrawingArea videodrawingarea;
+		public GstPlayer ();
 		public void pause ();
 		public void play ();
 		public void playSong ();
@@ -79,10 +80,13 @@ namespace Xnoise {
 		public Gst.TagList taglist { get; set; }
 		public double volume { get; set; }
 		public signal void sign_eos ();
+		public signal void sign_paused ();
+		public signal void sign_playing ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
 		public signal void sign_tag_changed (string newuri);
 		public signal void sign_video_playing ();
+		public signal void sign_volume_changed (double volume);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Main : GLib.Object {
@@ -97,6 +101,38 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : GLib.Object, Xnoise.IParams {
+		[CCode (cheader_filename = "xnoise.h")]
+		public class NextButton : Gtk.Button {
+			public NextButton ();
+			public void on_clicked ();
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class PlayPauseButton : Gtk.Button {
+			public PlayPauseButton ();
+			public void on_clicked ();
+			public void set_pause_picture ();
+			public void set_play_picture ();
+			public void update_picture ();
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class PreviousButton : Gtk.Button {
+			public PreviousButton ();
+			public void on_clicked ();
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class SongProgressBar : Gtk.ProgressBar {
+			public SongProgressBar ();
+			public void set_value (uint pos, uint len);
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class StopButton : Gtk.Button {
+			public StopButton ();
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class VolumeSliderButton : Gtk.VolumeButton {
+			public VolumeSliderButton ();
+		}
+		public bool _seek;
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
 		public double current_volume;
@@ -104,14 +140,17 @@ namespace Xnoise {
 		public Gtk.Window fullscreenwindow;
 		public bool is_fullscreen;
 		public Xnoise.MediaBrowser mediaBr;
-		public Gtk.Button playPauseButton;
+		public Xnoise.MainWindow.NextButton nextButton;
+		public Xnoise.MainWindow.PlayPauseButton playPauseButton;
 		public Gtk.Image playpause_popup_image;
+		public Xnoise.MainWindow.PreviousButton previousButton;
 		public Gtk.Button repeatButton;
 		public Gtk.Image repeatImage;
 		public Gtk.Label repeatLabel;
 		public Gtk.Entry searchEntryMB;
 		public Gtk.Label showvideolabel;
-		public Gtk.ProgressBar songProgressBar;
+		public Xnoise.MainWindow.SongProgressBar songProgressBar;
+		public Xnoise.MainWindow.StopButton stopButton;
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
 		public Gtk.DrawingArea videodrawingarea;
@@ -119,9 +158,6 @@ namespace Xnoise {
 		public void change_song (Xnoise.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
 		public MainWindow (ref unowned Xnoise.Main xn);
-		public void playpause_button_set_pause_picture ();
-		public void playpause_button_set_play_picture ();
-		public void progressbar_set_value (uint pos, uint len);
 		public void set_displayed_title (string newuri);
 		public bool fullscreenwindowvisible { get; set; }
 		public int repeatState { get; set; }
@@ -238,7 +274,7 @@ namespace Xnoise {
 		public abstract string name { get; }
 		public abstract Xnoise.Main xn { get; set; }
 	}
-	[CCode (type_id = "XNOISE_TYPE_TITLE__MTYPE__ID", cheader_filename = "xnoise.h")]
+	[CCode (type_id = "XNOISE_TYPE_TITLE_MTYPE_ID", cheader_filename = "xnoise.h")]
 	public struct Title_MType_Id {
 		public string name;
 		public int id;

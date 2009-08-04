@@ -790,7 +790,6 @@ public class Xnoise.TrackList : TreeView {
 		xn.gPl.Uri = uri;
 		xn.gPl.playSong();
 		if(xn.gPl.playing == false) {
-			xn.main_window.playpause_button_set_pause_picture ();
 			xn.gPl.play();
 		}
 		this.listmodel.get_iter(out iter, path);

@@ -7,8 +7,8 @@
 #include <unique/unique.h>
 #include <stdlib.h>
 #include <string.h>
-#include <gst/gst.h>
 #include <gtk/gtk.h>
+#include <gst/gst.h>
 #include <float.h>
 #include <math.h>
 #include <gdk/gdk.h>
@@ -79,6 +79,46 @@ typedef struct _XnoiseIParams XnoiseIParams;
 typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
+#define XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON (xnoise_main_window_play_pause_button_get_type ())
+#define XNOISE_MAIN_WINDOW_PLAY_PAUSE_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON, XnoiseMainWindowPlayPauseButton))
+#define XNOISE_MAIN_WINDOW_PLAY_PAUSE_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON, XnoiseMainWindowPlayPauseButtonClass))
+#define XNOISE_MAIN_WINDOW_IS_PLAY_PAUSE_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON))
+#define XNOISE_MAIN_WINDOW_IS_PLAY_PAUSE_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON))
+#define XNOISE_MAIN_WINDOW_PLAY_PAUSE_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON, XnoiseMainWindowPlayPauseButtonClass))
+
+typedef struct _XnoiseMainWindowPlayPauseButton XnoiseMainWindowPlayPauseButton;
+typedef struct _XnoiseMainWindowPlayPauseButtonClass XnoiseMainWindowPlayPauseButtonClass;
+
+#define XNOISE_MAIN_WINDOW_TYPE_PREVIOUS_BUTTON (xnoise_main_window_previous_button_get_type ())
+#define XNOISE_MAIN_WINDOW_PREVIOUS_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_MAIN_WINDOW_TYPE_PREVIOUS_BUTTON, XnoiseMainWindowPreviousButton))
+#define XNOISE_MAIN_WINDOW_PREVIOUS_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_MAIN_WINDOW_TYPE_PREVIOUS_BUTTON, XnoiseMainWindowPreviousButtonClass))
+#define XNOISE_MAIN_WINDOW_IS_PREVIOUS_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_MAIN_WINDOW_TYPE_PREVIOUS_BUTTON))
+#define XNOISE_MAIN_WINDOW_IS_PREVIOUS_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_MAIN_WINDOW_TYPE_PREVIOUS_BUTTON))
+#define XNOISE_MAIN_WINDOW_PREVIOUS_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_MAIN_WINDOW_TYPE_PREVIOUS_BUTTON, XnoiseMainWindowPreviousButtonClass))
+
+typedef struct _XnoiseMainWindowPreviousButton XnoiseMainWindowPreviousButton;
+typedef struct _XnoiseMainWindowPreviousButtonClass XnoiseMainWindowPreviousButtonClass;
+
+#define XNOISE_MAIN_WINDOW_TYPE_NEXT_BUTTON (xnoise_main_window_next_button_get_type ())
+#define XNOISE_MAIN_WINDOW_NEXT_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_MAIN_WINDOW_TYPE_NEXT_BUTTON, XnoiseMainWindowNextButton))
+#define XNOISE_MAIN_WINDOW_NEXT_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_MAIN_WINDOW_TYPE_NEXT_BUTTON, XnoiseMainWindowNextButtonClass))
+#define XNOISE_MAIN_WINDOW_IS_NEXT_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_MAIN_WINDOW_TYPE_NEXT_BUTTON))
+#define XNOISE_MAIN_WINDOW_IS_NEXT_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_MAIN_WINDOW_TYPE_NEXT_BUTTON))
+#define XNOISE_MAIN_WINDOW_NEXT_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_MAIN_WINDOW_TYPE_NEXT_BUTTON, XnoiseMainWindowNextButtonClass))
+
+typedef struct _XnoiseMainWindowNextButton XnoiseMainWindowNextButton;
+typedef struct _XnoiseMainWindowNextButtonClass XnoiseMainWindowNextButtonClass;
+
+#define XNOISE_MAIN_WINDOW_TYPE_STOP_BUTTON (xnoise_main_window_stop_button_get_type ())
+#define XNOISE_MAIN_WINDOW_STOP_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_MAIN_WINDOW_TYPE_STOP_BUTTON, XnoiseMainWindowStopButton))
+#define XNOISE_MAIN_WINDOW_STOP_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_MAIN_WINDOW_TYPE_STOP_BUTTON, XnoiseMainWindowStopButtonClass))
+#define XNOISE_MAIN_WINDOW_IS_STOP_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_MAIN_WINDOW_TYPE_STOP_BUTTON))
+#define XNOISE_MAIN_WINDOW_IS_STOP_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_MAIN_WINDOW_TYPE_STOP_BUTTON))
+#define XNOISE_MAIN_WINDOW_STOP_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_MAIN_WINDOW_TYPE_STOP_BUTTON, XnoiseMainWindowStopButtonClass))
+
+typedef struct _XnoiseMainWindowStopButton XnoiseMainWindowStopButton;
+typedef struct _XnoiseMainWindowStopButtonClass XnoiseMainWindowStopButtonClass;
+
 #define XNOISE_TYPE_ALBUM_IMAGE (xnoise_album_image_get_type ())
 #define XNOISE_ALBUM_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImage))
 #define XNOISE_ALBUM_IMAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImageClass))
@@ -88,6 +128,16 @@ typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
 typedef struct _XnoiseAlbumImage XnoiseAlbumImage;
 typedef struct _XnoiseAlbumImageClass XnoiseAlbumImageClass;
+
+#define XNOISE_MAIN_WINDOW_TYPE_SONG_PROGRESS_BAR (xnoise_main_window_song_progress_bar_get_type ())
+#define XNOISE_MAIN_WINDOW_SONG_PROGRESS_BAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_MAIN_WINDOW_TYPE_SONG_PROGRESS_BAR, XnoiseMainWindowSongProgressBar))
+#define XNOISE_MAIN_WINDOW_SONG_PROGRESS_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_MAIN_WINDOW_TYPE_SONG_PROGRESS_BAR, XnoiseMainWindowSongProgressBarClass))
+#define XNOISE_MAIN_WINDOW_IS_SONG_PROGRESS_BAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_MAIN_WINDOW_TYPE_SONG_PROGRESS_BAR))
+#define XNOISE_MAIN_WINDOW_IS_SONG_PROGRESS_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_MAIN_WINDOW_TYPE_SONG_PROGRESS_BAR))
+#define XNOISE_MAIN_WINDOW_SONG_PROGRESS_BAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_MAIN_WINDOW_TYPE_SONG_PROGRESS_BAR, XnoiseMainWindowSongProgressBarClass))
+
+typedef struct _XnoiseMainWindowSongProgressBar XnoiseMainWindowSongProgressBar;
+typedef struct _XnoiseMainWindowSongProgressBarClass XnoiseMainWindowSongProgressBarClass;
 
 #define XNOISE_TYPE_MEDIA_BROWSER (xnoise_media_browser_get_type ())
 #define XNOISE_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowser))
@@ -110,6 +160,22 @@ typedef struct _XnoiseTrackList XnoiseTrackList;
 typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 
 #define XNOISE_TYPE_DIRECTION (xnoise_direction_get_type ())
+typedef struct _XnoiseMainWindowNextButtonPrivate XnoiseMainWindowNextButtonPrivate;
+typedef struct _XnoiseMainWindowPreviousButtonPrivate XnoiseMainWindowPreviousButtonPrivate;
+typedef struct _XnoiseMainWindowStopButtonPrivate XnoiseMainWindowStopButtonPrivate;
+typedef struct _XnoiseMainWindowPlayPauseButtonPrivate XnoiseMainWindowPlayPauseButtonPrivate;
+typedef struct _XnoiseMainWindowSongProgressBarPrivate XnoiseMainWindowSongProgressBarPrivate;
+
+#define XNOISE_MAIN_WINDOW_TYPE_VOLUME_SLIDER_BUTTON (xnoise_main_window_volume_slider_button_get_type ())
+#define XNOISE_MAIN_WINDOW_VOLUME_SLIDER_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_MAIN_WINDOW_TYPE_VOLUME_SLIDER_BUTTON, XnoiseMainWindowVolumeSliderButton))
+#define XNOISE_MAIN_WINDOW_VOLUME_SLIDER_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_MAIN_WINDOW_TYPE_VOLUME_SLIDER_BUTTON, XnoiseMainWindowVolumeSliderButtonClass))
+#define XNOISE_MAIN_WINDOW_IS_VOLUME_SLIDER_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_MAIN_WINDOW_TYPE_VOLUME_SLIDER_BUTTON))
+#define XNOISE_MAIN_WINDOW_IS_VOLUME_SLIDER_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_MAIN_WINDOW_TYPE_VOLUME_SLIDER_BUTTON))
+#define XNOISE_MAIN_WINDOW_VOLUME_SLIDER_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_MAIN_WINDOW_TYPE_VOLUME_SLIDER_BUTTON, XnoiseMainWindowVolumeSliderButtonClass))
+
+typedef struct _XnoiseMainWindowVolumeSliderButton XnoiseMainWindowVolumeSliderButton;
+typedef struct _XnoiseMainWindowVolumeSliderButtonClass XnoiseMainWindowVolumeSliderButtonClass;
+typedef struct _XnoiseMainWindowVolumeSliderButtonPrivate XnoiseMainWindowVolumeSliderButtonPrivate;
 
 #define XNOISE_TYPE_ABOUT_DIALOG (xnoise_about_dialog_get_type ())
 #define XNOISE_ABOUT_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ABOUT_DIALOG, XnoiseAboutDialog))
@@ -149,7 +215,7 @@ typedef struct _XnoiseDbBrowserPrivate XnoiseDbBrowserPrivate;
 #define XNOISE_TYPE_MEDIA_TYPE (xnoise_media_type_get_type ())
 typedef struct _XnoiseTrackData XnoiseTrackData;
 
-#define XNOISE_TYPE_TITLE__MTYPE__ID (xnoise_title__mtype__id_get_type ())
+#define XNOISE_TYPE_TITLE_MTYPE_ID (xnoise_title_mtype_id_get_type ())
 typedef struct _XnoiseTitle_MType_Id XnoiseTitle_MType_Id;
 
 #define XNOISE_TYPE_DB_WRITER (xnoise_db_writer_get_type ())
@@ -255,6 +321,7 @@ struct _XnoiseMainClass {
 struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
+	GtkDrawingArea* videodrawingarea;
 	GstElement* playbin;
 };
 
@@ -272,19 +339,23 @@ struct _XnoiseIParamsIface {
 struct _XnoiseMainWindow {
 	GObject parent_instance;
 	XnoiseMainWindowPrivate * priv;
+	gboolean _seek;
 	GtkDrawingArea* videodrawingarea;
 	GtkLabel* showvideolabel;
 	gboolean is_fullscreen;
 	gboolean drag_on_da;
 	GtkEntry* searchEntryMB;
-	GtkButton* playPauseButton;
+	XnoiseMainWindowPlayPauseButton* playPauseButton;
+	XnoiseMainWindowPreviousButton* previousButton;
+	XnoiseMainWindowNextButton* nextButton;
+	XnoiseMainWindowStopButton* stopButton;
 	GtkButton* repeatButton;
 	GtkNotebook* browsernotebook;
 	GtkNotebook* tracklistnotebook;
 	GtkImage* repeatImage;
 	XnoiseAlbumImage* albumimage;
 	GtkLabel* repeatLabel;
-	GtkProgressBar* songProgressBar;
+	XnoiseMainWindowSongProgressBar* songProgressBar;
 	double current_volume;
 	XnoiseMediaBrowser* mediaBr;
 	XnoiseTrackList* trackList;
@@ -301,6 +372,79 @@ typedef enum  {
 	XNOISE_DIRECTION_NEXT = 0,
 	XNOISE_DIRECTION_PREVIOUS
 } XnoiseDirection;
+
+/**
+* A NextButton is a Gtk.Button that initiates playback of the previous item
+*/
+struct _XnoiseMainWindowNextButton {
+	GtkButton parent_instance;
+	XnoiseMainWindowNextButtonPrivate * priv;
+};
+
+struct _XnoiseMainWindowNextButtonClass {
+	GtkButtonClass parent_class;
+};
+
+/**
+* A PreviousButton is a Gtk.Button that initiates playback of the previous item
+*/
+struct _XnoiseMainWindowPreviousButton {
+	GtkButton parent_instance;
+	XnoiseMainWindowPreviousButtonPrivate * priv;
+};
+
+struct _XnoiseMainWindowPreviousButtonClass {
+	GtkButtonClass parent_class;
+};
+
+/**
+* A StopButton is a Gtk.Button that stops playback
+*/
+struct _XnoiseMainWindowStopButton {
+	GtkButton parent_instance;
+	XnoiseMainWindowStopButtonPrivate * priv;
+};
+
+struct _XnoiseMainWindowStopButtonClass {
+	GtkButtonClass parent_class;
+};
+
+/**
+* A PlayPauseButton is a Gtk.Button that accordingly pauses, unpauses or starts playback
+*/
+struct _XnoiseMainWindowPlayPauseButton {
+	GtkButton parent_instance;
+	XnoiseMainWindowPlayPauseButtonPrivate * priv;
+};
+
+struct _XnoiseMainWindowPlayPauseButtonClass {
+	GtkButtonClass parent_class;
+};
+
+/**
+* A SongProgressBar is  a Gtk.ProgressBar that shows the playback position in the 
+* currently played item and changes it upon user input
+*/
+struct _XnoiseMainWindowSongProgressBar {
+	GtkProgressBar parent_instance;
+	XnoiseMainWindowSongProgressBarPrivate * priv;
+};
+
+struct _XnoiseMainWindowSongProgressBarClass {
+	GtkProgressBarClass parent_class;
+};
+
+/**
+* A VolumeSliderButton is a Gtk.VolumeButton used to change the volume
+*/
+struct _XnoiseMainWindowVolumeSliderButton {
+	GtkVolumeButton parent_instance;
+	XnoiseMainWindowVolumeSliderButtonPrivate * priv;
+};
+
+struct _XnoiseMainWindowVolumeSliderButtonClass {
+	GtkVolumeButtonClass parent_class;
+};
 
 struct _XnoiseAboutDialog {
 	GtkAboutDialog parent_instance;
@@ -515,8 +659,8 @@ void xnoise_main_add_track_to_gst_player (XnoiseMain* self, const char* uri);
 XnoiseMain* xnoise_main_instance (void);
 void xnoise_main_save_tracklist (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
-XnoiseGstPlayer* xnoise_gst_player_new (GtkDrawingArea** da);
-XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type, GtkDrawingArea** da);
+XnoiseGstPlayer* xnoise_gst_player_new (void);
+XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type);
 void xnoise_gst_player_play (XnoiseGstPlayer* self);
 void xnoise_gst_player_pause (XnoiseGstPlayer* self);
 void xnoise_gst_player_stop (XnoiseGstPlayer* self);
@@ -537,22 +681,44 @@ const char* xnoise_gst_player_get_Uri (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_Uri (XnoiseGstPlayer* self, const char* value);
 void xnoise_gst_player_set_gst_position (XnoiseGstPlayer* self, double value);
 GType xnoise_iparams_get_type (void);
+GType xnoise_main_window_play_pause_button_get_type (void);
+GType xnoise_main_window_previous_button_get_type (void);
+GType xnoise_main_window_next_button_get_type (void);
+GType xnoise_main_window_stop_button_get_type (void);
 GType xnoise_album_image_get_type (void);
+GType xnoise_main_window_song_progress_bar_get_type (void);
 GType xnoise_media_browser_get_type (void);
 GType xnoise_track_list_get_type (void);
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 XnoiseMainWindow* xnoise_main_window_new (XnoiseMain** xn);
 XnoiseMainWindow* xnoise_main_window_construct (GType object_type, XnoiseMain** xn);
-void xnoise_main_window_playpause_button_set_play_picture (XnoiseMainWindow* self);
-void xnoise_main_window_playpause_button_set_pause_picture (XnoiseMainWindow* self);
 GType xnoise_direction_get_type (void);
 void xnoise_main_window_change_song (XnoiseMainWindow* self, XnoiseDirection direction, gboolean handle_repeat_state);
-void xnoise_main_window_progressbar_set_value (XnoiseMainWindow* self, guint pos, guint len);
 void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, const char* newuri);
 gint xnoise_main_window_get_repeatState (XnoiseMainWindow* self);
 void xnoise_main_window_set_repeatState (XnoiseMainWindow* self, gint value);
 gboolean xnoise_main_window_get_fullscreenwindowvisible (XnoiseMainWindow* self);
 void xnoise_main_window_set_fullscreenwindowvisible (XnoiseMainWindow* self, gboolean value);
+XnoiseMainWindowNextButton* xnoise_main_window_next_button_new (void);
+XnoiseMainWindowNextButton* xnoise_main_window_next_button_construct (GType object_type);
+void xnoise_main_window_next_button_on_clicked (XnoiseMainWindowNextButton* self);
+XnoiseMainWindowPreviousButton* xnoise_main_window_previous_button_new (void);
+XnoiseMainWindowPreviousButton* xnoise_main_window_previous_button_construct (GType object_type);
+void xnoise_main_window_previous_button_on_clicked (XnoiseMainWindowPreviousButton* self);
+XnoiseMainWindowStopButton* xnoise_main_window_stop_button_new (void);
+XnoiseMainWindowStopButton* xnoise_main_window_stop_button_construct (GType object_type);
+XnoiseMainWindowPlayPauseButton* xnoise_main_window_play_pause_button_new (void);
+XnoiseMainWindowPlayPauseButton* xnoise_main_window_play_pause_button_construct (GType object_type);
+void xnoise_main_window_play_pause_button_on_clicked (XnoiseMainWindowPlayPauseButton* self);
+void xnoise_main_window_play_pause_button_update_picture (XnoiseMainWindowPlayPauseButton* self);
+void xnoise_main_window_play_pause_button_set_play_picture (XnoiseMainWindowPlayPauseButton* self);
+void xnoise_main_window_play_pause_button_set_pause_picture (XnoiseMainWindowPlayPauseButton* self);
+XnoiseMainWindowSongProgressBar* xnoise_main_window_song_progress_bar_new (void);
+XnoiseMainWindowSongProgressBar* xnoise_main_window_song_progress_bar_construct (GType object_type);
+void xnoise_main_window_song_progress_bar_set_value (XnoiseMainWindowSongProgressBar* self, guint pos, guint len);
+GType xnoise_main_window_volume_slider_button_get_type (void);
+XnoiseMainWindowVolumeSliderButton* xnoise_main_window_volume_slider_button_new (void);
+XnoiseMainWindowVolumeSliderButton* xnoise_main_window_volume_slider_button_construct (GType object_type);
 GType xnoise_about_dialog_get_type (void);
 XnoiseAboutDialog* xnoise_about_dialog_new (void);
 XnoiseAboutDialog* xnoise_about_dialog_construct (GType object_type);
@@ -588,11 +754,11 @@ gint xnoise_db_browser_get_track_id_for_path (XnoiseDbBrowser* self, const char*
 char* xnoise_db_browser_get_uri_for_title (XnoiseDbBrowser* self, const char* artist, const char* album, const char* title);
 gint xnoise_db_browser_get_tracknumber_for_title (XnoiseDbBrowser* self, const char* artist, const char* album, const char* title);
 char** xnoise_db_browser_get_lastused_uris (XnoiseDbBrowser* self, int* result_length1);
-GType xnoise_title__mtype__id_get_type (void);
-XnoiseTitle_MType_Id* xnoise_title__mtype__id_dup (const XnoiseTitle_MType_Id* self);
-void xnoise_title__mtype__id_free (XnoiseTitle_MType_Id* self);
-void xnoise_title__mtype__id_copy (const XnoiseTitle_MType_Id* self, XnoiseTitle_MType_Id* dest);
-void xnoise_title__mtype__id_destroy (XnoiseTitle_MType_Id* self);
+GType xnoise_title_mtype_id_get_type (void);
+XnoiseTitle_MType_Id* xnoise_title_mtype_id_dup (const XnoiseTitle_MType_Id* self);
+void xnoise_title_mtype_id_free (XnoiseTitle_MType_Id* self);
+void xnoise_title_mtype_id_copy (const XnoiseTitle_MType_Id* self, XnoiseTitle_MType_Id* dest);
+void xnoise_title_mtype_id_destroy (XnoiseTitle_MType_Id* self);
 XnoiseTitle_MType_Id* xnoise_db_browser_get_video_data (XnoiseDbBrowser* self, char** searchtext, int* result_length1);
 char** xnoise_db_browser_get_videos (XnoiseDbBrowser* self, char** searchtext, int* result_length1);
 char** xnoise_db_browser_get_artists (XnoiseDbBrowser* self, char** searchtext, int* result_length1);
