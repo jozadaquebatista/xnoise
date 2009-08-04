@@ -130,8 +130,8 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.DEFAULT
 			);
-		videodrawingarea.button_press_event+=on_video_da_button_press;
-		sign_drag_over_da+=()=> {
+		videodrawingarea.button_press_event += on_video_da_button_press;
+		sign_drag_over_da += () => {
 			//switch to tracklist for dropping
 			if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(0);
 		};
@@ -338,7 +338,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 //		print("%d\n",(int)e.keyval);
 		switch(e.keyval) {
 			case KEY_F11:
-				this.toggle_fullscreen();
+				this.toggle_mainwindow_fullscreen();
 				break;
 			case KEY_ESC:
 				this.toggle_window_visbility();
@@ -354,10 +354,11 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	}
 
 	private void on_fullscreen_clicked() {
-		this.toggle_fullscreen();
+		this.toggle_mainwindow_fullscreen();
 	}
 			
-	private void toggle_fullscreen() {
+	// This is used for the main window
+	private void toggle_mainwindow_fullscreen() {
 		if(is_fullscreen) {
 			print("was fullscreen before\n");
 			this.window.unfullscreen();	
@@ -787,11 +788,11 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	/**
 	* A NextButton is a Gtk.Button that initiates playback of the previous item
 	*/
-	public class NextButton : Gtk.Button{
+	public class NextButton : Gtk.Button {
 		private Main xn;
 		public NextButton() {
 			this.xn = Main.instance ();
-			var img = new Gtk.Image.from_stock ("gtk-media-next", Gtk.IconSize.SMALL_TOOLBAR);
+			var img = new Gtk.Image.from_stock("gtk-media-next", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.can_focus = false;
@@ -803,15 +804,14 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}	
 	}
 	
-	
 	/**
 	* A PreviousButton is a Gtk.Button that initiates playback of the previous item
 	*/
-	public class PreviousButton : Gtk.Button{
+	public class PreviousButton : Gtk.Button {
 		private Main xn;
 		public PreviousButton() {
 			this.xn = Main.instance();
-			var img = new Gtk.Image.from_stock ("gtk-media-previous", Gtk.IconSize.SMALL_TOOLBAR);
+			var img = new Gtk.Image.from_stock("gtk-media-previous", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.can_focus = false;
@@ -826,11 +826,11 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	/**
 	* A StopButton is a Gtk.Button that stops playback
 	*/
-	public class StopButton : Gtk.Button{
+	public class StopButton : Gtk.Button {
 		private Main xn;
 		public StopButton() {
 			xn = Main.instance();
-			var img = new Gtk.Image.from_stock ("gtk-media-stop", Gtk.IconSize.BUTTON);
+			var img = new Gtk.Image.from_stock("gtk-media-stop", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image (img);
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.can_focus = false;
@@ -1070,6 +1070,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			var nextbutton = new MainWindow.NextButton();
 			var plpabutton = new MainWindow.PlayPauseButton();
 			var previousbutton = new MainWindow.PreviousButton();
+			var leavefullscreen = new LeaveVideoFSButton();
 			var volume = new MainWindow.VolumeSliderButton();
 			
 			bar = new MainWindow.SongProgressBar();
@@ -1086,6 +1087,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			mainbox.pack_start(nextbutton,false,false,0);
 			mainbox.pack_start(vp,true,false,0);
 			//mainbox.pack_start(ai_frame,false,false,0);
+			mainbox.pack_start(leavefullscreen,false,false,0);
 			mainbox.pack_start(volume,false,false,0);
 			
 			
@@ -1153,6 +1155,33 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 				 GLib.Source.remove (hide_event_id);
 				 hide_event_id = 0;
 			}
+		}
+		
+		/**
+		* A LeaveVideoFSButton is a Gtk.Button that switches off the fullscreen state of the video fullscreen window
+		* The only occurance for now is here. So it's placed in the FullscreenToolbar class
+		*/
+		public class LeaveVideoFSButton : Gtk.Button {
+			private Main xn;
+			public LeaveVideoFSButton() {
+				this.xn = Main.instance ();
+				var img = new Gtk.Image.from_stock(Gtk.STOCK_LEAVE_FULLSCREEN , Gtk.IconSize.SMALL_TOOLBAR);
+				this.set_image(img);
+				this.relief = Gtk.ReliefStyle.NONE;
+				this.can_focus = false;
+				this.clicked += this.on_clicked;
+				this.set_tooltip_text(_("Leave fullscreen"));
+			}
+		
+			public void on_clicked() {
+				this.xn.main_window.videodrawingarea.window.unfullscreen();
+				this.xn.main_window.videodrawingarea.reparent(this.xn.main_window.videovbox);
+				this.xn.main_window.fullscreenwindow.hide_all();
+				this.xn.main_window.tracklistnotebook.set_current_page(1);
+				this.xn.main_window.fullscreenwindowvisible = false;
+				this.xn.main_window.videovbox.show();
+				this.xn.main_window.fullscreentoolbar.hide();
+			}	
 		}
 	}
 	
