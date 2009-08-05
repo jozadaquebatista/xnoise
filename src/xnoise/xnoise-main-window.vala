@@ -615,6 +615,23 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		song_title_label.use_markup = true;
 	}
 
+	private bool on_trayicon_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
+		if(event.scroll.direction==Gdk.ScrollDirection.DOWN) {
+			double temp = this.xn.gPl.volume - 0.05;
+			if(temp<0.0) temp = 0.0;
+			this.xn.gPl.volume = temp;
+			return false;
+		}
+		else if(event.scroll.direction==Gdk.ScrollDirection.UP) {
+			double temp = this.xn.gPl.volume + 0.05;
+			if(temp>1.0) temp = 1.0;
+			this.xn.gPl.volume = temp;
+			return false;
+		}
+		return true;
+		
+	}
+
 
 	private void create_widgets() {
 		try {
@@ -779,6 +796,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		// TODO: Move these popup actions to uimanager		
 		this.trayicon.popup_menu       += this.trayicon_menu_popup;
 		this.trayicon.activate         += this.toggle_window_visbility;
+		this.trayicon.scroll_event     += this.on_trayicon_scrolled;
 		
 		this.window.delete_event       += this.on_close; //only send to tray
 		this.window.key_release_event  += this.on_key_released;
