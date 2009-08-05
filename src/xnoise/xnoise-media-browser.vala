@@ -1,4 +1,4 @@
-/* xnoise-music-browser.vala
+/* xnoise-media-browser.vala
  *
  * Copyright (C) 2009  Jörn Magens
  *

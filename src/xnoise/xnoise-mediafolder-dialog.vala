@@ -1,4 +1,4 @@
-/* xnoise-music-dir-dialog.vala
+/* xnoise-mediafolder-dialog.vala
  *
  * Copyright (C) 2009  Jörn Magens
  *
