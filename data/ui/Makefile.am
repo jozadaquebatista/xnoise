@@ -8,6 +8,7 @@ ui_DATA = \
 		album.png \
 		artist.png \
 		xnoise_16x16.png \
+		xnoise_logo_big.svg \
 		xnoise_48x48.png \
 		genre.png \
 		guitar.png \

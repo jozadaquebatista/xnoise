@@ -31,14 +31,39 @@
 using Gst;
 
 public class Xnoise.GstPlayer : GLib.Object {
+	private bool _current_has_video;
 	private uint timeout;
 	private int64 length_time;
 	private string _Uri = "";
 	private TagList _taglist;
-	public Gtk.DrawingArea videodrawingarea;
+	public VideoScreen videodrawingarea;
 	public dynamic Element playbin;
 //	public bool   paused_last_state;
-	public bool   seeking  { get; set; } //TODO
+	public bool seeking  { get; set; } //TODO
+	public bool current_has_video { 
+		get {
+			return _current_has_video;
+		} 
+		set {
+			_current_has_video = value;
+			if(!_current_has_video) {
+				Gdk.EventExpose e = Gdk.EventExpose();
+				e.type = Gdk.EventType.EXPOSE;
+				e.window = videodrawingarea.window;
+				var rect = Gdk.Rectangle();
+				rect.x = 0;
+				rect.y = 0;
+				rect.width = videodrawingarea.allocation.width;
+				rect.height = videodrawingarea.allocation.height;
+				e.area = rect;
+				Gdk.Region region = Gdk.Region.rectangle(rect);
+				e.region = region;
+				e.count = 0;
+				e.send_event = (char)1;
+				videodrawingarea.expose_event(e);
+			}
+		}
+	}
 	
 	public double volume { 
 		get {
@@ -77,6 +102,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		}
 		set {
 			_Uri = value;
+			this.current_has_video = false;
 			taglist = null;
 			this.playbin.set("uri", value);
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
@@ -103,7 +129,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_volume_changed(double volume);
 
 	public GstPlayer() {
-		videodrawingarea = new Gtk.DrawingArea();
+		videodrawingarea = new VideoScreen();
 		create_elements();
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
 		this.notify += (s, p) => {
@@ -131,6 +157,24 @@ public class Xnoise.GstPlayer : GLib.Object {
 					taglist.foreach(foreachtag);
 					break;
 				}
+				case "current_has_video": {
+//					print("GGGGGG\n");
+//					Gdk.EventExpose e = Gdk.EventExpose();
+//					e.type = Gdk.EventType.EXPOSE;
+//					e.window = videodrawingarea.window;
+//					var rect = Gdk.Rectangle();
+//					rect.x = 0;
+//					rect.y = 0;
+//					rect.width = videodrawingarea.allocation.width;
+//					rect.height = videodrawingarea.allocation.height;
+//					e.area = rect;
+//					Gdk.Region region = Gdk.Region.rectangle(rect);
+//					e.region = region;
+//					e.count = 0;
+//					e.send_event = (char)1;
+//					videodrawingarea.expose_event(e);
+					break;
+				}
 				default: break;
 			}
 		};
@@ -156,11 +200,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 			if (info == null) {
 				continue;
 			}
-			get_av_info(info);
+			get_audiovideo_info(info);
 		}
 	}
 
-	private void get_av_info(dynamic GLib.Object info) {
+	private void get_audiovideo_info(dynamic GLib.Object info) {
 		Pad pad = (Pad)info.object;
 		if(pad==null) return;
 		Gst.Caps caps = pad.get_negotiated_caps();
@@ -169,6 +213,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if (structure == null) return;
 		StreamType streamtype = info.type;
 		if(streamtype==StreamType.VIDEO) {
+			this.current_has_video = true;
 			sign_video_playing();
 		}
 	}
@@ -292,7 +337,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		sign_stopped();
 	}
 
-	public void playSong() { 
+	public void playSong() { //this is a pause-play action to take over the new uri for the playbin
 		bool buf_playing = playing;
 		playbin.set_state(State.READY);
 //		playbin.set("uri", Uri);

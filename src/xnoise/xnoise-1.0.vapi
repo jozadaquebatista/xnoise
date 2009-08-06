@@ -63,13 +63,14 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
 		public Gst.Element playbin;
-		public Gtk.DrawingArea videodrawingarea;
+		public Xnoise.VideoScreen videodrawingarea;
 		public GstPlayer ();
 		public void pause ();
 		public void play ();
 		public void playSong ();
 		public void stop ();
 		public string Uri { get; set; }
+		public bool current_has_video { get; set; }
 		public string currentalbum { get; set; }
 		public string currentartist { get; set; }
 		public string currenttitle { get; set; }
@@ -153,7 +154,7 @@ namespace Xnoise {
 		public Xnoise.MainWindow.StopButton stopButton;
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
-		public Gtk.DrawingArea videodrawingarea;
+		public Xnoise.VideoScreen videodrawingarea;
 		public Gtk.Window window;
 		public void change_song (Xnoise.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
@@ -260,6 +261,12 @@ namespace Xnoise {
 		public void set_play_picture ();
 		public void set_state_picture_for_title (Gtk.TreeIter iter, Xnoise.TrackState state = Xnoise.TrackState.STOPPED);
 		public signal void sign_active_path_changed ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class VideoScreen : Gtk.DrawingArea {
+		public Gdk.Pixbuf logo_pixbuf;
+		public override bool expose_event (Gdk.EventExpose e);
+		public VideoScreen ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IParams : GLib.Object {

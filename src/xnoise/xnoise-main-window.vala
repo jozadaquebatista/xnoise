@@ -44,7 +44,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private int _posY_buffer;
 	private Button showvideobutton;
 	private Gtk.VBox menuvbox;
-	public DrawingArea videodrawingarea;
+	public VideoScreen videodrawingarea;
 	public Label showvideolabel;
 	public bool is_fullscreen = false;
 	public bool drag_on_da = false;
@@ -114,8 +114,8 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		//restore last state
 		add_lastused_titles_to_tracklist();
 
-		notify["repeatState"]+=on_repeatState_changed;
-		notify["fullscreenwindowvisible"]+=on_fullscreenwindowvisible;
+		notify["repeatState"] += on_repeatState_changed;
+		notify["fullscreenwindowvisible"] += on_fullscreenwindowvisible;
 	}
 	
 	private void initialize_drawing_area() {
@@ -135,7 +135,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			//switch to tracklist for dropping
 			if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(0);
 		};
-		videodrawingarea.drag_motion+=on_da_drag_motion;
+		videodrawingarea.drag_motion += on_da_drag_motion;
 		//TODO: Do background color / image
 	//		Gdk.Color color;
 	//		Gdk.Color.parse ("blue", out color);

@@ -70,6 +70,16 @@ typedef struct _XnoiseGstPlayer XnoiseGstPlayer;
 typedef struct _XnoiseGstPlayerClass XnoiseGstPlayerClass;
 typedef struct _XnoiseGstPlayerPrivate XnoiseGstPlayerPrivate;
 
+#define XNOISE_TYPE_VIDEO_SCREEN (xnoise_video_screen_get_type ())
+#define XNOISE_VIDEO_SCREEN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_VIDEO_SCREEN, XnoiseVideoScreen))
+#define XNOISE_VIDEO_SCREEN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_VIDEO_SCREEN, XnoiseVideoScreenClass))
+#define XNOISE_IS_VIDEO_SCREEN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_VIDEO_SCREEN))
+#define XNOISE_IS_VIDEO_SCREEN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_VIDEO_SCREEN))
+#define XNOISE_VIDEO_SCREEN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_VIDEO_SCREEN, XnoiseVideoScreenClass))
+
+typedef struct _XnoiseVideoScreen XnoiseVideoScreen;
+typedef struct _XnoiseVideoScreenClass XnoiseVideoScreenClass;
+
 #define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
 #define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
 #define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
@@ -242,6 +252,7 @@ typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 #define XNOISE_TYPE_TRACK_LIST_COLUMN (xnoise_track_list_column_get_type ())
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
+typedef struct _XnoiseVideoScreenPrivate XnoiseVideoScreenPrivate;
 
 #define XNOISE_TYPE_SETTINGS_DIALOG (xnoise_settings_dialog_get_type ())
 #define XNOISE_SETTINGS_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_SETTINGS_DIALOG, XnoiseSettingsDialog))
@@ -321,7 +332,7 @@ struct _XnoiseMainClass {
 struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
-	GtkDrawingArea* videodrawingarea;
+	XnoiseVideoScreen* videodrawingarea;
 	GstElement* playbin;
 };
 
@@ -340,7 +351,7 @@ struct _XnoiseMainWindow {
 	GObject parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	gboolean _seek;
-	GtkDrawingArea* videodrawingarea;
+	XnoiseVideoScreen* videodrawingarea;
 	GtkLabel* showvideolabel;
 	gboolean is_fullscreen;
 	gboolean drag_on_da;
@@ -574,6 +585,16 @@ typedef enum  {
 	GST_STREAM_TYPE_VIDEO = 2
 } GstStreamType;
 
+struct _XnoiseVideoScreen {
+	GtkDrawingArea parent_instance;
+	XnoiseVideoScreenPrivate * priv;
+	GdkPixbuf* logo_pixbuf;
+};
+
+struct _XnoiseVideoScreenClass {
+	GtkDrawingAreaClass parent_class;
+};
+
 struct _XnoiseSettingsDialog {
 	GtkBuilder parent_instance;
 	XnoiseSettingsDialogPrivate * priv;
@@ -659,6 +680,7 @@ void xnoise_main_add_track_to_gst_player (XnoiseMain* self, const char* uri);
 XnoiseMain* xnoise_main_instance (void);
 void xnoise_main_save_tracklist (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
+GType xnoise_video_screen_get_type (void);
 XnoiseGstPlayer* xnoise_gst_player_new (void);
 XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type);
 void xnoise_gst_player_play (XnoiseGstPlayer* self);
@@ -667,6 +689,8 @@ void xnoise_gst_player_stop (XnoiseGstPlayer* self);
 void xnoise_gst_player_playSong (XnoiseGstPlayer* self);
 gboolean xnoise_gst_player_get_seeking (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_seeking (XnoiseGstPlayer* self, gboolean value);
+gboolean xnoise_gst_player_get_current_has_video (XnoiseGstPlayer* self);
+void xnoise_gst_player_set_current_has_video (XnoiseGstPlayer* self, gboolean value);
 double xnoise_gst_player_get_volume (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_volume (XnoiseGstPlayer* self, double value);
 gboolean xnoise_gst_player_get_playing (XnoiseGstPlayer* self);
@@ -813,6 +837,8 @@ GType xnoise_track_list_column_get_type (void);
 GType gst_stream_type_get_type (void);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
+XnoiseVideoScreen* xnoise_video_screen_new (void);
+XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type);
 GType xnoise_settings_dialog_get_type (void);
 XnoiseSettingsDialog* xnoise_settings_dialog_new (XnoiseMain** xn);
 XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type, XnoiseMain** xn);
