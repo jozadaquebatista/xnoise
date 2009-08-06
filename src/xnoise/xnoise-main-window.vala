@@ -44,7 +44,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private int _posY_buffer;
 	private Button showvideobutton;
 	private Gtk.VBox menuvbox;
-	public VideoScreen videodrawingarea;
+	public VideoScreen videoscreen;
 	public Label showvideolabel;
 	public bool is_fullscreen = false;
 	public bool drag_on_da = false;
@@ -108,8 +108,8 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		xn.gPl.sign_volume_changed += (val) => {this.current_volume = val;};
 		create_widgets();
 		
-		//initialization of videodrawingarea
-		initialize_drawing_area();
+		//initialization of videoscreen
+		initialize_video_screen();
 		
 		//restore last state
 		add_lastused_titles_to_tracklist();
@@ -118,30 +118,22 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		notify["fullscreenwindowvisible"] += on_fullscreenwindowvisible;
 	}
 	
-	private void initialize_drawing_area() {
-		videodrawingarea.set_double_buffered(false);
-		videodrawingarea.set_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
-		videodrawingarea.realize();
+	private void initialize_video_screen() {
+		videoscreen.realize();
 		// dummy drag'n'drop to get drag motion event
 		Gtk.drag_dest_set( 
-			videodrawingarea,
+			videoscreen,
 			Gtk.DestDefaults.MOTION,
 			this.target_list, 
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.DEFAULT
 			);
-		videodrawingarea.button_press_event += on_video_da_button_press;
+		videoscreen.button_press_event += on_video_da_button_press;
 		sign_drag_over_da += () => {
 			//switch to tracklist for dropping
 			if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(0);
 		};
-		videodrawingarea.drag_motion += on_da_drag_motion;
-		//TODO: Do background color / image
-	//		Gdk.Color color;
-	//		Gdk.Color.parse ("blue", out color);
-	//		videodrawingarea.get_colormap().alloc_color(color, false, true);
-	//		Gdk.GC gc = new Gdk.GC(videodrawingarea.window); 
-	//		gc.set_background(color);
+		videoscreen.drag_motion += on_da_drag_motion;
 	}
 
 	private bool on_da_drag_motion(DrawingArea sender, Gdk.DragContext context, int x, int y, uint timestamp) {
@@ -176,22 +168,22 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		if(!fullscreenwindowvisible) {
 			int monitor;
 			Gdk.Rectangle rectangle;
-			Gdk.Screen screen = this.videodrawingarea.get_screen();
-			monitor = screen.get_monitor_at_window(this.videodrawingarea.window);
+			Gdk.Screen screen = this.videoscreen.get_screen();
+			monitor = screen.get_monitor_at_window(this.videoscreen.window);
 			screen.get_monitor_geometry(monitor, out rectangle);
 			fullscreenwindow.move(rectangle.x, rectangle.y);
 			fullscreenwindow.fullscreen();
-			this.videodrawingarea.window.fullscreen();
+			this.videoscreen.window.fullscreen();
 			fullscreenwindow.show_all();
-			this.videodrawingarea.reparent(fullscreenwindow);
-			this.videodrawingarea.window.process_updates(true);
+			this.videoscreen.reparent(fullscreenwindow);
+			this.videoscreen.window.process_updates(true);
 			this.tracklistnotebook.set_current_page(0);
 			fullscreenwindowvisible = true;
 			fullscreentoolbar.show();
 		}
 		else {
-			this.videodrawingarea.window.unfullscreen();
-			this.videodrawingarea.reparent(videovbox);
+			this.videoscreen.window.unfullscreen();
+			this.videoscreen.reparent(videovbox);
 			fullscreenwindow.hide_all();
 			this.tracklistnotebook.set_current_page(1);
 			fullscreenwindowvisible = false;
@@ -645,9 +637,9 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			this.window.set_icon_from_file(APPICON);							
 			
 			//DRAWINGAREA FOR VIDEO
-			videodrawingarea = xn.gPl.videodrawingarea;
+			videoscreen = xn.gPl.videoscreen;
 			videovbox = gb.get_object("videovbox") as Gtk.VBox;
-			videovbox.pack_start(videodrawingarea,true,true,0);
+			videovbox.pack_start(videoscreen,true,true,0);
 			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;
@@ -1192,8 +1184,8 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			}
 		
 			public void on_clicked() {
-				this.xn.main_window.videodrawingarea.window.unfullscreen();
-				this.xn.main_window.videodrawingarea.reparent(this.xn.main_window.videovbox);
+				this.xn.main_window.videoscreen.window.unfullscreen();
+				this.xn.main_window.videoscreen.reparent(this.xn.main_window.videovbox);
 				this.xn.main_window.fullscreenwindow.hide_all();
 				this.xn.main_window.tracklistnotebook.set_current_page(1);
 				this.xn.main_window.fullscreenwindowvisible = false;

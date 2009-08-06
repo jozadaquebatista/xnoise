@@ -63,7 +63,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
 		public Gst.Element playbin;
-		public Xnoise.VideoScreen videodrawingarea;
+		public Xnoise.VideoScreen videoscreen;
 		public GstPlayer ();
 		public void pause ();
 		public void play ();
@@ -154,7 +154,7 @@ namespace Xnoise {
 		public Xnoise.MainWindow.StopButton stopButton;
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
-		public Xnoise.VideoScreen videodrawingarea;
+		public Xnoise.VideoScreen videoscreen;
 		public Gtk.Window window;
 		public void change_song (Xnoise.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
@@ -264,7 +264,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class VideoScreen : Gtk.DrawingArea {
-		public Gdk.Pixbuf logo_pixbuf;
+		public Gdk.Pixbuf logo_pixb;
 		public override bool expose_event (Gdk.EventExpose e);
 		public VideoScreen ();
 	}

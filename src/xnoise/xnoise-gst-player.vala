@@ -36,9 +36,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private int64 length_time;
 	private string _Uri = "";
 	private TagList _taglist;
-	public VideoScreen videodrawingarea;
+	public VideoScreen videoscreen;
 	public dynamic Element playbin;
-//	public bool   paused_last_state;
 	public bool seeking  { get; set; } //TODO
 	public bool current_has_video { 
 		get {
@@ -47,20 +46,22 @@ public class Xnoise.GstPlayer : GLib.Object {
 		set {
 			_current_has_video = value;
 			if(!_current_has_video) {
+				//TODO: This should only be triggered if logo is not already there.
+				//Otherwise there is a flickering
 				Gdk.EventExpose e = Gdk.EventExpose();
 				e.type = Gdk.EventType.EXPOSE;
-				e.window = videodrawingarea.window;
+				e.window = videoscreen.window;
 				var rect = Gdk.Rectangle();
 				rect.x = 0;
 				rect.y = 0;
-				rect.width = videodrawingarea.allocation.width;
-				rect.height = videodrawingarea.allocation.height;
+				rect.width = videoscreen.allocation.width;
+				rect.height = videoscreen.allocation.height;
 				e.area = rect;
 				Gdk.Region region = Gdk.Region.rectangle(rect);
 				e.region = region;
 				e.count = 0;
 				e.send_event = (char)1;
-				videodrawingarea.expose_event(e);
+				videoscreen.expose_event(e);
 			}
 		}
 	}
@@ -129,7 +130,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_volume_changed(double volume);
 
 	public GstPlayer() {
-		videodrawingarea = new VideoScreen();
+		videoscreen = new VideoScreen();
 		create_elements();
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
 		this.notify += (s, p) => {
@@ -155,24 +156,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 				case "taglist": {
 					if(this.taglist == null) return;
 					taglist.foreach(foreachtag);
-					break;
-				}
-				case "current_has_video": {
-//					print("GGGGGG\n");
-//					Gdk.EventExpose e = Gdk.EventExpose();
-//					e.type = Gdk.EventType.EXPOSE;
-//					e.window = videodrawingarea.window;
-//					var rect = Gdk.Rectangle();
-//					rect.x = 0;
-//					rect.y = 0;
-//					rect.width = videodrawingarea.allocation.width;
-//					rect.height = videodrawingarea.allocation.height;
-//					e.area = rect;
-//					Gdk.Region region = Gdk.Region.rectangle(rect);
-//					e.region = region;
-//					e.count = 0;
-//					e.send_event = (char)1;
-//					videodrawingarea.expose_event(e);
 					break;
 				}
 				default: break;
@@ -263,7 +246,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if(message_name=="prepare-xwindow-id") {
 			var imagesink = (XOverlay)msg.src;
 			imagesink.set_property("force-aspect-ratio", true);
-			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videodrawingarea.window));
+			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.window));
 		}
 	}
 	
