@@ -332,7 +332,7 @@ struct _XnoiseMainClass {
 struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
-	XnoiseVideoScreen* videodrawingarea;
+	XnoiseVideoScreen* videoscreen;
 	GstElement* playbin;
 };
 
@@ -351,7 +351,7 @@ struct _XnoiseMainWindow {
 	GObject parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	gboolean _seek;
-	XnoiseVideoScreen* videodrawingarea;
+	XnoiseVideoScreen* videoscreen;
 	GtkLabel* showvideolabel;
 	gboolean is_fullscreen;
 	gboolean drag_on_da;
@@ -588,7 +588,7 @@ typedef enum  {
 struct _XnoiseVideoScreen {
 	GtkDrawingArea parent_instance;
 	XnoiseVideoScreenPrivate * priv;
-	GdkPixbuf* logo_pixbuf;
+	GdkPixbuf* logo_pixb;
 };
 
 struct _XnoiseVideoScreenClass {

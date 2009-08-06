@@ -29,23 +29,31 @@
  */
 
 public class Xnoise.VideoScreen : Gtk.DrawingArea {
-	public Gdk.Pixbuf logo_pixbuf;
+	public Gdk.Pixbuf logo_pixb;
 	private Gdk.Pixbuf logo;
 	private Main xn;
 	
 	public VideoScreen() {
 		this.xn = Main.instance();
+		init_video_screen();
+	}
+
+
+	private void init_video_screen() {
+		this.set_double_buffered(false);
+		this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
 		try {
-			logo_pixbuf = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_logo_big.svg");
+			logo_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_logo_big.svg");
+			//TODO: Make a new logo. This is not too nice
 		}
 		catch(GLib.Error e) {
 			print("%s\n", e.message);
-		}
+		}		
 	}
-
+	
 	public override bool expose_event(Gdk.EventExpose e) {
 
-		if(e.count > 0) return true; //exposure compression, maybe not needed
+		if(e.count > 0) return true; //exposure compression
 			
 		Gdk.draw_rectangle(this.window, 
 		                   this.style.black_gc, true, 
@@ -53,16 +61,16 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		                   e.area.width, e.area.height
 		                   );
 
-		if(!xn.gPl.current_has_video) {
-			if(this.logo_pixbuf!=null) {
+		if(!xn.gPl.current_has_video) { 
+			if(this.logo_pixb!=null) {
 				logo = null;
-				int s_width, s_height, w_width, w_height;
+				int logowidth, logoheight, widgetwidth, widgetheight;
 				float ratio;
 				var region = new Gdk.Region();
 				var rect = Gdk.Rectangle();
 				rect.x = 0;
 				rect.y = 0;
-				rect.width = this.allocation.width;
+				rect.width  = this.allocation.width;
 				rect.height = this.allocation.height;
 				region = Gdk.Region.rectangle(rect);
 
@@ -74,40 +82,40 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 						           e.area.width, e.area.height
 						           );
 						           
-				s_width  = logo_pixbuf.get_width();
-				s_height = logo_pixbuf.get_height();
-				w_width  = this.allocation.width;
-				w_height = this.allocation.height;
+				logowidth  = logo_pixb.get_width();
+				logoheight = logo_pixb.get_height();
+				widgetwidth  = this.allocation.width;
+				widgetheight = this.allocation.height;
 
-				if((float)w_width / s_width > (float)w_height / s_height) {
-					ratio = (float)w_height / s_height;
-				} 
-				else {
-					ratio = (float)w_width / s_width;
-				}
+				if((float)widgetwidth/logowidth>(float)widgetheight/logoheight) 
+					ratio = (float)widgetheight/logoheight;
+				else 
+					ratio = (float)widgetwidth/logowidth;
 
-				s_width = (int)(s_width * ratio);
-				s_height = (int)(s_height * ratio);
+				logowidth = (int)(logowidth*ratio);
+				logoheight = (int)(logoheight*ratio);
 
-				if(s_width<= 1||s_height<= 1) {
+				if(logowidth<=1||logoheight<=1) { 
+					// Do not paint for small pictures
 					this.window.end_paint();
 					return true;
 				}
 
-				logo = logo_pixbuf.scale_simple(s_width, s_height, Gdk.InterpType.BILINEAR);
+				logo = logo_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
 
 				Gdk.draw_pixbuf(this.window, this.style.fg_gc[0], 
-					            logo, 0, 0, (w_width-s_width)/2, 
-					            (w_height-s_height)/2, s_width, 
-					            s_height, Gdk.RgbDither.NONE, 
+					            logo, 0, 0, (widgetwidth-logowidth)/2, 
+					            (widgetheight-logoheight)/2, logowidth, 
+					            logoheight, Gdk.RgbDither.NONE, 
 					            0, 0);
 				this.window.end_paint();
 			} 
 			else if(this.window!=null) {
-		  		// No pixbuf, just draw a black background then
-				this.window.clear_area(0, 0,
-					                   this.allocation.width,
-					                   this.allocation.height);
+				Gdk.draw_rectangle(this.window, 
+						           this.style.black_gc, true, 
+						           e.area.x, e.area.y,
+						           e.area.width, e.area.height
+						           );
 			}
 		}
 		return true;
