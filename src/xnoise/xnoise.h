@@ -686,7 +686,7 @@ XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type);
 void xnoise_gst_player_play (XnoiseGstPlayer* self);
 void xnoise_gst_player_pause (XnoiseGstPlayer* self);
 void xnoise_gst_player_stop (XnoiseGstPlayer* self);
-void xnoise_gst_player_playSong (XnoiseGstPlayer* self);
+void xnoise_gst_player_playSong (XnoiseGstPlayer* self, gboolean force_play);
 gboolean xnoise_gst_player_get_seeking (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_seeking (XnoiseGstPlayer* self, gboolean value);
 gboolean xnoise_gst_player_get_current_has_video (XnoiseGstPlayer* self);
@@ -818,7 +818,8 @@ void xnoise_track_list_add_uris (XnoiseTrackList* self, char** uris, int uris_le
 GType xnoise_track_state_get_type (void);
 GtkTreeIter xnoise_track_list_insert_title (XnoiseTrackList* self, XnoiseTrackState status, GdkPixbuf* pixbuf, gint tracknumber, const char* title, const char* album, const char* artist, const char* uri);
 void xnoise_track_list_set_state_picture_for_title (XnoiseTrackList* self, GtkTreeIter* iter, XnoiseTrackState state);
-void xnoise_track_list_set_play_picture (XnoiseTrackList* self);
+gboolean xnoise_track_list_set_play_state_for_first_song (XnoiseTrackList* self);
+gboolean xnoise_track_list_set_play_picture (XnoiseTrackList* self);
 void xnoise_track_list_set_pause_picture (XnoiseTrackList* self);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_selected_row (XnoiseTrackList* self);

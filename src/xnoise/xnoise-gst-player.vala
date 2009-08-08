@@ -102,6 +102,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return _Uri;
 		}
 		set {
+			print("set_uri\n");
 			_Uri = value;
 			this.current_has_video = false;
 			taglist = null;
@@ -317,13 +318,17 @@ public class Xnoise.GstPlayer : GLib.Object {
 		playbin.set_state(State.READY);
 		wait();
 		playing = false;
+		paused = false;
 		sign_stopped();
 	}
 
-	public void playSong() { //this is a pause-play action to take over the new uri for the playbin
-		bool buf_playing = playing;
+	//this is a pause-play action to take over the new uri for the playbin
+	public void playSong(bool force_play = false) { 
+		print("playsong\n");
+		if(playing) print("playing=true\n");
+		if(force_play) print("force_play=true\n");
+		bool buf_playing = (playing|force_play)&&(!paused);
 		playbin.set_state(State.READY);
-//		playbin.set("uri", Uri);
 		if (buf_playing == true) {
 			playbin.set_state(State.PLAYING);
 			wait();

@@ -67,7 +67,7 @@ namespace Xnoise {
 		public GstPlayer ();
 		public void pause ();
 		public void play ();
-		public void playSong ();
+		public void playSong (bool force_play = false);
 		public void stop ();
 		public string Uri { get; set; }
 		public bool current_has_video { get; set; }
@@ -258,7 +258,8 @@ namespace Xnoise {
 		public void reset_play_status_for_title ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
 		public void set_pause_picture ();
-		public void set_play_picture ();
+		public bool set_play_picture ();
+		public bool set_play_state_for_first_song ();
 		public void set_state_picture_for_title (Gtk.TreeIter iter, Xnoise.TrackState state = Xnoise.TrackState.STOPPED);
 		public signal void sign_active_path_changed ();
 	}

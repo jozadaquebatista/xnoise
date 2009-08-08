@@ -97,8 +97,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
 	
-	public UIManager get_ui_manager ()
-	{
+	public UIManager get_ui_manager() {
 		return ui_manager;
 	}
 		
@@ -444,19 +443,22 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			return;
 		}
 		
-		if(!trackList.get_active_path(out path)) { 
+		if(!trackList.get_active_path(out path)) { // active path sets first path if active is not found
 			stop();
 			return;
 		}
 		
-		if((!xn.gPl.playing)&&(!xn.gPl.paused)) {
+		if((!xn.gPl.playing)&&(!xn.gPl.paused)) { // if stopped
 			trackList.reset_play_status_for_title();
 			return;
 		}
 		
 		if(!(handle_repeat_state && (repeatState==Repeat.SINGLE))) {
-			if(direction == Direction.NEXT)     path.next();
-			if(direction == Direction.PREVIOUS) path.prev();
+			if( direction == Direction.NEXT)     path.next();
+			if((direction == Direction.PREVIOUS)&&
+			    !(path.to_string()=="0")) {
+				path.prev(); 
+			}
 		}
 
 		if(trackList.listmodel.get_iter(out iter, path)) {       //goto next song, if possible...
@@ -880,25 +882,28 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}
 		
 		public void on_clicked() { //TODO: maybe use the stored position
-			if ((xn.gPl.playing == false) 
-				&& ((xn.main_window.trackList.not_empty()) 
-				|| (xn.gPl.Uri != ""))) {   // not running and track available set to play
-					if (xn.gPl.Uri == "") { // play selected track, if available....
-						GLib.List<TreePath> pathlist;
-						weak TreeSelection ts;
-						ts = xn.main_window.trackList.get_selection();
-						pathlist = ts.get_selected_rows(null);
-						if (pathlist.nth_data(0)!=null) {
-							string uri = xn.main_window.trackList.get_uri_for_path(pathlist.nth_data(0));
-							xn.main_window.trackList.on_activated(uri, pathlist.nth_data(0));
-						}
-						else {
-							//.....or play previous song
-							xn.main_window.change_song(Direction.PREVIOUS);
-						}
+			if((!xn.gPl.playing)&&
+			   ((xn.main_window.trackList.not_empty())||(xn.gPl.Uri != ""))) {   
+			   // not running and track available set to play
+			
+				if(xn.gPl.Uri == "") { // play selected track, if available....
+					weak TreeSelection ts = xn.main_window.trackList.get_selection();
+					GLib.List<TreePath> pathlist = ts.get_selected_rows(null);
+					if(pathlist.nth_data(0)!=null) {
+						string uri = xn.main_window.trackList.get_uri_for_path(pathlist.nth_data(0));
+						xn.main_window.trackList.on_activated(uri, pathlist.nth_data(0));
 					}
-					xn.main_window.trackList.set_play_picture();
+					else {
+						//.....or play previous song
+						xn.main_window.change_song(Direction.PREVIOUS);
+					}
+				}
+				if(xn.main_window.trackList.set_play_picture()) {
 					xn.gPl.play();
+				}
+				else if(xn.main_window.trackList.set_play_state_for_first_song()) {
+					xn.gPl.play();
+				}
 			}
 			else { 
 				if (xn.main_window.trackList.listmodel.iter_n_children(null)>0) { 
@@ -912,7 +917,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}
 		
 		public void update_picture() {
-			if (xn.gPl.playing == true) this.set_play_picture();
+			if(xn.gPl.playing == true) this.set_play_picture();
 				else this.set_pause_picture();
 			}
 			
