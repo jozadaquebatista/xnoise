@@ -46,6 +46,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 		set {
 			_current_has_video = value;
 			if(!_current_has_video) {
+				//TODO: maybe this should be triggered from elsewhere. But
+				// I had difficulties to get this via a notify signal in VideoScreen widget
 				//TODO: This should only be triggered if logo is not already there.
 				//Otherwise there is a flickering
 				Gdk.EventExpose e = Gdk.EventExpose();
@@ -102,7 +104,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return _Uri;
 		}
 		set {
-			print("set_uri\n");
 			_Uri = value;
 			this.current_has_video = false;
 			taglist = null;
@@ -324,15 +325,13 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	//this is a pause-play action to take over the new uri for the playbin
 	public void playSong(bool force_play = false) { 
-		print("playsong\n");
-		if(playing) print("playing=true\n");
-		if(force_play) print("force_play=true\n");
 		bool buf_playing = (playing|force_play)&&(!paused);
 		playbin.set_state(State.READY);
-		if (buf_playing == true) {
+		if(buf_playing == true) {
 			playbin.set_state(State.PLAYING);
 			wait();
 			playing = true;
+			sign_playing();
 		}
 		playbin.set("volume", volume);
 	}
