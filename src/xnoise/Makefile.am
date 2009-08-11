@@ -15,7 +15,9 @@ VALA_CFLAGS = \
 	--vapi=$(srcdir)/xnoise-1.0.vapi \
 	--pkg config \
 	--pkg gtk+-2.0 \
+	--pkg gdk-2.0 \
 	--pkg gdk-x11-2.0 \
+	--pkg gdk-pixbuf-2.0 \
 	--pkg posix \
 	--pkg sqlite3 \
 	--pkg gio-2.0 \
@@ -45,6 +47,7 @@ xnoise_VALASOURCES = \
 	xnoise-tag-reader.vala \
 	xnoise-tracklist.vala \
 	xnoise-misc.vala \
+	xnoise-videoscreen.vala \
 	xnoise-settings-dialog.vala \
 	xnoise-plugin.vala \
 	xnoise-plugin-loader.vala \

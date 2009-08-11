@@ -44,7 +44,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private int _posY_buffer;
 	private Button showvideobutton;
 	private Gtk.VBox menuvbox;
-	public DrawingArea videodrawingarea;
+	public VideoScreen videoscreen;
 	public Label showvideolabel;
 	public bool is_fullscreen = false;
 	public bool drag_on_da = false;
@@ -97,8 +97,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
 	
-	public UIManager get_ui_manager ()
-	{
+	public UIManager get_ui_manager() {
 		return ui_manager;
 	}
 		
@@ -108,40 +107,32 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		xn.gPl.sign_volume_changed += (val) => {this.current_volume = val;};
 		create_widgets();
 		
-		//initialization of videodrawingarea
-		initialize_drawing_area();
+		//initialization of videoscreen
+		initialize_video_screen();
 		
 		//restore last state
 		add_lastused_titles_to_tracklist();
 
-		notify["repeatState"]+=on_repeatState_changed;
-		notify["fullscreenwindowvisible"]+=on_fullscreenwindowvisible;
+		notify["repeatState"] += on_repeatState_changed;
+		notify["fullscreenwindowvisible"] += on_fullscreenwindowvisible;
 	}
 	
-	private void initialize_drawing_area() {
-		videodrawingarea.set_double_buffered(false);
-		videodrawingarea.set_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
-		videodrawingarea.realize();
+	private void initialize_video_screen() {
+		videoscreen.realize();
 		// dummy drag'n'drop to get drag motion event
 		Gtk.drag_dest_set( 
-			videodrawingarea,
+			videoscreen,
 			Gtk.DestDefaults.MOTION,
 			this.target_list, 
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.DEFAULT
 			);
-		videodrawingarea.button_press_event += on_video_da_button_press;
+		videoscreen.button_press_event += on_video_da_button_press;
 		sign_drag_over_da += () => {
 			//switch to tracklist for dropping
 			if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(0);
 		};
-		videodrawingarea.drag_motion+=on_da_drag_motion;
-		//TODO: Do background color / image
-	//		Gdk.Color color;
-	//		Gdk.Color.parse ("blue", out color);
-	//		videodrawingarea.get_colormap().alloc_color(color, false, true);
-	//		Gdk.GC gc = new Gdk.GC(videodrawingarea.window); 
-	//		gc.set_background(color);
+		videoscreen.drag_motion += on_da_drag_motion;
 	}
 
 	private bool on_da_drag_motion(DrawingArea sender, Gdk.DragContext context, int x, int y, uint timestamp) {
@@ -176,22 +167,22 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		if(!fullscreenwindowvisible) {
 			int monitor;
 			Gdk.Rectangle rectangle;
-			Gdk.Screen screen = this.videodrawingarea.get_screen();
-			monitor = screen.get_monitor_at_window(this.videodrawingarea.window);
+			Gdk.Screen screen = this.videoscreen.get_screen();
+			monitor = screen.get_monitor_at_window(this.videoscreen.window);
 			screen.get_monitor_geometry(monitor, out rectangle);
 			fullscreenwindow.move(rectangle.x, rectangle.y);
 			fullscreenwindow.fullscreen();
-			this.videodrawingarea.window.fullscreen();
+			this.videoscreen.window.fullscreen();
 			fullscreenwindow.show_all();
-			this.videodrawingarea.reparent(fullscreenwindow);
-			this.videodrawingarea.window.process_updates(true);
+			this.videoscreen.reparent(fullscreenwindow);
+			this.videoscreen.window.process_updates(true);
 			this.tracklistnotebook.set_current_page(0);
 			fullscreenwindowvisible = true;
 			fullscreentoolbar.show();
 		}
 		else {
-			this.videodrawingarea.window.unfullscreen();
-			this.videodrawingarea.reparent(videovbox);
+			this.videoscreen.window.unfullscreen();
+			this.videoscreen.reparent(videovbox);
 			fullscreenwindow.hide_all();
 			this.tracklistnotebook.set_current_page(1);
 			fullscreenwindowvisible = false;
@@ -437,13 +428,15 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}
 		TreeIter iter;
 		TreePath path;
-		trackList.get_active_path(out path);
+		TrackState currentstate;
+		trackList.get_active_path(out path, out currentstate);
 		trackList.listmodel.get_iter(out iter, path); 
 		trackList.listmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
 	}
 
 	public void change_song(Direction direction, bool handle_repeat_state = false) {
 		TreeIter iter;
+		TrackState currentstate;
 		TreePath path = null;
 		int rowcount = -1;
 		rowcount = (int)trackList.listmodel.iter_n_children(null);
@@ -452,40 +445,51 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			return;
 		}
 		
-		if(!trackList.get_active_path(out path)) { 
+		if(!trackList.get_active_path(out path, out currentstate)) { // active path sets first path if active is not found
 			stop();
 			return;
 		}
 		
-		if((!xn.gPl.playing)&&(!xn.gPl.paused)) {
+		if((!xn.gPl.playing)&&(!xn.gPl.paused)) { // if stopped
 			trackList.reset_play_status_for_title();
 			return;
 		}
 		
 		if(!(handle_repeat_state && (repeatState==Repeat.SINGLE))) {
-			if(direction == Direction.NEXT)     path.next();
-			if(direction == Direction.PREVIOUS) path.prev();
+			if( direction == Direction.NEXT) path.next();
+			else if((direction == Direction.PREVIOUS)&&
+			       !(path.to_string()=="0")) {
+				path.prev(); 
+			}
 		}
 
 		if(trackList.listmodel.get_iter(out iter, path)) {       //goto next song, if possible...
-			trackList.reset_play_status_for_title();
-			trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
-			if(xn.gPl.paused) this.trackList.set_pause_picture();
+			trackList.reset_play_status_for_title(); //visual reset
+			if(xn.gPl.paused) {
+				trackList.set_state_picture_for_title(iter, TrackState.PAUSED);
+			}
+			else {
+				trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
+			}
 			trackList.set_focus_on_iter(ref iter);
 		} 
 		else if((trackList.listmodel.get_iter_first(out iter))&&
 		        (((handle_repeat_state)&&
 		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { //...or goto first song, if possible ...
 			trackList.reset_play_status_for_title();
-			trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
-			if(xn.gPl.paused) this.trackList.set_pause_picture();
+			if(xn.gPl.playing) {
+				trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
+			}
+			else if(xn.gPl.paused) {
+				trackList.set_state_picture_for_title(iter, TrackState.PAUSED);
+			}
 			trackList.set_focus_on_iter(ref iter);
 		}
 		else {
 			xn.gPl.stop();                      //...or stop
 			trackList.reset_play_status_for_title();
 			trackList.set_focus_on_iter(ref iter);
-			xn.gPl.Uri="";                      //...or stop
+			xn.gPl.Uri="";
 		}
 	}
 
@@ -565,23 +569,33 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		string basename = null;
 		File file = File.new_for_uri(newuri);
 		basename = file.get_basename();
-		if(xn.gPl.currentartist!=null) {
-			artist = remove_linebreaks(xn.gPl.currentartist);
-		}
+		var dbb = new DbBrowser();
+		if(dbb.uri_is_in_db(newuri)) {
+			TrackData td;
+			dbb.get_trackdata_for_uri(newuri, out td);
+			artist = td.Artist;
+			album = td.Album;
+			title = td.Title;
+		}	
 		else {
-			artist = "unknown artist";
-		}
-		if(xn.gPl.currenttitle!=null) {
-			title = remove_linebreaks(xn.gPl.currenttitle);
-		}
-		else {
-			title = "unknown title";
-		}
-		if(xn.gPl.currentalbum!=null) {
-			album = remove_linebreaks(xn.gPl.currentalbum);
-		}
-		else {
-			album = "unknown album";
+			if(xn.gPl.currentartist!=null) {
+				artist = remove_linebreaks(xn.gPl.currentartist);
+			}
+			else {
+				artist = "unknown artist";
+			}
+			if(xn.gPl.currenttitle!=null) {
+				title = remove_linebreaks(xn.gPl.currenttitle);
+			}
+			else {
+				title = "unknown title";
+			}
+			if(xn.gPl.currentalbum!=null) {
+				album = remove_linebreaks(xn.gPl.currentalbum);
+			}
+			else {
+				album = "unknown album";
+			}
 		}
 		if((newuri!=null) && (newuri!="")) {
 			text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>", 
@@ -645,9 +659,9 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			this.window.set_icon_from_file(APPICON);							
 			
 			//DRAWINGAREA FOR VIDEO
-			videodrawingarea = xn.gPl.videodrawingarea;
+			videoscreen = xn.gPl.videoscreen;
 			videovbox = gb.get_object("videovbox") as Gtk.VBox;
-			videovbox.pack_start(videodrawingarea,true,true,0);
+			videovbox.pack_start(videoscreen,true,true,0);
 			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;
@@ -878,35 +892,34 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			this.pauseImage = new Image.from_stock(STOCK_MEDIA_PAUSE, IconSize.SMALL_TOOLBAR);
 			this.update_picture();
 			
-			//xn.gPl.sign_paused += this.set_pause_picture;
-			//xn.gPl.sign_stopped += this.set_pause_picture;
-			//xn.gPl.sign_playing += this.set_play_picture;
-			
 			xn.gPl.sign_paused  += this.update_picture;
 			xn.gPl.sign_stopped += this.update_picture;
 			xn.gPl.sign_playing += this.update_picture;
 		}
 		
 		public void on_clicked() { //TODO: maybe use the stored position
-			if ((xn.gPl.playing == false) 
-				&& ((xn.main_window.trackList.not_empty()) 
-				|| (xn.gPl.Uri != ""))) {   // not running and track available set to play
-					if (xn.gPl.Uri == "") { // play selected track, if available....
-						GLib.List<TreePath> pathlist;
-						weak TreeSelection ts;
-						ts = xn.main_window.trackList.get_selection();
-						pathlist = ts.get_selected_rows(null);
-						if (pathlist.nth_data(0)!=null) {
-							string uri = xn.main_window.trackList.get_uri_for_path(pathlist.nth_data(0));
-							xn.main_window.trackList.on_activated(uri, pathlist.nth_data(0));
-						}
-						else {
-							//.....or play previous song
-							xn.main_window.change_song(Direction.PREVIOUS);
-						}
+			if((!xn.gPl.playing)&&
+			   ((xn.main_window.trackList.not_empty())||(xn.gPl.Uri != ""))) {   
+			   // not running and track available set to play
+			
+				if(xn.gPl.Uri == "") { // play selected track, if available....
+					weak TreeSelection ts = xn.main_window.trackList.get_selection();
+					GLib.List<TreePath> pathlist = ts.get_selected_rows(null);
+					if(pathlist.nth_data(0)!=null) {
+						string uri = xn.main_window.trackList.get_uri_for_path(pathlist.nth_data(0));
+						xn.main_window.trackList.on_activated(uri, pathlist.nth_data(0));
 					}
-					xn.main_window.trackList.set_play_picture();
+					else {
+						//.....or play previous song
+						xn.main_window.change_song(Direction.PREVIOUS);
+					}
+				}
+				if(xn.main_window.trackList.set_play_picture()) {
 					xn.gPl.play();
+				}
+				else if(xn.main_window.trackList.set_play_state_for_first_song()) {
+					xn.gPl.play();
+				}
 			}
 			else { 
 				if (xn.main_window.trackList.listmodel.iter_n_children(null)>0) { 
@@ -920,7 +933,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}
 		
 		public void update_picture() {
-			if (xn.gPl.playing == true) this.set_play_picture();
+			if(xn.gPl.playing == true) this.set_play_picture();
 				else this.set_pause_picture();
 			}
 			
@@ -1192,8 +1205,8 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			}
 		
 			public void on_clicked() {
-				this.xn.main_window.videodrawingarea.window.unfullscreen();
-				this.xn.main_window.videodrawingarea.reparent(this.xn.main_window.videovbox);
+				this.xn.main_window.videoscreen.window.unfullscreen();
+				this.xn.main_window.videoscreen.reparent(this.xn.main_window.videovbox);
 				this.xn.main_window.fullscreenwindow.hide_all();
 				this.xn.main_window.tracklistnotebook.set_current_page(1);
 				this.xn.main_window.fullscreenwindowvisible = false;

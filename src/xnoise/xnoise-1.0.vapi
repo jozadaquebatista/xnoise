@@ -63,13 +63,14 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
 		public Gst.Element playbin;
-		public Gtk.DrawingArea videodrawingarea;
+		public Xnoise.VideoScreen videoscreen;
 		public GstPlayer ();
 		public void pause ();
 		public void play ();
-		public void playSong ();
+		public void playSong (bool force_play = false);
 		public void stop ();
 		public string Uri { get; set; }
+		public bool current_has_video { get; set; }
 		public string currentalbum { get; set; }
 		public string currentartist { get; set; }
 		public string currenttitle { get; set; }
@@ -153,7 +154,7 @@ namespace Xnoise {
 		public Xnoise.MainWindow.StopButton stopButton;
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
-		public Gtk.DrawingArea videodrawingarea;
+		public Xnoise.VideoScreen videoscreen;
 		public Gtk.Window window;
 		public void change_song (Xnoise.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
@@ -241,7 +242,7 @@ namespace Xnoise {
 	public class TrackList : Gtk.TreeView {
 		public Gtk.ListStore listmodel;
 		public void add_uris (string[]? uris);
-		public bool get_active_path (out Gtk.TreePath path);
+		public bool get_active_path (out Gtk.TreePath path, out Xnoise.TrackState currentstate);
 		public string[] get_all_tracks ();
 		public string get_uri_for_path (Gtk.TreePath path);
 		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
@@ -256,10 +257,17 @@ namespace Xnoise {
 		public void remove_selected_row ();
 		public void reset_play_status_for_title ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
-		public void set_pause_picture ();
-		public void set_play_picture ();
+		public bool set_pause_picture ();
+		public bool set_play_picture ();
+		public bool set_play_state_for_first_song ();
 		public void set_state_picture_for_title (Gtk.TreeIter iter, Xnoise.TrackState state = Xnoise.TrackState.STOPPED);
-		public signal void sign_active_path_changed ();
+		public signal void sign_active_path_changed (Xnoise.TrackState ts);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class VideoScreen : Gtk.DrawingArea {
+		public Gdk.Pixbuf logo_pixb;
+		public override bool expose_event (Gdk.EventExpose e);
+		public VideoScreen ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IParams : GLib.Object {

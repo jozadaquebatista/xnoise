@@ -40,10 +40,10 @@ public class Xnoise.Main : GLib.Object {
 		check_database_and_tables();
 
 		_instance = this;
-		gPl = new GstPlayer();
-		main_window = new MainWindow(ref this);
-
 		
+		gPl = new GstPlayer();
+
+		main_window = new MainWindow(ref this);
 		
 		plugin_loader = new PluginLoader(ref this);
 		plugin_loader.load_all();

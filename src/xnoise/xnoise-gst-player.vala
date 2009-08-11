@@ -31,14 +31,42 @@
 using Gst;
 
 public class Xnoise.GstPlayer : GLib.Object {
+	private bool _current_has_video;
 	private uint timeout;
 	private int64 length_time;
 	private string _Uri = "";
 	private TagList _taglist;
-	public Gtk.DrawingArea videodrawingarea;
+	public VideoScreen videoscreen;
 	public dynamic Element playbin;
-//	public bool   paused_last_state;
-	public bool   seeking  { get; set; } //TODO
+	public bool seeking  { get; set; } //TODO
+	public bool current_has_video { 
+		get {
+			return _current_has_video;
+		} 
+		set {
+			_current_has_video = value;
+			if(!_current_has_video) {
+				//TODO: maybe this should be triggered from elsewhere. But
+				// I had difficulties to get this via a notify signal in VideoScreen widget
+				//TODO: This should only be triggered if logo is not already there.
+				//Otherwise there is a flickering
+				Gdk.EventExpose e = Gdk.EventExpose();
+				e.type = Gdk.EventType.EXPOSE;
+				e.window = videoscreen.window;
+				var rect = Gdk.Rectangle();
+				rect.x = 0;
+				rect.y = 0;
+				rect.width = videoscreen.allocation.width;
+				rect.height = videoscreen.allocation.height;
+				e.area = rect;
+				Gdk.Region region = Gdk.Region.rectangle(rect);
+				e.region = region;
+				e.count = 0;
+				e.send_event = (char)1;
+				videoscreen.expose_event(e);
+			}
+		}
+	}
 	
 	public double volume { 
 		get {
@@ -77,6 +105,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		}
 		set {
 			_Uri = value;
+			this.current_has_video = false;
 			taglist = null;
 			this.playbin.set("uri", value);
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
@@ -103,7 +132,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_volume_changed(double volume);
 
 	public GstPlayer() {
-		videodrawingarea = new Gtk.DrawingArea();
+		videoscreen = new VideoScreen();
 		create_elements();
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
 		this.notify += (s, p) => {
@@ -156,11 +185,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 			if (info == null) {
 				continue;
 			}
-			get_av_info(info);
+			get_audiovideo_info(info);
 		}
 	}
 
-	private void get_av_info(dynamic GLib.Object info) {
+	private void get_audiovideo_info(dynamic GLib.Object info) {
 		Pad pad = (Pad)info.object;
 		if(pad==null) return;
 		Gst.Caps caps = pad.get_negotiated_caps();
@@ -169,6 +198,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if (structure == null) return;
 		StreamType streamtype = info.type;
 		if(streamtype==StreamType.VIDEO) {
+			this.current_has_video = true;
 			sign_video_playing();
 		}
 	}
@@ -218,7 +248,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if(message_name=="prepare-xwindow-id") {
 			var imagesink = (XOverlay)msg.src;
 			imagesink.set_property("force-aspect-ratio", true);
-			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videodrawingarea.window));
+			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.window));
 		}
 	}
 	
@@ -289,17 +319,22 @@ public class Xnoise.GstPlayer : GLib.Object {
 		playbin.set_state(State.READY);
 		wait();
 		playing = false;
+		paused = false;
 		sign_stopped();
 	}
 
-	public void playSong() { 
-		bool buf_playing = playing;
+	// this is a pause-play action to take over the new uri for the playbin
+	public void playSong(bool force_play = false) { 
+		bool buf_playing = (playing|force_play);
 		playbin.set_state(State.READY);
-//		playbin.set("uri", Uri);
-		if (buf_playing == true) {
+		if(buf_playing == true) {
 			playbin.set_state(State.PLAYING);
 			wait();
 			playing = true;
+			sign_playing();
+		}
+		else {
+			sign_paused();
 		}
 		playbin.set("volume", volume);
 	}
