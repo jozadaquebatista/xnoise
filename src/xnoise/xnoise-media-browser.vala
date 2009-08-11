@@ -370,7 +370,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			int tracknumber = (int)td.Tracknumber;
 			if(imediate_play) {
 				if(i==0) {
-					xn.add_track_to_gst_player(uri);
 					iter = xn.main_window.trackList.insert_title(
 						TrackState.PLAYING, 
 						null, 

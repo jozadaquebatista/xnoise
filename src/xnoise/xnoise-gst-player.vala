@@ -323,15 +323,18 @@ public class Xnoise.GstPlayer : GLib.Object {
 		sign_stopped();
 	}
 
-	//this is a pause-play action to take over the new uri for the playbin
+	// this is a pause-play action to take over the new uri for the playbin
 	public void playSong(bool force_play = false) { 
-		bool buf_playing = (playing|force_play)&&(!paused);
+		bool buf_playing = (playing|force_play);
 		playbin.set_state(State.READY);
 		if(buf_playing == true) {
 			playbin.set_state(State.PLAYING);
 			wait();
 			playing = true;
 			sign_playing();
+		}
+		else {
+			sign_paused();
 		}
 		playbin.set("volume", volume);
 	}

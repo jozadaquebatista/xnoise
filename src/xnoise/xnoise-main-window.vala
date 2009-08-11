@@ -428,13 +428,15 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}
 		TreeIter iter;
 		TreePath path;
-		trackList.get_active_path(out path);
+		TrackState currentstate;
+		trackList.get_active_path(out path, out currentstate);
 		trackList.listmodel.get_iter(out iter, path); 
 		trackList.listmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
 	}
 
 	public void change_song(Direction direction, bool handle_repeat_state = false) {
 		TreeIter iter;
+		TrackState currentstate;
 		TreePath path = null;
 		int rowcount = -1;
 		rowcount = (int)trackList.listmodel.iter_n_children(null);
@@ -443,7 +445,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			return;
 		}
 		
-		if(!trackList.get_active_path(out path)) { // active path sets first path if active is not found
+		if(!trackList.get_active_path(out path, out currentstate)) { // active path sets first path if active is not found
 			stop();
 			return;
 		}
@@ -454,32 +456,40 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}
 		
 		if(!(handle_repeat_state && (repeatState==Repeat.SINGLE))) {
-			if( direction == Direction.NEXT)     path.next();
-			if((direction == Direction.PREVIOUS)&&
-			    !(path.to_string()=="0")) {
+			if( direction == Direction.NEXT) path.next();
+			else if((direction == Direction.PREVIOUS)&&
+			       !(path.to_string()=="0")) {
 				path.prev(); 
 			}
 		}
 
 		if(trackList.listmodel.get_iter(out iter, path)) {       //goto next song, if possible...
-			trackList.reset_play_status_for_title();
-			trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
-			if(xn.gPl.paused) this.trackList.set_pause_picture();
+			trackList.reset_play_status_for_title(); //visual reset
+			if(xn.gPl.paused) {
+				trackList.set_state_picture_for_title(iter, TrackState.PAUSED);
+			}
+			else {
+				trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
+			}
 			trackList.set_focus_on_iter(ref iter);
 		} 
 		else if((trackList.listmodel.get_iter_first(out iter))&&
 		        (((handle_repeat_state)&&
 		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { //...or goto first song, if possible ...
 			trackList.reset_play_status_for_title();
-			trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
-			if(xn.gPl.paused) this.trackList.set_pause_picture();
+			if(xn.gPl.playing) {
+				trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
+			}
+			else if(xn.gPl.paused) {
+				trackList.set_state_picture_for_title(iter, TrackState.PAUSED);
+			}
 			trackList.set_focus_on_iter(ref iter);
 		}
 		else {
 			xn.gPl.stop();                      //...or stop
 			trackList.reset_play_status_for_title();
 			trackList.set_focus_on_iter(ref iter);
-			xn.gPl.Uri="";                      //...or stop
+			xn.gPl.Uri="";
 		}
 	}
 
@@ -559,23 +569,33 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		string basename = null;
 		File file = File.new_for_uri(newuri);
 		basename = file.get_basename();
-		if(xn.gPl.currentartist!=null) {
-			artist = remove_linebreaks(xn.gPl.currentartist);
-		}
+		var dbb = new DbBrowser();
+		if(dbb.uri_is_in_db(newuri)) {
+			TrackData td;
+			dbb.get_trackdata_for_uri(newuri, out td);
+			artist = td.Artist;
+			album = td.Album;
+			title = td.Title;
+		}	
 		else {
-			artist = "unknown artist";
-		}
-		if(xn.gPl.currenttitle!=null) {
-			title = remove_linebreaks(xn.gPl.currenttitle);
-		}
-		else {
-			title = "unknown title";
-		}
-		if(xn.gPl.currentalbum!=null) {
-			album = remove_linebreaks(xn.gPl.currentalbum);
-		}
-		else {
-			album = "unknown album";
+			if(xn.gPl.currentartist!=null) {
+				artist = remove_linebreaks(xn.gPl.currentartist);
+			}
+			else {
+				artist = "unknown artist";
+			}
+			if(xn.gPl.currenttitle!=null) {
+				title = remove_linebreaks(xn.gPl.currenttitle);
+			}
+			else {
+				title = "unknown title";
+			}
+			if(xn.gPl.currentalbum!=null) {
+				album = remove_linebreaks(xn.gPl.currentalbum);
+			}
+			else {
+				album = "unknown album";
+			}
 		}
 		if((newuri!=null) && (newuri!="")) {
 			text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>", 
@@ -871,10 +891,6 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			this.playImage = new Image.from_stock(STOCK_MEDIA_PLAY, IconSize.SMALL_TOOLBAR);
 			this.pauseImage = new Image.from_stock(STOCK_MEDIA_PAUSE, IconSize.SMALL_TOOLBAR);
 			this.update_picture();
-			
-			//xn.gPl.sign_paused += this.set_pause_picture;
-			//xn.gPl.sign_stopped += this.set_pause_picture;
-			//xn.gPl.sign_playing += this.set_play_picture;
 			
 			xn.gPl.sign_paused  += this.update_picture;
 			xn.gPl.sign_stopped += this.update_picture;

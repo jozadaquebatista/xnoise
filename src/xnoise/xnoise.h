@@ -820,12 +820,12 @@ GtkTreeIter xnoise_track_list_insert_title (XnoiseTrackList* self, XnoiseTrackSt
 void xnoise_track_list_set_state_picture_for_title (XnoiseTrackList* self, GtkTreeIter* iter, XnoiseTrackState state);
 gboolean xnoise_track_list_set_play_state_for_first_song (XnoiseTrackList* self);
 gboolean xnoise_track_list_set_play_picture (XnoiseTrackList* self);
-void xnoise_track_list_set_pause_picture (XnoiseTrackList* self);
+gboolean xnoise_track_list_set_pause_picture (XnoiseTrackList* self);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_selected_row (XnoiseTrackList* self);
 gboolean xnoise_track_list_not_empty (XnoiseTrackList* self);
 void xnoise_track_list_reset_play_status_for_title (XnoiseTrackList* self);
-gboolean xnoise_track_list_get_active_path (XnoiseTrackList* self, GtkTreePath** path);
+gboolean xnoise_track_list_get_active_path (XnoiseTrackList* self, GtkTreePath** path, XnoiseTrackState* currentstate);
 void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, const GtkTreePath* path);
 char* xnoise_track_list_get_uri_for_path (XnoiseTrackList* self, const GtkTreePath* path);
 extern XnoiseParams* xnoise_par;

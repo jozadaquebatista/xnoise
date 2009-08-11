@@ -242,7 +242,7 @@ namespace Xnoise {
 	public class TrackList : Gtk.TreeView {
 		public Gtk.ListStore listmodel;
 		public void add_uris (string[]? uris);
-		public bool get_active_path (out Gtk.TreePath path);
+		public bool get_active_path (out Gtk.TreePath path, out Xnoise.TrackState currentstate);
 		public string[] get_all_tracks ();
 		public string get_uri_for_path (Gtk.TreePath path);
 		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
@@ -257,11 +257,11 @@ namespace Xnoise {
 		public void remove_selected_row ();
 		public void reset_play_status_for_title ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
-		public void set_pause_picture ();
+		public bool set_pause_picture ();
 		public bool set_play_picture ();
 		public bool set_play_state_for_first_song ();
 		public void set_state_picture_for_title (Gtk.TreeIter iter, Xnoise.TrackState state = Xnoise.TrackState.STOPPED);
-		public signal void sign_active_path_changed ();
+		public signal void sign_active_path_changed (Xnoise.TrackState ts);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class VideoScreen : Gtk.DrawingArea {
