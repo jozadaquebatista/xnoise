@@ -239,6 +239,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private StatusIcon create_tray_icon() {
 		StatusIcon icon = new StatusIcon.from_file(Config.UIDIR + "xnoise_16x16.png");
 		icon.set_tooltip_text("Xnoise media player");
+		icon.button_press_event += on_trayicon_clicked;
 		return icon;
 	}
 
@@ -634,6 +635,18 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}
 		song_title_label.set_text(text);
 		song_title_label.use_markup = true;
+	}
+
+	private bool on_trayicon_clicked(Gdk.Event event) {
+		switch(event.button.button) {
+			case 2:
+				//ugly, we should move play/resume code out of there.
+				this.playPauseButton.on_clicked();  
+				break;
+			default:
+				break;
+		}
+		return false;
 	}
 
 	private bool on_trayicon_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
