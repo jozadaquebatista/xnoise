@@ -418,7 +418,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private void stop() {
 		xn.gPl.stop();
 		xn.gPl.Uri = "";
-		trackList.reset_play_status_for_title();
+		trackList.reset_play_status_all_titles();
 		
 		//save position
 		int rowcount = -1;
@@ -429,46 +429,53 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		TreeIter iter;
 		TreePath path;
 		TrackState currentstate;
-		trackList.get_active_path(out path, out currentstate);
+		bool is_first;
+		trackList.get_active_path(out path, out currentstate, out is_first);
 		trackList.listmodel.get_iter(out iter, path); 
 		trackList.listmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
 	}
 
+	// This functionchanges the current song to the next or previous in the 
+	// tracklist handle_repeat_state should be true when the calling is not 
+	// coming from a button, but for example from a EOS signal handler 
 	public void change_song(Direction direction, bool handle_repeat_state = false) {
 		TreeIter iter;
 		TrackState currentstate;
 		TreePath path = null;
+		bool is_first;
 		int rowcount = -1;
 		rowcount = (int)trackList.listmodel.iter_n_children(null);
-		if(!(rowcount>0)) {
+		
+		if(rowcount==0) {
+			// if no track is in the list, it does not make sense to go any further
 			stop();
 			return;
 		}
 		
-		if(!trackList.get_active_path(out path, out currentstate)) { // active path sets first path if active is not found
+		if(!trackList.get_active_path(out path, out currentstate, out is_first)) { // active path sets first path if active is not found
 			stop();
 			return;
 		}
 		
 		if((!xn.gPl.playing)&&(!xn.gPl.paused)) { // if stopped
-			trackList.reset_play_status_for_title();
+			trackList.reset_play_status_all_titles();
 			return;
 		}
 		
-		if(!(handle_repeat_state && (repeatState==Repeat.SINGLE))) {
-			if( direction == Direction.NEXT) path.next();
+		if((!(handle_repeat_state && (repeatState==Repeat.SINGLE))) && !is_first) {
+			if(direction == Direction.NEXT) path.next();
 			else if((direction == Direction.PREVIOUS)&&
-			       !(path.to_string()=="0")) {
+			        (path.to_string()!="0")) {
 				path.prev(); 
 			}
 		}
 
 		if(trackList.listmodel.get_iter(out iter, path)) {       //goto next song, if possible...
-			trackList.reset_play_status_for_title(); //visual reset
+			trackList.reset_play_status_all_titles(); //visual reset
 			if(xn.gPl.paused) {
 				trackList.set_state_picture_for_title(iter, TrackState.PAUSED);
 			}
-			else {
+			else if(xn.gPl.playing){
 				trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
 			}
 			trackList.set_focus_on_iter(ref iter);
@@ -476,7 +483,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		else if((trackList.listmodel.get_iter_first(out iter))&&
 		        (((handle_repeat_state)&&
 		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { //...or goto first song, if possible ...
-			trackList.reset_play_status_for_title();
+			trackList.reset_play_status_all_titles();
 			if(xn.gPl.playing) {
 				trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
 			}
@@ -487,7 +494,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}
 		else {
 			xn.gPl.stop();                      //...or stop
-			trackList.reset_play_status_for_title();
+			trackList.reset_play_status_all_titles();
 			trackList.set_focus_on_iter(ref iter);
 			xn.gPl.Uri="";
 		}
@@ -507,7 +514,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	}
 	
 	private void on_remove_selected_button_clicked() {
-		trackList.remove_selected_row();
+		trackList.remove_selected_rows();
 	}
 
 	private void on_show_video_button_clicked() {
@@ -914,7 +921,8 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 						xn.main_window.change_song(Direction.PREVIOUS);
 					}
 				}
-				if(xn.main_window.trackList.set_play_picture()) {
+				if(xn.main_window.trackList.set_play_state()) {
+					// find active row, set state picture, bolden and set uri for gpl
 					xn.gPl.play();
 				}
 				else if(xn.main_window.trackList.set_play_state_for_first_song()) {
@@ -922,8 +930,8 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 				}
 			}
 			else { 
-				if (xn.main_window.trackList.listmodel.iter_n_children(null)>0) { 
-					xn.main_window.trackList.set_pause_picture();
+				if(xn.main_window.trackList.listmodel.iter_n_children(null)>0) { 
+					xn.main_window.trackList.set_pause_state();
 					xn.gPl.pause();
 				}
 				else { //if there is no track -> stop
@@ -933,9 +941,11 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}
 		
 		public void update_picture() {
-			if(xn.gPl.playing == true) this.set_play_picture();
-				else this.set_pause_picture();
-			}
+			if(xn.gPl.playing == true) 
+				this.set_play_picture();
+			else 
+				this.set_pause_picture();
+		}
 			
 		public void set_play_picture() {
 			this.set_image(pauseImage);
@@ -960,7 +970,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			this.discrete_blocks = 10;
 			this.set_size_request(-1,18);
 
-			this.set_events (Gdk.EventMask.BUTTON1_MOTION_MASK | Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK);
+			this.set_events(Gdk.EventMask.BUTTON1_MOTION_MASK | Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK);
 			this.button_press_event   += this.on_press;
 			this.button_release_event += this.on_release;
 			
@@ -998,23 +1008,25 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 				if(thisFraction > 1.0) thisFraction = 1.0;
 				this.set_fraction(thisFraction);
 				this.xn.main_window.sign_pos_changed(thisFraction);
+				
+				set_value((uint)((thisFraction * xn.gPl.length_time) / 1000000), (uint)(xn.gPl.length_time / 1000000));
 			}
 			return false;
 		}
 
 		private bool on_motion_notify(Gdk.EventMotion e) { 
 			double thisFraction;
-			
 			double mouse_x, mouse_y;
 			mouse_x = e.x;
 			mouse_y = e.y;
-			
 			Allocation progress_loc = this.allocation;
 			thisFraction = mouse_x / progress_loc.width; 
+			
 			if(thisFraction < 0.0) thisFraction = 0.0;
 			if(thisFraction > 1.0) thisFraction = 1.0;
+			
 			this.set_fraction(thisFraction);
-			this.xn.main_window.sign_pos_changed(thisFraction); 
+			this.xn.main_window.sign_pos_changed(thisFraction);
 			
 			return false;
 		}
@@ -1027,9 +1039,9 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			set_value(0,0);
 		}
 
-		public void set_value(uint pos,uint len) {
-			int dur_min, dur_sec, pos_min, pos_sec;
+		public void set_value(uint pos, uint len) {
 			if(len > 0) {
+				int dur_min, dur_sec, pos_min, pos_sec;
 				double fraction = (double)pos/(double)len;
 				if(fraction<0.0) fraction = 0.0;
 				if(fraction>1.0) fraction = 1.0;
@@ -1127,7 +1139,6 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			window.enter_notify_event += on_pointer_enter_toolbar;
 			fullscreenwindow.enter_notify_event += on_pointer_enter_fswindow;
 			resize ();
-			
 		}
 		
 		public void resize() {

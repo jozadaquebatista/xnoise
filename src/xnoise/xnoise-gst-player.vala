@@ -33,7 +33,7 @@ using Gst;
 public class Xnoise.GstPlayer : GLib.Object {
 	private bool _current_has_video;
 	private uint timeout;
-	private int64 length_time;
+	public int64 length_time { get; set; }
 	private string _Uri = "";
 	private TagList _taglist;
 	public VideoScreen videoscreen;
@@ -80,8 +80,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 		}
 	}
 	   
-	public bool   playing  { get; set; }
-	public bool   paused   { get; set; }
+	public bool playing  { get; set; }
+	public bool paused   { get; set; }
 	
 	public string currentartist { get; private set; }
 	public string currentalbum  { get; private set; }
@@ -108,6 +108,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			this.current_has_video = false;
 			taglist = null;
 			this.playbin.set("uri", value);
+			length_time = 0;
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
 		}
 	}
@@ -115,8 +116,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public double gst_position {
 		set {
 			if(seeking == false) {
-				playbin.seek(1.0, Gst.Format.TIME, Gst.SeekFlags.FLUSH | Gst.SeekFlags.ACCURATE, 
-					Gst.SeekType.SET, (int64)(value * length_time), Gst.SeekType.NONE, -1);
+				playbin.seek(1.0, Gst.Format.TIME, 
+				             Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE, 
+				             Gst.SeekType.SET, (int64)(value * length_time), 
+							 Gst.SeekType.NONE, -1);
 			}
 		}
 	}
@@ -275,19 +278,19 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private bool on_cyclic_send_song_position() {
 		Gst.Format fmt = Gst.Format.TIME;
 		int64 pos, len;
-		if ((playbin.current_state == State.PLAYING)&&(playing == false)) {
+		if((playbin.current_state == State.PLAYING)&&(playing == false)) {   
 			playing = true; 
 			paused  = false;
 		}
-		if ((playbin.current_state == State.PAUSED)&&(paused == false)) {
+		if((playbin.current_state == State.PAUSED)&&(paused == false)) {   
 			paused = true; 
 			playing = false; 
 		}
-		if (playing == false) return true; 
 		if(seeking == false) {
-			playbin.query_position(ref fmt, out pos);
 			playbin.query_duration(ref fmt, out len);
 			length_time = (int64)len;
+			if(playing == false) return true;
+			playbin.query_position(ref fmt, out pos);
 			sign_song_position_changed((uint)(pos/1000000), (uint)(len/1000000));
 		}
 //		print("current:%s \n",playbin.current_state.to_string());

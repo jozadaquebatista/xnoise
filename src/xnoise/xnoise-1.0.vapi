@@ -75,6 +75,7 @@ namespace Xnoise {
 		public string currentartist { get; set; }
 		public string currenttitle { get; set; }
 		public double gst_position { set; }
+		public int64 length_time { get; set; }
 		public bool paused { get; set; }
 		public bool playing { get; set; }
 		public bool seeking { get; set; }
@@ -242,7 +243,7 @@ namespace Xnoise {
 	public class TrackList : Gtk.TreeView {
 		public Gtk.ListStore listmodel;
 		public void add_uris (string[]? uris);
-		public bool get_active_path (out Gtk.TreePath path, out Xnoise.TrackState currentstate);
+		public bool get_active_path (out Gtk.TreePath path, out Xnoise.TrackState currentstate, out bool is_first);
 		public string[] get_all_tracks ();
 		public string get_uri_for_path (Gtk.TreePath path);
 		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
@@ -254,11 +255,11 @@ namespace Xnoise {
 		public void on_drag_data_get (Xnoise.TrackList sender, Gdk.DragContext context, Gtk.SelectionData selection, uint target_type, uint etime);
 		public void on_drag_end (Xnoise.TrackList sender, Gdk.DragContext context);
 		public bool on_drag_motion (Xnoise.TrackList sender, Gdk.DragContext context, int x, int y, uint timestamp);
-		public void remove_selected_row ();
-		public void reset_play_status_for_title ();
+		public void remove_selected_rows ();
+		public void reset_play_status_all_titles ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
-		public bool set_pause_picture ();
-		public bool set_play_picture ();
+		public bool set_pause_state ();
+		public bool set_play_state ();
 		public bool set_play_state_for_first_song ();
 		public void set_state_picture_for_title (Gtk.TreeIter iter, Xnoise.TrackState state = Xnoise.TrackState.STOPPED);
 		public signal void sign_active_path_changed (Xnoise.TrackState ts);

@@ -58,7 +58,7 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	private void connect_signals() {
-		gPl.sign_eos += () => { //handle endOfStream signal from gst player
+		gPl.sign_eos += () => { // handle endOfStream signal from gst player
 			main_window.change_song(Direction.NEXT, true);
 		};
 		gPl.sign_tag_changed += main_window.set_displayed_title;

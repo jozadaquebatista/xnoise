@@ -364,7 +364,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		int i = 0;
 		TreeIter iter;
 		TreeIter iter_2 = TreeIter();
-		if(imediate_play) xn.main_window.trackList.reset_play_status_for_title();
+		if(imediate_play) xn.main_window.trackList.reset_play_status_all_titles();
 		foreach(weak TrackData td in td_list) {
 			string uri = td.Uri; 
 			int tracknumber = (int)td.Tracknumber;
