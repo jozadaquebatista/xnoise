@@ -636,7 +636,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		song_title_label.set_text(text);
 		song_title_label.use_markup = true;
 	}
-
+	
 	private bool on_trayicon_clicked(Gdk.Event event) {
 		switch(event.button.button) {
 			case 2:
