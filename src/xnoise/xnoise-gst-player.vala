@@ -283,7 +283,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 			paused = true; 
 			playing = false; 
 		}
-		if (playing == false) return true; 
+		//hotfix - very dirty!!! remove && paused when progressbar doesn't jump to 0 anymore 
+		//when pausing. needs some refactoring of tracklist. it sets the uri when running
+		//xnoise_track_list_set_state_picture, we should try to better seperate gui code
+		//from program logic and work with more signals.
+		if (playing == false && paused == false) return true; 
 		if(seeking == false) {
 			playbin.query_position(ref fmt, out pos);
 			playbin.query_duration(ref fmt, out len);
