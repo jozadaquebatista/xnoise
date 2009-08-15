@@ -387,7 +387,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		}		
 		this.repeatState = par.get_int_value("repeatstate");
 		double volSlider = par.get_double_value("volume");
-		if((volSlider <= 0.0)&&(volSlider > 1.0))
+		if((volSlider <= 0.0)||(volSlider > 1.0))
 			xn.gPl.volume = 0.3;
 		else 
 			xn.gPl.volume = volSlider;
