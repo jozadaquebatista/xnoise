@@ -348,7 +348,7 @@ struct _XnoiseIParamsIface {
 };
 
 struct _XnoiseMainWindow {
-	GObject parent_instance;
+	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	gboolean _seek;
 	XnoiseVideoScreen* videoscreen;
@@ -370,13 +370,12 @@ struct _XnoiseMainWindow {
 	double current_volume;
 	XnoiseMediaBrowser* mediaBr;
 	XnoiseTrackList* trackList;
-	GtkWindow* window;
 	GtkWindow* fullscreenwindow;
 	GtkImage* playpause_popup_image;
 };
 
 struct _XnoiseMainWindowClass {
-	GObjectClass parent_class;
+	GtkWindowClass parent_class;
 };
 
 typedef enum  {

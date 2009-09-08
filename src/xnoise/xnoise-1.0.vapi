@@ -102,7 +102,7 @@ namespace Xnoise {
 		public void save_tracklist ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class MainWindow : GLib.Object, Xnoise.IParams {
+	public class MainWindow : Gtk.Window, Xnoise.IParams {
 		[CCode (cheader_filename = "xnoise.h")]
 		public class NextButton : Gtk.Button {
 			public NextButton ();
@@ -156,7 +156,6 @@ namespace Xnoise {
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
 		public Xnoise.VideoScreen videoscreen;
-		public Gtk.Window window;
 		public void change_song (Xnoise.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
 		public MainWindow (ref unowned Xnoise.Main xn);

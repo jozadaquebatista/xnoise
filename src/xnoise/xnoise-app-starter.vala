@@ -33,7 +33,7 @@ public class Xnoise.AppStarter : GLib.Object {
 	                                                  int command, 
 	                                                  Unique.MessageData message_data, 
 	                                                  uint time) {
-		xn.main_window.window.present();
+		xn.main_window.present();
 		xn.main_window.trackList.add_uris(message_data.get_uris()); 
 		return Unique.Response.OK;
 	}
@@ -116,10 +116,10 @@ public class Xnoise.AppStarter : GLib.Object {
 		}
 		else {
 			xn = Main.instance();
-			app.watch_window((Gtk.Window)xn.main_window.window);
+			app.watch_window((Gtk.Window)xn.main_window);
 			app.message_received += app_starter.on_message_received;
 
-			xn.main_window.window.show_all();
+			xn.main_window.show_all();
 			
 			xn.main_window.trackList.add_uris(uris);
 

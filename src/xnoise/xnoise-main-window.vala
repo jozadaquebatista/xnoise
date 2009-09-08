@@ -30,7 +30,7 @@
 
 using Gtk;
 
-public class Xnoise.MainWindow : GLib.Object, IParams {
+public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string MAIN_UI_FILE  = Config.UIDIR + "main_window.ui";
 	private const string MENU_UI_FILE  = Config.UIDIR + "main_ui.xml";
 	private const string APPICON       = Config.UIDIR + "xnoise_16x16.png";
@@ -44,6 +44,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private int _posY_buffer;
 	private Button showvideobutton;
 	private Gtk.VBox menuvbox;
+	private Gtk.VBox mainvbox;
 	public VideoScreen videoscreen;
 	public Label showvideolabel;
 	public bool is_fullscreen = false;
@@ -81,7 +82,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	public double current_volume; //keep it global for saving to params
 	public MediaBrowser mediaBr;
 	public TrackList trackList;
-	public Gtk.Window window;
+	//public Gtk.Window window;
 	public Gtk.Window fullscreenwindow;
 	private FullscreenToolbar fullscreentoolbar;
 	private Gtk.VBox videovbox;
@@ -227,7 +228,7 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			is_fullscreen = true;
 		}
 		else if(e.new_window_state==Gdk.WindowState.ICONIFIED) {
-			this.window.get_position(out _posX_buffer, out _posY_buffer);
+			this.get_position(out _posX_buffer, out _posY_buffer);
 			is_fullscreen = false;
 		}
 		else {
@@ -353,25 +354,25 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	private void toggle_mainwindow_fullscreen() {
 		if(is_fullscreen) {
 			print("was fullscreen before\n");
-			this.window.unfullscreen();	
+			this.unfullscreen();	
 		}
 		else {
-			this.window.fullscreen();					
+			this.fullscreen();					
 		}
 	}
 	
 	private void toggle_window_visbility() {
-		if (this.window.is_active) {
-			this.window.get_position(out _posX_buffer, out _posY_buffer);
-			this.window.hide();
+		if (this.is_active) {
+			this.get_position(out _posX_buffer, out _posY_buffer);
+			this.hide();
 		}
-		else if(this.window.visible==true) {
-			this.window.move(_posX_buffer, _posY_buffer);
-			this.window.present();
+		else if(this.visible==true) {
+			this.move(_posX_buffer, _posY_buffer);
+			this.present();
 		}
 		else {
-			this.window.move(_posX_buffer, _posY_buffer);
-			this.window.present();
+			this.move(_posX_buffer, _posY_buffer);
+			this.present();
 		}
 	}
 
@@ -379,11 +380,11 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 	public void read_params_data() {
 		int posX = par.get_int_value("posX");
 		int posY = par.get_int_value("posY");
-		this.window.move(posX, posY);
+		this.move(posX, posY);
 		int wi = par.get_int_value("width");
 		int he = par.get_int_value("height");
 		if (wi > 0 && he > 0) {
-			this.window.resize(wi, he);
+			this.resize(wi, he);
 		}		
 		this.repeatState = par.get_int_value("repeatstate");
 		double volSlider = par.get_double_value("volume");
@@ -400,11 +401,11 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 
 	public void write_params_data() {
 		int posX, posY, wi, he;
-		this.window.get_position(out posX, out posY);
+		this.get_position(out posX, out posY);
 		par.set_int_value("posX", posX);
 		par.set_int_value("posY", posY);
 		
-		this.window.get_size(out wi, out he);
+		this.get_size(out wi, out he);
 		par.set_int_value("width", wi);
 		par.set_int_value("height", he);
 		
@@ -543,8 +544,8 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 
 
 	private bool on_close() {
-		this.window.get_position(out _posX_buffer, out _posY_buffer);
-		this.window.hide();
+		this.get_position(out _posX_buffer, out _posY_buffer);
+		this.hide();
 		return true;
 	}
 
@@ -666,7 +667,6 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		
 	}
 
-
 	private void create_widgets() {
 		try {
 //			assert(GLib.FileUtils.test(MAIN_UI_FILE, FileTest.EXISTS));
@@ -674,9 +674,10 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 			Builder gb = new Gtk.Builder();
 			gb.add_from_file(MAIN_UI_FILE);
 			
-			this.window = gb.get_object("window1") as Gtk.Window;
-			this.window.title = "xnoise media player";
-			this.window.set_icon_from_file(APPICON);							
+//			this.window = gb.get_object("window1") as Gtk.Window;
+			this.mainvbox = gb.get_object("mainvbox") as Gtk.VBox;
+			this.title = "xnoise media player";
+			this.set_icon_from_file(APPICON);							
 			
 			//DRAWINGAREA FOR VIDEO
 			videoscreen = xn.gPl.videoscreen;
@@ -826,15 +827,16 @@ public class Xnoise.MainWindow : GLib.Object, IParams {
 		
 		var menubar = (MenuBar)ui_manager.get_widget("/MainMenu");
 		menuvbox.pack_start(menubar, false, false, 0);
-
+		this.add(mainvbox);
+		
 		// TODO: Move these popup actions to uimanager		
 		this.trayicon.popup_menu       += this.trayicon_menu_popup;
 		this.trayicon.activate         += this.toggle_window_visbility;
 		this.trayicon.scroll_event     += this.on_trayicon_scrolled;
 		
-		this.window.delete_event       += this.on_close; //only send to tray
-		this.window.key_release_event  += this.on_key_released;
-		this.window.window_state_event += this.on_window_state_change;
+		this.delete_event       += this.on_close; //only send to tray
+		this.key_release_event  += this.on_key_released;
+		this.window_state_event += this.on_window_state_change;
 	}
 	
 	/**

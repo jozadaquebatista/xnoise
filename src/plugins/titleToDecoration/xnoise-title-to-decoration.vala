@@ -99,11 +99,11 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 					);
 			}
 		}
-		xn.main_window.window.set_title(text);
+		xn.main_window.set_title(text);
 	}
 	
 	~TitleToDecoration() {
-		xn.main_window.window.set_title("xnoise media player");
+		xn.main_window.set_title("xnoise media player");
 	}
 
 	private void on_b_clicked(Gtk.Button sender) {
