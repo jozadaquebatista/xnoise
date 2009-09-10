@@ -353,6 +353,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise.h")]
+	public static string get_stream_uri (string playlist_uri);
+	[CCode (cheader_filename = "xnoise.h")]
 	public static void initialize ();
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string remove_linebreaks (string value);

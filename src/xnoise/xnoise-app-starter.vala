@@ -66,7 +66,7 @@ public class Xnoise.AppStarter : GLib.Object {
 		app = new Unique.App.with_commands("org.gnome.xnoise", "xnoise", null);
 		string[] uris = {};
 		File file;
-		FileType filetype;
+		//FileType filetype;
 		weak string mime;
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
@@ -74,24 +74,58 @@ public class Xnoise.AppStarter : GLib.Object {
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 
 		for(int j=1;j<args.length;j++) { //TODO: Test this; this should handle uris and paths
-			try {
-				file = File.new_for_commandline_arg(args[j]);
-				FileInfo info = file.query_info(
-					                attr, 
-					                FileQueryInfoFlags.NONE, 
-					                null);
-				filetype = info.get_file_type();
-				string content = info.get_content_type();
-				mime = g_content_type_get_mime_type(content);
+			file = File.new_for_commandline_arg(args[j]);
+			string urischeme = file.get_uri_scheme();
+			string content = null;
+			if(urischeme=="file") {
+				try {
+					FileInfo info = file.query_info(
+							            attr, 
+							            FileQueryInfoFlags.NONE, 
+							            null);
+					//filetype = info.get_file_type();
+					content = info.get_content_type();
+					mime = g_content_type_get_mime_type(content);
+				}
+				catch(GLib.Error e){
+					stderr.printf("argerror: %s\n", e.message);
+					continue;
+				}	
+				print("mime: %s\n", mime);
+				if((psAudio.match_string(mime))||
+				   (psVideo.match_string(mime))) {
+					print("added %s\n", file.get_uri());
+					// handle audio/x-scpls
+					if(mime=="audio/x-scpls") {
+						string buffer = Xnoise.get_stream_uri(file.get_uri());
+						print("stream uri = %s\n", buffer);
+						uris += buffer;
+					}
+					else {
+					   	uris += file.get_uri();
+					}
+				}
 			}
-			catch(GLib.Error e){
-				stderr.printf("argerror: %s\n", e.message);
-				return 1;
-			}	
-			
-		if((filetype==GLib.FileType.REGULAR)&
-		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
-			   	uris += file.get_uri();
+			else {
+				print("is remote\n");
+				try {
+					FileInputStream fis = file.read(null);
+					print("#1\n");
+					FileInfo info = fis.query_info(
+							            attr, 
+							            null);
+					print("#2\n");
+					//filetype = info.get_file_type();
+					content = info.get_content_type();
+					print("#3\n");
+					mime = g_content_type_get_mime_type(content);
+					print("#4\n");
+				}
+				catch(GLib.Error e){
+					stderr.printf("argerror: %s\n", e.message);
+					continue;
+				}	
+				print("mime: %s\n", mime);
 			}
 		}
 		uris += null;

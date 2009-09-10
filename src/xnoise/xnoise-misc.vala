@@ -48,6 +48,24 @@ namespace Xnoise {
 		}
 		return value;
 	}
+	
+	public static string get_stream_uri(string playlist_uri) {
+		//print("playlist_uri: %s\n", playlist_uri);
+		var file = File.new_for_uri(playlist_uri);
+		string outval = "";
+		var in_stream = new DataInputStream(file.read(null));
+		string line;
+		string[] keyval;
+		while ((line = in_stream.read_line(null, null))!=null) {
+			//print("line: %s\n", line);
+			keyval = line.split ("=", 2);
+			if (keyval[0] == "File1") {
+				outval = keyval[1];
+				return outval;
+			}
+		}
+		return outval;
+	}
 }
 
 

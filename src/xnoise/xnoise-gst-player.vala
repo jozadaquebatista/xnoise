@@ -98,17 +98,32 @@ public class Xnoise.GstPlayer : GLib.Object {
 				_taglist = null;
 		}
 	}
-	
+	private bool is_stream = false;
 	public string Uri { 
 		get {
 			return _Uri;
 		}
 		set {
+			is_stream = false;
 			_Uri = value;
 			this.current_has_video = false;
 			taglist = null;
 			this.playbin.set("uri", value);
 			length_time = 0;
+			
+			File file = File.new_for_uri(value);
+			FileType filetype;
+			try {
+				FileInfo info = file.query_info(
+						            FILE_ATTRIBUTE_STANDARD_TYPE, 
+						            FileQueryInfoFlags.NONE, 
+						            null);
+				filetype = info.get_file_type();
+			}
+			catch(GLib.Error e){
+				stderr.printf("argerror: %s\n", e.message);
+			}
+			if(filetype!=GLib.FileType.REGULAR) is_stream = true;
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
 		}
 	}
@@ -276,24 +291,26 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private bool on_cyclic_send_song_position() {
-		Gst.Format fmt = Gst.Format.TIME;
-		int64 pos, len;
-		if((playbin.current_state == State.PLAYING)&&(playing == false)) {   
-			playing = true; 
-			paused  = false;
+		if(!is_stream) {
+			Gst.Format fmt = Gst.Format.TIME;
+			int64 pos, len;
+			if((playbin.current_state == State.PLAYING)&&(playing == false)) {   
+				playing = true; 
+				paused  = false;
+			}
+			if((playbin.current_state == State.PAUSED)&&(paused == false)) {   
+				paused = true; 
+				playing = false; 
+			}
+			if(seeking == false) {
+				playbin.query_duration(ref fmt, out len);
+				length_time = (int64)len;
+				if(playing == false) return true;
+				playbin.query_position(ref fmt, out pos);
+				sign_song_position_changed((uint)(pos/1000000), (uint)(len/1000000));
+			}
+	//		print("current:%s \n",playbin.current_state.to_string());
 		}
-		if((playbin.current_state == State.PAUSED)&&(paused == false)) {   
-			paused = true; 
-			playing = false; 
-		}
-		if(seeking == false) {
-			playbin.query_duration(ref fmt, out len);
-			length_time = (int64)len;
-			if(playing == false) return true;
-			playbin.query_position(ref fmt, out pos);
-			sign_song_position_changed((uint)(pos/1000000), (uint)(len/1000000));
-		}
-//		print("current:%s \n",playbin.current_state.to_string());
 		return true;
 	}
 

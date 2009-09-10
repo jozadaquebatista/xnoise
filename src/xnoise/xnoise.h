@@ -832,6 +832,7 @@ char* xnoise_track_list_get_uri_for_path (XnoiseTrackList* self, const GtkTreePa
 extern XnoiseParams* xnoise_par;
 void xnoise_initialize (void);
 char* xnoise_remove_linebreaks (const char* value);
+char* xnoise_get_stream_uri (const char* playlist_uri);
 GType xnoise_browser_column_get_type (void);
 GType xnoise_browser_collection_type_get_type (void);
 GType xnoise_repeat_get_type (void);

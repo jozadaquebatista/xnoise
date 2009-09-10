@@ -490,34 +490,80 @@ public class Xnoise.TrackList : TreeView {
 			if(uris[0]==null) return;
 			int k=0;
 			TreeIter iter, iter_2;
+			FileType filetype;
 			this.reset_play_status_all_titles();
 			while(uris[k]!=null) { //because foreach is not working for this array coming from libunique
 				File file;
 				TagReader tr = new TagReader();
 				file = File.new_for_uri(uris[k]);
+				bool is_stream = false;
+				string urischeme = file.get_uri_scheme();
+				TrackData t = TrackData();
+				if(urischeme=="file") {
+					try {
+						FileInfo info = file.query_info(
+									        FILE_ATTRIBUTE_STANDARD_TYPE, 
+									        FileQueryInfoFlags.NONE, 
+									        null);
+						filetype = info.get_file_type();
+					}
+					catch(GLib.Error e){
+						stderr.printf("%s\n", e.message);
+						continue;
+					}	
+					if(filetype==GLib.FileType.REGULAR) {
+						print("is local file\n");
+						t = tr.read_tag_from_file(file.get_path()); 
+					}
+					else {
+						is_stream = true;
+					}
+				}
+				else {
+					is_stream = true;
+				}
 
-				//TODO: only for local files, so streams will not lead to a crash
-				TrackData t = tr.read_tag_from_file(file.get_path()); 
-
-				if (k==0) {
-					iter = this.insert_title(TrackState.PLAYING, 
-					                              null, 
-					                              (int)t.Tracknumber,
-					                              t.Title, 
-					                              t.Album, 
-					                              t.Artist, 
-					                              uris[k]);
+				if(false) {//k==0) {
+					if(!is_stream) {
+						iter = this.insert_title(TrackState.PLAYING, 
+							                          null, 
+							                          (int)t.Tracknumber,
+							                          t.Title, 
+							                          t.Album, 
+							                          t.Artist, 
+							                          uris[k]);
+					}
+					else {
+						iter = this.insert_title(TrackState.PLAYING, 
+							                          null, 
+							                          0,
+							                          "", 
+							                          "", 
+							                          "", 
+							                          uris[k]);						
+					}
 					this.set_state_picture_for_title(iter, TrackState.PLAYING);
 					iter_2 = iter;
 				}
 				else {
-					iter = this.insert_title(TrackState.STOPPED, 
-					                              null, 
-					                              (int)t.Tracknumber,
-					                              t.Title, 
-					                              t.Album, 
-					                              t.Artist, 
-					                              uris[k]);	
+					if(!is_stream) {
+						iter = this.insert_title(TrackState.STOPPED, 
+							                          null, 
+							                          (int)t.Tracknumber,
+							                          t.Title, 
+							                          t.Album, 
+							                          t.Artist, 
+							                          uris[k]);	
+					}
+					else {
+						iter = this.insert_title(TrackState.STOPPED, 
+							                          null, 
+							                          0,
+							                          "stream", 
+							                          "stream", 
+							                          "stream", 
+							                          uris[k]);							
+					}
 					this.set_state_picture_for_title(iter);
 				}
 				tr = null;
