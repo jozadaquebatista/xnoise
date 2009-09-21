@@ -30,22 +30,26 @@
 
 using Gtk;
 
-
-internal class Xnoise.MediaFolderDialog : Gtk.Builder {
+internal class Xnoise.MediaFolderDialog : GLib.Object {
+	private Gtk.Dialog dialog;
 	private string[] mfolders;
-	private Dialog window;
+	private Gtk.Builder builder;
+	private Gtk.VBox mainvbox; 
 	private ListStore listmodel;
 	private TreeView tv;
 	private TreeIter iter; //TODO
 	private Button bok;
 	private Button bcancel;
-	private Button badd;
+	private Button baddfile;
+	private Button baddfolder;
+	private Button baddradio;
 	private Button brem;
 	private string[] list_of_folders; 
-
+	
 	public signal void sign_finish();
 	
 	public MediaFolderDialog() {
+		builder = new Gtk.Builder();
 		create_widgets();
 
 		DbWriter dbb = new DbWriter();
@@ -55,12 +59,12 @@ internal class Xnoise.MediaFolderDialog : Gtk.Builder {
 			listmodel.append (out iter);
 			listmodel.set (iter, 0, mfolder, -1);
 		}
-		this.window.show_all();	
+		this.dialog.show_all();	
 	}
 
-	~MediaFolderDialog() {
-		print("destruct mfd\n");	
-	}
+	//~MediaFolderDialog() {
+	//	print("destruct mfd\n");	
+	//}
 
 	private void deliver_music_folders() {
 		list_of_folders = new string[0];
@@ -69,39 +73,46 @@ internal class Xnoise.MediaFolderDialog : Gtk.Builder {
 
 	private void create_widgets() {
 		try {
-			this.add_from_file(Config.UIDIR + "add_folder.ui");
+			dialog = new Dialog();
+			
+			builder.add_from_file(Config.UIDIR + "add_media.ui");
+			
+			mainvbox         = builder.get_object("mainvbox") as Gtk.VBox;
+			tv               = builder.get_object("tv") as TreeView;
+			baddfile         = builder.get_object("addfilebutton") as Button;
+			baddfolder       = builder.get_object("addfolderbutton") as Button;
+			baddradio        = builder.get_object("addradiobutton") as Button;
+			brem             = builder.get_object("removeButton") as Button;
+			
+			bcancel          = (Button)this.dialog.add_button(Gtk.STOCK_CANCEL , 0);
+			bok              = (Button)this.dialog.add_button(Gtk.STOCK_OK, 1);
+			
+			bok.clicked        += on_ok_button_clicked;
+			bcancel.clicked    += on_cancel_button_clicked;
+			baddfile.clicked   += on_add_file_button_clicked;
+			baddfolder.clicked += on_add_folder_button_clicked;
+			baddradio.clicked  += on_add_radio_button_clicked;
+			brem.clicked       += on_remove_button_clicked;
 
-			window     = this.get_object("musicFolderDialog") as Dialog;
-			tv         = this.get_object("tv") as TreeView;
-			bok        = this.get_object("OKbutton") as Button;
-			bcancel    = this.get_object("Cancelbutton") as Button;
-			badd       = this.get_object("Addfolderbutton") as Button;
-			brem       = this.get_object("removeButton") as Button;
-
-			bok.clicked+=on_ok_button_clicked;
-			bcancel.clicked+=on_cancel_button_clicked;
-			badd.clicked+=on_add_folder_button_clicked;
-			brem.clicked+=on_remove_button_clicked;
-
-			listmodel = new ListStore(1, typeof(string));
-			tv.set_model(listmodel);
-			CellRendererText cell = new CellRendererText ();
-			cell.set ("foreground_set", true, null);
-			tv.insert_column_with_attributes (-1, "Path", cell, "text", 0, null);
-
-			window.set_icon_from_file (Config.UIDIR + "xnoise_16x16.png");
+			this.dialog.vbox.add(mainvbox);
+			this.dialog.set_icon_from_file(Config.UIDIR + "xnoise_16x16.png");
+			this.dialog.set_title(_("xnoise - Add media to library"));
 		} 
 		catch (GLib.Error err) {
-			var msg = new Gtk.MessageDialog (null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 
-				Gtk.ButtonsType.CANCEL, "Failed to build dialog! \n" + err.message);
+			var msg = new Gtk.MessageDialog(null, 
+			                                Gtk.DialogFlags.MODAL, 
+			                                Gtk.MessageType.ERROR, 
+			                                Gtk.ButtonsType.CANCEL, 
+			                                "Failed to build dialog! \n" + err.message);
 			msg.run();
 			return;
 		}
-		listmodel = new ListStore(1, typeof(string));
+		
+		listmodel = new ListStore(2, typeof(string), typeof(int));
 		tv.set_model(listmodel);
 		CellRendererText cell = new Gtk.CellRendererText ();
-		cell.set ("foreground_set", true, null);
-		tv.insert_column_with_attributes (-1, "Path", cell, "text", 0, null);
+		cell.set("foreground_set", true, null);
+		tv.insert_column_with_attributes(-1, "Path", cell, "text", 0, null);
 	}
 
 	private bool list_foreach(TreeModel sender, TreePath mypath, TreeIter myiter) { 
@@ -116,7 +127,7 @@ internal class Xnoise.MediaFolderDialog : Gtk.Builder {
 		Main.instance().main_window.mediaBr.set_sensitive(false);
 		bok.sensitive = false;
 		bcancel.sensitive = false;
-		badd.sensitive = false;
+		baddfolder.sensitive = false;
 		brem.sensitive = false;
 		deliver_music_folders();
 		try {
@@ -125,49 +136,94 @@ internal class Xnoise.MediaFolderDialog : Gtk.Builder {
 			print("Error: %s\n", ex.message);
 			return;
 		}
-		window.destroy();
+		print("destroy\n");
+		this.dialog.destroy();
 	}
 	
-	private void* write_music_folder_into_db() { //THREADING FUNCTION
-		//thread for the song import to the db
-		//sends a signal when finished, this signal is handled by main window
+	private void* write_music_folder_into_db() { 
+		// thread function for the import to the library
+		// sends a signal when finished, this signal is handled by main window
 		DbWriter dbb = new DbWriter();
 		dbb.write_music_folder_into_db(list_of_folders); //TODO: pass list_of_folders as reference as soon as vala allows this
 		mfolders = null;
-		print("thread finished\n");
+		// print("thread finished\n");
 		this.sign_finish();
 		return null;
 	}
 
 	private void on_cancel_button_clicked() {
-		this.window.destroy();
+		this.dialog.destroy();
+	}
+
+	private void on_add_file_button_clicked() {
+		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
+			_("Select media file"),
+			this.dialog, 
+			Gtk.FileChooserAction.OPEN,
+			Gtk.STOCK_CANCEL,
+			Gtk.ResponseType.CANCEL,
+			Gtk.STOCK_OPEN,
+			Gtk.ResponseType.ACCEPT,
+			null);
+		if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
+			listmodel.append(out iter);
+			listmodel.set(iter, 
+			              0, fcdialog.get_filename(), 
+			              1, MediaStorageType.FILE,
+			              -1);
+		}
+		fcdialog.destroy();
+		fcdialog = null;
 	}
 
 	private void on_add_folder_button_clicked() {
-		Gtk.FileChooserDialog dialog = new Gtk.FileChooserDialog(
-			"Select music directory",
-			window, 
+		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
+			_("Select media folder"),
+			this.dialog, 
 			Gtk.FileChooserAction.SELECT_FOLDER,
 			Gtk.STOCK_CANCEL,
 			Gtk.ResponseType.CANCEL,
 			Gtk.STOCK_OPEN,
 			Gtk.ResponseType.ACCEPT,
 			null);
-		if (dialog.run() == Gtk.ResponseType.ACCEPT) {
+		if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
 			listmodel.append(out iter);
-			listmodel.set(iter, 0, dialog.get_filename (), -1);
+			listmodel.set(iter, 
+			              0, fcdialog.get_filename(), 
+			              1, MediaStorageType.FOLDER,
+			              -1);
 		}
-		dialog.destroy();
-		dialog = null;
+		fcdialog.destroy();
+		fcdialog = null;
 	}
 
+
+//private Gtk.Entry radioentry;
+//private Gtk.Button radiookbutton;
+//private Gtk.Window radiodialog;
+
+	private void on_add_radio_button_clicked() {
+		print("add radio clicked\n");
+
+//		radiodialog.destroy_event += () => {
+//			radiodialog = null;
+//		};
+//		radiookbutton.clicked += on_radio_ok_button_clicked;
+//		
+//		radiodialog.show_all();
+	}
+
+//	private void on_radio_ok_button_clicked() {
+//		print("radio ok\n");
+//	}
+	
 	private void on_remove_button_clicked() {
 		Gtk.TreeSelection selection = tv.get_selection ();
 		if(selection.count_selected_rows() > 0) {
 			selection.get_selected (null, out iter);
 			GLib.Value gv;
 			listmodel.get_value(iter, 0, out gv);
-			print("remove folder %s\n",gv.get_string());
+//			print("remove %s\n",gv.get_string());
 			listmodel.remove (iter);
 		}
 	}

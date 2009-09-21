@@ -82,6 +82,11 @@ public enum Xnoise.BrowserColumn {
 	N_COLUMNS
 }
 
+public enum Xnoise.MediaStorageType {
+	FILE = 0,
+	FOLDER,
+	STREAM
+}
 
 public enum Xnoise.BrowserCollectionType {
 	UNKNOWN = 0,

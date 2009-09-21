@@ -638,8 +638,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		song_title_label.use_markup = true;
 	}
 	
-	private bool on_trayicon_clicked(Gdk.Event event) {
-		switch(event.button.button) {
+	private bool on_trayicon_clicked(Gdk.EventButton e) {
+		switch(e.button) {
 			case 2:
 				//ugly, we should move play/resume code out of there.
 				this.playPauseButton.on_clicked();  

@@ -30,9 +30,9 @@
 
 
 internal class Xnoise.TagReader : GLib.Object {
-	public TagReader() {
-		print("construct TagReader\n");
-	}
+//	public TagReader() {
+//		print("construct TagReader\n");
+//	}
 	public TrackData read_tag_from_file(string filename) {
 		TrackData td; 
 		TagLib.File taglib_file = null;

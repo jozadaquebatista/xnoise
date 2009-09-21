@@ -1,7 +1,7 @@
 NULL =
 
 ui_DATA = \
-		add_folder.ui \
+		add_media.ui \
 		main_window.ui \
 		main_ui.xml \
 		settings.ui \

@@ -510,60 +510,34 @@ public class Xnoise.TrackList : TreeView {
 					catch(GLib.Error e){
 						stderr.printf("%s\n", e.message);
 						continue;
-					}	
+					}
 					if(filetype==GLib.FileType.REGULAR) {
-						print("is local file\n");
 						t = tr.read_tag_from_file(file.get_path()); 
 					}
 					else {
 						is_stream = true;
 					}
 				}
-				else {
-					is_stream = true;
-				}
 
-				if(false) {//k==0) {
-					if(!is_stream) {
-						iter = this.insert_title(TrackState.PLAYING, 
-							                          null, 
-							                          (int)t.Tracknumber,
-							                          t.Title, 
-							                          t.Album, 
-							                          t.Artist, 
-							                          uris[k]);
-					}
-					else {
-						iter = this.insert_title(TrackState.PLAYING, 
-							                          null, 
-							                          0,
-							                          "", 
-							                          "", 
-							                          "", 
-							                          uris[k]);						
-					}
+				if(k==0) {
+					iter = this.insert_title(TrackState.PLAYING, 
+						                          null, 
+						                          (int)t.Tracknumber,
+						                          t.Title, 
+						                          t.Album, 
+						                          t.Artist, 
+						                          uris[k]);
 					this.set_state_picture_for_title(iter, TrackState.PLAYING);
 					iter_2 = iter;
 				}
 				else {
-					if(!is_stream) {
-						iter = this.insert_title(TrackState.STOPPED, 
-							                          null, 
-							                          (int)t.Tracknumber,
-							                          t.Title, 
-							                          t.Album, 
-							                          t.Artist, 
-							                          uris[k]);	
-					}
-					else {
-						iter = this.insert_title(TrackState.STOPPED, 
-							                          null, 
-							                          0,
-							                          "stream", 
-							                          "stream", 
-							                          "stream", 
-							                          uris[k]);							
-					}
+					iter = this.insert_title(TrackState.STOPPED, 
+						                          null, 
+						                          (int)t.Tracknumber,
+						                          t.Title, 
+						                          t.Album, 
+						                          t.Artist, 
+						                          uris[k]);	
 					this.set_state_picture_for_title(iter);
 				}
 				tr = null;

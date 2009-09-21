@@ -245,6 +245,8 @@ typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 
 #define XNOISE_TYPE_BROWSER_COLUMN (xnoise_browser_column_get_type ())
 
+#define XNOISE_TYPE_MEDIA_STORAGE_TYPE (xnoise_media_storage_type_get_type ())
+
 #define XNOISE_TYPE_BROWSER_COLLECTION_TYPE (xnoise_browser_collection_type_get_type ())
 
 #define XNOISE_TYPE_REPEAT (xnoise_repeat_get_type ())
@@ -340,7 +342,6 @@ struct _XnoiseGstPlayerClass {
 	GObjectClass parent_class;
 };
 
-/*Interfaces*/
 struct _XnoiseIParamsIface {
 	GTypeInterface parent_iface;
 	void (*read_params_data) (XnoiseIParams* self);
@@ -383,9 +384,6 @@ typedef enum  {
 	XNOISE_DIRECTION_PREVIOUS
 } XnoiseDirection;
 
-/**
-* A NextButton is a Gtk.Button that initiates playback of the previous item
-*/
 struct _XnoiseMainWindowNextButton {
 	GtkButton parent_instance;
 	XnoiseMainWindowNextButtonPrivate * priv;
@@ -395,9 +393,6 @@ struct _XnoiseMainWindowNextButtonClass {
 	GtkButtonClass parent_class;
 };
 
-/**
-* A PreviousButton is a Gtk.Button that initiates playback of the previous item
-*/
 struct _XnoiseMainWindowPreviousButton {
 	GtkButton parent_instance;
 	XnoiseMainWindowPreviousButtonPrivate * priv;
@@ -407,9 +402,6 @@ struct _XnoiseMainWindowPreviousButtonClass {
 	GtkButtonClass parent_class;
 };
 
-/**
-* A StopButton is a Gtk.Button that stops playback
-*/
 struct _XnoiseMainWindowStopButton {
 	GtkButton parent_instance;
 	XnoiseMainWindowStopButtonPrivate * priv;
@@ -419,9 +411,6 @@ struct _XnoiseMainWindowStopButtonClass {
 	GtkButtonClass parent_class;
 };
 
-/**
-* A PlayPauseButton is a Gtk.Button that accordingly pauses, unpauses or starts playback
-*/
 struct _XnoiseMainWindowPlayPauseButton {
 	GtkButton parent_instance;
 	XnoiseMainWindowPlayPauseButtonPrivate * priv;
@@ -431,10 +420,6 @@ struct _XnoiseMainWindowPlayPauseButtonClass {
 	GtkButtonClass parent_class;
 };
 
-/**
-* A SongProgressBar is  a Gtk.ProgressBar that shows the playback position in the 
-* currently played item and changes it upon user input
-*/
 struct _XnoiseMainWindowSongProgressBar {
 	GtkProgressBar parent_instance;
 	XnoiseMainWindowSongProgressBarPrivate * priv;
@@ -444,9 +429,6 @@ struct _XnoiseMainWindowSongProgressBarClass {
 	GtkProgressBarClass parent_class;
 };
 
-/**
-* A VolumeSliderButton is a Gtk.VolumeButton used to change the volume
-*/
 struct _XnoiseMainWindowVolumeSliderButton {
 	GtkVolumeButton parent_instance;
 	XnoiseMainWindowVolumeSliderButtonPrivate * priv;
@@ -544,8 +526,6 @@ typedef enum  {
 	XNOISE_TRACK_STATE_POSITION_FLAG
 } XnoiseTrackState;
 
-/* PROJECT WIDE USED STRUCTS, INTERFACES AND ENUMS
-Enums*/
 typedef enum  {
 	XNOISE_BROWSER_COLUMN_ICON = 0,
 	XNOISE_BROWSER_COLUMN_VIS_TEXT,
@@ -554,6 +534,12 @@ typedef enum  {
 	XNOISE_BROWSER_COLUMN_COLL_TYPE,
 	XNOISE_BROWSER_COLUMN_N_COLUMNS
 } XnoiseBrowserColumn;
+
+typedef enum  {
+	XNOISE_MEDIA_STORAGE_TYPE_FILE = 0,
+	XNOISE_MEDIA_STORAGE_TYPE_FOLDER,
+	XNOISE_MEDIA_STORAGE_TYPE_STREAM
+} XnoiseMediaStorageType;
 
 typedef enum  {
 	XNOISE_BROWSER_COLLECTION_TYPE_UNKNOWN = 0,
@@ -817,7 +803,7 @@ void xnoise_track_list_on_drag_data_get (XnoiseTrackList* self, XnoiseTrackList*
 char** xnoise_track_list_get_all_tracks (XnoiseTrackList* self, int* result_length1);
 void xnoise_track_list_add_uris (XnoiseTrackList* self, char** uris, int uris_length1);
 GType xnoise_track_state_get_type (void);
-GtkTreeIter xnoise_track_list_insert_title (XnoiseTrackList* self, XnoiseTrackState status, GdkPixbuf* pixbuf, gint tracknumber, const char* title, const char* album, const char* artist, const char* uri);
+void xnoise_track_list_insert_title (XnoiseTrackList* self, XnoiseTrackState status, GdkPixbuf* pixbuf, gint tracknumber, const char* title, const char* album, const char* artist, const char* uri, GtkTreeIter* result);
 void xnoise_track_list_set_state_picture_for_title (XnoiseTrackList* self, GtkTreeIter* iter, XnoiseTrackState state);
 gboolean xnoise_track_list_set_play_state_for_first_song (XnoiseTrackList* self);
 gboolean xnoise_track_list_set_play_state (XnoiseTrackList* self);
@@ -834,6 +820,7 @@ void xnoise_initialize (void);
 char* xnoise_remove_linebreaks (const char* value);
 char* xnoise_get_stream_uri (const char* playlist_uri);
 GType xnoise_browser_column_get_type (void);
+GType xnoise_media_storage_type_get_type (void);
 GType xnoise_browser_collection_type_get_type (void);
 GType xnoise_repeat_get_type (void);
 GType xnoise_track_list_column_get_type (void);

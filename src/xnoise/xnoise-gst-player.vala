@@ -112,7 +112,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			length_time = 0;
 			
 			File file = File.new_for_uri(value);
-			FileType filetype;
+			FileType filetype = GLib.FileType.REGULAR;
 			try {
 				FileInfo info = file.query_info(
 						            FILE_ATTRIBUTE_STANDARD_TYPE, 
