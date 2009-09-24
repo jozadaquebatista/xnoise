@@ -45,6 +45,7 @@ internal class Xnoise.MediaFolderDialog : GLib.Object {
 	private Button baddradio;
 	private Button brem;
 	private string[] list_of_folders; 
+	private const string XNOISEICON = Config.UIDIR + "xnoise_16x16.png";
 	
 	public signal void sign_finish();
 	
@@ -74,7 +75,7 @@ internal class Xnoise.MediaFolderDialog : GLib.Object {
 	private void create_widgets() {
 		try {
 			dialog = new Dialog();
-			
+			dialog.set_modal(true);
 			builder.add_from_file(Config.UIDIR + "add_media.ui");
 			
 			mainvbox         = builder.get_object("mainvbox") as Gtk.VBox;
@@ -95,7 +96,7 @@ internal class Xnoise.MediaFolderDialog : GLib.Object {
 			brem.clicked       += on_remove_button_clicked;
 
 			this.dialog.vbox.add(mainvbox);
-			this.dialog.set_icon_from_file(Config.UIDIR + "xnoise_16x16.png");
+			this.dialog.set_icon_from_file(XNOISEICON);
 			this.dialog.set_title(_("xnoise - Add media to library"));
 		} 
 		catch (GLib.Error err) {
@@ -198,32 +199,65 @@ internal class Xnoise.MediaFolderDialog : GLib.Object {
 	}
 
 
-//private Gtk.Entry radioentry;
-//private Gtk.Button radiookbutton;
-//private Gtk.Window radiodialog;
+	private Gtk.Dialog radiodialog;
 
 	private void on_add_radio_button_clicked() {
-		print("add radio clicked\n");
+		radiodialog = new Gtk.Dialog();
+		radiodialog.set_modal(true);
+		radiodialog.set_keep_above(true);
+		
+		var radioentry = new Gtk.Entry();
+		radioentry.set_width_chars(50);
+		radioentry.secondary_icon_stock = Gtk.STOCK_CLEAR; 
+		radioentry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true); 
+		radioentry.icon_press += (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
+			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
+		};
+		radiodialog.vbox.pack_start(radioentry, true, true, 0);
+					
+		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_CANCEL, 0);
+		radiocancelbutton.clicked += () => {
+			print("radio cancel\n");
+			radiodialog.close();
+			radiodialog = null;
+		};
+		
+		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_OK, 1);
+		radiookbutton.clicked += () => {
+			print("radio ok\n");
+			radiodialog.close();
+			radiodialog = null;
+		};
 
-//		radiodialog.destroy_event += () => {
-//			radiodialog = null;
-//		};
-//		radiookbutton.clicked += on_radio_ok_button_clicked;
-//		
-//		radiodialog.show_all();
+		radiodialog.destroy_event += () => {
+			radiodialog = null;
+		};
+		
+		try {
+			radiodialog.set_icon_from_file(XNOISEICON);
+			radiodialog.set_title(_("Add internet radio link"));
+		}
+		catch (GLib.Error err) {
+			var msg = new Gtk.MessageDialog(null, 
+			                                Gtk.DialogFlags.MODAL, 
+			                                Gtk.MessageType.ERROR, 
+			                                Gtk.ButtonsType.CANCEL, 
+			                                "Failed set icon! \n" + err.message);
+			msg.run();
+		}
+		radiodialog.show_all();
 	}
 
-//	private void on_radio_ok_button_clicked() {
-//		print("radio ok\n");
-//	}
 	
+	/**
+	* Removes entry from the media library
+	*/
 	private void on_remove_button_clicked() {
 		Gtk.TreeSelection selection = tv.get_selection ();
 		if(selection.count_selected_rows() > 0) {
 			selection.get_selected (null, out iter);
 			GLib.Value gv;
 			listmodel.get_value(iter, 0, out gv);
-//			print("remove %s\n",gv.get_string());
 			listmodel.remove (iter);
 		}
 	}
