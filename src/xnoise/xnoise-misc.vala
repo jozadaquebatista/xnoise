@@ -118,7 +118,12 @@ public struct Xnoise.TrackData { // meta information structure
 	public string Uri;
 }
 
-public struct Xnoise.Title_MType_Id {
+public struct Xnoise.StreamData { // meta information structure
+	public string Name;
+	public string Uri;
+}
+
+public struct Xnoise.TitleMtypeId {
 	public string name;
 	public int id;
 	public MediaType mediatype;
