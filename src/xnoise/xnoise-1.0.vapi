@@ -278,6 +278,7 @@ namespace Xnoise {
 		public Gdk.Pixbuf logo_pixb;
 		public VideoScreen ();
 		public override bool expose_event (Gdk.EventExpose e);
+		public void trigger_expose ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IParams : GLib.Object {

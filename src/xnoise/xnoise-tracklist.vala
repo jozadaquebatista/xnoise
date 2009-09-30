@@ -364,7 +364,7 @@ public class Xnoise.TrackList : TreeView {
 			string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 			              FILE_ATTRIBUTE_STANDARD_TYPE;
 			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
-		} catch(Error e) {
+		} catch (Error e) {
 			print("Error importing directory %s. %s\n", dir.get_path(), e.message);
 			return;
 		}

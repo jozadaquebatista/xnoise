@@ -873,6 +873,7 @@ void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
 XnoiseVideoScreen* xnoise_video_screen_new (void);
 XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type);
+void xnoise_video_screen_trigger_expose (XnoiseVideoScreen* self);
 GType xnoise_settings_dialog_get_type (void);
 XnoiseSettingsDialog* xnoise_settings_dialog_new (XnoiseMain** xn);
 XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type, XnoiseMain** xn);

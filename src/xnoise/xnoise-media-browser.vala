@@ -476,20 +476,16 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return false;
 	}
 	
-	private bool separator_func(Gtk.TreeModel m, Gtk.TreeIter iter) {
-		int sepatator = 0;
-		m.get(iter, BrowserColumn.DRAW_SEPTR, ref sepatator);
-		if(sepatator==0) return false;
-		return true;
-	}
-	
-	private void put_listed_data_to_model() {
+	private void prepend_separator() {
 		TreeIter iter;
 		treemodel.prepend(out iter, null); 
 		treemodel.set(iter, BrowserColumn.DRAW_SEPTR, 1, -1); 
+	}
+	
+	private void put_listed_data_to_model() {
+		prepend_separator();
 		put_videos_to_model();
-		treemodel.prepend(out iter, null); 
-		treemodel.set(iter, BrowserColumn.DRAW_SEPTR, 1, -1); 
+		prepend_separator();
 		put_streams_to_model();
 	}
 			
@@ -654,7 +650,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.enable_tree_lines = use_treelines;
 		this.headers_visible = false;
 		this.enable_search = false;
-		this.set_row_separator_func(separator_func);
+		this.set_row_separator_func((m, iter) => {
+			int sepatator = 0;
+			m.get(iter, BrowserColumn.DRAW_SEPTR, ref sepatator);
+			if(sepatator==0) return false;
+			return true;
+		});
 	}
 }
 

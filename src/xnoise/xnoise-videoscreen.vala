@@ -120,5 +120,26 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 		return true;
 	}
+	
+	public void trigger_expose () {
+		//TODO: maybe this should be triggered from elsewhere. But
+		// I had difficulties to get this via a notify signal in VideoScreen widget
+		//TODO: This should only be triggered if logo is not already there.
+		//Otherwise there is a flickering
+		Gdk.EventExpose e = Gdk.EventExpose();
+		e.type = Gdk.EventType.EXPOSE;
+		e.window = this.window;
+		var rect = Gdk.Rectangle();
+		rect.x = 0;
+		rect.y = 0;
+		rect.width = this.allocation.width;
+		rect.height = this.allocation.height;
+		e.area = rect;
+		Gdk.Region region = Gdk.Region.rectangle(rect);
+		e.region = region;
+		e.count = 0;
+		e.send_event = (char)1;
+		this.expose_event(e);
+	}
 }
 

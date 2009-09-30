@@ -39,31 +39,14 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public VideoScreen videoscreen;
 	public dynamic Element playbin;
 	public bool seeking  { get; set; } //TODO
-	public bool current_has_video { 
+	public bool current_has_video { // TODO: Determine this elsewhere
 		get {
 			return _current_has_video;
 		} 
 		set {
 			_current_has_video = value;
 			if(!_current_has_video) {
-				//TODO: maybe this should be triggered from elsewhere. But
-				// I had difficulties to get this via a notify signal in VideoScreen widget
-				//TODO: This should only be triggered if logo is not already there.
-				//Otherwise there is a flickering
-				Gdk.EventExpose e = Gdk.EventExpose();
-				e.type = Gdk.EventType.EXPOSE;
-				e.window = videoscreen.window;
-				var rect = Gdk.Rectangle();
-				rect.x = 0;
-				rect.y = 0;
-				rect.width = videoscreen.allocation.width;
-				rect.height = videoscreen.allocation.height;
-				e.area = rect;
-				Gdk.Region region = Gdk.Region.rectangle(rect);
-				e.region = region;
-				e.count = 0;
-				e.send_event = (char)1;
-				videoscreen.expose_event(e);
+				videoscreen.trigger_expose();
 			}
 		}
 	}
