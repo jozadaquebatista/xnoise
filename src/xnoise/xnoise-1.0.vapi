@@ -19,20 +19,21 @@ namespace Xnoise {
 	public class AlbumImage : Gtk.Fixed {
 		public Gtk.Image albumimage;
 		public Gtk.Image albumimage_overlay;
+		public AlbumImage ();
 		public void find_album_image (string uri);
 		public void find_google_image (string search_term);
-		public AlbumImage ();
 		public void* set_albumimage_from_goo ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AppStarter : GLib.Object {
 		public static Xnoise.Main xn;
-		public static int main (string[] args);
 		public AppStarter ();
+		public static int main (string[] args);
 		public static Unique.Response on_message_received (Unique.App sender, int command, Unique.MessageData message_data, uint time);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbBrowser : GLib.Object {
+		public DbBrowser ();
 		public string[] get_albums (string artist, ref string searchtext);
 		public string[] get_artists (ref string searchtext);
 		public string[] get_lastused_uris ();
@@ -46,16 +47,15 @@ namespace Xnoise {
 		public string get_uri_for_title (string artist, string album, string title);
 		public Xnoise.Title_MType_Id[] get_video_data (ref string searchtext);
 		public string[] get_videos (ref string searchtext);
-		public DbBrowser ();
 		public bool uri_is_in_db (string uri);
 		public bool videos_available ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
+		public DbWriter ();
 		public void begin_transaction ();
 		public void commit_transaction ();
 		public string[] get_music_folders ();
-		public DbWriter ();
 		public void write_final_tracks_to_db (string[] final_tracklist);
 		public void write_music_folder_into_db (string[] mfolders);
 		public signal void sign_import_progress (uint current, uint amount);
@@ -95,9 +95,9 @@ namespace Xnoise {
 		public Xnoise.GstPlayer gPl;
 		public Xnoise.MainWindow main_window;
 		public Xnoise.PluginLoader plugin_loader;
+		public Main ();
 		public void add_track_to_gst_player (string uri);
 		public static Xnoise.Main instance ();
-		public Main ();
 		public void quit ();
 		public void save_tracklist ();
 	}
@@ -156,9 +156,9 @@ namespace Xnoise {
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
 		public Xnoise.VideoScreen videoscreen;
+		public MainWindow (ref unowned Xnoise.Main xn);
 		public void change_song (Xnoise.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
-		public MainWindow (ref unowned Xnoise.Main xn);
 		public void set_displayed_title (string newuri);
 		public bool fullscreenwindowvisible { get; set; }
 		public int repeatState { get; set; }
@@ -169,9 +169,9 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
 		public Gtk.TreeStore treemodel;
+		public MediaBrowser (ref unowned Xnoise.Main xn);
 		public bool change_model_data ();
 		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath path);
-		public MediaBrowser (ref unowned Xnoise.Main xn);
 		public bool on_button_press (Xnoise.MediaBrowser sender, Gdk.EventButton e);
 		public bool on_button_release (Xnoise.MediaBrowser sender, Gdk.EventButton e);
 		public void on_drag_data_get (Xnoise.MediaBrowser sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime);
@@ -181,12 +181,12 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {
+		public Params ();
 		public double get_double_value (string key);
 		public int get_int_value (string key);
 		public string[]? get_string_list_value (string key);
 		public string get_string_value (string key);
 		public void iparams_register (Xnoise.IParams iparam);
-		public Params ();
 		public void set_double_value (string key, double value);
 		public void set_int_value (string key, int value);
 		public void set_start_parameters_in_implementors ();
@@ -196,8 +196,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Plugin : GLib.Object {
-		public bool load (ref unowned Xnoise.Main xn);
 		public Plugin (Xnoise.PluginInformation info);
+		public bool load (ref unowned Xnoise.Main xn);
 		public Gtk.Widget? settingwidget ();
 		public bool activated { get; set; }
 		public bool configurable { get; set; }
@@ -205,8 +205,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginInformation : GLib.Object {
-		public bool load_info ();
 		public PluginInformation (string xplug_file);
+		public bool load_info ();
 		public string author { get; set; }
 		public string copyright { get; set; }
 		public string description { get; set; }
@@ -220,16 +220,16 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginLoader : GLib.Object {
 		public GLib.HashTable<string,Xnoise.Plugin> plugin_htable;
+		public PluginLoader (ref unowned Xnoise.Main xn);
 		public bool activate_single_plugin (string name);
 		public void deactivate_single_plugin (string name);
 		public unowned GLib.List<string> get_info_files ();
 		public bool load_all ();
-		public PluginLoader (ref unowned Xnoise.Main xn);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginManagerTree : Gtk.TreeView {
-		public void create_view ();
 		public PluginManagerTree (ref Xnoise.Main xn);
+		public void create_view ();
 		public signal void sign_plugin_activestate_changed (string name);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -241,12 +241,12 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackList : Gtk.TreeView {
 		public Gtk.ListStore listmodel;
+		public TrackList (ref unowned Xnoise.Main xn);
 		public void add_uris (string[]? uris);
 		public bool get_active_path (out Gtk.TreePath path, out Xnoise.TrackState currentstate, out bool is_first);
 		public string[] get_all_tracks ();
 		public string get_uri_for_path (Gtk.TreePath path);
 		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
-		public TrackList (ref unowned Xnoise.Main xn);
 		public bool not_empty ();
 		public void on_activated (string uri, Gtk.TreePath path);
 		public bool on_button_press (Xnoise.TrackList sender, Gdk.EventButton e);
@@ -266,8 +266,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class VideoScreen : Gtk.DrawingArea {
 		public Gdk.Pixbuf logo_pixb;
-		public override bool expose_event (Gdk.EventExpose e);
 		public VideoScreen ();
+		public override bool expose_event (Gdk.EventExpose e);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IParams : GLib.Object {
