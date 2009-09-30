@@ -16,6 +16,12 @@ namespace Xnoise {
 		public AboutDialog ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class AddMediaDialog : GLib.Object {
+		public Gtk.Builder builder;
+		public AddMediaDialog ();
+		public signal void sign_finish ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class AlbumImage : Gtk.Fixed {
 		public Gtk.Image albumimage;
 		public Gtk.Image albumimage_overlay;
@@ -182,12 +188,6 @@ namespace Xnoise {
 		public void on_drag_end (Xnoise.MediaBrowser sender, Gdk.DragContext context);
 		public void on_searchtext_changed (Gtk.Entry sender);
 		public signal void sign_activated ();
-	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class MediaFolderDialog : GLib.Object {
-		public Gtk.Builder builder;
-		public MediaFolderDialog ();
-		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {

@@ -245,16 +245,16 @@ typedef struct _XnoiseDbWriterClass XnoiseDbWriterClass;
 typedef struct _XnoiseDbWriterPrivate XnoiseDbWriterPrivate;
 typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 
-#define XNOISE_TYPE_MEDIA_FOLDER_DIALOG (xnoise_media_folder_dialog_get_type ())
-#define XNOISE_MEDIA_FOLDER_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_FOLDER_DIALOG, XnoiseMediaFolderDialog))
-#define XNOISE_MEDIA_FOLDER_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_FOLDER_DIALOG, XnoiseMediaFolderDialogClass))
-#define XNOISE_IS_MEDIA_FOLDER_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_FOLDER_DIALOG))
-#define XNOISE_IS_MEDIA_FOLDER_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_FOLDER_DIALOG))
-#define XNOISE_MEDIA_FOLDER_DIALOG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_FOLDER_DIALOG, XnoiseMediaFolderDialogClass))
+#define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
+#define XNOISE_ADD_MEDIA_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialog))
+#define XNOISE_ADD_MEDIA_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialogClass))
+#define XNOISE_IS_ADD_MEDIA_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG))
+#define XNOISE_IS_ADD_MEDIA_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ADD_MEDIA_DIALOG))
+#define XNOISE_ADD_MEDIA_DIALOG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialogClass))
 
-typedef struct _XnoiseMediaFolderDialog XnoiseMediaFolderDialog;
-typedef struct _XnoiseMediaFolderDialogClass XnoiseMediaFolderDialogClass;
-typedef struct _XnoiseMediaFolderDialogPrivate XnoiseMediaFolderDialogPrivate;
+typedef struct _XnoiseAddMediaDialog XnoiseAddMediaDialog;
+typedef struct _XnoiseAddMediaDialogClass XnoiseAddMediaDialogClass;
+typedef struct _XnoiseAddMediaDialogPrivate XnoiseAddMediaDialogPrivate;
 typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 
 #define XNOISE_TYPE_TRACK_STATE (xnoise_track_state_get_type ())
@@ -530,13 +530,13 @@ struct _XnoiseMediaBrowserClass {
 	GtkTreeViewClass parent_class;
 };
 
-struct _XnoiseMediaFolderDialog {
+struct _XnoiseAddMediaDialog {
 	GObject parent_instance;
-	XnoiseMediaFolderDialogPrivate * priv;
+	XnoiseAddMediaDialogPrivate * priv;
 	GtkBuilder* builder;
 };
 
-struct _XnoiseMediaFolderDialogClass {
+struct _XnoiseAddMediaDialogClass {
 	GObjectClass parent_class;
 };
 
@@ -833,9 +833,9 @@ void xnoise_media_browser_on_drag_data_get (XnoiseMediaBrowser* self, XnoiseMedi
 XnoiseTrackData* xnoise_media_browser_get_trackdata_for_treepath (XnoiseMediaBrowser* self, GtkTreePath* path, int* result_length1);
 void xnoise_media_browser_on_drag_end (XnoiseMediaBrowser* self, XnoiseMediaBrowser* sender, GdkDragContext* context);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
-GType xnoise_media_folder_dialog_get_type (void);
-XnoiseMediaFolderDialog* xnoise_media_folder_dialog_new (void);
-XnoiseMediaFolderDialog* xnoise_media_folder_dialog_construct (GType object_type);
+GType xnoise_add_media_dialog_get_type (void);
+XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
+XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
 XnoiseTrackList* xnoise_track_list_new (XnoiseMain** xn);
 XnoiseTrackList* xnoise_track_list_construct (GType object_type, XnoiseMain** xn);
 gboolean xnoise_track_list_on_button_press (XnoiseTrackList* self, XnoiseTrackList* sender, GdkEventButton* e);

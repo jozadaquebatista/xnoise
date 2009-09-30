@@ -1,4 +1,4 @@
-/* xnoise-mediafolder-dialog.vala
+/* xnoise-add-media-dialog.vala
  *
  * Copyright (C) 2009  Jörn Magens
  *
@@ -30,7 +30,7 @@
 
 using Gtk;
 
-public class Xnoise.MediaFolderDialog : GLib.Object {
+public class Xnoise.AddMediaDialog : GLib.Object {
 	
 	private const string XNOISEICON = Config.UIDIR + "xnoise_16x16.png";
 	private Gtk.Dialog dialog;
@@ -42,7 +42,7 @@ public class Xnoise.MediaFolderDialog : GLib.Object {
 	
 	public signal void sign_finish();
 	
-	public MediaFolderDialog() {
+	public AddMediaDialog() {
 		builder = new Gtk.Builder();
 		create_widgets();
 		

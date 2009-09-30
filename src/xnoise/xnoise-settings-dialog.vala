@@ -87,9 +87,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 //		file.set_integer("settings", "fontsizeMB", fontsizeMB);
 	}
 
-	private MediaFolderDialog mfd;
+	private AddMediaDialog mfd;
 	private void on_music_add_clicked(Gtk.Button sender) {
-		mfd = new MediaFolderDialog();
+		mfd = new AddMediaDialog();
 		mfd.sign_finish += () => {
 			mfd = null;
 			Idle.add(xn.main_window.mediaBr.change_model_data);	

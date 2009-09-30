@@ -555,9 +555,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		dialog.destroy();
 	}
 
-	private MediaFolderDialog mfd;
+	private AddMediaDialog mfd;
 	private void on_menu_add() {
-		mfd = new MediaFolderDialog();
+		mfd = new AddMediaDialog();
 		mfd.sign_finish += () => {
 			mfd = null;
 			Idle.add(mediaBr.change_model_data);	
