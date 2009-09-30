@@ -80,7 +80,7 @@ public class Xnoise.PluginLoader : Object {
 			return;
 		}
 		FileInfo info;
-		while((info = enumerator.next_file(null))!=null) {
+		while((info = enumerator.next_file(null)) != null) {
 			string filename = info.get_name();
 			string filepath = Path.build_filename(dir.get_path(), filename);
 			File file = File.new_for_path(filepath);

@@ -402,49 +402,54 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			if(imediate_play) {
 				if(i==0) {
 					iter = xn.main_window.trackList.insert_title(
-						TrackState.PLAYING, 
-						null, 
-						tracknumber,
-						Markup.printf_escaped("%s", td.Title), 
-						Markup.printf_escaped("%s", td.Album), 
-						Markup.printf_escaped("%s", td.Artist), 
-						uri);
+					           TrackState.PLAYING, 
+					           null, 
+					           tracknumber,
+					           Markup.printf_escaped("%s", td.Title), 
+					           Markup.printf_escaped("%s", td.Album), 
+					           Markup.printf_escaped("%s", td.Artist), 
+					           uri
+					       );
 					xn.main_window.trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
 					iter_2 = iter;
 				}
 				else {
 					iter = xn.main_window.trackList.insert_title(
-					    TrackState.STOPPED, 
-					    null, 
-					    tracknumber,
-					    Markup.printf_escaped("%s", td.Title), 
-					    Markup.printf_escaped("%s", td.Album), 
-					    Markup.printf_escaped("%s", td.Artist), 
-					    uri);			
+					           TrackState.STOPPED, 
+					           null, 
+					           tracknumber,
+					           Markup.printf_escaped("%s", td.Title), 
+					           Markup.printf_escaped("%s", td.Album), 
+					           Markup.printf_escaped("%s", td.Artist), 
+					           uri
+					       );			
 				}
 				i++;
 			}
 			else {
 				iter = xn.main_window.trackList.insert_title(
-				    TrackState.STOPPED, 
-				    null, 
-				    tracknumber,
-				    Markup.printf_escaped("%s", td.Title), 
-				    Markup.printf_escaped("%s", td.Album), 
-				    Markup.printf_escaped("%s", td.Artist), 
-				    uri);			
+				           TrackState.STOPPED, 
+				           null, 
+				           tracknumber,
+				           Markup.printf_escaped("%s", td.Title), 
+				           Markup.printf_escaped("%s", td.Album), 
+				           Markup.printf_escaped("%s", td.Artist), 
+				           uri
+				       );			
 			}
 		}
 		if(imediate_play) xn.main_window.trackList.set_focus_on_iter(ref iter_2);		
 	}
 
 	public bool change_model_data() {
-		dummymodel = new TreeStore(BrowserColumn.N_COLUMNS,  
+		dummymodel = new TreeStore(BrowserColumn.N_COLUMNS,
 		                           typeof(Gdk.Pixbuf), 
 		                           typeof(string),
 		                           typeof(int),
 		                           typeof(int),
-		                           typeof(int));
+		                           typeof(int),
+		                           typeof(int) // DRAW SEPARATOR
+		                           );
 		set_model(dummymodel);
 		treemodel.clear();
 		populate_model();
@@ -455,12 +460,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	private void create_model() {	// DATA
-		treemodel = new TreeStore(BrowserColumn.N_COLUMNS, 
-		                      typeof(Gdk.Pixbuf), 
-		                      typeof(string),
-		                      typeof(int),
-		                      typeof(int),
-		                      typeof(int));
+		treemodel = new TreeStore(BrowserColumn.N_COLUMNS,
+		                          typeof(Gdk.Pixbuf), 
+		                          typeof(string),
+		                          typeof(int),
+		                          typeof(int),
+		                          typeof(int),
+		                          typeof(int) // DRAW SEPARATOR
+		                          );
 	}
 	
 	private bool populate_model() {
@@ -469,17 +476,20 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return false;
 	}
 	
-//	private bool separator_func(Gtk.TreeModel model, Gtk.TreeIter? iter) {
-//		if(iter!=null) {
-//			print("not null\n");
-//			return false;
-//		}
-//		print("it's null \n");
-//		return true;
-//	}
+	private bool separator_func(Gtk.TreeModel m, Gtk.TreeIter iter) {
+		int sepatator = 0;
+		m.get(iter, BrowserColumn.DRAW_SEPTR, ref sepatator);
+		if(sepatator==0) return false;
+		return true;
+	}
 	
 	private void put_listed_data_to_model() {
+		TreeIter iter;
+		treemodel.prepend(out iter, null); 
+		treemodel.set(iter, BrowserColumn.DRAW_SEPTR, 1, -1); 
 		put_videos_to_model();
+		treemodel.prepend(out iter, null); 
+		treemodel.set(iter, BrowserColumn.DRAW_SEPTR, 1, -1); 
 		put_streams_to_model();
 	}
 			
@@ -500,7 +510,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			treemodel.set(iter_artist,  	
 				BrowserColumn.ICON, artist_pixb,		
 				BrowserColumn.VIS_TEXT, artist,
-				BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,	
+				BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
+				BrowserColumn.DRAW_SEPTR, 0,
 				-1); 
 			albumArray = albums_browser.get_albums(artist, ref searchtext);
 			foreach(weak string album in albumArray) { 			    //ALBUMS
@@ -508,7 +519,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				treemodel.set(iter_album,  	
 					BrowserColumn.ICON, album_pixb,		
 					BrowserColumn.VIS_TEXT, album,
-					BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,	
+					BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
+					BrowserColumn.DRAW_SEPTR, 0,	
 					-1); 
 				tmis = titles_browser.get_titles_with_mediatypes_and_ids(artist, album, ref searchtext);
 				foreach(weak TitleMtypeId tmi in tmis) {	         //TITLES WITH MEDIATYPES
@@ -520,6 +532,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 							BrowserColumn.DB_ID, tmi.id,
 							BrowserColumn.MEDIATYPE , (int)tmi.mediatype,
 							BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
+							BrowserColumn.DRAW_SEPTR, 0,
 							-1); 
 					}
 					else {
@@ -529,6 +542,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 							BrowserColumn.DB_ID, tmi.id,
 							BrowserColumn.MEDIATYPE , (int)tmi.mediatype,
 							BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
+							BrowserColumn.DRAW_SEPTR, 0,
 							-1); 						
 					}
 				}
@@ -548,6 +562,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		              BrowserColumn.ICON, radios_pixb,
 		              BrowserColumn.VIS_TEXT, "Internet Radio",
 		              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
+		              BrowserColumn.DRAW_SEPTR, 0,
 		              -1
 		              ); 
 		var tmis = dbb.get_radio_data(ref searchtext);
@@ -560,6 +575,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			              BrowserColumn.DB_ID, tmi.id,
 			              BrowserColumn.MEDIATYPE , (int) MediaType.STREAM,
 			              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
+			              BrowserColumn.DRAW_SEPTR, 0,
 			              -1
 			              ); 
 		}
@@ -574,6 +590,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		              BrowserColumn.ICON, videos_pixb,
 		              BrowserColumn.VIS_TEXT, "Videos",
 		              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
+		              BrowserColumn.DRAW_SEPTR, 0,
 		              -1
 		              ); 
 		var tmis = dbb.get_video_data(ref searchtext);
@@ -585,6 +602,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			              BrowserColumn.DB_ID, tmi.id,
 			              BrowserColumn.MEDIATYPE , (int) MediaType.VIDEO,
 			              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
+			              BrowserColumn.DRAW_SEPTR, 0,
 			              -1
 			              ); 
 		}
@@ -609,8 +627,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}	
 
 	private void create_view() {	
-//		Params.instance().read_from_file_for_single(this);
-		if(fontsizeMB<7) fontsizeMB = 7;
+		if(fontsizeMB < 7) fontsizeMB = 7;
 
 		this.set_size_request (300,500);
 		var renderer = new CellRendererText();
@@ -629,13 +646,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		column.add_attribute(renderer, "text", 1); // no markup!!
 		this.insert_column(column, -1);
 
-//		renderer = new CellRendererText();
-//		column = new TreeViewColumn();
-//		column.pack_start(renderer, false);
-//		column.add_attribute(renderer, "text", 1); 
-//		column.visible = false;
-//		this.insert_column(column, -1);
-		
 		if(par.get_int_value("use_treelines")==1) 
 			use_treelines=true;
 		else 
@@ -644,7 +654,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.enable_tree_lines = use_treelines;
 		this.headers_visible = false;
 		this.enable_search = false;
-//		this.set_row_separator_func(separator_func, destrnot);
+		this.set_row_separator_func(separator_func);
 	}
 }
 

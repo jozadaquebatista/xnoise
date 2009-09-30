@@ -326,6 +326,7 @@ namespace Xnoise {
 		DB_ID,
 		MEDIATYPE,
 		COLL_TYPE,
+		DRAW_SEPTR,
 		N_COLUMNS
 	}
 	[CCode (cprefix = "XNOISE_DIRECTION_", cheader_filename = "xnoise.h")]

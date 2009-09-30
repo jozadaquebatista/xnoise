@@ -52,8 +52,15 @@ namespace Xnoise {
 	public static string get_stream_uri(string playlist_uri) {
 		//print("playlist_uri: %s\n", playlist_uri);
 		var file = File.new_for_uri(playlist_uri);
+		DataInputStream in_stream = null;
 		string outval = "";
-		var in_stream = new DataInputStream(file.read(null));
+
+		try{
+			in_stream = new DataInputStream(file.read(null));
+		}
+		catch(Error e) {
+			print("Error: %s\n", e.message);
+		}
 		string line;
 		string[] keyval;
 		while ((line = in_stream.read_line(null, null))!=null) {
@@ -79,6 +86,7 @@ public enum Xnoise.BrowserColumn {
 	DB_ID,
 	MEDIATYPE,
 	COLL_TYPE,
+	DRAW_SEPTR,
 	N_COLUMNS
 }
 

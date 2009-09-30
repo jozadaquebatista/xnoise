@@ -364,23 +364,28 @@ public class Xnoise.TrackList : TreeView {
 			string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 			              FILE_ATTRIBUTE_STANDARD_TYPE;
 			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
-		} catch (Error error) {
-			critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
+		} catch(Error e) {
+			print("Error importing directory %s. %s\n", dir.get_path(), e.message);
 			return;
 		}
 		FileInfo info;
-		while((info = enumerator.next_file(null))!=null) {
-			string filename = info.get_name();
-			string filepath = Path.build_filename(dir.get_path(), filename);
-			File file = File.new_for_path(filepath);
-			FileType filetype = info.get_file_type();
+		try {
+			while((info = enumerator.next_file(null)) != null) {
+				string filename = info.get_name();
+				string filepath = Path.build_filename(dir.get_path(), filename);
+				File file = File.new_for_path(filepath);
+				FileType filetype = info.get_file_type();
 
-			if(filetype == FileType.DIRECTORY) {
-				this.handle_dropped_files_for_folders(file, ref path, ref is_first);
-			} 
-			else {
-				handle_dropped_file(file.get_uri(), ref path, ref is_first);
+				if(filetype == FileType.DIRECTORY) {
+					this.handle_dropped_files_for_folders(file, ref path, ref is_first);
+				} 
+				else {
+					handle_dropped_file(file.get_uri(), ref path, ref is_first);
+				}
 			}
+		} catch(Error e) {
+			print("Error: %s\n", e.message);
+			return;
 		}
 	}
 
