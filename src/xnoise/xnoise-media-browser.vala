@@ -40,6 +40,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private Gdk.Pixbuf title_pixb;
 	private Gdk.Pixbuf video_pixb;
 	private Gdk.Pixbuf videos_pixb;
+	private Gdk.Pixbuf radios_pixb;
 	private bool dragging;
 	private bool use_treelines;
 	internal int fontsizeMB = 8;
@@ -467,9 +468,19 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		put_listed_data_to_model(); // put at last, then it is on top
 		return false;
 	}
-
+	
+//	private bool separator_func(Gtk.TreeModel model, Gtk.TreeIter? iter) {
+//		if(iter!=null) {
+//			print("not null\n");
+//			return false;
+//		}
+//		print("it's null \n");
+//		return true;
+//	}
+	
 	private void put_listed_data_to_model() {
 		put_videos_to_model();
+		put_streams_to_model();
 	}
 			
 	private void put_hierarchical_data_to_model() {
@@ -480,7 +491,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		string[] artistArray;
 		string[] albumArray;
 		string[] titleArray;
-		Title_MType_Id[] tmis;
+		TitleMtypeId[] tmis;
 		
 		TreeIter iter_artist, iter_album, iter_title;	
 		artistArray = artists_browser.get_artists(ref searchtext);
@@ -500,7 +511,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 					BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,	
 					-1); 
 				tmis = titles_browser.get_titles_with_mediatypes_and_ids(artist, album, ref searchtext);
-				foreach(weak Title_MType_Id tmi in tmis) {	         //TITLES WITH MEDIATYPES
+				foreach(weak TitleMtypeId tmi in tmis) {	         //TITLES WITH MEDIATYPES
 					treemodel.prepend(out iter_title, iter_album); 
 					if(tmi.mediatype == MediaType.AUDIO) {
 						treemodel.set(iter_title,  	
@@ -528,27 +539,54 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		titleArray = null;
 	}
 
+	private void put_streams_to_model() {
+		DbBrowser dbb = new DbBrowser();
+		
+		TreeIter iter_radios, iter_singleradios;
+		treemodel.prepend(out iter_radios, null); 
+		treemodel.set(iter_radios,  	
+		              BrowserColumn.ICON, radios_pixb,
+		              BrowserColumn.VIS_TEXT, "Internet Radio",
+		              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
+		              -1
+		              ); 
+		var tmis = dbb.get_radio_data(ref searchtext);
+		tmis = dbb.get_radio_data(ref searchtext);
+		foreach(weak TitleMtypeId tmi in tmis) {
+			treemodel.prepend(out iter_singleradios, iter_radios); 
+			treemodel.set(iter_singleradios,  	
+			              BrowserColumn.ICON, radios_pixb,
+			              BrowserColumn.VIS_TEXT, tmi.name,
+			              BrowserColumn.DB_ID, tmi.id,
+			              BrowserColumn.MEDIATYPE , (int) MediaType.STREAM,
+			              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
+			              -1
+			              ); 
+		}
+	}
+
 	private void put_videos_to_model() {
 		DbBrowser dbb = new DbBrowser();
-		Title_MType_Id[] tmis;
 		if(!dbb.videos_available()) return;
 		TreeIter iter_videos, iter_singlevideo;
 		treemodel.prepend(out iter_videos, null); 
 		treemodel.set(iter_videos,  	
-			BrowserColumn.ICON, videos_pixb,
-			BrowserColumn.VIS_TEXT, "VIDEOS",
-			BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
-			-1); 
-		tmis = dbb.get_video_data(ref searchtext);
-		foreach(weak Title_MType_Id tmi in tmis) {
+		              BrowserColumn.ICON, videos_pixb,
+		              BrowserColumn.VIS_TEXT, "Videos",
+		              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
+		              -1
+		              ); 
+		var tmis = dbb.get_video_data(ref searchtext);
+		foreach(weak TitleMtypeId tmi in tmis) {
 			treemodel.prepend(out iter_singlevideo, iter_videos); 
 			treemodel.set(iter_singlevideo,  	
-				BrowserColumn.ICON, video_pixb,
-				BrowserColumn.VIS_TEXT, tmi.name,
-				BrowserColumn.DB_ID, tmi.id,
-				BrowserColumn.MEDIATYPE , (int)MediaType.VIDEO,
-				BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
-				-1); 
+			              BrowserColumn.ICON, video_pixb,
+			              BrowserColumn.VIS_TEXT, tmi.name,
+			              BrowserColumn.DB_ID, tmi.id,
+			              BrowserColumn.MEDIATYPE , (int) MediaType.VIDEO,
+			              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
+			              -1
+			              ); 
 		}
 		tmis = null;
 	}
@@ -559,7 +597,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			album_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "album.png");
 			title_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "note.png");
 			Gtk.Invisible w = new Gtk.Invisible();
-			videos_pixb  = w.render_icon(Gtk.STOCK_MEDIA_RECORD, IconSize.BUTTON, null); 
+			videos_pixb  = w.render_icon(Gtk.STOCK_MEDIA_RECORD, IconSize.BUTTON, null);
+			radios_pixb  = w.render_icon(Gtk.STOCK_CONNECT, IconSize.BUTTON, null);
+			
 			w = new Gtk.Invisible();
 			video_pixb  = w.render_icon(Gtk.STOCK_FILE, IconSize.BUTTON, null); 
 		}
@@ -604,6 +644,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.enable_tree_lines = use_treelines;
 		this.headers_visible = false;
 		this.enable_search = false;
+//		this.set_row_separator_func(separator_func, destrnot);
 	}
 }
 

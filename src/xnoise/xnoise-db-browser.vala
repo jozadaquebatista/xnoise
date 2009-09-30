@@ -49,6 +49,10 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement uri_for_id_statement;
 	private Statement tracknumber_for_track_statement;
 	private Statement count_for_mediatype_statement;
+	private Statement get_radios_statement;
+	private Statement get_single_radio_uri_statement;
+	private Statement get_music_folders_statement;
+	private Statement get_radio_data_statement;
 	
 	private static const string STMT_COUNT_FOR_MEDIATYPE = 
 		"SELECT COUNT (*) FROM mlib WHERE mediatype = ?";
@@ -82,6 +86,15 @@ public class Xnoise.DbBrowser : GLib.Object {
 		"SELECT DISTINCT title FROM mlib WHERE artist = ? AND album = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) ORDER BY tracknumber DESC"; 
 	private static const string STMT_GET_TITLES_WITH_MEDIATYPES_AND_IDS = 
 		"SELECT DISTINCT title, mediatype, id FROM mlib WHERE artist = ? AND album = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) GROUP BY title ORDER BY tracknumber DESC";
+	private static const string STMT_GET_RADIOS = 
+		"SELECT name, uri FROM radio";
+	private static const string STMT_GET_SINGLE_RADIO_URI = 
+		"SELECT uri FROM radio WHERE name = ?";
+	private static const string STMT_GET_MUSIC_FOLDERS = 
+		"SELECT * FROM music_folders";
+	private static const string STMT_GET_RADIO_DATA	=
+		"SELECT DISTINCT title, mediatype, id FROM mlib WHERE LOWER(title) LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
+		
 	public DbBrowser() {
 		DATABASE = dbFileName();
 		if(Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) { 
@@ -117,6 +130,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 			out this.get_videos_statement);
 		this.db.prepare_v2(STMT_GET_VIDEO_DATA, -1, 
 			out this.get_video_data_statement);
+		this.db.prepare_v2(STMT_GET_RADIO_DATA, -1, 
+			out this.get_radio_data_statement);
 		this.db.prepare_v2(STMT_GET_ALBUMS, -1, 
 			out this.get_albums_statement); 
 		this.db.prepare_v2(STMT_GET_TITLES, -1, 
@@ -135,6 +150,12 @@ public class Xnoise.DbBrowser : GLib.Object {
 			out this.tracknumber_for_track_statement);
 		this.db.prepare_v2(STMT_TRACKDATA_FOR_ID , -1, 
 			out this.trackdata_for_id_statement); 
+		this.db.prepare_v2(STMT_GET_RADIOS, -1, 
+			out this.get_radios_statement);
+		this.db.prepare_v2(STMT_GET_SINGLE_RADIO_URI, -1, 
+			out this.get_single_radio_uri_statement);
+		this.db.prepare_v2(STMT_GET_MUSIC_FOLDERS, -1, 
+			out this.get_music_folders_statement);
 	}
 
 	public bool videos_available() {
@@ -231,12 +252,42 @@ public class Xnoise.DbBrowser : GLib.Object {
 		}
 		return true;
 	}
+
+	public string[] get_music_folders() { 
+		string[] mfolders = {};
+		get_music_folders_statement.reset();
+		while(get_music_folders_statement.step() == Sqlite.ROW) {
+			mfolders += get_music_folders_statement.column_text(0);
+		}
+		return mfolders;
+	}
+
+	public StreamData[] get_radio_stations() { 
+		StreamData[] sData = {};
+		get_radios_statement.reset();
+		while(get_radios_statement.step() == Sqlite.ROW) {
+			StreamData sd = StreamData();
+			sd.Name = get_radios_statement.column_text(0);
+			sd.Uri  = get_radios_statement.column_text(1);
+			sData += sd;
+		}
+		return sData;
+	}
 	
+	public string? get_single_radio_station_uri(string name) { 
+		get_single_radio_uri_statement.reset();
+		get_single_radio_uri_statement.bind_text(1, name);
+		if(get_single_radio_uri_statement.step() == Sqlite.ROW) {
+			return get_single_radio_uri_statement.column_text(0);
+		}
+		return null;
+	}
+		
 	public int get_track_id_for_path(string uri) {
 		int val = -1;
 		track_id_for_uri_statement.reset();
 		track_id_for_uri_statement.bind_text(1, uri);
-		while(track_id_for_uri_statement.step() == Sqlite.ROW) {
+		if(track_id_for_uri_statement.step() == Sqlite.ROW) {
 			val = track_id_for_uri_statement.column_int(0);
 		}
 		return val;
@@ -245,9 +296,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 	public string get_uri_for_title(string artist,string album, string title) {
 		string val = "";
 		uri_for_track_statement.reset();
-		if((this.uri_for_track_statement.bind_text(1, artist)!=Sqlite.OK)|
-			(uri_for_track_statement.bind_text(2, album)!=Sqlite.OK)|
-			(uri_for_track_statement.bind_text(3, title)!=Sqlite.OK)) {
+		if((this.uri_for_track_statement.bind_text(1, artist) != Sqlite.OK)|
+			(uri_for_track_statement.bind_text(2, album) != Sqlite.OK)|
+			(uri_for_track_statement.bind_text(3, title) != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(uri_for_track_statement.step() == Sqlite.ROW) {
@@ -260,8 +311,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 		int val = 0;
 		tracknumber_for_track_statement.reset();
 		if((this.tracknumber_for_track_statement.bind_text(1, artist)!=Sqlite.OK)|
-			(tracknumber_for_track_statement.bind_text(2, album)!=Sqlite.OK)|
-			(tracknumber_for_track_statement.bind_text(3, title)!=Sqlite.OK)) {
+			(tracknumber_for_track_statement.bind_text(2, album) != Sqlite.OK)|
+			(tracknumber_for_track_statement.bind_text(3, title) != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(tracknumber_for_track_statement.step() == Sqlite.ROW) {
@@ -279,15 +330,15 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return val;
 	}
 
-	public Title_MType_Id[] get_video_data(ref string searchtext) { 
-		Title_MType_Id[] val = {};
+	public TitleMtypeId[] get_video_data(ref string searchtext) { 
+		TitleMtypeId[] val = {};
 		get_video_data_statement.reset();
-		if((this.get_video_data_statement.bind_text(1, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
-		   (this.get_video_data_statement.bind_int (2, (int)MediaType.VIDEO)       !=Sqlite.OK)) {
+		if((this.get_video_data_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_video_data_statement.bind_int (2, (int)MediaType.VIDEO)        != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(get_video_data_statement.step() == Sqlite.ROW) {
-			Title_MType_Id vd = Title_MType_Id();
+			TitleMtypeId vd = TitleMtypeId();
 			vd.name = get_video_data_statement.column_text(0);
 			vd.mediatype = (MediaType)get_video_data_statement.column_int(1);
 			vd.id = get_video_data_statement.column_int(2);
@@ -296,11 +347,28 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return val;
 	}
 
+	public TitleMtypeId[] get_radio_data(ref string searchtext) { 
+		TitleMtypeId[] val = {};
+		get_radio_data_statement.reset();
+		if((this.get_radio_data_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_radio_data_statement.bind_int (2, (int)MediaType.STREAM)       != Sqlite.OK)) {
+			this.db_error();
+		}
+		while(get_radio_data_statement.step() == Sqlite.ROW) {
+			TitleMtypeId vd = TitleMtypeId();
+			vd.name = get_radio_data_statement.column_text(0);
+			vd.mediatype = (MediaType)get_radio_data_statement.column_int(1);
+			vd.id = get_radio_data_statement.column_int(2);
+			val += vd;
+		}
+		return val;
+	}
+
 	public string[] get_videos(ref string searchtext) { 
 		string[] val = {};
 		get_videos_statement.reset();
-		if((this.get_videos_statement.bind_text(1, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
-		   (this.get_videos_statement.bind_int (2, (int)MediaType.VIDEO)       !=Sqlite.OK)) {
+		if((this.get_videos_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_videos_statement.bind_int (2, (int)MediaType.VIDEO)        != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(get_videos_statement.step() == Sqlite.ROW) {
@@ -312,9 +380,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 	public string[] get_artists(ref string searchtext) { 
 		string[] val = {};
 		get_artist_statement.reset();
-		if((this.get_artist_statement.bind_text(1, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
-		   (this.get_artist_statement.bind_text(2, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
-		   (this.get_artist_statement.bind_text(3, "%%%s%%".printf(searchtext))!=Sqlite.OK)) {
+		if((this.get_artist_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_artist_statement.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_artist_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(get_artist_statement.step() == Sqlite.ROW) {
@@ -327,9 +395,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 		string[] val = {};
 		get_albums_statement.reset();
 		if((this.get_albums_statement.bind_text(1, artist)!=Sqlite.OK)|
-		   (this.get_albums_statement.bind_text(2, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
-		   (this.get_albums_statement.bind_text(3, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
-		   (this.get_albums_statement.bind_text(4, "%%%s%%".printf(searchtext))!=Sqlite.OK)) {
+		   (this.get_albums_statement.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_albums_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_albums_statement.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(get_albums_statement.step() == Sqlite.ROW) {
@@ -338,19 +406,19 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return val;
 	}
 
-	public Title_MType_Id[] get_titles_with_mediatypes_and_ids(string artist, string album, ref string searchtext) { 
-		Title_MType_Id[] val = {};
+	public TitleMtypeId[] get_titles_with_mediatypes_and_ids(string artist, string album, ref string searchtext) { 
+		TitleMtypeId[] val = {};
 		get_titles_with_mediatypes_and_ids_statement.reset();
 		if((this.get_titles_with_mediatypes_and_ids_statement.bind_text(1, artist)!=Sqlite.OK)|
 		   (this.get_titles_with_mediatypes_and_ids_statement.bind_text(2, album)!=Sqlite.OK)|
-		   (this.get_titles_with_mediatypes_and_ids_statement.bind_text(3, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
-		   (this.get_titles_with_mediatypes_and_ids_statement.bind_text(4, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
-		   (this.get_titles_with_mediatypes_and_ids_statement.bind_text(5, "%%%s%%".printf(searchtext))!=Sqlite.OK)) {
+		   (this.get_titles_with_mediatypes_and_ids_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_titles_with_mediatypes_and_ids_statement.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_titles_with_mediatypes_and_ids_statement.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
 		
 		while(get_titles_with_mediatypes_and_ids_statement.step() == Sqlite.ROW) {
-			Title_MType_Id twt = Title_MType_Id();
+			TitleMtypeId twt = TitleMtypeId();
 			twt.name = get_titles_with_mediatypes_and_ids_statement.column_text(0);
 			twt.mediatype = (MediaType) get_titles_with_mediatypes_and_ids_statement.column_int(1);
 			twt.id = get_titles_with_mediatypes_and_ids_statement.column_int(2);
@@ -364,9 +432,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 		get_titles_statement.reset();
 		if((this.get_titles_statement.bind_text(1, artist)!=Sqlite.OK)|
 		   (this.get_titles_statement.bind_text(2, album)!=Sqlite.OK)|
-		   (this.get_titles_statement.bind_text(3, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
-		   (this.get_titles_statement.bind_text(4, "%%%s%%".printf(searchtext))!=Sqlite.OK)|
-		   (this.get_titles_statement.bind_text(5, "%%%s%%".printf(searchtext))!=Sqlite.OK)) {
+		   (this.get_titles_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_titles_statement.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_titles_statement.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
 		

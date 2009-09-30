@@ -37,15 +37,19 @@ namespace Xnoise {
 		public string[] get_albums (string artist, ref string searchtext);
 		public string[] get_artists (ref string searchtext);
 		public string[] get_lastused_uris ();
+		public string[] get_music_folders ();
+		public Xnoise.TitleMtypeId[] get_radio_data (ref string searchtext);
+		public Xnoise.StreamData[] get_radio_stations ();
+		public string? get_single_radio_station_uri (string name);
 		public string[] get_titles (string artist, string album, ref string searchtext);
-		public Xnoise.Title_MType_Id[] get_titles_with_mediatypes_and_ids (string artist, string album, ref string searchtext);
+		public Xnoise.TitleMtypeId[] get_titles_with_mediatypes_and_ids (string artist, string album, ref string searchtext);
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_uri (string uri, out Xnoise.TrackData val);
 		public int get_tracknumber_for_title (string artist, string album, string title);
 		public bool get_uri_for_id (int id, out string val);
 		public string get_uri_for_title (string artist, string album, string title);
-		public Xnoise.Title_MType_Id[] get_video_data (ref string searchtext);
+		public Xnoise.TitleMtypeId[] get_video_data (ref string searchtext);
 		public string[] get_videos (ref string searchtext);
 		public bool uri_is_in_db (string uri);
 		public bool videos_available ();
@@ -53,9 +57,9 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
 		public DbWriter ();
+		public void add_radio_staion (string uri, string name = "");
 		public void begin_transaction ();
 		public void commit_transaction ();
-		public string[] get_music_folders ();
 		public void write_final_tracks_to_db (string[] final_tracklist);
 		public void write_music_folder_into_db (string[] mfolders);
 		public signal void sign_import_progress (uint current, uint amount);
@@ -180,6 +184,12 @@ namespace Xnoise {
 		public signal void sign_activated ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class MediaFolderDialog : GLib.Object {
+		public Gtk.Builder builder;
+		public MediaFolderDialog ();
+		public signal void sign_finish ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {
 		public Params ();
 		public double get_double_value (string key);
@@ -282,8 +292,13 @@ namespace Xnoise {
 		public abstract string name { get; }
 		public abstract Xnoise.Main xn { get; set; }
 	}
+	[CCode (type_id = "XNOISE_TYPE_STREAM_DATA", cheader_filename = "xnoise.h")]
+	public struct StreamData {
+		public string Name;
+		public string Uri;
+	}
 	[CCode (type_id = "XNOISE_TYPE_TITLE_MTYPE_ID", cheader_filename = "xnoise.h")]
-	public struct Title_MType_Id {
+	public struct TitleMtypeId {
 		public string name;
 		public int id;
 		public Xnoise.MediaType mediatype;
@@ -317,6 +332,12 @@ namespace Xnoise {
 	public enum Direction {
 		NEXT,
 		PREVIOUS
+	}
+	[CCode (cprefix = "XNOISE_MEDIA_STORAGE_TYPE_", cheader_filename = "xnoise.h")]
+	public enum MediaStorageType {
+		FILE,
+		FOLDER,
+		STREAM
 	}
 	[CCode (cprefix = "XNOISE_MEDIA_TYPE_", cheader_filename = "xnoise.h")]
 	public enum MediaType {
@@ -352,6 +373,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static string get_stream_uri (string playlist_uri);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static void initialize ();
 	[CCode (cheader_filename = "xnoise.h")]

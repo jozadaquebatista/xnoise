@@ -39,13 +39,14 @@ public class Xnoise.DbWriter : GLib.Object {
 	private Statement update_mlib_entry_statement;
 	private Statement insert_mlib_entry_statement;
 	private Statement insert_lastused_entry_statement;
+	private Statement add_radio_statement;
 	private Statement check_track_exists_statement;
 	private Statement begin_statement;
 	private Statement commit_statement;
-	private Statement get_music_folders_statement;
 	private Statement write_music_folder_statement;
 	private Statement del_music_folder_statement;
 	private Statement del_mlib_statement;
+	private Statement del_radio_streams_statement;
 
 
 	//CREATE TABLE STATEMENTS
@@ -55,6 +56,8 @@ public class Xnoise.DbWriter : GLib.Object {
 		"CREATE TABLE lastused(uri text, mediatype integer);"; //for now 0=audio,1=video
 	private static const string STMT_CREATE_MUSICFOLDERS = 
 		"CREATE TABLE music_folders(name text primary key);";
+	private static const string STMT_CREATE_RADIO = 
+		"CREATE TABLE radio (id INTEGER PRIMARY KEY, name TEXT, uri TEXT);";
 
 	//FIND TABLE	
 	private static const string STMT_FIND_TABLE = 
@@ -67,8 +70,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		"COMMIT";
 	private static const string STMT_CHECK_TRACK_EXISTS = 
 		"SELECT id FROM mlib WHERE uri = ?"; 
-	private static const string STMT_GET_MUSIC_FOLDERS = 
-		"SELECT * FROM music_folders";
 	private static const string STMT_UPDATE_ENTRY = 
 		"INSERT INTO mlib (id, tracknumber, artist, album, title, genre, uri, mediatype) VALUES (\"null\", ?, ?, ?, ?, ?, ?, ?)";
 	private static const string STMT_INSERT_ENTRY = 
@@ -81,9 +82,13 @@ public class Xnoise.DbWriter : GLib.Object {
 		"DELETE FROM music_folders";
 	private static const string STMT_DEL_MLIB = 
 		"DELETE FROM mlib;";
+	private static const string STMT_DEL_RADIO_STREAM = 
+		"DELETE FROM radio;";
 	private static const string STMT_DELETE_MLIB_ENTRY = 
 		"DELETE FROM mlib WHERE id = ?";
-
+	private static const string STMT_ADD_RADIO = 
+		"INSERT INTO radio (name, uri) VALUES (?, ?)";
+		
 	public DbWriter() {
         this.db = get_db();
 		this.prepare_statements();
@@ -161,6 +166,11 @@ public class Xnoise.DbWriter : GLib.Object {
 					stderr.printf("Create DB: %s", errormsg);
 					return null;
 				}
+				
+				if(database.exec(STMT_CREATE_RADIO, null, out errormsg)!= Sqlite.OK) {
+					stderr.printf("Create DB: %s", errormsg);
+					return null;
+				}
 			}
 		}
 		return database;
@@ -171,28 +181,30 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	private void prepare_statements() { 
-	    this.db.prepare_v2(STMT_DELETE_MLIB_ENTRY, -1, 
-	    	out this.delete_mlib_entry_statement);
-	    this.db.prepare_v2(STMT_UPDATE_ENTRY, -1, 
-	    	out this.update_mlib_entry_statement); 
-	    this.db.prepare_v2(STMT_CHECK_TRACK_EXISTS, -1, 
-	    	out this.check_track_exists_statement); 
-	    this.db.prepare_v2(STMT_INSERT_ENTRY, -1, 
-	    	out this.insert_mlib_entry_statement); 
-	    this.db.prepare_v2(STMT_INSERT_LASTUSED, -1, 
-	    	out this.insert_lastused_entry_statement); 
-	    this.db.prepare_v2(STMT_BEGIN, -1, 
-	    	out this.begin_statement); 
-	    this.db.prepare_v2(STMT_COMMIT, -1, 
-	    	out this.commit_statement); 
-	    this.db.prepare_v2(STMT_GET_MUSIC_FOLDERS, -1, 
-	    	out this.get_music_folders_statement); 
-	    this.db.prepare_v2(STMT_WRITE_MUSIC_FOLDERS, -1, 
-	    	out this.write_music_folder_statement); 
-	    this.db.prepare_v2(STMT_DEL_MUSIC_FOLDERS, -1, 
-	    	out this.del_music_folder_statement); 
-	    this.db.prepare_v2(STMT_DEL_MLIB, -1, 
-	    	out this.del_mlib_statement); 
+		this.db.prepare_v2(STMT_DELETE_MLIB_ENTRY, -1, 
+			out this.delete_mlib_entry_statement);
+		this.db.prepare_v2(STMT_UPDATE_ENTRY, -1, 
+			out this.update_mlib_entry_statement); 
+		this.db.prepare_v2(STMT_CHECK_TRACK_EXISTS, -1, 
+			out this.check_track_exists_statement); 
+		this.db.prepare_v2(STMT_INSERT_ENTRY, -1, 
+			out this.insert_mlib_entry_statement); 
+		this.db.prepare_v2(STMT_INSERT_LASTUSED, -1, 
+			out this.insert_lastused_entry_statement); 
+		this.db.prepare_v2(STMT_BEGIN, -1, 
+			out this.begin_statement); 
+		this.db.prepare_v2(STMT_COMMIT, -1, 
+			out this.commit_statement); 
+		this.db.prepare_v2(STMT_WRITE_MUSIC_FOLDERS, -1, 
+			out this.write_music_folder_statement); 
+		this.db.prepare_v2(STMT_DEL_MUSIC_FOLDERS, -1, 
+			out this.del_music_folder_statement); 
+		this.db.prepare_v2(STMT_DEL_MLIB, -1, 
+			out this.del_mlib_statement); 
+		this.db.prepare_v2(STMT_ADD_RADIO, -1, 
+			out this.add_radio_statement); 
+		this.db.prepare_v2(STMT_DEL_RADIO_STREAM, -1, 
+			out this.del_radio_streams_statement); 			
 	}
 
 	private void db_update_entry(int id, TrackData td, string uri) {
@@ -323,53 +335,68 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 
-	public string[] get_music_folders() { 
-		string[] mfolders = {};
-		get_music_folders_statement.reset();
-		while(get_music_folders_statement.step() == Sqlite.ROW) {
-			mfolders += get_music_folders_statement.column_text(0);
+	public void add_radio_staion(string uri, string name = "") {
+		print("add radio : %s \n", uri);
+		if((uri == null) || (uri == "")) return;
+		if(name == null) name = "";	
+		this.begin_transaction();
+		add_radio_statement.reset();
+		if(add_radio_statement.bind_text(1, name) != Sqlite.OK||
+		   add_radio_statement.bind_text(2, uri)  != Sqlite.OK) {
+			this.db_error();
 		}
-		return mfolders;
+		if(add_radio_statement.step() != Sqlite.DONE) {
+			this.db_error();
+		}
+		this.commit_transaction();
 	}
 
 	private void del_music_folders() {
 		this.del_music_folder_statement.reset();
-		if(del_music_folder_statement.step()!=Sqlite.DONE) {
+		if(del_music_folder_statement.step() != Sqlite.DONE) {
 			this.db_error();
 		}
 	}
 	
-
+	private void del_radio_streams() {
+		this.del_radio_streams_statement.reset();
+		if(del_radio_streams_statement.step() != Sqlite.DONE) {
+			this.db_error();
+		}
+	}
+	
 	public void write_music_folder_into_db(string[] mfolders){
-		this.del_music_folders();
+		begin_transaction();	
+
+		del_music_folders();
+		del_radio_streams();
+		
 		foreach(string folder in mfolders) {
-			this.write_single_mfolder_to_db(folder);
+			write_single_mfolder_to_db(folder);
 		}
 		if(delete_mlib_data()==0) return;
 		
 		//TODO: Remove duplicates
-		
-		this.begin_transaction();	
 			
 		foreach(string folder in mfolders) {
 			File dir = File.new_for_path(folder);
 			assert(dir!=null);
-			this.import_tags_for_files(dir);
+			import_tags_for_files(dir);
 		}
 		
-		this.commit_transaction();
+		commit_transaction();
 	}
 
 	public void begin_transaction() {
 		this.begin_statement.reset();
-		if(begin_statement.step()!=Sqlite.DONE) {
+		if(begin_statement.step() != Sqlite.DONE) {
 			this.db_error();
 		}
 	}
 	
 	public void commit_transaction() {
 		this.commit_statement.reset();
-		if(commit_statement.step()!=Sqlite.DONE) {
+		if(commit_statement.step() != Sqlite.DONE) {
 			this.db_error();
 		}
 	}
@@ -397,14 +424,14 @@ public class Xnoise.DbWriter : GLib.Object {
 		this.insert_lastused_entry_statement.reset();
 		this.insert_lastused_entry_statement.bind_text(1, uri);
 		this.insert_lastused_entry_statement.bind_int (2, mediatype);
-		if(insert_lastused_entry_statement.step()!=Sqlite.DONE) {
+		if(insert_lastused_entry_statement.step() != Sqlite.DONE) {
 			this.db_error();
 		}
 	}
 
 	private int delete_mlib_data() {
 		this.del_mlib_statement.reset();
-		if(del_mlib_statement.step()!=Sqlite.DONE) {
+		if(del_mlib_statement.step() != Sqlite.DONE) {
 			this.db_error();
 			return 0;
 		}
@@ -414,7 +441,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private void write_single_mfolder_to_db(string mfolder) {
 		this.write_music_folder_statement.reset();
 		this.write_music_folder_statement.bind_text(1, mfolder);
-		if(write_music_folder_statement.step()!=Sqlite.DONE) {
+		if(write_music_folder_statement.step() != Sqlite.DONE) {
 			this.db_error();
 		}
 	}
