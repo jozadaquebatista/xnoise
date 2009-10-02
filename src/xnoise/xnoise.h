@@ -91,6 +91,16 @@ typedef struct _XnoiseIParams XnoiseIParams;
 typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
+#define XNOISE_TYPE_LYRICS_VIEW (xnoise_lyrics_view_get_type ())
+#define XNOISE_LYRICS_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LYRICS_VIEW, XnoiseLyricsView))
+#define XNOISE_LYRICS_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_LYRICS_VIEW, XnoiseLyricsViewClass))
+#define XNOISE_IS_LYRICS_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_LYRICS_VIEW))
+#define XNOISE_IS_LYRICS_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_LYRICS_VIEW))
+#define XNOISE_LYRICS_VIEW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_LYRICS_VIEW, XnoiseLyricsViewClass))
+
+typedef struct _XnoiseLyricsView XnoiseLyricsView;
+typedef struct _XnoiseLyricsViewClass XnoiseLyricsViewClass;
+
 #define XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON (xnoise_main_window_play_pause_button_get_type ())
 #define XNOISE_MAIN_WINDOW_PLAY_PAUSE_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON, XnoiseMainWindowPlayPauseButton))
 #define XNOISE_MAIN_WINDOW_PLAY_PAUSE_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON, XnoiseMainWindowPlayPauseButtonClass))
@@ -326,6 +336,48 @@ typedef struct _XnoisePluginManagerTreeClass XnoisePluginManagerTreeClass;
 typedef struct _XnoisePluginManagerTreePrivate XnoisePluginManagerTreePrivate;
 typedef struct _XnoiseAlbumImagePrivate XnoiseAlbumImagePrivate;
 
+#define XNOISE_TYPE_LYRICS (xnoise_lyrics_get_type ())
+#define XNOISE_LYRICS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LYRICS, XnoiseLyrics))
+#define XNOISE_IS_LYRICS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_LYRICS))
+#define XNOISE_LYRICS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_LYRICS, XnoiseLyricsIface))
+
+typedef struct _XnoiseLyrics XnoiseLyrics;
+typedef struct _XnoiseLyricsIface XnoiseLyricsIface;
+typedef struct _XnoiseLyricsViewPrivate XnoiseLyricsViewPrivate;
+
+#define XNOISE_TYPE_LYRICS_LOADER (xnoise_lyrics_loader_get_type ())
+#define XNOISE_LYRICS_LOADER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LYRICS_LOADER, XnoiseLyricsLoader))
+#define XNOISE_LYRICS_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_LYRICS_LOADER, XnoiseLyricsLoaderClass))
+#define XNOISE_IS_LYRICS_LOADER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_LYRICS_LOADER))
+#define XNOISE_IS_LYRICS_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_LYRICS_LOADER))
+#define XNOISE_LYRICS_LOADER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_LYRICS_LOADER, XnoiseLyricsLoaderClass))
+
+typedef struct _XnoiseLyricsLoader XnoiseLyricsLoader;
+typedef struct _XnoiseLyricsLoaderClass XnoiseLyricsLoaderClass;
+typedef struct _XnoiseLyricsLoaderPrivate XnoiseLyricsLoaderPrivate;
+
+#define TYPE_LEOSLYRICS_PLUGIN (leoslyrics_plugin_get_type ())
+#define LEOSLYRICS_PLUGIN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_LEOSLYRICS_PLUGIN, LeoslyricsPlugin))
+#define LEOSLYRICS_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_LEOSLYRICS_PLUGIN, LeoslyricsPluginClass))
+#define IS_LEOSLYRICS_PLUGIN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_LEOSLYRICS_PLUGIN))
+#define IS_LEOSLYRICS_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_LEOSLYRICS_PLUGIN))
+#define LEOSLYRICS_PLUGIN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_LEOSLYRICS_PLUGIN, LeoslyricsPluginClass))
+
+typedef struct _LeoslyricsPlugin LeoslyricsPlugin;
+typedef struct _LeoslyricsPluginClass LeoslyricsPluginClass;
+typedef struct _LeoslyricsPluginPrivate LeoslyricsPluginPrivate;
+
+#define TYPE_LEOSLYRICS (leoslyrics_get_type ())
+#define LEOSLYRICS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_LEOSLYRICS, Leoslyrics))
+#define LEOSLYRICS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_LEOSLYRICS, LeoslyricsClass))
+#define IS_LEOSLYRICS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_LEOSLYRICS))
+#define IS_LEOSLYRICS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_LEOSLYRICS))
+#define LEOSLYRICS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_LEOSLYRICS, LeoslyricsClass))
+
+typedef struct _Leoslyrics Leoslyrics;
+typedef struct _LeoslyricsClass LeoslyricsClass;
+typedef struct _LeoslyricsPrivate LeoslyricsPrivate;
+
 struct _XnoiseAppStarter {
 	GObject parent_instance;
 	XnoiseAppStarterPrivate * priv;
@@ -372,6 +424,7 @@ struct _XnoiseMainWindow {
 	GtkLabel* showvideolabel;
 	gboolean is_fullscreen;
 	gboolean drag_on_da;
+	XnoiseLyricsView* lyricsView;
 	GtkEntry* searchEntryMB;
 	XnoiseMainWindowPlayPauseButton* playPauseButton;
 	XnoiseMainWindowPreviousButton* previousButton;
@@ -679,6 +732,53 @@ struct _XnoiseAlbumImageClass {
 	GtkFixedClass parent_class;
 };
 
+struct _XnoiseLyricsIface {
+	GTypeInterface parent_iface;
+	void* (*fetch) (XnoiseLyrics* self);
+	char* (*get_text) (XnoiseLyrics* self);
+	char* (*get_identifier) (XnoiseLyrics* self);
+};
+
+struct _XnoiseLyricsView {
+	GtkTextView parent_instance;
+	XnoiseLyricsViewPrivate * priv;
+};
+
+struct _XnoiseLyricsViewClass {
+	GtkTextViewClass parent_class;
+};
+
+struct _XnoiseLyricsLoader {
+	GObject parent_instance;
+	XnoiseLyricsLoaderPrivate * priv;
+	XnoiseLyrics* lyrics;
+	char* artist;
+	char* title;
+};
+
+struct _XnoiseLyricsLoaderClass {
+	GObjectClass parent_class;
+};
+
+typedef XnoiseLyrics* (*XnoiseLyricsLoaderLyricsCreatorDelg) (const char* artist, const char* title, void* user_data);
+struct _LeoslyricsPlugin {
+	GObject parent_instance;
+	LeoslyricsPluginPrivate * priv;
+};
+
+struct _LeoslyricsPluginClass {
+	GObjectClass parent_class;
+};
+
+struct _Leoslyrics {
+	GObject parent_instance;
+	LeoslyricsPrivate * priv;
+};
+
+struct _LeoslyricsClass {
+	GObjectClass parent_class;
+};
+
 
 GType xnoise_app_starter_get_type (void);
 GType xnoise_main_get_type (void);
@@ -723,6 +823,7 @@ const char* xnoise_gst_player_get_Uri (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_Uri (XnoiseGstPlayer* self, const char* value);
 void xnoise_gst_player_set_gst_position (XnoiseGstPlayer* self, double value);
 GType xnoise_iparams_get_type (void);
+GType xnoise_lyrics_view_get_type (void);
 GType xnoise_main_window_play_pause_button_get_type (void);
 GType xnoise_main_window_previous_button_get_type (void);
 GType xnoise_main_window_next_button_get_type (void);
@@ -919,6 +1020,28 @@ XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
 void xnoise_album_image_find_album_image (XnoiseAlbumImage* self, const char* uri);
 void xnoise_album_image_find_google_image (XnoiseAlbumImage* self, const char* search_term);
 void* xnoise_album_image_set_albumimage_from_goo (XnoiseAlbumImage* self);
+GType xnoise_lyrics_get_type (void);
+void* xnoise_lyrics_fetch (XnoiseLyrics* self);
+char* xnoise_lyrics_get_text (XnoiseLyrics* self);
+char* xnoise_lyrics_get_identifier (XnoiseLyrics* self);
+XnoiseLyricsView* xnoise_lyrics_view_new (void);
+XnoiseLyricsView* xnoise_lyrics_view_construct (GType object_type);
+GType xnoise_lyrics_loader_get_type (void);
+gboolean xnoise_lyrics_loader_register_backend (const char* name, XnoiseLyricsLoaderLyricsCreatorDelg delg, void* delg_target);
+XnoiseLyricsLoader* xnoise_lyrics_loader_new (const char* artist, const char* title);
+XnoiseLyricsLoader* xnoise_lyrics_loader_construct (GType object_type, const char* artist, const char* title);
+char* xnoise_lyrics_loader_get_text (XnoiseLyricsLoader* self);
+gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self);
+GType leoslyrics_plugin_get_type (void);
+LeoslyricsPlugin* leoslyrics_plugin_new (void);
+LeoslyricsPlugin* leoslyrics_plugin_construct (GType object_type);
+GType leoslyrics_get_type (void);
+Leoslyrics* leoslyrics_new (const char* artist, const char* title);
+Leoslyrics* leoslyrics_construct (GType object_type, const char* artist, const char* title);
+XnoiseLyrics* leoslyrics_from_tags (const char* artist, const char* title);
+gboolean leoslyrics_fetch_hid (Leoslyrics* self);
+gboolean leoslyrics_fetch_text (Leoslyrics* self);
+gboolean* leoslyrics_available (Leoslyrics* self);
 
 
 G_END_DECLS

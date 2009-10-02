@@ -143,6 +143,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_stopped();
 	public signal void sign_eos();
 	public signal void sign_tag_changed(string newuri);
+	public signal void sign_uri_changed(string newuri);
 	public signal void sign_video_playing();
 	//public signal void sign_state_changed(int state);
 	public signal void sign_paused();
@@ -159,6 +160,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 					this.currentartist = "unknown artist";
 					this.currentalbum = "unknown album";
 					this.currenttitle = "unknown title";
+					message("dfgds");
+					sign_uri_changed(this.Uri);
 					break;
 				}
 				case "currentartist": {

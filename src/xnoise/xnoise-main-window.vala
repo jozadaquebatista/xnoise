@@ -49,6 +49,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public Label showvideolabel;
 	public bool is_fullscreen = false;
 	public bool drag_on_da = false;
+	public LyricsView lyricsView;
 	
 	private const ActionEntry[] action_entries = {
 		{ "FileMenuAction", null, N_("_File") },
@@ -789,6 +790,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox; 
 			sexyentryBox.add(searchEntryMB);
+			
+		
+			///Textbuffer for the lyrics
+			var scrolledlyricsview = gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;
+			this.lyricsView = new LyricsView();
+			scrolledlyricsview.add(lyricsView);
+			scrolledlyricsview.show_all();
 			
 			//Fullscreen window 
 			this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);

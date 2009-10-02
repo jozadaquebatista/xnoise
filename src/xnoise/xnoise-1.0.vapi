@@ -91,8 +91,26 @@ namespace Xnoise {
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
 		public signal void sign_tag_changed (string newuri);
+		public signal void sign_uri_changed (string newuri);
 		public signal void sign_video_playing ();
 		public signal void sign_volume_changed (double volume);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class LyricsLoader : GLib.Object {
+		[CCode (cheader_filename = "xnoise.h")]
+		public delegate Xnoise.Lyrics LyricsCreatorDelg (string artist, string title);
+		public string artist;
+		public Xnoise.Lyrics lyrics;
+		public string title;
+		public LyricsLoader (string artist, string title);
+		public bool fetch ();
+		public string get_text ();
+		public static bool register_backend (string name, Xnoise.LyricsLoader.LyricsCreatorDelg delg);
+		public signal void sign_fetched (string content);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class LyricsView : Gtk.TextView {
+		public LyricsView ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Main : GLib.Object {
@@ -145,6 +163,7 @@ namespace Xnoise {
 		public bool drag_on_da;
 		public Gtk.Window fullscreenwindow;
 		public bool is_fullscreen;
+		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;
 		public Xnoise.MainWindow.NextButton nextButton;
 		public Xnoise.MainWindow.PlayPauseButton playPauseButton;
@@ -292,6 +311,13 @@ namespace Xnoise {
 		public abstract string name { get; }
 		public abstract Xnoise.Main xn { get; set; }
 	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public interface Lyrics : GLib.Object {
+		public abstract void* fetch ();
+		public abstract string get_identifier ();
+		public abstract string get_text ();
+		public signal void sign_lyrics_fetched (string text);
+	}
 	[CCode (type_id = "XNOISE_TYPE_STREAM_DATA", cheader_filename = "xnoise.h")]
 	public struct StreamData {
 		public string Name;
@@ -379,4 +405,17 @@ namespace Xnoise {
 	public static void initialize ();
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string remove_linebreaks (string value);
+}
+[CCode (cheader_filename = "xnoise.h")]
+public class LeoslyricsPlugin : GLib.Object, Xnoise.IPlugin {
+	public LeoslyricsPlugin ();
+}
+[CCode (cheader_filename = "xnoise.h")]
+public class Leoslyrics : GLib.Object, Xnoise.Lyrics {
+	public Leoslyrics (string artist, string title);
+	public bool? available ();
+	public bool fetch_hid ();
+	public bool fetch_text ();
+	public static Xnoise.Lyrics from_tags (string artist, string title);
+	public signal void sign_lyrics_fetched (string text);
 }
