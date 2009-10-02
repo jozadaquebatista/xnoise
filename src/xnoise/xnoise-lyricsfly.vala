@@ -1,4 +1,4 @@
-/* xnoise-leoslyrics.vala
+/* xnoise-lyricsfly.vala
  *
  * Copyright (C) 2009  softshaker
  *
@@ -27,147 +27,74 @@
  * Author:
  * 	sotshaker
  */
- 
-using Xnoise;
-using Gtk;
+
+// Plugin for lyricsfly.com using its PHP API
+
+
+using GLib;
 using Soup;
 using Xml;
 
-// Plugin for leoslyrics.com PHP API
+// In order for lyricsfly to work properly, we have to sign up for an xnoise key, which is free
 
-// Plugin interfacing code for the future
-/*public class LeoslyricsPlugin : GLib.Object, IPlugin {
-	public Xnoise.Main xn { get; set; }
-	public string name { 
-		get {
-			return "Leoslyrics";
-		} 
-	}
+public class LyricsLyricsfly : GLib.Object, Xnoise.Lyrics {
 
-    
-	public bool init() {
-		LyricsLoader.register_backend(this.name, Leoslyrics.from_tags);
-		return true;
-	}
-
-	public Gtk.Widget? get_settings_widget() {
-		return null;
-	}
-
-	public bool has_settings_widget() {
-		return false;
-	} 
-}*/
-
-
-public class Leoslyrics : GLib.Object, Lyrics {
-	private SessionSync session;
-	private Message hid_msg;
+	private static Session session;
 	
 	private string artist;
 	private string title;
 		
 	private static const string my_identifier= "Leoslyrics";
-	private static const string auth = "xnoise";
-	private static const string check_url = "http://api.leoslyrics.com/api_search.php?auth=%s&artist=%s&songtitle=%s";
-	private static const string text_url = "http://api.leoslyrics.com/api_lyrics.php?auth=%s&hid=%s";
-	private static const string xp_hid = "/leoslyrics/searchResults/result/@hid[1]";
-	private static const string xp_text = "/leoslyrics/lyric/text";
+	private static const string auth = "fa7ed8a95b2aa9f70-temporary.API.access";
+	private static const string text_url = "http://lyricsfly.com/api/api.php?i=%s&a=%s&t=%s";
+	private static const string xp_text = "/start/sg[1]/tx";
 	
 	private static bool _is_initialized = false;
 	
-	private string hid;
 	private string text;
 	private bool? availability;
 	
 	public signal void sign_lyrics_fetched(string text);
 	
 	
-	public Leoslyrics (string artist, string title) {
+	public LyricsLyricsfly(string artist, string title) {
 		if (_is_initialized == false) {
-			message("initting");
-			//session = new SessionAsync ();
-			Xml.Parser.init();
+			message ("initting");
+			session = new SessionAsync();
+			Xml.Parser.init ();
 			
 			_is_initialized = true;
 		}
-		
-		hid = "";
-		
+
 		this.artist = artist;
 		this.title = title;
 		availability = null;
 		
-		var gethid_str = new StringBuilder();
-		gethid_str.printf(check_url, auth, Soup.URI.encode(artist, null), Soup.URI.encode(title, null));
-		
-		session = new SessionSync();
-		print("%s\n\n", gethid_str.str);
-		hid_msg = new Message("GET", gethid_str.str);
+		session = new SessionAsync();
 	}
 	
 	
 	public static Xnoise.Lyrics from_tags(string artist, string title) {
-		return new Leoslyrics(artist, title);
-	}
-	
-	
-	public bool fetch_hid () {
-		uint status;
-		status = session.send_message(hid_msg);
-		if (status != KnownStatusCode.OK) return false;
-		if (hid_msg.response_body.data == null) return false;
-		
-		print("-------------------HID\n%s\n\n", hid);
-		message(hid_msg.response_body.data);
-		
-		// Web API call ok, do the xml processing
-		
-		Xml.Doc* xmldoc = Xml.Parser.read_doc(hid_msg.response_body.data);
-		if (xmldoc == null) return false;
-		
-		XPathContext xp_cont = new XPathContext(xmldoc);
-		
-		var xp_result = xp_cont.eval_expression(xp_hid);
-		if (xp_result->nodesetval->is_empty()) { 
-			delete xmldoc;
-			availability = false;
-			return false;
-		}
-		
-		var hid_result_node = xp_result->nodesetval->item (0);
-		if (hid_result_node == null) {
-			delete xmldoc;
-			availability = false;
-			return false;
-		}
-
-		hid = hid_result_node->get_content();
-		delete xmldoc;
-		
-		if (hid == "") {
-			availability = false;
-			return false;
-		}
-		
-		availability = true;
-		return true;
+		return new LyricsLyricsfly(artist, title);
 	}
 	
 	
 	public bool fetch_text() {
 		var gettext_str = new StringBuilder();
-		gettext_str.printf(text_url, auth, hid);
-		var text_msg = new Message("GET", gettext_str.str);
+		gettext_str.printf (text_url, Soup.URI.encode(auth, null), Soup.URI.encode(artist, null), Soup.URI.encode(title, null));
+		var text_msg = new Message ("GET", gettext_str.str);
+		message(gettext_str.str);
 		
 		uint status;
 		status = session.send_message(text_msg);
 		
+		message(status.to_string());
 		if (status != KnownStatusCode.OK) return false;
+		message("still there");
 		if (text_msg.response_body.data == null) return false;
 
 		// Web API call ok, do the xml processing
-		
+		message(text_msg.response_body.data);
 		Xml.Doc* xmldoc = Xml.Parser.read_doc(text_msg.response_body.data);
 		if (xmldoc == null) return false;
 		
@@ -194,18 +121,16 @@ public class Leoslyrics : GLib.Object, Lyrics {
 				
 		return true;
 	}
-		
 	
+		
 	public bool? available() {
 		return availability;
 	}
 	
 	
-	public void* fetch () {
-		if (available() == null) fetch_hid();
-		if (available() == false || hid == "") return null;
-		
-		bool retval = fetch_text();
+	public void* fetch() {
+		bool retval;
+		if (available() == null) retval = fetch_text();
 		sign_lyrics_fetched(text);
 		return null;
 	}
@@ -222,4 +147,6 @@ public class Leoslyrics : GLib.Object, Lyrics {
 	
 	
 }
+
+
 

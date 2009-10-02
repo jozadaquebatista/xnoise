@@ -1,4 +1,4 @@
-/* xnoise-leoslyrics.vala
+/* xnoise-chartlyrics.vala
  *
  * Copyright (C) 2009  softshaker
  *
@@ -28,93 +28,75 @@
  * 	sotshaker
  */
  
-using Xnoise;
-using Gtk;
+// Plugin for chartlyrics.com plugin API
+
+
+using GLib;
 using Soup;
 using Xml;
 
-// Plugin for leoslyrics.com PHP API
+// XML PARSING DOES NOT YET WORK
 
-// Plugin interfacing code for the future
-/*public class LeoslyricsPlugin : GLib.Object, IPlugin {
-	public Xnoise.Main xn { get; set; }
-	public string name { 
-		get {
-			return "Leoslyrics";
-		} 
-	}
+public class LyricsChartlyrics : GLib.Object, Xnoise.Lyrics {
 
-    
-	public bool init() {
-		LyricsLoader.register_backend(this.name, Leoslyrics.from_tags);
-		return true;
-	}
-
-	public Gtk.Widget? get_settings_widget() {
-		return null;
-	}
-
-	public bool has_settings_widget() {
-		return false;
-	} 
-}*/
-
-
-public class Leoslyrics : GLib.Object, Lyrics {
-	private SessionSync session;
+	private static Session session;
 	private Message hid_msg;
 	
 	private string artist;
 	private string title;
 		
-	private static const string my_identifier= "Leoslyrics";
+	private static const string my_identifier= "Chartlyrics";
 	private static const string auth = "xnoise";
-	private static const string check_url = "http://api.leoslyrics.com/api_search.php?auth=%s&artist=%s&songtitle=%s";
-	private static const string text_url = "http://api.leoslyrics.com/api_lyrics.php?auth=%s&hid=%s";
-	private static const string xp_hid = "/leoslyrics/searchResults/result/@hid[1]";
-	private static const string xp_text = "/leoslyrics/lyric/text";
+	private static const string check_url = "http://api.chartlyrics.com/apiv1.asmx/SearchLyric?artist=%s&song=%s";
+	private static const string text_url = "http://api.chartlyrics.com/apiv1.asmx/GetLyric?lyricId=%s&lyricCheckSum=%s";
+	private static const string xp_hid = "//SearchLyricResult[LyricId != \"\" and LyricChecksum != \"\"]/LyricChecksum";
+	private static const string xp_id = "//SearchLyricResult[LyricId != \"\" and LyricChecksum != \"\"]/LyricId";
+	private static const string xp_text = "//Lyric";
 	
 	private static bool _is_initialized = false;
 	
 	private string hid;
+	private string id;
 	private string text;
 	private bool? availability;
 	
 	public signal void sign_lyrics_fetched(string text);
 	
 	
-	public Leoslyrics (string artist, string title) {
+	public LyricsChartlyrics(string artist, string title) {
 		if (_is_initialized == false) {
-			message("initting");
-			//session = new SessionAsync ();
-			Xml.Parser.init();
+			message ("initting");
+			session = new SessionAsync();
+			Xml.Parser.init ();
 			
 			_is_initialized = true;
 		}
 		
 		hid = "";
+		id = "";
 		
 		this.artist = artist;
 		this.title = title;
 		availability = null;
 		
 		var gethid_str = new StringBuilder();
-		gethid_str.printf(check_url, auth, Soup.URI.encode(artist, null), Soup.URI.encode(title, null));
+		gethid_str.printf(check_url, Soup.URI.encode(artist, null), Soup.URI.encode(title, null));
+		//gethid_str.assign (gethid_str.str);
 		
-		session = new SessionSync();
+		session = new SessionAsync();
 		print("%s\n\n", gethid_str.str);
 		hid_msg = new Message("GET", gethid_str.str);
 	}
 	
 	
 	public static Xnoise.Lyrics from_tags(string artist, string title) {
-		return new Leoslyrics(artist, title);
+		return new LyricsChartlyrics(artist, title);
 	}
 	
 	
-	public bool fetch_hid () {
+	public bool fetch_hid() {
 		uint status;
-		status = session.send_message(hid_msg);
+		status = session.send_message (hid_msg);
 		if (status != KnownStatusCode.OK) return false;
 		if (hid_msg.response_body.data == null) return false;
 		
@@ -127,8 +109,8 @@ public class Leoslyrics : GLib.Object, Lyrics {
 		if (xmldoc == null) return false;
 		
 		XPathContext xp_cont = new XPathContext(xmldoc);
-		
-		var xp_result = xp_cont.eval_expression(xp_hid);
+		message(xp_hid);
+		var xp_result = xp_cont.eval_expression (xp_hid);
 		if (xp_result->nodesetval->is_empty()) { 
 			delete xmldoc;
 			availability = false;
@@ -141,11 +123,29 @@ public class Leoslyrics : GLib.Object, Lyrics {
 			availability = false;
 			return false;
 		}
-
+		
+		xp_result = xp_cont.eval_expression (xp_id);
+		if (xp_result->nodesetval->is_empty()) { 
+			delete xmldoc;
+			availability = false;
+			return false;
+		}
+		
 		hid = hid_result_node->get_content();
+		message(hid);
+		
+		var id_result_node = xp_result->nodesetval->item (0);
+		if (hid_result_node == null) {
+			delete xmldoc;
+			availability = false;
+			return false;
+		}
+		message(id);
+
+		id = id_result_node->get_content();
 		delete xmldoc;
 		
-		if (hid == "") {
+		if (hid == "" || id == "") {
 			availability = false;
 			return false;
 		}
@@ -157,11 +157,11 @@ public class Leoslyrics : GLib.Object, Lyrics {
 	
 	public bool fetch_text() {
 		var gettext_str = new StringBuilder();
-		gettext_str.printf(text_url, auth, hid);
+		gettext_str.printf(text_url, id, hid);
 		var text_msg = new Message("GET", gettext_str.str);
 		
 		uint status;
-		status = session.send_message(text_msg);
+		status = session.send_message (text_msg);
 		
 		if (status != KnownStatusCode.OK) return false;
 		if (text_msg.response_body.data == null) return false;
@@ -175,21 +175,21 @@ public class Leoslyrics : GLib.Object, Lyrics {
 		
 		var xp_result = xp_cont.eval_expression(xp_text);
 		if (xp_result->nodesetval->is_empty()) {
-			message("empty"); 
+			message ("empty"); 
 			delete xmldoc;
 			availability = false;
 			return false;
 		}
 		
-		var text_result_node = xp_result->nodesetval->item(0);
+		var text_result_node = xp_result->nodesetval->item (0);
 		if (text_result_node == null) {
-			message("no item");
+			message ("no item");
 			delete xmldoc;
 			availability = false;
 			return false;
 		}
 		text = text_result_node->get_content();
-		message(text);
+		message (text);
 		delete xmldoc;
 				
 		return true;
@@ -201,12 +201,12 @@ public class Leoslyrics : GLib.Object, Lyrics {
 	}
 	
 	
-	public void* fetch () {
+	public void* fetch() {
 		if (available() == null) fetch_hid();
 		if (available() == false || hid == "") return null;
 		
-		bool retval = fetch_text();
-		sign_lyrics_fetched(text);
+		bool retval = fetch_text ();
+		sign_lyrics_fetched (text);
 		return null;
 	}
 	
