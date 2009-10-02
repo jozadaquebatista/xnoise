@@ -160,7 +160,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 					this.currentartist = "unknown artist";
 					this.currentalbum = "unknown album";
 					this.currenttitle = "unknown title";
-					message("dfgds");
 					sign_uri_changed(this.Uri);
 					break;
 				}
