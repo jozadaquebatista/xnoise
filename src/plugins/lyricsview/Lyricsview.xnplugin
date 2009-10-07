@@ -1,0 +1,9 @@
+[XnoisePlugin]
+name=Lyricsview
+module=Lyricsview
+description=Automatically shows and loads lyrics for the current song from internet services
+website=http://code.google.com/p/xnoise/
+icon=/path/to/icon
+copyright=Copyright © 2009 softshaker
+license=GPLv2 + exeption for distribution with non-GPL compatible gstreamer plugins
+author=softshaker <softshaker@googlemail.com>

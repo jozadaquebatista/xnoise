@@ -1,4 +1,4 @@
-/* xnoise-tag-reader.vala
+/* xnoise-title-to-decoration-registration.vala
  *
  * Copyright (C) 2009  Jörn Magens
  *
@@ -27,50 +27,8 @@
  * Author:
  * 	Jörn Magens
  */
-
-
-public class Xnoise.TagReader : GLib.Object {
-//	public TagReader() {
-//		print("construct TagReader\n");
-//	}
-	public TrackData read_tag_from_file(string filename) {
-		TrackData td; 
-		TagLib.File taglib_file = null;
-		taglib_file = new TagLib.File(filename);
-		if(taglib_file!=null) {
-			weak TagLib.Tag t = taglib_file.tag; 
-			td = TrackData();
-			try {
-				td.Artist = t.artist;
-				td.Title = t.title;
-				td.Album = t.album;
-				td.Genre = t.genre;
-				td.Tracknumber = t.track;
-				td.Mediatype   = MediaType.AUDIO;
-			}
-			finally {
-				if((td.Artist == "")||(td.Artist == null)) td.Artist = "unknown artist";
-				if((td.Title  == "")||(td.Title  == null)) td.Title  = "unknown title";
-				if((td.Album  == "")||(td.Album  == null)) td.Album  = "unknown album";
-				if((td.Genre  == "")||(td.Genre  == null)) td.Genre  = "unknown genre";
-				t = null;
-				taglib_file = null;
-			}
-		}
-		else {
-			td = TrackData(); 
-			td.Artist = "unknown artist";
-			td.Title  = "unknown title";
-			td.Album  = "unknown album";
-			td.Genre  = "unknown genre";
-			td.Tracknumber = (uint)0;
-			td.Mediatype   = MediaType.UNKNOWN;
-		}
-		
-		if(td.Title  == "unknown title") {
-			td.Title = GLib.Filename.display_basename(filename);
-		}
-		return td;
-	}
+ 
+[ModuleInit]
+public Type init_module() { 
+	return typeof(LyricsviewPlugin);
 }
-

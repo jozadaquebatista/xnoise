@@ -53,6 +53,8 @@ AC_CONFIG_FILES([Makefile
 	src/plugins/Makefile
 	src/plugins/testplugin/Makefile
 	src/plugins/titleToDecoration/Makefile
+	src/plugins/leoslyrics/Makefile
+	src/plugins/lyricsview/Makefile
 	po/Makefile.in])
 
 AC_OUTPUT

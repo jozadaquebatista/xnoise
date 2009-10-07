@@ -40,8 +40,34 @@
 	 	(goody, they are threaded and sooner or later will exit anyway)
 	 10. launch synchronous backends in a thread but make it possibly for backends 
 	 	to be async on their own (e.g. leoslyrics could use an async soup session) (goody) */
+	 	
+using Xnoise;
+	 	
+public class LyricsviewPlugin : GLib.Object, IPlugin {
+	public Xnoise.Main xn { get; set; }
+	public string name { 
+		get {
+			return "Lyricsview";
+		} 
+	}
 
-public interface Xnoise.Lyrics : GLib.Object {
+    
+	public bool init() {
+		return true;
+	}
+
+
+	public Gtk.Widget? get_settings_widget() {
+		return null;
+	}
+
+
+	public bool has_settings_widget() {
+		return false;
+	} 
+}
+
+public interface Lyrics : GLib.Object {
 	public abstract void* fetch();
 	public abstract string get_text();
 	public abstract string get_identifier();
@@ -51,7 +77,7 @@ public interface Xnoise.Lyrics : GLib.Object {
 }
 
 
-public class Xnoise.LyricsView : Gtk.TextView {
+public class LyricsView : Gtk.TextView {
 	private LyricsLoader cur_loader = null;
 	private Main xn;
 	private Gtk.TextBuffer textbuffer;
@@ -89,14 +115,14 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	
 
 
-public class Xnoise.LyricsLoader : GLib.Object {
-	public Lyrics lyrics;
+public class LyricsLoader : GLib.Object {
+	public Xnoise.Lyrics lyrics;
 	
 	private static LyricsCreatorDelg backend;
 	public string artist;
 	public string title;
 	
-	public delegate Lyrics LyricsCreatorDelg(string artist, string title);
+	public delegate Xnoise.Lyrics LyricsCreatorDelg(string artist, string title);
 	private static LyricsCreatorDelg default_backend;
 	private LyricsCreatorDelg backend_choice;
 	
@@ -116,7 +142,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 
 	
 	private void register_backends() {
-		backend = Leoslyrics.from_tags;
+		backend = Xnoise.Leoslyrics.from_tags;
 	}
 
 	

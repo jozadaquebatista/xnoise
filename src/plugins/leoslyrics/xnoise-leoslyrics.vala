@@ -36,7 +36,7 @@ using Xml;
 // Plugin for leoslyrics.com PHP API
 
 // Plugin interfacing code for the future
-/*public class LeoslyricsPlugin : GLib.Object, IPlugin {
+public class LeoslyricsPlugin : GLib.Object, IPlugin {
 	public Xnoise.Main xn { get; set; }
 	public string name { 
 		get {
@@ -50,17 +50,20 @@ using Xml;
 		return true;
 	}
 
+
 	public Gtk.Widget? get_settings_widget() {
 		return null;
 	}
 
+
 	public bool has_settings_widget() {
 		return false;
 	} 
-}*/
+}
 
 
-public class Xnoise.Leoslyrics : GLib.Object, Lyrics {
+
+public class Leoslyrics : GLib.Object, Lyrics {
 	private SessionSync session;
 	private Message hid_msg;
 	

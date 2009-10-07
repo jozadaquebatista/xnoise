@@ -265,6 +265,17 @@ typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 typedef struct _XnoiseMediaFolderDialog XnoiseMediaFolderDialog;
 typedef struct _XnoiseMediaFolderDialogClass XnoiseMediaFolderDialogClass;
 typedef struct _XnoiseMediaFolderDialogPrivate XnoiseMediaFolderDialogPrivate;
+
+#define XNOISE_TYPE_TAG_READER (xnoise_tag_reader_get_type ())
+#define XNOISE_TAG_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TAG_READER, XnoiseTagReader))
+#define XNOISE_TAG_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TAG_READER, XnoiseTagReaderClass))
+#define XNOISE_IS_TAG_READER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TAG_READER))
+#define XNOISE_IS_TAG_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TAG_READER))
+#define XNOISE_TAG_READER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TAG_READER, XnoiseTagReaderClass))
+
+typedef struct _XnoiseTagReader XnoiseTagReader;
+typedef struct _XnoiseTagReaderClass XnoiseTagReaderClass;
+typedef struct _XnoiseTagReaderPrivate XnoiseTagReaderPrivate;
 typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 
 #define XNOISE_TYPE_TRACK_STATE (xnoise_track_state_get_type ())
@@ -356,27 +367,16 @@ typedef struct _XnoiseLyricsLoader XnoiseLyricsLoader;
 typedef struct _XnoiseLyricsLoaderClass XnoiseLyricsLoaderClass;
 typedef struct _XnoiseLyricsLoaderPrivate XnoiseLyricsLoaderPrivate;
 
-#define TYPE_LEOSLYRICS_PLUGIN (leoslyrics_plugin_get_type ())
-#define LEOSLYRICS_PLUGIN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_LEOSLYRICS_PLUGIN, LeoslyricsPlugin))
-#define LEOSLYRICS_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_LEOSLYRICS_PLUGIN, LeoslyricsPluginClass))
-#define IS_LEOSLYRICS_PLUGIN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_LEOSLYRICS_PLUGIN))
-#define IS_LEOSLYRICS_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_LEOSLYRICS_PLUGIN))
-#define LEOSLYRICS_PLUGIN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_LEOSLYRICS_PLUGIN, LeoslyricsPluginClass))
+#define XNOISE_TYPE_LEOSLYRICS (xnoise_leoslyrics_get_type ())
+#define XNOISE_LEOSLYRICS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LEOSLYRICS, XnoiseLeoslyrics))
+#define XNOISE_LEOSLYRICS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_LEOSLYRICS, XnoiseLeoslyricsClass))
+#define XNOISE_IS_LEOSLYRICS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_LEOSLYRICS))
+#define XNOISE_IS_LEOSLYRICS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_LEOSLYRICS))
+#define XNOISE_LEOSLYRICS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_LEOSLYRICS, XnoiseLeoslyricsClass))
 
-typedef struct _LeoslyricsPlugin LeoslyricsPlugin;
-typedef struct _LeoslyricsPluginClass LeoslyricsPluginClass;
-typedef struct _LeoslyricsPluginPrivate LeoslyricsPluginPrivate;
-
-#define TYPE_LEOSLYRICS (leoslyrics_get_type ())
-#define LEOSLYRICS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_LEOSLYRICS, Leoslyrics))
-#define LEOSLYRICS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_LEOSLYRICS, LeoslyricsClass))
-#define IS_LEOSLYRICS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_LEOSLYRICS))
-#define IS_LEOSLYRICS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_LEOSLYRICS))
-#define LEOSLYRICS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_LEOSLYRICS, LeoslyricsClass))
-
-typedef struct _Leoslyrics Leoslyrics;
-typedef struct _LeoslyricsClass LeoslyricsClass;
-typedef struct _LeoslyricsPrivate LeoslyricsPrivate;
+typedef struct _XnoiseLeoslyrics XnoiseLeoslyrics;
+typedef struct _XnoiseLeoslyricsClass XnoiseLeoslyricsClass;
+typedef struct _XnoiseLeoslyricsPrivate XnoiseLeoslyricsPrivate;
 
 struct _XnoiseAppStarter {
 	GObject parent_instance;
@@ -593,6 +593,15 @@ struct _XnoiseMediaFolderDialogClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseTagReader {
+	GObject parent_instance;
+	XnoiseTagReaderPrivate * priv;
+};
+
+struct _XnoiseTagReaderClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoiseTrackList {
 	GtkTreeView parent_instance;
 	XnoiseTrackListPrivate * priv;
@@ -761,21 +770,12 @@ struct _XnoiseLyricsLoaderClass {
 };
 
 typedef XnoiseLyrics* (*XnoiseLyricsLoaderLyricsCreatorDelg) (const char* artist, const char* title, void* user_data);
-struct _LeoslyricsPlugin {
+struct _XnoiseLeoslyrics {
 	GObject parent_instance;
-	LeoslyricsPluginPrivate * priv;
+	XnoiseLeoslyricsPrivate * priv;
 };
 
-struct _LeoslyricsPluginClass {
-	GObjectClass parent_class;
-};
-
-struct _Leoslyrics {
-	GObject parent_instance;
-	LeoslyricsPrivate * priv;
-};
-
-struct _LeoslyricsClass {
+struct _XnoiseLeoslyricsClass {
 	GObjectClass parent_class;
 };
 
@@ -937,6 +937,10 @@ gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 GType xnoise_media_folder_dialog_get_type (void);
 XnoiseMediaFolderDialog* xnoise_media_folder_dialog_new (void);
 XnoiseMediaFolderDialog* xnoise_media_folder_dialog_construct (GType object_type);
+GType xnoise_tag_reader_get_type (void);
+void xnoise_tag_reader_read_tag_from_file (XnoiseTagReader* self, const char* filename, XnoiseTrackData* result);
+XnoiseTagReader* xnoise_tag_reader_new (void);
+XnoiseTagReader* xnoise_tag_reader_construct (GType object_type);
 XnoiseTrackList* xnoise_track_list_new (XnoiseMain** xn);
 XnoiseTrackList* xnoise_track_list_construct (GType object_type, XnoiseMain** xn);
 gboolean xnoise_track_list_on_button_press (XnoiseTrackList* self, XnoiseTrackList* sender, GdkEventButton* e);
@@ -1032,16 +1036,13 @@ XnoiseLyricsLoader* xnoise_lyrics_loader_new (const char* artist, const char* ti
 XnoiseLyricsLoader* xnoise_lyrics_loader_construct (GType object_type, const char* artist, const char* title);
 char* xnoise_lyrics_loader_get_text (XnoiseLyricsLoader* self);
 gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self);
-GType leoslyrics_plugin_get_type (void);
-LeoslyricsPlugin* leoslyrics_plugin_new (void);
-LeoslyricsPlugin* leoslyrics_plugin_construct (GType object_type);
-GType leoslyrics_get_type (void);
-Leoslyrics* leoslyrics_new (const char* artist, const char* title);
-Leoslyrics* leoslyrics_construct (GType object_type, const char* artist, const char* title);
-XnoiseLyrics* leoslyrics_from_tags (const char* artist, const char* title);
-gboolean leoslyrics_fetch_hid (Leoslyrics* self);
-gboolean leoslyrics_fetch_text (Leoslyrics* self);
-gboolean* leoslyrics_available (Leoslyrics* self);
+GType xnoise_leoslyrics_get_type (void);
+XnoiseLeoslyrics* xnoise_leoslyrics_new (const char* artist, const char* title);
+XnoiseLeoslyrics* xnoise_leoslyrics_construct (GType object_type, const char* artist, const char* title);
+XnoiseLyrics* xnoise_leoslyrics_from_tags (const char* artist, const char* title);
+gboolean xnoise_leoslyrics_fetch_hid (XnoiseLeoslyrics* self);
+gboolean xnoise_leoslyrics_fetch_text (XnoiseLeoslyrics* self);
+gboolean* xnoise_leoslyrics_available (XnoiseLeoslyrics* self);
 
 
 G_END_DECLS

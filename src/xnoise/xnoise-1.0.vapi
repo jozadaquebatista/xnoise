@@ -96,6 +96,15 @@ namespace Xnoise {
 		public signal void sign_volume_changed (double volume);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class Leoslyrics : GLib.Object, Xnoise.Lyrics {
+		public Leoslyrics (string artist, string title);
+		public bool? available ();
+		public bool fetch_hid ();
+		public bool fetch_text ();
+		public static Xnoise.Lyrics from_tags (string artist, string title);
+		public signal void sign_lyrics_fetched (string text);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsLoader : GLib.Object {
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate Xnoise.Lyrics LyricsCreatorDelg (string artist, string title);
@@ -268,6 +277,11 @@ namespace Xnoise {
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class TagReader : GLib.Object {
+		public TagReader ();
+		public Xnoise.TrackData read_tag_from_file (string filename);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackList : Gtk.TreeView {
 		public Gtk.ListStore listmodel;
 		public TrackList (ref unowned Xnoise.Main xn);
@@ -405,17 +419,4 @@ namespace Xnoise {
 	public static void initialize ();
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string remove_linebreaks (string value);
-}
-[CCode (cheader_filename = "xnoise.h")]
-public class LeoslyricsPlugin : GLib.Object, Xnoise.IPlugin {
-	public LeoslyricsPlugin ();
-}
-[CCode (cheader_filename = "xnoise.h")]
-public class Leoslyrics : GLib.Object, Xnoise.Lyrics {
-	public Leoslyrics (string artist, string title);
-	public bool? available ();
-	public bool fetch_hid ();
-	public bool fetch_text ();
-	public static Xnoise.Lyrics from_tags (string artist, string title);
-	public signal void sign_lyrics_fetched (string text);
 }

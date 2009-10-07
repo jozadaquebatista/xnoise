@@ -1,4 +1,4 @@
-SUBDIRS = testplugin titleToDecoration
+SUBDIRS = testplugin titleToDecoration leoslyrics lyricsview
 
 DISTCLEANFILES = \
 	Makefile.in \
