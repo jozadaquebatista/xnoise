@@ -29,7 +29,6 @@ VALA_CFLAGS = \
 	--pkg gmodule-2.0 \
 	--pkg libxml-2.0 \
 	--pkg libsoup-2.4 \
-	--thread \
 	-H $(srcdir)/xnoise.h \
 	--basedir $(top_srcdir)/src
 

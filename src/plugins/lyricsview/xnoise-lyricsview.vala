@@ -93,7 +93,7 @@ public class LyricsView : Gtk.TextView {
 
 	private void on_uri_change(/*TagType tag, */string uri) {
 		message("called");
-		cur_loader.sign_fetched -= on_lyrics_ready;
+		if (cur_loader != null)	cur_loader.sign_fetched -= on_lyrics_ready;
 		//if(tag != TagType.TITLE) return;
 		TagReader tr = new TagReader();
 		File file = File.new_for_uri(uri);

@@ -78,9 +78,7 @@ public class Xnoise.Leoslyrics : GLib.Object, Lyrics {
 	
 	private string hid;
 	private string text;
-	private bool? availability;
-	
-	public signal void sign_lyrics_fetched(string text);
+	private bool? availability;	
 	
 	
 	public Leoslyrics (string artist, string title) {

@@ -102,7 +102,6 @@ namespace Xnoise {
 		public bool fetch_hid ();
 		public bool fetch_text ();
 		public static Xnoise.Lyrics from_tags (string artist, string title);
-		public signal void sign_lyrics_fetched (string text);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsLoader : GLib.Object {

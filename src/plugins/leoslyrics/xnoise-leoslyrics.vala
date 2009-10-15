@@ -83,8 +83,6 @@ public class Leoslyrics : GLib.Object, Lyrics {
 	private string text;
 	private bool? availability;
 	
-	public signal void sign_lyrics_fetched(string text);
-	
 	
 	public Leoslyrics (string artist, string title) {
 		if (_is_initialized == false) {
