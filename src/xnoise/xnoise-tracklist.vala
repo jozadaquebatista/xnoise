@@ -543,7 +543,6 @@ public class Xnoise.TrackList : TreeView {
 				tr = null;
 				k++;
 			}
-			xn.add_track_to_gst_player(uris[0]); 
 		}
 	}
 	
