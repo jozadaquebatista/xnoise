@@ -10,9 +10,9 @@
         <property name="visible">True</property>
         <property name="xalign">0</property>
         <property name="xpad">12</property>
-        <property name="label" translatable="yes">Select the directories, files or internet radio stations 
-to add to the database. 
-All media will be available in the media browser.</property>
+        <property name="label" translatable="yes">Select the local folders or files or media streams to add to the library. 
+All library media will be available in the media browser.</property>
+        <property name="wrap">True</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -52,12 +52,12 @@ All media will be available in the media browser.</property>
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkButton" id="addfilebutton">
-                <property name="label" translatable="yes">Add File</property>
+              <object class="GtkButton" id="addfolderbutton">
+                <property name="label" translatable="yes">Add local folder</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
-                <property name="image">image1</property>
+                <property name="image">image2</property>
                 <property name="focus_on_click">False</property>
               </object>
               <packing>
@@ -66,12 +66,12 @@ All media will be available in the media browser.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="addfolderbutton">
-                <property name="label" translatable="yes">Add Directory</property>
+              <object class="GtkButton" id="addfilebutton">
+                <property name="label" translatable="yes">Add local file</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
-                <property name="image">image2</property>
+                <property name="image">image1</property>
                 <property name="focus_on_click">False</property>
               </object>
               <packing>
@@ -81,7 +81,7 @@ All media will be available in the media browser.</property>
             </child>
             <child>
               <object class="GtkButton" id="addradiobutton">
-                <property name="label" translatable="yes">Add internet radio station</property>
+                <property name="label" translatable="yes">Add media stream</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
@@ -108,6 +108,8 @@ All media will be available in the media browser.</property>
             <property name="focus_on_click">False</property>
           </object>
           <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>

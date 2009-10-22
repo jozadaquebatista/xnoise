@@ -51,8 +51,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement count_for_mediatype_statement;
 	private Statement get_radios_statement;
 	private Statement get_single_radio_uri_statement;
-	private Statement get_music_folders_statement;
+	private Statement get_media_folders_statement;
 	private Statement get_radio_data_statement;
+	private Statement stream_td_for_id_statement;
 	
 	private static const string STMT_COUNT_FOR_MEDIATYPE = 
 		"SELECT COUNT (*) FROM mlib WHERE mediatype = ?";
@@ -64,6 +65,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 		"SELECT artist, album, title, tracknumber FROM mlib WHERE uri = ?";
 	private static const string STMT_TRACKDATA_FOR_ID = 
 		"SELECT artist, album, title, tracknumber, mediatype, uri FROM mlib WHERE id = ?";
+	private static const string STMT_STREAM_TD_FOR_ID = 
+		"SELECT name, uri FROM streams WHERE id = ?";
 	private static const string STMT_URI_FOR_ID = 
 		"SELECT uri FROM mlib WHERE id = ?";
 	private static const string STMT_TRACK_ID_FOR_URI = 
@@ -87,13 +90,13 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private static const string STMT_GET_TITLES_WITH_MEDIATYPES_AND_IDS = 
 		"SELECT DISTINCT title, mediatype, id FROM mlib WHERE artist = ? AND album = ? AND (LOWER(artist) LIKE ? OR LOWER(album) LIKE ? OR LOWER(title) LIKE ?) GROUP BY title ORDER BY tracknumber DESC";
 	private static const string STMT_GET_RADIOS = 
-		"SELECT name, uri FROM radio";
+		"SELECT name, uri FROM streams";
 	private static const string STMT_GET_SINGLE_RADIO_URI = 
-		"SELECT uri FROM radio WHERE name = ?";
-	private static const string STMT_GET_MUSIC_FOLDERS = 
-		"SELECT * FROM music_folders";
+		"SELECT uri FROM streams WHERE name = ?";
+	private static const string STMT_GET_MEDIA_FOLDERS = 
+		"SELECT * FROM media_folders";
 	private static const string STMT_GET_RADIO_DATA	=
-		"SELECT DISTINCT title, mediatype, id FROM mlib WHERE LOWER(title) LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
+		"SELECT DISTINCT id, name, uri FROM streams WHERE LOWER(name) LIKE ? ORDER BY name DESC";
 		
 	public DbBrowser() {
 		DATABASE = dbFileName();
@@ -154,8 +157,10 @@ public class Xnoise.DbBrowser : GLib.Object {
 			out this.get_radios_statement);
 		this.db.prepare_v2(STMT_GET_SINGLE_RADIO_URI, -1, 
 			out this.get_single_radio_uri_statement);
-		this.db.prepare_v2(STMT_GET_MUSIC_FOLDERS, -1, 
-			out this.get_music_folders_statement);
+		this.db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1, 
+			out this.get_media_folders_statement);
+		this.db.prepare_v2(STMT_STREAM_TD_FOR_ID , -1, 
+			out this.stream_td_for_id_statement); 
 	}
 
 	public bool videos_available() {
@@ -227,7 +232,35 @@ public class Xnoise.DbBrowser : GLib.Object {
 		}
 		return true;
 	}
-	
+
+	public bool get_stream_td_for_id(int id, out TrackData val) { 
+		val = TrackData();
+		stream_td_for_id_statement.reset();
+		stream_td_for_id_statement.bind_int(1, id);
+		if(stream_td_for_id_statement.step() == Sqlite.ROW) {
+			val.Artist      = "";
+			val.Album       = "";
+			val.Title       = stream_td_for_id_statement.column_text(0);
+			val.Mediatype   = MediaType.STREAM;
+			val.Uri         = stream_td_for_id_statement.column_text(1);
+		}
+		else {
+			print("track is not in db. ID: %d\n", id);
+			return false;
+		}
+		return true;
+	}
+
+	public bool get_stream_for_id(int id, out string uri) { 
+		stream_td_for_id_statement.reset();
+		stream_td_for_id_statement.bind_int(1, id);
+		if(stream_td_for_id_statement.step() == Sqlite.ROW) {
+			uri = stream_td_for_id_statement.column_text(1);
+			return true;
+		}
+		return false;
+	}
+			
 	public bool get_trackdata_for_uri(string uri, out TrackData val) { 
 		val = TrackData();
 		trackdata_for_uri_statement.reset();
@@ -255,14 +288,14 @@ public class Xnoise.DbBrowser : GLib.Object {
 
 	public string[] get_music_folders() { 
 		string[] mfolders = {};
-		get_music_folders_statement.reset();
-		while(get_music_folders_statement.step() == Sqlite.ROW) {
-			mfolders += get_music_folders_statement.column_text(0);
+		get_media_folders_statement.reset();
+		while(get_media_folders_statement.step() == Sqlite.ROW) {
+			mfolders += get_media_folders_statement.column_text(0);
 		}
 		return mfolders;
 	}
 
-	public StreamData[] get_radio_stations() { 
+	public StreamData[] get_streams() { 
 		StreamData[] sData = {};
 		get_radios_statement.reset();
 		while(get_radios_statement.step() == Sqlite.ROW) {
@@ -274,7 +307,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return sData;
 	}
 	
-	public string? get_single_radio_station_uri(string name) { 
+	public string? get_single_stream_uri(string name) { 
 		get_single_radio_uri_statement.reset();
 		get_single_radio_uri_statement.bind_text(1, name);
 		if(get_single_radio_uri_statement.step() == Sqlite.ROW) {
@@ -347,18 +380,18 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return val;
 	}
 
-	public TitleMtypeId[] get_radio_data(ref string searchtext) { 
+	public TitleMtypeId[] get_stream_data(ref string searchtext) {
+	print("in get_stream_data\n");
 		TitleMtypeId[] val = {};
 		get_radio_data_statement.reset();
-		if((this.get_radio_data_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (this.get_radio_data_statement.bind_int (2, (int)MediaType.STREAM)       != Sqlite.OK)) {
+		if((this.get_radio_data_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(get_radio_data_statement.step() == Sqlite.ROW) {
 			TitleMtypeId vd = TitleMtypeId();
-			vd.name = get_radio_data_statement.column_text(0);
-			vd.mediatype = (MediaType)get_radio_data_statement.column_int(1);
-			vd.id = get_radio_data_statement.column_int(2);
+			vd.id = get_radio_data_statement.column_int(0);
+			vd.name = get_radio_data_statement.column_text(1);
+			vd.mediatype = MediaType.STREAM;
 			val += vd;
 		}
 		return val;

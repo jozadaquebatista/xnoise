@@ -33,7 +33,7 @@ internal class Xnoise.TagReader : GLib.Object {
 //	public TagReader() {
 //		print("construct TagReader\n");
 //	}
-	public TrackData read_tag_from_file(string filename) {
+	public TrackData read_tag(string filename) {
 		TrackData td; 
 		TagLib.File taglib_file = null;
 		taglib_file = new TagLib.File(filename);

@@ -30,7 +30,7 @@
 
 using Gtk;
 
-public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
+public class Xnoise.SettingsDialog : Gtk.Builder {
 	private const string group = "XnoisePlugin";
 	private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
 	public Gtk.Dialog dialog;
@@ -78,23 +78,14 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 		sign_finish();
 	}
 
-	public void read_params_data() {
-//		this.fontsizeMB = file.get_integer("settings", "fontsizeMB");
-//		this.sb.value = this.fontsizeMB;
-	}
-
-	public void write_params_data() {
-//		file.set_integer("settings", "fontsizeMB", fontsizeMB);
-	}
-
-	private AddMediaDialog mfd;
-	private void on_music_add_clicked(Gtk.Button sender) {
-		mfd = new AddMediaDialog();
-		mfd.sign_finish += () => {
-			mfd = null;
-			Idle.add(xn.main_window.mediaBr.change_model_data);	
-		};
-	}
+//	private AddMediaDialog mfd;
+//	private void on_music_add_clicked(Gtk.Button sender) {
+//		mfd = new AddMediaDialog();
+//		mfd.sign_finish += () => {
+//			mfd = null;
+//			Idle.add(xn.main_window.mediaBr.change_model_data);	
+//		};
+//	}
 
 	private void add_plugin_tabs() {
 		foreach(string name in this.xn.plugin_loader.plugin_htable.get_keys()) { 
@@ -144,9 +135,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 			sb.set_value(8.0);
 			sb.changed               += this.on_mb_font_changed;
 			
-			var musicAddButton       = this.get_object("button3") as Gtk.Button;
-			musicAddButton.can_focus = false;
-			musicAddButton.clicked   += this.on_music_add_clicked;
+//			var musicAddButton       = this.get_object("button3") as Gtk.Button;
+//			musicAddButton.can_focus = false;
+//			musicAddButton.clicked   += this.on_music_add_clicked;
 			
 			vboxplugins              = this.get_object("vboxplugins") as Gtk.VBox;
 			

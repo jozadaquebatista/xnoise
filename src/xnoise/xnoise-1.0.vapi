@@ -44,9 +44,11 @@ namespace Xnoise {
 		public string[] get_artists (ref string searchtext);
 		public string[] get_lastused_uris ();
 		public string[] get_music_folders ();
-		public Xnoise.TitleMtypeId[] get_radio_data (ref string searchtext);
-		public Xnoise.StreamData[] get_radio_stations ();
-		public string? get_single_radio_station_uri (string name);
+		public string? get_single_stream_uri (string name);
+		public Xnoise.TitleMtypeId[] get_stream_data (ref string searchtext);
+		public bool get_stream_for_id (int id, out string uri);
+		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
+		public Xnoise.StreamData[] get_streams ();
 		public string[] get_titles (string artist, string album, ref string searchtext);
 		public Xnoise.TitleMtypeId[] get_titles_with_mediatypes_and_ids (string artist, string album, ref string searchtext);
 		public int get_track_id_for_path (string uri);
@@ -61,13 +63,17 @@ namespace Xnoise {
 		public bool videos_available ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class DbCreator : GLib.Object {
+		public const int DB_VERSION_MAJOR;
+		public const int DB_VERSION_MINOR;
+		public DbCreator ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
 		public DbWriter ();
-		public void add_radio_staion (string uri, string name = "");
-		public void begin_transaction ();
-		public void commit_transaction ();
+		public void add_stream (string uri, string name = "");
 		public void write_final_tracks_to_db (string[] final_tracklist);
-		public void write_music_folder_into_db (string[] mfolders);
+		public void write_media_folder_into_db (string[] mfolders);
 		public signal void sign_import_progress (uint current, uint amount);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -243,7 +249,7 @@ namespace Xnoise {
 		public signal void sign_plugin_activestate_changed (string name);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class SettingsDialog : Gtk.Builder, Xnoise.IParams {
+	public class SettingsDialog : Gtk.Builder {
 		public Gtk.Dialog dialog;
 		public SettingsDialog (ref Xnoise.Main xn);
 		public signal void sign_finish ();
@@ -255,7 +261,7 @@ namespace Xnoise {
 		public void add_uris (string[]? uris);
 		public bool get_active_path (out Gtk.TreePath path, out Xnoise.TrackState currentstate, out bool is_first);
 		public string[] get_all_tracks ();
-		public string get_uri_for_path (Gtk.TreePath path);
+		public string get_uri_for_treepath (Gtk.TreePath path);
 		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
 		public bool not_empty ();
 		public void on_activated (string uri, Gtk.TreePath path);

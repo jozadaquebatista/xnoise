@@ -231,7 +231,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		TreeIter iter, iterChild, iterChildChild; 
 		string[] urilist = {};
 		DbBrowser dbb;
+		MediaType mt = MediaType.UNKNOWN;
 		int dbid = -1;
+		string uri;
 		BrowserCollectionType br_ct = BrowserCollectionType.UNKNOWN;
 		switch(path.get_depth()) {
 			case 1:
@@ -244,10 +246,25 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 					for(int i = 0; i < treemodel.iter_n_children(iter); i++) {
 						dbid = -1;
 						treemodel.iter_nth_child(out iterChild, iter, i);
-						treemodel.get(iterChild, BrowserColumn.DB_ID, ref dbid);
+						treemodel.get(iterChild, 
+						              BrowserColumn.DB_ID, ref dbid,
+						              BrowserColumn.MEDIATYPE, ref mt
+						              );
 						if(dbid==-1) break;
-						string uri;
-						if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+						switch(mt) { //TODO: Is This ok?
+							case MediaType.VIDEO: {
+								if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+								break;
+							}
+							case MediaType.STREAM : {
+								if(dbb.get_stream_for_id(dbid, out uri)) urilist += uri;
+								break;
+							}
+							default:
+								break;
+						}
+//						string uri;
+//						if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 					}
 				}
 				else if(br_ct == BrowserCollectionType.HIERARCHICAL) {
@@ -257,7 +274,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 							dbid = -1;
 							treemodel.iter_nth_child(out iterChildChild, iterChild, j);
 							treemodel.get(iterChildChild, BrowserColumn.DB_ID, ref dbid);
-							string uri;
+//							string uri;
 							if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 						}
 					}
@@ -269,10 +286,28 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				treemodel.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
 				if(br_ct == BrowserCollectionType.LISTED) {
 					dbid = -1;
-					treemodel.get(iter, BrowserColumn.DB_ID, ref dbid);
+					mt = MediaType.UNKNOWN;
+					treemodel.get(iter, 
+					              BrowserColumn.DB_ID, ref dbid,
+					              BrowserColumn.MEDIATYPE, ref mt
+					              );
 					if(dbid==-1) break;
-					string uri;
-					if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+						switch(mt) {
+						case MediaType.VIDEO: {
+							print("is VIDEO\n");
+							if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+							break;
+						}
+						case MediaType.STREAM : {
+							print("is STREAM\n");
+							if(dbb.get_stream_for_id(dbid, out uri)) urilist += uri;
+							break;
+						}
+						default:
+							break;
+					}
+//					string uri;
+//					if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 				}
 				else if(br_ct == BrowserCollectionType.HIERARCHICAL) {
 					
@@ -280,7 +315,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 						dbid = -1;
 						treemodel.iter_nth_child(out iterChild, iter, i);
 						treemodel.get(iterChild, BrowserColumn.DB_ID, ref dbid);
-						string uri;
+//						string uri;
 						if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 					}
 				}
@@ -291,7 +326,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				treemodel.get(iter, BrowserColumn.DB_ID, ref dbid);
 				if(dbid==-1) break;
 				dbb = new DbBrowser();
-				string uri;
+//				string uri;
 				if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 				break;
 		}
@@ -303,16 +338,30 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		print("listed\n");
 		DbBrowser dbb;
 		int dbid = -1;
+		MediaType mt = MediaType.UNKNOWN;
 		TreeIter iter;
 		TrackData[] td_list = {}; 
 		treemodel.get_iter(out iter, path);
-
-		treemodel.get(iter, BrowserColumn.DB_ID, ref dbid);
-		if(dbid==-1) return td_list;
-		
-		dbb = new DbBrowser();
-		TrackData td;
-		if(dbb.get_trackdata_for_id(dbid, out td)) td_list += td;
+		treemodel.get(iter, 
+		              BrowserColumn.DB_ID, ref dbid,
+		              BrowserColumn.MEDIATYPE, ref mt
+		              );
+		if(dbid!=-1) {
+			dbb = new DbBrowser();
+			TrackData td;
+			switch(mt) {
+				case MediaType.VIDEO: {
+					if(dbb.get_trackdata_for_id(dbid, out td)) td_list += td;
+					break;
+				}
+				case MediaType.STREAM : {
+					if(dbb.get_stream_td_for_id(dbid, out td)) td_list += td;
+					break;
+				}
+				default:
+					break;
+			}
+		} 
 
 		return td_list;
 	}
@@ -461,15 +510,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private void create_model() {	// DATA
 		treemodel = new TreeStore(BrowserColumn.N_COLUMNS,
-		                          typeof(Gdk.Pixbuf), 
-		                          typeof(string),
-		                          typeof(int),
-		                          typeof(int),
-		                          typeof(int),
-		                          typeof(int) // DRAW SEPARATOR
+		                          typeof(Gdk.Pixbuf), //ICON
+		                          typeof(string),     //VIS_TEXT
+		                          typeof(int),        //DB_ID
+		                          typeof(int),        //MEDIATYPE
+		                          typeof(int),        //COLL_TYPE
+		                          typeof(int)         // DRAW SEPARATOR
 		                          );
 	}
-	
+
 	private bool populate_model() {
 		put_hierarchical_data_to_model();
 		put_listed_data_to_model(); // put at last, then it is on top
@@ -483,7 +532,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 	
 	private void put_listed_data_to_model() {
-		prepend_separator();
+		prepend_separator(); // TODO: only prepend if data is available
 		put_videos_to_model();
 		prepend_separator();
 		put_streams_to_model();
@@ -556,22 +605,22 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		treemodel.prepend(out iter_radios, null); 
 		treemodel.set(iter_radios,  	
 		              BrowserColumn.ICON, radios_pixb,
-		              BrowserColumn.VIS_TEXT, "Internet Radio",
+		              BrowserColumn.VIS_TEXT, "Streams",
 		              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
 		              BrowserColumn.DRAW_SEPTR, 0,
 		              -1
-		              ); 
-		var tmis = dbb.get_radio_data(ref searchtext);
-		tmis = dbb.get_radio_data(ref searchtext);
+		              );
+		var tmis = dbb.get_stream_data(ref searchtext);
+		tmis = dbb.get_stream_data(ref searchtext);
 		foreach(weak TitleMtypeId tmi in tmis) {
 			treemodel.prepend(out iter_singleradios, iter_radios); 
 			treemodel.set(iter_singleradios,  	
-			              BrowserColumn.ICON, radios_pixb,
-			              BrowserColumn.VIS_TEXT, tmi.name,
-			              BrowserColumn.DB_ID, tmi.id,
-			              BrowserColumn.MEDIATYPE , (int) MediaType.STREAM,
-			              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
-			              BrowserColumn.DRAW_SEPTR, 0,
+			              BrowserColumn.ICON,        radios_pixb,
+			              BrowserColumn.VIS_TEXT,    tmi.name,
+			              BrowserColumn.DB_ID,       tmi.id,
+			              BrowserColumn.MEDIATYPE ,  (int)MediaType.STREAM,
+			              BrowserColumn.COLL_TYPE,   BrowserCollectionType.LISTED,
+			              BrowserColumn.DRAW_SEPTR,  0,
 			              -1
 			              ); 
 		}

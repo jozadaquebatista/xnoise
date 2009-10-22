@@ -243,6 +243,17 @@ typedef struct _XnoiseTitleMtypeId XnoiseTitleMtypeId;
 typedef struct _XnoiseDbWriter XnoiseDbWriter;
 typedef struct _XnoiseDbWriterClass XnoiseDbWriterClass;
 typedef struct _XnoiseDbWriterPrivate XnoiseDbWriterPrivate;
+
+#define XNOISE_TYPE_DB_CREATOR (xnoise_db_creator_get_type ())
+#define XNOISE_DB_CREATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DB_CREATOR, XnoiseDbCreator))
+#define XNOISE_DB_CREATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DB_CREATOR, XnoiseDbCreatorClass))
+#define XNOISE_IS_DB_CREATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DB_CREATOR))
+#define XNOISE_IS_DB_CREATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DB_CREATOR))
+#define XNOISE_DB_CREATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DB_CREATOR, XnoiseDbCreatorClass))
+
+typedef struct _XnoiseDbCreator XnoiseDbCreator;
+typedef struct _XnoiseDbCreatorClass XnoiseDbCreatorClass;
+typedef struct _XnoiseDbCreatorPrivate XnoiseDbCreatorPrivate;
 typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 
 #define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
@@ -519,6 +530,15 @@ struct _XnoiseDbWriterClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseDbCreator {
+	GObject parent_instance;
+	XnoiseDbCreatorPrivate * priv;
+};
+
+struct _XnoiseDbCreatorClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoiseMediaBrowser {
 	GtkTreeView parent_instance;
 	XnoiseMediaBrowserPrivate * priv;
@@ -792,6 +812,8 @@ void xnoise_track_data_free (XnoiseTrackData* self);
 void xnoise_track_data_copy (const XnoiseTrackData* self, XnoiseTrackData* dest);
 void xnoise_track_data_destroy (XnoiseTrackData* self);
 gboolean xnoise_db_browser_get_trackdata_for_id (XnoiseDbBrowser* self, gint id, XnoiseTrackData* val);
+gboolean xnoise_db_browser_get_stream_td_for_id (XnoiseDbBrowser* self, gint id, XnoiseTrackData* val);
+gboolean xnoise_db_browser_get_stream_for_id (XnoiseDbBrowser* self, gint id, char** uri);
 gboolean xnoise_db_browser_get_trackdata_for_uri (XnoiseDbBrowser* self, const char* uri, XnoiseTrackData* val);
 char** xnoise_db_browser_get_music_folders (XnoiseDbBrowser* self, int* result_length1);
 GType xnoise_stream_data_get_type (void);
@@ -799,8 +821,8 @@ XnoiseStreamData* xnoise_stream_data_dup (const XnoiseStreamData* self);
 void xnoise_stream_data_free (XnoiseStreamData* self);
 void xnoise_stream_data_copy (const XnoiseStreamData* self, XnoiseStreamData* dest);
 void xnoise_stream_data_destroy (XnoiseStreamData* self);
-XnoiseStreamData* xnoise_db_browser_get_radio_stations (XnoiseDbBrowser* self, int* result_length1);
-char* xnoise_db_browser_get_single_radio_station_uri (XnoiseDbBrowser* self, const char* name);
+XnoiseStreamData* xnoise_db_browser_get_streams (XnoiseDbBrowser* self, int* result_length1);
+char* xnoise_db_browser_get_single_stream_uri (XnoiseDbBrowser* self, const char* name);
 gint xnoise_db_browser_get_track_id_for_path (XnoiseDbBrowser* self, const char* uri);
 char* xnoise_db_browser_get_uri_for_title (XnoiseDbBrowser* self, const char* artist, const char* album, const char* title);
 gint xnoise_db_browser_get_tracknumber_for_title (XnoiseDbBrowser* self, const char* artist, const char* album, const char* title);
@@ -811,7 +833,7 @@ void xnoise_title_mtype_id_free (XnoiseTitleMtypeId* self);
 void xnoise_title_mtype_id_copy (const XnoiseTitleMtypeId* self, XnoiseTitleMtypeId* dest);
 void xnoise_title_mtype_id_destroy (XnoiseTitleMtypeId* self);
 XnoiseTitleMtypeId* xnoise_db_browser_get_video_data (XnoiseDbBrowser* self, char** searchtext, int* result_length1);
-XnoiseTitleMtypeId* xnoise_db_browser_get_radio_data (XnoiseDbBrowser* self, char** searchtext, int* result_length1);
+XnoiseTitleMtypeId* xnoise_db_browser_get_stream_data (XnoiseDbBrowser* self, char** searchtext, int* result_length1);
 char** xnoise_db_browser_get_videos (XnoiseDbBrowser* self, char** searchtext, int* result_length1);
 char** xnoise_db_browser_get_artists (XnoiseDbBrowser* self, char** searchtext, int* result_length1);
 char** xnoise_db_browser_get_albums (XnoiseDbBrowser* self, const char* artist, char** searchtext, int* result_length1);
@@ -820,11 +842,14 @@ char** xnoise_db_browser_get_titles (XnoiseDbBrowser* self, const char* artist, 
 GType xnoise_db_writer_get_type (void);
 XnoiseDbWriter* xnoise_db_writer_new (void);
 XnoiseDbWriter* xnoise_db_writer_construct (GType object_type);
-void xnoise_db_writer_add_radio_staion (XnoiseDbWriter* self, const char* uri, const char* name);
-void xnoise_db_writer_write_music_folder_into_db (XnoiseDbWriter* self, char** mfolders, int mfolders_length1);
-void xnoise_db_writer_begin_transaction (XnoiseDbWriter* self);
-void xnoise_db_writer_commit_transaction (XnoiseDbWriter* self);
+void xnoise_db_writer_add_stream (XnoiseDbWriter* self, const char* uri, const char* name);
+void xnoise_db_writer_write_media_folder_into_db (XnoiseDbWriter* self, char** mfolders, int mfolders_length1);
 void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, char** final_tracklist, int final_tracklist_length1);
+GType xnoise_db_creator_get_type (void);
+#define XNOISE_DB_CREATOR_DB_VERSION_MAJOR 2
+#define XNOISE_DB_CREATOR_DB_VERSION_MINOR 0
+XnoiseDbCreator* xnoise_db_creator_new (void);
+XnoiseDbCreator* xnoise_db_creator_construct (GType object_type);
 XnoiseMediaBrowser* xnoise_media_browser_new (XnoiseMain** xn);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, XnoiseMain** xn);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self, GtkEntry* sender);
@@ -858,7 +883,7 @@ gboolean xnoise_track_list_not_empty (XnoiseTrackList* self);
 void xnoise_track_list_reset_play_status_all_titles (XnoiseTrackList* self);
 gboolean xnoise_track_list_get_active_path (XnoiseTrackList* self, GtkTreePath** path, XnoiseTrackState* currentstate, gboolean* is_first);
 void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, GtkTreePath* path);
-char* xnoise_track_list_get_uri_for_path (XnoiseTrackList* self, GtkTreePath* path);
+char* xnoise_track_list_get_uri_for_treepath (XnoiseTrackList* self, GtkTreePath* path);
 extern XnoiseParams* xnoise_par;
 void xnoise_initialize (void);
 char* xnoise_remove_linebreaks (const char* value);

@@ -281,6 +281,7 @@ public class Xnoise.TrackList : TreeView {
 			bool is_first = true;
 			for(int i=0; i<uris.length;i++) {
 				filename = uris[i]; 
+				//TODO: HANDLE STREAMS AND PLAYLISTS
 				try {
 					file = File.new_for_uri(filename);
 					FileInfo info = file.query_info(
@@ -431,7 +432,7 @@ public class Xnoise.TrackList : TreeView {
 			else {
 				if(!(psVideo.match_string(mime))) {
 					var tr = new TagReader(); // TODO: Check dataimport for video
-					var tags = tr.read_tag_from_file(file.get_path());
+					var tags = tr.read_tag(file.get_path());
 					artist         = Markup.printf_escaped("%s", tags.Artist); 
 					album          = Markup.printf_escaped("%s", tags.Album); 
 					title          = Markup.printf_escaped("%s", tags.Title); 
@@ -517,7 +518,7 @@ public class Xnoise.TrackList : TreeView {
 						continue;
 					}
 					if(filetype==GLib.FileType.REGULAR) {
-						t = tr.read_tag_from_file(file.get_path()); 
+						t = tr.read_tag(file.get_path()); 
 					}
 					else {
 						is_stream = true;
@@ -875,7 +876,14 @@ public class Xnoise.TrackList : TreeView {
 		return false;
 	}
 	
-	public void on_activated(string uri, TreePath path){
+	public void on_activated(string uri, TreePath path) {
+		//check for existance on local files
+		File track = File.new_for_uri(uri);
+		
+		if(track.get_uri_scheme()=="file") {
+			if(!track.query_exists(null)) return;
+		}
+		
 		TreeIter iter;
 		this.listmodel.get_iter(out iter, path);
 		this.reset_play_status_all_titles();
@@ -889,7 +897,7 @@ public class Xnoise.TrackList : TreeView {
 		if(!this.get_active_path(out path, out currentstate, out is_first))
 			return;
 		
-		string uri = this.get_uri_for_path(path);
+		string uri = this.get_uri_for_treepath(path);
 
 		if((uri!=null)&&(uri!="")) {
 			xn.gPl.Uri = uri;
@@ -900,7 +908,7 @@ public class Xnoise.TrackList : TreeView {
 		}
 	}
 	
-	public string get_uri_for_path(TreePath path) {
+	public string get_uri_for_treepath(TreePath path) {
 		TreeIter iter;
 		string uri = "";
 		if(listmodel.get_iter(out iter, path)) {

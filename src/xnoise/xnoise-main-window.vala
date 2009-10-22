@@ -437,7 +437,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		trackList.listmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
 	}
 
-	// This functionchanges the current song to the next or previous in the 
+	// This function changes the current song to the next or previous in the 
 	// tracklist handle_repeat_state should be true when the calling is not 
 	// coming from a button, but for example from a EOS signal handler 
 	public void change_song(Direction direction, bool handle_repeat_state = false) {
@@ -928,7 +928,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					weak TreeSelection ts = xn.main_window.trackList.get_selection();
 					GLib.List<TreePath> pathlist = ts.get_selected_rows(null);
 					if(pathlist.nth_data(0)!=null) {
-						string uri = xn.main_window.trackList.get_uri_for_path(pathlist.nth_data(0));
+						string uri = xn.main_window.trackList.get_uri_for_treepath(pathlist.nth_data(0));
 						xn.main_window.trackList.on_activated(uri, pathlist.nth_data(0));
 					}
 					else {

@@ -76,17 +76,9 @@ public class Xnoise.Main : GLib.Object {
 		Posix.signal(Posix.SIGKILL, on_posix_finish); // write data to db on posix kill signal
 	}
 	
-	private string dbFileName() {
-		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".xnoise", "db.sqlite", null);
-	}
-	
 	private void check_database_and_tables() {
-		if(!GLib.FileUtils.test(dbFileName(), FileTest.EXISTS)) {
-			stderr.printf("db file is not yet existing....\n");
-			DbWriter dbw = new DbWriter(); //creating db instance and destroying it will create a db file and tables
-			stderr.printf("Creating new database file...");
-			dbw = null;
-		}
+		DbCreator dbc = new DbCreator(); //creating db instance and destroying it will create a db file and tables
+		dbc = null;
 	}
 
 	public void add_track_to_gst_player(string uri) { //TODO: maybe return bool and check for fail
