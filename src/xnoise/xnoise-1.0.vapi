@@ -329,6 +329,7 @@ namespace Xnoise {
 		public abstract void* fetch ();
 		public abstract string get_identifier ();
 		public abstract string get_text ();
+		public signal void sign_lyrics_done (Xnoise.Lyrics instance);
 		public signal void sign_lyrics_fetched (string text);
 	}
 	[CCode (type_id = "XNOISE_TYPE_STREAM_DATA", cheader_filename = "xnoise.h")]

@@ -61,7 +61,7 @@ using Xml;
 
 
 public class Xnoise.Leoslyrics : GLib.Object, Lyrics {
-	private SessionSync session;
+	private static SessionSync session;
 	private Message hid_msg;
 	
 	private string artist;
@@ -84,8 +84,8 @@ public class Xnoise.Leoslyrics : GLib.Object, Lyrics {
 	public Leoslyrics (string artist, string title) {
 		if (_is_initialized == false) {
 			message("initting");
-			//session = new SessionAsync ();
-			Xml.Parser.init();
+			session = new SessionSync ();
+			
 			
 			_is_initialized = true;
 		}
@@ -99,9 +99,15 @@ public class Xnoise.Leoslyrics : GLib.Object, Lyrics {
 		var gethid_str = new StringBuilder();
 		gethid_str.printf(check_url, auth, Soup.URI.encode(artist, null), Soup.URI.encode(title, null));
 		
-		session = new SessionSync();
 		print("%s\n\n", gethid_str.str);
 		hid_msg = new Message("GET", gethid_str.str);
+	}
+	
+	
+	~LeosLyrics() {
+		message("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxLeoslyrics destroyed:");
+		message(artist);
+		message(title);
 	}
 	
 	
@@ -205,6 +211,7 @@ public class Xnoise.Leoslyrics : GLib.Object, Lyrics {
 		
 		bool retval = fetch_text();
 		sign_lyrics_fetched(text);
+		sign_lyrics_done(this);
 		return null;
 	}
 	

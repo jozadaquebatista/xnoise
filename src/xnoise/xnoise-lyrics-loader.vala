@@ -48,6 +48,7 @@ public interface Xnoise.Lyrics : GLib.Object {
 
 	//public abstract Lyrics from_tags(string artist, string title);
 	public signal void sign_lyrics_fetched(string text);
+	public signal void sign_lyrics_done(Lyrics instance);
 }
 
 
@@ -75,6 +76,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		//TODO: only for local files, so streams will not lead to a crash
 		TrackData t = tr.read_tag_from_file(file.get_path());
 		if(cur_loader != null) cur_loader.sign_fetched -= on_lyrics_ready;
+
 		cur_loader = new LyricsLoader(t.Artist, t.Title);
 		cur_loader.sign_fetched += on_lyrics_ready;
 		cur_loader.fetch();
@@ -122,15 +124,29 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	
 	public LyricsLoader(string artist, string title) {
 		register_backends();
+		Xml.Parser.init();
 		this.artist = artist;
 		this.title = title;
 		backend_iter = 0;	
 	}
+	
+	
+	~LyricsLoader() {
+		message("++++++++++++++++++++++++++++LyricsLoader destroyed:");
+		message(artist);
+		message(title);
+	}
 
+
+	private static void on_done(Lyrics instance) {
+		instance.unref();
+	}
+	
 	
 	private void on_fetched(string text) {
 		message(text);
 		sign_fetched(text);
+		this.lyrics = null;
 	}
 
 	
@@ -150,7 +166,9 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		
 	public bool fetch() {
 		this.lyrics = this.backend/*s[this.backend_iter]*/(artist, title);
+		this.lyrics.ref();
 		this.lyrics.sign_lyrics_fetched += this.on_fetched;
+		this.lyrics.sign_lyrics_done +=on_done;
 		this.fetcher_thread = Thread.create (lyrics.fetch, true);
 		//fetcher_thread.join();
 		//lyrics.fetch();
@@ -159,17 +177,5 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		return true; 
 	}
 
-
-	/*[Compact]
-	public class LyricsCreatorDelg {
-    	public static delegate Lyrics CreatorDelg(string artist, string title);
-    	public CreatorDelg delg;
-		public LyricsCreatorDelg (CreatorDelg fn) {
-			this.delg = fn;
-		}
-		public Lyrics launch(string artist, string title) {
-			return delg(artist, title);
-		}
-	}*/	
 }
 	
