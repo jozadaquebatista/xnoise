@@ -824,8 +824,6 @@ void xnoise_stream_data_destroy (XnoiseStreamData* self);
 XnoiseStreamData* xnoise_db_browser_get_streams (XnoiseDbBrowser* self, int* result_length1);
 char* xnoise_db_browser_get_single_stream_uri (XnoiseDbBrowser* self, const char* name);
 gint xnoise_db_browser_get_track_id_for_path (XnoiseDbBrowser* self, const char* uri);
-char* xnoise_db_browser_get_uri_for_title (XnoiseDbBrowser* self, const char* artist, const char* album, const char* title);
-gint xnoise_db_browser_get_tracknumber_for_title (XnoiseDbBrowser* self, const char* artist, const char* album, const char* title);
 char** xnoise_db_browser_get_lastused_uris (XnoiseDbBrowser* self, int* result_length1);
 GType xnoise_title_mtype_id_get_type (void);
 XnoiseTitleMtypeId* xnoise_title_mtype_id_dup (const XnoiseTitleMtypeId* self);

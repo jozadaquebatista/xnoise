@@ -698,7 +698,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			
 		this.enable_tree_lines = use_treelines;
 		this.headers_visible = false;
-		this.enable_search = false;
+		this.enable_search = true;
 		this.set_row_separator_func((m, iter) => {
 			int sepatator = 0;
 			m.get(iter, BrowserColumn.DRAW_SEPTR, ref sepatator);

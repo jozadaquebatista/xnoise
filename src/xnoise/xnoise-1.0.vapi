@@ -54,9 +54,7 @@ namespace Xnoise {
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_uri (string uri, out Xnoise.TrackData val);
-		public int get_tracknumber_for_title (string artist, string album, string title);
 		public bool get_uri_for_id (int id, out string val);
-		public string get_uri_for_title (string artist, string album, string title);
 		public Xnoise.TitleMtypeId[] get_video_data (ref string searchtext);
 		public string[] get_videos (ref string searchtext);
 		public bool uri_is_in_db (string uri);
