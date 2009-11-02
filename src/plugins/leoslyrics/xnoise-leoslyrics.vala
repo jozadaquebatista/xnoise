@@ -28,15 +28,14 @@
  * 	softshaker
  */
  
-using Xnoise;
+//using Xnoise;
 using Gtk;
 using Soup;
 using Xml;
 
 // Plugin for leoslyrics.com PHP API
 
-// Plugin interfacing code for the future
-public class LeoslyricsPlugin : GLib.Object, IPlugin {
+public class LeoslyricsPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.ILyricsProvider {
 	public Xnoise.Main xn { get; set; }
 	public string name { 
 		get {
@@ -46,7 +45,7 @@ public class LeoslyricsPlugin : GLib.Object, IPlugin {
 
     
 	public bool init() {
-		LyricsLoader.register_backend(this.name, Leoslyrics.from_tags);
+		//LyricsLoader.register_backend(this.name, this.from_tags);
 		return true;
 	}
 
@@ -58,19 +57,24 @@ public class LeoslyricsPlugin : GLib.Object, IPlugin {
 
 	public bool has_settings_widget() {
 		return false;
+	}
+	
+	public Xnoise.Lyrics from_tags(string artist, string title) {
+		return new Leoslyrics(artist, title);
 	} 
 }
 
 
 
-public class Leoslyrics : GLib.Object, Lyrics {
-	private SessionSync session;
+public class Leoslyrics : GLib.Object, Xnoise.Lyrics {
+	private static SessionSync session;
 	private Message hid_msg;
 	
 	private string artist;
 	private string title;
 		
-	private static const string my_identifier= "Leoslyrics";
+	private static const string my_identifier = "Leoslyrics";
+	private static const string my_credits = "These Lyrics are provided by http://www.leoslyrics.com";
 	private static const string auth = "xnoise";
 	private static const string check_url = "http://api.leoslyrics.com/api_search.php?auth=%s&artist=%s&songtitle=%s";
 	private static const string text_url = "http://api.leoslyrics.com/api_lyrics.php?auth=%s&hid=%s";
@@ -87,7 +91,7 @@ public class Leoslyrics : GLib.Object, Lyrics {
 	public Leoslyrics (string artist, string title) {
 		if (_is_initialized == false) {
 			message("initting");
-			//session = new SessionAsync ();
+			session = new SessionSync ();
 			Xml.Parser.init();
 			
 			_is_initialized = true;
@@ -102,16 +106,13 @@ public class Leoslyrics : GLib.Object, Lyrics {
 		var gethid_str = new StringBuilder();
 		gethid_str.printf(check_url, auth, Soup.URI.encode(artist, null), Soup.URI.encode(title, null));
 		
-		session = new SessionSync();
 		print("%s\n\n", gethid_str.str);
 		hid_msg = new Message("GET", gethid_str.str);
 	}
+		
 	
-	
-	public static Xnoise.Lyrics from_tags(string artist, string title) {
-		return new Leoslyrics(artist, title);
-	}
-	
+	public string get_identifier() {return my_identifier;}
+	public string get_credits() {return my_credits;}
 	
 	public bool fetch_hid () {
 		uint status;
@@ -208,17 +209,13 @@ public class Leoslyrics : GLib.Object, Lyrics {
 		
 		bool retval = fetch_text();
 		sign_lyrics_fetched(text);
+		sign_lyrics_done(this);
 		return null;
 	}
 	
 	
 	public string get_text() {
 		return text;
-	}
-	
-	
-	public string get_identifier() {
-		return my_identifier;
 	}
 }
 

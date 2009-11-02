@@ -315,6 +315,14 @@ typedef struct _XnoisePlugin XnoisePlugin;
 typedef struct _XnoisePluginClass XnoisePluginClass;
 typedef struct _XnoisePluginPrivate XnoisePluginPrivate;
 
+#define XNOISE_TYPE_IPLUGIN (xnoise_iplugin_get_type ())
+#define XNOISE_IPLUGIN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPLUGIN, XnoiseIPlugin))
+#define XNOISE_IS_IPLUGIN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPLUGIN))
+#define XNOISE_IPLUGIN_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPLUGIN, XnoiseIPluginIface))
+
+typedef struct _XnoiseIPlugin XnoiseIPlugin;
+typedef struct _XnoiseIPluginIface XnoiseIPluginIface;
+
 #define XNOISE_TYPE_PLUGIN_INFORMATION (xnoise_plugin_information_get_type ())
 #define XNOISE_PLUGIN_INFORMATION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLUGIN_INFORMATION, XnoisePluginInformation))
 #define XNOISE_PLUGIN_INFORMATION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLUGIN_INFORMATION, XnoisePluginInformationClass))
@@ -326,14 +334,6 @@ typedef struct _XnoisePluginInformation XnoisePluginInformation;
 typedef struct _XnoisePluginInformationClass XnoisePluginInformationClass;
 typedef struct _XnoisePluginLoaderPrivate XnoisePluginLoaderPrivate;
 typedef struct _XnoisePluginInformationPrivate XnoisePluginInformationPrivate;
-
-#define XNOISE_TYPE_IPLUGIN (xnoise_iplugin_get_type ())
-#define XNOISE_IPLUGIN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPLUGIN, XnoiseIPlugin))
-#define XNOISE_IS_IPLUGIN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPLUGIN))
-#define XNOISE_IPLUGIN_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPLUGIN, XnoiseIPluginIface))
-
-typedef struct _XnoiseIPlugin XnoiseIPlugin;
-typedef struct _XnoiseIPluginIface XnoiseIPluginIface;
 
 #define XNOISE_TYPE_PLUGIN_MANAGER_TREE (xnoise_plugin_manager_tree_get_type ())
 #define XNOISE_PLUGIN_MANAGER_TREE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLUGIN_MANAGER_TREE, XnoisePluginManagerTree))
@@ -354,6 +354,14 @@ typedef struct _XnoiseAlbumImagePrivate XnoiseAlbumImagePrivate;
 
 typedef struct _XnoiseLyrics XnoiseLyrics;
 typedef struct _XnoiseLyricsIface XnoiseLyricsIface;
+
+#define XNOISE_TYPE_ILYRICS_PROVIDER (xnoise_ilyrics_provider_get_type ())
+#define XNOISE_ILYRICS_PROVIDER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ILYRICS_PROVIDER, XnoiseILyricsProvider))
+#define XNOISE_IS_ILYRICS_PROVIDER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ILYRICS_PROVIDER))
+#define XNOISE_ILYRICS_PROVIDER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_ILYRICS_PROVIDER, XnoiseILyricsProviderIface))
+
+typedef struct _XnoiseILyricsProvider XnoiseILyricsProvider;
+typedef struct _XnoiseILyricsProviderIface XnoiseILyricsProviderIface;
 typedef struct _XnoiseLyricsViewPrivate XnoiseLyricsViewPrivate;
 
 #define XNOISE_TYPE_LYRICS_LOADER (xnoise_lyrics_loader_get_type ())
@@ -366,17 +374,6 @@ typedef struct _XnoiseLyricsViewPrivate XnoiseLyricsViewPrivate;
 typedef struct _XnoiseLyricsLoader XnoiseLyricsLoader;
 typedef struct _XnoiseLyricsLoaderClass XnoiseLyricsLoaderClass;
 typedef struct _XnoiseLyricsLoaderPrivate XnoiseLyricsLoaderPrivate;
-
-#define XNOISE_TYPE_LEOSLYRICS (xnoise_leoslyrics_get_type ())
-#define XNOISE_LEOSLYRICS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LEOSLYRICS, XnoiseLeoslyrics))
-#define XNOISE_LEOSLYRICS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_LEOSLYRICS, XnoiseLeoslyricsClass))
-#define XNOISE_IS_LEOSLYRICS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_LEOSLYRICS))
-#define XNOISE_IS_LEOSLYRICS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_LEOSLYRICS))
-#define XNOISE_LEOSLYRICS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_LEOSLYRICS, XnoiseLeoslyricsClass))
-
-typedef struct _XnoiseLeoslyrics XnoiseLeoslyrics;
-typedef struct _XnoiseLeoslyricsClass XnoiseLeoslyricsClass;
-typedef struct _XnoiseLeoslyricsPrivate XnoiseLeoslyricsPrivate;
 
 struct _XnoiseAppStarter {
 	GObject parent_instance;
@@ -683,9 +680,20 @@ struct _XnoiseSettingsDialogClass {
 	GtkBuilderClass parent_class;
 };
 
+struct _XnoiseIPluginIface {
+	GTypeInterface parent_iface;
+	gboolean (*init) (XnoiseIPlugin* self);
+	gboolean (*has_settings_widget) (XnoiseIPlugin* self);
+	GtkWidget* (*get_settings_widget) (XnoiseIPlugin* self);
+	const char* (*get_name) (XnoiseIPlugin* self);
+	XnoiseMain* (*get_xn) (XnoiseIPlugin* self);
+	void (*set_xn) (XnoiseIPlugin* self, XnoiseMain* value);
+};
+
 struct _XnoisePlugin {
 	GObject parent_instance;
 	XnoisePluginPrivate * priv;
+	XnoiseIPlugin* loaded_plugin;
 };
 
 struct _XnoisePluginClass {
@@ -709,16 +717,6 @@ struct _XnoisePluginInformation {
 
 struct _XnoisePluginInformationClass {
 	GObjectClass parent_class;
-};
-
-struct _XnoiseIPluginIface {
-	GTypeInterface parent_iface;
-	gboolean (*init) (XnoiseIPlugin* self);
-	gboolean (*has_settings_widget) (XnoiseIPlugin* self);
-	GtkWidget* (*get_settings_widget) (XnoiseIPlugin* self);
-	const char* (*get_name) (XnoiseIPlugin* self);
-	XnoiseMain* (*get_xn) (XnoiseIPlugin* self);
-	void (*set_xn) (XnoiseIPlugin* self, XnoiseMain* value);
 };
 
 struct _XnoisePluginManagerTree {
@@ -746,6 +744,12 @@ struct _XnoiseLyricsIface {
 	void* (*fetch) (XnoiseLyrics* self);
 	char* (*get_text) (XnoiseLyrics* self);
 	char* (*get_identifier) (XnoiseLyrics* self);
+	char* (*get_credits) (XnoiseLyrics* self);
+};
+
+struct _XnoiseILyricsProviderIface {
+	GTypeInterface parent_iface;
+	XnoiseLyrics* (*from_tags) (XnoiseILyricsProvider* self, const char* artist, const char* title);
 };
 
 struct _XnoiseLyricsView {
@@ -770,15 +774,6 @@ struct _XnoiseLyricsLoaderClass {
 };
 
 typedef XnoiseLyrics* (*XnoiseLyricsLoaderLyricsCreatorDelg) (const char* artist, const char* title, void* user_data);
-struct _XnoiseLeoslyrics {
-	GObject parent_instance;
-	XnoiseLeoslyricsPrivate * priv;
-};
-
-struct _XnoiseLeoslyricsClass {
-	GObjectClass parent_class;
-};
-
 
 GType xnoise_app_starter_get_type (void);
 GType xnoise_main_get_type (void);
@@ -981,6 +976,7 @@ GType xnoise_settings_dialog_get_type (void);
 XnoiseSettingsDialog* xnoise_settings_dialog_new (XnoiseMain** xn);
 XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type, XnoiseMain** xn);
 GType xnoise_plugin_get_type (void);
+GType xnoise_iplugin_get_type (void);
 GType xnoise_plugin_information_get_type (void);
 XnoisePlugin* xnoise_plugin_new (XnoisePluginInformation* info);
 XnoisePlugin* xnoise_plugin_construct (GType object_type, XnoisePluginInformation* info);
@@ -1008,7 +1004,6 @@ const char* xnoise_plugin_information_get_website (XnoisePluginInformation* self
 const char* xnoise_plugin_information_get_license (XnoisePluginInformation* self);
 const char* xnoise_plugin_information_get_copyright (XnoisePluginInformation* self);
 const char* xnoise_plugin_information_get_author (XnoisePluginInformation* self);
-GType xnoise_iplugin_get_type (void);
 gboolean xnoise_iplugin_init (XnoiseIPlugin* self);
 gboolean xnoise_iplugin_has_settings_widget (XnoiseIPlugin* self);
 GtkWidget* xnoise_iplugin_get_settings_widget (XnoiseIPlugin* self);
@@ -1028,21 +1023,17 @@ GType xnoise_lyrics_get_type (void);
 void* xnoise_lyrics_fetch (XnoiseLyrics* self);
 char* xnoise_lyrics_get_text (XnoiseLyrics* self);
 char* xnoise_lyrics_get_identifier (XnoiseLyrics* self);
+char* xnoise_lyrics_get_credits (XnoiseLyrics* self);
+GType xnoise_ilyrics_provider_get_type (void);
+XnoiseLyrics* xnoise_ilyrics_provider_from_tags (XnoiseILyricsProvider* self, const char* artist, const char* title);
 XnoiseLyricsView* xnoise_lyrics_view_new (void);
 XnoiseLyricsView* xnoise_lyrics_view_construct (GType object_type);
 GType xnoise_lyrics_loader_get_type (void);
-gboolean xnoise_lyrics_loader_register_backend (const char* name, XnoiseLyricsLoaderLyricsCreatorDelg delg, void* delg_target);
+void xnoise_lyrics_loader_init (void);
 XnoiseLyricsLoader* xnoise_lyrics_loader_new (const char* artist, const char* title);
 XnoiseLyricsLoader* xnoise_lyrics_loader_construct (GType object_type, const char* artist, const char* title);
 char* xnoise_lyrics_loader_get_text (XnoiseLyricsLoader* self);
 gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self);
-GType xnoise_leoslyrics_get_type (void);
-XnoiseLeoslyrics* xnoise_leoslyrics_new (const char* artist, const char* title);
-XnoiseLeoslyrics* xnoise_leoslyrics_construct (GType object_type, const char* artist, const char* title);
-XnoiseLyrics* xnoise_leoslyrics_from_tags (const char* artist, const char* title);
-gboolean xnoise_leoslyrics_fetch_hid (XnoiseLeoslyrics* self);
-gboolean xnoise_leoslyrics_fetch_text (XnoiseLeoslyrics* self);
-gboolean* xnoise_leoslyrics_available (XnoiseLeoslyrics* self);
 
 
 G_END_DECLS

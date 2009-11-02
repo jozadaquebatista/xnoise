@@ -6,7 +6,6 @@ AM_CPPFLAGS = \
 	-DPLUGINSDIR=\"$(libdir)/xnoise\" \
 	-DLICENSEDIR=\"$(datadir)/xnoise/license/\" \
 	-include $(CONFIG_HEADER) \
-	-I/usr/include/libsoup-2.4 \
 	$(XNOISE_CFLAGS) \
 	$(NULL)
 
@@ -27,8 +26,6 @@ VALA_CFLAGS = \
 	--pkg taglib_c \
 	--pkg unique-1.0 \
 	--pkg gmodule-2.0 \
-	--pkg libxml-2.0 \
-	--pkg libsoup-2.4 \
 	-H $(srcdir)/xnoise.h \
 	--basedir $(top_srcdir)/src
 
@@ -59,7 +56,6 @@ xnoise_VALASOURCES = \
 	xnoise-plugin-manager-tree.vala \
 	xnoise-album-image.vala \
 	xnoise-lyrics-loader.vala \
-	xnoise-leoslyrics.vala
 	$(NULL)
 
 xnoise_SOURCES = \

@@ -68,6 +68,7 @@ public class Xnoise.Leoslyrics : GLib.Object, Lyrics {
 	private string title;
 		
 	private static const string my_identifier= "Leoslyrics";
+	private static const string my_credits = "These Lyrics are provided by http://www.leoslyrics.com";
 	private static const string auth = "xnoise";
 	private static const string check_url = "http://api.leoslyrics.com/api_search.php?auth=%s&artist=%s&songtitle=%s";
 	private static const string text_url = "http://api.leoslyrics.com/api_lyrics.php?auth=%s&hid=%s";
@@ -109,6 +110,10 @@ public class Xnoise.Leoslyrics : GLib.Object, Lyrics {
 		message(artist);
 		message(title);
 	}
+	
+	
+	public string get_identifier() {return my_identifier;}
+	public string get_credits() {return my_credits;}
 	
 	
 	public static Xnoise.Lyrics from_tags(string artist, string title) {
@@ -218,11 +223,6 @@ public class Xnoise.Leoslyrics : GLib.Object, Lyrics {
 	
 	public string get_text() {
 		return text;
-	}
-	
-	
-	public string get_identifier() {
-		return my_identifier;
 	}
 }
 

@@ -31,13 +31,16 @@
 public class Xnoise.Plugin : GLib.Object {
 	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT FROM MODULE
 	private Module module;
-	private IPlugin loaded_plugin;
+	public IPlugin loaded_plugin;
 	private Type type;
 	private PluginInformation info;
 	public bool loaded { get; private set; }	
 	public bool activated { get; set; }
 	public bool configurable { get; private set; }
-    private Main xn;
+	private Main xn;
+	
+	public signal void sign_activated();
+	public signal void sign_deactivated();
 	
 	private delegate Type InitModuleFunction();
   	
@@ -91,10 +94,12 @@ public class Xnoise.Plugin : GLib.Object {
 			activated = false;
 		}
 		this.configurable = this.loaded_plugin.has_settings_widget();
+		sign_activated();
 	}
 
 	private void deactivate() {
 		loaded_plugin = null;
+		sign_deactivated();
 	}
 	
 	public Gtk.Widget? settingwidget() {

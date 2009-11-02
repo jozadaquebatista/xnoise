@@ -96,14 +96,6 @@ namespace Xnoise {
 		public signal void sign_volume_changed (double volume);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class Leoslyrics : GLib.Object, Xnoise.Lyrics {
-		public Leoslyrics (string artist, string title);
-		public bool? available ();
-		public bool fetch_hid ();
-		public bool fetch_text ();
-		public static Xnoise.Lyrics from_tags (string artist, string title);
-	}
-	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsLoader : GLib.Object {
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate Xnoise.Lyrics LyricsCreatorDelg (string artist, string title);
@@ -113,8 +105,8 @@ namespace Xnoise {
 		public LyricsLoader (string artist, string title);
 		public bool fetch ();
 		public string get_text ();
-		public static bool register_backend (string name, Xnoise.LyricsLoader.LyricsCreatorDelg delg);
-		public signal void sign_fetched (string content);
+		public static void init ();
+		public signal void sign_fetched (string provider, string content);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsView : Gtk.TextView {
@@ -233,12 +225,15 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Plugin : GLib.Object {
+		public Xnoise.IPlugin loaded_plugin;
 		public Plugin (Xnoise.PluginInformation info);
 		public bool load (ref unowned Xnoise.Main xn);
 		public Gtk.Widget? settingwidget ();
 		public bool activated { get; set; }
 		public bool configurable { get; set; }
 		public bool loaded { get; set; }
+		public signal void sign_activated ();
+		public signal void sign_deactivated ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginInformation : GLib.Object {
@@ -262,6 +257,8 @@ namespace Xnoise {
 		public void deactivate_single_plugin (string name);
 		public unowned GLib.List<string> get_info_files ();
 		public bool load_all ();
+		public signal void sign_plugin_activated (Xnoise.Plugin p);
+		public signal void sign_plugin_deactivated (Xnoise.Plugin p);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginManagerTree : Gtk.TreeView {
@@ -312,6 +309,10 @@ namespace Xnoise {
 		public override bool expose_event (Gdk.EventExpose e);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public interface ILyricsProvider : GLib.Object {
+		public abstract Xnoise.Lyrics from_tags (string artist, string title);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public interface IParams : GLib.Object {
 		public abstract void read_params_data ();
 		public abstract void write_params_data ();
@@ -327,6 +328,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface Lyrics : GLib.Object {
 		public abstract void* fetch ();
+		public abstract string get_credits ();
 		public abstract string get_identifier ();
 		public abstract string get_text ();
 		public signal void sign_lyrics_done (Xnoise.Lyrics instance);

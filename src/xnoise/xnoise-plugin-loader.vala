@@ -1,6 +1,6 @@
 /* xnoise-plugin-loader.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009  softshaker
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,14 +25,17 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ * 	softshaker <softshaker   gmail.com>
  */
  
 public class Xnoise.PluginLoader : Object {
-    public HashTable<string,Plugin> plugin_htable;
+	public HashTable<string,Plugin> plugin_htable;
 	private Main xn;
 	private PluginInformation info;
 	private GLib.List<string> info_files;
+	
+	public signal void sign_plugin_activated(Plugin p);
+	public signal void sign_plugin_deactivated(Plugin p);
 	
 	public PluginLoader(ref weak Main xn) {
 		assert (Module.supported());
@@ -96,10 +99,18 @@ public class Xnoise.PluginLoader : Object {
 	}
 
 	public bool activate_single_plugin(string name) {
-		return this.plugin_htable.lookup(name).activated=true;//ref xn);
+	message("ENTERED!!!!!!!!!");
+		Plugin p = this.plugin_htable.lookup(name);
+		if(p == null) return false;
+		p.activated=true;//ref xn);
+		sign_plugin_activated(p);
+		return true;
 	}	
 
 	public void deactivate_single_plugin(string name) {
-		this.plugin_htable.lookup(name).activated=false;
+		Plugin p = this.plugin_htable.lookup(name);
+		if(p == null) return;
+		p.activated=false;
+		sign_plugin_deactivated(p);
 	}
 }
