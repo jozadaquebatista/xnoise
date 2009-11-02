@@ -99,7 +99,6 @@ public class Xnoise.PluginLoader : Object {
 	}
 
 	public bool activate_single_plugin(string name) {
-	message("ENTERED!!!!!!!!!");
 		Plugin p = this.plugin_htable.lookup(name);
 		if(p == null) return false;
 		p.activated=true;//ref xn);

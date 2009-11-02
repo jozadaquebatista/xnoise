@@ -69,9 +69,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 		this.dialog.destroy();
 		sign_finish();
 	}
-
-	private void on_accept_button_clicked() {
-	}
 	
 	private void on_cancel_button_clicked() {
 		this.dialog.destroy();
@@ -131,10 +128,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder, IParams {
 			var okButton             = this.get_object("buttonOK") as Gtk.Button;
 			okButton.can_focus       = false;
 			okButton.clicked         += this.on_ok_button_clicked;
-
-			var acceptButton         = this.get_object("button2") as Gtk.Button;
-			acceptButton.can_focus   = false;
-			acceptButton.clicked     += this.on_accept_button_clicked;
 						
 			var cancelButton         = this.get_object("button1") as Gtk.Button;
 			cancelButton.can_focus   = false;

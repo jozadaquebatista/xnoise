@@ -104,15 +104,12 @@ public class Xnoise.LyricsView : Gtk.TextView {
 public class Xnoise.LyricsLoader : GLib.Object {
 	public Lyrics lyrics;
 	
-	private static LyricsCreatorDelg backend;
 	private static ILyricsProvider provider;
 	private static Main xn;
 	public string artist;
 	public string title;
 	
 	public delegate Lyrics LyricsCreatorDelg(string artist, string title);
-	private static LyricsCreatorDelg default_backend;
-	private LyricsCreatorDelg backend_choice;
 	public signal void sign_fetched(string provider, string content);
 	private uint backend_iter;
 	weak Thread fetcher_thread;
@@ -169,7 +166,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	}
 
 	
-	private bool on_timeout() {
+	/*private bool on_timeout() {
 		//drop lrics
 		this.lyrics.sign_lyrics_fetched -= this.on_fetched;
 		
@@ -177,7 +174,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		
 		message("dropped");
 		return false;
-	}
+	}*/
 	
 		
 	public bool fetch() {
