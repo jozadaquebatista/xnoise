@@ -211,6 +211,17 @@ typedef struct _XnoiseParams XnoiseParams;
 typedef struct _XnoiseParamsClass XnoiseParamsClass;
 typedef struct _XnoiseParamsPrivate XnoiseParamsPrivate;
 
+#define XNOISE_TYPE_DB_CREATOR (xnoise_db_creator_get_type ())
+#define XNOISE_DB_CREATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DB_CREATOR, XnoiseDbCreator))
+#define XNOISE_DB_CREATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DB_CREATOR, XnoiseDbCreatorClass))
+#define XNOISE_IS_DB_CREATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DB_CREATOR))
+#define XNOISE_IS_DB_CREATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DB_CREATOR))
+#define XNOISE_DB_CREATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DB_CREATOR, XnoiseDbCreatorClass))
+
+typedef struct _XnoiseDbCreator XnoiseDbCreator;
+typedef struct _XnoiseDbCreatorClass XnoiseDbCreatorClass;
+typedef struct _XnoiseDbCreatorPrivate XnoiseDbCreatorPrivate;
+
 #define XNOISE_TYPE_DB_BROWSER (xnoise_db_browser_get_type ())
 #define XNOISE_DB_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DB_BROWSER, XnoiseDbBrowser))
 #define XNOISE_DB_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DB_BROWSER, XnoiseDbBrowserClass))
@@ -243,17 +254,6 @@ typedef struct _XnoiseTitleMtypeId XnoiseTitleMtypeId;
 typedef struct _XnoiseDbWriter XnoiseDbWriter;
 typedef struct _XnoiseDbWriterClass XnoiseDbWriterClass;
 typedef struct _XnoiseDbWriterPrivate XnoiseDbWriterPrivate;
-
-#define XNOISE_TYPE_DB_CREATOR (xnoise_db_creator_get_type ())
-#define XNOISE_DB_CREATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DB_CREATOR, XnoiseDbCreator))
-#define XNOISE_DB_CREATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DB_CREATOR, XnoiseDbCreatorClass))
-#define XNOISE_IS_DB_CREATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DB_CREATOR))
-#define XNOISE_IS_DB_CREATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DB_CREATOR))
-#define XNOISE_DB_CREATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DB_CREATOR, XnoiseDbCreatorClass))
-
-typedef struct _XnoiseDbCreator XnoiseDbCreator;
-typedef struct _XnoiseDbCreatorClass XnoiseDbCreatorClass;
-typedef struct _XnoiseDbCreatorPrivate XnoiseDbCreatorPrivate;
 typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 
 #define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
@@ -483,6 +483,15 @@ struct _XnoiseParamsClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseDbCreator {
+	GObject parent_instance;
+	XnoiseDbCreatorPrivate * priv;
+};
+
+struct _XnoiseDbCreatorClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoiseDbBrowser {
 	GObject parent_instance;
 	XnoiseDbBrowserPrivate * priv;
@@ -527,15 +536,6 @@ struct _XnoiseDbWriter {
 };
 
 struct _XnoiseDbWriterClass {
-	GObjectClass parent_class;
-};
-
-struct _XnoiseDbCreator {
-	GObject parent_instance;
-	XnoiseDbCreatorPrivate * priv;
-};
-
-struct _XnoiseDbCreatorClass {
 	GObjectClass parent_class;
 };
 
@@ -799,6 +799,11 @@ void xnoise_params_set_int_value (XnoiseParams* self, const char* key, gint valu
 void xnoise_params_set_double_value (XnoiseParams* self, const char* key, double value);
 void xnoise_params_set_string_list_value (XnoiseParams* self, const char* key, char** value, int value_length1);
 void xnoise_params_set_string_value (XnoiseParams* self, const char* key, const char* value);
+GType xnoise_db_creator_get_type (void);
+#define XNOISE_DB_CREATOR_DB_VERSION_MAJOR 2
+#define XNOISE_DB_CREATOR_DB_VERSION_MINOR 0
+XnoiseDbCreator* xnoise_db_creator_new (void);
+XnoiseDbCreator* xnoise_db_creator_construct (GType object_type);
 GType xnoise_db_browser_get_type (void);
 XnoiseDbBrowser* xnoise_db_browser_new (void);
 XnoiseDbBrowser* xnoise_db_browser_construct (GType object_type);
@@ -843,11 +848,6 @@ XnoiseDbWriter* xnoise_db_writer_construct (GType object_type);
 void xnoise_db_writer_add_stream (XnoiseDbWriter* self, const char* uri, const char* name);
 void xnoise_db_writer_write_media_folder_into_db (XnoiseDbWriter* self, char** mfolders, int mfolders_length1);
 void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, char** final_tracklist, int final_tracklist_length1);
-GType xnoise_db_creator_get_type (void);
-#define XNOISE_DB_CREATOR_DB_VERSION_MAJOR 2
-#define XNOISE_DB_CREATOR_DB_VERSION_MINOR 0
-XnoiseDbCreator* xnoise_db_creator_new (void);
-XnoiseDbCreator* xnoise_db_creator_construct (GType object_type);
 XnoiseMediaBrowser* xnoise_media_browser_new (XnoiseMain** xn);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, XnoiseMain** xn);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self, GtkEntry* sender);

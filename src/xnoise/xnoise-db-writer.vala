@@ -32,7 +32,7 @@ using Sqlite;
 
 public class Xnoise.DbWriter : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
-	private const string INIFOLDER = ".xnoise";
+	private const string SETTINGS_FOLDER = ".xnoise";
 	private Sqlite.Database db;
 	private Statement insert_lastused_entry_statement;
 	private Statement add_radio_statement;
@@ -115,7 +115,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		// there was more luck on creating the db on first start, if using a static function
 		Database database;
 		File home_dir = File.new_for_path(Environment.get_home_dir());
-		File xnoise_home = home_dir.get_child(INIFOLDER);
+		File xnoise_home = home_dir.get_child(SETTINGS_FOLDER);
 		File xnoisedb = xnoise_home.get_child(DATABASE_NAME);
 		if (!xnoise_home.query_exists(null)) {
 			print("Cannot find settings folder!\n");
@@ -581,143 +581,3 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 }
-
-
-
-public class Xnoise.DbCreator : GLib.Object {
-	private const string DATABASE_NAME = "db.sqlite";
-	private const string INIFOLDER = ".xnoise";
-	private Sqlite.Database db;
-	public static const int DB_VERSION_MAJOR = 2;
-	public static const int DB_VERSION_MINOR = 0;
-	private static File xnoisedb;
-	//CREATE TABLE STATEMENTS
-	private static const string STMT_CREATE_LASTUSED = 
-		"CREATE TABLE lastused(uri text, mediatype integer);";
-	private static const string STMT_CREATE_MUSICFOLDERS = 
-		"CREATE TABLE media_folders(name text primary key);";
-	private static const string STMT_CREATE_RADIO = 
-		"CREATE TABLE streams (id INTEGER PRIMARY KEY, name TEXT, uri TEXT);";
-	private static const string STMT_CREATE_ARTISTS = 
-		"CREATE TABLE artists (id INTEGER PRIMARY KEY, name TEXT);";
-	private static const string STMT_CREATE_ALBUMS = 
-		"CREATE TABLE albums (id INTEGER PRIMARY KEY, artist INTEGER, name TEXT, image TEXT);";
-	private static const string STMT_CREATE_URIS = 
-		"CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER);";
-	private static const string STMT_CREATE_GENRES = 
-		"CREATE TABLE genres (id integer primary key, name TEXT);";
-	private static const string STMT_CREATE_ITEMS = 
-		"CREATE TABLE items (id integer primary key, tracknumber integer, artist INTEGER, album INTEGER, title TEXT, genre TEXT, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTime DATETIME);";
-	//TODO: Is genre not used?
-	private static const string STMT_CREATE_VERSION = 
-		"CREATE TABLE version (major INTEGER, minor INTEGER);";
-	private static const string STMT_GET_VERSION = 
-		"SELECT major FROM version;";
-
-	//FIND TABLE	
-	private static const string STMT_FIND_TABLE = 
-		"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
-									
-	public DbCreator() {
-        this.db = get_db();
-		check_tables();
-	}
-
-	private static Database? get_db () {
-		// there was more luck on creating the db on first start, when using a static function
-		//TODO: Version check with drop table
-		Database database;
-		File home_dir = File.new_for_path(Environment.get_home_dir());
-		File xnoise_home = home_dir.get_child(INIFOLDER);
-		xnoisedb = xnoise_home.get_child(DATABASE_NAME);
-		if (!xnoise_home.query_exists(null)) {
-			try {
-				File current_dir = xnoise_home;
-				File[] directory_list = {};
-				while(current_dir != null) {
-				    if (current_dir.query_exists (null)) break;
-					directory_list += current_dir;
-				    current_dir = current_dir.get_parent();
-				}
-				foreach(File dir in directory_list) {
-				    print("Creating config path %s\n", dir.get_path());
-				    dir.make_directory(null);
-				}
-			} 
-			catch (Error e) {
-				stderr.printf("Error with create directory: %s", e.message);
-				return null;
-			}
-		}
-		Database.open_v2(xnoisedb.get_path(), 
-		                 out database, 
-		                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE, 
-		                 null) ;
-
-		return database;
-	}
-	
-	private bool exec_stmnt_string(string statement) {
-		string errormsg;
-		if(db.exec(statement, null, out errormsg)!= Sqlite.OK) {
-			stderr.printf("xyz::%s", errormsg);
-			return false;
-		}
-		return true;
-	}
-
-	private void check_tables() {
-		if(xnoisedb.query_exists(null) && db!=null) {
-			bool db_table_exists = false;
-			int nrow,ncolumn;
-			weak string[] resultArray;
-			string errmsg;
-
-			//Check for Table existance
-			if(db.get_table(STMT_FIND_TABLE, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) { 
-				stderr.printf("SQL error: %s\n", errmsg);
-				return;
-			}
-
-			//search version table
-			for(int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
-				for(int j = offset*ncolumn; j<(offset+1)*ncolumn; j++) {
-					if(resultArray[j]=="version") {
-						db_table_exists = true; //assume that if version is existing all other tables also exist
-						break;
-					}
-				}
-			}
-			if(db_table_exists == true) {
-				if(db.get_table(STMT_GET_VERSION, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) { 
-					stderr.printf("SQL error: %s\n", errmsg);
-					return;
-				}
-				//newly create db if major version is devating
-				string major = resultArray[1];
-				if(major!=("%d".printf(DB_VERSION_MAJOR))) {
-					print("Wrong major db version\n"); //TODO: Drop tables and create new
-					db = null;
-					xnoisedb.delete(null);
-				}
-			}
-			else {
-			//create Tables if not existant
-				if(!exec_stmnt_string(STMT_CREATE_LASTUSED)) return;
-				if(!exec_stmnt_string(STMT_CREATE_MUSICFOLDERS)) return;
-				if(!exec_stmnt_string(STMT_CREATE_RADIO)) return;
-				if(!exec_stmnt_string(STMT_CREATE_ARTISTS)) return;
-				if(!exec_stmnt_string(STMT_CREATE_ALBUMS)) return;
-				if(!exec_stmnt_string(STMT_CREATE_URIS)) return;
-				if(!exec_stmnt_string(STMT_CREATE_ITEMS)) return;
-				if(!exec_stmnt_string(STMT_CREATE_GENRES)) return;
-				if(!exec_stmnt_string(STMT_CREATE_VERSION)) return;
-				exec_stmnt_string("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR));
-			}
-		}
-		else {
-			print("Could not create or open database.\n");
-		}
-	}
-}
-

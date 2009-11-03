@@ -126,9 +126,9 @@ public class Xnoise.AppStarter : GLib.Object {
 			
 			xn.main_window.trackList.add_uris(uris);
 
-//			Gdk.threads_enter();
+			//Gdk.threads_enter();
 			Gtk.main();
-//			Gdk.threads_leave();
+			//Gdk.threads_leave();
 			app = null;
 		}
 		return 0;

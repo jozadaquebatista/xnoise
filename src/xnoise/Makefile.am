@@ -40,6 +40,7 @@ xnoise_VALASOURCES = \
 	xnoise-main-window.vala \
 	xnoise-about.vala \
 	xnoise-parameter.vala \
+	xnoise-db-creator.vala \
 	xnoise-db-browser.vala \
 	xnoise-db-writer.vala \
 	xnoise-media-browser.vala \

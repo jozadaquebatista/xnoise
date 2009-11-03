@@ -32,7 +32,7 @@ using Sqlite;
 
 public class Xnoise.DbBrowser : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
-	private const string INIFOLDER = ".xnoise";
+	private const string SETTINGS_FOLDER = ".xnoise";
 	private string DATABASE;
 	private Statement count_for_uri_statement;
 	private Statement get_lastused_statement;
@@ -105,7 +105,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Database db;
 
 	private string dbFileName() {
-		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), INIFOLDER, DATABASE_NAME, null);
+		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), SETTINGS_FOLDER, DATABASE_NAME, null);
 	}
 
 	private void db_error() {
