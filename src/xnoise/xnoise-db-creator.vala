@@ -34,14 +34,16 @@ public class Xnoise.DbCreator : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private Sqlite.Database db;
-	public static const int DB_VERSION_MAJOR = 2;
+	public static const int DB_VERSION_MAJOR = 3;
 	public static const int DB_VERSION_MINOR = 0;
 	private static File xnoisedb;
 	//CREATE TABLE STATEMENTS
 	private static const string STMT_CREATE_LASTUSED = 
 		"CREATE TABLE lastused(uri text, mediatype integer);";
-	private static const string STMT_CREATE_MUSICFOLDERS = 
-		"CREATE TABLE media_folders(name text primary key);";
+	private static const string STMT_CREATE_MEDIAFOLDERS = 
+		"CREATE TABLE media_folders(name TEXT PRIMARY KEY);";
+	private static const string STMT_CREATE_MEDIAFILES = 
+		"CREATE TABLE media_files(name TEXT PRIMARY KEY);";
 	private static const string STMT_CREATE_RADIO = 
 		"CREATE TABLE streams (id INTEGER PRIMARY KEY, name TEXT, uri TEXT);";
 	private static const string STMT_CREATE_ARTISTS = 
@@ -53,7 +55,7 @@ public class Xnoise.DbCreator : GLib.Object {
 	private static const string STMT_CREATE_GENRES = 
 		"CREATE TABLE genres (id integer primary key, name TEXT);";
 	private static const string STMT_CREATE_ITEMS = 
-		"CREATE TABLE items (id integer primary key, tracknumber integer, artist INTEGER, album INTEGER, title TEXT, genre TEXT, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTime DATETIME);";
+		"CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTime DATETIME);";
 	//TODO: Is genre not used?
 	private static const string STMT_CREATE_VERSION = 
 		"CREATE TABLE version (major INTEGER, minor INTEGER);";
@@ -149,15 +151,17 @@ public class Xnoise.DbCreator : GLib.Object {
 			}
 			else {
 			//create Tables if not existant
-				if(!exec_stmnt_string(STMT_CREATE_LASTUSED)) return;
-				if(!exec_stmnt_string(STMT_CREATE_MUSICFOLDERS)) return;
-				if(!exec_stmnt_string(STMT_CREATE_RADIO)) return;
-				if(!exec_stmnt_string(STMT_CREATE_ARTISTS)) return;
-				if(!exec_stmnt_string(STMT_CREATE_ALBUMS)) return;
-				if(!exec_stmnt_string(STMT_CREATE_URIS)) return;
-				if(!exec_stmnt_string(STMT_CREATE_ITEMS)) return;
-				if(!exec_stmnt_string(STMT_CREATE_GENRES)) return;
-				if(!exec_stmnt_string(STMT_CREATE_VERSION)) return;
+				if(!exec_stmnt_string(STMT_CREATE_LASTUSED)     ) return;
+				if(!exec_stmnt_string(STMT_CREATE_MEDIAFOLDERS) ) return;
+				if(!exec_stmnt_string(STMT_CREATE_MEDIAFILES)   ) return;
+				if(!exec_stmnt_string(STMT_CREATE_RADIO)        ) return;
+				if(!exec_stmnt_string(STMT_CREATE_ARTISTS)      ) return;
+				if(!exec_stmnt_string(STMT_CREATE_ALBUMS)       ) return;
+				if(!exec_stmnt_string(STMT_CREATE_URIS)         ) return;
+				if(!exec_stmnt_string(STMT_CREATE_ITEMS)        ) return;
+				if(!exec_stmnt_string(STMT_CREATE_GENRES)       ) return;
+				if(!exec_stmnt_string(STMT_CREATE_VERSION)      ) return;
+				//Set database version
 				exec_stmnt_string("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR));
 			}
 		}

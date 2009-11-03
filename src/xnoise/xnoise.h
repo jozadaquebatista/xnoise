@@ -800,7 +800,7 @@ void xnoise_params_set_double_value (XnoiseParams* self, const char* key, double
 void xnoise_params_set_string_list_value (XnoiseParams* self, const char* key, char** value, int value_length1);
 void xnoise_params_set_string_value (XnoiseParams* self, const char* key, const char* value);
 GType xnoise_db_creator_get_type (void);
-#define XNOISE_DB_CREATOR_DB_VERSION_MAJOR 2
+#define XNOISE_DB_CREATOR_DB_VERSION_MAJOR 3
 #define XNOISE_DB_CREATOR_DB_VERSION_MINOR 0
 XnoiseDbCreator* xnoise_db_creator_new (void);
 XnoiseDbCreator* xnoise_db_creator_construct (GType object_type);
@@ -820,7 +820,8 @@ gboolean xnoise_db_browser_get_trackdata_for_id (XnoiseDbBrowser* self, gint id,
 gboolean xnoise_db_browser_get_stream_td_for_id (XnoiseDbBrowser* self, gint id, XnoiseTrackData* val);
 gboolean xnoise_db_browser_get_stream_for_id (XnoiseDbBrowser* self, gint id, char** uri);
 gboolean xnoise_db_browser_get_trackdata_for_uri (XnoiseDbBrowser* self, const char* uri, XnoiseTrackData* val);
-char** xnoise_db_browser_get_music_folders (XnoiseDbBrowser* self, int* result_length1);
+char** xnoise_db_browser_get_media_files (XnoiseDbBrowser* self, int* result_length1);
+char** xnoise_db_browser_get_media_folders (XnoiseDbBrowser* self, int* result_length1);
 GType xnoise_stream_data_get_type (void);
 XnoiseStreamData* xnoise_stream_data_dup (const XnoiseStreamData* self);
 void xnoise_stream_data_free (XnoiseStreamData* self);
@@ -845,8 +846,9 @@ char** xnoise_db_browser_get_titles (XnoiseDbBrowser* self, const char* artist, 
 GType xnoise_db_writer_get_type (void);
 XnoiseDbWriter* xnoise_db_writer_new (void);
 XnoiseDbWriter* xnoise_db_writer_construct (GType object_type);
-void xnoise_db_writer_add_stream (XnoiseDbWriter* self, const char* uri, const char* name);
-void xnoise_db_writer_write_media_folder_into_db (XnoiseDbWriter* self, char** mfolders, int mfolders_length1);
+void xnoise_db_writer_store_media_files (XnoiseDbWriter* self, char** list_of_files, int list_of_files_length1);
+void xnoise_db_writer_store_streams (XnoiseDbWriter* self, char** list_of_streams, int list_of_streams_length1);
+void xnoise_db_writer_store_media_folders (XnoiseDbWriter* self, char** mfolders, int mfolders_length1);
 void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, char** final_tracklist, int final_tracklist_length1);
 XnoiseMediaBrowser* xnoise_media_browser_new (XnoiseMain** xn);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, XnoiseMain** xn);

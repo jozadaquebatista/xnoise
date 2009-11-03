@@ -43,7 +43,8 @@ namespace Xnoise {
 		public string[] get_albums (string artist, ref string searchtext);
 		public string[] get_artists (ref string searchtext);
 		public string[] get_lastused_uris ();
-		public string[] get_music_folders ();
+		public string[] get_media_files ();
+		public string[] get_media_folders ();
 		public string? get_single_stream_uri (string name);
 		public Xnoise.TitleMtypeId[] get_stream_data (ref string searchtext);
 		public bool get_stream_for_id (int id, out string uri);
@@ -69,9 +70,10 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
 		public DbWriter ();
-		public void add_stream (string uri, string name = "");
+		public void store_media_files (string[] list_of_files);
+		public void store_media_folders (string[] mfolders);
+		public void store_streams (string[] list_of_streams);
 		public void write_final_tracks_to_db (string[] final_tracklist);
-		public void write_media_folder_into_db (string[] mfolders);
 		public signal void sign_import_progress (uint current, uint amount);
 	}
 	[CCode (cheader_filename = "xnoise.h")]

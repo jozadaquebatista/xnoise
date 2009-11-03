@@ -38,6 +38,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private ListStore listmodel;
 	private TreeView tv;
 	private string[] list_of_folders;
+	private string[] list_of_files;
 	private string[] list_of_streams; 
 	
 	public signal void sign_finish();
@@ -51,9 +52,9 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		this.dialog.show_all();	
 	}
 
-//	~MediaFolderDialog() {
-//		print("destruct mfd\n");	
-//	}
+	//	~AddMediaDialog() {
+	//		print("destruct amd\n");	
+	//	}
 	
 	private void fill_media_list() {
 		return_if_fail(listmodel!=null);
@@ -61,10 +62,10 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		DbBrowser dbb = new DbBrowser();
 		
 		//add folders
-		var mfolders = dbb.get_music_folders(); 
+		var mfolders = dbb.get_media_folders(); 
 		foreach(string mfolder in mfolders) {
 			TreeIter iter;
-			listmodel.append (out iter);
+			listmodel.append(out iter);
 			listmodel.set(iter, 
 			              0, mfolder, 
 			              1, MediaStorageType.FOLDER,
@@ -72,11 +73,25 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			              );
 		}
 		
+		//add files
+		var mfiles = dbb.get_media_files();
+		print("mfiles length: %d\n", mfiles.length);
+		foreach(string uri in mfiles) {
+			File file = File.new_for_uri(uri);
+			TreeIter iter;
+			listmodel.append(out iter);
+			listmodel.set(iter, 
+			              0, file.get_path(), 
+			              1, MediaStorageType.FILE,
+			              -1
+			              );
+		}	
+			
 		//add streams to list
 		var streams = dbb.get_streams();
 		foreach(StreamData sd in streams) {
 			TreeIter iter;
-			listmodel.append (out iter);
+			listmodel.append(out iter);
 			listmodel.set(iter, 
 			              0, sd.Uri, 
 			              1, MediaStorageType.STREAM,
@@ -87,6 +102,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 	private void harvest_media_locations() {
 		list_of_streams = {};
+		list_of_files = {};
 		list_of_folders = {};
 		listmodel.foreach(list_foreach);
 	}
@@ -140,16 +156,22 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		MediaStorageType mst;
 		sender.get(myiter, 
 		           0, out gv,
-		           1, out mst,
-		           -1
+		           1, out mst
 		           );
-		if(mst==MediaStorageType.FOLDER) {
-			print("is folder\n");
-			list_of_folders += gv;
-		}
-		if(mst==MediaStorageType.STREAM) {
-			print("found stream: gv\n");
-			list_of_streams += gv;
+		switch(mst) {
+			case MediaStorageType.FOLDER:
+				list_of_folders += gv;
+				break;
+			case MediaStorageType.FILE:
+				var file = File.new_for_path(gv);
+				list_of_files += file.get_uri();
+				break;			
+			case MediaStorageType.STREAM:
+				list_of_streams += gv;
+				break;
+			default:
+				print("Error: unknown media storage type\n");
+				break;
 		}
 		return false;
 	}
@@ -170,14 +192,17 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	
 	private void* write_media_to_db() { 
 		// thread function for the import to the library
-		// sends a signal when finished, this signal is handled by main window
-		DbWriter dbw = new DbWriter();
-		dbw.write_media_folder_into_db(list_of_folders); //TODO: pass list_of_folders by ref as soon as vala allows this
-		foreach(string uri in list_of_streams) {
-			dbw.add_stream(uri);
-		}
-		// print("thread finished\n");
+		// sends a signal when finished, this signal is handled by main window class
+		var dbw = new DbWriter();
+		
+		dbw.store_media_folders(list_of_folders); 
+		
+		dbw.store_streams(list_of_streams); // TODO: Deliver streams with names
+		
+		dbw.store_media_files(list_of_files);
+		
 		this.sign_finish();
+		// print("thread finished\n");
 		return null;
 	}
 
@@ -195,6 +220,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			Gtk.STOCK_OPEN,
 			Gtk.ResponseType.ACCEPT,
 			null);
+		fcdialog.set_current_folder(Environment.get_home_dir());
 		if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
 			TreeIter iter;
 			listmodel.append(out iter);
@@ -218,6 +244,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			Gtk.STOCK_OPEN,
 			Gtk.ResponseType.ACCEPT,
 			null);
+		fcdialog.set_current_folder(Environment.get_home_dir());
 		if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
 			TreeIter iter;
 			listmodel.append(out iter);

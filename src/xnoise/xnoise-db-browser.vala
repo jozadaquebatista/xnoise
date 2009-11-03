@@ -52,6 +52,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement get_media_folders_statement;
 	private Statement get_radio_data_statement;
 	private Statement stream_td_for_id_statement;
+	private Statement get_media_files_statement;
 	
 	private static const string STMT_COUNT_FOR_MEDIATYPE = 
 		"SELECT COUNT (title) FROM items WHERE mediatype = ?";
@@ -87,6 +88,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 		"SELECT uri FROM streams WHERE name = ?";
 	private static const string STMT_GET_MEDIA_FOLDERS = 
 		"SELECT * FROM media_folders";
+	private static const string STMT_GET_MEDIA_FILES = 
+		"SELECT * FROM media_files";
 	private static const string STMT_GET_RADIO_DATA	=
 		"SELECT DISTINCT id, name, uri FROM streams WHERE LOWER(name) LIKE ? ORDER BY name DESC";
 		
@@ -148,7 +151,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 		this.db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1, 
 			out this.get_media_folders_statement);
 		this.db.prepare_v2(STMT_STREAM_TD_FOR_ID , -1, 
-			out this.stream_td_for_id_statement); 
+			out this.stream_td_for_id_statement);
+		this.db.prepare_v2(STMT_GET_MEDIA_FILES, -1, 
+			out this.get_media_files_statement);
 	}
 
 	public bool videos_available() {
@@ -274,7 +279,16 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return true;
 	}
 
-	public string[] get_music_folders() { 
+	public string[] get_media_files() { 
+		string[] mfiles = {};
+		get_media_files_statement.reset();
+		while(get_media_files_statement.step() == Sqlite.ROW) {
+			mfiles += get_media_files_statement.column_text(0);
+		}
+		return mfiles;
+	}
+
+	public string[] get_media_folders() { 
 		string[] mfolders = {};
 		get_media_folders_statement.reset();
 		while(get_media_folders_statement.step() == Sqlite.ROW) {
