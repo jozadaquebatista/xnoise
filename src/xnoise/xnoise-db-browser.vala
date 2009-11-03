@@ -40,8 +40,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement get_video_data_statement;
 	private Statement get_artist_statement;
 	private Statement get_albums_statement;
-	private Statement get_titles_statement;
-	private Statement get_titles_with_mediatypes_and_ids_statement;
+	private Statement get_items_statement;
+	private Statement get_items_with_mediatypes_and_ids_statement;
 	private Statement track_id_for_uri_statement;
 	private Statement trackdata_for_uri_statement;
 	private Statement trackdata_for_id_statement;
@@ -54,33 +54,33 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement stream_td_for_id_statement;
 	
 	private static const string STMT_COUNT_FOR_MEDIATYPE = 
-		"SELECT COUNT (title) FROM titles WHERE mediatype = ?";
+		"SELECT COUNT (title) FROM items WHERE mediatype = ?";
 	private static const string STMT_COUNT_FOR_URI = 
-		"SELECT COUNT (title) FROM titles WHERE uri = ?"; //TODO: is obsolete
+		"SELECT COUNT (title) FROM items i, uris u WHERE i.uri = u.id AND u.name = ?"; 
 	private static const string STMT_TRACKDATA_FOR_URI = 
-		"SELECT ar.name, al.name, t.title, t.tracknumber FROM artists ar, titles t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND u.name = ?";
+		"SELECT ar.name, al.name, t.title, t.tracknumber FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND u.name = ?";
 	private static const string STMT_TRACKDATA_FOR_ID = 
-		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name FROM artists ar, titles t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.id = ?";
+		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.id = ?";
 	private static const string STMT_STREAM_TD_FOR_ID = 
 		"SELECT name, uri FROM streams WHERE id = ?";
 	private static const string STMT_URI_FOR_ID = 
-		"SELECT u.name FROM titles t, uris u WHERE t.uri = u.id AND t.id = ?";
+		"SELECT u.name FROM items t, uris u WHERE t.uri = u.id AND t.id = ?";
 	private static const string STMT_TRACK_ID_FOR_URI = 
-		"SELECT t.id FROM titles t, uris u WHERE t.uri = u.id AND u.name = ?";
+		"SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
 	private static const string STMT_GET_LASTUSED = 
 		"SELECT uri FROM lastused";
 	private static const string STMT_GET_VIDEO_DATA = 
-		"SELECT DISTINCT title, mediatype, id FROM titles WHERE LOWER(title) LIKE ? AND mediatype = ? ORDER BY title DESC";
+		"SELECT DISTINCT title, mediatype, id FROM items WHERE LOWER(title) LIKE ? AND mediatype = ? ORDER BY title DESC";
 	private static const string STMT_GET_VIDEOS = 
-		"SELECT DISTINCT title FROM titles WHERE LOWER(title) LIKE ? AND mediatype = ? ORDER BY title DESC";
+		"SELECT DISTINCT title FROM items WHERE LOWER(title) LIKE ? AND mediatype = ? ORDER BY title DESC";
 	private static const string STMT_GET_ARTISTS = 
-		"SELECT DISTINCT ar.name FROM artists ar, titles t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (LOWER(ar.name) LIKE ? OR LOWER(al.name) LIKE ? OR LOWER(t.title) LIKE ?) ORDER BY ar.name DESC";
+		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (LOWER(ar.name) LIKE ? OR LOWER(al.name) LIKE ? OR LOWER(t.title) LIKE ?) ORDER BY ar.name DESC";
 	private static const string STMT_GET_ALBUMS = 
-		"SELECT DISTINCT al.name FROM artists ar, titles t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND (LOWER(al.name) LIKE ? OR LOWER(t.title) LIKE ?) ORDER BY al.name DESC";
-	private static const string STMT_GET_TITLES = 
-		"SELECT DISTINCT t.title FROM artists ar, titles t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND LOWER(t.title) LIKE ? ORDER BY t.tracknumber DESC";
-	private static const string STMT_GET_TITLES_WITH_MEDIATYPES_AND_IDS = 
-		"SELECT DISTINCT t.title, t.mediatype, t.id FROM artists ar, titles t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND LOWER(t.title) LIKE ? ORDER BY t.tracknumber DESC";
+		"SELECT DISTINCT al.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND (LOWER(al.name) LIKE ? OR LOWER(t.title) LIKE ?) ORDER BY al.name DESC";
+	private static const string STMT_GET_ITEMS = 
+		"SELECT DISTINCT t.title FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND LOWER(t.title) LIKE ? ORDER BY t.tracknumber DESC";
+	private static const string STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS = 
+		"SELECT DISTINCT t.title, t.mediatype, t.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND LOWER(t.title) LIKE ? ORDER BY t.tracknumber DESC";
 	private static const string STMT_GET_RADIOS = 
 		"SELECT name, uri FROM streams";
 	private static const string STMT_GET_SINGLE_RADIO_URI = 
@@ -98,9 +98,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 		this.prepare_statements();
 	}
 
-//	~DbBrowser() {
-//		print("destruct dbbrowser\n");
-//	}
+	//	~DbBrowser() {
+	//		print("destruct dbbrowser\n");
+	//	}
 
 	private Database db;
 
@@ -129,10 +129,10 @@ public class Xnoise.DbBrowser : GLib.Object {
 			out this.get_radio_data_statement);
 		this.db.prepare_v2(STMT_GET_ALBUMS, -1, 
 			out this.get_albums_statement); 
-		this.db.prepare_v2(STMT_GET_TITLES, -1, 
-			out this.get_titles_statement); 
-		this.db.prepare_v2(STMT_GET_TITLES_WITH_MEDIATYPES_AND_IDS, -1, 
-			out this.get_titles_with_mediatypes_and_ids_statement); 
+		this.db.prepare_v2(STMT_GET_ITEMS, -1, 
+			out this.get_items_statement); 
+		this.db.prepare_v2(STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS, -1, 
+			out this.get_items_with_mediatypes_and_ids_statement); 
 		this.db.prepare_v2(STMT_TRACKDATA_FOR_URI, -1, 
 			out this.trackdata_for_uri_statement); 
 		this.db.prepare_v2(STMT_URI_FOR_ID, -1, 
@@ -400,18 +400,18 @@ public class Xnoise.DbBrowser : GLib.Object {
 
 	public TitleMtypeId[] get_titles_with_mediatypes_and_ids(string artist, string album, ref string searchtext) { 
 		TitleMtypeId[] val = {};
-		get_titles_with_mediatypes_and_ids_statement.reset();
-		if((this.get_titles_with_mediatypes_and_ids_statement.bind_text(1, artist)!=Sqlite.OK)|
-		   (this.get_titles_with_mediatypes_and_ids_statement.bind_text(2, album)!=Sqlite.OK)|
-		   (this.get_titles_with_mediatypes_and_ids_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+		get_items_with_mediatypes_and_ids_statement.reset();
+		if((this.get_items_with_mediatypes_and_ids_statement.bind_text(1, artist)!=Sqlite.OK)|
+		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(2, album )!=Sqlite.OK)|
+		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
 		
-		while(get_titles_with_mediatypes_and_ids_statement.step() == Sqlite.ROW) {
+		while(get_items_with_mediatypes_and_ids_statement.step() == Sqlite.ROW) {
 			TitleMtypeId twt = TitleMtypeId();
-			twt.name = get_titles_with_mediatypes_and_ids_statement.column_text(0);
-			twt.mediatype = (MediaType) get_titles_with_mediatypes_and_ids_statement.column_int(1);
-			twt.id = get_titles_with_mediatypes_and_ids_statement.column_int(2);
+			twt.name = get_items_with_mediatypes_and_ids_statement.column_text(0);
+			twt.mediatype = (MediaType) get_items_with_mediatypes_and_ids_statement.column_int(1);
+			twt.id = get_items_with_mediatypes_and_ids_statement.column_int(2);
 			val += twt;
 		}
 		return val;
@@ -419,15 +419,15 @@ public class Xnoise.DbBrowser : GLib.Object {
 
 	public string[] get_titles(string artist, string album, ref string searchtext) { 
 		string[] val = {};
-		get_titles_statement.reset();
-		if((this.get_titles_statement.bind_text(1, artist)!=Sqlite.OK)|
-		   (this.get_titles_statement.bind_text(2, album)!=Sqlite.OK)|
-		   (this.get_titles_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+		get_items_statement.reset();
+		if((this.get_items_statement.bind_text(1, artist)!=Sqlite.OK)|
+		   (this.get_items_statement.bind_text(2, album)!=Sqlite.OK)|
+		   (this.get_items_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
 		
-		while(get_titles_statement.step() == Sqlite.ROW) {
-			val += get_titles_statement.column_text(0);
+		while(get_items_statement.step() == Sqlite.ROW) {
+			val += get_items_statement.column_text(0);
 		}
 		return val;
 	}

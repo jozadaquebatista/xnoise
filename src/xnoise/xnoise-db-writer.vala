@@ -54,7 +54,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private Statement get_title_id_statement;
 	private Statement delete_artists_statement;
 	private Statement delete_albums_statement;
-	private Statement delete_titles_statement;
+	private Statement delete_items_statement;
 	private Statement delete_uris_statement;
 	private Statement delete_genres_statement;
 		
@@ -64,7 +64,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_COMMIT = 
 		"COMMIT";
 	private static const string STMT_CHECK_TRACK_EXISTS = 
-		"SELECT t.id FROM titles t, uris u WHERE t.uri = u.id AND u.name = ?";
+		"SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
 	private static const string STMT_INSERT_LASTUSED = 
 		"INSERT INTO lastused (uri, mediatype) VALUES (?,?)";
 	private static const string STMT_WRITE_MEDIA_FOLDERS = 
@@ -92,15 +92,15 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_INSERT_GENRE = 
 		"INSERT INTO genres (name) VALUES (?)";
 	private static const string STMT_INSERT_TITLE = 
-		"INSERT INTO titles (tracknumber, artist, album, title, genre, uri, mediatype) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		"INSERT INTO items (tracknumber, artist, album, title, genre, uri, mediatype) VALUES (?, ?, ?, ?, ?, ?, ?)";
 	private static const string STMT_GET_TITLE_ID = 
-		"SELECT id FROM titles WHERE artist = ? AND album = ? AND LOWER(title) = ?";
+		"SELECT id FROM items WHERE artist = ? AND album = ? AND LOWER(title) = ?";
 	private static const string STMT_DEL_ARTISTS = 
 		"DELETE FROM artists";
 	private static const string STMT_DEL_ALBUMS = 
 		"DELETE FROM albums";
-	private static const string STMT_DEL_TITLES = 
-		"DELETE FROM titles";		
+	private static const string STMT_DEL_ITEMS = 
+		"DELETE FROM items";		
 	private static const string STMT_DEL_URIS = 
 		"DELETE FROM uris";		
 	private static const string STMT_DEL_GENRES = 
@@ -118,7 +118,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		File xnoise_home = home_dir.get_child(INIFOLDER);
 		File xnoisedb = xnoise_home.get_child(DATABASE_NAME);
 		if (!xnoise_home.query_exists(null)) {
-			print("Cannot find database file!\n");
+			print("Cannot find settings folder!\n");
 			return null;
 		}
 		Database.open_v2(xnoisedb.get_path(), 
@@ -173,8 +173,8 @@ public class Xnoise.DbWriter : GLib.Object {
 			out this.delete_artists_statement);
 		this.db.prepare_v2(STMT_DEL_ALBUMS, -1, 
 			out this.delete_albums_statement);
-		this.db.prepare_v2(STMT_DEL_TITLES, -1, 
-			out this.delete_titles_statement);
+		this.db.prepare_v2(STMT_DEL_ITEMS, -1, 
+			out this.delete_items_statement);
 		this.db.prepare_v2(STMT_DEL_URIS, -1, 
 			out this.delete_uris_statement);
 		this.db.prepare_v2(STMT_DEL_GENRES, -1, 
@@ -495,7 +495,7 @@ public class Xnoise.DbWriter : GLib.Object {
 			write_single_mediafolder(folder);
 		}
 		
-		if(delete_local_media_data()==0) return;
+		if(!delete_local_media_data()) return;
 		
 		foreach(string folder in mfolders_ht.get_keys()) {
 			File dir = File.new_for_path(folder);
@@ -535,11 +535,11 @@ public class Xnoise.DbWriter : GLib.Object {
 		current_query = "DELETE FROM lastused;";
 		rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
 		if (rc1 != Sqlite.OK) { 
-			stderr.printf("SQL error, while removing old music folders: %s\n", errmsg);//TODO
+			stderr.printf("SQL error, while removing old music folders: %s\n", errmsg);
 			return;
 		}	
 		foreach(string uri in final_tracklist) {
-			this.insert_lastused_track(uri, 0); //TODO: handle media type !=0 (video)
+			this.insert_lastused_track(uri, 0);
 		}
 		this.commit_transaction();
 	}
@@ -552,34 +552,25 @@ public class Xnoise.DbWriter : GLib.Object {
 			this.db_error();
 		}
 	}
+	
+	// Execution of prepared statements of that the return values are not used (insert, delete, drop, ...)
+	// function returns true if ok
+	private bool exec_prepared_stmt(Statement stmt) {
+		stmt.reset();
+		if(stmt.step() != Sqlite.DONE) {
+			this.db_error();
+			return false;
+		}
+		return true;	
+	}
 
-	private int delete_local_media_data() {
-		this.delete_artists_statement.reset();
-		if(delete_artists_statement.step() != Sqlite.DONE) {
-			this.db_error();
-			return 0;
-		}
-		this.delete_albums_statement.reset();
-		if(delete_albums_statement.step() != Sqlite.DONE) {
-			this.db_error();
-			return 0;
-		}
-		this.delete_titles_statement.reset();
-		if(delete_titles_statement.step() != Sqlite.DONE) {
-			this.db_error();
-			return 0;
-		}
-		this.delete_uris_statement.reset();
-		if(delete_uris_statement.step() != Sqlite.DONE) {
-			this.db_error();
-			return 0;
-		}
-		this.delete_genres_statement.reset();
-		if(delete_genres_statement.step() != Sqlite.DONE) {
-			this.db_error();
-			return 0;
-		}
-		return 1;
+	private bool delete_local_media_data() {
+		if(!exec_prepared_stmt(this.delete_artists_statement)) return false;
+		if(!exec_prepared_stmt(this.delete_albums_statement )) return false;
+		if(!exec_prepared_stmt(this.delete_items_statement  )) return false;
+		if(!exec_prepared_stmt(this.delete_uris_statement   )) return false;
+		if(!exec_prepared_stmt(this.delete_genres_statement )) return false;
+		return true;
 	}
 
 	private void write_single_mediafolder(string mfolder) {
@@ -599,10 +590,10 @@ public class Xnoise.DbCreator : GLib.Object {
 	private Sqlite.Database db;
 	public static const int DB_VERSION_MAJOR = 2;
 	public static const int DB_VERSION_MINOR = 0;
-
+	private static File xnoisedb;
 	//CREATE TABLE STATEMENTS
 	private static const string STMT_CREATE_LASTUSED = 
-		"CREATE TABLE lastused(uri text, mediatype integer);"; //for now 0=audio,1=video
+		"CREATE TABLE lastused(uri text, mediatype integer);";
 	private static const string STMT_CREATE_MUSICFOLDERS = 
 		"CREATE TABLE media_folders(name text primary key);";
 	private static const string STMT_CREATE_RADIO = 
@@ -615,8 +606,9 @@ public class Xnoise.DbCreator : GLib.Object {
 		"CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER);";
 	private static const string STMT_CREATE_GENRES = 
 		"CREATE TABLE genres (id integer primary key, name TEXT);";
-	private static const string STMT_CREATE_TITLES = 
-		"CREATE TABLE titles (id integer primary key, tracknumber integer, artist INTEGER, album INTEGER, title TEXT, genre TEXT, uri INTEGER, mediatype INTEGER);";
+	private static const string STMT_CREATE_ITEMS = 
+		"CREATE TABLE items (id integer primary key, tracknumber integer, artist INTEGER, album INTEGER, title TEXT, genre TEXT, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTime DATETIME);";
+	//TODO: Is genre not used?
 	private static const string STMT_CREATE_VERSION = 
 		"CREATE TABLE version (major INTEGER, minor INTEGER);";
 	private static const string STMT_GET_VERSION = 
@@ -628,6 +620,7 @@ public class Xnoise.DbCreator : GLib.Object {
 									
 	public DbCreator() {
         this.db = get_db();
+		check_tables();
 	}
 
 	private static Database? get_db () {
@@ -636,7 +629,7 @@ public class Xnoise.DbCreator : GLib.Object {
 		Database database;
 		File home_dir = File.new_for_path(Environment.get_home_dir());
 		File xnoise_home = home_dir.get_child(INIFOLDER);
-		File xnoisedb = xnoise_home.get_child(DATABASE_NAME);
+		xnoisedb = xnoise_home.get_child(DATABASE_NAME);
 		if (!xnoise_home.query_exists(null)) {
 			try {
 				File current_dir = xnoise_home;
@@ -660,21 +653,35 @@ public class Xnoise.DbCreator : GLib.Object {
 		                 out database, 
 		                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE, 
 		                 null) ;
-		if(xnoisedb.query_exists(null) && database!=null) {
+
+		return database;
+	}
+	
+	private bool exec_stmnt_string(string statement) {
+		string errormsg;
+		if(db.exec(statement, null, out errormsg)!= Sqlite.OK) {
+			stderr.printf("xyz::%s", errormsg);
+			return false;
+		}
+		return true;
+	}
+
+	private void check_tables() {
+		if(xnoisedb.query_exists(null) && db!=null) {
 			bool db_table_exists = false;
 			int nrow,ncolumn;
 			weak string[] resultArray;
 			string errmsg;
 
 			//Check for Table existance
-			if(database.get_table(STMT_FIND_TABLE, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) { 
+			if(db.get_table(STMT_FIND_TABLE, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) { 
 				stderr.printf("SQL error: %s\n", errmsg);
-				return null;
+				return;
 			}
 
 			//search version table
 			for(int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
-				for(int j = offset*ncolumn; j< (offset+1)*ncolumn;j++) {
+				for(int j = offset*ncolumn; j<(offset+1)*ncolumn; j++) {
 					if(resultArray[j]=="version") {
 						db_table_exists = true; //assume that if version is existing all other tables also exist
 						break;
@@ -682,67 +689,35 @@ public class Xnoise.DbCreator : GLib.Object {
 				}
 			}
 			if(db_table_exists == true) {
-				if(database.get_table(STMT_GET_VERSION, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) { 
+				if(db.get_table(STMT_GET_VERSION, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) { 
 					stderr.printf("SQL error: %s\n", errmsg);
-					return null;
+					return;
 				}
 				//newly create db if major version is devating
 				string major = resultArray[1];
 				if(major!=("%d".printf(DB_VERSION_MAJOR))) {
-					print("Wrong major db version\n");
-					database = null;
+					print("Wrong major db version\n"); //TODO: Drop tables and create new
+					db = null;
 					xnoisedb.delete(null);
 				}
 			}
 			else {
 			//create Tables if not existant
-				string errormsg;
-
-				if(database.exec(STMT_CREATE_LASTUSED, null, out errormsg)!= Sqlite.OK) {
-					stderr.printf("Create DB: %s", errormsg);
-					return null;
-				}
-				if(database.exec(STMT_CREATE_MUSICFOLDERS, null, out errormsg)!= Sqlite.OK) {
-					stderr.printf("Create DB: %s", errormsg);
-					return null;
-				}
-				if(database.exec(STMT_CREATE_RADIO, null, out errormsg)!= Sqlite.OK) {
-					stderr.printf("Create DB: %s", errormsg);
-					return null;
-				}
-				if(database.exec(STMT_CREATE_ARTISTS, null, out errormsg)!= Sqlite.OK) {
-					stderr.printf("Create DB: %s", errormsg);
-					return null;
-				}
-				if(database.exec(STMT_CREATE_ALBUMS, null, out errormsg)!= Sqlite.OK) {
-					stderr.printf("Create DB: %s", errormsg);
-					return null;
-				}
-				if(database.exec(STMT_CREATE_URIS, null, out errormsg)!= Sqlite.OK) {
-					stderr.printf("Create DB: %s", errormsg);
-					return null;
-				}
-				if(database.exec(STMT_CREATE_TITLES, null, out errormsg)!= Sqlite.OK) {
-					stderr.printf("Create DB: %s", errormsg);
-					return null;
-				}
-				if(database.exec(STMT_CREATE_GENRES, null, out errormsg)!= Sqlite.OK) {
-					stderr.printf("Create DB: %s", errormsg);
-					return null;
-				}
-				if(database.exec(STMT_CREATE_VERSION, null, out errormsg)!= Sqlite.OK) {
-					stderr.printf("Create DB: %s", errormsg);
-					return null;
-				}
-				if(database.exec("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR), 
-				                 null, 
-				                 out errormsg)!= Sqlite.OK) {
-					stderr.printf("Create DB: %s", errormsg);
-					return null;
-				}
+				if(!exec_stmnt_string(STMT_CREATE_LASTUSED)) return;
+				if(!exec_stmnt_string(STMT_CREATE_MUSICFOLDERS)) return;
+				if(!exec_stmnt_string(STMT_CREATE_RADIO)) return;
+				if(!exec_stmnt_string(STMT_CREATE_ARTISTS)) return;
+				if(!exec_stmnt_string(STMT_CREATE_ALBUMS)) return;
+				if(!exec_stmnt_string(STMT_CREATE_URIS)) return;
+				if(!exec_stmnt_string(STMT_CREATE_ITEMS)) return;
+				if(!exec_stmnt_string(STMT_CREATE_GENRES)) return;
+				if(!exec_stmnt_string(STMT_CREATE_VERSION)) return;
+				exec_stmnt_string("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR));
 			}
 		}
-		return database;
-	}		
+		else {
+			print("Could not create or open database.\n");
+		}
+	}
 }
 
