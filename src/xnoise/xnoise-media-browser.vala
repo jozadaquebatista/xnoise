@@ -54,9 +54,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		par.iparams_register(this);
 		create_model();
 		set_pixbufs();
-		populate_model();
 		create_view();
-		set_model(treemodel); 
+		Idle.add(populate_model);
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);		
 
 		Gtk.drag_source_set(
@@ -502,7 +501,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		set_model(dummymodel);
 		treemodel.clear();
 		populate_model();
-		set_model(treemodel);
 		xn.main_window.searchEntryMB.set_sensitive(true);
 		this.set_sensitive(true);
 		return false;
@@ -519,9 +517,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		                          );
 	}
 
+	// Puts data to treemodel and sets view to treemodel
+	// Can be used with Idle
 	private bool populate_model() {
 		put_hierarchical_data_to_model();
 		put_listed_data_to_model(); // put at last, then it is on top
+		set_model(treemodel);
 		return false;
 	}
 	
@@ -611,7 +612,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		              -1
 		              );
 		var tmis = dbb.get_stream_data(ref searchtext);
-		tmis = dbb.get_stream_data(ref searchtext);
 		foreach(weak TitleMtypeId tmi in tmis) {
 			treemodel.prepend(out iter_singleradios, iter_radios); 
 			treemodel.set(iter_singleradios,  	

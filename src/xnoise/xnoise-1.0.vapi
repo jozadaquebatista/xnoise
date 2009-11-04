@@ -50,7 +50,6 @@ namespace Xnoise {
 		public bool get_stream_for_id (int id, out string uri);
 		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 		public Xnoise.StreamData[] get_streams ();
-		public string[] get_titles (string artist, string album, ref string searchtext);
 		public Xnoise.TitleMtypeId[] get_titles_with_mediatypes_and_ids (string artist, string album, ref string searchtext);
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);

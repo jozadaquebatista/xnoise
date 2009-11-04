@@ -108,7 +108,7 @@ public class Xnoise.DbCreator : GLib.Object {
 	private bool exec_stmnt_string(string statement) {
 		string errormsg;
 		if(db.exec(statement, null, out errormsg)!= Sqlite.OK) {
-			stderr.printf("xyz::%s", errormsg);
+			stderr.printf("exec_stmnt_string error: %s", errormsg);
 			return false;
 		}
 		return true;

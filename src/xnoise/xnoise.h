@@ -842,7 +842,6 @@ char** xnoise_db_browser_get_videos (XnoiseDbBrowser* self, char** searchtext, i
 char** xnoise_db_browser_get_artists (XnoiseDbBrowser* self, char** searchtext, int* result_length1);
 char** xnoise_db_browser_get_albums (XnoiseDbBrowser* self, const char* artist, char** searchtext, int* result_length1);
 XnoiseTitleMtypeId* xnoise_db_browser_get_titles_with_mediatypes_and_ids (XnoiseDbBrowser* self, const char* artist, const char* album, char** searchtext, int* result_length1);
-char** xnoise_db_browser_get_titles (XnoiseDbBrowser* self, const char* artist, const char* album, char** searchtext, int* result_length1);
 GType xnoise_db_writer_get_type (void);
 XnoiseDbWriter* xnoise_db_writer_new (void);
 XnoiseDbWriter* xnoise_db_writer_construct (GType object_type);

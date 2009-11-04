@@ -359,18 +359,19 @@ public class Xnoise.DbWriter : GLib.Object {
 			print("Error importing genre!\n");
 			return;
 		}
-		int title_id = -1;
-		get_title_id_statement.reset();
-		if( get_title_id_statement.bind_int (1, artist_id)         != Sqlite.OK ||
-			get_title_id_statement.bind_int (2, album_id)          != Sqlite.OK ||
-			get_title_id_statement.bind_text(3, title.down())      != Sqlite.OK ) {
-			this.db_error();
-			return;
-		}
-		if(get_title_id_statement.step() == Sqlite.ROW)
-			title_id = get_title_id_statement.column_int(0);
-		
-		if(title_id ==-1) {
+		// COMMENT THIS OUT BECAUSE NOT USED ATM
+		//int title_id = -1;
+		//get_title_id_statement.reset();
+		//if( get_title_id_statement.bind_int (1, artist_id)         != Sqlite.OK ||
+		//	get_title_id_statement.bind_int (2, album_id)          != Sqlite.OK ||
+		//	get_title_id_statement.bind_text(3, title.down())      != Sqlite.OK ) {
+		//	this.db_error();
+		//	return;
+		//}
+		//if(get_title_id_statement.step() == Sqlite.ROW)
+		//	title_id = get_title_id_statement.column_int(0);
+		//
+		//if(title_id ==-1) {
 			insert_title_statement.reset();
 			if( insert_title_statement.bind_int (1, (int)tracknumber)  != Sqlite.OK ||
 				insert_title_statement.bind_int (2, artist_id)         != Sqlite.OK ||
@@ -383,7 +384,8 @@ public class Xnoise.DbWriter : GLib.Object {
 			}
 			if(insert_title_statement.step()!=Sqlite.DONE)
 				this.db_error();
-		}
+		//}
+		
 		//else {
 		//	print("double entry: %s - %s - %s\n", artist, album, title);
 		//}
@@ -589,7 +591,8 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(db == null) return;
 		var mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
 		begin_transaction();	
-
+//		exec_stmnt_string("DROP INDEX title_IDX;");
+//		exec_stmnt_string("DROP INDEX uri_IDX;");
 		del_media_folders();
 		
 		foreach(string folder in mfolders) {
@@ -607,7 +610,8 @@ public class Xnoise.DbWriter : GLib.Object {
 			assert(dir!=null);
 			import_local_tags(dir);
 		}
-		
+//		exec_stmnt_string("CREATE INDEX title_IDX ON items(title);");
+//		exec_stmnt_string("CREATE INDEX uri_IDX ON uris(name);");
 		commit_transaction();
 		
 		mfolders_ht.remove_all();
@@ -643,7 +647,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 	
 	// Execution of prepared statements of that the return values are not 
-	// used (insert, delete, drop, ...) and that do not need to bind data. 
+	// used (delete, drop, ...) and that do not need to bind data. 
 	// Function returns true if ok
 	private bool exec_prepared_stmt(Statement stmt) {
 		stmt.reset();
@@ -653,6 +657,15 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 		return true;	
 	}
+	
+//	private bool exec_stmnt_string(string statement) {
+//		string errormsg;
+//		if(db.exec(statement, null, out errormsg)!= Sqlite.OK) {
+//			stderr.printf("exec_stmnt_string error: %s", errormsg);
+//			return false;
+//		}
+//		return true;
+//	}
 	
 	private void del_media_folders() {
 		exec_prepared_stmt(del_media_folder_statement);
