@@ -38,7 +38,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private TagList _taglist;
 	public VideoScreen videoscreen;
 	public dynamic Element playbin;
+	
 	public bool seeking  { get; set; } //TODO
+	
 	public bool current_has_video { // TODO: Determine this elsewhere
 		get {
 			return _current_has_video;
@@ -64,10 +66,13 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 	   
 	public bool playing  { get; set; }
+	
 	public bool paused   { get; set; }
 	
 	public string currentartist { get; private set; }
+	
 	public string currentalbum  { get; private set; }
+	
 	public string currenttitle  { get; private set; }
 
 	public TagList taglist { 
@@ -81,6 +86,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				_taglist = null;
 		}
 	}
+	
 	private bool is_stream = false;
 	public string Uri { 
 		get {
@@ -94,19 +100,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 			this.playbin.set("uri", value);
 			length_time = 0;
 			
-			File file = File.new_for_uri(value);
-			FileType filetype = GLib.FileType.REGULAR;
-			try {
-				FileInfo info = file.query_info(
-						            FILE_ATTRIBUTE_STANDARD_TYPE, 
-						            FileQueryInfoFlags.NONE, 
-						            null);
-				filetype = info.get_file_type();
-			}
-			catch(GLib.Error e){
-				stderr.printf("argerror: %s\n", e.message);
-			}
-			if(filetype!=GLib.FileType.REGULAR) is_stream = true;
+			File file = File.new_for_commandline_arg(value);
+			if(file.get_uri_scheme() == "http") is_stream = true;
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
 		}
 	}

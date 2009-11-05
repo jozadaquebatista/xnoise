@@ -150,15 +150,30 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		DbBrowser dbBr = new DbBrowser();
 		string[] uris = dbBr.get_lastused_uris();
 		foreach(string uri in uris) {
-			TrackData td; 
-			if(dbBr.get_trackdata_for_uri(uri, out td)) {
-				this.trackList.insert_title(0,
-					                        null,
-					                        (int)td.Tracknumber,
-					                        Markup.printf_escaped("%s",td.Title),
-					                        Markup.printf_escaped("%s",td.Album),
-					                        Markup.printf_escaped("%s",td.Artist),
-					                        uri);
+			File file = File.new_for_commandline_arg(uri);
+			if(file.get_uri_scheme() != "http") {
+				TrackData td; 
+				if(dbBr.get_trackdata_for_uri(uri, out td)) {
+					this.trackList.insert_title(0,
+							                    null,
+							                    (int)td.Tracknumber,
+							                    Markup.printf_escaped("%s",td.Title),
+							                    Markup.printf_escaped("%s",td.Album),
+							                    Markup.printf_escaped("%s",td.Artist),
+							                    uri);
+				}
+			}
+			else {
+				TrackData td; 
+				if(dbBr.get_trackdata_for_stream(uri, out td)) {
+					this.trackList.insert_title(0,
+							                    null,
+							                    0,
+							                    Markup.printf_escaped("%s",td.Title),
+							                    "",
+							                    "",
+							                    uri);
+				}
 			}
 		}
 	}
@@ -530,7 +545,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 
-
 	private void on_tracklistnotebook_switch_page(void* sender, uint page) {
 		switch(page) {
 			case 0:
@@ -541,7 +555,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				break;
 		}
 	}
-
 
 	private bool on_close() {
 		this.get_position(out _posX_buffer, out _posY_buffer);

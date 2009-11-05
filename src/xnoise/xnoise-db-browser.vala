@@ -54,7 +54,13 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement stream_td_for_id_statement;
 	private Statement get_media_files_statement;
 	private Statement count_streams_statement;
+	private Statement trackdata_for_stream_statement;
+	private Statement count_for_stream_statement;
 
+	private static const string STMT_COUNT_FOR_STREAMS = 
+		"SELECT COUNT (id) FROM streams st WHERE st.uri = ?"; 
+	private static const string STMT_TRACKDATA_FOR_STREAM = 
+		"SELECT st.name FROM streams st WHERE st.name = ?";
 	private static const string STMT_COUNT_STREAMS = 
 		"SELECT COUNT (id) FROM streams";	
 	private static const string STMT_COUNT_FOR_MEDIATYPE = 
@@ -115,6 +121,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 	}
 
 	private void prepare_statements() {
+		this.db.prepare_v2(STMT_COUNT_FOR_STREAMS, -1, 
+			out this.count_for_stream_statement); 	
 		this.db.prepare_v2(STMT_COUNT_STREAMS, -1, 
 			out this.count_streams_statement); 	
 		this.db.prepare_v2(STMT_COUNT_FOR_MEDIATYPE, -1, 
@@ -155,6 +163,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 			out this.stream_td_for_id_statement);
 		this.db.prepare_v2(STMT_GET_MEDIA_FILES, -1, 
 			out this.get_media_files_statement);
+		this.db.prepare_v2(STMT_TRACKDATA_FOR_STREAM, -1, 
+			out this.trackdata_for_stream_statement);
 	}
 
 	public bool videos_available() {
@@ -177,8 +187,22 @@ public class Xnoise.DbBrowser : GLib.Object {
 		
 		if(count_streams_statement.step() == Sqlite.ROW) {
 			count = count_streams_statement.column_int(0);
+			if(count > 0) return true;
 		}
-		if(count>0) return true;
+		return false;
+	}
+	
+	public bool stream_is_in_db(string uri) {
+		int count = 0;
+		count_for_stream_statement.reset();
+		
+		if(count_for_stream_statement.bind_text(1, uri) != Sqlite.OK) {
+			this.db_error();
+		}
+		if(count_for_stream_statement.step() == Sqlite.ROW) {
+			count = count_for_stream_statement.column_int(0);
+			if(count > 0) return true;
+		}
 		return false;
 	}
 
@@ -186,7 +210,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		int count = 0;
 		count_for_uri_statement.reset();
 		
-		if(count_for_uri_statement.bind_text(1, uri)!=Sqlite.OK) {
+		if(count_for_uri_statement.bind_text(1, uri) != Sqlite.OK) {
 			this.db_error();
 		}
 		if(count_for_uri_statement.step() == Sqlite.ROW) {
@@ -199,7 +223,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 	public bool get_uri_for_id(int id, out string val) {
 		val = "";
 		uri_for_id_statement.reset();
-		uri_for_id_statement.bind_int(1, id);
+		if(uri_for_id_statement.bind_int(1, id) != Sqlite.OK) {
+			this.db_error();
+		}
 		if(uri_for_id_statement.step() == Sqlite.ROW) {
 			val = uri_for_id_statement.column_text(0);
 			return true;
@@ -210,7 +236,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 	public bool get_trackdata_for_id(int id, out TrackData val) { 
 		val = TrackData();
 		trackdata_for_id_statement.reset();
-		trackdata_for_id_statement.bind_int(1, id);
+		if(trackdata_for_id_statement.bind_int(1, id) != Sqlite.OK) {
+			this.db_error();
+		}
 		if(trackdata_for_id_statement.step() == Sqlite.ROW) {
 			val.Artist      = trackdata_for_id_statement.column_text(0);
 			val.Album       = trackdata_for_id_statement.column_text(1);
@@ -241,7 +269,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 	public bool get_stream_td_for_id(int id, out TrackData val) { 
 		val = TrackData();
 		stream_td_for_id_statement.reset();
-		stream_td_for_id_statement.bind_int(1, id);
+		if(stream_td_for_id_statement.bind_int(1, id) != Sqlite.OK) {
+			this.db_error();
+		}
 		if(stream_td_for_id_statement.step() == Sqlite.ROW) {
 			val.Artist      = "";
 			val.Album       = "";
@@ -258,14 +288,28 @@ public class Xnoise.DbBrowser : GLib.Object {
 
 	public bool get_stream_for_id(int id, out string uri) { 
 		stream_td_for_id_statement.reset();
-		stream_td_for_id_statement.bind_int(1, id);
+		if(stream_td_for_id_statement.bind_int(1, id) != Sqlite.OK) {
+			this.db_error();
+		}
 		if(stream_td_for_id_statement.step() == Sqlite.ROW) {
 			uri = stream_td_for_id_statement.column_text(1);
 			return true;
 		}
 		return false;
 	}
-			
+
+	public bool get_trackdata_for_stream(string uri, out TrackData val) { 
+		val = TrackData();
+		trackdata_for_stream_statement.reset();
+		if(trackdata_for_stream_statement.bind_text(1, uri) != Sqlite.OK) {
+			this.db_error();
+		}
+		if(trackdata_for_stream_statement.step() == Sqlite.ROW) {
+			val.Title = trackdata_for_stream_statement.column_text(0);
+		}
+		return true;
+	}
+
 	public bool get_trackdata_for_uri(string uri, out TrackData val) { 
 		val = TrackData();
 		trackdata_for_uri_statement.reset();

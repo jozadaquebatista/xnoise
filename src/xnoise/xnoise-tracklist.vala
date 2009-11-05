@@ -269,7 +269,7 @@ public class Xnoise.TrackList : TreeView {
 		//if reorder = false then data is coming from outside (music browser or nautilus) -> use uri_list
 		Gtk.TreePath path;
 		TreeRowReference drop_rowref;
-		string filename = null;
+		string uri = null;
 		File file;
 		FileType filetype;
 		string[] uris = selection.get_uris();
@@ -280,26 +280,32 @@ public class Xnoise.TrackList : TreeView {
 			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 			bool is_first = true;
 			for(int i=0; i<uris.length;i++) {
-				filename = uris[i]; 
-				//TODO: HANDLE STREAMS AND PLAYLISTS
-				try {
-					file = File.new_for_uri(filename);
-					FileInfo info = file.query_info(
-								        attr, 
-								        FileQueryInfoFlags.NONE, 
-								        null);
-					filetype = info.get_file_type();
-				}
-				catch(GLib.Error e){
-					stderr.printf("%s\n", e.message);
-					return;
-				}	
+				bool is_stream = false;
+				uri = uris[i]; 
+				file = File.new_for_uri(uri);
+				if(file.get_uri_scheme() == "http") is_stream = true;
+				if(!is_stream) {
+					try {
+						FileInfo info = file.query_info(
+										    attr, 
+										    FileQueryInfoFlags.NONE, 
+										    null);
+						filetype = info.get_file_type();
+					}
+					catch(GLib.Error e){
+						stderr.printf("%s\n", e.message);
+						return;
+					}	
 		
-				if(!(filetype==GLib.FileType.DIRECTORY)) {
-					handle_dropped_file(filename, ref path, ref is_first);	//FILES
+					if(filetype!=GLib.FileType.DIRECTORY) {
+						handle_dropped_file(uri, ref path, ref is_first);	//FILES
+					}
+					else {
+						handle_dropped_files_for_folders(file, ref path, ref is_first); //DIRECTORIES
+					}
 				}
 				else {
-					handle_dropped_files_for_folders(file, ref path, ref is_first); //DIRECTORIES
+					handle_dropped_stream(uri, ref path, ref is_first);
 				}
 			}
 			is_first = false;
@@ -390,6 +396,59 @@ public class Xnoise.TrackList : TreeView {
 		}
 	}
 
+	private void handle_dropped_stream(string streamuri, ref TreePath? path, ref bool is_first) {
+		//Function to import music STREAMS in drag'n'drop
+		TreeIter iter, new_iter;
+		File file = File.new_for_uri(streamuri);
+			
+		DbBrowser dbBr = new DbBrowser();
+		string artist, album, title;
+		if(dbBr.stream_is_in_db(streamuri)) {
+			TrackData td = TrackData(); 
+			dbBr.get_trackdata_for_stream(streamuri, out td); 
+			artist    = "";
+			album     = "";
+			title     = Markup.printf_escaped("%s", td.Title);
+		}
+		else {
+			artist         = ""; 
+			album          = ""; 
+			title          = Markup.printf_escaped("%s", file.get_uri()); 
+		}
+
+		TreeIter first_iter;
+		if(!this.listmodel.get_iter_first(out first_iter)) { //dropped on empty list, first uri
+			this.listmodel.insert(out new_iter, 0);
+		}
+		else if(path==null) { //dropped below all entries, first uri
+			listmodel.append(out new_iter);
+		}					
+		else { //all other uris
+			this.listmodel.get_iter(out iter, path); 
+			if(is_first) {
+				if((position == Gtk.TreeViewDropPosition.BEFORE)||
+				   (position == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) { 
+				   //Determine drop position for first, insert all others after first
+					this.listmodel.insert_before(out new_iter, iter);
+				}
+				else {
+					this.listmodel.insert_after(out new_iter, iter);
+				}
+				is_first = false;
+			}
+			else {
+				this.listmodel.insert_after(out new_iter, iter);
+			}
+		}
+		listmodel.set(new_iter,
+			TrackListColumn.STATE, TrackState.STOPPED,
+			TrackListColumn.TITLE, title,
+			TrackListColumn.ALBUM, album,
+			TrackListColumn.ARTIST, artist,
+			TrackListColumn.URI, streamuri,
+			-1);
+		path = listmodel.get_path(new_iter);
+	}
 	
 	private void handle_dropped_file(string fileuri, ref TreePath? path, ref bool is_first) {
 		//Function to import music FILES in drag'n'drop

@@ -53,10 +53,12 @@ namespace Xnoise {
 		public Xnoise.TitleMtypeId[] get_titles_with_mediatypes_and_ids (string artist, string album, ref string searchtext);
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
+		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public bool get_trackdata_for_uri (string uri, out Xnoise.TrackData val);
 		public bool get_uri_for_id (int id, out string val);
 		public Xnoise.TitleMtypeId[] get_video_data (ref string searchtext);
 		public string[] get_videos (ref string searchtext);
+		public bool stream_is_in_db (string uri);
 		public bool streams_available ();
 		public bool uri_is_in_db (string uri);
 		public bool videos_available ();
@@ -187,7 +189,7 @@ namespace Xnoise {
 		public Gtk.TreeStore treemodel;
 		public MediaBrowser (ref unowned Xnoise.Main xn);
 		public bool change_model_data ();
-		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath path);
+		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
 		public bool on_button_press (Xnoise.MediaBrowser sender, Gdk.EventButton e);
 		public bool on_button_release (Xnoise.MediaBrowser sender, Gdk.EventButton e);
 		public void on_drag_data_get (Xnoise.MediaBrowser sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime);

@@ -104,17 +104,17 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				Gtk.TreeSelection selection = this.get_selection();
 				if(selection.count_selected_rows()<1) break;
 				GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
-				TreePath? path = selected_rows.nth_data(0);
-				if(path.get_depth()>2) break;
-				if(path!=null) this.expand_row(path, false);
+				TreePath? treepath = selected_rows.nth_data(0);
+				if(treepath.get_depth()>2) break;
+				if(treepath!=null) this.expand_row(treepath, false);
 				break;
 			case KEY_CURSOR_LEFT:
 				Gtk.TreeSelection selection = this.get_selection();
 				if(selection.count_selected_rows()<1) break;
 				GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
-				TreePath? path = selected_rows.nth_data(0);
-				if(path.get_depth()>2) break;
-				if(path!=null) this.collapse_row(path);
+				TreePath? treepath = selected_rows.nth_data(0);
+				if(treepath.get_depth()>2) break;
+				if(treepath!=null) this.collapse_row(treepath);
 				break;				
 			default:
 				break;				
@@ -132,14 +132,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
     }
 
 	public bool on_button_press(MediaBrowser sender, Gdk.EventButton e) {
-		Gtk.TreePath path = null;
+		Gtk.TreePath treepath = null;
 		Gtk.TreeViewColumn column;        
 		Gtk.TreeSelection selection = this.get_selection();
 		int x = (int)e.x; 
 		int y = (int)e.y;
 		int cell_x, cell_y;
 
-		if(!this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y)) 
+		if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y)) 
 			return true;
 		
 		switch(e.button) {
@@ -148,10 +148,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 					return false;
 				}
 				else {
-					if(selection.path_is_selected(path)) {
+					if(selection.path_is_selected(treepath)) {
 						if(((e.state & Gdk.ModifierType.SHIFT_MASK)==Gdk.ModifierType.SHIFT_MASK)|
 						   ((e.state & Gdk.ModifierType.CONTROL_MASK)==Gdk.ModifierType.CONTROL_MASK)) {
-							selection.unselect_path(path);
+							selection.unselect_path(treepath);
 						} 
 						return true;
 					}
@@ -168,13 +168,13 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			}
 		}
 		if(!(selection.count_selected_rows()>0 )) 
-			selection.select_path(path);
+			selection.select_path(treepath);
 		return false; 
 	}
 
 
 	public bool on_button_release(MediaBrowser sender, Gdk.EventButton e) {
-		Gtk.TreePath path;
+		Gtk.TreePath treepath;
 		Gtk.TreeViewColumn column;
 		int cell_x, cell_y;
 
@@ -190,9 +190,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		Gtk.TreeSelection selection = this.get_selection();
 		int x = (int)e.x; 
 		int y = (int)e.y;
-		if(!this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y)) return false;
+		if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y)) return false;
 		selection.unselect_all();
-		selection.select_path(path);
+		selection.select_path(treepath);
 
 		return false; 
 	}
@@ -212,12 +212,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	public void on_drag_data_get(MediaBrowser sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime) {
 		string[] uris = {};
-		List<weak TreePath> paths;
+		List<weak TreePath> treepaths;
 		weak Gtk.TreeSelection sel;
 		sel = this.get_selection();
-		paths = sel.get_selected_rows(null);
-		foreach(weak TreePath path in paths) {
-			string[] l = this.build_uri_list_for_treepath(path);
+		treepaths = sel.get_selected_rows(null);
+		foreach(weak TreePath treepath in treepaths) {
+			string[] l = this.build_uri_list_for_treepath(treepath);
 			foreach(weak string u in l) {
 				uris += u;
 			}
@@ -226,7 +226,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		selection.set_uris(uris);
 	}
 
-	private string[] build_uri_list_for_treepath(Gtk.TreePath path) {
+	private string[] build_uri_list_for_treepath(Gtk.TreePath treepath) {
 		TreeIter iter, iterChild, iterChildChild; 
 		string[] urilist = {};
 		DbBrowser dbb;
@@ -234,9 +234,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		int dbid = -1;
 		string uri;
 		BrowserCollectionType br_ct = BrowserCollectionType.UNKNOWN;
-		switch(path.get_depth()) {
+		switch(treepath.get_depth()) {
 			case 1:
-				treemodel.get_iter(out iter, path);
+				treemodel.get_iter(out iter, treepath);
 				dbb = new DbBrowser();
 
 				treemodel.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
@@ -250,7 +250,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 						              BrowserColumn.MEDIATYPE, ref mtype
 						              );
 						if(dbid==-1) break;
-						switch(mtype) { //TODO: Is This ok?
+						switch(mtype) {
 							case MediaType.VIDEO: {
 								if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 								break;
@@ -277,7 +277,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				}
 				break;
 			case 2:
-				treemodel.get_iter(out iter, path);
+				treemodel.get_iter(out iter, treepath);
 				dbb = new DbBrowser();
 				treemodel.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
 				if(br_ct == BrowserCollectionType.LISTED) {
@@ -315,7 +315,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				break;
 			case 3: //TITLE
 				dbid = -1;
-				treemodel.get_iter(out iter, path);
+				treemodel.get_iter(out iter, treepath);
 				treemodel.get(iter, BrowserColumn.DB_ID, ref dbid);
 				if(dbid==-1) break;
 				dbb = new DbBrowser();
@@ -325,29 +325,28 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return urilist;		
 	}
 
-	private TrackData[] get_trackdata_listed(Gtk.TreePath path) {
+	private TrackData[] get_trackdata_listed(Gtk.TreePath treepath) {
 		//this is only used for path.get_depth() == 2 !
-		print("listed\n");
 		DbBrowser dbb;
 		int dbid = -1;
-		MediaType mt = MediaType.UNKNOWN;
+		MediaType mtype = MediaType.UNKNOWN;
 		TreeIter iter;
-		TrackData[] td_list = {}; 
-		treemodel.get_iter(out iter, path);
+		TrackData[] tdata = {}; 
+		treemodel.get_iter(out iter, treepath);
 		treemodel.get(iter, 
 		              BrowserColumn.DB_ID, ref dbid,
-		              BrowserColumn.MEDIATYPE, ref mt
+		              BrowserColumn.MEDIATYPE, ref mtype
 		              );
 		if(dbid!=-1) {
 			dbb = new DbBrowser();
 			TrackData td;
-			switch(mt) {
+			switch(mtype) {
 				case MediaType.VIDEO: {
-					if(dbb.get_trackdata_for_id(dbid, out td)) td_list += td;
+					if(dbb.get_trackdata_for_id(dbid, out td)) tdata += td;
 					break;
 				}
 				case MediaType.STREAM : {
-					if(dbb.get_stream_td_for_id(dbid, out td)) td_list += td;
+					if(dbb.get_stream_td_for_id(dbid, out td)) tdata += td;
 					break;
 				}
 				default:
@@ -355,18 +354,18 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			}
 		} 
 
-		return td_list;
+		return tdata;
 	}
 	
-	private TrackData[] get_trackdata_hierarchical(Gtk.TreePath path) {
+	private TrackData[] get_trackdata_hierarchical(Gtk.TreePath treepath) {
 		TreeIter iter, iterChild;
 		int dbid = -1;
-		TrackData[] td_list = {}; 
-		switch(path.get_depth()) {
+		TrackData[] tdata = {}; 
+		switch(treepath.get_depth()) {
 			case 1: //ARTIST (this case is currently not used)
 				break;
 			case 2: //ALBUM
-				treemodel.get_iter(out iter, path);
+				treemodel.get_iter(out iter, treepath);
 				
 				var dbb = new DbBrowser();
 				
@@ -376,37 +375,37 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 					treemodel.get(iterChild, BrowserColumn.DB_ID, ref dbid);
 					if(dbid==-1) continue;
 					TrackData td;
-					if(dbb.get_trackdata_for_id(dbid, out td)) td_list += td;
+					if(dbb.get_trackdata_for_id(dbid, out td)) tdata += td;
 				}
 				break;
 			case 3: //TITLE
 				dbid = -1;
-				treemodel.get_iter(out iter, path);
+				treemodel.get_iter(out iter, treepath);
 				treemodel.get(iter, BrowserColumn.DB_ID, ref dbid);
 				if(dbid==-1) break;
 				
 				var dbb = new DbBrowser();
 				
 				TrackData td;
-				if(dbb.get_trackdata_for_id(dbid, out td)) td_list += td;
+				if(dbb.get_trackdata_for_id(dbid, out td)) tdata += td;
 				break;
 		}		
-		return td_list;
+		return tdata;
 	}
 	
-	public TrackData[] get_trackdata_for_treepath(Gtk.TreePath path) {
+	public TrackData[] get_trackdata_for_treepath(Gtk.TreePath treepath) {
 		TreeIter iter;
 		BrowserCollectionType br_ct = BrowserCollectionType.UNKNOWN;
-		TrackData[] td_list = {}; 
-		treemodel.get_iter(out iter, path);
+		TrackData[] tdata = {}; 
+		treemodel.get_iter(out iter, treepath);
 		treemodel.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
 		if(br_ct == BrowserCollectionType.LISTED) {
-			return get_trackdata_listed(path);
+			return get_trackdata_listed(treepath);
 		}
 		else if(br_ct == BrowserCollectionType.HIERARCHICAL) {
-			return get_trackdata_hierarchical(path);
+			return get_trackdata_hierarchical(treepath);
 		}
-		return td_list;
+		return tdata;
 	}
 
 	public void on_drag_end(MediaBrowser sender, Gdk.DragContext context) { 
@@ -420,14 +419,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			Gdk.DragAction.MOVE);
 	}
 
-	private void on_row_activated(MediaBrowser sender, TreePath path, TreeViewColumn column){
-		if(path.get_depth()>1) {
-			TrackData[] td_list = this.get_trackdata_for_treepath(path);
+	private void on_row_activated(MediaBrowser sender, TreePath treepath, TreeViewColumn column){
+		if(treepath.get_depth()>1) {
+			TrackData[] td_list = this.get_trackdata_for_treepath(treepath);
 			this.add_songs_to_tracklist(td_list, true);
 			td_list = null;
 		}
 		else {
-			this.expand_row(path, false);
+			this.expand_row(treepath, false);
 		}
 	}
 
