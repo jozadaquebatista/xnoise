@@ -121,6 +121,7 @@ public struct Xnoise.TrackData { // meta information structure
 	public string Album;
 	public string Title;
 	public string Genre;
+	public uint Year;
 	public uint Tracknumber;
 	public MediaType Mediatype = MediaType.UNKNOWN;
 	public string Uri;

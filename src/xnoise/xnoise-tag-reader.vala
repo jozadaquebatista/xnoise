@@ -45,6 +45,7 @@ internal class Xnoise.TagReader : GLib.Object {
 				td.Title = t.title;
 				td.Album = t.album;
 				td.Genre = t.genre;
+				td.Year = t.year;
 				td.Tracknumber = t.track;
 				td.Mediatype   = MediaType.AUDIO;
 			}

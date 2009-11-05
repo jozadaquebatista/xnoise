@@ -98,7 +98,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_INSERT_GENRE = 
 		"INSERT INTO genres (name) VALUES (?)";
 	private static const string STMT_INSERT_TITLE = 
-		"INSERT INTO items (tracknumber, artist, album, title, genre, uri, mediatype) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		"INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 	private static const string STMT_GET_TITLE_ID = 
 		"SELECT id FROM items WHERE artist = ? AND album = ? AND LOWER(title) = ?";
 	private static const string STMT_DEL_ARTISTS = 
@@ -332,12 +332,13 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 		
 	private void insert_title(TrackData td, string uri) {
-		string artist    = td.Artist;
-		string title     = td.Title;
-		string album     = td.Album;
-		string genre     = td.Genre;
-		uint tracknumber = td.Tracknumber; 
-		int mediatype    = (int)td.Mediatype;
+		string artist       = td.Artist;
+		string title        = td.Title;
+		string album        = td.Album;
+		string genre        = td.Genre;
+		uint year           = td.Year;
+		uint tracknumber    = td.Tracknumber; 
+		int mediatype       = (int)td.Mediatype;
 
 		int artist_id = handle_artist(ref artist);
 		if(artist_id == -1) {
@@ -378,8 +379,9 @@ public class Xnoise.DbWriter : GLib.Object {
 				insert_title_statement.bind_int (3, album_id)          != Sqlite.OK ||
 				insert_title_statement.bind_text(4, title)             != Sqlite.OK ||
 				insert_title_statement.bind_int (5, genre_id)          != Sqlite.OK ||
-				insert_title_statement.bind_int (6, uri_id)            != Sqlite.OK ||
-				insert_title_statement.bind_int (7, mediatype)         != Sqlite.OK) {
+				insert_title_statement.bind_int (6, (int)year)         != Sqlite.OK ||
+				insert_title_statement.bind_int (7, uri_id)            != Sqlite.OK ||
+				insert_title_statement.bind_int (8, mediatype)         != Sqlite.OK) {
 				this.db_error();
 			}
 			if(insert_title_statement.step()!=Sqlite.DONE)

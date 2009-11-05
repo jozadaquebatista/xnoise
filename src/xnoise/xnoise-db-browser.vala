@@ -38,10 +38,10 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement get_lastused_statement;
 	private Statement get_videos_with_search_statement;
 	private Statement get_video_data_statement;
-	private Statement get_artist_with_search_statement;
-	private Statement get_albums_with_search_statement;
-	private Statement get_items_with_search_statement;
-	private Statement get_items_with_mediatypes_and_ids_with_search_statement;
+	private Statement get_artist_statement;
+	private Statement get_albums_statement;
+	private Statement get_items_statement;
+	private Statement get_items_with_mediatypes_and_ids_statement;
 	private Statement track_id_for_uri_statement;
 	private Statement trackdata_for_uri_statement;
 	private Statement trackdata_for_id_statement;
@@ -53,10 +53,10 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement get_radio_data_statement;
 	private Statement stream_td_for_id_statement;
 	private Statement get_media_files_statement;
-	private Statement get_artist_statement;
-	private Statement get_albums_statement;
-	private Statement get_items_with_mediatypes_and_ids_statement;
-	
+	private Statement count_streams_statement;
+
+	private static const string STMT_COUNT_STREAMS = 
+		"SELECT COUNT (id) FROM streams";	
 	private static const string STMT_COUNT_FOR_MEDIATYPE = 
 		"SELECT COUNT (title) FROM items WHERE mediatype = ?";
 	private static const string STMT_COUNT_FOR_URI = 
@@ -77,20 +77,14 @@ public class Xnoise.DbBrowser : GLib.Object {
 		"SELECT DISTINCT title, mediatype, id FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY title DESC";
 	private static const string STMT_GET_VIDEOS = 
 		"SELECT DISTINCT title FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY title DESC";
-	private static const string STMT_GET_ARTISTS_WITH_SEARCH = 
-		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY ar.name DESC";
 	private static const string STMT_GET_ARTISTS = 
-		"SELECT DISTINCT name FROM artists ORDER BY name DESC";
-	private static const string STMT_GET_ALBUMS_WITH_SEARCH = 
-		"SELECT DISTINCT al.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY al.name DESC";
+		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY ar.name DESC";
 	private static const string STMT_GET_ALBUMS = 
-		"SELECT DISTINCT al.name FROM artists ar, albums al WHERE al.artist = ar.id AND ar.name = ? ORDER BY al.name DESC";
-	private static const string STMT_GET_ITEMS_WITH_SEARCH = 
-		"SELECT DISTINCT t.title FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND t.title LIKE ? ORDER BY t.tracknumber DESC";
-	private static const string STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS_WITH_SEARCH = 
-		"SELECT DISTINCT t.title, t.mediatype, t.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY tracknumber DESC";
+		"SELECT DISTINCT al.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY t.year DESC, al.name DESC";
+	private static const string STMT_GET_ITEMS = 
+		"SELECT DISTINCT t.title FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND t.title LIKE ? ORDER BY t.tracknumber DESC, t.title DESC";
 	private static const string STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS = 
-		"SELECT DISTINCT t.title, t.mediatype, t.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? ORDER BY t.tracknumber DESC";
+		"SELECT DISTINCT t.title, t.mediatype, t.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY t.tracknumber DESC, t.title DESC";
 	private static const string STMT_GET_RADIOS = 
 		"SELECT name, uri FROM streams";
 	private static const string STMT_GET_SINGLE_RADIO_URI = 
@@ -120,9 +114,11 @@ public class Xnoise.DbBrowser : GLib.Object {
 		critical("Database error: %s", this.db.errmsg ());
 	}
 
-	private void prepare_statements() { 
+	private void prepare_statements() {
+		this.db.prepare_v2(STMT_COUNT_STREAMS, -1, 
+			out this.count_streams_statement); 	
 		this.db.prepare_v2(STMT_COUNT_FOR_MEDIATYPE, -1, 
-			out this.count_for_mediatype_statement); 	
+			out this.count_for_mediatype_statement);
 		this.db.prepare_v2(STMT_COUNT_FOR_URI, -1, 
 			out this.count_for_uri_statement); 
 		this.db.prepare_v2(STMT_GET_LASTUSED, -1, 
@@ -133,14 +129,14 @@ public class Xnoise.DbBrowser : GLib.Object {
 			out this.get_video_data_statement);
 		this.db.prepare_v2(STMT_GET_RADIO_DATA, -1, 
 			out this.get_radio_data_statement);
-		this.db.prepare_v2(STMT_GET_ARTISTS_WITH_SEARCH, -1, 
-			out this.get_artist_with_search_statement); 
-		this.db.prepare_v2(STMT_GET_ALBUMS_WITH_SEARCH, -1, 
-			out this.get_albums_with_search_statement); 
-		this.db.prepare_v2(STMT_GET_ITEMS_WITH_SEARCH, -1, 
-			out this.get_items_with_search_statement); 
-		this.db.prepare_v2(STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS_WITH_SEARCH, -1, 
-			out this.get_items_with_mediatypes_and_ids_with_search_statement); 
+		this.db.prepare_v2(STMT_GET_ARTISTS, -1, 
+			out this.get_artist_statement); 
+		this.db.prepare_v2(STMT_GET_ALBUMS, -1, 
+			out this.get_albums_statement); 
+		this.db.prepare_v2(STMT_GET_ITEMS, -1, 
+			out this.get_items_statement); 
+		this.db.prepare_v2(STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS, -1, 
+			out this.get_items_with_mediatypes_and_ids_statement); 
 		this.db.prepare_v2(STMT_TRACKDATA_FOR_URI, -1, 
 			out this.trackdata_for_uri_statement); 
 		this.db.prepare_v2(STMT_URI_FOR_ID, -1, 
@@ -159,19 +155,13 @@ public class Xnoise.DbBrowser : GLib.Object {
 			out this.stream_td_for_id_statement);
 		this.db.prepare_v2(STMT_GET_MEDIA_FILES, -1, 
 			out this.get_media_files_statement);
-		this.db.prepare_v2(STMT_GET_ARTISTS, -1,
-			out this.get_artist_statement);
-		this.db.prepare_v2(STMT_GET_ALBUMS, -1,
-			out this.get_albums_statement);
-		this.db.prepare_v2(STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS, -1,
-			out this.get_items_with_mediatypes_and_ids_statement);
 	}
 
 	public bool videos_available() {
 		int count = 0;
 		count_for_mediatype_statement.reset();
 		
-		if(count_for_mediatype_statement.bind_int(1, MediaType.VIDEO)!=Sqlite.OK) {
+		if(count_for_mediatype_statement.bind_int(1, MediaType.VIDEO) != Sqlite.OK) {
 			this.db_error();
 		}
 		if(count_for_mediatype_statement.step() == Sqlite.ROW) {
@@ -180,7 +170,18 @@ public class Xnoise.DbBrowser : GLib.Object {
 		if(count>0) return true;
 		return false;
 	}
+
+	public bool streams_available() {
+		int count = 0;
+		count_streams_statement.reset();
 		
+		if(count_streams_statement.step() == Sqlite.ROW) {
+			count = count_streams_statement.column_int(0);
+		}
+		if(count>0) return true;
+		return false;
+	}
+
 	public bool uri_is_in_db(string uri) {
 		int count = 0;
 		count_for_uri_statement.reset();
@@ -397,86 +398,50 @@ public class Xnoise.DbBrowser : GLib.Object {
 
 	public string[] get_artists(ref string searchtext) {
 		string[] val = {};
-		if(searchtext!="") {
-			get_artist_with_search_statement.reset();
-			if((this.get_artist_with_search_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-			   (this.get_artist_with_search_statement.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-			   (this.get_artist_with_search_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
-				this.db_error();
-			}
-			while(get_artist_with_search_statement.step() == Sqlite.ROW) {
-				val += get_artist_with_search_statement.column_text(0);
-			}
+		get_artist_statement.reset();
+		if((this.get_artist_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_artist_statement.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_artist_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+			this.db_error();
 		}
-		else {
-			get_artist_statement.reset();
-			while(get_artist_statement.step() == Sqlite.ROW) {
-				val += get_artist_statement.column_text(0);
-			}
+		while(get_artist_statement.step() == Sqlite.ROW) {
+			val += get_artist_statement.column_text(0);
 		}
 		return val;
 	}
 
 	public string[] get_albums(string artist, ref string searchtext) { 
 		string[] val = {};
-		if(searchtext!="") {
-			get_albums_with_search_statement.reset();
-			if((this.get_albums_with_search_statement.bind_text(1, artist)!=Sqlite.OK)|
-			   (this.get_albums_with_search_statement.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-			   (this.get_albums_with_search_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-			   (this.get_albums_with_search_statement.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
-				this.db_error();
-			}
-			while(get_albums_with_search_statement.step() == Sqlite.ROW) {
-				val += get_albums_with_search_statement.column_text(0);
-			}
+		get_albums_statement.reset();
+		if((this.get_albums_statement.bind_text(1, artist)!=Sqlite.OK)|
+		   (this.get_albums_statement.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_albums_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_albums_statement.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+			this.db_error();
 		}
-		else {
-			get_albums_statement.reset();
-			if(this.get_albums_statement.bind_text(1, artist)!=Sqlite.OK) {
-				this.db_error();
-			}
-			while(get_albums_statement.step() == Sqlite.ROW) {
-				val += get_albums_statement.column_text(0);
-			}
+		while(get_albums_statement.step() == Sqlite.ROW) {
+			val += get_albums_statement.column_text(0);
 		}
 		return val;
 	}
 
 	public TitleMtypeId[] get_titles_with_mediatypes_and_ids(string artist, string album, ref string searchtext) { 
 		TitleMtypeId[] val = {};
-		if(searchtext!="") {
-			get_items_with_mediatypes_and_ids_with_search_statement.reset();
-			if((this.get_items_with_mediatypes_and_ids_with_search_statement.bind_text(1, artist)!=Sqlite.OK)|
-			   (this.get_items_with_mediatypes_and_ids_with_search_statement.bind_text(2, album )!=Sqlite.OK)|
-			   (this.get_items_with_mediatypes_and_ids_with_search_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-			   (this.get_items_with_mediatypes_and_ids_with_search_statement.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-			   (this.get_items_with_mediatypes_and_ids_with_search_statement.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
-				this.db_error();
-			}
-				
-			while(get_items_with_mediatypes_and_ids_with_search_statement.step() == Sqlite.ROW) {
-				TitleMtypeId twt = TitleMtypeId();
-				twt.name = get_items_with_mediatypes_and_ids_with_search_statement.column_text(0);
-				twt.mediatype = (MediaType) get_items_with_mediatypes_and_ids_with_search_statement.column_int(1);
-				twt.id = get_items_with_mediatypes_and_ids_with_search_statement.column_int(2);
-				val += twt;
-			}
+		get_items_with_mediatypes_and_ids_statement.reset();
+		if((this.get_items_with_mediatypes_and_ids_statement.bind_text(1, artist)!=Sqlite.OK)|
+		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(2, album )!=Sqlite.OK)|
+		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+			this.db_error();
 		}
-		else {
-			get_items_with_mediatypes_and_ids_statement.reset();
-			if((this.get_items_with_mediatypes_and_ids_statement.bind_text(1, artist)!=Sqlite.OK)|
-			   (this.get_items_with_mediatypes_and_ids_statement.bind_text(2, album )!=Sqlite.OK)) {
-				this.db_error();
-			}
-		
-			while(get_items_with_mediatypes_and_ids_statement.step() == Sqlite.ROW) {
-				TitleMtypeId twt = TitleMtypeId();
-				twt.name = get_items_with_mediatypes_and_ids_statement.column_text(0);
-				twt.mediatype = (MediaType) get_items_with_mediatypes_and_ids_statement.column_int(1);
-				twt.id = get_items_with_mediatypes_and_ids_statement.column_int(2);
-				val += twt;
-			}
+			
+		while(get_items_with_mediatypes_and_ids_statement.step() == Sqlite.ROW) {
+			TitleMtypeId twt = TitleMtypeId();
+			twt.name = get_items_with_mediatypes_and_ids_statement.column_text(0);
+			twt.mediatype = (MediaType) get_items_with_mediatypes_and_ids_statement.column_int(1);
+			twt.id = get_items_with_mediatypes_and_ids_statement.column_int(2);
+			val += twt;
 		}
 		return val;
 	}

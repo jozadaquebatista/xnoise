@@ -57,6 +57,7 @@ namespace Xnoise {
 		public bool get_uri_for_id (int id, out string val);
 		public Xnoise.TitleMtypeId[] get_video_data (ref string searchtext);
 		public string[] get_videos (ref string searchtext);
+		public bool streams_available ();
 		public bool uri_is_in_db (string uri);
 		public bool videos_available ();
 	}
@@ -315,6 +316,7 @@ namespace Xnoise {
 		public string Album;
 		public string Title;
 		public string Genre;
+		public uint Year;
 		public uint Tracknumber;
 		public Xnoise.MediaType Mediatype;
 		public string Uri;
