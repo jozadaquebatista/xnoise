@@ -120,15 +120,15 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			this.dialog              = this.get_object("dialog1") as Gtk.Dialog;
 
 			var okButton             = this.get_object("buttonOK") as Gtk.Button;
-			okButton.can_focus       = false;
+//			okButton.can_focus       = false;
 			okButton.clicked         += this.on_ok_button_clicked;
 
 			var acceptButton         = this.get_object("button2") as Gtk.Button;
-			acceptButton.can_focus   = false;
+//			acceptButton.can_focus   = false;
 			acceptButton.clicked     += this.on_accept_button_clicked;
 						
 			var cancelButton         = this.get_object("button1") as Gtk.Button;
-			cancelButton.can_focus   = false;
+//			cancelButton.can_focus   = false;
 			cancelButton.clicked     += this.on_cancel_button_clicked;
 			
 			sb                       = this.get_object("spinbutton1") as Gtk.SpinButton;
