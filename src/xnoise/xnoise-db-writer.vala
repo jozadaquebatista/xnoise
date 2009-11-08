@@ -469,7 +469,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 		else if(psVideo.match_string(mime)) {
 			int idbuffer = db_entry_exists(file.get_uri());
-			TrackData td = TrackData();
+			var td = new TrackData();
 			td.Artist = "unknown artist";
 			td.Album = "unknown album";
 			td.Title = file.get_basename();
@@ -529,7 +529,7 @@ public class Xnoise.DbWriter : GLib.Object {
 			}
 			else if(psVideo.match_string(mime)) {
 				int idbuffer = db_entry_exists(file.get_uri());
-				TrackData td = TrackData();
+				var td = new TrackData();
 				td.Artist = "unknown artist";
 				td.Album = "unknown album";
 				td.Title = file.get_basename();

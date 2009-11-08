@@ -78,7 +78,7 @@ namespace Xnoise {
 
 // PROJECT WIDE USED STRUCTS, INTERFACES AND ENUMS
 
-//Enums
+// Enums
 
 public enum Xnoise.BrowserColumn {
 	ICON = 0,
@@ -116,28 +116,6 @@ public enum Xnoise.MediaType {
 	PLAYLISTFILE
 }
 
-public struct Xnoise.TrackData { // meta information structure
-	public string Artist;
-	public string Album;
-	public string Title;
-	public string Genre;
-	public uint Year;
-	public uint Tracknumber;
-	public MediaType Mediatype = MediaType.UNKNOWN;
-	public string Uri;
-}
-
-public struct Xnoise.StreamData { // meta information structure
-	public string Name;
-	public string Uri;
-}
-
-public struct Xnoise.TitleMtypeId {
-	public string name;
-	public int id;
-	public MediaType mediatype;
-}
-
 public enum Xnoise.TrackListColumn {
 	STATE = 0,
 	ICON,
@@ -167,7 +145,35 @@ public enum Gst.StreamType {
     VIDEO   = 2
 }
 
-//Interfaces
+// Classes
+
+public class Xnoise.TrackData { // track meta information
+	public string Artist;
+	public string Album;
+	public string Title;
+	public string Genre;
+	public uint Year;
+	public uint Tracknumber;
+	public MediaType Mediatype = MediaType.UNKNOWN;
+	public string Uri;
+}
+
+
+// Structs
+
+public struct Xnoise.StreamData { // meta information structure
+	public string Name;
+	public string Uri;
+}
+
+public struct Xnoise.TitleMtypeId {
+	public string name;
+	public int id;
+	public MediaType mediatype;
+}
+
+
+// Interfaces
 
 public interface Xnoise.IParams : GLib.Object {
 	public abstract void read_params_data();

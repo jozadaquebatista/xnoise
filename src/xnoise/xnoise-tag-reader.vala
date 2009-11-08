@@ -39,7 +39,7 @@ internal class Xnoise.TagReader : GLib.Object {
 		taglib_file = new TagLib.File(filename);
 		if(taglib_file!=null) {
 			weak TagLib.Tag t = taglib_file.tag; 
-			td = TrackData();
+			td = new TrackData();
 			try {
 				td.Artist = t.artist;
 				td.Title = t.title;
@@ -59,7 +59,7 @@ internal class Xnoise.TagReader : GLib.Object {
 			}
 		}
 		else {
-			td = TrackData(); 
+			td = new TrackData(); 
 			td.Artist = "unknown artist";
 			td.Title  = "unknown title";
 			td.Album  = "unknown album";

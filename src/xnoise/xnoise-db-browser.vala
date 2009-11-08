@@ -234,7 +234,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	}
 
 	public bool get_trackdata_for_id(int id, out TrackData val) { 
-		val = TrackData();
+		val = new TrackData();
 		trackdata_for_id_statement.reset();
 		if(trackdata_for_id_statement.bind_int(1, id) != Sqlite.OK) {
 			this.db_error();
@@ -267,7 +267,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	}
 
 	public bool get_stream_td_for_id(int id, out TrackData val) { 
-		val = TrackData();
+		val = new TrackData();
 		stream_td_for_id_statement.reset();
 		if(stream_td_for_id_statement.bind_int(1, id) != Sqlite.OK) {
 			this.db_error();
@@ -298,20 +298,23 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return false;
 	}
 
-	public bool get_trackdata_for_stream(string uri, out TrackData val) { 
-		val = TrackData();
+	public bool get_trackdata_for_stream(string uri, out TrackData val) {
+		bool retval = false;
+		val = new TrackData();
 		trackdata_for_stream_statement.reset();
 		if(trackdata_for_stream_statement.bind_text(1, uri) != Sqlite.OK) {
 			this.db_error();
 		}
 		if(trackdata_for_stream_statement.step() == Sqlite.ROW) {
 			val.Title = trackdata_for_stream_statement.column_text(0);
+			retval = true;
 		}
-		return true;
+		return retval;
 	}
 
-	public bool get_trackdata_for_uri(string uri, out TrackData val) { 
-		val = TrackData();
+	public bool get_trackdata_for_uri(string uri, out TrackData val) {
+		bool retval = false;
+		val = new TrackData();
 		trackdata_for_uri_statement.reset();
 		trackdata_for_uri_statement.bind_text(1, uri);
 		if(trackdata_for_uri_statement.step() == Sqlite.ROW) {
@@ -319,6 +322,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 			val.Album       = trackdata_for_uri_statement.column_text(1);
 			val.Title       = trackdata_for_uri_statement.column_text(2);
 			val.Tracknumber = (uint)trackdata_for_uri_statement.column_int(3); 
+			retval = true;
 		}
 		if((val.Artist=="") | (val.Artist==null)) {
 			val.Artist = "unknown artist";
@@ -332,7 +336,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 			string fileBasename = GLib.Filename.display_basename(file.get_path());
 			val.Title = fileBasename;
 		}
-		return true;
+		return retval;
 	}
 
 	public string[] get_media_files() { 

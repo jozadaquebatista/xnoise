@@ -234,14 +234,21 @@ typedef struct _XnoiseDbBrowserClass XnoiseDbBrowserClass;
 typedef struct _XnoiseDbBrowserPrivate XnoiseDbBrowserPrivate;
 
 #define XNOISE_TYPE_TRACK_DATA (xnoise_track_data_get_type ())
+#define XNOISE_TRACK_DATA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_DATA, XnoiseTrackData))
+#define XNOISE_TRACK_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_DATA, XnoiseTrackDataClass))
+#define XNOISE_IS_TRACK_DATA(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_DATA))
+#define XNOISE_IS_TRACK_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_DATA))
+#define XNOISE_TRACK_DATA_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_DATA, XnoiseTrackDataClass))
 
-#define XNOISE_TYPE_MEDIA_TYPE (xnoise_media_type_get_type ())
 typedef struct _XnoiseTrackData XnoiseTrackData;
+typedef struct _XnoiseTrackDataClass XnoiseTrackDataClass;
 
 #define XNOISE_TYPE_STREAM_DATA (xnoise_stream_data_get_type ())
 typedef struct _XnoiseStreamData XnoiseStreamData;
 
 #define XNOISE_TYPE_TITLE_MTYPE_ID (xnoise_title_mtype_id_get_type ())
+
+#define XNOISE_TYPE_MEDIA_TYPE (xnoise_media_type_get_type ())
 typedef struct _XnoiseTitleMtypeId XnoiseTitleMtypeId;
 
 #define XNOISE_TYPE_DB_WRITER (xnoise_db_writer_get_type ())
@@ -281,6 +288,7 @@ typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 #define XNOISE_TYPE_TRACK_LIST_COLUMN (xnoise_track_list_column_get_type ())
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
+typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
 typedef struct _XnoiseVideoScreenPrivate XnoiseVideoScreenPrivate;
 
 #define XNOISE_TYPE_SETTINGS_DIALOG (xnoise_settings_dialog_get_type ())
@@ -501,6 +509,11 @@ struct _XnoiseDbBrowserClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseStreamData {
+	char* Name;
+	char* Uri;
+};
+
 typedef enum  {
 	XNOISE_MEDIA_TYPE_UNKNOWN = 0,
 	XNOISE_MEDIA_TYPE_AUDIO,
@@ -508,22 +521,6 @@ typedef enum  {
 	XNOISE_MEDIA_TYPE_STREAM,
 	XNOISE_MEDIA_TYPE_PLAYLISTFILE
 } XnoiseMediaType;
-
-struct _XnoiseTrackData {
-	char* Artist;
-	char* Album;
-	char* Title;
-	char* Genre;
-	guint Year;
-	guint Tracknumber;
-	XnoiseMediaType Mediatype;
-	char* Uri;
-};
-
-struct _XnoiseStreamData {
-	char* Name;
-	char* Uri;
-};
 
 struct _XnoiseTitleMtypeId {
 	char* name;
@@ -622,6 +619,25 @@ typedef enum  {
 	GST_STREAM_TYPE_AUDIO = 1,
 	GST_STREAM_TYPE_VIDEO = 2
 } GstStreamType;
+
+struct _XnoiseTrackData {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseTrackDataPrivate * priv;
+	char* Artist;
+	char* Album;
+	char* Title;
+	char* Genre;
+	guint Year;
+	guint Tracknumber;
+	XnoiseMediaType Mediatype;
+	char* Uri;
+};
+
+struct _XnoiseTrackDataClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseTrackData *self);
+};
 
 struct _XnoiseVideoScreen {
 	GtkDrawingArea parent_instance;
@@ -817,17 +833,17 @@ gboolean xnoise_db_browser_streams_available (XnoiseDbBrowser* self);
 gboolean xnoise_db_browser_stream_is_in_db (XnoiseDbBrowser* self, const char* uri);
 gboolean xnoise_db_browser_uri_is_in_db (XnoiseDbBrowser* self, const char* uri);
 gboolean xnoise_db_browser_get_uri_for_id (XnoiseDbBrowser* self, gint id, char** val);
+gpointer xnoise_track_data_ref (gpointer instance);
+void xnoise_track_data_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_track_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_track_data (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_track_data (const GValue* value);
 GType xnoise_track_data_get_type (void);
-GType xnoise_media_type_get_type (void);
-XnoiseTrackData* xnoise_track_data_dup (const XnoiseTrackData* self);
-void xnoise_track_data_free (XnoiseTrackData* self);
-void xnoise_track_data_copy (const XnoiseTrackData* self, XnoiseTrackData* dest);
-void xnoise_track_data_destroy (XnoiseTrackData* self);
-gboolean xnoise_db_browser_get_trackdata_for_id (XnoiseDbBrowser* self, gint id, XnoiseTrackData* val);
-gboolean xnoise_db_browser_get_stream_td_for_id (XnoiseDbBrowser* self, gint id, XnoiseTrackData* val);
+gboolean xnoise_db_browser_get_trackdata_for_id (XnoiseDbBrowser* self, gint id, XnoiseTrackData** val);
+gboolean xnoise_db_browser_get_stream_td_for_id (XnoiseDbBrowser* self, gint id, XnoiseTrackData** val);
 gboolean xnoise_db_browser_get_stream_for_id (XnoiseDbBrowser* self, gint id, char** uri);
-gboolean xnoise_db_browser_get_trackdata_for_stream (XnoiseDbBrowser* self, const char* uri, XnoiseTrackData* val);
-gboolean xnoise_db_browser_get_trackdata_for_uri (XnoiseDbBrowser* self, const char* uri, XnoiseTrackData* val);
+gboolean xnoise_db_browser_get_trackdata_for_stream (XnoiseDbBrowser* self, const char* uri, XnoiseTrackData** val);
+gboolean xnoise_db_browser_get_trackdata_for_uri (XnoiseDbBrowser* self, const char* uri, XnoiseTrackData** val);
 char** xnoise_db_browser_get_media_files (XnoiseDbBrowser* self, int* result_length1);
 char** xnoise_db_browser_get_media_folders (XnoiseDbBrowser* self, int* result_length1);
 GType xnoise_stream_data_get_type (void);
@@ -840,6 +856,7 @@ char* xnoise_db_browser_get_single_stream_uri (XnoiseDbBrowser* self, const char
 gint xnoise_db_browser_get_track_id_for_path (XnoiseDbBrowser* self, const char* uri);
 char** xnoise_db_browser_get_lastused_uris (XnoiseDbBrowser* self, int* result_length1);
 GType xnoise_title_mtype_id_get_type (void);
+GType xnoise_media_type_get_type (void);
 XnoiseTitleMtypeId* xnoise_title_mtype_id_dup (const XnoiseTitleMtypeId* self);
 void xnoise_title_mtype_id_free (XnoiseTitleMtypeId* self);
 void xnoise_title_mtype_id_copy (const XnoiseTitleMtypeId* self, XnoiseTitleMtypeId* dest);
@@ -863,7 +880,7 @@ void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self, GtkEn
 gboolean xnoise_media_browser_on_button_press (XnoiseMediaBrowser* self, XnoiseMediaBrowser* sender, GdkEventButton* e);
 gboolean xnoise_media_browser_on_button_release (XnoiseMediaBrowser* self, XnoiseMediaBrowser* sender, GdkEventButton* e);
 void xnoise_media_browser_on_drag_data_get (XnoiseMediaBrowser* self, XnoiseMediaBrowser* sender, GdkDragContext* context, GtkSelectionData* selection, guint info, guint etime);
-XnoiseTrackData* xnoise_media_browser_get_trackdata_for_treepath (XnoiseMediaBrowser* self, GtkTreePath* treepath, int* result_length1);
+XnoiseTrackData** xnoise_media_browser_get_trackdata_for_treepath (XnoiseMediaBrowser* self, GtkTreePath* treepath, int* result_length1);
 void xnoise_media_browser_on_drag_end (XnoiseMediaBrowser* self, XnoiseMediaBrowser* sender, GdkDragContext* context);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 GType xnoise_add_media_dialog_get_type (void);
@@ -901,6 +918,8 @@ GType xnoise_browser_collection_type_get_type (void);
 GType xnoise_repeat_get_type (void);
 GType xnoise_track_list_column_get_type (void);
 GType gst_stream_type_get_type (void);
+XnoiseTrackData* xnoise_track_data_new (void);
+XnoiseTrackData* xnoise_track_data_construct (GType object_type);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
 XnoiseVideoScreen* xnoise_video_screen_new (void);

@@ -187,17 +187,15 @@ public class Xnoise.TrackList : TreeView {
 
 	private bool reorder_dragging;	
 	private void on_drag_begin(TrackList sender, DragContext context) {
-//		Gtk.TreeSelection selection = this.get_selection();
-//		if(selection.count_selected_rows() <= 0) {
-//			Gdk.drag_abort(context, Gtk.get_current_event_time());			
-//			return;
-//		}
-		
 		this.dragging = true;
 		this.reorder_dragging = true;
-
-		Gdk.drag_abort(context, Gtk.get_current_event_time());
+		
 		Gtk.TreeSelection selection = this.get_selection();
+		Gdk.drag_abort(context, Gtk.get_current_event_time());
+		if(selection.count_selected_rows() == 0) {
+			return;
+		}
+
 		if(selection.count_selected_rows() > 1) {
 			Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND_MULTIPLE);
 		}
@@ -220,7 +218,8 @@ public class Xnoise.TrackList : TreeView {
 			);
 	}
 
-	public void on_drag_data_get(TrackList sender, Gdk.DragContext context, Gtk.SelectionData selection, uint target_type, uint etime) {
+	public void on_drag_data_get(TrackList sender, Gdk.DragContext context, Gtk.SelectionData selection, 
+	                             uint target_type, uint etime) {
 		rowref_list = new TreeRowReference[0];
 		TreeIter iter;
 		GLib.Value uri;
@@ -275,10 +274,6 @@ public class Xnoise.TrackList : TreeView {
 		string[] uris = selection.get_uris();
 		this.get_dest_row_at_pos(x, y, out path, out position);
 		DbBrowser dbBr = new DbBrowser();
-//		ulong microsec = 0;
-//		GLib.Timer timer = new GLib.Timer();
-//		timer.reset();
-//		timer.start();
 
 		if(!this.reorder_dragging) { 					// DRAGGING NOT WITHIN TRACKLIST
 			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
@@ -314,8 +309,6 @@ public class Xnoise.TrackList : TreeView {
 				}
 			}
 			is_first = false;
-//			timer.stop();
-//			print("ELAPSED on_drag_data_received: %lf : %lu\n", timer.elapsed(out microsec), microsec/(ulong)1000);
 		}
 		else { 											// DRAGGING WITHIN TRACKLIST
 			drop_rowref = null;
@@ -410,9 +403,8 @@ public class Xnoise.TrackList : TreeView {
 		File file = File.new_for_uri(streamuri);
 			
 		string artist, album, title;
-		if(dbBr.stream_is_in_db(streamuri)) {
-			TrackData td = TrackData(); 
-			dbBr.get_trackdata_for_stream(streamuri, out td); 
+		TrackData td; 
+		if(dbBr.get_trackdata_for_stream(streamuri, out td)) {
 			artist    = "";
 			album     = "";
 			title     = Markup.printf_escaped("%s", td.Title);
@@ -480,24 +472,18 @@ public class Xnoise.TrackList : TreeView {
 		catch(GLib.Error e){
 			stderr.printf("%s\n", e.message);
 			return;
-		}	
+		}
+	
 		if((filetype==GLib.FileType.REGULAR)&
 		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
 			string artist, album, title;
 			uint tracknumb;
-			if(dbBr.uri_is_in_db(fileuri)) {
-				ulong microsec = 0;
-				GLib.Timer timer = new GLib.Timer();
-				timer.reset();
-				timer.start();
-				TrackData td;
-				dbBr.get_trackdata_for_uri(fileuri, out td); 
-				timer.stop();
-				print("ELAPSED get_trackdata_for_uri: %lf : %lu\n", timer.elapsed(out microsec), microsec/(ulong)1000);
+			TrackData td;
+			if(dbBr.get_trackdata_for_uri(fileuri, out td)) {
 				artist    = Markup.printf_escaped("%s", td.Artist);
 				album     = Markup.printf_escaped("%s", td.Album);
 				title     = Markup.printf_escaped("%s", td.Title);
-				tracknumb = td.Tracknumber; 
+				tracknumb = td.Tracknumber;
 			}
 			else {
 				if(!(psVideo.match_string(mime))) {
@@ -574,7 +560,7 @@ public class Xnoise.TrackList : TreeView {
 				file = File.new_for_uri(uris[k]);
 				bool is_stream = false;
 				string urischeme = file.get_uri_scheme();
-				TrackData t = TrackData();
+				var t = new TrackData();
 				if(urischeme=="file") {
 					try {
 						FileInfo info = file.query_info(

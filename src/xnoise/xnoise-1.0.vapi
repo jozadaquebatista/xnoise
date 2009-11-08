@@ -260,6 +260,18 @@ namespace Xnoise {
 		public SettingsDialog (ref Xnoise.Main xn);
 		public signal void sign_finish ();
 	}
+	[CCode (ref_function = "xnoise_track_data_ref", unref_function = "xnoise_track_data_unref", cheader_filename = "xnoise.h")]
+	public class TrackData {
+		public string Album;
+		public string Artist;
+		public string Genre;
+		public Xnoise.MediaType Mediatype;
+		public string Title;
+		public uint Tracknumber;
+		public string Uri;
+		public uint Year;
+		public TrackData ();
+	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackList : Gtk.TreeView {
 		public Gtk.ListStore listmodel;
@@ -315,17 +327,6 @@ namespace Xnoise {
 		public string name;
 		public int id;
 		public Xnoise.MediaType mediatype;
-	}
-	[CCode (type_id = "XNOISE_TYPE_TRACK_DATA", cheader_filename = "xnoise.h")]
-	public struct TrackData {
-		public string Artist;
-		public string Album;
-		public string Title;
-		public string Genre;
-		public uint Year;
-		public uint Tracknumber;
-		public Xnoise.MediaType Mediatype;
-		public string Uri;
 	}
 	[CCode (cprefix = "XNOISE_BROWSER_COLLECTION_TYPE_", cheader_filename = "xnoise.h")]
 	public enum BrowserCollectionType {
