@@ -91,8 +91,12 @@ namespace Xnoise {
 		public bool current_has_video { get; set; }
 		public string currentalbum { get; set; }
 		public string currentartist { get; set; }
+		public string currentgenre { get; set; }
+		public string currentlocation { get; set; }
+		public string currentorg { get; set; }
 		public string currenttitle { get; set; }
 		public double gst_position { set; }
+		public bool is_stream { get; set; }
 		public int64 length_time { get; set; }
 		public bool paused { get; set; }
 		public bool playing { get; set; }

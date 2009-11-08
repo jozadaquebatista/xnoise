@@ -216,8 +216,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		weak Gtk.TreeSelection sel;
 		sel = this.get_selection();
 		treepaths = sel.get_selected_rows(null);
+		var dbb = new DbBrowser();
+
 		foreach(weak TreePath treepath in treepaths) {
-			string[] l = this.build_uri_list_for_treepath(treepath);
+			string[] l = this.build_uri_list_for_treepath(treepath, ref dbb);
 			foreach(weak string u in l) {
 				uris += u;
 			}
@@ -226,18 +228,20 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		selection.set_uris(uris);
 	}
 
-	private string[] build_uri_list_for_treepath(Gtk.TreePath treepath) {
+
+	private string[] build_uri_list_for_treepath(Gtk.TreePath treepath, ref DbBrowser dbb) {
 		TreeIter iter, iterChild, iterChildChild; 
 		string[] urilist = {};
-		DbBrowser dbb;
+//		DbBrowser dbb;
 		MediaType mtype = MediaType.UNKNOWN;
 		int dbid = -1;
 		string uri;
 		BrowserCollectionType br_ct = BrowserCollectionType.UNKNOWN;
+		
 		switch(treepath.get_depth()) {
 			case 1:
 				treemodel.get_iter(out iter, treepath);
-				dbb = new DbBrowser();
+//				dbb = new DbBrowser();
 
 				treemodel.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
 				if(br_ct == BrowserCollectionType.LISTED) {
@@ -278,7 +282,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				break;
 			case 2:
 				treemodel.get_iter(out iter, treepath);
-				dbb = new DbBrowser();
+//				dbb = new DbBrowser();
 				treemodel.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
 				if(br_ct == BrowserCollectionType.LISTED) {
 					dbid = -1;
@@ -318,7 +322,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				treemodel.get_iter(out iter, treepath);
 				treemodel.get(iter, BrowserColumn.DB_ID, ref dbid);
 				if(dbid==-1) break;
-				dbb = new DbBrowser();
+//				dbb = new DbBrowser();
 				if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 				break;
 		}

@@ -263,8 +263,8 @@ public class Xnoise.TrackList : TreeView {
 	}
 
 	private Gtk.TreeViewDropPosition position;
-	private void on_drag_data_received (TrackList seder, DragContext context, int x, int y, 
-	                                    SelectionData selection, uint target_type, uint time) {
+	private void on_drag_data_received(TrackList seder, DragContext context, int x, int y, 
+	                                   SelectionData selection, uint target_type, uint time) {
 		//set uri list for dragging out of xnoise. in parallel work around with rowreferences
 		//if reorder = false then data is coming from outside (music browser or nautilus) -> use uri_list
 		Gtk.TreePath path;
@@ -274,7 +274,12 @@ public class Xnoise.TrackList : TreeView {
 		FileType filetype;
 		string[] uris = selection.get_uris();
 		this.get_dest_row_at_pos(x, y, out path, out position);
-		
+		DbBrowser dbBr = new DbBrowser();
+//		ulong microsec = 0;
+//		GLib.Timer timer = new GLib.Timer();
+//		timer.reset();
+//		timer.start();
+
 		if(!this.reorder_dragging) { 					// DRAGGING NOT WITHIN TRACKLIST
 			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
@@ -298,17 +303,19 @@ public class Xnoise.TrackList : TreeView {
 					}	
 		
 					if(filetype!=GLib.FileType.DIRECTORY) {
-						handle_dropped_file(uri, ref path, ref is_first);	//FILES
+						handle_dropped_file(ref uri, ref path, ref is_first, ref dbBr);	//FILES
 					}
 					else {
-						handle_dropped_files_for_folders(file, ref path, ref is_first); //DIRECTORIES
+						handle_dropped_files_for_folders(file, ref path, ref is_first, ref dbBr); //DIRECTORIES
 					}
 				}
 				else {
-					handle_dropped_stream(uri, ref path, ref is_first);
+					handle_dropped_stream(ref uri, ref path, ref is_first, ref dbBr);
 				}
 			}
 			is_first = false;
+//			timer.stop();
+//			print("ELAPSED on_drag_data_received: %lf : %lu\n", timer.elapsed(out microsec), microsec/(ulong)1000);
 		}
 		else { 											// DRAGGING WITHIN TRACKLIST
 			drop_rowref = null;
@@ -362,7 +369,7 @@ public class Xnoise.TrackList : TreeView {
 		}
 	}
 
-	private void handle_dropped_files_for_folders(File dir, ref TreePath? path, ref bool is_first) { 
+	private void handle_dropped_files_for_folders(File dir, ref TreePath? path, ref bool is_first, ref DbBrowser dbBr) { 
 		//Recursive function to import music DIRECTORIES in drag'n'drop
 		//as soon as a file is found it is passed to handle_dropped_file function
 		//the TreePath path is just passed through if it is a directory
@@ -384,10 +391,11 @@ public class Xnoise.TrackList : TreeView {
 				FileType filetype = info.get_file_type();
 
 				if(filetype == FileType.DIRECTORY) {
-					this.handle_dropped_files_for_folders(file, ref path, ref is_first);
+					this.handle_dropped_files_for_folders(file, ref path, ref is_first, ref dbBr);
 				} 
 				else {
-					handle_dropped_file(file.get_uri(), ref path, ref is_first);
+					string buffer = file.get_uri();
+					handle_dropped_file(ref buffer, ref path, ref is_first, ref dbBr);
 				}
 			}
 		} catch(Error e) {
@@ -396,12 +404,11 @@ public class Xnoise.TrackList : TreeView {
 		}
 	}
 
-	private void handle_dropped_stream(string streamuri, ref TreePath? path, ref bool is_first) {
+	private void handle_dropped_stream(ref string streamuri, ref TreePath? path, ref bool is_first, ref DbBrowser dbBr) {
 		//Function to import music STREAMS in drag'n'drop
 		TreeIter iter, new_iter;
 		File file = File.new_for_uri(streamuri);
 			
-		DbBrowser dbBr = new DbBrowser();
 		string artist, album, title;
 		if(dbBr.stream_is_in_db(streamuri)) {
 			TrackData td = TrackData(); 
@@ -411,9 +418,9 @@ public class Xnoise.TrackList : TreeView {
 			title     = Markup.printf_escaped("%s", td.Title);
 		}
 		else {
-			artist         = ""; 
-			album          = ""; 
-			title          = Markup.printf_escaped("%s", file.get_uri()); 
+			artist    = ""; 
+			album     = ""; 
+			title     = Markup.printf_escaped("%s", file.get_uri()); 
 		}
 
 		TreeIter first_iter;
@@ -450,7 +457,7 @@ public class Xnoise.TrackList : TreeView {
 		path = listmodel.get_path(new_iter);
 	}
 	
-	private void handle_dropped_file(string fileuri, ref TreePath? path, ref bool is_first) {
+	private void handle_dropped_file(ref string fileuri, ref TreePath? path, ref bool is_first, ref DbBrowser dbBr) {
 		//Function to import music FILES in drag'n'drop
 		TreeIter iter, new_iter;
 		File file;
@@ -474,15 +481,19 @@ public class Xnoise.TrackList : TreeView {
 			stderr.printf("%s\n", e.message);
 			return;
 		}	
-			
 		if((filetype==GLib.FileType.REGULAR)&
 		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
-			DbBrowser dbBr = new DbBrowser();
 			string artist, album, title;
 			uint tracknumb;
 			if(dbBr.uri_is_in_db(fileuri)) {
-				TrackData td = TrackData(); 
+				ulong microsec = 0;
+				GLib.Timer timer = new GLib.Timer();
+				timer.reset();
+				timer.start();
+				TrackData td;
 				dbBr.get_trackdata_for_uri(fileuri, out td); 
+				timer.stop();
+				print("ELAPSED get_trackdata_for_uri: %lf : %lu\n", timer.elapsed(out microsec), microsec/(ulong)1000);
 				artist    = Markup.printf_escaped("%s", td.Artist);
 				album     = Markup.printf_escaped("%s", td.Album);
 				title     = Markup.printf_escaped("%s", td.Title);
@@ -529,7 +540,7 @@ public class Xnoise.TrackList : TreeView {
 				}
 			}
 			string tracknumberString = null;
-			if(!(tracknumb==0)) {
+			if(tracknumb!=0) {
 				tracknumberString = "%u".printf(tracknumb);
 			}
 			listmodel.set(new_iter,

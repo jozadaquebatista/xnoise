@@ -49,27 +49,46 @@ public class TitleToDecoration : GLib.Object, IPlugin {
     }
 
 	private void write_title_to_decoration(string newuri) {
-		string text, album, artist, title;
+		string text, album, artist, title, genre, location, organization;
 		string basename = null;
 		File file = File.new_for_uri(newuri);
-		basename = file.get_basename();
+		if(!xn.gPl.is_stream)
+			basename = file.get_basename();
 		if(xn.gPl.currentartist!=null) {
 			artist = xn.gPl.currentartist;
 		}
 		else {
 			artist = "unknown artist";
 		}
-		if (xn.gPl.currenttitle!=null) {
+		if(xn.gPl.currenttitle!=null) {
 			title = xn.gPl.currenttitle;
 		}
 		else {
 			title = "unknown title";
 		}
-		if (xn.gPl.currentalbum!=null) {
+		if(xn.gPl.currentalbum!=null) {
 			album = xn.gPl.currentalbum;
 		}
 		else {
 			album = "unknown album";
+		}
+		if(xn.gPl.currentorg!=null) {
+			organization = remove_linebreaks(xn.gPl.currentorg);
+		}
+		else {
+			organization = "unknown organization";
+		}
+		if(xn.gPl.currentgenre!=null) {
+			genre = remove_linebreaks(xn.gPl.currentgenre);
+		}
+		else {
+			genre = "unknown genre";
+		}
+		if(xn.gPl.currentlocation!=null) {
+			location = remove_linebreaks(xn.gPl.currentlocation);
+		}
+		else {
+			location = "unknown location";
 		}
 		if((newuri!=null) && (newuri!="")) {
 			text = "%s %s %s %s %s ".printf( 
@@ -82,11 +101,18 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 			if(album=="unknown album" && 
 			   artist=="unknown artist" && 
 			   title=="unknown title") 
-			   	text = Markup.printf_escaped("%s", basename);
+				if(organization!="unknown organization") 
+					text = "%s".printf(organization);
+				else if(location!="unknown location") 
+					text = "%s".printf(location);
+				else
+					text = "%s".printf(file.get_uri());
 		}
 		else {
+		print("ELSE\n");
 			if((!xn.gPl.playing)&&
 				(!xn.gPl.paused)) {
+				print("STOPPED\n");
 				text = "xnoise media player";
 			}
 			else {

@@ -587,19 +587,72 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 
 	public void set_displayed_title(string newuri) { //TODO: this should also be used to show embedded images for current title
-		string text, album, artist, title;
+		string text, album, artist, title, organization, location, genre;
 		string basename = null;
+		print("newuri: %s\n", newuri);
 		File file = File.new_for_uri(newuri);
-		basename = file.get_basename();
-		var dbb = new DbBrowser();
-		if(dbb.uri_is_in_db(newuri)) {
-			TrackData td;
-			dbb.get_trackdata_for_uri(newuri, out td);
-			artist = td.Artist;
-			album = td.Album;
-			title = td.Title;
-		}	
-		else {
+		if(!xn.gPl.is_stream) {
+			basename = file.get_basename();
+			var dbb = new DbBrowser();
+			if(dbb.uri_is_in_db(newuri)) {
+				TrackData td;
+				dbb.get_trackdata_for_uri(newuri, out td);
+				artist = td.Artist;
+				album = td.Album;
+				title = td.Title;
+			}	
+			else {
+				if(xn.gPl.currentartist!=null) {
+					artist = remove_linebreaks(xn.gPl.currentartist);
+				}
+				else {
+					artist = "unknown artist";
+				}
+				if(xn.gPl.currenttitle!=null) {
+					title = remove_linebreaks(xn.gPl.currenttitle);
+				}
+				else {
+					title = "unknown title";
+				}
+				if(xn.gPl.currentalbum!=null) {
+					album = remove_linebreaks(xn.gPl.currentalbum);
+				}
+				else {
+					album = "unknown album";
+				}
+			}
+			if((newuri!=null) && (newuri!="")) {
+				text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>", 
+					title, 
+					_("by"), 
+					artist, 
+					_("on"), 
+					album
+					);
+				if(album=="unknown album" && 
+				   artist=="unknown artist" && 
+				   title=="unknown title") 
+					text = Markup.printf_escaped("<b>%s</b>", basename);
+			}
+			else {
+				if((!xn.gPl.playing)&&
+					(!xn.gPl.paused)) {
+					text = "<b>XNOISE</b>\nready to rock! ;-)";
+				}
+				else {
+					text = "<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
+						_("unknown title"), 
+						_("by"), 
+						_("unknown artist"), 
+						_("on"), 
+						_("unknown album")
+						);
+				}
+			}
+		}
+		else { // IS STREAM
+//			var dbb = new DbBrowser();
+
 			if(xn.gPl.currentartist!=null) {
 				artist = remove_linebreaks(xn.gPl.currentartist);
 			}
@@ -618,33 +671,58 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			else {
 				album = "unknown album";
 			}
-		}
-		if((newuri!=null) && (newuri!="")) {
-			text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>", 
-				title, 
-				_("by"), 
-				artist, 
-				_("on"), 
-				album
-				);
-			if(album=="unknown album" && 
-			   artist=="unknown artist" && 
-			   title=="unknown title") 
-				text = Markup.printf_escaped("<b>%s</b>", basename);
-		}
-		else {
-			if((!xn.gPl.playing)&&
-				(!xn.gPl.paused)) {
-				text = "<b>XNOISE</b>\nready to rock! ;-)";
+			if(xn.gPl.currentorg!=null) {
+				organization = remove_linebreaks(xn.gPl.currentorg);
 			}
 			else {
-				text = "<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
-					_("unknown title"), 
+				organization = "unknown organization";
+			}
+			if(xn.gPl.currentgenre!=null) {
+				genre = remove_linebreaks(xn.gPl.currentgenre);
+			}
+			else {
+				genre = "unknown genre";
+			}
+			if(xn.gPl.currentlocation!=null) {
+				location = remove_linebreaks(xn.gPl.currentlocation);
+			}
+			else {
+				location = "unknown location";
+			}
+			if((newuri!=null) && (newuri!="")) {
+				text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>", 
+					title, 
 					_("by"), 
-					_("unknown artist"), 
+					artist, 
 					_("on"), 
-					_("unknown album")
+					album
 					);
+				if(album=="unknown album" && 
+				   artist=="unknown artist" && 
+				   title=="unknown title") {
+				   
+					if(organization!="unknown organization") 
+						text = Markup.printf_escaped("<b>%s</b>", organization);
+					else if(location!="unknown location") 
+						text = Markup.printf_escaped("<b>%s</b>", location);
+					else
+						text = Markup.printf_escaped("<b>%s</b>", file.get_uri());
+				}
+			}
+			else {
+				if((!xn.gPl.playing)&&
+					(!xn.gPl.paused)) {
+					text = "<b>XNOISE</b>\nready to rock! ;-)";
+				}
+				else {
+					text = "<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
+						_("unknown title"), 
+						_("by"), 
+						_("unknown artist"), 
+						_("on"), 
+						_("unknown album")
+						);
+				}
 			}
 		}
 		song_title_label.set_text(text);

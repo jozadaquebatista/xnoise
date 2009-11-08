@@ -33,9 +33,9 @@ using Gst;
 public class Xnoise.GstPlayer : GLib.Object {
 	private bool _current_has_video;
 	private uint timeout;
-	public int64 length_time { get; set; }
 	private string _Uri = "";
 	private TagList _taglist;
+	public int64 length_time { get; set; }
 	public VideoScreen videoscreen;
 	public dynamic Element playbin;
 	
@@ -66,15 +66,16 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 	   
 	public bool playing  { get; set; }
-	
 	public bool paused   { get; set; }
 	
-	public string currentartist { get; private set; }
+	public bool is_stream         { get; private set; default = false; }
+	public string currentartist   { get; private set; }
+	public string currentalbum    { get; private set; }
+	public string currenttitle    { get; private set; }
+	public string currentgenre    { get; private set; }
+	public string currentorg      { get; private set; }
+	public string currentlocation { get; private set; }
 	
-	public string currentalbum  { get; private set; }
-	
-	public string currenttitle  { get; private set; }
-
 	public TagList taglist { 
 		get { 
 			return _taglist; 
@@ -87,7 +88,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 		}
 	}
 	
-	private bool is_stream = false;
 	public string Uri { 
 		get {
 			return _Uri;
@@ -134,9 +134,12 @@ public class Xnoise.GstPlayer : GLib.Object {
 		this.notify += (s, p) => {
 			switch(p.name) {
 				case "Uri": {
-					this.currentartist = "unknown artist";
-					this.currentalbum = "unknown album";
-					this.currenttitle = "unknown title";
+					this.currentartist   = "unknown artist";
+					this.currentalbum    = "unknown album";
+					this.currenttitle    = "unknown title";
+					this.currentlocation = "unknown location";
+					this.currentgenre    = "unknown genre";
+					this.currentorg      = "unknown organization";
 					break;
 				}
 				case "currentartist": {
@@ -148,6 +151,18 @@ public class Xnoise.GstPlayer : GLib.Object {
 					break;
 				}
 				case "currenttitle": {
+					this.sign_tag_changed(this.Uri);
+					break;
+				}
+				case "currentlocation": {
+					this.sign_tag_changed(this.Uri);
+					break;
+				}
+				case "currentgenre": {
+					this.sign_tag_changed(this.Uri);
+					break;
+				}
+				case "currentorg": {
 					this.sign_tag_changed(this.Uri);
 					break;
 				}
@@ -250,6 +265,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	
 	private void foreachtag(TagList list, string tag) {
 		string val = null;
+		//print("tag: %s\n", tag);
 		switch (tag) {
 		case "artist":
 			if(list.get_string(tag, out val)) 
@@ -262,6 +278,18 @@ public class Xnoise.GstPlayer : GLib.Object {
 		case "title":
 			if(list.get_string(tag, out val)) 
 				if(val!=this.currenttitle) this.currenttitle = val;
+			break;
+		case "location":
+			if(list.get_string(tag, out val)) 
+				if(val!=this.currentlocation) this.currentlocation = val;
+			break;
+		case "genre":
+			if(list.get_string(tag, out val))
+				if(val!=this.currentgenre) this.currentgenre = val;
+			break;
+		case "organization":
+			if(list.get_string(tag, out val))
+				if(val!=this.currentorg) this.currentorg = val; 
 			break;
 		default:
 			break;
