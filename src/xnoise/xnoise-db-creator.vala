@@ -146,7 +146,12 @@ public class Xnoise.DbCreator : GLib.Object {
 				if(major!=("%d".printf(DB_VERSION_MAJOR))) {
 					print("Wrong major db version\n"); //TODO: Drop tables and create new
 					db = null;
-					xnoisedb.delete(null);
+					try {
+						xnoisedb.delete(null);
+					}
+					catch(Error e) {
+						print("%s\n", e.message);
+					}
 				}
 			}
 			else {

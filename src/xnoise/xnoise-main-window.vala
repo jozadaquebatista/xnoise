@@ -585,18 +585,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		};
 	}
 
-
 	public void set_displayed_title(string newuri) { //TODO: this should also be used to show embedded images for current title
 		string text, album, artist, title, organization, location, genre;
 		string basename = null;
-		print("newuri: %s\n", newuri);
+		//print("newuri: %s\n", newuri);
+		if((newuri == "")|(newuri == null)) {
+			text = "<b>XNOISE</b>\nready to rock! ;-)";
+			song_title_label.set_text(text);
+			song_title_label.use_markup = true;
+			return;
+		}
 		File file = File.new_for_uri(newuri);
 		if(!xn.gPl.is_stream) {
 			basename = file.get_basename();
 			var dbb = new DbBrowser();
-			if(dbb.uri_is_in_db(newuri)) {
-				TrackData td;
-				dbb.get_trackdata_for_uri(newuri, out td);
+			TrackData td;
+			if(dbb.get_trackdata_for_uri(newuri, out td)) {
 				artist = td.Artist;
 				album = td.Album;
 				title = td.Title;
@@ -651,44 +655,36 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			}
 		}
 		else { // IS STREAM
-//			var dbb = new DbBrowser();
-
-			if(xn.gPl.currentartist!=null) {
+			if(xn.gPl.currentartist!=null)
 				artist = remove_linebreaks(xn.gPl.currentartist);
-			}
-			else {
+			else
 				artist = "unknown artist";
-			}
-			if(xn.gPl.currenttitle!=null) {
+
+			if(xn.gPl.currenttitle!=null)
 				title = remove_linebreaks(xn.gPl.currenttitle);
-			}
-			else {
+			else
 				title = "unknown title";
-			}
-			if(xn.gPl.currentalbum!=null) {
+
+			if(xn.gPl.currentalbum!=null)
 				album = remove_linebreaks(xn.gPl.currentalbum);
-			}
-			else {
+			else 
 				album = "unknown album";
-			}
-			if(xn.gPl.currentorg!=null) {
+
+			if(xn.gPl.currentorg!=null)
 				organization = remove_linebreaks(xn.gPl.currentorg);
-			}
-			else {
+			else 
 				organization = "unknown organization";
-			}
-			if(xn.gPl.currentgenre!=null) {
+
+			if(xn.gPl.currentgenre!=null)
 				genre = remove_linebreaks(xn.gPl.currentgenre);
-			}
-			else {
+			else
 				genre = "unknown genre";
-			}
-			if(xn.gPl.currentlocation!=null) {
+
+			if(xn.gPl.currentlocation!=null) 
 				location = remove_linebreaks(xn.gPl.currentlocation);
-			}
-			else {
+			else
 				location = "unknown location";
-			}
+
 			if((newuri!=null) && (newuri!="")) {
 				text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>", 
 					title, 
@@ -710,8 +706,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 			}
 			else {
-				if((!xn.gPl.playing)&&
-					(!xn.gPl.paused)) {
+				if((!xn.gPl.playing) &&
+				   (!xn.gPl.paused)) {
 					text = "<b>XNOISE</b>\nready to rock! ;-)";
 				}
 				else {
@@ -777,12 +773,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;
-			//removeAllButton.can_focus(false);
+			removeAllButton.can_focus      = false;
 			removeAllButton.clicked        += this.on_remove_all_button_clicked;
 			removeAllButton.set_tooltip_text(_("Remove all"));
 		
 			var removeSelectedButton       = gb.get_object("removeSelectedButton") as Gtk.Button;
-			//removeSelectedButton.can_focus = false;
+			removeSelectedButton.can_focus = false;
 			removeSelectedButton.clicked   += this.on_remove_selected_button_clicked;
 			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
 			//--------------------
@@ -793,14 +789,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//--------------------
 			
 			//SHOW VIDEO BUTTON
-			this.showvideobutton            = gb.get_object("showvideobutton") as Gtk.Button;
-			//showvideobutton.can_focus      = false;
+			this.showvideobutton           = gb.get_object("showvideobutton") as Gtk.Button;
+			showvideobutton.can_focus      = false;
 			showvideobutton.clicked        += this.on_show_video_button_clicked;
 			//--------------------
 			
 			//REPEAT MODE SELECTOR
 			this.repeatButton              = gb.get_object("repeatButton") as Gtk.Button;
-			//repeatButton.can_focus         = false;
+			repeatButton.can_focus         = false;
 			this.repeatButton.clicked      += this.on_repeat_button_clicked;
 			this.repeatLabel               = gb.get_object("repeatLabel") as Gtk.Label;
 			this.repeatImage               = gb.get_object("repeatImage") as Gtk.Image;
@@ -940,7 +936,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var img = new Gtk.Image.from_stock("gtk-media-next", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
-			//this.can_focus = false;
+			this.can_focus = false;
 			this.clicked += this.on_clicked;
 		}
 		
@@ -959,7 +955,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var img = new Gtk.Image.from_stock("gtk-media-previous", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
-			//this.can_focus = false;
+			this.can_focus = false;
 			this.clicked += this.on_clicked;
 		}
 		
@@ -978,7 +974,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var img = new Gtk.Image.from_stock("gtk-media-stop", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image (img);
 			this.relief = Gtk.ReliefStyle.NONE;
-			//this.can_focus = false;
+			this.can_focus = false;
 			this.clicked += this.on_clicked;
 		}
 		private void on_clicked() {
@@ -997,7 +993,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		
 		public PlayPauseButton() {
 			xn = Main.instance();
-			//this.can_focus = false;
+			this.can_focus = false;
 			this.clicked += this.on_clicked;
 			this.relief = Gtk.ReliefStyle.NONE;
 			
@@ -1178,7 +1174,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private Main xn;
 		public VolumeSliderButton() {
 			this.xn = Main.instance();
-			//this.can_focus = false;
+			this.can_focus = false;
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.set_value(0.3); //Default value
 			this.value_changed += on_change;
@@ -1316,7 +1312,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				var img = new Gtk.Image.from_stock(Gtk.STOCK_LEAVE_FULLSCREEN , Gtk.IconSize.SMALL_TOOLBAR);
 				this.set_image(img);
 				this.relief = Gtk.ReliefStyle.NONE;
-				//this.can_focus = false;
+				this.can_focus = false;
 				this.clicked += this.on_clicked;
 				this.set_tooltip_text(_("Leave fullscreen"));
 			}

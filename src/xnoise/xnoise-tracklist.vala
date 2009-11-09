@@ -702,6 +702,7 @@ public class Xnoise.TrackList : TreeView {
 	}
 	
 	public bool set_play_state_for_first_song() {
+		print("tracklist: set_play_state_for_first_song\n");
 		TreeIter iter;
 		Gdk.Pixbuf pixbuf;
 		Gtk.Invisible invisible = new Gtk.Invisible();
@@ -717,19 +718,19 @@ public class Xnoise.TrackList : TreeView {
 		              );
 		if(uri == xn.gPl.Uri) {	  
 			listmodel.set(iter,
-						  TrackListColumn.ICON, pixbuf,
-						  TrackListColumn.STATE, TrackState.PLAYING,
-						  -1
-						  );
+			              TrackListColumn.ICON, pixbuf,
+			              TrackListColumn.STATE, TrackState.PLAYING,
+			              -1
+			              );
 			bolden_row(ref iter);
 			xn.gPl.Uri = uri;
 		}
 		else {
 			listmodel.set(iter,
-						  TrackListColumn.ICON, null,
-						  TrackListColumn.STATE, TrackState.POSITION_FLAG,
-						  -1
-						  );
+			              TrackListColumn.ICON, null,
+			              TrackListColumn.STATE, TrackState.POSITION_FLAG,
+			              -1
+			              );
 		}
 		return true;
 	}
@@ -757,13 +758,13 @@ public class Xnoise.TrackList : TreeView {
 			              
 			if(state>0) {
 				listmodel.get(iter, 
-							  TrackListColumn.URI, out uri
-							  );
+				              TrackListColumn.URI, out uri
+				              );
 				if(uri==xn.gPl.Uri) {
 					listmodel.set(iter,
-								  TrackListColumn.ICON, pixbuf,
-								  -1
-								  );
+					              TrackListColumn.ICON, pixbuf,
+					              -1
+					              );
 					bolden_row(ref iter);
 				}
 				return true;
@@ -901,6 +902,7 @@ public class Xnoise.TrackList : TreeView {
 
 	// gets active path, or first path
 	public bool get_active_path(out TreePath path, out TrackState currentstate, out bool is_first) {
+//		print("tracklist: get_active_path\n");
 		TreeIter iter;
 		is_first = false;
 		currentstate = TrackState.STOPPED;
@@ -910,7 +912,7 @@ public class Xnoise.TrackList : TreeView {
 			listmodel.get(iter,
 			              TrackListColumn.STATE, out currentstate
 			              );
-			if((int)currentstate>0) {
+			if(currentstate != TrackState.STOPPED) {
 				path = listmodel.get_path(iter);
 				return true;
 			}
@@ -925,7 +927,7 @@ public class Xnoise.TrackList : TreeView {
 			listmodel.get(iter,
 			              TrackListColumn.URI, out uri
 			              );
-			if(xn.gPl.Uri=="") xn.gPl.Uri = uri;
+			//if(xn.gPl.Uri=="") xn.gPl.Uri = uri;
 			is_first = true;
 			return true;
 		}
@@ -957,7 +959,7 @@ public class Xnoise.TrackList : TreeView {
 
 		if((uri!=null)&&(uri!="")) {
 			xn.gPl.Uri = uri;
-			if(ts==TrackState.PLAYING) 
+			if(ts == TrackState.PLAYING) 
 				xn.gPl.playSong(true);
 			else
 				xn.gPl.playSong();

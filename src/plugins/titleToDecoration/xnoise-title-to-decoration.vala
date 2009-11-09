@@ -106,13 +106,11 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 				else if(location!="unknown location") 
 					text = "%s".printf(location);
 				else
-					text = "%s".printf(file.get_uri());
+					text = "%s".printf("xnoise media player");
 		}
 		else {
-		print("ELSE\n");
 			if((!xn.gPl.playing)&&
 				(!xn.gPl.paused)) {
-				print("STOPPED\n");
 				text = "xnoise media player";
 			}
 			else {

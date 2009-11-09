@@ -504,44 +504,49 @@ public class Xnoise.DbWriter : GLib.Object {
 			return;
 		}
 		FileInfo info;
-		while((info = enumerator.next_file(null))!=null) {
-			string filename = info.get_name();
-			string filepath = Path.build_filename(dir.get_path(), filename);
-			File file = File.new_for_path(filepath);
-			FileType filetype = info.get_file_type();
+		try {
+			while((info = enumerator.next_file(null))!=null) {
+				string filename = info.get_name();
+				string filepath = Path.build_filename(dir.get_path(), filename);
+				File file = File.new_for_path(filepath);
+				FileType filetype = info.get_file_type();
 
-			string content = info.get_content_type();
-			weak string mime = g_content_type_get_mime_type(content);
-			PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
-			PatternSpec psVideo = new PatternSpec("video*");
+				string content = info.get_content_type();
+				weak string mime = g_content_type_get_mime_type(content);
+				PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
+				PatternSpec psVideo = new PatternSpec("video*");
 
-			if(filetype == FileType.DIRECTORY) {
-				this.import_local_tags(file);
-			} 
-			else if(psAudio.match_string(mime)) {
-				int idbuffer = db_entry_exists(file.get_uri());
-				if(idbuffer== -1) {
-					var tr = new TagReader();
-					this.insert_title(tr.read_tag(filepath), file.get_uri());
-					current+=1;
+				if(filetype == FileType.DIRECTORY) {
+					this.import_local_tags(file);
+				} 
+				else if(psAudio.match_string(mime)) {
+					int idbuffer = db_entry_exists(file.get_uri());
+					if(idbuffer== -1) {
+						var tr = new TagReader();
+						this.insert_title(tr.read_tag(filepath), file.get_uri());
+						current+=1;
+					}
+	//				sign_import_progress(current, amount);   //TODO: Maybe use this to track import progress        
 				}
-//				sign_import_progress(current, amount);   //TODO: Maybe use this to track import progress        
+				else if(psVideo.match_string(mime)) {
+					int idbuffer = db_entry_exists(file.get_uri());
+					var td = new TrackData();
+					td.Artist = "unknown artist";
+					td.Album = "unknown album";
+					td.Title = file.get_basename();
+					td.Genre = "";
+					td.Tracknumber = 0;
+					td.Mediatype = MediaType.VIDEO;
+					
+					if(idbuffer== -1) {
+						this.insert_title(td, file.get_uri());
+						current+=1;
+					}		
+				}
 			}
-			else if(psVideo.match_string(mime)) {
-				int idbuffer = db_entry_exists(file.get_uri());
-				var td = new TrackData();
-				td.Artist = "unknown artist";
-				td.Album = "unknown album";
-				td.Title = file.get_basename();
-				td.Genre = "";
-				td.Tracknumber = 0;
-				td.Mediatype = MediaType.VIDEO;
-				
-				if(idbuffer== -1) {
-					this.insert_title(td, file.get_uri());
-					current+=1;
-				}		
-			}
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
 		}
 	}
 	

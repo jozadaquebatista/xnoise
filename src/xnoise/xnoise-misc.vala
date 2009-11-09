@@ -63,13 +63,18 @@ namespace Xnoise {
 		}
 		string line;
 		string[] keyval;
-		while ((line = in_stream.read_line(null, null))!=null) {
-			//print("line: %s\n", line);
-			keyval = line.split ("=", 2);
-			if (keyval[0] == "File1") {
-				outval = keyval[1];
-				return outval;
+		try {
+			while ((line = in_stream.read_line(null, null))!=null) {
+				//print("line: %s\n", line);
+				keyval = line.split ("=", 2);
+				if (keyval[0] == "File1") {
+					outval = keyval[1];
+					return outval;
+				}
 			}
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
 		}
 		return outval;
 	}

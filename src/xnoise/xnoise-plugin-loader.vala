@@ -80,18 +80,23 @@ public class Xnoise.PluginLoader : Object {
 			return;
 		}
 		FileInfo info;
-		while((info = enumerator.next_file(null)) != null) {
-			string filename = info.get_name();
-			string filepath = Path.build_filename(dir.get_path(), filename);
-			File file = File.new_for_path(filepath);
-			FileType filetype = info.get_file_type();
-			if(filetype == FileType.DIRECTORY) {
-				this.get_plugin_information_files(file);
-			} 
-			else if(filename.has_suffix(".xnplugin")) {
-//				print("found plugin information file: %s\n", filepath);
-				info_files.append(filepath);
+		try {
+			while((info = enumerator.next_file(null)) != null) {
+				string filename = info.get_name();
+				string filepath = Path.build_filename(dir.get_path(), filename);
+				File file = File.new_for_path(filepath);
+				FileType filetype = info.get_file_type();
+				if(filetype == FileType.DIRECTORY) {
+					this.get_plugin_information_files(file);
+				} 
+				else if(filename.has_suffix(".xnplugin")) {
+	//				print("found plugin information file: %s\n", filepath);
+					info_files.append(filepath);
+				}
 			}
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
 		}
 	}
 
