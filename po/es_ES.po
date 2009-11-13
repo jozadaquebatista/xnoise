@@ -1,0 +1,111 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: xnoise\n"
+"Report-Msgid-Bugs-To: f.sistemas@gmail.com\n"
+"POT-Creation-Date: 2009-11-10 20:30+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: fsistemas <f.sistemas@gmail.com>\n"
+"Language-Team: fsistemas <f.sistemas@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: s\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: SPAIN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: src/xnoise/xnoise-main-window.vala:38
+msgid "Show Video"
+msgstr "Mostrar Video"
+
+#: src/xnoise/xnoise-main-window.vala:39
+msgid "Show Tracklist"
+msgstr "Mostrar Lista de reproducción"
+
+#: src/xnoise/xnoise-main-window.vala:53
+msgid "_File"
+msgstr "_Archivo"
+
+#: src/xnoise/xnoise-main-window.vala:54
+msgid "_Add or Remove media"
+msgstr "_Agregar o quitar medios de reproducción"
+
+#: src/xnoise/xnoise-main-window.vala:54
+msgid "manage the content of the xnoise media library"
+msgstr "gestionar el contenido de la biblioteca de medios de reproducción de xnoise "
+
+#: src/xnoise/xnoise-main-window.vala:56
+msgid "_Edit"
+msgstr "_Editar"
+
+#: src/xnoise/xnoise-main-window.vala:58
+msgid "_View"
+msgstr "_Ver"
+
+#: src/xnoise/xnoise-main-window.vala:60
+msgid "_Help"
+msgstr "_Ayuda"
+
+#: src/xnoise/xnoise-main-window.vala:175
+msgid "no repeat"
+msgstr "no repetir"
+
+#: src/xnoise/xnoise-main-window.vala:180
+msgid "repeat single"
+msgstr "repetir"
+
+#: src/xnoise/xnoise-main-window.vala:185
+msgid "repeat all"
+msgstr "repetir todos"
+
+#: src/xnoise/xnoise-main-window.vala:220
+msgid "Play/Pause"
+msgstr "Reproducir/Pausar"
+
+#: src/xnoise/xnoise-main-window.vala:234
+msgid "Previous"
+msgstr "Anterior"
+
+#: src/xnoise/xnoise-main-window.vala:247
+msgid "Next"
+msgstr "Siguiente"
+
+#: src/xnoise/xnoise-main-window.vala:263
+msgid "Exit"
+msgstr "Salir"
+
+#: src/xnoise/xnoise-main-window.vala:665
+#: src/xnoise/xnoise-main-window.vala:683
+msgid "by"
+msgstr "por"
+
+#: src/xnoise/xnoise-main-window.vala:667
+#: src/xnoise/xnoise-main-window.vala:685
+msgid "on"
+msgstr "encendido"
+
+#: src/xnoise/xnoise-main-window.vala:682
+#, c-format
+msgid "unknown title"
+msgstr "titulo desconocido"
+
+#: src/xnoise/xnoise-main-window.vala:684
+msgid "unknown artist"
+msgstr "artista desconocido"
+
+#: src/xnoise/xnoise-main-window.vala:686
+msgid "unknown album"
+msgstr "album desconocido"
+
+#: src/xnoise/xnoise-main-window.vala:733
+msgid "Remove all"
+msgstr "Eliminar todo"
+
+#: src/xnoise/xnoise-main-window.vala:738
+msgid "Remove selected titles"
+msgstr "Eliminar titulos seleccionados"
+
+#: src/xnoise/xnoise-tracklist.vala:140
+msgid "Remove selected"
+msgstr "Eliminar seleccionados"
+

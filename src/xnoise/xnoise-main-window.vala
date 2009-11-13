@@ -778,7 +778,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			removeAllButton.set_tooltip_text(_("Remove all"));
 		
 			var removeSelectedButton       = gb.get_object("removeSelectedButton") as Gtk.Button;
-			removeSelectedButton.can_focus = false;
+			//removeSelectedButton.can_focus = false;
 			removeSelectedButton.clicked   += this.on_remove_selected_button_clicked;
 			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
 			//--------------------
@@ -936,7 +936,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var img = new Gtk.Image.from_stock("gtk-media-next", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
-			this.can_focus = false;
+			//this.can_focus = false;
 			this.clicked += this.on_clicked;
 		}
 		
@@ -955,7 +955,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var img = new Gtk.Image.from_stock("gtk-media-previous", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
-			this.can_focus = false;
+			//this.can_focus = false;
 			this.clicked += this.on_clicked;
 		}
 		
@@ -974,7 +974,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var img = new Gtk.Image.from_stock("gtk-media-stop", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image (img);
 			this.relief = Gtk.ReliefStyle.NONE;
-			this.can_focus = false;
+			//this.can_focus = false;
 			this.clicked += this.on_clicked;
 		}
 		private void on_clicked() {
@@ -993,7 +993,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		
 		public PlayPauseButton() {
 			xn = Main.instance();
-			this.can_focus = false;
+			//this.can_focus = false;
 			this.clicked += this.on_clicked;
 			this.relief = Gtk.ReliefStyle.NONE;
 			
@@ -1174,7 +1174,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private Main xn;
 		public VolumeSliderButton() {
 			this.xn = Main.instance();
-			this.can_focus = false;
+			//this.can_focus = false;
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.set_value(0.3); //Default value
 			this.value_changed += on_change;
@@ -1312,7 +1312,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				var img = new Gtk.Image.from_stock(Gtk.STOCK_LEAVE_FULLSCREEN , Gtk.IconSize.SMALL_TOOLBAR);
 				this.set_image(img);
 				this.relief = Gtk.ReliefStyle.NONE;
-				this.can_focus = false;
+				//this.can_focus = false;
 				this.clicked += this.on_clicked;
 				this.set_tooltip_text(_("Leave fullscreen"));
 			}

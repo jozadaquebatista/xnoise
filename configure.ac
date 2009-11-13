@@ -67,6 +67,4 @@ echo "
     CFLAGS:                        ${CFLAGS}
     C Compiler:                    ${CC}
 
-    Now type 'make' to compile xnoise.
-
 "
