@@ -38,7 +38,7 @@ mkinstalldirs
 po/.intltool-merge-cache
 po/Makefile.in.in
 po/POTFILES
-po/de_DE.gmo
+po/*.gmo
 po/stamp-it
 .libs
 .deps

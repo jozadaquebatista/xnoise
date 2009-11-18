@@ -179,7 +179,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private bool on_video_da_button_press(Gdk.EventButton e) {
-		if(!(e.button==3)) return false;
+		if(!((e.button==1)&&(e.type==Gdk.EventType.@2BUTTON_PRESS))) 
+			return false; //exit here, if it's no double-click
+			
 		if(!fullscreenwindowvisible) {
 			int monitor;
 			Gdk.Rectangle rectangle;
