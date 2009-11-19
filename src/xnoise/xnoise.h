@@ -894,6 +894,7 @@ gboolean xnoise_track_list_on_drag_motion (XnoiseTrackList* self, XnoiseTrackLis
 void xnoise_track_list_on_drag_end (XnoiseTrackList* self, XnoiseTrackList* sender, GdkDragContext* context);
 void xnoise_track_list_on_drag_data_get (XnoiseTrackList* self, XnoiseTrackList* sender, GdkDragContext* context, GtkSelectionData* selection, guint target_type, guint etime);
 char** xnoise_track_list_get_all_tracks (XnoiseTrackList* self, int* result_length1);
+void xnoise_track_list_add_tracks (XnoiseTrackList* self, XnoiseTrackData** td_list, int td_list_length1, gboolean imediate_play);
 void xnoise_track_list_add_uris (XnoiseTrackList* self, char** uris, int uris_length1);
 GType xnoise_track_state_get_type (void);
 void xnoise_track_list_insert_title (XnoiseTrackList* self, XnoiseTrackState status, GdkPixbuf* pixbuf, gint tracknumber, const char* title, const char* album, const char* artist, const char* uri, GtkTreeIter* result);
@@ -905,7 +906,7 @@ void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* it
 void xnoise_track_list_remove_selected_rows (XnoiseTrackList* self);
 gboolean xnoise_track_list_not_empty (XnoiseTrackList* self);
 void xnoise_track_list_reset_play_status_all_titles (XnoiseTrackList* self);
-gboolean xnoise_track_list_get_active_path (XnoiseTrackList* self, GtkTreePath** path, XnoiseTrackState* currentstate, gboolean* is_first);
+gboolean xnoise_track_list_get_active_path (XnoiseTrackList* self, GtkTreePath** treepath, XnoiseTrackState* currentstate, gboolean* is_first);
 void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, GtkTreePath* path);
 char* xnoise_track_list_get_uri_for_treepath (XnoiseTrackList* self, GtkTreePath* path);
 extern XnoiseParams* xnoise_par;

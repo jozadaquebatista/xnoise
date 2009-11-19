@@ -546,67 +546,106 @@ public class Xnoise.TrackList : TreeView {
 			print("Not a regular file or at least no audio file: %s\n", fileuri);
 		}
 	}
+
+	public void add_tracks(TrackData[]? td_list, bool imediate_play = true)	{
+		if(td_list==null) return;
+		if(td_list[0]==null) return;
+		int k = 0;
+		TreeIter iter, iter_2;
+		File file;
+		this.reset_play_status_all_titles();
+		while(td_list[k]!=null) {
+			string current_uri = td_list[k].Uri;
+			file = File.new_for_uri(current_uri);
+
+			if(k==0) {
+				iter = this.insert_title(TrackState.PLAYING, 
+											  null, 
+											  (int)td_list[k].Tracknumber,
+											  Markup.printf_escaped("%s", td_list[k].Title), 
+											  Markup.printf_escaped("%s", td_list[k].Album), 
+											  Markup.printf_escaped("%s", td_list[k].Artist), 
+											  current_uri);
+				this.set_state_picture_for_title(iter, TrackState.PLAYING);
+				iter_2 = iter;
+			}
+			else {
+				iter = this.insert_title(TrackState.STOPPED, 
+											  null, 
+											  (int)td_list[k].Tracknumber,
+											  Markup.printf_escaped("%s", td_list[k].Title), 
+											  Markup.printf_escaped("%s", td_list[k].Album), 
+											  Markup.printf_escaped("%s", td_list[k].Artist), 
+											  current_uri);
+				this.set_state_picture_for_title(iter);
+			}
+			k++;
+		}
+		xn.add_track_to_gst_player(td_list[0].Uri); 	
+	}
 	
 	public void add_uris(string[]? uris) {
-		if(uris!=null) {
-			if(uris[0]==null) return;
-			int k=0;
-			TreeIter iter, iter_2;
-			FileType filetype;
-			this.reset_play_status_all_titles();
-			while(uris[k]!=null) { //because foreach is not working for this array coming from libunique
-				File file;
-				TagReader tr = new TagReader();
-				file = File.new_for_uri(uris[k]);
-				bool is_stream = false;
-				string urischeme = file.get_uri_scheme();
-				var t = new TrackData();
-				if(urischeme=="file") {
-					try {
-						FileInfo info = file.query_info(
-									        FILE_ATTRIBUTE_STANDARD_TYPE, 
-									        FileQueryInfoFlags.NONE, 
-									        null);
-						filetype = info.get_file_type();
-					}
-					catch(GLib.Error e){
-						stderr.printf("%s\n", e.message);
-						continue;
-					}
-					if(filetype==GLib.FileType.REGULAR) {
-						t = tr.read_tag(file.get_path()); 
-					}
-					else {
-						is_stream = true;
-					}
+		if(uris==null) return;
+		if(uris[0]==null) return;
+		int k = 0;
+		TreeIter iter, iter_2;
+		FileType filetype;
+		this.reset_play_status_all_titles();
+		while(uris[k]!=null) { //because foreach is not working for this array coming from libunique
+			File file;
+			TagReader tr = new TagReader();
+			file = File.new_for_uri(uris[k]);
+			bool is_stream = false;
+			string urischeme = file.get_uri_scheme();
+			var t = new TrackData();
+			if(urischeme=="file") {
+				try {
+					FileInfo info = file.query_info(
+										FILE_ATTRIBUTE_STANDARD_TYPE, 
+										FileQueryInfoFlags.NONE, 
+										null);
+					filetype = info.get_file_type();
 				}
-
-				if(k==0) {
-					iter = this.insert_title(TrackState.PLAYING, 
-						                          null, 
-						                          (int)t.Tracknumber,
-						                          t.Title, 
-						                          t.Album, 
-						                          t.Artist, 
-						                          uris[k]);
-					this.set_state_picture_for_title(iter, TrackState.PLAYING);
-					iter_2 = iter;
+				catch(GLib.Error e){
+					stderr.printf("%s\n", e.message);
+					k++;
+					continue;
+				}
+				if(filetype==GLib.FileType.REGULAR) {
+					t = tr.read_tag(file.get_path()); 
 				}
 				else {
-					iter = this.insert_title(TrackState.STOPPED, 
-						                          null, 
-						                          (int)t.Tracknumber,
-						                          t.Title, 
-						                          t.Album, 
-						                          t.Artist, 
-						                          uris[k]);	
-					this.set_state_picture_for_title(iter);
+					is_stream = true;
 				}
-				tr = null;
-				k++;
 			}
-			xn.add_track_to_gst_player(uris[0]); 
+			else if(urischeme=="http") {
+				is_stream = true;
+			}
+			if(k==0) {
+				iter = this.insert_title(TrackState.PLAYING, 
+											  null, 
+											  (int)t.Tracknumber,
+											  t.Title, 
+											  t.Album, 
+											  t.Artist, 
+											  uris[k]);
+				this.set_state_picture_for_title(iter, TrackState.PLAYING);
+				iter_2 = iter;
+			}
+			else {
+				iter = this.insert_title(TrackState.STOPPED, 
+											  null, 
+											  (int)t.Tracknumber,
+											  t.Title, 
+											  t.Album, 
+											  t.Artist, 
+											  uris[k]);	
+				this.set_state_picture_for_title(iter);
+			}
+			tr = null;
+			k++;
 		}
+		xn.add_track_to_gst_player(uris[0]); 
 	}
 	
 
@@ -677,13 +716,9 @@ public class Xnoise.TrackList : TreeView {
 	public void set_state_picture_for_title(TreeIter iter, TrackState state = TrackState.STOPPED) {
 		Gdk.Pixbuf pixbuf = null;
 		var invisible = new Gtk.Invisible();
-
-		if(state==TrackState.PLAYING)
-			pixbuf = invisible.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
-		else if(state==TrackState.PAUSED)
-			pixbuf = invisible.render_icon(Gtk.STOCK_MEDIA_PAUSE, IconSize.BUTTON, null);
 	
 		if(state == TrackState.PLAYING) {
+			pixbuf = invisible.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
 			listmodel.set(iter,
 				TrackListColumn.STATE, TrackState.PLAYING,
 				TrackListColumn.ICON, pixbuf,
@@ -691,7 +726,8 @@ public class Xnoise.TrackList : TreeView {
 			bolden_row(ref iter);
 			sign_active_path_changed(state);
 		}
-		else {
+		else if(state==TrackState.PAUSED) {
+			pixbuf = invisible.render_icon(Gtk.STOCK_MEDIA_PAUSE, IconSize.BUTTON, null);
 			listmodel.set(iter,
 				TrackListColumn.STATE, TrackState.PAUSED,
 				TrackListColumn.ICON, pixbuf,
@@ -737,6 +773,7 @@ public class Xnoise.TrackList : TreeView {
 	
 	// find active row, set state picture, bolden and set uri for gpl
 	private bool set_track_state(TrackState ts) {
+		print("tracklist: set_track_state\n");
 		TreeIter iter;
 		Gdk.Pixbuf? pixbuf = null;
 		Gtk.Invisible w = new Gtk.Invisible();
@@ -844,7 +881,7 @@ public class Xnoise.TrackList : TreeView {
 		TreeIter iter;
 		int numberOfRows = 0;
 		numberOfRows = listmodel.iter_n_children(null);
-		if(numberOfRows == 0) return;
+		if(numberOfRows==0) return;
 		
 		for(int i = 0; i < numberOfRows; i++) {
 			listmodel.iter_nth_child(out iter, null, i);
@@ -862,18 +899,15 @@ public class Xnoise.TrackList : TreeView {
 		string valTitle = "";
 		this.listmodel.get(
 			iter,
-			TrackListColumn.TITLE,
-			out valTitle);
-		if(valTitle.has_prefix("<b>")) return;
-		this.listmodel.get(
-			iter,
 			TrackListColumn.ARTIST,	out valArtist,
-			TrackListColumn.ALBUM, out valAlbum);
+			TrackListColumn.ALBUM,  out valAlbum,
+			TrackListColumn.TITLE,  out valTitle);
+		if(valTitle.has_prefix("<b>")) return;
 
 		listmodel.set(iter,
 			TrackListColumn.ARTIST, "<b>%s</b>".printf(valArtist),
-			TrackListColumn.ALBUM, "<b>%s</b>".printf(valAlbum),
-			TrackListColumn.TITLE, "<b>%s</b>".printf(valTitle),
+			TrackListColumn.ALBUM,  "<b>%s</b>".printf(valAlbum),
+			TrackListColumn.TITLE,  "<b>%s</b>".printf(valTitle),
 			-1);
 	}
 
@@ -890,19 +924,20 @@ public class Xnoise.TrackList : TreeView {
 			out valTitle);
 		if(valTitle.has_prefix("<b>")) {
 			string artist = valArtist.substring(3, (int)valArtist.length - 7); 
-			string album  = valAlbum.substring(3, (int)valAlbum.length - 7);
-			string title  = valTitle.substring(3, (int)valTitle.length - 7);
+			string album  = valAlbum.substring( 3, (int)valAlbum.length  - 7);
+			string title  = valTitle.substring( 3, (int)valTitle.length  - 7);
 			listmodel.set(iter,
-				TrackListColumn.ARTIST, artist,
-				TrackListColumn.ALBUM, album,
-				TrackListColumn.TITLE, title,
-				-1);
+			              TrackListColumn.ARTIST, artist,
+			              TrackListColumn.ALBUM,  album,
+			              TrackListColumn.TITLE,  title,
+			              -1
+			              );
 		}
 	}
 
 	// gets active path, or first path
-	public bool get_active_path(out TreePath path, out TrackState currentstate, out bool is_first) {
-//		print("tracklist: get_active_path\n");
+	public bool get_active_path(out TreePath treepath, out TrackState currentstate, out bool is_first) {
+		print("tracklist: get_active_path\n");
 		TreeIter iter;
 		is_first = false;
 		currentstate = TrackState.STOPPED;
@@ -913,21 +948,22 @@ public class Xnoise.TrackList : TreeView {
 			              TrackListColumn.STATE, out currentstate
 			              );
 			if(currentstate != TrackState.STOPPED) {
-				path = listmodel.get_path(iter);
+				treepath = listmodel.get_path(iter);
 				return true;
 			}
 		}
 		if(listmodel.get_iter_first(out iter)) {
 			// first song in list
-			path = listmodel.get_path(iter); 
-			listmodel.set(iter,
-			              TrackListColumn.STATE, (int)TrackState.POSITION_FLAG,
-			              -1);
-			string uri = "";
-			listmodel.get(iter,
-			              TrackListColumn.URI, out uri
-			              );
-			//if(xn.gPl.Uri=="") xn.gPl.Uri = uri;
+			treepath = listmodel.get_path(iter); 
+//			listmodel.set(iter,
+//			              TrackListColumn.STATE, (int)TrackState.POSITION_FLAG,
+//			              -1);
+
+//			string uri = "";
+//			listmodel.get(iter,
+//			              TrackListColumn.URI, out uri
+//			              );
+//			if(xn.gPl.Uri=="") xn.gPl.Uri = uri;
 			is_first = true;
 			return true;
 		}
@@ -948,17 +984,20 @@ public class Xnoise.TrackList : TreeView {
 		this.set_state_picture_for_title(iter, TrackState.PLAYING);
 	}
 
-	private void on_active_path_changed(TrackList sender, TrackState ts){
-		TreePath path;
+	private void on_active_path_changed(TrackList sender, TrackState ts) {
+		// set gst player to active title coming from tracklist
+		// triggered by a signal in set_state_picture_for_title
+		print("tracklist: on_active_path_changed\n");
+		TreePath treepath;
 		TrackState currentstate;
 		bool is_first;
-		if(!this.get_active_path(out path, out currentstate, out is_first))
+		if(!this.get_active_path(out treepath, out currentstate, out is_first))
 			return;
 		
-		string uri = this.get_uri_for_treepath(path);
+		string uri = this.get_uri_for_treepath(treepath);
 
 		if((uri!=null)&&(uri!="")) {
-			xn.gPl.Uri = uri;
+			if(xn.gPl.Uri != uri) xn.gPl.Uri = uri;
 			if(ts == TrackState.PLAYING) 
 				xn.gPl.playSong(true);
 			else

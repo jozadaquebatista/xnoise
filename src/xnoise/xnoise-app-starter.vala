@@ -73,7 +73,7 @@ public class Xnoise.AppStarter : GLib.Object {
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 
-		for(int j=1;j<args.length;j++) { //TODO: Test this; this should handle uris and paths
+		for(int j=1;j<args.length;j++) {
 			file = File.new_for_commandline_arg(args[j]);
 			string urischeme = file.get_uri_scheme();
 			string content = null;
@@ -99,7 +99,7 @@ public class Xnoise.AppStarter : GLib.Object {
 		}
 		uris += null; //Null terminated array. Is adding null necessary?
 		
-		if (app.is_running) {
+		if(app.is_running) {
 			if(uris.length > 0) {
 				print("Adding tracks to the running instance of xnoise!\n");
 			}

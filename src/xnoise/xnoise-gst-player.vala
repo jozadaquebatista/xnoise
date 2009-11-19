@@ -103,6 +103,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			File file = File.new_for_commandline_arg(value);
 			if(file.get_uri_scheme() == "http") is_stream = true;
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
+			print("NEW Uri: %s\n", value);
 		}
 	}
 	
@@ -354,10 +355,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 		bool buf_playing = (playing|force_play);
 		playbin.set_state(State.READY);
 		if(buf_playing == true) {
-			playbin.set_state(State.PLAYING);
-			wait();
-			playing = true;
-			sign_playing();
+			play();
+//			playbin.set_state(State.PLAYING);
+//			wait();
+//			playing = true;
+//			sign_playing();
 		}
 		else {
 			sign_paused();

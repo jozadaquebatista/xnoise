@@ -455,8 +455,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	// This function changes the current song to the next or previous in the 
-	// tracklist handle_repeat_state should be true when the calling is not 
-	// coming from a button, but for example from a EOS signal handler 
+	// tracklist. handle_repeat_state should be true when the calling is not 
+	// coming from a button, but, e.g. from a EOS signal handler 
 	public void change_song(Direction direction, bool handle_repeat_state = false) {
 		TreeIter iter;
 		TrackState currentstate;
@@ -470,26 +470,30 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			stop();
 			return;
 		}
-		
-		if(!trackList.get_active_path(out path, out currentstate, out is_first)) { // active path sets first path if active is not found
+
+		// active path sets first path if active is not found
+		if(!trackList.get_active_path(out path, out currentstate, out is_first)) {
 			stop();
 			return;
 		}
-		
-		if((!xn.gPl.playing)&&(!xn.gPl.paused)) { // if stopped
+
+		// if stopped
+		if((!xn.gPl.playing)&&(!xn.gPl.paused)) { 
 			trackList.reset_play_status_all_titles();
 			return;
 		}
-		
+
+		// get next or previous path
 		if((!(handle_repeat_state && (repeatState==Repeat.SINGLE))) && !is_first) {
 			if(direction == Direction.NEXT) path.next();
 			else if((direction == Direction.PREVIOUS)&&
-			        (path.to_string()!="0")) {
+			        (path.to_string() != "0")) {
 				path.prev(); 
 			}
 		}
 
-		if(trackList.listmodel.get_iter(out iter, path)) {       //goto next song, if possible...
+		// goto path, if possible...
+		if(trackList.listmodel.get_iter(out iter, path)) {
 			trackList.reset_play_status_all_titles(); //visual reset
 			if(xn.gPl.paused) {
 				trackList.set_state_picture_for_title(iter, TrackState.PAUSED);
@@ -498,10 +502,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
 			}
 			trackList.set_focus_on_iter(ref iter);
-		} 
+		}
+		//...or goto first song, if possible ...
 		else if((trackList.listmodel.get_iter_first(out iter))&&
 		        (((handle_repeat_state)&&
-		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { //...or goto first song, if possible ...
+		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { 
 			trackList.reset_play_status_all_titles();
 			if(xn.gPl.playing) {
 				trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
@@ -511,11 +516,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			}
 			trackList.set_focus_on_iter(ref iter);
 		}
+		//...or stop
 		else {
 			xn.gPl.stop();                      //...or stop
 			trackList.reset_play_status_all_titles();
-			trackList.set_focus_on_iter(ref iter);
-			xn.gPl.Uri="";
+			// trackList.set_focus_on_iter(ref iter);
+			xn.gPl.Uri = "";
 		}
 	}
 
@@ -938,7 +944,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var img = new Gtk.Image.from_stock("gtk-media-next", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
-			//this.can_focus = false;
+			this.can_focus = false;
 			this.clicked += this.on_clicked;
 		}
 		
@@ -957,7 +963,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var img = new Gtk.Image.from_stock("gtk-media-previous", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
-			//this.can_focus = false;
+			this.can_focus = false;
 			this.clicked += this.on_clicked;
 		}
 		
@@ -976,7 +982,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var img = new Gtk.Image.from_stock("gtk-media-stop", Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image (img);
 			this.relief = Gtk.ReliefStyle.NONE;
-			//this.can_focus = false;
+			this.can_focus = false;
 			this.clicked += this.on_clicked;
 		}
 		private void on_clicked() {
@@ -995,7 +1001,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		
 		public PlayPauseButton() {
 			xn = Main.instance();
-			//this.can_focus = false;
+			this.can_focus = false;
 			this.clicked += this.on_clicked;
 			this.relief = Gtk.ReliefStyle.NONE;
 			
@@ -1176,7 +1182,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private Main xn;
 		public VolumeSliderButton() {
 			this.xn = Main.instance();
-			//this.can_focus = false;
+			this.can_focus = false;
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.set_value(0.3); //Default value
 			this.value_changed += on_change;
@@ -1314,7 +1320,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				var img = new Gtk.Image.from_stock(Gtk.STOCK_LEAVE_FULLSCREEN , Gtk.IconSize.SMALL_TOOLBAR);
 				this.set_image(img);
 				this.relief = Gtk.ReliefStyle.NONE;
-				//this.can_focus = false;
+				this.can_focus = false;
 				this.clicked += this.on_clicked;
 				this.set_tooltip_text(_("Leave fullscreen"));
 			}

@@ -276,8 +276,9 @@ namespace Xnoise {
 	public class TrackList : Gtk.TreeView {
 		public Gtk.ListStore listmodel;
 		public TrackList (ref unowned Xnoise.Main xn);
+		public void add_tracks (Xnoise.TrackData[]? td_list, bool imediate_play = true);
 		public void add_uris (string[]? uris);
-		public bool get_active_path (out Gtk.TreePath path, out Xnoise.TrackState currentstate, out bool is_first);
+		public bool get_active_path (out Gtk.TreePath treepath, out Xnoise.TrackState currentstate, out bool is_first);
 		public string[] get_all_tracks ();
 		public string get_uri_for_treepath (Gtk.TreePath path);
 		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);

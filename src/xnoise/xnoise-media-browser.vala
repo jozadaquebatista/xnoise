@@ -423,65 +423,16 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			Gdk.DragAction.MOVE);
 	}
 
-	private void on_row_activated(MediaBrowser sender, TreePath treepath, TreeViewColumn column){
-		if(treepath.get_depth()>1) {
+	private void on_row_activated(MediaBrowser sender, TreePath treepath, TreeViewColumn column) {
+		print("media-browser: on_row_activated\n");
+		if(treepath.get_depth() > 1) {
 			TrackData[] td_list = this.get_trackdata_for_treepath(treepath);
-			this.add_songs_to_tracklist(td_list, true);
+			this.xn.main_window.trackList.add_tracks(td_list, true);
 			td_list = null;
 		}
 		else {
 			this.expand_row(treepath, false);
 		}
-	}
-
-	private void add_songs_to_tracklist(TrackData[] td_list, bool imediate_play = false)	{
-		int i = 0;
-		TreeIter iter;
-		TreeIter iter_2 = TreeIter();
-		if(imediate_play) xn.main_window.trackList.reset_play_status_all_titles();
-		foreach(TrackData td in td_list) {
-			string uri = td.Uri; 
-			int tracknumber = (int)td.Tracknumber;
-			if(imediate_play) {
-				if(i==0) {
-					iter = xn.main_window.trackList.insert_title(
-					           TrackState.PLAYING, 
-					           null, 
-					           tracknumber,
-					           Markup.printf_escaped("%s", td.Title), 
-					           Markup.printf_escaped("%s", td.Album), 
-					           Markup.printf_escaped("%s", td.Artist), 
-					           uri
-					       );
-					xn.main_window.trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
-					iter_2 = iter;
-				}
-				else {
-					iter = xn.main_window.trackList.insert_title(
-					           TrackState.STOPPED, 
-					           null, 
-					           tracknumber,
-					           Markup.printf_escaped("%s", td.Title), 
-					           Markup.printf_escaped("%s", td.Album), 
-					           Markup.printf_escaped("%s", td.Artist), 
-					           uri
-					       );			
-				}
-				i++;
-			}
-			else {
-				iter = xn.main_window.trackList.insert_title(
-				           TrackState.STOPPED, 
-				           null, 
-				           tracknumber,
-				           Markup.printf_escaped("%s", td.Title), 
-				           Markup.printf_escaped("%s", td.Album), 
-				           Markup.printf_escaped("%s", td.Artist), 
-				           uri
-				       );			
-			}
-		}
-		if(imediate_play) xn.main_window.trackList.set_focus_on_iter(ref iter_2);		
 	}
 
 	public bool change_model_data() {

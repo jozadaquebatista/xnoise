@@ -61,7 +61,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		                   e.area.width, e.area.height
 		                   );
 
-		if(!xn.gPl.current_has_video) { 
+		if(!xn.gPl.current_has_video) {
+			//print("current has no video\n");
 			if(this.logo_pixb!=null) {
 				logo = null;
 				int logowidth, logoheight, widgetwidth, widgetheight;
