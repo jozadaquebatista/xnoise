@@ -937,7 +937,7 @@ public class Xnoise.TrackList : TreeView {
 
 	// gets active path, or first path
 	public bool get_active_path(out TreePath treepath, out TrackState currentstate, out bool is_first) {
-		print("tracklist: get_active_path\n");
+		//print("tracklist: get_active_path\n");
 		TreeIter iter;
 		is_first = false;
 		currentstate = TrackState.STOPPED;
@@ -987,7 +987,7 @@ public class Xnoise.TrackList : TreeView {
 	private void on_active_path_changed(TrackList sender, TrackState ts) {
 		// set gst player to active title coming from tracklist
 		// triggered by a signal in set_state_picture_for_title
-		print("tracklist: on_active_path_changed\n");
+		//print("tracklist: on_active_path_changed\n");
 		TreePath treepath;
 		TrackState currentstate;
 		bool is_first;

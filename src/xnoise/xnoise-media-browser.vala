@@ -424,7 +424,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	private void on_row_activated(MediaBrowser sender, TreePath treepath, TreeViewColumn column) {
-		print("media-browser: on_row_activated\n");
+		//print("media-browser: on_row_activated\n");
 		if(treepath.get_depth() > 1) {
 			TrackData[] td_list = this.get_trackdata_for_treepath(treepath);
 			this.xn.main_window.trackList.add_tracks(td_list, true);

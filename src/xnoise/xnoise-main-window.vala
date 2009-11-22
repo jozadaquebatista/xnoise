@@ -30,6 +30,9 @@
 
 using Gtk;
 
+[CCode (cname = "gdk_window_ensure_native")]
+public extern bool ensure_native(Gdk.Window window);
+
 public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string MAIN_UI_FILE  = Config.UIDIR + "main_window.ui";
 	private const string MENU_UI_FILE  = Config.UIDIR + "main_ui.xml";
@@ -120,6 +123,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	
 	private void initialize_video_screen() {
 		videoscreen.realize();
+		ensure_native(videoscreen.window);
 		// dummy drag'n'drop to get drag motion event
 		Gtk.drag_dest_set( 
 			videoscreen,
@@ -240,7 +244,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 		
-	private bool on_window_state_change(Gtk.Window sender, Gdk.EventWindowState e) {
+	private bool on_window_state_change(Xnoise.MainWindow sender, Gdk.EventWindowState e) {
 		if(e.new_window_state==Gdk.WindowState.FULLSCREEN) {
 			is_fullscreen = true;
 		}
@@ -344,7 +348,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private const int KEY_F11 = 0xFFC8; 
 	private const int KEY_ESC = 0xFF1B;
-	private bool on_key_released(Gtk.Window sender, Gdk.EventKey e) {
+	private bool on_key_released(Xnoise.MainWindow sender, Gdk.EventKey e) {
 //		print("%d\n",(int)e.keyval);
 		switch(e.keyval) {
 			case KEY_F11:

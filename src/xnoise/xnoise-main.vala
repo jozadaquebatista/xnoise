@@ -82,7 +82,7 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	public void add_track_to_gst_player(string uri) { //TODO: maybe return bool and check for fail
-		print("main: add_track_to_gst_player\n");
+		//print("main: add_track_to_gst_player\n");
 //		this.gPl.Uri = uri;
 		this.gPl.playSong();
 //		if(this.gPl.playing == false) {

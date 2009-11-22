@@ -38,6 +38,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public int64 length_time { get; set; }
 	public VideoScreen videoscreen;
 	public dynamic Element playbin;
+	private Gst.Message? msg_fi = null;
 	
 	public bool seeking  { get; set; } //TODO
 	
@@ -103,7 +104,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			File file = File.new_for_commandline_arg(value);
 			if(file.get_uri_scheme() == "http") is_stream = true;
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
-			print("NEW Uri: %s\n", value);
+			//print("NEW Uri: %s\n", value);
 		}
 	}
 	
@@ -254,14 +255,20 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private void on_sync_message(Gst.Message msg) {
-		if(msg.structure==null)
-			return;
+		if(msg.structure==null) return;
 		string message_name = msg.structure.get_name();
 		if(message_name=="prepare-xwindow-id") {
-			var imagesink = (XOverlay)msg.src;
-			imagesink.set_property("force-aspect-ratio", true);
-			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.window));
+			msg_fi = msg;
+			Idle.add(set_xwindow_id_from_main_thread);
 		}
+	}
+	
+	private bool set_xwindow_id_from_main_thread() {
+		if(msg_fi == null) return false;
+		var imagesink = (XOverlay)msg_fi.src;
+		imagesink.set_property("force-aspect-ratio", true);
+		imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.window));
+		return false;
 	}
 	
 	private void foreachtag(TagList list, string tag) {
@@ -356,10 +363,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 		playbin.set_state(State.READY);
 		if(buf_playing == true) {
 			play();
-//			playbin.set_state(State.PLAYING);
-//			wait();
-//			playing = true;
-//			sign_playing();
 		}
 		else {
 			sign_paused();
