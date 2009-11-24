@@ -38,7 +38,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public int64 length_time { get; set; }
 	public VideoScreen videoscreen;
 	public dynamic Element playbin;
-	private Gst.Message? msg_fi = null;
 	
 	public bool seeking  { get; set; } //TODO
 	
@@ -258,17 +257,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if(msg.structure==null) return;
 		string message_name = msg.structure.get_name();
 		if(message_name=="prepare-xwindow-id") {
-			msg_fi = msg;
-			Idle.add(set_xwindow_id_from_main_thread);
+			if(msg == null) return;
+			var imagesink = (XOverlay)msg.src;
+			imagesink.set_property("force-aspect-ratio", true);
+			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.window));
 		}
-	}
-	
-	private bool set_xwindow_id_from_main_thread() {
-		if(msg_fi == null) return false;
-		var imagesink = (XOverlay)msg_fi.src;
-		imagesink.set_property("force-aspect-ratio", true);
-		imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.window));
-		return false;
 	}
 	
 	private void foreachtag(TagList list, string tag) {

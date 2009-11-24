@@ -773,7 +773,7 @@ public class Xnoise.TrackList : TreeView {
 	
 	// find active row, set state picture, bolden and set uri for gpl
 	private bool set_track_state(TrackState ts) {
-		print("tracklist: set_track_state\n");
+		//print("tracklist: set_track_state\n");
 		TreeIter iter;
 		Gdk.Pixbuf? pixbuf = null;
 		Gtk.Invisible w = new Gtk.Invisible();
