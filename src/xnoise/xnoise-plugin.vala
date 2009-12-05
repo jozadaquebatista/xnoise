@@ -31,13 +31,17 @@
 public class Xnoise.Plugin : GLib.Object {
 	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT FROM MODULE
 	private Module module;
-	private IPlugin loaded_plugin;
+	public Object loaded_plugin;
 	private Type type;
 	private PluginInformation info;
 	public bool loaded { get; private set; }	
 	public bool activated { get; set; }
 	public bool configurable { get; private set; }
-    private Main xn;
+	public bool is_lyrics_plugin { get; private set; default = false;}
+	private Main xn;
+	
+	public signal void sign_activated();
+	public signal void sign_deactivated();
 	
 	private delegate Type InitModuleFunction();
   	
@@ -73,33 +77,37 @@ public class Xnoise.Plugin : GLib.Object {
 		type = init_module();
 		loaded = true;
 		this.configurable = false;
+		if(type is ILyricsProvider) this.is_lyrics_plugin = true;
 		return true;
 	}
 
 	private void activate() {
 		if(!loaded) return;
-		loaded_plugin = (IPlugin)Object.new(type, 
+		loaded_plugin = Object.new(type, 
 		                               "xn", this.xn,    //set properties via this, because
 		                               null);       //parameters are not allowed 
 		                                            //for this kind of Object construction
 		if(loaded_plugin == null) {
-			message("Failed to load plugin %s. Cannot get type.\n", loaded_plugin.name);
+			message("Failed to load plugin %s. Cannot get type.\n", ((IPlugin)loaded_plugin).name);
 			activated = false; 
 		}
-		if(!loaded_plugin.init()) {
-			message("Failed to load plugin %s. Cannot get initialize.\n", loaded_plugin.name);
+		if(!((IPlugin)loaded_plugin).init()) {
+			message("Failed to load plugin %s. Cannot get initialize.\n", ((IPlugin)loaded_plugin).name);
 			activated = false;
 		}
-		this.configurable = this.loaded_plugin.has_settings_widget();
+		this.configurable = ((IPlugin)this.loaded_plugin).has_settings_widget();
+
+		sign_activated();
 	}
 
 	private void deactivate() {
 		loaded_plugin = null;
+		sign_deactivated();
 	}
 	
 	public Gtk.Widget? settingwidget() {
 		if(this.loaded && this.activated) {
-			return this.loaded_plugin.get_settings_widget();
+			return ((IPlugin)this.loaded_plugin).get_settings_widget();
 		}
 		else {
 			return null;

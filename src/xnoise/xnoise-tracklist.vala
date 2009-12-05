@@ -738,7 +738,7 @@ public class Xnoise.TrackList : TreeView {
 	}
 	
 	public bool set_play_state_for_first_song() {
-		print("tracklist: set_play_state_for_first_song\n");
+		//print("tracklist: set_play_state_for_first_song\n");
 		TreeIter iter;
 		Gdk.Pixbuf pixbuf;
 		Gtk.Invisible invisible = new Gtk.Invisible();

@@ -43,9 +43,9 @@ public class Xnoise.Main : GLib.Object {
 		
 		gPl = new GstPlayer();
 
+		plugin_loader = new PluginLoader(ref this);
 		main_window = new MainWindow(ref this);
 		
-		plugin_loader = new PluginLoader(ref this);
 		plugin_loader.load_all();
 
 		foreach(string name in par.get_string_list_value("activated_plugins")) {

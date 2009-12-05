@@ -56,6 +56,8 @@ xnoise_VALASOURCES = \
 	xnoise-plugin-interface.vala \
 	xnoise-plugin-manager-tree.vala \
 	xnoise-album-image.vala \
+	xnoise-lyrics-loader.vala \
+	xnoise-lyrics-view.vala \
 	$(NULL)
 
 xnoise_SOURCES = \
@@ -70,6 +72,7 @@ xnoise.vala.stamp: $(xnoise_VALASOURCES)
 
 xnoise_LDADD = \
 	$(XNOISE_LIBS) \
+	-lsoup-2.4 \
 	$(NULL)
 	
 VAPI_FILES = xnoise-1.0.vapi

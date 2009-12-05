@@ -66,7 +66,9 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 			string name;
 			listmodel.get(iter, PluginManagerColumn.TEXT, out name);
 			bool plugin_state = this.xn.plugin_loader.plugin_htable.lookup(name).activated;
-			this.xn.plugin_loader.plugin_htable.lookup(name).activated = !plugin_state;
+			
+			if(!plugin_state) this.xn.plugin_loader.activate_single_plugin(name);
+			else this.xn.plugin_loader.deactivate_single_plugin(name); 
 			listmodel.set(iter, 
 			              PluginManagerColumn.TOGGLE, !plugin_state);
 			sign_plugin_activestate_changed(name);

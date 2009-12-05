@@ -185,5 +185,18 @@ public interface Xnoise.IParams : GLib.Object {
 	public abstract void write_params_data();
 }
 
+public interface Xnoise.ILyrics : GLib.Object {
+	public abstract void* fetch();
+	public abstract string get_text();
+	public abstract string get_identifier();
+	public abstract string get_credits();
+
+	public signal void sign_lyrics_fetched(string text);
+	public signal void sign_lyrics_done(ILyrics instance);
+}
+
+public interface Xnoise.ILyricsProvider : GLib.Object {
+	public abstract ILyrics from_tags(string artist, string title);
+}
 
 

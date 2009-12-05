@@ -29,10 +29,13 @@
  */
  
 public class Xnoise.PluginLoader : Object {
-    public HashTable<string,Plugin> plugin_htable;
+	public HashTable<string,Plugin> plugin_htable;
 	private Main xn;
 	private PluginInformation info;
 	private GLib.List<string> info_files;
+	
+	public signal void sign_plugin_activated(Plugin p);
+	public signal void sign_plugin_deactivated(Plugin p);
 	
 	public PluginLoader(ref weak Main xn) {
 		assert (Module.supported());
@@ -101,10 +104,17 @@ public class Xnoise.PluginLoader : Object {
 	}
 
 	public bool activate_single_plugin(string name) {
-		return this.plugin_htable.lookup(name).activated=true;//ref xn);
+		Plugin p = this.plugin_htable.lookup(name);
+		if(p == null) return false;
+		p.activated=true;//ref xn);
+		sign_plugin_activated(p);
+		return true;
 	}	
 
 	public void deactivate_single_plugin(string name) {
-		this.plugin_htable.lookup(name).activated=false;
+		Plugin p = this.plugin_htable.lookup(name);
+		if(p == null) return;
+		p.activated=false;
+		sign_plugin_deactivated(p);
 	}
 }
