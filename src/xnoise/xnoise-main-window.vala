@@ -61,7 +61,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		{ "EditMenuAction", null, N_("_Edit") },
 			{ "SettingsAction", STOCK_PREFERENCES, null, null, null, on_settings_edit},
 		{ "ViewMenuAction", null, N_("_View") },
-			{ "FullscreenAction", Gtk.STOCK_FULLSCREEN, null, null, null, on_fullscreen_clicked},
+			{ "ShowVideoAction", Gtk.STOCK_LEAVE_FULLSCREEN, N_("Show _video screen"), null, N_("Go to the video screen in the main window."), on_show_video_menu_clicked},
+			{ "ShowTracklistAction", Gtk.STOCK_INDEX, N_("Show _tracklist"), null, N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
+			{ "ShowLyricsAction", Gtk.STOCK_EDIT, N_("Show _lyrics"), null, N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
 		{ "HelpMenuAction", null, N_("_Help") },
 			{ "AboutAction", STOCK_ABOUT, null, null, null, on_help_about}
 	};
@@ -368,10 +370,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		xn.quit();
 	}
 
-	private void on_fullscreen_clicked() {
-		this.toggle_mainwindow_fullscreen();
+	private void on_show_video_menu_clicked() {
+		print("show video\n");
 	}
-			
+
+	private void on_show_tracklist_menu_clicked() {
+		print("show tracklist\n");
+	}
+
+	private void on_show_lyrics_menu_clicked() {
+		print("show lyrics\n");
+	}
+
+//	private void on_fullscreen_clicked() {
+//		this.toggle_mainwindow_fullscreen();
+//	}
+
 	// This is used for the main window
 	private void toggle_mainwindow_fullscreen() {
 		if(is_fullscreen) {

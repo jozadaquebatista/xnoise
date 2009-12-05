@@ -11,7 +11,9 @@
 		</menu>
 
 		<menu name="ViewMenu" action="ViewMenuAction">
-			<menuitem action="FullscreenAction"/>
+			<menuitem action="ShowVideoAction"/>
+			<menuitem action="ShowTracklistAction"/>
+			<menuitem action="ShowLyricsAction"/>
 		</menu>
 	
 		<placeholder name="MenuBarOps"/>
