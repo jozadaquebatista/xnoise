@@ -40,15 +40,14 @@
 	 	
 public class Xnoise.LyricsLoader : GLib.Object {
 	public ILyrics lyrics;
-	
 	private static ILyricsProvider provider;
 	private static Main xn;
+	private uint backend_iter;
 	public string artist;
 	public string title;
 	
 	public delegate ILyrics LyricsCreatorDelg(string artist, string title);
 	public signal void sign_fetched(string provider, string content);
-	private uint backend_iter;
 	weak Thread fetcher_thread;
 
 	public static void init() {
@@ -71,7 +70,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 
 	private static void on_plugin_activated(Plugin p) {
 		ILyricsProvider provider = p.loaded_plugin as ILyricsProvider;
-		if (provider == null) return;
+		if(provider == null) return;
 		LyricsLoader.provider = provider;
 		p.sign_deactivated.connect(LyricsLoader.on_backend_deactivated);
 	}
@@ -106,14 +105,12 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	
 		
 	public bool fetch() {
-	
 		if(this.provider == null) {
 			sign_fetched("", "Enable a lyrics provider plugin for lyrics fetching to work");
 			return false;
 		}
 		
 		//this.lyrics = this.backend/*s[this.backend_iter]*/(artist, title);
-		
 		
 		this.lyrics = this.provider.from_tags(artist, title);
 		this.lyrics.ref();

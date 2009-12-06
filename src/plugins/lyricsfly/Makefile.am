@@ -16,16 +16,16 @@ AM_CPPFLAGS = \
 
 BUILT_SOURCES = libLyricsfly.vala.stamp
 
-libLeoslyricsdir = $(libdir)/xnoise
+libLyricsflydir = $(libdir)/xnoise
 
-libLeoslyrics_LTLIBRARIES = libLyricsfly.la
+libLyricsfly_LTLIBRARIES = libLyricsfly.la
 
-libLeoslyrics_la_VALASOURCES = \
+libLyricsfly_la_VALASOURCES = \
 	xnoise-lyricsfly.vala \
 	xnoise-lyricsfly-registration.vala \
 	$(NULL)
 
-libLeoslyrics_la_SOURCES = \
+libLyricsfly_la_SOURCES = \
 	$(libLyricsfly_la_VALASOURCES:.vala=.c) \
 	$(NULL)
 
