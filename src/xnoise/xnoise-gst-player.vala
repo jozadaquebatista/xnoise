@@ -133,7 +133,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		videoscreen = new VideoScreen();
 		create_elements();
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
-		this.notify += (s, p) => {
+		this.notify.connect( (s, p) => {
 			switch(p.name) {
 				case "Uri": {
 					this.currentartist   = "unknown artist";
@@ -176,7 +176,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				}
 				default: break;
 			}
-		};
+		});
 	}
 	
 	private void create_elements() {
@@ -185,9 +185,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 		var bus = new Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
-		bus.message += this.on_message;
+		bus.message.connect(this.on_message);
 		bus.enable_sync_message_emission();
-		bus.sync_message += this.on_sync_message;
+		bus.sync_message.connect(this.on_sync_message);
 	}
 
 	private void get_stream_info() {

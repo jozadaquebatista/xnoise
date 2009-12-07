@@ -3,6 +3,7 @@
 	<menubar name="MainMenu">
 		<menu name="FileMenu" action="FileMenuAction">
 			<menuitem action="AddRemoveAction"/>
+			<separator/>
 			<menuitem action="QuitAction" />
 		</menu>
 
@@ -11,8 +12,8 @@
 		</menu>
 
 		<menu name="ViewMenu" action="ViewMenuAction">
-			<menuitem action="ShowVideoAction"/>
 			<menuitem action="ShowTracklistAction"/>
+			<menuitem action="ShowVideoAction"/>
 			<menuitem action="ShowLyricsAction"/>
 		</menu>
 	

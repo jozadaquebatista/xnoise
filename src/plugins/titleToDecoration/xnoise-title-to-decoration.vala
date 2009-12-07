@@ -135,9 +135,7 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 	}
 
 	public Gtk.Widget? get_settings_widget() {
-		b = new Gtk.Button.with_label("bingo");
-		b.clicked+=on_b_clicked;
-		return b;
+		return null;
 	}
 
 	public bool has_settings_widget() {

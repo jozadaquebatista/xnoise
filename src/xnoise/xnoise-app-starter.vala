@@ -120,7 +120,7 @@ public class Xnoise.AppStarter : GLib.Object {
 		else {
 			xn = Main.instance();
 			app.watch_window((Gtk.Window)xn.main_window);
-			app.message_received += app_starter.on_message_received;
+			app.message_received.connect(app_starter.on_message_received);
 
 			xn.main_window.show_all();
 			

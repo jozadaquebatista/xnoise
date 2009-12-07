@@ -123,12 +123,12 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			var bcancel        = (Button)this.dialog.add_button(Gtk.STOCK_CANCEL , 0);
 			var bok            = (Button)this.dialog.add_button(Gtk.STOCK_OK, 1);
 			
-			bok.clicked        += on_ok_button_clicked;
-			bcancel.clicked    += on_cancel_button_clicked;
-			baddfile.clicked   += on_add_file_button_clicked;
-			baddfolder.clicked += on_add_folder_button_clicked;
-			baddradio.clicked  += on_add_radio_button_clicked;
-			brem.clicked       += on_remove_button_clicked;
+			bok.clicked.connect( on_ok_button_clicked);
+			bcancel.clicked.connect(on_cancel_button_clicked);
+			baddfile.clicked.connect(on_add_file_button_clicked);
+			baddfolder.clicked.connect(on_add_folder_button_clicked);
+			baddradio.clicked.connect(on_add_radio_button_clicked);
+			brem.clicked.connect(on_remove_button_clicked);
 
 			this.dialog.vbox.add(mainvbox);
 			this.dialog.set_icon_from_file(XNOISEICON);
@@ -271,19 +271,19 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		radioentry.set_width_chars(50);
 		radioentry.secondary_icon_stock = Gtk.STOCK_CLEAR; 
 		radioentry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true); 
-		radioentry.icon_press += (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
+		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
-		};
+		});
 		radiodialog.vbox.pack_start(radioentry, true, true, 0);
 					
 		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_CANCEL, 0);
-		radiocancelbutton.clicked += () => {
+		radiocancelbutton.clicked.connect( () => {
 			radiodialog.close();
 			radiodialog = null;
-		};
+		});
 		
 		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_OK, 1);
-		radiookbutton.clicked += () => {
+		radiookbutton.clicked.connect( () => {
 			if((radioentry.text!=null)&&
 			   (radioentry.text.strip()!="")) {
 				TreeIter iter;
@@ -297,11 +297,11 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 			radiodialog.close();
 			radiodialog = null;
-		};
+		});
 
-		radiodialog.destroy_event += () => {
+		radiodialog.destroy_event.connect( () => {
 			radiodialog = null;
-		};
+		});
 		
 		try {
 			radiodialog.set_icon_from_file(XNOISEICON);

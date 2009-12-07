@@ -52,7 +52,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 
 	public static void init() {
 		xn = Main.instance();
-		xn.plugin_loader.sign_plugin_activated += LyricsLoader.on_plugin_activated;
+		xn.plugin_loader.sign_plugin_activated.connect(LyricsLoader.on_plugin_activated);
 	}
 	
 	public LyricsLoader(string artist, string title) {
@@ -85,7 +85,9 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	
 	private void on_fetched(string text) {
 		//message(text);
-		sign_fetched(this.lyrics.get_credits(), text);
+		if((text!=null)&&(text!="")) {
+			sign_fetched(this.lyrics.get_credits(), text);
+		}
 		this.lyrics = null;
 	}
 	
@@ -114,8 +116,8 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		
 		this.lyrics = this.provider.from_tags(artist, title);
 		this.lyrics.ref();
-		this.lyrics.sign_lyrics_fetched += this.on_fetched;
-		this.lyrics.sign_lyrics_done += on_done;
+		this.lyrics.sign_lyrics_fetched.connect(this.on_fetched);
+		this.lyrics.sign_lyrics_done.connect(on_done);
 		try {
 			this.fetcher_thread = Thread.create(lyrics.fetch, true);
 		}

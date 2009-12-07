@@ -115,9 +115,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				TreePath? treepath = selected_rows.nth_data(0);
 				if(treepath.get_depth()>2) break;
 				if(treepath!=null) this.collapse_row(treepath);
-				break;				
+				break;
 			default:
-				break;				
+				break;
 		}
 		return false; 
 	}
