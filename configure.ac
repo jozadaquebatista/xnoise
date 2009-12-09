@@ -65,7 +65,7 @@ AM_CONDITIONAL(GTKTWO_ONE_SIX, test x"$xyz" = "xno")
 dnl ================================================================
 dnl plugin check for plugins dependent on libxml-2.0
 
-LIBXML_REQUIRED=2.7.5
+LIBXML_REQUIRED=2.6.32
 AC_ARG_ENABLE([lyrics],
 	AS_HELP_STRING([--disable-leoslyrics],
 	[Disable lyric plugin (default: enabled)]),
@@ -87,7 +87,7 @@ dnl ================================================================
 dnl ================================================================
 dnl plugin check for plugins dependent on libsoup-2.4
 
-LIBSOUP_REQUIRED=2.28.1
+LIBSOUP_REQUIRED=2.26.0
 PKG_CHECK_MODULES(LIBSOUP, \
 				  libsoup-2.4 >= $LIBSOUP_REQUIRED, \
 				  have_libsoup=yes, \
