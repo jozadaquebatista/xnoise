@@ -29,9 +29,10 @@
  */
 
 using Gtk;
-
+# if GTKTWO_ONE_SIX
 [CCode (cname = "gdk_window_ensure_native")]
 public extern bool ensure_native(Gdk.Window window);
+# endif
 
 public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string MAIN_UI_FILE  = Config.UIDIR + "main_window.ui";
@@ -128,7 +129,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	
 	private void initialize_video_screen() {
 		videoscreen.realize();
+# if GTKTWO_ONE_SIX
 		ensure_native(videoscreen.window);
+# endif
 		// dummy drag'n'drop to get drag motion event
 		Gtk.drag_dest_set( 
 			videoscreen,

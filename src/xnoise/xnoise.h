@@ -859,7 +859,6 @@ GstTagList* xnoise_gst_player_get_taglist (XnoiseGstPlayer* self);
 const char* xnoise_gst_player_get_Uri (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_Uri (XnoiseGstPlayer* self, const char* value);
 void xnoise_gst_player_set_gst_position (XnoiseGstPlayer* self, double value);
-gboolean gdk_window_ensure_native (GdkWindow* window);
 GType xnoise_iparams_get_type (void);
 GType xnoise_lyrics_view_get_type (void);
 GType xnoise_main_window_play_pause_button_get_type (void);

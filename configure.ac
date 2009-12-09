@@ -51,10 +51,16 @@ dnl checks for xnoise
 
 GLIB_REQUIRED=2.12.0
 GTK_REQUIRED=2.16.0
+GTK_REQUIRED_RECOMMENDED=2.18.0
 SQLITE_REQUIRED=3.4
 PKG_CHECK_MODULES(XNOISE, glib-2.0 >= $GLIB_REQUIRED gobject-2.0 >= $GLIB_REQUIRED gtk+-2.0 >= $GTK_REQUIRED taglib_c sqlite3 >= $SQLITE_REQUIRED gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-plugins-base-0.10 gdk-2.0 gdk-pixbuf-2.0 gdk-x11-2.0 gio-2.0 unique-1.0 gmodule-2.0)
 
+PKG_CHECK_MODULES(GTKTWO_ONE_SIX, \
+				  gtk+-2.0 >= $GTK_REQUIRED_RECOMMENDED, \
+				  xyz=yes, \
+				  xyz=no)
 
+AM_CONDITIONAL(GTKTWO_ONE_SIX, test x"$xyz" = "xno")
 
 dnl ================================================================
 dnl plugin check for plugins dependent on libxml-2.0

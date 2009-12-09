@@ -440,5 +440,3 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string remove_linebreaks (string value);
 }
-[CCode (cname = "gdk_window_ensure_native", cheader_filename = "xnoise.h")]
-public static bool ensure_native (Gdk.Window window);
