@@ -111,6 +111,8 @@ public class Leoslyrics : GLib.Object, Xnoise.ILyrics {
 	
 	public bool fetch_hid () {
 		uint status;
+		availability = false;
+		
 		status = session.send_message(hid_msg);
 		if (status != KnownStatusCode.OK) return false;
 		if (hid_msg.response_body.data == null) return false;
@@ -128,24 +130,19 @@ public class Leoslyrics : GLib.Object, Xnoise.ILyrics {
 		var xp_result = xp_cont.eval_expression(xp_hid);
 		if (xp_result->nodesetval->is_empty()) { 
 			delete xmldoc;
-			availability = false;
 			return false;
 		}
 		
 		var hid_result_node = xp_result->nodesetval->item (0);
 		if (hid_result_node == null) {
 			delete xmldoc;
-			availability = false;
 			return false;
 		}
 
 		hid = hid_result_node->get_content();
 		delete xmldoc;
 		
-		if (hid == "") {
-			availability = false;
-			return false;
-		}
+		if (hid == "") return false;
 		
 		availability = true;
 		return true;
@@ -199,11 +196,13 @@ public class Leoslyrics : GLib.Object, Xnoise.ILyrics {
 	
 	public void* fetch () {
 		if (available() == null) fetch_hid();
-		if (available() == false || hid == "") return null;
-		
-		bool retval = fetch_text();
+		if (!available() || hid == ""){
+			sign_lyrics_done(this);
+			return null;
+		}
+		fetch_text();
 		sign_lyrics_fetched(text);
-		sign_lyrics_done(this);
+		//sign_lyrics_done(this);
 		return null;
 	}
 	
