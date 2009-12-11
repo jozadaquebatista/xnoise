@@ -202,7 +202,7 @@ public class Leoslyrics : GLib.Object, Xnoise.ILyrics {
 		}
 		fetch_text();
 		sign_lyrics_fetched(text);
-		//sign_lyrics_done(this);
+		sign_lyrics_done(this);
 		return null;
 	}
 	
