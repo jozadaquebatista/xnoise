@@ -39,6 +39,8 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		this.textbuffer = new Gtk.TextBuffer(null);
 		this.set_buffer(textbuffer);
 		this.set_editable(false);
+		this.set_left_margin(10);
+		this.set_wrap_mode(Gtk.WrapMode.WORD);
 		xn.gPl.sign_uri_changed.connect(on_uri_change);
 	}
 	

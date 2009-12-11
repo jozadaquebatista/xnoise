@@ -82,7 +82,7 @@ msgstr "por"
 #: src/xnoise/xnoise-main-window.vala:667
 #: src/xnoise/xnoise-main-window.vala:685
 msgid "on"
-msgstr "encendido"
+msgstr "en"
 
 #: src/xnoise/xnoise-main-window.vala:682
 #, c-format
