@@ -69,6 +69,9 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	}*/
 
 	private static void on_plugin_activated(Plugin p) {
+		//TODO: use new lyrics plugin has table instead !?!
+		//TODO: check 'is_lyrics_plugin' property
+		//if(!p.is_lyrics_plugin) return;
 		ILyricsProvider provider = p.loaded_plugin as ILyricsProvider;
 		if(provider == null) return;
 		LyricsLoader.provider = provider;

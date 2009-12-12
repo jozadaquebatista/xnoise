@@ -77,6 +77,7 @@ public class Xnoise.Plugin : GLib.Object {
 		type = init_module();
 		loaded = true;
 		this.configurable = false;
+		if(!(type is IPlugin)) return false; 
 		if(type is ILyricsProvider) this.is_lyrics_plugin = true;
 		return true;
 	}

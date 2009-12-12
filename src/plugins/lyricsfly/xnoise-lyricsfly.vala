@@ -70,7 +70,7 @@ public class LyricsLyricsfly : GLib.Object, Xnoise.ILyrics {
 	private string artist;
 	private string title;
 		
-	private static const string my_identifier= "Leoslyrics";
+	private static const string my_identifier= "Lyricsfly";
 	private static const string auth = "fa7ed8a95b2aa9f70-temporary.API.access";
 	private static const string text_url = "http://lyricsfly.com/api/api.php?i=%s&a=%s&t=%s";
 	private static const string xp_text = "/start/sg[1]/tx";

@@ -750,6 +750,7 @@ struct _XnoisePluginLoader {
 	GObject parent_instance;
 	XnoisePluginLoaderPrivate * priv;
 	GHashTable* plugin_htable;
+	GHashTable* lyrics_plugins_htable;
 };
 
 struct _XnoisePluginLoaderClass {

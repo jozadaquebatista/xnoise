@@ -30,5 +30,5 @@
  
 [ModuleInit]
 public Type init_module() { 
-	return typeof(LeoslyricsPlugin);
+	return typeof(LyricsChartlyrics);
 }
