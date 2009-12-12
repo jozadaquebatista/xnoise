@@ -59,7 +59,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		this.set_size_request(200, 200);
 
 		var toggle = new CellRendererToggle();
-		toggle.toggled += (toggle, path) => {
+		toggle.toggled.connect( (toggle, path) => {
 			TreeIter iter;
 			var tree_path = new TreePath.from_string(path);
 			listmodel.get_iter(out iter, tree_path);
@@ -72,7 +72,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 			listmodel.set(iter, 
 			              PluginManagerColumn.TOGGLE, !plugin_state);
 			sign_plugin_activestate_changed(name);
-		};
+		});
 
 		var column = new TreeViewColumn();
 		column.pack_start(toggle, false);

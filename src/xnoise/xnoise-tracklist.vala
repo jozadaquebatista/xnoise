@@ -48,7 +48,7 @@ public class Xnoise.TrackList : TreeView {
 		this.create_model();
 		this.create_view();
 		this.get_selection().set_mode(SelectionMode.MULTIPLE); 
-		this.sign_active_path_changed += this.on_active_path_changed;
+		this.sign_active_path_changed.connect(this.on_active_path_changed);
 
 		Gtk.drag_source_set(
 			this,
@@ -66,20 +66,20 @@ public class Xnoise.TrackList : TreeView {
 			Gdk.DragAction.DEFAULT
 			);
 
-		this.row_activated        += this.on_row_activated;
-		this.key_release_event    += this.on_key_released;
-		this.drag_begin           += this.on_drag_begin;
-		this.drag_data_get        += this.on_drag_data_get;
-		this.drag_end             += this.on_drag_end;
-		this.drag_motion          += this.on_drag_motion;
-		this.drag_data_received   += this.on_drag_data_received;
-		this.button_release_event += this.on_button_release;
-		this.button_press_event   += this.on_button_press;
+		this.row_activated.connect(this.on_row_activated);
+		this.key_release_event.connect(this.on_key_released);
+		this.drag_begin.connect(this.on_drag_begin);
+		this.drag_data_get.connect(this.on_drag_data_get);
+		this.drag_end.connect(this.on_drag_end);
+		this.drag_motion.connect(this.on_drag_motion);
+		this.drag_data_received.connect(this.on_drag_data_received);
+		this.button_release_event.connect(this.on_button_release);
+		this.button_press_event.connect(this.on_button_press);
 			
 		menu = create_rightclick_menu();
 	}
 
-	public bool on_button_press(TrackList sender, Gdk.EventButton e) {
+	public bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath path;
 		Gtk.TreeViewColumn column;        
 		
@@ -147,7 +147,7 @@ public class Xnoise.TrackList : TreeView {
 		removeHbox.pack_start(playpause_popup_image, false, true, 0);
 		removeHbox.pack_start(removeLabel, true, true, 0);
 		removetrackItem.add(removeHbox);
-		removetrackItem.activate += this.remove_selected_rows;
+		removetrackItem.activate.connect(this.remove_selected_rows);
 		rightmenu.append(removetrackItem);
 //		var separator = new SeparatorMenuItem();
 //		rightmenu.append(separator);
@@ -155,7 +155,7 @@ public class Xnoise.TrackList : TreeView {
 		return rightmenu;
 	}
 
-	public bool on_button_release(TrackList sender, Gdk.EventButton e) {
+	public bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath path;
 		Gtk.TreeViewColumn column;
 		int cell_x, cell_y;
@@ -177,7 +177,7 @@ public class Xnoise.TrackList : TreeView {
 		return false; //for testing
 	}
 
-	public bool on_drag_motion(TrackList sender, Gdk.DragContext context, int x, int y, uint timestamp) {
+	public bool on_drag_motion(Gtk.Widget sender, Gdk.DragContext context, int x, int y, uint timestamp) {
 		Gtk.TreePath path;
 		Gtk.TreeViewDropPosition pos;
 		if(!(this.get_dest_row_at_pos(x, y, out path, out pos))) return false;
@@ -186,7 +186,7 @@ public class Xnoise.TrackList : TreeView {
 	}	
 
 	private bool reorder_dragging;	
-	private void on_drag_begin(TrackList sender, DragContext context) {
+	private void on_drag_begin(Gtk.Widget sender, DragContext context) {
 		this.dragging = true;
 		this.reorder_dragging = true;
 		
@@ -205,7 +205,7 @@ public class Xnoise.TrackList : TreeView {
 		return;
 	}
 
-	public void on_drag_end(TrackList sender, Gdk.DragContext context) { 
+	public void on_drag_end(Gtk.Widget sender, Gdk.DragContext context) { 
 		this.dragging = false;
 		this.reorder_dragging = false;
 		this.unset_rows_drag_dest();
@@ -218,7 +218,7 @@ public class Xnoise.TrackList : TreeView {
 			);
 	}
 
-	public void on_drag_data_get(TrackList sender, Gdk.DragContext context, Gtk.SelectionData selection, 
+	public void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context, Gtk.SelectionData selection, 
 	                             uint target_type, uint etime) {
 		rowref_list = new TreeRowReference[0];
 		TreeIter iter;
@@ -262,7 +262,7 @@ public class Xnoise.TrackList : TreeView {
 	}
 
 	private Gtk.TreeViewDropPosition position;
-	private void on_drag_data_received(TrackList seder, DragContext context, int x, int y, 
+	private void on_drag_data_received(Gtk.Widget sender, DragContext context, int x, int y, 
 	                                   SelectionData selection, uint target_type, uint time) {
 		//set uri list for dragging out of xnoise. in parallel work around with rowreferences
 		//if reorder = false then data is coming from outside (music browser or nautilus) -> use uri_list
@@ -678,7 +678,7 @@ public class Xnoise.TrackList : TreeView {
 		}
 	}
 
-	private void on_row_activated(TrackList sender, TreePath path, TreeViewColumn column) {
+	private void on_row_activated(Gtk.Widget sender, TreePath path, TreeViewColumn column) {
 		string uri = null;
 		TreeIter iter;
 		if(listmodel.get_iter(out iter, path)) {
@@ -687,7 +687,7 @@ public class Xnoise.TrackList : TreeView {
 		this.on_activated(uri, path);
 	}
 
-	private bool on_key_released(TrackList sender, Gdk.EventKey ek) {
+	private bool on_key_released(Gtk.Widget sender, Gdk.EventKey ek) {
 		int KEY_DELETE = 0xFFFF; 
 		if(ek.keyval==KEY_DELETE) 
 			this.remove_selected_rows();

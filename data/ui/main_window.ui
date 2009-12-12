@@ -290,7 +290,7 @@ ready to rock</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <child>
-                          <object class="GtkImage" id="image1y">
+                          <object class="GtkImage" id="image1y1">
                             <property name="visible">True</property>
                             <property name="stock">gtk-clear</property>
                           </object>
@@ -309,7 +309,7 @@ ready to rock</property>
                         <property name="relief">none</property>
                         <property name="focus_on_click">False</property>
                         <child>
-                          <object class="GtkImage" id="image2y">
+                          <object class="GtkImage" id="image2y1">
                             <property name="visible">True</property>
                             <property name="stock">gtk-delete</property>
                           </object>
@@ -322,7 +322,7 @@ ready to rock</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVSeparator" id="vseparator1">
+                      <object class="GtkVSeparator" id="vseparator3">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                       </object>
@@ -333,7 +333,7 @@ ready to rock</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label4">
+                      <object class="GtkLabel" id="label4x">
                         <property name="visible">True</property>
                       </object>
                       <packing>
@@ -342,7 +342,44 @@ ready to rock</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="showvideobutton">
+                      <object class="GtkButton" id="showLyricsbuttonTL">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="relief">none</property>
+                        <child>
+                          <object class="GtkHBox" id="hbox2">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkImage" id="imageLy01">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-about</property>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label9">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Lyrics</property>
+                              </object>
+                              <packing>
+                                <property name="padding">2</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="showvideobuttonTL">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -363,9 +400,10 @@ ready to rock</property>
                             <child>
                               <object class="GtkLabel" id="showvideolabel">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Show Video</property>
+                                <property name="label" translatable="yes">Video</property>
                               </object>
                               <packing>
+                                <property name="padding">2</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -376,7 +414,7 @@ ready to rock</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="padding">2</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -388,11 +426,11 @@ ready to rock</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="padding">5</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="repeatButton">
+                      <object class="GtkButton" id="repeatButton01">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -402,7 +440,7 @@ ready to rock</property>
                           <object class="GtkHBox" id="hbox4">
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkImage" id="repeatImage">
+                              <object class="GtkImage" id="repeatImage01">
                                 <property name="visible">True</property>
                                 <property name="stock">gtk-refresh</property>
                               </object>
@@ -411,7 +449,7 @@ ready to rock</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="repeatLabel">
+                              <object class="GtkLabel" id="repeatLabel01">
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">no repeat</property>
                               </object>
@@ -428,7 +466,7 @@ ready to rock</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="padding">2</property>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                   </object>
@@ -470,66 +508,53 @@ ready to rock</property>
                   <object class="GtkHBox" id="hbox2v">
                     <property name="visible">True</property>
                     <child>
-                      <object class="GtkButton" id="removeAllButton1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="relief">none</property>
-                        <property name="focus_on_click">False</property>
-                        <child>
-                          <object class="GtkImage" id="image1y1">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-clear</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="removeSelectedButton1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="relief">none</property>
-                        <property name="focus_on_click">False</property>
-                        <child>
-                          <object class="GtkImage" id="image2y1">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-delete</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="padding">2</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkVSeparator" id="vseparator3">
-                        <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="padding">10</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="label8">
                         <property name="visible">True</property>
                       </object>
                       <packing>
                         <property name="fill">False</property>
-                        <property name="position">3</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="showvideobutton1">
+                      <object class="GtkButton" id="showLyricsbuttonv">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="relief">none</property>
+                        <child>
+                          <object class="GtkHBox" id="hbox8">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkImage" id="imagely02">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-about</property>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label10">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Lyrics</property>
+                              </object>
+                              <packing>
+                                <property name="padding">2</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="showTLbuttonv">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -550,9 +575,10 @@ ready to rock</property>
                             <child>
                               <object class="GtkLabel" id="showtracklistlabel">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Show Tracklist</property>
+                                <property name="label" translatable="yes">Tracklist</property>
                               </object>
                               <packing>
+                                <property name="padding">2</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -563,7 +589,7 @@ ready to rock</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="padding">2</property>
-                        <property name="position">4</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -575,11 +601,11 @@ ready to rock</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="padding">5</property>
-                        <property name="position">5</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="repeatButton1">
+                      <object class="GtkButton" id="repeatButton02">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -589,7 +615,7 @@ ready to rock</property>
                           <object class="GtkHBox" id="hbox7">
                             <property name="visible">True</property>
                             <child>
-                              <object class="GtkImage" id="repeatImage1">
+                              <object class="GtkImage" id="repeatImage02">
                                 <property name="visible">True</property>
                                 <property name="stock">gtk-refresh</property>
                               </object>
@@ -598,7 +624,7 @@ ready to rock</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="repeatLabel1">
+                              <object class="GtkLabel" id="repeatLabel02">
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">no repeat</property>
                               </object>
@@ -615,7 +641,7 @@ ready to rock</property>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="padding">2</property>
-                        <property name="position">6</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>
@@ -642,13 +668,168 @@ ready to rock</property>
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledlyricsview">
+              <object class="GtkVBox" id="vbox4">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">automatic</property>
-                <property name="vscrollbar_policy">automatic</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkScrolledWindow" id="scrolledlyricsview">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkHBox" id="hbox2v1">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkLabel" id="label11">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="showTLbuttonLY">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="relief">none</property>
+                        <child>
+                          <object class="GtkHBox" id="hbox11">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkImage" id="imagetl01">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-index</property>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label12">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Tracklist</property>
+                              </object>
+                              <packing>
+                                <property name="padding">2</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="showVideobuttonLY">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="relief">none</property>
+                        <property name="focus_on_click">False</property>
+                        <child>
+                          <object class="GtkHBox" id="hbox9">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkImage" id="showvideoimage2">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-fullscreen</property>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="showvideolabelLY">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Video</property>
+                              </object>
+                              <packing>
+                                <property name="padding">2</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="padding">2</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkVSeparator" id="vseparator6">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="padding">5</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="repeatButton03">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="relief">none</property>
+                        <property name="focus_on_click">False</property>
+                        <child>
+                          <object class="GtkHBox" id="hbox10">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkImage" id="repeatImage03">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-refresh</property>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="repeatLabel03">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">no repeat</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="padding">4</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="padding">2</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>

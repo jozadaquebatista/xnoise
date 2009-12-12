@@ -29,28 +29,32 @@
  */
 
 using Gtk;
-# if GTKTWO_ONE_SIX
 [CCode (cname = "gdk_window_ensure_native")]
 public extern bool ensure_native(Gdk.Window window);
-# endif
 
 public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string MAIN_UI_FILE  = Config.UIDIR + "main_window.ui";
 	private const string MENU_UI_FILE  = Config.UIDIR + "main_ui.xml";
 	private const string APPICON       = Config.UIDIR + "xnoise_16x16.png";
-	private const string SHOWVIDEO     = _("Show Video");
-	private const string SHOWTRACKLIST = _("Show Tracklist");
+	private const string SHOWVIDEO     = _("Video");
+	private const string SHOWTRACKLIST = _("Tracklist");
 	private Label song_title_label;
 	public bool _seek;
 	private HPaned hpaned;
 	private VolumeSliderButton volumeSliderButton;
 	private int _posX_buffer;
 	private int _posY_buffer;
-	private Button showvideobutton;
+	private Button showlyricsbuttonVid;
+	private Button showlyricsbuttonTL;
+	private Button showtracklistbuttonVid;
+	private Button showtracklistbuttonLY;
+	private Button showvideobuttonTL;
+	private Button showvideobuttonLY;
+
 	private Gtk.VBox menuvbox;
 	private Gtk.VBox mainvbox;
 	public VideoScreen videoscreen;
-	public Label showvideolabel;
+	//public Label showvideolabel;
 	public bool is_fullscreen = false;
 	public bool drag_on_da = false;
 	public LyricsView lyricsView;
@@ -79,12 +83,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public PreviousButton previousButton;
 	public NextButton nextButton;
 	public StopButton stopButton;
-	public Gtk.Button repeatButton;
+	public Gtk.Button repeatButton01;
+	public Gtk.Button repeatButton02;
+	public Gtk.Button repeatButton03;
 	public Gtk.Notebook browsernotebook;
 	public Gtk.Notebook tracklistnotebook;
-	public Image repeatImage;
+	public Image repeatImage01;
+	public Image repeatImage02;
+	public Image repeatImage03;
 	public AlbumImage albumimage;
-	public Label repeatLabel;
+	public Label repeatLabel01;
+	public Label repeatLabel02;
+	public Label repeatLabel03;
 	public SongProgressBar songProgressBar;
 	public double current_volume; //keep it global for saving to params
 	public MediaBrowser mediaBr;
@@ -126,12 +136,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		notify["repeatState"].connect(on_repeatState_changed);
 		notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
 	}
-	
+
 	private void initialize_video_screen() {
 		videoscreen.realize();
-# if GTKTWO_ONE_SIX
 		ensure_native(videoscreen.window);
-# endif
 		// dummy drag'n'drop to get drag motion event
 		Gtk.drag_dest_set( 
 			videoscreen,
@@ -145,17 +153,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//switch to tracklist for dropping
 			if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(0);
 		});
-		videoscreen.drag_motion += on_da_drag_motion;
+		videoscreen.drag_motion.connect(on_da_drag_motion);
 	}
 
-	private bool on_da_drag_motion(DrawingArea sender, Gdk.DragContext context, int x, int y, uint timestamp) {
+	private bool on_da_drag_motion(Gtk.Widget sender, Gdk.DragContext context, int x, int y, uint timestamp) {
 		drag_on_da = true;
 		sign_drag_over_da();
 		return true;
 	}
 		
 	private void on_fullscreenwindowvisible(GLib.ParamSpec pspec) {
-		this.showvideobutton.set_sensitive(!fullscreenwindowvisible);
+		this.showvideobuttonTL.set_sensitive(!fullscreenwindowvisible);
+		this.showvideobuttonLY.set_sensitive(!fullscreenwindowvisible);
 	}
 	
 	private void add_lastused_titles_to_tracklist() { 
@@ -235,24 +244,37 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void on_repeatState_changed(GLib.ParamSpec pspec) {
 		switch(this.repeatState) {
 			case Repeat.NOT_AT_ALL : {
-				repeatLabel.label = _("no repeat");
-				repeatImage.stock = Gtk.STOCK_EXECUTE; //TODO: create some other images
+				//TODO: create some other images
+				repeatLabel01.label = _("no repeat");
+				repeatImage01.stock = Gtk.STOCK_EXECUTE;
+				repeatLabel02.label = _("no repeat");
+				repeatImage02.stock = Gtk.STOCK_EXECUTE;
+				repeatLabel03.label = _("no repeat");
+				repeatImage03.stock = Gtk.STOCK_EXECUTE;
 				break;
 			}
 			case Repeat.SINGLE : {
-				repeatLabel.label = _("repeat single");
-				repeatImage.stock = Gtk.STOCK_REDO; 
+				repeatLabel01.label = _("repeat single");
+				repeatImage01.stock = Gtk.STOCK_REDO; 
+				repeatLabel02.label = _("repeat single");
+				repeatImage02.stock = Gtk.STOCK_REDO; 
+				repeatLabel03.label = _("repeat single");
+				repeatImage03.stock = Gtk.STOCK_REDO; 
 				break;
 			}
 			case Repeat.ALL : {
-				repeatLabel.label = _("repeat all");
-				repeatImage.stock = Gtk.STOCK_REFRESH; 
+				repeatLabel01.label = _("repeat all");
+				repeatImage01.stock = Gtk.STOCK_REFRESH; 
+				repeatLabel02.label = _("repeat all");
+				repeatImage02.stock = Gtk.STOCK_REFRESH; 
+				repeatLabel03.label = _("repeat all");
+				repeatImage03.stock = Gtk.STOCK_REFRESH; 
 				break;
 			}
 		}
 	}
 		
-	private bool on_window_state_change(Xnoise.MainWindow sender, Gdk.EventWindowState e) {
+	private bool on_window_state_change(Gtk.Widget sender, Gdk.EventWindowState e) {
 		if(e.new_window_state==Gdk.WindowState.FULLSCREEN) {
 			is_fullscreen = true;
 		}
@@ -356,7 +378,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private const int KEY_F11 = 0xFFC8; 
 	private const int KEY_ESC = 0xFF1B;
-	private bool on_key_released(Xnoise.MainWindow sender, Gdk.EventKey e) {
+	private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
 //		print("%d\n",(int)e.keyval);
 		switch(e.keyval) {
 			case KEY_F11:
@@ -555,7 +577,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		store.clear();
 	}
 	
-	private void on_repeat_button_clicked() {
+	private void on_repeat_button_clicked(Button sender) {
 		int temprepeatState = this.repeatState;
 		temprepeatState += 1;
 		if(temprepeatState>2) temprepeatState = 0;
@@ -566,26 +588,27 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		trackList.remove_selected_rows();
 	}
 
+	private void on_show_tracklist_button_clicked() {
+		this.tracklistnotebook.set_current_page(0);
+	}
+
 	private void on_show_video_button_clicked() {
-		switch(this.tracklistnotebook.page) {
-			case 0:
-				if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(1);
-				break;
-			case 1:
-				this.tracklistnotebook.set_current_page(0);
-				break;
-		}
+		this.tracklistnotebook.set_current_page(1);
+	}
+
+	private void on_show_lyrics_button_clicked() {
+		this.tracklistnotebook.set_current_page(2);
 	}
 
 	private void on_tracklistnotebook_switch_page(void* sender, uint page) {
-		switch(page) {
-			case 0:
-				this.showvideolabel.set_text(SHOWVIDEO);
-				break;
-			case 1:
-				this.showvideolabel.set_text(SHOWTRACKLIST);
-				break;
-		}
+//		switch(page) {
+//			case 0:
+//				this.showvideolabel.set_text(SHOWVIDEO);
+//				break;
+//			case 1:
+//				this.showvideolabel.set_text(SHOWTRACKLIST);
+//				break;
+//		}
 	}
 
 	private bool on_close() {
@@ -816,22 +839,53 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//--------------------
 
 			//SHOW VIDEO LABEL
-			this.showvideolabel            = gb.get_object("showvideolabel") as Gtk.Label;
-			this.showvideolabel.set_text(SHOWVIDEO);
+//			this.showvideolabel            = gb.get_object("showvideolabel") as Gtk.Label;
+//			this.showvideolabel.set_text(SHOWVIDEO);
 			//--------------------
 			
-			//SHOW VIDEO BUTTON
-			this.showvideobutton           = gb.get_object("showvideobutton") as Gtk.Button;
-			showvideobutton.can_focus      = false;
-			showvideobutton.clicked.connect(this.on_show_video_button_clicked);
+			//SHOW VIDEO BUTTONS
+			showvideobuttonTL                = gb.get_object("showvideobuttonTL") as Gtk.Button;
+			showvideobuttonTL.can_focus      = false;
+			showvideobuttonTL.clicked.connect(this.on_show_video_button_clicked);
+			showvideobuttonLY                = gb.get_object("showVideobuttonLY") as Gtk.Button;
+			showvideobuttonLY.can_focus      = false;
+			showvideobuttonLY.clicked.connect(this.on_show_video_button_clicked);
+			//--------------------
+
+			//SHOW TRACKLIST BUTTONS
+			showtracklistbuttonLY            = gb.get_object("showTLbuttonLY") as Gtk.Button;
+			showtracklistbuttonLY.can_focus  = false;
+			showtracklistbuttonLY.clicked.connect(this.on_show_tracklist_button_clicked);
+			showtracklistbuttonVid           = gb.get_object("showTLbuttonv") as Gtk.Button;
+			showtracklistbuttonVid.can_focus = false;
+			showtracklistbuttonVid.clicked.connect(this.on_show_tracklist_button_clicked);
+			//--------------------
+
+			//SHOW LYRICS BUTTONS
+			showlyricsbuttonTL               = gb.get_object("showLyricsbuttonTL") as Gtk.Button;
+			showlyricsbuttonTL.can_focus     = false;
+			showlyricsbuttonTL.clicked.connect(this.on_show_lyrics_button_clicked);
+			showlyricsbuttonVid              = gb.get_object("showLyricsbuttonv") as Gtk.Button;
+			showlyricsbuttonVid.can_focus    = false;
+			showlyricsbuttonVid.clicked.connect(this.on_show_lyrics_button_clicked);
 			//--------------------
 			
 			//REPEAT MODE SELECTOR
-			this.repeatButton              = gb.get_object("repeatButton") as Gtk.Button;
-			repeatButton.can_focus         = false;
-			this.repeatButton.clicked.connect(this.on_repeat_button_clicked);
-			this.repeatLabel               = gb.get_object("repeatLabel") as Gtk.Label;
-			this.repeatImage               = gb.get_object("repeatImage") as Gtk.Image;
+			repeatButton01                = gb.get_object("repeatButton01") as Gtk.Button;
+			repeatButton01.can_focus      = false;
+			repeatButton01.clicked.connect(this.on_repeat_button_clicked);
+			repeatLabel01                 = gb.get_object("repeatLabel01") as Gtk.Label;
+			repeatImage01                 = gb.get_object("repeatImage01") as Gtk.Image;
+			repeatButton02                = gb.get_object("repeatButton02") as Gtk.Button;
+			repeatButton02.can_focus      = false;
+			repeatButton02.clicked.connect(this.on_repeat_button_clicked);
+			repeatLabel02                 = gb.get_object("repeatLabel02") as Gtk.Label;
+			repeatImage02                 = gb.get_object("repeatImage02") as Gtk.Image;
+			repeatButton03                = gb.get_object("repeatButton03") as Gtk.Button;
+			repeatButton03.can_focus      = false;
+			repeatButton03.clicked.connect(this.on_repeat_button_clicked);
+			repeatLabel03                 = gb.get_object("repeatLabel03") as Gtk.Label;
+			repeatImage03                 = gb.get_object("repeatImage03") as Gtk.Image;
 			//--------------------
 			
 			//PLAYING TITLE IMAGE
@@ -901,7 +955,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, true); 
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true); 
 			this.searchEntryMB.set_sensitive(true);
-			this.searchEntryMB.changed += mediaBr.on_searchtext_changed;
+			this.searchEntryMB.changed.connect(mediaBr.on_searchtext_changed);
 			this.searchEntryMB.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 				if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
 			});
@@ -961,8 +1015,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.trayicon.scroll_event.connect(this.on_trayicon_scrolled);
 		
 		this.delete_event.connect(this.on_close); //only send to tray
-		this.key_release_event += this.on_key_released;
-		this.window_state_event += this.on_window_state_change;
+		this.key_release_event.connect(this.on_key_released);
+		this.window_state_event.connect(this.on_window_state_change);
 	}
 	
 	/**

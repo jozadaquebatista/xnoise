@@ -47,10 +47,10 @@ public class Xnoise.Plugin : GLib.Object {
   	
 	public Plugin(PluginInformation info) {
 		this.info = info;
-		this.notify += (s, p) => {
+		this.notify.connect( (s, p) => {
 			switch(p.name) {
 				case "activated": {
-					if(s.activated)
+					if(((Plugin)s).activated)
 						activate();
 					else
 						deactivate();
@@ -58,7 +58,7 @@ public class Xnoise.Plugin : GLib.Object {
 				}
 				default: break;
 			}
-		};
+		});
     }
     
     public bool load(ref weak Main xn) {

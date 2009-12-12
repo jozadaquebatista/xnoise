@@ -124,7 +124,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_tag_changed(string newuri);
 	public signal void sign_uri_changed(string newuri);
 	public signal void sign_video_playing();
-	//public signal void sign_state_changed(int state);
 	public signal void sign_paused();
 	public signal void sign_playing();
 	public signal void sign_volume_changed(double volume);

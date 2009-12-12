@@ -53,10 +53,10 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 //		print("destruct SettingsDialog\n");
 //	}
 	
-	private void on_mb_font_changed(Gtk.SpinButton sender) {
-		if((int)(sender.value) < 7 ) sender.value = 7;
-		if((int)(sender.value) > 15) sender.value = 15;
-		fontsizeMB = (int)sender.value;
+	private void on_mb_font_changed(Gtk.Editable sender) {
+		if((int)(((Gtk.SpinButton)sender).value) < 7 ) ((Gtk.SpinButton)sender).value = 7;
+		if((int)(((Gtk.SpinButton)sender).value) > 15) ((Gtk.SpinButton)sender).value = 15;
+		fontsizeMB = (int)((Gtk.SpinButton)sender).value;
 		xn.main_window.mediaBr.fontsizeMB = fontsizeMB;
 		//TODO:immediatly do something with the new value
 	}
@@ -74,15 +74,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		this.dialog.destroy();
 		sign_finish();
 	}
-
-//	private AddMediaDialog mfd;
-//	private void on_music_add_clicked(Gtk.Button sender) {
-//		mfd = new AddMediaDialog();
-//		mfd.sign_finish += () => {
-//			mfd = null;
-//			Idle.add(xn.main_window.mediaBr.change_model_data);	
-//		};
-//	}
 
 	private void add_plugin_tabs() {
 		foreach(string name in this.xn.plugin_loader.plugin_htable.get_keys()) { 
@@ -118,19 +109,15 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 			var okButton             = this.get_object("buttonOK") as Gtk.Button;
 			okButton.can_focus       = false;
-			okButton.clicked         += this.on_ok_button_clicked;
+			okButton.clicked.connect(this.on_ok_button_clicked);
 						
 			var cancelButton         = this.get_object("button1") as Gtk.Button;
 			cancelButton.can_focus   = false;
-			cancelButton.clicked     += this.on_cancel_button_clicked;
+			cancelButton.clicked.connect(this.on_cancel_button_clicked);
 			
 			sb                       = this.get_object("spinbutton1") as Gtk.SpinButton;
 			sb.set_value(8.0);
-			sb.changed               += this.on_mb_font_changed;
-			
-//			var musicAddButton       = this.get_object("button3") as Gtk.Button;
-//			musicAddButton.can_focus = false;
-//			musicAddButton.clicked   += this.on_music_add_clicked;
+			sb.changed.connect(this.on_mb_font_changed);
 			
 			vboxplugins              = this.get_object("vboxplugins") as Gtk.VBox;
 			
@@ -143,7 +130,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			
 			plugin_manager_tree = new PluginManagerTree(ref xn);
 			vboxplugins.pack_start(plugin_manager_tree, true, true, 0);
-			plugin_manager_tree.sign_plugin_activestate_changed+=reset_plugin_tabs;
+			plugin_manager_tree.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
 		} 
 		catch (GLib.Error err) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, 
