@@ -97,7 +97,7 @@ public class LastFmCovers : GLib.Object, Xnoise.IAlbumCoverImage {
 		string url_image = result->nodesetval->item(0)->get_content();
 		var file = File.new_for_uri(url_image);
 		if(file.query_exists(null)) { //If remote file does not exist
-			var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(), INIFOLDER, null);
+			var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(), INIFOLDER, "album_images", null);
 			var fileout = File.new_for_path(GLib.Path.build_filename(image_path, artist.down(), album.down(), file.get_basename(), null));
 			string pth = "";
 			File fileout_path = fileout.get_parent();
