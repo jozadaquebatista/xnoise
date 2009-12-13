@@ -52,6 +52,25 @@ typedef struct _XnoiseAlbumImage XnoiseAlbumImage;
 typedef struct _XnoiseAlbumImageClass XnoiseAlbumImageClass;
 typedef struct _XnoiseAlbumImagePrivate XnoiseAlbumImagePrivate;
 
+#define XNOISE_TYPE_ALBUM_IMAGE_LOADER (xnoise_album_image_loader_get_type ())
+#define XNOISE_ALBUM_IMAGE_LOADER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_IMAGE_LOADER, XnoiseAlbumImageLoader))
+#define XNOISE_ALBUM_IMAGE_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ALBUM_IMAGE_LOADER, XnoiseAlbumImageLoaderClass))
+#define XNOISE_IS_ALBUM_IMAGE_LOADER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ALBUM_IMAGE_LOADER))
+#define XNOISE_IS_ALBUM_IMAGE_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ALBUM_IMAGE_LOADER))
+#define XNOISE_ALBUM_IMAGE_LOADER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ALBUM_IMAGE_LOADER, XnoiseAlbumImageLoaderClass))
+
+typedef struct _XnoiseAlbumImageLoader XnoiseAlbumImageLoader;
+typedef struct _XnoiseAlbumImageLoaderClass XnoiseAlbumImageLoaderClass;
+typedef struct _XnoiseAlbumImageLoaderPrivate XnoiseAlbumImageLoaderPrivate;
+
+#define XNOISE_TYPE_IALBUM_COVER_IMAGE (xnoise_ialbum_cover_image_get_type ())
+#define XNOISE_IALBUM_COVER_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE, XnoiseIAlbumCoverImage))
+#define XNOISE_IS_IALBUM_COVER_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE))
+#define XNOISE_IALBUM_COVER_IMAGE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE, XnoiseIAlbumCoverImageIface))
+
+typedef struct _XnoiseIAlbumCoverImage XnoiseIAlbumCoverImage;
+typedef struct _XnoiseIAlbumCoverImageIface XnoiseIAlbumCoverImageIface;
+
 #define XNOISE_TYPE_APP_STARTER (xnoise_app_starter_get_type ())
 #define XNOISE_APP_STARTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_APP_STARTER, XnoiseAppStarter))
 #define XNOISE_APP_STARTER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_APP_STARTER, XnoiseAppStarterClass))
@@ -326,6 +345,14 @@ typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
 
 typedef struct _XnoiseILyricsProvider XnoiseILyricsProvider;
 typedef struct _XnoiseILyricsProviderIface XnoiseILyricsProviderIface;
+
+#define XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER (xnoise_ialbum_cover_image_provider_get_type ())
+#define XNOISE_IALBUM_COVER_IMAGE_PROVIDER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER, XnoiseIAlbumCoverImageProvider))
+#define XNOISE_IS_IALBUM_COVER_IMAGE_PROVIDER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER))
+#define XNOISE_IALBUM_COVER_IMAGE_PROVIDER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER, XnoiseIAlbumCoverImageProviderIface))
+
+typedef struct _XnoiseIAlbumCoverImageProvider XnoiseIAlbumCoverImageProvider;
+typedef struct _XnoiseIAlbumCoverImageProviderIface XnoiseIAlbumCoverImageProviderIface;
 typedef struct _XnoiseParamsPrivate XnoiseParamsPrivate;
 
 #define XNOISE_TYPE_PLUGIN (xnoise_plugin_get_type ())
@@ -417,13 +444,29 @@ struct _XnoiseAlbumImage {
 	GtkFixed parent_instance;
 	XnoiseAlbumImagePrivate * priv;
 	GtkImage* albumimage;
-	GtkImage* albumimage_overlay;
 };
 
 struct _XnoiseAlbumImageClass {
 	GtkFixedClass parent_class;
 };
 
+struct _XnoiseIAlbumCoverImageIface {
+	GTypeInterface parent_iface;
+	void (*fetch) (XnoiseIAlbumCoverImage* self);
+	char* (*get_image_uri) (XnoiseIAlbumCoverImage* self);
+};
+
+struct _XnoiseAlbumImageLoader {
+	GObject parent_instance;
+	XnoiseAlbumImageLoaderPrivate * priv;
+	XnoiseIAlbumCoverImage* aimage;
+};
+
+struct _XnoiseAlbumImageLoaderClass {
+	GObjectClass parent_class;
+};
+
+typedef XnoiseIAlbumCoverImage* (*XnoiseAlbumImageLoaderAlbumImageCreatorDelg) (const char* artist, const char* album, void* user_data);
 struct _XnoiseAppStarter {
 	GObject parent_instance;
 	XnoiseAppStarterPrivate * priv;
@@ -721,6 +764,11 @@ struct _XnoiseILyricsProviderIface {
 	XnoiseILyrics* (*from_tags) (XnoiseILyricsProvider* self, const char* artist, const char* title);
 };
 
+struct _XnoiseIAlbumCoverImageProviderIface {
+	GTypeInterface parent_iface;
+	XnoiseIAlbumCoverImage* (*from_tags) (XnoiseIAlbumCoverImageProvider* self, const char* artist, const char* album);
+};
+
 struct _XnoiseParams {
 	GObject parent_instance;
 	XnoiseParamsPrivate * priv;
@@ -828,9 +876,14 @@ XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
 GType xnoise_album_image_get_type (void);
 XnoiseAlbumImage* xnoise_album_image_new (void);
 XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
-void xnoise_album_image_find_album_image (XnoiseAlbumImage* self, const char* uri);
-void xnoise_album_image_find_google_image (XnoiseAlbumImage* self, const char* search_term);
-void* xnoise_album_image_set_albumimage_from_goo (XnoiseAlbumImage* self);
+void xnoise_album_image_load_default_image (XnoiseAlbumImage* self);
+GType xnoise_album_image_loader_get_type (void);
+GType xnoise_ialbum_cover_image_get_type (void);
+void xnoise_album_image_loader_init (void);
+XnoiseAlbumImageLoader* xnoise_album_image_loader_new (const char* artist, const char* album);
+XnoiseAlbumImageLoader* xnoise_album_image_loader_construct (GType object_type, const char* artist, const char* album);
+char* xnoise_album_image_loader_get_image_uri (XnoiseAlbumImageLoader* self);
+gboolean xnoise_album_image_loader_fetch (XnoiseAlbumImageLoader* self);
 GType xnoise_app_starter_get_type (void);
 GType xnoise_main_get_type (void);
 extern XnoiseMain* xnoise_app_starter_xn;
@@ -1011,6 +1064,10 @@ char* xnoise_ilyrics_get_identifier (XnoiseILyrics* self);
 char* xnoise_ilyrics_get_credits (XnoiseILyrics* self);
 GType xnoise_ilyrics_provider_get_type (void);
 XnoiseILyrics* xnoise_ilyrics_provider_from_tags (XnoiseILyricsProvider* self, const char* artist, const char* title);
+void xnoise_ialbum_cover_image_fetch (XnoiseIAlbumCoverImage* self);
+char* xnoise_ialbum_cover_image_get_image_uri (XnoiseIAlbumCoverImage* self);
+GType xnoise_ialbum_cover_image_provider_get_type (void);
+XnoiseIAlbumCoverImage* xnoise_ialbum_cover_image_provider_from_tags (XnoiseIAlbumCoverImageProvider* self, const char* artist, const char* album);
 XnoiseParams* xnoise_params_new (void);
 XnoiseParams* xnoise_params_construct (GType object_type);
 void xnoise_params_iparams_register (XnoiseParams* self, XnoiseIParams* iparam);

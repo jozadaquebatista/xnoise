@@ -199,4 +199,17 @@ public interface Xnoise.ILyricsProvider : GLib.Object {
 	public abstract ILyrics from_tags(string artist, string title);
 }
 
+public interface Xnoise.IAlbumCoverImage : GLib.Object {
+	public abstract void fetch();
+	public abstract string get_image_uri();
+	//public abstract bool find_image(string uri, string artist, string album);
+
+	public signal void sign_aimage_fetched(string image_uri);
+	public signal void sign_aimage_done(IAlbumCoverImage instance);
+}
+
+public interface Xnoise.IAlbumCoverImageProvider : GLib.Object {
+	public abstract IAlbumCoverImage from_tags(string artist, string album);
+}
+
 

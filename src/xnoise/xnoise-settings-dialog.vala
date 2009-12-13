@@ -31,14 +31,14 @@
 using Gtk;
 
 public class Xnoise.SettingsDialog : Gtk.Builder {
-	private const string group = "XnoisePlugin";
 	private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
 	public Gtk.Dialog dialog;
 	private PluginManagerTree plugin_manager_tree;
-	private Gtk.Notebook notebook;
-	private Gtk.SpinButton sb;
+	private Notebook notebook;
+	private SpinButton sb;
+	private RadioButton radioButtonmin;
 	private int fontsizeMB;
-	private Gtk.VBox vboxplugins;
+	private VBox vboxplugins;
 	private Main xn;
 
 	public signal void sign_finish();
@@ -60,19 +60,23 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		xn.main_window.mediaBr.fontsizeMB = fontsizeMB;
 		//TODO:immediatly do something with the new value
 	}
-
-//	private void write_settings() {
-//		
-//	}
 		
 	private void on_ok_button_clicked() {
 		this.dialog.destroy();
+		par.write_all_parameters_to_file();
 		sign_finish();
 	}
 	
 	private void on_cancel_button_clicked() {
 		this.dialog.destroy();
 		sign_finish();
+	}
+
+	private void on_radio_buttonmin_toggled(Gtk.ToggleButton sender) {
+		if(sender.active) 
+			par.set_int_value("show_on_startup", 1);
+		else
+			par.set_int_value("show_on_startup", 0);
 	}
 
 	private void add_plugin_tabs() {
@@ -85,17 +89,17 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		}		
 	}
 	
-	private void remove_plugin_tabs(string name) {
+	private void remove_plugin_tabs() {
 		//remove all tabs
-		int number_of_plugin_tab = notebook.get_n_pages();
-		for(int i=3;i<=number_of_plugin_tab;i++) { 
+		int number_of_plugin_tabs = notebook.get_n_pages();
+		for(int i=5; i<=number_of_plugin_tabs; i++) { 
 			notebook.remove_page(-1); //remove last page
 		}
 	}
 	
 	private void reset_plugin_tabs(string name) {
 		//just remove all tabs and rebuild them
-		remove_plugin_tabs(name);
+		remove_plugin_tabs();
 		add_plugin_tabs();
 		this.dialog.show_all();	
 	}
@@ -106,6 +110,12 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			
 			this.add_from_file(SETTINGS_UI_FILE);
 			this.dialog              = this.get_object("dialog1") as Gtk.Dialog;
+			
+			radioButtonmin           = this.get_object("radiobutton1") as Gtk.RadioButton;
+			radioButtonmin.can_focus = false;
+			//Set initial value
+			radioButtonmin.active = (par.get_int_value("show_on_startup") == 1 ? true : false);
+			radioButtonmin.toggled.connect(this.on_radio_buttonmin_toggled);
 
 			var okButton             = this.get_object("buttonOK") as Gtk.Button;
 			okButton.can_focus       = false;
@@ -130,6 +140,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			
 			plugin_manager_tree = new PluginManagerTree(ref xn);
 			vboxplugins.pack_start(plugin_manager_tree, true, true, 0);
+			
 			plugin_manager_tree.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
 		} 
 		catch (GLib.Error err) {

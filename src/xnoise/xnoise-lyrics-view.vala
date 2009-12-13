@@ -46,14 +46,12 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	
 	private void on_uri_change(string uri) {
 		//message("called");
-		if (cur_loader != null)	cur_loader.sign_fetched -= on_lyrics_ready;
+		if(cur_loader != null)	cur_loader.sign_fetched -= on_lyrics_ready;
 		textbuffer.set_text("LYRICS VIEWER", -1);
 		if((uri==null)|(uri=="")) return;
 		File file = File.new_for_uri(uri);
 		if(!file.has_uri_scheme("file")) return;
-		TagReader tr = new TagReader();
-
-		//TODO: only for local files, so streams will not lead to a crash
+		var tr = new TagReader();
 		TrackData t = tr.read_tag(file.get_path());
 		if(cur_loader != null) cur_loader.sign_fetched -= on_lyrics_ready;
 

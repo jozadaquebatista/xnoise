@@ -37,6 +37,7 @@ xnoise_VALASOURCES = \
 	xnoise-about.vala \
 	xnoise-add-media-dialog.vala \
 	xnoise-album-image.vala \
+	xnoise-album-image-loader.vala \
 	xnoise-app-starter.vala \
 	xnoise-db-browser.vala \
 	xnoise-db-creator.vala \

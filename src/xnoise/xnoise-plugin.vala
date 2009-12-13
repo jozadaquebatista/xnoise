@@ -79,9 +79,14 @@ public class Xnoise.Plugin : GLib.Object {
 		loaded = true;
 		this.configurable = false;
 
-		if(!type.is_a(typeof(IPlugin))) return false;
+		if(!type.is_a(typeof(IPlugin)))
+			return false;
 		
-		if(type.is_a(typeof(ILyricsProvider))) this.is_lyrics_plugin = true;
+		if(type.is_a(typeof(ILyricsProvider)))
+			this.is_lyrics_plugin = true;
+
+		if(type.is_a(typeof(IAlbumCoverImageProvider)))
+			this.is_album_image_plugin = true;
 
 		return true;
 	}

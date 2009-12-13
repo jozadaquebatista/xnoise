@@ -1,0 +1,9 @@
+[XnoisePlugin]
+name=LastfmCovers
+module=LastfmCovers
+description=Loads album cover images from http://www.lastfm.com
+website=http://code.google.com/p/xnoise/
+icon=/path/to/icon
+copyright=Copyright © 2009 xnoise developers 
+license=GPLv2 + exeption for distribution with non-GPL compatible gstreamer plugins
+author=softshaker <softshaker@googlemail.com>

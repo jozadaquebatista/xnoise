@@ -60,11 +60,6 @@ dnl ================================================================
 dnl plugin check for plugins dependent on libxml-2.0
 
 LIBXML_REQUIRED=2.6.32
-AC_ARG_ENABLE([lyrics],
-    AS_HELP_STRING([--disable-leoslyrics],
-    [Disable lyric plugin (default: enabled)]),
-    [enable_leoslyrics=$enableval],
-    [enable_leoslyrics=yes])
 
 PKG_CHECK_MODULES(LIBXML, \
                   libxml-2.0 >= $LIBXML_REQUIRED, \
@@ -97,15 +92,41 @@ dnl ================================================================
 dnl ================================================================
 dnl dependency check for optional build of leoslyrics plugin 
 
+AC_ARG_ENABLE([leoslyrics],
+    AS_HELP_STRING([--disable-leoslyrics],
+    [Disable lyric plugin (default: enabled)]),
+    [enable_leoslyrics=$enableval],
+    [enable_leoslyrics=yes])
+
 if test "x$enable_leoslyrics" = "xyes"; then
     if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
         enable_leoslyrics=yes		
     else
         enable_leoslyrics=no
-        AC_MSG_WARN([lyrics plugin will not be included in the build.])
+        AC_MSG_WARN([leoslyrics plugin will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_LEOSLYRICS, test x"$enable_leoslyrics" = "xyes")
+dnl ================================================================
+
+dnl ================================================================
+dnl dependency check for optional build of lastfmcovers plugin 
+
+AC_ARG_ENABLE([lastfm-covers],
+    AS_HELP_STRING([--disable-lastfm-covers],
+    [Disable lastfm covers plugin (default: enabled)]),
+    [enable_lastfmcovers=$enableval],
+    [enable_lastfmcovers=yes])
+
+if test "x$enable_lastfmcovers" = "xyes"; then
+    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
+        enable_lastfmcovers=yes		
+    else
+        enable_lastfmcovers=no
+        AC_MSG_WARN([lastfmcovers plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_LASTFMCOVERS, test x"$enable_lastfmcovers" = "xyes")
 dnl ================================================================
 
 
@@ -124,6 +145,7 @@ AC_CONFIG_FILES([Makefile
     src/plugins/Makefile
     src/plugins/testplugin/Makefile
     src/plugins/titleToDecoration/Makefile
+    src/plugins/lastfmCovers/Makefile
     src/plugins/leoslyrics/Makefile
     po/Makefile.in])
 
@@ -139,5 +161,6 @@ echo "
   Plugins: 
     titleToDecoration plugin:      yes
     leoslyrics plugin:             ${enable_leoslyrics}
+    lastfm covers:                 ${enable_lastfmcovers}
 
 "

@@ -24,11 +24,19 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AlbumImage : Gtk.Fixed {
 		public Gtk.Image albumimage;
-		public Gtk.Image albumimage_overlay;
 		public AlbumImage ();
-		public void find_album_image (string uri);
-		public void find_google_image (string search_term);
-		public void* set_albumimage_from_goo ();
+		public void load_default_image ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class AlbumImageLoader : GLib.Object {
+		[CCode (cheader_filename = "xnoise.h")]
+		public delegate Xnoise.IAlbumCoverImage AlbumImageCreatorDelg (string artist, string album);
+		public Xnoise.IAlbumCoverImage aimage;
+		public AlbumImageLoader (string artist, string album);
+		public bool fetch ();
+		public string get_image_uri ();
+		public static void init ();
+		public signal void sign_fetched (string image_uri);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AppStarter : GLib.Object {
@@ -341,6 +349,17 @@ namespace Xnoise {
 		public VideoScreen ();
 		public override bool expose_event (Gdk.EventExpose e);
 		public void trigger_expose ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public interface IAlbumCoverImage : GLib.Object {
+		public abstract void fetch ();
+		public abstract string get_image_uri ();
+		public signal void sign_aimage_done (Xnoise.IAlbumCoverImage instance);
+		public signal void sign_aimage_fetched (string image_uri);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public interface IAlbumCoverImageProvider : GLib.Object {
+		public abstract Xnoise.IAlbumCoverImage from_tags (string artist, string album);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface ILyrics : GLib.Object {

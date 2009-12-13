@@ -106,7 +106,7 @@ public class Xnoise.PluginLoader : Object {
 			}
 		}
 		catch(Error e) {
-			print("%s\n", e.message);
+			print("Get plugin information: %s\n", e.message);
 		}
 	}
 

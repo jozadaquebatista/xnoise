@@ -1,9 +1,13 @@
-DIST_SUBDIRS = testplugin titleToDecoration leoslyrics
+DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers
 
 SUBDIRS = testplugin titleToDecoration
 
 if ENABLE_LEOSLYRICS
-SUBDIRS += leoslyrics
+  SUBDIRS += leoslyrics
+endif
+
+if ENABLE_LASTFMCOVERS
+  SUBDIRS += lastfmCovers
 endif
 
 DISTCLEANFILES = \

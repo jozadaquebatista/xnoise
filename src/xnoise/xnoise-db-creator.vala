@@ -78,18 +78,19 @@ public class Xnoise.DbCreator : GLib.Object {
 		File home_dir = File.new_for_path(Environment.get_home_dir());
 		File xnoise_home = home_dir.get_child(SETTINGS_FOLDER);
 		xnoisedb = xnoise_home.get_child(DATABASE_NAME);
-		if (!xnoise_home.query_exists(null)) {
+		if(!xnoise_home.query_exists(null)) {
+			//TODO: use xnoise_home.make_directory_with_parents(null);
 			try {
 				File current_dir = xnoise_home;
 				File[] directory_list = {};
 				while(current_dir != null) {
-				    if (current_dir.query_exists (null)) break;
+					if(current_dir.query_exists (null)) break;
 					directory_list += current_dir;
-				    current_dir = current_dir.get_parent();
+					current_dir = current_dir.get_parent();
 				}
 				foreach(File dir in directory_list) {
-				    print("Creating config path %s\n", dir.get_path());
-				    dir.make_directory(null);
+					print("Creating config path %s\n", dir.get_path());
+					dir.make_directory(null);
 				}
 			} 
 			catch (Error e) {
