@@ -61,17 +61,17 @@ dnl plugin check for plugins dependent on libxml-2.0
 
 LIBXML_REQUIRED=2.6.32
 AC_ARG_ENABLE([lyrics],
-	AS_HELP_STRING([--disable-leoslyrics],
-	[Disable lyric plugin (default: enabled)]),
-	[enable_leoslyrics=$enableval],
-	[enable_leoslyrics=yes])
+    AS_HELP_STRING([--disable-leoslyrics],
+    [Disable lyric plugin (default: enabled)]),
+    [enable_leoslyrics=$enableval],
+    [enable_leoslyrics=yes])
 
 PKG_CHECK_MODULES(LIBXML, \
-				  libxml-2.0 >= $LIBXML_REQUIRED, \
-				  have_libxml=yes, \
-				  have_libxml=no)
+                  libxml-2.0 >= $LIBXML_REQUIRED, \
+                  have_libxml=yes, \
+                  have_libxml=no)
 if test "x$have_libxml" = "xno"; then
-	AC_MSG_WARN([libxml $LIBXML_REQUIRED or greater not found.])
+    AC_MSG_WARN([libxml $LIBXML_REQUIRED or greater not found.])
 fi
 dnl ================================================================
 
@@ -83,11 +83,11 @@ dnl plugin check for plugins dependent on libsoup-2.4
 
 LIBSOUP_REQUIRED=2.26.0
 PKG_CHECK_MODULES(LIBSOUP, \
-				  libsoup-2.4 >= $LIBSOUP_REQUIRED, \
-				  have_libsoup=yes, \
-				  have_libsoup=no)
+                  libsoup-2.4 >= $LIBSOUP_REQUIRED, \
+                  have_libsoup=yes, \
+                  have_libsoup=no)
 if test "x$have_libsoup" != "xyes"; then
-	AC_MSG_WARN([libsoup $LIBSOUP_REQUIRED or greater not found.])
+    AC_MSG_WARN([libsoup $LIBSOUP_REQUIRED or greater not found.])
 fi
 dnl ================================================================
 
@@ -98,12 +98,12 @@ dnl ================================================================
 dnl dependency check for optional build of leoslyrics plugin 
 
 if test "x$enable_leoslyrics" = "xyes"; then
-	if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
-		enable_leoslyrics=yes		
-	else
-		enable_leoslyrics=no
+    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
+        enable_leoslyrics=yes		
+    else
+        enable_leoslyrics=no
         AC_MSG_WARN([lyrics plugin will not be included in the build.])
-	fi
+    fi
 fi
 AM_CONDITIONAL(ENABLE_LEOSLYRICS, test x"$enable_leoslyrics" = "xyes")
 dnl ================================================================
@@ -115,17 +115,17 @@ AC_SUBST(XNOISE_CFLAGS)
 AC_SUBST(XNOISE_LIBS)
 
 AC_CONFIG_FILES([Makefile
-	data/Makefile
-	data/misc/xnoise-1.0.pc
-	data/misc/Makefile
-	data/ui/Makefile
-	src/Makefile
-	src/xnoise/Makefile
-	src/plugins/Makefile
-	src/plugins/testplugin/Makefile
-	src/plugins/titleToDecoration/Makefile
-	src/plugins/leoslyrics/Makefile
-	po/Makefile.in])
+    data/Makefile
+    data/misc/xnoise-1.0.pc
+    data/misc/Makefile
+    data/ui/Makefile
+    src/Makefile
+    src/xnoise/Makefile
+    src/plugins/Makefile
+    src/plugins/testplugin/Makefile
+    src/plugins/titleToDecoration/Makefile
+    src/plugins/leoslyrics/Makefile
+    po/Makefile.in])
 
 AC_OUTPUT
 

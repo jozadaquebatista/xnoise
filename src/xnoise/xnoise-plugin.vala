@@ -77,17 +77,32 @@ public class Xnoise.Plugin : GLib.Object {
 		type = init_module();
 		loaded = true;
 		this.configurable = false;
-		if(!(type is IPlugin)) return false; 
-		if(type is ILyricsProvider) this.is_lyrics_plugin = true;
+		//TODO: There must be a more convenient way to check for one interface
+		Type[] intf = type.interfaces();
+		bool implements_iplugin = false;
+		foreach(Type t in intf) {
+			if(t==typeof(IPlugin)) {
+				implements_iplugin = true;
+				break;
+			}
+		}
+		if(!implements_iplugin) return false;
+		
+		foreach(Type t in intf) {
+			if(t==typeof(ILyricsProvider)) {
+				this.is_lyrics_plugin = true;
+				break;
+			}
+		}
 		return true;
 	}
 
 	private void activate() {
 		if(!loaded) return;
 		loaded_plugin = Object.new(type, 
-		                               "xn", this.xn,    //set properties via this, because
-		                               null);       //parameters are not allowed 
-		                                            //for this kind of Object construction
+		                           "xn", this.xn,    //set properties via this, because
+		                           null);            //parameters are not allowed 
+		                                             //for this kind of Object construction
 		if(loaded_plugin == null) {
 			message("Failed to load plugin %s. Cannot get type.\n", ((IPlugin)loaded_plugin).name);
 			activated = false; 

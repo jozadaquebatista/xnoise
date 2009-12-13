@@ -68,6 +68,7 @@ public class Xnoise.PluginLoader : Object {
 			}
 		}
 		if(info_files.length()==0) print("No plugin inforamtion found\n");
+		//foreach(string s in lyrics_plugins_htable.get_keys()) print("%s in plugin ht\n", s);
 		return true;
 	}
 	

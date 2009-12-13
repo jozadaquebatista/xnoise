@@ -34,30 +34,30 @@ BUILT_SOURCES = xnoise.vala.stamp
 bin_PROGRAMS = xnoise
 
 xnoise_VALASOURCES = \
-	xnoise-app-starter.vala \
-	xnoise-main.vala \
-	xnoise-gst-player.vala \
-	xnoise-main-window.vala \
 	xnoise-about.vala \
-	xnoise-parameter.vala \
-	xnoise-db-creator.vala \
-	xnoise-db-browser.vala \
-	xnoise-db-writer.vala \
-	xnoise-media-browser.vala \
 	xnoise-add-media-dialog.vala \
-	xnoise-tag-reader.vala \
-	xnoise-tracklist.vala \
+	xnoise-album-image.vala \
+	xnoise-app-starter.vala \
+	xnoise-db-browser.vala \
+	xnoise-db-creator.vala \
+	xnoise-db-writer.vala \
+	xnoise-gst-player.vala \
+	xnoise-lyrics-loader.vala \
+	xnoise-lyrics-view.vala \
+	xnoise-main.vala \
+	xnoise-main-window.vala \
+	xnoise-media-browser.vala \
 	xnoise-misc.vala \
-	xnoise-videoscreen.vala \
-	xnoise-settings-dialog.vala \
+	xnoise-parameter.vala \
 	xnoise-plugin.vala \
 	xnoise-plugin-loader.vala \
 	xnoise-plugin-information.vala \
 	xnoise-plugin-interface.vala \
 	xnoise-plugin-manager-tree.vala \
-	xnoise-album-image.vala \
-	xnoise-lyrics-loader.vala \
-	xnoise-lyrics-view.vala \
+	xnoise-settings-dialog.vala \
+	xnoise-tag-reader.vala \
+	xnoise-tracklist.vala \
+	xnoise-videoscreen.vala \
 	$(NULL)
 
 xnoise_SOURCES = \
