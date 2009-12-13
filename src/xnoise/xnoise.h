@@ -1035,6 +1035,7 @@ gboolean xnoise_plugin_get_activated (XnoisePlugin* self);
 void xnoise_plugin_set_activated (XnoisePlugin* self, gboolean value);
 gboolean xnoise_plugin_get_configurable (XnoisePlugin* self);
 gboolean xnoise_plugin_get_is_lyrics_plugin (XnoisePlugin* self);
+gboolean xnoise_plugin_get_is_album_image_plugin (XnoisePlugin* self);
 XnoisePluginLoader* xnoise_plugin_loader_new (XnoiseMain** xn);
 XnoisePluginLoader* xnoise_plugin_loader_construct (GType object_type, XnoiseMain** xn);
 GList* xnoise_plugin_loader_get_info_files (XnoisePluginLoader* self);

@@ -38,7 +38,8 @@ public class Xnoise.Plugin : GLib.Object {
 	public bool activated { get; set; }
 	public bool configurable { get; private set; }
 	public bool is_lyrics_plugin { get; private set; default = false;}
-	private Main xn;
+	public bool is_album_image_plugin { get; private set; default = false;}
+	private weak Main xn;
 	
 	public signal void sign_activated();
 	public signal void sign_deactivated();
@@ -59,10 +60,10 @@ public class Xnoise.Plugin : GLib.Object {
 				default: break;
 			}
 		});
-    }
-    
-    public bool load(ref weak Main xn) {
-    	this.xn = xn;
+	}
+
+	public bool load(ref weak Main xn) {
+		this.xn = xn;
 		if (this.loaded) return true;
 		string path = Module.build_path(Config.PLUGINSDIR, info.module);
 		module = Module.open(path, ModuleFlags.BIND_LAZY);
@@ -77,23 +78,11 @@ public class Xnoise.Plugin : GLib.Object {
 		type = init_module();
 		loaded = true;
 		this.configurable = false;
-		//TODO: There must be a more convenient way to check for one interface
-		Type[] intf = type.interfaces();
-		bool implements_iplugin = false;
-		foreach(Type t in intf) {
-			if(t==typeof(IPlugin)) {
-				implements_iplugin = true;
-				break;
-			}
-		}
-		if(!implements_iplugin) return false;
+
+		if(!type.is_a(typeof(IPlugin))) return false;
 		
-		foreach(Type t in intf) {
-			if(t==typeof(ILyricsProvider)) {
-				this.is_lyrics_plugin = true;
-				break;
-			}
-		}
+		if(type.is_a(typeof(ILyricsProvider))) this.is_lyrics_plugin = true;
+
 		return true;
 	}
 
@@ -107,6 +96,7 @@ public class Xnoise.Plugin : GLib.Object {
 			message("Failed to load plugin %s. Cannot get type.\n", ((IPlugin)loaded_plugin).name);
 			activated = false; 
 		}
+		//if(loaded_plugin is IPlugin) print("sucess\n");
 		if(!((IPlugin)loaded_plugin).init()) {
 			message("Failed to load plugin %s. Cannot get initialize.\n", ((IPlugin)loaded_plugin).name);
 			activated = false;
@@ -130,4 +120,3 @@ public class Xnoise.Plugin : GLib.Object {
 		}
 	}
 }
-

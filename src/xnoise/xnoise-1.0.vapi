@@ -248,6 +248,7 @@ namespace Xnoise {
 		public Gtk.Widget? settingwidget ();
 		public bool activated { get; set; }
 		public bool configurable { get; set; }
+		public bool is_album_image_plugin { get; set; }
 		public bool is_lyrics_plugin { get; set; }
 		public bool loaded { get; set; }
 		public signal void sign_activated ();

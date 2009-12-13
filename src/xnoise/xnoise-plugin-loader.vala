@@ -31,7 +31,7 @@
 public class Xnoise.PluginLoader : Object {
 	public HashTable<string, Plugin> plugin_htable;
 	public HashTable<string, Plugin> lyrics_plugins_htable;
-	private Main xn;
+	private weak Main xn;
 	private PluginInformation info;
 	private GLib.List<string> info_files;
 	
@@ -59,12 +59,15 @@ public class Xnoise.PluginLoader : Object {
 			if(info.load_info()) {
 				plugin = new Plugin(info);
 				plugin.load(ref xn);
-				plugin_htable.insert(info.name, plugin); //Hold reference to plugin in hash table
+				if(plugin.loaded==true)
+					plugin_htable.insert(info.name, plugin); //Hold reference to plugin in hash table
+				else
+					continue;
 				if(plugin.is_lyrics_plugin) lyrics_plugins_htable.insert(info.name, plugin);
 			}
 			else {
 				print("Failed to load %s.\n", pluginInfoFile);
-				return false;
+				continue;
 			}
 		}
 		if(info_files.length()==0) print("No plugin inforamtion found\n");
