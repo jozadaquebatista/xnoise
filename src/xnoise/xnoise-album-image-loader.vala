@@ -29,7 +29,7 @@
  * 	Jörn Magens
  */
 public class Xnoise.AlbumImageLoader : GLib.Object {
-	public IAlbumCoverImage aimage;
+	public IAlbumCoverImage album_image;
 	private static IAlbumCoverImageProvider provider;
 	private static Main xn;
 	private uint backend_iter;
@@ -37,8 +37,8 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 	private string album;
 	
 	public delegate IAlbumCoverImage AlbumImageCreatorDelg(string artist, string album);
-	public signal void sign_fetched(string image_uri);
-	weak Thread fetcher_thread;
+	public signal void sign_fetched(string? image_path);
+	// Thread fetcher_thread;
 
 	public static void init() {
 		xn = Main.instance();
@@ -46,14 +46,15 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 	}
 	
 	public AlbumImageLoader(string artist, string album) {
+		print("new loader\n");
 		this.artist = artist;
 		this.album = album;
-		backend_iter = 0;	
+		backend_iter = 0;
 	}
 	
-	~AlbumImageLoader() {
-		print("AlbumImageLoader destroyed\n");
-	}
+	//~AlbumImageLoader() {
+	//	print("AlbumImageLoader destroyed\n");
+	//}
 
 	private static void on_plugin_activated(Plugin p) {
 		if(!p.is_album_image_plugin) return;
@@ -75,30 +76,24 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 		if((text!=null)&&(text!="")) {
 			sign_fetched(text);
 		}
-		this.aimage = null;
+		this.album_image = null;
 	}
 	
 	public string get_image_uri() {
-		return aimage.get_image_uri();
+		return album_image.get_image_uri();
 	}
 		
-	public bool fetch() {
+	public bool fetch_image() {
 		if(this.provider == null) {
-			sign_fetched("+++");
+			sign_fetched(null);
 			return false;
 		}
 		
-		this.aimage = this.provider.from_tags(artist, album);
-		this.aimage.ref();
-		this.aimage.sign_aimage_fetched.connect(this.on_fetched);
-		this.aimage.sign_aimage_done.connect(on_done);
-		//try {
-		aimage.fetch();
-			//this.fetcher_thread = Thread.create(aimage.fetch, true);
-		//}
-		//catch(GLib.ThreadError e) {
-		//	print("Album image loader: %s", e.message);
-		//}
+		this.album_image = this.provider.from_tags(artist, album);
+		this.album_image.ref();
+		this.album_image.sign_album_image_fetched.connect(this.on_fetched);
+		this.album_image.sign_album_image_done.connect(on_done);
+		album_image.fetch();
 		return true; 
 	}
 }

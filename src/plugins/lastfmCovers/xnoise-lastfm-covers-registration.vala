@@ -30,5 +30,5 @@
  
 [ModuleInit]
 public Type init_module() { 
-	return typeof(LastFmCoversPlugin);
+	return typeof(Xnoise.LastFmCoversPlugin);
 }

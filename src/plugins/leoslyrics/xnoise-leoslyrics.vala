@@ -35,8 +35,8 @@ using Xml;
 
 // Plugin for leoslyrics.com PHP API
 
-public class LeoslyricsPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.ILyricsProvider {
-	public Xnoise.Main xn { get; set; }
+public class Xnoise.LeoslyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
+	public Main xn { get; set; }
 	public string name { 
 		get {
 			return "Leoslyrics";
@@ -63,7 +63,7 @@ public class LeoslyricsPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.ILyricsProvi
 
 
 
-public class Leoslyrics : GLib.Object, Xnoise.ILyrics {
+public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 	private static SessionSync session;
 	private Message hid_msg;
 	
@@ -84,7 +84,7 @@ public class Leoslyrics : GLib.Object, Xnoise.ILyrics {
 	private string text;
 	private bool? availability;
 		
-	public Leoslyrics (string artist, string title) {
+	public Leoslyrics(string artist, string title) {
 		if (_is_initialized == false) {
 			//message("initting");
 			session = new SessionSync ();

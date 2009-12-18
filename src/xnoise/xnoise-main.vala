@@ -66,7 +66,6 @@ public class Xnoise.Main : GLib.Object {
 			if(!main_window.fullscreenwindowvisible) 
 				main_window.tracklistnotebook.set_current_page(1);
 		});
-//		gPl.sign_tag_changed.connect(main_window.albumimage.find_album_image);
 
 		main_window.sign_pos_changed.connect((main_window, fraction) => {
 			gPl.gst_position = fraction;

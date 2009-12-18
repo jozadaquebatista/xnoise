@@ -204,8 +204,8 @@ public interface Xnoise.IAlbumCoverImage : GLib.Object {
 	public abstract string get_image_uri();
 	//public abstract bool find_image(string uri, string artist, string album);
 
-	public signal void sign_aimage_fetched(string image_uri);
-	public signal void sign_aimage_done(IAlbumCoverImage instance);
+	public signal void sign_album_image_fetched(string image_uri);
+	public signal void sign_album_image_done(IAlbumCoverImage instance);
 }
 
 public interface Xnoise.IAlbumCoverImageProvider : GLib.Object {

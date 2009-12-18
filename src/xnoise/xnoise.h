@@ -459,7 +459,7 @@ struct _XnoiseIAlbumCoverImageIface {
 struct _XnoiseAlbumImageLoader {
 	GObject parent_instance;
 	XnoiseAlbumImageLoaderPrivate * priv;
-	XnoiseIAlbumCoverImage* aimage;
+	XnoiseIAlbumCoverImage* album_image;
 };
 
 struct _XnoiseAlbumImageLoaderClass {
@@ -877,13 +877,14 @@ GType xnoise_album_image_get_type (void);
 XnoiseAlbumImage* xnoise_album_image_new (void);
 XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
 void xnoise_album_image_load_default_image (XnoiseAlbumImage* self);
+void xnoise_album_image_set_albumimage_from_path (XnoiseAlbumImage* self, const char* path);
 GType xnoise_album_image_loader_get_type (void);
 GType xnoise_ialbum_cover_image_get_type (void);
 void xnoise_album_image_loader_init (void);
 XnoiseAlbumImageLoader* xnoise_album_image_loader_new (const char* artist, const char* album);
 XnoiseAlbumImageLoader* xnoise_album_image_loader_construct (GType object_type, const char* artist, const char* album);
 char* xnoise_album_image_loader_get_image_uri (XnoiseAlbumImageLoader* self);
-gboolean xnoise_album_image_loader_fetch (XnoiseAlbumImageLoader* self);
+gboolean xnoise_album_image_loader_fetch_image (XnoiseAlbumImageLoader* self);
 GType xnoise_app_starter_get_type (void);
 GType xnoise_main_get_type (void);
 extern XnoiseMain* xnoise_app_starter_xn;

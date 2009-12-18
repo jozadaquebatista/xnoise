@@ -26,17 +26,18 @@ namespace Xnoise {
 		public Gtk.Image albumimage;
 		public AlbumImage ();
 		public void load_default_image ();
+		public void set_albumimage_from_path (string path);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AlbumImageLoader : GLib.Object {
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate Xnoise.IAlbumCoverImage AlbumImageCreatorDelg (string artist, string album);
-		public Xnoise.IAlbumCoverImage aimage;
+		public Xnoise.IAlbumCoverImage album_image;
 		public AlbumImageLoader (string artist, string album);
-		public bool fetch ();
+		public bool fetch_image ();
 		public string get_image_uri ();
 		public static void init ();
-		public signal void sign_fetched (string image_uri);
+		public signal void sign_fetched (string? image_path);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AppStarter : GLib.Object {
@@ -354,8 +355,8 @@ namespace Xnoise {
 	public interface IAlbumCoverImage : GLib.Object {
 		public abstract void fetch ();
 		public abstract string get_image_uri ();
-		public signal void sign_aimage_done (Xnoise.IAlbumCoverImage instance);
-		public signal void sign_aimage_fetched (string image_uri);
+		public signal void sign_album_image_done (Xnoise.IAlbumCoverImage instance);
+		public signal void sign_album_image_fetched (string image_uri);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IAlbumCoverImageProvider : GLib.Object {

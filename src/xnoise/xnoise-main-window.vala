@@ -168,7 +168,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 	
 	private void add_lastused_titles_to_tracklist() { 
-		DbBrowser dbBr = new DbBrowser();
+		var dbBr = new DbBrowser();
 		string[] uris = dbBr.get_lastused_uris();
 		foreach(string uri in uris) {
 			File file = File.new_for_commandline_arg(uri);
@@ -640,7 +640,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 	}
 
-	public void set_displayed_title(string newuri) { //TODO: this should also be used to show embedded images for current title
+	public void set_displayed_title(string newuri) {
 		string text, album, artist, title, organization, location, genre;
 		string basename = null;
 		//print("newuri: %s\n", newuri);
@@ -659,7 +659,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				artist = td.Artist;
 				album = td.Album;
 				title = td.Title;
-			}	
+			}
 			else {
 				if(xn.gPl.currentartist!=null) {
 					artist = remove_linebreaks(xn.gPl.currentartist);
@@ -1315,11 +1315,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var vp = new Gtk.Alignment(0,0.5f,0,0);
 			vp.add (bar);
 			
-			/*var ai = new AlbumImage();
-			var ai_frame = new Gtk.AspectFrame("",0.5f,0.5f,1.00f,false);
-			ai_frame.set_padding(10);
-			ai_frame.add(ai);*/
-			
 			mainbox.pack_start(previousbutton,false,false,0);
 			mainbox.pack_start(plpabutton,false,false,0);
 			mainbox.pack_start(nextbutton,false,false,0);
@@ -1365,14 +1360,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 		private bool on_pointer_enter_toolbar (Gdk.EventCrossing ev) {
 			this.hide_lock = true;
-			if (hide_event_id != 0) GLib.Source.remove (hide_event_id);
+			if(hide_event_id != 0) GLib.Source.remove (hide_event_id);
 			fullscreenwindow.motion_notify_event.disconnect(on_pointer_motion);
 			return false;
 		}
 		public bool on_pointer_motion (Gdk.EventMotion ev) {
-			if (!window.window.is_visible()) window.show_all();
-			if (hide_lock == true) return false;
-			if (hide_event_id != 0) {
+			if(!window.window.is_visible()) window.show_all();
+			if(hide_lock == true) return false;
+			if(hide_event_id != 0) {
 				 GLib.Source.remove (hide_event_id);
 				 hide_event_id = 0;
 			}
@@ -1388,7 +1383,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		
 		public void hide() {
 			window.hide();
-			if (hide_event_id != 0) {
+			if(hide_event_id != 0) {
 				 GLib.Source.remove (hide_event_id);
 				 hide_event_id = 0;
 			}
@@ -1401,7 +1396,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		public class LeaveVideoFSButton : Gtk.Button {
 			private Main xn;
 			public LeaveVideoFSButton() {
-				this.xn = Main.instance ();
+				this.xn = Main.instance();
 				var img = new Gtk.Image.from_stock(Gtk.STOCK_LEAVE_FULLSCREEN , Gtk.IconSize.SMALL_TOOLBAR);
 				this.set_image(img);
 				this.relief = Gtk.ReliefStyle.NONE;

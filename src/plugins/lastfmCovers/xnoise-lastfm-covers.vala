@@ -37,19 +37,21 @@ using Xml;
 
 // Plugin for lastfm.com PHP API
 
-public class LastFmCoversPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.IAlbumCoverImageProvider {
-	public Xnoise.Main xn { get; set; }
+public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageProvider {
+	public Main xn { get; set; }
 	public string name { 
 		get {
 			return "lastFmCovers";
 		} 
 	}
-    //TODO: Is this needed?
+
 	public bool init() {
 		return true;
 	}
 
 	public Gtk.Widget? get_settings_widget() {
+		// TODO: Here we maybe need a Widget to put the user/pswd,
+		// key or account date for lastfm
 		return null;
 	}
 
@@ -64,7 +66,7 @@ public class LastFmCoversPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.IAlbumCove
 
 
 
-public class LastFmCovers : GLib.Object, Xnoise.IAlbumCoverImage {
+public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	private const string INIFOLDER = ".xnoise";
 	private static SessionAsync session;
 	static string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
@@ -72,13 +74,84 @@ public class LastFmCovers : GLib.Object, Xnoise.IAlbumCoverImage {
 	private string artist;
 	private string album;
 	private string image_uri = "";
-	//private bool? availability;
-		
+
 	public LastFmCovers(string artist, string album) {
 		this.artist = artist;
 		this.album = album;
+		print("new backend\n");
 	}
-	
+
+	public string? download_album_images(string artist,string album,XPathContext* xpath) {
+		string[] sizes = {"medium", "extralarge"};
+		//string default_size = "extralarge";
+		string default_size = "medium";
+		string uri_image = "";
+		var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
+		                                          INIFOLDER,
+		                                          "album_images",
+		                                          null
+		                                          );
+
+		for( int i = 0; i< sizes.length;i++) {
+			var fileout = File.new_for_path(GLib.Path.build_filename(
+			                                          image_path,
+			                                          artist.down(),
+			                                          album.down(),
+			                                          album.down() + "_" + sizes[i],
+			                                          null)
+			                                );
+
+			if(default_size == sizes[i]) uri_image = fileout.get_path();     
+
+			string pth = "";
+			File fileout_path = fileout.get_parent();
+			if(!fileout_path.query_exists(null)) {
+				try {
+					fileout_path.make_directory_with_parents(null);
+				}
+				catch(GLib.Error e) {
+					print("Error with create image directory: %s\npath: %s", e.message, pth);
+					return null;
+				}
+			}
+
+			if(!fileout.query_exists (null)) {
+				XPathObject* result = xpath->eval_expression("/lfm/album/image[@size='" + sizes[i] +"']");
+				if(result->nodesetval->is_empty() ) {
+					continue; //Remote file not exist
+				}
+				else {
+					string url_image = result->nodesetval->item(0)->get_content();
+					var remote_file = File.new_for_uri(url_image);
+					if(remote_file.query_exists(null)) { //remote file exist
+						try {
+							//print("Begin download file %s\n",remote_file.get_basename() );
+							remote_file.copy(fileout, FileCopyFlags.NONE, null, null);
+							//print("Finish download file %s\n", fileout.get_path());
+						}
+						catch(GLib.Error e) {
+							print("%s\n", e.message);
+						}
+					}
+					else {
+						continue;
+					}
+				}
+			}
+			else {
+				continue; //Local file exists
+			}
+		}
+
+		if(uri_image == "") {
+			return null;
+		}
+		else {
+			//print("uri_image: %s\n",uri_image);
+			return uri_image;
+		}
+	}
+
 	private string? find_image(string artist, string album) {
 		print("find_lastfm_image to %s - %s\n", artist, album);
 		session = new Soup.SessionAsync();
@@ -88,73 +161,26 @@ public class LastFmCovers : GLib.Object, Xnoise.IAlbumCoverImage {
 		session.send_message(message);
 		Xml.Doc* doc = Parser.parse_memory(message.response_body.data,(int)message.response_body.length);
 		XPathContext* xpath = new XPathContext(doc);
-		XPathObject* result = xpath->eval_expression("/lfm/album/image[@size='extralarge']");
 
+		XPathObject* result = xpath->eval_expression("/lfm/@status");
 		if( result->nodesetval->is_empty() ) {
-			//load_default_image();
 			return null;
-		}
-		string url_image = result->nodesetval->item(0)->get_content();
-		var file = File.new_for_uri(url_image);
-		if(file.query_exists(null)) { //If remote file does not exist
-			var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(), INIFOLDER, "album_images", null);
-			var fileout = File.new_for_path(GLib.Path.build_filename(image_path, artist.down(), album.down(), file.get_basename(), null));
-			string pth = "";
-			File fileout_path = fileout.get_parent();
-			if(!fileout_path.query_exists(null)) {
-				try {
-					fileout_path.make_directory_with_parents(null);
-				} 
-				catch(GLib.Error e) {
-					stderr.printf("Error with create image directory: %s\npath: %s", e.message, pth);
-					return null;
-				}
-			}
-
-
-
-
-			if(!fileout.query_exists(null)) { //If local image file does not exist.
-				try {
-					print("Download file %s\n", fileout.get_path());
-					file.copy(fileout, FileCopyFlags.NONE, null, null);
-				}
-				catch(GLib.Error e) {
-					print("%s\n", e.message);
-					return null;
-				}
-			}
-			else { //El archivo local existe
-				print("Local image %s exists.\n",file.get_basename () );
-			}
-//			set_albumimage_from_uri(fileout.get_path());
-			return fileout.get_path();
 		}
 		else {
-//			load_default_image();
-			print ("The remote image %s does not exist\n", file.get_basename());
-			return null;
+			string ok = result->nodesetval->item(0)->get_content();
+			if(ok == "ok") {
+				return download_album_images(artist, album, xpath);
+			}
+			else {
+				return null;
+			}
 		}
 	}
 	
-//	public bool? available() {
-//		return availability;
-//	}
-	
-	public void fetch () {
+	public void fetch() {
 		string s = find_image(this.artist, this.album);
-//		if(available() == null) {
-//			//find_lastfm_image();
-//			print("not available\n");
-//			return null;
-//		}
-//		if(!available()){
-//			sign_aimage_done(this);
-//			return null;
-//		}
-////		fetch_text();
-		sign_aimage_fetched(s);
-		sign_aimage_done(this);
+		sign_album_image_fetched(s);
+		sign_album_image_done(this);
 		return;
 	}
 	

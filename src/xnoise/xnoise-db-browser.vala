@@ -117,7 +117,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	}
 
 	private void db_error() {
-		critical("Database error: %s", this.db.errmsg ());
+		print("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
 	}
 
 	private void prepare_statements() {

@@ -27,14 +27,19 @@
  * Author:
  * 	Jörn Magens
  * 	softshaker  softshaker googlemail.com
+ * 	fsistemas
  */
 
 using Gtk;
 
 public class Xnoise.AlbumImage : Gtk.Fixed {
-	private AlbumImageLoader cur_loader = null;
-	private Main xn;
 	public Gtk.Image albumimage;
+	private AlbumImageLoader loader = null;
+	private Main xn;
+	private const string INIFOLDER = ".xnoise";
+	private string artist = "";
+	private string album = "";
+	private uint timeout = 0;
 	
 	public AlbumImage() {
 		xn = Main.instance();
@@ -43,24 +48,70 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 		albumimage.set_size_request(48, 48);
 		albumimage.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 		this.put(albumimage, 0, 0);
-		xn.gPl.sign_uri_changed.connect(on_uri_change);
+		xn.gPl.sign_uri_changed.connect(on_uri_changed);
+		xn.gPl.sign_tag_changed.connect(on_tag_changed);
+	}
+
+	private void on_tag_changed(string uri) {
+		if(timeout!=0) GLib.Source.remove(timeout);
+		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE, 2, on_timout_elapsed);
 	}
 	
-	private void on_uri_change(string uri) {
-		//message("called");
-		if(cur_loader != null)	cur_loader.sign_fetched -= on_aimage_ready;
-		albumimage.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
-		if((uri==null)|(uri=="")) return;
-		File file = File.new_for_uri(uri);
-		if(!file.has_uri_scheme("file")) return;
-		TagReader tr = new TagReader();
+	private void on_uri_changed(string uri) {
+		load_default_image();
+	}
+	
+	private bool on_timout_elapsed() {
+		string default_size = "small";
+		if(loader != null)
+			loader.sign_fetched.disconnect(on_album_image_fetched);
 
-		var t = tr.read_tag(file.get_path());
-		if(cur_loader != null) cur_loader.sign_fetched -= on_aimage_ready;
+		artist = remove_linebreaks(xn.gPl.currentartist);
+		album  = remove_linebreaks(xn.gPl.currentalbum );
+		//print("1. %s - %s\n", artist, album);
 
-		cur_loader = new AlbumImageLoader(t.Artist, t.Album);
-		cur_loader.sign_fetched.connect(on_aimage_ready);
-		cur_loader.fetch();
+		// Look into db in case gPl does not provide the tag
+		if((artist=="unknown artist")||(album =="unknown album" )) {
+			var dbb = new DbBrowser();
+			TrackData td;
+			if(dbb.get_trackdata_for_uri(xn.gPl.Uri, out td)) {
+				artist = td.Artist;
+				album = td.Album;
+			}
+		}
+
+		//print("2. %s - %s\n", artist, album);
+		if((artist=="")||(artist==null)||(artist=="unknown artist")||
+		   (album =="")||(album ==null)||(album =="unknown album" )) {
+			return false;
+		}
+
+		var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
+		                                          INIFOLDER,
+		                                          "album_images",
+		                                          null
+		                                          );
+
+		var fileout = File.new_for_path(GLib.Path.build_filename(
+												  image_path,
+												  artist.down(),
+												  album.down(),
+												  album.down() + "_" + default_size,
+												  null)
+										);
+
+		if(fileout.query_exists(null)) {
+			this.set_albumimage_from_path(fileout.get_path());
+		}
+		else {
+			if(loader != null) { 
+				loader.sign_fetched.disconnect(on_album_image_fetched); 
+			}
+			loader = new AlbumImageLoader(artist, album);
+			loader.sign_fetched.connect(on_album_image_fetched);
+			loader.fetch_image();
+		}
+		return false;
 	}
 
 	public void load_default_image() {
@@ -68,170 +119,26 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 		this.albumimage.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 	}
 
-	private void set_albumimage_from_uri(string uri) {
-		File urifile;
-		int width;
-		int height;
-		urifile = File.new_for_uri (uri);
-		albumimage.get_size_request(out width, out height);
-		this.albumimage.set_from_file(uri);
+	public void set_albumimage_from_path(string path) {
+		File file = File.new_for_path(path);
+		if(file.query_exists(null)) {
+			this.albumimage.set_from_file(path);
+		}
+		else { // Image does not exist -> load defult
+			load_default_image();
+		}
 	}
 	
-	private void on_aimage_ready(string image_uri) {
-		print("image ready\n");
+	private void on_album_image_fetched(string? image_path) {
+		//print("image ready: %s\n", image_path);
+		if(image_path == null) return;
+		
+		File f = File.new_for_path(image_path);
+		if(!f.query_exists(null)) return;
+		
+		this.set_albumimage_from_path(image_path);
+		// TODO: Put path as reference into db ?!
+		//var dbw = new DbWriter();
+		//dbw.set_local_image_for album(ref artist, ref album, f.get_uri());
 	}
 }
-
-
-//public class Xnoise.AlbumImage : Gtk.Fixed {
-//	// NOTE! some stream channels send title in ~5min intervals!
-//	// TODO: get image from tag
-//	// TODO: get image from folder
-//	// TODO: get image from service (with api)
-
-//	public Gtk.Image albumimage; // this would be that from xnoise
-//	public Gtk.Image albumimage_overlay; // UI 2.0 hack ;P
-	
-//	static string gooc_img_uri = "";
-//	static string orig_img_uri = "";
-//	static string working_animation = Config.UIDIR + "working_animation.gif";
-	
-//	private const string goo_prefix = "http://images.google.com/images?hl=en&q=";
-//	private const string goo_suffix = "&btnG=Search+Images&gbv=1";
-
-//	public AlbumImage() {
-//		albumimage = new Gtk.Image();
-//		albumimage.set_size_request(48, 48);
-//		albumimage_overlay = new Gtk.Image();
-//		albumimage_overlay.set_size_request(48, 48);
-//		albumimage.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
-//		this.put(albumimage, 0, 0);
-//		this.put(albumimage_overlay, 0, 0);
-//	}
-
-//	private uint timeout;
-//	private string current_uri;
-	
-//	public void find_album_image(string uri) {
-//		if((uri!=current_uri) ) Source.remove(timeout);
-//		if(timeout != 0) return;
-//		timeout = GLib.Timeout.add(1000, on_wait_for_tags);
-//		current_uri = uri;
-//	}
-
-//	private bool on_wait_for_tags() {
-//		DbBrowser db = new DbBrowser();
-//		Xnoise.TrackData td;
-//		if(db.get_trackdata_for_uri(current_uri, out td)) {
-//			string abc = td.Artist + " - " + td.Album;
-//			print("searching image for %s\n", abc);
-//			find_google_image(abc);
-//		}
-//		return false;
-//	}
-
-//	public void find_google_image (string search_term) {
-//		//TODO: test if adding "cover" (or similar) to term gets better results
-//		print ("search image for: \"%s\"\n", search_term);
-//		string goo_search = goo_encode (search_term);
-//		string goo_uri = goo_prefix + goo_search + goo_suffix;
-//		print ("goouri: %s\n", goo_uri);
-		
-//		var file = File.new_for_uri (goo_uri);
-		
-//		try {
-//			string line;
-//			bool found = false;
-//			var in_stream = new DataInputStream (file.read (null));
-
-//			while ((line = in_stream.read_line (null, null)) != null) {
-//				if (line.has_prefix("<table") && !found) {
-//					found = true;
-
-//					// google cached image uri
-//					gooc_img_uri = line.split ("</a></td>", 2) [0];
-//					gooc_img_uri = gooc_img_uri.split ("<img src=", 2) [1];
-//					gooc_img_uri = gooc_img_uri.split (" ", 2) [0];
-//					print ("FOUND gooc_img_uri: %s\n", gooc_img_uri);
-
-//					// original image uri
-//					orig_img_uri = line.split ("&imgrefurl", 2) [0];
-//					orig_img_uri = orig_img_uri.split ("?imgurl=", 2) [1];
-//					// clean google mess! why do they have % replaced by %25 ?
-//					orig_img_uri = orig_img_uri.replace ("%25", "%");
-//					print ("FOUND orig_img_uri: %s\n", orig_img_uri);
-//				}
-//			}
-//		} catch(Error e) {
-//			error ("%s\n", e.message);
-//		}
-
-//		try {
-//			Thread.create (set_albumimage_from_goo, false);
-//		} catch (ThreadError e) {
-//			error ("%s\n", e.message);
-//		}
-//	}
-
-
-	
-//	public void* set_albumimage_from_goo () {
-//		//TODO: check if uri not 404 ?
-
-//		Gdk.threads_enter ();
-//		albumimage_overlay.set_from_file (working_animation);
-//		Gdk.flush ();
-//		Gdk.threads_leave ();
-		
-//		if (gooc_img_uri != "") {
-//			set_albumimage_from_uri (gooc_img_uri);
-//		}
-
-//		if (orig_img_uri != "") {
-//			set_albumimage_from_uri (orig_img_uri);
-//		}
-		
-//		Gdk.threads_enter ();
-//		albumimage_overlay.clear ();
-//		Gdk.flush ();
-//		Gdk.threads_leave ();
-
-//	    return null;
-//	}
-	
-//	private void set_albumimage_from_uri (string uri) {
-//		File urifile;
-//		int width;
-//		int height;
-		
-//		urifile = File.new_for_uri (uri);
-//		albumimage.get_size_request (out width, out height);
-
-//		print ("TRY TO SET IMAGE FROM: %s\n", uri);		
-//		print ("gtk.image dimensions: %ix%i\n", width, height);
-
-//		try {
-//			var in_stream = new GLib.DataInputStream (urifile.read (null));
-//			//var pix = new Gdk.Pixbuf.from_stream (in_stream, null);
-//			var pix = new Gdk.Pixbuf.from_stream_at_scale
-//					(in_stream, width, height, false, null);
-			
-//			Gdk.threads_enter ();
-//			albumimage.set_from_pixbuf (pix);
-//			Gdk.flush ();
-//			Gdk.threads_leave ();
-		
-//		} catch(Error ex) {
-//			print ("get image error: %s\n", ex.message);
-//			//TODO set error/default image
-//		}
-//		print ("done setting image\n");
-//	}
-	
-//	private string goo_encode (string str) {
-//		var s = GLib.Uri.escape_string (str, "", true);
-//		s = s.replace ("%20", "+");
-//		return s;
-//	}
-//}
-

@@ -34,6 +34,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private Sqlite.Database db;
+	private Statement update_album_image_statement;
 	private Statement insert_lastused_entry_statement;
 	private Statement add_radio_statement;
 	private Statement check_track_exists_statement;
@@ -65,6 +66,8 @@ public class Xnoise.DbWriter : GLib.Object {
 		"BEGIN";
 	private static const string STMT_COMMIT = 
 		"COMMIT";
+	private static const string STMT_UPDATE_ALBUM_IMAGE = 
+		"UPDATE albums SET image = ? WHERE id = (SELECT al.id FROM albums al, artists ar WHERE al.artist = ar.id AND ar.name = ? AND al.name = ?)";
 	private static const string STMT_CHECK_TRACK_EXISTS = 
 		"SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
 	private static const string STMT_INSERT_LASTUSED = 
@@ -135,10 +138,12 @@ public class Xnoise.DbWriter : GLib.Object {
 	}		
 
 	private void db_error() {
-		stderr.printf("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
+		print("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
 	}
 
-	private void prepare_statements() { 
+	private void prepare_statements() {
+		this.db.prepare_v2(STMT_UPDATE_ALBUM_IMAGE, -1, 
+			out this.update_album_image_statement); 
 		this.db.prepare_v2(STMT_CHECK_TRACK_EXISTS, -1, 
 			out this.check_track_exists_statement); 
 		this.db.prepare_v2(STMT_INSERT_LASTUSED, -1, 
@@ -190,6 +195,24 @@ public class Xnoise.DbWriter : GLib.Object {
 		this.db.prepare_v2(STMT_ADD_MFILE, -1, 
 			out this.add_mfile_statement); 
 	}
+
+/*	public bool set_local_image_for album(ref artist, ref album, image_uri) {
+		begin_transaction();
+		update_album_image_statement.reset();
+		if(update_album_image_statement.bind_text(1, image_uri) != Sqlite.OK ||
+		   update_album_image_statement.bind_text(2, artist)    != Sqlite.OK ||
+		   update_album_image_statement.bind_text(3, album)     != Sqlite.OK ) {
+			this.db_error("set_local_image_for album");
+			return false;
+		}
+		if(update_album_image_statement.step() != Sqlite.DONE) {
+			this.db_error();
+			return false;
+		}
+		commit_transaction();
+		return true;
+	}
+*/
 
 	private int handle_artist(ref string artist) {
 		int artist_id = -1;
@@ -330,7 +353,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 		return genre_id;
 	}
-		
+
 	private void insert_title(TrackData td, string uri) {
 		string artist       = td.Artist;
 		string title        = td.Title;

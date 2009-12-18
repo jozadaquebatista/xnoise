@@ -32,6 +32,9 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	private LyricsLoader cur_loader = null;
 	private Main xn;
 	private Gtk.TextBuffer textbuffer;
+	private uint timeout = 0;
+	private string artist = "";
+	private string title = "";
 	
 	public LyricsView() {
 		xn = Main.instance();
@@ -39,25 +42,50 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		this.textbuffer = new Gtk.TextBuffer(null);
 		this.set_buffer(textbuffer);
 		this.set_editable(false);
-		this.set_left_margin(10);
+		this.set_left_margin(8);
 		this.set_wrap_mode(Gtk.WrapMode.WORD);
-		xn.gPl.sign_uri_changed.connect(on_uri_change);
+		xn.gPl.sign_uri_changed.connect(on_uri_changed);
+		xn.gPl.sign_tag_changed.connect(on_tag_changed);
+
 	}
-	
-	private void on_uri_change(string uri) {
-		//message("called");
+
+	private bool on_timout_elapsed() {
 		if(cur_loader != null)	cur_loader.sign_fetched -= on_lyrics_ready;
-		textbuffer.set_text("LYRICS VIEWER", -1);
-		if((uri==null)|(uri=="")) return;
-		File file = File.new_for_uri(uri);
-		if(!file.has_uri_scheme("file")) return;
-		var tr = new TagReader();
-		TrackData t = tr.read_tag(file.get_path());
+		artist = remove_linebreaks(xn.gPl.currentartist);
+		title  = remove_linebreaks(xn.gPl.currenttitle );
+		//print("1. %s - %s\n", artist, title);
+
+		// Look into db in case gPl does not provide the tag
+		if((artist=="unknown artist")||(title =="unknown title" )) {
+			var dbb = new DbBrowser();
+			TrackData td;
+			if(dbb.get_trackdata_for_uri(xn.gPl.Uri, out td)) {
+				artist = td.Artist;
+				title  = td.Title;
+			}
+		}
+
+		//print("2. %s - %s\n", artist, title);
+		if((artist=="")||(artist==null)||(artist=="unknown artist")||
+		   (title =="")||(title ==null)||(title =="unknown title" )) {
+			return false;
+		}
+
 		if(cur_loader != null) cur_loader.sign_fetched -= on_lyrics_ready;
 
-		cur_loader = new LyricsLoader(t.Artist, t.Title);
+		cur_loader = new LyricsLoader(artist, title);
 		cur_loader.sign_fetched.connect(on_lyrics_ready);
 		cur_loader.fetch();
+		return false;
+	}
+
+	private void on_tag_changed(string uri) {
+		if(timeout!=0) GLib.Source.remove(timeout);
+		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE, 2, on_timout_elapsed);
+	}
+	
+	private void on_uri_changed(string uri) {
+		textbuffer.set_text("LYRICS VIEWER", -1);
 	}
 	
 	private void on_lyrics_ready(string provider, string content) {
