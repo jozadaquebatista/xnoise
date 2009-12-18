@@ -33,14 +33,14 @@ using Gtk;
 
 public class TitleToDecoration : GLib.Object, IPlugin {
 	public Xnoise.Main xn { get; set; }
-	private Gtk.Button b;
+	//private Gtk.Button b;
 	public string name { 
 		get {
 			return "TitleToDecoration";
 		} 
 	}
 //    construct { // In this case it has to be a "construct" method
-//    	print("TestPlugin construction\n");
+//    	print("TitleToDecoration construction\n");
 //    }
     
 	public bool init() {
@@ -55,19 +55,19 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 		if(!xn.gPl.is_stream)
 			basename = file.get_basename();
 		if(xn.gPl.currentartist!=null) {
-			artist = xn.gPl.currentartist;
+			artist = remove_linebreaks(xn.gPl.currentartist);
 		}
 		else {
 			artist = "unknown artist";
 		}
 		if(xn.gPl.currenttitle!=null) {
-			title = xn.gPl.currenttitle;
+			title = remove_linebreaks(xn.gPl.currenttitle);
 		}
 		else {
 			title = "unknown title";
 		}
 		if(xn.gPl.currentalbum!=null) {
-			album = xn.gPl.currentalbum;
+			album = remove_linebreaks(xn.gPl.currentalbum);
 		}
 		else {
 			album = "unknown album";
@@ -130,9 +130,9 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 		xn.main_window.set_title("xnoise media player");
 	}
 
-	private void on_b_clicked(Gtk.Button sender) {
-		sender.label = sender.label + "_1";
-	}
+	//private void on_b_clicked(Gtk.Button sender) {
+	//	sender.label = sender.label + "_1";
+	//}
 
 	public Gtk.Widget? get_settings_widget() {
 		return null;
