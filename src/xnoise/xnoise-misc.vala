@@ -178,6 +178,7 @@ public struct Xnoise.TitleMtypeId {
 }
 
 
+
 // Interfaces
 
 public interface Xnoise.IParams : GLib.Object {
@@ -186,12 +187,15 @@ public interface Xnoise.IParams : GLib.Object {
 }
 
 public interface Xnoise.ILyrics : GLib.Object {
+	// 'fetch' is a thread function that will find the lyrics
 	public abstract void* fetch();
 	public abstract string get_text();
 	public abstract string get_identifier();
 	public abstract string get_credits();
 
 	public signal void sign_lyrics_fetched(string text);
+	// 'sign_lyrics_done' delivers the providers instance
+	// for destruction after usage
 	public signal void sign_lyrics_done(ILyrics instance);
 }
 
@@ -199,17 +203,18 @@ public interface Xnoise.ILyricsProvider : GLib.Object {
 	public abstract ILyrics from_tags(string artist, string title);
 }
 
+
+
 public interface Xnoise.IAlbumCoverImage : GLib.Object {
-	public abstract void fetch();
+	public abstract void fetch_image();
 	public abstract string get_image_uri();
-	//public abstract bool find_image(string uri, string artist, string album);
 
 	public signal void sign_album_image_fetched(string image_uri);
+	// 'sign_album_image_done' delivers the providers instance
+	// for destruction after usage
 	public signal void sign_album_image_done(IAlbumCoverImage instance);
 }
 
 public interface Xnoise.IAlbumCoverImageProvider : GLib.Object {
 	public abstract IAlbumCoverImage from_tags(string artist, string album);
 }
-
-

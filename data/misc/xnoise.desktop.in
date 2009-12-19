@@ -2,12 +2,12 @@
 Version=1.0
 Encoding=UTF-8
 Name=Xnoise Media Player
-Name[de]=Xnoise Medien-Wiedergabeprogramm
+Name[de]=Xnoise Medien-Wieder
 GenericName=Media Player
 GenericName[de]=Medien-Wiedergabeprogramm
 Name[de_DE]=Xnoise Medien-Wiedergabeprogramm
 Comment=Organize and play your music and video collections
-Comment[de]=Organisieren und Wiedergeben ihre Musik- und Videosammlungen 
+Comment[de]=Organisieren und Spielen Sie ihre Musik und ihre Videos 
 Exec=xnoise %U
 Terminal=false
 Type=Application

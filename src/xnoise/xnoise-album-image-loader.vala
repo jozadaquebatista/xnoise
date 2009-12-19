@@ -28,8 +28,9 @@
  * 	softshaker  softshaker googlemail.com
  * 	Jörn Magens
  */
+
 public class Xnoise.AlbumImageLoader : GLib.Object {
-	public IAlbumCoverImage album_image;
+	public IAlbumCoverImage album_image_provider;
 	private static IAlbumCoverImageProvider provider;
 	private static Main xn;
 	private uint backend_iter;
@@ -53,7 +54,7 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 	}
 	
 	//~AlbumImageLoader() {
-	//	print("AlbumImageLoader destroyed\n");
+	//	print("destruct AlbumImageLoader\n");
 	//}
 
 	private static void on_plugin_activated(Plugin p) {
@@ -76,11 +77,11 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 		if((text!=null)&&(text!="")) {
 			sign_fetched(text);
 		}
-		this.album_image = null;
+		this.album_image_provider = null;
 	}
 	
 	public string get_image_uri() {
-		return album_image.get_image_uri();
+		return album_image_provider.get_image_uri();
 	}
 		
 	public bool fetch_image() {
@@ -89,11 +90,11 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 			return false;
 		}
 		
-		this.album_image = this.provider.from_tags(artist, album);
-		this.album_image.ref();
-		this.album_image.sign_album_image_fetched.connect(this.on_fetched);
-		this.album_image.sign_album_image_done.connect(on_done);
-		album_image.fetch();
+		this.album_image_provider = this.provider.from_tags(artist, album);
+		this.album_image_provider.ref();
+		this.album_image_provider.sign_album_image_fetched.connect(this.on_fetched);
+		this.album_image_provider.sign_album_image_done.connect(on_done);
+		album_image_provider.fetch_image();
 		return true; 
 	}
 }

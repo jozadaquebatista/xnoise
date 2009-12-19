@@ -5,5 +5,5 @@ description=Sets the window title of xnoise to the current playing media informa
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 
-license=GPLv2 + exeption for distribution with non-GPL compatible gstreamer plugins
+license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
 author=Jörn Magens <shuerhaaken@googlemail.com>

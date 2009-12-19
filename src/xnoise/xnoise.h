@@ -452,14 +452,14 @@ struct _XnoiseAlbumImageClass {
 
 struct _XnoiseIAlbumCoverImageIface {
 	GTypeInterface parent_iface;
-	void (*fetch) (XnoiseIAlbumCoverImage* self);
+	void (*fetch_image) (XnoiseIAlbumCoverImage* self);
 	char* (*get_image_uri) (XnoiseIAlbumCoverImage* self);
 };
 
 struct _XnoiseAlbumImageLoader {
 	GObject parent_instance;
 	XnoiseAlbumImageLoaderPrivate * priv;
-	XnoiseIAlbumCoverImage* album_image;
+	XnoiseIAlbumCoverImage* album_image_provider;
 };
 
 struct _XnoiseAlbumImageLoaderClass {
@@ -1065,7 +1065,7 @@ char* xnoise_ilyrics_get_identifier (XnoiseILyrics* self);
 char* xnoise_ilyrics_get_credits (XnoiseILyrics* self);
 GType xnoise_ilyrics_provider_get_type (void);
 XnoiseILyrics* xnoise_ilyrics_provider_from_tags (XnoiseILyricsProvider* self, const char* artist, const char* title);
-void xnoise_ialbum_cover_image_fetch (XnoiseIAlbumCoverImage* self);
+void xnoise_ialbum_cover_image_fetch_image (XnoiseIAlbumCoverImage* self);
 char* xnoise_ialbum_cover_image_get_image_uri (XnoiseIAlbumCoverImage* self);
 GType xnoise_ialbum_cover_image_provider_get_type (void);
 XnoiseIAlbumCoverImage* xnoise_ialbum_cover_image_provider_from_tags (XnoiseIAlbumCoverImageProvider* self, const char* artist, const char* album);

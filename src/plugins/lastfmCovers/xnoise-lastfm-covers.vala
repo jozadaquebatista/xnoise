@@ -78,12 +78,18 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	public LastFmCovers(string artist, string album) {
 		this.artist = artist;
 		this.album = album;
-		print("new backend\n");
+		//print("new backend\n");
+	}
+	
+	public void fetch_image() {
+		string s = download_image(this.artist, this.album);
+		sign_album_image_fetched(s);
+		sign_album_image_done(this);
+		return;
 	}
 
-	public string? download_album_images(string artist,string album,XPathContext* xpath) {
-		string[] sizes = {"medium", "extralarge"};
-		//string default_size = "extralarge";
+	private string? download_album_images(string artist,string album,XPathContext* xpath) {
+		string[] sizes = {"medium", "extralarge"}; //Two sizes seem to be enough for now
 		string default_size = "medium";
 		string uri_image = "";
 		var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
@@ -152,11 +158,11 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		}
 	}
 
-	private string? find_image(string artist, string album) {
-		print("find_lastfm_image to %s - %s\n", artist, album);
+	private string? download_image(string artist, string album) {
+		//print("find_lastfm_image to %s - %s\n", artist, album);
 		session = new Soup.SessionAsync();
 		string url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + lastfmKey + "&artist=" + 			artist +"&album=" + album;
-		print(url+"\n");
+		//print(url+"\n");
 		var message = new Soup.Message("GET", url);
 		session.send_message(message);
 		Xml.Doc* doc = Parser.parse_memory(message.response_body.data,(int)message.response_body.length);
@@ -167,8 +173,8 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 			return null;
 		}
 		else {
-			string ok = result->nodesetval->item(0)->get_content();
-			if(ok == "ok") {
+			string state = result->nodesetval->item(0)->get_content();
+			if(state == "ok") {
 				return download_album_images(artist, album, xpath);
 			}
 			else {
@@ -177,14 +183,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		}
 	}
 	
-	public void fetch() {
-		string s = find_image(this.artist, this.album);
-		sign_album_image_fetched(s);
-		sign_album_image_done(this);
-		return;
-	}
-	
-	public string get_image_uri() {
+	private string get_image_uri() {
 		return image_uri;
 	}
 }

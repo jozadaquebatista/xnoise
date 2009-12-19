@@ -33,6 +33,7 @@
 using Gtk;
 
 public class Xnoise.AlbumImage : Gtk.Fixed {
+	// TODO: Local search is not working yet.
 	public Gtk.Image albumimage;
 	private AlbumImageLoader loader = null;
 	private Main xn;
@@ -53,14 +54,20 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 	}
 
 	private void on_tag_changed(string uri) {
-		if(timeout!=0) GLib.Source.remove(timeout);
-		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE, 2, on_timout_elapsed);
+		if(timeout!=0)
+			GLib.Source.remove(timeout);
+
+		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE,
+		                                        2,
+		                                        on_timout_elapsed);
 	}
-	
+
 	private void on_uri_changed(string uri) {
 		load_default_image();
 	}
-	
+
+	// Use the timeout because gPl is sending the sign_tag_changed signals
+	// sometimes very often at the beginning of a track.
 	private bool on_timout_elapsed() {
 		string default_size = "small";
 		if(loader != null)
@@ -93,12 +100,12 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 		                                          );
 
 		var fileout = File.new_for_path(GLib.Path.build_filename(
-												  image_path,
-												  artist.down(),
-												  album.down(),
-												  album.down() + "_" + default_size,
-												  null)
-										);
+		                                          image_path,
+		                                          artist.down(),
+		                                          album.down(),
+		                                          album.down() + "_" + default_size,
+		                                          null)
+		                                );
 
 		if(fileout.query_exists(null)) {
 			this.set_albumimage_from_path(fileout.get_path());
@@ -124,7 +131,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 		if(file.query_exists(null)) {
 			this.albumimage.set_from_file(path);
 		}
-		else { // Image does not exist -> load defult
+		else { // Image does not exist -> load default
 			load_default_image();
 		}
 	}

@@ -46,9 +46,10 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		this.set_wrap_mode(Gtk.WrapMode.WORD);
 		xn.gPl.sign_uri_changed.connect(on_uri_changed);
 		xn.gPl.sign_tag_changed.connect(on_tag_changed);
-
 	}
 
+	// Use the timeout because gPl is sending the sign_tag_changed signals
+	// sometimes very often at the beginning of a track.
 	private bool on_timout_elapsed() {
 		if(cur_loader != null)	cur_loader.sign_fetched -= on_lyrics_ready;
 		artist = remove_linebreaks(xn.gPl.currentartist);
@@ -80,8 +81,12 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	}
 
 	private void on_tag_changed(string uri) {
-		if(timeout!=0) GLib.Source.remove(timeout);
-		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE, 2, on_timout_elapsed);
+		if(timeout!=0)
+			GLib.Source.remove(timeout);
+			
+		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE,
+		                                        3, //3 Seconds is still ok
+		                                        on_timout_elapsed);
 	}
 	
 	private void on_uri_changed(string uri) {
@@ -89,6 +94,6 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	}
 	
 	private void on_lyrics_ready(string provider, string content) {
-		textbuffer.set_text(content+"\n\n"+provider, -1);
+		textbuffer.set_text(content + "\n\n" + provider, -1);
 	}
 }

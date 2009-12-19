@@ -32,7 +32,7 @@ namespace Xnoise {
 	public class AlbumImageLoader : GLib.Object {
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate Xnoise.IAlbumCoverImage AlbumImageCreatorDelg (string artist, string album);
-		public Xnoise.IAlbumCoverImage album_image;
+		public Xnoise.IAlbumCoverImage album_image_provider;
 		public AlbumImageLoader (string artist, string album);
 		public bool fetch_image ();
 		public string get_image_uri ();
@@ -353,7 +353,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IAlbumCoverImage : GLib.Object {
-		public abstract void fetch ();
+		public abstract void fetch_image ();
 		public abstract string get_image_uri ();
 		public signal void sign_album_image_done (Xnoise.IAlbumCoverImage instance);
 		public signal void sign_album_image_fetched (string image_uri);
