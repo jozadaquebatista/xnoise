@@ -44,7 +44,7 @@ namespace Xnoise {
 			GLib.Regex r = new GLib.Regex("\n");
 			tmp = r.replace(value, -1, 0, "_");
 			r = new GLib.Regex(" ");
-			tmp = r.replace(value, -1, 0, "_");
+			tmp = r.replace(tmp, -1, 0, "_");
 			r = new GLib.Regex("//");
 			return r.replace(tmp, -1, 0, "-");
 		}
