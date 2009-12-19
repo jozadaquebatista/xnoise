@@ -26,7 +26,6 @@ namespace Xnoise {
 		public Gtk.Image albumimage;
 		public AlbumImage ();
 		public void load_default_image ();
-		public void set_albumimage_from_path (string path);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AlbumImageLoader : GLib.Object {
@@ -52,6 +51,7 @@ namespace Xnoise {
 		public string[] get_albums (string artist, ref string searchtext);
 		public string[] get_artists (ref string searchtext);
 		public string[] get_lastused_uris ();
+		public string? get_local_image_path_for_uri (ref string uri);
 		public string[] get_media_files ();
 		public string[] get_media_folders ();
 		public string? get_single_stream_uri (string name);
@@ -81,6 +81,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
 		public DbWriter ();
+		public bool set_local_image_for_album (ref string artist, ref string album, string image_uri);
 		public void store_media_files (string[] list_of_files);
 		public void store_media_folders (string[] mfolders);
 		public void store_streams (string[] list_of_streams);
@@ -353,10 +354,10 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IAlbumCoverImage : GLib.Object {
-		public abstract void fetch_image ();
+		public abstract void* fetch_image ();
 		public abstract string get_image_uri ();
 		public signal void sign_album_image_done (Xnoise.IAlbumCoverImage instance);
-		public signal void sign_album_image_fetched (string image_uri);
+		public signal void sign_album_image_fetched (string? image_path);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IAlbumCoverImageProvider : GLib.Object {
@@ -460,6 +461,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static string escape_for_local_folder_search (string value);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string get_stream_uri (string playlist_uri);
 	[CCode (cheader_filename = "xnoise.h")]

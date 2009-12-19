@@ -196,13 +196,15 @@ public class Xnoise.DbWriter : GLib.Object {
 			out this.add_mfile_statement); 
 	}
 
-/*	public bool set_local_image_for album(ref artist, ref album, image_uri) {
+	public bool set_local_image_for_album(ref string artist,
+	                                      ref string album,
+	                                      string image_uri) {
 		begin_transaction();
 		update_album_image_statement.reset();
 		if(update_album_image_statement.bind_text(1, image_uri) != Sqlite.OK ||
 		   update_album_image_statement.bind_text(2, artist)    != Sqlite.OK ||
 		   update_album_image_statement.bind_text(3, album)     != Sqlite.OK ) {
-			this.db_error("set_local_image_for album");
+			this.db_error();
 			return false;
 		}
 		if(update_album_image_statement.step() != Sqlite.DONE) {
@@ -212,7 +214,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		commit_transaction();
 		return true;
 	}
-*/
 
 	private int handle_artist(ref string artist) {
 		int artist_id = -1;

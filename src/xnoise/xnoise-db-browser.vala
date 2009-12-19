@@ -34,6 +34,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private string DATABASE;
+	private Statement image_path_for_uri_statement;
 	private Statement count_for_uri_statement;
 	private Statement get_lastused_statement;
 	private Statement get_videos_with_search_statement;
@@ -57,6 +58,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private Statement trackdata_for_stream_statement;
 	private Statement count_for_stream_statement;
 
+	private static const string STMT_IMAGE_PATH_FOR_URI = 
+		"SELECT al.image FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND u.name = ?"; 
 	private static const string STMT_COUNT_FOR_STREAMS = 
 		"SELECT COUNT (id) FROM streams st WHERE st.uri = ?"; 
 	private static const string STMT_TRACKDATA_FOR_STREAM = 
@@ -66,7 +69,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	private static const string STMT_COUNT_FOR_MEDIATYPE = 
 		"SELECT COUNT (title) FROM items WHERE mediatype = ?";
 	private static const string STMT_COUNT_FOR_URI = 
-		"SELECT COUNT (title) FROM items i, uris u WHERE i.uri = u.id AND u.name = ?"; 
+		"SELECT COUNT (i.title) FROM items i, uris u WHERE i.uri = u.id AND u.name = ?"; 
 	private static const string STMT_TRACKDATA_FOR_URI = 
 		"SELECT ar.name, al.name, t.title, t.tracknumber FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND u.name = ?";
 	private static const string STMT_TRACKDATA_FOR_ID = 
@@ -120,7 +123,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 		print("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
 	}
 
-	private void prepare_statements() {
+	private void prepare_statements() { 
+		this.db.prepare_v2(STMT_IMAGE_PATH_FOR_URI, -1, 
+			out this.image_path_for_uri_statement); 	
 		this.db.prepare_v2(STMT_COUNT_FOR_STREAMS, -1, 
 			out this.count_for_stream_statement); 	
 		this.db.prepare_v2(STMT_COUNT_STREAMS, -1, 
@@ -296,6 +301,18 @@ public class Xnoise.DbBrowser : GLib.Object {
 			return true;
 		}
 		return false;
+	}
+
+	public string? get_local_image_path_for_uri(ref string uri) {
+		string retval = null;
+		image_path_for_uri_statement.reset();
+		if(image_path_for_uri_statement.bind_text(1, uri) != Sqlite.OK) {
+			this.db_error();
+		}
+		if(image_path_for_uri_statement.step() == Sqlite.ROW) {
+			retval = image_path_for_uri_statement.column_text(0);
+		}
+		return retval;
 	}
 
 	public bool get_trackdata_for_stream(string uri, out TrackData val) {

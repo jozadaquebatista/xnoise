@@ -35,12 +35,15 @@ using Gtk;
 public class Xnoise.AlbumImage : Gtk.Fixed {
 	// TODO: Local search is not working yet.
 	public Gtk.Image albumimage;
+	private const string INIFOLDER = ".xnoise";
+	private static string current_image_path = "";
 	private AlbumImageLoader loader = null;
 	private Main xn;
-	private const string INIFOLDER = ".xnoise";
 	private string artist = "";
 	private string album = "";
-	private uint timeout = 0;
+	private static uint timeout = 0;
+	private string default_size = "medium";
+	private bool db_image_available = false;
 	
 	public AlbumImage() {
 		xn = Main.instance();
@@ -57,25 +60,50 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 		if(timeout!=0)
 			GLib.Source.remove(timeout);
 
-		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE,
+		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT,
 		                                        2,
 		                                        on_timout_elapsed);
 	}
 
 	private void on_uri_changed(string uri) {
-		load_default_image();
+		db_image_available = false;
+		string current_uri = uri;
+		var dbb = new DbBrowser();
+		string? res = dbb.get_local_image_path_for_uri(ref current_uri);
+		dbb = null;
+		if((res!=null)&&(res!="")) {
+			//print("db has image entry\n");
+			File f = File.new_for_path(res);
+			if(!f.query_exists(null)) {
+				load_default_image();
+				return;
+			}
+			db_image_available = true;
+			current_image_path = res;
+			if(source!=0)
+				GLib.Source.remove(source);
+			source = Idle.add(this.set_albumimage_from_path);	
+		}
+		else {
+			//print("has no image entry\n");
+			load_default_image();
+		}
 	}
 
 	// Use the timeout because gPl is sending the sign_tag_changed signals
 	// sometimes very often at the beginning of a track.
 	private bool on_timout_elapsed() {
-		string default_size = "small";
+		if(db_image_available) return false;
 		if(loader != null)
 			loader.sign_fetched.disconnect(on_album_image_fetched);
 
+		artist = escape_for_local_folder_search(xn.gPl.currentartist);
+		album  = escape_for_local_folder_search(xn.gPl.currentalbum );
+		//print("1. %s - %s\n", artist, album);
+		if(set_local_image_if_available(artist, album)) return false;
+
 		artist = remove_linebreaks(xn.gPl.currentartist);
 		album  = remove_linebreaks(xn.gPl.currentalbum );
-		//print("1. %s - %s\n", artist, album);
 
 		// Look into db in case gPl does not provide the tag
 		if((artist=="unknown artist")||(album =="unknown album" )) {
@@ -101,14 +129,18 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 
 		var fileout = File.new_for_path(GLib.Path.build_filename(
 		                                          image_path,
-		                                          artist.down(),
-		                                          album.down(),
-		                                          album.down() + "_" + default_size,
+		                                          escape_for_local_folder_search(artist.down()),
+		                                          escape_for_local_folder_search(album.down()),
+		                                          escape_for_local_folder_search(album.down()) + "_" + default_size,
 		                                          null)
 		                                );
 
 		if(fileout.query_exists(null)) {
-			this.set_albumimage_from_path(fileout.get_path());
+			//print("using local path for album image: %s", fileout.get_path());
+			current_image_path = fileout.get_path();
+			if(source!=0)
+				GLib.Source.remove(source);
+			source = Idle.add(this.set_albumimage_from_path);
 		}
 		else {
 			if(loader != null) { 
@@ -121,31 +153,61 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 		return false;
 	}
 
+	private bool set_local_image_if_available(string artist, string album) {
+		var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
+		                                          INIFOLDER,
+		                                          "album_images",
+		                                          null
+		                                          );
+
+		var fileout = File.new_for_path(GLib.Path.build_filename(
+		                                          image_path,
+		                                          escape_for_local_folder_search(artist.down()),
+		                                          escape_for_local_folder_search(album.down()),
+		                                          escape_for_local_folder_search(album.down()) + "_" + default_size,
+		                                          null)
+		                                );
+		//print("xyz local: %s\n", fileout.get_path());
+		if(fileout.query_exists(null)) {
+			//print("using local path for album image: %s\n", fileout.get_path());
+			current_image_path = fileout.get_path();
+			if(source!=0)
+				GLib.Source.remove(source);
+			source = Idle.add(this.set_albumimage_from_path);
+			//print("local search succeeded!\n");
+			return true;
+		}
+		return false;
+	}
+	
 	public void load_default_image() {
+		if(source!=0)
+			GLib.Source.remove(source);
+		current_image_path = "";
 		this.albumimage.set_size_request(48, 48);
 		this.albumimage.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 	}
 
-	public void set_albumimage_from_path(string path) {
-		File file = File.new_for_path(path);
-		if(file.query_exists(null)) {
-			this.albumimage.set_from_file(path);
-		}
-		else { // Image does not exist -> load default
-			load_default_image();
-		}
+	private bool set_albumimage_from_path() {
+		this.albumimage.set_from_file(current_image_path);
+		return false;
 	}
+
+	private static uint source = 0;
 	
 	private void on_album_image_fetched(string? image_path) {
 		//print("image ready: %s\n", image_path);
-		if(image_path == null) return;
+		if((image_path == null)||(image_path == "")) return;
 		
 		File f = File.new_for_path(image_path);
 		if(!f.query_exists(null)) return;
-		
-		this.set_albumimage_from_path(image_path);
-		// TODO: Put path as reference into db ?!
-		//var dbw = new DbWriter();
-		//dbw.set_local_image_for album(ref artist, ref album, f.get_uri());
+
+		current_image_path = image_path;
+		if(source!=0)
+			GLib.Source.remove(source);
+		source = Idle.add(this.set_albumimage_from_path);	
+		var dbw = new DbWriter();
+		dbw.set_local_image_for_album(ref artist, ref album, image_path);
+		dbw = null;
 	}
 }

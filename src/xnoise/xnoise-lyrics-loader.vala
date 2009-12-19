@@ -86,10 +86,13 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		instance.unref();
 	}
 	
-	private void on_fetched(string text) {
+	private void on_fetched(string? text) {
 		//message(text);
 		if((text!=null)&&(text!="")) {
 			sign_fetched(this.lyrics.get_credits(), text);
+		}
+		else {
+			sign_fetched(this.lyrics.get_credits(), "no lyrics found...");
 		}
 		this.lyrics = null;
 	}

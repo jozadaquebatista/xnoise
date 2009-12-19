@@ -68,7 +68,8 @@ public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageP
 
 public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	private const string INIFOLDER = ".xnoise";
-	private static SessionAsync session;
+	//private static SessionAsync session;
+	private static SessionSync session;
 	static string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
 	
 	private string artist;
@@ -81,11 +82,15 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		//print("new backend\n");
 	}
 	
-	public void fetch_image() {
-		string s = download_image(this.artist, this.album);
+	//~LastFmCovers() {
+		//print("dstrct backend\n");
+	//}
+
+	public void* fetch_image() {
+		string s = find_image(this.artist, this.album);
 		sign_album_image_fetched(s);
 		sign_album_image_done(this);
-		return;
+		return null;
 	}
 
 	private string? download_album_images(string artist,string album,XPathContext* xpath) {
@@ -101,12 +106,27 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		for( int i = 0; i< sizes.length;i++) {
 			var fileout = File.new_for_path(GLib.Path.build_filename(
 			                                          image_path,
+			                                          escape_for_local_folder_search(artist.down()),
+			                                          escape_for_local_folder_search(album.down()),
+			                                          escape_for_local_folder_search(album.down()) +
+			                                          "_" +
+			                                          sizes[i],
+			                                          null)
+			                                );
+/*		var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
+		                                          INIFOLDER,
+		                                          "album_images",
+		                                          null
+		                                          );
+
+			var fileout = File.new_for_path(GLib.Path.build_filename(
+			                                          image_path,
 			                                          artist.down(),
 			                                          album.down(),
 			                                          album.down() + "_" + sizes[i],
 			                                          null)
 			                                );
-
+*/
 			if(default_size == sizes[i]) uri_image = fileout.get_path();     
 
 			string pth = "";
@@ -153,14 +173,13 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 			return null;
 		}
 		else {
-			//print("uri_image: %s\n",uri_image);
 			return uri_image;
 		}
 	}
 
-	private string? download_image(string artist, string album) {
+	private string? find_image(string artist, string album) {
 		//print("find_lastfm_image to %s - %s\n", artist, album);
-		session = new Soup.SessionAsync();
+		session = new Soup.SessionSync();
 		string url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + lastfmKey + "&artist=" + 			artist +"&album=" + album;
 		//print(url+"\n");
 		var message = new Soup.Message("GET", url);
