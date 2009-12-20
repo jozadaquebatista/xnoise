@@ -26,6 +26,8 @@ namespace Xnoise {
 		public Gtk.Image albumimage;
 		public AlbumImage ();
 		public void load_default_image ();
+		public bool album_image_available { get; set; }
+		public string current_image_path { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AlbumImageLoader : GLib.Object {

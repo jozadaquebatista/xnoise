@@ -110,20 +110,31 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void create_widgets() {
 		try {
 			dialog = new Dialog();
+
 			dialog.set_modal(true);
 			builder.add_from_file(Config.UIDIR + "add_media.ui");
 			
-			var mainvbox       = builder.get_object("mainvbox") as Gtk.VBox;
-			tv                 = builder.get_object("tv") as TreeView;
-			var baddfile       = builder.get_object("addfilebutton") as Button;
-			var baddfolder     = builder.get_object("addfolderbutton") as Button;
-			var baddradio      = builder.get_object("addradiobutton") as Button;
-			var brem           = builder.get_object("removeButton") as Button;
+			var mainvbox         = builder.get_object("mainvbox") as Gtk.VBox;
+			tv                   = builder.get_object("tv") as TreeView;
+			var baddfile         = builder.get_object("addfilebutton") as Button;
+			var baddfolder       = builder.get_object("addfolderbutton") as Button;
+			var baddradio        = builder.get_object("addradiobutton") as Button;
+			var brem             = builder.get_object("removeButton") as Button;
+
+			var labeladdfile     = builder.get_object("labeladdfile") as Label;
+			var labeladdfolder   = builder.get_object("labeladdfolder") as Label;
+			var labeladdstream   = builder.get_object("labeladdstream") as Label;
+			var labelremove      = builder.get_object("labelremove") as Label;
 			
-			var bcancel        = (Button)this.dialog.add_button(Gtk.STOCK_CANCEL , 0);
-			var bok            = (Button)this.dialog.add_button(Gtk.STOCK_OK, 1);
+			var bcancel          = (Button)this.dialog.add_button(Gtk.STOCK_CANCEL, 0);
+			var bok              = (Button)this.dialog.add_button(Gtk.STOCK_OK, 1);
+
+			labeladdfile.label   = _("Add local file");
+			labeladdfolder.label = _("Add local folder");
+			labeladdstream.label = _("Add media stream");
+			labelremove.label    = _("Remove");
 			
-			bok.clicked.connect( on_ok_button_clicked);
+			bok.clicked.connect(on_ok_button_clicked);
 			bcancel.clicked.connect(on_cancel_button_clicked);
 			baddfile.clicked.connect(on_add_file_button_clicked);
 			baddfolder.clicked.connect(on_add_folder_button_clicked);

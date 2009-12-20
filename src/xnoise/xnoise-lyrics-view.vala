@@ -92,8 +92,20 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	private void on_uri_changed(string uri) {
 		textbuffer.set_text("LYRICS VIEWER", -1);
 	}
-	
-	private void on_lyrics_ready(string provider, string content) {
+	private uint source = 0;
+	private string provider = "";
+	private string content = "";
+	private void on_lyrics_ready(string _provider, string _content) {
+		this.provider = _provider;
+		this.content  = _content;
+		if(source!=0)
+			GLib.Source.remove(source);
+
+		source = Idle.add(set_text);
+	}
+
+	private bool set_text() {
 		textbuffer.set_text(content + "\n\n" + provider, -1);
+		return false;
 	}
 }

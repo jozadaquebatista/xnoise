@@ -53,12 +53,35 @@ All library media will be available in the media browser.</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkButton" id="addfolderbutton">
-                <property name="label" translatable="yes">Add local folder</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
-                <property name="image">image2</property>
                 <property name="focus_on_click">False</property>
+                <child>
+                  <object class="GtkHBox" id="hbox2">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkImage" id="image4">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-directory</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="labeladdfolder">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Add local folder</property>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -67,12 +90,35 @@ All library media will be available in the media browser.</property>
             </child>
             <child>
               <object class="GtkButton" id="addfilebutton">
-                <property name="label" translatable="yes">Add local file</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
-                <property name="image">image1</property>
                 <property name="focus_on_click">False</property>
+                <child>
+                  <object class="GtkHBox" id="hbox3">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkImage" id="image5">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-add</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="labeladdfile">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Add local file</property>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -81,12 +127,35 @@ All library media will be available in the media browser.</property>
             </child>
             <child>
               <object class="GtkButton" id="addradiobutton">
-                <property name="label" translatable="yes">Add media stream</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
-                <property name="image">image3</property>
                 <property name="focus_on_click">False</property>
+                <child>
+                  <object class="GtkHBox" id="hbox4">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkImage" id="image6">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-connect</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="labeladdstream">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Add media stream</property>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -100,12 +169,35 @@ All library media will be available in the media browser.</property>
         </child>
         <child>
           <object class="GtkButton" id="removeButton">
-            <property name="label" translatable="yes">gtk-remove</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="receives_default">False</property>
-            <property name="use_stock">True</property>
             <property name="focus_on_click">False</property>
+            <property name="image_position">top</property>
+            <child>
+              <object class="GtkVBox" id="vbox1">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkImage" id="image7">
+                    <property name="visible">True</property>
+                    <property name="stock">gtk-remove</property>
+                  </object>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelremove">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Remove</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>

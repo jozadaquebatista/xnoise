@@ -99,7 +99,7 @@ namespace Xnoise {
 
 // PROJECT WIDE USED STRUCTS, INTERFACES AND ENUMS
 
-// Enums
+// ENUMS
 
 public enum Xnoise.BrowserColumn {
 	ICON = 0,
@@ -166,7 +166,7 @@ public enum Gst.StreamType {
     VIDEO   = 2
 }
 
-// Classes
+// DATA TRANSFER CLASS
 
 public class Xnoise.TrackData { // track meta information
 	public string Artist;
@@ -180,7 +180,7 @@ public class Xnoise.TrackData { // track meta information
 }
 
 
-// Structs
+// STRUCTS
 
 public struct Xnoise.StreamData { // meta information structure
 	public string Name;
@@ -195,7 +195,7 @@ public struct Xnoise.TitleMtypeId {
 
 
 
-// Interfaces
+// INTERFACES
 
 public interface Xnoise.IParams : GLib.Object {
 	public abstract void read_params_data();

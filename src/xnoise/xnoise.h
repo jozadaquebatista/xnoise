@@ -877,6 +877,8 @@ GType xnoise_album_image_get_type (void);
 XnoiseAlbumImage* xnoise_album_image_new (void);
 XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
 void xnoise_album_image_load_default_image (XnoiseAlbumImage* self);
+gboolean xnoise_album_image_get_album_image_available (XnoiseAlbumImage* self);
+const char* xnoise_album_image_get_current_image_path (XnoiseAlbumImage* self);
 GType xnoise_album_image_loader_get_type (void);
 GType xnoise_ialbum_cover_image_get_type (void);
 void xnoise_album_image_loader_init (void);
