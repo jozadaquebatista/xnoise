@@ -37,6 +37,7 @@ po/.intltool-merge-cache
 po/Makefile.in.in
 po/POTFILES
 po/*.gmo
+po/*.mo
 po/stamp-it
 .libs
 .deps
