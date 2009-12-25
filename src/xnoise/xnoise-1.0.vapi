@@ -147,6 +147,8 @@ namespace Xnoise {
 		public Xnoise.GstPlayer gPl;
 		public Xnoise.MainWindow main_window;
 		public Xnoise.PluginLoader plugin_loader;
+		public Xnoise.TrackList tl;
+		public Xnoise.TrackListModel tlm;
 		public Main ();
 		public void add_track_to_gst_player (string uri);
 		public static Xnoise.Main instance ();
@@ -163,7 +165,8 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise.h")]
 		public class PlayPauseButton : Gtk.Button {
 			public PlayPauseButton ();
-			public void on_clicked ();
+			public void on_clicked (Gtk.Widget sender);
+			public void on_menu_clicked (Gtk.MenuItem sender);
 			public void set_pause_picture ();
 			public void set_play_picture ();
 			public void update_picture ();
@@ -226,16 +229,21 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
-		public Gtk.TreeStore treemodel;
+		public Xnoise.MediaBrowserModel mediabrowsermodel;
 		public MediaBrowser (ref unowned Xnoise.Main xn);
 		public bool change_model_data ();
-		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
-		public bool on_button_press (Gtk.Widget sender, Gdk.EventButton e);
-		public bool on_button_release (Gtk.Widget sender, Gdk.EventButton e);
-		public void on_drag_data_get (Gtk.Widget sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime);
-		public void on_drag_end (Gtk.Widget sender, Gdk.DragContext context);
 		public void on_searchtext_changed (Gtk.Editable sender);
 		public signal void sign_activated ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
+		public string searchtext;
+		public MediaBrowserModel ();
+		public string[] build_uri_list_for_treepath (Gtk.TreePath treepath, ref Xnoise.DbBrowser dbb);
+		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
+		public Xnoise.TrackData[] get_trackdata_hierarchical (Gtk.TreePath treepath);
+		public Xnoise.TrackData[] get_trackdata_listed (Gtk.TreePath treepath);
+		public bool populate_model ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {
@@ -323,28 +331,30 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackList : Gtk.TreeView {
-		public Gtk.ListStore listmodel;
-		public TrackList (ref unowned Xnoise.Main xn);
+		public Xnoise.TrackListModel tracklistmodel;
+		public TrackList ();
 		public void add_tracks (Xnoise.TrackData[]? td_list, bool imediate_play = true);
 		public void add_uris (string[]? uris);
-		public bool get_active_path (out Gtk.TreePath treepath, out Xnoise.TrackState currentstate, out bool is_first);
 		public string[] get_all_tracks ();
 		public string get_uri_for_treepath (Gtk.TreePath path);
-		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
 		public bool not_empty ();
 		public void on_activated (string uri, Gtk.TreePath path);
-		public bool on_button_press (Gtk.Widget sender, Gdk.EventButton e);
-		public bool on_button_release (Gtk.Widget sender, Gdk.EventButton e);
-		public void on_drag_data_get (Gtk.Widget sender, Gdk.DragContext context, Gtk.SelectionData selection, uint target_type, uint etime);
-		public void on_drag_end (Gtk.Widget sender, Gdk.DragContext context);
-		public bool on_drag_motion (Gtk.Widget sender, Gdk.DragContext context, int x, int y, uint timestamp);
 		public void remove_selected_rows ();
 		public void reset_play_status_all_titles ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class TrackListModel : Gtk.ListStore, Gtk.TreeModel {
+		public TrackListModel ();
+		public void bolden_row (ref Gtk.TreeIter iter);
+		public bool get_active_path (out Gtk.TreePath treepath, out Xnoise.TrackState currentstate, out bool is_first);
+		public int get_n_rows ();
+		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
 		public bool set_pause_state ();
 		public bool set_play_state ();
 		public bool set_play_state_for_first_song ();
 		public void set_state_picture_for_title (Gtk.TreeIter iter, Xnoise.TrackState state = Xnoise.TrackState.STOPPED);
+		public void unbolden_row (ref Gtk.TreeIter iter);
 		public signal void sign_active_path_changed (Xnoise.TrackState ts);
 	}
 	[CCode (cheader_filename = "xnoise.h")]

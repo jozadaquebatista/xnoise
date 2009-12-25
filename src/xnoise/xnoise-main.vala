@@ -30,6 +30,8 @@
 
 public class Xnoise.Main : GLib.Object {
 	public MainWindow main_window;
+	public TrackList tl;
+	public TrackListModel tlm;
 	public PluginLoader plugin_loader;
 	public GstPlayer gPl;
 	private static Main _instance;
@@ -44,6 +46,8 @@ public class Xnoise.Main : GLib.Object {
 		gPl = new GstPlayer();
 
 		plugin_loader = new PluginLoader(ref this);
+		tlm = new TrackListModel();
+		tl = new TrackList();
 		main_window = new MainWindow(ref this);
 		
 		plugin_loader.load_all();
@@ -52,7 +56,7 @@ public class Xnoise.Main : GLib.Object {
 			if(plugin_loader.activate_single_plugin(name)) 
 				print("%s plugin is activated.\n", name);
 		}
-        
+
 		connect_signals();
 		par.set_start_parameters_in_implementors();
 	}
@@ -73,6 +77,7 @@ public class Xnoise.Main : GLib.Object {
 		Posix.signal(Posix.SIGQUIT, on_posix_finish); // write data to db on posix quit signal
 		Posix.signal(Posix.SIGTERM, on_posix_finish); // write data to db on posix term signal
 		Posix.signal(Posix.SIGKILL, on_posix_finish); // write data to db on posix kill signal
+		//main_window.connect_signals();
 	}
 	
 	private void check_database_and_tables() {

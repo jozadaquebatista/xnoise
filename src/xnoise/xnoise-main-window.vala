@@ -175,7 +175,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			if(file.get_uri_scheme() != "http") {
 				TrackData td; 
 				if(dbBr.get_trackdata_for_uri(uri, out td)) {
-					this.trackList.insert_title(0,
+					this.trackList.tracklistmodel.insert_title(0,
 							                    null,
 							                    (int)td.Tracknumber,
 							                    Markup.printf_escaped("%s",td.Title),
@@ -187,7 +187,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			else {
 				TrackData td; 
 				if(dbBr.get_trackdata_for_stream(uri, out td)) {
-					this.trackList.insert_title(0,
+					this.trackList.tracklistmodel.insert_title(0,
 							                    null,
 							                    0,
 							                    Markup.printf_escaped("%s",td.Title),
@@ -305,13 +305,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		playpause_popup_image = new Image();
 		playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
 		xn.gPl.sign_playing.connect( () => {
-			xn.main_window.playpause_popup_image.set_from_stock(STOCK_MEDIA_PAUSE, IconSize.MENU);
+			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PAUSE, IconSize.MENU);
 		});
 		xn.gPl.sign_stopped.connect( () => {
-			xn.main_window.playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
+			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
 		});
 		xn.gPl.sign_paused.connect( () => {
-			xn.main_window.playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
+			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
 		});
 			
 		var playLabel = new Label(_("Play/Pause"));
@@ -323,7 +323,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		playHbox.pack_start(playpause_popup_image, false, true, 0);
 		playHbox.pack_start(playLabel, true, true, 0);
 		playpauseItem.add(playHbox);
-		playpauseItem.activate.connect(playPauseButton.on_clicked);
+		playpauseItem.activate.connect(playPauseButton.on_menu_clicked);
 		traymenu.append(playpauseItem);
 
 		var previousImage = new Image();
@@ -487,7 +487,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		
 		//save position
 		int rowcount = -1;
-		rowcount = (int)trackList.listmodel.iter_n_children(null);
+		rowcount = (int)trackList.tracklistmodel.iter_n_children(null);
 		if(!(rowcount>0)) {
 			return;
 		}
@@ -495,9 +495,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		TreePath path;
 		TrackState currentstate;
 		bool is_first;
-		trackList.get_active_path(out path, out currentstate, out is_first);
-		trackList.listmodel.get_iter(out iter, path); 
-		trackList.listmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
+		trackList.tracklistmodel.get_active_path(out path, out currentstate, out is_first);
+		trackList.tracklistmodel.get_iter(out iter, path); 
+		trackList.tracklistmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
 	}
 
 	// This function changes the current song to the next or previous in the 
@@ -509,7 +509,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		TreePath path = null;
 		bool is_first;
 		int rowcount = -1;
-		rowcount = (int)trackList.listmodel.iter_n_children(null);
+		rowcount = (int)trackList.tracklistmodel.iter_n_children(null);
 		
 		if(rowcount==0) {
 			// if no track is in the list, it does not make sense to go any further
@@ -518,7 +518,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 
 		// active path sets first path if active is not found
-		if(!trackList.get_active_path(out path, out currentstate, out is_first)) {
+		if(!trackList.tracklistmodel.get_active_path(out path, out currentstate, out is_first)) {
 			stop();
 			return;
 		}
@@ -539,26 +539,26 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 
 		// goto path, if possible...
-		if(trackList.listmodel.get_iter(out iter, path)) {
+		if(trackList.tracklistmodel.get_iter(out iter, path)) {
 			trackList.reset_play_status_all_titles(); //visual reset
 			if(xn.gPl.paused) {
-				trackList.set_state_picture_for_title(iter, TrackState.PAUSED);
+				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PAUSED);
 			}
 			else if(xn.gPl.playing){
-				trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
+				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
 			}
 			trackList.set_focus_on_iter(ref iter);
 		}
 		//...or goto first song, if possible ...
-		else if((trackList.listmodel.get_iter_first(out iter))&&
+		else if((trackList.tracklistmodel.get_iter_first(out iter))&&
 		        (((handle_repeat_state)&&
 		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { 
 			trackList.reset_play_status_all_titles();
 			if(xn.gPl.playing) {
-				trackList.set_state_picture_for_title(iter, TrackState.PLAYING);
+				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
 			}
 			else if(xn.gPl.paused) {
-				trackList.set_state_picture_for_title(iter, TrackState.PAUSED);
+				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PAUSED);
 			}
 			trackList.set_focus_on_iter(ref iter);
 		}
@@ -598,17 +598,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private void on_show_lyrics_button_clicked() {
 		this.tracklistnotebook.set_current_page(2);
-	}
-
-	private void on_tracklistnotebook_switch_page(void* sender, uint page) {
-//		switch(page) {
-//			case 0:
-//				this.showvideolabel.set_text(SHOWVIDEO);
-//				break;
-//			case 1:
-//				this.showvideolabel.set_text(SHOWTRACKLIST);
-//				break;
-//		}
 	}
 
 	private bool on_close() {
@@ -784,7 +773,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		switch(e.button) {
 			case 2:
 				//ugly, we should move play/resume code out of there.
-				this.playPauseButton.on_clicked();  
+				this.playPauseButton.on_clicked(new Button());  
 				break;
 			default:
 				break;
@@ -933,7 +922,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			menuvbox                     = gb.get_object("menuvbox") as Gtk.VBox; 
 			
 			///Tracklist (right)
-			this.trackList = new TrackList(ref xn);
+			this.trackList = xn.tl; //new TrackList();
 			this.trackList.set_size_request(100,100);
 			var trackListScrollWin = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
 			trackListScrollWin.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.ALWAYS);
@@ -947,7 +936,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			mediaBrScrollWin.add(this.mediaBr);
 			browsernotebook    = gb.get_object("notebook1") as Gtk.Notebook;
 			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
-			tracklistnotebook.switch_page.connect(on_tracklistnotebook_switch_page);
 			
 			this.searchEntryMB = new Gtk.Entry(); 
 			this.searchEntryMB.primary_icon_stock = Gtk.STOCK_FIND; 
@@ -963,7 +951,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox; 
 			sexyentryBox.add(searchEntryMB);
 			
-		
 			///Textbuffer for the lyrics
 			var scrolledlyricsview = gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;
 			this.lyricsView = new LyricsView();
@@ -1087,46 +1074,54 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		public PlayPauseButton() {
 			xn = Main.instance();
 			this.can_focus = false;
-			this.clicked.connect(this.on_clicked);
 			this.relief = Gtk.ReliefStyle.NONE;
 			
 			this.playImage = new Image.from_stock(STOCK_MEDIA_PLAY, IconSize.SMALL_TOOLBAR);
 			this.pauseImage = new Image.from_stock(STOCK_MEDIA_PAUSE, IconSize.SMALL_TOOLBAR);
 			this.update_picture();
 			
+			this.clicked.connect(this.on_clicked);
 			xn.gPl.sign_paused.connect(this.update_picture);
 			xn.gPl.sign_stopped.connect(this.update_picture);
 			xn.gPl.sign_playing.connect(this.update_picture);
 		}
+
+		public void on_menu_clicked(Gtk.MenuItem sender) {
+			handle_click();
+		}
 		
-		public void on_clicked() { //TODO: maybe use the stored position
+		public void on_clicked(Gtk.Widget sender) {
+			handle_click();
+		}
+
+		private void handle_click() {
 			if((!xn.gPl.playing)&&
-			   ((xn.main_window.trackList.not_empty())||(xn.gPl.Uri != ""))) {   
+			   ((xn.tl.not_empty())||(xn.gPl.Uri != ""))) {   
 			   // not running and track available set to play
-			
 				if(xn.gPl.Uri == "") { // play selected track, if available....
-					weak TreeSelection ts = xn.main_window.trackList.get_selection();
+					weak TreeSelection ts = xn.tl.get_selection();
 					GLib.List<TreePath> pathlist = ts.get_selected_rows(null);
 					if(pathlist.nth_data(0)!=null) {
-						string uri = xn.main_window.trackList.get_uri_for_treepath(pathlist.nth_data(0));
-						xn.main_window.trackList.on_activated(uri, pathlist.nth_data(0));
+						string uri = xn.tl.get_uri_for_treepath(pathlist.nth_data(0));
+						xn.tl.on_activated(uri, pathlist.nth_data(0));
 					}
 					else {
 						//.....or play previous song
 						xn.main_window.change_song(Direction.PREVIOUS);
 					}
 				}
-				if(xn.main_window.trackList.set_play_state()) {
+				if(xn.tl.tracklistmodel.set_play_state()) {
 					// find active row, set state picture, bolden and set uri for gpl
 					xn.gPl.play();
 				}
-				else if(xn.main_window.trackList.set_play_state_for_first_song()) {
+				else if(xn.tl.tracklistmodel.set_play_state_for_first_song()) {
 					xn.gPl.play();
 				}
 			}
 			else { 
-				if(xn.main_window.trackList.listmodel.iter_n_children(null)>0) { 
-					xn.main_window.trackList.set_pause_state();
+				int buf = xn.tl.tracklistmodel.iter_n_children(null);
+				if(buf>0) { 
+					xn.tl.tracklistmodel.set_pause_state();
 					xn.gPl.pause();
 				}
 				else { //if there is no track -> stop

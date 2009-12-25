@@ -48,6 +48,7 @@ xnoise_VALASOURCES = \
 	xnoise-main.vala \
 	xnoise-main-window.vala \
 	xnoise-media-browser.vala \
+	xnoise-media-browser-model.vala \
 	xnoise-misc.vala \
 	xnoise-parameter.vala \
 	xnoise-plugin.vala \
@@ -58,6 +59,7 @@ xnoise_VALASOURCES = \
 	xnoise-settings-dialog.vala \
 	xnoise-tag-reader.vala \
 	xnoise-tracklist.vala \
+	xnoise-tracklist-model.vala \
 	xnoise-videoscreen.vala \
 	$(NULL)
 
