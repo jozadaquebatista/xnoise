@@ -42,6 +42,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		typeof(string), 
 		typeof(string)
 	};
+	public TreeRowReference? current_position = null;
 
 	public signal void sign_active_path_changed(TrackState ts);
 
@@ -96,10 +97,16 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		return iter;
 	}
 
-	public void set_state_picture_for_title(TreeIter iter, TrackState state = TrackState.STOPPED) {
+	public void set_state_picture_for_title(TreeIter iter,
+	                                        TrackState state = TrackState.STOPPED) {
 		Gdk.Pixbuf pixbuf = null;
 		var invisible = new Gtk.Invisible();
-	
+//Test for new treerowreference tracking
+		print("set_state_picture_for_title\n");
+		var tpath = this.get_path(iter);
+		if(tpath != null)
+			current_position = new TreeRowReference(this, tpath);
+//End test
 		if(state == TrackState.PLAYING) {
 			pixbuf = invisible.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
 			this.set(iter,
@@ -154,13 +161,60 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		return true;
 	}
 
-	public int get_n_rows() {
-		int val = 0;
-		val = this.iter_n_children(null);
-		print("get_n_rows: %d", val);
-		return val;
+	public bool not_empty() {
+		if(this.iter_n_children(null) > 0)
+			return true;
+		else
+			return false;
 	}
-	
+
+	public void mark_last_title_active() {
+		TreeIter iter;
+		int numberOfRows = 0;
+		numberOfRows = this.iter_n_children(null);
+		if(numberOfRows == 0) return;
+		this.iter_nth_child (out iter, null, numberOfRows -1);
+		this.set(iter,
+		         TrackListColumn.STATE, TrackState.POSITION_FLAG,
+		         -1
+		         );
+	}
+
+	// Resets visual state and the TrackState for all rows
+	public void reset_play_status_all_titles() {
+		TreeIter iter;
+		int numberOfRows = 0;
+		numberOfRows = this.iter_n_children(null);
+		if(numberOfRows==0) return;
+		
+		for(int i = 0; i < numberOfRows; i++) {
+			this.iter_nth_child(out iter, null, i);
+			this.set(iter,
+			         TrackListColumn.STATE, TrackState.STOPPED,
+			         TrackListColumn.ICON, null,
+			         -1
+			         );
+			this.unbolden_row(ref iter);
+		}
+	}
+
+	public string[] get_all_tracks() {
+		list_of_uris = {};
+		this.foreach(list_foreach);
+		return list_of_uris;
+	}
+
+	private string[] list_of_uris;
+	private bool list_foreach(TreeModel sender, TreePath path, TreeIter iter) { 
+		GLib.Value gv;
+		sender.get_value(
+			iter, 
+			TrackListColumn.URI, 
+			out gv);
+		list_of_uris += gv.get_string();
+		return false;
+	}
+
 	// find active row, set state picture, bolden and set uri for gpl
 	private bool set_track_state(TrackState ts) {
 		//print("tracklist: set_track_state\n");
@@ -209,18 +263,34 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		string valArtist = "";
 		string valAlbum = "";
 		string valTitle = "";
+		var tpath = current_position.get_path();
+		TreeIter citer;
+		this.get_iter(out citer, tpath);
+
 		this.get(
-			iter,
+			citer,
 			TrackListColumn.ARTIST,	out valArtist,
 			TrackListColumn.ALBUM,  out valAlbum,
 			TrackListColumn.TITLE,  out valTitle);
 		if(valTitle.has_prefix("<b>")) return;
 
-		this.set(iter,
+		this.set(citer,
 			TrackListColumn.ARTIST, "<b>%s</b>".printf(valArtist),
 			TrackListColumn.ALBUM,  "<b>%s</b>".printf(valAlbum),
 			TrackListColumn.TITLE,  "<b>%s</b>".printf(valTitle),
-			-1);
+			-1);		
+//		this.get(
+//			iter,
+//			TrackListColumn.ARTIST,	out valArtist,
+//			TrackListColumn.ALBUM,  out valAlbum,
+//			TrackListColumn.TITLE,  out valTitle);
+//		if(valTitle.has_prefix("<b>")) return;
+
+//		this.set(iter,
+//			TrackListColumn.ARTIST, "<b>%s</b>".printf(valArtist),
+//			TrackListColumn.ALBUM,  "<b>%s</b>".printf(valAlbum),
+//			TrackListColumn.TITLE,  "<b>%s</b>".printf(valTitle),
+//			-1);
 	}
 
 	public void unbolden_row(ref TreeIter iter) {

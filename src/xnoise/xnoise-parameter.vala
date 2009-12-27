@@ -29,6 +29,24 @@
  */
 
 public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
+	private const string default_content = """
+[settings_int]
+posY=25
+posX=0
+height=575
+fontsizeMB=0
+hp_position=227
+width=1024
+use_treelines=0
+repeatstate=0
+
+[settings_double]
+volume=0.29999999999999999
+
+[settings_string]
+activated_plugins=TitleToDecoration
+""";
+
 	private const string INIFILE   = "xnoise.ini";
 	private const string INIFOLDER = ".xnoise";
 	private List<IParams> IParams_implementers = new GLib.List<IParams>();
@@ -53,7 +71,12 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		//Put all values to hashtables on startup
 		KeyFile kf = new GLib.KeyFile();
 		try {
-			kf.load_from_file(build_file_name(), GLib.KeyFileFlags.NONE);
+			string? path = build_file_name();
+			if(path==null) {
+				print("Cannot get keyfile\n");
+				return;
+			}
+			kf.load_from_file(path, GLib.KeyFileFlags.NONE);
 			//write settings of type integer to hashtable
 			string[] groups;
 			groups = kf.get_keys(settings_int);
@@ -168,32 +191,37 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 
 
 
-	private string build_file_name() {
-		if(!create_file_folder()) {
+	private string? build_file_name() {
+		if(!check_file_folder())
 			print("Error with creating configuration directory.\n");
-		}
-		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), INIFOLDER, INIFILE, null);
+		string fname = GLib.Path.build_filename(GLib.Environment.get_home_dir(), INIFOLDER, INIFILE, null);
+		File f = File.new_for_path(fname);
+		return create_default_if_not_exist(f);
 	}
-	
-	private bool create_file_folder() { 
+
+	private string? create_default_if_not_exist(File f) {
+		if(!f.query_exists(null)) {
+			FileStream stream = FileStream.open(f.get_path(), "w");
+			if(stream != null) {
+				stream.printf(default_content);
+			}
+			else {
+				print("Error creating default ini file in %s \n", f.get_path());
+				return null;
+			}
+		}
+		return f.get_path();
+	}
+
+	private bool check_file_folder() { 
 		File home_dir = File.new_for_path(Environment.get_home_dir());
 		File xnoise_home = home_dir.get_child(".xnoise");
-		if (!xnoise_home.query_exists(null)) {
+		if(!xnoise_home.query_exists(null)) {
 			try {
-				File current_dir = xnoise_home;
-				File[] directory_list = {};
-				while(current_dir != null) {
-				    if(current_dir.query_exists(null)) break;
-					directory_list += current_dir;
-				    current_dir = current_dir.get_parent();
-				}
-				foreach(File dir in directory_list) {
-				    dir.make_directory(null);
-				}
-			} 
-			catch (Error e) {
-				stderr.printf("Error with create directory: %s", e.message);
-				return false;
+				xnoise_home.make_directory_with_parents(null);
+			}
+			catch(Error e) {
+				print("%s\n", e.message);
 			}
 		}
 		return true;

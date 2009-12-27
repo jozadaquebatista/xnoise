@@ -86,14 +86,7 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	public void add_track_to_gst_player(string uri) { //TODO: maybe return bool and check for fail
-		//print("main: add_track_to_gst_player\n");
-//		this.gPl.Uri = uri;
 		this.gPl.playSong();
-//		if(this.gPl.playing == false) {
-//			this.main_window.playpause_popup_image.set_from_stock(Gtk.STOCK_MEDIA_PAUSE, Gtk.IconSize.MENU);
-//			this.main_window.playPauseButton.set_pause_picture ();
-//			this.gPl.play();
-//		}
 	}
 
 	public static Main instance() {
@@ -119,10 +112,10 @@ public class Xnoise.Main : GLib.Object {
 		par.set_string_list_value("activated_plugins", activatedplugins);
 	}
 
-	private string[] final_tracklist;
+	private string[] final_tracklist = null;
 	public void save_tracklist() {
-		//print("write tracks into db....\n");
-		final_tracklist = this.main_window.trackList.get_all_tracks();	
+		final_tracklist =
+		    this.main_window.trackList.tracklistmodel.get_all_tracks();	
 		var dbwr = new DbWriter();
 		dbwr.write_final_tracks_to_db(final_tracklist);
 		final_tracklist = null;

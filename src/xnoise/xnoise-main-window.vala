@@ -409,10 +409,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.tracklistnotebook.set_current_page(2);
 	}
 
-//	private void on_fullscreen_clicked() {
-//		this.toggle_mainwindow_fullscreen();
-//	}
-
 	// This is used for the main window
 	private void toggle_mainwindow_fullscreen() {
 		if(is_fullscreen) {
@@ -483,7 +479,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void stop() {
 		xn.gPl.stop();
 		xn.gPl.Uri = "";
-		trackList.reset_play_status_all_titles();
+		trackList.tracklistmodel.reset_play_status_all_titles();
 		
 		//save position
 		int rowcount = -1;
@@ -525,7 +521,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		// if stopped
 		if((!xn.gPl.playing)&&(!xn.gPl.paused)) { 
-			trackList.reset_play_status_all_titles();
+			trackList.tracklistmodel.reset_play_status_all_titles();
 			return;
 		}
 
@@ -540,7 +536,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		// goto path, if possible...
 		if(trackList.tracklistmodel.get_iter(out iter, path)) {
-			trackList.reset_play_status_all_titles(); //visual reset
+			trackList.tracklistmodel.reset_play_status_all_titles(); //visual reset
 			if(xn.gPl.paused) {
 				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PAUSED);
 			}
@@ -553,7 +549,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		else if((trackList.tracklistmodel.get_iter_first(out iter))&&
 		        (((handle_repeat_state)&&
 		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) { 
-			trackList.reset_play_status_all_titles();
+			trackList.tracklistmodel.reset_play_status_all_titles();
 			if(xn.gPl.playing) {
 				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
 			}
@@ -565,8 +561,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		//...or stop
 		else {
 			xn.gPl.stop();                      //...or stop
-			trackList.reset_play_status_all_titles();
-			// trackList.set_focus_on_iter(ref iter);
+			trackList.tracklistmodel.reset_play_status_all_titles();
 			xn.gPl.Uri = "";
 		}
 	}
@@ -680,7 +675,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				if(album=="unknown album" && 
 				   artist=="unknown artist" && 
 				   title=="unknown title") 
-					text = Markup.printf_escaped("<b>%s</b>", basename);
+					if((basename == null)||(basename == "")) {
+						text = Markup.printf_escaped("<b>...</b>");
+					}
+					else {
+						text = Markup.printf_escaped("<b>%s</b>", basename);
+					}
 			}
 			else {
 				if((!xn.gPl.playing)&&
@@ -742,9 +742,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				   title=="unknown title") {
 				   
 					if(organization!="unknown organization") 
-						text = Markup.printf_escaped("<b>%s</b>", organization);
+						text = Markup.printf_escaped("<b>%s</b>", _("unknown organization"));
 					else if(location!="unknown location") 
-						text = Markup.printf_escaped("<b>%s</b>", location);
+						text = Markup.printf_escaped("<b>%s</b>", _("unknown location"));
 					else
 						text = Markup.printf_escaped("<b>%s</b>", file.get_uri());
 				}
@@ -783,14 +783,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private bool on_trayicon_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
 		if(event.scroll.direction==Gdk.ScrollDirection.DOWN) {
-			double temp = this.xn.gPl.volume - 0.05;
-			if(temp<0.0) temp = 0.0;
+			double temp = this.xn.gPl.volume - 0.02;
+			if(temp < 0.0) temp = 0.0;
 			this.xn.gPl.volume = temp;
 			return false;
 		}
 		else if(event.scroll.direction==Gdk.ScrollDirection.UP) {
-			double temp = this.xn.gPl.volume + 0.05;
-			if(temp>1.0) temp = 1.0;
+			double temp = this.xn.gPl.volume + 0.02;
+			if(temp > 1.0) temp = 1.0;
 			this.xn.gPl.volume = temp;
 			return false;
 		}
@@ -800,12 +800,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private void create_widgets() {
 		try {
-//			assert(GLib.FileUtils.test(MAIN_UI_FILE, FileTest.EXISTS));
-			
 			Builder gb = new Gtk.Builder();
 			gb.add_from_file(MAIN_UI_FILE);
 			
-//			this.window = gb.get_object("window1") as Gtk.Window;
 			this.mainvbox = gb.get_object("mainvbox") as Gtk.VBox;
 			this.title = "xnoise media player";
 			this.set_icon_from_file(APPICON);							
@@ -827,11 +824,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
 			//--------------------
 
-			//SHOW VIDEO LABEL
-//			this.showvideolabel            = gb.get_object("showvideolabel") as Gtk.Label;
-//			this.showvideolabel.set_text(SHOWVIDEO);
-			//--------------------
-			
 			//SHOW VIDEO BUTTONS
 			showvideobuttonTL                = gb.get_object("showvideobuttonTL") as Gtk.Button;
 			showvideobuttonTL.can_focus      = false;
@@ -882,8 +874,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			this.albumimage = new AlbumImage();
 			albumviewport.add(this.albumimage);
-//			albumimage.albumimage.button_press_event.connect(on_album_image_enter);
-//			albumimage.leave_notify_event.connect(on_album_image_leave);
 			//--------------------
 
 			//PLAYING TITLE NAME
@@ -1013,7 +1003,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private Main xn;
 		public NextButton() {
 			this.xn = Main.instance ();
-			var img = new Gtk.Image.from_stock("gtk-media-next", Gtk.IconSize.SMALL_TOOLBAR);
+			var img = new Gtk.Image.from_stock(STOCK_MEDIA_NEXT, Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.can_focus = false;
@@ -1032,7 +1022,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private Main xn;
 		public PreviousButton() {
 			this.xn = Main.instance();
-			var img = new Gtk.Image.from_stock("gtk-media-previous", Gtk.IconSize.SMALL_TOOLBAR);
+			var img = new Gtk.Image.from_stock(STOCK_MEDIA_PREVIOUS, Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.can_focus = false;
@@ -1051,7 +1041,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private Main xn;
 		public StopButton() {
 			xn = Main.instance();
-			var img = new Gtk.Image.from_stock("gtk-media-stop", Gtk.IconSize.SMALL_TOOLBAR);
+			var img = new Gtk.Image.from_stock(STOCK_MEDIA_STOP, Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image (img);
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.can_focus = false;
@@ -1096,8 +1086,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		private void handle_click() {
 			if((!xn.gPl.playing)&&
-			   ((xn.tl.not_empty())||(xn.gPl.Uri != ""))) {   
-			   // not running and track available set to play
+			   ((xn.tl.tracklistmodel.not_empty())||(xn.gPl.Uri != ""))) {   
+			//not running and track available set to play
 				if(xn.gPl.Uri == "") { // play selected track, if available....
 					weak TreeSelection ts = xn.tl.get_selection();
 					GLib.List<TreePath> pathlist = ts.get_selected_rows(null);

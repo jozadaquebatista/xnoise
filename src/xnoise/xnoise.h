@@ -893,6 +893,7 @@ struct _XnoiseTrackListClass {
 struct _XnoiseTrackListModel {
 	GtkListStore parent_instance;
 	XnoiseTrackListModelPrivate * priv;
+	GtkTreeRowReference* current_position;
 };
 
 struct _XnoiseTrackListModelClass {
@@ -1184,13 +1185,10 @@ XnoiseTagReader* xnoise_tag_reader_new (void);
 XnoiseTagReader* xnoise_tag_reader_construct (GType object_type);
 XnoiseTrackList* xnoise_track_list_new (void);
 XnoiseTrackList* xnoise_track_list_construct (GType object_type);
-char** xnoise_track_list_get_all_tracks (XnoiseTrackList* self, int* result_length1);
 void xnoise_track_list_add_tracks (XnoiseTrackList* self, XnoiseTrackData** td_list, int td_list_length1, gboolean imediate_play);
 void xnoise_track_list_add_uris (XnoiseTrackList* self, char** uris, int uris_length1);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_selected_rows (XnoiseTrackList* self);
-gboolean xnoise_track_list_not_empty (XnoiseTrackList* self);
-void xnoise_track_list_reset_play_status_all_titles (XnoiseTrackList* self);
 void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, GtkTreePath* path);
 char* xnoise_track_list_get_uri_for_treepath (XnoiseTrackList* self, GtkTreePath* path);
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
@@ -1199,7 +1197,10 @@ gboolean xnoise_track_list_model_get_active_path (XnoiseTrackListModel* self, Gt
 void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, XnoiseTrackState status, GdkPixbuf* pixbuf, gint tracknumber, const char* title, const char* album, const char* artist, const char* uri, GtkTreeIter* result);
 void xnoise_track_list_model_set_state_picture_for_title (XnoiseTrackListModel* self, GtkTreeIter* iter, XnoiseTrackState state);
 gboolean xnoise_track_list_model_set_play_state_for_first_song (XnoiseTrackListModel* self);
-gint xnoise_track_list_model_get_n_rows (XnoiseTrackListModel* self);
+gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
+void xnoise_track_list_model_mark_last_title_active (XnoiseTrackListModel* self);
+void xnoise_track_list_model_reset_play_status_all_titles (XnoiseTrackListModel* self);
+char** xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
 gboolean xnoise_track_list_model_set_play_state (XnoiseTrackListModel* self);
 gboolean xnoise_track_list_model_set_pause_state (XnoiseTrackListModel* self);
 void xnoise_track_list_model_bolden_row (XnoiseTrackListModel* self, GtkTreeIter* iter);

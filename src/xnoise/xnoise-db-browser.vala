@@ -350,7 +350,9 @@ public class Xnoise.DbBrowser : GLib.Object {
 		if((val.Title== "") | (val.Title== null)) {
 			val.Title = "unknown title";
 			File file = File.new_for_uri(uri);
-			string fileBasename = GLib.Filename.display_basename(file.get_path());
+			string fpath = file.get_path();
+			string fileBasename = "";
+			if(fpath!=null) fileBasename = GLib.Filename.display_basename(fpath);
 			val.Title = fileBasename;
 		}
 		return retval;

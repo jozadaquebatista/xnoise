@@ -152,8 +152,6 @@ public class Xnoise.TrackList : TreeView {
 		removetrackItem.add(removeHbox);
 		removetrackItem.activate.connect(this.remove_selected_rows);
 		rightmenu.append(removetrackItem);
-//		var separator = new SeparatorMenuItem();
-//		rightmenu.append(separator);
 		rightmenu.show_all();
 		return rightmenu;
 	}
@@ -221,9 +219,10 @@ public class Xnoise.TrackList : TreeView {
 			);
 	}
 
-	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context, Gtk.SelectionData selection, 
-	                             uint target_type, uint etime) {
-		rowref_list = new TreeRowReference[0];
+	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context,
+	                              Gtk.SelectionData selection, 
+	                              uint target_type, uint etime) {
+		rowref_list = {};//new TreeRowReference[0];
 		TreeIter iter;
 		GLib.Value uri;
 		List<weak TreePath> paths;
@@ -247,35 +246,19 @@ public class Xnoise.TrackList : TreeView {
 		selection.set_uris(uris); 
 	}
 
-	private string[] list_of_uris;
-	private bool list_foreach(TreeModel sender, TreePath path, TreeIter iter) { 
-		GLib.Value gv;
-		sender.get_value(
-			iter, 
-			TrackListColumn.URI, 
-			out gv);
-		list_of_uris += gv.get_string();
-		return false;
-	}
-	
-	public string[] get_all_tracks() {
-		list_of_uris = {};
-		this.tracklistmodel.foreach(list_foreach);
-		return list_of_uris;
-	}
-
-	private Gtk.TreeViewDropPosition position;
+	private Gtk.TreeViewDropPosition drop_pos;
 	private void on_drag_data_received(Gtk.Widget sender, DragContext context, int x, int y, 
 	                                   SelectionData selection, uint target_type, uint time) {
 		//set uri list for dragging out of xnoise. in parallel work around with rowreferences
-		//if reorder = false then data is coming from outside (music browser or nautilus) -> use uri_list
+		//if reorder = false then data is coming from outside (music browser or nautilus)
+		// -> use uri_list
 		Gtk.TreePath path;
 		TreeRowReference drop_rowref;
 		string uri = null;
 		File file;
 		FileType filetype;
 		string[] uris = selection.get_uris();
-		this.get_dest_row_at_pos(x, y, out path, out position);
+		this.get_dest_row_at_pos(x, y, out path, out drop_pos);
 		DbBrowser dbBr = new DbBrowser();
 
 		if(!this.reorder_dragging) { 					// DRAGGING NOT WITHIN TRACKLIST
@@ -327,8 +310,8 @@ public class Xnoise.TrackList : TreeView {
 					return;
 				}
 			}
-			if((!(position == Gtk.TreeViewDropPosition.BEFORE))&&
-			   (!(position == Gtk.TreeViewDropPosition.INTO_OR_BEFORE))) {
+			if((!(drop_pos == Gtk.TreeViewDropPosition.BEFORE))&&
+			   (!(drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE))) {
 				for(int i=rowref_list.length-1;i>=0;i--) {
 					if (rowref_list[i] == null || !rowref_list[i].valid()) {
 						return;
@@ -357,7 +340,7 @@ public class Xnoise.TrackList : TreeView {
 				}
 			}
 		}
-		position = Gtk.TreeViewDropPosition.AFTER; //Default position for next run
+		drop_pos = Gtk.TreeViewDropPosition.AFTER; //Default position for next run
 		rowref_list = null;
 		if(xn.main_window.drag_on_da) {
 			xn.main_window.drag_on_da = false;
@@ -428,8 +411,8 @@ public class Xnoise.TrackList : TreeView {
 		else { //all other uris
 			this.tracklistmodel.get_iter(out iter, path); 
 			if(is_first) {
-				if((position == Gtk.TreeViewDropPosition.BEFORE)||
-				   (position == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) { 
+				if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
+				   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) { 
 				   //Determine drop position for first, insert all others after first
 					this.tracklistmodel.insert_before(out new_iter, iter);
 				}
@@ -514,8 +497,8 @@ public class Xnoise.TrackList : TreeView {
 			else { //all other uris
 				this.tracklistmodel.get_iter(out iter, path); 
 				if(is_first) {
-					if((position == Gtk.TreeViewDropPosition.BEFORE)||
-					   (position == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) { 
+					if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
+					   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) { 
 					   //Determine drop position for first, insert all others after first
 						this.tracklistmodel.insert_before(out new_iter, iter);
 					}
@@ -556,7 +539,7 @@ public class Xnoise.TrackList : TreeView {
 		int k = 0;
 		TreeIter iter, iter_2;
 		File file;
-		this.reset_play_status_all_titles();
+		tracklistmodel.reset_play_status_all_titles();
 		while(td_list[k]!=null) {
 			string current_uri = td_list[k].Uri;
 			file = File.new_for_uri(current_uri);
@@ -593,8 +576,8 @@ public class Xnoise.TrackList : TreeView {
 		int k = 0;
 		TreeIter iter, iter_2;
 		FileType filetype;
-		this.reset_play_status_all_titles();
-		while(uris[k]!=null) { //because foreach is not working for this array coming from libunique
+		tracklistmodel.reset_play_status_all_titles();
+		while(uris[k] != null) { //because foreach is not working for this array coming from libunique
 			File file;
 			TagReader tr = new TagReader();
 			file = File.new_for_uri(uris[k]);
@@ -734,40 +717,7 @@ public class Xnoise.TrackList : TreeView {
 			tracklistmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
 			return;
 		}
-		if(removed_playing_title) this.mark_last_title_active();
-	}
-
-	private void mark_last_title_active() {
-		TreeIter iter;
-		int numberOfRows = 0;
-		numberOfRows = tracklistmodel.iter_n_children(null);
-		if (numberOfRows == 0) return;
-		tracklistmodel.iter_nth_child (out iter, null, numberOfRows -1);
-		tracklistmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
-	}
-	
-	public bool not_empty() {
-		if(tracklistmodel.iter_n_children(null)>0)
-			return true;
-		else
-			return false;
-	}
-	
-	// Resets visual state and the TrackState for all rows
-	public void reset_play_status_all_titles() {
-		TreeIter iter;
-		int numberOfRows = 0;
-		numberOfRows = tracklistmodel.iter_n_children(null);
-		if(numberOfRows==0) return;
-		
-		for(int i = 0; i < numberOfRows; i++) {
-			tracklistmodel.iter_nth_child(out iter, null, i);
-			tracklistmodel.set(iter,
-			              TrackListColumn.STATE, TrackState.STOPPED,
-			              TrackListColumn.ICON, null,
-			              -1);
-			tracklistmodel.unbolden_row(ref iter);
-		}
+		if(removed_playing_title) tracklistmodel.mark_last_title_active();
 	}
 
 	public void on_activated(string uri, TreePath path) {
@@ -779,8 +729,8 @@ public class Xnoise.TrackList : TreeView {
 		}
 		
 		TreeIter iter;
-		this.tracklistmodel.get_iter(out iter, path);
-		this.reset_play_status_all_titles();
+		tracklistmodel.get_iter(out iter, path);
+		tracklistmodel.reset_play_status_all_titles();
 		tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
 	}
 
@@ -896,7 +846,7 @@ public class Xnoise.TrackList : TreeView {
 		columnTitle.sizing       = Gtk.TreeViewColumnSizing.GROW_ONLY;
 		
 		this.search_column = TrackListColumn.TITLE;
-		this.enable_search = true;
+		this.enable_search = false;
 		this.rules_hint = true;
 	}
 }
