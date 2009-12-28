@@ -42,7 +42,17 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		typeof(string), 
 		typeof(string)
 	};
-	public TreeRowReference? current_position = null;
+
+//	public TreeRowReference? current_position = null; 
+	private TreeRowReference? _current_position = null;
+	public TreeRowReference current_position { 
+		get {
+			return _current_position;
+		}
+		set {
+			_current_position = value;
+		}
+	}
 
 	public signal void sign_active_path_changed(TrackState ts);
 
@@ -53,32 +63,47 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	// gets active path, or first path
-	public bool get_active_path(out TreePath treepath, out TrackState currentstate, out bool is_first) {
-		//print("tracklist: get_active_path\n");
+	public bool get_active_path(out TreePath treepath,
+	                            out TrackState currentstate,
+	                            out bool is_first) {
+
 		TreeIter iter;
 		is_first = false;
-		currentstate = TrackState.STOPPED;
-		int numberOfRows = this.iter_n_children(null);
-		for(int i = 0; i < numberOfRows; i++) {
-			this.iter_nth_child(out iter, null, i);
-			this.get(iter,
-			         TrackListColumn.STATE, out currentstate
-			         );
-			if(currentstate != TrackState.STOPPED) {
-				treepath = this.get_path(iter);
+		if(current_position!=null) {
+			treepath = current_position.get_path();
+			if(treepath!=null) {
+				print("active path: " + treepath.to_string() + "\n");
+				if(treepath.to_string()=="0") is_first = true; 
+				TreeIter citer;
+				this.get_iter(out citer, treepath);
+				this.get(citer,
+						 TrackListColumn.STATE, out currentstate
+						 );
 				return true;
 			}
+			return false;
 		}
 		if(this.get_iter_first(out iter)) {
 			// first song in list
-			treepath = this.get_path(iter); 
+			treepath = this.get_path(iter);
+
+			if(treepath != null)
+				current_position = new TreeRowReference(this, treepath);
+ 
 			is_first = true;
 			return true;
 		}
 		return false;
 	}
 
-	public TreeIter insert_title(TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri) {
+	public TreeIter insert_title(TrackState status = TrackState.STOPPED,
+	                             Gdk.Pixbuf? pixbuf,
+	                             int tracknumber,
+	                             string title,
+	                             string album,
+	                             string artist,
+	                             string uri
+	                             ) {
 		TreeIter iter;
 		string? tracknumberString = null;
 		this.append(out iter);
@@ -104,8 +129,13 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 //Test for new treerowreference tracking
 		print("set_state_picture_for_title\n");
 		var tpath = this.get_path(iter);
-		if(tpath != null)
+		if(tpath != null) {
 			current_position = new TreeRowReference(this, tpath);
+		}
+		else {
+			print("cannot setup treerowref\n");
+			return;
+		}
 //End test
 		if(state == TrackState.PLAYING) {
 			pixbuf = invisible.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
@@ -113,7 +143,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				TrackListColumn.STATE, TrackState.PLAYING,
 				TrackListColumn.ICON, pixbuf,
 				-1);
-			bolden_row(ref iter);
+			bolden_row();
 			sign_active_path_changed(state);
 		}
 		else if(state==TrackState.PAUSED) {
@@ -122,7 +152,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				TrackListColumn.STATE, TrackState.PAUSED,
 				TrackListColumn.ICON, pixbuf,
 				-1);
-			bolden_row(ref iter);
+			bolden_row();
 			sign_active_path_changed(state);
 		}
 	}
@@ -138,25 +168,29 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		if(numberOfRows==0) return false;
 		
 		this.iter_nth_child(out iter, null, 0);
+		var tpath = this.get_path(iter);
+		if(tpath != null)
+			current_position = new TreeRowReference(this, tpath);
 		
 		this.get(iter, 
-		              TrackListColumn.URI, out uri
-		              );
+		         TrackListColumn.URI, out uri
+		         );
+
 		if(uri == xn.gPl.Uri) {	  
 			this.set(iter,
-			              TrackListColumn.ICON, pixbuf,
-			              TrackListColumn.STATE, TrackState.PLAYING,
-			              -1
-			              );
-			bolden_row(ref iter);
+			         TrackListColumn.ICON, pixbuf,
+			         TrackListColumn.STATE, TrackState.PLAYING,
+			         -1
+			         );
+			bolden_row();
 			xn.gPl.Uri = uri;
 		}
 		else {
 			this.set(iter,
-			              TrackListColumn.ICON, null,
-			              TrackListColumn.STATE, TrackState.POSITION_FLAG,
-			              -1
-			              );
+			         TrackListColumn.ICON, null,
+			         TrackListColumn.STATE, TrackState.POSITION_FLAG,
+			         -1
+			         );
 		}
 		return true;
 	}
@@ -178,6 +212,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		         TrackListColumn.STATE, TrackState.POSITION_FLAG,
 		         -1
 		         );
+		var tpath = this.get_path(iter);
+		if(tpath != null)
+			current_position = new TreeRowReference(this, tpath);
 	}
 
 	// Resets visual state and the TrackState for all rows
@@ -194,7 +231,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			         TrackListColumn.ICON, null,
 			         -1
 			         );
-			this.unbolden_row(ref iter);
+			this.unbolden_row();
 		}
 	}
 
@@ -217,38 +254,65 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 
 	// find active row, set state picture, bolden and set uri for gpl
 	private bool set_track_state(TrackState ts) {
-		//print("tracklist: set_track_state\n");
-		TreeIter iter;
+		print("tracklist: set_track_state\n");
 		Gdk.Pixbuf? pixbuf = null;
 		Gtk.Invisible w = new Gtk.Invisible();
+		if(current_position==null) {
+			print("current position not found\n");
+			return false;
+		}
+		//var tpath = current_position.get_path();
+		TreeIter citer;
+		this.get_iter(out citer, current_position.get_path());
 		string uri;
 		if(ts==TrackState.PLAYING)
 			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
 		else if(ts==TrackState.PAUSED)
 			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PAUSE, IconSize.BUTTON, null);
-		int numberOfRows = (int)this.iter_n_children(null);
-		if(numberOfRows==0) return false;
-		for(int i=0; i<numberOfRows; i++) {
-			int state = 0;
-			this.iter_nth_child(out iter, null, i);
-			this.get(iter, 
-			         TrackListColumn.STATE, out state
-			         );
-			if(state>0) {
-				this.get(iter, 
-				         TrackListColumn.URI, out uri
-				         );
-				if(uri==xn.gPl.Uri) {
-					this.set(iter,
-					         TrackListColumn.ICON, pixbuf,
-					         -1
-					         );
-					bolden_row(ref iter);
-				}
-				return true;
-			}
+
+		this.get(citer, 
+				 TrackListColumn.URI, out uri
+				 );
+		if(uri==xn.gPl.Uri) {
+			this.set(citer,
+					 TrackListColumn.ICON, pixbuf,
+					 -1
+					 );
+			bolden_row();
 		}
-		return false;		
+		return true;
+
+//		TreeIter iter;
+//		Gdk.Pixbuf? pixbuf = null;
+//		Gtk.Invisible w = new Gtk.Invisible();
+//		string uri;
+//		if(ts==TrackState.PLAYING)
+//			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
+//		else if(ts==TrackState.PAUSED)
+//			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PAUSE, IconSize.BUTTON, null);
+//		int numberOfRows = (int)this.iter_n_children(null);
+//		if(numberOfRows==0) return false;
+//		for(int i=0; i<numberOfRows; i++) {
+//			int state = 0;
+//			this.iter_nth_child(out iter, null, i);
+//			this.get(iter, 
+//			         TrackListColumn.STATE, out state
+//			         );
+//			if(state>0) {
+//				this.get(iter, 
+//				         TrackListColumn.URI, out uri
+//				         );
+//				if(uri==xn.gPl.Uri) {
+//					this.set(iter,
+//					         TrackListColumn.ICON, pixbuf,
+//					         -1
+//					         );
+//					bolden_row();
+//				}
+//				return true;
+//			}
+//		}
+//		return false;		
 	}
 	
 	public bool set_play_state() {
@@ -259,13 +323,14 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		return set_track_state(TrackState.PAUSED);
 	}
 
-	public void bolden_row(ref TreeIter iter) {
+	public void bolden_row() {
 		string valArtist = "";
 		string valAlbum = "";
 		string valTitle = "";
-		var tpath = current_position.get_path();
+		if(current_position==null) return;
+		//var tpath = current_position.get_path();
 		TreeIter citer;
-		this.get_iter(out citer, tpath);
+		this.get_iter(out citer, current_position.get_path());
 
 		this.get(
 			citer,
@@ -279,36 +344,31 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			TrackListColumn.ALBUM,  "<b>%s</b>".printf(valAlbum),
 			TrackListColumn.TITLE,  "<b>%s</b>".printf(valTitle),
 			-1);		
-//		this.get(
-//			iter,
-//			TrackListColumn.ARTIST,	out valArtist,
-//			TrackListColumn.ALBUM,  out valAlbum,
-//			TrackListColumn.TITLE,  out valTitle);
-//		if(valTitle.has_prefix("<b>")) return;
-
-//		this.set(iter,
-//			TrackListColumn.ARTIST, "<b>%s</b>".printf(valArtist),
-//			TrackListColumn.ALBUM,  "<b>%s</b>".printf(valAlbum),
-//			TrackListColumn.TITLE,  "<b>%s</b>".printf(valTitle),
-//			-1);
 	}
 
-	public void unbolden_row(ref TreeIter iter) {
+	public void unbolden_row() {
 		string valArtist = "";
 		string valAlbum = "";
 		string valTitle = "";
-		this.get(iter,
-			TrackListColumn.ARTIST, 
-			out valArtist,
-			TrackListColumn.ALBUM, 
-			out valAlbum,
-			TrackListColumn.TITLE, 
-			out valTitle);
+		
+		if(current_position== null) return;
+
+		//var tpath = current_position.get_path();
+		TreeIter citer;
+		this.get_iter(out citer, current_position.get_path());
+		this.get(citer,
+		         TrackListColumn.ARTIST, 
+		         out valArtist,
+		         TrackListColumn.ALBUM, 
+		         out valAlbum,
+		         TrackListColumn.TITLE, 
+		         out valTitle);
+
 		if(valTitle.has_prefix("<b>")) {
 			string artist = valArtist.substring(3, (int)valArtist.length - 7); 
 			string album  = valAlbum.substring( 3, (int)valAlbum.length  - 7);
 			string title  = valTitle.substring( 3, (int)valTitle.length  - 7);
-			this.set(iter,
+			this.set(citer,
 			         TrackListColumn.ARTIST, artist,
 			         TrackListColumn.ALBUM,  album,
 			         TrackListColumn.TITLE,  title,

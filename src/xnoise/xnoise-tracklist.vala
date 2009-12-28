@@ -571,8 +571,8 @@ public class Xnoise.TrackList : TreeView {
 	}
 	
 	public void add_uris(string[]? uris) {
-		if(uris==null) return;
-		if(uris[0]==null) return;
+		if(uris == null) return;
+		if(uris[0] == null) return;
 		int k = 0;
 		TreeIter iter, iter_2;
 		FileType filetype;
@@ -609,23 +609,23 @@ public class Xnoise.TrackList : TreeView {
 			}
 			if(k==0) {
 				iter = tracklistmodel.insert_title(TrackState.PLAYING, 
-											  null, 
-											  (int)t.Tracknumber,
-											  t.Title, 
-											  t.Album, 
-											  t.Artist, 
-											  uris[k]);
+				                              null, 
+				                              (int)t.Tracknumber,
+				                              t.Title, 
+				                              t.Album, 
+				                              t.Artist, 
+				                              uris[k]);
 				tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
 				iter_2 = iter;
 			}
 			else {
 				iter = tracklistmodel.insert_title(TrackState.STOPPED, 
-											  null, 
-											  (int)t.Tracknumber,
-											  t.Title, 
-											  t.Album, 
-											  t.Artist, 
-											  uris[k]);	
+				                              null, 
+				                              (int)t.Tracknumber,
+				                              t.Title, 
+				                              t.Album, 
+				                              t.Artist, 
+				                              uris[k]);	
 				tracklistmodel.set_state_picture_for_title(iter);
 			}
 			tr = null;
@@ -706,8 +706,11 @@ public class Xnoise.TrackList : TreeView {
 			tracklistmodel.get(iter,
 			              TrackListColumn.STATE, out state
 			              );
-			if((state==TrackState.PLAYING)||
-			   (state==TrackState.PAUSED)) {
+			if((tracklistmodel.current_position!=null)&&
+			   (!removed_playing_title)&&
+			   (path.compare(tracklistmodel.current_position.get_path())==0)) {
+//			if((state==TrackState.PLAYING)||
+//			   (state==TrackState.PAUSED)) {
 				removed_playing_title = true;
 			}
 			tracklistmodel.remove(iter);
@@ -715,6 +718,7 @@ public class Xnoise.TrackList : TreeView {
 		if(path_2.prev() && removed_playing_title) { 
 			tracklistmodel.get_iter(out iter, path_2);
 			tracklistmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
+			tracklistmodel.current_position = new TreeRowReference(tracklistmodel, path_2);
 			return;
 		}
 		if(removed_playing_title) tracklistmodel.mark_last_title_active();
@@ -737,14 +741,19 @@ public class Xnoise.TrackList : TreeView {
 	private void on_active_path_changed(TrackListModel sender, TrackState ts) {
 		// set gst player to active title coming from tracklist
 		// triggered by a signal in set_state_picture_for_title
-		//print("tracklist: on_active_path_changed\n");
+		print("tracklist: on_active_path_changed\n");
 		TreePath treepath;
 		TrackState currentstate;
 		bool is_first;
-		if(!tracklistmodel.get_active_path(out treepath, out currentstate, out is_first))
+		if(!tracklistmodel.get_active_path(
+		   out treepath,
+		   out currentstate,
+		   out is_first)
+		   )
 			return;
 		
-		string uri = this.get_uri_for_treepath(treepath);
+		string uri = this.get_uri_for_current_position();
+		//this.get_uri_for_treepath(treepath);
 
 		if((uri!=null)&&(uri!="")) {
 			if(xn.gPl.Uri != uri) xn.gPl.Uri = uri;
@@ -754,16 +763,30 @@ public class Xnoise.TrackList : TreeView {
 				xn.gPl.playSong();
 		}
 	}
-	
-	public string get_uri_for_treepath(TreePath path) {
-		TreeIter iter;
+
+	public string get_uri_for_current_position() {
 		string uri = "";
-		if(tracklistmodel.get_iter(out iter, path)) {
+		TreeIter iter;
+		if(tracklistmodel.current_position != null) {
+			//var tp = tracklistmodel.current_position.get_path();
+			tracklistmodel.get_iter(out iter,
+			                        tracklistmodel.current_position.get_path()
+			                        );
 			tracklistmodel.get(iter,
 				TrackListColumn.URI, out uri);
 		}
 		return uri;
 	}
+	
+//	public string get_uri_for_treepath(TreePath path) {
+//		TreeIter iter;
+//		string uri = "";
+//		if(tracklistmodel.get_iter(out iter, path)) {
+//			tracklistmodel.get(iter,
+//				TrackListColumn.URI, out uri);
+//		}
+//		return uri;
+//	}
 
 	private void setup_view() {	
 		CellRendererText renderer; 

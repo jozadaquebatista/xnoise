@@ -893,7 +893,6 @@ struct _XnoiseTrackListClass {
 struct _XnoiseTrackListModel {
 	GtkListStore parent_instance;
 	XnoiseTrackListModelPrivate * priv;
-	GtkTreeRowReference* current_position;
 };
 
 struct _XnoiseTrackListModelClass {
@@ -1190,7 +1189,7 @@ void xnoise_track_list_add_uris (XnoiseTrackList* self, char** uris, int uris_le
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_selected_rows (XnoiseTrackList* self);
 void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, GtkTreePath* path);
-char* xnoise_track_list_get_uri_for_treepath (XnoiseTrackList* self, GtkTreePath* path);
+char* xnoise_track_list_get_uri_for_current_position (XnoiseTrackList* self);
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
 XnoiseTrackListModel* xnoise_track_list_model_construct (GType object_type);
 gboolean xnoise_track_list_model_get_active_path (XnoiseTrackListModel* self, GtkTreePath** treepath, XnoiseTrackState* currentstate, gboolean* is_first);
@@ -1203,8 +1202,10 @@ void xnoise_track_list_model_reset_play_status_all_titles (XnoiseTrackListModel*
 char** xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
 gboolean xnoise_track_list_model_set_play_state (XnoiseTrackListModel* self);
 gboolean xnoise_track_list_model_set_pause_state (XnoiseTrackListModel* self);
-void xnoise_track_list_model_bolden_row (XnoiseTrackListModel* self, GtkTreeIter* iter);
-void xnoise_track_list_model_unbolden_row (XnoiseTrackListModel* self, GtkTreeIter* iter);
+void xnoise_track_list_model_bolden_row (XnoiseTrackListModel* self);
+void xnoise_track_list_model_unbolden_row (XnoiseTrackListModel* self);
+const GtkTreeRowReference* xnoise_track_list_model_get_current_position (XnoiseTrackListModel* self);
+void xnoise_track_list_model_set_current_position (XnoiseTrackListModel* self, const GtkTreeRowReference* value);
 XnoiseVideoScreen* xnoise_video_screen_new (void);
 XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type);
 void xnoise_video_screen_trigger_expose (XnoiseVideoScreen* self);

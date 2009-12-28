@@ -335,19 +335,18 @@ namespace Xnoise {
 		public TrackList ();
 		public void add_tracks (Xnoise.TrackData[]? td_list, bool imediate_play = true);
 		public void add_uris (string[]? uris);
-		public string get_uri_for_treepath (Gtk.TreePath path);
+		public string get_uri_for_current_position ();
 		public void on_activated (string uri, Gtk.TreePath path);
 		public void remove_selected_rows ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackListModel : Gtk.ListStore, Gtk.TreeModel {
-		public Gtk.TreeRowReference? current_position;
 		public TrackListModel ();
-		public void bolden_row (ref Gtk.TreeIter iter);
+		public void bolden_row ();
 		public bool get_active_path (out Gtk.TreePath treepath, out Xnoise.TrackState currentstate, out bool is_first);
 		public string[] get_all_tracks ();
-		public Gtk.TreeIter insert_title (Xnoise.TrackState status = 0, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
+		public Gtk.TreeIter insert_title (Xnoise.TrackState status = Xnoise.TrackState.STOPPED, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
 		public void mark_last_title_active ();
 		public bool not_empty ();
 		public void reset_play_status_all_titles ();
@@ -355,7 +354,8 @@ namespace Xnoise {
 		public bool set_play_state ();
 		public bool set_play_state_for_first_song ();
 		public void set_state_picture_for_title (Gtk.TreeIter iter, Xnoise.TrackState state = Xnoise.TrackState.STOPPED);
-		public void unbolden_row (ref Gtk.TreeIter iter);
+		public void unbolden_row ();
+		public Gtk.TreeRowReference current_position { get; set; }
 		public signal void sign_active_path_changed (Xnoise.TrackState ts);
 	}
 	[CCode (cheader_filename = "xnoise.h")]

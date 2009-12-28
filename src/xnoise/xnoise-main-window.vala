@@ -507,26 +507,29 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		int rowcount = -1;
 		rowcount = (int)trackList.tracklistmodel.iter_n_children(null);
 		
-		if(rowcount==0) {
+		if(rowcount == 0) {
 			// if no track is in the list, it does not make sense to go any further
 			stop();
 			return;
 		}
 
 		// active path sets first path if active is not found
-		if(!trackList.tracklistmodel.get_active_path(out path, out currentstate, out is_first)) {
+		if(!trackList.tracklistmodel.get_active_path(out path,
+		                                             out currentstate,
+		                                             out is_first)
+		                                             ) {
 			stop();
 			return;
 		}
 
 		// if stopped
-		if((!xn.gPl.playing)&&(!xn.gPl.paused)) { 
+		if((!xn.gPl.playing)&&(!xn.gPl.paused)) {
 			trackList.tracklistmodel.reset_play_status_all_titles();
 			return;
 		}
 
 		// get next or previous path
-		if((!(handle_repeat_state && (repeatState==Repeat.SINGLE))) && !is_first) {
+		if((!(handle_repeat_state && (repeatState==Repeat.SINGLE)))) {
 			if(direction == Direction.NEXT) path.next();
 			else if((direction == Direction.PREVIOUS)&&
 			        (path.to_string() != "0")) {
@@ -1092,8 +1095,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					weak TreeSelection ts = xn.tl.get_selection();
 					GLib.List<TreePath> pathlist = ts.get_selected_rows(null);
 					if(pathlist.nth_data(0)!=null) {
-						string uri = xn.tl.get_uri_for_treepath(pathlist.nth_data(0));
-						xn.tl.on_activated(uri, pathlist.nth_data(0));
+						string uri = xn.tl.get_uri_for_current_position();
+						//string uri = xn.tl.get_uri_for_treepath(pathlist.nth_data(0));
+						TreePath tp = xn.tl.tracklistmodel.current_position.get_path();
+						xn.tl.on_activated(uri, tp);
+						//xn.tl.on_activated(uri, pathlist.nth_data(0));
 					}
 					else {
 						//.....or play previous song
