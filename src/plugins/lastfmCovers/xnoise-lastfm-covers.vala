@@ -79,12 +79,12 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	public LastFmCovers(string artist, string album) {
 		this.artist = artist;
 		this.album = album;
-		//print("new backend\n");
+		print("new backend\n");
 	}
 	
-	//~LastFmCovers() {
-		//print("dstrct backend\n");
-	//}
+	~LastFmCovers() {
+		print("dstrct backend\n");
+	}
 
 	public void* fetch_image() {
 		string s = find_image(this.artist, this.album);

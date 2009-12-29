@@ -1,4 +1,4 @@
-NULL = 
+NULL =
 
 AM_CPPFLAGS = \
 	-DDATADIR=\"$(datadir)/xnoise/\" \
@@ -42,6 +42,7 @@ xnoise_VALASOURCES = \
 	xnoise-db-browser.vala \
 	xnoise-db-creator.vala \
 	xnoise-db-writer.vala \
+	xnoise-global-data.vala \
 	xnoise-gst-player.vala \
 	xnoise-lyrics-loader.vala \
 	xnoise-lyrics-view.vala \
@@ -77,7 +78,7 @@ xnoise_LDADD = \
 	$(XNOISE_LIBS) \
 	-lsoup-2.4 \
 	$(NULL)
-	
+
 VAPI_FILES = xnoise-1.0.vapi
 DEPS_FILES = xnoise-1.0.deps
 
@@ -90,7 +91,7 @@ vapi_DATA = \
 libxnoiseincdir = $(includedir)/xnoise-1.0
 
 libxnoiseinc_HEADERS = xnoise.h
-	
+
 EXTRA_DIST = \
 	$(xnoise_VALASOURCES) \
 	$(VAPI_FILES) \

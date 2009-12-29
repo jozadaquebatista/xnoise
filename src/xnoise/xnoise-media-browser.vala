@@ -241,10 +241,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	private void on_row_activated(Gtk.Widget sender, TreePath treepath, TreeViewColumn column) {
-		//print("media-browser: on_row_activated\n");
 		if(treepath.get_depth() > 1) {
 			TrackData[] td_list = mediabrowsermodel.get_trackdata_for_treepath(treepath);
-			this.xn.main_window.trackList.add_tracks(td_list, true);
+			this.xn.tl.tracklistmodel.add_tracks(td_list, true);
 			td_list = null;
 		}
 		else {

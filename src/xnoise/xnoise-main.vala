@@ -29,34 +29,34 @@
  */
 
 public class Xnoise.Main : GLib.Object {
+	private static Main _instance;
+
 	public MainWindow main_window;
 	public TrackList tl;
 	public TrackListModel tlm;
 	public PluginLoader plugin_loader;
 	public GstPlayer gPl;
-	private static Main _instance;
-	
+
 	public Main() {
 		Xnoise.initialize();
 
 		check_database_and_tables();
 
 		_instance = this;
-		
+
 		gPl = new GstPlayer();
 
 		plugin_loader = new PluginLoader(ref this);
 		tlm = new TrackListModel();
 		tl = new TrackList();
 		main_window = new MainWindow(ref this);
-		
+
 		plugin_loader.load_all();
 
 		foreach(string name in par.get_string_list_value("activated_plugins")) {
-			if(plugin_loader.activate_single_plugin(name)) 
+			if(plugin_loader.activate_single_plugin(name))
 				print("%s plugin is activated.\n", name);
 		}
-
 		connect_signals();
 		par.set_start_parameters_in_implementors();
 	}
@@ -67,7 +67,7 @@ public class Xnoise.Main : GLib.Object {
 		});
 		gPl.sign_tag_changed.connect(main_window.set_displayed_title);
 		gPl.sign_video_playing.connect( () => { //handle stop signal from gst player
-			if(!main_window.fullscreenwindowvisible) 
+			if(!main_window.fullscreenwindowvisible)
 				main_window.tracklistnotebook.set_current_page(1);
 		});
 
@@ -79,7 +79,7 @@ public class Xnoise.Main : GLib.Object {
 		Posix.signal(Posix.SIGKILL, on_posix_finish); // write data to db on posix kill signal
 		//main_window.connect_signals();
 	}
-	
+
 	private void check_database_and_tables() {
 		DbCreator dbc = new DbCreator(); //creating db instance and destroying it will create a db file and tables
 		dbc = null;
@@ -90,7 +90,7 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	public static Main instance() {
-		if (_instance == null) 
+		if (_instance == null)
 			_instance = new Main();
 		return _instance;
 	}
@@ -104,10 +104,10 @@ public class Xnoise.Main : GLib.Object {
 		//print("\nsaving activated plugins...\n");
 		string[]? activatedplugins = {};
 		foreach(string name in this.plugin_loader.plugin_htable.get_keys()) {
-			if(this.plugin_loader.plugin_htable.lookup(name).activated) 
+			if(this.plugin_loader.plugin_htable.lookup(name).activated)
 				activatedplugins += name;
 		}
-		if(activatedplugins.length<=0) 
+		if(activatedplugins.length<=0)
 			activatedplugins = null;
 		par.set_string_list_value("activated_plugins", activatedplugins);
 	}
@@ -115,7 +115,7 @@ public class Xnoise.Main : GLib.Object {
 	private string[] final_tracklist = null;
 	public void save_tracklist() {
 		final_tracklist =
-		    this.main_window.trackList.tracklistmodel.get_all_tracks();	
+		    this.main_window.trackList.tracklistmodel.get_all_tracks();
 		var dbwr = new DbWriter();
 		dbwr.write_final_tracks_to_db(final_tracklist);
 		final_tracklist = null;
@@ -123,7 +123,7 @@ public class Xnoise.Main : GLib.Object {
 
 	public void quit() {
 		if(main_window.is_fullscreen) //TODO: Make this work right
-			this.main_window.window.unfullscreen();	
+			this.main_window.window.unfullscreen();
 		this.gPl.stop();
 		this.save_tracklist();
 		this.save_activated_plugins();

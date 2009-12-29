@@ -31,11 +31,16 @@
 // GENERAL NAMESPACE FUNCTIONS
 
 namespace Xnoise {
-	
-	public static Params par;
-	
+
+	public static Params par = null;
+	public static GlobalData global = null;
+
 	public static void initialize() {
-		if(par==null) par = new Params();
+		if(par == null)
+			par = new Params();
+
+		if(global == null)
+			global = new GlobalData();
 	}
 
 	public static string escape_for_local_folder_search(string value) {
@@ -64,7 +69,7 @@ namespace Xnoise {
 		}
 		return value;
 	}
-	
+
 	public static string get_stream_uri(string playlist_uri) {
 		//print("playlist_uri: %s\n", playlist_uri);
 		var file = File.new_for_uri(playlist_uri);
@@ -123,7 +128,7 @@ public enum Xnoise.BrowserCollectionType {
 	LISTED = 2
 }
 
-public enum Xnoise.Repeat { 
+public enum Xnoise.Repeat {
 	NOT_AT_ALL = 0,
 	SINGLE,
 	ALL
@@ -162,7 +167,7 @@ public enum Xnoise.Direction {
 
 public enum Gst.StreamType {
     UNKNOWN = 0,
-    AUDIO   = 1, 
+    AUDIO   = 1,
     VIDEO   = 2
 }
 

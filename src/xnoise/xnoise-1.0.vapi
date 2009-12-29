@@ -91,6 +91,14 @@ namespace Xnoise {
 		public signal void sign_import_progress (uint current, uint amount);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class GlobalData : GLib.Object {
+		public GlobalData ();
+		public string current_uri { get; set; }
+		public Gtk.TreeRowReference position_reference { get; set; }
+		public bool state_paused { get; set; }
+		public bool state_playing { get; set; }
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
 		public Gst.Element playbin;
 		public Xnoise.VideoScreen videoscreen;
@@ -333,8 +341,6 @@ namespace Xnoise {
 	public class TrackList : Gtk.TreeView {
 		public Xnoise.TrackListModel tracklistmodel;
 		public TrackList ();
-		public void add_tracks (Xnoise.TrackData[]? td_list, bool imediate_play = true);
-		public void add_uris (string[]? uris);
 		public string get_uri_for_current_position ();
 		public void on_activated (string uri, Gtk.TreePath path);
 		public void remove_selected_rows ();
@@ -343,6 +349,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackListModel : Gtk.ListStore, Gtk.TreeModel {
 		public TrackListModel ();
+		public void add_tracks (Xnoise.TrackData[]? td_list, bool imediate_play = true);
+		public void add_uris (string[]? uris);
 		public void bolden_row ();
 		public bool get_active_path (out Gtk.TreePath treepath, out Xnoise.TrackState currentstate, out bool is_first);
 		public string[] get_all_tracks ();
@@ -472,6 +480,8 @@ namespace Xnoise {
 		PAUSED,
 		POSITION_FLAG
 	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.GlobalData global;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise.h")]

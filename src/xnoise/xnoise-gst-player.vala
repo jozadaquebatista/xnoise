@@ -344,11 +344,16 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	public void stop() {
-		playbin.set_state(State.READY);
+print("gst stop #1\n");
+		playbin.set_state(State.NULL); //READY
+print("gst stop #2\n");
 		wait();
+print("gst stop #3\n");
 		playing = false;
 		paused = false;
+print("gst stop #4\n");
 		sign_stopped();
+print("gst stop #5\n");
 	}
 
 	// this is a pause-play action to take over the new uri for the playbin

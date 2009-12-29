@@ -69,6 +69,7 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 	}
 
 	private static void on_done(IAlbumCoverImage instance) {
+		fetcher_thread = null;
 		instance.unref();
 	}
 	
@@ -82,7 +83,7 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 		return album_image_provider.get_image_uri();
 	}
 
-	private weak Thread fetcher_thread;
+	private static weak Thread fetcher_thread;
 	public bool fetch_image() {
 		if(this.provider == null) {
 			sign_fetched(null);
