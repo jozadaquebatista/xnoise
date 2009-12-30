@@ -1232,11 +1232,6 @@ gboolean xnoise_track_list_model_set_play_state_for_first_song (XnoiseTrackListM
 gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
 void xnoise_track_list_model_mark_last_title_active (XnoiseTrackListModel* self);
 char** xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
-gboolean xnoise_track_list_model_reset_state (XnoiseTrackListModel* self);
-gboolean xnoise_track_list_model_set_play_state (XnoiseTrackListModel* self);
-gboolean xnoise_track_list_model_set_pause_state (XnoiseTrackListModel* self);
-void xnoise_track_list_model_bolden_row (XnoiseTrackListModel* self);
-void xnoise_track_list_model_unbolden_row (XnoiseTrackListModel* self);
 void xnoise_track_list_model_add_tracks (XnoiseTrackListModel* self, XnoiseTrackData** td_list, int td_list_length1, gboolean imediate_play);
 void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, char** uris, int uris_length1);
 XnoiseVideoScreen* xnoise_video_screen_new (void);

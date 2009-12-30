@@ -356,7 +356,6 @@ namespace Xnoise {
 		public TrackListModel ();
 		public void add_tracks (Xnoise.TrackData[]? td_list, bool imediate_play = true);
 		public void add_uris (string[]? uris);
-		public void bolden_row ();
 		public bool get_active_path (out Gtk.TreePath treepath, out Xnoise.TrackState currentstate, out bool is_first);
 		public string[] get_all_tracks ();
 		public Gtk.TreeIter insert_title (Xnoise.TrackState status = Xnoise.TrackState.STOPPED, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, bool bold = false, string uri);
@@ -364,12 +363,8 @@ namespace Xnoise {
 		public bool not_empty ();
 		public void on_before_position_reference_changed ();
 		public void on_position_reference_changed ();
-		public bool reset_state ();
-		public bool set_pause_state ();
-		public bool set_play_state ();
 		public bool set_play_state_for_first_song ();
 		public void set_state_picture_for_title (Gtk.TreeIter iter, Xnoise.TrackState state = Xnoise.TrackState.STOPPED);
-		public void unbolden_row ();
 		public signal void sign_active_path_changed (Xnoise.TrackState ts);
 	}
 	[CCode (cheader_filename = "xnoise.h")]

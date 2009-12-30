@@ -1130,12 +1130,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			if(global.track_state == TrackState.PLAYING) {
 				global.track_state = TrackState.PAUSED;
-				return;
 			}
-
-			if(global.track_state == TrackState.PAUSED) {
+			else if(global.track_state == TrackState.PAUSED) {
 				global.track_state = TrackState.PLAYING;
-				return;
 			}
 
 /*

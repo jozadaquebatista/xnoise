@@ -584,7 +584,7 @@ public class Xnoise.TrackList : TreeView {
 		TreePath start_path, end_path;
 		TreePath current_path = tracklistmodel.get_path(iter);
 
-		if(!this.get_visible_range (out start_path, out end_path))
+		if(!this.get_visible_range(out start_path, out end_path))
 			return;
 
 		weak int[] start   = start_path.get_indices();
@@ -648,6 +648,10 @@ public class Xnoise.TrackList : TreeView {
 		}
 		global.current_uri = uri;
 		global.track_state = TrackState.PLAYING;
+
+		TreeIter iter;
+		this.tracklistmodel.get_iter(out iter, path);
+		this.set_focus_on_iter(ref iter);
 		//TreeIter iter;
 		//tracklistmodel.get_iter(out iter, path);
 		//tracklistmodel.reset_play_status_all_titles();
@@ -738,7 +742,7 @@ print("active path cd uri: %s\n", uri);
 		                                                 "weight", TrackListModelColumn.WEIGHT,
 		                                                 null);
 
-		columnTitle.min_width = 120;
+		columnTitle.min_width = 100;
 		columnTitle.resizable = true;
 		columnTitle.reorderable = true;
 		this.insert_column(columnTitle, -1);
@@ -752,7 +756,7 @@ print("active path cd uri: %s\n", uri);
 		                                                 "weight", TrackListModelColumn.WEIGHT,
 		                                                 null);
 
-		columnAlbum.min_width = 120;
+		columnAlbum.min_width = 100;
 		columnAlbum.resizable = true;
 		columnAlbum.reorderable = true;
 		this.insert_column(columnAlbum, -1);
@@ -766,7 +770,7 @@ print("active path cd uri: %s\n", uri);
 		                                                  "weight", TrackListModelColumn.WEIGHT,
 		                                                   null);
 
-		columnArtist.min_width = 120;
+		columnArtist.min_width = 100;
 		columnArtist.resizable = true;
 		columnArtist.reorderable = true;
 		this.insert_column(columnArtist, -1);

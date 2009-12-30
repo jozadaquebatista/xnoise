@@ -56,17 +56,14 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		global.track_state_changed.connect( () => {
 			switch(global.track_state) {
 				case TrackState.PLAYING: {
-					bolden_row(); //TODO: this should be in one function
 					this.set_play_state();
 					break;
 				}
 				case TrackState.PAUSED: {
-					bolden_row();
 					this.set_pause_state();
 					break;
 				}
 				case TrackState.STOPPED: {
-					unbolden_row();
 					this.reset_state();
 					break;
 				}
@@ -318,18 +315,20 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			print("current position not found\n");
 			return false;
 		}
-		if(global.position_reference == null) {
-			print("current position not found\n");
-			return false;
-		}
-		//var tpath = current_position.get_path();
 		TreeIter citer;
 		this.get_iter(out citer, global.position_reference.get_path());
 		string uri;
-		if(ts==TrackState.PLAYING)
+		if(ts==TrackState.PLAYING) {
+			bolden_row();
 			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
-		else if(ts==TrackState.PAUSED)
+		}
+		else if(ts==TrackState.PAUSED) {
+			bolden_row();
 			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PAUSE, IconSize.BUTTON, null);
+		}
+		else if(ts==TrackState.STOPPED) {
+			unbolden_row();
+		}
 
 		this.get(citer,
 				 TrackListModelColumn.URI, out uri
@@ -375,19 +374,19 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 //		return false;
 	}
 
-	public bool reset_state() {
+	private bool reset_state() {
 		return set_track_state(TrackState.STOPPED);
 	}
 
-	public bool set_play_state() {
+	private bool set_play_state() {
 		return set_track_state(TrackState.PLAYING);
 	}
 
-	public bool set_pause_state() {
+	private bool set_pause_state() {
 		return set_track_state(TrackState.PAUSED);
 	}
 
-	public void bolden_row() {
+	private void bolden_row() {
 		if(global.position_reference == null) return;
 
 		var tpath = global.position_reference.get_path();
@@ -402,7 +401,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		         -1);
 	}
 
-	public void unbolden_row() {
+	private void unbolden_row() {
 		if(global.position_reference == null) return;
 
 		var tpath = global.position_reference.get_path();
@@ -417,13 +416,12 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	public void add_tracks(TrackData[]? td_list, bool imediate_play = true)	{
+
 		if(td_list == null) return;
 		if(td_list[0] == null) return;
 
 		int k = 0;
-		TreeIter iter, iter_2;
-		//File file;
-		//this.reset_play_status_all_titles();
+		TreeIter iter, iter_2 = {};
 		while(td_list[k] != null) {
 			string current_uri = td_list[k].Uri;
 			if(k == 0) { // First track
@@ -437,7 +435,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				                         current_uri);
 				global.position_reference = null;
 				global.position_reference = new TreeRowReference(this, this.get_path(iter));
-				//this.set_state_picture_for_title(iter, TrackState.PLAYING);
 				iter_2 = iter;
 			}
 			else {
@@ -449,15 +446,18 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				                         td_list[k].Artist,
 				                         false,
 				                         current_uri);
-				//this.set_state_picture_for_title(iter);
 			}
 			k++;
 		}
+
 		// TODO: should this be done from gPl ???????
 		if(td_list[0].Uri != null) {
 			global.track_state = TrackState.PLAYING;
 			global.current_uri = td_list[0].Uri;
 		}
+
+		xn.tl.set_focus_on_iter(ref iter_2);
+
 		//xn.add_track_to_gst_player(td_list[0].Uri); 	// TODO: check this function!!!!
 	}
 
