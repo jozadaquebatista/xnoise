@@ -38,6 +38,7 @@ public class Xnoise.Main : GLib.Object {
 	public GstPlayer gPl;
 
 	public Main() {
+
 		Xnoise.initialize();
 
 		check_database_and_tables();
@@ -57,13 +58,18 @@ public class Xnoise.Main : GLib.Object {
 			if(plugin_loader.activate_single_plugin(name))
 				print("%s plugin is activated.\n", name);
 		}
+
 		connect_signals();
+
 		par.set_start_parameters_in_implementors();
 	}
 
 	private void connect_signals() {
 		gPl.sign_eos.connect(() => { // handle endOfStream signal from gst player
+			global.handle_eos();
+			/*
 			main_window.change_song(Direction.NEXT, true);
+			*/
 		});
 		gPl.sign_tag_changed.connect(main_window.set_displayed_title);
 		gPl.sign_video_playing.connect( () => { //handle stop signal from gst player
@@ -77,16 +83,19 @@ public class Xnoise.Main : GLib.Object {
 		Posix.signal(Posix.SIGQUIT, on_posix_finish); // write data to db on posix quit signal
 		Posix.signal(Posix.SIGTERM, on_posix_finish); // write data to db on posix term signal
 		Posix.signal(Posix.SIGKILL, on_posix_finish); // write data to db on posix kill signal
-		//main_window.connect_signals();
 	}
 
 	private void check_database_and_tables() {
-		DbCreator dbc = new DbCreator(); //creating db instance and destroying it will create a db file and tables
+		//creating db instance and destroying it will create a db file and tables
+		var dbc = new DbCreator();
 		dbc = null;
 	}
 
-	public void add_track_to_gst_player(string uri) { //TODO: maybe return bool and check for fail
-		this.gPl.playSong();
+	public void add_track_to_gst_player(string uri) {
+		print("add_track_to_gst_player\n");
+		global.current_uri = uri;
+		global.track_state = TrackState.PLAYING;
+		//this.gPl.playSong();
 	}
 
 	public static Main instance() {

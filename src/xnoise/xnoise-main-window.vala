@@ -170,30 +170,38 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void add_lastused_titles_to_tracklist() {
 		var dbBr = new DbBrowser();
 		string[] uris = dbBr.get_lastused_uris();
-		foreach(string uri in uris) {
+		foreach(weak string uri in uris) {
 			File file = File.new_for_commandline_arg(uri);
+/*
+			if(global.position_reference==null) {
+				global.current_uri = uri;
+				global.state_playing = true;
+			}
+*/
 			if(file.get_uri_scheme() != "http") {
 				TrackData td;
 				if(dbBr.get_trackdata_for_uri(uri, out td)) {
 					this.trackList.tracklistmodel.insert_title(0,
-							                    null,
-							                    (int)td.Tracknumber,
-							                    Markup.printf_escaped("%s",td.Title),
-							                    Markup.printf_escaped("%s",td.Album),
-							                    Markup.printf_escaped("%s",td.Artist),
-							                    uri);
+					                                           null,
+					                                           (int)td.Tracknumber,
+					                                           td.Title,
+					                                           td.Album,
+					                                           td.Artist,
+					                                           false,
+					                                           uri);
 				}
 			}
 			else {
 				TrackData td;
 				if(dbBr.get_trackdata_for_stream(uri, out td)) {
 					this.trackList.tracklistmodel.insert_title(0,
-							                    null,
-							                    0,
-							                    Markup.printf_escaped("%s",td.Title),
-							                    "",
-							                    "",
-							                    uri);
+					                                           null,
+					                                           0,
+					                                           td.Title,
+					                                           "",
+					                                           "",
+					                                           false,
+					                                           uri);
 				}
 			}
 		}
@@ -436,7 +444,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 
+
 	//REGION IParameter
+
 	public void read_params_data() {
 		int posX = par.get_int_value("posX");
 		int posY = par.get_int_value("posY");
@@ -475,17 +485,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		par.set_double_value("volume", current_volume);
 	}
+
 	//END REGION IParameter
 
-	private void stop() {
-print("stop #1\n");
-		xn.gPl.stop();
-print("stop #1.1\n");
-		xn.gPl.Uri = "";
-print("stop #2\n");
-		trackList.tracklistmodel.reset_play_status_all_titles();
-print("stop #3\n");
 
+	private void stop() {
+		global.track_state = TrackState.STOPPED;
+		global.current_uri = "";
+		//xn.gPl.stop();
+		//xn.gPl.Uri = "";
+		//trackList.tracklistmodel.reset_play_status_all_titles();
+
+/*
 		//save position
 		int rowcount = -1;
 		rowcount = (int)trackList.tracklistmodel.iter_n_children(null);
@@ -496,13 +507,10 @@ print("stop #3\n");
 		TreePath path;
 		TrackState currentstate;
 		bool is_first;
-print("stop #4\n");
 		trackList.tracklistmodel.get_active_path(out path, out currentstate, out is_first);
-print("stop #5\n");
 		trackList.tracklistmodel.get_iter(out iter, path);
-print("stop #6\n");
-		trackList.tracklistmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
-print("stop #7\n");
+		trackList.tracklistmodel.set(iter, TrackListModelColumn.STATE, TrackState.POSITION_FLAG, -1);
+*/
 	}
 
 	// This function changes the current song to the next or previous in the
@@ -513,7 +521,7 @@ print("stop #7\n");
 		TrackState currentstate;
 		TreePath path = null;
 		bool is_first;
-		int rowcount = -1;
+		int rowcount = 0;
 		rowcount = (int)trackList.tracklistmodel.iter_n_children(null);
 
 		if(rowcount == 0) {
@@ -531,14 +539,16 @@ print("stop #7\n");
 			return;
 		}
 
+/*
 		// if stopped
 		if((!xn.gPl.playing)&&(!xn.gPl.paused)) {
 			trackList.tracklistmodel.reset_play_status_all_titles();
 			return;
 		}
+*/
 
 		// get next or previous path
-		if((!(handle_repeat_state && (repeatState==Repeat.SINGLE)))) {
+		if((!(handle_repeat_state &&(repeatState==Repeat.SINGLE)))) {
 			if(path == null) return;
 			if(direction == Direction.NEXT) path.next();
 			else if((direction == Direction.PREVIOUS)&&
@@ -549,13 +559,21 @@ print("stop #7\n");
 
 		if(path == null) return;
 
+		if(!trackList.tracklistmodel.get_iter(out iter, path)) return;
+
+		global.position_reference = new TreeRowReference(trackList.tracklistmodel, path);
+
+		if(global.track_state == TrackState.PLAYING) trackList.set_focus_on_iter(ref iter);
+/*
 		// goto path, if possible...
 		if(trackList.tracklistmodel.get_iter(out iter, path)) {
 			trackList.tracklistmodel.reset_play_status_all_titles(); //visual reset
-			if(xn.gPl.paused) {
+			if(global.state_paused) {
+//			if(xn.gPl.paused) {
 				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PAUSED);
 			}
-			else if(xn.gPl.playing){
+			else if(global.state_playing) {
+//			else if(xn.gPl.playing){
 				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
 			}
 			trackList.set_focus_on_iter(ref iter);
@@ -568,7 +586,8 @@ print("stop #7\n");
 			if(xn.gPl.playing) {
 				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
 			}
-			else if(xn.gPl.paused) {
+			else if(global.state_paused) {
+			//else if(xn.gPl.paused) {
 				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PAUSED);
 			}
 			trackList.set_focus_on_iter(ref iter);
@@ -579,10 +598,10 @@ print("stop #7\n");
 			trackList.tracklistmodel.reset_play_status_all_titles();
 			xn.gPl.Uri = "";
 		}
+*/
 	}
 
 	private void on_remove_all_button_clicked() {
-		trackList.tracklistmodel.current_position = null;
 		global.position_reference = null;
 		var store = (ListStore)trackList.get_model();
 		store.clear();
@@ -591,7 +610,7 @@ print("stop #7\n");
 	private void on_repeat_button_clicked(Button sender) {
 		int temprepeatState = this.repeatState;
 		temprepeatState += 1;
-		if(temprepeatState>2) temprepeatState = 0;
+		if(temprepeatState > 2) temprepeatState = 0;
 		repeatState = temprepeatState;
 	}
 
@@ -798,13 +817,13 @@ print("stop #7\n");
 	}
 
 	private bool on_trayicon_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
-		if(event.scroll.direction==Gdk.ScrollDirection.DOWN) {
+		if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
 			double temp = this.xn.gPl.volume - 0.02;
 			if(temp < 0.0) temp = 0.0;
 			this.xn.gPl.volume = temp;
 			return false;
 		}
-		else if(event.scroll.direction==Gdk.ScrollDirection.UP) {
+		else if(event.scroll.direction == Gdk.ScrollDirection.UP) {
 			double temp = this.xn.gPl.volume + 0.02;
 			if(temp > 1.0) temp = 1.0;
 			this.xn.gPl.volume = temp;
@@ -1104,6 +1123,22 @@ print("stop #7\n");
 		 * This method is used to handle play/pause commands from different signal handler sources
 		 */
 		private void handle_click() {
+			if(global.current_uri == "") {
+				string uri = xn.tl.get_uri_for_current_position();
+				if(uri != null) global.current_uri = uri;
+			}
+
+			if(global.track_state == TrackState.PLAYING) {
+				global.track_state = TrackState.PAUSED;
+				return;
+			}
+
+			if(global.track_state == TrackState.PAUSED) {
+				global.track_state = TrackState.PLAYING;
+				return;
+			}
+
+/*
 			if((!xn.gPl.playing)&&
 			   ((xn.tl.tracklistmodel.not_empty())||(xn.gPl.Uri != ""))) {
 				//not running and track available set to play
@@ -1114,7 +1149,7 @@ print("stop #7\n");
 				print("hc pathlist0 no null\n");
 						string uri = xn.tl.get_uri_for_current_position();
 						//string uri = xn.tl.get_uri_for_treepath(pathlist.nth_data(0));
-						TreePath tp = xn.tl.tracklistmodel.current_position.get_path();
+						TreePath tp = global.position_reference.get_path();
 				print("hc uri: %s\n", uri);
 						if((uri != null)&&(uri != "")) xn.tl.on_activated(uri, tp);
 						//xn.tl.on_activated(uri, pathlist.nth_data(0));
@@ -1142,6 +1177,7 @@ print("stop #7\n");
 					stop();
 				}
 			}
+*/
 		}
 
 		public void update_picture() {

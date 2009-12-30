@@ -28,6 +28,7 @@
  * 	Jörn Magens
  */
 
+
 // GENERAL NAMESPACE FUNCTIONS
 
 namespace Xnoise {
@@ -44,6 +45,7 @@ namespace Xnoise {
 	}
 
 	public static string escape_for_local_folder_search(string value) {
+		// transform the name to match the naming scheme
 		try {
 			string tmp = "";
 			GLib.Regex r = new GLib.Regex("\n");
@@ -60,6 +62,7 @@ namespace Xnoise {
 	}
 
 	public static string remove_linebreaks(string value) {
+		// unexpected linebreaks do not look nice
 		try {
 			GLib.Regex r = new GLib.Regex("\n");
 			return r.replace(value, -1, 0, " ");
@@ -102,6 +105,7 @@ namespace Xnoise {
 }
 
 
+
 // PROJECT WIDE USED STRUCTS, INTERFACES AND ENUMS
 
 // ENUMS
@@ -142,13 +146,14 @@ public enum Xnoise.MediaType {
 	PLAYLISTFILE
 }
 
-public enum Xnoise.TrackListColumn {
+public enum Xnoise.TrackListModelColumn {
 	STATE = 0,
 	ICON,
 	TRACKNUMBER,
 	TITLE,
 	ALBUM,
 	ARTIST,
+	WEIGHT,
 	URI,
 	N_COLUMNS
 }
@@ -156,8 +161,7 @@ public enum Xnoise.TrackListColumn {
 public enum Xnoise.TrackState {
 	STOPPED = 0,
 	PLAYING,
-	PAUSED,
-	POSITION_FLAG
+	PAUSED
 }
 
 public enum Xnoise.Direction {
@@ -171,6 +175,8 @@ public enum Gst.StreamType {
     VIDEO   = 2
 }
 
+
+
 // DATA TRANSFER CLASS
 
 public class Xnoise.TrackData { // track meta information
@@ -183,6 +189,7 @@ public class Xnoise.TrackData { // track meta information
 	public MediaType Mediatype = MediaType.UNKNOWN;
 	public string Uri;
 }
+
 
 
 // STRUCTS
@@ -200,12 +207,16 @@ public struct Xnoise.TitleMtypeId {
 
 
 
+
+
 // INTERFACES
 
 public interface Xnoise.IParams : GLib.Object {
 	public abstract void read_params_data();
 	public abstract void write_params_data();
 }
+
+
 
 // ILyrics implementors should be synchrouniously looking for images
 // this is done in the ThreadFunc "fetch()"
@@ -222,9 +233,12 @@ public interface Xnoise.ILyrics : GLib.Object {
 	public signal void sign_lyrics_done(ILyrics instance);
 }
 
+
 public interface Xnoise.ILyricsProvider : GLib.Object {
 	public abstract ILyrics from_tags(string artist, string title);
 }
+
+
 
 
 // IAlbumCoverImage implementors should be synchrouniously looking for images
@@ -240,6 +254,7 @@ public interface Xnoise.IAlbumCoverImage : GLib.Object {
 	// for destruction after usage
 	public signal void sign_album_image_done(IAlbumCoverImage instance);
 }
+
 
 public interface Xnoise.IAlbumCoverImageProvider : GLib.Object {
 	public abstract IAlbumCoverImage from_tags(string artist, string album);

@@ -26,7 +26,7 @@
  *
  * Author:
  * 	Jörn Magens
- */
+*/
 
 using Gtk;
 using Gdk;
@@ -50,7 +50,9 @@ public class Xnoise.TrackList : TreeView {
 		this.set_model(tracklistmodel);
 		this.setup_view();
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);
+/*
 		tracklistmodel.sign_active_path_changed.connect(this.on_active_path_changed);
+*/
 
 		Gtk.drag_source_set(
 			this,
@@ -121,7 +123,7 @@ public class Xnoise.TrackList : TreeView {
 				}
 				else {
 					int selectioncount = selection.count_selected_rows();
-					if(selectioncount<=1) {
+					if(selectioncount <= 1) {
 						selection.unselect_all();
 						selection.select_path(path);
 					}
@@ -235,7 +237,7 @@ public class Xnoise.TrackList : TreeView {
 		uris = new string[(int)paths.length() + 1];
 		foreach(weak TreePath path in paths) {
 			this.tracklistmodel.get_iter(out iter, path);
-			this.tracklistmodel.get_value(iter, TrackListColumn.URI, out uri);
+			this.tracklistmodel.get_value(iter, TrackListModelColumn.URI, out uri);
 			uris[i] = uri.get_string();
 			i++;
 			TreeRowReference treerowref = new TreeRowReference(this.tracklistmodel, path);
@@ -259,13 +261,13 @@ public class Xnoise.TrackList : TreeView {
 		FileType filetype;
 		string[] uris = selection.get_uris();
 		this.get_dest_row_at_pos(x, y, out path, out drop_pos);
-		DbBrowser dbBr = new DbBrowser();
+		var dbBr = new DbBrowser();
 
 		if(!this.reorder_dragging) { 					// DRAGGING NOT WITHIN TRACKLIST
 			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 			bool is_first = true;
-			for(int i=0; i<uris.length;i++) {
+			for(int i=0; i<uris.length; i++) {
 				bool is_stream = false;
 				uri = uris[i];
 				file = File.new_for_uri(uri);
@@ -393,12 +395,12 @@ public class Xnoise.TrackList : TreeView {
 		if(dbBr.get_trackdata_for_stream(streamuri, out td)) {
 			artist    = "";
 			album     = "";
-			title     = Markup.printf_escaped("%s", td.Title);
+			title     = td.Title;
 		}
 		else {
 			artist    = "";
 			album     = "";
-			title     = Markup.printf_escaped("%s", file.get_uri());
+			title     = file.get_uri();
 		}
 
 		TreeIter first_iter;
@@ -426,11 +428,11 @@ public class Xnoise.TrackList : TreeView {
 			}
 		}
 		tracklistmodel.set(new_iter,
-			TrackListColumn.STATE, TrackState.STOPPED,
-			TrackListColumn.TITLE, title,
-			TrackListColumn.ALBUM, album,
-			TrackListColumn.ARTIST, artist,
-			TrackListColumn.URI, streamuri,
+			TrackListModelColumn.STATE, TrackState.STOPPED,
+			TrackListModelColumn.TITLE, title,
+			TrackListModelColumn.ALBUM, album,
+			TrackListModelColumn.ARTIST, artist,
+			TrackListModelColumn.URI, streamuri,
 			-1);
 		path = tracklistmodel.get_path(new_iter);
 	}
@@ -466,24 +468,24 @@ public class Xnoise.TrackList : TreeView {
 			uint tracknumb;
 			TrackData td;
 			if(dbBr.get_trackdata_for_uri(fileuri, out td)) {
-				artist    = Markup.printf_escaped("%s", td.Artist);
-				album     = Markup.printf_escaped("%s", td.Album);
-				title     = Markup.printf_escaped("%s", td.Title);
+				artist    = td.Artist;
+				album     = td.Album;
+				title     = td.Title;
 				tracknumb = td.Tracknumber;
 			}
 			else {
 				if(!(psVideo.match_string(mime))) {
 					var tr = new TagReader(); // TODO: Check dataimport for video
 					var tags = tr.read_tag(file.get_path());
-					artist         = Markup.printf_escaped("%s", tags.Artist);
-					album          = Markup.printf_escaped("%s", tags.Album);
-					title          = Markup.printf_escaped("%s", tags.Title);
+					artist         = tags.Artist;
+					album          = tags.Album;
+					title          = tags.Title;
 					tracknumb      = tags.Tracknumber;
 				}
 				else { //TODO: Handle video data
 					artist         = "";
 					album          = "";
-					title          = Markup.printf_escaped("%s", file.get_basename());
+					title          = file.get_basename();
 					tracknumb      = 0;
 				}
 			}
@@ -516,12 +518,12 @@ public class Xnoise.TrackList : TreeView {
 				tracknumberString = "%u".printf(tracknumb);
 			}
 			tracklistmodel.set(new_iter,
-				TrackListColumn.STATE, TrackState.STOPPED,
-				TrackListColumn.TRACKNUMBER, tracknumberString,
-				TrackListColumn.TITLE, title,
-				TrackListColumn.ALBUM, album,
-				TrackListColumn.ARTIST, artist,
-				TrackListColumn.URI, fileuri,
+				TrackListModelColumn.STATE, TrackState.STOPPED,
+				TrackListModelColumn.TRACKNUMBER, tracknumberString,
+				TrackListModelColumn.TITLE, title,
+				TrackListModelColumn.ALBUM, album,
+				TrackListModelColumn.ARTIST, artist,
+				TrackListModelColumn.URI, fileuri,
 				-1);
 			path = tracklistmodel.get_path(new_iter);
 		}
@@ -566,7 +568,7 @@ public class Xnoise.TrackList : TreeView {
 		string uri = null;
 		TreeIter iter;
 		if(tracklistmodel.get_iter(out iter, path)) {
-			tracklistmodel.get(iter, TrackListColumn.URI, out uri);
+			tracklistmodel.get(iter, TrackListModelColumn.URI, out uri);
 		}
 		this.on_activated(uri, path);
 	}
@@ -581,11 +583,16 @@ public class Xnoise.TrackList : TreeView {
 	public void set_focus_on_iter(ref TreeIter iter) {
 		TreePath start_path, end_path;
 		TreePath current_path = tracklistmodel.get_path(iter);
-		if(!this.get_visible_range (out start_path, out end_path)) return;
+
+		if(!this.get_visible_range (out start_path, out end_path))
+			return;
+
 		weak int[] start   = start_path.get_indices();
 		weak int[] end     = end_path.get_indices();
 		weak int[] current = current_path.get_indices();
-		if(!((start[0] < current[0])&&(current[0] < end[0])))
+
+		if(!((start[0] < current[0])&&
+		    (current[0] < end[0])))
 			this.scroll_to_cell(current_path, null, true, (float)0.3, (float)0.0);
 	}
 
@@ -602,20 +609,18 @@ public class Xnoise.TrackList : TreeView {
 			tracklistmodel.get_iter(out iter, path);
 			path_2 = path;
 			//tracklistmodel.get(iter,
-			//                   TrackListColumn.STATE, out state
+			//                   TrackListModelColumn.STATE, out state
 			//                   );
-			if((tracklistmodel.current_position!=null)&&
+			if((global.position_reference!=null)&&
 			   (!removed_playing_title)&&
-			   (path.compare(tracklistmodel.current_position.get_path())==0)) {
+			   (path.compare(global.position_reference.get_path())==0)) {
 				removed_playing_title = true;
 			}
 			tracklistmodel.remove(iter);
 		}
 		if(path_2.prev() && removed_playing_title) {
 			tracklistmodel.get_iter(out iter, path_2);
-			tracklistmodel.set(iter, TrackListColumn.STATE, TrackState.POSITION_FLAG, -1);
-			tracklistmodel.current_position = null; // set to null first
-			tracklistmodel.current_position = new TreeRowReference(tracklistmodel, path_2);
+			//tracklistmodel.set(iter, TrackListModelColumn.STATE, TrackState.POSITION_FLAG, -1);
 			global.position_reference = null; // set to null first
 			global.position_reference = new TreeRowReference(tracklistmodel, path_2);
 			return;
@@ -627,16 +632,29 @@ public class Xnoise.TrackList : TreeView {
 		//check for existance on local files
 		File track = File.new_for_uri(uri);
 
-		if(track.get_uri_scheme()=="file") {
+		if(track.get_uri_scheme() == "file") {
 			if(!track.query_exists(null)) return;
 		}
 
-		TreeIter iter;
-		tracklistmodel.get_iter(out iter, path);
-		tracklistmodel.reset_play_status_all_titles();
-		tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
+/*
+		var tpath = this.get_path(iter);
+*/
+		if(path != null) {
+			global.position_reference = new TreeRowReference(this.tracklistmodel, path);
+		}
+		else {
+			print("cannot setup treerowref\n");
+			return;
+		}
+		global.current_uri = uri;
+		global.track_state = TrackState.PLAYING;
+		//TreeIter iter;
+		//tracklistmodel.get_iter(out iter, path);
+		//tracklistmodel.reset_play_status_all_titles();
+		//tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
 	}
 
+/*
 	private void on_active_path_changed(TrackListModel sender, TrackState ts) {
 		// set gst player to active title coming from tracklist
 		// triggered by a signal in set_state_picture_for_title
@@ -662,102 +680,106 @@ print("active path cd uri: %s\n", uri);
 				xn.gPl.playSong();
 		}
 	}
+*/
 
 	public string get_uri_for_current_position() {
 		string uri = "";
 		TreeIter iter;
-		if(tracklistmodel.current_position != null) {
-			//var tp = tracklistmodel.current_position.get_path();
+		if(global.position_reference != null) {
 			tracklistmodel.get_iter(out iter,
-			                        tracklistmodel.current_position.get_path()
+			                        global.position_reference.get_path()
 			                        );
 			tracklistmodel.get(iter,
-				TrackListColumn.URI, out uri);
+				TrackListModelColumn.URI, out uri);
 		}
 		return uri;
 	}
 
 	private void setup_view() {
 		CellRendererText renderer;
-		var columnPixb 	      = new TreeViewColumn();
-		var columnStatus      = new TreeViewColumn();
+		var columnPixb        = new TreeViewColumn();
 		var columnTracknumber = new TreeViewColumn();
-		var columnArtist      = new TreeViewColumn();
 		var columnAlbum       = new TreeViewColumn();
 		var columnTitle       = new TreeViewColumn();
-		var columnUri         = new TreeViewColumn();
+		var columnArtist      = new TreeViewColumn();
 
-		renderer = new CellRendererText();
-		renderer.set_fixed_height_from_font(1);
-		renderer.ellipsize = Pango.EllipsizeMode.END;
-		columnStatus.pack_start(renderer, false);
-		columnStatus.title = "Status";
-		columnStatus.visible = false;
-		this.insert_column(columnStatus, -1);
 
+		// STATUS ICON
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.set_fixed_size(-1,22);
 		columnPixb.pack_start(pixbufRenderer, false);
-		columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListColumn.ICON);
+		columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListModelColumn.ICON);
 		columnPixb.set_fixed_width(30);
 		columnPixb.reorderable = true;
 		this.insert_column(columnPixb, -1);
 
+
+		// TRACKNUMBER
 		renderer = new CellRendererText();
 		renderer.set_fixed_height_from_font(1);
-		columnTracknumber.pack_start(renderer, false);
-		columnTracknumber.add_attribute(renderer, "markup", TrackListColumn.TRACKNUMBER);
-		columnTracknumber.title = "#";
+		columnTracknumber = new TreeViewColumn.with_attributes("#",
+		                                                       renderer,
+		                                                       "text", TrackListModelColumn.TRACKNUMBER,
+		                                                       "weight", TrackListModelColumn.WEIGHT,
+		                                                       null);
+
 		columnTracknumber.set_fixed_width(32);
 		columnTracknumber.resizable = false;
+		columnTracknumber.visible = true;
 		columnTracknumber.reorderable = true;
 		this.insert_column(columnTracknumber, -1);
 
+
+		// TITLE
 		renderer = new CellRendererText();
-		renderer.set_fixed_height_from_font(1);
-		renderer.ellipsize = Pango.EllipsizeMode.END;
-		renderer.width_chars=30;
-		columnTitle.pack_start(renderer, true);
-		columnTitle.add_attribute(renderer, "markup", TrackListColumn.TITLE);
-		columnTitle.title = "Title";
-		columnTitle.min_width = 100; //TODO: is it possible to set the min width via number of characters for the used font?
+		columnTitle = new TreeViewColumn.with_attributes("Title",
+		                                                 renderer,
+		                                                 "text", TrackListModelColumn.TITLE,
+		                                                 "weight", TrackListModelColumn.WEIGHT,
+		                                                 null);
+
+		columnTitle.min_width = 120;
 		columnTitle.resizable = true;
 		columnTitle.reorderable = true;
 		this.insert_column(columnTitle, -1);
 
+
+		// ALBUM
 		renderer = new CellRendererText();
-		renderer.set_fixed_height_from_font(1);
-		renderer.ellipsize = Pango.EllipsizeMode.END;
-		renderer.width_chars=22;
-		columnAlbum.pack_start(renderer, true);
-		columnAlbum.add_attribute(renderer, "markup", TrackListColumn.ALBUM);
-		columnAlbum.title = "Album";
-		columnAlbum.min_width = 100;
+		columnAlbum = new TreeViewColumn.with_attributes("Album",
+		                                                 renderer,
+		                                                 "text", TrackListModelColumn.ALBUM,
+		                                                 "weight", TrackListModelColumn.WEIGHT,
+		                                                 null);
+
+		columnAlbum.min_width = 120;
 		columnAlbum.resizable = true;
 		columnAlbum.reorderable = true;
 		this.insert_column(columnAlbum, -1);
 
+
+		// ARTIST
 		renderer = new CellRendererText();
-		renderer.set_fixed_height_from_font(1);
-		renderer.ellipsize = Pango.EllipsizeMode.END;
-		renderer.width_chars=22;
-		columnArtist.pack_start(renderer, true);
-		columnArtist.add_attribute(renderer, "markup", TrackListColumn.ARTIST);
-		columnArtist.title = "Artist";
-		columnArtist.min_width = 100;
+		columnArtist = new TreeViewColumn.with_attributes("Artist",
+		                                                  renderer,
+		                                                  "text", TrackListModelColumn.ALBUM,
+		                                                  "weight", TrackListModelColumn.WEIGHT,
+		                                                   null);
+
+		columnArtist.min_width = 120;
 		columnArtist.resizable = true;
 		columnArtist.reorderable = true;
 		this.insert_column(columnArtist, -1);
 
+
+
 		columnPixb.sizing        = Gtk.TreeViewColumnSizing.FIXED;
-		columnStatus.sizing      = Gtk.TreeViewColumnSizing.FIXED;
 		columnTracknumber.sizing = Gtk.TreeViewColumnSizing.FIXED;
-		columnUri.sizing         = Gtk.TreeViewColumnSizing.FIXED;
 		columnArtist.sizing      = Gtk.TreeViewColumnSizing.GROW_ONLY;
 		columnAlbum.sizing       = Gtk.TreeViewColumnSizing.GROW_ONLY;
 		columnTitle.sizing       = Gtk.TreeViewColumnSizing.GROW_ONLY;
 
-		this.search_column = TrackListColumn.TITLE;
+		this.search_column = TrackListModelColumn.TITLE;
 		this.enable_search = false;
 		this.rules_hint = true;
 	}

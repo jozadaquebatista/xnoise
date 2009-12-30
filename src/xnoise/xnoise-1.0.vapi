@@ -93,10 +93,15 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GlobalData : GLib.Object {
 		public GlobalData ();
+		public void handle_eos ();
 		public string current_uri { get; set; }
+		public Gtk.TreeRowReference next_position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
-		public bool state_paused { get; set; }
-		public bool state_playing { get; set; }
+		public Xnoise.TrackState track_state { get; set; }
+		public signal void before_position_reference_changed ();
+		public signal void current_uri_changed ();
+		public signal void position_reference_changed ();
+		public signal void track_state_changed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
@@ -354,16 +359,17 @@ namespace Xnoise {
 		public void bolden_row ();
 		public bool get_active_path (out Gtk.TreePath treepath, out Xnoise.TrackState currentstate, out bool is_first);
 		public string[] get_all_tracks ();
-		public Gtk.TreeIter insert_title (Xnoise.TrackState status = Xnoise.TrackState.STOPPED, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, string uri);
+		public Gtk.TreeIter insert_title (Xnoise.TrackState status = Xnoise.TrackState.STOPPED, Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, bool bold = false, string uri);
 		public void mark_last_title_active ();
 		public bool not_empty ();
-		public void reset_play_status_all_titles ();
+		public void on_before_position_reference_changed ();
+		public void on_position_reference_changed ();
+		public bool reset_state ();
 		public bool set_pause_state ();
 		public bool set_play_state ();
 		public bool set_play_state_for_first_song ();
 		public void set_state_picture_for_title (Gtk.TreeIter iter, Xnoise.TrackState state = Xnoise.TrackState.STOPPED);
 		public void unbolden_row ();
-		public Gtk.TreeRowReference current_position { get; set; }
 		public signal void sign_active_path_changed (Xnoise.TrackState ts);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -462,14 +468,15 @@ namespace Xnoise {
 		SINGLE,
 		ALL
 	}
-	[CCode (cprefix = "XNOISE_TRACK_LIST_COLUMN_", cheader_filename = "xnoise.h")]
-	public enum TrackListColumn {
+	[CCode (cprefix = "XNOISE_TRACK_LIST_MODEL_COLUMN_", cheader_filename = "xnoise.h")]
+	public enum TrackListModelColumn {
 		STATE,
 		ICON,
 		TRACKNUMBER,
 		TITLE,
 		ALBUM,
 		ARTIST,
+		WEIGHT,
 		URI,
 		N_COLUMNS
 	}
@@ -477,8 +484,7 @@ namespace Xnoise {
 	public enum TrackState {
 		STOPPED,
 		PLAYING,
-		PAUSED,
-		POSITION_FLAG
+		PAUSED
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalData global;

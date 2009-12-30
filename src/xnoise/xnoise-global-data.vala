@@ -35,10 +35,58 @@
  */
 
 public class Xnoise.GlobalData : GLib.Object {
+	// Signals
+	public signal void position_reference_changed();
+	public signal void before_position_reference_changed();
+	public signal void track_state_changed();
+	public signal void current_uri_changed();
 
-	public bool state_playing { get; set; default = false; }
-	public bool state_paused  { get; set; default = false; }
-	public string current_uri { get; set; default = ""; }
+	// Private fields
+	private TrackState _track_state = TrackState.STOPPED;
+	private string  _current_uri = "";
+	private Gtk.TreeRowReference? _position_reference = null;
 
-	public Gtk.TreeRowReference position_reference { get; set; default = null; }
+	// Public properties
+	public TrackState track_state {
+		get {
+			return _track_state;
+		}
+		set {
+			if(_track_state != value) {
+				_track_state = value;
+				track_state_changed();
+			}
+		}
+	}
+
+	public string current_uri {
+		get {
+			return _current_uri;
+		}
+		set {
+			if(_current_uri != value) {
+				_current_uri = value;
+				current_uri_changed();
+			}
+		}
+	}
+
+	public Gtk.TreeRowReference position_reference {
+		get {
+			return _position_reference;
+		}
+		set {
+			if(_position_reference != value) {
+				before_position_reference_changed();
+				_position_reference = value;
+				position_reference_changed();
+			}
+		}
+	}
+
+	public Gtk.TreeRowReference next_position_reference { get; set; default = null; }
+
+	public void handle_eos() {
+		print("global: handle eos\n");
+	}
 }
