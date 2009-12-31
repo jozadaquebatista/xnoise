@@ -106,7 +106,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
-		public Gst.Element playbin;
+		public Gst.Element playbin2;
 		public Xnoise.VideoScreen videoscreen;
 		public GstPlayer ();
 		public void pause ();
