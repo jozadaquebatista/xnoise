@@ -1218,7 +1218,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.button_release_event.connect(this.on_release);
 
 			xn.gPl.sign_song_position_changed.connect(set_value);
-			xn.gPl.sign_eos.connect(on_eos);
+			global.caught_eos_from_player.connect(on_eos);
 			xn.gPl.sign_stopped.connect(on_stopped);
 
 			this.set_text("00:00 / 00:00");

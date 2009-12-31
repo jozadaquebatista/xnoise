@@ -247,7 +247,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				string debug;
 				msg.parse_error(out err, out debug);
 				stdout.printf("Error: %s\n", err.message);
-				this.sign_eos(); //this is used to go to the next track
+				global.handle_eos(); //this is used to go to the next track
 				break;
 			}
 			case Gst.MessageType.EOS: {
