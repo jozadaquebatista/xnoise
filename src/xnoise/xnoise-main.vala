@@ -65,12 +65,6 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	private void connect_signals() {
-		gPl.sign_eos.connect(() => { // handle endOfStream signal from gst player
-			global.handle_eos();
-			/*
-			main_window.change_song(Direction.NEXT, true);
-			*/
-		});
 		gPl.sign_tag_changed.connect(main_window.set_displayed_title);
 		gPl.sign_video_playing.connect( () => { //handle stop signal from gst player
 			if(!main_window.fullscreenwindowvisible)
@@ -86,12 +80,13 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	private void check_database_and_tables() {
-		//creating db instance and destroying it will create a db file and tables
+		//creating db instance and destroying it will create a database and the tables
 		var dbc = new DbCreator();
 		dbc = null;
 	}
 
 	public void add_track_to_gst_player(string uri) {
+		// TODO: update this function
 		print("add_track_to_gst_player\n");
 		global.current_uri = uri;
 		global.track_state = TrackState.PLAYING;

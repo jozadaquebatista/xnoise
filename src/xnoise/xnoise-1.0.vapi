@@ -99,6 +99,7 @@ namespace Xnoise {
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Xnoise.TrackState track_state { get; set; }
 		public signal void before_position_reference_changed ();
+		public signal void caught_eos_from_player ();
 		public signal void current_uri_changed ();
 		public signal void position_reference_changed ();
 		public signal void track_state_changed ();

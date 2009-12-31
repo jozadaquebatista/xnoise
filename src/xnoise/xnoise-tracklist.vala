@@ -636,9 +636,6 @@ public class Xnoise.TrackList : TreeView {
 			if(!track.query_exists(null)) return;
 		}
 
-/*
-		var tpath = this.get_path(iter);
-*/
 		if(path != null) {
 			global.position_reference = new TreeRowReference(this.tracklistmodel, path);
 		}
@@ -652,39 +649,7 @@ public class Xnoise.TrackList : TreeView {
 		TreeIter iter;
 		this.tracklistmodel.get_iter(out iter, path);
 		this.set_focus_on_iter(ref iter);
-		//TreeIter iter;
-		//tracklistmodel.get_iter(out iter, path);
-		//tracklistmodel.reset_play_status_all_titles();
-		//tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
 	}
-
-/*
-	private void on_active_path_changed(TrackListModel sender, TrackState ts) {
-		// set gst player to active title coming from tracklist
-		// triggered by a signal in set_state_picture_for_title
-		print("tracklist: on_active_path_changed\n");
-		TreePath treepath;
-		TrackState currentstate;
-		bool is_first;
-		if(!tracklistmodel.get_active_path(
-		   out treepath,
-		   out currentstate,
-		   out is_first)
-		   ) return;
-
-		string uri = this.get_uri_for_current_position();
-		//this.get_uri_for_treepath(treepath);
-print("active path cd uri: %s\n", uri);
-
-		if((uri!=null)&&(uri!="")) {
-			if(xn.gPl.Uri != uri) xn.gPl.Uri = uri;
-			if(ts == TrackState.PLAYING)
-				xn.gPl.playSong(true);
-			else
-				xn.gPl.playSong();
-		}
-	}
-*/
 
 	public string get_uri_for_current_position() {
 		string uri = "";

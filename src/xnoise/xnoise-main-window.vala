@@ -135,6 +135,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		notify["repeatState"].connect(on_repeatState_changed);
 		notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
+
+		global.caught_eos_from_player.connect(on_caught_eos_from_player);
 	}
 
 	private void initialize_video_screen() {
@@ -154,6 +156,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(0);
 		});
 		videoscreen.drag_motion.connect(on_da_drag_motion);
+	}
+
+	private void on_caught_eos_from_player() {
+		this.change_song(Direction.NEXT, true);
 	}
 
 	private bool on_da_drag_motion(Gtk.Widget sender, Gdk.DragContext context, int x, int y, uint timestamp) {

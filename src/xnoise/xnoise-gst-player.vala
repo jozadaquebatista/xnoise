@@ -57,8 +57,12 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return val;
 		}
 		set {
-			sign_volume_changed(value);
-			this.playbin.set("volume", value);
+			double val;
+			this.playbin.get("volume", out val);
+			if(val!=value) {
+				this.playbin.set("volume", value);
+				sign_volume_changed(value);
+			}
 		}
 	}
 
@@ -117,13 +121,12 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	public signal void sign_song_position_changed(uint msecs, uint ms_total);
+	public signal void sign_playing();
+	public signal void sign_paused();
 	public signal void sign_stopped();
-	public signal void sign_eos();
+	public signal void sign_video_playing();
 	public signal void sign_tag_changed(string newuri);
 	public signal void sign_uri_changed(string newuri);
-	public signal void sign_video_playing();
-	public signal void sign_paused();
-	public signal void sign_playing();
 	public signal void sign_volume_changed(double volume);
 
 	public GstPlayer() {
@@ -248,7 +251,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				break;
 			}
 			case Gst.MessageType.EOS: {
-				this.sign_eos();
+				global.handle_eos();
 				break;
 			}
 			case Gst.MessageType.TAG: {
