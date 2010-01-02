@@ -365,6 +365,8 @@ typedef struct _XnoiseParamsClass XnoiseParamsClass;
 
 #define XNOISE_TYPE_REPEAT (xnoise_repeat_get_type ())
 
+#define XNOISE_TYPE_TRACK_LIST_NOTE_BOOK_TAB (xnoise_track_list_note_book_tab_get_type ())
+
 #define XNOISE_TYPE_TRACK_LIST_MODEL_COLUMN (xnoise_track_list_model_column_get_type ())
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
@@ -777,15 +779,20 @@ typedef enum  {
 } XnoiseRepeat;
 
 typedef enum  {
-	XNOISE_TRACK_LIST_MODEL_COLUMN_STATE = 0,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_ICON,
+	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_TRACKLIST = 0,
+	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_VIDEO,
+	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_LYRICS
+} XnoiseTrackListNoteBookTab;
+
+typedef enum  {
+	XNOISE_TRACK_LIST_MODEL_COLUMN_ICON = 0,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_TRACKNUMBER,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_TITLE,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_ALBUM,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_ARTIST,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_LENGTH,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_WEIGHT,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_URI,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_N_COLUMNS
+	XNOISE_TRACK_LIST_MODEL_COLUMN_URI
 } XnoiseTrackListModelColumn;
 
 typedef enum  {
@@ -804,6 +811,7 @@ struct _XnoiseTrackData {
 	char* Genre;
 	guint Year;
 	guint Tracknumber;
+	gint32 Length;
 	XnoiseMediaType Mediatype;
 	char* Uri;
 };
@@ -1013,6 +1021,7 @@ void xnoise_db_writer_store_streams (XnoiseDbWriter* self, char** list_of_stream
 void xnoise_db_writer_store_media_folders (XnoiseDbWriter* self, char** mfolders, int mfolders_length1);
 void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, char** final_tracklist, int final_tracklist_length1);
 GType xnoise_global_data_get_type (void);
+void xnoise_global_data_reset_position_reference (XnoiseGlobalData* self);
 void xnoise_global_data_handle_eos (XnoiseGlobalData* self);
 XnoiseGlobalData* xnoise_global_data_new (void);
 XnoiseGlobalData* xnoise_global_data_construct (GType object_type);
@@ -1023,8 +1032,8 @@ const char* xnoise_global_data_get_current_uri (XnoiseGlobalData* self);
 void xnoise_global_data_set_current_uri (XnoiseGlobalData* self, const char* value);
 const GtkTreeRowReference* xnoise_global_data_get_position_reference (XnoiseGlobalData* self);
 void xnoise_global_data_set_position_reference (XnoiseGlobalData* self, const GtkTreeRowReference* value);
-const GtkTreeRowReference* xnoise_global_data_get_next_position_reference (XnoiseGlobalData* self);
-void xnoise_global_data_set_next_position_reference (XnoiseGlobalData* self, const GtkTreeRowReference* value);
+const GtkTreeRowReference* xnoise_global_data_get_position_reference_next (XnoiseGlobalData* self);
+void xnoise_global_data_set_position_reference_next (XnoiseGlobalData* self, const GtkTreeRowReference* value);
 GType xnoise_gst_player_get_type (void);
 GType xnoise_video_screen_get_type (void);
 XnoiseGstPlayer* xnoise_gst_player_new (void);
@@ -1138,6 +1147,7 @@ GType xnoise_browser_column_get_type (void);
 GType xnoise_media_storage_type_get_type (void);
 GType xnoise_browser_collection_type_get_type (void);
 GType xnoise_repeat_get_type (void);
+GType xnoise_track_list_note_book_tab_get_type (void);
 GType xnoise_track_list_model_column_get_type (void);
 GType gst_stream_type_get_type (void);
 XnoiseTrackData* xnoise_track_data_new (void);
@@ -1220,18 +1230,17 @@ XnoiseTrackList* xnoise_track_list_construct (GType object_type);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_selected_rows (XnoiseTrackList* self);
 void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, GtkTreePath* path);
-char* xnoise_track_list_get_uri_for_current_position (XnoiseTrackList* self);
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
 XnoiseTrackListModel* xnoise_track_list_model_construct (GType object_type);
 void xnoise_track_list_model_on_before_position_reference_changed (XnoiseTrackListModel* self);
 void xnoise_track_list_model_on_position_reference_changed (XnoiseTrackListModel* self);
-gboolean xnoise_track_list_model_get_active_path (XnoiseTrackListModel* self, GtkTreePath** treepath, XnoiseTrackState* currentstate, gboolean* is_first);
-void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, XnoiseTrackState status, GdkPixbuf* pixbuf, gint tracknumber, const char* title, const char* album, const char* artist, gboolean bold, const char* uri, GtkTreeIter* result);
-void xnoise_track_list_model_set_state_picture_for_title (XnoiseTrackListModel* self, GtkTreeIter* iter, XnoiseTrackState state);
-gboolean xnoise_track_list_model_set_play_state_for_first_song (XnoiseTrackListModel* self);
+gboolean xnoise_track_list_model_get_current_path (XnoiseTrackListModel* self, GtkTreePath** treepath);
+gboolean xnoise_track_list_model_get_active_path (XnoiseTrackListModel* self, GtkTreePath** treepath, gboolean* used_next_pos);
+void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, GdkPixbuf* pixbuf, gint tracknumber, const char* title, const char* album, const char* artist, gint length, gboolean bold, const char* uri, GtkTreeIter* result);
 gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
-void xnoise_track_list_model_mark_last_title_active (XnoiseTrackListModel* self);
+void xnoise_track_list_model_set_reference_to_last (XnoiseTrackListModel* self);
 char** xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
+char* xnoise_track_list_model_get_uri_for_current_position (XnoiseTrackListModel* self);
 void xnoise_track_list_model_add_tracks (XnoiseTrackListModel* self, XnoiseTrackData** td_list, int td_list_length1, gboolean imediate_play);
 void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, char** uris, int uris_length1);
 XnoiseVideoScreen* xnoise_video_screen_new (void);

@@ -34,13 +34,15 @@ public class Xnoise.TagReader : GLib.Object {
 //		print("construct TagReader\n");
 //	}
 	public TrackData read_tag(string filename) {
-		TrackData td; 
+		TrackData td;
 		TagLib.File taglib_file = null;
 		taglib_file = new TagLib.File(filename);
 		if(taglib_file!=null) {
-			weak TagLib.Tag t = taglib_file.tag; 
+			weak TagLib.Tag t = taglib_file.tag;
+			weak TagLib.AudioProperties ap = taglib_file.audioproperties;
 			td = new TrackData();
 			try {
+				// from class Tag
 				td.Artist = t.artist;
 				td.Title = t.title;
 				td.Album = t.album;
@@ -48,6 +50,8 @@ public class Xnoise.TagReader : GLib.Object {
 				td.Year = t.year;
 				td.Tracknumber = t.track;
 				td.Mediatype   = MediaType.AUDIO;
+				// from class AudioProperties
+				td.Length = (int32)ap.length;
 			}
 			finally {
 				if((td.Artist == "")||(td.Artist == null)) td.Artist = "unknown artist";
@@ -59,15 +63,18 @@ public class Xnoise.TagReader : GLib.Object {
 			}
 		}
 		else {
-			td = new TrackData(); 
+			td = new TrackData();
+			// from class Tag
 			td.Artist = "unknown artist";
 			td.Title  = "unknown title";
 			td.Album  = "unknown album";
 			td.Genre  = "unknown genre";
 			td.Tracknumber = (uint)0;
 			td.Mediatype   = MediaType.UNKNOWN;
+				// from class AudioProperties
+			td.Length = (int32)0;
 		}
-		
+
 		if(td.Title  == "unknown title") {
 			td.Title = GLib.Filename.display_basename(filename);
 		}

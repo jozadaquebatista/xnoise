@@ -187,12 +187,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			if(file.get_uri_scheme() != "http") {
 				TrackData td;
 				if(dbBr.get_trackdata_for_uri(uri, out td)) {
-					this.trackList.tracklistmodel.insert_title(0,
-					                                           null,
+					this.trackList.tracklistmodel.insert_title(null,
 					                                           (int)td.Tracknumber,
 					                                           td.Title,
 					                                           td.Album,
 					                                           td.Artist,
+					                                           td.Length,
 					                                           false,
 					                                           uri);
 				}
@@ -200,12 +200,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			else {
 				TrackData td;
 				if(dbBr.get_trackdata_for_stream(uri, out td)) {
-					this.trackList.tracklistmodel.insert_title(0,
-					                                           null,
+					this.trackList.tracklistmodel.insert_title(null,
 					                                           0,
 					                                           td.Title,
 					                                           "",
 					                                           "",
+					                                           0,
 					                                           false,
 					                                           uri);
 				}
@@ -498,25 +498,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void stop() {
 		global.track_state = TrackState.STOPPED;
 		global.current_uri = "";
-		//xn.gPl.stop();
-		//xn.gPl.Uri = "";
-		//trackList.tracklistmodel.reset_play_status_all_titles();
-
-/*
-		//save position
-		int rowcount = -1;
-		rowcount = (int)trackList.tracklistmodel.iter_n_children(null);
-		if(!(rowcount>0)) {
-			return;
-		}
-		TreeIter iter;
-		TreePath path;
-		TrackState currentstate;
-		bool is_first;
-		trackList.tracklistmodel.get_active_path(out path, out currentstate, out is_first);
-		trackList.tracklistmodel.get_iter(out iter, path);
-		trackList.tracklistmodel.set(iter, TrackListModelColumn.STATE, TrackState.POSITION_FLAG, -1);
-*/
 	}
 
 	// This function changes the current song to the next or previous in the
@@ -524,42 +505,33 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	// coming from a button, but, e.g. from a EOS signal handler
 	public void change_song(Direction direction, bool handle_repeat_state = false) {
 		weak TreeIter iter;
-		TrackState currentstate;
 		TreePath path = null;
-		bool is_first;
 		int rowcount = 0;
+		bool used_next_pos = false;
+
 		rowcount = (int)trackList.tracklistmodel.iter_n_children(null);
 
+		// if no track is in the list, it does not make sense to go any further
 		if(rowcount == 0) {
-			print("rowcount is zero -> stop\n");
-			// if no track is in the list, it does not make sense to go any further
 			stop();
 			return;
 		}
 
-		// active path sets first path if active is not found
-		if(!trackList.tracklistmodel.get_active_path(out path,
-		                                             out currentstate,
-		                                             out is_first)) {
+		// get_active_path sets first path, if active is not available
+		if(!trackList.tracklistmodel.get_active_path(out path, out used_next_pos)) {
 			stop();
 			return;
 		}
 
-/*
-		// if stopped
-		if((!xn.gPl.playing)&&(!xn.gPl.paused)) {
-			trackList.tracklistmodel.reset_play_status_all_titles();
-			return;
-		}
-*/
-
-		// get next or previous path
-		if((!(handle_repeat_state &&(repeatState==Repeat.SINGLE)))) {
-			if(path == null) return;
-			if(direction == Direction.NEXT) path.next();
-			else if((direction == Direction.PREVIOUS)&&
-			        (path.to_string() != "0")) {
-				path.prev();
+		if(!used_next_pos) {
+			// get next or previous path
+			if((!(handle_repeat_state &&(repeatState==Repeat.SINGLE)))) {
+				if(path == null) return;
+				if(direction == Direction.NEXT) path.next();
+				else if((direction == Direction.PREVIOUS)&&
+						(path.to_string() != "0")) {
+					path.prev();
+				}
 			}
 		}
 
@@ -570,41 +542,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		global.position_reference = new TreeRowReference(trackList.tracklistmodel, path);
 
 		if(global.track_state == TrackState.PLAYING) trackList.set_focus_on_iter(ref iter);
-/*
-		// goto path, if possible...
-		if(trackList.tracklistmodel.get_iter(out iter, path)) {
-			trackList.tracklistmodel.reset_play_status_all_titles(); //visual reset
-			if(global.state_paused) {
-//			if(xn.gPl.paused) {
-				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PAUSED);
-			}
-			else if(global.state_playing) {
-//			else if(xn.gPl.playing){
-				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
-			}
-			trackList.set_focus_on_iter(ref iter);
-		}
-		//...or goto first song, if possible ...
-		else if((trackList.tracklistmodel.get_iter_first(out iter))&&
-		        (((handle_repeat_state)&&
-		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) {
-			trackList.tracklistmodel.reset_play_status_all_titles();
-			if(xn.gPl.playing) {
-				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
-			}
-			else if(global.state_paused) {
-			//else if(xn.gPl.paused) {
-				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PAUSED);
-			}
-			trackList.set_focus_on_iter(ref iter);
-		}
-		//...or stop
-		else {
-			xn.gPl.stop();                      //...or stop
-			trackList.tracklistmodel.reset_play_status_all_titles();
-			xn.gPl.Uri = "";
-		}
-*/
 	}
 
 	private void on_remove_all_button_clicked() {
@@ -1130,57 +1067,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		 */
 		private void handle_click() {
 			if(global.current_uri == "") {
-				string uri = xn.tl.get_uri_for_current_position();
+				string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
 				if(uri != null) global.current_uri = uri;
 			}
 
 			if(global.track_state == TrackState.PLAYING) {
 				global.track_state = TrackState.PAUSED;
 			}
-			else if(global.track_state == TrackState.PAUSED) {
+			else {
 				global.track_state = TrackState.PLAYING;
 			}
-
-/*
-			if((!xn.gPl.playing)&&
-			   ((xn.tl.tracklistmodel.not_empty())||(xn.gPl.Uri != ""))) {
-				//not running and track available set to play
-				if(xn.gPl.Uri == "") { // play selected track, if available....
-					weak TreeSelection ts = xn.tl.get_selection();
-					GLib.List<TreePath> pathlist = ts.get_selected_rows(null);
-					if(pathlist.nth_data(0)!=null) {
-				print("hc pathlist0 no null\n");
-						string uri = xn.tl.get_uri_for_current_position();
-						//string uri = xn.tl.get_uri_for_treepath(pathlist.nth_data(0));
-						TreePath tp = global.position_reference.get_path();
-				print("hc uri: %s\n", uri);
-						if((uri != null)&&(uri != "")) xn.tl.on_activated(uri, tp);
-						//xn.tl.on_activated(uri, pathlist.nth_data(0));
-					}
-					else {
-						//.....or play previous song
-						xn.main_window.change_song(Direction.PREVIOUS);
-					}
-				}
-				if(xn.tl.tracklistmodel.set_play_state()) {
-					// find active row, set state picture, bolden and set uri for gpl
-					xn.gPl.play();
-				}
-				else if(xn.tl.tracklistmodel.set_play_state_for_first_song()) {
-					xn.gPl.play();
-				}
-			}
-			else {
-				int buf = xn.tl.tracklistmodel.iter_n_children(null);
-				if(buf > 0) {
-					xn.tl.tracklistmodel.set_pause_state();
-					xn.gPl.pause();
-				}
-				else { //if there is no track -> stop
-					stop();
-				}
-			}
-*/
 		}
 
 		public void update_picture() {

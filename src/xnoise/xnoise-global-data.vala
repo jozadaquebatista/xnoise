@@ -38,14 +38,17 @@ public class Xnoise.GlobalData : GLib.Object {
 	// Signals
 	public signal void position_reference_changed();
 	public signal void before_position_reference_changed();
+	public signal void before_position_reference_next_changed();
+	public signal void position_reference_next_changed();
 	public signal void track_state_changed();
 	public signal void current_uri_changed();
 	public signal void caught_eos_from_player();
 
 	// Private fields
 	private TrackState _track_state = TrackState.STOPPED;
-	private string  _current_uri = "";
+	private string _current_uri = "";
 	private Gtk.TreeRowReference? _position_reference = null;
+	private Gtk.TreeRowReference? _position_reference_next = null;
 
 	// Public properties
 	public TrackState track_state {
@@ -92,7 +95,23 @@ public class Xnoise.GlobalData : GLib.Object {
 	// The next_position_reference is used to hold a position in the tracklist,
 	// in case the row position_reference is pointing to is removed and the next
 	// song has not yet been started.
-	public Gtk.TreeRowReference next_position_reference { get; set; default = null; }
+	public Gtk.TreeRowReference position_reference_next {
+		get {
+			return _position_reference_next;
+		}
+		set {
+			if(_position_reference_next != value) {
+				before_position_reference_next_changed();
+				_position_reference_next = value;
+				// signal changed
+				position_reference_next_changed();
+			}
+		}
+	}
+
+	public void reset_position_reference() {
+		this._position_reference = null;
+	}
 
 	public void handle_eos() {
 		caught_eos_from_player();

@@ -146,16 +146,21 @@ public enum Xnoise.MediaType {
 	PLAYLISTFILE
 }
 
+public enum Xnoise.TrackListNoteBookTab {
+	TRACKLIST = 0,
+	VIDEO,
+	LYRICS
+}
+
 public enum Xnoise.TrackListModelColumn {
-	STATE = 0,
-	ICON,
+	ICON = 0,
 	TRACKNUMBER,
 	TITLE,
 	ALBUM,
 	ARTIST,
+	LENGTH,
 	WEIGHT,
-	URI,
-	N_COLUMNS
+	URI
 }
 
 public enum Xnoise.TrackState {
@@ -186,6 +191,7 @@ public class Xnoise.TrackData { // track meta information
 	public string Genre;
 	public uint Year;
 	public uint Tracknumber;
+	public int32 Length;
 	public MediaType Mediatype = MediaType.UNKNOWN;
 	public string Uri;
 }
