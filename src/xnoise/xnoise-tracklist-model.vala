@@ -353,7 +353,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		TreeIter iter, iter_2 = {};
 		while(td_list[k] != null) {
 			string current_uri = td_list[k].Uri;
-print("t no: %d\n", (int)td_list[k].Tracknumber);
+
 			if(k == 0) { // First track
 				iter = this.insert_title(null,
 				                         (int)td_list[k].Tracknumber,
