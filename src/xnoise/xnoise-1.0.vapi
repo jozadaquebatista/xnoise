@@ -337,6 +337,7 @@ namespace Xnoise {
 	public class TrackData {
 		public string Album;
 		public string Artist;
+		public int Bitrate;
 		public string Genre;
 		public int32 Length;
 		public Xnoise.MediaType Mediatype;

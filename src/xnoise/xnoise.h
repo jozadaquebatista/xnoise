@@ -812,6 +812,7 @@ struct _XnoiseTrackData {
 	guint Year;
 	guint Tracknumber;
 	gint32 Length;
+	gint Bitrate;
 	XnoiseMediaType Mediatype;
 	char* Uri;
 };

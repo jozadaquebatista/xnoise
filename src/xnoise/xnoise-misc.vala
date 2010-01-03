@@ -192,6 +192,7 @@ public class Xnoise.TrackData { // track meta information
 	public uint Year;
 	public uint Tracknumber;
 	public int32 Length;
+	public int Bitrate;
 	public MediaType Mediatype = MediaType.UNKNOWN;
 	public string Uri;
 }

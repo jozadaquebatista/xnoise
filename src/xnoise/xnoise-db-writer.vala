@@ -101,7 +101,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_INSERT_GENRE =
 		"INSERT INTO genres (name) VALUES (?)";
 	private static const string STMT_INSERT_TITLE =
-		"INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		"INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length, bitrate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static const string STMT_GET_TITLE_ID =
 		"SELECT id FROM items WHERE artist = ? AND album = ? AND LOWER(title) = ?";
 	private static const string STMT_DEL_ARTISTS =
@@ -363,6 +363,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		uint year           = td.Year;
 		uint tracknumber    = td.Tracknumber;
 		int32 length        = td.Length;
+		int bitrate         = td.Bitrate;
 		int mediatype       = (int)td.Mediatype;
 
 		int artist_id = handle_artist(ref artist);
@@ -385,19 +386,6 @@ public class Xnoise.DbWriter : GLib.Object {
 			print("Error importing genre!\n");
 			return;
 		}
-		// COMMENT THIS OUT BECAUSE NOT USED ATM
-		//int title_id = -1;
-		//get_title_id_statement.reset();
-		//if( get_title_id_statement.bind_int (1, artist_id)         != Sqlite.OK ||
-		//	get_title_id_statement.bind_int (2, album_id)          != Sqlite.OK ||
-		//	get_title_id_statement.bind_text(3, title.down())      != Sqlite.OK ) {
-		//	this.db_error();
-		//	return;
-		//}
-		//if(get_title_id_statement.step() == Sqlite.ROW)
-		//	title_id = get_title_id_statement.column_int(0);
-		//
-		//if(title_id ==-1) {
 		insert_title_statement.reset();
 		if( insert_title_statement.bind_int (1, (int)tracknumber)  != Sqlite.OK ||
 			insert_title_statement.bind_int (2, artist_id)         != Sqlite.OK ||
@@ -407,7 +395,8 @@ public class Xnoise.DbWriter : GLib.Object {
 			insert_title_statement.bind_int (6, (int)year)         != Sqlite.OK ||
 			insert_title_statement.bind_int (7, uri_id)            != Sqlite.OK ||
 			insert_title_statement.bind_int (8, mediatype)         != Sqlite.OK ||
-			insert_title_statement.bind_int (9, length)            != Sqlite.OK) {
+			insert_title_statement.bind_int (9, length)            != Sqlite.OK ||
+			insert_title_statement.bind_int (10, bitrate)          != Sqlite.OK) {
 			this.db_error();
 		}
 		if(insert_title_statement.step()!=Sqlite.DONE)
