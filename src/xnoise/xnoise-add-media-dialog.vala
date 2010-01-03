@@ -75,7 +75,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		
 		//add files
 		var mfiles = dbb.get_media_files();
-		print("mfiles length: %d\n", mfiles.length);
+		//print("mfiles length: %d\n", mfiles.length);
 		foreach(string uri in mfiles) {
 			File file = File.new_for_uri(uri);
 			TreeIter iter;

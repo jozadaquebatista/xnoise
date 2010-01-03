@@ -42,6 +42,28 @@ public class Xnoise.TrackList : TreeView {
 	private TreeRowReference[] rowref_list;
 	private bool dragging;
 	private Menu menu;
+	private bool _column_length_visible;
+	private bool _column_tracknumber_visible;
+	public bool column_length_visible {
+		get {
+			return _column_length_visible;
+		}
+		set {
+			_column_length_visible = value;
+			this.columnLength.visible = value;
+		}
+	}
+	public bool column_tracknumber_visible{
+		get {
+			return _column_tracknumber_visible;
+		}
+		set {
+			_column_tracknumber_visible = value;
+			this.columnTracknumber.visible = value;
+		}
+	}
+	private TreeViewColumn columnLength;
+	private TreeViewColumn columnTracknumber;
 	public TrackListModel tracklistmodel;
 
 	public TrackList() {
@@ -346,7 +368,7 @@ public class Xnoise.TrackList : TreeView {
 		rowref_list = null;
 		if(xn.main_window.drag_on_da) {
 			xn.main_window.drag_on_da = false;
-			xn.main_window.tracklistnotebook.set_current_page(1);
+			xn.main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 		}
 	}
 
@@ -664,11 +686,11 @@ public class Xnoise.TrackList : TreeView {
 	private void setup_view() {
 		CellRendererText renderer;
 		var columnPixb        = new TreeViewColumn();
-		var columnTracknumber = new TreeViewColumn();
+		columnTracknumber = new TreeViewColumn();
 		var columnAlbum       = new TreeViewColumn();
 		var columnTitle       = new TreeViewColumn();
 		var columnArtist      = new TreeViewColumn();
-		var columnLength      = new TreeViewColumn();
+		columnLength      = new TreeViewColumn();
 
 
 		// STATUS ICON

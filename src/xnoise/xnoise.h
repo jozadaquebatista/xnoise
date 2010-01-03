@@ -890,6 +890,11 @@ struct _XnoisePluginManagerTreeClass {
 	GtkTreeViewClass parent_class;
 };
 
+typedef enum  {
+	XNOISE_SETTINGS_DIALOG_ERROR_FILE_NOT_FOUND,
+	XNOISE_SETTINGS_DIALOG_ERROR_GENERAL_ERROR
+} XnoiseSettingsDialogError;
+#define XNOISE_SETTINGS_DIALOG_ERROR xnoise_settings_dialog_error_quark ()
 struct _XnoiseSettingsDialog {
 	GtkBuilder parent_instance;
 	XnoiseSettingsDialogPrivate * priv;
@@ -1016,7 +1021,7 @@ XnoiseDbCreator* xnoise_db_creator_construct (GType object_type);
 GType xnoise_db_writer_get_type (void);
 XnoiseDbWriter* xnoise_db_writer_new (void);
 XnoiseDbWriter* xnoise_db_writer_construct (GType object_type);
-gboolean xnoise_db_writer_set_local_image_for_album (XnoiseDbWriter* self, char** artist, char** album, const char* image_uri);
+gboolean xnoise_db_writer_set_local_image_for_album (XnoiseDbWriter* self, char** artist, char** album, const char* image_path);
 void xnoise_db_writer_store_media_files (XnoiseDbWriter* self, char** list_of_files, int list_of_files_length1);
 void xnoise_db_writer_store_streams (XnoiseDbWriter* self, char** list_of_streams, int list_of_streams_length1);
 void xnoise_db_writer_store_media_folders (XnoiseDbWriter* self, char** mfolders, int mfolders_length1);
@@ -1219,6 +1224,7 @@ GType xnoise_plugin_manager_tree_get_type (void);
 XnoisePluginManagerTree* xnoise_plugin_manager_tree_new (XnoiseMain** xn);
 XnoisePluginManagerTree* xnoise_plugin_manager_tree_construct (GType object_type, XnoiseMain** xn);
 void xnoise_plugin_manager_tree_create_view (XnoisePluginManagerTree* self);
+GQuark xnoise_settings_dialog_error_quark (void);
 GType xnoise_settings_dialog_get_type (void);
 XnoiseSettingsDialog* xnoise_settings_dialog_new (XnoiseMain** xn);
 XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type, XnoiseMain** xn);
@@ -1231,6 +1237,10 @@ XnoiseTrackList* xnoise_track_list_construct (GType object_type);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_selected_rows (XnoiseTrackList* self);
 void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, GtkTreePath* path);
+gboolean xnoise_track_list_get_column_length_visible (XnoiseTrackList* self);
+void xnoise_track_list_set_column_length_visible (XnoiseTrackList* self, gboolean value);
+gboolean xnoise_track_list_get_column_tracknumber_visible (XnoiseTrackList* self);
+void xnoise_track_list_set_column_tracknumber_visible (XnoiseTrackList* self, gboolean value);
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
 XnoiseTrackListModel* xnoise_track_list_model_construct (GType object_type);
 void xnoise_track_list_model_on_before_position_reference_changed (XnoiseTrackListModel* self);

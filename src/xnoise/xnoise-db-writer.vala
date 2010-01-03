@@ -198,12 +198,14 @@ public class Xnoise.DbWriter : GLib.Object {
 
 	public bool set_local_image_for_album(ref string artist,
 	                                      ref string album,
-	                                      string image_uri) {
+	                                      string image_path) {
+		// Existance has been checked before !
+
 		begin_transaction();
 		update_album_image_statement.reset();
-		if(update_album_image_statement.bind_text(1, image_uri) != Sqlite.OK ||
-		   update_album_image_statement.bind_text(2, artist)    != Sqlite.OK ||
-		   update_album_image_statement.bind_text(3, album)     != Sqlite.OK ) {
+		if(update_album_image_statement.bind_text(1, image_path) != Sqlite.OK ||
+		   update_album_image_statement.bind_text(2, artist)     != Sqlite.OK ||
+		   update_album_image_statement.bind_text(3, album)      != Sqlite.OK ) {
 			this.db_error();
 			return false;
 		}
@@ -356,22 +358,13 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	private void insert_title(TrackData td, string uri) {
-		string artist       = td.Artist;
-		string title        = td.Title;
-		string album        = td.Album;
-		string genre        = td.Genre;
-		uint year           = td.Year;
-		uint tracknumber    = td.Tracknumber;
-		int32 length        = td.Length;
-		int bitrate         = td.Bitrate;
-		int mediatype       = (int)td.Mediatype;
-
-		int artist_id = handle_artist(ref artist);
+		// make entries in other tables and get references from there
+		int artist_id = handle_artist(ref td.Artist);
 		if(artist_id == -1) {
 			print("Error importing artist!\n");
 			return;
 		}
-		int album_id = handle_album(ref artist_id, ref album);
+		int album_id = handle_album(ref artist_id, ref td.Album);
 		if(album_id == -1) {
 			print("Error importing album!\n");
 			return;
@@ -381,22 +374,22 @@ public class Xnoise.DbWriter : GLib.Object {
 			print("Error importing uri!\n");
 			return;
 		}
-		int genre_id = handle_genre(ref genre);
+		int genre_id = handle_genre(ref td.Genre);
 		if(genre_id == -1) {
 			print("Error importing genre!\n");
 			return;
 		}
 		insert_title_statement.reset();
-		if( insert_title_statement.bind_int (1, (int)tracknumber)  != Sqlite.OK ||
-			insert_title_statement.bind_int (2, artist_id)         != Sqlite.OK ||
-			insert_title_statement.bind_int (3, album_id)          != Sqlite.OK ||
-			insert_title_statement.bind_text(4, title)             != Sqlite.OK ||
-			insert_title_statement.bind_int (5, genre_id)          != Sqlite.OK ||
-			insert_title_statement.bind_int (6, (int)year)         != Sqlite.OK ||
-			insert_title_statement.bind_int (7, uri_id)            != Sqlite.OK ||
-			insert_title_statement.bind_int (8, mediatype)         != Sqlite.OK ||
-			insert_title_statement.bind_int (9, length)            != Sqlite.OK ||
-			insert_title_statement.bind_int (10, bitrate)          != Sqlite.OK) {
+		if( insert_title_statement.bind_int (1,  (int)td.Tracknumber) != Sqlite.OK ||
+			insert_title_statement.bind_int (2,  artist_id)           != Sqlite.OK ||
+			insert_title_statement.bind_int (3,  album_id)            != Sqlite.OK ||
+			insert_title_statement.bind_text(4,  td.Title)            != Sqlite.OK ||
+			insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
+			insert_title_statement.bind_int (6,  (int)td.Year)        != Sqlite.OK ||
+			insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
+			insert_title_statement.bind_int (8,  td.Mediatype)        != Sqlite.OK ||
+			insert_title_statement.bind_int (9,  td.Length)           != Sqlite.OK ||
+			insert_title_statement.bind_int (10, td.Bitrate)          != Sqlite.OK) {
 			this.db_error();
 		}
 		if(insert_title_statement.step()!=Sqlite.DONE)
@@ -414,10 +407,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 		return id;
 	}
-
-	private uint current = 0;
-//	private uint amount = 0;
-	public signal void sign_import_progress(uint current, uint amount);
 
 	// Single stream for collection
 	private void add_single_stream_to_collection(string uri, string name = "") {
@@ -473,23 +462,20 @@ public class Xnoise.DbWriter : GLib.Object {
 			if(idbuffer== -1) {
 				var tr = new TagReader();
 				this.insert_title(tr.read_tag(file.get_path()), file.get_uri());
-				current+=1;
 			}
-//			sign_import_progress(current, amount);   //TODO: Maybe use this to track import progress
 		}
 		else if(psVideo.match_string(mime)) {
 			int idbuffer = db_entry_exists(file.get_uri());
 			var td = new TrackData();
 			td.Artist = "unknown artist";
 			td.Album = "unknown album";
-			td.Title = file.get_basename();
+			if(file!=null) td.Title = file.get_basename();
 			td.Genre = "";
 			td.Tracknumber = 0;
 			td.Mediatype = MediaType.VIDEO;
 
 			if(idbuffer== -1) {
 				this.insert_title(td, file.get_uri());
-				//current+=1;
 			}
 		}
 	}
@@ -534,9 +520,7 @@ public class Xnoise.DbWriter : GLib.Object {
 					if(idbuffer== -1) {
 						var tr = new TagReader();
 						this.insert_title(tr.read_tag(filepath), file.get_uri());
-						current+=1;
 					}
-	//				sign_import_progress(current, amount);   //TODO: Maybe use this to track import progress
 				}
 				else if(psVideo.match_string(mime)) {
 					int idbuffer = db_entry_exists(file.get_uri());
@@ -550,7 +534,6 @@ public class Xnoise.DbWriter : GLib.Object {
 
 					if(idbuffer== -1) {
 						this.insert_title(td, file.get_uri());
-						current+=1;
 					}
 				}
 			}
@@ -674,15 +657,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 		return true;
 	}
-
-//	private bool exec_stmnt_string(string statement) {
-//		string errormsg;
-//		if(db.exec(statement, null, out errormsg)!= Sqlite.OK) {
-//			stderr.printf("exec_stmnt_string error: %s", errormsg);
-//			return false;
-//		}
-//		return true;
-//	}
 
 	private void del_media_folders() {
 		exec_prepared_stmt(del_media_folder_statement);

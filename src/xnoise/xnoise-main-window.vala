@@ -153,7 +153,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		videoscreen.button_press_event.connect(on_video_da_button_press);
 		sign_drag_over_da.connect(() => {
 			//switch to tracklist for dropping
-			if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(0);
+			if(!fullscreenwindowvisible)
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 		});
 		videoscreen.drag_motion.connect(on_da_drag_motion);
 	}
@@ -229,7 +230,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			fullscreenwindow.show_all();
 			this.videoscreen.reparent(fullscreenwindow);
 			this.videoscreen.window.process_updates(true);
-			this.tracklistnotebook.set_current_page(0);
+			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 			fullscreenwindowvisible = true;
 			fullscreentoolbar.show();
 		}
@@ -237,7 +238,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.videoscreen.window.unfullscreen();
 			this.videoscreen.reparent(videovbox);
 			fullscreenwindow.hide_all();
-			this.tracklistnotebook.set_current_page(1);
+			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			fullscreenwindowvisible = false;
 			this.videovbox.show();
 			fullscreentoolbar.hide();
@@ -413,15 +414,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_show_video_menu_clicked() {
-		this.tracklistnotebook.set_current_page(1);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 	}
 
 	private void on_show_tracklist_menu_clicked() {
-		this.tracklistnotebook.set_current_page(0);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 	}
 
 	private void on_show_lyrics_menu_clicked() {
-		this.tracklistnotebook.set_current_page(2);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
 	}
 
 	// This is used for the main window
@@ -562,15 +563,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_show_tracklist_button_clicked() {
-		this.tracklistnotebook.set_current_page(0);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 	}
 
 	private void on_show_video_button_clicked() {
-		this.tracklistnotebook.set_current_page(1);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 	}
 
 	private void on_show_lyrics_button_clicked() {
-		this.tracklistnotebook.set_current_page(2);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
 	}
 
 	private bool on_close() {
@@ -1353,7 +1354,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				this.xn.main_window.videoscreen.window.unfullscreen();
 				this.xn.main_window.videoscreen.reparent(this.xn.main_window.videovbox);
 				this.xn.main_window.fullscreenwindow.hide_all();
-				this.xn.main_window.tracklistnotebook.set_current_page(1);
+				this.xn.main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 				this.xn.main_window.fullscreenwindowvisible = false;
 				this.xn.main_window.videovbox.show();
 				this.xn.main_window.fullscreentoolbar.hide();

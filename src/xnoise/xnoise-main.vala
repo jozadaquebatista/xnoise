@@ -68,7 +68,7 @@ public class Xnoise.Main : GLib.Object {
 		gPl.sign_tag_changed.connect(main_window.set_displayed_title);
 		gPl.sign_video_playing.connect( () => { //handle stop signal from gst player
 			if(!main_window.fullscreenwindowvisible)
-				main_window.tracklistnotebook.set_current_page(1);
+				main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 		});
 
 		main_window.sign_pos_changed.connect((main_window, fraction) => {

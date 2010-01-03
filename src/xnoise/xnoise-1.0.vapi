@@ -83,12 +83,11 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
 		public DbWriter ();
-		public bool set_local_image_for_album (ref string artist, ref string album, string image_uri);
+		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public void store_media_files (string[] list_of_files);
 		public void store_media_folders (string[] mfolders);
 		public void store_streams (string[] list_of_streams);
 		public void write_final_tracks_to_db (string[] final_tracklist);
-		public signal void sign_import_progress (uint current, uint amount);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GlobalData : GLib.Object {
@@ -354,6 +353,8 @@ namespace Xnoise {
 		public void on_activated (string uri, Gtk.TreePath path);
 		public void remove_selected_rows ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
+		public bool column_length_visible { get; set; }
+		public bool column_tracknumber_visible { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackListModel : Gtk.ListStore, Gtk.TreeModel {
@@ -489,6 +490,11 @@ namespace Xnoise {
 		STOPPED,
 		PLAYING,
 		PAUSED
+	}
+	[CCode (cprefix = "XNOISE_SETTINGS_DIALOG_ERROR_", cheader_filename = "xnoise.h")]
+	public errordomain SettingsDialogError {
+		FILE_NOT_FOUND,
+		GENERAL_ERROR,
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalData global;

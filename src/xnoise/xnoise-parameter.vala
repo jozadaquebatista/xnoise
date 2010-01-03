@@ -219,12 +219,12 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 
 private const string default_content = """
 [settings_int]
-use_length_column=1
+use_length_column=0
 use_tracknumber_column=1
 posY=0
 posX=0
 height=575
-fontsizeMB=0
+fontsizeMB=8
 hp_position=227
 width=1024
 use_treelines=0

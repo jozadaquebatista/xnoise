@@ -48,7 +48,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 	public string current_image_path  { get; private set; default = ""; }
 
 //	public signal void sign_cov_image_available();
-	
+
 	public AlbumImage() {
 		xn = Main.instance();
 		AlbumImageLoader.init();
@@ -161,8 +161,8 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 			current_image_path = fileout.get_path();
 		}
 		else {
-			if(loader != null) { 
-				loader.sign_fetched.disconnect(on_album_image_fetched); 
+			if(loader != null) {
+				loader.sign_fetched.disconnect(on_album_image_fetched);
 			}
 			loader = new AlbumImageLoader(artist, album);
 			loader.sign_fetched.connect(on_album_image_fetched);
@@ -198,7 +198,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 		}
 		return false;
 	}
-	
+
 	public void load_default_image() {
 		if(source!=0)
 			GLib.Source.remove(source);
@@ -214,18 +214,18 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 	}
 
 	private static uint source = 0;
-	
+
 	private void on_album_image_fetched(string? image_path) {
 		//print("image ready: %s\n", image_path);
 		if((image_path == null)||(image_path == "")) return;
-		
+
 		File f = File.new_for_path(image_path);
 		if(!f.query_exists(null)) return;
 
 		current_image_path = image_path;
 		if(source!=0)
 			GLib.Source.remove(source);
-		source = Idle.add(this.set_albumimage_from_path);	
+		source = Idle.add(this.set_albumimage_from_path);
 		current_image_path = image_path;
 		album_image_available = true;
 		var dbw = new DbWriter();
