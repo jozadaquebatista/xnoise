@@ -58,17 +58,17 @@ namespace Xnoise {
 		public string[] get_media_files ();
 		public string[] get_media_folders ();
 		public string? get_single_stream_uri (string name);
-		public Xnoise.TitleMtypeId[] get_stream_data (ref string searchtext);
+		public Xnoise.MediaData[] get_stream_data (ref string searchtext);
 		public bool get_stream_for_id (int id, out string uri);
 		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 		public Xnoise.StreamData[] get_streams ();
-		public Xnoise.TitleMtypeId[] get_titles_with_mediatypes_and_ids (string artist, string album, ref string searchtext);
+		public Xnoise.MediaData[] get_titles_with_mediatypes_and_ids (string artist, string album, ref string searchtext);
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public bool get_trackdata_for_uri (string uri, out Xnoise.TrackData val);
 		public bool get_uri_for_id (int id, out string val);
-		public Xnoise.TitleMtypeId[] get_video_data (ref string searchtext);
+		public Xnoise.MediaData[] get_video_data (ref string searchtext);
 		public string[] get_videos (ref string searchtext);
 		public bool stream_is_in_db (string uri);
 		public bool streams_available ();
@@ -91,14 +91,20 @@ namespace Xnoise {
 		public void write_final_tracks_to_db (string[] final_tracklist);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class GlobalData : GLib.Object {
-		public GlobalData ();
+	public class GlobalInfo : GLib.Object {
+		[CCode (cprefix = "XNOISE_GLOBAL_INFO_TRACK_STATE_", cheader_filename = "xnoise.h")]
+		public enum TrackState {
+			STOPPED,
+			PLAYING,
+			PAUSED
+		}
+		public GlobalInfo ();
 		public void handle_eos ();
 		public void reset_position_reference ();
 		public string current_uri { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
-		public Xnoise.TrackState track_state { get; set; }
+		public Xnoise.GlobalInfo.TrackState track_state { get; set; }
 		public signal void before_position_reference_changed ();
 		public signal void before_position_reference_next_changed ();
 		public signal void caught_eos_from_player ();
@@ -205,6 +211,11 @@ namespace Xnoise {
 		public class VolumeSliderButton : Gtk.VolumeButton {
 			public VolumeSliderButton ();
 		}
+		[CCode (cprefix = "XNOISE_MAIN_WINDOW_DIRECTION_", cheader_filename = "xnoise.h")]
+		public enum Direction {
+			NEXT,
+			PREVIOUS
+		}
 		public bool _seek;
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
@@ -234,7 +245,7 @@ namespace Xnoise {
 		public Gtk.Notebook tracklistnotebook;
 		public Xnoise.VideoScreen videoscreen;
 		public MainWindow (ref unowned Xnoise.Main xn);
-		public void change_song (Xnoise.Direction direction, bool handle_repeat_state = false);
+		public void change_song (Xnoise.MainWindow.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
 		public void set_displayed_title (string newuri);
 		public bool fullscreenwindowvisible { get; set; }
@@ -254,6 +265,22 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
+		[CCode (cprefix = "XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_", cheader_filename = "xnoise.h")]
+		public enum CollectionType {
+			UNKNOWN,
+			HIERARCHICAL,
+			LISTED
+		}
+		[CCode (cprefix = "XNOISE_MEDIA_BROWSER_MODEL_COLUMN_", cheader_filename = "xnoise.h")]
+		public enum Column {
+			ICON,
+			VIS_TEXT,
+			DB_ID,
+			MEDIATYPE,
+			COLL_TYPE,
+			DRAW_SEPTR,
+			N_COLUMNS
+		}
 		public string searchtext;
 		public MediaBrowserModel ();
 		public string[] build_uri_list_for_treepath (Gtk.TreePath treepath, ref Xnoise.DbBrowser dbb);
@@ -362,6 +389,17 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackListModel : Gtk.ListStore, Gtk.TreeModel {
+		[CCode (cprefix = "XNOISE_TRACK_LIST_MODEL_COLUMN_", cheader_filename = "xnoise.h")]
+		public enum Column {
+			ICON,
+			TRACKNUMBER,
+			TITLE,
+			ALBUM,
+			ARTIST,
+			LENGTH,
+			WEIGHT,
+			URI
+		}
 		public TrackListModel ();
 		public void add_tracks (Xnoise.TrackData[]? td_list, bool imediate_play = true);
 		public void add_uris (string[]? uris);
@@ -374,7 +412,7 @@ namespace Xnoise {
 		public void on_before_position_reference_changed ();
 		public void on_position_reference_changed ();
 		public void set_reference_to_last ();
-		public signal void sign_active_path_changed (Xnoise.TrackState ts);
+		public signal void sign_active_path_changed (Xnoise.GlobalInfo.TrackState ts);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class VideoScreen : Gtk.DrawingArea {
@@ -420,43 +458,16 @@ namespace Xnoise {
 		public abstract string name { get; }
 		public abstract Xnoise.Main xn { get; set; }
 	}
-	[CCode (type_id = "XNOISE_TYPE_STREAM_DATA", cheader_filename = "xnoise.h")]
-	public struct StreamData {
-		public string Name;
-		public string Uri;
-	}
-	[CCode (type_id = "XNOISE_TYPE_TITLE_MTYPE_ID", cheader_filename = "xnoise.h")]
-	public struct TitleMtypeId {
+	[CCode (type_id = "XNOISE_TYPE_MEDIA_DATA", cheader_filename = "xnoise.h")]
+	public struct MediaData {
 		public string name;
 		public int id;
 		public Xnoise.MediaType mediatype;
 	}
-	[CCode (cprefix = "XNOISE_BROWSER_COLLECTION_TYPE_", cheader_filename = "xnoise.h")]
-	public enum BrowserCollectionType {
-		UNKNOWN,
-		HIERARCHICAL,
-		LISTED
-	}
-	[CCode (cprefix = "XNOISE_BROWSER_COLUMN_", cheader_filename = "xnoise.h")]
-	public enum BrowserColumn {
-		ICON,
-		VIS_TEXT,
-		DB_ID,
-		MEDIATYPE,
-		COLL_TYPE,
-		DRAW_SEPTR,
-		N_COLUMNS
-	}
-	[CCode (cprefix = "XNOISE_DIRECTION_", cheader_filename = "xnoise.h")]
-	public enum Direction {
-		NEXT,
-		PREVIOUS
-	}
-	[CCode (cprefix = "XNOISE_MEDIA_STORAGE_TYPE_", cheader_filename = "xnoise.h")]
-	public enum MediaStorageType {
-		FILE,
-		FOLDER,
-		STREAM
+	[CCode (type_id = "XNOISE_TYPE_STREAM_DATA", cheader_filename = "xnoise.h")]
+	public struct StreamData {
+		public string Name;
+		public string Uri;
 	}
 	[CCode (cprefix = "XNOISE_MEDIA_TYPE_", cheader_filename = "xnoise.h")]
 	public enum MediaType {
@@ -466,34 +477,11 @@ namespace Xnoise {
 		STREAM,
 		PLAYLISTFILE
 	}
-	[CCode (cprefix = "XNOISE_REPEAT_", cheader_filename = "xnoise.h")]
-	public enum Repeat {
-		NOT_AT_ALL,
-		SINGLE,
-		ALL
-	}
-	[CCode (cprefix = "XNOISE_TRACK_LIST_MODEL_COLUMN_", cheader_filename = "xnoise.h")]
-	public enum TrackListModelColumn {
-		ICON,
-		TRACKNUMBER,
-		TITLE,
-		ALBUM,
-		ARTIST,
-		LENGTH,
-		WEIGHT,
-		URI
-	}
 	[CCode (cprefix = "XNOISE_TRACK_LIST_NOTE_BOOK_TAB_", cheader_filename = "xnoise.h")]
 	public enum TrackListNoteBookTab {
 		TRACKLIST,
 		VIDEO,
 		LYRICS
-	}
-	[CCode (cprefix = "XNOISE_TRACK_STATE_", cheader_filename = "xnoise.h")]
-	public enum TrackState {
-		STOPPED,
-		PLAYING,
-		PAUSED
 	}
 	[CCode (cprefix = "XNOISE_SETTINGS_DIALOG_ERROR_", cheader_filename = "xnoise.h")]
 	public errordomain SettingsDialogError {
@@ -501,7 +489,7 @@ namespace Xnoise {
 		GENERAL_ERROR,
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public static Xnoise.GlobalData global;
+	public static Xnoise.GlobalInfo global;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise.h")]

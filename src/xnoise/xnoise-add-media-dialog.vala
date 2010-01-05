@@ -1,6 +1,6 @@
 /* xnoise-add-media-dialog.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 using Gtk;
 
 public class Xnoise.AddMediaDialog : GLib.Object {
-	
+
 	private const string XNOISEICON = Config.UIDIR + "xnoise_16x16.png";
 	private Gtk.Dialog dialog;
 	public Gtk.Builder builder;
@@ -39,40 +39,46 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private TreeView tv;
 	private string[] list_of_folders;
 	private string[] list_of_files;
-	private string[] list_of_streams; 
-	
+	private string[] list_of_streams;
+
+	private enum MediaStorageType {
+		FILE = 0,
+		FOLDER,
+		STREAM
+	}
+
 	public signal void sign_finish();
-	
+
 	public AddMediaDialog() {
 		builder = new Gtk.Builder();
 		create_widgets();
-		
+
 		fill_media_list();
 
-		this.dialog.show_all();	
+		this.dialog.show_all();
 	}
 
 	//	~AddMediaDialog() {
-	//		print("destruct amd\n");	
+	//		print("destruct amd\n");
 	//	}
-	
+
 	private void fill_media_list() {
 		return_if_fail(listmodel!=null);
-		
+
 		DbBrowser dbb = new DbBrowser();
-		
+
 		//add folders
-		var mfolders = dbb.get_media_folders(); 
+		var mfolders = dbb.get_media_folders();
 		foreach(string mfolder in mfolders) {
 			TreeIter iter;
 			listmodel.append(out iter);
-			listmodel.set(iter, 
-			              0, mfolder, 
+			listmodel.set(iter,
+			              0, mfolder,
 			              1, MediaStorageType.FOLDER,
 			              -1
 			              );
 		}
-		
+
 		//add files
 		var mfiles = dbb.get_media_files();
 		//print("mfiles length: %d\n", mfiles.length);
@@ -80,24 +86,24 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			File file = File.new_for_uri(uri);
 			TreeIter iter;
 			listmodel.append(out iter);
-			listmodel.set(iter, 
-			              0, file.get_path(), 
+			listmodel.set(iter,
+			              0, file.get_path(),
 			              1, MediaStorageType.FILE,
 			              -1
 			              );
-		}	
-			
+		}
+
 		//add streams to list
 		var streams = dbb.get_streams();
 		foreach(StreamData sd in streams) {
 			TreeIter iter;
 			listmodel.append(out iter);
-			listmodel.set(iter, 
-			              0, sd.Uri, 
+			listmodel.set(iter,
+			              0, sd.Uri,
 			              1, MediaStorageType.STREAM,
 			              -1
 			              );
-		}		
+		}
 	}
 
 	private void harvest_media_locations() {
@@ -113,7 +119,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 			dialog.set_modal(true);
 			builder.add_from_file(Config.UIDIR + "add_media.ui");
-			
+
 			var mainvbox         = builder.get_object("mainvbox") as Gtk.VBox;
 			tv                   = builder.get_object("tv") as TreeView;
 			var baddfile         = builder.get_object("addfilebutton") as Button;
@@ -125,7 +131,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			var labeladdfolder   = builder.get_object("labeladdfolder") as Label;
 			var labeladdstream   = builder.get_object("labeladdstream") as Label;
 			var labelremove      = builder.get_object("labelremove") as Label;
-			
+
 			var bcancel          = (Button)this.dialog.add_button(Gtk.STOCK_CANCEL, 0);
 			var bok              = (Button)this.dialog.add_button(Gtk.STOCK_OK, 1);
 
@@ -133,7 +139,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			labeladdfolder.label = _("Add local folder");
 			labeladdstream.label = _("Add media stream");
 			labelremove.label    = _("Remove");
-			
+
 			bok.clicked.connect(on_ok_button_clicked);
 			bcancel.clicked.connect(on_cancel_button_clicked);
 			baddfile.clicked.connect(on_add_file_button_clicked);
@@ -144,17 +150,17 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			this.dialog.vbox.add(mainvbox);
 			this.dialog.set_icon_from_file(XNOISEICON);
 			this.dialog.set_title(_("xnoise - Add media to library"));
-		} 
+		}
 		catch (GLib.Error e) {
-			var msg = new Gtk.MessageDialog(null, 
-			                                Gtk.DialogFlags.MODAL, 
-			                                Gtk.MessageType.ERROR, 
-			                                Gtk.ButtonsType.CANCEL, 
+			var msg = new Gtk.MessageDialog(null,
+			                                Gtk.DialogFlags.MODAL,
+			                                Gtk.MessageType.ERROR,
+			                                Gtk.ButtonsType.CANCEL,
 			                                "Failed to build dialog! %s\n".printf(e.message));
 			msg.run();
 			return;
 		}
-		
+
 		listmodel = new ListStore(2, typeof(string), typeof(int));
 		tv.set_model(listmodel);
 		CellRendererText cell = new Gtk.CellRendererText ();
@@ -162,10 +168,10 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		tv.insert_column_with_attributes(-1, "Path", cell, "text", 0);
 	}
 
-	private bool list_foreach(TreeModel sender, TreePath mypath, TreeIter myiter) { 
+	private bool list_foreach(TreeModel sender, TreePath mypath, TreeIter myiter) {
 		string gv;
 		MediaStorageType mst;
-		sender.get(myiter, 
+		sender.get(myiter,
 		           0, out gv,
 		           1, out mst
 		           );
@@ -176,7 +182,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			case MediaStorageType.FILE:
 				var file = File.new_for_path(gv);
 				list_of_files += file.get_uri();
-				break;			
+				break;
 			case MediaStorageType.STREAM:
 				list_of_streams += gv;
 				break;
@@ -193,25 +199,25 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		harvest_media_locations();
 		try {
 			Thread.create(write_media_to_db, false);
-		} 
+		}
 		catch (ThreadError e) {
 			print("Error: %s\n", e.message);
 			return;
 		}
 		this.dialog.destroy();
 	}
-	
-	private void* write_media_to_db() { 
+
+	private void* write_media_to_db() {
 		// thread function for the import to the library
 		// sends a signal when finished, this signal is handled by main window class
 		var dbw = new DbWriter();
-		
-		dbw.store_media_folders(list_of_folders); 
-		
+
+		dbw.store_media_folders(list_of_folders);
+
 		dbw.store_streams(list_of_streams); // TODO: Deliver streams with names
-		
+
 		dbw.store_media_files(list_of_files);
-		
+
 		this.sign_finish();
 		// print("thread finished\n");
 		return null;
@@ -224,7 +230,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void on_add_file_button_clicked() {
 		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
 			_("Select media file"),
-			this.dialog, 
+			this.dialog,
 			Gtk.FileChooserAction.OPEN,
 			Gtk.STOCK_CANCEL,
 			Gtk.ResponseType.CANCEL,
@@ -235,8 +241,8 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
 			TreeIter iter;
 			listmodel.append(out iter);
-			listmodel.set(iter, 
-			              0, fcdialog.get_filename(), 
+			listmodel.set(iter,
+			              0, fcdialog.get_filename(),
 			              1, MediaStorageType.FILE,
 			              -1
 			              );
@@ -248,7 +254,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void on_add_folder_button_clicked() {
 		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
 			_("Select media folder"),
-			this.dialog, 
+			this.dialog,
 			Gtk.FileChooserAction.SELECT_FOLDER,
 			Gtk.STOCK_CANCEL,
 			Gtk.ResponseType.CANCEL,
@@ -259,8 +265,8 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
 			TreeIter iter;
 			listmodel.append(out iter);
-			listmodel.set(iter, 
-			              0, fcdialog.get_filename(), 
+			listmodel.set(iter,
+			              0, fcdialog.get_filename(),
 			              1, MediaStorageType.FOLDER,
 			              -1
 			              );
@@ -277,22 +283,22 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		radiodialog = new Gtk.Dialog();
 		radiodialog.set_modal(true);
 		radiodialog.set_keep_above(true);
-		
+
 		radioentry = new Gtk.Entry();
 		radioentry.set_width_chars(50);
-		radioentry.secondary_icon_stock = Gtk.STOCK_CLEAR; 
-		radioentry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true); 
+		radioentry.secondary_icon_stock = Gtk.STOCK_CLEAR;
+		radioentry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
 		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
 		});
 		radiodialog.vbox.pack_start(radioentry, true, true, 0);
-					
+
 		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_CANCEL, 0);
 		radiocancelbutton.clicked.connect( () => {
 			radiodialog.close();
 			radiodialog = null;
 		});
-		
+
 		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_OK, 1);
 		radiookbutton.clicked.connect( () => {
 			if((radioentry.text!=null)&&
@@ -313,15 +319,15 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		radiodialog.destroy_event.connect( () => {
 			radiodialog = null;
 		});
-		
+
 		try {
 			radiodialog.set_icon_from_file(XNOISEICON);
 			radiodialog.set_title(_("Add internet radio link"));
 		}
 		catch(GLib.Error e) {
-			var msg = new Gtk.MessageDialog(null, 
-			                                Gtk.DialogFlags.MODAL, 
-			                                Gtk.MessageType.ERROR, 
+			var msg = new Gtk.MessageDialog(null,
+			                                Gtk.DialogFlags.MODAL,
+			                                Gtk.MessageType.ERROR,
 			                                Gtk.ButtonsType.CANCEL,
 			                                "Failed set icon! %s\n".printf(e.message)
 			                                );

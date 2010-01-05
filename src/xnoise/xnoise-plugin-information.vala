@@ -1,6 +1,6 @@
 /* xnoise-plugin-information.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,11 +38,11 @@ public class Xnoise.PluginInformation : GLib.Object {
 	public string license     { get; private set; }
 	public string copyright   { get; private set; }
 	public string author      { get; private set; }
-	
+
 	public PluginInformation(string xplug_file) {
 		this.xplug_file = xplug_file;
 	}
-	
+
 	private const string group = "XnoisePlugin";
 
 	public bool load_info() {

@@ -1,6 +1,6 @@
 /* xnoise-tracklist-model.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,20 @@ using Gtk;
 using Gdk;
 
 public class Xnoise.TrackListModel : ListStore, TreeModel {
+
 	private Main xn;
+
+	public enum Column {
+		ICON = 0,
+		TRACKNUMBER,
+		TITLE,
+		ALBUM,
+		ARTIST,
+		LENGTH,
+		WEIGHT,
+		URI
+	}
+
 	private GLib.Type[] col_types = new GLib.Type[] {
 		typeof(Gdk.Pixbuf), // ICON
 		typeof(string),     // TRACKNUMBER
@@ -44,7 +57,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		typeof(string)      // URI
 	};
 
-	public signal void sign_active_path_changed(TrackState ts);
+	public signal void sign_active_path_changed(GlobalInfo.TrackState ts);
 
 	public TrackListModel() {
 		this.xn = Main.instance();
@@ -55,15 +68,15 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		global.position_reference_changed.connect(on_position_reference_changed);
 		global.track_state_changed.connect( () => {
 			switch(global.track_state) {
-				case TrackState.PLAYING: {
+				case GlobalInfo.TrackState.PLAYING: {
 					this.set_play_state();
 					break;
 				}
-				case TrackState.PAUSED: {
+				case GlobalInfo.TrackState.PAUSED: {
 					this.set_pause_state();
 					break;
 				}
-				case TrackState.STOPPED: {
+				case GlobalInfo.TrackState.STOPPED: {
 					this.reset_state();
 					break;
 				}
@@ -83,7 +96,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		string uri = "";
 		if(get_current_path(out treepath)) {
 			this.get_iter(out iter, treepath);
-			this.get(iter, TrackListModelColumn.URI, out uri);
+			this.get(iter, Column.URI, out uri);
 			if(uri != "") global.current_uri = uri;
 		}
 		else {
@@ -93,9 +106,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		if(((int)global.track_state) > 0) { //playing or paused
 			bolden_row();
 
-			if(global.track_state == TrackState.PLAYING)
+			if(global.track_state == GlobalInfo.TrackState.PLAYING)
 				set_play_state();
-			else if(global.track_state== TrackState.PAUSED)
+			else if(global.track_state== GlobalInfo.TrackState.PAUSED)
 				set_pause_state();
 		}
 		else {
@@ -189,14 +202,14 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			int_bold = 400; // Pango code for not bold
 
 		this.set(iter,
-		         TrackListModelColumn.ICON, pixbuf,
-		         TrackListModelColumn.TRACKNUMBER, tracknumberString,
-		         TrackListModelColumn.TITLE, title,
-		         TrackListModelColumn.ALBUM, album,
-		         TrackListModelColumn.ARTIST, artist,
-		         TrackListModelColumn.LENGTH, lengthString,
-		         TrackListModelColumn.WEIGHT, int_bold,
-		         TrackListModelColumn.URI, uri,
+		         Column.ICON, pixbuf,
+		         Column.TRACKNUMBER, tracknumberString,
+		         Column.TITLE, title,
+		         Column.ALBUM, album,
+		         Column.ARTIST, artist,
+		         Column.LENGTH, lengthString,
+		         Column.WEIGHT, int_bold,
+		         Column.URI, uri,
 		         -1);
 		return iter;
 	}
@@ -239,7 +252,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		GLib.Value gv;
 		sender.get_value(
 			iter,
-			TrackListModelColumn.URI,
+			Column.URI,
 			out gv);
 		list_of_uris += gv.get_string();
 		return false;
@@ -252,19 +265,19 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		   (global.position_reference.valid())) {
 		// Use position_reference, if available...
 			this.get_iter(out iter, global.position_reference.get_path());
-			this.get(iter, TrackListModelColumn.URI, out uri);
+			this.get(iter, Column.URI, out uri);
 		}
 		else if((global.position_reference != null)&&
 		   (global.position_reference.valid())) {
 		// ...or use position_reference_next, if available
 			this.get_iter(out iter, global.position_reference_next.get_path());
-			this.get(iter, TrackListModelColumn.URI, out uri);
+			this.get(iter, Column.URI, out uri);
 		}
 		return uri;
 	}
 
 	// find active row, set state picture, bolden and set uri for gpl
-	private bool set_track_state(TrackState ts) {
+	private bool set_track_state(GlobalInfo.TrackState ts) {
 		Gdk.Pixbuf? pixbuf = null;
 		Gtk.Invisible w = new Gtk.Invisible();
 		if((global.position_reference == null)||
@@ -278,24 +291,24 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		TreeIter citer;
 		this.get_iter(out citer, global.position_reference.get_path());
 		string uri;
-		if(ts==TrackState.PLAYING) {
+		if(ts==GlobalInfo.TrackState.PLAYING) {
 			bolden_row();
 			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
 		}
-		else if(ts==TrackState.PAUSED) {
+		else if(ts==GlobalInfo.TrackState.PAUSED) {
 			bolden_row();
 			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PAUSE, IconSize.BUTTON, null);
 		}
-		else if(ts==TrackState.STOPPED) {
+		else if(ts==GlobalInfo.TrackState.STOPPED) {
 			unbolden_row();
 		}
 
 		this.get(citer,
-				 TrackListModelColumn.URI, out uri
+				 Column.URI, out uri
 				 );
 		if(uri==xn.gPl.Uri) {
 			this.set(citer,
-					 TrackListModelColumn.ICON, pixbuf,
+					 Column.ICON, pixbuf,
 					 -1
 					 );
 		}
@@ -303,15 +316,15 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	private bool reset_state() {
-		return set_track_state(TrackState.STOPPED);
+		return set_track_state(GlobalInfo.TrackState.STOPPED);
 	}
 
 	private bool set_play_state() {
-		return set_track_state(TrackState.PLAYING);
+		return set_track_state(GlobalInfo.TrackState.PLAYING);
 	}
 
 	private bool set_pause_state() {
-		return set_track_state(TrackState.PAUSED);
+		return set_track_state(GlobalInfo.TrackState.PAUSED);
 	}
 
 	private void bolden_row() {
@@ -326,7 +339,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		this.get_iter(out citer, tpath);
 
 		this.set(citer,
-		         TrackListModelColumn.WEIGHT, 700,
+		         Column.WEIGHT, 700,
 		         -1);
 	}
 
@@ -341,7 +354,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		TreeIter citer;
 		this.get_iter(out citer, tpath);
 		this.set(citer,
-		         TrackListModelColumn.WEIGHT, 400,
+		         Column.WEIGHT, 400,
 		         -1);
 	}
 
@@ -381,7 +394,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 
 		if(td_list[0].Uri != null) {
-			global.track_state = TrackState.PLAYING;
+			global.track_state = GlobalInfo.TrackState.PLAYING;
 			global.current_uri = td_list[0].Uri;
 		}
 
@@ -454,7 +467,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 		if(uris[0] != null) {
 			global.current_uri = uris[0];
-			global.track_state = TrackState.PLAYING;
+			global.track_state = GlobalInfo.TrackState.PLAYING;
 		}
 	}
 }

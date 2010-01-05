@@ -1,6 +1,6 @@
 /* xnoise-about.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class Xnoise.AboutDialog : Gtk.AboutDialog {
 	public AboutDialog() {
 		string contents;
 		try {
-			GLib.FileUtils.get_contents(GLib.Path.build_filename(Config.LICENSEDIR + "COPYING"), out contents); 
+			GLib.FileUtils.get_contents(GLib.Path.build_filename(Config.LICENSEDIR + "COPYING"), out contents);
 			license = contents;
 		}
 		catch(GLib.Error e) {
@@ -48,13 +48,13 @@ public class Xnoise.AboutDialog : Gtk.AboutDialog {
 
 		string _authors;
 		try {
-			GLib.FileUtils.get_contents(GLib.Path.build_filename(Config.LICENSEDIR + "AUTHORS"), out _authors); 
+			GLib.FileUtils.get_contents(GLib.Path.build_filename(Config.LICENSEDIR + "AUTHORS"), out _authors);
 			this.authors = _authors.split("\n", 500);
 		}
 		catch(GLib.Error e) {
 			stderr.printf("%s\n", e.message);
 		}
-		
+
 		try {
 			var pixbuf = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
 			logo = pixbuf;

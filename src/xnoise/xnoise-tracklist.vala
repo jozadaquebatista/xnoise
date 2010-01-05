@@ -1,6 +1,6 @@
 /* xnoise-tracklist.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -259,7 +259,7 @@ public class Xnoise.TrackList : TreeView {
 		uris = new string[(int)paths.length() + 1];
 		foreach(weak TreePath path in paths) {
 			this.tracklistmodel.get_iter(out iter, path);
-			this.tracklistmodel.get_value(iter, TrackListModelColumn.URI, out uri);
+			this.tracklistmodel.get_value(iter, TrackListModel.Column.URI, out uri);
 			uris[i] = uri.get_string();
 			i++;
 			TreeRowReference treerowref = new TreeRowReference(this.tracklistmodel, path);
@@ -450,10 +450,10 @@ public class Xnoise.TrackList : TreeView {
 			}
 		}
 		tracklistmodel.set(new_iter,
-		                   TrackListModelColumn.TITLE, title,
-		                   TrackListModelColumn.ALBUM, album,
-		                   TrackListModelColumn.ARTIST, artist,
-		                   TrackListModelColumn.URI, streamuri,
+		                   TrackListModel.Column.TITLE, title,
+		                   TrackListModel.Column.ALBUM, album,
+		                   TrackListModel.Column.ARTIST, artist,
+		                   TrackListModel.Column.URI, streamuri,
 		                   -1);
 		path = tracklistmodel.get_path(new_iter);
 	}
@@ -554,12 +554,12 @@ public class Xnoise.TrackList : TreeView {
 				tracknumberString = "%u".printf(tracknumb);
 			}
 			tracklistmodel.set(new_iter,
-			                   TrackListModelColumn.TRACKNUMBER, tracknumberString,
-			                   TrackListModelColumn.TITLE, title,
-			                   TrackListModelColumn.ALBUM, album,
-			                   TrackListModelColumn.ARTIST, artist,
-			                   TrackListModelColumn.LENGTH, lengthString,
-			                   TrackListModelColumn.URI, fileuri,
+			                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
+			                   TrackListModel.Column.TITLE, title,
+			                   TrackListModel.Column.ALBUM, album,
+			                   TrackListModel.Column.ARTIST, artist,
+			                   TrackListModel.Column.LENGTH, lengthString,
+			                   TrackListModel.Column.URI, fileuri,
 			                   -1);
 			path = tracklistmodel.get_path(new_iter);
 		}
@@ -604,7 +604,7 @@ public class Xnoise.TrackList : TreeView {
 		string uri = null;
 		TreeIter iter;
 		if(tracklistmodel.get_iter(out iter, path)) {
-			tracklistmodel.get(iter, TrackListModelColumn.URI, out uri);
+			tracklistmodel.get(iter, TrackListModel.Column.URI, out uri);
 		}
 		this.on_activated(uri, path);
 	}
@@ -676,7 +676,7 @@ public class Xnoise.TrackList : TreeView {
 			return;
 		}
 		global.current_uri = uri;
-		global.track_state = TrackState.PLAYING;
+		global.track_state = GlobalInfo.TrackState.PLAYING;
 
 		TreeIter iter;
 		this.tracklistmodel.get_iter(out iter, path);
@@ -697,7 +697,7 @@ public class Xnoise.TrackList : TreeView {
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.set_fixed_size(-1,22);
 		columnPixb.pack_start(pixbufRenderer, false);
-		columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListModelColumn.ICON);
+		columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListModel.Column.ICON);
 		columnPixb.set_fixed_width(30);
 		columnPixb.reorderable = true;
 		this.insert_column(columnPixb, -1);
@@ -707,8 +707,8 @@ public class Xnoise.TrackList : TreeView {
 		renderer = new CellRendererText();
 		columnTracknumber = new TreeViewColumn.with_attributes("#",
 		                                                       renderer,
-		                                                       "text", TrackListModelColumn.TRACKNUMBER,
-		                                                       "weight", TrackListModelColumn.WEIGHT,
+		                                                       "text", TrackListModel.Column.TRACKNUMBER,
+		                                                       "weight", TrackListModel.Column.WEIGHT,
 		                                                       null);
 
 		columnTracknumber.set_fixed_width(32);
@@ -728,8 +728,8 @@ public class Xnoise.TrackList : TreeView {
 		renderer = new CellRendererText();
 		columnTitle = new TreeViewColumn.with_attributes("Title",
 		                                                 renderer,
-		                                                 "text", TrackListModelColumn.TITLE,
-		                                                 "weight", TrackListModelColumn.WEIGHT,
+		                                                 "text", TrackListModel.Column.TITLE,
+		                                                 "weight", TrackListModel.Column.WEIGHT,
 		                                                 null);
 
 		columnTitle.min_width = 100;
@@ -742,8 +742,8 @@ public class Xnoise.TrackList : TreeView {
 		renderer = new CellRendererText();
 		columnAlbum = new TreeViewColumn.with_attributes("Album",
 		                                                 renderer,
-		                                                 "text", TrackListModelColumn.ALBUM,
-		                                                 "weight", TrackListModelColumn.WEIGHT,
+		                                                 "text", TrackListModel.Column.ALBUM,
+		                                                 "weight", TrackListModel.Column.WEIGHT,
 		                                                 null);
 
 		columnAlbum.min_width = 100;
@@ -756,8 +756,8 @@ public class Xnoise.TrackList : TreeView {
 		renderer = new CellRendererText();
 		columnArtist = new TreeViewColumn.with_attributes("Artist",
 		                                                  renderer,
-		                                                  "text", TrackListModelColumn.ARTIST,
-		                                                  "weight", TrackListModelColumn.WEIGHT,
+		                                                  "text", TrackListModel.Column.ARTIST,
+		                                                  "weight", TrackListModel.Column.WEIGHT,
 		                                                  null);
 
 		columnArtist.min_width = 100;
@@ -770,8 +770,8 @@ public class Xnoise.TrackList : TreeView {
 		renderer = new CellRendererText();
 		columnLength = new TreeViewColumn.with_attributes("Length",
 		                                                  renderer,
-		                                                  "text", TrackListModelColumn.LENGTH,
-		                                                  "weight", TrackListModelColumn.WEIGHT,
+		                                                  "text", TrackListModel.Column.LENGTH,
+		                                                  "weight", TrackListModel.Column.WEIGHT,
 		                                                  null);
 
 		columnLength.set_fixed_width(60);

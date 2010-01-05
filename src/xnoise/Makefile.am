@@ -42,7 +42,7 @@ xnoise_VALASOURCES = \
 	xnoise-db-browser.vala \
 	xnoise-db-creator.vala \
 	xnoise-db-writer.vala \
-	xnoise-global-data.vala \
+	xnoise-global-information.vala \
 	xnoise-gst-player.vala \
 	xnoise-lyrics-loader.vala \
 	xnoise-lyrics-view.vala \

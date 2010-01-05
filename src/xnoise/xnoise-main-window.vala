@@ -1,6 +1,6 @@
 /* xnoise-main-window.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,6 +50,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button showtracklistbuttonLY;
 	private Button showvideobuttonTL;
 	private Button showvideobuttonLY;
+
+	private enum Repeat {
+		NOT_AT_ALL = 0,
+		SINGLE,
+		ALL
+	}
+
+	public enum Direction {
+		NEXT = 0,
+		PREVIOUS,
+	}
 
 	private Gtk.VBox menuvbox;
 	private Gtk.VBox mainvbox;
@@ -498,14 +509,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 
 	private void stop() {
-		global.track_state = TrackState.STOPPED;
+		global.track_state = GlobalInfo.TrackState.STOPPED;
 		global.current_uri = "";
 	}
 
 	// This function changes the current song to the next or previous in the
 	// tracklist. handle_repeat_state should be true when the calling is not
 	// coming from a button, but, e.g. from a EOS signal handler
-	public void change_song(Direction direction, bool handle_repeat_state = false) {
+	public void change_song(MainWindow.Direction direction, bool handle_repeat_state = false) {
 		weak TreeIter iter;
 		TreePath path = null;
 		int rowcount = 0;
@@ -543,7 +554,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		global.position_reference = new TreeRowReference(trackList.tracklistmodel, path);
 
-		if(global.track_state == TrackState.PLAYING) trackList.set_focus_on_iter(ref iter);
+		if(global.track_state == GlobalInfo.TrackState.PLAYING) trackList.set_focus_on_iter(ref iter);
 	}
 
 	private void on_remove_all_button_clicked() {
@@ -1071,11 +1082,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				if(uri != null) global.current_uri = uri;
 			}
 
-			if(global.track_state == TrackState.PLAYING) {
-				global.track_state = TrackState.PAUSED;
+			if(global.track_state == GlobalInfo.TrackState.PLAYING) {
+				global.track_state = GlobalInfo.TrackState.PAUSED;
 			}
 			else {
-				global.track_state = TrackState.PLAYING;
+				global.track_state = GlobalInfo.TrackState.PLAYING;
 			}
 		}
 

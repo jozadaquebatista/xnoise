@@ -1,6 +1,6 @@
 /* xnoise-db-browser.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -418,15 +418,15 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return val;
 	}
 
-	public TitleMtypeId[] get_video_data(ref string searchtext) {
-		TitleMtypeId[] val = {};
+	public MediaData[] get_video_data(ref string searchtext) {
+		MediaData[] val = {};
 		get_video_data_statement.reset();
 		if((this.get_video_data_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
 		   (this.get_video_data_statement.bind_int (2, (int)MediaType.VIDEO)        != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(get_video_data_statement.step() == Sqlite.ROW) {
-			TitleMtypeId vd = TitleMtypeId();
+			MediaData vd = MediaData();
 			vd.name = get_video_data_statement.column_text(0);
 			vd.mediatype = (MediaType)get_video_data_statement.column_int(1);
 			vd.id = get_video_data_statement.column_int(2);
@@ -435,15 +435,15 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return val;
 	}
 
-	public TitleMtypeId[] get_stream_data(ref string searchtext) {
+	public MediaData[] get_stream_data(ref string searchtext) {
 		//	print("in get_stream_data\n");
-		TitleMtypeId[] val = {};
+		MediaData[] val = {};
 		get_radio_data_statement.reset();
 		if((this.get_radio_data_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(get_radio_data_statement.step() == Sqlite.ROW) {
-			TitleMtypeId vd = TitleMtypeId();
+			MediaData vd = MediaData();
 			vd.id = get_radio_data_statement.column_int(0);
 			vd.name = get_radio_data_statement.column_text(1);
 			vd.mediatype = MediaType.STREAM;
@@ -494,8 +494,8 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return val;
 	}
 
-	public TitleMtypeId[] get_titles_with_mediatypes_and_ids(string artist, string album, ref string searchtext) {
-		TitleMtypeId[] val = {};
+	public MediaData[] get_titles_with_mediatypes_and_ids(string artist, string album, ref string searchtext) {
+		MediaData[] val = {};
 		get_items_with_mediatypes_and_ids_statement.reset();
 		if((this.get_items_with_mediatypes_and_ids_statement.bind_text(1, artist)!=Sqlite.OK)|
 		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(2, album )!=Sqlite.OK)|
@@ -506,7 +506,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		}
 
 		while(get_items_with_mediatypes_and_ids_statement.step() == Sqlite.ROW) {
-			TitleMtypeId twt = TitleMtypeId();
+			MediaData twt = MediaData();
 			twt.name = get_items_with_mediatypes_and_ids_statement.column_text(0);
 			twt.mediatype = (MediaType) get_items_with_mediatypes_and_ids_statement.column_int(1);
 			twt.id = get_items_with_mediatypes_and_ids_statement.column_int(2);

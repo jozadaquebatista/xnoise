@@ -1,6 +1,6 @@
 /* xnoise-media-browser.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -299,7 +299,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.enable_search = true;
 		this.set_row_separator_func((m, iter) => {
 			int sepatator = 0;
-			m.get(iter, BrowserColumn.DRAW_SEPTR, ref sepatator);
+			m.get(iter, MediaBrowserModel.Column.DRAW_SEPTR, ref sepatator);
 			if(sepatator==0) return false;
 			return true;
 		});

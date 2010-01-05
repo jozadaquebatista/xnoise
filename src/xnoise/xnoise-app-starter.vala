@@ -1,6 +1,6 @@
 /* xnoise-app-starter.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,14 +27,14 @@
  * Author:
  * 	Jörn Magens
  */
- 
+
 public class Xnoise.AppStarter : GLib.Object {
-	public static Unique.Response on_message_received(Unique.App sender, 
-	                                                  int command, 
-	                                                  Unique.MessageData message_data, 
+	public static Unique.Response on_message_received(Unique.App sender,
+	                                                  int command,
+	                                                  Unique.MessageData message_data,
 	                                                  uint time) {
 		xn.main_window.present();
-		xn.tl.tracklistmodel.add_uris(message_data.get_uris()); 
+		xn.tl.tracklistmodel.add_uris(message_data.get_uris());
 		return Unique.Response.OK;
 	}
 
@@ -42,11 +42,11 @@ public class Xnoise.AppStarter : GLib.Object {
 
 	public static int main (string[] args) {
 //		Gdk.threads_init();
-		
+
 		GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
 		GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
 		Environment.set_application_name(Config.GETTEXT_PACKAGE);
-		
+
 		var opt_context = new OptionContext("[FILE] [FILE]..."); //TODO: Do some reset options
 		opt_context.set_summary("Xnoise is a media player for audio files.");
 		opt_context.set_description("http://code.google.com/p/xnoise/\n");
@@ -58,7 +58,7 @@ public class Xnoise.AppStarter : GLib.Object {
 			print("Run '%s --help' to see a full list of available command line options.\n", Environment.get_prgname ());
 			return 1;
 		}
-		
+
 		Gtk.init(ref args);
 		Gst.init(ref args);
 		Unique.App app;
@@ -94,11 +94,11 @@ public class Xnoise.AppStarter : GLib.Object {
 				catch(GLib.Error e){
 					stderr.printf("argerror: %s\n", e.message);
 					continue;
-				}	
+				}
 			}
 		}
 		uris += null; //Null terminated array. Is adding null necessary?
-		
+
 		if(app.is_running) {
 			if(uris.length > 0) {
 				print("Adding tracks to the running instance of xnoise!\n");
@@ -114,7 +114,7 @@ public class Xnoise.AppStarter : GLib.Object {
 			response = app.send_message(command, message_data);
 			app = null;
 
-			if (response != Unique.Response.OK) 
+			if (response != Unique.Response.OK)
 				print("singleton app response fail.\n");
 		}
 		else {
@@ -123,7 +123,7 @@ public class Xnoise.AppStarter : GLib.Object {
 			app.message_received.connect(app_starter.on_message_received);
 
 			xn.main_window.show_all();
-			
+
 			xn.tl.tracklistmodel.add_uris(uris);
 
 			//Gdk.threads_enter();

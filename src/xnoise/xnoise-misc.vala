@@ -1,6 +1,6 @@
 /* xnoise-misc.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,14 +34,14 @@
 namespace Xnoise {
 
 	public static Params par = null;
-	public static GlobalData global = null;
+	public static GlobalInfo global = null;
 
 	public static void initialize() {
 		if(par == null)
 			par = new Params();
 
 		if(global == null)
-			global = new GlobalData();
+			global = new GlobalInfo();
 	}
 
 	public static string escape_for_local_folder_search(string value) {
@@ -110,35 +110,7 @@ namespace Xnoise {
 
 // ENUMS
 
-public enum Xnoise.BrowserColumn {
-	ICON = 0,
-	VIS_TEXT,
-	DB_ID,
-	MEDIATYPE,
-	COLL_TYPE,
-	DRAW_SEPTR,
-	N_COLUMNS
-}
-
-public enum Xnoise.MediaStorageType {
-	FILE = 0,
-	FOLDER,
-	STREAM
-}
-
-public enum Xnoise.BrowserCollectionType {
-	UNKNOWN = 0,
-	HIERARCHICAL = 1,
-	LISTED = 2
-}
-
-public enum Xnoise.Repeat {
-	NOT_AT_ALL = 0,
-	SINGLE,
-	ALL
-}
-
-public enum Xnoise.MediaType {
+public enum Xnoise.MediaType { // used in various places
 	UNKNOWN = 0,
 	AUDIO,
 	VIDEO,
@@ -146,32 +118,10 @@ public enum Xnoise.MediaType {
 	PLAYLISTFILE
 }
 
-public enum Xnoise.TrackListNoteBookTab {
+public enum Xnoise.TrackListNoteBookTab { // used in various places
 	TRACKLIST = 0,
 	VIDEO,
 	LYRICS
-}
-
-public enum Xnoise.TrackListModelColumn {
-	ICON = 0,
-	TRACKNUMBER,
-	TITLE,
-	ALBUM,
-	ARTIST,
-	LENGTH,
-	WEIGHT,
-	URI
-}
-
-public enum Xnoise.TrackState {
-	STOPPED = 0,
-	PLAYING,
-	PAUSED
-}
-
-public enum Xnoise.Direction {
-	NEXT = 0,
-	PREVIOUS,
 }
 
 public enum Gst.StreamType {
@@ -184,6 +134,9 @@ public enum Gst.StreamType {
 
 // DATA TRANSFER CLASS
 
+/**
+ * This class is used to move around media information
+ */
 public class Xnoise.TrackData { // track meta information
 	public string Artist;
 	public string Album;
@@ -201,12 +154,18 @@ public class Xnoise.TrackData { // track meta information
 
 // STRUCTS
 
+/**
+ * This struct is used to move around certain streams information
+ */
 public struct Xnoise.StreamData { // meta information structure
 	public string Name;
 	public string Uri;
 }
 
-public struct Xnoise.TitleMtypeId {
+/**
+ * This struct is used to move around certain media information
+ */
+public struct Xnoise.MediaData {
 	public string name;
 	public int id;
 	public MediaType mediatype;
@@ -218,6 +177,12 @@ public struct Xnoise.TitleMtypeId {
 
 // INTERFACES
 
+/**
+ * Implementors of this interface have to register themselves in
+ * the static Parameter class instance `par' at start time of xnoise.
+ * The read_* and write_* methods will be called then to put some
+ * configuration data to the implementing class instances.
+ */
 public interface Xnoise.IParams : GLib.Object {
 	public abstract void read_params_data();
 	public abstract void write_params_data();
@@ -225,8 +190,10 @@ public interface Xnoise.IParams : GLib.Object {
 
 
 
-// ILyrics implementors should be synchrouniously looking for images
-// this is done in the ThreadFunc "fetch()"
+/**
+ * ILyrics implementors should be synchrouniously looking for images
+ * this is done in the ThreadFunc "fetch()"
+ */
 public interface Xnoise.ILyrics : GLib.Object {
 	// 'fetch' is a thread function that will find the lyrics
 	public abstract void* fetch();
@@ -248,8 +215,10 @@ public interface Xnoise.ILyricsProvider : GLib.Object {
 
 
 
-// IAlbumCoverImage implementors should be synchrouniously looking for images
-// this is done in the ThreadFunc "fetch_image()"
+/*
+ * IAlbumCoverImage implementors should be synchrouniously looking for images
+ * this is done in the ThreadFunc "fetch_image()"
+ */
 public interface Xnoise.IAlbumCoverImage : GLib.Object {
 	public abstract void* fetch_image();
 	public abstract string get_image_uri();

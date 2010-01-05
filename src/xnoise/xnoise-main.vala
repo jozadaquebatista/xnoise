@@ -1,6 +1,6 @@
 /* xnoise-main.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ public class Xnoise.Main : GLib.Object {
 		// TODO: update this function
 		print("add_track_to_gst_player\n");
 		global.current_uri = uri;
-		global.track_state = TrackState.PLAYING;
+		global.track_state = GlobalInfo.TrackState.PLAYING;
 		//this.gPl.playSong();
 	}
 

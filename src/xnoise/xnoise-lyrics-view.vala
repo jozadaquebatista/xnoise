@@ -1,6 +1,6 @@
 /* xnoise-lyrics-view.vala
  *
- * Copyright (C) 2009  softshaker
+ * Copyright (C) 2009-2010  softshaker
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

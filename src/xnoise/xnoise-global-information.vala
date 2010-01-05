@@ -1,6 +1,6 @@
-/* xnoise-general-data.vala
+/* xnoise-global-information.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
  * All these are properties, so that changes can be tracked application wide.
  */
 
-public class Xnoise.GlobalData : GLib.Object {
+public class Xnoise.GlobalInfo : GLib.Object {
 	// Signals
 	public signal void position_reference_changed();
 	public signal void before_position_reference_changed();
@@ -49,6 +49,12 @@ public class Xnoise.GlobalData : GLib.Object {
 	private string _current_uri = "";
 	private Gtk.TreeRowReference? _position_reference = null;
 	private Gtk.TreeRowReference? _position_reference_next = null;
+
+	public enum TrackState {
+		STOPPED = 0,
+		PLAYING,
+		PAUSED
+	}
 
 	// Public properties
 	public TrackState track_state {
