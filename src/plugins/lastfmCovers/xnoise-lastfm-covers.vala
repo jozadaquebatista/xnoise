@@ -39,10 +39,10 @@ using Xml;
 
 public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 	public Main xn { get; set; }
-	public string name { 
+	public string name {
 		get {
 			return "lastFmCovers";
-		} 
+		}
 	}
 
 	public bool init() {
@@ -58,10 +58,10 @@ public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageP
 	public bool has_settings_widget() {
 		return false;
 	}
-	
+
 	public Xnoise.IAlbumCoverImage from_tags(string artist, string album) {
 		return new LastFmCovers(artist, album);
-	} 
+	}
 }
 
 
@@ -71,7 +71,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	//private static SessionAsync session;
 	private static SessionSync session;
 	static string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
-	
+
 	private string artist;
 	private string album;
 	private string image_uri = "";
@@ -79,12 +79,12 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	public LastFmCovers(string artist, string album) {
 		this.artist = artist;
 		this.album = album;
-		print("new backend\n");
+		//print("new backend\n");
 	}
-	
-	~LastFmCovers() {
-		print("dstrct backend\n");
-	}
+
+	//~LastFmCovers() {
+	//	print("dstrct backend\n");
+	//}
 
 	public void* fetch_image() {
 		string s = find_image(this.artist, this.album);
@@ -127,7 +127,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 			                                          null)
 			                                );
 */
-			if(default_size == sizes[i]) uri_image = fileout.get_path();     
+			if(default_size == sizes[i]) uri_image = fileout.get_path();
 
 			string pth = "";
 			File fileout_path = fileout.get_parent();
@@ -201,7 +201,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 			}
 		}
 	}
-	
+
 	private string get_image_uri() {
 		return image_uri;
 	}

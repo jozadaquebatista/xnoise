@@ -36,15 +36,25 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private MediaBrowserModel dummymodel;
 	private Main xn;
 	private bool dragging;
-	private bool use_treelines;
+	private bool _use_treelines = false;
+	public bool use_treelines {
+		get {
+			return _use_treelines;
+		}
+		set {
+			_use_treelines = value;
+			this.enable_tree_lines = value;
+		}
+	}
+
 	internal int fontsizeMB = 8;
 	public signal void sign_activated();
 	private const TargetEntry[] target_list = {
 		{"text/uri-list", 0, 0}
 	};// This is not a very long list but uris are so universal
 
-	public MediaBrowser(ref weak Main xn) {
-		this.xn = xn;
+	public MediaBrowser() {
+		this.xn = Main.instance();
 		par.iparams_register(this);
 		mediabrowsermodel = new MediaBrowserModel();
 		setup_view();
@@ -77,18 +87,20 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.set_model(mediabrowsermodel);
 		return res;
 	}
+
 	// IParams functions
 	public void read_params_data() {
-		//this.fontsizeMB = par.get_int_value("fontsizeMB");
+		if(par.get_int_value("use_treelines")==1)
+			use_treelines = true;
+		else
+			use_treelines = false;
 	}
 
 	public void write_params_data() {
-		if(this.use_treelines) {
+		if(this.use_treelines)
 			par.set_int_value("use_treelines", 1);
-		}
-		else {
+		else
 			par.set_int_value("use_treelines", 0);
-		}
 		par.set_int_value("fontsizeMB", fontsizeMB);
 	}
 	// end IParams functions
@@ -283,12 +295,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		column.add_attribute(renderer, "text", 1); // no markup!!
 		this.insert_column(column, -1);
 
-		if(par.get_int_value("use_treelines")==1)
-			use_treelines=true;
-		else
-			use_treelines=false;
-
-		this.enable_tree_lines = use_treelines;
 		this.headers_visible = false;
 		this.enable_search = true;
 		this.set_row_separator_func((m, iter) => {

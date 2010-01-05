@@ -22,12 +22,13 @@ namespace Xnoise {
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class AlbumImage : Gtk.Fixed {
+	public class AlbumImage : Gtk.Fixed, Xnoise.IParams {
 		public Gtk.Image albumimage;
 		public AlbumImage ();
 		public void load_default_image ();
 		public bool album_image_available { get; set; }
 		public string current_image_path { get; set; }
+		public bool show_album_images { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AlbumImageLoader : GLib.Object {
@@ -245,9 +246,10 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
-		public MediaBrowser (ref unowned Xnoise.Main xn);
+		public MediaBrowser ();
 		public bool change_model_data ();
 		public void on_searchtext_changed (Gtk.Editable sender);
+		public bool use_treelines { get; set; }
 		public signal void sign_activated ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -283,9 +285,10 @@ namespace Xnoise {
 		public Gtk.Widget? settingwidget ();
 		public bool activated { get; set; }
 		public bool configurable { get; set; }
+		public Xnoise.PluginInformation info { get; }
 		public bool is_album_image_plugin { get; set; }
 		public bool is_lyrics_plugin { get; set; }
-		public bool loaded { get; set; }
+		public bool loaded { get; }
 		public signal void sign_activated ();
 		public signal void sign_deactivated ();
 	}
@@ -305,6 +308,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginLoader : GLib.Object {
+		public GLib.HashTable<string,Xnoise.Plugin> image_provider_htable;
 		public GLib.HashTable<string,Xnoise.Plugin> lyrics_plugins_htable;
 		public GLib.HashTable<string,Xnoise.Plugin> plugin_htable;
 		public PluginLoader (ref unowned Xnoise.Main xn);

@@ -32,7 +32,7 @@
 
 using Gtk;
 
-public class Xnoise.AlbumImage : Gtk.Fixed {
+public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 	// TODO: Local search is not working yet.
 	public Gtk.Image albumimage;
 	private const string INIFOLDER = ".xnoise";
@@ -46,11 +46,19 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 
 	public bool album_image_available { get; private set; default = false; }
 	public string current_image_path  { get; private set; default = ""; }
-
-//	public signal void sign_cov_image_available();
+	private bool _show_album_images = true;
+	public bool show_album_images {
+		get {
+			return _show_album_images;
+		}
+		set {
+			_show_album_images = value;
+		}
+	}
 
 	public AlbumImage() {
 		xn = Main.instance();
+		par.iparams_register(this);
 		AlbumImageLoader.init();
 		albumimage = new Gtk.Image();
 		albumimage.set_size_request(48, 48);
@@ -58,27 +66,25 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 		this.put(albumimage, 0, 0);
 		xn.gPl.sign_uri_changed.connect(on_uri_changed);
 		xn.gPl.sign_tag_changed.connect(on_tag_changed);
-//		this.notify.connect( (s, p) => {
-//			switch(p.name) {
-//				case "album-image-available": {
-//					sign_cov_image_available();
-//					break;
-//				}
-//				default: break;
-//			}
-//		});
 	}
 
 	private void on_tag_changed(string uri) {
 		if(timeout!=0)
 			GLib.Source.remove(timeout);
 
+		if(!show_album_images)
+			return;
+
 		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT,
 		                                        2,
-		                                        on_timout_elapsed);
+		                                        on_timeout_elapsed);
 	}
 
 	private void on_uri_changed(string uri) {
+		if(!show_album_images) {
+			this.load_default_image();
+			return;
+		}
 		album_image_available = false;
 		current_image_path = "";
 		db_image_available = false;
@@ -108,8 +114,17 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 
 	// Use the timeout because gPl is sending the sign_tag_changed signals
 	// sometimes very often at the beginning of a track.
-	private bool on_timout_elapsed() {
-		if(db_image_available) return false;
+	private bool on_timeout_elapsed() {
+
+		// Do not execute if source has been removed in the meantime
+		if(MainContext.current_source().is_destroyed()) return false;
+
+		if(!show_album_images)
+			return false;
+
+		if(db_image_available)
+			return false;
+
 		if(loader != null)
 			loader.sign_fetched.disconnect(on_album_image_fetched);
 
@@ -151,6 +166,8 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 		                                          null)
 		                                );
 
+		if(MainContext.current_source().is_destroyed()) return false;
+
 		if(fileout.query_exists(null)) {
 			//print("using local path for album image: %s", fileout.get_path());
 			current_image_path = fileout.get_path();
@@ -164,6 +181,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 			if(loader != null) {
 				loader.sign_fetched.disconnect(on_album_image_fetched);
 			}
+			if(MainContext.current_source().is_destroyed()) return false;
 			loader = new AlbumImageLoader(artist, album);
 			loader.sign_fetched.connect(on_album_image_fetched);
 			loader.fetch_image();
@@ -209,6 +227,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 	}
 
 	private bool set_albumimage_from_path() {
+		if(MainContext.current_source().is_destroyed()) return false;
 		this.albumimage.set_from_file(current_image_path);
 		return false;
 	}
@@ -232,4 +251,27 @@ public class Xnoise.AlbumImage : Gtk.Fixed {
 		dbw.set_local_image_for_album(ref artist, ref album, image_path);
 		dbw = null;
 	}
+
+	/// REGION IParams
+
+	public void read_params_data() {
+		int show = par.get_int_value("show_album_images");
+		if(show == 1) {
+			this.show_album_images = true;
+		}
+		else {
+			this.show_album_images = false;
+		}
+	}
+
+	public void write_params_data() {
+		if(this.show_album_images) {
+			par.set_int_value("show_album_images", 1);
+		}
+		else {
+			par.set_int_value("show_album_images", 0);
+		}
+	}
+
+	/// END REGION IParams
 }

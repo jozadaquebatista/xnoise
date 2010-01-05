@@ -33,21 +33,31 @@ public class Xnoise.Plugin : GLib.Object {
 	private Module module;
 	public Object loaded_plugin;
 	private Type type;
-	private PluginInformation info;
-	public bool loaded { get; private set; }	
+	private PluginInformation _info;
+	public PluginInformation info {
+		get {
+			return _info;
+		}
+	}
+	private bool _loaded = false;
+	public bool loaded {
+		get {
+			return _loaded;
+		}
+	}
 	public bool activated { get; set; }
 	public bool configurable { get; private set; }
 	public bool is_lyrics_plugin { get; private set; default = false;}
 	public bool is_album_image_plugin { get; private set; default = false;}
 	private weak Main xn;
-	
+
 	public signal void sign_activated();
 	public signal void sign_deactivated();
-	
+
 	private delegate Type InitModuleFunction();
-  	
+
 	public Plugin(PluginInformation info) {
-		this.info = info;
+		this._info = info;
 		this.notify.connect( (s, p) => {
 			switch(p.name) {
 				case "activated": {
@@ -64,24 +74,24 @@ public class Xnoise.Plugin : GLib.Object {
 
 	public bool load(ref weak Main xn) {
 		this.xn = xn;
-		if (this.loaded) return true;
+		if(this.loaded) return true;
 		string path = Module.build_path(Config.PLUGINSDIR, info.module);
 		module = Module.open(path, ModuleFlags.BIND_LAZY);
 		if (module == null) {
 			print("cannot find module\n");
 			return false;
-		}		
+		}
 		void* func;
 		module.symbol("init_module", out func);
 		InitModuleFunction init_module = (InitModuleFunction)func;
 		if(init_module == null) return false;
 		type = init_module();
-		loaded = true;
+		_loaded = true;
 		this.configurable = false;
 
 		if(!type.is_a(typeof(IPlugin)))
 			return false;
-		
+
 		if(type.is_a(typeof(ILyricsProvider)))
 			this.is_lyrics_plugin = true;
 
@@ -93,13 +103,13 @@ public class Xnoise.Plugin : GLib.Object {
 
 	private void activate() {
 		if(!loaded) return;
-		loaded_plugin = Object.new(type, 
+		loaded_plugin = Object.new(type,
 		                           "xn", this.xn,    //set properties via this, because
-		                           null);            //parameters are not allowed 
+		                           null);            //parameters are not allowed
 		                                             //for this kind of Object construction
 		if(loaded_plugin == null) {
 			message("Failed to load plugin %s. Cannot get type.\n", ((IPlugin)loaded_plugin).name);
-			activated = false; 
+			activated = false;
 		}
 		//if(loaded_plugin is IPlugin) print("sucess\n");
 		if(!((IPlugin)loaded_plugin).init()) {
@@ -115,7 +125,7 @@ public class Xnoise.Plugin : GLib.Object {
 		loaded_plugin = null;
 		sign_deactivated();
 	}
-	
+
 	public Gtk.Widget? settingwidget() {
 		if(this.loaded && this.activated) {
 			return ((IPlugin)this.loaded_plugin).get_settings_widget();

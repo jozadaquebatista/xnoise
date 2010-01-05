@@ -36,7 +36,7 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 	private uint backend_iter;
 	private string artist;
 	private string album;
-	
+
 	public delegate IAlbumCoverImage AlbumImageCreatorDelg(string artist, string album);
 	public signal void sign_fetched(string? image_path);
 
@@ -44,14 +44,14 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 		xn = Main.instance();
 		xn.plugin_loader.sign_plugin_activated.connect(AlbumImageLoader.on_plugin_activated);
 	}
-	
+
 	public AlbumImageLoader(string artist, string album) {
 		//print("new loader\n");
 		this.artist = artist;
 		this.album = album;
 		backend_iter = 0;
 	}
-	
+
 	//~AlbumImageLoader() {
 	//	print("destruct AlbumImageLoader\n");
 	//}
@@ -63,22 +63,22 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 		AlbumImageLoader.provider = provider;
 		p.sign_deactivated.connect(AlbumImageLoader.on_backend_deactivated);
 	}
-		
+
 	private static void on_backend_deactivated() {
 		AlbumImageLoader.provider = null;
 	}
 
 	private static void on_done(IAlbumCoverImage instance) {
+		if(fetcher_thread!=null) fetcher_thread.exit(null);
 		fetcher_thread = null;
 		instance.unref();
 	}
-	
+
 	private void on_fetched(string? text) {
-		//print("album image loader on_fetched\n");
 		sign_fetched(text);
 		this.album_image_provider = null;
 	}
-	
+
 	public string get_image_uri() {
 		return album_image_provider.get_image_uri();
 	}
@@ -89,7 +89,7 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 			sign_fetched(null);
 			return false;
 		}
-		
+
 		this.album_image_provider = this.provider.from_tags(artist, album);
 		this.album_image_provider.ref();
 		this.album_image_provider.sign_album_image_fetched.connect(this.on_fetched);
@@ -101,6 +101,6 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 			print("Album image loader: %s", e.message);
 		}
 		//album_image_provider.fetch_image();
-		return true; 
+		return true;
 	}
 }

@@ -136,7 +136,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		string? buffer = ht_string.lookup(key);
 		if((buffer==null)||(buffer=="#00"))
 			return null;
-		string[] list = (buffer).split(";", 50);
+		string[] list = buffer.split(";", 50);
 		return list;
 	}
 	//Type string
@@ -229,6 +229,7 @@ hp_position=227
 width=1024
 use_treelines=0
 repeatstate=2
+show_album_images=1
 
 [settings_double]
 volume=0.70000000000000000

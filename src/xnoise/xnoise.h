@@ -41,6 +41,14 @@ typedef struct _XnoiseAddMediaDialog XnoiseAddMediaDialog;
 typedef struct _XnoiseAddMediaDialogClass XnoiseAddMediaDialogClass;
 typedef struct _XnoiseAddMediaDialogPrivate XnoiseAddMediaDialogPrivate;
 
+#define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
+#define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
+#define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
+#define XNOISE_IPARAMS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParamsIface))
+
+typedef struct _XnoiseIParams XnoiseIParams;
+typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
+
 #define XNOISE_TYPE_ALBUM_IMAGE (xnoise_album_image_get_type ())
 #define XNOISE_ALBUM_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImage))
 #define XNOISE_ALBUM_IMAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImageClass))
@@ -247,14 +255,6 @@ typedef struct _XnoiseTrackListModelClass XnoiseTrackListModelClass;
 
 typedef struct _XnoisePluginLoader XnoisePluginLoader;
 typedef struct _XnoisePluginLoaderClass XnoisePluginLoaderClass;
-
-#define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
-#define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
-#define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
-#define XNOISE_IPARAMS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParamsIface))
-
-typedef struct _XnoiseIParams XnoiseIParams;
-typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
 #define XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON (xnoise_main_window_play_pause_button_get_type ())
@@ -475,6 +475,12 @@ struct _XnoiseAddMediaDialogClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseIParamsIface {
+	GTypeInterface parent_iface;
+	void (*read_params_data) (XnoiseIParams* self);
+	void (*write_params_data) (XnoiseIParams* self);
+};
+
 struct _XnoiseAlbumImage {
 	GtkFixed parent_instance;
 	XnoiseAlbumImagePrivate * priv;
@@ -625,12 +631,6 @@ struct _XnoiseMain {
 
 struct _XnoiseMainClass {
 	GObjectClass parent_class;
-};
-
-struct _XnoiseIParamsIface {
-	GTypeInterface parent_iface;
-	void (*read_params_data) (XnoiseIParams* self);
-	void (*write_params_data) (XnoiseIParams* self);
 };
 
 struct _XnoiseMainWindow {
@@ -856,6 +856,7 @@ struct _XnoisePluginLoader {
 	XnoisePluginLoaderPrivate * priv;
 	GHashTable* plugin_htable;
 	GHashTable* lyrics_plugins_htable;
+	GHashTable* image_provider_htable;
 };
 
 struct _XnoisePluginLoaderClass {
@@ -950,12 +951,15 @@ XnoiseAboutDialog* xnoise_about_dialog_construct (GType object_type);
 GType xnoise_add_media_dialog_get_type (void);
 XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
 XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
+GType xnoise_iparams_get_type (void);
 GType xnoise_album_image_get_type (void);
 XnoiseAlbumImage* xnoise_album_image_new (void);
 XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
 void xnoise_album_image_load_default_image (XnoiseAlbumImage* self);
 gboolean xnoise_album_image_get_album_image_available (XnoiseAlbumImage* self);
 const char* xnoise_album_image_get_current_image_path (XnoiseAlbumImage* self);
+gboolean xnoise_album_image_get_show_album_images (XnoiseAlbumImage* self);
+void xnoise_album_image_set_show_album_images (XnoiseAlbumImage* self, gboolean value);
 GType xnoise_album_image_loader_get_type (void);
 GType xnoise_ialbum_cover_image_get_type (void);
 void xnoise_album_image_loader_init (void);
@@ -1092,7 +1096,6 @@ XnoiseMain* xnoise_main_instance (void);
 void xnoise_main_save_tracklist (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
 gboolean gdk_window_ensure_native (GdkWindow* window);
-GType xnoise_iparams_get_type (void);
 GType xnoise_main_window_play_pause_button_get_type (void);
 GType xnoise_main_window_previous_button_get_type (void);
 GType xnoise_main_window_next_button_get_type (void);
@@ -1131,10 +1134,12 @@ GType xnoise_main_window_volume_slider_button_get_type (void);
 XnoiseMainWindowVolumeSliderButton* xnoise_main_window_volume_slider_button_new (void);
 XnoiseMainWindowVolumeSliderButton* xnoise_main_window_volume_slider_button_construct (GType object_type);
 GType xnoise_media_browser_model_get_type (void);
-XnoiseMediaBrowser* xnoise_media_browser_new (XnoiseMain** xn);
-XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, XnoiseMain** xn);
+XnoiseMediaBrowser* xnoise_media_browser_new (void);
+XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self, GtkEditable* sender);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
+gboolean xnoise_media_browser_get_use_treelines (XnoiseMediaBrowser* self);
+void xnoise_media_browser_set_use_treelines (XnoiseMediaBrowser* self, gboolean value);
 gboolean xnoise_media_browser_model_populate_model (XnoiseMediaBrowserModel* self);
 XnoiseTrackData** xnoise_media_browser_model_get_trackdata_listed (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, int* result_length1);
 XnoiseTrackData** xnoise_media_browser_model_get_trackdata_hierarchical (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, int* result_length1);
@@ -1189,6 +1194,7 @@ XnoisePlugin* xnoise_plugin_new (XnoisePluginInformation* info);
 XnoisePlugin* xnoise_plugin_construct (GType object_type, XnoisePluginInformation* info);
 gboolean xnoise_plugin_load (XnoisePlugin* self, XnoiseMain** xn);
 GtkWidget* xnoise_plugin_settingwidget (XnoisePlugin* self);
+XnoisePluginInformation* xnoise_plugin_get_info (XnoisePlugin* self);
 gboolean xnoise_plugin_get_loaded (XnoisePlugin* self);
 gboolean xnoise_plugin_get_activated (XnoisePlugin* self);
 void xnoise_plugin_set_activated (XnoisePlugin* self, gboolean value);

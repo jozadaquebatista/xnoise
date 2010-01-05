@@ -27,32 +27,34 @@
  * Author:
  * 	Jörn Magens
  */
- 
+
 public class Xnoise.PluginLoader : Object {
 	public HashTable<string, Plugin> plugin_htable;
 	public HashTable<string, Plugin> lyrics_plugins_htable;
+	public HashTable<string, Plugin> image_provider_htable;
 	private weak Main xn;
 	private PluginInformation info;
 	private GLib.List<string> info_files;
-	
+
 	public signal void sign_plugin_activated(Plugin p);
 	public signal void sign_plugin_deactivated(Plugin p);
-	
+
 	public PluginLoader(ref weak Main xn) {
 		assert (Module.supported());
 		this.xn = xn;
 		plugin_htable = new HashTable<string,Plugin>(str_hash, str_equal);
 		lyrics_plugins_htable = new HashTable<string,weak Plugin>(str_hash, str_equal);
+		image_provider_htable = new HashTable<string,weak Plugin>(str_hash, str_equal);
 	}
 
 	public unowned GLib.List<string> get_info_files() {
 		return info_files;
 	}
-			
+
 	public bool load_all() {
 		Plugin plugin;
 		File dir = File.new_for_path(Config.PLUGINSDIR);
-		
+
 		this.get_plugin_information_files(dir);
 		foreach(string pluginInfoFile in info_files) {
 			info = new PluginInformation(pluginInfoFile);
@@ -64,6 +66,7 @@ public class Xnoise.PluginLoader : Object {
 				else
 					continue;
 				if(plugin.is_lyrics_plugin) lyrics_plugins_htable.insert(info.name, plugin);
+				if(plugin.is_album_image_plugin) image_provider_htable.insert(info.name, plugin);
 			}
 			else {
 				print("Failed to load %s.\n", pluginInfoFile);
@@ -74,7 +77,7 @@ public class Xnoise.PluginLoader : Object {
 		//foreach(string s in lyrics_plugins_htable.get_keys()) print("%s in plugin ht\n", s);
 		return true;
 	}
-	
+
 	private void get_plugin_information_files(File dir) {
 		//Recoursive scanning of plugin directory.
 		//Module will have to be in the same path as its info file
@@ -98,7 +101,7 @@ public class Xnoise.PluginLoader : Object {
 				FileType filetype = info.get_file_type();
 				if(filetype == FileType.DIRECTORY) {
 					this.get_plugin_information_files(file);
-				} 
+				}
 				else if(filename.has_suffix(".xnplugin")) {
 	//				print("found plugin information file: %s\n", filepath);
 					info_files.append(filepath);
@@ -116,7 +119,7 @@ public class Xnoise.PluginLoader : Object {
 		p.activated=true;//ref xn);
 		sign_plugin_activated(p);
 		return true;
-	}	
+	}
 
 	public void deactivate_single_plugin(string name) {
 		Plugin p = this.plugin_htable.lookup(name);

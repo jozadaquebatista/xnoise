@@ -35,7 +35,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	private uint timeout = 0;
 	private string artist = "";
 	private string title = "";
-	
+
 	public LyricsView() {
 		xn = Main.instance();
 		LyricsLoader.init();
@@ -51,6 +51,9 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	// Use the timeout because gPl is sending the sign_tag_changed signals
 	// sometimes very often at the beginning of a track.
 	private bool on_timout_elapsed() {
+		// Do not execute if source has been removed in the meantime
+		if(MainContext.current_source().is_destroyed()) return false;
+
 		if(cur_loader != null)	cur_loader.sign_fetched -= on_lyrics_ready;
 		artist = remove_linebreaks(xn.gPl.currentartist);
 		title  = remove_linebreaks(xn.gPl.currenttitle );
@@ -72,6 +75,9 @@ public class Xnoise.LyricsView : Gtk.TextView {
 			return false;
 		}
 
+		// Do not execute if source has been removed in the meantime
+		if(MainContext.current_source().is_destroyed()) return false;
+
 		if(cur_loader != null) cur_loader.sign_fetched -= on_lyrics_ready;
 
 		cur_loader = new LyricsLoader(artist, title);
@@ -83,12 +89,12 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	private void on_tag_changed(string uri) {
 		if(timeout!=0)
 			GLib.Source.remove(timeout);
-			
+
 		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE,
 		                                        3, //3 Seconds is still ok
 		                                        on_timout_elapsed);
 	}
-	
+
 	private void on_uri_changed(string uri) {
 		textbuffer.set_text("LYRICS VIEWER", -1);
 	}
@@ -105,6 +111,9 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	}
 
 	private bool set_text() {
+		// Do not execute if source has been removed in the meantime
+		if(MainContext.current_source().is_destroyed()) return false;
+
 		textbuffer.set_text(content + "\n\n" + provider, -1);
 		return false;
 	}

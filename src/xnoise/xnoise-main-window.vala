@@ -437,7 +437,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void toggle_window_visbility() {
-		if (this.is_active) {
+		if(this.is_active) {
 			this.get_position(out _posX_buffer, out _posY_buffer);
 			this.hide();
 		}
@@ -465,7 +465,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 		this.repeatState = par.get_int_value("repeatstate");
 		double volSlider = par.get_double_value("volume");
-		if((volSlider <= 0.0)||(volSlider > 1.0))
+		if((volSlider <= 0.0)||
+		   (volSlider > 1.0))
 			xn.gPl.volume = 0.3;
 		else
 			xn.gPl.volume = volSlider;
@@ -752,7 +753,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		switch(e.button) {
 			case 2:
 				//ugly, we should move play/resume code out of there.
-				this.playPauseButton.on_clicked(new Button());
+				this.playPauseButton.on_clicked(new Gtk.Button());
 				break;
 			default:
 				break;
@@ -879,12 +880,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.nextButton = new NextButton();
 			playback_hbox.pack_start(nextButton,false,false,0);
 
-		        //PROGRESS BAR
+			//PROGRESS BAR
 			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
 			this.songProgressBar = new SongProgressBar();
 			//playback_hbox.pack_start(songProgressBar,false,false,0);
 			songprogress_viewport.add(songProgressBar);
-
 			//---------------------
 
 			///BOX FOR MAIN MENU
@@ -898,7 +898,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			trackListScrollWin.add(this.trackList);
 
 			///MediaBrowser (left)
-			this.mediaBr = new MediaBrowser(ref xn);
+			this.mediaBr = new MediaBrowser();
 			this.mediaBr.set_size_request(100,100);
 			var mediaBrScrollWin = gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
 			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
@@ -928,7 +928,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//Fullscreen window
 			this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);
-			//this.fullscreenwindow.realize();
 			this.fullscreenwindow.set_title("Xnoise media player - Fullscreen");
 			this.fullscreenwindow.set_icon_from_file(APPICON);
 			this.fullscreenwindow.set_events (Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
@@ -937,9 +936,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//Toolbar shown in the fullscreen window
 			this.fullscreentoolbar = new FullscreenToolbar(fullscreenwindow);
 		}
-		catch (GLib.Error err) {
+		catch (GLib.Error e) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
-				Gtk.ButtonsType.OK, "Failed to build main window! \n" + err.message);
+			    Gtk.ButtonsType.OK, "Failed to build main window! \n" + e.message);
 			msg.run();
 			return;
 		}

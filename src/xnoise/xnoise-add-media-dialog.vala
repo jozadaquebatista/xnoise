@@ -159,7 +159,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		tv.set_model(listmodel);
 		CellRendererText cell = new Gtk.CellRendererText ();
 		cell.set("foreground_set", true, null);
-		tv.insert_column_with_attributes(-1, "Path", cell, "text", 0, null);
+		tv.insert_column_with_attributes(-1, "Path", cell, "text", 0);
 	}
 
 	private bool list_foreach(TreeModel sender, TreePath mypath, TreeIter myiter) { 
