@@ -732,7 +732,7 @@ public class Xnoise.TrackList : TreeView {
 		                                                 "weight", TrackListModel.Column.WEIGHT,
 		                                                 null);
 
-		columnTitle.min_width = 100;
+		columnTitle.min_width = 80;
 		columnTitle.resizable = true;
 		columnTitle.reorderable = true;
 		this.insert_column(columnTitle, -1);
@@ -746,7 +746,7 @@ public class Xnoise.TrackList : TreeView {
 		                                                 "weight", TrackListModel.Column.WEIGHT,
 		                                                 null);
 
-		columnAlbum.min_width = 100;
+		columnAlbum.min_width = 80;
 		columnAlbum.resizable = true;
 		columnAlbum.reorderable = true;
 		this.insert_column(columnAlbum, -1);
@@ -760,7 +760,7 @@ public class Xnoise.TrackList : TreeView {
 		                                                  "weight", TrackListModel.Column.WEIGHT,
 		                                                  null);
 
-		columnArtist.min_width = 100;
+		columnArtist.min_width = 80;
 		columnArtist.resizable = true;
 		columnArtist.reorderable = true;
 		this.insert_column(columnArtist, -1);
@@ -774,7 +774,7 @@ public class Xnoise.TrackList : TreeView {
 		                                                  "weight", TrackListModel.Column.WEIGHT,
 		                                                  null);
 
-		columnLength.set_fixed_width(60);
+		columnLength.set_fixed_width(50);
 		columnLength.resizable = true;
 		columnLength.reorderable = true;
 		this.insert_column(columnLength, -1);
@@ -791,7 +791,7 @@ public class Xnoise.TrackList : TreeView {
 		columnTitle.sizing       = Gtk.TreeViewColumnSizing.GROW_ONLY;
 		columnAlbum.sizing       = Gtk.TreeViewColumnSizing.GROW_ONLY;
 		columnArtist.sizing      = Gtk.TreeViewColumnSizing.GROW_ONLY;
-		columnLength.sizing      = Gtk.TreeViewColumnSizing.GROW_ONLY;
+		columnLength.sizing      = Gtk.TreeViewColumnSizing.FIXED;
 
 		this.enable_search = false;
 		this.rules_hint = true;
