@@ -41,7 +41,7 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 	public signal void sign_fetched(string? image_path);
 
 	public static void init() {
-		xn = Main.instance();
+		xn = Main.instance;
 		xn.plugin_loader.sign_plugin_activated.connect(AlbumImageLoader.on_plugin_activated);
 	}
 

@@ -51,7 +51,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	static weak Thread fetcher_thread;
 
 	public static void init() {
-		xn = Main.instance();
+		xn = Main.instance;
 		xn.plugin_loader.sign_plugin_activated.connect(LyricsLoader.on_plugin_activated);
 	}
 
@@ -83,6 +83,8 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	}
 
 	private static void on_done(ILyrics instance) {
+		if(fetcher_thread!=null) fetcher_thread.exit(null);
+		fetcher_thread = null;
 		instance.unref();
 	}
 

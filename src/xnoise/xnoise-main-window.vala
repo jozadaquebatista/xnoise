@@ -131,7 +131,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	public MainWindow() {
-		this.xn = Main.instance();
+		this.xn = Main.instance;
 		par.iparams_register(this);
 		xn.gPl.sign_volume_changed.connect(
 			(val) => {this.current_volume = val;}
@@ -609,7 +609,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private SettingsDialog setingsD;
 	private void on_settings_edit() {
-		setingsD = new SettingsDialog(ref xn);
+		setingsD = new SettingsDialog();
 		setingsD.sign_finish.connect( () => {
 			setingsD = null;
 		});
@@ -991,7 +991,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public class NextButton : Gtk.Button {
 		private Main xn;
 		public NextButton() {
-			this.xn = Main.instance ();
+			this.xn = Main.instance;
 			var img = new Gtk.Image.from_stock(STOCK_MEDIA_NEXT, Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
@@ -1010,7 +1010,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public class PreviousButton : Gtk.Button {
 		private Main xn;
 		public PreviousButton() {
-			this.xn = Main.instance();
+			this.xn = Main.instance;
 			var img = new Gtk.Image.from_stock(STOCK_MEDIA_PREVIOUS, Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
@@ -1029,7 +1029,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public class StopButton : Gtk.Button {
 		private Main xn;
 		public StopButton() {
-			xn = Main.instance();
+			xn = Main.instance;
 			var img = new Gtk.Image.from_stock(STOCK_MEDIA_STOP, Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image (img);
 			this.relief = Gtk.ReliefStyle.NONE;
@@ -1051,7 +1051,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private Gtk.Image pauseImage;
 
 		public PlayPauseButton() {
-			xn = Main.instance();
+			xn = Main.instance;
 			this.can_focus = false;
 			this.relief = Gtk.ReliefStyle.NONE;
 
@@ -1115,7 +1115,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private Main xn;
 
 		public SongProgressBar() {
-			xn = Main.instance();
+			xn = Main.instance;
 
 			this.discrete_blocks = 10;
 			this.set_size_request(-1,18);
@@ -1221,7 +1221,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public class VolumeSliderButton : Gtk.VolumeButton {
 		private Main xn;
 		public VolumeSliderButton() {
-			this.xn = Main.instance();
+			this.xn = Main.instance;
 			this.can_focus = false;
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.set_value(0.3); //Default value
@@ -1253,7 +1253,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private bool hide_lock;
 
 		public FullscreenToolbar(Gtk.Window fullscreenwindow) {
-			xn = Main.instance();
+			xn = Main.instance;
 			this.hide_lock = false;
 			this.fullscreenwindow = fullscreenwindow;
 			window = new Gtk.Window (Gtk.WindowType.POPUP);
@@ -1351,7 +1351,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		public class LeaveVideoFSButton : Gtk.Button {
 			private Main xn;
 			public LeaveVideoFSButton() {
-				this.xn = Main.instance();
+				this.xn = Main.instance;
 				var img = new Gtk.Image.from_stock(Gtk.STOCK_LEAVE_FULLSCREEN , Gtk.IconSize.SMALL_TOOLBAR);
 				this.set_image(img);
 				this.relief = Gtk.ReliefStyle.NONE;

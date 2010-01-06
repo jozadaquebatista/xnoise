@@ -62,7 +62,7 @@ public class Xnoise.AppStarter : GLib.Object {
 		GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
 		Environment.set_application_name(Config.GETTEXT_PACKAGE);
 
-		var opt_context = new OptionContext(" - Xnoise Media Player");
+		var opt_context = new OptionContext("- Xnoise Media Player");
 		opt_context.set_description("Xnoise is a media player for Gtk+. It uses the gstreamer framework. \nMore information on the project website: \nhttp://code.google.com/p/xnoise/\n");
 		opt_context.set_help_enabled(true);
 		opt_context.add_main_entries(options, null);
@@ -145,7 +145,7 @@ public class Xnoise.AppStarter : GLib.Object {
 				print("singleton app response fail.\n");
 		}
 		else {
-			xn = Main.instance();
+			xn = Main.instance;
 			app.watch_window((Gtk.Window)xn.main_window);
 			app.message_received.connect(app_starter.on_message_received);
 

@@ -45,8 +45,8 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 	//TODO: File vala bug: if this is called sign_plugin_active_state_changed compilation fails
 	public signal void sign_plugin_activestate_changed(string name);
 
-	public PluginManagerTree(ref Main xn) {
-		this.xn = xn;
+	public PluginManagerTree() {
+		this.xn = Main.instance;
 		this.create_model();
 		this.create_view();
 	}

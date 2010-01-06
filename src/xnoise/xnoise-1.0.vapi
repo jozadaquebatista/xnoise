@@ -174,9 +174,9 @@ namespace Xnoise {
 		public Xnoise.TrackListModel tlm;
 		public Main ();
 		public void add_track_to_gst_player (string uri);
-		public static Xnoise.Main instance ();
 		public void quit ();
 		public void save_tracklist ();
+		public static Xnoise.Main instance { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {
@@ -309,7 +309,7 @@ namespace Xnoise {
 	public class Plugin : GLib.Object {
 		public GLib.Object loaded_plugin;
 		public Plugin (Xnoise.PluginInformation info);
-		public bool load (ref unowned Xnoise.Main xn);
+		public bool load ();
 		public Gtk.Widget? settingwidget ();
 		public bool activated { get; set; }
 		public bool configurable { get; set; }
@@ -349,14 +349,14 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginManagerTree : Gtk.TreeView {
-		public PluginManagerTree (ref Xnoise.Main xn);
+		public PluginManagerTree ();
 		public void create_view ();
 		public signal void sign_plugin_activestate_changed (string name);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class SettingsDialog : Gtk.Builder {
 		public Gtk.Dialog dialog;
-		public SettingsDialog (ref Xnoise.Main xn);
+		public SettingsDialog ();
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]

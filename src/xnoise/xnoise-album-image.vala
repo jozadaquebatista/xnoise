@@ -57,7 +57,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 	}
 
 	public AlbumImage() {
-		xn = Main.instance();
+		xn = Main.instance;
 		par.iparams_register(this);
 		AlbumImageLoader.init();
 		albumimage = new Gtk.Image();

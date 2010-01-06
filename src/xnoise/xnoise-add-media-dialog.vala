@@ -194,8 +194,8 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	}
 
 	private void on_ok_button_clicked() {
-		Main.instance().main_window.searchEntryMB.set_sensitive(false);
-		Main.instance().main_window.mediaBr.set_sensitive(false);
+		Main.instance.main_window.searchEntryMB.set_sensitive(false);
+		Main.instance.main_window.mediaBr.set_sensitive(false);
 		harvest_media_locations();
 		try {
 			Thread.create(write_media_to_db, false);

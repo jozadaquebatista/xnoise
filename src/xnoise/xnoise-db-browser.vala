@@ -108,7 +108,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 	public DbBrowser() {
 		DATABASE = dbFileName();
 		if(Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) {
-			stderr.printf("Can't open database: %s\n", (string)this.db.errmsg);
+			print("Can't open database: %s\n", (string)this.db.errmsg);
 		}
 		this.prepare_statements();
 	}

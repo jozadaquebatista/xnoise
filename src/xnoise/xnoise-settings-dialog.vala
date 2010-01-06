@@ -84,8 +84,8 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	public signal void sign_finish();
 
-	public SettingsDialog(ref Main xn) {
-		this.xn = xn;
+	public SettingsDialog() {
+		this.xn = Main.instance;
 		try {
 			this.setup_widgets();
 		}
@@ -424,7 +424,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 			add_plugin_tabs();
 
-			plugin_manager_tree = new PluginManagerTree(ref xn);
+			plugin_manager_tree = new PluginManagerTree();
 			vboxplugins.pack_start(plugin_manager_tree, true, true, 0);
 
 			plugin_manager_tree.sign_plugin_activestate_changed.connect(reset_plugin_tabs);

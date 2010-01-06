@@ -113,15 +113,21 @@ public class Xnoise.Main : GLib.Object {
 		//this.gPl.playSong();
 	}
 
-	public static Main instance() {
+	public static Main instance {
+/*
 		if (_instance == null)
 			_instance = new Main();
-		return _instance;
+*/
+		get {
+			if(_instance == null)
+				_instance = new Main();
+			return _instance;
+		}
 	}
 
 	private static void on_posix_finish(int signal_number) {
 		//print("Posix signal received (%d)\ncleaning up...\n", signal_number);
-		instance().quit();
+		instance.quit();
 	}
 
 	private void save_activated_plugins() {

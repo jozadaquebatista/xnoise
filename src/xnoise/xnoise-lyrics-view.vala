@@ -37,7 +37,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	private string title = "";
 
 	public LyricsView() {
-		xn = Main.instance();
+		xn = Main.instance;
 		LyricsLoader.init();
 		this.textbuffer = new Gtk.TextBuffer(null);
 		this.set_buffer(textbuffer);

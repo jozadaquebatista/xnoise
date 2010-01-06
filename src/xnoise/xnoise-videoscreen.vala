@@ -34,7 +34,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	private Main xn;
 
 	public VideoScreen() {
-		this.xn = Main.instance();
+		this.xn = Main.instance;
 		init_video_screen();
 	}
 

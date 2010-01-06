@@ -72,8 +72,8 @@ public class Xnoise.Plugin : GLib.Object {
 		});
 	}
 
-	public bool load(ref weak Main xn) {
-		this.xn = xn;
+	public bool load() {
+		this.xn = Main.instance;
 		if(this.loaded) return true;
 		string path = Module.build_path(Config.PLUGINSDIR, info.module);
 		module = Module.open(path, ModuleFlags.BIND_LAZY);

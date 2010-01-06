@@ -54,7 +54,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	};// This is not a very long list but uris are so universal
 
 	public MediaBrowser() {
-		this.xn = Main.instance();
+		this.xn = Main.instance;
 		par.iparams_register(this);
 		mediabrowsermodel = new MediaBrowserModel();
 		setup_view();

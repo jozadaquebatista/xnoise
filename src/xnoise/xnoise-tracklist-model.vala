@@ -60,7 +60,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	public signal void sign_active_path_changed(GlobalInfo.TrackState ts);
 
 	public TrackListModel() {
-		this.xn = Main.instance();
+		this.xn = Main.instance;
 		this.set_column_types(col_types);
 
 		// Use these two signals to handle the position_reference representation in tracklist

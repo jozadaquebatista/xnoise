@@ -41,7 +41,7 @@ public class Xnoise.PluginLoader : Object {
 
 	public PluginLoader() {
 		assert(Module.supported());
-		this.xn = Main.instance();
+		this.xn = Main.instance;
 		plugin_htable = new HashTable<string,Plugin>(str_hash, str_equal);
 		lyrics_plugins_htable = new HashTable<string,weak Plugin>(str_hash, str_equal);
 		image_provider_htable = new HashTable<string,weak Plugin>(str_hash, str_equal);
@@ -60,7 +60,7 @@ public class Xnoise.PluginLoader : Object {
 			info = new PluginInformation(pluginInfoFile);
 			if(info.load_info()) {
 				plugin = new Plugin(info);
-				plugin.load(ref xn);
+				plugin.load();
 				if(plugin.loaded==true)
 					plugin_htable.insert(info.name, plugin); //Hold reference to plugin in hash table
 				else

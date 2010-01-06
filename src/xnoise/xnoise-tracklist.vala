@@ -67,7 +67,7 @@ public class Xnoise.TrackList : TreeView {
 	public TrackListModel tracklistmodel;
 
 	public TrackList() {
-		this.xn = Main.instance();
+		this.xn = Main.instance;
 		if(xn.tlm == null)
 			print("tracklist model instance not available\n");
 
