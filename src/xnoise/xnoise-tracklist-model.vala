@@ -409,7 +409,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		int k = 0;
 		TreeIter iter, iter_2;
 		FileType filetype;
-		//this.reset_play_status_all_titles();
+		this.get_iter_first(out iter_2); //iter_2 = TreeIter();
 		while(uris[k] != null) { //because foreach is not working for this array coming from libunique
 			File file = File.new_for_uri(uris[k]);
 			TagReader tr = new TagReader();
@@ -438,7 +438,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			else if(urischeme == "http") {
 				is_stream = true;
 			}
-			if(k == 0) {
+			if(k == 0) { // first track
 				iter = this.insert_title(null,
 				                         (int)t.Tracknumber,
 				                         t.Title,
@@ -469,5 +469,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			global.current_uri = uris[0];
 			global.track_state = GlobalInfo.TrackState.PLAYING;
 		}
+		xn.tl.set_focus_on_iter(ref iter_2);
 	}
 }

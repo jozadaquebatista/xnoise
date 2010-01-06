@@ -130,8 +130,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		return ui_manager;
 	}
 
-	public MainWindow(ref weak Main xn) {
-		this.xn = xn;
+	public MainWindow() {
+		this.xn = Main.instance();
 		par.iparams_register(this);
 		xn.gPl.sign_volume_changed.connect(
 			(val) => {this.current_volume = val;}

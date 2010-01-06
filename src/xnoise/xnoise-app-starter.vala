@@ -40,60 +40,87 @@ public class Xnoise.AppStarter : GLib.Object {
 
 	public static Main xn;
 
-	public static int main (string[] args) {
+	static bool _plugins;
+	static bool _reset;
+	static bool _version;
+	[CCode (array_length = false, array_null_terminated = true)]
+	[NoArrayLength]
+	static string[] _fileargs;
+
+	const OptionEntry[] options = {
+		{ "version", 'V', 0, OptionArg.NONE, ref _version, "Show the application's version.", null },
+		{ "plugins", 'P', 0, OptionArg.NONE, ref _plugins, "Show loaded and activated plugins on app start.", null },
+		{ "reset", 'R', 0, OptionArg.NONE, ref _reset, "Reset all settings.", null },
+		{ "", 0, 0, OptionArg.FILENAME_ARRAY, ref _fileargs, null, "FILE..." },
+		{null}
+	};
+
+	public static int main(string[] args) {
 //		Gdk.threads_init();
 
 		GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
 		GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
 		Environment.set_application_name(Config.GETTEXT_PACKAGE);
 
-		var opt_context = new OptionContext("[FILE] [FILE]..."); //TODO: Do some reset options
-		opt_context.set_summary("Xnoise is a media player for audio files.");
-		opt_context.set_description("http://code.google.com/p/xnoise/\n");
-		opt_context.set_help_enabled (true);
+		var opt_context = new OptionContext(" - Xnoise Media Player");
+		opt_context.set_description("Xnoise is a media player for Gtk+. It uses the gstreamer framework. \nMore information on the project website: \nhttp://code.google.com/p/xnoise/\n");
+		opt_context.set_help_enabled(true);
+		opt_context.add_main_entries(options, null);
 		try {
-			opt_context.parse (ref args);
-		} catch (OptionError e) {
-			print("%s\n", e.message);
-			print("Run '%s --help' to see a full list of available command line options.\n", Environment.get_prgname ());
-			return 1;
+			opt_context.parse(ref args);
 		}
-
+		catch(OptionError e) {
+			print("%s\n", e.message);
+			print("Run '%s --help' to see a full list of available command line options.\n", args[0]);
+			return 0;
+		}
+		if(_reset) {
+			print("Reset not implemented, yet.\n");
+			return 0;
+		}
+		if(_version) {
+			print("Xnoise %s\n", Config.PACKAGE_VERSION);
+			return 0;
+		}
+		if(_plugins) {
+			Main.show_plugin_state = true;
+		}
 		Gtk.init(ref args);
 		Gst.init(ref args);
 		Unique.App app;
 		var app_starter = new AppStarter();
 		app = new Unique.App.with_commands("org.gnome.xnoise", "xnoise", null);
 		string[] uris = {};
-		File file;
-		//FileType filetype;
-		weak string mime;
+		File f = null;
+		string mime;
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		if(_fileargs != null) {
+			foreach(string s in _fileargs) {
+				f = File.new_for_commandline_arg(s); //fileargs[i]);
+				if(f == null) continue;
+				if(!f.query_exists(null)) continue;
+				string urischeme = f.get_uri_scheme();
+				string content = null;
+				if(urischeme=="file") {
+					try {
+						FileInfo info = f.query_info(attr,
+													 FileQueryInfoFlags.NONE,
+													 null);
+						content = info.get_content_type();
+						mime = g_content_type_get_mime_type(content);
 
-		for(int j=1;j<args.length;j++) {
-			file = File.new_for_commandline_arg(args[j]);
-			string urischeme = file.get_uri_scheme();
-			string content = null;
-			if(urischeme=="file") {
-				try {
-					FileInfo info = file.query_info(
-								        attr,
-								        FileQueryInfoFlags.NONE,
-								        null);
-					content = info.get_content_type();
-					mime = g_content_type_get_mime_type(content);
-
-					if((psAudio.match_string(mime))||
-					   (psVideo.match_string(mime))) {
-					   	uris += file.get_uri();
+						if((psAudio.match_string(mime))||
+						   (psVideo.match_string(mime))) {
+							uris += f.get_uri();
+						}
 					}
-				}
-				catch(GLib.Error e){
-					stderr.printf("argerror: %s\n", e.message);
-					continue;
+					catch(GLib.Error e) {
+						print("Argerror: %s\n", e.message);
+						continue;
+					}
 				}
 			}
 		}

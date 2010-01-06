@@ -169,6 +169,7 @@ namespace Xnoise {
 		public Xnoise.GstPlayer gPl;
 		public Xnoise.MainWindow main_window;
 		public Xnoise.PluginLoader plugin_loader;
+		public static bool show_plugin_state;
 		public Xnoise.TrackList tl;
 		public Xnoise.TrackListModel tlm;
 		public Main ();
@@ -244,7 +245,7 @@ namespace Xnoise {
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
 		public Xnoise.VideoScreen videoscreen;
-		public MainWindow (ref unowned Xnoise.Main xn);
+		public MainWindow ();
 		public void change_song (Xnoise.MainWindow.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
 		public void set_displayed_title (string newuri);
@@ -338,7 +339,7 @@ namespace Xnoise {
 		public GLib.HashTable<string,Xnoise.Plugin> image_provider_htable;
 		public GLib.HashTable<string,Xnoise.Plugin> lyrics_plugins_htable;
 		public GLib.HashTable<string,Xnoise.Plugin> plugin_htable;
-		public PluginLoader (ref unowned Xnoise.Main xn);
+		public PluginLoader ();
 		public bool activate_single_plugin (string name);
 		public void deactivate_single_plugin (string name);
 		public unowned GLib.List<string> get_info_files ();

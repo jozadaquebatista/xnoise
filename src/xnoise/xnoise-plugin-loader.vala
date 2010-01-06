@@ -32,16 +32,16 @@ public class Xnoise.PluginLoader : Object {
 	public HashTable<string, Plugin> plugin_htable;
 	public HashTable<string, Plugin> lyrics_plugins_htable;
 	public HashTable<string, Plugin> image_provider_htable;
-	private weak Main xn;
+	private Main xn;
 	private PluginInformation info;
 	private GLib.List<string> info_files;
 
 	public signal void sign_plugin_activated(Plugin p);
 	public signal void sign_plugin_deactivated(Plugin p);
 
-	public PluginLoader(ref weak Main xn) {
-		assert (Module.supported());
-		this.xn = xn;
+	public PluginLoader() {
+		assert(Module.supported());
+		this.xn = Main.instance();
 		plugin_htable = new HashTable<string,Plugin>(str_hash, str_equal);
 		lyrics_plugins_htable = new HashTable<string,weak Plugin>(str_hash, str_equal);
 		image_provider_htable = new HashTable<string,weak Plugin>(str_hash, str_equal);
