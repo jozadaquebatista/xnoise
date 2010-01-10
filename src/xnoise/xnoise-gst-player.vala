@@ -178,6 +178,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 			}
 		});
 
+		global.current_uri_repeated.connect( () => {
+			this.Uri = global.current_uri;
+			this.playSong();
+		});
+
 		global.current_uri_changed.connect( () => {
 			this.Uri = global.current_uri;
 			this.playSong();

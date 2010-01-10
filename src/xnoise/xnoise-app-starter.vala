@@ -61,6 +61,7 @@ public class Xnoise.AppStarter : GLib.Object {
 		GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
 		GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
 		Environment.set_application_name(Config.GETTEXT_PACKAGE);
+		//Environment.atexit(mem_profile); This can be used if xnoise is compiled with new memory statistic switch
 
 		var opt_context = new OptionContext("- Xnoise Media Player");
 		opt_context.set_description("Xnoise is a media player for Gtk+. It uses the gstreamer framework. \nMore information on the project website: \nhttp://code.google.com/p/xnoise/\n");

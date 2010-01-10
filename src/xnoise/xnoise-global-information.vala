@@ -42,6 +42,7 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	public signal void position_reference_next_changed();
 	public signal void track_state_changed();
 	public signal void current_uri_changed();
+	public signal void current_uri_repeated(string uri);
 	public signal void caught_eos_from_player();
 
 	// Private fields

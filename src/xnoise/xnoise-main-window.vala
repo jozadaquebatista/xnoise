@@ -54,7 +54,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private enum Repeat {
 		NOT_AT_ALL = 0,
 		SINGLE,
-		ALL
+		ALL,
+		RANDOM
 	}
 
 	public enum Direction {
@@ -297,6 +298,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				repeatImage03.stock = Gtk.STOCK_REFRESH;
 				break;
 			}
+			case Repeat.RANDOM : {
+				repeatLabel01.label = _("random play");
+				repeatImage01.stock = Gtk.STOCK_JUMP_TO;
+				repeatLabel02.label = _("random play");
+				repeatImage02.stock = Gtk.STOCK_JUMP_TO;
+				repeatLabel03.label = _("random play");
+				repeatImage03.stock = Gtk.STOCK_JUMP_TO;
+				break;
+			}
 		}
 	}
 
@@ -476,11 +486,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 		this.repeatState = par.get_int_value("repeatstate");
 		double volSlider = par.get_double_value("volume");
-		if((volSlider <= 0.0)||
-		   (volSlider > 1.0))
-			xn.gPl.volume = 0.3;
-		else
+		if((volSlider < 0.0)||
+		   (volSlider > 1.0)) {
+			xn.gPl.volume = 0.5;
+		}
+		else {
 			xn.gPl.volume = volSlider;
+		}
 
 		int hp_position = par.get_int_value("hp_position");
 		if (hp_position > 0) {
@@ -518,6 +530,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	// coming from a button, but, e.g. from a EOS signal handler
 	public void change_song(MainWindow.Direction direction, bool handle_repeat_state = false) {
 		weak TreeIter iter;
+		bool trackList_is_empty;
 		TreePath path = null;
 		int rowcount = 0;
 		bool used_next_pos = false;
@@ -536,19 +549,51 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return;
 		}
 
-		if(!used_next_pos) {
-			// get next or previous path
-			if((!(handle_repeat_state &&(repeatState==Repeat.SINGLE)))) {
-				if(path == null) return;
-				if(direction == Direction.NEXT) path.next();
-				else if((direction == Direction.PREVIOUS)&&
-						(path.to_string() != "0")) {
-					path.prev();
+		// handle RANDOM
+		if(handle_repeat_state && (repeatState==Repeat.RANDOM)) {
+			this.trackList.tracklistmodel.get_random_row(ref path);
+		}
+		else {
+			if(!used_next_pos) {
+				// get next or previous path
+				if((!(handle_repeat_state && (repeatState==Repeat.SINGLE)))) {
+					if(path == null) return;
+					if(!this.trackList.tracklistmodel.path_is_last_row(ref path,
+					                                                   out trackList_is_empty)
+					                                                   ) {
+						//print(" ! path_is_last_row\n");
+						if(direction == Direction.NEXT) {
+							path.next();
+						}
+						else if((direction == Direction.PREVIOUS)&&
+								(path.to_string() != "0")) {
+							path.prev();
+						}
+					}
+					else {
+						//print("path_is_last_row\n");
+						if(direction == Direction.NEXT) {
+							if(repeatState == Repeat.ALL) {
+								// only jump to first is repeat all is set
+								trackList.tracklistmodel.get_first_row(ref path);
+							}
+							else {
+								stop();
+							}
+						}
+						else if((direction == Direction.PREVIOUS)&&
+						        (path.to_string() != "0")) {
+							path.prev();
+						}
+					}
 				}
 			}
 		}
 
-		if(path == null) return;
+		if(path == null) {
+			stop();
+			return;
+		}
 
 		if(!trackList.tracklistmodel.get_iter(out iter, path)) return;
 
@@ -566,7 +611,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void on_repeat_button_clicked(Button sender) {
 		int temprepeatState = this.repeatState;
 		temprepeatState += 1;
-		if(temprepeatState > 2) temprepeatState = 0;
+		if(temprepeatState > 3) temprepeatState = 0;
 		repeatState = temprepeatState;
 	}
 

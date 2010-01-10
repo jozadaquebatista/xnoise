@@ -90,19 +90,81 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		reset_state();
 	}
 
+	public bool get_first_row(ref TreePath treepath) {
+		int n_children = this.iter_n_children(null);
+
+		if(n_children == 0) {
+			return false;
+		}
+		treepath = new TreePath.from_indices(0);
+
+		if(treepath!=null) return true;
+
+		return false;
+	}
+
+	public bool get_random_row(ref TreePath treepath){
+		int n_children = this.iter_n_children(null);
+
+		if(n_children == 0) {
+			return false;
+		}
+		//RANDOM FUNCTION
+		var rand = new Rand();
+		uint32 rand_val = rand.int_range((int32)0, (int32)(n_children - 1));
+
+		treepath = new TreePath.from_indices((int)rand_val);
+
+		if(treepath!=null) return true;
+
+		return false;
+	}
+
+	public bool path_is_last_row(ref TreePath path, out bool trackList_is_empty) { //TODO: Implement errordomain
+		trackList_is_empty = false;
+		int n_children = this.iter_n_children(null);
+
+		if(n_children == 0) {
+			trackList_is_empty = true;
+			return false; // Here something is wrong
+		}
+
+		// create treepath pointing to last row
+		var tp = new TreePath.from_indices(n_children - 1);
+
+		if(tp == null) {
+			trackList_is_empty = true;
+			return false;
+		}
+
+		// compare my treepath with last row
+		if(path.compare(tp) == 0) return true;
+		return false;
+	}
+
 	public void on_position_reference_changed() {
 		TreePath treepath;
 		TreeIter iter;
 		string uri = "";
+
+		// Handle uri stuff
 		if(get_current_path(out treepath)) {
 			this.get_iter(out iter, treepath);
 			this.get(iter, Column.URI, out uri);
-			if(uri != "") global.current_uri = uri;
+
+			if((uri != "")&&(uri ==global.current_uri))
+				global.current_uri_repeated(uri);
+
+			if(uri != "")
+				global.current_uri = uri;
 		}
 		else {
+
 			return;
+
 		}
 
+		// Set visual feedback for tracklist
 		if(((int)global.track_state) > 0) { //playing or paused
 			bolden_row();
 

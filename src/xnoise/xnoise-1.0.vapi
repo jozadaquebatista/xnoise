@@ -109,6 +109,7 @@ namespace Xnoise {
 		public signal void before_position_reference_next_changed ();
 		public signal void caught_eos_from_player ();
 		public signal void current_uri_changed ();
+		public signal void current_uri_repeated (string uri);
 		public signal void position_reference_changed ();
 		public signal void position_reference_next_changed ();
 		public signal void track_state_changed ();
@@ -407,11 +408,14 @@ namespace Xnoise {
 		public bool get_active_path (out Gtk.TreePath treepath, out bool used_next_pos);
 		public string[] get_all_tracks ();
 		public bool get_current_path (out Gtk.TreePath treepath);
+		public bool get_first_row (ref Gtk.TreePath treepath);
+		public bool get_random_row (ref Gtk.TreePath treepath);
 		public string get_uri_for_current_position ();
 		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, int length = 0, bool bold = false, string uri);
 		public bool not_empty ();
 		public void on_before_position_reference_changed ();
 		public void on_position_reference_changed ();
+		public bool path_is_last_row (ref Gtk.TreePath path, out bool trackList_is_empty);
 		public void set_reference_to_last ();
 		public signal void sign_active_path_changed (Xnoise.GlobalInfo.TrackState ts);
 	}
