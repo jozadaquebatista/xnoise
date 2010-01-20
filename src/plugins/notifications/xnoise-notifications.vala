@@ -26,31 +26,37 @@
  *
  * Author:
  * 	Jörn Magens
+ * 	fsistemas
  */
  
-using Xnoise;
+using Notify;
 using Gtk;
 
-public class TitleToDecoration : GLib.Object, IPlugin {
-	public Xnoise.Main xn { get; set; }
+public class Xnoise.Notifications : GLib.Object, IPlugin {
+	public Main xn { get; set; }
 	public string name { 
 		get {
 			return "notifications";
 		} 
 	}
+	private static Notification popup;
 
-	construct { 
+	public Notifications() { //string title, string artist, string album,Gdk.Pixbuf icon
+//		this.title = title;
+//		this.artist = artist;
+//		this.album = album;
+//		this.icon = icon;
 		timeout = 0;
+		xn.gPl.sign_uri_changed += on_uri_changed;
 	}
 
 	public bool init() {
-		xn.gPl.sign_tag_changed += on_tag_changed;
 		return true;
 	}
 	
 	uint timeout;
 	
-	private void on_tag_changed(string uri) {
+	private void on_uri_changed(string uri) {
 		if(timeout != 0)
 			Source.remove(timeout);
 
@@ -136,17 +142,40 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 			}
 		}
 		print("%s\n", text);
-		if(MainContext.current_source().is_destroyed()) return;
-//		xn.main_window.set_title(text);
-	}
-	
-	~TitleToDecoration() {
-//		xn.main_window.set_title("xnoise media player");
+		string sumary = "<b>" + title + "</b>";
+		string body = "by <b>" + artist + "</b> <br /> of <b>" + album + "</b>";
+
+		if(popup == null) {
+			popup = new Notification(sumary,body,null,null);
+		}
+		else {
+			popup.update(sumary,body,"");
+		}
+//		popup.set_icon_from_pixbuf( icon );
+		popup.set_urgency(Notify.Urgency.NORMAL);
+		popup.set_timeout(1000);
+		show();
 	}
 
-	//private void on_b_clicked(Gtk.Button sender) {
-	//	sender.label = sender.label + "_1";
-	//}
+//	string title; //title of song  
+//	string artist; //artist name  
+//	string album; //album	
+//	Gdk.Pixbuf icon;
+	
+	
+		
+	public void show() {
+		try {	
+			popup.show();
+		}
+		catch(GLib.Error e) {
+			 print("%s\n", e.message); 
+		}
+	}
+	
+	~Notifications() {
+		print("destruct notifications\n");
+	}
 
 	public Gtk.Widget? get_settings_widget() {
 		return null;

@@ -44,7 +44,7 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 		return true;
 	}
 	
-	private void write_title_to_decoration(string newuri) {
+	private void write_title_to_decoration(ref string newuri, string? x, string? y) {
 		string text, album, artist, title, genre, location, organization;
 		string basename = null;
 		File file = File.new_for_uri(newuri);

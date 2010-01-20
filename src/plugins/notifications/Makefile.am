@@ -7,7 +7,7 @@ SUBDIRS = \
 
 AM_CPPFLAGS = \
 	$(XNOISE_CFLAGS) \
-	$(XNOISETITLETODECORATION_CFLAGS) \
+	$(XNOISENOTIFICATIONS_CFLAGS) \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
 	-include $(CONFIG_HEADER) \
 	-I$(top_srcdir)/src/xnoise -DDATA_DIR='"$(datadir)"' \
@@ -32,6 +32,7 @@ VALA_CFLAGS = \
 	--thread \
 	--vapidir $(top_srcdir)/vapi \
 	--pkg config \
+	--pkg libnotify \
 	--pkg gtk+-2.0 \
 	--pkg posix \
 	--pkg sqlite3 \
@@ -42,7 +43,7 @@ VALA_CFLAGS = \
 	--pkg gmodule-2.0 \
 	--vapidir $(top_srcdir)/src/xnoise \
 	--pkg xnoise-1.0 \
-	--basedir $(top_srcdir)/src/plugins/titleToDecoration
+	--basedir $(top_srcdir)/src/plugins/notifications
 
 libnotifications.vala.stamp: $(libnotifications_la_VALASOURCES)
 	$(VALAC) -C  $(VALA_CFLAGS) $^
@@ -53,7 +54,7 @@ libnotifications_la_LDFLAGS = \
 	-module -avoid-version
 
 libnotifications_la_LIBADD = \
-	$(XNOISETEST_LIBS) \
+	$(XNOISENOTIFICATIONS_LIBS) \
 	$(NULL)
 
 notificationsinformation_DATA = notifications.xnplugin

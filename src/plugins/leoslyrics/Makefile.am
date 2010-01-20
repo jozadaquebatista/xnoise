@@ -57,7 +57,7 @@ libLeoslyrics_la_LDFLAGS = \
 	-module -avoid-version
 
 libLeoslyrics_la_LIBADD = \
-	$(XNOISETEST_LIBS) \
+	$(XNOISELEOSLYRICS_LIBS) \
 	$(NULL)
 
 leoslyricsinformation_DATA = Leoslyrics.xnplugin

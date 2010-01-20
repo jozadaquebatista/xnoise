@@ -90,6 +90,21 @@ dnl ================================================================
 
 
 dnl ================================================================
+dnl plugin check for plugins dependent on libnotify
+
+LIBNOTIFY_REQUIRED=0.4.5
+PKG_CHECK_MODULES(LIBNOTIFY, \
+                  libnotify >= $LIBNOTIFY_REQUIRED, \
+                  have_libnotify=yes, \
+                  have_libnotify=no)
+if test "x$have_libnotify" != "xyes"; then
+    AC_MSG_WARN([libnotify $LIBNOTIFY_REQUIRED or greater not found.])
+fi
+dnl ================================================================
+
+
+
+dnl ================================================================
 dnl dependency check for optional build of leoslyrics plugin 
 
 AC_ARG_ENABLE([leoslyrics],
@@ -129,6 +144,25 @@ fi
 AM_CONDITIONAL(ENABLE_LASTFMCOVERS, test x"$enable_lastfmcovers" = "xyes")
 dnl ================================================================
 
+dnl ================================================================
+dnl dependency check for optional build of notifications plugin 
+
+AC_ARG_ENABLE([notifications],
+    AS_HELP_STRING([--disable-notifications],
+    [Disable notifications plugin (default: enabled)]),
+    [enable_notifications=$enableval],
+    [enable_notifications=yes])
+
+if test "x$enable_notifications" = "xyes"; then
+    if test "x$have_libnotify" = "xyes"; then
+        enable_notifications=yes		
+    else
+        enable_notifications=no
+        AC_MSG_WARN([notifications plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_NOTIFICATIONS, test x"$enable_notifications" = "xyes")
+dnl ================================================================
 
 
 
@@ -147,6 +181,7 @@ AC_CONFIG_FILES([Makefile
     src/plugins/titleToDecoration/Makefile
     src/plugins/lastfmCovers/Makefile
     src/plugins/leoslyrics/Makefile
+    src/plugins/notifications/Makefile
     po/Makefile.in])
 
 AC_OUTPUT
@@ -159,8 +194,9 @@ echo "
     CFLAGS:                        ${CFLAGS}
     
   Plugins: 
-    titleToDecoration plugin:      yes
-    leoslyrics plugin:             ${enable_leoslyrics}
+    titleToDecoration:             yes
+    leoslyrics:                    ${enable_leoslyrics}
     lastfm covers:                 ${enable_lastfmcovers}
+    notifications:                 ${enable_notifications}
 
 "

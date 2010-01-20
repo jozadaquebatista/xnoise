@@ -76,7 +76,6 @@ public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageP
 public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	private const string INIFOLDER = ".xnoise";
 	private static SessionSync session;
-	private static Mutex mutex;
 	private static string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
 
 	private string artist;

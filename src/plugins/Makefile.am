@@ -1,4 +1,4 @@
-DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers
+DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers notifications
 
 SUBDIRS = testplugin titleToDecoration
 
@@ -8,6 +8,10 @@ endif
 
 if ENABLE_LASTFMCOVERS
   SUBDIRS += lastfmCovers
+endif
+
+if ENABLE_NOTIFICATIONS
+  SUBDIRS += notifications
 endif
 
 DISTCLEANFILES = \
