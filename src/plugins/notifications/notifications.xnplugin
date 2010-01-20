@@ -1,0 +1,9 @@
+[XnoisePlugin]
+name=notifications
+module=notifications
+description=Use notifications when playing back a song
+website=http://code.google.com/p/xnoise/
+icon=/path/to/icon
+copyright=Copyright © 2009 Jörn Magens 
+license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
+author=Jörn Magens <shuerhaaken@googlemail.com>
