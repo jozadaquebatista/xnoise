@@ -660,7 +660,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 	}
 
-	public void set_displayed_title(string newuri) {
+	public void set_displayed_title(ref string newuri, string? tagname, string? tagvalue) {
 		string text, album, artist, title, organization, location, genre;
 		string basename = null;
 		//print("newuri: %s\n", newuri);
@@ -1418,4 +1418,5 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 }
+
 

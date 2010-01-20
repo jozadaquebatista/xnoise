@@ -27,7 +27,6 @@ namespace Xnoise {
 		public AlbumImage ();
 		public void load_default_image ();
 		public bool album_image_available { get; set; }
-		public string current_image_path { get; set; }
 		public bool show_album_images { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -35,11 +34,12 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate Xnoise.IAlbumCoverImage AlbumImageCreatorDelg (string artist, string album);
 		public Xnoise.IAlbumCoverImage album_image_provider;
+		public static GLib.Mutex mutex;
 		public AlbumImageLoader (string artist, string album);
 		public bool fetch_image ();
 		public string get_image_uri ();
 		public static void init ();
-		public signal void sign_fetched (string? image_path);
+		public signal void sign_fetched (string artist, string album, string? image_path);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AppStarter : GLib.Object {
@@ -143,7 +143,7 @@ namespace Xnoise {
 		public signal void sign_playing ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
-		public signal void sign_tag_changed (string newuri);
+		public signal void sign_tag_changed (ref string newuri, string? tagname, string? tagvalue);
 		public signal void sign_uri_changed (string newuri);
 		public signal void sign_video_playing ();
 		public signal void sign_volume_changed (double volume);
@@ -249,7 +249,7 @@ namespace Xnoise {
 		public MainWindow ();
 		public void change_song (Xnoise.MainWindow.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
-		public void set_displayed_title (string newuri);
+		public void set_displayed_title (ref string newuri, string? tagname, string? tagvalue);
 		public bool fullscreenwindowvisible { get; set; }
 		public int repeatState { get; set; }
 		public signal void sign_drag_over_da ();
@@ -431,7 +431,7 @@ namespace Xnoise {
 		public abstract void* fetch_image ();
 		public abstract string get_image_uri ();
 		public signal void sign_album_image_done (Xnoise.IAlbumCoverImage instance);
-		public signal void sign_album_image_fetched (string? image_path);
+		public signal void sign_album_image_fetched (string artist, string album, string? image_path);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IAlbumCoverImageProvider : GLib.Object {
@@ -458,7 +458,9 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IPlugin : GLib.Object {
 		public abstract Gtk.Widget? get_settings_widget ();
+		public abstract Gtk.Widget? get_singleline_settings_widget ();
 		public abstract bool has_settings_widget ();
+		public abstract bool has_singleline_settings_widget ();
 		public abstract bool init ();
 		public abstract string name { get; }
 		public abstract Xnoise.Main xn { get; set; }
@@ -505,6 +507,8 @@ namespace Xnoise {
 	public static void initialize ();
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string remove_linebreaks (string value);
+	[CCode (cheader_filename = "xnoise.h")]
+	public static string replace_underline_with_blank_encoded (string value);
 }
 [CCode (cname = "gdk_window_ensure_native", cheader_filename = "xnoise.h")]
 public static bool ensure_native (Gdk.Window window);

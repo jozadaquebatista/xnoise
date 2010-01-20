@@ -73,6 +73,18 @@ namespace Xnoise {
 		return value;
 	}
 
+	public static string replace_underline_with_blank_encoded(string value) {
+		// unexpected linebreaks do not look nice
+		try {
+			GLib.Regex r = new GLib.Regex("_");
+			return r.replace(value, -1, 0, "%20");
+		}
+		catch(GLib.RegexError e) {
+			print("%s\n", e.message);
+		}
+		return value;
+	}
+
 	public static string get_stream_uri(string playlist_uri) {
 		//print("playlist_uri: %s\n", playlist_uri);
 		var file = File.new_for_uri(playlist_uri);
@@ -224,7 +236,7 @@ public interface Xnoise.IAlbumCoverImage : GLib.Object {
 	public abstract string get_image_uri();
 
 	// delivers local image path on success, null otherwise
-	public signal void sign_album_image_fetched(string? image_path);
+	public signal void sign_album_image_fetched(string artist, string album, string? image_path);
 
 	// 'sign_album_image_done' delivers the providers instance
 	// for destruction after usage

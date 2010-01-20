@@ -29,8 +29,7 @@
  * Jörn Magens
  * fsistemas
  */
- //TODO: only call this if local file is not available
- // Do everything async
+
 using Gtk;
 using Soup;
 using Xml;
@@ -55,10 +54,18 @@ public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageP
 		return null;
 	}
 
+	public Gtk.Widget? get_singleline_settings_widget() {
+		return null;
+	}
+
 	public bool has_settings_widget() {
 		return false;
 	}
-
+	
+	public bool has_singleline_settings_widget() {
+		return false;
+	}
+	
 	public Xnoise.IAlbumCoverImage from_tags(string artist, string album) {
 		return new LastFmCovers(artist, album);
 	}
@@ -68,9 +75,9 @@ public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageP
 
 public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	private const string INIFOLDER = ".xnoise";
-	//private static SessionAsync session;
 	private static SessionSync session;
-	static string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
+	private static Mutex mutex;
+	private static string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
 
 	private string artist;
 	private string album;
@@ -82,28 +89,29 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		//print("new backend\n");
 	}
 
-	//~LastFmCovers() {
-	//	print("dstrct backend\n");
-	//}
+	~LastFmCovers() {
+		print("dstrct backend\n");
+	}
 
 	public void* fetch_image() {
-		string s = find_image(this.artist, this.album);
-		sign_album_image_fetched(s);
+		string? s = find_image(this.artist, this.album);
+		sign_album_image_fetched(this.artist, this.album, s);
 		sign_album_image_done(this);
 		return null;
 	}
 
 	private string? download_album_images(string artist,string album,XPathContext* xpath) {
-		string[] sizes = {"medium", "extralarge"}; //Two sizes seem to be enough for now
+		string[] sizes = {"medium", "extralarge"}; 
 		string default_size = "medium";
 		string uri_image = "";
+		print("lalala: %s\n", escape_for_local_folder_search(artist.down()));
 		var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
 		                                          INIFOLDER,
 		                                          "album_images",
 		                                          null
 		                                          );
 
-		for( int i = 0; i< sizes.length;i++) {
+		for(int i = 0; i< sizes.length;i++) {
 			var fileout = File.new_for_path(GLib.Path.build_filename(
 			                                          image_path,
 			                                          escape_for_local_folder_search(artist.down()),
@@ -113,20 +121,6 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 			                                          sizes[i],
 			                                          null)
 			                                );
-/*		var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
-		                                          INIFOLDER,
-		                                          "album_images",
-		                                          null
-		                                          );
-
-			var fileout = File.new_for_path(GLib.Path.build_filename(
-			                                          image_path,
-			                                          artist.down(),
-			                                          album.down(),
-			                                          album.down() + "_" + sizes[i],
-			                                          null)
-			                                );
-*/
 			if(default_size == sizes[i]) uri_image = fileout.get_path();
 
 			string pth = "";
@@ -140,7 +134,6 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 					return null;
 				}
 			}
-
 			if(!fileout.query_exists (null)) {
 				XPathObject* result = xpath->eval_expression("/lfm/album/image[@size='" + sizes[i] +"']");
 				if(result->nodesetval->is_empty() ) {
@@ -178,25 +171,45 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	}
 
 	private string? find_image(string artist, string album) {
-		//print("find_lastfm_image to %s - %s\n", artist, album);
+		print("find_lastfm_image to %s - %s\n", artist, album);
 		session = new Soup.SessionSync();
-		string url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + lastfmKey + "&artist=" + 			artist +"&album=" + album;
+		string url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + 
+		   lastfmKey + 
+		   "&artist=" + 
+		   replace_underline_with_blank_encoded(Soup.URI.encode(artist, null)) +
+		   "&album=" + 
+		   replace_underline_with_blank_encoded(Soup.URI.encode(album , null));
+		
 		//print(url+"\n");
 		var message = new Soup.Message("GET", url);
+		AlbumImageLoader.mutex.lock();
 		session.send_message(message);
+		AlbumImageLoader.mutex.unlock();
+		
+		if(message == null || message.response_body == null || message.response_body.data == null) {
+			//print("empty message\n");
+			return null;
+		}
+		
 		Xml.Doc* doc = Parser.parse_memory(message.response_body.data,(int)message.response_body.length);
 		XPathContext* xpath = new XPathContext(doc);
 
 		XPathObject* result = xpath->eval_expression("/lfm/@status");
 		if( result->nodesetval->is_empty() ) {
+			delete doc;
 			return null;
 		}
 		else {
 			string state = result->nodesetval->item(0)->get_content();
 			if(state == "ok") {
-				return download_album_images(artist, album, xpath);
+				//print("state ok\n");
+				string imagepath = download_album_images(artist, album, xpath);
+				delete doc;
+				return imagepath;
 			}
 			else {
+				//print("state not ok\n");
+				delete doc;
 				return null;
 			}
 		}

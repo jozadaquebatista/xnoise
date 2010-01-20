@@ -36,25 +36,23 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 	private uint backend_iter;
 	private string artist;
 	private string album;
-
+	private static weak Thread fetcher_thread;
+	public static Mutex mutex;
+	
 	public delegate IAlbumCoverImage AlbumImageCreatorDelg(string artist, string album);
-	public signal void sign_fetched(string? image_path);
+	public signal void sign_fetched(string artist, string album, string? image_path);
 
 	public static void init() {
 		xn = Main.instance;
+		mutex = new Mutex();
 		xn.plugin_loader.sign_plugin_activated.connect(AlbumImageLoader.on_plugin_activated);
 	}
 
 	public AlbumImageLoader(string artist, string album) {
-		//print("new loader\n");
 		this.artist = artist;
 		this.album = album;
 		backend_iter = 0;
 	}
-
-	//~AlbumImageLoader() {
-	//	print("destruct AlbumImageLoader\n");
-	//}
 
 	private static void on_plugin_activated(Plugin p) {
 		if(!p.is_album_image_plugin) return;
@@ -69,13 +67,14 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 	}
 
 	private static void on_done(IAlbumCoverImage instance) {
-		if(fetcher_thread!=null) fetcher_thread.exit(null);
+		mutex.lock();
 		fetcher_thread = null;
+		mutex.unlock();
 		instance.unref();
 	}
 
-	private void on_fetched(string? text) {
-		sign_fetched(text);
+	private void on_fetched(string artist, string album, string? image_path) {
+		sign_fetched(artist, album, image_path);
 		this.album_image_provider = null;
 	}
 
@@ -83,10 +82,9 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 		return album_image_provider.get_image_uri();
 	}
 
-	private static weak Thread fetcher_thread;
 	public bool fetch_image() {
 		if(this.provider == null) {
-			sign_fetched(null);
+			sign_fetched("", "", null);
 			return false;
 		}
 
@@ -95,12 +93,13 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 		this.album_image_provider.sign_album_image_fetched.connect(this.on_fetched);
 		this.album_image_provider.sign_album_image_done.connect(on_done);
 		try {
+			mutex.lock();
 			this.fetcher_thread = Thread.create(album_image_provider.fetch_image, true);
+			mutex.unlock();
 		}
 		catch(GLib.ThreadError e) {
 			print("Album image loader: %s", e.message);
 		}
-		//album_image_provider.fetch_image();
 		return true;
 	}
 }

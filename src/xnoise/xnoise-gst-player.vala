@@ -125,7 +125,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_paused();
 	public signal void sign_stopped();
 	public signal void sign_video_playing();
-	public signal void sign_tag_changed(string newuri);
+	public signal void sign_tag_changed(ref string newuri, string? tagname, string? tagvalue);
 	public signal void sign_uri_changed(string newuri);
 	public signal void sign_volume_changed(double volume);
 
@@ -136,37 +136,40 @@ public class Xnoise.GstPlayer : GLib.Object {
 		this.notify.connect( (s, p) => {
 			switch(p.name) {
 				case "Uri": {
-					this.currentartist   = "unknown artist";
-					this.currentalbum    = "unknown album";
-					this.currenttitle    = "unknown title";
-					this.currentlocation = "unknown location";
-					this.currentgenre    = "unknown genre";
-					this.currentorg      = "unknown organization";
-					sign_uri_changed(this.Uri);
+					this._currentartist   = "unknown artist";
+					this._currentalbum    = "unknown album";
+					this._currenttitle    = "unknown title";
+					this._currentlocation = "unknown location";
+					this._currentgenre    = "unknown genre";
+					this._currentorg      = "unknown organization";
+					
+					this.sign_uri_changed(this.Uri);
+					this.sign_tag_changed(ref this._Uri, null, null);
+					
 					break;
 				}
 				case "currentartist": {
-					this.sign_tag_changed(this.Uri);
+					this.sign_tag_changed(ref this._Uri, "artist", this._currentartist);
 					break;
 				}
 				case "currentalbum": {
-					this.sign_tag_changed(this.Uri);
+					this.sign_tag_changed(ref this._Uri, "album", this._currentalbum);
 					break;
 				}
 				case "currenttitle": {
-					this.sign_tag_changed(this.Uri);
+					this.sign_tag_changed(ref this._Uri, "title", this._currenttitle);
 					break;
 				}
 				case "currentlocation": {
-					this.sign_tag_changed(this.Uri);
+					this.sign_tag_changed(ref this._Uri, "location", this._currentlocation);
 					break;
 				}
 				case "currentgenre": {
-					this.sign_tag_changed(this.Uri);
+					this.sign_tag_changed(ref this._Uri, "genre", this._currentgenre);
 					break;
 				}
 				case "currentorg": {
-					this.sign_tag_changed(this.Uri);
+					this.sign_tag_changed(ref this._Uri, "organization", this._currentorg);
 					break;
 				}
 				case "taglist": {

@@ -86,7 +86,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		return false;
 	}
 
-	private void on_tag_changed(string uri) {
+	private void on_tag_changed(ref string uri, string? tagname, string? tagvalue) {
 		if(timeout!=0)
 			GLib.Source.remove(timeout);
 

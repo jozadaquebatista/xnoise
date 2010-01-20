@@ -52,7 +52,15 @@ public class Xnoise.LeoslyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 		return null;
 	}
 
+	public Gtk.Widget? get_singleline_settings_widget() {
+		return null;
+	}
+
 	public bool has_settings_widget() {
+		return false;
+	}
+	
+	public bool has_singleline_settings_widget() {
 		return false;
 	}
 
