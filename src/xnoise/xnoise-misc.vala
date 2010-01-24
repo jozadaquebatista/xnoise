@@ -29,13 +29,17 @@
  */
 
 
-// GENERAL NAMESPACE FUNCTIONS
+// XNOISES' GENERAL NAMESPACE FUNCTIONS
 
 namespace Xnoise {
 
 	public static Params par = null;
 	public static GlobalInfo global = null;
 
+	/*
+	 * This function is used to create static instances of Params
+	 * and GlobalInfo in the xnoise namespace.
+	 */
 	public static void initialize() {
 		if(par == null)
 			par = new Params();
@@ -85,8 +89,23 @@ namespace Xnoise {
 		return value;
 	}
 
-	public static bool get_image_path_for_media_uri(string uri, ref string? imagepath) {
-		imagepath = null;
+	/*
+	 * This function tries to find the right image for the uri.
+	 */
+	public static bool get_image_path_for_media_uri(string uri, ref string? image_path) {
+		//TODO: also check imagepath via track metadata
+		string tmpuri = uri;
+		image_path = null;
+		var dbb = new DbBrowser();
+		
+		if(dbb == null)
+			return false;
+		
+		image_path = dbb.get_local_image_path_for_uri(ref tmpuri);
+		
+		if(image_path != null)
+			return true;
+			
 		return false;
 	}
 

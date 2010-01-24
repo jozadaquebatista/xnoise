@@ -9,6 +9,7 @@ AM_CPPFLAGS = \
 	$(XNOISE_CFLAGS) \
 	$(XNOISENOTIFICATIONS_CFLAGS) \
 	$(LIBNOTIFY_CFLAGS) \
+	-DUIDIR=\"$(datadir)/xnoise/ui/\" \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
 	-include $(CONFIG_HEADER) \
 	-I$(top_srcdir)/src/xnoise -DDATA_DIR='"$(datadir)"' \

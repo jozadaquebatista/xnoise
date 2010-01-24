@@ -502,7 +502,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string escape_for_local_folder_search (string value);
 	[CCode (cheader_filename = "xnoise.h")]
-	public static bool get_image_path_for_media_uri (string uri, ref string? imagepath);
+	public static bool get_image_path_for_media_uri (string uri, ref string? image_path);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string get_stream_uri (string playlist_uri);
 	[CCode (cheader_filename = "xnoise.h")]

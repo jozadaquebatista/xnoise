@@ -58,9 +58,9 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 	private void on_uri_changed(string uri) {
 		if(timeout != 0)
 			Source.remove(timeout);
-//		print("notif uri: %s\n", uri);
 
-		if(((uri=="")||(uri==null))&&(notification!=null)) {
+		if(((uri=="")||(uri==null))&&
+		   (notification!=null)) {
 //			print("close n\n");
 			try {
 				notification.clear_hints();
@@ -82,33 +82,33 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		string uri = newuri;
 		string image_path = null;
 		string album, artist, title;
-		Gdk.Pixbuf icon = null;
+		Gdk.Pixbuf image_pixb = null;
 		string basename = null;
 		File file = File.new_for_uri(newuri);
 		if(!xn.gPl.is_stream)
 			basename = file.get_basename();
-		if(xn.gPl.currentartist!=null) {
+		if(xn.gPl.currentartist != null) {
 			artist = remove_linebreaks(xn.gPl.currentartist);
 		}
 		else {
 			artist = "unknown artist";
 		}
-		if(xn.gPl.currenttitle!=null) {
+		if(xn.gPl.currenttitle != null) {
 			title = remove_linebreaks(xn.gPl.currenttitle);
 		}
 		else {
 			title = "unknown title";
 		}
-		if(xn.gPl.currentalbum!=null) {
+		if(xn.gPl.currentalbum != null) {
 			album = remove_linebreaks(xn.gPl.currentalbum);
 		}
 		else {
 			album = "unknown album";
 		}
 
-		if((title == "unknown title")&& 
+		if((title  == "unknown title")&& 
 		   (artist == "unknown artist")&&
-		   (album == "unknown album")) {
+		   (album  == "unknown album")) {
 			TrackData td;
 			if(dbb.get_trackdata_for_uri(newuri, out td)) {
 				artist = td.Artist;
@@ -116,8 +116,8 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 				title = td.Title;
 			}
 		}
-		//TODO: bool get_image_path_for_media_uri(string uri, ref string? imagepath) {		
-		image_path = dbb.get_local_image_path_for_uri(ref uri);
+		//TODO: check res
+		bool res = get_image_path_for_media_uri(uri, ref image_path);
 		string summary = "<b>" + title + "</b>";
 		string body = _("by") +
 		              " <b>" + artist + "</b> \n" +
@@ -133,17 +133,25 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		}
 		if(image_path != null) {
 			try {
-				icon = new Gdk.Pixbuf.from_file(image_path);	
+				image_pixb = new Gdk.Pixbuf.from_file(image_path);
 			}
 			catch(GLib.Error e) {
 				print("%s\n", e.message);
 			}
 		}
-		if(icon != null) {
-			notification.set_icon_from_pixbuf(icon);
+		else {
+			try {
+				image_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+			}
+		}
+		if(image_pixb != null) {
+			notification.set_icon_from_pixbuf(image_pixb);
 		}
 		notification.set_urgency(Notify.Urgency.NORMAL);
-		notification.set_timeout(1000);
+		notification.set_timeout(2000);
 		show();
 	}
 
