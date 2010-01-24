@@ -1,6 +1,6 @@
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 1)
-m4_define(xnoise_micro_version, 0)
+m4_define(xnoise_micro_version, 1)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
 
@@ -68,6 +68,8 @@ PKG_CHECK_MODULES(LIBXML, \
 if test "x$have_libxml" = "xno"; then
     AC_MSG_WARN([libxml $LIBXML_REQUIRED or greater not found.])
 fi
+AC_SUBST(LIBXML_CFLAGS)
+AC_SUBST(LIBXML_LIBS)
 dnl ================================================================
 
 
@@ -77,6 +79,7 @@ dnl ================================================================
 dnl plugin check for plugins dependent on libsoup-2.4
 
 LIBSOUP_REQUIRED=2.26.0
+
 PKG_CHECK_MODULES(LIBSOUP, \
                   libsoup-2.4 >= $LIBSOUP_REQUIRED, \
                   have_libsoup=yes, \
@@ -84,6 +87,8 @@ PKG_CHECK_MODULES(LIBSOUP, \
 if test "x$have_libsoup" != "xyes"; then
     AC_MSG_WARN([libsoup $LIBSOUP_REQUIRED or greater not found.])
 fi
+AC_SUBST(LIBSOUP_CFLAGS)
+AC_SUBST(LIBSOUP_LIBS)
 dnl ================================================================
 
 
@@ -100,6 +105,8 @@ PKG_CHECK_MODULES(LIBNOTIFY, \
 if test "x$have_libnotify" != "xyes"; then
     AC_MSG_WARN([libnotify $LIBNOTIFY_REQUIRED or greater not found.])
 fi
+AC_SUBST(LIBNOTIFY_CFLAGS)
+AC_SUBST(LIBNOTIFY_LIBS)
 dnl ================================================================
 
 

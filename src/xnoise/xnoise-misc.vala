@@ -85,6 +85,11 @@ namespace Xnoise {
 		return value;
 	}
 
+	public static bool get_image_path_for_media_uri(string uri, ref string? imagepath) {
+		imagepath = null;
+		return false;
+	}
+
 	public static string get_stream_uri(string playlist_uri) {
 		//print("playlist_uri: %s\n", playlist_uri);
 		var file = File.new_for_uri(playlist_uri);

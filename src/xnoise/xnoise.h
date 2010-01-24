@@ -1143,6 +1143,7 @@ void xnoise_initialize (void);
 char* xnoise_escape_for_local_folder_search (const char* value);
 char* xnoise_remove_linebreaks (const char* value);
 char* xnoise_replace_underline_with_blank_encoded (const char* value);
+gboolean xnoise_get_image_path_for_media_uri (const char* uri, char** imagepath);
 char* xnoise_get_stream_uri (const char* playlist_uri);
 GType xnoise_track_list_note_book_tab_get_type (void);
 GType gst_stream_type_get_type (void);

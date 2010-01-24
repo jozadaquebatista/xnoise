@@ -8,6 +8,7 @@ SUBDIRS = \
 AM_CPPFLAGS = \
 	$(XNOISE_CFLAGS) \
 	$(XNOISENOTIFICATIONS_CFLAGS) \
+	$(LIBNOTIFY_CFLAGS) \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
 	-include $(CONFIG_HEADER) \
 	-I$(top_srcdir)/src/xnoise -DDATA_DIR='"$(datadir)"' \
@@ -32,8 +33,8 @@ VALA_CFLAGS = \
 	--thread \
 	--vapidir $(top_srcdir)/vapi \
 	--pkg config \
-	--pkg libnotify \
 	--pkg gtk+-2.0 \
+	--pkg libnotify \
 	--pkg posix \
 	--pkg sqlite3 \
 	--pkg gio-2.0 \
@@ -54,6 +55,7 @@ libnotifications_la_LDFLAGS = \
 	-module -avoid-version
 
 libnotifications_la_LIBADD = \
+	$(LIBNOTIFY_LIBS) \
 	$(XNOISENOTIFICATIONS_LIBS) \
 	$(NULL)
 
@@ -72,5 +74,4 @@ DISTCLEANFILES = \
 	libnotifications.vala.stamp \
 	Makefile.in \
 	$(NULL)
-
 

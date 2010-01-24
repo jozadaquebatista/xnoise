@@ -29,8 +29,8 @@
  * 	fsistemas
  */
  
-using Notify;
 using Gtk;
+using Notify;
 
 public class Xnoise.Notifications : GLib.Object, IPlugin {
 	public Main xn { get; set; }
@@ -39,26 +39,37 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			return "notifications";
 		} 
 	}
-	private static Notification popup;
+	private Notification notification;
+	private uint timeout;
 
-	public Notifications() { //string title, string artist, string album,Gdk.Pixbuf icon
-//		this.title = title;
-//		this.artist = artist;
-//		this.album = album;
-//		this.icon = icon;
+	construct {
 		timeout = 0;
-		xn.gPl.sign_uri_changed += on_uri_changed;
 	}
 
 	public bool init() {
+		if(!Notify.init("Xnoise media player")) {
+			print("libnotify initialization failed\n");
+			return false;
+		}
+		xn.gPl.sign_uri_changed += on_uri_changed;
 		return true;
 	}
-	
-	uint timeout;
 	
 	private void on_uri_changed(string uri) {
 		if(timeout != 0)
 			Source.remove(timeout);
+//		print("notif uri: %s\n", uri);
+
+		if(((uri=="")||(uri==null))&&(notification!=null)) {
+//			print("close n\n");
+			try {
+				notification.clear_hints();
+				notification.close();
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+			}
+		}
 
 		timeout = Timeout.add_seconds(1, () => {
 			show_notification(uri);
@@ -67,7 +78,11 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 	}
 	
 	private void show_notification(string newuri) {
-		string text, album, artist, title, genre, location, organization;
+		var dbb = new DbBrowser();
+		string uri = newuri;
+		string image_path = null;
+		string album, artist, title;
+		Gdk.Pixbuf icon = null;
 		string basename = null;
 		File file = File.new_for_uri(newuri);
 		if(!xn.gPl.is_stream)
@@ -90,91 +105,71 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		else {
 			album = "unknown album";
 		}
-		if(xn.gPl.currentorg!=null) {
-			organization = remove_linebreaks(xn.gPl.currentorg);
-		}
-		else {
-			organization = "unknown organization";
-		}
-		if(xn.gPl.currentgenre!=null) {
-			genre = remove_linebreaks(xn.gPl.currentgenre);
-		}
-		else {
-			genre = "unknown genre";
-		}
-		if(xn.gPl.currentlocation!=null) {
-			location = remove_linebreaks(xn.gPl.currentlocation);
-		}
-		else {
-			location = "unknown location";
-		}
-		if((newuri!=null) && (newuri!="")) {
-			text = "%s %s %s %s %s ".printf( 
-				title, 
-				_("by"), 
-				artist, 
-				_("on"), 
-				album
-				);
-			if(album=="unknown album" && 
-			   artist=="unknown artist" && 
-			   title=="unknown title") 
-				if(organization!="unknown organization") 
-					text = "%s".printf(organization);
-				else if(location!="unknown location") 
-					text = "%s".printf(location);
-				else
-					text = "%s".printf("xnoise media player");
-		}
-		else {
-			if((!xn.gPl.playing)&&
-				(!xn.gPl.paused)) {
-				text = "xnoise media player";
-			}
-			else {
-				text = "%s %s %s %s %s ".printf( 
-					_("unknown title"), 
-					_("by"), 
-					_("unknown artist"),
-					_("on"), 
-					_("unknown album")
-					);
-			}
-		}
-		print("%s\n", text);
-		string sumary = "<b>" + title + "</b>";
-		string body = "by <b>" + artist + "</b> <br /> of <b>" + album + "</b>";
 
-		if(popup == null) {
-			popup = new Notification(sumary,body,null,null);
+		if((title == "unknown title")&& 
+		   (artist == "unknown artist")&&
+		   (album == "unknown album")) {
+			TrackData td;
+			if(dbb.get_trackdata_for_uri(newuri, out td)) {
+				artist = td.Artist;
+				album = td.Album;
+				title = td.Title;
+			}
+		}
+		//TODO: bool get_image_path_for_media_uri(string uri, ref string? imagepath) {		
+		image_path = dbb.get_local_image_path_for_uri(ref uri);
+		string summary = "<b>" + title + "</b>";
+		string body = _("by") +
+		              " <b>" + artist + "</b> \n" +
+		              _("on") + 
+		              " <b>" + album + "</b>";
+		
+		if(notification == null) {
+			notification = new Notification(summary, body, null, null);
 		}
 		else {
-			popup.update(sumary,body,"");
+			notification.clear_hints();
+			notification.update(summary, body, "");
 		}
-//		popup.set_icon_from_pixbuf( icon );
-		popup.set_urgency(Notify.Urgency.NORMAL);
-		popup.set_timeout(1000);
+		if(image_path != null) {
+			try {
+				icon = new Gdk.Pixbuf.from_file(image_path);	
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+			}
+		}
+		if(icon != null) {
+			notification.set_icon_from_pixbuf(icon);
+		}
+		notification.set_urgency(Notify.Urgency.NORMAL);
+		notification.set_timeout(1000);
 		show();
 	}
 
-//	string title; //title of song  
-//	string artist; //artist name  
-//	string album; //album	
-//	Gdk.Pixbuf icon;
-	
-	
-		
 	public void show() {
 		try {	
-			popup.show();
+			notification.show();
 		}
 		catch(GLib.Error e) {
 			 print("%s\n", e.message); 
 		}
 	}
-	
+
+	private void cleanup() {
+		if(notification != null) {
+			try {
+				notification.close();
+				notification = null;
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+			}
+		}
+	}
+
 	~Notifications() {
-		print("destruct notifications\n");
+		cleanup();
 	}
 
 	public Gtk.Widget? get_settings_widget() {

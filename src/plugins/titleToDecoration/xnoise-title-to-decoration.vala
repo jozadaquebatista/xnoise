@@ -31,8 +31,8 @@
 using Xnoise;
 using Gtk;
 
-public class TitleToDecoration : GLib.Object, IPlugin {
-	public Xnoise.Main xn { get; set; }
+public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
+	public Main xn { get; set; }
 	public string name { 
 		get {
 			return "TitleToDecoration";
