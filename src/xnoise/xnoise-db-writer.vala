@@ -453,7 +453,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 
 		string content = info.get_content_type();
-		weak string mime = g_content_type_get_mime_type(content);
+		unowned string mime = g_content_type_get_mime_type(content);
 		PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
 		PatternSpec psVideo = new PatternSpec("video*");
 
@@ -508,7 +508,7 @@ public class Xnoise.DbWriter : GLib.Object {
 				FileType filetype = info.get_file_type();
 
 				string content = info.get_content_type();
-				weak string mime = g_content_type_get_mime_type(content);
+				unowned string mime = g_content_type_get_mime_type(content);
 				PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
 				PatternSpec psVideo = new PatternSpec("video*");
 
@@ -620,7 +620,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	public void write_final_tracks_to_db(string[] final_tracklist) {
 		string current_query = "";
 		int rc1, nrow, ncolumn;
-		weak string[] resultArray;
+		unowned string[] resultArray;
 		string errmsg;
 		if(db == null) return;
 

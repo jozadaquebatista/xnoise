@@ -108,7 +108,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		         Column.DRAW_SEPTR, 0
 		         );
 		var tmis = dbb.get_video_data(ref searchtext);
-		foreach(weak MediaData tmi in tmis) {
+		foreach(unowned MediaData tmi in tmis) {
 			this.prepend(out iter_singlevideo, iter_videos);
 			this.set(iter_singlevideo,
 			         Column.ICON, video_pixb,
@@ -141,7 +141,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		         Column.DRAW_SEPTR, 0
 		         );
 		var tmis = dbb.get_stream_data(ref searchtext);
-		foreach(weak MediaData tmi in tmis) {
+		foreach(unowned MediaData tmi in tmis) {
 			this.prepend(out iter_singleradios, iter_radios);
 			this.set(iter_singleradios,
 			         Column.ICON,        radios_pixb,
@@ -180,7 +180,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 		TreeIter iter_artist, iter_album, iter_title;
 		artistArray = artists_browser.get_artists(ref searchtext);
-		foreach(weak string artist in artistArray) { 	              //ARTISTS
+		foreach(unowned string artist in artistArray) { 	              //ARTISTS
 			this.prepend(out iter_artist, null);
 			this.set(iter_artist,
 			         Column.ICON, artist_pixb,
@@ -188,7 +188,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 			         Column.DRAW_SEPTR, 0);
 			albumArray = albums_browser.get_albums(artist, ref searchtext);
-			foreach(weak string album in albumArray) { 			    //ALBUMS
+			foreach(unowned string album in albumArray) { 			    //ALBUMS
 				this.prepend(out iter_album, iter_artist);
 				this.set(iter_album,
 				         Column.ICON, album_pixb,
@@ -196,7 +196,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0);
 				tmis = titles_browser.get_titles_with_mediatypes_and_ids(artist, album, ref searchtext);
-				foreach(weak MediaData tmi in tmis) {	         //TITLES WITH MEDIATYPES
+				foreach(unowned MediaData tmi in tmis) {	         //TITLES WITH MEDIATYPES
 					this.prepend(out iter_title, iter_album);
 					if(tmi.mediatype == MediaType.AUDIO) {
 						this.set(iter_title,

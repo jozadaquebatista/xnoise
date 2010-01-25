@@ -38,8 +38,8 @@ public class Xnoise.TagReader : GLib.Object {
 		TagLib.File taglib_file = null;
 		taglib_file = new TagLib.File(filename);
 		if(taglib_file!=null) {
-			weak TagLib.Tag t              = taglib_file.tag;
-			weak TagLib.AudioProperties ap = taglib_file.audioproperties;
+			unowned TagLib.Tag t              = taglib_file.tag;
+			unowned TagLib.AudioProperties ap = taglib_file.audioproperties;
 			td = new TrackData();
 			try {
 				// from class Tag

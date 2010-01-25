@@ -106,7 +106,7 @@ public class Xnoise.DbCreator : GLib.Object {
 		if(xnoisedb.query_exists(null) && db!=null) {
 			bool db_table_exists = false;
 			int nrow,ncolumn;
-			weak string[] resultArray;
+			unowned string[] resultArray;
 			string errmsg;
 
 			//Check for Table existance

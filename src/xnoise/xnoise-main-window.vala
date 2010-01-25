@@ -189,7 +189,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void add_lastused_titles_to_tracklist() {
 		var dbBr = new DbBrowser();
 		string[] uris = dbBr.get_lastused_uris();
-		foreach(weak string uri in uris) {
+		foreach(unowned string uri in uris) {
 			File file = File.new_for_commandline_arg(uri);
 /*
 			if(global.position_reference==null) {
@@ -529,7 +529,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	// tracklist. handle_repeat_state should be true when the calling is not
 	// coming from a button, but, e.g. from a EOS signal handler
 	public void change_song(MainWindow.Direction direction, bool handle_repeat_state = false) {
-		weak TreeIter iter;
+		unowned TreeIter iter;
 		bool trackList_is_empty;
 		TreePath path = null;
 		int rowcount = 0;

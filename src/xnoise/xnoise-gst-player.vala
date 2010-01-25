@@ -213,7 +213,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private void get_stream_info() {
-		weak GLib.List <dynamic GLib.Object> stream_info = null;
+		unowned GLib.List <dynamic GLib.Object> stream_info = null;
 		stream_info = this.playbin.stream_info;
 		if(stream_info==null) return;
 		for(int i=0;i<stream_info.length();i++) {
@@ -230,7 +230,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if(pad==null) return;
 		Gst.Caps caps = pad.get_negotiated_caps();
 		if(caps==null) return;
-		weak Structure structure = caps.get_structure(0);
+		unowned Structure structure = caps.get_structure(0);
 		if (structure == null) return;
 		StreamType streamtype = info.type;
 		if(streamtype==StreamType.VIDEO) {

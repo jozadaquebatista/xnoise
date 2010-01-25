@@ -36,7 +36,7 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 	private uint backend_iter;
 	private string artist;
 	private string album;
-	private static weak Thread fetcher_thread;
+	private static unowned Thread fetcher_thread;
 	public static Mutex mutex;
 	
 	public delegate IAlbumCoverImage AlbumImageCreatorDelg(string artist, string album);

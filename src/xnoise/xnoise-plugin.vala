@@ -49,7 +49,7 @@ public class Xnoise.Plugin : GLib.Object {
 	public bool configurable { get; private set; }
 	public bool is_lyrics_plugin { get; private set; default = false;}
 	public bool is_album_image_plugin { get; private set; default = false;}
-	private weak Main xn;
+	private unowned Main xn;
 
 	public signal void sign_activated();
 	public signal void sign_deactivated();

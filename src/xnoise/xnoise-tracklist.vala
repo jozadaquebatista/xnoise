@@ -249,15 +249,15 @@ public class Xnoise.TrackList : TreeView {
 		rowref_list = {};//new TreeRowReference[0];
 		TreeIter iter;
 		GLib.Value uri;
-		List<weak TreePath> paths;
-		weak Gtk.TreeSelection sel;
+		List<unowned TreePath> paths;
+		unowned Gtk.TreeSelection sel;
 		string[] uris;
 
 		sel = this.get_selection();
 		paths = sel.get_selected_rows(null);
  		int i = 0;
 		uris = new string[(int)paths.length() + 1];
-		foreach(weak TreePath path in paths) {
+		foreach(unowned TreePath path in paths) {
 			this.tracklistmodel.get_iter(out iter, path);
 			this.tracklistmodel.get_value(iter, TrackListModel.Column.URI, out uri);
 			uris[i] = uri.get_string();
@@ -340,8 +340,8 @@ public class Xnoise.TrackList : TreeView {
 					if (rowref_list[i] == null || !rowref_list[i].valid()) {
 						return;
 					}
-					weak TreeIter current_iter;
-					weak TreeIter drop_iter;
+					unowned TreeIter current_iter;
+					unowned TreeIter drop_iter;
 					var current_path = rowref_list[i].get_path();
 					this.tracklistmodel.get_iter(out current_iter, current_path); //get iter for current
 					TreePath drop_path = drop_rowref.get_path();
@@ -354,8 +354,8 @@ public class Xnoise.TrackList : TreeView {
 					if (rowref_list[i] == null || !rowref_list[i].valid()) {
 						return;
 					}
-					weak TreeIter current_iter;
-					weak TreeIter drop_iter;
+					unowned TreeIter current_iter;
+					unowned TreeIter drop_iter;
 					var current_path = rowref_list[i].get_path();
 					this.tracklistmodel.get_iter(out current_iter, current_path); //get iter for current
 					TreePath drop_path = drop_rowref.get_path();
@@ -476,7 +476,7 @@ public class Xnoise.TrackList : TreeView {
 		TreeIter iter, new_iter;
 		File file;
 		FileType filetype;
-		weak string mime;
+		unowned string mime;
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
@@ -577,13 +577,13 @@ public class Xnoise.TrackList : TreeView {
 		if(rowcount>0) {
 			//get path of last unselected
 			bool found = false;
-			List<weak TreePath> selected_paths;
-			weak Gtk.TreeSelection sel = this.get_selection();
+			List<unowned TreePath> selected_paths;
+			unowned Gtk.TreeSelection sel = this.get_selection();
 			selected_paths = sel.get_selected_rows(null);
 			int i=0;
 			do {
 				path = new TreePath.from_string("%d".printf(rowcount - 1 - i));
-				foreach(weak TreePath treepath in selected_paths) {
+				foreach(unowned TreePath treepath in selected_paths) {
 					if(treepath.compare(path)!=0) {
 						found = true;
 						break;
@@ -623,9 +623,9 @@ public class Xnoise.TrackList : TreeView {
 		if(!this.get_visible_range(out start_path, out end_path))
 			return;
 
-		weak int[] start   = start_path.get_indices();
-		weak int[] end     = end_path.get_indices();
-		weak int[] current = current_path.get_indices();
+		unowned int[] start   = start_path.get_indices();
+		unowned int[] end     = end_path.get_indices();
+		unowned int[] current = current_path.get_indices();
 
 		if(!((start[0] < current[0])&&
 		    (current[0] < end[0])))
@@ -640,7 +640,7 @@ public class Xnoise.TrackList : TreeView {
 		list = this.get_selection().get_selected_rows(null);
 		if(list.length() == 0) return;
 		list.reverse();
-		foreach(weak Gtk.TreePath path in list) {
+		foreach(unowned Gtk.TreePath path in list) {
 			tracklistmodel.get_iter(out iter, path);
 			path_2 = path;
 			if((global.position_reference!=null)&&

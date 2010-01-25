@@ -43,8 +43,8 @@ public class Xnoise.PluginLoader : Object {
 		assert(Module.supported());
 		this.xn = Main.instance;
 		plugin_htable = new HashTable<string,Plugin>(str_hash, str_equal);
-		lyrics_plugins_htable = new HashTable<string,weak Plugin>(str_hash, str_equal);
-		image_provider_htable = new HashTable<string,weak Plugin>(str_hash, str_equal);
+		lyrics_plugins_htable = new HashTable<string,unowned Plugin>(str_hash, str_equal);
+		image_provider_htable = new HashTable<string,unowned Plugin>(str_hash, str_equal);
 	}
 
 	public unowned GLib.List<string> get_info_files() {

@@ -80,7 +80,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	}
 
 	public void set_start_parameters_in_implementors() {
-		foreach(weak IParams ip in IParams_implementers) {
+		foreach(unowned IParams ip in IParams_implementers) {
 			ip.read_params_data();
 		}
 	}
@@ -90,7 +90,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 
 		KeyFile kf = new GLib.KeyFile();
 
-		foreach(weak IParams ip in IParams_implementers)
+		foreach(unowned IParams ip in IParams_implementers)
 			ip.write_params_data();
 
 		foreach(string key in ht_int.get_keys())

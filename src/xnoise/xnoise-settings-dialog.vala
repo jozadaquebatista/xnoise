@@ -186,7 +186,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private void add_plugin_tabs() {
 		int count = 0;
 		foreach(string name in this.xn.plugin_loader.plugin_htable.get_keys()) {
-			weak Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
+			unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
 			if((p.activated) && (p.configurable)) {
 			  	Widget? w = p.settingwidget();
 				if(w!=null) notebook.append_page(w, new Gtk.Label(name));
@@ -265,7 +265,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	private int get_position_in_array(string[] array, ref string needle) {
 		int position = 1;
-		foreach(weak string array_entry in array) {
+		foreach(unowned string array_entry in array) {
 			if(needle==array_entry) return position;
 			position++;
 		}
@@ -349,7 +349,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	// Move the provider up in ranking
 	private void on_ai_up_button_clicked(Gtk.Button sender) {
-		weak TreeSelection sel = ai_tv.get_selection();
+		unowned TreeSelection sel = ai_tv.get_selection();
 		TreeIter iter;
 		TreeIter next_iter;
 		List<TreePath> treepaths = sel.get_selected_rows(null);
@@ -362,7 +362,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	// Move the provider down in ranking
 	private void on_ai_down_button_clicked(Gtk.Button sender) {
-		weak TreeSelection sel = ai_tv.get_selection();
+		unowned TreeSelection sel = ai_tv.get_selection();
 		TreeIter iter;
 		TreeIter next_iter;
 		List<TreePath> treepaths = sel.get_selected_rows(null);

@@ -48,7 +48,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 
 	public delegate ILyrics LyricsCreatorDelg(string artist, string title);
 	public signal void sign_fetched(string provider, string content);
-	static weak Thread fetcher_thread;
+	static unowned Thread fetcher_thread;
 
 	public static void init() {
 		xn = Main.instance;

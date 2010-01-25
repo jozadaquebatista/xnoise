@@ -225,15 +225,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime) {
 		string[] uris = {};
-		List<weak TreePath> treepaths;
-		weak Gtk.TreeSelection sel;
+		List<unowned TreePath> treepaths;
+		unowned Gtk.TreeSelection sel;
 		sel = this.get_selection();
 		treepaths = sel.get_selected_rows(null);
 		var dbb = new DbBrowser();
 
-		foreach(weak TreePath treepath in treepaths) {
+		foreach(unowned TreePath treepath in treepaths) {
 			string[] l = mediabrowsermodel.build_uri_list_for_treepath(treepath, ref dbb);
-			foreach(weak string u in l) {
+			foreach(unowned string u in l) {
 				uris += u;
 			}
 		}
