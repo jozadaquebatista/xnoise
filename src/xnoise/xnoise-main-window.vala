@@ -550,13 +550,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 
 		// handle RANDOM
-		if(handle_repeat_state && (repeatState==Repeat.RANDOM)) {
+		if((repeatState == Repeat.RANDOM)) {
 			this.trackList.tracklistmodel.get_random_row(ref path);
 		}
 		else {
 			if(!used_next_pos) {
 				// get next or previous path
-				if((!(handle_repeat_state && (repeatState==Repeat.SINGLE)))) {
+				if((!(handle_repeat_state && (repeatState == Repeat.SINGLE)))) {
 					if(path == null) return;
 					if(!this.trackList.tracklistmodel.path_is_last_row(ref path,
 					                                                   out trackList_is_empty)
