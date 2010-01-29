@@ -258,16 +258,10 @@ public interface Xnoise.ILyricsProvider : GLib.Object {
 
 
 public interface Xnoise.IAlbumCoverImage : GLib.Object {
-//	public abstract void* fetch_image();
-//	public abstract string get_image_uri();
-
-	// delivers local image path on success, null otherwise
+	//delivers local image path on success, "" otherwise
 	public signal void sign_image_fetched(string artist, string album, string image_path);
-
+	//start image search
 	public abstract void find_image();
-	// 'sign_album_image_done' delivers the providers instance
-	// for destruction after usage
-//	public signal void sign_album_image_done(IAlbumCoverImage instance);
 }
 
 
