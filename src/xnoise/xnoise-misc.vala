@@ -50,19 +50,25 @@ namespace Xnoise {
 
 	public static string escape_for_local_folder_search(string value) {
 		// transform the name to match the naming scheme
+		string tmp = "";
 		try {
-			string tmp = "";
-			GLib.Regex r = new GLib.Regex("\n");
+			var r = new GLib.Regex("\n");
 			tmp = r.replace(value, -1, 0, "_");
 			r = new GLib.Regex(" ");
 			tmp = r.replace(tmp, -1, 0, "_");
-			r = new GLib.Regex("//");
-			return r.replace(tmp, -1, 0, "-");
 		}
-		catch(GLib.RegexError e) {
+		catch(RegexError e) {
 			print("%s\n", e.message);
+			return value;
 		}
-		return value;
+		if(tmp.str("/") != null) {
+			string[] a = tmp.split("/", 20);
+			tmp = "";
+			foreach(string s in a) {
+				tmp = tmp + s;
+			}
+		}
+		return tmp;
 	}
 
 	public static string remove_linebreaks(string value) {
@@ -251,20 +257,17 @@ public interface Xnoise.ILyricsProvider : GLib.Object {
 
 
 
-/*
- * IAlbumCoverImage implementors should be synchrouniously looking for images
- * this is done in the ThreadFunc "fetch_image()"
- */
 public interface Xnoise.IAlbumCoverImage : GLib.Object {
-	public abstract void* fetch_image();
-	public abstract string get_image_uri();
+//	public abstract void* fetch_image();
+//	public abstract string get_image_uri();
 
 	// delivers local image path on success, null otherwise
-	public signal void sign_album_image_fetched(string artist, string album, string? image_path);
+	public signal void sign_image_fetched(string artist, string album, string image_path);
 
+	public abstract void find_image();
 	// 'sign_album_image_done' delivers the providers instance
 	// for destruction after usage
-	public signal void sign_album_image_done(IAlbumCoverImage instance);
+//	public signal void sign_album_image_done(IAlbumCoverImage instance);
 }
 
 

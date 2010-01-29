@@ -30,76 +30,56 @@
  */
 
 public class Xnoise.AlbumImageLoader : GLib.Object {
-	public IAlbumCoverImage album_image_provider;
 	private static IAlbumCoverImageProvider provider;
 	private static Main xn;
 	private uint backend_iter;
-	private string artist;
-	private string album;
-	private static unowned Thread fetcher_thread;
-	public static Mutex mutex;
+	public string artist;
+	public string album;
 	
-	public delegate IAlbumCoverImage AlbumImageCreatorDelg(string artist, string album);
-	public signal void sign_fetched(string artist, string album, string? image_path);
+	public signal void sign_fetched(string artist, string album, string image_path);
 
 	public static void init() {
 		xn = Main.instance;
-		mutex = new Mutex();
 		xn.plugin_loader.sign_plugin_activated.connect(AlbumImageLoader.on_plugin_activated);
 	}
 
-	public AlbumImageLoader(string artist, string album) {
-		this.artist = artist;
-		this.album = album;
+	public AlbumImageLoader() {
 		backend_iter = 0;
 	}
 
 	private static void on_plugin_activated(Plugin p) {
-		if(!p.is_album_image_plugin) return;
+		if(!p.is_album_image_plugin) 
+			return;
+		
 		IAlbumCoverImageProvider provider = p.loaded_plugin as IAlbumCoverImageProvider;
-		if(provider == null) return;
+		if(provider == null) 
+			return;
+		
 		AlbumImageLoader.provider = provider;
 		p.sign_deactivated.connect(AlbumImageLoader.on_backend_deactivated);
+	}
+	
+	//forward signal from current provider
+	private void on_image_fetched(string _artist, string _album, string _image_path) {
+		sign_fetched(_artist, _album, _image_path);
 	}
 
 	private static void on_backend_deactivated() {
 		AlbumImageLoader.provider = null;
 	}
 
-	private static void on_done(IAlbumCoverImage instance) {
-		mutex.lock();
-		fetcher_thread = null;
-		mutex.unlock();
-		instance.unref();
-	}
-
-	private void on_fetched(string artist, string album, string? image_path) {
-		sign_fetched(artist, album, image_path);
-		this.album_image_provider = null;
-	}
-
-	public string get_image_uri() {
-		return album_image_provider.get_image_uri();
-	}
-
 	public bool fetch_image() {
 		if(this.provider == null) {
-			sign_fetched("", "", null);
+			sign_fetched("", "", "");
 			return false;
 		}
-
-		this.album_image_provider = this.provider.from_tags(artist, album);
-		this.album_image_provider.ref();
-		this.album_image_provider.sign_album_image_fetched.connect(this.on_fetched);
-		this.album_image_provider.sign_album_image_done.connect(on_done);
-		try {
-			mutex.lock();
-			this.fetcher_thread = Thread.create(album_image_provider.fetch_image, true);
-			mutex.unlock();
-		}
-		catch(GLib.ThreadError e) {
-			print("Album image loader: %s", e.message);
-		}
+		Idle.add( () => {
+			var album_image_provider = this.provider.from_tags(artist, album);
+			album_image_provider.sign_image_fetched.connect(on_image_fetched);
+			album_image_provider.ref(); //prevent destruction before ready
+			album_image_provider.find_image();
+			return false;
+		});
 		return true;
 	}
 }

@@ -73,148 +73,221 @@ public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageP
 
 
 
+/**
+ * The LastFmCovers class tries to find cover images on 
+ * lastFm.
+ * The images are downloaded to a local folder below ~/.xnoise
+ * The download folder is returned via a signal together with
+ * the artist name and the album name for identification.
+ * 
+ * This class should be called from a closure to work with full
+ * mainloop integration. No threads needed!
+ * Copying is also done asynchonously.
+ */
 public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
+	private const int SECONDS_FOR_TIMEOUT = 10;
+	// Maybe add this key as a construct only property. Then it can be an individual key for each user
+	private const string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
+	
 	private const string INIFOLDER = ".xnoise";
-	private static SessionSync session;
-	private static string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
-
+	private SessionAsync session;
 	private string artist;
 	private string album;
-	private string image_uri = "";
-
-	public LastFmCovers(string artist, string album) {
-		this.artist = artist;
-		this.album = album;
-		//print("new backend\n");
+	private File f = null;
+	private string image_path;
+	private string[] sizes;
+	private File[] image_sources;
+	private uint timeout;
+	
+	public LastFmCovers(string _artist, string _album) {
+		this.artist = _artist;
+		this.album  = _album;
+		image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
+		                                      INIFOLDER,
+		                                      "album_images",
+		                                      null
+		                                      );
+		image_sources = {};
+		sizes = {"medium", "extralarge"}; //Two are enough
+		timeout = 0;
 	}
-
+	
 	~LastFmCovers() {
-		print("dstrct backend\n");
+		if(timeout != 0)
+			Source.remove(timeout);
 	}
 
-	public void* fetch_image() {
-		string? s = find_image(this.artist, this.album);
-		sign_album_image_fetched(this.artist, this.album, s);
-		sign_album_image_done(this);
-		return null;
+	private File get_file_for_current_artistalbum(ref string reply_artist, ref string reply_album, ref string size) {
+		File f = File.new_for_path(GLib.Path.build_filename(image_path,
+		                           escape_for_local_folder_search(reply_artist.down()),
+		                           escape_for_local_folder_search(reply_album.down()),
+		                           escape_for_local_folder_search(reply_album.down()) +
+		                           "_" +
+		                           size,
+		                           null)
+		                           );
+		return f;
 	}
-
-	private string? download_album_images(string artist,string album,XPathContext* xpath) {
-		string[] sizes = {"medium", "extralarge"}; 
-		string default_size = "medium";
-		string uri_image = "";
-		print("lalala: %s\n", escape_for_local_folder_search(artist.down()));
-		var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
-		                                          INIFOLDER,
-		                                          "album_images",
-		                                          null
-		                                          );
-
-		for(int i = 0; i< sizes.length;i++) {
-			var fileout = File.new_for_path(GLib.Path.build_filename(
-			                                          image_path,
-			                                          escape_for_local_folder_search(artist.down()),
-			                                          escape_for_local_folder_search(album.down()),
-			                                          escape_for_local_folder_search(album.down()) +
-			                                          "_" +
-			                                          sizes[i],
-			                                          null)
-			                                );
-			if(default_size == sizes[i]) uri_image = fileout.get_path();
-
-			string pth = "";
-			File fileout_path = fileout.get_parent();
-			if(!fileout_path.query_exists(null)) {
-				try {
-					fileout_path.make_directory_with_parents(null);
-				}
-				catch(GLib.Error e) {
-					print("Error with create image directory: %s\npath: %s", e.message, pth);
-					return null;
-				}
-			}
-			if(!fileout.query_exists (null)) {
-				XPathObject* result = xpath->eval_expression("/lfm/album/image[@size='" + sizes[i] +"']");
-				if(result->nodesetval->is_empty() ) {
-					continue; //Remote file not exist
-				}
-				else {
-					string url_image = result->nodesetval->item(0)->get_content();
-					var remote_file = File.new_for_uri(url_image);
-					if(remote_file.query_exists(null)) { //remote file exist
-						try {
-							//print("Begin download file %s\n",remote_file.get_basename() );
-							remote_file.copy(fileout, FileCopyFlags.NONE, null, null);
-							//print("Finish download file %s\n", fileout.get_path());
-						}
-						catch(GLib.Error e) {
-							print("%s\n", e.message);
-						}
-					}
-					else {
-						continue;
-					}
-				}
-			}
-			else {
-				continue; //Local file exists
-			}
+	
+	public void find_image() {
+		//print("find_lastfm_image to %s - %s\n", artist, album);
+		if((artist=="unknown artist")||
+		   (album=="unknown album")) {
+			sign_image_fetched(artist, album, "");
+			this.unref();
+			return;
 		}
-
-		if(uri_image == "") {
-			return null;
-		}
-		else {
-			return uri_image;
-		}
-	}
-
-	private string? find_image(string artist, string album) {
-		print("find_lastfm_image to %s - %s\n", artist, album);
-		session = new Soup.SessionSync();
+			
+		session = new Soup.SessionAsync();
 		string url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=" + 
-		   lastfmKey + 
-		   "&artist=" + 
-		   replace_underline_with_blank_encoded(Soup.URI.encode(artist, null)) +
-		   "&album=" + 
-		   replace_underline_with_blank_encoded(Soup.URI.encode(album , null));
-		
-		//print(url+"\n");
+		             lastfmKey + 
+		             "&artist=" + 
+		             replace_underline_with_blank_encoded(Soup.URI.encode(artist, null)) +
+		             "&album=" + 
+		             replace_underline_with_blank_encoded(Soup.URI.encode(album , null));
 		var message = new Soup.Message("GET", url);
-		AlbumImageLoader.mutex.lock();
-		session.send_message(message);
-		AlbumImageLoader.mutex.unlock();
+		session.queue_message(message, soup_cb);
 		
-		if(message == null || message.response_body == null || message.response_body.data == null) {
+		//Add timeout for response
+		timeout = Timeout.add_seconds(SECONDS_FOR_TIMEOUT, timeout_elapsed);
+	}
+	
+	private bool timeout_elapsed() {
+		//print("timeout imagesearch for %s - %s\n", artist, album);
+		this.unref();
+		return false;
+	}
+	
+	private void soup_cb(Session sess, Message mess) {
+		
+		return_if_fail(this != null);
+		
+		if(mess == null || mess.response_body == null || mess.response_body.data == null) {
 			//print("empty message\n");
-			return null;
+			sign_image_fetched(artist, album, "");
+			// unrefing is maybe not needed as the timeout should do it
+			return;
 		}
 		
-		Xml.Doc* doc = Parser.parse_memory(message.response_body.data,(int)message.response_body.length);
-		XPathContext* xpath = new XPathContext(doc);
+		//prevent timeout from elapsing
+		if(timeout != 0)
+			GLib.Source.remove(timeout);
 
+		//print("mess.response_body.data: %s\n", mess.response_body.data);
+		Xml.Doc* doc = Parser.parse_memory((string)mess.response_body.data,(int)mess.response_body.length);
+		
+		XPathContext* xpath = new XPathContext(doc);
 		XPathObject* result = xpath->eval_expression("/lfm/@status");
-		if( result->nodesetval->is_empty() ) {
-			delete doc;
-			return null;
+		if(result->nodesetval->is_empty()) {
+			//print("node is empty\n");
 		}
 		else {
 			string state = result->nodesetval->item(0)->get_content();
 			if(state == "ok") {
-				//print("state ok\n");
-				string imagepath = download_album_images(artist, album, xpath);
-				delete doc;
-				return imagepath;
-			}
-			else {
-				//print("state not ok\n");
-				delete doc;
-				return null;
+				string default_size = "medium";
+				string uri_image = "";
+
+				foreach(string s in sizes) {
+					f = get_file_for_current_artistalbum(ref artist, ref album, ref s);
+					if(default_size == s) uri_image = f.get_path();
+
+					string pth = "";
+					File f_path = f.get_parent();
+					if(!f_path.query_exists(null)) {
+						try {
+							f_path.make_directory_with_parents(null);
+						}
+						catch(GLib.Error e) {
+							print("Error with create image directory: %s\npath: %s", e.message, pth);
+							delete xpath;
+							delete doc;
+							return;
+						}
+					}
+
+					if(!f.query_exists(null)) {
+						result = xpath->eval_expression("/lfm/album/image[@size='" + s +"']"); //XPathObject* 
+						if(result->nodesetval->is_empty() ) {
+							continue; //Remote file not exist or no network connection
+						}
+						else {
+							string url_image = result->nodesetval->item(0)->get_content();
+							var remote_file = File.new_for_uri(url_image);
+							image_sources += remote_file;
+						}
+					}
+					else {
+						//print("Local file already exists\n");
+						continue; //Local file exists
+					}
+				}
+				// Do not execute if source has been removed in the meantime
+				if(MainContext.current_source().is_destroyed()) {
+					delete xpath;
+					delete doc;
+					return;
+				}
+				string reply_artist = "";
+				result = xpath->eval_expression("/lfm/album/artist");
+				if(result->nodesetval->is_empty()) {
+					reply_artist = "";
+				}
+				else {
+					reply_artist = result->nodesetval->item(0)->get_content();
+				}
+				string reply_album = "";
+				result = xpath->eval_expression("/lfm/album/name");
+				if(result->nodesetval->is_empty()) {
+					reply_album = "";
+				}
+				else {
+					reply_album = result->nodesetval->item(0)->get_content();
+				}
+				//use the reply's artist/album to make sure the right combination is used'
+				this.copy_something_async(reply_artist.down(), reply_album.down());
 			}
 		}
+		delete xpath;
+		delete doc;
+		return;
 	}
 
-	private string get_image_uri() {
-		return image_uri;
+	private async void copy_something_async(string _reply_artist, string _reply_album) {
+		File destination;
+		bool buf = false;
+		string default_path = "";
+		int i = 0;
+		string reply_artist = _reply_artist;
+		string reply_album = _reply_album;
+		
+		foreach(File f in image_sources) {
+			var s = sizes[i];
+			destination = get_file_for_current_artistalbum(ref reply_artist, ref reply_album, ref s);
+			try {
+				if(f.query_exists(null)) { //remote file exist
+					
+					buf = yield f.copy_async(destination,
+					                         FileCopyFlags.OVERWRITE,
+					                         Priority.DEFAULT,
+					                         null,
+					                         null);
+				}
+				else {
+					continue;
+				}
+				if(sizes[i] == "medium") default_path = destination.get_path();
+				i++;
+			}
+			catch(GLib.Error e) {
+				print("Error: %s\n", e.message);
+				i++;
+				continue;
+			}
+		}
+		// signal finish with artist, album in order to identify the sent image
+		sign_image_fetched(reply_artist, reply_album, default_path);
+		this.unref(); // After this point the class can safely be destroyed
+		return;
 	}
 }
+

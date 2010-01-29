@@ -42,9 +42,9 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 	private static uint timeout = 0;
 	private string default_size = "medium";
 	private bool db_image_available = false;
+	private bool _show_album_images = true;
 
 	public bool album_image_available { get; private set; default = false; }
-	private bool _show_album_images = true;
 	public bool show_album_images {
 		get {
 			return _show_album_images;
@@ -62,22 +62,10 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 		albumimage.set_size_request(48, 48);
 		albumimage.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 		this.put(albumimage, 0, 0);
+		loader = new AlbumImageLoader();
+		loader.sign_fetched.connect(on_album_image_fetched);
 		xn.gPl.sign_uri_changed.connect(on_uri_changed);
-//		xn.gPl.sign_tag_changed.connect(on_tag_changed);
 	}
-
-//	private void on_tag_changed(ref string uri, string? tagname, string? tagvalue) {
-//		print("on_tag_changed %s\n", tagname);
-//		if(timeout!=0)
-//			GLib.Source.remove(timeout);
-
-//		if(!show_album_images)
-//			return;
-
-//		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT,
-//		                                        2,
-//		                                        on_timeout_elapsed);
-//	}
 
 	private void on_uri_changed(string uri) {
 		//print("on_uri_changed\n");
@@ -111,9 +99,9 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 		}
 		else {
 			load_default_image();
-			if(timeout!=0)
-				GLib.Source.remove(timeout);
-			timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT,
+			if(timeout != 0)
+				Source.remove(timeout);
+			timeout = Timeout.add_seconds_full(GLib.Priority.DEFAULT,
 			                                        1,
 			                                        () => {
 			                                        	search_image(uri);
@@ -129,20 +117,17 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 		if(MainContext.current_source().is_destroyed())
 			return;
 
-		if(loader != null)
-			loader.sign_fetched.disconnect(on_album_image_fetched);
-
-		artist = escape_for_local_folder_search(xn.gPl.currentartist);
-		album  = escape_for_local_folder_search(xn.gPl.currentalbum );
+		string _artist = escape_for_local_folder_search(xn.gPl.currentartist);
+		string _album  = escape_for_local_folder_search(xn.gPl.currentalbum );
 		//print("1. %s - %s\n", artist, album);
-		if(set_local_image_if_available(artist, album)) 
+		if(set_local_image_if_available(_artist, _album)) 
 			return;
 
-		string art = remove_linebreaks(xn.gPl.currentartist);
-		string alb = remove_linebreaks(xn.gPl.currentalbum );
+		artist = remove_linebreaks(xn.gPl.currentartist);
+		album = remove_linebreaks(xn.gPl.currentalbum );
 
 		// Look into db in case gPl does not provide the tag
-		if((art=="unknown artist")||(alb =="unknown album")) {
+		if((artist == "unknown artist")||(album == "unknown album")) {
 			var dbb = new DbBrowser();
 			TrackData td;
 			if(dbb.get_trackdata_for_uri(xn.gPl.Uri, out td)) {
@@ -151,7 +136,6 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 			}
 		}
 
-		//print("2. %s - %s\n", artist, album);
 		if((artist=="")||(artist==null)||(artist=="unknown artist")||
 		   (album =="")||(album ==null)||(album =="unknown album" )) {
 			return;
@@ -175,21 +159,16 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 			return;
 		
 		if(fileout.query_exists(null)) {
-			if(source != 0)
-				GLib.Source.remove(source);
-			source = Idle.add( () => {
-				this.set_albumimage_from_path(fileout.get_path());
-				return false;
-			});
+			set_image_via_idle(fileout.get_path());
 			album_image_available = true;
 		}
 		else {
-			if(loader != null) {
-				loader.sign_fetched.disconnect(on_album_image_fetched);
-			}
-			if(MainContext.current_source().is_destroyed()) return;
-			loader = new AlbumImageLoader(artist, album);
-			loader.sign_fetched.connect(on_album_image_fetched);
+
+			if(MainContext.current_source().is_destroyed()) 
+				return;
+				
+			loader.artist = artist;
+			loader.album  = album;
 			loader.fetch_image();
 		}
 		return;
@@ -211,13 +190,7 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 		                                );
 		//print("xyz local: %s\n", fileout.get_path());
 		if(fileout.query_exists(null)) {
-			if(source!=0)
-				GLib.Source.remove(source);
-			
-			source = Idle.add( () => {
-				this.set_albumimage_from_path(fileout.get_path());
-				return false;
-			});
+			set_image_via_idle(fileout.get_path());
 			album_image_available = true;
 			return true;
 		}
@@ -236,35 +209,44 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 	private bool set_albumimage_from_path(string image_path) {
 		if(MainContext.current_source().is_destroyed()) 
 			return false;
-			
+		
 		this.albumimage.set_from_file(image_path);
 		return false;
 	}
 
-	private static uint source = 0;
+	private uint source = 0;
 
-	private void on_album_image_fetched(string _artist, string _album, string? image_path) {
-		//print("image ready: %s\n", image_path);
-		if((image_path == null)||(image_path == "")) return;
+	private void on_album_image_fetched(string _artist, string _album, string image_path) {
+		if(image_path == "") 
+			return;
 		
-		if((artist != _artist)||(album != _album)) return;
+		if((artist.down() != _artist.down())||(album.down() != _album.down())) 
+			return;
 		
 		File f = File.new_for_path(image_path);
-		if(!f.query_exists(null)) return;
+		if(!f.query_exists(null)) 
+			return;
+		
+		set_image_via_idle(image_path);
 
-		if(source!=0)
-			GLib.Source.remove(source);
-			
-		source = Idle.add( () => {
-			this.set_albumimage_from_path(image_path);
-			return false;
-		});
 		album_image_available = true;
 		var dbw = new DbWriter();
 		dbw.set_local_image_for_album(ref artist, ref album, image_path);
 		dbw = null;
 	}
 
+	private void set_image_via_idle(string image_path) {
+		if(image_path == "")
+			return;
+		
+		if(source != 0)
+			Source.remove(source);
+			
+		source = Idle.add( () => {
+			this.set_albumimage_from_path(image_path);
+			return false;
+		});
+	}
 	/// REGION IParams
 
 	public void read_params_data() {

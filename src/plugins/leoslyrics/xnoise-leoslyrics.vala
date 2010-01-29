@@ -130,7 +130,7 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 
 		// Web API call ok, do the xml processing
 
-		Xml.Doc* xmldoc = Xml.Parser.read_doc(hid_msg.response_body.data);
+		Xml.Doc* xmldoc = Xml.Parser.read_doc((string)hid_msg.response_body.data);
 		if(xmldoc == null) return false;
 
 		XPathContext xp_cont = new XPathContext(xmldoc);
@@ -170,7 +170,7 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 
 		// Web API call ok, do the xml processing
 
-		Xml.Doc* xmldoc = Xml.Parser.read_doc(text_msg.response_body.data);
+		Xml.Doc* xmldoc = Xml.Parser.read_doc((string)text_msg.response_body.data);
 		if (xmldoc == null) return false;
 
 		XPathContext xp_cont = new XPathContext(xmldoc);
