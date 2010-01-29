@@ -85,20 +85,24 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		Gdk.Pixbuf image_pixb = null;
 		string basename = null;
 		File file = File.new_for_uri(newuri);
+
 		if(!xn.gPl.is_stream)
 			basename = file.get_basename();
+
 		if(xn.gPl.currentartist != null) {
 			artist = remove_linebreaks(xn.gPl.currentartist);
 		}
 		else {
 			artist = "unknown artist";
 		}
+
 		if(xn.gPl.currenttitle != null) {
 			title = remove_linebreaks(xn.gPl.currenttitle);
 		}
 		else {
 			title = "unknown title";
 		}
+
 		if(xn.gPl.currentalbum != null) {
 			album = remove_linebreaks(xn.gPl.currentalbum);
 		}
@@ -116,8 +120,9 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 				title = td.Title;
 			}
 		}
-		//TODO: check res
-		bool res = get_image_path_for_media_uri(uri, ref image_path);
+		
+		//TODO: check return value
+		get_image_path_for_media_uri(uri, ref image_path);
 		string summary = "<b>" + title + "</b>";
 		string body = _("by") +
 		              " <b>" + artist + "</b> \n" +
