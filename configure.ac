@@ -132,6 +132,26 @@ AM_CONDITIONAL(ENABLE_LEOSLYRICS, test x"$enable_leoslyrics" = "xyes")
 dnl ================================================================
 
 dnl ================================================================
+dnl dependency check for optional build of lyricsfly plugin 
+
+AC_ARG_ENABLE([lyricsfly],
+    AS_HELP_STRING([--disable-lyricsfly],
+    [Disable lyric plugin (default: enabled)]),
+    [enable_lyricsfly=$enableval],
+    [enable_lyricsfly=yes])
+
+if test "x$enable_lyricsfly" = "xyes"; then
+    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
+        enable_lyricsfly=yes		
+    else
+        enable_lyricsfly=no
+        AC_MSG_WARN([lyricsfly plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_LYRICSFLY, test x"$enable_lyricsfly" = "xyes")
+dnl ================================================================
+
+dnl ================================================================
 dnl dependency check for optional build of lastfmcovers plugin 
 
 AC_ARG_ENABLE([lastfm-covers],
@@ -188,6 +208,7 @@ AC_CONFIG_FILES([Makefile
     src/plugins/titleToDecoration/Makefile
     src/plugins/lastfmCovers/Makefile
     src/plugins/leoslyrics/Makefile
+    src/plugins/lyricsfly/Makefile
     src/plugins/notifications/Makefile
     po/Makefile.in])
 
@@ -203,6 +224,7 @@ echo "
   Plugins: 
     titleToDecoration:             yes
     leoslyrics:                    ${enable_leoslyrics}
+    lyricsfly:                     ${enable_lyricsfly}
     lastfm covers:                 ${enable_lastfmcovers}
     notifications:                 ${enable_notifications}
 

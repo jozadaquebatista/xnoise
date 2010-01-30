@@ -14,6 +14,10 @@ if ENABLE_NOTIFICATIONS
   SUBDIRS += notifications
 endif
 
+if ENABLE_LYRICSFLY
+  SUBDIRS += lyricsfly
+endif
+
 DISTCLEANFILES = \
 	Makefile.in \
 	$(NULL)

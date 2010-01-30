@@ -57,10 +57,10 @@ libLyricsfly_la_LDFLAGS = \
 	-module -avoid-version
 
 libLyricsfly_la_LIBADD = \
-	$(XNOISETEST_LIBS) \
+	$(XNOISELYRICSFLY_LIBS) \
 	$(NULL)
 
-Lyricsflyinformation_DATA = Leoslyrics.xnplugin
+Lyricsflyinformation_DATA = Lyricsfly.xnplugin
 Lyricsflyinformationdir = $(libdir)/xnoise
 
 EXTRA_DIST = \
