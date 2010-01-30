@@ -318,6 +318,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 		radiodialog.destroy_event.connect( () => {
 			radiodialog = null;
+			return true;
 		});
 
 		try {
