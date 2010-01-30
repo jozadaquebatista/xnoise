@@ -267,7 +267,7 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 			reply_title = result->nodesetval->item(0)->get_content();
 		}
 		
-		sign_lyrics_fetched(reply_artist.down(), reply_title.down(), get_credits(), get_identifier(), lyrics_text);
+		sign_lyrics_fetched(reply_artist, reply_title, get_credits(), get_identifier(), lyrics_text);
 
 		delete doc;
 		remove_timeout();
