@@ -259,21 +259,16 @@ public interface Xnoise.IParams : GLib.Object {
 
 
 /**
- * ILyrics implementors should be synchrouniously looking for images
- * this is done in the ThreadFunc "fetch()"
+ * ILyrics implementors should be asynchronously look for lyrics
+ * The reply is checked for matching artist/title
  */
 public interface Xnoise.ILyrics : GLib.Object {
-	// 'fetch' is a thread function that will find the lyrics
 	public abstract void find_lyrics();
 
 	public abstract string get_identifier();
 	public abstract string get_credits();
 
 	public signal void sign_lyrics_fetched(string artist, string title, string credits, string identifier, string text);
-//	public signal void sign_lyrics_fetched(string text);
-	// 'sign_lyrics_done' delivers the providers instance
-	// for destruction after usage
-//	public signal void sign_lyrics_done(ILyrics instance);
 }
 
 
@@ -283,7 +278,10 @@ public interface Xnoise.ILyricsProvider : GLib.Object {
 
 
 
-
+/**
+ * IAlbumCoverImage implementors should be asynchronously look for images
+ * The reply is checked for matching artist/album
+ */
 public interface Xnoise.IAlbumCoverImage : GLib.Object {
 	//delivers local image path on success, "" otherwise
 	public signal void sign_image_fetched(string artist, string album, string image_path);
