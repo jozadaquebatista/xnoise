@@ -51,13 +51,19 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private ListStore visibleColTvModel;
 	private CheckButton checkB_showL;
 	private CheckButton show_album_cbutton;
+	private CheckButton use_lyrics_cbutton;
 	private HBox ai_hbox;
+	private HBox ly_hbox;
 	private bool show_length_col;
 	private bool show_trackno_col;
 	private ListStore ai_model;
+	private ListStore ly_model;
 	private TreeView ai_tv;
+	private TreeView ly_tv;
 	private Button ai_down_button;
+	private Button ly_down_button;
 	private Button ai_up_button;
+	private Button ly_up_button;
 
 	private enum NotebookTabs {
 		GENERAL,
@@ -80,6 +86,13 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		N_COLUMNS
 	}
 
+	private enum LyricsProvider {
+		STATE,
+		NAME,
+		RANKING,
+		N_COLUMNS
+	}
+	
 	public Gtk.Dialog dialog;
 
 	public signal void sign_finish();
@@ -97,6 +110,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 		setup_viz_cols_tv();
 		setup_albumimage_provider_tv();
+		setup_lyrics_provider_tv();
 
 		notebook.switch_page.connect(on_notebook_switched_page);
 
@@ -107,6 +121,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		// refresh table
 		if(page_num == NotebookTabs.COVER_IMAGES)
 			this.put_data_to_ai_tv();
+
+		if(page_num == NotebookTabs.LYRICS)
+			this.put_data_to_ly_tv();
 	}
 
 	private void initialize_members() {
@@ -212,6 +229,58 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		this.dialog.show_all();
 	}
 
+
+	private void setup_lyrics_provider_tv() {
+		ly_tv = new TreeView();
+		ly_model = new ListStore(LyricsProvider.N_COLUMNS,
+		                         typeof(bool),
+		                         typeof(string),
+		                         typeof(int));
+		ly_tv.model = ly_model;
+
+		var renderer = new CellRendererText();
+
+		var columnText = new TreeViewColumn();
+
+		columnText.pack_start(renderer, true);
+		columnText.add_attribute(renderer,
+		                         "text", LyricsProvider.NAME
+		                         );
+		columnText.add_attribute(renderer,
+		                         "sensitive", LyricsProvider.STATE
+		                         );
+		ly_tv.append_column(columnText);
+
+		ly_tv.headers_visible = false;
+
+		ly_hbox.pack_start(ly_tv, true, true, 0);
+
+		ly_tv.get_selection().set_mode(SelectionMode.SINGLE);
+
+		put_data_to_ly_tv();
+	}
+
+	private void put_data_to_ly_tv() {
+		TreeIter iter;
+		int ranking = -1;
+		ly_model.clear();
+		string[]? ly_providers = par.get_string_list_value("album_image_providers");
+		var ly_prov_list = xn.plugin_loader.lyrics_plugins_htable.get_keys();
+		foreach(string name in ly_prov_list) {
+			ranking = -1;
+			if(ly_providers != null) {
+				ranking = get_position_in_array(ly_providers, ref name);
+			}
+			ly_model.prepend(out iter);
+			ly_model.set(iter,
+			             LyricsProvider.STATE, this.xn.plugin_loader.lyrics_plugins_htable.lookup(name).activated,
+			             LyricsProvider.NAME, name,
+			             LyricsProvider.RANKING, ranking
+			             );
+		}
+		//TODO: Sort on the base of RANKING in the treeview
+	}
+
 	private void setup_albumimage_provider_tv() {
 		ai_tv = new TreeView();
 		ai_model = new ListStore(AIProvider.N_COLUMNS,
@@ -266,7 +335,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private int get_position_in_array(string[] array, ref string needle) {
 		int position = 1;
 		foreach(unowned string array_entry in array) {
-			if(needle==array_entry) return position;
+			if(needle == array_entry) return position;
 			position++;
 		}
 		return -1;
@@ -347,6 +416,17 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		}
 	}
 
+	private void on_use_lyrics_cbutton_clicked(Gtk.Button sender) {
+		if(this.use_lyrics_cbutton.active) {
+			par.set_int_value("use_lyrics", 1);
+//			xn.main_window.albumimage.show_album_images = true;
+		}
+		else {
+			par.set_int_value("use_lyrics", 0);
+//			xn.main_window.albumimage.show_album_images = false;
+		}
+	}
+
 	// Move the provider up in ranking
 	private void on_ai_up_button_clicked(Gtk.Button sender) {
 		unowned TreeSelection sel = ai_tv.get_selection();
@@ -373,6 +453,32 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		ai_model.move_after(iter, next_iter); //move
 	}
 
+	// Move the provider up in ranking
+	private void on_ly_up_button_clicked(Gtk.Button sender) {
+		unowned TreeSelection sel = ly_tv.get_selection();
+		TreeIter iter;
+		TreeIter next_iter;
+		List<TreePath> treepaths = sel.get_selected_rows(null);
+		TreePath tp = (TreePath)treepaths.first().data;
+		if(!ly_model.get_iter(out iter, tp)) return;
+		tp.prev();
+		if(!ly_model.get_iter(out next_iter, tp)) return;
+		ly_model.move_before(iter, next_iter); //move
+	}
+
+	// Move the provider down in ranking
+	private void on_ly_down_button_clicked(Gtk.Button sender) {
+		unowned TreeSelection sel = ly_tv.get_selection();
+		TreeIter iter;
+		TreeIter next_iter;
+		List<TreePath> treepaths = sel.get_selected_rows(null);
+		TreePath tp = (TreePath)treepaths.first().data;
+		if(!ly_model.get_iter(out iter, tp)) return;
+		tp.next();
+		if(!ly_model.get_iter(out next_iter, tp)) return;
+		ly_model.move_after(iter, next_iter); //move
+	}
+
 	private bool setup_widgets() throws SettingsDialogError {
 		try {
 			File f = File.new_for_path(SETTINGS_UI_FILE);
@@ -392,6 +498,18 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			ai_down_button = this.get_object("ai_down_button") as Gtk.Button;
 			ai_down_button.can_focus = false;
 			ai_down_button.clicked.connect(this.on_ai_down_button_clicked);
+
+			use_lyrics_cbutton = this.get_object("use_lyrics_cbutton") as Gtk.CheckButton;
+			use_lyrics_cbutton.can_focus = false;
+			use_lyrics_cbutton.clicked.connect(this.on_use_lyrics_cbutton_clicked);
+
+			ly_up_button = this.get_object("ly_up_button") as Gtk.Button;
+			ly_up_button.can_focus = false;
+			ly_up_button.clicked.connect(this.on_ly_up_button_clicked);
+
+			ly_down_button = this.get_object("ly_down_button") as Gtk.Button;
+			ly_down_button.can_focus = false;
+			ly_down_button.clicked.connect(this.on_ly_down_button_clicked);
 
 			checkB_showL = this.get_object("checkB_showlines") as Gtk.CheckButton;
 			checkB_showL.can_focus = false;
@@ -414,7 +532,8 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			sb.changed.connect(this.on_mb_font_changed);
 
 			ai_hbox = this.get_object("ai_hbox") as Gtk.HBox;
-
+			ly_hbox = this.get_object("ly_hbox") as Gtk.HBox;
+			
 			vboxplugins = this.get_object("vboxplugins") as Gtk.VBox;
 
 			notebook = this.get_object("notebook1") as Gtk.Notebook;
