@@ -1,6 +1,6 @@
 /* xnoise-lastfm-covers.vala
  *
- * Copyright (C) 2009 Jörn Magens
+ * Copyright (C) 2009 - 2010 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -128,6 +128,11 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		                           );
 		return f;
 	}
+
+	private void remove_timeout() {
+		if(timeout != 0)
+			Source.remove(timeout);
+	}
 	
 	public void find_image() {
 		//print("find_lastfm_image to %s - %s\n", artist, album);
@@ -153,14 +158,13 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	}
 	
 	private bool timeout_elapsed() {
-		//print("timeout imagesearch for %s - %s\n", artist, album);
 		this.unref();
 		return false;
 	}
 	
 	private void soup_cb(Session sess, Message mess) {
-		
-		return_if_fail(this != null);
+		if(this == null)
+			return;
 		
 		if(mess == null || mess.response_body == null || mess.response_body.data == null) {
 			//print("empty message\n");
@@ -169,10 +173,6 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 			return;
 		}
 		
-		//prevent timeout from elapsing
-		if(timeout != 0)
-			GLib.Source.remove(timeout);
-
 		//print("mess.response_body.data: %s\n", mess.response_body.data);
 		Xml.Doc* doc = Parser.parse_memory((string)mess.response_body.data,(int)mess.response_body.length);
 		
@@ -201,6 +201,8 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 							print("Error with create image directory: %s\npath: %s", e.message, pth);
 							delete xpath;
 							delete doc;
+							remove_timeout();
+							this.unref();
 							return;
 						}
 					}
@@ -220,12 +222,6 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 						//print("Local file already exists\n");
 						continue; //Local file exists
 					}
-				}
-				// Do not execute if source has been removed in the meantime
-				if(MainContext.current_source().is_destroyed()) {
-					delete xpath;
-					delete doc;
-					return;
 				}
 				string reply_artist = "";
 				result = xpath->eval_expression("/lfm/album/artist");
@@ -286,6 +282,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		}
 		// signal finish with artist, album in order to identify the sent image
 		sign_image_fetched(reply_artist, reply_album, default_path);
+		remove_timeout();
 		this.unref(); // After this point the class can safely be destroyed
 		return;
 	}

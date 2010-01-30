@@ -71,6 +71,32 @@ namespace Xnoise {
 		return tmp;
 	}
 
+	public static string remove_single_character(string haystack, string needle) {
+		//TODO: check if this can be done more efficiently
+		string result = "";
+		if(haystack.str(needle) != null) {
+			string[] a = haystack.split(needle, 30);
+			foreach(string s in a) {
+				result = result + s;
+			}
+		}
+		else {
+			return haystack;
+		}
+		return result;
+	}
+
+	public static string prepare_for_comparison(string value) {
+		// transform strings to make it easier to compare them
+		string result = value;
+		string[] test_characters = {"/", " ", ".", ",", ";", ":", "\\", "'", "`", "´", "!", "_"};
+		
+		foreach(string s in test_characters)
+			result = remove_single_character(result, s);
+
+		return result.down();
+	}
+
 	public static string remove_linebreaks(string value) {
 		// unexpected linebreaks do not look nice
 		try {
@@ -238,15 +264,16 @@ public interface Xnoise.IParams : GLib.Object {
  */
 public interface Xnoise.ILyrics : GLib.Object {
 	// 'fetch' is a thread function that will find the lyrics
-	public abstract void* fetch();
-	public abstract string get_text();
+	public abstract void find_lyrics();
+
 	public abstract string get_identifier();
 	public abstract string get_credits();
 
-	public signal void sign_lyrics_fetched(string text);
+	public signal void sign_lyrics_fetched(string artist, string title, string credits, string identifier, string text);
+//	public signal void sign_lyrics_fetched(string text);
 	// 'sign_lyrics_done' delivers the providers instance
 	// for destruction after usage
-	public signal void sign_lyrics_done(ILyrics instance);
+//	public signal void sign_lyrics_done(ILyrics instance);
 }
 
 

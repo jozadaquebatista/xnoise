@@ -38,12 +38,9 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 	
 	public signal void sign_fetched(string artist, string album, string image_path);
 
-	public static void init() {
+	public AlbumImageLoader() {
 		xn = Main.instance;
 		xn.plugin_loader.sign_plugin_activated.connect(AlbumImageLoader.on_plugin_activated);
-	}
-
-	public AlbumImageLoader() {
 		backend_iter = 0;
 	}
 

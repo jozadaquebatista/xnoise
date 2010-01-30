@@ -26,54 +26,41 @@
  *
  * Author:
  * 	softshaker  softshaker googlemail.com
+ * 	Jörn Magens
  */
 
 /* TODO: * try different sources in order of their priority if backends fail to find lyrics
 	 * ensure everything's radio-stream-proof
-	 * find a suitable integration into the gui [importance++]
 	 * make preferences options
-	 * -> merge into default branch
-	 * ensure backends can be killed while downloading
-	 	(goody, they are threaded and sooner or later will exit anyway)
-	 * launch synchronous backends in a thread but make it possibly for backends
-	 	to be async on their own (e.g. leoslyrics could use an async soup session) (goody) */
+	 * lyrics loader should use top prio provider and if it doesn't find lyrics try the next one
+*/
 
 public class Xnoise.LyricsLoader : GLib.Object {
-	public ILyrics lyrics;
 	private static ILyricsProvider provider;
 	private static Main xn;
-	private uint backend_iter;
+//	private uint backend_iter;
 	public string artist;
 	public string title;
 
-	public delegate ILyrics LyricsCreatorDelg(string artist, string title);
-	public signal void sign_fetched(string provider, string content);
-	static unowned Thread fetcher_thread;
+	public signal void sign_fetched(string artist, string title, string credits, string identifier, string text);
 
-	public static void init() {
+	public LyricsLoader() {
+		this.artist = artist;
+		this.title = title;
 		xn = Main.instance;
 		xn.plugin_loader.sign_plugin_activated.connect(LyricsLoader.on_plugin_activated);
 	}
 
-	public LyricsLoader(string artist, string title) {
-
-		this.artist = artist;
-		this.title = title;
-		backend_iter = 0;
-	}
-
-/*	~LyricsLoader() {
-		message("LyricsLoader destroyed");
-		message(artist);
-		message(title);
-	}*/
-
 	private static void on_plugin_activated(Plugin p) {
-		//TODO: use new lyrics plugin has table instead !?!
-		//TODO: check 'is_lyrics_plugin' property
-		if(!p.is_lyrics_plugin) return;
+		//TODO: use new lyrics plugin hash table instead !?!
+		if(!p.is_lyrics_plugin)
+			return;
+
 		ILyricsProvider provider = p.loaded_plugin as ILyricsProvider;
-		if(provider == null) return;
+
+		if(provider == null) 
+			return;
+		
 		LyricsLoader.provider = provider;
 		p.sign_deactivated.connect(LyricsLoader.on_backend_deactivated);
 	}
@@ -82,62 +69,30 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		LyricsLoader.provider = null;
 	}
 
-	private static void on_done(ILyrics instance) {
-		if(fetcher_thread!=null) fetcher_thread.exit(null);
-		fetcher_thread = null;
-		instance.unref();
-	}
-
-	private void on_fetched(string? text) {
-		//message(text);
-		if((text!=null)&&(text!="")) {
-			sign_fetched(this.lyrics.get_credits(), text);
-		}
-		else {
-			sign_fetched(this.lyrics.get_credits(), "no lyrics found...");
-		}
-		this.lyrics = null;
-	}
-
-	public string get_text() {
-		return lyrics.get_text();
-	}
-
-	/*private bool on_timeout() {
-		//drop lrics
-		this.lyrics.sign_lyrics_fetched -= this.on_fetched;
-
-		//if (this.backend_iter < this.backends.length) fetch();
-
-		message("dropped");
-		return false;
-	}*/
-
-
 	public bool fetch() {
 		if(this.provider == null) {
-			sign_fetched("", "Enable a lyrics provider plugin for lyrics fetching to work");
+			sign_fetched(artist, title, "", "", "Enable a lyrics provider plugin for lyrics fetching to work");
 			return false;
 		}
 
-		//this.lyrics = this.backend/*s[this.backend_iter]*/(artist, title);
-
-		this.lyrics = this.provider.from_tags(artist, title);
-		this.lyrics.ref();
-		this.lyrics.sign_lyrics_fetched.connect(this.on_fetched);
-		this.lyrics.sign_lyrics_done.connect(on_done);
-		try {
-			this.fetcher_thread = Thread.create(lyrics.fetch, true);
-		}
-		catch(GLib.ThreadError e) {
-			print("Lyricsloader: %s", e.message);
-		}
-
-		//fetcher_thread.join();
-		//lyrics.fetch();
-		//backend_iter++;
-		//Timeout.add(5000, on_timeout);
+		Idle.add( () => {
+			var p = this.provider.from_tags(artist, title);
+			p.sign_lyrics_fetched.connect(on_lyrics_fetched);
+			p.ref(); //prevent destruction before ready
+			p.find_lyrics();
+			return false;
+		});
 		return true;
+	}
+	
+	//forward result
+	private void on_lyrics_fetched(string artist, string title, string credits, string identifier, string text) {
+		if((text != null)&&(text != "")) {
+			sign_fetched(artist, title, credits, identifier, text);
+		}
+		else {
+			sign_fetched(artist, title, credits, identifier, "no lyrics found...");
+		}
 	}
 }
 

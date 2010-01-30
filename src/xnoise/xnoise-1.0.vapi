@@ -35,7 +35,6 @@ namespace Xnoise {
 		public string artist;
 		public AlbumImageLoader ();
 		public bool fetch_image ();
-		public static void init ();
 		public signal void sign_fetched (string artist, string album, string image_path);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -147,16 +146,11 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsLoader : GLib.Object {
-		[CCode (cheader_filename = "xnoise.h")]
-		public delegate Xnoise.ILyrics LyricsCreatorDelg (string artist, string title);
 		public string artist;
-		public Xnoise.ILyrics lyrics;
 		public string title;
-		public LyricsLoader (string artist, string title);
+		public LyricsLoader ();
 		public bool fetch ();
-		public string get_text ();
-		public static void init ();
-		public signal void sign_fetched (string provider, string content);
+		public signal void sign_fetched (string artist, string title, string credits, string identifier, string text);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsView : Gtk.TextView {
@@ -434,12 +428,10 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface ILyrics : GLib.Object {
-		public abstract void* fetch ();
+		public abstract void find_lyrics ();
 		public abstract string get_credits ();
 		public abstract string get_identifier ();
-		public abstract string get_text ();
-		public signal void sign_lyrics_done (Xnoise.ILyrics instance);
-		public signal void sign_lyrics_fetched (string text);
+		public signal void sign_lyrics_fetched (string artist, string title, string credits, string identifier, string text);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface ILyricsProvider : GLib.Object {
@@ -503,7 +495,11 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static void initialize ();
 	[CCode (cheader_filename = "xnoise.h")]
+	public static string prepare_for_comparison (string value);
+	[CCode (cheader_filename = "xnoise.h")]
 	public static string remove_linebreaks (string value);
+	[CCode (cheader_filename = "xnoise.h")]
+	public static string remove_single_character (string haystack, string needle);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string replace_underline_with_blank_encoded (string value);
 }

@@ -57,7 +57,6 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 	public AlbumImage() {
 		xn = Main.instance;
 		par.iparams_register(this);
-		AlbumImageLoader.init();
 		albumimage = new Gtk.Image();
 		albumimage.set_size_request(48, 48);
 		albumimage.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
