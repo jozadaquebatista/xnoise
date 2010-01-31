@@ -22,8 +22,7 @@ namespace Xnoise {
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class AlbumImage : Gtk.Fixed, Xnoise.IParams {
-		public Gtk.Image albumimage;
+	public class AlbumImage : Gtk.Image, Xnoise.IParams {
 		public AlbumImage ();
 		public void load_default_image ();
 		public bool album_image_available { get; set; }

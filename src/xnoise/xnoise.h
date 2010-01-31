@@ -478,13 +478,12 @@ struct _XnoiseIParamsIface {
 };
 
 struct _XnoiseAlbumImage {
-	GtkFixed parent_instance;
+	GtkImage parent_instance;
 	XnoiseAlbumImagePrivate * priv;
-	GtkImage* albumimage;
 };
 
 struct _XnoiseAlbumImageClass {
-	GtkFixedClass parent_class;
+	GtkImageClass parent_class;
 };
 
 struct _XnoiseAlbumImageLoader {

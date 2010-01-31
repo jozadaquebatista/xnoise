@@ -909,7 +909,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var albumviewport              = gb.get_object("albumviewport") as Gtk.Viewport;
 
 			this.albumimage = new AlbumImage();
-			albumviewport.add(this.albumimage);
+			EventBox ebox = new EventBox(); 
+			ebox.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK|Gdk.EventMask.LEAVE_NOTIFY_MASK);
+
+			ebox.add(albumimage);
+			albumviewport.add(ebox);
+
+			ebox.enter_notify_event.connect( (s, e) => {
+				print("entered\n");
+				return false;
+			});
+
+			ebox.leave_notify_event.connect( (s, e) => {
+				print("left\n");
+				return false;
+			});
+
 			//--------------------
 
 			//PLAYING TITLE NAME
@@ -1356,8 +1371,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.hide_lock = false;
 			fullscreenwindow.motion_notify_event.connect(on_pointer_motion);
 			return false;
-
 		}
+
 		private bool on_pointer_enter_toolbar (Gdk.EventCrossing ev) {
 			this.hide_lock = true;
 			if(hide_event_id != 0) GLib.Source.remove (hide_event_id);

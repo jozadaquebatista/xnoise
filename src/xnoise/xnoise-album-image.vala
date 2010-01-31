@@ -32,8 +32,7 @@
 
 using Gtk;
 
-public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
-	public Gtk.Image albumimage;
+public class Xnoise.AlbumImage : Gtk.Image, IParams {
 	private const string INIFOLDER = ".xnoise";
 	private AlbumImageLoader loader = null;
 	private Main xn;
@@ -57,10 +56,9 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 	public AlbumImage() {
 		xn = Main.instance;
 		par.iparams_register(this);
-		albumimage = new Gtk.Image();
-		albumimage.set_size_request(48, 48);
-		albumimage.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
-		this.put(albumimage, 0, 0);
+		this.set_size_request(48, 48);
+		this.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
+
 		loader = new AlbumImageLoader();
 		loader.sign_fetched.connect(on_album_image_fetched);
 		xn.gPl.sign_uri_changed.connect(on_uri_changed);
@@ -118,7 +116,6 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 
 		string _artist = escape_for_local_folder_search(xn.gPl.currentartist);
 		string _album  = escape_for_local_folder_search(xn.gPl.currentalbum );
-		//print("1. %s - %s\n", artist, album);
 		if(set_local_image_if_available(_artist, _album)) 
 			return;
 
@@ -201,15 +198,15 @@ public class Xnoise.AlbumImage : Gtk.Fixed, IParams {
 			GLib.Source.remove(source);
 			
 		album_image_available = false;
-		this.albumimage.set_size_request(48, 48);
-		this.albumimage.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
+		this.set_size_request(48, 48);
+		this.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 	}
 
 	private bool set_albumimage_from_path(string image_path) {
 		if(MainContext.current_source().is_destroyed()) 
 			return false;
 		
-		this.albumimage.set_from_file(image_path);
+		this.set_from_file(image_path);
 		return false;
 	}
 
