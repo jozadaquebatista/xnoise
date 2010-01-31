@@ -918,7 +918,6 @@ typedef enum  {
 struct _XnoiseVideoScreen {
 	GtkDrawingArea parent_instance;
 	XnoiseVideoScreenPrivate * priv;
-	GdkPixbuf* logo_pixb;
 };
 
 struct _XnoiseVideoScreenClass {
@@ -1011,6 +1010,7 @@ GType xnoise_global_info_get_type (void);
 GType xnoise_global_info_track_state_get_type (void);
 void xnoise_global_info_reset_position_reference (XnoiseGlobalInfo* self);
 void xnoise_global_info_handle_eos (XnoiseGlobalInfo* self);
+void xnoise_global_info_broadcast_image_for_current_track (XnoiseGlobalInfo* self);
 XnoiseGlobalInfo* xnoise_global_info_new (void);
 XnoiseGlobalInfo* xnoise_global_info_construct (GType object_type);
 XnoiseGlobalInfoTrackState xnoise_global_info_get_track_state (XnoiseGlobalInfo* self);

@@ -66,11 +66,12 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 
 	private void on_uri_changed(string uri) {
 		//print("on_uri_changed\n");
-		
+
 		if(!show_album_images) {
 			this.load_default_image();
 			return;
 		}
+		global.broadcast_image_for_current_track();
 
 		album_image_available = false;
 		db_image_available = false;
@@ -86,16 +87,12 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 				return;
 			}
 			db_image_available = true;
-			if(source != 0)
-				GLib.Source.remove(source);
-			source = Idle.add( () => {
-				set_albumimage_from_path(res);
-				album_image_available = true;
-				return false;
-			});
+			global.broadcast_image_for_current_track();
+			set_image_via_idle(res);
 		}
 		else {
 			load_default_image();
+			global.broadcast_image_for_current_track();
 			if(timeout != 0)
 				Source.remove(timeout);
 			timeout = Timeout.add_seconds_full(GLib.Priority.DEFAULT,
@@ -211,12 +208,13 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 	}
 
 	private uint source = 0;
-
+	
 	private void on_album_image_fetched(string _artist, string _album, string image_path) {
 		if(image_path == "") 
 			return;
 		
-		if((artist.down() != _artist.down())||(album.down() != _album.down())) 
+		if((prepare_for_comparison(artist) != prepare_for_comparison(_artist))||
+		   (prepare_for_comparison(album)  != prepare_for_comparison(_album ))) 
 			return;
 		
 		File f = File.new_for_path(image_path);
@@ -226,6 +224,9 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		set_image_via_idle(image_path);
 
 		album_image_available = true;
+		
+		global.broadcast_image_for_current_track();
+		
 		var dbw = new DbWriter();
 		dbw.set_local_image_for_album(ref artist, ref album, image_path);
 		dbw = null;

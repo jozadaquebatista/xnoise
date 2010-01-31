@@ -123,4 +123,25 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	public void handle_eos() {
 		caught_eos_from_player();
 	}
+	
+	public signal void sign_image_available(string? image_path_small, string? image_path_large);
+	
+	public void broadcast_image_for_current_track() {
+//		if(!found) 
+//			return;
+			
+		string? image_path = null;
+		if(get_image_path_for_media_uri(current_uri, ref image_path)) {
+			string? buf = null; 
+			if((image_path == "") || (image_path == null))
+				return;
+				
+			buf = image_path.substring(0, image_path.len() - "medium".len());
+			buf = buf + "extralarge";
+			sign_image_available(image_path, buf);
+		}
+		else {
+			sign_image_available(null, null);
+		}
+	}
 }

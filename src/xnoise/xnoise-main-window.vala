@@ -50,6 +50,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button showtracklistbuttonLY;
 	private Button showvideobuttonTL;
 	private Button showvideobuttonLY;
+	private int buffer_last_page;
 
 	private enum Repeat {
 		NOT_AT_ALL = 0,
@@ -149,6 +150,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
 
 		global.caught_eos_from_player.connect(on_caught_eos_from_player);
+		buffer_last_page = 0;
 	}
 
 	private void initialize_video_screen() {
@@ -831,7 +833,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return false;
 		}
 		return true;
-
 	}
 
 	private void create_widgets() {
@@ -916,12 +917,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			albumviewport.add(ebox);
 
 			ebox.enter_notify_event.connect( (s, e) => {
-				print("entered\n");
+				buffer_last_page = this.tracklistnotebook.get_current_page();
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 				return false;
 			});
 
 			ebox.leave_notify_event.connect( (s, e) => {
-				print("left\n");
+				this.tracklistnotebook.set_current_page(buffer_last_page);
 				return false;
 			});
 

@@ -29,15 +29,36 @@
  */
 
 public class Xnoise.VideoScreen : Gtk.DrawingArea {
-	public Gdk.Pixbuf logo_pixb;
+	private Gdk.Pixbuf logo_pixb;
+	private Gdk.Pixbuf cover_image_pixb;
 	private Gdk.Pixbuf logo;
 	private Main xn;
+	private bool cover_available;
 
 	public VideoScreen() {
 		this.xn = Main.instance;
 		init_video_screen();
+		cover_available = false;
+		global.sign_image_available.connect(on_sign_image_available);
 	}
 
+	private void on_sign_image_available(string? imagepath_small, string? imagepath_large) {
+		if(imagepath_small != null) {
+			try {
+				cover_image_pixb = new Gdk.Pixbuf.from_file(imagepath_large);
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+				return;
+			}
+			cover_available = true;
+		}
+		else {
+			cover_image_pixb = null;
+			cover_available = false;
+		}
+	}
+	
 	private void init_video_screen() {
 		this.set_double_buffered(false);
 		this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
@@ -77,10 +98,10 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				this.window.begin_paint_region(region);
 
 				Gdk.draw_rectangle(this.window,
-						           this.style.black_gc, true,
-						           e.area.x, e.area.y,
-						           e.area.width, e.area.height
-						           );
+				                   this.style.black_gc, true,
+				                   e.area.x, e.area.y,
+				                   e.area.width, e.area.height
+				                   );
 
 				logowidth  = logo_pixb.get_width();
 				logoheight = logo_pixb.get_height();
@@ -100,8 +121,15 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 					this.window.end_paint();
 					return true;
 				}
-
-				logo = logo_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
+				if(!cover_available) {
+					logo = logo_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
+				}
+				else {
+					if(cover_image_pixb != null)
+						logo = cover_image_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
+					else
+						logo = logo_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
+				}
 
 				Gdk.draw_pixbuf(this.window, this.style.fg_gc[0],
 					            logo, 0, 0, (widgetwidth-logowidth)/2,
