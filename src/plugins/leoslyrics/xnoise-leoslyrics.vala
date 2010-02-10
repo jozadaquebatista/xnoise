@@ -159,7 +159,7 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 			return;
 		}
 
-		XPathContext xp_cont = new XPathContext(doc);
+		XPath.Context xp_cont = new XPath.Context(doc);
 
 		var xp_result = xp_cont.eval_expression(xp_hid);
 		if(xp_result->nodesetval->is_empty()) {
@@ -228,8 +228,8 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 			return;
 		}
 
-		XPathContext* xpath = new XPathContext(doc);
-		XPathObject* result = xpath->eval_expression(xp_text);
+		XPath.Context* xpath = new XPath.Context(doc);
+		XPath.Object* result = xpath->eval_expression(xp_text);
 		
 		if(result->nodesetval->is_empty()) {
 			//print("empty\n");

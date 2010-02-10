@@ -148,7 +148,7 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 			return;
 		}
 
-		if(((string)mesg.response_body.data == null) || ((string)mesg.response_body.data == "")) {
+		if(((string)mesg.response_body.flatten().data == null) || ((string)mesg.response_body.data == "")) {
 			remove_timeout();
 			this.unref();
 			return;
@@ -157,14 +157,14 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 		// Web API reply available, do xml processing
 		//message("response:\n" + (string)mesg.response_body.data + "\nend response\n");
 		
-		Xml.Doc* doc = Xml.Parser.read_doc((string)mesg.response_body.data);
+		Xml.Doc* doc = Xml.Parser.read_doc((string)mesg.response_body.flatten().data);
 		if(doc == null) {
 			remove_timeout();
 			this.unref();
 			return;
 		}
 		
-		XPathContext xp_cont = new XPathContext(doc);
+		XPath.Context xp_cont = new XPath.Context(doc);
 		
 		var xp_result = xp_cont.eval_expression(xp_text);
 		if (xp_result->nodesetval->is_empty()) {

@@ -174,10 +174,10 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		}
 		
 		//print("mess.response_body.data: %s\n", mess.response_body.data);
-		Xml.Doc* doc = Parser.parse_memory((string)mess.response_body.data,(int)mess.response_body.length);
+		Xml.Doc* doc = Parser.parse_memory((string)mess.response_body.flatten().data,(int)mess.response_body.length);
 		
-		XPathContext* xpath = new XPathContext(doc);
-		XPathObject* result = xpath->eval_expression("/lfm/@status");
+		XPath.Context* xpath = new XPath.Context(doc);
+		XPath.Object* result = xpath->eval_expression("/lfm/@status");
 		if(result->nodesetval->is_empty()) {
 			//print("node is empty\n");
 		}
