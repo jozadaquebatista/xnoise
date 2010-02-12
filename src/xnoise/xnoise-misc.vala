@@ -133,7 +133,7 @@ namespace Xnoise {
 		if(dbb == null)
 			return false;
 		
-		image_path = dbb.get_local_image_path_for_uri(ref tmpuri);
+		image_path = dbb.get_local_image_path_for_track(ref tmpuri);
 		
 		if(image_path != null)
 			return true;

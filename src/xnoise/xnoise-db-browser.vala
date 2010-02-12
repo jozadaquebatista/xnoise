@@ -197,7 +197,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return false;
 	}
 
-	public bool stream_is_in_db(string uri) {
+	public bool stream_in_db(string uri) {
 		int count = 0;
 		count_for_stream_statement.reset();
 
@@ -211,7 +211,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return false;
 	}
 
-	public bool uri_is_in_db(string uri) {
+	public bool track_in_db(string uri) {
 		int count = 0;
 		count_for_uri_statement.reset();
 
@@ -304,7 +304,7 @@ public class Xnoise.DbBrowser : GLib.Object {
 		return false;
 	}
 
-	public string? get_local_image_path_for_uri(ref string uri) {
+	public string? get_local_image_path_for_track(ref string uri) {
 		string retval = null;
 		image_path_for_uri_statement.reset();
 		if(image_path_for_uri_statement.bind_text(1, uri) != Sqlite.OK) {

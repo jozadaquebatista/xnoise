@@ -78,7 +78,7 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		string current_uri = uri;
 		
 		var dbb = new DbBrowser();
-		string? res = dbb.get_local_image_path_for_uri(ref current_uri);
+		string? res = dbb.get_local_image_path_for_track(ref current_uri);
 		
 		if((res!=null)&&(res!="")) {
 			File f = File.new_for_path(res);

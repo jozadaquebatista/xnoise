@@ -39,6 +39,7 @@ po/POTFILES
 po/*.gmo
 po/*.mo
 po/stamp-it
+data/misc/xnoise.desktop.in
 .libs
 .deps
 src/xnoise/xnoise

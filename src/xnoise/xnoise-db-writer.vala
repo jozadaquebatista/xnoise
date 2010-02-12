@@ -442,50 +442,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 
-	// Single file for media items
-	public void add_single_file(string uri) {
-		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
-		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
-		FileInfo info = null;
-		File file = File.new_for_uri(uri);
-		try {
-			info = file.query_info(attr, FileQueryInfoFlags.NONE, null);
-		}
-		catch(Error e) {
-			print("single file import: %s\n", e.message);
-			return;
-		}
-
-		string content = info.get_content_type();
-		unowned string mime = g_content_type_get_mime_type(content);
-		PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
-		PatternSpec psVideo = new PatternSpec("video*");
-
-		if(psAudio.match_string(mime)) {
-			int idbuffer = uri_entry_exists(file.get_uri());
-			if(idbuffer== -1) {
-				var tr = new TagReader();
-				this.insert_title(tr.read_tag(file.get_path()), file.get_uri());
-			}
-		}
-		else if(psVideo.match_string(mime)) {
-			int idbuffer = uri_entry_exists(file.get_uri());
-			var td = new TrackData();
-			td.Artist = "unknown artist";
-			td.Album = "unknown album";
-			if(file!=null) td.Title = file.get_basename();
-			td.Genre = "";
-			td.Tracknumber = 0;
-			td.Mediatype = MediaType.VIDEO;
-
-			if(idbuffer== -1) {
-				this.insert_title(td, file.get_uri());
-			}
-		}
-	}
-
-	public void add_single_mediafolder_to_collection(string mfolder) {
+	public void add_single_folder_to_collection(string mfolder) {
 		this.write_media_folder_statement.reset();
 		this.write_media_folder_statement.bind_text(1, mfolder);
 		if(write_media_folder_statement.step() != Sqlite.DONE) {
@@ -534,15 +491,15 @@ public class Xnoise.DbWriter : GLib.Object {
 		return true;
 	}
 
-	public void del_media_folders() {
+	public void del_all_folders() {
 		exec_prepared_stmt(del_media_folder_statement);
 	}
 
-	public void del_media_files() {
+	public void del_all_files() {
 		exec_prepared_stmt(delete_media_files_statement);
 	}
 
-	public void del_streams() {
+	public void del_all_streams() {
 		exec_prepared_stmt(del_streams_statement);
 	}
 

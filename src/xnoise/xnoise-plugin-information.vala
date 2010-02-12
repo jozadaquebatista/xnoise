@@ -29,18 +29,64 @@
  */
 
 public class Xnoise.PluginInformation : GLib.Object {
-	public string xplug_file  { get; private set; }
-	public string name        { get; private set; }
-	public string icon        { get; private set; }
-	public string module      { get; private set; }
-	public string description { get; private set; }
-	public string website     { get; private set; }
-	public string license     { get; private set; }
-	public string copyright   { get; private set; }
-	public string author      { get; private set; }
+	private string _author;
+	private string _copyright;
+	private string _description;
+	private string _icon;
+	private string _license;
+	private string _module;
+	private string _name;
+	private string _website;
+	private string _xplug_file;
+
+	public string xplug_file { 
+		get {
+			return _xplug_file;
+		}
+	}
+	public string name { 
+		get {
+			return _name;
+		}
+	}
+	public string icon {
+		get {
+			return _icon;
+		}
+	}
+	public string module {
+		get {
+			return _module;
+		}
+	}
+	public string description {
+		get {
+			return _description;
+		}
+	}
+	public string website {
+		get {
+			return _website;
+		}
+	}
+	public string license {
+		get {
+			return _license;
+		}
+	}
+	public string copyright {
+		get {
+			return _copyright;
+		}
+	}
+	public string author {
+		get {
+			return _author;
+		}
+	}
 
 	public PluginInformation(string xplug_file) {
-		this.xplug_file = xplug_file;
+		this._xplug_file = xplug_file;
 	}
 
 	private const string group = "XnoisePlugin";
@@ -50,14 +96,14 @@ public class Xnoise.PluginInformation : GLib.Object {
 		try	{
 			kf.load_from_file(xplug_file, KeyFileFlags.NONE);
 			if (!kf.has_group(group)) return false;
-			name        = kf.get_string(group, "name");
-			description = kf.get_string(group, "description");
-			module      = kf.get_string(group, "module");
-			icon        = kf.get_string(group, "icon");
-			author      = kf.get_string(group, "author");
-			website     = kf.get_string(group, "website");
-			license     = kf.get_string(group, "license");
-			copyright   = kf.get_string(group, "copyright");
+			_name        = kf.get_string(group, "name");
+			_description = kf.get_string(group, "description");
+			_module      = kf.get_string(group, "module");
+			_icon        = kf.get_string(group, "icon");
+			_author      = kf.get_string(group, "author");
+			_website     = kf.get_string(group, "website");
+			_license     = kf.get_string(group, "license");
+			_copyright   = kf.get_string(group, "copyright");
 		}
 		catch(FileError e) {
 			print("Error plugin information: %s\n", e.message);

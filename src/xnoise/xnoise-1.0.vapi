@@ -49,7 +49,7 @@ namespace Xnoise {
 		public string[] get_albums (string artist, ref string searchtext);
 		public string[] get_artists (ref string searchtext);
 		public string[] get_lastused_uris ();
-		public string? get_local_image_path_for_uri (ref string uri);
+		public string? get_local_image_path_for_track (ref string uri);
 		public string[] get_media_files ();
 		public string[] get_media_folders ();
 		public string? get_single_stream_uri (string name);
@@ -65,9 +65,9 @@ namespace Xnoise {
 		public bool get_uri_for_id (int id, out string val);
 		public Xnoise.MediaData[] get_video_data (ref string searchtext);
 		public string[] get_videos (ref string searchtext);
-		public bool stream_is_in_db (string uri);
+		public bool stream_in_db (string uri);
 		public bool streams_available ();
-		public bool uri_is_in_db (string uri);
+		public bool track_in_db (string uri);
 		public bool videos_available ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -79,15 +79,14 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
 		public DbWriter ();
-		public void add_single_file (string uri);
 		public void add_single_file_to_collection (string uri);
-		public void add_single_mediafolder_to_collection (string mfolder);
+		public void add_single_folder_to_collection (string mfolder);
 		public void add_single_stream_to_collection (string uri, string name = "");
 		public void begin_transaction ();
 		public void commit_transaction ();
-		public void del_media_files ();
-		public void del_media_folders ();
-		public void del_streams ();
+		public void del_all_files ();
+		public void del_all_folders ();
+		public void del_all_streams ();
 		public bool delete_local_media_data ();
 		public void insert_title (Xnoise.TrackData td, string uri);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
@@ -232,15 +231,6 @@ namespace Xnoise {
 		public Xnoise.MainWindow.PlayPauseButton playPauseButton;
 		public Gtk.Image playpause_popup_image;
 		public Xnoise.MainWindow.PreviousButton previousButton;
-		public Gtk.Button repeatButton01;
-		public Gtk.Button repeatButton02;
-		public Gtk.Button repeatButton03;
-		public Gtk.Image repeatImage01;
-		public Gtk.Image repeatImage02;
-		public Gtk.Image repeatImage03;
-		public Gtk.Label repeatLabel01;
-		public Gtk.Label repeatLabel02;
-		public Gtk.Label repeatLabel03;
 		public Gtk.Entry searchEntryMB;
 		public Xnoise.MainWindow.SongProgressBar songProgressBar;
 		public Xnoise.MainWindow.StopButton stopButton;
@@ -333,15 +323,15 @@ namespace Xnoise {
 	public class PluginInformation : GLib.Object {
 		public PluginInformation (string xplug_file);
 		public bool load_info ();
-		public string author { get; set; }
-		public string copyright { get; set; }
-		public string description { get; set; }
-		public string icon { get; set; }
-		public string license { get; set; }
-		public string module { get; set; }
-		public string name { get; set; }
-		public string website { get; set; }
-		public string xplug_file { get; set; }
+		public string author { get; }
+		public string copyright { get; }
+		public string description { get; }
+		public string icon { get; }
+		public string license { get; }
+		public string module { get; }
+		public string name { get; }
+		public string website { get; }
+		public string xplug_file { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginLoader : GLib.Object {

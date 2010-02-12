@@ -38,6 +38,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string APPICON       = Config.UIDIR + "xnoise_16x16.png";
 	private const string SHOWVIDEO     = _("Video");
 	private const string SHOWTRACKLIST = _("Tracklist");
+	private Main xn;
+	private ActionGroup action_group;
+	private UIManager ui_manager = new UIManager();
 	private Label song_title_label;
 	public bool _seek;
 	private HPaned hpaned;
@@ -50,7 +53,44 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button showtracklistbuttonLY;
 	private Button showvideobuttonTL;
 	private Button showvideobuttonLY;
+	private Button repeatButton01;
+	private Button repeatButton02;
+	private Button repeatButton03;
 	private int buffer_last_page;
+	private Image repeatImage01;
+	private Image repeatImage02;
+	private Image repeatImage03;
+	private Label repeatLabel01;
+	private Label repeatLabel02;
+	private Label repeatLabel03;
+	private VBox menuvbox;
+	private VBox mainvbox;
+	private FullscreenToolbar fullscreentoolbar;
+	private VBox videovbox;
+	public bool is_fullscreen = false;
+	public bool drag_on_da = false;
+	public LyricsView lyricsView;
+	public VideoScreen videoscreen;
+	public Entry searchEntryMB;
+	public PlayPauseButton playPauseButton;
+	public PreviousButton previousButton;
+	public NextButton nextButton;
+	public StopButton stopButton;
+	public Notebook browsernotebook;
+	public Notebook tracklistnotebook;
+	public AlbumImage albumimage;
+	public SongProgressBar songProgressBar;
+	public double current_volume; //keep it global for saving to params
+	public MediaBrowser mediaBr;
+	public TrackList trackList;
+	public Gtk.Window fullscreenwindow;
+
+	public int repeatState { get; set; }
+	public bool fullscreenwindowvisible { get; set; }
+
+	public signal void sign_pos_changed(double fraction);
+	public signal void sign_volume_changed(double fraction);
+	public signal void sign_drag_over_da();
 
 	private enum Repeat {
 		NOT_AT_ALL = 0,
@@ -63,14 +103,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		NEXT = 0,
 		PREVIOUS,
 	}
-
-	private Gtk.VBox menuvbox;
-	private Gtk.VBox mainvbox;
-	public VideoScreen videoscreen;
-	//public Label showvideolabel;
-	public bool is_fullscreen = false;
-	public bool drag_on_da = false;
-	public LyricsView lyricsView;
 
 	private const ActionEntry[] action_entries = {
 		{ "FileMenuAction", null, N_("_File") },
@@ -89,44 +121,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const Gtk.TargetEntry[] target_list = {
 		{"text/uri-list", 0, 0}
 	};
-
-//	private Image showvideoimage;
-	public Gtk.Entry searchEntryMB;
-	public PlayPauseButton playPauseButton;
-	public PreviousButton previousButton;
-	public NextButton nextButton;
-	public StopButton stopButton;
-	public Gtk.Button repeatButton01;
-	public Gtk.Button repeatButton02;
-	public Gtk.Button repeatButton03;
-	public Gtk.Notebook browsernotebook;
-	public Gtk.Notebook tracklistnotebook;
-	public Image repeatImage01;
-	public Image repeatImage02;
-	public Image repeatImage03;
-	public AlbumImage albumimage;
-	public Label repeatLabel01;
-	public Label repeatLabel02;
-	public Label repeatLabel03;
-	public SongProgressBar songProgressBar;
-	public double current_volume; //keep it global for saving to params
-	public MediaBrowser mediaBr;
-	public TrackList trackList;
-	//public Gtk.Window window;
-	public Gtk.Window fullscreenwindow;
-	private FullscreenToolbar fullscreentoolbar;
-	private Gtk.VBox videovbox;
-
-	public int repeatState { get; set; }
-	public bool fullscreenwindowvisible { get; set; }
-
-	public signal void sign_pos_changed(double fraction);
-	public signal void sign_volume_changed(double fraction);
-	public signal void sign_drag_over_da();
-	private Main xn;
-
-	private ActionGroup action_group;
-	private UIManager ui_manager = new UIManager();
 
 	public UIManager get_ui_manager() {
 		return ui_manager;
