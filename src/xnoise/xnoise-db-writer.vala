@@ -33,7 +33,7 @@ using Sqlite;
 public class Xnoise.DbWriter : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
-	private Sqlite.Database db;
+	private Sqlite.Database db = null;
 	private Statement update_album_image_statement;
 	private Statement insert_lastused_entry_statement;
 	private Statement add_radio_statement;
@@ -60,6 +60,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private Statement delete_genres_statement;
 	private Statement delete_media_files_statement;
 	private Statement add_mfile_statement;
+	private bool begin_stmt_used;
 
 	// DBWRITER STATEMENTS
 	private static const string STMT_BEGIN =
@@ -116,8 +117,12 @@ public class Xnoise.DbWriter : GLib.Object {
 		"DELETE FROM genres";
 
 	public DbWriter() {
-        this.db = get_db();
-		if(this.db!=null) this.prepare_statements();
+		this.db = get_db();
+		if(this.db == null)
+			return;
+		
+		this.begin_stmt_used = false;
+		this.prepare_statements();
 	}
 
 	private static Database? get_db () {
@@ -357,7 +362,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		return genre_id;
 	}
 
-	private void insert_title(TrackData td, string uri) {
+	public void insert_title(TrackData td, string uri) {
 		// make entries in other tables and get references from there
 		int artist_id = handle_artist(ref td.Artist);
 		if(artist_id == -1) {
@@ -396,7 +401,7 @@ public class Xnoise.DbWriter : GLib.Object {
 			this.db_error();
 	}
 
-	private int db_entry_exists(string uri) {
+	public int uri_entry_exists(string uri) {
 		int id = -1;
 		check_track_exists_statement.reset();
 		if(check_track_exists_statement.bind_text(1, uri)!=Sqlite.OK) {
@@ -409,7 +414,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	// Single stream for collection
-	private void add_single_stream_to_collection(string uri, string name = "") {
+	public void add_single_stream_to_collection(string uri, string name = "") {
 		if(db == null) return;
 		print("add stream : %s \n", uri);
 		if((uri == null) || (uri == "")) return;
@@ -425,7 +430,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	// Single file for collection
-	private void add_single_file_to_collection(string uri) {
+	public void add_single_file_to_collection(string uri) {
 		if(db == null) return;
 		if((uri == null) || (uri == "")) return;
 		add_mfile_statement.reset();
@@ -438,7 +443,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	// Single file for media items
-	private void add_single_file(string uri) {
+	public void add_single_file(string uri) {
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
@@ -458,14 +463,14 @@ public class Xnoise.DbWriter : GLib.Object {
 		PatternSpec psVideo = new PatternSpec("video*");
 
 		if(psAudio.match_string(mime)) {
-			int idbuffer = db_entry_exists(file.get_uri());
+			int idbuffer = uri_entry_exists(file.get_uri());
 			if(idbuffer== -1) {
 				var tr = new TagReader();
 				this.insert_title(tr.read_tag(file.get_path()), file.get_uri());
 			}
 		}
 		else if(psVideo.match_string(mime)) {
-			int idbuffer = db_entry_exists(file.get_uri());
+			int idbuffer = uri_entry_exists(file.get_uri());
 			var td = new TrackData();
 			td.Artist = "unknown artist";
 			td.Album = "unknown album";
@@ -480,141 +485,12 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 
-	private void add_single_mediafolder_to_collection(string mfolder) {
+	public void add_single_mediafolder_to_collection(string mfolder) {
 		this.write_media_folder_statement.reset();
 		this.write_media_folder_statement.bind_text(1, mfolder);
 		if(write_media_folder_statement.step() != Sqlite.DONE) {
 			this.db_error();
 		}
-	}
-
-	private void import_local_tags(File dir) {
-		FileEnumerator enumerator;
-		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
-		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
-		try {
-			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
-		} catch (Error error) {
-			critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
-			return;
-		}
-		FileInfo info;
-		try {
-			while((info = enumerator.next_file(null))!=null) {
-				string filename = info.get_name();
-				string filepath = Path.build_filename(dir.get_path(), filename);
-				File file = File.new_for_path(filepath);
-				FileType filetype = info.get_file_type();
-
-				string content = info.get_content_type();
-				unowned string mime = g_content_type_get_mime_type(content);
-				PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
-				PatternSpec psVideo = new PatternSpec("video*");
-
-				if(filetype == FileType.DIRECTORY) {
-					this.import_local_tags(file);
-				}
-				else if(psAudio.match_string(mime)) {
-					int idbuffer = db_entry_exists(file.get_uri());
-					if(idbuffer== -1) {
-						var tr = new TagReader();
-						this.insert_title(tr.read_tag(filepath), file.get_uri());
-					}
-				}
-				else if(psVideo.match_string(mime)) {
-					int idbuffer = db_entry_exists(file.get_uri());
-					var td = new TrackData();
-					td.Artist = "unknown artist";
-					td.Album = "unknown album";
-					td.Title = file.get_basename();
-					td.Genre = "";
-					td.Tracknumber = 0;
-					td.Mediatype = MediaType.VIDEO;
-
-					if(idbuffer== -1) {
-						this.insert_title(td, file.get_uri());
-					}
-				}
-			}
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-		}
-	}
-
-	public void store_media_files(string[] list_of_files) {
-		if(db == null) return;
-		var files_ht = new HashTable<string,int>(str_hash, str_equal);
-		begin_transaction();
-
-		del_media_files();
-
-		foreach(string strm in list_of_files) {
-			files_ht.insert(strm, 1);
-		}
-
-		foreach(string uri in files_ht.get_keys()) {
-			add_single_file_to_collection(uri);
-		}
-
-		foreach(string uri in files_ht.get_keys()) {
-			add_single_file(uri);
-		}
-
-		commit_transaction();
-
-		files_ht.remove_all();
-	}
-
-	public void store_streams(string[] list_of_streams) {
-		if(db == null) return;
-		var streams_ht = new HashTable<string,int>(str_hash, str_equal);
-		begin_transaction();
-
-		del_streams();
-
-		foreach(string strm in list_of_streams) {
-			streams_ht.insert(strm, 1);
-		}
-
-		foreach(string strm in streams_ht.get_keys()) {
-			add_single_stream_to_collection(strm, strm); //TODO: Use name different from uri
-		}
-
-		commit_transaction();
-
-		streams_ht.remove_all();
-	}
-
-	public void store_media_folders(string[] mfolders){
-		if(db == null) return;
-		var mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
-		begin_transaction();
-//		exec_stmnt_string("DROP INDEX title_IDX;");
-//		exec_stmnt_string("DROP INDEX uri_IDX;");
-		del_media_folders();
-
-		foreach(string folder in mfolders) {
-			mfolders_ht.insert(folder, 1);
-		}
-
-		foreach(string folder in mfolders_ht.get_keys()) {
-			add_single_mediafolder_to_collection(folder);
-		}
-
-		if(!delete_local_media_data()) return;
-
-		foreach(string folder in mfolders_ht.get_keys()) {
-			File dir = File.new_for_path(folder);
-			assert(dir!=null);
-			import_local_tags(dir);
-		}
-//		exec_stmnt_string("CREATE INDEX title_IDX ON items(title);");
-//		exec_stmnt_string("CREATE INDEX uri_IDX ON uris(name);");
-		commit_transaction();
-
-		mfolders_ht.remove_all();
 	}
 
 	public void write_final_tracks_to_db(string[] final_tracklist) {
@@ -658,19 +534,19 @@ public class Xnoise.DbWriter : GLib.Object {
 		return true;
 	}
 
-	private void del_media_folders() {
+	public void del_media_folders() {
 		exec_prepared_stmt(del_media_folder_statement);
 	}
 
-	private void del_media_files() {
+	public void del_media_files() {
 		exec_prepared_stmt(delete_media_files_statement);
 	}
 
-	private void del_streams() {
+	public void del_streams() {
 		exec_prepared_stmt(del_streams_statement);
 	}
 
-	private bool delete_local_media_data() {
+	public bool delete_local_media_data() {
 		if(!exec_prepared_stmt(this.delete_artists_statement)) return false;
 		if(!exec_prepared_stmt(this.delete_albums_statement )) return false;
 		if(!exec_prepared_stmt(this.delete_items_statement  )) return false;
@@ -679,11 +555,17 @@ public class Xnoise.DbWriter : GLib.Object {
 		return true;
 	}
 
-	private void begin_transaction() {
+	public void begin_transaction() {
 		exec_prepared_stmt(begin_statement);
+		begin_stmt_used = true;
 	}
 
-	private void commit_transaction() {
+	public void commit_transaction() {
+		if(begin_stmt_used != true)
+			return;
+			
 		exec_prepared_stmt(commit_statement);
+		begin_stmt_used = false;
 	}
 }
+

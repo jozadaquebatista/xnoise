@@ -79,10 +79,19 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
 		public DbWriter ();
+		public void add_single_file (string uri);
+		public void add_single_file_to_collection (string uri);
+		public void add_single_mediafolder_to_collection (string mfolder);
+		public void add_single_stream_to_collection (string uri, string name = "");
+		public void begin_transaction ();
+		public void commit_transaction ();
+		public void del_media_files ();
+		public void del_media_folders ();
+		public void del_streams ();
+		public bool delete_local_media_data ();
+		public void insert_title (Xnoise.TrackData td, string uri);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
-		public void store_media_files (string[] list_of_files);
-		public void store_media_folders (string[] mfolders);
-		public void store_streams (string[] list_of_streams);
+		public int uri_entry_exists (string uri);
 		public void write_final_tracks_to_db (string[] final_tracklist);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -282,6 +291,13 @@ namespace Xnoise {
 		public Xnoise.TrackData[] get_trackdata_hierarchical (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_listed (Gtk.TreePath treepath);
 		public bool populate_model ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class MediaImporter : GLib.Object {
+		public MediaImporter ();
+		public void store_files (string[] list_of_files, ref Xnoise.DbWriter dbw);
+		public void store_folders (string[] mfolders, ref Xnoise.DbWriter dbw);
+		public void store_streams (string[] list_of_streams, ref Xnoise.DbWriter dbw);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {

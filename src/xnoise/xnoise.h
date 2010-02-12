@@ -335,6 +335,17 @@ typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
 
 #define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_media_browser_model_collection_type_get_type ())
 
+#define XNOISE_TYPE_MEDIA_IMPORTER (xnoise_media_importer_get_type ())
+#define XNOISE_MEDIA_IMPORTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_IMPORTER, XnoiseMediaImporter))
+#define XNOISE_MEDIA_IMPORTER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_IMPORTER, XnoiseMediaImporterClass))
+#define XNOISE_IS_MEDIA_IMPORTER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_IMPORTER))
+#define XNOISE_IS_MEDIA_IMPORTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_IMPORTER))
+#define XNOISE_MEDIA_IMPORTER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_IMPORTER, XnoiseMediaImporterClass))
+
+typedef struct _XnoiseMediaImporter XnoiseMediaImporter;
+typedef struct _XnoiseMediaImporterClass XnoiseMediaImporterClass;
+typedef struct _XnoiseMediaImporterPrivate XnoiseMediaImporterPrivate;
+
 #define XNOISE_TYPE_PARAMS (xnoise_params_get_type ())
 #define XNOISE_PARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PARAMS, XnoiseParams))
 #define XNOISE_PARAMS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PARAMS, XnoiseParamsClass))
@@ -745,6 +756,15 @@ typedef enum  {
 	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_LISTED = 2
 } XnoiseMediaBrowserModelCollectionType;
 
+struct _XnoiseMediaImporter {
+	GObject parent_instance;
+	XnoiseMediaImporterPrivate * priv;
+};
+
+struct _XnoiseMediaImporterClass {
+	GObjectClass parent_class;
+};
+
 typedef enum  {
 	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_TRACKLIST = 0,
 	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_VIDEO,
@@ -1002,10 +1022,19 @@ GType xnoise_db_writer_get_type (void);
 XnoiseDbWriter* xnoise_db_writer_new (void);
 XnoiseDbWriter* xnoise_db_writer_construct (GType object_type);
 gboolean xnoise_db_writer_set_local_image_for_album (XnoiseDbWriter* self, char** artist, char** album, const char* image_path);
-void xnoise_db_writer_store_media_files (XnoiseDbWriter* self, char** list_of_files, int list_of_files_length1);
-void xnoise_db_writer_store_streams (XnoiseDbWriter* self, char** list_of_streams, int list_of_streams_length1);
-void xnoise_db_writer_store_media_folders (XnoiseDbWriter* self, char** mfolders, int mfolders_length1);
+void xnoise_db_writer_insert_title (XnoiseDbWriter* self, XnoiseTrackData* td, const char* uri);
+gint xnoise_db_writer_uri_entry_exists (XnoiseDbWriter* self, const char* uri);
+void xnoise_db_writer_add_single_stream_to_collection (XnoiseDbWriter* self, const char* uri, const char* name);
+void xnoise_db_writer_add_single_file_to_collection (XnoiseDbWriter* self, const char* uri);
+void xnoise_db_writer_add_single_file (XnoiseDbWriter* self, const char* uri);
+void xnoise_db_writer_add_single_mediafolder_to_collection (XnoiseDbWriter* self, const char* mfolder);
 void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, char** final_tracklist, int final_tracklist_length1);
+void xnoise_db_writer_del_media_folders (XnoiseDbWriter* self);
+void xnoise_db_writer_del_media_files (XnoiseDbWriter* self);
+void xnoise_db_writer_del_streams (XnoiseDbWriter* self);
+gboolean xnoise_db_writer_delete_local_media_data (XnoiseDbWriter* self);
+void xnoise_db_writer_begin_transaction (XnoiseDbWriter* self);
+void xnoise_db_writer_commit_transaction (XnoiseDbWriter* self);
 GType xnoise_global_info_get_type (void);
 GType xnoise_global_info_track_state_get_type (void);
 void xnoise_global_info_reset_position_reference (XnoiseGlobalInfo* self);
@@ -1124,6 +1153,12 @@ XnoiseTrackData** xnoise_media_browser_model_get_trackdata_for_treepath (XnoiseM
 char** xnoise_media_browser_model_build_uri_list_for_treepath (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, XnoiseDbBrowser** dbb, int* result_length1);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
+GType xnoise_media_importer_get_type (void);
+void xnoise_media_importer_store_files (XnoiseMediaImporter* self, char** list_of_files, int list_of_files_length1, XnoiseDbWriter** dbw);
+void xnoise_media_importer_store_folders (XnoiseMediaImporter* self, char** mfolders, int mfolders_length1, XnoiseDbWriter** dbw);
+void xnoise_media_importer_store_streams (XnoiseMediaImporter* self, char** list_of_streams, int list_of_streams_length1, XnoiseDbWriter** dbw);
+XnoiseMediaImporter* xnoise_media_importer_new (void);
+XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
 GType xnoise_params_get_type (void);
 extern XnoiseParams* xnoise_par;
 extern XnoiseGlobalInfo* xnoise_global;

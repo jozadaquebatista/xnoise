@@ -17,6 +17,7 @@ src/xnoise/xnoise-main.vala
 src/xnoise/xnoise-main-window.vala
 src/xnoise/xnoise-media-browser.vala
 src/xnoise/xnoise-media-browser-model.vala
+src/xnoise/xnoise-media-importer.vala
 src/xnoise/xnoise-misc.vala
 src/xnoise/xnoise-parameter.vala
 src/xnoise/xnoise-plugin.vala

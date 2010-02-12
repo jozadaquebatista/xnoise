@@ -200,7 +200,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		try {
 			Thread.create(write_media_to_db, false);
 		}
-		catch (ThreadError e) {
+		catch(ThreadError e) {
 			print("Error: %s\n", e.message);
 			return;
 		}
@@ -210,14 +210,16 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void* write_media_to_db() {
 		// thread function for the import to the library
 		// sends a signal when finished, this signal is handled by main window class
+
 		var dbw = new DbWriter();
+		var mi = new MediaImporter();
 
-		dbw.store_media_folders(list_of_folders);
-
-		dbw.store_streams(list_of_streams); // TODO: Deliver streams with names
-
-		dbw.store_media_files(list_of_files);
-
+		mi.store_folders(list_of_folders, ref dbw);
+		mi.store_streams(list_of_streams, ref dbw); // TODO: Deliver streams with names
+		mi.store_files(list_of_files, ref dbw);
+		dbw = null;
+		mi = null;
+		
 		this.sign_finish();
 		// print("thread finished\n");
 		return null;
