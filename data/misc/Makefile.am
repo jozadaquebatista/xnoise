@@ -1,8 +1,8 @@
 NULL =
 
-desktopdir 	 = $(datadir)/applications
+desktopdir = $(datadir)/applications
 desktop_in_files = xnoise.desktop.in
-desktop_DATA 	 = $(desktop_in_files:.desktop.in=.desktop)
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 pkgconfigdir = $(libdir)/pkgconfig
@@ -15,14 +15,14 @@ appiconscalable_DATA = xnoise.svg
 appiconscalabledir = $(datadir)/icons/hicolor/scalable/apps
 
 EXTRA_DIST = \
+	$(desktop_in_files) \
 	$(appicon_DATA) \
 	$(appiconscalable_DATA) \
-	$(desktop_in_files)	\
 	xnoise-1.0.pc.in \
-	$(NULL)	
+	$(NULL)
 
 CLEANFILES = \
-	$(desktop_DATA)	
+	$(desktop_DATA)
 
 DISTCLEANFILES = \
 	Makefile.in \
