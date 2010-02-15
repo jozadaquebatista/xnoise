@@ -47,6 +47,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private VolumeSliderButton volumeSliderButton;
 	private int _posX_buffer;
 	private int _posY_buffer;
+	private Button collapsebutton;
 	private Button showlyricsbuttonVid;
 	private Button showlyricsbuttonTL;
 	private Button showtracklistbuttonVid;
@@ -976,6 +977,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox;
 			sexyentryBox.add(searchEntryMB);
+			
+			collapsebutton = gb.get_object("collapsebutton") as Gtk.Button;
+			var labelcoll =  gb.get_object("labelcoll") as Gtk.Label;
+			labelcoll.label = _("Collapse");
+			collapsebutton.clicked.connect( () => {
+				mediaBr.collapse_all();
+			});
 
 			///Textbuffer for the lyrics
 			var scrolledlyricsview = gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;

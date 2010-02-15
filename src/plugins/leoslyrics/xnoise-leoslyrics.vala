@@ -77,6 +77,7 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 	
 	private SessionAsync session;
 	private uint timeout;
+	private bool timeout_done;
 	private static const string my_identifier = "Leoslyrics";
 	private static const string my_credits = "These Lyrics are provided by http://www.leoslyrics.com";
 	private static const string auth = "xnoise";
@@ -102,6 +103,7 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 		
 		sign_hid_fetched.connect(on_sign_hid_fetched);
 		timeout = 0;
+		timeout_done = false;
 	}
 	
 	~Leoslyrics() {
@@ -210,13 +212,19 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 
 		if(mesg.response_body.data == null) {
 			remove_timeout();
-			this.unref();
+
+			if(!this.timeout_done)
+				this.unref();
+
 			return;
 		}
 
 		if(((string)mesg.response_body.data == null) || ((string)mesg.response_body.data == "")) {
 			remove_timeout();
-			this.unref();
+
+			if(!this.timeout_done)
+				this.unref();
+
 			return;
 		}
 		//print("(string)mesg.response_body.data fetch txt: \n%s", (string)mesg.response_body.data);
@@ -224,7 +232,8 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 		
 		if(doc == null) {
 			remove_timeout();
-			this.unref();
+			if(!this.timeout_done)
+				this.unref();
 			return;
 		}
 
@@ -235,14 +244,16 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 			//print("empty\n");
 			delete doc;
 			remove_timeout();
-			this.unref();
+			if(!this.timeout_done)
+				this.unref();
 			return;
 		}
 		if(result == null) {
 			//message("no item");
 			delete doc;
 			remove_timeout();
-			this.unref();
+			if(!this.timeout_done)
+				this.unref();
 			return;
 		}
 
@@ -271,7 +282,8 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 
 		delete doc;
 		remove_timeout();
-		this.unref();
+		if(!this.timeout_done)
+			this.unref();
 	}
 
 	public void find_lyrics() {
@@ -284,6 +296,8 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 	private bool timeout_elapsed() {
 		if(MainContext.current_source().is_destroyed())
 			return false;
+		
+		timeout_done = true;
 		this.unref();
 		return false;
 	}
@@ -294,7 +308,8 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 			print("on_sign_hid_fetched empty\n");
 			sign_lyrics_fetched("", "", "", "", "");
 			remove_timeout();
-			this.unref();
+			if(!this.timeout_done)
+				this.unref();
 			return;
 		}
 		fetch_text();

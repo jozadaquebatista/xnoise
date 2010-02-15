@@ -30,7 +30,7 @@
 
 using Sqlite;
 
-public class Xnoise.DbBrowser : GLib.Object {
+public class Xnoise.DbBrowser {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private string DATABASE;

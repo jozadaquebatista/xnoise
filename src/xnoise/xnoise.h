@@ -509,21 +509,25 @@ struct _XnoiseAlbumImageLoaderClass {
 };
 
 struct _XnoiseAppStarter {
-	GObject parent_instance;
+	GTypeInstance parent_instance;
+	volatile int ref_count;
 	XnoiseAppStarterPrivate * priv;
 };
 
 struct _XnoiseAppStarterClass {
-	GObjectClass parent_class;
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseAppStarter *self);
 };
 
 struct _XnoiseDbBrowser {
-	GObject parent_instance;
+	GTypeInstance parent_instance;
+	volatile int ref_count;
 	XnoiseDbBrowserPrivate * priv;
 };
 
 struct _XnoiseDbBrowserClass {
-	GObjectClass parent_class;
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseDbBrowser *self);
 };
 
 struct _XnoiseStreamData {
@@ -888,12 +892,14 @@ struct _XnoiseSettingsDialogClass {
 };
 
 struct _XnoiseTagReader {
-	GObject parent_instance;
+	GTypeInstance parent_instance;
+	volatile int ref_count;
 	XnoiseTagReaderPrivate * priv;
 };
 
 struct _XnoiseTagReaderClass {
-	GObjectClass parent_class;
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseTagReader *self);
 };
 
 struct _XnoiseTrackList {
@@ -954,6 +960,11 @@ GType xnoise_album_image_loader_get_type (void);
 XnoiseAlbumImageLoader* xnoise_album_image_loader_new (void);
 XnoiseAlbumImageLoader* xnoise_album_image_loader_construct (GType object_type);
 gboolean xnoise_album_image_loader_fetch_image (XnoiseAlbumImageLoader* self);
+gpointer xnoise_app_starter_ref (gpointer instance);
+void xnoise_app_starter_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_app_starter (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_app_starter (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_app_starter (const GValue* value);
 GType xnoise_app_starter_get_type (void);
 GType xnoise_main_get_type (void);
 extern XnoiseMain* xnoise_app_starter_xn;
@@ -961,6 +972,11 @@ UniqueResponse xnoise_app_starter_on_message_received (UniqueApp* sender, gint c
 gint xnoise_app_starter_main (char** args, int args_length1);
 XnoiseAppStarter* xnoise_app_starter_new (void);
 XnoiseAppStarter* xnoise_app_starter_construct (GType object_type);
+gpointer xnoise_db_browser_ref (gpointer instance);
+void xnoise_db_browser_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_db_browser (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_db_browser (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_db_browser (const GValue* value);
 GType xnoise_db_browser_get_type (void);
 XnoiseDbBrowser* xnoise_db_browser_new (void);
 XnoiseDbBrowser* xnoise_db_browser_construct (GType object_type);
@@ -1237,6 +1253,11 @@ GQuark xnoise_settings_dialog_error_quark (void);
 GType xnoise_settings_dialog_get_type (void);
 XnoiseSettingsDialog* xnoise_settings_dialog_new (void);
 XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type);
+gpointer xnoise_tag_reader_ref (gpointer instance);
+void xnoise_tag_reader_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_tag_reader (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_tag_reader (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_tag_reader (const GValue* value);
 GType xnoise_tag_reader_get_type (void);
 XnoiseTrackData* xnoise_tag_reader_read_tag (XnoiseTagReader* self, const char* filename);
 XnoiseTagReader* xnoise_tag_reader_new (void);

@@ -78,10 +78,12 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 	
 	private SessionAsync session;
 	private uint timeout;
+	private bool timeout_done;
+
 	private static const string my_identifier= "Lyricsfly";
 	
 	//this temporary key is only valid for one week
-	private static const string auth = "0febc5f3fcf7b93b3-temporary.API.access";
+	private static const string auth = "4fa66b60fec3d780f-temporary.API.access";
 	
 	private static const string text_url = "http://lyricsfly.com/api/api.php?i=%s&a=%s&t=%s";
 	private static const string xp_text = "/start/sg[1]/tx";
@@ -106,12 +108,13 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 		this.title = title;
 		
 		timeout = 0;
+		timeout_done = false;
 	}
 	
 	~LyricsLyricsfly() {
 		if(timeout != 0)
 			Source.remove(timeout);
-		print("destruct LFmIP\n");
+//		print("destruct LFmIP\n");
 	}
 
 	public string get_identifier() {return my_identifier;}
@@ -144,13 +147,15 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 
 		if(mesg.response_body.data == null) {
 			remove_timeout();
-			this.unref();
+			if(!this.timeout_done)
+				this.unref();
 			return;
 		}
 
 		if(((string)mesg.response_body.flatten().data == null) || ((string)mesg.response_body.data == "")) {
 			remove_timeout();
-			this.unref();
+			if(!this.timeout_done)
+				this.unref();
 			return;
 		}
 
@@ -160,7 +165,8 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 		Xml.Doc* doc = Xml.Parser.read_doc((string)mesg.response_body.flatten().data);
 		if(doc == null) {
 			remove_timeout();
-			this.unref();
+			if(!this.timeout_done)
+				this.unref();
 			return;
 		}
 		
@@ -171,7 +177,8 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 			//message("empty"); 
 			delete doc;
 			remove_timeout();
-			this.unref();
+			if(!this.timeout_done)
+				this.unref();
 			return;
 		}
 		
@@ -180,7 +187,8 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 			//message("no item");
 			delete doc;
 			remove_timeout();
-			this.unref();
+			if(!this.timeout_done)
+				this.unref();
 			return;
 		}
 		string lyrics_text = text_result_node->get_content();
@@ -211,11 +219,23 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 		
 		remove_timeout();
 		delete doc;
+		if(!this.timeout_done)
+			this.unref();
+	}
+
+	private bool timeout_elapsed() {
+		if(MainContext.current_source().is_destroyed())
+			return false;
+		
+		timeout_done = true;
 		this.unref();
+		return false;
 	}
 
 	public void find_lyrics() {
 		fetch_text();
+		//Add timeout for response
+		timeout = Timeout.add_seconds(SECONDS_FOR_TIMEOUT, timeout_elapsed);
 	}
 }
 

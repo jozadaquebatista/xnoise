@@ -169,33 +169,31 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	private void put_hierarchical_data_to_model() {
-		DbBrowser artists_browser = new DbBrowser();
-		DbBrowser albums_browser  = new DbBrowser();
-		DbBrowser titles_browser  = new DbBrowser();
-
+		var dbb = new DbBrowser();
+		
 		string[] artistArray;
 		string[] albumArray;
 		string[] titleArray;
 		MediaData[] tmis;
 
 		TreeIter iter_artist, iter_album, iter_title;
-		artistArray = artists_browser.get_artists(ref searchtext);
-		foreach(unowned string artist in artistArray) { 	              //ARTISTS
+		artistArray = dbb.get_artists(ref searchtext);
+		foreach(string artist in artistArray) { 	              //ARTISTS
 			this.prepend(out iter_artist, null);
 			this.set(iter_artist,
 			         Column.ICON, artist_pixb,
 			         Column.VIS_TEXT, artist,
 			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 			         Column.DRAW_SEPTR, 0);
-			albumArray = albums_browser.get_albums(artist, ref searchtext);
-			foreach(unowned string album in albumArray) { 			    //ALBUMS
+			albumArray = dbb.get_albums(artist, ref searchtext);
+			foreach(string album in albumArray) { 			    //ALBUMS
 				this.prepend(out iter_album, iter_artist);
 				this.set(iter_album,
 				         Column.ICON, album_pixb,
 				         Column.VIS_TEXT, album,
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0);
-				tmis = titles_browser.get_titles_with_mediatypes_and_ids(artist, album, ref searchtext);
+				tmis = dbb.get_titles_with_mediatypes_and_ids(artist, album, ref searchtext);
 				foreach(unowned MediaData tmi in tmis) {	         //TITLES WITH MEDIATYPES
 					this.prepend(out iter_title, iter_album);
 					if(tmi.mediatype == MediaType.AUDIO) {
@@ -272,21 +270,25 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					dbid = -1;
 					this.iter_nth_child(out iterChild, iter, i);
 					this.get(iterChild, Column.DB_ID, ref dbid);
-					if(dbid==-1) continue;
+					if(dbid==-1)
+						continue;
 					TrackData td;
-					if(dbb.get_trackdata_for_id(dbid, out td)) tdata += td;
+					if(dbb.get_trackdata_for_id(dbid, out td)) 
+						tdata += td;
 				}
 				break;
 			case 3: //TITLE
 				dbid = -1;
 				this.get_iter(out iter, treepath);
 				this.get(iter, Column.DB_ID, ref dbid);
-				if(dbid==-1) break;
+				if(dbid==-1) 
+					break;
 
 				var dbb = new DbBrowser();
 
 				TrackData td;
-				if(dbb.get_trackdata_for_id(dbid, out td)) tdata += td;
+				if(dbb.get_trackdata_for_id(dbid, out td)) 
+					tdata += td;
 				break;
 		}
 		return tdata;

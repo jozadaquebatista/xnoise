@@ -117,11 +117,13 @@ public class Xnoise.DbWriter : GLib.Object {
 		"DELETE FROM genres";
 
 	public DbWriter() {
+		this.db = null;
 		this.db = get_db();
+		
 		if(this.db == null)
 			return;
 		
-		this.begin_stmt_used = false;
+		this.begin_stmt_used = false; // initialize begin commit compare
 		this.prepare_statements();
 	}
 

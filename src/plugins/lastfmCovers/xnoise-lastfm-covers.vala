@@ -85,7 +85,7 @@ public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageP
  * Copying is also done asynchonously.
  */
 public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
-	private const int SECONDS_FOR_TIMEOUT = 10;
+	private const int SECONDS_FOR_TIMEOUT = 12;
 	// Maybe add this key as a construct only property. Then it can be an individual key for each user
 	private const string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
 	
@@ -98,6 +98,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	private string[] sizes;
 	private File[] image_sources;
 	private uint timeout;
+	private bool timeout_done;
 	
 	public LastFmCovers(string _artist, string _album) {
 		this.artist = _artist;
@@ -110,6 +111,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		image_sources = {};
 		sizes = {"medium", "extralarge"}; //Two are enough
 		timeout = 0;
+		timeout_done = false;
 	}
 	
 	~LastFmCovers() {
@@ -158,14 +160,12 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	}
 	
 	private bool timeout_elapsed() {
+		this.timeout_done = true;
 		this.unref();
 		return false;
 	}
 	
 	private void soup_cb(Session sess, Message mess) {
-		if(this == null)
-			return;
-		
 		if(mess == null || mess.response_body == null || mess.response_body.data == null) {
 			//print("empty message\n");
 			sign_image_fetched(artist, album, "");
@@ -240,7 +240,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 					reply_album = result->nodesetval->item(0)->get_content();
 				}
 				//use the reply's artist/album to make sure the right combination is used'
-				this.copy_something_async(reply_artist.down(), reply_album.down());
+				this.copy_covers_async(reply_artist.down(), reply_album.down());
 			}
 		}
 		delete xpath;
@@ -248,7 +248,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		return;
 	}
 
-	private async void copy_something_async(string _reply_artist, string _reply_album) {
+	private async void copy_covers_async(string _reply_artist, string _reply_album) {
 		File destination;
 		bool buf = false;
 		string default_path = "";
@@ -282,8 +282,12 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		}
 		// signal finish with artist, album in order to identify the sent image
 		sign_image_fetched(reply_artist, reply_album, default_path);
+
 		remove_timeout();
-		this.unref(); // After this point the class can safely be destroyed
+		
+		if(!this.timeout_done) {
+			this.unref(); // After this point LastFmCovers downloader can safely be removed
+		}
 		return;
 	}
 }

@@ -29,7 +29,7 @@
  */
 
 
-public class Xnoise.TagReader : GLib.Object {
+public class Xnoise.TagReader {
 //	public TagReader() {
 //		print("construct TagReader\n");
 //	}

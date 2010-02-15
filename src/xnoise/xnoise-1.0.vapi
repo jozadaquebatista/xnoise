@@ -36,15 +36,15 @@ namespace Xnoise {
 		public bool fetch_image ();
 		public signal void sign_fetched (string artist, string album, string image_path);
 	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class AppStarter : GLib.Object {
+	[CCode (ref_function = "xnoise_app_starter_ref", unref_function = "xnoise_app_starter_unref", cheader_filename = "xnoise.h")]
+	public class AppStarter {
 		public static Xnoise.Main xn;
 		public AppStarter ();
 		public static int main (string[] args);
 		public static Unique.Response on_message_received (Unique.App sender, int command, Unique.MessageData message_data, uint time);
 	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class DbBrowser : GLib.Object {
+	[CCode (ref_function = "xnoise_db_browser_ref", unref_function = "xnoise_db_browser_unref", cheader_filename = "xnoise.h")]
+	public class DbBrowser {
 		public DbBrowser ();
 		public string[] get_albums (string artist, ref string searchtext);
 		public string[] get_artists (ref string searchtext);
@@ -358,8 +358,8 @@ namespace Xnoise {
 		public SettingsDialog ();
 		public signal void sign_finish ();
 	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class TagReader : GLib.Object {
+	[CCode (ref_function = "xnoise_tag_reader_ref", unref_function = "xnoise_tag_reader_unref", cheader_filename = "xnoise.h")]
+	public class TagReader {
 		public TagReader ();
 		public Xnoise.TrackData read_tag (string filename);
 	}

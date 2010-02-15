@@ -135,8 +135,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	public void on_searchtext_changed(Gtk.Editable sender) {
-		mediabrowsermodel.searchtext =
-		    ((Gtk.Entry)sender).get_text().down();
+		mediabrowsermodel.searchtext = ((Gtk.Entry)sender).get_text().down();
 		change_model_data();
 		if((mediabrowsermodel.searchtext!="")&&
 		   (mediabrowsermodel.searchtext!=null)) {
