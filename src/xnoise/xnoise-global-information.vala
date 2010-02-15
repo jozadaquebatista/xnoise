@@ -47,7 +47,7 @@ public class Xnoise.GlobalInfo : GLib.Object {
 
 	// Private fields
 	private TrackState _track_state = TrackState.STOPPED;
-	private string _current_uri = "";
+	private string? _current_uri = null;
 	private Gtk.TreeRowReference? _position_reference = null;
 	private Gtk.TreeRowReference? _position_reference_next = null;
 
@@ -71,7 +71,7 @@ public class Xnoise.GlobalInfo : GLib.Object {
 		}
 	}
 
-	public string current_uri {
+	public string? current_uri {
 		get {
 			return _current_uri;
 		}

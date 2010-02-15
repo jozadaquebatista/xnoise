@@ -49,7 +49,7 @@ namespace Xnoise {
 		public string[] get_albums (string artist, ref string searchtext);
 		public string[] get_artists (ref string searchtext);
 		public string[] get_lastused_uris ();
-		public string? get_local_image_path_for_track (ref string uri);
+		public string? get_local_image_path_for_track (ref string? uri);
 		public string[] get_media_files ();
 		public string[] get_media_folders ();
 		public string? get_single_stream_uri (string name);
@@ -61,7 +61,7 @@ namespace Xnoise {
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
-		public bool get_trackdata_for_uri (string uri, out Xnoise.TrackData val);
+		public bool get_trackdata_for_uri (string? uri, out Xnoise.TrackData val);
 		public bool get_uri_for_id (int id, out string val);
 		public Xnoise.MediaData[] get_video_data (ref string searchtext);
 		public string[] get_videos (ref string searchtext);
@@ -105,7 +105,7 @@ namespace Xnoise {
 		public void broadcast_image_for_current_track ();
 		public void handle_eos ();
 		public void reset_position_reference ();
-		public string current_uri { get; set; }
+		public string? current_uri { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
 		public Xnoise.GlobalInfo.TrackState track_state { get; set; }
@@ -127,8 +127,9 @@ namespace Xnoise {
 		public void pause ();
 		public void play ();
 		public void playSong (bool force_play = false);
+		public void request_location (string? uri);
 		public void stop ();
-		public string Uri { get; set; }
+		public string? Uri { get; set; }
 		public bool current_has_video { get; set; }
 		public string currentalbum { get; set; }
 		public string currentartist { get; set; }
@@ -144,11 +145,12 @@ namespace Xnoise {
 		public bool seeking { get; set; }
 		public Gst.TagList taglist { get; set; }
 		public double volume { get; set; }
+		public signal void sign_about_to_finish ();
 		public signal void sign_paused ();
 		public signal void sign_playing ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
-		public signal void sign_tag_changed (ref string newuri, string? tagname, string? tagvalue);
+		public signal void sign_tag_changed (string newuri);
 		public signal void sign_uri_changed (string newuri);
 		public signal void sign_video_playing ();
 		public signal void sign_volume_changed (double volume);
@@ -495,7 +497,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string escape_for_local_folder_search (string value);
 	[CCode (cheader_filename = "xnoise.h")]
-	public static bool get_image_path_for_media_uri (string uri, ref string? image_path);
+	public static bool get_image_path_for_media_uri (string? uri, ref string? image_path);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string get_stream_uri (string playlist_uri);
 	[CCode (cheader_filename = "xnoise.h")]

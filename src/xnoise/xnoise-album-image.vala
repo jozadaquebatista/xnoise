@@ -64,7 +64,7 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		xn.gPl.sign_uri_changed.connect(on_uri_changed);
 	}
 
-	private void on_uri_changed(string uri) {
+	private void on_uri_changed(string? uri) {
 		//print("on_uri_changed\n");
 
 		if(!show_album_images) {
@@ -106,9 +106,12 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 
 	// Startes via timeout because gPl is sending the sign_tag_changed signals
 	// sometimes very often at the beginning of a track.
-	private void search_image(string uri) {
+	private void search_image(string? uri) {
 
 		if(MainContext.current_source().is_destroyed())
+			return;
+		
+		if(uri == null)
 			return;
 
 		string _artist = escape_for_local_folder_search(xn.gPl.currentartist);
