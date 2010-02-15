@@ -1,6 +1,6 @@
-/* xnoise-general-data.vala
+/* xnoise-global-information.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,18 +34,28 @@
  * All these are properties, so that changes can be tracked application wide.
  */
 
-public class Xnoise.GlobalData : GLib.Object {
+public class Xnoise.GlobalInfo : GLib.Object {
 	// Signals
 	public signal void position_reference_changed();
 	public signal void before_position_reference_changed();
+	public signal void before_position_reference_next_changed();
+	public signal void position_reference_next_changed();
 	public signal void track_state_changed();
 	public signal void current_uri_changed();
+	public signal void current_uri_repeated(string uri);
 	public signal void caught_eos_from_player();
 
 	// Private fields
 	private TrackState _track_state = TrackState.STOPPED;
-	private string  _current_uri = "";
+	private string _current_uri = "";
 	private Gtk.TreeRowReference? _position_reference = null;
+	private Gtk.TreeRowReference? _position_reference_next = null;
+
+	public enum TrackState {
+		STOPPED = 0,
+		PLAYING,
+		PAUSED
+	}
 
 	// Public properties
 	public TrackState track_state {
@@ -92,9 +102,46 @@ public class Xnoise.GlobalData : GLib.Object {
 	// The next_position_reference is used to hold a position in the tracklist,
 	// in case the row position_reference is pointing to is removed and the next
 	// song has not yet been started.
-	public Gtk.TreeRowReference next_position_reference { get; set; default = null; }
+	public Gtk.TreeRowReference position_reference_next {
+		get {
+			return _position_reference_next;
+		}
+		set {
+			if(_position_reference_next != value) {
+				before_position_reference_next_changed();
+				_position_reference_next = value;
+				// signal changed
+				position_reference_next_changed();
+			}
+		}
+	}
+
+	public void reset_position_reference() {
+		this._position_reference = null;
+	}
 
 	public void handle_eos() {
 		caught_eos_from_player();
+	}
+	
+	public signal void sign_image_available(string? image_path_small, string? image_path_large);
+	
+	public void broadcast_image_for_current_track() {
+//		if(!found) 
+//			return;
+			
+		string? image_path = null;
+		if(get_image_path_for_media_uri(current_uri, ref image_path)) {
+			string? buf = null; 
+			if((image_path == "") || (image_path == null))
+				return;
+				
+			buf = image_path.substring(0, image_path.len() - "medium".len());
+			buf = buf + "extralarge";
+			sign_image_available(image_path, buf);
+		}
+		else {
+			sign_image_available(null, null);
+		}
 	}
 }

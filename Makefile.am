@@ -1,8 +1,12 @@
-NULL = 
-
-#Build in these directories:
+NULL =
 
 SUBDIRS = \
+	data \
+	src \
+	po \
+	$(NULL)
+
+DIST_SUBDIRS = \
 	data \
 	src \
 	po \
@@ -12,10 +16,10 @@ xnoiselicense_DATA =  \
 	COPYING \
 	AUTHORS \
 	$(NULL)
-	
+
 xnoiselicensedir = $(datadir)/xnoise/license
 
-EXTRA_DIST = config.rpath m4/ChangeLog  \
+EXTRA_DIST = \
 	$(xnoiselicense_DATA) \
 	intltool-extract.in \
 	intltool-merge.in \

@@ -1,0 +1,204 @@
+/* xnoise-notifications.vala
+ *
+ * Copyright (C) 2009  Jörn Magens
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The Xnoise authors hereby grant permission for non-GPL compatible
+ *  GStreamer plugins to be used and distributed together with GStreamer
+ *  and Xnoise. This permission is above and beyond the permissions granted
+ *  by the GPL license by which Xnoise is covered. If you modify this code
+ *  you may extend this exception to your version of the code, but you are not
+ *  obligated to do so. If you do not wish to do so, delete this exception
+ *  statement from your version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
+ *
+ * Author:
+ * 	Jörn Magens
+ * 	fsistemas
+ */
+ 
+using Gtk;
+using Notify;
+
+public class Xnoise.Notifications : GLib.Object, IPlugin {
+	public Main xn { get; set; }
+	public string name { 
+		get {
+			return "notifications";
+		} 
+	}
+	private Notification notification;
+	private uint timeout;
+
+	construct {
+		timeout = 0;
+	}
+
+	public bool init() {
+		if(!Notify.init("Xnoise media player")) {
+			print("libnotify initialization failed\n");
+			return false;
+		}
+		xn.gPl.sign_uri_changed += on_uri_changed;
+		return true;
+	}
+	
+	private void on_uri_changed(string uri) {
+		if(timeout != 0)
+			Source.remove(timeout);
+
+		if(((uri=="")||(uri==null))&&
+		   (notification!=null)) {
+//			print("close n\n");
+			try {
+				notification.clear_hints();
+				notification.close();
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+			}
+		}
+
+		timeout = Timeout.add_seconds(1, () => {
+			show_notification(uri);
+			return false;
+		});
+	}
+	
+	private void show_notification(string newuri) {
+		var dbb = new DbBrowser();
+		string uri = newuri;
+		string image_path = null;
+		string album, artist, title;
+		Gdk.Pixbuf image_pixb = null;
+		string basename = null;
+		File file = File.new_for_uri(newuri);
+
+		if(!xn.gPl.is_stream)
+			basename = file.get_basename();
+
+		if(xn.gPl.currentartist != null) {
+			artist = remove_linebreaks(xn.gPl.currentartist);
+		}
+		else {
+			artist = "unknown artist";
+		}
+
+		if(xn.gPl.currenttitle != null) {
+			title = remove_linebreaks(xn.gPl.currenttitle);
+		}
+		else {
+			title = "unknown title";
+		}
+
+		if(xn.gPl.currentalbum != null) {
+			album = remove_linebreaks(xn.gPl.currentalbum);
+		}
+		else {
+			album = "unknown album";
+		}
+
+		if((title  == "unknown title")&& 
+		   (artist == "unknown artist")&&
+		   (album  == "unknown album")) {
+			TrackData td;
+			if(dbb.get_trackdata_for_uri(newuri, out td)) {
+				artist = td.Artist;
+				album = td.Album;
+				title = td.Title;
+			}
+		}
+		
+		//TODO: check return value
+		get_image_path_for_media_uri(uri, ref image_path);
+		string summary = "<b>" + title + "</b>";
+		string body = _("by") +
+		              " <b>" + artist + "</b> \n" +
+		              _("on") + 
+		              " <b>" + album + "</b>";
+		
+		if(notification == null) {
+			notification = new Notification(summary, body, null, null);
+		}
+		else {
+			notification.clear_hints();
+			notification.update(summary, body, "");
+		}
+		if(image_path != null) {
+			try {
+				image_pixb = new Gdk.Pixbuf.from_file(image_path);
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+			}
+		}
+		else {
+			try {
+				image_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+			}
+		}
+		if(image_pixb != null) {
+			notification.set_icon_from_pixbuf(image_pixb);
+		}
+		notification.set_urgency(Notify.Urgency.NORMAL);
+		notification.set_timeout(2000);
+		show();
+	}
+
+	public void show() {
+		try {	
+			notification.show();
+		}
+		catch(GLib.Error e) {
+			 print("%s\n", e.message); 
+		}
+	}
+
+	private void cleanup() {
+		if(notification != null) {
+			try {
+				notification.close();
+				notification = null;
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+			}
+		}
+	}
+
+	~Notifications() {
+		cleanup();
+	}
+
+	public Gtk.Widget? get_settings_widget() {
+		return null;
+	}
+
+	public Gtk.Widget? get_singleline_settings_widget() {
+		return null;
+	}
+
+	public bool has_settings_widget() {
+		return false;
+	}
+	
+	public bool has_singleline_settings_widget() {
+		return false;
+	}
+}
+

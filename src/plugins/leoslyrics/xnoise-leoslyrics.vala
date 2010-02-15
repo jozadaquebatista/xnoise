@@ -1,6 +1,6 @@
 /* xnoise-leoslyrics.vala
  *
- * Copyright (C) 2009  softshaker
+ * Copyright (C) 2009 softshaker
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,8 +26,9 @@
  *
  * Author:
  * 	softshaker
+ * 	Jörn Magens
  */
- 
+
 //using Xnoise;
 using Gtk;
 using Soup;
@@ -37,12 +38,12 @@ using Xml;
 
 public class Xnoise.LeoslyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	public Main xn { get; set; }
-	public string name { 
+	public string name {
 		get {
 			return "Leoslyrics";
-		} 
+		}
 	}
-    
+
 	public bool init() {
 		//LyricsLoader.register_backend(this.name, this.from_tags);
 		return true;
@@ -52,24 +53,31 @@ public class Xnoise.LeoslyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 		return null;
 	}
 
+	public Gtk.Widget? get_singleline_settings_widget() {
+		return null;
+	}
+
 	public bool has_settings_widget() {
 		return false;
 	}
 	
+	public bool has_singleline_settings_widget() {
+		return false;
+	}
+
 	public Xnoise.ILyrics from_tags(string artist, string title) {
 		return new Leoslyrics(artist, title);
-	} 
+	}
 }
 
 
 
 public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
-	private static SessionSync session;
-	private Message hid_msg;
+	private const int SECONDS_FOR_TIMEOUT = 15;
 	
-	private string artist;
-	private string title;
-		
+	private SessionAsync session;
+	private uint timeout;
+	private bool timeout_done;
 	private static const string my_identifier = "Leoslyrics";
 	private static const string my_credits = "These Lyrics are provided by http://www.leoslyrics.com";
 	private static const string auth = "xnoise";
@@ -77,138 +85,234 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 	private static const string text_url = "http://api.leoslyrics.com/api_lyrics.php?auth=%s&hid=%s";
 	private static const string xp_hid = "/leoslyrics/searchResults/result/@hid[1]";
 	private static const string xp_text = "/leoslyrics/lyric/text";
-	
-	private static bool _is_initialized = false;
+	private string artist;
+	private string title;
 	
 	private string hid;
-	private string text;
-	private bool? availability;
-		
-	public Leoslyrics(string artist, string title) {
-		if (_is_initialized == false) {
-			//message("initting");
-			session = new SessionSync ();
-			Xml.Parser.init();
-			
-			_is_initialized = true;
-		}
-		
+
+	private signal void sign_hid_fetched();
+
+	public Leoslyrics(string _artist, string _title) {
+		this.artist = _artist;
+		this.title  = _title;
+		session = new SessionAsync ();
+		Xml.Parser.init();
 		hid = "";
 		this.artist = artist;
 		this.title = title;
-		availability = null;
 		
-		var gethid_str = new StringBuilder();
-		gethid_str.printf(check_url, auth, Soup.URI.encode(artist, null), Soup.URI.encode(title, null));
-		
-		//print("%s\n\n", gethid_str.str);
-		hid_msg = new Message("GET", gethid_str.str);
+		sign_hid_fetched.connect(on_sign_hid_fetched);
+		timeout = 0;
+		timeout_done = false;
 	}
-		
 	
-	public string get_identifier() {return my_identifier;}
-	public string get_credits() {return my_credits;}
+	~Leoslyrics() {
+		if(timeout != 0)
+			Source.remove(timeout);
+	}
+
+	private string get_credits() {
+		return my_credits;
+	}
 	
-	public bool fetch_hid () {
-		uint status;
-		availability = false;
-		
-		status = session.send_message(hid_msg);
-		if (status != KnownStatusCode.OK) return false;
-		if (hid_msg.response_body.data == null) return false;
-		
-		//print("-------------------HID\n%s\n\n", hid);
-		//message(hid_msg.response_body.data);
-		
-		// Web API call ok, do the xml processing
-		
-		Xml.Doc* xmldoc = Xml.Parser.read_doc(hid_msg.response_body.data);
-		if (xmldoc == null) return false;
-		
-		XPathContext xp_cont = new XPathContext(xmldoc);
-		
-		var xp_result = xp_cont.eval_expression(xp_hid);
-		if (xp_result->nodesetval->is_empty()) { 
-			delete xmldoc;
-			return false;
+	private string get_identifier() {
+		return my_identifier;
+	}
+
+	private void remove_timeout() {
+		if(timeout != 0)
+			Source.remove(timeout);
+	}
+	
+	private void fetch_hid() {
+		var gethid_str = new StringBuilder();
+		gethid_str.printf(check_url, 
+		                  auth, 
+		                  replace_underline_with_blank_encoded(Soup.URI.encode(artist, null)),
+		                  replace_underline_with_blank_encoded(Soup.URI.encode(title, null))
+		                  );
+		//print("gethid_str.str: %s\n\n", gethid_str.str);
+		var hid_msg = new Soup.Message("GET", gethid_str.str);
+		session.queue_message(hid_msg, fetch_hid_cb);
+	}
+
+	private void fetch_hid_cb(Session sess, Message mesg) {
+		if(this == null) {
+			remove_timeout();
+			return;
 		}
 		
+		if(mesg.response_body.data == null) {
+			remove_timeout();
+			this.unref();
+			return;
+		}
+
+		if(((string)mesg.response_body.data == null) || ((string)mesg.response_body.data == "")) {
+			remove_timeout();
+			this.unref();
+			return;
+		}
+
+		Xml.Doc* doc = Xml.Parser.read_doc((string)mesg.response_body.data);
+		if(doc == null) {
+			remove_timeout();
+			this.unref();
+			return;
+		}
+
+		XPath.Context xp_cont = new XPath.Context(doc);
+
+		var xp_result = xp_cont.eval_expression(xp_hid);
+		if(xp_result->nodesetval->is_empty()) {
+			delete doc;
+			remove_timeout();
+			this.unref();
+			return;
+		}
+
 		var hid_result_node = xp_result->nodesetval->item (0);
-		if (hid_result_node == null) {
-			delete xmldoc;
-			return false;
+		if(hid_result_node == null) {
+			delete doc;
+			remove_timeout();
+			this.unref();
+			return;
 		}
 
 		hid = hid_result_node->get_content();
-		delete xmldoc;
-		
-		if (hid == "") return false;
-		
-		availability = true;
-		return true;
-	}
-	
-	
-	public bool fetch_text() {
-		var gettext_str = new StringBuilder();
-		gettext_str.printf(text_url, auth, hid);
-		var text_msg = new Message("GET", gettext_str.str);
-		
-		uint status;
-		status = session.send_message(text_msg);
-		
-		if (status != KnownStatusCode.OK) return false;
-		if (text_msg.response_body.data == null) return false;
+		delete doc;
 
-		// Web API call ok, do the xml processing
-		
-		Xml.Doc* xmldoc = Xml.Parser.read_doc(text_msg.response_body.data);
-		if (xmldoc == null) return false;
-		
-		XPathContext xp_cont = new XPathContext(xmldoc);
-		
-		var xp_result = xp_cont.eval_expression(xp_text);
-		if (xp_result->nodesetval->is_empty()) {
-			//message("empty"); 
-			delete xmldoc;
-			availability = false;
-			return false;
+		if(hid == "") {
+			remove_timeout();
+			this.unref();
+			return;
 		}
+
+		sign_hid_fetched();
+	}
+
+	private void fetch_text() {
+		if(this == null) {
+			remove_timeout();
+			return;
+		}
+
+		var get_text_str = new StringBuilder();
+		get_text_str.printf(text_url, auth, hid);
+		var text_msg = new Message("GET", get_text_str.str);
+
+		session.queue_message(text_msg, fetch_txt_cb);
+	}
+
+	private void fetch_txt_cb(Session sess, Message mesg) {
+		if(this == null) {
+			remove_timeout();
+			return;
+		}
+
+		if(mesg.response_body.data == null) {
+			remove_timeout();
+
+			if(!this.timeout_done)
+				this.unref();
+
+			return;
+		}
+
+		if(((string)mesg.response_body.data == null) || ((string)mesg.response_body.data == "")) {
+			remove_timeout();
+
+			if(!this.timeout_done)
+				this.unref();
+
+			return;
+		}
+		//print("(string)mesg.response_body.data fetch txt: \n%s", (string)mesg.response_body.data);
+		Xml.Doc* doc = Xml.Parser.parse_memory((string)mesg.response_body.data, (int)mesg.response_body.length);
 		
-		var text_result_node = xp_result->nodesetval->item(0);
-		if (text_result_node == null) {
+		if(doc == null) {
+			remove_timeout();
+			if(!this.timeout_done)
+				this.unref();
+			return;
+		}
+
+		XPath.Context* xpath = new XPath.Context(doc);
+		XPath.Object* result = xpath->eval_expression(xp_text);
+		
+		if(result->nodesetval->is_empty()) {
+			//print("empty\n");
+			delete doc;
+			remove_timeout();
+			if(!this.timeout_done)
+				this.unref();
+			return;
+		}
+		if(result == null) {
 			//message("no item");
-			delete xmldoc;
-			availability = false;
-			return false;
+			delete doc;
+			remove_timeout();
+			if(!this.timeout_done)
+				this.unref();
+			return;
 		}
-		text = text_result_node->get_content();
-		//message(text);
-		delete xmldoc;
-				
-		return true;
-	}
+
+		string lyrics_text = "";
+		lyrics_text = result->nodesetval->item(0)->get_content();
+
+		string reply_artist = "";
+		result = xpath->eval_expression("/leoslyrics/lyric/artist/name");
+		if(result->nodesetval->is_empty()) {
+			reply_artist = "";
+		}
+		else {
+			reply_artist = result->nodesetval->item(0)->get_content();
+		}
+
+		string reply_title = "";
+		result = xpath->eval_expression("/leoslyrics/lyric/title");
+		if(result->nodesetval->is_empty()) {
+			reply_title = "";
+		}
+		else {
+			reply_title = result->nodesetval->item(0)->get_content();
+		}
 		
-	
-	public bool? available() {
-		return availability;
+		sign_lyrics_fetched(reply_artist, reply_title, get_credits(), get_identifier(), lyrics_text);
+
+		delete doc;
+		remove_timeout();
+		if(!this.timeout_done)
+			this.unref();
 	}
-	
-	public void* fetch () {
-		if (available() == null) fetch_hid();
-		if (!available() || hid == ""){
-			sign_lyrics_done(this);
-			return null;
+
+	public void find_lyrics() {
+		fetch_hid();
+
+		//Add timeout for response
+		timeout = Timeout.add_seconds(SECONDS_FOR_TIMEOUT, timeout_elapsed);
+	}
+
+	private bool timeout_elapsed() {
+		if(MainContext.current_source().is_destroyed())
+			return false;
+		
+		timeout_done = true;
+		this.unref();
+		return false;
+	}
+
+	// this signal handler continues the downloading of lyrics
+	private void on_sign_hid_fetched(Leoslyrics sender) {
+		if(hid == "") {
+			print("on_sign_hid_fetched empty\n");
+			sign_lyrics_fetched("", "", "", "", "");
+			remove_timeout();
+			if(!this.timeout_done)
+				this.unref();
+			return;
 		}
 		fetch_text();
-		sign_lyrics_fetched(text);
-		sign_lyrics_done(this);
-		return null;
-	}
-	
-	
-	public string get_text() {
-		return text;
 	}
 }
 

@@ -1,6 +1,6 @@
 /* xnoise-main-window.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,26 +38,72 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string APPICON       = Config.UIDIR + "xnoise_16x16.png";
 	private const string SHOWVIDEO     = _("Video");
 	private const string SHOWTRACKLIST = _("Tracklist");
+	private Main xn;
+	private ActionGroup action_group;
+	private UIManager ui_manager = new UIManager();
 	private Label song_title_label;
 	public bool _seek;
 	private HPaned hpaned;
 	private VolumeSliderButton volumeSliderButton;
 	private int _posX_buffer;
 	private int _posY_buffer;
+	private Button collapsebutton;
 	private Button showlyricsbuttonVid;
 	private Button showlyricsbuttonTL;
 	private Button showtracklistbuttonVid;
 	private Button showtracklistbuttonLY;
 	private Button showvideobuttonTL;
 	private Button showvideobuttonLY;
-
-	private Gtk.VBox menuvbox;
-	private Gtk.VBox mainvbox;
-	public VideoScreen videoscreen;
-	//public Label showvideolabel;
+	private Button repeatButton01;
+	private Button repeatButton02;
+	private Button repeatButton03;
+	private int buffer_last_page;
+	private Image repeatImage01;
+	private Image repeatImage02;
+	private Image repeatImage03;
+	private Label repeatLabel01;
+	private Label repeatLabel02;
+	private Label repeatLabel03;
+	private VBox menuvbox;
+	private VBox mainvbox;
+	private FullscreenToolbar fullscreentoolbar;
+	private VBox videovbox;
 	public bool is_fullscreen = false;
 	public bool drag_on_da = false;
 	public LyricsView lyricsView;
+	public VideoScreen videoscreen;
+	public Entry searchEntryMB;
+	public PlayPauseButton playPauseButton;
+	public PreviousButton previousButton;
+	public NextButton nextButton;
+	public StopButton stopButton;
+	public Notebook browsernotebook;
+	public Notebook tracklistnotebook;
+	public AlbumImage albumimage;
+	public SongProgressBar songProgressBar;
+	public double current_volume; //keep it global for saving to params
+	public MediaBrowser mediaBr;
+	public TrackList trackList;
+	public Gtk.Window fullscreenwindow;
+
+	public int repeatState { get; set; }
+	public bool fullscreenwindowvisible { get; set; }
+
+	public signal void sign_pos_changed(double fraction);
+	public signal void sign_volume_changed(double fraction);
+	public signal void sign_drag_over_da();
+
+	private enum Repeat {
+		NOT_AT_ALL = 0,
+		SINGLE,
+		ALL,
+		RANDOM
+	}
+
+	public enum Direction {
+		NEXT = 0,
+		PREVIOUS,
+	}
 
 	private const ActionEntry[] action_entries = {
 		{ "FileMenuAction", null, N_("_File") },
@@ -77,50 +123,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		{"text/uri-list", 0, 0}
 	};
 
-//	private Image showvideoimage;
-	public Gtk.Entry searchEntryMB;
-	public PlayPauseButton playPauseButton;
-	public PreviousButton previousButton;
-	public NextButton nextButton;
-	public StopButton stopButton;
-	public Gtk.Button repeatButton01;
-	public Gtk.Button repeatButton02;
-	public Gtk.Button repeatButton03;
-	public Gtk.Notebook browsernotebook;
-	public Gtk.Notebook tracklistnotebook;
-	public Image repeatImage01;
-	public Image repeatImage02;
-	public Image repeatImage03;
-	public AlbumImage albumimage;
-	public Label repeatLabel01;
-	public Label repeatLabel02;
-	public Label repeatLabel03;
-	public SongProgressBar songProgressBar;
-	public double current_volume; //keep it global for saving to params
-	public MediaBrowser mediaBr;
-	public TrackList trackList;
-	//public Gtk.Window window;
-	public Gtk.Window fullscreenwindow;
-	private FullscreenToolbar fullscreentoolbar;
-	private Gtk.VBox videovbox;
-
-	public int repeatState { get; set; }
-	public bool fullscreenwindowvisible { get; set; }
-
-	public signal void sign_pos_changed(double fraction);
-	public signal void sign_volume_changed(double fraction);
-	public signal void sign_drag_over_da();
-	private Main xn;
-
-	private ActionGroup action_group;
-	private UIManager ui_manager = new UIManager();
-
 	public UIManager get_ui_manager() {
 		return ui_manager;
 	}
 
-	public MainWindow(ref weak Main xn) {
-		this.xn = xn;
+	public MainWindow() {
+		this.xn = Main.instance;
 		par.iparams_register(this);
 		xn.gPl.sign_volume_changed.connect(
 			(val) => {this.current_volume = val;}
@@ -137,6 +145,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
 
 		global.caught_eos_from_player.connect(on_caught_eos_from_player);
+		buffer_last_page = 0;
 	}
 
 	private void initialize_video_screen() {
@@ -153,7 +162,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		videoscreen.button_press_event.connect(on_video_da_button_press);
 		sign_drag_over_da.connect(() => {
 			//switch to tracklist for dropping
-			if(!fullscreenwindowvisible) this.tracklistnotebook.set_current_page(0);
+			if(!fullscreenwindowvisible)
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 		});
 		videoscreen.drag_motion.connect(on_da_drag_motion);
 	}
@@ -176,7 +186,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void add_lastused_titles_to_tracklist() {
 		var dbBr = new DbBrowser();
 		string[] uris = dbBr.get_lastused_uris();
-		foreach(weak string uri in uris) {
+		foreach(unowned string uri in uris) {
 			File file = File.new_for_commandline_arg(uri);
 /*
 			if(global.position_reference==null) {
@@ -187,12 +197,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			if(file.get_uri_scheme() != "http") {
 				TrackData td;
 				if(dbBr.get_trackdata_for_uri(uri, out td)) {
-					this.trackList.tracklistmodel.insert_title(0,
-					                                           null,
+					this.trackList.tracklistmodel.insert_title(null,
 					                                           (int)td.Tracknumber,
 					                                           td.Title,
 					                                           td.Album,
 					                                           td.Artist,
+					                                           td.Length,
 					                                           false,
 					                                           uri);
 				}
@@ -200,12 +210,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			else {
 				TrackData td;
 				if(dbBr.get_trackdata_for_stream(uri, out td)) {
-					this.trackList.tracklistmodel.insert_title(0,
-					                                           null,
+					this.trackList.tracklistmodel.insert_title(null,
 					                                           0,
 					                                           td.Title,
 					                                           "",
 					                                           "",
+					                                           0,
 					                                           false,
 					                                           uri);
 				}
@@ -229,7 +239,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			fullscreenwindow.show_all();
 			this.videoscreen.reparent(fullscreenwindow);
 			this.videoscreen.window.process_updates(true);
-			this.tracklistnotebook.set_current_page(0);
+			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 			fullscreenwindowvisible = true;
 			fullscreentoolbar.show();
 		}
@@ -237,23 +247,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.videoscreen.window.unfullscreen();
 			this.videoscreen.reparent(videovbox);
 			fullscreenwindow.hide_all();
-			this.tracklistnotebook.set_current_page(1);
+			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			fullscreenwindowvisible = false;
 			this.videovbox.show();
 			fullscreentoolbar.hide();
 		}
 		return false;
 	}
-
-//	private bool on_album_image_enter() {
-//		print("enter album image\n");
-//		return true;
-//	}
-//
-//	private bool on_album_image_leave() {
-//		print("leave album image\n");
-//		return true;
-//	}
 
 	private void on_repeatState_changed(GLib.ParamSpec pspec) {
 		switch(this.repeatState) {
@@ -283,6 +283,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				repeatImage02.stock = Gtk.STOCK_REFRESH;
 				repeatLabel03.label = _("repeat all");
 				repeatImage03.stock = Gtk.STOCK_REFRESH;
+				break;
+			}
+			case Repeat.RANDOM : {
+				repeatLabel01.label = _("random play");
+				repeatImage01.stock = Gtk.STOCK_JUMP_TO;
+				repeatLabel02.label = _("random play");
+				repeatImage02.stock = Gtk.STOCK_JUMP_TO;
+				repeatLabel03.label = _("random play");
+				repeatImage03.stock = Gtk.STOCK_JUMP_TO;
 				break;
 			}
 		}
@@ -413,15 +422,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_show_video_menu_clicked() {
-		this.tracklistnotebook.set_current_page(1);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 	}
 
 	private void on_show_tracklist_menu_clicked() {
-		this.tracklistnotebook.set_current_page(0);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 	}
 
 	private void on_show_lyrics_menu_clicked() {
-		this.tracklistnotebook.set_current_page(2);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
 	}
 
 	// This is used for the main window
@@ -436,7 +445,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void toggle_window_visbility() {
-		if (this.is_active) {
+		if(this.is_active) {
 			this.get_position(out _posX_buffer, out _posY_buffer);
 			this.hide();
 		}
@@ -464,10 +473,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 		this.repeatState = par.get_int_value("repeatstate");
 		double volSlider = par.get_double_value("volume");
-		if((volSlider <= 0.0)||(volSlider > 1.0))
-			xn.gPl.volume = 0.3;
-		else
+		if((volSlider < 0.0)||
+		   (volSlider > 1.0)) {
+			xn.gPl.volume = 0.5;
+		}
+		else {
 			xn.gPl.volume = volSlider;
+		}
 
 		int hp_position = par.get_int_value("hp_position");
 		if (hp_position > 0) {
@@ -496,115 +508,85 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 
 	private void stop() {
-		global.track_state = TrackState.STOPPED;
+		global.track_state = GlobalInfo.TrackState.STOPPED;
 		global.current_uri = "";
-		//xn.gPl.stop();
-		//xn.gPl.Uri = "";
-		//trackList.tracklistmodel.reset_play_status_all_titles();
-
-/*
-		//save position
-		int rowcount = -1;
-		rowcount = (int)trackList.tracklistmodel.iter_n_children(null);
-		if(!(rowcount>0)) {
-			return;
-		}
-		TreeIter iter;
-		TreePath path;
-		TrackState currentstate;
-		bool is_first;
-		trackList.tracklistmodel.get_active_path(out path, out currentstate, out is_first);
-		trackList.tracklistmodel.get_iter(out iter, path);
-		trackList.tracklistmodel.set(iter, TrackListModelColumn.STATE, TrackState.POSITION_FLAG, -1);
-*/
 	}
 
 	// This function changes the current song to the next or previous in the
 	// tracklist. handle_repeat_state should be true when the calling is not
 	// coming from a button, but, e.g. from a EOS signal handler
-	public void change_song(Direction direction, bool handle_repeat_state = false) {
-		weak TreeIter iter;
-		TrackState currentstate;
+	public void change_song(MainWindow.Direction direction, bool handle_repeat_state = false) {
+		unowned TreeIter iter;
+		bool trackList_is_empty;
 		TreePath path = null;
-		bool is_first;
 		int rowcount = 0;
+		bool used_next_pos = false;
+
 		rowcount = (int)trackList.tracklistmodel.iter_n_children(null);
 
+		// if no track is in the list, it does not make sense to go any further
 		if(rowcount == 0) {
-			print("rowcount is zero -> stop\n");
-			// if no track is in the list, it does not make sense to go any further
 			stop();
 			return;
 		}
 
-		// active path sets first path if active is not found
-		if(!trackList.tracklistmodel.get_active_path(out path,
-		                                             out currentstate,
-		                                             out is_first)) {
+		// get_active_path sets first path, if active is not available
+		if(!trackList.tracklistmodel.get_active_path(out path, out used_next_pos)) {
 			stop();
 			return;
 		}
 
-/*
-		// if stopped
-		if((!xn.gPl.playing)&&(!xn.gPl.paused)) {
-			trackList.tracklistmodel.reset_play_status_all_titles();
-			return;
+		// handle RANDOM
+		if((repeatState == Repeat.RANDOM)) {
+			this.trackList.tracklistmodel.get_random_row(ref path);
 		}
-*/
-
-		// get next or previous path
-		if((!(handle_repeat_state &&(repeatState==Repeat.SINGLE)))) {
-			if(path == null) return;
-			if(direction == Direction.NEXT) path.next();
-			else if((direction == Direction.PREVIOUS)&&
-			        (path.to_string() != "0")) {
-				path.prev();
+		else {
+			if(!used_next_pos) {
+				// get next or previous path
+				if((!(handle_repeat_state && (repeatState == Repeat.SINGLE)))) {
+					if(path == null) return;
+					if(!this.trackList.tracklistmodel.path_is_last_row(ref path,
+					                                                   out trackList_is_empty)
+					                                                   ) {
+						//print(" ! path_is_last_row\n");
+						if(direction == Direction.NEXT) {
+							path.next();
+						}
+						else if((direction == Direction.PREVIOUS)&&
+								(path.to_string() != "0")) {
+							path.prev();
+						}
+					}
+					else {
+						//print("path_is_last_row\n");
+						if(direction == Direction.NEXT) {
+							if(repeatState == Repeat.ALL) {
+								// only jump to first is repeat all is set
+								trackList.tracklistmodel.get_first_row(ref path);
+							}
+							else {
+								stop();
+							}
+						}
+						else if((direction == Direction.PREVIOUS)&&
+						        (path.to_string() != "0")) {
+							path.prev();
+						}
+					}
+				}
 			}
 		}
 
-		if(path == null) return;
+		if(path == null) {
+			stop();
+			return;
+		}
 
 		if(!trackList.tracklistmodel.get_iter(out iter, path)) return;
 
 		global.position_reference = new TreeRowReference(trackList.tracklistmodel, path);
 
-		if(global.track_state == TrackState.PLAYING) trackList.set_focus_on_iter(ref iter);
-/*
-		// goto path, if possible...
-		if(trackList.tracklistmodel.get_iter(out iter, path)) {
-			trackList.tracklistmodel.reset_play_status_all_titles(); //visual reset
-			if(global.state_paused) {
-//			if(xn.gPl.paused) {
-				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PAUSED);
-			}
-			else if(global.state_playing) {
-//			else if(xn.gPl.playing){
-				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
-			}
-			trackList.set_focus_on_iter(ref iter);
-		}
-		//...or goto first song, if possible ...
-		else if((trackList.tracklistmodel.get_iter_first(out iter))&&
-		        (((handle_repeat_state)&&
-		        (repeatState==Repeat.ALL))||(!handle_repeat_state))) {
-			trackList.tracklistmodel.reset_play_status_all_titles();
-			if(xn.gPl.playing) {
-				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PLAYING);
-			}
-			else if(global.state_paused) {
-			//else if(xn.gPl.paused) {
-				trackList.tracklistmodel.set_state_picture_for_title(iter, TrackState.PAUSED);
-			}
-			trackList.set_focus_on_iter(ref iter);
-		}
-		//...or stop
-		else {
-			xn.gPl.stop();                      //...or stop
-			trackList.tracklistmodel.reset_play_status_all_titles();
-			xn.gPl.Uri = "";
-		}
-*/
+		if(global.track_state == GlobalInfo.TrackState.PLAYING) trackList.set_focus_on_iter(ref iter);
 	}
 
 	private void on_remove_all_button_clicked() {
@@ -616,7 +598,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void on_repeat_button_clicked(Button sender) {
 		int temprepeatState = this.repeatState;
 		temprepeatState += 1;
-		if(temprepeatState > 2) temprepeatState = 0;
+		if(temprepeatState > 3) temprepeatState = 0;
 		repeatState = temprepeatState;
 	}
 
@@ -625,15 +607,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_show_tracklist_button_clicked() {
-		this.tracklistnotebook.set_current_page(0);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 	}
 
 	private void on_show_video_button_clicked() {
-		this.tracklistnotebook.set_current_page(1);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 	}
 
 	private void on_show_lyrics_button_clicked() {
-		this.tracklistnotebook.set_current_page(2);
+		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
 	}
 
 	private bool on_close() {
@@ -659,13 +641,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private SettingsDialog setingsD;
 	private void on_settings_edit() {
-		setingsD = new SettingsDialog(ref xn);
+		setingsD = new SettingsDialog();
 		setingsD.sign_finish.connect( () => {
 			setingsD = null;
 		});
 	}
 
-	public void set_displayed_title(string newuri) {
+	public void set_displayed_title(ref string newuri, string? tagname, string? tagvalue) {
 		string text, album, artist, title, organization, location, genre;
 		string basename = null;
 		//print("newuri: %s\n", newuri);
@@ -814,7 +796,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		switch(e.button) {
 			case 2:
 				//ugly, we should move play/resume code out of there.
-				this.playPauseButton.on_clicked(new Button());
+				this.playPauseButton.on_clicked(new Gtk.Button());
 				break;
 			default:
 				break;
@@ -836,7 +818,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return false;
 		}
 		return true;
-
 	}
 
 	private void create_widgets() {
@@ -914,7 +895,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var albumviewport              = gb.get_object("albumviewport") as Gtk.Viewport;
 
 			this.albumimage = new AlbumImage();
-			albumviewport.add(this.albumimage);
+			EventBox ebox = new EventBox(); 
+			ebox.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK|Gdk.EventMask.LEAVE_NOTIFY_MASK);
+
+			ebox.add(albumimage);
+			albumviewport.add(ebox);
+
+			ebox.enter_notify_event.connect( (s, e) => {
+				buffer_last_page = this.tracklistnotebook.get_current_page();
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+				return false;
+			});
+
+			ebox.leave_notify_event.connect( (s, e) => {
+				this.tracklistnotebook.set_current_page(buffer_last_page);
+				return false;
+			});
+
 			//--------------------
 
 			//PLAYING TITLE NAME
@@ -941,12 +938,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.nextButton = new NextButton();
 			playback_hbox.pack_start(nextButton,false,false,0);
 
-		        //PROGRESS BAR
+			//PROGRESS BAR
 			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
 			this.songProgressBar = new SongProgressBar();
 			//playback_hbox.pack_start(songProgressBar,false,false,0);
 			songprogress_viewport.add(songProgressBar);
-
 			//---------------------
 
 			///BOX FOR MAIN MENU
@@ -960,7 +956,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			trackListScrollWin.add(this.trackList);
 
 			///MediaBrowser (left)
-			this.mediaBr = new MediaBrowser(ref xn);
+			this.mediaBr = new MediaBrowser();
 			this.mediaBr.set_size_request(100,100);
 			var mediaBrScrollWin = gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
 			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
@@ -981,6 +977,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox;
 			sexyentryBox.add(searchEntryMB);
+			
+			collapsebutton = gb.get_object("collapsebutton") as Gtk.Button;
+			var labelcoll =  gb.get_object("labelcoll") as Gtk.Label;
+			labelcoll.label = _("Collapse");
+			collapsebutton.clicked.connect( () => {
+				mediaBr.collapse_all();
+			});
 
 			///Textbuffer for the lyrics
 			var scrolledlyricsview = gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;
@@ -990,7 +993,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//Fullscreen window
 			this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);
-			//this.fullscreenwindow.realize();
 			this.fullscreenwindow.set_title("Xnoise media player - Fullscreen");
 			this.fullscreenwindow.set_icon_from_file(APPICON);
 			this.fullscreenwindow.set_events (Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
@@ -999,9 +1001,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//Toolbar shown in the fullscreen window
 			this.fullscreentoolbar = new FullscreenToolbar(fullscreenwindow);
 		}
-		catch (GLib.Error err) {
+		catch (GLib.Error e) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
-				Gtk.ButtonsType.OK, "Failed to build main window! \n" + err.message);
+			    Gtk.ButtonsType.OK, "Failed to build main window! \n" + e.message);
 			msg.run();
 			return;
 		}
@@ -1043,7 +1045,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public class NextButton : Gtk.Button {
 		private Main xn;
 		public NextButton() {
-			this.xn = Main.instance ();
+			this.xn = Main.instance;
 			var img = new Gtk.Image.from_stock(STOCK_MEDIA_NEXT, Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
@@ -1062,7 +1064,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public class PreviousButton : Gtk.Button {
 		private Main xn;
 		public PreviousButton() {
-			this.xn = Main.instance();
+			this.xn = Main.instance;
 			var img = new Gtk.Image.from_stock(STOCK_MEDIA_PREVIOUS, Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
@@ -1081,7 +1083,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public class StopButton : Gtk.Button {
 		private Main xn;
 		public StopButton() {
-			xn = Main.instance();
+			xn = Main.instance;
 			var img = new Gtk.Image.from_stock(STOCK_MEDIA_STOP, Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image (img);
 			this.relief = Gtk.ReliefStyle.NONE;
@@ -1103,7 +1105,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private Gtk.Image pauseImage;
 
 		public PlayPauseButton() {
-			xn = Main.instance();
+			xn = Main.instance;
 			this.can_focus = false;
 			this.relief = Gtk.ReliefStyle.NONE;
 
@@ -1130,57 +1132,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		 */
 		private void handle_click() {
 			if(global.current_uri == "") {
-				string uri = xn.tl.get_uri_for_current_position();
+				string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
 				if(uri != null) global.current_uri = uri;
 			}
 
-			if(global.track_state == TrackState.PLAYING) {
-				global.track_state = TrackState.PAUSED;
-			}
-			else if(global.track_state == TrackState.PAUSED) {
-				global.track_state = TrackState.PLAYING;
-			}
-
-/*
-			if((!xn.gPl.playing)&&
-			   ((xn.tl.tracklistmodel.not_empty())||(xn.gPl.Uri != ""))) {
-				//not running and track available set to play
-				if(xn.gPl.Uri == "") { // play selected track, if available....
-					weak TreeSelection ts = xn.tl.get_selection();
-					GLib.List<TreePath> pathlist = ts.get_selected_rows(null);
-					if(pathlist.nth_data(0)!=null) {
-				print("hc pathlist0 no null\n");
-						string uri = xn.tl.get_uri_for_current_position();
-						//string uri = xn.tl.get_uri_for_treepath(pathlist.nth_data(0));
-						TreePath tp = global.position_reference.get_path();
-				print("hc uri: %s\n", uri);
-						if((uri != null)&&(uri != "")) xn.tl.on_activated(uri, tp);
-						//xn.tl.on_activated(uri, pathlist.nth_data(0));
-					}
-					else {
-						//.....or play previous song
-						xn.main_window.change_song(Direction.PREVIOUS);
-					}
-				}
-				if(xn.tl.tracklistmodel.set_play_state()) {
-					// find active row, set state picture, bolden and set uri for gpl
-					xn.gPl.play();
-				}
-				else if(xn.tl.tracklistmodel.set_play_state_for_first_song()) {
-					xn.gPl.play();
-				}
+			if(global.track_state == GlobalInfo.TrackState.PLAYING) {
+				global.track_state = GlobalInfo.TrackState.PAUSED;
 			}
 			else {
-				int buf = xn.tl.tracklistmodel.iter_n_children(null);
-				if(buf > 0) {
-					xn.tl.tracklistmodel.set_pause_state();
-					xn.gPl.pause();
-				}
-				else { //if there is no track -> stop
-					stop();
-				}
+				global.track_state = GlobalInfo.TrackState.PLAYING;
 			}
-*/
 		}
 
 		public void update_picture() {
@@ -1208,7 +1169,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private Main xn;
 
 		public SongProgressBar() {
-			xn = Main.instance();
+			xn = Main.instance;
 
 			this.discrete_blocks = 10;
 			this.set_size_request(-1,18);
@@ -1314,7 +1275,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public class VolumeSliderButton : Gtk.VolumeButton {
 		private Main xn;
 		public VolumeSliderButton() {
-			this.xn = Main.instance();
+			this.xn = Main.instance;
 			this.can_focus = false;
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.set_value(0.3); //Default value
@@ -1346,7 +1307,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		private bool hide_lock;
 
 		public FullscreenToolbar(Gtk.Window fullscreenwindow) {
-			xn = Main.instance();
+			xn = Main.instance;
 			this.hide_lock = false;
 			this.fullscreenwindow = fullscreenwindow;
 			window = new Gtk.Window (Gtk.WindowType.POPUP);
@@ -1404,8 +1365,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.hide_lock = false;
 			fullscreenwindow.motion_notify_event.connect(on_pointer_motion);
 			return false;
-
 		}
+
 		private bool on_pointer_enter_toolbar (Gdk.EventCrossing ev) {
 			this.hide_lock = true;
 			if(hide_event_id != 0) GLib.Source.remove (hide_event_id);
@@ -1444,7 +1405,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		public class LeaveVideoFSButton : Gtk.Button {
 			private Main xn;
 			public LeaveVideoFSButton() {
-				this.xn = Main.instance();
+				this.xn = Main.instance;
 				var img = new Gtk.Image.from_stock(Gtk.STOCK_LEAVE_FULLSCREEN , Gtk.IconSize.SMALL_TOOLBAR);
 				this.set_image(img);
 				this.relief = Gtk.ReliefStyle.NONE;
@@ -1457,7 +1418,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				this.xn.main_window.videoscreen.window.unfullscreen();
 				this.xn.main_window.videoscreen.reparent(this.xn.main_window.videovbox);
 				this.xn.main_window.fullscreenwindow.hide_all();
-				this.xn.main_window.tracklistnotebook.set_current_page(1);
+				this.xn.main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 				this.xn.main_window.fullscreenwindowvisible = false;
 				this.xn.main_window.videovbox.show();
 				this.xn.main_window.fullscreentoolbar.hide();
@@ -1466,4 +1427,5 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 }
+
 

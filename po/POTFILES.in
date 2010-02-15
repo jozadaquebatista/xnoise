@@ -1,17 +1,33 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
-src/xnoise-misc.vala
-src/xnoise-about.vala        
-src/xnoise-music-browser.vala
-src/xnoise-app-starter.vala  
-src/xnoise-music-dir-dialog.vala
-src/xnoise-db-browser.vala   
-src/xnoise-parameter.vala
-src/xnoise-db-writer.vala    
-src/xnoise-settings-dialog.vala
-src/xnoise-gst-player.vala   
-src/xnoise-tag-reader.vala
-src/xnoise-main.vala         
-src/xnoise-tracklist.vala
-src/xnoise-main-window.vala
+data/misc/xnoise.desktop.in.in
+src/xnoise/xnoise-about.vala
+src/xnoise/xnoise-add-media-dialog.vala
+src/xnoise/xnoise-album-image.vala
+src/xnoise/xnoise-album-image-loader.vala
+src/xnoise/xnoise-app-starter.vala
+src/xnoise/xnoise-db-browser.vala
+src/xnoise/xnoise-db-creator.vala
+src/xnoise/xnoise-db-writer.vala
+src/xnoise/xnoise-global-information.vala
+src/xnoise/xnoise-gst-player.vala
+src/xnoise/xnoise-lyrics-loader.vala
+src/xnoise/xnoise-lyrics-view.vala
+src/xnoise/xnoise-main.vala
+src/xnoise/xnoise-main-window.vala
+src/xnoise/xnoise-media-browser.vala
+src/xnoise/xnoise-media-browser-model.vala
+src/xnoise/xnoise-media-importer.vala
+src/xnoise/xnoise-misc.vala
+src/xnoise/xnoise-parameter.vala
+src/xnoise/xnoise-plugin.vala
+src/xnoise/xnoise-plugin-loader.vala
+src/xnoise/xnoise-plugin-information.vala
+src/xnoise/xnoise-plugin-interface.vala
+src/xnoise/xnoise-plugin-manager-tree.vala
+src/xnoise/xnoise-settings-dialog.vala
+src/xnoise/xnoise-tag-reader.vala
+src/xnoise/xnoise-tracklist.vala
+src/xnoise/xnoise-tracklist-model.vala
+src/xnoise/xnoise-videoscreen.vala
 

@@ -1,6 +1,6 @@
-DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers
-
 SUBDIRS = testplugin titleToDecoration
+
+DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers notifications lyricsfly
 
 if ENABLE_LEOSLYRICS
   SUBDIRS += leoslyrics
@@ -10,6 +10,14 @@ if ENABLE_LASTFMCOVERS
   SUBDIRS += lastfmCovers
 endif
 
+if ENABLE_NOTIFICATIONS
+  SUBDIRS += notifications
+endif
+
+if ENABLE_LYRICSFLY
+  SUBDIRS += lyricsfly
+endif
+
 DISTCLEANFILES = \
 	Makefile.in \
 	$(NULL)
@@ -17,5 +25,4 @@ DISTCLEANFILES = \
 MAINTAINERCLEANFILES = \
 	Makefile.in \
 	$(NULL)
-
 

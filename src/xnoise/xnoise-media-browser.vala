@@ -1,6 +1,6 @@
 /* xnoise-media-browser.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,24 +36,34 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private MediaBrowserModel dummymodel;
 	private Main xn;
 	private bool dragging;
-	private bool use_treelines;
+	private bool _use_treelines = false;
+	public bool use_treelines {
+		get {
+			return _use_treelines;
+		}
+		set {
+			_use_treelines = value;
+			this.enable_tree_lines = value;
+		}
+	}
+
 	internal int fontsizeMB = 8;
 	public signal void sign_activated();
 	private const TargetEntry[] target_list = {
 		{"text/uri-list", 0, 0}
 	};// This is not a very long list but uris are so universal
 
-	public MediaBrowser(ref weak Main xn) {
-		this.xn = xn;
+	public MediaBrowser() {
+		this.xn = Main.instance;
 		par.iparams_register(this);
 		mediabrowsermodel = new MediaBrowserModel();
 		setup_view();
 		Idle.add(this.populate_model);
-		this.get_selection().set_mode(SelectionMode.MULTIPLE);		
+		this.get_selection().set_mode(SelectionMode.MULTIPLE);
 
 		Gtk.drag_source_set(
 			this,
-			Gdk.ModifierType.BUTTON1_MASK, 
+			Gdk.ModifierType.BUTTON1_MASK,
 			this.target_list,
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.MOVE);
@@ -61,7 +71,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.dragging = false;
 
 		//Signals
-		this.row_activated.connect(this.on_row_activated); 
+		this.row_activated.connect(this.on_row_activated);
 		this.drag_begin.connect(this.on_drag_begin);
 		this.drag_data_get.connect(this.on_drag_data_get);
 		this.drag_end.connect(this.on_drag_end);
@@ -77,25 +87,27 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.set_model(mediabrowsermodel);
 		return res;
 	}
+
 	// IParams functions
 	public void read_params_data() {
-		this.fontsizeMB = par.get_int_value("fontsizeMB");
+		if(par.get_int_value("use_treelines")==1)
+			use_treelines = true;
+		else
+			use_treelines = false;
 	}
 
 	public void write_params_data() {
-		if(this.use_treelines) {
+		if(this.use_treelines)
 			par.set_int_value("use_treelines", 1);
-		}
-		else {
+		else
 			par.set_int_value("use_treelines", 0);
-		}
 		par.set_int_value("fontsizeMB", fontsizeMB);
 	}
 	// end IParams functions
 
 	private const int KEY_CURSOR_RIGHT = 0xFF53;
 	private const int KEY_CURSOR_LEFT  = 0xFF51;
-	
+
 	private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
 //		print("%d\n",(int)e.keyval);
 		Gtk.TreeModel m;
@@ -119,12 +131,11 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			default:
 				break;
 		}
-		return false; 
+		return false;
 	}
-	
-	public void on_searchtext_changed(Gtk.Editable sender) { 
-		mediabrowsermodel.searchtext =
-		    ((Gtk.Entry)sender).get_text().down();
+
+	public void on_searchtext_changed(Gtk.Editable sender) {
+		mediabrowsermodel.searchtext = ((Gtk.Entry)sender).get_text().down();
 		change_model_data();
 		if((mediabrowsermodel.searchtext!="")&&
 		   (mediabrowsermodel.searchtext!=null)) {
@@ -134,18 +145,18 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath treepath = null;
-		Gtk.TreeViewColumn column;        
+		Gtk.TreeViewColumn column;
 		Gtk.TreeSelection selection = this.get_selection();
-		int x = (int)e.x; 
+		int x = (int)e.x;
 		int y = (int)e.y;
 		int cell_x, cell_y;
 
-		if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y)) 
+		if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y))
 			return true;
-		
+
 		switch(e.button) {
 			case 1: {
-				if(selection.count_selected_rows()<= 1) { 
+				if(selection.count_selected_rows()<= 1) {
 					return false;
 				}
 				else {
@@ -153,12 +164,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 						if(((e.state & Gdk.ModifierType.SHIFT_MASK)==Gdk.ModifierType.SHIFT_MASK)|
 						   ((e.state & Gdk.ModifierType.CONTROL_MASK)==Gdk.ModifierType.CONTROL_MASK)) {
 							selection.unselect_path(treepath);
-						} 
+						}
 						return true;
 					}
 					else if(!(((e.state & Gdk.ModifierType.SHIFT_MASK)==Gdk.ModifierType.SHIFT_MASK)|
 							((e.state & Gdk.ModifierType.CONTROL_MASK)==Gdk.ModifierType.CONTROL_MASK))) {
-						return true; 
+						return true;
 					}
 					return false;
 				}
@@ -168,9 +179,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				return false; //TODO check if this is right
 			}
 		}
-		if(!(selection.count_selected_rows()>0 )) 
+		if(!(selection.count_selected_rows()>0 ))
 			selection.select_path(treepath);
-		return false; 
+		return false;
 	}
 
 
@@ -189,13 +200,13 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		}
 
 		Gtk.TreeSelection selection = this.get_selection();
-		int x = (int)e.x; 
+		int x = (int)e.x;
 		int y = (int)e.y;
 		if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y)) return false;
 		selection.unselect_all();
 		selection.select_path(treepath);
 
-		return false; 
+		return false;
 	}
 
 	private void on_drag_begin(Gtk.Widget sender, DragContext context) {
@@ -213,15 +224,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime) {
 		string[] uris = {};
-		List<weak TreePath> treepaths;
-		weak Gtk.TreeSelection sel;
+		List<unowned TreePath> treepaths;
+		unowned Gtk.TreeSelection sel;
 		sel = this.get_selection();
 		treepaths = sel.get_selected_rows(null);
 		var dbb = new DbBrowser();
 
-		foreach(weak TreePath treepath in treepaths) {
+		foreach(unowned TreePath treepath in treepaths) {
 			string[] l = mediabrowsermodel.build_uri_list_for_treepath(treepath, ref dbb);
-			foreach(weak string u in l) {
+			foreach(unowned string u in l) {
 				uris += u;
 			}
 		}
@@ -229,12 +240,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		selection.set_uris(uris);
 	}
 
-	private void on_drag_end(Gtk.Widget sender, Gdk.DragContext context) { 
+	private void on_drag_end(Gtk.Widget sender, Gdk.DragContext context) {
 		this.dragging = false;
 		this.unset_rows_drag_dest();
 		Gtk.drag_dest_set(this,
 		                  Gtk.DestDefaults.ALL,
-		                  this.target_list, 
+		                  this.target_list,
 		                  Gdk.DragAction.COPY|
 		                  Gdk.DragAction.MOVE
 		                  );
@@ -262,37 +273,32 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return false;
 	}
 
-	private void setup_view() {	
-		if(fontsizeMB < 7) fontsizeMB = 7;
+	private void setup_view() {
+		fontsizeMB = par.get_int_value("fontsizeMB");
+		if((fontsizeMB < 7)||(fontsizeMB > 14)) fontsizeMB = 7;
 
 		this.set_size_request (300,500);
 		var renderer = new CellRendererText();
-		renderer.font = "Sans " + fontsizeMB.to_string(); 
+		renderer.font = "Sans " + fontsizeMB.to_string();
 //		renderer.family = "Sans"; //TODO: Does not work!?
 //		renderer.size = 9; //TODO: Does not work!?
 		renderer.set_fixed_height_from_font(1);
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.stock_id = Gtk.STOCK_GO_FORWARD;
-		
+
 		var column = new TreeViewColumn();
-		
+
 		column.pack_start(pixbufRenderer, false);
 		column.add_attribute(pixbufRenderer, "pixbuf", 0);
 		column.pack_start(renderer, false);
 		column.add_attribute(renderer, "text", 1); // no markup!!
 		this.insert_column(column, -1);
 
-		if(par.get_int_value("use_treelines")==1) 
-			use_treelines=true;
-		else 
-			use_treelines=false;
-			
-		this.enable_tree_lines = use_treelines;
 		this.headers_visible = false;
 		this.enable_search = true;
 		this.set_row_separator_func((m, iter) => {
 			int sepatator = 0;
-			m.get(iter, BrowserColumn.DRAW_SEPTR, ref sepatator);
+			m.get(iter, MediaBrowserModel.Column.DRAW_SEPTR, ref sepatator);
 			if(sepatator==0) return false;
 			return true;
 		});

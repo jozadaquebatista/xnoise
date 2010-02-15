@@ -1,6 +1,6 @@
 /* xnoise-media-browser-model.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +34,23 @@
 using Gtk;
 
 public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
+
+	public enum Column {
+		ICON = 0,
+		VIS_TEXT,
+		DB_ID,
+		MEDIATYPE,
+		COLL_TYPE,
+		DRAW_SEPTR,
+		N_COLUMNS
+	}
+
+	public enum CollectionType {
+		UNKNOWN = 0,
+		HIERARCHICAL = 1,
+		LISTED = 2
+	}
+
 	private GLib.Type[] col_types = new GLib.Type[] {
 		typeof(Gdk.Pixbuf), //ICON
 		typeof(string),     //VIS_TEXT
@@ -42,6 +59,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		typeof(int),        //COLL_TYPE
 		typeof(int)         //DRAW SEPARATOR
 	};
+
 	public string searchtext = "";
 	private Gdk.Pixbuf artist_pixb;
 	private Gdk.Pixbuf album_pixb;
@@ -63,45 +81,43 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			Gtk.Invisible w = new Gtk.Invisible();
 			videos_pixb  = w.render_icon(Gtk.STOCK_MEDIA_RECORD, IconSize.BUTTON, null);
 			radios_pixb  = w.render_icon(Gtk.STOCK_CONNECT, IconSize.BUTTON, null);
-			
+
 			w = new Gtk.Invisible();
-			video_pixb  = w.render_icon(Gtk.STOCK_FILE, IconSize.BUTTON, null); 
+			video_pixb  = w.render_icon(Gtk.STOCK_FILE, IconSize.BUTTON, null);
 		}
 		catch (GLib.Error e) {
 			print("Error: %s\n",e.message);
 		}
-	}	
+	}
 
 	private void prepend_separator() {
 		TreeIter iter;
-		this.prepend(out iter, null); 
-		this.set(iter, BrowserColumn.DRAW_SEPTR, 1, -1); 
+		this.prepend(out iter, null);
+		this.set(iter, Column.DRAW_SEPTR, 1, -1);
 	}
 
 	private void put_videos_to_model() {
 		DbBrowser dbb = new DbBrowser();
 		if(!dbb.videos_available()) return;
 		TreeIter iter_videos, iter_singlevideo;
-		this.prepend(out iter_videos, null); 
-		this.set(iter_videos,  	
-		                      BrowserColumn.ICON, videos_pixb,
-		                      BrowserColumn.VIS_TEXT, "Videos",
-		                      BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
-		                      BrowserColumn.DRAW_SEPTR, 0,
-		                      -1
-		                      );
+		this.prepend(out iter_videos, null);
+		this.set(iter_videos,
+		         Column.ICON, videos_pixb,
+		         Column.VIS_TEXT, "Videos",
+		         Column.COLL_TYPE, CollectionType.LISTED,
+		         Column.DRAW_SEPTR, 0
+		         );
 		var tmis = dbb.get_video_data(ref searchtext);
-		foreach(weak TitleMtypeId tmi in tmis) {
-			this.prepend(out iter_singlevideo, iter_videos); 
-			this.set(iter_singlevideo,  	
-			                      BrowserColumn.ICON, video_pixb,
-			                      BrowserColumn.VIS_TEXT, tmi.name,
-			                      BrowserColumn.DB_ID, tmi.id,
-			                      BrowserColumn.MEDIATYPE , (int) MediaType.VIDEO,
-			                      BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
-			                      BrowserColumn.DRAW_SEPTR, 0,
-			                      -1
-			                      ); 
+		foreach(unowned MediaData tmi in tmis) {
+			this.prepend(out iter_singlevideo, iter_videos);
+			this.set(iter_singlevideo,
+			         Column.ICON, video_pixb,
+			         Column.VIS_TEXT, tmi.name,
+			         Column.DB_ID, tmi.id,
+			         Column.MEDIATYPE , (int) MediaType.VIDEO,
+			         Column.COLL_TYPE, CollectionType.LISTED,
+			         Column.DRAW_SEPTR, 0
+			         );
 		}
 		tmis = null;
 	}
@@ -115,28 +131,26 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private void put_streams_to_model() {
 		DbBrowser dbb = new DbBrowser();
 		if(!dbb.streams_available()) return;
-		
+
 		TreeIter iter_radios, iter_singleradios;
-		this.prepend(out iter_radios, null); 
-		this.set(iter_radios,  	
-		              BrowserColumn.ICON, radios_pixb,
-		              BrowserColumn.VIS_TEXT, "Streams",
-		              BrowserColumn.COLL_TYPE, BrowserCollectionType.LISTED,
-		              BrowserColumn.DRAW_SEPTR, 0,
-		              -1
-		              );
+		this.prepend(out iter_radios, null);
+		this.set(iter_radios,
+		         Column.ICON, radios_pixb,
+		         Column.VIS_TEXT, "Streams",
+		         Column.COLL_TYPE, CollectionType.LISTED,
+		         Column.DRAW_SEPTR, 0
+		         );
 		var tmis = dbb.get_stream_data(ref searchtext);
-		foreach(weak TitleMtypeId tmi in tmis) {
-			this.prepend(out iter_singleradios, iter_radios); 
-			this.set(iter_singleradios,  	
-			              BrowserColumn.ICON,        radios_pixb,
-			              BrowserColumn.VIS_TEXT,    tmi.name,
-			              BrowserColumn.DB_ID,       tmi.id,
-			              BrowserColumn.MEDIATYPE ,  (int)MediaType.STREAM,
-			              BrowserColumn.COLL_TYPE,   BrowserCollectionType.LISTED,
-			              BrowserColumn.DRAW_SEPTR,  0,
-			              -1
-			              ); 
+		foreach(unowned MediaData tmi in tmis) {
+			this.prepend(out iter_singleradios, iter_radios);
+			this.set(iter_singleradios,
+			         Column.ICON,        radios_pixb,
+			         Column.VIS_TEXT,    tmi.name,
+			         Column.DB_ID,       tmi.id,
+			         Column.MEDIATYPE ,  (int)MediaType.STREAM,
+			         Column.COLL_TYPE,   CollectionType.LISTED,
+			         Column.DRAW_SEPTR,  0
+			         );
 		}
 	}
 
@@ -155,56 +169,50 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	private void put_hierarchical_data_to_model() {
-		DbBrowser artists_browser = new DbBrowser();
-		DbBrowser albums_browser  = new DbBrowser();
-		DbBrowser titles_browser  = new DbBrowser();
-
+		var dbb = new DbBrowser();
+		
 		string[] artistArray;
 		string[] albumArray;
 		string[] titleArray;
-		TitleMtypeId[] tmis;
-		
-		TreeIter iter_artist, iter_album, iter_title;	
-		artistArray = artists_browser.get_artists(ref searchtext);
-		foreach(weak string artist in artistArray) { 	              //ARTISTS
-			this.prepend(out iter_artist, null); 
-			this.set(iter_artist,  	
-			                      BrowserColumn.ICON, artist_pixb,		
-			                      BrowserColumn.VIS_TEXT, artist,
-			                      BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
-			                      BrowserColumn.DRAW_SEPTR, 0,
-			                      -1); 
-			albumArray = albums_browser.get_albums(artist, ref searchtext);
-			foreach(weak string album in albumArray) { 			    //ALBUMS
-				this.prepend(out iter_album, iter_artist); 
-				this.set(iter_album,  	
-				                      BrowserColumn.ICON, album_pixb,		
-				                      BrowserColumn.VIS_TEXT, album,
-				                      BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
-				                      BrowserColumn.DRAW_SEPTR, 0,	
-				                      -1); 
-				tmis = titles_browser.get_titles_with_mediatypes_and_ids(artist, album, ref searchtext);
-				foreach(weak TitleMtypeId tmi in tmis) {	         //TITLES WITH MEDIATYPES
-					this.prepend(out iter_title, iter_album); 
+		MediaData[] tmis;
+
+		TreeIter iter_artist, iter_album, iter_title;
+		artistArray = dbb.get_artists(ref searchtext);
+		foreach(string artist in artistArray) { 	              //ARTISTS
+			this.prepend(out iter_artist, null);
+			this.set(iter_artist,
+			         Column.ICON, artist_pixb,
+			         Column.VIS_TEXT, artist,
+			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+			         Column.DRAW_SEPTR, 0);
+			albumArray = dbb.get_albums(artist, ref searchtext);
+			foreach(string album in albumArray) { 			    //ALBUMS
+				this.prepend(out iter_album, iter_artist);
+				this.set(iter_album,
+				         Column.ICON, album_pixb,
+				         Column.VIS_TEXT, album,
+				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+				         Column.DRAW_SEPTR, 0);
+				tmis = dbb.get_titles_with_mediatypes_and_ids(artist, album, ref searchtext);
+				foreach(unowned MediaData tmi in tmis) {	         //TITLES WITH MEDIATYPES
+					this.prepend(out iter_title, iter_album);
 					if(tmi.mediatype == MediaType.AUDIO) {
-						this.set(iter_title,  	
-						                      BrowserColumn.ICON, title_pixb,		
-						                      BrowserColumn.VIS_TEXT, tmi.name,
-						                      BrowserColumn.DB_ID, tmi.id,
-						                      BrowserColumn.MEDIATYPE , (int)tmi.mediatype,
-						                      BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
-						                      BrowserColumn.DRAW_SEPTR, 0,
-						                      -1);
+						this.set(iter_title,
+						         Column.ICON, title_pixb,
+						         Column.VIS_TEXT, tmi.name,
+						         Column.DB_ID, tmi.id,
+						         Column.MEDIATYPE , (int)tmi.mediatype,
+						         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+						         Column.DRAW_SEPTR, 0);
 					}
 					else {
-						this.set(iter_title,  	
-						                      BrowserColumn.ICON, video_pixb,		
-						                      BrowserColumn.VIS_TEXT, tmi.name,
-						                      BrowserColumn.DB_ID, tmi.id,
-						                      BrowserColumn.MEDIATYPE , (int)tmi.mediatype,
-						                      BrowserColumn.COLL_TYPE, BrowserCollectionType.HIERARCHICAL,
-						                      BrowserColumn.DRAW_SEPTR, 0,
-						                      -1);
+						this.set(iter_title,
+						         Column.ICON, video_pixb,
+						         Column.VIS_TEXT, tmi.name,
+						         Column.DB_ID, tmi.id,
+						         Column.MEDIATYPE , (int)tmi.mediatype,
+						         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+						         Column.DRAW_SEPTR, 0);
 					}
 				}
 			}
@@ -220,12 +228,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		int dbid = -1;
 		MediaType mtype = MediaType.UNKNOWN;
 		TreeIter iter;
-		TrackData[] tdata = {}; 
+		TrackData[] tdata = {};
 		this.get_iter(out iter, treepath);
-		this.get(iter, 
-		                      BrowserColumn.DB_ID, ref dbid,
-		                      BrowserColumn.MEDIATYPE, ref mtype
-		              );
+		this.get(iter,
+		         Column.DB_ID, ref dbid,
+		         Column.MEDIATYPE, ref mtype
+		         );
 		if(dbid!=-1) {
 			dbb = new DbBrowser();
 			TrackData td;
@@ -241,83 +249,87 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				default:
 					break;
 			}
-		} 
+		}
 
 		return tdata;
 	}
-	
+
 	public TrackData[] get_trackdata_hierarchical(Gtk.TreePath treepath) {
 		TreeIter iter, iterChild;
 		int dbid = -1;
-		TrackData[] tdata = {}; 
+		TrackData[] tdata = {};
 		switch(treepath.get_depth()) {
 			case 1: //ARTIST (this case is currently not used)
 				break;
 			case 2: //ALBUM
 				this.get_iter(out iter, treepath);
-				
+
 				var dbb = new DbBrowser();
-				
+
 				for(int i = 0; i < this.iter_n_children(iter); i++) {
 					dbid = -1;
 					this.iter_nth_child(out iterChild, iter, i);
-					this.get(iterChild, BrowserColumn.DB_ID, ref dbid);
-					if(dbid==-1) continue;
+					this.get(iterChild, Column.DB_ID, ref dbid);
+					if(dbid==-1)
+						continue;
 					TrackData td;
-					if(dbb.get_trackdata_for_id(dbid, out td)) tdata += td;
+					if(dbb.get_trackdata_for_id(dbid, out td)) 
+						tdata += td;
 				}
 				break;
 			case 3: //TITLE
 				dbid = -1;
 				this.get_iter(out iter, treepath);
-				this.get(iter, BrowserColumn.DB_ID, ref dbid);
-				if(dbid==-1) break;
-				
+				this.get(iter, Column.DB_ID, ref dbid);
+				if(dbid==-1) 
+					break;
+
 				var dbb = new DbBrowser();
-				
+
 				TrackData td;
-				if(dbb.get_trackdata_for_id(dbid, out td)) tdata += td;
+				if(dbb.get_trackdata_for_id(dbid, out td)) 
+					tdata += td;
 				break;
-		}		
+		}
 		return tdata;
 	}
-	
+
 	public TrackData[] get_trackdata_for_treepath(Gtk.TreePath treepath) {
 		TreeIter iter;
-		BrowserCollectionType br_ct = BrowserCollectionType.UNKNOWN;
-		TrackData[] tdata = {}; 
+		CollectionType br_ct = CollectionType.UNKNOWN;
+		TrackData[] tdata = {};
 		this.get_iter(out iter, treepath);
-		this.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
-		if(br_ct == BrowserCollectionType.LISTED) {
+		this.get(iter, Column.COLL_TYPE, ref br_ct);
+		if(br_ct == CollectionType.LISTED) {
 			return get_trackdata_listed(treepath);
 		}
-		else if(br_ct == BrowserCollectionType.HIERARCHICAL) {
+		else if(br_ct == CollectionType.HIERARCHICAL) {
 			return get_trackdata_hierarchical(treepath);
 		}
 		return tdata;
 	}
 
 	public string[] build_uri_list_for_treepath(Gtk.TreePath treepath, ref DbBrowser dbb) {
-		TreeIter iter, iterChild, iterChildChild; 
+		TreeIter iter, iterChild, iterChildChild;
 		string[] urilist = {};
 		MediaType mtype = MediaType.UNKNOWN;
 		int dbid = -1;
 		string uri;
-		BrowserCollectionType br_ct = BrowserCollectionType.UNKNOWN;
-		
+		CollectionType br_ct = CollectionType.UNKNOWN;
+
 		switch(treepath.get_depth()) {
 			case 1:
 				this.get_iter(out iter, treepath);
 
-				this.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
-				if(br_ct == BrowserCollectionType.LISTED) {
+				this.get(iter, Column.COLL_TYPE, ref br_ct);
+				if(br_ct == CollectionType.LISTED) {
 					dbid = -1;
 					for(int i = 0; i < this.iter_n_children(iter); i++) {
 						dbid = -1;
 						this.iter_nth_child(out iterChild, iter, i);
-						this.get(iterChild, 
-						         BrowserColumn.DB_ID, ref dbid,
-						         BrowserColumn.MEDIATYPE, ref mtype
+						this.get(iterChild,
+						         Column.DB_ID, ref dbid,
+						         Column.MEDIATYPE, ref mtype
 						         );
 						if(dbid==-1) break;
 						switch(mtype) {
@@ -334,13 +346,13 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						}
 					}
 				}
-				else if(br_ct == BrowserCollectionType.HIERARCHICAL) {
+				else if(br_ct == CollectionType.HIERARCHICAL) {
 					for(int i = 0; i < this.iter_n_children(iter); i++) {
 						this.iter_nth_child(out iterChild, iter, i);
 						for(int j = 0; j<this.iter_n_children(iterChild); j++) {
 							dbid = -1;
 							this.iter_nth_child(out iterChildChild, iterChild, j);
-							this.get(iterChildChild, BrowserColumn.DB_ID, ref dbid);
+							this.get(iterChildChild, Column.DB_ID, ref dbid);
 							if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 						}
 					}
@@ -348,13 +360,13 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				break;
 			case 2:
 				this.get_iter(out iter, treepath);
-				this.get(iter, BrowserColumn.COLL_TYPE, ref br_ct);
-				if(br_ct == BrowserCollectionType.LISTED) {
+				this.get(iter, Column.COLL_TYPE, ref br_ct);
+				if(br_ct == CollectionType.LISTED) {
 					dbid = -1;
 					mtype = MediaType.UNKNOWN;
-					this.get(iter, 
-					         BrowserColumn.DB_ID, ref dbid,
-					         BrowserColumn.MEDIATYPE, ref mtype
+					this.get(iter,
+					         Column.DB_ID, ref dbid,
+					         Column.MEDIATYPE, ref mtype
 					         );
 					if(dbid==-1) break;
 						switch(mtype) {
@@ -372,12 +384,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 							break;
 					}
 				}
-				else if(br_ct == BrowserCollectionType.HIERARCHICAL) {
-					
+				else if(br_ct == CollectionType.HIERARCHICAL) {
+
 					for(int i = 0; i < this.iter_n_children(iter); i++) {
 						dbid = -1;
 						this.iter_nth_child(out iterChild, iter, i);
-						this.get(iterChild, BrowserColumn.DB_ID, ref dbid);
+						this.get(iterChild, Column.DB_ID, ref dbid);
 						if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 					}
 				}
@@ -385,11 +397,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			case 3: //TITLE
 				dbid = -1;
 				this.get_iter(out iter, treepath);
-				this.get(iter, BrowserColumn.DB_ID, ref dbid);
+				this.get(iter, Column.DB_ID, ref dbid);
 				if(dbid==-1) break;
 				if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 				break;
 		}
-		return urilist;		
+		return urilist;
 	}
 }

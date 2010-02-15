@@ -1,6 +1,6 @@
 /* xnoise-tag-reader.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,25 +29,30 @@
  */
 
 
-public class Xnoise.TagReader : GLib.Object {
+public class Xnoise.TagReader {
 //	public TagReader() {
 //		print("construct TagReader\n");
 //	}
 	public TrackData read_tag(string filename) {
-		TrackData td; 
+		TrackData td;
 		TagLib.File taglib_file = null;
 		taglib_file = new TagLib.File(filename);
 		if(taglib_file!=null) {
-			weak TagLib.Tag t = taglib_file.tag; 
+			unowned TagLib.Tag t              = taglib_file.tag;
+			unowned TagLib.AudioProperties ap = taglib_file.audioproperties;
 			td = new TrackData();
 			try {
-				td.Artist = t.artist;
-				td.Title = t.title;
-				td.Album = t.album;
-				td.Genre = t.genre;
-				td.Year = t.year;
+				// from class Tag
+				td.Artist      = t.artist;
+				td.Title       = t.title;
+				td.Album       = t.album;
+				td.Genre       = t.genre;
+				td.Year        = t.year;
 				td.Tracknumber = t.track;
 				td.Mediatype   = MediaType.AUDIO;
+				// from class AudioProperties
+				td.Length      = (int32)ap.length;
+				td.Bitrate     = ap.bitrate;
 			}
 			finally {
 				if((td.Artist == "")||(td.Artist == null)) td.Artist = "unknown artist";
@@ -59,15 +64,19 @@ public class Xnoise.TagReader : GLib.Object {
 			}
 		}
 		else {
-			td = new TrackData(); 
+			td = new TrackData();
+
 			td.Artist = "unknown artist";
 			td.Title  = "unknown title";
 			td.Album  = "unknown album";
 			td.Genre  = "unknown genre";
 			td.Tracknumber = (uint)0;
 			td.Mediatype   = MediaType.UNKNOWN;
+
+			td.Length = (int32)0;
+			td.Bitrate = 0;
 		}
-		
+
 		if(td.Title  == "unknown title") {
 			td.Title = GLib.Filename.display_basename(filename);
 		}

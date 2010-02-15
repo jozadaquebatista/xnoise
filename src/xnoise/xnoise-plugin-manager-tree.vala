@@ -1,6 +1,6 @@
 /* xnoise-plugin-manager-tree.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,16 +41,16 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 	}
 
 	private Main xn;
-	
-	//TODO: File vala bug: if this is called sign_plugin_active_state_changed compilation fails
-	public signal void sign_plugin_activestate_changed(string name); 
 
-	public PluginManagerTree(ref Main xn) {
-		this.xn = xn;
+	//TODO: File vala bug: if this is called sign_plugin_active_state_changed compilation fails
+	public signal void sign_plugin_activestate_changed(string name);
+
+	public PluginManagerTree() {
+		this.xn = Main.instance;
 		this.create_model();
 		this.create_view();
 	}
-	
+
 //	~PluginManagerTree() {
 //		print("destruct PluginGuiElement\n");
 //	}
@@ -66,10 +66,10 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 			string name;
 			listmodel.get(iter, PluginManagerColumn.TEXT, out name);
 			bool plugin_state = this.xn.plugin_loader.plugin_htable.lookup(name).activated;
-			
+
 			if(!plugin_state) this.xn.plugin_loader.activate_single_plugin(name);
-			else this.xn.plugin_loader.deactivate_single_plugin(name); 
-			listmodel.set(iter, 
+			else this.xn.plugin_loader.deactivate_single_plugin(name);
+			listmodel.set(iter,
 			              PluginManagerColumn.TOGGLE, !plugin_state);
 			sign_plugin_activestate_changed(name);
 		});
@@ -113,15 +113,15 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				website     = kf.get_string(group, "website");
 				license     = kf.get_string(group, "license");
 				copyright   = kf.get_string(group, "copyright");
-				
+
 				var invisible = new Gtk.Invisible();
 				Gdk.Pixbuf pixbuf = invisible.render_icon(Gtk.STOCK_UNDO , IconSize.BUTTON, null); //TODO: use plugins' icons
-				
+
 				TreeIter iter;
 				listmodel.append(out iter);
-				listmodel.set(iter, 
-				              PluginManagerColumn.TOGGLE, this.xn.plugin_loader.plugin_htable.lookup(name).activated, 
-				              PluginManagerColumn.ICON, pixbuf, 
+				listmodel.set(iter,
+				              PluginManagerColumn.TOGGLE, this.xn.plugin_loader.plugin_htable.lookup(name).activated,
+				              PluginManagerColumn.ICON, pixbuf,
 				              PluginManagerColumn.TEXT, name);
 			}
 			catch(Error e) {
@@ -131,9 +131,9 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 	}
 
 	private void create_model() {
-		listmodel = new ListStore(PluginManagerColumn.N_COLUMNS, 
-		                          typeof(bool), 
-		                          typeof(Gdk.Pixbuf), 
+		listmodel = new ListStore(PluginManagerColumn.N_COLUMNS,
+		                          typeof(bool),
+		                          typeof(Gdk.Pixbuf),
 		                          typeof(string));
 	}
 }

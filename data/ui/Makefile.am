@@ -13,7 +13,6 @@ ui_DATA = \
 		genre.png \
 		guitar.png \
 		note.png \
-		working_animation.gif \
 		$(NULL)	
 
 
@@ -31,6 +30,4 @@ MAINTAINERCLEANFILES = \
 	Makefile.in \
 	$(NULL)
 	
-
-
 

@@ -1,6 +1,6 @@
 /* xnoise-main.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ public class Xnoise.Main : GLib.Object {
 	public TrackListModel tlm;
 	public PluginLoader plugin_loader;
 	public GstPlayer gPl;
+	public static bool show_plugin_state;
 
 	public Main() {
 
@@ -47,16 +48,35 @@ public class Xnoise.Main : GLib.Object {
 
 		gPl = new GstPlayer();
 
-		plugin_loader = new PluginLoader(ref this);
+		plugin_loader = new PluginLoader();
 		tlm = new TrackListModel();
 		tl = new TrackList();
-		main_window = new MainWindow(ref this);
+		main_window = new MainWindow();
 
 		plugin_loader.load_all();
 
 		foreach(string name in par.get_string_list_value("activated_plugins")) {
-			if(plugin_loader.activate_single_plugin(name))
-				print("%s plugin is activated.\n", name);
+			if(!plugin_loader.activate_single_plugin(name)) {
+				print("\t%s plugin failed to activate!\n", name);
+			}
+		}
+
+		if(show_plugin_state) print(" PLUGIN INFO:\n");
+		foreach(string name in plugin_loader.plugin_htable.get_keys()) {
+			if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).loaded))
+				if(show_plugin_state) print("\t%s loaded\n", name);
+			else {
+				print("\t%s NOT loaded\n\n", name);
+				continue;
+			}
+			if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).activated)) {
+				print("\t%s activated\n", name);
+			}
+			else {
+				if(show_plugin_state) print("\t%s NOT activated\n", name);
+			}
+
+			if(show_plugin_state) print("\n");
 		}
 
 		connect_signals();
@@ -68,7 +88,7 @@ public class Xnoise.Main : GLib.Object {
 		gPl.sign_tag_changed.connect(main_window.set_displayed_title);
 		gPl.sign_video_playing.connect( () => { //handle stop signal from gst player
 			if(!main_window.fullscreenwindowvisible)
-				main_window.tracklistnotebook.set_current_page(1);
+				main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 		});
 
 		main_window.sign_pos_changed.connect((main_window, fraction) => {
@@ -89,19 +109,25 @@ public class Xnoise.Main : GLib.Object {
 		// TODO: update this function
 		print("add_track_to_gst_player\n");
 		global.current_uri = uri;
-		global.track_state = TrackState.PLAYING;
+		global.track_state = GlobalInfo.TrackState.PLAYING;
 		//this.gPl.playSong();
 	}
 
-	public static Main instance() {
+	public static Main instance {
+/*
 		if (_instance == null)
 			_instance = new Main();
-		return _instance;
+*/
+		get {
+			if(_instance == null)
+				_instance = new Main();
+			return _instance;
+		}
 	}
 
 	private static void on_posix_finish(int signal_number) {
 		//print("Posix signal received (%d)\ncleaning up...\n", signal_number);
-		instance().quit();
+		instance.quit();
 	}
 
 	private void save_activated_plugins() {

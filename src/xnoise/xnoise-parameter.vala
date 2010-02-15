@@ -1,6 +1,6 @@
 /* xnoise-parameter.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,24 +29,6 @@
  */
 
 public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
-	private const string default_content = """
-[settings_int]
-posY=25
-posX=0
-height=575
-fontsizeMB=0
-hp_position=227
-width=1024
-use_treelines=0
-repeatstate=0
-
-[settings_double]
-volume=0.29999999999999999
-
-[settings_string]
-activated_plugins=TitleToDecoration
-""";
-
 	private const string INIFILE   = "xnoise.ini";
 	private const string INIFOLDER = ".xnoise";
 	private List<IParams> IParams_implementers = new GLib.List<IParams>();
@@ -80,55 +62,63 @@ activated_plugins=TitleToDecoration
 			//write settings of type integer to hashtable
 			string[] groups;
 			groups = kf.get_keys(settings_int);
-			foreach(string s in groups) 
+			foreach(string s in groups)
 				ht_int.insert(s, kf.get_integer(settings_int, s));
 			//write settings of type double to hashtable
 			groups = kf.get_keys(settings_double);
-			foreach(string s in groups) 
+			foreach(string s in groups)
 				ht_double.insert(s, kf.get_double(settings_double, s));
 			//write settings of type string to hashtable
 			groups = kf.get_keys(settings_string);
 			foreach(string s in groups) {
 				ht_string.insert(s, kf.get_string(settings_string, s));
-			}					
-		} 
+			}
+		}
 		catch(GLib.Error ex) {
 			return;
 		}
 	}
-	
+
 	public void set_start_parameters_in_implementors() {
-		foreach(weak IParams ip in IParams_implementers) {
+		foreach(unowned IParams ip in IParams_implementers) {
 			ip.read_params_data();
 		}
 	}
 
 	public void write_all_parameters_to_file() {
-		FileStream stream = GLib.FileStream.open(build_file_name(), "w");
 		size_t length;
+
 		KeyFile kf = new GLib.KeyFile();
 
-		foreach(weak IParams ip in IParams_implementers) 
+		foreach(unowned IParams ip in IParams_implementers)
 			ip.write_params_data();
-		
-		foreach(string key in ht_int.get_keys()) 
+
+		foreach(string key in ht_int.get_keys())
 			kf.set_integer(settings_int, key, ht_int.lookup(key));
-		
-		foreach(string key in ht_double.get_keys()) 
+
+		foreach(string key in ht_double.get_keys())
 			kf.set_double(settings_double, key, ht_double.lookup(key));
-		
-		foreach(string key in ht_string.get_keys()) 
+
+		foreach(string key in ht_string.get_keys())
 			kf.set_string(settings_string, key, ht_string.lookup(key));
-		
-		stream.puts(kf.to_data(out length));
+
+		File f = File.new_for_path(build_file_name());
+		try {
+			var fs = f.replace(null, false, FileCreateFlags.NONE, null);
+			var ds = new DataOutputStream(fs);
+			ds.put_string(kf.to_data(out length), null);
+		}
+		catch(GLib.Error e) {
+			print("%s\n", e.message);
+		}
 	}
 
 
 	//  GETTERS FOR THE HASH TABLE
-	//Type int	
+	//Type int
 	public int get_int_value(string key) {
 		int? val = ht_int.lookup(key);
-		if(val!=null) 
+		if(val!=null)
 			return val;
 		else
 			return 0;
@@ -136,27 +126,27 @@ activated_plugins=TitleToDecoration
 	//Type double
 	public double get_double_value(string key) {
 		double? val = ht_double.lookup(key);
-		if(val!=null) 
+		if(val!=null)
 			return val;
 		else
-			return 0.0;		
+			return 0.0;
 	}
 	//Type string list
 	public string[]? get_string_list_value(string key) {
 		string? buffer = ht_string.lookup(key);
-		if((buffer==null)||(buffer=="#00")) 
+		if((buffer==null)||(buffer=="#00"))
 			return null;
-		string[] list = (buffer).split(";", 50);
-		return list;	
+		string[] list = buffer.split(";", 50);
+		return list;
 	}
 	//Type string
 	public string get_string_value(string key) {
 		string val = ht_string.lookup(key);
-		return val == null ? "" : val;		
+		return val == null ? "" : val;
 	}
-	
-	
-	
+
+
+
 	//  SETTERS FOR THE HASH TABLE
 	//Type int
 	public void set_int_value(string key, int value) {
@@ -181,7 +171,7 @@ activated_plugins=TitleToDecoration
 		else {
 			buffer = "#00";
 		}
-			
+
 		if(buffer!=null) ht_string.insert(key,buffer);
 	}
 	//Type string
@@ -201,19 +191,19 @@ activated_plugins=TitleToDecoration
 
 	private string? create_default_if_not_exist(File f) {
 		if(!f.query_exists(null)) {
-			FileStream stream = FileStream.open(f.get_path(), "w");
-			if(stream != null) {
-				stream.printf(default_content);
+			try {
+				var fs = f.create(FileCreateFlags.NONE, null);
+				var ds = new DataOutputStream(fs);
+				ds.put_string(default_content, null);
 			}
-			else {
-				print("Error creating default ini file in %s \n", f.get_path());
-				return null;
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
 			}
 		}
 		return f.get_path();
 	}
 
-	private bool check_file_folder() { 
+	private bool check_file_folder() {
 		File home_dir = File.new_for_path(Environment.get_home_dir());
 		File xnoise_home = home_dir.get_child(".xnoise");
 		if(!xnoise_home.query_exists(null)) {
@@ -226,5 +216,26 @@ activated_plugins=TitleToDecoration
 		}
 		return true;
 	}
+
+private const string default_content = """
+[settings_int]
+use_length_column=0
+use_tracknumber_column=1
+posY=0
+posX=0
+height=575
+fontsizeMB=8
+hp_position=227
+width=1024
+use_treelines=0
+repeatstate=2
+show_album_images=1
+
+[settings_double]
+volume=0.70000000000000000
+
+[settings_string]
+activated_plugins=TitleToDecoration
+""";
 }
 

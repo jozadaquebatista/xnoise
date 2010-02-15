@@ -31,30 +31,26 @@
 using Xnoise;
 using Gtk;
 
-public class TitleToDecoration : GLib.Object, IPlugin {
-	public Xnoise.Main xn { get; set; }
-	//private Gtk.Button b;
+public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
+	public Main xn { get; set; }
 	public string name { 
 		get {
 			return "TitleToDecoration";
 		} 
 	}
-//    construct { // In this case it has to be a "construct" method
-//    	print("TitleToDecoration construction\n");
-//    }
-    
+
 	public bool init() {
 		xn.gPl.sign_tag_changed += write_title_to_decoration;
-    	return true;
-    }
-
-	private void write_title_to_decoration(string newuri) {
+		return true;
+	}
+	
+	private void write_title_to_decoration(ref string newuri, string? x, string? y) {
 		string text, album, artist, title, genre, location, organization;
 		string basename = null;
 		File file = File.new_for_uri(newuri);
 		if(!xn.gPl.is_stream)
 			basename = file.get_basename();
-		if(xn.gPl.currentartist!=null) {
+		if(xn.gPl.currentartist != null) {
 			artist = remove_linebreaks(xn.gPl.currentartist);
 		}
 		else {
@@ -123,6 +119,7 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 					);
 			}
 		}
+		if(MainContext.current_source().is_destroyed()) return;
 		xn.main_window.set_title(text);
 	}
 	
@@ -130,16 +127,20 @@ public class TitleToDecoration : GLib.Object, IPlugin {
 		xn.main_window.set_title("xnoise media player");
 	}
 
-	//private void on_b_clicked(Gtk.Button sender) {
-	//	sender.label = sender.label + "_1";
-	//}
-
 	public Gtk.Widget? get_settings_widget() {
+		return null;
+	}
+
+	public Gtk.Widget? get_singleline_settings_widget() {
 		return null;
 	}
 
 	public bool has_settings_widget() {
 		return true;
-	} 
+	}
+
+	public bool has_singleline_settings_widget() {
+		return false;
+	}
 }
 

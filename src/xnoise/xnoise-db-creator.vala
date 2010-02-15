@@ -1,6 +1,6 @@
 /* xnoise-db-creator.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,34 +38,34 @@ public class Xnoise.DbCreator : GLib.Object {
 	public static const int DB_VERSION_MINOR = 0;
 	private static File xnoisedb;
 	//CREATE TABLE STATEMENTS
-	private static const string STMT_CREATE_LASTUSED = 
+	private static const string STMT_CREATE_LASTUSED =
 		"CREATE TABLE lastused(uri text, mediatype integer);";
-	private static const string STMT_CREATE_MEDIAFOLDERS = 
+	private static const string STMT_CREATE_MEDIAFOLDERS =
 		"CREATE TABLE media_folders(name TEXT PRIMARY KEY);";
-	private static const string STMT_CREATE_MEDIAFILES = 
+	private static const string STMT_CREATE_MEDIAFILES =
 		"CREATE TABLE media_files(name TEXT PRIMARY KEY);";
-	private static const string STMT_CREATE_RADIO = 
+	private static const string STMT_CREATE_RADIO =
 		"CREATE TABLE streams (id INTEGER PRIMARY KEY, name TEXT, uri TEXT);";
-	private static const string STMT_CREATE_ARTISTS = 
+	private static const string STMT_CREATE_ARTISTS =
 		"CREATE TABLE artists (id INTEGER PRIMARY KEY, name TEXT);";
-	private static const string STMT_CREATE_ALBUMS = 
+	private static const string STMT_CREATE_ALBUMS =
 		"CREATE TABLE albums (id INTEGER PRIMARY KEY, artist INTEGER, name TEXT, image TEXT);";
-	private static const string STMT_CREATE_URIS = 
+	private static const string STMT_CREATE_URIS =
 		"CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER);";
-	private static const string STMT_CREATE_GENRES = 
+	private static const string STMT_CREATE_GENRES =
 		"CREATE TABLE genres (id integer primary key, name TEXT);";
-	private static const string STMT_CREATE_ITEMS = 
+	private static const string STMT_CREATE_ITEMS =
 		"CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTime DATETIME);";
 	//TODO: Is genre not used?
-	private static const string STMT_CREATE_VERSION = 
+	private static const string STMT_CREATE_VERSION =
 		"CREATE TABLE version (major INTEGER, minor INTEGER);";
-	private static const string STMT_GET_VERSION = 
+	private static const string STMT_GET_VERSION =
 		"SELECT major FROM version;";
 
-	//FIND TABLE	
-	private static const string STMT_FIND_TABLE = 
+	//FIND TABLE
+	private static const string STMT_FIND_TABLE =
 		"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
-									
+
 	public DbCreator() {
         this.db = get_db();
 		check_tables();
@@ -85,14 +85,14 @@ public class Xnoise.DbCreator : GLib.Object {
 				print("%s\n", e.message);
 			}
 		}
-		Database.open_v2(xnoisedb.get_path(), 
-		                 out database, 
-		                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE, 
+		Database.open_v2(xnoisedb.get_path(),
+		                 out database,
+		                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE,
 		                 null) ;
 
 		return database;
 	}
-	
+
 	private bool exec_stmnt_string(string statement) {
 		string errormsg;
 		if(db.exec(statement, null, out errormsg)!= Sqlite.OK) {
@@ -106,11 +106,11 @@ public class Xnoise.DbCreator : GLib.Object {
 		if(xnoisedb.query_exists(null) && db!=null) {
 			bool db_table_exists = false;
 			int nrow,ncolumn;
-			weak string[] resultArray;
+			unowned string[] resultArray;
 			string errmsg;
 
 			//Check for Table existance
-			if(db.get_table(STMT_FIND_TABLE, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) { 
+			if(db.get_table(STMT_FIND_TABLE, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) {
 				stderr.printf("SQL error: %s\n", errmsg);
 				return;
 			}
@@ -125,7 +125,7 @@ public class Xnoise.DbCreator : GLib.Object {
 				}
 			}
 			if(db_table_exists == true) {
-				if(db.get_table(STMT_GET_VERSION, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) { 
+				if(db.get_table(STMT_GET_VERSION, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) {
 					stderr.printf("SQL error: %s\n", errmsg);
 					return;
 				}

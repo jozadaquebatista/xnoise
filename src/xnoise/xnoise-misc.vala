@@ -1,6 +1,6 @@
 /* xnoise-misc.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,36 +29,72 @@
  */
 
 
-// GENERAL NAMESPACE FUNCTIONS
+// XNOISES' GENERAL NAMESPACE FUNCTIONS
 
 namespace Xnoise {
 
 	public static Params par = null;
-	public static GlobalData global = null;
+	public static GlobalInfo global = null;
 
+	/*
+	 * This function is used to create static instances of Params
+	 * and GlobalInfo in the xnoise namespace.
+	 */
 	public static void initialize() {
 		if(par == null)
 			par = new Params();
 
 		if(global == null)
-			global = new GlobalData();
+			global = new GlobalInfo();
 	}
 
 	public static string escape_for_local_folder_search(string value) {
 		// transform the name to match the naming scheme
+		string tmp = "";
 		try {
-			string tmp = "";
-			GLib.Regex r = new GLib.Regex("\n");
+			var r = new GLib.Regex("\n");
 			tmp = r.replace(value, -1, 0, "_");
 			r = new GLib.Regex(" ");
 			tmp = r.replace(tmp, -1, 0, "_");
-			r = new GLib.Regex("//");
-			return r.replace(tmp, -1, 0, "-");
 		}
-		catch(GLib.RegexError e) {
+		catch(RegexError e) {
 			print("%s\n", e.message);
+			return value;
 		}
-		return value;
+		if(tmp.str("/") != null) {
+			string[] a = tmp.split("/", 20);
+			tmp = "";
+			foreach(string s in a) {
+				tmp = tmp + s;
+			}
+		}
+		return tmp;
+	}
+
+	public static string remove_single_character(string haystack, string needle) {
+		//TODO: check if this can be done more efficiently
+		string result = "";
+		if(haystack.str(needle) != null) {
+			string[] a = haystack.split(needle, 30);
+			foreach(string s in a) {
+				result = result + s;
+			}
+		}
+		else {
+			return haystack;
+		}
+		return result;
+	}
+
+	public static string prepare_for_comparison(string value) {
+		// transform strings to make it easier to compare them
+		string result = value;
+		string[] test_characters = {"/", " ", ".", ",", ";", ":", "\\", "'", "`", "´", "!", "_"};
+		
+		foreach(string s in test_characters)
+			result = remove_single_character(result, s);
+
+		return result.down();
 	}
 
 	public static string remove_linebreaks(string value) {
@@ -71,6 +107,38 @@ namespace Xnoise {
 			print("%s\n", e.message);
 		}
 		return value;
+	}
+
+	public static string replace_underline_with_blank_encoded(string value) {
+		// unexpected linebreaks do not look nice
+		try {
+			GLib.Regex r = new GLib.Regex("_");
+			return r.replace(value, -1, 0, "%20");
+		}
+		catch(GLib.RegexError e) {
+			print("%s\n", e.message);
+		}
+		return value;
+	}
+
+	/*
+	 * This function tries to find the right image for the uri.
+	 */
+	public static bool get_image_path_for_media_uri(string uri, ref string? image_path) {
+		//TODO: also check imagepath via track metadata
+		string tmpuri = uri;
+		image_path = null;
+		var dbb = new DbBrowser();
+		
+		if(dbb == null)
+			return false;
+		
+		image_path = dbb.get_local_image_path_for_track(ref tmpuri);
+		
+		if(image_path != null)
+			return true;
+			
+		return false;
 	}
 
 	public static string get_stream_uri(string playlist_uri) {
@@ -110,35 +178,7 @@ namespace Xnoise {
 
 // ENUMS
 
-public enum Xnoise.BrowserColumn {
-	ICON = 0,
-	VIS_TEXT,
-	DB_ID,
-	MEDIATYPE,
-	COLL_TYPE,
-	DRAW_SEPTR,
-	N_COLUMNS
-}
-
-public enum Xnoise.MediaStorageType {
-	FILE = 0,
-	FOLDER,
-	STREAM
-}
-
-public enum Xnoise.BrowserCollectionType {
-	UNKNOWN = 0,
-	HIERARCHICAL = 1,
-	LISTED = 2
-}
-
-public enum Xnoise.Repeat {
-	NOT_AT_ALL = 0,
-	SINGLE,
-	ALL
-}
-
-public enum Xnoise.MediaType {
+public enum Xnoise.MediaType { // used in various places
 	UNKNOWN = 0,
 	AUDIO,
 	VIDEO,
@@ -146,27 +186,10 @@ public enum Xnoise.MediaType {
 	PLAYLISTFILE
 }
 
-public enum Xnoise.TrackListModelColumn {
-	STATE = 0,
-	ICON,
-	TRACKNUMBER,
-	TITLE,
-	ALBUM,
-	ARTIST,
-	WEIGHT,
-	URI,
-	N_COLUMNS
-}
-
-public enum Xnoise.TrackState {
-	STOPPED = 0,
-	PLAYING,
-	PAUSED
-}
-
-public enum Xnoise.Direction {
-	NEXT = 0,
-	PREVIOUS,
+public enum Xnoise.TrackListNoteBookTab { // used in various places
+	TRACKLIST = 0,
+	VIDEO,
+	LYRICS
 }
 
 public enum Gst.StreamType {
@@ -179,6 +202,9 @@ public enum Gst.StreamType {
 
 // DATA TRANSFER CLASS
 
+/**
+ * This class is used to move around media information
+ */
 public class Xnoise.TrackData { // track meta information
 	public string Artist;
 	public string Album;
@@ -186,6 +212,8 @@ public class Xnoise.TrackData { // track meta information
 	public string Genre;
 	public uint Year;
 	public uint Tracknumber;
+	public int32 Length;
+	public int Bitrate;
 	public MediaType Mediatype = MediaType.UNKNOWN;
 	public string Uri;
 }
@@ -194,12 +222,18 @@ public class Xnoise.TrackData { // track meta information
 
 // STRUCTS
 
+/**
+ * This struct is used to move around certain streams information
+ */
 public struct Xnoise.StreamData { // meta information structure
 	public string Name;
 	public string Uri;
 }
 
-public struct Xnoise.TitleMtypeId {
+/**
+ * This struct is used to move around certain media information
+ */
+public struct Xnoise.MediaData {
 	public string name;
 	public int id;
 	public MediaType mediatype;
@@ -211,6 +245,12 @@ public struct Xnoise.TitleMtypeId {
 
 // INTERFACES
 
+/**
+ * Implementors of this interface have to register themselves in
+ * the static Parameter class instance `par' at start time of xnoise.
+ * The read_* and write_* methods will be called then to put some
+ * configuration data to the implementing class instances.
+ */
 public interface Xnoise.IParams : GLib.Object {
 	public abstract void read_params_data();
 	public abstract void write_params_data();
@@ -218,19 +258,17 @@ public interface Xnoise.IParams : GLib.Object {
 
 
 
-// ILyrics implementors should be synchrouniously looking for images
-// this is done in the ThreadFunc "fetch()"
+/**
+ * ILyrics implementors should be asynchronously look for lyrics
+ * The reply is checked for matching artist/title
+ */
 public interface Xnoise.ILyrics : GLib.Object {
-	// 'fetch' is a thread function that will find the lyrics
-	public abstract void* fetch();
-	public abstract string get_text();
+	public abstract void find_lyrics();
+
 	public abstract string get_identifier();
 	public abstract string get_credits();
 
-	public signal void sign_lyrics_fetched(string text);
-	// 'sign_lyrics_done' delivers the providers instance
-	// for destruction after usage
-	public signal void sign_lyrics_done(ILyrics instance);
+	public signal void sign_lyrics_fetched(string artist, string title, string credits, string identifier, string text);
 }
 
 
@@ -240,19 +278,15 @@ public interface Xnoise.ILyricsProvider : GLib.Object {
 
 
 
-
-// IAlbumCoverImage implementors should be synchrouniously looking for images
-// this is done in the ThreadFunc "fetch_image()"
+/**
+ * IAlbumCoverImage implementors should be asynchronously look for images
+ * The reply is checked for matching artist/album
+ */
 public interface Xnoise.IAlbumCoverImage : GLib.Object {
-	public abstract void* fetch_image();
-	public abstract string get_image_uri();
-
-	// delivers local image path on success, null otherwise
-	public signal void sign_album_image_fetched(string? image_path);
-
-	// 'sign_album_image_done' delivers the providers instance
-	// for destruction after usage
-	public signal void sign_album_image_done(IAlbumCoverImage instance);
+	//delivers local image path on success, "" otherwise
+	public signal void sign_image_fetched(string artist, string album, string image_path);
+	//start image search
+	public abstract void find_image();
 }
 
 

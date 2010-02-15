@@ -8,5 +8,6 @@ namespace Config {
 	public const string GETTEXT_PACKAGE;
 	public const string LIBDIR;
 	public const string LOCALE_DIR;
+	public const string PACKAGE_VERSION;
 }
 

@@ -1,6 +1,6 @@
 /* xnoise-lyrics-view.vala
  *
- * Copyright (C) 2009  softshaker
+ * Copyright (C) 2009-2010  softshaker
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,32 +26,48 @@
  *
  * Author:
  * 	softshaker  softshaker googlemail.com
+ * 	Jörn Magens
  */
 
 public class Xnoise.LyricsView : Gtk.TextView {
-	private LyricsLoader cur_loader = null;
+	private LyricsLoader loader = null;
 	private Main xn;
 	private Gtk.TextBuffer textbuffer;
 	private uint timeout = 0;
 	private string artist = "";
 	private string title = "";
-	
+	private uint source = 0;
+//	private string providername = "";
+//	private string content = "";
+
 	public LyricsView() {
-		xn = Main.instance();
-		LyricsLoader.init();
+		xn = Main.instance;
+		loader = new LyricsLoader();
+		loader.sign_fetched.connect(on_lyrics_ready);
 		this.textbuffer = new Gtk.TextBuffer(null);
 		this.set_buffer(textbuffer);
 		this.set_editable(false);
 		this.set_left_margin(8);
 		this.set_wrap_mode(Gtk.WrapMode.WORD);
 		xn.gPl.sign_uri_changed.connect(on_uri_changed);
-		xn.gPl.sign_tag_changed.connect(on_tag_changed);
+	}
+
+	private void on_uri_changed(string uri) {
+		textbuffer.set_text("LYRICS VIEWER", -1);
+		if(timeout!=0)
+			GLib.Source.remove(timeout);
+
+		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE,
+		                                        3,
+		                                        on_timout_elapsed);
 	}
 
 	// Use the timeout because gPl is sending the sign_tag_changed signals
 	// sometimes very often at the beginning of a track.
 	private bool on_timout_elapsed() {
-		if(cur_loader != null)	cur_loader.sign_fetched -= on_lyrics_ready;
+		// Do not execute if source has been removed in the meantime
+		if(MainContext.current_source().is_destroyed()) return false;
+
 		artist = remove_linebreaks(xn.gPl.currentartist);
 		title  = remove_linebreaks(xn.gPl.currenttitle );
 		//print("1. %s - %s\n", artist, title);
@@ -72,40 +88,40 @@ public class Xnoise.LyricsView : Gtk.TextView {
 			return false;
 		}
 
-		if(cur_loader != null) cur_loader.sign_fetched -= on_lyrics_ready;
+		// Do not execute if source has been removed in the meantime
+		if(MainContext.current_source().is_destroyed()) return false;
 
-		cur_loader = new LyricsLoader(artist, title);
-		cur_loader.sign_fetched.connect(on_lyrics_ready);
-		cur_loader.fetch();
+//		if(loader != null) loader.sign_fetched -= on_lyrics_ready;
+
+		loader.artist = artist;
+		loader.title  = title;
+		loader.fetch();
 		return false;
 	}
 
-	private void on_tag_changed(string uri) {
-		if(timeout!=0)
-			GLib.Source.remove(timeout);
-			
-		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE,
-		                                        3, //3 Seconds is still ok
-		                                        on_timout_elapsed);
+	private void on_lyrics_ready(string _artist, string _title, string _credits, string _identifier, string _text) {
+		//check if returned track is the one we asked for:
+		if(!((prepare_for_comparison(this.artist) == prepare_for_comparison(_artist))&&
+		     (prepare_for_comparison(this.title) == prepare_for_comparison(_title))))
+			return;
+		
+		set_text_via_idle((_artist + " - " + _title + "\n\n" + _text + "\n\nprovided by " + _identifier));
 	}
-	
-	private void on_uri_changed(string uri) {
-		textbuffer.set_text("LYRICS VIEWER", -1);
-	}
-	private uint source = 0;
-	private string provider = "";
-	private string content = "";
-	private void on_lyrics_ready(string _provider, string _content) {
-		this.provider = _provider;
-		this.content  = _content;
+
+	private void set_text_via_idle(string text) {
 		if(source!=0)
 			GLib.Source.remove(source);
-
-		source = Idle.add(set_text);
+		source = Idle.add( () => {
+			set_text(text);
+			return false;
+		});
 	}
+	
+	private void set_text(string text) {
+		// Do not execute if source has been removed in the meantime
+		if(MainContext.current_source().is_destroyed()) 
+			return;
 
-	private bool set_text() {
-		textbuffer.set_text(content + "\n\n" + provider, -1);
-		return false;
+		textbuffer.set_text(text, -1);
 	}
 }

@@ -1,6 +1,6 @@
 /* xnoise-videoscreen.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2010  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,15 +29,36 @@
  */
 
 public class Xnoise.VideoScreen : Gtk.DrawingArea {
-	public Gdk.Pixbuf logo_pixb;
+	private Gdk.Pixbuf logo_pixb;
+	private Gdk.Pixbuf cover_image_pixb;
 	private Gdk.Pixbuf logo;
 	private Main xn;
-	
+	private bool cover_available;
+
 	public VideoScreen() {
-		this.xn = Main.instance();
+		this.xn = Main.instance;
 		init_video_screen();
+		cover_available = false;
+		global.sign_image_available.connect(on_sign_image_available);
 	}
 
+	private void on_sign_image_available(string? imagepath_small, string? imagepath_large) {
+		if(imagepath_small != null) {
+			try {
+				cover_image_pixb = new Gdk.Pixbuf.from_file(imagepath_large);
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+				return;
+			}
+			cover_available = true;
+		}
+		else {
+			cover_image_pixb = null;
+			cover_available = false;
+		}
+	}
+	
 	private void init_video_screen() {
 		this.set_double_buffered(false);
 		this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
@@ -47,15 +68,15 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 		catch(GLib.Error e) {
 			print("%s\n", e.message);
-		}		
+		}
 	}
-	
+
 	public override bool expose_event(Gdk.EventExpose e) {
 
 		if(e.count > 0) return true; //exposure compression
-			
-		Gdk.draw_rectangle(this.window, 
-		                   this.style.black_gc, true, 
+
+		Gdk.draw_rectangle(this.window,
+		                   this.style.black_gc, true,
 		                   e.area.x, e.area.y,
 		                   e.area.width, e.area.height
 		                   );
@@ -76,43 +97,50 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 
 				this.window.begin_paint_region(region);
 
-				Gdk.draw_rectangle(this.window, 
-						           this.style.black_gc, true, 
-						           e.area.x, e.area.y,
-						           e.area.width, e.area.height
-						           );
-						           
+				Gdk.draw_rectangle(this.window,
+				                   this.style.black_gc, true,
+				                   e.area.x, e.area.y,
+				                   e.area.width, e.area.height
+				                   );
+
 				logowidth  = logo_pixb.get_width();
 				logoheight = logo_pixb.get_height();
 				widgetwidth  = this.allocation.width;
 				widgetheight = this.allocation.height;
 
-				if((float)widgetwidth/logowidth>(float)widgetheight/logoheight) 
+				if((float)widgetwidth/logowidth>(float)widgetheight/logoheight)
 					ratio = (float)widgetheight/logoheight;
-				else 
+				else
 					ratio = (float)widgetwidth/logowidth;
 
 				logowidth = (int)(logowidth*ratio);
 				logoheight = (int)(logoheight*ratio);
 
-				if(logowidth<=1||logoheight<=1) { 
+				if(logowidth<=1||logoheight<=1) {
 					// Do not paint for small pictures
 					this.window.end_paint();
 					return true;
 				}
+				if(!cover_available) {
+					logo = logo_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
+				}
+				else {
+					if(cover_image_pixb != null)
+						logo = cover_image_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
+					else
+						logo = logo_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
+				}
 
-				logo = logo_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
-
-				Gdk.draw_pixbuf(this.window, this.style.fg_gc[0], 
-					            logo, 0, 0, (widgetwidth-logowidth)/2, 
-					            (widgetheight-logoheight)/2, logowidth, 
-					            logoheight, Gdk.RgbDither.NONE, 
+				Gdk.draw_pixbuf(this.window, this.style.fg_gc[0],
+					            logo, 0, 0, (widgetwidth-logowidth)/2,
+					            (widgetheight-logoheight)/2, logowidth,
+					            logoheight, Gdk.RgbDither.NONE,
 					            0, 0);
 				this.window.end_paint();
-			} 
+			}
 			else if(this.window!=null) {
-				Gdk.draw_rectangle(this.window, 
-						           this.style.black_gc, true, 
+				Gdk.draw_rectangle(this.window,
+						           this.style.black_gc, true,
 						           e.area.x, e.area.y,
 						           e.area.width, e.area.height
 						           );
@@ -120,7 +148,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 		return true;
 	}
-	
+
 	public void trigger_expose () {
 		//TODO: maybe this should be triggered from elsewhere. But
 		// I had difficulties to get this via a notify signal in VideoScreen widget
