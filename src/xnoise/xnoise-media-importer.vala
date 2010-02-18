@@ -32,6 +32,7 @@
 public class Xnoise.MediaImporter : Object {
 	private static MediaImporter _media_importer = null;
 	public signal void sig_media_path_changed();
+	public signal void sig_item_imported(string uri);
 
 	public MediaImporter() {
 		if(_media_importer == null) _media_importer = this;
@@ -67,9 +68,9 @@ public class Xnoise.MediaImporter : Object {
 	}
 
 	// store a single file in the db, don't add it to the media path
-	public void add_single_file(string uri, ref DbWriter dbw) {
+	public int add_single_file(string uri, ref DbWriter dbw) {
 		if(dbw == null) 
-			return;
+			return -1;
 		dbw.begin_transaction();
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
@@ -81,7 +82,7 @@ public class Xnoise.MediaImporter : Object {
 		}
 		catch(Error e) {
 			print("single file import: %s\n", e.message);
-			return;
+			return -1;
 		}
 
 		string content = info.get_content_type();
@@ -95,6 +96,7 @@ public class Xnoise.MediaImporter : Object {
 				var tr = new TagReader();
 				dbw.insert_title(tr.read_tag(file.get_path()), file.get_uri());
 			}
+			dbw.commit_transaction();
 		}
 		else if(psVideo.match_string(mime)) {
 			int idbuffer = dbw.uri_entry_exists(file.get_uri());
@@ -109,15 +111,19 @@ public class Xnoise.MediaImporter : Object {
 			if(idbuffer== -1) {
 				dbw.insert_title(td, file.get_uri());
 			}
+			dbw.commit_transaction();
 		}
-		dbw.commit_transaction();
+		else return 0;
+		
+		sig_item_imported(uri);
+		return 1;
 	}
 
 
 	// store a folder in the db, don't add it to the media path
-	public void add_local_tags(File dir, ref DbWriter dbw) {
+	public int add_local_tags(File dir, ref DbWriter dbw) {
 		if(dbw == null) 
-			return;
+			return -1;
 		dbw.begin_transaction();
 		FileEnumerator enumerator;
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
@@ -127,9 +133,10 @@ public class Xnoise.MediaImporter : Object {
 			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
 		} catch (Error error) {
 			critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
-			return;
+			return -1;
 		}
 		FileInfo info;
+		int success_count = 0;
 		try {
 			while((info = enumerator.next_file(null))!=null) {
 				string filename = info.get_name();
@@ -150,6 +157,8 @@ public class Xnoise.MediaImporter : Object {
 					if(idbuffer== -1) {
 						var tr = new TagReader();
 						dbw.insert_title(tr.read_tag(filepath), file.get_uri());
+						success_count++;
+						sig_item_imported(file.get_uri());
 					}
 				}
 				else if(psVideo.match_string(mime)) {
@@ -164,6 +173,8 @@ public class Xnoise.MediaImporter : Object {
 
 					if(idbuffer== -1) {
 						dbw.insert_title(td, file.get_uri());
+						success_count++;
+						sig_item_imported(file.get_uri());
 					}
 				}
 			}
@@ -172,6 +183,7 @@ public class Xnoise.MediaImporter : Object {
 			print("%s\n", e.message);
 		}
 		dbw.commit_transaction();
+		return success_count;
 	}
 
 	// add folders to the media path and store them in the db
