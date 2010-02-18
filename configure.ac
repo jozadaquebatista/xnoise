@@ -208,10 +208,10 @@ dnl ================================================================
 dnl dependency check for optional build of mediawatcher plugin 
 
 AC_ARG_ENABLE([mediawatcher],
-    AS_HELP_STRING([--enable-mediawatcher],
-    [Disable mediawatcher plugin (default: disabled)]),
+    AS_HELP_STRING([--disable-mediawatcher],
+    [Disable mediawatcher plugin (default: enabled)]),
     [enable_mediawatcher=$enableval],
-    [enable_mediawatcher=no])
+    [enable_mediawatcher=yes])
 
 if test "x$enable_mediawatcher" = "xyes"; then
         enable_mediawatcher=yes		

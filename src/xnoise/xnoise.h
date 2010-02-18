@@ -1162,13 +1162,13 @@ char** xnoise_media_browser_model_build_uri_list_for_treepath (XnoiseMediaBrowse
 XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
 GType xnoise_media_importer_get_type (void);
-XnoiseMediaImporter* xnoise_media_importer_new (void);
-XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
 void xnoise_media_importer_store_files (XnoiseMediaImporter* self, char** list_of_files, int list_of_files_length1, XnoiseDbWriter** dbw);
 void xnoise_media_importer_add_single_file (XnoiseMediaImporter* self, const char* uri, XnoiseDbWriter** dbw);
 void xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir, XnoiseDbWriter** dbw);
 void xnoise_media_importer_store_folders (XnoiseMediaImporter* self, char** mfolders, int mfolders_length1, XnoiseDbWriter** dbw);
 void xnoise_media_importer_store_streams (XnoiseMediaImporter* self, char** list_of_streams, int list_of_streams_length1, XnoiseDbWriter** dbw);
+XnoiseMediaImporter* xnoise_media_importer_new (void);
+XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
 GType xnoise_params_get_type (void);
 extern XnoiseParams* xnoise_par;
 extern XnoiseGlobalInfo* xnoise_global;

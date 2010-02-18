@@ -116,6 +116,7 @@ namespace Xnoise {
 		public signal void current_uri_repeated (string uri);
 		public signal void position_reference_changed ();
 		public signal void position_reference_next_changed ();
+		public signal void sig_media_path_changed ();
 		public signal void sign_image_available (string? image_path_small, string? image_path_large);
 		public signal void track_state_changed ();
 	}

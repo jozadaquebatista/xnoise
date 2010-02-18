@@ -30,13 +30,21 @@
 
 
 public class Xnoise.MediaImporter : Object {
-	private static MediaImporter _media_importer = null;
+//	private static MediaImporter _instance = null;
 	public signal void sig_media_path_changed();
 
-	public MediaImporter() {
-		if(_media_importer == null) _media_importer = this;
-		else this=_media_importer;
-	}
+//	public static MediaImporter instance {
+//		get {
+//			if(_instance == null)
+//				_instance = new MediaImporter();
+//			return _instance;
+//		}
+//	}
+
+//	public MediaImporter() { 
+		//if(_media_importer == null) _media_importer = this;
+		//else this=_media_importer;
+//	}
 
 	// add files to the media path and store them in the db
 	public void store_files(string[] list_of_files, ref DbWriter dbw) {
@@ -63,7 +71,7 @@ public class Xnoise.MediaImporter : Object {
 		}
 
 		files_ht.remove_all();
-		sig_media_path_changed();
+		global.sig_media_path_changed();
 	}
 
 	// store a single file in the db, don't add it to the media path
@@ -118,7 +126,6 @@ public class Xnoise.MediaImporter : Object {
 	public void add_local_tags(File dir, ref DbWriter dbw) {
 		if(dbw == null) 
 			return;
-		dbw.begin_transaction();
 		FileEnumerator enumerator;
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
@@ -171,7 +178,6 @@ public class Xnoise.MediaImporter : Object {
 		catch(Error e) {
 			print("%s\n", e.message);
 		}
-		dbw.commit_transaction();
 	}
 
 	// add folders to the media path and store them in the db
@@ -201,7 +207,7 @@ public class Xnoise.MediaImporter : Object {
 		dbw.commit_transaction();
 
 		mfolders_ht.remove_all();
-		sig_media_path_changed();
+		global.sig_media_path_changed();
 	}
 
 	// add streams to the media path and store them in the db
@@ -225,7 +231,7 @@ public class Xnoise.MediaImporter : Object {
 		dbw.commit_transaction();
 
 		streams_ht.remove_all();
-		sig_media_path_changed();
+		global.sig_media_path_changed();
 	}
 }
 

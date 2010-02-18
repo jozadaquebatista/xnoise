@@ -121,12 +121,11 @@ public class Xnoise.DbWriter : GLib.Object {
 		this.db = get_db();
 		
 		if(this.db == null)
-			return;
-		
+			this.unref();// = null;
 		this.begin_stmt_used = false; // initialize begin commit compare
 		this.prepare_statements();
 	}
-
+	
 	private static Database? get_db () {
 		// there was more luck on creating the db on first start, if using a static function
 		Database database;
@@ -494,15 +493,18 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	public void del_all_folders() {
-		exec_prepared_stmt(del_media_folder_statement);
+		if(!exec_prepared_stmt(del_media_folder_statement))
+			print("error deleting folders from db\n");
 	}
 
 	public void del_all_files() {
-		exec_prepared_stmt(delete_media_files_statement);
+		if(!exec_prepared_stmt(delete_media_files_statement))
+			print("error deleting files from db\n");
 	}
 
 	public void del_all_streams() {
-		exec_prepared_stmt(del_streams_statement);
+		if(!exec_prepared_stmt(del_streams_statement))
+			print("error deleting streams from db\n");
 	}
 
 	public bool delete_local_media_data() {

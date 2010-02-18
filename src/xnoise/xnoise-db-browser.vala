@@ -107,9 +107,12 @@ public class Xnoise.DbBrowser {
 
 	public DbBrowser() {
 		DATABASE = dbFileName();
+		db = null;
 		if(Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) {
 			print("Can't open database: %s\n", (string)this.db.errmsg);
 		}
+		if(this.db == null)
+			this = null;
 		this.prepare_statements();
 	}
 

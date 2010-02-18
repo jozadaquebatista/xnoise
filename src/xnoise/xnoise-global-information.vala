@@ -35,15 +35,22 @@
  */
 
 public class Xnoise.GlobalInfo : GLib.Object {
-	// Signals
+
+	// SIGNALS
+	// TreeRowReference for currrent track changed
 	public signal void position_reference_changed();
+	// TreeRowReference for currrent track changed, triggered before change
 	public signal void before_position_reference_changed();
 	public signal void before_position_reference_next_changed();
 	public signal void position_reference_next_changed();
+	// state changed to playing, paused or stopped
 	public signal void track_state_changed();
 	public signal void current_uri_changed();
 	public signal void current_uri_repeated(string uri);
 	public signal void caught_eos_from_player();
+	//signal to be triggered after a change of the media folders
+	public signal void sig_media_path_changed();
+
 
 	// Private fields
 	private TrackState _track_state = TrackState.STOPPED;

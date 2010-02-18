@@ -72,39 +72,35 @@ public class MediawatcherPlugin : GLib.Object, IPlugin {
 	public bool has_singleline_settings_widget() {
 		return false;
 	}
-
-
 }
 
 
 public class Mediawatcher : GLib.Object {
 	private List<FileMonitor> monitor_list;
-	private MediaImporter mi;
 	
 	// the frequency limit to check monitored directories for changes
-	private const int monitoring_frequency = 2000;  
+	private const int monitoring_frequency = 2000;
 	
 	public Mediawatcher() {
-		mi = new MediaImporter();
-		mi.sig_media_path_changed.connect(media_path_changed_cb);
-		
+		global.sig_media_path_changed.connect(media_path_changed_cb);
 		setup_monitors();
 	}
 
-	
 	/* creates file monitors for all directories in the media path */ 
 	protected void setup_monitors() {
 		monitor_list = new List<FileMonitor>();
+		var dbb = new DbBrowser();
+		var mfolders = dbb.get_media_folders();
 		
-		DbBrowser dbb = new DbBrowser();
-        var mfolders = dbb.get_media_folders();
-        foreach(string mfolder in mfolders) setup_monitor_for_path(mfolder);
-    }
-
+		foreach(string mfolder in mfolders)
+			setup_monitor_for_path(mfolder);
+	}
 	
 	protected void media_path_changed_cb() {
 		unowned List<FileMonitor> iter = monitor_list;
-		while((iter = iter.next) != null) iter.data.unref();
+		while((iter = iter.next) != null) 
+			iter.data.unref();
+			
 		monitor_list.data.unref();
 		
 		setup_monitors();
@@ -113,6 +109,7 @@ public class Mediawatcher : GLib.Object {
 	/* setup file monitors for a directory and all its subdirectories, reference them and
 	 store them in monitor_list */
 	protected void setup_monitor_for_path(string path) {
+		print("setup_monitor_for_path : %s\n", path);
 		try {
 			var dir = File.new_for_path(path);
 			var monitor = dir.monitor_directory(FileMonitorFlags.NONE);
@@ -123,17 +120,20 @@ public class Mediawatcher : GLib.Object {
 
 			monitor_all_subdirs(dir);
 		}
-		catch (IOError e) {
-			stdout.printf("Could not setup file monitoring for \'%s\': Error %s\n", path, e.message);
+		catch(IOError e) {
+			print("Could not setup file monitoring for \'%s\': Error %s\n", path, e.message);
 		}
 	}
 
 
-	protected void file_changed_cb(File file, File? other_file, FileMonitorEvent event_type) {
-		if (event_type == FileMonitorEvent.CREATED) {
+	protected void file_changed_cb(FileMonitor sender, File file, File? other_file, FileMonitorEvent event_type) {
+		print("%s\n", event_type.to_string());
+		if(event_type == FileMonitorEvent.CREATED) { // TODO: monitor removal of folders, too
 			if(file != null) {
-				stdout.printf("\'%s\' has been created recently, adding to db...", file.get_path());
-				DbWriter dbw = new DbWriter();
+				print("\'%s\' has been created recently, updating db...", file.get_path());
+				
+				var dbw = new DbWriter();
+				var mi = new MediaImporter();
 				
 				try {
 					var info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
@@ -146,8 +146,8 @@ public class Mediawatcher : GLib.Object {
 					
 					Main.instance.main_window.mediaBr.change_model_data();
 				} 
-				catch (Error e) {
-					stdout.printf("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e.message);
+				catch(Error e) {
+					print("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e.message);
 				}
 			}
 		}
@@ -158,14 +158,14 @@ public class Mediawatcher : GLib.Object {
 	 stores them in monitor_list */
 	protected void monitor_all_subdirs(File f) {
 		try {
-			var enumerator = f.enumerate_children(FILE_ATTRIBUTE_STANDARD_TYPE+","
-								+FILE_ATTRIBUTE_STANDARD_NAME,
-								0,
-								null);
+			var enumerator = f.enumerate_children(FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+			                                      FILE_ATTRIBUTE_STANDARD_NAME,
+			                                      0,
+			                                      null);
 			FileInfo info;
-			while ((info = enumerator.next_file(null)) != null) {
-				if (info.get_file_type() == FileType.DIRECTORY) {
-					var temp_f = File.new_for_path(f.get_path()+"/"+info.get_name());
+			while((info = enumerator.next_file(null)) != null) {
+				if(info.get_file_type() == FileType.DIRECTORY) {
+					var temp_f = File.new_for_path(GLib.Path.build_filename(f.get_path(), info.get_name(), null));
 	
 					var temp_mon = temp_f.monitor_directory(FileMonitorFlags.NONE);
 					temp_mon.changed.connect(file_changed_cb);
@@ -177,11 +177,11 @@ public class Mediawatcher : GLib.Object {
 				}
 			}
 		}
-		catch (IOError e) {
-			stdout.printf("Setting up file monitoring: Error: %s\n", e.message);
+		catch(IOError e) {
+			print("Setting up file monitoring: Error: %s\n", e.message);
 		}
-		catch (Error e) {
-			stdout.printf("Setting up file monitoring: Error: %s\n", e.message);
+		catch(Error e) {
+			print("Setting up file monitoring: Error: %s\n", e.message);
 		}
 	}
 	

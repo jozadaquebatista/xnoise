@@ -29,7 +29,7 @@
  */
 
 public class Xnoise.Main : GLib.Object {
-	private static Main _instance;
+	private static Main _instance = null;
 
 	public MainWindow main_window;
 	public TrackList tl;
