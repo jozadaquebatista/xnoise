@@ -973,9 +973,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, true);
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
 			this.searchEntryMB.set_sensitive(true);
-			this.searchEntryMB.changed.connect(mediaBr.on_searchtext_changed);
+			this.searchEntryMB.key_release_event.connect( (s, e) => {
+				int KEY_ENTER = 0xFF0D;
+				var entry = (Gtk.Entry)s;
+				if((int)e.keyval == KEY_ENTER || entry.get_text().size() >= 2 ||
+				    entry.get_text().size() == 0 ) {
+					this.mediaBr.on_searchtext_changed(entry);
+				}
+				return false;
+			});
+
 			this.searchEntryMB.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
-				if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
+				if(p0 == Gtk.EntryIconPosition.SECONDARY) {
+					s.text = "";
+					var entry = (Gtk.Entry)s;
+					this.mediaBr.on_searchtext_changed(entry);
+				}
 			});
 
 			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox;
