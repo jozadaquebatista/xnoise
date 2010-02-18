@@ -40,9 +40,9 @@
 	* handle file deletions
 */
 
-using Xnoise;
+using Gtk;
 
-public class MediawatcherPlugin : GLib.Object, IPlugin {
+public class Xnoise.MediawatcherPlugin : GLib.Object, IPlugin {
 	public Mediawatcher watcher;
 
 	public Main xn { get; set; }
@@ -75,14 +75,18 @@ public class MediawatcherPlugin : GLib.Object, IPlugin {
 }
 
 
-public class Mediawatcher : GLib.Object {
+public class Xnoise.Mediawatcher : GLib.Object {
 	private List<FileMonitor> monitor_list;
+	private ImportInfoBar iib;
 	
 	// the frequency limit to check monitored directories for changes
 	private const int monitoring_frequency = 2000;
 	
 	public Mediawatcher() {
 		global.sig_media_path_changed.connect(media_path_changed_cb);
+		
+		iib = new ImportInfoBar();
+		
 		setup_monitors();
 	}
 
@@ -184,6 +188,116 @@ public class Mediawatcher : GLib.Object {
 			print("Setting up file monitoring: Error: %s\n", e.message);
 		}
 	}
-	
+}
 
+
+/* 
+	An info bar which shows us when import of new media items is in progress and which, 
+	after notify_timeout_value of milliseconds without new importing activity,
+	tells us how many items have been added / tells us artist and title of the file if was a
+	single file only.
+ */
+private class Xnoise.ImportInfoBar {
+	public InfoBar bar;
+	public Label bar_label;
+	public Button bar_close_button;
+	public ProgressBar bar_progress;
+	
+	public bool shown;
+	public int import_count;
+	public uint import_notify_timeout;
+	
+	public string last_uri;
+	
+	private const int notify_timeout_value = 2500;
+	
+	public ImportInfoBar() {
+		import_count = 0;
+		bar = new InfoBar();
+
+		bar_label = new Label("");
+		var content_area = bar.get_content_area();
+		((Container)content_area).add(bar_label);
+		bar_label.show();
+		
+		var close_image = new Gtk.Image.from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU);
+		bar_close_button = new Gtk.Button();
+		bar_close_button.set_image(close_image);
+		bar_close_button.set_relief(Gtk.ReliefStyle.NONE);
+		close_image.show();
+		bar_close_button.set_size_request(0, 0);
+		bar.add_action_widget(bar_close_button, 0);
+		
+		bar_progress = new ProgressBar();
+		bar_progress.set_size_request(0,0);
+		bar_progress.bar_style = ProgressBarStyle.CONTINUOUS;
+		((Container)content_area).add(bar_progress);
+		
+		
+		bar_close_button.clicked.connect((a) => {
+			bar.hide();
+			import_count = 0;
+			shown = false;
+		});
+		
+//		mi = new MediaImporter();
+		global.sig_item_imported.connect(on_import);
+	}
+	
+	private void on_ongoing_import(string uri) {
+		import_count++;
+		last_uri = null;
+		bar_progress.pulse();
+		
+		GLib.Source.remove (import_notify_timeout);
+		import_notify_timeout = Timeout.add(notify_timeout_value, on_countdown_done);
+	}
+		
+	private void on_import(string uri) {
+		bar_label.set_text("Adding new files to the media database...");
+		
+		bar_close_button.hide();
+		bar_progress.show();
+		bar_progress.pulse();
+		
+		bar.show();
+		
+		import_count++;
+		last_uri = uri;
+		
+		if (shown == false) {
+			Main.instance.main_window.display_info_bar(bar);
+			shown = true;
+		}
+		import_notify_timeout = Timeout.add(notify_timeout_value, on_countdown_done);
+		global.sig_item_imported.disconnect(on_import);
+		global.sig_item_imported.connect(on_ongoing_import);
+		
+		/*var spinner = new Gtk.Spinner();
+		var action_area = bar.get_action_area();
+		((Gtk.Container)action_area).add(spinner);
+		spinner.show();
+		spinner.start();*/
+		//Gtk.Spinner for vala hasn't arrived yet :-( 
+	}
+	
+	
+	private bool on_countdown_done() {
+		if (import_count > 1) {
+			bar_label.set_text(import_count.to_string()+" items have been added to your media library");
+		}
+		else {
+			var dbb = new DbBrowser();
+			TrackData data;
+			dbb.get_trackdata_for_uri(last_uri, out data);
+			bar_label.set_markup("<b>"+data.Artist+" - "+ data.Title+"</b> has been added to your media library");
+			last_uri = null;
+		}
+		
+		bar_progress.hide();
+		bar_close_button.show();
+		global.sig_item_imported.disconnect(on_ongoing_import);
+		global.sig_item_imported.connect(on_import);
+		return false;
+	}
 }

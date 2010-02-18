@@ -50,7 +50,7 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	public signal void caught_eos_from_player();
 	//signal to be triggered after a change of the media folders
 	public signal void sig_media_path_changed();
-
+	public signal void sig_item_imported(string uri);
 
 	// Private fields
 	private TrackState _track_state = TrackState.STOPPED;

@@ -116,6 +116,7 @@ namespace Xnoise {
 		public signal void current_uri_repeated (string uri);
 		public signal void position_reference_changed ();
 		public signal void position_reference_next_changed ();
+		public signal void sig_item_imported (string uri);
 		public signal void sig_media_path_changed ();
 		public signal void sign_image_available (string? image_path_small, string? image_path_large);
 		public signal void track_state_changed ();
@@ -289,7 +290,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaImporter : GLib.Object {
 		public MediaImporter ();
-		public void add_local_tags (GLib.File dir, ref Xnoise.DbWriter dbw);
+		public int add_local_tags (GLib.File dir, ref Xnoise.DbWriter dbw);
 		public void add_single_file (string uri, ref Xnoise.DbWriter dbw);
 		public void store_files (string[] list_of_files, ref Xnoise.DbWriter dbw);
 		public void store_folders (string[] mfolders, ref Xnoise.DbWriter dbw);

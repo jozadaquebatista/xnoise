@@ -1165,7 +1165,7 @@ XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type
 GType xnoise_media_importer_get_type (void);
 void xnoise_media_importer_store_files (XnoiseMediaImporter* self, char** list_of_files, int list_of_files_length1, XnoiseDbWriter** dbw);
 void xnoise_media_importer_add_single_file (XnoiseMediaImporter* self, const char* uri, XnoiseDbWriter** dbw);
-void xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir, XnoiseDbWriter** dbw);
+gint xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir, XnoiseDbWriter** dbw);
 void xnoise_media_importer_store_folders (XnoiseMediaImporter* self, char** mfolders, int mfolders_length1, XnoiseDbWriter** dbw);
 void xnoise_media_importer_store_streams (XnoiseMediaImporter* self, char** list_of_streams, int list_of_streams_length1, XnoiseDbWriter** dbw);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
