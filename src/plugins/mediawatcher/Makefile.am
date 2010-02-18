@@ -37,8 +37,6 @@ libMediawatcher_la_LDFLAGS = \
 
 libMediawatcher_la_LIBADD = \
 	$(XNOISE_LIBS) \
-	$(LIBXML_LIBS) \
-	$(LIBSOUP_LIBS) \
 	$(NULL)
 
 mediawatcherinformation_DATA = Mediawatcher.xnplugin

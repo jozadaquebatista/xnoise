@@ -167,7 +167,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		e.region = region;
 		e.count = 0;
 		e.send_event = (char)1;
-		this.expose_event(e);
+//		this.expose_event(e);
 	}
 }
 
