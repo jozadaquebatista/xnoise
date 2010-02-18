@@ -68,6 +68,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private VBox mainvbox;
 	private FullscreenToolbar fullscreentoolbar;
 	private VBox videovbox;
+	private VBox contentvbox;
 	public bool is_fullscreen = false;
 	public bool drag_on_da = false;
 	public LyricsView lyricsView;
@@ -828,6 +829,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.mainvbox = gb.get_object("mainvbox") as Gtk.VBox;
 			this.title = "xnoise media player";
 			this.set_icon_from_file(APPICON);
+			
+			this.contentvbox = gb.get_object("contentvbox") as Gtk.VBox;
 
 			//DRAWINGAREA FOR VIDEO
 			videoscreen = xn.gPl.videoscreen;
@@ -1038,6 +1041,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.key_release_event.connect(this.on_key_released);
 		this.window_state_event.connect(this.on_window_state_change);
 	}
+	
+	public void display_info_bar(InfoBar bar) {
+		contentvbox.pack_start(bar, false, false, 0);
+		bar.show();
+	}
+
 
 	/**
 	* A NextButton is a Gtk.Button that initiates playback of the previous item

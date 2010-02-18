@@ -242,6 +242,7 @@ namespace Xnoise {
 		public Xnoise.VideoScreen videoscreen;
 		public MainWindow ();
 		public void change_song (Xnoise.MainWindow.Direction direction, bool handle_repeat_state = false);
+		public void display_info_bar (Gtk.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
 		public void set_displayed_title (ref string newuri, string? tagname, string? tagvalue);
 		public bool fullscreenwindowvisible { get; set; }
