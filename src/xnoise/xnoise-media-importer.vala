@@ -31,21 +31,7 @@
 using Gtk;
 
 public class Xnoise.MediaImporter : GLib.Object {
-//	private static MediaImporter _instance = null;
 	public signal void sig_media_path_changed();
-
-//	public static MediaImporter instance {
-//		get {
-//			if(_instance == null)
-//				_instance = new MediaImporter();
-//			return _instance;
-//		}
-//	}
-
-//	public MediaImporter() { 
-		//if(_media_importer == null) _media_importer = this;
-		//else this=_media_importer;
-//	}
 
 	// add files to the media path and store them in the db
 	public void store_files(string[] list_of_files, ref DbWriter dbw) {
@@ -125,10 +111,11 @@ public class Xnoise.MediaImporter : GLib.Object {
 
 
 	// store a folder in the db, don't add it to the media path
+	// This is a recoursive function.
+	// Do not call begin_transaction or commit_transaction within this function
 	public int add_local_tags(File dir, ref DbWriter dbw) {
 		if(dbw == null) 
 			return -1;
-//		dbw.begin_transaction();
 		FileEnumerator enumerator;
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
@@ -186,7 +173,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 		catch(Error e) {
 			print("%s\n", e.message);
 		}
-//		dbw.commit_transaction();
 		return success_count;
 	}
 
