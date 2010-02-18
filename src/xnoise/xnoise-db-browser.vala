@@ -304,8 +304,11 @@ public class Xnoise.DbBrowser {
 		return false;
 	}
 
-	public string? get_local_image_path_for_track(ref string uri) {
+	public string? get_local_image_path_for_track(ref string? uri) {
 		string retval = null;
+		if(uri == null) 
+			return retval;
+		
 		image_path_for_uri_statement.reset();
 		if(image_path_for_uri_statement.bind_text(1, uri) != Sqlite.OK) {
 			this.db_error();
@@ -330,9 +333,12 @@ public class Xnoise.DbBrowser {
 		return retval;
 	}
 
-	public bool get_trackdata_for_uri(string uri, out TrackData val) {
+	public bool get_trackdata_for_uri(string? uri, out TrackData val) {
 		bool retval = false;
 		val = new TrackData();
+		if(uri == null)
+			return retval;
+		
 		trackdata_for_uri_statement.reset();
 		trackdata_for_uri_statement.bind_text(1, uri);
 		if(trackdata_for_uri_statement.step() == Sqlite.ROW) {

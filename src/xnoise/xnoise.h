@@ -587,7 +587,7 @@ struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
 	XnoiseVideoScreen* videoscreen;
-	GstElement* playbin;
+	GstElement* playbin2;
 };
 
 struct _XnoiseGstPlayerClass {
@@ -1061,6 +1061,7 @@ GType xnoise_gst_player_get_type (void);
 GType xnoise_video_screen_get_type (void);
 XnoiseGstPlayer* xnoise_gst_player_new (void);
 XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type);
+void xnoise_gst_player_request_location (XnoiseGstPlayer* self, const char* uri);
 void xnoise_gst_player_play (XnoiseGstPlayer* self);
 void xnoise_gst_player_pause (XnoiseGstPlayer* self);
 void xnoise_gst_player_stop (XnoiseGstPlayer* self);

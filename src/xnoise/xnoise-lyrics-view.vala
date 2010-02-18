@@ -52,7 +52,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		xn.gPl.sign_uri_changed.connect(on_uri_changed);
 	}
 
-	private void on_uri_changed(string uri) {
+	private void on_uri_changed(string? uri) {
 		textbuffer.set_text("LYRICS VIEWER", -1);
 		if(timeout!=0)
 			GLib.Source.remove(timeout);

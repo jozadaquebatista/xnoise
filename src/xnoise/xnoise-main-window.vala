@@ -509,7 +509,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private void stop() {
 		global.track_state = GlobalInfo.TrackState.STOPPED;
-		global.current_uri = "";
+		global.current_uri = null;
 	}
 
 	// This function changes the current song to the next or previous in the
@@ -1131,9 +1131,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		 * This method is used to handle play/pause commands from different signal handler sources
 		 */
 		private void handle_click() {
-			if(global.current_uri == "") {
+			//FIXME : This is slow as hell with playbin2. Why?
+			Idle.add(
+				handle_click_async
+			);
+		}
+		
+		private bool handle_click_async() {
+			if(global.current_uri == null) {
 				string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
-				if(uri != null) global.current_uri = uri;
+				if((uri != "")&&(uri != null)) 
+					global.current_uri = uri;
 			}
 
 			if(global.track_state == GlobalInfo.TrackState.PLAYING) {
@@ -1142,6 +1150,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			else {
 				global.track_state = GlobalInfo.TrackState.PLAYING;
 			}
+			return false;
 		}
 
 		public void update_picture() {
@@ -1162,7 +1171,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 
 	/**
-	* A SongProgressBar is  a Gtk.ProgressBar that shows the playback position in the
+	* A SongProgressBar is a Gtk.ProgressBar that shows the playback position in the
 	* currently played item and changes it upon user input
 	*/
 	public class SongProgressBar : Gtk.ProgressBar {
