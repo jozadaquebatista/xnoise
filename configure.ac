@@ -278,6 +278,6 @@ echo "
     lyricsfly:                     ${enable_lyricsfly}
     lastfm covers:                 ${enable_lastfmcovers}
     notifications:                 ${enable_notifications}
-    mediwatcher:                   ${enable_mediawatcher}
+    mediawatcher:                  ${enable_mediawatcher}
 
 "
