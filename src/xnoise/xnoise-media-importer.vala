@@ -30,6 +30,15 @@
 
 
 public class Xnoise.MediaImporter : Object {
+	private static MediaImporter _media_importer = null;
+	public signal void sig_media_path_changed();
+
+	public MediaImporter() {
+		if(_media_importer == null) _media_importer = this;
+		else this=_media_importer;
+	}
+
+	// add files to the media path and store them in the db
 	public void store_files(string[] list_of_files, ref DbWriter dbw) {
 		if(dbw == null) 
 			return;
@@ -47,17 +56,21 @@ public class Xnoise.MediaImporter : Object {
 			dbw.add_single_file_to_collection(uri);
 		}
 
+		dbw.commit_transaction();
+
 		foreach(string uri in files_ht.get_keys()) {
 			this.add_single_file(uri, ref dbw);
 		}
 
-		dbw.commit_transaction();
-
 		files_ht.remove_all();
+		sig_media_path_changed();
 	}
 
-	// Single file for media items
-	private void add_single_file(string uri, ref DbWriter dbw) {
+	// store a single file in the db, don't add it to the media path
+	public void add_single_file(string uri, ref DbWriter dbw) {
+		if(dbw == null) 
+			return;
+		dbw.begin_transaction();
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
@@ -97,12 +110,15 @@ public class Xnoise.MediaImporter : Object {
 				dbw.insert_title(td, file.get_uri());
 			}
 		}
+		dbw.commit_transaction();
 	}
 
-	private void import_local_tags(File dir, ref DbWriter dbw) {
+
+	// store a folder in the db, don't add it to the media path
+	public void add_local_tags(File dir, ref DbWriter dbw) {
 		if(dbw == null) 
 			return;
-		
+		dbw.begin_transaction();
 		FileEnumerator enumerator;
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
@@ -127,7 +143,7 @@ public class Xnoise.MediaImporter : Object {
 				PatternSpec psVideo = new PatternSpec("video*");
 
 				if(filetype == FileType.DIRECTORY) {
-					this.import_local_tags(file, ref dbw);
+					this.add_local_tags(file, ref dbw);
 				}
 				else if(psAudio.match_string(mime)) {
 					int idbuffer = dbw.uri_entry_exists(file.get_uri());
@@ -155,8 +171,10 @@ public class Xnoise.MediaImporter : Object {
 		catch(Error e) {
 			print("%s\n", e.message);
 		}
+		dbw.commit_transaction();
 	}
 
+	// add folders to the media path and store them in the db
 	public void store_folders(string[] mfolders, ref DbWriter dbw){
 		if(dbw == null) 
 			return;
@@ -178,13 +196,15 @@ public class Xnoise.MediaImporter : Object {
 		foreach(string folder in mfolders_ht.get_keys()) {
 			File dir = File.new_for_path(folder);
 			assert(dir != null);
-			import_local_tags(dir, ref dbw);
+			add_local_tags(dir, ref dbw);
 		}
 		dbw.commit_transaction();
 
 		mfolders_ht.remove_all();
+		sig_media_path_changed();
 	}
 
+	// add streams to the media path and store them in the db
 	public void store_streams(string[] list_of_streams, ref DbWriter dbw) {
 		if(dbw == null) 
 			return;
@@ -205,6 +225,7 @@ public class Xnoise.MediaImporter : Object {
 		dbw.commit_transaction();
 
 		streams_ht.remove_all();
+		sig_media_path_changed();
 	}
 }
 

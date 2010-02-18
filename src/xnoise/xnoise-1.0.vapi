@@ -285,9 +285,12 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaImporter : GLib.Object {
 		public MediaImporter ();
+		public void add_local_tags (GLib.File dir, ref Xnoise.DbWriter dbw);
+		public void add_single_file (string uri, ref Xnoise.DbWriter dbw);
 		public void store_files (string[] list_of_files, ref Xnoise.DbWriter dbw);
 		public void store_folders (string[] mfolders, ref Xnoise.DbWriter dbw);
 		public void store_streams (string[] list_of_streams, ref Xnoise.DbWriter dbw);
+		public signal void sig_media_path_changed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {

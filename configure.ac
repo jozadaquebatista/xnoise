@@ -204,6 +204,23 @@ fi
 AM_CONDITIONAL(ENABLE_NOTIFICATIONS, test x"$enable_notifications" = "xyes")
 dnl ================================================================
 
+dnl ================================================================
+dnl dependency check for optional build of mediawatcher plugin 
+
+AC_ARG_ENABLE([mediawatcher],
+    AS_HELP_STRING([--enable-mediawatcher],
+    [Disable mediawatcher plugin (default: disabled)]),
+    [enable_mediawatcher=$enableval],
+    [enable_mediawatcher=no])
+
+if test "x$enable_mediawatcher" = "xyes"; then
+        enable_mediawatcher=yes		
+else
+        enable_mediawatcher=no
+        AC_MSG_WARN([mediawatcher plugin will not be included in the build.])
+fi
+AM_CONDITIONAL(ENABLE_MEDIAWATCHER, test x"$enable_mediawatcher" = "xyes")
+dnl ================================================================
 
 
 # Gettext
@@ -242,6 +259,7 @@ AC_CONFIG_FILES([
     src/plugins/leoslyrics/Makefile
     src/plugins/lyricsfly/Makefile
     src/plugins/notifications/Makefile
+    src/plugins/mediawatcher/Makefile
     po/Makefile.in
 ])
 
@@ -260,5 +278,6 @@ echo "
     lyricsfly:                     ${enable_lyricsfly}
     lastfm covers:                 ${enable_lastfmcovers}
     notifications:                 ${enable_notifications}
+    mediwatcher:                   ${enable_mediawatcher}
 
 "

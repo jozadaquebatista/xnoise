@@ -1,0 +1,9 @@
+[XnoisePlugin]
+name=Mediawatcher
+module=Mediawatcher
+description=Automatically adds new files in your media directories to the database
+website=http://code.google.com/p/xnoise/
+icon=/path/to/icon
+copyright=Copyright © 2010 softshaker 
+license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
+author=softshaker <softshaker@googlemail.com>
