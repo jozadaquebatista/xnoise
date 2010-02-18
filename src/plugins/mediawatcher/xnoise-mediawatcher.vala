@@ -137,11 +137,14 @@ public class Mediawatcher : GLib.Object {
 				
 				try {
 					var info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
+					
 					if(info.get_file_type() == FileType.REGULAR) mi.add_single_file(file.get_uri(), ref dbw);	
 					else if (info.get_file_type() == FileType.DIRECTORY) {
 						mi.add_local_tags(file, ref dbw);
 						setup_monitor_for_path(file.get_path());
 					}
+					
+					Main.instance.main_window.mediaBr.change_model_data();
 				} 
 				catch (Error e) {
 					stdout.printf("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e.message);
