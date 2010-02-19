@@ -34,6 +34,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private Sqlite.Database db = null;
+	private Statement pragma_foreign_keys_statement;
 	private Statement update_album_image_statement;
 	private Statement insert_lastused_entry_statement;
 	private Statement add_radio_statement;
@@ -61,6 +62,10 @@ public class Xnoise.DbWriter : GLib.Object {
 	private Statement delete_media_files_statement;
 	private Statement add_mfile_statement;
 	private bool begin_stmt_used;
+	
+	//SQLITE CONFIG STATEMENTS
+	private static const string STMT_PRAGMA_FOREIGN_KEYS =
+		"PRAGMA foreign_keys = ON;";
 
 	// DBWRITER STATEMENTS
 	private static const string STMT_BEGIN =
@@ -124,6 +129,19 @@ public class Xnoise.DbWriter : GLib.Object {
 			this.unref();// = null;
 		this.begin_stmt_used = false; // initialize begin commit compare
 		this.prepare_statements();
+		
+		setup_db();
+	}
+	
+	private bool setup_db() {
+		begin_transaction();
+		bool retval = exec_prepared_stmt(pragma_foreign_keys_statement);
+		if (!retval) {
+			print("Setup of database constraints failed \n");	
+		}
+		commit_transaction();
+		
+		return retval;
 	}
 	
 	private static Database? get_db () {
@@ -148,6 +166,8 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	private void prepare_statements() {
+		this.db.prepare_v2(STMT_PRAGMA_FOREIGN_KEYS, -1,
+			out this.pragma_foreign_keys_statement);
 		this.db.prepare_v2(STMT_UPDATE_ALBUM_IMAGE, -1,
 			out this.update_album_image_statement);
 		this.db.prepare_v2(STMT_CHECK_TRACK_EXISTS, -1,
