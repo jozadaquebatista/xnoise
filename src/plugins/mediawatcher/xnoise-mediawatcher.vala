@@ -101,12 +101,12 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 	
 	protected void media_path_changed_cb() {
-		unowned List<FileMonitor> iter = monitor_list;
-		while((iter = iter.next) != null) 
-			iter.data.unref();
-			
-		monitor_list.data.unref();
-		
+		if(monitor_list != null) {
+			unowned List<FileMonitor> iter = monitor_list;
+			while((iter = iter.next) != null) 
+				iter.data.unref();
+				monitor_list.data.unref();
+		}
 		setup_monitors();
 	}
 	
@@ -198,16 +198,16 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	single file only.
  */
 private class Xnoise.ImportInfoBar {
-	public InfoBar bar;
-	public Label bar_label;
-	public Button bar_close_button;
-	public ProgressBar bar_progress;
+	private InfoBar bar;
+	private Label bar_label;
+	private Button bar_close_button;
+	private ProgressBar bar_progress;
 	
-	public bool shown;
-	public int import_count;
-	public uint import_notify_timeout;
+	private bool shown;
+	private int import_count;
+	private uint import_notify_timeout;
 	
-	public string last_uri;
+	private string last_uri;
 	
 	private const int notify_timeout_value = 2500;
 	
