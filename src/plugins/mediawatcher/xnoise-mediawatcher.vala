@@ -101,12 +101,12 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 	
 	protected void media_path_changed_cb() {
-		unowned List<FileMonitor> iter = monitor_list;
-		while((iter = iter.next) != null) 
-			iter.data.unref();
-			
-		monitor_list.data.unref();
-		
+		if(monitor_list != null) {
+			unowned List<FileMonitor> iter = monitor_list;
+			while((iter = iter.next) != null) 
+				iter.data.unref();
+				monitor_list.data.unref();
+		}
 		setup_monitors();
 	}
 	
