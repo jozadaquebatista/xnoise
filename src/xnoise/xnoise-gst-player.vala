@@ -262,7 +262,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 //				break;
 //			}
 			case Gst.MessageType.TAG: {
-				print("message tag\n");
 				TagList tag_list;
 				msg.parse_tag(out tag_list);
 				if(taglist == null && tag_list != null) {
@@ -382,7 +381,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	public void stop() {
 		playbin2.set_state(State.NULL); //READY
-		print("gst stop\n");
+//		print("gst stop\n");
 //		wait();
 		playing = false;
 		paused = false;

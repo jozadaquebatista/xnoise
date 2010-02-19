@@ -976,21 +976,38 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.searchEntryMB.key_release_event.connect( (s, e) => {
 				int KEY_ENTER = 0xFF0D;
 				var entry = (Gtk.Entry)s;
-				if((int)e.keyval == KEY_ENTER || entry.get_text().size() >= 2 ||
+				if((int)e.keyval == KEY_ENTER ||
 				    entry.get_text().size() == 0 ) {
 					this.mediaBr.on_searchtext_changed(entry);
+				}
+				if(entry.text != "") {
+					Gdk.Color color;
+					Gdk.Color.parse("DarkSalmon", out color);
+					entry.modify_base(StateType.NORMAL, color);
+				}
+				else {
+					Gdk.Color color;
+					Gdk.Color.parse("grey100", out color);
+					entry.modify_base(StateType.NORMAL, color);
 				}
 				return false;
 			});
 
-			this.searchEntryMB.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
+			this.searchEntryMB.icon_press.connect( (s, p0, p1) => { 
+				// s:Entry, p0:Position, p1:Gdk.Event
+				var entry = (Gtk.Entry)s;
+				if(p0 == Gtk.EntryIconPosition.PRIMARY) {
+					this.mediaBr.on_searchtext_changed((Gtk.Entry)s);
+				}
 				if(p0 == Gtk.EntryIconPosition.SECONDARY) {
 					s.text = "";
-					var entry = (Gtk.Entry)s;
-					this.mediaBr.on_searchtext_changed(entry);
+					Gdk.Color color;
+					Gdk.Color.parse("grey100", out color);
+					entry.modify_base(StateType.NORMAL, color);
+					this.mediaBr.on_searchtext_changed((Gtk.Entry)s);
 				}
 			});
-
+			
 			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox;
 			sexyentryBox.add(searchEntryMB);
 			
