@@ -76,7 +76,7 @@ public class Xnoise.MediawatcherPlugin : GLib.Object, IPlugin {
 
 
 public class Xnoise.Mediawatcher : GLib.Object {
-	private List<FileMonitor> monitor_list;
+	private List<FileMonitor> monitor_list = null;
 	private ImportInfoBar iib;
 	
 	// the frequency limit to check monitored directories for changes
@@ -101,12 +101,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 	
 	protected void media_path_changed_cb() {
-		if(monitor_list != null) {
-			unowned List<FileMonitor> iter = monitor_list;
-			while((iter = iter.next) != null) 
-				iter.data.unref();
-				monitor_list.data.unref();
-		}
+		monitor_list.remove_all(monitor_list.data);
+		monitor_list = null;
 		setup_monitors();
 	}
 	
@@ -131,7 +127,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 
 
 	protected void file_changed_cb(FileMonitor sender, File file, File? other_file, FileMonitorEvent event_type) {
-		print("%s\n", event_type.to_string());
+		//print("%s\n", event_type.to_string());
 		if(event_type == FileMonitorEvent.CREATED) { // TODO: monitor removal of folders, too
 			if(file != null) {
 				print("\'%s\' has been created recently, updating db...", file.get_path());
@@ -197,15 +193,15 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	single file only.
  */
 private class Xnoise.ImportInfoBar {
-	public InfoBar bar = null;
-	public Label bar_label = null;
-	public Button bar_close_button = null;
-	public ProgressBar bar_progress = null;
+	private InfoBar bar = null;
+	private Label bar_label = null;
+	private Button bar_close_button = null;
+	private ProgressBar bar_progress = null;
 	
-	public bool shown;
-	public int import_count;
+	private bool shown;
+	private int import_count;
 	
-	public string last_uri  = null;
+	private string last_uri  = null;
 	
 	private const int notify_timeout_value = 2500;
 	
@@ -291,8 +287,14 @@ private class Xnoise.ImportInfoBar {
 		if(bar_label == null)
 			return false;
 			
-		if (import_count > 1) {
-			bar_label.set_text(import_count.to_string() + " items have been added to your media library");
+		if(import_count > 1) {
+			Idle.add( () => {
+				// Doing this in an Idle prevents some warnings
+				bar_label.set_text(import_count.to_string() + 
+				                   " items have been added to your media library"
+				                   );
+				return false;
+			}); 
 		}
 		else {
 			var dbb = new DbBrowser();
