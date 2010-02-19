@@ -902,6 +902,7 @@ ready to rock</property>
                 </child>
               </object>
               <packing>
+                <property name="pack_type">end</property>
                 <property name="position">0</property>
               </packing>
             </child>
