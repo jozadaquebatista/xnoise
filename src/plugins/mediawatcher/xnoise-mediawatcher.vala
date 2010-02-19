@@ -113,7 +113,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	/* setup file monitors for a directory and all its subdirectories, reference them and
 	 store them in monitor_list */
 	protected void setup_monitor_for_path(string path) {
-		print("setup_monitor_for_path : %s\n", path);
+		//print("setup_monitor_for_path : %s\n", path);
 		try {
 			var dir = File.new_for_path(path);
 			var monitor = dir.monitor_directory(FileMonitorFlags.NONE);
@@ -131,7 +131,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 
 
 	protected void file_changed_cb(FileMonitor sender, File file, File? other_file, FileMonitorEvent event_type) {
-		print("%s\n", event_type.to_string());
+		//print("%s\n", event_type.to_string());
 		if(event_type == FileMonitorEvent.CREATED) { // TODO: monitor removal of folders, too
 			if(file != null) {
 				print("\'%s\' has been created recently, updating db...", file.get_path());
@@ -156,7 +156,6 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			}
 		}
 	}
-
 
 	/* sets up file monitors for all subdirectories of a directory, references them and
 	 stores them in monitor_list */
@@ -198,16 +197,15 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	single file only.
  */
 private class Xnoise.ImportInfoBar {
-	public InfoBar bar;
-	public Label bar_label;
-	public Button bar_close_button;
-	public ProgressBar bar_progress;
+	public InfoBar bar = null;
+	public Label bar_label = null;
+	public Button bar_close_button = null;
+	public ProgressBar bar_progress = null;
 	
 	public bool shown;
 	public int import_count;
-	public uint import_notify_timeout;
 	
-	public string last_uri;
+	public string last_uri  = null;
 	
 	private const int notify_timeout_value = 2500;
 	
@@ -216,6 +214,7 @@ private class Xnoise.ImportInfoBar {
 		bar = new InfoBar();
 
 		bar_label = new Label("");
+		bar_label.height_request = 25;
 		var content_area = bar.get_content_area();
 		((Container)content_area).add(bar_label);
 		bar_label.show();
@@ -229,10 +228,10 @@ private class Xnoise.ImportInfoBar {
 		bar.add_action_widget(bar_close_button, 0);
 		
 		bar_progress = new ProgressBar();
-		bar_progress.set_size_request(0,0);
+		bar_progress.set_size_request(0, 0);
+		bar_progress.pulse_step = 0.01;
 		bar_progress.bar_style = ProgressBarStyle.CONTINUOUS;
 		((Container)content_area).add(bar_progress);
-		
 		
 		bar_close_button.clicked.connect((a) => {
 			bar.hide();
@@ -240,20 +239,26 @@ private class Xnoise.ImportInfoBar {
 			shown = false;
 		});
 		
-//		mi = new MediaImporter();
 		global.sig_item_imported.connect(on_import);
+		
+		global.notify["media-import-in-progress"].connect( () => {
+			if(global.media_import_in_progress == false) {
+				on_countdown_done();
+			}
+		});
 	}
 	
 	private void on_ongoing_import(string uri) {
 		import_count++;
 		last_uri = null;
 		bar_progress.pulse();
-		
-		GLib.Source.remove (import_notify_timeout);
-		import_notify_timeout = Timeout.add(notify_timeout_value, on_countdown_done);
 	}
 		
 	private void on_import(string uri) {
+		if(bar_label == null)
+			return;
+		
+		import_count = 0;
 		bar_label.set_text("Adding new files to the media database...");
 		
 		bar_close_button.hide();
@@ -269,7 +274,7 @@ private class Xnoise.ImportInfoBar {
 			Main.instance.main_window.display_info_bar(bar);
 			shown = true;
 		}
-		import_notify_timeout = Timeout.add(notify_timeout_value, on_countdown_done);
+		
 		global.sig_item_imported.disconnect(on_import);
 		global.sig_item_imported.connect(on_ongoing_import);
 		
@@ -283,14 +288,17 @@ private class Xnoise.ImportInfoBar {
 	
 	
 	private bool on_countdown_done() {
+		if(bar_label == null)
+			return false;
+			
 		if (import_count > 1) {
-			bar_label.set_text(import_count.to_string()+" items have been added to your media library");
+			bar_label.set_text(import_count.to_string() + " items have been added to your media library");
 		}
 		else {
 			var dbb = new DbBrowser();
 			TrackData data;
 			dbb.get_trackdata_for_uri(last_uri, out data);
-			bar_label.set_markup("<b>"+data.Artist+" - "+ data.Title+"</b> has been added to your media library");
+			bar_label.set_markup("<b>" + data.Artist + " - "+ data.Title + "</b> has been added to your media library");
 			last_uri = null;
 		}
 		

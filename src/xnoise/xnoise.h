@@ -571,6 +571,7 @@ struct _XnoiseDbWriterClass {
 struct _XnoiseGlobalInfo {
 	GObject parent_instance;
 	XnoiseGlobalInfoPrivate * priv;
+	gboolean _media_import_in_progress;
 };
 
 struct _XnoiseGlobalInfoClass {
@@ -1057,6 +1058,8 @@ const GtkTreeRowReference* xnoise_global_info_get_position_reference (XnoiseGlob
 void xnoise_global_info_set_position_reference (XnoiseGlobalInfo* self, const GtkTreeRowReference* value);
 const GtkTreeRowReference* xnoise_global_info_get_position_reference_next (XnoiseGlobalInfo* self);
 void xnoise_global_info_set_position_reference_next (XnoiseGlobalInfo* self, const GtkTreeRowReference* value);
+gboolean xnoise_global_info_get_media_import_in_progress (XnoiseGlobalInfo* self);
+void xnoise_global_info_set_media_import_in_progress (XnoiseGlobalInfo* self, gboolean value);
 GType xnoise_gst_player_get_type (void);
 GType xnoise_video_screen_get_type (void);
 XnoiseGstPlayer* xnoise_gst_player_new (void);

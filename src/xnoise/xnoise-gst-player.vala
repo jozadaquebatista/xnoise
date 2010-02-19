@@ -145,7 +145,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
 		this.notify.connect( (s, p) => {
 			switch(p.name) {
-case "Uri": {
+				case "Uri": {
 					this._currentartist   = "unknown artist";
 					this._currentalbum    = "unknown album";
 					this._currenttitle    = "unknown title";

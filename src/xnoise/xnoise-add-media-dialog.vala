@@ -213,10 +213,17 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 		var dbw = new DbWriter();
 		var mi = new MediaImporter();
-
+		
+		//start import
+		global.media_import_in_progress = true;
+		
 		mi.store_folders(list_of_folders, ref dbw);
 		mi.store_streams(list_of_streams, ref dbw); // TODO: Deliver streams with names
 		mi.store_files(list_of_files, ref dbw);
+		
+		//finish import
+		global.media_import_in_progress = false;
+
 		dbw = null;
 		mi = null;
 		

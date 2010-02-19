@@ -101,11 +101,13 @@ namespace Xnoise {
 			PLAYING,
 			PAUSED
 		}
+		public bool _media_import_in_progress;
 		public GlobalInfo ();
 		public void broadcast_image_for_current_track ();
 		public void handle_eos ();
 		public void reset_position_reference ();
 		public string? current_uri { get; set; }
+		public bool media_import_in_progress { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
 		public Xnoise.GlobalInfo.TrackState track_state { get; set; }

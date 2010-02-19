@@ -58,6 +58,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		}
 
 		files_ht.remove_all();
+
 		global.sig_media_path_changed();
 	}
 

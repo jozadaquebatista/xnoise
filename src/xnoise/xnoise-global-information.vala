@@ -122,6 +122,15 @@ public class Xnoise.GlobalInfo : GLib.Object {
 			}
 		}
 	}
+	public bool _media_import_in_progress;
+	public bool media_import_in_progress {
+		get {
+			return _media_import_in_progress;
+		}
+		set {
+				_media_import_in_progress = value;
+		}
+	}
 
 	public void reset_position_reference() {
 		this._position_reference = null;
