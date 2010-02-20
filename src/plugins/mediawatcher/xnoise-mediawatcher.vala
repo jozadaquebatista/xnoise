@@ -105,8 +105,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			unowned List<FileMonitor> iter = monitor_list;
 			while((iter = iter.next) != null) {
 				iter.data.unref();
-				monitor_list.data.unref();
 			}
+			monitor_list.data.unref();
 			monitor_list = null;
 		}
 		setup_monitors();
@@ -209,6 +209,7 @@ private class Xnoise.ImportInfoBar {
 	
 	private string last_uri  = null;
 	
+	private uint import_notify_timeout;
 	private const int notify_timeout_value = 2500;
 	
 	public ImportInfoBar() {
@@ -216,7 +217,7 @@ private class Xnoise.ImportInfoBar {
 		bar = new InfoBar();
 
 		bar_label = new Label("");
-		bar_label.height_request = 25;
+		bar_label.height_request = 20;
 		var content_area = bar.get_content_area();
 		((Container)content_area).add(bar_label);
 		bar_label.show();
@@ -230,7 +231,6 @@ private class Xnoise.ImportInfoBar {
 		bar.add_action_widget(bar_close_button, 0);
 		
 		bar_progress = new ProgressBar();
-		bar_progress.set_size_request(0, 0);
 		bar_progress.pulse_step = 0.01;
 		bar_progress.bar_style = ProgressBarStyle.CONTINUOUS;
 		((Container)content_area).add(bar_progress);
@@ -243,31 +243,29 @@ private class Xnoise.ImportInfoBar {
 		
 		global.sig_item_imported.connect(on_import);
 		
-		global.notify["media-import-in-progress"].connect( () => {
+		/*global.notify["media-import-in-progress"].connect( () => {
 			if(global.media_import_in_progress == false) {
 				on_countdown_done();
 			}
-		});
+		});*/
 	}
 	
 	private void on_ongoing_import(string uri) {
 		import_count++;
 		last_uri = null;
 		bar_progress.pulse();
+		
+		GLib.Source.remove (import_notify_timeout);
+		import_notify_timeout = Timeout.add(notify_timeout_value, on_countdown_done);
 	}
 		
 	private void on_import(string uri) {
 		if(bar_label == null)
-			return;
-		
-		import_count = 0;
+			bar_label = new Label("");
+	
 		bar_label.set_text("Adding new files to the media database...");
 		
-		bar_close_button.hide();
-		bar_progress.show();
-		bar_progress.pulse();
-		
-		bar.show();
+
 		
 		import_count++;
 		last_uri = uri;
@@ -276,6 +274,14 @@ private class Xnoise.ImportInfoBar {
 			Main.instance.main_window.display_info_bar(bar);
 			shown = true;
 		}
+		
+		bar_close_button.hide();
+		bar_progress.show();
+		bar_progress.pulse();
+		
+		bar.show();
+		
+		import_notify_timeout = Timeout.add(notify_timeout_value, on_countdown_done);
 		
 		global.sig_item_imported.disconnect(on_import);
 		global.sig_item_imported.connect(on_ongoing_import);
@@ -290,8 +296,10 @@ private class Xnoise.ImportInfoBar {
 	
 	
 	private bool on_countdown_done() {
+		//GLib.Source.remove (import_notify_timeout);
+		
 		if(bar_label == null)
-			return false;
+			bar_label = new Label("");
 			
 		if(import_count > 1) {
 			Idle.add( () => {
