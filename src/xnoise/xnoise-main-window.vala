@@ -986,9 +986,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					entry.modify_base(StateType.NORMAL, color);
 				}
 				else {
-					Gdk.Color color;
-					Gdk.Color.parse("grey100", out color);
-					entry.modify_base(StateType.NORMAL, color);
+					entry.modify_base(StateType.NORMAL, null);
 				}
 				return false;
 			});
@@ -1001,9 +999,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 				if(p0 == Gtk.EntryIconPosition.SECONDARY) {
 					s.text = "";
-					Gdk.Color color;
-					Gdk.Color.parse("grey100", out color);
-					entry.modify_base(StateType.NORMAL, color);
+					entry.modify_base(StateType.NORMAL, null);
 					this.mediaBr.on_searchtext_changed((Gtk.Entry)s);
 				}
 			});
