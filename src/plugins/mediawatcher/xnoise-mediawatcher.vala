@@ -101,8 +101,14 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 	
 	protected void media_path_changed_cb() {
-		monitor_list.remove_all(monitor_list.data);
-		monitor_list = null;
+		if(monitor_list != null) {
+			unowned List<FileMonitor> iter = monitor_list;
+			while((iter = iter.next) != null) {
+				iter.data.unref();
+				monitor_list.data.unref();
+			}
+			monitor_list = null;
+		}
 		setup_monitors();
 	}
 	
