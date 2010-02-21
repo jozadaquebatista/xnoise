@@ -137,7 +137,7 @@ msgstr "repetir todos"
 #: ../src/xnoise/xnoise-main-window.vala:291
 #: ../src/xnoise/xnoise-main-window.vala:293
 msgid "random play"
-msgstr "Add local file"
+msgstr "Reproducción aleatoria"
 
 #: ../src/xnoise/xnoise-main-window.vala:341
 msgid "Play/Pause"
