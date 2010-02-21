@@ -75,7 +75,7 @@ public class Xnoise.MediawatcherPlugin : GLib.Object, IPlugin {
 
 
 public class Xnoise.Mediawatcher : GLib.Object {
-	private List<FileMonitor> monitor_list = null;
+	private List<DataPair> monitor_list = null;
 	private ImportInfoBar iib;
 	
 	// the frequency limit to check monitored directories for changes
@@ -88,10 +88,20 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		
 		setup_monitors();
 	}
+	
+	protected class DataPair {
+		public DataPair(string path, FileMonitor monitor) {
+			this.path = path;
+			this.monitor = monitor;
+		}
+		
+		public FileMonitor monitor;
+		public string path;
+	}
 
 	/* creates file monitors for all directories in the media path */ 
 	protected void setup_monitors() {
-		monitor_list = new List<FileMonitor>();
+		monitor_list = new List<DataPair>();
 		var dbb = new DbBrowser();
 		var mfolders = dbb.get_media_folders();
 		
@@ -100,12 +110,14 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 	
 	protected void media_path_changed_cb() {
+		//in future, when we are informed of path changes item by item
+		//we will be able to remove and add specific monitors 
 		if(monitor_list != null) {
-			unowned List<FileMonitor> iter = monitor_list;
+			unowned List<DataPair> iter = monitor_list;
 			while((iter = iter.next) != null) {
-				iter.data.unref();
+				iter.data.monitor.unref();
 			}
-			monitor_list.data.unref();
+			monitor_list.data.monitor.unref();
 			monitor_list = null;
 		}
 		setup_monitors();
@@ -119,9 +131,10 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			var dir = File.new_for_path(path);
 			var monitor = dir.monitor_directory(FileMonitorFlags.NONE);
 			monitor.changed.connect(file_changed_cb);
-			monitor.ref();
 			monitor.set_rate_limit(monitoring_frequency);
-			monitor_list.append(monitor);	
+			var d = new DataPair(path, monitor);
+			monitor.ref();
+			monitor_list.append(d);	
 
 			monitor_all_subdirs(dir);
 		}
@@ -130,46 +143,63 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		}
 	}
 
+	protected void remove_dir_monitors(string path) {
+		monitor_list.foreach((data) => {
+			unowned List<DataPair> iter = monitor_list;
+			while(iter != null) {	
+	   			if(iter.data.path.has_prefix(path)) {
+	   				print("removed monitor %s", iter.data.path);
+	   				iter.data.monitor.unref();
+	   				iter = iter.next;
+	   				iter.delete_link(iter.prev);
+	   			}
+	   			else iter = iter.next;
+	   		}
+	   	});
+	}
 
 	protected void handle_deleted_file(File file) {
 	   	//if the file was a directory it is in monitor_list
 	   	//search for filepath in monitor list and remove it
 	   	//remove all its subdirs from monitor list
-	   	//in the course of thattry to remove the uri of every file 
-	   	//that was in those directories from the db
+	   	//in the course of that try to remove the uri of every file 
+	   	//that was in those directories from the db 
+	   	//(we might need to store the directory of files in the db)
+	   	
+		remove_dir_monitors(file.get_path());
 	   	
 	   	print("File deleted: \'%s\'\n", file.get_path());
 	   	var dbw = new DbWriter();
        	dbw.delete_uri(file.get_uri());
        	Main.instance.main_window.mediaBr.change_model_data();
     }
+    
+    protected void handle_created_file(File file) {
+		print("\'%s\' has been created recently, updating db...\n", file.get_path());
+			
+		var dbw = new DbWriter();
+		var mi = new MediaImporter();
+		
+		try {
+			var info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
+			
+			if(info.get_file_type() == FileType.REGULAR) mi.add_single_file(file.get_uri(), ref dbw);	
+			else if (info.get_file_type() == FileType.DIRECTORY) {
+				mi.add_local_tags(file, ref dbw);
+				setup_monitor_for_path(file.get_path());
+			}
+			
+			Main.instance.main_window.mediaBr.change_model_data();
+		} 
+		catch(Error e) {
+			print("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e.message);
+		}
+	}
        	
 	protected void file_changed_cb(FileMonitor sender, File file, File? other_file, FileMonitorEvent event_type) {
 		//print("%s\n", event_type.to_string());
-		if(event_type == FileMonitorEvent.CREATED) { // TODO: monitor removal of folders, too
-			if(file != null) {
-				print("\'%s\' has been created recently, updating db...\n", file.get_path());
-				
-				var dbw = new DbWriter();
-				var mi = new MediaImporter();
-				
-				try {
-					var info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
-					
-					if(info.get_file_type() == FileType.REGULAR) mi.add_single_file(file.get_uri(), ref dbw);	
-					else if (info.get_file_type() == FileType.DIRECTORY) {
-						mi.add_local_tags(file, ref dbw);
-						setup_monitor_for_path(file.get_path());
-					}
-					
-					Main.instance.main_window.mediaBr.change_model_data();
-				} 
-				catch(Error e) {
-					print("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e.message);
-				}
-			}
-		}
-		
+		if(event_type == FileMonitorEvent.CREATED)  // TODO: monitor removal of folders, too
+			if(file != null) handle_created_file(file);
 		if(event_type == FileMonitorEvent.DELETED) handle_deleted_file(file);
 	}
 
@@ -188,9 +218,10 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	
 					var temp_mon = temp_f.monitor_directory(FileMonitorFlags.NONE);
 					temp_mon.changed.connect(file_changed_cb);
-					temp_mon.ref();
 					temp_mon.set_rate_limit(monitoring_frequency);
-					monitor_list.append(temp_mon);
+					var d = new DataPair(temp_f.get_path(), temp_mon);
+					temp_mon.ref();
+					monitor_list.append(d);
 				
 					monitor_all_subdirs(temp_f);
 				}
