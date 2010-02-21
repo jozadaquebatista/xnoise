@@ -273,29 +273,29 @@ public class Xnoise.DbWriter : GLib.Object {
 			out this.add_mfile_statement);
                         
 		this.db.prepare_v2(STMT_GET_ARTIST_FOR_URI_ID , -1,
-		        out this.get_artist_for_uri_id_statement);
+			out this.get_artist_for_uri_id_statement);
 		this.db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1,
-		        out this.count_artist_in_items_statement);
+			out this.count_artist_in_items_statement);
 		this.db.prepare_v2(STMT_DEL_ARTIST , -1,
-		        out this.delete_artist_statement);
+			out this.delete_artist_statement);
 		this.db.prepare_v2(STMT_DEL_URI , -1,
-		        out this.delete_uri_statement);
+			out this.delete_uri_statement);
 		this.db.prepare_v2(STMT_DEL_ITEM , -1,
-		        out this.delete_item_statement);
+			out this.delete_item_statement);
 		        
 		this.db.prepare_v2(STMT_GET_ALBUM_FOR_URI_ID , -1,
-		        out this.get_album_for_uri_id_statement);
+			out this.get_album_for_uri_id_statement);
 		this.db.prepare_v2(STMT_COUNT_ALBUM_IN_ITEMS , -1,
-		        out this.count_album_in_items_statement);
+			out this.count_album_in_items_statement);
 		this.db.prepare_v2(STMT_DEL_ALBUM , -1,
-		        out this.delete_album_statement);
+			out this.delete_album_statement);
 
 		this.db.prepare_v2(STMT_GET_GENRE_FOR_URI_ID , -1,
-		        out this.get_genre_for_uri_id_statement);
+			out this.get_genre_for_uri_id_statement);
 		this.db.prepare_v2(STMT_COUNT_GENRE_IN_ITEMS , -1,
-		        out this.count_genre_in_items_statement);
+			out this.count_genre_in_items_statement);
 		this.db.prepare_v2(STMT_DEL_GENRE , -1,
-		        out this.delete_genre_statement);
+			out this.delete_genre_statement);
 		        
 	}
 
