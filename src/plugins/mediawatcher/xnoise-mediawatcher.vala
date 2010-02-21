@@ -150,8 +150,9 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	   			if(iter.data.path.has_prefix(path)) {
 	   				print("removed monitor %s", iter.data.path);
 	   				iter.data.monitor.unref();
-	   				iter = iter.next;
-	   				iter.delete_link(iter.prev);
+	   				unowned List<DataPair> temp = iter.next;
+	   				iter.delete_link(iter);
+	   				iter = temp;
 	   			}
 	   			else iter = iter.next;
 	   		}
