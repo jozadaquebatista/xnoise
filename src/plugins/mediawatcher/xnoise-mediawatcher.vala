@@ -32,12 +32,11 @@
 
 /* TODO
 	* handle symlinks
-	* test performance, maybe switch to inotify
+	* test performance, maybe switch to inotify as an option for linux
 	* find a well performing facility to automatically add files that were created in the media 
 		path while xnoise was not monitoring/running (i have no solution here)
-	* act upon changes of the media path directories/items more precisely 
-		(don't regenerate everything) -> also needs work on MediaImporter and AddMediaDialog
-	* handle file deletions
+	* handle directory deletions
+	* disconnect signal handlers when plugin is unloaded
 */
 
 using Gtk;
@@ -132,11 +131,24 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 
 
+	protected void handle_deleted_file(File file) {
+	   	//if the file was a directory it is in monitor_list
+	   	//search for filepath in monitor list and remove it
+	   	//remove all its subdirs from monitor list
+	   	//in the course of thattry to remove the uri of every file 
+	   	//that was in those directories from the db
+	   	
+	   	print("File deleted: \'%s\'\n", file.get_path());
+	   	var dbw = new DbWriter();
+       	dbw.delete_uri(file.get_uri());
+       	Main.instance.main_window.mediaBr.change_model_data();
+    }
+       	
 	protected void file_changed_cb(FileMonitor sender, File file, File? other_file, FileMonitorEvent event_type) {
 		//print("%s\n", event_type.to_string());
 		if(event_type == FileMonitorEvent.CREATED) { // TODO: monitor removal of folders, too
 			if(file != null) {
-				print("\'%s\' has been created recently, updating db...", file.get_path());
+				print("\'%s\' has been created recently, updating db...\n", file.get_path());
 				
 				var dbw = new DbWriter();
 				var mi = new MediaImporter();
@@ -157,6 +169,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 				}
 			}
 		}
+		
+		if(event_type == FileMonitorEvent.DELETED) handle_deleted_file(file);
 	}
 
 	/* sets up file monitors for all subdirectories of a directory, references them and

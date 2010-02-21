@@ -61,6 +61,21 @@ public class Xnoise.DbWriter : GLib.Object {
 	private Statement delete_genres_statement;
 	private Statement delete_media_files_statement;
 	private Statement add_mfile_statement;
+	private static Statement delete_uri_statement;
+	private static Statement delete_item_statement;
+
+    private Statement get_artist_for_uri_id_statement;
+	private Statement count_artist_in_items_statement;
+	private Statement delete_artist_statement;
+
+	private Statement get_album_for_uri_id_statement;
+	private Statement count_album_in_items_statement;
+	private Statement delete_album_statement;
+
+	private Statement get_genre_for_uri_id_statement;
+	private Statement count_genre_in_items_statement;
+	private Statement delete_genre_statement;
+
 	private bool begin_stmt_used;
 	
 	//SQLITE CONFIG STATEMENTS
@@ -120,6 +135,42 @@ public class Xnoise.DbWriter : GLib.Object {
 		"DELETE FROM uris";
 	private static const string STMT_DEL_GENRES =
 		"DELETE FROM genres";
+	    
+	private static const string STMT_DEL_URI = 
+		"DELETE FROM uris WHERE id = ?";
+	private static const string STMT_DEL_ITEM = 
+		"DELETE FROM items WHERE uri = ?";
+		
+	private static const string STMT_GET_ARTIST_FOR_URI_ID =
+		"SELECT artist FROM items WHERE uri = ?";
+	private static const string STMT_COUNT_ARTIST_IN_ITEMS =
+		"SELECT COUNT(id) FROM items WHERE artist = ?";
+	private static const string STMT_DEL_ARTIST = 
+		"DELETE FROM ARTISTS WHERE id = ?";
+	    
+	private static const string STMT_GET_ALBUM_FOR_URI_ID =
+		"SELECT album FROM items WHERE uri = ?";
+	private static const string STMT_COUNT_ALBUM_IN_ITEMS =
+		"SELECT COUNT(id) FROM items WHERE album = ?";
+	private static const string STMT_DEL_ALBUM = 
+		"DELETE FROM albums WHERE id = ?";
+		
+	private static const string STMT_GET_GENRE_FOR_URI_ID =
+		"SELECT genre FROM items WHERE uri = ?";
+	private static const string STMT_COUNT_GENRE_IN_ITEMS =
+		"SELECT COUNT(id) FROM genre WHERE album = ?";
+	private static const string STMT_DEL_GENRE = 
+		"DELETE FROM genre WHERE id = ?";
+		
+	/*private static const string STMT_GET_COL_FOR_URI_ID =
+		"SELECT ? FROM items WHERE uri = ?";
+	private static const string STMT_COUNT_COL_IN_ITEMS =
+		"SELECT COUNT(id) FROM items WHERE ? = ?";
+	private static const string STMT_DEL_ID_IN_TABLE = 
+		"DELETE FROM ? WHERE id = ?";*/
+
+		
+		
 
 	public DbWriter() {
 		this.db = null;
@@ -203,7 +254,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		this.db.prepare_v2(STMT_INSERT_GENRE, -1,
 			out this.insert_genre_statement);
 		this.db.prepare_v2(STMT_INSERT_TITLE, -1,
-			out this.insert_title_statement);
+        	out this.insert_title_statement);
 		this.db.prepare_v2(STMT_GET_TITLE_ID, -1,
 			out this.get_title_id_statement);
 		this.db.prepare_v2(STMT_DEL_ARTISTS, -1,
@@ -220,6 +271,32 @@ public class Xnoise.DbWriter : GLib.Object {
 			out this.delete_media_files_statement);
 		this.db.prepare_v2(STMT_ADD_MFILE, -1,
 			out this.add_mfile_statement);
+                        
+		this.db.prepare_v2(STMT_GET_ARTIST_FOR_URI_ID , -1,
+		        out this.get_artist_for_uri_id_statement);
+		this.db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1,
+		        out this.count_artist_in_items_statement);
+		this.db.prepare_v2(STMT_DEL_ARTIST , -1,
+		        out this.delete_artist_statement);
+		this.db.prepare_v2(STMT_DEL_URI , -1,
+		        out this.delete_uri_statement);
+		this.db.prepare_v2(STMT_DEL_ITEM , -1,
+		        out this.delete_item_statement);
+		        
+		this.db.prepare_v2(STMT_GET_ALBUM_FOR_URI_ID , -1,
+		        out this.get_album_for_uri_id_statement);
+		this.db.prepare_v2(STMT_COUNT_ALBUM_IN_ITEMS , -1,
+		        out this.count_album_in_items_statement);
+		this.db.prepare_v2(STMT_DEL_ALBUM , -1,
+		        out this.delete_album_statement);
+
+		this.db.prepare_v2(STMT_GET_GENRE_FOR_URI_ID , -1,
+		        out this.get_genre_for_uri_id_statement);
+		this.db.prepare_v2(STMT_COUNT_GENRE_IN_ITEMS , -1,
+		        out this.count_genre_in_items_statement);
+		this.db.prepare_v2(STMT_DEL_GENRE , -1,
+		        out this.delete_genre_statement);
+		        
 	}
 
 	public bool set_local_image_for_album(ref string artist,
@@ -421,6 +498,86 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(insert_title_statement.step()!=Sqlite.DONE)
 			this.db_error();
 	}
+        
+
+	/*
+	* Delete a row from the uri table and delete every item that references it and
+	* before that delete every album, artist or genre entry that would thus end up
+	* with no item referencing it.	
+	*/
+	public void delete_uri(string uri) {
+		// get uri id
+		int uri_id = -1;
+		
+
+		get_uri_id_statement.reset();
+		if(get_uri_id_statement.bind_text(1, uri) != Sqlite.OK) {
+			this.db_error();
+			return;
+		}
+		if(get_uri_id_statement.step() == Sqlite.ROW)
+			uri_id = get_uri_id_statement.column_int(0);
+		if (uri_id == -1) return;
+
+
+		//delete the according album/artist/genre entries if not referenced by any other item
+		//granted, there might be more intelligent ways to do this but I guess this is the fastest one
+		//after all we can use foreign keys and cascading deletion when the distros ship sqlite >=3.6.19
+		
+		begin_transaction();		
+		
+		//album
+		get_album_for_uri_id_statement.bind_int(1, uri_id);
+		get_album_for_uri_id_statement.step();
+		var album_id = get_album_for_uri_id_statement.column_int(0);
+
+		count_album_in_items_statement.bind_int(1, album_id);
+		count_album_in_items_statement.step();
+		var album_count = count_album_in_items_statement.column_int(0);
+
+		if(album_count < 2) {
+			delete_album_statement.bind_int(1, album_id);
+			delete_album_statement.step();
+		}
+		
+		//artist
+		get_artist_for_uri_id_statement.bind_int(1, uri_id);
+		get_artist_for_uri_id_statement.step();
+		var artist_id = get_artist_for_uri_id_statement.column_int(0);
+
+		count_artist_in_items_statement.bind_int(1, artist_id);
+		count_artist_in_items_statement.step();
+		var artist_count = count_artist_in_items_statement.column_int(0);
+
+		if(artist_count < 2) {
+			delete_artist_statement.bind_int(1, artist_id);
+			delete_artist_statement.step();
+		}
+
+		//genre
+		get_genre_for_uri_id_statement.bind_int(1, uri_id);
+		get_genre_for_uri_id_statement.step();
+		var genre_id = get_genre_for_uri_id_statement.column_int(0);
+
+		count_genre_in_items_statement.bind_int(1, genre_id);
+		count_genre_in_items_statement.step();
+		var genre_count = count_genre_in_items_statement.column_int(0);
+
+		if(genre_count < 2) {
+			delete_genre_statement.bind_int(1, genre_id);
+			delete_genre_statement.step();
+		}
+
+		//delete item          
+		delete_item_statement.bind_int(1, uri_id);
+		delete_item_statement.step();
+
+		//delete uri
+		delete_uri_statement.bind_int(1, uri_id);
+		delete_uri_statement.step();
+		
+		commit_transaction();
+	}
 
 	public int uri_entry_exists(string uri) {
 		int id = -1;
@@ -433,6 +590,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 		return id;
 	}
+	
 
 	// Single stream for collection
 	public void add_single_stream_to_collection(string uri, string name = "") {

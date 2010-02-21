@@ -1032,6 +1032,7 @@ XnoiseDbWriter* xnoise_db_writer_new (void);
 XnoiseDbWriter* xnoise_db_writer_construct (GType object_type);
 gboolean xnoise_db_writer_set_local_image_for_album (XnoiseDbWriter* self, char** artist, char** album, const char* image_path);
 void xnoise_db_writer_insert_title (XnoiseDbWriter* self, XnoiseTrackData* td, const char* uri);
+void xnoise_db_writer_delete_uri (XnoiseDbWriter* self, const char* uri);
 gint xnoise_db_writer_uri_entry_exists (XnoiseDbWriter* self, const char* uri);
 void xnoise_db_writer_add_single_stream_to_collection (XnoiseDbWriter* self, const char* uri, const char* name);
 void xnoise_db_writer_add_single_file_to_collection (XnoiseDbWriter* self, const char* uri);

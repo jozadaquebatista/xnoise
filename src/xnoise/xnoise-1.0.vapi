@@ -88,6 +88,7 @@ namespace Xnoise {
 		public void del_all_folders ();
 		public void del_all_streams ();
 		public bool delete_local_media_data ();
+		public void delete_uri (string uri);
 		public void insert_title (Xnoise.TrackData td, string uri);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public int uri_entry_exists (string uri);
