@@ -39,7 +39,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			return "notifications";
 		} 
 	}
-	private Notification notification;
+	private Notification notification = null;
 	private uint timeout;
 
 	construct {
@@ -55,16 +55,17 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		return true;
 	}
 	
-	private void on_uri_changed(string uri) {
+	private void on_uri_changed(string? uri) {
 		if(timeout != 0)
 			Source.remove(timeout);
 
-		if(((uri=="")||(uri==null))&&
-		   (notification!=null)) {
-//			print("close n\n");
+		if((uri=="")||(uri==null)) {
 			try {
-				notification.clear_hints();
-				notification.close();
+				if(notification != null) {
+					notification.clear_hints();
+					notification.close();
+				}
+				return;
 			}
 			catch(GLib.Error e) {
 				print("%s\n", e.message);

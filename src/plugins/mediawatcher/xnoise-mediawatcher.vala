@@ -198,7 +198,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
        	
 	protected void file_changed_cb(FileMonitor sender, File file, File? other_file, FileMonitorEvent event_type) {
-		//print("%s\n", event_type.to_string());
+		print("%s\n", event_type.to_string());
 		if(event_type == FileMonitorEvent.CREATED)  // TODO: monitor removal of folders, too
 			if(file != null) handle_created_file(file);
 		if(event_type == FileMonitorEvent.DELETED) handle_deleted_file(file);
