@@ -36,7 +36,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private string? _Uri = null;
 	private TagList _taglist;
 	public VideoScreen videoscreen;
-	public dynamic Element playbin2;
+	public dynamic Element playbin;
 
 	public bool current_has_video { // TODO: Determine this elsewhere
 		get {
@@ -53,14 +53,14 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public double volume {
 		get {
 			double val;
-			this.playbin2.get("volume", out val);
+			this.playbin.get("volume", out val);
 			return val;
 		}
 		set {
 			double val;
-			this.playbin2.get("volume", out val);
+			this.playbin.get("volume", out val);
 			if(val!=value) {
-				this.playbin2.set("volume", value);
+				this.playbin.set("volume", value);
 				sign_volume_changed(value);
 			}
 		}
@@ -98,20 +98,20 @@ public class Xnoise.GstPlayer : GLib.Object {
 			print("NEW Uri: %s\n", value);
 			is_stream = false; //reset
 			_Uri = value;
-			if((value=="")||(value==null)) {
-				playbin2.set_state(State.NULL); //stop
+			if((value == "")||(value == null)) {
+				playbin.set_state(State.NULL); //stop
 				playing = false;
 				paused = false;
 			}
 			this.current_has_video = false;
-			taglist = null;  //reset
-			length_time = 0; //reset
-			if(value!=null) {
-				this.playbin2.uri = value;
+			
+			//reset
+			taglist = null;
+			length_time = 0;
+			this.playbin.uri = (value == null ? "" : value);
+			if(value != null) {
 				File file = File.new_for_commandline_arg(value);
-
-				// TODO: Maybe there is a better way to check this?
-				if(file.get_uri_scheme() == "http") 
+				if(file.get_uri_scheme() == "http") // TODO: Maybe there is a better way to check this?
 					is_stream = true;
 			}
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
@@ -121,7 +121,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public double gst_position {
 		set {
 			if(seeking == false) {
-				playbin2.seek(1.0, Gst.Format.TIME,
+				playbin.seek(1.0, Gst.Format.TIME,
 				             Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
 				             Gst.SeekType.SET, (int64)(value * length_time),
 							 Gst.SeekType.NONE, -1);
@@ -206,12 +206,12 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	public void request_location(string? uri) {
 		bool playing_buf = playing;
-		playbin2.set_state(State.READY);
+		playbin.set_state(State.READY);
 		
 		this.Uri = uri;
 
 		if(playing_buf)
-			playbin2.set_state(State.PLAYING);
+			playbin.set_state(State.PLAYING);
 	}
 
 	public signal void sign_about_to_finish();
@@ -226,12 +226,12 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private void create_elements() {
-		playbin2 = ElementFactory.make("playbin2", "playbin2");
-        taglist = null;
+		playbin = ElementFactory.make("playbin2", "playbin");
+		taglist = null;
 		var bus = new Bus ();
-		bus = playbin2.get_bus();
+		bus = playbin.get_bus();
 		bus.add_signal_watch();
-		playbin2.connect("swapped-object-signal::about-to-finish", on_about_to_finish, this, null);
+		playbin.connect("swapped-object-signal::about-to-finish", on_about_to_finish, this, null);
 		bus.message.connect(this.on_bus_message);
 		bus.enable_sync_message_emission();
 		bus.sync_message.connect(this.on_sync_message);
@@ -245,21 +245,21 @@ public class Xnoise.GstPlayer : GLib.Object {
 				msg.parse_state_changed(out oldstate, out newstate, null);
 				if((newstate==State.PLAYING)&&((oldstate==State.PAUSED)||(oldstate==State.READY))) {
 					this.check_for_video();
-		        }
+				}
 				break;
 			}
 			case Gst.MessageType.ERROR: {
 				Error err;
 				string debug;
 				msg.parse_error(out err, out debug);
-				stdout.printf("Error: %s\n", err.message);
-//				global.handle_eos(); //this is used to go to the next track
+				print("Error: %s\n", err.message);
+				global.handle_eos(); //this is used to go to the next track
 				break;
 			}
-//			case Gst.MessageType.EOS: {
-//				global.handle_eos();
-//				break;
-//			}
+			case Gst.MessageType.EOS: {
+				global.handle_eos();
+				break;
+			}
 			case Gst.MessageType.TAG: {
 				TagList tag_list;
 				msg.parse_tag(out tag_list);
@@ -277,7 +277,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	private void check_for_video() {
 		int n_video;
-		playbin2.get("n-video", out n_video);
+		playbin.get("n-video", out n_video);
 		if(n_video > 0) {
 			this.current_has_video = true;
 		}
@@ -337,61 +337,52 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if(!is_stream) {
 			Gst.Format fmt = Gst.Format.TIME;
 			int64 pos, len;
-			if((playbin2.current_state == State.PLAYING)&&(playing == false)) {
+			if((playbin.current_state == State.PLAYING)&&(playing == false)) {
 				playing = true;
 				paused  = false;
 			}
-			if((playbin2.current_state == State.PAUSED)&&(paused == false)) {
+			if((playbin.current_state == State.PAUSED)&&(paused == false)) {
 				paused = true;
 				playing = false;
 			}
 			if(seeking == false) {
-				playbin2.query_duration(ref fmt, out len);
+				playbin.query_duration(ref fmt, out len);
 				length_time = (int64)len;
 				if(playing == false) return true;
-				playbin2.query_position(ref fmt, out pos);
+				playbin.query_position(ref fmt, out pos);
 				sign_song_position_changed((uint)(pos/1000000), (uint)(len/1000000));
 			}
-	//		print("current:%s \n",playbin2.current_state.to_string());
+	//		print("current:%s \n",playbin.current_state.to_string());
 		}
 		return true;
 	}
 
-	private void wait() {
-		State stateOld, stateNew;
-		playbin2.get_state(out stateOld, out stateNew, (Gst.ClockTime)50000000);
-	}
-
 	public void play() {
-		playbin2.set_state(Gst.State.PLAYING);
-		wait();
+		playbin.set_state(Gst.State.PLAYING);
 		playing = true;
 		paused = false;
 		sign_playing();
 	}
 
 	public void pause() {
-		playbin2.set_state(State.PAUSED);
-		wait();
+		playbin.set_state(State.PAUSED);
 		playing = false;
 		paused = true;
 		sign_paused();
 	}
 
 	public void stop() {
-		playbin2.set_state(State.NULL); //READY
-//		print("gst stop\n");
-//		wait();
+		playbin.set_state(State.NULL); //READY
 		playing = false;
 		paused = false;
 		sign_stopped();
 	}
 
-	// This is a pause-play action to take over the new uri for the playbin2
+	// This is a pause-play action to take over the new uri for the playbin
 	// It recovers the original state orcan be forces to play
 	public void playSong(bool force_play = false) {
 		bool buf_playing = ((global.track_state == GlobalInfo.TrackState.PLAYING)||force_play);
-		playbin2.set_state(State.READY);
+		playbin.set_state(State.READY);
 		if(buf_playing == true) {
 			Idle.add( () => {
 				play();
@@ -401,7 +392,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		else {
 			sign_paused();
 		}
-		playbin2.volume = volume; // TODO: Volume should have a global representation
+		playbin.volume = volume; // TODO: Volume should have a global representation
 	}
 }
 

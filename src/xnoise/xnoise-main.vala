@@ -105,10 +105,6 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	public static Main instance {
-/*
-		if (_instance == null)
-			_instance = new Main();
-*/
 		get {
 			if(_instance == null)
 				_instance = new Main();

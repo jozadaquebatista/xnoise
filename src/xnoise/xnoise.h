@@ -588,7 +588,7 @@ struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
 	XnoiseVideoScreen* videoscreen;
-	GstElement* playbin2;
+	GstElement* playbin;
 };
 
 struct _XnoiseGstPlayerClass {
