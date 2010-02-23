@@ -131,8 +131,7 @@ public class Xnoise.Main : GLib.Object {
 
 	private string[] final_tracklist = null;
 	public void save_tracklist() {
-		final_tracklist =
-		    this.main_window.trackList.tracklistmodel.get_all_tracks();
+		final_tracklist = this.main_window.trackList.tracklistmodel.get_all_tracks();
 		var dbwr = new DbWriter();
 		dbwr.write_final_tracks_to_db(final_tracklist);
 		final_tracklist = null;

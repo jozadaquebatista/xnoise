@@ -10,7 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unique/unique.h>
-#include <gst/gst.h>
 #include <float.h>
 #include <math.h>
 #include <gdk/gdk.h>
@@ -588,7 +587,6 @@ struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
 	XnoiseVideoScreen* videoscreen;
-	GstElement* playbin;
 };
 
 struct _XnoiseGstPlayerClass {
@@ -1065,7 +1063,6 @@ GType xnoise_gst_player_get_type (void);
 GType xnoise_video_screen_get_type (void);
 XnoiseGstPlayer* xnoise_gst_player_new (void);
 XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type);
-void xnoise_gst_player_request_location (XnoiseGstPlayer* self, const char* uri);
 void xnoise_gst_player_play (XnoiseGstPlayer* self);
 void xnoise_gst_player_pause (XnoiseGstPlayer* self);
 void xnoise_gst_player_stop (XnoiseGstPlayer* self);
@@ -1089,7 +1086,6 @@ const char* xnoise_gst_player_get_currenttitle (XnoiseGstPlayer* self);
 const char* xnoise_gst_player_get_currentgenre (XnoiseGstPlayer* self);
 const char* xnoise_gst_player_get_currentorg (XnoiseGstPlayer* self);
 const char* xnoise_gst_player_get_currentlocation (XnoiseGstPlayer* self);
-GstTagList* xnoise_gst_player_get_taglist (XnoiseGstPlayer* self);
 const char* xnoise_gst_player_get_Uri (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_Uri (XnoiseGstPlayer* self, const char* value);
 void xnoise_gst_player_set_gst_position (XnoiseGstPlayer* self, double value);

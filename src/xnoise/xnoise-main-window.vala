@@ -904,14 +904,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//--------------------
 
 			//PLAYING TITLE IMAGE
-			var albumviewport              = gb.get_object("albumviewport") as Gtk.Viewport;
+			var aibox                     = gb.get_object("aibox") as Gtk.HBox;
 
 			this.albumimage = new AlbumImage();
 			EventBox ebox = new EventBox(); 
 			ebox.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK|Gdk.EventMask.LEAVE_NOTIFY_MASK);
 
 			ebox.add(albumimage);
-			albumviewport.add(ebox);
+			aibox.add(ebox);
 
 			ebox.enter_notify_event.connect( (s, e) => {
 				buffer_last_page = this.tracklistnotebook.get_current_page();

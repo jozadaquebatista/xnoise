@@ -126,13 +126,11 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
-		public Gst.Element playbin;
 		public Xnoise.VideoScreen videoscreen;
 		public GstPlayer ();
 		public void pause ();
 		public void play ();
 		public void playSong (bool force_play = false);
-		public void request_location (string? uri);
 		public void stop ();
 		public string? Uri { get; set; }
 		public bool current_has_video { get; set; }
@@ -148,7 +146,6 @@ namespace Xnoise {
 		public bool paused { get; set; }
 		public bool playing { get; set; }
 		public bool seeking { get; set; }
-		public Gst.TagList taglist { get; set; }
 		public double volume { get; set; }
 		public signal void sign_about_to_finish ();
 		public signal void sign_paused ();

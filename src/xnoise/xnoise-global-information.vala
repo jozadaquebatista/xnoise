@@ -37,9 +37,9 @@
 public class Xnoise.GlobalInfo : GLib.Object {
 
 	// SIGNALS
-	// TreeRowReference for currrent track changed
+	// TreeRowReference for current track changed
 	public signal void position_reference_changed();
-	// TreeRowReference for currrent track changed, triggered before change
+	// TreeRowReference for current track changed, triggered before change
 	public signal void before_position_reference_changed();
 	public signal void before_position_reference_next_changed();
 	public signal void position_reference_next_changed();
@@ -52,7 +52,7 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	public signal void sig_media_path_changed();
 	public signal void sig_item_imported(string uri);
 
-	// Private fields
+	// PRIVATE FIELDS
 	private TrackState _track_state = TrackState.STOPPED;
 	private string? _current_uri = null;
 	private Gtk.TreeRowReference? _position_reference = null;
@@ -64,7 +64,7 @@ public class Xnoise.GlobalInfo : GLib.Object {
 		PAUSED
 	}
 
-	// Public properties
+	// PROPERTIES
 	public TrackState track_state {
 		get {
 			return _track_state;
@@ -132,20 +132,19 @@ public class Xnoise.GlobalInfo : GLib.Object {
 		}
 	}
 
+	// PUBLIC GLOBAL FUNCTIONS
 	public void reset_position_reference() {
 		this._position_reference = null;
 	}
 
 	public void handle_eos() {
+		//emmit signal
 		caught_eos_from_player();
 	}
 	
 	public signal void sign_image_available(string? image_path_small, string? image_path_large);
 	
 	public void broadcast_image_for_current_track() {
-//		if(!found) 
-//			return;
-			
 		string? image_path = null;
 		if(get_image_path_for_media_uri(current_uri, ref image_path)) {
 			string? buf = null; 

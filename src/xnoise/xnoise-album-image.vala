@@ -34,6 +34,7 @@ using Gtk;
 
 public class Xnoise.AlbumImage : Gtk.Image, IParams {
 	private const string INIFOLDER = ".xnoise";
+	private const int SIZE = 48;
 	private AlbumImageLoader loader = null;
 	private Main xn;
 	private string artist = "";
@@ -56,7 +57,7 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 	public AlbumImage() {
 		xn = Main.instance;
 		par.iparams_register(this);
-		this.set_size_request(48, 48);
+		this.set_size_request(SIZE, SIZE);
 		this.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 
 		loader = new AlbumImageLoader();
@@ -198,15 +199,15 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 			GLib.Source.remove(source);
 			
 		album_image_available = false;
-		this.set_size_request(48, 48);
+		this.set_size_request(SIZE, SIZE);
 		this.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 	}
 
 	private bool set_albumimage_from_path(string image_path) {
 		if(MainContext.current_source().is_destroyed()) 
 			return false;
-		
 		this.set_from_file(image_path);
+		this.set_size_request(SIZE, SIZE);
 		return false;
 	}
 

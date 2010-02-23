@@ -36,7 +36,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private string? _Uri = null;
 	private TagList _taglist;
 	public VideoScreen videoscreen;
-	public dynamic Element playbin;
+	private dynamic Element playbin;
 
 	public bool current_has_video { // TODO: Determine this elsewhere
 		get {
@@ -78,7 +78,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public string currentorg      { get; private set; }
 	public string currentlocation { get; private set; }
 
-	public TagList taglist {
+	private TagList taglist {
 		get {
 			return _taglist;
 		}
@@ -95,7 +95,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return _Uri;
 		}
 		set {
-			print("NEW Uri: %s\n", value);
 			is_stream = false; //reset
 			_Uri = value;
 			if((value == "")||(value == null)) {
@@ -204,7 +203,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		});
 	}
 
-	public void request_location(string? uri) {
+	private void request_location(string? uri) {
 		bool playing_buf = playing;
 		playbin.set_state(State.READY);
 		
