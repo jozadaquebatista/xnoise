@@ -155,7 +155,7 @@ namespace Xnoise {
 		public signal void sign_playing ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
-		public signal void sign_tag_changed (ref string newuri, string? tagname, string? tagvalue);
+		public signal void sign_tag_changed (ref string? newuri, string? tagname, string? tagvalue);
 		public signal void sign_uri_changed (string newuri);
 		public signal void sign_video_playing ();
 		public signal void sign_volume_changed (double volume);
@@ -248,7 +248,7 @@ namespace Xnoise {
 		public void change_song (Xnoise.MainWindow.Direction direction, bool handle_repeat_state = false);
 		public void display_info_bar (Gtk.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
-		public void set_displayed_title (ref string newuri, string? tagname, string? tagvalue);
+		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
 		public bool fullscreenwindowvisible { get; set; }
 		public int repeatState { get; set; }
 		public signal void sign_drag_over_da ();

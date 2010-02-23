@@ -85,15 +85,6 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	private void connect_signals() {
-		gPl.sign_tag_changed.connect(main_window.set_displayed_title);
-		gPl.sign_video_playing.connect( () => { //handle stop signal from gst player
-			if(!main_window.fullscreenwindowvisible)
-				main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
-		});
-
-		main_window.sign_pos_changed.connect((main_window, fraction) => {
-			gPl.gst_position = fraction;
-		});
 		Posix.signal(Posix.SIGQUIT, on_posix_finish); // write data to db on posix quit signal
 		Posix.signal(Posix.SIGTERM, on_posix_finish); // write data to db on posix term signal
 		Posix.signal(Posix.SIGKILL, on_posix_finish); // write data to db on posix kill signal

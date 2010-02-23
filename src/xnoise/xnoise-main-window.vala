@@ -145,8 +145,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		notify["repeatState"].connect(on_repeatState_changed);
 		notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
 
-		global.caught_eos_from_player.connect(on_caught_eos_from_player);
 		buffer_last_page = 0;
+
+		global.caught_eos_from_player.connect(on_caught_eos_from_player);
+		xn.gPl.sign_tag_changed.connect(this.set_displayed_title);
+		xn.gPl.sign_video_playing.connect( () => { 
+			//handle stop signal from gst player
+			if(!this.fullscreenwindowvisible)
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+		});
+		this.sign_pos_changed.connect( (s, fraction) => {
+			xn.gPl.gst_position = fraction;
+		});
 	}
 
 	private void initialize_video_screen() {
@@ -166,7 +176,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			if(!fullscreenwindowvisible)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 		});
-		videoscreen.drag_motion.connect(on_da_drag_motion);
+		videoscreen.drag_motion.connect(this.on_da_drag_motion);
 	}
 
 	private void on_caught_eos_from_player() {
@@ -648,10 +658,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 	}
 
-	public void set_displayed_title(ref string newuri, string? tagname, string? tagvalue) {
+	public void set_displayed_title(ref string? newuri, string? tagname, string? tagvalue) {
 		string text, album, artist, title, organization, location, genre;
 		string basename = null;
-		//print("newuri: %s\n", newuri);
 		if((newuri == "")|(newuri == null)) {
 			text = "<b>XNOISE</b>\nready to rock! ;-)";
 			song_title_label.set_text(text);

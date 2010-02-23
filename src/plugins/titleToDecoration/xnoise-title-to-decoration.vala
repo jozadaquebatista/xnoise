@@ -40,13 +40,17 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 	}
 
 	public bool init() {
-//		xn.gPl.sign_tag_changed += write_title_to_decoration;
+		xn.gPl.sign_tag_changed += write_title_to_decoration;
 		return true;
 	}
 	
-	private void write_title_to_decoration(ref string newuri, string? x, string? y) {
+	private void write_title_to_decoration(ref string? newuri, string? x, string? y) {
 		string text, album, artist, title, genre, location, organization;
 		string basename = null;
+		if(newuri == null) {
+			xn.main_window.set_title("xnoise media player");
+			return;
+		}
 		File file = File.new_for_uri(newuri);
 		if(!xn.gPl.is_stream)
 			basename = file.get_basename();
