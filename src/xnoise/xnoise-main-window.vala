@@ -234,10 +234,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 
-	private bool on_video_da_button_press(Gdk.EventButton e) {
-		if(!((e.button==1)&&(e.type==Gdk.EventType.@2BUTTON_PRESS)))
-			return false; //exit here, if it's no double-click
-
+	public void toggle_fullscreen() {
 		if(!fullscreenwindowvisible) {
 			int monitor;
 			Gdk.Rectangle rectangle;
@@ -250,6 +247,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			fullscreenwindow.show_all();
 			this.videoscreen.reparent(fullscreenwindow);
 			this.videoscreen.window.process_updates(true);
+
 			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 			fullscreenwindowvisible = true;
 			fullscreentoolbar.show();
@@ -258,10 +256,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.videoscreen.window.unfullscreen();
 			this.videoscreen.reparent(videovbox);
 			fullscreenwindow.hide_all();
+
 			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			fullscreenwindowvisible = false;
 			this.videovbox.show();
 			fullscreentoolbar.hide();
+		}
+	}
+
+	private bool on_video_da_button_press(Gdk.EventButton e) {
+		if(!((e.button==1)&&(e.type==Gdk.EventType.@2BUTTON_PRESS))) {
+			return false; //exit here, if it's no double-click
+		}
+		else {
+			toggle_fullscreen();
 		}
 		return false;
 	}
@@ -1390,7 +1398,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			fullscreenwindow.motion_notify_event.connect(on_pointer_motion);
 			window.enter_notify_event.connect(on_pointer_enter_toolbar);
 			fullscreenwindow.enter_notify_event.connect(on_pointer_enter_fswindow);
+			fullscreenwindow.key_release_event.connect(this.on_key_released);
 			resize ();
+		}
+
+		private const int KEY_ESC = 0xFF1B;
+		private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
+			switch(e.keyval) {
+				case KEY_ESC: {
+					this.xn.main_window.toggle_fullscreen();
+				}
+				break;
+				default:
+				break;
+			}
+			return false;
 		}
 
 		public void resize() {

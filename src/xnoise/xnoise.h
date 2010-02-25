@@ -1118,6 +1118,7 @@ GType xnoise_main_window_direction_get_type (void);
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 XnoiseMainWindow* xnoise_main_window_new (void);
 XnoiseMainWindow* xnoise_main_window_construct (GType object_type);
+void xnoise_main_window_toggle_fullscreen (XnoiseMainWindow* self);
 void xnoise_main_window_change_song (XnoiseMainWindow* self, XnoiseMainWindowDirection direction, gboolean handle_repeat_state);
 void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, char** newuri, const char* tagname, const char* tagvalue);
 void xnoise_main_window_display_info_bar (XnoiseMainWindow* self, GtkInfoBar* bar);

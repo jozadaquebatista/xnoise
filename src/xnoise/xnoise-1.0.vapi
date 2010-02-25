@@ -246,6 +246,7 @@ namespace Xnoise {
 		public void display_info_bar (Gtk.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
+		public void toggle_fullscreen ();
 		public bool fullscreenwindowvisible { get; set; }
 		public int repeatState { get; set; }
 		public signal void sign_drag_over_da ();
