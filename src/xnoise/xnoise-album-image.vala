@@ -207,7 +207,8 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		if(MainContext.current_source().is_destroyed()) 
 			return false;
 		this.set_from_file(image_path);
-		this.set_size_request(SIZE, SIZE);
+		Gdk.Pixbuf temp = this.get_pixbuf().scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
+		this.set_from_pixbuf(temp);
 		return false;
 	}
 
