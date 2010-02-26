@@ -283,8 +283,14 @@ public class Xnoise.TrackList : TreeView {
 		FileType filetype;
 		string[] uris = selection.get_uris();
 		this.get_dest_row_at_pos(x, y, out path, out drop_pos);
-		var dbBr = new DbBrowser();
-
+		DbBrowser dbBr = null;
+		try {
+			dbBr = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
 		if(!this.reorder_dragging) { 					// DRAGGING NOT WITHIN TRACKLIST
 			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;

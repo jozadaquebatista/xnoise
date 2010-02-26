@@ -77,8 +77,15 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		album_image_available = false;
 		db_image_available = false;
 		string current_uri = uri;
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
 		
-		var dbb = new DbBrowser();
 		string? res = dbb.get_local_image_path_for_track(ref current_uri);
 		
 		if((res!=null)&&(res!="")) {
@@ -125,7 +132,14 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 
 		// Look into db in case gPl does not provide the tag
 		if((artist == "unknown artist")||(album == "unknown album")) {
-			var dbb = new DbBrowser();
+			DbBrowser dbb = null;
+			try {
+				dbb = new DbBrowser();
+			}
+			catch(Error e) {
+				print("%s\n", e.message);
+				return;
+			}
 			TrackData td;
 			if(dbb.get_trackdata_for_uri(xn.gPl.Uri, out td)) {
 				artist = td.Artist;
@@ -231,7 +245,14 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		
 		global.check_image_for_current_track();
 		
-		var dbw = new DbWriter();
+		DbWriter dbw = null;
+		try {
+			dbw = new DbWriter();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
 		dbw.set_local_image_for_album(ref artist, ref album, image_path);
 		dbw = null;
 		

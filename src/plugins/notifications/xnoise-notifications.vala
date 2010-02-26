@@ -79,7 +79,14 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 	}
 	
 	private void show_notification(string newuri) {
-		var dbb = new DbBrowser();
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
 		string uri = newuri;
 		string image_path = null;
 		string album, artist, title;

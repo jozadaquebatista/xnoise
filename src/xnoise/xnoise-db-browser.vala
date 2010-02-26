@@ -30,6 +30,10 @@
 
 using Sqlite;
 
+public errordomain Xnoise.DbError {
+	FAILED;
+}
+
 public class Xnoise.DbBrowser {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
@@ -105,14 +109,16 @@ public class Xnoise.DbBrowser {
 	private static const string STMT_GET_RADIO_DATA	=
 		"SELECT DISTINCT id, name, uri FROM streams WHERE name LIKE ? ORDER BY name DESC";
 
-	public DbBrowser() {
+	public DbBrowser() throws Error{
 		DATABASE = dbFileName();
 		db = null;
 		if(Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) {
 			print("Can't open database: %s\n", (string)this.db.errmsg);
+			throw new DbError.FAILED("failed messge");
 		}
-		if(this.db == null)
-			this = null;
+		if(this.db == null) {
+			throw new DbError.FAILED("failed messge");
+		}
 		this.prepare_statements();
 	}
 

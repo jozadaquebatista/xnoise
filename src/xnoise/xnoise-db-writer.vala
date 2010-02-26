@@ -172,12 +172,13 @@ public class Xnoise.DbWriter : GLib.Object {
 		
 		
 
-	public DbWriter() {
+	public DbWriter() throws DbError {
 		this.db = null;
 		this.db = get_db();
 		
-		if(this.db == null)
-			this.unref();// = null;
+		if(this.db == null) 
+			throw new DbError.FAILED("Cannot open database for writing.");
+
 		this.begin_stmt_used = false; // initialize begin commit compare
 		this.prepare_statements();
 		
@@ -197,7 +198,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	
 	private static Database? get_db () {
 		// there was more luck on creating the db on first start, if using a static function
-		Database database;
+		Database database = null;
 		File home_dir = File.new_for_path(Environment.get_home_dir());
 		File xnoise_home = home_dir.get_child(SETTINGS_FOLDER);
 		File xnoisedb = xnoise_home.get_child(DATABASE_NAME);
@@ -205,10 +206,22 @@ public class Xnoise.DbWriter : GLib.Object {
 			print("Cannot find settings folder!\n");
 			return null;
 		}
-		Database.open_v2(xnoisedb.get_path(),
-		                 out database,
-		                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE,
-		                 null) ;
+		int ret = Database.open_v2(xnoisedb.get_path(),
+		                           out database,
+		                           Sqlite.OPEN_READWRITE,
+		                           null);
+
+		if(ret != Sqlite.OK) {
+			print("Cannot open database.\n");
+			return null;
+		}
+		
+		//workaround
+		//check if write permissions were given (
+		//readwrite succeeded instead of readonly fallback)
+		if(database.exec("UPDATE items SET id=0 WHERE 0;", null, null)!= Sqlite.OK) {
+			return null;
+		}
 		return database;
 	}
 
@@ -629,7 +642,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 
-	public void write_final_tracks_to_db(string[] final_tracklist) {
+	public void write_final_tracks_to_db(string[] final_tracklist) throws Error {
 		string current_query = "";
 		int rc1, nrow, ncolumn;
 		unowned string[] resultArray;
@@ -640,8 +653,9 @@ public class Xnoise.DbWriter : GLib.Object {
 		current_query = "DELETE FROM lastused;";
 		rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
 		if (rc1 != Sqlite.OK) {
-			stderr.printf("SQL error, while removing old music folders: %s\n", errmsg);
-			return;
+//			stderr.printf("SQL error, while removing old music folders: %s\n", errmsg);
+//			return;
+			throw new DbError.FAILED("While removing old music folders: %s".printf(errmsg));
 		}
 		foreach(string uri in final_tracklist) {
 			this.insert_lastused_track(uri, 0);

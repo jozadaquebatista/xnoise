@@ -146,18 +146,25 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	}
 	
 	public void check_image_for_current_track() {
-		string? image_path = null;
-		if(get_image_path_for_media_uri(current_uri, ref image_path)) {
-			string? buf = null; 
-			if((image_path == "") || (image_path == null)) {
+		string? small_name = null;
+		if(get_image_path_for_media_uri(current_uri, ref small_name)) {
+			string? large_name = null; 
+			if((small_name == "") || (small_name == null)) {
 				image_path_small = null;
 				image_path_large = null;
 				return;
 			}
-			buf = image_path.substring(0, image_path.len() - "medium".len());
-			buf = buf + "extralarge";
-			image_path_small = image_path;
-			image_path_large = buf;
+			large_name = small_name.substring(0, small_name.len() - "medium".len());
+			large_name = large_name + "extralarge";
+			File small = File.new_for_path(small_name);
+			File large = File.new_for_path(large_name);
+			if(!small.query_exists(null))
+				small_name = null;
+			if(!large.query_exists(null))
+				image_path_large = small_name;
+			else
+				image_path_large = large_name;
+			image_path_small = small_name;
 		}
 		else {
 			image_path_small = null;

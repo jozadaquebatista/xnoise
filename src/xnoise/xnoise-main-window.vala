@@ -195,7 +195,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void add_lastused_titles_to_tracklist() {
-		var dbBr = new DbBrowser();
+		DbBrowser dbBr = null;
+		try {
+			dbBr = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
 		string[] uris = dbBr.get_lastused_uris();
 		foreach(unowned string uri in uris) {
 			File file = File.new_for_commandline_arg(uri);
@@ -678,7 +685,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		File file = File.new_for_uri(newuri);
 		if(!xn.gPl.is_stream) {
 			basename = file.get_basename();
-			var dbb = new DbBrowser();
+			DbBrowser dbb = null;
+			try {
+				dbb = new DbBrowser();
+			}
+			catch(Error e) {
+				print("%s\n", e.message);
+				return;
+			}
 			TrackData td;
 			if(dbb.get_trackdata_for_uri(newuri, out td)) {
 				artist = td.Artist;

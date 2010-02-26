@@ -97,8 +97,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	private void put_videos_to_model() {
-		DbBrowser dbb = new DbBrowser();
-		if(!dbb.videos_available()) return;
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}		
+		if(!dbb.videos_available()) 
+			return;
 		TreeIter iter_videos, iter_singlevideo;
 		this.prepend(out iter_videos, null);
 		this.set(iter_videos,
@@ -129,7 +137,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	private void put_streams_to_model() {
-		DbBrowser dbb = new DbBrowser();
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}		
 		if(!dbb.streams_available()) return;
 
 		TreeIter iter_radios, iter_singleradios;
@@ -155,7 +170,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	private void put_listed_data_to_model() {
-		var dbb = new DbBrowser();
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}		
 
 		if(dbb.videos_available())
 			prepend_separator();
@@ -170,7 +192,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 	//FIXME: this is not very generic
 	private void put_hierarchical_data_to_model() {
-		var dbb = new DbBrowser();
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}		
 		
 		string[] artistArray;
 		string[] albumArray;
@@ -225,25 +254,31 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 	public TrackData[] get_trackdata_listed(Gtk.TreePath treepath) {
 		//this is only used for path.get_depth() == 2 !
-		DbBrowser dbb;
 		int dbid = -1;
 		MediaType mtype = MediaType.UNKNOWN;
 		TreeIter iter;
 		TrackData[] tdata = {};
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return tdata;
+		}		
 		this.get_iter(out iter, treepath);
 		this.get(iter,
 		         Column.DB_ID, ref dbid,
 		         Column.MEDIATYPE, ref mtype
 		         );
 		if(dbid!=-1) {
-			dbb = new DbBrowser();
 			TrackData td;
 			switch(mtype) {
 				case MediaType.VIDEO: {
 					if(dbb.get_trackdata_for_id(dbid, out td)) tdata += td;
 					break;
 				}
-				case MediaType.STREAM : {
+				case MediaType.STREAM: {
 					if(dbb.get_stream_td_for_id(dbid, out td)) tdata += td;
 					break;
 				}
@@ -259,13 +294,21 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		TreeIter iter, iterChild;
 		int dbid = -1;
 		TrackData[] tdata = {};
+		if(treepath.get_depth() ==1)
+			return tdata;
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return tdata;
+		}
 		switch(treepath.get_depth()) {
 			case 1: //ARTIST (this case is currently not used)
 				break;
 			case 2: //ALBUM
 				this.get_iter(out iter, treepath);
-
-				var dbb = new DbBrowser();
 
 				for(int i = 0; i < this.iter_n_children(iter); i++) {
 					dbid = -1;
@@ -284,9 +327,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				this.get(iter, Column.DB_ID, ref dbid);
 				if(dbid==-1) 
 					break;
-
-				var dbb = new DbBrowser();
-
 				TrackData td;
 				if(dbb.get_trackdata_for_id(dbid, out td)) 
 					tdata += td;

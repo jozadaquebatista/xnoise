@@ -33,7 +33,7 @@ using Sqlite;
 public class Xnoise.DbCreator : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
-	private Sqlite.Database db;
+	private Sqlite.Database? db;
 	public static const int DB_VERSION_MAJOR = 3;
 	public static const int DB_VERSION_MINOR = 0;
 	private static File xnoisedb;
@@ -67,8 +67,12 @@ public class Xnoise.DbCreator : GLib.Object {
 	private static const string STMT_FIND_TABLE =
 		"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
 
-	public DbCreator() {
-        this.db = get_db();
+	public DbCreator() throws Error {
+		this.db = null;
+		this.db = get_db();
+		if(this.db == null) 
+			throw new DbError.FAILED("Cannot open database for writing.");
+		
 		check_tables();
 	}
 
@@ -91,6 +95,12 @@ public class Xnoise.DbCreator : GLib.Object {
 		                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE,
 		                 null) ;
 
+		//workaround
+		//check if write permissions were given (
+		//readwrite succeeded instead of readonly fallback)
+		if(database.exec("UPDATE items SET id=0 WHERE 0;", null, null)!= Sqlite.OK) {
+			return null;
+		}
 		return database;
 	}
 

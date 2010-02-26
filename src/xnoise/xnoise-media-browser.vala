@@ -228,7 +228,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		unowned Gtk.TreeSelection sel;
 		sel = this.get_selection();
 		treepaths = sel.get_selected_rows(null);
-		var dbb = new DbBrowser();
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
 
 		foreach(unowned TreePath treepath in treepaths) {
 			string[] l = mediabrowsermodel.build_uri_list_for_treepath(treepath, ref dbb);

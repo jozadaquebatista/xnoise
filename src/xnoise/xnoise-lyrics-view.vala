@@ -74,7 +74,14 @@ public class Xnoise.LyricsView : Gtk.TextView {
 
 		// Look into db in case gPl does not provide the tag
 		if((artist=="unknown artist")||(title =="unknown title" )) {
-			var dbb = new DbBrowser();
+			DbBrowser dbb;
+			try {
+				dbb = new DbBrowser();
+			}
+			catch(Error e) {
+				print("%s\n", e.message);
+				return false;
+			}		
 			TrackData td;
 			if(dbb.get_trackdata_for_uri(xn.gPl.Uri, out td)) {
 				artist = td.Artist;

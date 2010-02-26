@@ -128,8 +128,14 @@ namespace Xnoise {
 		//TODO: also check imagepath via track metadata
 		string tmpuri = uri;
 		image_path = null;
-		var dbb = new DbBrowser();
-		
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return false;
+		}		
 		if(dbb == null)
 			return false;
 		

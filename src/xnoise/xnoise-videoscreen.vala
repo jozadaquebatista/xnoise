@@ -130,21 +130,18 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 					else
 						logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
 				}
-				int y_offset = (int)(logoheight * 0.1); //TODO: fix offset calculation
-				int x_offset = (int)((widgetwidth-logowidth) * 0.5);
-				//print("widgetheight = %d, logoheight = %d, y_offset = %d\n", widgetheight, logoheight, y_offset);
-				Gdk.draw_pixbuf(this.window,                          //Destination drawable
-				                this.style.fg_gc[0],                  //a Gdk.GC, used for clipping, or NULL
-				                logo,                                 //a Gdk Pixbuf
-				                0, 0,                                 //Source X/Y coordinates within pixbuf.
-				                (int)((widgetwidth-logowidth)/2) +
-				                    x_offset,                         //Destination X coordinate within drawable
-				                (int)((widgetheight-logoheight)/2) + 
-				                    y_offset,                         //Destination Y coordinate within drawable
-				                -1,                                   //Width of region to render, in pixels, or -1 to use pixbuf width.
-				                -1,                                   //Height of region to render, in pixels, or -1 to use pixbuf height.
-				                Gdk.RgbDither.NONE,                   //Dithering mode for GdkRGB.
-				                0, 0                                  //X/Y offsets for dither.
+				int y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
+				int x_offset = (int)((widgetwidth * 0.5) - (logowidth * 0.4));
+				Gdk.draw_pixbuf(this.window,          //Destination drawable
+				                this.style.fg_gc[0],  //a Gdk.GC, used for clipping, or NULL
+				                logo,                 //a Gdk Pixbuf
+				                0, 0,                 //Source X/Y coordinates within pixbuf.
+				                x_offset,             //Destination X coordinate within drawable
+				                y_offset,             //Destination Y coordinate within drawable
+				                -1,                   //Width of region to render, in pixels, or -1 to use pixbuf width.
+				                -1,                   //Height of region to render, in pixels, or -1 to use pixbuf height.
+				                Gdk.RgbDither.NONE,   //Dithering mode for GdkRGB.
+				                0, 0                  //X/Y offsets for dither.
 				                );
 				this.window.end_paint();
 			}
@@ -160,24 +157,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	}
 
 	public void trigger_expose () {
-		//TODO: maybe this should be triggered from elsewhere. But
-		// I had difficulties to get this via a notify signal in VideoScreen widget
-		//TODO: This should only be triggered if logo is not already there.
-		//Otherwise there is a flickering
-		Gdk.EventExpose e = Gdk.EventExpose();
-		e.type = Gdk.EventType.EXPOSE;
-		e.window = this.window;
-		var rect = Gdk.Rectangle();
-		rect.x = 0;
-		rect.y = 0;
-		rect.width = this.allocation.width;
-		rect.height = this.allocation.height;
-		e.area = rect;
-		Gdk.Region region = Gdk.Region.rectangle(rect);
-		e.region = region;
-		e.count = 0;
-		e.send_event = (char)1;
-//		this.expose_event(e);
+		//trigger a redraw by gtk using our expose_event handler
+		this.queue_draw_area(0, 0, this.allocation.width, this.allocation.height);
 	}
 }
 

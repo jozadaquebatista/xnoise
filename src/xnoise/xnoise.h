@@ -519,6 +519,10 @@ struct _XnoiseAppStarterClass {
 	void (*finalize) (XnoiseAppStarter *self);
 };
 
+typedef enum  {
+	XNOISE_DB_ERROR_FAILED
+} XnoiseDbError;
+#define XNOISE_DB_ERROR xnoise_db_error_quark ()
 struct _XnoiseDbBrowser {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -972,14 +976,15 @@ UniqueResponse xnoise_app_starter_on_message_received (UniqueApp* sender, gint c
 gint xnoise_app_starter_main (char** args, int args_length1);
 XnoiseAppStarter* xnoise_app_starter_new (void);
 XnoiseAppStarter* xnoise_app_starter_construct (GType object_type);
+GQuark xnoise_db_error_quark (void);
 gpointer xnoise_db_browser_ref (gpointer instance);
 void xnoise_db_browser_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_db_browser (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
 void xnoise_value_set_db_browser (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_db_browser (const GValue* value);
 GType xnoise_db_browser_get_type (void);
-XnoiseDbBrowser* xnoise_db_browser_new (void);
-XnoiseDbBrowser* xnoise_db_browser_construct (GType object_type);
+XnoiseDbBrowser* xnoise_db_browser_new (GError** error);
+XnoiseDbBrowser* xnoise_db_browser_construct (GType object_type, GError** error);
 gboolean xnoise_db_browser_videos_available (XnoiseDbBrowser* self);
 gboolean xnoise_db_browser_streams_available (XnoiseDbBrowser* self);
 gboolean xnoise_db_browser_stream_in_db (XnoiseDbBrowser* self, const char* uri);
@@ -1023,11 +1028,11 @@ XnoiseMediaData* xnoise_db_browser_get_titles_with_mediatypes_and_ids (XnoiseDbB
 GType xnoise_db_creator_get_type (void);
 #define XNOISE_DB_CREATOR_DB_VERSION_MAJOR 3
 #define XNOISE_DB_CREATOR_DB_VERSION_MINOR 0
-XnoiseDbCreator* xnoise_db_creator_new (void);
-XnoiseDbCreator* xnoise_db_creator_construct (GType object_type);
+XnoiseDbCreator* xnoise_db_creator_new (GError** error);
+XnoiseDbCreator* xnoise_db_creator_construct (GType object_type, GError** error);
 GType xnoise_db_writer_get_type (void);
-XnoiseDbWriter* xnoise_db_writer_new (void);
-XnoiseDbWriter* xnoise_db_writer_construct (GType object_type);
+XnoiseDbWriter* xnoise_db_writer_new (GError** error);
+XnoiseDbWriter* xnoise_db_writer_construct (GType object_type, GError** error);
 gboolean xnoise_db_writer_set_local_image_for_album (XnoiseDbWriter* self, char** artist, char** album, const char* image_path);
 void xnoise_db_writer_insert_title (XnoiseDbWriter* self, XnoiseTrackData* td, const char* uri);
 void xnoise_db_writer_delete_uri (XnoiseDbWriter* self, const char* uri);
@@ -1035,7 +1040,7 @@ gint xnoise_db_writer_uri_entry_exists (XnoiseDbWriter* self, const char* uri);
 void xnoise_db_writer_add_single_stream_to_collection (XnoiseDbWriter* self, const char* uri, const char* name);
 void xnoise_db_writer_add_single_file_to_collection (XnoiseDbWriter* self, const char* uri);
 void xnoise_db_writer_add_single_folder_to_collection (XnoiseDbWriter* self, const char* mfolder);
-void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, char** final_tracklist, int final_tracklist_length1);
+void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, char** final_tracklist, int final_tracklist_length1, GError** error);
 void xnoise_db_writer_del_all_folders (XnoiseDbWriter* self);
 void xnoise_db_writer_del_all_files (XnoiseDbWriter* self);
 void xnoise_db_writer_del_all_streams (XnoiseDbWriter* self);

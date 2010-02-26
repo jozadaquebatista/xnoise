@@ -44,9 +44,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 		}
 		set {
 			_current_has_video = value;
-			if(!_current_has_video) {
+			if(!_current_has_video) 
 				videoscreen.trigger_expose();
-			}
+			else
+				sign_video_playing();
 		}
 	}
 

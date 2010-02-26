@@ -102,7 +102,14 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	/* creates file monitors for all directories in the media path */ 
 	protected void setup_monitors() {
 		monitor_list = new List<DataPair>();
-		var dbb = new DbBrowser();
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
 		var mfolders = dbb.get_media_folders();
 		
 		foreach(string mfolder in mfolders)
@@ -160,25 +167,39 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 
 	protected void handle_deleted_file(File file) {
-	   	//if the file was a directory it is in monitor_list
-	   	//search for filepath in monitor list and remove it
-	   	//remove all its subdirs from monitor list
-	   	//in the course of that try to remove the uri of every file 
-	   	//that was in those directories from the db 
-	   	//(we might need to store the directory of files in the db)
-	   	
+		//if the file was a directory it is in monitor_list
+		//search for filepath in monitor list and remove it
+		//remove all its subdirs from monitor list
+		//in the course of that try to remove the uri of every file 
+		//that was in those directories from the db 
+		//(we might need to store the directory of files in the db)
+		
 		remove_dir_monitors(file.get_path());
-	   	
-	   	print("File deleted: \'%s\'\n", file.get_path());
-	   	var dbw = new DbWriter();
-       	dbw.delete_uri(file.get_uri());
-       	Main.instance.main_window.mediaBr.change_model_data();
-    }
-    
-    protected void handle_created_file(File file) {
+		
+		print("File deleted: \'%s\'\n", file.get_path());
+		DbWriter dbw = null;
+		try {
+			dbw = new DbWriter();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
+		dbw.delete_uri(file.get_uri());
+		Main.instance.main_window.mediaBr.change_model_data();
+	}
+
+	protected void handle_created_file(File file) {
 		print("\'%s\' has been created recently, updating db...\n", file.get_path());
 			
-		var dbw = new DbWriter();
+		DbWriter dbw = null;
+		try {
+			dbw = new DbWriter();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
 		var mi = new MediaImporter();
 		
 		try {
@@ -357,7 +378,14 @@ private class Xnoise.ImportInfoBar {
 			}); 
 		}
 		else {
-			var dbb = new DbBrowser();
+			DbBrowser dbb = null;
+			try {
+				dbb = new DbBrowser();
+			}
+			catch(Error e) {
+				print("%s\n", e.message);
+				return false;
+			}
 			TrackData data;
 			dbb.get_trackdata_for_uri(last_uri, out data);
 			bar_label.set_markup("<b>" + data.Artist + " - "+ data.Title + "</b> has been added to your media library");

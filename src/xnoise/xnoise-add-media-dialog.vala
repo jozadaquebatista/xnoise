@@ -65,7 +65,14 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void fill_media_list() {
 		return_if_fail(listmodel!=null);
 
-		DbBrowser dbb = new DbBrowser();
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
 
 		//add folders
 		var mfolders = dbb.get_media_folders();
@@ -211,7 +218,14 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		// thread function for the import to the library
 		// sends a signal when finished, this signal is handled by main window class
 
-		var dbw = new DbWriter();
+		DbWriter dbw = null;
+		try {
+			dbw = new DbWriter();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return null;
+		}
 		var mi = new MediaImporter();
 		
 		//start import

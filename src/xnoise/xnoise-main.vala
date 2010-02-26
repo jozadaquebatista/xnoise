@@ -92,7 +92,13 @@ public class Xnoise.Main : GLib.Object {
 
 	private void check_database_and_tables() {
 		//creating db instance and destroying it will create a database and the tables
-		var dbc = new DbCreator();
+		DbCreator dbc = null;
+		try {
+			dbc = new DbCreator();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+		}
 		dbc = null;
 	}
 
@@ -132,8 +138,21 @@ public class Xnoise.Main : GLib.Object {
 	private string[] final_tracklist = null;
 	public void save_tracklist() {
 		final_tracklist = this.main_window.trackList.tracklistmodel.get_all_tracks();
-		var dbwr = new DbWriter();
-		dbwr.write_final_tracks_to_db(final_tracklist);
+		DbWriter dbw = null;
+		try {
+			dbw = new DbWriter();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
+		
+		try {
+			dbw.write_final_tracks_to_db(final_tracklist);
+		}
+		catch(Error err) {
+			print("%s\n", err.message);
+		}
 		final_tracklist = null;
 	}
 

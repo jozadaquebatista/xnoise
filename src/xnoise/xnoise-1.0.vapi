@@ -45,7 +45,7 @@ namespace Xnoise {
 	}
 	[CCode (ref_function = "xnoise_db_browser_ref", unref_function = "xnoise_db_browser_unref", cheader_filename = "xnoise.h")]
 	public class DbBrowser {
-		public DbBrowser ();
+		public DbBrowser () throws GLib.Error;
 		public string[] get_albums (string artist, ref string searchtext);
 		public string[] get_artists (ref string searchtext);
 		public string[] get_lastused_uris ();
@@ -74,11 +74,11 @@ namespace Xnoise {
 	public class DbCreator : GLib.Object {
 		public const int DB_VERSION_MAJOR;
 		public const int DB_VERSION_MINOR;
-		public DbCreator ();
+		public DbCreator () throws GLib.Error;
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
-		public DbWriter ();
+		public DbWriter () throws Xnoise.DbError;
 		public void add_single_file_to_collection (string uri);
 		public void add_single_folder_to_collection (string mfolder);
 		public void add_single_stream_to_collection (string uri, string name = "");
@@ -92,7 +92,7 @@ namespace Xnoise {
 		public void insert_title (Xnoise.TrackData td, string uri);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public int uri_entry_exists (string uri);
-		public void write_final_tracks_to_db (string[] final_tracklist);
+		public void write_final_tracks_to_db (string[] final_tracklist) throws GLib.Error;
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GlobalInfo : GLib.Object {
@@ -492,6 +492,10 @@ namespace Xnoise {
 		TRACKLIST,
 		VIDEO,
 		LYRICS
+	}
+	[CCode (cprefix = "XNOISE_DB_ERROR_", cheader_filename = "xnoise.h")]
+	public errordomain DbError {
+		FAILED,
 	}
 	[CCode (cprefix = "XNOISE_SETTINGS_DIALOG_ERROR_", cheader_filename = "xnoise.h")]
 	public errordomain SettingsDialogError {
