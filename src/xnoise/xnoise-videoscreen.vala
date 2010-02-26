@@ -33,29 +33,30 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	private Gdk.Pixbuf cover_image_pixb;
 	private Gdk.Pixbuf logo;
 	private Main xn;
-	private bool cover_available;
+	private bool cover_image_available;
 
 	public VideoScreen() {
 		this.xn = Main.instance;
 		init_video_screen();
-		cover_available = false;
-		global.sign_image_available.connect(on_sign_image_available);
+		cover_image_available = false;
+		global.notify["image-path-large"].connect(on_image_path_changed);
 	}
 
-	private void on_sign_image_available(string? imagepath_small, string? imagepath_large) {
-		if(imagepath_small != null) {
+	private void on_image_path_changed() {
+		print("vs: image path changed : %s\n", global.image_path_large);
+		if(global.image_path_large != null) {
 			try {
-				cover_image_pixb = new Gdk.Pixbuf.from_file(imagepath_large);
+				cover_image_pixb = new Gdk.Pixbuf.from_file(global.image_path_large);
 			}
 			catch(GLib.Error e) {
 				print("%s\n", e.message);
 				return;
 			}
-			cover_available = true;
+			cover_image_available = true;
 		}
 		else {
 			cover_image_pixb = null;
-			cover_available = false;
+			cover_image_available = false;
 		}
 	}
 	
@@ -121,21 +122,31 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 					this.window.end_paint();
 					return true;
 				}
-				if(!cover_available) {
-					logo = logo_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
+				if(!cover_image_available) {
+					logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
 				}
 				else {
 					if(cover_image_pixb != null)
-						logo = cover_image_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
+						logo = cover_image_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
 					else
-						logo = logo_pixb.scale_simple(logowidth, logoheight, Gdk.InterpType.HYPER);
+						logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
 				}
-
-				Gdk.draw_pixbuf(this.window, this.style.fg_gc[0],
-					            logo, 0, 0, (widgetwidth-logowidth)/2,
-					            (widgetheight-logoheight)/2, logowidth,
-					            logoheight, Gdk.RgbDither.NONE,
-					            0, 0);
+				int y_offset = (int)(logoheight * 0.1); //TODO: fix offset calculation
+				int x_offset = (int)((widgetwidth-logowidth) * 0.5);
+				print("widgetheight = %d, logoheight = %d, y_offset = %d\n", widgetheight, logoheight, y_offset);
+				Gdk.draw_pixbuf(this.window,                          //Destination drawable
+				                this.style.fg_gc[0],                  //a Gdk.GC, used for clipping, or NULL
+				                logo,                                 //a Gdk Pixbuf
+				                0, 0,                                 //Source X/Y coordinates within pixbuf.
+				                (int)((widgetwidth-logowidth)/2) +
+				                    x_offset,                         //Destination X coordinate within drawable
+				                (int)((widgetheight-logoheight)/2) + 
+				                    y_offset,                         //Destination Y coordinate within drawable
+				                -1,                                   //Width of region to render, in pixels, or -1 to use pixbuf width.
+				                -1,                                   //Height of region to render, in pixels, or -1 to use pixbuf height.
+				                Gdk.RgbDither.NONE,                   //Dithering mode for GdkRGB.
+				                0, 0                                  //X/Y offsets for dither.
+				                );
 				this.window.end_paint();
 			}
 			else if(this.window!=null) {

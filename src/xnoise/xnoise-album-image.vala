@@ -72,7 +72,7 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 			this.load_default_image();
 			return;
 		}
-		global.broadcast_image_for_current_track();
+		global.check_image_for_current_track();
 
 		album_image_available = false;
 		db_image_available = false;
@@ -88,12 +88,12 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 				return;
 			}
 			db_image_available = true;
-			global.broadcast_image_for_current_track();
+			global.check_image_for_current_track();
 			set_image_via_idle(res);
 		}
 		else {
 			load_default_image();
-			global.broadcast_image_for_current_track();
+			global.check_image_for_current_track();
 			if(timeout != 0)
 				Source.remove(timeout);
 			timeout = Timeout.add_seconds_full(GLib.Priority.DEFAULT,
@@ -203,13 +203,12 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		this.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 	}
 
-	private bool set_albumimage_from_path(string image_path) {
+	private void set_albumimage_from_path(string image_path) {
 		if(MainContext.current_source().is_destroyed()) 
-			return false;
+			return;
 		this.set_from_file(image_path);
 		Gdk.Pixbuf temp = this.get_pixbuf().scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
 		this.set_from_pixbuf(temp);
-		return false;
 	}
 
 	private uint source = 0;
@@ -230,11 +229,17 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 
 		album_image_available = true;
 		
-		global.broadcast_image_for_current_track();
+		global.check_image_for_current_track();
 		
 		var dbw = new DbWriter();
 		dbw.set_local_image_for_album(ref artist, ref album, image_path);
 		dbw = null;
+		
+		Idle.add( () => {
+			print("idle check for image\n");
+			global.check_image_for_current_track();
+			return false;
+		});
 	}
 
 	private void set_image_via_idle(string image_path) {

@@ -104,10 +104,12 @@ namespace Xnoise {
 		}
 		public bool _media_import_in_progress;
 		public GlobalInfo ();
-		public void broadcast_image_for_current_track ();
+		public void check_image_for_current_track ();
 		public void handle_eos ();
 		public void reset_position_reference ();
 		public string? current_uri { get; set; }
+		public string? image_path_large { get; set; }
+		public string? image_path_small { get; set; }
 		public bool media_import_in_progress { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
@@ -121,7 +123,6 @@ namespace Xnoise {
 		public signal void position_reference_next_changed ();
 		public signal void sig_item_imported (string uri);
 		public signal void sig_media_path_changed ();
-		public signal void sign_image_available (string? image_path_small, string? image_path_large);
 		public signal void track_state_changed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]

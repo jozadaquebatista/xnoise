@@ -923,7 +923,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			ebox.enter_notify_event.connect( (s, e) => {
 				buffer_last_page = this.tracklistnotebook.get_current_page();
-				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+				if(global.image_path_large != null)
+					this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 				return false;
 			});
 

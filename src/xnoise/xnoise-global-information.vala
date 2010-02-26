@@ -132,6 +132,9 @@ public class Xnoise.GlobalInfo : GLib.Object {
 		}
 	}
 
+	public string? image_path_small { get; set; default = null; }
+	public string? image_path_large { get; set; default = null; }
+	
 	// PUBLIC GLOBAL FUNCTIONS
 	public void reset_position_reference() {
 		this._position_reference = null;
@@ -142,21 +145,24 @@ public class Xnoise.GlobalInfo : GLib.Object {
 		caught_eos_from_player();
 	}
 	
-	public signal void sign_image_available(string? image_path_small, string? image_path_large);
-	
-	public void broadcast_image_for_current_track() {
+	public void check_image_for_current_track() {
 		string? image_path = null;
 		if(get_image_path_for_media_uri(current_uri, ref image_path)) {
 			string? buf = null; 
-			if((image_path == "") || (image_path == null))
+			if((image_path == "") || (image_path == null)) {
+				image_path_small = null;
+				image_path_large = null;
 				return;
-				
+			}
 			buf = image_path.substring(0, image_path.len() - "medium".len());
 			buf = buf + "extralarge";
-			sign_image_available(image_path, buf);
+			image_path_small = image_path;
+			image_path_large = buf;
+			print("fond image, set path\n");
 		}
 		else {
-			sign_image_available(null, null);
+			image_path_small = null;
+			image_path_large = null;
 		}
 	}
 }
