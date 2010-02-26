@@ -158,7 +158,6 @@ public class Xnoise.GlobalInfo : GLib.Object {
 			buf = buf + "extralarge";
 			image_path_small = image_path;
 			image_path_large = buf;
-			print("fond image, set path\n");
 		}
 		else {
 			image_path_small = null;

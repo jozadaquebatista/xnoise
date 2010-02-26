@@ -236,7 +236,6 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		dbw = null;
 		
 		Idle.add( () => {
-			print("idle check for image\n");
 			global.check_image_for_current_track();
 			return false;
 		});

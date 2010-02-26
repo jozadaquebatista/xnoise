@@ -43,7 +43,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	}
 
 	private void on_image_path_changed() {
-		print("vs: image path changed : %s\n", global.image_path_large);
 		if(global.image_path_large != null) {
 			try {
 				cover_image_pixb = new Gdk.Pixbuf.from_file(global.image_path_large);
@@ -133,7 +132,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				}
 				int y_offset = (int)(logoheight * 0.1); //TODO: fix offset calculation
 				int x_offset = (int)((widgetwidth-logowidth) * 0.5);
-				print("widgetheight = %d, logoheight = %d, y_offset = %d\n", widgetheight, logoheight, y_offset);
+				//print("widgetheight = %d, logoheight = %d, y_offset = %d\n", widgetheight, logoheight, y_offset);
 				Gdk.draw_pixbuf(this.window,                          //Destination drawable
 				                this.style.fg_gc[0],                  //a Gdk.GC, used for clipping, or NULL
 				                logo,                                 //a Gdk Pixbuf
@@ -151,10 +150,10 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 			}
 			else if(this.window!=null) {
 				Gdk.draw_rectangle(this.window,
-						           this.style.black_gc, true,
-						           e.area.x, e.area.y,
-						           e.area.width, e.area.height
-						           );
+				                   this.style.black_gc, true,
+				                   e.area.x, e.area.y,
+				                   e.area.width, e.area.height
+				                   );
 			}
 		}
 		return true;
