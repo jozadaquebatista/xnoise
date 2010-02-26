@@ -561,19 +561,26 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			stop();
 			return;
 		}
-
-		// handle RANDOM
+//		bool replay_row = false;
+		TreePath tmp_path = null;
 		if((repeatState == Repeat.RANDOM)) {
+			// handle RANDOM
+			tmp_path = path;
 			this.trackList.tracklistmodel.get_random_row(ref path);
+//			print("path: %s, tmppat: %s\n", path.to_string(), tmp_path.to_string());
+//			if(path.to_string() == tmp_path.to_string()) {
+//				print("equal\n");
+//				replay_row = true;
+//			}
 		}
 		else {
 			if(!used_next_pos) {
 				// get next or previous path
 				if((!(handle_repeat_state && (repeatState == Repeat.SINGLE)))) {
-					if(path == null) return;
+					if(path == null) 
+						return;
 					if(!this.trackList.tracklistmodel.path_is_last_row(ref path,
-					                                                   out trackList_is_empty)
-					                                                   ) {
+					                                                   out trackList_is_empty)) {
 						//print(" ! path_is_last_row\n");
 						if(direction == Direction.NEXT) {
 							path.next();
@@ -600,6 +607,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 						}
 					}
 				}
+				else {
+					tmp_path = path;
+				}
 			}
 		}
 
@@ -607,12 +617,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			stop();
 			return;
 		}
-
-		if(!trackList.tracklistmodel.get_iter(out iter, path)) return;
+		if(!trackList.tracklistmodel.get_iter(out iter, path))
+			return;
 
 		global.position_reference = new TreeRowReference(trackList.tracklistmodel, path);
 
-		if(global.track_state == GlobalInfo.TrackState.PLAYING) trackList.set_focus_on_iter(ref iter);
+		if(global.track_state == GlobalInfo.TrackState.PLAYING)
+			trackList.set_focus_on_iter(ref iter);
+
+		if((path == null)||(tmp_path == null)) {
+			global.do_restart_of_current_track();
+			return;
+		}
+		if(path.to_string() == tmp_path.to_string()) 
+			global.do_restart_of_current_track();
 	}
 
 	private void on_remove_all_button_clicked() {

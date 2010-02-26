@@ -1049,6 +1049,7 @@ void xnoise_db_writer_commit_transaction (XnoiseDbWriter* self);
 GType xnoise_global_info_get_type (void);
 GType xnoise_global_info_track_state_get_type (void);
 void xnoise_global_info_reset_position_reference (XnoiseGlobalInfo* self);
+void xnoise_global_info_do_restart_of_current_track (XnoiseGlobalInfo* self);
 void xnoise_global_info_handle_eos (XnoiseGlobalInfo* self);
 void xnoise_global_info_check_image_for_current_track (XnoiseGlobalInfo* self);
 XnoiseGlobalInfo* xnoise_global_info_new (void);

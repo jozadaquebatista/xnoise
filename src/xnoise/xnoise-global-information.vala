@@ -51,6 +51,8 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	//signal to be triggered after a change of the media folders
 	public signal void sig_media_path_changed();
 	public signal void sig_item_imported(string uri);
+	
+	public signal void sign_restart_song();
 
 	// PRIVATE FIELDS
 	private TrackState _track_state = TrackState.STOPPED;
@@ -140,6 +142,10 @@ public class Xnoise.GlobalInfo : GLib.Object {
 		this._position_reference = null;
 	}
 
+	public void do_restart_of_current_track() {
+		sign_restart_song();
+	}
+	
 	public void handle_eos() {
 		//emmit signal
 		caught_eos_from_player();

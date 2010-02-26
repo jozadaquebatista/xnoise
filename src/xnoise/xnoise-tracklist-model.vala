@@ -106,7 +106,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	public bool get_random_row(ref TreePath treepath){
 		int n_children = this.iter_n_children(null);
 
-		if(n_children == 0) {
+		if(n_children <= 1) {
 			return false;
 		}
 		//RANDOM FUNCTION
@@ -115,7 +115,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 
 		treepath = new TreePath.from_indices((int)rand_val);
 
-		if(treepath!=null) return true;
+		if(treepath!=null)
+			return true;
 
 		return false;
 	}

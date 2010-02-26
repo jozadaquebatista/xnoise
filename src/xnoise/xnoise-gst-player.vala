@@ -124,7 +124,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				playbin.seek(1.0, Gst.Format.TIME,
 				             Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
 				             Gst.SeekType.SET, (int64)(value * length_time),
-							 Gst.SeekType.NONE, -1);
+				             Gst.SeekType.NONE, -1);
 			}
 		}
 	}
@@ -201,6 +201,14 @@ public class Xnoise.GstPlayer : GLib.Object {
 				this.pause();
 			else if(global.track_state == GlobalInfo.TrackState.STOPPED)
 				this.stop();
+		});
+		
+		global.sign_restart_song.connect( () => {
+			playbin.seek(1.0, Gst.Format.TIME,
+			                 Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
+			                 Gst.SeekType.SET, (int64)(0.0 * length_time),
+			                 Gst.SeekType.NONE, -1);
+			this.playSong();
 		});
 	}
 

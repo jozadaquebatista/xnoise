@@ -104,6 +104,7 @@ namespace Xnoise {
 		public bool _media_import_in_progress;
 		public GlobalInfo ();
 		public void check_image_for_current_track ();
+		public void do_restart_of_current_track ();
 		public void handle_eos ();
 		public void reset_position_reference ();
 		public string? current_uri { get; set; }
@@ -122,6 +123,7 @@ namespace Xnoise {
 		public signal void position_reference_next_changed ();
 		public signal void sig_item_imported (string uri);
 		public signal void sig_media_path_changed ();
+		public signal void sign_restart_song ();
 		public signal void track_state_changed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
