@@ -168,6 +168,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		put_streams_to_model();
 	}
 
+	//FIXME: this is not very generic
 	private void put_hierarchical_data_to_model() {
 		var dbb = new DbBrowser();
 		

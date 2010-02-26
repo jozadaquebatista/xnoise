@@ -83,15 +83,15 @@ public class Xnoise.DbBrowser {
 	private static const string STMT_GET_LASTUSED =
 		"SELECT uri FROM lastused";
 	private static const string STMT_GET_VIDEO_DATA =
-		"SELECT DISTINCT title, mediatype, id FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY title DESC";
+		"SELECT DISTINCT title, mediatype, id FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
 	private static const string STMT_GET_VIDEOS =
-		"SELECT DISTINCT title FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY title DESC";
+		"SELECT DISTINCT title FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
 	private static const string STMT_GET_ARTISTS =
-		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY ar.name DESC";
+		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY LOWER(ar.name) DESC";
 	private static const string STMT_GET_ALBUMS =
-		"SELECT DISTINCT al.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY t.year DESC, al.name DESC";
+		"SELECT DISTINCT al.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY LOWER(al.name) DESC";
 	private static const string STMT_GET_ITEMS =
-		"SELECT DISTINCT t.title FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND t.title LIKE ? ORDER BY t.tracknumber DESC, t.title DESC";
+		"SELECT DISTINCT t.title FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND t.title LIKE ? ORDER BY t.tracknumber DESC, LOWER(t.title) DESC";
 	private static const string STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS =
 		"SELECT DISTINCT t.title, t.mediatype, t.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY t.tracknumber DESC, t.title DESC";
 	private static const string STMT_GET_RADIOS =
