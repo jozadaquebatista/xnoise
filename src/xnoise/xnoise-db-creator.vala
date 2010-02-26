@@ -35,7 +35,7 @@ public class Xnoise.DbCreator : GLib.Object {
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private Sqlite.Database? db;
 	public static const int DB_VERSION_MAJOR = 3;
-	public static const int DB_VERSION_MINOR = 0;
+	public static const int DB_VERSION_MINOR = 1;
 	private static File xnoisedb;
 
 	//CREATE TABLE STATEMENTS

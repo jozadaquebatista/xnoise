@@ -170,5 +170,6 @@ public class Xnoise.GlobalInfo : GLib.Object {
 			image_path_small = null;
 			image_path_large = null;
 		}
+		//print("small: %s; \nlarge: %s\n", image_path_small, image_path_large);
 	}
 }

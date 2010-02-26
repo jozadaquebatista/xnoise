@@ -218,7 +218,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	private void on_about_to_finish() {
 		Idle.add ( () => { 
-			print("about to finish\n");
 			this.sign_about_to_finish ();
 			global.handle_eos();
 			return false;

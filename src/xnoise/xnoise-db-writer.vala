@@ -88,7 +88,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_COMMIT =
 		"COMMIT";
 	private static const string STMT_UPDATE_ALBUM_IMAGE =
-		"UPDATE albums SET image = ? WHERE id = (SELECT al.id FROM albums al, artists ar WHERE al.artist = ar.id AND ar.name = ? AND al.name = ?)";
+		"UPDATE albums SET image = ? WHERE id = (SELECT al.id FROM albums al, artists ar WHERE al.artist = ar.id AND LOWER(ar.name) = LOWER(?) AND LOWER(al.name) = LOWER(?))";
 	private static const string STMT_CHECK_TRACK_EXISTS =
 		"SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
 	private static const string STMT_INSERT_LASTUSED =

@@ -136,8 +136,6 @@ namespace Xnoise {
 			print("%s\n", e.message);
 			return false;
 		}		
-		if(dbb == null)
-			return false;
 		
 		image_path = dbb.get_local_image_path_for_track(ref tmpuri);
 		

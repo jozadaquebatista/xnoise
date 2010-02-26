@@ -957,7 +957,6 @@ GType xnoise_album_image_get_type (void);
 XnoiseAlbumImage* xnoise_album_image_new (void);
 XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
 void xnoise_album_image_load_default_image (XnoiseAlbumImage* self);
-gboolean xnoise_album_image_get_album_image_available (XnoiseAlbumImage* self);
 gboolean xnoise_album_image_get_show_album_images (XnoiseAlbumImage* self);
 void xnoise_album_image_set_show_album_images (XnoiseAlbumImage* self, gboolean value);
 GType xnoise_album_image_loader_get_type (void);
@@ -1027,7 +1026,7 @@ char** xnoise_db_browser_get_albums (XnoiseDbBrowser* self, const char* artist, 
 XnoiseMediaData* xnoise_db_browser_get_titles_with_mediatypes_and_ids (XnoiseDbBrowser* self, const char* artist, const char* album, char** searchtext, int* result_length1);
 GType xnoise_db_creator_get_type (void);
 #define XNOISE_DB_CREATOR_DB_VERSION_MAJOR 3
-#define XNOISE_DB_CREATOR_DB_VERSION_MINOR 0
+#define XNOISE_DB_CREATOR_DB_VERSION_MINOR 1
 XnoiseDbCreator* xnoise_db_creator_new (GError** error);
 XnoiseDbCreator* xnoise_db_creator_construct (GType object_type, GError** error);
 GType xnoise_db_writer_get_type (void);
