@@ -98,9 +98,9 @@ public class Xnoise.DbCreator : GLib.Object {
 		//workaround
 		//check if write permissions were given (
 		//readwrite succeeded instead of readonly fallback)
-		if(database.exec("UPDATE items SET id=0 WHERE 0;", null, null)!= Sqlite.OK) {
+		/*if(database.exec("UPDATE items SET id=0 WHERE 0;", null, null)!= Sqlite.OK) {
 			return null;
-		}
+		}*/
 		return database;
 	}
 

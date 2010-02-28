@@ -219,9 +219,9 @@ public class Xnoise.DbWriter : GLib.Object {
 		//workaround
 		//check if write permissions were given (
 		//readwrite succeeded instead of readonly fallback)
-		if(database.exec("UPDATE items SET id=0 WHERE 0;", null, null)!= Sqlite.OK) {
+		/*if(database.exec("UPDATE items SET id=0 WHERE 0;", null, null)!= Sqlite.OK) {
 			return null;
-		}
+		}*/
 		return database;
 	}
 
@@ -531,61 +531,74 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(get_uri_id_statement.step() == Sqlite.ROW)
 			uri_id = get_uri_id_statement.column_int(0);
 		if (uri_id == -1) return;
+		print("%s is %s\n", uri, uri_id.to_string()); 
 
 
 		//delete the according album/artist/genre entries if not referenced by any other item
 		//granted, there might be more intelligent ways to do this but I guess this is the fastest one
 		//after all we can use foreign keys and cascading deletion when the distros ship sqlite >=3.6.19
 		
-		begin_transaction();		
-		
+		begin_transaction();
+				
 		//album
+		get_album_for_uri_id_statement.reset();
 		get_album_for_uri_id_statement.bind_int(1, uri_id);
 		get_album_for_uri_id_statement.step();
 		var album_id = get_album_for_uri_id_statement.column_int(0);
 
+		count_album_in_items_statement.reset();
 		count_album_in_items_statement.bind_int(1, album_id);
 		count_album_in_items_statement.step();
 		var album_count = count_album_in_items_statement.column_int(0);
 
 		if(album_count < 2) {
+			delete_album_statement.reset();
 			delete_album_statement.bind_int(1, album_id);
 			delete_album_statement.step();
 		}
 		
 		//artist
+		get_artist_for_uri_id_statement.reset();
 		get_artist_for_uri_id_statement.bind_int(1, uri_id);
 		get_artist_for_uri_id_statement.step();
 		var artist_id = get_artist_for_uri_id_statement.column_int(0);
-
+		
+		count_artist_in_items_statement.reset();
 		count_artist_in_items_statement.bind_int(1, artist_id);
 		count_artist_in_items_statement.step();
 		var artist_count = count_artist_in_items_statement.column_int(0);
 
 		if(artist_count < 2) {
+			delete_artist_statement.reset();
 			delete_artist_statement.bind_int(1, artist_id);
 			delete_artist_statement.step();
 		}
 
 		//genre
+		get_genre_for_uri_id_statement.reset();
 		get_genre_for_uri_id_statement.bind_int(1, uri_id);
 		get_genre_for_uri_id_statement.step();
 		var genre_id = get_genre_for_uri_id_statement.column_int(0);
 
+		count_genre_in_items_statement.reset();
 		count_genre_in_items_statement.bind_int(1, genre_id);
 		count_genre_in_items_statement.step();
 		var genre_count = count_genre_in_items_statement.column_int(0);
 
 		if(genre_count < 2) {
+			delete_genre_statement.reset();
 			delete_genre_statement.bind_int(1, genre_id);
 			delete_genre_statement.step();
 		}
 
-		//delete item          
+		//delete item
+		delete_item_statement.reset();          
 		delete_item_statement.bind_int(1, uri_id);
 		delete_item_statement.step();
+		print("deleted uri_id %s", uri_id.to_string());
 
 		//delete uri
+		delete_uri_statement.reset();
 		delete_uri_statement.bind_int(1, uri_id);
 		delete_uri_statement.step();
 		
