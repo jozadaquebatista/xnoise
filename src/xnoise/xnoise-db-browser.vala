@@ -440,14 +440,14 @@ public class Xnoise.DbBrowser {
 	
 	public string[] get_uris(string search_string) {
 		print("searching for %s\n", STMT_GET_URIS.replace("?", search_string));
-		string[] mfiles = {};
+		string[] results = {};
 		get_uris_statement.reset();
-		track_id_for_uri_statement.bind_text(1, search_string);
+		get_uris_statement.bind_text(1, search_string);
 		while(get_uris_statement.step() == Sqlite.ROW) {
 			print("found %s", get_uris_statement.column_text(0));
-			mfiles += get_uris_statement.column_text(0);
+			results += get_uris_statement.column_text(0);
 		}
-		return mfiles;
+		return results;
 	}
 
 	public MediaData[] get_video_data(ref string searchtext) {

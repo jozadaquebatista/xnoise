@@ -212,7 +212,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			var search_string = file.get_uri();
 			search_string = search_string.replace("%", "\\%");
 			search_string = search_string.replace("_", "\\_");
-			search_string += "%";
+			search_string += "/%";
 			var results = dbb.get_uris(search_string);
 			foreach (string a in results) {
 				print("deleting %s from db\n", a);
