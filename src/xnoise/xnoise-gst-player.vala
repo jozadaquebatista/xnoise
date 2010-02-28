@@ -205,11 +205,12 @@ public class Xnoise.GstPlayer : GLib.Object {
 		
 		global.sign_restart_song.connect( () => {
 			playbin.seek(1.0, Gst.Format.TIME,
-			                 Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-			                 Gst.SeekType.SET, (int64)(0.0 * length_time),
-			                 Gst.SeekType.NONE, -1);
+			             Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
+			             Gst.SeekType.SET, (int64)(0.0 * length_time),
+			             Gst.SeekType.NONE, -1);
 			this.playSong();
 		});
+		this.sign_tag_changed.connect(global.set_meta_information);
 	}
 
 	private void request_location(string? uri) {

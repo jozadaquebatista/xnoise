@@ -133,7 +133,15 @@ public class Xnoise.GlobalInfo : GLib.Object {
 				_media_import_in_progress = value;
 		}
 	}
-
+	
+	// Current track's meta data
+	public string? current_artist { get; set; default = null; }
+	public string? current_album { get; set; default = null; }
+	public string? current_title { get; set; default = null; }
+	public string? current_location { get; set; default = null; }
+	public string? current_genre { get; set; default = null; }
+	public string? current_organization { get; set; default = null; }
+	
 	public string? image_path_small { get; set; default = null; }
 	public string? image_path_large { get; set; default = null; }
 	
@@ -177,5 +185,83 @@ public class Xnoise.GlobalInfo : GLib.Object {
 			image_path_large = null;
 		}
 		//print("small: %s; \nlarge: %s\n", image_path_small, image_path_large);
+	}
+	
+	// set meta information after start of new track/stream
+	public void set_meta_information(ref string? newuri, string? tagname, string? tagvalue) {
+		string album, artist, title;//, organization, location, genre;
+		string basename = null;
+		if((newuri == "")|(newuri == null)) {
+			return;
+		}
+		File file = File.new_for_uri(newuri);
+//		if(!current_track_is_stream) {
+		basename = file.get_basename();
+		DbBrowser dbb = null;
+		try {
+			dbb = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
+		TrackData td;
+		if(dbb.get_trackdata_for_uri(newuri, out td)) {
+			artist = td.Artist;
+			album = td.Album;
+			title = td.Title;
+		}
+		else {
+			if(current_artist!=null) {
+				artist = remove_linebreaks(current_artist);
+			}
+			else {
+				artist = "unknown artist";
+			}
+			if(current_title!=null) {
+				title = remove_linebreaks(current_title);
+			}
+			else {
+				title = "unknown title";
+			}
+			if(current_album!=null) {
+				album = remove_linebreaks(current_album);
+			}
+			else {
+				album = "unknown album";
+			}
+		}
+//		}
+//		else { // IS STREAM
+//			if(current_artist!=null)
+//				artist = remove_linebreaks(current_artist);
+//			else
+//				artist = "unknown artist";
+
+//			if(current_title!=null)
+//				title = remove_linebreaks(current_title);
+//			else
+//				title = "unknown title";
+
+//			if(current_album!=null)
+//				album = remove_linebreaks(current_album);
+//			else
+//				album = "unknown album";
+
+//			if(current_org!=null)
+//				organization = remove_linebreaks(current_org);
+//			else
+//				organization = "unknown organization";
+
+//			if(current_genre!=null)
+//				genre = remove_linebreaks(current_genre);
+//			else
+//				genre = "unknown genre";
+
+//			if(current_location!=null)
+//				location = remove_linebreaks(current_location);
+//			else
+//				location = "unknown location";
+//		}
 	}
 }

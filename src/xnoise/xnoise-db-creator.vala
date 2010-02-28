@@ -70,15 +70,16 @@ public class Xnoise.DbCreator : GLib.Object {
 	public DbCreator() throws Error {
 		this.db = null;
 		this.db = get_db();
+
 		if(this.db == null) 
-			throw new DbError.FAILED("Cannot open database for writing.");
-		
+			throw new DbError.FAILED("Cannot create database.");
+
 		check_tables();
 	}
 
 	private static Database? get_db () {
 		//TODO: Version check with drop table
-		Database database;
+		Database database = null;
 		File home_dir = File.new_for_path(Environment.get_home_dir());
 		File xnoise_home = home_dir.get_child(SETTINGS_FOLDER);
 		xnoisedb = xnoise_home.get_child(DATABASE_NAME);
@@ -95,12 +96,6 @@ public class Xnoise.DbCreator : GLib.Object {
 		                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE,
 		                 null) ;
 
-		//workaround
-		//check if write permissions were given (
-		//readwrite succeeded instead of readonly fallback)
-		if(database.exec("UPDATE items SET id=0 WHERE 0;", null, null)!= Sqlite.OK) {
-			return null;
-		}
 		return database;
 	}
 

@@ -45,6 +45,7 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 	}
 	
 	private void write_title_to_decoration(ref string? newuri, string? x, string? y) {
+		print("write_title_to_decoration %s %s %s\n", newuri, x, y);
 		string text, album, artist, title, genre, location, organization;
 		string basename = null;
 		if(newuri == null) {
@@ -55,6 +56,7 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 		if(!xn.gPl.is_stream)
 			basename = file.get_basename();
 		if(xn.gPl.currentartist != null) {
+			print("xn.gPl.currentartist: %s\n", xn.gPl.currentartist);
 			artist = remove_linebreaks(xn.gPl.currentartist);
 		}
 		else {
@@ -123,7 +125,9 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 					);
 			}
 		}
-		if(MainContext.current_source().is_destroyed()) return;
+		print("text: %s\n", text);
+		if(MainContext.current_source().is_destroyed()) 
+			return;
 		xn.main_window.set_title(text);
 	}
 	

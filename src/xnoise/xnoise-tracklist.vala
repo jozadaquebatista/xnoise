@@ -302,18 +302,17 @@ public class Xnoise.TrackList : TreeView {
 				if(file.get_uri_scheme() == "http") is_stream = true;
 				if(!is_stream) {
 					try {
-						FileInfo info = file.query_info(
-										    attr,
-										    FileQueryInfoFlags.NONE,
-										    null);
+						FileInfo info = file.query_info(attr,
+						                                FileQueryInfoFlags.NONE,
+						                                null);
 						filetype = info.get_file_type();
 					}
 					catch(GLib.Error e){
-						stderr.printf("%s\n", e.message);
+						print("%s\n", e.message);
 						return;
 					}
 
-					if(filetype!=GLib.FileType.DIRECTORY) {
+					if(filetype != GLib.FileType.DIRECTORY) {
 						handle_dropped_file(ref uri, ref path, ref is_first, ref dbBr);	//FILES
 					}
 					else {
@@ -326,7 +325,7 @@ public class Xnoise.TrackList : TreeView {
 			}
 			is_first = false;
 		}
-		else { 											// DRAGGING WITHIN TRACKLIST
+		else { // DRAGGING WITHIN TRACKLIST
 			drop_rowref = null;
 			if(path!=null) {
 				//TODO:check if drop position is selected
@@ -387,7 +386,8 @@ public class Xnoise.TrackList : TreeView {
 			string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 			              FILE_ATTRIBUTE_STANDARD_TYPE;
 			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
-		} catch (Error e) {
+		}
+		catch(Error e) {
 			print("Error importing directory %s. %s\n", dir.get_path(), e.message);
 			return;
 		}
@@ -407,13 +407,15 @@ public class Xnoise.TrackList : TreeView {
 					handle_dropped_file(ref buffer, ref path, ref is_first, ref dbBr);
 				}
 			}
-		} catch(Error e) {
+		}
+		catch(Error e) {
 			print("Error: %s\n", e.message);
 			return;
 		}
 	}
 
-	private void handle_dropped_stream(ref string streamuri, ref TreePath? path, ref bool is_first, ref DbBrowser dbBr) {
+	private void handle_dropped_stream(ref string streamuri, ref TreePath? path, 
+	                                   ref bool is_first, ref DbBrowser dbBr) {
 		//Function to import music STREAMS in drag'n'drop
 		TreeIter iter, new_iter;
 		File file = File.new_for_uri(streamuri);
@@ -498,11 +500,11 @@ public class Xnoise.TrackList : TreeView {
 			mime = g_content_type_get_mime_type(content);
 		}
 		catch(GLib.Error e){
-			stderr.printf("%s\n", e.message);
+			print("%s\n", e.message);
 			return;
 		}
 
-		if((filetype==GLib.FileType.REGULAR)&
+		if((filetype == GLib.FileType.REGULAR)&
 		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
 			string artist, album, title, lengthString = "";
 			uint tracknumb;
@@ -532,11 +534,11 @@ public class Xnoise.TrackList : TreeView {
 				}
 			}
 			TreeIter first_iter;
-			if(!this.tracklistmodel.get_iter_first(out first_iter)) { //dropped on empty list, first uri
-				this.tracklistmodel.insert(out new_iter, 0);
-			}
-			else if(path==null) { //dropped below all entries, first uri
+			if((path == null)||(!this.tracklistmodel.get_iter_first(out first_iter))) { 
+				//dropped below all entries, first uri OR
+				//dropped on empty list, first uri
 				tracklistmodel.append(out new_iter);
+				drop_pos = Gtk.TreeViewDropPosition.AFTER;
 			}
 			else { //all other uris
 				this.tracklistmodel.get_iter(out iter, path);
