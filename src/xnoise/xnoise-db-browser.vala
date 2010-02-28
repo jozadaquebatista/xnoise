@@ -439,7 +439,7 @@ public class Xnoise.DbBrowser {
 	}
 	
 	public string[] get_uris(string search_string) {
-		print("searching for %s", STMT_GET_URIS.replace("?", search_string));
+		print("searching for %s\n", STMT_GET_URIS.replace("?", search_string));
 		string[] mfiles = {};
 		get_uris_statement.reset();
 		track_id_for_uri_statement.bind_text(1, search_string);

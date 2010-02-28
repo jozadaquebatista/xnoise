@@ -197,9 +197,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			print("%s\n", e.message);
 			return;
 		}
-		print("inspecting %s", file.get_path());
 		if(monitor_in_list(file.get_path())) {
-			print("DIR!!!!!!!!!");
+			print("%s was a directory\n", file.get_path());
 			DbBrowser dbb = null;
 			try {
 				dbb = new DbBrowser();
@@ -214,10 +213,9 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			search_string = search_string.replace("%", "\\%");
 			search_string = search_string.replace("_", "\\_");
 			search_string += "%";
-			print("FFFFFFFFFFFFFFFSEARCHING FOR %s\n\n", search_string);
 			var results = dbb.get_uris(search_string);
 			foreach (string a in results) {
-				print("XXXXXXXXXXXXXXXXXXXXXXdeleting %s\n", a);
+				print("deleting %s from db\n", a);
 				dbw.delete_uri(a);
 			}
 		}
