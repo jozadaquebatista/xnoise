@@ -148,7 +148,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		buffer_last_page = 0;
 
 		global.caught_eos_from_player.connect(on_caught_eos_from_player);
-		xn.gPl.sign_tag_changed.connect(this.set_displayed_title);
+		global.sign_tag_changed.connect(this.set_displayed_title);
 		xn.gPl.sign_video_playing.connect( () => { 
 			//handle stop signal from gst player
 			if(!this.fullscreenwindowvisible)

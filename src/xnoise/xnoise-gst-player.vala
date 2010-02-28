@@ -33,11 +33,12 @@ using Gst;
 public class Xnoise.GstPlayer : GLib.Object {
 	private bool _current_has_video;
 	private uint timeout;
+	private uint update_tags_source;
 	private string? _Uri = null;
-	private TagList _taglist;
+	private Gst.TagList _taglist;
 	public VideoScreen videoscreen;
 	private dynamic Element playbin;
-
+	
 	public bool current_has_video { // TODO: Determine this elsewhere
 		get {
 			return _current_has_video;
@@ -79,7 +80,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public string currentorg      { get; private set; }
 	public string currentlocation { get; private set; }
 
-	private TagList taglist {
+	private Gst.TagList taglist {
 		get {
 			return _taglist;
 		}
@@ -134,7 +135,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_paused();
 	public signal void sign_stopped();
 	public signal void sign_video_playing();
-	public signal void sign_tag_changed(ref string? newuri, string? tagname, string? tagvalue);
 	public signal void sign_uri_changed(string newuri);
 	public signal void sign_volume_changed(double volume);
 
@@ -142,7 +142,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 		videoscreen = new VideoScreen();
 		create_elements();
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
+		update_tags_source = 0;
 		this.notify.connect( (s, p) => {
+			//print("p.name: %s\n", p.name);
 			switch(p.name) {
 				case "Uri": {
 					this._currentartist   = "unknown artist";
@@ -153,40 +155,34 @@ public class Xnoise.GstPlayer : GLib.Object {
 					this._currentorg      = "unknown organization";
 					
 					this.sign_uri_changed(this.Uri);
-					this.sign_tag_changed(ref this._Uri, null, null);
+					global.sign_tag_changed(ref this._Uri, null, null);
 					
 					break;
 				}
 				case "currentartist": {
-					this.sign_tag_changed(ref this._Uri, "artist", this._currentartist);
+					global.sign_tag_changed(ref this._Uri, "artist", this._currentartist);
 					break;
 				}
 				case "currentalbum": {
-					this.sign_tag_changed(ref this._Uri, "album", this._currentalbum);
+					global.sign_tag_changed(ref this._Uri, "album", this._currentalbum);
 					break;
 				}
 				case "currenttitle": {
-					this.sign_tag_changed(ref this._Uri, "title", this._currenttitle);
+					global.sign_tag_changed(ref this._Uri, "title", this._currenttitle);
 					break;
 				}
 				case "currentlocation": {
-					this.sign_tag_changed(ref this._Uri, "location", this._currentlocation);
+					global.sign_tag_changed(ref this._Uri, "location", this._currentlocation);
 					break;
 				}
 				case "currentgenre": {
-					this.sign_tag_changed(ref this._Uri, "genre", this._currentgenre);
+					global.sign_tag_changed(ref this._Uri, "genre", this._currentgenre);
 					break;
 				}
 				case "currentorg": {
-					this.sign_tag_changed(ref this._Uri, "organization", this._currentorg);
+					global.sign_tag_changed(ref this._Uri, "organization", this._currentorg);
 					break;
 				}
-				case "taglist": {
-					if(this.taglist == null) return;
-					taglist.foreach(foreachtag);
-					break;
-				}
-				default: break;
 			}
 		});
 
@@ -210,7 +206,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 			             Gst.SeekType.NONE, -1);
 			this.playSong();
 		});
-		this.sign_tag_changed.connect(global.set_meta_information);
 	}
 
 	private void request_location(string? uri) {
@@ -240,9 +235,33 @@ public class Xnoise.GstPlayer : GLib.Object {
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
 		playbin.connect("swapped-object-signal::about-to-finish", on_about_to_finish, this, null);
+		playbin.connect("swapped-object-signal::audio-tags-changed", on_audio_tags_changed, this, null);
 		bus.message.connect(this.on_bus_message);
 		bus.enable_sync_message_emission();
 		bus.sync_message.connect(this.on_sync_message);
+	}
+	
+	private void on_audio_tags_changed(int stream_number) {
+		TagList tags = null;
+		Signal.emit_by_name(playbin, "get-audio-tags", stream_number, ref tags);
+		if(taglist == null && tags != null) {
+			taglist = tags;
+		}
+		else {
+			taglist.merge(tags, TagMergeMode.REPLACE);
+		}
+		if(this.taglist == null) 
+			return;
+		
+		if(update_tags_source != 0)
+			Source.remove(update_tags_source);
+		
+		update_tags_source = Idle.add(update_tags);
+	}
+
+	private bool update_tags() {
+		taglist.@foreach(foreachtag);
+		return false;
 	}
 
 	private void on_bus_message(Gst.Message msg) {
@@ -266,17 +285,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 			}
 			case Gst.MessageType.EOS: {
 				global.handle_eos();
-				break;
-			}
-			case Gst.MessageType.TAG: {
-				TagList tag_list;
-				msg.parse_tag(out tag_list);
-				if(taglist == null && tag_list != null) {
-					taglist = tag_list;
-				}
-				else {
-					taglist.merge(tag_list, TagMergeMode.REPLACE);
-				}
 				break;
 			}
 			default: break;
@@ -311,7 +319,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private void foreachtag(TagList list, string tag) {
 		string val = null;
 		//print("tag: %s\n", tag);
-		switch (tag) {
+		switch(tag) {
 		case "artist":
 			if(list.get_string(tag, out val))
 				if(val!=this.currentartist) this.currentartist = val;

@@ -107,7 +107,6 @@ namespace Xnoise {
 		public void do_restart_of_current_track ();
 		public void handle_eos ();
 		public void reset_position_reference ();
-		public void set_meta_information (ref string? newuri, string? tagname, string? tagvalue);
 		public string? current_album { get; set; }
 		public string? current_artist { get; set; }
 		public string? current_genre { get; set; }
@@ -131,6 +130,7 @@ namespace Xnoise {
 		public signal void sig_item_imported (string uri);
 		public signal void sig_media_path_changed ();
 		public signal void sign_restart_song ();
+		public signal void sign_tag_changed (ref string? newuri, string? tagname, string? tagvalue);
 		public signal void track_state_changed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -161,7 +161,6 @@ namespace Xnoise {
 		public signal void sign_playing ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
-		public signal void sign_tag_changed (ref string? newuri, string? tagname, string? tagvalue);
 		public signal void sign_uri_changed (string newuri);
 		public signal void sign_video_playing ();
 		public signal void sign_volume_changed (double volume);

@@ -36,6 +36,10 @@
 
 public class Xnoise.GlobalInfo : GLib.Object {
 
+	public GlobalInfo() {
+		sign_tag_changed.connect(this.set_meta_information);
+	}
+	
 	// SIGNALS
 	// TreeRowReference for current track changed
 	public signal void position_reference_changed();
@@ -53,6 +57,9 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	public signal void sig_item_imported(string uri);
 	
 	public signal void sign_restart_song();
+
+	public signal void sign_tag_changed(ref string? newuri, string? tagname, string? tagvalue);
+
 
 	// PRIVATE FIELDS
 	private TrackState _track_state = TrackState.STOPPED;
@@ -188,10 +195,17 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	}
 	
 	// set meta information after start of new track/stream
-	public void set_meta_information(ref string? newuri, string? tagname, string? tagvalue) {
-		string album, artist, title;//, organization, location, genre;
+	private void set_meta_information(ref string? newuri, string? tagname, string? tagvalue) {
+		print("set_meta_information: %s - %s\n", tagname, tagvalue);
+//		string album, artist, title;//, organization, location, genre;
 		string basename = null;
 		if((newuri == "")|(newuri == null)) {
+			current_artist = null;
+			current_album = null;
+			current_title = null;
+			current_location = null;
+			current_genre = null;
+			current_organization = null;
 			return;
 		}
 		File file = File.new_for_uri(newuri);
@@ -207,61 +221,16 @@ public class Xnoise.GlobalInfo : GLib.Object {
 		}
 		TrackData td;
 		if(dbb.get_trackdata_for_uri(newuri, out td)) {
-			artist = td.Artist;
-			album = td.Album;
-			title = td.Title;
+			current_artist = td.Artist;
+			current_album  = td.Album;
+			current_title  = td.Title;
+			current_genre  = td.Genre;
 		}
-		else {
-			if(current_artist!=null) {
-				artist = remove_linebreaks(current_artist);
-			}
-			else {
-				artist = "unknown artist";
-			}
-			if(current_title!=null) {
-				title = remove_linebreaks(current_title);
-			}
-			else {
-				title = "unknown title";
-			}
-			if(current_album!=null) {
-				album = remove_linebreaks(current_album);
-			}
-			else {
-				album = "unknown album";
-			}
+		else { //TODO: Use tags coming from gstreamer
+			current_artist = null;
+			current_album  = null;
+			current_title  = null;
+			current_genre  = null;
 		}
-//		}
-//		else { // IS STREAM
-//			if(current_artist!=null)
-//				artist = remove_linebreaks(current_artist);
-//			else
-//				artist = "unknown artist";
-
-//			if(current_title!=null)
-//				title = remove_linebreaks(current_title);
-//			else
-//				title = "unknown title";
-
-//			if(current_album!=null)
-//				album = remove_linebreaks(current_album);
-//			else
-//				album = "unknown album";
-
-//			if(current_org!=null)
-//				organization = remove_linebreaks(current_org);
-//			else
-//				organization = "unknown organization";
-
-//			if(current_genre!=null)
-//				genre = remove_linebreaks(current_genre);
-//			else
-//				genre = "unknown genre";
-
-//			if(current_location!=null)
-//				location = remove_linebreaks(current_location);
-//			else
-//				location = "unknown location";
-//		}
 	}
 }
