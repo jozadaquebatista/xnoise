@@ -1012,6 +1012,7 @@ XnoiseStreamData* xnoise_db_browser_get_streams (XnoiseDbBrowser* self, int* res
 char* xnoise_db_browser_get_single_stream_uri (XnoiseDbBrowser* self, const char* name);
 gint xnoise_db_browser_get_track_id_for_path (XnoiseDbBrowser* self, const char* uri);
 char** xnoise_db_browser_get_lastused_uris (XnoiseDbBrowser* self, int* result_length1);
+char** xnoise_db_browser_get_uris (XnoiseDbBrowser* self, const char* search_string, int* result_length1);
 GType xnoise_media_data_get_type (void);
 GType xnoise_media_type_get_type (void);
 XnoiseMediaData* xnoise_media_data_dup (const XnoiseMediaData* self);

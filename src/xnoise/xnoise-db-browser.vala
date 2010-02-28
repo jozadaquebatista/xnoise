@@ -47,6 +47,7 @@ public class Xnoise.DbBrowser {
 	private Statement get_albums_statement;
 	private Statement get_items_statement;
 	private Statement get_items_with_mediatypes_and_ids_statement;
+	private Statement get_uris_statement;
 	private Statement track_id_for_uri_statement;
 	private Statement trackdata_for_uri_statement;
 	private Statement trackdata_for_id_statement;
@@ -98,6 +99,8 @@ public class Xnoise.DbBrowser {
 		"SELECT DISTINCT t.title FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND t.title LIKE ? ORDER BY t.tracknumber DESC, LOWER(t.title) DESC";
 	private static const string STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS =
 		"SELECT DISTINCT t.title, t.mediatype, t.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY t.tracknumber DESC, t.title DESC";
+	private static const string STMT_GET_URIS = 
+		"SELECT name FROM uris WHERE name LIKE ? ESCAPE \'\\\'";
 	private static const string STMT_GET_RADIOS =
 		"SELECT name, uri FROM streams";
 	private static const string STMT_GET_SINGLE_RADIO_URI =
@@ -159,6 +162,8 @@ public class Xnoise.DbBrowser {
 			out this.get_items_statement);
 		this.db.prepare_v2(STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS, -1,
 			out this.get_items_with_mediatypes_and_ids_statement);
+		this.db.prepare_v2(STMT_GET_URIS, -1,
+			out this.get_uris_statement);
 		this.db.prepare_v2(STMT_TRACKDATA_FOR_URI, -1,
 			out this.trackdata_for_uri_statement);
 		this.db.prepare_v2(STMT_URI_FOR_ID, -1,
@@ -431,6 +436,18 @@ public class Xnoise.DbBrowser {
 			val += get_lastused_statement.column_text(0);
 		}
 		return val;
+	}
+	
+	public string[] get_uris(string search_string) {
+		print("searching for %s", STMT_GET_URIS.replace("?", search_string));
+		string[] mfiles = {};
+		get_uris_statement.reset();
+		track_id_for_uri_statement.bind_text(1, search_string);
+		while(get_uris_statement.step() == Sqlite.ROW) {
+			print("found %s", get_uris_statement.column_text(0));
+			mfiles += get_uris_statement.column_text(0);
+		}
+		return mfiles;
 	}
 
 	public MediaData[] get_video_data(ref string searchtext) {

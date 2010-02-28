@@ -165,7 +165,20 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	   		}
 	   	});
 	}
-
+	
+	protected bool monitor_in_list(string path) {
+	bool success = false;
+		monitor_list.foreach((data) => {
+			unowned List<DataPair> iter = monitor_list;
+			while(iter != null) {
+				//print("!!%s\n", iter.data.path);
+				if(iter.data.path == path) success = true;
+				iter = iter.next;
+			}
+		});
+		return success;
+	}
+			
 	protected void handle_deleted_file(File file) {
 		//if the file was a directory it is in monitor_list
 		//search for filepath in monitor list and remove it
@@ -174,18 +187,43 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		//that was in those directories from the db 
 		//(we might need to store the directory of files in the db)
 		
-		remove_dir_monitors(file.get_path());
-		
 		print("File deleted: \'%s\'\n", file.get_path());
 		DbWriter dbw = null;
 		try {
 			dbw = new DbWriter();
+			
 		}
 		catch(Error e) {
 			print("%s\n", e.message);
 			return;
 		}
+		print("inspecting %s", file.get_path());
+		if(monitor_in_list(file.get_path())) {
+			print("DIR!!!!!!!!!");
+			DbBrowser dbb = null;
+			try {
+				dbb = new DbBrowser();
+			}
+			catch(Error e) {
+				print("%s\n", e.message);
+				return;
+			}
+			
+
+			var search_string = file.get_uri();
+			search_string = search_string.replace("%", "\\%");
+			search_string = search_string.replace("_", "\\_");
+			search_string += "%";
+			print("FFFFFFFFFFFFFFFSEARCHING FOR %s\n\n", search_string);
+			var results = dbb.get_uris(search_string);
+			foreach (string a in results) {
+				print("XXXXXXXXXXXXXXXXXXXXXXdeleting %s\n", a);
+				dbw.delete_uri(a);
+			}
+		}
+			
 		dbw.delete_uri(file.get_uri());
+		remove_dir_monitors(file.get_path());
 		Main.instance.main_window.mediaBr.change_model_data();
 	}
 
