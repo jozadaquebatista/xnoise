@@ -124,15 +124,15 @@ namespace Xnoise {
 		public signal void before_position_reference_changed ();
 		public signal void before_position_reference_next_changed ();
 		public signal void caught_eos_from_player ();
-		public signal void current_uri_changed ();
-		public signal void current_uri_repeated (string uri);
 		public signal void position_reference_changed ();
 		public signal void position_reference_next_changed ();
 		public signal void sig_item_imported (string uri);
 		public signal void sig_media_path_changed ();
 		public signal void sign_restart_song ();
-		public signal void sign_tag_changed (ref string? newuri, string? tagname, string? tagvalue);
+		public signal void tag_changed (ref string? newuri, string? tagname, string? tagvalue);
 		public signal void track_state_changed ();
+		public signal void uri_changed (string? uri);
+		public signal void uri_repeated (string? uri);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GstPlayer : GLib.Object {
@@ -144,12 +144,6 @@ namespace Xnoise {
 		public void stop ();
 		public string? Uri { get; set; }
 		public bool current_has_video { get; set; }
-		public string currentalbum { get; set; }
-		public string currentartist { get; set; }
-		public string currentgenre { get; set; }
-		public string currentlocation { get; set; }
-		public string currentorg { get; set; }
-		public string currenttitle { get; set; }
 		public double gst_position { set; }
 		public bool is_stream { get; set; }
 		public int64 length_time { get; set; }
@@ -162,7 +156,6 @@ namespace Xnoise {
 		public signal void sign_playing ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
-		public signal void sign_uri_changed (string newuri);
 		public signal void sign_video_playing ();
 		public signal void sign_volume_changed (double volume);
 	}

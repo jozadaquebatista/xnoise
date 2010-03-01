@@ -51,7 +51,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			print("libnotify initialization failed\n");
 			return false;
 		}
-		xn.gPl.sign_uri_changed += on_uri_changed;
+		global.uri_changed += on_uri_changed;
 		return true;
 	}
 	
@@ -97,22 +97,22 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		if(!xn.gPl.is_stream)
 			basename = file.get_basename();
 
-		if(xn.gPl.currentartist != null) {
-			artist = remove_linebreaks(xn.gPl.currentartist);
+		if(global.current_artist != null) {
+			artist = remove_linebreaks(global.current_artist);
 		}
 		else {
 			artist = "unknown artist";
 		}
 
-		if(xn.gPl.currenttitle != null) {
-			title = remove_linebreaks(xn.gPl.currenttitle);
+		if(global.current_title != null) {
+			title = remove_linebreaks(global.current_title);
 		}
 		else {
 			title = "unknown title";
 		}
 
-		if(xn.gPl.currentalbum != null) {
-			album = remove_linebreaks(xn.gPl.currentalbum);
+		if(global.current_album != null) {
+			album = remove_linebreaks(global.current_album);
 		}
 		else {
 			album = "unknown album";

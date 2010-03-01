@@ -49,7 +49,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		this.set_editable(false);
 		this.set_left_margin(8);
 		this.set_wrap_mode(Gtk.WrapMode.WORD);
-		xn.gPl.sign_uri_changed.connect(on_uri_changed);
+		global.uri_changed.connect(on_uri_changed);
 	}
 
 	private void on_uri_changed(string? uri) {
@@ -62,14 +62,14 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		                                        on_timout_elapsed);
 	}
 
-	// Use the timeout because gPl is sending the sign_tag_changed signals
+	// Use the timeout because gPl is sending the tag_changed signals
 	// sometimes very often at the beginning of a track.
 	private bool on_timout_elapsed() {
 		// Do not execute if source has been removed in the meantime
 		if(MainContext.current_source().is_destroyed()) return false;
 
-		artist = remove_linebreaks(xn.gPl.currentartist);
-		title  = remove_linebreaks(xn.gPl.currenttitle );
+		artist = remove_linebreaks(global.current_artist);
+		title  = remove_linebreaks(global.current_title );
 		//print("1. %s - %s\n", artist, title);
 
 		// Look into db in case gPl does not provide the tag

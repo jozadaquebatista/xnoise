@@ -40,7 +40,7 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 	}
 
 	public bool init() {
-		global.sign_tag_changed += write_title_to_decoration;
+		global.tag_changed += write_title_to_decoration;
 		return true;
 	}
 	
@@ -55,39 +55,39 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 		File file = File.new_for_uri(newuri);
 		if(!xn.gPl.is_stream)
 			basename = file.get_basename();
-		if(xn.gPl.currentartist != null) {
-			print("xn.gPl.currentartist: %s\n", xn.gPl.currentartist);
-			artist = remove_linebreaks(xn.gPl.currentartist);
+		if(global.current_artist != null) {
+			print("global.current_artist: %s\n", global.current_artist);
+			artist = remove_linebreaks(global.current_artist);
 		}
 		else {
 			artist = "unknown artist";
 		}
-		if(xn.gPl.currenttitle!=null) {
-			title = remove_linebreaks(xn.gPl.currenttitle);
+		if(global.current_title!=null) {
+			title = remove_linebreaks(global.current_title);
 		}
 		else {
 			title = "unknown title";
 		}
-		if(xn.gPl.currentalbum!=null) {
-			album = remove_linebreaks(xn.gPl.currentalbum);
+		if(global.current_album!=null) {
+			album = remove_linebreaks(global.current_album);
 		}
 		else {
 			album = "unknown album";
 		}
-		if(xn.gPl.currentorg!=null) {
-			organization = remove_linebreaks(xn.gPl.currentorg);
+		if(global.current_organization!=null) {
+			organization = remove_linebreaks(global.current_organization);
 		}
 		else {
 			organization = "unknown organization";
 		}
-		if(xn.gPl.currentgenre!=null) {
-			genre = remove_linebreaks(xn.gPl.currentgenre);
+		if(global.current_genre!=null) {
+			genre = remove_linebreaks(global.current_genre);
 		}
 		else {
 			genre = "unknown genre";
 		}
-		if(xn.gPl.currentlocation!=null) {
-			location = remove_linebreaks(xn.gPl.currentlocation);
+		if(global.current_location!=null) {
+			location = remove_linebreaks(global.current_location);
 		}
 		else {
 			location = "unknown location";

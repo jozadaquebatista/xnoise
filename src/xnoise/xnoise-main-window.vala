@@ -148,7 +148,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		buffer_last_page = 0;
 
 		global.caught_eos_from_player.connect(on_caught_eos_from_player);
-		global.sign_tag_changed.connect(this.set_displayed_title);
+		global.tag_changed.connect(this.set_displayed_title);
 		xn.gPl.sign_video_playing.connect( () => { 
 			//handle stop signal from gst player
 			if(!this.fullscreenwindowvisible)
@@ -718,20 +718,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				title = td.Title;
 			}
 			else {
-				if(xn.gPl.currentartist!=null) {
-					artist = remove_linebreaks(xn.gPl.currentartist);
+				if(global.current_artist!=null) {
+					artist = remove_linebreaks(global.current_artist);
 				}
 				else {
 					artist = "unknown artist";
 				}
-				if(xn.gPl.currenttitle!=null) {
-					title = remove_linebreaks(xn.gPl.currenttitle);
+				if(global.current_title!=null) {
+					title = remove_linebreaks(global.current_title);
 				}
 				else {
 					title = "unknown title";
 				}
-				if(xn.gPl.currentalbum!=null) {
-					album = remove_linebreaks(xn.gPl.currentalbum);
+				if(global.current_album!=null) {
+					album = remove_linebreaks(global.current_album);
 				}
 				else {
 					album = "unknown album";
@@ -772,33 +772,33 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			}
 		}
 		else { // IS STREAM
-			if(xn.gPl.currentartist!=null)
-				artist = remove_linebreaks(xn.gPl.currentartist);
+			if(global.current_artist!=null)
+				artist = remove_linebreaks(global.current_artist);
 			else
 				artist = "unknown artist";
 
-			if(xn.gPl.currenttitle!=null)
-				title = remove_linebreaks(xn.gPl.currenttitle);
+			if(global.current_title!=null)
+				title = remove_linebreaks(global.current_title);
 			else
 				title = "unknown title";
 
-			if(xn.gPl.currentalbum!=null)
-				album = remove_linebreaks(xn.gPl.currentalbum);
+			if(global.current_album!=null)
+				album = remove_linebreaks(global.current_album);
 			else
 				album = "unknown album";
 
-			if(xn.gPl.currentorg!=null)
-				organization = remove_linebreaks(xn.gPl.currentorg);
+			if(global.current_organization!=null)
+				organization = remove_linebreaks(global.current_organization);
 			else
 				organization = "unknown organization";
 
-			if(xn.gPl.currentgenre!=null)
-				genre = remove_linebreaks(xn.gPl.currentgenre);
+			if(global.current_genre!=null)
+				genre = remove_linebreaks(global.current_genre);
 			else
 				genre = "unknown genre";
 
-			if(xn.gPl.currentlocation!=null)
-				location = remove_linebreaks(xn.gPl.currentlocation);
+			if(global.current_location!=null)
+				location = remove_linebreaks(global.current_location);
 			else
 				location = "unknown location";
 

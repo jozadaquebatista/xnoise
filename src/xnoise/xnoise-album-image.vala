@@ -60,7 +60,7 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 
 		loader = new AlbumImageLoader();
 		loader.sign_fetched.connect(on_album_image_fetched);
-		xn.gPl.sign_uri_changed.connect(on_uri_changed);
+		global.uri_changed.connect(on_uri_changed);
 	}
 
 	private void on_uri_changed(string? uri) {
@@ -118,7 +118,7 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		}
 	}
 
-	// Startes via timeout because gPl is sending the sign_tag_changed signals
+	// Startes via timeout because gPl is sending the tag_changed signals
 	// sometimes very often at the beginning of a track.
 	private void search_image(string? uri) {
 
@@ -132,9 +132,9 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		string _artist_raw = "";
 		string _album_raw = "";
 		
-		if((xn.gPl.currentartist != "unknown artist") && (xn.gPl.currentalbum != "unknown album")) {
-			_artist_raw = xn.gPl.currentartist;
-			_album_raw  = xn.gPl.currentalbum;
+		if((global.current_artist != "unknown artist") && (global.current_album != "unknown album")) {
+			_artist_raw = global.current_artist;
+			_album_raw  = global.current_album;
 			_artist = escape_for_local_folder_search(_artist_raw);
 			_album  = escape_for_local_folder_search(_album_raw );
 		}
@@ -162,8 +162,8 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 		if(set_local_image_if_available(ref _artist_raw, ref _album_raw)) 
 			return;
 
-		artist = remove_linebreaks(xn.gPl.currentartist);
-		album  = remove_linebreaks(xn.gPl.currentalbum );
+		artist = remove_linebreaks(global.current_artist);
+		album  = remove_linebreaks(global.current_album );
 
 		// Look into db in case gPl does not provide the tag
 		if((artist == "unknown artist")||(album == "unknown album")) {

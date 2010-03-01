@@ -36,8 +36,32 @@
 
 public class Xnoise.GlobalInfo : GLib.Object {
 
-	public GlobalInfo() {
-		sign_tag_changed.connect(this.set_meta_information);
+	construct {
+		uri_changed.connect(this.set_meta_information);
+	
+		this.notify.connect( (s, p) => {
+			//print("p.name: %s\n", p.name);
+			switch(p.name) {
+				case "current-artist":
+					this.tag_changed(ref this._current_uri, "artist", this._current_artist);
+					break;
+				case "current-album":
+					this.tag_changed(ref this._current_uri, "album", this._current_album);
+					break;
+				case "current-title":
+					this.tag_changed(ref this._current_uri, "title", this._current_title);
+					break;
+				case "current-location":
+					this.tag_changed(ref this._current_uri, "location", this._current_location);
+					break;
+				case "current-genre":
+					this.tag_changed(ref this._current_uri, "genre", this._current_genre);
+					break;
+				case "current-org":
+					this.tag_changed(ref this._current_uri, "organization", this._current_organization);
+					break;
+			}
+		});
 	}
 	
 	// SIGNALS
@@ -49,8 +73,10 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	public signal void position_reference_next_changed();
 	// state changed to playing, paused or stopped
 	public signal void track_state_changed();
-	public signal void current_uri_changed();
-	public signal void current_uri_repeated(string uri);
+	public signal void uri_changed(string? uri);
+	public signal void uri_repeated(string? uri);
+	public signal void tag_changed(ref string? newuri, string? tagname, string? tagvalue);
+	
 	public signal void caught_eos_from_player();
 	//signal to be triggered after a change of the media folders
 	public signal void sig_media_path_changed();
@@ -58,7 +84,6 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	
 	public signal void sign_restart_song();
 
-	public signal void sign_tag_changed(ref string? newuri, string? tagname, string? tagvalue);
 
 
 	// PRIVATE FIELDS
@@ -95,7 +120,7 @@ public class Xnoise.GlobalInfo : GLib.Object {
 			if(_current_uri != value) {
 				_current_uri = value;
 				// signal changed
-				current_uri_changed();
+				uri_changed(value);
 			}
 		}
 	}
@@ -191,13 +216,12 @@ public class Xnoise.GlobalInfo : GLib.Object {
 			image_path_small = null;
 			image_path_large = null;
 		}
-		//print("small: %s; \nlarge: %s\n", image_path_small, image_path_large);
 	}
 	
-	// set meta information after start of new track/stream
-	private void set_meta_information(ref string? newuri, string? tagname, string? tagvalue) {
-		print("set_meta_information: %s - %s\n", tagname, tagvalue);
-//		string album, artist, title;//, organization, location, genre;
+	// set meta information after start of new track/stream from 
+	// database. If not available, just reset tag info and wait for 
+	// data from gstreamer
+	private void set_meta_information(string? newuri) {
 		string basename = null;
 		if((newuri == "")|(newuri == null)) {
 			current_artist = null;
@@ -209,7 +233,6 @@ public class Xnoise.GlobalInfo : GLib.Object {
 			return;
 		}
 		File file = File.new_for_uri(newuri);
-//		if(!current_track_is_stream) {
 		basename = file.get_basename();
 		DbBrowser dbb = null;
 		try {
@@ -226,11 +249,13 @@ public class Xnoise.GlobalInfo : GLib.Object {
 			current_title  = td.Title;
 			current_genre  = td.Genre;
 		}
-		else { //TODO: Use tags coming from gstreamer
+		else { 
 			current_artist = null;
-			current_album  = null;
-			current_title  = null;
-			current_genre  = null;
+			current_album = null;
+			current_title = null;
+			current_location = null;
+			current_genre = null;
+			current_organization = null;
 		}
 	}
 }

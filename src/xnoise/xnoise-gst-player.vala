@@ -73,12 +73,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public bool seeking           { get; set; } //TODO
 	public int64 length_time      { get; set; }
 	public bool is_stream         { get; private set; default = false; }
-	public string currentartist   { get; private set; }
-	public string currentalbum    { get; private set; }
-	public string currenttitle    { get; private set; }
-	public string currentgenre    { get; private set; }
-	public string currentorg      { get; private set; }
-	public string currentlocation { get; private set; }
 
 	private Gst.TagList taglist {
 		get {
@@ -135,7 +129,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_paused();
 	public signal void sign_stopped();
 	public signal void sign_video_playing();
-	public signal void sign_uri_changed(string newuri);
+//	public signal void sign_uri_changed(string newuri);
 	public signal void sign_volume_changed(double volume);
 
 	public GstPlayer() {
@@ -143,50 +137,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 		create_elements();
 		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
 		update_tags_source = 0;
-		this.notify.connect( (s, p) => {
-			//print("p.name: %s\n", p.name);
-			switch(p.name) {
-				case "Uri": {
-					this._currentartist   = "unknown artist";
-					this._currentalbum    = "unknown album";
-					this._currenttitle    = "unknown title";
-					this._currentlocation = "unknown location";
-					this._currentgenre    = "unknown genre";
-					this._currentorg      = "unknown organization";
-					
-					this.sign_uri_changed(this.Uri);
-					global.sign_tag_changed(ref this._Uri, null, null);
-					
-					break;
-				}
-				case "currentartist": {
-					global.sign_tag_changed(ref this._Uri, "artist", this._currentartist);
-					break;
-				}
-				case "currentalbum": {
-					global.sign_tag_changed(ref this._Uri, "album", this._currentalbum);
-					break;
-				}
-				case "currenttitle": {
-					global.sign_tag_changed(ref this._Uri, "title", this._currenttitle);
-					break;
-				}
-				case "currentlocation": {
-					global.sign_tag_changed(ref this._Uri, "location", this._currentlocation);
-					break;
-				}
-				case "currentgenre": {
-					global.sign_tag_changed(ref this._Uri, "genre", this._currentgenre);
-					break;
-				}
-				case "currentorg": {
-					global.sign_tag_changed(ref this._Uri, "organization", this._currentorg);
-					break;
-				}
-			}
-		});
 
-		global.current_uri_changed.connect( () => {
+		global.uri_changed.connect( () => {
 			this.request_location(global.current_uri);
 		});
 
@@ -322,27 +274,27 @@ public class Xnoise.GstPlayer : GLib.Object {
 		switch(tag) {
 		case "artist":
 			if(list.get_string(tag, out val))
-				if(val!=this.currentartist) this.currentartist = val;
+				if(val != global.current_artist) global.current_artist = val;
 			break;
 		case "album":
 			if(list.get_string(tag, out val))
-				if(val!=this.currentalbum) this.currentalbum = val;
+				if(val != global.current_album) global.current_album = val;
 			break;
 		case "title":
 			if(list.get_string(tag, out val))
-				if(val!=this.currenttitle) this.currenttitle = val;
+				if(val != global.current_title) global.current_title = val;
 			break;
 		case "location":
 			if(list.get_string(tag, out val))
-				if(val!=this.currentlocation) this.currentlocation = val;
+				if(val != global.current_location) global.current_location = val;
 			break;
 		case "genre":
 			if(list.get_string(tag, out val))
-				if(val!=this.currentgenre) this.currentgenre = val;
+				if(val != global.current_genre) global.current_genre = val;
 			break;
 		case "organization":
 			if(list.get_string(tag, out val))
-				if(val!=this.currentorg) this.currentorg = val;
+				if(val != global.current_organization) global.current_organization = val;
 			break;
 		default:
 			break;

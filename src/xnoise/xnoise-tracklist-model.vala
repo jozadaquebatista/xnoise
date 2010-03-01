@@ -153,8 +153,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			this.get_iter(out iter, treepath);
 			this.get(iter, Column.URI, out uri);
 
-			if((uri != "")&&(uri ==global.current_uri))
-				global.current_uri_repeated(uri);
+			if((uri != "")&&(uri == global.current_uri))
+				global.uri_repeated(uri);
 
 			if(uri != "")
 				global.current_uri = uri;
