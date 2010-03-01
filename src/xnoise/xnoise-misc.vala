@@ -97,8 +97,11 @@ namespace Xnoise {
 		return result.down();
 	}
 
-	public static string remove_linebreaks(string value) {
+	public static string remove_linebreaks(string? value) {
 		// unexpected linebreaks do not look nice
+		if(value == null)
+			return value;
+		
 		try {
 			GLib.Regex r = new GLib.Regex("\n");
 			return r.replace(value, -1, 0, " ");

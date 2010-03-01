@@ -703,40 +703,40 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		File file = File.new_for_uri(newuri);
 		if(!xn.gPl.is_stream) {
 			basename = file.get_basename();
-			DbBrowser dbb = null;
-			try {
-				dbb = new DbBrowser();
-			}
-			catch(Error e) {
-				print("%s\n", e.message);
-				return;
-			}
-			TrackData td;
-			if(dbb.get_trackdata_for_uri(newuri, out td)) {
-				artist = td.Artist;
-				album = td.Album;
-				title = td.Title;
+//			DbBrowser dbb = null;
+//			try {
+//				dbb = new DbBrowser();
+//			}
+//			catch(Error e) {
+//				print("%s\n", e.message);
+//				return;
+//			}
+//			TrackData td;
+//			if(dbb.get_trackdata_for_uri(newuri, out td)) {
+//				artist = td.Artist;
+//				album = td.Album;
+//				title = td.Title;
+//			}
+//			else {
+			if(global.current_artist!=null) {
+				artist = remove_linebreaks(global.current_artist);
 			}
 			else {
-				if(global.current_artist!=null) {
-					artist = remove_linebreaks(global.current_artist);
-				}
-				else {
-					artist = "unknown artist";
-				}
-				if(global.current_title!=null) {
-					title = remove_linebreaks(global.current_title);
-				}
-				else {
-					title = "unknown title";
-				}
-				if(global.current_album!=null) {
-					album = remove_linebreaks(global.current_album);
-				}
-				else {
-					album = "unknown album";
-				}
+				artist = "unknown artist";
 			}
+			if(global.current_title!=null) {
+				title = remove_linebreaks(global.current_title);
+			}
+			else {
+				title = "unknown title";
+			}
+			if(global.current_album!=null) {
+				album = remove_linebreaks(global.current_album);
+			}
+			else {
+				album = "unknown album";
+			}
+//			}
 			if((newuri!=null) && (newuri!="")) {
 				text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>",
 					title,

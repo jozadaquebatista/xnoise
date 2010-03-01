@@ -41,11 +41,27 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 
 	public bool init() {
 		global.tag_changed += write_title_to_decoration;
+		source = 0;
 		return true;
 	}
 	
+	private uint source;
 	private void write_title_to_decoration(ref string? newuri, string? x, string? y) {
-		print("write_title_to_decoration %s %s %s\n", newuri, x, y);
+		//print("write_title_to_decoration %s %s %s\n", newuri, x, y);
+		string uri = newuri;
+		if(source != 0)
+			Source.remove(source);
+		
+		source = Idle.add( () => {
+			dispatch_set_title_to_decoration(uri, x, y);
+			return false;
+		});
+	}
+
+	private void dispatch_set_title_to_decoration(string? newuri, string? x, string? y) {
+		if(MainContext.current_source().is_destroyed()) 
+			return;
+
 		string text, album, artist, title, genre, location, organization;
 		string basename = null;
 		if(newuri == null) {
@@ -56,7 +72,7 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 		if(!xn.gPl.is_stream)
 			basename = file.get_basename();
 		if(global.current_artist != null) {
-			print("global.current_artist: %s\n", global.current_artist);
+			//print("global.current_artist: %s\n", global.current_artist);
 			artist = remove_linebreaks(global.current_artist);
 		}
 		else {
@@ -125,11 +141,12 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 					);
 			}
 		}
-		print("text: %s\n", text);
+		//print("text: %s\n", text);
 		if(MainContext.current_source().is_destroyed()) 
 			return;
 		xn.main_window.set_title(text);
 	}
+
 	
 	~TitleToDecoration() {
 		xn.main_window.set_title("xnoise media player");
