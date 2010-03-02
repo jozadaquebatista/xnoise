@@ -33,7 +33,6 @@
 using Gtk;
 
 public class Xnoise.AlbumImage : Gtk.Image, IParams {
-	private const string INIFOLDER = ".xnoise";
 	private const int SIZE = 48;
 	private AlbumImageLoader loader = null;
 	private Main xn;
@@ -187,8 +186,7 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 			return;
 		}
 
-		var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
-		                                          INIFOLDER,
+		var image_path = GLib.Path.build_filename(global.settings_folder,
 		                                          "album_images",
 		                                          null
 		                                          );
@@ -220,8 +218,7 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 	}
 
 	private bool set_local_image_if_available(ref string _artist, ref string _album) {
-		var image_path = GLib.Path.build_filename(GLib.Environment.get_home_dir(),
-		                                          INIFOLDER,
+		var image_path = GLib.Path.build_filename(global.settings_folder,
 		                                          "album_images",
 		                                          null
 		                                          );

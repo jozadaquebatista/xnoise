@@ -1055,6 +1055,7 @@ void xnoise_global_info_handle_eos (XnoiseGlobalInfo* self);
 void xnoise_global_info_check_image_for_current_track (XnoiseGlobalInfo* self);
 XnoiseGlobalInfo* xnoise_global_info_new (void);
 XnoiseGlobalInfo* xnoise_global_info_construct (GType object_type);
+const char* xnoise_global_info_get_settings_folder (XnoiseGlobalInfo* self);
 XnoiseGlobalInfoTrackState xnoise_global_info_get_track_state (XnoiseGlobalInfo* self);
 void xnoise_global_info_set_track_state (XnoiseGlobalInfo* self, XnoiseGlobalInfoTrackState value);
 const char* xnoise_global_info_get_current_uri (XnoiseGlobalInfo* self);

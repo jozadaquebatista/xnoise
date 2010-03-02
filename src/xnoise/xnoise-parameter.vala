@@ -184,7 +184,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	private string? build_file_name() {
 		if(!check_file_folder())
 			print("Error with creating configuration directory.\n");
-		string fname = GLib.Path.build_filename(GLib.Environment.get_home_dir(), INIFOLDER, INIFILE, null);
+		string fname = GLib.Path.build_filename(global.settings_folder, INIFILE, null);
 		File f = File.new_for_path(fname);
 		return create_default_if_not_exist(f);
 	}
@@ -204,8 +204,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	}
 
 	private bool check_file_folder() {
-		File home_dir = File.new_for_path(Environment.get_home_dir());
-		File xnoise_home = home_dir.get_child(".xnoise");
+		File xnoise_home = File.new_for_path(global.settings_folder);
 		if(!xnoise_home.query_exists(null)) {
 			try {
 				xnoise_home.make_directory_with_parents(null);
@@ -219,13 +218,14 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 
 private const string default_content = """
 [settings_int]
+use_lyrics=1
 use_length_column=0
 use_tracknumber_column=1
 posY=0
 posX=0
 height=575
 fontsizeMB=8
-hp_position=227
+hp_position=253
 width=1024
 use_treelines=0
 repeatstate=2
@@ -235,7 +235,7 @@ show_album_images=1
 volume=0.70000000000000000
 
 [settings_string]
-activated_plugins=TitleToDecoration
+activated_plugins=notifications;LastfmCovers;TitleToDecoration;Mediawatcher
 """;
 }
 

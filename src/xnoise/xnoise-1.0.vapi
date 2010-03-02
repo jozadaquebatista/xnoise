@@ -120,6 +120,7 @@ namespace Xnoise {
 		public bool media_import_in_progress { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
+		public string settings_folder { get; }
 		public Xnoise.GlobalInfo.TrackState track_state { get; set; }
 		public signal void before_position_reference_changed ();
 		public signal void before_position_reference_next_changed ();

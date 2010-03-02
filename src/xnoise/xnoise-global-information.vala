@@ -37,6 +37,11 @@
 public class Xnoise.GlobalInfo : GLib.Object {
 
 	construct {
+		_settings_folder = 
+		   GLib.Path.build_filename(GLib.Environment.get_home_dir(), 
+		                            ".config", 
+		                            "xnoise", 
+		                            null);
 		uri_changed.connect(this.set_meta_information);
 	
 		this.notify.connect( (s, p) => {
@@ -63,8 +68,10 @@ public class Xnoise.GlobalInfo : GLib.Object {
 			}
 		});
 	}
+
 	
 	// SIGNALS
+
 	// TreeRowReference for current track changed
 	public signal void position_reference_changed();
 	// TreeRowReference for current track changed, triggered before change
@@ -92,13 +99,25 @@ public class Xnoise.GlobalInfo : GLib.Object {
 	private Gtk.TreeRowReference? _position_reference = null;
 	private Gtk.TreeRowReference? _position_reference_next = null;
 
+	// ENUMS
 	public enum TrackState {
 		STOPPED = 0,
 		PLAYING,
 		PAUSED
 	}
 
+
 	// PROPERTIES
+
+	// User specific settings directory following freedesktop standard:
+	//http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+	private string _settings_folder = "";
+	public string settings_folder { 
+		get {
+			return _settings_folder;
+		}
+	}
+
 	public TrackState track_state {
 		get {
 			return _track_state;

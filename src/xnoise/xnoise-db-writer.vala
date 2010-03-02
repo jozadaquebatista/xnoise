@@ -199,8 +199,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static Database? get_db () {
 		// there was more luck on creating the db on first start, if using a static function
 		Database database = null;
-		File home_dir = File.new_for_path(Environment.get_home_dir());
-		File xnoise_home = home_dir.get_child(SETTINGS_FOLDER);
+		File xnoise_home = File.new_for_path(global.settings_folder);
 		File xnoisedb = xnoise_home.get_child(DATABASE_NAME);
 		if (!xnoise_home.query_exists(null)) {
 			print("Cannot find settings folder!\n");

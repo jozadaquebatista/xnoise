@@ -41,11 +41,11 @@ namespace Xnoise {
 	 * and GlobalInfo in the xnoise namespace.
 	 */
 	public static void initialize() {
-		if(par == null)
-			par = new Params();
-
 		if(global == null)
 			global = new GlobalInfo();
+
+		if(par == null)
+			par = new Params();
 	}
 
 	public static string escape_for_local_folder_search(string value) {

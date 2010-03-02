@@ -128,7 +128,7 @@ public class Xnoise.DbBrowser {
 	private Database db;
 
 	private string dbFileName() {
-		return GLib.Path.build_filename(GLib.Environment.get_home_dir(), SETTINGS_FOLDER, DATABASE_NAME, null);
+		return GLib.Path.build_filename(global.settings_folder, DATABASE_NAME, null);
 	}
 
 	private void db_error() {
