@@ -32,7 +32,7 @@
 
 using Gtk;
 
-public class Xnoise.AlbumImage : Gtk.Image, IParams {
+public class Xnoise.AlbumImage : Gtk.Image {
 	private const int SIZE = 48;
 	private AlbumImageLoader loader = null;
 	private Main xn;
@@ -53,7 +53,6 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 
 	public AlbumImage() {
 		xn = Main.instance;
-		par.iparams_register(this);
 		this.set_size_request(SIZE, SIZE);
 		this.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 
@@ -320,27 +319,4 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 			return false;
 		});
 	}
-	
-	/// REGION IParams
-
-	public void read_params_data() {
-//		int show = par.get_int_value("show_album_images");
-//		if(show == 1) {
-//			this.show_album_images = true;
-//		}
-//		else {
-//			this.show_album_images = false;
-//		}
-	}
-
-	public void write_params_data() {
-//		if(this.show_album_images) {
-//			par.set_int_value("show_album_images", 1);
-//		}
-//		else {
-//			par.set_int_value("show_album_images", 0);
-//		}
-	}
-
-	/// END REGION IParams
 }

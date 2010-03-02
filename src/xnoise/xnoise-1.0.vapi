@@ -22,7 +22,7 @@ namespace Xnoise {
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class AlbumImage : Gtk.Image, Xnoise.IParams {
+	public class AlbumImage : Gtk.Image {
 		public AlbumImage ();
 		public void load_default_image ();
 	}
@@ -304,7 +304,9 @@ namespace Xnoise {
 	public class Params : GLib.Object {
 		public Params ();
 		public double get_double_value (string key);
+		public int get_image_provider_priority (string name);
 		public int get_int_value (string key);
+		public int get_lyric_provider_priority (string name);
 		public string[]? get_string_list_value (string key);
 		public string get_string_value (string key);
 		public void iparams_register (Xnoise.IParams iparam);
@@ -345,9 +347,11 @@ namespace Xnoise {
 		public string xplug_file { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class PluginLoader : GLib.Object {
+	public class PluginLoader : GLib.Object, Xnoise.IParams {
 		public GLib.HashTable<string,Xnoise.Plugin> image_provider_htable;
+		public GLib.HashTable<string,string> image_provider_priority;
 		public GLib.HashTable<string,Xnoise.Plugin> lyrics_plugins_htable;
+		public GLib.HashTable<string,string> lyrics_plugins_priority;
 		public GLib.HashTable<string,Xnoise.Plugin> plugin_htable;
 		public PluginLoader ();
 		public bool activate_single_plugin (string name);

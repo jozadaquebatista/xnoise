@@ -179,7 +179,37 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		ht_string.insert(key,value);
 	}
 
-
+	public int get_lyric_provider_priority(string name) {
+		string[]? prio_order = get_string_list_value("prio_lyrics");
+		if(prio_order == null)
+			return 99;
+		
+		int i = 0;
+		foreach(string s in prio_order) {
+			if(name == s)
+				return i;
+			else
+				i++;
+		}
+		
+		return i;
+	}
+	
+	public int get_image_provider_priority(string name) {
+		string[]? prio_order = get_string_list_value("prio_images");
+		if(prio_order == null)
+			return 99;
+		
+		int i = 0;
+		foreach(string s in prio_order) {
+			if(name == s)
+				return i;
+			else
+				i++;
+		}
+		
+		return i;
+	}
 
 	private string? build_file_name() {
 		if(!check_file_folder())
@@ -236,6 +266,8 @@ volume=0.70000000000000000
 
 [settings_string]
 activated_plugins=notifications;LastfmCovers;TitleToDecoration;Mediawatcher
+prio_lyrics=Leoslyrics;Lyricsfly
+prio_images=LastfmCovers
 """;
 }
 

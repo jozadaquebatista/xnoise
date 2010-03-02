@@ -28,10 +28,12 @@
  * 	Jörn Magens
  */
 
-public class Xnoise.PluginLoader : Object {
+public class Xnoise.PluginLoader : Object, IParams {
 	public HashTable<string, Plugin> plugin_htable;
 	public HashTable<string, Plugin> lyrics_plugins_htable;
 	public HashTable<string, Plugin> image_provider_htable;
+	public HashTable<string, string> lyrics_plugins_priority;
+	public HashTable<string, string> image_provider_priority;
 	private Main xn;
 	private PluginInformation info;
 	private GLib.List<string> info_files;
@@ -41,10 +43,13 @@ public class Xnoise.PluginLoader : Object {
 
 	public PluginLoader() {
 		assert(Module.supported());
+		par.iparams_register(this);
 		this.xn = Main.instance;
-		plugin_htable = new HashTable<string,Plugin>(str_hash, str_equal);
-		lyrics_plugins_htable = new HashTable<string,unowned Plugin>(str_hash, str_equal);
-		image_provider_htable = new HashTable<string,unowned Plugin>(str_hash, str_equal);
+		plugin_htable = new HashTable<string, Plugin>(str_hash, str_equal);
+		lyrics_plugins_htable = new HashTable<string, unowned Plugin>(str_hash, str_equal);
+		image_provider_htable = new HashTable<string, unowned Plugin>(str_hash, str_equal);
+		lyrics_plugins_priority = new HashTable<string, string>(str_hash, str_equal);
+		image_provider_priority = new HashTable<string, string>(str_hash, str_equal);
 	}
 
 	public unowned GLib.List<string> get_info_files() {
@@ -54,19 +59,32 @@ public class Xnoise.PluginLoader : Object {
 	public bool load_all() {
 		Plugin plugin;
 		File dir = File.new_for_path(Config.PLUGINSDIR);
-
+		int ly_count = 50;
+		int ai_count = 50;
 		this.get_plugin_information_files(dir);
 		foreach(string pluginInfoFile in info_files) {
 			info = new PluginInformation(pluginInfoFile);
 			if(info.load_info()) {
 				plugin = new Plugin(info);
 				plugin.load();
-				if(plugin.loaded==true)
+				if(plugin.loaded == true)
 					plugin_htable.insert(info.name, plugin); //Hold reference to plugin in hash table
 				else
 					continue;
-				if(plugin.is_lyrics_plugin) lyrics_plugins_htable.insert(info.name, plugin);
-				if(plugin.is_album_image_plugin) image_provider_htable.insert(info.name, plugin);
+				if(plugin.is_lyrics_plugin) {
+					lyrics_plugins_htable.insert(info.name, plugin);
+					string buf = (par.get_lyric_provider_priority(info.name)).to_string();
+					if(buf == "99")
+						buf = (ly_count++).to_string();
+					lyrics_plugins_priority.insert(buf, info.name);
+				}
+				if(plugin.is_album_image_plugin) {
+					image_provider_htable.insert(info.name, plugin);
+					string buf = (par.get_image_provider_priority(info.name)).to_string();
+					if(buf == "99")
+						buf = (ai_count++).to_string();
+					image_provider_priority.insert(buf, info.name);
+				} 
 			}
 			else {
 				print("Failed to load %s.\n", pluginInfoFile);
@@ -127,4 +145,44 @@ public class Xnoise.PluginLoader : Object {
 		p.activated=false;
 		sign_plugin_deactivated(p);
 	}
+	
+	private int sort_compare_func(void* a, void* b) {
+		if((int)a < (int)b)  return -1;
+		if((int)a == (int)b) return  0;
+		if((int)a > (int)b)  return  1;
+		return 0;
+	}
+	
+	
+	/// REGION IParams
+
+	public void read_params_data() {
+	}
+
+	public void write_params_data() {
+		List<int> n_list_ai = new List<int>();
+		List<string> list_ai = image_provider_priority.get_keys();
+		foreach(string s in list_ai)
+			n_list_ai.insert_sorted_with_data(s.to_int(), sort_compare_func);
+		
+		string[] prio_array_ai = {};
+		foreach(int i in n_list_ai)
+			prio_array_ai += image_provider_priority.lookup(i.to_string());
+		
+		par.set_string_list_value("prio_images", prio_array_ai);
+
+
+		List<int> n_list_ly = new List<int>();
+		List<string> list_ly = lyrics_plugins_priority.get_keys();
+		foreach(string s in list_ly)
+			n_list_ly.insert_sorted_with_data(s.to_int(), sort_compare_func);
+		
+		string[] prio_array_ly = {};
+		foreach(int i in n_list_ly)
+			prio_array_ly += lyrics_plugins_priority.lookup(i.to_string());
+		
+		par.set_string_list_value("prio_lyrics", prio_array_ly);
+	}
+
+	/// END REGION IParams
 }
