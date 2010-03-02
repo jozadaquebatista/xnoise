@@ -25,7 +25,6 @@ namespace Xnoise {
 	public class AlbumImage : Gtk.Image, Xnoise.IParams {
 		public AlbumImage ();
 		public void load_default_image ();
-		public bool show_album_images { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AlbumImageLoader : GLib.Object {

@@ -50,8 +50,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private TreeView visibleColTv;
 	private ListStore visibleColTvModel;
 	private CheckButton checkB_showL;
-	private CheckButton show_album_cbutton;
-	private CheckButton use_lyrics_cbutton;
 	private HBox ai_hbox;
 	private HBox ly_hbox;
 	private bool show_length_col;
@@ -102,7 +100,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		try {
 			this.setup_widgets();
 		}
-		catch(SettingsDialogError e) {
+		catch(Error e) {
 			print("Error setting up settings dialog: %s\n", e.message);
 			return;
 		}
@@ -143,7 +141,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		else
 			sb.set_value(9.0);
 		sb.set_numeric(true);
-		show_album_cbutton.active = (par.get_int_value("show_album_images") == 1 ? true : false);
 	}
 
 	private void on_mb_font_changed(Gtk.Editable sender) {
@@ -182,13 +179,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			buf = 0;
 		par.set_int_value("use_tracknumber_column", buf);
 		xn.tl.column_tracknumber_visible = show_trackno_col;
-
-		// show album images
-		if(xn.main_window.albumimage.show_album_images)
-			buf = 1;
-		else
-			buf = 0;
-		par.set_int_value("show_album_images", buf);
 
 		this.dialog.destroy();
 		par.write_all_parameters_to_file();
@@ -387,16 +377,16 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 		visibleColTv.model = visibleColTvModel;
 
-		var columnToggle = new TreeViewColumn ();
+		var columnToggle = new TreeViewColumn();
 		columnToggle.pack_start(toggle, false);
 		columnToggle.add_attribute(toggle,
 		                           "active", DisplayColums.TOGGLE
 		                           );
 		visibleColTv.append_column(columnToggle);
 
-		var renderer = new CellRendererText ();
+		var renderer = new CellRendererText();
 
-		var columnText = new TreeViewColumn ();
+		var columnText = new TreeViewColumn();
 		columnText.pack_start(renderer, true);
 		columnText.add_attribute(renderer,
 		                         "text", DisplayColums.TEXT
@@ -405,28 +395,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		put_data_to_viz_cols_tv();
  	}
 
-	private void on_show_album_cbutton_clicked(Gtk.Button sender) {
-		if(this.show_album_cbutton.active) {
-			par.set_int_value("show_album_images", 1);
-			xn.main_window.albumimage.show_album_images = true;
-		}
-		else {
-			par.set_int_value("show_album_images", 0);
-			xn.main_window.albumimage.show_album_images = false;
-		}
-	}
-
-	private void on_use_lyrics_cbutton_clicked(Gtk.Button sender) {
-		if(this.use_lyrics_cbutton.active) {
-			par.set_int_value("use_lyrics", 1);
-//			xn.main_window.albumimage.show_album_images = true;
-		}
-		else {
-			par.set_int_value("use_lyrics", 0);
-//			xn.main_window.albumimage.show_album_images = false;
-		}
-	}
-
 	// Move the provider up in ranking
 	private void on_ai_up_button_clicked(Gtk.Button sender) {
 		unowned TreeSelection sel = ai_tv.get_selection();
@@ -434,9 +402,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		TreeIter next_iter;
 		List<TreePath> treepaths = sel.get_selected_rows(null);
 		TreePath tp = (TreePath)treepaths.first().data;
-		if(!ai_model.get_iter(out iter, tp)) return;
+		if(!ai_model.get_iter(out iter, tp)) 
+			return;
 		tp.prev();
-		if(!ai_model.get_iter(out next_iter, tp)) return;
+		if(!ai_model.get_iter(out next_iter, tp)) 
+			return;
 		ai_model.move_before(iter, next_iter); //move
 	}
 
@@ -447,9 +417,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		TreeIter next_iter;
 		List<TreePath> treepaths = sel.get_selected_rows(null);
 		TreePath tp = (TreePath)treepaths.first().data;
-		if(!ai_model.get_iter(out iter, tp)) return;
+		if(!ai_model.get_iter(out iter, tp)) 
+			return;
 		tp.next();
-		if(!ai_model.get_iter(out next_iter, tp)) return;
+		if(!ai_model.get_iter(out next_iter, tp)) 
+			return;
 		ai_model.move_after(iter, next_iter); //move
 	}
 
@@ -460,9 +432,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		TreeIter next_iter;
 		List<TreePath> treepaths = sel.get_selected_rows(null);
 		TreePath tp = (TreePath)treepaths.first().data;
-		if(!ly_model.get_iter(out iter, tp)) return;
+		if(!ly_model.get_iter(out iter, tp)) 
+			return;
 		tp.prev();
-		if(!ly_model.get_iter(out next_iter, tp)) return;
+		if(!ly_model.get_iter(out next_iter, tp)) 
+			return;
 		ly_model.move_before(iter, next_iter); //move
 	}
 
@@ -473,23 +447,21 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		TreeIter next_iter;
 		List<TreePath> treepaths = sel.get_selected_rows(null);
 		TreePath tp = (TreePath)treepaths.first().data;
-		if(!ly_model.get_iter(out iter, tp)) return;
+		if(!ly_model.get_iter(out iter, tp)) 
+			return;
 		tp.next();
-		if(!ly_model.get_iter(out next_iter, tp)) return;
+		if(!ly_model.get_iter(out next_iter, tp)) 
+			return;
 		ly_model.move_after(iter, next_iter); //move
 	}
 
-	private bool setup_widgets() throws SettingsDialogError {
+	private bool setup_widgets() throws Error {
 		try {
 			File f = File.new_for_path(SETTINGS_UI_FILE);
 			if(!f.query_exists(null)) throw new SettingsDialogError.FILE_NOT_FOUND("Ui file not found!");
 
 			this.add_from_file(SETTINGS_UI_FILE);
 			this.dialog = this.get_object("dialog1") as Gtk.Dialog;
-
-			show_album_cbutton = this.get_object("show_album_images_cbutton") as Gtk.CheckButton;
-			show_album_cbutton.can_focus = false;
-			show_album_cbutton.clicked.connect(this.on_show_album_cbutton_clicked);
 
 			ai_up_button = this.get_object("ai_up_button") as Gtk.Button;
 			ai_up_button.can_focus = false;
@@ -498,10 +470,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			ai_down_button = this.get_object("ai_down_button") as Gtk.Button;
 			ai_down_button.can_focus = false;
 			ai_down_button.clicked.connect(this.on_ai_down_button_clicked);
-
-			use_lyrics_cbutton = this.get_object("use_lyrics_cbutton") as Gtk.CheckButton;
-			use_lyrics_cbutton.can_focus = false;
-			use_lyrics_cbutton.clicked.connect(this.on_use_lyrics_cbutton_clicked);
 
 			ly_up_button = this.get_object("ly_up_button") as Gtk.Button;
 			ly_up_button.can_focus = false;

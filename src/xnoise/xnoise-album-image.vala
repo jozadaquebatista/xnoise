@@ -40,16 +40,16 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 	private string album = "";
 	private static uint timeout = 0;
 	private string default_size = "medium";
-	private bool _show_album_images = true;
+//	private bool _show_album_images = true;
 
-	public bool show_album_images {
-		get {
-			return _show_album_images;
-		}
-		set {
-			_show_album_images = value;
-		}
-	}
+//	public bool show_album_images {
+//		get {
+//			return _show_album_images;
+//		}
+//		set {
+//			_show_album_images = value;
+//		}
+//	}
 
 	public AlbumImage() {
 		xn = Main.instance;
@@ -65,10 +65,10 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 	private void on_uri_changed(string? uri) {
 		//print("on_uri_changed\n");
 
-		if(!show_album_images) {
-			this.load_default_image();
-			return;
-		}
+//		if(!show_album_images) {
+//			this.load_default_image();
+//			return;
+//		}
 
 		global.check_image_for_current_track();
 		if(global.image_path_small == null) {
@@ -324,22 +324,22 @@ public class Xnoise.AlbumImage : Gtk.Image, IParams {
 	/// REGION IParams
 
 	public void read_params_data() {
-		int show = par.get_int_value("show_album_images");
-		if(show == 1) {
-			this.show_album_images = true;
-		}
-		else {
-			this.show_album_images = false;
-		}
+//		int show = par.get_int_value("show_album_images");
+//		if(show == 1) {
+//			this.show_album_images = true;
+//		}
+//		else {
+//			this.show_album_images = false;
+//		}
 	}
 
 	public void write_params_data() {
-		if(this.show_album_images) {
-			par.set_int_value("show_album_images", 1);
-		}
-		else {
-			par.set_int_value("show_album_images", 0);
-		}
+//		if(this.show_album_images) {
+//			par.set_int_value("show_album_images", 1);
+//		}
+//		else {
+//			par.set_int_value("show_album_images", 0);
+//		}
 	}
 
 	/// END REGION IParams
