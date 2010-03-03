@@ -230,7 +230,7 @@ public class Xnoise.TrackList : TreeView {
 		return (adjustment.get_value() != buffer);
 	}
 	
-	public bool autoscroll_timeout() {
+	private bool autoscroll_timeout() {
 		double delta = 0.0;
 		Gdk.Rectangle expose_area = Gdk.Rectangle();
 		
@@ -264,7 +264,7 @@ public class Xnoise.TrackList : TreeView {
 		return true;
 	}
 	
-	void start_autoscroll() { 
+	private void start_autoscroll() { 
 		double delta = 0.0;
 		get_autoscroll_delta(ref delta);
 		if(delta != 0) {
