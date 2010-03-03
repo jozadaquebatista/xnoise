@@ -77,6 +77,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.drag_end.connect(this.on_drag_end);
 		this.button_release_event.connect(this.on_button_release);
 		this.button_press_event.connect(this.on_button_press);
+		this.key_press_event.connect(this.on_key_pressed);
 		this.key_release_event.connect(this.on_key_released);
 	}
 
@@ -134,6 +135,11 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return false;
 	}
 
+	private const int F_KEY = 0x0066;
+	private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
+		return false;
+	}
+	
 	public void on_searchtext_changed(Gtk.Editable sender) {
 		mediabrowsermodel.searchtext = ((Gtk.Entry)sender).get_text().down();
 		change_model_data();
@@ -302,7 +308,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.insert_column(column, -1);
 
 		this.headers_visible = false;
-		this.enable_search = true;
+		this.enable_search = false;
 		this.set_row_separator_func((m, iter) => {
 			int sepatator = 0;
 			m.get(iter, MediaBrowserModel.Column.DRAW_SEPTR, ref sepatator);

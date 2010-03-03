@@ -429,7 +429,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const int KEY_F11 = 0xFFC8;
 	private const int KEY_ESC = 0xFF1B;
 	private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
-//		print("%d\n",(int)e.keyval);
+		//print("%d : %d\n",(int)e.keyval, (int)e.state);
 		switch(e.keyval) {
 			case KEY_F11:
 				this.toggle_mainwindow_fullscreen();
@@ -442,7 +442,28 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 		return false;
 	}
-
+	
+	private const int F_KEY = 0x0066;
+	private const int D_KEY = 0x0064;
+	private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
+		//print("%d : %d\n",(int)e.keyval, (int)e.state);
+		if(e.state != 0x0014) // Modifier state
+			return false;
+		switch(e.keyval) {
+			case F_KEY: {
+					searchEntryMB.grab_focus();
+				}
+				break;
+			case D_KEY: {
+					searchEntryMB.text = "";
+				}
+				break;
+			default:
+				break;
+		}
+		return false;
+	}
+	
 	private void quit_now() {
 		xn.quit();
 	}
@@ -1093,6 +1114,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		this.delete_event.connect(this.on_close); //only send to tray
 		this.key_release_event.connect(this.on_key_released);
+		this.key_press_event.connect(this.on_key_pressed);
 		this.window_state_event.connect(this.on_window_state_change);
 	}
 	
