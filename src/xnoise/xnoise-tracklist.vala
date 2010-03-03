@@ -44,7 +44,7 @@ public class Xnoise.TrackList : TreeView {
 	private Menu menu;
 	private bool _column_length_visible;
 	private bool _column_tracknumber_visible;
-	private const int autoscroll_offset = 50;
+	private const int autoscroll_distance = 50;
 	private uint autoscroll_source = 0;
 	private bool reorder_dragging = false;
 	
@@ -220,8 +220,11 @@ public class Xnoise.TrackList : TreeView {
 	
 	private bool do_scroll(int delta) { 
 		int buffer;
-		Gtk.Adjustment adjustment;
-		adjustment = this.get_vadjustment();
+		Gtk.Adjustment adjustment = this.get_vadjustment();
+		
+		if(adjustment == null)
+			return false;
+		
 		buffer = (int)adjustment.get_value();
 		adjustment.set_value(adjustment.get_value() + delta);
 		return (adjustment.get_value() != buffer);
@@ -238,9 +241,9 @@ public class Xnoise.TrackList : TreeView {
 		if(!do_scroll((int)delta))
 			return true;
 		
-		expose_area.x = this.allocation.x;
-		expose_area.y = this.allocation.y;
-		expose_area.width = this.allocation.width;
+		expose_area.x      = this.allocation.x;
+		expose_area.y      = this.allocation.y;
+		expose_area.width  = this.allocation.width;
 		expose_area.height = this.allocation.height;
 		
 		if(delta > 0) {
@@ -248,7 +251,7 @@ public class Xnoise.TrackList : TreeView {
 		} 
 		else {
 			if(delta < 0)
-				expose_area.height = -1 * (int)delta;
+				expose_area.height = (int)(-1.0 * delta);
 		}
 
 		expose_area.x -= this.allocation.x;
@@ -257,8 +260,7 @@ public class Xnoise.TrackList : TreeView {
 		this.queue_draw_area(expose_area.x,
 		                     expose_area.y,
 		                     expose_area.width,
-		                     expose_area.height
-		                     );
+		                     expose_area.height);
 		return true;
 	}
 	
@@ -270,10 +272,7 @@ public class Xnoise.TrackList : TreeView {
 				autoscroll_source = Timeout.add(100, autoscroll_timeout);
 		} 
 		else {
-			if(autoscroll_source != 0) {
-				Source.remove(autoscroll_source);
-				autoscroll_source = 0;
-			}
+			stop_autoscroll();
 		}
 	}
 
@@ -285,24 +284,23 @@ public class Xnoise.TrackList : TreeView {
 	}
 
 	private void get_autoscroll_delta(ref double delta) {
-		int y;
-		this.window.get_pointer(null, out y, null);
+		int y_pos;
+		this.window.get_pointer(null, out y_pos, null);
 		delta = 0.0;
-		if(y < autoscroll_offset) 
-			delta = (double)(y - autoscroll_offset);
+		if(y_pos < autoscroll_distance) 
+			delta = (double)(y_pos - autoscroll_distance);
 
-		if(y > this.allocation.height - autoscroll_offset) {
-			if(delta != 0) {
-				//window too narrow, don't autoscroll.
+		if(y_pos > (this.allocation.height - autoscroll_distance)) {
+			if(delta != 0) { //window too narrow, don't autoscroll.
 				return;
 			}
-			delta = (double)(y - (this.allocation.height - autoscroll_offset));
+			delta = (double)(y_pos - (this.allocation.height - autoscroll_distance));
 		}
 		if(delta == 0) {
 			return;
 		}
 		if(delta != 0) {
-			delta /= autoscroll_offset;
+			delta /= autoscroll_distance;
 			delta *= 60;
 		}
 	}
