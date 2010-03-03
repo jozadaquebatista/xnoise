@@ -227,7 +227,7 @@ namespace Xnoise {
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
 		public double current_volume;
-		public bool drag_on_da;
+		public bool drag_on_content_area;
 		public Gtk.Window fullscreenwindow;
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
@@ -239,6 +239,7 @@ namespace Xnoise {
 		public Gtk.Entry searchEntryMB;
 		public Xnoise.MainWindow.SongProgressBar songProgressBar;
 		public Xnoise.MainWindow.StopButton stopButton;
+		public Xnoise.TrackListNoteBookTab temporary_tab;
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
 		public Xnoise.VideoScreen videoscreen;
@@ -250,7 +251,7 @@ namespace Xnoise {
 		public void toggle_fullscreen ();
 		public bool fullscreenwindowvisible { get; set; }
 		public int repeatState { get; set; }
-		public signal void sign_drag_over_da ();
+		public signal void sign_drag_over_content_area ();
 		public signal void sign_pos_changed (double fraction);
 		public signal void sign_volume_changed (double fraction);
 	}

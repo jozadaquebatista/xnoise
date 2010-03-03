@@ -241,6 +241,8 @@ typedef struct _XnoiseIParams XnoiseIParams;
 typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
+#define XNOISE_TYPE_TRACK_LIST_NOTE_BOOK_TAB (xnoise_track_list_note_book_tab_get_type ())
+
 #define XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON (xnoise_main_window_play_pause_button_get_type ())
 #define XNOISE_MAIN_WINDOW_PLAY_PAUSE_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON, XnoiseMainWindowPlayPauseButton))
 #define XNOISE_MAIN_WINDOW_PLAY_PAUSE_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_MAIN_WINDOW_TYPE_PLAY_PAUSE_BUTTON, XnoiseMainWindowPlayPauseButtonClass))
@@ -355,8 +357,6 @@ typedef struct _XnoiseMediaImporterPrivate XnoiseMediaImporterPrivate;
 
 typedef struct _XnoiseParams XnoiseParams;
 typedef struct _XnoiseParamsClass XnoiseParamsClass;
-
-#define XNOISE_TYPE_TRACK_LIST_NOTE_BOOK_TAB (xnoise_track_list_note_book_tab_get_type ())
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
 typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
@@ -631,12 +631,19 @@ struct _XnoiseIParamsIface {
 	void (*write_params_data) (XnoiseIParams* self);
 };
 
+typedef enum  {
+	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_TRACKLIST = 0,
+	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_VIDEO,
+	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_LYRICS
+} XnoiseTrackListNoteBookTab;
+
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	gboolean _seek;
 	gboolean is_fullscreen;
-	gboolean drag_on_da;
+	gboolean drag_on_content_area;
+	XnoiseTrackListNoteBookTab temporary_tab;
 	XnoiseLyricsView* lyricsView;
 	XnoiseVideoScreen* videoscreen;
 	GtkEntry* searchEntryMB;
@@ -763,12 +770,6 @@ struct _XnoiseMediaImporter {
 struct _XnoiseMediaImporterClass {
 	GObjectClass parent_class;
 };
-
-typedef enum  {
-	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_TRACKLIST = 0,
-	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_VIDEO,
-	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_LYRICS
-} XnoiseTrackListNoteBookTab;
 
 typedef enum  {
 	GST_STREAM_TYPE_UNKNOWN = 0,
@@ -1125,6 +1126,7 @@ void xnoise_main_quit (XnoiseMain* self);
 XnoiseMain* xnoise_main_get_instance (void);
 gboolean gdk_window_ensure_native (GdkWindow* window);
 GType xnoise_iparams_get_type (void);
+GType xnoise_track_list_note_book_tab_get_type (void);
 GType xnoise_main_window_play_pause_button_get_type (void);
 GType xnoise_main_window_previous_button_get_type (void);
 GType xnoise_main_window_next_button_get_type (void);
@@ -1199,7 +1201,6 @@ char* xnoise_remove_linebreaks (const char* value);
 char* xnoise_replace_underline_with_blank_encoded (const char* value);
 gboolean xnoise_get_image_path_for_media_uri (const char* uri, char** image_path);
 char* xnoise_get_stream_uri (const char* playlist_uri);
-GType xnoise_track_list_note_book_tab_get_type (void);
 GType gst_stream_type_get_type (void);
 XnoiseTrackData* xnoise_track_data_new (void);
 XnoiseTrackData* xnoise_track_data_construct (GType object_type);
