@@ -44,6 +44,10 @@ public class Xnoise.TrackList : TreeView {
 	private Menu menu;
 	private bool _column_length_visible;
 	private bool _column_tracknumber_visible;
+	private const int autoscroll_offset = 50;
+	private uint autoscroll_source = 0;
+	private bool reorder_dragging = false;
+	
 	public bool column_length_visible {
 		get {
 			return _column_length_visible;
@@ -100,6 +104,7 @@ public class Xnoise.TrackList : TreeView {
 		this.drag_end.connect(this.on_drag_end);
 		this.drag_motion.connect(this.on_drag_motion);
 		this.drag_data_received.connect(this.on_drag_data_received);
+		this.drag_leave.connect(this.on_drag_leave);
 		this.button_release_event.connect(this.on_button_release);
 		this.button_press_event.connect(this.on_button_press);
 
@@ -207,10 +212,101 @@ public class Xnoise.TrackList : TreeView {
 		Gtk.TreeViewDropPosition pos;
 		if(!(this.get_dest_row_at_pos(x, y, out path, out pos))) return false;
 		this.set_drag_dest_row(path, pos);
+		
+		// Autoscroll
+		start_autoscroll();
 		return true;
 	}
+	
+	private bool do_scroll(int delta) { 
+		int buffer;
+		Gtk.Adjustment adjustment;
+		adjustment = this.get_vadjustment();
+		buffer = (int)adjustment.get_value();
+		adjustment.set_value(adjustment.get_value() + delta);
+		return (adjustment.get_value() != buffer);
+	}
+	
+	public bool autoscroll_timeout() {
+		double delta = 0.0;
+		Gdk.Rectangle expose_area = Gdk.Rectangle();
+		
+		get_autoscroll_delta(ref delta);
+		if(delta == 0) 
+			return true;
+		
+		if(!do_scroll((int)delta))
+			return true;
+		
+		expose_area.x = this.allocation.x;
+		expose_area.y = this.allocation.y;
+		expose_area.width = this.allocation.width;
+		expose_area.height = this.allocation.height;
+		
+		if(delta > 0) {
+			expose_area.y = expose_area.height - (int)delta;
+		} 
+		else {
+			if(delta < 0)
+				expose_area.height = -1 * (int)delta;
+		}
 
-	private bool reorder_dragging;
+		expose_area.x -= this.allocation.x;
+		expose_area.y -= this.allocation.y;
+
+		this.queue_draw_area(expose_area.x,
+		                     expose_area.y,
+		                     expose_area.width,
+		                     expose_area.height
+		                     );
+		return true;
+	}
+	
+	void start_autoscroll() { 
+		double delta = 0.0;
+		get_autoscroll_delta(ref delta);
+		if(delta != 0) {
+			if(autoscroll_source == 0) 
+				autoscroll_source = Timeout.add(100, autoscroll_timeout);
+		} 
+		else {
+			if(autoscroll_source != 0) {
+				Source.remove(autoscroll_source);
+				autoscroll_source = 0;
+			}
+		}
+	}
+
+	private void stop_autoscroll() {
+		if(autoscroll_source != 0) {
+			Source.remove(autoscroll_source);
+			autoscroll_source = 0;
+		}
+	}
+
+	private void get_autoscroll_delta(ref double delta) {
+		int y;
+		this.window.get_pointer(null, out y, null);
+		delta = 0.0;
+		if(y < autoscroll_offset) 
+			delta = (double)(y - autoscroll_offset);
+
+		if(y > this.allocation.height - autoscroll_offset) {
+			if(delta != 0) {
+				//window too narrow, don't autoscroll.
+				return;
+			}
+			delta = (double)(y - (this.allocation.height - autoscroll_offset));
+		}
+		if(delta == 0) {
+			return;
+		}
+		if(delta != 0) {
+			delta /= autoscroll_offset;
+			delta *= 60;
+		}
+	}
+
 	private void on_drag_begin(Gtk.Widget sender, DragContext context) {
 		this.dragging = true;
 		this.reorder_dragging = true;
@@ -241,12 +337,17 @@ public class Xnoise.TrackList : TreeView {
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.MOVE
 			);
+		stop_autoscroll();
+	}
+
+	private void on_drag_leave(Gtk.Widget sender, Gdk.DragContext context, uint etime) {
+		stop_autoscroll();
 	}
 
 	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context,
 	                              Gtk.SelectionData selection,
 	                              uint target_type, uint etime) {
-		rowref_list = {};//new TreeRowReference[0];
+		rowref_list = {};
 		TreeIter iter;
 		GLib.Value uri;
 		List<unowned TreePath> paths;
@@ -342,7 +443,7 @@ public class Xnoise.TrackList : TreeView {
 			if((!(drop_pos == Gtk.TreeViewDropPosition.BEFORE))&&
 			   (!(drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE))) {
 				for(int i=rowref_list.length-1;i>=0;i--) {
-					if (rowref_list[i] == null || !rowref_list[i].valid()) {
+					if(rowref_list[i] == null || !rowref_list[i].valid()) {
 						return;
 					}
 					unowned TreeIter current_iter;
@@ -356,7 +457,7 @@ public class Xnoise.TrackList : TreeView {
 			}
 			else {
 				for(int i=0;i<rowref_list.length;i++) {
-					if (rowref_list[i] == null || !rowref_list[i].valid()) {
+					if(rowref_list[i] == null || !rowref_list[i].valid()) {
 						return;
 					}
 					unowned TreeIter current_iter;

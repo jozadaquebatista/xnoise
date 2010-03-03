@@ -395,6 +395,7 @@ namespace Xnoise {
 	public class TrackList : Gtk.TreeView {
 		public Xnoise.TrackListModel tracklistmodel;
 		public TrackList ();
+		public bool autoscroll_timeout ();
 		public void on_activated (string uri, Gtk.TreePath path);
 		public void remove_selected_rows ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);

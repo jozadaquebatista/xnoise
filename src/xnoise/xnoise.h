@@ -1289,6 +1289,7 @@ XnoiseTagReader* xnoise_tag_reader_new (void);
 XnoiseTagReader* xnoise_tag_reader_construct (GType object_type);
 XnoiseTrackList* xnoise_track_list_new (void);
 XnoiseTrackList* xnoise_track_list_construct (GType object_type);
+gboolean xnoise_track_list_autoscroll_timeout (XnoiseTrackList* self);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_selected_rows (XnoiseTrackList* self);
 void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, GtkTreePath* path);
