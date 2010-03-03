@@ -70,7 +70,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private VBox videovbox;
 	private VBox contentvbox;
 	public bool is_fullscreen = false;
-	public bool drag_on_da = false;
+	public bool drag_on_content_area = false;
+	public TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
 	public LyricsView lyricsView;
 	public VideoScreen videoscreen;
 	public Entry searchEntryMB;
@@ -92,7 +93,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	public signal void sign_pos_changed(double fraction);
 	public signal void sign_volume_changed(double fraction);
-	public signal void sign_drag_over_da();
+	public signal void sign_drag_over_content_area();
 
 	private enum Repeat {
 		NOT_AT_ALL = 0,
@@ -170,22 +171,43 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.DEFAULT
 			);
+		Gtk.drag_dest_set(
+			lyricsView,
+			Gtk.DestDefaults.MOTION,
+			this.target_list,
+			Gdk.DragAction.COPY|
+			Gdk.DragAction.DEFAULT
+			);
 		videoscreen.button_press_event.connect(on_video_da_button_press);
-		sign_drag_over_da.connect(() => {
+		sign_drag_over_content_area.connect(() => {
 			//switch to tracklist for dropping
 			if(!fullscreenwindowvisible)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 		});
-		videoscreen.drag_motion.connect(this.on_da_drag_motion);
+		videoscreen.drag_motion.connect((sender,context,x,y,t) => {
+			temporary_tab = TrackListNoteBookTab.VIDEO;
+			sign_drag_over_content_area();
+			return true;
+		});
+		
+		lyricsView.drag_motion.connect((sender,context,x,y,t) => {
+			temporary_tab = TrackListNoteBookTab.LYRICS;
+			sign_drag_over_content_area();
+			return true;
+		});
+		
 	}
 
 	private void on_caught_eos_from_player() {
 		this.change_song(Direction.NEXT, true);
 	}
 
-	private bool on_da_drag_motion(Gtk.Widget sender, Gdk.DragContext context, int x, int y, uint timestamp) {
-		drag_on_da = true;
-		sign_drag_over_da();
+	private bool on_content_area_drag_motion(Gtk.Widget sender, 
+											Gdk.DragContext context, 
+											int x, int y, 
+											uint timestamp) {
+		drag_on_content_area = true;
+		sign_drag_over_content_area();
 		return true;
 	}
 

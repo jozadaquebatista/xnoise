@@ -341,6 +341,14 @@ public class Xnoise.TrackList : TreeView {
 
 	private void on_drag_leave(Gtk.Widget sender, Gdk.DragContext context, uint etime) {
 		stop_autoscroll();
+		//The Gtk guys should emit the leave event AFTER the drop event
+		/*Timeout.add(1000, () => { 
+		if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+			xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
+			xn.main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
+		}
+		return true;
+		});*/
 	}
 
 	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context,
@@ -471,9 +479,9 @@ public class Xnoise.TrackList : TreeView {
 		}
 		drop_pos = Gtk.TreeViewDropPosition.AFTER; //Default position for next run
 		rowref_list = null;
-		if(xn.main_window.drag_on_da) {
-			xn.main_window.drag_on_da = false;
-			xn.main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+		if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+			xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
+			xn.main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
 		}
 	}
 
