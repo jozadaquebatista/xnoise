@@ -74,19 +74,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox2">
-            <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">4</property>
-            <property name="position">1</property>
-          </packing>
+          <placeholder/>
         </child>
         <child>
           <object class="GtkAspectFrame" id="aspectframe2">
@@ -148,6 +136,9 @@ ready to rock</property>
           <packing>
             <property name="position">4</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <object class="GtkAspectFrame" id="aFrameVolumeButton">
