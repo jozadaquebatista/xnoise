@@ -32,8 +32,9 @@ using Gst;
 
 public class Xnoise.GstPlayer : GLib.Object {
 	private bool _current_has_video;
-	private uint timeout;
+	private uint cycle_time_source;
 	private uint update_tags_source;
+	private uint check_for_video_source;
 	private string? _Uri = null;
 	private Gst.TagList _taglist;
 	public VideoScreen videoscreen;
@@ -70,7 +71,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	public bool playing           { get; set; }
 	public bool paused            { get; set; }
-	public bool seeking           { get; set; } //TODO
+	public bool seeking           { get; set; }
 	public int64 length_time      { get; set; }
 	public bool is_stream         { get; private set; default = false; }
 
@@ -129,14 +130,14 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_paused();
 	public signal void sign_stopped();
 	public signal void sign_video_playing();
-//	public signal void sign_uri_changed(string newuri);
 	public signal void sign_volume_changed(double volume);
 
 	public GstPlayer() {
 		videoscreen = new VideoScreen();
 		create_elements();
-		timeout = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position); //once per second is enough?
+		cycle_time_source = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position);
 		update_tags_source = 0;
+		check_for_video_source = 0;
 
 		global.uri_changed.connect( () => {
 			this.request_location(global.current_uri);
@@ -170,14 +171,15 @@ public class Xnoise.GstPlayer : GLib.Object {
 			playbin.set_state(State.PLAYING);
 	}
 
-	public signal void sign_about_to_finish();
-
-	private void on_about_to_finish() {
+	private void handle_eos_via_idle() {
 		Idle.add ( () => { 
-			this.sign_about_to_finish ();
 			global.handle_eos();
 			return false;
 		});
+	}
+	
+	private void on_about_to_finish() {
+		handle_eos_via_idle();
 	}
 
 	private void create_elements() {
@@ -199,9 +201,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if(taglist == null && tags != null) {
 			taglist = tags;
 		}
-		else {
+		else if(tags != null){
 			taglist.merge(tags, TagMergeMode.REPLACE);
 		}
+		
 		if(this.taglist == null) 
 			return;
 		
@@ -212,17 +215,25 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private bool update_tags() {
+		if(taglist == null)
+			return false;
 		taglist.@foreach(foreachtag);
 		return false;
 	}
 
 	private void on_bus_message(Gst.Message msg) {
+		if((msg == null)||(msg.structure == null)) 
+			return;
 		switch(msg.type) {
 			case Gst.MessageType.STATE_CHANGED: {
 				State newstate;
 				State oldstate;
+				
+				if(msg.src!=playbin) // only look for playbin state changes
+					break;
+					
 				msg.parse_state_changed(out oldstate, out newstate, null);
-				if((newstate==State.PLAYING)&&((oldstate==State.PAUSED)||(oldstate==State.READY))) {
+				if((newstate == State.PLAYING)&&((oldstate == State.PAUSED)||(oldstate == State.READY))) {
 					this.check_for_video();
 				}
 				break;
@@ -232,11 +243,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 				string debug;
 				msg.parse_error(out err, out debug);
 				print("Error: %s\n", err.message);
-				global.handle_eos(); //this is used to go to the next track
+				handle_eos_via_idle(); //this is used to go to the next track
 				break;
 			}
 			case Gst.MessageType.EOS: {
-				global.handle_eos();
+				handle_eos_via_idle();
 				break;
 			}
 			default: break;
@@ -244,24 +255,30 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private void check_for_video() {
-		int n_video;
-		playbin.get("n-video", out n_video);
-		if(n_video > 0) {
-			this.current_has_video = true;
-		}
-		else {
-			this.current_has_video = false;
-		}
+		if(check_for_video_source != 0)
+			Source.remove(check_for_video_source);
+		
+		check_for_video_source = Idle.add( () => {
+			int n_video = 0;
+			playbin.get("n-video", out n_video);
+			if(n_video > 0) {
+				this.current_has_video = true;
+			}
+			else {
+				this.current_has_video = false;
+			}
+			return false;
+		});
 	}
 
 	/**
 	 * For video synchronization and activation of video screen
 	 */
 	private void on_sync_message(Gst.Message msg) {
-		if(msg.structure==null) return;
+		if((msg == null)||(msg.structure == null)) 
+			return;
 		string message_name = msg.structure.get_name();
 		if(message_name=="prepare-xwindow-id") {
-			if(msg == null) return;
 			var imagesink = (XOverlay)msg.src;
 			imagesink.set_property("force-aspect-ratio", true);
 			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.window));
@@ -269,6 +286,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private void foreachtag(TagList list, string tag) {
+		if(list == null)
+			return;
 		string val = null;
 		//print("tag: %s\n", tag);
 		switch(tag) {

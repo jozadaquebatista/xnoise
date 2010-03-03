@@ -28,7 +28,7 @@
  * 	softshaker  softshaker googlemail.com
  * 	Jörn Magens
  */
-
+//TODO: use priorities
 public class Xnoise.AlbumImageLoader : GLib.Object {
 	private static IAlbumCoverImageProvider provider;
 	private static Main xn;
@@ -72,6 +72,8 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 		}
 		Idle.add( () => {
 			var album_image_provider = this.provider.from_tags(artist, album);
+			if(album_image_provider == null)
+				return false;
 			album_image_provider.sign_image_fetched.connect(on_image_fetched);
 			album_image_provider.ref(); //prevent destruction before ready
 			album_image_provider.find_image();

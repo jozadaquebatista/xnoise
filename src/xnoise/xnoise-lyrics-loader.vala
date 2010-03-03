@@ -34,7 +34,7 @@
 	 * make preferences options
 	 * lyrics loader should use top prio provider and if it doesn't find lyrics try the next one
 */
-
+//TODO: use priorities
 public class Xnoise.LyricsLoader : GLib.Object {
 	private static ILyricsProvider provider;
 	private static Main xn;
@@ -77,6 +77,8 @@ public class Xnoise.LyricsLoader : GLib.Object {
 
 		Idle.add( () => {
 			var p = this.provider.from_tags(artist, title);
+			if(p == null)
+				return false;
 			p.sign_lyrics_fetched.connect(on_lyrics_fetched);
 			p.ref(); //prevent destruction before ready
 			p.find_lyrics();

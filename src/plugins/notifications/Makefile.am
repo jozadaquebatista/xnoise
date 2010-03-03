@@ -12,7 +12,7 @@ AM_CPPFLAGS = \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
 	-include $(CONFIG_HEADER) \
 	-I$(top_srcdir)/src/xnoise -DDATA_DIR='"$(datadir)"' \
-	-I/usr/include/libnotify \
+	$(LIBNOTIFY_CFLAGS) \
 	$(NULL)
 
 libnotificationsdir = $(libdir)/xnoise

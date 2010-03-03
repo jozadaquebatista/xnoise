@@ -180,6 +180,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		par.set_int_value("use_tracknumber_column", buf);
 		xn.tl.column_tracknumber_visible = show_trackno_col;
 
+		//write priorities for album image providers
+		//TODO
+		//write priorities for lyrics providers
+		//TODO
+
 		this.dialog.destroy();
 		par.write_all_parameters_to_file();
 		sign_finish();

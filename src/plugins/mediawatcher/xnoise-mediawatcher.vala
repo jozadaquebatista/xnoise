@@ -154,16 +154,16 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		monitor_list.foreach((data) => {
 			unowned List<DataPair> iter = monitor_list;
 			while(iter != null) {	
-	   			if(iter.data.path.has_prefix(path)) {
-	   				print("removed monitor %s", iter.data.path);
-	   				iter.data.monitor.unref();
-	   				unowned List<DataPair> temp = iter.next;
-	   				iter.delete_link(iter);
-	   				iter = temp;
-	   			}
-	   			else iter = iter.next;
-	   		}
-	   	});
+				if(iter.data.path.has_prefix(path)) {
+					print("removed monitor %s", iter.data.path);
+					iter.data.monitor.unref();
+					unowned List<DataPair> temp = iter.next;
+					iter.delete_link(iter);
+					iter = temp;
+				}
+				else iter = iter.next;
+			}
+		});
 	}
 	
 	protected bool monitor_in_list(string path) {

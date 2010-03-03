@@ -10,8 +10,8 @@ AM_CPPFLAGS = \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
 	-include $(CONFIG_HEADER) \
 	-I$(top_srcdir)/src/xnoise -DDATA_DIR='"$(datadir)"' \
-	-I/usr/include/libsoup-2.4 \
-	-I/usr/include/libxml-2.0 \
+	$(LIBXML_CFLAGS) \
+	$(LIBSOUP_CFLAGS) \
 	$(NULL)
 
 libLastfmCoversdir = $(libdir)/xnoise

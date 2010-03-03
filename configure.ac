@@ -273,7 +273,7 @@ echo "
     CFLAGS:                        ${CFLAGS}
     
   Plugins: 
-    titleToDecoration:             yes
+    titleToDecoration:             yes (always)
     leoslyrics:                    ${enable_leoslyrics}
     lyricsfly:                     ${enable_lyricsfly}
     lastfm covers:                 ${enable_lastfmcovers}

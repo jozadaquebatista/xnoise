@@ -539,7 +539,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	// This function changes the current song to the next or previous in the
-	// tracklist. handle_repeat_state should be true when the calling is not
+	// tracklist. handle_repeat_state should be true if the calling is not
 	// coming from a button, but, e.g. from a EOS signal handler
 	public void change_song(MainWindow.Direction direction, bool handle_repeat_state = false) {
 		unowned TreeIter iter;
@@ -561,17 +561,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			stop();
 			return;
 		}
-//		bool replay_row = false;
 		TreePath tmp_path = null;
 		if((repeatState == Repeat.RANDOM)) {
 			// handle RANDOM
 			tmp_path = path;
 			this.trackList.tracklistmodel.get_random_row(ref path);
-//			print("path: %s, tmppat: %s\n", path.to_string(), tmp_path.to_string());
-//			if(path.to_string() == tmp_path.to_string()) {
-//				print("equal\n");
-//				replay_row = true;
-//			}
 		}
 		else {
 			if(!used_next_pos) {

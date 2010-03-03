@@ -151,7 +151,6 @@ namespace Xnoise {
 		public bool playing { get; set; }
 		public bool seeking { get; set; }
 		public double volume { get; set; }
-		public signal void sign_about_to_finish ();
 		public signal void sign_paused ();
 		public signal void sign_playing ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
