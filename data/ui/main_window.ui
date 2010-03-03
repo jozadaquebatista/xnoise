@@ -79,17 +79,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox7">
+          <object class="GtkAspectFrame" id="aspectframe2">
             <property name="visible">True</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkLabel" id="label2">
-                <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
             <child>
               <object class="GtkViewport" id="songprogress_viewport">
                 <property name="visible">True</property>
@@ -100,23 +93,11 @@
                   <placeholder/>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="padding">10</property>
+            <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -159,9 +140,13 @@ ready to rock</property>
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vboxVolumeButton">
+          <placeholder/>
+        </child>
+        <child>
+          <object class="GtkAspectFrame" id="aFrameVolumeButton">
             <property name="visible">True</property>
-            <property name="orientation">vertical</property>
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
             <child>
               <placeholder/>
             </child>
@@ -169,7 +154,7 @@ ready to rock</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">4</property>
+            <property name="position">6</property>
           </packing>
         </child>
       </object>

@@ -955,8 +955,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//VOLUME SLIDE BUTTON
 			this.volumeSliderButton = new VolumeSliderButton();
-			var vbVol = gb.get_object("vboxVolumeButton") as Gtk.VBox;
-			vbVol.pack_start(volumeSliderButton, false, false, 1);
+			var afVol = gb.get_object("aFrameVolumeButton") as Gtk.AspectFrame;
+			afVol.add(volumeSliderButton);
 
 			//PLAYBACK CONTROLLS
 			var playback_hbox = gb.get_object("playback_hbox") as Gtk.HBox;
