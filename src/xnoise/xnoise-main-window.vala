@@ -202,15 +202,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.change_song(Direction.NEXT, true);
 	}
 
-	private bool on_content_area_drag_motion(Gtk.Widget sender, 
-											Gdk.DragContext context, 
-											int x, int y, 
-											uint timestamp) {
-		drag_on_content_area = true;
-		sign_drag_over_content_area();
-		return true;
-	}
-
 	private void on_fullscreenwindowvisible(GLib.ParamSpec pspec) {
 		this.showvideobuttonTL.set_sensitive(!fullscreenwindowvisible);
 		this.showvideobuttonLY.set_sensitive(!fullscreenwindowvisible);
