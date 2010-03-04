@@ -48,6 +48,10 @@ public class Xnoise.TrackList : TreeView {
 	private uint autoscroll_source = 0;
 	private bool reorder_dragging = false;
 	
+	private uint hide_timer;
+	private bool hide_timer_set = false;
+	private const uint HIDE_TIMEOUT = 1000;
+	
 	public bool column_length_visible {
 		get {
 			return _column_length_visible;
@@ -489,9 +493,21 @@ public class Xnoise.TrackList : TreeView {
 		}
 		drop_pos = Gtk.TreeViewDropPosition.AFTER; //Default position for next run
 		rowref_list = null;
+		
+		//After dropping an item hide the tracklist with a delay of HIDE_TIMEOUT ms 
+		//if it was only shown temporarily
+		
 		if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
-			xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
-			xn.main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
+			if(hide_timer_set) GLib.Source.remove(hide_timer);
+			hide_timer = Timeout.add(HIDE_TIMEOUT, () => {
+				hide_timer_set = false;
+				if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+					xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
+					xn.main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
+				}
+				return false;
+			});
+			hide_timer_set = true;
 		}
 	}
 
