@@ -84,7 +84,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public AlbumImage albumimage;
 	public SongProgressBar songProgressBar;
 	public double current_volume; //keep it global for saving to params
-	public MediaBrowser mediaBr;
+	public MediaBrowser mediaBr = null;
 	public TrackList trackList;
 	public Gtk.Window fullscreenwindow;
 

@@ -222,7 +222,9 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			
 		dbw.delete_uri(file.get_uri());
 		remove_dir_monitors(file.get_path());
-		Main.instance.main_window.mediaBr.change_model_data();
+	
+		if(Main.instance.main_window.mediaBr != null)
+			Main.instance.main_window.mediaBr.change_model_data();
 	}
 
 	protected void handle_created_file(File file) {
@@ -247,7 +249,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 				setup_monitor_for_path(file.get_path());
 			}
 			
-			Main.instance.main_window.mediaBr.change_model_data();
+			if(Main.instance.main_window.mediaBr != null)
+				Main.instance.main_window.mediaBr.change_model_data();
 		} 
 		catch(Error e) {
 			print("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e.message);

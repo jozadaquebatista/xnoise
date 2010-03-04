@@ -99,6 +99,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		catch (GLib.Error e) {
 			print("Error: %s\n",e.message);
 		}
+		if(Main.instance.main_window != null)
+			if(Main.instance.main_window.mediaBr != null) {
+				this.clear();
+				this.populate_model();
+			}
 	}
 
 	private void prepend_separator() {
