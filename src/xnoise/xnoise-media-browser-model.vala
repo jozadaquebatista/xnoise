@@ -61,6 +61,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	};
 
 	public string searchtext = "";
+	private IconTheme theme = null;
 	private Gdk.Pixbuf artist_pixb;
 	private Gdk.Pixbuf album_pixb;
 	private Gdk.Pixbuf title_pixb;
@@ -69,20 +70,30 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private Gdk.Pixbuf radios_pixb;
 
 	construct {
+		theme = IconTheme.get_default();
+		theme.changed.connect(set_pixbufs);
 		set_pixbufs();
 		set_column_types(col_types);
 	}
 
 	private void set_pixbufs() {
 		try {
-			artist_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
-			album_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "album.png");
-			title_pixb  = new Gdk.Pixbuf.from_file(Config.UIDIR + "note.png");
+			
 			Gtk.Invisible w = new Gtk.Invisible();
-			videos_pixb  = w.render_icon(Gtk.STOCK_MEDIA_RECORD, IconSize.BUTTON, null);
+			
+			if(theme.has_icon("system-users")) artist_pixb = theme.load_icon("system-users", 0, 0);
+			else if(theme.has_icon("stock_person")) artist_pixb = theme.load_icon("stock_person", 0, 0);
+			else artist_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
+			
+			album_pixb = w.render_icon(Gtk.STOCK_CDROM, IconSize.BUTTON, null);
+			
+			if(theme.has_icon("audio-x-generic")) title_pixb = theme.load_icon("audio-x-generic", 0, 0);
+			else title_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
+			
+			if(theme.has_icon("video-x-generic")) videos_pixb = theme.load_icon("video-x-generic", 0, 0);
+			else videos_pixb = w.render_icon(Gtk.STOCK_MEDIA_RECORD, IconSize.BUTTON, null);
+			
 			radios_pixb  = w.render_icon(Gtk.STOCK_CONNECT, IconSize.BUTTON, null);
-
-			w = new Gtk.Invisible();
 			video_pixb  = w.render_icon(Gtk.STOCK_FILE, IconSize.BUTTON, null);
 		}
 		catch (GLib.Error e) {
