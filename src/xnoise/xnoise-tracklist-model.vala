@@ -34,6 +34,7 @@ using Gdk;
 public class Xnoise.TrackListModel : ListStore, TreeModel {
 
 	private Main xn;
+	private IconTheme icon_theme;
 
 	public enum Column {
 		ICON = 0,
@@ -61,6 +62,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 
 	public TrackListModel() {
 		this.xn = Main.instance;
+		this.icon_theme = IconTheme.get_default();
 		this.set_column_types(col_types);
 
 		// Use these two signals to handle the position_reference representation in tracklist
@@ -83,6 +85,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				default: break;
 			}
 		});
+		icon_theme.changed.connect(on_position_reference_changed);
 	}
 
 	public void on_before_position_reference_changed() {
