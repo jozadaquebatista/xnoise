@@ -39,6 +39,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			return "notifications";
 		} 
 	}
+	private const int IMAGE_SIZE = 64;
 	private Notification notification = null;
 	private uint timeout;
 
@@ -147,6 +148,9 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		if(image_path != null) {
 			try {
 				image_pixb = new Gdk.Pixbuf.from_file(image_path);
+				if(image_pixb != null) {
+					image_pixb = image_pixb.scale_simple(IMAGE_SIZE, IMAGE_SIZE, Gdk.InterpType.BILINEAR);
+				}
 			}
 			catch(GLib.Error e) {
 				print("%s\n", e.message);
