@@ -108,9 +108,14 @@ public class Xnoise.TrackList : TreeView {
 		this.drag_leave.connect(this.on_drag_leave);
 		this.button_release_event.connect(this.on_button_release);
 		this.button_press_event.connect(this.on_button_press);
-
+		
 		menu = create_rightclick_menu();
 	}
+	
+	/*private bool on_pointer_leave(CrossingEvent e) {
+		xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
+		return false;
+	}*/
 
 	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath path;
@@ -341,14 +346,19 @@ public class Xnoise.TrackList : TreeView {
 
 	private void on_drag_leave(Gtk.Widget sender, Gdk.DragContext context, uint etime) {
 		stop_autoscroll();
-		//The Gtk guys should emit the leave event AFTER the drop event
-		/*Timeout.add(1000, () => { 
-		if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
-			xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
-			xn.main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
+
+		Gdk.Window win = this.get_window();
+		if(win == null) return;
+		
+		int px = 0, py = 0;
+		win.get_pointer(out px, out py, null);
+		
+		if(px < 0 || py < 0) {
+			if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+				xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
+				xn.main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
+			}
 		}
-		return true;
-		});*/
 	}
 
 	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context,
