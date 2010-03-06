@@ -457,6 +457,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const int 3_KEY = 0x0033;
 	private const int F_KEY = 0x0066;
 	private const int D_KEY = 0x0064;
+	private const int SPACE_KEY = 0x0020;
 	private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
 		//print("%d : %d\n",(int)e.keyval, (int)e.state);
 		switch(e.keyval) {
@@ -488,6 +489,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					if(e.state != 0x0018) // ALT Modifier
 						return false;
 					this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
+				}
+				return true;
+			case SPACE_KEY: {
+					if(searchEntryMB.has_focus)
+						return false;
+					playPauseButton.clicked();
 				}
 				return true;
 			default:
