@@ -71,9 +71,19 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 	construct {
 		theme = IconTheme.get_default();
-		theme.changed.connect(set_pixbufs);
+		theme.changed.connect(update_pixbufs);
 		set_pixbufs();
 		set_column_types(col_types);
+	}
+	
+	private void update_pixbufs() {
+		this.set_pixbufs();
+		if(Main.instance.main_window != null)
+			if(Main.instance.main_window.mediaBr != null) {
+				this.ref();
+				Main.instance.main_window.mediaBr.change_model_data();
+				this.unref();
+			}
 	}
 
 	private void set_pixbufs() {
@@ -99,11 +109,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		catch (GLib.Error e) {
 			print("Error: %s\n",e.message);
 		}
-		if(Main.instance.main_window != null)
-			if(Main.instance.main_window.mediaBr != null) {
-				this.clear();
-				this.populate_model();
-			}
 	}
 
 	private void prepend_separator() {
