@@ -339,6 +339,13 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			this.get_iter(out iter, global.position_reference_next.get_path());
 			this.get(iter, Column.URI, out uri);
 		}
+		else if(this.get_iter_first(out iter)){
+			// ... or use first position, if available and 
+			// set global.position_reference to that track
+			this.get(iter, Column.URI, out uri);
+			global.position_reference = null;
+			global.position_reference = new TreeRowReference(this, this.get_path(iter));
+		}
 		return uri;
 	}
 
