@@ -37,8 +37,6 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	private string artist = "";
 	private string title = "";
 	private uint source = 0;
-//	private string providername = "";
-//	private string content = "";
 
 	public LyricsView() {
 		xn = Main.instance;
@@ -53,7 +51,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	}
 
 	private void on_uri_changed(string? uri) {
-		textbuffer.set_text("LYRICS VIEWER", -1);
+		textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);
 		if(timeout!=0)
 			GLib.Source.remove(timeout);
 
@@ -98,10 +96,9 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		// Do not execute if source has been removed in the meantime
 		if(MainContext.current_source().is_destroyed()) return false;
 
-//		if(loader != null) loader.sign_fetched -= on_lyrics_ready;
-
 		loader.artist = artist;
 		loader.title  = title;
+		set_text((_("\nTrying to find lyrics for \"%s\" by \"%s\"...")).printf(title, artist));
 		loader.fetch();
 		return false;
 	}
@@ -109,8 +106,10 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	private void on_lyrics_ready(string _artist, string _title, string _credits, string _identifier, string _text) {
 		//check if returned track is the one we asked for:
 		if(!((prepare_for_comparison(this.artist) == prepare_for_comparison(_artist))&&
-		     (prepare_for_comparison(this.title) == prepare_for_comparison(_title))))
+		     (prepare_for_comparison(this.title)  == prepare_for_comparison(_title)))) {
+			set_text((_("\nLyrics provider %s cannot find lyrics for \n\"%s\" by \"%s\".\n")).printf(_identifier,title, artist));
 			return;
+		}
 		
 		set_text_via_idle((_artist + " - " + _title + "\n\n" + _text + "\n\nprovided by " + _identifier));
 	}
