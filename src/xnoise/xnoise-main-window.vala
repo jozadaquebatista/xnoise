@@ -615,9 +615,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return;
 		}
 		TreePath tmp_path = null;
+		tmp_path = path;
 		if((repeatState == Repeat.RANDOM)) {
 			// handle RANDOM
-			tmp_path = path;
 			this.trackList.tracklistmodel.get_random_row(ref path);
 		}
 		else {
@@ -672,12 +672,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if(global.track_state == GlobalInfo.TrackState.PLAYING)
 			trackList.set_focus_on_iter(ref iter);
 
-		if((path == null)||(tmp_path == null)) {
-			global.do_restart_of_current_track();
-			return;
+		if(path.to_string() == tmp_path.to_string()) {
+			if(repeatState == Repeat.SINGLE) {
+				// Explicit restart
+				global.do_restart_of_current_track();
+			}
+			else{
+				// Explicit stop, because there is no more 
+				stop();
+			}
 		}
-		if(path.to_string() == tmp_path.to_string()) 
-			global.do_restart_of_current_track();
 	}
 
 	private void on_remove_all_button_clicked() {
