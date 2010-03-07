@@ -258,6 +258,7 @@ fontsizeMB=8
 hp_position=253
 width=1024
 use_treelines=0
+compact_layout=0
 repeatstate=2
 show_album_images=1
 

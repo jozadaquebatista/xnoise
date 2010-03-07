@@ -26,5 +26,14 @@
 		</menu>
 		
 	</menubar>
+	<menubar name="ConfigButtonMenu">
+		<menu name="ConfigMenu" action="ConfigMenuAction">
+			<menuitem action ="AddRemoveAction"/>
+			<menuitem action ="SettingsAction"/>
+			<menuitem action ="AboutAction"/>
+			<separator/>
+			<menuitem action ="QuitAction"/>
+		</menu>
+	</menubar>
 </ui>
 

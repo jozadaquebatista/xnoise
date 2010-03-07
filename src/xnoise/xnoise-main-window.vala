@@ -69,6 +69,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private FullscreenToolbar fullscreentoolbar;
 	private VBox videovbox;
 	private VBox contentvbox;
+	private MenuBar menubar;
 	public bool is_fullscreen = false;
 	public bool drag_on_content_area = false;
 	public TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
@@ -87,6 +88,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public MediaBrowser mediaBr = null;
 	public TrackList trackList;
 	public Gtk.Window fullscreenwindow;
+	
+	public Gtk.Button config_button;
+	private Gtk.Image config_button_image;
+	private Gtk.AspectFrame a_frame_config_button = null;
 
 	public int repeatState { get; set; }
 	public bool fullscreenwindowvisible { get; set; }
@@ -118,7 +123,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			{ "ShowVideoAction", Gtk.STOCK_LEAVE_FULLSCREEN, N_("_Video screen"), null, N_("Go to the video screen in the main window."), on_show_video_menu_clicked},
 			{ "ShowLyricsAction", Gtk.STOCK_EDIT, N_("_Lyrics"), null, N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
 		{ "HelpMenuAction", null, N_("_Help") },
-			{ "AboutAction", STOCK_ABOUT, null, null, null, on_help_about}
+			{ "AboutAction", STOCK_ABOUT, null, null, null, on_help_about},
+		{ "ConfigMenuAction", null, N_("_Config") }
 	};
 
 	private const Gtk.TargetEntry[] target_list = {
@@ -127,6 +133,36 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	public UIManager get_ui_manager() {
 		return ui_manager;
+	}
+	
+	private bool _compact_layout;
+	public bool compact_layout {
+		get {
+			return _compact_layout;
+		}
+	
+		set {
+			if (value) {
+				if(_compact_layout) return;
+				if(menubar.get_parent() != null) {
+					menuvbox.remove(menubar);
+				}
+				if(a_frame_config_button != null && config_button.get_parent() == null) 
+					a_frame_config_button.add(config_button);
+				config_button.show();
+				stopButton.hide();
+			}
+			else {
+				if(a_frame_config_button != null && config_button.is_realized()) 
+					a_frame_config_button.remove(config_button);
+				config_button.unrealize();
+				if(menubar.get_parent() == null) {
+					menuvbox.add(menubar);
+					menubar.show();
+				}
+				stopButton.show();
+			}
+		}
 	}
 
 	public MainWindow() {
@@ -252,6 +288,25 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 			}
 		}
+	}
+	
+	public void position_config_menu (Menu menu, out int x, out int y, out bool push) {
+		//the upper rightcorner of the popup menu should be just beneath the lower left corner of the button
+
+		int o_x, o_y, o_height, o_width, o_depth;
+		config_button.get_window().get_geometry(out o_x, out o_y, out o_width, out o_height, out o_depth);
+		Requisition req; 
+		config_button.get_child_requisition(out req);
+		/* get_allocation is broken in vapi - we should remove this direct field access as soon as it is fixed */
+		Allocation alloc;
+		alloc = config_button.allocation;
+		x = o_x + alloc.x + req.width;
+		y = o_y + alloc.y + req.height;
+		
+		Requisition menu_req;
+		menu.get_child_requisition(out menu_req);
+		x -= menu_req.width;
+		push= true;
 	}
 
 	public void toggle_fullscreen() {
@@ -996,12 +1051,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var playback_hbox = gb.get_object("playback_hbox") as Gtk.HBox;
 			this.previousButton = new PreviousButton();
 			playback_hbox.pack_start(previousButton,false,false,0);
+			previousButton.show();
 			this.playPauseButton = new PlayPauseButton();
 			playback_hbox.pack_start(playPauseButton,false,false,0);
+			this.playPauseButton.show();
 			this.stopButton = new StopButton();
 			playback_hbox.pack_start(stopButton,false,false,0);
 			this.nextButton = new NextButton();
 			playback_hbox.pack_start(nextButton,false,false,0);
+			nextButton.show();
 
 			//PROGRESS BAR
 			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
@@ -1070,8 +1128,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			sexyentryBox.add(searchEntryMB);
 			
 			collapsebutton = gb.get_object("collapsebutton") as Gtk.Button;
-			var labelcoll =  gb.get_object("labelcoll") as Gtk.Label;
-			labelcoll.label = _("Collapse");
+			//var labelcoll =  gb.get_object("labelcoll") as Gtk.Label;
+			//labelcoll.label = _("Collapse");
 			collapsebutton.clicked.connect( () => {
 				mediaBr.collapse_all();
 			});
@@ -1091,6 +1149,28 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//Toolbar shown in the fullscreen window
 			this.fullscreentoolbar = new FullscreenToolbar(fullscreenwindow);
+			
+			//Config button for compact layout		
+			config_button_image = new Gtk.Image.from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.SMALL_TOOLBAR);
+			config_button = new Button();
+			
+			/* Code for rendering a button with a down arrow icon 
+			var config_button_pixb = new Gdk.Pixbuf.from_file_at_scale(PREFERENCES_ICON_PATH, 25, 25, true);
+			var arrow_pixb = new Gdk.Pixbuf.from_file_at_scale(DOWN_ARROW_ICON_PATH, 8, 8, true);
+			config_button_pixb.width = arrow_pixb.width + config_button_pixb.width; 
+			arrow_pixb.copy_area(0, 0, 
+								arrow_pixb.get_width(), arrow_pixb.get_height(), 
+								config_button_pixb,
+								config_button_pixb.get_width()  - arrow_pixb.get_width(),
+								config_button_pixb.get_height()/4*3 - arrow_pixb.get_height());
+			config_button_image = new Image.from_pixbuf(config_button_pixb);*/
+			
+			config_button.set_image(config_button_image);
+			config_button.set_label("↓");
+			config_button.can_focus = false;
+			config_button.set_relief(Gtk.ReliefStyle.NONE);
+			a_frame_config_button = gb.get_object("aFrameConfigButton") as Gtk.AspectFrame;	
+			
 		}
 		catch (GLib.Error e) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
@@ -1115,10 +1195,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		catch(GLib.Error e) {
 			print("%s\n", e.message);
 		}
-
-		var menubar = (MenuBar)ui_manager.get_widget("/MainMenu");
+		
+		
+		menubar = (MenuBar)ui_manager.get_widget("/MainMenu");
 		menuvbox.pack_start(menubar, false, false, 0);
 		this.add(mainvbox);
+		
+		var config_button_menu_root = (ImageMenuItem)ui_manager.get_widget("/ConfigButtonMenu/ConfigMenu");
+		var config_button_menu = (Menu)config_button_menu_root.get_submenu();
+		config_button_menu.detach();
+		config_button_menu.attach_to_widget(config_button, (a,x) => {});
+		config_button.clicked.connect(() => {
+			config_button_menu.popup(null, null, position_config_menu, 0, 0);
+		});
+		
+		if(par.get_int_value("compact_layout") > 0) compact_layout = true;
+		else compact_layout = false;
 
 		// TODO: Move these popup actions to uimanager
 		this.trayicon.popup_menu.connect(this.trayicon_menu_popup);

@@ -659,6 +659,7 @@ struct _XnoiseMainWindow {
 	XnoiseMediaBrowser* mediaBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* fullscreenwindow;
+	GtkButton* config_button;
 	GtkImage* playpause_popup_image;
 };
 
@@ -1137,6 +1138,7 @@ GType xnoise_main_window_direction_get_type (void);
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 XnoiseMainWindow* xnoise_main_window_new (void);
 XnoiseMainWindow* xnoise_main_window_construct (GType object_type);
+void xnoise_main_window_position_config_menu (XnoiseMainWindow* self, GtkMenu* menu, gint* x, gint* y, gboolean* push);
 void xnoise_main_window_toggle_fullscreen (XnoiseMainWindow* self);
 void xnoise_main_window_change_song (XnoiseMainWindow* self, XnoiseMainWindowDirection direction, gboolean handle_repeat_state);
 void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, char** newuri, const char* tagname, const char* tagvalue);
@@ -1145,6 +1147,8 @@ gint xnoise_main_window_get_repeatState (XnoiseMainWindow* self);
 void xnoise_main_window_set_repeatState (XnoiseMainWindow* self, gint value);
 gboolean xnoise_main_window_get_fullscreenwindowvisible (XnoiseMainWindow* self);
 void xnoise_main_window_set_fullscreenwindowvisible (XnoiseMainWindow* self, gboolean value);
+gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
+void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
 XnoiseMainWindowNextButton* xnoise_main_window_next_button_new (void);
 XnoiseMainWindowNextButton* xnoise_main_window_next_button_construct (GType object_type);
 void xnoise_main_window_next_button_on_clicked (XnoiseMainWindowNextButton* self);

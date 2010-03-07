@@ -50,6 +50,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private TreeView visibleColTv;
 	private ListStore visibleColTvModel;
 	private CheckButton checkB_showL;
+	private CheckButton checkB_compact;
 	private HBox ai_hbox;
 	private HBox ly_hbox;
 	private bool show_length_col;
@@ -128,10 +129,15 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		//Visible Cols
 		show_length_col = (par.get_int_value("use_length_column") == 1 ? true : false);
 		show_trackno_col = (par.get_int_value("use_tracknumber_column") == 1 ? true : false);
-		if(par.get_int_value("use_treelines") == 1)
+		if(par.get_int_value("use_treelines") > 0)
 			checkB_showL.active = true;
 		else
 			checkB_showL.active = false;
+			
+		if(par.get_int_value("compact_layout") > 0)
+			checkB_compact.active = true;
+		else
+			checkB_compact.active = false;
 
 		// SpinButton
 		sb.configure(new Gtk.Adjustment(8.0, 7.0, 14.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
@@ -159,6 +165,19 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		else {
 			par.set_int_value("use_treelines", 0);
 			xn.main_window.mediaBr.use_treelines = false;
+		}
+	}
+	
+	private void on_checkbutton_compact_clicked(Gtk.Button sender) {
+		if(this.checkB_compact.active) {
+			par.set_int_value("compact_layout", 1);
+			xn.main_window.compact_layout = true;
+			print("on");
+		}
+		else {
+			par.set_int_value("compact_layout", 0);
+			print("off");
+			xn.main_window.compact_layout = false;
 		}
 	}
 
@@ -487,6 +506,10 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_showL = this.get_object("checkB_showlines") as Gtk.CheckButton;
 			checkB_showL.can_focus = false;
 			checkB_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
+			
+			checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
+			checkB_compact.can_focus = false;
+			checkB_compact.clicked.connect(this.on_checkbutton_compact_clicked);
 
 			var okButton = this.get_object("buttonOK") as Gtk.Button;
 			okButton.can_focus = false;

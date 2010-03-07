@@ -226,6 +226,7 @@ namespace Xnoise {
 		public bool _seek;
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
+		public Gtk.Button config_button;
 		public double current_volume;
 		public bool drag_on_content_area;
 		public Gtk.Window fullscreenwindow;
@@ -247,8 +248,10 @@ namespace Xnoise {
 		public void change_song (Xnoise.MainWindow.Direction direction, bool handle_repeat_state = false);
 		public void display_info_bar (Gtk.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
+		public void position_config_menu (Gtk.Menu menu, out int x, out int y, out bool push);
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
 		public void toggle_fullscreen ();
+		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
 		public int repeatState { get; set; }
 		public signal void sign_drag_over_content_area ();
