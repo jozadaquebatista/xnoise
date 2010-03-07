@@ -462,16 +462,18 @@ ready to rock</property>
                                     <property name="stock">gtk-refresh</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="repeatLabel01">
+                                    <property name="width_request">130</property>
                                     <property name="visible">True</property>
                                     <property name="label" translatable="yes">no repeat</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
                                     <property name="padding">4</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -481,7 +483,6 @@ ready to rock</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">False</property>
                             <property name="padding">2</property>
                             <property name="position">7</property>
                           </packing>
@@ -637,16 +638,18 @@ ready to rock</property>
                                     <property name="stock">gtk-refresh</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="repeatLabel02">
+                                    <property name="width_request">130</property>
                                     <property name="visible">True</property>
                                     <property name="label" translatable="yes">no repeat</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
                                     <property name="padding">4</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -656,7 +659,6 @@ ready to rock</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">False</property>
                             <property name="padding">2</property>
                             <property name="position">4</property>
                           </packing>
@@ -819,16 +821,18 @@ ready to rock</property>
                                     <property name="stock">gtk-refresh</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="repeatLabel03">
+                                    <property name="width_request">130</property>
                                     <property name="visible">True</property>
                                     <property name="label" translatable="yes">no repeat</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
                                     <property name="padding">4</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -838,7 +842,6 @@ ready to rock</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">False</property>
                             <property name="padding">2</property>
                             <property name="position">4</property>
                           </packing>

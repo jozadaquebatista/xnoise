@@ -52,13 +52,23 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			print("libnotify initialization failed\n");
 			return false;
 		}
-		global.uri_changed += on_uri_changed;
+		global.uri_changed.connect(on_uri_changed);
+		global.sign_restart_song.connect(on_restart);
 		return true;
 	}
 	
+	private void on_restart() {
+		Idle.add( () => {
+			on_uri_changed(global.current_uri);
+			return false;
+		});
+	}
+	
 	private void on_uri_changed(string? uri) {
-		if(timeout != 0)
+		if(timeout != 0) {
 			Source.remove(timeout);
+			timeout = 0;
+		}
 
 		if((uri=="")||(uri==null)) {
 			try {

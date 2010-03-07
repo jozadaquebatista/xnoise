@@ -346,7 +346,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		else {
 			toggle_fullscreen();
 		}
-		return false;
+		return true;
 	}
 
 	private void on_repeatState_changed(GLib.ParamSpec pspec) {
@@ -495,15 +495,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private const int KEY_F11 = 0xFFC8;
-	private const int KEY_ESC = 0xFF1B;
 	private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
 		//print("%d : %d\n",(int)e.keyval, (int)e.state);
 		switch(e.keyval) {
 			case KEY_F11:
 				this.toggle_mainwindow_fullscreen();
-				break;
-			case KEY_ESC:
-				this.toggle_window_visbility();
 				break;
 			default:
 				break;
@@ -511,21 +507,51 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		return false;
 	}
 	
+	private const int 1_KEY = 0x0031;
+	private const int 2_KEY = 0x0032;
+	private const int 3_KEY = 0x0033;
 	private const int F_KEY = 0x0066;
 	private const int D_KEY = 0x0064;
+	private const int SPACE_KEY = 0x0020;
 	private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
 		//print("%d : %d\n",(int)e.keyval, (int)e.state);
-		if(e.state != 0x0014) // Modifier state
-			return false;
 		switch(e.keyval) {
 			case F_KEY: {
+					if(e.state != 0x0014) // Ctrl Modifier
+						return false;
 					searchEntryMB.grab_focus();
 				}
-				break;
+				return true;
 			case D_KEY: {
+					if(e.state != 0x0014) // Ctrl Modifier
+						return false;
 					searchEntryMB.text = "";
 				}
-				break;
+				return true;
+			case 1_KEY: {
+					if(e.state != 0x0018) // ALT Modifier
+						return false;
+					this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
+				}
+				return true;
+			case 2_KEY: {
+					if(e.state != 0x0018) // ALT Modifier
+						return false;
+					this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+				}
+				return true;
+			case 3_KEY: {
+					if(e.state != 0x0018) // ALT Modifier
+						return false;
+					this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
+				}
+				return true;
+			case SPACE_KEY: {
+					if(searchEntryMB.has_focus)
+						return false;
+					playPauseButton.clicked();
+				}
+				return true;
 			default:
 				break;
 		}
@@ -651,9 +677,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return;
 		}
 		TreePath tmp_path = null;
+		tmp_path = path;
 		if((repeatState == Repeat.RANDOM)) {
 			// handle RANDOM
-			tmp_path = path;
 			this.trackList.tracklistmodel.get_random_row(ref path);
 		}
 		else {
@@ -708,12 +734,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if(global.track_state == GlobalInfo.TrackState.PLAYING)
 			trackList.set_focus_on_iter(ref iter);
 
-		if((path == null)||(tmp_path == null)) {
-			global.do_restart_of_current_track();
-			return;
+		if(path.to_string() == tmp_path.to_string()) {
+			if(repeatState == Repeat.SINGLE) {
+				// Explicit restart
+				global.do_restart_of_current_track();
+			}
+			else{
+				// Explicit stop, because there is no more 
+				stop();
+			}
 		}
-		if(path.to_string() == tmp_path.to_string()) 
-			global.do_restart_of_current_track();
 	}
 
 	private void on_remove_all_button_clicked() {
@@ -1545,10 +1575,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			switch(e.keyval) {
 				case KEY_ESC: {
 					this.xn.main_window.toggle_fullscreen();
+					return true;
 				}
-				break;
-				default:
-				break;
+				default: 
+					break;
 			}
 			return false;
 		}
