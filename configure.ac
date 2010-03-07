@@ -63,6 +63,7 @@ XNOISE_PACKAGES="\
     --pkg sqlite3 \
     --pkg gio-2.0 \
     --pkg gstreamer-0.10 \
+    --pkg gstreamer-pbutils-0.10 \
     --pkg gstreamer-interfaces-0.10 \
     --pkg taglib_c \
     --pkg unique-1.0 \

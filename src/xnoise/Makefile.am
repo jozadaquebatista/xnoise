@@ -60,6 +60,7 @@ xnoise_VALAFLAGS = \
 
 xnoise_LDADD = \
 	$(XNOISE_LIBS) \
+	-lgstpbutils-0.10 \
 	$(NULL)
 
 xnoise_LDFLAGS = -export-dynamic

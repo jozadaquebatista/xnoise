@@ -143,6 +143,7 @@ namespace Xnoise {
 		public void playSong (bool force_play = false);
 		public void stop ();
 		public string? Uri { get; set; }
+		public bool buffering { get; set; }
 		public bool current_has_video { get; set; }
 		public double gst_position { set; }
 		public bool is_stream { get; set; }
@@ -151,6 +152,7 @@ namespace Xnoise {
 		public bool playing { get; set; }
 		public bool seeking { get; set; }
 		public double volume { get; set; }
+		public signal void sign_buffering (int percent);
 		public signal void sign_paused ();
 		public signal void sign_playing ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
@@ -512,7 +514,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise.h")]
-	public static string escape_for_local_folder_search (string value);
+	public static string escape_for_local_folder_search (string? value);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static bool get_image_path_for_media_uri (string? uri, ref string? image_path);
 	[CCode (cheader_filename = "xnoise.h")]

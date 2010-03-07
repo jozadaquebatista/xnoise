@@ -38,6 +38,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private string? _Uri = null;
 	private Gst.TagList _taglist;
 	public VideoScreen videoscreen;
+	private GLib.List<Gst.Message> missing_plugins = new GLib.List<Gst.Message>();
 	private dynamic Element playbin;
 	
 	public bool current_has_video { // TODO: Determine this elsewhere
@@ -74,6 +75,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public bool seeking           { get; set; }
 	public int64 length_time      { get; set; }
 	public bool is_stream         { get; private set; default = false; }
+	public bool buffering         { get; private set; default = false; }
+	
 
 	private Gst.TagList taglist {
 		get {
@@ -130,7 +133,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_paused();
 	public signal void sign_stopped();
 	public signal void sign_video_playing();
+	public signal void sign_buffering(int percent);
 	public signal void sign_volume_changed(double volume);
+
+	private signal void sign_missing_plugins();
 
 	public GstPlayer() {
 		videoscreen = new VideoScreen();
@@ -159,6 +165,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			             Gst.SeekType.NONE, -1);
 			this.playSong();
 		});
+		sign_missing_plugins.connect(on_sign_missing_plugins); 
 	}
 
 	private void request_location(string? uri) {
@@ -238,12 +245,34 @@ public class Xnoise.GstPlayer : GLib.Object {
 				}
 				break;
 			}
+			case Gst.MessageType.ELEMENT: {
+				string type = null;
+				string source;
+
+				source = msg.src.get_name();
+				type   = msg.structure.get_name();
+
+				if(type == null)
+					break;
+
+				if(type == "missing-plugin") {
+					print("missing plugins msg for element\n");
+					print("src_name: %s; type_name: %s\n", source, type);
+					missing_plugins.prepend(msg);
+					return;
+				}
+				break;
+			}
 			case Gst.MessageType.ERROR: {
 				Error err;
 				string debug;
 				msg.parse_error(out err, out debug);
 				print("Error: %s\n", err.message);
-				handle_eos_via_idle(); //this is used to go to the next track
+				print("Debug: %s\n", debug);
+				if(!is_missing_plugins_error(msg)) {
+					print("error not missing plugin\n");
+					handle_eos_via_idle(); //this is used to go to the next track
+				}
 				break;
 			}
 			case Gst.MessageType.EOS: {
@@ -254,6 +283,33 @@ public class Xnoise.GstPlayer : GLib.Object {
 		}
 	}
 
+	private bool is_missing_plugins_error(Gst.Message msg) {
+		print("in is_missing_plugins_error?\n");
+		bool retval = false;
+		Error err = null;
+		string debug;
+		
+		if(missing_plugins == null) {
+			print("messages is null and therefore no missing_plugin message\n");
+			return false;
+		}
+		msg.parse_error(out err, out debug);
+		
+		print("err.code: %d\n", (int)err.code);
+		
+		if(err is Gst.CoreError && ((int)(err.code) == (int)(Gst.StreamError.CODEC_NOT_FOUND))) {
+			print("is missing plgins error \n");
+			sign_missing_plugins();
+		} 
+		return retval;
+	}
+	
+	private void on_sign_missing_plugins() {
+		print("sign_missing_plugins!!!!\n");
+		stop();
+		return;
+	}
+	
 	private void check_for_video() {
 		if(check_for_video_source != 0)
 			Source.remove(check_for_video_source);

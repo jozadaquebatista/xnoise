@@ -48,9 +48,12 @@ namespace Xnoise {
 			par = new Params();
 	}
 
-	public static string escape_for_local_folder_search(string value) {
+	public static string escape_for_local_folder_search(string? value) {
 		// transform the name to match the naming scheme
 		string tmp = "";
+		if(value == null)
+			return tmp;
+		
 		try {
 			var r = new GLib.Regex("\n");
 			tmp = r.replace(value, -1, 0, "_");
