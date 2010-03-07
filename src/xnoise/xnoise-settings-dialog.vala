@@ -172,11 +172,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		if(this.checkB_compact.active) {
 			par.set_int_value("compact_layout", 1);
 			xn.main_window.compact_layout = true;
-			print("on");
 		}
 		else {
 			par.set_int_value("compact_layout", 0);
-			print("off");
 			xn.main_window.compact_layout = false;
 		}
 	}
