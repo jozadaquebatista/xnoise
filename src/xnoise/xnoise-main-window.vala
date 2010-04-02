@@ -1196,13 +1196,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			config_button_image = new Image.from_pixbuf(config_button_pixb);*/
 			
 			config_button.set_image(config_button_image);
-			config_button.set_label("↓");
+			//config_button.set_label("↓");
 			config_button.can_focus = false;
 			config_button.set_relief(Gtk.ReliefStyle.NONE);
 			a_frame_config_button = gb.get_object("aFrameConfigButton") as Gtk.AspectFrame;	
 			
 		}
-		catch (GLib.Error e) {
+		catch(GLib.Error e) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
 			    Gtk.ButtonsType.OK, "Failed to build main window! \n" + e.message);
 			msg.run();
