@@ -45,8 +45,6 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	public signal void sign_fetched(string artist, string title, string credits, string identifier, string text);
 
 	public LyricsLoader() {
-		this.artist = artist;
-		this.title = title;
 		xn = Main.instance;
 		xn.plugin_loader.sign_plugin_activated.connect(LyricsLoader.on_plugin_activated);
 	}
