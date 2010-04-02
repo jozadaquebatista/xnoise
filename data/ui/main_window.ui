@@ -51,7 +51,7 @@
             <child>
               <object class="GtkHBox" id="playback_hbox">
                 <property name="visible">True</property>
-                <property name="spacing">2</property>
+                <property name="no_show_all">True</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -70,11 +70,9 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
+            <property name="padding">2</property>
             <property name="position">0</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <object class="GtkAspectFrame" id="aspectframe2">
@@ -96,7 +94,8 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">2</property>
+            <property name="padding">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -120,7 +119,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -134,11 +133,23 @@ ready to rock</property>
             <property name="width_chars">30</property>
           </object>
           <packing>
-            <property name="position">4</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkAspectFrame" id="aFrameConfigButton">
+            <property name="label_xalign">0</property>
+            <property name="shadow_type">none</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">2</property>
+            <property name="position">4</property>
+          </packing>
         </child>
         <child>
           <object class="GtkAspectFrame" id="aFrameVolumeButton">
@@ -152,8 +163,11 @@ ready to rock</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">6</property>
+            <property name="position">5</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
       <packing>
@@ -187,6 +201,21 @@ ready to rock</property>
                         <property name="width_request">200</property>
                         <property name="visible">True</property>
                         <child>
+                          <object class="GtkButton" id="collapsebutton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="image">imagecollapse</property>
+                            <property name="relief">none</property>
+                            <property name="focus_on_click">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <placeholder/>
                         </child>
                       </object>
@@ -195,6 +224,9 @@ ready to rock</property>
                         <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                     <child>
                       <object class="GtkScrolledWindow" id="scroll_music_br">
@@ -207,54 +239,6 @@ ready to rock</property>
                         </child>
                       </object>
                       <packing>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkHBox" id="collapseMBbox">
-                        <property name="visible">True</property>
-                        <child>
-                          <object class="GtkButton" id="collapsebutton">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="receives_default">True</property>
-                            <property name="focus_on_click">False</property>
-                            <child>
-                              <object class="GtkHBox" id="hbox12">
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkImage" id="imagecollapse">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-unindent</property>
-                                    <property name="icon-size">1</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="labelcoll">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">_Collapse</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="single_line_mode">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -316,25 +300,6 @@ ready to rock</property>
                       <object class="GtkHBox" id="hbox3">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkButton" id="removeAllButton">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="relief">none</property>
-                            <property name="focus_on_click">False</property>
-                            <child>
-                              <object class="GtkImage" id="image1y1">
-                                <property name="visible">True</property>
-                                <property name="stock">gtk-clear</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkButton" id="removeSelectedButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -351,6 +316,25 @@ ready to rock</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="padding">2</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="removeAllButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="relief">none</property>
+                            <property name="focus_on_click">False</property>
+                            <child>
+                              <object class="GtkImage" id="image1y1">
+                                <property name="visible">True</property>
+                                <property name="stock">gtk-clear</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -902,5 +886,11 @@ ready to rock</property>
         <property name="position">2</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkImage" id="imagecollapse">
+    <property name="visible">True</property>
+    <property name="tooltip_text" translatable="yes">Collapse</property>
+    <property name="stock">gtk-unindent</property>
+    <property name="icon-size">1</property>
   </object>
 </interface>
