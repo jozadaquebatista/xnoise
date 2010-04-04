@@ -92,6 +92,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public Gtk.Button config_button;
 	private Gtk.Image config_button_image;
 	private Gtk.AspectFrame a_frame_config_button = null;
+	private uint aimage_timeout;
 
 	public int repeatState { get; set; }
 	public bool fullscreenwindowvisible { get; set; }
@@ -1042,22 +1043,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//PLAYING TITLE IMAGE
 			var aibox                     = gb.get_object("aibox") as Gtk.HBox;
-
+			
 			this.albumimage = new AlbumImage();
 			EventBox ebox = new EventBox(); 
 			ebox.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK|Gdk.EventMask.LEAVE_NOTIFY_MASK);
-
+			
 			ebox.add(albumimage);
 			aibox.add(ebox);
-
-			ebox.enter_notify_event.connect( (s, e) => {
-				buffer_last_page = this.tracklistnotebook.get_current_page();
-				if(global.image_path_large != null)
-					this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
-				return false;
-			});
+			
+			aimage_timeout = 0;
+			
+			ebox.enter_notify_event.connect(ai_ebox_enter);
 
 			ebox.leave_notify_event.connect( (s, e) => {
+				if(aimage_timeout != 0) {
+					Source.remove(aimage_timeout);
+					aimage_timeout = 0;
+					return false;
+				}
 				this.tracklistnotebook.set_current_page(buffer_last_page);
 				return false;
 			});
@@ -1256,6 +1259,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public void display_info_bar(InfoBar bar) {
 		contentvbox.pack_start(bar, false, false, 0);
 		bar.show();
+	}
+	
+	private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {
+		aimage_timeout = Timeout.add_seconds(1, () => {
+					buffer_last_page = this.tracklistnotebook.get_current_page();
+					if(global.image_path_large != null)
+						this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+					this.aimage_timeout = 0;
+					return false;
+				});
+		return false;
 	}
 
 
