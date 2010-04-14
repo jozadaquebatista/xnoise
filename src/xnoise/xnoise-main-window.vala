@@ -54,16 +54,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button showtracklistbuttonLY;
 	private Button showvideobuttonTL;
 	private Button showvideobuttonLY;
-	private Button repeatButton01;
-	private Button repeatButton02;
-	private Button repeatButton03;
+	private Button repeatButton;
 	private int buffer_last_page;
-	private Image repeatImage01;
-	private Image repeatImage02;
-	private Image repeatImage03;
-	private Label repeatLabel01;
-	private Label repeatLabel02;
-	private Label repeatLabel03;
+	//private Image repeatImage;
+	private Label repeatLabel;
 	private VBox menuvbox;
 	private VBox mainvbox;
 	private FullscreenToolbar fullscreentoolbar;
@@ -354,39 +348,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		switch(this.repeatState) {
 			case Repeat.NOT_AT_ALL : {
 				//TODO: create some other images
-				repeatLabel01.label = _("no repeat");
-				repeatImage01.stock = Gtk.STOCK_EXECUTE;
-				repeatLabel02.label = _("no repeat");
-				repeatImage02.stock = Gtk.STOCK_EXECUTE;
-				repeatLabel03.label = _("no repeat");
-				repeatImage03.stock = Gtk.STOCK_EXECUTE;
+				repeatLabel.label = _("no repeat");
+				//repeatImage.stock = Gtk.STOCK_EXECUTE;
 				break;
 			}
 			case Repeat.SINGLE : {
-				repeatLabel01.label = _("repeat single");
-				repeatImage01.stock = Gtk.STOCK_REDO;
-				repeatLabel02.label = _("repeat single");
-				repeatImage02.stock = Gtk.STOCK_REDO;
-				repeatLabel03.label = _("repeat single");
-				repeatImage03.stock = Gtk.STOCK_REDO;
+				repeatLabel.label = _("repeat single");
+				//repeatImage.stock = Gtk.STOCK_REDO;
 				break;
 			}
 			case Repeat.ALL : {
-				repeatLabel01.label = _("repeat all");
-				repeatImage01.stock = Gtk.STOCK_REFRESH;
-				repeatLabel02.label = _("repeat all");
-				repeatImage02.stock = Gtk.STOCK_REFRESH;
-				repeatLabel03.label = _("repeat all");
-				repeatImage03.stock = Gtk.STOCK_REFRESH;
+				repeatLabel.label = _("repeat all");
+				//repeatImage.stock = Gtk.STOCK_REFRESH;
 				break;
 			}
 			case Repeat.RANDOM : {
-				repeatLabel01.label = _("random play");
-				repeatImage01.stock = Gtk.STOCK_JUMP_TO;
-				repeatLabel02.label = _("random play");
-				repeatImage02.stock = Gtk.STOCK_JUMP_TO;
-				repeatLabel03.label = _("random play");
-				repeatImage03.stock = Gtk.STOCK_JUMP_TO;
+				repeatLabel.label = _("random play");
+				//repeatImage.stock = Gtk.STOCK_JUMP_TO;
 				break;
 			}
 		}
@@ -1024,21 +1002,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//--------------------
 
 			//REPEAT MODE SELECTOR
-			repeatButton01                = gb.get_object("repeatButton01") as Gtk.Button;
-			repeatButton01.can_focus      = false;
-			repeatButton01.clicked.connect(this.on_repeat_button_clicked);
-			repeatLabel01                 = gb.get_object("repeatLabel01") as Gtk.Label;
-			repeatImage01                 = gb.get_object("repeatImage01") as Gtk.Image;
-			repeatButton02                = gb.get_object("repeatButton02") as Gtk.Button;
-			repeatButton02.can_focus      = false;
-			repeatButton02.clicked.connect(this.on_repeat_button_clicked);
-			repeatLabel02                 = gb.get_object("repeatLabel02") as Gtk.Label;
-			repeatImage02                 = gb.get_object("repeatImage02") as Gtk.Image;
-			repeatButton03                = gb.get_object("repeatButton03") as Gtk.Button;
-			repeatButton03.can_focus      = false;
-			repeatButton03.clicked.connect(this.on_repeat_button_clicked);
-			repeatLabel03                 = gb.get_object("repeatLabel03") as Gtk.Label;
-			repeatImage03                 = gb.get_object("repeatImage03") as Gtk.Image;
+			repeatButton                = gb.get_object("repeatButton") as Gtk.Button;
+			repeatButton.can_focus      = false;
+			repeatButton.clicked.connect(this.on_repeat_button_clicked);
+			repeatLabel                 = gb.get_object("repeatLabel") as Gtk.Label;
+			//repeatImage                 = gb.get_object("repeatImage01") as Gtk.Image;
+			
+			//give the button a slim appearance
+			RcStyle repeat_button_style = new RcStyle();
+			repeat_button_style.xthickness = 0;
+			repeat_button_style.ythickness = 0;
+			repeatButton.modify_style(repeat_button_style);			
+			
 			//--------------------
 
 			//PLAYING TITLE IMAGE
