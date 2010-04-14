@@ -1184,22 +1184,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.fullscreentoolbar = new FullscreenToolbar(fullscreenwindow);
 			
 			//Config button for compact layout		
+			//render the preferences icon with a down arrow next to it
 			config_button_image = new Gtk.Image.from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.SMALL_TOOLBAR);
 			config_button = new Button();
+			var config_hbox = new HBox(false, 0);
+			config_hbox.pack_start(config_button_image, false, false, 0);
+			var config_arrow = new Arrow(ArrowType.DOWN, ShadowType.NONE);
+			config_hbox.pack_start(config_arrow, false, false, 0);
+			config_button.add(config_hbox);
 			
-			/* Code for rendering a button with a down arrow icon 
-			var config_button_pixb = new Gdk.Pixbuf.from_file_at_scale(PREFERENCES_ICON_PATH, 25, 25, true);
-			var arrow_pixb = new Gdk.Pixbuf.from_file_at_scale(DOWN_ARROW_ICON_PATH, 8, 8, true);
-			config_button_pixb.width = arrow_pixb.width + config_button_pixb.width; 
-			arrow_pixb.copy_area(0, 0, 
-								arrow_pixb.get_width(), arrow_pixb.get_height(), 
-								config_button_pixb,
-								config_button_pixb.get_width()  - arrow_pixb.get_width(),
-								config_button_pixb.get_height()/4*3 - arrow_pixb.get_height());
-			config_button_image = new Image.from_pixbuf(config_button_pixb);*/
-			
-			config_button.set_image(config_button_image);
-			//config_button.set_label("↓");
 			config_button.can_focus = false;
 			config_button.set_relief(Gtk.ReliefStyle.NONE);
 			a_frame_config_button = gb.get_object("aFrameConfigButton") as Gtk.AspectFrame;	
