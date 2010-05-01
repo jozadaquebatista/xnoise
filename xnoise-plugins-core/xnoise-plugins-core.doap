@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns:gnome="http://api.gnome.org/doap-extensions#"
+         xmlns="http://usefulinc.com/ns/doap#">
+
+  <name xml:lang="en">xnoise-plugins-core</name>
+  <shortdesc xml:lang="en">Media player for Gtk+ (Plugins) </shortdesc>
+
+  <homepage rdf:resource="http://www.xnoise-media-player.com/" />
+  <mailing-list rdf:resource="http://groups.google.com/group/xnoise" />
+  <download-page rdf:resource="http://code.google.com/p/xnoise/downloads/list" />
+  <bug-database rdf:resource="http://code.google.com/p/xnoise/issues/list" />
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Jörn Magens</foaf:name>
+      <foaf:mbox rdf:resource="shuerhaaken@googlemail.com" />
+      <gnome:userid>shuerhaaken</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+</Project>
+
