@@ -232,6 +232,7 @@ namespace Xnoise {
 		public double current_volume;
 		public bool drag_on_content_area;
 		public Gtk.Window fullscreenwindow;
+		public Gtk.HPaned hpaned;
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;
@@ -403,6 +404,7 @@ namespace Xnoise {
 		public TrackList ();
 		public void on_activated (string uri, Gtk.TreePath path);
 		public void remove_selected_rows ();
+		public void set_column_width (int available_space);
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
 		public bool column_length_visible { get; set; }
 		public bool column_tracknumber_visible { get; set; }

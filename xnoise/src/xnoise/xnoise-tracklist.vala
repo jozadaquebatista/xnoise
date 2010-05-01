@@ -836,13 +836,18 @@ public class Xnoise.TrackList : TreeView {
 		this.set_focus_on_iter(ref iter);
 	}
 
+	private TreeViewColumn columnPixb;
+	private TreeViewColumn columnAlbum;
+	private TreeViewColumn columnTitle;
+	private TreeViewColumn columnArtist;
+
 	private void setup_view() {
 		CellRendererText renderer;
-		var columnPixb        = new TreeViewColumn();
+		columnPixb        = new TreeViewColumn();
 		columnTracknumber = new TreeViewColumn();
-		var columnAlbum       = new TreeViewColumn();
-		var columnTitle       = new TreeViewColumn();
-		var columnArtist      = new TreeViewColumn();
+		columnAlbum       = new TreeViewColumn();
+		columnTitle       = new TreeViewColumn();
+		columnArtist      = new TreeViewColumn();
 		columnLength      = new TreeViewColumn();
 
 
@@ -886,7 +891,7 @@ public class Xnoise.TrackList : TreeView {
 		                                                 null);
 
 		columnTitle.min_width = 80;
-		columnTitle.resizable = true;
+		columnTitle.resizable = false;
 		columnTitle.reorderable = true;
 		this.insert_column(columnTitle, -1);
 
@@ -900,7 +905,7 @@ public class Xnoise.TrackList : TreeView {
 		                                                 null);
 
 		columnAlbum.min_width = 80;
-		columnAlbum.resizable = true;
+		columnAlbum.resizable = false;
 		columnAlbum.reorderable = true;
 		this.insert_column(columnAlbum, -1);
 
@@ -914,7 +919,7 @@ public class Xnoise.TrackList : TreeView {
 		                                                  null);
 
 		columnArtist.min_width = 80;
-		columnArtist.resizable = true;
+		columnArtist.resizable = false;
 		columnArtist.reorderable = true;
 		this.insert_column(columnArtist, -1);
 
@@ -928,7 +933,7 @@ public class Xnoise.TrackList : TreeView {
 		                                                  null);
 
 		columnLength.set_fixed_width(50);
-		columnLength.resizable = true;
+		columnLength.resizable = false;
 		columnLength.reorderable = true;
 		this.insert_column(columnLength, -1);
 
@@ -941,12 +946,22 @@ public class Xnoise.TrackList : TreeView {
 
 		columnPixb.sizing        = Gtk.TreeViewColumnSizing.FIXED;
 		columnTracknumber.sizing = Gtk.TreeViewColumnSizing.FIXED;
-		columnTitle.sizing       = Gtk.TreeViewColumnSizing.GROW_ONLY;
-		columnAlbum.sizing       = Gtk.TreeViewColumnSizing.GROW_ONLY;
-		columnArtist.sizing      = Gtk.TreeViewColumnSizing.GROW_ONLY;
+		columnTitle.sizing       = Gtk.TreeViewColumnSizing.FIXED;
+		columnAlbum.sizing       = Gtk.TreeViewColumnSizing.FIXED;
+		columnArtist.sizing      = Gtk.TreeViewColumnSizing.FIXED;
 		columnLength.sizing      = Gtk.TreeViewColumnSizing.FIXED;
-
+		
 		this.enable_search = false;
 		this.rules_hint = true;
 	}
+
+	public void set_column_width(int available_space) {
+		int x;
+		x = (available_space - (columnPixb.width + columnTracknumber.width + columnLength.width)) / 4;
+		columnTitle.set_fixed_width(x);
+		columnArtist.set_fixed_width(x);
+		columnAlbum.set_fixed_width(x);
+	}
+
+
 }

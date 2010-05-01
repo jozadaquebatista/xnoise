@@ -641,6 +641,7 @@ struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	gboolean _seek;
+	GtkHPaned* hpaned;
 	gboolean is_fullscreen;
 	gboolean drag_on_content_area;
 	XnoiseTrackListNoteBookTab temporary_tab;
@@ -1302,6 +1303,7 @@ XnoiseTrackList* xnoise_track_list_construct (GType object_type);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_selected_rows (XnoiseTrackList* self);
 void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, GtkTreePath* path);
+void xnoise_track_list_set_column_width (XnoiseTrackList* self, gint available_space);
 gboolean xnoise_track_list_get_column_length_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_length_visible (XnoiseTrackList* self, gboolean value);
 gboolean xnoise_track_list_get_column_tracknumber_visible (XnoiseTrackList* self);

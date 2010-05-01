@@ -43,7 +43,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private UIManager ui_manager = new UIManager();
 	private Label song_title_label;
 	public bool _seek;
-	private HPaned hpaned;
+	public HPaned hpaned;
 	private VolumeSliderButton volumeSliderButton;
 	private int _posX_buffer;
 	private int _posY_buffer;
@@ -1048,6 +1048,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//--------------------
 
 			this.hpaned = gb.get_object("hpaned1") as Gtk.HPaned;
+			this.hpaned.notify["position"].connect(() => {
+				int w, x;
+				this.get_size(out w, out x);
+				this.trackList.set_column_width(w - this.hpaned.position);
+			});
 			//----------------
 
 			//VOLUME SLIDE BUTTON
