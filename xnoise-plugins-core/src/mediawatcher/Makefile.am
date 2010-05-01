@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = \
 	$(NULL)
 
-AM_CPPFLAGS = \
+INCLUDES = \
 	$(XNOISEPLUGINSCORE_CFLAGS) \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
 	-include $(CONFIG_HEADER) \
@@ -24,7 +24,6 @@ libMediawatcher_la_SOURCES = \
 libMediawatcher_la_VALAFLAGS = \
 	--thread \
 	--vapidir $(top_srcdir)/../xnoise/vapi \
-	--vapidir $(top_srcdir)/../xnoise/src/xnoise \
 	--basedir $(top_srcdir)/src/mediawatcher \
 	--pkg xnoise-1.0 \
 	--pkg gio-2.0 \

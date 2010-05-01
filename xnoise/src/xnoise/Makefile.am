@@ -1,15 +1,18 @@
 NULL =
 
-AM_CPPFLAGS = \
+bin_PROGRAMS = xnoise
+
+INCLUDES = \
 	-include $(CONFIG_HEADER) \
+	$(XNOISE_CFLAGS) \
 	-DDATADIR=\"$(datadir)/xnoise/\" \
 	-DUIDIR=\"$(datadir)/xnoise/ui/\" \
 	-DPLUGINSDIR=\"$(libdir)/xnoise\" \
 	-DLICENSEDIR=\"$(datadir)/xnoise/license/\" \
-	$(XNOISE_CFLAGS) \
 	$(NULL)
 
-bin_PROGRAMS = xnoise
+xnoisedir = $(includedir)/xnoise-1.0
+xnoise_HEADERS = xnoise.h
 
 BUILT_SOURCES = \
 	xnoise-1.0.vapi \
@@ -48,13 +51,13 @@ xnoise_SOURCES = \
 	xnoise-videoscreen.vala \
 	$(NULL)
 
-xnoise_VALAFLAGS = \
+VALAFLAGS = \
+	--basedir $(top_srcdir)/src \
+	--pkg config \
+	--thread \
 	--vapidir $(srcdir)/../../vapi \
 	--vapi=$(srcdir)/xnoise-1.0.vapi \
-	--pkg config \
-	--basedir $(top_srcdir)/src \
-	--thread \
-	--header $(srcdir)/xnoise.h \
+	--header=$(srcdir)/xnoise.h \
 	@XNOISE_PACKAGES@ \
 	$(NULL)
 
@@ -76,6 +79,7 @@ MAINTAINERCLEANFILES = Makefile.in $(BUILT_SOURCES)
 EXTRA_DIST = \
 	$(VAPI_FILES) \
 	$(DEPS_FILES) \
+	$(BUILT_SOURCES) \
 	$(NULL)
 
 DISTCLEANFILES = \

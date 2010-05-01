@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = \
 	$(NULL)
 
-AM_CPPFLAGS = \
+INCLUDES = \
 	$(XNOISEPLUGINSCORE_CFLAGS) \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
 	-include $(CONFIG_HEADER) \
@@ -26,7 +26,6 @@ libLeoslyrics_la_SOURCES = \
 libLeoslyrics_la_VALAFLAGS = \
 	--thread \
 	--vapidir $(top_srcdir)/../xnoise/vapi \
-	--vapidir $(top_srcdir)/../xnoise/src/xnoise \
 	--basedir $(top_srcdir)/src/leoslyrics \
 	--pkg xnoise-1.0 \
 	--pkg libsoup-2.4 \

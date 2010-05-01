@@ -28,6 +28,7 @@
  * 	Jörn Magens
  */
 
+
 using Sqlite;
 
 public errordomain Xnoise.DbError {

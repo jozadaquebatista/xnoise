@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = \
 	$(NULL)
 
-AM_CPPFLAGS = \
+INCLUDES = \
 	$(XNOISEPLUGINSCORE_CFLAGS) \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
 	-include $(CONFIG_HEADER) \
@@ -24,7 +24,6 @@ libxnoisetest_la_SOURCES = \
 libxnoisetest_la_VALAFLAGS = \
 	--thread \
 	--vapidir $(top_srcdir)/../xnoise/vapi \
-	--vapidir $(top_srcdir)/../xnoise/src/xnoise \
 	--basedir $(top_srcdir)/src/testplugin \
 	--pkg xnoise-1.0 \
 	@XNOISEPLUGINSCORE_PACKAGES@ \

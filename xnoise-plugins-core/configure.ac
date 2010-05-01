@@ -4,7 +4,7 @@ m4_define(xnoisepluginscore_minor_version, 1)
 m4_define(xnoisepluginscore_micro_version, 3)
 m4_define(xnoisepluginscore_version, xnoisepluginscore_major_version.xnoisepluginscore_minor_version.xnoisepluginscore_micro_version)
 
-AC_INIT(xnoisepluginscore, xnoisepluginscore_version, shuerhaakenATgo oglemail.com, [xnoisepluginscore])
+AC_INIT(xnoisepluginscore, xnoisepluginscore_version, shuerhaakenATgo oglemail.com, [xnoise-plugins-core])
 
 # require automake-1.11 for vala support
 AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-bzip2])
@@ -39,7 +39,7 @@ LIBSOUP_REQUIRED=2.26.0
 XNOISE_REQUIRED=xnoisepluginscore_version
 
 PKG_CHECK_MODULES(XNOISEPLUGINSCORE, \
-   xnoise-1.0 >= $XNOISE_REQUIRED)
+   xnoise-1.0 = $XNOISE_REQUIRED)
 
 XNOISEPLUGINSCORE_PACKAGES="\
     --pkg config \
@@ -252,12 +252,15 @@ AC_CONFIG_FILES([
 AC_OUTPUT
 
 echo "
+  ${PACKAGE} ${VERSION}
+  ~~~~~~~~~~~~~~~~~~~~~~~~~
+  
   Configuration Info:
     gettext_package:               ${GETTEXT_PACKAGE}
     prefix:                        ${prefix}
     CFLAGS:                        ${CFLAGS}
     
-  Plugins: 
+  Plugins to build: 
     titleToDecoration:             yes (always)
     leoslyrics:                    ${enable_leoslyrics}
     lyricsfly:                     ${enable_lyricsfly}

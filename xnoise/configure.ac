@@ -17,20 +17,20 @@ AM_MAINTAINER_MODE
 # Disable generation of static libraries
 AC_DISABLE_STATIC
 
-AC_PROG_CC
-AM_PROG_VALAC([0.8.1])
-AC_STDC_HEADERS
-AC_PROG_LIBTOOL
-AC_FUNC_MMAP
-
 dnl required versions for xnoise
-VALA_REQUIRED=0.7.10
 GSTREAMER_REQUIRED=0.10.23
 GLIB_REQUIRED=2.12.0
 GIO_REQUIRED=2.16
 GTK_REQUIRED=2.18.0
 SQLITE_REQUIRED=3.4
 TAGLIB_C_REQUIRED=1.5.0
+VALA_REQUIRED=0.8.0
+
+AC_PROG_CC
+AM_PROG_VALAC($VALA_REQUIRED)
+AC_STDC_HEADERS
+AC_PROG_LIBTOOL
+AC_FUNC_MMAP
 
 PKG_CHECK_MODULES(XNOISE, \
     glib-2.0 >= $GLIB_REQUIRED \
@@ -69,6 +69,23 @@ AC_SUBST(XNOISE_CFLAGS)
 AC_SUBST(XNOISE_LIBS)
 AC_SUBST(XNOISE_PACKAGES)
 
+dnl ================================================================
+dnl check for vala to setup vapidir
+PKG_CHECK_MODULES(VALAC, \
+                  vala-1.0 >= $VALA_REQUIRED, \
+                  have_vala=yes, \
+                  have_vala=no)
+
+if test x$have_vala = xyes ; then
+    if test "x$VALAC" = "x"; then
+        AC_MSG_ERROR([Cannot find the "valac" compiler in PATH])
+    fi
+    VAPIDIR=`pkg-config --variable=vapidir vala-1.0`
+else
+    VAPIDIR=`echo ${datadir}/vala/vapi`
+fi
+AC_SUBST(VAPIDIR)
+dnl ================================================================
 
 # Gettext
 GETTEXT_PACKAGE=xnoise
@@ -105,10 +122,12 @@ AC_CONFIG_FILES([
 AC_OUTPUT
 
 echo "
+  ${PACKAGE} ${VERSION}
+  ~~~~~~~~~~~~
+  
   Configuration Info:
     gettext_package:               ${GETTEXT_PACKAGE}
     prefix:                        ${prefix}
-    vapidir:                       ${VAPIDIR}
     CFLAGS:                        ${CFLAGS}
 
 "

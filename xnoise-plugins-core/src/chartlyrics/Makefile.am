@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = \
 	$(NULL)
 
-AM_CPPFLAGS = \
+INCLUDES = \
 	$(XNOISEPLUGINSCORE_CFLAGS) \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
 	-include $(CONFIG_HEADER) \
@@ -26,8 +26,7 @@ libchartlyrics_la_SOURCES = \
 libchartlyrics_la_VALAFLAGS = \
 	--thread \
 	--vapidir $(top_srcdir)/vapi \
-	--vapidir $(top_srcdir)/src/xnoise \
-	--basedir $(top_srcdir)/src/plugins/chartlyrics \
+	--basedir $(top_srcdir)/src/chartlyrics \
 	--pkg xnoise-1.0 \
 	--pkg libxml-2.0 \
 	--pkg libsoup-2.4 \

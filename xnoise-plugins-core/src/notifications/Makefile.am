@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = \
 	$(NULL)
 
-AM_CPPFLAGS = \
+INCLUDES = \
 	$(XNOISEPLUGINSCORE_CFLAGS) \
 	$(LIBNOTIFY_CFLAGS) \
 	-DUIDIR=\"$(datadir)/xnoise/ui/\" \
@@ -26,8 +26,7 @@ libnotifications_la_SOURCES = \
 
 libnotifications_la_VALAFLAGS = \
 	--thread \
-	--vapidir $(top_srcdir)/../xnoise/vapi \
-	--vapidir $(top_srcdir)/../xnoise/src/xnoise \
+	--vapidir $(top_srcdir)/vapi \
 	--basedir $(top_srcdir)/src/notifications \
 	--pkg xnoise-1.0 \
 	--pkg libnotify \
