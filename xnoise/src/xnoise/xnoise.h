@@ -641,7 +641,6 @@ struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	gboolean _seek;
-	GtkHPaned* hpaned;
 	gboolean is_fullscreen;
 	gboolean drag_on_content_area;
 	XnoiseTrackListNoteBookTab temporary_tab;

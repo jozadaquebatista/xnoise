@@ -232,7 +232,6 @@ namespace Xnoise {
 		public double current_volume;
 		public bool drag_on_content_area;
 		public Gtk.Window fullscreenwindow;
-		public Gtk.HPaned hpaned;
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;

@@ -42,8 +42,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
 	private Label song_title_label;
-	public bool _seek;
-	public HPaned hpaned;
+	private HPaned hpaned;
 	private VolumeSliderButton volumeSliderButton;
 	private int _posX_buffer;
 	private int _posY_buffer;
@@ -64,6 +63,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private VBox videovbox;
 	private VBox contentvbox;
 	private MenuBar menubar;
+	public bool _seek;
 	public bool is_fullscreen = false;
 	public bool drag_on_content_area = false;
 	public TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
