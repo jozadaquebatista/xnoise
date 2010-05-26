@@ -930,20 +930,35 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		return false;
 	}
 
+	private uint volumesource = 0;
 	private bool on_trayicon_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
+		if(volumesource != 0)
+			Source.remove(volumesource);
 		if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
 			double temp = this.xn.gPl.volume - 0.02;
 			if(temp < 0.0) temp = 0.0;
-			this.xn.gPl.volume = temp;
-			return false;
+			volumesource = Idle.add( () => {
+				set_volume_async(temp);
+				return false;
+			});
 		}
 		else if(event.scroll.direction == Gdk.ScrollDirection.UP) {
 			double temp = this.xn.gPl.volume + 0.02;
 			if(temp > 1.0) temp = 1.0;
-			this.xn.gPl.volume = temp;
-			return false;
+			volumesource = Idle.add( () => {
+				set_volume_async(temp);
+				return false;
+			});
 		}
-		return true;
+		return false;
+	}
+
+	private void set_volume_async(double vol) {
+		//To be used in Idle
+		if(MainContext.current_source().is_destroyed())
+			return;
+		this.xn.gPl.volume = vol;
+		volumesource = 0; // Source id used for this Idlefunc
 	}
 
 	private void create_widgets() {
@@ -1338,7 +1353,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		 * This method is used to handle play/pause commands from different signal handler sources
 		 */
 		private void handle_click() {
-			//FIXME : This is slow as hell with playbin2. Why?
 			Idle.add(
 				handle_click_async
 			);
