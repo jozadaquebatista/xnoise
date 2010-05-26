@@ -129,11 +129,14 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		//Visible Cols
 		show_length_col = (par.get_int_value("use_length_column") == 1 ? true : false);
 		show_trackno_col = (par.get_int_value("use_tracknumber_column") == 1 ? true : false);
+		
+		//Treelines
 		if(par.get_int_value("use_treelines") > 0)
 			checkB_showL.active = true;
 		else
 			checkB_showL.active = false;
-			
+		
+		//compact layout
 		if(par.get_int_value("compact_layout") > 0)
 			checkB_compact.active = true;
 		else

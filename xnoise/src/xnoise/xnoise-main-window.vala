@@ -189,6 +189,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.sign_pos_changed.connect( (s, fraction) => {
 			xn.gPl.gst_position = fraction;
 		});
+		
+		this.check_resize.connect( () => {
+			Idle.add( () => {
+				int w, x;
+				this.get_size(out w, out x);
+				this.trackList.set_column_width(w - this.hpaned.position);
+				return false;
+			});
+		});
 	}
 
 	private void initialize_video_screen() {
@@ -1103,7 +1112,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.trackList = xn.tl; //new TrackList();
 			this.trackList.set_size_request(100,100);
 			var trackListScrollWin = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
-			trackListScrollWin.set_policy(Gtk.PolicyType.AUTOMATIC,Gtk.PolicyType.ALWAYS);
+			trackListScrollWin.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
 			trackListScrollWin.add(this.trackList);
 
 			///MediaBrowser (left)
