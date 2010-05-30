@@ -340,6 +340,21 @@ ready to rock</property>
                       <object class="GtkHBox" id="hbox3">
                         <property name="visible">True</property>
                         <child>
+                          <object class="GtkButton" id="hide_button">
+                            <property name="label" translatable="yes">Hide Media</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="relief">none</property>
+                            <property name="focus_on_click">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkButton" id="removeSelectedButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -356,7 +371,7 @@ ready to rock</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="padding">2</property>
-                            <property name="position">0</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
@@ -375,7 +390,7 @@ ready to rock</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
@@ -386,7 +401,7 @@ ready to rock</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="padding">10</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <child>
@@ -395,7 +410,7 @@ ready to rock</property>
                           </object>
                           <packing>
                             <property name="fill">False</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
@@ -432,7 +447,7 @@ ready to rock</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                         <child>
@@ -471,7 +486,7 @@ ready to rock</property>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="padding">2</property>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                       </object>
@@ -513,12 +528,27 @@ ready to rock</property>
                       <object class="GtkHBox" id="hbox2v">
                         <property name="visible">True</property>
                         <child>
+                          <object class="GtkButton" id="hide_button_1">
+                            <property name="label" translatable="yes">Hide Media</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="relief">none</property>
+                            <property name="focus_on_click">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="fill">False</property>
-                            <property name="position">0</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
@@ -555,7 +585,7 @@ ready to rock</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
@@ -594,7 +624,7 @@ ready to rock</property>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="padding">2</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </object>
@@ -643,12 +673,27 @@ ready to rock</property>
                       <object class="GtkHBox" id="hbox2v1">
                         <property name="visible">True</property>
                         <child>
+                          <object class="GtkButton" id="hide_button_2">
+                            <property name="label" translatable="yes">Hide Media</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="relief">none</property>
+                            <property name="focus_on_click">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkLabel" id="label11">
                             <property name="visible">True</property>
                           </object>
                           <packing>
                             <property name="fill">False</property>
-                            <property name="position">0</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
@@ -685,7 +730,7 @@ ready to rock</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
@@ -724,7 +769,7 @@ ready to rock</property>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="padding">2</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </object>

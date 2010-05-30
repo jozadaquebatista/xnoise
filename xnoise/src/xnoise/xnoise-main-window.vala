@@ -47,6 +47,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private int _posX_buffer;
 	private int _posY_buffer;
 	private Button collapsebutton;
+	private Button hide_button;
+	private Button hide_button_1;
+	private Button hide_button_2;
 	private Button showlyricsbuttonVid;
 	private Button showlyricsbuttonTL;
 	private Button showtracklistbuttonVid;
@@ -54,6 +57,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button showvideobuttonTL;
 	private Button showvideobuttonLY;
 	private Button repeatButton;
+	private int hide_clicked;
 	private int buffer_last_page;
 	//private Image repeatImage;
 	private Label repeatLabel;
@@ -758,6 +762,31 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void on_show_video_button_clicked() {
 		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 	}
+	
+	//hide or show button
+	private int hpaned_position_buffer = 0;
+	private void on_hide_button_clicked() {
+		if(hide_clicked % 2 == 1) {
+			hpaned_position_buffer = hpaned.get_position();
+			hpaned.set_position(0);
+			hide_button.label= "Show Media";
+			hide_button_1.label= "Show Media";
+			hide_button_2.label= "Show Media";				
+			hide_clicked ++;
+		}
+		else {
+			if(hpaned_position_buffer > 0) {
+				hpaned.set_position(hpaned_position_buffer);
+			}
+			else {
+				hpaned.set_position(200);
+			}
+			hide_button.label= "Hide Media";
+			hide_button_1.label= "Hide Media";
+			hide_button_2.label= "Hide Media";				
+			hide_clicked ++;
+		}
+	}
 
 	private void on_show_lyrics_button_clicked() {
 		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
@@ -1170,6 +1199,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			collapsebutton.clicked.connect( () => {
 				mediaBr.collapse_all();
 			});
+
+			//hide or show button
+			hide_clicked = 1;
+				
+			hide_button = gb.get_object("hide_button") as Gtk.Button;
+			hide_button.clicked.connect(this.on_hide_button_clicked);
+			
+			hide_button_1 = gb.get_object("hide_button_1") as Gtk.Button;
+			hide_button_1.clicked.connect(this.on_hide_button_clicked);
+			
+			hide_button_2 = gb.get_object("hide_button_2") as Gtk.Button;
+			hide_button_2.clicked.connect(this.on_hide_button_clicked); 
 
 			///Textbuffer for the lyrics
 			var scrolledlyricsview = gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;
