@@ -46,5 +46,8 @@ data/misc/xnoise.desktop.in
 src/xnoise/xnoise
 stamp-h1
 *.bz2
-
+xnoise/.anjuta/
+xnoise/.anjuta*
+xnoise/TODO.tasks
+xnoise/xnoise.anjuta
 
