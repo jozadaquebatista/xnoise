@@ -33,11 +33,13 @@ using Gtk;
 public extern bool ensure_native(Gdk.Window window);
 
 public class Xnoise.MainWindow : Gtk.Window, IParams {
-	private const string MAIN_UI_FILE  = Config.UIDIR + "main_window.ui";
-	private const string MENU_UI_FILE  = Config.UIDIR + "main_ui.xml";
-	private const string APPICON       = Config.UIDIR + "xnoise_16x16.png";
-	private const string SHOWVIDEO     = _("Video");
-	private const string SHOWTRACKLIST = _("Tracklist");
+	private const string MAIN_UI_FILE     = Config.UIDIR + "main_window.ui";
+	private const string MENU_UI_FILE     = Config.UIDIR + "main_ui.xml";
+	private const string APPICON          = Config.UIDIR + "xnoise_16x16.png";
+	private const string SHOWVIDEO        = _("Video");
+	private const string SHOWTRACKLIST    = _("Tracklist");
+	private const string SHOWMEDIABROWSER = _("Show Media");
+	private const string HIDEMEDIABROWSER = _("Hide Media");
 	private Main xn;
 	private ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
@@ -46,6 +48,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private VolumeSliderButton volumeSliderButton;
 	private int _posX_buffer;
 	private int _posY_buffer;
+	private uint aimage_timeout;
+	private Gtk.Image config_button_image;
+	private Gtk.AspectFrame a_frame_config_button = null;
 	private Button collapsebutton;
 	private Button hide_button;
 	private Button hide_button_1;
@@ -57,9 +62,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button showvideobuttonTL;
 	private Button showvideobuttonLY;
 	private Button repeatButton;
-	private int hide_clicked;
 	private int buffer_last_page;
-	//private Image repeatImage;
 	private Label repeatLabel;
 	private VBox menuvbox;
 	private VBox mainvbox;
@@ -67,6 +70,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private VBox videovbox;
 	private VBox contentvbox;
 	private MenuBar menubar;
+	private bool _media_browser_visible;
 	public bool _seek;
 	public bool is_fullscreen = false;
 	public bool drag_on_content_area = false;
@@ -86,12 +90,27 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public MediaBrowser mediaBr = null;
 	public TrackList trackList;
 	public Gtk.Window fullscreenwindow;
-	
 	public Gtk.Button config_button;
-	private Gtk.Image config_button_image;
-	private Gtk.AspectFrame a_frame_config_button = null;
-	private uint aimage_timeout;
-
+	
+	private bool media_browser_visible { 
+		get {
+			return _media_browser_visible;
+		} 
+		set {
+			if((value == true) && (_media_browser_visible != value)) {
+				hide_button.label   = HIDEMEDIABROWSER;
+				hide_button_1.label = HIDEMEDIABROWSER;
+				hide_button_2.label = HIDEMEDIABROWSER;
+			}
+			else if((value == false) && (_media_browser_visible != value)) {
+				hide_button.label   = SHOWMEDIABROWSER;
+				hide_button_1.label = SHOWMEDIABROWSER;
+				hide_button_2.label = SHOWMEDIABROWSER;
+			}
+			_media_browser_visible = value;
+		} 
+	}
+	
 	public int repeatState { get; set; }
 	public bool fullscreenwindowvisible { get; set; }
 
@@ -765,26 +784,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	
 	//hide or show button
 	private int hpaned_position_buffer = 0;
-	private void on_hide_button_clicked() {
-		if(hide_clicked % 2 == 1) {
-			hpaned_position_buffer = hpaned.get_position();
+	private void toggle_media_browser_visibility() {
+		if(media_browser_visible) {
+			hpaned_position_buffer = hpaned.get_position(); // buffer last position
 			hpaned.set_position(0);
-			hide_button.label= "Show Media";
-			hide_button_1.label= "Show Media";
-			hide_button_2.label= "Show Media";				
-			hide_clicked ++;
+			media_browser_visible = false;
 		}
 		else {
-			if(hpaned_position_buffer > 0) {
+			if(hpaned_position_buffer > 20) { // min value
 				hpaned.set_position(hpaned_position_buffer);
 			}
 			else {
-				hpaned.set_position(200);
+				hpaned.set_position(200); //use this if nothing else is available
 			}
-			hide_button.label= "Hide Media";
-			hide_button_1.label= "Hide Media";
-			hide_button_2.label= "Hide Media";				
-			hide_clicked ++;
+			media_browser_visible = true;
 		}
 	}
 
@@ -1102,6 +1115,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			this.hpaned = gb.get_object("hpaned1") as Gtk.HPaned;
 			this.hpaned.notify["position"].connect(() => {
+				if(this.hpaned.position == 0)
+					media_browser_visible = false;
+				else
+					media_browser_visible = true;
+
 				int w, x;
 				this.get_size(out w, out x);
 				this.trackList.set_column_width(w - this.hpaned.position);
@@ -1200,17 +1218,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				mediaBr.collapse_all();
 			});
 
-			//hide or show button
-			hide_clicked = 1;
-				
 			hide_button = gb.get_object("hide_button") as Gtk.Button;
-			hide_button.clicked.connect(this.on_hide_button_clicked);
+			hide_button.clicked.connect(this.toggle_media_browser_visibility);
 			
 			hide_button_1 = gb.get_object("hide_button_1") as Gtk.Button;
-			hide_button_1.clicked.connect(this.on_hide_button_clicked);
+			hide_button_1.clicked.connect(this.toggle_media_browser_visibility);
 			
 			hide_button_2 = gb.get_object("hide_button_2") as Gtk.Button;
-			hide_button_2.clicked.connect(this.on_hide_button_clicked); 
+			hide_button_2.clicked.connect(this.toggle_media_browser_visibility); 
 
 			///Textbuffer for the lyrics
 			var scrolledlyricsview = gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;
