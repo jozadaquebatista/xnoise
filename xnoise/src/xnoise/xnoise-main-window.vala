@@ -170,7 +170,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				if(a_frame_config_button != null && config_button.get_parent() == null) 
 					a_frame_config_button.add(config_button);
 				config_button.show();
-				config_button_menu.detach();
+				if(config_button_menu.attach_widget != null)
+					config_button_menu.detach();
 				config_button_menu.attach_to_widget(config_button, (a,x) => {});
 				stopButton.hide();
 			}
@@ -323,7 +324,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 	
 	public void position_config_menu (Menu menu, out int x, out int y, out bool push) {
-		//the upper rightcorner of the popup menu should be just beneath the lower left corner of the button
+		//the upper right corner of the popup menu should be just beneath the lower right corner of the button
 
 		int o_x, o_y, o_height, o_width, o_depth;
 		config_button.get_window().get_geometry(out o_x, out o_y, out o_width, out o_height, out o_depth);
@@ -831,11 +832,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 	}
 
-	private SettingsDialog setingsD;
 	private void on_settings_edit() {
-		setingsD = new SettingsDialog();
-		setingsD.sign_finish.connect( () => {
-			setingsD = null;
+		var settingsD = new SettingsDialog();
+		settingsD.sign_finish.connect( () => {
+			settingsD = null;
 		});
 	}
 
