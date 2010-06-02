@@ -70,6 +70,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private VBox videovbox;
 	private VBox contentvbox;
 	private MenuBar menubar;
+	private ImageMenuItem config_button_menu_root;
+	private Menu config_button_menu;
 	private bool _media_browser_visible;
 	public bool _seek;
 	public bool is_fullscreen = false;
@@ -168,9 +170,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				if(a_frame_config_button != null && config_button.get_parent() == null) 
 					a_frame_config_button.add(config_button);
 				config_button.show();
+				config_button_menu.detach();
+				config_button_menu.attach_to_widget(config_button, (a,x) => {});
 				stopButton.hide();
 			}
 			else {
+				config_button_menu.detach();
 				if(a_frame_config_button != null && config_button.is_realized()) 
 					a_frame_config_button.remove(config_button);
 				config_button.unrealize();
@@ -1287,10 +1292,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		menuvbox.pack_start(menubar, false, false, 0);
 		this.add(mainvbox);
 		
-		var config_button_menu_root = (ImageMenuItem)ui_manager.get_widget("/ConfigButtonMenu/ConfigMenu");
-		var config_button_menu = (Menu)config_button_menu_root.get_submenu();
-		config_button_menu.detach();
-		config_button_menu.attach_to_widget(config_button, (a,x) => {});
+		config_button_menu_root = (ImageMenuItem)ui_manager.get_widget("/ConfigButtonMenu/ConfigMenu");
+		config_button_menu = (Menu)config_button_menu_root.get_submenu();
 		config_button.clicked.connect(() => {
 			config_button_menu.popup(null, null, position_config_menu, 0, 0);
 		});

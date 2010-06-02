@@ -42,6 +42,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 /*
 	private const int NUMBER_OF_NON_PLUGIN_TABS = 4;
 */
+	private bool _initialized = false;
 	private PluginManagerTree plugin_manager_tree;
 	private Notebook notebook;
 	private SpinButton sb;
@@ -98,21 +99,23 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	public SettingsDialog() {
 		this.xn = Main.instance;
-		try {
-			this.setup_widgets();
+		if(!_initialized) {
+			try {
+				this.setup_widgets();
+			}
+			catch(Error e) {
+				print("Error setting up settings dialog: %s\n", e.message);
+				return;
+			}
+			initialize_members();
+
+			setup_viz_cols_tv();
+			setup_albumimage_provider_tv();
+			setup_lyrics_provider_tv();
+
+			notebook.switch_page.connect(on_notebook_switched_page);
+			_initialized = true;
 		}
-		catch(Error e) {
-			print("Error setting up settings dialog: %s\n", e.message);
-			return;
-		}
-		initialize_members();
-
-		setup_viz_cols_tv();
-		setup_albumimage_provider_tv();
-		setup_lyrics_provider_tv();
-
-		notebook.switch_page.connect(on_notebook_switched_page);
-
 		dialog.show_all();
 	}
 
@@ -205,7 +208,8 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		//write priorities for lyrics providers
 		//TODO
 
-		this.dialog.destroy();
+		//this.dialog.destroy();
+		this.dialog.hide();
 		par.write_all_parameters_to_file();
 		sign_finish();
 	}
