@@ -169,8 +169,8 @@
                     <property name="can_focus">True</property>
                     <property name="xalign">0.15000000596046448</property>
                     <property name="yalign">1</property>
-                    <property name="label" translatable="yes">Please note that some changes will only be 
-taken over on next start.</property>
+                    <property name="label" translatable="yes">Please note that some changes will not be applied 
+until the next start of xnoise</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">40</property>
                   </object>
