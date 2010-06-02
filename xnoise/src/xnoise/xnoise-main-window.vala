@@ -646,11 +646,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	public void write_params_data() {
-		int posX, posY, wi, he;
+		//disabled because of crashes
+		/*int posX, posY;
 		this.get_position(out posX, out posY);
 		par.set_int_value("posX", posX);
-		par.set_int_value("posY", posY);
+		par.set_int_value("posY", posY);*/
 
+		int  wi, he;
 		this.get_size(out wi, out he);
 		par.set_int_value("width", wi);
 		par.set_int_value("height", he);
