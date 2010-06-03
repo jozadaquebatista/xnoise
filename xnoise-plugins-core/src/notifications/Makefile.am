@@ -11,7 +11,7 @@ INCLUDES = \
 	-DUIDIR=\"$(datadir)/xnoise/ui/\" \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
 	-include $(CONFIG_HEADER) \
-	-I$(top_srcdir)/../xnoise/src/xnoise -DDATA_DIR='"$(datadir)"' \
+	-I$(top_srcdir)/../xnoise/src -DDATA_DIR='"$(datadir)"' \
 	$(LIBNOTIFY_CFLAGS) \
 	$(NULL)
 
