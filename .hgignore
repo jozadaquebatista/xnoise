@@ -43,7 +43,7 @@ po/stamp-it
 data/misc/xnoise.desktop.in
 .libs
 .deps
-src/xnoise/xnoise
+src/xnoise
 stamp-h1
 *.bz2
 xnoise/.anjuta/
