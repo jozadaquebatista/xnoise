@@ -25,6 +25,7 @@ xnoise_SOURCES = \
 	xnoise-album-image.vala \
 	xnoise-album-image-loader.vala \
 	xnoise-app-starter.vala \
+	xnoise-control-button.vala \
 	xnoise-db-browser.vala \
 	xnoise-db-creator.vala \
 	xnoise-db-writer.vala \
@@ -39,7 +40,6 @@ xnoise_SOURCES = \
 	xnoise-media-browser-model.vala \
 	xnoise-media-importer.vala \
 	xnoise-misc.vala \
-	xnoise-next-button.vala \
 	xnoise-parameter.vala \
 	xnoise-play-pause-button.vala \
 	xnoise-plugin.vala \
@@ -47,9 +47,7 @@ xnoise_SOURCES = \
 	xnoise-plugin-information.vala \
 	xnoise-plugin-interface.vala \
 	xnoise-plugin-manager-tree.vala \
-	xnoise-previous-button.vala \
 	xnoise-settings-dialog.vala \
-	xnoise-stop-button.vala \
 	xnoise-tag-reader.vala \
 	xnoise-tracklist.vala \
 	xnoise-tracklist-model.vala \

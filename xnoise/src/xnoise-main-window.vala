@@ -82,9 +82,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public VideoScreen videoscreen;
 	public Entry searchEntryMB;
 	public PlayPauseButton playPauseButton;
-	public PreviousButton previousButton;
-	public NextButton nextButton;
-	public StopButton stopButton;
+	public ControlButton previousButton;
+	public ControlButton nextButton;
+	public ControlButton stopButton;
 	public Notebook browsernotebook;
 	public Notebook tracklistnotebook;
 	public AlbumImage albumimage;
@@ -125,11 +125,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		SINGLE,
 		ALL,
 		RANDOM
-	}
-
-	public enum Direction {
-		NEXT = 0,
-		PREVIOUS,
 	}
 
 	private const ActionEntry[] action_entries = {
@@ -268,7 +263,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_caught_eos_from_player() {
-		this.change_song(Direction.NEXT, true);
+		this.change_song(ControlButton.Direction.NEXT, true);
 	}
 
 	private void on_fullscreenwindowvisible(GLib.ParamSpec pspec) {
@@ -675,7 +670,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	// This function changes the current song to the next or previous in the
 	// tracklist. handle_repeat_state should be true if the calling is not
 	// coming from a button, but, e.g. from a EOS signal handler
-	public void change_song(MainWindow.Direction direction, bool handle_repeat_state = false) {
+	public void change_song(ControlButton.Direction direction, bool handle_repeat_state = false) {
 		unowned TreeIter iter;
 		bool trackList_is_empty;
 		TreePath path = null;
@@ -710,17 +705,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					if(!this.trackList.tracklistmodel.path_is_last_row(ref path,
 					                                                   out trackList_is_empty)) {
 						//print(" ! path_is_last_row\n");
-						if(direction == Direction.NEXT) {
+						if(direction == ControlButton.Direction.NEXT) {
 							path.next();
 						}
-						else if((direction == Direction.PREVIOUS)&&
+						else if((direction == ControlButton.Direction.PREVIOUS)&&
 								(path.to_string() != "0")) {
 							path.prev();
 						}
 					}
 					else {
 						//print("path_is_last_row\n");
-						if(direction == Direction.NEXT) {
+						if(direction == ControlButton.Direction.NEXT) {
 							if(repeatState == Repeat.ALL) {
 								// only jump to first is repeat all is set
 								trackList.tracklistmodel.get_first_row(ref path);
@@ -729,7 +724,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 								stop();
 							}
 						}
-						else if((direction == Direction.PREVIOUS)&&
+						else if((direction == ControlButton.Direction.PREVIOUS)&&
 						        (path.to_string() != "0")) {
 							path.prev();
 						}
@@ -1126,16 +1121,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//PLAYBACK CONTROLLS
 			var playback_hbox = gb.get_object("playback_hbox") as Gtk.HBox;
-			this.previousButton = new PreviousButton();
-			playback_hbox.pack_start(previousButton,false,false,0);
+			this.previousButton = new ControlButton(ControlButton.Direction.PREVIOUS);
+			playback_hbox.pack_start(previousButton, false, false, 0);
 			previousButton.show();
 			this.playPauseButton = new PlayPauseButton();
-			playback_hbox.pack_start(playPauseButton,false,false,0);
+			playback_hbox.pack_start(playPauseButton, false, false, 0);
 			this.playPauseButton.show();
-			this.stopButton = new StopButton();
-			playback_hbox.pack_start(stopButton,false,false,0);
-			this.nextButton = new NextButton();
-			playback_hbox.pack_start(nextButton,false,false,0);
+			this.stopButton = new ControlButton(ControlButton.Direction.STOP);
+			playback_hbox.pack_start(stopButton, false, false, 0);
+			this.nextButton = new ControlButton(ControlButton.Direction.NEXT);
+			playback_hbox.pack_start(nextButton, false, false, 0);
 			nextButton.show();
 
 			//PROGRESS BAR

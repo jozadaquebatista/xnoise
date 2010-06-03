@@ -41,6 +41,17 @@ namespace Xnoise {
 		public static int main (string[] args);
 		public static Unique.Response on_message_received (Unique.App sender, int command, Unique.MessageData message_data, uint time);
 	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class ControlButton : Gtk.Button {
+		[CCode (cprefix = "XNOISE_CONTROL_BUTTON_DIRECTION_", cheader_filename = "xnoise.h")]
+		public enum Direction {
+			NEXT,
+			PREVIOUS,
+			STOP
+		}
+		public ControlButton (Xnoise.ControlButton.Direction _direction = Xnoise.ControlButton.Direction.STOP);
+		public void on_clicked ();
+	}
 	[CCode (ref_function = "xnoise_db_browser_ref", unref_function = "xnoise_db_browser_unref", cheader_filename = "xnoise.h")]
 	public class DbBrowser {
 		public DbBrowser () throws GLib.Error;
@@ -202,11 +213,6 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {
-		[CCode (cprefix = "XNOISE_MAIN_WINDOW_DIRECTION_", cheader_filename = "xnoise.h")]
-		public enum Direction {
-			NEXT,
-			PREVIOUS
-		}
 		public bool _seek;
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
@@ -217,20 +223,20 @@ namespace Xnoise {
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;
-		public Xnoise.NextButton nextButton;
+		public Xnoise.ControlButton nextButton;
 		public Xnoise.PlayPauseButton playPauseButton;
 		public Gtk.Image playpause_popup_image;
-		public Xnoise.PreviousButton previousButton;
+		public Xnoise.ControlButton previousButton;
 		public Gtk.Entry searchEntryMB;
 		public Xnoise.TrackProgressBar songProgressBar;
-		public Xnoise.StopButton stopButton;
+		public Xnoise.ControlButton stopButton;
 		public Xnoise.TrackListNoteBookTab temporary_tab;
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
 		public Xnoise.VideoScreen videoscreen;
 		public Gtk.VBox videovbox;
 		public MainWindow ();
-		public void change_song (Xnoise.MainWindow.Direction direction, bool handle_repeat_state = false);
+		public void change_song (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public void display_info_bar (Gtk.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
 		public void position_config_menu (Gtk.Menu menu, out int x, out int y, out bool push);
@@ -288,11 +294,6 @@ namespace Xnoise {
 		public void store_folders (string[] mfolders, ref Xnoise.DbWriter dbw);
 		public void store_streams (string[] list_of_streams, ref Xnoise.DbWriter dbw);
 		public signal void sig_media_path_changed ();
-	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class NextButton : Gtk.Button {
-		public NextButton ();
-		public void on_clicked ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {
@@ -371,19 +372,10 @@ namespace Xnoise {
 		public signal void sign_plugin_activestate_changed (string name);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class PreviousButton : Gtk.Button {
-		public PreviousButton ();
-		public void on_clicked ();
-	}
-	[CCode (cheader_filename = "xnoise.h")]
 	public class SettingsDialog : Gtk.Builder {
 		public Gtk.Dialog dialog;
 		public SettingsDialog ();
 		public signal void sign_finish ();
-	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class StopButton : Gtk.Button {
-		public StopButton ();
 	}
 	[CCode (ref_function = "xnoise_tag_reader_ref", unref_function = "xnoise_tag_reader_unref", cheader_filename = "xnoise.h")]
 	public class TagReader {

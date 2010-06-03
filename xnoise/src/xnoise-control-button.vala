@@ -1,4 +1,4 @@
-/* xnoise-next-button.vala
+/* xnoise-control-button.vala
  *
  * Copyright (C) 2009-2010  Jörn Magens
  *
@@ -33,13 +33,42 @@
 using Gtk;
 
 /**
-* A NextButton is a Gtk.Button that initiates playback of the previous item
+* A ControlButton is a Gtk.Button that initiates playback of the previous or next item or stop
 */
-public class Xnoise.NextButton : Gtk.Button {
+public class Xnoise.ControlButton : Gtk.Button {
+	public static enum Direction {
+		NEXT = 0,
+		PREVIOUS,
+		STOP
+	}
+	
 	private unowned Main xn;
-	public NextButton() {
+	private Direction direction;
+	
+	public ControlButton(Direction _direction = Direction.STOP) {
 		this.xn = Main.instance;
-		var img = new Gtk.Image.from_stock(STOCK_MEDIA_NEXT, Gtk.IconSize.SMALL_TOOLBAR);
+		
+		if(_direction != Direction.NEXT && _direction != Direction.PREVIOUS && _direction != Direction.STOP)
+			direction = Direction.STOP;
+		else
+			direction = _direction;
+			
+		string stockid = STOCK_MEDIA_STOP;
+		switch (direction) {
+			case Direction.NEXT:
+				stockid = STOCK_MEDIA_NEXT;
+				break;
+			case Direction.PREVIOUS:
+				stockid = STOCK_MEDIA_PREVIOUS;
+				break;
+			case Direction.STOP:
+				stockid = STOCK_MEDIA_STOP;
+				break;
+			default:
+				stockid = STOCK_MEDIA_STOP;
+				break;
+		}
+		var img = new Gtk.Image.from_stock(stockid, Gtk.IconSize.SMALL_TOOLBAR);
 		this.set_image(img);
 		this.relief = Gtk.ReliefStyle.NONE;
 		this.can_focus = false;
@@ -47,8 +76,13 @@ public class Xnoise.NextButton : Gtk.Button {
 	}
 
 	public void on_clicked() {
-		this.xn.main_window.change_song(MainWindow.Direction.NEXT);
+		if(direction == Direction.NEXT || direction == Direction.PREVIOUS)
+			this.xn.main_window.change_song(direction);
+		else if(direction == Direction.STOP)
+			this.xn.main_window.stop();
 	}
 }
+
+
 
 

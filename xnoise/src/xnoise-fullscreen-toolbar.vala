@@ -49,11 +49,11 @@ public class Xnoise.FullscreenToolbar {
 
 		var mainbox = new Gtk.HBox(false,8);
 
-		var nextbutton = new NextButton();
-		var plpabutton = new PlayPauseButton();
-		var previousbutton = new PreviousButton();
+		var nextbutton      = new ControlButton(ControlButton.Direction.NEXT);
+		var previousbutton  = new ControlButton(ControlButton.Direction.PREVIOUS);
+		var plpabutton      = new PlayPauseButton();
 		var leavefullscreen = new LeaveVideoFSButton();
-		var volume = new VolumeSliderButton();
+		var volume          = new VolumeSliderButton();
 
 		bar = new TrackProgressBar();
 		var vp = new Gtk.Alignment(0,0.5f,0,0);
