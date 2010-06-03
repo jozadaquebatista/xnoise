@@ -57,15 +57,17 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public double volume {
 		get {
 			double val;
-			this.playbin.get("volume", out val);
+			val = this.playbin.volume;
 			return val;
 		}
 		set {
 			double val;
-			this.playbin.get("volume", out val);
+			val = this.playbin.volume;
 			if(val!=value) {
-				this.playbin.set("volume", value);
-				sign_volume_changed(value);
+				this.playbin.volume = value;
+				
+				//signal is used in mainwindow to update volume slider
+				sign_volume_changed(value); 
 			}
 		}
 	}
@@ -422,7 +424,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	// This is a pause-play action to take over the new uri for the playbin
-	// It recovers the original state orcan be forces to play
+	// It recovers the original state or can be forced to play
 	public void playSong(bool force_play = false) {
 		bool buf_playing = ((global.track_state == GlobalInfo.TrackState.PLAYING)||force_play);
 		playbin.set_state(State.READY);

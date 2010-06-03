@@ -28,6 +28,7 @@ xnoise_SOURCES = \
 	xnoise-db-browser.vala \
 	xnoise-db-creator.vala \
 	xnoise-db-writer.vala \
+	xnoise-fullscreen-toolbar.vala \
 	xnoise-global-information.vala \
 	xnoise-gst-player.vala \
 	xnoise-lyrics-loader.vala \
@@ -38,17 +39,23 @@ xnoise_SOURCES = \
 	xnoise-media-browser-model.vala \
 	xnoise-media-importer.vala \
 	xnoise-misc.vala \
+	xnoise-next-button.vala \
 	xnoise-parameter.vala \
+	xnoise-play-pause-button.vala \
 	xnoise-plugin.vala \
 	xnoise-plugin-loader.vala \
 	xnoise-plugin-information.vala \
 	xnoise-plugin-interface.vala \
 	xnoise-plugin-manager-tree.vala \
+	xnoise-previous-button.vala \
 	xnoise-settings-dialog.vala \
+	xnoise-stop-button.vala \
 	xnoise-tag-reader.vala \
 	xnoise-tracklist.vala \
 	xnoise-tracklist-model.vala \
+	xnoise-track-progressbar.vala \
 	xnoise-videoscreen.vala \
+	xnoise-volume-slider-button.vala \
 	$(NULL)
 
 VALAFLAGS = \

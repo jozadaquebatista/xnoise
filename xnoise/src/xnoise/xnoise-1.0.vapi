@@ -93,6 +93,20 @@ namespace Xnoise {
 		public int uri_entry_exists (string uri);
 		public void write_final_tracks_to_db (string[] final_tracklist) throws GLib.Error;
 	}
+	[CCode (ref_function = "xnoise_fullscreen_toolbar_ref", unref_function = "xnoise_fullscreen_toolbar_unref", cheader_filename = "xnoise.h")]
+	public class FullscreenToolbar {
+		[CCode (cheader_filename = "xnoise.h")]
+		public class LeaveVideoFSButton : Gtk.Button {
+			public LeaveVideoFSButton ();
+			public void on_clicked ();
+		}
+		public FullscreenToolbar (Gtk.Window fullscreenwindow);
+		public void hide ();
+		public void launch_hide_timer ();
+		public bool on_pointer_motion (Gdk.EventMotion ev);
+		public void resize ();
+		public void show ();
+	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GlobalInfo : GLib.Object {
 		[CCode (cprefix = "XNOISE_GLOBAL_INFO_TRACK_STATE_", cheader_filename = "xnoise.h")]
@@ -188,38 +202,6 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {
-		[CCode (cheader_filename = "xnoise.h")]
-		public class NextButton : Gtk.Button {
-			public NextButton ();
-			public void on_clicked ();
-		}
-		[CCode (cheader_filename = "xnoise.h")]
-		public class PlayPauseButton : Gtk.Button {
-			public PlayPauseButton ();
-			public void on_clicked (Gtk.Widget sender);
-			public void on_menu_clicked (Gtk.MenuItem sender);
-			public void set_pause_picture ();
-			public void set_play_picture ();
-			public void update_picture ();
-		}
-		[CCode (cheader_filename = "xnoise.h")]
-		public class PreviousButton : Gtk.Button {
-			public PreviousButton ();
-			public void on_clicked ();
-		}
-		[CCode (cheader_filename = "xnoise.h")]
-		public class SongProgressBar : Gtk.ProgressBar {
-			public SongProgressBar ();
-			public void set_value (uint pos, uint len);
-		}
-		[CCode (cheader_filename = "xnoise.h")]
-		public class StopButton : Gtk.Button {
-			public StopButton ();
-		}
-		[CCode (cheader_filename = "xnoise.h")]
-		public class VolumeSliderButton : Gtk.VolumeButton {
-			public VolumeSliderButton ();
-		}
 		[CCode (cprefix = "XNOISE_MAIN_WINDOW_DIRECTION_", cheader_filename = "xnoise.h")]
 		public enum Direction {
 			NEXT,
@@ -229,29 +211,31 @@ namespace Xnoise {
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
 		public Gtk.Button config_button;
-		public double current_volume;
 		public bool drag_on_content_area;
+		public Xnoise.FullscreenToolbar fullscreentoolbar;
 		public Gtk.Window fullscreenwindow;
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;
-		public Xnoise.MainWindow.NextButton nextButton;
-		public Xnoise.MainWindow.PlayPauseButton playPauseButton;
+		public Xnoise.NextButton nextButton;
+		public Xnoise.PlayPauseButton playPauseButton;
 		public Gtk.Image playpause_popup_image;
-		public Xnoise.MainWindow.PreviousButton previousButton;
+		public Xnoise.PreviousButton previousButton;
 		public Gtk.Entry searchEntryMB;
-		public Xnoise.MainWindow.SongProgressBar songProgressBar;
-		public Xnoise.MainWindow.StopButton stopButton;
+		public Xnoise.TrackProgressBar songProgressBar;
+		public Xnoise.StopButton stopButton;
 		public Xnoise.TrackListNoteBookTab temporary_tab;
 		public Xnoise.TrackList trackList;
 		public Gtk.Notebook tracklistnotebook;
 		public Xnoise.VideoScreen videoscreen;
+		public Gtk.VBox videovbox;
 		public MainWindow ();
 		public void change_song (Xnoise.MainWindow.Direction direction, bool handle_repeat_state = false);
 		public void display_info_bar (Gtk.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
 		public void position_config_menu (Gtk.Menu menu, out int x, out int y, out bool push);
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
+		public void stop ();
 		public void toggle_fullscreen ();
 		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
@@ -306,6 +290,11 @@ namespace Xnoise {
 		public signal void sig_media_path_changed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class NextButton : Gtk.Button {
+		public NextButton ();
+		public void on_clicked ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {
 		public Params ();
 		public double get_double_value (string key);
@@ -321,6 +310,15 @@ namespace Xnoise {
 		public void set_string_list_value (string key, string[]? value);
 		public void set_string_value (string key, string value);
 		public void write_all_parameters_to_file ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class PlayPauseButton : Gtk.Button {
+		public PlayPauseButton ();
+		public void on_clicked (Gtk.Widget sender);
+		public void on_menu_clicked (Gtk.MenuItem sender);
+		public void set_pause_picture ();
+		public void set_play_picture ();
+		public void update_picture ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Plugin : GLib.Object {
@@ -373,10 +371,19 @@ namespace Xnoise {
 		public signal void sign_plugin_activestate_changed (string name);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class PreviousButton : Gtk.Button {
+		public PreviousButton ();
+		public void on_clicked ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class SettingsDialog : Gtk.Builder {
 		public Gtk.Dialog dialog;
 		public SettingsDialog ();
 		public signal void sign_finish ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class StopButton : Gtk.Button {
+		public StopButton ();
 	}
 	[CCode (ref_function = "xnoise_tag_reader_ref", unref_function = "xnoise_tag_reader_unref", cheader_filename = "xnoise.h")]
 	public class TagReader {
@@ -439,10 +446,19 @@ namespace Xnoise {
 		public signal void sign_active_path_changed (Xnoise.GlobalInfo.TrackState ts);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class TrackProgressBar : Gtk.ProgressBar {
+		public TrackProgressBar ();
+		public void set_value (uint pos, uint len);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class VideoScreen : Gtk.DrawingArea {
 		public VideoScreen ();
 		public override bool expose_event (Gdk.EventExpose e);
 		public void trigger_expose ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class VolumeSliderButton : Gtk.VolumeButton {
+		public VolumeSliderButton ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IAlbumCoverImage : GLib.Object {
