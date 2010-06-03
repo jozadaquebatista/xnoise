@@ -115,7 +115,6 @@ AC_CONFIG_FILES([
     data/misc/xnoise-1.0.pc
     data/ui/Makefile
     src/Makefile
-    src/xnoise/Makefile
     po/Makefile.in
 ])
 
