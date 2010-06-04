@@ -878,6 +878,8 @@ public class Xnoise.TrackList : TreeView {
 
 		// TITLE
 		renderer = new CellRendererText();
+		renderer.ellipsize = Pango.EllipsizeMode.END;
+		renderer.ellipsize_set = true;
 		columnTitle = new TextColumn("Title", renderer, TrackListModel.Column.TITLE);
 		columnTitle.add_attribute(renderer,
 		                          "text", TrackListModel.Column.TITLE);
@@ -893,6 +895,8 @@ public class Xnoise.TrackList : TreeView {
 
 		// ALBUM
 		renderer = new CellRendererText();
+		renderer.ellipsize = Pango.EllipsizeMode.END;
+		renderer.ellipsize_set = true;
 		columnAlbum = new TextColumn("Album", renderer, TrackListModel.Column.ALBUM);
 		columnAlbum.add_attribute(renderer,
 		                          "text", TrackListModel.Column.ALBUM);
@@ -907,6 +911,8 @@ public class Xnoise.TrackList : TreeView {
 
 		// ARTIST
 		renderer = new CellRendererText();
+		renderer.ellipsize = Pango.EllipsizeMode.END;
+		renderer.ellipsize_set = true;
 		columnArtist = new TextColumn("Artist", renderer, TrackListModel.Column.ARTIST);
 		columnArtist.add_attribute(renderer,
 		                           "text", TrackListModel.Column.ARTIST);

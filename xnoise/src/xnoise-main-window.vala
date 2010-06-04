@@ -216,7 +216,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 		
 		this.check_resize.connect( () => {
-			//Why is this signal triggered all the time as soon as xnoise is playing a song?
 			if(this.window == null)
 				return;
 			int w, x;
