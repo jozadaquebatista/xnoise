@@ -40,9 +40,11 @@ public class Xnoise.TrackList : TreeView {
 	private const string USE_TR_NO_COL = "use_tracknumber_column";
 
 	private TreeViewColumn columnPixb;
-	private TreeViewColumn columnAlbum;
-	private TreeViewColumn columnTitle;
-	private TreeViewColumn columnArtist;
+	private TextColumn columnAlbum;
+	private TextColumn columnTitle;
+	private TextColumn columnArtist;
+	private TextColumn columnLength;
+	private TextColumn columnTracknumber;
 	private int variable_col_count = 0;
 	private TreeRowReference[] rowref_list;
 	private bool dragging;
@@ -56,8 +58,6 @@ public class Xnoise.TrackList : TreeView {
 	private uint hide_timer;
 	private bool hide_timer_set = false;
 	private const uint HIDE_TIMEOUT = 1000;
-	private TreeViewColumn columnLength;
-	private TreeViewColumn columnTracknumber;
 	
 	public bool column_length_visible {
 		get {
@@ -65,14 +65,7 @@ public class Xnoise.TrackList : TreeView {
 		}
 		set {
 			_column_length_visible = value;
-			//refresh and setup width
-			Idle.add( () => {
-				this.columnLength.visible = value;
-				int w, x;
-				this.window.get_size(out w, out x);
-				this.set_column_width(w);
-				return false;
-			});
+			this.columnLength.visible = value;
 		}
 	}
 	
@@ -83,14 +76,6 @@ public class Xnoise.TrackList : TreeView {
 		set {
 			_column_tracknumber_visible = value;
 			this.columnTracknumber.visible = value;
-			//refresh and setup width
-			Idle.add( () => {
-				this.columnTracknumber.visible = value;
-				int w, x;
-				this.window.get_size(out w, out x);
-				this.set_column_width(w);
-				return false;
-			});
 		}
 	}
 
@@ -860,37 +845,29 @@ public class Xnoise.TrackList : TreeView {
 
 	private void setup_view() {
 		CellRendererText renderer;
-		columnPixb        = new TreeViewColumn();
-		columnTracknumber = new TreeViewColumn();
-		columnAlbum       = new TreeViewColumn();
-		columnTitle       = new TreeViewColumn();
-		columnArtist      = new TreeViewColumn();
-		columnLength      = new TreeViewColumn();
-
 
 		// STATUS ICON
 		var pixbufRenderer = new CellRendererPixbuf();
+		columnPixb         = new TreeViewColumn();
 		pixbufRenderer.set_fixed_size(-1,22);
 		columnPixb.pack_start(pixbufRenderer, false);
 		columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListModel.Column.ICON);
 		columnPixb.set_fixed_width(30);
-		columnPixb.reorderable = true;
+		columnPixb.reorderable = false;
 		this.insert_column(columnPixb, -1);
 
 
 		// TRACKNUMBER
 		renderer = new CellRendererText();
-		columnTracknumber = new TreeViewColumn.with_attributes("#",
-		                                                       renderer,
-		                                                       "text", TrackListModel.Column.TRACKNUMBER,
-		                                                       "weight", TrackListModel.Column.WEIGHT,
-		                                                       null);
-
-		columnTracknumber.set_fixed_width(32);
+		columnTracknumber = new TextColumn("#", renderer, TrackListModel.Column.TRACKNUMBER);
+		columnTracknumber.add_attribute(renderer,
+		                                "text", TrackListModel.Column.TRACKNUMBER);
+		columnTracknumber.add_attribute(renderer,
+		                                "weight", TrackListModel.Column.WEIGHT);
+		columnTracknumber.adjust_width(32);
 		columnTracknumber.resizable = false;
-		columnTracknumber.reorderable = true;
+		columnTracknumber.reorderable = false;
 		this.insert_column(columnTracknumber, -1);
-
 		if(par.get_int_value(USE_TR_NO_COL) == 1) {
 			columnTracknumber.visible = true;
 		}
@@ -901,58 +878,58 @@ public class Xnoise.TrackList : TreeView {
 
 		// TITLE
 		renderer = new CellRendererText();
-		columnTitle = new TreeViewColumn.with_attributes("Title",
-		                                                 renderer,
-		                                                 "text", TrackListModel.Column.TITLE,
-		                                                 "weight", TrackListModel.Column.WEIGHT,
-		                                                 null);
-
+		columnTitle = new TextColumn("Title", renderer, TrackListModel.Column.TITLE);
+		columnTitle.add_attribute(renderer,
+		                          "text", TrackListModel.Column.TITLE);
+		columnTitle.add_attribute(renderer,
+		                          "weight", TrackListModel.Column.WEIGHT);
 		columnTitle.min_width = 80;
 		columnTitle.resizable = true;
-		columnTitle.reorderable = true;
+		columnTitle.reorderable = false;
+		columnTitle.resized.connect(on_column_resized);
 		this.insert_column(columnTitle, -1);
 		variable_col_count++;
 
 
 		// ALBUM
 		renderer = new CellRendererText();
-		columnAlbum = new TreeViewColumn.with_attributes("Album",
-		                                                 renderer,
-		                                                 "text", TrackListModel.Column.ALBUM,
-		                                                 "weight", TrackListModel.Column.WEIGHT,
-		                                                 null);
-
+		columnAlbum = new TextColumn("Album", renderer, TrackListModel.Column.ALBUM);
+		columnAlbum.add_attribute(renderer,
+		                          "text", TrackListModel.Column.ALBUM);
+		columnAlbum.add_attribute(renderer,
+		                          "weight", TrackListModel.Column.WEIGHT);
 		columnAlbum.min_width = 80;
 		columnAlbum.resizable = true;
-		columnAlbum.reorderable = true;
+		columnAlbum.reorderable = false;
+		columnAlbum.resized.connect( on_column_resized);
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
 
 		// ARTIST
 		renderer = new CellRendererText();
-		columnArtist = new TreeViewColumn.with_attributes("Artist",
-		                                                  renderer,
-		                                                  "text", TrackListModel.Column.ARTIST,
-		                                                  "weight", TrackListModel.Column.WEIGHT,
-		                                                  null);
-
+		columnArtist = new TextColumn("Artist", renderer, TrackListModel.Column.ARTIST);
+		columnArtist.add_attribute(renderer,
+		                           "text", TrackListModel.Column.ARTIST);
+		columnArtist.add_attribute(renderer,
+		                           "weight", TrackListModel.Column.WEIGHT);
 		columnArtist.min_width = 80;
-		columnArtist.resizable = true;
-		columnArtist.reorderable = true;
+		columnArtist.resizable = false; // This is the case for the current column order
+		columnArtist.reorderable = false;
+		columnArtist.resized.connect(on_column_resized);
 		this.insert_column(columnArtist, -1);
 		variable_col_count++;
 
 		// LENGTH
 		renderer = new CellRendererText();
-		columnLength = new TreeViewColumn.with_attributes("Length",
-		                                                  renderer,
-		                                                  "text", TrackListModel.Column.LENGTH,
-		                                                  "weight", TrackListModel.Column.WEIGHT,
-		                                                  null);
+		columnLength = new TextColumn("Length", renderer, TrackListModel.Column.LENGTH);
+		columnLength.add_attribute(renderer,
+		                           "text", TrackListModel.Column.LENGTH);
+		columnLength.add_attribute(renderer,
+		                           "weight", TrackListModel.Column.WEIGHT);
 
-		columnLength.set_fixed_width(50);
-		columnLength.resizable = true;
-		columnLength.reorderable = true;
+		columnLength.adjust_width(75);
+		columnLength.resizable = false;
+		columnLength.reorderable = false;
 		this.insert_column(columnLength, -1);
 
 		if(par.get_int_value(USE_LEN_COL) == 1) {
@@ -973,15 +950,60 @@ public class Xnoise.TrackList : TreeView {
 		this.rules_hint = true;
 	}
 
-	public void set_column_width(int available_space) {
-		int x;
-		x = (available_space - (columnPixb.width + (columnTracknumber.visible ? columnTracknumber.width : 0) + (columnLength.visible ? 75 : 22))) / variable_col_count;
-		// TODO: use relative sizes for columns that come from resizing of individual cols
-		// TODO save column width relations to configuration
-		columnTitle.set_fixed_width(x);
-		columnArtist.set_fixed_width(x);
-		columnAlbum.set_fixed_width(x);
+	//Resize of a column affects resizable columns to the right, only and, of course, the resized column itself
+	//Howto get the next cols to the right dynamically?
+	//If a column is not resizable, use a width dependent on the contained text
+	//Store the available space and maybe relative shares of it for the resizable columns, for later use in window resize etc.
+	//During window/hpane resize a different mode has to be active to get 
+
+	private double relative_fraction_title = 0.2;
+	private double relative_fraction_album = 0.2;
+	private double relative_fraction_artist = 0.2;
+	private int col_title_width = 80;
+	private int col_album_width = 80;
+	private int col_artist_width = 80;
+	private void on_column_resized(TextColumn sender, TrackListModel.Column id) {
+		switch(id) {
+			case TrackListModel.Column.TITLE:
+				int delta = col_title_width - columnTitle.width;
+				int half_delta = (int)(delta / 2);
+				columnAlbum.adjust_width(columnAlbum.width + (delta - half_delta));
+				columnArtist.adjust_width(columnArtist.width + half_delta);
+				break;
+			case TrackListModel.Column.ALBUM:
+				int delta = col_album_width - columnAlbum.width;
+				columnArtist.adjust_width(columnArtist.width + delta);
+				break;
+			case TrackListModel.Column.ARTIST:
+				break;
+			default:
+				break;
+		}
+		relative_fraction_title  = (double)columnTitle.width  / (double)available_width;
+		relative_fraction_album  = (double)columnAlbum.width  / (double)available_width;
+		relative_fraction_artist = (double)columnArtist.width / (double)available_width;
+		col_artist_width = columnArtist.width;
+		col_album_width = columnAlbum.width;
+		col_title_width = columnTitle.width;
 	}
-
-
+	
+	private int available_width {
+		get {
+			int w, h;
+			xn.main_window.get_size(out w, out h);
+			return (w - xn.main_window.hpaned.position);
+		}
+	}
+	
+	public void handle_resize() {
+		if(xn.main_window.window == null)
+			return;
+		//print("resized by hpaned or window\n");
+		columnTitle.adjust_width((int)(relative_fraction_title * available_width));
+		col_title_width = columnTitle.width;
+		columnAlbum.adjust_width((int)(relative_fraction_album * available_width));
+		col_album_width = columnAlbum.width;
+		columnArtist.adjust_width((int)(relative_fraction_artist * available_width));
+		col_artist_width = columnArtist.width;
+	}
 }

@@ -445,10 +445,21 @@ typedef struct _XnoiseSettingsDialogPrivate XnoiseSettingsDialogPrivate;
 typedef struct _XnoiseTagReader XnoiseTagReader;
 typedef struct _XnoiseTagReaderClass XnoiseTagReaderClass;
 typedef struct _XnoiseTagReaderPrivate XnoiseTagReaderPrivate;
-typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
-typedef struct _XnoiseTrackListModelPrivate XnoiseTrackListModelPrivate;
+
+#define XNOISE_TYPE_TEXT_COLUMN (xnoise_text_column_get_type ())
+#define XNOISE_TEXT_COLUMN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TEXT_COLUMN, XnoiseTextColumn))
+#define XNOISE_TEXT_COLUMN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TEXT_COLUMN, XnoiseTextColumnClass))
+#define XNOISE_IS_TEXT_COLUMN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TEXT_COLUMN))
+#define XNOISE_IS_TEXT_COLUMN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TEXT_COLUMN))
+#define XNOISE_TEXT_COLUMN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TEXT_COLUMN, XnoiseTextColumnClass))
+
+typedef struct _XnoiseTextColumn XnoiseTextColumn;
+typedef struct _XnoiseTextColumnClass XnoiseTextColumnClass;
+typedef struct _XnoiseTextColumnPrivate XnoiseTextColumnPrivate;
 
 #define XNOISE_TRACK_LIST_MODEL_TYPE_COLUMN (xnoise_track_list_model_column_get_type ())
+typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
+typedef struct _XnoiseTrackListModelPrivate XnoiseTrackListModelPrivate;
 typedef struct _XnoiseTrackProgressBarPrivate XnoiseTrackProgressBarPrivate;
 typedef struct _XnoiseVideoScreenPrivate XnoiseVideoScreenPrivate;
 
@@ -683,6 +694,7 @@ struct _XnoiseMainWindow {
 	GtkVBox* videovbox;
 	XnoiseLyricsView* lyricsView;
 	XnoiseVideoScreen* videoscreen;
+	GtkHPaned* hpaned;
 	GtkEntry* searchEntryMB;
 	XnoisePlayPauseButton* playPauseButton;
 	XnoiseControlButton* previousButton;
@@ -896,6 +908,26 @@ struct _XnoiseTagReaderClass {
 	void (*finalize) (XnoiseTagReader *self);
 };
 
+struct _XnoiseTextColumn {
+	GtkTreeViewColumn parent_instance;
+	XnoiseTextColumnPrivate * priv;
+};
+
+struct _XnoiseTextColumnClass {
+	GtkTreeViewColumnClass parent_class;
+};
+
+typedef enum  {
+	XNOISE_TRACK_LIST_MODEL_COLUMN_ICON = 0,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_TRACKNUMBER,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_TITLE,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_ALBUM,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_ARTIST,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_LENGTH,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_WEIGHT,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_URI
+} XnoiseTrackListModelColumn;
+
 struct _XnoiseTrackList {
 	GtkTreeView parent_instance;
 	XnoiseTrackListPrivate * priv;
@@ -914,17 +946,6 @@ struct _XnoiseTrackListModel {
 struct _XnoiseTrackListModelClass {
 	GtkListStoreClass parent_class;
 };
-
-typedef enum  {
-	XNOISE_TRACK_LIST_MODEL_COLUMN_ICON = 0,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_TRACKNUMBER,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_TITLE,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_ALBUM,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_ARTIST,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_LENGTH,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_WEIGHT,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_URI
-} XnoiseTrackListModelColumn;
 
 struct _XnoiseTrackProgressBar {
 	GtkProgressBar parent_instance;
@@ -1307,17 +1328,22 @@ GType xnoise_tag_reader_get_type (void);
 XnoiseTrackData* xnoise_tag_reader_read_tag (XnoiseTagReader* self, const char* filename);
 XnoiseTagReader* xnoise_tag_reader_new (void);
 XnoiseTagReader* xnoise_tag_reader_construct (GType object_type);
+GType xnoise_text_column_get_type (void);
+GType xnoise_track_list_model_column_get_type (void);
+XnoiseTextColumn* xnoise_text_column_new (const char* title, GtkCellRendererText* renderer, XnoiseTrackListModelColumn col_id);
+XnoiseTextColumn* xnoise_text_column_construct (GType object_type, const char* title, GtkCellRendererText* renderer, XnoiseTrackListModelColumn col_id);
+void xnoise_text_column_adjust_width (XnoiseTextColumn* self, gint width);
+XnoiseTrackListModelColumn xnoise_text_column_get_id (XnoiseTextColumn* self);
 XnoiseTrackList* xnoise_track_list_new (void);
 XnoiseTrackList* xnoise_track_list_construct (GType object_type);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_selected_rows (XnoiseTrackList* self);
 void xnoise_track_list_on_activated (XnoiseTrackList* self, const char* uri, GtkTreePath* path);
-void xnoise_track_list_set_column_width (XnoiseTrackList* self, gint available_space);
+void xnoise_track_list_handle_resize (XnoiseTrackList* self);
 gboolean xnoise_track_list_get_column_length_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_length_visible (XnoiseTrackList* self, gboolean value);
 gboolean xnoise_track_list_get_column_tracknumber_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_tracknumber_visible (XnoiseTrackList* self, gboolean value);
-GType xnoise_track_list_model_column_get_type (void);
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
 XnoiseTrackListModel* xnoise_track_list_model_construct (GType object_type);
 void xnoise_track_list_model_on_before_position_reference_changed (XnoiseTrackListModel* self);

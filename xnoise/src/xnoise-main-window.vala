@@ -44,7 +44,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
 	private Label song_title_label;
-	private HPaned hpaned;
 	private VolumeSliderButton volumeSliderButton;
 	private int _posX_buffer;
 	private int _posY_buffer;
@@ -72,6 +71,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Menu config_button_menu;
 	private bool _media_browser_visible;
 	private double current_volume; //keep it global for saving to params
+	private int window_width = 0;
 	public bool _seek;
 	public bool is_fullscreen = false;
 	public bool drag_on_content_area = false;
@@ -80,6 +80,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public VBox videovbox;
 	public LyricsView lyricsView;
 	public VideoScreen videoscreen;
+	public HPaned hpaned;
 	public Entry searchEntryMB;
 	public PlayPauseButton playPauseButton;
 	public ControlButton previousButton;
@@ -215,15 +216,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 		
 		this.check_resize.connect( () => {
-			Idle.add( () => {
-				int w, x;
-				this.get_size(out w, out x);
-				this.trackList.set_column_width(w - this.hpaned.position);
-				return false;
-			});
+			//Why is this signal triggered all the time as soon as xnoise is playing a song?
+			if(this.window == null)
+				return;
+			int w, x;
+			this.get_size(out w, out x);
+			if(w != window_width) {
+				window_width = w;
+				this.trackList.handle_resize();
+			}
 		});
 	}
-
+	
 	private void initialize_video_screen() {
 		videoscreen.realize();
 		ensure_native(videoscreen.window);
@@ -1107,10 +1111,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					media_browser_visible = false;
 				else
 					media_browser_visible = true;
-
-				int w, x;
-				this.get_size(out w, out x);
-				this.trackList.set_column_width(w - this.hpaned.position);
+					
+				if(this.window != null)
+					this.trackList.handle_resize();
 			});
 			//----------------
 
