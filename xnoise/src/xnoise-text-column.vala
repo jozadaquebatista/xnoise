@@ -41,7 +41,7 @@ public class Xnoise.TextColumn : TreeViewColumn {
 		}
 	}
 	
-	public signal void resized(TrackListModel.Column source_id);
+	public signal void resized(bool grow, int delta, TrackListModel.Column source_id);
 	
 	public TextColumn(string title, CellRendererText renderer, TrackListModel.Column col_id) {
 		xn = Main.instance;
@@ -51,8 +51,10 @@ public class Xnoise.TextColumn : TreeViewColumn {
 		this.last_size = this.width;
 		this.notify["width"].connect( (s, p) => {
 			if(last_size != this.width) {
+				bool grow = (this.width > last_size);
+				int delta = (this.width - last_size).abs();
 				last_size = this.width;
-				resized(this.id); //emit signal
+				resized(grow, delta, this.id); //emit signal
 			}
 		});
 	}

@@ -965,32 +965,51 @@ public class Xnoise.TrackList : TreeView {
 	private double relative_fraction_title = 0.2;
 	private double relative_fraction_album = 0.2;
 	private double relative_fraction_artist = 0.2;
-	private int col_title_width = 80;
-	private int col_album_width = 80;
-	private int col_artist_width = 80;
-	private void on_column_resized(TextColumn sender, TrackListModel.Column id) {
+	
+	private void on_column_resized(TextColumn sender, bool grow, int delta, TrackListModel.Column id) {
 		switch(id) {
 			case TrackListModel.Column.TITLE:
-				int delta = col_title_width - columnTitle.width;
-				int half_delta = (int)(delta / 2);
-				columnAlbum.adjust_width(columnAlbum.width + (delta - half_delta));
-				columnArtist.adjust_width(columnArtist.width + half_delta);
+				if((columnTitle.width + columnAlbum.get_min_width() + columnArtist.get_min_width()) > available_dynamic_width) {
+					//print("max delta %d %s\n", delta, grow.to_string());
+					if(grow) {
+						columnTitle.adjust_width(columnTitle.width - delta);
+						break;
+					}
+				}
+				int half_delta = ((int)(delta / 2)).abs();
+				if(grow) {
+					columnAlbum.adjust_width(columnAlbum.width - (delta - half_delta));
+					columnArtist.adjust_width(columnArtist.width - half_delta);
+				}
+				else{
+					columnAlbum.adjust_width(columnAlbum.width + (delta - half_delta));
+					columnArtist.adjust_width(columnArtist.width + half_delta);
+				}
 				break;
 			case TrackListModel.Column.ALBUM:
-				int delta = col_album_width - columnAlbum.width;
-				columnArtist.adjust_width(columnArtist.width + delta);
+				if((columnTitle.width + columnAlbum.width + columnArtist.get_min_width()) > available_dynamic_width) {
+					// min size artist???
+					//print("max ALBUM delta %d %s\n", delta, grow.to_string());
+					if(grow) {
+						columnAlbum.adjust_width(columnAlbum.width - delta);
+						break;
+					}
+				}
+				if(grow) {
+					columnArtist.adjust_width(columnArtist.width - delta);
+				}
+				else {
+					columnArtist.adjust_width(columnArtist.width + delta);
+				}
 				break;
 			case TrackListModel.Column.ARTIST:
 				break;
 			default:
 				break;
 		}
-		relative_fraction_title  = (double)columnTitle.width  / (double)available_width;
-		relative_fraction_album  = (double)columnAlbum.width  / (double)available_width;
-		relative_fraction_artist = (double)columnArtist.width / (double)available_width;
-		col_artist_width = columnArtist.width;
-		col_album_width = columnAlbum.width;
-		col_title_width = columnTitle.width;
+		relative_fraction_title  = (double)columnTitle.width  / (double)available_dynamic_width;
+		relative_fraction_album  = (double)columnAlbum.width  / (double)available_dynamic_width;
+		relative_fraction_artist = (double)columnArtist.width / (double)available_dynamic_width;
 	}
 	
 	private int available_width {
@@ -1001,15 +1020,18 @@ public class Xnoise.TrackList : TreeView {
 		}
 	}
 	
+	private int available_dynamic_width {
+		get {
+			return (available_width - (columnPixb.width + (columnTracknumber.visible ? columnTracknumber.width : 0) + (columnLength.visible ? 75 : 22)));
+		}
+	}
+	
 	public void handle_resize() {
 		if(xn.main_window.window == null)
 			return;
 		//print("resized by hpaned or window\n");
-		columnTitle.adjust_width((int)(relative_fraction_title * available_width));
-		col_title_width = columnTitle.width;
-		columnAlbum.adjust_width((int)(relative_fraction_album * available_width));
-		col_album_width = columnAlbum.width;
-		columnArtist.adjust_width((int)(relative_fraction_artist * available_width));
-		col_artist_width = columnArtist.width;
+		columnTitle.adjust_width((int)(relative_fraction_title * available_dynamic_width));
+		columnAlbum.adjust_width((int)(relative_fraction_album * available_dynamic_width));
+		columnArtist.adjust_width((int)(relative_fraction_artist * available_dynamic_width));
 	}
 }

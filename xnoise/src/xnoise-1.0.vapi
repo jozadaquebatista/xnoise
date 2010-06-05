@@ -388,7 +388,7 @@ namespace Xnoise {
 		public TextColumn (string title, Gtk.CellRendererText renderer, Xnoise.TrackListModel.Column col_id);
 		public void adjust_width (int width);
 		public Xnoise.TrackListModel.Column id { get; }
-		public signal void resized (Xnoise.TrackListModel.Column source_id);
+		public signal void resized (bool grow, int delta, Xnoise.TrackListModel.Column source_id);
 	}
 	[CCode (ref_function = "xnoise_track_data_ref", unref_function = "xnoise_track_data_unref", cheader_filename = "xnoise.h")]
 	public class TrackData {
