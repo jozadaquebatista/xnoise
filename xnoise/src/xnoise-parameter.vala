@@ -250,8 +250,8 @@ private const string default_content = """
 [settings_int]
 use_lyrics=1
 use_length_column=1
-posY=196
-posX=303
+posY=0
+posX=0
 height=550
 fontsizeMB=8
 compact_layout=1
