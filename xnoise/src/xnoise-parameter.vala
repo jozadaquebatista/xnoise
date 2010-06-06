@@ -249,26 +249,26 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 private const string default_content = """
 [settings_int]
 use_lyrics=1
-use_length_column=0
-use_tracknumber_column=1
-posY=0
-posX=0
-height=575
+use_length_column=1
+posY=196
+posX=303
+height=550
 fontsizeMB=8
-hp_position=253
-width=1024
+compact_layout=1
+width=1116
+use_tracknumber_column=0
+hp_position=241
 use_treelines=0
-compact_layout=0
-repeatstate=2
 show_album_images=1
+repeatstate=2
 
 [settings_double]
-volume=0.70000000000000000
+volume=0.080511778431618983
 
 [settings_string]
-activated_plugins=notifications;LastfmCovers;TitleToDecoration;Mediawatcher
 prio_lyrics=Leoslyrics;Lyricsfly
 prio_images=LastfmCovers
+activated_plugins=Leoslyrics;notifications;LastfmCovers;TitleToDecoration;Mediawatcher
 """;
 }
 

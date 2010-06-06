@@ -30,11 +30,42 @@
 
 using Gtk;
 using Gdk;
+//namespace Xnoise {
+//	public static const string rcdata = 
+//"""style "dark-view" {
+//bg[NORMAL] = "#272727"
+//bg[PRELIGHT] = "#232323"
+//bg[ACTIVE] = "#212121"
+//bg[SELECTED] = "#ffffff"
+
+//text[NORMAL] = "#ffffff"
+//text[PRELIGHT] = "#ffffff"
+//text[ACTIVE] = "#ffffff"
+//text[SELECTED] = "#ffffff"
+
+//fg[NORMAL] = "#ffffff"
+//fg[PRELIGHT] = "#ffffff"
+//fg[ACTIVE] = "#ffffff"
+//fg[SELECTED] = "#ffffff"
+
+//base[NORMAL] = "#272727"
+//base[PRELIGHT] = "#232323"
+//base[ACTIVE] = "#212121"
+//base[SELECTED] = "#212121"
+//}
+
+//class "GtkTreeView" style "dark-view"
+//class "GtkButton" style "dark-view"
+//class "GtkLabel" style "dark-view"
+//class "GtkComboBox" style "dark-view"
+//class "GtkEntry" style "dark-view"
+//""";
+//}
 
 public class Xnoise.MediaBrowser : TreeView, IParams {
 	public MediaBrowserModel mediabrowsermodel;
 	private MediaBrowserModel dummymodel;
-	private Main xn;
+	private unowned Main xn;
 	private bool dragging;
 	private bool _use_treelines = false;
 	public bool use_treelines {
@@ -79,6 +110,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.button_press_event.connect(this.on_button_press);
 		this.key_press_event.connect(this.on_key_pressed);
 		this.key_release_event.connect(this.on_key_released);
+		//Gtk.Style style;
+		//style = Gtk.rc_get_style(this);
+		//this.modify_base(StateType.NORMAL, style.rc_style.bg[StateType.NORMAL]);
 	}
 
 	// This function is intended for the usage
