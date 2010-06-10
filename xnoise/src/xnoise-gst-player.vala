@@ -231,14 +231,14 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private void on_bus_message(Gst.Message msg) {
-		if((msg == null)||(msg.structure == null)) 
+		if((msg == null)||(msg.get_structure() == null)) 
 			return;
-		switch(msg.type) {
+		switch(msg.type()) {
 			case Gst.MessageType.STATE_CHANGED: {
 				State newstate;
 				State oldstate;
 				
-				if(msg.src!=playbin) // only look for playbin state changes
+				if(msg.src()!=playbin) // only look for playbin state changes
 					break;
 					
 				msg.parse_state_changed(out oldstate, out newstate, null);
@@ -251,8 +251,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 				string type = null;
 				string source;
 
-				source = msg.src.get_name();
-				type   = msg.structure.get_name();
+				source = msg.src().get_name();
+				type   = msg.get_structure().get_name();
 
 				if(type == null)
 					break;
@@ -333,11 +333,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 	 * For video synchronization and activation of video screen
 	 */
 	private void on_sync_message(Gst.Message msg) {
-		if((msg == null)||(msg.structure == null)) 
+		if((msg == null)||(msg.get_structure() == null)) 
 			return;
-		string message_name = msg.structure.get_name();
+		string message_name = msg.get_structure().get_name();
 		if(message_name=="prepare-xwindow-id") {
-			var imagesink = (XOverlay)msg.src;
+			var imagesink = (XOverlay)(msg.src());
 			imagesink.set_property("force-aspect-ratio", true);
 			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.window));
 		}

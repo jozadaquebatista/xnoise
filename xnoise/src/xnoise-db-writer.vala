@@ -655,19 +655,11 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	public void write_final_tracks_to_db(string[] final_tracklist) throws Error {
-		string current_query = "";
-		int rc1, nrow, ncolumn;
-		unowned string[] resultArray;
-		string errmsg;
 		if(db == null) return;
 
 		this.begin_transaction();
-		current_query = "DELETE FROM lastused;";
-		rc1 = db.get_table(current_query, out resultArray, out nrow, out ncolumn, out errmsg);
-		if (rc1 != Sqlite.OK) {
-//			stderr.printf("SQL error, while removing old music folders: %s\n", errmsg);
-//			return;
-			throw new DbError.FAILED("While removing old music folders: %s".printf(errmsg));
+		if(db.exec("DELETE FROM lastused;", null, null)!= Sqlite.OK) {
+			throw new DbError.FAILED("Error while removing old music folders");
 		}
 		foreach(string uri in final_tracklist) {
 			this.insert_lastused_track(uri, 0);

@@ -431,7 +431,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		tp.prev();
 		if(!ai_model.get_iter(out next_iter, tp)) 
 			return;
-		ai_model.move_before(iter, next_iter); //move
+		ai_model.move_before(ref iter, next_iter); //move
 	}
 
 	// Move the provider down in ranking
@@ -446,7 +446,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		tp.next();
 		if(!ai_model.get_iter(out next_iter, tp)) 
 			return;
-		ai_model.move_after(iter, next_iter); //move
+		ai_model.move_after(ref iter, next_iter); //move
 	}
 
 	// Move the provider up in ranking
@@ -461,7 +461,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		tp.prev();
 		if(!ly_model.get_iter(out next_iter, tp)) 
 			return;
-		ly_model.move_before(iter, next_iter); //move
+		ly_model.move_before(ref iter, next_iter); //move
 	}
 
 	// Move the provider down in ranking
@@ -476,7 +476,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		tp.next();
 		if(!ly_model.get_iter(out next_iter, tp)) 
 			return;
-		ly_model.move_after(iter, next_iter); //move
+		ly_model.move_after(ref iter, next_iter); //move
 	}
 
 	private bool setup_widgets() throws Error {

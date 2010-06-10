@@ -480,7 +480,7 @@ public class Xnoise.TrackList : TreeView {
 					this.tracklistmodel.get_iter(out current_iter, current_path); //get iter for current
 					TreePath drop_path = drop_rowref.get_path();
 					this.tracklistmodel.get_iter(out drop_iter, drop_path);//get iter for drop position
-					this.tracklistmodel.move_after(current_iter, drop_iter); //move
+					this.tracklistmodel.move_after(ref current_iter, drop_iter); //move
 				}
 			}
 			else {
@@ -494,7 +494,7 @@ public class Xnoise.TrackList : TreeView {
 					this.tracklistmodel.get_iter(out current_iter, current_path); //get iter for current
 					TreePath drop_path = drop_rowref.get_path();
 					this.tracklistmodel.get_iter(out drop_iter, drop_path); //get iter for drop position
-					this.tracklistmodel.move_before(current_iter, drop_iter); //move
+					this.tracklistmodel.move_before(ref current_iter, drop_iter); //move
 				}
 			}
 		}
