@@ -29,6 +29,6 @@
  */
  
 [ModuleInit]
-public Type init_module() { 
+public Type init_module(TypeModule module) { 
 	return typeof(LyricsChartlyrics);
 }

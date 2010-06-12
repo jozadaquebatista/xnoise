@@ -40,7 +40,7 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 	}
 
 	public bool init() {
-		global.tag_changed += write_title_to_decoration;
+		global.tag_changed.connect(write_title_to_decoration);
 		source = 0;
 		return true;
 	}

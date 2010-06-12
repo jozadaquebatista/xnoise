@@ -201,6 +201,7 @@ namespace Xnoise {
 	public class Main : GLib.Object {
 		public Xnoise.GstPlayer gPl;
 		public Xnoise.MainWindow main_window;
+		public static bool no_plugins;
 		public Xnoise.PluginLoader plugin_loader;
 		public static bool show_plugin_state;
 		public Xnoise.TrackList tl;
@@ -323,7 +324,7 @@ namespace Xnoise {
 		public void update_picture ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class Plugin : GLib.Object {
+	public class Plugin : GLib.TypeModule {
 		public GLib.Object loaded_plugin;
 		public Plugin (Xnoise.PluginInformation info);
 		public bool load ();

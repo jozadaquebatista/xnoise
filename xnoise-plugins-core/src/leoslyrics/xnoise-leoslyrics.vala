@@ -98,8 +98,6 @@ public class Xnoise.Leoslyrics : GLib.Object, ILyrics {
 		session = new SessionAsync ();
 		Xml.Parser.init();
 		hid = "";
-		this.artist = artist;
-		this.title = title;
 		
 		sign_hid_fetched.connect(on_sign_hid_fetched);
 		timeout = 0;

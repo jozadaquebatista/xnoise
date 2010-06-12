@@ -50,7 +50,7 @@ public class TestPlugin : GLib.Object, IPlugin {
 
 	public Gtk.Widget? get_settings_widget() {
 		b = new Gtk.Button.with_label("bingo");
-		b.clicked += on_b_clicked;
+		b.clicked.connect(on_b_clicked);
 		return b;
 	}
 

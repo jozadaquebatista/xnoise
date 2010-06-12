@@ -104,9 +104,6 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 		Xml.Parser.init ();
 		hid = "";
 		
-		this.artist = artist;
-		this.title = title;
-		
 		timeout = 0;
 		timeout_done = false;
 	}

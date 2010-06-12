@@ -829,13 +829,13 @@ struct _XnoisePlayPauseButtonClass {
 };
 
 struct _XnoisePlugin {
-	GObject parent_instance;
+	GTypeModule parent_instance;
 	XnoisePluginPrivate * priv;
 	GObject* loaded_plugin;
 };
 
 struct _XnoisePluginClass {
-	GObjectClass parent_class;
+	GTypeModuleClass parent_class;
 };
 
 struct _XnoisePluginLoader {
@@ -1171,6 +1171,7 @@ GType xnoise_track_list_get_type (void);
 GType xnoise_track_list_model_get_type (void);
 GType xnoise_plugin_loader_get_type (void);
 extern gboolean xnoise_main_show_plugin_state;
+extern gboolean xnoise_main_no_plugins;
 XnoiseMain* xnoise_main_new (void);
 XnoiseMain* xnoise_main_construct (GType object_type);
 void xnoise_main_add_track_to_gst_player (XnoiseMain* self, const char* uri);

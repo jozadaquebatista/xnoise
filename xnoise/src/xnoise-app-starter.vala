@@ -40,7 +40,8 @@ public class Xnoise.AppStarter {
 
 	public static Main xn;
 
-	static bool _plugins;
+	static bool _plugininfo;
+	static bool _noplugins;
 	static bool _reset;
 	static bool _version;
 	[CCode (array_length = false, array_null_terminated = true)]
@@ -49,7 +50,8 @@ public class Xnoise.AppStarter {
 
 	const OptionEntry[] options = {
 		{ "version", 'V', 0, OptionArg.NONE, ref _version, "Show the application's version.", null },
-		{ "plugins", 'P', 0, OptionArg.NONE, ref _plugins, "Show loaded and activated plugins on app start.", null },
+		{ "plugin-info", 'p', 0, OptionArg.NONE, ref _plugininfo, "Show loaded and activated plugins on app start.", null },
+		{ "no-plugins", 'N', 0, OptionArg.NONE, ref _noplugins, "Start without loding any plugins.", null },
 		{ "reset", 'R', 0, OptionArg.NONE, ref _reset, "Reset all settings.", null },
 		{ "", 0, 0, OptionArg.FILENAME_ARRAY, ref _fileargs, null, "FILE..." },
 		{null}
@@ -80,11 +82,14 @@ public class Xnoise.AppStarter {
 			return 0;
 		}
 		if(_version) {
-			print("Xnoise %s\n", Config.PACKAGE_VERSION);
+			print("xnoise %s\n", Config.PACKAGE_VERSION);
 			return 0;
 		}
-		if(_plugins) {
+		if(_plugininfo) {
 			Main.show_plugin_state = true;
+		}
+		if(_noplugins) {
+			Main.no_plugins = true;
 		}
 		Gtk.init(ref args);
 		Gst.init(ref args);

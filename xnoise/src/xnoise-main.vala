@@ -37,6 +37,7 @@ public class Xnoise.Main : GLib.Object {
 	public PluginLoader plugin_loader;
 	public GstPlayer gPl;
 	public static bool show_plugin_state;
+	public static bool no_plugins;
 
 	public Main() {
 
@@ -52,31 +53,33 @@ public class Xnoise.Main : GLib.Object {
 		tlm = new TrackListModel();
 		tl = new TrackList();
 		main_window = new MainWindow();
+		
+		if(!no_plugins) {
+			plugin_loader.load_all();
 
-		plugin_loader.load_all();
-
-		foreach(string name in par.get_string_list_value("activated_plugins")) {
-			if(!plugin_loader.activate_single_plugin(name)) {
-				print("\t%s plugin failed to activate!\n", name);
-			}
-		}
-
-		if(show_plugin_state) print(" PLUGIN INFO:\n");
-		foreach(string name in plugin_loader.plugin_htable.get_keys()) {
-			if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).loaded))
-				if(show_plugin_state) print("\t%s loaded\n", name);
-			else {
-				print("\t%s NOT loaded\n\n", name);
-				continue;
-			}
-			if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).activated)) {
-				print("\t%s activated\n", name);
-			}
-			else {
-				if(show_plugin_state) print("\t%s NOT activated\n", name);
+			foreach(string name in par.get_string_list_value("activated_plugins")) {
+				if(!plugin_loader.activate_single_plugin(name)) {
+					print("\t%s plugin failed to activate!\n", name);
+				}
 			}
 
-			if(show_plugin_state) print("\n");
+			if(show_plugin_state) print(" PLUGIN INFO:\n");
+			foreach(string name in plugin_loader.plugin_htable.get_keys()) {
+				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).loaded))
+					if(show_plugin_state) print("\t%s loaded\n", name);
+				else {
+					print("\t%s NOT loaded\n\n", name);
+					continue;
+				}
+				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).activated)) {
+					print("\t%s activated\n", name);
+				}
+				else {
+					if(show_plugin_state) print("\t%s NOT activated\n", name);
+				}
+
+				if(show_plugin_state) print("\n");
+			}
 		}
 
 		connect_signals();

@@ -28,7 +28,7 @@
  * 	Jörn Magens
  */
 
-public class Xnoise.Plugin : GLib.Object {
+public class Xnoise.Plugin : TypeModule {
 	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT FROM MODULE
 	private Module module;
 	public Object loaded_plugin;
@@ -54,7 +54,7 @@ public class Xnoise.Plugin : GLib.Object {
 	public signal void sign_activated();
 	public signal void sign_deactivated();
 
-	private delegate Type InitModuleFunction();
+	private delegate Type InitModuleFunction(TypeModule module);
 
 	public Plugin(PluginInformation info) {
 		this._info = info;
@@ -85,7 +85,7 @@ public class Xnoise.Plugin : GLib.Object {
 		module.symbol("init_module", out func);
 		InitModuleFunction init_module = (InitModuleFunction)func;
 		if(init_module == null) return false;
-		type = init_module();
+		type = init_module(this);
 		_loaded = true;
 		this.configurable = false;
 
