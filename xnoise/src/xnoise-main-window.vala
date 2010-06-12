@@ -35,7 +35,7 @@ public extern bool ensure_native(Gdk.Window window);
 public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string MAIN_UI_FILE     = Config.UIDIR + "main_window.ui";
 	private const string MENU_UI_FILE     = Config.UIDIR + "main_ui.xml";
-	private const string APPICON          = Config.UIDIR + "xnoise_16x16.png";
+	private const string APPICON          = Config.UIDIR + "xnoise_bruit_48x48.png";
 	private const string SHOWVIDEO        = _("Video");
 	private const string SHOWTRACKLIST    = _("Tracklist");
 	private const string SHOWMEDIABROWSER = _("Show Media");
@@ -421,7 +421,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private StatusIcon create_tray_icon() {
-		StatusIcon icon = new StatusIcon.from_file(Config.UIDIR + "xnoise_16x16.png");
+		StatusIcon icon = new StatusIcon.from_file(Config.UIDIR + "xnoise_bruit_48x48.png");
 		icon.set_tooltip_text("Xnoise media player");
 		icon.button_press_event.connect(on_trayicon_clicked);
 		return icon;

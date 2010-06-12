@@ -33,7 +33,7 @@ using GLib;
 public class Xnoise.AboutDialog : Gtk.AboutDialog {
 	const string COPYRIGHT = "Copyright \xc2\xa9 2008, 2009-2010 Jörn Magens";
 	const string PROGRAM_NAME = "xnoise";
-	const string WEBSITE = "http://code.google.com/p/xnoise/";
+	const string WEBSITE = "http://www.xnoise-media-player.com/";
 
 	public AboutDialog() {
 		string contents;

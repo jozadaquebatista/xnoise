@@ -9,6 +9,8 @@ ui_DATA = \
 		artist.png \
 		xnoise_16x16.png \
 		xnoise_logo_big.svg \
+		xnoise_bruit_48x48.png \
+		xnoise_bruit_16x16.png \
 		xnoise_bruit.svg \
 		xnoise_48x48.png \
 		genre.png \
