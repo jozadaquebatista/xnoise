@@ -57,22 +57,17 @@ public class Xnoise.Plugin : TypeModule {
 	private delegate Type InitModuleFunction(TypeModule module);
 
 	public Plugin(PluginInformation info) {
+		Object();
 		this._info = info;
-		this.notify.connect( (s, p) => {
-			switch(p.name) {
-				case "activated": {
-					if(((Plugin)s).activated)
-						activate();
-					else
-						deactivate();
-					break;
-				}
-				default: break;
-			}
+		this.notify["activated"].connect( (s, p) => {
+			if(((Plugin)s).activated)
+				activate();
+			else
+				deactivate();
 		});
 	}
 
-	public bool load() {
+	public override bool load() {
 		this.xn = Main.instance;
 		if(this.loaded) return true;
 		string path = Module.build_path(Config.PLUGINSDIR, info.module);
@@ -99,6 +94,9 @@ public class Xnoise.Plugin : TypeModule {
 			this.is_album_image_plugin = true;
 
 		return true;
+	}
+	
+	public override void unload() {
 	}
 
 	private void activate() {

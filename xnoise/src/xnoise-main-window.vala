@@ -527,6 +527,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const int 3_KEY = 0x0033;
 	private const int F_KEY = 0x0066;
 	private const int D_KEY = 0x0064;
+	private const int M_KEY = 0x006D;
 	private const int SPACE_KEY = 0x0020;
 	private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
 		//print("%d : %d\n",(int)e.keyval, (int)e.state);
@@ -567,6 +568,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					playPauseButton.clicked();
 				}
 				return true;
+			case M_KEY: {
+					toggle_media_browser_visibility();
+					break;
+				}
 			default:
 				break;
 		}
