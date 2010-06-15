@@ -486,6 +486,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 			this.add_from_file(SETTINGS_UI_FILE);
 			this.dialog = this.get_object("dialog1") as Gtk.Dialog;
+			this.dialog.set_modal(true);
 
 			ai_up_button = this.get_object("ai_up_button") as Gtk.Button;
 			ai_up_button.can_focus = false;

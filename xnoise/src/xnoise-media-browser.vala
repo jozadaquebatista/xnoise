@@ -187,6 +187,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				print("button 3\n"); //TODO
 				return false; //TODO check if this is right
 			}
+			default: {
+				break;
+			}
 		}
 		if(!(selection.count_selected_rows()>0 ))
 			selection.select_path(treepath);

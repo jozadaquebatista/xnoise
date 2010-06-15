@@ -165,14 +165,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 				if(a_frame_config_button != null && config_button.get_parent() == null) 
 					a_frame_config_button.add(config_button);
-				config_button.show();
-				if(config_button_menu.attach_widget != null)
-					config_button_menu.detach();
-				config_button_menu.attach_to_widget(config_button, (a,x) => {});
+				config_button.show_all();
 				stopButton.hide();
 			}
 			else {
-				config_button_menu.detach();
 				if(a_frame_config_button != null && config_button.is_realized()) 
 					a_frame_config_button.remove(config_button);
 				config_button.unrealize();
@@ -180,7 +176,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					menuvbox.add(menubar);
 					menubar.show();
 				}
-				stopButton.show();
+				stopButton.show_all();
 			}
 		}
 	}
@@ -422,7 +418,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private StatusIcon create_tray_icon() {
 		StatusIcon icon = new StatusIcon.from_file(Config.UIDIR + "xnoise_bruit_48x48.png");
-		icon.set_tooltip_text("Xnoise media player");
+		icon.set_tooltip_text("xnoise media player");
 		icon.button_press_event.connect(on_trayicon_clicked);
 		return icon;
 	}
