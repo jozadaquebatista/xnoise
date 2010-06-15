@@ -565,7 +565,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 				return true;
 			case M_KEY: {
-					toggle_media_browser_visibility();
+					if(!this.searchEntryMB.has_focus)
+						toggle_media_browser_visibility();
 					break;
 				}
 			default:
