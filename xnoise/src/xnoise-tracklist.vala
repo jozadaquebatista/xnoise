@@ -978,8 +978,23 @@ public class Xnoise.TrackList : TreeView {
 				}
 				int half_delta = ((int)(delta / 2)).abs();
 				if(grow) {
-					columnAlbum.adjust_width(columnAlbum.width - (delta - half_delta));
-					columnArtist.adjust_width(columnArtist.width - half_delta);
+					int cAlb = 0, cArt = 0, cAlbDelta = 0, cArtDelta = 0;
+					cAlb = columnAlbum.width - (delta - half_delta);
+					if(cAlb < columnAlbum.get_min_width()) {
+						cAlbDelta = cAlb - columnAlbum.get_min_width();
+						cAlb = columnAlbum.get_min_width();
+					}
+
+					cArt = columnArtist.width - half_delta - cAlbDelta;
+					if(cArt < columnArtist.get_min_width()) {
+						cArtDelta = cArt - columnArtist.get_min_width();
+						cArt = columnArtist.get_min_width();
+					}
+					if(cArtDelta.abs() > 0) {
+						columnTitle.adjust_width(columnTitle.width - cArtDelta.abs());
+					}
+					columnAlbum.adjust_width(cAlb);
+					columnArtist.adjust_width(cArt);
 				}
 				else{
 					columnAlbum.adjust_width(columnAlbum.width + (delta - half_delta));
@@ -988,7 +1003,6 @@ public class Xnoise.TrackList : TreeView {
 				break;
 			case TrackListModel.Column.ALBUM:
 				if((columnTitle.width + columnAlbum.width + columnArtist.get_min_width()) > available_dynamic_width) {
-					// min size artist???
 					//print("max ALBUM delta %d %s\n", delta, grow.to_string());
 					if(grow) {
 						columnAlbum.adjust_width(columnAlbum.width - delta);
@@ -996,7 +1010,17 @@ public class Xnoise.TrackList : TreeView {
 					}
 				}
 				if(grow) {
-					columnArtist.adjust_width(columnArtist.width - delta);
+//					columnArtist.adjust_width(columnArtist.width - delta);
+					int cArt = 0, cArtDelta = 0;
+					cArt = columnArtist.width - delta;
+					if(cArt < columnArtist.get_min_width()) {
+						cArtDelta = cArt - columnArtist.get_min_width();
+						cArt = columnArtist.get_min_width();
+					}
+					if(cArtDelta.abs() > 0) {
+						columnAlbum.adjust_width(columnAlbum.width - cArtDelta.abs());
+					}
+					columnArtist.adjust_width(cArt);
 				}
 				else {
 					columnArtist.adjust_width(columnArtist.width + delta);

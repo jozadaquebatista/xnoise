@@ -239,16 +239,15 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			return;
 		}
 		var mi = new MediaImporter();
-		
 		try {
 			var info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
-			
+		
 			if(info.get_file_type() == FileType.REGULAR) mi.add_single_file(file.get_uri(), ref dbw);	
 			else if (info.get_file_type() == FileType.DIRECTORY) {
 				mi.add_local_tags(file, ref dbw);
 				setup_monitor_for_path(file.get_path());
 			}
-			
+		
 			if(Main.instance.main_window.mediaBr != null)
 				Main.instance.main_window.mediaBr.change_model_data();
 		} 
@@ -256,12 +255,16 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			print("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e.message);
 		}
 	}
-       	
+
 	protected void file_changed_cb(FileMonitor sender, File file, File? other_file, FileMonitorEvent event_type) {
-		print("%s\n", event_type.to_string());
-		if(event_type == FileMonitorEvent.CREATED)  // TODO: monitor removal of folders, too
-			if(file != null) handle_created_file(file);
-		if(event_type == FileMonitorEvent.DELETED) handle_deleted_file(file);
+		if(!global.media_import_in_progress) {
+			print("%s\n", event_type.to_string());
+			if(event_type == FileMonitorEvent.CREATED)  // TODO: monitor removal of folders, too
+				if(file != null) 
+					handle_created_file(file);
+			if(event_type == FileMonitorEvent.DELETED) 
+				handle_deleted_file(file);
+		}
 	}
 
 	/* sets up file monitors for all subdirectories of a directory, references them and
@@ -359,45 +362,48 @@ private class Xnoise.ImportInfoBar {
 	private void on_ongoing_import(string uri) {
 		import_count++;
 		last_uri = null;
-		bar_progress.pulse();
+		if(bar_progress.get_realized())
+			bar_progress.pulse();
 		
 		GLib.Source.remove (import_notify_timeout);
 		import_notify_timeout = Timeout.add(notify_timeout_value, on_countdown_done);
 	}
 		
 	private void on_import(string uri) {
-		if(bar_label == null)
-			bar_label = new Label("");
+		if(!global.media_import_in_progress) {
+			if(bar_label == null)
+				bar_label = new Label("");
 	
-		bar_label.set_text("Adding new files to the media database...");
+			bar_label.set_text("Adding new files to the media database...");
 		
 
 		
-		import_count++;
-		last_uri = uri;
+			import_count++;
+			last_uri = uri;
 		
-		if (shown == false) {
-			Main.instance.main_window.display_info_bar(bar);
-			shown = true;
+			if (shown == false) {
+				Main.instance.main_window.display_info_bar(bar);
+				shown = true;
+			}
+		
+			bar_close_button.hide();
+			bar_progress.show();
+			bar_progress.pulse();
+		
+			bar.show();
+		
+			import_notify_timeout = Timeout.add(notify_timeout_value, on_countdown_done);
+		
+			global.sig_item_imported.disconnect(on_import);
+			global.sig_item_imported.connect(on_ongoing_import);
+		
+			/*var spinner = new Gtk.Spinner();
+			var action_area = bar.get_action_area();
+			((Gtk.Container)action_area).add(spinner);
+			spinner.show();
+			spinner.start();*/
+			//Gtk.Spinner for vala hasn't arrived yet :-( 
 		}
-		
-		bar_close_button.hide();
-		bar_progress.show();
-		bar_progress.pulse();
-		
-		bar.show();
-		
-		import_notify_timeout = Timeout.add(notify_timeout_value, on_countdown_done);
-		
-		global.sig_item_imported.disconnect(on_import);
-		global.sig_item_imported.connect(on_ongoing_import);
-		
-		/*var spinner = new Gtk.Spinner();
-		var action_area = bar.get_action_area();
-		((Gtk.Container)action_area).add(spinner);
-		spinner.show();
-		spinner.start();*/
-		//Gtk.Spinner for vala hasn't arrived yet :-( 
 	}
 	
 	
@@ -410,9 +416,10 @@ private class Xnoise.ImportInfoBar {
 		if(import_count > 1) {
 			Idle.add( () => {
 				// Doing this in an Idle prevents some warnings
-				bar_label.set_text(import_count.to_string() + 
-				                   " items have been added to your media library"
-				                   );
+				if(bar_label.get_realized())
+					bar_label.set_text(import_count.to_string() + 
+					                   " items have been added to your media library"
+					                   );
 				return false;
 			}); 
 		}
@@ -427,7 +434,8 @@ private class Xnoise.ImportInfoBar {
 			}
 			TrackData data;
 			dbb.get_trackdata_for_uri(last_uri, out data);
-			bar_label.set_markup("<b>" + data.Artist + " - "+ data.Title + "</b> has been added to your media library");
+			if(bar_label.get_realized())
+				bar_label.set_markup("<b>" + data.Artist + " - "+ data.Title + "</b> has been added to your media library");
 			last_uri = null;
 		}
 		
