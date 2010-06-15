@@ -1275,6 +1275,8 @@ GType xnoise_plugin_get_type (void);
 GType xnoise_plugin_information_get_type (void);
 XnoisePlugin* xnoise_plugin_new (XnoisePluginInformation* info);
 XnoisePlugin* xnoise_plugin_construct (GType object_type, XnoisePluginInformation* info);
+void xnoise_plugin_activate (XnoisePlugin* self);
+void xnoise_plugin_deactivate (XnoisePlugin* self);
 GtkWidget* xnoise_plugin_settingwidget (XnoisePlugin* self);
 XnoisePluginInformation* xnoise_plugin_get_info (XnoisePlugin* self);
 gboolean xnoise_plugin_get_loaded (XnoisePlugin* self);

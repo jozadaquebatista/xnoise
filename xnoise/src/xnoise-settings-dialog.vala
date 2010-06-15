@@ -37,7 +37,7 @@ public errordomain Xnoise.SettingsDialogError {
 
 
 public class Xnoise.SettingsDialog : Gtk.Builder {
-	private Main xn;
+	private unowned Main xn;
 	private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
 /*
 	private const int NUMBER_OF_NON_PLUGIN_TABS = 4;

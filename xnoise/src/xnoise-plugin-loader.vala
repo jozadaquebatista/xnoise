@@ -134,15 +134,18 @@ public class Xnoise.PluginLoader : Object, IParams {
 	public bool activate_single_plugin(string name) {
 		Plugin p = this.plugin_htable.lookup(name);
 		if(p == null) return false;
-		p.activated=true;//ref xn);
-		sign_plugin_activated(p);
-		return true;
+		p.activate();
+		if(p.activated) {
+			sign_plugin_activated(p);
+			return true;
+		}
+		return false;
 	}
 
 	public void deactivate_single_plugin(string name) {
 		Plugin p = this.plugin_htable.lookup(name);
 		if(p == null) return;
-		p.activated=false;
+		p.deactivate();
 		sign_plugin_deactivated(p);
 	}
 	

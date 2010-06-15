@@ -327,6 +327,8 @@ namespace Xnoise {
 	public class Plugin : GLib.TypeModule {
 		public GLib.Object loaded_plugin;
 		public Plugin (Xnoise.PluginInformation info);
+		public void activate ();
+		public void deactivate ();
 		public override bool load ();
 		public Gtk.Widget? settingwidget ();
 		public override void unload ();

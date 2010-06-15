@@ -40,7 +40,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		N_COLUMNS
 	}
 
-	private Main xn;
+	private unowned Main xn;
 
 	//TODO: File vala bug: if this is called sign_plugin_active_state_changed compilation fails
 	public signal void sign_plugin_activestate_changed(string name);
@@ -65,12 +65,14 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 			listmodel.get_iter(out iter, tree_path);
 			string name;
 			listmodel.get(iter, PluginManagerColumn.TEXT, out name);
-			bool plugin_state = this.xn.plugin_loader.plugin_htable.lookup(name).activated;
 
-			if(!plugin_state) this.xn.plugin_loader.activate_single_plugin(name);
-			else this.xn.plugin_loader.deactivate_single_plugin(name);
+			if(this.xn.plugin_loader.plugin_htable.lookup(name).activated) 
+				this.xn.plugin_loader.deactivate_single_plugin(name);
+			else 
+				this.xn.plugin_loader.activate_single_plugin(name);
 			listmodel.set(iter,
-			              PluginManagerColumn.TOGGLE, !plugin_state);
+			              PluginManagerColumn.TOGGLE, this.xn.plugin_loader.plugin_htable.lookup(name).activated);
+			              
 			sign_plugin_activestate_changed(name);
 		});
 

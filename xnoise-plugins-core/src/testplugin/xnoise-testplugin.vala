@@ -33,7 +33,9 @@ using Gtk;
 
 public class TestPlugin : GLib.Object, IPlugin {
 	private Gtk.Button b;
+	
 	public Xnoise.Main xn { get; set; }
+	
 	public string name { 
 		get {
 			return "Test";

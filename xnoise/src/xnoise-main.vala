@@ -133,7 +133,7 @@ public class Xnoise.Main : GLib.Object {
 			if(this.plugin_loader.plugin_htable.lookup(name).activated)
 				activatedplugins += name;
 		}
-		if(activatedplugins.length<=0)
+		if(activatedplugins.length <= 0)
 			activatedplugins = null;
 		par.set_string_list_value("activated_plugins", activatedplugins);
 	}

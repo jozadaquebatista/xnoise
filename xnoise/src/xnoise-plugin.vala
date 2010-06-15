@@ -27,29 +27,33 @@
  * Author:
  * 	Jörn Magens
  */
+ 
 
 public class Xnoise.Plugin : TypeModule {
 	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT FROM MODULE
+	private unowned Main xn;
+	private bool _loaded = false;
 	private Module module;
-	public Object loaded_plugin;
 	private Type type;
 	private PluginInformation _info;
+
+	public Object loaded_plugin;
+	
 	public PluginInformation info {
 		get {
 			return _info;
 		}
 	}
-	private bool _loaded = false;
 	public bool loaded {
 		get {
 			return _loaded;
 		}
 	}
+
 	public bool activated { get; set; }
 	public bool configurable { get; private set; }
 	public bool is_lyrics_plugin { get; private set; default = false;}
 	public bool is_album_image_plugin { get; private set; default = false;}
-	private unowned Main xn;
 
 	public signal void sign_activated();
 	public signal void sign_deactivated();
@@ -58,7 +62,9 @@ public class Xnoise.Plugin : TypeModule {
 
 	public Plugin(PluginInformation info) {
 		Object();
+		base.set_name(info.name);
 		this._info = info;
+		this.xn = Main.instance;
 		this.notify["activated"].connect( (s, p) => {
 			if(((Plugin)s).activated)
 				activate();
@@ -68,18 +74,22 @@ public class Xnoise.Plugin : TypeModule {
 	}
 
 	public override bool load() {
-		this.xn = Main.instance;
-		if(this.loaded) return true;
+		//print("load_plugin_module %s\n", _info.name);
+		if(this.loaded) 
+			return true;
+		
 		string path = Module.build_path(Config.PLUGINSDIR, info.module);
 		module = Module.open(path, ModuleFlags.BIND_LAZY);
-		if (module == null) {
+		if(module == null) {
 			print("cannot find module\n");
 			return false;
 		}
 		void* func;
 		module.symbol("init_module", out func);
 		InitModuleFunction init_module = (InitModuleFunction)func;
-		if(init_module == null) return false;
+		if(init_module == null) 
+			return false;
+			
 		type = init_module(this);
 		_loaded = true;
 		this.configurable = false;
@@ -95,37 +105,46 @@ public class Xnoise.Plugin : TypeModule {
 
 		return true;
 	}
-	
+
 	public override void unload() {
+		//print("unload %s\n", _info.name);
+		_loaded = false;
+		_activated = false;
+		sign_deactivated();
 	}
 
-	private void activate() {
-		if(!loaded) return;
+	public void activate() {
+		if(activated)
+			return;
+		
+		if(module == null)
+			return;
 		loaded_plugin = Object.new(type,
 		                           "xn", this.xn,    //set properties via this, because
 		                           null);            //parameters are not allowed
 		                                             //for this kind of Object construction
 		if(loaded_plugin == null) {
-			message("Failed to load plugin %s. Cannot get type.\n", ((IPlugin)loaded_plugin).name);
-			activated = false;
+			message("Failed to load plugin %s. Cannot get type.\n", _info.name);
+			_activated = false;
 		}
 		//if(loaded_plugin is IPlugin) print("sucess\n");
 		if(!((IPlugin)loaded_plugin).init()) {
-			message("Failed to load plugin %s. Cannot get initialize.\n", ((IPlugin)loaded_plugin).name);
-			activated = false;
+			message("Failed to load plugin %s. Cannot initialize.\n", _info.name);
+			_activated = false;
 		}
 		this.configurable = ((IPlugin)this.loaded_plugin).has_settings_widget();
-
+		_activated = true;
 		sign_activated();
 	}
 
-	private void deactivate() {
+	public void deactivate() {
+		//print("deactivate\n");
+		_activated = false;
 		loaded_plugin = null;
-		sign_deactivated();
 	}
 
 	public Gtk.Widget? settingwidget() {
-		if(this.loaded && this.activated) {
+		if(this.loaded) { // && this.activated
 			return ((IPlugin)this.loaded_plugin).get_settings_widget();
 		}
 		else {
