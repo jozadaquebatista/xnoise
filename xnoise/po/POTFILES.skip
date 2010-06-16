@@ -1,10 +1,8 @@
 data/misc/xnoise.desktop.in
-data/ui/add_media.ui
-data/ui/main_window.ui
-data/ui/settings.ui
-src/plugins/notifications/xnoise-notifications.c
-src/plugins/titleToDecoration/xnoise-title-to-decoration.c
-src/xnoise/xnoise-add-media-dialog.c
-src/xnoise/xnoise-main-window.c
-src/xnoise/xnoise-settings-dialog.c
-src/xnoise/xnoise-tracklist.c
+src/xnoise-add-media-dialog.c
+src/xnoise-fullscreen-toolbar.c
+src/xnoise-lyrics-view.c
+src/xnoise-main-window.c
+src/xnoise-settings-dialog.c
+src/xnoise-tracklist.c
+
