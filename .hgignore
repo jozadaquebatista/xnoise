@@ -10,6 +10,7 @@ syntax: glob
 *.lo
 *.Po
 *.Plo
+*~
 Makefile
 Makefile.in
 *.m4
@@ -46,6 +47,7 @@ data/misc/xnoise.desktop.in
 src/xnoise
 stamp-h1
 *.bz2
+*.gz
 xnoise/.anjuta/
 xnoise/.anjuta*
 xnoise/TODO.tasks

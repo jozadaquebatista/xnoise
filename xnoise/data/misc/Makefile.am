@@ -15,9 +15,9 @@ appiconscalable_DATA = xnoise.svg
 appiconscalabledir = $(datadir)/icons/hicolor/scalable/apps
 
 EXTRA_DIST = \
-	$(desktop_in_files) \
 	$(appicon_DATA) \
 	$(appiconscalable_DATA) \
+	$(desktop_in_files) \
 	xnoise-1.0.pc.in \
 	$(NULL)
 

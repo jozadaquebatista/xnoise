@@ -1,4 +1,4 @@
-SUBDIRS = misc ui
+SUBDIRS = ui misc
 
 DISTCLEANFILES = \
 	Makefile.in \

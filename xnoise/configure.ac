@@ -7,7 +7,7 @@ m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro
 AC_INIT(xnoise, xnoise_version, shuerhaakenATgo oglemail.com, [xnoise])
 
 # require automake-1.11 for vala support
-AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-bzip2])
+AM_INIT_AUTOMAKE([1.11 dist-bzip2])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS([config.h])
@@ -80,10 +80,9 @@ if test x$have_vala = xyes ; then
     if test "x$VALAC" = "x"; then
         AC_MSG_ERROR([Cannot find the "valac" compiler in PATH])
     fi
-    VAPIDIR=`pkg-config --variable=vapidir vala-1.0`
-else
-    VAPIDIR=`echo ${datadir}/vala/vapi`
 fi
+dnl VAPIDIR is used to place the xnoise vapi file
+VAPIDIR="${datadir}/vala/vapi"
 AC_SUBST(VAPIDIR)
 dnl ================================================================
 
@@ -95,13 +94,9 @@ AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
 IT_PROG_INTLTOOL([0.35.0])
 
-if test "x${prefix}" = "xNONE"; then
-  PREFIX="${ac_default_prefix}"
-else
-  PREFIX="${prefix}"
-fi
-AC_DEFINE_UNQUOTED(LOCALE_DIR, "${PREFIX}/${DATADIRNAME}/locale",[Locale directory])
-
+LOCALE_DIR="${datadir}/locale"
+AC_DEFINE_UNQUOTED(LOCALE_DIR, "$LOCALE_DIR",[Locale directory.])
+AC_SUBST(LOCALE_DIR)
 AC_SUBST(VALAFLAGS)
 
 dnl Shave the output
@@ -128,5 +123,10 @@ echo "
     gettext_package:               ${GETTEXT_PACKAGE}
     prefix:                        ${prefix}
     CFLAGS:                        ${CFLAGS}
+    VAPIDIR:                       ${VAPIDIR}
+    LOCALE_DIR:                    ${LOCALE_DIR}
+    datadir:                       ${datadir}
+    datarootdir:                   ${datarootdir}
+    prefix/share:                  ${prefix}/share
 
 "

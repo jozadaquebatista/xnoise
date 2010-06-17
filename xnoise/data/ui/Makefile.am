@@ -18,10 +18,13 @@ ui_DATA = \
 		note.png \
 		$(NULL)	
 
-
 uidir = $(datadir)/xnoise/ui
 
+pixmap_DATA = xnoise.xpm
+pixmapdir = $(datadir)/pixmaps
+
 EXTRA_DIST = \
+	$(pixmap_DATA) \
 	$(ui_DATA) \
 	$(NULL)	
 

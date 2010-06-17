@@ -1,7 +1,6 @@
 [Desktop Entry]
 Version=1.0
-Encoding=UTF-8
-_Name=Xnoise Media Player
+_Name=Xnoise
 _GenericName=Media Player
 _Comment=Organize and play your music and video collections
 Exec=xnoise %U
