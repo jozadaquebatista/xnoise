@@ -8,8 +8,9 @@ SUBDIRS = \
 INCLUDES = \
 	$(XNOISEPLUGINSCORE_CFLAGS) \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
+	-DDATA_DIR='"$(datadir)"' \
+	-DLOCALE_DIR=\"${datarootdir}/locale\" \
 	-include $(CONFIG_HEADER) \
-	-I$(top_srcdir)/../xnoise/src -DDATA_DIR='"$(datadir)"' \
 	$(NULL)
 
 libMediawatcherdir = $(libdir)/xnoise
@@ -23,7 +24,7 @@ libMediawatcher_la_SOURCES = \
 
 libMediawatcher_la_VALAFLAGS = \
 	--thread \
-	--vapidir $(top_srcdir)/../xnoise/vapi \
+	--vapidir $(top_srcdir)/vapi \
 	--basedir $(top_srcdir)/src/mediawatcher \
 	--pkg xnoise-1.0 \
 	--pkg gio-2.0 \

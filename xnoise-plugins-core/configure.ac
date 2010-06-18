@@ -7,7 +7,7 @@ m4_define(xnoisepluginscore_version, xnoisepluginscore_major_version.xnoiseplugi
 AC_INIT(xnoisepluginscore, xnoisepluginscore_version, shuerhaakenATgo oglemail.com, [xnoise-plugins-core])
 
 # require automake-1.11 for vala support
-AM_INIT_AUTOMAKE([1.11 no-dist-gzip dist-bzip2])
+AM_INIT_AUTOMAKE([1.11 dist-bzip2])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS([config.h])
@@ -38,8 +38,7 @@ LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
 XNOISE_REQUIRED=xnoisepluginscore_version
 
-PKG_CHECK_MODULES(XNOISEPLUGINSCORE, \
-   xnoise-1.0 = $XNOISE_REQUIRED)
+PKG_CHECK_MODULES(XNOISEPLUGINSCORE, xnoise-1.0 = $XNOISE_REQUIRED)
 
 XNOISEPLUGINSCORE_PACKAGES="\
     --pkg config \
@@ -220,13 +219,6 @@ AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
 IT_PROG_INTLTOOL([0.35.0])
 
-if test "x${prefix}" = "xNONE"; then
-  PREFIX="${ac_default_prefix}"
-else
-  PREFIX="${prefix}"
-fi
-AC_DEFINE_UNQUOTED(LOCALE_DIR, "${PREFIX}/${DATADIRNAME}/locale",[Locale directory])
-
 AC_SUBST(VALAFLAGS)
 
 dnl Shave the output
@@ -237,7 +229,6 @@ AC_CONFIG_FILES([
     data/Makefile
     data/misc/Makefile
     data/misc/xnoise-plugins-core-1.0.pc
-    data/ui/Makefile
     src/Makefile
     src/testplugin/Makefile
     src/titleToDecoration/Makefile

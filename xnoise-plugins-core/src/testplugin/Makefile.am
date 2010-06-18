@@ -8,8 +8,9 @@ SUBDIRS = \
 INCLUDES = \
 	$(XNOISEPLUGINSCORE_CFLAGS) \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
+	-DDATA_DIR='"$(datadir)"' \
+	-DLOCALE_DIR=\"${datarootdir}/locale\" \
 	-include $(CONFIG_HEADER) \
-	-I$(top_srcdir)/../xnoise/src -DDATA_DIR='"$(datadir)"' \
 	$(NULL)
 
 libxnoisetestdir = $(libdir)/xnoise
@@ -23,7 +24,7 @@ libxnoisetest_la_SOURCES = \
 
 libxnoisetest_la_VALAFLAGS = \
 	--thread \
-	--vapidir $(top_srcdir)/../xnoise/vapi \
+	--vapidir $(top_srcdir)/vapi \
 	--basedir $(top_srcdir)/src/testplugin \
 	--pkg xnoise-1.0 \
 	@XNOISEPLUGINSCORE_PACKAGES@ \

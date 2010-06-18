@@ -7,11 +7,11 @@ SUBDIRS = \
 
 INCLUDES = \
 	$(XNOISEPLUGINSCORE_CFLAGS) \
-	$(LIBNOTIFY_CFLAGS) \
 	-DUIDIR=\"$(datadir)/xnoise/ui/\" \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
+	-DDATA_DIR='"$(datadir)"' \
+	-DLOCALE_DIR=\"${datarootdir}/locale\" \
 	-include $(CONFIG_HEADER) \
-	-I$(top_srcdir)/../xnoise/src -DDATA_DIR='"$(datadir)"' \
 	$(LIBNOTIFY_CFLAGS) \
 	$(NULL)
 

@@ -7,9 +7,10 @@ SUBDIRS = \
 
 INCLUDES = \
 	$(XNOISEPLUGINSCORE_CFLAGS) \
+	-DDATA_DIR='"$(datadir)"' \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
+	-DLOCALE_DIR=\"${datarootdir}/locale\" \
 	-include $(CONFIG_HEADER) \
-	-I$(top_srcdir)/../xnoise/src -DDATA_DIR='"$(datadir)"' \
 	$(LIBXML_CFLAGS) \
 	$(LIBSOUP_CFLAGS) \
 	$(NULL)
@@ -25,7 +26,7 @@ libLyricsfly_la_SOURCES = \
 
 libLyricsfly_la_VALAFLAGS = \
 	--thread \
-	--vapidir $(top_srcdir)/../xnoise/vapi \
+	--vapidir $(top_srcdir)/vapi \
 	--basedir $(top_srcdir)/src/lyricsfly \
 	--pkg xnoise-1.0 \
 	--pkg libxml-2.0 \

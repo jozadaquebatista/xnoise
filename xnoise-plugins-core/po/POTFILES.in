@@ -1,7 +1,5 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
-src/chartlyrics/xnoise-chartlyrics-registration.vala
-src/chartlyrics/xnoise-chartlyrics.vala
 src/lastfmCovers/xnoise-lastfm-covers-registration.vala
 src/lastfmCovers/xnoise-lastfm-covers.vala
 src/leoslyrics/xnoise-leoslyrics-registration.vala
