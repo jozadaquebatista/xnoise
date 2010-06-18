@@ -9,6 +9,7 @@ INCLUDES = \
 	-DUIDIR=\"$(datadir)/xnoise/ui/\" \
 	-DPLUGINSDIR=\"$(libdir)/xnoise\" \
 	-DLICENSEDIR=\"$(datadir)/xnoise/license/\" \
+	-DLOCALE_DIR=\"${datarootdir}/locale\" \
 	$(NULL)
 
 xnoisedir = $(includedir)/xnoise-1.0

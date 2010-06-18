@@ -8,28 +8,20 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = xnoise-1.0.pc
 
-appicon_DATA = xnoise.png
-appicondir = $(datadir)/icons/hicolor/48x48/apps
-
-appiconscalable_DATA = xnoise.svg
-appiconscalabledir = $(datadir)/icons/hicolor/scalable/apps
-
 EXTRA_DIST = \
-	$(appicon_DATA) \
-	$(appiconscalable_DATA) \
-	$(desktop_in_files) \
-	xnoise-1.0.pc.in \
-	$(NULL)
+    $(desktop_in_files) \
+    xnoise-1.0.pc.in \
+    $(NULL)
 
 CLEANFILES = \
-	$(desktop_DATA)
+    $(desktop_DATA)
 
 DISTCLEANFILES = \
-	Makefile.in \
-	$(pkgconfig_DATA) \
-	$(NULL)
+    Makefile.in \
+    $(pkgconfig_DATA) \
+    $(NULL)
 	
 MAINTAINERCLEANFILES = \
-	Makefile.in \
-	$(NULL)
+    Makefile.in \
+    $(NULL)
 

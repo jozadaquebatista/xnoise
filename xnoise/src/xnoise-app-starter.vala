@@ -58,8 +58,7 @@ public class Xnoise.AppStarter {
 	};
 
 	public static int main(string[] args) {
-//		Gdk.threads_init();
-
+		//		Gdk.threads_init();
 		GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
 		GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
 		Environment.set_application_name(Config.GETTEXT_PACKAGE);

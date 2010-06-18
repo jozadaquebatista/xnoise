@@ -1,11 +1,11 @@
-SUBDIRS = ui misc
+SUBDIRS = icons ui misc
 
 DISTCLEANFILES = \
-	Makefile.in \
-	$(NULL)
-	
+    Makefile.in \
+    $(NULL)
+
 MAINTAINERCLEANFILES = \
-	Makefile.in \
-	$(NULL)
+    Makefile.in \
+    $(NULL)
 
 

@@ -94,9 +94,6 @@ AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
 IT_PROG_INTLTOOL([0.35.0])
 
-LOCALE_DIR="${datadir}/locale"
-AC_DEFINE_UNQUOTED(LOCALE_DIR, "$LOCALE_DIR",[Locale directory.])
-AC_SUBST(LOCALE_DIR)
 AC_SUBST(VALAFLAGS)
 
 dnl Shave the output
@@ -109,6 +106,11 @@ AC_CONFIG_FILES([
     data/misc/Makefile
     data/misc/xnoise-1.0.pc
     data/ui/Makefile
+    data/icons/Makefile
+    data/icons/32x32/Makefile
+    data/icons/48x48/Makefile
+    data/icons/256x256/Makefile
+    data/icons/scalable/Makefile
     src/Makefile
     po/Makefile.in
 ])
@@ -123,10 +125,5 @@ echo "
     gettext_package:               ${GETTEXT_PACKAGE}
     prefix:                        ${prefix}
     CFLAGS:                        ${CFLAGS}
-    VAPIDIR:                       ${VAPIDIR}
-    LOCALE_DIR:                    ${LOCALE_DIR}
-    datadir:                       ${datadir}
-    datarootdir:                   ${datarootdir}
-    prefix/share:                  ${prefix}/share
 
 "

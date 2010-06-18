@@ -46,8 +46,8 @@ public class Xnoise.PluginLoader : Object, IParams {
 		par.iparams_register(this);
 		this.xn = Main.instance;
 		plugin_htable = new HashTable<string, Plugin>(str_hash, str_equal);
-		lyrics_plugins_htable = new HashTable<string, unowned Plugin>(str_hash, str_equal);
-		image_provider_htable = new HashTable<string, unowned Plugin>(str_hash, str_equal);
+		lyrics_plugins_htable   = new HashTable<string, unowned Plugin>(str_hash, str_equal);
+		image_provider_htable   = new HashTable<string, unowned Plugin>(str_hash, str_equal);
 		lyrics_plugins_priority = new HashTable<string, string>(str_hash, str_equal);
 		image_provider_priority = new HashTable<string, string>(str_hash, str_equal);
 	}
@@ -100,34 +100,37 @@ public class Xnoise.PluginLoader : Object, IParams {
 		//Recoursive scanning of plugin directory.
 		//Module will have to be in the same path as its info file
 		//Modules organized in subdirectories are allowed
-		FileEnumerator enumerator;
-		info_files = new GLib.List<string>();
-		try {
-			string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
-			              FILE_ATTRIBUTE_STANDARD_TYPE;
-			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
-		} catch (Error error) {
-			critical("Error importing plugin information directory %s. %s\n", dir.get_path(), error.message);
-			return;
-		}
-		FileInfo info;
-		try {
-			while((info = enumerator.next_file(null)) != null) {
-				string filename = info.get_name();
-				string filepath = Path.build_filename(dir.get_path(), filename);
-				File file = File.new_for_path(filepath);
-				FileType filetype = info.get_file_type();
-				if(filetype == FileType.DIRECTORY) {
-					this.get_plugin_information_files(file);
-				}
-				else if(filename.has_suffix(".xnplugin")) {
-	//				print("found plugin information file: %s\n", filepath);
-					info_files.append(filepath);
+		if(dir.query_exists(null)) {
+			FileEnumerator enumerator;
+			info_files = new GLib.List<string>();
+			try {
+				string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
+					          FILE_ATTRIBUTE_STANDARD_TYPE;
+				enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
+			} 
+			catch(Error error) {
+				critical("Error importing plugin information directory %s. %s\n", dir.get_path(), error.message);
+				return;
+			}
+			FileInfo info;
+			try {
+				while((info = enumerator.next_file(null)) != null) {
+					string filename = info.get_name();
+					string filepath = Path.build_filename(dir.get_path(), filename);
+					File file = File.new_for_path(filepath);
+					FileType filetype = info.get_file_type();
+					if(filetype == FileType.DIRECTORY) {
+						this.get_plugin_information_files(file);
+					}
+					else if(filename.has_suffix(".xnplugin")) {
+						//print("found plugin information file: %s\n", filepath);
+						info_files.append(filepath);
+					}
 				}
 			}
-		}
-		catch(Error e) {
-			print("Get plugin information: %s\n", e.message);
+			catch(Error e) {
+				print("Get plugin information: %s\n", e.message);
+			}
 		}
 	}
 
@@ -173,7 +176,6 @@ public class Xnoise.PluginLoader : Object, IParams {
 			prio_array_ai += image_provider_priority.lookup(i.to_string());
 		
 		par.set_string_list_value("prio_images", prio_array_ai);
-
 
 		List<int> n_list_ly = new List<int>();
 		List<string> list_ly = lyrics_plugins_priority.get_keys();
