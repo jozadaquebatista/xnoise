@@ -1,7 +1,7 @@
 AC_PREREQ(2.53)
 m4_define(xnoisepluginscore_major_version, 0)
 m4_define(xnoisepluginscore_minor_version, 1)
-m4_define(xnoisepluginscore_micro_version, 4)
+m4_define(xnoisepluginscore_micro_version, 5)
 m4_define(xnoisepluginscore_version, xnoisepluginscore_major_version.xnoisepluginscore_minor_version.xnoisepluginscore_micro_version)
 
 AC_INIT(xnoisepluginscore, xnoisepluginscore_version, shuerhaakenATgo oglemail.com, [xnoise-plugins-core])
