@@ -43,16 +43,30 @@ public class Xnoise.TagReader {
 			td = new TrackData();
 			try {
 				// from class Tag
-				td.Artist      = t.artist;
-				td.Title       = t.title;
-				td.Album       = t.album;
-				td.Genre       = t.genre;
-				td.Year        = t.year;
-				td.Tracknumber = t.track;
-				td.Mediatype   = MediaType.AUDIO;
+				if(t != null) {
+					td.Artist      = t.artist;
+					td.Title       = t.title;
+					td.Album       = t.album;
+					td.Genre       = t.genre;
+					td.Year        = t.year;
+					td.Tracknumber = t.track;
+					td.Mediatype   = MediaType.AUDIO;
+				} else {
+					td.Artist = "unknown artist";
+					td.Title  = "unknown title";
+					td.Album  = "unknown album";
+					td.Genre  = "unknown genre";
+					td.Tracknumber = (uint)0;
+					td.Mediatype   = MediaType.UNKNOWN;
+				}	
 				// from class AudioProperties
-				td.Length      = (int32)ap.length;
-				td.Bitrate     = ap.bitrate;
+				if(ap != null) {
+					td.Length      = (int32)ap.length;
+					td.Bitrate     = ap.bitrate;
+				} else {
+					td.Length = (int32)0;
+					td.Bitrate = 0;
+				}		
 			}
 			finally {
 				if((td.Artist == "")||(td.Artist == null)) td.Artist = "unknown artist";
