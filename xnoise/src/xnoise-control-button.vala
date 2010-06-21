@@ -68,7 +68,7 @@ public class Xnoise.ControlButton : Gtk.Button {
 				stockid = STOCK_MEDIA_STOP;
 				break;
 		}
-		var img = new Gtk.Image.from_stock(stockid, Gtk.IconSize.SMALL_TOOLBAR);
+		var img = new Gtk.Image.from_stock(stockid, Gtk.IconSize.LARGE_TOOLBAR);
 		this.set_image(img);
 		this.relief = Gtk.ReliefStyle.NONE;
 		this.can_focus = false;

@@ -1244,7 +1244,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			//Config button for compact layout		
 			//render the preferences icon with a down arrow next to it
-			config_button_image = new Gtk.Image.from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.SMALL_TOOLBAR);
+			config_button_image = new Gtk.Image.from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.LARGE_TOOLBAR);
 			config_button = new Button();
 			var config_hbox = new HBox(false, 0);
 			config_hbox.pack_start(config_button_image, false, false, 0);
