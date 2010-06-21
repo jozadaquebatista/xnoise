@@ -48,6 +48,7 @@ xnoise_SOURCES = \
 	xnoise-plugin-information.vala \
 	xnoise-plugin-interface.vala \
 	xnoise-plugin-manager-tree.vala \
+	xnoise-screensaver-manager.vala \
 	xnoise-settings-dialog.vala \
 	xnoise-tag-reader.vala \
 	xnoise-text-column.vala \

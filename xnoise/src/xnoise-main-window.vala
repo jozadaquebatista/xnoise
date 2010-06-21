@@ -72,6 +72,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private bool _media_browser_visible;
 	private double current_volume; //keep it global for saving to params
 	private int window_width = 0;
+	private ScreenSaverManager ssm = null;
 	public bool _seek;
 	public bool is_fullscreen = false;
 	public bool drag_on_content_area = false;
@@ -192,6 +193,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		//initialization of videoscreen
 		initialize_video_screen();
 
+		//initialize screen saver management
+		ssm = new ScreenSaverManager();
+
 		//restore last state
 		add_lastused_titles_to_tracklist();
 
@@ -266,6 +270,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_fullscreenwindowvisible(GLib.ParamSpec pspec) {
+		if(fullscreenwindowvisible) ssm.inhibit();
+		else ssm.uninhibit();
+		
 		this.showvideobuttonTL.set_sensitive(!fullscreenwindowvisible);
 		this.showvideobuttonLY.set_sensitive(!fullscreenwindowvisible);
 	}

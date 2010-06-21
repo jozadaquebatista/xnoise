@@ -194,7 +194,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private void create_elements() {
 		playbin = ElementFactory.make("playbin2", "playbin");
 		taglist = null;
-		var bus = new Bus ();
+		var bus = new Gst.Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
 		playbin.connect("swapped-object-signal::about-to-finish", on_about_to_finish, this, null);
@@ -233,12 +233,12 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private void on_bus_message(Gst.Message msg) {
 		if((msg == null)||(msg.get_structure() == null)) 
 			return;
-		switch(msg.type()) {
+		switch(msg.type) {
 			case Gst.MessageType.STATE_CHANGED: {
 				State newstate;
 				State oldstate;
 				
-				if(msg.src()!=playbin) // only look for playbin state changes
+				if(msg.src!=playbin) // only look for playbin state changes
 					break;
 					
 				msg.parse_state_changed(out oldstate, out newstate, null);
@@ -251,7 +251,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				string type = null;
 				string source;
 
-				source = msg.src().get_name();
+				source = msg.src.get_name();
 				type   = msg.get_structure().get_name();
 
 				if(type == null)
@@ -337,7 +337,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return;
 		string message_name = msg.get_structure().get_name();
 		if(message_name=="prepare-xwindow-id") {
-			var imagesink = (XOverlay)(msg.src());
+			var imagesink = (XOverlay)(msg.src);
 			imagesink.set_property("force-aspect-ratio", true);
 			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.window));
 		}

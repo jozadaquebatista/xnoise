@@ -111,7 +111,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 			return;
 		}
 		
-		set_text_via_idle((_artist + " - " + _title + "\n\n" + _text + "\n\nprovided by " + _identifier));
+		set_text_via_idle((_artist + " - " + _title + "\n\n" + _text + "\n\n" + _credits));
 	}
 
 	private void set_text_via_idle(string text) {
