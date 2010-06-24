@@ -1,7 +1,7 @@
 AC_PREREQ(2.53)
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 1)
-m4_define(xnoise_micro_version, 5)
+m4_define(xnoise_micro_version, 8)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
 AC_INIT(xnoise, xnoise_version, shuerhaakenATgo oglemail.com, [xnoise])
@@ -92,6 +92,7 @@ AH_TEMPLATE([GETTEXT_PACKAGE], [xnoise])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["$GETTEXT_PACKAGE"])
 AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
+
 IT_PROG_INTLTOOL([0.35.0])
 
 AC_SUBST(VALAFLAGS)
