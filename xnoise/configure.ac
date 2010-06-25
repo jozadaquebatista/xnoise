@@ -24,7 +24,7 @@ GIO_REQUIRED=2.16
 GTK_REQUIRED=2.18.0
 SQLITE_REQUIRED=3.4
 TAGLIB_C_REQUIRED=1.5.0
-VALA_REQUIRED=0.8.0
+VALA_REQUIRED=0.9.2
 
 AC_PROG_CC
 AM_PROG_VALAC($VALA_REQUIRED)
@@ -43,7 +43,6 @@ PKG_CHECK_MODULES(XNOISE, \
     gstreamer-plugins-base-0.10 \
     gdk-2.0 \
     gdk-pixbuf-2.0 \
-    gdk-x11-2.0 \
     gio-2.0 >= $GIO_REQUIRED \
     unique-1.0 \
     gmodule-2.0)
@@ -52,7 +51,6 @@ XNOISE_PACKAGES="\
     --pkg config \
     --pkg gtk+-2.0 \
     --pkg gdk-2.0 \
-    --pkg gdk-x11-2.0 \
     --pkg gdk-pixbuf-2.0 \
     --pkg posix \
     --pkg sqlite3 \

@@ -18,7 +18,7 @@ AM_MAINTAINER_MODE
 AC_DISABLE_STATIC
 
 AC_PROG_CC
-AM_PROG_VALAC([0.8.1])
+AM_PROG_VALAC([0.9.2])
 AC_STDC_HEADERS
 AC_PROG_LIBTOOL
 AC_FUNC_MMAP
@@ -44,7 +44,6 @@ XNOISEPLUGINSCORE_PACKAGES="\
     --pkg config \
     --pkg gtk+-2.0 \
     --pkg gdk-2.0 \
-    --pkg gdk-x11-2.0 \
     --pkg gdk-pixbuf-2.0 \
     --pkg posix \
     --pkg sqlite3 \
