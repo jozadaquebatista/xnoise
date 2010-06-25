@@ -33,34 +33,36 @@ AC_PROG_LIBTOOL
 AC_FUNC_MMAP
 
 PKG_CHECK_MODULES(XNOISE, \
+    gdk-2.0 \
+    gdk-pixbuf-2.0 \
+    gdk-x11-2.0 \
     glib-2.0 >= $GLIB_REQUIRED \
+    gmodule-2.0 \
     gobject-2.0 >= $GLIB_REQUIRED \
-    gtk+-2.0 >= $GTK_REQUIRED \
-    taglib_c >= $TAGLIB_C_REQUIRED \
-    sqlite3 >= $SQLITE_REQUIRED \
+    gio-2.0 >= $GIO_REQUIRED \
     gstreamer-0.10 >= $GSTREAMER_REQUIRED \
     gstreamer-interfaces-0.10 \
     gstreamer-plugins-base-0.10 \
-    gdk-2.0 \
-    gdk-pixbuf-2.0 \
-    gio-2.0 >= $GIO_REQUIRED \
-    unique-1.0 \
-    gmodule-2.0)
+    gtk+-2.0 >= $GTK_REQUIRED \
+    sqlite3 >= $SQLITE_REQUIRED \
+    taglib_c >= $TAGLIB_C_REQUIRED \
+    unique-1.0)
 
 XNOISE_PACKAGES="\
     --pkg config \
-    --pkg gtk+-2.0 \
     --pkg gdk-2.0 \
     --pkg gdk-pixbuf-2.0 \
-    --pkg posix \
-    --pkg sqlite3 \
+    --pkg gdk-x11-2.0 \
     --pkg gio-2.0 \
+    --pkg gmodule-2.0 \
     --pkg gstreamer-0.10 \
     --pkg gstreamer-pbutils-0.10 \
     --pkg gstreamer-interfaces-0.10 \
+    --pkg gtk+-2.0 \
+    --pkg posix \
+    --pkg sqlite3 \
     --pkg taglib_c \
     --pkg unique-1.0 \
-    --pkg gmodule-2.0 \
 "
 
 AC_SUBST(XNOISE_CFLAGS)
