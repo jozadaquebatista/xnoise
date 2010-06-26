@@ -653,11 +653,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	public void write_params_data() {
-		//disabled because of crashes
-		/*int posX, posY;
+		int posX, posY;
 		this.get_position(out posX, out posY);
 		par.set_int_value("posX", posX);
-		par.set_int_value("posY", posY);*/
+		par.set_int_value("posY", posY);
 
 		int  wi, he;
 		this.get_size(out wi, out he);
@@ -1259,7 +1258,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 		catch(GLib.Error e) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
-			    Gtk.ButtonsType.OK, "Failed to build main window! \n" + e.message);
+			                                Gtk.ButtonsType.OK,
+			                                "Failed to build main window! \n" + e.message);
 			msg.run();
 			return;
 		}
