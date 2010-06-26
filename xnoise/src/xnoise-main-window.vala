@@ -157,9 +157,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		get {
 			return _compact_layout;
 		}
-	
 		set {
-			if (value) {
+			if(value) {
 				if(_compact_layout) return;
 				if(menubar.get_parent() != null) {
 					menuvbox.remove(menubar);
@@ -167,9 +166,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				if(a_frame_config_button != null && config_button.get_parent() == null) 
 					a_frame_config_button.add(config_button);
 				config_button.show_all();
+				if(config_button_menu.attach_widget != null)
+					config_button_menu.detach();
+				config_button_menu.attach_to_widget(config_button, (a, x) => {});
 				stopButton.hide();
 			}
 			else {
+				config_button_menu.detach();
 				if(a_frame_config_button != null && config_button.is_realized()) 
 					a_frame_config_button.remove(config_button);
 				config_button.unrealize();
@@ -324,7 +327,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
-	public void position_config_menu (Menu menu, out int x, out int y, out bool push) {
+	public void position_config_menu(Menu menu, out int x, out int y, out bool push) {
 		//the upper right corner of the popup menu should be just beneath the lower right corner of the button
 
 		int o_x, o_y, o_height, o_width, o_depth;
@@ -332,6 +335,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		Requisition req; 
 		config_button.get_child_requisition(out req);
 		/* get_allocation is broken in vapi - we should remove this direct field access as soon as it is fixed */
+		//Did you file a bug for this?
 		Allocation alloc;
 		alloc = config_button.allocation;
 		x = o_x + alloc.x + req.width;
@@ -1289,9 +1293,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		config_button_menu_root = (ImageMenuItem)ui_manager.get_widget("/ConfigButtonMenu/ConfigMenu");
 		config_button_menu = (Menu)config_button_menu_root.get_submenu();
 		config_button.clicked.connect(() => {
-			config_button_menu.popup(null, null, position_config_menu, 0, 0);
+			config_button_menu.popup(null, null, position_config_menu, 0, Gtk.get_current_event_time());
 		});
-		
 		if(par.get_int_value("compact_layout") > 0) compact_layout = true;
 		else compact_layout = false;
 
