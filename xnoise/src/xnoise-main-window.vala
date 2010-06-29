@@ -703,7 +703,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			stop();
 			return;
 		}
-
 		// get_active_path sets first path, if active is not available
 		if(!trackList.tracklistmodel.get_active_path(out path, out used_next_pos)) {
 			stop();
@@ -727,9 +726,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 						if(direction == ControlButton.Direction.NEXT) {
 							path.next();
 						}
-						else if((direction == ControlButton.Direction.PREVIOUS)&&
-								(path.to_string() != "0")) {
-							path.prev();
+						else if(direction == ControlButton.Direction.PREVIOUS) {
+							if(path.to_string() != "0") // only do something if are not in the first row
+								path.prev();
+							else
+								return;
 						}
 					}
 					else {
@@ -743,9 +744,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 								stop();
 							}
 						}
-						else if((direction == ControlButton.Direction.PREVIOUS)&&
-						        (path.to_string() != "0")) {
-							path.prev();
+						else if(direction == ControlButton.Direction.PREVIOUS) {
+							if(path.to_string() != "0") // only do something if are not in the first row
+								path.prev();
+							else
+								return;
 						}
 					}
 				}

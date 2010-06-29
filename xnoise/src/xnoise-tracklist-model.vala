@@ -155,17 +155,17 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		if(get_current_path(out treepath)) {
 			this.get_iter(out iter, treepath);
 			this.get(iter, Column.URI, out uri);
-
-			if((uri != "")&&(uri == global.current_uri))
+			if((uri != "") && (uri == global.current_uri)) {
+				global.do_restart_of_current_track();
 				global.uri_repeated(uri);
+			}
 
 			if(uri != "")
 				global.current_uri = uri;
+			
 		}
 		else {
-
 			return;
-
 		}
 
 		// Set visual feedback for tracklist
