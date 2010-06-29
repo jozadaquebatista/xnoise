@@ -269,7 +269,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_caught_eos_from_player() {
-		this.change_song(ControlButton.Direction.NEXT, true);
+		this.change_track(ControlButton.Direction.NEXT, true);
 	}
 
 	private void on_fullscreenwindowvisible(GLib.ParamSpec pspec) {
@@ -689,7 +689,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	// This function changes the current song to the next or previous in the
 	// tracklist. handle_repeat_state should be true if the calling is not
 	// coming from a button, but, e.g. from a EOS signal handler
-	public void change_song(ControlButton.Direction direction, bool handle_repeat_state = false) {
+	public void change_track(ControlButton.Direction direction, bool handle_repeat_state = false) {
 		unowned TreeIter iter;
 		bool trackList_is_empty;
 		TreePath path = null;
@@ -768,7 +768,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			trackList.set_focus_on_iter(ref iter);
 
 		if(path.to_string() == tmp_path.to_string()) {
-			if(repeatState == Repeat.SINGLE) {
+			if((repeatState == Repeat.SINGLE)||((repeatState == Repeat.ALL && rowcount == 1))) {
 				// Explicit restart
 				global.do_restart_of_current_track();
 			}
@@ -1021,7 +1021,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
 		if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS)
-			this.change_song(dir);
+			this.change_track(dir);
 		else if(dir == ControlButton.Direction.STOP)
 			this.stop();
 	}

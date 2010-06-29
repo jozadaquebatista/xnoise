@@ -238,7 +238,7 @@ namespace Xnoise {
 		public Xnoise.VideoScreen videoscreen;
 		public Gtk.VBox videovbox;
 		public MainWindow ();
-		public void change_song (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
+		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public void display_info_bar (Gtk.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
 		public void position_config_menu (Gtk.Menu menu, out int x, out int y, out bool push);

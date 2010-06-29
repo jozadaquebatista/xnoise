@@ -29,13 +29,13 @@
  * 	softshaker
  */
 
-
 using Gtk;
 
 /**
-* A ControlButton is a Gtk.Button that initiates playback of the previous or next item or stop
-*/
+ * A ControlButton is a Gtk.Button that initiates playback of the previous or next item or stop
+ */
 public class Xnoise.ControlButton : Gtk.Button {
+	
 	public static enum Direction {
 		NEXT = 0,
 		PREVIOUS,
@@ -44,19 +44,16 @@ public class Xnoise.ControlButton : Gtk.Button {
 	
 	public signal void sign_clicked(Direction dir);
 	
-	private unowned Main xn;
 	private Direction direction;
 	
 	public ControlButton(Direction _direction = Direction.STOP) {
-		this.xn = Main.instance;
-		
 		if(_direction != Direction.NEXT && _direction != Direction.PREVIOUS && _direction != Direction.STOP)
 			direction = Direction.STOP;
 		else
 			direction = _direction;
 			
-		string stockid = STOCK_MEDIA_STOP;
-		switch (direction) {
+		string stockid;
+		switch(direction) {
 			case Direction.NEXT:
 				stockid = STOCK_MEDIA_NEXT;
 				break;
