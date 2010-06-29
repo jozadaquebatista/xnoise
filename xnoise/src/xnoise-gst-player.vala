@@ -269,10 +269,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 				Error err;
 				string debug;
 				msg.parse_error(out err, out debug);
-				print("Error: %s\n", err.message);
-				print("Debug: %s\n", debug);
+				print("GstError: %s\n", err.message);
+				//print("Debug: %s\n", debug);
 				if(!is_missing_plugins_error(msg)) {
-					print("error not missing plugin\n");
+					print("Error is not missing plugin error\n");
 					handle_eos_via_idle(); //this is used to go to the next track
 				}
 				break;
@@ -286,28 +286,28 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private bool is_missing_plugins_error(Gst.Message msg) {
-		print("in is_missing_plugins_error?\n");
+		//print("in is_missing_plugins_error?\n");
 		bool retval = false;
 		Error err = null;
 		string debug;
 		
 		if(missing_plugins == null) {
-			print("messages is null and therefore no missing_plugin message\n");
+			//print("messages is null and therefore no missing_plugin message\n");
 			return false;
 		}
 		msg.parse_error(out err, out debug);
 		
-		print("err.code: %d\n", (int)err.code);
+		//print("err.code: %d\n", (int)err.code);
 		
 		if(err is Gst.CoreError && ((int)(err.code) == (int)(Gst.StreamError.CODEC_NOT_FOUND))) {
-			print("is missing plgins error \n");
+			//print("is missing plgins error \n");
 			sign_missing_plugins();
 		} 
 		return retval;
 	}
 	
 	private void on_sign_missing_plugins() {
-		print("sign_missing_plugins!!!!\n");
+		//print("sign_missing_plugins!!!!\n");
 		stop();
 		return;
 	}

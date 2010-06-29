@@ -712,7 +712,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		tmp_path = path;
 		if((repeatState == Repeat.RANDOM)) {
 			// handle RANDOM
-			this.trackList.tracklistmodel.get_random_row(ref path);
+			if(!this.trackList.tracklistmodel.get_random_row(ref path) || 
+			   (path.to_string() == tmp_path.to_string())) {
+				if(!this.trackList.tracklistmodel.get_random_row(ref path)) //try once again
+					return;
+			}
 		}
 		else {
 			if(!used_next_pos) {
