@@ -42,6 +42,8 @@ public class Xnoise.ControlButton : Gtk.Button {
 		STOP
 	}
 	
+	public signal void sign_clicked(Direction dir);
+	
 	private unowned Main xn;
 	private Direction direction;
 	
@@ -75,11 +77,8 @@ public class Xnoise.ControlButton : Gtk.Button {
 		this.clicked.connect(this.on_clicked);
 	}
 
-	public void on_clicked() {
-		if(direction == Direction.NEXT || direction == Direction.PREVIOUS)
-			this.xn.main_window.change_song(direction);
-		else if(direction == Direction.STOP)
-			this.xn.main_window.stop();
+	private void on_clicked() {
+		this.sign_clicked(direction);
 	}
 }
 

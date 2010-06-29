@@ -50,7 +50,7 @@ namespace Xnoise {
 			STOP
 		}
 		public ControlButton (Xnoise.ControlButton.Direction _direction = Xnoise.ControlButton.Direction.STOP);
-		public void on_clicked ();
+		public signal void sign_clicked (Xnoise.ControlButton.Direction dir);
 	}
 	[CCode (ref_function = "xnoise_db_browser_ref", unref_function = "xnoise_db_browser_unref", cheader_filename = "xnoise.h")]
 	public class DbBrowser {

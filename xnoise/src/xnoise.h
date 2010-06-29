@@ -1006,7 +1006,6 @@ GType xnoise_control_button_get_type (void);
 GType xnoise_control_button_direction_get_type (void);
 XnoiseControlButton* xnoise_control_button_new (XnoiseControlButtonDirection _direction);
 XnoiseControlButton* xnoise_control_button_construct (GType object_type, XnoiseControlButtonDirection _direction);
-void xnoise_control_button_on_clicked (XnoiseControlButton* self);
 GQuark xnoise_db_error_quark (void);
 gpointer xnoise_db_browser_ref (gpointer instance);
 void xnoise_db_browser_unref (gpointer instance);

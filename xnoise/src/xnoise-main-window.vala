@@ -476,7 +476,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		previousHbox.pack_start(previousImage, false, true, 0);
 		previousHbox.pack_start(previousLabel, true, true, 0);
 		previousItem.add(previousHbox);
-		previousItem.activate.connect(previousButton.on_clicked);
+		previousItem.activate.connect( () => {
+			this.handle_control_button_click(previousButton, ControlButton.Direction.PREVIOUS);
+		});
 		traymenu.append(previousItem);
 
 		var nextImage = new Image();
@@ -489,7 +491,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		nextHbox.pack_start(nextImage, false, true, 0);
 		nextHbox.pack_start(nextLabel, true, true, 0);
 		nextItem.add(nextHbox);
-		nextItem.activate.connect(nextButton.on_clicked);
+		nextItem.activate.connect( () => {
+			this.handle_control_button_click(nextButton, ControlButton.Direction.NEXT);
+		});
 		traymenu.append(nextItem);
 
 		var separator = new SeparatorMenuItem();
@@ -1015,6 +1019,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		return false;
 	}
 
+	private void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
+		if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS)
+			this.change_song(dir);
+		else if(dir == ControlButton.Direction.STOP)
+			this.stop();
+	}
+
 	private void create_widgets() {
 		try {
 			Builder gb = new Gtk.Builder();
@@ -1136,14 +1147,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//PLAYBACK CONTROLLS
 			var playback_hbox = gb.get_object("playback_hbox") as Gtk.HBox;
 			this.previousButton = new ControlButton(ControlButton.Direction.PREVIOUS);
+			this.previousButton.sign_clicked.connect(handle_control_button_click);
 			playback_hbox.pack_start(previousButton, false, false, 0);
 			previousButton.show();
 			this.playPauseButton = new PlayPauseButton();
 			playback_hbox.pack_start(playPauseButton, false, false, 0);
 			this.playPauseButton.show();
 			this.stopButton = new ControlButton(ControlButton.Direction.STOP);
+			this.stopButton.sign_clicked.connect(handle_control_button_click);
 			playback_hbox.pack_start(stopButton, false, false, 0);
 			this.nextButton = new ControlButton(ControlButton.Direction.NEXT);
+			this.nextButton.sign_clicked.connect(handle_control_button_click);
 			playback_hbox.pack_start(nextButton, false, false, 0);
 			nextButton.show();
 
