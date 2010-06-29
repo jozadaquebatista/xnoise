@@ -101,6 +101,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			_Uri = value;
 			if((value == "")||(value == null)) {
 				playbin.set_state(State.NULL); //stop
+				print("Uri = null or '' -> set to stop\n");
 				playing = false;
 				paused = false;
 			}
@@ -238,13 +239,16 @@ public class Xnoise.GstPlayer : GLib.Object {
 				State newstate;
 				State oldstate;
 				
-				if(msg.src!=playbin) // only look for playbin state changes
+				if(msg.src != playbin) // only look for playbin state changes
 					break;
 					
 				msg.parse_state_changed(out oldstate, out newstate, null);
 				if((newstate == State.PLAYING)&&((oldstate == State.PAUSED)||(oldstate == State.READY))) {
 					this.check_for_video();
 				}
+				//if((oldstate == State.PLAYING)&&((newstate == State.NULL)||(newstate == State.PAUSED)||(newstate == State.READY))) {
+				//	print("stopped/paused message\n");
+				//}
 				break;
 			}
 			case Gst.MessageType.ELEMENT: {
