@@ -1,4 +1,4 @@
-/* xnoise-title-to-decoration-registration.vala
+/* xnoise-mpris-registration.vala
  *
  * Copyright (C) 2009  Jörn Magens
  *

@@ -51,38 +51,40 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	}
 
 	public bool init() {
-	    try {
-	    	// connect to the session bus
-		    conn = DBus.Bus.get (DBus.BusType.SESSION);
-		    if(conn == null) return false;
-		    
-		    bus = conn.get_object ("org.freedesktop.DBus",
-		                           "/org/freedesktop/DBus",
-		                           "org.freedesktop.DBus");
-		    if(bus == null) return false;                       
-		    
-		    // request our name
-		    uint request_name_result = bus.request_name ("org.mpris.xnoise", (uint) 0);
+		try {
+			// connect to the session bus
+			conn = DBus.Bus.get(DBus.BusType.SESSION);
+			if(conn == null) return false;
+			
+			bus = conn.get_object("org.freedesktop.DBus",
+			                      "/org/freedesktop/DBus",
+			                      "org.freedesktop.DBus");
+			if(bus == null) return false;
+			
+			// request our name
+			uint request_name_result = bus.request_name("org.mpris.xnoise", (uint)0);
 			
 			// if we got our name setup / /Player and /TrackList objects
-		    if (request_name_result == DBus.RequestNameReply.PRIMARY_OWNER) {
+			if(request_name_result == DBus.RequestNameReply.PRIMARY_OWNER) {
 
-		        root = new MprisRoot();
-		        conn.register_object ("/", root);
-		        
-		        player = new MprisPlayer();
-		        conn.register_object ("/Player", player);
-		        
-		        tracklist = new MprisTrackList();
-		        conn.register_object ("/TrackList", tracklist);
-		    } else {        
-		  		stderr.printf ("mpris: cannot acquire name org.mpris.xnoise in session bus");
-		    }
-    	} catch (GLib.Error e) {
-        	stderr.printf ("mpris: failed to setup dbus interface: %s\n", e.message);
-        	return false;
-    	}
-    	return true;
+				root = new MprisRoot();
+				conn.register_object("/", root);
+		
+				 player = new MprisPlayer();
+				conn.register_object("/Player", player);
+
+				tracklist = new MprisTrackList();
+				conn.register_object("/TrackList", tracklist);
+			}
+			else {
+				stderr.printf("mpris: cannot acquire name org.mpris.xnoise in session bus");
+			}
+		}
+		catch(GLib.Error e) {
+			stderr.printf("mpris: failed to setup dbus interface: %s\n", e.message);
+			return false;
+		}
+		return true;
 	}
 	
 	~Mpris() {
@@ -109,21 +111,21 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 
 
 
-[DBus (name = "org.freedesktop.MediaPlayer")]
+[DBus(name = "org.freedesktop.MediaPlayer")]
 public class MprisRoot : GLib.Object {
-    public string Identity () {
-    	return "xnoise";
-    }
-    
-    public void Quit () {
-    }
-    
-    public VersionStruct MprisVersion() {
-    	var v = VersionStruct();
-    	v.Major = 1;
-    	v.Minor = 0;
-    	return v;
-    }
+	public string Identity() {
+		return "xnoise";
+	}
+	
+	public void Quit() {
+	}
+	
+	public VersionStruct MprisVersion() {
+		var v = VersionStruct();
+		v.Major = 1;
+		v.Minor = 0;
+		return v;
+	}
 }
 
 public struct VersionStruct {
@@ -133,9 +135,9 @@ public struct VersionStruct {
 
 
 
-[DBus (name = "org.freedesktop.MediaPlayer")]
+[DBus(name = "org.freedesktop.MediaPlayer")]
 public class MprisPlayer : GLib.Object {
-	private Main xn;
+	private unowned Main xn;
 	private static enum Direction {
 		NEXT = 0,
 		PREVIOUS,
@@ -146,12 +148,18 @@ public class MprisPlayer : GLib.Object {
 	public signal void StatusChange(StatusStruct Status);
 	public signal void CapsChange(int Capabilities);
 
+	public MprisPlayer() {
+		this.xn = Main.instance;
+	}
+
 	public void Next() {
-		this.xn.main_window.change_song(Xnoise.ControlButton.Direction.NEXT);
+		print("next\n");
+		this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
 	}
 	
 	public void Prev() {
-		this.xn.main_window.change_song(Xnoise.ControlButton.Direction.PREVIOUS);
+		print("prev\n");
+		this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
 	}
 	
 	public void Pause() {
@@ -159,7 +167,7 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public void Stop() {
-		this.xn.main_window.change_song(Xnoise.ControlButton.Direction.STOP);
+		this.xn.main_window.stop();
 	}
 	
 	public void Play() {
@@ -175,7 +183,7 @@ public class MprisPlayer : GLib.Object {
 		return ss;
 	}
 	
-	public HashTable<string, Value?> GetMetadata() {
+	public HashTable<string, Value?>? GetMetadata() {
 		return null;
 	}
 	
@@ -195,7 +203,7 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public void PositionSet(int Position) {
-		if (xn.gPl.length_time == 0) return; 
+		if(xn.gPl.length_time == 0) return; 
 		this.xn.main_window.sign_pos_changed(Position/xn.gPl.length_time);
 	}
 	
@@ -213,12 +221,12 @@ public struct StatusStruct {
 
 
 
-[DBus (name = "org.freedesktop.MediaPlayer")]
+[DBus(name = "org.freedesktop.MediaPlayer")]
 public class MprisTrackList : GLib.Object {
 	public signal void TrackListChange(int Nb_Tracks);
 	
 	
-	public HashTable<string, Value?> GetMetadata (int Position) {
+	public HashTable<string, Value?>? GetMetadata(int Position) {
 		return null;
 	}
 	
