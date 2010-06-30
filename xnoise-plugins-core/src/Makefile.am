@@ -21,6 +21,10 @@ endif
 if ENABLE_MEDIAWATCHER
   SUBDIRS += mediawatcher
 endif
+
+if ENABLE_MPRIS
+  SUBDIRS += mpris
+endif
   
 DISTCLEANFILES = \
 	Makefile.in \

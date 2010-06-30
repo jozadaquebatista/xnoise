@@ -36,6 +36,7 @@ dnl required versions for plugins
 LIBNOTIFY_REQUIRED=0.4.5
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
+DBUS_GLIB_REQUIRED=0.0.1
 XNOISE_REQUIRED=xnoisepluginscore_version
 
 PKG_CHECK_MODULES(XNOISEPLUGINSCORE, xnoise-1.0 = $XNOISE_REQUIRED)
@@ -54,6 +55,7 @@ XNOISEPLUGINSCORE_PACKAGES="\
     --pkg taglib_c \
     --pkg unique-1.0 \
     --pkg gmodule-2.0 \
+    --pkg dbus-glib-1 \
 "
 
 AC_SUBST(XNOISEPLUGINSCORE_CFLAGS)
@@ -107,6 +109,23 @@ if test "x$have_libnotify" != "xyes"; then
 fi
 AC_SUBST(LIBNOTIFY_CFLAGS)
 AC_SUBST(LIBNOTIFY_LIBS)
+dnl ================================================================
+
+
+
+
+dnl ================================================================
+dnl plugin check for plugins dependent on dbus-glib
+
+PKG_CHECK_MODULES(LIBDBUS_GLIB, \
+                  dbus-glib-1 >= $DBUS_GLIB_REQUIRED, \
+                  have_dbus_glib=yes, \
+                  have_dbus_glib=no)
+if test "x$have_dbus_glib" != "xyes"; then
+    AC_MSG_WARN([dbus-glib $DBUS_GLIB_REQUIRED or greater not found.])
+fi
+AC_SUBST(LIBDBUS_GLIB_CFLAGS)
+AC_SUBST(LIBDBUS_GLIB_LIBS)
 dnl ================================================================
 
 
@@ -201,14 +220,33 @@ AC_ARG_ENABLE([mediawatcher],
     [enable_mediawatcher=yes])
 
 if test "x$enable_mediawatcher" = "xyes"; then
-        enable_mediawatcher=yes		
+	enable_mediawatcher=yes		
 else
-        enable_mediawatcher=no
-        AC_MSG_WARN([mediawatcher plugin will not be included in the build.])
+   	enable_mediawatcher=no
+   	AC_MSG_WARN([mediawatcher plugin will not be included in the build.])
 fi
 AM_CONDITIONAL(ENABLE_MEDIAWATCHER, test x"$enable_mediawatcher" = "xyes")
 dnl ================================================================
 
+dnl ================================================================
+dnl dependency check for optional build of mpris plugin 
+
+AC_ARG_ENABLE([mpris],
+    AS_HELP_STRING([--disable-mpris],
+    [Disable mpris plugin (default: enabled)]),
+    [enable_mpris=$enableval],
+    [enable_mpris=yes])
+
+if test "x$enable_mpris" = "xyes"; then
+	if test "x$have_dbus_glib" = "xyes"; then
+		enable_mpris=yes		
+	else
+        enable_mpris=no
+        AC_MSG_WARN([mpris plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_MPRIS, test x"$enable_mpris" = "xyes")
+dnl ================================================================
 
 # Gettext
 GETTEXT_PACKAGE=xnoise-plugins-core
@@ -236,6 +274,7 @@ AC_CONFIG_FILES([
     src/lyricsfly/Makefile
     src/notifications/Makefile
     src/mediawatcher/Makefile
+    src/mpris/Makefile
     po/Makefile.in
 ])
 
@@ -257,5 +296,5 @@ echo "
     lastfm covers:                 ${enable_lastfmcovers}
     notifications:                 ${enable_notifications}
     mediawatcher:                  ${enable_mediawatcher}
-
+    mpris:                         ${enable_mpris}
 "
