@@ -248,7 +248,7 @@ public class MprisTrackList : GLib.Object {
 	public void SetLoop(bool State) {
 	}
 	
-	public void SetRandon(bool State) {
+	public void SetRandom(bool State) {
 	}
 }
 
