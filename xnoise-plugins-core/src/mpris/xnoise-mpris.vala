@@ -163,6 +163,12 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public void Pause() {
+		if(global.current_uri == null) {
+			string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
+			if((uri != "")&&(uri != null)) 
+				global.current_uri = uri;
+		}
+
 		global.track_state = GlobalInfo.TrackState.PAUSED;
 	}
 	
@@ -171,7 +177,15 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public void Play() {
-		global.track_state = GlobalInfo.TrackState.PLAYING;
+		if(global.current_uri == null) {
+			string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
+			if((uri != "")&&(uri != null)) 
+				global.current_uri = uri;
+		}
+
+		if(!(global.track_state == GlobalInfo.TrackState.PLAYING)) {
+			global.track_state = GlobalInfo.TrackState.PLAYING;
+		}
 	}
 	
 	public void Repeat(bool State) {

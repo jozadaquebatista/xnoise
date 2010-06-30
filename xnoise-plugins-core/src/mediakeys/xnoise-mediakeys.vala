@@ -106,10 +106,18 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 				break;
 			}
 			case "Play": {
-				if(global.track_state == GlobalInfo.TrackState.PAUSED || global.track_state == GlobalInfo.TrackState.STOPPED)
-					global.track_state = GlobalInfo.TrackState.PLAYING;
-				else
+				if(global.current_uri == null) {
+					string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
+					if((uri != "")&&(uri != null)) 
+						global.current_uri = uri;
+				}
+
+				if(global.track_state == GlobalInfo.TrackState.PLAYING) {
 					global.track_state = GlobalInfo.TrackState.PAUSED;
+				}
+				else {
+					global.track_state = GlobalInfo.TrackState.PLAYING;
+				}
 				break;
 			}
 			case "Stop": {
