@@ -248,6 +248,27 @@ fi
 AM_CONDITIONAL(ENABLE_MPRIS, test x"$enable_mpris" = "xyes")
 dnl ================================================================
 
+dnl ================================================================
+dnl dependency check for optional build of mediakeys plugin 
+
+AC_ARG_ENABLE([mpris],
+    AS_HELP_STRING([--disable-mediakeys],
+    [Disable mediakeys plugin (default: enabled)]),
+    [enable_mediakeys=$enableval],
+    [enable_mediakeys=yes])
+
+if test "x$enable_mediakeys" = "xyes"; then
+	if test "x$have_dbus_glib" = "xyes"; then
+		enable_mediakeys=yes		
+	else
+        enable_mediakeys=no
+        AC_MSG_WARN([mediakeys plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_MEDIAKEYS, test x"$enable_mediakeys" = "xyes")
+dnl ================================================================
+
+
 # Gettext
 GETTEXT_PACKAGE=xnoise-plugins-core
 AH_TEMPLATE([GETTEXT_PACKAGE], [xnoise-plugins-core])
@@ -275,6 +296,7 @@ AC_CONFIG_FILES([
     src/notifications/Makefile
     src/mediawatcher/Makefile
     src/mpris/Makefile
+    src/mediakeys/Makefile
     po/Makefile.in
 ])
 
@@ -297,4 +319,5 @@ echo "
     notifications:                 ${enable_notifications}
     mediawatcher:                  ${enable_mediawatcher}
     mpris:                         ${enable_mpris}
+    mediakeys:                     ${enable_mediakeys}
 "

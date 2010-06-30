@@ -25,7 +25,11 @@ endif
 if ENABLE_MPRIS
   SUBDIRS += mpris
 endif
-  
+
+if ENABLE_MEDIAKEYS
+  SUBDIRS += mediakeys
+endif
+
 DISTCLEANFILES = \
 	Makefile.in \
 	$(NULL)
