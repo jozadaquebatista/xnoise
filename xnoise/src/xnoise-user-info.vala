@@ -28,16 +28,21 @@
  * 	Jörn Magens
  */
 
+//Keep this class static, so it can handle the old info bar messages and 
+// remove them as soon as they are due.
+
 using Gtk;
 
 public class Xnoise.UserInfo : GLib.Object {
 	
+	// Set how the infobar should be removed
 	public enum RemovalType {
 		CLOSE_BUTTON = 0, //Info is removed, if close button is clicked
 		TIMER,            //Info is removed, if timer has elapsed
 		EXTERNAL          //Info is removed, if external function is called with messge id; no remove button available and no timer used
 	}
 
+	// Set the type of content. Used to choose picture/spinner
 	public enum ContentClass {
 		INFO = 0,
 		WAIT,
@@ -46,6 +51,7 @@ public class Xnoise.UserInfo : GLib.Object {
 		CRITICAL
 	}
 
+	// delegate type used to place the info bar
 	public delegate void AddInfoBarDelegateType(InfoBar ibar);
 
 	private AddInfoBarDelegateType add_info_bar;
@@ -77,6 +83,10 @@ public class Xnoise.UserInfo : GLib.Object {
 		popdown(id);
 	}
 	
+	
+	/*
+	 * Hide infobar and remove it from the internal list
+	 */
 	public void popdown(uint id) {
 		InfoBar? bar = info_messages.lookup(id);
 		
