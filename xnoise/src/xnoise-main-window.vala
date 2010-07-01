@@ -1331,12 +1331,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.window_state_event.connect(this.on_window_state_change);
 	}
 	
-	public void display_info_bar(InfoBar bar) {
+	public void display_info_bar(Gtk.InfoBar bar) {
 		contentvbox.pack_start(bar, false, false, 0);
 		bar.show();
 	}
 	
-	public void show_status_info(InfoBar bar) {
+	public void show_status_info(Xnoise.InfoBar bar) {
 		contentvbox.pack_end(bar, false, false, 0);
 		bar.show_all();
 	}

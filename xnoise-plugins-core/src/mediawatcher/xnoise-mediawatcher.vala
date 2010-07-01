@@ -308,7 +308,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	single file only.
  */
 private class Xnoise.ImportInfoBar {
-	private InfoBar bar = null;
+	private Gtk.InfoBar bar = null;
 	private Label bar_label = null;
 	private Button bar_close_button = null;
 	private ProgressBar bar_progress = null;
@@ -323,7 +323,7 @@ private class Xnoise.ImportInfoBar {
 	
 	public ImportInfoBar() {
 		import_count = 0;
-		bar = new InfoBar();
+		bar = new Gtk.InfoBar();
 
 		bar_label = new Label("");
 		bar_label.height_request = 20;

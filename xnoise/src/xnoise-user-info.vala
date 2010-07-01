@@ -51,6 +51,8 @@ public class Xnoise.UserInfo : GLib.Object {
 		CRITICAL
 	}
 
+	public signal void sign_removed_info_bar(uint id);
+
 	// delegate type used to place the info bar
 	public delegate void AddInfoBarDelegateType(InfoBar ibar);
 
@@ -81,6 +83,15 @@ public class Xnoise.UserInfo : GLib.Object {
 		if(id == 0)
 			return;
 		popdown(id);
+	}
+	
+	public void enable_close_button_by_id(uint id, bool enable) {
+		Xnoise.InfoBar? bar = info_messages.lookup(id);
+		
+		if(bar == null)
+			return;
+			
+		bar.enable_close_button(enable);
 	}
 	
 	public void update_symbol_widget_by_id(uint id, UserInfo.ContentClass cc) {
@@ -131,6 +142,8 @@ public class Xnoise.UserInfo : GLib.Object {
 			bar = null;
 			return false;
 		});
+		
+		sign_removed_info_bar(id);
 	}
 
 	/*

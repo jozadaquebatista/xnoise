@@ -34,6 +34,7 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 	private Gtk.Widget symbol_widget;
 	private UserInfo uinf; 
 	private UserInfo.RemovalType removal_type;
+	private Gtk.Button? close_button = null;
 	private Gtk.Widget? extra_widget = null;
 	private uint current_id = 0;
 	
@@ -45,6 +46,7 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 	               string _info_text = "", 
 	               bool bold = true,
 	               Gtk.Widget? _extra_widget = null) {
+		
 		uinf          = _uinf; 
 		removal_type  = _removal_type;
 		current_id = _current_id;
@@ -55,6 +57,13 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 	//~InfoBar() {
 	//	print("destruct info bar\n");
 	//}
+	
+	public void enable_close_button(bool enable) {
+		if(close_button == null)
+			return;
+		
+		close_button.sensitive = enable;
+	}
 	
 	public void update_symbol_widget(UserInfo.ContentClass cc) {
 		symbol_widget.hide();
@@ -116,7 +125,7 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 
 		switch(removal_type) {
 			case(UserInfo.RemovalType.CLOSE_BUTTON):
-				var close_button = new Gtk.Button.from_stock(Gtk.STOCK_CLOSE);
+				close_button = new Gtk.Button.from_stock(Gtk.STOCK_CLOSE);
 				close_button.clicked.connect( () => {
 					Idle.add( () => {
 						uinf.popdown(current_id);
