@@ -119,15 +119,15 @@ namespace Xnoise {
 		public void show ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class GlobalInfo : GLib.Object {
-		[CCode (cprefix = "XNOISE_GLOBAL_INFO_TRACK_STATE_", cheader_filename = "xnoise.h")]
+	public class GlobalAccess : GLib.Object {
+		[CCode (cprefix = "XNOISE_GLOBAL_ACCESS_TRACK_STATE_", cheader_filename = "xnoise.h")]
 		public enum TrackState {
 			STOPPED,
 			PLAYING,
 			PAUSED
 		}
 		public bool _media_import_in_progress;
-		public GlobalInfo ();
+		public GlobalAccess ();
 		public void check_image_for_current_track ();
 		public void do_restart_of_current_track ();
 		public void handle_eos ();
@@ -145,7 +145,7 @@ namespace Xnoise {
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
 		public string settings_folder { get; }
-		public Xnoise.GlobalInfo.TrackState track_state { get; set; }
+		public Xnoise.GlobalAccess.TrackState track_state { get; set; }
 		public signal void before_position_reference_changed ();
 		public signal void before_position_reference_next_changed ();
 		public signal void caught_eos_from_player ();
@@ -448,7 +448,7 @@ namespace Xnoise {
 		public void on_position_reference_changed ();
 		public bool path_is_last_row (ref Gtk.TreePath path, out bool trackList_is_empty);
 		public void set_reference_to_last ();
-		public signal void sign_active_path_changed (Xnoise.GlobalInfo.TrackState ts);
+		public signal void sign_active_path_changed (Xnoise.GlobalAccess.TrackState ts);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackProgressBar : Gtk.ProgressBar {
@@ -557,7 +557,7 @@ namespace Xnoise {
 		GENERAL_ERROR,
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public static Xnoise.GlobalInfo global;
+	public static Xnoise.GlobalAccess global;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise.h")]

@@ -58,7 +58,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		typeof(string)      // URI
 	};
 
-	public signal void sign_active_path_changed(GlobalInfo.TrackState ts);
+	public signal void sign_active_path_changed(GlobalAccess.TrackState ts);
 
 	public TrackListModel() {
 		this.xn = Main.instance;
@@ -70,15 +70,15 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		global.position_reference_changed.connect(on_position_reference_changed);
 		global.track_state_changed.connect( () => {
 			switch(global.track_state) {
-				case GlobalInfo.TrackState.PLAYING: {
+				case GlobalAccess.TrackState.PLAYING: {
 					this.set_play_state();
 					break;
 				}
-				case GlobalInfo.TrackState.PAUSED: {
+				case GlobalAccess.TrackState.PAUSED: {
 					this.set_pause_state();
 					break;
 				}
-				case GlobalInfo.TrackState.STOPPED: {
+				case GlobalAccess.TrackState.STOPPED: {
 					this.reset_state();
 					break;
 				}
@@ -172,9 +172,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		if(((int)global.track_state) > 0) { //playing or paused
 			bolden_row();
 
-			if(global.track_state == GlobalInfo.TrackState.PLAYING)
+			if(global.track_state == GlobalAccess.TrackState.PLAYING)
 				set_play_state();
-			else if(global.track_state== GlobalInfo.TrackState.PAUSED)
+			else if(global.track_state== GlobalAccess.TrackState.PAUSED)
 				set_pause_state();
 		}
 		else {
@@ -350,7 +350,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	// find active row, set state picture, bolden and set uri for gpl
-	private bool set_track_state(GlobalInfo.TrackState ts) {
+	private bool set_track_state(GlobalAccess.TrackState ts) {
 		Gdk.Pixbuf? pixbuf = null;
 		Gtk.Invisible w = new Gtk.Invisible();
 		if((global.position_reference == null)||
@@ -364,15 +364,15 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		TreeIter citer;
 		this.get_iter(out citer, global.position_reference.get_path());
 		string uri;
-		if(ts==GlobalInfo.TrackState.PLAYING) {
+		if(ts==GlobalAccess.TrackState.PLAYING) {
 			bolden_row();
 			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
 		}
-		else if(ts==GlobalInfo.TrackState.PAUSED) {
+		else if(ts==GlobalAccess.TrackState.PAUSED) {
 			bolden_row();
 			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PAUSE, IconSize.BUTTON, null);
 		}
-		else if(ts==GlobalInfo.TrackState.STOPPED) {
+		else if(ts==GlobalAccess.TrackState.STOPPED) {
 			unbolden_row();
 		}
 
@@ -389,15 +389,15 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	private bool reset_state() {
-		return set_track_state(GlobalInfo.TrackState.STOPPED);
+		return set_track_state(GlobalAccess.TrackState.STOPPED);
 	}
 
 	private bool set_play_state() {
-		return set_track_state(GlobalInfo.TrackState.PLAYING);
+		return set_track_state(GlobalAccess.TrackState.PLAYING);
 	}
 
 	private bool set_pause_state() {
-		return set_track_state(GlobalInfo.TrackState.PAUSED);
+		return set_track_state(GlobalAccess.TrackState.PAUSED);
 	}
 
 	private void bolden_row() {
@@ -467,7 +467,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 
 		if(td_list[0].Uri != null) {
-			global.track_state = GlobalInfo.TrackState.PLAYING;
+			global.track_state = GlobalAccess.TrackState.PLAYING;
 			global.current_uri = td_list[0].Uri;
 		}
 
@@ -540,7 +540,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 		if(uris[0] != null) {
 			global.current_uri = uris[0];
-			global.track_state = GlobalInfo.TrackState.PLAYING;
+			global.track_state = GlobalAccess.TrackState.PLAYING;
 		}
 		xn.tl.set_focus_on_iter(ref iter_2);
 	}

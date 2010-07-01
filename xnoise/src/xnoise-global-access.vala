@@ -1,4 +1,4 @@
-/* xnoise-global-information.vala
+/* xnoise-global-access.vala
  *
  * Copyright (C) 2009-2010  Jörn Magens
  *
@@ -34,7 +34,7 @@
  * All these are properties, so that changes can be tracked application wide.
  */
 
-public class Xnoise.GlobalInfo : GLib.Object {
+public class Xnoise.GlobalAccess : GLib.Object {
 
 	construct {
 		_settings_folder = 

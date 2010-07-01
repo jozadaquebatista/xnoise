@@ -31,7 +31,7 @@ xnoise_SOURCES = \
 	xnoise-db-creator.vala \
 	xnoise-db-writer.vala \
 	xnoise-fullscreen-toolbar.vala \
-	xnoise-global-information.vala \
+	xnoise-global-access.vala \
 	xnoise-gst-player.vala \
 	xnoise-lyrics-loader.vala \
 	xnoise-lyrics-view.vala \

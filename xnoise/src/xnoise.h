@@ -170,18 +170,18 @@ typedef struct _XnoiseFullscreenToolbarLeaveVideoFSButton XnoiseFullscreenToolba
 typedef struct _XnoiseFullscreenToolbarLeaveVideoFSButtonClass XnoiseFullscreenToolbarLeaveVideoFSButtonClass;
 typedef struct _XnoiseFullscreenToolbarLeaveVideoFSButtonPrivate XnoiseFullscreenToolbarLeaveVideoFSButtonPrivate;
 
-#define XNOISE_TYPE_GLOBAL_INFO (xnoise_global_info_get_type ())
-#define XNOISE_GLOBAL_INFO(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GLOBAL_INFO, XnoiseGlobalInfo))
-#define XNOISE_GLOBAL_INFO_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GLOBAL_INFO, XnoiseGlobalInfoClass))
-#define XNOISE_IS_GLOBAL_INFO(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_GLOBAL_INFO))
-#define XNOISE_IS_GLOBAL_INFO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_GLOBAL_INFO))
-#define XNOISE_GLOBAL_INFO_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_GLOBAL_INFO, XnoiseGlobalInfoClass))
+#define XNOISE_TYPE_GLOBAL_ACCESS (xnoise_global_access_get_type ())
+#define XNOISE_GLOBAL_ACCESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccess))
+#define XNOISE_GLOBAL_ACCESS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccessClass))
+#define XNOISE_IS_GLOBAL_ACCESS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_GLOBAL_ACCESS))
+#define XNOISE_IS_GLOBAL_ACCESS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_GLOBAL_ACCESS))
+#define XNOISE_GLOBAL_ACCESS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccessClass))
 
-typedef struct _XnoiseGlobalInfo XnoiseGlobalInfo;
-typedef struct _XnoiseGlobalInfoClass XnoiseGlobalInfoClass;
-typedef struct _XnoiseGlobalInfoPrivate XnoiseGlobalInfoPrivate;
+typedef struct _XnoiseGlobalAccess XnoiseGlobalAccess;
+typedef struct _XnoiseGlobalAccessClass XnoiseGlobalAccessClass;
+typedef struct _XnoiseGlobalAccessPrivate XnoiseGlobalAccessPrivate;
 
-#define XNOISE_GLOBAL_INFO_TYPE_TRACK_STATE (xnoise_global_info_track_state_get_type ())
+#define XNOISE_GLOBAL_ACCESS_TYPE_TRACK_STATE (xnoise_global_access_track_state_get_type ())
 
 #define XNOISE_TYPE_GST_PLAYER (xnoise_gst_player_get_type ())
 #define XNOISE_GST_PLAYER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayer))
@@ -626,21 +626,21 @@ struct _XnoiseFullscreenToolbarLeaveVideoFSButtonClass {
 	GtkButtonClass parent_class;
 };
 
-struct _XnoiseGlobalInfo {
+struct _XnoiseGlobalAccess {
 	GObject parent_instance;
-	XnoiseGlobalInfoPrivate * priv;
+	XnoiseGlobalAccessPrivate * priv;
 	gboolean _media_import_in_progress;
 };
 
-struct _XnoiseGlobalInfoClass {
+struct _XnoiseGlobalAccessClass {
 	GObjectClass parent_class;
 };
 
 typedef enum  {
-	XNOISE_GLOBAL_INFO_TRACK_STATE_STOPPED = 0,
-	XNOISE_GLOBAL_INFO_TRACK_STATE_PLAYING,
-	XNOISE_GLOBAL_INFO_TRACK_STATE_PAUSED
-} XnoiseGlobalInfoTrackState;
+	XNOISE_GLOBAL_ACCESS_TRACK_STATE_STOPPED = 0,
+	XNOISE_GLOBAL_ACCESS_TRACK_STATE_PLAYING,
+	XNOISE_GLOBAL_ACCESS_TRACK_STATE_PAUSED
+} XnoiseGlobalAccessTrackState;
 
 struct _XnoiseGstPlayer {
 	GObject parent_instance;
@@ -1137,41 +1137,41 @@ GType xnoise_fullscreen_toolbar_leave_video_fs_button_get_type (void);
 XnoiseFullscreenToolbarLeaveVideoFSButton* xnoise_fullscreen_toolbar_leave_video_fs_button_new (void);
 XnoiseFullscreenToolbarLeaveVideoFSButton* xnoise_fullscreen_toolbar_leave_video_fs_button_construct (GType object_type);
 void xnoise_fullscreen_toolbar_leave_video_fs_button_on_clicked (XnoiseFullscreenToolbarLeaveVideoFSButton* self);
-GType xnoise_global_info_get_type (void);
-GType xnoise_global_info_track_state_get_type (void);
-void xnoise_global_info_reset_position_reference (XnoiseGlobalInfo* self);
-void xnoise_global_info_do_restart_of_current_track (XnoiseGlobalInfo* self);
-void xnoise_global_info_handle_eos (XnoiseGlobalInfo* self);
-void xnoise_global_info_check_image_for_current_track (XnoiseGlobalInfo* self);
-XnoiseGlobalInfo* xnoise_global_info_new (void);
-XnoiseGlobalInfo* xnoise_global_info_construct (GType object_type);
-const char* xnoise_global_info_get_settings_folder (XnoiseGlobalInfo* self);
-XnoiseGlobalInfoTrackState xnoise_global_info_get_track_state (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_track_state (XnoiseGlobalInfo* self, XnoiseGlobalInfoTrackState value);
-const char* xnoise_global_info_get_current_uri (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_current_uri (XnoiseGlobalInfo* self, const char* value);
-const GtkTreeRowReference* xnoise_global_info_get_position_reference (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_position_reference (XnoiseGlobalInfo* self, const GtkTreeRowReference* value);
-const GtkTreeRowReference* xnoise_global_info_get_position_reference_next (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_position_reference_next (XnoiseGlobalInfo* self, const GtkTreeRowReference* value);
-gboolean xnoise_global_info_get_media_import_in_progress (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_media_import_in_progress (XnoiseGlobalInfo* self, gboolean value);
-const char* xnoise_global_info_get_current_artist (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_current_artist (XnoiseGlobalInfo* self, const char* value);
-const char* xnoise_global_info_get_current_album (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_current_album (XnoiseGlobalInfo* self, const char* value);
-const char* xnoise_global_info_get_current_title (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_current_title (XnoiseGlobalInfo* self, const char* value);
-const char* xnoise_global_info_get_current_location (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_current_location (XnoiseGlobalInfo* self, const char* value);
-const char* xnoise_global_info_get_current_genre (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_current_genre (XnoiseGlobalInfo* self, const char* value);
-const char* xnoise_global_info_get_current_organization (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_current_organization (XnoiseGlobalInfo* self, const char* value);
-const char* xnoise_global_info_get_image_path_small (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_image_path_small (XnoiseGlobalInfo* self, const char* value);
-const char* xnoise_global_info_get_image_path_large (XnoiseGlobalInfo* self);
-void xnoise_global_info_set_image_path_large (XnoiseGlobalInfo* self, const char* value);
+GType xnoise_global_access_get_type (void);
+GType xnoise_global_access_track_state_get_type (void);
+void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
+void xnoise_global_access_do_restart_of_current_track (XnoiseGlobalAccess* self);
+void xnoise_global_access_handle_eos (XnoiseGlobalAccess* self);
+void xnoise_global_access_check_image_for_current_track (XnoiseGlobalAccess* self);
+XnoiseGlobalAccess* xnoise_global_access_new (void);
+XnoiseGlobalAccess* xnoise_global_access_construct (GType object_type);
+const char* xnoise_global_access_get_settings_folder (XnoiseGlobalAccess* self);
+XnoiseGlobalAccessTrackState xnoise_global_access_get_track_state (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_track_state (XnoiseGlobalAccess* self, XnoiseGlobalAccessTrackState value);
+const char* xnoise_global_access_get_current_uri (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_current_uri (XnoiseGlobalAccess* self, const char* value);
+const GtkTreeRowReference* xnoise_global_access_get_position_reference (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_position_reference (XnoiseGlobalAccess* self, const GtkTreeRowReference* value);
+const GtkTreeRowReference* xnoise_global_access_get_position_reference_next (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_position_reference_next (XnoiseGlobalAccess* self, const GtkTreeRowReference* value);
+gboolean xnoise_global_access_get_media_import_in_progress (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_media_import_in_progress (XnoiseGlobalAccess* self, gboolean value);
+const char* xnoise_global_access_get_current_artist (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_current_artist (XnoiseGlobalAccess* self, const char* value);
+const char* xnoise_global_access_get_current_album (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_current_album (XnoiseGlobalAccess* self, const char* value);
+const char* xnoise_global_access_get_current_title (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_current_title (XnoiseGlobalAccess* self, const char* value);
+const char* xnoise_global_access_get_current_location (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_current_location (XnoiseGlobalAccess* self, const char* value);
+const char* xnoise_global_access_get_current_genre (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_current_genre (XnoiseGlobalAccess* self, const char* value);
+const char* xnoise_global_access_get_current_organization (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_current_organization (XnoiseGlobalAccess* self, const char* value);
+const char* xnoise_global_access_get_image_path_small (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_image_path_small (XnoiseGlobalAccess* self, const char* value);
+const char* xnoise_global_access_get_image_path_large (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_image_path_large (XnoiseGlobalAccess* self, const char* value);
 GType xnoise_gst_player_get_type (void);
 GType xnoise_video_screen_get_type (void);
 XnoiseGstPlayer* xnoise_gst_player_new (void);
@@ -1265,7 +1265,7 @@ XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
 GType xnoise_params_get_type (void);
 extern XnoiseParams* xnoise_par;
-extern XnoiseGlobalInfo* xnoise_global;
+extern XnoiseGlobalAccess* xnoise_global;
 GType xnoise_user_info_get_type (void);
 extern XnoiseUserInfo* xnoise_userinfo;
 void xnoise_initialize (void);

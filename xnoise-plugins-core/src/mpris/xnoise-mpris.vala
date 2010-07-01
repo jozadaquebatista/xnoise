@@ -169,7 +169,7 @@ public class MprisPlayer : GLib.Object {
 				global.current_uri = uri;
 		}
 
-		global.track_state = GlobalInfo.TrackState.PAUSED;
+		global.track_state = GlobalAccess.TrackState.PAUSED;
 	}
 	
 	public void Stop() {
@@ -183,8 +183,8 @@ public class MprisPlayer : GLib.Object {
 				global.current_uri = uri;
 		}
 
-		if(!(global.track_state == GlobalInfo.TrackState.PLAYING)) {
-			global.track_state = GlobalInfo.TrackState.PLAYING;
+		if(!(global.track_state == GlobalAccess.TrackState.PLAYING)) {
+			global.track_state = GlobalAccess.TrackState.PLAYING;
 		}
 	}
 	

@@ -684,7 +684,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 
 	public void stop() {
-		global.track_state = GlobalInfo.TrackState.STOPPED;
+		global.track_state = GlobalAccess.TrackState.STOPPED;
 		global.current_uri = null;
 	}
 
@@ -773,7 +773,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		global.position_reference = new TreeRowReference(trackList.tracklistmodel, path);
 
-		if(global.track_state == GlobalInfo.TrackState.PLAYING)
+		if(global.track_state == GlobalAccess.TrackState.PLAYING)
 			trackList.set_focus_on_iter(ref iter);
 
 		if(path.to_string() == tmp_path.to_string()) {

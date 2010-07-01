@@ -79,11 +79,11 @@ public class Xnoise.PlayPauseButton: Gtk.Button {
 				global.current_uri = uri;
 		}
 
-		if(global.track_state == GlobalInfo.TrackState.PLAYING) {
-			global.track_state = GlobalInfo.TrackState.PAUSED;
+		if(global.track_state == GlobalAccess.TrackState.PLAYING) {
+			global.track_state = GlobalAccess.TrackState.PAUSED;
 		}
 		else {
-			global.track_state = GlobalInfo.TrackState.PLAYING;
+			global.track_state = GlobalAccess.TrackState.PLAYING;
 		}
 		return false;
 	}

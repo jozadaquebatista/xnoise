@@ -95,7 +95,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		if(application != "xnoise")
 			return;
 		
-		//TODO: Create some convenience methods in GlobalInformation class to control xnoise
+		//TODO: Create some convenience methods in GlobalAccessrmation class to control xnoise
 		switch(key) {
 			case "Next": {
 				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
@@ -112,11 +112,11 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 						global.current_uri = uri;
 				}
 
-				if(global.track_state == GlobalInfo.TrackState.PLAYING) {
-					global.track_state = GlobalInfo.TrackState.PAUSED;
+				if(global.track_state == GlobalAccess.TrackState.PLAYING) {
+					global.track_state = GlobalAccess.TrackState.PAUSED;
 				}
 				else {
-					global.track_state = GlobalInfo.TrackState.PLAYING;
+					global.track_state = GlobalAccess.TrackState.PLAYING;
 				}
 				break;
 			}

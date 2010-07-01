@@ -160,11 +160,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 		});
 
 		global.track_state_changed.connect( () => {
-			if(global.track_state == GlobalInfo.TrackState.PLAYING)
+			if(global.track_state == GlobalAccess.TrackState.PLAYING)
 				this.play();
-			else if(global.track_state == GlobalInfo.TrackState.PAUSED)
+			else if(global.track_state == GlobalAccess.TrackState.PAUSED)
 				this.pause();
-			else if(global.track_state == GlobalInfo.TrackState.STOPPED)
+			else if(global.track_state == GlobalAccess.TrackState.STOPPED)
 				this.stop();
 		});
 		
@@ -437,7 +437,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	// This is a pause-play action to take over the new uri for the playbin
 	// It recovers the original state or can be forced to play
 	public void playSong(bool force_play = false) {
-		bool buf_playing = ((global.track_state == GlobalInfo.TrackState.PLAYING)||force_play);
+		bool buf_playing = ((global.track_state == GlobalAccess.TrackState.PLAYING)||force_play);
 		playbin.set_state(State.READY);
 		if(buf_playing == true) {
 			Idle.add( () => {
