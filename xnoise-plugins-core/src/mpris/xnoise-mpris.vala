@@ -218,7 +218,7 @@ public class MprisPlayer : GLib.Object {
 	
 	public void PositionSet(int Position) {
 		if(xn.gPl.length_time == 0) return; 
-		this.xn.main_window.sign_pos_changed(Position/1000/xn.gPl.length_time);
+		xn.gPl.gst_position = (double)Position/(double)(xn.gPl.length_time/1000000);
 	}
 	
 	public int PositionGet() {
