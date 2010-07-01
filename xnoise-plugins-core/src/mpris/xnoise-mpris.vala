@@ -206,7 +206,7 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public void VolumeSet(int Volume) {
-		this.xn.gPl.volume = Volume;
+		this.xn.gPl.volume = (double)Volume/100;
 	}
 	
 	public int VolumeGet() {
