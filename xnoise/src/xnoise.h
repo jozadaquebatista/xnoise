@@ -1202,7 +1202,7 @@ void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean val
 GType xnoise_media_browser_model_get_type (void);
 XnoiseMediaBrowser* xnoise_media_browser_new (void);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type);
-void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self, GtkEditable* sender);
+void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self, const char* txt);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_get_use_treelines (XnoiseMediaBrowser* self);
 void xnoise_media_browser_set_use_treelines (XnoiseMediaBrowser* self, gboolean value);

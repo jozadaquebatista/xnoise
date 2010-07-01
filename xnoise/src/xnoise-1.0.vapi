@@ -257,7 +257,7 @@ namespace Xnoise {
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
 		public MediaBrowser ();
 		public bool change_model_data ();
-		public void on_searchtext_changed (Gtk.Editable sender);
+		public void on_searchtext_changed (string? txt);
 		public bool use_treelines { get; set; }
 		public signal void sign_activated ();
 	}
