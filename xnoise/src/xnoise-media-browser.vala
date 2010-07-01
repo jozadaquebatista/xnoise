@@ -65,9 +65,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			this,
 			Gdk.ModifierType.BUTTON1_MASK,
 			this.target_list,
-			Gdk.DragAction.COPY|
-			Gdk.DragAction.MOVE);
+			Gdk.DragAction.COPY);
 
+		Gtk.drag_dest_set(
+			this,
+			Gtk.DestDefaults.ALL,
+			this.target_list,
+			Gdk.DragAction.COPY);
+		
 		this.dragging = false;
 
 		//Signals
@@ -79,9 +84,16 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.button_press_event.connect(this.on_button_press);
 		this.key_press_event.connect(this.on_key_pressed);
 		this.key_release_event.connect(this.on_key_released);
+		this.drag_data_received.connect(this.on_drag_data_received);
 		//Gtk.Style style;
 		//style = Gtk.rc_get_style(this);
 		//this.modify_base(StateType.NORMAL, style.rc_style.bg[StateType.NORMAL]);
+	}
+
+	private void on_drag_data_received(Gtk.Widget sender, DragContext context, int x, int y,
+	                                   SelectionData selection, uint target_type, uint time) {
+		//TODO: Open media import dialog for dropped files and folders
+		print("drag receive\n");
 	}
 
 	// This function is intended for the usage
