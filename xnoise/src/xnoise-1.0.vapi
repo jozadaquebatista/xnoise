@@ -456,6 +456,28 @@ namespace Xnoise {
 		public void set_value (uint pos, uint len);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class UserInfo : GLib.Object {
+		[CCode (cprefix = "XNOISE_USER_INFO_CONTENT_CLASS_", cheader_filename = "xnoise.h")]
+		public enum ContentClass {
+			INFO,
+			WAIT,
+			WARNING,
+			QUESTION,
+			CRITICAL
+		}
+		[CCode (cprefix = "XNOISE_USER_INFO_REMOVAL_TYPE_", cheader_filename = "xnoise.h")]
+		public enum RemovalType {
+			CLOSE_BUTTON,
+			TIMER,
+			EXTERNAL
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public delegate void AddInfoBarDelegateType (Gtk.InfoBar ibar);
+		public UserInfo (Xnoise.UserInfo.AddInfoBarDelegateType func);
+		public void popdown (uint id);
+		public uint popup (Xnoise.UserInfo.RemovalType removal_type, Xnoise.UserInfo.ContentClass content_class, string info_text = "", int appearance_time_seconds = 2, Gtk.Widget? extra_widget = null);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class VideoScreen : Gtk.DrawingArea {
 		public VideoScreen ();
 		public override bool expose_event (Gdk.EventExpose e);
@@ -538,6 +560,8 @@ namespace Xnoise {
 	public static Xnoise.GlobalInfo global;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.UserInfo userinfo;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string escape_for_local_folder_search (string? value);
 	[CCode (cheader_filename = "xnoise.h")]

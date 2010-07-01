@@ -35,7 +35,7 @@ namespace Xnoise {
 
 	public static Params par = null;
 	public static GlobalInfo global = null;
-
+	public static UserInfo userinfo = null;
 	/*
 	 * This function is used to create static instances of Params
 	 * and GlobalInfo in the xnoise namespace.

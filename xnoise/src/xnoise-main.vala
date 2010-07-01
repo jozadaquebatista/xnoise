@@ -53,7 +53,9 @@ public class Xnoise.Main : GLib.Object {
 		tlm = new TrackListModel();
 		tl = new TrackList();
 		main_window = new MainWindow();
-		
+
+		userinfo = new UserInfo(main_window.show_status_info);
+
 		if(!no_plugins) {
 			plugin_loader.load_all();
 

@@ -200,30 +200,18 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		return false;
 	}
 
+	private uint msg_id;
+	
 	private void on_ok_button_clicked() {
 		Main.instance.main_window.searchEntryMB.set_sensitive(false);
 		Main.instance.main_window.mediaBr.set_sensitive(false);
+		//TODO: Make sure this dialog is not opened while media import
 		
-		
-		//TODO Replace this with a genaral user info system class
-		var bar = new InfoBar();
-		var spinner = new Gtk.Spinner();
-		var bar_label = new Label("Importing media data...");
-		var content_area = bar.get_content_area();
-
-		((Container)content_area).add(spinner);
-		((Container)content_area).add(bar_label);
-		
-		spinner.start();
-		Main.instance.main_window.show_status_info(bar);
-		//TODO: MAybe put an abort button here???
-		
-		this.sign_finish.connect( () => {
-			if(bar == null)
-				return;
-			bar.hide();
-			bar.destroy();
-		});
+		msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
+		                        UserInfo.ContentClass.WAIT,
+		                        "Importing media data. This may take some time...",
+		                        5,
+		                        null);
 		
 		harvest_media_locations();
 		
@@ -240,7 +228,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void* write_media_to_db() {
 		// thread function for the import to the library
 		// sends a signal when finished, this signal is handled by main window class
-
+		uint id = msg_id; //Threads cannot take args in vala, therefore we have to buffer the id here
 		DbWriter dbw = null;
 		try {
 			dbw = new DbWriter();
@@ -263,6 +251,8 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 		dbw = null;
 		mi = null;
+		
+		userinfo.popdown(id);
 		
 		this.sign_finish();
 		// print("thread finished\n");
