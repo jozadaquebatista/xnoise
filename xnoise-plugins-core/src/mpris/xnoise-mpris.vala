@@ -218,11 +218,15 @@ public class MprisPlayer : GLib.Object {
 	
 	public void PositionSet(int Position) {
 		if(xn.gPl.length_time == 0) return; 
-		this.xn.main_window.sign_pos_changed(Position/xn.gPl.length_time);
+		this.xn.main_window.sign_pos_changed(Position/1000/xn.gPl.length_time);
 	}
 	
 	public int PositionGet() {
-		return 0;
+		if(xn.gPl.length_time == 0) return -1;
+		double pos = xn.gPl.gst_position;
+		double rel_pos = pos * xn.gPl.length_time / 1000000;
+		string buf = rel_pos.to_string();
+		return buf.to_int();
 	}
 }
 

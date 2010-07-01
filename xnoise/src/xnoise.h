@@ -1157,6 +1157,7 @@ gboolean xnoise_gst_player_get_is_stream (XnoiseGstPlayer* self);
 gboolean xnoise_gst_player_get_buffering (XnoiseGstPlayer* self);
 const char* xnoise_gst_player_get_Uri (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_Uri (XnoiseGstPlayer* self, const char* value);
+double xnoise_gst_player_get_gst_position (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_gst_position (XnoiseGstPlayer* self, double value);
 GType xnoise_lyrics_loader_get_type (void);
 XnoiseLyricsLoader* xnoise_lyrics_loader_new (void);
