@@ -204,6 +204,31 @@ typedef struct _XnoiseGstPlayerPrivate XnoiseGstPlayerPrivate;
 typedef struct _XnoiseVideoScreen XnoiseVideoScreen;
 typedef struct _XnoiseVideoScreenClass XnoiseVideoScreenClass;
 
+#define XNOISE_TYPE_INFO_BAR (xnoise_info_bar_get_type ())
+#define XNOISE_INFO_BAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_INFO_BAR, XnoiseInfoBar))
+#define XNOISE_INFO_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_INFO_BAR, XnoiseInfoBarClass))
+#define XNOISE_IS_INFO_BAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_INFO_BAR))
+#define XNOISE_IS_INFO_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_INFO_BAR))
+#define XNOISE_INFO_BAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_INFO_BAR, XnoiseInfoBarClass))
+
+typedef struct _XnoiseInfoBar XnoiseInfoBar;
+typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
+typedef struct _XnoiseInfoBarPrivate XnoiseInfoBarPrivate;
+
+#define XNOISE_TYPE_USER_INFO (xnoise_user_info_get_type ())
+#define XNOISE_USER_INFO(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_USER_INFO, XnoiseUserInfo))
+#define XNOISE_USER_INFO_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_USER_INFO, XnoiseUserInfoClass))
+#define XNOISE_IS_USER_INFO(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_USER_INFO))
+#define XNOISE_IS_USER_INFO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_USER_INFO))
+#define XNOISE_USER_INFO_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_USER_INFO, XnoiseUserInfoClass))
+
+typedef struct _XnoiseUserInfo XnoiseUserInfo;
+typedef struct _XnoiseUserInfoClass XnoiseUserInfoClass;
+
+#define XNOISE_USER_INFO_TYPE_CONTENT_CLASS (xnoise_user_info_content_class_get_type ())
+
+#define XNOISE_USER_INFO_TYPE_REMOVAL_TYPE (xnoise_user_info_removal_type_get_type ())
+
 #define XNOISE_TYPE_LYRICS_LOADER (xnoise_lyrics_loader_get_type ())
 #define XNOISE_LYRICS_LOADER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LYRICS_LOADER, XnoiseLyricsLoader))
 #define XNOISE_LYRICS_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_LYRICS_LOADER, XnoiseLyricsLoaderClass))
@@ -345,16 +370,6 @@ typedef struct _XnoiseMediaImporterPrivate XnoiseMediaImporterPrivate;
 typedef struct _XnoiseParams XnoiseParams;
 typedef struct _XnoiseParamsClass XnoiseParamsClass;
 
-#define XNOISE_TYPE_USER_INFO (xnoise_user_info_get_type ())
-#define XNOISE_USER_INFO(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_USER_INFO, XnoiseUserInfo))
-#define XNOISE_USER_INFO_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_USER_INFO, XnoiseUserInfoClass))
-#define XNOISE_IS_USER_INFO(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_USER_INFO))
-#define XNOISE_IS_USER_INFO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_USER_INFO))
-#define XNOISE_USER_INFO_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_USER_INFO, XnoiseUserInfoClass))
-
-typedef struct _XnoiseUserInfo XnoiseUserInfo;
-typedef struct _XnoiseUserInfoClass XnoiseUserInfoClass;
-
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
 typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
 
@@ -472,10 +487,6 @@ typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 typedef struct _XnoiseTrackListModelPrivate XnoiseTrackListModelPrivate;
 typedef struct _XnoiseTrackProgressBarPrivate XnoiseTrackProgressBarPrivate;
 typedef struct _XnoiseUserInfoPrivate XnoiseUserInfoPrivate;
-
-#define XNOISE_USER_INFO_TYPE_REMOVAL_TYPE (xnoise_user_info_removal_type_get_type ())
-
-#define XNOISE_USER_INFO_TYPE_CONTENT_CLASS (xnoise_user_info_content_class_get_type ())
 typedef struct _XnoiseVideoScreenPrivate XnoiseVideoScreenPrivate;
 
 #define XNOISE_TYPE_VOLUME_SLIDER_BUTTON (xnoise_volume_slider_button_get_type ())
@@ -651,6 +662,29 @@ struct _XnoiseGstPlayer {
 struct _XnoiseGstPlayerClass {
 	GObjectClass parent_class;
 };
+
+struct _XnoiseInfoBar {
+	GtkInfoBar parent_instance;
+	XnoiseInfoBarPrivate * priv;
+};
+
+struct _XnoiseInfoBarClass {
+	GtkInfoBarClass parent_class;
+};
+
+typedef enum  {
+	XNOISE_USER_INFO_CONTENT_CLASS_INFO = 0,
+	XNOISE_USER_INFO_CONTENT_CLASS_WAIT,
+	XNOISE_USER_INFO_CONTENT_CLASS_WARNING,
+	XNOISE_USER_INFO_CONTENT_CLASS_QUESTION,
+	XNOISE_USER_INFO_CONTENT_CLASS_CRITICAL
+} XnoiseUserInfoContentClass;
+
+typedef enum  {
+	XNOISE_USER_INFO_REMOVAL_TYPE_CLOSE_BUTTON = 0,
+	XNOISE_USER_INFO_REMOVAL_TYPE_TIMER,
+	XNOISE_USER_INFO_REMOVAL_TYPE_EXTERNAL
+} XnoiseUserInfoRemovalType;
 
 struct _XnoiseLyricsLoader {
 	GObject parent_instance;
@@ -980,21 +1014,7 @@ struct _XnoiseUserInfoClass {
 	GObjectClass parent_class;
 };
 
-typedef enum  {
-	XNOISE_USER_INFO_REMOVAL_TYPE_CLOSE_BUTTON = 0,
-	XNOISE_USER_INFO_REMOVAL_TYPE_TIMER,
-	XNOISE_USER_INFO_REMOVAL_TYPE_EXTERNAL
-} XnoiseUserInfoRemovalType;
-
-typedef enum  {
-	XNOISE_USER_INFO_CONTENT_CLASS_INFO = 0,
-	XNOISE_USER_INFO_CONTENT_CLASS_WAIT,
-	XNOISE_USER_INFO_CONTENT_CLASS_WARNING,
-	XNOISE_USER_INFO_CONTENT_CLASS_QUESTION,
-	XNOISE_USER_INFO_CONTENT_CLASS_CRITICAL
-} XnoiseUserInfoContentClass;
-
-typedef void (*XnoiseUserInfoAddInfoBarDelegateType) (GtkInfoBar* ibar, void* user_data);
+typedef void (*XnoiseUserInfoAddInfoBarDelegateType) (XnoiseInfoBar* ibar, void* user_data);
 struct _XnoiseVideoScreen {
 	GtkDrawingArea parent_instance;
 	XnoiseVideoScreenPrivate * priv;
@@ -1198,6 +1218,15 @@ const char* xnoise_gst_player_get_Uri (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_Uri (XnoiseGstPlayer* self, const char* value);
 double xnoise_gst_player_get_gst_position (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_gst_position (XnoiseGstPlayer* self, double value);
+GType xnoise_info_bar_get_type (void);
+GType xnoise_user_info_get_type (void);
+GType xnoise_user_info_content_class_get_type (void);
+GType xnoise_user_info_removal_type_get_type (void);
+XnoiseInfoBar* xnoise_info_bar_new (XnoiseUserInfo* _uinf, XnoiseUserInfoContentClass _content_class, XnoiseUserInfoRemovalType _removal_type, guint _current_id, gint _appearance_time_seconds, const char* _info_text, GtkWidget* _extra_widget);
+XnoiseInfoBar* xnoise_info_bar_construct (GType object_type, XnoiseUserInfo* _uinf, XnoiseUserInfoContentClass _content_class, XnoiseUserInfoRemovalType _removal_type, guint _current_id, gint _appearance_time_seconds, const char* _info_text, GtkWidget* _extra_widget);
+void xnoise_info_bar_update_symbol_widget (XnoiseInfoBar* self, XnoiseUserInfoContentClass cc);
+void xnoise_info_bar_update_text (XnoiseInfoBar* self, const char* txt, gboolean bold);
+void xnoise_info_bar_update_extra_widget (XnoiseInfoBar* self, GtkWidget* widget);
 GType xnoise_lyrics_loader_get_type (void);
 XnoiseLyricsLoader* xnoise_lyrics_loader_new (void);
 XnoiseLyricsLoader* xnoise_lyrics_loader_construct (GType object_type);
@@ -1231,8 +1260,8 @@ void xnoise_main_window_toggle_fullscreen (XnoiseMainWindow* self);
 void xnoise_main_window_stop (XnoiseMainWindow* self);
 void xnoise_main_window_change_track (XnoiseMainWindow* self, XnoiseControlButtonDirection direction, gboolean handle_repeat_state);
 void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, char** newuri, const char* tagname, const char* tagvalue);
-void xnoise_main_window_display_info_bar (XnoiseMainWindow* self, GtkInfoBar* bar);
-void xnoise_main_window_show_status_info (XnoiseMainWindow* self, GtkInfoBar* bar);
+void xnoise_main_window_display_info_bar (XnoiseMainWindow* self, XnoiseInfoBar* bar);
+void xnoise_main_window_show_status_info (XnoiseMainWindow* self, XnoiseInfoBar* bar);
 gint xnoise_main_window_get_repeatState (XnoiseMainWindow* self);
 void xnoise_main_window_set_repeatState (XnoiseMainWindow* self, gint value);
 gboolean xnoise_main_window_get_fullscreenwindowvisible (XnoiseMainWindow* self);
@@ -1266,7 +1295,6 @@ XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
 GType xnoise_params_get_type (void);
 extern XnoiseParams* xnoise_par;
 extern XnoiseGlobalAccess* xnoise_global;
-GType xnoise_user_info_get_type (void);
 extern XnoiseUserInfo* xnoise_userinfo;
 void xnoise_initialize (void);
 char* xnoise_escape_for_local_folder_search (const char* value);
@@ -1407,10 +1435,11 @@ void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, char** uris, 
 XnoiseTrackProgressBar* xnoise_track_progress_bar_new (void);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_construct (GType object_type);
 void xnoise_track_progress_bar_set_value (XnoiseTrackProgressBar* self, guint pos, guint len);
-GType xnoise_user_info_removal_type_get_type (void);
-GType xnoise_user_info_content_class_get_type (void);
 XnoiseUserInfo* xnoise_user_info_new (XnoiseUserInfoAddInfoBarDelegateType func, void* func_target);
 XnoiseUserInfo* xnoise_user_info_construct (GType object_type, XnoiseUserInfoAddInfoBarDelegateType func, void* func_target);
+void xnoise_user_info_update_symbol_widget_by_id (XnoiseUserInfo* self, guint id, XnoiseUserInfoContentClass cc);
+void xnoise_user_info_update_text_by_id (XnoiseUserInfo* self, guint id, const char* txt, gboolean bold);
+void xnoise_user_info_update_extra_widget_by_id (XnoiseUserInfo* self, guint id, GtkWidget* widget);
 void xnoise_user_info_popdown (XnoiseUserInfo* self, guint id);
 guint xnoise_user_info_popup (XnoiseUserInfo* self, XnoiseUserInfoRemovalType removal_type, XnoiseUserInfoContentClass content_class, const char* info_text, gint appearance_time_seconds, GtkWidget* extra_widget);
 XnoiseVideoScreen* xnoise_video_screen_new (void);

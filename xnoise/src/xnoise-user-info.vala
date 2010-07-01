@@ -55,13 +55,13 @@ public class Xnoise.UserInfo : GLib.Object {
 	public delegate void AddInfoBarDelegateType(InfoBar ibar);
 
 	private AddInfoBarDelegateType add_info_bar;
-	private HashTable<uint, InfoBar> info_messages;
+	private HashTable<uint, Xnoise.InfoBar> info_messages;
 	private uint id_count;
 
 	public UserInfo(AddInfoBarDelegateType func) {
 		add_info_bar = func;
 		id_count = 1;
-		info_messages = new HashTable<uint, InfoBar>(direct_hash, direct_equal);
+		info_messages = new HashTable<uint, Xnoise.InfoBar>(direct_hash, direct_equal);
 	}
 
 	private uint get_min(GLib.List<uint> list) {
@@ -83,12 +83,40 @@ public class Xnoise.UserInfo : GLib.Object {
 		popdown(id);
 	}
 	
+	public void update_symbol_widget_by_id(uint id, UserInfo.ContentClass cc) {
+		Xnoise.InfoBar? bar = info_messages.lookup(id);
+		
+		if(bar == null)
+			return;
+			
+		bar.update_symbol_widget(cc);
+	}
+	
+	public void update_text_by_id(uint id, string txt, bool bold = true) {
+		
+		Xnoise.InfoBar? bar = info_messages.lookup(id);
+		
+		if(bar == null)
+			return;
+			
+		bar.update_text(txt, bold);
+	}
+	
+	public void update_extra_widget_by_id(uint id, Gtk.Widget? widget) {
+		
+		Xnoise.InfoBar? bar = info_messages.lookup(id);
+		
+		if(bar == null)
+			return;
+			
+		bar.update_extra_widget(widget);
+	}
 	
 	/*
 	 * Hide infobar and remove it from the internal list
 	 */
 	public void popdown(uint id) {
-		InfoBar? bar = info_messages.lookup(id);
+		Xnoise.InfoBar? bar = info_messages.lookup(id);
 		
 		if(bar == null)
 			return;
@@ -114,53 +142,24 @@ public class Xnoise.UserInfo : GLib.Object {
 	 * returns:                  messge id for removal of info bars
 	 */
 	public uint popup(RemovalType removal_type,
-	               ContentClass content_class,
-	               string info_text = "",
-	               int appearance_time_seconds = 2, 
-	               Widget? extra_widget = null) {
+	                 ContentClass content_class,
+	                 string info_text = "",
+	                 int appearance_time_seconds = 2, 
+	                 Widget? extra_widget = null) {
 		
 		uint current_id = id_count;
 		id_count++;
 		
-		var bar           = new InfoBar();
-		var symbol_widget = create_symbol_widget(content_class);
-		var info_label    = new Label(info_text);
-		var content_area  = bar.get_content_area();
-		var bx            = new Gtk.HBox(false, 0);
-		
-		if(symbol_widget != null)
-			bx.pack_start(symbol_widget, false, false , 0);
-		
-		info_label.set_ellipsize(Pango.EllipsizeMode.END);
-		bx.pack_start(info_label, true, true , 0);
-
-		if(extra_widget != null)
-			bx.pack_start(symbol_widget, false, false , 0);
-
-		switch(removal_type) {
-			case(RemovalType.CLOSE_BUTTON):
-				var close_button = new Button.from_stock(Gtk.STOCK_CLOSE);
-				close_button.clicked.connect( () => {
-					this.popdown(current_id);
-				});
-				bx.pack_start(close_button, false, false , 0);
-				break;
-			case(RemovalType.TIMER):
-				Timeout.add_seconds(appearance_time_seconds, 
-					                () => {
-					if(MainContext.current_source().is_destroyed())
-						return false;
-					this.popdown(current_id);
-					return false;
-				});
-				break;
-			default:
-				break;
-		}
-		((Container)content_area).add(bx);
+		var bar = new Xnoise.InfoBar(this, 
+		                             content_class, 
+		                             removal_type, 
+		                             current_id,
+		                             appearance_time_seconds, 
+		                             info_text, 
+		                             extra_widget);
 
 		info_messages.insert(current_id, bar);
-		this.add_info_bar(bar); //Main.instance.main_window.show_status_info(bar);
+		this.add_info_bar(bar); 
 		bar.show_all();
 		
 		if(info_messages.size() > 3)
@@ -168,36 +167,5 @@ public class Xnoise.UserInfo : GLib.Object {
 		
 		return current_id;
 	}
-
-	private Widget? create_symbol_widget(ContentClass content_class) {
-		Widget? ret = null;
-		switch(content_class) {
-			case(ContentClass.INFO):
-				var info_image = new Gtk.Image.from_stock(Gtk.STOCK_DIALOG_INFO, Gtk.IconSize.MENU);
-				ret = info_image;
-				break;
-			case(ContentClass.WAIT):
-				var spinner = new Gtk.Spinner();
-				spinner.start();
-				ret = spinner;
-				break;
-			case(ContentClass.WARNING):
-				var info_image = new Gtk.Image.from_stock(Gtk.STOCK_DIALOG_WARNING, Gtk.IconSize.MENU);
-				ret = info_image;
-				break;
-			case(ContentClass.QUESTION):
-				var info_image = new Gtk.Image.from_stock(Gtk.STOCK_DIALOG_QUESTION, Gtk.IconSize.MENU);
-				ret = info_image;
-				break;
-			case(ContentClass.CRITICAL):
-				var info_image = new Gtk.Image.from_stock(Gtk.STOCK_DIALOG_ERROR, Gtk.IconSize.LARGE_TOOLBAR);
-				ret = info_image;
-				break;
-			default:
-				break;
-		}
-		return ret;
-	}
-
 }
 

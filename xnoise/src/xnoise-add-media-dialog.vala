@@ -252,7 +252,12 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		dbw = null;
 		mi = null;
 		
-		userinfo.popdown(id);
+		userinfo.update_text_by_id(id, "Finished import.", true);
+		userinfo.update_symbol_widget_by_id(id, UserInfo.ContentClass.INFO);
+		Timeout.add_seconds(4, () => {
+			userinfo.popdown(id);
+			return false;
+		});
 		
 		this.sign_finish();
 		// print("thread finished\n");

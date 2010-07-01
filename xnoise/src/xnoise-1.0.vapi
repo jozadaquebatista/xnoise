@@ -186,6 +186,13 @@ namespace Xnoise {
 		public signal void sign_volume_changed (double volume);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class InfoBar : Gtk.InfoBar {
+		public InfoBar (Xnoise.UserInfo _uinf, Xnoise.UserInfo.ContentClass _content_class, Xnoise.UserInfo.RemovalType _removal_type, uint _current_id, int _appearance_time_seconds, string _info_text = "", Gtk.Widget? _extra_widget = null);
+		public void update_extra_widget (Gtk.Widget? widget);
+		public void update_symbol_widget (Xnoise.UserInfo.ContentClass cc);
+		public void update_text (string txt, bool bold = true);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsLoader : GLib.Object {
 		public string artist;
 		public string title;
@@ -239,11 +246,11 @@ namespace Xnoise {
 		public Gtk.VBox videovbox;
 		public MainWindow ();
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
-		public void display_info_bar (Gtk.InfoBar bar);
+		public void display_info_bar (Xnoise.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
 		public void position_config_menu (Gtk.Menu menu, out int x, out int y, out bool push);
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
-		public void show_status_info (Gtk.InfoBar bar);
+		public void show_status_info (Xnoise.InfoBar bar);
 		public void stop ();
 		public void toggle_fullscreen ();
 		public bool compact_layout { get; set; }
@@ -472,10 +479,13 @@ namespace Xnoise {
 			EXTERNAL
 		}
 		[CCode (cheader_filename = "xnoise.h")]
-		public delegate void AddInfoBarDelegateType (Gtk.InfoBar ibar);
+		public delegate void AddInfoBarDelegateType (Xnoise.InfoBar ibar);
 		public UserInfo (Xnoise.UserInfo.AddInfoBarDelegateType func);
 		public void popdown (uint id);
 		public uint popup (Xnoise.UserInfo.RemovalType removal_type, Xnoise.UserInfo.ContentClass content_class, string info_text = "", int appearance_time_seconds = 2, Gtk.Widget? extra_widget = null);
+		public void update_extra_widget_by_id (uint id, Gtk.Widget? widget);
+		public void update_symbol_widget_by_id (uint id, Xnoise.UserInfo.ContentClass cc);
+		public void update_text_by_id (uint id, string txt, bool bold = true);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class VideoScreen : Gtk.DrawingArea {

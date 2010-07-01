@@ -33,6 +33,7 @@ xnoise_SOURCES = \
 	xnoise-fullscreen-toolbar.vala \
 	xnoise-global-access.vala \
 	xnoise-gst-player.vala \
+	xnoise-info-bar.vala \
 	xnoise-lyrics-loader.vala \
 	xnoise-lyrics-view.vala \
 	xnoise-main.vala \
