@@ -553,6 +553,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					if(e.state != 0x0014) // Ctrl Modifier
 						return false;
 					searchEntryMB.text = "";
+					searchEntryMB.modify_base(StateType.NORMAL, null);
+					this.mediaBr.on_searchtext_changed("");
 				}
 				return true;
 			case 1_KEY: {
@@ -1202,10 +1204,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.searchEntryMB.set_sensitive(true);
 			this.searchEntryMB.key_release_event.connect( (s, e) => {
 				int KEY_ENTER = 0xFF0D;
-				var entry = (Gtk.Entry)s;
-				if((int)e.keyval == KEY_ENTER ||
-				    entry.get_text().size() == 0 ) {
-					this.mediaBr.on_searchtext_changed(entry);
+				var entry = (Entry)s;
+				if((int)e.keyval == KEY_ENTER) {
+					this.mediaBr.on_searchtext_changed(entry.text);
 				}
 				if(entry.text != "") {
 					Gdk.Color color;
@@ -1222,12 +1223,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				// s:Entry, p0:Position, p1:Gdk.Event
 				var entry = (Gtk.Entry)s;
 				if(p0 == Gtk.EntryIconPosition.PRIMARY) {
-					this.mediaBr.on_searchtext_changed((Gtk.Entry)s);
+					this.mediaBr.on_searchtext_changed(entry.text);
 				}
 				if(p0 == Gtk.EntryIconPosition.SECONDARY) {
 					s.text = "";
 					entry.modify_base(StateType.NORMAL, null);
-					this.mediaBr.on_searchtext_changed((Gtk.Entry)s);
+					this.mediaBr.on_searchtext_changed(entry.text);
 				}
 			});
 			
