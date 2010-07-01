@@ -129,6 +129,13 @@ public class Xnoise.GstPlayer : GLib.Object {
 				             Gst.SeekType.NONE, -1);
 			}
 		}
+		
+		get {
+			int64 pos;
+			Gst.Format format = Gst.Format.TIME;
+			playbin.query_position(ref format, out pos);
+			return (double)pos/(double)length_time;
+		}
 	}
 
 	public signal void sign_song_position_changed(uint msecs, uint ms_total);

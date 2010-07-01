@@ -170,7 +170,7 @@ namespace Xnoise {
 		public string? Uri { get; set; }
 		public bool buffering { get; set; }
 		public bool current_has_video { get; set; }
-		public double gst_position { set; }
+		public double gst_position { get; set; }
 		public bool is_stream { get; set; }
 		public int64 length_time { get; set; }
 		public bool paused { get; set; }
