@@ -1336,6 +1336,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		bar.show();
 	}
 	
+	public void show_status_info(InfoBar bar) {
+		contentvbox.pack_end(bar, false, false, 0);
+		bar.show_all();
+	}
+	
 	private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {
 		aimage_timeout = Timeout.add_seconds(1, () => {
 					buffer_last_page = this.tracklistnotebook.get_current_page();

@@ -203,7 +203,30 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void on_ok_button_clicked() {
 		Main.instance.main_window.searchEntryMB.set_sensitive(false);
 		Main.instance.main_window.mediaBr.set_sensitive(false);
+		
+		
+		//TODO Replace this with a genaral user info system class
+		var bar = new InfoBar();
+		var spinner = new Gtk.Spinner();
+		var bar_label = new Label("Importing media data...");
+		var content_area = bar.get_content_area();
+
+		((Container)content_area).add(spinner);
+		((Container)content_area).add(bar_label);
+		
+		spinner.start();
+		Main.instance.main_window.show_status_info(bar);
+		//TODO: MAybe put an abort button here???
+		
+		this.sign_finish.connect( () => {
+			if(bar == null)
+				return;
+			bar.hide();
+			bar.destroy();
+		});
+		
 		harvest_media_locations();
+		
 		try {
 			Thread.create(write_media_to_db, false);
 		}
