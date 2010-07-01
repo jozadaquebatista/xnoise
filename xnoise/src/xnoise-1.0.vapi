@@ -187,7 +187,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class InfoBar : Gtk.InfoBar {
-		public InfoBar (Xnoise.UserInfo _uinf, Xnoise.UserInfo.ContentClass _content_class, Xnoise.UserInfo.RemovalType _removal_type, uint _current_id, int _appearance_time_seconds, string _info_text = "", Gtk.Widget? _extra_widget = null);
+		public InfoBar (Xnoise.UserInfo _uinf, Xnoise.UserInfo.ContentClass _content_class, Xnoise.UserInfo.RemovalType _removal_type, uint _current_id, int _appearance_time_seconds, string _info_text = "", bool bold = true, Gtk.Widget? _extra_widget = null);
 		public void update_extra_widget (Gtk.Widget? widget);
 		public void update_symbol_widget (Xnoise.UserInfo.ContentClass cc);
 		public void update_text (string txt, bool bold = true);
@@ -482,7 +482,7 @@ namespace Xnoise {
 		public delegate void AddInfoBarDelegateType (Xnoise.InfoBar ibar);
 		public UserInfo (Xnoise.UserInfo.AddInfoBarDelegateType func);
 		public void popdown (uint id);
-		public uint popup (Xnoise.UserInfo.RemovalType removal_type, Xnoise.UserInfo.ContentClass content_class, string info_text = "", int appearance_time_seconds = 2, Gtk.Widget? extra_widget = null);
+		public uint popup (Xnoise.UserInfo.RemovalType removal_type, Xnoise.UserInfo.ContentClass content_class, string info_text = "", bool bold = true, int appearance_time_seconds = 2, Gtk.Widget? extra_widget = null);
 		public void update_extra_widget_by_id (uint id, Gtk.Widget? widget);
 		public void update_symbol_widget_by_id (uint id, Xnoise.UserInfo.ContentClass cc);
 		public void update_text_by_id (uint id, string txt, bool bold = true);

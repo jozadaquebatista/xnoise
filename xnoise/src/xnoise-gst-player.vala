@@ -269,8 +269,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 					break;
 
 				if(type == "missing-plugin") {
-					print("missing plugins msg for element\n");
-					print("src_name: %s; type_name: %s\n", source, type);
+					//print("missing plugins msg for element\n");
+					//print("src_name: %s; type_name: %s\n", source, type);
 					missing_plugins.prepend(msg);
 					return;
 				}
@@ -312,6 +312,15 @@ public class Xnoise.GstPlayer : GLib.Object {
 		
 		if(err is Gst.CoreError && ((int)(err.code) == (int)(Gst.StreamError.CODEC_NOT_FOUND))) {
 			//print("is missing plgins error \n");
+			Idle.add( () => {
+				userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
+				               UserInfo.ContentClass.WARNING,
+				               "Missing plugins error",
+				               true,
+				               5,
+				               null);
+				return false;
+			});
 			sign_missing_plugins();
 		} 
 		return retval;

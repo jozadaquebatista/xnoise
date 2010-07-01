@@ -210,6 +210,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
 		                        UserInfo.ContentClass.WAIT,
 		                        "Importing media data. This may take some time...",
+		                        true,
 		                        5,
 		                        null);
 		
@@ -252,7 +253,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		dbw = null;
 		mi = null;
 		
-		userinfo.update_text_by_id(id, "Finished import.", true);
+		userinfo.update_text_by_id(id, "Finished import.", false);
 		userinfo.update_symbol_widget_by_id(id, UserInfo.ContentClass.INFO);
 		Timeout.add_seconds(4, () => {
 			userinfo.popdown(id);

@@ -144,6 +144,7 @@ public class Xnoise.UserInfo : GLib.Object {
 	public uint popup(RemovalType removal_type,
 	                 ContentClass content_class,
 	                 string info_text = "",
+	                 bool bold = true, 
 	                 int appearance_time_seconds = 2, 
 	                 Widget? extra_widget = null) {
 		
@@ -155,7 +156,8 @@ public class Xnoise.UserInfo : GLib.Object {
 		                             removal_type, 
 		                             current_id,
 		                             appearance_time_seconds, 
-		                             info_text, 
+		                             info_text,
+		                             bold,
 		                             extra_widget);
 
 		info_messages.insert(current_id, bar);
