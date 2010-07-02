@@ -77,11 +77,13 @@ public class Xnoise.MediawatcherPlugin : GLib.Object, IPlugin {
 public class Xnoise.Mediawatcher : GLib.Object {
 	private List<DataPair> monitor_list = null;
 	private ImportInfoBar iib;
-	
+	private Queue<string> queue;
 	// the frequency limit to check monitored directories for changes
 	private const int monitoring_frequency = 2000;
 	
 	public Mediawatcher() {
+		queue = new Queue<string>();
+		
 		global.sig_media_path_changed.connect(media_path_changed_cb);
 		
 		iib = new ImportInfoBar();
@@ -89,7 +91,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		setup_monitors();
 	}
 	
-	protected class DataPair {
+	protected class DataPair : GLib.Object{
 		public DataPair(string path, FileMonitor monitor) {
 			this.path = path;
 			this.monitor = monitor;
@@ -122,8 +124,10 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		if(monitor_list != null) {
 			unowned List<DataPair> iter = monitor_list;
 			while((iter = iter.next) != null) {
+				iter.data.monitor.cancel(); //This seems to necessary
 				iter.data.monitor.unref();
 			}
+			monitor_list.data.monitor.cancel(); //This seems to necessary
 			monitor_list.data.monitor.unref();
 			monitor_list = null;
 		}
@@ -141,7 +145,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			monitor.set_rate_limit(monitoring_frequency);
 			var d = new DataPair(path, monitor);
 			monitor.ref();
-			monitor_list.append(d);	
+			monitor_list.append(d);
 
 			monitor_all_subdirs(dir);
 		}
@@ -156,10 +160,12 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			while(iter != null) {	
 				if(iter.data.path.has_prefix(path)) {
 					print("removed monitor %s", iter.data.path);
+					iter.data.monitor.cancel(); //This seems to necessary
 					iter.data.monitor.unref();
 					unowned List<DataPair> temp = iter.next;
 					iter.delete_link(iter);
 					iter = temp;
+					print("REMOVE\n");
 				}
 				else iter = iter.next;
 			}
@@ -167,7 +173,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 	
 	protected bool monitor_in_list(string path) {
-	bool success = false;
+		bool success = false;
 		monitor_list.foreach((data) => {
 			unowned List<DataPair> iter = monitor_list;
 			while(iter != null) {
@@ -228,8 +234,26 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 
 	protected void handle_created_file(File file) {
-		print("\'%s\' has been created recently, updating db...\n", file.get_path());
-			
+//		print("\'%s\' has been created recently, updating db...\n", file.get_path());
+		string buffer = file.get_path();
+		queue.push_tail(buffer);
+		if(queue.length > 0) {
+			Timeout.add_seconds(2, () => {
+				some_asyn_method();
+				return false;
+			});
+		}
+	}
+
+	private void some_asyn_method() {
+		// todo : this seems to be a blocker for the gui
+		// doing this async in a source function and taking data from a queue improved the situation slightly
+		string? path = queue.peek_head();
+		if(path == null)
+			return;
+		print("\nHANDLE QUEUE for %s\n", path);
+		File file = File.new_for_path(path);
+		queue.pop_head();
 		DbWriter dbw = null;
 		try {
 			dbw = new DbWriter();
@@ -247,9 +271,11 @@ public class Xnoise.Mediawatcher : GLib.Object {
 				mi.add_local_tags(file, ref dbw);
 				setup_monitor_for_path(file.get_path());
 			}
-		
-			if(Main.instance.main_window.mediaBr != null)
-				Main.instance.main_window.mediaBr.change_model_data();
+			Idle.add( () => {
+				if(Main.instance.main_window.mediaBr != null)
+					Main.instance.main_window.mediaBr.change_model_data();
+				return false;
+			});
 		} 
 		catch(Error e) {
 			print("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e.message);
@@ -307,7 +333,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	tells us how many items have been added / tells us artist and title of the file if was a
 	single file only.
  */
-private class Xnoise.ImportInfoBar {
+private class Xnoise.ImportInfoBar : GLib.Object {
 	private Gtk.InfoBar bar = null;
 	private Label bar_label = null;
 	private Button bar_close_button = null;
