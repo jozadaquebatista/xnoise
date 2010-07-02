@@ -330,14 +330,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public void position_config_menu(Menu menu, out int x, out int y, out bool push) {
 		//the upper right corner of the popup menu should be just beneath the lower right corner of the button
 
-		int o_x, o_y, o_height, o_width, o_depth;
-		config_button.get_window().get_geometry(out o_x, out o_y, out o_width, out o_height, out o_depth);
+		int o_x = 0, o_y = 0;
+		this.get_window().get_position(out o_x, out o_y);
 		Requisition req; 
 		config_button.get_child_requisition(out req);
 		/* get_allocation is broken in vapi - we should remove this direct field access as soon as it is fixed */
 		//Did you file a bug for this?
 		Allocation alloc;
 		alloc = config_button.allocation;
+		print("%i, %i", o_x, o_y);
 		x = o_x + alloc.x + req.width;
 		y = o_y + alloc.y + req.height;
 		
