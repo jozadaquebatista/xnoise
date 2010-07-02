@@ -166,13 +166,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				if(a_frame_config_button != null && config_button.get_parent() == null) 
 					a_frame_config_button.add(config_button);
 				config_button.show_all();
-				if(config_button_menu.attach_widget != null)
+				//buggy
+				/*if(config_button_menu.attach_widget != null)
 					config_button_menu.detach();
-				config_button_menu.attach_to_widget(config_button, (a, x) => {});
+				config_button_menu.attach_to_widget(config_button, (a, x) => {});*/
 				stopButton.hide();
 			}
 			else {
-				config_button_menu.detach();
+				//config_button_menu.detach();
 				if(a_frame_config_button != null && config_button.is_realized()) 
 					a_frame_config_button.remove(config_button);
 				config_button.unrealize();
@@ -338,7 +339,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		//Did you file a bug for this?
 		Allocation alloc;
 		alloc = config_button.allocation;
-		print("%i, %i", o_x, o_y);
 		x = o_x + alloc.x + req.width;
 		y = o_y + alloc.y + req.height;
 		
