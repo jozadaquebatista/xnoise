@@ -38,7 +38,7 @@ public class Xnoise.TrackList : TreeView {
 	};
 	private const string USE_LEN_COL   = "use_length_column";
 	private const string USE_TR_NO_COL = "use_tracknumber_column";
-	private const string USE_ALBUM_COL   = "use_album_column";
+	//private const string USE_ALBUM_COL   = "use_album_column";
 
 	private TreeViewColumn columnPixb;
 	private TextColumn columnAlbum;
@@ -915,12 +915,12 @@ public class Xnoise.TrackList : TreeView {
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
 		
-		if(par.get_int_value(USE_ALBUM_COL) == 1) {
+		/*if(par.get_int_value(USE_ALBUM_COL) == 1) {
 			columnAlbum.visible = true;
 		}
 		else {
 			columnAlbum.visible = false;
-		}
+		}*/
 
 		// ARTIST
 		renderer = new CellRendererText();
