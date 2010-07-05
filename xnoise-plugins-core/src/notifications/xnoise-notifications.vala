@@ -142,11 +142,11 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		
 		//TODO: check return value
 		get_image_path_for_media_uri(uri, ref image_path);
-		string summary = "<b>" + title + "</b>";
+		string summary = title;
 		string body = _("by") +
-		              " <b>" + artist + "</b> \n" +
+		              " " + artist + " \n" +
 		              _("on") + 
-		              " <b>" + album + "</b>";
+		              " " + album;
 		
 		if(notification == null) {
 			notification = new Notification(summary, body, null, null);
