@@ -4,12 +4,14 @@ SUBDIRS = \
 	data \
 	src \
 	po \
+	vapi \
 	$(NULL)
 
 DIST_SUBDIRS = \
 	data \
 	src \
 	po \
+	vapi \
 	$(NULL)
 
 xnoiselicense_DATA =  \

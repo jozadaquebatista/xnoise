@@ -298,6 +298,7 @@ AC_CONFIG_FILES([
     src/mpris/Makefile
     src/mediakeys/Makefile
     po/Makefile.in
+    vapi/Makefile
 ])
 
 AC_OUTPUT

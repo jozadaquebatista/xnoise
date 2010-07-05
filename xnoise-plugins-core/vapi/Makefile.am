@@ -1,1 +1,5 @@
-EXTRA_DIST = config.vapi
+noinst_DATA = \
+	config.vapi
+
+EXTRA_DIST = \
+	$(noinst_DATA)

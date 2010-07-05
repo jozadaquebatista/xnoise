@@ -114,6 +114,7 @@ AC_CONFIG_FILES([
     data/icons/scalable/Makefile
     src/Makefile
     po/Makefile.in
+    vapi/Makefile
 ])
 
 AC_OUTPUT
