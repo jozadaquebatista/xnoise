@@ -38,6 +38,7 @@ public class Xnoise.TrackList : TreeView {
 	};
 	private const string USE_LEN_COL   = "use_length_column";
 	private const string USE_TR_NO_COL = "use_tracknumber_column";
+	private const string USE_ALBUM_COL   = "use_album_column";
 
 	private TreeViewColumn columnPixb;
 	private TextColumn columnAlbum;
@@ -49,35 +50,40 @@ public class Xnoise.TrackList : TreeView {
 	private TreeRowReference[] rowref_list;
 	private bool dragging;
 	private Menu menu;
-	private bool _column_length_visible;
-	private bool _column_tracknumber_visible;
 	private const int autoscroll_distance = 50;
 	private uint autoscroll_source = 0;
 	private bool reorder_dragging = false;
-	
 	private uint hide_timer;
 	private bool hide_timer_set = false;
 	private const uint HIDE_TIMEOUT = 1000;
 	
 	public bool column_length_visible {
 		get {
-			return _column_length_visible;
+			return this.columnLength.visible;
 		}
 		set {
-			_column_length_visible = value;
 			this.columnLength.visible = value;
 		}
 	}
 	
-	public bool column_tracknumber_visible{
+	public bool column_tracknumber_visible {
 		get {
-			return _column_tracknumber_visible;
+			return this.columnTracknumber.visible;
 		}
 		set {
-			_column_tracknumber_visible = value;
 			this.columnTracknumber.visible = value;
 		}
 	}
+	
+	public bool column_album_visible {
+		get {
+			return this.columnAlbum.visible;
+		}
+		set {
+			this.columnAlbum.visible = value;
+		}
+	}
+			
 
 	public TrackListModel tracklistmodel;
 
@@ -908,6 +914,13 @@ public class Xnoise.TrackList : TreeView {
 		columnAlbum.resized.connect( on_column_resized);
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
+		
+		if(par.get_int_value(USE_ALBUM_COL) == 1) {
+			columnAlbum.visible = true;
+		}
+		else {
+			columnAlbum.visible = false;
+		}
 
 		// ARTIST
 		renderer = new CellRendererText();

@@ -425,6 +425,7 @@ namespace Xnoise {
 		public void on_activated (string uri, Gtk.TreePath path);
 		public void remove_selected_rows ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
+		public bool column_album_visible { get; set; }
 		public bool column_length_visible { get; set; }
 		public bool column_tracknumber_visible { get; set; }
 	}

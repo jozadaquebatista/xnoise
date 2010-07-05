@@ -1417,6 +1417,8 @@ gboolean xnoise_track_list_get_column_length_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_length_visible (XnoiseTrackList* self, gboolean value);
 gboolean xnoise_track_list_get_column_tracknumber_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_tracknumber_visible (XnoiseTrackList* self, gboolean value);
+gboolean xnoise_track_list_get_column_album_visible (XnoiseTrackList* self);
+void xnoise_track_list_set_column_album_visible (XnoiseTrackList* self, gboolean value);
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
 XnoiseTrackListModel* xnoise_track_list_model_construct (GType object_type);
 void xnoise_track_list_model_on_before_position_reference_changed (XnoiseTrackListModel* self);

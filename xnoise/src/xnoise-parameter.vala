@@ -250,6 +250,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 private const string default_content = """
 [settings_int]
 use_lyrics=1
+use_album_column=1
 use_length_column=1
 posY=0
 posX=0
