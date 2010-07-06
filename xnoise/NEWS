@@ -3,8 +3,9 @@ xnoise 0.1.9
 
  * add user info system
  * add initial import dialog
+ * add open file dialog (play tracks without adding them to the library)
  * improve random mode
- * new icons
+ * use new icons
  * show user info on media import
  * distribute vapi directories with released tarballs
  * several bugfixes

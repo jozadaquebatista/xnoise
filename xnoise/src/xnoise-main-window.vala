@@ -41,7 +41,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string SHOWMEDIABROWSER = _("Show Media");
 	private const string HIDEMEDIABROWSER = _("Hide Media");
 	private unowned Main xn;
-	private ActionGroup action_group;
+	public ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
 	private Label song_title_label;
 	private VolumeSliderButton volumeSliderButton;

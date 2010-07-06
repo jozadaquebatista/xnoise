@@ -223,6 +223,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {
 		public bool _seek;
+		public Gtk.ActionGroup action_group;
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
 		public Gtk.Button config_button;
