@@ -156,7 +156,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		return true;
 	}
 
-	public void trigger_expose () {
+	public void trigger_expose() {
 		//trigger a redraw by gtk using our expose_event handler
 		this.queue_draw_area(0, 0, this.allocation.width, this.allocation.height);
 	}

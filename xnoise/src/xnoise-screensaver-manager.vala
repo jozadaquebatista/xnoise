@@ -22,13 +22,13 @@ namespace Xnoise {
 		}
 			
 		public bool inhibit() {
-			message("calling Inhibit");
+			//message("calling Inhibit");
 			if (backend == null) return false;
 			return backend.inhibit();
 		}
 	
 		public bool uninhibit() {
-			message("calling UnInhibit");
+			//message("calling UnInhibit");
 			if (backend == null) return false;
 			return backend.uninhibit();
 		}
@@ -80,7 +80,7 @@ namespace Xnoise {
 
 		public bool inhibit() {
 			int id = get_window_id();
-			print ("%i", id);
+			//print ("%i", id);
 			try {
 				Process.spawn_sync (null, {path, inhibit_param, get_window_id().to_string()}, null, 
 				                    SpawnFlags.STDOUT_TO_DEV_NULL, 

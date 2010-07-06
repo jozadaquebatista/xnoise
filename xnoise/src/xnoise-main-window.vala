@@ -392,6 +392,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 			fullscreenwindowvisible = true;
 			fullscreentoolbar.show();
+			Idle.add( () => {
+				this.videoscreen.trigger_expose();
+				return false;
+			});
 		}
 		else {
 			this.videoscreen.window.unfullscreen();
@@ -402,6 +406,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			fullscreenwindowvisible = false;
 			this.videovbox.show();
 			fullscreentoolbar.hide();
+			Idle.add( () => {
+				this.videoscreen.trigger_expose();
+				return false;
+			});
 		}
 	}
 
