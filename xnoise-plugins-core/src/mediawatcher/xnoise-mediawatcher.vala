@@ -91,7 +91,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		setup_monitors();
 	}
 	
-	protected class DataPair : GLib.Object{
+	private class DataPair : GLib.Object{
 		public DataPair(string path, FileMonitor monitor) {
 			this.path = path;
 			this.monitor = monitor;
@@ -102,7 +102,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 
 	/* creates file monitors for all directories in the media path */ 
-	protected void setup_monitors() {
+	private void setup_monitors() {
 		monitor_list = new List<DataPair>();
 		DbBrowser dbb = null;
 		try {
@@ -118,7 +118,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			setup_monitor_for_path(mfolder);
 	}
 	
-	protected void media_path_changed_cb() {
+	private void media_path_changed_cb() {
 		//in future, when we are informed of path changes item by item
 		//we will be able to remove and add specific monitors 
 		if(monitor_list != null) {
@@ -136,7 +136,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	
 	/* setup file monitors for a directory and all its subdirectories, reference them and
 	 store them in monitor_list */
-	protected void setup_monitor_for_path(string path) {
+	private void setup_monitor_for_path(string path) {
 		//print("setup_monitor_for_path : %s\n", path);
 		try {
 			var dir = File.new_for_path(path);
@@ -154,7 +154,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		}
 	}
 
-	protected void remove_dir_monitors(string path) {
+	private void remove_dir_monitors(string path) {
 		monitor_list.foreach((data) => {
 			unowned List<DataPair> iter = monitor_list;
 			while(iter != null) {	
@@ -172,7 +172,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		});
 	}
 	
-	protected bool monitor_in_list(string path) {
+	private bool monitor_in_list(string path) {
 		bool success = false;
 		monitor_list.foreach((data) => {
 			unowned List<DataPair> iter = monitor_list;
@@ -185,7 +185,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		return success;
 	}
 			
-	protected void handle_deleted_file(File file) {
+	private void handle_deleted_file(File file) {
 		//if the file was a directory it is in monitor_list
 		//search for filepath in monitor list and remove it
 		//remove all its subdirs from monitor list
@@ -194,14 +194,16 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		//(we might need to store the directory of files in the db)
 		
 		print("File deleted: \'%s\'\n", file.get_path());
-		DbWriter dbw = null;
-		try {
-			dbw = new DbWriter();
+//		DbWriter dbw = null;
+		if(dbw == null) {
+			try {
+				dbw = new DbWriter();
 			
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return;
+			}
+			catch(Error e) {
+				print("%s\n", e.message);
+				return;
+			}
 		}
 		if(monitor_in_list(file.get_path())) {
 			print("%s was a directory\n", file.get_path());
@@ -231,21 +233,54 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	
 		if(Main.instance.main_window.mediaBr != null)
 			Main.instance.main_window.mediaBr.change_model_data();
+		Idle.add( () => {
+			dbw = null;
+			return false;
+		});
 	}
 
-	protected void handle_created_file(File file) {
+	private void handle_created_file(File file) {
 //		print("\'%s\' has been created recently, updating db...\n", file.get_path());
 		string buffer = file.get_path();
+//		Timer t = new Timer();
+//		t.reset();
+//		ulong microseconds;
+//		t.start();
 		queue.push_tail(buffer);
-		if(queue.length > 0) {
-			Timeout.add_seconds(2, () => {
-				some_asyn_method();
-				return false;
-			});
+//		t.stop();
+//		double buf = t.elapsed(out microseconds);
+//		print("\nelapsed: %lf ; %u\n", buf, (uint)microseconds);
+		if(queue.length > 0)
+			starter_method_async();
+	}
+	
+	private DbWriter dbw = null;
+	
+	private async void starter_method_async() {
+		if(async_running == true)
+			return;
+
+//print("entering loop\n");
+		while(queue.length > 0) {
+			async_running = true;
+			yield async_worker();
 		}
+		Idle.add( () => {
+			dbw = null;
+			return false;
+		});
+		Idle.add( () => {
+			if(Main.instance.main_window.mediaBr != null)
+				Main.instance.main_window.mediaBr.change_model_data();
+			return false;
+		});
+//print("leaving loop\n");
+		async_running = false;
 	}
 
-	private void some_asyn_method() {
+	private bool async_running = false;
+
+	private async void async_worker() {
 		// todo : this seems to be a blocker for the gui
 		// doing this async in a source function and taking data from a queue improved the situation slightly
 		string? path = queue.peek_head();
@@ -254,13 +289,14 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		print("\nHANDLE QUEUE for %s\n", path);
 		File file = File.new_for_path(path);
 		queue.pop_head();
-		DbWriter dbw = null;
-		try {
-			dbw = new DbWriter();
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return;
+		if(dbw == null) {
+			try {
+				dbw = new DbWriter();
+			}
+			catch(Error e1) {
+				print("%s\n", e1.message);
+				return;
+			}
 		}
 		var mi = new MediaImporter();
 		try {
@@ -271,18 +307,50 @@ public class Xnoise.Mediawatcher : GLib.Object {
 				mi.add_local_tags(file, ref dbw);
 				setup_monitor_for_path(file.get_path());
 			}
-			Idle.add( () => {
-				if(Main.instance.main_window.mediaBr != null)
-					Main.instance.main_window.mediaBr.change_model_data();
-				return false;
-			});
 		} 
-		catch(Error e) {
-			print("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e.message);
+		catch(Error e2) {
+			print("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e2.message);
 		}
 	}
 
-	protected void file_changed_cb(FileMonitor sender, File file, File? other_file, FileMonitorEvent event_type) {
+//	private void async_worker() {
+//		// todo : this seems to be a blocker for the gui
+//		// doing this async in a source function and taking data from a queue improved the situation slightly
+//		string? path = queue.peek_head();
+//		if(path == null)
+//			return;
+//		print("\nHANDLE QUEUE for %s\n", path);
+//		File file = File.new_for_path(path);
+//		queue.pop_head();
+//		DbWriter dbw = null;
+//		try {
+//			dbw = new DbWriter();
+//		}
+//		catch(Error e) {
+//			print("%s\n", e.message);
+//			return;
+//		}
+//		var mi = new MediaImporter();
+//		try {
+//			var info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
+//		
+//			if(info.get_file_type() == FileType.REGULAR) mi.add_single_file(file.get_uri(), ref dbw);	
+//			else if (info.get_file_type() == FileType.DIRECTORY) {
+//				mi.add_local_tags(file, ref dbw);
+//				setup_monitor_for_path(file.get_path());
+//			}
+//			Idle.add( () => {
+//				if(Main.instance.main_window.mediaBr != null)
+//					Main.instance.main_window.mediaBr.change_model_data();
+//				return false;
+//			});
+//		} 
+//		catch(Error e) {
+//			print("Adding of \'%s\' failed: Error: %s\n", file.get_path(), e.message);
+//		}
+//	}
+
+	private void file_changed_cb(FileMonitor sender, File file, File? other_file, FileMonitorEvent event_type) {
 		if(!global.media_import_in_progress) {
 			print("%s\n", event_type.to_string());
 			if(event_type == FileMonitorEvent.CREATED)  // TODO: monitor removal of folders, too
@@ -295,7 +363,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 
 	/* sets up file monitors for all subdirectories of a directory, references them and
 	 stores them in monitor_list */
-	protected void monitor_all_subdirs(File f) {
+	private void monitor_all_subdirs(File f) {
 		try {
 			var enumerator = f.enumerate_children(FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 			                                      FILE_ATTRIBUTE_STANDARD_NAME,
