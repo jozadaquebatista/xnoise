@@ -2,6 +2,7 @@
 <ui>
 	<menubar name="MainMenu">
 		<menu name="FileMenu" action="FileMenuAction">
+			<menuitem action="OpenAction"/>
 			<menuitem action="AddRemoveAction"/>
 			<separator/>
 			<menuitem action="QuitAction" />
@@ -29,6 +30,7 @@
 	<menubar name="ConfigButtonMenu">
 		<menu name="ConfigMenu" action="ConfigMenuAction">
 			<menuitem action ="AddRemoveAction"/>
+			<menuitem action="OpenAction"/>
 			<menuitem action ="SettingsAction"/>
 			<menuitem action ="AboutAction"/>
 			<separator/>

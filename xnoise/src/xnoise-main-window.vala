@@ -131,6 +131,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private const ActionEntry[] action_entries = {
 		{ "FileMenuAction", null, N_("_File") },
+			{ "OpenAction", Gtk.STOCK_OPEN, null, null, N_("open file"), on_file_add},
 			{ "AddRemoveAction", Gtk.STOCK_ADD, N_("_Add or Remove media"), null, N_("manage the content of the xnoise media library"), on_menu_add},
 			{ "QuitAction", STOCK_QUIT, null, null, null, quit_now},
 		{ "EditMenuAction", null, N_("_Edit") },
@@ -893,6 +894,33 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 	}
 
+	private void on_file_add() {
+		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
+			_("Select media file"),
+			this,
+			Gtk.FileChooserAction.OPEN,
+			Gtk.STOCK_CANCEL,
+			Gtk.ResponseType.CANCEL,
+			Gtk.STOCK_OPEN,
+			Gtk.ResponseType.ACCEPT,
+			null);
+		fcdialog.select_multiple = true;
+		fcdialog.set_current_folder(Environment.get_home_dir());
+		if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
+			GLib.SList<string> res = fcdialog.get_uris();
+			if(!(res == null || res.data == "")) {
+				string[] media_files = {};
+				foreach(string s in res) {
+					media_files += s;
+				}
+				media_files += null; 
+				this.trackList.tracklistmodel.add_uris(media_files);
+			}
+		}
+		fcdialog.destroy();
+		fcdialog = null;
+	}
+	
 	private void on_settings_edit() {
 		var settingsD = new SettingsDialog();
 		settingsD.sign_finish.connect( () => {

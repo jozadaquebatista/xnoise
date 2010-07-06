@@ -280,7 +280,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			Gtk.ResponseType.ACCEPT,
 			null);
 		fcdialog.set_current_folder(Environment.get_home_dir());
-		if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
+		if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
 			TreeIter iter;
 			listmodel.append(out iter);
 			listmodel.set(iter,

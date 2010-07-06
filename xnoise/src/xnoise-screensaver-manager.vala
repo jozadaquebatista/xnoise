@@ -79,7 +79,7 @@ namespace Xnoise {
 		}
 
 		public bool inhibit() {
-			int id = get_window_id();
+			//int id = get_window_id();
 			//print ("%i", id);
 			try {
 				Process.spawn_sync (null, {path, inhibit_param, get_window_id().to_string()}, null, 
