@@ -205,6 +205,13 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void on_ok_button_clicked() {
 		Main.instance.main_window.searchEntryMB.set_sensitive(false);
 		Main.instance.main_window.mediaBr.set_sensitive(false);
+		List<Action> actions = Main.instance.main_window.action_group.list_actions();
+		foreach(Action a in actions) {
+			if(a.name == "AddRemoveAction") {
+				a.sensitive = false;
+				break;
+			}
+		}
 		//TODO: Make sure this dialog is not opened while media import
 		
 		msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
@@ -259,6 +266,15 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			userinfo.popdown(id);
 			return false;
 		});
+		
+		//reenable media dialog action
+		List<Action> actions = Main.instance.main_window.action_group.list_actions();
+		foreach(Action a in actions) {
+			if(a.name == "AddRemoveAction") {
+				a.sensitive = true;
+				break;
+			}
+		} 
 		
 		this.sign_finish();
 		// print("thread finished\n");
