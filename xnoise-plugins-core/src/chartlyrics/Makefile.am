@@ -20,8 +20,8 @@ libchartlyricsdir = $(libdir)/xnoise
 libchartlyrics_LTLIBRARIES = libchartlyrics.la
 
 libchartlyrics_la_SOURCES = \
-	xnoise-leoslyrics.vala \
-	xnoise-leoslyrics-registration.vala \
+	xnoise-chartlyrics.vala \
+	xnoise-chartlyrics-registration.vala \
 	$(NULL)
 
 libchartlyrics_la_VALAFLAGS = \

@@ -268,6 +268,26 @@ fi
 AM_CONDITIONAL(ENABLE_MEDIAKEYS, test x"$enable_mediakeys" = "xyes")
 dnl ================================================================
 
+dnl ================================================================
+dnl dependency check for optional build of chartlyrics plugin 
+
+AC_ARG_ENABLE([chartlyrics],
+    AS_HELP_STRING([--disable-chartlyrics],
+    [Disable chartlyrics plugin (default: enabled)]),
+    [enable_chartlyrics=$enableval],
+    [enable_chartlyrics=yes])
+
+if test "x$enable_chartlyrics" = "xyes"; then
+    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
+        enable_chartlyrics=yes		
+    else
+        enable_chartlyrics=no
+        AC_MSG_WARN([chartlyrics plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_CHARTLYRICS, test x"$enable_chartlyrics" = "xyes")
+dnl ================================================================
+
 
 # Gettext
 GETTEXT_PACKAGE=xnoise-plugins-core
@@ -297,6 +317,7 @@ AC_CONFIG_FILES([
     src/mediawatcher/Makefile
     src/mpris/Makefile
     src/mediakeys/Makefile
+    src/chartlyrics/Makefile
     po/Makefile.in
     vapi/Makefile
 ])
@@ -321,4 +342,5 @@ echo "
     mediawatcher:                  ${enable_mediawatcher}
     mpris:                         ${enable_mpris}
     mediakeys:                     ${enable_mediakeys}
+    chartlyrics:                   ${enable_chartlyrics}
 "
