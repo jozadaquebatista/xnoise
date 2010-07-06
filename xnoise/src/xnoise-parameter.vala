@@ -269,7 +269,7 @@ volume=0.080511778431618983
 [settings_string]
 prio_lyrics=Leoslyrics;Lyricsfly
 prio_images=LastfmCovers
-activated_plugins=Leoslyrics;notifications;LastfmCovers;TitleToDecoration;Mediawatcher
+activated_plugins=Leoslyrics;notifications;LastfmCovers;TitleToDecoration;Mediawatcher;mediakeys
 """;
 }
 
