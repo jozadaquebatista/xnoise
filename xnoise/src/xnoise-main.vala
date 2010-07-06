@@ -40,8 +40,8 @@ public class Xnoise.Main : GLib.Object {
 	public static bool no_plugins;
 
 	public Main() {
-
-		Xnoise.initialize();
+		bool is_first_start;
+		Xnoise.initialize(out is_first_start);
 
 		check_database_and_tables();
 
@@ -87,6 +87,9 @@ public class Xnoise.Main : GLib.Object {
 		connect_signals();
 
 		par.set_start_parameters_in_implementors();
+		
+		if(is_first_start)
+			main_window.ask_for_initial_media_import();
 	}
 
 	private void connect_signals() {

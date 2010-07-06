@@ -69,7 +69,7 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 		symbol_widget.hide();
 		symbol_widget.destroy();
 		symbol_widget = create_symbol_widget(cc);
-		swbox.pack_start(symbol_widget, false, false , 0);
+		swbox.pack_start(symbol_widget, false, false , 2);
 		symbol_widget.show_all();
 	}
 	

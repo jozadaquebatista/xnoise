@@ -40,12 +40,21 @@ namespace Xnoise {
 	 * This function is used to create static instances of Params
 	 * and GlobalInfo in the xnoise namespace.
 	 */
-	public static void initialize() {
+	public static void initialize(out bool is_first_start) {
+		is_first_start = false;
 		if(global == null)
 			global = new GlobalAccess();
 
+		File xnoise_home = File.new_for_path(global.settings_folder);
+		File xnoiseini = null;
+		xnoiseini = xnoise_home.get_child("db.sqlite");
+		if(!xnoiseini.query_exists(null)) {
+			is_first_start = true;
+		}
+
 		if(par == null)
 			par = new Params();
+
 	}
 
 	public static string escape_for_local_folder_search(string? value) {

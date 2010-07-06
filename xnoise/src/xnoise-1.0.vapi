@@ -246,6 +246,7 @@ namespace Xnoise {
 		public Xnoise.VideoScreen videoscreen;
 		public Gtk.VBox videovbox;
 		public MainWindow ();
+		public void ask_for_initial_media_import ();
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public void display_info_bar (Gtk.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
@@ -583,7 +584,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string get_stream_uri (string playlist_uri);
 	[CCode (cheader_filename = "xnoise.h")]
-	public static void initialize ();
+	public static void initialize (out bool is_first_start);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string prepare_for_comparison (string value);
 	[CCode (cheader_filename = "xnoise.h")]

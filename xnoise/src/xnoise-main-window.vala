@@ -328,6 +328,33 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
+	public void ask_for_initial_media_import() {
+		uint msg_id = 0;
+		var add_media_button = new Gtk.Button.with_label(_("Add media"));
+		msg_id = userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
+		                        UserInfo.ContentClass.QUESTION,
+		                        _("You started xnoise for the first time. Do you want to import media into the library?"),
+		                        false,
+		                        5,
+		                        add_media_button);
+		add_media_button.clicked.connect( () => {
+			on_media_add_on_first_start(msg_id);
+		});
+		
+	}
+	
+	private void on_media_add_on_first_start(uint msg_id) {
+		Idle.add( () => {
+			userinfo.popdown(msg_id);
+			return false;
+		});
+		mfd = new AddMediaDialog();
+		mfd.sign_finish.connect( () => {
+			mfd = null;
+			Idle.add(mediaBr.change_model_data);
+		});
+	}
+	
 	public void position_config_menu(Menu menu, out int x, out int y, out bool push) {
 		//the upper right corner of the popup menu should be just beneath the lower right corner of the button
 
