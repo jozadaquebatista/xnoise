@@ -1,0 +1,19 @@
+xnoise 0.1.9
+============
+
+ * add user info system
+ * add initial import dialog
+ * improve random mode
+ * new icons
+ * show user info on media import
+ * distribute vapi directories with released tarballs
+ * several bugfixes
+
+xnoise 0.1.6
+============
+
+ * added screensaver management
+ * several bugfixes
+ * enhance handling of corrupted tags on tag reading
+ * enlarge icons on playback buttons
+
