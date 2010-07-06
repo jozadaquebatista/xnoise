@@ -104,7 +104,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 	
 	public Chartlyrics(string artist, string title) {
 		if (_is_initialized == false) {
-			message ("initting");
+			//message ("initting");
 			session = new SessionAsync();
 			Xml.Parser.init ();
 			
@@ -123,7 +123,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		//gethid_str.assign (gethid_str.str);
 		
 		session = new SessionAsync();
-		print("%s\n\n", gethid_str.str);
+		//print("%s\n\n", gethid_str.str);
 		hid_msg = new Message("GET", gethid_str.str);
 	}
 	
@@ -151,7 +151,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		//message(xp_hid);
 		var xp_result = xp_cont.eval_expression(xp_hid);
 		if (xp_result->nodesetval->is_empty()) { 
-			message("no hid result");
+			//message("no hid result");
 			delete xmldoc;
 			availability = false;
 			return false;
@@ -217,7 +217,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		
 		var xp_result = xp_cont.eval_expression(xp_text);
 		if (xp_result->nodesetval->is_empty()) {
-			message ("empty"); 
+			//message ("empty"); 
 			delete xmldoc;
 			availability = false;
 			return false;
@@ -225,13 +225,13 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		
 		var text_result_node = xp_result->nodesetval->item (0);
 		if (text_result_node == null) {
-			message ("no item");
+			//message ("no item");
 			delete xmldoc;
 			availability = false;
 			return false;
 		}
 		text = text_result_node->get_content();
-		message (text);
+		//message (text);
 		delete xmldoc;
 		sign_lyrics_fetched(artist, title, get_credits(), get_identifier(), text);
 				
