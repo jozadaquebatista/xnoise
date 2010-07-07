@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="768"
-   height="256"
+   width="574.48999"
+   height="163.99001"
    id="svg2"
    version="1.1"
    inkscape:version="0.47 r22583"
@@ -95,9 +95,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.83921569"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="518.60229"
-     inkscape:cy="106.59529"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="141.99792"
+     inkscape:cy="81.124071"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -131,9 +131,10 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-796.36218)">
+     transform="translate(-44.351086,-826.28471)">
     <g
-       id="g2879">
+       id="g2863"
+       transform="translate(4,-2)">
       <path
          d="m 263.54244,886.63378 0,43.42906 -13.52455,0 0,-43.04359 c -7e-5,-6.80983 -1.51911,-11.90654 -4.55718,-15.29012 -3.03818,-3.38347 -7.59536,-5.07522 -13.67154,-5.07529 -7.30133,7e-5 -13.05907,2.03446 -17.27319,6.10319 -4.2142,4.06886 -6.32128,9.61526 -6.32126,16.63925 l 0,40.66656 -13.59803,0 0.41788,-76.66643 c 0.0421,-7.71021 6.73107,10.38244 24.57311,6.19057 6.08167,-2.56519 6.55666,-3.6359 15.21511,-4.90732 9.35971,-1.37438 19.95464,3.4174 24.80591,8.55686 4.85111,5.09677 3.93366,13.46088 3.93374,23.39726"
          id="path3758"
@@ -160,17 +161,16 @@
          sodipodi:nodetypes="czcccccsscscsccccscsc"
          style="font-size:84.45616913px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans" />
       <text
-         transform="scale(1.0539473,0.94881402)"
+         transform="scale(1.2085175,0.82746008)"
          id="text3699"
-         y="1030.2697"
-         x="265.1828"
-         style="font-size:41.59132385px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         y="1165.3612"
+         x="159.716"
+         style="font-size:33.7454834px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
          xml:space="preserve"><tspan
-           style="font-size:46.54068375px"
-           y="1030.2697"
-           x="265.1828"
+           y="1165.3612"
+           x="159.716"
            id="tspan3701"
-           sodipodi:role="line">ready to rock</tspan></text>
+           sodipodi:role="line">ready to rock </tspan></text>
       <path
          sodipodi:nodetypes="ccsccsc"
          d="m 588.62756,852.25333 0.11582,4.85149 c 14.29216,8.97247 17.32237,20.99737 17.10295,29.18188 -0.21942,8.1845 -6.68649,17.4207 -21.61483,26.32472 l 4.37191,6.74209 c 16.29552,-9.71947 23.8847,-20.18267 24.22448,-32.85706 0.33978,-12.67438 -8.50498,-24.38972 -24.20033,-34.24312 z"
@@ -181,8 +181,8 @@
          style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:3.20000005;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
          id="path4602" />
       <g
-         transform="matrix(1.0555196,0,0,1,-5.8306705,0)"
-         id="g2871">
+         transform="matrix(1.0471099,0,0,1,-6.3416005,0)"
+         id="g2855">
         <path
            style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:15.49999809;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
            d="m 160.46782,830.2811 c -32.76859,24.40257 -49.6072,47.68502 -56.726,74.72657 l -0.62052,2.41222 0.31026,2.56955 c 1.92888,15.48171 11.10996,28.35022 21.9251,40.431 10.81514,12.08078 23.86527,23.24344 35.88682,32.8272 l 15.82329,-20.45143 c -11.47802,-9.1505 -23.58226,-19.61714 -32.7325,-29.83818 -8.13624,-9.08838 -13.24232,-17.90454 -14.8408,-23.96495 5.86194,-19.92673 17.37848,-36.3809 46.12542,-57.78854 L 160.46782,830.2811 z"
