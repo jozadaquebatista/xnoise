@@ -31,7 +31,6 @@
 public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	private Gdk.Pixbuf logo_pixb;
 	private Gdk.Pixbuf cover_image_pixb;
-	private Gdk.Pixbuf logo;
 	private Main xn;
 	private bool cover_image_available;
 
@@ -82,79 +81,99 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		                   );
 
 		if(!xn.gPl.current_has_video) {
-			//print("current has no video\n");
-			if(this.logo_pixb!=null) {
-				logo = null;
-				int logowidth, logoheight, widgetwidth, widgetheight;
-				float ratio;
-				var region = new Gdk.Region();
-				var rect = Gdk.Rectangle();
-				rect.x = 0;
-				rect.y = 0;
-				rect.width  = this.allocation.width;
-				rect.height = this.allocation.height;
-				region = Gdk.Region.rectangle(rect);
-
-				this.window.begin_paint_region(region);
-
-				Gdk.draw_rectangle(this.window,
-				                   this.style.black_gc, true,
-				                   e.area.x, e.area.y,
-				                   e.area.width, e.area.height
-				                   );
-
-				logowidth  = logo_pixb.get_width();
-				logoheight = logo_pixb.get_height();
-				widgetwidth  = this.allocation.width;
-				widgetheight = this.allocation.height;
-
-				if((float)widgetwidth/logowidth>(float)widgetheight/logoheight)
-					ratio = (float)widgetheight/logoheight;
+			
+			if(!cover_image_available) {
+				draw_pixbuf(logo_pixb, e);
+			}
+			else {
+				if(cover_image_pixb != null)
+					draw_pixbuf(cover_image_pixb, e);
 				else
-					ratio = (float)widgetwidth/logowidth;
-
-				logowidth = (int)(logowidth*ratio);
-				logoheight = (int)(logoheight*ratio);
-
-				if(logowidth<=1||logoheight<=1) {
-					// Do not paint for small pictures
-					this.window.end_paint();
-					return true;
-				}
-				if(!cover_image_available) {
-					logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
-				}
-				else {
-					if(cover_image_pixb != null)
-						logo = cover_image_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
-					else
-						logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
-				}
-				int y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
-				int x_offset = (int)((widgetwidth * 0.5) - (logowidth * 0.4));
-				Gdk.draw_pixbuf(this.window,          //Destination drawable
-				                this.style.fg_gc[0],  //a Gdk.GC, used for clipping, or NULL
-				                logo,                 //a Gdk Pixbuf
-				                0, 0,                 //Source X/Y coordinates within pixbuf.
-				                x_offset,             //Destination X coordinate within drawable
-				                y_offset,             //Destination Y coordinate within drawable
-				                -1,                   //Width of region to render, in pixels, or -1 to use pixbuf width.
-				                -1,                   //Height of region to render, in pixels, or -1 to use pixbuf height.
-				                Gdk.RgbDither.NONE,   //Dithering mode for GdkRGB.
-				                0, 0                  //X/Y offsets for dither.
-				                );
-				this.window.end_paint();
+					draw_pixbuf(logo_pixb, e);
 			}
-			else if(this.window!=null) {
-				Gdk.draw_rectangle(this.window,
-				                   this.style.black_gc, true,
-				                   e.area.x, e.area.y,
-				                   e.area.width, e.area.height
-				                   );
-			}
+		}
+			
+		else if(this.window!=null) {
+			Gdk.draw_rectangle(this.window,
+			                   this.style.black_gc, true,
+			                   e.area.x, e.area.y,
+			                   e.area.width, e.area.height
+			                   );
 		}
 		return true;
 	}
+	
+	
+	public void draw_pixbuf(Gdk.Pixbuf pixb, Gdk.EventExpose e) {
+		if (pixb == null) return;
+		Gdk.Pixbuf drawing_pb = null;
+		
+		int pixbwidth, pixbheight, widgetwidth, widgetheight;
+		float ratio;
+		var region = new Gdk.Region();
+		var rect = Gdk.Rectangle();
+		rect.x = 0;
+		rect.y = 0;
+		rect.width  = this.allocation.width;
+		rect.height = this.allocation.height;
+		region = Gdk.Region.rectangle(rect);
+
+		this.window.begin_paint_region(region);
+		Gdk.draw_rectangle(this.window,
+		                   this.style.black_gc, true,
+		                   e.area.x, e.area.y,
+		                   e.area.width, e.area.height
+		                   );
+		                   
+		pixbwidth  = pixb.get_width();
+		pixbheight = pixb.get_height();
+		widgetwidth  = this.allocation.width;
+		widgetheight = this.allocation.height;
+		
+		if(widgetwidth == 0 || widgetheight == 0 || pixbwidth == 0 || pixbheight == 0) {
+			this.window.end_paint();
+			return;
+		}
+
+		if((float)widgetwidth/pixbwidth>(float)widgetheight/pixbheight)
+			ratio = (float)widgetheight/pixbheight;
+		else
+			ratio = (float)widgetwidth/pixbwidth;
+		
+		pixbwidth = (int)(pixbwidth*ratio);
+		pixbheight = (int)(pixbheight*ratio);
+		
+		if(pixbwidth<=1||pixbheight<=1) {
+			// Do not paint for small pictures
+			this.window.end_paint();
+			return;
+		}
+		
+		drawing_pb = pixb.scale_simple((int)(pixbwidth * 0.8), (int)(pixbheight * 0.8), Gdk.InterpType.HYPER);
+		if (drawing_pb == null) {
+			this.window.end_paint(); 
+			return;
+		}
+		
+		int y_offset = (int)((widgetheight * 0.5) - (pixbheight * 0.4));
+		int x_offset = (int)((widgetwidth * 0.5) - (pixbwidth * 0.4));
+		
+		Gdk.draw_pixbuf(this.window,          //Destination drawable
+		                this.style.fg_gc[0],  //a Gdk.GC, used for clipping, or NULL
+		                drawing_pb,                 //a Gdk Pixbuf
+		                0, 0,                 //Source X/Y coordinates within pixbuf.
+		                x_offset,             //Destination X coordinate within drawable
+		                y_offset,             //Destination Y coordinate within drawable
+		                -1,                   //Width of region to render, in pixels, or -1 to use pixbuf width.
+		                -1,                   //Height of region to render, in pixels, or -1 to use pixbuf height.
+		                Gdk.RgbDither.NONE,   //Dithering mode for GdkRGB.
+		                0, 0                  //X/Y offsets for dither.
+		                );
+		this.window.end_paint();
+		return;
+	}                   
+		                  
+		
 
 	public void trigger_expose() {
 		//trigger a redraw by gtk using our expose_event handler

@@ -1450,6 +1450,7 @@ void xnoise_user_info_popdown (XnoiseUserInfo* self, guint id);
 guint xnoise_user_info_popup (XnoiseUserInfo* self, XnoiseUserInfoRemovalType removal_type, XnoiseUserInfoContentClass content_class, const char* info_text, gboolean bold, gint appearance_time_seconds, GtkWidget* extra_widget);
 XnoiseVideoScreen* xnoise_video_screen_new (void);
 XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type);
+void xnoise_video_screen_draw_pixbuf (XnoiseVideoScreen* self, GdkPixbuf* pixb, GdkEventExpose* e);
 void xnoise_video_screen_trigger_expose (XnoiseVideoScreen* self);
 GType xnoise_volume_slider_button_get_type (void);
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (void);

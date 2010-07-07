@@ -212,7 +212,6 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 				break;
 			}
 		}
-		//TODO: Make sure this dialog is not opened while media import
 		
 		msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
 		                        UserInfo.ContentClass.WAIT,

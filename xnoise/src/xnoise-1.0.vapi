@@ -496,6 +496,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class VideoScreen : Gtk.DrawingArea {
 		public VideoScreen ();
+		public void draw_pixbuf (Gdk.Pixbuf pixb, Gdk.EventExpose e);
 		public override bool expose_event (Gdk.EventExpose e);
 		public void trigger_expose ();
 	}
