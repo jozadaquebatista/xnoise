@@ -1,7 +1,2 @@
-data/misc/xnoise.desktop.in
-data/ui/add_media.ui
-data/ui/main_window.ui
-data/ui/settings.ui
 src/notifications/xnoise-notifications.c
 src/titleToDecoration/xnoise-title-to-decoration.c
-

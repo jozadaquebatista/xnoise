@@ -5,4 +5,3 @@ src/xnoise-lyrics-view.c
 src/xnoise-main-window.c
 src/xnoise-settings-dialog.c
 src/xnoise-tracklist.c
-

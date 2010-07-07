@@ -1,17 +1,33 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
-src/lastfmCovers/xnoise-lastfm-covers-registration.vala
-src/lastfmCovers/xnoise-lastfm-covers.vala
-src/leoslyrics/xnoise-leoslyrics-registration.vala
-src/leoslyrics/xnoise-leoslyrics.vala
-src/lyricsfly/xnoise-lyricsfly-registration.vala
-src/lyricsfly/xnoise-lyricsfly.vala
-src/mediawatcher/xnoise-mediawatcher-registration.vala
+src/mediakeys/xnoise-mediakeys.vala
+src/mediakeys/xnoise-mediakeys-registration.vala
+src/mediakeys/libmediakeys_la_vala.stamp
+src/mpris/xnoise-mpris-registration.vala
+src/mpris/libmpris_la_vala.stamp
+src/mpris/xnoise-mpris.vala
+src/mediawatcher/libMediawatcher_la_vala.stamp
 src/mediawatcher/xnoise-mediawatcher.vala
-src/notifications/xnoise-notifications-registration.vala
-src/notifications/xnoise-notifications.vala
-src/testplugin/xnoise-testplugin-registration.vala
+src/mediawatcher/xnoise-mediawatcher-registration.vala
+src/testplugin/libxnoisetest_la_vala.stamp
 src/testplugin/xnoise-testplugin.vala
-src/titleToDecoration/xnoise-title-to-decoration-registration.vala
+src/testplugin/xnoise-testplugin-registration.vala
+src/notifications/xnoise-notifications.vala
+src/notifications/libnotifications_la_vala.stamp
+src/notifications/xnoise-notifications-registration.vala
+src/chartlyrics/xnoise-chartlyrics-registration.vala
+src/chartlyrics/libchartlyrics_la_vala.stamp
+src/chartlyrics/xnoise-chartlyrics.vala
+src/leoslyrics/libLeoslyrics_la_vala.stamp
+src/leoslyrics/xnoise-leoslyrics.vala
+src/leoslyrics/xnoise-leoslyrics-registration.vala
+src/lyricsfly/libLyricsfly_la_vala.stamp
+src/lyricsfly/xnoise-lyricsfly.vala
+src/lyricsfly/xnoise-lyricsfly-registration.vala
 src/titleToDecoration/xnoise-title-to-decoration.vala
+src/titleToDecoration/xnoise-title-to-decoration-registration.vala
+src/titleToDecoration/libTitleToDecoration_la_vala.stamp
+src/lastfmCovers/xnoise-lastfm-covers.vala
+src/lastfmCovers/xnoise-lastfm-covers-registration.vala
+
 

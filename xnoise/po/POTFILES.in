@@ -11,7 +11,7 @@ src/xnoise-db-browser.vala
 src/xnoise-db-creator.vala
 src/xnoise-db-writer.vala
 src/xnoise-fullscreen-toolbar.vala
-src/xnoise-global-information.vala
+src/xnoise-global-access.vala
 src/xnoise-gst-player.vala
 src/xnoise-lyrics-loader.vala
 src/xnoise-lyrics-view.vala
