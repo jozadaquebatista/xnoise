@@ -32,7 +32,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	private Gdk.Pixbuf logo_pixb;
 	private Gdk.Pixbuf cover_image_pixb;
 	private Gdk.Pixbuf logo;
-	private Main xn;
+	private unowned Main xn;
 	private bool cover_image_available;
 
 	public VideoScreen() {
@@ -64,7 +64,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
 		try {
 			logo_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_bruit.svg");
-			//TODO: Make a new logo. This is not too nice
 		}
 		catch(GLib.Error e) {
 			print("%s\n", e.message);
@@ -82,6 +81,10 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		                   );
 
 		if(!xn.gPl.current_has_video) {
+
+			int y_offset;
+			int x_offset;
+
 			//print("current has no video\n");
 			if(this.logo_pixb!=null) {
 				logo = null;
@@ -113,8 +116,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				else
 					ratio = (float)widgetwidth/logowidth;
 
-				logowidth = (int)(logowidth*ratio);
-				logoheight = (int)(logoheight*ratio);
+				logowidth  = (int)(logowidth  *ratio);
+				logoheight = (int)(logoheight *ratio);
 
 				if(logowidth<=1||logoheight<=1) {
 					// Do not paint for small pictures
@@ -123,24 +126,45 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				}
 				if(!cover_image_available) {
 					logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
+					y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
+					x_offset = (int)((widgetwidth  * 0.5) - (logowidth  * 0.4));
 				}
 				else {
-					if(cover_image_pixb != null)
-						logo = cover_image_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
-					else
+					if(cover_image_pixb != null) {
+						int cover_image_width  = cover_image_pixb.get_width();
+						int cover_image_height = cover_image_pixb.get_height();
+
+						if((float)widgetwidth/cover_image_width>(float)widgetheight/cover_image_height)
+							ratio = (float)widgetheight/cover_image_height;
+						else
+							ratio = (float)widgetwidth/cover_image_width;
+
+						int ciwidth  = (int)(cover_image_width  * ratio * 0.8);
+						int ciheight = (int)(cover_image_height * ratio * 0.8);
+						
+						//TODO: Set max scale
+						
+						logo = cover_image_pixb.scale_simple(ciwidth, ciheight, Gdk.InterpType.HYPER);
+
+						y_offset = (int)((widgetheight * 0.5) - (ciheight * 0.5));
+						x_offset = (int)((widgetwidth  * 0.5) - (ciwidth  * 0.5));
+					}
+					else {
 						logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
+						y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
+						x_offset = (int)((widgetwidth  * 0.5) - (logowidth  * 0.4));
+					}
 				}
-				int y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
-				int x_offset = (int)((widgetwidth * 0.5) - (logowidth * 0.4));
+
 				Gdk.draw_pixbuf(this.window,          //Destination drawable
-				                this.style.fg_gc[0],  //a Gdk.GC, used for clipping, or NULL
-				                logo,                 //a Gdk Pixbuf
+				                this.style.fg_gc[0],  //a Gdk.GC, used for clipping, or null
+				                logo,                 //a Gdk.Pixbuf
 				                0, 0,                 //Source X/Y coordinates within pixbuf.
 				                x_offset,             //Destination X coordinate within drawable
 				                y_offset,             //Destination Y coordinate within drawable
 				                -1,                   //Width of region to render, in pixels, or -1 to use pixbuf width.
 				                -1,                   //Height of region to render, in pixels, or -1 to use pixbuf height.
-				                Gdk.RgbDither.NONE,   //Dithering mode for GdkRGB.
+				                Gdk.RgbDither.NONE,   //Dithering mode for Gdk.RGB.
 				                0, 0                  //X/Y offsets for dither.
 				                );
 				this.window.end_paint();
