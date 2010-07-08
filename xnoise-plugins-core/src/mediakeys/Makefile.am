@@ -12,7 +12,7 @@ INCLUDES = \
 	-DDATA_DIR='"$(datadir)"' \
 	-DLOCALE_DIR=\"${datarootdir}/locale\" \
 	-include $(CONFIG_HEADER) \
-	$(LIBNOTIFY_CFLAGS) \
+	$(LIBDBUS_GLIB_CFLAGS) \
 	$(NULL)
 
 libmediakeysdir = $(libdir)/xnoise
@@ -39,7 +39,7 @@ libmediakeys_la_LDFLAGS = \
 
 libmediakeys_la_LIBADD = \
 	$(XNOISEPLUGINSCORE_LIBS) \
-	$(LIBNOTIFY_LIBS) \
+	$(LIBDBUS_GLIB_LIBS) \
 	$(NULL)
 
 mediakeysinformation_DATA = mediakeys.xnplugin

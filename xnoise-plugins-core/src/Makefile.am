@@ -1,6 +1,6 @@
 SUBDIRS = testplugin titleToDecoration
 
-DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers notifications lyricsfly mediawatcher
+DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers notifications lyricsfly mediakeys mpris mediawatcher chartlyrics
 
 if ENABLE_CHARTLYRICS
   SUBDIRS += chartlyrics

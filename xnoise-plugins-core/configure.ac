@@ -1,7 +1,7 @@
 AC_PREREQ(2.53)
 m4_define(xnoisepluginscore_major_version, 0)
 m4_define(xnoisepluginscore_minor_version, 1)
-m4_define(xnoisepluginscore_micro_version, 9)
+m4_define(xnoisepluginscore_micro_version, 10)
 m4_define(xnoisepluginscore_version, xnoisepluginscore_major_version.xnoisepluginscore_minor_version.xnoisepluginscore_micro_version)
 
 AC_INIT(xnoisepluginscore, xnoisepluginscore_version, shuerhaakenATgo oglemail.com, [xnoise-plugins-core])
@@ -238,9 +238,9 @@ AC_ARG_ENABLE([mpris],
     [enable_mpris=yes])
 
 if test "x$enable_mpris" = "xyes"; then
-	if test "x$have_dbus_glib" = "xyes"; then
-		enable_mpris=yes		
-	else
+    if test "x$have_dbus_glib" = "xyes"; then
+        enable_mpris=yes
+    else
         enable_mpris=no
         AC_MSG_WARN([mpris plugin will not be included in the build.])
     fi
@@ -251,16 +251,16 @@ dnl ================================================================
 dnl ================================================================
 dnl dependency check for optional build of mediakeys plugin 
 
-AC_ARG_ENABLE([mpris],
+AC_ARG_ENABLE([mediakeys],
     AS_HELP_STRING([--disable-mediakeys],
     [Disable mediakeys plugin (default: enabled)]),
     [enable_mediakeys=$enableval],
     [enable_mediakeys=yes])
 
 if test "x$enable_mediakeys" = "xyes"; then
-	if test "x$have_dbus_glib" = "xyes"; then
-		enable_mediakeys=yes		
-	else
+    if test "x$have_dbus_glib" = "xyes"; then
+        enable_mediakeys=yes
+    else
         enable_mediakeys=no
         AC_MSG_WARN([mediakeys plugin will not be included in the build.])
     fi
@@ -279,7 +279,7 @@ AC_ARG_ENABLE([chartlyrics],
 
 if test "x$enable_chartlyrics" = "xyes"; then
     if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
-        enable_chartlyrics=yes		
+        enable_chartlyrics=yes
     else
         enable_chartlyrics=no
         AC_MSG_WARN([chartlyrics plugin will not be included in the build.])

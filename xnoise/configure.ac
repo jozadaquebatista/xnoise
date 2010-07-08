@@ -1,7 +1,7 @@
 AC_PREREQ(2.53)
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 1)
-m4_define(xnoise_micro_version, 9)
+m4_define(xnoise_micro_version, 10)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
 AC_INIT(xnoise, xnoise_version, shuerhaakenATgo oglemail.com, [xnoise])
