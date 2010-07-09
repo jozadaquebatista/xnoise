@@ -14,17 +14,8 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AM_MAINTAINER_MODE
 
-# Disable generation of static libraries
-AC_DISABLE_STATIC
-
-AC_PROG_CC
-AM_PROG_VALAC([0.9.2])
-AC_STDC_HEADERS
-AC_PROG_LIBTOOL
-AC_FUNC_MMAP
-
 dnl required versions for xnoise
-VALA_REQUIRED=0.7.10
+VALA_REQUIRED=0.9.2
 GSTREAMER_REQUIRED=0.10.23
 GLIB_REQUIRED=2.12.0
 GIO_REQUIRED=2.16
@@ -38,6 +29,25 @@ LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
 DBUS_GLIB_REQUIRED=0.0.1
 XNOISE_REQUIRED=xnoisepluginscore_version
+
+# Disable generation of static libraries
+AC_DISABLE_STATIC
+
+AC_PROG_CC
+AC_ARG_ENABLE([usevala],
+    AS_HELP_STRING([--disable-usevala],
+    [Disable use of vala for releases that are compiled on a system that has old version of vala (default: enabled)]),
+    [enable_usevala=$enableval],
+    [enable_usevala=yes])
+
+if test "x$enable_usevala" = "xyes"; then
+    AM_PROG_VALAC($VALA_REQUIRED)
+fi
+AM_CONDITIONAL(ENABLE_NOTIFICATIONS, test x"$enable_usevala" = "xyes")
+
+AC_STDC_HEADERS
+AC_PROG_LIBTOOL
+AC_FUNC_MMAP
 
 PKG_CHECK_MODULES(XNOISEPLUGINSCORE, xnoise-1.0 = $XNOISE_REQUIRED)
 

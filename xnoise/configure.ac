@@ -27,7 +27,17 @@ TAGLIB_C_REQUIRED=1.5.0
 VALA_REQUIRED=0.9.2
 
 AC_PROG_CC
-AM_PROG_VALAC($VALA_REQUIRED)
+AC_ARG_ENABLE([usevala],
+    AS_HELP_STRING([--disable-usevala],
+    [Disable use of vala for releases that are compiled on a system that has old version of vala (default: enabled)]),
+    [enable_usevala=$enableval],
+    [enable_usevala=yes])
+
+if test "x$enable_usevala" = "xyes"; then
+    AM_PROG_VALAC($VALA_REQUIRED)
+fi
+AM_CONDITIONAL(ENABLE_NOTIFICATIONS, test x"$enable_usevala" = "xyes")
+
 AC_STDC_HEADERS
 AC_PROG_LIBTOOL
 AC_FUNC_MMAP
@@ -69,18 +79,7 @@ AC_SUBST(XNOISE_CFLAGS)
 AC_SUBST(XNOISE_LIBS)
 AC_SUBST(XNOISE_PACKAGES)
 
-dnl ================================================================
-dnl check for vala to setup vapidir
-PKG_CHECK_MODULES(VALAC, \
-                  vala-1.0 >= $VALA_REQUIRED, \
-                  have_vala=yes, \
-                  have_vala=no)
 
-if test x$have_vala = xyes ; then
-    if test "x$VALAC" = "x"; then
-        AC_MSG_ERROR([Cannot find the "valac" compiler in PATH])
-    fi
-fi
 dnl VAPIDIR is used to place the xnoise vapi file
 VAPIDIR="${datadir}/vala/vapi"
 AC_SUBST(VAPIDIR)
