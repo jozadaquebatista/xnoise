@@ -3,15 +3,19 @@ NULL =
 SUBDIRS = \
 	data \
 	src \
+	libplaylist \
 	po \
 	vapi \
+	tests \
 	$(NULL)
 
 DIST_SUBDIRS = \
 	data \
 	src \
+	libplaylist \
 	po \
 	vapi \
+	tests \
 	$(NULL)
 
 xnoiselicense_DATA =  \

@@ -1,10 +1,19 @@
 AC_PREREQ(2.53)
+
+#xnoise version
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 1)
 m4_define(xnoise_micro_version, 10)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
+#libplaylist version
+m4_define(libplaylist_major_version, 0)
+m4_define(libplaylist_minor_version, 0)
+m4_define(libplaylist_micro_version, 1)
+m4_define(libplaylist_version, libplaylist_major_version.libplaylist_minor_version.libplaylist_micro_version)
+
 AC_INIT(xnoise, xnoise_version, shuerhaakenATgo oglemail.com, [xnoise])
+#AC_INIT(libplaylist, libplaylist_version, shuerhaakenATgo oglemail.com, [libplaylist])
 
 # require automake-1.11 for vala support
 AM_INIT_AUTOMAKE([1.11 dist-bzip2])
@@ -58,6 +67,11 @@ PKG_CHECK_MODULES(XNOISE, \
     taglib_c >= $TAGLIB_C_REQUIRED \
     unique-1.0)
 
+PKG_CHECK_MODULES(LIBPLAYLIST, \
+    glib-2.0 >= $GLIB_REQUIRED \
+    gobject-2.0 >= $GLIB_REQUIRED \
+    gio-2.0 >= $GIO_REQUIRED)
+
 XNOISE_PACKAGES="\
     --pkg config \
     --pkg gdk-2.0 \
@@ -75,9 +89,17 @@ XNOISE_PACKAGES="\
     --pkg unique-1.0 \
 "
 
+LIBPLAYLIST_PACKAGES="\
+    --pkg config \
+"
+
 AC_SUBST(XNOISE_CFLAGS)
 AC_SUBST(XNOISE_LIBS)
 AC_SUBST(XNOISE_PACKAGES)
+
+AC_SUBST(LIBPLAYLIST_CFLAGS)
+AC_SUBST(LIBPLAYLIST_LIBS)
+AC_SUBST(LIBPLAYLIST_PACKAGES)
 
 
 dnl VAPIDIR is used to place the xnoise vapi file
@@ -105,6 +127,7 @@ AC_CONFIG_FILES([
     data/misc/xnoise.desktop.in
     data/misc/Makefile
     data/misc/xnoise-1.0.pc
+    data/misc/libplaylist-1.0.pc
     data/ui/Makefile
     data/icons/Makefile
     data/icons/32x32/Makefile
@@ -112,8 +135,10 @@ AC_CONFIG_FILES([
     data/icons/256x256/Makefile
     data/icons/scalable/Makefile
     src/Makefile
+    libplaylist/Makefile
     po/Makefile.in
     vapi/Makefile
+    tests/Makefile
 ])
 
 AC_OUTPUT
