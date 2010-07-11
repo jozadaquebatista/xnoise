@@ -38,10 +38,9 @@ public class Xnoise.GlobalAccess : GLib.Object {
 
 	construct {
 		_settings_folder = 
-		   GLib.Path.build_filename(GLib.Environment.get_home_dir(), 
-		                            ".config", 
-		                            "xnoise", 
-		                            null);
+		GLib.Path.build_filename(GLib.Environment.get_user_config_dir(),
+		                         "xnoise",
+		                         null);
 		uri_changed.connect(this.set_meta_information);
 	
 		this.notify.connect( (s, p) => {
