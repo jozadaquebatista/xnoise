@@ -40,26 +40,26 @@ namespace Pl {
 			try {
 				var in_stream = new DataInputStream(file.read(null));
 				string line;
-				while((line = in_stream.read_line(null, null)) != null ) {
+				while((line = in_stream.read_line(null, null)) != null) {
 
-					if( line.has_prefix("#") ) { //# Comments
+					if(line.has_prefix("#")) { //# Comments
 						continue;
 					} 
-					else if( line.size() == 0 ) { //Blank line
+					else if(line.size() == 0) { //Blank line
 						continue;
 					} 
-					else if( line.contains( "<track>" ) ) {
+					else if(line.contains("<track>")) {
 						entry_on = true;
 						continue;
 					} 
-					else if( line.contains( "</track>" ) ) {
+					else if(line.contains("</track>")) {
 						entry_on = false;
 						stdout.printf("\n");
 						continue;
 					} 
 					else {
-						if( entry_on ) {
-							if( line.contains( "<location" ) ) {
+						if(entry_on) {
+							if(line.contains("<location")) {
 								line = line.replace("<location>","");
 								line = line.replace("</location>","");
 								line = line.strip();

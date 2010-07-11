@@ -52,4 +52,6 @@ xnoise/.anjuta/
 xnoise/.anjuta*
 xnoise/TODO.tasks
 xnoise/xnoise.anjuta
+.dirstamp
+xnoise/tests/tests
 

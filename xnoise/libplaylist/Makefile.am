@@ -49,7 +49,7 @@ libplaylist_la_VALAFLAGS = \
 	--thread \
 	--pkg gio-2.0 \
 	--vapidir $(top_srcdir)/vapi \
-	--basedir $(top_srcdir)/src \
+	--basedir $(top_srcdir)/libplaylist \
 	@LIBPLAYLIST_PACKAGES@ \
 	$(NULL)
 
