@@ -1,4 +1,4 @@
-/* pl-playlist-data.vala
+/* pl-data.vala
  *
  * Copyright (C) 2010  Jörn Magens
  *
@@ -20,34 +20,87 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-
+// an instance of this Data object represents one entry in the list. An entry contains one or more data fields, at least the uri to the target
 namespace Pl {
 	public class Data {
-		//TODO: check if this kind of data object is suitable for all kinds of playlists
-		public Data() {
-			this.urls = {};
+		public enum Field {
+			URI = 0,
+			TITLE,
+			AUTHOR,
+			GENRE,
+			ALBUM,
+			COPYRIGHT,
+			DURATION,
 		}
-		//use this to handle data
-		public string[] urls;//        { get; set; default = null; }
-		public string? title;//         { get; set; default = null; }
-		public string? author;//        { get; set; default = null; }
-		public string? genre;//         { get; set; default = null; }
-		public string? album;//         { get; set; default = null; }
-		public string? volume;//        { get; set; default = null; }
-		public string? duration;//      { get; set; default = null; }
-		public string? starttime;//     { get; set; default = null; }
-		public string? copyright;//     { get; set; default = null; }
-		public ListType playlist_type;//   { get; set; default = ListType.UNKNOWN; }
 		
-		public string? get_next_url() {
-			//TODO
-			return "";
+		private HashTable<Field, string> htable = null;
+		
+		public Data() {
+			htable = new HashTable<Field, string>(direct_hash, direct_equal);
+		}
+		
+		~Data() {
+			htable = null;
+		}
+		
+		public void add_field(Field field, string val) {
+			htable.insert(field, val);
+		}
+		
+		public Field[] get_contained_fields() {
+			Field[] retval = {};
+			List<Field> list = htable.get_keys();
+			if(list == null)
+				return retval;
+			
+			foreach(Field f in list)
+				retval += f;
+
+			return retval;
+		}
+		
+		public string get_field(Field field) {
+			return htable.lookup(field);
 		}
 
-//		public void append_url(string? url) {
-//			//TODO : maybe check if uri is already in list?
-//			this.urls += url;
-//		}
+
+		// Convenience functions
+		
+		public string get_uri() {
+			return htable.lookup(Field.URI);
+		}
+
+		public string get_title() {
+			return htable.lookup(Field.TITLE);
+		}
+		
+		public string get_author() {
+			return htable.lookup(Field.AUTHOR);
+		}
+		
+		public string get_genre() {
+			return htable.lookup(Field.GENRE);
+		}
+		
+		public string get_album() {
+			return htable.lookup(Field.ALBUM);
+		}
+		
+		public string get_copyright() {
+			return htable.lookup(Field.COPYRIGHT);
+		}
+
+		public string get_duration_string() {
+			return htable.lookup(Field.DURATION);
+		}
+
+		public long get_duration() {
+			string? s = htable.lookup(Field.DURATION);
+			if(s == null)
+				return -1;
+			
+			return get_duration_from_string(ref s);
+		}
 	}
 }
 

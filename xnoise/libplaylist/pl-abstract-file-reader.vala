@@ -27,8 +27,8 @@ namespace Pl {
 		public signal void started(string playlist_uri);
 		public signal void finished(string playlist_uri);
 
-		public abstract Data? read(File file) throws ReaderError ;
-		public abstract async Data? read_asyn(File file) throws ReaderError;
+		public abstract Data[] read(File file) throws Internal.ReaderError;
+		public abstract async Data[] read_asyn(File file) throws Internal.ReaderError;
 	}
 }
 

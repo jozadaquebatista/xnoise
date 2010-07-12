@@ -25,45 +25,45 @@ namespace Pl {
 	// base class for all playlist filewriter implementations
 	private class Xspf.FileWriter : AbstractFileWriter {
 	
-		private Data data;
+		private Data[] data_collection;
 		private File file;
 
-		public override Result write(File _file, Data _data) throws WriterError {
+		public override Result write(File _file, Data[] _data_collection) throws Internal.WriterError {
 			this.file = _file;
-			this.data = _data;
-			if(data != null) {
-				var list = data.urls;
-				if(list != null && list.length > 0) {
-					try {
-						if(file.query_exists(null)) {
-							file.delete(null);
-						}
-
-						var file_stream = file.create(FileCreateFlags.NONE, null);
-						var data_stream = new DataOutputStream(file_stream);
-						
-						data_stream.put_string("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", null);
-						data_stream.put_string("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n", null);
-						data_stream.put_string("  <trackList>\n", null);
-						for(int i=0;i<list.length;i++) {
-							data_stream.put_string("    <track>\n", null);
-							data_stream.put_string("      <title></title>\n", null);
-							data_stream.put_string("      <location>" + list[i]  + "\n", null);
-							data_stream.put_string("    </track>\n", null);
-						}
-						data_stream.put_string("  </trackList>\n", null);
-						data_stream.put_string("</playlist>\n", null);
-					} catch(GLib.Error e) {
-						print("%s\n", e.message);
+			this.data_collection = _data_collection;
+			if(data_collection != null && data_collection.length > 0) {
+				try {
+					if(file.query_exists(null)) {
+						file.delete(null);
 					}
+
+					var file_stream = file.create(FileCreateFlags.NONE, null);
+					var data_stream = new DataOutputStream(file_stream);
+					
+					data_stream.put_string("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", null);
+					data_stream.put_string("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n", null);
+					data_stream.put_string("  <trackList>\n", null);
+					foreach(Data d in data_collection) {
+						if(d.get_field(Data.Field.URI) == null)
+							continue;
+						data_stream.put_string("    <track>\n", null);
+						data_stream.put_string("      <title></title>\n", null);
+						data_stream.put_string("      <location>" + d.get_field(Data.Field.URI) + "\n", null);
+						data_stream.put_string("    </track>\n", null);
+					}
+					data_stream.put_string("  </trackList>\n", null);
+					data_stream.put_string("</playlist>\n", null);
+				}
+				catch(GLib.Error e) {
+					print("%s\n", e.message);
 				}
 			}
-			return Result.UNHANDLED;
+			return Result.SUCCESS;
 		}
 		
-		public override async Result write_asyn(File _file, Data _data) throws WriterError {
+		public override async Result write_asyn(File _file, Data[] _data_collection) throws Internal.WriterError {
 			this.file = _file;
-			this.data = _data;
+			this.data_collection = _data_collection;
 			return Result.UNHANDLED;
 		}
 	}

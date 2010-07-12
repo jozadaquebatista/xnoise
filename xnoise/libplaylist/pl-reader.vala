@@ -24,9 +24,8 @@
 namespace Pl {
 	public class Reader : GLib.Object {
 		private File? file = null;
-		private Data? _pl_data = null;
 		private AbstractFileReader? plfile_reader = null;
-		private string? _uri = null;
+		private string? _playlist_uri = null;
 		
 		//use this to protect running reading process
 		//it shall not be possible to run async and sync reading in parallel'
@@ -40,27 +39,31 @@ namespace Pl {
 			}
 		}
 		
-		public string uri { 
+		public string playlist_uri { 
 			get {
-				return _uri;
+				return _playlist_uri;
 			} 
 		}
 		
-		private Data? pl_data{ 
-			get {
-				return _pl_data;
-			} 
-		}
+		private Data[] _pl_data;
 		
 		public Reader() {
-//			_uri = playlist_uri;
-			_pl_data = new Data();
+			_pl_data = {};
 			read_in_progress_mutex = new Mutex();
 		}
 		
-		public Result read(string playlist_uri) {
+		public string[] get_uris() {
+			string[] retval = {};
+			foreach(Data d in _pl_data) {
+				if(d.get_uri() != null)
+					retval += d.get_uri();
+			}
+			return retval;
+		}
+		
+		public Result read(string list_uri) throws ReaderError {
 			Result ret = Result.UNHANDLED;
-			_uri = playlist_uri;
+			_playlist_uri = list_uri;
 			read_in_progress_mutex.lock();
 			plfile_reader = get_playlist_file_reader_for_current_uri();
 			
@@ -73,9 +76,9 @@ namespace Pl {
 			return ret;
 		}
 
-		public async Result read_async(string playlist_uri) {
+		public async Result read_async(string list_uri) throws ReaderError {
 			Result ret = Result.UNHANDLED;
-			_uri = playlist_uri;
+			_playlist_uri = list_uri;
 			plfile_reader = get_playlist_file_reader_for_current_uri();
 			
 			if(plfile_reader == null) {
@@ -106,7 +109,7 @@ namespace Pl {
 			try {
 				_pl_data = yield plfile_reader.read_asyn(file);
 			}
-			catch(Error e) {
+			catch(Internal.ReaderError e) {
 				print("%sn", e.message);
 				return Result.ERROR;
 			}
@@ -120,14 +123,14 @@ namespace Pl {
 			//TODO: return the right implementation of PlaylistReader
 			ListType current_type = get_playlist_type_for_current_uri();
 			switch(current_type) {
+				case ListType.ASX:
+					AbstractFileReader ret = new Asx.FileReader();
+					return ret;
 				case ListType.M3U:
 					AbstractFileReader ret = new M3u.FileReader();
 					return ret;
 				case ListType.PLS:
 					AbstractFileReader ret = new Pls.FileReader();
-					return ret;
-				case ListType.ASX:
-					AbstractFileReader ret = new Asx.FileReader();
 					return ret;
 				case ListType.XSPF:
 					AbstractFileReader ret = new Xspf.FileReader();
@@ -153,10 +156,10 @@ namespace Pl {
 
 		private ListType get_type_by_extension() {
 			//TODO: Determine filetype by extension
-			file = File.new_for_uri(_uri);
+			file = File.new_for_uri(_playlist_uri);
 			try {
-				if(_uri != null) {
-					string uri_down = _uri.down();
+				if(_playlist_uri != null) {
+					string uri_down = _playlist_uri.down();
 					if(uri_down.has_suffix(".asx")) {
 						return ListType.ASX;
 					}
@@ -186,7 +189,7 @@ namespace Pl {
 		private ListType get_type_by_data() {
 			//TODO: Determine filetype by content
 			string content_type = "";
-			file = File.new_for_uri(_uri);
+			file = File.new_for_uri(_playlist_uri);
 			try {
 				var file_info = file.query_info("*", FileQueryInfoFlags.NONE, null);
 				print("File size: %lld bytes\n", file_info.get_size());
@@ -224,46 +227,6 @@ namespace Pl {
 				return ListType.UNKNOWN;
 			}
 		}
-
-
-		// Content forwarding from reader implementation
-		public string[]? get_uris() {
-			return _pl_data.urls;
-		}
-		
-		public string? get_title() {
-			return _pl_data.title;
-		}
-		
-		public string? get_author() {
-			return _pl_data.author;
-		}
-		
-		public string? get_genre() {
-			return _pl_data.genre;
-		}
-		
-		public string? get_album() {
-			return _pl_data.album;
-		}
-		
-		public string? get_volume() {
-			return _pl_data.volume;
-		}
-		
-		public string? get_duration() {
-			return _pl_data.duration;
-		}
-		
-		public string? get_starttime() {
-			return _pl_data.starttime;
-		}
-		
-		public string? get_copyright() {
-			return _pl_data.copyright;
-		}
-		
-		// TODO write a function that return all the types of data that is available in _pl_data
 	}
 }
 

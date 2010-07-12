@@ -5,6 +5,9 @@ namespace Pl {
 	[CCode (cprefix = "PlAsx", lower_case_cprefix = "pl_asx_")]
 	namespace Asx {
 	}
+	[CCode (cprefix = "PlInternal", lower_case_cprefix = "pl_internal_")]
+	namespace Internal {
+	}
 	[CCode (cprefix = "PlM3u", lower_case_cprefix = "pl_m3u_")]
 	namespace M3u {
 	}
@@ -16,41 +19,43 @@ namespace Pl {
 	}
 	[CCode (ref_function = "pl_data_ref", unref_function = "pl_data_unref", cheader_filename = "libplaylist.h")]
 	public class Data {
-		public string? album;
-		public string? author;
-		public string? copyright;
-		public string? duration;
-		public string? genre;
-		public Pl.ListType playlist_type;
-		public string? starttime;
-		public string? title;
-		public string[] urls;
-		public string? volume;
+		[CCode (cprefix = "PL_DATA_FIELD_", cheader_filename = "libplaylist.h")]
+		public enum Field {
+			URI,
+			TITLE,
+			AUTHOR,
+			GENRE,
+			ALBUM,
+			COPYRIGHT,
+			DURATION
+		}
 		public Data ();
-		public string? get_next_url ();
+		public void add_field (Pl.Data.Field field, string val);
+		public string get_album ();
+		public string get_author ();
+		public Pl.Data.Field[] get_contained_fields ();
+		public string get_copyright ();
+		public long get_duration ();
+		public string get_duration_string ();
+		public string get_field (Pl.Data.Field field);
+		public string get_genre ();
+		public string get_title ();
+		public string get_uri ();
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Reader : GLib.Object {
 		public Reader ();
-		public string? get_album ();
-		public string? get_author ();
-		public string? get_copyright ();
-		public string? get_duration ();
-		public string? get_genre ();
-		public string? get_starttime ();
-		public string? get_title ();
-		public string[]? get_uris ();
-		public string? get_volume ();
-		public Pl.Result read (string playlist_uri);
-		public async Pl.Result read_async (string playlist_uri);
+		public string[] get_uris ();
+		public Pl.Result read (string list_uri) throws Pl.ReaderError;
+		public async Pl.Result read_async (string list_uri) throws Pl.ReaderError;
+		public string playlist_uri { get; }
 		public Pl.ListType ptype { get; }
-		public string uri { get; }
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Writer : GLib.Object {
 		public Writer (Pl.ListType ptype);
-		public Pl.Result write (Pl.Data? data, string playlist_uri, bool overwrite = true);
-		public async Pl.Result write_asyn (Pl.Data? data, string playlist_uri, bool overwrite = true);
+		public Pl.Result write (Pl.Data[] data, string playlist_uri, bool overwrite = true) throws Pl.WriterError;
+		public async Pl.Result write_asyn (Pl.Data[] data, string playlist_uri, bool overwrite = true) throws Pl.WriterError;
 		public string? uri { get; }
 	}
 	[CCode (cprefix = "PL_LIST_TYPE_", cheader_filename = "libplaylist.h")]

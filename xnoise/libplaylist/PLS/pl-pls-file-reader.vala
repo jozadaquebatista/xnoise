@@ -26,15 +26,13 @@ namespace Pl {
 	private class Pls.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override Data? read(File _file) throws ReaderError {
-			Data data = new Data();//weiter runter
+		public override Data[] read(File _file) throws Internal.ReaderError {
+			Data[] data_collection = {};
 			this.file = _file;
-
-			string[] list = {};
 
 			if (!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
 				stderr.printf ("File '%s' doesn't exist.\n", file.get_uri());
-				return data;
+				return data_collection;
 			}
 
 			try {
@@ -45,10 +43,11 @@ namespace Pl {
 				//Read header => [playlist]
 				if( (line = in_stream.read_line (null, null)) != null ) {
 					if ( !line.has_prefix( "[playlist]" ) ) {
-						return data;
+						return data_collection;
 					}
 
 					while ((line = in_stream.read_line (null, null)) != null) {
+						var d = new Data();
 						//Ignore blank line
 						if( line.size() == 0 ) { 
 							continue; 
@@ -72,10 +71,14 @@ namespace Pl {
 							if(file_line != null) {
 								var arrayFile = file_line.split("=");
 								if(arrayFile != null && arrayFile.length >= 2) {
-									list+= arrayFile[1];
+//									list+= arrayFile[1];
+									File tmp = File.new_for_commandline_arg(arrayFile[1]);
+									d.add_field(Data.Field.URI, tmp.get_uri());
 								}
 							}
 						}
+						if(d.get_field(Data.Field.URI) != null)
+							data_collection += d;
 					}
 				}
 			} 
@@ -83,14 +86,13 @@ namespace Pl {
 				print("Error: %s\n", e.message);
 				error ("%s", e.message);
 			}
-			data.urls = list;
-			return data;
+			return data_collection;
 		}
 
-		public override async Data? read_asyn(File _file) throws ReaderError {
-//			Data data = new Data();
+		public override async Data[] read_asyn(File _file) throws Internal.ReaderError {
+			Data[] data_collection = {};
 			this.file = _file;
-			return null;
+			return data_collection;
 		}
 	}
 }

@@ -33,6 +33,16 @@ namespace Pl {
 		SOMETHING_ELSE
 	}
 	
+	private errordomain Internal.ReaderError {
+		UNKNOWN_TYPE,
+		SOMETHING_ELSE
+	}
+
+	private errordomain Internal.WriterError {
+		UNKNOWN_TYPE,
+		SOMETHING_ELSE
+	}
+	
 	//Type of playlist
 	public enum ListType {
 		UNKNOWN = 0,

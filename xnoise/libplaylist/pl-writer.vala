@@ -23,7 +23,7 @@
 
 namespace Pl {
 	public class Writer : GLib.Object {
-		private Data? pl_data = null;
+		private Data[] pl_data = null;
 		private AbstractFileWriter? plfile_writer = null;
 		private File file = null;
 		private Mutex write_in_progress_mutex;
@@ -40,22 +40,29 @@ namespace Pl {
 		}
 		
 		// write playlist data to file
-		public Result write(Data? data, string playlist_uri, bool overwrite = true) {
-			if(pl_data == null)
+		public Result write(Data[] data, string playlist_uri, bool overwrite = true) throws WriterError { // TODO: handle overwrite
+			if(data == null)
 				return Result.UNHANDLED;
+				
 			write_in_progress_mutex.lock();
 			pl_data = data;
 			
 			_uri = playlist_uri;
 			file = File.new_for_uri(playlist_uri);
+			try {
+				plfile_writer.write(file, pl_data);
+			}
+			catch(Error e) {
+				print("Error writing playlist: %s\n", e.message);
+			}
 			//TODO: check if local, check if exist,...
 			write_in_progress_mutex.unlock();
 			return Result.UNHANDLED;
 		}
 
 		// write playlist data to file (async version)
-		public async Result write_asyn(Data? data, string playlist_uri, bool overwrite = true) {
-			if(pl_data == null)
+		public async Result write_asyn(Data[] data, string playlist_uri, bool overwrite = true) throws WriterError {
+			if(data == null)
 				return Result.UNHANDLED;
 			write_in_progress_mutex.lock();
 			

@@ -26,16 +26,13 @@ namespace Pl {
 	private class M3u.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override Data? read(File _file) throws ReaderError {
-			//Data data = new Data();//weiter runter
+		public override Data[] read(File _file) throws Internal.ReaderError {
+			Data[] data_collection = {};
 			this.file = _file;
 			
-			string[] list = {};
-
 			if(!file.get_uri().has_prefix("http://") && !file.query_exists(null)) {
 				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
-				Data data = new Data();
-				return data;
+				return data_collection;
 			}
 
 			try {
@@ -50,7 +47,6 @@ namespace Pl {
 
 						// Read lines until end of file(null) is reached
 						while((line = in_stream.read_line(null, null)) != null) {
-
 							//Ignorar lineas en blanco
 							if(line.strip().size() == 0)
 								continue;
@@ -58,9 +54,11 @@ namespace Pl {
 							//TODO: Read aditional info
 							if(line.has_prefix("#"))
 								continue;
-							list += line;
-//							data.append_url("http://media.example.com/entire.ts"); // for testing
-							//print("%s\n", line);
+
+							var d = new Data();
+							File tmp = File.new_for_commandline_arg(line);
+							d.add_field(Data.Field.URI, tmp.get_uri());
+							data_collection += d;
 						}
 					}
 				}
@@ -68,15 +66,13 @@ namespace Pl {
 			catch(GLib.Error e) {
 				print("%s", e.message);
 			}
-			Data data = new Data();
-			data.urls = list;
-			return data;
+			return data_collection;
 		}
 
-		public override async Data? read_asyn(File _file) throws ReaderError {
-//			Data data = new Data();
+		public override async Data[] read_asyn(File _file) throws Internal.ReaderError {
+			Data[] data_collection = {};
 			this.file = _file;
-			return null;
+			return data_collection;
 		}
 	}
 }

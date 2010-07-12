@@ -26,23 +26,22 @@ namespace Pl {
 	private class Xspf.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override Data? read(File _file) throws ReaderError {
-			Data data = new Data();//weiter runter
+		public override Data[] read(File _file) throws Internal.ReaderError {
+			Data[] data_collection = {};
 			this.file = _file;
 			
-			string[] list = {};
 			var entry_on = false;
 		
 			if(!file.get_uri().has_prefix("http://") && !file.query_exists(null)) {
 				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
-				return data;
+				return data_collection;
 			}
 
 			try {
 				var in_stream = new DataInputStream(file.read(null));
 				string line;
 				while((line = in_stream.read_line(null, null)) != null) {
-
+					var d = new Data();
 					if(line.has_prefix("#")) { //# Comments
 						continue;
 					} 
@@ -64,23 +63,25 @@ namespace Pl {
 								line = line.replace("<location>","");
 								line = line.replace("</location>","");
 								line = line.strip();
-								list+= line;
+								File tmp = File.new_for_commandline_arg(line);
+								d.add_field(Data.Field.URI, tmp.get_uri());
 							}
 						}
 					}
+					if(d.get_field(Data.Field.URI) != null)
+						data_collection += d;
 				}
 			} 
 			catch(GLib.Error e) {
 				print("Error: %s\n", e.message); 
 			}
-			data.urls = list;
-			return data;
+			return data_collection;
 		}
 
-		public override async Data? read_asyn(File _file) throws ReaderError {
-//			Data data = new Data();
+		public override async Data[] read_asyn(File _file) throws Internal.ReaderError {
+			Data[] data_collection = {};
 			this.file = _file;
-			return null;
+			return data_collection;
 		}
 	}
 }

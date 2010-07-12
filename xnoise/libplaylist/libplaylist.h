@@ -28,6 +28,8 @@ typedef struct _PlData PlData;
 typedef struct _PlDataClass PlDataClass;
 typedef struct _PlDataPrivate PlDataPrivate;
 
+#define PL_DATA_TYPE_FIELD (pl_data_field_get_type ())
+
 #define PL_TYPE_READER (pl_reader_get_type ())
 #define PL_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PL_TYPE_READER, PlReader))
 #define PL_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PL_TYPE_READER, PlReaderClass))
@@ -81,23 +83,22 @@ struct _PlData {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
 	PlDataPrivate * priv;
-	char** urls;
-	gint urls_length1;
-	char* title;
-	char* author;
-	char* genre;
-	char* album;
-	char* volume;
-	char* duration;
-	char* starttime;
-	char* copyright;
-	PlListType playlist_type;
 };
 
 struct _PlDataClass {
 	GTypeClass parent_class;
 	void (*finalize) (PlData *self);
 };
+
+typedef enum  {
+	PL_DATA_FIELD_URI = 0,
+	PL_DATA_FIELD_TITLE,
+	PL_DATA_FIELD_AUTHOR,
+	PL_DATA_FIELD_GENRE,
+	PL_DATA_FIELD_ALBUM,
+	PL_DATA_FIELD_COPYRIGHT,
+	PL_DATA_FIELD_DURATION
+} PlDataField;
 
 struct _PlReader {
 	GObject parent_instance;
@@ -131,32 +132,35 @@ void pl_value_set_data (GValue* value, gpointer v_object);
 void pl_value_take_data (GValue* value, gpointer v_object);
 gpointer pl_value_get_data (const GValue* value);
 GType pl_data_get_type (void);
+GType pl_data_field_get_type (void);
 PlData* pl_data_new (void);
 PlData* pl_data_construct (GType object_type);
-char* pl_data_get_next_url (PlData* self);
+void pl_data_add_field (PlData* self, PlDataField field, const char* val);
+PlDataField* pl_data_get_contained_fields (PlData* self, int* result_length1);
+char* pl_data_get_field (PlData* self, PlDataField field);
+char* pl_data_get_uri (PlData* self);
+char* pl_data_get_title (PlData* self);
+char* pl_data_get_author (PlData* self);
+char* pl_data_get_genre (PlData* self);
+char* pl_data_get_album (PlData* self);
+char* pl_data_get_copyright (PlData* self);
+char* pl_data_get_duration_string (PlData* self);
+glong pl_data_get_duration (PlData* self);
 GType pl_reader_get_type (void);
 PlReader* pl_reader_new (void);
 PlReader* pl_reader_construct (GType object_type);
-PlResult pl_reader_read (PlReader* self, const char* playlist_uri);
-void pl_reader_read_async (PlReader* self, const char* playlist_uri, GAsyncReadyCallback _callback_, gpointer _user_data_);
-PlResult pl_reader_read_finish (PlReader* self, GAsyncResult* _res_);
 char** pl_reader_get_uris (PlReader* self, int* result_length1);
-char* pl_reader_get_title (PlReader* self);
-char* pl_reader_get_author (PlReader* self);
-char* pl_reader_get_genre (PlReader* self);
-char* pl_reader_get_album (PlReader* self);
-char* pl_reader_get_volume (PlReader* self);
-char* pl_reader_get_duration (PlReader* self);
-char* pl_reader_get_starttime (PlReader* self);
-char* pl_reader_get_copyright (PlReader* self);
+PlResult pl_reader_read (PlReader* self, const char* list_uri, GError** error);
+void pl_reader_read_async (PlReader* self, const char* list_uri, GAsyncReadyCallback _callback_, gpointer _user_data_);
+PlResult pl_reader_read_finish (PlReader* self, GAsyncResult* _res_, GError** error);
 PlListType pl_reader_get_ptype (PlReader* self);
-const char* pl_reader_get_uri (PlReader* self);
+const char* pl_reader_get_playlist_uri (PlReader* self);
 GType pl_writer_get_type (void);
 PlWriter* pl_writer_new (PlListType ptype);
 PlWriter* pl_writer_construct (GType object_type, PlListType ptype);
-PlResult pl_writer_write (PlWriter* self, PlData* data, const char* playlist_uri, gboolean overwrite);
-void pl_writer_write_asyn (PlWriter* self, PlData* data, const char* playlist_uri, gboolean overwrite, GAsyncReadyCallback _callback_, gpointer _user_data_);
-PlResult pl_writer_write_asyn_finish (PlWriter* self, GAsyncResult* _res_);
+PlResult pl_writer_write (PlWriter* self, PlData** data, int data_length1, const char* playlist_uri, gboolean overwrite, GError** error);
+void pl_writer_write_asyn (PlWriter* self, PlData** data, int data_length1, const char* playlist_uri, gboolean overwrite, GAsyncReadyCallback _callback_, gpointer _user_data_);
+PlResult pl_writer_write_asyn_finish (PlWriter* self, GAsyncResult* _res_, GError** error);
 const char* pl_writer_get_uri (PlWriter* self);
 
 
