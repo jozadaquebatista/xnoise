@@ -1,0 +1,242 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  >
+<head>
+  <meta  http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link  REL="SHORTCUT ICON" HREF="/groups/img/3/favicon.ico">
+  <title>
+  xnoise | Google Groups
+  </title>
+  <meta name="save" content="history">
+<noscript><style type="text/css"><!--
+  .noscripthide { display:none; } .noscriptinline { display:inline; } .noscriptblock { display:block; }
+--></style></noscript>
+<script language="javascript"><!--
+  document.write('<style type="text/css">.scripthide { display: none; } .scriptinline { display: inline; } .scriptblock { display: block; }</style>');
+//--></script>
+<script language="javascript1.2"><!--
+  if (document.getElementById)
+    document.write('<style type="text/css">.script12hide { display: none; } .script12inline { display: inline; } .script12block { display: block; } .lnav { position: absolute; } .lnavch { margin-left:23.0ex;}</style>');
+//--></script>
+<script language="javascript1.3"><!--
+  if (document.getElementById)
+    document.write('<style type="text/css">.script13hide { display: none; } .script13inline { display: inline; } .script13block { display: block; }</style>');
+//--></script>
+<style type="text/css"><!--
+  @import "/groups/style.css?ig=1&av=&hl=de&v=679";
+  
+--></style>
+  <script language="javascript1.3" src="/groups/static/release/g2_common-19bbbb3d18cdd8cd613a76ae0f332207.js"></script>
+<script language="javascript"><!--
+
+// ----------------------------------
+// used for dynamic function generation on event handlers
+
+var loaddef = "";
+var resizedef = "";
+
+//-----------------------------------
+// Browser detection and support
+
+var agt = navigator.userAgent.toLowerCase();
+var is_opera = (agt.indexOf("opera") != -1);
+var is_ie = (agt.indexOf("msie") != -1) && document.all && !is_opera;
+var is_ie5 = (agt.indexOf("msie 5") != -1) && document.all;
+window.agt = agt;
+window.is_opera = is_opera;
+window.is_ie = is_ie;
+window.is_ie5 = is_ie5;
+
+// ----------------------------------
+// cross-browser functions
+
+var IE_all_cache = new Object();
+function IE_getElementById(id) {
+  if (IE_all_cache[id] == null) {
+    IE_all_cache[id] = document.all[id];
+  }
+  return IE_all_cache[id];
+}
+
+if (document.all) {
+  if (!document.getElementById) {
+    document.getElementById = IE_getElementById;
+  }
+}
+
+
+
+  //----------------------------------
+  // Timezone detection (sets cookie)
+
+  try {
+    document.cookie = 'GTZ=' + (new Date()).getTimezoneOffset() + ';path=/;expires=Mon, 01-Jan-2024 00:00:01 GMT';
+  } catch(e) {}
+
+
+// ---------------------------------
+// shelled functions for old javascript
+function tog() {}
+
+//--></script>
+<script language="javascript1.3"><!--
+
+// ----------------------------------
+// visibility functions
+
+function tog() {
+  // tog: toggle the visibility of html elements (arguments[1..]) from none to
+  // arguments[0].  Return what should be returned in a javascript onevent().
+  display = arguments[0];
+  for( var i=1; i<arguments.length; i++ ) {    
+    var x = document.getElementById(arguments[i]);
+    if (!x) continue;
+    if (x.style.display == "none" || x.style.display == "") {
+      x.style.display = display;
+    } else {
+      x.style.display = "none";
+    }
+  }
+
+  var e = is_ie ? window.event : this;
+  if (e) {
+    if (is_ie) {
+      e.cancelBubble = true;
+      e.returnValue = false;
+      return false;
+    } else {
+      return false;
+    }
+  }
+}
+
+
+_G2_initCurrentDomain('googlegroups.com',
+            false,
+            true);
+
+_G2_initCurrentGroup('xnoise',
+            'a');
+
+
+
+
+//--></script>
+<script language="javascript"><!--
+  window.gbar={};(function(){function h(a,b,d){var c="on"+b;if(a.addEventListener)a.addEventListener(b,d,false);else if(a.attachEvent)a.attachEvent(c,d);else{var e=a[c];a[c]=function(){var f=e.apply(this,arguments),g=d.apply(this,arguments);return f==undefined?g:g==undefined?f:g&&f}}};var i=window.gbar,k,l,m;function n(a){var b=window.encodeURIComponent&&(document.forms[0].q||"").value;if(b)a.href=a.href.replace(/([?&])q=[^&]*|$/,function(d,c){return(c||"&")+"q="+encodeURIComponent(b)})}i.qs=n;function o(a,b,d,c,e,f){var g=document.getElementById(a);if(g){var j=g.style;j.left=c?"auto":b+"px";j.right=c?b+"px":"auto";j.top=d+"px";j.visibility=l?"hidden":"visible";if(e&&f){j.width=e+"px";j.height=f+"px"}else{o(k,b,d,c,g.offsetWidth,g.offsetHeight);l=l?"":a}}}i.tg=function(a){a=a||window.event;var b,d=a.target||a.srcElement;a.cancelBubble=true;if(k!=null)p(d);else{b=document.createElement(Array.every||window.createPopup?"iframe":"div");b.frameBorder="0";k=b.id="gbs";b.src="javascript:''";d.parentNode.appendChild(b);h(document,"click",i.close);p(d);i.alld&&i.alld(function(){var c=document.getElementById("gbli");if(c){var e=c.parentNode;q(e,c);var f=c.prevSibling;e.removeChild(c);i.removeExtraDelimiters(e,f);b.style.height=e.offsetHeight+"px"}})}};function r(a){var b,d=document.defaultView;if(d&&d.getComputedStyle){if(a=d.getComputedStyle(a,""))b=a.direction}else b=a.currentStyle?a.currentStyle.direction:a.style.direction;return b=="rtl"}function p(a){var b=0;if(a.className!="gb3")a=a.parentNode;var d=a.getAttribute("aria-owns")||"gbi",c=a.offsetWidth,e=a.offsetTop>20?46:24;if(document.getElementById("tphdr"))e-=3;var f=false;do b+=a.offsetLeft||0;while(a=a.offsetParent);a=(document.documentElement.clientWidth||document.body.clientWidth)-b-c;c=r(document.body);if(d=="gbi"){var g=document.getElementById("gbi");q(g,document.getElementById("gbli")||g.firstChild);if(c){b=a;f=true}}else if(!c){b=a;f=true}l!=d&&i.close();o(d,b,e,f)}i.close=function(){l&&o(l,0,0)};function s(a,b,d){if(!m){m="gb2";if(i.alld){var c=i.findClassName(a);if(c)m=c}}a.insertBefore(b,d).className=m}function q(a,b){for(var d,c=window.navExtra;c&&(d=c.pop());)s(a,d,b)}i.addLink=function(a,b,d){if((b=document.getElementById(b))&&a){a.className="gb4";var c=document.createElement("span");c.appendChild(a);c.appendChild(document.createTextNode(" | "));c.id=d;b.appendChild(c)}}})();
+//--></script>
+<style type="text/css"><!--
+  #gbar,#guser{font-size:13px;padding-top:1px !important}#gbar{float:left;height:22px}#guser{padding-bottom:7px !important;text-align:right}.gbh,.gbd{border-top:1px solid #c9d7f1;font-size:1px}.gbh{height:0;position:absolute;top:24px;width:100%}#gbs,.gbm{background:#fff;left:0;position:absolute;text-align:left;visibility:hidden;z-index:1000}.gbm{border:1px solid;border-color:#c9d7f1 #36c #36c #a2bae7;z-index:1001}.gb1{margin-right:.5em}.gb1,.gb3{zoom:1}.gb2{display:block;padding:.2em .5em;}.gb2,.gb3{text-decoration:none;border-bottom:none}a.gb1,a.gb2,a.gb3,a.gb4{color:#00c !important}.gbi .gb3,.gbi .gb2,.gbi .gb4{color:#dd8e27 !important}.gbf .gb3,.gbf .gb2,.gbf .gb4{color:#900 !important}a.gb2:hover{background:#36c;color:#fff !important}
+--></style>
+<script language="javascript"><!--
+function ad_resize() {}
+function if_resize() {}
+function fin_resize() {}
+function qs() {}
+//--></script>
+<script language="javascript1.2"><!--
+function if_resize(name, w, h) {
+  if (document.getElementById && document.getElementById(name)){
+    document.getElementById(name).style.height = h + "px";
+    document.getElementById(name).style.width = w + "px";
+  }
+}
+function ad_resize(w, h) {
+  if_resize("google_ads_frame",w,h);
+}
+function fin_resize(w, h) {
+  if_resize("google_finance_frame",w,h);
+}
+
+function qs(el) {
+  if (window.RegExp && window.encodeURIComponent) {
+    var qe=encodeURIComponent(document.gs.q.value);
+
+    if (qe == '') {
+      return 1;
+    }
+
+    if (el.href.indexOf("q=")!=-1) {
+      el.href=el.href.replace(new RegExp("q=[^&$]*"),"q="+qe);
+    } else {
+      el.href+="&q="+qe;
+    }
+  }
+  return 1;
+}
+
+//--></script>
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://xnoise.googlegroups.com/group/xnoise/feed/rss_v2_0_msgs.xml">
+  <link rel="alternate" type="application/atom+xml" title="Atom" href="http://xnoise.googlegroups.com/group/xnoise/feed/atom_v1_0_msgs.xml">
+</head>
+<body onresize=""
+      onload=""
+      
+        topmargin=0
+        leftmargin=0
+        marginheight=0
+        marginwidth=0
+      
+      bgcolor=white
+      
+      
+  >
+  <div  class="ggaiabar">
+  <div id=gbar><nobr><a href="http://mail.google.com/mail/?tab=gm" class=gb1>E-Mail</a> <a href="http://www.google.com/calendar/render?tab=gc" class=gb1>Kalender</a> <a href="http://docs.google.com/?tab=go" class=gb1>Text &amp; Tabellen</a> <a href="http://www.google.com/webhp?hl=de&tab=gw" onclick=gbar.qs(this) class=gb1>Web</a> <a href="http://www.google.com/reader/?tab=gy" class=gb1>Reader</a> <a href="http://www.google.com/intl/de/options/" onclick="this.blur();gbar.tg(event);return !1" aria-haspopup=true class=gb3><u>Mehr</u> <small>&#9660;</small></a><div class=gbm id=gbi><a href="http://picasaweb.google.com/home?hl=de&tab=gq" onclick=gbar.qs(this) class=gb2>Fotos</a> <a href="http://sites.google.com/?tab=g3" class=gb2>Sites</a> <b class=gb2>Groups</b> <a href="http://www.youtube.com/?hl=de&tab=g1" onclick=gbar.qs(this) class=gb2>YouTube</a> <div class=gb2><div class=gbd></div></div><a href="http://www.google.com/imghp?hl=de&tab=gi" onclick=gbar.qs(this) class=gb2>Bilder</a> <a href="http://video.google.com/?hl=de&tab=gv" onclick=gbar.qs(this) class=gb2>Videos</a> <a href="http://maps.google.com/maps?hl=de&tab=gl" onclick=gbar.qs(this) class=gb2>Maps</a> <a href="http://news.google.com/nwshp?hl=de&tab=gn" onclick=gbar.qs(this) class=gb2>News</a> <a href="http://www.google.com/prdhp?hl=de&tab=gf" onclick=gbar.qs(this) class=gb2>Shopping</a> <a href="http://books.google.com/bkshp?hl=de&tab=gp" onclick=gbar.qs(this) class=gb2>Bücher</a> <a href="http://translate.google.com/?hl=de&tab=gT" onclick=gbar.qs(this) class=gb2>Übersetzer</a> <a href="http://blogsearch.google.com/?hl=de&tab=gb" onclick=gbar.qs(this) class=gb2>Blogs</a> <div class=gb2><div class=gbd></div></div><a href="http://www.google.com/intl/de/options/" class=gb2>und noch mehr &raquo;</a> </div></nobr></div><div class=gbh style=left:0></div><div class=gbh style=right:0></div>
+  <div align="right" id="guser" width="100%">
+  <nobr>
+  <a target="_blank" href="/support?hl=de">Hilfe</a> |
+  <a target=_top href="https://www.google.com/accounts/ServiceLogin?passive=true&hl=de&service=groups2&continue=http%3A%2F%2Fxnoise.googlegroups.com%2Fattach%2Ff9b32dbb045331fb%2Fasx_test.asx%3Fpart%3D5&cd=US&ssip=g3">Anmelden</a>
+</nobr>
+  </div>
+  </div>
+  <div class="clear"></div>
+  <div class="gtopbar">
+  <table cellpadding=0 cellspacing=0 width=100% border=0>
+  <tr valign="top">
+  <td class="maincell">
+  <table cellpadding=0 cellspacing=0 border=0><tr valign="top"><td width="140" style="overflow: hidden;"><a href="/"><img src="/intl/de/images/logos/groups_logo_sm.gif" width="140" height="30" alt="Google Groups-Startseite" border=0 style="position: relative; top: 2px; margin-right: 10px;"></a></td>
+  </table>
+  </td>
+  </tr>
+  </table>
+  </div>
+<BLOCKQUOTE>
+  <H2>Gefunden</H2>
+  <p> Klicken Sie zum Fortfahren auf den folgenden Link.<p>
+  <a href="/attach/f9b32dbb045331fb/asx_test.asx?gda=Yr1ppkYAAAANSLt1REy7tuLfdXgLmBNb4Gkrm-W5s3W9DQNKyGBRPouZ8I40mHLPEHV-yuhPBP1x40jamwa1UURqDcgHarKEE-Ea7GxYMt0t6nY0uV5FIQ&amp;part=5">/attach/f9b32dbb045331fb/asx_test.asx?gda=Yr1ppkYAAAANSLt1REy7tuLfdXgLmBNb4Gkrm-W5s3W9DQNKyGBRPouZ8I40mHLPEHV-yuhPBP1x40jamwa1UURqDcgHarKEE-Ea7GxYMt0t6nY0uV5FIQ&amp;part=5</a>
+</BLOCKQUOTE>
+  <div class="padt10"></div>
+  <div style="border-bottom: 1px solid #999999;"></div>
+  <div style="background-color: #eeeeee">
+<div class="padt10 padb10">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr valign=center>
+  <td align="center" style="padding-right:1em;" class="fontsize2">
+  <b><a  style="color: #00c" target=_top href="/groups/create?lnk=gcf">Eine Gruppe erstellen</a></b><font color="#333"> - </font>
+  <a style="color: #00c" target=_top href="/">Google Groups</a><font color="#333"> - </font> <a  style="color: #00c" target=_top href="http://www.google.com/webhp?hl=de">Google-Startseite</a><font color="#333"> - </font> <a  style="color: #00c" target=_top href="http://groups.google.com/intl/de/googlegroups/terms_of_service3.html">Nutzungsbedingungen</a><font color="#333"> - </font> <a  style="color: #00c" target=_top href="http://groups.google.com/intl/de/googlegroups/privacy3.html">Datenschutzbestimmungen</a>
+  </td>
+  </tr>
+  <tr>
+  <td  align="center" style="color: #333" class="fontsize1 padt5" >©2010 Google</td>
+  </tr>
+  </table>
+</div>
+  </div>
+<script language="javascript"><!--
+if( loaddef != "" ) {
+  window.onload=new Function( loaddef );
+}
+if( resizedef != "" ) {
+  window.onresize = new Function( resizedef );
+}
+//--></script>
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"> </script>
+  <script type="text/javascript"><!--
+      
+        _uacct = "UA-1044941-1";
+      
+      urchinTracker("\x2Fattach\x2Ff9b32dbb045331fb\x2Fasx_test.asx?part=5\x26als_gt=group\x26als_greg=US\x26als_gact=\x26als_gsubs=\x26als_gview=ANYONE\x26als_gpjoin=y\x26");
+    //--></script>
+</body>
+</html>

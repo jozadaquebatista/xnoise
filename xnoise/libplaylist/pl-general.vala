@@ -39,7 +39,8 @@ namespace Pl {
 		IGNORED,
 		M3U,
 		PLS,
-		ASX
+		ASX,
+		XSPF
 	}
 	
 	public enum Result {

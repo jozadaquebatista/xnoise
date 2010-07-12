@@ -27,14 +27,15 @@ namespace Pl {
 		private unowned File file;
 		
 		public override Data? read(File _file) throws ReaderError {
-			//Data data = new Data();//weiter runter
+			Data data = new Data();//weiter runter
 			this.file = _file;
 			
 			string[] list = {};
 			var entry_on = false;
 		
-			if(!file.query_exists(null)) {
+			if(!file.get_uri().has_prefix("http://") && !file.query_exists(null)) {
 				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
+				return data;
 			}
 
 			try {
@@ -72,7 +73,8 @@ namespace Pl {
 			catch(GLib.Error e) {
 				stdout.printf("Error: %s\n", e.message); 
 			}
-			return null;
+			data.urls = list;
+			return data;
 		}
 
 		public override async Data? read_asyn(File _file) throws ReaderError {

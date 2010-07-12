@@ -1,11 +1,11 @@
 /* pl-reader.vala
  *
- * Copyright (C) 2010  Jörn Magens
+ * Copyright(C) 2010  Jörn Magens
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * version 2.1 of the License, or(at your option) any later version.
 
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -107,12 +107,15 @@ namespace Pl {
 				case ListType.M3U:
 					AbstractFileReader ret = new M3u.FileReader();
 					return ret;
-//				case ListType.PLS:
-//					AbstractFileReader ret = new Pls.FileReader();
-//					return ret;
-//				case ListType.ASX:
-//					AbstractFileReader ret = new Asx.FileReader();
-//					return ret;
+				case ListType.PLS:
+					AbstractFileReader ret = new Pls.FileReader();
+					return ret;
+				case ListType.ASX:
+					AbstractFileReader ret = new Asx.FileReader();
+					return ret;
+				case ListType.XSPF:
+					AbstractFileReader ret = new Xspf.FileReader();
+					return ret;					
 			}
 			return null;
 		}
@@ -134,12 +137,77 @@ namespace Pl {
 
 		private ListType get_type_by_extension() {
 			//TODO: Determine filetype by extension
-			return ListType.M3U;
+			string content_type = "";
+			file = File.new_for_uri(_uri);
+			try {
+				if(_uri != null) {
+					string uri_down = _uri.down();
+					if(uri_down.has_suffix("asx")) {
+						return ListType.ASX;
+					}
+					else if(uri_down.has_suffix("pls")) {
+						return ListType.PLS;
+					}
+					else if(uri_down.has_suffix("m3u")) {
+						return ListType.M3U;
+					}
+					else if(uri_down.has_suffix("xspf")) {
+						return ListType.XSPF;
+					}
+					else {
+						return ListType.UNKNOWN;
+					}
+				}
+				else {
+					return ListType.UNKNOWN;
+				}
+			}
+			catch(Error e) {
+				stdout.printf("Error: %s\n",e.message);
+				return ListType.UNKNOWN;
+			}
 		}
 
 		private ListType get_type_by_data() {
 			//TODO: Determine filetype by content
-			return ListType.M3U;
+			string content_type = "";
+			file = File.new_for_uri(_uri);
+			try {
+				var file_info = file.query_info("*", FileQueryInfoFlags.NONE, null);
+				stdout.printf("File size: %lld bytes\n", file_info.get_size());
+				content_type = file_info.get_content_type();
+				string mime = g_content_type_get_mime_type(content_type);
+				stdout.printf("Mime type: %s\n",mime);
+				//audio/x-ms-asx => asx
+				if(content_type =="audio/x-ms-asx") {
+					stdout.printf("Content type asx: %s\n",content_type);
+					return ListType.ASX;
+				}
+				//audio/x-scpls	 => pls
+				else if(content_type =="audio/x-scpls") {
+					stdout.printf("Content type pls: %s\n",content_type);
+					return ListType.PLS;
+				}
+				//application/vnd.apple.mpegurl
+				//audio/x-mpegurl => m3u
+				//audio/mpegurl
+				else if(content_type=="application/vnd.apple.mpegurl" || content_type =="audio/x-mpegurl" || content_type =="audio/mpegurl") {
+					stdout.printf("Content type m3u: %s\n",content_type);
+					return ListType.M3U;
+				}
+				else if(content_type =="application/xspf+xml") {
+					stdout.printf("Content type xspf: %s\n",content_type);
+					return ListType.XSPF;
+				}
+				else {
+					stdout.printf("Other Content type: %s\n",content_type);
+					return ListType.UNKNOWN;
+				}
+			}
+			catch(Error e) {
+				stdout.printf("Error: %s\n",e.message);
+				return ListType.UNKNOWN;
+			}
 		}
 
 
@@ -160,11 +228,11 @@ namespace Pl {
 			return _pl_data.genre;
 		}
 		
-		public string? get_album () {
+		public string? get_album() {
 			return _pl_data.album;
 		}
 		
-		public string? get_volume () {
+		public string? get_volume() {
 			return _pl_data.volume;
 		}
 		

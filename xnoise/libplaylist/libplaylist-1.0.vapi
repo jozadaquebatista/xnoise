@@ -59,7 +59,8 @@ namespace Pl {
 		IGNORED,
 		M3U,
 		PLS,
-		ASX
+		ASX,
+		XSPF
 	}
 	[CCode (cprefix = "PL_RESULT_", cheader_filename = "libplaylist.h")]
 	public enum Result {

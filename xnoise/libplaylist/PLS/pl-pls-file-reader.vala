@@ -27,14 +27,14 @@ namespace Pl {
 		private unowned File file;
 		
 		public override Data? read(File _file) throws ReaderError {
-			//Data data = new Data();//weiter runter
+			Data data = new Data();//weiter runter
 			this.file = _file;
 
 			string[] list = {};
 
-			if (!file.query_exists (null)) {
+			if (!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
 				stderr.printf ("File '%s' doesn't exist.\n", file.get_uri());
-				return null;
+				return data;
 			}
 
 			try {
@@ -42,10 +42,10 @@ namespace Pl {
 				string line;
 				int numberofentries = 0;
 
-				//Leer cabecera => [playlist]
+				//Read header => [playlist]
 				if( (line = in_stream.read_line (null, null)) != null ) {
-					if ( !line.contains( "[playlist]" ) ) {
-						return null;
+					if ( !line.has_prefix( "[playlist]" ) ) {
+						return data;
 					}
 
 					while ((line = in_stream.read_line (null, null)) != null) {
@@ -54,7 +54,7 @@ namespace Pl {
 							continue; 
 						}
 
-						if( line.contains("numberofentries") ) {
+						if( line.down().contains("numberofentries") ) {
 							var arrayNumberOfEntries = line.split("=");
 
 							if( arrayNumberOfEntries.length == 2 ) {
@@ -64,14 +64,14 @@ namespace Pl {
 							continue;
 						}
 
-						if( line.has_prefix("File") ) {            
+						if( line.has_prefix("File") ) {        
 							string file_line = line;
 							string title_line = in_stream.read_line (null, null);
 							string length_line = in_stream.read_line (null, null);
 
 							if(file_line != null) {
 								var arrayFile = file_line.split("=");
-								if(arrayFile != null && arrayFile.length >= 1) {
+								if(arrayFile != null && arrayFile.length >= 2) {
 									list+= arrayFile[1];
 								}
 							}
@@ -80,9 +80,11 @@ namespace Pl {
 				}
 			} 
 			catch (GLib.Error e) {
+				print("Error: %s\n", e.message);
 				error ("%s", e.message);
 			}
-			return null;
+			data.urls = list;
+			return data;
 		}
 
 		public override async Data? read_asyn(File _file) throws ReaderError {

@@ -32,9 +32,10 @@ namespace Pl {
 			
 			string[] list = {};
 
-			if(!file.query_exists(null)) {
+			if(!file.get_uri().has_prefix("http://") && !file.query_exists(null)) {
 				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
-				return null;
+				Data data = new Data();
+				return data;
 			}
 
 			try {
@@ -55,7 +56,7 @@ namespace Pl {
 								continue;
 
 							//TODO: Read aditional info
-							if(line.has_prefix("#EXTINF"))
+							if(line.has_prefix("#"))
 								continue;
 							list += line;
 //							data.append_url("http://media.example.com/entire.ts"); // for testing
@@ -63,11 +64,13 @@ namespace Pl {
 						}
 					}
 				}
-			} 
+			}
 			catch(GLib.Error e) {
 				print("%s", e.message);
 			}
-			return new Data();
+			Data data = new Data();
+			data.urls = list;
+			return data;
 		}
 
 		public override async Data? read_asyn(File _file) throws ReaderError {
