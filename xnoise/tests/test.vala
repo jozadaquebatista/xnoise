@@ -1,17 +1,15 @@
 using Pl;
 
 bool test_reader_creation() {
-	
-	File f = File.new_for_path("./playlist-examples/live-streaming.m3u");
-	var reader = new Pl.Reader(f.get_uri());
+	var reader = new Pl.Reader();
 	return reader != null;
 }
 
 bool test_m3u_reading() {
 	File f = File.new_for_path("./playlist-examples/live-streaming.m3u");
-	var reader = new Pl.Reader(f.get_uri());
+	var reader = new Pl.Reader();
 	try {
-		reader.read();
+		reader.read(f.get_uri());
 	}
 	catch(Error e) {
 		print("m3u test error reading\n");
@@ -24,9 +22,9 @@ bool test_m3u_reading() {
 
 bool test_pls_reading() {
 	File f = File.new_for_uri("http://emisora.fundingue.com:8070/listen.pls");
-	var reader = new Pl.Reader(f.get_uri());
+	var reader = new Pl.Reader();
 	try {
-		reader.read();
+		reader.read(f.get_uri());
 	}
 	catch(Error e) {
 		print("pls test error reading\n");
@@ -40,9 +38,9 @@ bool test_pls_reading() {
 
 bool test_asx_reading() {
 	File f = File.new_for_path("./playlist-examples/asx_test.asx");
-	var reader = new Pl.Reader(f.get_uri());
+	var reader = new Pl.Reader();
 	try {
-		reader.read();
+		reader.read(f.get_uri());
 	}
 	catch(Error e) {
 		print("asx test error reading\n");
@@ -55,9 +53,9 @@ bool test_asx_reading() {
 
 bool test_xspf_reading() {
 	File f = File.new_for_path("./playlist-examples/xspf.xspf");
-	var reader = new Pl.Reader(f.get_uri());
+	var reader = new Pl.Reader();
 	try {
-		reader.read();
+		reader.read(f.get_uri());
 	}
 	catch(Error e) {
 		print("xspf test error reading\n");

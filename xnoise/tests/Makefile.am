@@ -56,3 +56,13 @@ clean-local:
 	-rm -rf coverage
 
 .PHONY: coverage-report
+
+CLEANFILES = \
+	*.c \
+	tests.vala.stamp \
+	$(NULL)
+	
+DISTCLEANFILES = \
+	Makefile.in \
+	$(NULL)
+

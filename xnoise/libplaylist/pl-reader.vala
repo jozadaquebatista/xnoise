@@ -29,7 +29,9 @@ namespace Pl {
 		private string? _uri = null;
 		
 		//use this to protect running reading process
+		//it shall not be possible to run async and sync reading in parallel'
 		private Mutex read_in_progress_mutex;
+		
 		private ListType _ptype;
 		
 		public ListType ptype {
@@ -50,54 +52,68 @@ namespace Pl {
 			} 
 		}
 		
-		public Reader(string playlist_uri) {
-			_uri = playlist_uri;
+		public Reader() {
+//			_uri = playlist_uri;
 			_pl_data = new Data();
 			read_in_progress_mutex = new Mutex();
 		}
 		
-		public void read() throws ReaderError {
+		public Result read(string playlist_uri) {
+			Result ret = Result.UNHANDLED;
+			_uri = playlist_uri;
 			read_in_progress_mutex.lock();
 			plfile_reader = get_playlist_file_reader_for_current_uri();
 			
 			if(plfile_reader == null) {
-				throw new ReaderError.UNKNOWN_TYPE("File type unknown or not a playlist.");
+				return Result.ERROR;
 			}
 			
-			this.read_internal();
+			ret = this.read_internal();
 			read_in_progress_mutex.unlock();
+			return ret;
 		}
 
-		public async void read_async() throws ReaderError {
+		public async Result read_async(string playlist_uri) {
+			Result ret = Result.UNHANDLED;
+			_uri = playlist_uri;
 			plfile_reader = get_playlist_file_reader_for_current_uri();
 			
 			if(plfile_reader == null) {
-				throw new ReaderError.UNKNOWN_TYPE("File type unknown or not a playlist.");
+				return Result.ERROR;
 			}
 
 			read_in_progress_mutex.lock();
-			yield this.read_async_internal();
+			ret = yield this.read_async_internal();
 			read_in_progress_mutex.unlock();
+			return ret;
 		}
 
-		private void read_internal() {
-			file = File.new_for_uri(_uri);
+		private Result read_internal() {
 			try {
 				_pl_data = plfile_reader.read(file);
 			}
 			catch(Error e) {
 				print("%sn", e.message);
+				return Result.ERROR;
 			}
+			if(_pl_data == null)
+				return Result.EMPTY;
+			else
+				return Result.SUCCESS;
 		}
 
-		private async void read_async_internal() {
-			file = File.new_for_uri(_uri);
+		private async Result read_async_internal() {
 			try {
 				_pl_data = yield plfile_reader.read_asyn(file);
 			}
 			catch(Error e) {
 				print("%sn", e.message);
+				return Result.ERROR;
 			}
+			if(_pl_data == null)
+				return Result.EMPTY;
+			else
+				return Result.SUCCESS;
 		}
 		
 		private AbstractFileReader? get_playlist_file_reader_for_current_uri() {
@@ -115,7 +131,7 @@ namespace Pl {
 					return ret;
 				case ListType.XSPF:
 					AbstractFileReader ret = new Xspf.FileReader();
-					return ret;					
+					return ret;
 			}
 			return null;
 		}
@@ -137,21 +153,20 @@ namespace Pl {
 
 		private ListType get_type_by_extension() {
 			//TODO: Determine filetype by extension
-			string content_type = "";
 			file = File.new_for_uri(_uri);
 			try {
 				if(_uri != null) {
 					string uri_down = _uri.down();
-					if(uri_down.has_suffix("asx")) {
+					if(uri_down.has_suffix(".asx")) {
 						return ListType.ASX;
 					}
-					else if(uri_down.has_suffix("pls")) {
+					else if(uri_down.has_suffix(".pls")) {
 						return ListType.PLS;
 					}
-					else if(uri_down.has_suffix("m3u")) {
+					else if(uri_down.has_suffix(".m3u")) {
 						return ListType.M3U;
 					}
-					else if(uri_down.has_suffix("xspf")) {
+					else if(uri_down.has_suffix(".xspf")) {
 						return ListType.XSPF;
 					}
 					else {
@@ -163,7 +178,7 @@ namespace Pl {
 				}
 			}
 			catch(Error e) {
-				stdout.printf("Error: %s\n",e.message);
+				print("Error: %s\n",e.message);
 				return ListType.UNKNOWN;
 			}
 		}
@@ -174,38 +189,38 @@ namespace Pl {
 			file = File.new_for_uri(_uri);
 			try {
 				var file_info = file.query_info("*", FileQueryInfoFlags.NONE, null);
-				stdout.printf("File size: %lld bytes\n", file_info.get_size());
+				print("File size: %lld bytes\n", file_info.get_size());
 				content_type = file_info.get_content_type();
 				string mime = g_content_type_get_mime_type(content_type);
-				stdout.printf("Mime type: %s\n",mime);
+				print("Mime type: %s\n",mime);
 				//audio/x-ms-asx => asx
-				if(content_type =="audio/x-ms-asx") {
-					stdout.printf("Content type asx: %s\n",content_type);
+				if(content_type == ContentType.ASX) { //"audio/x-ms-asx"
+					print("Content type asx: %s\n", content_type);
 					return ListType.ASX;
 				}
 				//audio/x-scpls	 => pls
-				else if(content_type =="audio/x-scpls") {
-					stdout.printf("Content type pls: %s\n",content_type);
+				else if(content_type == ContentType.PLS) { //"audio/x-scpls"
+					print("Content type pls: %s\n", content_type);
 					return ListType.PLS;
 				}
 				//application/vnd.apple.mpegurl
 				//audio/x-mpegurl => m3u
 				//audio/mpegurl
-				else if(content_type=="application/vnd.apple.mpegurl" || content_type =="audio/x-mpegurl" || content_type =="audio/mpegurl") {
-					stdout.printf("Content type m3u: %s\n",content_type);
+				else if(content_type == ContentType.APPLE_MPEG || content_type == ContentType.X_MPEG || content_type == ContentType.MPEG) { //MPEG
+					print("Content type m3u: %s\n",content_type);
 					return ListType.M3U;
 				}
-				else if(content_type =="application/xspf+xml") {
-					stdout.printf("Content type xspf: %s\n",content_type);
+				else if(content_type == ContentType.XSPF) {
+					print("Content type xspf: %s\n", content_type);
 					return ListType.XSPF;
 				}
 				else {
-					stdout.printf("Other Content type: %s\n",content_type);
+					print("Other Content type: %s\n", content_type);
 					return ListType.UNKNOWN;
 				}
 			}
 			catch(Error e) {
-				stdout.printf("Error: %s\n",e.message);
+				print("Error: %s\n",e.message);
 				return ListType.UNKNOWN;
 			}
 		}
@@ -247,6 +262,8 @@ namespace Pl {
 		public string? get_copyright() {
 			return _pl_data.copyright;
 		}
+		
+		// TODO write a function that return all the types of data that is available in _pl_data
 	}
 }
 

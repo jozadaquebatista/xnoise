@@ -23,40 +23,64 @@
 
 namespace Pl {
 	public class Writer : GLib.Object {
-		private Data? _pl_data = null;
+		private Data? pl_data = null;
 		private AbstractFileWriter? plfile_writer = null;
-		private string? _uri = null;
+		private File file = null;
 		private Mutex write_in_progress_mutex;
-		
-		public string uri { 
+		private string? _uri = null;
+		public string? uri { 
 			get {
 				return _uri;
 			} 
 		}
 		
-		private Data? pl_data { 
-			get {
-				return _pl_data;
-			} 
-			set {
-				_pl_data = value;
-			}
-		}
-
 		public Writer(ListType ptype) {
-			plfile_writer = get_playlist_file_writer_for_type();
+			plfile_writer = get_playlist_file_writer_for_type(ptype);
+			write_in_progress_mutex = new Mutex();
 		}
 		
-		public Result write_to_file() {
+		// write playlist data to file
+		public Result write(Data? data, string playlist_uri, bool overwrite = true) {
+			if(pl_data == null)
+				return Result.UNHANDLED;
+			write_in_progress_mutex.lock();
+			pl_data = data;
+			
+			_uri = playlist_uri;
+			file = File.new_for_uri(playlist_uri);
+			//TODO: check if local, check if exist,...
+			write_in_progress_mutex.unlock();
 			return Result.UNHANDLED;
 		}
 
-		public async Result write_asyn(){
+		// write playlist data to file (async version)
+		public async Result write_asyn(Data? data, string playlist_uri, bool overwrite = true) {
+			if(pl_data == null)
+				return Result.UNHANDLED;
+			write_in_progress_mutex.lock();
+			
+			pl_data = data;
+			
+			_uri = playlist_uri;
+			file = File.new_for_uri(playlist_uri);
+			//TODO: check if local, check if exist,...
+			write_in_progress_mutex.unlock();
 			return Result.UNHANDLED;
 		}
 		
-		private AbstractFileWriter? get_playlist_file_writer_for_type() {
-			return null;
+		private static AbstractFileWriter? get_playlist_file_writer_for_type(ListType ptype) {
+			switch(ptype) {
+				case ListType.ASX:
+					return new Asx.FileWriter();
+				case ListType.M3U:
+					return new M3u.FileWriter();
+				case ListType.PLS:
+					return new Pls.FileWriter();
+				case ListType.XSPF:
+					return new Xspf.FileWriter();
+				default:
+					return null;
+			}
 		}
 	}
 }

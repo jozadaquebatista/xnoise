@@ -55,7 +55,7 @@ namespace Pl {
 					} 
 					else if(line.contains("</track>")) {
 						entry_on = false;
-						stdout.printf("\n");
+						print("\n");
 						continue;
 					} 
 					else {
@@ -71,7 +71,7 @@ namespace Pl {
 				}
 			} 
 			catch(GLib.Error e) {
-				stdout.printf("Error: %s\n", e.message); 
+				print("Error: %s\n", e.message); 
 			}
 			data.urls = list;
 			return data;

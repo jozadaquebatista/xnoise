@@ -5,9 +5,9 @@
 #define __LIBPLAYLIST_H__
 
 #include <glib.h>
-#include <glib-object.h>
 #include <stdlib.h>
 #include <string.h>
+#include <glib-object.h>
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
@@ -73,7 +73,8 @@ typedef enum  {
 	PL_RESULT_UNHANDLED = 0,
 	PL_RESULT_ERROR,
 	PL_RESULT_IGNORED,
-	PL_RESULT_SUCCESS
+	PL_RESULT_SUCCESS,
+	PL_RESULT_EMPTY
 } PlResult;
 
 struct _PlData {
@@ -122,6 +123,7 @@ GQuark pl_writer_error_quark (void);
 GType pl_list_type_get_type (void);
 GType pl_result_get_type (void);
 extern gboolean pl_debug;
+glong pl_get_duration_from_string (char** duration_string);
 gpointer pl_data_ref (gpointer instance);
 void pl_data_unref (gpointer instance);
 GParamSpec* pl_param_spec_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -133,11 +135,11 @@ PlData* pl_data_new (void);
 PlData* pl_data_construct (GType object_type);
 char* pl_data_get_next_url (PlData* self);
 GType pl_reader_get_type (void);
-PlReader* pl_reader_new (const char* playlist_uri);
-PlReader* pl_reader_construct (GType object_type, const char* playlist_uri);
-void pl_reader_read (PlReader* self, GError** error);
-void pl_reader_read_async (PlReader* self, GAsyncReadyCallback _callback_, gpointer _user_data_);
-void pl_reader_read_finish (PlReader* self, GAsyncResult* _res_, GError** error);
+PlReader* pl_reader_new (void);
+PlReader* pl_reader_construct (GType object_type);
+PlResult pl_reader_read (PlReader* self, const char* playlist_uri);
+void pl_reader_read_async (PlReader* self, const char* playlist_uri, GAsyncReadyCallback _callback_, gpointer _user_data_);
+PlResult pl_reader_read_finish (PlReader* self, GAsyncResult* _res_);
 char** pl_reader_get_uris (PlReader* self, int* result_length1);
 char* pl_reader_get_title (PlReader* self);
 char* pl_reader_get_author (PlReader* self);
@@ -152,8 +154,8 @@ const char* pl_reader_get_uri (PlReader* self);
 GType pl_writer_get_type (void);
 PlWriter* pl_writer_new (PlListType ptype);
 PlWriter* pl_writer_construct (GType object_type, PlListType ptype);
-PlResult pl_writer_write_to_file (PlWriter* self);
-void pl_writer_write_asyn (PlWriter* self, GAsyncReadyCallback _callback_, gpointer _user_data_);
+PlResult pl_writer_write (PlWriter* self, PlData* data, const char* playlist_uri, gboolean overwrite);
+void pl_writer_write_asyn (PlWriter* self, PlData* data, const char* playlist_uri, gboolean overwrite, GAsyncReadyCallback _callback_, gpointer _user_data_);
 PlResult pl_writer_write_asyn_finish (PlWriter* self, GAsyncResult* _res_);
 const char* pl_writer_get_uri (PlWriter* self);
 

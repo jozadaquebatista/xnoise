@@ -60,7 +60,7 @@ namespace Pl {
 								continue;
 							list += line;
 //							data.append_url("http://media.example.com/entire.ts"); // for testing
-							//stdout.printf("%s\n", line);
+							//print("%s\n", line);
 						}
 					}
 				}

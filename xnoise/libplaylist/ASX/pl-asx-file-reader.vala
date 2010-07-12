@@ -67,7 +67,7 @@ namespace Pl {
 				}
 			} 
 			catch(GLib.Error e) {
-				stdout.printf("Errorr: %s\n", e.message);
+				print("Errorr: %s\n", e.message);
 			}
 			data.urls = list;
 			return data;

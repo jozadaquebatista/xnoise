@@ -31,7 +31,7 @@ namespace Pl {
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Reader : GLib.Object {
-		public Reader (string playlist_uri);
+		public Reader ();
 		public string? get_album ();
 		public string? get_author ();
 		public string? get_copyright ();
@@ -41,17 +41,17 @@ namespace Pl {
 		public string? get_title ();
 		public string[]? get_uris ();
 		public string? get_volume ();
-		public void read () throws Pl.ReaderError;
-		public async void read_async () throws Pl.ReaderError;
+		public Pl.Result read (string playlist_uri);
+		public async Pl.Result read_async (string playlist_uri);
 		public Pl.ListType ptype { get; }
 		public string uri { get; }
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Writer : GLib.Object {
 		public Writer (Pl.ListType ptype);
-		public async Pl.Result write_asyn ();
-		public Pl.Result write_to_file ();
-		public string uri { get; }
+		public Pl.Result write (Pl.Data? data, string playlist_uri, bool overwrite = true);
+		public async Pl.Result write_asyn (Pl.Data? data, string playlist_uri, bool overwrite = true);
+		public string? uri { get; }
 	}
 	[CCode (cprefix = "PL_LIST_TYPE_", cheader_filename = "libplaylist.h")]
 	public enum ListType {
@@ -67,7 +67,8 @@ namespace Pl {
 		UNHANDLED,
 		ERROR,
 		IGNORED,
-		SUCCESS
+		SUCCESS,
+		EMPTY
 	}
 	[CCode (cprefix = "PL_READER_ERROR_", cheader_filename = "libplaylist.h")]
 	public errordomain ReaderError {
@@ -81,4 +82,6 @@ namespace Pl {
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static bool debug;
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static long get_duration_from_string (ref string? duration_string);
 }
