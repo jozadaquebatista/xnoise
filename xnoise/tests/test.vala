@@ -6,7 +6,7 @@ bool test_reader_creation() {
 }
 
 bool test_m3u_reading() {
-	File f = File.new_for_path("./playlist-examples/live-streaming.m3u");
+	File f = File.new_for_path("./playlist-examples/test_m3u.m3u");
 	var reader = new Pl.Reader();
 	try {
 		reader.read(f.get_uri());
