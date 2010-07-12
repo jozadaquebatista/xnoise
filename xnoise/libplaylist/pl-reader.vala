@@ -1,11 +1,11 @@
 /* pl-reader.vala
  *
- * Copyright(C) 2010  Jörn Magens
+ * Copyright (C) 2010  Jörn Magens
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or(at your option) any later version.
+ * version 2.1 of the License, or (at your option) any later version.
 
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,16 +23,17 @@
 
 namespace Pl {
 	public class Reader : GLib.Object {
+		// _pl_data is the collection of data entries in one playlist
+		private Data[] _pl_data;
 		private File? file = null;
+		private ListType _ptype;
 		private AbstractFileReader? plfile_reader = null;
 		private string? _playlist_uri = null;
-		
 		//use this to protect running reading process
 		//it shall not be possible to run async and sync reading in parallel'
 		private Mutex read_in_progress_mutex;
 		
-		private ListType _ptype;
-		
+		//Properties
 		public ListType ptype {
 			get {
 				return _ptype;
@@ -45,27 +46,19 @@ namespace Pl {
 			} 
 		}
 		
-		private Data[] _pl_data;
-		
 		public Reader() {
 			_pl_data = {};
 			read_in_progress_mutex = new Mutex();
 		}
 		
-		public string[] get_uris() {
-			string[] retval = {};
-			foreach(Data d in _pl_data) {
-				if(d.get_uri() != null)
-					retval += d.get_uri();
-			}
-			return retval;
-		}
-		
+		//Constructor
 		public Result read(string list_uri) throws ReaderError {
 			Result ret = Result.UNHANDLED;
 			_playlist_uri = list_uri;
+			file = File.new_for_uri(_playlist_uri);
+			
 			read_in_progress_mutex.lock();
-			plfile_reader = get_playlist_file_reader_for_current_uri();
+			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri);
 			
 			if(plfile_reader == null) {
 				return Result.ERROR;
@@ -76,10 +69,13 @@ namespace Pl {
 			return ret;
 		}
 
+
 		public async Result read_async(string list_uri) throws ReaderError {
 			Result ret = Result.UNHANDLED;
 			_playlist_uri = list_uri;
-			plfile_reader = get_playlist_file_reader_for_current_uri();
+			file = File.new_for_uri(_playlist_uri);
+
+			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri);
 			
 			if(plfile_reader == null) {
 				return Result.ERROR;
@@ -109,7 +105,7 @@ namespace Pl {
 			try {
 				_pl_data = yield plfile_reader.read_asyn(file);
 			}
-			catch(Internal.ReaderError e) {
+			catch(InternalReaderError e) {
 				print("%sn", e.message);
 				return Result.ERROR;
 			}
@@ -118,10 +114,13 @@ namespace Pl {
 			else
 				return Result.SUCCESS;
 		}
+
+
+		//static functions to setup reader
 		
-		private AbstractFileReader? get_playlist_file_reader_for_current_uri() {
+		private static AbstractFileReader? get_playlist_file_reader_for_uri(ref string uri_) {
 			//TODO: return the right implementation of PlaylistReader
-			ListType current_type = get_playlist_type_for_current_uri();
+			ListType current_type = get_playlist_type_for_uri(ref uri_);
 			switch(current_type) {
 				case ListType.ASX:
 					AbstractFileReader ret = new Asx.FileReader();
@@ -139,27 +138,23 @@ namespace Pl {
 			return null;
 		}
 
-		private ListType get_playlist_type_for_current_uri() {
+		private static ListType get_playlist_type_for_uri(ref string uri_) {
 			//What is more reliable? extension or data?
-			ListType retval = get_type_by_extension();
+			ListType retval = get_type_by_extension(ref uri_);
 			if(retval != ListType.UNKNOWN) {
 				return retval;
 			}
 			
-			retval = get_type_by_data();
-			//if(retval != ListType.UNKNOWN) {
-			//	return retval;
-			//}
+			retval = get_type_by_data(ref uri_);
 			
 			return retval;
 		}
 
-		private ListType get_type_by_extension() {
+		private static ListType get_type_by_extension(ref string uri_) {
 			//TODO: Determine filetype by extension
-			file = File.new_for_uri(_playlist_uri);
 			try {
-				if(_playlist_uri != null) {
-					string uri_down = _playlist_uri.down();
+				if(uri_ != null) {
+					string uri_down = uri_.down();
 					if(uri_down.has_suffix(".asx")) {
 						return ListType.ASX;
 					}
@@ -186,35 +181,35 @@ namespace Pl {
 			}
 		}
 
-		private ListType get_type_by_data() {
+		private static ListType get_type_by_data(ref string uri_) {
 			//TODO: Determine filetype by content
 			string content_type = "";
-			file = File.new_for_uri(_playlist_uri);
+			File f = File.new_for_uri(uri_);
 			try {
-				var file_info = file.query_info("*", FileQueryInfoFlags.NONE, null);
-				print("File size: %lld bytes\n", file_info.get_size());
+				var file_info = f.query_info("*", FileQueryInfoFlags.NONE, null);
+				//print("File size: %lld bytes\n", file_info.get_size());
 				content_type = file_info.get_content_type();
 				string mime = g_content_type_get_mime_type(content_type);
-				print("Mime type: %s\n",mime);
+				//print("Mime type: %s\n",mime);
 				//audio/x-ms-asx => asx
 				if(content_type == ContentType.ASX) { //"audio/x-ms-asx"
-					print("Content type asx: %s\n", content_type);
+					//print("Content type asx: %s\n", content_type);
 					return ListType.ASX;
 				}
 				//audio/x-scpls	 => pls
 				else if(content_type == ContentType.PLS) { //"audio/x-scpls"
-					print("Content type pls: %s\n", content_type);
+					//print("Content type pls: %s\n", content_type);
 					return ListType.PLS;
 				}
 				//application/vnd.apple.mpegurl
 				//audio/x-mpegurl => m3u
 				//audio/mpegurl
 				else if(content_type == ContentType.APPLE_MPEG || content_type == ContentType.X_MPEG || content_type == ContentType.MPEG) { //MPEG
-					print("Content type m3u: %s\n",content_type);
+					//print("Content type m3u: %s\n", content_type);
 					return ListType.M3U;
 				}
 				else if(content_type == ContentType.XSPF) {
-					print("Content type xspf: %s\n", content_type);
+					//print("Content type xspf: %s\n", content_type);
 					return ListType.XSPF;
 				}
 				else {
@@ -223,9 +218,101 @@ namespace Pl {
 				}
 			}
 			catch(Error e) {
-				print("Error: %s\n",e.message);
+				print("Error: %s\n", e.message);
 				return ListType.UNKNOWN;
 			}
+		}
+
+
+		// functions to retrieve found data
+		
+		public bool data_available() {
+			return _pl_data.length > 0;
+		}
+		
+		public string[] get_found_uris() {
+			string[] retval = {};
+			foreach(Data d in _pl_data) {
+				if(d.get_uri() != null)
+					retval += d.get_uri();
+			}
+			return retval;
+		}
+	
+		public string? get_tile_for_uri(ref string uri_needle) {
+			string? retval = null;
+			foreach(Data d in _pl_data) {
+				if(d.get_uri() == uri_needle) {
+					retval = d.get_title();
+					break;
+				}
+			}
+			return retval;
+		}
+		public string? get_author_for_uri(ref string uri_needle) {
+			string? retval = null;
+			foreach(Data d in _pl_data) {
+				if(d.get_uri() == uri_needle) {
+					retval = d.get_author();
+					break;
+				}
+			}
+			return retval;
+		}
+		
+		public string? get_genre_for_uri(ref string uri_needle) {
+			string? retval = null;
+			foreach(Data d in _pl_data) {
+				if(d.get_uri() == uri_needle) {
+					retval = d.get_genre();
+					break;
+				}
+			}
+			return retval;
+		}
+		
+		public string? get_album_for_uri(ref string uri_needle) {
+			string? retval = null;
+			foreach(Data d in _pl_data) {
+				if(d.get_uri() == uri_needle) {
+					retval = d.get_album();
+					break;
+				}
+			}
+			return retval;
+		}
+		
+		public string? get_copyright_for_uri(ref string uri_needle) {
+			string? retval = null;
+			foreach(Data d in _pl_data) {
+				if(d.get_uri() == uri_needle) {
+					retval = d.get_copyright();
+					break;
+				}
+			}
+			return retval;
+		}
+
+		public string? get_duration_string_for_uri(ref string uri_needle) {
+			string? retval = null;
+			foreach(Data d in _pl_data) {
+				if(d.get_uri() == uri_needle) {
+					retval = d.get_duration_string();
+					break;
+				}
+			}
+			return retval;
+		}
+
+		public long get_duration_for_uri(ref string uri_needle) {
+			long retval = -1;
+			foreach(Data d in _pl_data) {
+				if(d.get_uri() == uri_needle) {
+					retval = d.get_duration();
+					break;
+				}
+			}
+			return retval;
 		}
 	}
 }

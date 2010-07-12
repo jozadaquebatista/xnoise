@@ -26,7 +26,7 @@ namespace Pl {
 	private class Pls.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override Data[] read(File _file) throws Internal.ReaderError {
+		public override Data[] read(File _file) throws InternalReaderError {
 			Data[] data_collection = {};
 			this.file = _file;
 
@@ -88,7 +88,7 @@ namespace Pl {
 			return data_collection;
 		}
 
-		public override async Data[] read_asyn(File _file) throws Internal.ReaderError {
+		public override async Data[] read_asyn(File _file) throws InternalReaderError {
 			Data[] data_collection = {};
 			this.file = _file;
 			return data_collection;

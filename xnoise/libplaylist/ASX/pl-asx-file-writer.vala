@@ -27,7 +27,7 @@ namespace Pl {
 		private Data[] data_collection;
 		private File file;
 
-		public override Result write(File _file, Data[] _data_collection) throws Internal.WriterError {
+		public override Result write(File _file, Data[] _data_collection) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
 			if(data_collection != null && data_collection.length > 0) {
@@ -57,7 +57,7 @@ namespace Pl {
 			return Result.SUCCESS;
 		}
 		
-		public override async Result write_asyn(File _file, Data[] _data_collection) throws Internal.WriterError {
+		public override async Result write_asyn(File _file, Data[] _data_collection) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
 			return Result.UNHANDLED;

@@ -64,33 +64,33 @@ namespace Pl {
 		}
 
 
-		// Convenience functions
+		// Convenience functions to get data of the playlist entry
 		
-		public string get_uri() {
+		public string? get_uri() {
 			return htable.lookup(Field.URI);
 		}
 
-		public string get_title() {
+		public string? get_title() {
 			return htable.lookup(Field.TITLE);
 		}
 		
-		public string get_author() {
+		public string? get_author() {
 			return htable.lookup(Field.AUTHOR);
 		}
 		
-		public string get_genre() {
+		public string? get_genre() {
 			return htable.lookup(Field.GENRE);
 		}
 		
-		public string get_album() {
+		public string? get_album() {
 			return htable.lookup(Field.ALBUM);
 		}
 		
-		public string get_copyright() {
+		public string? get_copyright() {
 			return htable.lookup(Field.COPYRIGHT);
 		}
 
-		public string get_duration_string() {
+		public string? get_duration_string() {
 			return htable.lookup(Field.DURATION);
 		}
 

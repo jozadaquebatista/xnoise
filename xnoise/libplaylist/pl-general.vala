@@ -33,12 +33,12 @@ namespace Pl {
 		SOMETHING_ELSE
 	}
 	
-	private errordomain Internal.ReaderError {
+	private errordomain InternalReaderError {
 		UNKNOWN_TYPE,
 		SOMETHING_ELSE
 	}
 
-	private errordomain Internal.WriterError {
+	private errordomain InternalWriterError {
 		UNKNOWN_TYPE,
 		SOMETHING_ELSE
 	}

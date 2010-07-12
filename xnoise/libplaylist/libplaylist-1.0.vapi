@@ -5,9 +5,6 @@ namespace Pl {
 	[CCode (cprefix = "PlAsx", lower_case_cprefix = "pl_asx_")]
 	namespace Asx {
 	}
-	[CCode (cprefix = "PlInternal", lower_case_cprefix = "pl_internal_")]
-	namespace Internal {
-	}
 	[CCode (cprefix = "PlM3u", lower_case_cprefix = "pl_m3u_")]
 	namespace M3u {
 	}
@@ -31,21 +28,29 @@ namespace Pl {
 		}
 		public Data ();
 		public void add_field (Pl.Data.Field field, string val);
-		public string get_album ();
-		public string get_author ();
+		public string? get_album ();
+		public string? get_author ();
 		public Pl.Data.Field[] get_contained_fields ();
-		public string get_copyright ();
+		public string? get_copyright ();
 		public long get_duration ();
-		public string get_duration_string ();
+		public string? get_duration_string ();
 		public string get_field (Pl.Data.Field field);
-		public string get_genre ();
-		public string get_title ();
-		public string get_uri ();
+		public string? get_genre ();
+		public string? get_title ();
+		public string? get_uri ();
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Reader : GLib.Object {
 		public Reader ();
-		public string[] get_uris ();
+		public bool data_available ();
+		public string? get_album_for_uri (ref string uri_needle);
+		public string? get_author_for_uri (ref string uri_needle);
+		public string? get_copyright_for_uri (ref string uri_needle);
+		public long get_duration_for_uri (ref string uri_needle);
+		public string? get_duration_string_for_uri (ref string uri_needle);
+		public string[] get_found_uris ();
+		public string? get_genre_for_uri (ref string uri_needle);
+		public string? get_tile_for_uri (ref string uri_needle);
 		public Pl.Result read (string list_uri) throws Pl.ReaderError;
 		public async Pl.Result read_async (string list_uri) throws Pl.ReaderError;
 		public string playlist_uri { get; }

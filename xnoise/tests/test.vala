@@ -15,7 +15,7 @@ bool test_m3u_reading() {
 		print("m3u test error reading\n");
 		return false;
 	}
-	var uris = reader.get_uris();
+	var uris = reader.get_found_uris();
 	//print("Size: %s\n", uris.length.to_string());
 	return uris[0] == "http://media.example.com/entire.ts";
 }
@@ -30,7 +30,7 @@ bool test_pls_reading() {
 		print("pls test error reading\n");
 		return false;
 	}
-	var uris = reader.get_uris();
+	var uris = reader.get_found_uris();
 	//print("Size: %s\n", uris.length.to_string());
 	//print("Url0: %s\n",uris[0]);
 	return uris[0] == "http://emisora.fundingue.com:8070/";
@@ -46,7 +46,7 @@ bool test_asx_reading() {
 		print("asx test error reading\n");
 		return false;
 	}
-	var uris = reader.get_uris();
+	var uris = reader.get_found_uris();
 	//print("Size: %s\n", uris.length.to_string());
 	return uris[0] == "http://example.com/announcement.wma";
 }
@@ -61,7 +61,7 @@ bool test_xspf_reading() {
 		print("xspf test error reading\n");
 		return false;
 	}
-	var uris = reader.get_uris();
+	var uris = reader.get_found_uris();
 	//print("Size: %s\n", uris.length.to_string());
 	return uris[0] == "http://www.example.com/music/bar.ogg";
 }
