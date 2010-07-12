@@ -58,7 +58,7 @@ namespace Pl {
 
 							if( arrayNumberOfEntries.length == 2 ) {
 								numberofentries = arrayNumberOfEntries[1].to_int();   
-								print("There are %d entries: \n", numberofentries);
+								//print("There are %d entries: \n", numberofentries);
 							}
 							continue;
 						}

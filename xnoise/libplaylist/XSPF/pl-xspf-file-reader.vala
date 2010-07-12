@@ -54,7 +54,7 @@ namespace Pl {
 					} 
 					else if(line.contains("</track>")) {
 						entry_on = false;
-						print("\n");
+						//print("\n");
 						continue;
 					} 
 					else {

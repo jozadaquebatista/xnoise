@@ -16,7 +16,7 @@ bool test_m3u_reading() {
 		return false;
 	}
 	var uris = reader.get_uris();
-	print("Size: %s\n", uris.length.to_string());
+	//print("Size: %s\n", uris.length.to_string());
 	return uris[0] == "http://media.example.com/entire.ts";
 }
 
@@ -31,7 +31,7 @@ bool test_pls_reading() {
 		return false;
 	}
 	var uris = reader.get_uris();
-	print("Size: %s\n", uris.length.to_string());
+	//print("Size: %s\n", uris.length.to_string());
 	//print("Url0: %s\n",uris[0]);
 	return uris[0] == "http://emisora.fundingue.com:8070/";
 }
@@ -47,7 +47,7 @@ bool test_asx_reading() {
 		return false;
 	}
 	var uris = reader.get_uris();
-	print("Size: %s\n", uris.length.to_string());
+	//print("Size: %s\n", uris.length.to_string());
 	return uris[0] == "http://example.com/announcement.wma";
 }
 
@@ -62,46 +62,46 @@ bool test_xspf_reading() {
 		return false;
 	}
 	var uris = reader.get_uris();
-	print("Size: %s\n", uris.length.to_string());
+	//print("Size: %s\n", uris.length.to_string());
 	return uris[0] == "http://www.example.com/music/bar.ogg";
 }
 
 void main() {
-
+	print("\n");
 	// CREATE READER
-	print("\nm3u test reader creation:");
+	print("m3u test reader creation:");
 	if(test_reader_creation())
-		print("\t\tpass\n");
+		print("\033[50Gpass\n");
 	else
-		print("\t\tfail\n");
+		print("\033[50Gfail\n");
 
 	// READ M3U
-	print("\ttest m3u reading:");
+	print("test m3u reading:");
 	if(test_m3u_reading())
-		print("\t\tpass\n");
+		print("\033[50Gpass\n");
 	else
-		print("\t\tfail\n");
+		print("\033[50Gfail\n");
 
 	//READ PLS
-	print("\ttest pls reading:");
+	print("test pls reading:");
 	if(test_pls_reading())
-		print("\t\tpass\n");
+		print("\033[50Gpass\n");
 	else
-		print("\t\tfail\n");
+		print("\033[50Gfail\n");
 
 	//READ ASX
-	print("\ttest asx reading:");
+	print("test asx reading:");
 	if(test_asx_reading())
-		print("\t\tpass\n");
+		print("\033[50Gpass\n");
 	else
-		print("\t\tfail\n");
+		print("\033[50Gfail\n");
 
 
 	//READ XSPF
-	print("\ttest xspf reading:");
+	print("test xspf reading:");
 	if(test_xspf_reading())
-		print("\t\tpass\n");
+		print("\033[50Gpass\n");
 	else
-		print("\t\tfail\n");
+		print("\033[50Gfail\n");
 }
 
