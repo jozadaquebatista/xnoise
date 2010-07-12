@@ -71,7 +71,6 @@ namespace Pl {
 							if(file_line != null) {
 								var arrayFile = file_line.split("=");
 								if(arrayFile != null && arrayFile.length >= 2) {
-//									list+= arrayFile[1];
 									File tmp = File.new_for_commandline_arg(arrayFile[1]);
 									d.add_field(Data.Field.URI, tmp.get_uri());
 								}

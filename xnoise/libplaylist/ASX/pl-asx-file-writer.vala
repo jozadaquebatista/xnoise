@@ -30,7 +30,6 @@ namespace Pl {
 		public override Result write(File _file, Data[] _data_collection) throws Internal.WriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
-//				var list = data.urls;
 			if(data_collection != null && data_collection.length > 0) {
 				try {
 					if(file.query_exists(null)) {
