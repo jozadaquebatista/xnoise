@@ -171,12 +171,12 @@ bool test_asx_writing_abs_paths() {
 	var data = new Data();
 	data.add_field(Data.Field.URI, t1.get_uri());
 	data.add_field(Data.Field.TITLE, current_title_1);
-	data_collection.add(data);
+	data_collection.append(data);
 	
 	data = new Data();
 	data.add_field(Data.Field.URI, t2.get_uri());
 	data.add_field(Data.Field.TITLE, current_title_2);
-	data_collection.add(data);
+	data_collection.append(data);
 	
 	try {
 		writer.write(data_collection, f.get_uri());
@@ -211,12 +211,12 @@ bool test_m3u_writing_abs_paths() {
 	var data = new Data();
 	data.add_field(Data.Field.URI, t1.get_uri());
 	data.add_field(Data.Field.TITLE, current_title_1); //titles are still ignored
-	data_collection.add(data);
+	data_collection.append(data);
 	
 	data = new Data();
 	data.add_field(Data.Field.URI, t2.get_uri());
 	data.add_field(Data.Field.TITLE, current_title_2); //titles are still ignored
-	data_collection.add(data);
+	data_collection.append(data);
 	
 	try {
 		writer.write(data_collection, f.get_uri());
@@ -251,12 +251,12 @@ bool test_pls_writing_abs_paths() {
 	var data = new Data();
 	data.add_field(Data.Field.URI, t1.get_uri());
 	data.add_field(Data.Field.TITLE, current_title_1); //titles are still ignored
-	data_collection.add(data);
+	data_collection.append(data);
 	
 	data = new Data();
 	data.add_field(Data.Field.URI, t2.get_uri());
 	data.add_field(Data.Field.TITLE, current_title_2); //titles are still ignored
-	data_collection.add(data);
+	data_collection.append(data);
 	
 	try {
 		writer.write(data_collection, f.get_uri());

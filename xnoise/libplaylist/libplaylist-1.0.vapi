@@ -52,7 +52,7 @@ namespace Pl {
 		[CCode (ref_function = "pl_data_collection_iterator_ref", unref_function = "pl_data_collection_iterator_unref", cheader_filename = "libplaylist.h")]
 		public class Iterator {
 			public Iterator (Pl.DataCollection dc);
-			public void add (Pl.Data item);
+			public void append (Pl.Data item);
 			public bool first ();
 			public Pl.Data @get ();
 			public bool has_previous ();
@@ -64,7 +64,7 @@ namespace Pl {
 			public void @set (Pl.Data item);
 		}
 		public DataCollection ();
-		public bool add (Pl.Data item);
+		public bool append (Pl.Data item);
 		public void clear ();
 		public bool contains (Pl.Data d);
 		public bool contains_field (Pl.Data.Field field, string value);
@@ -72,6 +72,8 @@ namespace Pl {
 		public Pl.Data @get (int index);
 		public string? get_album_for_uri (ref string uri_needle);
 		public string? get_author_for_uri (ref string uri_needle);
+		public Pl.Data.Field[] get_contained_fields_for_idx (int idx);
+		public Pl.Data.Field[] get_contained_fields_for_uri (ref string uri);
 		public string? get_copyright_for_uri (ref string uri_needle);
 		public long get_duration_for_uri (ref string uri_needle);
 		public string? get_duration_string_for_uri (ref string uri_needle);

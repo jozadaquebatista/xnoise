@@ -57,7 +57,7 @@ namespace Pl {
 					else if(line.contains("</track>")) {
 						entry_on = false;
 						//print("add entry\n");
-						data_collection.add(d);
+						data_collection.append(d);
 						continue;
 					}
 					else if(entry_on) { // Can we always assume that this is in one line???

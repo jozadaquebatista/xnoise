@@ -199,6 +199,18 @@ namespace Pl {
 			return false;
 		}
 
+		public Pl.Data.Field[] get_contained_fields_for_idx(int idx) {
+			return _items[idx].get_contained_fields();
+		}
+		
+		public Pl.Data.Field[] get_contained_fields_for_uri(ref string uri) {
+			for(int index = 0; index < _size; index++) {
+				if(_items[index].get_uri() == uri)
+					return _items[index].get_contained_fields();
+			}
+			return new Pl.Data.Field[0];
+		}
+		
 		public Iterator iterator() {
 			return new Iterator(this);
 		}
@@ -225,7 +237,7 @@ namespace Pl {
 			_items[index] = item;
 		}
 
-		public bool add(Data item) {
+		public bool append(Data item) {
 			if(_size == _items.length) {
 				grow_if_needed(1);
 			}
@@ -391,7 +403,7 @@ namespace Pl {
 				_stamp = _dc._stamp;
 			}
 
-			public void add(Data item) {
+			public void append(Data item) {
 				assert(_stamp == _dc._stamp);
 				assert(_index >= 0);
 				assert(_index < _dc._size);

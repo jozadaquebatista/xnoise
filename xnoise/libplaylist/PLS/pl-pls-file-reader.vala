@@ -75,7 +75,7 @@ namespace Pl {
 									d.add_field(Data.Field.URI, tmp.get_uri());
 								}
 							}
-							data_collection.add(d);
+							data_collection.append(d);
 						}
 					}
 				}

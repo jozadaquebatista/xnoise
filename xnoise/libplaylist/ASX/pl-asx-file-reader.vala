@@ -55,7 +55,7 @@ namespace Pl {
 					}
 					else if(line.contains("</entry>")) {
 						entry_on = false;
-						data_collection.add(d);
+						data_collection.append(d);
 						continue;
 					}
 					else {

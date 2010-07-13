@@ -98,7 +98,7 @@ namespace Pl {
 								if(title != "") {
 									d.add_field(Data.Field.TITLE, title);
 								}
-								data_collection.add(d);
+								data_collection.append(d);
 							}
 						}
 					}
