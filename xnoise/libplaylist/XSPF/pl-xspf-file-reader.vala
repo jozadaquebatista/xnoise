@@ -66,7 +66,7 @@ namespace Pl {
 							line = line.replace("</location>","");
 							line = line.strip();
 							if(d != null) {
-								File tmp = get_file_for_location(line, base_path);
+								File tmp = get_file_for_location(ref line, ref base_path);
 								d.add_field(Data.Field.URI, tmp.get_uri());
 							}
 							else {

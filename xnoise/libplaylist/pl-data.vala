@@ -31,6 +31,8 @@ namespace Pl {
 			ALBUM,             // Album, if available, null otherwise
 			COPYRIGHT,         // Copyright, if available, null otherwise
 			DURATION,          // Duration, if available, -1 otherwise
+			PARAM_NAME,        // Asx parameter name
+			PARAM_VALUE,       // Asx parameter value
 			IS_REMOTE,         // whether the target is remote : "0" = local, "1" = remote
 			IS_PLAYLIST        // whether the target is another playlist : "0" = false, "1" = true
 		}

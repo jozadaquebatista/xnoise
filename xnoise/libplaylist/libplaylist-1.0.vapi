@@ -25,6 +25,8 @@ namespace Pl {
 			ALBUM,
 			COPYRIGHT,
 			DURATION,
+			PARAM_NAME,
+			PARAM_VALUE,
 			IS_REMOTE,
 			IS_PLAYLIST
 		}
@@ -57,7 +59,7 @@ namespace Pl {
 		public bool get_is_playlist_for_uri (ref string uri_needle);
 		public bool get_is_remote_for_uri (ref string uri_needle);
 		public int get_number_of_entries ();
-		public string? get_tile_for_uri (ref string uri_needle);
+		public string? get_title_for_uri (ref string uri_needle);
 		public Pl.Result read (string list_uri) throws Pl.ReaderError;
 		public async Pl.Result read_async (string list_uri) throws Pl.ReaderError;
 		public Pl.Data[] data_collection { get; }
@@ -66,10 +68,12 @@ namespace Pl {
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Writer : GLib.Object {
-		public Writer (Pl.ListType ptype);
-		public Pl.Result write (Pl.Data[] data, string playlist_uri, bool overwrite = true) throws Pl.WriterError;
-		public async Pl.Result write_asyn (Pl.Data[] data, string playlist_uri, bool overwrite = true) throws Pl.WriterError;
+		public Writer (Pl.ListType ptype, bool overwrite = true, bool absolute_uris = true);
+		public Pl.Result write (Pl.Data[] data_collection, string playlist_uri) throws Pl.WriterError;
+		public async Pl.Result write_asyn (Pl.Data[] data_collection, string playlist_uri) throws Pl.WriterError;
+		public bool overwrite_if_exists { get; }
 		public string? uri { get; }
+		public bool use_absolute_uris { get; }
 	}
 	[CCode (cprefix = "PL_LIST_TYPE_", cheader_filename = "libplaylist.h")]
 	public enum ListType {
@@ -96,12 +100,19 @@ namespace Pl {
 	[CCode (cprefix = "PL_WRITER_ERROR_", cheader_filename = "libplaylist.h")]
 	public errordomain WriterError {
 		UNKNOWN_TYPE,
-		SOMETHING_ELSE,
+		NO_DATA,
+		NO_DEST_URI,
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static bool debug;
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static long get_duration_from_string (ref string? duration_string);
 	[CCode (cheader_filename = "libplaylist.h")]
-	public static GLib.File get_file_for_location (string adr, string base_path = "");
+	public static GLib.File get_file_for_location (ref string adr, ref string base_path = "");
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static Pl.ListType get_playlist_type_for_uri (ref string uri_);
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static Pl.ListType get_type_by_data (ref string uri_);
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static Pl.ListType get_type_by_extension (ref string uri_);
 }

@@ -27,6 +27,26 @@ namespace Pl {
 	
 		private Data[] data_collection;
 		private File file;
+		private bool _use_absolute_uris = true;
+		private bool _overwrite_if_exists = true;
+		
+		public bool use_absolute_uris { 
+			get {
+				return _use_absolute_uris;
+			} 
+		}
+		
+		public bool overwrite_if_exists { 
+			get {
+				return _overwrite_if_exists;
+			} 
+		}
+
+
+		public FileWriter(bool overwrite, bool absolute_uris) {
+			_overwrite_if_exists = overwrite;
+			_use_absolute_uris = absolute_uris;
+		}
 
 		public override Result write(File _file, Data[] _data_collection) throws InternalWriterError {
 			this.file = _file;

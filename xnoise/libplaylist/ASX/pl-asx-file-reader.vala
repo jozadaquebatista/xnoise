@@ -40,8 +40,8 @@ namespace Pl {
 			try {
 				var in_stream = new DataInputStream(file.read(null));
 				string line;
+				Data d = null;
 				while((line = in_stream.read_line(null, null)) != null) {
-					var d = new Data();
 					if(line.has_prefix("#")) { //# Comments
 						continue;
 					}
@@ -49,25 +49,39 @@ namespace Pl {
 						continue;
 					}
 					else if(line.contains("<entry>")) {
+						d = new Data();
 						entry_on = true;
 						continue;
 					}
 					else if(line.contains("</entry>")) {
 						entry_on = false;
+						data_collection += d;
 						continue;
 					}
 					else {
 						if(entry_on) {
 							if(line.contains("<ref")) {
-								string[] array_ref = line.split("\"");
-								if(array_ref != null && array_ref.length == 3) {
-									File tmp = get_file_for_location(array_ref[1], base_path);
-									d.add_field(Data.Field.URI, tmp.get_uri());
+								char* begin = line.str("\"");
+								begin ++;
+								char* end = line.rstr("\"");
+								if(end == begin) {
+									print("no url inside\n");
+									continue;
 								}
+								*end = '\0';
+								string buf = ((string)begin)._strip();
+								File tmp = get_file_for_location(ref buf, ref base_path);
+								d.add_field(Data.Field.URI, tmp.get_uri());
+							}
+							else if(line.contains("<title>")) {
+								char* begin = line.str("<title>");
+								begin += "<title>".size();
+								char* end = line.rstr("</title>");
+								*end = '\0';
+								d.add_field(Data.Field.TITLE, (string)begin);
 							}
 						}
 					}
-					data_collection += d;
 				}
 			} 
 			catch(GLib.Error e) {

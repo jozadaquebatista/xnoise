@@ -26,6 +26,27 @@ namespace Pl {
 		
 		private Data[] data_collection;
 		private File file;
+		private bool _use_absolute_uris = true;
+		private bool _overwrite_if_exists = true;
+		
+		public bool use_absolute_uris { 
+			get {
+				return _use_absolute_uris;
+			} 
+		}
+		
+		public bool overwrite_if_exists { 
+			get {
+				return _overwrite_if_exists;
+			} 
+		}
+
+
+		public FileWriter(bool overwrite, bool absolute_uris) {
+			_overwrite_if_exists = overwrite;
+			_use_absolute_uris = absolute_uris;
+			// TODO: honor overwrite, etc.
+		}
 
 		public override Result write(File _file, Data[] _data_collection) throws InternalWriterError {
 			this.file = _file;
@@ -40,13 +61,20 @@ namespace Pl {
 					var data_stream = new DataOutputStream(file_stream);
 					
 					data_stream.put_string("<asx version=\"3.0\">\n", null);
-					data_stream.put_string("\t<title></title>\n", null); //TODO: Playlist title
+					//data_stream.put_string("\t<title></title>\n", null); //TODO: Playlist title
 					foreach(Data d in data_collection) {
-						if(d.get_field(Data.Field.URI) == null)
+						string? tmp_uri = d.get_field(Data.Field.URI);
+						if((tmp_uri == null) && (tmp_uri == ""))
 							continue;
-						data_stream.put_string("\t<entry>\n", null);
-						data_stream.put_string("\t <ref href=\"" + d.get_field(Data.Field.URI) + "\" />\n", null);
-						data_stream.put_string("\t</entry>\n\n", null);
+						
+						string? tmp_title = d.get_title();
+						
+						data_stream.put_string("  <entry>\n", null);
+						if((tmp_title != null) && (tmp_title != "")) 
+							data_stream.put_string(Markup.printf_escaped("    <title>%s</title>\n", tmp_title), null);
+						
+						data_stream.put_string(Markup.printf_escaped("    <ref href=\"%s\" />\n", tmp_uri), null);
+						data_stream.put_string("  </entry>\n", null);
 					}
 					data_stream.put_string("</asx>\n", null);
 				} 

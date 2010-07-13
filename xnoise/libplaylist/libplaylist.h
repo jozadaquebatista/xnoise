@@ -59,7 +59,8 @@ typedef enum  {
 #define PL_READER_ERROR pl_reader_error_quark ()
 typedef enum  {
 	PL_WRITER_ERROR_UNKNOWN_TYPE,
-	PL_WRITER_ERROR_SOMETHING_ELSE
+	PL_WRITER_ERROR_NO_DATA,
+	PL_WRITER_ERROR_NO_DEST_URI
 } PlWriterError;
 #define PL_WRITER_ERROR pl_writer_error_quark ()
 typedef enum  {
@@ -98,6 +99,8 @@ typedef enum  {
 	PL_DATA_FIELD_ALBUM,
 	PL_DATA_FIELD_COPYRIGHT,
 	PL_DATA_FIELD_DURATION,
+	PL_DATA_FIELD_PARAM_NAME,
+	PL_DATA_FIELD_PARAM_VALUE,
 	PL_DATA_FIELD_IS_REMOTE,
 	PL_DATA_FIELD_IS_PLAYLIST
 } PlDataField;
@@ -127,7 +130,10 @@ GType pl_list_type_get_type (void);
 GType pl_result_get_type (void);
 extern gboolean pl_debug;
 glong pl_get_duration_from_string (char** duration_string);
-GFile* pl_get_file_for_location (const char* adr, const char* base_path);
+GFile* pl_get_file_for_location (char** adr, char** base_path);
+PlListType pl_get_playlist_type_for_uri (char** uri_);
+PlListType pl_get_type_by_extension (char** uri_);
+PlListType pl_get_type_by_data (char** uri_);
 gpointer pl_data_ref (gpointer instance);
 void pl_data_unref (gpointer instance);
 GParamSpec* pl_param_spec_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -159,7 +165,7 @@ void pl_reader_read_async (PlReader* self, const char* list_uri, GAsyncReadyCall
 PlResult pl_reader_read_finish (PlReader* self, GAsyncResult* _res_, GError** error);
 gboolean pl_reader_data_available (PlReader* self);
 char** pl_reader_get_found_uris (PlReader* self, int* result_length1);
-char* pl_reader_get_tile_for_uri (PlReader* self, char** uri_needle);
+char* pl_reader_get_title_for_uri (PlReader* self, char** uri_needle);
 char* pl_reader_get_author_for_uri (PlReader* self, char** uri_needle);
 char* pl_reader_get_genre_for_uri (PlReader* self, char** uri_needle);
 char* pl_reader_get_album_for_uri (PlReader* self, char** uri_needle);
@@ -173,12 +179,14 @@ PlListType pl_reader_get_ptype (PlReader* self);
 const char* pl_reader_get_playlist_uri (PlReader* self);
 PlData** pl_reader_get_data_collection (PlReader* self, int* result_length1);
 GType pl_writer_get_type (void);
-PlWriter* pl_writer_new (PlListType ptype);
-PlWriter* pl_writer_construct (GType object_type, PlListType ptype);
-PlResult pl_writer_write (PlWriter* self, PlData** data, int data_length1, const char* playlist_uri, gboolean overwrite, GError** error);
-void pl_writer_write_asyn (PlWriter* self, PlData** data, int data_length1, const char* playlist_uri, gboolean overwrite, GAsyncReadyCallback _callback_, gpointer _user_data_);
+PlWriter* pl_writer_new (PlListType ptype, gboolean overwrite, gboolean absolute_uris);
+PlWriter* pl_writer_construct (GType object_type, PlListType ptype, gboolean overwrite, gboolean absolute_uris);
+PlResult pl_writer_write (PlWriter* self, PlData** data_collection, int data_collection_length1, const char* playlist_uri, GError** error);
+void pl_writer_write_asyn (PlWriter* self, PlData** data_collection, int data_collection_length1, const char* playlist_uri, GAsyncReadyCallback _callback_, gpointer _user_data_);
 PlResult pl_writer_write_asyn_finish (PlWriter* self, GAsyncResult* _res_, GError** error);
 const char* pl_writer_get_uri (PlWriter* self);
+gboolean pl_writer_get_use_absolute_uris (PlWriter* self);
+gboolean pl_writer_get_overwrite_if_exists (PlWriter* self);
 
 
 G_END_DECLS

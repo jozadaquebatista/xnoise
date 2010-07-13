@@ -90,8 +90,7 @@ bool test_m3u_reading_2() {
 	return uris[0] == t1.get_uri() && reader.get_number_of_entries() == 5;
 }
 
-//fails because resource is offline
-
+//   fails because resource is offline
 //bool test_pls_reading() {
 //	File f = File.new_for_uri("http://emisora.fundingue.com:8070/listen.pls");
 //	var reader = new Pl.Reader();
@@ -159,10 +158,90 @@ bool test_xspf_reading() {
 	return (uris[0] == "http://www.example.com/music/bar.ogg" && uris[1] == t1.get_uri());
 }
 
+bool test_asx_writing_abs_paths() {
+	File f = File.new_for_path("./playlist-examples/tmp_asx.asx");
+	File t1 = File.new_for_commandline_arg("./playlist-examples/media/Disco de datos/Musica/ILONA-BUSCANDO UN FINAL.ogg");
+	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
+	string current_title_1 = "BUSCANDO UN FINAL";
+	string current_title_2 = "everclear - SMFTA";
+	var writer = new Pl.Writer(ListType.ASX, true, true);
+	
+	Data[] data_collection = {};
+	
+	var data = new Data();
+	data.add_field(Data.Field.URI, t1.get_uri());
+	data.add_field(Data.Field.TITLE, current_title_1);
+	data_collection += data;
+	
+	data = new Data();
+	data.add_field(Data.Field.URI, t2.get_uri());
+	data.add_field(Data.Field.TITLE, current_title_2);
+	data_collection += data;
+	
+	try {
+		writer.write(data_collection, f.get_uri());
+	}
+	catch(Error e) {
+		print("asx test error writing %s\n", e.message);
+		return false;
+	}
+	
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("asx test error readwrite\n");
+		return false;
+	}
+	var uris = reader.get_found_uris();
+	return uris[0] == t1.get_uri() && reader.get_title_for_uri(ref uris[1]) == current_title_2;
+}
+
+bool test_m3u_writing_abs_paths() {
+	File f = File.new_for_path("./playlist-examples/tmp_m3u.m3u");
+	File t1 = File.new_for_commandline_arg("./playlist-examples/media/Disco de datos/Musica/ILONA-BUSCANDO UN FINAL.ogg");
+	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
+	string current_title_1 = "BUSCANDO UN FINAL";
+	string current_title_2 = "everclear - SMFTA";
+	var writer = new Pl.Writer(ListType.M3U, true, true);
+	
+	Data[] data_collection = {};
+	
+	var data = new Data();
+	data.add_field(Data.Field.URI, t1.get_uri());
+	data.add_field(Data.Field.TITLE, current_title_1); //titles are still ignored
+	data_collection += data;
+	
+	data = new Data();
+	data.add_field(Data.Field.URI, t2.get_uri());
+	data.add_field(Data.Field.TITLE, current_title_2); //titles are still ignored
+	data_collection += data;
+	
+	try {
+		writer.write(data_collection, f.get_uri());
+	}
+	catch(Error e) {
+		print("m3u test error writing %s\n", e.message);
+		return false;
+	}
+	
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("m3u test error readwrite\n");
+		return false;
+	}
+	var uris = reader.get_found_uris();
+	return uris[0] == t1.get_uri() && reader.get_title_for_uri(ref uris[1]) == current_title_2;
+}
+
 void main() {
 	print("\n");
 	// CREATE READER
-	print("m3u test reader creation:");
+	print("test reader creation:");
 	if(test_reader_creation())
 		print("\033[50Gpass\n");
 	else
@@ -210,7 +289,7 @@ void main() {
 	else
 		print("\033[50Gfail\n");
 
-		//READ PLS
+	//READ PLS
 	//	print("test pls reading:");
 	//	if(test_pls_reading())
 	//		print("\033[50Gpass\n");
@@ -238,5 +317,20 @@ void main() {
 		print("\033[50Gpass\n");
 	else
 		print("\033[50Gfail\n");
+
+	//WRITE ASX
+	print("test asx writing abs paths:");
+	if(test_asx_writing_abs_paths())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+
+	//WRITE ASX
+	print("test m3u writing abs paths:");
+	if(test_m3u_writing_abs_paths())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+
 }
 

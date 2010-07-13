@@ -71,7 +71,7 @@ namespace Pl {
 							if(file_line != null) {
 								var arrayFile = file_line.split("=");
 								if(arrayFile != null && arrayFile.length >= 2) {
-									File tmp = get_file_for_location(arrayFile[1], base_path);
+									File tmp = get_file_for_location(ref arrayFile[1], ref base_path);
 									d.add_field(Data.Field.URI, tmp.get_uri());
 								}
 							}

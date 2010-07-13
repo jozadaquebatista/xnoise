@@ -26,6 +26,26 @@ namespace Pl {
 		
 		private Data[] data_collection;
 		private File file;
+		private bool _use_absolute_uris = true;
+		private bool _overwrite_if_exists = true;
+		
+		public bool use_absolute_uris { 
+			get {
+				return _use_absolute_uris;
+			} 
+		}
+		
+		public bool overwrite_if_exists { 
+			get {
+				return _overwrite_if_exists;
+			} 
+		}
+
+
+		public FileWriter(bool overwrite, bool absolute_uris) {
+			_overwrite_if_exists = overwrite;
+			_use_absolute_uris = absolute_uris;
+		}
 
 		public override Result write(File _file, Data[] _data_collection) throws InternalWriterError {
 			this.file = _file;
@@ -39,9 +59,17 @@ namespace Pl {
 					var data_stream = new DataOutputStream(file_stream);
 					data_stream.put_string("#EXTM3U\n", null); //Playlist header
 					foreach(Data d in data_collection) {
-						if(d.get_field(Data.Field.URI) == null)
+						string tmp_uri = d.get_field(Data.Field.URI);
+						
+						if(tmp_uri == null)
 							continue;
-						data_stream.put_string(d.get_field(Data.Field.URI) + "\n", null);
+						
+						string tmp_title = d.get_field(Data.Field.TITLE);
+						
+						if(tmp_title != null)
+							data_stream.put_string("#EXTINF:-1," + tmp_title + "\n", null); // length not used
+						
+						data_stream.put_string(tmp_uri + "\n", null);
 					}
 				} 
 				catch(GLib.Error e) {

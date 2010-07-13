@@ -30,7 +30,8 @@ namespace Pl {
 
 	public errordomain WriterError {
 		UNKNOWN_TYPE,
-		SOMETHING_ELSE
+		NO_DATA,
+		NO_DEST_URI
 	}
 	
 	private errordomain InternalReaderError {
@@ -118,7 +119,7 @@ namespace Pl {
 	}
 	
 	// create a File for the absolute/relative path or uri
-	public static File get_file_for_location(string adr, string base_path = "") {
+	public static File get_file_for_location(ref string adr, ref string base_path = "") {
 		string adress = adr; //work on a copy
 		char* p = adress;
 		
@@ -145,6 +146,92 @@ namespace Pl {
 		
 		File retval = File.new_for_commandline_arg(adress);
 		return retval;
+	}
+	
+	public static ListType get_playlist_type_for_uri(ref string uri_) {
+		//What is more reliable? extension or data? 
+		//What shall happen if the extension is wrong?
+		ListType retval = get_type_by_extension(ref uri_);
+		
+		if(retval != ListType.UNKNOWN) {
+			return retval;
+		}
+		
+		retval = get_type_by_data(ref uri_);
+		
+		return retval;
+	}
+
+	public static ListType get_type_by_extension(ref string uri_) {
+		try {
+			if(uri_ != null) {
+				string uri_down = uri_.down();
+				if(uri_down.has_suffix(".asx")) {
+					return ListType.ASX;
+				}
+				else if(uri_down.has_suffix(".pls")) {
+					return ListType.PLS;
+				}
+				else if(uri_down.has_suffix(".m3u")) {
+					return ListType.M3U;
+				}
+				else if(uri_down.has_suffix(".xspf")) {
+					return ListType.XSPF;
+				}
+				else {
+					return ListType.UNKNOWN;
+				}
+			}
+			else {
+				return ListType.UNKNOWN;
+			}
+		}
+		catch(Error e) {
+			print("Error: %s\n",e.message);
+			return ListType.UNKNOWN;
+		}
+	}
+
+	public static ListType get_type_by_data(ref string uri_) {
+		string content_type = "";
+		File f = File.new_for_uri(uri_);
+		try {
+			var file_info = f.query_info("*", FileQueryInfoFlags.NONE, null);
+			//print("File size: %lld bytes\n", file_info.get_size());
+			content_type = file_info.get_content_type();
+			//string mime = g_content_type_get_mime_type(content_type);
+			//print("Mime type: %s\n",mime);
+			
+			//audio/x-ms-asx => asx
+			if(content_type == ContentType.ASX) { //"audio/x-ms-asx"
+				//print("Content type asx: %s\n", content_type);
+				return ListType.ASX;
+			}
+			//audio/x-scpls	 => pls
+			else if(content_type == ContentType.PLS) { //"audio/x-scpls"
+				//print("Content type pls: %s\n", content_type);
+				return ListType.PLS;
+			}
+			//application/vnd.apple.mpegurl
+			//audio/x-mpegurl => m3u
+			//audio/mpegurl
+			else if(content_type == ContentType.APPLE_MPEG || content_type == ContentType.X_MPEG || content_type == ContentType.MPEG) { //MPEG
+				//print("Content type m3u: %s\n", content_type);
+				return ListType.M3U;
+			}
+			else if(content_type == ContentType.XSPF) {
+				//print("Content type xspf: %s\n", content_type);
+				return ListType.XSPF;
+			}
+			else {
+				print("Other Content type: %s\n", content_type);
+				return ListType.UNKNOWN;
+			}
+		}
+		catch(Error e) {
+			print("Error: %s\n", e.message);
+			return ListType.UNKNOWN;
+		}
 	}
 }
 
