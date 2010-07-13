@@ -35,6 +35,7 @@ namespace Pl {
 	
 	private errordomain InternalReaderError {
 		UNKNOWN_TYPE,
+		INVALID_FILE,
 		SOMETHING_ELSE
 	}
 
@@ -114,6 +115,36 @@ namespace Pl {
 			return seconds;
 		
 		return -1; // string didn't match the scanning formats
+	}
+	
+	// create a File for the absolute/relative path or uri
+	public static File get_file_for_location(string adr, string base_path = "") {
+		string adress = adr; //work on a copy
+		char* p = adress;
+		
+		adress._delimit("\\", '/'); //make slashes from backslashes in place
+		
+		if((p[0].isalpha() && (!((string)(p + 1)).contains("://"))) || (p[0] == '/' && p[1] != '/')) {
+			//relative paths
+			if(p[0] == '/') {
+				adress = base_path + adress;
+			}
+			else {
+				adress = base_path + "/" + adress;
+			}
+		}
+		else if((p[0].isalpha()) && ((string)(p + 1)).has_prefix("://")) {
+			// relative to a windows drive letter
+			File base_path_file = File.new_for_commandline_arg(base_path);
+			File tmp = base_path_file.get_child(((string)p[2]));
+			adress = tmp.get_uri();
+		}
+		else if(p[0] == '/' && p[1] == '/') {
+			adress = "smb:" + adress;
+		}
+		
+		File retval = File.new_for_commandline_arg(adress);
+		return retval;
 	}
 }
 

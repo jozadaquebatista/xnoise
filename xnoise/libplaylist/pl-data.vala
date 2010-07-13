@@ -24,13 +24,15 @@
 namespace Pl {
 	public class Data {
 		public enum Field {
-			URI = 0,
-			TITLE,
-			AUTHOR,
-			GENRE,
-			ALBUM,
-			COPYRIGHT,
-			DURATION,
+			URI = 0,           // Target uri
+			TITLE,             // Title, if available, null otherwise
+			AUTHOR,            // Author, if available, null otherwise
+			GENRE,             // Genre, if available, null otherwise
+			ALBUM,             // Album, if available, null otherwise
+			COPYRIGHT,         // Copyright, if available, null otherwise
+			DURATION,          // Duration, if available, -1 otherwise
+			IS_REMOTE,         // whether the target is remote : "0" = local, "1" = remote
+			IS_PLAYLIST        // whether the target is another playlist : "0" = false, "1" = true
 		}
 		
 		private HashTable<Field, string> htable = null;
@@ -100,6 +102,22 @@ namespace Pl {
 				return -1;
 			
 			return get_duration_from_string(ref s);
+		}
+
+		public bool is_remote() {
+			string? s = htable.lookup(Field.IS_REMOTE);
+			if(s == "1")
+				return true;
+			
+			return false;
+		}
+
+		public bool is_playlist() {
+			string? s = htable.lookup(Field.IS_PLAYLIST);
+			if(s == "1")
+				return true;
+			
+			return false;
 		}
 	}
 }

@@ -5,6 +5,60 @@ bool test_reader_creation() {
 	return reader != null;
 }
 
+bool test_m3u_type_recognition() {
+	File f = File.new_for_path("./playlist-examples/test_m3u.m3u");
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("m3u test error reading\n");
+		return false;
+	}
+	//print("Size: %s\n", uris.length.to_string());
+	return reader.ptype == ListType.M3U;
+}
+
+bool test_pls_type_recognition() {
+	File f = File.new_for_path("./playlist-examples/pls_test.pls");
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("pls test error reading\n");
+		return false;
+	}
+	return reader.ptype == ListType.PLS;
+}
+
+bool test_asx_type_recognition() {
+	File f = File.new_for_path("./playlist-examples/asx_test.asx");
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("asx test error reading\n");
+		return false;
+	}
+	return reader.ptype == ListType.ASX;
+}
+
+bool test_xspf_type_recognition() {
+	File f = File.new_for_path("./playlist-examples/xspf.xspf");
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("xspf test error reading\n");
+		return false;
+	}
+	return reader.ptype == ListType.XSPF;
+}
+
+
 bool test_m3u_reading() {
 	File f = File.new_for_path("./playlist-examples/test_m3u.m3u");
 	var reader = new Pl.Reader();
@@ -17,11 +71,47 @@ bool test_m3u_reading() {
 	}
 	var uris = reader.get_found_uris();
 	//print("Size: %s\n", uris.length.to_string());
-	return uris[0] == "http://media.example.com/entire.ts";
+	return uris[0] == "http://media.example.com/entire.ts" && reader.get_number_of_entries() == 1;
 }
 
-bool test_pls_reading() {
-	File f = File.new_for_uri("http://emisora.fundingue.com:8070/listen.pls");
+bool test_m3u_reading_2() {
+	File f = File.new_for_path("./playlist-examples/test_ext_m3u.m3u");
+	File t1 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("m3u test error reading\n");
+		return false;
+	}
+	var uris = reader.get_found_uris();
+	//print("Size: %s\n", uris.length.to_string());
+	return uris[0] == t1.get_uri() && reader.get_number_of_entries() == 5;
+}
+
+//fails because resource is offline
+
+//bool test_pls_reading() {
+//	File f = File.new_for_uri("http://emisora.fundingue.com:8070/listen.pls");
+//	var reader = new Pl.Reader();
+//	try {
+//		reader.read(f.get_uri());
+//	}
+//	catch(Error e) {
+//		print("pls test error reading\n");
+//		return false;
+//	}
+//	var uris = reader.get_found_uris();
+//	//print("Size: %s\n", uris.length.to_string());
+//	//print("Url0: %s\n",uris[0]);
+//	return uris[0] == "http://emisora.fundingue.com:8070/";
+//}
+
+bool test_pls_reading_2() {
+	File f = File.new_for_path("./playlist-examples/pls_test.pls");
+	File t1 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
+	File t5 = File.new_for_commandline_arg("http://www.site.com:8000/listen.pls");
 	var reader = new Pl.Reader();
 	try {
 		reader.read(f.get_uri());
@@ -30,10 +120,11 @@ bool test_pls_reading() {
 		print("pls test error reading\n");
 		return false;
 	}
-	var uris = reader.get_found_uris();
-	//print("Size: %s\n", uris.length.to_string());
-	//print("Url0: %s\n",uris[0]);
-	return uris[0] == "http://emisora.fundingue.com:8070/";
+	var uri1 = reader.data_collection[0].get_uri();
+	var uri5 = reader.data_collection[4].get_uri();
+	//print("\nXX: %s\nXX: %s\n", uri1, uri5);
+
+	return (uri1 == t1.get_uri()) && (uri5 == t5.get_uri()) && (reader.get_number_of_entries() == 5);
 }
 
 bool test_asx_reading() {
@@ -53,6 +144,7 @@ bool test_asx_reading() {
 
 bool test_xspf_reading() {
 	File f = File.new_for_path("./playlist-examples/xspf.xspf");
+	File t1 = File.new_for_commandline_arg("./playlist-examples/media/Disco de datos/Musica/ILONA-BUSCANDO UN FINAL.ogg");
 	var reader = new Pl.Reader();
 	try {
 		reader.read(f.get_uri());
@@ -62,8 +154,9 @@ bool test_xspf_reading() {
 		return false;
 	}
 	var uris = reader.get_found_uris();
+	//print(" %s\n", uris[0]);
 	//print("Size: %s\n", uris.length.to_string());
-	return uris[0] == "http://www.example.com/music/bar.ogg";
+	return (uris[0] == "http://www.example.com/music/bar.ogg" && uris[1] == t1.get_uri());
 }
 
 void main() {
@@ -75,20 +168,62 @@ void main() {
 	else
 		print("\033[50Gfail\n");
 
+	// RECOGNIZE M3U TYPE
+	print("test m3u type recognition:");
+	if(test_m3u_type_recognition())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+
+	// RECOGNIZE PLS TYPE
+	print("test pls type recognition:");
+	if(test_pls_type_recognition())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+
+	// RECOGNIZE XSPF TYPE
+	print("test xspf type recognition:");
+	if(test_xspf_type_recognition())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+
+	// RECOGNIZE ASX TYPE
+	print("test asx type recognition:");
+	if(test_asx_type_recognition())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+
 	// READ M3U
 	print("test m3u reading:");
 	if(test_m3u_reading())
 		print("\033[50Gpass\n");
 	else
 		print("\033[50Gfail\n");
-
-	//READ PLS
-	print("test pls reading:");
-	if(test_pls_reading())
+		
+	// READ M3U 2
+	print("test m3u reading 2:");
+	if(test_m3u_reading_2())
 		print("\033[50Gpass\n");
 	else
 		print("\033[50Gfail\n");
 
+		//READ PLS
+	//	print("test pls reading:");
+	//	if(test_pls_reading())
+	//		print("\033[50Gpass\n");
+	//	else
+	//		print("\033[50Gfail\n");
+
+	//READ PLS
+	print("test pls reading 2:");
+	if(test_pls_reading_2())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+		
 	//READ ASX
 	print("test asx reading:");
 	if(test_asx_reading())

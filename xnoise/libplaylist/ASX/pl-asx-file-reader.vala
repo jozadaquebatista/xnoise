@@ -28,6 +28,7 @@ namespace Pl {
 		public override Data[] read(File _file) throws InternalReaderError {
 			Data[] data_collection = {};
 			this.file = _file;
+			set_base_path();
 			
 			var entry_on = false;
 		
@@ -60,14 +61,13 @@ namespace Pl {
 							if(line.contains("<ref")) {
 								string[] array_ref = line.split("\"");
 								if(array_ref != null && array_ref.length == 3) {
-									File tmp = File.new_for_commandline_arg(array_ref[1]);
+									File tmp = get_file_for_location(array_ref[1], base_path);
 									d.add_field(Data.Field.URI, tmp.get_uri());
 								}
 							}
 						}
 					}
-					if(d.get_field(Data.Field.URI) != null)
-						data_collection += d;
+					data_collection += d;
 				}
 			} 
 			catch(GLib.Error e) {
@@ -79,7 +79,12 @@ namespace Pl {
 		public override async Data[] read_asyn(File _file) throws InternalReaderError {
 			Data[] data_collection = {};
 			this.file = _file;
+			set_base_path();
 			return data_collection;
+		}
+
+		protected override void set_base_path() {
+			base_path = file.get_parent().get_uri();
 		}
 	}
 }

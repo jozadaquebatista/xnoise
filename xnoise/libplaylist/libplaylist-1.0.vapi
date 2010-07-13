@@ -24,7 +24,9 @@ namespace Pl {
 			GENRE,
 			ALBUM,
 			COPYRIGHT,
-			DURATION
+			DURATION,
+			IS_REMOTE,
+			IS_PLAYLIST
 		}
 		public Data ();
 		public void add_field (Pl.Data.Field field, string val);
@@ -38,6 +40,8 @@ namespace Pl {
 		public string? get_genre ();
 		public string? get_title ();
 		public string? get_uri ();
+		public bool is_playlist ();
+		public bool is_remote ();
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Reader : GLib.Object {
@@ -50,9 +54,13 @@ namespace Pl {
 		public string? get_duration_string_for_uri (ref string uri_needle);
 		public string[] get_found_uris ();
 		public string? get_genre_for_uri (ref string uri_needle);
+		public bool get_is_playlist_for_uri (ref string uri_needle);
+		public bool get_is_remote_for_uri (ref string uri_needle);
+		public int get_number_of_entries ();
 		public string? get_tile_for_uri (ref string uri_needle);
 		public Pl.Result read (string list_uri) throws Pl.ReaderError;
 		public async Pl.Result read_async (string list_uri) throws Pl.ReaderError;
+		public Pl.Data[] data_collection { get; }
 		public string playlist_uri { get; }
 		public Pl.ListType ptype { get; }
 	}
@@ -94,4 +102,6 @@ namespace Pl {
 	public static bool debug;
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static long get_duration_from_string (ref string? duration_string);
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static GLib.File get_file_for_location (string adr, string base_path = "");
 }

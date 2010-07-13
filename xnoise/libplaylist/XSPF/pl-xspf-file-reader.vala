@@ -29,49 +29,67 @@ namespace Pl {
 		public override Data[] read(File _file) throws InternalReaderError {
 			Data[] data_collection = {};
 			this.file = _file;
+			set_base_path();
 			
 			var entry_on = false;
 		
-			if(!file.get_uri().has_prefix("http://") && !file.query_exists(null)) {
+			if(!file.query_exists(null)) {
 				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
 				return data_collection;
 			}
-
 			try {
 				var in_stream = new DataInputStream(file.read(null));
 				string line;
+				Data? d = null;
 				while((line = in_stream.read_line(null, null)) != null) {
-					var d = new Data();
 					if(line.has_prefix("#")) { //# Comments
 						continue;
-					} 
+					}
 					else if(line.size() == 0) { //Blank line
 						continue;
-					} 
+					}
 					else if(line.contains("<track>")) {
 						entry_on = true;
+						//print("prepare new entry\n");
+						d = new Data();
 						continue;
-					} 
+					}
 					else if(line.contains("</track>")) {
 						entry_on = false;
-						//print("\n");
+						//print("add entry\n");
+						data_collection += d;
 						continue;
-					} 
-					else {
-						if(entry_on) {
-							if(line.contains("<location")) {
-								line = line.replace("<location>","");
-								line = line.replace("</location>","");
-								line = line.strip();
-								File tmp = File.new_for_commandline_arg(line);
+					}
+					else if(entry_on) { // Can we always assume that this is in one line???
+						if(line.contains("<location")) {
+							line = line.replace("<location>","");
+							line = line.replace("</location>","");
+							line = line.strip();
+							if(d != null) {
+								File tmp = get_file_for_location(line, base_path);
 								d.add_field(Data.Field.URI, tmp.get_uri());
+							}
+							else {
+								throw new InternalReaderError.INVALID_FILE("Error not in track (location). Invalide playlist file\n");
+							}
+						}
+						if(line.contains("<title")) {
+							line = line.replace("<title>","");
+							line = line.replace("</title>","");
+							line = line.strip();
+							if(d != null) {
+								d.add_field(Data.Field.TITLE, line);
+							}
+							else {
+								throw new InternalReaderError.INVALID_FILE("Error not in track (title). Invalide playlist file\n");
 							}
 						}
 					}
-					if(d.get_field(Data.Field.URI) != null)
-						data_collection += d;
+					else {
+						continue;
+					}
 				}
-			} 
+			}
 			catch(GLib.Error e) {
 				print("Error: %s\n", e.message); 
 			}
@@ -81,7 +99,12 @@ namespace Pl {
 		public override async Data[] read_asyn(File _file) throws InternalReaderError {
 			Data[] data_collection = {};
 			this.file = _file;
+			set_base_path();
 			return data_collection;
+		}
+		
+		protected override void set_base_path() {
+			base_path = file.get_parent().get_uri();
 		}
 	}
 }

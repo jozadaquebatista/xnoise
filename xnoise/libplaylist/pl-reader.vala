@@ -23,8 +23,8 @@
 
 namespace Pl {
 	public class Reader : GLib.Object {
-		// _pl_data is the collection of data entries in one playlist
-		private Data[] _pl_data;
+		// _data_collection is the collection of data entries in one playlist
+		private Data[] _data_collection;
 		private File? file = null;
 		private ListType _ptype;
 		private AbstractFileReader? plfile_reader = null;
@@ -46,19 +46,26 @@ namespace Pl {
 			} 
 		}
 		
+		public Data[] data_collection {
+			get {
+				return _data_collection;
+			} 
+		}
+		
+		
+		//Constructor
 		public Reader() {
-			_pl_data = {};
+			_data_collection = {};
 			read_in_progress_mutex = new Mutex();
 		}
 		
-		//Constructor
 		public Result read(string list_uri) throws ReaderError {
 			Result ret = Result.UNHANDLED;
 			_playlist_uri = list_uri;
 			file = File.new_for_uri(_playlist_uri);
 			
 			read_in_progress_mutex.lock();
-			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri);
+			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri, ref _ptype);
 			
 			if(plfile_reader == null) {
 				return Result.ERROR;
@@ -75,7 +82,7 @@ namespace Pl {
 			_playlist_uri = list_uri;
 			file = File.new_for_uri(_playlist_uri);
 
-			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri);
+			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri, ref _ptype);
 			
 			if(plfile_reader == null) {
 				return Result.ERROR;
@@ -89,13 +96,13 @@ namespace Pl {
 
 		private Result read_internal() {
 			try {
-				_pl_data = plfile_reader.read(file);
+				_data_collection = plfile_reader.read(file);
 			}
 			catch(Error e) {
 				print("%sn", e.message);
 				return Result.ERROR;
 			}
-			if(_pl_data == null)
+			if(_data_collection == null)
 				return Result.EMPTY;
 			else
 				return Result.SUCCESS;
@@ -103,13 +110,13 @@ namespace Pl {
 
 		private async Result read_async_internal() {
 			try {
-				_pl_data = yield plfile_reader.read_asyn(file);
+				_data_collection = yield plfile_reader.read_asyn(file);
 			}
 			catch(InternalReaderError e) {
 				print("%sn", e.message);
 				return Result.ERROR;
 			}
-			if(_pl_data == null)
+			if(_data_collection == null)
 				return Result.EMPTY;
 			else
 				return Result.SUCCESS;
@@ -118,9 +125,9 @@ namespace Pl {
 
 		//static functions to setup reader
 		
-		private static AbstractFileReader? get_playlist_file_reader_for_uri(ref string uri_) {
+		private static AbstractFileReader? get_playlist_file_reader_for_uri(ref string uri_ , ref ListType current_type) {
 			//TODO: return the right implementation of PlaylistReader
-			ListType current_type = get_playlist_type_for_uri(ref uri_);
+			current_type = get_playlist_type_for_uri(ref uri_);
 			switch(current_type) {
 				case ListType.ASX:
 					AbstractFileReader ret = new Asx.FileReader();
@@ -189,8 +196,9 @@ namespace Pl {
 				var file_info = f.query_info("*", FileQueryInfoFlags.NONE, null);
 				//print("File size: %lld bytes\n", file_info.get_size());
 				content_type = file_info.get_content_type();
-				string mime = g_content_type_get_mime_type(content_type);
+				//string mime = g_content_type_get_mime_type(content_type);
 				//print("Mime type: %s\n",mime);
+				
 				//audio/x-ms-asx => asx
 				if(content_type == ContentType.ASX) { //"audio/x-ms-asx"
 					//print("Content type asx: %s\n", content_type);
@@ -227,12 +235,12 @@ namespace Pl {
 		// functions to retrieve found data
 		
 		public bool data_available() {
-			return _pl_data.length > 0;
+			return _data_collection.length > 0;
 		}
 		
 		public string[] get_found_uris() {
 			string[] retval = {};
-			foreach(Data d in _pl_data) {
+			foreach(Data d in _data_collection) {
 				if(d.get_uri() != null)
 					retval += d.get_uri();
 			}
@@ -241,7 +249,7 @@ namespace Pl {
 	
 		public string? get_tile_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in _pl_data) {
+			foreach(Data d in _data_collection) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_title();
 					break;
@@ -251,7 +259,7 @@ namespace Pl {
 		}
 		public string? get_author_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in _pl_data) {
+			foreach(Data d in _data_collection) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_author();
 					break;
@@ -262,7 +270,7 @@ namespace Pl {
 		
 		public string? get_genre_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in _pl_data) {
+			foreach(Data d in _data_collection) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_genre();
 					break;
@@ -273,7 +281,7 @@ namespace Pl {
 		
 		public string? get_album_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in _pl_data) {
+			foreach(Data d in _data_collection) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_album();
 					break;
@@ -284,7 +292,7 @@ namespace Pl {
 		
 		public string? get_copyright_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in _pl_data) {
+			foreach(Data d in _data_collection) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_copyright();
 					break;
@@ -295,7 +303,7 @@ namespace Pl {
 
 		public string? get_duration_string_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in _pl_data) {
+			foreach(Data d in _data_collection) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_duration_string();
 					break;
@@ -306,13 +314,35 @@ namespace Pl {
 
 		public long get_duration_for_uri(ref string uri_needle) {
 			long retval = -1;
-			foreach(Data d in _pl_data) {
+			foreach(Data d in _data_collection) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_duration();
 					break;
 				}
 			}
 			return retval;
+		}
+
+		public bool get_is_remote_for_uri(ref string uri_needle) {
+			foreach(Data d in _data_collection) {
+				if(d.get_uri() == uri_needle) {
+					return d.is_remote();
+				}
+			}
+			return false;
+		}
+
+		public bool get_is_playlist_for_uri(ref string uri_needle) {
+			foreach(Data d in _data_collection) {
+				if(d.get_uri() == uri_needle) {
+					return d.is_playlist();
+				}
+			}
+			return false;
+		}
+		
+		public int get_number_of_entries() {
+			return _data_collection.length;
 		}
 	}
 }

@@ -29,6 +29,7 @@ namespace Pl {
 		public override Data[] read(File _file) throws InternalReaderError {
 			Data[] data_collection = {};
 			this.file = _file;
+			set_base_path();
 			
 			if(!file.get_uri().has_prefix("http://") && !file.query_exists(null)) {
 				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
@@ -56,7 +57,7 @@ namespace Pl {
 								continue;
 
 							var d = new Data();
-							File tmp = File.new_for_commandline_arg(line);
+							File tmp = get_file_for_location(line, base_path);
 							d.add_field(Data.Field.URI, tmp.get_uri());
 							data_collection += d;
 						}
@@ -72,7 +73,12 @@ namespace Pl {
 		public override async Data[] read_asyn(File _file) throws InternalReaderError {
 			Data[] data_collection = {};
 			this.file = _file;
+			set_base_path();
 			return data_collection;
+		}
+		
+		protected override void set_base_path() {
+			base_path = file.get_parent().get_uri();
 		}
 	}
 }

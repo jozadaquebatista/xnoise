@@ -7,8 +7,8 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -97,7 +97,9 @@ typedef enum  {
 	PL_DATA_FIELD_GENRE,
 	PL_DATA_FIELD_ALBUM,
 	PL_DATA_FIELD_COPYRIGHT,
-	PL_DATA_FIELD_DURATION
+	PL_DATA_FIELD_DURATION,
+	PL_DATA_FIELD_IS_REMOTE,
+	PL_DATA_FIELD_IS_PLAYLIST
 } PlDataField;
 
 struct _PlReader {
@@ -125,6 +127,7 @@ GType pl_list_type_get_type (void);
 GType pl_result_get_type (void);
 extern gboolean pl_debug;
 glong pl_get_duration_from_string (char** duration_string);
+GFile* pl_get_file_for_location (const char* adr, const char* base_path);
 gpointer pl_data_ref (gpointer instance);
 void pl_data_unref (gpointer instance);
 GParamSpec* pl_param_spec_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -146,6 +149,8 @@ char* pl_data_get_album (PlData* self);
 char* pl_data_get_copyright (PlData* self);
 char* pl_data_get_duration_string (PlData* self);
 glong pl_data_get_duration (PlData* self);
+gboolean pl_data_is_remote (PlData* self);
+gboolean pl_data_is_playlist (PlData* self);
 GType pl_reader_get_type (void);
 PlReader* pl_reader_new (void);
 PlReader* pl_reader_construct (GType object_type);
@@ -161,8 +166,12 @@ char* pl_reader_get_album_for_uri (PlReader* self, char** uri_needle);
 char* pl_reader_get_copyright_for_uri (PlReader* self, char** uri_needle);
 char* pl_reader_get_duration_string_for_uri (PlReader* self, char** uri_needle);
 glong pl_reader_get_duration_for_uri (PlReader* self, char** uri_needle);
+gboolean pl_reader_get_is_remote_for_uri (PlReader* self, char** uri_needle);
+gboolean pl_reader_get_is_playlist_for_uri (PlReader* self, char** uri_needle);
+gint pl_reader_get_number_of_entries (PlReader* self);
 PlListType pl_reader_get_ptype (PlReader* self);
 const char* pl_reader_get_playlist_uri (PlReader* self);
+PlData** pl_reader_get_data_collection (PlReader* self, int* result_length1);
 GType pl_writer_get_type (void);
 PlWriter* pl_writer_new (PlListType ptype);
 PlWriter* pl_writer_construct (GType object_type, PlListType ptype);

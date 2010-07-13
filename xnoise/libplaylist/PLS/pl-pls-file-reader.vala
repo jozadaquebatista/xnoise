@@ -29,8 +29,8 @@ namespace Pl {
 		public override Data[] read(File _file) throws InternalReaderError {
 			Data[] data_collection = {};
 			this.file = _file;
-
-			if (!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
+			set_base_path();
+			if(!file.query_exists(null)) { 
 				stderr.printf ("File '%s' doesn't exist.\n", file.get_uri());
 				return data_collection;
 			}
@@ -45,39 +45,38 @@ namespace Pl {
 					if ( !line.has_prefix( "[playlist]" ) ) {
 						return data_collection;
 					}
-
+					Data d = null;
 					while ((line = in_stream.read_line (null, null)) != null) {
-						var d = new Data();
+						
 						//Ignore blank line
 						if( line.size() == 0 ) { 
 							continue; 
 						}
 
-						if( line.down().contains("numberofentries") ) {
+						if(line.down().contains("numberofentries")) {
 							var arrayNumberOfEntries = line.split("=");
 
-							if( arrayNumberOfEntries.length == 2 ) {
-								numberofentries = arrayNumberOfEntries[1].to_int();   
+							if(arrayNumberOfEntries.length == 2) {
+								numberofentries = arrayNumberOfEntries[1].to_int();
 								//print("There are %d entries: \n", numberofentries);
 							}
 							continue;
 						}
-
-						if( line.has_prefix("File") ) {        
+						if(line.has_prefix("File")) {
+							//TODO: handle title and length for current entry
+							d = new Data();
 							string file_line = line;
-							string title_line = in_stream.read_line (null, null);
-							string length_line = in_stream.read_line (null, null);
-
+							//string title_line = in_stream.read_line (null, null);
+							//string length_line = in_stream.read_line (null, null);
 							if(file_line != null) {
 								var arrayFile = file_line.split("=");
 								if(arrayFile != null && arrayFile.length >= 2) {
-									File tmp = File.new_for_commandline_arg(arrayFile[1]);
+									File tmp = get_file_for_location(arrayFile[1], base_path);
 									d.add_field(Data.Field.URI, tmp.get_uri());
 								}
 							}
-						}
-						if(d.get_field(Data.Field.URI) != null)
 							data_collection += d;
+						}
 					}
 				}
 			} 
@@ -91,7 +90,12 @@ namespace Pl {
 		public override async Data[] read_asyn(File _file) throws InternalReaderError {
 			Data[] data_collection = {};
 			this.file = _file;
+			set_base_path();
 			return data_collection;
+		}
+
+		protected override void set_base_path() {
+			base_path = file.get_parent().get_uri();
 		}
 	}
 }
