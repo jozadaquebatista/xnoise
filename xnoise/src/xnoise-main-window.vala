@@ -275,11 +275,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_fullscreenwindowvisible(GLib.ParamSpec pspec) {
-		if(fullscreenwindowvisible) ssm.inhibit();
-		else ssm.uninhibit();
+		handle_screensaver();
+		if(fullscreenwindowvisible)
+			global.track_state_changed.connect(handle_screensaver);
 		
 		this.showvideobuttonTL.set_sensitive(!fullscreenwindowvisible);
 		this.showvideobuttonLY.set_sensitive(!fullscreenwindowvisible);
+	}
+	
+	private void handle_screensaver() {
+		if(fullscreenwindowvisible) {
+			if (global.track_state == GlobalAccess.TrackState.PLAYING) ssm.inhibit();
+			else ssm.uninhibit();
+		}
+		else {
+			global.track_state_changed.disconnect(handle_screensaver);
+			ssm.uninhibit();
+		}
 	}
 
 	private void add_lastused_titles_to_tracklist() {
