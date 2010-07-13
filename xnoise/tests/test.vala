@@ -238,6 +238,47 @@ bool test_m3u_writing_abs_paths() {
 	return uris[0] == t1.get_uri() && reader.get_title_for_uri(ref uris[1]) == current_title_2;
 }
 
+bool test_pls_writing_abs_paths() {
+	File f = File.new_for_path("./playlist-examples/tmp_pls.pls");
+	File t1 = File.new_for_commandline_arg("./playlist-examples/media/Disco de datos/Musica/ILONA-BUSCANDO UN FINAL.ogg");
+	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
+	string current_title_1 = "BUSCANDO UN FINAL";
+	string current_title_2 = "everclear - SMFTA";
+	var writer = new Pl.Writer(ListType.PLS, true, true);
+	
+	DataCollection data_collection = new DataCollection();
+	
+	var data = new Data();
+	data.add_field(Data.Field.URI, t1.get_uri());
+	data.add_field(Data.Field.TITLE, current_title_1); //titles are still ignored
+	data_collection.add(data);
+	
+	data = new Data();
+	data.add_field(Data.Field.URI, t2.get_uri());
+	data.add_field(Data.Field.TITLE, current_title_2); //titles are still ignored
+	data_collection.add(data);
+	
+	try {
+		writer.write(data_collection, f.get_uri());
+	}
+	catch(Error e) {
+		print("pls test error writing %s\n", e.message);
+		return false;
+	}
+	
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("pls test error readwrite\n");
+		return false;
+	}
+	var uris = reader.get_found_uris();
+	print("uris[1] get title: %s\n", reader.get_title_for_uri(ref uris[1]));
+	return uris[0] == t1.get_uri() && reader.get_title_for_uri(ref uris[1]) == current_title_2;
+}
+
 void main() {
 	print("\n");
 	// CREATE READER
@@ -325,9 +366,16 @@ void main() {
 	else
 		print("\033[50Gfail\n");
 
-	//WRITE ASX
+	//WRITE M3U
 	print("test m3u writing abs paths:");
 	if(test_m3u_writing_abs_paths())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+
+	//WRITE PLS
+	print("test pls writing abs paths:");
+	if(test_pls_writing_abs_paths())
 		print("\033[50Gpass\n");
 	else
 		print("\033[50Gfail\n");
