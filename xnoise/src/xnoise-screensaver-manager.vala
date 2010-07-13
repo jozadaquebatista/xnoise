@@ -22,13 +22,16 @@ namespace Xnoise {
 		}
 			
 		public bool inhibit() {
-			//message("calling Inhibit");
-			if (backend == null) return false;
+			message("calling Inhibit");
+			if (backend == null) {
+				print("cannot suspend screensaver, install xdg-utils");
+				return false;
+			}
 			return backend.inhibit();
 		}
 	
 		public bool uninhibit() {
-			//message("calling UnInhibit");
+			message("calling UnInhibit");
 			if (backend == null) return false;
 			return backend.uninhibit();
 		}
