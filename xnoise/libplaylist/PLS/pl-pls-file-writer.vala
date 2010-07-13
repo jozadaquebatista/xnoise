@@ -24,7 +24,7 @@ namespace Pl {
 	// base class for all playlist filewriter implementations
 	private class Pls.FileWriter : AbstractFileWriter {
 		
-		private Data[] data_collection;
+		private DataCollection data_collection;
 		private File file;
 		private bool _use_absolute_uris = true;
 		private bool _overwrite_if_exists = true;
@@ -47,10 +47,10 @@ namespace Pl {
 			_use_absolute_uris = absolute_uris;
 		}
 
-		public override Result write(File _file, Data[] _data_collection) throws InternalWriterError {
+		public override Result write(File _file, DataCollection _data_collection) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
-			if(data_collection != null && data_collection.length > 0) {
+			if(data_collection != null && data_collection.get_size() > 0) {
 				try {
 					if(file.query_exists(null)) {
 						file.delete(null);
@@ -69,7 +69,7 @@ namespace Pl {
 						data_stream.put_string("Length" +i.to_string() + "=" + "-1\n\n", null);
 						i++;
 					}
-					data_stream.put_string("NumberOfEntries=" + data_collection.length.to_string() + "\n", null);
+					data_stream.put_string("NumberOfEntries=" + data_collection.get_size().to_string() + "\n", null);
 					data_stream.put_string("Version=2\n", null);
 				}
 				catch(GLib.Error e) {
@@ -79,7 +79,7 @@ namespace Pl {
 			return Result.UNHANDLED;
 		}
 		
-		public override async Result write_asyn(File _file, Data[] _data_collection) throws InternalWriterError {
+		public override async Result write_asyn(File _file, DataCollection _data_collection) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
 			return Result.UNHANDLED;

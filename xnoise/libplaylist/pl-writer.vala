@@ -23,7 +23,7 @@
 
 namespace Pl {
 	public class Writer : GLib.Object {
-		private Data[] pl_data = null;
+		private DataCollection pl_data = null;
 		private AbstractFileWriter? plfile_writer = null;
 		private File file = null;
 		private Mutex write_in_progress_mutex;
@@ -61,7 +61,7 @@ namespace Pl {
 	
 	
 		// write playlist data to file
-		public Result write(Data[] data_collection, string playlist_uri) throws WriterError { // TODO: handle overwrite
+		public Result write(DataCollection data_collection, string playlist_uri) throws WriterError { // TODO: handle overwrite
 			
 			if(data_collection == null)
 				throw new WriterError.NO_DATA("No data was provided. Playlist cannot be created.");
@@ -90,7 +90,7 @@ namespace Pl {
 		}
 
 		// write playlist data to file (async version)
-		public async Result write_asyn(Data[] data_collection, string playlist_uri) throws WriterError {
+		public async Result write_asyn(DataCollection data_collection, string playlist_uri) throws WriterError {
 			
 			if(data_collection == null)
 				throw new WriterError.NO_DATA("No data was provided. Playlist cannot be created.");

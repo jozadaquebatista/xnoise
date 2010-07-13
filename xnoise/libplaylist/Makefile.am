@@ -30,6 +30,7 @@ libplaylist_la_SOURCES = \
 	pl-abstract-file-writer.vala \
 	pl-general.vala \
 	pl-data.vala \
+	pl-data-collection.vala \
 	pl-reader.vala \
 	pl-writer.vala \
 	ASX/pl-asx-file-reader.vala \

@@ -31,8 +31,8 @@ namespace Pl {
 			lines_buf = {};
 		}
 		
-		public override Data[] read(File _file) throws InternalReaderError {
-			Data[] data_collection = {};
+		public override DataCollection read(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
 			
@@ -44,7 +44,6 @@ namespace Pl {
 			try {
 				var in_stream = new DataInputStream(file.read(null));
 				string line;
-				string next_line = "";
 
 				//Read header => #M3U o #EXTM3U
 				if((line = in_stream.read_line(null, null)) != null) {
@@ -99,7 +98,7 @@ namespace Pl {
 								if(title != "") {
 									d.add_field(Data.Field.TITLE, title);
 								}
-								data_collection += d;
+								data_collection.add(d);
 							}
 						}
 					}
@@ -142,8 +141,8 @@ namespace Pl {
 			return false;
 		}
 
-		public override async Data[] read_asyn(File _file) throws InternalReaderError {
-			Data[] data_collection = {};
+		public override async DataCollection read_asyn(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
 			return data_collection;

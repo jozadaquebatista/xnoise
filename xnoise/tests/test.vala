@@ -166,17 +166,17 @@ bool test_asx_writing_abs_paths() {
 	string current_title_2 = "everclear - SMFTA";
 	var writer = new Pl.Writer(ListType.ASX, true, true);
 	
-	Data[] data_collection = {};
+	DataCollection data_collection = new DataCollection();
 	
 	var data = new Data();
 	data.add_field(Data.Field.URI, t1.get_uri());
 	data.add_field(Data.Field.TITLE, current_title_1);
-	data_collection += data;
+	data_collection.add(data);
 	
 	data = new Data();
 	data.add_field(Data.Field.URI, t2.get_uri());
 	data.add_field(Data.Field.TITLE, current_title_2);
-	data_collection += data;
+	data_collection.add(data);
 	
 	try {
 		writer.write(data_collection, f.get_uri());
@@ -206,17 +206,17 @@ bool test_m3u_writing_abs_paths() {
 	string current_title_2 = "everclear - SMFTA";
 	var writer = new Pl.Writer(ListType.M3U, true, true);
 	
-	Data[] data_collection = {};
+	DataCollection data_collection = new DataCollection();
 	
 	var data = new Data();
 	data.add_field(Data.Field.URI, t1.get_uri());
 	data.add_field(Data.Field.TITLE, current_title_1); //titles are still ignored
-	data_collection += data;
+	data_collection.add(data);
 	
 	data = new Data();
 	data.add_field(Data.Field.URI, t2.get_uri());
 	data.add_field(Data.Field.TITLE, current_title_2); //titles are still ignored
-	data_collection += data;
+	data_collection.add(data);
 	
 	try {
 		writer.write(data_collection, f.get_uri());

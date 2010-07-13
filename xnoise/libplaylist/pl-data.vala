@@ -98,6 +98,14 @@ namespace Pl {
 			return htable.lookup(Field.DURATION);
 		}
 
+		public string? get_param_name() {
+			return htable.lookup(Field.PARAM_NAME);
+		}
+
+		public string? get_param_value() {
+			return htable.lookup(Field.PARAM_VALUE);
+		}
+
 		public long get_duration() {
 			string? s = htable.lookup(Field.DURATION);
 			if(s == null)

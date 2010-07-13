@@ -25,8 +25,8 @@ namespace Pl {
 	private class Asx.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override Data[] read(File _file) throws InternalReaderError {
-			Data[] data_collection = {};
+		public override DataCollection read(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
 			
@@ -55,7 +55,7 @@ namespace Pl {
 					}
 					else if(line.contains("</entry>")) {
 						entry_on = false;
-						data_collection += d;
+						data_collection.add(d);
 						continue;
 					}
 					else {
@@ -90,8 +90,8 @@ namespace Pl {
 			return data_collection;
 		}
 
-		public override async Data[] read_asyn(File _file) throws InternalReaderError {
-			Data[] data_collection = {};
+		public override async DataCollection read_asyn(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
 			return data_collection;

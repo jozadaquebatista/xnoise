@@ -27,8 +27,8 @@ namespace Pl {
 		public signal void started(string playlist_uri);
 		public signal void finished(string playlist_uri);
 
-		public abstract Result write(File file, Data[] data_collection) throws InternalWriterError;
-		public abstract async Result write_asyn(File file, Data[] data_collection) throws InternalWriterError;
+		public abstract Result write(File file, DataCollection data_collection) throws InternalWriterError;
+		public abstract async Result write_asyn(File file, DataCollection data_collection) throws InternalWriterError;
 	}
 }
 

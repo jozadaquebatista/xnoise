@@ -26,8 +26,8 @@ namespace Pl {
 	private class Pls.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override Data[] read(File _file) throws InternalReaderError {
-			Data[] data_collection = {};
+		public override DataCollection read(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
 			if(!file.query_exists(null)) { 
@@ -75,7 +75,7 @@ namespace Pl {
 									d.add_field(Data.Field.URI, tmp.get_uri());
 								}
 							}
-							data_collection += d;
+							data_collection.add(d);
 						}
 					}
 				}
@@ -87,8 +87,8 @@ namespace Pl {
 			return data_collection;
 		}
 
-		public override async Data[] read_asyn(File _file) throws InternalReaderError {
-			Data[] data_collection = {};
+		public override async DataCollection read_asyn(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
 			return data_collection;

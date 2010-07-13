@@ -25,7 +25,7 @@ namespace Pl {
 	// base class for all playlist filewriter implementations
 	private class Xspf.FileWriter : AbstractFileWriter {
 	
-		private Data[] data_collection;
+		private DataCollection data_collection;
 		private File file;
 		private bool _use_absolute_uris = true;
 		private bool _overwrite_if_exists = true;
@@ -48,10 +48,10 @@ namespace Pl {
 			_use_absolute_uris = absolute_uris;
 		}
 
-		public override Result write(File _file, Data[] _data_collection) throws InternalWriterError {
+		public override Result write(File _file, DataCollection _data_collection) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
-			if(data_collection != null && data_collection.length > 0) {
+			if(data_collection != null && data_collection.get_size() > 0) {
 				try {
 					if(file.query_exists(null)) {
 						file.delete(null);
@@ -81,7 +81,7 @@ namespace Pl {
 			return Result.SUCCESS;
 		}
 		
-		public override async Result write_asyn(File _file, Data[] _data_collection) throws InternalWriterError {
+		public override async Result write_asyn(File _file, DataCollection _data_collection) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
 			return Result.UNHANDLED;
