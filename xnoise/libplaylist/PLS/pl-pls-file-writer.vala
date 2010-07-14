@@ -64,8 +64,8 @@ namespace Pl {
 					foreach(Data d in data_collection) {
 						if(d.get_field(Data.Field.URI) == null)
 							continue;
-						data_stream.put_string("File" +i.to_string() + "=" + d.get_field(Data.Field.URI) + "\n", null);
-						data_stream.put_string("Title" +i.to_string() + "=" + "\n", null);
+						data_stream.put_string("File" +i.to_string() + "=" + d.get_uri() + "\n", null);
+						data_stream.put_string("Title" +i.to_string() + "=" + d.get_title()  + "\n", null);
 						data_stream.put_string("Length" +i.to_string() + "=" + "-1\n\n", null);
 						i++;
 					}

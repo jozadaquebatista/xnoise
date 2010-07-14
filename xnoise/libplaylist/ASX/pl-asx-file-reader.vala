@@ -64,13 +64,12 @@ namespace Pl {
 								char* begin = line.str("\"");
 								begin ++;
 								char* end = line.rstr("\"");
-								if(end == begin) {
+								if(begin >= end) {
 									print("no url inside\n");
 									continue;
 								}
 								*end = '\0';
-								string buf = ((string)begin)._strip();
-								File tmp = get_file_for_location(ref buf, ref base_path);
+								File tmp = get_file_for_location(((string)begin)._strip(), ref base_path);
 								d.add_field(Data.Field.URI, tmp.get_uri());
 							}
 							else if(line.contains("<title>")) {

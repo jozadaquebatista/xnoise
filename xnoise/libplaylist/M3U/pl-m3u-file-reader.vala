@@ -93,7 +93,7 @@ namespace Pl {
 								d = new Data();
 							}
 							if(adress != "") {
-								File tmp = get_file_for_location(ref adress, ref base_path);
+								File tmp = get_file_for_location(adress, ref base_path);
 								d.add_field(Data.Field.URI, tmp.get_uri());
 								if(title != "") {
 									d.add_field(Data.Field.TITLE, title);

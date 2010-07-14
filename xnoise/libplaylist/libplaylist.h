@@ -174,7 +174,7 @@ GType pl_list_type_get_type (void);
 GType pl_result_get_type (void);
 extern gboolean pl_debug;
 glong pl_get_duration_from_string (char** duration_string);
-GFile* pl_get_file_for_location (char** adr, char** base_path);
+GFile* pl_get_file_for_location (const char* adr, char** base_path);
 PlListType pl_get_playlist_type_for_uri (char** uri_);
 PlListType pl_get_type_by_extension (char** uri_);
 PlListType pl_get_type_by_data (char** uri_);

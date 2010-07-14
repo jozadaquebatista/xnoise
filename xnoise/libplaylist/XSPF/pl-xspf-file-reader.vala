@@ -62,27 +62,25 @@ namespace Pl {
 					}
 					else if(entry_on) { // Can we always assume that this is in one line???
 						if(line.contains("<location")) {
-							line = line.replace("<location>","");
-							line = line.replace("</location>","");
-							line = line.strip();
-							if(d != null) {
-								File tmp = get_file_for_location(ref line, ref base_path);
-								d.add_field(Data.Field.URI, tmp.get_uri());
+							char* begin = line.str(">");
+							begin ++;
+							char* end = line.rstr("<");
+							if(begin >= end) {
+								throw new InternalReaderError.INVALID_FILE("Error. Invalid playlist file (uri)\n");
 							}
-							else {
-								throw new InternalReaderError.INVALID_FILE("Error not in track (location). Invalide playlist file\n");
-							}
+							*end = '\0';
+							File tmp = get_file_for_location(((string)begin)._strip(), ref base_path);
+							d.add_field(Data.Field.URI, tmp.get_uri());
 						}
 						if(line.contains("<title")) {
-							line = line.replace("<title>","");
-							line = line.replace("</title>","");
-							line = line.strip();
-							if(d != null) {
-								d.add_field(Data.Field.TITLE, line);
+							char* begin = line.str(">");
+							begin++;
+							char* end = line.rstr("<");
+							if(begin >= end) {
+								throw new InternalReaderError.INVALID_FILE("Error. Invalid playlist file (title)\n");
 							}
-							else {
-								throw new InternalReaderError.INVALID_FILE("Error not in track (title). Invalide playlist file\n");
-							}
+							*end = '\0';
+							d.add_field(Data.Field.TITLE, ((string)begin)._strip());
 						}
 					}
 					else {

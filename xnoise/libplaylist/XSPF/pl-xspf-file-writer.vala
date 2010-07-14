@@ -63,12 +63,20 @@ namespace Pl {
 					data_stream.put_string("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n", null);
 					data_stream.put_string("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n", null);
 					data_stream.put_string("  <trackList>\n", null);
+					
 					foreach(Data d in data_collection) {
-						if(d.get_field(Data.Field.URI) == null)
+						if(d.get_uri() == null) {
+							print("uri was null\n");
 							continue;
+						}
+							
 						data_stream.put_string("    <track>\n", null);
-						data_stream.put_string("      <title></title>\n", null);
-						data_stream.put_string("      <location>" + d.get_field(Data.Field.URI) + "\n", null);
+						
+						if(d.get_title() != null)
+							data_stream.put_string(Markup.printf_escaped("      <title>%s</title>\n", d.get_title()), null);
+						
+						data_stream.put_string(Markup.printf_escaped("      <location>%s</location>\n", d.get_uri()), null);
+						
 						data_stream.put_string("    </track>\n", null);
 					}
 					data_stream.put_string("  </trackList>\n", null);

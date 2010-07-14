@@ -36,47 +36,80 @@ namespace Pl {
 			}
 
 			try {
-				var in_stream = new DataInputStream (file.read (null));
+				var in_stream = new DataInputStream (file.read(null));
 				string line;
 				int numberofentries = 0;
-
+				string[] line_buf = {};
 				//Read header => [playlist]
-				if( (line = in_stream.read_line (null, null)) != null ) {
-					if ( !line.has_prefix( "[playlist]" ) ) {
+				if((line = in_stream.read_line(null, null)) != null) {
+					if (!line.has_prefix( "[playlist]" ) ) {
 						return data_collection;
 					}
 					Data d = null;
-					while ((line = in_stream.read_line (null, null)) != null) {
+					while((line = in_stream.read_line (null, null)) != null) {
 						
 						//Ignore blank line
-						if( line.size() == 0 ) { 
+						if(line._strip().size() == 0) { 
 							continue; 
 						}
-
 						if(line.down().contains("numberofentries")) {
 							var arrayNumberOfEntries = line.split("=");
-
+							
+							//Can we rely on existance of numberofentries??
 							if(arrayNumberOfEntries.length == 2) {
 								numberofentries = arrayNumberOfEntries[1].to_int();
 								//print("There are %d entries: \n", numberofentries);
 							}
+							else {
+								//error
+							}
 							continue;
 						}
-						if(line.has_prefix("File")) {
-							//TODO: handle title and length for current entry
-							d = new Data();
-							string file_line = line;
-							//string title_line = in_stream.read_line (null, null);
-							//string length_line = in_stream.read_line (null, null);
-							if(file_line != null) {
-								var arrayFile = file_line.split("=");
-								if(arrayFile != null && arrayFile.length >= 2) {
-									File tmp = get_file_for_location(ref arrayFile[1], ref base_path);
+						else {
+							line_buf += line;
+						}
+
+					}
+					
+					for(int i = 1; i <= numberofentries; i++) {
+						d = new Data();
+						for(int j = 0; j < line_buf.length; j++) {
+							if(line_buf[j].has_prefix("File" + i.to_string())) {
+								if(line_buf[j].contains("=")) {
+									char* begin = line_buf[j].str("=");
+									begin++;
+									char* end = (char*)line_buf[j] + line_buf[j].size();
+									if(begin >= end)
+										break;
+									File tmp = get_file_for_location(((string)begin)._strip(), ref base_path);
 									d.add_field(Data.Field.URI, tmp.get_uri());
+									break;
+								}
+								else {
+									break;
 								}
 							}
-							data_collection.append(d);
+							
 						}
+						for(int j = 0; j < line_buf.length; j++) {
+							if(line_buf[j].has_prefix("Title" + i.to_string())) {
+								if(line_buf[j].contains("=")) {
+									char* begin = line_buf[j].str("=");
+									begin++;
+									char* end = (char*)line_buf[j] + line_buf[j].size();
+									if(begin >= end)
+										break;
+									line_buf[j] = ((string)begin)._strip();
+									d.add_field(Data.Field.TITLE, line_buf[j]);
+									break;
+								}
+								else {
+									break;
+								}
+							}
+						}
+						if(d.get_uri() != null)
+							data_collection.append(d);
 					}
 				}
 			} 

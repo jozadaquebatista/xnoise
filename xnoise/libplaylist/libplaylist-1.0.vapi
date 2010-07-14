@@ -157,7 +157,7 @@ namespace Pl {
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static long get_duration_from_string (ref string? duration_string);
 	[CCode (cheader_filename = "libplaylist.h")]
-	public static GLib.File get_file_for_location (ref string adr, ref string base_path = "");
+	public static GLib.File get_file_for_location (string adr, ref string base_path = "");
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static Pl.ListType get_playlist_type_for_uri (ref string uri_);
 	[CCode (cheader_filename = "libplaylist.h")]
