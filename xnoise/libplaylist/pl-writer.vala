@@ -63,21 +63,34 @@ namespace Pl {
 		// write playlist data to file
 		public Result write(DataCollection data_collection, string playlist_uri) throws WriterError { // TODO: handle overwrite
 			
-			if(data_collection == null)
+			if(data_collection == null || data_collection.get_size() == 0)
 				throw new WriterError.NO_DATA("No data was provided. Playlist cannot be created.");
 
-			
 			if(playlist_uri == null || playlist_uri == "")
 				throw new WriterError.NO_DEST_URI("No destation for playlist file was specified. Playlist cannot be created.");
 			
+			File playlist_file = File.new_for_uri(playlist_uri);
+			if(playlist_file.get_uri_scheme() in remote_schemes)
+				throw new WriterError.DEST_REMOTE("Destination is remote. Playlist cannot be created.");
+			
+			
+			
 			// now start
-			write_in_progress_mutex.lock();
-			pl_data = data_collection;
+			if(write_in_progress_mutex.trylock() == false) {
+				print("write is already in progress\n");
+				return Result.DOUBLE_WRITE;
+			}
+				
+			pl_data = data_collection; //keep a reference
+			
+			string buf = playlist_file.get_parent().get_path();
+			foreach(Data d  in pl_data)
+				d.base_path = buf;
 			
 			_uri = playlist_uri;
 			file = File.new_for_uri(playlist_uri);
 			try {
-				plfile_writer.write(file, pl_data);
+				plfile_writer.write(file, pl_data); // pl_data is a reference type and therefore only a pointer is passed - less copying
 			}
 			catch(Error e) {
 				print("Error writing playlist: %s\n", e.message);
@@ -100,7 +113,10 @@ namespace Pl {
 				throw new WriterError.NO_DEST_URI("No destation for playlist file was specified. Playlist cannot be created.");
 			
 			// now start
-			write_in_progress_mutex.lock();
+			if(write_in_progress_mutex.trylock() == false) {
+				print("write is already in progress\n");
+				return Result.DOUBLE_WRITE;
+			}
 			
 			pl_data = data_collection;
 			
@@ -114,13 +130,13 @@ namespace Pl {
 		private static AbstractFileWriter? get_playlist_file_writer_for_type(ListType ptype, bool overwrite, bool abs_uris) {
 			switch(ptype) {
 				case ListType.ASX:
-					return new Asx.FileWriter(overwrite, abs_uris);
+					return new Asx.FileWriter(overwrite);
 				case ListType.M3U:
-					return new M3u.FileWriter(overwrite, abs_uris);
+					return new M3u.FileWriter(overwrite);
 				case ListType.PLS:
-					return new Pls.FileWriter(overwrite, abs_uris);
+					return new Pls.FileWriter(overwrite);
 				case ListType.XSPF:
-					return new Xspf.FileWriter(overwrite, abs_uris);
+					return new Xspf.FileWriter(overwrite);
 				default:
 					return null;
 			}

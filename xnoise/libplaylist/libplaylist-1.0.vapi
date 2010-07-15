@@ -32,6 +32,7 @@ namespace Pl {
 		}
 		public Data ();
 		public void add_field (Pl.Data.Field field, string val);
+		public string? get_abs_path ();
 		public string? get_album ();
 		public string? get_author ();
 		public Pl.Data.Field[] get_contained_fields ();
@@ -42,10 +43,13 @@ namespace Pl {
 		public string? get_genre ();
 		public string? get_param_name ();
 		public string? get_param_value ();
+		public string? get_rel_path ();
 		public string? get_title ();
 		public string? get_uri ();
 		public bool is_playlist ();
 		public bool is_remote ();
+		public string? base_path { get; set; }
+		public Pl.TargetType target_type { get; set; }
 	}
 	[CCode (ref_function = "pl_data_collection_ref", unref_function = "pl_data_collection_unref", cheader_filename = "libplaylist.h")]
 	public class DataCollection {
@@ -139,7 +143,14 @@ namespace Pl {
 		ERROR,
 		IGNORED,
 		SUCCESS,
-		EMPTY
+		EMPTY,
+		DOUBLE_WRITE
+	}
+	[CCode (cprefix = "PL_TARGET_TYPE_", cheader_filename = "libplaylist.h")]
+	public enum TargetType {
+		URI,
+		REL_PATH,
+		ABS_PATH
 	}
 	[CCode (cprefix = "PL_READER_ERROR_", cheader_filename = "libplaylist.h")]
 	public errordomain ReaderError {
@@ -151,13 +162,16 @@ namespace Pl {
 		UNKNOWN_TYPE,
 		NO_DATA,
 		NO_DEST_URI,
+		DEST_REMOTE,
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static bool debug;
 	[CCode (cheader_filename = "libplaylist.h")]
+	public const string[] remote_schemes;
+	[CCode (cheader_filename = "libplaylist.h")]
 	public static long get_duration_from_string (ref string? duration_string);
 	[CCode (cheader_filename = "libplaylist.h")]
-	public static GLib.File get_file_for_location (string adr, ref string base_path = "");
+	public static GLib.File get_file_for_location (string adr, ref string base_path = "", out Pl.TargetType tt);
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static Pl.ListType get_playlist_type_for_uri (ref string uri_);
 	[CCode (cheader_filename = "libplaylist.h")]

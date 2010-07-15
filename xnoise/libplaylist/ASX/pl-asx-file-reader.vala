@@ -69,7 +69,11 @@ namespace Pl {
 									continue;
 								}
 								*end = '\0';
-								File tmp = get_file_for_location(((string)begin)._strip(), ref base_path);
+								//print("\nasx location %s\n", ((string)begin));
+								TargetType tt;
+								File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
+								d.target_type = tt;
+								//print("\nasx read uri: %s\n", tmp.get_uri());
 								d.add_field(Data.Field.URI, tmp.get_uri());
 							}
 							else if(line.contains("<title>")) {

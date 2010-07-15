@@ -26,14 +26,7 @@ namespace Pl {
 		
 		private DataCollection data_collection;
 		private File file;
-		private bool _use_absolute_uris = true;
 		private bool _overwrite_if_exists = true;
-		
-		public bool use_absolute_uris { 
-			get {
-				return _use_absolute_uris;
-			} 
-		}
 		
 		public bool overwrite_if_exists { 
 			get {
@@ -41,15 +34,14 @@ namespace Pl {
 			} 
 		}
 
-
-		public FileWriter(bool overwrite, bool absolute_uris) {
+		public FileWriter(bool overwrite) {
 			_overwrite_if_exists = overwrite;
-			_use_absolute_uris = absolute_uris;
 			// TODO: honor overwrite, etc.
 		}
 
 		public override Result write(File _file, DataCollection _data_collection) throws InternalWriterError {
 			this.file = _file;
+			set_base_path();
 			this.data_collection = _data_collection;
 			if(data_collection != null && data_collection.get_size() > 0) {
 				try {
@@ -63,9 +55,26 @@ namespace Pl {
 					data_stream.put_string("<asx version=\"3.0\">\n", null);
 					//data_stream.put_string("\t<title></title>\n", null); //TODO: Playlist title
 					foreach(Data d in data_collection) {
-						string? tmp_uri = d.get_field(Data.Field.URI);
-						if((tmp_uri == null) && (tmp_uri == ""))
-							continue;
+						string? tmp_location = null;
+						
+						// find out the type of the target to save (uri, absolute path or relative to the playlist)
+						switch(d.target_type) { //TODO: check if ASX specification allows relative paths
+							case TargetType.URI:
+								tmp_location = d.get_uri();
+								if((tmp_location == null) && (tmp_location == ""))
+									continue;
+								break;
+							case TargetType.ABS_PATH:
+								tmp_location = d.get_abs_path();
+								if((tmp_location == null) && (tmp_location == ""))
+									continue;
+								break;
+							case TargetType.REL_PATH:
+								tmp_location = d.get_rel_path();
+								if((tmp_location == null) && (tmp_location == ""))
+									continue;
+								break;
+						}
 						
 						string? tmp_title = d.get_title();
 						
@@ -73,7 +82,7 @@ namespace Pl {
 						if((tmp_title != null) && (tmp_title != "")) 
 							data_stream.put_string(Markup.printf_escaped("    <title>%s</title>\n", tmp_title), null);
 						
-						data_stream.put_string(Markup.printf_escaped("    <ref href=\"%s\" />\n", tmp_uri), null);
+						data_stream.put_string(Markup.printf_escaped("    <ref href=\"%s\" />\n", tmp_location), null);
 						data_stream.put_string("  </entry>\n", null);
 					}
 					data_stream.put_string("</asx>\n", null);
@@ -87,9 +96,13 @@ namespace Pl {
 		
 		public override async Result write_asyn(File _file, DataCollection _data_collection) throws InternalWriterError {
 			this.file = _file;
+			set_base_path();
 			this.data_collection = _data_collection;
 			return Result.UNHANDLED;
 		}
+		
+		protected override void set_base_path() {
+			base_path = file.get_parent().get_uri();
+		}
 	}
 }
-

@@ -31,7 +31,8 @@ namespace Pl {
 	public errordomain WriterError {
 		UNKNOWN_TYPE,
 		NO_DATA,
-		NO_DEST_URI
+		NO_DEST_URI,
+		DEST_REMOTE
 	}
 	
 	private errordomain InternalReaderError {
@@ -60,7 +61,14 @@ namespace Pl {
 		ERROR,         //Error reading playlist
 		IGNORED,       //Playlist was ignored for some reason
 		SUCCESS,       //Playlist was read successfully
-		EMPTY          //Reding returned no data
+		EMPTY,         //Reding returned no data
+		DOUBLE_WRITE   //There was already a write in progress for current writer instance
+	}
+	
+	public enum TargetType {
+		URI,           // a uri is a uri
+		REL_PATH,      // path relative to the location of the playlist
+		ABS_PATH       // absolute path (local only !)
 	}
 	
 	// string constants for content types
@@ -75,6 +83,9 @@ namespace Pl {
 	
 	//put some debug messages into the code
 	public bool debug = false;
+	
+	
+	public const string[] remote_schemes = { "http", "ftp" }; // TODO: add more
 	
 	
 	// Static helper functions
@@ -119,19 +130,24 @@ namespace Pl {
 	}
 	
 	// create a File for the absolute/relative path or uri
-	public static File get_file_for_location(string adr, ref string base_path = "") {
+	public static File get_file_for_location(string adr, ref string base_path = "", out TargetType tt) {
 		string adress = adr; //work on a copy
 		char* p = adress;
+
+		tt = TargetType.URI; // source was of this target type
+		
+		if(p[0] == '\\' && p[1] != '\\') {
+			p++;
+			adress = ((string)p);
+		}
 		
 		adress._delimit("\\", '/'); //make slashes from backslashes in place
 		
 		if((p[0].isalpha() && (!((string)(p + 1)).contains("://"))) || (p[0] == '/' && p[1] != '/')) {
 			//relative paths
-			if(p[0] == '/') {
-				adress = base_path + adress;
-			}
-			else {
+			if(p[0] != '/') { // Could a path starting with / also be relative path
 				adress = base_path + "/" + adress;
+				tt = TargetType.REL_PATH; // source was of this target type
 			}
 		}
 		else if((p[0].isalpha()) && ((string)(p + 1)).has_prefix("://")) {
@@ -139,10 +155,20 @@ namespace Pl {
 			File base_path_file = File.new_for_commandline_arg(base_path);
 			File tmp = base_path_file.get_child(((string)p[2]));
 			adress = tmp.get_uri();
+			tt = TargetType.ABS_PATH; // source was of this target type
 		}
 		else if(p[0] == '/' && p[1] == '/') {
 			adress = "smb:" + adress;
+			tt = TargetType.ABS_PATH; // source was of this target type
 		}
+		
+		// check if target was a regular absolute path
+		p = adress;
+		if(p[0] == '/' && p[1] != '/') {
+			// if it looks like an absolute path here it is an absolute path
+			tt = TargetType.ABS_PATH;
+		}
+		
 		
 		File retval = File.new_for_commandline_arg(adress);
 		return retval;

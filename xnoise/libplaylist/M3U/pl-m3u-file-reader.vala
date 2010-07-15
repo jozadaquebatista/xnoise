@@ -36,7 +36,7 @@ namespace Pl {
 			this.file = _file;
 			set_base_path();
 			
-			if(!file.get_uri().has_prefix("http://") && !file.query_exists(null)) {
+			if(!file.query_exists(null)) {
 				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
 				return data_collection;
 			}
@@ -93,8 +93,10 @@ namespace Pl {
 								d = new Data();
 							}
 							if(adress != "") {
-								File tmp = get_file_for_location(adress, ref base_path);
+								TargetType tt;
+								File tmp = get_file_for_location(adress, ref base_path, out tt);
 								d.add_field(Data.Field.URI, tmp.get_uri());
+								d.target_type = tt;
 								if(title != "") {
 									d.add_field(Data.Field.TITLE, title);
 								}

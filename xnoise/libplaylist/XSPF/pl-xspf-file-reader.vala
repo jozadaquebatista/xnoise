@@ -69,8 +69,11 @@ namespace Pl {
 								throw new InternalReaderError.INVALID_FILE("Error. Invalid playlist file (uri)\n");
 							}
 							*end = '\0';
-							File tmp = get_file_for_location(((string)begin)._strip(), ref base_path);
+
+							TargetType tt;
+							File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
 							d.add_field(Data.Field.URI, tmp.get_uri());
+							d.target_type = tt;
 						}
 						if(line.contains("<title")) {
 							char* begin = line.str(">");

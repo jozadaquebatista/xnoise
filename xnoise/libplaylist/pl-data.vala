@@ -23,6 +23,8 @@
 // an instance of this Data object represents one entry in the list. An entry contains one or more data fields, at least the uri to the target
 namespace Pl {
 	public class Data {
+		private HashTable<Field, string> htable = null;
+		
 		public enum Field {
 			URI = 0,           // Target uri
 			TITLE,             // Title, if available, null otherwise
@@ -37,7 +39,8 @@ namespace Pl {
 			IS_PLAYLIST        // whether the target is another playlist : "0" = false, "1" = true
 		}
 		
-		private HashTable<Field, string> htable = null;
+		public TargetType target_type { get; set; default = TargetType.URI; }
+		public string? base_path      { get; set; default = null; }
 		
 		public Data() {
 			htable = new HashTable<Field, string>(direct_hash, direct_equal);
@@ -72,6 +75,38 @@ namespace Pl {
 		
 		public string? get_uri() {
 			return htable.lookup(Field.URI);
+		}
+
+		public string? get_rel_path() {
+			string? s = htable.lookup(Field.URI);
+			if(s == null)
+				return null;
+
+			File f = File.new_for_uri(s);
+
+			if(base_path == null)
+				return null;
+
+			File bp = File.new_for_path(base_path);
+			if(bp == null)
+				return null;
+			
+			return bp.get_relative_path(f);
+		}
+
+		public string? get_abs_path() {
+			//this will work for locally mounted files only
+			//return null for remote uri schemes like 'http', 'ftp' 
+			string? s = htable.lookup(Field.URI);
+			if(s == null)
+				return null;
+			
+			File f = File.new_for_uri(s);
+
+			if(f.get_uri_scheme() in remote_schemes)
+				return null;
+			
+			return f.get_path();
 		}
 
 		public string? get_title() {

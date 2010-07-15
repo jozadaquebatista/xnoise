@@ -26,14 +26,7 @@ namespace Pl {
 		
 		private DataCollection data_collection;
 		private File file;
-		private bool _use_absolute_uris = true;
 		private bool _overwrite_if_exists = true;
-		
-		public bool use_absolute_uris { 
-			get {
-				return _use_absolute_uris;
-			} 
-		}
 		
 		public bool overwrite_if_exists { 
 			get {
@@ -41,10 +34,8 @@ namespace Pl {
 			} 
 		}
 
-
-		public FileWriter(bool overwrite, bool absolute_uris) {
+		public FileWriter(bool overwrite) {
 			_overwrite_if_exists = overwrite;
-			_use_absolute_uris = absolute_uris;
 		}
 
 		public override Result write(File _file, DataCollection _data_collection) throws InternalWriterError {
@@ -59,17 +50,33 @@ namespace Pl {
 					var data_stream = new DataOutputStream(file_stream);
 					data_stream.put_string("#EXTM3U\n", null); //Playlist header
 					foreach(Data d in data_collection) {
-						string tmp_uri = d.get_field(Data.Field.URI);
+						string? tmp_location = null;
 						
-						if(tmp_uri == null)
-							continue;
-						
+						// find out the type of the target to save (uri, absolute path or relative to the playlist)
+						switch(d.target_type) { 
+							case TargetType.URI:
+								tmp_location = d.get_uri();
+								if((tmp_location == null) && (tmp_location == ""))
+									continue;
+								break;
+							case TargetType.ABS_PATH:
+								tmp_location = d.get_abs_path();
+								if((tmp_location == null) && (tmp_location == ""))
+									continue;
+								break;
+							case TargetType.REL_PATH:
+								tmp_location = d.get_rel_path();
+								if((tmp_location == null) && (tmp_location == ""))
+									continue;
+								break;
+						}
 						string tmp_title = d.get_field(Data.Field.TITLE);
 						
 						if(tmp_title != null)
-							data_stream.put_string("#EXTINF:-1," + tmp_title + "\n", null); // length not used
+							data_stream.put_string("#EXTINF:-1," + tmp_title + "\n", null); // length not used, yet
 						
-						data_stream.put_string(tmp_uri + "\n", null);
+						//print("tmp_location: %s\n", tmp_location);
+						data_stream.put_string(tmp_location + "\n", null);
 					}
 				} 
 				catch(GLib.Error e) {
@@ -83,6 +90,10 @@ namespace Pl {
 			this.file = _file;
 			this.data_collection = _data_collection;
 			return Result.UNHANDLED;
+		}
+		
+		protected override void set_base_path() {
+			base_path = file.get_parent().get_uri();
 		}
 	}
 }

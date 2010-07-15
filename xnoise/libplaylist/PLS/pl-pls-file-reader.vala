@@ -81,8 +81,10 @@ namespace Pl {
 									char* end = (char*)line_buf[j] + line_buf[j].size();
 									if(begin >= end)
 										break;
-									File tmp = get_file_for_location(((string)begin)._strip(), ref base_path);
+									TargetType tt;
+									File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
 									d.add_field(Data.Field.URI, tmp.get_uri());
+									d.target_type = tt;
 									break;
 								}
 								else {

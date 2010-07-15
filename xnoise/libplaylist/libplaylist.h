@@ -17,6 +17,8 @@ G_BEGIN_DECLS
 
 #define PL_TYPE_RESULT (pl_result_get_type ())
 
+#define PL_TYPE_TARGET_TYPE (pl_target_type_get_type ())
+
 #define PL_TYPE_DATA (pl_data_get_type ())
 #define PL_DATA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PL_TYPE_DATA, PlData))
 #define PL_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PL_TYPE_DATA, PlDataClass))
@@ -82,7 +84,8 @@ typedef enum  {
 typedef enum  {
 	PL_WRITER_ERROR_UNKNOWN_TYPE,
 	PL_WRITER_ERROR_NO_DATA,
-	PL_WRITER_ERROR_NO_DEST_URI
+	PL_WRITER_ERROR_NO_DEST_URI,
+	PL_WRITER_ERROR_DEST_REMOTE
 } PlWriterError;
 #define PL_WRITER_ERROR pl_writer_error_quark ()
 typedef enum  {
@@ -99,8 +102,15 @@ typedef enum  {
 	PL_RESULT_ERROR,
 	PL_RESULT_IGNORED,
 	PL_RESULT_SUCCESS,
-	PL_RESULT_EMPTY
+	PL_RESULT_EMPTY,
+	PL_RESULT_DOUBLE_WRITE
 } PlResult;
+
+typedef enum  {
+	PL_TARGET_TYPE_URI,
+	PL_TARGET_TYPE_REL_PATH,
+	PL_TARGET_TYPE_ABS_PATH
+} PlTargetType;
 
 struct _PlData {
 	GTypeInstance parent_instance;
@@ -172,9 +182,10 @@ GQuark pl_reader_error_quark (void);
 GQuark pl_writer_error_quark (void);
 GType pl_list_type_get_type (void);
 GType pl_result_get_type (void);
+GType pl_target_type_get_type (void);
 extern gboolean pl_debug;
 glong pl_get_duration_from_string (char** duration_string);
-GFile* pl_get_file_for_location (const char* adr, char** base_path);
+GFile* pl_get_file_for_location (const char* adr, char** base_path, PlTargetType* tt);
 PlListType pl_get_playlist_type_for_uri (char** uri_);
 PlListType pl_get_type_by_extension (char** uri_);
 PlListType pl_get_type_by_data (char** uri_);
@@ -192,6 +203,8 @@ void pl_data_add_field (PlData* self, PlDataField field, const char* val);
 PlDataField* pl_data_get_contained_fields (PlData* self, int* result_length1);
 char* pl_data_get_field (PlData* self, PlDataField field);
 char* pl_data_get_uri (PlData* self);
+char* pl_data_get_rel_path (PlData* self);
+char* pl_data_get_abs_path (PlData* self);
 char* pl_data_get_title (PlData* self);
 char* pl_data_get_author (PlData* self);
 char* pl_data_get_genre (PlData* self);
@@ -203,6 +216,10 @@ char* pl_data_get_param_value (PlData* self);
 glong pl_data_get_duration (PlData* self);
 gboolean pl_data_is_remote (PlData* self);
 gboolean pl_data_is_playlist (PlData* self);
+PlTargetType pl_data_get_target_type (PlData* self);
+void pl_data_set_target_type (PlData* self, PlTargetType value);
+const char* pl_data_get_base_path (PlData* self);
+void pl_data_set_base_path (PlData* self, const char* value);
 gpointer pl_data_collection_ref (gpointer instance);
 void pl_data_collection_unref (gpointer instance);
 GParamSpec* pl_param_spec_data_collection (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -291,6 +308,7 @@ const char* pl_writer_get_uri (PlWriter* self);
 gboolean pl_writer_get_use_absolute_uris (PlWriter* self);
 gboolean pl_writer_get_overwrite_if_exists (PlWriter* self);
 
+extern const char* PL_remote_schemes[2];
 
 G_END_DECLS
 
