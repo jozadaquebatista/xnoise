@@ -166,7 +166,7 @@ bool test_asx_writing_abs_paths() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.ASX, true, true);
+	var writer = new Pl.Writer(ListType.ASX, true);
 	
 	DataCollection data_collection = new DataCollection();
 	
@@ -206,7 +206,7 @@ bool test_m3u_writing_abs_paths() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.M3U, true, true);
+	var writer = new Pl.Writer(ListType.M3U, true);
 	
 	DataCollection data_collection = new DataCollection();
 	
@@ -246,7 +246,7 @@ bool test_pls_writing_abs_paths() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.PLS, true, true);
+	var writer = new Pl.Writer(ListType.PLS, true);
 	
 	DataCollection data_collection = new DataCollection();
 	
@@ -287,7 +287,7 @@ bool test_xspf_writing_abs_paths() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.XSPF, true, true);
+	var writer = new Pl.Writer(ListType.XSPF, true);
 	
 	DataCollection data_collection = new DataCollection();
 	
@@ -329,7 +329,7 @@ bool test_asx_writing_rel_paths() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.ASX, true, true);
+	var writer = new Pl.Writer(ListType.ASX, true);
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
@@ -381,7 +381,7 @@ bool test_m3u_writing_rel_paths() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.M3U, true, true);
+	var writer = new Pl.Writer(ListType.M3U, true);
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
@@ -430,7 +430,7 @@ bool test_pls_writing_rel_paths() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.PLS, true, true);
+	var writer = new Pl.Writer(ListType.PLS, true);
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
@@ -479,7 +479,7 @@ bool test_xspf_writing_rel_paths() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.XSPF, true, true);
+	var writer = new Pl.Writer(ListType.XSPF, true);
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
@@ -530,7 +530,7 @@ bool test_asx_readwrite_targettype() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.ASX, true, true);
+	var writer = new Pl.Writer(ListType.ASX, true);
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
@@ -579,7 +579,7 @@ bool test_m3u_readwrite_targettype() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.M3U, true, true);
+	var writer = new Pl.Writer(ListType.M3U, true);
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
@@ -629,7 +629,7 @@ bool test_pls_readwrite_targettype() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.PLS, true, true);
+	var writer = new Pl.Writer(ListType.PLS, true);
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
@@ -679,7 +679,7 @@ bool test_xspf_readwrite_targettype() {
 	File t2 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	string current_title_1 = "BUSCANDO UN FINAL";
 	string current_title_2 = "everclear - SMFTA";
-	var writer = new Pl.Writer(ListType.XSPF, true, true);
+	var writer = new Pl.Writer(ListType.XSPF, true);
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
@@ -707,7 +707,7 @@ bool test_xspf_readwrite_targettype() {
 		writer.write(data_collection, f.get_uri());
 	}
 	catch(Error e) {
-		print("asx test error writing %s\n", e.message);
+		print("xspf test error writing %s\n", e.message);
 		return false;
 	}
 	
@@ -716,7 +716,7 @@ bool test_xspf_readwrite_targettype() {
 		reader.read(f.get_uri());
 	}
 	catch(Error e) {
-		print("asx test error readwrite\n");
+		print("xspf test error readwrite\n");
 		return false;
 	}
 	TargetType[] tts = {};
@@ -726,6 +726,59 @@ bool test_xspf_readwrite_targettype() {
 	//print("\n%s\n", tts[0].to_string());
 	//print("%s\n", tts[1].to_string());
 	return tts[0]==TargetType.ABS_PATH && tts[1]==TargetType.REL_PATH && tts[2]==TargetType.URI;
+}
+
+bool test_conversion_asx_xspf() {
+	File f = File.new_for_path("./playlist-examples/asx_test.asx");
+	File target = File.new_for_path("./playlist-examples/tmp_copy_as_xspf.xspf");
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("asx test error reading\n");
+		return false;
+	}
+	DataCollection d = reader.data_collection;
+	var writer = new Pl.Writer(ListType.XSPF, true);
+	try {
+		writer.write(d, target.get_uri());
+	}
+	catch(Error e) {
+		print("asx test error writing %s\n", e.message);
+		return false;
+	}
+	return true; //TODO Howto verify that conversion worked? Maybe do a chain over all types and compare both ends
+}
+
+bool test_m3u_read_with_no_extension_on_file() {
+	File f = File.new_for_path("./playlist-examples/test_ext_m3u");
+	File t1 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("m3u test error reading\n");
+		return false;
+	}
+	var uris = reader.get_found_uris();
+	//print("Size: %s\n", uris.length.to_string());
+	return uris[0] == t1.get_uri() && reader.get_number_of_entries() == 5;
+}
+
+bool test_xpsf_read_with_no_extension_on_file() {
+	File f = File.new_for_path("./playlist-examples/xf");
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("m3u test error reading\n");
+		return false;
+	}
+	var uris = reader.get_found_uris();
+	return uris[0] == "http://www.example.com/music/bar.ogg" && reader.get_number_of_entries() == 2;
 }
 
 void main() {
@@ -893,5 +946,32 @@ void main() {
 		print("\033[50Gpass\n");
 	else
 		print("\033[50Gfail\n");
+		
+	//PLAYLIST CONVERSION ASX -> XSPF
+	print("test conversion asx -> xspf:");
+	if(test_conversion_asx_xspf())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+		
+
+
+	// Corrupted FILE TESTS
+	
+	//READ M3U without filename extension
+	print("test read M3U without extension:");
+	if(test_m3u_read_with_no_extension_on_file())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+		
+	//READ XSPF without filename extension
+	print("test read XSPF without extension:");
+	if(test_xpsf_read_with_no_extension_on_file())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+	
+	
 }
 

@@ -121,12 +121,11 @@ namespace Pl {
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Writer : GLib.Object {
-		public Writer (Pl.ListType ptype, bool overwrite = true, bool absolute_uris = true);
+		public Writer (Pl.ListType ptype, bool overwrite = true);
 		public Pl.Result write (Pl.DataCollection data_collection, string playlist_uri) throws Pl.WriterError;
 		public async Pl.Result write_asyn (Pl.DataCollection data_collection, string playlist_uri) throws Pl.WriterError;
 		public bool overwrite_if_exists { get; }
 		public string? uri { get; }
-		public bool use_absolute_uris { get; }
 	}
 	[CCode (cprefix = "PL_LIST_TYPE_", cheader_filename = "libplaylist.h")]
 	public enum ListType {

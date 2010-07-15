@@ -37,12 +37,6 @@ namespace Pl {
 			} 
 		}
 		
-		public bool use_absolute_uris { 
-			get {
-				return _use_absolute_uris;
-			} 
-		}
-		
 		public bool overwrite_if_exists { 
 			get {
 				return _overwrite_if_exists;
@@ -50,13 +44,12 @@ namespace Pl {
 		}
 
 		// if no absolute uris are used, then files are relative to containing playlist folder
-		public Writer(ListType ptype, bool overwrite = true, bool absolute_uris = true) {
+		public Writer(ListType ptype, bool overwrite = true) {
 			_overwrite_if_exists = overwrite;
-			_use_absolute_uris = absolute_uris;
 
 			write_in_progress_mutex = new Mutex();
 
-			plfile_writer = get_playlist_file_writer_for_type(ptype, overwrite, absolute_uris);
+			plfile_writer = get_playlist_file_writer_for_type(ptype, overwrite);
 		}
 	
 	
@@ -127,7 +120,7 @@ namespace Pl {
 			return Result.UNHANDLED;
 		}
 		
-		private static AbstractFileWriter? get_playlist_file_writer_for_type(ListType ptype, bool overwrite, bool abs_uris) {
+		private static AbstractFileWriter? get_playlist_file_writer_for_type(ListType ptype, bool overwrite) {
 			switch(ptype) {
 				case ListType.ASX:
 					return new Asx.FileWriter(overwrite);

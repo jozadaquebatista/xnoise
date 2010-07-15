@@ -7,8 +7,8 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
-#include <gio/gio.h>
 #include <glib-object.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -184,11 +184,6 @@ GType pl_list_type_get_type (void);
 GType pl_result_get_type (void);
 GType pl_target_type_get_type (void);
 extern gboolean pl_debug;
-glong pl_get_duration_from_string (char** duration_string);
-GFile* pl_get_file_for_location (const char* adr, char** base_path, PlTargetType* tt);
-PlListType pl_get_playlist_type_for_uri (char** uri_);
-PlListType pl_get_type_by_extension (char** uri_);
-PlListType pl_get_type_by_data (char** uri_);
 gpointer pl_data_ref (gpointer instance);
 void pl_data_unref (gpointer instance);
 GParamSpec* pl_param_spec_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -298,14 +293,18 @@ gboolean pl_reader_get_is_playlist_for_uri (PlReader* self, char** uri_needle);
 PlListType pl_reader_get_ptype (PlReader* self);
 const char* pl_reader_get_playlist_uri (PlReader* self);
 PlDataCollection* pl_reader_get_data_collection (PlReader* self);
+PlListType pl_get_playlist_type_for_uri (char** uri_);
+PlListType pl_get_type_by_extension (char** uri_);
+PlListType pl_get_type_by_data (char** uri_);
+glong pl_get_duration_from_string (char** duration_string);
+GFile* pl_get_file_for_location (const char* adr, char** base_path, PlTargetType* tt);
 GType pl_writer_get_type (void);
-PlWriter* pl_writer_new (PlListType ptype, gboolean overwrite, gboolean absolute_uris);
-PlWriter* pl_writer_construct (GType object_type, PlListType ptype, gboolean overwrite, gboolean absolute_uris);
+PlWriter* pl_writer_new (PlListType ptype, gboolean overwrite);
+PlWriter* pl_writer_construct (GType object_type, PlListType ptype, gboolean overwrite);
 PlResult pl_writer_write (PlWriter* self, PlDataCollection* data_collection, const char* playlist_uri, GError** error);
 void pl_writer_write_asyn (PlWriter* self, PlDataCollection* data_collection, const char* playlist_uri, GAsyncReadyCallback _callback_, gpointer _user_data_);
 PlResult pl_writer_write_asyn_finish (PlWriter* self, GAsyncResult* _res_, GError** error);
 const char* pl_writer_get_uri (PlWriter* self);
-gboolean pl_writer_get_use_absolute_uris (PlWriter* self);
 gboolean pl_writer_get_overwrite_if_exists (PlWriter* self);
 
 extern const char* PL_remote_schemes[2];
