@@ -40,6 +40,15 @@ public class Xnoise.FullscreenToolbar {
 	private TrackProgressBar bar;
 	private uint hide_event_id;
 	private bool hide_lock;
+	
+	private void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
+		if(xn == null) return;
+		if(xn.main_window == null) return;
+		if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS)
+			xn.main_window.change_track(dir);
+		else if(dir == ControlButton.Direction.STOP)
+			xn.main_window.stop();
+	}
 
 	public FullscreenToolbar(Gtk.Window fullscreenwindow) {
 		xn = Main.instance;
@@ -50,7 +59,9 @@ public class Xnoise.FullscreenToolbar {
 		var mainbox = new Gtk.HBox(false,8);
 
 		var nextbutton      = new ControlButton(ControlButton.Direction.NEXT);
+		nextbutton.sign_clicked.connect(handle_control_button_click);
 		var previousbutton  = new ControlButton(ControlButton.Direction.PREVIOUS);
+		previousbutton.sign_clicked.connect(handle_control_button_click);
 		var plpabutton      = new PlayPauseButton();
 		var leavefullscreen = new LeaveVideoFSButton();
 		var volume          = new VolumeSliderButton();
