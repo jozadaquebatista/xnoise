@@ -420,7 +420,7 @@ namespace Xnoise {
 		public TrackData ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class TrackList : Gtk.TreeView {
+	public class TrackList : Gtk.TreeView, Xnoise.IParams {
 		public Xnoise.TrackListModel tracklistmodel;
 		public TrackList ();
 		public void handle_resize ();

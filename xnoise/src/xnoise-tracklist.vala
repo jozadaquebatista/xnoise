@@ -31,7 +31,7 @@
 using Gtk;
 using Gdk;
 
-public class Xnoise.TrackList : TreeView {
+public class Xnoise.TrackList : TreeView, IParams {
 	private Main xn;
 	private const TargetEntry[] target_list = {
 		{"text/uri-list", 0, 0}
@@ -56,6 +56,7 @@ public class Xnoise.TrackList : TreeView {
 	private uint hide_timer;
 	private bool hide_timer_set = false;
 	private const uint HIDE_TIMEOUT = 1000;
+	private HashTable<string,double?> relative_column_sizes;
 	
 	public bool column_length_visible {
 		get {
@@ -91,7 +92,8 @@ public class Xnoise.TrackList : TreeView {
 		this.xn = Main.instance;
 		if(xn.tlm == null)
 			print("tracklist model instance not available\n");
-
+		
+		par.iparams_register(this);
 		tracklistmodel = xn.tlm;
 		this.set_model(tracklistmodel);
 		this.setup_view();
@@ -851,6 +853,32 @@ public class Xnoise.TrackList : TreeView {
 
 	private void setup_view() {
 		CellRendererText renderer;
+		relative_column_sizes = new HashTable<string,double?>(str_hash, str_equal);
+		this.columns_changed.connect(() => {
+			var columns = this.get_columns();
+			foreach(TreeViewColumn c in columns) {
+				if(relative_column_sizes.lookup(c.title) == null && c.title != "" && c.title != "#") {
+					//lookup from config
+					relative_column_sizes.insert(c.title, 0.0);
+					break;
+				}
+			}
+		}); 
+		
+		this.show.connect(() => {
+			var columns = this.get_columns();
+			foreach(TreeViewColumn c in columns) {
+				double relative_size = 0.0;
+				if(c.width != 0) 
+					relative_size = (double)c.width / (double)available_width;
+				
+				if(relative_column_sizes.lookup(c.title) != null)
+					relative_column_sizes.replace(c.title, relative_size);
+				else relative_column_sizes.insert(c.title, relative_size);
+			}
+		});
+				
+			
 
 		// STATUS ICON
 		var pixbufRenderer = new CellRendererPixbuf();
@@ -859,6 +887,7 @@ public class Xnoise.TrackList : TreeView {
 		columnPixb.pack_start(pixbufRenderer, false);
 		columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListModel.Column.ICON);
 		columnPixb.set_fixed_width(30);
+		columnPixb.min_width = 30;
 		columnPixb.reorderable = false;
 		this.insert_column(columnPixb, -1);
 
@@ -871,8 +900,9 @@ public class Xnoise.TrackList : TreeView {
 		columnTracknumber.add_attribute(renderer,
 		                                "weight", TrackListModel.Column.WEIGHT);
 		columnTracknumber.adjust_width(32);
+		columnTracknumber.min_width = 32;
 		columnTracknumber.resizable = false;
-		columnTracknumber.reorderable = false;
+		columnTracknumber.reorderable = true;
 		this.insert_column(columnTracknumber, -1);
 		if(par.get_int_value(USE_TR_NO_COL) == 1) {
 			columnTracknumber.visible = true;
@@ -893,7 +923,7 @@ public class Xnoise.TrackList : TreeView {
 		                          "weight", TrackListModel.Column.WEIGHT);
 		columnTitle.min_width = 80;
 		columnTitle.resizable = true;
-		columnTitle.reorderable = false;
+		columnTitle.reorderable = true;
 		columnTitle.resized.connect(on_column_resized);
 		this.insert_column(columnTitle, -1);
 		variable_col_count++;
@@ -910,7 +940,7 @@ public class Xnoise.TrackList : TreeView {
 		                          "weight", TrackListModel.Column.WEIGHT);
 		columnAlbum.min_width = 80;
 		columnAlbum.resizable = true;
-		columnAlbum.reorderable = false;
+		columnAlbum.reorderable = true;
 		columnAlbum.resized.connect( on_column_resized);
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
@@ -932,8 +962,8 @@ public class Xnoise.TrackList : TreeView {
 		columnArtist.add_attribute(renderer,
 		                           "weight", TrackListModel.Column.WEIGHT);
 		columnArtist.min_width = 80;
-		columnArtist.resizable = false; // This is the case for the current column order
-		columnArtist.reorderable = false;
+		columnArtist.resizable = true; // This is the case for the current column order
+		columnArtist.reorderable = true;
 		columnArtist.resized.connect(on_column_resized);
 		this.insert_column(columnArtist, -1);
 		variable_col_count++;
@@ -947,8 +977,9 @@ public class Xnoise.TrackList : TreeView {
 		                           "weight", TrackListModel.Column.WEIGHT);
 
 		columnLength.adjust_width(75);
+		columnLength.min_width = 75;
 		columnLength.resizable = false;
-		columnLength.reorderable = false;
+		columnLength.reorderable = true;
 		this.insert_column(columnLength, -1);
 
 		if(par.get_int_value(USE_LEN_COL) == 1) {
@@ -969,85 +1000,7 @@ public class Xnoise.TrackList : TreeView {
 		this.rules_hint = true;
 	}
 
-	//Resize of a column affects resizable columns to the right, only and, of course, the resized column itself
-	//Howto get the next cols to the right dynamically?
-	//If a column is not resizable, use a width dependent on the contained text
-	//Store the available space and maybe relative shares of it for the resizable columns, for later use in window resize etc.
-	//During window/hpane resize a different mode has to be active to get 
 
-	private double relative_fraction_title = 0.2;
-	private double relative_fraction_album = 0.2;
-	private double relative_fraction_artist = 0.2;
-	
-	private void on_column_resized(TextColumn sender, bool grow, int delta, TrackListModel.Column id) {
-		switch(id) {
-			case TrackListModel.Column.TITLE:
-				if((columnTitle.width + columnAlbum.get_min_width() + columnArtist.get_min_width()) > available_dynamic_width) {
-					//print("max delta %d %s\n", delta, grow.to_string());
-					if(grow) {
-						columnTitle.adjust_width(columnTitle.width - delta);
-						break;
-					}
-				}
-				int half_delta = ((int)(delta / 2)).abs();
-				if(grow) {
-					int cAlb = 0, cArt = 0, cAlbDelta = 0, cArtDelta = 0;
-					cAlb = columnAlbum.width - (delta - half_delta);
-					if(cAlb < columnAlbum.get_min_width()) {
-						cAlbDelta = cAlb - columnAlbum.get_min_width();
-						cAlb = columnAlbum.get_min_width();
-					}
-
-					cArt = columnArtist.width - half_delta - cAlbDelta;
-					if(cArt < columnArtist.get_min_width()) {
-						cArtDelta = cArt - columnArtist.get_min_width();
-						cArt = columnArtist.get_min_width();
-					}
-					if(cArtDelta.abs() > 0) {
-						columnTitle.adjust_width(columnTitle.width - cArtDelta.abs());
-					}
-					columnAlbum.adjust_width(cAlb);
-					columnArtist.adjust_width(cArt);
-				}
-				else{
-					columnAlbum.adjust_width(columnAlbum.width + (delta - half_delta));
-					columnArtist.adjust_width(columnArtist.width + half_delta);
-				}
-				break;
-			case TrackListModel.Column.ALBUM:
-				if((columnTitle.width + columnAlbum.width + columnArtist.get_min_width()) > available_dynamic_width) {
-					//print("max ALBUM delta %d %s\n", delta, grow.to_string());
-					if(grow) {
-						columnAlbum.adjust_width(columnAlbum.width - delta);
-						break;
-					}
-				}
-				if(grow) {
-//					columnArtist.adjust_width(columnArtist.width - delta);
-					int cArt = 0, cArtDelta = 0;
-					cArt = columnArtist.width - delta;
-					if(cArt < columnArtist.get_min_width()) {
-						cArtDelta = cArt - columnArtist.get_min_width();
-						cArt = columnArtist.get_min_width();
-					}
-					if(cArtDelta.abs() > 0) {
-						columnAlbum.adjust_width(columnAlbum.width - cArtDelta.abs());
-					}
-					columnArtist.adjust_width(cArt);
-				}
-				else {
-					columnArtist.adjust_width(columnArtist.width + delta);
-				}
-				break;
-			case TrackListModel.Column.ARTIST:
-				break;
-			default:
-				break;
-		}
-		relative_fraction_title  = (double)columnTitle.width  / (double)available_dynamic_width;
-		relative_fraction_album  = (double)columnAlbum.width  / (double)available_dynamic_width;
-		relative_fraction_artist = (double)columnArtist.width / (double)available_dynamic_width;
-	}
 	
 	private int available_width {
 		get {
@@ -1066,9 +1019,137 @@ public class Xnoise.TrackList : TreeView {
 	public void handle_resize() {
 		if(xn.main_window.window == null)
 			return;
-		//print("resized by hpaned or window\n");
-		columnTitle.adjust_width((int)(relative_fraction_title * available_dynamic_width));
-		columnAlbum.adjust_width((int)(relative_fraction_album * available_dynamic_width));
-		columnArtist.adjust_width((int)(relative_fraction_artist * available_dynamic_width));
+		columnTitle.resized.disconnect(on_column_resized);
+		columnArtist.resized.disconnect(on_column_resized);
+		columnAlbum.resized.disconnect(on_column_resized);	
+		resize_column_range_relatively(0);
+		columnTitle.resized.connect(on_column_resized);
+		columnArtist.resized.connect(on_column_resized);
+		columnAlbum.resized.connect(on_column_resized);
 	}
+	
+	private void on_column_resized(TextColumn sender, bool grow, int delta, TrackListModel.Column id) {
+		var columns = this.get_columns();
+		int iter = 0;
+		int result = 0;
+		print("COLUMN RESIZED\n");
+		foreach(TreeViewColumn c in columns) {
+			if(sender.title == c.title) {
+				/* now we have the position number of the column that has been resized */
+				print("sender is %s\n", c.title);
+				result = resize_column_range_relatively(iter+1);
+				if(result < 0) {
+					/* the column was resized to a size that exceeds the available space
+					by result, lower its size by result again */
+					sender.adjust_width(sender.width + result);
+				}
+			}
+			if(c.resizable)
+				/* store the column's new relative size in a hash table */
+				relative_column_sizes.replace(c.title, (double)c.width / (double)available_width);
+			iter++;
+		}
+	}
+	
+
+	
+	/* resizes a range of columns relatively the start of that range is marked
+	by the number of the first column and its end is marked by the last column
+	int the treeview, delta is the difference in size */
+	private int resize_column_range_relatively(int starting_column) {
+		print("\n\n\nresizing from column %d\n", starting_column);
+	
+		var columns = this.get_columns();
+		int iter = -1;
+		
+		/* that's the width to the left, we don't touch it.
+		only the columns to the right are resized */
+		int left_width = 0;
+		
+		/* that's the width of the fixed size columns */
+		int fixed_width = 0;
+		
+		/* the minimun width for resizable columns*/
+		int min_dynamic_width = 0;
+		
+		/* the sum of all relative column sizes, only for resizable columns.
+		the single sizes are the part of each column's width that exceeds the column's
+		minimun width, relative to the treeview's width as a whole.
+		we can divide the min_width in this formula by an arbitrary number if we want the
+		size to be distributed more equally among the columns. */
+		double rel_size_sum = 0;
+		
+		/* iterate over the columns and calculate those sizes */
+		foreach(TreeViewColumn c in columns) {
+			iter++;
+			/* only handle visible columns */
+			if(!c.visible) continue;
+			if(iter < starting_column) {
+				left_width += c.width;
+				continue;
+			}
+			
+			if(c.resizable) {
+				min_dynamic_width += c.min_width;
+				double? rel_size = relative_column_sizes.lookup(c.title);
+				if(rel_size == null) rel_size = 0.15;
+				rel_size_sum += (double)rel_size - (double)c.min_width / (double)available_width;
+				continue;
+			}
+			
+			fixed_width += c.width;
+		}
+		
+		if(starting_column >= iter) return 0;
+		
+		
+		/* the width that is not statically allocated as minimum or fixed width 
+		and must be distributed among the resizable columns */
+		int distributable_width = available_width - (left_width + min_dynamic_width + fixed_width);
+		
+		if(left_width <= 0 && available_width <= (min_dynamic_width + fixed_width)) distributable_width = 0;
+		print("width to dsitribute %d\n", distributable_width);
+		print("available width %d, fixed_width %d, min_dynamic_width %d, left_width %d, rel_size_sum %f\n", available_width, fixed_width, min_dynamic_width, left_width, rel_size_sum);
+		unowned List<TreeViewColumn> starting_column_node = columns.nth(starting_column);
+		foreach(TreeViewColumn c in starting_column_node) {
+			if(c.resizable) {
+				//get the column's relative size
+				double? rel_size = relative_column_sizes.lookup(c.title);
+				if(rel_size == null) rel_size = 0.15;
+				rel_size = ((double)rel_size - (double)c.min_width / (double)available_width) / rel_size_sum;
+				print("resizing %s to %d, rel_size %f\n", c.title, c.min_width + 
+					(int)(((double)distributable_width) * (double)rel_size), rel_size);
+						
+				((TextColumn) c).adjust_width(c.min_width + 
+					(int)(((double)distributable_width) * (double)rel_size));
+			}
+		}	
+		return distributable_width;
+	}
+	
+	
+		
+	public void write_params_data() {
+		var columns = this.get_columns();
+		foreach(TreeViewColumn c in columns) {
+			if(c == null) continue;
+			if(!c.resizable) continue;
+			double? relative_size = relative_column_sizes.lookup(c.title);
+			if(relative_size == null) continue;
+			par.set_double_value("relative_size_"+c.title+"_column", (double)relative_size);
+		} 
+
+	}
+	
+	public void read_params_data() {
+	}
+	
 }
+
+
+
+
+				
+				
+		
+

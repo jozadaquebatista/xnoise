@@ -73,6 +73,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private double current_volume; //keep it global for saving to params
 	private int window_width = 0;
 	private ScreenSaverManager ssm = null;
+	private int hpaned_pos;
 	public bool _seek;
 	public bool is_fullscreen = false;
 	public bool drag_on_content_area = false;
@@ -220,16 +221,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			xn.gPl.gst_position = fraction;
 		});
 		
-		this.check_resize.connect( () => {
-			if(this.window == null)
-				return;
-			int w, x;
-			this.get_size(out w, out x);
-			if(w != window_width) {
-				window_width = w;
-				this.trackList.handle_resize();
-			}
-		});
+		this.check_resize.connect(on_resized);
+	}
+	
+	void on_resized() {
+		if(this.window == null)
+			return;
+		int w, x;
+		this.get_size(out w, out x);
+		if(w != window_width) {
+			this.check_resize.disconnect(on_resized);
+			this.trackList.handle_resize();
+			this.check_resize.connect(on_resized);
+			window_width = w;
+		}
 	}
 	
 	private void initialize_video_screen() {
@@ -1110,6 +1115,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		else if(dir == ControlButton.Direction.STOP)
 			this.stop();
 	}
+	
+	private void on_hpaned_position_changed() {
+		if(this.hpaned.position == 0)
+			media_browser_visible = false;
+		else
+			media_browser_visible = true;
+			
+		if(this.window != null) {
+			this.hpaned.notify["position"].disconnect(on_hpaned_position_changed);
+			this.trackList.handle_resize();
+			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
+		}
+		hpaned_pos = this.hpaned.position;
+	}
 
 	private void create_widgets() {
 		try {
@@ -1213,15 +1232,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//--------------------
 
 			this.hpaned = gb.get_object("hpaned1") as Gtk.HPaned;
-			this.hpaned.notify["position"].connect(() => {
-				if(this.hpaned.position == 0)
-					media_browser_visible = false;
-				else
-					media_browser_visible = true;
-					
-				if(this.window != null)
-					this.trackList.handle_resize();
-			});
+			hpaned_pos = this.hpaned.position;
+			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
 			//----------------
 
 			//VOLUME SLIDE BUTTON

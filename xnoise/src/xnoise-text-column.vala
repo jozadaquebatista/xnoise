@@ -62,6 +62,9 @@ public class Xnoise.TextColumn : TreeViewColumn {
 	// this function sets the size without emmiting the resized signal
 	public void adjust_width(int width) {
 		last_size = width;
-		this.set_fixed_width(width);
+		if(width > this.min_width)
+			this.set_fixed_width(width);
+		else
+			this.set_fixed_width(this.min_width); 
 	}
 }
