@@ -14,10 +14,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="xnoise.svg"
-   inkscape:export-filename="/home/qnull/Desktop/xnoise_icons/xn_icon192192lp.png"
-   inkscape:export-xdpi="34.560001"
-   inkscape:export-ydpi="34.560001">
+   sodipodi:docname="xn_icon.svg"
+   inkscape:export-filename="/mnt/files/l/xnoise/xnoise/data/icons/256x256/xnoise.png"
+   inkscape:export-xdpi="46.080002"
+   inkscape:export-ydpi="46.080002">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -133,14 +133,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="901.48034"
-     inkscape:cy="-80.136752"
+     inkscape:zoom="0.24748737"
+     inkscape:cx="92.737684"
+     inkscape:cy="442.11618"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1680"
-     inkscape:window-height="1002"
+     inkscape:window-width="1280"
+     inkscape:window-height="949"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
@@ -172,7 +172,7 @@
      transform="translate(0,-552.36218)">
     <g
        id="g5467"
-       transform="matrix(3.6151386,0,0,3.3652434,-305.52399,-2364.9572)">
+       transform="matrix(3.2538409,0,0,3.2188042,-255.71972,-2226.5318)">
       <path
          transform="matrix(0.98889742,0,0,0.92857142,105.60269,870.58849)"
          d="M 96.3125,-3.96875 C 70.657695,15.136228 54.762771,33.551726 45.65625,53.625 36.062816,38.344603 21.602713,23.883782 0.65625,9.03125 l -14.6875,21.3125 c 28.60368,20.28203 39.99345,35.75642 45.8125,54.375 -1.64504,5.45878 -6.6054,13.6619 -14.5625,22.125 -9.1250702,9.70534 -21.2109702,19.66335 -32.6875,28.375 l 15.34375,20.8125 c 12.02303,-9.1265 25.06593,-19.72033 35.90625,-31.25 6.080891,-6.46757 11.656303,-13.17537 15.75,-20.5 2.939898,4.08271 6.230048,8.04419 9.6875,11.90625 10.81514,12.08078 23.85345,23.22874 35.875,32.8125 L 112.9375,128.5625 C 101.45948,119.412 89.33774,108.93979 80.1875,98.71875 72.05126,89.63037 66.94223,80.81041 65.34375,74.75 71.20569,54.82327 82.721814,38.37639 111.46875,16.96875 L 96.3125,-3.96875 z"
