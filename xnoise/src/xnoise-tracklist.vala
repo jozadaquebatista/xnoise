@@ -1058,7 +1058,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 	}
 	
-	// BUGBUGBUG: resize a column other than the last one to minimal width and then rapidly resize
+	// BUGBUGBUG: resize a column to minimal width and then rapidly resize
 	// the whole window to a very small width -> endless resize signal flood
 	// this also existed in the previous code (gtk+ bug??)
 	// DANGER: resizable columns need to be text columns
@@ -1111,7 +1111,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 			fixed_width += c.width;
 		}
 		
-		if(starting_column >= iter) return 0;
+		if(starting_column > iter) return 0;
+		print("calllled33333333333355555555");
 		
 		
 		/* the width that is not statically allocated as minimum or fixed width 
