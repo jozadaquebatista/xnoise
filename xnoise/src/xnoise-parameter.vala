@@ -251,6 +251,7 @@ private const string default_content = """
 [settings_int]
 use_lyrics=1
 use_length_column=1
+use_album_column=1
 posY=0
 posX=0
 height=550
@@ -272,6 +273,4 @@ prio_images=LastfmCovers
 activated_plugins=Chartlyrics;notifications;LastfmCovers;TitleToDecoration;Mediawatcher;mediakeys
 """;
 }
-
-//use_album_column=1
 

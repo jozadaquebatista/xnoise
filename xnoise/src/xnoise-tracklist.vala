@@ -38,7 +38,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	};
 	private const string USE_LEN_COL   = "use_length_column";
 	private const string USE_TR_NO_COL = "use_tracknumber_column";
-	//private const string USE_ALBUM_COL   = "use_album_column";
+	private const string USE_ALBUM_COL   = "use_album_column";
 
 	private TreeViewColumn columnPixb;
 	private TextColumn columnAlbum;
@@ -865,7 +865,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 				if(c == null) continue;
 				if(relative_column_sizes.lookup(c.title) == null && c.title != "" && c.resizable) {
 					double rel_size = par.get_double_value("relative_size_" + c.title + "_column");
-					print("%s: %f\n", c.title, rel_size);
 					relative_column_sizes.insert(c.title, rel_size);
 					((TextColumn)c).resized.connect(on_column_resized);
 					handle_resize();
@@ -881,7 +880,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 			//give the columns their relative sizes
 			var columns = this.get_columns();
 			foreach(TreeViewColumn c in columns) {
-				print("called88888888888888888888888888888888");
 				if(c == null) continue;
 				if(!c.resizable) continue;
 				double? rel_size = relative_column_sizes.lookup(c.title);
@@ -957,12 +955,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
 		
-		/*if(par.get_int_value(USE_ALBUM_COL) == 1) {
+		if(par.get_int_value(USE_ALBUM_COL) == 1) {
 			columnAlbum.visible = true;
 		}
 		else {
 			columnAlbum.visible = false;
-		}*/
+		}
 
 		// ARTIST
 		renderer = new CellRendererText();
@@ -1039,11 +1037,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 		var columns = this.get_columns();
 		int iter = 0;
 		int result = 0;
-		print("COLUMN RESIZED\n");
+		print("Column resize: %s\n", sender.title);
 		foreach(TreeViewColumn c in columns) {
 			if(sender.title == c.title) {
 				/* now we have the position number of the column that has been resized */
-				print("sender is %s\n", c.title);
 				result = resize_column_range_relatively(iter+1);
 				if(result < 0) {
 					/* the column was resized to a size that exceeds the available space
@@ -1061,6 +1058,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	// BUGBUGBUG: resize a column to minimal width and then rapidly resize
 	// the whole window to a very small width -> endless resize signal flood
 	// this also existed in the previous code (gtk+ bug??)
+	// i'll leave the debug messages in the code until it's fixed
 	// DANGER: resizable columns need to be text columns
 	
 	/* resizes a range of columns relatively the start of that range is marked
@@ -1068,7 +1066,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	int the treeview, delta is the difference in size */
 	private int resize_column_range_relatively(int starting_column) {
 		if(!this.visible) return 0;
-		print("\n\n\nresizing from column %d\n", starting_column);
+		print("\nresizing from column %d\n", starting_column);
 	
 		var columns = this.get_columns();
 		int iter = -1;
@@ -1112,7 +1110,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 		
 		if(starting_column > iter) return 0;
-		print("calllled33333333333355555555");
 		
 		
 		/* the width that is not statically allocated as minimum or fixed width 

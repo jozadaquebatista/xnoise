@@ -53,7 +53,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private CheckButton checkB_compact;
 	private HBox ai_hbox;
 	private HBox ly_hbox;
-	//private bool show_album_col;
+	private bool show_album_col;
 	private bool show_length_col;
 	private bool show_trackno_col;
 	private ListStore ai_model;
@@ -129,7 +129,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		//Visible Cols
 		show_length_col = (par.get_int_value("use_length_column") == 1 ? true : false);
 		show_trackno_col = (par.get_int_value("use_tracknumber_column") == 1 ? true : false);
-		//show_album_col = (par.get_int_value("use_album_column") == 1 ? true : false);
+		show_album_col = (par.get_int_value("use_album_column") == 1 ? true : false);
 		
 		//Treelines
 		if(par.get_int_value("use_treelines") > 0)
@@ -187,12 +187,12 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		
 		int buf = 0;
 		// show album column
-		/*if(show_album_col)
+		if(show_album_col)
 			buf = 1;
 		else
 			buf = 0;
 		par.set_int_value("use_album_column", buf);
-		xn.tl.column_album_visible = show_album_col;*/
+		xn.tl.column_album_visible = show_album_col;
 		
 		// show length column
 		if(show_length_col)
@@ -368,11 +368,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	private void put_data_to_viz_cols_tv() {
 		TreeIter iter;
-		/*visibleColTvModel.prepend(out iter);
+		visibleColTvModel.prepend(out iter);
 		visibleColTvModel.set(iter,
 			DisplayColums.TOGGLE, this.show_album_col,
 			DisplayColums.TEXT, "Album"
-			);*/
+			);
 		visibleColTvModel.prepend(out iter);
 		visibleColTvModel.set(iter,
 			DisplayColums.TOGGLE, this.show_length_col,
@@ -405,9 +405,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			                      DisplayColums.TOGGLE, ref val
 			                      );
 			switch(text) {
-				/*case "Album":
+				case "Album":
 					this.show_album_col = val;
-					break;*/
+					break;
 				case "Length":
 					this.show_length_col = val;
 					break;
