@@ -24,11 +24,16 @@
 namespace Pl {
 	// abstract base class for all playlist filereader implementations
 	private abstract class AbstractFileReader : GLib.Object {
+		// relative paths from playlists are turnedinto absolute paths, by using base path
+		protected string base_path;
+		 
 		public signal void started(string playlist_uri);
 		public signal void finished(string playlist_uri);
 
-		public abstract Data[] read(File file) throws InternalReaderError;
-		public abstract async Data[] read_asyn(File file) throws InternalReaderError;
+		public abstract DataCollection read(File file) throws InternalReaderError;
+		public abstract async DataCollection read_asyn(File file) throws InternalReaderError;
+
+		protected abstract void set_base_path();
 	}
 }
 

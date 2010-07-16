@@ -24,10 +24,15 @@ namespace Pl {
 			GENRE,
 			ALBUM,
 			COPYRIGHT,
-			DURATION
+			DURATION,
+			PARAM_NAME,
+			PARAM_VALUE,
+			IS_REMOTE,
+			IS_PLAYLIST
 		}
 		public Data ();
 		public void add_field (Pl.Data.Field field, string val);
+		public string? get_abs_path ();
 		public string? get_album ();
 		public string? get_author ();
 		public Pl.Data.Field[] get_contained_fields ();
@@ -36,8 +41,62 @@ namespace Pl {
 		public string? get_duration_string ();
 		public string get_field (Pl.Data.Field field);
 		public string? get_genre ();
+		public string? get_param_name ();
+		public string? get_param_value ();
+		public string? get_rel_path ();
 		public string? get_title ();
 		public string? get_uri ();
+		public bool is_playlist ();
+		public bool is_remote ();
+		public string? base_path { get; set; }
+		public Pl.TargetType target_type { get; set; }
+	}
+	[CCode (ref_function = "pl_data_collection_ref", unref_function = "pl_data_collection_unref", cheader_filename = "libplaylist.h")]
+	public class DataCollection {
+		[CCode (ref_function = "pl_data_collection_iterator_ref", unref_function = "pl_data_collection_iterator_unref", cheader_filename = "libplaylist.h")]
+		public class Iterator {
+			public Iterator (Pl.DataCollection dc);
+			public void append (Pl.Data item);
+			public bool first ();
+			public Pl.Data @get ();
+			public bool has_previous ();
+			public int index ();
+			public void insert (Pl.Data item);
+			public bool next ();
+			public bool previous ();
+			public void remove ();
+			public void @set (Pl.Data item);
+		}
+		public DataCollection ();
+		public bool append (Pl.Data item);
+		public void clear ();
+		public bool contains (Pl.Data d);
+		public bool contains_field (Pl.Data.Field field, string value);
+		public bool data_available ();
+		public Pl.Data @get (int index);
+		public string? get_album_for_uri (ref string uri_needle);
+		public string? get_author_for_uri (ref string uri_needle);
+		public Pl.Data.Field[] get_contained_fields_for_idx (int idx);
+		public Pl.Data.Field[] get_contained_fields_for_uri (ref string uri);
+		public string? get_copyright_for_uri (ref string uri_needle);
+		public long get_duration_for_uri (ref string uri_needle);
+		public string? get_duration_string_for_uri (ref string uri_needle);
+		public string[] get_found_uris ();
+		public string? get_genre_for_uri (ref string uri_needle);
+		public bool get_is_playlist_for_uri (ref string uri_needle);
+		public bool get_is_remote_for_uri (ref string uri_needle);
+		public int get_number_of_entries ();
+		public string? get_param_name_for_uri (ref string uri_needle);
+		public string? get_param_value_for_uri (ref string uri_needle);
+		public int get_size ();
+		public string? get_title_for_uri (ref string uri_needle);
+		public int index_of (Pl.Data d);
+		public void insert (int index, Pl.Data item);
+		public Pl.DataCollection.Iterator iterator ();
+		public void merge (Pl.DataCollection data_collection);
+		public bool remove (Pl.Data item);
+		public Pl.Data remove_at (int index);
+		public void @set (int index, Pl.Data item);
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Reader : GLib.Object {
@@ -50,17 +109,24 @@ namespace Pl {
 		public string? get_duration_string_for_uri (ref string uri_needle);
 		public string[] get_found_uris ();
 		public string? get_genre_for_uri (ref string uri_needle);
-		public string? get_tile_for_uri (ref string uri_needle);
+		public bool get_is_playlist_for_uri (ref string uri_needle);
+		public bool get_is_remote_for_uri (ref string uri_needle);
+		public int get_number_of_entries ();
+		public string? get_title_for_uri (ref string uri_needle);
 		public Pl.Result read (string list_uri) throws Pl.ReaderError;
-		public async Pl.Result read_async (string list_uri) throws Pl.ReaderError;
+		public async Pl.Result read_asyn (string list_uri) throws Pl.ReaderError;
+		public Pl.DataCollection data_collection { get; }
 		public string playlist_uri { get; }
 		public Pl.ListType ptype { get; }
+		public signal void finished (string playlist_uri);
+		public signal void started (string playlist_uri);
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Writer : GLib.Object {
-		public Writer (Pl.ListType ptype);
-		public Pl.Result write (Pl.Data[] data, string playlist_uri, bool overwrite = true) throws Pl.WriterError;
-		public async Pl.Result write_asyn (Pl.Data[] data, string playlist_uri, bool overwrite = true) throws Pl.WriterError;
+		public Writer (Pl.ListType ptype, bool overwrite = true);
+		public Pl.Result write (Pl.DataCollection data_collection, string playlist_uri) throws Pl.WriterError;
+		public async Pl.Result write_asyn (Pl.DataCollection data_collection, string playlist_uri) throws Pl.WriterError;
+		public bool overwrite_if_exists { get; }
 		public string? uri { get; }
 	}
 	[CCode (cprefix = "PL_LIST_TYPE_", cheader_filename = "libplaylist.h")]
@@ -78,7 +144,14 @@ namespace Pl {
 		ERROR,
 		IGNORED,
 		SUCCESS,
-		EMPTY
+		EMPTY,
+		DOUBLE_WRITE
+	}
+	[CCode (cprefix = "PL_TARGET_TYPE_", cheader_filename = "libplaylist.h")]
+	public enum TargetType {
+		URI,
+		REL_PATH,
+		ABS_PATH
 	}
 	[CCode (cprefix = "PL_READER_ERROR_", cheader_filename = "libplaylist.h")]
 	public errordomain ReaderError {
@@ -88,10 +161,22 @@ namespace Pl {
 	[CCode (cprefix = "PL_WRITER_ERROR_", cheader_filename = "libplaylist.h")]
 	public errordomain WriterError {
 		UNKNOWN_TYPE,
-		SOMETHING_ELSE,
+		NO_DATA,
+		NO_DEST_URI,
+		DEST_REMOTE,
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static bool debug;
 	[CCode (cheader_filename = "libplaylist.h")]
+	public const string[] remote_schemes;
+	[CCode (cheader_filename = "libplaylist.h")]
 	public static long get_duration_from_string (ref string? duration_string);
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static GLib.File get_file_for_location (string adr, ref string base_path = "", out Pl.TargetType tt);
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static Pl.ListType get_playlist_type_for_uri (ref string uri_);
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static Pl.ListType get_type_by_data (ref string uri_);
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static Pl.ListType get_type_by_extension (ref string uri_);
 }

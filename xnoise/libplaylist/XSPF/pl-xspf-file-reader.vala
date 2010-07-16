@@ -26,62 +26,86 @@ namespace Pl {
 	private class Xspf.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override Data[] read(File _file) throws InternalReaderError {
-			Data[] data_collection = {};
+		public override DataCollection read(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
 			this.file = _file;
+			set_base_path();
 			
 			var entry_on = false;
 		
-			if(!file.get_uri().has_prefix("http://") && !file.query_exists(null)) {
+			if(!file.query_exists(null)) {
 				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
 				return data_collection;
 			}
-
 			try {
 				var in_stream = new DataInputStream(file.read(null));
 				string line;
+				Data? d = null;
 				while((line = in_stream.read_line(null, null)) != null) {
-					var d = new Data();
 					if(line.has_prefix("#")) { //# Comments
 						continue;
-					} 
+					}
 					else if(line.size() == 0) { //Blank line
 						continue;
-					} 
+					}
 					else if(line.contains("<track>")) {
 						entry_on = true;
+						//print("prepare new entry\n");
+						d = new Data();
 						continue;
-					} 
+					}
 					else if(line.contains("</track>")) {
 						entry_on = false;
-						//print("\n");
+						//print("add entry\n");
+						data_collection.append(d);
 						continue;
-					} 
-					else {
-						if(entry_on) {
-							if(line.contains("<location")) {
-								line = line.replace("<location>","");
-								line = line.replace("</location>","");
-								line = line.strip();
-								File tmp = File.new_for_commandline_arg(line);
-								d.add_field(Data.Field.URI, tmp.get_uri());
+					}
+					else if(entry_on) { // Can we always assume that this is in one line???
+						if(line.contains("<location")) {
+							char* begin = line.str(">");
+							begin ++;
+							char* end = line.rstr("<");
+							if(begin >= end) {
+								throw new InternalReaderError.INVALID_FILE("Error. Invalid playlist file (uri)\n");
 							}
+							*end = '\0';
+
+							TargetType tt;
+							File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
+							d.add_field(Data.Field.URI, tmp.get_uri());
+							d.target_type = tt;
+						}
+						if(line.contains("<title")) {
+							char* begin = line.str(">");
+							begin++;
+							char* end = line.rstr("<");
+							if(begin >= end) {
+								throw new InternalReaderError.INVALID_FILE("Error. Invalid playlist file (title)\n");
+							}
+							*end = '\0';
+							d.add_field(Data.Field.TITLE, ((string)begin)._strip());
 						}
 					}
-					if(d.get_field(Data.Field.URI) != null)
-						data_collection += d;
+					else {
+						continue;
+					}
 				}
-			} 
+			}
 			catch(GLib.Error e) {
 				print("Error: %s\n", e.message); 
 			}
 			return data_collection;
 		}
 
-		public override async Data[] read_asyn(File _file) throws InternalReaderError {
-			Data[] data_collection = {};
+		public override async DataCollection read_asyn(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
 			this.file = _file;
+			set_base_path();
 			return data_collection;
+		}
+		
+		protected override void set_base_path() {
+			base_path = file.get_parent().get_uri();
 		}
 	}
 }

@@ -54,4 +54,8 @@ xnoise/TODO.tasks
 xnoise/xnoise.anjuta
 .dirstamp
 xnoise/tests/tests
+xnoise/tests/playlist-examples/tmp_*.asx
+xnoise/tests/playlist-examples/tmp_*.m3u
+xnoise/tests/playlist-examples/tmp_*.pls
+xnoise/tests/playlist-examples/tmp_*.xspf
 

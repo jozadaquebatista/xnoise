@@ -26,58 +26,92 @@ namespace Pl {
 	private class Pls.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override Data[] read(File _file) throws InternalReaderError {
-			Data[] data_collection = {};
+		public override DataCollection read(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
 			this.file = _file;
-
-			if (!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
+			set_base_path();
+			if(!file.query_exists(null)) { 
 				stderr.printf ("File '%s' doesn't exist.\n", file.get_uri());
 				return data_collection;
 			}
 
 			try {
-				var in_stream = new DataInputStream (file.read (null));
+				var in_stream = new DataInputStream (file.read(null));
 				string line;
 				int numberofentries = 0;
-
+				string[] line_buf = {};
 				//Read header => [playlist]
-				if( (line = in_stream.read_line (null, null)) != null ) {
-					if ( !line.has_prefix( "[playlist]" ) ) {
+				if((line = in_stream.read_line(null, null)) != null) {
+					if (!line.has_prefix( "[playlist]" ) ) {
 						return data_collection;
 					}
-
-					while ((line = in_stream.read_line (null, null)) != null) {
-						var d = new Data();
+					Data d = null;
+					while((line = in_stream.read_line (null, null)) != null) {
+						
 						//Ignore blank line
-						if( line.size() == 0 ) { 
+						if(line._strip().size() == 0) { 
 							continue; 
 						}
-
-						if( line.down().contains("numberofentries") ) {
+						if(line.down().contains("numberofentries")) {
 							var arrayNumberOfEntries = line.split("=");
-
-							if( arrayNumberOfEntries.length == 2 ) {
-								numberofentries = arrayNumberOfEntries[1].to_int();   
+							
+							//Can we rely on existance of numberofentries??
+							if(arrayNumberOfEntries.length == 2) {
+								numberofentries = arrayNumberOfEntries[1].to_int();
 								//print("There are %d entries: \n", numberofentries);
+							}
+							else {
+								//error
 							}
 							continue;
 						}
+						else {
+							line_buf += line;
+						}
 
-						if( line.has_prefix("File") ) {        
-							string file_line = line;
-							string title_line = in_stream.read_line (null, null);
-							string length_line = in_stream.read_line (null, null);
-
-							if(file_line != null) {
-								var arrayFile = file_line.split("=");
-								if(arrayFile != null && arrayFile.length >= 2) {
-									File tmp = File.new_for_commandline_arg(arrayFile[1]);
+					}
+					
+					for(int i = 1; i <= numberofentries; i++) {
+						d = new Data();
+						for(int j = 0; j < line_buf.length; j++) {
+							if(line_buf[j].has_prefix("File" + i.to_string())) {
+								if(line_buf[j].contains("=")) {
+									char* begin = line_buf[j].str("=");
+									begin++;
+									char* end = (char*)line_buf[j] + line_buf[j].size();
+									if(begin >= end)
+										break;
+									TargetType tt;
+									File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
 									d.add_field(Data.Field.URI, tmp.get_uri());
+									d.target_type = tt;
+									break;
+								}
+								else {
+									break;
+								}
+							}
+							
+						}
+						for(int j = 0; j < line_buf.length; j++) {
+							if(line_buf[j].has_prefix("Title" + i.to_string())) {
+								if(line_buf[j].contains("=")) {
+									char* begin = line_buf[j].str("=");
+									begin++;
+									char* end = (char*)line_buf[j] + line_buf[j].size();
+									if(begin >= end)
+										break;
+									line_buf[j] = ((string)begin)._strip();
+									d.add_field(Data.Field.TITLE, line_buf[j]);
+									break;
+								}
+								else {
+									break;
 								}
 							}
 						}
-						if(d.get_field(Data.Field.URI) != null)
-							data_collection += d;
+						if(d.get_uri() != null)
+							data_collection.append(d);
 					}
 				}
 			} 
@@ -88,10 +122,15 @@ namespace Pl {
 			return data_collection;
 		}
 
-		public override async Data[] read_asyn(File _file) throws InternalReaderError {
-			Data[] data_collection = {};
+		public override async DataCollection read_asyn(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
 			this.file = _file;
+			set_base_path();
 			return data_collection;
+		}
+
+		protected override void set_base_path() {
+			base_path = file.get_parent().get_uri();
 		}
 	}
 }

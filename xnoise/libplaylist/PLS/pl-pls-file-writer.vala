@@ -24,13 +24,24 @@ namespace Pl {
 	// base class for all playlist filewriter implementations
 	private class Pls.FileWriter : AbstractFileWriter {
 		
-		private Data[] data_collection;
+		private DataCollection data_collection;
 		private File file;
+		private bool _overwrite_if_exists = true;
+		
+		public bool overwrite_if_exists { 
+			get {
+				return _overwrite_if_exists;
+			} 
+		}
 
-		public override Result write(File _file, Data[] _data_collection) throws InternalWriterError {
+		public FileWriter(bool overwrite) {
+			_overwrite_if_exists = overwrite;
+		}
+
+		public override Result write(File _file, DataCollection _data_collection) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
-			if(data_collection != null && data_collection.length > 0) {
+			if(data_collection != null && data_collection.get_size() > 0) {
 				try {
 					if(file.query_exists(null)) {
 						file.delete(null);
@@ -42,14 +53,34 @@ namespace Pl {
 					data_stream.put_string("[playlist]\n\n", null);
 					int i = 1;
 					foreach(Data d in data_collection) {
-						if(d.get_field(Data.Field.URI) == null)
-							continue;
-						data_stream.put_string("File" +i.to_string() + "=" + d.get_field(Data.Field.URI) + "\n", null);
-						data_stream.put_string("Title" +i.to_string() + "=" + "\n", null);
+						string? tmp_location = null;
+						
+						// find out the type of the target to save (uri, absolute path or relative to the playlist)
+						switch(d.target_type) { //TODO: check if ASX specification allows relative paths
+							case TargetType.URI:
+								tmp_location = d.get_uri();
+								if((tmp_location == null) && (tmp_location == ""))
+									continue;
+								break;
+							case TargetType.ABS_PATH:
+								tmp_location = d.get_abs_path();
+								if((tmp_location == null) && (tmp_location == ""))
+									continue;
+								break;
+							case TargetType.REL_PATH:
+								tmp_location = d.get_rel_path();
+								if((tmp_location == null) && (tmp_location == ""))
+									continue;
+								break;
+						}
+//						if(d.get_field(Data.Field.URI) == null)
+//							continue;
+						data_stream.put_string("File" +i.to_string() + "=" + tmp_location + "\n", null);
+						data_stream.put_string("Title" +i.to_string() + "=" + d.get_title()  + "\n", null);
 						data_stream.put_string("Length" +i.to_string() + "=" + "-1\n\n", null);
 						i++;
 					}
-					data_stream.put_string("NumberOfEntries=" + data_collection.length.to_string() + "\n", null);
+					data_stream.put_string("NumberOfEntries=" + data_collection.get_size().to_string() + "\n", null);
 					data_stream.put_string("Version=2\n", null);
 				}
 				catch(GLib.Error e) {
@@ -59,10 +90,14 @@ namespace Pl {
 			return Result.UNHANDLED;
 		}
 		
-		public override async Result write_asyn(File _file, Data[] _data_collection) throws InternalWriterError {
+		public override async Result write_asyn(File _file, DataCollection _data_collection) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
 			return Result.UNHANDLED;
+		}
+
+		protected override void set_base_path() {
+			base_path = file.get_parent().get_uri();
 		}
 	}
 }

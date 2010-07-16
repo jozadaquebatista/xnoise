@@ -30,11 +30,14 @@ namespace Pl {
 
 	public errordomain WriterError {
 		UNKNOWN_TYPE,
-		SOMETHING_ELSE
+		NO_DATA,
+		NO_DEST_URI,
+		DEST_REMOTE
 	}
 	
 	private errordomain InternalReaderError {
 		UNKNOWN_TYPE,
+		INVALID_FILE,
 		SOMETHING_ELSE
 	}
 
@@ -58,7 +61,14 @@ namespace Pl {
 		ERROR,         //Error reading playlist
 		IGNORED,       //Playlist was ignored for some reason
 		SUCCESS,       //Playlist was read successfully
-		EMPTY          //Reding returned no data
+		EMPTY,         //Reding returned no data
+		DOUBLE_WRITE   //There was already a write in progress for current writer instance
+	}
+	
+	public enum TargetType {
+		URI,           // a uri is a uri
+		REL_PATH,      // path relative to the location of the playlist
+		ABS_PATH       // absolute path (local only !)
 	}
 	
 	// string constants for content types
@@ -74,46 +84,6 @@ namespace Pl {
 	//put some debug messages into the code
 	public bool debug = false;
 	
-	
-	// Static helper functions
-	
-	// duration in seconds
-	public static long get_duration_from_string(ref string? duration_string) {
-		
-		if(duration_string == null)
-			return -1;
-		
-		long duration = 0;
-		int hours = 0; 
-		int minutes = 0; 
-		int seconds = 0; 
-		int fractions_of_seconds = 0;
-		
-		// Try scanning different formats
-		
-		if(duration_string.scanf("%d:%d:%d.%d", ref hours, ref minutes, ref seconds, ref fractions_of_seconds) == 4) {
-			duration = hours * 3600 + minutes * 60 + seconds;
-			return (duration == 0 && fractions_of_seconds > 0) ? 1 : duration;
-		}
-		
-		if(duration_string.scanf("%d:%d.%d", ref minutes, ref seconds, ref fractions_of_seconds) == 3) {
-			duration = minutes * 60 + seconds;
-			return (duration == 0 && fractions_of_seconds > 0) ? 1 : duration;
-		}
-		
-		if(duration_string.scanf("%d:%d:%d", ref hours, ref minutes, ref seconds) == 3) 
-			return hours * 3600 + minutes * 60 + seconds;
-		
-		if(duration_string.scanf("%d.%d", ref minutes, ref seconds) == 2) 
-			return minutes * 60 + seconds;
-		
-		if(duration_string.scanf("%d:%d", ref minutes, ref seconds) == 2) 
-			return minutes * 60 + seconds;
-		
-		if(duration_string.scanf("%d", ref seconds) == 1) 
-			return seconds;
-		
-		return -1; // string didn't match the scanning formats
-	}
+	public const string[] remote_schemes = { "http", "ftp" }; // TODO: add more
 }
 

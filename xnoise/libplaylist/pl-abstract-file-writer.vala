@@ -27,8 +27,13 @@ namespace Pl {
 		public signal void started(string playlist_uri);
 		public signal void finished(string playlist_uri);
 
-		public abstract Result write(File file, Data[] data_collection) throws InternalWriterError;
-		public abstract async Result write_asyn(File file, Data[] data_collection) throws InternalWriterError;
+		// relative paths from playlists are turnedinto absolute paths, by using base path
+		protected string base_path;
+		
+		public abstract Result write(File file, DataCollection data_collection) throws InternalWriterError;
+		public abstract async Result write_asyn(File file, DataCollection data_collection) throws InternalWriterError;
+		
+		protected abstract void set_base_path();
 	}
 }
 
