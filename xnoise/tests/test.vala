@@ -90,22 +90,21 @@ bool test_m3u_reading_2() {
 	return uris[0] == t1.get_uri() && reader.get_number_of_entries() == 5;
 }
 
-//   fails because resource is offline
-//bool test_pls_reading() {
-//	File f = File.new_for_uri("http://emisora.fundingue.com:8070/listen.pls");
-//	var reader = new Pl.Reader();
-//	try {
-//		reader.read(f.get_uri());
-//	}
-//	catch(Error e) {
-//		print("pls test error reading\n");
-//		return false;
-//	}
-//	var uris = reader.get_found_uris();
-//	//print("Size: %s\n", uris.length.to_string());
-//	//print("Url0: %s\n",uris[0]);
-//	return uris[0] == "http://emisora.fundingue.com:8070/";
-//}
+bool test_asx_remote_reading() {
+	File f = File.new_for_uri("http://www.tropicalisima.fm/wmbaladas48.asx");
+	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("asx remote test error reading\n");
+		return false;
+	}
+	var uris = reader.get_found_uris();
+	//print("Size: %s\n", uris.length.to_string());
+	return uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
+}
 
 bool test_pls_reading_2() {
 	File f = File.new_for_path("./playlist-examples/pls_test.pls");
@@ -828,6 +827,12 @@ void main() {
 	// READ M3U 2
 	print("test m3u reading 2:");
 	if(test_m3u_reading_2())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+
+	print("test asx remote reading:");
+	if(test_asx_remote_reading())
 		print("\033[50Gpass\n");
 	else
 		print("\033[50Gfail\n");
