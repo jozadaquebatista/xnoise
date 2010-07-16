@@ -95,7 +95,10 @@ bool test_asx_remote_reading() {
 	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
 	var reader = new Pl.Reader();
 	try {
+//		t = new Timer();
+//		t.start();
 		reader.read(f.get_uri());
+//		print("%f\n", t.elapsed(null));
 	}
 	catch(Error e) {
 		print("asx remote test error reading\n");
@@ -780,6 +783,48 @@ bool test_xpsf_read_with_no_extension_on_file() {
 	return uris[0] == "http://www.example.com/music/bar.ogg" && reader.get_number_of_entries() == 2;
 }
 
+
+MainLoop ml;
+//Timer t;
+//Pl.Reader asxreader;
+void test_asx_async_reading() {
+	File f = File.new_for_uri("http://www.tropicalisima.fm/wmbaladas48.asx");//"http://www.tropicalisima.fm/audios/suave128k.pls");
+	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
+	var asxreader = new Pl.Reader();
+	asxreader.finished.connect(asx_async_finished_cb01);
+	asxreader.ref(); //prevent destruction
+	try {
+//		t = new Timer();
+//		t.start();
+		asxreader.read_asyn.begin(f.get_uri());
+//		print("%f\n", t.elapsed(null));
+		
+	}
+	catch(Error e) {
+		print("asx remote test error reading\n");
+		return;
+	}
+	//print("Size: %s\n", uris.length.to_string());
+	return;// uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
+}
+
+void asx_async_finished_cb01(Pl.Reader sender, string pluri) {
+	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
+	var uris = sender.get_found_uris();
+	//print("Size: %s\n", uris.length.to_string());
+	sender.unref();
+	//	print("uris[0]: %s\n", uris[0]);
+	//	print("t1.get_uri() :%s\n", t1.get_uri());
+	//print("sender.get_number_of_entries():%d\n", sender.get_number_of_entries());
+	if(uris[0] == t1.get_uri() && sender.get_number_of_entries() == 1)
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+//	print("%f\n", t.elapsed(null));
+	ml.quit();
+	return;
+}
+
 void main() {
 	print("\n");
 	// CREATE READER
@@ -977,6 +1022,17 @@ void main() {
 	else
 		print("\033[50Gfail\n");
 	
+	// async tests
 	
+	print("test asx async reading:");
+	test_asx_async_reading();
+	ml = new MainLoop(); // reuse mainloop for every async test
+	ml.run();
+
+	print("test asx async reading:");
+	test_asx_async_reading();
+	ml = new MainLoop(); // reuse mainloop for every async test
+	ml.run();
+
 }
 
