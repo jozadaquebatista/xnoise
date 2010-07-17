@@ -43,20 +43,29 @@ public class Xnoise.TextColumn : TreeViewColumn {
 	
 	public signal void resized(bool grow, int delta, TrackListModel.Column source_id);
 	
+	private void on_width_changed() {
+		if(last_size != this.width) {
+			bool grow = (this.width > last_size);
+			int delta = (this.width - last_size).abs();
+			last_size = this.width;
+			resized(grow, delta, this.id); //emit signal
+		}
+	}		
+	
+	private void on_visibility_changed() {
+		if(this.visible) this.notify["width"].connect(on_width_changed);
+		else this.notify["width"].disconnect(on_width_changed);
+	}
+	
 	public TextColumn(string title, CellRendererText renderer, TrackListModel.Column col_id) {
 		xn = Main.instance;
 		this.set_title(title);
 		this._id = col_id;
 		this.pack_start(renderer, true);
 		this.last_size = this.width;
-		this.notify["width"].connect( (s, p) => {
-			if(last_size != this.width) {
-				bool grow = (this.width > last_size);
-				int delta = (this.width - last_size).abs();
-				last_size = this.width;
-				resized(grow, delta, this.id); //emit signal
-			}
-		});
+		this.notify["visible"].connect(on_visibility_changed);
+		if(this.visible)
+			this.notify["width"].connect(on_width_changed);
 	}
 	
 	// this function sets the size without emmiting the resized signal
@@ -64,7 +73,9 @@ public class Xnoise.TextColumn : TreeViewColumn {
 		last_size = width;
 		if(width > this.min_width)
 			this.set_fixed_width(width);
-		else
+		// this is badly needed in order to prevent us from getting cought in an infinite loop
+		// of notify["width"] signals	
+		else if(this.width > this.min_width)
 			this.set_fixed_width(this.min_width); 
 	}
 }
