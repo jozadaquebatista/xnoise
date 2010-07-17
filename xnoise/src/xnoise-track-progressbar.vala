@@ -37,6 +37,7 @@ using Gtk;
 */
 public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 	private unowned Main xn;
+	private const double SCROLL_POS_CHANGE = 0.02;
 
 	public TrackProgressBar() {
 		xn = Main.instance;
@@ -44,9 +45,10 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		this.discrete_blocks = 10;
 		this.set_size_request(-1,18);
 
-		this.set_events(Gdk.EventMask.BUTTON1_MOTION_MASK | Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK);
+		this.set_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.BUTTON1_MOTION_MASK | Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK);
 		this.button_press_event.connect(this.on_press);
 		this.button_release_event.connect(this.on_release);
+		this.scroll_event.connect(this.on_scroll);
 
 		xn.gPl.sign_song_position_changed.connect(set_value);
 		global.caught_eos_from_player.connect(on_eos);
@@ -87,7 +89,41 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		}
 		return false;
 	}
+	
+	private bool on_scroll(Gdk.EventScroll event) {
+		if(global.track_state != GlobalAccess.TrackState.STOPPED) {
+			if(event.direction == Gdk.ScrollDirection.DOWN) {
+				if((xn.gPl.playing)|(xn.gPl.paused)) {
+					double thisFraction;
 
+					thisFraction = this.fraction - SCROLL_POS_CHANGE;
+
+					if(thisFraction < 0.0) thisFraction = 0.0;
+					if(thisFraction > 1.0) thisFraction = 1.0;
+					this.set_fraction(thisFraction);
+					this.xn.main_window.sign_pos_changed(thisFraction);
+
+					set_value((uint)((thisFraction * xn.gPl.length_time) / 1000000), (uint)(xn.gPl.length_time / 1000000));
+				}
+			}
+			else if(event.direction == Gdk.ScrollDirection.UP) {
+				if((xn.gPl.playing)|(xn.gPl.paused)) {
+					double thisFraction;
+
+					thisFraction = this.fraction + SCROLL_POS_CHANGE;
+
+					if(thisFraction < 0.0) thisFraction = 0.0;
+					if(thisFraction > 1.0) thisFraction = 1.0;
+					this.set_fraction(thisFraction);
+					this.xn.main_window.sign_pos_changed(thisFraction);
+
+					set_value((uint)((thisFraction * xn.gPl.length_time) / 1000000), (uint)(xn.gPl.length_time / 1000000));
+				}
+			}
+		}
+		return false;
+	}
+	
 	private bool on_motion_notify(Gdk.EventMotion e) {
 		double thisFraction;
 		double mouse_x, mouse_y;
