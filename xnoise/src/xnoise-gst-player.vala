@@ -101,7 +101,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			_Uri = value;
 			if((value == "")||(value == null)) {
 				playbin.set_state(State.NULL); //stop
-				print("Uri = null or '' -> set to stop\n");
+				//print("Uri = null or '' -> set to stop\n");
 				playing = false;
 				paused = false;
 			}
