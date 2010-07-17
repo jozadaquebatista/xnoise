@@ -1092,13 +1092,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		return false;
 	}
 
-	private const double VOL_CHANGE = 0.04;
 	private bool on_trayicon_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
-		if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
-			change_track(ControlButton.Direction.PREVIOUS, true);
-		}
-		else if(event.scroll.direction == Gdk.ScrollDirection.UP) {
-			change_track(ControlButton.Direction.NEXT, true);
+		if(global.track_state != GlobalAccess.TrackState.STOPPED) {
+			if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
+				change_track(ControlButton.Direction.PREVIOUS, true);
+			}
+			else if(event.scroll.direction == Gdk.ScrollDirection.UP) {
+				change_track(ControlButton.Direction.NEXT, true);
+			}
 		}
 		return false;
 	}
