@@ -1095,16 +1095,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const double VOL_CHANGE = 0.04;
 	private bool on_trayicon_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
 		if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
-			double temp = 0.0;
-			temp = this.xn.gPl.volume - VOL_CHANGE;
-			if(temp < 0.0) temp = 0.0;
-			this.xn.gPl.volume = temp;
+			change_track(ControlButton.Direction.PREVIOUS, true);
 		}
 		else if(event.scroll.direction == Gdk.ScrollDirection.UP) {
-			double temp = 0.0;
-			temp = this.xn.gPl.volume + VOL_CHANGE;
-			if(temp > 1.0) temp = 1.0;
-			this.xn.gPl.volume = temp;
+			change_track(ControlButton.Direction.NEXT, true);
 		}
 		return false;
 	}
