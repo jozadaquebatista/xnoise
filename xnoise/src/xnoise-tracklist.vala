@@ -1037,7 +1037,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 		var columns = this.get_columns();
 		int iter = 0;
 		int result = 0;
-		print("Column resize: %s\n", sender.title);
+		
+		//print("Column resize: %s\n", sender.title);
+		
 		foreach(TreeViewColumn c in columns) {
 			if(sender.title == c.title) {
 				/* now we have the position number of the column that has been resized */
@@ -1055,10 +1057,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 	}
 	
-	// BUGBUGBUG: resize a column to minimal width and then rapidly resize
-	// the whole window to a very small width -> endless resize signal flood
-	// this also existed in the previous code (gtk+ bug??)
-	// i'll leave the debug messages in the code until it's fixed
+
 	// DANGER: resizable columns need to be text columns
 	
 	/* resizes a range of columns relatively the start of that range is marked
@@ -1066,7 +1065,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	int the treeview, delta is the difference in size */
 	private int resize_column_range_relatively(int starting_column) {
 		if(!this.visible) return 0;
-		print("\nresizing from column %d\n", starting_column);
+		//print("\nresizing from column %d\n", starting_column);
 	
 		var columns = this.get_columns();
 		int iter = -1;
@@ -1117,8 +1116,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 		int distributable_width = available_width - (left_width + min_dynamic_width + fixed_width);
 		
 		if(left_width <= 0 && available_width <= (min_dynamic_width + fixed_width)) distributable_width = 0;
-		print("width to dsitribute %d\n", distributable_width);
-		print("available width %d, fixed_width %d, min_dynamic_width %d, left_width %d, rel_size_sum %f\n", available_width, fixed_width, min_dynamic_width, left_width, rel_size_sum);
+		
+		//print("width to dsitribute %d\n", distributable_width);
+		//print("available width %d, fixed_width %d, min_dynamic_width %d, left_width %d, rel_size_sum %f\n", available_width, fixed_width, min_dynamic_width, left_width, rel_size_sum);
+		
 		unowned List<TreeViewColumn> starting_column_node = columns.nth(starting_column);
 		foreach(TreeViewColumn c in starting_column_node) {
 			if(c.resizable) {
@@ -1126,8 +1127,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 				double? rel_size = relative_column_sizes.lookup(c.title);
 				if(rel_size == null) rel_size = 0.15;
 				rel_size = ((double)rel_size - (double)c.min_width / (double)available_width) / rel_size_sum;
-				print("resizing %s to %d, rel_size %f\n", c.title, c.min_width + 
-					(int)(((double)distributable_width) * (double)rel_size), rel_size);
+				
+				/* print("resizing %s to %d, rel_size %f\n", c.title, c.min_width + 
+					(int)(((double)distributable_width) * (double)rel_size), rel_size); */
 						
 				((TextColumn) c).adjust_width(c.min_width + 
 					(int)(((double)distributable_width) * (double)rel_size));
