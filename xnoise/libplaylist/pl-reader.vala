@@ -87,7 +87,7 @@ namespace Pl {
 			_playlist_uri = list_uri;
 			file = File.new_for_uri(_playlist_uri);
 
-			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri, ref _ptype);
+			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri, ref _ptype); // TODO async version
 			plfile_reader.finished.connect( (s, u) => {
 				this.finished(u);
 			});
@@ -96,10 +96,10 @@ namespace Pl {
 				return Result.ERROR;
 			}
 
-//			read_in_progress_mutex.lock();
+			read_in_progress_mutex.lock();
 //			ret = yield this.read_async_internal();
 			this.read_async_internal.begin();
-//			read_in_progress_mutex.unlock();
+			read_in_progress_mutex.unlock();
 			return ret;
 		}
 

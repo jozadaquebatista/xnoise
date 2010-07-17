@@ -42,7 +42,7 @@ namespace Pl {
 				string[] line_buf = {};
 				//Read header => [playlist]
 				if((line = in_stream.read_line(null, null)) != null) {
-					if (!line.has_prefix( "[playlist]" ) ) {
+					if(!line.has_prefix( "[playlist]")) {
 						return data_collection;
 					}
 					Data d = null;
@@ -125,7 +125,100 @@ namespace Pl {
 		public override async DataCollection read_asyn(File _file) throws InternalReaderError {
 			DataCollection data_collection = new DataCollection();
 			this.file = _file;
+			size_t a;
+			char* begin;
+			char* end;
 			set_base_path();
+			if(!file.query_exists(null)) { 
+				stderr.printf ("File '%s' doesn't exist.\n", file.get_uri());
+				return data_collection;
+			}
+
+			try {
+				var in_stream = new DataInputStream (file.read(null));
+				string line;
+				int numberofentries = 0;
+				string[] line_buf = {};
+				//Read header => [playlist]
+				if((line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, out a)) != null) {
+					if(!line.has_prefix("[playlist]")) {
+						return data_collection;
+					}
+					Data d = null;
+					while(in_stream != null && (line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, out a)) != null) {
+						//Ignore blank line
+						if(line._strip().size() == 0) {
+							continue; 
+						}
+						if(line.down().contains("numberofentries")) {
+							var arrayNumberOfEntries = line.split("=");
+							//Can we rely on existance of numberofentries??
+							if(arrayNumberOfEntries.length == 2) {
+								numberofentries = arrayNumberOfEntries[1].to_int();
+								//print("There are %d entries: \n", numberofentries);
+							}
+							else {
+								//error
+							}
+							continue;
+						}
+						else {
+							line_buf += line;
+						}
+					}
+					
+					for(int i = 1; i <= numberofentries; i++) {
+						d = new Data();
+						for(int k = 0; k < line_buf.length; k++) {
+							if(line_buf[k].has_prefix("File" + i.to_string())) {
+								if(line_buf[k].contains("=")) {
+									begin = line_buf[k].str("=");
+									begin++;
+									end = (char*)line_buf[k] + line_buf[k].size();
+									if(begin >= end)
+										break;
+									TargetType tt;
+									File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
+									d.add_field(Data.Field.URI, tmp.get_uri());
+									d.target_type = tt;
+									break;
+								}
+								else {
+									break;
+								}
+							}
+							
+						}
+						for(int j = 0; j < line_buf.length; j++) {
+							if(line_buf[j].has_prefix("Title" + i.to_string())) {
+								if(line_buf[j].contains("=")) {
+									begin = line_buf[j].str("=");
+									begin++;
+									end = (char*)line_buf[j] + line_buf[j].size();
+									if(begin >= end)
+										break;
+									line_buf[j] = ((string)begin)._strip();
+									d.add_field(Data.Field.TITLE, line_buf[j]);
+									break;
+								}
+								else {
+									break;
+								}
+							}
+						}
+						if(d.get_uri() != null)
+							data_collection.append(d);
+					}
+				}
+			}
+			catch(GLib.Error e) {
+				print("Error: %s\n", e.message);
+				error("%s", e.message);
+			}
+			Idle.add( () => {
+				this.finished(file.get_uri());
+				return false;
+			});
 			return data_collection;
 		}
 
