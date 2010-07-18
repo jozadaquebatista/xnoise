@@ -569,7 +569,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void trayicon_menu_popup(StatusIcon i, uint button, uint activateTime) {
-		menu.popup(null, null, null, 0, activateTime);
+		menu.popup(null, null, i.position_menu, 0, activateTime);
 	}
 
 	private const int KEY_F11 = 0xFFC8;
