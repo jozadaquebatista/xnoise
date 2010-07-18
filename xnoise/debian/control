@@ -1,0 +1,24 @@
+Source: xnoise
+Section: gnome
+Priority: optional
+Maintainer: Jörn Magens <shuerhaaken@googlemail.com>
+Build-Depends: debhelper (>= 7), autotools-dev, intltool (>= 0.35.0), libsqlite3-dev (>= 3.6), libtagc0-dev (>=1.6.2), libgtk2.0-dev (>=2.20), libgstreamer0.10-dev (>=0.10.28), libgstreamer-plugins-base0.10-dev (>=0.10.28), libunique-dev (>=1.0)
+Standards-Version: 3.8.3
+Homepage: http://www.xnoise-media-player.com/
+
+Package: xnoise
+Architecture: any
+Depends: ${misc:Depends}, libsqlite3-0 (>= 3.6), libgtk2.0-0 (>=2.20), libgstreamer0.10-0 (>=0.10.28), libgstreamer-plugins-base0.10-0 (>=0.10.28), libtagc0 (>=1.6.2), libunique-1.0-0 (>=1.0)
+Description: A Media player for Gtk+.
+ Unlike Rhythmbox, Banshee or itunes, Xnoise uses a tracklist centric design. 
+ The tracklist is a list of video or music tracks that are played one by one 
+ without being removed. This gives you the possibility to enqueue any track 
+ in any order, regardless if they are on the same album or not. The tracks can 
+ be reordered at any time via drag and drop.
+ .
+ The media browser contains all available media in a hierarchical tree structure 
+ of the available metadata. It is easy to find a single track, artist or album by 
+ going through this tree or by just entering a search term. From the media browser, 
+ music or videos can be dragged into the tracklist to every position.
+ Xnoise can play every kind of audio/video data that gstreamer can handle.
+ There is are plugins available.
