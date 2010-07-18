@@ -1,0 +1,129 @@
+using GLib;
+using Gtk;	
+	
+public class Xnoise.TrayIcon : StatusIcon {
+	private Menu traymenu;
+	private unowned Main xn;
+	private Image playpause_popup_image;
+	
+	public TrayIcon() {
+		set_from_file(Config.UIDIR + "xnoise_bruit_48x48.png");
+		set_tooltip_text("xnoise media player");
+		xn = Main.instance;
+		construct_traymenu();
+		
+		popup_menu.connect(this.traymenu_popup);
+		activate.connect(xn.main_window.toggle_window_visbility);
+		scroll_event.connect(this.on_scrolled);
+		button_press_event.connect(this.on_clicked);
+	}
+	
+	
+	private void construct_traymenu() {
+		traymenu = new Menu();
+
+		playpause_popup_image = new Image();
+		playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
+		xn.gPl.sign_playing.connect( () => {
+			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PAUSE, IconSize.MENU);
+		});
+		xn.gPl.sign_stopped.connect( () => {
+			if(this.playpause_popup_image==null) print("this.playpause_popup_image == null\n");
+			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
+		});
+		xn.gPl.sign_paused.connect( () => {
+			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
+		});
+
+		var playLabel = new Label(_("Play/Pause"));
+		playLabel.set_alignment(0, 0);
+		playLabel.set_width_chars(20);
+		var playpauseItem = new MenuItem();
+		var playHbox = new HBox(false,1);
+		playHbox.set_spacing(10);
+		playHbox.pack_start(playpause_popup_image, false, true, 0);
+		playHbox.pack_start(playLabel, true, true, 0);
+		playpauseItem.add(playHbox);
+		playpauseItem.activate.connect(xn.main_window.playPauseButton.on_menu_clicked);
+		traymenu.append(playpauseItem);
+
+		var previousImage = new Image();
+		previousImage.set_from_stock(STOCK_MEDIA_PREVIOUS, IconSize.MENU);
+		var previousLabel = new Label(_("Previous"));
+		previousLabel.set_alignment(0, 0);
+		var previousItem = new MenuItem();
+		var previousHbox = new HBox(false,1);
+		previousHbox.set_spacing(10);
+		previousHbox.pack_start(previousImage, false, true, 0);
+		previousHbox.pack_start(previousLabel, true, true, 0);
+		previousItem.add(previousHbox);
+		previousItem.activate.connect( () => {
+			xn.main_window.handle_control_button_click(xn.main_window.previousButton, ControlButton.Direction.PREVIOUS);
+		});
+		traymenu.append(previousItem);
+
+		var nextImage = new Image();
+		nextImage.set_from_stock(STOCK_MEDIA_NEXT, IconSize.MENU);
+		var nextLabel = new Label(_("Next"));
+		nextLabel.set_alignment(0, 0);
+		var nextItem = new MenuItem();
+		var nextHbox = new HBox(false,1);
+		nextHbox.set_spacing(10);
+		nextHbox.pack_start(nextImage, false, true, 0);
+		nextHbox.pack_start(nextLabel, true, true, 0);
+		nextItem.add(nextHbox);
+		nextItem.activate.connect( () => {
+			xn.main_window.handle_control_button_click(xn.main_window.nextButton, ControlButton.Direction.NEXT);
+		});
+		traymenu.append(nextItem);
+
+		var separator = new SeparatorMenuItem();
+		traymenu.append(separator);
+
+		var exitImage = new Image();
+		exitImage.set_from_stock(STOCK_QUIT, IconSize.MENU);
+		var exitLabel = new Label(_("Exit"));
+		exitLabel.set_alignment(0, 0);
+		var exitItem = new MenuItem();
+		var exitHbox = new HBox(false,1);
+		exitHbox.set_spacing(10);
+		exitHbox.pack_start(exitImage, false, true, 0);
+		exitHbox.pack_start(exitLabel, true, true, 0);
+		exitItem.add(exitHbox);
+		exitItem.activate.connect(xn.quit);
+		traymenu.append(exitItem);
+
+		traymenu.show_all();
+	}
+
+	private bool on_clicked(Gdk.EventButton e) {
+		switch(e.button) {
+			case 2:
+				//ugly, we should move play/resume code out of there.
+				xn.main_window.playPauseButton.on_clicked(new Gtk.Button());
+				break;
+			default:
+				break;
+		}
+		return false;
+	}
+
+	private bool on_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
+		if(global.track_state != GlobalAccess.TrackState.STOPPED) {
+			if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
+				xn.main_window.change_track(ControlButton.Direction.PREVIOUS, true);
+			}
+			else if(event.scroll.direction == Gdk.ScrollDirection.UP) {
+				xn.main_window.change_track(ControlButton.Direction.NEXT, true);
+			}
+		}
+		return false;
+	}
+	
+	private void traymenu_popup(StatusIcon i, uint button, uint activateTime) {
+		traymenu.popup(null, null, i.position_menu, 0, activateTime);
+	}
+	
+
+
+}
