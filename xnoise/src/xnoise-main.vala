@@ -30,7 +30,8 @@
 
 public class Xnoise.Main : GLib.Object {
 	private static Main _instance = null;
-
+	
+	public TrayIcon tray_icon;
 	public MainWindow main_window;
 	public TrackList tl;
 	public TrackListModel tlm;
@@ -53,6 +54,7 @@ public class Xnoise.Main : GLib.Object {
 		tlm = new TrackListModel();
 		tl = new TrackList();
 		main_window = new MainWindow();
+		tray_icon = new TrayIcon();
 
 		userinfo = new UserInfo(main_window.show_status_info);
 

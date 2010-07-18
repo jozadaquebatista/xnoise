@@ -56,6 +56,7 @@ xnoise_SOURCES = \
 	xnoise-tracklist.vala \
 	xnoise-tracklist-model.vala \
 	xnoise-track-progressbar.vala \
+	xnoise-tray-icon.vala \
 	xnoise-user-info.vala \
 	xnoise-videoscreen.vala \
 	xnoise-volume-slider-button.vala \

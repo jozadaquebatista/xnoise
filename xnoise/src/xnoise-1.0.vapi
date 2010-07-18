@@ -214,6 +214,7 @@ namespace Xnoise {
 		public static bool show_plugin_state;
 		public Xnoise.TrackList tl;
 		public Xnoise.TrackListModel tlm;
+		public Xnoise.TrayIcon tray_icon;
 		public Main ();
 		public void add_track_to_gst_player (string uri);
 		public void quit ();
@@ -236,7 +237,6 @@ namespace Xnoise {
 		public Xnoise.MediaBrowser mediaBr;
 		public Xnoise.ControlButton nextButton;
 		public Xnoise.PlayPauseButton playPauseButton;
-		public Gtk.Image playpause_popup_image;
 		public Xnoise.ControlButton previousButton;
 		public Gtk.Entry searchEntryMB;
 		public Xnoise.TrackProgressBar songProgressBar;
@@ -252,11 +252,13 @@ namespace Xnoise {
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public void display_info_bar (Gtk.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
+		public void handle_control_button_click (Xnoise.ControlButton sender, Xnoise.ControlButton.Direction dir);
 		public void position_config_menu (Gtk.Menu menu, out int x, out int y, out bool push);
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
 		public void show_status_info (Xnoise.InfoBar bar);
 		public void stop ();
 		public void toggle_fullscreen ();
+		public void toggle_window_visbility ();
 		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
 		public int repeatState { get; set; }
@@ -466,6 +468,10 @@ namespace Xnoise {
 	public class TrackProgressBar : Gtk.ProgressBar {
 		public TrackProgressBar ();
 		public void set_value (uint pos, uint len);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class TrayIcon : Gtk.StatusIcon {
+		public TrayIcon ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class UserInfo : GLib.Object {

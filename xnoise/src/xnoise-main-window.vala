@@ -168,14 +168,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				if(a_frame_config_button != null && config_button.get_parent() == null) 
 					a_frame_config_button.add(config_button);
 				config_button.show_all();
-				//buggy
-				/*if(config_button_menu.attach_widget != null)
-					config_button_menu.detach();
-				config_button_menu.attach_to_widget(config_button, (a, x) => {});*/
 				stopButton.hide();
 			}
 			else {
-				//config_button_menu.detach();
 				if(a_frame_config_button != null && config_button.is_realized()) 
 					a_frame_config_button.remove(config_button);
 				config_button.unrealize();
@@ -479,98 +474,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		return false;
 	}
 
-	private StatusIcon create_tray_icon() {
-		StatusIcon icon = new StatusIcon.from_file(Config.UIDIR + "xnoise_bruit_48x48.png");
-		icon.set_tooltip_text("xnoise media player");
-		icon.button_press_event.connect(on_trayicon_clicked);
-		return icon;
-	}
-
-	private StatusIcon trayicon;
-	private Menu menu;
-	public Image playpause_popup_image;
-
-	private Menu add_menu_to_trayicon() {
-		var traymenu = new Menu();
-
-		playpause_popup_image = new Image();
-		playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
-		xn.gPl.sign_playing.connect( () => {
-			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PAUSE, IconSize.MENU);
-		});
-		xn.gPl.sign_stopped.connect( () => {
-			if(this.playpause_popup_image==null) print("this.playpause_popup_image == null\n");
-			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
-		});
-		xn.gPl.sign_paused.connect( () => {
-			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
-		});
-
-		var playLabel = new Label(_("Play/Pause"));
-		playLabel.set_alignment(0, 0);
-		playLabel.set_width_chars(20);
-		var playpauseItem = new MenuItem();
-		var playHbox = new HBox(false,1);
-		playHbox.set_spacing(10);
-		playHbox.pack_start(playpause_popup_image, false, true, 0);
-		playHbox.pack_start(playLabel, true, true, 0);
-		playpauseItem.add(playHbox);
-		playpauseItem.activate.connect(playPauseButton.on_menu_clicked);
-		traymenu.append(playpauseItem);
-
-		var previousImage = new Image();
-		previousImage.set_from_stock(STOCK_MEDIA_PREVIOUS, IconSize.MENU);
-		var previousLabel = new Label(_("Previous"));
-		previousLabel.set_alignment(0, 0);
-		var previousItem = new MenuItem();
-		var previousHbox = new HBox(false,1);
-		previousHbox.set_spacing(10);
-		previousHbox.pack_start(previousImage, false, true, 0);
-		previousHbox.pack_start(previousLabel, true, true, 0);
-		previousItem.add(previousHbox);
-		previousItem.activate.connect( () => {
-			this.handle_control_button_click(previousButton, ControlButton.Direction.PREVIOUS);
-		});
-		traymenu.append(previousItem);
-
-		var nextImage = new Image();
-		nextImage.set_from_stock(STOCK_MEDIA_NEXT, IconSize.MENU);
-		var nextLabel = new Label(_("Next"));
-		nextLabel.set_alignment(0, 0);
-		var nextItem = new MenuItem();
-		var nextHbox = new HBox(false,1);
-		nextHbox.set_spacing(10);
-		nextHbox.pack_start(nextImage, false, true, 0);
-		nextHbox.pack_start(nextLabel, true, true, 0);
-		nextItem.add(nextHbox);
-		nextItem.activate.connect( () => {
-			this.handle_control_button_click(nextButton, ControlButton.Direction.NEXT);
-		});
-		traymenu.append(nextItem);
-
-		var separator = new SeparatorMenuItem();
-		traymenu.append(separator);
-
-		var exitImage = new Image();
-		exitImage.set_from_stock(STOCK_QUIT, IconSize.MENU);
-		var exitLabel = new Label(_("Exit"));
-		exitLabel.set_alignment(0, 0);
-		var exitItem = new MenuItem();
-		var exitHbox = new HBox(false,1);
-		exitHbox.set_spacing(10);
-		exitHbox.pack_start(exitImage, false, true, 0);
-		exitHbox.pack_start(exitLabel, true, true, 0);
-		exitItem.add(exitHbox);
-		exitItem.activate.connect(quit_now);
-		traymenu.append(exitItem);
-
-		traymenu.show_all();
-		return traymenu;
-	}
-
-	private void trayicon_menu_popup(StatusIcon i, uint button, uint activateTime) {
-		menu.popup(null, null, i.position_menu, 0, activateTime);
-	}
 
 	private const int KEY_F11 = 0xFFC8;
 	private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
@@ -671,7 +574,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 
-	private void toggle_window_visbility() {
+	public void toggle_window_visbility() {
 		if(this.is_active) {
 			this.get_position(out _posX_buffer, out _posY_buffer);
 			this.hide();
@@ -1078,31 +981,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		song_title_label.use_markup = true;
 	}
 
-	private bool on_trayicon_clicked(Gdk.EventButton e) {
-		switch(e.button) {
-			case 2:
-				//ugly, we should move play/resume code out of there.
-				this.playPauseButton.on_clicked(new Gtk.Button());
-				break;
-			default:
-				break;
-		}
-		return false;
-	}
 
-	private bool on_trayicon_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
-		if(global.track_state != GlobalAccess.TrackState.STOPPED) {
-			if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
-				change_track(ControlButton.Direction.PREVIOUS, true);
-			}
-			else if(event.scroll.direction == Gdk.ScrollDirection.UP) {
-				change_track(ControlButton.Direction.NEXT, true);
-			}
-		}
-		return false;
-	}
-
-	private void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
+	public void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
 		if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS)
 			this.change_track(dir);
 		else if(dir == ControlButton.Direction.STOP)
@@ -1370,9 +1250,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return;
 		}
 
-		//TRAYICON
-		this.trayicon = create_tray_icon();
-		this.menu     = add_menu_to_trayicon();
 
 		//UIMANAGER FOR MENUS, THIS ALLOWS INJECTION OF ENTRIES BY PLUGINS
 		action_group = new ActionGroup("XnoiseActions");
@@ -1399,11 +1276,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 		if(par.get_int_value("compact_layout") > 0) compact_layout = true;
 		else compact_layout = false;
-
-		// TODO: Move these popup actions to uimanager
-		this.trayicon.popup_menu.connect(this.trayicon_menu_popup);
-		this.trayicon.activate.connect(this.toggle_window_visbility);
-		this.trayicon.scroll_event.connect(this.on_trayicon_scrolled);
 
 		this.delete_event.connect(this.on_close); //only send to tray
 		this.key_release_event.connect(this.on_key_released);

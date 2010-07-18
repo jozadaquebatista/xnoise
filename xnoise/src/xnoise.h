@@ -252,6 +252,16 @@ typedef struct _XnoiseLyricsViewClass XnoiseLyricsViewClass;
 typedef struct _XnoiseLyricsViewPrivate XnoiseLyricsViewPrivate;
 typedef struct _XnoiseMainPrivate XnoiseMainPrivate;
 
+#define XNOISE_TYPE_TRAY_ICON (xnoise_tray_icon_get_type ())
+#define XNOISE_TRAY_ICON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIcon))
+#define XNOISE_TRAY_ICON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIconClass))
+#define XNOISE_IS_TRAY_ICON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRAY_ICON))
+#define XNOISE_IS_TRAY_ICON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRAY_ICON))
+#define XNOISE_TRAY_ICON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIconClass))
+
+typedef struct _XnoiseTrayIcon XnoiseTrayIcon;
+typedef struct _XnoiseTrayIconClass XnoiseTrayIconClass;
+
 #define XNOISE_TYPE_MAIN_WINDOW (xnoise_main_window_get_type ())
 #define XNOISE_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindow))
 #define XNOISE_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
@@ -486,6 +496,7 @@ typedef struct _XnoiseTextColumnPrivate XnoiseTextColumnPrivate;
 typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 typedef struct _XnoiseTrackListModelPrivate XnoiseTrackListModelPrivate;
 typedef struct _XnoiseTrackProgressBarPrivate XnoiseTrackProgressBarPrivate;
+typedef struct _XnoiseTrayIconPrivate XnoiseTrayIconPrivate;
 typedef struct _XnoiseUserInfoPrivate XnoiseUserInfoPrivate;
 typedef struct _XnoiseVideoScreenPrivate XnoiseVideoScreenPrivate;
 
@@ -709,6 +720,7 @@ struct _XnoiseLyricsViewClass {
 struct _XnoiseMain {
 	GObject parent_instance;
 	XnoiseMainPrivate * priv;
+	XnoiseTrayIcon* tray_icon;
 	XnoiseMainWindow* main_window;
 	XnoiseTrackList* tl;
 	XnoiseTrackListModel* tlm;
@@ -759,7 +771,6 @@ struct _XnoiseMainWindow {
 	XnoiseTrackList* trackList;
 	GtkWindow* fullscreenwindow;
 	GtkButton* config_button;
-	GtkImage* playpause_popup_image;
 };
 
 struct _XnoiseMainWindowClass {
@@ -1007,6 +1018,15 @@ struct _XnoiseTrackProgressBarClass {
 	GtkProgressBarClass parent_class;
 };
 
+struct _XnoiseTrayIcon {
+	GtkStatusIcon parent_instance;
+	XnoiseTrayIconPrivate * priv;
+};
+
+struct _XnoiseTrayIconClass {
+	GtkStatusIconClass parent_class;
+};
+
 struct _XnoiseUserInfo {
 	GObject parent_instance;
 	XnoiseUserInfoPrivate * priv;
@@ -1237,6 +1257,7 @@ gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self);
 GType xnoise_lyrics_view_get_type (void);
 XnoiseLyricsView* xnoise_lyrics_view_new (void);
 XnoiseLyricsView* xnoise_lyrics_view_construct (GType object_type);
+GType xnoise_tray_icon_get_type (void);
 GType xnoise_main_window_get_type (void);
 GType xnoise_track_list_get_type (void);
 GType xnoise_track_list_model_get_type (void);
@@ -1261,9 +1282,11 @@ XnoiseMainWindow* xnoise_main_window_construct (GType object_type);
 void xnoise_main_window_ask_for_initial_media_import (XnoiseMainWindow* self);
 void xnoise_main_window_position_config_menu (XnoiseMainWindow* self, GtkMenu* menu, gint* x, gint* y, gboolean* push);
 void xnoise_main_window_toggle_fullscreen (XnoiseMainWindow* self);
+void xnoise_main_window_toggle_window_visbility (XnoiseMainWindow* self);
 void xnoise_main_window_stop (XnoiseMainWindow* self);
 void xnoise_main_window_change_track (XnoiseMainWindow* self, XnoiseControlButtonDirection direction, gboolean handle_repeat_state);
 void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, char** newuri, const char* tagname, const char* tagvalue);
+void xnoise_main_window_handle_control_button_click (XnoiseMainWindow* self, XnoiseControlButton* sender, XnoiseControlButtonDirection dir);
 void xnoise_main_window_display_info_bar (XnoiseMainWindow* self, GtkInfoBar* bar);
 void xnoise_main_window_show_status_info (XnoiseMainWindow* self, XnoiseInfoBar* bar);
 gint xnoise_main_window_get_repeatState (XnoiseMainWindow* self);
@@ -1441,6 +1464,8 @@ void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, char** uris, 
 XnoiseTrackProgressBar* xnoise_track_progress_bar_new (void);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_construct (GType object_type);
 void xnoise_track_progress_bar_set_value (XnoiseTrackProgressBar* self, guint pos, guint len);
+XnoiseTrayIcon* xnoise_tray_icon_new (void);
+XnoiseTrayIcon* xnoise_tray_icon_construct (GType object_type);
 XnoiseUserInfo* xnoise_user_info_new (XnoiseUserInfoAddInfoBarDelegateType func, void* func_target);
 XnoiseUserInfo* xnoise_user_info_construct (GType object_type, XnoiseUserInfoAddInfoBarDelegateType func, void* func_target);
 void xnoise_user_info_enable_close_button_by_id (XnoiseUserInfo* self, guint id, gboolean enable);
