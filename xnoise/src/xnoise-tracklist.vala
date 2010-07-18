@@ -1008,22 +1008,29 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.enable_search = false;
 		this.rules_hint = true;
 	}
-
-
 	
 	private int available_width {
 		get {
-			int w, h;
+			if(xn.main_window == null) 
+				return 0;
+	
+			int h, w;
+			int scrollbar_w = 0;
 			xn.main_window.get_size(out w, out h);
-			return (w - xn.main_window.hpaned.position);
+			
+			if(xn.main_window.trackListScrollWin != null) {
+				var scrollbar = xn.main_window.trackListScrollWin.get_vscrollbar();
+				if(scrollbar != null) {
+					Requisition req; 
+					scrollbar.get_child_requisition(out req);
+					scrollbar_w = req.width;				
+				}
+			}
+			
+			return w - (scrollbar_w + xn.main_window.hpaned.position);		
 		}
 	}
 	
-	private int available_dynamic_width {
-		get {
-			return (available_width - (columnPixb.width + (columnTracknumber.visible ? columnTracknumber.width : 0) + (columnLength.visible ? 75 : 22)));
-		}
-	}
 	
 	public void handle_resize() {
 		if(xn.main_window == null)

@@ -243,6 +243,7 @@ namespace Xnoise {
 		public Xnoise.ControlButton stopButton;
 		public Xnoise.TrackListNoteBookTab temporary_tab;
 		public Xnoise.TrackList trackList;
+		public Gtk.ScrolledWindow trackListScrollWin;
 		public Gtk.Notebook tracklistnotebook;
 		public Xnoise.VideoScreen videoscreen;
 		public Gtk.VBox videovbox;

@@ -736,6 +736,7 @@ struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	GtkActionGroup* action_group;
+	GtkScrolledWindow* trackListScrollWin;
 	gboolean _seek;
 	gboolean is_fullscreen;
 	gboolean drag_on_content_area;
