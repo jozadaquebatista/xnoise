@@ -157,16 +157,6 @@ public class Xnoise.TrayIcon : StatusIcon {
 		if(global.track_state == GlobalAccess.TrackState.STOPPED || uri == null || uri == "") {
 			tp.set_markup(" xnoise media player \n" +
 			              "<span rise=\"6000\" style =\"italic\"> ready to rock ;)</span>");
-			               
-			/*try {
-				var pb = new Gdk.Pixbuf.from_file_at_scale(Config.UIDIR + "xnoise_48x48.png",
-				                                           TOOLTIP_IMAGE_SIZE/3,
-				                                           TOOLTIP_IMAGE_SIZE/3,
-				                                           true); 
-				tp.set_icon(pb);
-			} catch (Error e) {
-				print(e.message);
-			}*/
 			return true;
 		}
 		
@@ -177,17 +167,18 @@ public class Xnoise.TrayIcon : StatusIcon {
 		string? filename = null;
 		if(uri != null) {
 			File f = File.new_for_uri(uri);
-			if(f != null)
+			if(f != null) {
 				filename = f.get_basename();
+				filename = Markup.escape_text(filename);
+			}
 		}
 		
 		//if neither title nor artist are known, show filename instead
 		//if there is no title, the title is the same as the filename
 		//shouldn't global rather return null if there is no title?
 		
-		//todo: handle streams, change label layout
-		if(uri == null); //show name + state
-		else if((title == null && artist == null && filename != null) || (filename == title /*&& artist == null*/))
+		//todo: handle streams, change label layout, pack in a box with padding and use Tooltip.set_custom
+		if((title == null && artist == null && filename != null) || (filename == title /*&& artist == null*/))
 			tp.set_markup("\n<b><big>" + filename + " </big></b><span size=\"xx-small\">\n</span>" +
 			              "<span style=\"italic\" rise=\"6000\">" +
 			              state + "</span>\n");	
@@ -198,13 +189,17 @@ public class Xnoise.TrayIcon : StatusIcon {
 				artist = "unknown artist";
 			if(title == null)
 				title = "unknown title";
+			album = Markup.escape_text(album);
+			artist = Markup.escape_text(artist);
+			title = Markup.escape_text(title);
+			state = Markup.escape_text(state);
 				
-		tp.set_markup("<span size=\"larger\" weight=\"bold\">   " + 
-		              title +   " </span>\n<span size=\"larger\">   </span><span size=\"medium\" rise=\"6000\" style=\"italic\">" + 
+		tp.set_markup("<span size=\"larger\" weight=\"bold\">" + 
+		              title +   " </span>\n<span size=\"medium\" rise=\"6000\" style=\"italic\">" + 
 		              state + "</span><span size=\"xx-small\">\n</span>" +
-		              "<span weight=\"light\">        by </span> <b>" + 
+		              "<span weight=\"light\">     by </span> <b>" + 
 		              artist + "</b> \n" +
-		              "<span weight=\"light\">        on </span> <b>" + 
+		              "<span weight=\"light\">     on </span> <b>" + 
 		              album + "</b>   ");
 		}
 				

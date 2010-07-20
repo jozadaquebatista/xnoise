@@ -132,12 +132,12 @@ namespace Xnoise {
 		public void do_restart_of_current_track ();
 		public void handle_eos ();
 		public void reset_position_reference ();
-		public string? current_album { get; set; }
-		public string? current_artist { get; set; }
-		public string? current_genre { get; set; }
-		public string? current_location { get; set; }
-		public string? current_organization { get; set; }
-		public string? current_title { get; set; }
+		public string current_album { get; set; }
+		public string current_artist { get; set; }
+		public string current_genre { get; set; }
+		public string current_location { get; set; }
+		public string current_organization { get; set; }
+		public string current_title { get; set; }
 		public string? current_uri { get; set; }
 		public string? image_path_large { get; set; }
 		public string? image_path_small { get; set; }

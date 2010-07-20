@@ -241,6 +241,7 @@ ready to rock</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Collapse all</property>
                             <property name="image">imagecollapse</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
@@ -805,7 +806,7 @@ ready to rock</property>
   </object>
   <object class="GtkImage" id="imagecollapse">
     <property name="visible">True</property>
-    <property name="tooltip_text" translatable="yes">Collapse</property>
+    <property name="tooltip_text" translatable="yes">Collapse all</property>
     <property name="stock">gtk-unindent</property>
     <property name="icon-size">1</property>
   </object>

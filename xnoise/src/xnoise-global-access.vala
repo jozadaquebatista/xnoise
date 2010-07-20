@@ -185,12 +185,12 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	}
 	
 	// Current track's meta data
-	public string? current_artist { get; set; default = null; }
-	public string? current_album { get; set; default = null; }
-	public string? current_title { get; set; default = null; }
-	public string? current_location { get; set; default = null; }
-	public string? current_genre { get; set; default = null; }
-	public string? current_organization { get; set; default = null; }
+	public string current_artist { get; set; default = null; }
+	public string current_album { get; set; default = null; }
+	public string current_title { get; set; default = null; }
+	public string current_location { get; set; default = null; }
+	public string current_genre { get; set; default = null; }
+	public string current_organization { get; set; default = null; }
 	
 	public string? image_path_small { get; set; default = null; }
 	public string? image_path_large { get; set; default = null; }
