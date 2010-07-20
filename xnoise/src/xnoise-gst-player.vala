@@ -40,7 +40,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public VideoScreen videoscreen;
 	private GLib.List<Gst.Message> missing_plugins = new GLib.List<Gst.Message>();
 	private dynamic Element playbin;
-	private dynamic Element visualization;
 	
 	public bool current_has_video { // TODO: Determine this elsewhere
 		get {
@@ -211,31 +210,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 		bus.message.connect(this.on_bus_message);
 		bus.enable_sync_message_emission();
 		bus.sync_message.connect(this.on_sync_message);
-		
-		
-		var vis_list = find_visualization_plugins();
-		foreach (PluginFeature f in vis_list) {
-			print("vis: %s", f.name);
-		}
-		/*visualization = ElementFactory.make("goom", null);
-		playbin.set("flags", playbin.flags | 1 << 3);
-		playbin.vis_plugin = visualization;*/
 	}
-	
-	private GLib.List<PluginFeature> find_visualization_plugins() {
-		var ret = Registry.get_default().feature_filter( (f) => {
-				if(!(f.get_type().is_a(typeof(ElementFactory))))
-					return false;
-				ElementFactory feature = (ElementFactory)f;
-				if(feature.get_klass() == "Visualization")
-					return true;
-				return false;
-			},
-			false);
-		return ret;
-	}
-			
-	
+		
 	private void on_audio_tags_changed(int stream_number) {
 		TagList tags = null;
 		Signal.emit_by_name(playbin, "get-audio-tags", stream_number, ref tags);

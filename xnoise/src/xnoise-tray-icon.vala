@@ -153,6 +153,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 				break;
 			}
 		}
+		state = Markup.escape_text(state);
 		
 		if(global.track_state == GlobalAccess.TrackState.STOPPED || uri == null || uri == "") {
 			tp.set_markup(" xnoise media player \n" +
@@ -177,7 +178,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		//if there is no title, the title is the same as the filename
 		//shouldn't global rather return null if there is no title?
 		
-		//todo: handle streams, change label layout, pack in a box with padding and use Tooltip.set_custom
+		//todo: handle streams, change label layout, pack into a box with padding and use Tooltip.set_custom
 		if((title == null && artist == null && filename != null) || (filename == title /*&& artist == null*/))
 			tp.set_markup("\n<b><big>" + filename + " </big></b><span size=\"xx-small\">\n</span>" +
 			              "<span style=\"italic\" rise=\"6000\">" +
@@ -192,7 +193,6 @@ public class Xnoise.TrayIcon : StatusIcon {
 			album = Markup.escape_text(album);
 			artist = Markup.escape_text(artist);
 			title = Markup.escape_text(title);
-			state = Markup.escape_text(state);
 				
 		tp.set_markup("<span size=\"larger\" weight=\"bold\">" + 
 		              title +   " </span>\n<span size=\"medium\" rise=\"6000\" style=\"italic\">" + 
