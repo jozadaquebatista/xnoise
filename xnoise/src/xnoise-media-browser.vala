@@ -88,7 +88,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 		Gtk.Style style;
 		style = Gtk.rc_get_style(xn.tl);
-		this.modify_base(StateType.NORMAL, style.base[Gtk.StateType.INSENSITIVE]);
+		this.modify_base(StateType.NORMAL, style.rc_style.bg[StateType.NORMAL]);
 		this.style_set.connect(on_style_set);
 	}
 	
@@ -97,7 +97,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		print("style set!\n");
 		Gtk.Style style;
 		style = Gtk.rc_get_style(xn.tl);
-		this.modify_base(StateType.NORMAL, style.base[Gtk.StateType.INSENSITIVE]);
+		this.modify_base(StateType.NORMAL, style.rc_style.bg[StateType.NORMAL]);
 		this.style_set.connect(on_style_set);
 	}
 

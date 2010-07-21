@@ -49,11 +49,14 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 	private void write_title_to_decoration(ref string? newuri, string? x, string? y) {
 		//print("write_title_to_decoration %s %s %s\n", newuri, x, y);
 		string uri = newuri;
-		if(source != 0)
+		if(source != 0) {
 			Source.remove(source);
+			this.source = (uint)0;
+		}
 		
 		source = Idle.add( () => {
 			dispatch_set_title_to_decoration(uri, x, y);
+			this.source = (uint)0;
 			return false;
 		});
 	}
@@ -65,7 +68,7 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 		string text, album, artist, title, genre, location, organization;
 		string basename = null;
 		if(newuri == null) {
-			xn.main_window.set_title("xnoise media player");
+			xn.main_window.title = "xnoise media player";
 			return;
 		}
 		File file = File.new_for_uri(newuri);
