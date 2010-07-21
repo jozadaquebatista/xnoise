@@ -271,6 +271,7 @@ ready to rock</property>
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">never</property>
                         <property name="vscrollbar_policy">automatic</property>
+                        <property name="shadow_type">etched-in</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -323,6 +324,7 @@ ready to rock</property>
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">automatic</property>
                         <property name="vscrollbar_policy">automatic</property>
+                        <property name="shadow_type">etched-in</property>
                         <child>
                           <placeholder/>
                         </child>
