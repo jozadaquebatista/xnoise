@@ -201,7 +201,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	private void create_elements() {
 		playbin = ElementFactory.make("playbin2", "playbin");
-		playbin.flags = playbin.flags | (1 << 2);
+		playbin.flags = playbin.flags | (1 << 2); // add playflag text for subtitle; Is this working??
 		taglist = null;
 		var bus = new Gst.Bus ();
 		bus = playbin.get_bus();
