@@ -201,6 +201,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	private void create_elements() {
 		playbin = ElementFactory.make("playbin2", "playbin");
+		playbin.flags = playbin.flags | (1 << 2); // add playflag text for subtitle; Is this working??
 		taglist = null;
 		var bus = new Gst.Bus ();
 		bus = playbin.get_bus();
@@ -356,7 +357,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if((msg == null)||(msg.get_structure() == null)) 
 			return;
 		string message_name = msg.get_structure().get_name();
-		print("%s\n", message_name);
+		//print("%s\n", message_name);
 		if(message_name=="prepare-xwindow-id") {
 			var imagesink = (XOverlay)(msg.src);
 			imagesink.set_property("force-aspect-ratio", true);
@@ -420,6 +421,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			}
 	//		print("current:%s \n",playbin.current_state.to_string());
 		}
+		//print("flags: %d\n", (int)playbin.flags);
 		return true;
 	}
 

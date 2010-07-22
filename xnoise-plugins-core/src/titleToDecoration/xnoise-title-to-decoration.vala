@@ -49,11 +49,14 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 	private void write_title_to_decoration(ref string? newuri, string? x, string? y) {
 		//print("write_title_to_decoration %s %s %s\n", newuri, x, y);
 		string uri = newuri;
-		if(source != 0)
+		if(source != 0) {
 			Source.remove(source);
+			this.source = (uint)0;
+		}
 		
 		source = Idle.add( () => {
 			dispatch_set_title_to_decoration(uri, x, y);
+			this.source = (uint)0;
 			return false;
 		});
 	}
@@ -65,7 +68,7 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 		string text, album, artist, title, genre, location, organization;
 		string basename = null;
 		if(newuri == null) {
-			xn.main_window.set_title("xnoise media player");
+			xn.main_window.title = "xnoise media player";
 			return;
 		}
 		File file = File.new_for_uri(newuri);
@@ -78,19 +81,19 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 		else {
 			artist = "unknown artist";
 		}
-		if(global.current_title!=null) {
+		if(global.current_title != null) {
 			title = remove_linebreaks(global.current_title);
 		}
 		else {
 			title = "unknown title";
 		}
-		if(global.current_album!=null) {
+		if(global.current_album != null) {
 			album = remove_linebreaks(global.current_album);
 		}
 		else {
 			album = "unknown album";
 		}
-		if(global.current_organization!=null) {
+		if(global.current_organization != null) {
 			organization = remove_linebreaks(global.current_organization);
 		}
 		else {
@@ -102,13 +105,13 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 		else {
 			genre = "unknown genre";
 		}
-		if(global.current_location!=null) {
+		if(global.current_location != null) {
 			location = remove_linebreaks(global.current_location);
 		}
 		else {
 			location = "unknown location";
 		}
-		if((newuri!=null) && (newuri!="")) {
+		if((newuri != null) && (newuri != "")) {
 			text = "%s %s %s %s %s ".printf( 
 				title, 
 				_("by"), 
@@ -116,12 +119,12 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 				_("on"), 
 				album
 				);
-			if(album=="unknown album" && 
-			   artist=="unknown artist" && 
-			   title=="unknown title") 
-				if(organization!="unknown organization") 
+			if(album == "unknown album" && 
+			   artist == "unknown artist" && 
+			   title == "unknown title") 
+				if(organization != "unknown organization") 
 					text = "%s".printf(organization);
-				else if(location!="unknown location") 
+				else if(location != "unknown location") 
 					text = "%s".printf(location);
 				else
 					text = "%s".printf("xnoise media player");

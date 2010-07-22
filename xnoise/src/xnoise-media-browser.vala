@@ -111,9 +111,20 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.key_press_event.connect(this.on_key_pressed);
 		this.key_release_event.connect(this.on_key_released);
 		this.drag_data_received.connect(this.on_drag_data_received);
-		//Gtk.Style style;
-		//style = Gtk.rc_get_style(this);
-		//this.modify_base(StateType.NORMAL, style.rc_style.bg[StateType.NORMAL]);
+
+		Gtk.Style style;
+		style = Gtk.rc_get_style(xn.tl);
+		this.modify_base(StateType.NORMAL, style.rc_style.bg[StateType.NORMAL]);
+		this.style_set.connect(on_style_set);
+	}
+	
+	private void on_style_set(Gtk.Widget sender, Gtk.Style? stl) {
+		this.style_set.disconnect(on_style_set);
+		print("style set!\n");
+		Gtk.Style style;
+		style = Gtk.rc_get_style(xn.tl);
+		this.modify_base(StateType.NORMAL, style.rc_style.bg[StateType.NORMAL]);
+		this.style_set.connect(on_style_set);
 	}
 
 	private void on_drag_data_received(Gtk.Widget sender, DragContext context, int x, int y,
