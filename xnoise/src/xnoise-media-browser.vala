@@ -48,11 +48,13 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			if(!value) {
 				renderer.set_fixed_height_from_font(1);
 				renderer.wrap_width = -1;
-				if(visible) this.change_model_data();
-				print("unsset");
+				if(visible)
+					Idle.add( () => {
+						this.change_model_data();
+						return false;
+						});
 				return;
 			}
-			print("set");
 			renderer.set_fixed_height_from_font(-1);
 			renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
 			if(xn.main_window == null)
@@ -412,6 +414,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		new_width -= mediabrowsermodel.get_max_icon_width() + scrollbar_w;
 		if(new_width < 60) return;
 		renderer.wrap_width = new_width;
-		this.change_model_data();
+		Idle.add( () => {
+			this.change_model_data();
+			return false;
+		});
 	}
 }
