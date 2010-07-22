@@ -37,6 +37,32 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private unowned Main xn;
 	private bool dragging;
 	private bool _use_treelines = false;
+	private bool _use_linebreaks = false;
+	private CellRendererText renderer = null;
+	public bool use_linebreaks {
+		get {
+			return _use_linebreaks;
+		}
+		set {
+			_use_linebreaks = value;
+			if(!value) {
+				renderer.set_fixed_height_from_font(1);
+				renderer.wrap_width = -1;
+				if(visible) this.change_model_data();
+				print("unsset");
+				return;
+			}
+			print("set");
+			renderer.set_fixed_height_from_font(-1);
+			renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
+			if(xn.main_window == null)
+				return;
+			if(xn.main_window.hpaned == null)
+				return;
+			this.resize_line_width(xn.main_window.hpaned.position);
+		}
+	}
+	
 	public bool use_treelines {
 		get {
 			return _use_treelines;
@@ -106,10 +132,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	// IParams functions
 	public void read_params_data() {
-		if(par.get_int_value("use_treelines")==1)
+		if(par.get_int_value("use_treelines") == 1)
 			use_treelines = true;
 		else
 			use_treelines = false;
+		
+		if(par.get_int_value("use_linebreaks") == 1)
+			use_linebreaks = true;
+		else
+			use_linebreaks = false;
 	}
 
 	public void write_params_data() {
@@ -117,6 +148,11 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			par.set_int_value("use_treelines", 1);
 		else
 			par.set_int_value("use_treelines", 0);
+			
+		if(this.use_linebreaks)
+			par.set_int_value("use_linebreaks", 1);
+		else
+			par.set_int_value("use_linebreaks", 0);
 		par.set_int_value("fontsizeMB", fontsizeMB);
 	}
 	// end IParams functions
@@ -312,11 +348,13 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		if((fontsizeMB < 7)||(fontsizeMB > 14)) fontsizeMB = 7;
 
 		this.set_size_request (300,500);
-		var renderer = new CellRendererText();
+		renderer = new CellRendererText();
 		renderer.font = "Sans " + fontsizeMB.to_string();
 //		renderer.family = "Sans"; //TODO: Does not work!?
 //		renderer.size = 9; //TODO: Does not work!?
-		renderer.set_fixed_height_from_font(1);
+
+
+
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.stock_id = Gtk.STOCK_GO_FORWARD;
 
@@ -336,5 +374,33 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			if(sepatator==0) return false;
 			return true;
 		});
+	}
+	
+	
+	/* TODO: Find a more cpu efficient way to update the linebreaks, which also
+		 keeps the currently expanded nodes expanded!*/
+		 
+	/* calculates the size available for the text in the treeview, one expander's size usage is
+	ignored, though */
+	public void resize_line_width(int new_width) {
+		if(!use_linebreaks)
+			return;
+		//check for options
+		//get scrollbar width of the scrolled window
+		int scrollbar_w = 0;
+		if(xn.main_window.mediaBrScrollWin != null) {
+			var scrollbar = xn.main_window.trackListScrollWin.get_vscrollbar();
+			if(scrollbar != null) {
+				Requisition req; 
+				scrollbar.get_child_requisition(out req);
+				scrollbar_w = req.width;				
+			}
+		}
+		//substract scrollbar width and the space used up by the icons from the
+		//total width	
+		new_width -= mediabrowsermodel.get_max_icon_width() + scrollbar_w;
+		if(new_width < 60) return;
+		renderer.wrap_width = new_width;
+		this.change_model_data();
 	}
 }

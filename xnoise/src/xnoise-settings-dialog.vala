@@ -51,6 +51,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private ListStore visibleColTvModel;
 	private CheckButton checkB_showL;
 	private CheckButton checkB_compact;
+	private CheckButton checkB_mediaBrLinebreaks;
 	private HBox ai_hbox;
 	private HBox ly_hbox;
 	private bool show_album_col;
@@ -142,6 +143,12 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_compact.active = true;
 		else
 			checkB_compact.active = false;
+			
+		//media browser line breaks
+		if(par.get_int_value("mediabrowser_linebreaks") > 0)
+			checkB_mediaBrLinebreaks.active = true;
+		else
+			checkB_mediaBrLinebreaks.active = false;
 
 		// SpinButton
 		sb.configure(new Gtk.Adjustment(8.0, 7.0, 14.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
@@ -182,6 +189,18 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			xn.main_window.compact_layout = false;
 		}
 	}
+	
+	private void on_checkbutton_mediabr_linebreaks_clicked(Gtk.Button sender) {
+		if(this.checkB_mediaBrLinebreaks.active) {
+			par.set_int_value("mediabrowser_linebreaks", 1);
+			xn.main_window.mediaBr.use_linebreaks = true;
+		}
+		else {
+			par.set_int_value("mediabrowser_linebreaks", 0);
+			xn.main_window.mediaBr.use_linebreaks = false;
+		}
+	}
+			
 
 	private void on_ok_button_clicked() {
 		
@@ -526,6 +545,10 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_showL = this.get_object("checkB_showlines") as Gtk.CheckButton;
 			checkB_showL.can_focus = false;
 			checkB_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
+			
+			checkB_mediaBrLinebreaks = this.get_object("checkB_mediaBrLinebreaks") as Gtk.CheckButton;
+			checkB_mediaBrLinebreaks.can_focus = false;
+			checkB_mediaBrLinebreaks.clicked.connect(this.on_checkbutton_mediabr_linebreaks_clicked);
 			
 			checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
 			checkB_compact.can_focus = false;

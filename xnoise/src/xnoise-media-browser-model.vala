@@ -85,6 +85,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				this.unref();
 			}
 	}
+	
+	public int get_max_icon_width() {
+		return artist_pixb.width + title_pixb.width + album_pixb.width;
+	}
+		
 
 	private void set_pixbufs() {
 		try {

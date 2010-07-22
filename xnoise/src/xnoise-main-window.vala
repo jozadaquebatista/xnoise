@@ -73,6 +73,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private double current_volume; //keep it global for saving to params
 	private int window_width = 0;
 	private ScreenSaverManager ssm = null;
+	public ScrolledWindow mediaBrScrollWin = null;
 	public ScrolledWindow trackListScrollWin = null;
 	public bool _seek;
 	public bool is_fullscreen = false;
@@ -990,6 +991,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 	
 	private void on_hpaned_position_changed() {
+		hpaned_resized = true;
 		if(this.hpaned.position == 0)
 			media_browser_visible = false;
 		else
@@ -999,8 +1001,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.trackList.handle_resize();
 		}
 	}
-			
+	
+	private bool hpaned_button_one;
+	private bool hpaned_resized = false;
+	private int hpaned_size_cache;
+	private bool on_hpaned_button_event(Gdk.EventButton e) {
+		if(e.button == 1 && e.type == Gdk.EventType.BUTTON_PRESS)
+			hpaned_button_one = true;
+		else if(e.button == 1 && e.type == Gdk.EventType.BUTTON_RELEASE) {
+			if(hpaned_resized && hpaned_button_one)  {
+				hpaned_resized = false;
+				this.mediaBr.resize_line_width(this.hpaned.position);
+			}
+			hpaned_button_one = false;
+		}
+		return false;
+	}
 
+	
 	private void create_widgets() {
 		try {
 			Builder gb = new Gtk.Builder();
@@ -1104,6 +1122,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			this.hpaned = gb.get_object("hpaned1") as Gtk.HPaned;
 			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
+			this.hpaned.button_press_event.connect(on_hpaned_button_event);
+			this.hpaned.button_release_event.connect(on_hpaned_button_event);
 			//----------------
 
 			//VOLUME SLIDE BUTTON
@@ -1150,7 +1170,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			///MediaBrowser (left)
 			this.mediaBr = new MediaBrowser();
 			this.mediaBr.set_size_request(100,100);
-			var mediaBrScrollWin = gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
+			mediaBrScrollWin = gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
 			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
 			mediaBrScrollWin.add(this.mediaBr);
 			browsernotebook    = gb.get_object("notebook1") as Gtk.Notebook;

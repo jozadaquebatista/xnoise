@@ -235,6 +235,7 @@ namespace Xnoise {
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;
+		public Gtk.ScrolledWindow mediaBrScrollWin;
 		public Xnoise.ControlButton nextButton;
 		public Xnoise.PlayPauseButton playPauseButton;
 		public Xnoise.ControlButton previousButton;
@@ -272,6 +273,8 @@ namespace Xnoise {
 		public MediaBrowser ();
 		public bool change_model_data ();
 		public void on_searchtext_changed (string? txt);
+		public void resize_line_width (int new_width);
+		public bool use_linebreaks { get; set; }
 		public bool use_treelines { get; set; }
 		public signal void sign_activated ();
 	}
@@ -296,6 +299,7 @@ namespace Xnoise {
 		public string searchtext;
 		public MediaBrowserModel ();
 		public string[] build_uri_list_for_treepath (Gtk.TreePath treepath, ref Xnoise.DbBrowser dbb);
+		public int get_max_icon_width ();
 		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_hierarchical (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_listed (Gtk.TreePath treepath);

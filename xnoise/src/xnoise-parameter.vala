@@ -263,6 +263,7 @@ hp_position=241
 use_treelines=0
 show_album_images=1
 repeatstate=2
+mediabrowser_linebreaks=0
 
 [settings_double]
 volume=0.080511778431618983
