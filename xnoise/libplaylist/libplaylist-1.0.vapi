@@ -11,6 +11,9 @@ namespace Pl {
 	[CCode (cprefix = "PlPls", lower_case_cprefix = "pl_pls_")]
 	namespace Pls {
 	}
+	[CCode (cprefix = "PlWpl", lower_case_cprefix = "pl_wpl_")]
+	namespace Wpl {
+	}
 	[CCode (cprefix = "PlXspf", lower_case_cprefix = "pl_xspf_")]
 	namespace Xspf {
 	}
@@ -136,7 +139,8 @@ namespace Pl {
 		M3U,
 		PLS,
 		ASX,
-		XSPF
+		XSPF,
+		WPL
 	}
 	[CCode (cprefix = "PL_RESULT_", cheader_filename = "libplaylist.h")]
 	public enum Result {

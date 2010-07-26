@@ -94,7 +94,8 @@ typedef enum  {
 	PL_LIST_TYPE_M3U,
 	PL_LIST_TYPE_PLS,
 	PL_LIST_TYPE_ASX,
-	PL_LIST_TYPE_XSPF
+	PL_LIST_TYPE_XSPF,
+	PL_LIST_TYPE_WPL
 } PlListType;
 
 typedef enum  {

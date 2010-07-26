@@ -148,6 +148,10 @@ namespace Pl {
 				case ListType.XSPF:
 					AbstractFileReader ret = new Xspf.FileReader();
 					return ret;
+				case ListType.WPL:
+					AbstractFileReader ret = new Wpl.FileReader();
+					return ret;
+				
 			}
 			return null;
 		}
@@ -233,6 +237,9 @@ namespace Pl {
 				else if(uri_down.has_suffix(".xspf")) {
 					return ListType.XSPF;
 				}
+				else if(uri_down.has_suffix(".wpl")) {
+					return ListType.WPL;
+				}
 				else {
 					return ListType.UNKNOWN;
 				}
@@ -277,6 +284,9 @@ namespace Pl {
 			else if(content_type == ContentType.XSPF) {
 				//print("Content type xspf: %s\n", content_type);
 				return ListType.XSPF;
+			}
+			else if(content_type == ContentType.WPL) {
+				return ListType.WPL;
 			}
 			else {
 				print("Other Content type: %s\n", content_type);

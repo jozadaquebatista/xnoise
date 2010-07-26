@@ -633,7 +633,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		TreeIter iter, new_iter;
 		File file;
 		FileType filetype;
-		unowned string mime;
+		string mime;
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +

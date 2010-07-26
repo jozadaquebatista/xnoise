@@ -29,6 +29,7 @@ AC_DISABLE_STATIC
 dnl required versions for xnoise
 GSTREAMER_REQUIRED=0.10.23
 GLIB_REQUIRED=2.12.0
+LIBXML_REQUIRED=2.6.32
 GIO_REQUIRED=2.16
 GTK_REQUIRED=2.18.0
 SQLITE_REQUIRED=3.4
@@ -70,6 +71,7 @@ PKG_CHECK_MODULES(XNOISE, \
 PKG_CHECK_MODULES(LIBPLAYLIST, \
     glib-2.0 >= $GLIB_REQUIRED \
     gobject-2.0 >= $GLIB_REQUIRED \
+    libxml-2.0 >= $LIBXML_REQUIRED \
     gio-2.0 >= $GIO_REQUIRED)
 
 XNOISE_PACKAGES="\
@@ -78,6 +80,7 @@ XNOISE_PACKAGES="\
     --pkg gdk-pixbuf-2.0 \
     --pkg gdk-x11-2.0 \
     --pkg gio-2.0 \
+    --pkg libxml-2.0 \
     --pkg gmodule-2.0 \
     --pkg gstreamer-0.10 \
     --pkg gstreamer-pbutils-0.10 \

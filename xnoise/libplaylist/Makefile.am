@@ -11,6 +11,7 @@ INCLUDES = \
 	-DDATA_DIR='"$(datadir)"' \
 	-DLOCALE_DIR=\"${datarootdir}/locale\" \
 	-include $(CONFIG_HEADER) \
+	$(LIBXML_CFLAGS) \
 	$(NULL)
 
 playlist_hdir = $(includedir)/libplaylist-1.0
@@ -35,6 +36,8 @@ libplaylist_la_SOURCES = \
 	pl-writer.vala \
 	ASX/pl-asx-file-reader.vala \
 	ASX/pl-asx-file-writer.vala \
+	WPL/pl-wpl-file-reader.vala \
+	WPL/pl-wpl-file-writer.vala \
 	M3U/pl-m3u-file-reader.vala \
 	M3U/pl-m3u-file-writer.vala \
 	PLS/pl-pls-file-reader.vala \
@@ -49,6 +52,7 @@ libplaylist_la_VALAFLAGS = \
 	--header=libplaylist.h --vapi=libplaylist-1.0.vapi \
 	--thread \
 	--pkg gio-2.0 \
+	--pkg libxml-2.0 \
 	--vapidir $(top_srcdir)/vapi \
 	--basedir $(top_srcdir)/libplaylist \
 	@LIBPLAYLIST_PACKAGES@ \
@@ -61,6 +65,7 @@ libplaylist_la_LDFLAGS = \
 
 libplaylist_la_LIBADD = \
 	$(LIBPLAYLIST_LIBS) \
+	$(LIBXML_LIBS) \
 	$(NULL)
 
 VAPI_FILES = libplaylist-1.0.vapi

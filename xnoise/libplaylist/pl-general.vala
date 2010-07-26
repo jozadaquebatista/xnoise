@@ -53,7 +53,8 @@ namespace Pl {
 		M3U,
 		PLS,
 		ASX,
-		XSPF
+		XSPF,
+		WPL
 	}
 	
 	public enum Result {
@@ -79,6 +80,7 @@ namespace Pl {
 		public const string X_MPEG      = "audio/x-mpegurl";
 		public const string MPEG        = "audio/mpegurl";
 		public const string XSPF        = "application/xspf+xml";
+		public const string WPL         = "application/vnd.ms-wpl";
 	}
 	
 	//put some debug messages into the code

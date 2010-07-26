@@ -81,7 +81,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		}
 
 		string content = info.get_content_type();
-		unowned string mime = g_content_type_get_mime_type(content);
+		string mime = g_content_type_get_mime_type(content);
 		PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
 		PatternSpec psVideo = new PatternSpec("video*");
 
@@ -137,7 +137,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 				FileType filetype = info.get_file_type();
 
 				string content = info.get_content_type();
-				unowned string mime = g_content_type_get_mime_type(content);
+				string mime = g_content_type_get_mime_type(content);
 				PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
 				PatternSpec psVideo = new PatternSpec("video*");
 

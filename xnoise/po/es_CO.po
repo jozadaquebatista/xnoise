@@ -49,11 +49,11 @@ msgstr "xnoise - Agregar medios a la biblioceta multimedia"
 #: ../src/xnoise-add-media-dialog.vala:290
 #: ../src/xnoise-main-window.vala:899
 msgid "Select media file"
-msgstr "Archivo seleccionado"
+msgstr "Seleccione un archivo multimedia"
 
 #: ../src/xnoise-add-media-dialog.vala:314
 msgid "Select media folder"
-msgstr "Carpeta seleccionada"
+msgstr "Seleccione una carpeta multimedia"
 
 #: ../src/xnoise-add-media-dialog.vala:384
 msgid "Add internet radio link"
@@ -70,7 +70,7 @@ msgid ""
 "Trying to find lyrics for \"%s\" by \"%s\"..."
 msgstr ""
 "\n"
-"Trying to find lyrics for \"%s\" by \"%s\"..."
+"Intentando buscar lyrycs para \"%s\" por \"%s\"..."
 
 #: ../src/xnoise-lyrics-view.vala:110
 #, c-format
@@ -80,8 +80,8 @@ msgid ""
 "\"%s\" by \"%s\".\n"
 msgstr ""
 "\n"
-"Lyrics provider %s cannot find lyrics for \n"
-"\"%s\" by \"%s\".\n"
+"El proveedor de Lyrics %s no puede encontrar lyrics para \n"
+"\"%s\" por \"%s\".\n"
 
 #: ../src/xnoise-main-window.vala:39
 msgid "Video"
@@ -93,11 +93,11 @@ msgstr "Lista de reproducción"
 
 #: ../src/xnoise-main-window.vala:41
 msgid "Show Media"
-msgstr "Show Media"
+msgstr "Mostrar medios"
 
 #: ../src/xnoise-main-window.vala:42
 msgid "Hide Media"
-msgstr "Hide Media"
+msgstr "Ocultar medios"
 
 #: ../src/xnoise-main-window.vala:133
 msgid "_File"
@@ -105,7 +105,7 @@ msgstr "_Archivo"
 
 #: ../src/xnoise-main-window.vala:134
 msgid "open file"
-msgstr "open file"
+msgstr "Abrir archivo"
 
 #: ../src/xnoise-main-window.vala:135
 msgid "_Add or Remove media"
@@ -129,7 +129,7 @@ msgstr "_Lista de reproducción"
 
 #: ../src/xnoise-main-window.vala:140
 msgid "Go to the tracklist."
-msgstr "Ir a lista de reproducción"
+msgstr "Ir a lista de reproducción."
 
 #: ../src/xnoise-main-window.vala:141
 msgid "_Video screen"
@@ -153,15 +153,15 @@ msgstr "_Ayuda"
 
 #: ../src/xnoise-main-window.vala:145
 msgid "_Config"
-msgstr "_Config"
+msgstr "_Configuración"
 
 #: ../src/xnoise-main-window.vala:334
 msgid "Add media"
-msgstr "Agregar media"
+msgstr "Agregar medios de reproducción"
 
 #: ../src/xnoise-main-window.vala:337
 msgid "You started xnoise for the first time. Do you want to import media into the library?"
-msgstr "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Esta es la primer vez que inicia xnoise. Usted desea importar medios de reproducción en su biblioteca de medios de reproducción?"
 
 #. TODO: create some other images
 #: ../src/xnoise-main-window.vala:431

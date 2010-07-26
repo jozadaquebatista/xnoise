@@ -21,18 +21,103 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
+using Xml;
+
 namespace Pl {
 	private class Asx.FileReader : AbstractFileReader {
 		private unowned File file;
-		
+
+		private DataCollection parse(DataCollection data_collection,ref string base_path = "",string data) {
+			string iter_name;
+			Xml.Doc* xmlDoc = Parser.parse_memory(data, (int)data.size());
+			Xml.Node* rootNode = xmlDoc->get_root_element();
+
+			Pl.Data d = null;
+			for(Xml.Node* iter = rootNode->children; iter != null; iter = iter->next) {
+				if(iter->type != ElementType.ELEMENT_NODE) {
+					continue;
+				}
+				iter_name = iter->name.down();
+				if(iter_name == "entry") {
+					if(iter->children != null) {
+						Xml.Node *iter_in;
+						for(iter_in=iter->children->next;iter_in != null; iter_in = iter_in->next) {
+							if(iter_in->is_text() == 0) {
+								switch(iter_in->name.down()) {
+									case "ref":
+										string href = iter_in->get_prop("href");
+										//print("URL = '%s'\n",href);
+										d = new Pl.Data();
+										TargetType tt;
+										File tmp = get_file_for_location(href, ref base_path, out tt);
+										d.target_type = tt;
+										d.add_field(Data.Field.URI, tmp.get_uri());
+										data_collection.append(d);
+										break;
+									case "title":
+										//print("Title = '%s'\n",iter_in->get_content());
+										//d.add_field(Data.Field.TITLE,iter_in->get_content());
+										break;
+									case "author":
+										//print("Autor = '%s'\n",iter_in->get_content());
+										break;
+									case "copyright":
+										//print("Copyright = '%s'\n",iter_in->get_content());
+										break;
+									default:
+										//print("%s = '%s'\n",iter_in->name,iter_in->get_content());
+										break;
+								}
+							}
+						}
+						delete iter_in;
+					}
+				}
+				else if(iter_name == "title") {
+					//print("Playlist Title = '%s'\n",iter->get_content());
+				}
+			}
+			return data_collection;
+		}
+
+		//public DataCollection read_xml(File _file) throws InternalReaderError {
 		public override DataCollection read(File _file) throws InternalReaderError {
+			DataCollection data_collection = new DataCollection();
+			this.file = _file;
+			set_base_path();
+			
+			if (!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
+				stderr.printf("File '%s' doesn't exist.\n",file.get_uri()); //THROW
+				return data_collection;
+			}
+			
+			try {
+
+				string content;
+				var stream = new DataInputStream(file.read(null));
+				content = stream.read_until("", null, null);
+			
+				if(content == null) {
+					return data_collection;
+				}
+				content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + content;
+				this.parse(data_collection,ref base_path,content);
+			} 
+			catch(GLib.Error e) {
+				print("Error: %s\n", e.message);
+			}
+			return data_collection;
+		}
+
+		//public override DataCollection read(File _file) throws InternalReaderError {
+		public DataCollection read_old(File _file) throws InternalReaderError {
 			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
 			
 			bool entry_on = false;
 		
-			if (!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
+			if(!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
 				stderr.printf("File '%s' doesn't exist.\n",file.get_uri());
 				return data_collection;
 			}
@@ -89,7 +174,7 @@ namespace Pl {
 						}
 					}
 				}
-			} 
+			}
 			catch(GLib.Error e) {
 				print("Errorr: %s\n", e.message);
 			}
