@@ -34,12 +34,13 @@ using Gtk;
 
 public class Xnoise.FullscreenToolbar {
 	private unowned Main xn;
-	private const uint hide_delay = 3000;
+	private const uint hide_delay = 4000;
 	private Gtk.Window window;
 	private Gtk.Window fullscreenwindow;
 	private TrackProgressBar bar;
 	private uint hide_event_id;
 	private bool hide_lock;
+	private Gdk.Cursor invisible_cursor;
 	
 	private void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
 		if(xn == null) return;
@@ -85,6 +86,8 @@ public class Xnoise.FullscreenToolbar {
 		fullscreenwindow.enter_notify_event.connect(on_pointer_enter_fswindow);
 		fullscreenwindow.key_release_event.connect(this.on_key_released);
 		resize ();
+		
+		invisible_cursor = new Gdk.Cursor(Gdk.CursorType.BLANK_CURSOR);
 	}
 
 	private const int SPACE_KEY = 0x0020;
@@ -140,7 +143,7 @@ public class Xnoise.FullscreenToolbar {
 	}
 	
 	public bool on_pointer_motion (Gdk.EventMotion ev) {
-		if(!window.window.is_visible()) window.show_all();
+		if(!window.window.is_visible())show();
 		if(hide_lock == true) return false;
 		if(hide_event_id != 0) {
 			 GLib.Source.remove (hide_event_id);
@@ -153,11 +156,18 @@ public class Xnoise.FullscreenToolbar {
 
 	public void show() {
 		window.show_all();
+		//show the default cursor
+		Gdk.Window w = fullscreenwindow.get_window();
+		w.set_cursor(null);
 		launch_hide_timer();
 	}
 
 	public void hide() {
 		window.hide();
+		//hide cursor
+		Gdk.Window w = fullscreenwindow.get_window();
+		w.set_cursor(invisible_cursor);
+				
 		if(hide_event_id != 0) {
 			 GLib.Source.remove (hide_event_id);
 			 hide_event_id = 0;
