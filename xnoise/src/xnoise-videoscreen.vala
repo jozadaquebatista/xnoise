@@ -43,6 +43,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	}
 
 	private void on_image_path_changed() {
+		print("cb called");
 		if(global.image_path_large != null) {
 			try {
 				cover_image_pixb = new Gdk.Pixbuf.from_file(global.image_path_large);
@@ -52,6 +53,12 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				return;
 			}
 			cover_image_available = true;
+			if(this.visible) {
+				Gdk.Window w = this.get_window();
+				if (w != null) 
+					w.invalidate_rect(null, false);
+			}
+				
 		}
 		else {
 			cover_image_pixb = null;
