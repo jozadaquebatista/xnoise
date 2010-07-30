@@ -1301,6 +1301,8 @@ XnoiseMediaBrowser* xnoise_media_browser_new (void);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self, const char* txt);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
+void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
+void xnoise_media_browser_on_row_collapsed (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
 void xnoise_media_browser_resize_line_width (XnoiseMediaBrowser* self, gint new_width);
 gboolean xnoise_media_browser_get_use_linebreaks (XnoiseMediaBrowser* self);
 void xnoise_media_browser_set_use_linebreaks (XnoiseMediaBrowser* self, gboolean value);

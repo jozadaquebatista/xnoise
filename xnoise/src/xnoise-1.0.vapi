@@ -272,6 +272,8 @@ namespace Xnoise {
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
 		public MediaBrowser ();
 		public bool change_model_data ();
+		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
+		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_searchtext_changed (string? txt);
 		public void resize_line_width (int new_width);
 		public bool use_linebreaks { get; set; }

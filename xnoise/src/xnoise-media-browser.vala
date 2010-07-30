@@ -39,6 +39,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private bool _use_treelines = false;
 	private bool _use_linebreaks = false;
 	private CellRendererText renderer = null;
+	private List<TreePath> expansion_list = null;
+	
 	public bool use_linebreaks {
 		get {
 			return _use_linebreaks;
@@ -53,8 +55,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 						this.change_model_data();
 						return false;
 						});
+				this.row_collapsed.disconnect(on_row_collapsed);
+				this.row_expanded.disconnect(on_row_expanded);
+				expansion_list = null;
 				return;
 			}
+			if(expansion_list == null)
+				expansion_list = new List<TreePath>();
+			this.row_collapsed.connect(on_row_collapsed);
+			this.row_expanded.connect(on_row_expanded);
 			renderer.set_fixed_height_from_font(-1);
 			renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
 			if(xn.main_window == null)
@@ -102,6 +111,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			Gdk.DragAction.COPY);
 		
 		this.dragging = false;
+		
 
 		//Signals
 		this.row_activated.connect(this.on_row_activated);
@@ -341,6 +351,22 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.set_sensitive(true);
 		return false;
 	}
+	
+	public void on_row_expanded(TreeIter iter, TreePath path) {
+		this.expansion_list.append(path);
+	}
+	
+	public void on_row_collapsed(TreeIter iter, TreePath path) {
+		uint list_iter = 0;
+		foreach(TreePath tp in this.expansion_list) {
+			if(path.compare(tp) == 0) {
+				print("found");
+				this.expansion_list.delete_link(this.expansion_list.nth(list_iter));
+				break;
+			}
+			list_iter++;
+		}	
+	}
 
 	private void setup_view() {
 		fontsizeMB = par.get_int_value("fontsizeMB");
@@ -373,6 +399,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			if(sepatator==0) return false;
 			return true;
 		});
+		
 	}
 	
 	
@@ -402,6 +429,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		renderer.wrap_width = new_width;
 		Idle.add( () => {
 			this.change_model_data();
+			this.row_collapsed.disconnect(on_row_collapsed);
+			this.row_expanded.disconnect(on_row_expanded);
+			foreach (TreePath tp in this.expansion_list)
+				this.expand_row(tp, false);
+			this.row_collapsed.connect(on_row_collapsed);
+			this.row_expanded.connect(on_row_expanded);
 			return false;
 		});
 	}
