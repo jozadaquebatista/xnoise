@@ -80,30 +80,28 @@ public class Xnoise.AlbumImage : Gtk.Image {
 				print("%s\n", e.message);
 				return;
 			}
-		
+			
 			string? res = dbb.get_local_image_path_for_track(ref current_uri);
 			//print("res: %s\n", res);
 			if((res != null) && (res != "")) {
 				File f = File.new_for_path(res);
-				if(!f.query_exists(null)) {
-					load_default_image();
+				if(f.query_exists(null)) {
+					global.check_image_for_current_track();
+					set_image_via_idle(res);
 					return;
 				}
-				global.check_image_for_current_track();
-				set_image_via_idle(res);
 			}
-			else {
-				load_default_image();
-				global.check_image_for_current_track();
-				if(timeout != 0)
-					Source.remove(timeout);
-				timeout = Timeout.add_seconds_full(GLib.Priority.DEFAULT,
-				                                    1,
-				                                    () => {
-				                                    	search_image(uri);
-				                                    	return false;
-				                                    });
-			}
+			
+			load_default_image();
+			global.check_image_for_current_track();
+			if(timeout != 0)
+				Source.remove(timeout);
+			timeout = Timeout.add_seconds_full(GLib.Priority.DEFAULT,
+			                                    1,
+			                                    () => {
+			                                    	search_image(uri);
+			                                    	return false;
+			                                    });
 		}
 		else {
 			File f = File.new_for_path(global.image_path_small);
