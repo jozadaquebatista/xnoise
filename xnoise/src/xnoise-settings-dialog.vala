@@ -46,7 +46,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private Notebook notebook;
 	private SpinButton sb;
 	private int fontsizeMB;
-	private VBox vboxplugins;
+	private ScrolledWindow scrollWinPlugins;
 	private TreeView visibleColTv;
 	private ListStore visibleColTvModel;
 	private CheckButton checkB_showL;
@@ -65,7 +65,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private Button ly_down_button;
 	private Button ai_up_button;
 	private Button ly_up_button;
-
+	
 	private enum NotebookTabs {
 		GENERAL,
 		PLUGINS,
@@ -523,7 +523,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			if(!f.query_exists(null)) throw new SettingsDialogError.FILE_NOT_FOUND("Ui file not found!");
 
 			this.add_from_file(SETTINGS_UI_FILE);
-			this.dialog = this.get_object("dialog1") as Gtk.Dialog;
+			this.dialog = this.get_object("settingsDialog") as Gtk.Dialog;
 			this.dialog.set_modal(true);
 
 			ai_up_button = this.get_object("ai_up_button") as Gtk.Button;
@@ -573,7 +573,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			ai_hbox = this.get_object("ai_hbox") as Gtk.HBox;
 			ly_hbox = this.get_object("ly_hbox") as Gtk.HBox;
 			
-			vboxplugins = this.get_object("vboxplugins") as Gtk.VBox;
+			scrollWinPlugins = this.get_object("scrollWinPlugins") as Gtk.ScrolledWindow;
 
 			notebook = this.get_object("notebook1") as Gtk.Notebook;
 
@@ -583,7 +583,8 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			add_plugin_tabs();
 
 			plugin_manager_tree = new PluginManagerTree();
-			vboxplugins.pack_start(plugin_manager_tree, true, true, 0);
+			this.dialog.realize.connect(on_dialog_realized);
+			scrollWinPlugins.add(plugin_manager_tree);
 
 			plugin_manager_tree.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
 		}
@@ -595,4 +596,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		}
 		return true;
 	}
+	
+	private void on_dialog_realized() {
+		Requisition req;
+		dialog.get_child_requisition(out req);
+		plugin_manager_tree.set_width(req.width);
+	}
+		
 }

@@ -39,6 +39,9 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		TEXT,
 		N_COLUMNS
 	}
+	private CellRendererText text;
+	private TreeViewColumn iconColumn;
+	private TreeViewColumn checkColumn;
 
 	private unowned Main xn;
 
@@ -54,6 +57,14 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 //	~PluginManagerTree() {
 //		print("destruct PluginGuiElement\n");
 //	}
+
+	public static void text_cell_cb (CellLayout cell_layout, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
+		Value v;
+		tree_model.get_value(iter, 2, out v);
+		string s = v.get_string();
+		((CellRendererText)cell).markup = s;
+	}
+		
 
 	public void create_view() {
 		this.set_size_request(200, 200);
@@ -76,30 +87,38 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 			sign_plugin_activestate_changed(name);
 		});
 
-		var column = new TreeViewColumn();
-		column.pack_start(toggle, false);
-		column.add_attribute(toggle, "active", PluginManagerColumn.TOGGLE);
-		this.append_column(column);
+		checkColumn = new TreeViewColumn();
+		checkColumn.pack_start(toggle, false);
+		checkColumn.add_attribute(toggle, "active", PluginManagerColumn.TOGGLE);
+		this.append_column(checkColumn);
 
-
-		column = new TreeViewColumn();
+		iconColumn = new TreeViewColumn();
 		var pixbufRenderer = new CellRendererPixbuf();
-		column.pack_start(pixbufRenderer, false);
-		column.add_attribute(pixbufRenderer, "pixbuf", PluginManagerColumn.ICON);
-		column.set_fixed_width(50);
-		this.append_column(column);
+		iconColumn.pack_start(pixbufRenderer, false);
+		iconColumn.add_attribute(pixbufRenderer, "pixbuf", PluginManagerColumn.ICON);
+		iconColumn.set_fixed_width(50);
+		this.append_column(iconColumn);
 
-		var text = new CellRendererText();
+		text = new CellRendererText();
 
-		column = new TreeViewColumn();
+		var column = new TreeViewColumn();
 		column.pack_start(text, true);
 		column.add_attribute(text, "text", PluginManagerColumn.TEXT);
+		column.set_cell_data_func(text, text_cell_cb);
 		this.append_column(column);
 
 		this.set_headers_visible(false);
 		setup_entries();
+		this.set_model(listmodel);			
+	}
+	
+	public void set_width(int w) {
+		text.wrap_mode = Pango.WrapMode.WORD_CHAR;
+		text.wrap_width = w - checkColumn.width - iconColumn.width;
+		this.set_model(null);
 		this.set_model(listmodel);
 	}
+	
 
 	private void setup_entries() {
 		foreach(string s in this.xn.plugin_loader.get_info_files()) {
@@ -124,7 +143,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				listmodel.set(iter,
 				              PluginManagerColumn.TOGGLE, this.xn.plugin_loader.plugin_htable.lookup(name).activated,
 				              PluginManagerColumn.ICON, pixbuf,
-				              PluginManagerColumn.TEXT, name);
+				              PluginManagerColumn.TEXT, "<b>" + name + "</b>\n" + description);
 			}
 			catch(Error e) {
 				print("Error plugin information: %s\n", e.message);

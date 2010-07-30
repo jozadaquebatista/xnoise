@@ -394,6 +394,8 @@ namespace Xnoise {
 	public class PluginManagerTree : Gtk.TreeView {
 		public PluginManagerTree ();
 		public void create_view ();
+		public void set_width (int w);
+		public static void text_cell_cb (Gtk.CellLayout cell_layout, Gtk.CellRenderer cell, Gtk.TreeModel tree_model, Gtk.TreeIter iter);
 		public signal void sign_plugin_activestate_changed (string name);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
