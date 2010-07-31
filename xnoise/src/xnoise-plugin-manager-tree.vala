@@ -36,7 +36,8 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 	private enum PluginManagerColumn {
 		TOGGLE,
 		ICON,
-		TEXT,
+		NAME,
+		DESCRIPTION,
 		N_COLUMNS
 	}
 	private CellRendererText text;
@@ -60,9 +61,13 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 
 	public static void text_cell_cb (CellLayout cell_layout, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
 		Value v;
-		tree_model.get_value(iter, 2, out v);
+		tree_model.get_value(iter, PluginManagerColumn.NAME, out v);
 		string s = v.get_string();
-		((CellRendererText)cell).markup = s;
+		string markup = "<b>" + s + "</b>\n";
+		tree_model.get_value(iter, PluginManagerColumn.DESCRIPTION, out v);
+		s = v.get_string();
+		markup += s;		
+		((CellRendererText)cell).markup = markup;
 	}
 		
 
@@ -75,7 +80,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 			var tree_path = new TreePath.from_string(path);
 			listmodel.get_iter(out iter, tree_path);
 			string name;
-			listmodel.get(iter, PluginManagerColumn.TEXT, out name);
+			listmodel.get(iter, PluginManagerColumn.NAME, out name);
 
 			if(this.xn.plugin_loader.plugin_htable.lookup(name).activated) 
 				this.xn.plugin_loader.deactivate_single_plugin(name);
@@ -103,7 +108,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 
 		var column = new TreeViewColumn();
 		column.pack_start(text, true);
-		column.add_attribute(text, "text", PluginManagerColumn.TEXT);
+		column.add_attribute(text, "text", PluginManagerColumn.NAME);
 		column.set_cell_data_func(text, text_cell_cb);
 		this.append_column(column);
 
@@ -143,7 +148,8 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				listmodel.set(iter,
 				              PluginManagerColumn.TOGGLE, this.xn.plugin_loader.plugin_htable.lookup(name).activated,
 				              PluginManagerColumn.ICON, pixbuf,
-				              PluginManagerColumn.TEXT, "<b>" + name + "</b>\n" + description);
+				              PluginManagerColumn.NAME, name,
+				              PluginManagerColumn.DESCRIPTION, description);
 			}
 			catch(Error e) {
 				print("Error plugin information: %s\n", e.message);
@@ -155,6 +161,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		listmodel = new ListStore(PluginManagerColumn.N_COLUMNS,
 		                          typeof(bool),
 		                          typeof(Gdk.Pixbuf),
+		                          typeof(string),
 		                          typeof(string));
 	}
 }
