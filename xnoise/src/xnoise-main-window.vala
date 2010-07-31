@@ -137,6 +137,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			{ "AddRemoveAction", Gtk.STOCK_ADD, N_("_Add or Remove media"), null, N_("manage the content of the xnoise media library"), on_menu_add},
 			{ "QuitAction", STOCK_QUIT, null, null, null, quit_now},
 		{ "EditMenuAction", null, N_("_Edit") },
+			{ "ClearTrackListAction", Gtk.STOCK_CLEAR, N_("C_lear tracklist"), null, N_("Clear the tracklist"), on_remove_all_button_clicked},
 			{ "SettingsAction", STOCK_PREFERENCES, null, null, null, on_settings_edit},
 		{ "ViewMenuAction", null, N_("_View") },
 			{ "ShowTracklistAction", Gtk.STOCK_INDEX, N_("_Tracklist"), null, N_("Go to the tracklist."), on_show_tracklist_menu_clicked},

@@ -9,6 +9,8 @@
 		</menu>
 
 		<menu name="EditMenu" action="EditMenuAction">
+			<menuitem action="ClearTrackListAction"/>
+			<separator />
 			<menuitem action="SettingsAction"/>
 		</menu>
 
