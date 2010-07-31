@@ -360,7 +360,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		uint list_iter = 0;
 		foreach(TreePath tp in this.expansion_list) {
 			if(path.compare(tp) == 0) {
-				print("found");
 				this.expansion_list.delete_link(this.expansion_list.nth(list_iter));
 				break;
 			}
@@ -423,11 +422,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				scrollbar_w = req.width;				
 			}
 		}
-		//substract scrollbar width and the space used up by the icons from the
-		//total width
-		//24 for the expander, the second potentially shown wxpander is beneath an icon anyway
-		//24 pixels are only a guess!	
-		new_width -= mediabrowsermodel.get_max_icon_width() + scrollbar_w + 24;
+		//substract scrollbar width, expander width, vertical separator width and the space used 
+		//up by the icons from the total width
+		Value v = Value(Type.from_name("gint"));
+		((TreeView)this).style_get_property("expander-size", v);
+		int expander_size = v.get_int();
+		((TreeView)this).style_get_property("vertical-separator", v);
+		int vertical_separator_size = v.get_int();
+		new_width -= mediabrowsermodel.get_max_icon_width() + scrollbar_w + expander_size + vertical_separator_size * 4;
 		if(new_width < 60) return;
 		renderer.wrap_width = new_width;
 		Idle.add( () => {
