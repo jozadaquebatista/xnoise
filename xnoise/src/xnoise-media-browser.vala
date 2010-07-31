@@ -404,10 +404,11 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	
 	
 	/* TODO: Find a more cpu efficient way to update the linebreaks, which also
-		 keeps the currently expanded nodes expanded!*/
+		 keeps the currently expanded nodes expanded!
 		 
-	/* calculates the size available for the text in the treeview, one expander's size usage is
-	ignored, though */
+	   TODO: Find out the correct expander size at runtime */
+		 
+	/* calculates the size available for the text in the treeview */
 	public void resize_line_width(int new_width) {
 		if(!use_linebreaks)
 			return;
@@ -423,16 +424,21 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			}
 		}
 		//substract scrollbar width and the space used up by the icons from the
-		//total width	
-		new_width -= mediabrowsermodel.get_max_icon_width() + scrollbar_w;
+		//total width
+		//24 for the expander, the second potentially shown wxpander is beneath an icon anyway
+		//24 pixels are only a guess!	
+		new_width -= mediabrowsermodel.get_max_icon_width() + scrollbar_w + 24;
 		if(new_width < 60) return;
 		renderer.wrap_width = new_width;
 		Idle.add( () => {
+			double scroll_position = xn.main_window.mediaBrScrollWin.vadjustment.value;
 			this.change_model_data();
 			this.row_collapsed.disconnect(on_row_collapsed);
 			this.row_expanded.disconnect(on_row_expanded);
 			foreach (TreePath tp in this.expansion_list)
 				this.expand_row(tp, false);
+			xn.main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);
+			xn.main_window.mediaBrScrollWin.vadjustment.value_changed();
 			this.row_collapsed.connect(on_row_collapsed);
 			this.row_expanded.connect(on_row_expanded);
 			return false;
