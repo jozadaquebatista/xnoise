@@ -1005,7 +1005,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	
 	private bool hpaned_button_one;
 	private bool hpaned_resized = false;
-	private int hpaned_size_cache;
 	private bool on_hpaned_button_event(Gdk.EventButton e) {
 		if(e.button == 1 && e.type == Gdk.EventType.BUTTON_PRESS)
 			hpaned_button_one = true;

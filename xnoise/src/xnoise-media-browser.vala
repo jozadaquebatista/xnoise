@@ -33,7 +33,6 @@ using Gdk;
 
 public class Xnoise.MediaBrowser : TreeView, IParams {
 	public MediaBrowserModel mediabrowsermodel;
-	private MediaBrowserModel dummymodel;
 	private unowned Main xn;
 	private bool dragging;
 	private bool _use_treelines = false;
