@@ -46,24 +46,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			return _use_linebreaks;
 		}
 		set {
+			if(_use_linebreaks == value) return;
 			_use_linebreaks = value;
 			if(!value) {
 				renderer.set_fixed_height_from_font(1);
 				renderer.wrap_width = -1;
 				if(visible)
-					Idle.add( () => {
-						this.change_model_data();
-						return false;
-						});
-				this.row_collapsed.disconnect(on_row_collapsed);
-				this.row_expanded.disconnect(on_row_expanded);
-				expansion_list = null;
+					Idle.add(update_view);
 				return;
 			}
-			if(expansion_list == null)
-				expansion_list = new List<TreePath>();
-			this.row_collapsed.connect(on_row_collapsed);
-			this.row_expanded.connect(on_row_expanded);
 			renderer.set_fixed_height_from_font(-1);
 			renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
 			if(xn.main_window == null)
@@ -83,8 +74,27 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			this.enable_tree_lines = value;
 		}
 	}
-
-	internal int fontsizeMB = 8;
+	
+	private int _fontsizeMB = 0;
+	internal int fontsizeMB {
+		get {
+			return _fontsizeMB;
+		}
+		set {
+			if (_fontsizeMB == 0) { //intialization
+				if((value < 7)||(value > 14)) _fontsizeMB = 7;
+				else _fontsizeMB = value;
+				renderer.font = "Sans " + fontsizeMB.to_string();
+			}
+			else {
+				if((value < 7)||(value > 14)) _fontsizeMB = 7;
+				else _fontsizeMB = value;
+				renderer.font = "Sans " + fontsizeMB.to_string();
+				Idle.add(update_view);
+			}
+		}
+	}
+		
 	public signal void sign_activated();
 	private const TargetEntry[] target_list = {
 		{"text/uri-list", 0, 0}
@@ -342,15 +352,33 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	public bool change_model_data() {
-		dummymodel = new MediaBrowserModel();
-		set_model(dummymodel);
+		set_model(null);
 		mediabrowsermodel.clear();
 		mediabrowsermodel.populate_model();
-		set_model(mediabrowsermodel);
+		update_view();
 		xn.main_window.searchEntryMB.set_sensitive(true);
 		this.set_sensitive(true);
 		return false;
 	}
+	
+	/* updates the view, leaves the original model untouched.
+	   expanded rows are kept as well as the scrollbar position */
+	   
+	public bool update_view() {
+		double scroll_position = xn.main_window.mediaBrScrollWin.vadjustment.value;
+		this.row_collapsed.disconnect(on_row_collapsed);
+		this.row_expanded.disconnect(on_row_expanded);
+		this.set_model(null);
+		this.set_model(mediabrowsermodel);
+		foreach (TreePath tp in this.expansion_list)
+			this.expand_row(tp, false);
+		xn.main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);
+		xn.main_window.mediaBrScrollWin.vadjustment.value_changed();
+		this.row_collapsed.connect(on_row_collapsed);
+		this.row_expanded.connect(on_row_expanded);
+		return false;
+	}
+		
 	
 	public void on_row_expanded(TreeIter iter, TreePath path) {
 		this.expansion_list.append(path);
@@ -368,14 +396,18 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	private void setup_view() {
-		fontsizeMB = par.get_int_value("fontsizeMB");
-		if((fontsizeMB < 7)||(fontsizeMB > 14)) fontsizeMB = 7;
-
+		
+		//we keep track of which rows are expanded, so we can expand them again
+		//when the view is updated
+		expansion_list = new List<TreePath>();
+		this.row_collapsed.connect(on_row_collapsed);
+		this.row_expanded.connect(on_row_expanded);
+		
 		this.set_size_request (300,500);
 		renderer = new CellRendererText();
-		renderer.font = "Sans " + fontsizeMB.to_string();
 //		renderer.family = "Sans"; //TODO: Does not work!?
 //		renderer.size = 9; //TODO: Does not work!?
+		fontsizeMB = par.get_int_value("fontsizeMB");
 
 
 
@@ -432,18 +464,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		new_width -= mediabrowsermodel.get_max_icon_width() + scrollbar_w + expander_size + vertical_separator_size * 4;
 		if(new_width < 60) return;
 		renderer.wrap_width = new_width;
-		Idle.add( () => {
-			double scroll_position = xn.main_window.mediaBrScrollWin.vadjustment.value;
-			this.change_model_data();
-			this.row_collapsed.disconnect(on_row_collapsed);
-			this.row_expanded.disconnect(on_row_expanded);
-			foreach (TreePath tp in this.expansion_list)
-				this.expand_row(tp, false);
-			xn.main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);
-			xn.main_window.mediaBrScrollWin.vadjustment.value_changed();
-			this.row_collapsed.connect(on_row_collapsed);
-			this.row_expanded.connect(on_row_expanded);
-			return false;
-		});
+		Idle.add(update_view);
 	}
 }

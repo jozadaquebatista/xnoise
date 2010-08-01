@@ -276,6 +276,7 @@ namespace Xnoise {
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_searchtext_changed (string? txt);
 		public void resize_line_width (int new_width);
+		public bool update_view ();
 		public bool use_linebreaks { get; set; }
 		public bool use_treelines { get; set; }
 		public signal void sign_activated ();
