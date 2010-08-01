@@ -456,7 +456,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		}
 		//substract scrollbar width, expander width, vertical separator width and the space used 
 		//up by the icons from the total width
-		Value v = Value(Type.from_name("gint"));
+		Value v = Value(typeof(int));
 		((TreeView)this).style_get_property("expander-size", v);
 		int expander_size = v.get_int();
 		((TreeView)this).style_get_property("vertical-separator", v);

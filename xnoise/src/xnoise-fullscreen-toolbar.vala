@@ -34,7 +34,7 @@ using Gtk;
 
 public class Xnoise.FullscreenToolbar {
 	private unowned Main xn;
-	private const uint hide_delay = 4000;
+	private const uint hide_delay = 4;
 	private Gtk.Window window;
 	private Gtk.Window fullscreenwindow;
 	private TrackProgressBar bar;
@@ -120,12 +120,12 @@ public class Xnoise.FullscreenToolbar {
 	}
 
 	private bool hide_timer_elapsed () {
-		if (!this.hide_lock) this.hide();
+		if(!this.hide_lock) this.hide();
 		return false;
 	}
 
 	public void launch_hide_timer () {
-		hide_event_id = Timeout.add (hide_delay, hide_timer_elapsed);
+		hide_event_id = Timeout.add_seconds (hide_delay, hide_timer_elapsed);
 	}
 
 
@@ -137,7 +137,10 @@ public class Xnoise.FullscreenToolbar {
 
 	private bool on_pointer_enter_toolbar (Gdk.EventCrossing ev) {
 		this.hide_lock = true;
-		if(hide_event_id != 0) GLib.Source.remove (hide_event_id);
+		if(hide_event_id != 0) {
+			GLib.Source.remove (hide_event_id);
+			hide_event_id = 0;
+		}
 		fullscreenwindow.motion_notify_event.disconnect(on_pointer_motion);
 		return false;
 	}
