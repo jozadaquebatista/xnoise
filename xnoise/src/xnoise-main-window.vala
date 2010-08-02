@@ -204,6 +204,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		notify["repeatState"].connect(on_repeatState_changed);
 		notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
+		global.notify["media-import-in-progress"].connect(on_media_import_notify);
 
 		buffer_last_page = 0;
 
@@ -1003,6 +1004,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
+	/* disables (or enables) the AddRemoveAction in the menus if
+	   music is (not anymore) being imported */ 
+	private void on_media_import_notify(GLib.Object sender, ParamSpec spec) {
+		List<Action> actions = action_group.list_actions();
+		foreach(Action a in actions) {
+			if(a.name == "AddRemoveAction") {
+				a.sensitive = !global.media_import_in_progress;
+				break;
+			}
+			//the actions seem to be automatically unreferenced when the list is destroyed
+			//but they are never referenced when the list is created, so we reference them!
+			a.ref();
+		}
+	}
+	
 	private bool hpaned_button_one;
 	private bool hpaned_resized = false;
 	private bool on_hpaned_button_event(Gdk.EventButton e) {
@@ -1260,7 +1276,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			config_button.can_focus = false;
 			config_button.set_relief(Gtk.ReliefStyle.NONE);
 			a_frame_config_button = gb.get_object("aFrameConfigButton") as Gtk.AspectFrame;	
-			
 		}
 		catch(GLib.Error e) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
