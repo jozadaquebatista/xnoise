@@ -27,6 +27,32 @@ namespace Pl {
 	private class Asx.FileReader : AbstractFileReader {
 		private unowned File file;
 
+		public string fix_tags_xml(string content) {
+			string up;
+			string down;
+			string xml=content;
+			MatchInfo match_info = null;
+			string[] resultado;
+			Regex regex = null;
+			
+			try {
+				regex = new Regex("(<([A-Z]+[A-Za-z0-9]+))|(<\\/([A-Z]+([A-Za-z0-9])+)>)");
+			}
+			catch(GLib.RegexError e) {
+				print("%s\n", e.message);
+			}
+			while(regex.match_all(xml,0,out match_info)) {
+				resultado = match_info.fetch_all ();
+				if(resultado!=null && resultado.length > 0) {
+					up = resultado[0].up();
+					down = resultado[0].down();
+					xml = xml.replace(resultado[0],down);
+					xml = xml.replace(up,down);
+				}
+			}
+			return xml;
+		}
+
 		private DataCollection parse(DataCollection data_collection,ref string base_path = "",string data) {
 			string iter_name;
 			Xml.Doc* xmlDoc = Parser.parse_memory(data, (int)data.size());
@@ -100,6 +126,8 @@ namespace Pl {
 				if(content == null) {
 					return data_collection;
 				}
+				content = this.fix_tags_xml(content);
+				//print("\n\n%s: \n\n",content);
 				content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + content;
 				this.parse(data_collection,ref base_path,content);
 			} 

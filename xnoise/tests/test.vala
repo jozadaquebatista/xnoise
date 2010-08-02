@@ -125,6 +125,24 @@ bool test_asx_remote_reading() {
 	return uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
 }
 
+bool test_asx_bad_xml_remote_reading() {
+	File f = File.new_for_uri("http://www.tropicalisima.fm/wmbaladas48.asx");
+	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
+	var reader = new Pl.Reader();
+	try {
+		reader.read(f.get_uri());
+	}
+	catch(Error e) {
+		print("asx bad xml remote test error reading\n");
+		return false;
+	}
+	var uris = reader.get_found_uris();
+	//print("Size: %s\n", uris.length.to_string());
+  //print("URI0: %s\n", uris[0]);
+  //print("URI1: %s\n", uris[1]);
+	return uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
+}
+
 bool test_pls_reading_2() {
 	File f = File.new_for_path("./playlist-examples/pls_test.pls");
 	File t1 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
@@ -958,6 +976,12 @@ void main() {
 	
 	print("test asx remote reading:");
 	if(test_asx_remote_reading())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+
+	print("test asx bad xml remote reading:");
+	if(test_asx_bad_xml_remote_reading())
 		print("\033[50Gpass\n");
 	else
 		print("\033[50Gfail\n");
