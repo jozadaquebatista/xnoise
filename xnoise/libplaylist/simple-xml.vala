@@ -30,6 +30,8 @@ namespace SimpleXml {
 	public const string APOSTROPH_ESCAPED    = "&apos;";
 	
 	public class Reader {
+		// simple xml reader that fits with vala more than libxml 
+		// TODO: Implement async reading
 		private string? xml_string = null;
 		private string filename;
 		private GLib.MappedFile? mapped_file = null;
@@ -344,7 +346,9 @@ namespace SimpleXml {
 
 
 	public class Writer {
-		
+		// simple xml writer that fits with vala more than libxml 
+		// TODO: Implement async writing
+
 		Node root;
 		
 		public Writer(Node root, string header_type_string = "xml", string version_string = "1.0", string encoding_string = "UTF-8") {

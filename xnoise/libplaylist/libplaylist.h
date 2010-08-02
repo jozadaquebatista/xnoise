@@ -76,6 +76,61 @@ typedef struct _PlWriter PlWriter;
 typedef struct _PlWriterClass PlWriterClass;
 typedef struct _PlWriterPrivate PlWriterPrivate;
 
+#define SIMPLE_XML_TYPE_READER (simple_xml_reader_get_type ())
+#define SIMPLE_XML_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SIMPLE_XML_TYPE_READER, SimpleXmlReader))
+#define SIMPLE_XML_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SIMPLE_XML_TYPE_READER, SimpleXmlReaderClass))
+#define SIMPLE_XML_IS_READER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SIMPLE_XML_TYPE_READER))
+#define SIMPLE_XML_IS_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SIMPLE_XML_TYPE_READER))
+#define SIMPLE_XML_READER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SIMPLE_XML_TYPE_READER, SimpleXmlReaderClass))
+
+typedef struct _SimpleXmlReader SimpleXmlReader;
+typedef struct _SimpleXmlReaderClass SimpleXmlReaderClass;
+typedef struct _SimpleXmlReaderPrivate SimpleXmlReaderPrivate;
+
+#define SIMPLE_XML_TYPE_NODE (simple_xml_node_get_type ())
+#define SIMPLE_XML_NODE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SIMPLE_XML_TYPE_NODE, SimpleXmlNode))
+#define SIMPLE_XML_NODE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SIMPLE_XML_TYPE_NODE, SimpleXmlNodeClass))
+#define SIMPLE_XML_IS_NODE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SIMPLE_XML_TYPE_NODE))
+#define SIMPLE_XML_IS_NODE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SIMPLE_XML_TYPE_NODE))
+#define SIMPLE_XML_NODE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SIMPLE_XML_TYPE_NODE, SimpleXmlNodeClass))
+
+typedef struct _SimpleXmlNode SimpleXmlNode;
+typedef struct _SimpleXmlNodeClass SimpleXmlNodeClass;
+
+#define SIMPLE_XML_TYPE_WRITER (simple_xml_writer_get_type ())
+#define SIMPLE_XML_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SIMPLE_XML_TYPE_WRITER, SimpleXmlWriter))
+#define SIMPLE_XML_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SIMPLE_XML_TYPE_WRITER, SimpleXmlWriterClass))
+#define SIMPLE_XML_IS_WRITER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SIMPLE_XML_TYPE_WRITER))
+#define SIMPLE_XML_IS_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SIMPLE_XML_TYPE_WRITER))
+#define SIMPLE_XML_WRITER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SIMPLE_XML_TYPE_WRITER, SimpleXmlWriterClass))
+
+typedef struct _SimpleXmlWriter SimpleXmlWriter;
+typedef struct _SimpleXmlWriterClass SimpleXmlWriterClass;
+typedef struct _SimpleXmlWriterPrivate SimpleXmlWriterPrivate;
+typedef struct _SimpleXmlNodePrivate SimpleXmlNodePrivate;
+
+#define SIMPLE_XML_NODE_TYPE_CHILDREN (simple_xml_node_children_get_type ())
+#define SIMPLE_XML_NODE_CHILDREN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SIMPLE_XML_NODE_TYPE_CHILDREN, SimpleXmlNodeChildren))
+#define SIMPLE_XML_NODE_CHILDREN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SIMPLE_XML_NODE_TYPE_CHILDREN, SimpleXmlNodeChildrenClass))
+#define SIMPLE_XML_NODE_IS_CHILDREN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SIMPLE_XML_NODE_TYPE_CHILDREN))
+#define SIMPLE_XML_NODE_IS_CHILDREN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SIMPLE_XML_NODE_TYPE_CHILDREN))
+#define SIMPLE_XML_NODE_CHILDREN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SIMPLE_XML_NODE_TYPE_CHILDREN, SimpleXmlNodeChildrenClass))
+
+typedef struct _SimpleXmlNodeChildren SimpleXmlNodeChildren;
+typedef struct _SimpleXmlNodeChildrenClass SimpleXmlNodeChildrenClass;
+typedef struct _SimpleXmlNodeChildrenPrivate SimpleXmlNodeChildrenPrivate;
+
+#define SIMPLE_XML_NODE_CHILDREN_TYPE_ITERATOR (simple_xml_node_children_iterator_get_type ())
+#define SIMPLE_XML_NODE_CHILDREN_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SIMPLE_XML_NODE_CHILDREN_TYPE_ITERATOR, SimpleXmlNodeChildrenIterator))
+#define SIMPLE_XML_NODE_CHILDREN_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SIMPLE_XML_NODE_CHILDREN_TYPE_ITERATOR, SimpleXmlNodeChildrenIteratorClass))
+#define SIMPLE_XML_NODE_CHILDREN_IS_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SIMPLE_XML_NODE_CHILDREN_TYPE_ITERATOR))
+#define SIMPLE_XML_NODE_CHILDREN_IS_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SIMPLE_XML_NODE_CHILDREN_TYPE_ITERATOR))
+#define SIMPLE_XML_NODE_CHILDREN_ITERATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SIMPLE_XML_NODE_CHILDREN_TYPE_ITERATOR, SimpleXmlNodeChildrenIteratorClass))
+
+typedef struct _SimpleXmlNodeChildrenIterator SimpleXmlNodeChildrenIterator;
+typedef struct _SimpleXmlNodeChildrenIteratorClass SimpleXmlNodeChildrenIteratorClass;
+typedef struct _SimpleXmlNodeChildrenIteratorPrivate SimpleXmlNodeChildrenIteratorPrivate;
+
 typedef enum  {
 	PL_READER_ERROR_UNKNOWN_TYPE,
 	PL_READER_ERROR_SOMETHING_ELSE
@@ -176,6 +231,64 @@ struct _PlWriter {
 
 struct _PlWriterClass {
 	GObjectClass parent_class;
+};
+
+struct _SimpleXmlReader {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	SimpleXmlReaderPrivate * priv;
+	SimpleXmlNode* root;
+};
+
+struct _SimpleXmlReaderClass {
+	GTypeClass parent_class;
+	void (*finalize) (SimpleXmlReader *self);
+};
+
+struct _SimpleXmlWriter {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	SimpleXmlWriterPrivate * priv;
+};
+
+struct _SimpleXmlWriterClass {
+	GTypeClass parent_class;
+	void (*finalize) (SimpleXmlWriter *self);
+};
+
+struct _SimpleXmlNode {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	SimpleXmlNodePrivate * priv;
+	GHashTable* attributes;
+	SimpleXmlNodeChildren* children;
+};
+
+struct _SimpleXmlNodeClass {
+	GTypeClass parent_class;
+	void (*finalize) (SimpleXmlNode *self);
+};
+
+struct _SimpleXmlNodeChildren {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	SimpleXmlNodeChildrenPrivate * priv;
+};
+
+struct _SimpleXmlNodeChildrenClass {
+	GTypeClass parent_class;
+	void (*finalize) (SimpleXmlNodeChildren *self);
+};
+
+struct _SimpleXmlNodeChildrenIterator {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	SimpleXmlNodeChildrenIteratorPrivate * priv;
+};
+
+struct _SimpleXmlNodeChildrenIteratorClass {
+	GTypeClass parent_class;
+	void (*finalize) (SimpleXmlNodeChildrenIterator *self);
 };
 
 
@@ -307,6 +420,86 @@ void pl_writer_write_asyn (PlWriter* self, PlDataCollection* data_collection, co
 PlResult pl_writer_write_asyn_finish (PlWriter* self, GAsyncResult* _res_, GError** error);
 const char* pl_writer_get_uri (PlWriter* self);
 gboolean pl_writer_get_overwrite_if_exists (PlWriter* self);
+#define SIMPLE_XML_AMPERSAND_ESCAPED "&amp;"
+#define SIMPLE_XML_GREATER_THAN_ESCAPED "&gt;"
+#define SIMPLE_XML_LOWER_THAN_ESCAPED "&lt;"
+#define SIMPLE_XML_QUOTE_ESCAPED "&quot;"
+#define SIMPLE_XML_APOSTROPH_ESCAPED "&apos;"
+gpointer simple_xml_reader_ref (gpointer instance);
+void simple_xml_reader_unref (gpointer instance);
+GParamSpec* simple_xml_param_spec_reader (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void simple_xml_value_set_reader (GValue* value, gpointer v_object);
+void simple_xml_value_take_reader (GValue* value, gpointer v_object);
+gpointer simple_xml_value_get_reader (const GValue* value);
+GType simple_xml_reader_get_type (void);
+gpointer simple_xml_node_ref (gpointer instance);
+void simple_xml_node_unref (gpointer instance);
+GParamSpec* simple_xml_param_spec_node (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void simple_xml_value_set_node (GValue* value, gpointer v_object);
+void simple_xml_value_take_node (GValue* value, gpointer v_object);
+gpointer simple_xml_value_get_node (const GValue* value);
+GType simple_xml_node_get_type (void);
+SimpleXmlReader* simple_xml_reader_new (const char* filename);
+SimpleXmlReader* simple_xml_reader_construct (GType object_type, const char* filename);
+SimpleXmlReader* simple_xml_reader_new_from_string (const char* xml_string);
+SimpleXmlReader* simple_xml_reader_construct_from_string (GType object_type, const char* xml_string);
+void simple_xml_reader_read (SimpleXmlReader* self, gboolean case_sensitive);
+gpointer simple_xml_writer_ref (gpointer instance);
+void simple_xml_writer_unref (gpointer instance);
+GParamSpec* simple_xml_param_spec_writer (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void simple_xml_value_set_writer (GValue* value, gpointer v_object);
+void simple_xml_value_take_writer (GValue* value, gpointer v_object);
+gpointer simple_xml_value_get_writer (const GValue* value);
+GType simple_xml_writer_get_type (void);
+SimpleXmlWriter* simple_xml_writer_new (SimpleXmlNode* root, const char* header_type_string, const char* version_string, const char* encoding_string);
+SimpleXmlWriter* simple_xml_writer_construct (GType object_type, SimpleXmlNode* root, const char* header_type_string, const char* version_string, const char* encoding_string);
+void simple_xml_writer_write (SimpleXmlWriter* self, const char* filename);
+gpointer simple_xml_node_children_ref (gpointer instance);
+void simple_xml_node_children_unref (gpointer instance);
+GParamSpec* simple_xml_node_param_spec_children (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void simple_xml_node_value_set_children (GValue* value, gpointer v_object);
+void simple_xml_node_value_take_children (GValue* value, gpointer v_object);
+gpointer simple_xml_node_value_get_children (const GValue* value);
+GType simple_xml_node_children_get_type (void);
+SimpleXmlNode* simple_xml_node_new (const char* name);
+SimpleXmlNode* simple_xml_node_construct (GType object_type, const char* name);
+gboolean simple_xml_node_has_text (SimpleXmlNode* self);
+void simple_xml_node_append_child (SimpleXmlNode* self, SimpleXmlNode* child);
+void simple_xml_node_prepend_child (SimpleXmlNode* self, SimpleXmlNode* child);
+void simple_xml_node_insert_child (SimpleXmlNode* self, gint pos, SimpleXmlNode* child);
+SimpleXmlNode* simple_xml_node_get_child_by_name (SimpleXmlNode* self, const char* childname);
+const char* simple_xml_node_get_text (SimpleXmlNode* self);
+void simple_xml_node_set_text (SimpleXmlNode* self, const char* value);
+const char* simple_xml_node_get_name (SimpleXmlNode* self);
+SimpleXmlNode* simple_xml_node_get_parent (SimpleXmlNode* self);
+SimpleXmlNodeChildren* simple_xml_node_children_new (SimpleXmlNode* parent);
+SimpleXmlNodeChildren* simple_xml_node_children_construct (GType object_type, SimpleXmlNode* parent);
+void simple_xml_node_children_prepend (SimpleXmlNodeChildren* self, SimpleXmlNode* node);
+void simple_xml_node_children_append (SimpleXmlNodeChildren* self, SimpleXmlNode* node);
+void simple_xml_node_children_insert (SimpleXmlNodeChildren* self, gint pos, SimpleXmlNode* node);
+SimpleXmlNode* simple_xml_node_children_get_by_name (SimpleXmlNodeChildren* self, const char* childname);
+gint simple_xml_node_children_get_idx_of_child (SimpleXmlNodeChildren* self, SimpleXmlNode* node);
+SimpleXmlNode* simple_xml_node_children_get (SimpleXmlNodeChildren* self, gint idx);
+void simple_xml_node_children_set (SimpleXmlNodeChildren* self, gint idx, SimpleXmlNode* node);
+gboolean simple_xml_node_children_remove (SimpleXmlNodeChildren* self, SimpleXmlNode* node);
+gboolean simple_xml_node_children_remove_child_at_idx (SimpleXmlNodeChildren* self, gint idx);
+void simple_xml_node_children_clear (SimpleXmlNodeChildren* self);
+gpointer simple_xml_node_children_iterator_ref (gpointer instance);
+void simple_xml_node_children_iterator_unref (gpointer instance);
+GParamSpec* simple_xml_node_children_param_spec_iterator (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void simple_xml_node_children_value_set_iterator (GValue* value, gpointer v_object);
+void simple_xml_node_children_value_take_iterator (GValue* value, gpointer v_object);
+gpointer simple_xml_node_children_value_get_iterator (const GValue* value);
+GType simple_xml_node_children_iterator_get_type (void);
+SimpleXmlNodeChildrenIterator* simple_xml_node_children_iterator (SimpleXmlNodeChildren* self);
+SimpleXmlNode* simple_xml_node_children_get_parent (SimpleXmlNodeChildren* self);
+gint simple_xml_node_children_get_count (SimpleXmlNodeChildren* self);
+SimpleXmlNodeChildrenIterator* simple_xml_node_children_iterator_new (SimpleXmlNodeChildren* children);
+SimpleXmlNodeChildrenIterator* simple_xml_node_children_iterator_construct (GType object_type, SimpleXmlNodeChildren* children);
+gboolean simple_xml_node_children_iterator_next (SimpleXmlNodeChildrenIterator* self);
+SimpleXmlNode* simple_xml_node_children_iterator_get (SimpleXmlNodeChildrenIterator* self);
+gboolean simple_xml_node_children_iterator_last (SimpleXmlNodeChildrenIterator* self);
+void simple_xml_node_children_iterator_set (SimpleXmlNodeChildrenIterator* self, SimpleXmlNode* item);
 
 extern const char* PL_remote_schemes[2];
 

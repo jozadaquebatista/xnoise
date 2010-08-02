@@ -184,3 +184,67 @@ namespace Pl {
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static Pl.ListType get_type_by_extension (ref string uri_);
 }
+[CCode (cprefix = "SimpleXml", lower_case_cprefix = "simple_xml_")]
+namespace SimpleXml {
+	[CCode (ref_function = "simple_xml_node_ref", unref_function = "simple_xml_node_unref", cheader_filename = "libplaylist.h")]
+	public class Node {
+		[CCode (ref_function = "simple_xml_node_children_ref", unref_function = "simple_xml_node_children_unref", cheader_filename = "libplaylist.h")]
+		public class Children {
+			[CCode (ref_function = "simple_xml_node_children_iterator_ref", unref_function = "simple_xml_node_children_iterator_unref", cheader_filename = "libplaylist.h")]
+			public class Iterator {
+				public Iterator (SimpleXml.Node.Children children);
+				public unowned SimpleXml.Node @get ();
+				public bool last ();
+				public bool next ();
+				public void @set (SimpleXml.Node item);
+			}
+			public Children (SimpleXml.Node parent);
+			public void append (SimpleXml.Node node);
+			public void clear ();
+			public unowned SimpleXml.Node? @get (int idx);
+			public unowned SimpleXml.Node? get_by_name (string childname);
+			public int get_idx_of_child (SimpleXml.Node node);
+			public void insert (int pos, SimpleXml.Node node);
+			public SimpleXml.Node.Children.Iterator iterator ();
+			public void prepend (SimpleXml.Node node);
+			public bool remove (SimpleXml.Node node);
+			public bool remove_child_at_idx (int idx);
+			public void @set (int idx, SimpleXml.Node node);
+			public int count { get; }
+			public SimpleXml.Node? parent { get; }
+		}
+		public GLib.HashTable<string,string> attributes;
+		public SimpleXml.Node.Children children;
+		public Node (string? name);
+		public void append_child (SimpleXml.Node child);
+		public unowned SimpleXml.Node? get_child_by_name (string childname);
+		public bool has_text ();
+		public void insert_child (int pos, SimpleXml.Node child);
+		public void prepend_child (SimpleXml.Node child);
+		public string? name { get; }
+		public SimpleXml.Node? parent { get; }
+		public string? text { get; set; }
+	}
+	[CCode (ref_function = "simple_xml_reader_ref", unref_function = "simple_xml_reader_unref", cheader_filename = "libplaylist.h")]
+	public class Reader {
+		public SimpleXml.Node root;
+		public Reader (string filename);
+		public Reader.from_string (string? xml_string);
+		public void read (bool case_sensitive = true);
+	}
+	[CCode (ref_function = "simple_xml_writer_ref", unref_function = "simple_xml_writer_unref", cheader_filename = "libplaylist.h")]
+	public class Writer {
+		public Writer (SimpleXml.Node root, string header_type_string = "xml", string version_string = "1.0", string encoding_string = "UTF-8");
+		public void write (string filename);
+	}
+	[CCode (cheader_filename = "libplaylist.h")]
+	public const string AMPERSAND_ESCAPED;
+	[CCode (cheader_filename = "libplaylist.h")]
+	public const string APOSTROPH_ESCAPED;
+	[CCode (cheader_filename = "libplaylist.h")]
+	public const string GREATER_THAN_ESCAPED;
+	[CCode (cheader_filename = "libplaylist.h")]
+	public const string LOWER_THAN_ESCAPED;
+	[CCode (cheader_filename = "libplaylist.h")]
+	public const string QUOTE_ESCAPED;
+}
