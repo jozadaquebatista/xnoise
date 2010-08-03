@@ -953,7 +953,8 @@ bool test_xml_readwrite_01() {
 	targetnode = targetnode.get_child_by_name("title");
 	sourcenode = sourcenode.get_child_by_name("asx");
 	sourcenode = sourcenode.get_child_by_name("title");
-	//print("\nsource: %s\n", sourcenode.text);
+	//print("\nsource: %s sz: %d\n", sourcenode.text, (int)sourcenode.text.size());
+	//print("\ntarget: %s sz: %d\n", targetnode.text, (int)targetnode.text.size());
 	return sourcenode.text == targetnode.text; 
 }
 
@@ -965,7 +966,7 @@ bool test_xml_readwrite_01() {
 //void show_node_data(SimpleXml.Node? mrnode, ref int dpth) {
 //	if(mrnode == null)
 //		return;
-//	foreach(SimpleXml.Node node in mrnode.children) {
+//	foreach(SimpleXml.Node node in mrnode) {
 //		do_n_spaces(ref dpth);
 //		print("%s ", node.name);
 //		foreach(string s in node.attributes.get_keys())

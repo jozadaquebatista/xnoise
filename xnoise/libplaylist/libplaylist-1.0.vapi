@@ -188,39 +188,28 @@ namespace Pl {
 namespace SimpleXml {
 	[CCode (ref_function = "simple_xml_node_ref", unref_function = "simple_xml_node_unref", cheader_filename = "libplaylist.h")]
 	public class Node {
-		[CCode (ref_function = "simple_xml_node_children_ref", unref_function = "simple_xml_node_children_unref", cheader_filename = "libplaylist.h")]
-		public class Children {
-			[CCode (ref_function = "simple_xml_node_children_iterator_ref", unref_function = "simple_xml_node_children_iterator_unref", cheader_filename = "libplaylist.h")]
-			public class Iterator {
-				public Iterator (SimpleXml.Node.Children children);
-				public unowned SimpleXml.Node @get ();
-				public bool last ();
-				public bool next ();
-				public void @set (SimpleXml.Node item);
-			}
-			public Children (SimpleXml.Node parent);
-			public void append (SimpleXml.Node node);
-			public void clear ();
-			public unowned SimpleXml.Node? @get (int idx);
-			public unowned SimpleXml.Node? get_by_name (string childname);
-			public int get_idx_of_child (SimpleXml.Node node);
-			public void insert (int pos, SimpleXml.Node node);
-			public SimpleXml.Node.Children.Iterator iterator ();
-			public void prepend (SimpleXml.Node node);
-			public bool remove (SimpleXml.Node node);
-			public bool remove_child_at_idx (int idx);
-			public void @set (int idx, SimpleXml.Node node);
-			public int count { get; }
-			public SimpleXml.Node? parent { get; }
+		[CCode (ref_function = "simple_xml_node_iterator_ref", unref_function = "simple_xml_node_iterator_unref", cheader_filename = "libplaylist.h")]
+		public class Iterator {
+			public Iterator (SimpleXml.Node parent_node);
+			public unowned SimpleXml.Node @get ();
+			public bool next ();
+			public void @set (SimpleXml.Node item);
 		}
 		public GLib.HashTable<string,string> attributes;
-		public SimpleXml.Node.Children children;
 		public Node (string? name);
-		public void append_child (SimpleXml.Node child);
+		public void append_child (SimpleXml.Node node);
+		public void clear ();
+		public unowned SimpleXml.Node? @get (int idx);
 		public unowned SimpleXml.Node? get_child_by_name (string childname);
+		public int get_idx_of_child (SimpleXml.Node node);
 		public bool has_text ();
-		public void insert_child (int pos, SimpleXml.Node child);
-		public void prepend_child (SimpleXml.Node child);
+		public void insert_child (int pos, SimpleXml.Node node);
+		public SimpleXml.Node.Iterator iterator ();
+		public void prepend_child (SimpleXml.Node node);
+		public bool remove (SimpleXml.Node node);
+		public bool remove_child_at_idx (int idx);
+		public void @set (int idx, SimpleXml.Node node);
+		public int children_count { get; }
 		public string? name { get; }
 		public SimpleXml.Node? parent { get; }
 		public string? text { get; set; }

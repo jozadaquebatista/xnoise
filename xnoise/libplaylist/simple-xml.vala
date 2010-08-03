@@ -205,6 +205,7 @@ namespace SimpleXml {
 		}
 
 		private TokenType read_token(out Token token) {
+			//based on function from vala markup reader
 			token = new Token();
 			attributes.remove_all();
 
@@ -456,13 +457,13 @@ namespace SimpleXml {
 			if(mrnode == null)
 				return;
 
-			foreach(SimpleXml.Node node in mrnode.children) {
+			foreach(SimpleXml.Node node in mrnode) {
 				do_n_spaces(ref stream);
 				
 				begin_node(node, ref stream);
 				write_attributes(node, ref stream);
 				
-				if(!node.has_text() && node.children.count == 0)
+				if(!node.has_text() && node.children_count == 0)
 					write_string_to_stream(" />", ref stream);
 				else
 					write_string_to_stream(">", ref stream);
@@ -481,10 +482,10 @@ namespace SimpleXml {
 
 				dpth -= 2;
 
-				if(!node.has_text() && node.children.count > 0) 
+				if(!node.has_text() && node.children_count > 0) 
 					do_n_spaces(ref stream);
 				
-				if(node.has_text() || node.children.count > 0)
+				if(node.has_text() || node.children_count > 0)
 					end_node(node, ref stream);
 			}
 		}
@@ -500,11 +501,8 @@ namespace SimpleXml {
 
 		public HashTable<string, string> attributes = new HashTable<string, string>(str_hash, str_equal);
 
-		public Children children;
-	
 		public Node(string? name) {
 			this._name = name;
-			children = new Children(this);
 		}
 	
 		public string? text { get; set; default = null; }
@@ -524,325 +522,285 @@ namespace SimpleXml {
 		public bool has_text() {
 			return this.text != null;
 		}
+		
+		private int _children_count = 0;
+	
+		private Container? _first = null;
+		private unowned Container? _last = null;
 
-		public void append_child(Node child) {
-			children.append(child);
+		public int children_count {
+			get {
+				return this._children_count;
+			}
 		}
 
-		public void prepend_child(Node child) {
-			children.prepend(child);
+		public void prepend_child(Node node) {
+			assert(node.parent == null);
+			node._parent = this;
+			Container c = new Container(node);
+			if(this._first == null && this._last == null) {
+				this._first = c;
+				this._last = c;
+				this._children_count++;
+			}
+			else {
+				this.insert_child(0, node);
+			}
+			return;
 		}
 
-		public void insert_child(int pos, Node child) {
-			children.insert(pos, child);
+		public void append_child(Node node) {
+			assert(node.parent == null);
+			node._parent = this;
+			Container c = new Container(node);
+			if(this._first == null && this._last == null) {
+				this._first = c;
+				this._last = c;
+			}
+			else {
+				this._last.next = c;
+				c.previous = this._last;
+				this._last = c;
+			}
+			this._children_count++;
+			return;
+		}
+
+		public void insert_child(int pos, Node node) {
+			assert(node.parent == null);
+			node._parent = this;
+			if(pos < 0) {
+				pos = this._children_count - 1 - pos;
+				assert(pos >= 0);
+			}
+		
+			if(pos > this._children_count) {
+				this.append_child(node);
+			}
+			else if(pos == 0) {
+				Container c = new Container(node);
+				c.next = this._first;
+				this._first.previous = c;
+				this._first = (owned)c; // ownership of first item needed!
+				this._children_count++;
+			}
+			else {
+				Container c = new Container(node);
+				Container previous = this._first;
+				for(int i = 0; i < pos - 1; i++) {
+					previous = previous.next;
+				}
+				c.previous = previous;
+				c.next = previous.next;
+				c.next.previous = c;
+				previous.next = c;
+				this._children_count++;
+			}
+		}
+		public unowned Node? get_child_by_name(string childname) {
+			foreach(unowned Node n in this) {
+				if(n.name == childname)
+					return n;
+			}
+			return null;
+		}
+		
+		public int get_idx_of_child(Node node) {
+			int idx = -1;
+			foreach(Node n in this) {
+				if(&n == &node) {
+					return idx;
+				}
+				idx++;
+			}
+			return idx;
+		}
+
+		//get node by index; don't use this to iterate over list
+		public unowned Node? get(int idx) {
+			if(idx > (this._children_count - 1))
+				return null;
+		
+			unowned Container? c = null;;
+			if(idx == 0) {
+				c = this._first;
+			} 
+			else if(idx == this._children_count - 1) {
+				c = this._last;
+			} 
+			else if(idx <= this._children_count / 2) { //start from begin
+				c = this._first;
+				int i = 0;
+				while(i != idx) {
+					c = c.next;
+					i++;
+				}
+			}
+			else { //start from end
+				c = this._last;
+				for (int i = this._children_count - 1; i != idx; i--) {
+					c = c.previous;
+				}
+			}
+			//check if we have a container
+			if(c == null)
+				return null;
+			else
+				return c.data;
+		}
+
+		//simply overwrite the Node
+		public void set(int idx, Node node) {
+			assert(node.parent == null);
+			node._parent = this;
+			if(idx > (this._children_count - 1))
+				return; //should I put a warning here?
+			
+			unowned Container? c = null;;
+			if(idx == 0) {
+				c = this._first;
+			}
+			else if(idx == this._children_count - 1) {
+				c = this._last;
+			} 
+			else if(idx <= this._children_count / 2) { //start from begin
+				int i = 0;
+				c = this._first;
+				while(i != idx) {
+					c = c.next;
+					i++;
+				}
+			}
+			else { //start from end
+				int i = this._children_count - 1;
+				c = this._last;
+				while(i != idx) {
+					c = c.previous;
+					i--;
+				}
+			}
+			//check if we have a container
+			return_if_fail(c != null);
+		
+			c.data = node;
+		}
+
+		public bool remove(Node node) {
+			int idx = get_idx_of_child(node);
+			if(idx >= 0) {
+				return remove_child_at_idx(idx);
+			}
+			else {
+				return false;
+			}
 		}
 	
-		public unowned Node? get_child_by_name(string childname) {
-			return children.get_by_name(childname);
+		public bool remove_child_at_idx(int idx) {
+			if(idx > (this._children_count - 1))
+				return false;
+			
+			unowned Container? c = null;;
+			if(idx == 0) {
+				c = this._first;
+			} 
+			else if(idx == this._children_count - 1) {
+				c = this._last;
+			} 
+			else if(idx <= this._children_count / 2) { //start from begin
+				c = this._first;
+				int i = 0;
+				while(i != idx) {
+					c = c.next;
+					i++;
+				}
+			}
+			else { //start from end
+				c = this._last;
+				for (int i = this._children_count - 1; i != idx; i--) {
+					c = c.previous;
+				}
+			}
+			//check if we have a container
+			if(c == null)
+				return false;
+			//put the list parts together
+			if(c == this._first) {
+				this._first = c.next;
+			}
+			if(c == this._last) {
+				this._last = c.previous;
+			}
+			if(c.previous != null) {
+				c.previous.next = c.next;
+			}
+			if(c.next != null) {
+				c.next.previous = c.previous;
+			}
+			c.previous = null;
+			c.next = null;
+			this._children_count--;
+			return true;
 		}
-		
-		public class Children {
-			private int _count = 0;
-		
-			private Container? _first = null;
-			private unowned Container? _last = null;
+	
+		public void clear() {
+			this._first = this._last = null;
+			this._children_count = 0;
+		}
 
-			private unowned Node _parent;
-		
-			public Node? parent { 
-				get {
-					return _parent;
-				}
+		private class Container {
+			public Node data;
+			public unowned Container? previous = null;
+			public Container? next = null;
+			public Container(Node data) {
+				this.data = data;
 			}
-		
-			public Children(Node parent) {
-				this._parent = parent;
-			}
-		
-			public int count {
-				get {
-					return this._count;
-				}
-			}
+		}
 
-			public void prepend(Node node) {
-				assert(node.parent == null);
-				node._parent = this._parent;
-				Container c = new Container(node);
-				if(this._first == null && this._last == null) {
-					this._first = c;
-					this._last = c;
-					this._count++;
-				}
-				else {
-					this.insert(0, node);
-				}
-				return;
+		public Iterator iterator() {
+			return new Iterator(this);
+		}
+
+		public class Iterator {
+			private bool started = false; //set to first item on first iteration
+			private bool removed = false;
+			private Node parent_node;
+			private int _index;
+
+			private unowned Container? current_item;
+
+			public Iterator(Node parent_node) {
+				this.parent_node = parent_node;
+				this.current_item = null;
+				this._index = -1;
 			}
 
-			public void append(Node node) {
-				assert(node.parent == null);
-				node._parent = this._parent;
-				Container c = new Container(node);
-				if(this._first == null && this._last == null) {
-					this._first = c;
-					this._last = c;
+			public bool next() {
+				if(this.removed && this.current_item != null) {
+					this.removed = false;
+					return true;
 				}
-				else {
-					this._last.next = c;
-					c.previous = this._last;
-					this._last = c;
-				}
-				this._count++;
-				return;
-			}
-
-			public void insert(int pos, Node node) {
-				assert(node.parent == null);
-				node._parent = this._parent;
-				if(pos < 0) {
-					pos = this._count - 1 - pos;
-					assert(pos >= 0);
-				}
-			
-				if(pos > this._count) {
-					this.append(node);
-				}
-				else if(pos == 0) {
-					Container c = new Container(node);
-					c.next = this._first;
-					this._first.previous = c;
-					this._first = (owned)c; // ownership of first item needed!
-					this._count++;
-				}
-				else {
-					Container c = new Container(node);
-					Container previous = this._first;
-					for(int i = 0; i < pos - 1; i++) {
-						previous = previous.next;
-					}
-					c.previous = previous;
-					c.next = previous.next;
-					c.next.previous = c;
-					previous.next = c;
-					this._count++;
-				}
-			}
-			public unowned Node? get_by_name(string childname) {
-				foreach(unowned Node n in this) {
-					if(n.name == childname)
-						return n;
-				}
-				return null;
-			}
-			
-			public int get_idx_of_child(Node node) {
-				int idx = -1;
-				foreach(Node n in this) {
-					if(&n == &node) {
-						return idx;
-					}
-					idx++;
-				}
-				return idx;
-			}
-
-			//get node by index; don't use this to iterate over list
-			public unowned Node? get(int idx) {
-				if(idx > (this._count - 1))
-					return null;
-			
-				unowned Container? c = null;;
-				if(idx == 0) {
-					c = this._first;
-				} 
-				else if(idx == this._count - 1) {
-					c = this._last;
-				} 
-				else if(idx <= this._count / 2) { //start from begin
-					c = this._first;
-					int i = 0;
-					while(i != idx) {
-						c = c.next;
-						i++;
-					}
-				}
-				else { //start from end
-					c = this._last;
-					for (int i = this._count - 1; i != idx; i--) {
-						c = c.previous;
-					}
-				}
-				//check if we have a container
-				if(c == null)
-					return null;
-				else
-					return c.data;
-			}
-
-			//simply overwrite the Node
-			public void set(int idx, Node node) {
-				assert(node.parent == null);
-				node._parent = this._parent;
-				if(idx > (this._count - 1))
-					return; //should I put a warning here?
-				
-				unowned Container? c = null;;
-				if(idx == 0) {
-					c = this._first;
-				}
-				else if(idx == this._count - 1) {
-					c = this._last;
-				} 
-				else if(idx <= this._count / 2) { //start from begin
-					int i = 0;
-					c = this._first;
-					while(i != idx) {
-						c = c.next;
-						i++;
-					}
-				}
-				else { //start from end
-					int i = this._count - 1;
-					c = this._last;
-					while(i != idx) {
-						c = c.previous;
-						i--;
-					}
-				}
-				//check if we have a container
-				return_if_fail(c != null);
-			
-				c.data = node;
-			}
-
-			public bool remove(Node node) {
-				int idx = get_idx_of_child(node);
-				if(idx >= 0) {
-					return remove_child_at_idx(idx);
-				}
-				else {
-					return false;
-				}
-			}
-		
-			public bool remove_child_at_idx(int idx) {
-				if(idx > (this._count - 1))
-					return false;
-				
-				unowned Container? c = null;;
-				if(idx == 0) {
-					c = this._first;
-				} 
-				else if(idx == this._count - 1) {
-					c = this._last;
-				} 
-				else if(idx <= this._count / 2) { //start from begin
-					c = this._first;
-					int i = 0;
-					while(i != idx) {
-						c = c.next;
-						i++;
-					}
-				}
-				else { //start from end
-					c = this._last;
-					for (int i = this._count - 1; i != idx; i--) {
-						c = c.previous;
-					}
-				}
-				//check if we have a container
-				if(c == null)
-					return false;
-				//put the list parts together
-				if(c == this._first) {
-					this._first = c.next;
-				}
-				if(c == this._last) {
-					this._last = c.previous;
-				}
-				if (c.previous != null) {
-					c.previous.next = c.next;
-				}
-				if (c.next != null) {
-					c.next.previous = c.previous;
-				}
-				c.previous = null;
-				c.next = null;
-				this._count--;
-				return true;
-			}
-		
-			public void clear() {
-				this._first = this._last = null;
-				this._count = 0;
-			}
-
-			private class Container {
-				public Node data;
-				public unowned Container? previous = null;
-				public Container? next = null;
-				public Container(Node data) {
-					this.data = data;
-				}
-			}
-
-			public Iterator iterator() {
-				return new Iterator(this);
-			}
-
-			public class Iterator {
-				private bool started = false; //set to first item on first iteration
-				private bool removed = false;
-				private Children children;
-				private int _index;
-
-				private unowned Container? current_item;
-
-				public Iterator(Children children) {
-					this.children = children;
-					this.current_item = null;
-					this._index = -1;
-				}
-
-				public bool next() {
-					if(this.removed && this.current_item != null) {
-						this.removed = false;
-						return true;
-					}
-					else if(!this.started && this.children._first != null) {
-						this.started = true;
-						this.current_item = this.children._first;
-						this._index++;
-						return true;
-					}
-					else if(this.current_item != null && this.current_item.next != null) {
-						this.current_item = this.current_item.next;
-						this._index++;
-						return true;
-					}
-					return false;
-				}
-
-				public unowned Node get() {
-					assert(this.current_item != null);
-					return this.current_item.data;
-				}
-
-				public bool last() {
-					if(children.count == 0) {
-						return false;
-					}
-					this.current_item = this.children._last;
+				else if(!this.started && this.parent_node._first != null) {
 					this.started = true;
-					this._index = this.children._count - 1;
-					return this.current_item != null;
+					this.current_item = this.parent_node._first;
+					this._index++;
+					return true;
 				}
+				else if(this.current_item != null && this.current_item.next != null) {
+					this.current_item = this.current_item.next;
+					this._index++;
+					return true;
+				}
+				return false;
+			}
 
-				public void set(Node item) {
-					assert(this.current_item != null);
-					this.current_item.data = item;
-				}
+			public unowned Node get() {
+				assert(this.current_item != null);
+				return this.current_item.data;
+			}
+
+			public void set(Node item) {
+				assert(this.current_item != null);
+				this.current_item.data = item;
 			}
 		}
 	}
