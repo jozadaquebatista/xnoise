@@ -234,7 +234,7 @@ namespace SimpleXml {
 	}
 	[CCode (ref_function = "simple_xml_writer_ref", unref_function = "simple_xml_writer_unref", cheader_filename = "libplaylist.h")]
 	public class Writer {
-		public Writer (SimpleXml.Node root, string header_type_string = "xml", string version_string = "1.0", string encoding_string = "UTF-8");
+		public Writer (SimpleXml.Node root, string header_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		public void write (string filename);
 	}
 	[CCode (cheader_filename = "libplaylist.h")]

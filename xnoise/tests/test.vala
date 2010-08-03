@@ -916,6 +916,71 @@ void pls_async_finished_cb01(Pl.Reader sender, string pluri) {
 	return;
 }
 
+
+
+
+//---XML Read/Write
+bool test_xml_readwrite_01() {
+	//read 
+	File source = File.new_for_path("./playlist-examples/asx_test.asx");//"./playlist-examples/asx_test.asx");
+	File target = File.new_for_path("./playlist-examples/tmp_asx.xml");
+
+	var mr = new SimpleXml.Reader(source.get_path());
+	mr.read(); // all data is now in mr.root if read was successful
+	if(mr.root == null)
+		print("xml reading 1 with errors\n");
+
+	SimpleXml.Node sourcenode = mr.root;
+	SimpleXml.Node targetnode;
+	//	//the following can be used to display the nodes with children:
+	//	int dpth = 0;
+	//	show_node_data(mr.root, ref dpth);
+	//	
+
+	//write
+	var mw = new SimpleXml.Writer(mr.root, ""); 
+	//noheader used
+	mw.write(target.get_uri());
+
+	var res_mr = new SimpleXml.Reader(target.get_path());
+	res_mr.read(); // all data is now in mr.root if read was successful
+	if(res_mr.root == null)
+		print("xml reading 2 with errors\n");
+	targetnode = res_mr.root; //store node
+	
+	//now compare some roots
+	targetnode = targetnode.get_child_by_name("asx");
+	targetnode = targetnode.get_child_by_name("title");
+	sourcenode = sourcenode.get_child_by_name("asx");
+	sourcenode = sourcenode.get_child_by_name("title");
+	//print("\nsource: %s\n", sourcenode.text);
+	return sourcenode.text == targetnode.text; 
+}
+
+////   HELPER FUNCTIONS TO DISPLAY NODE DATA IN TERMINAL
+//inline void do_n_spaces(ref int dpth) {
+//	for(int i = 0; i< dpth; i++)
+//		print(" ");
+//}
+//void show_node_data(SimpleXml.Node? mrnode, ref int dpth) {
+//	if(mrnode == null)
+//		return;
+//	foreach(SimpleXml.Node node in mrnode.children) {
+//		do_n_spaces(ref dpth);
+//		print("%s ", node.name);
+//		foreach(string s in node.attributes.get_keys())
+//			print("A:%s=%s ", s, node.attributes.lookup(s));
+//		if(node.has_text())
+//			print("text=%s\n", node.text);
+//		else
+//			print("\n");
+//		dpth += 2;
+//		show_node_data(node, ref dpth);
+//	}
+//	dpth -= 2;
+//}
+
+
 void main() {
 	print("\n");
 	// CREATE READER
@@ -1151,5 +1216,10 @@ void main() {
 	ml = new MainLoop(); // reuse mainloop for every async test
 	ml.run();
 
+	print("test xml reading and writing");
+	if(test_xml_readwrite_01())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
 }
 

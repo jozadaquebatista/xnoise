@@ -65,8 +65,11 @@ namespace SimpleXml {
 		public Reader(string filename) {
 			assert(filename != null);
 			this.filename = filename;
+			File f = File.new_for_commandline_arg(filename);
+			File curr = File.new_for_commandline_arg(Environment.get_current_dir());
+			string rel_path = curr.get_relative_path(f);
 			try {
-				mapped_file = new MappedFile(filename, false);
+				mapped_file = new MappedFile("./" + rel_path, false);
 				begin = mapped_file.get_contents();
 				end = begin + mapped_file.get_length();
 				current = begin;
@@ -85,6 +88,7 @@ namespace SimpleXml {
 		}
 
 		public void read(bool case_sensitive = true) {
+			//TODO: error handling
 			Token token;
 			TokenType tt;
 			root = new Node(null);
@@ -103,20 +107,21 @@ namespace SimpleXml {
 				if(tt == Reader.TokenType.END_ELEMENT) {
 					//verify that end element has the same name as start
 					// TODO: handle empty element
-					assert(token.end - 1 > token.begin + 2);
-					string? end_element_name = get_nodename(token.begin + 2, token.end);
-					//print("current_node.name: %s ; end_element_name: %s\n", current_node.name, end_element_name);
-					if(case_sensitive)
-						if(current_node.name != end_element_name) {
-							root = null;
-							print("--- Exit with errors. ---\n");
-						}
-					else
-						if(current_node.name.down() != end_element_name.down()) {
-							root = null;
-							print("--- Exit with errors. ---\n");
-						}
-						assert(current_node.name.down() == end_element_name.down());
+					// TODO: handle unnamed node endings
+//					assert(token.end - 1 > token.begin + 2);
+//					string? end_element_name = get_nodename(token.begin + 2, token.end);
+//					//print("current_node.name: %s ; end_element_name: %s\n", current_node.name, end_element_name);
+//					if(case_sensitive)
+//						if(current_node.name != end_element_name) {
+//							root = null;
+//							print("--- Exit with errors. ---\n");
+//						}
+//					else
+//						if(current_node.name.down() != end_element_name.down()) {
+//							root = null;
+//							print("--- Exit with errors. ---\n");
+//						}
+//						assert(current_node.name.down() == end_element_name.down());
 					
 					//one level up in the hierarchy
 					if(current_node.parent != null) {
@@ -349,9 +354,11 @@ namespace SimpleXml {
 		// simple xml writer that fits with vala more than libxml 
 		// TODO: Implement async writing
 
-		Node root;
+		private Node root;
+		private string header_string;
 		
-		public Writer(Node root, string header_type_string = "xml", string version_string = "1.0", string encoding_string = "UTF-8") {
+		public Writer(Node root, string header_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n") {
+			this.header_string = header_string;
 			this.root = root;
 		}
 		
@@ -367,6 +374,7 @@ namespace SimpleXml {
 				print("Cannot create file. %s\n", e.message);
 				return;
 			}
+			
 			write_header(ref stream);
 
 			if(root == null)
@@ -376,22 +384,14 @@ namespace SimpleXml {
 		}
 		
 		private void write_header(ref FileOutputStream stream) {
-			//<?xml version="1.0" encoding="UTF-8"?>
 			ssize_t size;
 			ssize_t already_written = 0;
+			header_string._strip();
 			
-			string header_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"; //TODO
-			char* header_pointer = header_string;
-			try {
-				while(already_written < header_string.size()) {
-					size = stream.write((void*) header_pointer, header_string.size() - already_written, null);
-					already_written = already_written + size;
-					header_pointer += size;
-				}
-			}
-			catch(GLib.Error e) {
-				print("%s\n", e.message);
-			}
+			if(header_string.size() < 4)
+				return;
+			
+			write_string_to_stream(header_string, ref stream);
 		}
 		
 		private int dpth = 0;
@@ -461,7 +461,11 @@ namespace SimpleXml {
 				
 				begin_node(node, ref stream);
 				write_attributes(node, ref stream);
-				write_string_to_stream(">", ref stream);
+				
+				if(!node.has_text() && node.children.count == 0)
+					write_string_to_stream(" />", ref stream);
+				else
+					write_string_to_stream(">", ref stream);
 				
 				if(node.has_text())
 					write_string_to_stream(escape_text(node.text), ref stream);
@@ -477,11 +481,11 @@ namespace SimpleXml {
 
 				dpth -= 2;
 
-				if(!node.has_text()) {
+				if(!node.has_text() && node.children.count > 0) 
 					do_n_spaces(ref stream);
-				}
-
-				end_node(node, ref stream);
+				
+				if(node.has_text() || node.children.count > 0)
+					end_node(node, ref stream);
 			}
 		}
 	}
@@ -844,38 +848,6 @@ namespace SimpleXml {
 	}
 }
 
-
-//public void do_n_spaces(ref int dpth) {
-//	for(int i = 0; i< dpth; i++)
-//		print(" ");
-//}
-
-//public void show_node_data(SimpleXml.Node? mrnode, ref int dpth) {
-//	if(mrnode == null)
-//		return;
-//	foreach(SimpleXml.Node node in mrnode.children) {
-//		do_n_spaces(ref dpth);
-//		print("%s ", node.name);
-//		foreach(string s in node.attributes.get_keys())
-//			print("A:%s=%s ", s, node.attributes.lookup(s));
-//		if(node.has_text())
-//			print("text=%s\n", node.text);
-//		else
-//			print("\n");
-//		dpth += 2;
-//		show_node_data(node, ref dpth);
-//	}
-//	dpth -= 2;
-//}
-
-//public static void main() {
-//	var mr = new SimpleXml.Reader("./markup.xspf");
-//	mr.read();
-//	int dpth = 0;
-//	show_node_data(mr.root, ref dpth);
-//	var mw = new SimpleXml.Writer(mr.root);
-//	mw.write("./tmp_xml.xml");
-//}
 
 
 
