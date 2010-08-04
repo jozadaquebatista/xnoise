@@ -504,9 +504,7 @@ namespace SimpleXml {
 		private string? _name = null;
 
 
-
 		public HashTable<string, string> attributes = new HashTable<string, string>(str_hash, str_equal);
-
 
 		public Node(string? name) {
 			this._name = name;
@@ -701,7 +699,6 @@ namespace SimpleXml {
 					i--;
 				}
 			}
-			//check if we have a container
 			return_if_fail(nd != null);
 		
 			Node prev = nd.previous;
@@ -709,8 +706,14 @@ namespace SimpleXml {
 			
 			node._previous = prev;
 			node._next = prev.next;
-			nxt._previous = node;
-			prev._next = node;
+			if(nxt != null)
+				nxt._previous = node;
+			if(prev != null)
+				prev._next = node;
+			if(nd == this._first)
+				this._first = node;
+			if(nd == this._last)
+				this._last = node;
 		}
 
 		public bool remove(Node node) {
@@ -782,9 +785,10 @@ namespace SimpleXml {
 		public class Iterator {
 			private bool started = false; //set to first item on first iteration
 			private bool removed = false;
-			private Node parent_node;
+			private unowned Node parent_node;
 			private int _index;
 
+			//a pointer to the current child for the Iterator of the node
 			private unowned Node? current_child;
 
 			public Iterator(Node parent_node) {
@@ -820,13 +824,20 @@ namespace SimpleXml {
 			public void set(Node node) {
 				assert(this.current_child != null);
 				
-				Node prev = this.current_child.previous;
-				Node nxt = this.current_child.next;
+				Node? prev = this.current_child.previous;
+				Node? nxt = this.current_child.next;
 				
 				node._previous = prev;
 				node._next = prev.next;
-				nxt._previous = node;
-				prev._next = node;
+				if(nxt != null)
+					nxt._previous = node;
+				if(prev != null)
+					prev._next = node;
+
+				if(this.current_child == this.parent_node._first)
+					this.parent_node._first = node;
+				if(this.current_child == this.parent_node._last)
+					this.parent_node._last = node;
 			}
 		}
 	}
