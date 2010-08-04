@@ -193,7 +193,7 @@ namespace SimpleXml {
 			public Iterator (SimpleXml.Node parent_node);
 			public unowned SimpleXml.Node @get ();
 			public bool next ();
-			public void @set (SimpleXml.Node item);
+			public void @set (SimpleXml.Node node);
 		}
 		public GLib.HashTable<string,string> attributes;
 		public Node (string? name);
@@ -202,6 +202,8 @@ namespace SimpleXml {
 		public unowned SimpleXml.Node? @get (int idx);
 		public unowned SimpleXml.Node? get_child_by_name (string childname);
 		public int get_idx_of_child (SimpleXml.Node node);
+		public bool has_attributes ();
+		public bool has_children ();
 		public bool has_text ();
 		public void insert_child (int pos, SimpleXml.Node node);
 		public SimpleXml.Node.Iterator iterator ();
@@ -211,7 +213,9 @@ namespace SimpleXml {
 		public void @set (int idx, SimpleXml.Node node);
 		public int children_count { get; }
 		public string? name { get; }
+		public SimpleXml.Node? next { get; }
 		public SimpleXml.Node? parent { get; }
+		public SimpleXml.Node? previous { get; }
 		public string? text { get; set; }
 	}
 	[CCode (ref_function = "simple_xml_reader_ref", unref_function = "simple_xml_reader_unref", cheader_filename = "libplaylist.h")]

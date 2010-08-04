@@ -434,6 +434,8 @@ void simple_xml_writer_write (SimpleXmlWriter* self, const char* filename);
 SimpleXmlNode* simple_xml_node_new (const char* name);
 SimpleXmlNode* simple_xml_node_construct (GType object_type, const char* name);
 gboolean simple_xml_node_has_text (SimpleXmlNode* self);
+gboolean simple_xml_node_has_children (SimpleXmlNode* self);
+gboolean simple_xml_node_has_attributes (SimpleXmlNode* self);
 void simple_xml_node_prepend_child (SimpleXmlNode* self, SimpleXmlNode* node);
 void simple_xml_node_append_child (SimpleXmlNode* self, SimpleXmlNode* node);
 void simple_xml_node_insert_child (SimpleXmlNode* self, gint pos, SimpleXmlNode* node);
@@ -456,12 +458,14 @@ const char* simple_xml_node_get_text (SimpleXmlNode* self);
 void simple_xml_node_set_text (SimpleXmlNode* self, const char* value);
 const char* simple_xml_node_get_name (SimpleXmlNode* self);
 SimpleXmlNode* simple_xml_node_get_parent (SimpleXmlNode* self);
+SimpleXmlNode* simple_xml_node_get_previous (SimpleXmlNode* self);
+SimpleXmlNode* simple_xml_node_get_next (SimpleXmlNode* self);
 gint simple_xml_node_get_children_count (SimpleXmlNode* self);
 SimpleXmlNodeIterator* simple_xml_node_iterator_new (SimpleXmlNode* parent_node);
 SimpleXmlNodeIterator* simple_xml_node_iterator_construct (GType object_type, SimpleXmlNode* parent_node);
 gboolean simple_xml_node_iterator_next (SimpleXmlNodeIterator* self);
 SimpleXmlNode* simple_xml_node_iterator_get (SimpleXmlNodeIterator* self);
-void simple_xml_node_iterator_set (SimpleXmlNodeIterator* self, SimpleXmlNode* item);
+void simple_xml_node_iterator_set (SimpleXmlNodeIterator* self, SimpleXmlNode* node);
 
 extern const char* PL_remote_schemes[2];
 

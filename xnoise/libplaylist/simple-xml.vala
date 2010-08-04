@@ -496,10 +496,17 @@ namespace SimpleXml {
 
 	public class Node {
 		// Represents a xml node. Can contain more nodes, text and attributes
-		private string? _name = null;
 		private unowned Node _parent;
+		private unowned Node? _previous = null;
+		private Node? _next = null;
+		private int _children_count = 0;
+			
+		private string? _name = null;
+
+
 
 		public HashTable<string, string> attributes = new HashTable<string, string>(str_hash, str_equal);
+
 
 		public Node(string? name) {
 			this._name = name;
@@ -519,14 +526,32 @@ namespace SimpleXml {
 			}
 		}
 
+		public Node? previous { 
+			get {
+				return _previous;
+			}
+		}
+
+		public Node? next { 
+			get {
+				return _next;
+			}
+		}
+		
 		public bool has_text() {
 			return this.text != null;
 		}
 		
-		private int _children_count = 0;
-	
-		private Container? _first = null;
-		private unowned Container? _last = null;
+		public bool has_children() {
+			return _children_count > 0 && this._first != null;
+		}
+
+		public bool has_attributes() {
+			return attributes.size() > 0;
+		}
+
+		private Node? _first = null;
+		private unowned Node? _last = null;
 
 		public int children_count {
 			get {
@@ -537,10 +562,9 @@ namespace SimpleXml {
 		public void prepend_child(Node node) {
 			assert(node.parent == null);
 			node._parent = this;
-			Container c = new Container(node);
 			if(this._first == null && this._last == null) {
-				this._first = c;
-				this._last = c;
+				this._first = node;
+				this._last = node;
 				this._children_count++;
 			}
 			else {
@@ -552,15 +576,14 @@ namespace SimpleXml {
 		public void append_child(Node node) {
 			assert(node.parent == null);
 			node._parent = this;
-			Container c = new Container(node);
 			if(this._first == null && this._last == null) {
-				this._first = c;
-				this._last = c;
+				this._first = node;
+				this._last = node;
 			}
 			else {
-				this._last.next = c;
-				c.previous = this._last;
-				this._last = c;
+				this._last._next = node;
+				node._previous = this._last;
+				this._last = node;
 			}
 			this._children_count++;
 			return;
@@ -578,25 +601,24 @@ namespace SimpleXml {
 				this.append_child(node);
 			}
 			else if(pos == 0) {
-				Container c = new Container(node);
-				c.next = this._first;
-				this._first.previous = c;
-				this._first = (owned)c; // ownership of first item needed!
+				node._next = this._first;
+				this._first._previous = node;
+				this._first = node;
 				this._children_count++;
 			}
 			else {
-				Container c = new Container(node);
-				Container previous = this._first;
+				Node prev = this._first;
 				for(int i = 0; i < pos - 1; i++) {
-					previous = previous.next;
+					prev = prev.next;
 				}
-				c.previous = previous;
-				c.next = previous.next;
-				c.next.previous = c;
-				previous.next = c;
+				node._previous = prev;
+				node._next = prev.next;
+				node.next._previous = node;
+				prev._next = node;
 				this._children_count++;
 			}
 		}
+		
 		public unowned Node? get_child_by_name(string childname) {
 			foreach(unowned Node n in this) {
 				if(n.name == childname)
@@ -621,32 +643,32 @@ namespace SimpleXml {
 			if(idx > (this._children_count - 1))
 				return null;
 		
-			unowned Container? c = null;;
+			unowned Node? nd = null;;
 			if(idx == 0) {
-				c = this._first;
+				nd = this._first;
 			} 
 			else if(idx == this._children_count - 1) {
-				c = this._last;
+				nd = this._last;
 			} 
 			else if(idx <= this._children_count / 2) { //start from begin
-				c = this._first;
+				nd = this._first;
 				int i = 0;
 				while(i != idx) {
-					c = c.next;
+					nd = nd.next;
 					i++;
 				}
 			}
 			else { //start from end
-				c = this._last;
+				nd = this._last;
 				for (int i = this._children_count - 1; i != idx; i--) {
-					c = c.previous;
+					nd = nd.previous;
 				}
 			}
 			//check if we have a container
-			if(c == null)
+			if(nd == null)
 				return null;
 			else
-				return c.data;
+				return nd;
 		}
 
 		//simply overwrite the Node
@@ -656,33 +678,39 @@ namespace SimpleXml {
 			if(idx > (this._children_count - 1))
 				return; //should I put a warning here?
 			
-			unowned Container? c = null;;
+			unowned Node? nd = null;;
 			if(idx == 0) {
-				c = this._first;
+				nd = this._first;
 			}
 			else if(idx == this._children_count - 1) {
-				c = this._last;
+				nd = this._last;
 			} 
 			else if(idx <= this._children_count / 2) { //start from begin
 				int i = 0;
-				c = this._first;
+				nd = this._first;
 				while(i != idx) {
-					c = c.next;
+					nd = nd.next;
 					i++;
 				}
 			}
 			else { //start from end
 				int i = this._children_count - 1;
-				c = this._last;
+				nd = this._last;
 				while(i != idx) {
-					c = c.previous;
+					nd = nd.previous;
 					i--;
 				}
 			}
 			//check if we have a container
-			return_if_fail(c != null);
+			return_if_fail(nd != null);
 		
-			c.data = node;
+			Node prev = nd.previous;
+			Node nxt = nd.next;
+			
+			node._previous = prev;
+			node._next = prev.next;
+			nxt._previous = node;
+			prev._next = node;
 		}
 
 		public bool remove(Node node) {
@@ -699,45 +727,45 @@ namespace SimpleXml {
 			if(idx > (this._children_count - 1))
 				return false;
 			
-			unowned Container? c = null;;
+			unowned Node? nd = null;;
 			if(idx == 0) {
-				c = this._first;
+				nd = this._first;
 			} 
 			else if(idx == this._children_count - 1) {
-				c = this._last;
+				nd = this._last;
 			} 
 			else if(idx <= this._children_count / 2) { //start from begin
-				c = this._first;
+				nd = this._first;
 				int i = 0;
 				while(i != idx) {
-					c = c.next;
+					nd = nd.next;
 					i++;
 				}
 			}
 			else { //start from end
-				c = this._last;
-				for (int i = this._children_count - 1; i != idx; i--) {
-					c = c.previous;
+				nd = this._last;
+				for(int i = this._children_count - 1; i != idx; i--) {
+					nd = nd.previous;
 				}
 			}
 			//check if we have a container
-			if(c == null)
+			if(nd == null)
 				return false;
 			//put the list parts together
-			if(c == this._first) {
-				this._first = c.next;
+			if(nd == this._first) {
+				this._first = nd.next;
 			}
-			if(c == this._last) {
-				this._last = c.previous;
+			if(nd == this._last) {
+				this._last = nd.previous;
 			}
-			if(c.previous != null) {
-				c.previous.next = c.next;
+			if(nd.previous != null) {
+				nd.previous._next = nd.next;
 			}
-			if(c.next != null) {
-				c.next.previous = c.previous;
+			if(nd.next != null) {
+				nd.next._previous = nd.previous;
 			}
-			c.previous = null;
-			c.next = null;
+			nd._previous = null;
+			nd._next = null;
 			this._children_count--;
 			return true;
 		}
@@ -745,15 +773,6 @@ namespace SimpleXml {
 		public void clear() {
 			this._first = this._last = null;
 			this._children_count = 0;
-		}
-
-		private class Container {
-			public Node data;
-			public unowned Container? previous = null;
-			public Container? next = null;
-			public Container(Node data) {
-				this.data = data;
-			}
 		}
 
 		public Iterator iterator() {
@@ -766,27 +785,27 @@ namespace SimpleXml {
 			private Node parent_node;
 			private int _index;
 
-			private unowned Container? current_item;
+			private unowned Node? current_child;
 
 			public Iterator(Node parent_node) {
 				this.parent_node = parent_node;
-				this.current_item = null;
+				this.current_child = null;
 				this._index = -1;
 			}
 
 			public bool next() {
-				if(this.removed && this.current_item != null) {
+				if(this.removed && this.current_child != null) {
 					this.removed = false;
 					return true;
 				}
 				else if(!this.started && this.parent_node._first != null) {
 					this.started = true;
-					this.current_item = this.parent_node._first;
+					this.current_child = this.parent_node._first;
 					this._index++;
 					return true;
 				}
-				else if(this.current_item != null && this.current_item.next != null) {
-					this.current_item = this.current_item.next;
+				else if(this.current_child != null && this.current_child.next != null) {
+					this.current_child = this.current_child.next;
 					this._index++;
 					return true;
 				}
@@ -794,13 +813,20 @@ namespace SimpleXml {
 			}
 
 			public unowned Node get() {
-				assert(this.current_item != null);
-				return this.current_item.data;
+				assert(this.current_child != null);
+				return this.current_child;
 			}
 
-			public void set(Node item) {
-				assert(this.current_item != null);
-				this.current_item.data = item;
+			public void set(Node node) {
+				assert(this.current_child != null);
+				
+				Node prev = this.current_child.previous;
+				Node nxt = this.current_child.next;
+				
+				node._previous = prev;
+				node._next = prev.next;
+				nxt._previous = node;
+				prev._next = node;
 			}
 		}
 	}
