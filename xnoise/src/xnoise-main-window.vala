@@ -1203,14 +1203,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				var entry = (Entry)s;
 				if((int)e.keyval == KEY_ENTER) {
 					this.mediaBr.on_searchtext_changed(entry.text);
-				}
-				if(entry.text != "") {
-					Gdk.Color color;
-					Gdk.Color.parse("DarkSalmon", out color);
-					entry.modify_base(StateType.NORMAL, color);
-				}
-				else {
-					entry.modify_base(StateType.NORMAL, null);
+					if(entry.text != "") {
+						Gdk.Color color;
+						Gdk.Color.parse("DarkSalmon", out color);
+						entry.modify_base(StateType.NORMAL, color);
+					}
+					else {
+						entry.modify_base(StateType.NORMAL, null);
+					}
 				}
 				return false;
 			});
