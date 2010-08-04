@@ -38,7 +38,7 @@ namespace Pl {
 			_overwrite_if_exists = overwrite;
 		}
 
-		public override Result write(File _file, DataCollection _data_collection) throws InternalWriterError {
+		public override Result write(File _file, DataCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
 			if(data_collection != null && data_collection.get_size() > 0) {
@@ -90,7 +90,7 @@ namespace Pl {
 			return Result.UNHANDLED;
 		}
 		
-		public override async Result write_asyn(File _file, DataCollection _data_collection) throws InternalWriterError {
+		public override async Result write_asyn(File _file, DataCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
 			return Result.UNHANDLED;

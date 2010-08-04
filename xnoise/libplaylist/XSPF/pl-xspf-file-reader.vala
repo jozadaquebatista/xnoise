@@ -40,10 +40,10 @@ namespace Pl {
 		
 			iter_name = iter->name.down(); 
 			if(iter_name == "tracklist") {
-			        //print("\nTrackList: %s\n","trackList");
+				//print("\nTrackList: %s\n","trackList");
 				if(iter->children != null) {
 					Xml.Node *iter_in;   
-     				for(iter_in = iter->children->next; iter_in != null;iter_in = iter_in->next) {
+					for(iter_in = iter->children->next; iter_in != null;iter_in = iter_in->next) {
 							if(iter_in->is_text() == 0) {
 								switch(iter_in->name.down()) {
 									case "track":
@@ -93,34 +93,34 @@ namespace Pl {
 			return data_collection;
 		}
 
-	public override DataCollection read(File _file) throws InternalReaderError {
-			DataCollection data_collection = new DataCollection();
-			this.file = _file;
-			set_base_path();
-	    
-			if (!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
-				stderr.printf("File '%s' doesn't exist.\n",file.get_uri());
-				return data_collection;
-			}
-	    	    	     
-	    try {
+	public override DataCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+		DataCollection data_collection = new DataCollection();
+		this.file = _file;
+		set_base_path();
+
+		if (!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
+			stderr.printf("File '%s' doesn't exist.\n",file.get_uri());
+			return data_collection;
+		}
+		
+		try {
 				string contenido;
 				{
 					var stream = new DataInputStream(file.read(null));
 					contenido = stream.read_until("", null, null);
 				}
 			  
-			  if(contenido == null) {
-			    return data_collection;
-			  }
+			if(contenido == null) {
+				return data_collection;
+			}
 				//print("\n%s\n",contenido);
 				return this.parse(data_collection,ref base_path,contenido);
-	    }
-	    catch (GLib.Error e) {
+		}
+		catch (GLib.Error e) {
 				print ("%s\n", e.message);
-	    }
-	    return data_collection; 
-	  }
+		}
+		return data_collection; 
+	}
 
 		//public override DataCollection read(File _file) throws InternalReaderError {
 		public DataCollection read_txt(File _file) throws InternalReaderError {
@@ -194,7 +194,7 @@ namespace Pl {
 			return data_collection;
 		}
 
-		public override async DataCollection read_asyn(File _file) throws InternalReaderError {
+		public override async DataCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
 			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();

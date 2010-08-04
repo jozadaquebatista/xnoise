@@ -9,7 +9,7 @@ bool test_m3u_type_recognition() {
 	File f = File.new_for_path("./playlist-examples/test_m3u.m3u");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("m3u test error reading\n");
@@ -23,7 +23,7 @@ bool test_pls_type_recognition() {
 	File f = File.new_for_path("./playlist-examples/pls_test.pls");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("pls test error reading\n");
@@ -36,7 +36,7 @@ bool test_asx_type_recognition() {
 	File f = File.new_for_path("./playlist-examples/asx_test.asx");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error reading\n");
@@ -49,7 +49,7 @@ bool test_wpl_type_recognition() {
 	File f = File.new_for_path("./playlist-examples/wpl_test.wpl");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("wpl test error reading\n");
@@ -63,7 +63,7 @@ bool test_xspf_type_recognition() {
 	File f = File.new_for_path("./playlist-examples/xspf.xspf");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("xspf test error reading\n");
@@ -77,7 +77,7 @@ bool test_m3u_reading() {
 	File f = File.new_for_path("./playlist-examples/test_m3u.m3u");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("m3u test error reading\n");
@@ -93,7 +93,7 @@ bool test_m3u_reading_2() {
 	File t1 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("m3u test error reading\n");
@@ -111,7 +111,7 @@ bool test_asx_remote_reading() {
 	try {
 //		t = new Timer();
 //		t.start();
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 //		print("%f\n", t.elapsed(null));
 	}
 	catch(Error e) {
@@ -130,7 +130,7 @@ bool test_asx_bad_xml_remote_reading() {
 	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx bad xml remote test error reading\n");
@@ -149,7 +149,7 @@ bool test_pls_reading_2() {
 	File t5 = File.new_for_commandline_arg("http://www.site.com:8000/listen.pls");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("pls test error reading\n");
@@ -166,7 +166,7 @@ bool test_asx_reading() {
 	File f = File.new_for_path("./playlist-examples/asx_test.asx");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error reading\n");
@@ -181,7 +181,7 @@ bool test_wpl_reading() {
 	File f = File.new_for_path("./playlist-examples/wpl_test.wpl");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("wpl test error reading\n");
@@ -198,7 +198,7 @@ bool test_xspf_reading() {
 	File t1 = File.new_for_commandline_arg("/media/Disco de datos/Musica/ILONA-BUSCANDO UN FINAL.ogg");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("xspf test error reading\n");
@@ -233,7 +233,7 @@ bool test_asx_writing_abs_paths() {
 	data_collection.append(data);
 	
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error writing %s\n", e.message);
@@ -242,7 +242,7 @@ bool test_asx_writing_abs_paths() {
 	
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error readwrite\n");
@@ -250,7 +250,7 @@ bool test_asx_writing_abs_paths() {
 	}
 	var uris = reader.get_found_uris();
 	//return uris[0] == t1.get_uri() && reader.get_title_for_uri(ref uris[1]) == current_title_2;
-return uris[0] == t1.get_uri();
+	return uris[0] == t1.get_uri();
 }
 
 bool test_m3u_writing_abs_paths() {
@@ -274,7 +274,7 @@ bool test_m3u_writing_abs_paths() {
 	data_collection.append(data);
 	
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("m3u test error writing %s\n", e.message);
@@ -283,7 +283,7 @@ bool test_m3u_writing_abs_paths() {
 	
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("m3u test error readwrite\n");
@@ -315,7 +315,7 @@ bool test_pls_writing_abs_paths() {
 	data_collection.append(data);
 	
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("pls test error writing %s\n", e.message);
@@ -324,7 +324,7 @@ bool test_pls_writing_abs_paths() {
 	
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("pls test error readwrite\n");
@@ -356,7 +356,7 @@ bool test_xspf_writing_abs_paths() {
 	data_collection.append(data);
 	
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("xspf test error writing %s\n", e.message);
@@ -365,7 +365,7 @@ bool test_xspf_writing_abs_paths() {
 	
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("xspf test error readwrite\n");
@@ -411,7 +411,7 @@ bool test_asx_writing_rel_paths() {
 	
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error readwrite\n");
@@ -454,7 +454,7 @@ bool test_m3u_writing_rel_paths() {
 	data_collection.append(data);
 	
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("m3u test error writing %s\n", e.message);
@@ -462,7 +462,7 @@ bool test_m3u_writing_rel_paths() {
 	}
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("m3u test error readwrite\n");
@@ -503,7 +503,7 @@ bool test_pls_writing_rel_paths() {
 	data_collection.append(data);
 	
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("pls test error writing %s\n", e.message);
@@ -511,7 +511,7 @@ bool test_pls_writing_rel_paths() {
 	}
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("pls test error readwrite\n");
@@ -552,7 +552,7 @@ bool test_xspf_writing_rel_paths() {
 	data_collection.append(data);
 	
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("pls test error writing %s\n", e.message);
@@ -560,7 +560,7 @@ bool test_xspf_writing_rel_paths() {
 	}
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("pls test error readwrite\n");
@@ -603,7 +603,7 @@ bool test_asx_readwrite_targettype() {
 	data_collection.append(data);
 	
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error writing %s\n", e.message);
@@ -612,7 +612,7 @@ bool test_asx_readwrite_targettype() {
 	
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error readwrite\n");
@@ -652,7 +652,7 @@ bool test_m3u_readwrite_targettype() {
 	data_collection.append(data);
 	
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error writing %s\n", e.message);
@@ -661,7 +661,7 @@ bool test_m3u_readwrite_targettype() {
 	
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error readwrite\n");
@@ -702,7 +702,7 @@ bool test_pls_readwrite_targettype() {
 	data_collection.append(data);
 	
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error writing %s\n", e.message);
@@ -711,7 +711,7 @@ bool test_pls_readwrite_targettype() {
 	
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error readwrite\n");
@@ -758,7 +758,7 @@ bool test_xspf_readwrite_targettype() {
 	data_collection.append(data);
 
 	try {
-		writer.write(data_collection, f.get_uri());
+		writer.write(data_collection, f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("xspf test error writing %s\n", e.message);
@@ -767,7 +767,7 @@ bool test_xspf_readwrite_targettype() {
 	
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("xspf test error readwrite\n");
@@ -787,7 +787,7 @@ bool test_conversion_asx_xspf() {
 	File target = File.new_for_path("./playlist-examples/tmp_copy_as_xspf.xspf");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error reading\n");
@@ -796,7 +796,7 @@ bool test_conversion_asx_xspf() {
 	DataCollection d = reader.data_collection;
 	var writer = new Pl.Writer(ListType.XSPF, true);
 	try {
-		writer.write(d, target.get_uri());
+		writer.write(d, target.get_uri(), null);
 	}
 	catch(Error e) {
 		print("asx test error writing %s\n", e.message);
@@ -810,7 +810,7 @@ bool test_conversion_wpl_asx() {
 	File target = File.new_for_path("./playlist-examples/tmp_copy_wpl_as_asx.asx");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("wpl test error reading\n");
@@ -819,7 +819,7 @@ bool test_conversion_wpl_asx() {
 	DataCollection d = reader.data_collection;
 	var writer = new Pl.Writer(ListType.ASX, true);
 	try {
-		writer.write(d, target.get_uri());
+		writer.write(d, target.get_uri(), null);
 	}
 	catch(Error e) {
 		print("wpl test error writing %s\n", e.message);
@@ -833,7 +833,7 @@ bool test_m3u_read_with_no_extension_on_file() {
 	File t1 = File.new_for_commandline_arg("./playlist-examples/Alternative/everclear - SMFTA.mp3");
 	var reader = new Pl.Reader();
 	try {
-		reader.read(f.get_uri());
+		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {
 		print("m3u test error reading\n");
@@ -866,7 +866,7 @@ void test_asx_async_reading() {
 	asxreader.finished.connect(asx_async_finished_cb01);
 	asxreader.ref(); //prevent destruction
 	try {
-		asxreader.read_asyn.begin(f.get_uri());
+		asxreader.read_asyn.begin(f.get_uri(), null);
 		
 	}
 	catch(Error e) {

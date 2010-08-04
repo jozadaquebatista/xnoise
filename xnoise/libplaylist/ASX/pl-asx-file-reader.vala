@@ -107,7 +107,7 @@ namespace Pl {
 		}
 
 		//public DataCollection read_xml(File _file) throws InternalReaderError {
-		public override DataCollection read(File _file) throws InternalReaderError {
+		public override DataCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
 			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
@@ -211,7 +211,7 @@ namespace Pl {
 
 //		private DataCollection data_collection;
 		
-		public override async DataCollection read_asyn(File _file) throws InternalReaderError {
+		public override async DataCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
 			var data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();

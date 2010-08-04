@@ -39,7 +39,7 @@ namespace Pl {
 			// TODO: honor overwrite, etc.
 		}
 
-		public override Result write(File _file, DataCollection _data_collection) throws InternalWriterError {
+		public override Result write(File _file, DataCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
 			this.file = _file;
 			set_base_path();
 			this.data_collection = _data_collection;
@@ -94,7 +94,7 @@ namespace Pl {
 			return Result.SUCCESS;
 		}
 		
-		public override async Result write_asyn(File _file, DataCollection _data_collection) throws InternalWriterError {
+		public override async Result write_asyn(File _file, DataCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
 			this.file = _file;
 			set_base_path();
 			this.data_collection = _data_collection;

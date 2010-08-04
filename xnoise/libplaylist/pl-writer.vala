@@ -54,7 +54,7 @@ namespace Pl {
 	
 	
 		// write playlist data to file
-		public Result write(DataCollection data_collection, string playlist_uri) throws WriterError { // TODO: handle overwrite
+		public Result write(DataCollection data_collection, string playlist_uri, Cancellable? cancellable = null) throws WriterError { // TODO: handle overwrite
 			
 			if(data_collection == null || data_collection.get_size() == 0)
 				throw new WriterError.NO_DATA("No data was provided. Playlist cannot be created.");
@@ -96,7 +96,7 @@ namespace Pl {
 		}
 
 		// write playlist data to file (async version)
-		public async Result write_asyn(DataCollection data_collection, string playlist_uri) throws WriterError {
+		public async Result write_asyn(DataCollection data_collection, string playlist_uri, Cancellable? cancellable = null) throws WriterError {
 			
 			if(data_collection == null)
 				throw new WriterError.NO_DATA("No data was provided. Playlist cannot be created.");

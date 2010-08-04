@@ -30,8 +30,8 @@ namespace Pl {
 		public signal void started(string playlist_uri);
 		public signal void finished(string playlist_uri);
 
-		public abstract DataCollection read(File file) throws InternalReaderError;
-		public abstract async DataCollection read_asyn(File file) throws InternalReaderError;
+		public abstract DataCollection read(File file, Cancellable? cancellable = null) throws InternalReaderError;
+		public abstract async DataCollection read_asyn(File file, Cancellable? cancellable = null) throws InternalReaderError;
 
 		protected abstract void set_base_path();
 	}

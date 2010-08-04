@@ -116,8 +116,8 @@ namespace Pl {
 		public bool get_is_remote_for_uri (ref string uri_needle);
 		public int get_number_of_entries ();
 		public string? get_title_for_uri (ref string uri_needle);
-		public Pl.Result read (string list_uri) throws Pl.ReaderError;
-		public async Pl.Result read_asyn (string list_uri) throws Pl.ReaderError;
+		public Pl.Result read (string list_uri, GLib.Cancellable? cancellable = null) throws Pl.ReaderError;
+		public async Pl.Result read_asyn (string list_uri, GLib.Cancellable? cancellable = null) throws Pl.ReaderError;
 		public Pl.DataCollection data_collection { get; }
 		public string playlist_uri { get; }
 		public Pl.ListType ptype { get; }
@@ -127,8 +127,8 @@ namespace Pl {
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Writer : GLib.Object {
 		public Writer (Pl.ListType ptype, bool overwrite = true);
-		public Pl.Result write (Pl.DataCollection data_collection, string playlist_uri) throws Pl.WriterError;
-		public async Pl.Result write_asyn (Pl.DataCollection data_collection, string playlist_uri) throws Pl.WriterError;
+		public Pl.Result write (Pl.DataCollection data_collection, string playlist_uri, GLib.Cancellable? cancellable = null) throws Pl.WriterError;
+		public async Pl.Result write_asyn (Pl.DataCollection data_collection, string playlist_uri, GLib.Cancellable? cancellable = null) throws Pl.WriterError;
 		public bool overwrite_if_exists { get; }
 		public string? uri { get; }
 	}

@@ -64,7 +64,7 @@ namespace Pl {
 			read_in_progress_mutex = new Mutex();
 		}
 		
-		public Result read(string list_uri) throws ReaderError {
+		public Result read(string list_uri, Cancellable? cancellable = null) throws ReaderError {
 			Result ret = Result.UNHANDLED;
 			_playlist_uri = list_uri;
 			file = File.new_for_uri(_playlist_uri);
@@ -82,7 +82,7 @@ namespace Pl {
 		}
 
 
-		public async Result read_asyn(string list_uri) throws ReaderError {
+		public async Result read_asyn(string list_uri, Cancellable? cancellable = null) throws ReaderError {
 			Result ret = Result.UNHANDLED;
 			_playlist_uri = list_uri;
 			file = File.new_for_uri(_playlist_uri);

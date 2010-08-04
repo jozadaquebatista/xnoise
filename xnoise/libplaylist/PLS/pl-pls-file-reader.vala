@@ -26,7 +26,7 @@ namespace Pl {
 	private class Pls.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override DataCollection read(File _file) throws InternalReaderError {
+		public override DataCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
 			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
@@ -122,7 +122,7 @@ namespace Pl {
 			return data_collection;
 		}
 
-		public override async DataCollection read_asyn(File _file) throws InternalReaderError {
+		public override async DataCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
 			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			size_t a;

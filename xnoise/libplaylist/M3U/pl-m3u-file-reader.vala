@@ -31,7 +31,7 @@ namespace Pl {
 			lines_buf = {};
 		}
 		
-		public override DataCollection read(File _file) throws InternalReaderError {
+		public override DataCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
 			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
@@ -143,7 +143,7 @@ namespace Pl {
 			return false;
 		}
 
-		public override async DataCollection read_asyn(File _file) throws InternalReaderError {
+		public override async DataCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
 			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
