@@ -30,7 +30,7 @@
 
 using GLib;
 
-public class Xnoise.AboutDialog : Gtk.AboutDialog {
+private class Xnoise.AboutDialog : Gtk.AboutDialog {
 	const string COPYRIGHT = "Copyright \xc2\xa9 2008, 2009-2010 Jörn Magens";
 	const string PROGRAM_NAME = "xnoise";
 	const string WEBSITE = "http://www.xnoise-media-player.com/";
@@ -48,7 +48,7 @@ public class Xnoise.AboutDialog : Gtk.AboutDialog {
 		string _authors;
 		try {
 			GLib.FileUtils.get_contents(GLib.Path.build_filename(Config.LICENSEDIR + "AUTHORS"), out _authors);
-			this.authors = _authors.split("\n", 500);
+			this.authors = _authors.split("\n", 500); // wow, that is optimistic
 		}
 		catch(GLib.Error e) {
 			print("%s\n", e.message);
@@ -61,13 +61,8 @@ public class Xnoise.AboutDialog : Gtk.AboutDialog {
 		catch(GLib.Error e) {
 			print("%s\n", e.message);
 		}
-
-		try {
-			set_icon_from_file(Config.UIDIR + "xnoise_16x16.png");
-		}
-		catch(GLib.Error e) {
-			print("%s\n", e.message);
-		}
+		this.set_default_icon_name(PROGRAM_NAME);
+		this.set_logo_icon_name(PROGRAM_NAME);
 
 		this.program_name = PROGRAM_NAME;
 		this.version      = Config.PACKAGE_VERSION;

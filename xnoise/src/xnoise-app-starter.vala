@@ -28,7 +28,7 @@
  * 	Jörn Magens
  */
 
-public class Xnoise.AppStarter {
+private class Xnoise.AppStarter {
 	public static Unique.Response on_message_received(Unique.App sender,
 	                                                  int command,
 	                                                  Unique.MessageData message_data,

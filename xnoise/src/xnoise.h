@@ -5,11 +5,10 @@
 #define ____XNOISE_H__
 
 #include <glib.h>
-#include <gtk/gtk.h>
 #include <glib-object.h>
+#include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unique/unique.h>
 #include <gdk/gdk.h>
 #include <float.h>
 #include <math.h>
@@ -18,17 +17,6 @@
 
 G_BEGIN_DECLS
 
-
-#define XNOISE_TYPE_ABOUT_DIALOG (xnoise_about_dialog_get_type ())
-#define XNOISE_ABOUT_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ABOUT_DIALOG, XnoiseAboutDialog))
-#define XNOISE_ABOUT_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ABOUT_DIALOG, XnoiseAboutDialogClass))
-#define XNOISE_IS_ABOUT_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ABOUT_DIALOG))
-#define XNOISE_IS_ABOUT_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ABOUT_DIALOG))
-#define XNOISE_ABOUT_DIALOG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ABOUT_DIALOG, XnoiseAboutDialogClass))
-
-typedef struct _XnoiseAboutDialog XnoiseAboutDialog;
-typedef struct _XnoiseAboutDialogClass XnoiseAboutDialogClass;
-typedef struct _XnoiseAboutDialogPrivate XnoiseAboutDialogPrivate;
 
 #define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
 #define XNOISE_ADD_MEDIA_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialog))
@@ -62,27 +50,6 @@ typedef struct _XnoiseAlbumImagePrivate XnoiseAlbumImagePrivate;
 typedef struct _XnoiseAlbumImageLoader XnoiseAlbumImageLoader;
 typedef struct _XnoiseAlbumImageLoaderClass XnoiseAlbumImageLoaderClass;
 typedef struct _XnoiseAlbumImageLoaderPrivate XnoiseAlbumImageLoaderPrivate;
-
-#define XNOISE_TYPE_APP_STARTER (xnoise_app_starter_get_type ())
-#define XNOISE_APP_STARTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_APP_STARTER, XnoiseAppStarter))
-#define XNOISE_APP_STARTER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_APP_STARTER, XnoiseAppStarterClass))
-#define XNOISE_IS_APP_STARTER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_APP_STARTER))
-#define XNOISE_IS_APP_STARTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_APP_STARTER))
-#define XNOISE_APP_STARTER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_APP_STARTER, XnoiseAppStarterClass))
-
-typedef struct _XnoiseAppStarter XnoiseAppStarter;
-typedef struct _XnoiseAppStarterClass XnoiseAppStarterClass;
-typedef struct _XnoiseAppStarterPrivate XnoiseAppStarterPrivate;
-
-#define XNOISE_TYPE_MAIN (xnoise_main_get_type ())
-#define XNOISE_MAIN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN, XnoiseMain))
-#define XNOISE_MAIN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN, XnoiseMainClass))
-#define XNOISE_IS_MAIN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MAIN))
-#define XNOISE_IS_MAIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MAIN))
-#define XNOISE_MAIN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MAIN, XnoiseMainClass))
-
-typedef struct _XnoiseMain XnoiseMain;
-typedef struct _XnoiseMainClass XnoiseMainClass;
 
 #define XNOISE_TYPE_CONTROL_BUTTON (xnoise_control_button_get_type ())
 #define XNOISE_CONTROL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_CONTROL_BUTTON, XnoiseControlButton))
@@ -250,6 +217,16 @@ typedef struct _XnoiseLyricsLoaderPrivate XnoiseLyricsLoaderPrivate;
 typedef struct _XnoiseLyricsView XnoiseLyricsView;
 typedef struct _XnoiseLyricsViewClass XnoiseLyricsViewClass;
 typedef struct _XnoiseLyricsViewPrivate XnoiseLyricsViewPrivate;
+
+#define XNOISE_TYPE_MAIN (xnoise_main_get_type ())
+#define XNOISE_MAIN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN, XnoiseMain))
+#define XNOISE_MAIN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN, XnoiseMainClass))
+#define XNOISE_IS_MAIN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MAIN))
+#define XNOISE_IS_MAIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MAIN))
+#define XNOISE_MAIN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MAIN, XnoiseMainClass))
+
+typedef struct _XnoiseMain XnoiseMain;
+typedef struct _XnoiseMainClass XnoiseMainClass;
 typedef struct _XnoiseMainPrivate XnoiseMainPrivate;
 
 #define XNOISE_TYPE_TRAY_ICON (xnoise_tray_icon_get_type ())
@@ -511,15 +488,6 @@ typedef struct _XnoiseVolumeSliderButton XnoiseVolumeSliderButton;
 typedef struct _XnoiseVolumeSliderButtonClass XnoiseVolumeSliderButtonClass;
 typedef struct _XnoiseVolumeSliderButtonPrivate XnoiseVolumeSliderButtonPrivate;
 
-struct _XnoiseAboutDialog {
-	GtkAboutDialog parent_instance;
-	XnoiseAboutDialogPrivate * priv;
-};
-
-struct _XnoiseAboutDialogClass {
-	GtkAboutDialogClass parent_class;
-};
-
 struct _XnoiseAddMediaDialog {
 	GObject parent_instance;
 	XnoiseAddMediaDialogPrivate * priv;
@@ -548,17 +516,6 @@ struct _XnoiseAlbumImageLoader {
 
 struct _XnoiseAlbumImageLoaderClass {
 	GObjectClass parent_class;
-};
-
-struct _XnoiseAppStarter {
-	GTypeInstance parent_instance;
-	volatile int ref_count;
-	XnoiseAppStarterPrivate * priv;
-};
-
-struct _XnoiseAppStarterClass {
-	GTypeClass parent_class;
-	void (*finalize) (XnoiseAppStarter *self);
 };
 
 struct _XnoiseControlButton {
@@ -1056,9 +1013,6 @@ struct _XnoiseVolumeSliderButtonClass {
 };
 
 
-GType xnoise_about_dialog_get_type (void);
-XnoiseAboutDialog* xnoise_about_dialog_new (void);
-XnoiseAboutDialog* xnoise_about_dialog_construct (GType object_type);
 GType xnoise_add_media_dialog_get_type (void);
 XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
 XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
@@ -1070,19 +1024,6 @@ GType xnoise_album_image_loader_get_type (void);
 XnoiseAlbumImageLoader* xnoise_album_image_loader_new (void);
 XnoiseAlbumImageLoader* xnoise_album_image_loader_construct (GType object_type);
 gboolean xnoise_album_image_loader_fetch_image (XnoiseAlbumImageLoader* self);
-gpointer xnoise_app_starter_ref (gpointer instance);
-void xnoise_app_starter_unref (gpointer instance);
-GParamSpec* xnoise_param_spec_app_starter (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void xnoise_value_set_app_starter (GValue* value, gpointer v_object);
-void xnoise_value_take_app_starter (GValue* value, gpointer v_object);
-gpointer xnoise_value_get_app_starter (const GValue* value);
-GType xnoise_app_starter_get_type (void);
-GType xnoise_main_get_type (void);
-extern XnoiseMain* xnoise_app_starter_xn;
-UniqueResponse xnoise_app_starter_on_message_received (UniqueApp* sender, gint command, UniqueMessageData* message_data, guint time);
-gint xnoise_app_starter_main (char** args, int args_length1);
-XnoiseAppStarter* xnoise_app_starter_new (void);
-XnoiseAppStarter* xnoise_app_starter_construct (GType object_type);
 GType xnoise_control_button_get_type (void);
 GType xnoise_control_button_direction_get_type (void);
 XnoiseControlButton* xnoise_control_button_new (XnoiseControlButtonDirection _direction);
@@ -1257,6 +1198,7 @@ gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self);
 GType xnoise_lyrics_view_get_type (void);
 XnoiseLyricsView* xnoise_lyrics_view_new (void);
 XnoiseLyricsView* xnoise_lyrics_view_construct (GType object_type);
+GType xnoise_main_get_type (void);
 GType xnoise_tray_icon_get_type (void);
 GType xnoise_main_window_get_type (void);
 GType xnoise_track_list_get_type (void);

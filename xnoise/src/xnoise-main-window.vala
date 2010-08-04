@@ -35,7 +35,6 @@ public extern bool ensure_native(Gdk.Window window);
 public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string MAIN_UI_FILE     = Config.UIDIR + "main_window.ui";
 	private const string MENU_UI_FILE     = Config.UIDIR + "main_ui.xml";
-	private const string APPICON          = Config.UIDIR + "xnoise_bruit_48x48.png";
 	private const string SHOWVIDEO        = _("Video");
 	private const string SHOWTRACKLIST    = _("Tracklist");
 	private const string SHOWMEDIABROWSER = _("Show Media");
@@ -1042,7 +1041,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			this.mainvbox = gb.get_object("mainvbox") as Gtk.VBox;
 			this.title = "xnoise media player";
-			this.set_icon_from_file(APPICON);
+			this.set_default_icon_name("xnoise");
 			
 			this.contentvbox = gb.get_object("contentvbox") as Gtk.VBox;
 
@@ -1256,7 +1255,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//Fullscreen window
 			this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);
 			this.fullscreenwindow.set_title("Xnoise media player - Fullscreen");
-			this.fullscreenwindow.set_icon_from_file(APPICON);
+			this.fullscreenwindow.set_default_icon_name("xnoise");
 			this.fullscreenwindow.set_events (Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
 			this.fullscreenwindow.realize();
 

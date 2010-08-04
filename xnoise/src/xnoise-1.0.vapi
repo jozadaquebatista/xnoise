@@ -12,10 +12,6 @@ namespace Gst {
 [CCode (cprefix = "Xnoise", lower_case_cprefix = "xnoise_")]
 namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
-	public class AboutDialog : Gtk.AboutDialog {
-		public AboutDialog ();
-	}
-	[CCode (cheader_filename = "xnoise.h")]
 	public class AddMediaDialog : GLib.Object {
 		public Gtk.Builder builder;
 		public AddMediaDialog ();
@@ -33,13 +29,6 @@ namespace Xnoise {
 		public AlbumImageLoader ();
 		public bool fetch_image ();
 		public signal void sign_fetched (string artist, string album, string image_path);
-	}
-	[CCode (ref_function = "xnoise_app_starter_ref", unref_function = "xnoise_app_starter_unref", cheader_filename = "xnoise.h")]
-	public class AppStarter {
-		public static Xnoise.Main xn;
-		public AppStarter ();
-		public static int main (string[] args);
-		public static Unique.Response on_message_received (Unique.App sender, int command, Unique.MessageData message_data, uint time);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class ControlButton : Gtk.Button {

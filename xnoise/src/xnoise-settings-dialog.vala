@@ -577,7 +577,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 			notebook = this.get_object("notebook1") as Gtk.Notebook;
 
-			this.dialog.set_icon_from_file (Config.UIDIR + "xnoise_16x16.png");
+			this.dialog.set_default_icon_name("xnoise");
 			this.dialog.set_position(Gtk.WindowPosition.CENTER);
 
 			add_plugin_tabs();
