@@ -72,6 +72,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private double current_volume; //keep it global for saving to params
 	private int window_width = 0;
 	private ScreenSaverManager ssm = null;
+	private List<Gtk.Action> actions_list = null;
 	public ScrolledWindow mediaBrScrollWin = null;
 	public ScrolledWindow trackListScrollWin = null;
 	public bool _seek;
@@ -1006,15 +1007,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	/* disables (or enables) the AddRemoveAction in the menus if
 	   music is (not anymore) being imported */ 
 	private void on_media_import_notify(GLib.Object sender, ParamSpec spec) {
-		List<Action> actions = action_group.list_actions();
-		foreach(Action a in actions) {
+		if(actions_list == null)
+			actions_list = action_group.list_actions();
+		foreach(Action a in actions_list) {
 			if(a.name == "AddRemoveAction") {
 				a.sensitive = !global.media_import_in_progress;
 				break;
 			}
-			//the actions seem to be automatically unreferenced when the list is destroyed
-			//but they are never referenced when the list is created, so we reference them!
-			a.ref();
 		}
 	}
 	

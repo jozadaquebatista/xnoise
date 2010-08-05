@@ -271,9 +271,9 @@ struct _SimpleXmlNodeIteratorClass {
 
 GQuark pl_reader_error_quark (void);
 GQuark pl_writer_error_quark (void);
-GType pl_list_type_get_type (void);
-GType pl_result_get_type (void);
-GType pl_target_type_get_type (void);
+GType pl_list_type_get_type (void) G_GNUC_CONST;
+GType pl_result_get_type (void) G_GNUC_CONST;
+GType pl_target_type_get_type (void) G_GNUC_CONST;
 extern gboolean pl_debug;
 gpointer pl_data_ref (gpointer instance);
 void pl_data_unref (gpointer instance);
@@ -281,8 +281,8 @@ GParamSpec* pl_param_spec_data (const gchar* name, const gchar* nick, const gcha
 void pl_value_set_data (GValue* value, gpointer v_object);
 void pl_value_take_data (GValue* value, gpointer v_object);
 gpointer pl_value_get_data (const GValue* value);
-GType pl_data_get_type (void);
-GType pl_data_field_get_type (void);
+GType pl_data_get_type (void) G_GNUC_CONST;
+GType pl_data_field_get_type (void) G_GNUC_CONST;
 PlData* pl_data_new (void);
 PlData* pl_data_construct (GType object_type);
 void pl_data_add_field (PlData* self, PlDataField field, const char* val);
@@ -312,7 +312,7 @@ GParamSpec* pl_param_spec_data_collection (const gchar* name, const gchar* nick,
 void pl_value_set_data_collection (GValue* value, gpointer v_object);
 void pl_value_take_data_collection (GValue* value, gpointer v_object);
 gpointer pl_value_get_data_collection (const GValue* value);
-GType pl_data_collection_get_type (void);
+GType pl_data_collection_get_type (void) G_GNUC_CONST;
 PlDataCollection* pl_data_collection_new (void);
 PlDataCollection* pl_data_collection_construct (GType object_type);
 gint pl_data_collection_get_size (PlDataCollection* self);
@@ -340,7 +340,7 @@ GParamSpec* pl_data_collection_param_spec_iterator (const gchar* name, const gch
 void pl_data_collection_value_set_iterator (GValue* value, gpointer v_object);
 void pl_data_collection_value_take_iterator (GValue* value, gpointer v_object);
 gpointer pl_data_collection_value_get_iterator (const GValue* value);
-GType pl_data_collection_iterator_get_type (void);
+GType pl_data_collection_iterator_get_type (void) G_GNUC_CONST;
 PlDataCollectionIterator* pl_data_collection_iterator (PlDataCollection* self);
 gint pl_data_collection_index_of (PlDataCollection* self, PlData* d);
 PlData* pl_data_collection_get (PlDataCollection* self, gint index);
@@ -363,7 +363,7 @@ void pl_data_collection_iterator_set (PlDataCollectionIterator* self, PlData* it
 void pl_data_collection_iterator_insert (PlDataCollectionIterator* self, PlData* item);
 void pl_data_collection_iterator_append (PlDataCollectionIterator* self, PlData* item);
 gint pl_data_collection_iterator_index (PlDataCollectionIterator* self);
-GType pl_reader_get_type (void);
+GType pl_reader_get_type (void) G_GNUC_CONST;
 PlReader* pl_reader_new (void);
 PlReader* pl_reader_construct (GType object_type);
 PlResult pl_reader_read (PlReader* self, const char* list_uri, GCancellable* cancellable, GError** error);
@@ -389,7 +389,7 @@ PlListType pl_get_type_by_extension (char** uri_);
 PlListType pl_get_type_by_data (char** uri_);
 glong pl_get_duration_from_string (char** duration_string);
 GFile* pl_get_file_for_location (const char* adr, char** base_path, PlTargetType* tt);
-GType pl_writer_get_type (void);
+GType pl_writer_get_type (void) G_GNUC_CONST;
 PlWriter* pl_writer_new (PlListType ptype, gboolean overwrite);
 PlWriter* pl_writer_construct (GType object_type, PlListType ptype, gboolean overwrite);
 PlResult pl_writer_write (PlWriter* self, PlDataCollection* data_collection, const char* playlist_uri, GCancellable* cancellable, GError** error);
@@ -408,14 +408,14 @@ GParamSpec* simple_xml_param_spec_reader (const gchar* name, const gchar* nick, 
 void simple_xml_value_set_reader (GValue* value, gpointer v_object);
 void simple_xml_value_take_reader (GValue* value, gpointer v_object);
 gpointer simple_xml_value_get_reader (const GValue* value);
-GType simple_xml_reader_get_type (void);
+GType simple_xml_reader_get_type (void) G_GNUC_CONST;
 gpointer simple_xml_node_ref (gpointer instance);
 void simple_xml_node_unref (gpointer instance);
 GParamSpec* simple_xml_param_spec_node (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
 void simple_xml_value_set_node (GValue* value, gpointer v_object);
 void simple_xml_value_take_node (GValue* value, gpointer v_object);
 gpointer simple_xml_value_get_node (const GValue* value);
-GType simple_xml_node_get_type (void);
+GType simple_xml_node_get_type (void) G_GNUC_CONST;
 SimpleXmlReader* simple_xml_reader_new (const char* filename);
 SimpleXmlReader* simple_xml_reader_construct (GType object_type, const char* filename);
 SimpleXmlReader* simple_xml_reader_new_from_string (const char* xml_string);
@@ -427,7 +427,7 @@ GParamSpec* simple_xml_param_spec_writer (const gchar* name, const gchar* nick, 
 void simple_xml_value_set_writer (GValue* value, gpointer v_object);
 void simple_xml_value_take_writer (GValue* value, gpointer v_object);
 gpointer simple_xml_value_get_writer (const GValue* value);
-GType simple_xml_writer_get_type (void);
+GType simple_xml_writer_get_type (void) G_GNUC_CONST;
 SimpleXmlWriter* simple_xml_writer_new (SimpleXmlNode* root, const char* header_string);
 SimpleXmlWriter* simple_xml_writer_construct (GType object_type, SimpleXmlNode* root, const char* header_string);
 void simple_xml_writer_write (SimpleXmlWriter* self, const char* filename);
@@ -452,7 +452,7 @@ GParamSpec* simple_xml_node_param_spec_iterator (const gchar* name, const gchar*
 void simple_xml_node_value_set_iterator (GValue* value, gpointer v_object);
 void simple_xml_node_value_take_iterator (GValue* value, gpointer v_object);
 gpointer simple_xml_node_value_get_iterator (const GValue* value);
-GType simple_xml_node_iterator_get_type (void);
+GType simple_xml_node_iterator_get_type (void) G_GNUC_CONST;
 SimpleXmlNodeIterator* simple_xml_node_iterator (SimpleXmlNode* self);
 const char* simple_xml_node_get_text (SimpleXmlNode* self);
 void simple_xml_node_set_text (SimpleXmlNode* self, const char* value);
