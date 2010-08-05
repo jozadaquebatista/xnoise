@@ -208,7 +208,7 @@ namespace SimpleXml {
 		public void insert_child (int pos, SimpleXml.Node node);
 		public SimpleXml.Node.Iterator iterator ();
 		public void prepend_child (SimpleXml.Node node);
-		public bool remove (SimpleXml.Node node);
+		public bool remove_child (SimpleXml.Node node);
 		public bool remove_child_at_idx (int idx);
 		public void @set (int idx, SimpleXml.Node node);
 		public int children_count { get; }

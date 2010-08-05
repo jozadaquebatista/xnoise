@@ -25,6 +25,7 @@ namespace SimpleXml {
 
 	public class Node {
 		// Represents a xml node. Can contain more nodes, text and attributes
+		// For convenient usage with vala iteration
 		private unowned Node _parent;
 		private unowned Node? _previous = null;
 		private Node? _next = null;
@@ -135,7 +136,9 @@ namespace SimpleXml {
 			}
 			else {
 				Node prev = this._first;
-				for(int i = 0; i < pos - 1; i++) {
+				int i = 0;
+				while(i < pos - 1) {
+					i++;
 					prev = prev.next;
 				}
 				node._previous = prev;
@@ -146,6 +149,8 @@ namespace SimpleXml {
 			}
 		}
 		
+		// returns the first appearance only !!!
+		//TODO: method that returns all children with a certain name
 		public unowned Node? get_child_by_name(string childname) {
 			foreach(unowned Node n in this) {
 				if(n.name == childname)
@@ -157,7 +162,7 @@ namespace SimpleXml {
 		public int get_idx_of_child(Node node) {
 			int idx = -1;
 			foreach(Node n in this) {
-				if(&n == &node) {
+				if(&n == &node) { //adress compare
 					return idx;
 				}
 				idx++;
@@ -245,7 +250,7 @@ namespace SimpleXml {
 				this._last = node;
 		}
 
-		public bool remove(Node node) {
+		public bool remove_child(Node node) {
 			int idx = get_idx_of_child(node);
 			if(idx >= 0) {
 				return remove_child_at_idx(idx);

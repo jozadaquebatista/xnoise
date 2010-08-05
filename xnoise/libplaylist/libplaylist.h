@@ -429,7 +429,7 @@ SimpleXmlNode* simple_xml_node_get_child_by_name (SimpleXmlNode* self, const cha
 gint simple_xml_node_get_idx_of_child (SimpleXmlNode* self, SimpleXmlNode* node);
 SimpleXmlNode* simple_xml_node_get (SimpleXmlNode* self, gint idx);
 void simple_xml_node_set (SimpleXmlNode* self, gint idx, SimpleXmlNode* node);
-gboolean simple_xml_node_remove (SimpleXmlNode* self, SimpleXmlNode* node);
+gboolean simple_xml_node_remove_child (SimpleXmlNode* self, SimpleXmlNode* node);
 gboolean simple_xml_node_remove_child_at_idx (SimpleXmlNode* self, gint idx);
 void simple_xml_node_clear (SimpleXmlNode* self);
 gpointer simple_xml_node_iterator_ref (gpointer instance);
