@@ -865,15 +865,14 @@ public class Xnoise.TrackList : TreeView, IParams {
 			var columns = this.get_columns();
 			foreach(TreeViewColumn c in columns) {
 				if(c == null) continue;
-				if(relative_column_sizes.lookup(c.title) == null && c.title != "" && c.resizable) {
-					double rel_size = par.get_double_value("relative_size_" + c.title + "_column");
-					relative_column_sizes.insert(c.title, rel_size);
-					((TextColumn)c).resized.connect(on_column_resized);
-					handle_resize();
+				if(relative_column_sizes.lookup(c.title) == null && c.title != "") {
+					if(c.resizable) {
+						double rel_size = par.get_double_value("relative_size_" + c.title + "_column");
+						relative_column_sizes.insert(c.title, rel_size);
+						((TextColumn)c).resized.connect(on_column_resized);
+					}
 					new_column = true;
 				}
-				if(relative_column_sizes.lookup(c.title) == null)
-					new_column = true;
 				//connect to visibility property change
 				//connect to resizable property change
 				//override this class' insert_column with this code			
@@ -882,6 +881,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 				n_columns++;
 			else
 				n_columns--;
+			handle_resize();
 		});
 		
 		this.show.connect(() => {
@@ -1039,9 +1039,13 @@ public class Xnoise.TrackList : TreeView, IParams {
 			((TreeView)this).style_get_property("vertical-separator", v);
 			int vertical_separator_size = v.get_int();
 			
-			return w - (scrollbar_w + 
+			print("|%i|%i", w - (scrollbar_w + 
 			            xn.main_window.hpaned.position + 
-			            n_columns * vertical_separator_size);		
+			            n_columns * vertical_separator_size), n_columns);
+			
+			return w - (scrollbar_w + 
+			            xn.main_window.hpaned.position);/* + 
+			            n_columns * vertical_separator_size);*/		
 		}
 	}
 	
