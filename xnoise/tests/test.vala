@@ -925,7 +925,7 @@ bool test_xml_readwrite_01() {
 	File source = File.new_for_path("./playlist-examples/asx_test.asx");//"./playlist-examples/asx_test.asx");
 	File target = File.new_for_path("./playlist-examples/tmp_asx.xml");
 
-	var mr = new SimpleXml.Reader(source.get_path());
+	var mr = new SimpleXml.Reader(source);
 	mr.read(); // all data is now in mr.root if read was successful
 	if(mr.root == null)
 		print("xml reading 1 with errors\n");
@@ -942,7 +942,7 @@ bool test_xml_readwrite_01() {
 	//noheader used
 	mw.write(target.get_uri());
 
-	var res_mr = new SimpleXml.Reader(target.get_path());
+	var res_mr = new SimpleXml.Reader(target);
 	res_mr.read(); // all data is now in mr.root if read was successful
 	if(res_mr.root == null)
 		print("xml reading 2 with errors\n");
@@ -980,6 +980,30 @@ bool test_xml_readwrite_01() {
 //	}
 //	dpth -= 2;
 //}
+
+
+void test_async_xml_read() {
+	File source = File.new_for_path("./playlist-examples/asx_test.asx");
+	var mr = new SimpleXml.Reader(source);
+	mr.finished.connect(xml_async_finished_cb01);
+	mr.ref(); //prevent destruction
+	mr.read_asyn.begin(); // all data is now in mr.root if read was successful
+}
+void xml_async_finished_cb01(SimpleXml.Reader sender) {
+	if(sender.root == null)
+		print("test async xml reading 01 with errors\n");
+
+	SimpleXml.Node sourcenode = sender.root;
+	sourcenode = sourcenode.get_child_by_name("asx");
+	sourcenode = sourcenode.get_child_by_name("title");
+	if(sourcenode.text == "Example.com Live Stream")
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+	sender.unref();
+	ml.quit();
+	return;
+}
 
 
 void main() {
@@ -1207,20 +1231,26 @@ void main() {
 	
 	// async tests
 	
-	print("test asx async reading:");
-	test_asx_async_reading();
-	ml = new MainLoop(); // reuse mainloop for every async test
-	ml.run();
-
 	print("test pls async reading:");
 	test_pls_async_reading();
 	ml = new MainLoop(); // reuse mainloop for every async test
 	ml.run();
 
-	print("test xml reading and writing");
+	print("test xml reading and writing:");
 	if(test_xml_readwrite_01())
 		print("\033[50Gpass\n");
 	else
 		print("\033[50Gfail\n");
+
+	print("test asx async reading:");
+	test_asx_async_reading();
+	ml = new MainLoop(); // reuse mainloop for every async test
+	ml.run();
+
+	print("test async xml reading:");
+	test_async_xml_read();
+	ml = new MainLoop(); // reuse mainloop for every async test
+	ml.run();
+
 }
 

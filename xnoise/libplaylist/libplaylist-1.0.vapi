@@ -218,15 +218,18 @@ namespace SimpleXml {
 		public SimpleXml.Node? previous { get; }
 		public string? text { get; set; }
 	}
-	[CCode (ref_function = "simple_xml_reader_ref", unref_function = "simple_xml_reader_unref", cheader_filename = "libplaylist.h")]
-	public class Reader {
+	[CCode (cheader_filename = "libplaylist.h")]
+	public class Reader : GLib.Object {
 		public SimpleXml.Node root;
-		public Reader (string filename);
+		public Reader (GLib.File file);
 		public Reader.from_string (string? xml_string);
-		public void read (bool case_sensitive = true);
+		public void read (bool case_sensitive = true, GLib.Cancellable? cancellable = null);
+		public async void read_asyn (bool case_sensitive = true, GLib.Cancellable? cancellable = null);
+		public signal void finished ();
+		public signal void started ();
 	}
-	[CCode (ref_function = "simple_xml_writer_ref", unref_function = "simple_xml_writer_unref", cheader_filename = "libplaylist.h")]
-	public class Writer {
+	[CCode (cheader_filename = "libplaylist.h")]
+	public class Writer : GLib.Object {
 		public Writer (SimpleXml.Node root, string header_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		public void write (string filename);
 	}

@@ -29,29 +29,37 @@ namespace SimpleXml {
 	public const string QUOTE_ESCAPED        = "&quot;";
 	public const string APOSTROPH_ESCAPED    = "&apos;";
 	
-	public class Reader {
+	public class Reader : Object {
 		// simple xml reader that fits with vala more than libxml 
 		// TODO: Implement async reading
 		private string? xml_string = null;
-		private string filename;
+		private File file;
 		private GLib.MappedFile? mapped_file = null;
 
 
 		private char* begin;
 		private char* current;
 		private char* end;
+		
+		private bool parse_from_string = false;
+		private bool locally_buffered = false;
 
 		private string name;
 
 		private HashTable<string, string> attributes = new HashTable<string, string>(str_hash, str_equal);
 		private bool empty_element;
 	
+		public signal void started();
+		public signal void finished();
+		
 		private enum TokenType {
 			NONE,
 			START_ELEMENT,
 			END_ELEMENT,
+			EMPTY_ELEMENT,
 			TEXT,
 			ERROR,
+			NOTHING,
 			EOF;
 		}
 
@@ -62,21 +70,9 @@ namespace SimpleXml {
 
 		public Node root;
 
-		public Reader(string filename) {
-			assert(filename != null);
-			this.filename = filename;
-			File f = File.new_for_commandline_arg(filename);
-			File curr = File.new_for_commandline_arg(Environment.get_current_dir());
-			string rel_path = curr.get_relative_path(f);
-			try {
-				mapped_file = new MappedFile("./" + rel_path, false);
-				begin = mapped_file.get_contents();
-				end = begin + mapped_file.get_length();
-				current = begin;
-			}
-			catch(FileError e) {
-				stderr.printf("Unable to map file `%s': %s".printf(filename, e.message));
-			}
+		public Reader(File file) {
+			assert(file != null);
+			this.file = file;
 		}
 	
 		public Reader.from_string(string? xml_string) {
@@ -85,21 +81,184 @@ namespace SimpleXml {
 			begin = this.xml_string;
 			end = begin + this.xml_string.size();
 			current = begin;
+			parse_from_string = true;
 		}
+		
+	private File? buffer_locally() {
+		bool buf = false;
+		File dest;
+		locally_buffered = true;
+		var rnd = new Rand();
+		try {
+			string tmp_dir = Environment.get_tmp_dir();
+			dest = File.new_for_path(GLib.Path.build_filename(tmp_dir, ".simple_xml", file.get_basename() + rnd.next_int().to_string()));
+			if(!dest.get_parent().query_exists(null))
+				dest.get_parent().make_directory_with_parents(null);
+			
+			buf = this.file.copy(dest, 
+			                     FileCopyFlags.OVERWRITE, 
+			                     null, 
+			                     null); 
+		}
+		catch(GLib.Error e) {
+			print("ERROR: %s\n", e.message);
+			return null;
+		}
+		return dest;
+	}
 
-		public void read(bool case_sensitive = true) {
+	private async File? buffer_locally_asyn() {
+		bool buf = false;
+		File dest;
+		locally_buffered = true;
+		var rnd = new Rand();
+		try {
+			string tmp_dir = Environment.get_tmp_dir();
+			dest = File.new_for_path(GLib.Path.build_filename(tmp_dir, ".simple_xml", file.get_basename() + rnd.next_int().to_string()));
+			if(!dest.get_parent().query_exists(null))
+				dest.get_parent().make_directory_with_parents(null);
+
+			buf = yield file.copy_async(dest, 
+			                            FileCopyFlags.OVERWRITE, 
+			                            Priority.DEFAULT, 
+			                            null, 
+			                            null); 
+		}
+		catch(GLib.Error e) {
+			print("ERROR: %s\n", e.message);
+			return null;
+		}
+		return dest;
+	}
+
+		private void load_markup_file() {
+			
+			if(!file.has_uri_scheme("file"))
+				file = buffer_locally();
+			
+			File curr = File.new_for_commandline_arg(Environment.get_current_dir());
+			string rel_path = curr.get_relative_path(file);
+			try {
+				mapped_file = new MappedFile("./" + rel_path, false);
+				begin = mapped_file.get_contents();
+				end = begin + mapped_file.get_length();
+				current = begin;
+			}
+			catch(FileError e) {
+				stderr.printf("Unable to map file `%s': %s".printf(file.get_uri(), e.message));
+			}
+		}
+	
+		private async void load_markup_file_asyn() {
+			
+			if(!file.has_uri_scheme("file"))
+				file = yield buffer_locally_asyn();
+			
+			File curr = File.new_for_commandline_arg(Environment.get_current_dir());
+//			string rel_path = curr.get_relative_path(file);
+			try {
+				mapped_file = new MappedFile(file.get_path(), false);//("./" + rel_path, false);
+				begin = mapped_file.get_contents();
+				end = begin + mapped_file.get_length();
+				current = begin;
+			}
+			catch(FileError e) {
+				stderr.printf("Unable to map file `%s': %s".printf(file.get_uri(), e.message));
+			}
+		}
+	
+		public void read(bool case_sensitive = true, Cancellable? cancellable = null) {
+			if(!parse_from_string)
+				load_markup_file();
+
 			//TODO: error handling
+			started();
 			Token token;
 			TokenType tt;
 			root = new Node(null);
 			Node current_node = root;
-			while((tt = this.read_token(out token)) != Reader.TokenType.EOF) {
+			while((tt = this.read_token(out token, case_sensitive)) != Reader.TokenType.EOF) {
+				if(cancellable != null && cancellable.is_cancelled())
+					break;
 				if(tt == Reader.TokenType.START_ELEMENT) {
 					assert(token.end > token.begin + 1);
 					Node n = new Node(get_nodename(token.begin + 1, token.end));
 
 					foreach(string s in attributes.get_keys()) //TODO copy htable ?
 						n.attributes.insert(s, get_attribute(s));
+
+					current_node.append_child(n);
+					current_node = n;
+				}
+				if(tt == Reader.TokenType.END_ELEMENT) {
+					//verify that end element has the same name as start
+					// TODO: handle empty element
+					// TODO: handle unnamed node endings
+//					assert(token.end - 1 > token.begin + 2);
+//					string? end_element_name = get_nodename(token.begin + 2, token.end);
+//					//print("current_node.name: %s ; end_element_name: %s\n", current_node.name, end_element_name);
+//					if(case_sensitive)
+//						if(current_node.name != end_element_name) {
+//							root = null;
+//							print("--- Exit with errors. ---\n");
+//						}
+//					else
+//						if(current_node.name.down() != end_element_name.down()) {
+//							root = null;
+//							print("--- Exit with errors. ---\n");
+//						}
+//						assert(current_node.name.down() == end_element_name.down());
+					
+					//one level up in the hierarchy
+					if(current_node.parent != null) {
+						current_node = current_node.parent;
+					}
+				}
+				if(tt == Reader.TokenType.TEXT) {
+					current_node.text = unescape_text(get_text(token.begin, token.end));
+				}
+				if(tt == Reader.TokenType.NOTHING) {
+					//do nothing
+				}
+				if(tt == Reader.TokenType.ERROR) {
+					current_node = null;
+					root = null;
+					print("--- Exit with errors. ---\n");
+					break;
+				}
+			}
+			if(locally_buffered)
+				remove_locally_buffered_file(); //cleanup
+			finished();
+		}
+
+		public async void read_asyn(bool case_sensitive = true, Cancellable? cancellable = null) {
+			if(!parse_from_string)
+				yield load_markup_file_asyn();
+			//TODO: error handling
+			started();
+			Token token;
+			TokenType tt;
+			root = new Node(null);
+			Node current_node = root;
+			while(true) {
+				tt = yield this.read_token_asyn(out token, case_sensitive);
+				if(tt == Reader.TokenType.EOF)
+					break;
+				
+				if(cancellable != null && cancellable.is_cancelled()){
+					current_node = null;
+					root = null;
+					print("--- cancelled ---\n");
+					break;
+				}
+				if(tt == Reader.TokenType.START_ELEMENT) {
+					assert(token.end > token.begin + 1);
+					string nn = get_nodename(token.begin + 1, token.end);
+					Node n = new Node((case_sensitive ? nn : nn.down()));
+					//print("node name: %s\n", nn);
+					foreach(string s in attributes.get_keys()) //TODO copy htable ?
+						n.attributes.insert((case_sensitive ? s : s.down()), get_attribute(s));
 
 					current_node.append_child(n);
 					current_node = n;
@@ -138,8 +297,30 @@ namespace SimpleXml {
 					break;
 				}
 			}
+			Idle.add( () => {
+				finished();
+				return false;
+			});
+
+			if(locally_buffered) {
+				Idle.add( () => {
+					remove_locally_buffered_file(); //cleanup
+					return false;
+				});
+			}
 		}
 
+		private void remove_locally_buffered_file() {
+			if(locally_buffered) {
+				try {
+					file.delete(null);
+				}
+				catch(Error e) {
+					print("Error cleaning up: %s\n", e.message);
+				}
+			}
+		}
+		
 		private inline string? get_attribute(string attr) {
 			return attributes.lookup(attr);
 		}
@@ -204,7 +385,11 @@ namespace SimpleXml {
 			return((string) begin_name).ndup(this.current - begin_name);
 		}
 
-		private TokenType read_token(out Token token) {
+		private async TokenType read_token_asyn(out Token token, bool case_sensitive) {
+			return read_token(out token, case_sensitive);
+		}
+		
+		private TokenType read_token(out Token token, bool case_sensitive) {
 			//based on function from vala markup reader
 			token = new Token();
 			attributes.remove_all();
@@ -247,7 +432,7 @@ namespace SimpleXml {
 							this.current++;
 						}
 						//TODO: Also store comment
-						return read_token(out token);
+						return TokenType.NOTHING;
 					}
 				} 
 				else if(current[0] == '/') {
@@ -258,7 +443,7 @@ namespace SimpleXml {
 					token.end = token.begin + name.size() + 1;
 					token.begin -= 2;
 					if(this.current >= this.end || this.current[0] != '>') {
-						stderr.printf("Error: Invalid xml file! Expected '>'\n");
+						stderr.printf("Error end element: Invalid xml file! Expected '>'\n");
 						root = null;
 						return TokenType.ERROR;
 					}
@@ -272,24 +457,26 @@ namespace SimpleXml {
 						string attr_name = read_name();
 						if(this.current >= this.end || this.current[0] != '=') {
 							// error
-							stderr.printf("Error: Invalid xml file! \n");
+							stderr.printf("Error start element 1: Invalid xml file! \n");
 							root = null;
 							return TokenType.ERROR;
 						}
 						this.current++;
+						skip_space();
 						// FIXME allow single quotes
-						if(this.current >= this.end || this.current[0] != '"') {
+						if(this.current >= this.end || (this.current[0] != '"' && this.current[0] != '\'')) {
 							// error
-							stderr.printf("Error: Invalid xml file! \n");
+							stderr.printf("Error start element 2: Invalid xml file! \n");
 							root = null;
 							return TokenType.ERROR;
 						}
+						char quot_character = this.current[0];
 						this.current++;
 						char* attr_begin = this.current;
-						while(this.current < this.end && current[0] != '"') {
-							unichar u =((string) this.current).get_char_validated((long)(this.end - this.current));
-							if(u !=(unichar)(-1)) {
-								this.current += u.to_utf8(null);
+						while(this.current < this.end && current[0] != quot_character) {
+							unichar uy =((string) this.current).get_char_validated((long)(this.end - this.current));
+							if(uy !=(unichar)(-1)) {
+								this.current += uy.to_utf8(null);
 							} 
 							else {
 								stderr.printf("invalid UTF-8 character");
@@ -314,7 +501,7 @@ namespace SimpleXml {
 						empty_element = false;
 					}
 					if(this.current >= this.end || this.current[0] != '>') {
-						stderr.printf("Error: Invalid xml file! \n");
+						stderr.printf("Error 4: Invalid xml file! \n");
 						root = null;
 						return TokenType.ERROR;
 					}
@@ -325,9 +512,9 @@ namespace SimpleXml {
 				skip_space();
 				char* text_begin = current;
 				while(this.current < this.end && this.current[0] != '<') {
-					unichar u =((string) this.current).get_char_validated((long)(this.end - this.current));
-					if(u !=(unichar)(-1)) {
-						this.current += u.to_utf8(null);
+					unichar ux =((string) this.current).get_char_validated((long)(this.end - this.current));
+					if(ux !=(unichar)(-1)) {
+						this.current += ux.to_utf8(null);
 					} 
 					else {
 						stderr.printf("invalid UTF-8 character\n");
@@ -337,7 +524,7 @@ namespace SimpleXml {
 					// no text
 					// read next token
 					print("--- no text in node ---\n");
-					return read_token(out token);
+					return TokenType.NOTHING;
 				}
 				type = TokenType.TEXT;
 			}
@@ -351,7 +538,7 @@ namespace SimpleXml {
 
 
 
-	public class Writer {
+	public class Writer : Object {
 		// simple xml writer that fits with vala more than libxml 
 		// TODO: Implement async writing
 

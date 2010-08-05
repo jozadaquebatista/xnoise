@@ -223,26 +223,22 @@ struct _PlWriterClass {
 };
 
 struct _SimpleXmlReader {
-	GTypeInstance parent_instance;
-	volatile int ref_count;
+	GObject parent_instance;
 	SimpleXmlReaderPrivate * priv;
 	SimpleXmlNode* root;
 };
 
 struct _SimpleXmlReaderClass {
-	GTypeClass parent_class;
-	void (*finalize) (SimpleXmlReader *self);
+	GObjectClass parent_class;
 };
 
 struct _SimpleXmlWriter {
-	GTypeInstance parent_instance;
-	volatile int ref_count;
+	GObject parent_instance;
 	SimpleXmlWriterPrivate * priv;
 };
 
 struct _SimpleXmlWriterClass {
-	GTypeClass parent_class;
-	void (*finalize) (SimpleXmlWriter *self);
+	GObjectClass parent_class;
 };
 
 struct _SimpleXmlNode {
@@ -402,12 +398,6 @@ gboolean pl_writer_get_overwrite_if_exists (PlWriter* self);
 #define SIMPLE_XML_LOWER_THAN_ESCAPED "&lt;"
 #define SIMPLE_XML_QUOTE_ESCAPED "&quot;"
 #define SIMPLE_XML_APOSTROPH_ESCAPED "&apos;"
-gpointer simple_xml_reader_ref (gpointer instance);
-void simple_xml_reader_unref (gpointer instance);
-GParamSpec* simple_xml_param_spec_reader (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void simple_xml_value_set_reader (GValue* value, gpointer v_object);
-void simple_xml_value_take_reader (GValue* value, gpointer v_object);
-gpointer simple_xml_value_get_reader (const GValue* value);
 GType simple_xml_reader_get_type (void);
 gpointer simple_xml_node_ref (gpointer instance);
 void simple_xml_node_unref (gpointer instance);
@@ -416,17 +406,13 @@ void simple_xml_value_set_node (GValue* value, gpointer v_object);
 void simple_xml_value_take_node (GValue* value, gpointer v_object);
 gpointer simple_xml_value_get_node (const GValue* value);
 GType simple_xml_node_get_type (void);
-SimpleXmlReader* simple_xml_reader_new (const char* filename);
-SimpleXmlReader* simple_xml_reader_construct (GType object_type, const char* filename);
+SimpleXmlReader* simple_xml_reader_new (GFile* file);
+SimpleXmlReader* simple_xml_reader_construct (GType object_type, GFile* file);
 SimpleXmlReader* simple_xml_reader_new_from_string (const char* xml_string);
 SimpleXmlReader* simple_xml_reader_construct_from_string (GType object_type, const char* xml_string);
-void simple_xml_reader_read (SimpleXmlReader* self, gboolean case_sensitive);
-gpointer simple_xml_writer_ref (gpointer instance);
-void simple_xml_writer_unref (gpointer instance);
-GParamSpec* simple_xml_param_spec_writer (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void simple_xml_value_set_writer (GValue* value, gpointer v_object);
-void simple_xml_value_take_writer (GValue* value, gpointer v_object);
-gpointer simple_xml_value_get_writer (const GValue* value);
+void simple_xml_reader_read (SimpleXmlReader* self, gboolean case_sensitive, GCancellable* cancellable);
+void simple_xml_reader_read_asyn (SimpleXmlReader* self, gboolean case_sensitive, GCancellable* cancellable, GAsyncReadyCallback _callback_, gpointer _user_data_);
+void simple_xml_reader_read_asyn_finish (SimpleXmlReader* self, GAsyncResult* _res_);
 GType simple_xml_writer_get_type (void);
 SimpleXmlWriter* simple_xml_writer_new (SimpleXmlNode* root, const char* header_string);
 SimpleXmlWriter* simple_xml_writer_construct (GType object_type, SimpleXmlNode* root, const char* header_string);

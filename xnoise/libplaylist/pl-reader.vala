@@ -66,13 +66,14 @@ namespace Pl {
 		
 		public Result read(string list_uri, Cancellable? cancellable = null) throws ReaderError {
 			Result ret = Result.UNHANDLED;
+			read_in_progress_mutex.lock();
 			_playlist_uri = list_uri;
 			file = File.new_for_uri(_playlist_uri);
 			
-			read_in_progress_mutex.lock();
 			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri, ref _ptype);
 			
 			if(plfile_reader == null) {
+				read_in_progress_mutex.unlock();
 				return Result.ERROR;
 			}
 			
@@ -84,19 +85,20 @@ namespace Pl {
 
 		public async Result read_asyn(string list_uri, Cancellable? cancellable = null) throws ReaderError {
 			Result ret = Result.UNHANDLED;
+			read_in_progress_mutex.lock();
 			_playlist_uri = list_uri;
-			file = File.new_for_uri(_playlist_uri);
+			this.file = File.new_for_commandline_arg(_playlist_uri);
 
-			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri, ref _ptype); // TODO async version
+			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri, ref _ptype); 
 			plfile_reader.finished.connect( (s, u) => {
 				this.finished(u);
 			});
 			
 			if(plfile_reader == null) {
+				read_in_progress_mutex.unlock();
 				return Result.ERROR;
 			}
 
-			read_in_progress_mutex.lock();
 //			ret = yield this.read_async_internal();
 			this.read_async_internal.begin();
 			read_in_progress_mutex.unlock();
@@ -119,6 +121,7 @@ namespace Pl {
 
 		private async Result read_async_internal() {
 			try {
+				assert(file != null);
 				_data_collection = yield plfile_reader.read_asyn(file);
 			}
 			catch(InternalReaderError e) {
