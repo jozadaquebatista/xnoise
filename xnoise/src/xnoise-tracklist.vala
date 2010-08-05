@@ -57,6 +57,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private bool hide_timer_set = false;
 	private const uint HIDE_TIMEOUT = 1000;
 	private HashTable<string,double?> relative_column_sizes;
+	private int n_columns = 0;
 	
 	public bool column_length_visible {
 		get {
@@ -860,20 +861,27 @@ public class Xnoise.TrackList : TreeView, IParams {
 		
 		relative_column_sizes = new HashTable<string,double?>(str_hash, str_equal);
 		this.columns_changed.connect(() => {
+			bool new_column = false;
 			var columns = this.get_columns();
 			foreach(TreeViewColumn c in columns) {
 				if(c == null) continue;
-				if(relative_column_sizes.lookup(c.title) == null && c.title != "" && c.resizable) {
-					double rel_size = par.get_double_value("relative_size_" + c.title + "_column");
-					relative_column_sizes.insert(c.title, rel_size);
-					((TextColumn)c).resized.connect(on_column_resized);
-					handle_resize();
+				if(relative_column_sizes.lookup(c.title) == null && c.title != "") {
+					if(c.resizable) {
+						double rel_size = par.get_double_value("relative_size_" + c.title + "_column");
+						relative_column_sizes.insert(c.title, rel_size);
+						((TextColumn)c).resized.connect(on_column_resized);
+					}
+					new_column = true;
 				}
-				
 				//connect to visibility property change
 				//connect to resizable property change
 				//override this class' insert_column with this code			
 			}
+			if(new_column)
+				n_columns++;
+			else
+				n_columns--;
+			handle_resize();
 		});
 		
 		this.show.connect(() => {
@@ -1027,7 +1035,17 @@ public class Xnoise.TrackList : TreeView, IParams {
 				}
 			}
 			
-			return w - (scrollbar_w + xn.main_window.hpaned.position);		
+			Value v = Value(typeof(int));
+			((TreeView)this).style_get_property("vertical-separator", v);
+			int vertical_separator_size = v.get_int();
+			
+			print("|%i|%i", w - (scrollbar_w + 
+			            xn.main_window.hpaned.position + 
+			            n_columns * vertical_separator_size), n_columns);
+			
+			return w - (scrollbar_w + 
+			            xn.main_window.hpaned.position);/* + 
+			            n_columns * vertical_separator_size);*/		
 		}
 	}
 	
