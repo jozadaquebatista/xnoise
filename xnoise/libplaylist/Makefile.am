@@ -34,7 +34,9 @@ libplaylist_la_SOURCES = \
 	pl-data-collection.vala \
 	pl-reader.vala \
 	pl-writer.vala \
-	simple-xml.vala \
+	simple-xml-reader.vala \
+	simple-xml-writer.vala \
+	simple-xml-node.vala \
 	ASX/pl-asx-file-reader.vala \
 	ASX/pl-asx-file-writer.vala \
 	WPL/pl-wpl-file-reader.vala \
