@@ -51,7 +51,7 @@ namespace Pl {
 					//Process file only if it's valid m3u play list
 					if(line.has_prefix("#M3U") || line.has_prefix("#EXTM3U")) {
 						// Read lines until end of file(null) is reached
-						while((line = in_stream.read_line(null, null)) != null && line != "#EXT-X-ENDLIST") {
+						while((line = in_stream.read_line(null, null)) != null && line.strip() != "#EXT-X-ENDLIST") {
 							if(line._strip().size() == 0)
 								continue;
 								
@@ -147,6 +147,89 @@ namespace Pl {
 			DataCollection data_collection = new DataCollection();
 			this.file = _file;
 			set_base_path();
+			size_t len;
+			if(!file.query_exists(null)) {
+				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
+				return data_collection;
+			}
+
+			try {
+				var in_stream = new DataInputStream(file.read(null));
+				string line = yield in_stream.read_line_async(Priority.DEFAULT, null, out len);
+				//public async string? read_line_async (int io_priority, GLib.Cancellable? cancellable = null, out size_t? length = null) throws GLib.Error;
+
+				//Read header => #M3U o #EXTM3U
+				if(line != null) {
+
+					//Process file only if it's valid m3u play list
+					if(line.has_prefix("#M3U") || line.has_prefix("#EXTM3U")) {
+						// Read lines until end of file(null) is reached
+						while(true) {
+							line = yield in_stream.read_line_async(Priority.DEFAULT, null, out len);
+							if(line == null || line.strip() == "#EXT-X-ENDLIST")
+								break;
+							
+							if(line._strip().size() == 0)
+								continue;
+							
+							lines_buf += line._strip();
+						}
+						Data d = null;
+						for(int i = 0; i < lines_buf.length && lines_buf[i] != null;i++) {
+							string title = "";
+							string adress = "";
+							if(line_is_comment(ref lines_buf[i])) {
+								if(!line_is_extinf(ref lines_buf[i], ref title)) {
+									continue;
+								}
+								else {
+									// here it's an extinf
+									// look into the following lines
+									for(int j = i + 1; j < lines_buf.length && lines_buf[j] != null; j++) {
+										if(line_is_comment(ref lines_buf[j])) {
+											//is comment
+											if(line_is_extinf(ref lines_buf[j], ref title)) {
+												//is extinf, so it is used and adress is deleted
+												i = j;
+												adress = "";
+												break;
+											}
+										}
+										else {
+											adress = lines_buf[j];
+											d = new Data();
+											i = j;
+											break;
+										}
+									}
+								}
+							}
+							else {
+								//then it's an adress
+								adress = lines_buf[i];
+								d = new Data();
+							}
+							if(adress != "") {
+								TargetType tt;
+								File tmp = get_file_for_location(adress, ref base_path, out tt);
+								d.add_field(Data.Field.URI, tmp.get_uri());
+								d.target_type = tt;
+								if(title != "") {
+									d.add_field(Data.Field.TITLE, title);
+								}
+								data_collection.append(d);
+							}
+						}
+					}
+				}
+			}
+			catch(GLib.Error e) {
+				print("%s", e.message);
+			}
+			Idle.add( () => {
+				this.finished(file.get_uri());
+				return false;
+			});
 			return data_collection;
 		}
 		

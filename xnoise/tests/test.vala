@@ -1006,6 +1006,50 @@ void xml_async_finished_cb01(SimpleXml.Reader sender) {
 }
 
 
+
+void test_m3u_async_reading() {
+	File f = File.new_for_path("./playlist-examples/test_m3u.m3u");
+	var asxreader = new Pl.Reader();
+	asxreader.finished.connect(m3u_async_finished_cb01);
+	asxreader.ref(); //prevent destruction
+	try {
+		asxreader.read_asyn.begin(f.get_uri());
+		
+	}
+	catch(Error e) {
+		print("m3u async test error reading\n");
+		return;
+	}
+	return;// uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
+}
+void m3u_async_finished_cb01(Pl.Reader sender, string pluri) {
+//	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
+	var uris = sender.get_found_uris();
+	if(uris[0] == "http://media.example.com/entire.ts" && sender.get_number_of_entries() == 1)
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+	sender.unref();
+	ml.quit();
+	return;
+}
+
+//bool test_m3u_reading() {
+//	File f = File.new_for_path("./playlist-examples/test_m3u.m3u");
+//	var reader = new Pl.Reader();
+//	try {
+//		reader.read(f.get_uri(), null);
+//	}
+//	catch(Error e) {
+//		print("m3u test error reading\n");
+//		return false;
+//	}
+//	var uris = reader.get_found_uris();
+//	//print("Size: %s\n", uris.length.to_string());
+//	return uris[0] == "http://media.example.com/entire.ts" && reader.get_number_of_entries() == 1;
+//}
+
+
 void main() {
 	print("\n");
 	// CREATE READER
@@ -1252,5 +1296,9 @@ void main() {
 	ml = new MainLoop(); // reuse mainloop for every async test
 	ml.run();
 
+	print("test m3u async reading:");
+	test_m3u_async_reading();
+	ml = new MainLoop(); // reuse mainloop for every async test
+	ml.run();
 }
 
