@@ -25,7 +25,7 @@ namespace Pl {
 	// base class for all playlist filewriter implementations
 	private class Xspf.FileWriter : AbstractFileWriter {
 	
-		private DataCollection data_collection;
+		private ItemCollection data_collection;
 		private File file;
 		private bool _overwrite_if_exists = true;
 		
@@ -39,7 +39,7 @@ namespace Pl {
 			_overwrite_if_exists = overwrite;
 		}
 
-		public override Result write(File _file, DataCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
+		public override Result write(File _file, ItemCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
 			this.file = _file;
 			set_base_path();
 			this.data_collection = _data_collection;
@@ -56,7 +56,7 @@ namespace Pl {
 					data_stream.put_string("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">\n", null);
 					data_stream.put_string("  <trackList>\n", null);
 					
-					foreach(Data d in data_collection) {
+					foreach(Item d in data_collection) {
 						string? tmp_location = null;
 						
 						// find out the type of the target to save (uri, absolute path or relative to the playlist)
@@ -98,7 +98,7 @@ namespace Pl {
 			return Result.SUCCESS;
 		}
 		
-		public override async Result write_asyn(File _file, DataCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
+		public override async Result write_asyn(File _file, ItemCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
 			this.file = _file;
 			set_base_path();
 			this.data_collection = _data_collection;

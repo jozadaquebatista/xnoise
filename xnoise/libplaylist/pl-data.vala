@@ -20,9 +20,9 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-// an instance of this Data object represents one entry in the list. An entry contains one or more data fields, at least the uri to the target
+// an instance of this Item object represents one entry in the list. An entry contains one or more data fields, at least the uri to the target
 namespace Pl {
-	public class Data {
+	public class Item {
 		private HashTable<Field, string> htable = null;
 		
 		public enum Field {
@@ -42,11 +42,11 @@ namespace Pl {
 		public TargetType target_type { get; set; default = TargetType.URI; }
 		public string? base_path      { get; set; default = null; }
 		
-		public Data() {
+		public Item() {
 			htable = new HashTable<Field, string>(direct_hash, direct_equal);
 		}
 		
-		~Data() {
+		~Item() {
 			htable = null;
 		}
 		

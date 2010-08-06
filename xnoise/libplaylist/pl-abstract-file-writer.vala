@@ -30,8 +30,8 @@ namespace Pl {
 		// relative paths from playlists are turnedinto absolute paths, by using base path
 		protected string base_path;
 		
-		public abstract Result write(File file, DataCollection data_collection, Cancellable? cancellable = null) throws InternalWriterError;
-		public abstract async Result write_asyn(File file, DataCollection data_collection, Cancellable? cancellable = null) throws InternalWriterError;
+		public abstract Result write(File file, ItemCollection data_collection, Cancellable? cancellable = null) throws InternalWriterError;
+		public abstract async Result write_asyn(File file, ItemCollection data_collection, Cancellable? cancellable = null) throws InternalWriterError;
 		
 		protected abstract void set_base_path();
 	}

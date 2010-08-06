@@ -26,8 +26,8 @@ namespace Pl {
 	private class Pls.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override DataCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			DataCollection data_collection = new DataCollection();
+		public override ItemCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			ItemCollection data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
 			if(!file.query_exists(null)) { 
@@ -45,7 +45,7 @@ namespace Pl {
 					if(!line.has_prefix( "[playlist]")) {
 						return data_collection;
 					}
-					Data d = null;
+					Item d = null;
 					while((line = in_stream.read_line (null, null)) != null) {
 						
 						//Ignore blank line
@@ -72,7 +72,7 @@ namespace Pl {
 					}
 					
 					for(int i = 1; i <= numberofentries; i++) {
-						d = new Data();
+						d = new Item();
 						for(int j = 0; j < line_buf.length; j++) {
 							if(line_buf[j].has_prefix("File" + i.to_string())) {
 								if(line_buf[j].contains("=")) {
@@ -83,7 +83,7 @@ namespace Pl {
 										break;
 									TargetType tt;
 									File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
-									d.add_field(Data.Field.URI, tmp.get_uri());
+									d.add_field(Item.Field.URI, tmp.get_uri());
 									d.target_type = tt;
 									break;
 								}
@@ -102,7 +102,7 @@ namespace Pl {
 									if(begin >= end)
 										break;
 									line_buf[j] = ((string)begin)._strip();
-									d.add_field(Data.Field.TITLE, line_buf[j]);
+									d.add_field(Item.Field.TITLE, line_buf[j]);
 									break;
 								}
 								else {
@@ -122,8 +122,8 @@ namespace Pl {
 			return data_collection;
 		}
 
-		public override async DataCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			DataCollection data_collection = new DataCollection();
+		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			ItemCollection data_collection = new ItemCollection();
 			this.file = _file;
 			size_t a;
 			char* begin;
@@ -144,7 +144,7 @@ namespace Pl {
 					if(!line.has_prefix("[playlist]")) {
 						return data_collection;
 					}
-					Data d = null;
+					Item d = null;
 					while(in_stream != null && (line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, out a)) != null) {
 						//Ignore blank line
 						if(line._strip().size() == 0) {
@@ -168,7 +168,7 @@ namespace Pl {
 					}
 					
 					for(int i = 1; i <= numberofentries; i++) {
-						d = new Data();
+						d = new Item();
 						for(int k = 0; k < line_buf.length; k++) {
 							if(line_buf[k].has_prefix("File" + i.to_string())) {
 								if(line_buf[k].contains("=")) {
@@ -179,7 +179,7 @@ namespace Pl {
 										break;
 									TargetType tt;
 									File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
-									d.add_field(Data.Field.URI, tmp.get_uri());
+									d.add_field(Item.Field.URI, tmp.get_uri());
 									d.target_type = tt;
 									break;
 								}
@@ -198,7 +198,7 @@ namespace Pl {
 									if(begin >= end)
 										break;
 									line_buf[j] = ((string)begin)._strip();
-									d.add_field(Data.Field.TITLE, line_buf[j]);
+									d.add_field(Item.Field.TITLE, line_buf[j]);
 									break;
 								}
 								else {

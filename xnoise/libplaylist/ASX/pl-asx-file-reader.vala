@@ -53,12 +53,12 @@ namespace Pl {
 			return xml;
 		}
 
-		private DataCollection parse(DataCollection data_collection,ref string base_path = "",string data) {
+		private ItemCollection parse(ItemCollection data_collection,ref string base_path = "",string data) {
 			string iter_name;
 			Xml.Doc* xmlDoc = Parser.parse_memory(data, (int)data.size());
 			Xml.Node* rootNode = xmlDoc->get_root_element();
 
-			Pl.Data d = null;
+			Pl.Item d = null;
 			for(Xml.Node* iter = rootNode->children; iter != null; iter = iter->next) {
 				if(iter->type != ElementType.ELEMENT_NODE) {
 					continue;
@@ -73,16 +73,16 @@ namespace Pl {
 									case "ref":
 										string href = iter_in->get_prop("href");
 										//print("URL = '%s'\n",href);
-										d = new Pl.Data();
+										d = new Pl.Item();
 										TargetType tt;
 										File tmp = get_file_for_location(href, ref base_path, out tt);
 										d.target_type = tt;
-										d.add_field(Data.Field.URI, tmp.get_uri());
+										d.add_field(Item.Field.URI, tmp.get_uri());
 										data_collection.append(d);
 										break;
 									case "title":
 										//print("Title = '%s'\n",iter_in->get_content());
-										//d.add_field(Data.Field.TITLE,iter_in->get_content());
+										//d.add_field(Item.Field.TITLE,iter_in->get_content());
 										break;
 									case "author":
 										//print("Autor = '%s'\n",iter_in->get_content());
@@ -106,9 +106,9 @@ namespace Pl {
 			return data_collection;
 		}
 
-		//public DataCollection read_xml(File _file) throws InternalReaderError {
-		public override DataCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			DataCollection data_collection = new DataCollection();
+		//public ItemCollection read_xml(File _file) throws InternalReaderError {
+		public override ItemCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			ItemCollection data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
 			
@@ -137,9 +137,9 @@ namespace Pl {
 			return data_collection;
 		}
 
-		//public override DataCollection read(File _file) throws InternalReaderError {
-		public DataCollection read_old(File _file) throws InternalReaderError {
-			DataCollection data_collection = new DataCollection();
+		//public override ItemCollection read(File _file) throws InternalReaderError {
+		public ItemCollection read_old(File _file) throws InternalReaderError {
+			ItemCollection data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
 			
@@ -153,7 +153,7 @@ namespace Pl {
 			try {
 				var in_stream = new DataInputStream(file.read(null));
 				string line;
-				Data d = null;
+				Item d = null;
 				while((line = in_stream.read_line(null, null)) != null) {
 					char* begin;
 					char* end;
@@ -165,7 +165,7 @@ namespace Pl {
 						continue;
 					}
 					else if(line.contains("<entry>")) {
-						d = new Data();
+						d = new Item();
 						entry_on = true;
 						continue;
 					}
@@ -190,14 +190,14 @@ namespace Pl {
 								File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
 								d.target_type = tt;
 								//print("\nasx read uri: %s\n", tmp.get_uri());
-								d.add_field(Data.Field.URI, tmp.get_uri());
+								d.add_field(Item.Field.URI, tmp.get_uri());
 							}
 							else if(line.contains("<title>")) {
 								begin = line.str("<title>");
 								begin += "<title>".size();
 								end = line.rstr("</title>");
 								*end = '\0';
-								d.add_field(Data.Field.TITLE, (string)begin);
+								d.add_field(Item.Field.TITLE, (string)begin);
 							}
 						}
 					}
@@ -210,8 +210,8 @@ namespace Pl {
 		}
 
 
-		public override async DataCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			var data_collection = new DataCollection();
+		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			var data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
 			var mr = new SimpleXml.Reader(file);
@@ -229,7 +229,7 @@ namespace Pl {
 			foreach(SimpleXml.Node nd in asx_base) {
 				if(nd.name == "entry") {
 
-					Data d = new Data();
+					Item d = new Item();
 
 					unowned SimpleXml.Node tmp = nd.get_child_by_name("ref");
 					if(tmp == null)
@@ -244,14 +244,14 @@ namespace Pl {
 						File f = get_file_for_location(target._strip(), ref base_path, out tt);
 						d.target_type = tt;
 						//print("\nasx read uri: %s\n", f.get_uri());
-						d.add_field(Data.Field.URI, f.get_uri());
+						d.add_field(Item.Field.URI, f.get_uri());
 					}
 					else
 						continue;
 			
 					tmp = nd.get_child_by_name("title");
 					if(tmp != null && tmp.has_text()) {
-						d.add_field(Data.Field.TITLE, tmp.text);
+						d.add_field(Item.Field.TITLE, tmp.text);
 					}
 					
 					data_collection.append(d);
@@ -264,10 +264,10 @@ namespace Pl {
 			return data_collection;
 		}
 
-//		private DataCollection data_collection;
+//		private ItemCollection data_collection;
 		
-//		public override async DataCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-//			var data_collection = new DataCollection();
+//		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+//			var data_collection = new ItemCollection();
 //			this.file = _file;
 //			set_base_path();
 //			DataInputStream in_stream = null;
@@ -282,7 +282,7 @@ namespace Pl {
 //				print("Error 01!\n");
 //			}
 //			string line = null;
-//			Data d = null;
+//			Item d = null;
 //			try {
 //				while(in_stream != null && (line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, out a)) != null) {
 ////					line = yield di_stream.read_line_async(GLib.Priority.DEFAULT, null, out a);
@@ -296,7 +296,7 @@ namespace Pl {
 //						continue;
 //					}
 //					else if(line.contains("<entry>")) {
-//						d = new Data();
+//						d = new Item();
 //						entry_on = true;
 //						continue;
 //					}
@@ -321,14 +321,14 @@ namespace Pl {
 //								File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
 //								d.target_type = tt;
 //								//print("\nasx read uri: %s\n", tmp.get_uri());
-//								d.add_field(Data.Field.URI, tmp.get_uri());
+//								d.add_field(Item.Field.URI, tmp.get_uri());
 //							}
 //							else if(line.contains("<title>")) {
 //								begin = line.str("<title>");
 //								begin += "<title>".size();
 //								end = line.rstr("</title>");
 //								*end = '\0';
-//								d.add_field(Data.Field.TITLE, (string)begin);
+//								d.add_field(Item.Field.TITLE, (string)begin);
 //							}
 //						}
 //					}
@@ -356,7 +356,7 @@ namespace Pl {
 //				print("Error 01!\n");
 //			}
 //			string line;
-//			Data d = null;
+//			Item d = null;
 //			try {
 //				while(in_stream != null && (line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, out a)) != null) {
 ////					line = yield di_stream.read_line_async(GLib.Priority.DEFAULT, null, out a);
@@ -368,7 +368,7 @@ namespace Pl {
 //						continue;
 //					}
 //					else if(line.contains("<entry>")) {
-//						d = new Data();
+//						d = new Item();
 //						entry_on = true;
 //						continue;
 //					}
@@ -393,14 +393,14 @@ namespace Pl {
 //								File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
 //								d.target_type = tt;
 //								//print("\nasx read uri: %s\n", tmp.get_uri());
-//								d.add_field(Data.Field.URI, tmp.get_uri());
+//								d.add_field(Item.Field.URI, tmp.get_uri());
 //							}
 //							else if(line.contains("<title>")) {
 //								char* begin = line.str("<title>");
 //								begin += "<title>".size();
 //								char* end = line.rstr("</title>");
 //								*end = '\0';
-//								d.add_field(Data.Field.TITLE, (string)begin);
+//								d.add_field(Item.Field.TITLE, (string)begin);
 //							}
 //						}
 //					}

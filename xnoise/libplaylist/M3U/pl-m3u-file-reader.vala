@@ -22,7 +22,6 @@
  */
 
 namespace Pl {
-	// base class for all playlist filereader implementations
 	private class M3u.FileReader : AbstractFileReader {
 		private unowned File file;
 		private string[] lines_buf;
@@ -31,8 +30,8 @@ namespace Pl {
 			lines_buf = {};
 		}
 		
-		public override DataCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			DataCollection data_collection = new DataCollection();
+		public override ItemCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			ItemCollection data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
 			
@@ -57,7 +56,7 @@ namespace Pl {
 								
 							lines_buf += line._strip();
 						}
-						Data d = null;
+						Item d = null;
 						for(int i = 0; i < lines_buf.length && lines_buf[i] != null;i++) {
 							string title = "";
 							string adress = "";
@@ -80,7 +79,7 @@ namespace Pl {
 										}
 										else {
 											adress = lines_buf[j];
-											d = new Data();
+											d = new Item();
 											i = j;
 											break;
 										}
@@ -90,15 +89,15 @@ namespace Pl {
 							else {
 								//then it's an adress
 								adress = lines_buf[i];
-								d = new Data();
+								d = new Item();
 							}
 							if(adress != "") {
 								TargetType tt;
 								File tmp = get_file_for_location(adress, ref base_path, out tt);
-								d.add_field(Data.Field.URI, tmp.get_uri());
+								d.add_field(Item.Field.URI, tmp.get_uri());
 								d.target_type = tt;
 								if(title != "") {
-									d.add_field(Data.Field.TITLE, title);
+									d.add_field(Item.Field.TITLE, title);
 								}
 								data_collection.append(d);
 							}
@@ -143,8 +142,8 @@ namespace Pl {
 			return false;
 		}
 
-		public override async DataCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			DataCollection data_collection = new DataCollection();
+		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			ItemCollection data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
 			size_t len;
@@ -174,7 +173,7 @@ namespace Pl {
 							
 							lines_buf += line._strip();
 						}
-						Data d = null;
+						Item d = null;
 						for(int i = 0; i < lines_buf.length && lines_buf[i] != null;i++) {
 							string title = "";
 							string adress = "";
@@ -197,7 +196,7 @@ namespace Pl {
 										}
 										else {
 											adress = lines_buf[j];
-											d = new Data();
+											d = new Item();
 											i = j;
 											break;
 										}
@@ -207,15 +206,15 @@ namespace Pl {
 							else {
 								//then it's an adress
 								adress = lines_buf[i];
-								d = new Data();
+								d = new Item();
 							}
 							if(adress != "") {
 								TargetType tt;
 								File tmp = get_file_for_location(adress, ref base_path, out tt);
-								d.add_field(Data.Field.URI, tmp.get_uri());
+								d.add_field(Item.Field.URI, tmp.get_uri());
 								d.target_type = tt;
 								if(title != "") {
-									d.add_field(Data.Field.TITLE, title);
+									d.add_field(Item.Field.TITLE, title);
 								}
 								data_collection.append(d);
 							}

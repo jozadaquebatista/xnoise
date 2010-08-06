@@ -19,40 +19,40 @@ G_BEGIN_DECLS
 
 #define PL_TYPE_TARGET_TYPE (pl_target_type_get_type ())
 
-#define PL_TYPE_DATA (pl_data_get_type ())
-#define PL_DATA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PL_TYPE_DATA, PlData))
-#define PL_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PL_TYPE_DATA, PlDataClass))
-#define PL_IS_DATA(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PL_TYPE_DATA))
-#define PL_IS_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PL_TYPE_DATA))
-#define PL_DATA_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PL_TYPE_DATA, PlDataClass))
+#define PL_TYPE_ITEM (pl_item_get_type ())
+#define PL_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PL_TYPE_ITEM, PlItem))
+#define PL_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PL_TYPE_ITEM, PlItemClass))
+#define PL_IS_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PL_TYPE_ITEM))
+#define PL_IS_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PL_TYPE_ITEM))
+#define PL_ITEM_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PL_TYPE_ITEM, PlItemClass))
 
-typedef struct _PlData PlData;
-typedef struct _PlDataClass PlDataClass;
-typedef struct _PlDataPrivate PlDataPrivate;
+typedef struct _PlItem PlItem;
+typedef struct _PlItemClass PlItemClass;
+typedef struct _PlItemPrivate PlItemPrivate;
 
-#define PL_DATA_TYPE_FIELD (pl_data_field_get_type ())
+#define PL_ITEM_TYPE_FIELD (pl_item_field_get_type ())
 
-#define PL_TYPE_DATA_COLLECTION (pl_data_collection_get_type ())
-#define PL_DATA_COLLECTION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PL_TYPE_DATA_COLLECTION, PlDataCollection))
-#define PL_DATA_COLLECTION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PL_TYPE_DATA_COLLECTION, PlDataCollectionClass))
-#define PL_IS_DATA_COLLECTION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PL_TYPE_DATA_COLLECTION))
-#define PL_IS_DATA_COLLECTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PL_TYPE_DATA_COLLECTION))
-#define PL_DATA_COLLECTION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PL_TYPE_DATA_COLLECTION, PlDataCollectionClass))
+#define PL_TYPE_ITEM_COLLECTION (pl_item_collection_get_type ())
+#define PL_ITEM_COLLECTION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PL_TYPE_ITEM_COLLECTION, PlItemCollection))
+#define PL_ITEM_COLLECTION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PL_TYPE_ITEM_COLLECTION, PlItemCollectionClass))
+#define PL_IS_ITEM_COLLECTION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PL_TYPE_ITEM_COLLECTION))
+#define PL_IS_ITEM_COLLECTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PL_TYPE_ITEM_COLLECTION))
+#define PL_ITEM_COLLECTION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PL_TYPE_ITEM_COLLECTION, PlItemCollectionClass))
 
-typedef struct _PlDataCollection PlDataCollection;
-typedef struct _PlDataCollectionClass PlDataCollectionClass;
-typedef struct _PlDataCollectionPrivate PlDataCollectionPrivate;
+typedef struct _PlItemCollection PlItemCollection;
+typedef struct _PlItemCollectionClass PlItemCollectionClass;
+typedef struct _PlItemCollectionPrivate PlItemCollectionPrivate;
 
-#define PL_DATA_COLLECTION_TYPE_ITERATOR (pl_data_collection_iterator_get_type ())
-#define PL_DATA_COLLECTION_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PL_DATA_COLLECTION_TYPE_ITERATOR, PlDataCollectionIterator))
-#define PL_DATA_COLLECTION_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PL_DATA_COLLECTION_TYPE_ITERATOR, PlDataCollectionIteratorClass))
-#define PL_DATA_COLLECTION_IS_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PL_DATA_COLLECTION_TYPE_ITERATOR))
-#define PL_DATA_COLLECTION_IS_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PL_DATA_COLLECTION_TYPE_ITERATOR))
-#define PL_DATA_COLLECTION_ITERATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PL_DATA_COLLECTION_TYPE_ITERATOR, PlDataCollectionIteratorClass))
+#define PL_ITEM_COLLECTION_TYPE_ITERATOR (pl_item_collection_iterator_get_type ())
+#define PL_ITEM_COLLECTION_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PL_ITEM_COLLECTION_TYPE_ITERATOR, PlItemCollectionIterator))
+#define PL_ITEM_COLLECTION_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PL_ITEM_COLLECTION_TYPE_ITERATOR, PlItemCollectionIteratorClass))
+#define PL_ITEM_COLLECTION_IS_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PL_ITEM_COLLECTION_TYPE_ITERATOR))
+#define PL_ITEM_COLLECTION_IS_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PL_ITEM_COLLECTION_TYPE_ITERATOR))
+#define PL_ITEM_COLLECTION_ITERATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PL_ITEM_COLLECTION_TYPE_ITERATOR, PlItemCollectionIteratorClass))
 
-typedef struct _PlDataCollectionIterator PlDataCollectionIterator;
-typedef struct _PlDataCollectionIteratorClass PlDataCollectionIteratorClass;
-typedef struct _PlDataCollectionIteratorPrivate PlDataCollectionIteratorPrivate;
+typedef struct _PlItemCollectionIterator PlItemCollectionIterator;
+typedef struct _PlItemCollectionIteratorClass PlItemCollectionIteratorClass;
+typedef struct _PlItemCollectionIteratorPrivate PlItemCollectionIteratorPrivate;
 
 #define PL_TYPE_READER (pl_reader_get_type ())
 #define PL_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PL_TYPE_READER, PlReader))
@@ -157,51 +157,51 @@ typedef enum  {
 	PL_TARGET_TYPE_ABS_PATH
 } PlTargetType;
 
-struct _PlData {
+struct _PlItem {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	PlDataPrivate * priv;
+	PlItemPrivate * priv;
 };
 
-struct _PlDataClass {
+struct _PlItemClass {
 	GTypeClass parent_class;
-	void (*finalize) (PlData *self);
+	void (*finalize) (PlItem *self);
 };
 
 typedef enum  {
-	PL_DATA_FIELD_URI = 0,
-	PL_DATA_FIELD_TITLE,
-	PL_DATA_FIELD_AUTHOR,
-	PL_DATA_FIELD_GENRE,
-	PL_DATA_FIELD_ALBUM,
-	PL_DATA_FIELD_COPYRIGHT,
-	PL_DATA_FIELD_DURATION,
-	PL_DATA_FIELD_PARAM_NAME,
-	PL_DATA_FIELD_PARAM_VALUE,
-	PL_DATA_FIELD_IS_REMOTE,
-	PL_DATA_FIELD_IS_PLAYLIST
-} PlDataField;
+	PL_ITEM_FIELD_URI = 0,
+	PL_ITEM_FIELD_TITLE,
+	PL_ITEM_FIELD_AUTHOR,
+	PL_ITEM_FIELD_GENRE,
+	PL_ITEM_FIELD_ALBUM,
+	PL_ITEM_FIELD_COPYRIGHT,
+	PL_ITEM_FIELD_DURATION,
+	PL_ITEM_FIELD_PARAM_NAME,
+	PL_ITEM_FIELD_PARAM_VALUE,
+	PL_ITEM_FIELD_IS_REMOTE,
+	PL_ITEM_FIELD_IS_PLAYLIST
+} PlItemField;
 
-struct _PlDataCollection {
+struct _PlItemCollection {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	PlDataCollectionPrivate * priv;
+	PlItemCollectionPrivate * priv;
 };
 
-struct _PlDataCollectionClass {
+struct _PlItemCollectionClass {
 	GTypeClass parent_class;
-	void (*finalize) (PlDataCollection *self);
+	void (*finalize) (PlItemCollection *self);
 };
 
-struct _PlDataCollectionIterator {
+struct _PlItemCollectionIterator {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	PlDataCollectionIteratorPrivate * priv;
+	PlItemCollectionIteratorPrivate * priv;
 };
 
-struct _PlDataCollectionIteratorClass {
+struct _PlItemCollectionIteratorClass {
 	GTypeClass parent_class;
-	void (*finalize) (PlDataCollectionIterator *self);
+	void (*finalize) (PlItemCollectionIterator *self);
 };
 
 struct _PlReader {
@@ -271,94 +271,94 @@ GType pl_list_type_get_type (void) G_GNUC_CONST;
 GType pl_result_get_type (void) G_GNUC_CONST;
 GType pl_target_type_get_type (void) G_GNUC_CONST;
 extern gboolean pl_debug;
-gpointer pl_data_ref (gpointer instance);
-void pl_data_unref (gpointer instance);
-GParamSpec* pl_param_spec_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void pl_value_set_data (GValue* value, gpointer v_object);
-void pl_value_take_data (GValue* value, gpointer v_object);
-gpointer pl_value_get_data (const GValue* value);
-GType pl_data_get_type (void) G_GNUC_CONST;
-GType pl_data_field_get_type (void) G_GNUC_CONST;
-PlData* pl_data_new (void);
-PlData* pl_data_construct (GType object_type);
-void pl_data_add_field (PlData* self, PlDataField field, const char* val);
-PlDataField* pl_data_get_contained_fields (PlData* self, int* result_length1);
-char* pl_data_get_field (PlData* self, PlDataField field);
-char* pl_data_get_uri (PlData* self);
-char* pl_data_get_rel_path (PlData* self);
-char* pl_data_get_abs_path (PlData* self);
-char* pl_data_get_title (PlData* self);
-char* pl_data_get_author (PlData* self);
-char* pl_data_get_genre (PlData* self);
-char* pl_data_get_album (PlData* self);
-char* pl_data_get_copyright (PlData* self);
-char* pl_data_get_duration_string (PlData* self);
-char* pl_data_get_param_name (PlData* self);
-char* pl_data_get_param_value (PlData* self);
-glong pl_data_get_duration (PlData* self);
-gboolean pl_data_is_remote (PlData* self);
-gboolean pl_data_is_playlist (PlData* self);
-PlTargetType pl_data_get_target_type (PlData* self);
-void pl_data_set_target_type (PlData* self, PlTargetType value);
-const char* pl_data_get_base_path (PlData* self);
-void pl_data_set_base_path (PlData* self, const char* value);
-gpointer pl_data_collection_ref (gpointer instance);
-void pl_data_collection_unref (gpointer instance);
-GParamSpec* pl_param_spec_data_collection (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void pl_value_set_data_collection (GValue* value, gpointer v_object);
-void pl_value_take_data_collection (GValue* value, gpointer v_object);
-gpointer pl_value_get_data_collection (const GValue* value);
-GType pl_data_collection_get_type (void) G_GNUC_CONST;
-PlDataCollection* pl_data_collection_new (void);
-PlDataCollection* pl_data_collection_construct (GType object_type);
-gint pl_data_collection_get_size (PlDataCollection* self);
-gboolean pl_data_collection_data_available (PlDataCollection* self);
-char** pl_data_collection_get_found_uris (PlDataCollection* self, int* result_length1);
-char* pl_data_collection_get_title_for_uri (PlDataCollection* self, char** uri_needle);
-char* pl_data_collection_get_author_for_uri (PlDataCollection* self, char** uri_needle);
-char* pl_data_collection_get_genre_for_uri (PlDataCollection* self, char** uri_needle);
-char* pl_data_collection_get_album_for_uri (PlDataCollection* self, char** uri_needle);
-char* pl_data_collection_get_copyright_for_uri (PlDataCollection* self, char** uri_needle);
-char* pl_data_collection_get_duration_string_for_uri (PlDataCollection* self, char** uri_needle);
-glong pl_data_collection_get_duration_for_uri (PlDataCollection* self, char** uri_needle);
-char* pl_data_collection_get_param_name_for_uri (PlDataCollection* self, char** uri_needle);
-char* pl_data_collection_get_param_value_for_uri (PlDataCollection* self, char** uri_needle);
-gboolean pl_data_collection_get_is_remote_for_uri (PlDataCollection* self, char** uri_needle);
-gboolean pl_data_collection_get_is_playlist_for_uri (PlDataCollection* self, char** uri_needle);
-gint pl_data_collection_get_number_of_entries (PlDataCollection* self);
-gboolean pl_data_collection_contains (PlDataCollection* self, PlData* d);
-gboolean pl_data_collection_contains_field (PlDataCollection* self, PlDataField field, const char* value);
-PlDataField* pl_data_collection_get_contained_fields_for_idx (PlDataCollection* self, gint idx, int* result_length1);
-PlDataField* pl_data_collection_get_contained_fields_for_uri (PlDataCollection* self, char** uri, int* result_length1);
-gpointer pl_data_collection_iterator_ref (gpointer instance);
-void pl_data_collection_iterator_unref (gpointer instance);
-GParamSpec* pl_data_collection_param_spec_iterator (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void pl_data_collection_value_set_iterator (GValue* value, gpointer v_object);
-void pl_data_collection_value_take_iterator (GValue* value, gpointer v_object);
-gpointer pl_data_collection_value_get_iterator (const GValue* value);
-GType pl_data_collection_iterator_get_type (void) G_GNUC_CONST;
-PlDataCollectionIterator* pl_data_collection_iterator (PlDataCollection* self);
-gint pl_data_collection_index_of (PlDataCollection* self, PlData* d);
-PlData* pl_data_collection_get (PlDataCollection* self, gint index);
-void pl_data_collection_set (PlDataCollection* self, gint index, PlData* item);
-gboolean pl_data_collection_append (PlDataCollection* self, PlData* item);
-void pl_data_collection_insert (PlDataCollection* self, gint index, PlData* item);
-gboolean pl_data_collection_remove (PlDataCollection* self, PlData* item);
-PlData* pl_data_collection_remove_at (PlDataCollection* self, gint index);
-void pl_data_collection_clear (PlDataCollection* self);
-void pl_data_collection_merge (PlDataCollection* self, PlDataCollection* data_collection);
-PlDataCollectionIterator* pl_data_collection_iterator_new (PlDataCollection* dc);
-PlDataCollectionIterator* pl_data_collection_iterator_construct (GType object_type, PlDataCollection* dc);
-gboolean pl_data_collection_iterator_next (PlDataCollectionIterator* self);
-gboolean pl_data_collection_iterator_first (PlDataCollectionIterator* self);
-PlData* pl_data_collection_iterator_get (PlDataCollectionIterator* self);
-void pl_data_collection_iterator_remove (PlDataCollectionIterator* self);
-gboolean pl_data_collection_iterator_previous (PlDataCollectionIterator* self);
-gboolean pl_data_collection_iterator_has_previous (PlDataCollectionIterator* self);
-void pl_data_collection_iterator_set (PlDataCollectionIterator* self, PlData* item);
-void pl_data_collection_iterator_insert (PlDataCollectionIterator* self, PlData* item);
-void pl_data_collection_iterator_append (PlDataCollectionIterator* self, PlData* item);
-gint pl_data_collection_iterator_index (PlDataCollectionIterator* self);
+gpointer pl_item_ref (gpointer instance);
+void pl_item_unref (gpointer instance);
+GParamSpec* pl_param_spec_item (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void pl_value_set_item (GValue* value, gpointer v_object);
+void pl_value_take_item (GValue* value, gpointer v_object);
+gpointer pl_value_get_item (const GValue* value);
+GType pl_item_get_type (void) G_GNUC_CONST;
+GType pl_item_field_get_type (void) G_GNUC_CONST;
+PlItem* pl_item_new (void);
+PlItem* pl_item_construct (GType object_type);
+void pl_item_add_field (PlItem* self, PlItemField field, const char* val);
+PlItemField* pl_item_get_contained_fields (PlItem* self, int* result_length1);
+char* pl_item_get_field (PlItem* self, PlItemField field);
+char* pl_item_get_uri (PlItem* self);
+char* pl_item_get_rel_path (PlItem* self);
+char* pl_item_get_abs_path (PlItem* self);
+char* pl_item_get_title (PlItem* self);
+char* pl_item_get_author (PlItem* self);
+char* pl_item_get_genre (PlItem* self);
+char* pl_item_get_album (PlItem* self);
+char* pl_item_get_copyright (PlItem* self);
+char* pl_item_get_duration_string (PlItem* self);
+char* pl_item_get_param_name (PlItem* self);
+char* pl_item_get_param_value (PlItem* self);
+glong pl_item_get_duration (PlItem* self);
+gboolean pl_item_is_remote (PlItem* self);
+gboolean pl_item_is_playlist (PlItem* self);
+PlTargetType pl_item_get_target_type (PlItem* self);
+void pl_item_set_target_type (PlItem* self, PlTargetType value);
+const char* pl_item_get_base_path (PlItem* self);
+void pl_item_set_base_path (PlItem* self, const char* value);
+gpointer pl_item_collection_ref (gpointer instance);
+void pl_item_collection_unref (gpointer instance);
+GParamSpec* pl_param_spec_item_collection (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void pl_value_set_item_collection (GValue* value, gpointer v_object);
+void pl_value_take_item_collection (GValue* value, gpointer v_object);
+gpointer pl_value_get_item_collection (const GValue* value);
+GType pl_item_collection_get_type (void) G_GNUC_CONST;
+PlItemCollection* pl_item_collection_new (void);
+PlItemCollection* pl_item_collection_construct (GType object_type);
+gint pl_item_collection_get_size (PlItemCollection* self);
+gboolean pl_item_collection_data_available (PlItemCollection* self);
+char** pl_item_collection_get_found_uris (PlItemCollection* self, int* result_length1);
+char* pl_item_collection_get_title_for_uri (PlItemCollection* self, char** uri_needle);
+char* pl_item_collection_get_author_for_uri (PlItemCollection* self, char** uri_needle);
+char* pl_item_collection_get_genre_for_uri (PlItemCollection* self, char** uri_needle);
+char* pl_item_collection_get_album_for_uri (PlItemCollection* self, char** uri_needle);
+char* pl_item_collection_get_copyright_for_uri (PlItemCollection* self, char** uri_needle);
+char* pl_item_collection_get_duration_string_for_uri (PlItemCollection* self, char** uri_needle);
+glong pl_item_collection_get_duration_for_uri (PlItemCollection* self, char** uri_needle);
+char* pl_item_collection_get_param_name_for_uri (PlItemCollection* self, char** uri_needle);
+char* pl_item_collection_get_param_value_for_uri (PlItemCollection* self, char** uri_needle);
+gboolean pl_item_collection_get_is_remote_for_uri (PlItemCollection* self, char** uri_needle);
+gboolean pl_item_collection_get_is_playlist_for_uri (PlItemCollection* self, char** uri_needle);
+gint pl_item_collection_get_number_of_entries (PlItemCollection* self);
+gboolean pl_item_collection_contains (PlItemCollection* self, PlItem* d);
+gboolean pl_item_collection_contains_field (PlItemCollection* self, PlItemField field, const char* value);
+PlItemField* pl_item_collection_get_contained_fields_for_idx (PlItemCollection* self, gint idx, int* result_length1);
+PlItemField* pl_item_collection_get_contained_fields_for_uri (PlItemCollection* self, char** uri, int* result_length1);
+gpointer pl_item_collection_iterator_ref (gpointer instance);
+void pl_item_collection_iterator_unref (gpointer instance);
+GParamSpec* pl_item_collection_param_spec_iterator (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void pl_item_collection_value_set_iterator (GValue* value, gpointer v_object);
+void pl_item_collection_value_take_iterator (GValue* value, gpointer v_object);
+gpointer pl_item_collection_value_get_iterator (const GValue* value);
+GType pl_item_collection_iterator_get_type (void) G_GNUC_CONST;
+PlItemCollectionIterator* pl_item_collection_iterator (PlItemCollection* self);
+gint pl_item_collection_index_of (PlItemCollection* self, PlItem* d);
+PlItem* pl_item_collection_get (PlItemCollection* self, gint index);
+void pl_item_collection_set (PlItemCollection* self, gint index, PlItem* item);
+gboolean pl_item_collection_append (PlItemCollection* self, PlItem* item);
+void pl_item_collection_insert (PlItemCollection* self, gint index, PlItem* item);
+gboolean pl_item_collection_remove (PlItemCollection* self, PlItem* item);
+PlItem* pl_item_collection_remove_at (PlItemCollection* self, gint index);
+void pl_item_collection_clear (PlItemCollection* self);
+void pl_item_collection_merge (PlItemCollection* self, PlItemCollection* data_collection);
+PlItemCollectionIterator* pl_item_collection_iterator_new (PlItemCollection* dc);
+PlItemCollectionIterator* pl_item_collection_iterator_construct (GType object_type, PlItemCollection* dc);
+gboolean pl_item_collection_iterator_next (PlItemCollectionIterator* self);
+gboolean pl_item_collection_iterator_first (PlItemCollectionIterator* self);
+PlItem* pl_item_collection_iterator_get (PlItemCollectionIterator* self);
+void pl_item_collection_iterator_remove (PlItemCollectionIterator* self);
+gboolean pl_item_collection_iterator_previous (PlItemCollectionIterator* self);
+gboolean pl_item_collection_iterator_has_previous (PlItemCollectionIterator* self);
+void pl_item_collection_iterator_set (PlItemCollectionIterator* self, PlItem* item);
+void pl_item_collection_iterator_insert (PlItemCollectionIterator* self, PlItem* item);
+void pl_item_collection_iterator_append (PlItemCollectionIterator* self, PlItem* item);
+gint pl_item_collection_iterator_index (PlItemCollectionIterator* self);
 GType pl_reader_get_type (void) G_GNUC_CONST;
 PlReader* pl_reader_new (void);
 PlReader* pl_reader_construct (GType object_type);
@@ -379,7 +379,7 @@ gboolean pl_reader_get_is_remote_for_uri (PlReader* self, char** uri_needle);
 gboolean pl_reader_get_is_playlist_for_uri (PlReader* self, char** uri_needle);
 PlListType pl_reader_get_ptype (PlReader* self);
 const char* pl_reader_get_playlist_uri (PlReader* self);
-PlDataCollection* pl_reader_get_data_collection (PlReader* self);
+PlItemCollection* pl_reader_get_data_collection (PlReader* self);
 PlListType pl_get_playlist_type_for_uri (char** uri_);
 PlListType pl_get_type_by_extension (char** uri_);
 PlListType pl_get_type_by_data (char** uri_);
@@ -388,8 +388,8 @@ GFile* pl_get_file_for_location (const char* adr, char** base_path, PlTargetType
 GType pl_writer_get_type (void) G_GNUC_CONST;
 PlWriter* pl_writer_new (PlListType ptype, gboolean overwrite);
 PlWriter* pl_writer_construct (GType object_type, PlListType ptype, gboolean overwrite);
-PlResult pl_writer_write (PlWriter* self, PlDataCollection* data_collection, const char* playlist_uri, GCancellable* cancellable, GError** error);
-void pl_writer_write_asyn (PlWriter* self, PlDataCollection* data_collection, const char* playlist_uri, GCancellable* cancellable, GAsyncReadyCallback _callback_, gpointer _user_data_);
+PlResult pl_writer_write (PlWriter* self, PlItemCollection* data_collection, const char* playlist_uri, GCancellable* cancellable, GError** error);
+void pl_writer_write_asyn (PlWriter* self, PlItemCollection* data_collection, const char* playlist_uri, GCancellable* cancellable, GAsyncReadyCallback _callback_, gpointer _user_data_);
 PlResult pl_writer_write_asyn_finish (PlWriter* self, GAsyncResult* _res_, GError** error);
 const char* pl_writer_get_uri (PlWriter* self);
 gboolean pl_writer_get_overwrite_if_exists (PlWriter* self);

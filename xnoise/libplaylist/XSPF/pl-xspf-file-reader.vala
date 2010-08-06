@@ -24,15 +24,14 @@
 using Xml;
 
 namespace Pl {
-	// base class for all playlist filereader implementations
 	private class Xspf.FileReader : AbstractFileReader {
 		private unowned File file;
 
-		private DataCollection parse(DataCollection data_collection,ref string base_path = "",string data) throws GLib.Error {
+		private ItemCollection parse(ItemCollection data_collection,ref string base_path = "",string data) throws GLib.Error {
 		string iter_name;
 		Xml.Doc* xmlDoc = Parser.parse_memory(data, (int)data.size());
 		Xml.Node* rootNode = xmlDoc->get_root_element();
-		Pl.Data d = null;
+		Pl.Item d = null;
 		for(Xml.Node* iter=rootNode->children; iter!=null;iter=iter->next) {
 			if(iter->type != ElementType.ELEMENT_NODE) {
 				  continue;
@@ -49,7 +48,7 @@ namespace Pl {
 									case "track":
 										if(iter_in->children != null) {
 											Xml.Node *seq_in;
-											d = new Pl.Data();
+											d = new Pl.Item();
 											for(seq_in=iter_in->children->next;seq_in!=null;seq_in=seq_in->next) 
 											{
 												if(seq_in->is_text() == 0) {
@@ -60,12 +59,12 @@ namespace Pl {
 														 TargetType tt;
 														 File tmp = get_file_for_location(url, ref base_path, out tt);
 														 d.target_type = tt;
-														 d.add_field(Data.Field.URI, tmp.get_uri());
+														 d.add_field(Item.Field.URI, tmp.get_uri());
 														}
 														break;
 														case "title": {
 															//print("%s = '%s'\n",seq_in->name,seq_in->get_content());
-															d.add_field(Data.Field.TITLE,seq_in->get_content());
+															d.add_field(Item.Field.TITLE,seq_in->get_content());
 														}
 														break;
 														case "default": {}
@@ -93,8 +92,8 @@ namespace Pl {
 			return data_collection;
 		}
 
-	public override DataCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-		DataCollection data_collection = new DataCollection();
+	public override ItemCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+		ItemCollection data_collection = new ItemCollection();
 		this.file = _file;
 		set_base_path();
 
@@ -122,9 +121,9 @@ namespace Pl {
 		return data_collection; 
 	}
 
-		//public override DataCollection read(File _file) throws InternalReaderError {
-		public DataCollection read_txt(File _file) throws InternalReaderError {
-			DataCollection data_collection = new DataCollection();
+		//public override ItemCollection read(File _file) throws InternalReaderError {
+		public ItemCollection read_txt(File _file) throws InternalReaderError {
+			ItemCollection data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
 			
@@ -137,7 +136,7 @@ namespace Pl {
 			try {
 				var in_stream = new DataInputStream(file.read(null));
 				string line;
-				Data? d = null;
+				Item? d = null;
 				while((line = in_stream.read_line(null, null)) != null) {
 					if(line.has_prefix("#")) { //# Comments
 						continue;
@@ -148,7 +147,7 @@ namespace Pl {
 					else if(line.contains("<track>")) {
 						entry_on = true;
 						//print("prepare new entry\n");
-						d = new Data();
+						d = new Item();
 						continue;
 					}
 					else if(line.contains("</track>")) {
@@ -169,7 +168,7 @@ namespace Pl {
 
 							TargetType tt;
 							File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
-							d.add_field(Data.Field.URI, tmp.get_uri());
+							d.add_field(Item.Field.URI, tmp.get_uri());
 							d.target_type = tt;
 						}
 						if(line.contains("<title")) {
@@ -180,7 +179,7 @@ namespace Pl {
 								throw new InternalReaderError.INVALID_FILE("Error. Invalid playlist file (title)\n");
 							}
 							*end = '\0';
-							d.add_field(Data.Field.TITLE, ((string)begin)._strip());
+							d.add_field(Item.Field.TITLE, ((string)begin)._strip());
 						}
 					}
 					else {
@@ -194,8 +193,8 @@ namespace Pl {
 			return data_collection;
 		}
 
-		public override async DataCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			DataCollection data_collection = new DataCollection();
+		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			ItemCollection data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
 			return data_collection;

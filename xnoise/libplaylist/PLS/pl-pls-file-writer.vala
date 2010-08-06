@@ -24,7 +24,7 @@ namespace Pl {
 	// base class for all playlist filewriter implementations
 	private class Pls.FileWriter : AbstractFileWriter {
 		
-		private DataCollection data_collection;
+		private ItemCollection data_collection;
 		private File file;
 		private bool _overwrite_if_exists = true;
 		
@@ -38,7 +38,7 @@ namespace Pl {
 			_overwrite_if_exists = overwrite;
 		}
 
-		public override Result write(File _file, DataCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
+		public override Result write(File _file, ItemCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
 			if(data_collection != null && data_collection.get_size() > 0) {
@@ -52,7 +52,7 @@ namespace Pl {
 					
 					data_stream.put_string("[playlist]\n\n", null);
 					int i = 1;
-					foreach(Data d in data_collection) {
+					foreach(Item d in data_collection) {
 						string? tmp_location = null;
 						
 						// find out the type of the target to save (uri, absolute path or relative to the playlist)
@@ -73,7 +73,7 @@ namespace Pl {
 									continue;
 								break;
 						}
-//						if(d.get_field(Data.Field.URI) == null)
+//						if(d.get_field(Item.Field.URI) == null)
 //							continue;
 						data_stream.put_string("File" +i.to_string() + "=" + tmp_location + "\n", null);
 						data_stream.put_string("Title" +i.to_string() + "=" + d.get_title()  + "\n", null);
@@ -90,7 +90,7 @@ namespace Pl {
 			return Result.UNHANDLED;
 		}
 		
-		public override async Result write_asyn(File _file, DataCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
+		public override async Result write_asyn(File _file, ItemCollection _data_collection, Cancellable? cancellable = null) throws InternalWriterError {
 			this.file = _file;
 			this.data_collection = _data_collection;
 			return Result.UNHANDLED;

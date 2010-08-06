@@ -26,11 +26,11 @@ using Xml;
 namespace Pl {
 	private class Wpl.FileReader : AbstractFileReader {
 		private unowned File file;
-		private DataCollection parse(DataCollection data_collection,ref string base_path = "",string data) throws GLib.Error {
+		private ItemCollection parse(ItemCollection data_collection,ref string base_path = "",string data) throws GLib.Error {
 			string iter_name;
 			Xml.Doc* xmlDoc = Parser.parse_memory(data, (int)data.size());
 			Xml.Node* rootNode = xmlDoc->get_root_element();
-			Pl.Data d = null;
+			Pl.Item d = null;
 			for(Xml.Node* iter = rootNode->children; iter != null; iter = iter->next) {
 				if(iter->type != ElementType.ELEMENT_NODE) {
 					continue;
@@ -50,13 +50,13 @@ namespace Pl {
 												if(seq_in->is_text() == 0) {
 													switch(seq_in->name.down()) {
 														case "media":
-															d = new Pl.Data();
+															d = new Pl.Item();
 															string src = seq_in->get_prop("src");
 															//print("URL = '%s'\n",src);
 															TargetType tt;
 															File tmp = get_file_for_location(src, ref base_path, out tt);
 															d.target_type = tt;
-															d.add_field(Data.Field.URI, tmp.get_uri());
+															d.add_field(Item.Field.URI, tmp.get_uri());
 															data_collection.append(d);
 															break;
 														case "default":
@@ -99,8 +99,8 @@ namespace Pl {
 			return data_collection;
 		}
 
-		public override DataCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			DataCollection data_collection = new DataCollection();
+		public override ItemCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			ItemCollection data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
 
@@ -131,8 +131,8 @@ namespace Pl {
 			return data_collection; 
 		}
 	
-		public override async DataCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			var data_collection = new DataCollection();
+		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			var data_collection = new ItemCollection();
 			//TODO:
 			return data_collection;
 		}

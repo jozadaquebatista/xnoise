@@ -34,14 +34,14 @@
 
 
 namespace Pl {
-	public class DataCollection {
+	public class ItemCollection {
 
-		private Data[] _items = {};
+		private Item[] _items = {};
 		private int _size;
 		private int _stamp = 0;
 
-		public DataCollection() { //EqualFunc? equalfunc = null
-			this._items = new Data[4];
+		public ItemCollection() { //EqualFunc? equalfunc = null
+			this._items = new Item[4];
 		}
 
 		public int get_size() {
@@ -54,7 +54,7 @@ namespace Pl {
 
 		public string[] get_found_uris() {
 			string[] retval = {};
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() != null)
 					retval += d.get_uri();
 			}
@@ -63,7 +63,7 @@ namespace Pl {
 	
 		public string? get_title_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_title();
 					break;
@@ -73,7 +73,7 @@ namespace Pl {
 		}
 		public string? get_author_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_author();
 					break;
@@ -84,7 +84,7 @@ namespace Pl {
 		
 		public string? get_genre_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_genre();
 					break;
@@ -95,7 +95,7 @@ namespace Pl {
 		
 		public string? get_album_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_album();
 					break;
@@ -106,7 +106,7 @@ namespace Pl {
 		
 		public string? get_copyright_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_copyright();
 					break;
@@ -117,7 +117,7 @@ namespace Pl {
 
 		public string? get_duration_string_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_duration_string();
 					break;
@@ -128,7 +128,7 @@ namespace Pl {
 
 		public long get_duration_for_uri(ref string uri_needle) {
 			long retval = -1;
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_duration();
 					break;
@@ -139,7 +139,7 @@ namespace Pl {
 
 		public string? get_param_name_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_param_name();
 					break;
@@ -150,7 +150,7 @@ namespace Pl {
 
 		public string? get_param_value_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_param_value();
 					break;
@@ -160,7 +160,7 @@ namespace Pl {
 		}
 
 		public bool get_is_remote_for_uri(ref string uri_needle) {
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					return d.is_remote();
 				}
@@ -169,7 +169,7 @@ namespace Pl {
 		}
 
 		public bool get_is_playlist_for_uri(ref string uri_needle) {
-			foreach(Data d in this) {
+			foreach(Item d in this) {
 				if(d.get_uri() == uri_needle) {
 					return d.is_playlist();
 				}
@@ -182,7 +182,7 @@ namespace Pl {
 		}
 
 		//in operator: bool b = needle in obj
-		public bool contains(Data d) {
+		public bool contains(Item d) {
 			for(int index = 0; index < _size; index++) {
 				if(direct_equal(_items[index], d))
 					return true;
@@ -190,8 +190,8 @@ namespace Pl {
 			return false;
 		}
 
-		//find Data with certain field content
-		public bool contains_field(Data.Field field, string value) {
+		//find Item with certain field content
+		public bool contains_field(Item.Field field, string value) {
 			for(int index = 0; index < _size; index++) {
 				if(_items[index].get_field(field) == value)
 					return true;
@@ -199,23 +199,23 @@ namespace Pl {
 			return false;
 		}
 
-		public Pl.Data.Field[] get_contained_fields_for_idx(int idx) {
+		public Pl.Item.Field[] get_contained_fields_for_idx(int idx) {
 			return _items[idx].get_contained_fields();
 		}
 		
-		public Pl.Data.Field[] get_contained_fields_for_uri(ref string uri) {
+		public Pl.Item.Field[] get_contained_fields_for_uri(ref string uri) {
 			for(int index = 0; index < _size; index++) {
 				if(_items[index].get_uri() == uri)
 					return _items[index].get_contained_fields();
 			}
-			return new Pl.Data.Field[0];
+			return new Pl.Item.Field[0];
 		}
 		
 		public Iterator iterator() {
 			return new Iterator(this);
 		}
 
-		public int index_of(Data d) {
+		public int index_of(Item d) {
 			for(int index = 0; index < _size; index++) {
 				if(direct_equal(_items[index], d))
 					return index;
@@ -224,20 +224,20 @@ namespace Pl {
 		}
 
 		//index access: obj[index]
-		public Data get(int index) {
+		public Item get(int index) {
 			assert(index >= 0);
 			assert(index < _size);
 			return _items[index];
 		}
 
 		//index assignment: obj[index] = item
-		public void set(int index, Data item) {
+		public void set(int index, Item item) {
 			assert(index >= 0);
 			assert(index < _size);
 			_items[index] = item;
 		}
 
-		public bool append(Data item) {
+		public bool append(Item item) {
 			if(_size == _items.length) {
 				grow_if_needed(1);
 			}
@@ -246,7 +246,7 @@ namespace Pl {
 			return true;
 		}
 
-		public void insert(int index, Data item) {
+		public void insert(int index, Item item) {
 			assert(index >= 0);
 			assert(index <= _size);
 
@@ -258,7 +258,7 @@ namespace Pl {
 			_stamp++;
 		}
 
-		public bool remove(Data item) {
+		public bool remove(Item item) {
 			for(int index = 0; index < _size; index++) {
 				if(direct_equal(_items[index], item)) {
 					remove_at(index);
@@ -268,10 +268,10 @@ namespace Pl {
 			return false;
 		}
 
-		public Data remove_at(int index) {
+		public Item remove_at(int index) {
 			assert(index >= 0);
 			assert(index < _size);
-			Data item = _items[index];
+			Item item = _items[index];
 			_items[index] = null;
 			shift(index + 1, -1);
 			_stamp++;
@@ -286,12 +286,12 @@ namespace Pl {
 			_stamp++;
 		}
 
-		public void merge(DataCollection data_collection) {
+		public void merge(ItemCollection data_collection) {
 			if(data_collection.get_size() == 0) 
 				return;
 			
 			grow_if_needed(data_collection.get_size());
-			foreach(Data item in data_collection)
+			foreach(Item item in data_collection)
 				_items[_size++] = item;
 			
 			_stamp++;
@@ -321,14 +321,14 @@ namespace Pl {
 		}
 
 		public class Iterator {
-			private DataCollection _dc;
+			private ItemCollection _dc;
 			private int _index = -1;
 			private bool _removed = false;
 
 			// concurrent modification protection
 			private int _stamp = 0;
 
-			public Iterator(DataCollection dc) {
+			public Iterator(ItemCollection dc) {
 				_dc = dc;
 				_stamp = _dc._stamp;
 			}
@@ -353,7 +353,7 @@ namespace Pl {
 				return true;
 			}
 
-			public Data get() {
+			public Item get() {
 				assert(_stamp == _dc._stamp);
 				assert(_index >= 0);
 				assert(_index < _dc._size);
@@ -386,7 +386,7 @@ namespace Pl {
 				return(_index - 1 >= 0);
 			}
 
-			public void set(Data item) {
+			public void set(Item item) {
 				assert(_stamp == _dc._stamp);
 				assert(_index >= 0);
 				assert(_index < _dc._size);
@@ -394,7 +394,7 @@ namespace Pl {
 				_stamp = ++_dc._stamp;
 			}
 
-			public void insert(Data item) {
+			public void insert(Item item) {
 				assert(_stamp == _dc._stamp);
 				assert(_index >= 0);
 				assert(_index < _dc._size);
@@ -403,7 +403,7 @@ namespace Pl {
 				_stamp = _dc._stamp;
 			}
 
-			public void append(Data item) {
+			public void append(Item item) {
 				assert(_stamp == _dc._stamp);
 				assert(_index >= 0);
 				assert(_index < _dc._size);

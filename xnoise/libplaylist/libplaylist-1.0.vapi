@@ -17,9 +17,9 @@ namespace Pl {
 	[CCode (cprefix = "PlXspf", lower_case_cprefix = "pl_xspf_")]
 	namespace Xspf {
 	}
-	[CCode (ref_function = "pl_data_ref", unref_function = "pl_data_unref", cheader_filename = "libplaylist.h")]
-	public class Data {
-		[CCode (cprefix = "PL_DATA_FIELD_", cheader_filename = "libplaylist.h")]
+	[CCode (ref_function = "pl_item_ref", unref_function = "pl_item_unref", cheader_filename = "libplaylist.h")]
+	public class Item {
+		[CCode (cprefix = "PL_ITEM_FIELD_", cheader_filename = "libplaylist.h")]
 		public enum Field {
 			URI,
 			TITLE,
@@ -33,16 +33,16 @@ namespace Pl {
 			IS_REMOTE,
 			IS_PLAYLIST
 		}
-		public Data ();
-		public void add_field (Pl.Data.Field field, string val);
+		public Item ();
+		public void add_field (Pl.Item.Field field, string val);
 		public string? get_abs_path ();
 		public string? get_album ();
 		public string? get_author ();
-		public Pl.Data.Field[] get_contained_fields ();
+		public Pl.Item.Field[] get_contained_fields ();
 		public string? get_copyright ();
 		public long get_duration ();
 		public string? get_duration_string ();
-		public string get_field (Pl.Data.Field field);
+		public string get_field (Pl.Item.Field field);
 		public string? get_genre ();
 		public string? get_param_name ();
 		public string? get_param_value ();
@@ -54,33 +54,33 @@ namespace Pl {
 		public string? base_path { get; set; }
 		public Pl.TargetType target_type { get; set; }
 	}
-	[CCode (ref_function = "pl_data_collection_ref", unref_function = "pl_data_collection_unref", cheader_filename = "libplaylist.h")]
-	public class DataCollection {
-		[CCode (ref_function = "pl_data_collection_iterator_ref", unref_function = "pl_data_collection_iterator_unref", cheader_filename = "libplaylist.h")]
+	[CCode (ref_function = "pl_item_collection_ref", unref_function = "pl_item_collection_unref", cheader_filename = "libplaylist.h")]
+	public class ItemCollection {
+		[CCode (ref_function = "pl_item_collection_iterator_ref", unref_function = "pl_item_collection_iterator_unref", cheader_filename = "libplaylist.h")]
 		public class Iterator {
-			public Iterator (Pl.DataCollection dc);
-			public void append (Pl.Data item);
+			public Iterator (Pl.ItemCollection dc);
+			public void append (Pl.Item item);
 			public bool first ();
-			public Pl.Data @get ();
+			public Pl.Item @get ();
 			public bool has_previous ();
 			public int index ();
-			public void insert (Pl.Data item);
+			public void insert (Pl.Item item);
 			public bool next ();
 			public bool previous ();
 			public void remove ();
-			public void @set (Pl.Data item);
+			public void @set (Pl.Item item);
 		}
-		public DataCollection ();
-		public bool append (Pl.Data item);
+		public ItemCollection ();
+		public bool append (Pl.Item item);
 		public void clear ();
-		public bool contains (Pl.Data d);
-		public bool contains_field (Pl.Data.Field field, string value);
+		public bool contains (Pl.Item d);
+		public bool contains_field (Pl.Item.Field field, string value);
 		public bool data_available ();
-		public Pl.Data @get (int index);
+		public Pl.Item @get (int index);
 		public string? get_album_for_uri (ref string uri_needle);
 		public string? get_author_for_uri (ref string uri_needle);
-		public Pl.Data.Field[] get_contained_fields_for_idx (int idx);
-		public Pl.Data.Field[] get_contained_fields_for_uri (ref string uri);
+		public Pl.Item.Field[] get_contained_fields_for_idx (int idx);
+		public Pl.Item.Field[] get_contained_fields_for_uri (ref string uri);
 		public string? get_copyright_for_uri (ref string uri_needle);
 		public long get_duration_for_uri (ref string uri_needle);
 		public string? get_duration_string_for_uri (ref string uri_needle);
@@ -93,13 +93,13 @@ namespace Pl {
 		public string? get_param_value_for_uri (ref string uri_needle);
 		public int get_size ();
 		public string? get_title_for_uri (ref string uri_needle);
-		public int index_of (Pl.Data d);
-		public void insert (int index, Pl.Data item);
-		public Pl.DataCollection.Iterator iterator ();
-		public void merge (Pl.DataCollection data_collection);
-		public bool remove (Pl.Data item);
-		public Pl.Data remove_at (int index);
-		public void @set (int index, Pl.Data item);
+		public int index_of (Pl.Item d);
+		public void insert (int index, Pl.Item item);
+		public Pl.ItemCollection.Iterator iterator ();
+		public void merge (Pl.ItemCollection data_collection);
+		public bool remove (Pl.Item item);
+		public Pl.Item remove_at (int index);
+		public void @set (int index, Pl.Item item);
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Reader : GLib.Object {
@@ -118,7 +118,7 @@ namespace Pl {
 		public string? get_title_for_uri (ref string uri_needle);
 		public Pl.Result read (string list_uri, GLib.Cancellable? cancellable = null) throws Pl.ReaderError;
 		public async Pl.Result read_asyn (string list_uri, GLib.Cancellable? cancellable = null) throws Pl.ReaderError;
-		public Pl.DataCollection data_collection { get; }
+		public Pl.ItemCollection data_collection { get; }
 		public string playlist_uri { get; }
 		public Pl.ListType ptype { get; }
 		public signal void finished (string playlist_uri);
@@ -127,8 +127,8 @@ namespace Pl {
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Writer : GLib.Object {
 		public Writer (Pl.ListType ptype, bool overwrite = true);
-		public Pl.Result write (Pl.DataCollection data_collection, string playlist_uri, GLib.Cancellable? cancellable = null) throws Pl.WriterError;
-		public async Pl.Result write_asyn (Pl.DataCollection data_collection, string playlist_uri, GLib.Cancellable? cancellable = null) throws Pl.WriterError;
+		public Pl.Result write (Pl.ItemCollection data_collection, string playlist_uri, GLib.Cancellable? cancellable = null) throws Pl.WriterError;
+		public async Pl.Result write_asyn (Pl.ItemCollection data_collection, string playlist_uri, GLib.Cancellable? cancellable = null) throws Pl.WriterError;
 		public bool overwrite_if_exists { get; }
 		public string? uri { get; }
 	}

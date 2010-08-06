@@ -220,16 +220,16 @@ bool test_asx_writing_abs_paths() {
 	string current_title_2 = "everclear - SMFTA";
 	var writer = new Pl.Writer(ListType.ASX, true);
 	
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1);
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1);
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2);
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2);
 	data_collection.append(data);
 	
 	try {
@@ -261,16 +261,16 @@ bool test_m3u_writing_abs_paths() {
 	string current_title_2 = "everclear - SMFTA";
 	var writer = new Pl.Writer(ListType.M3U, true);
 	
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1); //titles are still ignored
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1); //titles are still ignored
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2); //titles are still ignored
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2); //titles are still ignored
 	data_collection.append(data);
 	
 	try {
@@ -302,16 +302,16 @@ bool test_pls_writing_abs_paths() {
 	string current_title_2 = "everclear - SMFTA";
 	var writer = new Pl.Writer(ListType.PLS, true);
 	
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1); //titles are still ignored
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1); //titles are still ignored
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2); //titles are still ignored
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2); //titles are still ignored
 	data_collection.append(data);
 	
 	try {
@@ -343,16 +343,16 @@ bool test_xspf_writing_abs_paths() {
 	string current_title_2 = "everclear - SMFTA";
 	var writer = new Pl.Writer(ListType.XSPF, true);
 	
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1); //titles are still ignored
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1); //titles are still ignored
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2); //titles are still ignored
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2); //titles are still ignored
 	data_collection.append(data);
 	
 	try {
@@ -387,17 +387,17 @@ bool test_asx_writing_rel_paths() {
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1);
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1);
 	data.target_type = TargetType.ABS_PATH;
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2);
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2);
 	data.target_type = TargetType.REL_PATH;
 	data_collection.append(data);
 	
@@ -439,17 +439,17 @@ bool test_m3u_writing_rel_paths() {
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1);
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1);
 	data.target_type = TargetType.ABS_PATH;
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2);
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2);
 	data.target_type = TargetType.REL_PATH;
 	data_collection.append(data);
 	
@@ -488,17 +488,17 @@ bool test_pls_writing_rel_paths() {
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1);
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1);
 	data.target_type = TargetType.ABS_PATH;
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2);
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2);
 	data.target_type = TargetType.REL_PATH;
 	data_collection.append(data);
 	
@@ -537,17 +537,17 @@ bool test_xspf_writing_rel_paths() {
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1);
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1);
 	data.target_type = TargetType.ABS_PATH;
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2);
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2);
 	data.target_type = TargetType.REL_PATH;
 	data_collection.append(data);
 	
@@ -588,17 +588,17 @@ bool test_asx_readwrite_targettype() {
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1);
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1);
 	data.target_type = TargetType.ABS_PATH;
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2);
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2);
 	data.target_type = TargetType.REL_PATH;
 	data_collection.append(data);
 	
@@ -619,7 +619,7 @@ bool test_asx_readwrite_targettype() {
 		return false;
 	}
 	TargetType[] tts = {};
-	foreach(Data d in reader.data_collection) {
+	foreach(Item d in reader.data_collection) {
 		tts += d.target_type;
 	}
 	//print("\n%s\n", tts[0].to_string());
@@ -637,17 +637,17 @@ bool test_m3u_readwrite_targettype() {
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1);
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1);
 	data.target_type = TargetType.ABS_PATH;
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2);
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2);
 	data.target_type = TargetType.REL_PATH;
 	data_collection.append(data);
 	
@@ -668,7 +668,7 @@ bool test_m3u_readwrite_targettype() {
 		return false;
 	}
 	TargetType[] tts = {};
-	foreach(Data d in reader.data_collection) {
+	foreach(Item d in reader.data_collection) {
 		tts += d.target_type;
 	}
 	//print("\n%s\n", tts[0].to_string());
@@ -687,17 +687,17 @@ bool test_pls_readwrite_targettype() {
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1);
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1);
 	data.target_type = TargetType.ABS_PATH;
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2);
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2);
 	data.target_type = TargetType.URI;
 	data_collection.append(data);
 	
@@ -718,7 +718,7 @@ bool test_pls_readwrite_targettype() {
 		return false;
 	}
 	TargetType[] tts = {};
-	foreach(Data d in reader.data_collection) {
+	foreach(Item d in reader.data_collection) {
 		tts += d.target_type;
 	}
 	//print("\n%s\n", tts[0].to_string());
@@ -737,23 +737,23 @@ bool test_xspf_readwrite_targettype() {
 	
 	//print("\nuri1: %s\n", t1.get_uri());
 	//print("uri2: %s\n", t2.get_uri());
-	DataCollection data_collection = new DataCollection();
+	ItemCollection data_collection = new ItemCollection();
 	
-	var data = new Data();
-	data.add_field(Data.Field.URI, t1.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_1);
+	var data = new Item();
+	data.add_field(Item.Field.URI, t1.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_1);
 	data.target_type = TargetType.ABS_PATH;
 	data_collection.append(data);
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
-	data.add_field(Data.Field.TITLE, current_title_2);
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
+	data.add_field(Item.Field.TITLE, current_title_2);
 	data.target_type = TargetType.REL_PATH;
 	data_collection.append(data);
 	
 	
-	data = new Data();
-	data.add_field(Data.Field.URI, t2.get_uri());
+	data = new Item();
+	data.add_field(Item.Field.URI, t2.get_uri());
 	data.target_type = TargetType.URI;
 	data_collection.append(data);
 
@@ -774,7 +774,7 @@ bool test_xspf_readwrite_targettype() {
 		return false;
 	}
 	TargetType[] tts = {};
-	foreach(Data d in reader.data_collection) {
+	foreach(Item d in reader.data_collection) {
 		tts += d.target_type;
 	}
 	//print("\n%s\n", tts[0].to_string());
@@ -793,7 +793,7 @@ bool test_conversion_asx_xspf() {
 		print("asx test error reading\n");
 		return false;
 	}
-	DataCollection d = reader.data_collection;
+	ItemCollection d = reader.data_collection;
 	var writer = new Pl.Writer(ListType.XSPF, true);
 	try {
 		writer.write(d, target.get_uri(), null);
@@ -816,7 +816,7 @@ bool test_conversion_wpl_asx() {
 		print("wpl test error reading\n");
 		return false;
 	}
-	DataCollection d = reader.data_collection;
+	ItemCollection d = reader.data_collection;
 	var writer = new Pl.Writer(ListType.ASX, true);
 	try {
 		writer.write(d, target.get_uri(), null);
