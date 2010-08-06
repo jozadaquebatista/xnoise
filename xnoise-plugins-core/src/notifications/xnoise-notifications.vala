@@ -54,7 +54,24 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		}
 		global.uri_changed.connect(on_uri_changed);
 		global.sign_restart_song.connect(on_restart);
+		global.sign_song_info_required.connect(on_song_info_required);
 		return true;
+	}
+
+	private void on_song_info_required() {
+		if(global.current_uri == "" || global.current_uri == null) {
+			try {
+				if(notification != null) {
+					notification.clear_hints();
+					notification.close();
+				}
+				return;
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+			}
+		}
+		show_notification(global.current_uri);
 	}
 	
 	private void on_restart() {
@@ -70,7 +87,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			timeout = 0;
 		}
 
-		if((uri=="")||(uri==null)) {
+		if(uri == "" || uri == null) {
 			try {
 				if(notification != null) {
 					notification.clear_hints();

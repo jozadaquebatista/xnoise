@@ -89,6 +89,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public signal void sig_item_imported(string uri);
 	
 	public signal void sign_restart_song();
+	public signal void sign_song_info_required();
 
 
 
@@ -194,6 +195,8 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	
 	public string? image_path_small { get; set; default = null; }
 	public string? image_path_large { get; set; default = null; }
+	
+	public bool notifications_available { get; set; }
 	
 	// PUBLIC GLOBAL FUNCTIONS
 	public void reset_position_reference() {

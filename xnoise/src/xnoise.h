@@ -1155,6 +1155,8 @@ const char* xnoise_global_access_get_image_path_small (XnoiseGlobalAccess* self)
 void xnoise_global_access_set_image_path_small (XnoiseGlobalAccess* self, const char* value);
 const char* xnoise_global_access_get_image_path_large (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_image_path_large (XnoiseGlobalAccess* self, const char* value);
+gboolean xnoise_global_access_get_notifications_available (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_notifications_available (XnoiseGlobalAccess* self, gboolean value);
 GType xnoise_gst_player_get_type (void);
 GType xnoise_video_screen_get_type (void);
 XnoiseGstPlayer* xnoise_gst_player_new (void);

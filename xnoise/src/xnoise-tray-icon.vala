@@ -7,6 +7,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 	private unowned Main xn;
 	private Image playpause_popup_image;
 	private const int TOOLTIP_IMAGE_SIZE = 48;
+//	private bool use_notifications;
 	
 	public TrayIcon() {
 		set_from_file(Config.UIDIR + "xnoise_bruit_48x48.png");
@@ -21,7 +22,6 @@ public class Xnoise.TrayIcon : StatusIcon {
 		scroll_event.connect(this.on_scrolled);
 		button_press_event.connect(this.on_clicked);
 	}
-	
 	
 	private void construct_traymenu() {
 		traymenu = new Menu();
@@ -127,92 +127,127 @@ public class Xnoise.TrayIcon : StatusIcon {
 	private void traymenu_popup(StatusIcon i, uint button, uint activateTime) {
 		traymenu.popup(null, null, i.position_menu, 0, activateTime);
 	}
-
+	
+	private uint recently_entered_timeout = 0;
+	private bool _recently_entered_trayicon = false;
+	private bool recently_entered_trayicon {
+		get {
+			return _recently_entered_trayicon;
+		}
+		set {
+			if(value == _recently_entered_trayicon)
+				return;
+			
+			_recently_entered_trayicon = value;
+			
+			if(recently_entered_timeout != 0) {
+				Source.remove(recently_entered_timeout);
+				recently_entered_timeout = 0;
+			}
+			
+			recently_entered_timeout = Timeout.add_seconds(2, () => {
+				_recently_entered_trayicon = false;
+				recently_entered_timeout = 0;
+				return false;
+			});
+			
+			if(value == true)
+				global.sign_song_info_required();
+		}
+	}
 
 	// todo: use global string constants for uknown_[title,album,artist] and state!
 	// for now they are left uni18ned
 	private bool on_query_tooltip(int x, int y, bool keyboard_mod, Tooltip tp) {
-		
-		string state = "";
-		string? uri = global.current_uri;
-		switch (global.track_state) {
-			case GlobalAccess.TrackState.STOPPED: {
-				state = "stopped";
-				break;
-			}
-			case GlobalAccess.TrackState.PLAYING: {
-				state = "playing";
-				break;
-			}
-			case GlobalAccess.TrackState.PAUSED: {
-				state = "paused";
-				break;
-			}
-			default: {
-				state = "stopped";
-				break;
-			}
+		if(global.notifications_available) {
+			//use notifications to show information
+			//this event is triggered a millon times so I have to make sure the signal isn't sent too often
+			recently_entered_trayicon = true; 
+			return false;
 		}
-		state = Markup.escape_text(state);
+		else {
+			string state = "";
+			string? uri = global.current_uri;
+			switch(global.track_state) {
+				case GlobalAccess.TrackState.STOPPED: {
+					state = "stopped";
+					break;
+				}
+				case GlobalAccess.TrackState.PLAYING: {
+					state = "playing";
+					break;
+				}
+				case GlobalAccess.TrackState.PAUSED: {
+					state = "paused";
+					break;
+				}
+				default: {
+					state = "stopped";
+					break;
+				}
+			}
+			state = Markup.escape_text(state);
 		
-		if(global.track_state == GlobalAccess.TrackState.STOPPED || uri == null || uri == "") {
-			tp.set_markup(" xnoise media player \n" +
-			              "<span rise=\"6000\" style =\"italic\"> ready to rock ;)</span>");
+			if(global.track_state == GlobalAccess.TrackState.STOPPED || uri == null || uri == "") {
+				tp.set_markup(" xnoise media player \n" +
+					          "<span rise=\"6000\" style =\"italic\"> ready to rock ;)</span>");
+				return true;
+			}
+		
+			string? title = global.current_title;
+			string? artist = global.current_artist;
+			string? album = global.current_album;
+		
+			string? filename = null;
+			if(uri != null) {
+				File f = File.new_for_uri(uri);
+				if(f != null) {
+					filename = f.get_basename();
+					filename = Markup.escape_text(filename);
+				}
+			}
+		
+			//if neither title nor artist are known, show filename instead
+			//if there is no title, the title is the same as the filename
+			//shouldn't global rather return null if there is no title?
+		
+			//todo: handle streams, change label layout, pack into a box with padding and use Tooltip.set_custom
+			if((title == null && artist == null && filename != null) || (filename == title /*&& artist == null*/))
+				tp.set_markup("\n<b><big>" + filename + " </big></b><span size=\"xx-small\">\n</span>" +
+					          "<span style=\"italic\" rise=\"6000\">" +
+					          state + "</span>\n");	
+			else {
+				if(album == null)
+					album = "unknown album";
+				if(artist == null)
+					artist = "unknown artist";
+				if(title == null)
+					title = "unknown title";
+				album = Markup.escape_text(album);
+				artist = Markup.escape_text(artist);
+				title = Markup.escape_text(title);
+				
+			tp.set_markup("<span size=\"larger\" weight=\"bold\">" + 
+				          title +   " </span>\n<span size=\"medium\" rise=\"6000\" style=\"italic\">" + 
+				          state + "</span><span size=\"xx-small\">\n</span>" +
+				          "<span weight=\"light\">     by </span> <b>" + 
+				          artist + "</b> \n" +
+				          "<span weight=\"light\">     on </span> <b>" + 
+				          album + "</b>   ");
+			}
+				
+			string img_path = global.image_path_small;
+			if(img_path == null) img_path = Config.UIDIR + "xnoise_48x48.png";
+		
+			try {
+				var pb = new Gdk.Pixbuf.from_file_at_scale(img_path, TOOLTIP_IMAGE_SIZE, TOOLTIP_IMAGE_SIZE, true); 
+				tp.set_icon(pb);
+			}
+			catch(Error e) {
+				print(e.message);
+			}
+		
 			return true;
 		}
-		
-		string? title = global.current_title;
-		string? artist = global.current_artist;
-		string? album = global.current_album;
-		
-		string? filename = null;
-		if(uri != null) {
-			File f = File.new_for_uri(uri);
-			if(f != null) {
-				filename = f.get_basename();
-				filename = Markup.escape_text(filename);
-			}
-		}
-		
-		//if neither title nor artist are known, show filename instead
-		//if there is no title, the title is the same as the filename
-		//shouldn't global rather return null if there is no title?
-		
-		//todo: handle streams, change label layout, pack into a box with padding and use Tooltip.set_custom
-		if((title == null && artist == null && filename != null) || (filename == title /*&& artist == null*/))
-			tp.set_markup("\n<b><big>" + filename + " </big></b><span size=\"xx-small\">\n</span>" +
-			              "<span style=\"italic\" rise=\"6000\">" +
-			              state + "</span>\n");	
-		else {
-			if(album == null)
-				album = "unknown album";
-			if(artist == null)
-				artist = "unknown artist";
-			if(title == null)
-				title = "unknown title";
-			album = Markup.escape_text(album);
-			artist = Markup.escape_text(artist);
-			title = Markup.escape_text(title);
-				
-		tp.set_markup("<span size=\"larger\" weight=\"bold\">" + 
-		              title +   " </span>\n<span size=\"medium\" rise=\"6000\" style=\"italic\">" + 
-		              state + "</span><span size=\"xx-small\">\n</span>" +
-		              "<span weight=\"light\">     by </span> <b>" + 
-		              artist + "</b> \n" +
-		              "<span weight=\"light\">     on </span> <b>" + 
-		              album + "</b>   ");
-		}
-				
-		string img_path = global.image_path_small;
-		if (img_path == null) img_path = Config.UIDIR + "xnoise_48x48.png";
-		
-		try {
-			var pb = new Gdk.Pixbuf.from_file_at_scale(img_path, TOOLTIP_IMAGE_SIZE, TOOLTIP_IMAGE_SIZE, true); 
-			tp.set_icon(pb);
-		} catch (Error e) {
-			print(e.message);
-		}
-		
-		return true;
 	}
 }

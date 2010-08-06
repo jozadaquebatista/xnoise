@@ -131,6 +131,7 @@ namespace Xnoise {
 		public string? image_path_large { get; set; }
 		public string? image_path_small { get; set; }
 		public bool media_import_in_progress { get; set; }
+		public bool notifications_available { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
 		public string settings_folder { get; }
@@ -143,6 +144,7 @@ namespace Xnoise {
 		public signal void sig_item_imported (string uri);
 		public signal void sig_media_path_changed ();
 		public signal void sign_restart_song ();
+		public signal void sign_song_info_required ();
 		public signal void tag_changed (ref string? newuri, string? tagname, string? tagvalue);
 		public signal void track_state_changed ();
 		public signal void uri_changed (string? uri);
