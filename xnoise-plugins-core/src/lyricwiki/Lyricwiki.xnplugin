@@ -1,0 +1,9 @@
+[XnoisePlugin]
+name=Lyricwiki
+module=Lyricwiki
+description=Loads lyrics from http://www.lyricwiki.com
+website=http://code.google.com/p/xnoise/
+icon=/path/to/icon
+copyright=Copyright © 2010 softshaker 
+license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
+author=softshaker <softshaker@googlemail.com>
