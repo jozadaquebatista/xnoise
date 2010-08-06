@@ -32,6 +32,9 @@ XNOISE_REQUIRED=xnoisepluginscore_version
 dnl required versions for vala, if used
 VALA_REQUIRED=0.9.4
 
+dnl required versions for vala, if used
+VALA_REQUIRED=0.9.4
+
 # Disable generation of static libraries
 AC_DISABLE_STATIC
 
@@ -190,6 +193,26 @@ AM_CONDITIONAL(ENABLE_LYRICSFLY, test x"$enable_lyricsfly" = "xyes")
 dnl ================================================================
 
 dnl ================================================================
+dnl dependency check for optional build of lyricwiki plugin 
+
+AC_ARG_ENABLE([lyricwiki],
+    AS_HELP_STRING([--disable-lyricwiki],
+    [Disable lyricwiki plugin (default: enabled)]),
+    [enable_lyricwiki=$enableval],
+    [enable_lyricwiki=yes])
+
+if test "x$enable_lyricwiki" = "xyes"; then
+    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
+        enable_lyricwiki=yes		
+    else
+        enable_lyricwiki=no
+        AC_MSG_WARN([lyricwiki plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_LYRICWIKI, test x"$enable_lyricwiki" = "xyes")
+dnl ================================================================
+
+dnl ================================================================
 dnl dependency check for optional build of lastfmcovers plugin 
 
 AC_ARG_ENABLE([lastfm-covers],
@@ -337,6 +360,7 @@ AC_CONFIG_FILES([
     src/mpris/Makefile
     src/mediakeys/Makefile
     src/chartlyrics/Makefile
+    src/lyricwiki/Makefile
     po/Makefile.in
     vapi/Makefile
 ])
@@ -356,10 +380,11 @@ echo "
     titleToDecoration:             yes (always)
     leoslyrics:                    ${enable_leoslyrics}
     lyricsfly:                     ${enable_lyricsfly}
+    chartlyrics:                   ${enable_chartlyrics}
+    lyricwiki:                     ${enable_lyricwiki}
     lastfm covers:                 ${enable_lastfmcovers}
     notifications:                 ${enable_notifications}
     mediawatcher:                  ${enable_mediawatcher}
     mpris:                         ${enable_mpris}
     mediakeys:                     ${enable_mediakeys}
-    chartlyrics:                   ${enable_chartlyrics}
 "

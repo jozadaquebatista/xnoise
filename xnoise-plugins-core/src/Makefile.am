@@ -34,6 +34,10 @@ if ENABLE_MEDIAKEYS
   SUBDIRS += mediakeys
 endif
 
+if ENABLE_LYRICWIKI
+  SUBDIRS += lyricwiki
+endif
+
 DISTCLEANFILES = \
 	Makefile.in \
 	$(NULL)
