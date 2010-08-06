@@ -255,7 +255,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	private uint source = 0;
 	
 	private void on_album_image_fetched(string _artist, string _album, string image_path) {
-		print("called on_image_fetched");
+		//print("called on_image_fetched");
 		if(image_path == "") 
 			return;
 		

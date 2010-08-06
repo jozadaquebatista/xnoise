@@ -1039,9 +1039,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 			((TreeView)this).style_get_property("vertical-separator", v);
 			int vertical_separator_size = v.get_int();
 			
-			print("|%i|%i", w - (scrollbar_w + 
-			            xn.main_window.hpaned.position + 
-			            n_columns * vertical_separator_size), n_columns);
+			//print("|%i|%i", w - (scrollbar_w + 
+			//            xn.main_window.hpaned.position + 
+			//            n_columns * vertical_separator_size), n_columns);
 			
 			return w - (scrollbar_w + 
 			            xn.main_window.hpaned.position);/* + 

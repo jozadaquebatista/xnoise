@@ -213,7 +213,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	}
 	
 	public void check_image_for_current_track() {
-		print("called check_image called");
+		//print("called check_image called");
 		string? small_name = null;
 		if(get_image_path_for_media_uri(current_uri, ref small_name)) {
 			string? large_name = null; 
@@ -235,7 +235,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 			image_path_small = small_name;
 		}
 		else {
-		print("all null");
+		//print("all null");
 			image_path_small = null;
 			image_path_large = null;
 		}
