@@ -34,7 +34,9 @@ GIO_REQUIRED=2.16
 GTK_REQUIRED=2.18.0
 SQLITE_REQUIRED=3.4
 TAGLIB_C_REQUIRED=1.5.0
-VALA_REQUIRED=0.9.2
+
+dnl required versions for vala, if used
+VALA_REQUIRED=0.9.4
 
 AC_PROG_CC
 AC_ARG_ENABLE([usevala],
@@ -44,9 +46,16 @@ AC_ARG_ENABLE([usevala],
     [enable_usevala=yes])
 
 if test "x$enable_usevala" = "xyes"; then
-    AM_PROG_VALAC($VALA_REQUIRED)
+    PKG_CHECK_MODULES(VALACOMPILER, \
+                      vala-1.0 >= $VALA_REQUIRED, \
+                      have_vala=yes, \
+                      have_vala=no)
+    if test "x$have_vala" = "xno"; then
+        AC_MSG_WARN([vala $VALA_REQUIRED or greater not found.])
+    else
+        AM_PROG_VALAC($VALA_REQUIRED)
+    fi
 fi
-AM_CONDITIONAL(ENABLE_NOTIFICATIONS, test x"$enable_usevala" = "xyes")
 
 AC_STDC_HEADERS
 AC_PROG_LIBTOOL
