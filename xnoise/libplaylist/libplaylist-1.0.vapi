@@ -201,6 +201,7 @@ namespace SimpleXml {
 		public void clear ();
 		public unowned SimpleXml.Node? @get (int idx);
 		public unowned SimpleXml.Node? get_child_by_name (string childname);
+		public SimpleXml.Node[] get_children_by_name (string childname);
 		public int get_idx_of_child (SimpleXml.Node node);
 		public bool has_attributes ();
 		public bool has_children ();

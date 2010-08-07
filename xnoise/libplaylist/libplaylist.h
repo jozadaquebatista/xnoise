@@ -426,6 +426,7 @@ void simple_xml_node_prepend_child (SimpleXmlNode* self, SimpleXmlNode* node);
 void simple_xml_node_append_child (SimpleXmlNode* self, SimpleXmlNode* node);
 void simple_xml_node_insert_child (SimpleXmlNode* self, gint pos, SimpleXmlNode* node);
 SimpleXmlNode* simple_xml_node_get_child_by_name (SimpleXmlNode* self, const char* childname);
+SimpleXmlNode** simple_xml_node_get_children_by_name (SimpleXmlNode* self, const char* childname, int* result_length1);
 gint simple_xml_node_get_idx_of_child (SimpleXmlNode* self, SimpleXmlNode* node);
 SimpleXmlNode* simple_xml_node_get (SimpleXmlNode* self, gint idx);
 void simple_xml_node_set (SimpleXmlNode* self, gint idx, SimpleXmlNode* node);

@@ -215,10 +215,12 @@ namespace Pl {
 			this.file = _file;
 			set_base_path();
 			var mr = new SimpleXml.Reader(file);
-			yield mr.read_asyn(false); 
+			yield mr.read_asyn(false); //read not case sensitive
 			if(mr.root == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error with async asx reading\n");
 			}
+			
+			//get asx root node
 			unowned SimpleXml.Node asx_base = mr.root.get_child_by_name("asx");
 			if(asx_base == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error with async asx reading\n");
@@ -226,9 +228,13 @@ namespace Pl {
 			//print("children: %d\n", asx_base.children_count);
 			//print("name: %s\n", asx_base.name);
 			
-			foreach(SimpleXml.Node nd in asx_base) {
-				if(nd.name == "entry") {
-
+			//get all entry nodes
+			SimpleXml.Node[] entries = asx_base.get_children_by_name("entry");
+			if(entries == null) {
+				throw new InternalReaderError.INVALID_FILE("internal error 2 with async asx reading. No entries\n");
+			}
+			
+			foreach(unowned SimpleXml.Node nd in entries) {
 					Item d = new Item();
 
 					unowned SimpleXml.Node tmp = nd.get_child_by_name("ref");
@@ -255,7 +261,6 @@ namespace Pl {
 					}
 					
 					data_collection.append(d);
-				}
 			}
 			Idle.add( () => {
 				this.finished(file.get_uri());

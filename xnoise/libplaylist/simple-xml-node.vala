@@ -159,6 +159,15 @@ namespace SimpleXml {
 			return null;
 		}
 		
+		public Node[] get_children_by_name(string childname) {
+			Node[] nds = {};
+			foreach(unowned Node n in this) {
+				if(n.name == childname)
+					nds += n;
+			}
+			return nds;
+		}
+
 		public int get_idx_of_child(Node node) {
 			int idx = -1;
 			foreach(Node n in this) {
