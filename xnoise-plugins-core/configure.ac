@@ -30,10 +30,7 @@ DBUS_GLIB_REQUIRED=0.0.1
 XNOISE_REQUIRED=xnoisepluginscore_version
 
 dnl required versions for vala, if used
-VALA_REQUIRED=0.9.4
-
-dnl required versions for vala, if used
-VALA_REQUIRED=0.9.4
+VALA_REQUIRED=0.9.6
 
 # Disable generation of static libraries
 AC_DISABLE_STATIC
@@ -47,7 +44,7 @@ AC_ARG_ENABLE([usevala],
 
 if test "x$enable_usevala" = "xyes"; then
     PKG_CHECK_MODULES(VALACOMPILER, \
-                      vala-1.0 >= $VALA_REQUIRED, \
+                      vala-0.10 >= $VALA_REQUIRED, \
                       have_vala=yes, \
                       have_vala=no)
     if test "x$have_vala" = "xno"; then

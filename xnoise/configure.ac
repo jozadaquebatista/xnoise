@@ -36,7 +36,7 @@ SQLITE_REQUIRED=3.4
 TAGLIB_C_REQUIRED=1.5.0
 
 dnl required versions for vala, if used
-VALA_REQUIRED=0.9.4
+VALA_REQUIRED=0.9.6
 
 AC_PROG_CC
 AC_ARG_ENABLE([usevala],
@@ -47,7 +47,7 @@ AC_ARG_ENABLE([usevala],
 
 if test "x$enable_usevala" = "xyes"; then
     PKG_CHECK_MODULES(VALACOMPILER, \
-                      vala-1.0 >= $VALA_REQUIRED, \
+                      vala-0.10 >= $VALA_REQUIRED, \
                       have_vala=yes, \
                       have_vala=no)
     if test "x$have_vala" = "xno"; then
@@ -115,7 +115,7 @@ AC_SUBST(LIBPLAYLIST_PACKAGES)
 
 
 dnl VAPIDIR is used to place the xnoise vapi file
-VAPIDIR="${datadir}/vala/vapi"
+VAPIDIR="${datadir}/vala-0.10/vapi"
 AC_SUBST(VAPIDIR)
 dnl ================================================================
 
