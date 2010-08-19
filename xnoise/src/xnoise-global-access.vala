@@ -98,6 +98,9 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	private string? _current_uri = null;
 	private Gtk.TreeRowReference? _position_reference = null;
 	private Gtk.TreeRowReference? _position_reference_next = null;
+	
+	private RemoteSchemes _remote_schemes = new RemoteSchemes();
+	private LocalSchemes  _local_schemes  = new LocalSchemes();
 
 	// ENUMS
 	public enum TrackState {
@@ -175,6 +178,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 			}
 		}
 	}
+
 	public bool _media_import_in_progress;
 	public bool media_import_in_progress {
 		get {
@@ -182,6 +186,18 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		}
 		set {
 				_media_import_in_progress = value;
+		}
+	}
+
+	public RemoteSchemes remote_schemes { 
+		get {
+			return _remote_schemes;
+		}
+	}
+	
+	public LocalSchemes local_schemes { 
+		get {
+			return _local_schemes;
 		}
 	}
 	

@@ -103,13 +103,14 @@ private class Xnoise.AppStarter {
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 		if(_fileargs != null) {
+			var ls = new Xnoise.LocalSchemes();
 			foreach(string s in _fileargs) {
 				f = File.new_for_commandline_arg(s); //fileargs[i]);
 				if(f == null) continue;
 				if(!f.query_exists(null)) continue;
 				string urischeme = f.get_uri_scheme();
 				string content = null;
-				if(urischeme=="file") {
+				if(urischeme in ls) {
 					try {
 						FileInfo info = f.query_info(attr,
 													 FileQueryInfoFlags.NONE,

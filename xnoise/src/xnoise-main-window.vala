@@ -313,7 +313,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				global.state_playing = true;
 			}
 */
-			if(file.get_uri_scheme() != "http") {
+			if(!(file.get_uri_scheme() in global.remote_schemes)) {
 				TrackData td;
 				if(dbBr.get_trackdata_for_uri(uri, out td)) {
 					this.trackList.tracklistmodel.insert_title(null,

@@ -113,7 +113,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			this.playbin.uri = (value == null ? "" : value);
 			if(value != null) {
 				File file = File.new_for_commandline_arg(value);
-				if(file.get_uri_scheme() == "http") // TODO: Maybe there is a better way to check this?
+				if(file.get_uri_scheme() in global.remote_schemes)
 					is_stream = true;
 			}
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar

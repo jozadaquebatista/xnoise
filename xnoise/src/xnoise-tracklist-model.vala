@@ -488,7 +488,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			bool is_stream = false;
 			string urischeme = file.get_uri_scheme();
 			var t = new TrackData();
-			if(urischeme == "file") {
+			if(urischeme in global.local_schemes) {
 				try {
 					FileInfo info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE,
 				                                    FileQueryInfoFlags.NONE,
@@ -507,7 +507,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 					is_stream = true;
 				}
 			}
-			else if(urischeme == "http") {
+			else if(urischeme in global.remote_schemes) {
 				is_stream = true;
 			}
 			if(k == 0) { // first track

@@ -237,6 +237,51 @@ public class Xnoise.TrackData { // track meta information
 	public string Uri;
 }
 
+public class Xnoise.RemoteSchemes {
+	// remote types for data
+	private string[] _list = {
+		"http", 
+		"https", 
+		"ftp"
+	};
+
+	public string[] list {
+		get {
+			return _list;
+		}
+	}
+	
+	// syntax support for 'in'
+	public bool contains(string location) {
+		foreach(string s in _list) {
+			if(location == s) return true;
+		}
+		return false;
+	}
+}
+
+public class Xnoise.LocalSchemes {
+	// locally mounted types for data
+	private string[] _list = {
+		"file", 
+		"dvd", 
+		"cdrom"
+	};
+
+	public string[] list {
+		get {
+			return _list;
+		}
+	}
+	
+	// syntax support for 'in'
+	public bool contains(string location) {
+		foreach(string s in _list) {
+			if(location == s) return true;
+		}
+		return false;
+	}
+}
 
 
 // STRUCTS

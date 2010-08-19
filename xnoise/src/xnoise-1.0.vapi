@@ -130,10 +130,12 @@ namespace Xnoise {
 		public string? current_uri { get; set; }
 		public string? image_path_large { get; set; }
 		public string? image_path_small { get; set; }
+		public Xnoise.LocalSchemes local_schemes { get; }
 		public bool media_import_in_progress { get; set; }
 		public bool notifications_available { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
+		public Xnoise.RemoteSchemes remote_schemes { get; }
 		public string settings_folder { get; }
 		public Xnoise.GlobalAccess.TrackState track_state { get; set; }
 		public signal void before_position_reference_changed ();
@@ -183,6 +185,12 @@ namespace Xnoise {
 		public void update_extra_widget (Gtk.Widget? widget);
 		public void update_symbol_widget (Xnoise.UserInfo.ContentClass cc);
 		public void update_text (string txt, bool bold = true);
+	}
+	[CCode (ref_function = "xnoise_local_schemes_ref", unref_function = "xnoise_local_schemes_unref", cheader_filename = "xnoise.h")]
+	public class LocalSchemes {
+		public LocalSchemes ();
+		public bool contains (string location);
+		public string[] list { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsLoader : GLib.Object {
@@ -389,6 +397,12 @@ namespace Xnoise {
 		public void set_width (int w);
 		public static void text_cell_cb (Gtk.CellLayout cell_layout, Gtk.CellRenderer cell, Gtk.TreeModel tree_model, Gtk.TreeIter iter);
 		public signal void sign_plugin_activestate_changed (string name);
+	}
+	[CCode (ref_function = "xnoise_remote_schemes_ref", unref_function = "xnoise_remote_schemes_unref", cheader_filename = "xnoise.h")]
+	public class RemoteSchemes {
+		public RemoteSchemes ();
+		public bool contains (string location);
+		public string[] list { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class SettingsDialog : Gtk.Builder {

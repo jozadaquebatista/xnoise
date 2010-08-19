@@ -436,7 +436,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 				bool is_stream = false;
 				uri = uris[i];
 				file = File.new_for_uri(uri);
-				if(file.get_uri_scheme() == "http") is_stream = true;
+				if(file.get_uri_scheme() in global.remote_schemes) is_stream = true;
 				if(!is_stream) {
 					try {
 						FileInfo info = file.query_info(attr,
@@ -836,7 +836,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		//check for existance on local files
 		File track = File.new_for_uri(uri);
 
-		if(track.get_uri_scheme() == "file") {
+		if(track.get_uri_scheme() in global.local_schemes) {
 			if(!track.query_exists(null)) return;
 		}
 

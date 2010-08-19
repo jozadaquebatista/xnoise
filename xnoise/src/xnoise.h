@@ -150,6 +150,26 @@ typedef struct _XnoiseGlobalAccessPrivate XnoiseGlobalAccessPrivate;
 
 #define XNOISE_GLOBAL_ACCESS_TYPE_TRACK_STATE (xnoise_global_access_track_state_get_type ())
 
+#define XNOISE_TYPE_REMOTE_SCHEMES (xnoise_remote_schemes_get_type ())
+#define XNOISE_REMOTE_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_REMOTE_SCHEMES, XnoiseRemoteSchemes))
+#define XNOISE_REMOTE_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_REMOTE_SCHEMES, XnoiseRemoteSchemesClass))
+#define XNOISE_IS_REMOTE_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_REMOTE_SCHEMES))
+#define XNOISE_IS_REMOTE_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_REMOTE_SCHEMES))
+#define XNOISE_REMOTE_SCHEMES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_REMOTE_SCHEMES, XnoiseRemoteSchemesClass))
+
+typedef struct _XnoiseRemoteSchemes XnoiseRemoteSchemes;
+typedef struct _XnoiseRemoteSchemesClass XnoiseRemoteSchemesClass;
+
+#define XNOISE_TYPE_LOCAL_SCHEMES (xnoise_local_schemes_get_type ())
+#define XNOISE_LOCAL_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemes))
+#define XNOISE_LOCAL_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemesClass))
+#define XNOISE_IS_LOCAL_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_LOCAL_SCHEMES))
+#define XNOISE_IS_LOCAL_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_LOCAL_SCHEMES))
+#define XNOISE_LOCAL_SCHEMES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemesClass))
+
+typedef struct _XnoiseLocalSchemes XnoiseLocalSchemes;
+typedef struct _XnoiseLocalSchemesClass XnoiseLocalSchemesClass;
+
 #define XNOISE_TYPE_GST_PLAYER (xnoise_gst_player_get_type ())
 #define XNOISE_GST_PLAYER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayer))
 #define XNOISE_GST_PLAYER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayerClass))
@@ -359,6 +379,8 @@ typedef struct _XnoiseParamsClass XnoiseParamsClass;
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
 typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
+typedef struct _XnoiseRemoteSchemesPrivate XnoiseRemoteSchemesPrivate;
+typedef struct _XnoiseLocalSchemesPrivate XnoiseLocalSchemesPrivate;
 
 #define XNOISE_TYPE_ILYRICS (xnoise_ilyrics_get_type ())
 #define XNOISE_ILYRICS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ILYRICS, XnoiseILyrics))
@@ -807,6 +829,28 @@ struct _XnoiseTrackDataClass {
 	void (*finalize) (XnoiseTrackData *self);
 };
 
+struct _XnoiseRemoteSchemes {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseRemoteSchemesPrivate * priv;
+};
+
+struct _XnoiseRemoteSchemesClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseRemoteSchemes *self);
+};
+
+struct _XnoiseLocalSchemes {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseLocalSchemesPrivate * priv;
+};
+
+struct _XnoiseLocalSchemesClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseLocalSchemes *self);
+};
+
 struct _XnoiseILyricsIface {
 	GTypeInterface parent_iface;
 	void (*find_lyrics) (XnoiseILyrics* self);
@@ -1139,6 +1183,22 @@ const GtkTreeRowReference* xnoise_global_access_get_position_reference_next (Xno
 void xnoise_global_access_set_position_reference_next (XnoiseGlobalAccess* self, const GtkTreeRowReference* value);
 gboolean xnoise_global_access_get_media_import_in_progress (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_media_import_in_progress (XnoiseGlobalAccess* self, gboolean value);
+gpointer xnoise_remote_schemes_ref (gpointer instance);
+void xnoise_remote_schemes_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_remote_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_remote_schemes (GValue* value, gpointer v_object);
+void xnoise_value_take_remote_schemes (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_remote_schemes (const GValue* value);
+GType xnoise_remote_schemes_get_type (void) G_GNUC_CONST;
+XnoiseRemoteSchemes* xnoise_global_access_get_remote_schemes (XnoiseGlobalAccess* self);
+gpointer xnoise_local_schemes_ref (gpointer instance);
+void xnoise_local_schemes_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_local_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_local_schemes (GValue* value, gpointer v_object);
+void xnoise_value_take_local_schemes (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_local_schemes (const GValue* value);
+GType xnoise_local_schemes_get_type (void) G_GNUC_CONST;
+XnoiseLocalSchemes* xnoise_global_access_get_local_schemes (XnoiseGlobalAccess* self);
 const char* xnoise_global_access_get_current_artist (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_current_artist (XnoiseGlobalAccess* self, const char* value);
 const char* xnoise_global_access_get_current_album (XnoiseGlobalAccess* self);
@@ -1285,6 +1345,14 @@ char* xnoise_get_stream_uri (const char* playlist_uri);
 GType gst_stream_type_get_type (void) G_GNUC_CONST;
 XnoiseTrackData* xnoise_track_data_new (void);
 XnoiseTrackData* xnoise_track_data_construct (GType object_type);
+gboolean xnoise_remote_schemes_contains (XnoiseRemoteSchemes* self, const char* location);
+XnoiseRemoteSchemes* xnoise_remote_schemes_new (void);
+XnoiseRemoteSchemes* xnoise_remote_schemes_construct (GType object_type);
+char** xnoise_remote_schemes_get_list (XnoiseRemoteSchemes* self, int* result_length1);
+gboolean xnoise_local_schemes_contains (XnoiseLocalSchemes* self, const char* location);
+XnoiseLocalSchemes* xnoise_local_schemes_new (void);
+XnoiseLocalSchemes* xnoise_local_schemes_construct (GType object_type);
+char** xnoise_local_schemes_get_list (XnoiseLocalSchemes* self, int* result_length1);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_ilyrics_get_type (void) G_GNUC_CONST;
