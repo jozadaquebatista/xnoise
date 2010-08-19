@@ -13,7 +13,6 @@ m4_define(libplaylist_micro_version, 1)
 m4_define(libplaylist_version, libplaylist_major_version.libplaylist_minor_version.libplaylist_micro_version)
 
 AC_INIT(xnoise, xnoise_version, shuerhaakenATgo oglemail.com, [xnoise])
-#AC_INIT(libplaylist, libplaylist_version, shuerhaakenATgo oglemail.com, [libplaylist])
 
 # require automake-1.11 for vala support
 AM_INIT_AUTOMAKE([1.11 dist-bzip2])
@@ -36,7 +35,7 @@ SQLITE_REQUIRED=3.4
 TAGLIB_C_REQUIRED=1.5.0
 
 dnl required versions for vala, if used
-VALA_REQUIRED=0.9.6
+VALA_REQUIRED=0.9.7
 
 AC_PROG_CC
 AC_ARG_ENABLE([usevala],

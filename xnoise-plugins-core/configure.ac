@@ -30,7 +30,7 @@ DBUS_GLIB_REQUIRED=0.0.1
 XNOISE_REQUIRED=xnoisepluginscore_version
 
 dnl required versions for vala, if used
-VALA_REQUIRED=0.9.6
+VALA_REQUIRED=0.9.7
 
 # Disable generation of static libraries
 AC_DISABLE_STATIC
@@ -373,7 +373,7 @@ echo "
     prefix:                        ${prefix}
     CFLAGS:                        ${CFLAGS}
     
-  Plugins to build: 
+  Plugins included in this build: 
     titleToDecoration:             yes (always)
     leoslyrics:                    ${enable_leoslyrics}
     lyricsfly:                     ${enable_lyricsfly}
