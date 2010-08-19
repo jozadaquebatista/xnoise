@@ -246,7 +246,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	                             bool bold = false,
 	                             string uri) {
 		TreeIter iter;
-		int int_bold = 400;
+		int int_bold = Pango.Weight.NORMAL;
 		string? tracknumberString = null;
 		string? lengthString = null;
 		this.append(out iter);
@@ -263,9 +263,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 
 		if(bold)
-			int_bold = 700; // Pango code for bold
+			int_bold = Pango.Weight.BOLD;
 		else
-			int_bold = 400; // Pango code for not bold
+			int_bold = Pango.Weight.NORMAL;
 
 		this.set(iter,
 		         Column.ICON, pixbuf,
@@ -287,7 +287,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			return false;
 	}
 
-	//
 	public void set_reference_to_last() {
 		TreeIter iter;
 		int numberOfRows = 0;
@@ -306,7 +305,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		global.position_reference_next = new TreeRowReference(this, tpath);
 	}
 
-
+	// used for saving current tracks in list before quit
 	public string[] get_all_tracks() {
 		list_of_uris = {};
 		this.foreach(list_foreach);
@@ -412,7 +411,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		this.get_iter(out citer, tpath);
 
 		this.set(citer,
-		         Column.WEIGHT, 700,
+		         Column.WEIGHT, Pango.Weight.BOLD,
 		         -1);
 	}
 
@@ -427,7 +426,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		TreeIter citer;
 		this.get_iter(out citer, tpath);
 		this.set(citer,
-		         Column.WEIGHT, 400,
+		         Column.WEIGHT, Pango.Weight.NORMAL,
 		         -1);
 	}
 

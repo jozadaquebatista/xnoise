@@ -92,8 +92,8 @@ namespace Xnoise {
 				                    null, 
 				                    out exit_status);
 			}
-			catch (GLib.Error e) {
-				error("Failed to inhibit screensaver using xdg-screensaver: %s", e.message);
+			catch(GLib.Error e) {
+				print("Failed to inhibit screensaver using xdg-screensaver: %s\n", e.message);
 				return false;
 			}
 		
@@ -110,8 +110,8 @@ namespace Xnoise {
 				                    null, 
 				                    out exit_status);
 			}
-			catch (GLib.Error e) {
-				error("Failed to uninhibit screensaver using xdg-screensaver: %s", e.message);
+			catch(GLib.Error e) {
+				print("Failed to uninhibit screensaver using xdg-screensaver: %s", e.message);
 				return false;
 			}
 		

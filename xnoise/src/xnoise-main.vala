@@ -157,6 +157,9 @@ public class Xnoise.Main : GLib.Object {
 			return;
 		}
 		
+		if(dbw == null)
+			return;
+		
 		try {
 			dbw.write_final_tracks_to_db(final_tracklist);
 		}

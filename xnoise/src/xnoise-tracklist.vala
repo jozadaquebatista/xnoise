@@ -53,8 +53,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private const int autoscroll_distance = 50;
 	private uint autoscroll_source = 0;
 	private bool reorder_dragging = false;
-	private uint hide_timer;
-	private bool hide_timer_set = false;
+	private uint hide_timer = 0;
 	private const uint HIDE_TIMEOUT = 1000;
 	private HashTable<string,double?> relative_column_sizes;
 	private int n_columns = 0;
@@ -429,7 +428,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			print("%s\n", e.message);
 			return;
 		}
-		if(!this.reorder_dragging) { 					// DRAGGING NOT WITHIN TRACKLIST
+		if(!this.reorder_dragging) { // DRAGGING NOT WITHIN TRACKLIST
 			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 			bool is_first = true;
@@ -514,16 +513,17 @@ public class Xnoise.TrackList : TreeView, IParams {
 		//if it was only shown temporarily
 		
 		if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
-			if(hide_timer_set) GLib.Source.remove(hide_timer);
+			if(hide_timer != 0) 
+				GLib.Source.remove(hide_timer);
+			
 			hide_timer = Timeout.add(HIDE_TIMEOUT, () => {
-				hide_timer_set = false;
 				if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
 					xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
 					xn.main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
 				}
+				hide_timer = 0;
 				return false;
 			});
-			hide_timer_set = true;
 		}
 	}
 
@@ -607,10 +607,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 				this.tracklistmodel.insert_after(out new_iter, iter);
 			}
 		}
+		//TODO use insert_title function of tracklistmodel instead ?!?
 		tracklistmodel.set(new_iter,
 		                   TrackListModel.Column.TITLE, title,
 		                   TrackListModel.Column.ALBUM, album,
 		                   TrackListModel.Column.ARTIST, artist,
+		                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
 		                   TrackListModel.Column.URI, streamuri,
 		                   -1);
 		path = tracklistmodel.get_path(new_iter);
@@ -717,6 +719,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			                   TrackListModel.Column.ALBUM, album,
 			                   TrackListModel.Column.ARTIST, artist,
 			                   TrackListModel.Column.LENGTH, lengthString,
+			                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
 			                   TrackListModel.Column.URI, fileuri,
 			                   -1);
 			path = tracklistmodel.get_path(new_iter);
@@ -1031,13 +1034,13 @@ public class Xnoise.TrackList : TreeView, IParams {
 				if(scrollbar != null) {
 					Requisition req; 
 					scrollbar.get_child_requisition(out req);
-					scrollbar_w = req.width;				
+					scrollbar_w = req.width;
 				}
 			}
 			
 			Value v = Value(typeof(int));
 			((TreeView)this).style_get_property("vertical-separator", v);
-			int vertical_separator_size = v.get_int();
+			//int vertical_separator_size = v.get_int();
 			
 			//print("|%i|%i", w - (scrollbar_w + 
 			//            xn.main_window.hpaned.position + 
