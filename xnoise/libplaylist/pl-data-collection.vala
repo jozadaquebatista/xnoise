@@ -20,12 +20,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  *
- * This file is based on excerpts from libgee version as of April 2010
+ * This file uses excerpts from libgee version as of April 2010
  * Original Authors:
  * 	Jürg Billeter <j@bitron.ch>
  * 	Didier 'Ptitjes Villevalois <ptitjes@free.fr>
- * 	and others 
- * 	modified by Jörn Magens <shuerhaaken@googlemail.com>
+ * 	and others
  * 
  * Authors:
  * 	Jörn Magens <shuerhaaken@googlemail.com>
@@ -38,6 +37,7 @@ namespace Pl {
 		private Item[] _items = {};
 		private int _size;
 		private int _stamp = 0;
+		private List<string> _general_info = new List<string>();
 
 		public ItemCollection() {
 			this._items = new Item[4];
@@ -45,6 +45,16 @@ namespace Pl {
 
 		public int get_size() {
 			return _size;
+		}
+
+		public List<string> general_info {
+			get {
+				return _general_info;
+			}
+			set {
+				if(value != null)
+					_general_info = value.copy();
+			}
 		}
 
 		public bool data_available() {

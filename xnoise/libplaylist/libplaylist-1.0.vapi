@@ -100,6 +100,7 @@ namespace Pl {
 		public bool remove (Pl.Item item);
 		public Pl.Item remove_at (int index);
 		public void @set (int index, Pl.Item item);
+		public GLib.List<string> general_info { get; set; }
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Reader : GLib.Object {

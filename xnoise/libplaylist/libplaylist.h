@@ -347,6 +347,8 @@ gboolean pl_item_collection_remove (PlItemCollection* self, PlItem* item);
 PlItem* pl_item_collection_remove_at (PlItemCollection* self, gint index);
 void pl_item_collection_clear (PlItemCollection* self);
 void pl_item_collection_merge (PlItemCollection* self, PlItemCollection* data_collection);
+GList* pl_item_collection_get_general_info (PlItemCollection* self);
+void pl_item_collection_set_general_info (PlItemCollection* self, GList* value);
 PlItemCollectionIterator* pl_item_collection_iterator_new (PlItemCollection* dc);
 PlItemCollectionIterator* pl_item_collection_iterator_construct (GType object_type, PlItemCollection* dc);
 gboolean pl_item_collection_iterator_next (PlItemCollectionIterator* self);
