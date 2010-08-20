@@ -489,7 +489,7 @@ namespace SimpleXml {
 							return TokenType.ERROR;
 						}
 						this.current++;
-						attributes.insert(attr_name, attr_value);
+						attributes.insert(attr_name.down(), attr_value); //TODO: is it ok to do this lowercase always?
 						skip_space();
 					}
 					if(this.current[0] == '/') {

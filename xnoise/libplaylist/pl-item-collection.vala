@@ -37,7 +37,7 @@ namespace Pl {
 		private Item[] _items = {};
 		private int _size;
 		private int _stamp = 0;
-		private List<string> _general_info = new List<string>();
+		private HashTable<string, string> _general_info = new HashTable<string, string>(str_hash, str_equal);
 
 		public ItemCollection() {
 			this._items = new Item[4];
@@ -47,16 +47,26 @@ namespace Pl {
 			return _size;
 		}
 
-		public List<string> general_info {
-			get {
-				return _general_info;
-			}
-			set {
-				if(value != null)
-					_general_info = value.copy();
-			}
+		public void add_general_info(string key, string val) {
+			_general_info.insert(key, val);
 		}
+		
+		public string[] get_general_info_keys() {
+			string[] retval = {};
+			List<string> list = _general_info.get_keys();
+			if(list == null)
+				return retval;
+			
+			foreach(string s in list)
+				retval += s;
 
+			return retval;
+		}
+		
+		public string get_general_info(string key) {
+			return _general_info.lookup(key);
+		}
+		
 		public bool data_available() {
 			return this.get_size() > 0;
 		}

@@ -149,7 +149,28 @@ namespace Pl {
 			//print("children: %d\n", wpl_base.children_count);
 			//print("name: %s\n", wpl_base.name);
 			
-			unowned SimpleXml.Node tmp = wpl_base.get_child_by_name("body");
+			unowned SimpleXml.Node tmp;
+			unowned SimpleXml.Node tmp_head;
+			
+			tmp_head = wpl_base.get_child_by_name("head");
+
+			tmp = tmp_head.get_child_by_name("author");
+			if(tmp != null && tmp.text != null)
+				data_collection.add_general_info("author", tmp.text);
+			
+			tmp = tmp_head.get_child_by_name("title");
+			if(tmp != null && tmp.text != null)
+				data_collection.add_general_info("title", tmp.text);
+
+			SimpleXml.Node[] metas = tmp_head.get_children_by_name("meta");
+			if(metas != null) {
+				foreach(unowned SimpleXml.Node nx in metas) {
+					if(nx.attributes.lookup("name") != null && nx.attributes.lookup("content") != null)
+						data_collection.add_general_info(nx.attributes.lookup("name"), nx.attributes.lookup("content"));
+				}
+			}
+			
+			tmp = wpl_base.get_child_by_name("body");
 			if(tmp == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error 2 with async wpl reading. No entries\n");
 			}

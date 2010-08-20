@@ -71,6 +71,7 @@ namespace Pl {
 			public void @set (Pl.Item item);
 		}
 		public ItemCollection ();
+		public void add_general_info (string key, string val);
 		public bool append (Pl.Item item);
 		public void clear ();
 		public bool contains (Pl.Item d);
@@ -85,6 +86,8 @@ namespace Pl {
 		public long get_duration_for_uri (ref string uri_needle);
 		public string? get_duration_string_for_uri (ref string uri_needle);
 		public string[] get_found_uris ();
+		public string get_general_info (string key);
+		public string[] get_general_info_keys ();
 		public string? get_genre_for_uri (ref string uri_needle);
 		public bool get_is_playlist_for_uri (ref string uri_needle);
 		public bool get_is_remote_for_uri (ref string uri_needle);
@@ -100,7 +103,6 @@ namespace Pl {
 		public bool remove (Pl.Item item);
 		public Pl.Item remove_at (int index);
 		public void @set (int index, Pl.Item item);
-		public GLib.List<string> general_info { get; set; }
 	}
 	[CCode (cheader_filename = "libplaylist.h")]
 	public class Reader : GLib.Object {

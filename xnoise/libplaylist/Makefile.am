@@ -30,8 +30,8 @@ libplaylist_la_SOURCES = \
 	pl-abstract-file-reader.vala \
 	pl-abstract-file-writer.vala \
 	pl-general.vala \
-	pl-data.vala \
-	pl-data-collection.vala \
+	pl-item.vala \
+	pl-item-collection.vala \
 	pl-reader.vala \
 	pl-writer.vala \
 	simple-xml-reader.vala \
