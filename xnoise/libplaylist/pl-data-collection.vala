@@ -24,7 +24,6 @@
  * Original Authors:
  * 	Jürg Billeter <j@bitron.ch>
  * 	Didier 'Ptitjes Villevalois <ptitjes@free.fr>
- * 	Didier 'Ptitjes' Villevalois <ptitjes@free.fr>
  * 	and others 
  * 	modified by Jörn Magens <shuerhaaken@googlemail.com>
  * 
@@ -40,7 +39,7 @@ namespace Pl {
 		private int _size;
 		private int _stamp = 0;
 
-		public ItemCollection() { //EqualFunc? equalfunc = null
+		public ItemCollection() {
 			this._items = new Item[4];
 		}
 

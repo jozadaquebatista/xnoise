@@ -112,7 +112,7 @@ namespace Xnoise {
 	public static string remove_linebreaks(string? value) {
 		// unexpected linebreaks do not look nice
 		if(value == null)
-			return value;
+			return "";
 		
 		try {
 			GLib.Regex r = new GLib.Regex("\n");
@@ -212,9 +212,9 @@ public enum Xnoise.TrackListNoteBookTab { // used in various places
 }
 
 public enum Gst.StreamType {
-    UNKNOWN = 0,
-    AUDIO   = 1,
-    VIDEO   = 2
+	UNKNOWN = 0,
+	AUDIO   = 1,
+	VIDEO   = 2
 }
 
 
@@ -265,7 +265,7 @@ public class Xnoise.LocalSchemes {
 	private string[] _list = {
 		"file", 
 		"dvd", 
-		"cdrom"
+		"cdda"
 	};
 
 	public string[] list {

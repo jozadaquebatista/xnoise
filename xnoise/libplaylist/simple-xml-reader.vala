@@ -84,52 +84,52 @@ namespace SimpleXml {
 			parse_from_string = true;
 		}
 		
-	private File? buffer_locally() {
-		bool buf = false;
-		File dest;
-		locally_buffered = true;
-		var rnd = new Rand();
-		try {
-			string tmp_dir = Environment.get_tmp_dir();
-			dest = File.new_for_path(GLib.Path.build_filename(tmp_dir, ".simple_xml", file.get_basename() + rnd.next_int().to_string()));
-			if(!dest.get_parent().query_exists(null))
-				dest.get_parent().make_directory_with_parents(null);
-			
-			buf = this.file.copy(dest, 
-			                     FileCopyFlags.OVERWRITE, 
-			                     null, 
-			                     null); 
+		private File? buffer_locally() {
+			bool buf = false;
+			File dest;
+			locally_buffered = true;
+			var rnd = new Rand();
+			try {
+				string tmp_dir = Environment.get_tmp_dir();
+				dest = File.new_for_path(GLib.Path.build_filename(tmp_dir, ".simple_xml", file.get_basename() + rnd.next_int().to_string()));
+				if(!dest.get_parent().query_exists(null))
+					dest.get_parent().make_directory_with_parents(null);
+				
+				buf = this.file.copy(dest, 
+				                     FileCopyFlags.OVERWRITE, 
+				                     null, 
+				                     null); 
+			}
+			catch(GLib.Error e) {
+				print("ERROR: %s\n", e.message);
+				return null;
+			}
+			return dest;
 		}
-		catch(GLib.Error e) {
-			print("ERROR: %s\n", e.message);
-			return null;
-		}
-		return dest;
-	}
 
-	private async File? buffer_locally_asyn() {
-		bool buf = false;
-		File dest;
-		locally_buffered = true;
-		var rnd = new Rand();
-		try {
-			string tmp_dir = Environment.get_tmp_dir();
-			dest = File.new_for_path(GLib.Path.build_filename(tmp_dir, ".simple_xml", file.get_basename() + rnd.next_int().to_string()));
-			if(!dest.get_parent().query_exists(null))
-				dest.get_parent().make_directory_with_parents(null);
+		private async File? buffer_locally_asyn() {
+			bool buf = false;
+			File dest;
+			locally_buffered = true;
+			var rnd = new Rand();
+			try {
+				string tmp_dir = Environment.get_tmp_dir();
+				dest = File.new_for_path(GLib.Path.build_filename(tmp_dir, ".simple_xml", file.get_basename() + rnd.next_int().to_string()));
+				if(!dest.get_parent().query_exists(null))
+					dest.get_parent().make_directory_with_parents(null);
 
-			buf = yield file.copy_async(dest, 
-			                            FileCopyFlags.OVERWRITE, 
-			                            Priority.DEFAULT, 
-			                            null, 
-			                            null); 
+				buf = yield file.copy_async(dest, 
+				                            FileCopyFlags.OVERWRITE, 
+				                            Priority.DEFAULT, 
+				                            null, 
+				                            null); 
+			}
+			catch(GLib.Error e) {
+				print("ERROR: %s\n", e.message);
+				return null;
+			}
+			return dest;
 		}
-		catch(GLib.Error e) {
-			print("ERROR: %s\n", e.message);
-			return null;
-		}
-		return dest;
-	}
 
 		private void load_markup_file() {
 			

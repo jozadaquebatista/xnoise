@@ -137,77 +137,77 @@ namespace Pl {
 			return data_collection;
 		}
 
-		//public override ItemCollection read(File _file) throws InternalReaderError {
-		public ItemCollection read_old(File _file) throws InternalReaderError {
-			ItemCollection data_collection = new ItemCollection();
-			this.file = _file;
-			set_base_path();
-			
-			bool entry_on = false;
-		
-			if(!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
-				stderr.printf("File '%s' doesn't exist.\n",file.get_uri());
-				return data_collection;
-			}
-		
-			try {
-				var in_stream = new DataInputStream(file.read(null));
-				string line;
-				Item d = null;
-				while((line = in_stream.read_line(null, null)) != null) {
-					char* begin;
-					char* end;
-					
-					if(line.has_prefix("#")) { //# Comments
-						continue;
-					}
-					else if(line.size() == 0) { //Blank line
-						continue;
-					}
-					else if(line.contains("<entry>")) {
-						d = new Item();
-						entry_on = true;
-						continue;
-					}
-					else if(line.contains("</entry>")) {
-						entry_on = false;
-						data_collection.append(d);
-						continue;
-					}
-					else {
-						if(entry_on) {
-							if(line.contains("<ref")) {
-								begin = line.str("\"");
-								begin ++;
-								end = line.rstr("\"");
-								if(begin >= end) {
-									print("no url inside\n");
-									continue;
-								}
-								*end = '\0';
-								//print("\nasx location %s\n", ((string)begin));
-								TargetType tt;
-								File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
-								d.target_type = tt;
-								//print("\nasx read uri: %s\n", tmp.get_uri());
-								d.add_field(Item.Field.URI, tmp.get_uri());
-							}
-							else if(line.contains("<title>")) {
-								begin = line.str("<title>");
-								begin += "<title>".size();
-								end = line.rstr("</title>");
-								*end = '\0';
-								d.add_field(Item.Field.TITLE, (string)begin);
-							}
-						}
-					}
-				}
-			}
-			catch(GLib.Error e) {
-				print("Errorr: %s\n", e.message);
-			}
-			return data_collection;
-		}
+//		//public override ItemCollection read(File _file) throws InternalReaderError {
+//		public ItemCollection read_old(File _file) throws InternalReaderError {
+//			ItemCollection data_collection = new ItemCollection();
+//			this.file = _file;
+//			set_base_path();
+//			
+//			bool entry_on = false;
+//		
+//			if(!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
+//				stderr.printf("File '%s' doesn't exist.\n",file.get_uri());
+//				return data_collection;
+//			}
+//		
+//			try {
+//				var in_stream = new DataInputStream(file.read(null));
+//				string line;
+//				Item d = null;
+//				while((line = in_stream.read_line(null, null)) != null) {
+//					char* begin;
+//					char* end;
+//					
+//					if(line.has_prefix("#")) { //# Comments
+//						continue;
+//					}
+//					else if(line.size() == 0) { //Blank line
+//						continue;
+//					}
+//					else if(line.contains("<entry>")) {
+//						d = new Item();
+//						entry_on = true;
+//						continue;
+//					}
+//					else if(line.contains("</entry>")) {
+//						entry_on = false;
+//						data_collection.append(d);
+//						continue;
+//					}
+//					else {
+//						if(entry_on) {
+//							if(line.contains("<ref")) {
+//								begin = line.str("\"");
+//								begin ++;
+//								end = line.rstr("\"");
+//								if(begin >= end) {
+//									print("no url inside\n");
+//									continue;
+//								}
+//								*end = '\0';
+//								//print("\nasx location %s\n", ((string)begin));
+//								TargetType tt;
+//								File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
+//								d.target_type = tt;
+//								//print("\nasx read uri: %s\n", tmp.get_uri());
+//								d.add_field(Item.Field.URI, tmp.get_uri());
+//							}
+//							else if(line.contains("<title>")) {
+//								begin = line.str("<title>");
+//								begin += "<title>".size();
+//								end = line.rstr("</title>");
+//								*end = '\0';
+//								d.add_field(Item.Field.TITLE, (string)begin);
+//							}
+//						}
+//					}
+//				}
+//			}
+//			catch(GLib.Error e) {
+//				print("Errorr: %s\n", e.message);
+//			}
+//			return data_collection;
+//		}
 
 
 		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {

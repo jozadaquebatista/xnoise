@@ -1034,20 +1034,34 @@ void m3u_async_finished_cb01(Pl.Reader sender, string pluri) {
 	return;
 }
 
-//bool test_m3u_reading() {
-//	File f = File.new_for_path("./playlist-examples/test_m3u.m3u");
-//	var reader = new Pl.Reader();
-//	try {
-//		reader.read(f.get_uri(), null);
-//	}
-//	catch(Error e) {
-//		print("m3u test error reading\n");
-//		return false;
-//	}
-//	var uris = reader.get_found_uris();
-//	//print("Size: %s\n", uris.length.to_string());
-//	return uris[0] == "http://media.example.com/entire.ts" && reader.get_number_of_entries() == 1;
-//}
+
+void test_wpl_async_reading() {
+	File f = File.new_for_path("./playlist-examples/wpl_test.wpl");
+	var wplreader = new Pl.Reader();
+	wplreader.finished.connect(wpl_async_finished_cb01);
+	wplreader.ref(); //prevent destruction
+	try {
+		wplreader.read_asyn.begin(f.get_uri());
+		
+	}
+	catch(Error e) {
+		print("wpl async test error reading\n");
+		return;
+	}
+	return;// uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
+}
+void wpl_async_finished_cb01(Pl.Reader sender, string pluri) {
+//	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
+	var uris = sender.get_found_uris();
+	if(uris[0] == "mms://win40nj.audiovideoweb.com/avwebdsnjwinlive4051" && sender.get_number_of_entries() == 3)
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
+	sender.unref();
+	ml.quit();
+	return;
+}
+
 
 
 void main() {
@@ -1300,5 +1314,11 @@ void main() {
 	test_m3u_async_reading();
 	ml = new MainLoop(); // reuse mainloop for every async test
 	ml.run();
+
+	print("test wpl async reading:");
+	test_wpl_async_reading();
+	ml = new MainLoop(); // reuse mainloop for every async test
+	ml.run();
+
 }
 

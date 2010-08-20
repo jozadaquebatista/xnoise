@@ -133,7 +133,54 @@ namespace Pl {
 	
 		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
 			var data_collection = new ItemCollection();
-			//TODO:
+			this.file = _file;
+			set_base_path();
+			var mr = new SimpleXml.Reader(file);
+			yield mr.read_asyn(false); //read not case sensitive
+			if(mr.root == null) {
+				throw new InternalReaderError.INVALID_FILE("internal error with async wpl reading\n");
+			}
+			
+			//get asx root node
+			unowned SimpleXml.Node wpl_base = mr.root.get_child_by_name("smil");
+			if(wpl_base == null) {
+				throw new InternalReaderError.INVALID_FILE("internal error with async wpl reading\n");
+			}
+			//print("children: %d\n", wpl_base.children_count);
+			//print("name: %s\n", wpl_base.name);
+			
+			unowned SimpleXml.Node tmp = wpl_base.get_child_by_name("body");
+			if(tmp == null) {
+				throw new InternalReaderError.INVALID_FILE("internal error 2 with async wpl reading. No entries\n");
+			}
+			tmp = tmp.get_child_by_name("seq");
+			SimpleXml.Node[] entries = tmp.get_children_by_name("media");
+			if(entries == null) {
+				throw new InternalReaderError.INVALID_FILE("internal error 3 with async wpl reading. No entries\n");
+			}
+			
+			foreach(unowned SimpleXml.Node nd in entries) {
+				Item d = new Item();
+				
+				string? target = null;
+				target = nd.attributes.lookup("src");
+
+				if(target != null) {
+					TargetType tt;
+					File f = get_file_for_location(target._strip(), ref base_path, out tt);
+					d.target_type = tt;
+					//print("\nasx read uri: %s\n", f.get_uri());
+					d.add_field(Item.Field.URI, f.get_uri());
+				}
+				else
+					continue;
+				
+				data_collection.append(d);
+			}
+			Idle.add( () => {
+				this.finished(file.get_uri());
+				return false;
+			});
 			return data_collection;
 		}
 
