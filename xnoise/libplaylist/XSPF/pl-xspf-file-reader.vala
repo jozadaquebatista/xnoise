@@ -22,184 +22,83 @@
  */
 
 using Xml;
+using SimpleXml;
 
 namespace Pl {
 	private class Xspf.FileReader : AbstractFileReader {
 		private unowned File file;
 
-		private ItemCollection parse(ItemCollection data_collection,ref string base_path = "",string data) throws GLib.Error {
-		string iter_name;
-		Xml.Doc* xmlDoc = Parser.parse_memory(data, (int)data.size());
-		Xml.Node* rootNode = xmlDoc->get_root_element();
-		Pl.Item d = null;
-		for(Xml.Node* iter=rootNode->children; iter!=null;iter=iter->next) {
-			if(iter->type != ElementType.ELEMENT_NODE) {
-				  continue;
-			}
-		
-			iter_name = iter->name.down(); 
-			if(iter_name == "tracklist") {
-				//print("\nTrackList: %s\n","trackList");
-				if(iter->children != null) {
-					Xml.Node *iter_in;   
-					for(iter_in = iter->children->next; iter_in != null;iter_in = iter_in->next) {
-							if(iter_in->is_text() == 0) {
-								switch(iter_in->name.down()) {
-									case "track":
-										if(iter_in->children != null) {
-											Xml.Node *seq_in;
-											d = new Pl.Item();
-											for(seq_in=iter_in->children->next;seq_in!=null;seq_in=seq_in->next) 
-											{
-												if(seq_in->is_text() == 0) {
-													switch(seq_in->name.down()) {
-														case "location": {
-														 string url = seq_in->get_content();
-														 //print("URL = '%s'\n",url);
-														 TargetType tt;
-														 File tmp = get_file_for_location(url, ref base_path, out tt);
-														 d.target_type = tt;
-														 d.add_field(Item.Field.URI, tmp.get_uri());
-														}
-														break;
-														case "title": {
-															//print("%s = '%s'\n",seq_in->name,seq_in->get_content());
-															d.add_field(Item.Field.TITLE,seq_in->get_content());
-														}
-														break;
-														case "default": {}
-														break;
-													}
-												}
-												//delete seq_in;
-											}
-											//ADD
-											data_collection.append(d);
-										}
-										break;
-										default:
-										//print("%s = '%s'\n",iter_in->name,iter_in->get_content());
-										break;
+		private ItemCollection parse(ItemCollection item_collection,
+			                         ref string data) throws GLib.Error {
+			Pl.Item d = null;
+			SimpleXml.Reader reader = new SimpleXml.Reader.from_string(data);
+			reader.read();
+			var root = reader.root;
+			if(root != null && root.has_children()) {
+				var playlist = root[0];
+				if(playlist != null && playlist.name.down() == "playlist" && playlist.has_children()) {
+					SimpleXml.Node trackList = playlist[0];
+					if(trackList != null && trackList.name.down() == "tracklist" && trackList.has_children()) {
+						SimpleXml.Node[] tracks = trackList.get_children_by_name("track");
+						if(tracks != null && tracks.length > 0) {
+							foreach(SimpleXml.Node track in tracks) {
+								if(track.has_children()) {
+									d = new Pl.Item();
+									var title = track.get_child_by_name("title");
+									if(title != null) {
+										d.add_field(Item.Field.TITLE, title.text);
 									}
+									var location = track.get_child_by_name("location");
+									if(location != null) {
+										TargetType tt;
+										File tmp=get_file_for_location(location.text, ref base_path, out tt);
+										d.target_type = tt;
+										d.add_field(Item.Field.URI, tmp.get_uri());
+									}
+									item_collection.append(d);
 								}
-								//delete iter_in;
 							}
 						}
-				} else {
-				        //print("\nOtro:%s\n",iter_name);
+					}
 				}
 			}
-			return data_collection;
+			return item_collection;
 		}
 
-	public override ItemCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-		ItemCollection data_collection = new ItemCollection();
-		this.file = _file;
-		set_base_path();
-
-		if (!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
-			stderr.printf("File '%s' doesn't exist.\n",file.get_uri());
-			return data_collection;
-		}
-		
-		try {
-				string contenido;
-				{
-					var stream = new DataInputStream(file.read(null));
-					contenido = stream.read_until("", null, null);
-				}
-			  
-			if(contenido == null) {
-				return data_collection;
-			}
-				//print("\n%s\n",contenido);
-				return this.parse(data_collection,ref base_path,contenido);
-		}
-		catch (GLib.Error e) {
-				print ("%s\n", e.message);
-		}
-		return data_collection; 
-	}
-
-		//public override ItemCollection read(File _file) throws InternalReaderError {
-		public ItemCollection read_txt(File _file) throws InternalReaderError {
-			ItemCollection data_collection = new ItemCollection();
+		public override ItemCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			ItemCollection item_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
-			
-			var entry_on = false;
-		
-			if(!file.query_exists(null)) {
-				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
-				return data_collection;
-			}
-			try {
-				var in_stream = new DataInputStream(file.read(null));
-				string line;
-				Item? d = null;
-				while((line = in_stream.read_line(null, null)) != null) {
-					if(line.has_prefix("#")) { //# Comments
-						continue;
-					}
-					else if(line.size() == 0) { //Blank line
-						continue;
-					}
-					else if(line.contains("<track>")) {
-						entry_on = true;
-						//print("prepare new entry\n");
-						d = new Item();
-						continue;
-					}
-					else if(line.contains("</track>")) {
-						entry_on = false;
-						//print("add entry\n");
-						data_collection.append(d);
-						continue;
-					}
-					else if(entry_on) { // Can we always assume that this is in one line???
-						if(line.contains("<location")) {
-							char* begin = line.str(">");
-							begin ++;
-							char* end = line.rstr("<");
-							if(begin >= end) {
-								throw new InternalReaderError.INVALID_FILE("Error. Invalid playlist file (uri)\n");
-							}
-							*end = '\0';
 
-							TargetType tt;
-							File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
-							d.add_field(Item.Field.URI, tmp.get_uri());
-							d.target_type = tt;
-						}
-						if(line.contains("<title")) {
-							char* begin = line.str(">");
-							begin++;
-							char* end = line.rstr("<");
-							if(begin >= end) {
-								throw new InternalReaderError.INVALID_FILE("Error. Invalid playlist file (title)\n");
-							}
-							*end = '\0';
-							d.add_field(Item.Field.TITLE, ((string)begin)._strip());
-						}
-					}
-					else {
-						continue;
-					}
+			if(!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
+				stderr.printf("File '%s' doesn't exist.\n",file.get_uri());
+				return item_collection;
+			}
+		
+			try {
+				string contenido;
+				var stream = new DataInputStream(file.read(null));
+				contenido = stream.read_until("", null, null);
+			
+				if(contenido == null) {
+					return item_collection;
 				}
+				//print("\n%s\n",contenido);
+				return this.parse(item_collection, ref contenido); //ref base_path,
 			}
 			catch(GLib.Error e) {
-				print("Error: %s\n", e.message); 
+				print ("%s\n", e.message);
 			}
-			return data_collection;
+			return item_collection;
 		}
 
 		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			ItemCollection data_collection = new ItemCollection();
+			ItemCollection item_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
-			return data_collection;
+			return item_collection;
 		}
-		
+	
 		protected override void set_base_path() {
 			base_path = file.get_parent().get_uri();
 		}
