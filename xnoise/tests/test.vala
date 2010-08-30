@@ -861,7 +861,7 @@ bool test_xpsf_read_with_no_extension_on_file() {
 
 MainLoop ml;
 void test_asx_async_reading() {
-	File f = File.new_for_uri("http://www.tropicalisima.fm/wmbaladas48.asx");//"http://www.tropicalisima.fm/audios/suave128k.pls");
+	File f = File.new_for_path("./playlist-examples/malformed_asx.asx");//"http://www.tropicalisima.fm/wmbaladas48.asx");//"http://www.tropicalisima.fm/audios/suave128k.pls");
 	var asxreader = new Pl.Reader();
 	asxreader.finished.connect(asx_async_finished_cb01);
 	asxreader.ref(); //prevent destruction

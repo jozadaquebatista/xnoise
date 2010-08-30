@@ -1,0 +1,13 @@
+<ASX version="3.0">
+
+<entry>
+<PARAM name="HTMLView" value="http://67.159.60.125:82/baladas/playing.html"/> 
+<ref href= "mms://67.159.60.125/baladas"/> 
+<Abstract>www.tropicalisima.fm</abstract> 
+<Copyright>Tropicalisima.FM</Copyright>  
+<Author>Tropicalisima.fm Baladas</author> 
+<Title>Las Mejores Baladas de todos los tiempos</title> 
+</entry> 
+
+
+</ASX>

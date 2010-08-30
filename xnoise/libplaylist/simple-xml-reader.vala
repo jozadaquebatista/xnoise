@@ -190,24 +190,29 @@ namespace SimpleXml {
 					current_node.append_child(n);
 					current_node = n;
 				}
+				if(tt == Reader.TokenType.EMPTY_ELEMENT) {
+					//print("empty\n")
+					//one level up in the hierarchy
+					if(current_node.parent != null) {
+						current_node = current_node.parent;
+					}
+				}
 				if(tt == Reader.TokenType.END_ELEMENT) {
 					//verify that end element has the same name as start
-					// TODO: handle empty element
-					// TODO: handle unnamed node endings
-//					assert(token.end - 1 > token.begin + 2);
-//					string? end_element_name = get_nodename(token.begin + 2, token.end);
-//					//print("current_node.name: %s ; end_element_name: %s\n", current_node.name, end_element_name);
-//					if(case_sensitive)
-//						if(current_node.name != end_element_name) {
-//							root = null;
-//							print("--- Exit with errors. ---\n");
-//						}
-//					else
-//						if(current_node.name.down() != end_element_name.down()) {
-//							root = null;
-//							print("--- Exit with errors. ---\n");
-//						}
-//						assert(current_node.name.down() == end_element_name.down());
+					assert(token.end - 1 > token.begin + 2);
+					string? end_element_name = get_nodename(token.begin + 2, token.end);
+					//print("current_node.name: %s ; end_element_name: %s\n", current_node.name, end_element_name);
+					if(case_sensitive)
+						if(current_node.name != end_element_name) {
+							root = null;
+							print("--- Exit with errors. #1 ---\n");
+						}
+					else
+						if(current_node.name.down() != end_element_name.down()) {
+							root = null;
+							print("--- Exit with errors. #2 ---\n");
+						}
+						assert(current_node.name.down() == end_element_name.down());
 					
 					//one level up in the hierarchy
 					if(current_node.parent != null) {
@@ -263,24 +268,31 @@ namespace SimpleXml {
 					current_node.append_child(n);
 					current_node = n;
 				}
+				if(tt == Reader.TokenType.EMPTY_ELEMENT) {
+					//print("empty\n")
+					//one level up in the hierarchy
+					if(current_node.parent != null) {
+						current_node = current_node.parent;
+					}
+				}
 				if(tt == Reader.TokenType.END_ELEMENT) {
 					//verify that end element has the same name as start
 					// TODO: handle empty element
 					// TODO: handle unnamed node endings
-//					assert(token.end - 1 > token.begin + 2);
-//					string? end_element_name = get_nodename(token.begin + 2, token.end);
-//					//print("current_node.name: %s ; end_element_name: %s\n", current_node.name, end_element_name);
-//					if(case_sensitive)
-//						if(current_node.name != end_element_name) {
-//							root = null;
-//							print("--- Exit with errors. ---\n");
-//						}
-//					else
-//						if(current_node.name.down() != end_element_name.down()) {
-//							root = null;
-//							print("--- Exit with errors. ---\n");
-//						}
-//						assert(current_node.name.down() == end_element_name.down());
+					assert(token.end - 1 > token.begin + 2);
+					string? end_element_name = get_nodename(token.begin + 2, token.end);
+					//print("current_node.name: %s ; end_element_name: %s\n", current_node.name, end_element_name);
+					if(case_sensitive)
+						if(current_node.name != end_element_name) {
+							root = null;
+							print("--- Exit with errors. ---\n");
+						}
+					else
+						if(current_node.name.down() != end_element_name.down()) {
+							root = null;
+							print("--- Exit with errors. ---\n");
+						}
+						assert(current_node.name.down() == end_element_name.down());
 					
 					//one level up in the hierarchy
 					if(current_node.parent != null) {
@@ -396,7 +408,7 @@ namespace SimpleXml {
 
 			if(empty_element) {
 				empty_element = false;
-				return TokenType.END_ELEMENT;
+				return TokenType.EMPTY_ELEMENT;
 			}
 
 			skip_space();
