@@ -243,7 +243,7 @@ namespace Pl {
 
 					string? target = null;
 					if(tmp != null)
-						target = tmp.attributes.lookup("href");
+						target = tmp.attributes["href"];
 
 					if(target != null) {
 						TargetType tt;

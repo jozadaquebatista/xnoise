@@ -165,8 +165,8 @@ namespace Pl {
 			SimpleXml.Node[] metas = tmp_head.get_children_by_name("meta");
 			if(metas != null) {
 				foreach(unowned SimpleXml.Node nx in metas) {
-					if(nx.attributes.lookup("name") != null && nx.attributes.lookup("content") != null)
-						data_collection.add_general_info(nx.attributes.lookup("name"), nx.attributes.lookup("content"));
+					if(nx.attributes["name"] != null && nx.attributes["content"] != null)
+						data_collection.add_general_info(nx.attributes["name"], nx.attributes["content"]);
 				}
 			}
 			
@@ -184,7 +184,7 @@ namespace Pl {
 				Item d = new Item();
 				
 				string? target = null;
-				target = nd.attributes.lookup("src");
+				target = nd.attributes["src"];
 
 				if(target != null) {
 					TargetType tt;

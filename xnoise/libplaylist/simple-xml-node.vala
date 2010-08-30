@@ -33,8 +33,7 @@ namespace SimpleXml {
 			
 		private string? _name = null;
 
-
-		public HashTable<string, string> attributes = new HashTable<string, string>(str_hash, str_equal);
+		public Attributes attributes = new Attributes();
 
 		public Node(string? name) {
 			this._name = name;
@@ -65,6 +64,192 @@ namespace SimpleXml {
 				return _next;
 			}
 		}
+
+		public class Attributes {
+		
+			private GLib.HashTable<string, string> table = 
+			   new GLib.HashTable<string, string>(str_hash, str_equal);
+	
+			public Keys keys;
+			public Values values;
+	
+			public Attributes() {
+				keys = new Keys(this);
+				values = new Values(this);
+			}
+
+			~Attributes() {
+				table.remove_all();
+				table = null;
+			}
+	
+			public class Keys {
+				private unowned Attributes attrib;
+		
+				public Keys(Attributes _attrib) {
+					attrib = _attrib;
+				}
+		
+				public bool contains(string needle_key) {
+					foreach(string current_key in attrib.key_list) {
+						if(str_equal(needle_key, current_key))
+							return true;
+					}
+					return false;
+				}
+		
+				public Iterator iterator() {
+					return new Iterator(this.attrib);
+				}
+	
+				public class Iterator {
+					private unowned Attributes iter_attib;
+					private List<unowned string> key_list = null;
+					private unowned List<string> curr_key;
+			
+					public Iterator(Attributes _iter_attib) {
+						this.iter_attib = _iter_attib;
+					}
+			
+					public bool next() {
+						if(this.key_list == null) {
+							this.key_list = iter_attib.key_list;
+							if(this.key_list == null)
+								return false;
+							this.curr_key = this.key_list.first();
+					
+							if(this.curr_key.data != null) 
+								return true;
+							else 
+								return false;
+						}
+						else {
+							if(this.curr_key.next == null)
+								return false;
+					
+							this.curr_key = this.curr_key.next;
+							return true;
+						}
+					}
+			
+					public string? get() {
+						if(this.curr_key == null)
+							return null;
+						return this.curr_key.data;
+					}
+				}
+			}
+
+			public class Values {
+				private unowned Attributes attrib;
+		
+				public Values(Attributes _attrib) {
+					attrib = _attrib;
+				}
+		
+				public bool contains(string needle_value) {
+					foreach(string current_val in attrib.value_list) {
+						if(str_equal(needle_value, current_val))
+							return true;
+					}
+					return false;
+				}
+		
+				public Iterator iterator() {
+					return new Iterator(this.attrib);
+				}
+	
+				public class Iterator {
+					private unowned Attributes iter_attrib;
+					private List<unowned string> value_list = null;
+					private unowned List<string> curr_value = null;
+		
+					public Iterator(Attributes _iter_attrib) {
+						this.iter_attrib = _iter_attrib;
+					}
+
+					public bool next() {
+						if(this.value_list == null) {
+							this.value_list = iter_attrib.value_list;
+							if(this.value_list == null)
+								return false;
+							this.curr_value = this.value_list.first();
+					
+							if(this.curr_value.data != null) {
+								return true;
+							}
+							else {
+								return false;
+							}
+						}
+						else {
+							if(this.curr_value.next == null) {
+								return false;
+							}
+							this.curr_value = this.curr_value.next;
+							return true;
+						}
+					}
+
+					public string? get() {
+						if(this.curr_value == null)
+							return null;
+						return this.curr_value.data;
+					}
+				}
+			}
+
+			public void add(string key, string val) {
+				assert(table != null);
+				table.insert(key, val);
+			}
+	
+			public void replace(string key, string val) {
+				assert(table != null);
+				table.replace(key, val);
+			}
+	
+			public void remove(string key) {
+				assert(table != null);
+				table.remove(key);
+			}
+	
+			public void clear() {
+				assert(table != null);
+				table.remove_all();
+			}
+	
+			public int item_count {
+				get {
+					return (int)table.size();
+				}
+			}
+
+			public List<unowned string> key_list {
+				owned get {
+					return table.get_keys();
+				}
+			}
+
+			public List<unowned string> value_list {
+				owned get {
+					return table.get_values();
+				}
+			}
+
+			public string? get(string key) {
+				return table.lookup(key);
+			}
+
+			public void set(string key, string? val) {
+				if(val == null) {
+					table.remove(key);
+				}
+				else {
+					table.insert(key, val);
+				}
+			}
+		}
 		
 		public bool has_text() {
 			return this.text != null;
@@ -75,7 +260,7 @@ namespace SimpleXml {
 		}
 
 		public bool has_attributes() {
-			return attributes.size() > 0;
+			return attributes.item_count > 0;
 		}
 
 		private Node? _first = null;

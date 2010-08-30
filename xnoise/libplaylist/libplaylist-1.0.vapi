@@ -191,6 +191,45 @@ namespace Pl {
 namespace SimpleXml {
 	[CCode (ref_function = "simple_xml_node_ref", unref_function = "simple_xml_node_unref", cheader_filename = "libplaylist.h")]
 	public class Node {
+		[CCode (ref_function = "simple_xml_node_attributes_ref", unref_function = "simple_xml_node_attributes_unref", cheader_filename = "libplaylist.h")]
+		public class Attributes {
+			[CCode (ref_function = "simple_xml_node_attributes_keys_ref", unref_function = "simple_xml_node_attributes_keys_unref", cheader_filename = "libplaylist.h")]
+			public class Keys {
+				[CCode (ref_function = "simple_xml_node_attributes_keys_iterator_ref", unref_function = "simple_xml_node_attributes_keys_iterator_unref", cheader_filename = "libplaylist.h")]
+				public class Iterator {
+					public Iterator (SimpleXml.Node.Attributes _iter_attib);
+					public string? @get ();
+					public bool next ();
+				}
+				public Keys (SimpleXml.Node.Attributes _attrib);
+				public bool contains (string needle_key);
+				public SimpleXml.Node.Attributes.Keys.Iterator iterator ();
+			}
+			[CCode (ref_function = "simple_xml_node_attributes_values_ref", unref_function = "simple_xml_node_attributes_values_unref", cheader_filename = "libplaylist.h")]
+			public class Values {
+				[CCode (ref_function = "simple_xml_node_attributes_values_iterator_ref", unref_function = "simple_xml_node_attributes_values_iterator_unref", cheader_filename = "libplaylist.h")]
+				public class Iterator {
+					public Iterator (SimpleXml.Node.Attributes _iter_attrib);
+					public string? @get ();
+					public bool next ();
+				}
+				public Values (SimpleXml.Node.Attributes _attrib);
+				public bool contains (string needle_value);
+				public SimpleXml.Node.Attributes.Values.Iterator iterator ();
+			}
+			public SimpleXml.Node.Attributes.Keys keys;
+			public SimpleXml.Node.Attributes.Values values;
+			public Attributes ();
+			public void add (string key, string val);
+			public void clear ();
+			public string? @get (string key);
+			public void remove (string key);
+			public void replace (string key, string val);
+			public void @set (string key, string? val);
+			public int item_count { get; }
+			public GLib.List<weak string> key_list { owned get; }
+			public GLib.List<weak string> value_list { owned get; }
+		}
 		[CCode (ref_function = "simple_xml_node_iterator_ref", unref_function = "simple_xml_node_iterator_unref", cheader_filename = "libplaylist.h")]
 		public class Iterator {
 			public Iterator (SimpleXml.Node parent_node);
@@ -198,7 +237,7 @@ namespace SimpleXml {
 			public bool next ();
 			public void @set (SimpleXml.Node node);
 		}
-		public GLib.HashTable<string,string> attributes;
+		public SimpleXml.Node.Attributes attributes;
 		public Node (string? name);
 		public void append_child (SimpleXml.Node node);
 		public void clear ();

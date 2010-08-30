@@ -57,7 +57,6 @@ namespace SimpleXml {
 		}
 		
 		private void write_header(ref FileOutputStream stream) {
-			ssize_t size;
 			ssize_t already_written = 0;
 			header_string._strip();
 			
@@ -69,7 +68,7 @@ namespace SimpleXml {
 		
 		private int dpth = 0;
 		private void do_n_spaces(ref FileOutputStream stream) {
-			for(int i=0; i<dpth;i++)
+			for(int i=0; i<dpth; i++)
 				write_string_to_stream(" ", ref stream);
 		}
 		
@@ -110,8 +109,8 @@ namespace SimpleXml {
 				return;
 			
 			// insert attribs into node begin
-			foreach(string s in node.attributes.get_keys()) {
-				write_string_to_stream(" %s=\"%s\"".printf(s, escape_text(node.attributes.lookup(s))), ref stream);
+			foreach(string s in node.attributes.keys) {
+				write_string_to_stream(" %s=\"%s\"".printf(s, escape_text(node.attributes[s])), ref stream);
 			}
 		}
 		

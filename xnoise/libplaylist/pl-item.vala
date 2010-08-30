@@ -1,4 +1,4 @@
-/* pl-data.vala
+/* pl-item.vala
  *
  * Copyright (C) 2010  Jörn Magens
  *

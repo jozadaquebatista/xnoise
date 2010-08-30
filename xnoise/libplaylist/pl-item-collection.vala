@@ -1,4 +1,4 @@
-/* pl-data-collection.vala
+/* pl-item-collection.vala
  *
  * Copyright (C) 2004-2005  Novell, Inc
  * Copyright (C) 2005  David Waite
@@ -329,7 +329,6 @@ namespace Pl {
 			assert(grow_number >= 0);
 			int minimum_size = _size + grow_number;
 			if(minimum_size > _items.length) {
-				// double the capacity unless we add even more items at this time TODO
 				set_capacity(grow_number > _items.length ? minimum_size : 2 * _items.length);
 			}
 		}
