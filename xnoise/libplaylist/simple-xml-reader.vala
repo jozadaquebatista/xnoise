@@ -257,7 +257,7 @@ namespace SimpleXml {
 					string nn = get_nodename(token.begin + 1, token.end);
 					Node n = new Node((case_sensitive ? nn : nn.down()));
 					//print("node name: %s\n", nn);
-					foreach(string s in attributes.get_keys()) //TODO copy htable ?
+					foreach(string s in attributes.get_keys())
 						n.attributes[(case_sensitive ? s : s.down())] = get_attribute(s);
 
 					current_node.append_child(n);

@@ -93,10 +93,66 @@ namespace Pl {
 		}
 
 		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			ItemCollection item_collection = new ItemCollection();
+			var data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
-			return item_collection;
+			var mr = new SimpleXml.Reader(file);
+			yield mr.read_asyn(false); //read not case sensitive (lowercase)
+			if(mr.root == null) {
+				throw new InternalReaderError.INVALID_FILE("internal error with async xspf reading\n");
+			}
+			
+			//get xspf root node
+			unowned SimpleXml.Node xspf_tmp = mr.root.get_child_by_name("playlist");
+			if(xspf_tmp == null) {
+				throw new InternalReaderError.INVALID_FILE("internal error with async xspf reading\n");
+			}
+			
+			xspf_tmp = xspf_tmp.get_child_by_name("tracklist"); // here: lower case !!! "trackList"
+			if(xspf_tmp == null) {
+				throw new InternalReaderError.INVALID_FILE("internal error 2 with async xspf reading. No entries\n");
+			}
+			
+			//get all entry nodes
+			SimpleXml.Node[] entries = xspf_tmp.get_children_by_name("track");
+			if(entries == null) {
+				throw new InternalReaderError.INVALID_FILE("internal error 3 with async xspf reading. No entries\n");
+			}
+
+			foreach(unowned SimpleXml.Node nd in entries) {
+				Item d = new Item();
+
+				unowned SimpleXml.Node tmp = nd.get_child_by_name("location");
+				if(tmp == null)
+					continue; //error?
+
+				string? target = null;
+				
+				if(tmp.has_text())
+					target = tmp.text;
+
+				if(target != null) {
+					TargetType tt;
+					File f = get_file_for_location(target._strip(), ref base_path, out tt);
+					d.target_type = tt;
+					//print("\nxspf read uri: %s\n", f.get_uri());
+					d.add_field(Item.Field.URI, f.get_uri());
+				}
+				else
+					continue;
+		
+				tmp = nd.get_child_by_name("title");
+				if(tmp != null && tmp.has_text()) {
+					d.add_field(Item.Field.TITLE, tmp.text);
+				}
+				
+				data_collection.append(d);
+			}
+			Idle.add( () => {
+				this.finished(file.get_uri());
+				return false;
+			});
+			return data_collection;
 		}
 	
 		protected override void set_base_path() {
