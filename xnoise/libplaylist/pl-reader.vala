@@ -225,34 +225,28 @@ namespace Pl {
 	}
 
 	public static ListType get_type_by_extension(ref string uri_) {
-		try {
-			if(uri_ != null) {
-				string uri_down = uri_.down();
-				if(uri_down.has_suffix(".asx")) {
-					return ListType.ASX;
-				}
-				else if(uri_down.has_suffix(".pls")) {
-					return ListType.PLS;
-				}
-				else if(uri_down.has_suffix(".m3u")) {
-					return ListType.M3U;
-				}
-				else if(uri_down.has_suffix(".xspf")) {
-					return ListType.XSPF;
-				}
-				else if(uri_down.has_suffix(".wpl")) {
-					return ListType.WPL;
-				}
-				else {
-					return ListType.UNKNOWN;
-				}
+		if(uri_ != null) {
+			string uri_down = uri_.down();
+			if(uri_down.has_suffix(".asx")) {
+				return ListType.ASX;
+			}
+			else if(uri_down.has_suffix(".pls")) {
+				return ListType.PLS;
+			}
+			else if(uri_down.has_suffix(".m3u")) {
+				return ListType.M3U;
+			}
+			else if(uri_down.has_suffix(".xspf")) {
+				return ListType.XSPF;
+			}
+			else if(uri_down.has_suffix(".wpl")) {
+				return ListType.WPL;
 			}
 			else {
 				return ListType.UNKNOWN;
 			}
 		}
-		catch(Error e) {
-			print("Error: %s\n",e.message);
+		else {
 			return ListType.UNKNOWN;
 		}
 	}

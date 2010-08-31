@@ -205,20 +205,7 @@ namespace SimpleXml {
 				public bool contains (string needle_key);
 				public SimpleXml.Node.Attributes.Keys.Iterator iterator ();
 			}
-			[CCode (ref_function = "simple_xml_node_attributes_values_ref", unref_function = "simple_xml_node_attributes_values_unref", cheader_filename = "libplaylist.h")]
-			public class Values {
-				[CCode (ref_function = "simple_xml_node_attributes_values_iterator_ref", unref_function = "simple_xml_node_attributes_values_iterator_unref", cheader_filename = "libplaylist.h")]
-				public class Iterator {
-					public Iterator (SimpleXml.Node.Attributes _iter_attrib);
-					public string? @get ();
-					public bool next ();
-				}
-				public Values (SimpleXml.Node.Attributes _attrib);
-				public bool contains (string needle_value);
-				public SimpleXml.Node.Attributes.Values.Iterator iterator ();
-			}
 			public SimpleXml.Node.Attributes.Keys keys;
-			public SimpleXml.Node.Attributes.Values values;
 			public Attributes ();
 			public void add (string key, string val);
 			public void clear ();

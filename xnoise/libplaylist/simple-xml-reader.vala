@@ -154,7 +154,7 @@ namespace SimpleXml {
 			if(!file.has_uri_scheme("file"))
 				file = yield buffer_locally_asyn();
 			
-			File curr = File.new_for_commandline_arg(Environment.get_current_dir());
+			//File curr = File.new_for_commandline_arg(Environment.get_current_dir());
 //			string rel_path = curr.get_relative_path(file);
 			try {
 				mapped_file = new MappedFile(file.get_path(), false);//("./" + rel_path, false);

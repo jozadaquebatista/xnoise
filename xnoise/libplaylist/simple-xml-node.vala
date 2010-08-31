@@ -71,11 +71,9 @@ namespace SimpleXml {
 			   new GLib.HashTable<string, string>(str_hash, str_equal);
 	
 			public Keys keys;
-			public Values values;
 	
 			public Attributes() {
 				keys = new Keys(this);
-				values = new Values(this);
 			}
 
 			~Attributes() {
@@ -136,65 +134,6 @@ namespace SimpleXml {
 						if(this.curr_key == null)
 							return null;
 						return this.curr_key.data;
-					}
-				}
-			}
-
-			public class Values {
-				private unowned Attributes attrib;
-		
-				public Values(Attributes _attrib) {
-					attrib = _attrib;
-				}
-		
-				public bool contains(string needle_value) {
-					foreach(string current_val in attrib.value_list) {
-						if(str_equal(needle_value, current_val))
-							return true;
-					}
-					return false;
-				}
-		
-				public Iterator iterator() {
-					return new Iterator(this.attrib);
-				}
-	
-				public class Iterator {
-					private unowned Attributes iter_attrib;
-					private List<unowned string> value_list = null;
-					private unowned List<string> curr_value = null;
-		
-					public Iterator(Attributes _iter_attrib) {
-						this.iter_attrib = _iter_attrib;
-					}
-
-					public bool next() {
-						if(this.value_list == null) {
-							this.value_list = iter_attrib.value_list;
-							if(this.value_list == null)
-								return false;
-							this.curr_value = this.value_list.first();
-					
-							if(this.curr_value.data != null) {
-								return true;
-							}
-							else {
-								return false;
-							}
-						}
-						else {
-							if(this.curr_value.next == null) {
-								return false;
-							}
-							this.curr_value = this.curr_value.next;
-							return true;
-						}
-					}
-
-					public string? get() {
-						if(this.curr_value == null)
-							return null;
-						return this.curr_value.data;
 					}
 				}
 			}

@@ -57,7 +57,6 @@ namespace SimpleXml {
 		}
 		
 		private void write_header(ref FileOutputStream stream) {
-			ssize_t already_written = 0;
 			header_string._strip();
 			
 			if(header_string.size() < 4)

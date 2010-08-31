@@ -91,7 +91,7 @@ namespace Pl {
 								break;
 						}
 						
-						string? tmp_title = d.get_title();
+						//string? tmp_title = d.get_title();
 						
 						data_stream.put_string(Markup.printf_escaped("<media src=\"%s\" />\n", tmp_location), null);
 					}

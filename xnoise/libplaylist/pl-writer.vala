@@ -28,7 +28,7 @@ namespace Pl {
 		private File file = null;
 		private Mutex write_in_progress_mutex;
 		private string? _uri = null;
-		private bool _use_absolute_uris = true;
+		//private bool _use_absolute_uris = true;
 		private bool _overwrite_if_exists = true;
 		
 		public string? uri { 

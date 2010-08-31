@@ -139,16 +139,6 @@ typedef struct _SimpleXmlNodeAttributesPrivate SimpleXmlNodeAttributesPrivate;
 
 typedef struct _SimpleXmlNodeAttributesKeys SimpleXmlNodeAttributesKeys;
 typedef struct _SimpleXmlNodeAttributesKeysClass SimpleXmlNodeAttributesKeysClass;
-
-#define SIMPLE_XML_NODE_ATTRIBUTES_TYPE_VALUES (simple_xml_node_attributes_values_get_type ())
-#define SIMPLE_XML_NODE_ATTRIBUTES_VALUES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SIMPLE_XML_NODE_ATTRIBUTES_TYPE_VALUES, SimpleXmlNodeAttributesValues))
-#define SIMPLE_XML_NODE_ATTRIBUTES_VALUES_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SIMPLE_XML_NODE_ATTRIBUTES_TYPE_VALUES, SimpleXmlNodeAttributesValuesClass))
-#define SIMPLE_XML_NODE_ATTRIBUTES_IS_VALUES(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SIMPLE_XML_NODE_ATTRIBUTES_TYPE_VALUES))
-#define SIMPLE_XML_NODE_ATTRIBUTES_IS_VALUES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SIMPLE_XML_NODE_ATTRIBUTES_TYPE_VALUES))
-#define SIMPLE_XML_NODE_ATTRIBUTES_VALUES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SIMPLE_XML_NODE_ATTRIBUTES_TYPE_VALUES, SimpleXmlNodeAttributesValuesClass))
-
-typedef struct _SimpleXmlNodeAttributesValues SimpleXmlNodeAttributesValues;
-typedef struct _SimpleXmlNodeAttributesValuesClass SimpleXmlNodeAttributesValuesClass;
 typedef struct _SimpleXmlNodeAttributesKeysPrivate SimpleXmlNodeAttributesKeysPrivate;
 
 #define SIMPLE_XML_NODE_ATTRIBUTES_KEYS_TYPE_ITERATOR (simple_xml_node_attributes_keys_iterator_get_type ())
@@ -161,18 +151,6 @@ typedef struct _SimpleXmlNodeAttributesKeysPrivate SimpleXmlNodeAttributesKeysPr
 typedef struct _SimpleXmlNodeAttributesKeysIterator SimpleXmlNodeAttributesKeysIterator;
 typedef struct _SimpleXmlNodeAttributesKeysIteratorClass SimpleXmlNodeAttributesKeysIteratorClass;
 typedef struct _SimpleXmlNodeAttributesKeysIteratorPrivate SimpleXmlNodeAttributesKeysIteratorPrivate;
-typedef struct _SimpleXmlNodeAttributesValuesPrivate SimpleXmlNodeAttributesValuesPrivate;
-
-#define SIMPLE_XML_NODE_ATTRIBUTES_VALUES_TYPE_ITERATOR (simple_xml_node_attributes_values_iterator_get_type ())
-#define SIMPLE_XML_NODE_ATTRIBUTES_VALUES_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SIMPLE_XML_NODE_ATTRIBUTES_VALUES_TYPE_ITERATOR, SimpleXmlNodeAttributesValuesIterator))
-#define SIMPLE_XML_NODE_ATTRIBUTES_VALUES_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SIMPLE_XML_NODE_ATTRIBUTES_VALUES_TYPE_ITERATOR, SimpleXmlNodeAttributesValuesIteratorClass))
-#define SIMPLE_XML_NODE_ATTRIBUTES_VALUES_IS_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SIMPLE_XML_NODE_ATTRIBUTES_VALUES_TYPE_ITERATOR))
-#define SIMPLE_XML_NODE_ATTRIBUTES_VALUES_IS_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SIMPLE_XML_NODE_ATTRIBUTES_VALUES_TYPE_ITERATOR))
-#define SIMPLE_XML_NODE_ATTRIBUTES_VALUES_ITERATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SIMPLE_XML_NODE_ATTRIBUTES_VALUES_TYPE_ITERATOR, SimpleXmlNodeAttributesValuesIteratorClass))
-
-typedef struct _SimpleXmlNodeAttributesValuesIterator SimpleXmlNodeAttributesValuesIterator;
-typedef struct _SimpleXmlNodeAttributesValuesIteratorClass SimpleXmlNodeAttributesValuesIteratorClass;
-typedef struct _SimpleXmlNodeAttributesValuesIteratorPrivate SimpleXmlNodeAttributesValuesIteratorPrivate;
 typedef struct _SimpleXmlNodeIteratorPrivate SimpleXmlNodeIteratorPrivate;
 
 typedef enum  {
@@ -313,7 +291,6 @@ struct _SimpleXmlNodeAttributes {
 	volatile int ref_count;
 	SimpleXmlNodeAttributesPrivate * priv;
 	SimpleXmlNodeAttributesKeys* keys;
-	SimpleXmlNodeAttributesValues* values;
 };
 
 struct _SimpleXmlNodeAttributesClass {
@@ -341,28 +318,6 @@ struct _SimpleXmlNodeAttributesKeysIterator {
 struct _SimpleXmlNodeAttributesKeysIteratorClass {
 	GTypeClass parent_class;
 	void (*finalize) (SimpleXmlNodeAttributesKeysIterator *self);
-};
-
-struct _SimpleXmlNodeAttributesValues {
-	GTypeInstance parent_instance;
-	volatile int ref_count;
-	SimpleXmlNodeAttributesValuesPrivate * priv;
-};
-
-struct _SimpleXmlNodeAttributesValuesClass {
-	GTypeClass parent_class;
-	void (*finalize) (SimpleXmlNodeAttributesValues *self);
-};
-
-struct _SimpleXmlNodeAttributesValuesIterator {
-	GTypeInstance parent_instance;
-	volatile int ref_count;
-	SimpleXmlNodeAttributesValuesIteratorPrivate * priv;
-};
-
-struct _SimpleXmlNodeAttributesValuesIteratorClass {
-	GTypeClass parent_class;
-	void (*finalize) (SimpleXmlNodeAttributesValuesIterator *self);
 };
 
 struct _SimpleXmlNodeIterator {
@@ -577,13 +532,6 @@ void simple_xml_node_attributes_value_set_keys (GValue* value, gpointer v_object
 void simple_xml_node_attributes_value_take_keys (GValue* value, gpointer v_object);
 gpointer simple_xml_node_attributes_value_get_keys (const GValue* value);
 GType simple_xml_node_attributes_keys_get_type (void) G_GNUC_CONST;
-gpointer simple_xml_node_attributes_values_ref (gpointer instance);
-void simple_xml_node_attributes_values_unref (gpointer instance);
-GParamSpec* simple_xml_node_attributes_param_spec_values (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void simple_xml_node_attributes_value_set_values (GValue* value, gpointer v_object);
-void simple_xml_node_attributes_value_take_values (GValue* value, gpointer v_object);
-gpointer simple_xml_node_attributes_value_get_values (const GValue* value);
-GType simple_xml_node_attributes_values_get_type (void) G_GNUC_CONST;
 SimpleXmlNodeAttributes* simple_xml_node_attributes_new (void);
 SimpleXmlNodeAttributes* simple_xml_node_attributes_construct (GType object_type);
 void simple_xml_node_attributes_add (SimpleXmlNodeAttributes* self, const char* key, const char* val);
@@ -610,21 +558,6 @@ SimpleXmlNodeAttributesKeysIterator* simple_xml_node_attributes_keys_iterator_ne
 SimpleXmlNodeAttributesKeysIterator* simple_xml_node_attributes_keys_iterator_construct (GType object_type, SimpleXmlNodeAttributes* _iter_attib);
 gboolean simple_xml_node_attributes_keys_iterator_next (SimpleXmlNodeAttributesKeysIterator* self);
 char* simple_xml_node_attributes_keys_iterator_get (SimpleXmlNodeAttributesKeysIterator* self);
-SimpleXmlNodeAttributesValues* simple_xml_node_attributes_values_new (SimpleXmlNodeAttributes* _attrib);
-SimpleXmlNodeAttributesValues* simple_xml_node_attributes_values_construct (GType object_type, SimpleXmlNodeAttributes* _attrib);
-gboolean simple_xml_node_attributes_values_contains (SimpleXmlNodeAttributesValues* self, const char* needle_value);
-gpointer simple_xml_node_attributes_values_iterator_ref (gpointer instance);
-void simple_xml_node_attributes_values_iterator_unref (gpointer instance);
-GParamSpec* simple_xml_node_attributes_values_param_spec_iterator (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void simple_xml_node_attributes_values_value_set_iterator (GValue* value, gpointer v_object);
-void simple_xml_node_attributes_values_value_take_iterator (GValue* value, gpointer v_object);
-gpointer simple_xml_node_attributes_values_value_get_iterator (const GValue* value);
-GType simple_xml_node_attributes_values_iterator_get_type (void) G_GNUC_CONST;
-SimpleXmlNodeAttributesValuesIterator* simple_xml_node_attributes_values_iterator (SimpleXmlNodeAttributesValues* self);
-SimpleXmlNodeAttributesValuesIterator* simple_xml_node_attributes_values_iterator_new (SimpleXmlNodeAttributes* _iter_attrib);
-SimpleXmlNodeAttributesValuesIterator* simple_xml_node_attributes_values_iterator_construct (GType object_type, SimpleXmlNodeAttributes* _iter_attrib);
-gboolean simple_xml_node_attributes_values_iterator_next (SimpleXmlNodeAttributesValuesIterator* self);
-char* simple_xml_node_attributes_values_iterator_get (SimpleXmlNodeAttributesValuesIterator* self);
 SimpleXmlNodeIterator* simple_xml_node_iterator_new (SimpleXmlNode* parent_node);
 SimpleXmlNodeIterator* simple_xml_node_iterator_construct (GType object_type, SimpleXmlNode* parent_node);
 gboolean simple_xml_node_iterator_next (SimpleXmlNodeIterator* self);
