@@ -71,7 +71,7 @@ namespace Pl {
 			set_base_path();
 
 			if(!file.get_uri().has_prefix("http://") && !file.query_exists (null)) {
-				stderr.printf("File '%s' doesn't exist.\n",file.get_uri());
+				stderr.printf("File '%s' doesn't exist.\n", file.get_uri());
 				return item_collection;
 			}
 		
@@ -93,7 +93,7 @@ namespace Pl {
 		}
 
 		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			var data_collection = new ItemCollection();
+			var item_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
 			var mr = new SimpleXml.Reader(file);
@@ -103,12 +103,44 @@ namespace Pl {
 			}
 			
 			//get xspf root node
-			unowned SimpleXml.Node xspf_tmp = mr.root.get_child_by_name("playlist");
-			if(xspf_tmp == null) {
+			unowned SimpleXml.Node? playlist = mr.root.get_child_by_name("playlist");
+			if(playlist == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error with async xspf reading\n");
 			}
 			
-			xspf_tmp = xspf_tmp.get_child_by_name("tracklist"); // here: lower case !!! "trackList"
+			unowned SimpleXml.Node? xspf_tmp = null;
+			
+			// playlist title
+			xspf_tmp = playlist.get_child_by_name("title");
+			if(xspf_tmp != null && xspf_tmp.text != null)
+				item_collection.add_general_info("title", xspf_tmp.text);
+			
+			// playlist info
+			xspf_tmp = playlist.get_child_by_name("info");
+			if(xspf_tmp != null && xspf_tmp.text != null)
+				item_collection.add_general_info("info", xspf_tmp.text);
+			
+			// playlist creator
+			xspf_tmp = playlist.get_child_by_name("creator");
+			if(xspf_tmp != null && xspf_tmp.text != null)
+				item_collection.add_general_info("creator", xspf_tmp.text);
+			
+			// playlist location
+			xspf_tmp = playlist.get_child_by_name("location");
+			if(xspf_tmp != null && xspf_tmp.text != null)
+				item_collection.add_general_info("location", xspf_tmp.text);
+			
+			// playlist identifier
+			xspf_tmp = playlist.get_child_by_name("identifier");
+			if(xspf_tmp != null && xspf_tmp.text != null)
+				item_collection.add_general_info("identifier", xspf_tmp.text);
+			
+			// playlist image
+			xspf_tmp = playlist.get_child_by_name("image");
+			if(xspf_tmp != null && xspf_tmp.text != null)
+				item_collection.add_general_info("image", xspf_tmp.text);
+			
+			xspf_tmp = playlist.get_child_by_name("tracklist"); // here: lower case !!! "trackList"
 			if(xspf_tmp == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error 2 with async xspf reading. No entries\n");
 			}
@@ -146,13 +178,13 @@ namespace Pl {
 					d.add_field(Item.Field.TITLE, tmp.text);
 				}
 				
-				data_collection.append(d);
+				item_collection.append(d);
 			}
 			Idle.add( () => {
 				this.finished(file.get_uri());
 				return false;
 			});
-			return data_collection;
+			return item_collection;
 		}
 	
 		protected override void set_base_path() {
