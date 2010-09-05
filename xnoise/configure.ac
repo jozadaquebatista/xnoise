@@ -35,7 +35,7 @@ SQLITE_REQUIRED=3.4
 TAGLIB_C_REQUIRED=1.5.0
 
 dnl required versions for vala, if used
-VALA_REQUIRED=0.9.7
+VALA_REQUIRED=0.9.8
 
 AC_PROG_CC
 AC_ARG_ENABLE([usevala],

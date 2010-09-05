@@ -30,7 +30,7 @@ DBUS_GLIB_REQUIRED=0.0.1
 XNOISE_REQUIRED=xnoisepluginscore_version
 
 dnl required versions for vala, if used
-VALA_REQUIRED=0.9.7
+VALA_REQUIRED=0.9.8
 
 # Disable generation of static libraries
 AC_DISABLE_STATIC
