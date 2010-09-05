@@ -51,9 +51,14 @@ namespace Pl {
 									var location = track.get_child_by_name("location");
 									if(location != null) {
 										TargetType tt;
-										File tmp=get_file_for_location(location.text, ref base_path, out tt);
+										File tmp = get_file_for_location(location.text, ref base_path, out tt);
 										d.target_type = tt;
 										d.add_field(Item.Field.URI, tmp.get_uri());
+										string? ext = get_extension(tmp);
+										if(ext != null) {
+											if(is_known_playlist_extension(ref ext))
+												d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+										}
 									}
 									item_collection.append(d);
 								}
@@ -169,6 +174,11 @@ namespace Pl {
 					d.target_type = tt;
 					//print("\nxspf read uri: %s\n", f.get_uri());
 					d.add_field(Item.Field.URI, f.get_uri());
+					string? ext = get_extension(f);
+					if(ext != null) {
+						if(is_known_playlist_extension(ref ext))
+							d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+					}
 				}
 				else
 					continue;

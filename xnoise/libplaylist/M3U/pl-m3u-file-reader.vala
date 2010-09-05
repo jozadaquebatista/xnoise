@@ -96,6 +96,11 @@ namespace Pl {
 								File tmp = get_file_for_location(adress, ref base_path, out tt);
 								d.add_field(Item.Field.URI, tmp.get_uri());
 								d.target_type = tt;
+								string? ext = get_extension(tmp);
+								if(ext != null) {
+									if(is_known_playlist_extension(ref ext))
+										d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+								}
 								if(title != "") {
 									d.add_field(Item.Field.TITLE, title);
 								}
@@ -213,6 +218,11 @@ namespace Pl {
 								File tmp = get_file_for_location(adress, ref base_path, out tt);
 								d.add_field(Item.Field.URI, tmp.get_uri());
 								d.target_type = tt;
+								string? ext = get_extension(tmp);
+								if(ext != null) {
+									if(is_known_playlist_extension(ref ext))
+										d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+								}
 								if(title != "") {
 									d.add_field(Item.Field.TITLE, title);
 								}

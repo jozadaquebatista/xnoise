@@ -175,9 +175,13 @@ namespace Pl {
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static bool debug;
 	[CCode (cheader_filename = "libplaylist.h")]
+	public const string[] known_playlist_extensions;
+	[CCode (cheader_filename = "libplaylist.h")]
 	public const string[] remote_schemes;
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static long get_duration_from_string (ref string? duration_string);
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static string? get_extension (GLib.File? f);
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static GLib.File get_file_for_location (string adr, ref string base_path = "", out Pl.TargetType tt);
 	[CCode (cheader_filename = "libplaylist.h")]
@@ -186,6 +190,8 @@ namespace Pl {
 	public static Pl.ListType get_type_by_data (ref string uri_);
 	[CCode (cheader_filename = "libplaylist.h")]
 	public static Pl.ListType get_type_by_extension (ref string uri_);
+	[CCode (cheader_filename = "libplaylist.h")]
+	public static bool is_known_playlist_extension (ref string ext);
 }
 [CCode (cprefix = "SimpleXml", lower_case_cprefix = "simple_xml_")]
 namespace SimpleXml {

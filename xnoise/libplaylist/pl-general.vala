@@ -72,6 +72,8 @@ namespace Pl {
 		ABS_PATH       // absolute path (local only !)
 	}
 	
+	public const string[] known_playlist_extensions = {"asx", "pls", "m3u", "wpl", "xspf"};
+	
 	// string constants for content types
 	private static class ContentType {
 		public const string ASX         = "audio/x-ms-asx";
@@ -87,5 +89,22 @@ namespace Pl {
 	public bool debug = false;
 	
 	public const string[] remote_schemes = { "http", "ftp" }; // TODO: add more
+	
+	public static bool is_known_playlist_extension(ref string ext) {
+		foreach(string s in known_playlist_extensions) {
+			if(ext == s)
+				return true;
+		}
+		return false;
+	}
+	
+	public static string? get_extension(File? f) {
+		if(f == null)
+			return null;
+		string uri = f.get_uri();
+		assert(uri != null);
+		string? ext = uri.rstr(".");
+		return ext;
+	}
 }
 

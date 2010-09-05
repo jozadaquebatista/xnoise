@@ -57,6 +57,11 @@ namespace Pl {
 															File tmp = get_file_for_location(src, ref base_path, out tt);
 															d.target_type = tt;
 															d.add_field(Item.Field.URI, tmp.get_uri());
+															string? ext = get_extension(tmp);
+															if(ext != null) {
+																if(is_known_playlist_extension(ref ext))
+																	d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+															}
 															data_collection.append(d);
 															break;
 														case "default":
@@ -192,6 +197,11 @@ namespace Pl {
 					d.target_type = tt;
 					//print("\nasx read uri: %s\n", f.get_uri());
 					d.add_field(Item.Field.URI, f.get_uri());
+					string? ext = get_extension(f);
+					if(ext != null) {
+						if(is_known_playlist_extension(ref ext))
+							d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+					}
 				}
 				else
 					continue;

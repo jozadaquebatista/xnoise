@@ -7,8 +7,8 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
-#include <glib-object.h>
 #include <gio/gio.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -338,6 +338,8 @@ GType pl_list_type_get_type (void) G_GNUC_CONST;
 GType pl_result_get_type (void) G_GNUC_CONST;
 GType pl_target_type_get_type (void) G_GNUC_CONST;
 extern gboolean pl_debug;
+gboolean pl_is_known_playlist_extension (char** ext);
+char* pl_get_extension (GFile* f);
 gpointer pl_item_ref (gpointer instance);
 void pl_item_unref (gpointer instance);
 GParamSpec* pl_param_spec_item (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -564,6 +566,7 @@ gboolean simple_xml_node_iterator_next (SimpleXmlNodeIterator* self);
 SimpleXmlNode* simple_xml_node_iterator_get (SimpleXmlNodeIterator* self);
 void simple_xml_node_iterator_set (SimpleXmlNodeIterator* self, SimpleXmlNode* node);
 
+extern const char* PL_known_playlist_extensions[5];
 extern const char* PL_remote_schemes[2];
 
 G_END_DECLS
