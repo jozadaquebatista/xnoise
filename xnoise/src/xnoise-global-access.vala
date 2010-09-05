@@ -238,7 +238,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 				image_path_large = null;
 				return;
 			}
-			large_name = small_name.substring(0, small_name.len() - "medium".len());
+			large_name = small_name.substring(0, small_name.length - "medium".length);
 			large_name = large_name + "extralarge";
 			File small = File.new_for_path(small_name);
 			File large = File.new_for_path(large_name);

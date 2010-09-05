@@ -480,6 +480,17 @@ typedef struct _XnoiseTagReader XnoiseTagReader;
 typedef struct _XnoiseTagReaderClass XnoiseTagReaderClass;
 typedef struct _XnoiseTagReaderPrivate XnoiseTagReaderPrivate;
 
+#define XNOISE_TYPE_TAG_WRITER (xnoise_tag_writer_get_type ())
+#define XNOISE_TAG_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TAG_WRITER, XnoiseTagWriter))
+#define XNOISE_TAG_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TAG_WRITER, XnoiseTagWriterClass))
+#define XNOISE_IS_TAG_WRITER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TAG_WRITER))
+#define XNOISE_IS_TAG_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TAG_WRITER))
+#define XNOISE_TAG_WRITER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TAG_WRITER, XnoiseTagWriterClass))
+
+typedef struct _XnoiseTagWriter XnoiseTagWriter;
+typedef struct _XnoiseTagWriterClass XnoiseTagWriterClass;
+typedef struct _XnoiseTagWriterPrivate XnoiseTagWriterPrivate;
+
 #define XNOISE_TYPE_TEXT_COLUMN (xnoise_text_column_get_type ())
 #define XNOISE_TEXT_COLUMN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TEXT_COLUMN, XnoiseTextColumn))
 #define XNOISE_TEXT_COLUMN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TEXT_COLUMN, XnoiseTextColumnClass))
@@ -971,6 +982,17 @@ struct _XnoiseTagReaderClass {
 	void (*finalize) (XnoiseTagReader *self);
 };
 
+struct _XnoiseTagWriter {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseTagWriterPrivate * priv;
+};
+
+struct _XnoiseTagWriterClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseTagWriter *self);
+};
+
 struct _XnoiseTextColumn {
 	GtkTreeViewColumn parent_instance;
 	XnoiseTextColumnPrivate * priv;
@@ -1448,6 +1470,16 @@ GType xnoise_tag_reader_get_type (void) G_GNUC_CONST;
 XnoiseTrackData* xnoise_tag_reader_read_tag (XnoiseTagReader* self, const char* filename);
 XnoiseTagReader* xnoise_tag_reader_new (void);
 XnoiseTagReader* xnoise_tag_reader_construct (GType object_type);
+gpointer xnoise_tag_writer_ref (gpointer instance);
+void xnoise_tag_writer_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_tag_writer (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_tag_writer (GValue* value, gpointer v_object);
+void xnoise_value_take_tag_writer (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_tag_writer (const GValue* value);
+GType xnoise_tag_writer_get_type (void) G_GNUC_CONST;
+gboolean xnoise_tag_writer_write_tag (XnoiseTagWriter* self, const char* filename, XnoiseTrackData* td);
+XnoiseTagWriter* xnoise_tag_writer_new (void);
+XnoiseTagWriter* xnoise_tag_writer_construct (GType object_type);
 GType xnoise_text_column_get_type (void) G_GNUC_CONST;
 GType xnoise_track_list_model_column_get_type (void) G_GNUC_CONST;
 XnoiseTextColumn* xnoise_text_column_new (const char* title, GtkCellRendererText* renderer, XnoiseTrackListModelColumn col_id);

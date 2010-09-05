@@ -225,16 +225,16 @@ public enum Gst.StreamType {
  * This class is used to move around media information
  */
 public class Xnoise.TrackData { // track meta information
-	public string Artist;
-	public string Album;
-	public string Title;
-	public string Genre;
-	public uint Year;
-	public uint Tracknumber;
-	public int32 Length;
-	public int Bitrate;
+	public string? Artist = null;
+	public string? Album = null;
+	public string? Title = null;
+	public string? Genre = null;
+	public uint Year = 0;
+	public uint Tracknumber = 0;
+	public int32 Length = 0;
+	public int Bitrate = 0;
 	public MediaType Mediatype = MediaType.UNKNOWN;
-	public string Uri;
+	public string? Uri = null;
 }
 
 public class Xnoise.RemoteSchemes {

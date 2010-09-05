@@ -415,6 +415,11 @@ namespace Xnoise {
 		public TagReader ();
 		public Xnoise.TrackData read_tag (string filename);
 	}
+	[CCode (ref_function = "xnoise_tag_writer_ref", unref_function = "xnoise_tag_writer_unref", cheader_filename = "xnoise.h")]
+	public class TagWriter {
+		public TagWriter ();
+		public bool write_tag (string filename, Xnoise.TrackData? td);
+	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TextColumn : Gtk.TreeViewColumn {
 		public TextColumn (string title, Gtk.CellRendererText renderer, Xnoise.TrackListModel.Column col_id);
@@ -424,15 +429,15 @@ namespace Xnoise {
 	}
 	[CCode (ref_function = "xnoise_track_data_ref", unref_function = "xnoise_track_data_unref", cheader_filename = "xnoise.h")]
 	public class TrackData {
-		public string Album;
-		public string Artist;
+		public string? Album;
+		public string? Artist;
 		public int Bitrate;
-		public string Genre;
+		public string? Genre;
 		public int32 Length;
 		public Xnoise.MediaType Mediatype;
-		public string Title;
+		public string? Title;
 		public uint Tracknumber;
-		public string Uri;
+		public string? Uri;
 		public uint Year;
 		public TrackData ();
 	}
