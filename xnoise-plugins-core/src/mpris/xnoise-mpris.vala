@@ -29,7 +29,8 @@
  */
 
 // exposes xnoise's player and tracklist controls via dbus using the standardized mpris interface
-// refer to http://www.mpris.org for interface definition
+// refer to 
+// http://www.mpris.org/2.0/spec/
 
 using Gtk;
 using DBus;
@@ -62,8 +63,8 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 			if(bus == null) return false;
 			
 			// request our name
-			uint request_name_result = bus.request_name("org.mpris.xnoise", (uint)0);
-			
+			uint request_name_result = bus.request_name("org.mpris.MediaPlayer2.xnoise", (uint)0);
+			//print("request_name_result %d\n", (int)request_name_result);
 			// if we got our name setup / /Player and /TrackList objects
 			if(request_name_result == DBus.RequestNameReply.PRIMARY_OWNER) {
 
@@ -111,18 +112,101 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 
 
 
-[DBus(name = "org.freedesktop.MediaPlayer")]
+[DBus(name = "org.mpris.MediaPlayer2")]
 public class MprisRoot : GLib.Object {
 	public string Identity() {
 		return "xnoise";
 	}
 	
+	public bool CanQuit { 
+		get {
+			return false;
+		} 
+	}
+
+	public bool CanRaise { 
+		get {
+			return false;
+		} 
+	}
+	
+	public string DesktopEntry { 
+		get {
+			return "xnoise";
+		} 
+	}
+	
+	public string[] SupportedUriSchemes {
+		owned get {
+			string[] sa = {"http", "file", "https", "ftp"};
+			return sa;
+		}
+	}
+	
+	public string[] SupportedMimeTypes {
+		owned get {
+			string[] sa = {
+			   "application/x-ogg",
+			   "application/ogg",
+			   "video/3gpp",
+			   "video/avi",
+			   "video/dv",
+			   "video/fli",
+			   "video/flv",
+			   "video/mp4",
+			   "video/mp4v-es",
+			   "video/mpeg",
+			   "video/msvideo",
+			   "video/ogg",
+			   "video/quicktime",
+			   "video/vivo",
+			   "video/vnd.divx",
+			   "video/vnd.vivo",
+			   "video/x-anim",
+			   "video/x-avi",
+			   "video/x-flc",
+			   "video/x-fli",
+			   "video/x-flic",
+			   "video/x-flv",
+			   "video/x-m4v",
+			   "video/x-matroska",
+			   "video/x-mpeg",
+			   "video/x-mpg",
+			   "video/x-ms-asf",
+			   "video/x-msvideo",
+			   "video/x-ms-wm",
+			   "video/x-ms-wmv",
+			   "video/x-ms-wmx",
+			   "video/x-ms-wvx",
+			   "video/x-nsv",
+			   "video/x-ogm+ogg",
+			   "video/x-theora",
+			   "video/x-theora+ogg",
+			   "audio/x-vorbis+ogg",
+			   "audio/x-scpls",
+			   "audio/x-mp3",
+			   "audio/x-mpeg",
+			   "audio/mpeg",
+			   "audio/x-mpegurl",
+			   "audio/x-flac",
+			   "x-content/audio-cdda",
+			   "x-content/audio-player"
+			};
+			return sa;
+		}
+	}
+
 	public void Quit() {
+		//TODO
+	}
+	
+	public void Raise() {
+		//TODO
 	}
 	
 	public VersionStruct MprisVersion() {
 		var v = VersionStruct();
-		v.Major = 1;
+		v.Major = 2;
 		v.Minor = 0;
 		return v;
 	}
@@ -135,7 +219,7 @@ public struct VersionStruct {
 
 
 
-[DBus(name = "org.freedesktop.MediaPlayer")]
+[DBus(name = "org.mpris.MediaPlayer2")]
 public class MprisPlayer : GLib.Object {
 	private unowned Main xn;
 	private static enum Direction {
@@ -197,37 +281,114 @@ public class MprisPlayer : GLib.Object {
 		return ss;
 	}
 	
+	public string PlaybackStatus {
+		get {
+			switch(global.track_state) {
+				case(GlobalAccess.TrackState.STOPPED):
+					return "Stopped";
+				case(GlobalAccess.TrackState.PLAYING):
+					return "Playing";
+				case(GlobalAccess.TrackState.PAUSED):
+					return "Paused";
+				default:
+					return "Stopped";
+			}
+		}
+	}
+	
+	public string LoopStatus {
+		get {
+			switch(this.xn.main_window.repeatState) {
+				case(MainWindow.Repeat.NOT_AT_ALL):
+					return "None";
+				case(MainWindow.Repeat.SINGLE):
+					return "Track";
+				case(MainWindow.Repeat.ALL):
+					return "Playlist";
+				case(MainWindow.Repeat.RANDOM):
+					return "Playlist";
+				default:
+					return "Playlist";
+			}
+		}
+		set {
+			switch(value) {
+				case("None"):
+					this.xn.main_window.repeatState = MainWindow.Repeat.NOT_AT_ALL;
+					break;
+				case("Track"):
+					this.xn.main_window.repeatState = MainWindow.Repeat.SINGLE;
+					break;
+				case("Playlist"):
+					this.xn.main_window.repeatState = MainWindow.Repeat.ALL;
+					break;
+				default:
+					this.xn.main_window.repeatState = MainWindow.Repeat.ALL;
+					break;
+			}
+		}
+	}
+	
 	public HashTable<string, Value?>? GetMetadata() {
 		return null;
 	}
 	
-	public int GetCaps() {
-		return 0;
+	public double Volume {
+		get {
+			return this.xn.gPl.volume;
+		}
+		set {
+			if(value < 0.0)
+				value = 0.0;
+			this.xn.gPl.volume = value;
+		}
+	}
+	public bool CanGoNext {
+		get {
+			return true;
+		}
 	}
 	
-	public void VolumeSet(int Volume) {
-		this.xn.gPl.volume = (double)Volume/100;
+	public bool CanGoPrevious {
+		get {
+			return true;
+		}
+	}
+	public bool CanPlay {
+		get {
+			return true;
+		}
 	}
 	
-	public int VolumeGet() {
-		double vol = 100*this.xn.gPl.volume;
-		string vols = vol.to_string(); // I didn't know anything better ;)
-		return vols.to_int();
-		
+	public bool CanPause {
+		get {
+			return true;
+		}
 	}
 	
-	public void PositionSet(int Position) {
-		if(xn.gPl.length_time == 0) return; 
-		xn.gPl.gst_position = (double)Position/(double)(xn.gPl.length_time/1000000);
+	public bool CanSeek {
+		get {
+			return false;
+		}
 	}
 	
-	public int PositionGet() {
-		if(xn.gPl.length_time == 0) return -1;
-		double pos = xn.gPl.gst_position;
-		double rel_pos = pos * xn.gPl.length_time / 1000000;
-		string buf = rel_pos.to_string();
-		return buf.to_int();
+	public bool CanControl {
+		get {
+			return true;
+		}
 	}
+//	public void PositionSet(int Position) {
+//		if(xn.gPl.length_time == 0) return; 
+//		xn.gPl.gst_position = (double)Position/(double)(xn.gPl.length_time/1000000);
+//	}
+	
+//	public int PositionGet() {
+//		if(xn.gPl.length_time == 0) return -1;
+//		double pos = xn.gPl.gst_position;
+//		double rel_pos = pos * xn.gPl.length_time / 1000000;
+//		string buf = rel_pos.to_string();
+//		return buf.to_int();
+//	}
 }
 
 public struct StatusStruct {
@@ -239,7 +400,7 @@ public struct StatusStruct {
 
 
 
-[DBus(name = "org.freedesktop.MediaPlayer")]
+[DBus(name = "org.mpris.MediaPlayer2")]
 public class MprisTrackList : GLib.Object {
 	public signal void TrackListChange(int Nb_Tracks);
 	

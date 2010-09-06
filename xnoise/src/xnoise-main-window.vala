@@ -117,14 +117,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		} 
 	}
 	
-	public int repeatState { get; set; }
+	public Repeat repeatState { get; set; }
 	public bool fullscreenwindowvisible { get; set; }
 
 	public signal void sign_pos_changed(double fraction);
 	public signal void sign_volume_changed(double fraction);
 	public signal void sign_drag_over_content_area();
 
-	private enum Repeat {
+	public enum Repeat {
 		NOT_AT_ALL = 0,
 		SINGLE,
 		ALL,
@@ -604,7 +604,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if (wi > 0 && he > 0) {
 			this.resize(wi, he);
 		}
-		this.repeatState = par.get_int_value("repeatstate");
+		this.repeatState = (Repeat)par.get_int_value("repeatstate");
 		double volSlider = par.get_double_value("volume");
 		if((volSlider < 0.0)||
 		   (volSlider > 1.0)) {
@@ -753,9 +753,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_repeat_button_clicked(Button sender) {
-		int temprepeatState = this.repeatState;
-		temprepeatState += 1;
-		if(temprepeatState > 3) temprepeatState = 0;
+		Repeat temprepeatState = this.repeatState;
+		temprepeatState = (Repeat)((int)temprepeatState + 1);
+		if((int)temprepeatState > 3) temprepeatState = (Repeat)0;
 		repeatState = temprepeatState;
 	}
 

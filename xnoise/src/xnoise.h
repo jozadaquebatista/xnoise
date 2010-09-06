@@ -339,6 +339,8 @@ typedef struct _XnoiseTrackProgressBarClass XnoiseTrackProgressBarClass;
 
 typedef struct _XnoiseMediaBrowser XnoiseMediaBrowser;
 typedef struct _XnoiseMediaBrowserClass XnoiseMediaBrowserClass;
+
+#define XNOISE_MAIN_WINDOW_TYPE_REPEAT (xnoise_main_window_repeat_get_type ())
 typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 
 #define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
@@ -767,6 +769,13 @@ struct _XnoiseMainWindow {
 struct _XnoiseMainWindowClass {
 	GtkWindowClass parent_class;
 };
+
+typedef enum  {
+	XNOISE_MAIN_WINDOW_REPEAT_NOT_AT_ALL = 0,
+	XNOISE_MAIN_WINDOW_REPEAT_SINGLE,
+	XNOISE_MAIN_WINDOW_REPEAT_ALL,
+	XNOISE_MAIN_WINDOW_REPEAT_RANDOM
+} XnoiseMainWindowRepeat;
 
 struct _XnoiseMediaBrowser {
 	GtkTreeView parent_instance;
@@ -1302,6 +1311,7 @@ GType xnoise_track_list_note_book_tab_get_type (void) G_GNUC_CONST;
 GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
 GType xnoise_track_progress_bar_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
+GType xnoise_main_window_repeat_get_type (void) G_GNUC_CONST;
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 XnoiseMainWindow* xnoise_main_window_new (void);
 XnoiseMainWindow* xnoise_main_window_construct (GType object_type);
@@ -1315,8 +1325,8 @@ void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, char** newu
 void xnoise_main_window_handle_control_button_click (XnoiseMainWindow* self, XnoiseControlButton* sender, XnoiseControlButtonDirection dir);
 void xnoise_main_window_display_info_bar (XnoiseMainWindow* self, GtkInfoBar* bar);
 void xnoise_main_window_show_status_info (XnoiseMainWindow* self, XnoiseInfoBar* bar);
-gint xnoise_main_window_get_repeatState (XnoiseMainWindow* self);
-void xnoise_main_window_set_repeatState (XnoiseMainWindow* self, gint value);
+XnoiseMainWindowRepeat xnoise_main_window_get_repeatState (XnoiseMainWindow* self);
+void xnoise_main_window_set_repeatState (XnoiseMainWindow* self, XnoiseMainWindowRepeat value);
 gboolean xnoise_main_window_get_fullscreenwindowvisible (XnoiseMainWindow* self);
 void xnoise_main_window_set_fullscreenwindowvisible (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);

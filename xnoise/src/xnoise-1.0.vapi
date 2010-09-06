@@ -222,6 +222,13 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {
+		[CCode (cprefix = "XNOISE_MAIN_WINDOW_REPEAT_", cheader_filename = "xnoise.h")]
+		public enum Repeat {
+			NOT_AT_ALL,
+			SINGLE,
+			ALL,
+			RANDOM
+		}
 		public bool _seek;
 		public Gtk.ActionGroup action_group;
 		public Xnoise.AlbumImage albumimage;
@@ -261,7 +268,7 @@ namespace Xnoise {
 		public void toggle_window_visbility ();
 		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
-		public int repeatState { get; set; }
+		public Xnoise.MainWindow.Repeat repeatState { get; set; }
 		public signal void sign_drag_over_content_area ();
 		public signal void sign_pos_changed (double fraction);
 		public signal void sign_volume_changed (double fraction);
