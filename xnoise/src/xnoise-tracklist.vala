@@ -858,6 +858,22 @@ public class Xnoise.TrackList : TreeView, IParams {
 	/*private void column_visibility_changed();
 	private void column_resizability_changed();*/
 
+	// i hide the default insert_colum, so we can load the column's position
+	// from the config file before actually inserting it
+	private new void insert_column(Gtk.TreeViewColumn column, int position) {
+		if(position < 0) {
+			position = par.get_int_value("position_" + column.title + "_column");
+		}
+
+		// in the config file we count from 1 onwards, because 0 means "not set"
+		// if position is 0, it will -1, meaning it will be placed at the end
+		position--;
+		
+		base.insert_column(column, position);
+	}
+
+	
+
 	private void setup_view() {
 		CellRendererText renderer;
 		
@@ -876,9 +892,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 					}
 					new_column = true;
 				}
-				//connect to visibility property change
-				//connect to resizable property change
-				//override this class' insert_column with this code			
+				// connect to visibility property change
+				// connect to resizable property change
+				// override this class' insert_column with this code			
 			}
 			if(new_column)
 				n_columns++;
@@ -888,7 +904,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		});
 		
 		this.show.connect(() => {
-			//give the columns their relative sizes
+			// give the columns their relative sizes
 			var columns = this.get_columns();
 			foreach(TreeViewColumn c in columns) {
 				if(c == null) continue;
@@ -1170,12 +1186,19 @@ public class Xnoise.TrackList : TreeView, IParams {
 		
 	public void write_params_data() {
 		var columns = this.get_columns();
+		int counter = 0;
 		foreach(TreeViewColumn c in columns) {
 			if(c == null) continue;
+
+			// write column position, counting from 1 onwards
+			counter++;
+			par.set_int_value("position_" + c.title + "_column", counter);
+
+			// write relative column sizes
 			if(!c.resizable) continue;
 			double? relative_size = relative_column_sizes.lookup(c.title);
 			if(relative_size == null) continue;
-			par.set_double_value("relative_size_"+c.title+"_column", (double)relative_size);
+			par.set_double_value("relative_size_" + c.title + "_column", (double)relative_size);
 		} 
 
 	}
