@@ -1,26 +1,11 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
-  <object class="GtkUIManager" id="uimanager1"/>
-  <object class="GtkImage" id="image1">
+  <object class="GtkImage" id="imagecollapse">
     <property name="visible">True</property>
-    <property name="stock">gtk-add</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="stock">gtk-properties</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="stock">gtk-quit</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="stock">gtk-fullscreen</property>
+    <property name="tooltip_text" translatable="yes">Collapse all</property>
+    <property name="stock">gtk-unindent</property>
     <property name="icon-size">1</property>
   </object>
   <object class="GtkVBox" id="mainvbox">
@@ -360,6 +345,7 @@ ready to rock</property>
                               <object class="GtkImage" id="image2y1">
                                 <property name="visible">True</property>
                                 <property name="stock">gtk-delete</property>
+                                <property name="icon-size">1</property>
                               </object>
                             </child>
                           </object>
@@ -380,6 +366,7 @@ ready to rock</property>
                               <object class="GtkImage" id="image1y1">
                                 <property name="visible">True</property>
                                 <property name="stock">gtk-clear</property>
+                                <property name="icon-size">1</property>
                               </object>
                             </child>
                           </object>
@@ -420,6 +407,7 @@ ready to rock</property>
                                   <object class="GtkImage" id="imageLy01">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-about</property>
+                                    <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
@@ -458,6 +446,7 @@ ready to rock</property>
                                   <object class="GtkImage" id="showvideoimage">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-fullscreen</property>
+                                    <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
@@ -804,10 +793,24 @@ ready to rock</property>
       </packing>
     </child>
   </object>
-  <object class="GtkImage" id="imagecollapse">
+  <object class="GtkImage" id="image4">
     <property name="visible">True</property>
-    <property name="tooltip_text" translatable="yes">Collapse all</property>
-    <property name="stock">gtk-unindent</property>
+    <property name="stock">gtk-fullscreen</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="stock">gtk-quit</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="stock">gtk-properties</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-add</property>
     <property name="icon-size">1</property>
   </object>
 </interface>
