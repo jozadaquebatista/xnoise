@@ -37,6 +37,7 @@ using DBus;
 using Xnoise;
 
 public class Xnoise.Mpris : GLib.Object, IPlugin {
+	private Indicate.Server server;
 	public Main xn { get; set; }
 	public Connection conn;
 	public dynamic DBus.Object bus;
@@ -67,24 +68,29 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 			//print("request_name_result %d\n", (int)request_name_result);
 			// if we got our name setup / /Player and /TrackList objects
 			if(request_name_result == DBus.RequestNameReply.PRIMARY_OWNER) {
-
+			
 				root = new MprisRoot();
 				conn.register_object("/", root);
 		
 				 player = new MprisPlayer();
 				conn.register_object("/Player", player);
 
-				tracklist = new MprisTrackList();
-				conn.register_object("/TrackList", tracklist);
+//				tracklist = new MprisTrackList(); 
+//				conn.register_object("/TrackList", tracklist);
 			}
 			else {
-				stderr.printf("mpris: cannot acquire name org.mpris.xnoise in session bus");
+				stderr.printf("mpris: cannot acquire name org.mpris.MediaPlayer2.xnoise in session bus");
 			}
-		}
+		} 
 		catch(GLib.Error e) {
 			stderr.printf("mpris: failed to setup dbus interface: %s\n", e.message);
 			return false;
 		}
+		
+		server= Indicate.Server.ref_default();
+		server.set("type", "music.xnoise");
+		server.set_desktop_file("/usr/share/applications/xnoise.desktop");
+		server.show();
 		return true;
 	}
 	
@@ -405,7 +411,7 @@ public class MprisTrackList : GLib.Object {
 	public signal void TrackListChange(int Nb_Tracks);
 	
 	
-	public HashTable<string, Value?>? GetMetadata(int Position) {
+	public HashTable<string, Value?>? GetTracksMetadata(int Position) {
 		return null;
 	}
 	

@@ -27,6 +27,7 @@ LIBNOTIFY_REQUIRED=0.4.5
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
 DBUS_GLIB_REQUIRED=0.0.1
+LIBINDICATE_REQUIRED=0.1
 XNOISE_REQUIRED=xnoisepluginscore_version
 
 dnl required versions for vala, if used
@@ -74,7 +75,6 @@ XNOISEPLUGINSCORE_PACKAGES="\
     --pkg taglib_c \
     --pkg unique-1.0 \
     --pkg gmodule-2.0 \
-    --pkg dbus-glib-1 \
 "
 
 AC_SUBST(XNOISEPLUGINSCORE_CFLAGS)
@@ -145,6 +145,22 @@ if test "x$have_dbus_glib" != "xyes"; then
 fi
 AC_SUBST(LIBDBUS_GLIB_CFLAGS)
 AC_SUBST(LIBDBUS_GLIB_LIBS)
+dnl ================================================================
+
+
+
+dnl ================================================================
+dnl plugin check for plugins dependent on libindicate
+
+PKG_CHECK_MODULES(LIBINDICATE, \
+                  indicate >= $LIBINDICATE_REQUIRED, \
+                  have_libindicate=yes, \
+                  have_libindicate=no)
+if test "x$have_libindicate" != "xyes"; then
+    AC_MSG_WARN([libindicate $LIBINDICATE_REQUIRED or greater not found.])
+fi
+AC_SUBST(LIBINDICATE_CFLAGS)
+AC_SUBST(LIBINDICATE_LIBS)
 dnl ================================================================
 
 
@@ -278,7 +294,12 @@ AC_ARG_ENABLE([mpris],
 
 if test "x$enable_mpris" = "xyes"; then
     if test "x$have_dbus_glib" = "xyes"; then
-        enable_mpris=yes
+        if test "x$have_libindicate" = "xyes"; then
+            enable_mpris=yes
+        else
+            enable_mpris=no
+            AC_MSG_WARN([mpris plugin will not be included in the build.])
+        fi
     else
         enable_mpris=no
         AC_MSG_WARN([mpris plugin will not be included in the build.])
