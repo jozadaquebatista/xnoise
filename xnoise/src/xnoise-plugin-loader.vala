@@ -139,9 +139,6 @@ public class Xnoise.PluginLoader : Object { //, IParams
 		if(p == null) return false;
 		p.activate();
 		if(p.activated) {//notifications
-			if(p.info.name == "notifications") {
-				global.notifications_available = true;
-			}
 			sign_plugin_activated(p);
 			return true;
 		}
@@ -151,9 +148,6 @@ public class Xnoise.PluginLoader : Object { //, IParams
 	public void deactivate_single_plugin(string name) {
 		Plugin p = this.plugin_htable.lookup(name);
 		if(p == null) return;
-		if(p.info.name == "notifications") {
-			global.notifications_available = false;
-		}
 		p.deactivate();
 		sign_plugin_deactivated(p);
 	}
