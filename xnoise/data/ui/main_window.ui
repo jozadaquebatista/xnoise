@@ -545,6 +545,7 @@ ready to rock</property>
                                   <object class="GtkImage" id="imagely02">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-about</property>
+                                    <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
@@ -583,6 +584,7 @@ ready to rock</property>
                                   <object class="GtkImage" id="showvideoimage1">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-index</property>
+                                    <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
@@ -689,6 +691,7 @@ ready to rock</property>
                                   <object class="GtkImage" id="imagetl01">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-index</property>
+                                    <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
@@ -727,6 +730,7 @@ ready to rock</property>
                                   <object class="GtkImage" id="showvideoimage2">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-fullscreen</property>
+                                    <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
