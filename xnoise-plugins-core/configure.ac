@@ -75,6 +75,7 @@ XNOISEPLUGINSCORE_PACKAGES="\
     --pkg taglib_c \
     --pkg unique-1.0 \
     --pkg gmodule-2.0 \
+    --pkg xnoise-1.0 \
 "
 
 AC_SUBST(XNOISEPLUGINSCORE_CFLAGS)
