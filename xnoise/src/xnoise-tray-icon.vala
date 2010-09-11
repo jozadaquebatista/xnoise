@@ -177,8 +177,8 @@ public class Xnoise.TrayIcon : StatusIcon {
 	
 		//todo: handle streams, change label layout, pack into a box with padding and use Tooltip.set_custom
 		if((title == null && artist == null && filename != null) || (filename == title /*&& artist == null*/)) {
-			tp.set_markup("\n<b><big>" + filename + " </big></b><span size=\"xx-small\">\n</span>" +
-			              "<span style=\"italic\" rise=\"6000\">" +
+			tp.set_markup("\n<b>" + prepare_name_from_filename(filename) + " </b><span size=\"xx-small\">\n</span>" +
+			              "<span size=\"small\" style=\"italic\" rise=\"6000\">" +
 			              state + "</span>\n");
 		}
 		else {

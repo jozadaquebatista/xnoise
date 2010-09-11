@@ -894,7 +894,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 						text = Markup.printf_escaped("<b>...</b>");
 					}
 					else {
-						text = Markup.printf_escaped("<b>%s</b>", basename);
+						text = Markup.printf_escaped("<b>%s</b>", prepare_name_from_filename(basename));
 					}
 			}
 			else {

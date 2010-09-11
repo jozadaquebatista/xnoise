@@ -92,7 +92,7 @@ public class Xnoise.TagReader {
 		}
 
 		if(td.Title  == "unknown title") {
-			td.Title = GLib.Filename.display_basename(filename);
+			td.Title = prepare_name_from_filename(GLib.Filename.display_basename(filename));
 		}
 		return td;
 	}

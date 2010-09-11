@@ -621,7 +621,9 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string prepare_for_comparison (string value);
 	[CCode (cheader_filename = "xnoise.h")]
-	public static string remove_linebreaks (string? value);
+	public static string prepare_name_from_filename (string? val);
+	[CCode (cheader_filename = "xnoise.h")]
+	public static string remove_linebreaks (string? val);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string remove_single_character (string haystack, string needle);
 	[CCode (cheader_filename = "xnoise.h")]

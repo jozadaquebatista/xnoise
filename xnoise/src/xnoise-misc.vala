@@ -109,19 +109,37 @@ namespace Xnoise {
 		return result.down();
 	}
 
-	public static string remove_linebreaks(string? value) {
+	public static string remove_linebreaks(string? val) {
 		// unexpected linebreaks do not look nice
-		if(value == null)
+		if(val == null)
 			return "";
 		
 		try {
 			GLib.Regex r = new GLib.Regex("\n");
-			return r.replace(value, -1, 0, " ");
+			return r.replace(val, -1, 0, " ");
 		}
 		catch(GLib.RegexError e) {
 			print("%s\n", e.message);
 		}
-		return value;
+		return val;
+	}
+
+	public static string prepare_name_from_filename(string? val) {
+		if(val == null)
+			return "";
+		string name = val;
+		char* p = name.rstr(".");
+		if(p != null)
+			p[0] = '\0';
+		
+		try {
+			GLib.Regex r = new GLib.Regex("_");
+			name = r.replace(name, -1, 0, " ");
+		}
+		catch(GLib.RegexError e) {
+			print("%s\n", e.message);
+		}
+		return name;
 	}
 
 	public static string replace_underline_with_blank_encoded(string value) {

@@ -97,7 +97,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 			var td = new TrackData();
 			td.Artist = "unknown artist";
 			td.Album = "unknown album";
-			if(file!=null) td.Title = file.get_basename();
+			if(file!=null) td.Title = prepare_name_from_filename(file.get_basename());
 			td.Genre = "";
 			td.Tracknumber = 0;
 			td.Mediatype = MediaType.VIDEO;
@@ -158,7 +158,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 					var td = new TrackData();
 					td.Artist = "unknown artist";
 					td.Album = "unknown album";
-					td.Title = file.get_basename();
+					td.Title = prepare_name_from_filename(file.get_basename());
 					td.Genre = "";
 					td.Tracknumber = 0;
 					td.Mediatype = MediaType.VIDEO;
