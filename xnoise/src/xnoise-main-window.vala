@@ -134,6 +134,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const ActionEntry[] action_entries = {
 		{ "FileMenuAction", null, N_("_File") },
 			{ "OpenAction", Gtk.STOCK_OPEN, null, null, N_("open file"), on_file_add},
+			{ "OpenLocationAction", Gtk.STOCK_NETWORK, N_("Open _Location"), null, N_("open remote location"), on_location_add },
 			{ "AddRemoveAction", Gtk.STOCK_ADD, N_("_Add or Remove media"), null, N_("manage the content of the xnoise media library"), on_menu_add},
 			{ "QuitAction", STOCK_QUIT, null, null, null, quit_now},
 		{ "EditMenuAction", null, N_("_Edit") },
@@ -815,6 +816,69 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 	}
 
+	private void on_location_add() {
+		//TODO: Update Tag info presented in tracklist
+		var radiodialog = new Gtk.Dialog();
+		radiodialog.set_modal(true);
+		radiodialog.set_keep_above(true);
+
+		var radioentry = new Gtk.Entry();
+		radioentry.set_width_chars(50);
+		radioentry.secondary_icon_stock = Gtk.STOCK_CLEAR;
+		radioentry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
+		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
+			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
+		});
+		radiodialog.vbox.pack_start(radioentry, true, true, 0);
+
+		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_CANCEL, 0);
+		radiocancelbutton.clicked.connect( () => {
+			radiodialog.close();
+			radiodialog = null;
+		});
+
+		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_OK, 1);
+		radiookbutton.clicked.connect( () => {
+
+			if((radioentry.text!=null) && (radioentry.text.strip() != "")) {
+					try {
+						var uri = radioentry.text.strip();
+						File f = File.new_for_uri(uri);
+						this.trackList.tracklistmodel.insert_title(null,
+						                                           0,
+						                                           prepare_name_from_filename(f.get_basename()),
+						                                           "",
+						                                           "",
+						                                           0,
+						                                           false,
+						                                           uri);
+					}
+					catch(GLib.Error e) {
+						print("Error on_location_add: %s\n",e.message);
+					}
+			}
+			radiodialog.close();
+			radiodialog = null;
+		});
+
+		radiodialog.destroy_event.connect( () => {
+			radiodialog = null;
+			return true;
+		});
+
+		radiodialog.set_title(_("Enter the URL of the file to open"));
+		radiodialog.show_all();
+
+		var display = radiodialog.get_display();
+		Gdk.Atom atom = Gdk.SELECTION_CLIPBOARD;
+		Clipboard clipboard = Clipboard.get_for_display(display,atom);
+		string text = clipboard.wait_for_text();
+		if(text != null && "://" in text) {
+			//it's url, then paste in text input
+			radioentry.text = text;
+		}
+	}
+	
 	private void on_file_add() {
 		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
 			_("Select media file"),
