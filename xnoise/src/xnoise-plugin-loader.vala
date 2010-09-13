@@ -32,8 +32,6 @@ public class Xnoise.PluginLoader : Object { //, IParams
 	public HashTable<string, Plugin> plugin_htable;
 	public HashTable<string, Plugin> lyrics_plugins_htable;
 	public HashTable<string, Plugin> image_provider_htable;
-	public HashTable<string, string> lyrics_plugins_priority;
-	public HashTable<string, string> image_provider_priority;
 	private Main xn;
 	private PluginInformation info;
 	private GLib.List<string> info_files;
@@ -48,8 +46,6 @@ public class Xnoise.PluginLoader : Object { //, IParams
 		plugin_htable = new HashTable<string, Plugin>(str_hash, str_equal);
 		lyrics_plugins_htable   = new HashTable<string, unowned Plugin>(str_hash, str_equal);
 		image_provider_htable   = new HashTable<string, unowned Plugin>(str_hash, str_equal);
-		lyrics_plugins_priority = new HashTable<string, string>(str_hash, str_equal);
-		image_provider_priority = new HashTable<string, string>(str_hash, str_equal);
 	}
 
 	public unowned GLib.List<string> get_info_files() {
@@ -59,8 +55,6 @@ public class Xnoise.PluginLoader : Object { //, IParams
 	public bool load_all() {
 		Plugin plugin;
 		File dir = File.new_for_path(Config.PLUGINSDIR);
-		int ly_count = 50;
-		int ai_count = 50;
 		this.get_plugin_information_files(dir);
 		foreach(string pluginInfoFile in info_files) {
 			info = new PluginInformation(pluginInfoFile);
@@ -73,18 +67,10 @@ public class Xnoise.PluginLoader : Object { //, IParams
 					continue;
 				if(plugin.is_lyrics_plugin) {
 					lyrics_plugins_htable.insert(info.name, plugin);
-					string buf = (par.get_lyric_provider_priority(info.name)).to_string();
-					if(buf == "99")
-						buf = (ly_count++).to_string();
-					lyrics_plugins_priority.insert(buf, info.name);
 				}
 				if(plugin.is_album_image_plugin) {
 					image_provider_htable.insert(info.name, plugin);
-					string buf = (par.get_image_provider_priority(info.name)).to_string();
-					if(buf == "99")
-						buf = (ai_count++).to_string();
-					image_provider_priority.insert(buf, info.name);
-				} 
+				}
 			}
 			else {
 				print("Failed to load %s.\n", pluginInfoFile);

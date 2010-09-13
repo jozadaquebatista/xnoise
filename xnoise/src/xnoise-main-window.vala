@@ -841,21 +841,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		radiookbutton.clicked.connect( () => {
 
 			if((radioentry.text!=null) && (radioentry.text.strip() != "")) {
-					try {
-						var uri = radioentry.text.strip();
-						File f = File.new_for_uri(uri);
-						this.trackList.tracklistmodel.insert_title(null,
-						                                           0,
-						                                           prepare_name_from_filename(f.get_basename()),
-						                                           "",
-						                                           "",
-						                                           0,
-						                                           false,
-						                                           uri);
-					}
-					catch(GLib.Error e) {
-						print("Error on_location_add: %s\n",e.message);
-					}
+				var uri = radioentry.text.strip();
+				File f = File.new_for_uri(uri);
+				this.trackList.tracklistmodel.insert_title(null,
+				                                           0,
+				                                           prepare_name_from_filename(f.get_basename()),
+				                                           "",
+				                                           "",
+				                                           0,
+				                                           false,
+				                                           uri);
 			}
 			radiodialog.close();
 			radiodialog = null;

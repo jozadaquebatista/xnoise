@@ -39,9 +39,6 @@ public errordomain Xnoise.SettingsDialogError {
 public class Xnoise.SettingsDialog : Gtk.Builder {
 	private unowned Main xn;
 	private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
-/*
-	private const int NUMBER_OF_NON_PLUGIN_TABS = 4;
-*/
 	private PluginManagerTree plugin_manager_tree;
 	private Notebook notebook;
 	private SpinButton sb;
@@ -67,10 +64,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private Button ly_up_button;
 	
 	private enum NotebookTabs {
-		GENERAL,
+		GENERAL = 0,
 		PLUGINS,
-		COVER_IMAGES,
-		LYRICS,
+		PRIORITIES,
 		N_COLUMNS
 	}
 
@@ -83,14 +79,12 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private enum AIProvider {
 		STATE,
 		NAME,
-		RANKING,
 		N_COLUMNS
 	}
 
 	private enum LyricsProvider {
 		STATE,
 		NAME,
-		RANKING,
 		N_COLUMNS
 	}
 	
@@ -119,11 +113,10 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	private void on_notebook_switched_page(Notebook sender, NotebookPage page, uint page_num) {
 		// refresh table
-		if(page_num == NotebookTabs.COVER_IMAGES)
-			this.put_data_to_ai_tv();
-
-		if(page_num == NotebookTabs.LYRICS)
-			this.put_data_to_ly_tv();
+		if(page_num == NotebookTabs.PRIORITIES) {
+			ly_model.foreach(update_lyrics_providers);
+			ai_model.foreach(update_ai_providers);
+		}
 	}
 
 	private void initialize_members() {
@@ -200,8 +193,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			xn.main_window.mediaBr.use_linebreaks = false;
 		}
 	}
-			
-
+	
 	private void on_ok_button_clicked() {
 		
 		int buf = 0;
@@ -229,14 +221,34 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		par.set_int_value("use_tracknumber_column", buf);
 		xn.tl.column_tracknumber_visible = show_trackno_col;
 
-		//write priorities for album image providers
-		//TODO
 		//write priorities for lyrics providers
-		//TODO
+		ly_model.foreach(lyrics_list_foreach);
+		par.set_string_list_value("prio_lyrics", priorities_lyrics);
+
+		//write priorities for image providers
+		ai_model.foreach(images_list_foreach);
+		par.set_string_list_value("prio_images", priorities_images);
 
 		par.write_all_parameters_to_file();
 		this.dialog.destroy();
 		sign_finish();
+	}
+
+	private string[] priorities_lyrics = {};
+	private string[] priorities_images = {};
+	
+	private bool lyrics_list_foreach(TreeModel sender, TreePath path, TreeIter iter) {
+		string? name = null;
+		sender.get(iter, LyricsProvider.NAME, out name);
+		priorities_lyrics += name;
+		return false;
+	}
+	
+	private bool images_list_foreach(TreeModel sender, TreePath path, TreeIter iter) {
+		string? name = null;
+		sender.get(iter, LyricsProvider.NAME, out name);
+		priorities_lyrics += name;
+		return false;
 	}
 
 	private void on_cancel_button_clicked() {
@@ -249,7 +261,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		foreach(string name in this.xn.plugin_loader.plugin_htable.get_keys()) {
 			unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
 			if((p.activated) && (p.configurable)) {
-			  	Widget? w = p.settingwidget();
+			   Widget? w = p.settingwidget();
 				if(w!=null) notebook.append_page(w, new Gtk.Label(name));
 				count++;
 			}
@@ -258,9 +270,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	}
 
 	private void remove_plugin_tabs() {
-		//remove all tabs
+		//remove all plugin tabs, before re-adding them
 		int number_of_plugin_tabs = notebook.get_n_pages();
-		for(int i=5; i<=number_of_plugin_tabs; i++) {
+		for(int i = NotebookTabs.N_COLUMNS; i < number_of_plugin_tabs; i++) {
 			notebook.remove_page(-1); //remove last page
 		}
 	}
@@ -273,13 +285,12 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		this.dialog.show_all();
 	}
 
-
 	private void setup_lyrics_provider_tv() {
 		ly_tv = new TreeView();
 		ly_model = new ListStore(LyricsProvider.N_COLUMNS,
 		                         typeof(bool),
-		                         typeof(string),
-		                         typeof(int));
+		                         typeof(string)
+		                         );
 		ly_tv.model = ly_model;
 
 		var renderer = new CellRendererText();
@@ -306,31 +317,64 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	private void put_data_to_ly_tv() {
 		TreeIter iter;
-		int ranking = -1;
 		ly_model.clear();
-		string[]? ly_providers = par.get_string_list_value("album_image_providers");
-		var ly_prov_list = xn.plugin_loader.lyrics_plugins_htable.get_keys();
-		foreach(string name in ly_prov_list) {
-			ranking = -1;
-			if(ly_providers != null) {
-				ranking = get_position_in_array(ly_providers, ref name);
+		string[]? ordered_ly_providers = par.get_string_list_value("prio_lyrics");
+		List<unowned string> ly_prov_list = xn.plugin_loader.lyrics_plugins_htable.get_keys();
+		if(ordered_ly_providers != null) {
+			foreach(string name in ordered_ly_providers) {
+				if(is_in_list(ref ly_prov_list, name)) {
+					ly_model.prepend(out iter);
+					ly_model.set(iter,
+					             LyricsProvider.STATE, this.xn.plugin_loader.lyrics_plugins_htable.lookup(name).activated,
+					             LyricsProvider.NAME, name
+					             );
+				}
 			}
-			ly_model.prepend(out iter);
-			ly_model.set(iter,
-			             LyricsProvider.STATE, this.xn.plugin_loader.lyrics_plugins_htable.lookup(name).activated,
-			             LyricsProvider.NAME, name,
-			             LyricsProvider.RANKING, ranking
-			             );
 		}
-		//TODO: Sort on the base of RANKING in the treeview
+		else {
+			foreach(unowned string name in ly_prov_list) {
+				ly_model.prepend(out iter);
+				ly_model.set(iter,
+				             LyricsProvider.STATE, this.xn.plugin_loader.lyrics_plugins_htable.lookup(name).activated,
+				             LyricsProvider.NAME, name
+				             );
+			}
+		}
 	}
 
+	private bool update_lyrics_providers(TreeModel sender, TreePath path, TreeIter iter) {
+		//update activation state in lyrics providers
+		string? name = null;
+		sender.get(iter, LyricsProvider.NAME, out name);
+		ly_model.set(iter,
+		             LyricsProvider.STATE, this.xn.plugin_loader.lyrics_plugins_htable.lookup(name).activated
+		             );
+		return false;
+	}
+
+	private bool update_ai_providers(TreeModel sender, TreePath path, TreeIter iter) {
+		//update activation state in image providers
+		string? name = null;
+		sender.get(iter, AIProvider.NAME, out name);
+		ai_model.set(iter,
+		             AIProvider.STATE, this.xn.plugin_loader.image_provider_htable.lookup(name).activated
+		             );
+		return false;
+	}
+
+	private bool is_in_list(ref List<string> list, string text) {
+		foreach(unowned string s in list)	{
+			if(text == s)
+				return true;
+		}
+		return false;
+	}
+	
 	private void setup_albumimage_provider_tv() {
 		ai_tv = new TreeView();
 		ai_model = new ListStore(AIProvider.N_COLUMNS,
 		                         typeof(bool),
-		                         typeof(string),
-		                         typeof(int));
+		                         typeof(string));
 		ai_tv.model = ai_model;
 
 		var renderer = new CellRendererText();
@@ -357,32 +401,29 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	private void put_data_to_ai_tv() {
 		TreeIter iter;
-		int ranking = -1;
 		ai_model.clear();
-		string[]? album_image_providers = par.get_string_list_value("album_image_providers");
-		var ai_prov_list = xn.plugin_loader.image_provider_htable.get_keys();
-		foreach(string name in ai_prov_list) {
-			ranking = -1;
-			if(album_image_providers!=null) {
-				ranking = get_position_in_array(album_image_providers, ref name);
+		string[]? ordered_ai_providers = par.get_string_list_value("prio_images");
+		List<unowned string> ai_prov_list = xn.plugin_loader.image_provider_htable.get_keys();
+		if(ordered_ai_providers != null) {
+			foreach(string name in ordered_ai_providers) {
+				if(is_in_list(ref ai_prov_list, name)) {
+					ai_model.prepend(out iter);
+					ai_model.set(iter,
+					             AIProvider.STATE, this.xn.plugin_loader.image_provider_htable.lookup(name).activated,
+					             AIProvider.NAME, name
+					             );
+				}
 			}
-			ai_model.prepend(out iter);
-			ai_model.set(iter,
-			             AIProvider.STATE, this.xn.plugin_loader.image_provider_htable.lookup(name).activated,
-			             AIProvider.NAME, name,
-			             AIProvider.RANKING, ranking
-			             );
 		}
-		//TODO: Sort on the base of RANKING in the treeview
-	}
-
-	private int get_position_in_array(string[] array, ref string needle) {
-		int position = 1;
-		foreach(unowned string array_entry in array) {
-			if(needle == array_entry) return position;
-			position++;
+		else {
+			foreach(unowned string name in ai_prov_list) {
+				ai_model.prepend(out iter);
+				ai_model.set(iter,
+				             AIProvider.STATE, this.xn.plugin_loader.image_provider_htable.lookup(name).activated,
+				             AIProvider.NAME, name
+				             );
+			}
 		}
-		return -1;
 	}
 
 	private void put_data_to_viz_cols_tv() {
@@ -463,6 +504,10 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		TreeIter iter;
 		TreeIter next_iter;
 		List<TreePath> treepaths = sel.get_selected_rows(null);
+		
+		if(treepaths == null)
+			return;
+		
 		TreePath tp = (TreePath)treepaths.first().data;
 		if(!ai_model.get_iter(out iter, tp)) 
 			return;
@@ -478,6 +523,10 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		TreeIter iter;
 		TreeIter next_iter;
 		List<TreePath> treepaths = sel.get_selected_rows(null);
+		
+		if(treepaths == null)
+			return;
+		
 		TreePath tp = (TreePath)treepaths.first().data;
 		if(!ai_model.get_iter(out iter, tp)) 
 			return;
@@ -493,6 +542,10 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		TreeIter iter;
 		TreeIter next_iter;
 		List<TreePath> treepaths = sel.get_selected_rows(null);
+		
+		if(treepaths == null)
+			return;
+		
 		TreePath tp = (TreePath)treepaths.first().data;
 		if(!ly_model.get_iter(out iter, tp)) 
 			return;
@@ -508,7 +561,12 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		TreeIter iter;
 		TreeIter next_iter;
 		List<TreePath> treepaths = sel.get_selected_rows(null);
+		
+		if(treepaths == null)
+			return;
+		
 		TreePath tp = (TreePath)treepaths.first().data;
+		
 		if(!ly_model.get_iter(out iter, tp)) 
 			return;
 		tp.next();

@@ -384,9 +384,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginLoader : GLib.Object {
 		public GLib.HashTable<string,Xnoise.Plugin> image_provider_htable;
-		public GLib.HashTable<string,string> image_provider_priority;
 		public GLib.HashTable<string,Xnoise.Plugin> lyrics_plugins_htable;
-		public GLib.HashTable<string,string> lyrics_plugins_priority;
 		public GLib.HashTable<string,Xnoise.Plugin> plugin_htable;
 		public PluginLoader ();
 		public bool activate_single_plugin (string name);

@@ -927,8 +927,6 @@ struct _XnoisePluginLoader {
 	GHashTable* plugin_htable;
 	GHashTable* lyrics_plugins_htable;
 	GHashTable* image_provider_htable;
-	GHashTable* lyrics_plugins_priority;
-	GHashTable* image_provider_priority;
 };
 
 struct _XnoisePluginLoaderClass {
