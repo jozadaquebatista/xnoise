@@ -38,7 +38,6 @@ using DBus;
 using Xnoise;
 
 public class Xnoise.Mpris : GLib.Object, IPlugin {
-	private Indicate.Server server;
 	public Main xn { get; set; }
 	public Connection conn;
 	public dynamic DBus.Object bus;
@@ -69,18 +68,18 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 			//print("request_name_result %d\n", (int)request_name_result);
 			// if we got our name setup / /Player and /TrackList objects
 			if(request_name_result == DBus.RequestNameReply.PRIMARY_OWNER) {
-			
+				
 				root = new MprisRoot();
 				conn.register_object("/org/mpris/MediaPlayer2", root);
-		
+				
 				 player = new MprisPlayer();
 				conn.register_object("/org/mpris/MediaPlayer2/Player", player);
-
+				
 //				tracklist = new MprisTrackList(); 
 //				conn.register_object("/TrackList", tracklist);
 			}
 			else {
-				stderr.printf("mpris: cannot acquire name org.mpris.MediaPlayer2.xnoise in session bus");
+				print("mpris: cannot acquire name org.mpris.MediaPlayer2.xnoise in session bus\n");
 			}
 		} 
 		catch(GLib.Error e) {
@@ -88,16 +87,12 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 			return false;
 		}
 		
-		server= Indicate.Server.ref_default();
-		server.set("type", "music.xnoise");
-		server.menu = "/org/mpris/MediaPlayer2";
-		server.set_desktop_file("/usr/local/share/applications/xnoise.desktop");
-		server.show();
 		return true;
 	}
 	
 	~Mpris() {
-		server.hide();
+		RawError error = RawError();
+		bus.release_name("org.mpris.MediaPlayer2.xnoise");//FIXME: This is giving warnings
 	}
 
 	public Gtk.Widget? get_settings_widget() {
@@ -340,13 +335,13 @@ public class MprisPlayer : GLib.Object {
 		}
 	}
 	
-	public int64 Position {
+	public int32 Position {
 		get {
 			if(xn.gPl.length_time == 0)
 				return -1;
 			double pos = xn.gPl.gst_position;
 //			double rel_pos = 
-			return (int64)(pos * xn.gPl.length_time / 1000000);
+			return (int32)(pos * xn.gPl.length_time / 1000000);
 //			string buf = rel_pos.to_string();
 //			return buf.to_int64();
 		}

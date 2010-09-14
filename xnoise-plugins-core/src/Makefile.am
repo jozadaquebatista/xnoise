@@ -1,6 +1,6 @@
 SUBDIRS = testplugin titleToDecoration
 
-DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers notifications lyricsfly mediakeys mpris mediawatcher chartlyrics lyricwiki
+DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers notifications lyricsfly mediakeys mpris mediawatcher chartlyrics lyricwiki soundmenu
 
 if ENABLE_CHARTLYRICS
   SUBDIRS += chartlyrics
@@ -36,6 +36,10 @@ endif
 
 if ENABLE_LYRICWIKI
   SUBDIRS += lyricwiki
+endif
+
+if ENABLE_SOUNDMENU
+  SUBDIRS += soundmenu
 endif
 
 DISTCLEANFILES = \

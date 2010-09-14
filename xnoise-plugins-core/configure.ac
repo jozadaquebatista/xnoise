@@ -295,12 +295,7 @@ AC_ARG_ENABLE([mpris],
 
 if test "x$enable_mpris" = "xyes"; then
     if test "x$have_dbus_glib" = "xyes"; then
-        if test "x$have_libindicate" = "xyes"; then
-            enable_mpris=yes
-        else
-            enable_mpris=no
-            AC_MSG_WARN([mpris plugin will not be included in the build.])
-        fi
+        enable_mpris=yes
     else
         enable_mpris=no
         AC_MSG_WARN([mpris plugin will not be included in the build.])
@@ -308,6 +303,32 @@ if test "x$enable_mpris" = "xyes"; then
 fi
 AM_CONDITIONAL(ENABLE_MPRIS, test x"$enable_mpris" = "xyes")
 dnl ================================================================
+
+dnl ================================================================
+dnl dependency check for optional build of soundmenu plugin 
+
+AC_ARG_ENABLE([soundmenu],
+    AS_HELP_STRING([--disable-soundmenu],
+    [Disable soundmenu plugin (default: enabled)]),
+    [enable_soundmenu=$enableval],
+    [enable_soundmenu=yes])
+
+if test "x$enable_soundmenu" = "xyes"; then
+    if test "x$have_libindicate" = "xyes"; then
+        if test "x$enable_mpris" = "xyes"; then
+            enable_soundmenu=yes
+        else
+            enable_soundmenu=no
+            AC_MSG_WARN([soundmenu plugin will not be included in the build.])
+        fi
+    else
+        enable_soundmenu=no
+        AC_MSG_WARN([soundmenu plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_SOUNDMENU, test x"$enable_soundmenu" = "xyes")
+dnl ================================================================
+
 
 dnl ================================================================
 dnl dependency check for optional build of mediakeys plugin 
@@ -380,6 +401,7 @@ AC_CONFIG_FILES([
     src/mediakeys/Makefile
     src/chartlyrics/Makefile
     src/lyricwiki/Makefile
+    src/soundmenu/Makefile
     po/Makefile.in
     vapi/Makefile
 ])
@@ -406,4 +428,5 @@ echo "
     mediawatcher:                  ${enable_mediawatcher}
     mpris:                         ${enable_mpris}
     mediakeys:                     ${enable_mediakeys}
+    soundmenu:                     ${enable_soundmenu}
 "
