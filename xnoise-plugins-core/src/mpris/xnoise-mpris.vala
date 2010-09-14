@@ -26,9 +26,10 @@
  *
  * Author:
  * Andreas Obergrusberger
+ * Jörn Magens
  */
 
-// exposes xnoise's player and tracklist controls via dbus using the standardized mpris interface
+// exposes xnoise's player and tracklist controls via dbus using the mpris v2 interface
 // refer to 
 // http://www.mpris.org/2.0/spec/
 
@@ -70,10 +71,10 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 			if(request_name_result == DBus.RequestNameReply.PRIMARY_OWNER) {
 			
 				root = new MprisRoot();
-				conn.register_object("/", root);
+				conn.register_object("/org/mpris/MediaPlayer2", root);
 		
 				 player = new MprisPlayer();
-				conn.register_object("/Player", player);
+				conn.register_object("/org/mpris/MediaPlayer2/Player", player);
 
 //				tracklist = new MprisTrackList(); 
 //				conn.register_object("/TrackList", tracklist);
@@ -89,12 +90,14 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 		
 		server= Indicate.Server.ref_default();
 		server.set("type", "music.xnoise");
-		server.set_desktop_file("/usr/share/applications/xnoise.desktop");
+		server.menu = "/org/mpris/MediaPlayer2";
+		server.set_desktop_file("/usr/local/share/applications/xnoise.desktop");
 		server.show();
 		return true;
 	}
 	
 	~Mpris() {
+		server.hide();
 	}
 
 	public Gtk.Widget? get_settings_widget() {
@@ -120,9 +123,6 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 
 [DBus(name = "org.mpris.MediaPlayer2")]
 public class MprisRoot : GLib.Object {
-	public string Identity() {
-		return "xnoise";
-	}
 	
 	public bool CanQuit { 
 		get {
@@ -136,10 +136,21 @@ public class MprisRoot : GLib.Object {
 		} 
 	}
 	
+	public bool HasTrackList {
+		get {
+			return false;
+		}
+	}
 	public string DesktopEntry { 
 		get {
 			return "xnoise";
 		} 
+	}
+	
+	public string Identity {
+		get {
+			return "xnoise media player";
+		}
 	}
 	
 	public string[] SupportedUriSchemes {
@@ -203,29 +214,31 @@ public class MprisRoot : GLib.Object {
 	}
 
 	public void Quit() {
+		print("mpris interface requested quit.\n");
 		//TODO
 	}
 	
 	public void Raise() {
+		print("mpris interface requested raise.\n");
 		//TODO
 	}
 	
-	public VersionStruct MprisVersion() {
-		var v = VersionStruct();
-		v.Major = 2;
-		v.Minor = 0;
-		return v;
-	}
+//	public VersionStruct MprisVersion() {
+//		var v = VersionStruct();
+//		v.Major = 2;
+//		v.Minor = 0;
+//		return v;
+//	}
 }
 
-public struct VersionStruct {
-	uint16 Major;
-	uint16 Minor;
-}
+//public struct VersionStruct {
+//	uint16 Major;
+//	uint16 Minor;
+//}
 
 
 
-[DBus(name = "org.mpris.MediaPlayer2")]
+[DBus(name = "org.mpris.MediaPlayer2.Player")]
 public class MprisPlayer : GLib.Object {
 	private unowned Main xn;
 	private static enum Direction {
@@ -233,60 +246,6 @@ public class MprisPlayer : GLib.Object {
 		PREVIOUS,
 		STOP
 	}	
-	
-	public signal void TrackChange(HashTable<string, Value?> Metadata);
-	public signal void StatusChange(StatusStruct Status);
-	public signal void CapsChange(int Capabilities);
-
-	public MprisPlayer() {
-		this.xn = Main.instance;
-	}
-
-	public void Next() {
-		print("next\n");
-		this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
-	}
-	
-	public void Prev() {
-		print("prev\n");
-		this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
-	}
-	
-	public void Pause() {
-		if(global.current_uri == null) {
-			string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
-			if((uri != "")&&(uri != null)) 
-				global.current_uri = uri;
-		}
-
-		global.track_state = GlobalAccess.TrackState.PAUSED;
-	}
-	
-	public void Stop() {
-		this.xn.main_window.stop();
-	}
-	
-	public void Play() {
-		if(global.current_uri == null) {
-			string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
-			if((uri != "")&&(uri != null)) 
-				global.current_uri = uri;
-		}
-
-		if(!(global.track_state == GlobalAccess.TrackState.PLAYING)) {
-			global.track_state = GlobalAccess.TrackState.PLAYING;
-		}
-	}
-	
-	public void Repeat(bool State) {
-	}
-	
-	public StatusStruct GetStatus() {
-		var ss = StatusStruct();
-		//ss.playback_state = 
-		return ss;
-	}
-	
 	public string PlaybackStatus {
 		get {
 			switch(global.track_state) {
@@ -335,8 +294,39 @@ public class MprisPlayer : GLib.Object {
 		}
 	}
 	
-	public HashTable<string, Value?>? GetMetadata() {
-		return null;
+	public double Rate {
+		get {
+			return 1.0;
+		}
+		set {
+		}
+	}
+	
+	private MainWindow.Repeat buffer_repeat_state = MainWindow.Repeat.NOT_AT_ALL;
+	public bool Shuffle {
+		get {
+			if(this.xn.main_window.repeatState == MainWindow.Repeat.RANDOM)
+				return true;
+			return false;
+		}
+		set {
+			if(value == true) {
+				buffer_repeat_state = this.xn.main_window.repeatState;
+				this.xn.main_window.repeatState = MainWindow.Repeat.RANDOM;
+			}
+			else {
+				this.xn.main_window.repeatState = buffer_repeat_state;
+			}
+		}
+	}
+	
+	public HashTable<string, Value?>? Metadata { //a{sv}
+		owned get {
+			var ht = new HashTable<string, Value?>(direct_hash, direct_equal);
+			Value v = "1";
+			ht.insert("mpris:trackid", v);
+			return ht;
+		}
 	}
 	
 	public double Volume {
@@ -349,6 +339,31 @@ public class MprisPlayer : GLib.Object {
 			this.xn.gPl.volume = value;
 		}
 	}
+	
+	public int64 Position {
+		get {
+			if(xn.gPl.length_time == 0)
+				return -1;
+			double pos = xn.gPl.gst_position;
+//			double rel_pos = 
+			return (int64)(pos * xn.gPl.length_time / 1000000);
+//			string buf = rel_pos.to_string();
+//			return buf.to_int64();
+		}
+	}
+	
+	public double MinimumRate {
+		get {
+			return 1.0;
+		}
+	}
+
+	public double MaximumRate {
+		get {
+			return 1.0;
+		}
+	}
+
 	public bool CanGoNext {
 		get {
 			return true;
@@ -383,30 +398,97 @@ public class MprisPlayer : GLib.Object {
 			return true;
 		}
 	}
-//	public void PositionSet(int Position) {
-//		if(xn.gPl.length_time == 0) return; 
-//		xn.gPl.gst_position = (double)Position/(double)(xn.gPl.length_time/1000000);
+	public signal void Seeked(int64 Position);
+//	public signal void TrackChange(HashTable<string, Value?> Metadata);
+//	public signal void StatusChange(StatusStruct Status);
+//	public signal void CapsChange(int Capabilities);
+
+	public MprisPlayer() {
+		this.xn = Main.instance;
+	}
+
+	public void Next() {
+		print("next\n");
+		this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
+	}
+	
+	public void Previous() {
+		print("prev\n");
+		this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
+	}
+	
+	public void Pause() {
+		if(global.current_uri == null) {
+			string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
+			if((uri != "")&&(uri != null)) 
+				global.current_uri = uri;
+		}
+		
+		global.track_state = GlobalAccess.TrackState.PAUSED;
+	}
+	
+	public void PlayPause() {
+		if(global.current_uri == null) {
+			string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
+			if((uri != "")&&(uri != null)) 
+				global.current_uri = uri;
+		}
+		
+		if(global.track_state == GlobalAccess.TrackState.PLAYING) {
+			global.track_state = GlobalAccess.TrackState.PAUSED;
+		}
+		else {
+			global.track_state = GlobalAccess.TrackState.PLAYING;
+		}
+	}
+	
+	public void Stop() {
+		this.xn.main_window.stop();
+	}
+	
+	public void Play() {
+		if(global.current_uri == null) {
+			string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
+			if((uri != "")&&(uri != null)) 
+				global.current_uri = uri;
+		}
+		
+		if(!(global.track_state == GlobalAccess.TrackState.PLAYING)) {
+			global.track_state = GlobalAccess.TrackState.PLAYING;
+		}
+	}
+	
+	public void Seek(int64 Offset) {
+		return;
+	}
+	
+	public void SetPosition(string dobj, int64 Position) {
+		//TODO
+	}
+	
+	public void OpenUri(string Uri) {
+		//TODO
+		return;
+	}
+	
+//	public StatusStruct GetStatus() {
+//		var ss = StatusStruct();
+//		//ss.playback_state = 
+//		return ss;
 //	}
 	
-//	public int PositionGet() {
-//		if(xn.gPl.length_time == 0) return -1;
-//		double pos = xn.gPl.gst_position;
-//		double rel_pos = pos * xn.gPl.length_time / 1000000;
-//		string buf = rel_pos.to_string();
-//		return buf.to_int();
-//	}
 }
 
-public struct StatusStruct {
-	int playback_state;
-	int shuffle_state;
-	int repeat_current_state;
-	int endless_state;
-}
+//public struct StatusStruct {
+//	int playback_state;
+//	int shuffle_state;
+//	int repeat_current_state;
+//	int endless_state;
+//}
 
 
 
-[DBus(name = "org.mpris.MediaPlayer2")]
+[DBus(name = "org.mpris.MediaPlayer2.Tracklist")]
 public class MprisTrackList : GLib.Object {
 	public signal void TrackListChange(int Nb_Tracks);
 	
