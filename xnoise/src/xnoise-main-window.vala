@@ -873,7 +873,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			radioentry.text = text;
 		}
 	}
-	
 	private void on_file_add() {
 		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
 			_("Select media file"),

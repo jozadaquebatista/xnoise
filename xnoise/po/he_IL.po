@@ -1,25 +1,32 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-09-06 17:27+0000\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Ricardo A. Hermosilla Carrillo <ra.hermosillac@gmail.com>\n"
-"Language-Team: SPANISH <ES@li.org>\n"
+"PO-Revision-Date: 2010-09-20 14:10+0200\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
+"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: s\n"
-"X-Poedit-Language: Spanish\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.6.1\n"
+"X-Poedit-Language: Hebrew\n"
+"X-Poedit-Country: ISRAEL\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../data/misc/xnoise.desktop.in.in.h:1
 msgid "Media Player"
-msgstr "Reproductor Multimedia"
+msgstr "נגן מדיה"
 
 #: ../data/misc/xnoise.desktop.in.in.h:2
 msgid "Organize and play your music and video collections"
-msgstr "Organice y reproduzca su colección de música y videos"
+msgstr "ארגון ונגינת אוספי המוזיקה והווידאו שלך"
 
 #: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Xnoise"
@@ -27,39 +34,39 @@ msgstr "Xnoise"
 
 #: ../src/xnoise-add-media-dialog.vala:145
 msgid "Add local file"
-msgstr "Agregar archivo local"
+msgstr "הוספת קובץ מקומי"
 
 #: ../src/xnoise-add-media-dialog.vala:146
 msgid "Add local folder"
-msgstr "Agregar carpeta local"
+msgstr "הוספת תיקיית מקומית"
 
 #: ../src/xnoise-add-media-dialog.vala:147
 msgid "Add media stream"
-msgstr "Agregar media stream"
+msgstr "הוספת תזרים מדיה"
 
 #: ../src/xnoise-add-media-dialog.vala:148
 msgid "Remove"
-msgstr "Eliminar"
+msgstr "הסרה"
 
 #: ../src/xnoise-add-media-dialog.vala:159
 msgid "xnoise - Add media to library"
-msgstr "xnoise - Agregar medios a la biblioteca"
+msgstr "xnoise - הוספת מדיה לספריה"
 
 #: ../src/xnoise-add-media-dialog.vala:274 ../src/xnoise-main-window.vala:820
 msgid "Select media file"
-msgstr "Seleccione un archivo multimedia"
+msgstr "בחירת קובץ מדיה"
 
 #: ../src/xnoise-add-media-dialog.vala:298
 msgid "Select media folder"
-msgstr "Seleccione una carpeta multimedia"
+msgstr "בחירת תיקיית מדיה"
 
 #: ../src/xnoise-add-media-dialog.vala:368
 msgid "Add internet radio link"
-msgstr "Agregar url a emisora de radio por internet"
+msgstr "הוספת קישור לרדיו אינטרנט"
 
 #: ../src/xnoise-fullscreen-toolbar.vala:193
 msgid "Leave fullscreen"
-msgstr "Salir de pantalla completa"
+msgstr "יציאה ממסך מלא"
 
 #: ../src/xnoise-lyrics-view.vala:101
 #, c-format
@@ -68,7 +75,7 @@ msgid ""
 "Trying to find lyrics for \"%s\" by \"%s\"..."
 msgstr ""
 "\n"
-"Intentando buscar Letras de Canciones para \"%s\" por \"%s\"..."
+"בניסיון למציאת מילות השיר \"%s\" של \"%s\"..."
 
 #: ../src/xnoise-lyrics-view.vala:110
 #, c-format
@@ -78,180 +85,159 @@ msgid ""
 "\"%s\" by \"%s\".\n"
 msgstr ""
 "\n"
-"El proveedor de Letras de Canciones %s no puede encontrar letras para \n"
-"\"%s\" por \"%s\".\n"
+"ספק מילות השירים %s לא הצליח למצוא את המילים לשיר \n"
+"\"%s\" של \"%s\".\n"
 
 #: ../src/xnoise-main-window.vala:38
 msgid "Video"
-msgstr "Video"
+msgstr "וידאו"
 
 #: ../src/xnoise-main-window.vala:39
 msgid "Tracklist"
-msgstr "Lista de reproducción"
+msgstr "רשימת רצועות"
 
 #: ../src/xnoise-main-window.vala:40
 msgid "Show Media"
-msgstr "Mostrar medios"
+msgstr "הצגת מדיה"
 
 #: ../src/xnoise-main-window.vala:41
 msgid "Hide Media"
-msgstr "Ocultar medios"
+msgstr "הסתרת מדיה"
 
 #: ../src/xnoise-main-window.vala:135
 msgid "_File"
-msgstr "_Archivo"
+msgstr "_קובץ"
 
 #: ../src/xnoise-main-window.vala:136
 msgid "open file"
-msgstr "Abrir archivo"
+msgstr "פתיחת קובץ"
 
 #: ../src/xnoise-main-window.vala:137
 msgid "_Add or Remove media"
-msgstr "_Agregar o quitar medios de reproducción"
+msgstr "הוס_פה או הסרה של מדיה"
 
 #: ../src/xnoise-main-window.vala:137
 msgid "manage the content of the xnoise media library"
-msgstr ""
-"gestionar el contenido de la biblioteca de reproducción de xnoise"
+msgstr "ניהול התוכן של ספריית המדיה של xnoise"
 
 #: ../src/xnoise-main-window.vala:139
 msgid "_Edit"
-msgstr "_Editar"
+msgstr "ע_ריכה"
 
 #: ../src/xnoise-main-window.vala:140
 msgid "C_lear tracklist"
-msgstr "_Limpiar lista de Reproducción"
+msgstr "_פינוי רשימת הרצועות"
 
 #: ../src/xnoise-main-window.vala:140
 msgid "Clear the tracklist"
-msgstr "Limpiar la lista de reproducción"
+msgstr "פינוי רשימת הרצועות"
 
 #: ../src/xnoise-main-window.vala:142
 msgid "_View"
-msgstr "_Ver"
+msgstr "_תצוגה"
 
 #: ../src/xnoise-main-window.vala:143
 msgid "_Tracklist"
-msgstr "_Lista de reproducción"
+msgstr "ר_שימת הרצועות"
 
 #: ../src/xnoise-main-window.vala:143
 msgid "Go to the tracklist."
-msgstr "Ir a lista de reproducción."
+msgstr "מעבר לרשימת הרצועות."
 
 #: ../src/xnoise-main-window.vala:144
 msgid "_Video screen"
-msgstr "Pantalla de _Video"
+msgstr "מסך _וידאו"
 
 #: ../src/xnoise-main-window.vala:144
 msgid "Go to the video screen in the main window."
-msgstr "Ir a la pantalla de video en la ventana principal"
+msgstr "מעבר למסך וידאו בחלון הראשי."
 
 #: ../src/xnoise-main-window.vala:145
 msgid "_Lyrics"
-msgstr "_Letras de Canciones"
+msgstr "_מילות השירים"
 
 #: ../src/xnoise-main-window.vala:145
 msgid "Go to the lyrics view."
-msgstr "Ir al visor de Letras de Canciones."
+msgstr "מעבר לתצוגת מילות השירים"
 
 #: ../src/xnoise-main-window.vala:146
 msgid "_Help"
-msgstr "_Ayuda"
+msgstr "ע_זרה"
 
 #: ../src/xnoise-main-window.vala:148
 msgid "_Config"
-msgstr "_Configuración"
+msgstr "ה_גדרה"
 
 #: ../src/xnoise-main-window.vala:347
 msgid "Add media"
-msgstr "Agregar medios de reproducción"
+msgstr "הוספת מדיה"
 
 #: ../src/xnoise-main-window.vala:350
 msgid ""
 "You started xnoise for the first time. Do you want to import media into the "
 "library?"
-msgstr ""
-"Esta es la primer vez que inicia xnoise. Usted desea importar medios de "
-"reproducción en su biblioteca de reproducción?"
+msgstr "הפעלת את xnoise לראשונה. האם ברצונך לייבא מדיה לספריה?"
 
 #. TODO: create some other images
 #: ../src/xnoise-main-window.vala:444
 msgid "no repeat"
-msgstr "no repetir"
+msgstr "ללא חזרה"
 
 #: ../src/xnoise-main-window.vala:449
 msgid "repeat single"
-msgstr "repetir una vez"
+msgstr "חזרה על יחיד"
 
 #: ../src/xnoise-main-window.vala:454
 msgid "repeat all"
-msgstr "repetir todo"
+msgstr "חזרה על הכול"
 
 #: ../src/xnoise-main-window.vala:459
 msgid "random play"
-msgstr "reproducción aleatoria"
+msgstr "נגינה אקראית"
 
 #: ../src/xnoise-main-window.vala:885 ../src/xnoise-main-window.vala:908
 #: ../src/xnoise-main-window.vala:950 ../src/xnoise-main-window.vala:975
 msgid "by"
-msgstr "por"
+msgstr "של"
 
 #: ../src/xnoise-main-window.vala:887 ../src/xnoise-main-window.vala:910
 #: ../src/xnoise-main-window.vala:952 ../src/xnoise-main-window.vala:977
 msgid "on"
-msgstr "en"
+msgstr "מהאלבום"
 
 #: ../src/xnoise-main-window.vala:907 ../src/xnoise-main-window.vala:974
 #, c-format
 msgid "unknown title"
-msgstr "titulo desconocido"
+msgstr "כותרת בלתי ידועה"
 
 #: ../src/xnoise-main-window.vala:909 ../src/xnoise-main-window.vala:976
 msgid "unknown artist"
-msgstr "artista desconocido"
+msgstr "אמן בלתי ידוע"
 
 #: ../src/xnoise-main-window.vala:911 ../src/xnoise-main-window.vala:978
 msgid "unknown album"
-msgstr "álbum desconocido"
+msgstr "אלבום בלתי ידוע"
 
 #: ../src/xnoise-main-window.vala:960
 msgid "unknown organization"
-msgstr "organización desconocida"
+msgstr "ארגון בלתי ידוע"
 
 #: ../src/xnoise-main-window.vala:962
 msgid "unknown location"
-msgstr "ubicación desconocida"
+msgstr "מיקום בלתי ידוע"
 
 #: ../src/xnoise-main-window.vala:1056
 msgid "Remove all"
-msgstr "Eliminar todo"
+msgstr "הסרת הכול"
 
 #: ../src/xnoise-main-window.vala:1061
 msgid "Remove selected titles"
-msgstr "Eliminar títulos seleccionados"
+msgstr "הסרת כל הכותרות הנבחרות"
 
 #: ../src/xnoise-settings-dialog.vala:566
 msgid "Visible extra columns for tracklist:"
-msgstr "Columnas extras para la Lista de Reproducción:"
+msgstr "עמודות נוספות גלויות ברשימת הרצועות:"
 
 #: ../src/xnoise-tracklist.vala:198
 msgid "Remove selected"
-msgstr "Eliminar seleccionados"
-
-#~ msgid "Play/Pause"
-#~ msgstr "Reproducir/Pausar"
-
-#~ msgid "Previous"
-#~ msgstr "Anterior"
-
-#~ msgid "Next"
-#~ msgstr "Siguiente"
-
-#~ msgid "Exit"
-#~ msgstr "Salir"
-
-#~ msgid "Xnoise Media Player"
-#~ msgstr "Xnoise Media Player"
-
-#~ msgid "Collapse"
-#~ msgstr "Colapsar"
+msgstr "הסרת הנבחרים"
