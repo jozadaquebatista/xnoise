@@ -39,30 +39,6 @@ public class Xnoise.DbBrowser {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private string DATABASE;
-	private Statement image_path_for_uri_statement;
-	private Statement count_for_uri_statement;
-	private Statement get_lastused_statement;
-	private Statement get_videos_with_search_statement;
-	private Statement get_video_data_statement;
-	private Statement get_artist_statement;
-	private Statement get_albums_statement;
-	private Statement get_items_statement;
-	private Statement get_items_with_mediatypes_and_ids_statement;
-	private Statement get_uris_statement;
-	private Statement track_id_for_uri_statement;
-	private Statement trackdata_for_uri_statement;
-	private Statement trackdata_for_id_statement;
-	private Statement uri_for_id_statement;
-	private Statement count_for_mediatype_statement;
-	private Statement get_radios_statement;
-	private Statement get_single_radio_uri_statement;
-	private Statement get_media_folders_statement;
-	private Statement get_radio_data_statement;
-	private Statement stream_td_for_id_statement;
-	private Statement get_media_files_statement;
-	private Statement count_streams_statement;
-	private Statement trackdata_for_stream_statement;
-	private Statement count_for_stream_statement;
 
 	private static const string STMT_IMAGE_PATH_FOR_URI =
 		"SELECT al.image FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND u.name = ?";
@@ -123,7 +99,6 @@ public class Xnoise.DbBrowser {
 		if(this.db == null) {
 			throw new DbError.FAILED("failed messge");
 		}
-		this.prepare_statements();
 	}
 
 	private Database db;
@@ -136,137 +111,107 @@ public class Xnoise.DbBrowser {
 		print("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
 	}
 
-	private void prepare_statements() {
-		this.db.prepare_v2(STMT_IMAGE_PATH_FOR_URI, -1,
-			out this.image_path_for_uri_statement);
-		this.db.prepare_v2(STMT_COUNT_FOR_STREAMS, -1,
-			out this.count_for_stream_statement);
-		this.db.prepare_v2(STMT_COUNT_STREAMS, -1,
-			out this.count_streams_statement);
-		this.db.prepare_v2(STMT_COUNT_FOR_MEDIATYPE, -1,
-			out this.count_for_mediatype_statement);
-		this.db.prepare_v2(STMT_COUNT_FOR_URI, -1,
-			out this.count_for_uri_statement);
-		this.db.prepare_v2(STMT_GET_LASTUSED, -1,
-			out this.get_lastused_statement);
-		this.db.prepare_v2(STMT_GET_VIDEOS, -1,
-			out this.get_videos_with_search_statement);
-		this.db.prepare_v2(STMT_GET_VIDEO_DATA, -1,
-			out this.get_video_data_statement);
-		this.db.prepare_v2(STMT_GET_RADIO_DATA, -1,
-			out this.get_radio_data_statement);
-		this.db.prepare_v2(STMT_GET_ARTISTS, -1,
-			out this.get_artist_statement);
-		this.db.prepare_v2(STMT_GET_ALBUMS, -1,
-			out this.get_albums_statement);
-		this.db.prepare_v2(STMT_GET_ITEMS, -1,
-			out this.get_items_statement);
-		this.db.prepare_v2(STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS, -1,
-			out this.get_items_with_mediatypes_and_ids_statement);
-		this.db.prepare_v2(STMT_GET_URIS, -1,
-			out this.get_uris_statement);
-		this.db.prepare_v2(STMT_TRACKDATA_FOR_URI, -1,
-			out this.trackdata_for_uri_statement);
-		this.db.prepare_v2(STMT_URI_FOR_ID, -1,
-			out this.uri_for_id_statement);
-		this.db.prepare_v2(STMT_TRACK_ID_FOR_URI, -1,
-			out this.track_id_for_uri_statement);
-		this.db.prepare_v2(STMT_TRACKDATA_FOR_ID , -1,
-			out this.trackdata_for_id_statement);
-		this.db.prepare_v2(STMT_GET_RADIOS, -1,
-			out this.get_radios_statement);
-		this.db.prepare_v2(STMT_GET_SINGLE_RADIO_URI, -1,
-			out this.get_single_radio_uri_statement);
-		this.db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1,
-			out this.get_media_folders_statement);
-		this.db.prepare_v2(STMT_STREAM_TD_FOR_ID , -1,
-			out this.stream_td_for_id_statement);
-		this.db.prepare_v2(STMT_GET_MEDIA_FILES, -1,
-			out this.get_media_files_statement);
-		this.db.prepare_v2(STMT_TRACKDATA_FOR_STREAM, -1,
-			out this.trackdata_for_stream_statement);
-	}
-
 	public bool videos_available() {
+		Statement stmt;
 		int count = 0;
-		count_for_mediatype_statement.reset();
+		
+		this.db.prepare_v2(STMT_COUNT_FOR_MEDIATYPE, -1, out stmt);
+			
+		stmt.reset();
 
-		if(count_for_mediatype_statement.bind_int(1, MediaType.VIDEO) != Sqlite.OK) {
+		if(stmt.bind_int(1, MediaType.VIDEO) != Sqlite.OK) {
 			this.db_error();
 		}
-		if(count_for_mediatype_statement.step() == Sqlite.ROW) {
-			count = count_for_mediatype_statement.column_int(0);
+		if(stmt.step() == Sqlite.ROW) {
+			count = stmt.column_int(0);
 		}
 		if(count>0) return true;
 		return false;
 	}
 
 	public bool streams_available() {
+		Statement stmt;
 		int count = 0;
-		count_streams_statement.reset();
+		this.db.prepare_v2(STMT_COUNT_STREAMS, -1, out stmt);
+			
+		stmt.reset();
 
-		if(count_streams_statement.step() == Sqlite.ROW) {
-			count = count_streams_statement.column_int(0);
+		if(stmt.step() == Sqlite.ROW) {
+			count = stmt.column_int(0);
 			if(count > 0) return true;
 		}
 		return false;
 	}
 
 	public bool stream_in_db(string uri) {
+		Statement stmt;
 		int count = 0;
-		count_for_stream_statement.reset();
+		
+		this.db.prepare_v2(STMT_COUNT_FOR_STREAMS, -1, out stmt);
+			
+		stmt.reset();
 
-		if(count_for_stream_statement.bind_text(1, uri) != Sqlite.OK) {
+		if(stmt.bind_text(1, uri) != Sqlite.OK) {
 			this.db_error();
 		}
-		if(count_for_stream_statement.step() == Sqlite.ROW) {
-			count = count_for_stream_statement.column_int(0);
+		if(stmt.step() == Sqlite.ROW) {
+			count = stmt.column_int(0);
 			if(count > 0) return true;
 		}
 		return false;
 	}
 
 	public bool track_in_db(string uri) {
+		Statement stmt;
 		int count = 0;
-		count_for_uri_statement.reset();
+		
+		this.db.prepare_v2(STMT_COUNT_FOR_URI, -1, out stmt);
+			
+		stmt.reset();
 
-		if(count_for_uri_statement.bind_text(1, uri) != Sqlite.OK) {
+		if(stmt.bind_text(1, uri) != Sqlite.OK) {
 			this.db_error();
 		}
-		if(count_for_uri_statement.step() == Sqlite.ROW) {
-			count = count_for_uri_statement.column_int(0);
+		if(stmt.step() == Sqlite.ROW) {
+			count = stmt.column_int(0);
 		}
 		if(count>0) return true;
 		return false;
 	}
 
 	public bool get_uri_for_id(int id, out string val) {
+		Statement stmt;
 		val = "";
-		uri_for_id_statement.reset();
-		if(uri_for_id_statement.bind_int(1, id) != Sqlite.OK) {
+		this.db.prepare_v2(STMT_URI_FOR_ID, -1, out stmt);
+		stmt.reset();
+		if(stmt.bind_int(1, id) != Sqlite.OK) {
 			this.db_error();
 		}
-		if(uri_for_id_statement.step() == Sqlite.ROW) {
-			val = uri_for_id_statement.column_text(0);
+		if(stmt.step() == Sqlite.ROW) {
+			val = stmt.column_text(0);
 			return true;
 		}
 		return false;
 	}
 
 	public bool get_trackdata_for_id(int id, out TrackData val) {
+		Statement stmt;
 		val = new TrackData();
-		trackdata_for_id_statement.reset();
-		if(trackdata_for_id_statement.bind_int(1, id) != Sqlite.OK) {
+		
+		this.db.prepare_v2(STMT_TRACKDATA_FOR_ID , -1, out stmt);
+		
+		stmt.reset();
+		if(stmt.bind_int(1, id) != Sqlite.OK) {
 			this.db_error();
 		}
-		if(trackdata_for_id_statement.step() == Sqlite.ROW) {
-			val.Artist      = trackdata_for_id_statement.column_text(0);
-			val.Album       = trackdata_for_id_statement.column_text(1);
-			val.Title       = trackdata_for_id_statement.column_text(2);
-			val.Tracknumber = trackdata_for_id_statement.column_int(3);
-			val.Mediatype   = (MediaType)trackdata_for_id_statement.column_int(4);
-			val.Uri         = trackdata_for_id_statement.column_text(5);
-			val.Length      = trackdata_for_id_statement.column_int(6);
+		if(stmt.step() == Sqlite.ROW) {
+			val.Artist      = stmt.column_text(0);
+			val.Album       = stmt.column_text(1);
+			val.Title       = stmt.column_text(2);
+			val.Tracknumber = stmt.column_int(3);
+			val.Mediatype   = (MediaType)stmt.column_int(4);
+			val.Uri         = stmt.column_text(5);
+			val.Length      = stmt.column_int(6);
 		}
 		else {
 			print("get_trackdata_for_id: track is not in db. ID: %d\n", id);
@@ -288,17 +233,20 @@ public class Xnoise.DbBrowser {
 	}
 
 	public bool get_stream_td_for_id(int id, out TrackData val) {
+		Statement stmt;
 		val = new TrackData();
-		stream_td_for_id_statement.reset();
-		if(stream_td_for_id_statement.bind_int(1, id) != Sqlite.OK) {
+		this.db.prepare_v2(STMT_STREAM_TD_FOR_ID , -1, out stmt);
+			
+		stmt.reset();
+		if(stmt.bind_int(1, id) != Sqlite.OK) {
 			this.db_error();
 		}
-		if(stream_td_for_id_statement.step() == Sqlite.ROW) {
+		if(stmt.step() == Sqlite.ROW) {
 			val.Artist      = "";
 			val.Album       = "";
-			val.Title       = stream_td_for_id_statement.column_text(0);
+			val.Title       = stmt.column_text(0);
 			val.Mediatype   = MediaType.STREAM;
-			val.Uri         = stream_td_for_id_statement.column_text(1);
+			val.Uri         = stmt.column_text(1);
 		}
 		else {
 			print("get_stream_td_for_id: track is not in db. ID: %d\n", id);
@@ -308,41 +256,50 @@ public class Xnoise.DbBrowser {
 	}
 
 	public bool get_stream_for_id(int id, out string uri) {
-		stream_td_for_id_statement.reset();
-		if(stream_td_for_id_statement.bind_int(1, id) != Sqlite.OK) {
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_STREAM_TD_FOR_ID , -1, out stmt);
+		
+		stmt.reset();
+		if(stmt.bind_int(1, id) != Sqlite.OK) {
 			this.db_error();
 		}
-		if(stream_td_for_id_statement.step() == Sqlite.ROW) {
-			uri = stream_td_for_id_statement.column_text(1);
+		if(stmt.step() == Sqlite.ROW) {
+			uri = stmt.column_text(1);
 			return true;
 		}
 		return false;
 	}
 
 	public string? get_local_image_path_for_track(ref string? uri) {
+		Statement stmt;
 		string retval = null;
 		if(uri == null) 
 			return retval;
+		this.db.prepare_v2(STMT_IMAGE_PATH_FOR_URI, -1, out stmt);
 		
-		image_path_for_uri_statement.reset();
-		if(image_path_for_uri_statement.bind_text(1, uri) != Sqlite.OK) {
+		stmt.reset();
+		if(stmt.bind_text(1, uri) != Sqlite.OK) {
 			this.db_error();
 		}
-		if(image_path_for_uri_statement.step() == Sqlite.ROW) {
-			retval = image_path_for_uri_statement.column_text(0);
+		if(stmt.step() == Sqlite.ROW) {
+			retval = stmt.column_text(0);
 		}
 		return retval;
 	}
 
 	public bool get_trackdata_for_stream(string uri, out TrackData val) {
+		Statement stmt;
 		bool retval = false;
 		val = new TrackData();
-		trackdata_for_stream_statement.reset();
-		if(trackdata_for_stream_statement.bind_text(1, uri) != Sqlite.OK) {
+		this.db.prepare_v2(STMT_TRACKDATA_FOR_STREAM, -1, out stmt);
+			
+		stmt.reset();
+		if(stmt.bind_text(1, uri) != Sqlite.OK) {
 			this.db_error();
 		}
-		if(trackdata_for_stream_statement.step() == Sqlite.ROW) {
-			val.Title = trackdata_for_stream_statement.column_text(0);
+		if(stmt.step() == Sqlite.ROW) {
+			val.Title = stmt.column_text(0);
 			retval = true;
 		}
 		return retval;
@@ -354,14 +311,17 @@ public class Xnoise.DbBrowser {
 		if(uri == null)
 			return retval;
 		
-		trackdata_for_uri_statement.reset();
-		trackdata_for_uri_statement.bind_text(1, uri);
-		if(trackdata_for_uri_statement.step() == Sqlite.ROW) {
-			val.Artist      = trackdata_for_uri_statement.column_text(0);
-			val.Album       = trackdata_for_uri_statement.column_text(1);
-			val.Title       = trackdata_for_uri_statement.column_text(2);
-			val.Tracknumber = (uint)trackdata_for_uri_statement.column_int(3);
-			val.Length      = trackdata_for_uri_statement.column_int(4);
+		Statement stmt;
+		this.db.prepare_v2(STMT_TRACKDATA_FOR_URI, -1, out stmt);
+			
+		stmt.reset();
+		stmt.bind_text(1, uri);
+		if(stmt.step() == Sqlite.ROW) {
+			val.Artist      = stmt.column_text(0);
+			val.Album       = stmt.column_text(1);
+			val.Title       = stmt.column_text(2);
+			val.Tracknumber = (uint)stmt.column_int(3);
+			val.Length      = stmt.column_int(4);
 			retval = true;
 		}
 		if((val.Artist=="") | (val.Artist==null)) {
@@ -382,87 +342,116 @@ public class Xnoise.DbBrowser {
 	}
 
 	public string[] get_media_files() {
+		Statement stmt;
 		string[] mfiles = {};
-		get_media_files_statement.reset();
-		while(get_media_files_statement.step() == Sqlite.ROW) {
-			mfiles += get_media_files_statement.column_text(0);
+		
+		this.db.prepare_v2(STMT_GET_MEDIA_FILES, -1, out stmt);
+		
+		stmt.reset();
+		while(stmt.step() == Sqlite.ROW) {
+			mfiles += stmt.column_text(0);
 		}
 		return mfiles;
 	}
 
 	public string[] get_media_folders() {
+		Statement stmt;
 		string[] mfolders = {};
-		get_media_folders_statement.reset();
-		while(get_media_folders_statement.step() == Sqlite.ROW) {
-			mfolders += get_media_folders_statement.column_text(0);
+		
+		this.db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1, out stmt);
+		
+		stmt.reset();
+		while(stmt.step() == Sqlite.ROW) {
+			mfolders += stmt.column_text(0);
 		}
 		return mfolders;
 	}
 
 	public StreamData[] get_streams() {
+		Statement stmt;
 		StreamData[] sData = {};
-		get_radios_statement.reset();
-		while(get_radios_statement.step() == Sqlite.ROW) {
+		
+		this.db.prepare_v2(STMT_GET_RADIOS, -1, out stmt);
+			
+		stmt.reset();
+		while(stmt.step() == Sqlite.ROW) {
 			StreamData sd = StreamData();
-			sd.Name = get_radios_statement.column_text(0);
-			sd.Uri  = get_radios_statement.column_text(1);
+			sd.Name = stmt.column_text(0);
+			sd.Uri  = stmt.column_text(1);
 			sData += sd;
 		}
 		return sData;
 	}
 
 	public string? get_single_stream_uri(string name) {
-		get_single_radio_uri_statement.reset();
-		get_single_radio_uri_statement.bind_text(1, name);
-		if(get_single_radio_uri_statement.step() == Sqlite.ROW) {
-			return get_single_radio_uri_statement.column_text(0);
+		Statement stmt;
+		this.db.prepare_v2(STMT_GET_SINGLE_RADIO_URI, -1, out stmt);
+		stmt.reset();
+		stmt.bind_text(1, name);
+		if(stmt.step() == Sqlite.ROW) {
+			return stmt.column_text(0);
 		}
 		return null;
 	}
 
 	public int get_track_id_for_path(string uri) {
 		int val = -1;
-		track_id_for_uri_statement.reset();
-		track_id_for_uri_statement.bind_text(1, uri);
-		if(track_id_for_uri_statement.step() == Sqlite.ROW) {
-			val = track_id_for_uri_statement.column_int(0);
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_TRACK_ID_FOR_URI, -1, out stmt);
+		stmt.reset();
+		stmt.bind_text(1, uri);
+		if(stmt.step() == Sqlite.ROW) {
+			val = stmt.column_int(0);
 		}
 		return val;
 	}
 
 	public string[] get_lastused_uris() {
 		string[] val = {};
-		get_lastused_statement.reset();
-		while(this.get_lastused_statement.step() == Sqlite.ROW) {
-			val += get_lastused_statement.column_text(0);
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_LASTUSED, -1,out stmt);
+		
+		stmt.reset();
+		while(stmt.step() == Sqlite.ROW) {
+			val += stmt.column_text(0);
 		}
 		return val;
 	}
 	
 	public string[] get_uris(string search_string) {
-		print("searching for %s\n", STMT_GET_URIS.replace("?", search_string));
+		//print("searching for %s\n", STMT_GET_URIS.replace("?", search_string));
 		string[] results = {};
-		get_uris_statement.reset();
-		get_uris_statement.bind_text(1, search_string);
-		while(get_uris_statement.step() == Sqlite.ROW) {
-			print("found %s", get_uris_statement.column_text(0));
-			results += get_uris_statement.column_text(0);
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_URIS, -1, out stmt);
+		
+		stmt.reset();
+		stmt.bind_text(1, search_string);
+		while(stmt.step() == Sqlite.ROW) {
+			//print("found %s", stmt.column_text(0));
+			results += stmt.column_text(0);
 		}
 		return results;
 	}
 
 	public MediaData[] get_video_data(ref string searchtext) {
 		MediaData[] val = {};
-		get_video_data_statement.reset();
-		if((this.get_video_data_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (this.get_video_data_statement.bind_int (2, (int)MediaType.VIDEO)        != Sqlite.OK)) {
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_VIDEO_DATA, -1, out stmt);
+		
+		stmt.reset();
+		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (stmt.bind_int (2, (int)MediaType.VIDEO)        != Sqlite.OK)) {
 			this.db_error();
 		}
-		while(get_video_data_statement.step() == Sqlite.ROW) {
+		while(stmt.step() == Sqlite.ROW) {
 			MediaData vd = MediaData();
-			vd.name = get_video_data_statement.column_text(0);
-			vd.mediatype = (MediaType)get_video_data_statement.column_int(1);
-			vd.id = get_video_data_statement.column_int(2);
+			vd.name = stmt.column_text(0);
+			vd.mediatype = (MediaType)stmt.column_int(1);
+			vd.id = stmt.column_int(2);
 			val += vd;
 		}
 		return val;
@@ -471,14 +460,17 @@ public class Xnoise.DbBrowser {
 	public MediaData[] get_stream_data(ref string searchtext) {
 		//	print("in get_stream_data\n");
 		MediaData[] val = {};
-		get_radio_data_statement.reset();
-		if((this.get_radio_data_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_RADIO_DATA, -1, out stmt);
+		stmt.reset();
+		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
-		while(get_radio_data_statement.step() == Sqlite.ROW) {
+		while(stmt.step() == Sqlite.ROW) {
 			MediaData vd = MediaData();
-			vd.id = get_radio_data_statement.column_int(0);
-			vd.name = get_radio_data_statement.column_text(1);
+			vd.id = stmt.column_int(0);
+			vd.name = stmt.column_text(1);
 			vd.mediatype = MediaType.STREAM;
 			val += vd;
 		}
@@ -486,63 +478,79 @@ public class Xnoise.DbBrowser {
 	}
 
 	public string[] get_videos(ref string searchtext) {
+		Statement stmt;
 		string[] val = {};
-		get_videos_with_search_statement.reset();
-		if((this.get_videos_with_search_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (this.get_videos_with_search_statement.bind_int (2, (int)MediaType.VIDEO)        != Sqlite.OK)) {
+		this.db.prepare_v2(STMT_GET_VIDEOS, -1, out stmt);
+			
+		stmt.reset();
+		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (stmt.bind_int (2, (int)MediaType.VIDEO)        != Sqlite.OK)) {
 			this.db_error();
 		}
-		while(get_videos_with_search_statement.step() == Sqlite.ROW) {
-			val += get_videos_with_search_statement.column_text(0);
+		while(stmt.step() == Sqlite.ROW) {
+			val += stmt.column_text(0);
 		}
 		return val;
 	}
 
 	public string[] get_artists(ref string searchtext) {
 		string[] val = {};
-		get_artist_statement.reset();
-		if((this.get_artist_statement.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (this.get_artist_statement.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (this.get_artist_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
+		
+		stmt.reset();
+		
+		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
-		while(get_artist_statement.step() == Sqlite.ROW) {
-			val += get_artist_statement.column_text(0);
+		while(stmt.step() == Sqlite.ROW) {
+			val += stmt.column_text(0);
 		}
 		return val;
 	}
 
 	public string[] get_albums(string artist, ref string searchtext) {
 		string[] val = {};
-		get_albums_statement.reset();
-		if((this.get_albums_statement.bind_text(1, artist)!=Sqlite.OK)|
-		   (this.get_albums_statement.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (this.get_albums_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (this.get_albums_statement.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
+		
+		stmt.reset();
+		if((stmt.bind_text(1, artist)!=Sqlite.OK)|
+		   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
-		while(get_albums_statement.step() == Sqlite.ROW) {
-			val += get_albums_statement.column_text(0);
+		while(stmt.step() == Sqlite.ROW) {
+			val += stmt.column_text(0);
 		}
 		return val;
 	}
 
 	public MediaData[] get_titles_with_mediatypes_and_ids(string artist, string album, ref string searchtext) {
 		MediaData[] val = {};
-		get_items_with_mediatypes_and_ids_statement.reset();
-		if((this.get_items_with_mediatypes_and_ids_statement.bind_text(1, artist)!=Sqlite.OK)|
-		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(2, album )!=Sqlite.OK)|
-		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (this.get_items_with_mediatypes_and_ids_statement.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS, -1, out stmt);
+
+		stmt.reset();
+		if((stmt.bind_text(1, artist)!=Sqlite.OK)|
+		   (stmt.bind_text(2, album )!=Sqlite.OK)|
+		   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
+		   (stmt.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
 
-		while(get_items_with_mediatypes_and_ids_statement.step() == Sqlite.ROW) {
+		while(stmt.step() == Sqlite.ROW) {
 			MediaData twt = MediaData();
-			twt.name = get_items_with_mediatypes_and_ids_statement.column_text(0);
-			twt.mediatype = (MediaType) get_items_with_mediatypes_and_ids_statement.column_int(1);
-			twt.id = get_items_with_mediatypes_and_ids_statement.column_int(2);
+			twt.name = stmt.column_text(0);
+			twt.mediatype = (MediaType) stmt.column_int(1);
+			twt.id = stmt.column_int(2);
 			val += twt;
 		}
 		return val;
