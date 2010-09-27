@@ -301,16 +301,16 @@ public class MprisPlayer : GLib.Object {
 			}
 			ht.insert("PlaybackStatus", statestring);
 			 
-			Variant htv = ht;
-			Variant sav = inv;
-			Variant[] contents =  { new GLib.Variant.string("org.mpris.MediaPlayer2.Player"), htv, sav };
-			Variant variant = new Variant.tuple(contents);
+//			Variant htv = ht;
+//			Variant sav = inv;
+//			Variant[] contents =  { new GLib.Variant.string("org.mpris.MediaPlayer2.Player"), htv, sav };
+//			Variant variant = new Variant.tuple(contents);
 
-			conn.emit_signal(null,
-						 "/org/mpris/MediaPlayer2",
-						 "org.freedesktop.DBus.Properties",
-						 "PropertiesChanged",
-						  variant);
+//			conn.emit_signal(null,
+//						 "/org/mpris/MediaPlayer2",
+//						 "org.freedesktop.DBus.Properties",
+//						 "PropertiesChanged",
+//						  variant);
 		});
 //		Timeout.add_seconds(4, () => {
 //			add_player_property_change("PlaybackStatus", "Paused");
