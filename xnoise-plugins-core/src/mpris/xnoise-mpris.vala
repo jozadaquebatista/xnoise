@@ -281,44 +281,39 @@ public class MprisPlayer : GLib.Object {
 		this.conn = conn;
 		this.xn = Main.instance;
 		Xnoise.global.notify["track-state"].connect( () => {
-			var ht = new HashTable<string,Variant>(str_hash, str_equal);
-			string[] inv = {};
-			inv += "";
-			string statestring;
-			switch(global.track_state) {
-				case(GlobalAccess.TrackState.STOPPED):
-					statestring = "Stopped";
-					break;
-				case(GlobalAccess.TrackState.PLAYING):
-					statestring = "Playing";
-					break;
-				case(GlobalAccess.TrackState.PAUSED):
-					statestring = "Paused";
-					break;
-				default:
-					statestring = "Stopped";
-					break;
-			}
-			ht.insert("PlaybackStatus", statestring);
-			 
-//			Variant htv = ht;
-//			Variant sav = inv;
-//			Variant[] contents =  { new GLib.Variant.string("org.mpris.MediaPlayer2.Player"), htv, sav };
-//			Variant variant = new Variant.tuple(contents);
-
-//			conn.emit_signal(null,
-//						 "/org/mpris/MediaPlayer2",
-//						 "org.freedesktop.DBus.Properties",
-//						 "PropertiesChanged",
-//						  variant);
+			send_property_change("track-state");
 		});
-//		Timeout.add_seconds(4, () => {
-//			add_player_property_change("PlaybackStatus", "Paused");
-//			TestSignPlayer("lalala test");
-//			return true;
-//		});
 	}
 
+	private void send_property_change(string p) {
+		if(p != "track-state") 
+			return;
+		
+		var builder = new VariantBuilder(VariantType.ARRAY);
+		var invalid_builder = new VariantBuilder(new VariantType("as"));
+
+		if(p == "track-state") {
+			Variant i = this.PlaybackStatus;
+			print("now add %s\n", this.PlaybackStatus);
+			builder.add ("{sv}", "PlaybackStatus", i);
+		}
+
+		try {
+			conn.emit_signal(null, 
+			                 "/org/mpris/MediaPlayer2", 
+			                 "org.freedesktop.DBus.Properties", 
+			                 "PropertiesChanged", 
+			                 new Variant("(sa{sv}as)", 
+			                             "org.mpris.MediaPlayer2.Player", 
+			                             builder, 
+			                             invalid_builder)
+			                 );
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+		}
+	}
+	
 	public string PlaybackStatus {
 		get { //TODO signal org.freedesktop.DBus.Properties.PropertiesChanged
 			switch(global.track_state) {
@@ -594,7 +589,36 @@ public class MprisPlayer : GLib.Object {
 
 
 
+//			var ht = new HashTable<string,Variant>(str_hash, str_equal);
+//			string[] inv = {};
+//			inv += "";
+//			string statestring;
+//			switch(global.track_state) {
+//				case(GlobalAccess.TrackState.STOPPED):
+//					statestring = "Stopped";
+//					break;
+//				case(GlobalAccess.TrackState.PLAYING):
+//					statestring = "Playing";
+//					break;
+//				case(GlobalAccess.TrackState.PAUSED):
+//					statestring = "Paused";
+//					break;
+//				default:
+//					statestring = "Stopped";
+//					break;
+//			}
+//			ht.insert("PlaybackStatus", statestring);
+			 
+//			Variant htv = ht;
+//			Variant sav = inv;
+//			Variant[] contents =  { new GLib.Variant.string("org.mpris.MediaPlayer2.Player"), htv, sav };
+//			Variant variant = new Variant.tuple(contents);
 
+//			conn.emit_signal(null,
+//						 "/org/mpris/MediaPlayer2",
+//						 "org.freedesktop.DBus.Properties",
+//						 "PropertiesChanged",
+//						  variant);
 
 
 
