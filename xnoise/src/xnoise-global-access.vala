@@ -91,8 +91,6 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public signal void sign_restart_song();
 	public signal void sign_song_info_required();
 
-
-
 	// PRIVATE FIELDS
 	private TrackState _track_state = TrackState.STOPPED;
 	private string? _current_uri = null;

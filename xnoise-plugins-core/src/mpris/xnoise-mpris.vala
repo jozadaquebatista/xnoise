@@ -34,65 +34,60 @@
 // http://www.mpris.org/2.0/spec/
 
 using Gtk;
-using DBus;
 using Xnoise;
 
 public class Xnoise.Mpris : GLib.Object, IPlugin {
 	public Main xn { get; set; }
-	public Connection conn;
-	public dynamic DBus.Object bus;
-	
+	private uint owner_id;
 	public MprisPlayer player = null;
 	public MprisRoot root = null;
-	public MprisTrackList tracklist = null;
+//	public MprisTrackList tracklist = null;
 	
 	public string name { 
 		get {
 			return "mpris";
 		} 
 	}
+	private void on_bus_acquired(DBusConnection connection, string name) {
+		print("bus acquired\n");
+		try {
+//			conn = connection;
+			root = new MprisRoot();
+			connection.register_object("/org/mpris/MediaPlayer2", root);
+			player = new MprisPlayer(connection);
+			connection.register_object("/org/mpris/MediaPlayer2", player);
+		} 
+		catch(IOError e) {
+			print("%s\n", e.message);
+		}
+	}
 
+	private void on_name_acquired(DBusConnection connection, string name) {
+		print("name acquired\n");
+	}	
+
+	private void on_name_lost(DBusConnection connection, string name) {
+		print("name_lost\n");
+	}
+	
 	public bool init() {
 		try {
-			// connect to the session bus
-			conn = DBus.Bus.get(DBus.BusType.SESSION);
-			if(conn == null) return false;
-			
-			bus = conn.get_object("org.freedesktop.DBus",
-			                      "/org/freedesktop/DBus",
-			                      "org.freedesktop.DBus");
-			if(bus == null) return false;
-			
-			// request our name
-			uint request_name_result = bus.request_name("org.mpris.MediaPlayer2.xnoise", (uint)0);
-			//print("request_name_result %d\n", (int)request_name_result);
-			// if we got our name setup / /Player and /TrackList objects
-			if(request_name_result == DBus.RequestNameReply.PRIMARY_OWNER) {
-				
-				root = new MprisRoot();
-				conn.register_object("/org/mpris/MediaPlayer2", root);
-				
-				 player = new MprisPlayer();
-				conn.register_object("/org/mpris/MediaPlayer2/Player", player);
-				
-//				tracklist = new MprisTrackList(); 
-//				conn.register_object("/TrackList", tracklist);
-			}
-			else {
-				print("mpris: cannot acquire name org.mpris.MediaPlayer2.xnoise in session bus\n");
-			}
+			uint owner_id = Bus.own_name(BusType.SESSION,
+						                 "org.mpris.MediaPlayer2.xnoise",
+						                 GLib.BusNameOwnerFlags.NONE,
+						                 on_bus_acquired,
+						                 on_name_acquired,
+						                 on_name_lost);
 		} 
-		catch(GLib.Error e) {
-			stderr.printf("mpris: failed to setup dbus interface: %s\n", e.message);
+		catch(IOError e) {
+		    print("%s\n", e.message);
 			return false;
 		}
-		
 		return true;
 	}
 	
 	~Mpris() {
-		RawError error = RawError();
-		bus.release_name("org.mpris.MediaPlayer2.xnoise");//FIXME: This is giving warnings
+		Bus.unown_name(owner_id);
 	}
 
 	public Gtk.Widget? get_settings_widget() {
@@ -217,32 +212,115 @@ public class MprisRoot : GLib.Object {
 		print("mpris interface requested raise.\n");
 		//TODO
 	}
-	
-//	public VersionStruct MprisVersion() {
-//		var v = VersionStruct();
-//		v.Major = 2;
-//		v.Minor = 0;
-//		return v;
-//	}
 }
 
-//public struct VersionStruct {
-//	uint16 Major;
-//	uint16 Minor;
+//[DBus(name = "org.freedesktop.DBus.Properties")]
+//public interface Notifier : GLib.Object {
+////	public DBusConnection conn;
+////	public HashTable<string,Variant>  player_property_changes = null;
+////	private string[] invalidated = {};
+//	[CCode (array_length = false, array_null_terminated = true)]
+//	string[] invalidated = {};
+//	
+//	public signal void PropertiesChanged(string interface_name, HashTable<string,Variant> changed_properties, string[] inv);
+
+////	private bool property_changed() {
+////		if(player_property_changes == null)
+////			return false;
+////		var ht = new HashTable<string,Variant>(str_hash, str_equal);
+////		
+////		foreach(string s in player_property_changes.get_keys()) {
+////			ht.insert(s, player_property_changes.lookup(s));
+////		}
+////print("property_change#3\n");
+////		try {
+////			//bool GLib.DBusConnection.emit_signal (string? destination_bus_name, string object_path, string interface_name, string signal_name, GLib.Variant parameters)
+////			
+//////			Variant v = new Variant("(sa{sv}^as)", "org.mpris.MediaPlayer2.Player", ht, invalidated);
+////print("property_change#4\n");
+//////			conn.emit_signal(null, "/org/mpris/MediaPlayer2", "org.freedesktop.DBus.Properties", "PropertiesChanged", "org.mpris.MediaPlayer2.Player", ht, invalidated); //parameters);
+////			PropertiesChanged("org.mpris.MediaPlayer2.Player", ht, invalidated);
+////print("property_change#5\n");
+////		}
+////		catch(IOError e) {
+////			print("mpris: %s\n", e.message);
+////		}
+////print("property_change#6\n");
+////		player_property_emit_id = 0;
+////		player_property_changes = null;
+////		return false;
+////	}
+
+////	private uint player_property_emit_id;
+////	protected void add_player_property_change(string property, Variant val) {
+////		if(player_property_changes == null) {
+////			player_property_changes = new HashTable<string,Variant>(str_hash, str_equal);
+////		}
+////		print("add_player_property_change#4 %s\n", (string)property);
+////			player_property_changes.insert(property,val);
+////		
+////		if(player_property_emit_id == 0) {
+////			player_property_emit_id = Idle.add(property_changed);
+////		}
+////	}
 //}
-
-
 
 [DBus(name = "org.mpris.MediaPlayer2.Player")]
 public class MprisPlayer : GLib.Object {
 	private unowned Main xn;
+	private DBusConnection conn;
+
+	public signal void TestSignPlayer(string ls);
 	private static enum Direction {
 		NEXT = 0,
 		PREVIOUS,
 		STOP
-	}	
+	}
+	
+	public MprisPlayer(DBusConnection conn) {
+		this.conn = conn;
+		this.xn = Main.instance;
+		Xnoise.global.notify["track-state"].connect( () => {
+			var ht = new HashTable<string,Variant>(str_hash, str_equal);
+			string[] inv = {};
+			inv += "";
+			string statestring;
+			switch(global.track_state) {
+				case(GlobalAccess.TrackState.STOPPED):
+					statestring = "Stopped";
+					break;
+				case(GlobalAccess.TrackState.PLAYING):
+					statestring = "Playing";
+					break;
+				case(GlobalAccess.TrackState.PAUSED):
+					statestring = "Paused";
+					break;
+				default:
+					statestring = "Stopped";
+					break;
+			}
+			ht.insert("PlaybackStatus", statestring);
+			 
+			Variant htv = ht;
+			Variant sav = inv;
+			Variant[] contents =  { new GLib.Variant.string("org.mpris.MediaPlayer2.Player"), htv, sav };
+			Variant variant = new Variant.tuple(contents);
+
+			conn.emit_signal(null,
+						 "/org/mpris/MediaPlayer2",
+						 "org.freedesktop.DBus.Properties",
+						 "PropertiesChanged",
+						  variant);
+		});
+//		Timeout.add_seconds(4, () => {
+//			add_player_property_change("PlaybackStatus", "Paused");
+//			TestSignPlayer("lalala test");
+//			return true;
+//		});
+	}
+
 	public string PlaybackStatus {
-		get {
+		get { //TODO signal org.freedesktop.DBus.Properties.PropertiesChanged
 			switch(global.track_state) {
 				case(GlobalAccess.TrackState.STOPPED):
 					return "Stopped";
@@ -315,10 +393,10 @@ public class MprisPlayer : GLib.Object {
 		}
 	}
 	
-	public HashTable<string, Value?>? Metadata { //a{sv}
+	public HashTable<string,Variant>? Metadata { //a{sv}
 		owned get {
-			var ht = new HashTable<string, Value?>(direct_hash, direct_equal);
-			Value v = "1";
+			var ht = new HashTable<string,Variant>(direct_hash, direct_equal);
+			Variant v = "1";
 			ht.insert("mpris:trackid", v);
 			return ht;
 		}
@@ -397,10 +475,6 @@ public class MprisPlayer : GLib.Object {
 //	public signal void TrackChange(HashTable<string, Value?> Metadata);
 //	public signal void StatusChange(StatusStruct Status);
 //	public signal void CapsChange(int Capabilities);
-
-	public MprisPlayer() {
-		this.xn = Main.instance;
-	}
 
 	public void Next() {
 		print("next\n");
@@ -483,36 +557,36 @@ public class MprisPlayer : GLib.Object {
 
 
 
-[DBus(name = "org.mpris.MediaPlayer2.Tracklist")]
-public class MprisTrackList : GLib.Object {
-	public signal void TrackListChange(int Nb_Tracks);
-	
-	
-	public HashTable<string, Value?>? GetTracksMetadata(int Position) {
-		return null;
-	}
-	
-	public int GetCurrentTrack() {
-		return 0;
-	}
-	
-	public int GetLength() {
-		return 0;
-	}
-	
-	public int AddTrack(string Uri, bool PlayImmediately) { 
-		return 0;
-	}
-	
-	public void DelTrack(int Position) {
-	}
-	
-	public void SetLoop(bool State) {
-	}
-	
-	public void SetRandom(bool State) {
-	}
-}
+//[DBus(name = "org.mpris.MediaPlayer2.Tracklist")]
+//public class MprisTrackList : GLib.Object {
+//	public signal void TrackListChange(int Nb_Tracks);
+//	
+//	
+//	public HashTable<string,Variant>? GetTracksMetadata(int Position) {
+//		return null;
+//	}
+//	
+//	public int GetCurrentTrack() {
+//		return 0;
+//	}
+//	
+//	public int GetLength() {
+//		return 0;
+//	}
+//	
+//	public int AddTrack(string Uri, bool PlayImmediately) { 
+//		return 0;
+//	}
+//	
+//	public void DelTrack(int Position) {
+//	}
+//	
+//	public void SetLoop(bool State) {
+//	}
+//	
+//	public void SetRandom(bool State) {
+//	}
+//}
 
 
 

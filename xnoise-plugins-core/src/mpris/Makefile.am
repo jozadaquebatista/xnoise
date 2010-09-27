@@ -12,9 +12,9 @@ INCLUDES = \
     -DDATA_DIR='"$(datadir)"' \
     -DLOCALE_DIR=\"${datarootdir}/locale\" \
     -include $(CONFIG_HEADER) \
-    $(LIBDBUS_GLIB_CFLAGS) \
     $(LIBINDICATE_CFLAGS) \
     $(NULL)
+#    $(LIBDBUS_GLIB_CFLAGS) 
 
 libmprisdir = $(libdir)/xnoise
 
@@ -29,7 +29,6 @@ libmpris_la_VALAFLAGS = \
     --thread \
     --vapidir $(top_srcdir)/vapi \
     --basedir $(top_srcdir)/src/mpris \
-    --pkg dbus-glib-1 \
     --pkg indicate \
     @XNOISEPLUGINSCORE_PACKAGES@ \
     $(NULL)
@@ -40,9 +39,9 @@ libmpris_la_LDFLAGS = \
 
 libmpris_la_LIBADD = \
     $(XNOISEPLUGINSCORE_LIBS) \
-    $(LIBDBUS_GLIB_LIBS) \
     $(LIBINDICATE_LIBS) \
     $(NULL)
+#    $(LIBDBUS_GLIB_LIBS) 
 
 mprisinformation_DATA = mpris.xnplugin
 mprisinformationdir = $(libdir)/xnoise
