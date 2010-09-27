@@ -281,7 +281,7 @@ public class MprisPlayer : GLib.Object {
 		this.conn = conn;
 		this.xn = Main.instance;
 		Xnoise.global.notify["track-state"].connect( () => {
-			send_property_change("track-state");
+			//send_property_change("track-state");
 		});
 	}
 
