@@ -30,9 +30,9 @@ if ENABLE_MPRIS
   SUBDIRS += mpris
 endif
 
-#if ENABLE_MEDIAKEYS
-#  SUBDIRS += mediakeys
-#endif
+if ENABLE_MEDIAKEYS
+  SUBDIRS += mediakeys
+endif
 
 if ENABLE_LYRICWIKI
   SUBDIRS += lyricwiki

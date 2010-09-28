@@ -36,24 +36,10 @@ VALA_REQUIRED=0.9.8
 # Disable generation of static libraries
 AC_DISABLE_STATIC
 
-#AC_PROG_CC
-#AC_ARG_ENABLE([usevala],
-#    AS_HELP_STRING([--disable-usevala],
-#    [Disable use of vala for releases that are compiled on a system that has old version of vala (default: enabled)]),
-#    [enable_usevala=$enableval],
-#    [enable_usevala=yes])
 
-#if test "x$enable_usevala" = "xyes"; then
-#    PKG_CHECK_MODULES(VALACOMPILER, \
-#                      vala-0.10 >= $VALA_REQUIRED, \
-#                      have_vala=yes, \
-#                      have_vala=no)
-#    if test "x$have_vala" = "xno"; then
-#        AC_MSG_WARN([vala $VALA_REQUIRED or greater not found.])
-#    else
-        AM_PROG_VALAC($VALA_REQUIRED)
-#    fi
-#fi
+AC_PROG_CC
+AM_PROG_VALAC($VALA_REQUIRED)
+
 
 AC_STDC_HEADERS
 AC_PROG_LIBTOOL
@@ -137,15 +123,15 @@ dnl ================================================================
 dnl ================================================================
 dnl plugin check for plugins dependent on dbus-glib
 
-#PKG_CHECK_MODULES(LIBDBUS_GLIB, \
-#                  dbus-glib-1 >= $DBUS_GLIB_REQUIRED, \
-#                  have_dbus_glib=yes, \
-#                  have_dbus_glib=no)
-#if test "x$have_dbus_glib" != "xyes"; then
-#    AC_MSG_WARN([dbus-glib $DBUS_GLIB_REQUIRED or greater not found.])
-#fi
-#AC_SUBST(LIBDBUS_GLIB_CFLAGS)
-#AC_SUBST(LIBDBUS_GLIB_LIBS)
+PKG_CHECK_MODULES(LIBDBUS_GLIB, \
+                  dbus-glib-1 >= $DBUS_GLIB_REQUIRED, \
+                  have_dbus_glib=yes, \
+                  have_dbus_glib=no)
+if test "x$have_dbus_glib" != "xyes"; then
+    AC_MSG_WARN([dbus-glib $DBUS_GLIB_REQUIRED or greater not found.])
+fi
+AC_SUBST(LIBDBUS_GLIB_CFLAGS)
+AC_SUBST(LIBDBUS_GLIB_LIBS)
 dnl ================================================================
 
 
@@ -177,7 +163,7 @@ AC_ARG_ENABLE([leoslyrics],
 
 if test "x$enable_leoslyrics" = "xyes"; then
     if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
-        enable_leoslyrics=yes		
+        enable_leoslyrics=yes
     else
         enable_leoslyrics=no
         AC_MSG_WARN([leoslyrics plugin will not be included in the build.])
@@ -197,7 +183,7 @@ AC_ARG_ENABLE([lyricsfly],
 
 if test "x$enable_lyricsfly" = "xyes"; then
     if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
-        enable_lyricsfly=yes		
+        enable_lyricsfly=yes
     else
         enable_lyricsfly=no
         AC_MSG_WARN([lyricsfly plugin will not be included in the build.])
@@ -217,7 +203,7 @@ AC_ARG_ENABLE([lyricwiki],
 
 if test "x$enable_lyricwiki" = "xyes"; then
     if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
-        enable_lyricwiki=yes		
+        enable_lyricwiki=yes
     else
         enable_lyricwiki=no
         AC_MSG_WARN([lyricwiki plugin will not be included in the build.])
@@ -237,7 +223,7 @@ AC_ARG_ENABLE([lastfm-covers],
 
 if test "x$enable_lastfmcovers" = "xyes"; then
     if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
-        enable_lastfmcovers=yes		
+        enable_lastfmcovers=yes
     else
         enable_lastfmcovers=no
         AC_MSG_WARN([lastfmcovers plugin will not be included in the build.])
@@ -257,7 +243,7 @@ AC_ARG_ENABLE([notifications],
 
 if test "x$enable_notifications" = "xyes"; then
     if test "x$have_libnotify" = "xyes"; then
-        enable_notifications=yes		
+        enable_notifications=yes
     else
         enable_notifications=no
         AC_MSG_WARN([notifications plugin will not be included in the build.])
@@ -276,7 +262,7 @@ AC_ARG_ENABLE([mediawatcher],
     [enable_mediawatcher=yes])
 
 if test "x$enable_mediawatcher" = "xyes"; then
-	enable_mediawatcher=yes		
+	enable_mediawatcher=yes
 else
    	enable_mediawatcher=no
    	AC_MSG_WARN([mediawatcher plugin will not be included in the build.])
@@ -333,20 +319,20 @@ dnl ================================================================
 dnl ================================================================
 dnl dependency check for optional build of mediakeys plugin 
 
-#AC_ARG_ENABLE([mediakeys],
-#    AS_HELP_STRING([--disable-mediakeys],
-#    [Disable mediakeys plugin (default: enabled)]),
-#    [enable_mediakeys=$enableval],
-#    [enable_mediakeys=yes])
+AC_ARG_ENABLE([mediakeys],
+    AS_HELP_STRING([--disable-mediakeys],
+    [Disable mediakeys plugin (default: enabled)]),
+    [enable_mediakeys=$enableval],
+    [enable_mediakeys=yes])
 
-#if test "x$enable_mediakeys" = "xyes"; then
-#    if test "x$have_dbus_glib" = "xyes"; then
-#        enable_mediakeys=yes
-#    else
-#        enable_mediakeys=no
-#        AC_MSG_WARN([mediakeys plugin will not be included in the build.])
-#    fi
-#fi
+if test "x$enable_mediakeys" = "xyes"; then
+    if test "x$have_dbus_glib" = "xyes"; then
+        enable_mediakeys=yes
+    else
+        enable_mediakeys=no
+        AC_MSG_WARN([mediakeys plugin will not be included in the build.])
+    fi
+fi
 AM_CONDITIONAL(ENABLE_MEDIAKEYS, test x"$enable_mediakeys" = "xyes")
 dnl ================================================================
 

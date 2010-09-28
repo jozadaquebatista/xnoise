@@ -51,7 +51,6 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	private void on_bus_acquired(DBusConnection connection, string name) {
 		print("bus acquired\n");
 		try {
-//			conn = connection;
 			root = new MprisRoot();
 			connection.register_object("/org/mpris/MediaPlayer2", root);
 			player = new MprisPlayer(connection);
@@ -113,16 +112,21 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 
 [DBus(name = "org.mpris.MediaPlayer2")]
 public class MprisRoot : GLib.Object {
+	private unowned Xnoise.Main xn;
+	
+	public MprisRoot() {
+		xn = Xnoise.Main.instance;
+	}
 	
 	public bool CanQuit { 
 		get {
-			return false;
+			return true;
 		} 
 	}
 
 	public bool CanRaise { 
 		get {
-			return false;
+			return true;
 		} 
 	}
 	
@@ -204,73 +208,26 @@ public class MprisRoot : GLib.Object {
 	}
 
 	public void Quit() {
-		print("mpris interface requested quit.\n");
-		//TODO
+		xn.quit();
 	}
 	
 	public void Raise() {
-		print("mpris interface requested raise.\n");
-		//TODO
+		xn.main_window.present();
 	}
 }
 
-//[DBus(name = "org.freedesktop.DBus.Properties")]
-//public interface Notifier : GLib.Object {
-////	public DBusConnection conn;
-////	public HashTable<string,Variant>  player_property_changes = null;
-////	private string[] invalidated = {};
-//	[CCode (array_length = false, array_null_terminated = true)]
-//	string[] invalidated = {};
-//	
-//	public signal void PropertiesChanged(string interface_name, HashTable<string,Variant> changed_properties, string[] inv);
-
-////	private bool property_changed() {
-////		if(player_property_changes == null)
-////			return false;
-////		var ht = new HashTable<string,Variant>(str_hash, str_equal);
-////		
-////		foreach(string s in player_property_changes.get_keys()) {
-////			ht.insert(s, player_property_changes.lookup(s));
-////		}
-////print("property_change#3\n");
-////		try {
-////			//bool GLib.DBusConnection.emit_signal (string? destination_bus_name, string object_path, string interface_name, string signal_name, GLib.Variant parameters)
-////			
-//////			Variant v = new Variant("(sa{sv}^as)", "org.mpris.MediaPlayer2.Player", ht, invalidated);
-////print("property_change#4\n");
-//////			conn.emit_signal(null, "/org/mpris/MediaPlayer2", "org.freedesktop.DBus.Properties", "PropertiesChanged", "org.mpris.MediaPlayer2.Player", ht, invalidated); //parameters);
-////			PropertiesChanged("org.mpris.MediaPlayer2.Player", ht, invalidated);
-////print("property_change#5\n");
-////		}
-////		catch(IOError e) {
-////			print("mpris: %s\n", e.message);
-////		}
-////print("property_change#6\n");
-////		player_property_emit_id = 0;
-////		player_property_changes = null;
-////		return false;
-////	}
-
-////	private uint player_property_emit_id;
-////	protected void add_player_property_change(string property, Variant val) {
-////		if(player_property_changes == null) {
-////			player_property_changes = new HashTable<string,Variant>(str_hash, str_equal);
-////		}
-////		print("add_player_property_change#4 %s\n", (string)property);
-////			player_property_changes.insert(property,val);
-////		
-////		if(player_property_emit_id == 0) {
-////			player_property_emit_id = Idle.add(property_changed);
-////		}
-////	}
-//}
 
 [DBus(name = "org.mpris.MediaPlayer2.Player")]
 public class MprisPlayer : GLib.Object {
 	private unowned Main xn;
 	private DBusConnection conn;
-
-	public signal void TestSignPlayer(string ls);
+	
+	private const string INTERFACE_NAME = "org.mpris.MediaPlayer2.Player";
+	
+	private uint send_property_source = 0;
+	private uint update_metadata_source = 0;
+	private HashTable<string,Variant> changed_properties = null;
+	
 	private static enum Direction {
 		NEXT = 0,
 		PREVIOUS,
@@ -280,42 +237,135 @@ public class MprisPlayer : GLib.Object {
 	public MprisPlayer(DBusConnection conn) {
 		this.conn = conn;
 		this.xn = Main.instance;
-		Xnoise.global.notify["track-state"].connect( () => {
-			//send_property_change("track-state");
+		
+		Xnoise.global.notify["track-state"].connect( (s, p) => {
+			Variant variant = this.PlaybackStatus;
+			queue_property_for_notification("PlaybackStatus", variant);
+		});
+		
+		Xnoise.global.tag_changed.connect(on_tag_changed);
+		
+		this.xn.gPl.notify["volume"].connect( () => {
+			Variant variant = this.xn.gPl.volume;
+			queue_property_for_notification("Volume", variant);
+		});
+		
+		Xnoise.global.notify["image-path-large"].connect( () => {
+			File f = File.new_for_commandline_arg(Xnoise.global.image_path_large);
+			if(f == null)
+				return;
+			_metadata.insert("mpris:artUrl", f.get_uri());
+			
+			trigger_metadata_update();
+		});
+		
+		this.xn.gPl.notify["length-time"].connect( () => {
+			//print("length-time: %lld\n", ((int64)xn.gPl.length_time/1000));
+			if(_metadata.lookup("mpris:length") == null)
+				_metadata.insert("mpris:length", ((int64)0));
+				
+			if(((int64)_metadata.lookup("mpris:length")) != ((int64)xn.gPl.length_time/1000)) {
+				_metadata.insert("mpris:length", ((int64)xn.gPl.length_time/1000));
+				trigger_metadata_update();
+			}
 		});
 	}
+	
+	private void trigger_metadata_update() {
+		if(update_metadata_source != 0)
+			Source.remove(update_metadata_source);
 
-	private void send_property_change(string p) {
-		if(p != "track-state") 
-			return;
-		
-		var builder = new VariantBuilder(VariantType.ARRAY);
-		var invalid_builder = new VariantBuilder(new VariantType("as"));
-
-		if(p == "track-state") {
-			Variant i = this.PlaybackStatus;
-			print("now add %s\n", this.PlaybackStatus);
-			builder.add ("{sv}", "PlaybackStatus", i);
+		update_metadata_source = Timeout.add_seconds(1, () => {
+			Variant variant = this.PlaybackStatus;
+			queue_property_for_notification("Metadata", variant);
+			update_metadata_source = 0;
+			return false;
+		});
+	}
+	
+	private void on_tag_changed(Xnoise.GlobalAccess sender, ref string? newuri, string? tagname, string? tagvalue) {
+		switch(tagname){
+			case "artist":
+				if(tagvalue == null)
+					break;
+				string[] sa = {};
+				sa += tagvalue;
+				_metadata.insert("xesam:artist", sa);
+				break;
+			case "album":
+				if(tagvalue == null)
+					break;
+				string s = tagvalue;
+				_metadata.insert("xesam:album", s);
+				break;
+			case "title":
+				if(tagvalue == null)
+					break;
+				string s = tagvalue;
+				_metadata.insert("xesam:title", s);
+				break;
+			case "genre":
+				if(tagvalue == null)
+					break;
+				string[] sa = {};
+				sa += tagvalue;
+				_metadata.insert("xesam:genre", sa);
+				break;
+			default:
+				break;
 		}
-
+		
+		trigger_metadata_update();
+	}
+	
+	private bool send_property_change() {
+		
+		if(changed_properties == null)
+			return false;
+		
+		var builder             = new VariantBuilder(VariantType.ARRAY);
+		var invalidated_builder = new VariantBuilder(new VariantType("as"));
+		
+		foreach(string name in changed_properties.get_keys()) {
+			Variant variant = changed_properties.lookup(name);
+			builder.add("{sv}", name, variant);
+		}
+		
+		changed_properties = null;
+		
 		try {
-			conn.emit_signal(null, 
+			conn.emit_signal(null,
 			                 "/org/mpris/MediaPlayer2", 
 			                 "org.freedesktop.DBus.Properties", 
 			                 "PropertiesChanged", 
 			                 new Variant("(sa{sv}as)", 
-			                             "org.mpris.MediaPlayer2.Player", 
+			                             this.INTERFACE_NAME, 
 			                             builder, 
-			                             invalid_builder)
+			                             invalidated_builder)
 			                 );
 		}
 		catch(Error e) {
 			print("%s\n", e.message);
 		}
+		send_property_source = 0;
+		return false;
+	}
+	
+	private void queue_property_for_notification(string property, Variant val) {
+		// putting the properties into a hashtable works as akind of event compression
+		
+		if(changed_properties == null)
+			changed_properties = new HashTable<string,Variant>(str_hash, str_equal);
+		
+		changed_properties.insert(property, val);
+		
+		if(send_property_source == 0) {
+			send_property_source = Idle.add(send_property_change);
+		}
 	}
 	
 	public string PlaybackStatus {
-		get { //TODO signal org.freedesktop.DBus.Properties.PropertiesChanged
+		owned get { //TODO signal org.freedesktop.DBus.Properties.PropertiesChanged
 			switch(global.track_state) {
 				case(GlobalAccess.TrackState.STOPPED):
 					return "Stopped";
@@ -330,7 +380,7 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public string LoopStatus {
-		get {
+		owned get {
 			switch(this.xn.main_window.repeatState) {
 				case(MainWindow.Repeat.NOT_AT_ALL):
 					return "None";
@@ -359,6 +409,8 @@ public class MprisPlayer : GLib.Object {
 					this.xn.main_window.repeatState = MainWindow.Repeat.ALL;
 					break;
 			}
+			Variant variant = value;
+			queue_property_for_notification("LoopStatus", variant);
 		}
 	}
 	
@@ -385,15 +437,17 @@ public class MprisPlayer : GLib.Object {
 			else {
 				this.xn.main_window.repeatState = buffer_repeat_state;
 			}
+			Variant variant = value;
+			queue_property_for_notification("Shuffle", variant);
 		}
 	}
 	
+	private HashTable<string,Variant> _metadata = new HashTable<string,Variant>(str_hash, str_equal);
 	public HashTable<string,Variant>? Metadata { //a{sv}
 		owned get {
-			var ht = new HashTable<string,Variant>(direct_hash, direct_equal);
-			Variant v = "1";
-			ht.insert("mpris:trackid", v);
-			return ht;
+			Variant variant = "1";
+			_metadata.insert("mpris:trackid", variant);
+			return _metadata;
 		}
 	}
 	
@@ -404,19 +458,19 @@ public class MprisPlayer : GLib.Object {
 		set {
 			if(value < 0.0)
 				value = 0.0;
+			if(value > 1.0)
+				value = 1.0;
+
 			this.xn.gPl.volume = value;
 		}
 	}
 	
-	public int32 Position {
+	public int64 Position {
 		get {
 			if(xn.gPl.length_time == 0)
 				return -1;
 			double pos = xn.gPl.gst_position;
-//			double rel_pos = 
-			return (int32)(pos * xn.gPl.length_time / 1000000);
-//			string buf = rel_pos.to_string();
-//			return buf.to_int64();
+			return (int64)(pos * xn.gPl.length_time / 1000.0);
 		}
 	}
 	
@@ -443,6 +497,7 @@ public class MprisPlayer : GLib.Object {
 			return true;
 		}
 	}
+	
 	public bool CanPlay {
 		get {
 			return true;
@@ -457,7 +512,7 @@ public class MprisPlayer : GLib.Object {
 	
 	public bool CanSeek {
 		get {
-			return false;
+			return true;
 		}
 	}
 	
@@ -466,18 +521,16 @@ public class MprisPlayer : GLib.Object {
 			return true;
 		}
 	}
+	
 	public signal void Seeked(int64 Position);
-//	public signal void TrackChange(HashTable<string, Value?> Metadata);
-//	public signal void StatusChange(StatusStruct Status);
-//	public signal void CapsChange(int Capabilities);
-
+	
 	public void Next() {
-		print("next\n");
+		//print("next\n");
 		this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
 	}
 	
 	public void Previous() {
-		print("prev\n");
+		//print("prev\n");
 		this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
 	}
 	
@@ -534,22 +587,7 @@ public class MprisPlayer : GLib.Object {
 		//TODO
 		return;
 	}
-	
-//	public StatusStruct GetStatus() {
-//		var ss = StatusStruct();
-//		//ss.playback_state = 
-//		return ss;
-//	}
-	
 }
-
-//public struct StatusStruct {
-//	int playback_state;
-//	int shuffle_state;
-//	int repeat_current_state;
-//	int endless_state;
-//}
-
 
 
 //[DBus(name = "org.mpris.MediaPlayer2.Tracklist")]
@@ -582,44 +620,6 @@ public class MprisPlayer : GLib.Object {
 //	public void SetRandom(bool State) {
 //	}
 //}
-
-
-
-
-
-
-
-//			var ht = new HashTable<string,Variant>(str_hash, str_equal);
-//			string[] inv = {};
-//			inv += "";
-//			string statestring;
-//			switch(global.track_state) {
-//				case(GlobalAccess.TrackState.STOPPED):
-//					statestring = "Stopped";
-//					break;
-//				case(GlobalAccess.TrackState.PLAYING):
-//					statestring = "Playing";
-//					break;
-//				case(GlobalAccess.TrackState.PAUSED):
-//					statestring = "Paused";
-//					break;
-//				default:
-//					statestring = "Stopped";
-//					break;
-//			}
-//			ht.insert("PlaybackStatus", statestring);
-			 
-//			Variant htv = ht;
-//			Variant sav = inv;
-//			Variant[] contents =  { new GLib.Variant.string("org.mpris.MediaPlayer2.Player"), htv, sav };
-//			Variant variant = new Variant.tuple(contents);
-
-//			conn.emit_signal(null,
-//						 "/org/mpris/MediaPlayer2",
-//						 "org.freedesktop.DBus.Properties",
-//						 "PropertiesChanged",
-//						  variant);
-
 
 
 

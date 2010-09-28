@@ -14,7 +14,6 @@ INCLUDES = \
     -include $(CONFIG_HEADER) \
     $(LIBINDICATE_CFLAGS) \
     $(NULL)
-#    $(LIBDBUS_GLIB_CFLAGS) 
 
 libmprisdir = $(libdir)/xnoise
 
@@ -41,7 +40,6 @@ libmpris_la_LIBADD = \
     $(XNOISEPLUGINSCORE_LIBS) \
     $(LIBINDICATE_LIBS) \
     $(NULL)
-#    $(LIBDBUS_GLIB_LIBS) 
 
 mprisinformation_DATA = mpris.xnplugin
 mprisinformationdir = $(libdir)/xnoise
