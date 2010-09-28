@@ -88,7 +88,7 @@ dnl ================================================================
 dnl ================================================================
 dnl plugin check for plugins dependent on GDBus
 
-PKG_CHECK_MODULES(LIBGDBUS, \
+PKG_CHECK_MODULES(GDBUS, \
                   glib-2.0 >= $GDBUS_REQUIRED, \
                   have_gdbus=yes, \
                   have_gdbus=no)

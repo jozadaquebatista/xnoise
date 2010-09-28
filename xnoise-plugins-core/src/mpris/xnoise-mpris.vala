@@ -49,7 +49,7 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 		} 
 	}
 	private void on_bus_acquired(DBusConnection connection, string name) {
-		print("bus acquired\n");
+		//print("bus acquired\n");
 		try {
 			root = new MprisRoot();
 			connection.register_object("/org/mpris/MediaPlayer2", root);
@@ -62,24 +62,24 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	}
 
 	private void on_name_acquired(DBusConnection connection, string name) {
-		print("name acquired\n");
+		//print("name acquired\n");
 	}	
 
 	private void on_name_lost(DBusConnection connection, string name) {
-		print("name_lost\n");
+		//print("name_lost\n");
 	}
 	
 	public bool init() {
 		try {
-			uint owner_id = Bus.own_name(BusType.SESSION,
-						                 "org.mpris.MediaPlayer2.xnoise",
-						                 GLib.BusNameOwnerFlags.NONE,
-						                 on_bus_acquired,
-						                 on_name_acquired,
-						                 on_name_lost);
+			owner_id = Bus.own_name(BusType.SESSION,
+			                        "org.mpris.MediaPlayer2.xnoise",
+			                         GLib.BusNameOwnerFlags.NONE,
+			                         on_bus_acquired,
+			                         on_name_acquired,
+			                         on_name_lost);
 		} 
 		catch(IOError e) {
-		    print("%s\n", e.message);
+			print("%s\n", e.message);
 			return false;
 		}
 		return true;
@@ -212,7 +212,7 @@ public class MprisRoot : GLib.Object {
 	}
 	
 	public void Raise() {
-		xn.main_window.present();
+		xn.main_window.show_window();
 	}
 }
 
@@ -220,7 +220,7 @@ public class MprisRoot : GLib.Object {
 [DBus(name = "org.mpris.MediaPlayer2.Player")]
 public class MprisPlayer : GLib.Object {
 	private unowned Main xn;
-	private DBusConnection conn;
+	private unowned DBusConnection conn;
 	
 	private const string INTERFACE_NAME = "org.mpris.MediaPlayer2.Player";
 	
@@ -467,6 +467,7 @@ public class MprisPlayer : GLib.Object {
 	
 	public int64 Position {
 		get {
+			print("get position\n");
 			if(xn.gPl.length_time == 0)
 				return -1;
 			double pos = xn.gPl.gst_position;
@@ -580,7 +581,8 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public void SetPosition(string dobj, int64 Position) {
-		//TODO
+		print(" set position %lf\n", ((double)Position/(xn.gPl.length_time / 1000.0)));
+		xn.gPl.gst_position = ((double)Position/(xn.gPl.length_time / 1000.0));
 	}
 	
 	public void OpenUri(string Uri) {

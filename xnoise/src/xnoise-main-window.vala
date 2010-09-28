@@ -583,8 +583,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.get_position(out _posX_buffer, out _posY_buffer);
 			this.hide();
 		}
-		else if(this.window.is_visible()==true) {
+		else if(this.window.is_visible() == true) {
 			this.move(_posX_buffer, _posY_buffer);
+			this.present();
+		}
+		else {
+			this.move(_posX_buffer, _posY_buffer);
+			this.present();
+		}
+	}
+
+	public void show_window() {
+		if(this.window.is_visible() == true) {
 			this.present();
 		}
 		else {
