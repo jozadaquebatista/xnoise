@@ -57,7 +57,7 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 		Timeout.add(2, () => {
 			server = Indicate.Server.ref_default();
 			server.set("type", "music.xnoise");
-			server.set_desktop_file("/usr/local/share/applications/xnoise.desktop");
+			server.set_desktop_file("xnoise.desktop");
 			server.show();
 			return false;
 		});

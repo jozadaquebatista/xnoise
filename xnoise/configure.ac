@@ -38,23 +38,7 @@ dnl required versions for vala, if used
 VALA_REQUIRED=0.9.8
 
 AC_PROG_CC
-AC_ARG_ENABLE([usevala],
-    AS_HELP_STRING([--disable-usevala],
-    [Disable use of vala for releases that are compiled on a system that has old version of vala (default: enabled)]),
-    [enable_usevala=$enableval],
-    [enable_usevala=yes])
-
-if test "x$enable_usevala" = "xyes"; then
-    PKG_CHECK_MODULES(VALACOMPILER, \
-                      vala-0.10 >= $VALA_REQUIRED, \
-                      have_vala=yes, \
-                      have_vala=no)
-    if test "x$have_vala" = "xno"; then
-        AC_MSG_WARN([vala $VALA_REQUIRED or greater not found.])
-    else
-        AM_PROG_VALAC($VALA_REQUIRED)
-    fi
-fi
+AM_PROG_VALAC($VALA_REQUIRED)
 
 AC_STDC_HEADERS
 AC_PROG_LIBTOOL

@@ -129,7 +129,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 				             Gst.SeekType.NONE, -1);
 			}
 		}
-		
 		get {
 			int64 pos;
 			Gst.Format format = Gst.Format.TIME;

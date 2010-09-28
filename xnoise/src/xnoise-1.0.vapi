@@ -262,6 +262,7 @@ namespace Xnoise {
 		public void position_config_menu (Gtk.Menu menu, out int x, out int y, out bool push);
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
 		public void show_status_info (Xnoise.InfoBar bar);
+		public void show_window ();
 		public void stop ();
 		public void toggle_fullscreen ();
 		public void toggle_window_visbility ();
