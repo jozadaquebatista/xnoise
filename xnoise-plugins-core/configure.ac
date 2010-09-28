@@ -27,7 +27,8 @@ LIBNOTIFY_REQUIRED=0.4.5
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
 DBUS_GLIB_REQUIRED=0.0.1
-LIBINDICATE_REQUIRED=0.1
+LIBINDICATE_REQUIRED=0.4.2
+GDBUS_REQUIRED=2.26
 XNOISE_REQUIRED=xnoisepluginscore_version
 
 dnl required versions for vala, if used
@@ -83,6 +84,20 @@ AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
 dnl ================================================================
 
+
+dnl ================================================================
+dnl plugin check for plugins dependent on GDBus
+
+PKG_CHECK_MODULES(LIBGDBUS, \
+                  glib-2.0 >= $GDBUS_REQUIRED, \
+                  have_gdbus=yes, \
+                  have_gdbus=no)
+if test "x$have_gdbus" = "xno"; then
+    AC_MSG_WARN([gdbus is not available.])
+fi
+AC_SUBST(GDBUS_CFLAGS)
+AC_SUBST(GDBUS_LIBS)
+dnl ================================================================
 
 
 
@@ -280,12 +295,12 @@ AC_ARG_ENABLE([mpris],
     [enable_mpris=yes])
 
 if test "x$enable_mpris" = "xyes"; then
-#    if test "x$have_dbus_glib" = "xyes"; then
+    if test "x$have_gdbus" = "xyes"; then
         enable_mpris=yes
-#    else
-#        enable_mpris=no
-#        AC_MSG_WARN([mpris plugin will not be included in the build.])
-#    fi
+    else
+        enable_mpris=no
+        AC_MSG_WARN([mpris plugin will not be included in the build.])
+    fi
 fi
 AM_CONDITIONAL(ENABLE_MPRIS, test x"$enable_mpris" = "xyes")
 dnl ================================================================
