@@ -57,6 +57,11 @@ clean-local:
 
 .PHONY: coverage-report
 
+EXTRA_DIST += \
+	playlist-examples \
+	$(NULL)
+
+
 CLEANFILES = \
 	*.c \
 	tests.vala.stamp \
