@@ -32,19 +32,27 @@
 // XNOISES' GENERAL NAMESPACE FUNCTIONS
 
 namespace Xnoise {
-
+	public static Timer t1;
+	public static Timer t2;
 	public static Params par = null;
 	public static GlobalAccess global = null;
 	public static UserInfo userinfo = null;
+	public static Worker worker = null;
+	public static MediaImporter mix;
+	public static MainContext mc;
 	/*
 	 * This function is used to create static instances of Params
 	 * and GlobalInfo in the xnoise namespace.
 	 */
 	public static void initialize(out bool is_first_start) {
 		is_first_start = false;
+		mix = new MediaImporter();
+
+		worker = new Worker(MainContext.default());
+		
 		if(global == null)
 			global = new GlobalAccess();
-
+		
 		File xnoise_home = File.new_for_path(global.settings_folder);
 		File xnoiseini = null;
 		xnoiseini = xnoise_home.get_child("db.sqlite");
@@ -54,7 +62,8 @@ namespace Xnoise {
 
 		if(par == null)
 			par = new Params();
-
+		t1 = new Timer();
+		t2 = new Timer();
 	}
 
 	public static string escape_for_local_folder_search(string? value) {

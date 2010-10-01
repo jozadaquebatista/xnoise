@@ -157,8 +157,24 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	public bool populate_model() {
+//		t1.reset();
+//		ulong microseconds;
+//		t1.start();
+//		var job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, mix.store_folders_job);
+//		job.set_arg("mfolders", list_of_folders);
+//		job.set_arg("msg_id", msg_id);
+//		worker.push_job(job);
 		this.put_hierarchical_data_to_model();
+//		t1.stop();
+//		double buf = t1.elapsed(out microseconds);
+//		print("\nelapsed put_hierarchical_data_to_model: %lf ; %u\n", buf, (uint)microseconds);		
+
+//		t1.reset();
+//		t1.start();
 		this.put_listed_data_to_model(); // put at last, then it is on top
+//		t1.stop();
+//		buf = t1.elapsed(out microseconds);
+//		print("\nelapsed put_listed_data_to_model: %lf ; %u\n", buf, (uint)microseconds);		
 		return false;
 	}
 

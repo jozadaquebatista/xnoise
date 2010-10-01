@@ -299,6 +299,16 @@ typedef struct _XnoiseTrackListModelClass XnoiseTrackListModelClass;
 typedef struct _XnoisePluginLoader XnoisePluginLoader;
 typedef struct _XnoisePluginLoaderClass XnoisePluginLoaderClass;
 
+#define WORKER_TYPE_JOB (worker_job_get_type ())
+#define WORKER_JOB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), WORKER_TYPE_JOB, WorkerJob))
+#define WORKER_JOB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), WORKER_TYPE_JOB, WorkerJobClass))
+#define WORKER_IS_JOB(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), WORKER_TYPE_JOB))
+#define WORKER_IS_JOB_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), WORKER_TYPE_JOB))
+#define WORKER_JOB_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), WORKER_TYPE_JOB, WorkerJobClass))
+
+typedef struct _WorkerJob WorkerJob;
+typedef struct _WorkerJobClass WorkerJobClass;
+
 #define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
 #define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
 #define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
@@ -378,6 +388,16 @@ typedef struct _XnoiseMediaImporterPrivate XnoiseMediaImporterPrivate;
 
 typedef struct _XnoiseParams XnoiseParams;
 typedef struct _XnoiseParamsClass XnoiseParamsClass;
+
+#define TYPE_WORKER (worker_get_type ())
+#define WORKER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_WORKER, Worker))
+#define WORKER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_WORKER, WorkerClass))
+#define IS_WORKER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_WORKER))
+#define IS_WORKER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_WORKER))
+#define WORKER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_WORKER, WorkerClass))
+
+typedef struct _Worker Worker;
+typedef struct _WorkerClass WorkerClass;
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
 typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
@@ -522,6 +542,10 @@ typedef struct _XnoiseVideoScreenPrivate XnoiseVideoScreenPrivate;
 typedef struct _XnoiseVolumeSliderButton XnoiseVolumeSliderButton;
 typedef struct _XnoiseVolumeSliderButtonClass XnoiseVolumeSliderButtonClass;
 typedef struct _XnoiseVolumeSliderButtonPrivate XnoiseVolumeSliderButtonPrivate;
+typedef struct _WorkerPrivate WorkerPrivate;
+
+#define WORKER_TYPE_EXECUTION_TYPE (worker_execution_type_get_type ())
+typedef struct _WorkerJobPrivate WorkerJobPrivate;
 
 struct _XnoiseAddMediaDialog {
 	GObject parent_instance;
@@ -1085,6 +1109,46 @@ struct _XnoiseVolumeSliderButtonClass {
 	GtkVolumeButtonClass parent_class;
 };
 
+struct _Worker {
+	GObject parent_instance;
+	WorkerPrivate * priv;
+};
+
+struct _WorkerClass {
+	GObjectClass parent_class;
+};
+
+typedef enum  {
+	WORKER_EXECUTION_TYPE_UNKNOWN = 0,
+	WORKER_EXECUTION_TYPE_SYNC,
+	WORKER_EXECUTION_TYPE_SYNC_HIGH_PRIORITY,
+	WORKER_EXECUTION_TYPE_ASYNC,
+	WORKER_EXECUTION_TYPE_ASYNC_LOW_PRIORITY
+} WorkerExecutionType;
+
+typedef gboolean (*WorkerAsyncWorkFunc) (WorkerJob* jb, void* user_data);
+typedef void (*WorkerSyncWorkFunc) (WorkerJob* jb, void* user_data);
+struct _WorkerJob {
+	GObject parent_instance;
+	WorkerJobPrivate * priv;
+	GValue* value_arg1;
+	GValue* value_arg2;
+	void* p_arg;
+	gint counter[4];
+	gint64 id;
+	WorkerAsyncWorkFunc a_func;
+	gpointer a_func_target;
+	GDestroyNotify a_func_target_destroy_notify;
+	WorkerSyncWorkFunc s_func;
+	gpointer s_func_target;
+	GDestroyNotify s_func_target_destroy_notify;
+	GCancellable* cancellable;
+};
+
+struct _WorkerJobClass {
+	GObjectClass parent_class;
+};
+
 
 GType xnoise_add_media_dialog_get_type (void) G_GNUC_CONST;
 XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
@@ -1299,6 +1363,8 @@ XnoiseMain* xnoise_main_new (void);
 XnoiseMain* xnoise_main_construct (GType object_type);
 void xnoise_main_add_track_to_gst_player (XnoiseMain* self, const char* uri);
 void xnoise_main_save_tracklist (XnoiseMain* self);
+GType worker_job_get_type (void) G_GNUC_CONST;
+void xnoise_main_write_final_tracks_to_db_job (XnoiseMain* self, WorkerJob* job);
 void xnoise_main_quit (XnoiseMain* self);
 XnoiseMain* xnoise_main_get_instance (void);
 gboolean gdk_window_ensure_native (GdkWindow* window);
@@ -1355,14 +1421,21 @@ GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
 void xnoise_media_importer_store_files (XnoiseMediaImporter* self, char** list_of_files, int list_of_files_length1, XnoiseDbWriter** dbw);
 void xnoise_media_importer_add_single_file (XnoiseMediaImporter* self, const char* uri, XnoiseDbWriter** dbw);
 gint xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir, XnoiseDbWriter** dbw);
+void xnoise_media_importer_store_folders_job (XnoiseMediaImporter* self, WorkerJob* job);
 void xnoise_media_importer_store_folders (XnoiseMediaImporter* self, char** mfolders, int mfolders_length1, XnoiseDbWriter** dbw);
 void xnoise_media_importer_store_streams (XnoiseMediaImporter* self, char** list_of_streams, int list_of_streams_length1, XnoiseDbWriter** dbw);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
+extern GTimer* xnoise_t1;
+extern GTimer* xnoise_t2;
 GType xnoise_params_get_type (void) G_GNUC_CONST;
 extern XnoiseParams* xnoise_par;
 extern XnoiseGlobalAccess* xnoise_global;
 extern XnoiseUserInfo* xnoise_userinfo;
+GType worker_get_type (void) G_GNUC_CONST;
+extern Worker* xnoise_worker;
+extern XnoiseMediaImporter* xnoise_mix;
+extern GMainContext* xnoise_mc;
 void xnoise_initialize (gboolean* is_first_start);
 char* xnoise_escape_for_local_folder_search (const char* value);
 char* xnoise_remove_single_character (const char* haystack, const char* needle);
@@ -1541,6 +1614,15 @@ void xnoise_video_screen_trigger_expose (XnoiseVideoScreen* self);
 GType xnoise_volume_slider_button_get_type (void) G_GNUC_CONST;
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (void);
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_construct (GType object_type);
+GType worker_execution_type_get_type (void) G_GNUC_CONST;
+Worker* worker_new (GMainContext* mc);
+Worker* worker_construct (GType object_type, GMainContext* mc);
+void worker_push_job (Worker* self, WorkerJob* j);
+WorkerJob* worker_job_new (gint id, WorkerExecutionType execution_type, WorkerAsyncWorkFunc a_func, void* a_func_target, WorkerSyncWorkFunc s_func, void* s_func_target);
+WorkerJob* worker_job_construct (GType object_type, gint id, WorkerExecutionType execution_type, WorkerAsyncWorkFunc a_func, void* a_func_target, WorkerSyncWorkFunc s_func, void* s_func_target);
+void worker_job_set_arg (WorkerJob* self, const char* name, GValue* val);
+GValue* worker_job_get_arg (WorkerJob* self, const char* name);
+WorkerExecutionType worker_job_get_execution_type (WorkerJob* self);
 
 
 G_END_DECLS

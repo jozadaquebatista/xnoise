@@ -353,8 +353,19 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	public bool change_model_data() {
 		set_model(null);
 		mediabrowsermodel.clear();
+		t1.reset();
+		ulong microseconds;
+		t1.start();
 		mediabrowsermodel.populate_model();
+		t1.stop();
+		double buf = t1.elapsed(out microseconds);
+		print("\nelapsed populate model: %lf ; %u\n", buf, (uint)microseconds);
+		t1.reset();
+		t1.start();
 		update_view();
+		t1.stop();
+		buf = t1.elapsed(out microseconds);
+		print("\nelapsed update view: %lf ; %u\n", buf, (uint)microseconds);
 		xn.main_window.searchEntryMB.set_sensitive(true);
 		this.set_sensitive(true);
 		return false;

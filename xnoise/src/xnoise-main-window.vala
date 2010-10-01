@@ -201,7 +201,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		ssm = new ScreenSaverManager();
 
 		//restore last state
-		add_lastused_titles_to_tracklist();
+		var job = new Worker.Job(999, Worker.ExecutionType.SYNC, null, this.add_lastused_titles_to_tracklist);
+		worker.push_job(job);
 
 		notify["repeatState"].connect(on_repeatState_changed);
 		notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
@@ -296,7 +297,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 
-	private void add_lastused_titles_to_tracklist() {
+	private void add_lastused_titles_to_tracklist(Worker.Job job) {
 		DbBrowser dbBr = null;
 		try {
 			dbBr = new DbBrowser();
@@ -305,39 +306,45 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			print("%s\n", e.message);
 			return;
 		}
+		if(dbBr == null)
+			return;
 		string[] uris = dbBr.get_lastused_uris();
-		foreach(unowned string uri in uris) {
-			File file = File.new_for_commandline_arg(uri);
-/*
-			if(global.position_reference==null) {
-				global.current_uri = uri;
-				global.state_playing = true;
-			}
-*/
+		for(int i = 0; i < uris.length; i++) {
+			File file = File.new_for_uri(uris[i]);
 			if(!(file.get_uri_scheme() in global.remote_schemes)) {
 				TrackData td;
-				if(dbBr.get_trackdata_for_uri(uri, out td)) {
-					this.trackList.tracklistmodel.insert_title(null,
-					                                           (int)td.Tracknumber,
-					                                           td.Title,
-					                                           td.Album,
-					                                           td.Artist,
-					                                           td.Length,
-					                                           false,
-					                                           uri);
+				if(dbBr.get_trackdata_for_uri(uris[i], out td)) {
+					string current_uri = uris[i];
+					Idle.add( () => {
+						this.trackList.tracklistmodel.insert_title(null,
+							                                       (int)td.Tracknumber,
+							                                       td.Title,
+							                                       td.Album,
+							                                       td.Artist,
+							                                       td.Length,
+							                                       false,
+							                                       current_uri);
+						
+						return false;
+					});
 				}
 			}
 			else {
 				TrackData td;
-				if(dbBr.get_trackdata_for_stream(uri, out td)) {
-					this.trackList.tracklistmodel.insert_title(null,
-					                                           0,
-					                                           td.Title,
-					                                           "",
-					                                           "",
-					                                           0,
-					                                           false,
-					                                           uri);
+				if(dbBr.get_trackdata_for_stream(uris[i], out td)) {
+					string current_uri = uris[i];
+					Idle.add( () => {
+						this.trackList.tracklistmodel.insert_title(null,
+							                                       0,
+							                                       td.Title,
+							                                       "",
+							                                       "",
+							                                       0,
+							                                       false,
+							                                       current_uri);
+						
+						return false;
+					});
 				}
 			}
 		}
@@ -822,7 +829,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		mfd = new AddMediaDialog();
 		mfd.sign_finish.connect( () => {
 			mfd = null;
-			Idle.add(mediaBr.change_model_data);
+//			Idle.add(mediaBr.change_model_data);
 		});
 	}
 

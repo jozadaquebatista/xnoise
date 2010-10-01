@@ -217,6 +217,7 @@ namespace Xnoise {
 		public void add_track_to_gst_player (string uri);
 		public void quit ();
 		public void save_tracklist ();
+		public void write_final_tracks_to_db_job (Worker.Job job);
 		public static Xnoise.Main instance { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -321,6 +322,7 @@ namespace Xnoise {
 		public void add_single_file (string uri, ref Xnoise.DbWriter dbw);
 		public void store_files (string[] list_of_files, ref Xnoise.DbWriter dbw);
 		public void store_folders (string[] mfolders, ref Xnoise.DbWriter dbw);
+		public void store_folders_job (Worker.Job job);
 		public void store_streams (string[] list_of_streams, ref Xnoise.DbWriter dbw);
 		public signal void sig_media_path_changed ();
 	}
@@ -606,9 +608,19 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalAccess global;
 	[CCode (cheader_filename = "xnoise.h")]
+	public static GLib.MainContext mc;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.MediaImporter mix;
+	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise.h")]
+	public static GLib.Timer t1;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static GLib.Timer t2;
+	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.UserInfo userinfo;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Worker worker;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string escape_for_local_folder_search (string? value);
 	[CCode (cheader_filename = "xnoise.h")]
@@ -627,6 +639,39 @@ namespace Xnoise {
 	public static string remove_single_character (string haystack, string needle);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string replace_underline_with_blank_encoded (string value);
+}
+[CCode (cheader_filename = "xnoise.h")]
+public class Worker : GLib.Object {
+	[CCode (cheader_filename = "xnoise.h")]
+	public class Job : GLib.Object {
+		public Worker.AsyncWorkFunc? a_func;
+		public GLib.Cancellable? cancellable;
+		public int[] counter;
+		public int64 id;
+		public void* p_arg;
+		public Worker.SyncWorkFunc? s_func;
+		public GLib.Value? value_arg1;
+		public GLib.Value? value_arg2;
+		public Job (int id = 0, Worker.ExecutionType execution_type = 0, Worker.AsyncWorkFunc? a_func = null, Worker.SyncWorkFunc? s_func = null);
+		public GLib.Value? get_arg (string name);
+		public void set_arg (string? name, GLib.Value? val);
+		public Worker.ExecutionType execution_type { get; }
+		public signal void finished ();
+	}
+	[CCode (cprefix = "WORKER_EXECUTION_TYPE_", cheader_filename = "xnoise.h")]
+	public enum ExecutionType {
+		UNKNOWN,
+		SYNC,
+		SYNC_HIGH_PRIORITY,
+		ASYNC,
+		ASYNC_LOW_PRIORITY
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public delegate bool AsyncWorkFunc (Worker.Job jb);
+	[CCode (cheader_filename = "xnoise.h")]
+	public delegate void SyncWorkFunc (Worker.Job jb);
+	public Worker (GLib.MainContext mc);
+	public void push_job (Worker.Job j);
 }
 [CCode (cname = "gdk_window_ensure_native", cheader_filename = "xnoise.h")]
 public static bool ensure_native (Gdk.Window window);

@@ -127,6 +127,7 @@ public class Worker : Object {
 		local_context = new MainContext();
 		local_context.push_thread_default();
 		var loop = new MainLoop(local_context);
+		message( "worker thread %d", (int)Linux.gettid() );
 		loop.run();
 		return null;
 	}
@@ -182,12 +183,7 @@ public class Worker : Object {
 					print("Error: There must be a SyncWorkFunc in a sync job.\n");
 					break;
 				}
-				try {
-					sync_job_queue.push(j);
-				}
-				catch(ThreadError e) {
-					print("Error pushing to thread pool: %s\n", e.message);
-				}
+				sync_job_queue.push(j);
 				Source source = new IdleSource(); 
 				source.set_callback(() => {
 					sync_func(); 
@@ -200,12 +196,7 @@ public class Worker : Object {
 					print("Error: There must be a AsyncWorkFunc in an async job.\n");
 					break;
 				}
-				try {
-					async_job_queue.push(j);
-				}
-				catch(ThreadError e) {
-					print("Error pushing to thread pool: %s\n", e.message);
-				}
+				async_job_queue.push(j);
 				Source source = new IdleSource(); 
 				source.set_callback(() => {
 					async_func(); 

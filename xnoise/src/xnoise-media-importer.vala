@@ -178,6 +178,62 @@ public class Xnoise.MediaImporter : GLib.Object {
 	}
 
 	// add folders to the media path and store them in the db
+	// only for Worker.Job usage
+	public void store_folders_job(Worker.Job job){
+//string[] mfolders, ref 
+		print("store_folders_job \n");
+		DbWriter dbw;
+		try {
+			dbw = new DbWriter();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
+		if(dbw == null) 
+			return;
+		
+		var mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
+		dbw.begin_transaction();
+		dbw.del_all_folders();
+
+		foreach(string folder in (string[])job.get_arg("mfolders")) {
+			mfolders_ht.insert(folder, 1); // this removes double entries
+		}
+
+		foreach(unowned string folder in mfolders_ht.get_keys()) {
+//			print("xx folder %s\n", folder);
+			dbw.add_single_folder_to_collection(folder);
+		}
+
+		if(!dbw.delete_local_media_data()) return;
+
+		foreach(string folder in mfolders_ht.get_keys()) {
+			File dir = File.new_for_path(folder);
+			assert(dir != null);
+			add_local_tags(dir, ref dbw);
+		}
+		dbw.commit_transaction();
+//		uint msg_id = (uint)job.get_arg("msg_id");
+//		print("msg_id: %u\n", msg_id);
+		Idle.add( () => {
+			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), "Finished import.", false);
+			userinfo.update_symbol_widget_by_id((uint)job.get_arg("msg_id"), UserInfo.ContentClass.INFO);
+			return false;
+		});
+		Timeout.add_seconds(4, () => {
+			userinfo.popdown((uint)job.get_arg("msg_id"));
+//			job.unref();
+//			print("job ref_count %u\n", job.ref_count);
+			Idle.add(Xnoise.Main.instance.main_window.mediaBr.change_model_data);
+			return false;
+		});
+		mfolders_ht.remove_all();
+		global.sig_media_path_changed();
+	}
+
+
+	// add folders to the media path and store them in the db
 	public void store_folders(string[] mfolders, ref DbWriter dbw){
 		if(dbw == null) 
 			return;

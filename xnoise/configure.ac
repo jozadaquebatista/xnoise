@@ -82,6 +82,7 @@ XNOISE_PACKAGES="\
     --pkg sqlite3 \
     --pkg taglib_c \
     --pkg unique-1.0 \
+    --pkg linux \
 "
 
 LIBPLAYLIST_PACKAGES="\

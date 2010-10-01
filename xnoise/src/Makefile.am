@@ -61,6 +61,7 @@ xnoise_SOURCES = \
 	xnoise-user-info.vala \
 	xnoise-videoscreen.vala \
 	xnoise-volume-slider-button.vala \
+	xnoise-worker.vala \
 	$(NULL)
 
 VALAFLAGS = \
