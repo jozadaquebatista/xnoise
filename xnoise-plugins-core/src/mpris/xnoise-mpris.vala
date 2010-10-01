@@ -251,7 +251,10 @@ public class MprisPlayer : GLib.Object {
 		});
 		
 		Xnoise.global.notify["image-path-large"].connect( () => {
-			File f = File.new_for_commandline_arg(Xnoise.global.image_path_large);
+			string s = Xnoise.global.image_path_large;
+			if(s == null)
+				return;
+			File f = File.new_for_commandline_arg(s);
 			if(f == null)
 				return;
 			_metadata.insert("mpris:artUrl", f.get_uri());
