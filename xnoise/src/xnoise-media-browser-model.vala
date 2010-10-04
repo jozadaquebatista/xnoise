@@ -40,6 +40,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		MEDIATYPE,
 		COLL_TYPE,
 		DRAW_SEPTR,
+		VISIBLE,
 		N_COLUMNS
 	}
 
@@ -55,7 +56,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		typeof(int),        //DB_ID
 		typeof(int),        //MEDIATYPE
 		typeof(int),        //COLL_TYPE
-		typeof(int)         //DRAW SEPARATOR
+		typeof(int),        //DRAW SEPARATOR
+		typeof(bool)        //VISIBLE
 	};
 
 	public string searchtext = "";

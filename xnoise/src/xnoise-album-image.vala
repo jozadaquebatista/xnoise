@@ -271,6 +271,15 @@ public class Xnoise.AlbumImage : Gtk.Image {
 
 		global.check_image_for_current_track();
 		
+		var job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.set_local_album_image);
+		job.set_arg("artist", artist);
+		job.set_arg("album", album);
+		job.set_arg("image_path", image_path);
+		worker.push_job(job);
+		
+	}
+	
+	private void set_local_album_image(Worker.Job job) {
 		DbWriter dbw = null;
 		try {
 			dbw = new DbWriter();
@@ -279,7 +288,10 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			print("%s\n", e.message);
 			return;
 		}
-		dbw.set_local_image_for_album(ref artist, ref album, image_path);
+		string __artist = (string)job.get_arg("artist");
+		string __album = (string)job.get_arg("album");
+		string __image_path = (string)job.get_arg("image_path");
+		dbw.set_local_image_for_album(ref __artist, ref __album, __image_path);
 		dbw = null;
 		
 		Idle.add( () => {

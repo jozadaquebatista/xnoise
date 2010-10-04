@@ -63,67 +63,88 @@ public class Xnoise.MediaBrowserFilterModel : Gtk.TreeModelFilter, Gtk.TreeModel
 			case 1: //ARTIST
 				string artist = null;
 				model.get(iter, MediaBrowserModel.Column.VIS_TEXT, ref artist);
-				if(artist != null && artist.down().str(_searchtext) != null)
+				if(artist != null && artist.down().str(_searchtext) != null) {
+//					Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, true);
 					return true;
+				}
 				TreeIter iterChild;
 				for(int i = 0; i < model.iter_n_children(iter); i++) {
 					model.iter_nth_child(out iterChild, iter, i);
 					string album = null;
 					model.get(iterChild, MediaBrowserModel.Column.VIS_TEXT, ref album);
-					if(album != null && album.down().str(_searchtext) != null)
+					if(album != null && album.down().str(_searchtext) != null) {
+//						Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, true);
 						return true;
+					}
 					TreeIter iterChildChild;
 					for(int j = 0; j < model.iter_n_children(iterChild); j++) {
 						model.iter_nth_child(out iterChildChild, iterChild, j);
 						string title = null;
 						model.get(iterChildChild, MediaBrowserModel.Column.VIS_TEXT, ref title);
-						if(title != null && title.down().str(_searchtext) != null)
+						if(title != null && title.down().str(_searchtext) != null) {
+//							Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, true);
 							return true;
+						}
 					}
 				}
+//				Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, false);
 				return false;
 			case 2: //ALBUM
 				string album = null;
 				model.get(iter, MediaBrowserModel.Column.VIS_TEXT, ref album);
-				if(album != null && album.down().str(_searchtext) != null)
+				if(album != null && album.down().str(_searchtext) != null) {
+//					Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, true);
 					return true;
+				}
 				TreeIter iterChild;
 				for(int i = 0; i < model.iter_n_children(iter); i++) {
 					model.iter_nth_child(out iterChild, iter, i);
 					string title = null;
 					model.get(iterChild, MediaBrowserModel.Column.VIS_TEXT, ref title);
-					if(title != null && title.down().str(_searchtext) != null)
+					if(title != null && title.down().str(_searchtext) != null) {
+//						Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, true);
 						return true;
+					}
 				}
 				TreeIter iter_parent;
 				string artist = null;
 				if(model.iter_parent(out iter_parent, iter)) {
 					model.get(iter_parent, MediaBrowserModel.Column.VIS_TEXT, ref artist);
-					if(artist != null && artist.down().str(_searchtext) != null)
+					if(artist != null && artist.down().str(_searchtext) != null) {
+//						Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, true);
 						return true;
+					}
 				}
 				return false;
 			case 3: //TITLE
 				string title = null;
 				model.get(iter, MediaBrowserModel.Column.VIS_TEXT, ref title);
-				if(title != null && title.down().str(_searchtext) != null)
+				if(title != null && title.down().str(_searchtext) != null) {
+//					Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, true);
 					return true;
+				}
 				TreeIter iter_parent;
 				string album = null;
 				if(model.iter_parent(out iter_parent, iter)) {
 					model.get(iter_parent, MediaBrowserModel.Column.VIS_TEXT, ref album);
-					if(album != null && album.down().str(_searchtext) != null)
+					if(album != null && album.down().str(_searchtext) != null) {
+//						Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, true);
 						return true;
+					}
 					TreeIter iter_parent_parent;
 					string artist = null;
 					if(model.iter_parent(out iter_parent_parent, iter_parent)) {
 						model.get(iter_parent_parent, MediaBrowserModel.Column.VIS_TEXT, ref artist);
-						if(artist != null && artist.down().str(_searchtext) != null)
+						if(artist != null && artist.down().str(_searchtext) != null) {
+//							Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, true);
 							return true;
+						}
 					}
 				}
+//				Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, false);
 				return false;
 			default:
+//				Xnoise.Main.instance.main_window.mediaBr.mediabrowsermodel.set(iter, MediaBrowserModel.Column.IS_VISIBLE, false);
 				return false;
 		}
 	}

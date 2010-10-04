@@ -312,6 +312,7 @@ namespace Xnoise {
 			MEDIATYPE,
 			COLL_TYPE,
 			DRAW_SEPTR,
+			VISIBLE,
 			N_COLUMNS
 		}
 		public string searchtext;

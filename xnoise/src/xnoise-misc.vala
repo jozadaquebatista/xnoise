@@ -168,7 +168,7 @@ namespace Xnoise {
 	 * This function tries to find the right image for the uri.
 	 */
 	public static bool get_image_path_for_media_uri(string? uri, ref string? image_path) {
-		//TODO: also check imagepath via track metadata
+		//TODO: don't use this function !
 		string tmpuri = uri;
 		image_path = null;
 		DbBrowser dbb = null;
