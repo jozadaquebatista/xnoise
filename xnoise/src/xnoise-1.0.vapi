@@ -45,19 +45,19 @@ namespace Xnoise {
 	public class DbBrowser {
 		public DbBrowser () throws GLib.Error;
 		public int count_artists_with_search (ref string searchtext);
-		public string[] get_albums (string artist, ref string searchtext);
-		public string[] get_artists (ref string searchtext);
+		public string[] get_albums_2 (string artist);
+		public string[] get_artists_2 ();
 		public string[] get_lastused_uris ();
 		public string? get_local_image_path_for_track (ref string? uri);
 		public string[] get_media_files ();
 		public string[] get_media_folders ();
 		public string? get_single_stream_uri (string name);
-		public string[] get_some_artists (ref string searchtext, int limit, int offset);
+		public string[] get_some_artists_2 (int limit, int offset);
 		public Xnoise.MediaData[] get_stream_data (ref string searchtext);
 		public bool get_stream_for_id (int id, out string uri);
 		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 		public Xnoise.StreamData[] get_streams ();
-		public Xnoise.MediaData[] get_titles_with_mediatypes_and_ids (string artist, string album, ref string searchtext);
+		public Xnoise.MediaData[] get_titles_with_mediatypes_and_ids_2 (string artist, string album);
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
@@ -278,6 +278,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
+		public Xnoise.MediaBrowserFilterModel filtermodel;
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
 		public MediaBrowser ();
 		public bool change_model_data ();
@@ -289,6 +290,11 @@ namespace Xnoise {
 		public bool use_linebreaks { get; set; }
 		public bool use_treelines { get; set; }
 		public signal void sign_activated ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class MediaBrowserFilterModel : Gtk.TreeModelFilter, Gtk.TreeModel {
+		public MediaBrowserFilterModel (Xnoise.MediaBrowserModel mbm);
+		public string searchtext { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {

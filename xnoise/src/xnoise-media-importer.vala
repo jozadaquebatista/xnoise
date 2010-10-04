@@ -86,10 +86,13 @@ public class Xnoise.MediaImporter : GLib.Object {
 		PatternSpec psVideo = new PatternSpec("video*");
 
 		if(psAudio.match_string(mime)) {
-			int idbuffer = dbw.uri_entry_exists(file.get_uri());
-			if(idbuffer== -1) {
-				var tr = new TagReader();
-				dbw.insert_title(tr.read_tag(file.get_path()), file.get_uri());
+			string uri_lc = uri.down();
+			if(!(uri_lc.has_suffix(".m3u")||uri.has_suffix(".pls")||uri.has_suffix(".asx")||uri.has_suffix(".xspf")||uri.has_suffix(".wpl"))) {
+				int idbuffer = dbw.uri_entry_exists(file.get_uri());
+				if(idbuffer== -1) {
+					var tr = new TagReader();
+					dbw.insert_title(tr.read_tag(file.get_path()), file.get_uri());
+				}
 			}
 		}
 		else if(psVideo.match_string(mime)) {

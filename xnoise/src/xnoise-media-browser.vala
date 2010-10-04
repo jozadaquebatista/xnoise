@@ -33,6 +33,7 @@ using Gdk;
 
 public class Xnoise.MediaBrowser : TreeView, IParams {
 	public MediaBrowserModel mediabrowsermodel;
+	public MediaBrowserFilterModel filtermodel;
 	private unowned Main xn;
 	private bool dragging;
 	private bool _use_treelines = false;
@@ -103,6 +104,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.xn = Main.instance;
 		par.iparams_register(this);
 		mediabrowsermodel = new MediaBrowserModel();
+		filtermodel = new MediaBrowserFilterModel(mediabrowsermodel);
 		setup_view();
 		Idle.add(this.populate_model);
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);
@@ -144,7 +146,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	// with GLib.Idle
 	private bool populate_model() {
 		bool res = mediabrowsermodel.populate_model();
-		this.set_model(mediabrowsermodel);
+		this.set_model(filtermodel);//mediabrowsermodel);
 		return res;
 	}
 
@@ -209,12 +211,26 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return false;
 	}
 	
+	private string last_searchtext = "";
 	public void on_searchtext_changed(string? txt) {
-		if(txt != null)
-			mediabrowsermodel.searchtext = txt.down();
-		else
+		if(txt != null) {
+			if(last_searchtext != txt) {
+				mediabrowsermodel.searchtext = txt.down();
+				filtermodel.searchtext = txt.down();
+				last_searchtext = txt;
+			}
+			else {
+				last_searchtext = txt;
+				return;
+			}
+		}
+		else {
 			mediabrowsermodel.searchtext = "";
-		change_model_data();
+			filtermodel.searchtext = "";
+			last_searchtext = "";
+		}
+		filtermodel.refilter();
+//		change_model_data();
 		if((txt != "") &&
 		   (txt != null)) {
 			this.expand_all();
@@ -318,8 +334,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			return;
 		}
 
-		foreach(unowned TreePath treepath in treepaths) {
-			string[] l = mediabrowsermodel.build_uri_list_for_treepath(treepath, ref dbb);
+		foreach(unowned TreePath treepath in treepaths) { //maybe use dummy and fetch uris later
+			string[] l = mediabrowsermodel.build_uri_list_for_treepath(filtermodel.convert_path_to_child_path(treepath), ref dbb); //TODO only visible lines
 			foreach(unowned string u in l) {
 				uris += u;
 			}
@@ -341,7 +357,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private void on_row_activated(Gtk.Widget sender, TreePath treepath, TreeViewColumn column) {
 		if(treepath.get_depth() > 1) {
-			TrackData[] td_list = mediabrowsermodel.get_trackdata_for_treepath(treepath);
+			TrackData[] td_list = mediabrowsermodel.get_trackdata_for_treepath(filtermodel.convert_path_to_child_path(treepath));
 			this.xn.tl.tracklistmodel.add_tracks(td_list, true);
 			td_list = null;
 		}
@@ -353,19 +369,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	public bool change_model_data() {
 		set_model(null);
 		mediabrowsermodel.clear();
-		t1.reset();
-		ulong microseconds;
-		t1.start();
 		mediabrowsermodel.populate_model();
-		t1.stop();
-		double buf = t1.elapsed(out microseconds);
-		print("\nelapsed populate model: %lf ; %u\n", buf, (uint)microseconds);
-		t1.reset();
-		t1.start();
 		update_view();
-		t1.stop();
-		buf = t1.elapsed(out microseconds);
-		print("\nelapsed update view: %lf ; %u\n", buf, (uint)microseconds);
 		xn.main_window.searchEntryMB.set_sensitive(true);
 		this.set_sensitive(true);
 		return false;
@@ -379,7 +384,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.row_collapsed.disconnect(on_row_collapsed);
 		this.row_expanded.disconnect(on_row_expanded);
 		this.set_model(null);
-		this.set_model(mediabrowsermodel);
+		this.set_model(filtermodel);//mediabrowsermodel);
 		foreach (TreePath tp in this.expansion_list)
 			this.expand_row(tp, false);
 		xn.main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);

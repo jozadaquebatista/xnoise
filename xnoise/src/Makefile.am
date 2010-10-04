@@ -40,6 +40,7 @@ xnoise_SOURCES = \
 	xnoise-main-window.vala \
 	xnoise-media-browser.vala \
 	xnoise-media-browser-model.vala \
+	xnoise-media-browser-filtermodel.vala \
 	xnoise-media-importer.vala \
 	xnoise-misc.vala \
 	xnoise-parameter.vala \

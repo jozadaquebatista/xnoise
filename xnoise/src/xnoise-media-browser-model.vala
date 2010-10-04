@@ -28,8 +28,6 @@
  * 	Jörn Magens
  */
 
-// The usage of a own model will give the possibility to simplify
-// some things in xnoise and make others more effective.
 
 using Gtk;
 
@@ -293,7 +291,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			print("%s\n", e.message);
 			return;
 		}
-		artistArray = dbb.get_some_artists(ref searchtext, ARTIST_FOR_ONE_JOB, job.big_counter[1]);
+//		Timer t = new Timer();
+//		t.reset();
+//		ulong microseconds;
+//		t.start();
+		artistArray = dbb.get_some_artists_2(ARTIST_FOR_ONE_JOB, job.big_counter[1]);
+//		t.stop();
+//		double buf = t.elapsed(out microseconds);
+//		print("\nelapsed get some artists 2:: %lf ; %u\n", buf, (uint)microseconds);
+		
 		job.big_counter[1] += artistArray.length;
 		
 		job.set_arg("artistArray", artistArray);
@@ -318,6 +324,41 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		});
 		return;
 	}
+//	private void handle_artists(Worker.Job job) {
+//		string[] artistArray;
+//		DbBrowser dbb = null;
+//		try {
+//			dbb = new DbBrowser();
+//		}
+//		catch(Error e) {
+//			print("%s\n", e.message);
+//			return;
+//		}
+//		artistArray = dbb.get_some_artists(ref searchtext, ARTIST_FOR_ONE_JOB, job.big_counter[1]);
+//		job.big_counter[1] += artistArray.length;
+//		
+//		job.set_arg("artistArray", artistArray);
+//		Idle.add( () => {
+//			TreeIter iter_artist;
+//			foreach(string artist in (string[])job.get_arg("artistArray")) { 	              //ARTISTS
+//				this.append(out iter_artist, null);
+//				this.set(iter_artist,
+//				         Column.ICON, artist_pixb,
+//				         Column.VIS_TEXT, artist,
+//				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+//				         Column.DRAW_SEPTR, 0);
+//				
+//				Gtk.TreePath p = this.get_path(iter_artist);
+//				TreeRowReference treerowref = new TreeRowReference(this, p);
+//				var job_album = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.handle_album);
+//				job_album.set_arg("treerowref", treerowref);
+//				job_album.set_arg("artist", artist);
+//				worker.push_job(job_album);
+//			}
+//			return false;
+//		});
+//		return;
+//	}
 	
 	private void handle_album(Worker.Job job) {
 		DbBrowser dbb = null;
@@ -329,7 +370,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			return;
 		}		
 		string artist = (string)job.get_arg("artist");
-		string[] albumArray = dbb.get_albums(artist, ref searchtext);
+//		Timer t = new Timer();
+//		t.reset();
+//		ulong microseconds;
+//		t.start();
+		string[] albumArray = dbb.get_albums_2(artist);
+//		t.stop();
+//		double buf = t.elapsed(out microseconds);
+//		print("\nelapsed get albums 2:: %lf ; %u\n", buf, (uint)microseconds);
+		
 		job.set_arg("albumArray", albumArray);
 		Idle.add( () => {
 				TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
@@ -367,7 +416,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		string ar, al;
 		ar = (string)job.get_arg("artist");
 		al = (string)job.get_arg("album");
-		MediaData[] tmis = dbb.get_titles_with_mediatypes_and_ids(ar, al, ref searchtext);
+//		Timer t = new Timer();
+//		t.reset();
+//		ulong microseconds;
+//		t.start();
+		MediaData[] tmis = dbb.get_titles_with_mediatypes_and_ids_2(ar, al);
+//		t.stop();
+//		double buf = t.elapsed(out microseconds);
+//		print("\nelapsed get albums 2:: %lf ; %u\n", buf, (uint)microseconds);
+		
 		job.media_dat = tmis;
 		
 		Idle.add( () => {
@@ -381,8 +438,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					this.set(iter_title,
 						     Column.ICON, title_pixb,
 						     Column.VIS_TEXT, tmi.name,
-						     Column.DB_ID, tmi.id, //1,//idx[i],
-						     Column.MEDIATYPE , tmi.mediatype, //1,//mtx[i],
+						     Column.DB_ID, tmi.id,
+						     Column.MEDIATYPE , tmi.mediatype,
 						     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 						     Column.DRAW_SEPTR, 0);
 				}
