@@ -31,10 +31,11 @@
 
 
 
-public class Worker : Object {
+public class Xnoise.Worker : Object {
 	
 	private AsyncQueue<Job> async_job_queue = new AsyncQueue<Job>();
 	private AsyncQueue<Job> sync_job_queue  = new AsyncQueue<Job>();
+	private AsyncQueue<Job> timed_job_queue = new AsyncQueue<Job>();
 	
 	private unowned Thread thread;
 	
@@ -64,6 +65,7 @@ public class Worker : Object {
 		UNKNOWN = 0,
 		SYNC,
 		SYNC_HIGH_PRIORITY, // not used,yet
+		TIMED,              // queue timed job if working functionreturns true -> queue again
 		ASYNC,
 		ASYNC_LOW_PRIORITY  // not used,yet
 	}
@@ -96,17 +98,18 @@ public class Worker : Object {
 		
 		~Job() {
 			this.ht.remove_all();
-			print("dtor job\n"); 
+			//print("dtor job\n"); 
 		}
 		
 		// These can be used as references to other objects, structs, arrays, simple types, strings, arrays and structs
 		public Value? value_arg1 = null;
 		public Value? value_arg2 = null;
 		public void* p_arg = null;
-		
+		public MediaData[] media_dat; // maybe use TrackData class insttead of MediaData?
 		// It is useful to have some Job persistent counters available
 		public int counter[4];
-		
+		// 4 more big couters
+		public int32 big_counter[4];
 		// Finished signals will be sent in the main thread
 		public signal void finished();
 		

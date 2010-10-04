@@ -47,7 +47,8 @@ namespace Xnoise {
 	public static void initialize(out bool is_first_start) {
 		is_first_start = false;
 		mix = new MediaImporter();
-
+		
+		// setup worker with reference to default context
 		worker = new Worker(MainContext.default());
 		
 		if(global == null)
