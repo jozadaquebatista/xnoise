@@ -150,7 +150,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	};
 
 	private const Gtk.TargetEntry[] target_list = {
-		{"text/uri-list", 0, 0}
+		{"application/db-id", TargetFlags.SAME_APP, 0},
+		{"text/uri-list", TargetFlags.OTHER_APP, 0}
 	};
 
 	public UIManager get_ui_manager() {
@@ -1272,7 +1273,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
 			this.searchEntryMB.set_sensitive(true);
 			this.searchEntryMB.key_release_event.connect( (s, e) => {
-				int KEY_ENTER = 0xFF0D;
+				//int KEY_ENTER = 0xFF0D;
 				var entry = (Entry)s;
 				this.mediaBr.on_searchtext_changed(entry.text);
 				if(entry.text != "") {

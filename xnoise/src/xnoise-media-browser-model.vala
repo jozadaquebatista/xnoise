@@ -670,14 +670,13 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		int32[] urilist = {};
 		MediaType mtype = MediaType.UNKNOWN;
 		int dbid = -1;
-		string uri;
+		//string uri;
 		TreePath treepath;
 		CollectionType br_ct = CollectionType.UNKNOWN;
 		treepath = this.get_path(iter);
 		switch(treepath.get_depth()) {
 			case 1:
-//				this.get_iter(out iter, treepath);
-
+			//this.get_iter(out iter, treepath);
 				this.get(iter, Column.COLL_TYPE, ref br_ct);
 				if(br_ct == CollectionType.LISTED) {
 					dbid = -1;

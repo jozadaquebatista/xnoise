@@ -241,50 +241,10 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 //		worker.push_job();
 //		
 //		job = new Worker.Job(1, Worker.ExecutionType.ASYNC, MediaImporter.store_folders_job, null);
-//		job.set_arg("mfolders", list_of_streams);
+//		job.set_arg("mfolders", list_of_files);
 //		worker.push_job();
 		this.dialog.destroy();
 		this.sign_finish();
-	}
-
-	private void* write_media_to_db() {
-		// thread function for the import to the library
-		// sends a signal when finished, this signal is handled by main window class
-		
-//		uint id = msg_id; //Threads cannot take args in vala, therefore we have to buffer the id here
-//		DbWriter dbw = null;
-//		try {
-//			dbw = new DbWriter();
-//		}
-//		catch(Error e) {
-//			print("%s\n", e.message);
-//			return null;
-//		}
-//		var mi = new MediaImporter();
-//		
-//		//start import
-//		global.media_import_in_progress = true;
-//		
-//		mi.store_folders(list_of_folders, ref dbw);
-//		mi.store_streams(list_of_streams, ref dbw); // TODO: Deliver streams with names
-//		mi.store_files(list_of_files, ref dbw);
-//		
-//		//finish import
-//		global.media_import_in_progress = false;
-
-//		dbw = null;
-//		mi = null;
-//		
-//		userinfo.update_text_by_id(id, "Finished import.", false);
-//		userinfo.update_symbol_widget_by_id(id, UserInfo.ContentClass.INFO);
-//		Timeout.add_seconds(4, () => {
-//			userinfo.popdown(id);
-//			return false;
-//		});
-//		
-//		this.sign_finish();
-//		// print("thread finished\n");
-		return null;
 	}
 
 	private void on_cancel_button_clicked() {

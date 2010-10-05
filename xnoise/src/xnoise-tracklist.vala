@@ -418,8 +418,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 		Gtk.TreePath path;
 		TreeRowReference drop_rowref;
 		string uri = null;
-		File file;
-		FileType filetype;
+		//File file;
+		//FileType filetype;
 		string[] uris;
 		this.get_dest_row_at_pos(x, y, out path, out drop_pos);
 		
@@ -559,8 +559,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		if(row_ref != null && row_ref.valid())
 			path = row_ref.get_path();
 		foreach(int32 ix in ids) {
-			//print("id::%d\n", (int)ix);
-			string x = "";
 			int tracknumb;
 			string lengthString = "", artist, album, title, uri;
 			if(dbBr.get_trackdata_for_id((int)ix, out td)) {
