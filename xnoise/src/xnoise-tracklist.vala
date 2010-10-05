@@ -33,22 +33,19 @@ using Gdk;
 
 public class Xnoise.TrackList : TreeView, IParams {
 	private Main xn;
-//	private const TargetEntry[] target_list = {
-//		{"text/uri-list", 0, 0}
-//	};
 	private const TargetEntry[] src_target_entries = {
 		{"text/uri-list", 0, 0}
-//		{"text/uri-list", TargetFlags.SAME_APP, 0}
 	};
 
 	// targets used with this as a destination
 	private const TargetEntry[] dest_target_entries = {
 		{"application/db-id", TargetFlags.SAME_APP, 0},
-		{"text/uri-list", TargetFlags.SAME_WIDGET, 0}
+		{"text/uri-list", 0, 0}
+//		{"text/uri-list", TargetFlags.OTHER_APP, 0}
 	};
 
-	private const string USE_LEN_COL   = "use_length_column";
-	private const string USE_TR_NO_COL = "use_tracknumber_column";
+	private const string USE_LEN_COL     = "use_length_column";
+	private const string USE_TR_NO_COL   = "use_tracknumber_column";
 	private const string USE_ALBUM_COL   = "use_album_column";
 
 	private TreeViewColumn columnPixb;
@@ -109,23 +106,21 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.set_model(tracklistmodel);
 		this.setup_view();
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);
-
-		Gtk.drag_source_set(
-			this,
-			Gdk.ModifierType.BUTTON1_MASK,
-			this.src_target_entries,
-			Gdk.DragAction.COPY|
-			Gdk.DragAction.MOVE
-			);
-
-		Gtk.drag_dest_set(
-			this,
-			Gtk.DestDefaults.ALL,
-			this.dest_target_entries,
-			Gdk.DragAction.COPY|
-			Gdk.DragAction.DEFAULT
-			);
-
+		
+		Gtk.drag_source_set(this,
+		                    Gdk.ModifierType.BUTTON1_MASK,
+		                    this.src_target_entries,
+		                    Gdk.DragAction.COPY|
+		                    Gdk.DragAction.MOVE
+		                    );
+		
+		Gtk.drag_dest_set(this,
+		                  Gtk.DestDefaults.ALL,
+		                  this.dest_target_entries,
+		                  Gdk.DragAction.COPY|
+		                  Gdk.DragAction.DEFAULT
+		                  );
+		
 		// Signals
 		this.row_activated.connect(this.on_row_activated);
 		this.key_release_event.connect(this.on_key_released);
@@ -142,21 +137,17 @@ public class Xnoise.TrackList : TreeView, IParams {
 		menu = create_rightclick_menu();
 	}
 	
-	/*private bool on_pointer_leave(CrossingEvent e) {
-		xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
-		return false;
-	}*/
-
 	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath path;
 		Gtk.TreeViewColumn column;
-
+		
 		Gtk.TreeSelection selection = this.get_selection();
 		int x = (int)e.x;
 		int y = (int)e.y;
 		int cell_x, cell_y;
-		if(!(this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y))) return true;
-
+		if(!(this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y)))
+			return true;
+		
 		switch(e.button) {
 			case 1:
 				if(selection.count_selected_rows()<=1) {
@@ -364,19 +355,18 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.dragging = false;
 		this.reorder_dragging = false;
 		this.unset_rows_drag_dest();
-		Gtk.drag_dest_set(
-			this,
-			Gtk.DestDefaults.ALL,
-			this.dest_target_entries,
-			Gdk.DragAction.COPY|
-			Gdk.DragAction.MOVE
-			);
+		Gtk.drag_dest_set(this,
+		                  Gtk.DestDefaults.ALL,
+		                  this.dest_target_entries,
+		                  Gdk.DragAction.COPY|
+		                  Gdk.DragAction.MOVE
+		                  );
 		stop_autoscroll();
 	}
 
 	private void on_drag_leave(Gtk.Widget sender, Gdk.DragContext context, uint etime) {
 		stop_autoscroll();
-
+		
 		Gdk.Window win = this.get_window();
 		if(win == null) return;
 		
@@ -433,24 +423,27 @@ public class Xnoise.TrackList : TreeView, IParams {
 		string[] uris;
 		this.get_dest_row_at_pos(x, y, out path, out drop_pos);
 		
-		if(!this.reorder_dragging) { // DRAGGING NOT WITHIN TRACKLIST
+		if(!this.reorder_dragging) { // && Xnoise.Main.instance.main_window.mediaBr.drag_from_mediabrowser) { 
+			// DRAGGING NOT WITHIN TRACKLIST
 			unowned int32[] ids = (int32[])selection.data;
 			ids.length = (int)(selection.length / sizeof(int32));
 			
-			TreeRowReference row_ref = new TreeRowReference(this.model, path);
+			TreeRowReference row_ref = null;
+			if(path != null)
+				row_ref = new TreeRowReference(this.model, path);
 			
 			var job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.insert_dropped_ids);
 			job.set_arg("row_ref", row_ref);
+			job.set_arg("drop_pos", drop_pos);
 			job.id_array = ids;
 			worker.push_job(job);
-
-//			for(int i = ids.length -1; i >= 0; i--) {
-//				print("%ld\n", ids[i]);
-//			}
+		}
+//		else if(!this.reorder_dragging && !Xnoise.Main.instance.main_window.mediaBr.drag_from_mediabrowser) {
+//			uris = selection.get_uris();
 //			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 //			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 //			bool is_first = true;
-//			for(int i=0; i<uris.length; i++) {
+//			for(int i = 0; i < uris.length; i++) {
 //				bool is_stream = false;
 //				uri = uris[i];
 //				file = File.new_for_uri(uri);
@@ -479,14 +472,16 @@ public class Xnoise.TrackList : TreeView, IParams {
 //				}
 //			}
 //			is_first = false;
-		}
+//			
+//		}
 		else { // DRAGGING WITHIN TRACKLIST
 			uris = selection.get_uris();
 			drop_rowref = null;
-			if(path!=null) {
+			if(path != null) {
 				//TODO:check if drop position is selected
 				drop_rowref = new TreeRowReference(this.tracklistmodel, path);
-				if(drop_rowref == null || !drop_rowref.valid()) return;
+				if(drop_rowref == null || !drop_rowref.valid()) 
+					return;
 			}
 			else {
 				get_last_unselected_path(ref path);
@@ -558,8 +553,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 			return;
 		}
 		bool is_first = true;
+		TreeViewDropPosition drop_pos_1 = (TreeViewDropPosition)job.get_arg("drop_pos");
 		TreeRowReference row_ref = (TreeRowReference)job.get_arg("row_ref");
-		TreePath path = row_ref.get_path();
+		TreePath path = null;
+		if(row_ref != null && row_ref.valid())
+			path = row_ref.get_path();
 		foreach(int32 ix in ids) {
 			//print("id::%d\n", (int)ix);
 			string x = "";
@@ -572,7 +570,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 				tracknumb = (int)td.Tracknumber;
 				lengthString = make_time_display_from_seconds(td.Length);
 				uri = td.Uri;
-
+				
 				Idle.add( () => {
 					
 					TreeIter iter, new_iter;
@@ -581,13 +579,13 @@ public class Xnoise.TrackList : TreeView, IParams {
 						//dropped below all entries, first uri OR
 						//dropped on empty list, first uri
 						tracklistmodel.append(out new_iter);
-						drop_pos = Gtk.TreeViewDropPosition.AFTER;
+						drop_pos_1 = Gtk.TreeViewDropPosition.AFTER;
 					}
 					else { //all other uris
 						this.tracklistmodel.get_iter(out iter, path);
 						if(is_first) {
-							if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
-							   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
+							if((drop_pos_1 == Gtk.TreeViewDropPosition.BEFORE)||
+							   (drop_pos_1 == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
 							   //Determine drop position for first, insert all others after first
 								this.tracklistmodel.insert_before(out new_iter, iter);
 							}
@@ -619,7 +617,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			}
 		}
 	}
-	
+
 	private void handle_dropped_files_for_folders(File dir, ref TreePath? path, ref bool is_first, ref DbBrowser dbBr) {
 		//Recursive function to import music DIRECTORIES in drag'n'drop
 		//as soon as a file is found it is passed to handle_dropped_file function

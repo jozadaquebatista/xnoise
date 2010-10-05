@@ -1274,16 +1274,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.searchEntryMB.key_release_event.connect( (s, e) => {
 				int KEY_ENTER = 0xFF0D;
 				var entry = (Entry)s;
-				if((int)e.keyval == KEY_ENTER) {
-					this.mediaBr.on_searchtext_changed(entry.text);
-					if(entry.text != "") {
-						Gdk.Color color;
-						Gdk.Color.parse("DarkSalmon", out color);
-						entry.modify_base(StateType.NORMAL, color);
-					}
-					else {
-						entry.modify_base(StateType.NORMAL, null);
-					}
+				this.mediaBr.on_searchtext_changed(entry.text);
+				if(entry.text != "") {
+					Gdk.Color color;
+					Gdk.Color.parse("DarkSalmon", out color);
+					entry.modify_base(StateType.NORMAL, color);
+				}
+				else {
+					entry.modify_base(StateType.NORMAL, null);
 				}
 				return false;
 			});
