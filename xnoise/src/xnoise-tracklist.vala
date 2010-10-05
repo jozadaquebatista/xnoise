@@ -33,9 +33,20 @@ using Gdk;
 
 public class Xnoise.TrackList : TreeView, IParams {
 	private Main xn;
-	private const TargetEntry[] target_list = {
+//	private const TargetEntry[] target_list = {
+//		{"text/uri-list", 0, 0}
+//	};
+	private const TargetEntry[] src_target_entries = {
 		{"text/uri-list", 0, 0}
+//		{"text/uri-list", TargetFlags.SAME_APP, 0}
 	};
+
+	// targets used with this as a destination
+	private const TargetEntry[] dest_target_entries = {
+		{"application/db-id", TargetFlags.SAME_APP, 0},
+		{"text/uri-list", TargetFlags.SAME_WIDGET, 0}
+	};
+
 	private const string USE_LEN_COL   = "use_length_column";
 	private const string USE_TR_NO_COL = "use_tracknumber_column";
 	private const string USE_ALBUM_COL   = "use_album_column";
@@ -102,7 +113,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		Gtk.drag_source_set(
 			this,
 			Gdk.ModifierType.BUTTON1_MASK,
-			this.target_list,
+			this.src_target_entries,
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.MOVE
 			);
@@ -110,7 +121,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		Gtk.drag_dest_set(
 			this,
 			Gtk.DestDefaults.ALL,
-			this.target_list,
+			this.dest_target_entries,
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.DEFAULT
 			);
@@ -356,7 +367,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		Gtk.drag_dest_set(
 			this,
 			Gtk.DestDefaults.ALL,
-			this.target_list,
+			this.dest_target_entries,
 			Gdk.DragAction.COPY|
 			Gdk.DragAction.MOVE
 			);
@@ -413,56 +424,64 @@ public class Xnoise.TrackList : TreeView, IParams {
 		//set uri list for dragging out of xnoise. in parallel work around with rowreferences
 		//if reorder = false then data is coming from outside (music browser or nautilus)
 		// -> use uri_list
+		
 		Gtk.TreePath path;
 		TreeRowReference drop_rowref;
 		string uri = null;
 		File file;
 		FileType filetype;
-		string[] uris = selection.get_uris();
+		string[] uris;
 		this.get_dest_row_at_pos(x, y, out path, out drop_pos);
-		DbBrowser dbBr = null;
-		try {
-			dbBr = new DbBrowser();
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return;
-		}
+		
 		if(!this.reorder_dragging) { // DRAGGING NOT WITHIN TRACKLIST
-			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
-			bool is_first = true;
-			for(int i=0; i<uris.length; i++) {
-				bool is_stream = false;
-				uri = uris[i];
-				file = File.new_for_uri(uri);
-				if(file.get_uri_scheme() in global.remote_schemes) is_stream = true;
-				if(!is_stream) {
-					try {
-						FileInfo info = file.query_info(attr,
-						                                FileQueryInfoFlags.NONE,
-						                                null);
-						filetype = info.get_file_type();
-					}
-					catch(GLib.Error e){
-						print("%s\n", e.message);
-						return;
-					}
+			unowned int32[] ids = (int32[])selection.data;
+			ids.length = (int)(selection.length / sizeof(int32));
+			
+			TreeRowReference row_ref = new TreeRowReference(this.model, path);
+			
+			var job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.insert_dropped_ids);
+			job.set_arg("row_ref", row_ref);
+			job.id_array = ids;
+			worker.push_job(job);
 
-					if(filetype != GLib.FileType.DIRECTORY) {
-						handle_dropped_file(ref uri, ref path, ref is_first, ref dbBr);	//FILES
-					}
-					else {
-						handle_dropped_files_for_folders(file, ref path, ref is_first, ref dbBr); //DIRECTORIES
-					}
-				}
-				else {
-					handle_dropped_stream(ref uri, ref path, ref is_first, ref dbBr);
-				}
-			}
-			is_first = false;
+//			for(int i = ids.length -1; i >= 0; i--) {
+//				print("%ld\n", ids[i]);
+//			}
+//			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+//			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+//			bool is_first = true;
+//			for(int i=0; i<uris.length; i++) {
+//				bool is_stream = false;
+//				uri = uris[i];
+//				file = File.new_for_uri(uri);
+//				if(file.get_uri_scheme() in global.remote_schemes) is_stream = true;
+//				if(!is_stream) {
+//					try {
+//						FileInfo info = file.query_info(attr,
+//						                                FileQueryInfoFlags.NONE,
+//						                                null);
+//						filetype = info.get_file_type();
+//					}
+//					catch(GLib.Error e){
+//						print("%s\n", e.message);
+//						return;
+//					}
+
+//					if(filetype != GLib.FileType.DIRECTORY) {
+//						handle_dropped_file(ref uri, ref path, ref is_first, ref dbBr);	//FILES
+//					}
+//					else {
+//						handle_dropped_files_for_folders(file, ref path, ref is_first, ref dbBr); //DIRECTORIES
+//					}
+//				}
+//				else {
+//					handle_dropped_stream(ref uri, ref path, ref is_first, ref dbBr);
+//				}
+//			}
+//			is_first = false;
 		}
 		else { // DRAGGING WITHIN TRACKLIST
+			uris = selection.get_uris();
 			drop_rowref = null;
 			if(path!=null) {
 				//TODO:check if drop position is selected
@@ -527,6 +546,80 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 	}
 
+	private void insert_dropped_ids(Worker.Job job) {
+		int32[] ids = job.id_array;
+		TrackData td;
+		DbBrowser dbBr = null;
+		try {
+			dbBr = new DbBrowser();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
+		bool is_first = true;
+		TreeRowReference row_ref = (TreeRowReference)job.get_arg("row_ref");
+		TreePath path = row_ref.get_path();
+		foreach(int32 ix in ids) {
+			//print("id::%d\n", (int)ix);
+			string x = "";
+			int tracknumb;
+			string lengthString = "", artist, album, title, uri;
+			if(dbBr.get_trackdata_for_id((int)ix, out td)) {
+				artist    = td.Artist;
+				album     = td.Album;
+				title     = td.Title;
+				tracknumb = (int)td.Tracknumber;
+				lengthString = make_time_display_from_seconds(td.Length);
+				uri = td.Uri;
+
+				Idle.add( () => {
+					
+					TreeIter iter, new_iter;
+					TreeIter first_iter = TreeIter();
+					if((path == null)||(!this.tracklistmodel.get_iter_first(out first_iter))) { 
+						//dropped below all entries, first uri OR
+						//dropped on empty list, first uri
+						tracklistmodel.append(out new_iter);
+						drop_pos = Gtk.TreeViewDropPosition.AFTER;
+					}
+					else { //all other uris
+						this.tracklistmodel.get_iter(out iter, path);
+						if(is_first) {
+							if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
+							   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
+							   //Determine drop position for first, insert all others after first
+								this.tracklistmodel.insert_before(out new_iter, iter);
+							}
+							else {
+								this.tracklistmodel.insert_after(out new_iter, iter);
+							}
+							is_first = false;
+						}
+						else {
+							this.tracklistmodel.insert_after(out new_iter, iter);
+						}
+					}
+					string tracknumberString = null;
+					if(tracknumb!=0) {
+						tracknumberString = "%u".printf(tracknumb);
+					}
+					tracklistmodel.set(new_iter,
+							           TrackListModel.Column.TRACKNUMBER, tracknumberString,
+							           TrackListModel.Column.TITLE, title,
+							           TrackListModel.Column.ALBUM, album,
+							           TrackListModel.Column.ARTIST, artist,
+							           TrackListModel.Column.LENGTH, lengthString,
+							           TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
+							           TrackListModel.Column.URI, uri,
+							           -1);
+					path = tracklistmodel.get_path(new_iter);
+					return false;
+				});
+			}
+		}
+	}
+	
 	private void handle_dropped_files_for_folders(File dir, ref TreePath? path, ref bool is_first, ref DbBrowser dbBr) {
 		//Recursive function to import music DIRECTORIES in drag'n'drop
 		//as soon as a file is found it is passed to handle_dropped_file function

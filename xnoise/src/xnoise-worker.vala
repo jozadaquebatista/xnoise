@@ -105,7 +105,10 @@ public class Xnoise.Worker : Object {
 		public Value? value_arg1 = null;
 		public Value? value_arg2 = null;
 		public void* p_arg = null;
+		
 		public MediaData[] media_dat; // maybe use TrackData class insttead of MediaData?
+		public int32[] id_array;
+//		public TrackData[] track_dat; 
 		// It is useful to have some Job persistent counters available
 		public int counter[4];
 		// 4 more big couters

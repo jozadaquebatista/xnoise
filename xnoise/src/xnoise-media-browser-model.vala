@@ -91,6 +91,103 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 		
 
+	public void filter() {
+		this.foreach(filterfunc);
+	}
+
+	public bool filterfunc(Gtk.TreeModel model, Gtk.TreePath path, Gtk.TreeIter iter) {
+//		TreePath p = this.get_path(iter);
+		switch(path.get_depth()) {
+			case 1: //ARTIST
+				string artist = null;
+				this.get(iter, MediaBrowserModel.Column.VIS_TEXT, ref artist);
+				if(artist != null && artist.down().str(searchtext) != null) {
+					this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
+					return false;
+				}
+				TreeIter iterChild;
+				for(int i = 0; i < this.iter_n_children(iter); i++) {
+					this.iter_nth_child(out iterChild, iter, i);
+					string album = null;
+					this.get(iterChild, MediaBrowserModel.Column.VIS_TEXT, ref album);
+					if(album != null && album.down().str(searchtext) != null) {
+						this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
+						return false;
+					}
+					TreeIter iterChildChild;
+					for(int j = 0; j < this.iter_n_children(iterChild); j++) {
+						this.iter_nth_child(out iterChildChild, iterChild, j);
+						string title = null;
+						this.get(iterChildChild, MediaBrowserModel.Column.VIS_TEXT, ref title);
+						if(title != null && title.down().str(searchtext) != null) {
+							this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
+							return false;
+						}
+					}
+				}
+				this.set(iter, MediaBrowserModel.Column.VISIBLE, false);
+				return false;
+			case 2: //ALBUM
+				string album = null;
+				this.get(iter, MediaBrowserModel.Column.VIS_TEXT, ref album);
+				if(album != null && album.down().str(searchtext) != null) {
+					this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
+					return false;
+				}
+				TreeIter iterChild;
+				for(int i = 0; i < this.iter_n_children(iter); i++) {
+					this.iter_nth_child(out iterChild, iter, i);
+					string title = null;
+					this.get(iterChild, MediaBrowserModel.Column.VIS_TEXT, ref title);
+					if(title != null && title.down().str(searchtext) != null) {
+						this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
+						return false;
+					}
+				}
+				TreeIter iter_parent;
+				string artist = null;
+				if(this.iter_parent(out iter_parent, iter)) {
+					this.get(iter_parent, MediaBrowserModel.Column.VIS_TEXT, ref artist);
+					if(artist != null && artist.down().str(searchtext) != null) {
+						this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
+						return false;
+					}
+				}
+				this.set(iter, MediaBrowserModel.Column.VISIBLE, false);
+				return false;
+			case 3: //TITLE
+				string title = null;
+				this.get(iter, MediaBrowserModel.Column.VIS_TEXT, ref title);
+				if(title != null && title.down().str(searchtext) != null) {
+					this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
+					return false;
+				}
+				TreeIter iter_parent;
+				string album = null;
+				if(this.iter_parent(out iter_parent, iter)) {
+					this.get(iter_parent, MediaBrowserModel.Column.VIS_TEXT, ref album);
+					if(album != null && album.down().str(searchtext) != null) {
+						this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
+						return false;
+					}
+					TreeIter iter_parent_parent;
+					string artist = null;
+					if(this.iter_parent(out iter_parent_parent, iter_parent)) {
+						this.get(iter_parent_parent, MediaBrowserModel.Column.VIS_TEXT, ref artist);
+						if(artist != null && artist.down().str(searchtext) != null) {
+							this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
+							return false;
+						}
+					}
+				}
+				this.set(iter, MediaBrowserModel.Column.VISIBLE, false);
+				return false;
+			default:
+				this.set(iter, MediaBrowserModel.Column.VISIBLE, false);
+				return false;
+		}
+	}
+
 	private void set_pixbufs() {
 		try {
 			
@@ -165,7 +262,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.ICON, radios_pixb,
 			         Column.VIS_TEXT, "Streams",
 			         Column.COLL_TYPE, CollectionType.LISTED,
-			         Column.DRAW_SEPTR, 0
+			         Column.DRAW_SEPTR, 0,
+			         Column.VISIBLE, true
 			         );
 			foreach(unowned MediaData tmi in job.media_dat) {
 				this.prepend(out iter_singleradios, iter_radios);
@@ -175,7 +273,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.DB_ID,       tmi.id,
 				         Column.MEDIATYPE ,  (int)MediaType.STREAM,
 				         Column.COLL_TYPE,   CollectionType.LISTED,
-				         Column.DRAW_SEPTR,  0
+				         Column.DRAW_SEPTR,  0,
+				         Column.VISIBLE, true
 				         );
 			}
 			return false;
@@ -203,7 +302,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				     Column.ICON, videos_pixb,
 				     Column.VIS_TEXT, "Videos",
 				     Column.COLL_TYPE, CollectionType.LISTED,
-				     Column.DRAW_SEPTR, 0
+				     Column.DRAW_SEPTR, 0,
+			         Column.VISIBLE, true
 				     );
 			foreach(unowned MediaData tmi in job.media_dat) {
 				this.prepend(out iter_singlevideo, iter_videos);
@@ -213,7 +313,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					     Column.DB_ID, tmi.id,
 					     Column.MEDIATYPE , (int) MediaType.VIDEO,
 					     Column.COLL_TYPE, CollectionType.LISTED,
-					     Column.DRAW_SEPTR, 0
+					     Column.DRAW_SEPTR, 0,
+					     Column.VISIBLE, true
 					     );
 			}
 			return false;
@@ -313,7 +414,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.ICON, artist_pixb,
 				         Column.VIS_TEXT, artist,
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-				         Column.DRAW_SEPTR, 0);
+				         Column.DRAW_SEPTR, 0,
+				         Column.VISIBLE, true
+				         );
 				
 				Gtk.TreePath p = this.get_path(iter_artist);
 				TreeRowReference treerowref = new TreeRowReference(this, p);
@@ -393,7 +496,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					         Column.ICON, album_pixb,
 					         Column.VIS_TEXT, album,
 					         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-					         Column.DRAW_SEPTR, 0);
+					         Column.DRAW_SEPTR, 0,
+					         Column.VISIBLE, true
+					         );
 					Gtk.TreePath p1 = this.get_path(iter_album);
 					TreeRowReference treerowref = new TreeRowReference(this, p1);
 					var job_title = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.handle_titles);
@@ -443,7 +548,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						     Column.DB_ID, tmi.id,
 						     Column.MEDIATYPE , tmi.mediatype,
 						     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-						     Column.DRAW_SEPTR, 0);
+						     Column.DRAW_SEPTR, 0,
+					         Column.VISIBLE, true
+						     );
 				}
 				else {
 					this.set(iter_title,
@@ -452,7 +559,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						     Column.DB_ID, tmi.id,
 						     Column.MEDIATYPE, tmi.mediatype,
 						     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-						     Column.DRAW_SEPTR, 0);
+						     Column.DRAW_SEPTR, 0,
+						     Column.VISIBLE, true
+						     );
 				}
 			}
 			return false;
@@ -554,6 +663,113 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			return get_trackdata_hierarchical(treepath);
 		}
 		return tdata;
+	}
+
+	public int32[] build_id_list_for_iter(ref TreeIter iter) {
+		TreeIter iterChild, iterChildChild;
+		int32[] urilist = {};
+		MediaType mtype = MediaType.UNKNOWN;
+		int dbid = -1;
+		string uri;
+		TreePath treepath;
+		CollectionType br_ct = CollectionType.UNKNOWN;
+		treepath = this.get_path(iter);
+		switch(treepath.get_depth()) {
+			case 1:
+//				this.get_iter(out iter, treepath);
+
+				this.get(iter, Column.COLL_TYPE, ref br_ct);
+				if(br_ct == CollectionType.LISTED) {
+					dbid = -1;
+					for(int i = 0; i < this.iter_n_children(iter); i++) {
+						dbid = -1;
+						this.iter_nth_child(out iterChild, iter, i);
+						this.get(iterChild,
+						         Column.DB_ID, ref dbid//,
+//						         Column.MEDIATYPE, ref mtype
+						         );
+						urilist += dbid;
+//						if(dbid==-1) break;
+//						switch(mtype) {
+//							case MediaType.VIDEO: {
+//								if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+//								break;
+//							}
+//							case MediaType.STREAM : {
+//								if(dbb.get_stream_for_id(dbid, out uri)) urilist += uri;
+//								break;
+//							}
+//							default:
+//								break;
+//						}
+					}
+				}
+				else if(br_ct == CollectionType.HIERARCHICAL) {
+					for(int i = 0; i < this.iter_n_children(iter); i++) {
+						this.iter_nth_child(out iterChild, iter, i);
+						for(int j = 0; j<this.iter_n_children(iterChild); j++) {
+							dbid = -1;
+							this.iter_nth_child(out iterChildChild, iterChild, j);
+							this.get(iterChildChild, Column.DB_ID, ref dbid);
+							if(dbid != -1)
+								urilist += dbid;
+//							if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+						}
+					}
+				}
+				break;
+			case 2:
+//				this.get_iter(out iter, treepath);
+				this.get(iter, Column.COLL_TYPE, ref br_ct);
+				if(br_ct == CollectionType.LISTED) {
+					dbid = -1;
+					mtype = MediaType.UNKNOWN;
+					this.get(iter,
+					         Column.DB_ID, ref dbid
+//					         Column.MEDIATYPE, ref mtype
+					         );
+					if(dbid==-1) break;
+					
+					urilist += dbid;
+					
+//						switch(mtype) {
+//						case MediaType.VIDEO: {
+//							//print("is VIDEO\n");
+//							if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+//							break;
+//						}
+//						case MediaType.STREAM : {
+//							//print("is STREAM\n");
+//							if(dbb.get_stream_for_id(dbid, out uri)) urilist += uri;
+//							break;
+//						}
+//						default:
+//							break;
+//					}
+				}
+				else if(br_ct == CollectionType.HIERARCHICAL) {
+
+					for(int i = 0; i < this.iter_n_children(iter); i++) {
+						dbid = -1;
+						this.iter_nth_child(out iterChild, iter, i);
+						this.get(iterChild, Column.DB_ID, ref dbid);
+							if(dbid != -1)
+								urilist += dbid;
+//						if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+					}
+				}
+				break;
+			case 3: //TITLE
+				dbid = -1;
+//				this.get_iter(out iter, treepath);
+				this.get(iter, Column.DB_ID, ref dbid);
+				if(dbid==-1) break;
+//				if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
+				if(dbid != -1)
+					urilist += dbid;
+				break;
+		}
+		return urilist;
 	}
 
 	public string[] build_uri_list_for_treepath(Gtk.TreePath treepath, ref DbBrowser dbb) {

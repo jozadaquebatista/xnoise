@@ -96,8 +96,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 		
 	public signal void sign_activated();
-	private const TargetEntry[] target_list = {
-		{"text/uri-list", 0, 0}
+	// targets used with this as a source
+	private const TargetEntry[] src_target_entries = {
+		{"application/db-id", TargetFlags.SAME_APP, 0}
+		//{"text/uri-list", 0, 0}
+	};
+
+	// targets used with this as a destination
+	private const TargetEntry[] dest_target_entries = {
+		{"text/uri-list", TargetFlags.OTHER_APP, 0}
 	};// This is not a very long list but uris are so universal
 
 	public MediaBrowser() {
@@ -112,13 +119,13 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		Gtk.drag_source_set(
 			this,
 			Gdk.ModifierType.BUTTON1_MASK,
-			this.target_list,
+			this.src_target_entries,
 			Gdk.DragAction.COPY);
 
 		Gtk.drag_dest_set(
 			this,
 			Gtk.DestDefaults.ALL,
-			this.target_list,
+			this.dest_target_entries,
 			Gdk.DragAction.COPY);
 		
 		this.dragging = false;
@@ -216,7 +223,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		if(txt != null) {
 			if(last_searchtext != txt) {
 				mediabrowsermodel.searchtext = txt.down();
-				filtermodel.searchtext = txt.down();
 				last_searchtext = txt;
 			}
 			else {
@@ -226,17 +232,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		}
 		else {
 			mediabrowsermodel.searchtext = "";
-			filtermodel.searchtext = "";
 			last_searchtext = "";
 		}
-		filtermodel.refilter();
+		mediabrowsermodel.filter();
 //		change_model_data();
 		if((txt != "") &&
 		   (txt != null)) {
 			this.expand_all();
 		}
 	}
-
 	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath treepath = null;
 		Gtk.TreeViewColumn column;
@@ -320,28 +324,51 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context, Gtk.SelectionData selection, uint info, uint etime) {
-		string[] uris = {};
+	
 		List<unowned TreePath> treepaths;
 		unowned Gtk.TreeSelection sel;
 		sel = this.get_selection();
 		treepaths = sel.get_selected_rows(null);
-		DbBrowser dbb = null;
-		try {
-			dbb = new DbBrowser();
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return;
-		}
-
-		foreach(unowned TreePath treepath in treepaths) { //maybe use dummy and fetch uris later
-			string[] l = mediabrowsermodel.build_uri_list_for_treepath(filtermodel.convert_path_to_child_path(treepath), ref dbb); //TODO only visible lines
-			foreach(unowned string u in l) {
-				uris += u;
+		TreeIter iter;
+		int32[] ids = {};
+		foreach(unowned TreePath treepath in treepaths) { 
+			TreePath tp = filtermodel.convert_path_to_child_path(treepath);
+			mediabrowsermodel.get_iter(out iter, tp);
+//			string[] l = mediabrowsermodel.build_uri_list_for_treepath(filtermodel.convert_path_to_child_path(treepath), ref dbb); //TODO only visible lines
+			int32[] l = mediabrowsermodel.build_id_list_for_iter(ref iter); //TODO only visible lines
+			foreach(int32 u in l) {
+				ids += u;
 			}
 		}
-		uris += null;
-		selection.set_uris(uris);
+		Gdk.Atom dnd_atom = Gdk.Atom.intern(src_target_entries[0].target, true);
+		unowned uchar[] data = (uchar[])ids;
+		data.length = (int)(ids.length * sizeof(uint));
+
+		selection.set(dnd_atom, 8, data);
+
+		
+//		string[] uris = {};
+//		List<unowned TreePath> treepaths;
+//		unowned Gtk.TreeSelection sel;
+//		sel = this.get_selection();
+//		treepaths = sel.get_selected_rows(null);
+//		DbBrowser dbb = null;
+//		try {
+//			dbb = new DbBrowser();
+//		}
+//		catch(Error e) {
+//			print("%s\n", e.message);
+//			return;
+//		}
+
+//		foreach(unowned TreePath treepath in treepaths) { //maybe use dummy and fetch uris later
+//			string[] l = mediabrowsermodel.build_uri_list_for_treepath(filtermodel.convert_path_to_child_path(treepath), ref dbb); //TODO only visible lines
+//			foreach(unowned string u in l) {
+//				uris += u;
+//			}
+//		}
+//		uris += null;
+//		selection.set_uris(uris);
 	}
 
 	private void on_drag_end(Gtk.Widget sender, Gdk.DragContext context) {
@@ -349,7 +376,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.unset_rows_drag_dest();
 		Gtk.drag_dest_set(this,
 		                  Gtk.DestDefaults.ALL,
-		                  this.target_list,
+		                  this.dest_target_entries,
 		                  Gdk.DragAction.COPY|
 		                  Gdk.DragAction.MOVE
 		                  );
@@ -381,16 +408,16 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	   
 	public bool update_view() {
 		double scroll_position = xn.main_window.mediaBrScrollWin.vadjustment.value;
-		this.row_collapsed.disconnect(on_row_collapsed);
-		this.row_expanded.disconnect(on_row_expanded);
+//		this.row_collapsed.disconnect(on_row_collapsed);
+//		this.row_expanded.disconnect(on_row_expanded);
 		this.set_model(null);
 		this.set_model(filtermodel);//mediabrowsermodel);
-		foreach (TreePath tp in this.expansion_list)
-			this.expand_row(tp, false);
+//		foreach (TreePath tp in this.expansion_list)
+//			this.expand_row(tp, false);
 		xn.main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);
 		xn.main_window.mediaBrScrollWin.vadjustment.value_changed();
-		this.row_collapsed.connect(on_row_collapsed);
-		this.row_expanded.connect(on_row_expanded);
+//		this.row_collapsed.connect(on_row_collapsed);
+//		this.row_expanded.connect(on_row_expanded);
 		return false;
 	}
 		
@@ -415,8 +442,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		//we keep track of which rows are expanded, so we can expand them again
 		//when the view is updated
 		expansion_list = new List<TreePath>();
-		this.row_collapsed.connect(on_row_collapsed);
-		this.row_expanded.connect(on_row_expanded);
+//		this.row_collapsed.connect(on_row_collapsed);
+//		this.row_expanded.connect(on_row_expanded);
 		
 		this.set_size_request (300,500);
 		renderer = new CellRendererText();
