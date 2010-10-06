@@ -674,6 +674,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		TreePath treepath;
 		CollectionType br_ct = CollectionType.UNKNOWN;
 		treepath = this.get_path(iter);
+		bool visible = false;
 		switch(treepath.get_depth()) {
 			case 1:
 			//this.get_iter(out iter, treepath);
@@ -684,10 +685,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						dbid = -1;
 						this.iter_nth_child(out iterChild, iter, i);
 						this.get(iterChild,
-						         Column.DB_ID, ref dbid//,
+						         Column.DB_ID, ref dbid,
+						         Column.VISIBLE, ref visible
 //						         Column.MEDIATYPE, ref mtype
 						         );
-						urilist += dbid;
+						if(visible)
+							urilist += dbid;
 //						if(dbid==-1) break;
 //						switch(mtype) {
 //							case MediaType.VIDEO: {
@@ -706,13 +709,20 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				else if(br_ct == CollectionType.HIERARCHICAL) {
 					for(int i = 0; i < this.iter_n_children(iter); i++) {
 						this.iter_nth_child(out iterChild, iter, i);
+						this.get(iterChild,
+						         Column.VISIBLE, ref visible
+						         );
+						if(!visible)
+							continue;
 						for(int j = 0; j<this.iter_n_children(iterChild); j++) {
 							dbid = -1;
 							this.iter_nth_child(out iterChildChild, iterChild, j);
-							this.get(iterChildChild, Column.DB_ID, ref dbid);
-							if(dbid != -1)
+							this.get(iterChildChild, 
+							         Column.DB_ID, ref dbid,
+							         Column.VISIBLE, ref visible
+							         );
+							if(dbid != -1 && visible)
 								urilist += dbid;
-//							if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 						}
 					}
 				}
@@ -724,12 +734,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					dbid = -1;
 					mtype = MediaType.UNKNOWN;
 					this.get(iter,
-					         Column.DB_ID, ref dbid
+					         Column.DB_ID, ref dbid,
+					         Column.VISIBLE, ref visible
 //					         Column.MEDIATYPE, ref mtype
 					         );
 					if(dbid==-1) break;
 					
-					urilist += dbid;
+					if(visible)
+						urilist += dbid;
 					
 //						switch(mtype) {
 //						case MediaType.VIDEO: {
@@ -751,19 +763,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					for(int i = 0; i < this.iter_n_children(iter); i++) {
 						dbid = -1;
 						this.iter_nth_child(out iterChild, iter, i);
-						this.get(iterChild, Column.DB_ID, ref dbid);
-							if(dbid != -1)
+						this.get(iterChild, Column.DB_ID, ref dbid, Column.VISIBLE, ref visible);
+							if(dbid != -1 && visible)
 								urilist += dbid;
-//						if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 					}
 				}
 				break;
 			case 3: //TITLE
 				dbid = -1;
-//				this.get_iter(out iter, treepath);
 				this.get(iter, Column.DB_ID, ref dbid);
 				if(dbid==-1) break;
-//				if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 				if(dbid != -1)
 					urilist += dbid;
 				break;
