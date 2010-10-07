@@ -40,6 +40,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string SHOWMEDIABROWSER = _("Show Media");
 	private const string HIDEMEDIABROWSER = _("Hide Media");
 	private unowned Main xn;
+	private uint search_idlesource = 0;
 	public ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
 	private Label song_title_label;
@@ -374,7 +375,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		mfd = new AddMediaDialog();
 		mfd.sign_finish.connect( () => {
 			mfd = null;
-			Idle.add(mediaBr.change_model_data);
+//			Idle.add(mediaBr.change_model_data);
 		});
 	}
 	
@@ -521,7 +522,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 						return false;
 					searchEntryMB.text = "";
 					searchEntryMB.modify_base(StateType.NORMAL, null);
-					this.mediaBr.on_searchtext_changed("");
+					this.mediaBr.on_searchtext_changed();
 				}
 				return true;
 			case 1_KEY: {
@@ -1273,9 +1274,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
 			this.searchEntryMB.set_sensitive(true);
 			this.searchEntryMB.key_release_event.connect( (s, e) => {
-				//int KEY_ENTER = 0xFF0D;
 				var entry = (Entry)s;
-				this.mediaBr.on_searchtext_changed(entry.text);
+				if(search_idlesource != 0)
+					Source.remove(search_idlesource);
+				search_idlesource = Idle.add( () => {
+					this.mediaBr.on_searchtext_changed();
+					this.search_idlesource = 0;
+					return false;
+				});
 				if(entry.text != "") {
 					Gdk.Color color;
 					Gdk.Color.parse("DarkSalmon", out color);
@@ -1291,12 +1297,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				// s:Entry, p0:Position, p1:Gdk.Event
 				var entry = (Gtk.Entry)s;
 				if(p0 == Gtk.EntryIconPosition.PRIMARY) {
-					this.mediaBr.on_searchtext_changed(entry.text);
+					this.mediaBr.on_searchtext_changed();
 				}
 				if(p0 == Gtk.EntryIconPosition.SECONDARY) {
 					s.text = "";
 					entry.modify_base(StateType.NORMAL, null);
-					this.mediaBr.on_searchtext_changed(entry.text);
+					this.mediaBr.on_searchtext_changed();
 				}
 			});
 			

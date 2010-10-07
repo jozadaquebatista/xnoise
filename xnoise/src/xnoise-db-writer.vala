@@ -510,7 +510,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(insert_title_statement.step()!=Sqlite.DONE)
 			this.db_error();
 	}
-        
 
 	/*
 	* Delete a row from the uri table and delete every item that references it and

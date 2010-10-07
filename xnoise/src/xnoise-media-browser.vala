@@ -41,6 +41,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	
 	public MediaBrowserModel mediabrowsermodel;
 	public MediaBrowserFilterModel filtermodel;
+	public TreeModelSort sortmodel;
 	//public bool drag_from_mediabrowser = false;
 	
 	public bool use_linebreaks {
@@ -114,6 +115,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		par.iparams_register(this);
 		mediabrowsermodel = new MediaBrowserModel();
 		filtermodel = new MediaBrowserFilterModel(mediabrowsermodel);
+		sortmodel = new TreeModelSort.with_model(filtermodel);
+		sortmodel.set_sort_column_id(MediaBrowserModel.Column.VIS_TEXT, SortType.ASCENDING);
 		setup_view();
 		Idle.add(this.populate_model);
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);
@@ -219,7 +222,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return false;
 	}
 	
-	public void on_searchtext_changed(string? txt) {
+	public void on_searchtext_changed() {
+		string txt = xn.main_window.searchEntryMB.text;
 		if(txt != null) {
 			mediabrowsermodel.searchtext = txt.down();
 		}
@@ -227,10 +231,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			mediabrowsermodel.searchtext = "";
 		}
 		mediabrowsermodel.filter();
-		if(txt != "") 
-			this.expand_all();
-		else
-			this.collapse_all();
+//		if(txt != "") 
+//			this.expand_all();
+//		else
+//			this.collapse_all();
 	}
 
 	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
@@ -368,7 +372,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		mediabrowsermodel.clear();
 		mediabrowsermodel.populate_model();
 		update_view();
-		xn.main_window.searchEntryMB.set_sensitive(true);
+//		xn.main_window.searchEntryMB.set_sensitive(true);
 		this.set_sensitive(true);
 		return false;
 	}

@@ -231,8 +231,11 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 //		ds1.i++;
 //		print("MT ds1.i %d\n", ds1.i);
 ////		worker.push_job(d);
+		global.media_import_in_progress = true;
+		Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
+		// global.media_import_in_progress has to be reset in the last job !
 		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, mix.store_folders_job);
+		job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, media_importer.store_folders_job);
 		job.set_arg("mfolders", list_of_folders);
 		job.set_arg("msg_id", msg_id);
 		worker.push_job(job);
@@ -249,6 +252,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 	private void on_cancel_button_clicked() {
 		this.dialog.destroy();
+		this.sign_finish();
 	}
 
 	private void on_add_file_button_clicked() {

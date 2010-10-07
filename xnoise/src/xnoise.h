@@ -678,7 +678,6 @@ struct _XnoiseFullscreenToolbarLeaveVideoFSButtonClass {
 struct _XnoiseGlobalAccess {
 	GObject parent_instance;
 	XnoiseGlobalAccessPrivate * priv;
-	gboolean _media_import_in_progress;
 };
 
 struct _XnoiseGlobalAccessClass {
@@ -817,6 +816,7 @@ struct _XnoiseMediaBrowser {
 	XnoiseMediaBrowserPrivate * priv;
 	XnoiseMediaBrowserModel* mediabrowsermodel;
 	XnoiseMediaBrowserFilterModel* filtermodel;
+	GtkTreeModelSort* sortmodel;
 };
 
 struct _XnoiseMediaBrowserClass {
@@ -1428,7 +1428,7 @@ GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_filter_model_get_type (void) G_GNUC_CONST;
 XnoiseMediaBrowser* xnoise_media_browser_new (void);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type);
-void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self, const char* txt);
+void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_update_view (XnoiseMediaBrowser* self);
 void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
@@ -1442,7 +1442,6 @@ GType xnoise_media_browser_model_column_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_model_collection_type_get_type (void) G_GNUC_CONST;
 gint xnoise_media_browser_model_get_max_icon_width (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_filter (XnoiseMediaBrowserModel* self);
-gboolean xnoise_media_browser_model_filterfunc (XnoiseMediaBrowserModel* self, GtkTreeModel* model, GtkTreePath* path, GtkTreeIter* iter);
 gboolean xnoise_media_browser_model_populate_model (XnoiseMediaBrowserModel* self);
 XnoiseTrackData** xnoise_media_browser_model_get_trackdata_listed (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, int* result_length1);
 XnoiseTrackData** xnoise_media_browser_model_get_trackdata_hierarchical (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, int* result_length1);
@@ -1458,9 +1457,9 @@ void xnoise_media_browser_filter_model_set_searchtext (XnoiseMediaBrowserFilterM
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
 void xnoise_media_importer_store_files (XnoiseMediaImporter* self, char** list_of_files, int list_of_files_length1, XnoiseDbWriter** dbw);
 void xnoise_media_importer_add_single_file (XnoiseMediaImporter* self, const char* uri, XnoiseDbWriter** dbw);
-gint xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir, XnoiseDbWriter** dbw);
+void xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir, XnoiseDbWriter* dbw, XnoiseWorkerJob* job, GAsyncReadyCallback _callback_, gpointer _user_data_);
+void xnoise_media_importer_add_local_tags_finish (XnoiseMediaImporter* self, GAsyncResult* _res_);
 void xnoise_media_importer_store_folders_job (XnoiseMediaImporter* self, XnoiseWorkerJob* job);
-void xnoise_media_importer_store_folders (XnoiseMediaImporter* self, char** mfolders, int mfolders_length1, XnoiseDbWriter** dbw);
 void xnoise_media_importer_store_streams (XnoiseMediaImporter* self, char** list_of_streams, int list_of_streams_length1, XnoiseDbWriter** dbw);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
@@ -1472,7 +1471,7 @@ extern XnoiseGlobalAccess* xnoise_global;
 extern XnoiseUserInfo* xnoise_userinfo;
 GType xnoise_worker_get_type (void) G_GNUC_CONST;
 extern XnoiseWorker* xnoise_worker;
-extern XnoiseMediaImporter* xnoise_mix;
+extern XnoiseMediaImporter* xnoise_media_importer;
 extern GMainContext* xnoise_mc;
 void xnoise_initialize (gboolean* is_first_start);
 char* xnoise_escape_for_local_folder_search (const char* value);

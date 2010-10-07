@@ -38,7 +38,7 @@ namespace Xnoise {
 	public static GlobalAccess global = null;
 	public static UserInfo userinfo = null;
 	public static Worker worker = null;
-	public static MediaImporter mix;
+	public static MediaImporter media_importer;
 	public static MainContext mc;
 	/*
 	 * This function is used to create static instances of Params
@@ -46,7 +46,7 @@ namespace Xnoise {
 	 */
 	public static void initialize(out bool is_first_start) {
 		is_first_start = false;
-		mix = new MediaImporter();
+		media_importer = new MediaImporter();
 		
 		// setup worker with reference to default context
 		worker = new Worker(MainContext.default());

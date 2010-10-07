@@ -117,7 +117,6 @@ namespace Xnoise {
 			PLAYING,
 			PAUSED
 		}
-		public bool _media_import_in_progress;
 		public GlobalAccess ();
 		public void check_image_for_current_track ();
 		public void do_restart_of_current_track ();
@@ -280,11 +279,12 @@ namespace Xnoise {
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
 		public Xnoise.MediaBrowserFilterModel filtermodel;
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
+		public Gtk.TreeModelSort sortmodel;
 		public MediaBrowser ();
 		public bool change_model_data ();
 		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
-		public void on_searchtext_changed (string? txt);
+		public void on_searchtext_changed ();
 		public void resize_line_width (int new_width);
 		public bool update_view ();
 		public bool use_linebreaks { get; set; }
@@ -320,7 +320,6 @@ namespace Xnoise {
 		public int32[] build_id_list_for_iter (ref Gtk.TreeIter iter);
 		public string[] build_uri_list_for_treepath (Gtk.TreePath treepath, ref Xnoise.DbBrowser dbb);
 		public void filter ();
-		public bool filterfunc (Gtk.TreeModel model, Gtk.TreePath path, Gtk.TreeIter iter);
 		public int get_max_icon_width ();
 		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_hierarchical (Gtk.TreePath treepath);
@@ -330,13 +329,11 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaImporter : GLib.Object {
 		public MediaImporter ();
-		public int add_local_tags (GLib.File dir, ref Xnoise.DbWriter dbw);
+		public async void add_local_tags (GLib.File dir, Xnoise.DbWriter dbw, Xnoise.Worker.Job job);
 		public void add_single_file (string uri, ref Xnoise.DbWriter dbw);
 		public void store_files (string[] list_of_files, ref Xnoise.DbWriter dbw);
-		public void store_folders (string[] mfolders, ref Xnoise.DbWriter dbw);
 		public void store_folders_job (Xnoise.Worker.Job job);
 		public void store_streams (string[] list_of_streams, ref Xnoise.DbWriter dbw);
-		public signal void sig_media_path_changed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {
@@ -659,7 +656,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static GLib.MainContext mc;
 	[CCode (cheader_filename = "xnoise.h")]
-	public static Xnoise.MediaImporter mix;
+	public static Xnoise.MediaImporter media_importer;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise.h")]

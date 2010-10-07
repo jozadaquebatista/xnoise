@@ -31,7 +31,7 @@
 using Gtk;
 
 public class Xnoise.MediaImporter : GLib.Object {
-	public signal void sig_media_path_changed();
+	//public signal void sig_media_path_changed();
 
 	// add files to the media path and store them in the db
 	public void store_files(string[] list_of_files, ref DbWriter dbw) {
@@ -87,7 +87,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 
 		if(psAudio.match_string(mime)) {
 			string uri_lc = uri.down();
-			if(!(uri_lc.has_suffix(".m3u")||uri.has_suffix(".pls")||uri.has_suffix(".asx")||uri.has_suffix(".xspf")||uri.has_suffix(".wpl"))) {
+			if(!(uri_lc.has_suffix(".m3u")||uri_lc.has_suffix(".pls")||uri_lc.has_suffix(".asx")||uri_lc.has_suffix(".xspf")||uri_lc.has_suffix(".wpl"))) {
 				int idbuffer = dbw.uri_entry_exists(file.get_uri());
 				if(idbuffer== -1) {
 					var tr = new TagReader();
@@ -109,7 +109,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 				dbw.insert_title(td, file.get_uri());
 			}
 		}
-		global.sig_item_imported(uri);
+//		global.sig_item_imported(uri);
 		dbw.commit_transaction();
 	}
 
@@ -117,59 +117,92 @@ public class Xnoise.MediaImporter : GLib.Object {
 	// store a folder in the db, don't add it to the media path
 	// This is a recoursive function.
 	// Do not call begin_transaction or commit_transaction within this function
-	public int add_local_tags(File dir, ref DbWriter dbw) {
-		if(dbw == null) 
-			return -1;
+	public async void add_local_tags(File dir, DbWriter dbw, Worker.Job job) {
+		if(dbw == null)
+			return;
+		
+		job.counter[0]++;
+
 		FileEnumerator enumerator;
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 		try {
-			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
-		} catch (Error error) {
+			enumerator = yield dir.enumerate_children_async(attr, FileQueryInfoFlags.NONE, GLib.Priority.DEFAULT, null);
+		} 
+		catch (Error error) {
 			critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
-			return -1;
+			job.counter[0]--;
+			if(job.counter[0] == 0) {
+				end_import(job);
+				print("------------------------ready\n");
+				dbw.commit_transaction();
+			}
+			return;
 		}
-		FileInfo info;
+		GLib.List<GLib.FileInfo> infos;
 		int success_count = 0;
 		try {
-			while((info = enumerator.next_file(null))!=null) {
-				string filename = info.get_name();
-				string filepath = Path.build_filename(dir.get_path(), filename);
-				File file = File.new_for_path(filepath);
-				FileType filetype = info.get_file_type();
-
-				string content = info.get_content_type();
-				string mime = g_content_type_get_mime_type(content);
-				PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
-				PatternSpec psVideo = new PatternSpec("video*");
-
-				if(filetype == FileType.DIRECTORY) {
-					this.add_local_tags(file, ref dbw);
-				}
-				else if(psAudio.match_string(mime)) {
-					int idbuffer = dbw.uri_entry_exists(file.get_uri());
-					if(idbuffer== -1) {
-						var tr = new TagReader();
-						dbw.insert_title(tr.read_tag(filepath), file.get_uri());
-						success_count++;
-						global.sig_item_imported(file.get_uri());
+			while(true) {
+				infos = yield enumerator.next_files_async(15, GLib.Priority.DEFAULT, null);
+				
+				if(infos == null) {
+					job.counter[0]--;
+					if(job.counter[0] == 0) {
+						print("------------------------ready\n");
+						dbw.commit_transaction();
+						end_import(job);
 					}
+					return;
 				}
-				else if(psVideo.match_string(mime)) {
-					int idbuffer = dbw.uri_entry_exists(file.get_uri());
-					var td = new TrackData();
-					td.Artist = "unknown artist";
-					td.Album = "unknown album";
-					td.Title = prepare_name_from_filename(file.get_basename());
-					td.Genre = "";
-					td.Tracknumber = 0;
-					td.Mediatype = MediaType.VIDEO;
+				
+				foreach(FileInfo info in infos) {
+					int idbuffer;
+					string filename = info.get_name();
+					string filepath = Path.build_filename(dir.get_path(), filename);
+					File file = File.new_for_path(filepath);
+					FileType filetype = info.get_file_type();
 
-					if(idbuffer== -1) {
-						dbw.insert_title(td, file.get_uri());
-						success_count++;
-						global.sig_item_imported(file.get_uri());
+					string content = info.get_content_type();
+					string mime = g_content_type_get_mime_type(content);
+					PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
+					PatternSpec psVideo = new PatternSpec("video*");
+
+					if(filetype == FileType.DIRECTORY) {
+						yield this.add_local_tags(file, dbw, job);
+					}
+					else if(psAudio.match_string(mime)) {
+						string uri_lc = filename.down();
+						if(!(uri_lc.has_suffix(".m3u")||uri_lc.has_suffix(".pls")||uri_lc.has_suffix(".asx")||uri_lc.has_suffix(".xspf")||uri_lc.has_suffix(".wpl"))) {
+							idbuffer = dbw.uri_entry_exists(file.get_uri());
+							if(idbuffer== -1) {
+								var tr = new TagReader();
+
+								dbw.insert_title(tr.read_tag(filepath), file.get_uri());
+								success_count++;
+	//							Idle.add( () => {
+	//								Main.instance.main_window.mediaBr.mediabrowsermodel.
+	//								return false;
+	//							});
+		//						global.sig_item_imported(file.get_uri());
+							}
+						}
+					}
+					else if(psVideo.match_string(mime)) {
+						idbuffer = dbw.uri_entry_exists(file.get_uri());
+						var td = new TrackData();
+						td.Artist = "unknown artist";
+						td.Album = "unknown album";
+						td.Title = prepare_name_from_filename(file.get_basename());
+						td.Genre = "";
+						td.Tracknumber = 0;
+						td.Mediatype = MediaType.VIDEO;
+
+						if(idbuffer== -1) {
+							dbw.insert_title(td, file.get_uri());
+							success_count++;
+	//						global.sig_item_imported(file.get_uri());
+						}
 					}
 				}
 			}
@@ -177,14 +210,38 @@ public class Xnoise.MediaImporter : GLib.Object {
 		catch(Error e) {
 			print("%s\n", e.message);
 		}
-		return success_count;
+
+		job.counter[0]--;
+		if(job.counter[0] == 0) {
+			print("------------------------ready\n");
+			dbw.commit_transaction();
+			end_import(job);
+		}
+		return;
 	}
 
+	private void end_import(Worker.Job job) {
+		Idle.add( () => {
+			// update user info in idle in main thread
+			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), "Finished import.", false);
+			userinfo.update_symbol_widget_by_id((uint)job.get_arg("msg_id"), UserInfo.ContentClass.INFO);
+			return false;
+		});
+		Timeout.add_seconds(4, () => {
+			// remove user info after some seconds
+			userinfo.popdown((uint)job.get_arg("msg_id"));
+			Idle.add( () => {
+				global.sig_media_path_changed();
+				return false;
+			});
+			return false;
+		});
+		global.media_import_in_progress = false;
+	}
 	// add folders to the media path and store them in the db
 	// only for Worker.Job usage
 	public void store_folders_job(Worker.Job job){
-//string[] mfolders, ref 
-		print("store_folders_job \n");
+		//print("store_folders_job \n");
 		DbWriter dbw;
 		try {
 			dbw = new DbWriter();
@@ -205,7 +262,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		}
 
 		foreach(unowned string folder in mfolders_ht.get_keys()) {
-//			print("xx folder %s\n", folder);
+			print("xx folder %s\n", folder);
 			dbw.add_single_folder_to_collection(folder);
 		}
 
@@ -214,57 +271,59 @@ public class Xnoise.MediaImporter : GLib.Object {
 		foreach(string folder in mfolders_ht.get_keys()) {
 			File dir = File.new_for_path(folder);
 			assert(dir != null);
-			add_local_tags(dir, ref dbw);
+			// import all the files
+			add_local_tags.begin(dir, dbw, job);
 		}
-		dbw.commit_transaction();
-//		uint msg_id = (uint)job.get_arg("msg_id");
-//		print("msg_id: %u\n", msg_id);
-		Idle.add( () => {
-			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), "Finished import.", false);
-			userinfo.update_symbol_widget_by_id((uint)job.get_arg("msg_id"), UserInfo.ContentClass.INFO);
-			return false;
-		});
-		Timeout.add_seconds(4, () => {
-			userinfo.popdown((uint)job.get_arg("msg_id"));
-//			job.unref();
-//			print("job ref_count %u\n", job.ref_count);
-			Idle.add(Xnoise.Main.instance.main_window.mediaBr.change_model_data);
-			return false;
-		});
+//		dbw.commit_transaction();
+//		Idle.add( () => {
+//			// update user info in idle in main thread
+//			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), "Finished import.", false);
+//			userinfo.update_symbol_widget_by_id((uint)job.get_arg("msg_id"), UserInfo.ContentClass.INFO);
+//			return false;
+//		});
+//		Timeout.add_seconds(4, () => {
+//			// remove user info after some seconds
+//			userinfo.popdown((uint)job.get_arg("msg_id"));
+//			Idle.add( () => {
+//				global.sig_media_path_changed();
+//				return false;
+//			});
+//			return false;
+//		});
+//		global.media_import_in_progress = false;
 		mfolders_ht.remove_all();
-		global.sig_media_path_changed();
 	}
 
 
 	// add folders to the media path and store them in the db
-	public void store_folders(string[] mfolders, ref DbWriter dbw){
-		if(dbw == null) 
-			return;
-		
-		var mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
-		dbw.begin_transaction();
-		dbw.del_all_folders();
+//	public void store_folders(string[] mfolders, ref DbWriter dbw){
+//		if(dbw == null) 
+//			return;
+//		
+//		var mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
+//		dbw.begin_transaction();
+//		dbw.del_all_folders();
 
-		foreach(string folder in mfolders) {
-			mfolders_ht.insert(folder, 1);
-		}
+//		foreach(string folder in mfolders) {
+//			mfolders_ht.insert(folder, 1);
+//		}
 
-		foreach(string folder in mfolders_ht.get_keys()) {
-			dbw.add_single_folder_to_collection(folder);
-		}
+//		foreach(string folder in mfolders_ht.get_keys()) {
+//			dbw.add_single_folder_to_collection(folder);
+//		}
 
-		if(!dbw.delete_local_media_data()) return;
+//		if(!dbw.delete_local_media_data()) return;
 
-		foreach(string folder in mfolders_ht.get_keys()) {
-			File dir = File.new_for_path(folder);
-			assert(dir != null);
-			add_local_tags(dir, ref dbw);
-		}
-		dbw.commit_transaction();
+//		foreach(string folder in mfolders_ht.get_keys()) {
+//			File dir = File.new_for_path(folder);
+//			assert(dir != null);
+//			add_local_tags(dir, ref dbw);
+//		}
+//		dbw.commit_transaction();
 
-		mfolders_ht.remove_all();
-		global.sig_media_path_changed();
-	}
+//		mfolders_ht.remove_all();
+//		global.sig_media_path_changed();
+//	}
 
 	// add streams to the media path and store them in the db
 	public void store_streams(string[] list_of_streams, ref DbWriter dbw) {

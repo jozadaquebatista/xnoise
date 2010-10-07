@@ -40,7 +40,7 @@ public class Xnoise.Worker : Object {
 	private unowned Thread thread;
 	
 	private MainContext local_context;
-	private MainContext main_context;
+	private unowned MainContext main_context;
 	
 	public Worker(MainContext mc) {
 		if (!Thread.supported ()) {

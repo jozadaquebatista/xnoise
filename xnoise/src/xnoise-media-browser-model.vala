@@ -95,7 +95,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		this.foreach(filterfunc);
 	}
 
-	public bool filterfunc(Gtk.TreeModel model, Gtk.TreePath path, Gtk.TreeIter iter) {
+	private bool filterfunc(Gtk.TreeModel model, Gtk.TreePath path, Gtk.TreeIter iter) {
 //		TreePath p = this.get_path(iter);
 		switch(path.get_depth()) {
 			case 1: //ARTIST
@@ -219,6 +219,44 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		this.set(iter, Column.DRAW_SEPTR, 1, -1);
 	}
 
+//	public void insert_sorted(TrackData td) {
+//		
+//		if(td == null)
+//			return;
+//		
+//		TreeIter artist_iter, album_iter;
+//		string test = null;
+//		if(!get_iter_for_artist(ref artist, out artist_iter)) {
+//			
+//		}
+//		if(!get_iter_for_album(ref album, ref artist_iter, out album_iter)) {
+//			
+//		}
+//		
+//	}
+	
+	private bool get_iter_for_artist(ref string artist, out TreeIter artist_iter) {
+		string text = null;
+		for(int i = 0; i < this.iter_n_children(null); i++) {
+			this.iter_nth_child(out artist_iter, null, i);
+			this.get(artist_iter, Column.VIS_TEXT, ref text);
+			if(text == artist)
+				return true;
+		}
+		return false;
+	}
+	
+	private bool get_iter_for_album(ref string album, ref TreeIter artist_iter, out TreeIter album_iter) {
+		string text = null;
+		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
+			this.iter_nth_child(out album_iter, null, i);
+			this.get(album_iter, Column.VIS_TEXT, ref text);
+			if(text == album)
+				return true;
+		}
+		return false;
+	}
+	
 	public bool populate_model() {
 		Worker.Job job;
 		job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.handle_listed_data);

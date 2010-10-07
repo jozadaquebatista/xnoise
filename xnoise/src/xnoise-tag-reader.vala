@@ -79,6 +79,7 @@ public class Xnoise.TagReader {
 				}
 			}
 			else {
+print("e1\n");
 				td = new TrackData();
 
 				td.Artist = "unknown artist";
@@ -93,6 +94,7 @@ public class Xnoise.TagReader {
 			}
 		}
 		else {
+print("e2\n");
 			td = new TrackData();
 
 			td.Artist = "unknown artist";

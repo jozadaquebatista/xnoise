@@ -177,7 +177,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		}
 	}
 
-	public bool _media_import_in_progress;
+	private bool _media_import_in_progress;
 	public bool media_import_in_progress {
 		get {
 			return _media_import_in_progress;
