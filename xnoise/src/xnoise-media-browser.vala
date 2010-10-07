@@ -231,10 +231,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			mediabrowsermodel.searchtext = "";
 		}
 		mediabrowsermodel.filter();
-//		if(txt != "") 
-//			this.expand_all();
-//		else
-//			this.collapse_all();
+		if(txt != "") 
+			this.expand_all();
+		else
+			this.collapse_all();
 	}
 
 	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
@@ -379,19 +379,19 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	
 	/* updates the view, leaves the original model untouched.
 	   expanded rows are kept as well as the scrollbar position */
-	   
 	public bool update_view() {
 		double scroll_position = xn.main_window.mediaBrScrollWin.vadjustment.value;
-//		this.row_collapsed.disconnect(on_row_collapsed);
-//		this.row_expanded.disconnect(on_row_expanded);
+		this.row_collapsed.disconnect(on_row_collapsed);
+		this.row_expanded.disconnect(on_row_expanded);
 		this.set_model(null);
 		this.set_model(filtermodel);//mediabrowsermodel);
-//		foreach (TreePath tp in this.expansion_list)
-//			this.expand_row(tp, false);
+		//TODO: delete the expanion list after import
+		foreach(TreePath tp in this.expansion_list)
+			this.expand_row(tp, false);
 		xn.main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);
 		xn.main_window.mediaBrScrollWin.vadjustment.value_changed();
-//		this.row_collapsed.connect(on_row_collapsed);
-//		this.row_expanded.connect(on_row_expanded);
+		this.row_collapsed.connect(on_row_collapsed);
+		this.row_expanded.connect(on_row_expanded);
 		return false;
 	}
 		
@@ -416,8 +416,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		//we keep track of which rows are expanded, so we can expand them again
 		//when the view is updated
 		expansion_list = new List<TreePath>();
-//		this.row_collapsed.connect(on_row_collapsed);
-//		this.row_expanded.connect(on_row_expanded);
+		this.row_collapsed.connect(on_row_collapsed);
+		this.row_expanded.connect(on_row_expanded);
 		
 		this.set_size_request (300,500);
 		renderer = new CellRendererText();

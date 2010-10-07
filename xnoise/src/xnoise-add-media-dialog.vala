@@ -203,8 +203,6 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private uint msg_id;
 	
 	private void on_ok_button_clicked() {
-//		Main.instance.main_window.searchEntryMB.set_sensitive(false);
-//		Main.instance.main_window.mediaBr.set_sensitive(false);
 		
 		msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
 		                        UserInfo.ContentClass.WAIT,
@@ -214,26 +212,11 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		                        null);
 		
 		harvest_media_locations();
-//		
-//		try {
-//			Thread.create(write_media_to_db, false);
-//		}
-//		catch(ThreadError e) {
-//			print("Error: %s\n", e.message);
-//			return;
-//		}
-//		message( "main thread %d", (int)Linux.gettid() );
-//		Worker.Job d = new Worker.Job(67, Worker.ExecutionType.SYNC, null, mix.store_folders_job);
-//		d.set_arg("array", array);
-//		d.set_arg("zz", zz);
-//		d.set_arg("ds1", ds1);
-//		d.cancellable = new Cancellable();
-//		ds1.i++;
-//		print("MT ds1.i %d\n", ds1.i);
-////		worker.push_job(d);
+
 		global.media_import_in_progress = true;
 		Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
-		// global.media_import_in_progress has to be reset in the last job !
+
+		// TODO:global.media_import_in_progress has to be reset in the last job !
 		Worker.Job job;
 		job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, media_importer.store_folders_job);
 		job.set_arg("mfolders", list_of_folders);

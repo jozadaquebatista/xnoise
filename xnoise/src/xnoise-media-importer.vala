@@ -31,7 +31,6 @@
 using Gtk;
 
 public class Xnoise.MediaImporter : GLib.Object {
-	//public signal void sig_media_path_changed();
 
 	// add files to the media path and store them in the db
 	public void store_files(string[] list_of_files, ref DbWriter dbw) {
@@ -109,7 +108,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 				dbw.insert_title(td, file.get_uri());
 			}
 		}
-//		global.sig_item_imported(uri);
 		dbw.commit_transaction();
 	}
 
@@ -180,11 +178,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 
 								dbw.insert_title(tr.read_tag(filepath), file.get_uri());
 								success_count++;
-	//							Idle.add( () => {
-	//								Main.instance.main_window.mediaBr.mediabrowsermodel.
-	//								return false;
-	//							});
-		//						global.sig_item_imported(file.get_uri());
 							}
 						}
 					}
@@ -201,7 +194,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 						if(idbuffer== -1) {
 							dbw.insert_title(td, file.get_uri());
 							success_count++;
-	//						global.sig_item_imported(file.get_uri());
 						}
 					}
 				}
@@ -274,56 +266,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 			// import all the files
 			add_local_tags.begin(dir, dbw, job);
 		}
-//		dbw.commit_transaction();
-//		Idle.add( () => {
-//			// update user info in idle in main thread
-//			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), "Finished import.", false);
-//			userinfo.update_symbol_widget_by_id((uint)job.get_arg("msg_id"), UserInfo.ContentClass.INFO);
-//			return false;
-//		});
-//		Timeout.add_seconds(4, () => {
-//			// remove user info after some seconds
-//			userinfo.popdown((uint)job.get_arg("msg_id"));
-//			Idle.add( () => {
-//				global.sig_media_path_changed();
-//				return false;
-//			});
-//			return false;
-//		});
-//		global.media_import_in_progress = false;
 		mfolders_ht.remove_all();
 	}
-
-
-	// add folders to the media path and store them in the db
-//	public void store_folders(string[] mfolders, ref DbWriter dbw){
-//		if(dbw == null) 
-//			return;
-//		
-//		var mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
-//		dbw.begin_transaction();
-//		dbw.del_all_folders();
-
-//		foreach(string folder in mfolders) {
-//			mfolders_ht.insert(folder, 1);
-//		}
-
-//		foreach(string folder in mfolders_ht.get_keys()) {
-//			dbw.add_single_folder_to_collection(folder);
-//		}
-
-//		if(!dbw.delete_local_media_data()) return;
-
-//		foreach(string folder in mfolders_ht.get_keys()) {
-//			File dir = File.new_for_path(folder);
-//			assert(dir != null);
-//			add_local_tags(dir, ref dbw);
-//		}
-//		dbw.commit_transaction();
-
-//		mfolders_ht.remove_all();
-//		global.sig_media_path_changed();
-//	}
 
 	// add streams to the media path and store them in the db
 	public void store_streams(string[] list_of_streams, ref DbWriter dbw) {

@@ -96,7 +96,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	private bool filterfunc(Gtk.TreeModel model, Gtk.TreePath path, Gtk.TreeIter iter) {
-//		TreePath p = this.get_path(iter);
 		switch(path.get_depth()) {
 			case 1: //ARTIST
 				string artist = null;
@@ -234,7 +233,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //		}
 //		
 //	}
-	
+
+	//TODO: create new iter in the right position
 	private bool get_iter_for_artist(ref string artist, out TreeIter artist_iter) {
 		string text = null;
 		for(int i = 0; i < this.iter_n_children(null); i++) {
@@ -246,6 +246,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		return false;
 	}
 	
+	//TODO: create new iter in the right position
 	private bool get_iter_for_album(ref string album, ref TreeIter artist_iter, out TreeIter album_iter) {
 		string text = null;
 		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
@@ -432,14 +433,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			print("%s\n", e.message);
 			return;
 		}
-//		Timer t = new Timer();
-//		t.reset();
-//		ulong microseconds;
-//		t.start();
 		artistArray = dbb.get_some_artists_2(ARTIST_FOR_ONE_JOB, job.big_counter[1]);
-//		t.stop();
-//		double buf = t.elapsed(out microseconds);
-//		print("\nelapsed get some artists 2:: %lf ; %u\n", buf, (uint)microseconds);
 		
 		job.big_counter[1] += artistArray.length;
 		
@@ -513,14 +507,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			return;
 		}		
 		string artist = (string)job.get_arg("artist");
-//		Timer t = new Timer();
-//		t.reset();
-//		ulong microseconds;
-//		t.start();
 		string[] albumArray = dbb.get_albums_2(artist);
-//		t.stop();
-//		double buf = t.elapsed(out microseconds);
-//		print("\nelapsed get albums 2:: %lf ; %u\n", buf, (uint)microseconds);
 		
 		job.set_arg("albumArray", albumArray);
 		Idle.add( () => {
@@ -561,14 +548,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		string ar, al;
 		ar = (string)job.get_arg("artist");
 		al = (string)job.get_arg("album");
-//		Timer t = new Timer();
-//		t.reset();
-//		ulong microseconds;
-//		t.start();
 		MediaData[] tmis = dbb.get_titles_with_mediatypes_and_ids_2(ar, al);
-//		t.stop();
-//		double buf = t.elapsed(out microseconds);
-//		print("\nelapsed get albums 2:: %lf ; %u\n", buf, (uint)microseconds);
 		
 		job.media_dat = tmis;
 		
@@ -703,6 +683,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		return tdata;
 	}
 
+	//TODO: How to do this for videos/streams?
 	public int32[] build_id_list_for_iter(ref TreeIter iter) {
 		TreeIter iterChild, iterChildChild;
 		int32[] urilist = {};
