@@ -41,7 +41,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	
 	public MediaBrowserModel mediabrowsermodel;
 	public MediaBrowserFilterModel filtermodel;
-	public TreeModelSort sortmodel;
+//	public TreeModelSort sortmodel;
 	//public bool drag_from_mediabrowser = false;
 	
 	public bool use_linebreaks {
@@ -115,8 +115,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		par.iparams_register(this);
 		mediabrowsermodel = new MediaBrowserModel();
 		filtermodel = new MediaBrowserFilterModel(mediabrowsermodel);
-		sortmodel = new TreeModelSort.with_model(filtermodel);
-		sortmodel.set_sort_column_id(MediaBrowserModel.Column.VIS_TEXT, SortType.ASCENDING);
+//		sortmodel = new TreeModelSort.with_model(filtermodel);
+//		sortmodel.set_sort_column_id(MediaBrowserModel.Column.VIS_TEXT, SortType.ASCENDING);
 		setup_view();
 		Idle.add(this.populate_model);
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);

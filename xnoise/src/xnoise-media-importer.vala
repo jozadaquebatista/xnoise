@@ -131,11 +131,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		catch (Error error) {
 			critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
 			job.counter[0]--;
-			if(job.counter[0] == 0) {
-				end_import(job);
-				print("------------------------ready\n");
-				dbw.commit_transaction();
-			}
+			end_import(job);
 			return;
 		}
 		GLib.List<GLib.FileInfo> infos;
@@ -147,7 +143,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 				if(infos == null) {
 					job.counter[0]--;
 					if(job.counter[0] == 0) {
-						print("------------------------ready\n");
 						dbw.commit_transaction();
 						end_import(job);
 					}
@@ -205,7 +200,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 
 		job.counter[0]--;
 		if(job.counter[0] == 0) {
-			print("------------------------ready\n");
 			dbw.commit_transaction();
 			end_import(job);
 		}
@@ -230,6 +224,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		});
 		global.media_import_in_progress = false;
 	}
+
 	// add folders to the media path and store them in the db
 	// only for Worker.Job usage
 	public void store_folders_job(Worker.Job job){

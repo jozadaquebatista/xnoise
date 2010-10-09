@@ -161,6 +161,20 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		artist = remove_linebreaks(global.current_artist);
 		album  = remove_linebreaks(global.current_album );
 
+
+		var job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.fetch_trackdata_job);
+		job.set_arg("artist", artist);
+		job.set_arg("album", album);
+		job.set_arg("uri", xn.gPl.Uri);
+		worker.push_job(job);
+	}
+	
+	
+	private void fetch_trackdata_job(Worker.Job job) {
+		string artist = (string)job.get_arg("artist");
+		string album  = (string)job.get_arg("album");
+		string uri    = (string)job.get_arg("uri");
+		
 		// Look into db in case gPl does not provide the tag
 		if((artist == "unknown artist")||(album == "unknown album")) {
 			DbBrowser dbb = null;
@@ -172,7 +186,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 				return;
 			}
 			TrackData td;
-			if(dbb.get_trackdata_for_uri(xn.gPl.Uri, out td)) {
+			if(dbb.get_trackdata_for_uri(uri, out td)) {
 				artist = td.Artist;
 				album  = td.Album;
 			}
@@ -192,24 +206,23 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		                                          image_path,
 		                                          escape_for_local_folder_search(artist.down()),
 		                                          escape_for_local_folder_search(album.down()),
-		                                          escape_for_local_folder_search(album.down()) + "_" + default_size,
+		                                          escape_for_local_folder_search(album.down()) + 
+		                                          "_" + 
+		                                          default_size,
 		                                          null)
 		                                );
 
-		if(MainContext.current_source().is_destroyed())
-			return;
 		
 		if(fileout.query_exists(null)) {
 			set_image_via_idle(fileout.get_path());
 		}
 		else {
-
-			if(MainContext.current_source().is_destroyed()) 
-				return;
-				
-			loader.artist = artist;
-			loader.album  = album;
-			loader.fetch_image();
+			Idle.add( () => {
+				loader.artist = artist;
+				loader.album  = album;
+				loader.fetch_image();
+				return false;
+			});
 		}
 		return;
 	}
@@ -231,7 +244,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		if(fileout.query_exists(null)) {
 			//print("ai exists\n");
 			set_image_via_idle(fileout.get_path());
-			update_image_path_in_db(ref _artist, ref _album, fileout.get_path());
+			//update_image_path_in_db(ref _artist, ref _album, fileout.get_path());
 			return true;
 		}
 		return false;
@@ -269,36 +282,39 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		
 		set_image_via_idle(image_path);
 
-		global.check_image_for_current_track();
-		
-		var job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.set_local_album_image);
-		job.set_arg("artist", artist);
-		job.set_arg("album", album);
-		job.set_arg("image_path", image_path);
-		worker.push_job(job);
-		
-	}
-	
-	private void set_local_album_image(Worker.Job job) {
-		DbWriter dbw = null;
-		try {
-			dbw = new DbWriter();
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return;
-		}
-		string __artist = (string)job.get_arg("artist");
-		string __album = (string)job.get_arg("album");
-		string __image_path = (string)job.get_arg("image_path");
-		dbw.set_local_image_for_album(ref __artist, ref __album, __image_path);
-		dbw = null;
-		
 		Idle.add( () => {
 			global.check_image_for_current_track();
 			return false;
 		});
+		
+//		var job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.set_local_album_image);
+//		job.set_arg("artist", artist);
+//		job.set_arg("album", album);
+//		job.set_arg("image_path", image_path);
+//		worker.push_job(job);
+		
 	}
+	
+//	private void set_local_album_image(Worker.Job job) {
+//		DbWriter dbw = null;
+//		try {
+//			dbw = new DbWriter();
+//		}
+//		catch(Error e) {
+//			print("%s\n", e.message);
+//			return;
+//		}
+//		string __artist = (string)job.get_arg("artist");
+//		string __album = (string)job.get_arg("album");
+//		string __image_path = (string)job.get_arg("image_path");
+//		dbw.set_local_image_for_album(ref __artist, ref __album, __image_path);
+//		dbw = null;
+//		
+//		Idle.add( () => {
+//			global.check_image_for_current_track();
+//			return false;
+//		});
+//	}
 
 	private void set_image_via_idle(string image_path) {
 		if(image_path == "")
@@ -313,21 +329,21 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		});
 	}
 	
-	private void update_image_path_in_db(ref string artist, ref string album, string path) {
-		DbWriter dbw = null;
-		try {
-			dbw = new DbWriter();
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return;
-		}
-		dbw.set_local_image_for_album(ref artist, ref album, path);
-		dbw = null;
-		
-		source = Idle.add( () => {
-			global.check_image_for_current_track();
-			return false;
-		});
-	}
+//	private void update_image_path_in_db(ref string artist, ref string album, string path) {
+//		DbWriter dbw = null;
+//		try {
+//			dbw = new DbWriter();
+//		}
+//		catch(Error e) {
+//			print("%s\n", e.message);
+//			return;
+//		}
+//		dbw.set_local_image_for_album(ref artist, ref album, path);
+//		dbw = null;
+//		
+//		source = Idle.add( () => {
+//			global.check_image_for_current_track();
+//			return false;
+//		});
+//	}
 }

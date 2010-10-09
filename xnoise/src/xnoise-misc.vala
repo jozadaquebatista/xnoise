@@ -168,7 +168,6 @@ namespace Xnoise {
 	 * This function tries to find the right image for the uri.
 	 */
 	public static bool get_image_path_for_media_uri(string? uri, ref string? image_path) {
-		//TODO: don't use this function !
 		string tmpuri = uri;
 		image_path = null;
 		DbBrowser dbb = null;
@@ -186,6 +185,21 @@ namespace Xnoise {
 			return true;
 			
 		return false;
+	}
+
+	public static File get_file_for_current_artistalbum(string artist, string album, string size) {
+		File f = File.new_for_path(GLib.Path.build_filename(GLib.Path.build_filename(global.settings_folder,
+		                                                                             "album_images",
+		                                                                             null
+		                                                                             ),
+		                           escape_for_local_folder_search(artist.down()),
+		                           escape_for_local_folder_search(album.down()),
+		                           escape_for_local_folder_search(album.down()) +
+		                           "_" +
+		                           size,
+		                           null)
+		                           );
+		return f;
 	}
 
 	public static string get_stream_uri(string playlist_uri) {

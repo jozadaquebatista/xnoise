@@ -225,32 +225,27 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	}
 	
 	public void check_image_for_current_track() {
-		//print("called check_image called");
 		string? small_name = null;
-		if(get_image_path_for_media_uri(current_uri, ref small_name)) {
-			string? large_name = null; 
-			if((small_name == "") || (small_name == null)) {
-				image_path_small = null;
-				image_path_large = null;
-				return;
-			}
-			large_name = small_name.substring(0, small_name.length - "medium".length);
-			large_name = large_name + "extralarge";
-			File small = File.new_for_path(small_name);
-			File large = File.new_for_path(large_name);
-			if(!small.query_exists(null))
-				small_name = null;
-			if(!large.query_exists(null))
-				image_path_large = small_name;
-			else
-				image_path_large = large_name;
-			image_path_small = small_name;
-		}
-		else {
-		//print("all null");
+		string? large_name = null; 
+		File f = get_file_for_current_artistalbum(current_artist, current_album, "medium");
+		small_name = f.get_path();
+		if((small_name == "") || (small_name == null)) {
 			image_path_small = null;
 			image_path_large = null;
+			return;
 		}
+		
+		large_name = small_name.substring(0, small_name.length - "medium".length);
+		large_name = large_name + "extralarge";
+		File small = File.new_for_path(small_name);
+		File large = File.new_for_path(large_name);
+		if(!small.query_exists(null))
+			small_name = null;
+		if(!large.query_exists(null))
+			image_path_large = small_name;
+		else
+			image_path_large = large_name;
+		image_path_small = small_name;
 	}
 	
 	// set meta information after start of new track/stream from 

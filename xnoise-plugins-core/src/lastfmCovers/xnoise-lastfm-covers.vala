@@ -118,18 +118,6 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 			Source.remove(timeout);
 	}
 
-	private File get_file_for_current_artistalbum(ref string reply_artist, ref string reply_album, ref string size) {
-		File f = File.new_for_path(GLib.Path.build_filename(image_path,
-		                           escape_for_local_folder_search(reply_artist.down()),
-		                           escape_for_local_folder_search(reply_album.down()),
-		                           escape_for_local_folder_search(reply_album.down()) +
-		                           "_" +
-		                           size,
-		                           null)
-		                           );
-		return f;
-	}
-
 	private void remove_timeout() {
 		if(timeout != 0)
 			Source.remove(timeout);
@@ -187,7 +175,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 				string uri_image = "";
 
 				foreach(string s in sizes) {
-					f = get_file_for_current_artistalbum(ref artist, ref album, ref s);
+					f = get_file_for_current_artistalbum(artist, album, s);
 					if(default_size == s) uri_image = f.get_path();
 
 					string pth = "";
@@ -257,7 +245,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 		
 		foreach(File f in image_sources) {
 			var s = sizes[i];
-			destination = get_file_for_current_artistalbum(ref reply_artist, ref reply_album, ref s);
+			destination = get_file_for_current_artistalbum(reply_artist, reply_album, s);
 			try {
 				if(f.query_exists(null)) { //remote file exist
 					
