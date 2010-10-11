@@ -57,6 +57,7 @@ namespace Xnoise {
 		public bool get_stream_for_id (int id, out string uri);
 		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 		public Xnoise.StreamData[] get_streams ();
+		public Xnoise.TrackData[] get_titles_with_data (string artist, string album);
 		public Xnoise.MediaData[] get_titles_with_mediatypes_and_ids_2 (string artist, string album);
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
@@ -293,7 +294,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaBrowserFilterModel : Gtk.TreeModelFilter, Gtk.TreeModel {
 		public MediaBrowserFilterModel (Xnoise.MediaBrowserModel mbm);
-		public string searchtext { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
@@ -312,6 +312,7 @@ namespace Xnoise {
 			COLL_TYPE,
 			DRAW_SEPTR,
 			VISIBLE,
+			TRACKNUMBER,
 			N_COLUMNS
 		}
 		public string searchtext;
@@ -560,6 +561,7 @@ namespace Xnoise {
 			public Xnoise.MediaData[] media_dat;
 			public void* p_arg;
 			public Xnoise.Worker.SyncWorkFunc? s_func;
+			public Xnoise.TrackData[] track_dat;
 			public GLib.Value? value_arg1;
 			public GLib.Value? value_arg2;
 			public Job (int id = 0, Xnoise.Worker.ExecutionType execution_type = 0, Xnoise.Worker.AsyncWorkFunc? a_func = null, Xnoise.Worker.SyncWorkFunc? s_func = null);

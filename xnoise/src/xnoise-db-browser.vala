@@ -726,6 +726,32 @@ public class Xnoise.DbBrowser {
 		}
 		return val;
 	}
+
+	private static const string STMT_GET_ITEMS_WITH_DATA =
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? ORDER BY t.tracknumber DESC, t.title DESC";
+
+	public TrackData[] get_titles_with_data(string artist, string album) {
+		TrackData[] val = {};
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_ITEMS_WITH_DATA, -1, out stmt);
+
+		stmt.reset();
+		if((stmt.bind_text(1, artist)!=Sqlite.OK)|
+		   (stmt.bind_text(2, album )!=Sqlite.OK)) {
+			this.db_error();
+		}
+
+		while(stmt.step() == Sqlite.ROW) {
+			TrackData twt = new TrackData();
+			twt.Title = stmt.column_text(0);
+			twt.Mediatype = (MediaType) stmt.column_int(1);
+			twt.db_id = stmt.column_int(2);
+			twt.Tracknumber = stmt.column_int(3);
+			val += twt;
+		}
+		return val;
+	}
 	
 //	public MediaData[] get_titles_with_mediatypes_and_ids(string artist, string album, ref string searchtext) {
 //		MediaData[] val = {};

@@ -31,31 +31,9 @@
 using Gtk;
 
 public class Xnoise.MediaBrowserFilterModel : Gtk.TreeModelFilter, Gtk.TreeModel {
-
-//	public enum Column {
-//		ICON = 0,
-//		VIS_TEXT,
-//		DB_ID,
-//		MEDIATYPE,
-//		COLL_TYPE,
-//		DRAW_SEPTR,
-//		N_COLUMNS
-//	}
-
 	public MediaBrowserFilterModel(MediaBrowserModel mbm) {
 		GLib.Object(child_model:mbm);
-//		this.set_visible_func(filterfunc);
 		this.set_visible_column(MediaBrowserModel.Column.VISIBLE);
-	}
-	
-	private string _searchtext = "";
-	public string searchtext { 
-		get {
-			return _searchtext;
-		}
-		set {
-			_searchtext = value;
-		}
 	}
 }
 

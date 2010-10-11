@@ -840,6 +840,7 @@ typedef enum  {
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_COLL_TYPE,
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_DRAW_SEPTR,
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_VISIBLE,
+	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_TRACKNUMBER,
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_N_COLUMNS
 } XnoiseMediaBrowserModelColumn;
 
@@ -1161,6 +1162,8 @@ struct _XnoiseWorkerJob {
 	gint media_dat_length1;
 	gint32* id_array;
 	gint id_array_length1;
+	XnoiseTrackData** track_dat;
+	gint track_dat_length1;
 	gint counter[4];
 	gint32 big_counter[4];
 	gint64 id;
@@ -1247,6 +1250,7 @@ char** xnoise_db_browser_get_some_artists_2 (XnoiseDbBrowser* self, gint limit, 
 char** xnoise_db_browser_get_artists_2 (XnoiseDbBrowser* self, int* result_length1);
 char** xnoise_db_browser_get_albums_2 (XnoiseDbBrowser* self, const char* artist, int* result_length1);
 XnoiseMediaData* xnoise_db_browser_get_titles_with_mediatypes_and_ids_2 (XnoiseDbBrowser* self, const char* artist, const char* album, int* result_length1);
+XnoiseTrackData** xnoise_db_browser_get_titles_with_data (XnoiseDbBrowser* self, const char* artist, const char* album, int* result_length1);
 GType xnoise_db_creator_get_type (void) G_GNUC_CONST;
 #define XNOISE_DB_CREATOR_DB_VERSION_MAJOR 3
 #define XNOISE_DB_CREATOR_DB_VERSION_MINOR 1
@@ -1454,8 +1458,6 @@ XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
 XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_new (XnoiseMediaBrowserModel* mbm);
 XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_construct (GType object_type, XnoiseMediaBrowserModel* mbm);
-const char* xnoise_media_browser_filter_model_get_searchtext (XnoiseMediaBrowserFilterModel* self);
-void xnoise_media_browser_filter_model_set_searchtext (XnoiseMediaBrowserFilterModel* self, const char* value);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
 void xnoise_media_importer_store_files (XnoiseMediaImporter* self, char** list_of_files, int list_of_files_length1, XnoiseDbWriter** dbw);
 void xnoise_media_importer_add_single_file (XnoiseMediaImporter* self, const char* uri, XnoiseDbWriter** dbw);

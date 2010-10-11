@@ -153,6 +153,14 @@ public class Xnoise.MediaImporter : GLib.Object {
 					job.counter[0]--;
 					if(job.counter[0] == 0) {
 						dbw.commit_transaction();
+						if(tda.length > 0) {
+							TrackData[] tdax1 = tda;
+							tda = {};
+							Idle.add( () => {
+								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax1); 
+								return false; 
+							});
+						}
 						end_import(job);
 					}
 					return;
@@ -181,6 +189,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 								td = new TrackData();
 								var tr = new TagReader();
 								td = tr.read_tag(filepath);
+								//print("++%s\n", td.Title);
 								int32 id = dbw.insert_title(td, file.get_uri());
 								td.db_id = id;
 								td.Mediatype = MediaType.AUDIO;
@@ -209,7 +218,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 						td.Mediatype = MediaType.VIDEO;
 						if(idbuffer== -1) {
 							dbw.insert_title(td, file.get_uri());
-//							success_count++;
 						}
 					}
 				}
