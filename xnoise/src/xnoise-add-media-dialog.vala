@@ -203,34 +203,37 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private uint msg_id;
 	
 	private void on_ok_button_clicked() {
-		
-		msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
+		Main.instance.main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
+		Timeout.add(200, () => {
+			msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
 		                        UserInfo.ContentClass.WAIT,
 		                        "Importing media data. This may take some time...",
 		                        true,
 		                        5,
 		                        null);
 		
-		harvest_media_locations();
+			harvest_media_locations();
 
-		global.media_import_in_progress = true;
-		Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
+			global.media_import_in_progress = true;
+			Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
 
-		// TODO:global.media_import_in_progress has to be reset in the last job !
-		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, media_importer.store_folders_job);
-		job.set_arg("mfolders", list_of_folders);
-		job.set_arg("msg_id", msg_id);
-		worker.push_job(job);
-//		job = new Worker.Job(1, Worker.ExecutionType.ASYNC, MediaImporter.store_folders_job, null);
-//		job.set_arg("mfolders", list_of_streams);
-//		worker.push_job();
-//		
-//		job = new Worker.Job(1, Worker.ExecutionType.ASYNC, MediaImporter.store_folders_job, null);
-//		job.set_arg("mfolders", list_of_files);
-//		worker.push_job();
-		this.dialog.destroy();
-		this.sign_finish();
+			// TODO:global.media_import_in_progress has to be reset in the last job !
+			Worker.Job job;
+			job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, media_importer.store_folders_job);
+			job.set_arg("mfolders", list_of_folders);
+			job.set_arg("msg_id", msg_id);
+			worker.push_job(job);
+	//		job = new Worker.Job(1, Worker.ExecutionType.ASYNC, MediaImporter.store_folders_job, null);
+	//		job.set_arg("mfolders", list_of_streams);
+	//		worker.push_job();
+	//		
+	//		job = new Worker.Job(1, Worker.ExecutionType.ASYNC, MediaImporter.store_folders_job, null);
+	//		job.set_arg("mfolders", list_of_files);
+	//		worker.push_job();
+			this.dialog.destroy();
+			this.sign_finish();
+			return false;
+		});
 	}
 
 	private void on_cancel_button_clicked() {

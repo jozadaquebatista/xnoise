@@ -277,6 +277,7 @@ public class Xnoise.TrackData { // track meta information
 	public int Bitrate = 0;
 	public MediaType Mediatype = MediaType.UNKNOWN;
 	public string? Uri = null;
+	public int32 db_id = -1;
 }
 
 public class Xnoise.RemoteSchemes {

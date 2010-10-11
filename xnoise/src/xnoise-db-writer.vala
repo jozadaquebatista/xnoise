@@ -135,7 +135,8 @@ public class Xnoise.DbWriter : GLib.Object {
 		"DELETE FROM uris";
 	private static const string STMT_DEL_GENRES =
 		"DELETE FROM genres";
-	    
+	private static const string STMT_GET_GET_ITEM_ID = 
+		"SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
 	private static const string STMT_DEL_URI = 
 		"DELETE FROM uris WHERE id = ?";
 	private static const string STMT_DEL_ITEM = 
@@ -472,44 +473,104 @@ public class Xnoise.DbWriter : GLib.Object {
 		return genre_id;
 	}
 
-	public void insert_title(TrackData td, string uri) {
+	public int32 insert_title(TrackData td, string uri) {
 		// make entries in other tables and get references from there
+		//mutex.enter();
 		int artist_id = handle_artist(ref td.Artist);
 		if(artist_id == -1) {
 			print("Error importing artist!\n");
-			return;
+			//mutex.leave();
+			return -1;
 		}
 		int album_id = handle_album(ref artist_id, ref td.Album);
 		if(album_id == -1) {
 			print("Error importing album!\n");
-			return;
+			//mutex.leave();
+			return -1;
 		}
 		int uri_id = handle_uri(uri);
 		if(uri_id == -1) {
 			print("Error importing uri!\n");
-			return;
+			//mutex.leave();
+			return -1;
 		}
 		int genre_id = handle_genre(ref td.Genre);
 		if(genre_id == -1) {
 			print("Error importing genre!\n");
-			return;
+			//mutex.leave();
+			return -1;
 		}
 		insert_title_statement.reset();
-		if( insert_title_statement.bind_int (1,  (int)td.Tracknumber) != Sqlite.OK ||
-			insert_title_statement.bind_int (2,  artist_id)           != Sqlite.OK ||
-			insert_title_statement.bind_int (3,  album_id)            != Sqlite.OK ||
-			insert_title_statement.bind_text(4,  td.Title)            != Sqlite.OK ||
-			insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
-			insert_title_statement.bind_int (6,  (int)td.Year)        != Sqlite.OK ||
-			insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
-			insert_title_statement.bind_int (8,  td.Mediatype)        != Sqlite.OK ||
-			insert_title_statement.bind_int (9,  td.Length)           != Sqlite.OK ||
-			insert_title_statement.bind_int (10, td.Bitrate)          != Sqlite.OK) {
+		if(insert_title_statement.bind_int (1,  (int)td.Tracknumber) != Sqlite.OK ||
+		   insert_title_statement.bind_int (2,  artist_id)           != Sqlite.OK ||
+		   insert_title_statement.bind_int (3,  album_id)            != Sqlite.OK ||
+		   insert_title_statement.bind_text(4,  td.Title)            != Sqlite.OK ||
+		   insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
+		   insert_title_statement.bind_int (6,  (int)td.Year)        != Sqlite.OK ||
+		   insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
+		   insert_title_statement.bind_int (8,  td.Mediatype)        != Sqlite.OK ||
+		   insert_title_statement.bind_int (9,  td.Length)           != Sqlite.OK ||
+		   insert_title_statement.bind_int (10, td.Bitrate)          != Sqlite.OK) {
 			this.db_error();
 		}
+		
 		if(insert_title_statement.step()!=Sqlite.DONE)
 			this.db_error();
+		
+		//get id back
+		Statement stmt;
+		this.db.prepare_v2(STMT_GET_GET_ITEM_ID, -1, out stmt);
+		if(stmt.bind_int (1,  artist_id)           != Sqlite.OK ||
+		   stmt.bind_int (2,  album_id)            != Sqlite.OK ||
+		   stmt.bind_text(3,  td.Title)            != Sqlite.OK) {
+			this.db_error();
+		}
+		stmt.reset();
+		int32 val = -1;
+		if(stmt.step() == Sqlite.ROW) {
+			val = (int32)stmt.column_int(0);
+		}
+		//mutex.leave();
+		return val;
 	}
+//	public void insert_title(TrackData td, string uri) {
+//		// make entries in other tables and get references from there
+//		int artist_id = handle_artist(ref td.Artist);
+//		if(artist_id == -1) {
+//			print("Error importing artist!\n");
+//			return;
+//		}
+//		int album_id = handle_album(ref artist_id, ref td.Album);
+//		if(album_id == -1) {
+//			print("Error importing album!\n");
+//			return;
+//		}
+//		int uri_id = handle_uri(uri);
+//		if(uri_id == -1) {
+//			print("Error importing uri!\n");
+//			return;
+//		}
+//		int genre_id = handle_genre(ref td.Genre);
+//		if(genre_id == -1) {
+//			print("Error importing genre!\n");
+//			return;
+//		}
+//		insert_title_statement.reset();
+//		if( insert_title_statement.bind_int (1,  (int)td.Tracknumber) != Sqlite.OK ||
+//			insert_title_statement.bind_int (2,  artist_id)           != Sqlite.OK ||
+//			insert_title_statement.bind_int (3,  album_id)            != Sqlite.OK ||
+//			insert_title_statement.bind_text(4,  td.Title)            != Sqlite.OK ||
+//			insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
+//			insert_title_statement.bind_int (6,  (int)td.Year)        != Sqlite.OK ||
+//			insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
+//			insert_title_statement.bind_int (8,  td.Mediatype)        != Sqlite.OK ||
+//			insert_title_statement.bind_int (9,  td.Length)           != Sqlite.OK ||
+//			insert_title_statement.bind_int (10, td.Bitrate)          != Sqlite.OK) {
+//			this.db_error();
+//		}
+//		if(insert_title_statement.step()!=Sqlite.DONE)
+//			this.db_error();
+//	}
 
 	/*
 	* Delete a row from the uri table and delete every item that references it and

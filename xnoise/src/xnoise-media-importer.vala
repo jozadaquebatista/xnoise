@@ -111,6 +111,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		dbw.commit_transaction();
 	}
 
+	private TrackData[] tda = {};
 
 	// store a folder in the db, don't add it to the media path
 	// This is a recoursive function.
@@ -120,7 +121,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 			return;
 		
 		job.counter[0]++;
-
+		
 		FileEnumerator enumerator;
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
@@ -131,6 +132,14 @@ public class Xnoise.MediaImporter : GLib.Object {
 		catch (Error error) {
 			critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
 			job.counter[0]--;
+			if(tda.length > 0) {
+				TrackData[] tdax2 = tda;
+				tda = {};
+				Idle.add( () => {
+					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax2); 
+					return false; 
+				});
+			}
 			end_import(job);
 			return;
 		}
@@ -148,7 +157,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 					}
 					return;
 				}
-				
+				TrackData td;
 				foreach(FileInfo info in infos) {
 					int idbuffer;
 					string filename = info.get_name();
@@ -167,28 +176,40 @@ public class Xnoise.MediaImporter : GLib.Object {
 					else if(psAudio.match_string(mime)) {
 						string uri_lc = filename.down();
 						if(!(uri_lc.has_suffix(".m3u")||uri_lc.has_suffix(".pls")||uri_lc.has_suffix(".asx")||uri_lc.has_suffix(".xspf")||uri_lc.has_suffix(".wpl"))) {
-							idbuffer = dbw.uri_entry_exists(file.get_uri());
+							idbuffer = dbw.uri_entry_exists(file.get_uri()); //TODO wird das verwendet?
 							if(idbuffer== -1) {
+								td = new TrackData();
 								var tr = new TagReader();
-
-								dbw.insert_title(tr.read_tag(filepath), file.get_uri());
-								success_count++;
+								td = tr.read_tag(filepath);
+								int32 id = dbw.insert_title(td, file.get_uri());
+								td.db_id = id;
+								td.Mediatype = MediaType.AUDIO;
+								tda += td;
+								if(tda.length > 15) {
+									TrackData[] tdax = tda;
+									tda = {};
+									dbw.commit_transaction(); // intermediate commit make tracks fully available for user
+									Idle.add( () => {
+										Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax); 
+										return false; 
+									});
+									dbw.begin_transaction();
+								}
 							}
 						}
 					}
 					else if(psVideo.match_string(mime)) {
 						idbuffer = dbw.uri_entry_exists(file.get_uri());
-						var td = new TrackData();
+						td = new TrackData();
 						td.Artist = "unknown artist";
 						td.Album = "unknown album";
 						td.Title = prepare_name_from_filename(file.get_basename());
 						td.Genre = "";
 						td.Tracknumber = 0;
 						td.Mediatype = MediaType.VIDEO;
-
 						if(idbuffer== -1) {
 							dbw.insert_title(td, file.get_uri());
-							success_count++;
+//							success_count++;
 						}
 					}
 				}
@@ -197,10 +218,17 @@ public class Xnoise.MediaImporter : GLib.Object {
 		catch(Error e) {
 			print("%s\n", e.message);
 		}
-
 		job.counter[0]--;
 		if(job.counter[0] == 0) {
 			dbw.commit_transaction();
+			if(tda.length > 0) {
+				TrackData[] tdax1 = tda;
+				tda = {};
+				Idle.add( () => {
+					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax1); 
+					return false; 
+				});
+			}
 			end_import(job);
 		}
 		return;

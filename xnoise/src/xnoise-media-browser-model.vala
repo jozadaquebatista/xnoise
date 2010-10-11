@@ -218,52 +218,158 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		this.set(iter, Column.DRAW_SEPTR, 1, -1);
 	}
 
-//	public void insert_sorted(TrackData td) {
-//		
-//		if(td == null)
-//			return;
-//		
-//		TreeIter artist_iter, album_iter;
-//		string test = null;
-//		if(!get_iter_for_artist(ref artist, out artist_iter)) {
-//			
-//		}
-//		if(!get_iter_for_album(ref album, ref artist_iter, out album_iter)) {
-//			
-//		}
-//		
-//	}
-
-	//TODO: create new iter in the right position
-	private bool get_iter_for_artist(ref string artist, out TreeIter artist_iter) {
+	public void insert_trackdata_sorted(TrackData[] tda) {
+		TreeIter artist_iter, new_artist_iter, album_iter, title_iter;
 		string text = null;
+		foreach(TrackData td in tda) {
+			handle_iter_for_artist(ref td, out artist_iter);
+			handle_iter_for_album (ref td, ref artist_iter, out album_iter);
+			handle_iter_for_title (ref td, ref album_iter , out title_iter);
+		}
+	}
+
+	private void handle_iter_for_artist(ref TrackData td, out TreeIter artist_iter) {
+		string text = null;
+		if(this.iter_n_children(null) == 0) {
+			this.append(out artist_iter, null);
+			this.set(artist_iter,
+			         Column.ICON, artist_pixb,
+			         Column.VIS_TEXT, td.Artist,
+			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+			         Column.DRAW_SEPTR, 0,
+			         Column.VISIBLE, true
+			         );
+			return;
+		}
 		for(int i = 0; i < this.iter_n_children(null); i++) {
 			this.iter_nth_child(out artist_iter, null, i);
 			this.get(artist_iter, Column.VIS_TEXT, ref text);
-			if(text == artist)
-				return true;
+			if(strcmp(text, td.Artist) == 0) {
+				//found artist
+				return;
+			}
+			if(strcmp(text, td.Artist) > 0) {
+				//found artist
+				TreeIter new_artist_iter;
+				this.insert_before(out new_artist_iter, null, artist_iter);
+				this.set(new_artist_iter,
+				         Column.ICON, artist_pixb,
+				         Column.VIS_TEXT, td.Artist,
+				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+				         Column.DRAW_SEPTR, 0,
+				         Column.VISIBLE, true
+				         );
+				artist_iter = new_artist_iter;
+				return;
+			}
 		}
-		return false;
+		this.append(out artist_iter, null);
+		this.set(artist_iter,
+		         Column.ICON, artist_pixb,
+		         Column.VIS_TEXT, td.Artist,
+		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+		         Column.DRAW_SEPTR, 0,
+		         Column.VISIBLE, true
+		         );
+		return;
 	}
 	
-	//TODO: create new iter in the right position
-	private bool get_iter_for_album(ref string album, ref TreeIter artist_iter, out TreeIter album_iter) {
+	private void handle_iter_for_album(ref TrackData td, ref TreeIter artist_iter, out TreeIter album_iter) {
 		string text = null;
-		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
-			this.iter_nth_child(out album_iter, null, i);
-			this.get(album_iter, Column.VIS_TEXT, ref text);
-			if(text == album)
-				return true;
+		if(this.iter_n_children(artist_iter) == 0) {
+			this.append(out album_iter, artist_iter);
+			this.set(album_iter,
+			         Column.ICON, album_pixb,
+			         Column.VIS_TEXT, td.Album,
+			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+			         Column.DRAW_SEPTR, 0,
+			         Column.VISIBLE, true
+			         );
+			return;
 		}
-		return false;
+		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
+			this.iter_nth_child(out album_iter, artist_iter, i);
+			this.get(album_iter, Column.VIS_TEXT, ref text);
+			if(strcmp(text, td.Album) == 0) {
+				//found album
+				return;
+			}
+			if(strcmp(text, td.Album) > 0) {
+				//found artist
+				TreeIter new_album_iter;
+				this.insert_before(out new_album_iter, artist_iter, album_iter);
+				this.set(new_album_iter,
+				         Column.ICON, album_pixb,
+				         Column.VIS_TEXT, td.Album,
+				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+				         Column.DRAW_SEPTR, 0,
+				         Column.VISIBLE, true
+				         );
+				album_iter = new_album_iter;
+				return;
+			}
+		}
+		this.append(out album_iter, artist_iter);
+		this.set(album_iter,
+		         Column.ICON, album_pixb,
+		         Column.VIS_TEXT, td.Album,
+		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+		         Column.DRAW_SEPTR, 0,
+		         Column.VISIBLE, true
+		         );
+		return;
 	}
 	
+	private void handle_iter_for_title(ref TrackData td, ref TreeIter album_iter, out TreeIter title_iter) {
+		string text = null;
+		this.append(out title_iter, album_iter);
+		this.set(title_iter,
+		         Column.ICON, title_pixb,
+		         Column.VIS_TEXT, td.Title,
+		         Column.DB_ID, td.db_id,
+		         Column.MEDIATYPE , (int)MediaType.AUDIO,
+		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+		         Column.DRAW_SEPTR, 0,
+		         Column.VISIBLE, true
+		         );
+		return;
+	}
+//	
+//	//TODO: create new iter in the right position
+//	private bool get_iter_for_album(ref string album, ref TreeIter artist_iter, out TreeIter album_iter) {
+//		string text = null;
+//		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
+//			this.iter_nth_child(out album_iter, null, i);
+//			this.get(album_iter, Column.VIS_TEXT, ref text);
+//			if(text == album)
+//				return true;
+//		}
+//		return false;
+//	}
+	
+	public void cancel_fill_model() {
+		if(populate_model_cancellable == null)
+			return;
+		populate_model_cancellable.cancel();
+	}
+	
+	private Cancellable populate_model_cancellable = null;
 	public bool populate_model() {
+		print("populate_model\n");
+		if(populate_model_cancellable == null) {
+			populate_model_cancellable = new Cancellable();
+		}
+		else {
+			populate_model_cancellable.cancel();
+			populate_model_cancellable = new Cancellable();
+		}
 		Worker.Job job;
 		job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.handle_listed_data);
+		job.cancellable = populate_model_cancellable;
 		worker.push_job(job);
 		
 		job = new Worker.Job(1, Worker.ExecutionType.ASYNC, this.handle_hierarchical_data, null);
+		job.cancellable = populate_model_cancellable;
 		worker.push_job(job);
 		
 		return false;
@@ -274,9 +380,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private void handle_listed_data(Worker.Job job) {
 		var stream_job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.handle_streams);
+		stream_job.cancellable = populate_model_cancellable;
 		worker.push_job(stream_job);
 		
 		var video_job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.handle_videos);
+		video_job.cancellable = populate_model_cancellable;
 		worker.push_job(video_job);
 	}
 	
@@ -295,26 +403,30 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			return;
 		
 		Idle.add( () => {
-			TreeIter iter_radios, iter_singleradios;
-			this.prepend(out iter_radios, null);
-			this.set(iter_radios,
-			         Column.ICON, radios_pixb,
-			         Column.VIS_TEXT, "Streams",
-			         Column.COLL_TYPE, CollectionType.LISTED,
-			         Column.DRAW_SEPTR, 0,
-			         Column.VISIBLE, true
-			         );
-			foreach(unowned MediaData tmi in job.media_dat) {
-				this.prepend(out iter_singleradios, iter_radios);
-				this.set(iter_singleradios,
-				         Column.ICON,        radios_pixb,
-				         Column.VIS_TEXT,    tmi.name,
-				         Column.DB_ID,       tmi.id,
-				         Column.MEDIATYPE ,  (int)MediaType.STREAM,
-				         Column.COLL_TYPE,   CollectionType.LISTED,
-				         Column.DRAW_SEPTR,  0,
-				         Column.VISIBLE, true
-				         );
+			if(!job.cancellable.is_cancelled()) {
+				TreeIter iter_radios, iter_singleradios;
+				this.prepend(out iter_radios, null);
+				this.set(iter_radios,
+					     Column.ICON, radios_pixb,
+					     Column.VIS_TEXT, "Streams",
+					     Column.COLL_TYPE, CollectionType.LISTED,
+					     Column.DRAW_SEPTR, 0,
+					     Column.VISIBLE, true
+					     );
+				foreach(unowned MediaData tmi in job.media_dat) {
+					if(job.cancellable.is_cancelled())
+						break;
+					this.prepend(out iter_singleradios, iter_radios);
+					this.set(iter_singleradios,
+						     Column.ICON,        radios_pixb,
+						     Column.VIS_TEXT,    tmi.name,
+						     Column.DB_ID,       tmi.id,
+						     Column.MEDIATYPE ,  (int)MediaType.STREAM,
+						     Column.COLL_TYPE,   CollectionType.LISTED,
+						     Column.DRAW_SEPTR,  0,
+						     Column.VISIBLE, true
+						     );
+				}
 			}
 			return false;
 		});
@@ -335,26 +447,30 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			return;
 		
 		Idle.add( () => {
-			TreeIter iter_videos, iter_singlevideo;
-			this.prepend(out iter_videos, null);
-			this.set(iter_videos,
-				     Column.ICON, videos_pixb,
-				     Column.VIS_TEXT, "Videos",
-				     Column.COLL_TYPE, CollectionType.LISTED,
-				     Column.DRAW_SEPTR, 0,
-			         Column.VISIBLE, true
-				     );
-			foreach(unowned MediaData tmi in job.media_dat) {
-				this.prepend(out iter_singlevideo, iter_videos);
-				this.set(iter_singlevideo,
-					     Column.ICON, video_pixb,
-					     Column.VIS_TEXT, tmi.name,
-					     Column.DB_ID, tmi.id,
-					     Column.MEDIATYPE , (int) MediaType.VIDEO,
-					     Column.COLL_TYPE, CollectionType.LISTED,
-					     Column.DRAW_SEPTR, 0,
-					     Column.VISIBLE, true
-					     );
+			if(!job.cancellable.is_cancelled()) {
+				TreeIter iter_videos, iter_singlevideo;
+				this.prepend(out iter_videos, null);
+				this.set(iter_videos,
+						 Column.ICON, videos_pixb,
+						 Column.VIS_TEXT, "Videos",
+						 Column.COLL_TYPE, CollectionType.LISTED,
+						 Column.DRAW_SEPTR, 0,
+						 Column.VISIBLE, true
+						 );
+				foreach(unowned MediaData tmi in job.media_dat) {
+					if(job.cancellable.is_cancelled())
+						break;
+					this.prepend(out iter_singlevideo, iter_videos);
+					this.set(iter_singlevideo,
+					         Column.ICON, video_pixb,
+					         Column.VIS_TEXT, tmi.name,
+					         Column.DB_ID, tmi.id,
+					         Column.MEDIATYPE , (int) MediaType.VIDEO,
+					         Column.COLL_TYPE, CollectionType.LISTED,
+					         Column.DRAW_SEPTR, 0,
+					         Column.VISIBLE, true
+					         );
+				}
 			}
 			return false;
 		});
@@ -364,6 +480,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private bool handle_hierarchical_data(Worker.Job job) {
 		DbBrowser dbb = null;
 		//TODO: Use Cancellable
+		if(job.cancellable.is_cancelled())
+			return false;
+		
 		if(dbb == null) {
 			try {
 				dbb = new DbBrowser();
@@ -411,9 +530,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			return false;
 		}
 		var artist_job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.handle_artists);
-		
+		artist_job.cancellable = populate_model_cancellable;
 		artist_job.big_counter[1] = job.big_counter[1]; //current offset
 		
+		if(job.cancellable.is_cancelled())
+			return false;
+			
 		worker.push_job(artist_job);
 		
 		// increment offset
@@ -424,6 +546,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private const int ARTIST_FOR_ONE_JOB = 12;
 	private void handle_artists(Worker.Job job) {
+		if(job.cancellable.is_cancelled())
+			return;
 		string[] artistArray;
 		DbBrowser dbb = null;
 		try {
@@ -439,8 +563,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		
 		job.set_arg("artistArray", artistArray);
 		Idle.add( () => {
+			if(job.cancellable.is_cancelled())
+				return false;
 			TreeIter iter_artist;
 			foreach(string artist in (string[])job.get_arg("artistArray")) { 	              //ARTISTS
+				if(job.cancellable.is_cancelled())
+					break;
 				this.append(out iter_artist, null);
 				this.set(iter_artist,
 				         Column.ICON, artist_pixb,
@@ -453,6 +581,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				Gtk.TreePath p = this.get_path(iter_artist);
 				TreeRowReference treerowref = new TreeRowReference(this, p);
 				var job_album = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.handle_album);
+				job_album.cancellable = populate_model_cancellable;
 				job_album.set_arg("treerowref", treerowref);
 				job_album.set_arg("artist", artist);
 				worker.push_job(job_album);
@@ -498,6 +627,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //	}
 	
 	private void handle_album(Worker.Job job) {
+		if(job.cancellable.is_cancelled())
+			return;
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
@@ -511,11 +642,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		
 		job.set_arg("albumArray", albumArray);
 		Idle.add( () => {
+				if(job.cancellable.is_cancelled())
+					return false;
 				TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
 				TreePath p = row_ref.get_path();
 				TreeIter iter_artist, iter_album;
 				this.get_iter(out iter_artist, p);
 				foreach(string album in (string[])job.get_arg("albumArray")) { 			    //ALBUMS
+					if(job.cancellable.is_cancelled())
+						return false;
 					this.prepend(out iter_album, iter_artist);
 					this.set(iter_album,
 					         Column.ICON, album_pixb,
@@ -527,6 +662,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					Gtk.TreePath p1 = this.get_path(iter_album);
 					TreeRowReference treerowref = new TreeRowReference(this, p1);
 					var job_title = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.handle_titles);
+					job_title.cancellable = populate_model_cancellable;
 					job_title.set_arg("treerowref", treerowref);
 					job_title.set_arg("artist", artist);
 					job_title.set_arg("album", album);
@@ -537,6 +673,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	private void handle_titles(Worker.Job job) {
+		if(job.cancellable.is_cancelled())
+			return;
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
@@ -553,33 +691,37 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		job.media_dat = tmis;
 		
 		Idle.add( () => {
+			if(job.cancellable.is_cancelled())
+				return false;
 			TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
 			TreePath p = row_ref.get_path();
 			TreeIter iter_title, iter_album;
 			this.get_iter(out iter_album, p);
 			foreach(unowned MediaData tmi in job.media_dat) {	         //TITLES WITH MEDIATYPES
+				if(job.cancellable.is_cancelled())
+					return false;
 				this.prepend(out iter_title, iter_album);
 				if(tmi.mediatype == MediaType.AUDIO) {
 					this.set(iter_title,
-						     Column.ICON, title_pixb,
-						     Column.VIS_TEXT, tmi.name,
-						     Column.DB_ID, tmi.id,
-						     Column.MEDIATYPE , tmi.mediatype,
-						     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-						     Column.DRAW_SEPTR, 0,
+					         Column.ICON, title_pixb,
+					         Column.VIS_TEXT, tmi.name,
+					         Column.DB_ID, tmi.id,
+					         Column.MEDIATYPE , tmi.mediatype,
+					         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+					         Column.DRAW_SEPTR, 0,
 					         Column.VISIBLE, true
-						     );
+					         );
 				}
 				else {
 					this.set(iter_title,
-						     Column.ICON, video_pixb,
-						     Column.VIS_TEXT, tmi.name,
-						     Column.DB_ID, tmi.id,
-						     Column.MEDIATYPE, tmi.mediatype,
-						     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-						     Column.DRAW_SEPTR, 0,
-						     Column.VISIBLE, true
-						     );
+					         Column.ICON, video_pixb,
+					         Column.VIS_TEXT, tmi.name,
+					         Column.DB_ID, tmi.id,
+					         Column.MEDIATYPE, tmi.mediatype,
+					         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+					         Column.DRAW_SEPTR, 0,
+					         Column.VISIBLE, true
+					         );
 				}
 			}
 			return false;

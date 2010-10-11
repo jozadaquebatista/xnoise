@@ -90,7 +90,7 @@ namespace Xnoise {
 		public void del_all_streams ();
 		public bool delete_local_media_data ();
 		public void delete_uri (string uri);
-		public void insert_title (Xnoise.TrackData td, string uri);
+		public int32 insert_title (Xnoise.TrackData td, string uri);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public int uri_entry_exists (string uri);
 		public void write_final_tracks_to_db (string[] final_tracklist) throws GLib.Error;
@@ -318,11 +318,13 @@ namespace Xnoise {
 		public MediaBrowserModel ();
 		public int32[] build_id_list_for_iter (ref Gtk.TreeIter iter);
 		public string[] build_uri_list_for_treepath (Gtk.TreePath treepath, ref Xnoise.DbBrowser dbb);
+		public void cancel_fill_model ();
 		public void filter ();
 		public int get_max_icon_width ();
 		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_hierarchical (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_listed (Gtk.TreePath treepath);
+		public void insert_trackdata_sorted (Xnoise.TrackData[] tda);
 		public bool populate_model ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -454,6 +456,7 @@ namespace Xnoise {
 		public uint Tracknumber;
 		public string? Uri;
 		public uint Year;
+		public int32 db_id;
 		public TrackData ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
