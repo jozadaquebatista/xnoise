@@ -325,17 +325,19 @@ namespace Xnoise {
 		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_hierarchical (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_listed (Gtk.TreePath treepath);
+		public void insert_file (Xnoise.TrackData tda);
+		public void insert_stream (Xnoise.TrackData tda);
 		public void insert_trackdata_sorted (Xnoise.TrackData[] tda);
 		public bool populate_model ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaImporter : GLib.Object {
 		public MediaImporter ();
-		public async void add_local_tags (GLib.File dir, Xnoise.DbWriter dbw, Xnoise.Worker.Job job);
-		public void add_single_file (string uri, ref Xnoise.DbWriter dbw);
-		public void store_files (string[] list_of_files, ref Xnoise.DbWriter dbw);
+		public async void add_local_tags (GLib.File dir, Xnoise.Worker.Job job);
+		public void add_single_file (string uri);
+		public void store_files_job (Xnoise.Worker.Job job);
 		public void store_folders_job (Xnoise.Worker.Job job);
-		public void store_streams (string[] list_of_streams, ref Xnoise.DbWriter dbw);
+		public void store_streams_job (Xnoise.Worker.Job job);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {

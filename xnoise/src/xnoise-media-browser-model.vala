@@ -220,8 +220,27 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		this.set(iter, Column.DRAW_SEPTR, 1, -1);
 	}
 
+	public void insert_stream(TrackData tda) {
+//		TreeIter artist_iter, new_artist_iter, album_iter, title_iter;
+//		string text = null;
+//		foreach(TrackData td in tda) {
+//			handle_iter_for_artist(ref td, out artist_iter);
+//			handle_iter_for_album (ref td, ref artist_iter, out album_iter);
+//			handle_iter_for_title (ref td, ref album_iter , out title_iter);
+//		}
+	}
+	
+	public void insert_file(TrackData tda) {
+//		TreeIter artist_iter, new_artist_iter, album_iter, title_iter;
+//		string text = null;
+//		foreach(TrackData td in tda) {
+//			handle_iter_for_artist(ref td, out artist_iter);
+//			handle_iter_for_album (ref td, ref artist_iter, out album_iter);
+//			handle_iter_for_title (ref td, ref album_iter , out title_iter);
+//		}
+	}
+	
 	public void insert_trackdata_sorted(TrackData[] tda) {
-//		List<TrackData> tda_sorted = sort_track_data(tda);
 		TreeIter artist_iter, new_artist_iter, album_iter, title_iter;
 		string text = null;
 		foreach(TrackData td in tda) {
@@ -229,16 +248,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			handle_iter_for_album (ref td, ref artist_iter, out album_iter);
 			handle_iter_for_title (ref td, ref album_iter , out title_iter);
 		}
-	}
-
-	private static int compfunc(int a, int b) {
-		if(a < b)
-			return -1;
-		
-		if(a > b)
-			return 1;
-		
-		return 0;
 	}
 	
 	private void handle_iter_for_artist(ref TrackData td, out TreeIter artist_iter) {
@@ -353,11 +362,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		for(int i = 0; i < this.iter_n_children(album_iter); i++) {
 			this.iter_nth_child(out title_iter, album_iter, i);
 			this.get(title_iter, Column.TRACKNUMBER, ref tr_no);
-			if(compfunc(tr_no, (int)td.Tracknumber) == 0) {
+			if(tr_no == (int)td.Tracknumber) {
 				//found album
 				return;
 			}
-			if(compfunc(tr_no, (int)td.Tracknumber) > 0) {
+			if(tr_no > (int)td.Tracknumber) {
 				//found artist
 				TreeIter new_title_iter;
 				this.insert_before(out new_title_iter, album_iter, title_iter);
@@ -629,41 +638,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		});
 		return;
 	}
-//	private void handle_artists(Worker.Job job) {
-//		string[] artistArray;
-//		DbBrowser dbb = null;
-//		try {
-//			dbb = new DbBrowser();
-//		}
-//		catch(Error e) {
-//			print("%s\n", e.message);
-//			return;
-//		}
-//		artistArray = dbb.get_some_artists(ref searchtext, ARTIST_FOR_ONE_JOB, job.big_counter[1]);
-//		job.big_counter[1] += artistArray.length;
-//		
-//		job.set_arg("artistArray", artistArray);
-//		Idle.add( () => {
-//			TreeIter iter_artist;
-//			foreach(string artist in (string[])job.get_arg("artistArray")) { 	              //ARTISTS
-//				this.append(out iter_artist, null);
-//				this.set(iter_artist,
-//				         Column.ICON, artist_pixb,
-//				         Column.VIS_TEXT, artist,
-//				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-//				         Column.DRAW_SEPTR, 0);
-//				
-//				Gtk.TreePath p = this.get_path(iter_artist);
-//				TreeRowReference treerowref = new TreeRowReference(this, p);
-//				var job_album = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.handle_album);
-//				job_album.set_arg("treerowref", treerowref);
-//				job_album.set_arg("artist", artist);
-//				worker.push_job(job_album);
-//			}
-//			return false;
-//		});
-//		return;
-//	}
 	
 	private void handle_album(Worker.Job job) {
 		if(job.cancellable.is_cancelled())

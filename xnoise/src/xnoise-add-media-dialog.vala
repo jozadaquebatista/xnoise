@@ -217,19 +217,21 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			global.media_import_in_progress = true;
 			Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
 
-			// TODO:global.media_import_in_progress has to be reset in the last job !
+			// global.media_import_in_progress has to be reset in the last job !
 			Worker.Job job;
+			job = new Worker.Job(1, Worker.ExecutionType.SYNC, null,  media_importer.store_streams_job);
+			job.set_arg("list_of_streams", list_of_streams);
+			worker.push_job(job);
+			
+			job = new Worker.Job(1, Worker.ExecutionType.SYNC, null,  media_importer.store_files_job);
+			job.set_arg("list_of_files", list_of_files);
+			worker.push_job(job);
+			
 			job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, media_importer.store_folders_job);
 			job.set_arg("mfolders", list_of_folders);
 			job.set_arg("msg_id", msg_id);
 			worker.push_job(job);
-	//		job = new Worker.Job(1, Worker.ExecutionType.ASYNC, MediaImporter.store_folders_job, null);
-	//		job.set_arg("mfolders", list_of_streams);
-	//		worker.push_job();
-	//		
-	//		job = new Worker.Job(1, Worker.ExecutionType.ASYNC, MediaImporter.store_folders_job, null);
-	//		job.set_arg("mfolders", list_of_files);
-	//		worker.push_job();
+			
 			this.dialog.destroy();
 			this.sign_finish();
 			return false;
