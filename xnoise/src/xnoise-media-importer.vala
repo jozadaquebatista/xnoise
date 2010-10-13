@@ -131,7 +131,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 	}
 
 	private TrackData[] tda = {};
-
+	private TrackData[] tdv = {};
 	// store a folder in the db, don't add it to the media path
 	// This is a recoursive function.
 	// Do not call begin_transaction or commit_transaction within this function
@@ -177,6 +177,14 @@ public class Xnoise.MediaImporter : GLib.Object {
 							tda = {};
 							Idle.add( () => {
 								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax1); 
+								return false; 
+							});
+						}
+						if(tdv.length > 0) {
+							TrackData[] tdvx = tdv;
+							tdv = {};
+							Idle.add( () => {
+								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
 								return false; 
 							});
 						}
@@ -238,6 +246,18 @@ public class Xnoise.MediaImporter : GLib.Object {
 						if(idbuffer== -1) {
 							dbw.insert_title(td, file.get_uri());
 						}
+						td.db_id = dbw.get_track_id_for_uri(file.get_uri());
+						tdv += td;
+						if(tdv.length > 15) {
+							TrackData[] tdvx = tdv;
+							tdv = {};
+							dbw.commit_transaction(); // intermediate commit make tracks fully available for user
+							Idle.add( () => {
+								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
+								return false; 
+							});
+							dbw.begin_transaction();
+						}
 					}
 				}
 			}
@@ -253,6 +273,14 @@ public class Xnoise.MediaImporter : GLib.Object {
 				tda = {};
 				Idle.add( () => {
 					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax1); 
+					return false; 
+				});
+			}
+			if(tdv.length > 0) {
+				TrackData[] tdvx = tdv;
+				tdv = {};
+				Idle.add( () => {
+					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
 					return false; 
 				});
 			}
@@ -284,9 +312,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 	// only for Worker.Job usage
 	public void store_folders_job(Worker.Job job){
 		//print("store_folders_job \n");
-		if(dbw == null) 
-			return;
-		
 		var mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
 		dbw.begin_transaction();
 		dbw.del_all_folders();
@@ -312,9 +337,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 
 	// add streams to the media path and store them in the db
 	public void store_streams_job(Worker.Job job) {
-		if(dbw == null) 
-			return;
-		
 		var streams_ht = new HashTable<string,int>(str_hash, str_equal);
 		dbw.begin_transaction();
 
@@ -327,9 +349,22 @@ public class Xnoise.MediaImporter : GLib.Object {
 		foreach(string strm in streams_ht.get_keys()) {
 			dbw.add_single_stream_to_collection(strm, strm); //TODO: Use name different from uri
 		}
-
+		
 		dbw.commit_transaction();
-
+		
+		TrackData val;
+		TrackData[] tdax = {};
+		foreach(string strm in streams_ht.get_keys()) {
+			dbw.get_trackdata_for_stream(strm, out val);
+			tdax += val;
+			print("dbid stream: %d\n", (int)val.db_id);
+		}
+		job.track_dat = tdax;
+		Idle.add( () => {
+			Main.instance.main_window.mediaBr.mediabrowsermodel.insert_stream_sorted(job.track_dat); 
+			return false; 
+		});
+		
 		streams_ht.remove_all();
 //		global.sig_media_path_changed();
 	}
@@ -357,34 +392,11 @@ public class Xnoise.MediaImporter : GLib.Object {
 		foreach(string uri in files_ht.get_keys()) {
 			this.add_single_file(uri);
 		}
-
+		//TODO: add to mediabrowser
 		files_ht.remove_all();
 
 //		global.sig_media_path_changed();
 	}
 
-//	// add streams to the media path and store them in the db
-//	public void store_streams(string[] list_of_streams, ref DbWriter dbw) {
-//		if(dbw == null) 
-//			return;
-
-//		var streams_ht = new HashTable<string,int>(str_hash, str_equal);
-//		dbw.begin_transaction();
-
-//		dbw.del_all_streams();
-
-//		foreach(string strm in list_of_streams) {
-//			streams_ht.insert(strm, 1);
-//		}
-
-//		foreach(string strm in streams_ht.get_keys()) {
-//			dbw.add_single_stream_to_collection(strm, strm); //TODO: Use name different from uri
-//		}
-
-//		dbw.commit_transaction();
-
-//		streams_ht.remove_all();
-//		global.sig_media_path_changed();
-//	}
 }
 

@@ -91,6 +91,8 @@ namespace Xnoise {
 		public void del_all_streams ();
 		public bool delete_local_media_data ();
 		public void delete_uri (string uri);
+		public int get_track_id_for_uri (string uri);
+		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public int32 insert_title (Xnoise.TrackData td, string uri);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public int uri_entry_exists (string uri);
@@ -325,9 +327,10 @@ namespace Xnoise {
 		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_hierarchical (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_listed (Gtk.TreePath treepath);
-		public void insert_file (Xnoise.TrackData tda);
-		public void insert_stream (Xnoise.TrackData tda);
+		public void insert_file_sorted (Xnoise.TrackData tda);
+		public void insert_stream_sorted (Xnoise.TrackData[] tda);
 		public void insert_trackdata_sorted (Xnoise.TrackData[] tda);
+		public void insert_video_sorted (Xnoise.TrackData[] tda);
 		public bool populate_model ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]

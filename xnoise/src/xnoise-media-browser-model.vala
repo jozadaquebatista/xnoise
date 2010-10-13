@@ -220,17 +220,131 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		this.set(iter, Column.DRAW_SEPTR, 1, -1);
 	}
 
-	public void insert_stream(TrackData tda) {
-//		TreeIter artist_iter, new_artist_iter, album_iter, title_iter;
-//		string text = null;
-//		foreach(TrackData td in tda) {
-//			handle_iter_for_artist(ref td, out artist_iter);
-//			handle_iter_for_album (ref td, ref artist_iter, out album_iter);
-//			handle_iter_for_title (ref td, ref album_iter , out title_iter);
-//		}
+	public void insert_video_sorted(TrackData[] tda) {
+		string text = null;
+		TreeIter iter_videos = TreeIter(), iter_singlevideos;
+		CollectionType ct = CollectionType.UNKNOWN; 
+		if(this.iter_n_children(null) == 0) {
+			this.prepend(out iter_videos, null);
+			this.set(iter_videos,
+			         Column.ICON, videos_pixb,
+			         Column.VIS_TEXT, "Videos",
+			         Column.COLL_TYPE, CollectionType.LISTED,
+			         Column.DRAW_SEPTR, 0,
+			         Column.VISIBLE, true
+			         );
+		}
+		else {
+			bool found = false;
+			for(int i = 0; i < this.iter_n_children(null); i++) {
+				this.iter_nth_child(out iter_videos, null, i);
+				this.get(iter_videos, Column.VIS_TEXT, ref text, Column.COLL_TYPE, ref ct);
+				if(strcmp(text, "Videos") == 0 && ct == CollectionType.LISTED) {
+					//found streams
+					found = true;
+					break;
+				}
+			}
+			if(found == false) {
+				this.prepend(out iter_videos, null);
+				this.set(iter_videos,
+					     Column.ICON, videos_pixb,
+					     Column.VIS_TEXT, "Videos",
+					     Column.COLL_TYPE, CollectionType.LISTED,
+					     Column.DRAW_SEPTR, 0,
+					     Column.VISIBLE, true
+					     );
+			}
+		}
+		foreach(TrackData td in tda) {
+			this.prepend(out iter_singlevideos, iter_videos);
+			this.set(iter_singlevideos,
+			         Column.ICON,        videos_pixb,
+			         Column.VIS_TEXT,    td.Title,
+			         Column.DB_ID,       td.db_id,
+			         Column.MEDIATYPE ,  (int)MediaType.VIDEO,
+			         Column.COLL_TYPE,   CollectionType.LISTED,
+			         Column.DRAW_SEPTR,  0,
+			         Column.VISIBLE, true
+			         );
+		}
+
+//				TreeIter iter_videos, iter_singlevideo;
+//				this.prepend(out iter_videos, null);
+//				this.set(iter_videos,
+//						 Column.ICON, videos_pixb,
+//						 Column.VIS_TEXT, "Videos",
+//						 Column.COLL_TYPE, CollectionType.LISTED,
+//						 Column.DRAW_SEPTR, 0,
+//						 Column.VISIBLE, true
+//						 );
+//				foreach(unowned MediaData tmi in job.media_dat) {
+//					if(job.cancellable.is_cancelled())
+//						break;
+//					this.prepend(out iter_singlevideo, iter_videos);
+//					this.set(iter_singlevideo,
+//					         Column.ICON, video_pixb,
+//					         Column.VIS_TEXT, tmi.name,
+//					         Column.DB_ID, tmi.id,
+//					         Column.MEDIATYPE , (int) MediaType.VIDEO,
+//					         Column.COLL_TYPE, CollectionType.LISTED,
+//					         Column.DRAW_SEPTR, 0,
+//					         Column.VISIBLE, true
+//					         );
+//				}
+	}
+
+	public void insert_stream_sorted(TrackData[] tda) {
+		string text = null;
+		TreeIter iter_radios = TreeIter(), iter_singleradios;
+		CollectionType ct = CollectionType.UNKNOWN; 
+		if(this.iter_n_children(null) == 0) {
+			this.prepend(out iter_radios, null);
+			this.set(iter_radios,
+			     Column.ICON, radios_pixb,
+			     Column.VIS_TEXT, "Streams",
+			     Column.COLL_TYPE, CollectionType.LISTED,
+			     Column.DRAW_SEPTR, 0,
+			     Column.VISIBLE, true
+			     );
+		}
+		else {
+			bool found = false;
+			for(int i = 0; i < this.iter_n_children(null); i++) {
+				this.iter_nth_child(out iter_radios, null, i);
+				this.get(iter_radios, Column.VIS_TEXT, ref text, Column.COLL_TYPE, ref ct);
+				if(strcmp(text, "Streams") == 0 && ct == CollectionType.LISTED) {
+					//found streams
+					found = true;
+					break;
+				}
+			}
+			if(found == false) {
+				this.prepend(out iter_radios, null);
+				this.set(iter_radios,
+					 Column.ICON, radios_pixb,
+					 Column.VIS_TEXT, "Streams",
+					 Column.COLL_TYPE, CollectionType.LISTED,
+					 Column.DRAW_SEPTR, 0,
+					 Column.VISIBLE, true
+					 );
+			}
+		}
+		foreach(TrackData td in tda) {
+			this.prepend(out iter_singleradios, iter_radios);
+			this.set(iter_singleradios,
+			         Column.ICON,        radios_pixb,
+			         Column.VIS_TEXT,    td.Title,
+			         Column.DB_ID,       td.db_id,
+			         Column.MEDIATYPE ,  (int)MediaType.STREAM,
+			         Column.COLL_TYPE,   CollectionType.LISTED,
+			         Column.DRAW_SEPTR,  0,
+			         Column.VISIBLE, true
+			         );
+		}
 	}
 	
-	public void insert_file(TrackData tda) {
+	public void insert_file_sorted(TrackData tda) {
 //		TreeIter artist_iter, new_artist_iter, album_iter, title_iter;
 //		string text = null;
 //		foreach(TrackData td in tda) {
@@ -263,9 +377,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         );
 			return;
 		}
+		CollectionType ct = CollectionType.UNKNOWN;
 		for(int i = 0; i < this.iter_n_children(null); i++) {
 			this.iter_nth_child(out artist_iter, null, i);
-			this.get(artist_iter, Column.VIS_TEXT, ref text);
+			this.get(artist_iter, Column.VIS_TEXT, ref text, Column.COLL_TYPE, ref ct);
+			if(ct != CollectionType.HIERARCHICAL)
+				continue;
 			if(strcmp(text, td.Artist) == 0) {
 				//found artist
 				return;

@@ -141,14 +141,16 @@ public class Xnoise.DbWriter : GLib.Object {
 		"DELETE FROM uris WHERE id = ?";
 	private static const string STMT_DEL_ITEM = 
 		"DELETE FROM items WHERE uri = ?";
-		
+	private static const string STMT_TRACKDATA_FOR_STREAM =
+		"SELECT st.id, st.name FROM streams st WHERE st.name = ?";
 	private static const string STMT_GET_ARTIST_FOR_URI_ID =
 		"SELECT artist FROM items WHERE uri = ?";
 	private static const string STMT_COUNT_ARTIST_IN_ITEMS =
 		"SELECT COUNT(id) FROM items WHERE artist = ?";
 	private static const string STMT_DEL_ARTIST = 
 		"DELETE FROM ARTISTS WHERE id = ?";
-	    
+	private static const string STMT_TRACK_ID_FOR_URI =
+		"SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
 	private static const string STMT_GET_ALBUM_FOR_URI_ID =
 		"SELECT album FROM items WHERE uri = ?";
 	private static const string STMT_COUNT_ALBUM_IN_ITEMS =
@@ -471,6 +473,37 @@ public class Xnoise.DbWriter : GLib.Object {
 				genre_id = get_genre_id_statement.column_int(0);
 		}
 		return genre_id;
+	}
+
+	public bool get_trackdata_for_stream(string uri, out TrackData val) {
+		Statement stmt;
+		bool retval = false;
+		val = new TrackData();
+		this.db.prepare_v2(STMT_TRACKDATA_FOR_STREAM, -1, out stmt);
+			
+		stmt.reset();
+		if(stmt.bind_text(1, uri) != Sqlite.OK) {
+			this.db_error();
+		}
+		if(stmt.step() == Sqlite.ROW) {
+			val.db_id = stmt.column_int(0);
+			val.Title = stmt.column_text(1);
+			retval = true;
+		}
+		return retval;
+	}
+
+	public int get_track_id_for_uri(string uri) {
+		int val = -1;
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_TRACK_ID_FOR_URI, -1, out stmt);
+		stmt.reset();
+		stmt.bind_text(1, uri);
+		if(stmt.step() == Sqlite.ROW) {
+			val = stmt.column_int(0);
+		}
+		return val;
 	}
 
 	public int32 insert_title(TrackData td, string uri) {
