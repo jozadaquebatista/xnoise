@@ -317,10 +317,10 @@ namespace Xnoise {
 		}
 		public string searchtext;
 		public MediaBrowserModel ();
-		public int32[] build_id_list_for_iter (ref Gtk.TreeIter iter);
 		public string[] build_uri_list_for_treepath (Gtk.TreePath treepath, ref Xnoise.DbBrowser dbb);
 		public void cancel_fill_model ();
 		public void filter ();
+		public Xnoise.DndData[] get_dnd_data_for_path (ref Gtk.TreePath treepath);
 		public int get_max_icon_width ();
 		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_hierarchical (Gtk.TreePath treepath);
@@ -558,6 +558,7 @@ namespace Xnoise {
 			public int32[] big_counter;
 			public GLib.Cancellable? cancellable;
 			public int[] counter;
+			public Xnoise.DndData[] dnd_data;
 			public int64 id;
 			public int32[] id_array;
 			public Xnoise.MediaData[] media_dat;
@@ -622,6 +623,11 @@ namespace Xnoise {
 		public abstract bool init ();
 		public abstract string name { get; }
 		public abstract Xnoise.Main xn { get; set; }
+	}
+	[CCode (type_id = "XNOISE_TYPE_DND_DATA", cheader_filename = "xnoise.h")]
+	public struct DndData {
+		public int32 db_id;
+		public Xnoise.MediaType mediatype;
 	}
 	[CCode (type_id = "XNOISE_TYPE_MEDIA_DATA", cheader_filename = "xnoise.h")]
 	public struct MediaData {

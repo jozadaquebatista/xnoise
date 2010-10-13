@@ -377,6 +377,9 @@ typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
 #define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLUMN (xnoise_media_browser_model_column_get_type ())
 
 #define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_media_browser_model_collection_type_get_type ())
+
+#define XNOISE_TYPE_DND_DATA (xnoise_dnd_data_get_type ())
+typedef struct _XnoiseDndData XnoiseDndData;
 typedef struct _XnoiseMediaBrowserFilterModelPrivate XnoiseMediaBrowserFilterModelPrivate;
 
 #define XNOISE_TYPE_MEDIA_IMPORTER (xnoise_media_importer_get_type ())
@@ -850,6 +853,11 @@ typedef enum  {
 	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_LISTED = 2
 } XnoiseMediaBrowserModelCollectionType;
 
+struct _XnoiseDndData {
+	gint32 db_id;
+	XnoiseMediaType mediatype;
+};
+
 struct _XnoiseMediaBrowserFilterModel {
 	GtkTreeModelFilter parent_instance;
 	XnoiseMediaBrowserFilterModelPrivate * priv;
@@ -1164,6 +1172,8 @@ struct _XnoiseWorkerJob {
 	gint id_array_length1;
 	XnoiseTrackData** track_dat;
 	gint track_dat_length1;
+	XnoiseDndData* dnd_data;
+	gint dnd_data_length1;
 	gint counter[4];
 	gint32 big_counter[4];
 	gint64 id;
@@ -1454,7 +1464,10 @@ gboolean xnoise_media_browser_model_populate_model (XnoiseMediaBrowserModel* sel
 XnoiseTrackData** xnoise_media_browser_model_get_trackdata_listed (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, int* result_length1);
 XnoiseTrackData** xnoise_media_browser_model_get_trackdata_hierarchical (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, int* result_length1);
 XnoiseTrackData** xnoise_media_browser_model_get_trackdata_for_treepath (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, int* result_length1);
-gint32* xnoise_media_browser_model_build_id_list_for_iter (XnoiseMediaBrowserModel* self, GtkTreeIter* iter, int* result_length1);
+GType xnoise_dnd_data_get_type (void) G_GNUC_CONST;
+XnoiseDndData* xnoise_dnd_data_dup (const XnoiseDndData* self);
+void xnoise_dnd_data_free (XnoiseDndData* self);
+XnoiseDndData* xnoise_media_browser_model_get_dnd_data_for_path (XnoiseMediaBrowserModel* self, GtkTreePath** treepath, int* result_length1);
 char** xnoise_media_browser_model_build_uri_list_for_treepath (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, XnoiseDbBrowser** dbb, int* result_length1);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);

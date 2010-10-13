@@ -346,6 +346,10 @@ public struct Xnoise.MediaData {
 	public MediaType mediatype;
 }
 
+public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
+	public int32 db_id;
+	public MediaType mediatype;
+}
 
 
 

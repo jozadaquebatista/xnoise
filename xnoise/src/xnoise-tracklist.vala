@@ -39,7 +39,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 	// targets used with this as a destination
 	private const TargetEntry[] dest_target_entries = {
-		{"application/db-id", TargetFlags.SAME_APP, 0},
+		{"application/custom_dnd_data", TargetFlags.SAME_APP, 0},
 		{"text/uri-list", 0, 0}
 //		{"text/uri-list", TargetFlags.OTHER_APP, 0}
 	};
@@ -425,8 +425,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 		
 		if(!this.reorder_dragging) { // && Xnoise.Main.instance.main_window.mediaBr.drag_from_mediabrowser) { 
 			// DRAGGING NOT WITHIN TRACKLIST
-			unowned int32[] ids = (int32[])selection.data;
-			ids.length = (int)(selection.length / sizeof(int32));
+			unowned DndData[] ids = (DndData[])selection.data;
+			ids.length = (int)(selection.length / sizeof(DndData));
 			
 			TreeRowReference row_ref = null;
 			if(path != null)
@@ -435,7 +435,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			var job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.insert_dropped_ids);
 			job.set_arg("row_ref", row_ref);
 			job.set_arg("drop_pos", drop_pos);
-			job.id_array = ids;
+			job.dnd_data = ids;
 			worker.push_job(job);
 		}
 //		else if(!this.reorder_dragging && !Xnoise.Main.instance.main_window.mediaBr.drag_from_mediabrowser) {
@@ -542,7 +542,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void insert_dropped_ids(Worker.Job job) {
-		int32[] ids = job.id_array;
+		DndData[] ids = job.dnd_data;
 		TrackData td;
 		DbBrowser dbBr = null;
 		try {
@@ -558,10 +558,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 		TreePath path = null;
 		if(row_ref != null && row_ref.valid())
 			path = row_ref.get_path();
-		foreach(int32 ix in ids) {
+		foreach(DndData ix in ids) {
 			int tracknumb;
 			string lengthString = "", artist, album, title, uri;
-			if(dbBr.get_trackdata_for_id((int)ix, out td)) {
+			if(dbBr.get_trackdata_for_id((int)ix.db_id, out td)) {
 				artist    = td.Artist;
 				album     = td.Album;
 				title     = td.Title;

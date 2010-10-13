@@ -101,8 +101,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	public signal void sign_activated();
 	// targets used with this as a source
 	private const TargetEntry[] src_target_entries = {
-		{"application/db-id", TargetFlags.SAME_APP, 0}
-		//{"text/uri-list", 0, 0}
+		{"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
 	};
 
 	// targets used with this as a destination
@@ -327,18 +326,18 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		selection = this.get_selection();
 		treepaths = selection.get_selected_rows(null);
 		TreeIter iter;
-		int32[] ids = {};
+		DndData[] ids = {};
 		foreach(unowned TreePath treepath in treepaths) { 
 			TreePath tp = filtermodel.convert_path_to_child_path(treepath);
-			mediabrowsermodel.get_iter(out iter, tp);
-			int32[] l = mediabrowsermodel.build_id_list_for_iter(ref iter); 
-			foreach(int32 u in l) {
-				ids += u;
+//			mediabrowsermodel.get_iter(out iter, tp);
+			DndData[] l = mediabrowsermodel.get_dnd_data_for_path(ref tp); 
+			foreach(DndData u in l) {
+				ids += u; // TODO: Can this be done more efficient?
 			}
 		}
 		Gdk.Atom dnd_atom = Gdk.Atom.intern(src_target_entries[0].target, true);
 		unowned uchar[] data = (uchar[])ids;
-		data.length = (int)(ids.length * sizeof(int32));
+		data.length = (int)(ids.length * sizeof(DndData));
 		
 		selection_data.set(dnd_atom, 8, data);
 	}

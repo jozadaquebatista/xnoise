@@ -839,16 +839,18 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	//TODO: How to do this for videos/streams?
-	public int32[] build_id_list_for_iter(ref TreeIter iter) {
-		TreeIter iterChild, iterChildChild;
-		int32[] urilist = {};
+	public DndData[] get_dnd_data_for_path(ref TreePath treepath) {
+		TreeIter iter, iterChild, iterChildChild;
+//		int32[] urilist = {};
+		DndData[] dnd_data_array = {};
 		MediaType mtype = MediaType.UNKNOWN;
 		int dbid = -1;
 		//string uri;
-		TreePath treepath;
+//		TreePath treepath;
 		CollectionType br_ct = CollectionType.UNKNOWN;
-		treepath = this.get_path(iter);
+//		treepath = this.get_path(iter);
 		bool visible = false;
+		this.get_iter(out iter, treepath);
 		switch(treepath.get_depth()) {
 			case 1:
 			//this.get_iter(out iter, treepath);
@@ -860,11 +862,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						this.iter_nth_child(out iterChild, iter, i);
 						this.get(iterChild,
 						         Column.DB_ID, ref dbid,
-						         Column.VISIBLE, ref visible
-//						         Column.MEDIATYPE, ref mtype
+						         Column.VISIBLE, ref visible,
+						         Column.MEDIATYPE, ref mtype
 						         );
-						if(visible)
-							urilist += dbid;
+						if(visible) {
+//							urilist += dbid;
+							DndData dnd_data = { dbid, (MediaType)mtype };
+							dnd_data_array += dnd_data;
+						}
 //						if(dbid==-1) break;
 //						switch(mtype) {
 //							case MediaType.VIDEO: {
@@ -893,10 +898,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 							this.iter_nth_child(out iterChildChild, iterChild, j);
 							this.get(iterChildChild, 
 							         Column.DB_ID, ref dbid,
-							         Column.VISIBLE, ref visible
+							         Column.VISIBLE, ref visible,
+							         Column.MEDIATYPE, ref mtype
 							         );
-							if(dbid != -1 && visible)
-								urilist += dbid;
+							if(dbid != -1 && visible) {
+								DndData dnd_data = { dbid, (MediaType)mtype };
+								dnd_data_array += dnd_data;
+//								urilist += dbid;
+							}
 						}
 					}
 				}
@@ -909,13 +918,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					mtype = MediaType.UNKNOWN;
 					this.get(iter,
 					         Column.DB_ID, ref dbid,
-					         Column.VISIBLE, ref visible
-//					         Column.MEDIATYPE, ref mtype
+					         Column.VISIBLE, ref visible,
+					         Column.MEDIATYPE, ref mtype
 					         );
 					if(dbid==-1) break;
 					
-					if(visible)
-						urilist += dbid;
+					if(visible) {
+						DndData dnd_data = { dbid, (MediaType)mtype };
+						dnd_data_array += dnd_data;
+//						urilist += dbid;
+					}
 					
 //						switch(mtype) {
 //						case MediaType.VIDEO: {
@@ -937,21 +949,31 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					for(int i = 0; i < this.iter_n_children(iter); i++) {
 						dbid = -1;
 						this.iter_nth_child(out iterChild, iter, i);
-						this.get(iterChild, Column.DB_ID, ref dbid, Column.VISIBLE, ref visible);
-							if(dbid != -1 && visible)
-								urilist += dbid;
+						this.get(iterChild, 
+						         Column.DB_ID, ref dbid,
+						         Column.VISIBLE, ref visible,
+						         Column.MEDIATYPE, ref mtype
+						         );
+							if(dbid != -1 && visible) {
+								DndData dnd_data = { dbid, (MediaType)mtype };
+								dnd_data_array += dnd_data;
+//								urilist += dbid;
+							}
 					}
 				}
 				break;
 			case 3: //TITLE
 				dbid = -1;
-				this.get(iter, Column.DB_ID, ref dbid);
+				this.get(iter, Column.DB_ID, ref dbid, Column.MEDIATYPE, ref mtype);
 				if(dbid==-1) break;
-				if(dbid != -1)
-					urilist += dbid;
+				if(dbid != -1) {
+//					urilist += dbid;
+					DndData dnd_data = { dbid, (MediaType)mtype };
+					dnd_data_array += dnd_data;
+				}
 				break;
 		}
-		return urilist;
+		return dnd_data_array;
 	}
 
 	public string[] build_uri_list_for_treepath(Gtk.TreePath treepath, ref DbBrowser dbb) {
