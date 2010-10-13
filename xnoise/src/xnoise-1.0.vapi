@@ -560,7 +560,6 @@ namespace Xnoise {
 			public int[] counter;
 			public Xnoise.DndData[] dnd_data;
 			public int64 id;
-			public int32[] id_array;
 			public Xnoise.MediaData[] media_dat;
 			public void* p_arg;
 			public Xnoise.Worker.SyncWorkFunc? s_func;
@@ -576,11 +575,11 @@ namespace Xnoise {
 		[CCode (cprefix = "XNOISE_WORKER_EXECUTION_TYPE_", cheader_filename = "xnoise.h")]
 		public enum ExecutionType {
 			UNKNOWN,
-			SYNC,
-			SYNC_HIGH_PRIORITY,
+			ONE_SHOT,
+			ONE_SHOT_HIGH_PRIORITY,
 			TIMED,
-			ASYNC,
-			ASYNC_LOW_PRIORITY
+			REPEATED,
+			REPEATED_LOW_PRIORITY
 		}
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate bool AsyncWorkFunc (Xnoise.Worker.Job jb);

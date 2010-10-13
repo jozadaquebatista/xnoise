@@ -1151,11 +1151,11 @@ struct _XnoiseWorkerClass {
 
 typedef enum  {
 	XNOISE_WORKER_EXECUTION_TYPE_UNKNOWN = 0,
-	XNOISE_WORKER_EXECUTION_TYPE_SYNC,
-	XNOISE_WORKER_EXECUTION_TYPE_SYNC_HIGH_PRIORITY,
+	XNOISE_WORKER_EXECUTION_TYPE_ONE_SHOT,
+	XNOISE_WORKER_EXECUTION_TYPE_ONE_SHOT_HIGH_PRIORITY,
 	XNOISE_WORKER_EXECUTION_TYPE_TIMED,
-	XNOISE_WORKER_EXECUTION_TYPE_ASYNC,
-	XNOISE_WORKER_EXECUTION_TYPE_ASYNC_LOW_PRIORITY
+	XNOISE_WORKER_EXECUTION_TYPE_REPEATED,
+	XNOISE_WORKER_EXECUTION_TYPE_REPEATED_LOW_PRIORITY
 } XnoiseWorkerExecutionType;
 
 typedef gboolean (*XnoiseWorkerAsyncWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
@@ -1168,8 +1168,6 @@ struct _XnoiseWorkerJob {
 	void* p_arg;
 	XnoiseMediaData* media_dat;
 	gint media_dat_length1;
-	gint32* id_array;
-	gint id_array_length1;
 	XnoiseTrackData** track_dat;
 	gint track_dat_length1;
 	XnoiseDndData* dnd_data;

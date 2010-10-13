@@ -163,7 +163,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 			return;
 		}
 		GLib.List<GLib.FileInfo> infos;
-		int success_count = 0;
+//		int success_count = 0;
 		try {
 			while(true) {
 				infos = yield enumerator.next_files_async(15, GLib.Priority.DEFAULT, null);

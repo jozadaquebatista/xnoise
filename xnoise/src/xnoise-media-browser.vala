@@ -320,20 +320,24 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context, Gtk.SelectionData selection_data, uint info, uint etime) {
-	
 		List<unowned TreePath> treepaths;
 		unowned Gtk.TreeSelection selection;
 		selection = this.get_selection();
 		treepaths = selection.get_selected_rows(null);
-		TreeIter iter;
+//		TreeIter iter;
 		DndData[] ids = {};
-		foreach(unowned TreePath treepath in treepaths) { 
-			TreePath tp = filtermodel.convert_path_to_child_path(treepath);
-//			mediabrowsermodel.get_iter(out iter, tp);
-			DndData[] l = mediabrowsermodel.get_dnd_data_for_path(ref tp); 
-			foreach(DndData u in l) {
-				ids += u; // TODO: Can this be done more efficient?
+		if(treepaths.length() > 1) {
+			foreach(unowned TreePath treepath in treepaths) { 
+				TreePath tp = filtermodel.convert_path_to_child_path(treepath);
+				DndData[] l = mediabrowsermodel.get_dnd_data_for_path(ref tp); 
+				foreach(DndData u in l) {
+					ids += u; // this is necessary, if more than one path can be selected
+				}
 			}
+		}
+		else {
+			TreePath tp = filtermodel.convert_path_to_child_path((TreePath)treepaths.data);
+			ids = mediabrowsermodel.get_dnd_data_for_path(ref tp);
 		}
 		Gdk.Atom dnd_atom = Gdk.Atom.intern(src_target_entries[0].target, true);
 		unowned uchar[] data = (uchar[])ids;
@@ -345,7 +349,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private void on_drag_end(Gtk.Widget sender, Gdk.DragContext context) {
 		this.dragging = false;
 		//this.drag_from_mediabrowser = false;
-
+		
 		this.unset_rows_drag_dest();
 		Gtk.drag_dest_set(this,
 		                  Gtk.DestDefaults.ALL,

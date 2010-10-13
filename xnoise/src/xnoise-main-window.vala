@@ -151,7 +151,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	};
 
 	private const Gtk.TargetEntry[] target_list = {
-		{"application/db-id", TargetFlags.SAME_APP, 0},
+		{"application/custom_dnd_data", TargetFlags.SAME_APP, 0},
 		{"text/uri-list", TargetFlags.OTHER_APP, 0}
 	};
 
@@ -203,7 +203,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		ssm = new ScreenSaverManager();
 
 		//restore last state
-		var job = new Worker.Job(999, Worker.ExecutionType.SYNC, null, this.add_lastused_titles_to_tracklist);
+		var job = new Worker.Job(999, Worker.ExecutionType.ONE_SHOT, null, this.add_lastused_titles_to_tracklist);
 		worker.push_job(job);
 
 		notify["repeatState"].connect(on_repeatState_changed);

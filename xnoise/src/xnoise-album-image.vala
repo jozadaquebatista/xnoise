@@ -162,7 +162,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		album  = remove_linebreaks(global.current_album );
 
 
-		var job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.fetch_trackdata_job);
+		var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.fetch_trackdata_job);
 		job.set_arg("artist", artist);
 		job.set_arg("album", album);
 		job.set_arg("uri", xn.gPl.Uri);
@@ -287,7 +287,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			return false;
 		});
 		
-//		var job = new Worker.Job(1, Worker.ExecutionType.SYNC, null, this.set_local_album_image);
+//		var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.set_local_album_image);
 //		job.set_arg("artist", artist);
 //		job.set_arg("album", album);
 //		job.set_arg("image_path", image_path);

@@ -35,7 +35,7 @@ public class Xnoise.Worker : Object {
 	
 	private AsyncQueue<Job> async_job_queue = new AsyncQueue<Job>();
 	private AsyncQueue<Job> sync_job_queue  = new AsyncQueue<Job>();
-	private AsyncQueue<Job> timed_job_queue = new AsyncQueue<Job>();
+	//private AsyncQueue<Job> timed_job_queue = new AsyncQueue<Job>();
 	
 	private unowned Thread thread;
 	
@@ -63,11 +63,11 @@ public class Xnoise.Worker : Object {
 	
 	public enum ExecutionType {
 		UNKNOWN = 0,
-		SYNC,
-		SYNC_HIGH_PRIORITY, // not used,yet
-		TIMED,              // queue timed job if working functionreturns true -> queue again
-		ASYNC,
-		ASYNC_LOW_PRIORITY  // not used,yet
+		ONE_SHOT,
+		ONE_SHOT_HIGH_PRIORITY, // not used,yet
+		TIMED,                  // queue timed job if working functionreturns true -> queue again
+		REPEATED,               // repeat until worker function returns false
+		REPEATED_LOW_PRIORITY   // not used,yet
 	}
 	
 	public class Job : Object {
@@ -106,8 +106,8 @@ public class Xnoise.Worker : Object {
 		public Value? value_arg2 = null;
 		public void* p_arg = null;
 		
-		public MediaData[] media_dat; // maybe use TrackData class insttead of MediaData?
-		public int32[] id_array;
+		public MediaData[] media_dat; // maybe always use TrackData class instead of MediaData?
+		//public int32[] id_array;
 		public TrackData[] track_dat; 
 		public DndData[] dnd_data;
 		// It is useful to have some Job persistent counters available
@@ -134,7 +134,7 @@ public class Xnoise.Worker : Object {
 		local_context = new MainContext();
 		local_context.push_thread_default();
 		var loop = new MainLoop(local_context);
-		message( "worker thread %d", (int)Linux.gettid() );
+		//message( "worker thread %d", (int)Linux.gettid() );
 		loop.run();
 		return null;
 	}
@@ -185,7 +185,7 @@ public class Xnoise.Worker : Object {
 	// After pushing a Job, it will be executed and removed
 	public void push_job(Job j) {
 		switch(j.execution_type) {
-			case ExecutionType.SYNC:
+			case ExecutionType.ONE_SHOT:
 				if(j.s_func == null) {
 					print("Error: There must be a SyncWorkFunc in a sync job.\n");
 					break;
@@ -198,7 +198,7 @@ public class Xnoise.Worker : Object {
 				});
 				source.attach(local_context);
 				break;
-			case ExecutionType.ASYNC:
+			case ExecutionType.REPEATED:
 				if(j.a_func == null) {
 					print("Error: There must be a AsyncWorkFunc in an async job.\n");
 					break;
@@ -212,7 +212,7 @@ public class Xnoise.Worker : Object {
 				source.attach(local_context);
 				break;
 			default:
-				print("Not a valid execution type. Doing nothing\n");
+				print("Not a valid execution type or the type was not yet implemented. Doing nothing\n");
 				break;
 		}
 	}

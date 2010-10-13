@@ -148,7 +148,7 @@ public class Xnoise.Main : GLib.Object {
 	private string[] final_tracklist = null;
 	public void save_tracklist() {
 		final_tracklist = this.main_window.trackList.tracklistmodel.get_all_tracks();
-		var job = new Worker.Job(999, Worker.ExecutionType.SYNC, null, this.write_final_tracks_to_db_job);
+		var job = new Worker.Job(999, Worker.ExecutionType.ONE_SHOT, null, this.write_final_tracks_to_db_job);
 		worker.push_job(job);
 	}
 	
