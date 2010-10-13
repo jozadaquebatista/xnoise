@@ -72,6 +72,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private bool _media_browser_visible;
 	private double current_volume; //keep it global for saving to params
 	private int window_width = 0;
+	private ulong active_notifier = 0;
 	private ScreenSaverManager ssm = null;
 	private List<Gtk.Action> actions_list = null;
 	public ScrolledWindow mediaBrScrollWin = null;
@@ -206,8 +207,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		var job = new Worker.Job(999, Worker.ExecutionType.ONE_SHOT, null, this.add_lastused_titles_to_tracklist);
 		worker.push_job(job);
 
-		notify["repeatState"].connect(on_repeatState_changed);
-		notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
+		active_notifier = this.notify["is-active"].connect(buffer_position);
+		this.notify["repeatState"].connect(on_repeatState_changed);
+		this.notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
 		global.notify["media-import-in-progress"].connect(on_media_import_notify);
 
 		buffer_last_page = 0;
@@ -224,9 +226,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 		
 		this.check_resize.connect(on_resized);
+		
 	}
 	
-	void on_resized() {
+	private void buffer_position() {
+		this.get_position(out _posX_buffer, out _posY_buffer);
+	}
+	
+	private void on_resized() {
 		if(this.window == null)
 			return;
 		int w, x;
@@ -588,6 +595,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	public void toggle_window_visbility() {
+		if(active_notifier != 0) {
+			this.disconnect(active_notifier);
+			active_notifier = 0;
+		}
 		if(this.is_active) {
 			this.get_position(out _posX_buffer, out _posY_buffer);
 			this.hide();
@@ -595,10 +606,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		else if(this.window.is_visible() == true) {
 			this.move(_posX_buffer, _posY_buffer);
 			this.present();
+			active_notifier = this.notify["is-active"].connect(buffer_position);
 		}
 		else {
 			this.move(_posX_buffer, _posY_buffer);
 			this.present();
+			active_notifier = this.notify["is-active"].connect(buffer_position);
 		}
 	}
 
@@ -815,6 +828,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private bool on_close() {
+		if(active_notifier != 0) {
+			this.disconnect(active_notifier);
+			active_notifier = 0;
+		}
 		this.get_position(out _posX_buffer, out _posY_buffer);
 		this.hide();
 		return true;

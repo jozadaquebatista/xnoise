@@ -55,6 +55,7 @@ public class Xnoise.Worker : Object {
 		}
 	}
 	
+	//TODO: Maybe use only one working function type
 	// AsyncWorkFunc will repeatedly be executed from an async function until it returns false
 	public delegate bool AsyncWorkFunc(Job jb);
 	
@@ -119,7 +120,7 @@ public class Xnoise.Worker : Object {
 		
 		// This can be used to identify the job or it's origin, etc.
 		// This could also be used to mark the creation time of a job, if useful
-		public int64 id;
+		public int64 id; //TODO: Is this needed?
 		
 		// readonly execution type for the job (sync, async, ..)
 		public ExecutionType execution_type { get { return _execution_type; } }
