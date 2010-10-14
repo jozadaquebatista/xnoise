@@ -339,7 +339,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		int artist_id = -1;
 
 		get_artist_id_statement.reset();
-		if(get_artist_id_statement.bind_text(1, artist.down()) != Sqlite.OK) {
+		if(get_artist_id_statement.bind_text(1, artist.down().strip()) != Sqlite.OK) {
 			this.db_error();
 			return -1;
 		}
@@ -349,7 +349,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(artist_id == -1) { // Artist not in table, yet
 			// Insert artist
 			insert_artist_statement.reset();
-			if(insert_artist_statement.bind_text(1, artist) != Sqlite.OK) {
+			if(insert_artist_statement.bind_text(1, artist.strip()) != Sqlite.OK) {
 				this.db_error();
 				return -1;
 			}
@@ -359,7 +359,7 @@ public class Xnoise.DbWriter : GLib.Object {
 			}
 			// Get unique artist id key
 			get_artist_id_statement.reset();
-			if(get_artist_id_statement.bind_text(1, artist.down()) != Sqlite.OK) {
+			if(get_artist_id_statement.bind_text(1, artist.down().strip()) != Sqlite.OK) {
 				this.db_error();
 				return -1;
 			}
@@ -374,7 +374,7 @@ public class Xnoise.DbWriter : GLib.Object {
 
 		get_album_id_statement.reset();
 		if(get_album_id_statement.bind_int (1, artist_id)    != Sqlite.OK ||
-		   get_album_id_statement.bind_text(2, album.down()) != Sqlite.OK ) {
+		   get_album_id_statement.bind_text(2, album.down().strip()) != Sqlite.OK ) {
 			this.db_error();
 			return -1;
 		   }
@@ -385,7 +385,7 @@ public class Xnoise.DbWriter : GLib.Object {
 			// Insert album
 			insert_album_statement.reset();
 			if(insert_album_statement.bind_int (1, artist_id) != Sqlite.OK ||
-			   insert_album_statement.bind_text(2, album)     != Sqlite.OK ) {
+			   insert_album_statement.bind_text(2, album.strip())     != Sqlite.OK ) {
 				this.db_error();
 				return -1;
 			}
@@ -395,8 +395,8 @@ public class Xnoise.DbWriter : GLib.Object {
 			}
 			// Get unique album id key
 			get_album_id_statement.reset();
-			if(get_album_id_statement.bind_int (1, artist_id)    != Sqlite.OK ||
-			   get_album_id_statement.bind_text(2, album.down()) != Sqlite.OK ) {
+			if(get_album_id_statement.bind_int (1, artist_id           )    != Sqlite.OK ||
+			   get_album_id_statement.bind_text(2, album.down().strip()) != Sqlite.OK ) {
 				this.db_error();
 				return -1;
 			}
@@ -445,7 +445,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		if((genre.strip() == "")||(genre == null)) return -2; //NO GENRE
 
 		get_genre_id_statement.reset();
-		if(get_genre_id_statement.bind_text(1, genre.down()) != Sqlite.OK) {
+		if(get_genre_id_statement.bind_text(1, genre.down().strip()) != Sqlite.OK) {
 			this.db_error();
 			return -1;
 		}
@@ -455,7 +455,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(genre_id == -1) { // genre not in table, yet
 			// Insert genre
 			insert_genre_statement.reset();
-			if(insert_genre_statement.bind_text(1, genre) != Sqlite.OK) {
+			if(insert_genre_statement.bind_text(1, genre.strip()) != Sqlite.OK) {
 				this.db_error();
 				return -1;
 			}
@@ -465,7 +465,7 @@ public class Xnoise.DbWriter : GLib.Object {
 			}
 			// Get unique genre id key
 			get_genre_id_statement.reset();
-			if(get_genre_id_statement.bind_text(1, genre.down()) != Sqlite.OK) {
+			if(get_genre_id_statement.bind_text(1, genre.down().strip()) != Sqlite.OK) {
 				this.db_error();
 				return -1;
 			}
@@ -508,29 +508,24 @@ public class Xnoise.DbWriter : GLib.Object {
 
 	public int32 insert_title(TrackData td, string uri) {
 		// make entries in other tables and get references from there
-		//mutex.enter();
 		int artist_id = handle_artist(ref td.Artist);
 		if(artist_id == -1) {
 			print("Error importing artist!\n");
-			//mutex.leave();
 			return -1;
 		}
 		int album_id = handle_album(ref artist_id, ref td.Album);
 		if(album_id == -1) {
 			print("Error importing album!\n");
-			//mutex.leave();
 			return -1;
 		}
 		int uri_id = handle_uri(uri);
 		if(uri_id == -1) {
 			print("Error importing uri!\n");
-			//mutex.leave();
 			return -1;
 		}
 		int genre_id = handle_genre(ref td.Genre);
 		if(genre_id == -1) {
 			print("Error importing genre!\n");
-			//mutex.leave();
 			return -1;
 		}
 		insert_title_statement.reset();
@@ -553,9 +548,9 @@ public class Xnoise.DbWriter : GLib.Object {
 		//get id back
 		Statement stmt;
 		this.db.prepare_v2(STMT_GET_GET_ITEM_ID, -1, out stmt);
-		if(stmt.bind_int (1,  artist_id)           != Sqlite.OK ||
-		   stmt.bind_int (2,  album_id)            != Sqlite.OK ||
-		   stmt.bind_text(3,  td.Title)            != Sqlite.OK) {
+		if(stmt.bind_int (1, artist_id) != Sqlite.OK ||
+		   stmt.bind_int (2, album_id)  != Sqlite.OK ||
+		   stmt.bind_text(3, td.Title)  != Sqlite.OK) {
 			this.db_error();
 		}
 		stmt.reset();
@@ -563,7 +558,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(stmt.step() == Sqlite.ROW) {
 			val = (int32)stmt.column_int(0);
 		}
-		//mutex.leave();
 		return val;
 	}
 //	public void insert_title(TrackData td, string uri) {

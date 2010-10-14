@@ -1458,7 +1458,6 @@ gint xnoise_media_browser_model_get_max_icon_width (XnoiseMediaBrowserModel* sel
 void xnoise_media_browser_model_filter (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_insert_video_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
 void xnoise_media_browser_model_insert_stream_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
-void xnoise_media_browser_model_insert_file_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData* tda);
 void xnoise_media_browser_model_insert_trackdata_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
 void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
 gboolean xnoise_media_browser_model_populate_model (XnoiseMediaBrowserModel* self);
@@ -1478,6 +1477,7 @@ GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
 void xnoise_media_importer_add_single_file (XnoiseMediaImporter* self, const char* uri);
 void xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir, XnoiseWorkerJob* job, GAsyncReadyCallback _callback_, gpointer _user_data_);
 void xnoise_media_importer_add_local_tags_finish (XnoiseMediaImporter* self, GAsyncResult* _res_);
+void xnoise_media_importer_reset_local_data_library_job (XnoiseMediaImporter* self, XnoiseWorkerJob* job);
 void xnoise_media_importer_store_folders_job (XnoiseMediaImporter* self, XnoiseWorkerJob* job);
 void xnoise_media_importer_store_streams_job (XnoiseMediaImporter* self, XnoiseWorkerJob* job);
 void xnoise_media_importer_store_files_job (XnoiseMediaImporter* self, XnoiseWorkerJob* job);

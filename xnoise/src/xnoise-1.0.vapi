@@ -327,7 +327,6 @@ namespace Xnoise {
 		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_hierarchical (Gtk.TreePath treepath);
 		public Xnoise.TrackData[] get_trackdata_listed (Gtk.TreePath treepath);
-		public void insert_file_sorted (Xnoise.TrackData tda);
 		public void insert_stream_sorted (Xnoise.TrackData[] tda);
 		public void insert_trackdata_sorted (Xnoise.TrackData[] tda);
 		public void insert_video_sorted (Xnoise.TrackData[] tda);
@@ -338,6 +337,7 @@ namespace Xnoise {
 		public MediaImporter ();
 		public async void add_local_tags (GLib.File dir, Xnoise.Worker.Job job);
 		public void add_single_file (string uri);
+		public void reset_local_data_library_job (Xnoise.Worker.Job job);
 		public void store_files_job (Xnoise.Worker.Job job);
 		public void store_folders_job (Xnoise.Worker.Job job);
 		public void store_streams_job (Xnoise.Worker.Job job);

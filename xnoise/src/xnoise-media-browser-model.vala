@@ -268,30 +268,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.VISIBLE, true
 			         );
 		}
-
-//				TreeIter iter_videos, iter_singlevideo;
-//				this.prepend(out iter_videos, null);
-//				this.set(iter_videos,
-//						 Column.ICON, videos_pixb,
-//						 Column.VIS_TEXT, "Videos",
-//						 Column.COLL_TYPE, CollectionType.LISTED,
-//						 Column.DRAW_SEPTR, 0,
-//						 Column.VISIBLE, true
-//						 );
-//				foreach(unowned MediaData tmi in job.media_dat) {
-//					if(job.cancellable.is_cancelled())
-//						break;
-//					this.prepend(out iter_singlevideo, iter_videos);
-//					this.set(iter_singlevideo,
-//					         Column.ICON, video_pixb,
-//					         Column.VIS_TEXT, tmi.name,
-//					         Column.DB_ID, tmi.id,
-//					         Column.MEDIATYPE , (int) MediaType.VIDEO,
-//					         Column.COLL_TYPE, CollectionType.LISTED,
-//					         Column.DRAW_SEPTR, 0,
-//					         Column.VISIBLE, true
-//					         );
-//				}
 	}
 
 	public void insert_stream_sorted(TrackData[] tda) {
@@ -343,20 +319,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         );
 		}
 	}
-	
-	public void insert_file_sorted(TrackData tda) {
-//		TreeIter artist_iter, new_artist_iter, album_iter, title_iter;
-//		string text = null;
-//		foreach(TrackData td in tda) {
-//			handle_iter_for_artist(ref td, out artist_iter);
-//			handle_iter_for_album (ref td, ref artist_iter, out album_iter);
-//			handle_iter_for_title (ref td, ref album_iter , out title_iter);
-//		}
-	}
-	
+
 	public void insert_trackdata_sorted(TrackData[] tda) {
-		TreeIter artist_iter, new_artist_iter, album_iter, title_iter;
+		TreeIter artist_iter, album_iter, title_iter;
 		string text = null;
+		//print("insert_trackdata_sorted : %s - %s - %s - %d \n", tda[0].Artist,tda[0].Album,tda[0].Title,tda[0].db_id);
 		foreach(TrackData td in tda) {
 			handle_iter_for_artist(ref td, out artist_iter);
 			handle_iter_for_album (ref td, ref artist_iter, out album_iter);
@@ -383,11 +350,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			this.get(artist_iter, Column.VIS_TEXT, ref text, Column.COLL_TYPE, ref ct);
 			if(ct != CollectionType.HIERARCHICAL)
 				continue;
-			if(strcmp(text, td.Artist) == 0) {
+			text = text.down().strip();
+			if(strcmp(text, td.Artist.down().strip()) == 0) {
 				//found artist
 				return;
 			}
-			if(strcmp(text, td.Artist) > 0) {
+			if(strcmp(text, td.Artist.down().strip()) > 0) {
 				//found artist
 				TreeIter new_artist_iter;
 				this.insert_before(out new_artist_iter, null, artist_iter);
@@ -430,11 +398,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
 			this.iter_nth_child(out album_iter, artist_iter, i);
 			this.get(album_iter, Column.VIS_TEXT, ref text);
-			if(strcmp(text, td.Album) == 0) {
+			text = text.down().strip();
+			if(strcmp(text, td.Album.down().strip()) == 0) {
 				//found album
 				return;
 			}
-			if(strcmp(text, td.Album) > 0) {
+			if(strcmp(text, td.Album.down().strip()) > 0) {
 				//found artist
 				TreeIter new_album_iter;
 				this.insert_before(out new_album_iter, artist_iter, album_iter);
@@ -680,24 +649,25 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					return false;
 				}
 			}
-			job.big_counter[0] = dbb.count_artists_with_search(ref searchtext);
+			job.big_counter[0] = (int32)dbb.count_artists_with_search(ref searchtext);
 		}
 		
 		if(job.big_counter[0] == 0) {
 			dbb = null;
 			return false;
 		}
-		
+		bool repeate = true;
 		if((job.big_counter[1] + ARTIST_FOR_ONE_JOB) > job.big_counter[0]) {
 			// last round
-			//print("done import\n");
 			dbb = null;
-			return false;
+			repeate = false;
 		}
+
 		var artist_job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_artists);
 		artist_job.cancellable = populate_model_cancellable;
 		artist_job.big_counter[1] = job.big_counter[1]; //current offset
 		
+
 		if(job.cancellable.is_cancelled())
 			return false;
 			
@@ -706,7 +676,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		// increment offset
 		job.big_counter[1] = job.big_counter[1] + ARTIST_FOR_ONE_JOB;
 		
-		return true;
+		return repeate;
 	}
 	
 	private const int ARTIST_FOR_ONE_JOB = 12;
@@ -723,7 +693,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			return;
 		}
 		artistArray = dbb.get_some_artists_2(ARTIST_FOR_ONE_JOB, job.big_counter[1]);
-		
+		//print("artistArray lenght init %d\n", artistArray.length);
 		job.big_counter[1] += artistArray.length;
 		
 		job.set_arg("artistArray", artistArray);
