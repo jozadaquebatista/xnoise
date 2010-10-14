@@ -82,3 +82,4 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 		return true;
 	}
 }
+

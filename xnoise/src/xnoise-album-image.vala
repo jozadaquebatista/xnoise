@@ -52,40 +52,27 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	}
 
 	private void on_uri_changed(string? uri) {
-
 		global.check_image_for_current_track();
 		if(global.image_path_small == null) {
 			string current_uri = uri;
-			DbBrowser dbb = null;
-			try {
-				dbb = new DbBrowser();
-			}
-			catch(Error e) {
-				print("%s\n", e.message);
+		
+			File f = get_file_for_current_artistalbum(global.current_artist, global.current_album, "medium");
+			if(f.query_exists(null)) {
+				global.check_image_for_current_track();
+				set_image_via_idle(f.get_path());
 				return;
 			}
-			
-			string? res = dbb.get_local_image_path_for_track(ref current_uri);
-			//print("res: %s\n", res);
-			if((res != null) && (res != "")) {
-				File f = File.new_for_path(res);
-				if(f.query_exists(null)) {
-					global.check_image_for_current_track();
-					set_image_via_idle(res);
-					return;
-				}
-			}
-			
+		
 			load_default_image();
 			global.check_image_for_current_track();
 			if(timeout != 0)
 				Source.remove(timeout);
 			timeout = Timeout.add_seconds_full(GLib.Priority.DEFAULT,
-			                                    1,
-			                                    () => {
-			                                    	search_image(uri);
-			                                    	return false;
-			                                    });
+				                                1,
+				                                () => {
+				                                	search_image(uri);
+				                                	return false;
+				                                });
 		}
 		else {
 			File f = File.new_for_path(global.image_path_small);
@@ -119,24 +106,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			_album  = escape_for_local_folder_search(_album_raw );
 		}
 		else {
-			DbBrowser dbb = null;
-			try {
-				dbb = new DbBrowser();
-			}
-			catch(Error e) {
-				print("%s\n", e.message);
-				return;
-			}
-			TrackData td;
-			if(dbb.get_trackdata_for_uri(uri, out td)){
-				_artist_raw = td.Artist;
-				_album_raw  = td.Album;
-				_artist = escape_for_local_folder_search(_artist_raw);
-				_album  = escape_for_local_folder_search(_album_raw );
-			}
-			else{
-				return;
-			}
+			return;
 		}
 		
 		if(set_local_image_if_available(ref _artist_raw, ref _album_raw)) 
@@ -159,23 +129,6 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		string album  = (string)job.get_arg("album");
 		string uri    = (string)job.get_arg("uri");
 		
-		// Look into db in case gPl does not provide the tag
-		if((artist == "unknown artist")||(album == "unknown album")) {
-			DbBrowser dbb = null;
-			try {
-				dbb = new DbBrowser();
-			}
-			catch(Error e) {
-				print("%s\n", e.message);
-				return;
-			}
-			TrackData td;
-			if(dbb.get_trackdata_for_uri(uri, out td)) {
-				artist = td.Artist;
-				album  = td.Album;
-			}
-		}
-
 		if((artist=="")||(artist==null)||(artist=="unknown artist")||
 		   (album =="")||(album ==null)||(album =="unknown album" )) {
 			return;
@@ -252,7 +205,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	private uint source = 0;
 	
 	private void on_album_image_fetched(string _artist, string _album, string image_path) {
-		//print("called on_image_fetched");
+		//print("called on_image_fetched %s - %s : %s", _artist, _album, image_path);
 		if(image_path == "") 
 			return;
 		
@@ -270,36 +223,8 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			global.check_image_for_current_track();
 			return false;
 		});
-		
-//		var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.set_local_album_image);
-//		job.set_arg("artist", artist);
-//		job.set_arg("album", album);
-//		job.set_arg("image_path", image_path);
-//		worker.push_job(job);
-		
 	}
 	
-//	private void set_local_album_image(Worker.Job job) {
-//		DbWriter dbw = null;
-//		try {
-//			dbw = new DbWriter();
-//		}
-//		catch(Error e) {
-//			print("%s\n", e.message);
-//			return;
-//		}
-//		string __artist = (string)job.get_arg("artist");
-//		string __album = (string)job.get_arg("album");
-//		string __image_path = (string)job.get_arg("image_path");
-//		dbw.set_local_image_for_album(ref __artist, ref __album, __image_path);
-//		dbw = null;
-//		
-//		Idle.add( () => {
-//			global.check_image_for_current_track();
-//			return false;
-//		});
-//	}
-
 	private void set_image_via_idle(string image_path) {
 		if(image_path == "")
 			return;
@@ -312,22 +237,4 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			return false;
 		});
 	}
-	
-//	private void update_image_path_in_db(ref string artist, ref string album, string path) {
-//		DbWriter dbw = null;
-//		try {
-//			dbw = new DbWriter();
-//		}
-//		catch(Error e) {
-//			print("%s\n", e.message);
-//			return;
-//		}
-//		dbw.set_local_image_for_album(ref artist, ref album, path);
-//		dbw = null;
-//		
-//		source = Idle.add( () => {
-//			global.check_image_for_current_track();
-//			return false;
-//		});
-//	}
 }

@@ -164,29 +164,6 @@ namespace Xnoise {
 		return value;
 	}
 
-	/*
-	 * This function tries to find the right image for the uri.
-	 */
-	public static bool get_image_path_for_media_uri(string? uri, ref string? image_path) {
-		string tmpuri = uri;
-		image_path = null;
-		DbBrowser dbb = null;
-		try {
-			dbb = new DbBrowser();
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return false;
-		}		
-		
-		image_path = dbb.get_local_image_path_for_track(ref tmpuri);
-		
-		if(image_path != null)
-			return true;
-			
-		return false;
-	}
-
 	public static File get_file_for_current_artistalbum(string artist, string album, string size) {
 		File f = File.new_for_path(GLib.Path.build_filename(GLib.Path.build_filename(global.settings_folder,
 		                                                                             "album_images",

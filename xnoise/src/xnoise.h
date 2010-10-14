@@ -1500,7 +1500,6 @@ char* xnoise_prepare_for_comparison (const char* value);
 char* xnoise_remove_linebreaks (const char* val);
 char* xnoise_prepare_name_from_filename (const char* val);
 char* xnoise_replace_underline_with_blank_encoded (const char* value);
-gboolean xnoise_get_image_path_for_media_uri (const char* uri, char** image_path);
 GFile* xnoise_get_file_for_current_artistalbum (const char* artist, const char* album, const char* size);
 char* xnoise_get_stream_uri (const char* playlist_uri);
 GType gst_stream_type_get_type (void) G_GNUC_CONST;
