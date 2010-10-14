@@ -107,16 +107,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 	}
 	
 	private void show_notification(string newuri) {
-		DbBrowser dbb = null;
-		try {
-			dbb = new DbBrowser();
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return;
-		}
 		string uri = newuri;
-		string image_path = null;
 		string album, artist, title;
 		Gdk.Pixbuf image_pixb = null;
 		string basename = null;
@@ -146,19 +137,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			album = "unknown album";
 		}
 
-		if((title  == "unknown title")&& 
-		   (artist == "unknown artist")&&
-		   (album  == "unknown album")) {
-			TrackData td;
-			if(dbb.get_trackdata_for_uri(newuri, out td)) {
-				artist = td.Artist;
-				album = td.Album;
-				title = td.Title;
-			}
-		}
-		
-		//TODO: check return value
-		get_image_path_for_media_uri(uri, ref image_path);
+		File f = get_file_for_current_artistalbum(artist, album, "medium");
 		string summary = title;
 		string body = _("by") +
 		              " " + artist + " \n" +
@@ -172,9 +151,9 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			notification.clear_hints();
 			notification.update(summary, body, "");
 		}
-		if(image_path != null) {
+		if(f.query_exists()) {
 			try {
-				image_pixb = new Gdk.Pixbuf.from_file(image_path);
+				image_pixb = new Gdk.Pixbuf.from_file(f.get_path());
 				if(image_pixb != null) {
 					image_pixb = image_pixb.scale_simple(IMAGE_SIZE, IMAGE_SIZE, Gdk.InterpType.BILINEAR);
 				}

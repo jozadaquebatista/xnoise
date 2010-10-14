@@ -40,16 +40,6 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	private string album = "";
 	private static uint timeout = 0;
 	private string default_size = "medium";
-//	private bool _show_album_images = true;
-
-//	public bool show_album_images {
-//		get {
-//			return _show_album_images;
-//		}
-//		set {
-//			_show_album_images = value;
-//		}
-//	}
 
 	public AlbumImage() {
 		xn = Main.instance;
@@ -62,12 +52,6 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	}
 
 	private void on_uri_changed(string? uri) {
-		//print("on_uri_changed\n");
-
-//		if(!show_album_images) {
-//			this.load_default_image();
-//			return;
-//		}
 
 		global.check_image_for_current_track();
 		if(global.image_path_small == null) {

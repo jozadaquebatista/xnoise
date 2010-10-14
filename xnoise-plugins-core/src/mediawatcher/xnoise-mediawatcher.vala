@@ -40,6 +40,8 @@
 */
 
 using Gtk;
+using Xnoise;
+
 
 public class Xnoise.MediawatcherPlugin : GLib.Object, IPlugin {
 	public Mediawatcher watcher;
@@ -88,7 +90,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		
 		iib = new ImportInfoBar();
 		
-		setup_monitors();
+		var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.setup_monitors_job);
+		worker.push_job(job);
 	}
 	
 	private class DataPair : GLib.Object{
@@ -102,7 +105,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	}
 
 	/* creates file monitors for all directories in the media path */ 
-	private void setup_monitors() {
+	private void setup_monitors_job(Worker.Job job) {
 		monitor_list = new List<DataPair>();
 		DbBrowser dbb = null;
 		try {
@@ -131,7 +134,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			monitor_list.data.monitor.unref();
 			monitor_list = null;
 		}
-		setup_monitors();
+		var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.setup_monitors_job);
+		worker.push_job(job);
 	}
 	
 	/* setup file monitors for a directory and all its subdirectories, reference them and
@@ -185,20 +189,19 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		return success;
 	}
 			
-	private void handle_deleted_file(File file) {
+	private void handle_deleted_file_job(Worker.Job job) {
 		//if the file was a directory it is in monitor_list
 		//search for filepath in monitor list and remove it
 		//remove all its subdirs from monitor list
 		//in the course of that try to remove the uri of every file 
 		//that was in those directories from the db 
 		//(we might need to store the directory of files in the db)
-		
+		File file = (File)job.get_arg("file");
 		print("File deleted: \'%s\'\n", file.get_path());
-//		DbWriter dbw = null;
+		DbWriter dbw = null;
 		if(dbw == null) {
 			try {
 				dbw = new DbWriter();
-			
 			}
 			catch(Error e) {
 				print("%s\n", e.message);
@@ -227,60 +230,51 @@ public class Xnoise.Mediawatcher : GLib.Object {
 				dbw.delete_uri(a);
 			}
 		}
-			
+		
 		dbw.delete_uri(file.get_uri());
 		remove_dir_monitors(file.get_path());
 	
-		if(Main.instance.main_window.mediaBr != null)
-			Main.instance.main_window.mediaBr.change_model_data();
-		Idle.add( () => {
-			dbw = null;
-			return false;
-		});
+//		if(Main.instance.main_window.mediaBr != null)
+//			Main.instance.main_window.mediaBr.change_model_data();
+//		Idle.add( () => {
+		dbw = null;
+//			return false;
+//		});
 	}
 
-	private void handle_created_file(File file) {
-//		print("\'%s\' has been created recently, updating db...\n", file.get_path());
+	private void handle_created_file_job(Worker.Job job) {
+		File file = (File)job.get_arg("file");
+		print("\'%s\' has been created recently, updating db...\n", file.get_path());
 		string buffer = file.get_path();
-//		Timer t = new Timer();
-//		t.reset();
-//		ulong microseconds;
-//		t.start();
 		queue.push_tail(buffer);
-//		t.stop();
-//		double buf = t.elapsed(out microseconds);
-//		print("\nelapsed: %lf ; %u\n", buf, (uint)microseconds);
 		if(queue.length > 0)
-			starter_method_async();
+			starter_method_async.begin(job);
 	}
 	
-	private DbWriter dbw = null;
+//	private DbWriter dbw = null;
 	
-	private async void starter_method_async() {
+	private async void starter_method_async(Worker.Job job) {
 		if(async_running == true)
 			return;
-
-//print("entering loop\n");
 		while(queue.length > 0) {
 			async_running = true;
-			yield async_worker();
+			yield async_worker(job);
 		}
-		Idle.add( () => {
-			dbw = null;
-			return false;
-		});
-		Idle.add( () => {
-			if(Main.instance.main_window.mediaBr != null)
-				Main.instance.main_window.mediaBr.change_model_data();
-			return false;
-		});
-//print("leaving loop\n");
+//		Idle.add( () => {
+//			dbw = null;
+//			return false;
+//		});
+//		Idle.add( () => {
+//			if(Main.instance.main_window.mediaBr != null)
+//				Main.instance.main_window.mediaBr.change_model_data(); // where is this used
+//			return false;
+//		});
 		async_running = false;
 	}
 
 	private bool async_running = false;
 
-	private async void async_worker() {
+	private async void async_worker(Worker.Job job) {
 		// todo : this seems to be a blocker for the gui
 		// doing this async in a source function and taking data from a queue improved the situation slightly
 		string? path = queue.peek_head();
@@ -289,23 +283,27 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		print("\nHANDLE QUEUE for %s\n", path);
 		File file = File.new_for_path(path);
 		queue.pop_head();
-		if(dbw == null) {
-			try {
-				dbw = new DbWriter();
-			}
-			catch(Error e1) {
-				print("%s\n", e1.message);
-				return;
-			}
-		}
-		var mi = new MediaImporter();
+//		if(dbw == null) {
+//		 DbWriter dbw;
+//		try {
+//			dbw = new DbWriter();
+//		}
+//		catch(Error e1) {
+//			print("%s\n", e1.message);
+//			return;
+//		}
+//		}
+//		var mi = new MediaImporter();
 		try {
 			var info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
-		
-			if(info.get_file_type() == FileType.REGULAR) mi.add_single_file(file.get_uri(), ref dbw);	
+			if(info.get_file_type() == FileType.REGULAR) media_importer.add_single_file(file.get_uri());
 			else if (info.get_file_type() == FileType.DIRECTORY) {
-				mi.add_local_tags(file, ref dbw);
-				setup_monitor_for_path(file.get_path());
+				add_local_tags.begin(file);
+print("++1\n");
+//				media_importer.add_local_tags(file, job);
+//print("++2\n");
+//				setup_monitor_for_path(file.get_path());
+//print("++3\n");
 			}
 		} 
 		catch(Error e2) {
@@ -313,6 +311,87 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		}
 	}
 
+	private async void add_local_tags(File dir) { //DbWriter dbw,
+		
+		FileEnumerator enumerator;
+		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
+		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		try {
+			enumerator = yield dir.enumerate_children_async(attr, FileQueryInfoFlags.NONE, GLib.Priority.DEFAULT, null);
+		} 
+		catch (Error error) {
+			critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
+			return;
+		}
+		GLib.List<GLib.FileInfo> infos;
+		try {
+			while(true) {
+				infos = yield enumerator.next_files_async(15, GLib.Priority.DEFAULT, null);
+				
+				if(infos == null) {
+					return;
+				}
+				TrackData td;
+				foreach(FileInfo info in infos) {
+					int idbuffer;
+					string filename = info.get_name();
+					string filepath = Path.build_filename(dir.get_path(), filename);
+					File file = File.new_for_path(filepath);
+					FileType filetype = info.get_file_type();
+
+					string content = info.get_content_type();
+					string mime = g_content_type_get_mime_type(content);
+					PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
+					PatternSpec psVideo = new PatternSpec("video*");
+
+					if(filetype == FileType.DIRECTORY) {
+						yield this.add_local_tags(file);
+						setup_monitor_for_path(file.get_path());
+					}
+					else if(psAudio.match_string(mime)) {
+						string uri_lc = filepath.down();
+						if(!(uri_lc.has_suffix(".m3u")||uri_lc.has_suffix(".pls")||uri_lc.has_suffix(".asx")||uri_lc.has_suffix(".xspf")||uri_lc.has_suffix(".wpl"))) {
+							var job = new Worker.Job(33, Worker.ExecutionType.REPEATED_LOW_PRIORITY, this.low_prio_import_job, null);
+							string nm = file.get_uri();
+							job.set_arg("uri", nm);
+							worker.push_job(job);
+						}
+					}
+				}
+			}
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+		}
+		return;
+	}
+	
+	private bool low_prio_import_job(Worker.Job job) {
+		print("low prio job!\n");
+		DbWriter dbw = null;
+		try {
+			dbw = new DbWriter();
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+		}
+		File f = File.new_for_uri((string)job.get_arg("uri"));
+		int idbuffer = dbw.uri_entry_exists(f.get_uri());
+		if(idbuffer== -1) {
+			var tr = new TagReader();
+			TrackData td = tr.read_tag(f.get_path());
+			td.db_id = dbw.insert_title(td, f.get_uri());
+			TrackData[] tdy = { td };
+			Idle.add( () => {
+				Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdy); 
+				return false; 
+			});
+		}
+//		media_importer.add_single_file((string)job.get_arg("uri"));
+		return false;
+	}
+	
 //	private void async_worker() {
 //		// todo : this seems to be a blocker for the gui
 //		// doing this async in a source function and taking data from a queue improved the situation slightly
@@ -353,11 +432,22 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	private void file_changed_cb(FileMonitor sender, File file, File? other_file, FileMonitorEvent event_type) {
 		if(!global.media_import_in_progress) {
 			print("%s\n", event_type.to_string());
-			if(event_type == FileMonitorEvent.CREATED)  // TODO: monitor removal of folders, too
-				if(file != null) 
-					handle_created_file(file);
-			if(event_type == FileMonitorEvent.DELETED) 
-				handle_deleted_file(file);
+			if(event_type == FileMonitorEvent.CREATED) { // TODO: monitor removal of folders, too
+				if(file != null) {
+					var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_created_file_job);
+					job.set_arg("file", file);
+					worker.push_job(job);
+//					handle_created_file(file);
+				}
+			}
+			if(event_type == FileMonitorEvent.DELETED) {
+				if(file != null) {
+					var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_deleted_file_job);
+					job.set_arg("file", file);
+					worker.push_job(job);
+				}
+//				handle_deleted_file(file);
+			}
 		}
 	}
 

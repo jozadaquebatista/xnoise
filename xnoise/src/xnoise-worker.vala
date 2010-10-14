@@ -33,9 +33,9 @@
 
 public class Xnoise.Worker : Object {
 	
-	private AsyncQueue<Job> async_job_queue = new AsyncQueue<Job>();
-	private AsyncQueue<Job> sync_job_queue  = new AsyncQueue<Job>();
-	//private AsyncQueue<Job> timed_job_queue = new AsyncQueue<Job>();
+	private AsyncQueue<Job> async_job_queue    = new AsyncQueue<Job>();
+	private AsyncQueue<Job> sync_job_queue     = new AsyncQueue<Job>();
+	private AsyncQueue<Job> low_prio_job_queue = new AsyncQueue<Job>();
 	
 	private unowned Thread thread;
 	
@@ -140,6 +140,44 @@ public class Xnoise.Worker : Object {
 		return null;
 	}
 	
+	private async void low_prio_func() {
+		if(async_job_queue.length() > 0 || sync_job_queue.length() > 0) {
+			Source src = new IdleSource();
+			src.set_priority(Priority.LOW);
+			src.set_callback(() => {
+				low_prio_func();
+				return false;
+			});
+			src.attach(local_context);
+		}
+		else {
+			Job current_job = low_prio_job_queue.try_pop();
+			if(current_job == null) {
+				print("no low_prio job\n");
+				return;
+			}
+			bool repeat = true;
+			while(repeat) {
+				//message( "thread %d ; job %d", (int)Linux.gettid(), current_job.id);
+				repeat = current_job.a_func(current_job);
+				Source source = new IdleSource();
+				source.set_callback(low_prio_func.callback);
+				source.set_priority(Priority.LOW);
+				//execute async function in local context
+				source.attach(local_context);
+				yield;
+			}
+			Source s2 = new IdleSource(); 
+			s2.set_callback(() => {
+				//send Job's finished signal in main context
+				current_job.finished();
+				return false;
+			});
+			s2.attach(main_context);
+		}
+		return;
+	}
+	
 	// Execution of async jobs
 	private async void async_func() {
 		Job current_job = async_job_queue.try_pop();
@@ -208,6 +246,20 @@ public class Xnoise.Worker : Object {
 				Source source = new IdleSource(); 
 				source.set_callback(() => {
 					async_func(); 
+					return false;
+				});
+				source.attach(local_context);
+				break;
+			case ExecutionType.REPEATED_LOW_PRIORITY:
+				if(j.a_func == null) {
+					print("Error: There must be a AsyncWorkFunc in a sync job.\n");
+					break;
+				}
+				low_prio_job_queue.push(j);
+				Source source = new IdleSource();
+				source.set_priority(Priority.LOW);
+				source.set_callback(() => {
+					low_prio_func();
 					return false;
 				});
 				source.attach(local_context);

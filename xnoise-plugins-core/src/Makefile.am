@@ -22,9 +22,9 @@ if ENABLE_LYRICSFLY
   SUBDIRS += lyricsfly
 endif
 
-if ENABLE_MEDIAWATCHER
-  SUBDIRS += mediawatcher
-endif
+#if ENABLE_MEDIAWATCHER
+#  SUBDIRS += mediawatcher
+#endif
 
 if ENABLE_MPRIS
   SUBDIRS += mpris
