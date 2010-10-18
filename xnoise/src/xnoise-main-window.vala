@@ -340,7 +340,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					});
 				}
 				else {
-					string artist = "", album = "", title = "", lengthString = "";
+					string artist = "", album = "", title = "";
 					int length = 0;
 					string current_uri = uris[i];
 					File f;

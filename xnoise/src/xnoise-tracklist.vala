@@ -454,7 +454,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 						}
 					}
 					bool is_first = true;
-					TreeIter drop_iter, current_iter;
 					string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 					              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 					foreach(string uri in uris) {
@@ -483,7 +482,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 					break;
 				default:
 					assert_not_reached();
-					break;
 			
 			}
 		}
@@ -731,51 +729,51 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 	}
 
-	private void handle_dropped_stream(ref string streamuri, ref TreePath? path, 
-	                                   ref bool is_first) {
-		//Function to import music STREAMS in drag'n'drop
-		TreeIter iter, new_iter;
-		File file = File.new_for_uri(streamuri);
+//	private void handle_dropped_stream(ref string streamuri, ref TreePath? path, 
+//	                                   ref bool is_first) {
+//		//Function to import music STREAMS in drag'n'drop
+//		TreeIter iter, new_iter;
+//		File file = File.new_for_uri(streamuri);
 
-		string artist, album, title;
-		artist    = "";
-		album     = "";
-		title     = file.get_uri();
+//		string artist, album, title;
+//		artist    = "";
+//		album     = "";
+//		title     = file.get_uri();
 
-		TreeIter first_iter;
-		if(!this.tracklistmodel.get_iter_first(out first_iter)) { //dropped on empty list, first uri
-			this.tracklistmodel.insert(out new_iter, 0);
-		}
-		else if(path==null) { //dropped below all entries, first uri
-			tracklistmodel.append(out new_iter);
-		}
-		else { //all other uris
-			this.tracklistmodel.get_iter(out iter, path);
-			if(is_first) {
-				if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
-				   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
-				   //Determine drop position for first, insert all others after first
-					this.tracklistmodel.insert_before(out new_iter, iter);
-				}
-				else {
-					this.tracklistmodel.insert_after(out new_iter, iter);
-				}
-				is_first = false;
-			}
-			else {
-				this.tracklistmodel.insert_after(out new_iter, iter);
-			}
-		}
-		//TODO use insert_title function of tracklistmodel instead ?!?
-		tracklistmodel.set(new_iter,
-		                   TrackListModel.Column.TITLE, title,
-		                   TrackListModel.Column.ALBUM, album,
-		                   TrackListModel.Column.ARTIST, artist,
-		                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-		                   TrackListModel.Column.URI, streamuri,
-		                   -1);
-		path = tracklistmodel.get_path(new_iter);
-	}
+//		TreeIter first_iter;
+//		if(!this.tracklistmodel.get_iter_first(out first_iter)) { //dropped on empty list, first uri
+//			this.tracklistmodel.insert(out new_iter, 0);
+//		}
+//		else if(path==null) { //dropped below all entries, first uri
+//			tracklistmodel.append(out new_iter);
+//		}
+//		else { //all other uris
+//			this.tracklistmodel.get_iter(out iter, path);
+//			if(is_first) {
+//				if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
+//				   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
+//				   //Determine drop position for first, insert all others after first
+//					this.tracklistmodel.insert_before(out new_iter, iter);
+//				}
+//				else {
+//					this.tracklistmodel.insert_after(out new_iter, iter);
+//				}
+//				is_first = false;
+//			}
+//			else {
+//				this.tracklistmodel.insert_after(out new_iter, iter);
+//			}
+//		}
+//		//TODO use insert_title function of tracklistmodel instead ?!?
+//		tracklistmodel.set(new_iter,
+//		                   TrackListModel.Column.TITLE, title,
+//		                   TrackListModel.Column.ALBUM, album,
+//		                   TrackListModel.Column.ARTIST, artist,
+//		                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
+//		                   TrackListModel.Column.URI, streamuri,
+//		                   -1);
+//		path = tracklistmodel.get_path(new_iter);
+//	}
 
 	private string make_time_display_from_seconds(int length) {
 		string lengthString = "";
@@ -817,15 +815,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
 			string artist, album, title, lengthString = "";
 			uint tracknumb;
-			TrackData td;
-//			if(dbBr.get_trackdata_for_uri(fileuri, out td)) {
-//				artist    = td.Artist;
-//				album     = td.Album;
-//				title     = td.Title;
-//				tracknumb = td.Tracknumber;
-//				lengthString = make_time_display_from_seconds(td.Length);
-//			}
-//			else {
 			if(!(psVideo.match_string(mime))) {
 				var tr = new TagReader(); // TODO: Check dataimport for video
 				var tags = tr.read_tag(file.get_path());
@@ -841,7 +830,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 				title          = file.get_basename();
 				tracknumb      = 0;
 			}
-//			}
 			TreeIter first_iter;
 			if((path == null)||(!this.tracklistmodel.get_iter_first(out first_iter))) { 
 				//dropped below all entries, first uri OR

@@ -52,10 +52,10 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	}
 
 	private void on_uri_changed(string? uri) {
+		string current_uri = uri;
 		Idle.add( () => {
 			global.check_image_for_current_track();
 			if(global.image_path_small == null) {
-				string current_uri = uri;
 				
 				File f = get_file_for_current_artistalbum(global.current_artist, global.current_album, "medium");
 				if(f != null && f.query_exists(null)) {
@@ -63,7 +63,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 					set_image_via_idle(f.get_path());
 					return false;
 				}
-		
+				string current_uri1 = current_uri;
 				load_default_image();
 				global.check_image_for_current_track();
 				if(timeout != 0)
@@ -71,7 +71,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 				timeout = Timeout.add_seconds_full(GLib.Priority.DEFAULT,
 				                                    1,
 				                                    () => {
-				                                    	search_image(uri);
+				                                    	search_image(current_uri1);
 				                                    	return false;
 				                                    });
 			}
@@ -131,7 +131,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	private void fetch_trackdata_job(Worker.Job job) {
 		string artist = (string)job.get_arg("artist");
 		string album  = (string)job.get_arg("album");
-		string uri    = (string)job.get_arg("uri");
+		//string uri    = (string)job.get_arg("uri");
 		
 		if((artist=="")||(artist==null)||(artist=="unknown artist")||
 		   (album =="")||(album ==null)||(album =="unknown album" )) {

@@ -214,11 +214,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 	}
 
-	private void prepend_separator() {
-		TreeIter iter;
-		this.prepend(out iter, null);
-		this.set(iter, Column.DRAW_SEPTR, 1, -1);
-	}
+	//	private void prepend_separator() {
+	//		TreeIter iter;
+	//		this.prepend(out iter, null);
+	//		this.set(iter, Column.DRAW_SEPTR, 1, -1);
+	//	}
 
 	public void insert_video_sorted(TrackData[] tda) {
 		string text = null;
@@ -322,7 +322,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 	public void insert_trackdata_sorted(TrackData[] tda) {
 		TreeIter artist_iter, album_iter, title_iter;
-		string text = null;
 		//print("insert_trackdata_sorted : %s - %s - %s - %d \n", tda[0].Artist,tda[0].Album,tda[0].Title,tda[0].db_id);
 		foreach(TrackData td in tda) {
 			handle_iter_for_artist(ref td, out artist_iter);
