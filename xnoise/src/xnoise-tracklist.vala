@@ -34,14 +34,13 @@ using Gdk;
 public class Xnoise.TrackList : TreeView, IParams {
 	private Main xn;
 	private const TargetEntry[] src_target_entries = {
-		{"text/uri-list", 0, 0}
+		{"text/uri-list", Gtk.TargetFlags.SAME_WIDGET, 0}
 	};
 
 	// targets used with this as a destination
 	private const TargetEntry[] dest_target_entries = {
 		{"application/custom_dnd_data", TargetFlags.SAME_APP, 0},
-		{"text/uri-list", 0, 0}
-//		{"text/uri-list", TargetFlags.OTHER_APP, 0}
+		{"text/uri-list", 0, 1}
 	};
 
 	private const string USE_LEN_COL     = "use_length_column";
@@ -129,6 +128,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.drag_data_get.connect(this.on_drag_data_get);
 		this.drag_end.connect(this.on_drag_end);
 		this.drag_motion.connect(this.on_drag_motion);
+//		this.drag_drop.connect(this.on_drag_drop);
 		this.drag_data_received.connect(this.on_drag_data_received);
 		this.drag_leave.connect(this.on_drag_leave);
 		this.button_release_event.connect(this.on_button_release);
@@ -382,7 +382,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context,
-	                              Gtk.SelectionData selection,
+	                              Gtk.SelectionData selection, 
 	                              uint target_type, uint etime) {
 		rowref_list = {};
 		TreeIter iter;
@@ -414,66 +414,79 @@ public class Xnoise.TrackList : TreeView, IParams {
 		//set uri list for dragging out of xnoise. in parallel work around with rowreferences
 		//if reorder = false then data is coming from outside (music browser or nautilus)
 		// -> use uri_list
-		
 		Gtk.TreePath path;
 		TreeRowReference drop_rowref;
-//		string uri = null;
-		//File file;
-		//FileType filetype;
+		FileType filetype;
+		File file;
 		string[] uris;
 		this.get_dest_row_at_pos(x, y, out path, out drop_pos);
 		
-		if(!this.reorder_dragging) { // && Xnoise.Main.instance.main_window.mediaBr.drag_from_mediabrowser) { 
-			// DRAGGING NOT WITHIN TRACKLIST
-			unowned DndData[] ids = (DndData[])selection.data;
-			ids.length = (int)(selection.length / sizeof(DndData));
+		if(!this.reorder_dragging ) {
+			switch(target_type) {
+				// DRAGGING NOT WITHIN TRACKLIST
+				case 0: // custom dnd data from media browser
+					unowned DndData[] ids = (DndData[])selection.data;
+					ids.length = (int)(selection.length / sizeof(DndData));
 			
-			TreeRowReference row_ref = null;
-			if(path != null)
-				row_ref = new TreeRowReference(this.model, path);
+					TreeRowReference row_ref = null;
+					if(path != null)
+						row_ref = new TreeRowReference(this.model, path);
 			
-			var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.insert_dnd_data_job);
-			job.set_arg("row_ref", row_ref);
-			job.set_arg("drop_pos", drop_pos);
-			job.dnd_data = ids;
-			worker.push_job(job);
+					var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.insert_dnd_data_job);
+					job.set_arg("row_ref", row_ref);
+					job.set_arg("drop_pos", drop_pos);
+					job.dnd_data = ids;
+					worker.push_job(job);
+					break;
+				case 1: // uri list from outside
+					uris = selection.get_uris();
+					drop_rowref = null;
+					if(path != null) {
+						drop_rowref = new TreeRowReference(this.tracklistmodel, path);
+						if(drop_rowref == null || !drop_rowref.valid()) 
+							return;
+					}
+					else {
+						get_last_unselected_path(ref path);
+						drop_rowref = new TreeRowReference(this.tracklistmodel, path);
+						if(drop_rowref == null || !drop_rowref.valid()) {
+							return;
+						}
+					}
+					bool is_first = true;
+					TreeIter drop_iter, current_iter;
+					string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+					              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+					foreach(string uri in uris) {
+						bool is_stream = false;
+						file = File.new_for_uri(uri);
+						if(file.get_uri_scheme() in global.remote_schemes) is_stream = true;
+						if(!is_stream) {
+							try {
+								FileInfo info = file.query_info(attr,
+										                        FileQueryInfoFlags.NONE,
+										                        null);
+								filetype = info.get_file_type();
+							}
+							catch(GLib.Error e){
+								print("%s\n", e.message);
+								return;
+							}
+							if(filetype != GLib.FileType.DIRECTORY) {
+								handle_dropped_file(ref uri, ref path, ref is_first);	//FILES
+							}
+							else {
+								handle_dropped_files_for_folders(file, ref path, ref is_first); //DIRECTORIES
+							}
+						}
+					}
+					break;
+				default:
+					assert_not_reached();
+					break;
+			
+			}
 		}
-//		else if(!this.reorder_dragging && !Xnoise.Main.instance.main_window.mediaBr.drag_from_mediabrowser) {
-//			uris = selection.get_uris();
-//			string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-//			              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
-//			bool is_first = true;
-//			for(int i = 0; i < uris.length; i++) {
-//				bool is_stream = false;
-//				uri = uris[i];
-//				file = File.new_for_uri(uri);
-//				if(file.get_uri_scheme() in global.remote_schemes) is_stream = true;
-//				if(!is_stream) {
-//					try {
-//						FileInfo info = file.query_info(attr,
-//						                                FileQueryInfoFlags.NONE,
-//						                                null);
-//						filetype = info.get_file_type();
-//					}
-//					catch(GLib.Error e){
-//						print("%s\n", e.message);
-//						return;
-//					}
-
-//					if(filetype != GLib.FileType.DIRECTORY) {
-//						handle_dropped_file(ref uri, ref path, ref is_first, ref dbBr);	//FILES
-//					}
-//					else {
-//						handle_dropped_files_for_folders(file, ref path, ref is_first, ref dbBr); //DIRECTORIES
-//					}
-//				}
-//				else {
-//					handle_dropped_stream(ref uri, ref path, ref is_first, ref dbBr);
-//				}
-//			}
-//			is_first = false;
-//			
-//		}
 		else { // DRAGGING WITHIN TRACKLIST
 			uris = selection.get_uris();
 			drop_rowref = null;
@@ -681,7 +694,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 	}
 
-	private void handle_dropped_files_for_folders(File dir, ref TreePath? path, ref bool is_first, ref DbBrowser dbBr) {
+	private void handle_dropped_files_for_folders(File dir, ref TreePath? path, ref bool is_first) {
 		//Recursive function to import music DIRECTORIES in drag'n'drop
 		//as soon as a file is found it is passed to handle_dropped_file function
 		//the TreePath path is just passed through if it is a directory
@@ -704,11 +717,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 				FileType filetype = info.get_file_type();
 
 				if(filetype == FileType.DIRECTORY) {
-					this.handle_dropped_files_for_folders(file, ref path, ref is_first, ref dbBr);
+					this.handle_dropped_files_for_folders(file, ref path, ref is_first);
 				}
 				else {
 					string buffer = file.get_uri();
-					handle_dropped_file(ref buffer, ref path, ref is_first, ref dbBr);
+					handle_dropped_file(ref buffer, ref path, ref is_first);
 				}
 			}
 		}
@@ -718,59 +731,51 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 	}
 
-//	private void handle_dropped_stream(ref string streamuri, ref TreePath? path, 
-//	                                   ref bool is_first, ref DbBrowser dbBr) {
-//		//Function to import music STREAMS in drag'n'drop
-//		TreeIter iter, new_iter;
-//		File file = File.new_for_uri(streamuri);
+	private void handle_dropped_stream(ref string streamuri, ref TreePath? path, 
+	                                   ref bool is_first) {
+		//Function to import music STREAMS in drag'n'drop
+		TreeIter iter, new_iter;
+		File file = File.new_for_uri(streamuri);
 
-//		string artist, album, title;
-//		TrackData td;
-//		if(dbBr.get_trackdata_for_stream(streamuri, out td)) {
-//			artist    = "";
-//			album     = "";
-//			title     = td.Title;
-//		}
-//		else {
-//			artist    = "";
-//			album     = "";
-//			title     = file.get_uri();
-//		}
+		string artist, album, title;
+		artist    = "";
+		album     = "";
+		title     = file.get_uri();
 
-//		TreeIter first_iter;
-//		if(!this.tracklistmodel.get_iter_first(out first_iter)) { //dropped on empty list, first uri
-//			this.tracklistmodel.insert(out new_iter, 0);
-//		}
-//		else if(path==null) { //dropped below all entries, first uri
-//			tracklistmodel.append(out new_iter);
-//		}
-//		else { //all other uris
-//			this.tracklistmodel.get_iter(out iter, path);
-//			if(is_first) {
-//				if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
-//				   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
-//				   //Determine drop position for first, insert all others after first
-//					this.tracklistmodel.insert_before(out new_iter, iter);
-//				}
-//				else {
-//					this.tracklistmodel.insert_after(out new_iter, iter);
-//				}
-//				is_first = false;
-//			}
-//			else {
-//				this.tracklistmodel.insert_after(out new_iter, iter);
-//			}
-//		}
-//		//TODO use insert_title function of tracklistmodel instead ?!?
-//		tracklistmodel.set(new_iter,
-//		                   TrackListModel.Column.TITLE, title,
-//		                   TrackListModel.Column.ALBUM, album,
-//		                   TrackListModel.Column.ARTIST, artist,
-//		                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-//		                   TrackListModel.Column.URI, streamuri,
-//		                   -1);
-//		path = tracklistmodel.get_path(new_iter);
-//	}
+		TreeIter first_iter;
+		if(!this.tracklistmodel.get_iter_first(out first_iter)) { //dropped on empty list, first uri
+			this.tracklistmodel.insert(out new_iter, 0);
+		}
+		else if(path==null) { //dropped below all entries, first uri
+			tracklistmodel.append(out new_iter);
+		}
+		else { //all other uris
+			this.tracklistmodel.get_iter(out iter, path);
+			if(is_first) {
+				if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
+				   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
+				   //Determine drop position for first, insert all others after first
+					this.tracklistmodel.insert_before(out new_iter, iter);
+				}
+				else {
+					this.tracklistmodel.insert_after(out new_iter, iter);
+				}
+				is_first = false;
+			}
+			else {
+				this.tracklistmodel.insert_after(out new_iter, iter);
+			}
+		}
+		//TODO use insert_title function of tracklistmodel instead ?!?
+		tracklistmodel.set(new_iter,
+		                   TrackListModel.Column.TITLE, title,
+		                   TrackListModel.Column.ALBUM, album,
+		                   TrackListModel.Column.ARTIST, artist,
+		                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
+		                   TrackListModel.Column.URI, streamuri,
+		                   -1);
+		path = tracklistmodel.get_path(new_iter);
+	}
 
 	private string make_time_display_from_seconds(int length) {
 		string lengthString = "";
@@ -784,8 +789,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		return lengthString;
 	}
 
-	private void handle_dropped_file(ref string fileuri, ref TreePath? path,
-	                                 ref bool is_first, ref DbBrowser dbBr) {
+	private void handle_dropped_file(ref string fileuri, ref TreePath? path, ref bool is_first) {
 		//Function to import music FILES in drag'n'drop
 		TreeIter iter, new_iter;
 		File file;
@@ -809,36 +813,35 @@ public class Xnoise.TrackList : TreeView, IParams {
 			print("%s\n", e.message);
 			return;
 		}
-
 		if((filetype == GLib.FileType.REGULAR)&
 		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
 			string artist, album, title, lengthString = "";
 			uint tracknumb;
 			TrackData td;
-			if(dbBr.get_trackdata_for_uri(fileuri, out td)) {
-				artist    = td.Artist;
-				album     = td.Album;
-				title     = td.Title;
-				tracknumb = td.Tracknumber;
-				lengthString = make_time_display_from_seconds(td.Length);
+//			if(dbBr.get_trackdata_for_uri(fileuri, out td)) {
+//				artist    = td.Artist;
+//				album     = td.Album;
+//				title     = td.Title;
+//				tracknumb = td.Tracknumber;
+//				lengthString = make_time_display_from_seconds(td.Length);
+//			}
+//			else {
+			if(!(psVideo.match_string(mime))) {
+				var tr = new TagReader(); // TODO: Check dataimport for video
+				var tags = tr.read_tag(file.get_path());
+				artist         = tags.Artist;
+				album          = tags.Album;
+				title          = tags.Title;
+				tracknumb      = tags.Tracknumber;
+				lengthString = make_time_display_from_seconds(tags.Length);
 			}
-			else {
-				if(!(psVideo.match_string(mime))) {
-					var tr = new TagReader(); // TODO: Check dataimport for video
-					var tags = tr.read_tag(file.get_path());
-					artist         = tags.Artist;
-					album          = tags.Album;
-					title          = tags.Title;
-					tracknumb      = tags.Tracknumber;
-					lengthString = make_time_display_from_seconds(td.Length);
-				}
-				else { //TODO: Handle video data
-					artist         = "";
-					album          = "";
-					title          = file.get_basename();
-					tracknumb      = 0;
-				}
+			else { //TODO: Handle video data
+				artist         = "";
+				album          = "";
+				title          = file.get_basename();
+				tracknumb      = 0;
 			}
+//			}
 			TreeIter first_iter;
 			if((path == null)||(!this.tracklistmodel.get_iter_first(out first_iter))) { 
 				//dropped below all entries, first uri OR

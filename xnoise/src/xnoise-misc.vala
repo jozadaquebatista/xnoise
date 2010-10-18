@@ -164,7 +164,13 @@ namespace Xnoise {
 		return value;
 	}
 
-	public static File get_file_for_current_artistalbum(string artist, string album, string size) {
+	public static File? get_file_for_current_artistalbum(string? artist, string? album, string? size) {
+		if(artist == null)
+			return null;
+		if(album == null)
+			return null;
+		if(size == null)
+			size = "medium";
 		File f = File.new_for_path(GLib.Path.build_filename(GLib.Path.build_filename(global.settings_folder,
 		                                                                             "album_images",
 		                                                                             null

@@ -318,6 +318,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if(dbBr == null)
 			return;
 		string[] uris = dbBr.get_lastused_uris();
+		var psVideo = new PatternSpec("video*");
+		var psAudio = new PatternSpec("audio*");
 		for(int i = 0; i < uris.length; i++) {
 			File file = File.new_for_uri(uris[i]);
 			if(!(file.get_uri_scheme() in global.remote_schemes)) {
@@ -331,6 +333,64 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 							                                       td.Album,
 							                                       td.Artist,
 							                                       td.Length,
+							                                       false,
+							                                       current_uri);
+						
+						return false;
+					});
+				}
+				else {
+					string artist = "", album = "", title = "", lengthString = "";
+					int length = 0;
+					string current_uri = uris[i];
+					File f;
+					FileType filetype;
+					TrackData tags;
+					string mime;
+					string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+								  FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+					try {
+						f = File.new_for_uri(current_uri);
+						FileInfo info = f.query_info(
+									      attr,
+									      FileQueryInfoFlags.NONE,
+									      null);
+						filetype = info.get_file_type();
+						string content = info.get_content_type();
+						mime = g_content_type_get_mime_type(content);
+					}
+					catch(GLib.Error e){
+						print("%s\n", e.message);
+						return;
+					}
+					if((filetype == GLib.FileType.REGULAR)&
+					   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
+						uint tracknumb;
+						if(!(psVideo.match_string(mime))) {
+							var tr = new TagReader(); 
+							tags = tr.read_tag(f.get_path());
+							artist         = tags.Artist;
+							album          = tags.Album;
+							title          = tags.Title;
+							tracknumb      = tags.Tracknumber;
+							length         = tags.Length;
+//							lengthString = make_time_display_from_seconds(tags.Length);
+						}
+						else { 
+							artist         = "";
+							album          = "";
+							title          = f.get_basename();
+							tracknumb      = 0;
+							length         = 0;
+						}
+					}
+					Idle.add( () => {
+						this.trackList.tracklistmodel.insert_title(null,
+							                                       (int)td.Tracknumber,
+							                                       title,
+							                                       album,
+							                                       artist,
+							                                       length,
 							                                       false,
 							                                       current_uri);
 						

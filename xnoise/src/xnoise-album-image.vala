@@ -52,37 +52,40 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	}
 
 	private void on_uri_changed(string? uri) {
-		global.check_image_for_current_track();
-		if(global.image_path_small == null) {
-			string current_uri = uri;
-		
-			File f = get_file_for_current_artistalbum(global.current_artist, global.current_album, "medium");
-			if(f.query_exists(null)) {
-				global.check_image_for_current_track();
-				set_image_via_idle(f.get_path());
-				return;
-			}
-		
-			load_default_image();
+		Idle.add( () => {
 			global.check_image_for_current_track();
-			if(timeout != 0)
-				Source.remove(timeout);
-			timeout = Timeout.add_seconds_full(GLib.Priority.DEFAULT,
-				                                1,
-				                                () => {
-				                                	search_image(uri);
-				                                	return false;
-				                                });
-		}
-		else {
-			File f = File.new_for_path(global.image_path_small);
-			if(!f.query_exists(null)) {
+			if(global.image_path_small == null) {
+				string current_uri = uri;
+				
+				File f = get_file_for_current_artistalbum(global.current_artist, global.current_album, "medium");
+				if(f != null && f.query_exists(null)) {
+					global.check_image_for_current_track();
+					set_image_via_idle(f.get_path());
+					return false;
+				}
+		
 				load_default_image();
+				global.check_image_for_current_track();
+				if(timeout != 0)
+					Source.remove(timeout);
+				timeout = Timeout.add_seconds_full(GLib.Priority.DEFAULT,
+				                                    1,
+				                                    () => {
+				                                    	search_image(uri);
+				                                    	return false;
+				                                    });
 			}
 			else {
-				set_image_via_idle(global.image_path_small);
+				File f = File.new_for_path(global.image_path_small);
+				if(!f.query_exists(null)) {
+					load_default_image();
+				}
+				else {
+					set_image_via_idle(global.image_path_small);
+				}
 			}
-		}
+			return false;
+		});
 	}
 
 	// Startes via timeout because gPl is sending the tag_changed signals
@@ -99,7 +102,8 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		string _artist_raw = "";
 		string _album_raw = "";
 		
-		if((global.current_artist != "unknown artist") && (global.current_album != "unknown album")) {
+		if((global.current_artist != null && global.current_artist != "unknown artist") && 
+		   (global.current_album != null && global.current_album != "unknown album")) {
 			_artist_raw = global.current_artist;
 			_album_raw  = global.current_album;
 			_artist = escape_for_local_folder_search(_artist_raw);
