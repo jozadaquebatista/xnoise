@@ -61,12 +61,13 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 			server.show();
 			return false;
 		});
-		
+		xn.tray_icon.visible = false;
 		return true;
 	}
 	
 	~SoundMenu() {
 		server.hide();
+		xn.tray_icon.visible = true;
 	}
 	
 	public Gtk.Widget? get_settings_widget() {
