@@ -70,16 +70,14 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	}
 	
 	public bool init() {
-		try {
 			owner_id = Bus.own_name(BusType.SESSION,
 			                        "org.mpris.MediaPlayer2.xnoise",
 			                         GLib.BusNameOwnerFlags.NONE,
 			                         on_bus_acquired,
 			                         on_name_acquired,
 			                         on_name_lost);
-		} 
-		catch(IOError e) {
-			print("%s\n", e.message);
+		if(owner_id == 0) {
+			print("mpris error\n");
 			return false;
 		}
 		return true;
@@ -136,13 +134,13 @@ public class MprisRoot : GLib.Object {
 		}
 	}
 	public string DesktopEntry { 
-		get {
+		owned get {
 			return "xnoise";
 		} 
 	}
 	
 	public string Identity {
-		get {
+		owned get {
 			return "xnoise media player";
 		}
 	}
