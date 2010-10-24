@@ -21,7 +21,6 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using Xml;
 using SimpleXml;
 
 namespace Pl {

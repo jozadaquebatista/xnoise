@@ -21,85 +21,86 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using Xml;
+using SimpleXml;
 
 namespace Pl {
 	private class Wpl.FileReader : AbstractFileReader {
 		private unowned File file;
 		private ItemCollection parse(ItemCollection data_collection,ref string base_path = "",string data) throws GLib.Error {
-			string iter_name;
-			Xml.Doc* xmlDoc = Parser.parse_memory(data, (int)data.size());
-			Xml.Node* rootNode = xmlDoc->get_root_element();
-			Pl.Item d = null;
-			for(Xml.Node* iter = rootNode->children; iter != null; iter = iter->next) {
-				if(iter->type != ElementType.ELEMENT_NODE) {
-					continue;
-				}
+			SimpleXml.Reader reader = new SimpleXml.Reader.from_string(data);
+			reader.read();
 			
-				iter_name = iter->name.down(); 
-				if(iter_name == "body") {
-					if(iter->children != null) {
-						Xml.Node *iter_in;
-						for(iter_in = iter->children->next; iter_in != null;iter_in = iter_in->next) {
-							if(iter_in->is_text() == 0) {
-								switch(iter_in->name.down()) {
-									case "seq":
-										if(iter_in->children != null) {
-											Xml.Node *seq_in;
-											for(seq_in = iter_in->children->next;seq_in!=null;seq_in=seq_in->next) {
-												if(seq_in->is_text() == 0) {
-													switch(seq_in->name.down()) {
-														case "media":
-															d = new Pl.Item();
-															string src = seq_in->get_prop("src");
-															//print("URL = '%s'\n",src);
-															TargetType tt;
-															File tmp = get_file_for_location(src, ref base_path, out tt);
-															d.target_type = tt;
-															d.add_field(Item.Field.URI, tmp.get_uri());
-															string? ext = get_extension(tmp);
-															if(ext != null) {
-																if(is_known_playlist_extension(ref ext))
-																	d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
-															}
-															data_collection.append(d);
-															break;
-														case "default":
-															break;
-														default:
-															break;
-													}
-												}
-											//delete seq_in;
+			var root = reader.root;
+			if(root != null && root.has_children()) {
+			var smil = root[0];
+			if(smil != null && smil.name.down() == "smil" && smil.has_children()) {
+				//print("smil: %s\n",smil.name.down());
+				var body = smil.get_child_by_name("body");
+				if(body != null && body.has_children()) {
+					Pl.Item d = null;
+					//print("body: %s\n",body.name.down());
+					var seq = body.get_child_by_name("seq");
+					if(seq != null && seq.has_children()) {
+						//print("seq: %s\n",seq.name.down());
+						SimpleXml.Node[] medias = 
+						seq.get_children_by_name("media");
+
+						if(medias != null && medias.length>0) {
+							foreach(SimpleXml.Node media in medias) {
+								var attrs = media.attributes;
+								if(attrs != null) {
+									string src = attrs.get("src");
+									if(src != null ) {
+										d = new Pl.Item();
+										TargetType tt;
+										File tmp = get_file_for_location(src, ref base_path, out tt);
+										d.target_type = tt;
+										d.add_field(Item.Field.URI, tmp.get_uri());
+										string? ext = get_extension(tmp);
+										if(ext != null) {
+											if(is_known_playlist_extension(ref ext)) {
+												d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
 											}
 										}
-										break;
-									default:
-										//print("%s = '%s'\n",iter_in->name,iter_in->get_content());
-										break;
+										data_collection.append(d);
+									}
 								}
 							}
-								//delete iter_in;
 						}
 					}
 				}
-				else if(iter_name=="head") {
-					if(iter->children != null) {
-						Xml.Node *iter_in;
-						for(iter_in=iter->children->next;iter_in!=null;iter_in=iter_in->next) {
-							if(iter_in->is_text() == 0) {
-								switch(iter_in->name.down()) {
-									case "title": 
-										//print("Play list title =  '%s'\n",iter_in->get_content());
-										break;
-									default:
-										break;
-								}
+			}
+			
+
+			var head = smil.get_child_by_name("head");
+			if(head != null && head.has_children()) {
+				//Playlist title
+				var title = head.get_child_by_name("title");
+				if(title != null) {
+				//data_collection.add_field(Item.Field.TITLE, title.text);
+				}
+				
+				//Playlist author
+				var author = head.get_child_by_name("author");
+				if(author != null) {
+				//data_collection.add_field(Item.Field.AUTHOR, author.text);
+				}
+
+				SimpleXml.Node[] metas = head.get_children_by_name("meta");
+				if(metas != null && metas.length > 0) {
+					foreach(SimpleXml.Node meta in metas) {
+						var attrs = meta.attributes;
+						if(attrs != null) {
+							string name = attrs.get("name");
+							string content = attrs.get("content");
+							if(name != null && content != null) {
+								//TODO: More info from playlist
 							}
-							//delete iter_in;
 						}
 					}
 				}
+			}
+
 			}
 			return data_collection;
 		}

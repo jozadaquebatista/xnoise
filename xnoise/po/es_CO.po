@@ -1,9 +1,12 @@
+#
+# shuerhaaken <shuerhaaken@googlemail.com>, 2010.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-07-07 09:34+0200\n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2010-10-16 18:51-0500\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: fsistemas <f.sistemas@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +23,7 @@ msgstr "Media Player"
 
 #: ../data/misc/xnoise.desktop.in.in.h:2
 msgid "Organize and play your music and video collections"
-msgstr "Organize and play your music and video collections"
+msgstr "Organice y reproduzca su colección de musica y video"
 
 #: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Xnoise"
@@ -46,8 +49,7 @@ msgstr "Eliminar"
 msgid "xnoise - Add media to library"
 msgstr "xnoise - Agregar medios a la biblioceta multimedia"
 
-#: ../src/xnoise-add-media-dialog.vala:290
-#: ../src/xnoise-main-window.vala:899
+#: ../src/xnoise-add-media-dialog.vala:290 ../src/xnoise-main-window.vala:899
 msgid "Select media file"
 msgstr "Seleccione un archivo multimedia"
 
@@ -113,7 +115,8 @@ msgstr "_Agregar o quitar medios de reproducción"
 
 #: ../src/xnoise-main-window.vala:135
 msgid "manage the content of the xnoise media library"
-msgstr "gestionar el contenido de la biblioteca de medios de reproducción de xnoise"
+msgstr ""
+"gestionar el contenido de la biblioteca de medios de reproducción de xnoise"
 
 #: ../src/xnoise-main-window.vala:137
 msgid "_Edit"
@@ -160,8 +163,12 @@ msgid "Add media"
 msgstr "Agregar medios de reproducción"
 
 #: ../src/xnoise-main-window.vala:337
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
-msgstr "Esta es la primer vez que inicia xnoise. Usted desea importar medios de reproducción en su biblioteca de medios de reproducción?"
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
+msgstr ""
+"Esta es la primer vez que inicia xnoise. Usted desea importar medios de "
+"reproducción en su biblioteca de medios de reproducción?"
 
 #. TODO: create some other images
 #: ../src/xnoise-main-window.vala:431
@@ -196,33 +203,26 @@ msgstr "Siguiente"
 msgid "Exit"
 msgstr "Salir"
 
-#: ../src/xnoise-main-window.vala:964
-#: ../src/xnoise-main-window.vala:987
-#: ../src/xnoise-main-window.vala:1029
-#: ../src/xnoise-main-window.vala:1054
+#: ../src/xnoise-main-window.vala:964 ../src/xnoise-main-window.vala:987
+#: ../src/xnoise-main-window.vala:1029 ../src/xnoise-main-window.vala:1054
 msgid "by"
 msgstr "por"
 
-#: ../src/xnoise-main-window.vala:966
-#: ../src/xnoise-main-window.vala:989
-#: ../src/xnoise-main-window.vala:1031
-#: ../src/xnoise-main-window.vala:1056
+#: ../src/xnoise-main-window.vala:966 ../src/xnoise-main-window.vala:989
+#: ../src/xnoise-main-window.vala:1031 ../src/xnoise-main-window.vala:1056
 msgid "on"
 msgstr "en"
 
-#: ../src/xnoise-main-window.vala:986
-#: ../src/xnoise-main-window.vala:1053
+#: ../src/xnoise-main-window.vala:986 ../src/xnoise-main-window.vala:1053
 #, c-format
 msgid "unknown title"
 msgstr "Titulo desconocido"
 
-#: ../src/xnoise-main-window.vala:988
-#: ../src/xnoise-main-window.vala:1055
+#: ../src/xnoise-main-window.vala:988 ../src/xnoise-main-window.vala:1055
 msgid "unknown artist"
 msgstr "Artista desconocido"
 
-#: ../src/xnoise-main-window.vala:990
-#: ../src/xnoise-main-window.vala:1057
+#: ../src/xnoise-main-window.vala:990 ../src/xnoise-main-window.vala:1057
 msgid "unknown album"
 msgstr "Album desconocido"
 
@@ -244,7 +244,7 @@ msgstr "Eliminar titulos seleccionados"
 
 #: ../src/xnoise-settings-dialog.vala:543
 msgid "Visible extra columns for tracklist:"
-msgstr "Visible extra columns for tracklist:"
+msgstr "Mostrar columnas adicionales en la lista de reproducción:"
 
 #: ../src/xnoise-tracklist.vala:196
 msgid "Remove selected"
@@ -252,6 +252,6 @@ msgstr "Eliminar seleccionados"
 
 #~ msgid "Xnoise Media Player"
 #~ msgstr "Xnoise Media Player"
+
 #~ msgid "Collapse"
 #~ msgstr "Collapse"
-

@@ -21,7 +21,7 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using Xml;
+using SimpleXml;
 
 namespace Pl {
 	private class Asx.FileReader : AbstractFileReader {
@@ -54,60 +54,60 @@ namespace Pl {
 		}
 
 		private ItemCollection parse(ItemCollection data_collection,ref string base_path = "",string data) {
-			string iter_name;
-			Xml.Doc* xmlDoc = Parser.parse_memory(data, (int)data.size());
-			Xml.Node* rootNode = xmlDoc->get_root_element();
-
-			Pl.Item d = null;
-			for(Xml.Node* iter = rootNode->children; iter != null; iter = iter->next) {
-				if(iter->type != ElementType.ELEMENT_NODE) {
-					continue;
-				}
-				iter_name = iter->name.down();
-				if(iter_name == "entry") {
-					if(iter->children != null) {
-						Xml.Node *iter_in;
-						for(iter_in=iter->children->next;iter_in != null; iter_in = iter_in->next) {
-							if(iter_in->is_text() == 0) {
-								switch(iter_in->name.down()) {
-									case "ref":
-										string href = iter_in->get_prop("href");
-										//print("URL = '%s'\n",href);
-										d = new Pl.Item();
-										TargetType tt;
-										File tmp = get_file_for_location(href, ref base_path, out tt);
-										d.target_type = tt;
-										d.add_field(Item.Field.URI, tmp.get_uri());
-										string? ext = get_extension(tmp);
-										if(ext != null) {
-											if(is_known_playlist_extension(ref ext))
-												d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+			SimpleXml.Reader reader = new SimpleXml.Reader.from_string(data);
+			reader.read();
+			var root = reader.root;
+			if(root != null && root.has_children()) {
+				var asx = root[0];
+				//print("asx: %s\n",asx.name.down());
+				if(asx != null && asx.has_children() && "asx"==asx.name.down()) {
+					var ptitle = asx.get_child_by_name("title");
+					//Playlist title
+					if(ptitle != null) {
+						//ptitle.text
+					}
+					var entrys = asx.get_children_by_name("entry");
+					if(entrys != null && entrys.length>0) {
+						Pl.Item d = null;
+						foreach(SimpleXml.Node entry in entrys) {
+							d = new Pl.Item();
+							var title = entry.get_child_by_name("title");
+							if(title != null) {
+								d.add_field(Item.Field.TITLE,title.text);
+							}
+							//Autor
+							var author = entry.get_child_by_name("author");
+							if(author != null) {
+								//author.text
+							}
+							//Copyright
+							var copyright = entry.get_child_by_name("copyright");
+							if(copyright != null) {
+								//copyright.text
+							}
+							var xref = entry.get_child_by_name("ref");
+							if(xref!=null && xref.attributes != null) {
+								var attrs = xref.attributes;
+								var href = attrs.get("href");
+								if(href!= null) {
+									TargetType tt;
+									File tmp = get_file_for_location(href, ref base_path, out tt);
+									d.target_type = tt;
+									d.add_field(Item.Field.URI, tmp.get_uri());
+									string? ext = get_extension(tmp);
+									if(ext != null) {
+										if(is_known_playlist_extension(ref ext)) {
+											d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
 										}
-										data_collection.append(d);
-										break;
-									case "title":
-										//print("Title = '%s'\n",iter_in->get_content());
-										//d.add_field(Item.Field.TITLE,iter_in->get_content());
-										break;
-									case "author":
-										//print("Autor = '%s'\n",iter_in->get_content());
-										break;
-									case "copyright":
-										//print("Copyright = '%s'\n",iter_in->get_content());
-										break;
-									default:
-										//print("%s = '%s'\n",iter_in->name,iter_in->get_content());
-										break;
+									}
+									data_collection.append(d);
 								}
 							}
 						}
-						delete iter_in;
 					}
 				}
-				else if(iter_name == "title") {
-					//print("Playlist Title = '%s'\n",iter->get_content());
-				}
 			}
+			
 			return data_collection;
 		}
 
@@ -123,7 +123,6 @@ namespace Pl {
 			}
 			
 			try {
-
 				string content;
 				var stream = new DataInputStream(file.read(null));
 				content = stream.read_until("", null, null);

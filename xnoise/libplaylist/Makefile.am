@@ -55,7 +55,6 @@ libplaylist_la_VALAFLAGS = \
 	--header=libplaylist.h --vapi=libplaylist-1.0.vapi \
 	--thread \
 	--pkg gio-2.0 \
-	--pkg libxml-2.0 \
 	--vapidir $(top_srcdir)/vapi \
 	--basedir $(top_srcdir)/libplaylist \
 	@LIBPLAYLIST_PACKAGES@ \
