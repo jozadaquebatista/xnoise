@@ -441,18 +441,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 				case 1: // uri list from outside
 					uris = selection.get_uris();
 					drop_rowref = null;
-					if(path != null) {
-						drop_rowref = new TreeRowReference(this.tracklistmodel, path);
-						if(drop_rowref == null || !drop_rowref.valid()) 
-							return;
-					}
-					else {
-						get_last_unselected_path(ref path);
-						drop_rowref = new TreeRowReference(this.tracklistmodel, path);
-						if(drop_rowref == null || !drop_rowref.valid()) {
-							return;
-						}
-					}
 					bool is_first = true;
 					string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 					              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
@@ -463,8 +451,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 						if(!is_stream) {
 							try {
 								FileInfo info = file.query_info(attr,
-										                        FileQueryInfoFlags.NONE,
-										                        null);
+								                                FileQueryInfoFlags.NONE,
+								                                null);
 								filetype = info.get_file_type();
 							}
 							catch(GLib.Error e){
@@ -902,6 +890,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 		else {
 			print("no path\n");
+			path = null;
 			return;
 		}
 	}
