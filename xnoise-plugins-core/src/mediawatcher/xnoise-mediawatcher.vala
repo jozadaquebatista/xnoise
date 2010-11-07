@@ -90,7 +90,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		
 		iib = new ImportInfoBar();
 		
-		var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.setup_monitors_job);
+		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.setup_monitors_job);
 		worker.push_job(job);
 	}
 	
@@ -134,7 +134,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			monitor_list.data.monitor.unref();
 			monitor_list = null;
 		}
-		var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.setup_monitors_job);
+		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.setup_monitors_job);
 		worker.push_job(job);
 	}
 	
@@ -434,7 +434,7 @@ print("++1\n");
 			print("%s\n", event_type.to_string());
 			if(event_type == FileMonitorEvent.CREATED) { // TODO: monitor removal of folders, too
 				if(file != null) {
-					var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_created_file_job);
+					var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_created_file_job);
 					job.set_arg("file", file);
 					worker.push_job(job);
 //					handle_created_file(file);
@@ -442,7 +442,7 @@ print("++1\n");
 			}
 			if(event_type == FileMonitorEvent.DELETED) {
 				if(file != null) {
-					var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_deleted_file_job);
+					var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_deleted_file_job);
 					job.set_arg("file", file);
 					worker.push_job(job);
 				}

@@ -578,8 +578,8 @@ namespace Xnoise {
 		[CCode (cprefix = "XNOISE_WORKER_EXECUTION_TYPE_", cheader_filename = "xnoise.h")]
 		public enum ExecutionType {
 			UNKNOWN,
-			ONE_SHOT,
-			ONE_SHOT_HIGH_PRIORITY,
+			ONCE,
+			ONCE_HIGH_PRIORITY,
 			TIMED,
 			REPEATED,
 			REPEATED_LOW_PRIORITY

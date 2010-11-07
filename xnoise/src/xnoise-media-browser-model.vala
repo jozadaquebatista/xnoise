@@ -500,7 +500,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			populate_model_cancellable = new Cancellable();
 		}
 		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_listed_data);
+		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_listed_data);
 		job.cancellable = populate_model_cancellable;
 		worker.push_job(job);
 		
@@ -512,11 +512,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 	
 	private void handle_listed_data(Worker.Job job) {
-		var stream_job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_streams);
+		var stream_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_streams);
 		stream_job.cancellable = populate_model_cancellable;
 		worker.push_job(stream_job);
 		
-		var video_job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_videos);
+		var video_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_videos);
 		video_job.cancellable = populate_model_cancellable;
 		worker.push_job(video_job);
 	}
@@ -662,7 +662,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			repeate = false;
 		}
 
-		var artist_job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_artists);
+		var artist_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_artists);
 		artist_job.cancellable = populate_model_cancellable;
 		artist_job.big_counter[1] = job.big_counter[1]; //current offset
 		
@@ -714,7 +714,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				
 				Gtk.TreePath p = this.get_path(iter_artist);
 				TreeRowReference treerowref = new TreeRowReference(this, p);
-				var job_album = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_album);
+				var job_album = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_album);
 				job_album.cancellable = populate_model_cancellable;
 				job_album.set_arg("treerowref", treerowref);
 				job_album.set_arg("artist", artist);
@@ -760,7 +760,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					         );
 					Gtk.TreePath p1 = this.get_path(iter_album);
 					TreeRowReference treerowref = new TreeRowReference(this, p1);
-					var job_title = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.handle_titles);
+					var job_title = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_titles);
 					job_title.cancellable = populate_model_cancellable;
 					job_title.set_arg("treerowref", treerowref);
 					job_title.set_arg("artist", artist);

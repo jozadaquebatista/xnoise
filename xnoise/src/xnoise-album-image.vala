@@ -120,7 +120,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		album  = remove_linebreaks(global.current_album );
 
 
-		var job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, this.fetch_trackdata_job);
+		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.fetch_trackdata_job);
 		job.set_arg("artist", artist);
 		job.set_arg("album", album);
 		job.set_arg("uri", xn.gPl.Uri);

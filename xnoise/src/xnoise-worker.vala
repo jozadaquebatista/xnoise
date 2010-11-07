@@ -64,8 +64,8 @@ public class Xnoise.Worker : Object {
 	
 	public enum ExecutionType {
 		UNKNOWN = 0,
-		ONE_SHOT,
-		ONE_SHOT_HIGH_PRIORITY, // not used,yet
+		ONCE,
+		ONCE_HIGH_PRIORITY, // not used,yet
 		TIMED,                  // queue timed job if working functionreturns true -> queue again
 		REPEATED,               // repeat until worker function returns false
 		REPEATED_LOW_PRIORITY   // not used,yet
@@ -224,7 +224,7 @@ public class Xnoise.Worker : Object {
 	// After pushing a Job, it will be executed and removed
 	public void push_job(Job j) {
 		switch(j.execution_type) {
-			case ExecutionType.ONE_SHOT:
+			case ExecutionType.ONCE:
 				if(j.s_func == null) {
 					print("Error: There must be a SyncWorkFunc in a sync job.\n");
 					break;

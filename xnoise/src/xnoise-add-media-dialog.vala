@@ -219,18 +219,18 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 			// global.media_import_in_progress has to be reset in the last job !
 			Worker.Job job;
-			job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, media_importer.reset_local_data_library_job);
+			job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.reset_local_data_library_job);
 			worker.push_job(job);
 			
-			job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, media_importer.store_streams_job);
+			job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.store_streams_job);
 			job.set_arg("list_of_streams", list_of_streams);
 			worker.push_job(job);
 			
-			job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, media_importer.store_files_job);
+			job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.store_files_job);
 			job.set_arg("list_of_files", list_of_files);
 			worker.push_job(job);
 			
-			job = new Worker.Job(1, Worker.ExecutionType.ONE_SHOT, null, media_importer.store_folders_job);
+			job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.store_folders_job);
 			job.set_arg("mfolders", list_of_folders);
 			job.set_arg("msg_id", msg_id);
 			worker.push_job(job);

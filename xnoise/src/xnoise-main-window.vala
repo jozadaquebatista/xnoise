@@ -204,7 +204,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		ssm = new ScreenSaverManager();
 
 		//restore last state
-		var job = new Worker.Job(999, Worker.ExecutionType.ONE_SHOT, null, this.add_lastused_titles_to_tracklist);
+		var job = new Worker.Job(999, Worker.ExecutionType.ONCE, null, this.add_lastused_titles_to_tracklist);
 		worker.push_job(job);
 
 		active_notifier = this.notify["is-active"].connect(buffer_position);

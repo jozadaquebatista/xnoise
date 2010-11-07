@@ -87,7 +87,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		});
 		icon_theme.changed.connect(on_position_reference_changed);
 	}
-
+	
 	public void on_before_position_reference_changed() {
 		unbolden_row();
 		reset_state();
