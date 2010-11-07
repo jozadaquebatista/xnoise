@@ -88,6 +88,29 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		icon_theme.changed.connect(on_position_reference_changed);
 	}
 	
+	public Iterator iterator() {
+		return new Iterator(this);
+	}
+
+	public class Iterator {
+		private int index;
+		private unowned TrackListModel tlm;
+
+		public Iterator(TrackListModel tlm) {
+			this.tlm = tlm;
+		}
+
+		public bool next() {
+			return true;
+		}
+
+		public TreeIter get() {
+			TreeIter iter;
+			tlm.iter_nth_child(out iter, null, index);
+			return iter;
+		}
+	}
+
 	public void on_before_position_reference_changed() {
 		unbolden_row();
 		reset_state();

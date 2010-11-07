@@ -479,6 +479,12 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackListModel : Gtk.ListStore, Gtk.TreeModel {
+		[CCode (ref_function = "xnoise_track_list_model_iterator_ref", unref_function = "xnoise_track_list_model_iterator_unref", cheader_filename = "xnoise.h")]
+		public class Iterator {
+			public Iterator (Xnoise.TrackListModel tlm);
+			public Gtk.TreeIter @get ();
+			public bool next ();
+		}
 		[CCode (cprefix = "XNOISE_TRACK_LIST_MODEL_COLUMN_", cheader_filename = "xnoise.h")]
 		public enum Column {
 			ICON,
@@ -500,6 +506,7 @@ namespace Xnoise {
 		public bool get_random_row (ref Gtk.TreePath treepath);
 		public string get_uri_for_current_position ();
 		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, int length = 0, bool bold = false, string uri);
+		public Xnoise.TrackListModel.Iterator iterator ();
 		public bool not_empty ();
 		public void on_before_position_reference_changed ();
 		public void on_position_reference_changed ();

@@ -541,6 +541,17 @@ typedef struct _XnoiseTextColumnPrivate XnoiseTextColumnPrivate;
 #define XNOISE_TRACK_LIST_MODEL_TYPE_COLUMN (xnoise_track_list_model_column_get_type ())
 typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 typedef struct _XnoiseTrackListModelPrivate XnoiseTrackListModelPrivate;
+
+#define XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR (xnoise_track_list_model_iterator_get_type ())
+#define XNOISE_TRACK_LIST_MODEL_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR, XnoiseTrackListModelIterator))
+#define XNOISE_TRACK_LIST_MODEL_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR, XnoiseTrackListModelIteratorClass))
+#define XNOISE_TRACK_LIST_MODEL_IS_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR))
+#define XNOISE_TRACK_LIST_MODEL_IS_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR))
+#define XNOISE_TRACK_LIST_MODEL_ITERATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR, XnoiseTrackListModelIteratorClass))
+
+typedef struct _XnoiseTrackListModelIterator XnoiseTrackListModelIterator;
+typedef struct _XnoiseTrackListModelIteratorClass XnoiseTrackListModelIteratorClass;
+typedef struct _XnoiseTrackListModelIteratorPrivate XnoiseTrackListModelIteratorPrivate;
 typedef struct _XnoiseTrackProgressBarPrivate XnoiseTrackProgressBarPrivate;
 typedef struct _XnoiseTrayIconPrivate XnoiseTrayIconPrivate;
 typedef struct _XnoiseUserInfoPrivate XnoiseUserInfoPrivate;
@@ -1094,6 +1105,17 @@ struct _XnoiseTrackListModelClass {
 	GtkListStoreClass parent_class;
 };
 
+struct _XnoiseTrackListModelIterator {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseTrackListModelIteratorPrivate * priv;
+};
+
+struct _XnoiseTrackListModelIteratorClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseTrackListModelIterator *self);
+};
+
 struct _XnoiseTrackProgressBar {
 	GtkProgressBar parent_instance;
 	XnoiseTrackProgressBarPrivate * priv;
@@ -1638,6 +1660,14 @@ gboolean xnoise_track_list_get_column_album_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_album_visible (XnoiseTrackList* self, gboolean value);
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
 XnoiseTrackListModel* xnoise_track_list_model_construct (GType object_type);
+gpointer xnoise_track_list_model_iterator_ref (gpointer instance);
+void xnoise_track_list_model_iterator_unref (gpointer instance);
+GParamSpec* xnoise_track_list_model_param_spec_iterator (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_track_list_model_value_set_iterator (GValue* value, gpointer v_object);
+void xnoise_track_list_model_value_take_iterator (GValue* value, gpointer v_object);
+gpointer xnoise_track_list_model_value_get_iterator (const GValue* value);
+GType xnoise_track_list_model_iterator_get_type (void) G_GNUC_CONST;
+XnoiseTrackListModelIterator* xnoise_track_list_model_iterator (XnoiseTrackListModel* self);
 void xnoise_track_list_model_on_before_position_reference_changed (XnoiseTrackListModel* self);
 gboolean xnoise_track_list_model_get_first_row (XnoiseTrackListModel* self, GtkTreePath** treepath);
 gboolean xnoise_track_list_model_get_random_row (XnoiseTrackListModel* self, GtkTreePath** treepath);
@@ -1652,6 +1682,10 @@ char** xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* 
 char* xnoise_track_list_model_get_uri_for_current_position (XnoiseTrackListModel* self);
 void xnoise_track_list_model_add_tracks (XnoiseTrackListModel* self, XnoiseTrackData** td_list, int td_list_length1, gboolean imediate_play);
 void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, char** uris, int uris_length1);
+XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_new (XnoiseTrackListModel* tlm);
+XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_construct (GType object_type, XnoiseTrackListModel* tlm);
+gboolean xnoise_track_list_model_iterator_next (XnoiseTrackListModelIterator* self);
+void xnoise_track_list_model_iterator_get (XnoiseTrackListModelIterator* self, GtkTreeIter* result);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_new (void);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_construct (GType object_type);
 void xnoise_track_progress_bar_set_value (XnoiseTrackProgressBar* self, guint pos, guint len);
