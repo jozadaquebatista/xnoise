@@ -276,7 +276,7 @@ public class MprisPlayer : GLib.Object {
 		if(update_metadata_source != 0)
 			Source.remove(update_metadata_source);
 
-		update_metadata_source = Timeout.add_seconds(1, () => {
+		update_metadata_source = Idle.add( () => {  // Timeout.add_seconds(1, () => {
 			Variant variant = this.PlaybackStatus;
 			queue_property_for_notification("Metadata", variant);
 			update_metadata_source = 0;
