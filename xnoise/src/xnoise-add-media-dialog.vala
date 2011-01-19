@@ -154,7 +154,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			baddradio.clicked.connect(on_add_radio_button_clicked);
 			brem.clicked.connect(on_remove_button_clicked);
 
-			this.dialog.vbox.add(mainvbox);
+			((Gtk.VBox)this.dialog.get_content_area()).add(mainvbox);
 			this.dialog.set_icon_from_file(XNOISEICON);
 			this.dialog.set_title(_("xnoise - Add media to library"));
 		}
@@ -310,7 +310,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
 		});
-		radiodialog.vbox.pack_start(radioentry, true, true, 0);
+		((Gtk.VBox)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
 
 		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_CANCEL, 0);
 		radiocancelbutton.clicked.connect( () => {

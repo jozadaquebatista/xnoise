@@ -81,7 +81,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 
 		if(e.count > 0) return true; //exposure compression
 
-		Gdk.draw_rectangle(this.window,
+		Gdk.draw_rectangle(this.get_window(),
 		                   this.style.black_gc, true,
 		                   e.area.x, e.area.y,
 		                   e.area.width, e.area.height
@@ -101,13 +101,15 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				var rect = Gdk.Rectangle();
 				rect.x = 0;
 				rect.y = 0;
-				rect.width  = this.allocation.width;
-				rect.height = this.allocation.height;
+				Gtk.Allocation alloc;
+				this.get_allocation(out alloc);
+				rect.width  = alloc.width;
+				rect.height = alloc.height;
 				region = Gdk.Region.rectangle(rect);
 
-				this.window.begin_paint_region(region);
+				this.get_window().begin_paint_region(region);
 
-				Gdk.draw_rectangle(this.window,
+				Gdk.draw_rectangle(this.get_window(),
 				                   this.style.black_gc, true,
 				                   e.area.x, e.area.y,
 				                   e.area.width, e.area.height
@@ -115,8 +117,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 
 				logowidth  = logo_pixb.get_width();
 				logoheight = logo_pixb.get_height();
-				widgetwidth  = this.allocation.width;
-				widgetheight = this.allocation.height;
+				widgetwidth  = alloc.width;
+				widgetheight = alloc.height;
 
 				if((float)widgetwidth/logowidth>(float)widgetheight/logoheight)
 					ratio = (float)widgetheight/logoheight;
@@ -128,7 +130,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 
 				if(logowidth<=1||logoheight<=1) {
 					// Do not paint for small pictures
-					this.window.end_paint();
+					this.get_window().end_paint();
 					return true;
 				}
 				if(!cover_image_available) {
@@ -163,7 +165,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 					}
 				}
 
-				Gdk.draw_pixbuf(this.window,          //Destination drawable
+				Gdk.draw_pixbuf(this.get_window(),    //Destination drawable
 				                this.style.fg_gc[0],  //a Gdk.GC, used for clipping, or null
 				                logo,                 //a Gdk.Pixbuf
 				                0, 0,                 //Source X/Y coordinates within pixbuf.
@@ -174,10 +176,10 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				                Gdk.RgbDither.NONE,   //Dithering mode for Gdk.RGB.
 				                0, 0                  //X/Y offsets for dither.
 				                );
-				this.window.end_paint();
+				this.get_window().end_paint();
 			}
-			else if(this.window!=null) {
-				Gdk.draw_rectangle(this.window,
+			else if(this.get_window()!=null) {
+				Gdk.draw_rectangle(this.get_window(),
 				                   this.style.black_gc, true,
 				                   e.area.x, e.area.y,
 				                   e.area.width, e.area.height
@@ -189,7 +191,9 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 
 	public void trigger_expose() {
 		//trigger a redraw by gtk using our expose_event handler
-		this.queue_draw_area(0, 0, this.allocation.width, this.allocation.height);
+		Gtk.Allocation alloc;
+		this.get_allocation(out alloc);
+		this.queue_draw_area(0, 0, alloc.width, alloc.height);
 	}
 }
 

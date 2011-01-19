@@ -99,7 +99,8 @@ AC_SUBST(LIBPLAYLIST_PACKAGES)
 
 
 dnl VAPIDIR is used to place the xnoise vapi file
-VAPIDIR="${datadir}/vala-0.10/vapi"
+dnl '.../vala/vapi' is vala version independent
+VAPIDIR="${datadir}/vala/vapi"
 AC_SUBST(VAPIDIR)
 dnl ================================================================
 

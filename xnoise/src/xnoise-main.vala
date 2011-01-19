@@ -176,7 +176,7 @@ public class Xnoise.Main : GLib.Object {
 	public void quit() {
 		Timeout.add_seconds(1, () => { Gtk.main_quit(); return false;});
 		if(main_window.is_fullscreen) 
-			this.main_window.window.unfullscreen();
+			this.main_window.get_window().unfullscreen();
 		main_window.hide();
 		this.gPl.stop();
 		this.save_tracklist();

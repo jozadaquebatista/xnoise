@@ -74,7 +74,8 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 			mouse_x = e.x;
 			mouse_y = e.y;
 
-			Allocation progress_loc = this.allocation;
+			Allocation progress_loc;
+			this.get_allocation(out progress_loc);
 			thisFraction = mouse_x / progress_loc.width;
 
 			this.motion_notify_event.disconnect(on_motion_notify);
@@ -129,7 +130,8 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		double mouse_x, mouse_y;
 		mouse_x = e.x;
 		mouse_y = e.y;
-		Allocation progress_loc = this.allocation;
+		Allocation progress_loc;
+		this.get_allocation(out progress_loc);
 		thisFraction = mouse_x / progress_loc.width;
 
 		if(thisFraction < 0.0) thisFraction = 0.0;

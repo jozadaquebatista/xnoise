@@ -268,10 +268,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 		if(!do_scroll((int)delta))
 			return true;
 		
-		expose_area.x      = this.allocation.x;
-		expose_area.y      = this.allocation.y;
-		expose_area.width  = this.allocation.width;
-		expose_area.height = this.allocation.height;
+		Allocation alloc;
+		this.get_allocation(out alloc);
+		expose_area.x      = alloc.x;
+		expose_area.y      = alloc.y;
+		expose_area.width  = alloc.width;
+		expose_area.height = alloc.height;
 		
 		if(delta > 0) {
 			expose_area.y = expose_area.height - (int)delta;
@@ -281,8 +283,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 				expose_area.height = (int)(-1.0 * delta);
 		}
 
-		expose_area.x -= this.allocation.x;
-		expose_area.y -= this.allocation.y;
+		expose_area.x -= alloc.x;
+		expose_area.y -= alloc.y;
 
 		this.queue_draw_area(expose_area.x,
 		                     expose_area.y,
@@ -312,16 +314,17 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 	private void get_autoscroll_delta(ref double delta) {
 		int y_pos;
-		this.window.get_pointer(null, out y_pos, null);
+		this.get_window().get_pointer(null, out y_pos, null);
 		delta = 0.0;
 		if(y_pos < autoscroll_distance) 
 			delta = (double)(y_pos - autoscroll_distance);
-
-		if(y_pos > (this.allocation.height - autoscroll_distance)) {
+		Allocation alloc;
+		this.get_allocation(out alloc);
+		if(y_pos > (alloc.height - autoscroll_distance)) {
 			if(delta != 0) { //window too narrow, don't autoscroll.
 				return;
 			}
-			delta = (double)(y_pos - (this.allocation.height - autoscroll_distance));
+			delta = (double)(y_pos - (alloc.height - autoscroll_distance));
 		}
 		if(delta == 0) {
 			return;
@@ -425,13 +428,13 @@ public class Xnoise.TrackList : TreeView, IParams {
 			switch(target_type) {
 				// DRAGGING NOT WITHIN TRACKLIST
 				case 0: // custom dnd data from media browser
-					unowned DndData[] ids = (DndData[])selection.data;
-					ids.length = (int)(selection.length / sizeof(DndData));
-			
+					unowned DndData[] ids = (DndData[])selection.get_data();
+					ids.length = (int)(selection.get_length() / sizeof(DndData));
+					
 					TreeRowReference row_ref = null;
 					if(path != null)
 						row_ref = new TreeRowReference(this.model, path);
-			
+					
 					var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.insert_dnd_data_job);
 					job.set_arg("row_ref", row_ref);
 					job.set_arg("drop_pos", drop_pos);
@@ -1189,7 +1192,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			}
 			
 			Value v = Value(typeof(int));
-			((TreeView)this).style_get_property("vertical-separator", v);
+			((TreeView)this).style_get_property("vertical-separator", out v);
 			//int vertical_separator_size = v.get_int();
 			
 			//print("|%i|%i", w - (scrollbar_w + 
@@ -1206,7 +1209,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	public void handle_resize() {
 		if(xn.main_window == null)
 			return;
-		if(xn.main_window.window == null)
+		if(xn.main_window.get_window() == null)
 			return;
 		resize_column_range_relatively(0);
 	}

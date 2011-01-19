@@ -177,7 +177,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				stopButton.hide();
 			}
 			else {
-				if(a_frame_config_button != null && config_button.is_realized()) 
+				if(a_frame_config_button != null && config_button.get_realized()) 
 					a_frame_config_button.remove(config_button);
 				config_button.unrealize();
 				if(menubar.get_parent() == null) {
@@ -234,7 +234,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 	
 	private void on_resized() {
-		if(this.window == null)
+		if(this.get_window() == null)
 			return;
 		int w, x;
 		this.get_size(out w, out x);
@@ -246,7 +246,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	
 	private void initialize_video_screen() {
 		videoscreen.realize();
-		ensure_native(videoscreen.window);
+		ensure_native(videoscreen.get_window());
 		// dummy drag'n'drop to get drag motion event
 		Gtk.drag_dest_set(
 			videoscreen,
@@ -456,7 +456,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		/* get_allocation is broken in vapi - we should remove this direct field access as soon as it is fixed */
 		//Did you file a bug for this?
 		Allocation alloc;
-		alloc = config_button.allocation;
+		config_button.get_allocation(out alloc);
 		x = o_x + alloc.x + req.width;
 		y = o_y + alloc.y + req.height;
 		
@@ -471,14 +471,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			int monitor;
 			Gdk.Rectangle rectangle;
 			Gdk.Screen screen = this.videoscreen.get_screen();
-			monitor = screen.get_monitor_at_window(this.videoscreen.window);
+			monitor = screen.get_monitor_at_window(this.videoscreen.get_window());
 			screen.get_monitor_geometry(monitor, out rectangle);
 			fullscreenwindow.move(rectangle.x, rectangle.y);
 			fullscreenwindow.fullscreen();
-			this.videoscreen.window.fullscreen();
+			this.videoscreen.get_window().fullscreen();
 			fullscreenwindow.show_all();
 			this.videoscreen.reparent(fullscreenwindow);
-			this.videoscreen.window.process_updates(true);
+			this.videoscreen.get_window().process_updates(true);
 
 			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 			fullscreenwindowvisible = true;
@@ -489,7 +489,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			});
 		}
 		else {
-			this.videoscreen.window.unfullscreen();
+			this.videoscreen.get_window().unfullscreen();
 			this.videoscreen.reparent(videovbox);
 			fullscreenwindow.hide_all();
 
@@ -663,7 +663,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.get_position(out _posX_buffer, out _posY_buffer);
 			this.hide();
 		}
-		else if(this.window.is_visible() == true) {
+		else if(this.get_window().is_visible() == true) {
 			this.move(_posX_buffer, _posY_buffer);
 			this.present();
 			active_notifier = this.notify["is-active"].connect(buffer_position);
@@ -676,7 +676,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	public void show_window() {
-		if(this.window.is_visible() == true) {
+		if(this.get_window().is_visible() == true) {
 			this.present();
 		}
 		else {
@@ -925,7 +925,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
 		});
-		radiodialog.vbox.pack_start(radioentry, true, true, 0);
+		((Gtk.VBox)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
 
 		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_CANCEL, 0);
 		radiocancelbutton.clicked.connect( () => {
@@ -1153,7 +1153,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		else
 			media_browser_visible = true;
 			
-		if(this.window != null) {
+		if(this.get_window() != null) {
 			this.trackList.handle_resize();
 		}
 	}

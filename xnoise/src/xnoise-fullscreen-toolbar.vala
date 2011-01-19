@@ -113,7 +113,7 @@ public class Xnoise.FullscreenToolbar {
 		Gdk.Rectangle rect;
 
 		screen = fullscreenwindow.get_screen();
-		screen.get_monitor_geometry (screen.get_monitor_at_window (fullscreenwindow.window),out rect);
+		screen.get_monitor_geometry (screen.get_monitor_at_window (fullscreenwindow.get_window()),out rect);
 
 		this.window.resize(rect.width, 30);
 		bar.set_size_request(rect.width/2,18);
@@ -146,7 +146,7 @@ public class Xnoise.FullscreenToolbar {
 	}
 	
 	public bool on_pointer_motion (Gdk.EventMotion ev) {
-		if(!window.window.is_visible())show();
+		if(!window.get_window().is_visible())show();
 		if(hide_lock == true) return false;
 		if(hide_event_id != 0) {
 			 GLib.Source.remove (hide_event_id);
@@ -194,7 +194,7 @@ public class Xnoise.FullscreenToolbar {
 		}
 
 		public void on_clicked() {
-			this.xn.main_window.videoscreen.window.unfullscreen();
+			this.xn.main_window.videoscreen.get_window().unfullscreen();
 			this.xn.main_window.videoscreen.reparent(this.xn.main_window.videovbox);
 			this.xn.main_window.fullscreenwindow.hide_all();
 			this.xn.main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);

@@ -111,9 +111,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		dialog.show_all();
 	}
 
-	private void on_notebook_switched_page(Notebook sender, NotebookPage page, uint page_num) {
+	private void on_notebook_switched_page() { //Notebook sender, Gtk.NotebookPage page, uint page_num) {
 		// refresh table
-		if(page_num == NotebookTabs.PRIORITIES) {
+		if(this.notebook.get_current_page() == NotebookTabs.PRIORITIES) {
 			ly_model.foreach(update_lyrics_providers);
 			ai_model.foreach(update_ai_providers);
 		}
