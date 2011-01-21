@@ -37,7 +37,18 @@ using Xml;
 // Plugin for lastfm.com PHP API
 
 public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageProvider {
+	private unowned Xnoise.Plugin _owner;
+	
 	public Main xn { get; set; }
+	
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
 	public string name {
 		get {
 			return "lastFmCovers";

@@ -33,6 +33,9 @@ using Indicate;
 
 public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 	private Indicate.Server server;
+	private Xnoise.Plugin p;
+	private unowned Xnoise.Plugin _owner;
+	
 	public Main xn { get; set; }
 	
 	public string name { 
@@ -41,9 +44,18 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 		}
 	}
 	
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
+
 	public bool init() {
 		//TODO check for mpris plugin being active
-		unowned Xnoise.Plugin p = xn.plugin_loader.plugin_htable.lookup("mpris");
+		p = xn.plugin_loader.plugin_htable.lookup("mpris");
 		if(p == null)
 			return false;
 		
@@ -53,6 +65,7 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 			print("cannot start mpris plugin\n");
 			return false;
 		}
+		p.sign_deactivated.connect(mpris_deactivated);
 		
 		Timeout.add(2, () => {
 			server = Indicate.Server.ref_default();
@@ -85,6 +98,15 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 	
 	public bool has_singleline_settings_widget() {
 		return false;
+	}
+	
+	private void mpris_deactivated() {
+		//this plugin depends on mpris2 plugin
+		if(this.owner != null)
+			Idle.add( () => {
+				owner.deactivate();
+				return false;
+			}); 
 	}
 }
 

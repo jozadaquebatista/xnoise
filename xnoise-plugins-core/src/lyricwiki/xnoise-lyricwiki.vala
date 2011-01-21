@@ -32,7 +32,19 @@ using GLib;
 using Soup;
 
 public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
+	private unowned Xnoise.Plugin _owner;
+	
 	public Main xn { get; set; }
+
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
+
 	public string name {
 		get {
 			return "Lyricwiki";

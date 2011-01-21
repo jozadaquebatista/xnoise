@@ -132,7 +132,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 	private void setup_entries() {
 		foreach(string s in this.xn.plugin_loader.get_info_files()) {
 			string name, description, icon, author, website, license, copyright;
-			try	{
+			try {
 				var kf = new KeyFile();
 				kf.load_from_file(s, KeyFileFlags.NONE);
 				if(!kf.has_group(group)) continue;
@@ -148,6 +148,9 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				Gdk.Pixbuf pixbuf = invisible.render_icon(Gtk.STOCK_UNDO , IconSize.BUTTON, null); //TODO: use plugins' icons
 				unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
 				p.sign_activated.connect( () => {
+					refresh_tree();
+				});
+				p.sign_deactivated.connect( () => {
 					refresh_tree();
 				});
 				TreeIter iter;

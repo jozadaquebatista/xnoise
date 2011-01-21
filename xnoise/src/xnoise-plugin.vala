@@ -36,6 +36,7 @@ public class Xnoise.Plugin : TypeModule {
 	private Module module;
 	private Type type;
 	private PluginInformation _info;
+	private bool _activated;
 
 	public Object loaded_plugin;
 	
@@ -50,7 +51,11 @@ public class Xnoise.Plugin : TypeModule {
 		}
 	}
 
-	public bool activated { get; set; }
+	public bool activated { 
+		get {
+			return _activated;
+		}
+	}
 	public bool configurable { get; private set; }
 	public bool is_lyrics_plugin { get; private set; default = false;}
 	public bool is_album_image_plugin { get; private set; default = false;}
@@ -119,10 +124,13 @@ public class Xnoise.Plugin : TypeModule {
 		
 		if(module == null)
 			return;
+		unowned Plugin ow = this;
 		loaded_plugin = Object.new(type,
-		                           "xn", this.xn,    //set properties via this, because
+		                           "xn", this.xn,
+		                           "owner", ow,      //set properties via this, because
 		                           null);            //parameters are not allowed
 		                                             //for this kind of Object construction
+//		((IPlugin)loaded_plugin).parent = this;
 		if(loaded_plugin == null) {
 			message("Failed to load plugin %s. Cannot get type.\n", _info.name);
 			_activated = false;
@@ -141,6 +149,7 @@ public class Xnoise.Plugin : TypeModule {
 		//print("deactivate\n");
 		_activated = false;
 		loaded_plugin = null;
+		sign_deactivated();
 	}
 
 	public Gtk.Widget? settingwidget() {

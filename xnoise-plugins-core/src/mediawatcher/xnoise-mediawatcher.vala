@@ -44,7 +44,18 @@ using Xnoise;
 
 
 public class Xnoise.MediawatcherPlugin : GLib.Object, IPlugin {
+	private unowned Xnoise.Plugin _owner;
+
 	public Mediawatcher watcher;
+	
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
 
 	public Main xn { get; set; }
 	public string name {

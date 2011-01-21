@@ -39,7 +39,20 @@ using Xml;
 
 
 public class Xnoise.LyricsLyricsflyPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.ILyricsProvider {
+	
+	private unowned Xnoise.Plugin _owner;
+
 	public Xnoise.Main xn { get; set; }
+
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
+
 	public string name { 
 		get {
 			return "Lyricsfly";

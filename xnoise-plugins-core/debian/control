@@ -10,7 +10,7 @@ Package: xnoise-plugins-core
 Architecture: any
 Depends: ${misc:Depends}, xnoise (>= 0.1.9), libxml2 (>= 2.7.0), libsqlite3-0 (>= 3.6), libnotify1 (>= 0.4.5), libsoup2.4-1 (>=2.28), libgtk2.0-0 (>=2.20), libgstreamer0.10-0 (>=0.10.28), libgstreamer-plugins-base0.10-0 (>=0.10.28), libtagc0 (>=1.6.2), libunique-1.0-0 (>=1.0), libdbus-glib-1-2 (>=0.84)
 Description: A Media player for Gtk+. (PLUGINS PACKAGE)
- This package contains the core plugins for xnoise. Their usage with xnoise is optional.
+ This package contains the core plugins for xnoise.
  .
  Unlike Rhythmbox, Banshee or itunes, Xnoise uses a tracklist centric design. 
  The tracklist is a list of video or music tracks that are played one by one 

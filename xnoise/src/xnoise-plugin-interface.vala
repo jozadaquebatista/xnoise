@@ -29,6 +29,7 @@
  */
 
 public interface Xnoise.IPlugin : GLib.Object {
+	public abstract Xnoise.Plugin owner { get; set; }
 	public abstract string name { get; }
 	public abstract Main xn { get; set; }
 	public abstract bool init();

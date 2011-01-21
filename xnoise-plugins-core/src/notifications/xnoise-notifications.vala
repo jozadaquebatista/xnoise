@@ -34,6 +34,16 @@ using Notify;
 
 public class Xnoise.Notifications : GLib.Object, IPlugin {
 	public Main xn { get; set; }
+	private unowned Xnoise.Plugin _owner;
+	
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
 	public string name { 
 		get {
 			return "notifications";

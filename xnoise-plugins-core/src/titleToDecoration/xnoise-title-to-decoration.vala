@@ -32,7 +32,19 @@ using Xnoise;
 using Gtk;
 
 public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
+	private unowned Xnoise.Plugin _owner;
+
 	public Main xn { get; set; }
+	
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
+
 	public string name { 
 		get {
 			return "TitleToDecoration";

@@ -33,7 +33,17 @@ using Gtk;
 
 public class TestPlugin : GLib.Object, IPlugin {
 	private Gtk.Button b;
+	private unowned Xnoise.Plugin _owner;
 	
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
+
 	public Xnoise.Main xn { get; set; }
 	
 	public string name { 

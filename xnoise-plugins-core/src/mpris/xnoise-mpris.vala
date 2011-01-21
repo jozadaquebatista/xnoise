@@ -39,16 +39,29 @@ using Xnoise;
 public class Xnoise.Mpris : GLib.Object, IPlugin {
 	public Main xn { get; set; }
 	private uint owner_id;
+	private uint object_id_root;
+	private uint object_id_player;
 	public MprisPlayer player = null;
 	public MprisRoot root = null;
 //	public MprisTrackList tracklist = null;
-	
+	private unowned Xnoise.Plugin _owner;
+	unowned DBusConnection conn;
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
+
 	public string name { 
 		get {
 			return "mpris";
 		} 
 	}
 	private void on_bus_acquired(DBusConnection connection, string name) {
+		this.conn = connection;
 		//print("bus acquired\n");
 		try {
 			root = new MprisRoot();
@@ -80,11 +93,23 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 			print("mpris error\n");
 			return false;
 		}
+		owner.sign_deactivated.connect(clean_up);
 		return true;
 	}
 	
-	~Mpris() {
+	private void clean_up() {
+		if(owner_id == 0)
+			return;
+		this.conn.unregister_object(object_id_player);
+		this.conn.unregister_object(object_id_root);
 		Bus.unown_name(owner_id);
+		object_id_player = 0;
+		object_id_root = 0;
+		owner_id = 0;
+	}
+	
+	~Mpris() {
+		clean_up();
 	}
 
 	public Gtk.Widget? get_settings_widget() {

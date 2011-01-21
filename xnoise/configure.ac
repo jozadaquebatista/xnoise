@@ -98,8 +98,8 @@ AC_SUBST(LIBPLAYLIST_LIBS)
 AC_SUBST(LIBPLAYLIST_PACKAGES)
 
 
-dnl VAPIDIR is used to place the xnoise vapi file
-dnl '.../vala/vapi' is vala version independent
+dnl       VAPIDIR is used to place the xnoise vapi file
+dnl       $DATADIR/vala/vapi is vala version independent
 VAPIDIR="${datadir}/vala/vapi"
 AC_SUBST(VAPIDIR)
 dnl ================================================================
@@ -112,8 +112,6 @@ AC_SUBST(GETTEXT_PACKAGE)
 AM_GLIB_GNU_GETTEXT
 
 IT_PROG_INTLTOOL([0.35.0])
-
-AC_SUBST(VALAFLAGS)
 
 dnl Shave the output
 AM_SILENT_RULES([yes])
@@ -148,5 +146,5 @@ echo "
     gettext_package:               ${GETTEXT_PACKAGE}
     prefix:                        ${prefix}
     CFLAGS:                        ${CFLAGS}
-
+    VALAC                          ${VALAC}
 "

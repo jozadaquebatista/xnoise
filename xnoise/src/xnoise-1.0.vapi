@@ -377,7 +377,7 @@ namespace Xnoise {
 		public override bool load ();
 		public Gtk.Widget? settingwidget ();
 		public override void unload ();
-		public bool activated { get; set; }
+		public bool activated { get; }
 		public bool configurable { get; set; }
 		public Xnoise.PluginInformation info { get; }
 		public bool is_album_image_plugin { get; set; }
@@ -631,6 +631,7 @@ namespace Xnoise {
 		public abstract bool has_singleline_settings_widget ();
 		public abstract bool init ();
 		public abstract string name { get; }
+		public abstract Xnoise.Plugin owner { get; set; }
 		public abstract Xnoise.Main xn { get; set; }
 	}
 	[CCode (type_id = "XNOISE_TYPE_DND_DATA", cheader_filename = "xnoise.h")]

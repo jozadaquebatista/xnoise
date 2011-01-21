@@ -39,7 +39,19 @@ using Xnoise;
 // XML PARSING DOES NOT YET WORK
 
 public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
+	private unowned Xnoise.Plugin _owner;
+	
 	public Main xn { get; set; }
+	
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
+
 	public string name {
 		get {
 			return "Chartlyrics";

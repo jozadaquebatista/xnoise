@@ -33,7 +33,19 @@ using DBus;
 using Xnoise;
 
 public class Xnoise.MediaKeys : GLib.Object, IPlugin {
+	private unowned Xnoise.Plugin _owner;
+
 	public unowned Main xn { get; set; }
+	
+	public Xnoise.Plugin owner {
+		get {
+			return _owner;
+		}
+		set {
+			_owner = value;
+		}
+	}
+
 	public Connection conn;
 	public dynamic DBus.Object bus;
 	
