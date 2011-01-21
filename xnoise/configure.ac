@@ -3,7 +3,7 @@ AC_PREREQ(2.53)
 #xnoise version
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 1)
-m4_define(xnoise_micro_version, 12)
+m4_define(xnoise_micro_version, 13)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
 #libplaylist version
@@ -35,7 +35,7 @@ SQLITE_REQUIRED=3.4
 TAGLIB_C_REQUIRED=1.5.0
 
 dnl required versions for vala, if used
-VALA_REQUIRED=0.9.8
+VALA_REQUIRED=0.10.0
 
 AC_PROG_CC
 AM_PROG_VALAC($VALA_REQUIRED)

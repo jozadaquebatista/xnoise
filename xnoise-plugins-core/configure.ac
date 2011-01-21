@@ -1,7 +1,7 @@
 AC_PREREQ(2.53)
 m4_define(xnoisepluginscore_major_version, 0)
 m4_define(xnoisepluginscore_minor_version, 1)
-m4_define(xnoisepluginscore_micro_version, 12)
+m4_define(xnoisepluginscore_micro_version, 13)
 m4_define(xnoisepluginscore_version, xnoisepluginscore_major_version.xnoisepluginscore_minor_version.xnoisepluginscore_micro_version)
 
 AC_INIT(xnoisepluginscore, xnoisepluginscore_version, shuerhaakenATgo oglemail.com, [xnoise-plugins-core])
@@ -32,7 +32,7 @@ GDBUS_REQUIRED=2.26
 XNOISE_REQUIRED=xnoisepluginscore_version
 
 dnl required versions for vala, if used
-VALA_REQUIRED=0.9.8
+VALA_REQUIRED=0.10.0
 
 # Disable generation of static libraries
 AC_DISABLE_STATIC
