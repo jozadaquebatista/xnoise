@@ -41,10 +41,12 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		GLib.Path.build_filename(GLib.Environment.get_user_config_dir(),
 		                         "xnoise",
 		                         null);
-		uri_changed.connect(this.set_meta_information);
+		uri_changed.connect( (s,v) => {
+			this.set_meta_information(v);
+		});
 	
 		this.notify.connect( (s, p) => {
-			//print("p.name: %s\n", p.name);
+			print("p.name: %s\n", p.name);
 			switch(p.name) {
 				case "current-artist":
 					this.tag_changed(ref this._current_uri, "artist", this._current_artist);
@@ -282,7 +284,10 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		else { 
 			current_artist = null;
 			current_album = null;
-			current_title = null;
+			char* p = basename.rstr(".");
+			if(p!=null)
+				p[0]= '\0';
+			current_title = basename;
 			current_location = null;
 			current_genre = null;
 			current_organization = null;

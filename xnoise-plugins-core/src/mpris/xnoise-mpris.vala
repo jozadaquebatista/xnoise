@@ -301,7 +301,8 @@ public class MprisPlayer : GLib.Object {
 		if(update_metadata_source != 0)
 			Source.remove(update_metadata_source);
 
-		update_metadata_source = Idle.add( () => {  // Timeout.add_seconds(1, () => {
+		update_metadata_source = Timeout.add(300, () => {
+			print("trigger_metadata_update %s\n", global.current_artist);
 			Variant variant = this.PlaybackStatus;
 			queue_property_for_notification("Metadata", variant);
 			update_metadata_source = 0;
@@ -312,35 +313,34 @@ public class MprisPlayer : GLib.Object {
 	private void on_tag_changed(Xnoise.GlobalAccess sender, ref string? newuri, string? tagname, string? tagvalue) {
 		switch(tagname){
 			case "artist":
-				if(tagvalue == null)
-					break;
 				string[] sa = {};
+				if(tagvalue == null)
+					tagvalue = "";
 				sa += tagvalue;
 				_metadata.insert("xesam:artist", sa);
 				break;
 			case "album":
 				if(tagvalue == null)
-					break;
+					tagvalue = "";
 				string s = tagvalue;
 				_metadata.insert("xesam:album", s);
 				break;
 			case "title":
 				if(tagvalue == null)
-					break;
+					tagvalue = "";
 				string s = tagvalue;
 				_metadata.insert("xesam:title", s);
 				break;
 			case "genre":
 				if(tagvalue == null)
-					break;
+					tagvalue = "";
 				string[] sa = {};
 				sa += tagvalue;
 				_metadata.insert("xesam:genre", sa);
 				break;
 			default:
-				break;
+				return;
 		}
-		
 		trigger_metadata_update();
 	}
 	
