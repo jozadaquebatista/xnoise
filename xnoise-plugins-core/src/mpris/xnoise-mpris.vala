@@ -45,7 +45,8 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	public MprisRoot root = null;
 //	public MprisTrackList tracklist = null;
 	private unowned Xnoise.Plugin _owner;
-	unowned DBusConnection conn;
+	private unowned DBusConnection conn;
+	
 	public Xnoise.Plugin owner {
 		get {
 			return _owner;
@@ -302,7 +303,7 @@ public class MprisPlayer : GLib.Object {
 			Source.remove(update_metadata_source);
 
 		update_metadata_source = Timeout.add(300, () => {
-			print("trigger_metadata_update %s\n", global.current_artist);
+			//print("trigger_metadata_update %s\n", global.current_artist);
 			Variant variant = this.PlaybackStatus;
 			queue_property_for_notification("Metadata", variant);
 			update_metadata_source = 0;
@@ -493,7 +494,7 @@ public class MprisPlayer : GLib.Object {
 	
 	public int64 Position {
 		get {
-			print("get position\n");
+			//print("get position\n");
 			if(xn.gPl.length_time == 0)
 				return -1;
 			double pos = xn.gPl.gst_position;
@@ -607,7 +608,7 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public void SetPosition(string dobj, int64 Position) {
-		print(" set position %lf\n", ((double)Position/(xn.gPl.length_time / 1000.0)));
+		//print(" set position %lf\n", ((double)Position/(xn.gPl.length_time / 1000.0)));
 		xn.gPl.gst_position = ((double)Position/(xn.gPl.length_time / 1000.0));
 	}
 	

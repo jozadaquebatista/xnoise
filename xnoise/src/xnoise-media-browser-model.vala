@@ -491,7 +491,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private Cancellable populate_model_cancellable = null;
 	public bool populate_model() {
-		print("populate_model\n");
+		//print("populate_model\n");
 		if(populate_model_cancellable == null) {
 			populate_model_cancellable = new Cancellable();
 		}

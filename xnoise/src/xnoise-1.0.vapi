@@ -710,3 +710,5 @@ namespace Xnoise {
 }
 [CCode (cname = "gdk_window_ensure_native", cheader_filename = "xnoise.h")]
 public static bool ensure_native (Gdk.Window window);
+[CCode (cheader_filename = "xnoise.h")]
+public static void gtk_widget_style_get_property (Gtk.Widget widget, string property_name, GLib.Value val);

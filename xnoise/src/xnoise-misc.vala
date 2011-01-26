@@ -139,17 +139,21 @@ namespace Xnoise {
 			return "";
 		string name = val;
 		char* p = name.rstr(".");
-		if(p != null)
-			p[0] = '\0';
+		char* s = name;
+		string prep;
+		if(p != null) 
+			prep = name.ndup((size_t)(p - s));
+		else
+			prep = name;
 		
 		try {
 			GLib.Regex r = new GLib.Regex("_");
-			name = r.replace(name, -1, 0, " ");
+			prep = r.replace(prep, -1, 0, " ");
 		}
 		catch(GLib.RegexError e) {
 			print("%s\n", e.message);
 		}
-		return name;
+		return prep;
 	}
 
 	public static string replace_underline_with_blank_encoded(string value) {

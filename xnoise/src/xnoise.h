@@ -1436,6 +1436,7 @@ void xnoise_main_write_final_tracks_to_db_job (XnoiseMain* self, XnoiseWorkerJob
 void xnoise_main_quit (XnoiseMain* self);
 XnoiseMain* xnoise_main_get_instance (void);
 gboolean gdk_window_ensure_native (GdkWindow* window);
+void gtk_widget_style_get_property (GtkWidget* widget, const char* property_name, GValue* val);
 GType xnoise_iparams_get_type (void) G_GNUC_CONST;
 GType xnoise_track_list_note_book_tab_get_type (void) G_GNUC_CONST;
 GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;

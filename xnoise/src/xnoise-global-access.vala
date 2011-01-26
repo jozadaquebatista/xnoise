@@ -46,7 +46,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		});
 	
 		this.notify.connect( (s, p) => {
-			print("p.name: %s\n", p.name);
+			//print("p.name: %s\n", p.name);
 			switch(p.name) {
 				case "current-artist":
 					this.tag_changed(ref this._current_uri, "artist", this._current_artist);
@@ -230,7 +230,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		string? small_name = null;
 		string? large_name = null; 
 		File f = get_file_for_current_artistalbum(current_artist, current_album, "medium");
-		small_name = f.get_path();
+		small_name = f != null ? f.get_path() : "";
 		if((small_name == "") || (small_name == null)) {
 			image_path_small = null;
 			image_path_large = null;

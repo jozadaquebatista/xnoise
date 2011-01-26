@@ -32,6 +32,9 @@ using Gtk;
 [CCode (cname = "gdk_window_ensure_native")]
 public extern bool ensure_native(Gdk.Window window);
 
+[CCode (cname = "gtk_widget_style_get_property")]
+public extern void gtk_widget_style_get_property(Gtk.Widget widget, string property_name, GLib.Value val);
+
 public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string MAIN_UI_FILE     = Config.UIDIR + "main_window.ui";
 	private const string MENU_UI_FILE     = Config.UIDIR + "main_ui.xml";

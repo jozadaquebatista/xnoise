@@ -1191,8 +1191,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 				}
 			}
 			
-			Value v = Value(typeof(int));
-			((TreeView)this).style_get_property("vertical-separator", out v);
+			//Value v = Value(typeof(int));
+			//((TreeView)this).style_get_property("vertical-separator", out v);
 			//int vertical_separator_size = v.get_int();
 			
 			//print("|%i|%i", w - (scrollbar_w + 

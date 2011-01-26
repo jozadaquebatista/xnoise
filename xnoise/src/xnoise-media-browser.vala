@@ -476,9 +476,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		//substract scrollbar width, expander width, vertical separator width and the space used 
 		//up by the icons from the total width
 		Value v = Value(typeof(int));
-		((TreeView)this).style_get_property("expander-size", out v);
+		gtk_widget_style_get_property(this, "expander-size", v);
 		int expander_size = v.get_int();
-		((TreeView)this).style_get_property("vertical-separator", out v);
+		v.reset();
+		gtk_widget_style_get_property(this, "vertical-separator", v);
 		int vertical_separator_size = v.get_int();
 		new_width -= mediabrowsermodel.get_max_icon_width() + scrollbar_w + expander_size + vertical_separator_size * 4;
 		if(new_width < 60) return;
@@ -486,3 +487,4 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		Idle.add(update_view);
 	}
 }
+
