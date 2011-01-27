@@ -61,8 +61,8 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			if(conn == null) return false;
 			
 			bus = conn.get_object("org.gnome.SettingsDaemon",
-								 "/org/gnome/SettingsDaemon/MediaKeys",
-								 "org.gnome.SettingsDaemon.MediaKeys");
+			                      "/org/gnome/SettingsDaemon/MediaKeys",
+			                      "org.gnome.SettingsDaemon.MediaKeys");
 			if(bus == null)
 				return false;
 			
