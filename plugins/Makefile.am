@@ -1,56 +1,53 @@
-NULL =
+SUBDIRS = testplugin titleToDecoration
 
-SUBDIRS = \
-	data \
-	src \
-	po \
-	vapi \
-	$(NULL)
+DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers notifications lyricsfly mediakeys mpris mediawatcher chartlyrics lyricwiki soundmenu
 
-DIST_SUBDIRS = \
-	data \
-	src \
-	po \
-	vapi \
-	$(NULL)
+if ENABLE_CHARTLYRICS
+  SUBDIRS += chartlyrics
+endif
 
-xnoiselicense_DATA = \
-	COPYING \
-	AUTHORS \
-	$(NULL)
+if ENABLE_LEOSLYRICS
+  SUBDIRS += leoslyrics
+endif
 
-xnoiselicensedir = $(datadir)/xnoise-plugins-core/license
+if ENABLE_LASTFMCOVERS
+  SUBDIRS += lastfmCovers
+endif
 
-EXTRA_DIST = \
-	$(xnoiselicense_DATA) \
-	intltool-extract.in \
-	intltool-merge.in \
-	intltool-update.in\
-	$(NULL)
+if ENABLE_NOTIFICATIONS
+  SUBDIRS += notifications
+endif
+
+if ENABLE_LYRICSFLY
+  SUBDIRS += lyricsfly
+endif
+
+#if ENABLE_MEDIAWATCHER
+#  SUBDIRS += mediawatcher
+#endif
+
+if ENABLE_MPRIS
+  SUBDIRS += mpris
+endif
+
+if ENABLE_MEDIAKEYS
+  SUBDIRS += mediakeys
+endif
+
+if ENABLE_LYRICWIKI
+  SUBDIRS += lyricwiki
+endif
+
+if ENABLE_SOUNDMENU
+  SUBDIRS += soundmenu
+endif
 
 DISTCLEANFILES = \
-	intltool-extract.in \
-	intltool-merge.in \
-	intltool-update.in \
-	configure \
-	ltmain.sh \
 	Makefile.in \
-	config.h.in \
-	compile \
-	depcomp \
-	install-sh \
-	missing \
-	mkinstalldirs \
-	autom4te.cache/output.0 \
-	autom4te.cache/output.1 \
-	autom4te.cache/requests \
-	autom4te.cache/traces.0 \
-	autom4te.cache/traces.1 \
-	config.guess \
-	config.sub \
-	aclocal.m4 \
-	po/.intltool-merge-cache \
+	$(NULL)
+	
+MAINTAINERCLEANFILES = \
+	Makefile.in \
 	$(NULL)
 
 
-ACLOCAL_AMFLAGS = -I m4

@@ -39,4 +39,25 @@ src/xnoise-volume-slider-button.vala
 data/ui/add_media.ui
 data/ui/main_window.ui
 data/ui/settings.ui
+plugins/mediakeys/xnoise-mediakeys.vala
+plugins/mediakeys/xnoise-mediakeys-registration.vala
+plugins/mpris/xnoise-mpris-registration.vala
+plugins/mpris/xnoise-mpris.vala
+plugins/mediawatcher/xnoise-mediawatcher.vala
+plugins/mediawatcher/xnoise-mediawatcher-registration.vala
+plugins/testplugin/xnoise-testplugin.vala
+plugins/testplugin/xnoise-testplugin-registration.vala
+plugins/notifications/xnoise-notifications.vala
+plugins/notifications/xnoise-notifications-registration.vala
+plugins/chartlyrics/xnoise-chartlyrics-registration.vala
+plugins/chartlyrics/xnoise-chartlyrics.vala
+plugins/leoslyrics/xnoise-leoslyrics.vala
+plugins/leoslyrics/xnoise-leoslyrics-registration.vala
+plugins/lyricsfly/xnoise-lyricsfly.vala
+plugins/lyricsfly/xnoise-lyricsfly-registration.vala
+plugins/titleToDecoration/xnoise-title-to-decoration.vala
+plugins/titleToDecoration/xnoise-title-to-decoration-registration.vala
+plugins/lastfmCovers/xnoise-lastfm-covers.vala
+plugins/lastfmCovers/xnoise-lastfm-covers-registration.vala
+
 

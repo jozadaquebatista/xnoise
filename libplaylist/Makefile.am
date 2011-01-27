@@ -8,7 +8,7 @@ SUBDIRS = \
 INCLUDES = \
 	$(LIBPLAYLIST_CFLAGS) \
 	-DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
-	-DDATA_DIR='"$(datadir)"' \
+	-DDATADIR='"$(datadir)"' \
 	-DLOCALE_DIR=\"${datarootdir}/locale\" \
 	-include $(CONFIG_HEADER) \
 	$(LIBXML_CFLAGS) \
