@@ -352,7 +352,7 @@ print("++1\n");
 					FileType filetype = info.get_file_type();
 
 					string content = info.get_content_type();
-					string mime = g_content_type_get_mime_type(content);
+					string mime = GLib.ContentType.get_mime_type(content);
 					PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
 					PatternSpec psVideo = new PatternSpec("video*");
 
@@ -526,7 +526,7 @@ private class Xnoise.ImportInfoBar : GLib.Object {
 		((Container)content_area).add(bar_label);
 		bar_label.show();
 		
-		var close_image = new Gtk.Image.from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU);
+		var close_image = new Gtk.Image.from_stock(Gtk.Stock.CLOSE, Gtk.IconSize.MENU);
 		bar_close_button = new Gtk.Button();
 		bar_close_button.set_image(close_image);
 		bar_close_button.set_relief(Gtk.ReliefStyle.NONE);

@@ -116,7 +116,7 @@ private class Xnoise.AppStarter {
 													 FileQueryInfoFlags.NONE,
 													 null);
 						content = info.get_content_type();
-						mime = g_content_type_get_mime_type(content);
+						mime = GLib.ContentType.get_mime_type(content);
 
 						if((psAudio.match_string(mime))||
 						   (psVideo.match_string(mime))) {

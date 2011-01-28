@@ -26,16 +26,16 @@ public class Xnoise.TrayIcon : StatusIcon {
 		traymenu = new Menu();
 
 		playpause_popup_image = new Image();
-		playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
+		playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.MENU);
 		xn.gPl.sign_playing.connect( () => {
-			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PAUSE, IconSize.MENU);
+			this.playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PAUSE, IconSize.MENU);
 		});
 		xn.gPl.sign_stopped.connect( () => {
 			if(this.playpause_popup_image==null) print("this.playpause_popup_image == null\n");
-			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
+			this.playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.MENU);
 		});
 		xn.gPl.sign_paused.connect( () => {
-			this.playpause_popup_image.set_from_stock(STOCK_MEDIA_PLAY, IconSize.MENU);
+			this.playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.MENU);
 		});
 
 		var playLabel = new Label(_("Play/Pause"));
@@ -51,7 +51,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		traymenu.append(playpauseItem);
 
 		var previousImage = new Image();
-		previousImage.set_from_stock(STOCK_MEDIA_PREVIOUS, IconSize.MENU);
+		previousImage.set_from_stock(Gtk.Stock.MEDIA_PREVIOUS, IconSize.MENU);
 		var previousLabel = new Label(_("Previous"));
 		previousLabel.set_alignment(0, 0);
 		var previousItem = new MenuItem();
@@ -66,7 +66,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		traymenu.append(previousItem);
 
 		var nextImage = new Image();
-		nextImage.set_from_stock(STOCK_MEDIA_NEXT, IconSize.MENU);
+		nextImage.set_from_stock(Gtk.Stock.MEDIA_NEXT, IconSize.MENU);
 		var nextLabel = new Label(_("Next"));
 		nextLabel.set_alignment(0, 0);
 		var nextItem = new MenuItem();
@@ -84,7 +84,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		traymenu.append(separator);
 
 		var exitImage = new Image();
-		exitImage.set_from_stock(STOCK_QUIT, IconSize.MENU);
+		exitImage.set_from_stock(Gtk.Stock.QUIT, IconSize.MENU);
 		var exitLabel = new Label(_("Exit"));
 		exitLabel.set_alignment(0, 0);
 		var exitItem = new MenuItem();

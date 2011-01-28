@@ -145,7 +145,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				copyright   = kf.get_string(group, "copyright");
 
 				var invisible = new Gtk.Invisible();
-				Gdk.Pixbuf pixbuf = invisible.render_icon(Gtk.STOCK_UNDO , IconSize.BUTTON, null); //TODO: use plugins' icons
+				Gdk.Pixbuf pixbuf = invisible.render_icon(Gtk.Stock.UNDO , IconSize.BUTTON, null); //TODO: use plugins' icons
 				unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
 				p.sign_activated.connect( () => {
 					refresh_tree();

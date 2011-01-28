@@ -125,7 +125,7 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 
 		switch(removal_type) {
 			case(UserInfo.RemovalType.CLOSE_BUTTON):
-				close_button = new Gtk.Button.from_stock(Gtk.STOCK_CLOSE);
+				close_button = new Gtk.Button.from_stock(Gtk.Stock.CLOSE);
 				close_button.clicked.connect( () => {
 					Idle.add( () => {
 						uinf.popdown(current_id);
@@ -153,7 +153,7 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 		Gtk.Widget? ret = null;
 		switch(content_class) {
 			case(UserInfo.ContentClass.INFO):
-				var info_image = new Gtk.Image.from_stock(Gtk.STOCK_DIALOG_INFO, Gtk.IconSize.MENU);
+				var info_image = new Gtk.Image.from_stock(Gtk.Stock.DIALOG_INFO, Gtk.IconSize.MENU);
 				ret = info_image;
 				break;
 			case(UserInfo.ContentClass.WAIT):
@@ -162,15 +162,15 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 				ret = spinner;
 				break;
 			case(UserInfo.ContentClass.WARNING):
-				var info_image = new Gtk.Image.from_stock(Gtk.STOCK_DIALOG_WARNING, Gtk.IconSize.MENU);
+				var info_image = new Gtk.Image.from_stock(Gtk.Stock.DIALOG_WARNING, Gtk.IconSize.MENU);
 				ret = info_image;
 				break;
 			case(UserInfo.ContentClass.QUESTION):
-				var info_image = new Gtk.Image.from_stock(Gtk.STOCK_DIALOG_QUESTION, Gtk.IconSize.MENU);
+				var info_image = new Gtk.Image.from_stock(Gtk.Stock.DIALOG_QUESTION, Gtk.IconSize.MENU);
 				ret = info_image;
 				break;
 			case(UserInfo.ContentClass.CRITICAL):
-				var info_image = new Gtk.Image.from_stock(Gtk.STOCK_DIALOG_ERROR, Gtk.IconSize.LARGE_TOOLBAR);
+				var info_image = new Gtk.Image.from_stock(Gtk.Stock.DIALOG_ERROR, Gtk.IconSize.LARGE_TOOLBAR);
 				ret = info_image;
 				break;
 			default:

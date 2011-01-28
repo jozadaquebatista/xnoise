@@ -45,8 +45,8 @@ public class Xnoise.PlayPauseButton: Gtk.Button {
 		this.can_focus = false;
 		this.relief = Gtk.ReliefStyle.NONE;
 
-		this.playImage = new Image.from_stock(STOCK_MEDIA_PLAY, IconSize.LARGE_TOOLBAR);
-		this.pauseImage = new Image.from_stock(STOCK_MEDIA_PAUSE, IconSize.LARGE_TOOLBAR);
+		this.playImage = new Image.from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.LARGE_TOOLBAR);
+		this.pauseImage = new Image.from_stock(Gtk.Stock.MEDIA_PAUSE, IconSize.LARGE_TOOLBAR);
 		this.update_picture();
 
 		this.clicked.connect(this.on_clicked);

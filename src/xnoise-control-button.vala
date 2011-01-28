@@ -55,16 +55,16 @@ public class Xnoise.ControlButton : Gtk.Button {
 		string stockid;
 		switch(direction) {
 			case Direction.NEXT:
-				stockid = STOCK_MEDIA_NEXT;
+				stockid = Gtk.Stock.MEDIA_NEXT;
 				break;
 			case Direction.PREVIOUS:
-				stockid = STOCK_MEDIA_PREVIOUS;
+				stockid = Gtk.Stock.MEDIA_PREVIOUS;
 				break;
 			case Direction.STOP:
-				stockid = STOCK_MEDIA_STOP;
+				stockid = Gtk.Stock.MEDIA_STOP;
 				break;
 			default:
-				stockid = STOCK_MEDIA_STOP;
+				stockid = Gtk.Stock.MEDIA_STOP;
 				break;
 		}
 		var img = new Gtk.Image.from_stock(stockid, Gtk.IconSize.LARGE_TOOLBAR);

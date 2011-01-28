@@ -44,7 +44,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	public AlbumImage() {
 		xn = Main.instance;
 		this.set_size_request(SIZE, SIZE);
-		this.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
+		this.set_from_stock(Gtk.Stock.CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 
 		loader = new AlbumImageLoader();
 		loader.sign_fetched.connect(on_album_image_fetched);
@@ -195,7 +195,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			GLib.Source.remove(source);
 			
 		this.set_size_request(SIZE, SIZE);
-		this.set_from_stock(Gtk.STOCK_CDROM, Gtk.IconSize.LARGE_TOOLBAR);
+		this.set_from_stock(Gtk.Stock.CDROM, Gtk.IconSize.LARGE_TOOLBAR);
 	}
 
 	private void set_albumimage_from_path(string image_path) {

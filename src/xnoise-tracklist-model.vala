@@ -388,11 +388,11 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		string uri;
 		if(ts==GlobalAccess.TrackState.PLAYING) {
 			bolden_row();
-			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PLAY, IconSize.BUTTON, null);
+			pixbuf = w.render_icon(Gtk.Stock.MEDIA_PLAY, IconSize.BUTTON, null);
 		}
 		else if(ts==GlobalAccess.TrackState.PAUSED) {
 			bolden_row();
-			pixbuf = w.render_icon(Gtk.STOCK_MEDIA_PAUSE, IconSize.BUTTON, null);
+			pixbuf = w.render_icon(Gtk.Stock.MEDIA_PAUSE, IconSize.BUTTON, null);
 		}
 		else if(ts==GlobalAccess.TrackState.STOPPED) {
 			unbolden_row();

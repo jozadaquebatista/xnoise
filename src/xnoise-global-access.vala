@@ -284,15 +284,12 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		else { 
 			current_artist = null;
 			current_album = null;
-			char* p = basename.rstr(".");
-			char* s = basename;
-			unowned string start = basename;
-			if(p!=null) {
-				current_title = start.ndup((size_t)(p - s));
-			}
-			else {
+			
+			if(basename.last_index_of(".") != -1) 
+				current_title = prepare_name_from_filename(basename);
+			else 
 				current_title = basename;
-			}
+			
 			current_location = null;
 			current_genre = null;
 			current_organization = null;

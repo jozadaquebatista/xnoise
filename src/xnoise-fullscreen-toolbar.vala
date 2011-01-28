@@ -185,7 +185,7 @@ public class Xnoise.FullscreenToolbar {
 		private unowned Main xn;
 		public LeaveVideoFSButton() {
 			this.xn = Main.instance;
-			var img = new Gtk.Image.from_stock(Gtk.STOCK_LEAVE_FULLSCREEN , Gtk.IconSize.SMALL_TOOLBAR);
+			var img = new Gtk.Image.from_stock(Gtk.Stock.LEAVE_FULLSCREEN , Gtk.IconSize.SMALL_TOOLBAR);
 			this.set_image(img);
 			this.relief = Gtk.ReliefStyle.NONE;
 			this.can_focus = false;

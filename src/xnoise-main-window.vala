@@ -33,7 +33,7 @@ using Gtk;
 public extern bool ensure_native(Gdk.Window window);
 
 [CCode (cname = "gtk_widget_style_get_property")]
-public extern void gtk_widget_style_get_property(Gtk.Widget widget, string property_name, GLib.Value val);
+public extern void widget_style_get_property(Gtk.Widget widget, string property_name, GLib.Value val);
 
 public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string MAIN_UI_FILE     = Config.UIDIR + "main_window.ui";
@@ -44,7 +44,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string HIDEMEDIABROWSER = _("Hide Media");
 	private unowned Main xn;
 	private uint search_idlesource = 0;
-	public ActionGroup action_group;
+	public Gtk.ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
 	private Label song_title_label;
 	private VolumeSliderButton volumeSliderButton;
@@ -136,21 +136,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		RANDOM
 	}
 
-	private const ActionEntry[] action_entries = {
+	private const Gtk.ActionEntry[] action_entries = {
 		{ "FileMenuAction", null, N_("_File") },
-			{ "OpenAction", Gtk.STOCK_OPEN, null, null, N_("open file"), on_file_add},
-			{ "OpenLocationAction", Gtk.STOCK_NETWORK, N_("Open _Location"), null, N_("open remote location"), on_location_add },
-			{ "AddRemoveAction", Gtk.STOCK_ADD, N_("_Add or Remove media"), null, N_("manage the content of the xnoise media library"), on_menu_add},
-			{ "QuitAction", STOCK_QUIT, null, null, null, quit_now},
+			{ "OpenAction", Gtk.Stock.OPEN, null, null, N_("open file"), on_file_add},
+			{ "OpenLocationAction", Gtk.Stock.NETWORK, N_("Open _Location"), null, N_("open remote location"), on_location_add },
+			{ "AddRemoveAction", Gtk.Stock.ADD, N_("_Add or Remove media"), null, N_("manage the content of the xnoise media library"), on_menu_add},
+			{ "QuitAction", Gtk.Stock.QUIT, null, null, null, quit_now},
 		{ "EditMenuAction", null, N_("_Edit") },
-			{ "ClearTrackListAction", Gtk.STOCK_CLEAR, N_("C_lear tracklist"), null, N_("Clear the tracklist"), on_remove_all_button_clicked},
-			{ "SettingsAction", STOCK_PREFERENCES, null, null, null, on_settings_edit},
+			{ "ClearTrackListAction", Gtk.Stock.CLEAR, N_("C_lear tracklist"), null, N_("Clear the tracklist"), on_remove_all_button_clicked},
+			{ "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit},
 		{ "ViewMenuAction", null, N_("_View") },
-			{ "ShowTracklistAction", Gtk.STOCK_INDEX, N_("_Tracklist"), null, N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
-			{ "ShowVideoAction", Gtk.STOCK_LEAVE_FULLSCREEN, N_("_Video screen"), null, N_("Go to the video screen in the main window."), on_show_video_menu_clicked},
-			{ "ShowLyricsAction", Gtk.STOCK_EDIT, N_("_Lyrics"), null, N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
+			{ "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), null, N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
+			{ "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Video screen"), null, N_("Go to the video screen in the main window."), on_show_video_menu_clicked},
+			{ "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), null, N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
 		{ "HelpMenuAction", null, N_("_Help") },
-			{ "AboutAction", STOCK_ABOUT, null, null, null, on_help_about},
+			{ "AboutAction", Gtk.Stock.ABOUT, null, null, null, on_help_about},
 		{ "ConfigMenuAction", null, N_("_Config") }
 	};
 
@@ -360,7 +360,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 									      null);
 						filetype = info.get_file_type();
 						string content = info.get_content_type();
-						mime = g_content_type_get_mime_type(content);
+						mime = GLib.ContentType.get_mime_type(content);
 					}
 					catch(GLib.Error e){
 						print("%s\n", e.message);
@@ -522,22 +522,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			case Repeat.NOT_AT_ALL : {
 				//TODO: create some other images
 				repeatLabel.label = _("no repeat");
-				//repeatImage.stock = Gtk.STOCK_EXECUTE;
+				//repeatImage.stock = Gtk.Stock.EXECUTE;
 				break;
 			}
 			case Repeat.SINGLE : {
 				repeatLabel.label = _("repeat single");
-				//repeatImage.stock = Gtk.STOCK_REDO;
+				//repeatImage.stock = Gtk.Stock.REDO;
 				break;
 			}
 			case Repeat.ALL : {
 				repeatLabel.label = _("repeat all");
-				//repeatImage.stock = Gtk.STOCK_REFRESH;
+				//repeatImage.stock = Gtk.Stock.REFRESH;
 				break;
 			}
 			case Repeat.RANDOM : {
 				repeatLabel.label = _("random play");
-				//repeatImage.stock = Gtk.STOCK_JUMP_TO;
+				//repeatImage.stock = Gtk.Stock.JUMP_TO;
 				break;
 			}
 		}
@@ -923,20 +923,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		var radioentry = new Gtk.Entry();
 		radioentry.set_width_chars(50);
-		radioentry.secondary_icon_stock = Gtk.STOCK_CLEAR;
+		radioentry.secondary_icon_stock = Gtk.Stock.CLEAR;
 		radioentry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
 		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
 		});
 		((Gtk.VBox)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
 
-		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_CANCEL, 0);
+		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.CANCEL, 0);
 		radiocancelbutton.clicked.connect( () => {
 			radiodialog.close();
 			radiodialog = null;
 		});
 
-		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_OK, 1);
+		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.OK, 1);
 		radiookbutton.clicked.connect( () => {
 
 			if((radioentry.text!=null) && (radioentry.text.strip() != "")) {
@@ -977,9 +977,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			_("Select media file"),
 			this,
 			Gtk.FileChooserAction.OPEN,
-			Gtk.STOCK_CANCEL,
+			Gtk.Stock.CANCEL,
 			Gtk.ResponseType.CANCEL,
-			Gtk.STOCK_OPEN,
+			Gtk.Stock.OPEN,
 			Gtk.ResponseType.ACCEPT,
 			null);
 		fcdialog.select_multiple = true;
@@ -1166,7 +1166,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void on_media_import_notify(GLib.Object sender, ParamSpec spec) {
 		if(actions_list == null)
 			actions_list = action_group.list_actions();
-		foreach(Action a in actions_list) {
+		foreach(Gtk.Action a in actions_list) {
 			if(a.name == "AddRemoveAction") {
 				a.sensitive = !global.media_import_in_progress;
 				break;
@@ -1348,8 +1348,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
 
 			this.searchEntryMB = new Gtk.Entry();
-			this.searchEntryMB.primary_icon_stock = Gtk.STOCK_FIND;
-			this.searchEntryMB.secondary_icon_stock = Gtk.STOCK_CLEAR;
+			this.searchEntryMB.primary_icon_stock = Gtk.Stock.FIND;
+			this.searchEntryMB.secondary_icon_stock = Gtk.Stock.CLEAR;
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, true);
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
 			this.searchEntryMB.set_sensitive(true);
@@ -1423,7 +1423,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			//Config button for compact layout		
 			//render the preferences icon with a down arrow next to it
-			config_button_image = new Gtk.Image.from_stock(Gtk.STOCK_PREFERENCES, Gtk.IconSize.LARGE_TOOLBAR);
+			config_button_image = new Gtk.Image.from_stock(Gtk.Stock.PREFERENCES, Gtk.IconSize.LARGE_TOOLBAR);
 			config_button = new Button();
 			var config_hbox = new HBox(false, 0);
 			config_hbox.pack_start(config_button_image, false, false, 0);
@@ -1445,7 +1445,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 
 		//UIMANAGER FOR MENUS, THIS ALLOWS INJECTION OF ENTRIES BY PLUGINS
-		action_group = new ActionGroup("XnoiseActions");
+		action_group = new Gtk.ActionGroup("XnoiseActions");
 		action_group.set_translation_domain(Config.GETTEXT_PACKAGE);
 		action_group.add_actions(action_entries, this);
 

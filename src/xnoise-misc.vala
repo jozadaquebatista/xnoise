@@ -83,7 +83,7 @@ namespace Xnoise {
 			print("%s\n", e.message);
 			return value;
 		}
-		if(tmp.str("/") != null) {
+		if(tmp.contains("/")) {
 			string[] a = tmp.split("/", 20);
 			tmp = "";
 			foreach(string s in a) {
@@ -96,7 +96,7 @@ namespace Xnoise {
 	public static string remove_single_character(string haystack, string needle) {
 		//TODO: check if this can be done more efficiently
 		string result = "";
-		if(haystack.str(needle) != null) {
+		if(haystack.contains(needle) == true) {
 			string[] a = haystack.split(needle, 30);
 			foreach(string s in a) {
 				result = result + s;
@@ -138,11 +138,9 @@ namespace Xnoise {
 		if(val == null)
 			return "";
 		string name = val;
-		char* p = name.rstr(".");
-		char* s = name;
 		string prep;
-		if(p != null) 
-			prep = name.ndup((size_t)(p - s));
+		if(name.last_index_of(".") != -1) 
+			prep = name.substring(0, name.last_index_of("."));
 		else
 			prep = name;
 		

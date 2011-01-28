@@ -102,7 +102,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			case 1: //ARTIST
 				string artist = null;
 				this.get(iter, MediaBrowserModel.Column.VIS_TEXT, ref artist);
-				if(artist != null && artist.down().str(searchtext) != null) {
+				if(artist != null && artist.down().contains(searchtext) == true) {
 					this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
 					return false;
 				}
@@ -111,7 +111,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					this.iter_nth_child(out iterChild, iter, i);
 					string album = null;
 					this.get(iterChild, MediaBrowserModel.Column.VIS_TEXT, ref album);
-					if(album != null && album.down().str(searchtext) != null) {
+					if(album != null && album.down().contains(searchtext) == true) {
 						this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
 						return false;
 					}
@@ -120,7 +120,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						this.iter_nth_child(out iterChildChild, iterChild, j);
 						string title = null;
 						this.get(iterChildChild, MediaBrowserModel.Column.VIS_TEXT, ref title);
-						if(title != null && title.down().str(searchtext) != null) {
+						if(title != null && title.down().contains(searchtext) == true) {
 							this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
 							return false;
 						}
@@ -131,7 +131,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			case 2: //ALBUM
 				string album = null;
 				this.get(iter, MediaBrowserModel.Column.VIS_TEXT, ref album);
-				if(album != null && album.down().str(searchtext) != null) {
+				if(album != null && album.down().contains(searchtext) == true) {
 					this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
 					return false;
 				}
@@ -140,7 +140,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					this.iter_nth_child(out iterChild, iter, i);
 					string title = null;
 					this.get(iterChild, MediaBrowserModel.Column.VIS_TEXT, ref title);
-					if(title != null && title.down().str(searchtext) != null) {
+					if(title != null && title.down().contains(searchtext) == true) {
 						this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
 						return false;
 					}
@@ -149,7 +149,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				string artist = null;
 				if(this.iter_parent(out iter_parent, iter)) {
 					this.get(iter_parent, MediaBrowserModel.Column.VIS_TEXT, ref artist);
-					if(artist != null && artist.down().str(searchtext) != null) {
+					if(artist != null && artist.down().contains(searchtext) == true) {
 						this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
 						return false;
 					}
@@ -159,7 +159,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			case 3: //TITLE
 				string title = null;
 				this.get(iter, MediaBrowserModel.Column.VIS_TEXT, ref title);
-				if(title != null && title.down().str(searchtext) != null) {
+				if(title != null && title.down().contains(searchtext) == true) {
 					this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
 					return false;
 				}
@@ -167,7 +167,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				string album = null;
 				if(this.iter_parent(out iter_parent, iter)) {
 					this.get(iter_parent, MediaBrowserModel.Column.VIS_TEXT, ref album);
-					if(album != null && album.down().str(searchtext) != null) {
+					if(album != null && album.down().contains(searchtext) == true) {
 						this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
 						return false;
 					}
@@ -175,7 +175,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					string artist = null;
 					if(this.iter_parent(out iter_parent_parent, iter_parent)) {
 						this.get(iter_parent_parent, MediaBrowserModel.Column.VIS_TEXT, ref artist);
-						if(artist != null && artist.down().str(searchtext) != null) {
+						if(artist != null && artist.down().contains(searchtext) == true) {
 							this.set(iter, MediaBrowserModel.Column.VISIBLE, true);
 							return false;
 						}
@@ -198,16 +198,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			else if(theme.has_icon("stock_person")) artist_pixb = theme.load_icon("stock_person", 0, 0);
 			else artist_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
 			
-			album_pixb = w.render_icon(Gtk.STOCK_CDROM, IconSize.BUTTON, null);
+			album_pixb = w.render_icon(Gtk.Stock.CDROM, IconSize.BUTTON, null);
 			
 			if(theme.has_icon("audio-x-generic")) title_pixb = theme.load_icon("audio-x-generic", 0, 0);
 			else title_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
 			
 			if(theme.has_icon("video-x-generic")) videos_pixb = theme.load_icon("video-x-generic", 0, 0);
-			else videos_pixb = w.render_icon(Gtk.STOCK_MEDIA_RECORD, IconSize.BUTTON, null);
+			else videos_pixb = w.render_icon(Gtk.Stock.MEDIA_RECORD, IconSize.BUTTON, null);
 			
-			radios_pixb  = w.render_icon(Gtk.STOCK_CONNECT, IconSize.BUTTON, null);
-			video_pixb  = w.render_icon(Gtk.STOCK_FILE, IconSize.BUTTON, null);
+			radios_pixb  = w.render_icon(Gtk.Stock.CONNECT, IconSize.BUTTON, null);
+			video_pixb  = w.render_icon(Gtk.Stock.FILE, IconSize.BUTTON, null);
 		}
 		catch (GLib.Error e) {
 			print("Error: %s\n",e.message);

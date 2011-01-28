@@ -311,10 +311,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		Gdk.drag_abort(context, Gtk.get_current_event_time());
 		Gtk.TreeSelection selection = this.get_selection();
 		if(selection.count_selected_rows() > 1) {
-			Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND_MULTIPLE);
+			Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND_MULTIPLE);
 		}
 		else {
-			Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND);
+			Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND);
 		}
 		return;
 	}
@@ -431,7 +431,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 
 		var pixbufRenderer = new CellRendererPixbuf();
-		pixbufRenderer.stock_id = Gtk.STOCK_GO_FORWARD;
+		pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
 
 		var column = new TreeViewColumn();
 
@@ -476,10 +476,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		//substract scrollbar width, expander width, vertical separator width and the space used 
 		//up by the icons from the total width
 		Value v = Value(typeof(int));
-		gtk_widget_style_get_property(this, "expander-size", v);
+		widget_style_get_property(this, "expander-size", v);
 		int expander_size = v.get_int();
 		v.reset();
-		gtk_widget_style_get_property(this, "vertical-separator", v);
+		widget_style_get_property(this, "vertical-separator", v);
 		int vertical_separator_size = v.get_int();
 		new_width -= mediabrowsermodel.get_max_icon_width() + scrollbar_w + expander_size + vertical_separator_size * 4;
 		if(new_width < 60) return;

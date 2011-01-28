@@ -37,18 +37,16 @@ public class Xnoise.Worker : Object {
 	private AsyncQueue<Job> sync_job_queue     = new AsyncQueue<Job>();
 	private AsyncQueue<Job> low_prio_job_queue = new AsyncQueue<Job>();
 	
-	private unowned Thread thread;
-	
+	private unowned Thread<int> thread;
 	private MainContext local_context;
 	private unowned MainContext main_context;
 	
 	public Worker(MainContext mc) {
-		if (!Thread.supported ()) {
+		if (!Thread.supported ())
 			error("Cannot work without multithreading support.");
-		}
 		this.main_context = mc;
 		try {
-			thread = Thread.create(thread_func, false );
+			thread = Thread.create<int>(thread_func, false );
 		}
 		catch(ThreadError e) {
 			print("Error creating thread: %s\n", e.message);
@@ -131,13 +129,13 @@ public class Xnoise.Worker : Object {
 	}
 	
 	//thread function is used to setup a local mainloop/maincontext
-	private void* thread_func() {
+	private int thread_func() {
 		local_context = new MainContext();
 		local_context.push_thread_default();
 		var loop = new MainLoop(local_context);
 		//message( "worker thread %d", (int)Linux.gettid() );
 		loop.run();
-		return null;
+		return 0;
 	}
 	
 	private async void low_prio_func() {

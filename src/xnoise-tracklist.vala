@@ -196,7 +196,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private Menu create_rightclick_menu() {
 		var rightmenu = new Menu();
 		var playpause_popup_image = new Gtk.Image();
-		playpause_popup_image.set_from_stock(STOCK_DELETE, IconSize.MENU);
+		playpause_popup_image.set_from_stock(Gtk.Stock.DELETE, IconSize.MENU);
 		var removeLabel = new Label(_("Remove selected"));
 		removeLabel.set_alignment(0, 0);
 		removeLabel.set_width_chars(20);
@@ -346,10 +346,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 
 		if(selection.count_selected_rows() > 1) {
-			Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND_MULTIPLE);
+			Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND_MULTIPLE);
 		}
 		else {
-			Gtk.drag_source_set_icon_stock(this, Gtk.STOCK_DND);
+			Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND);
 		}
 		return;
 	}
@@ -796,7 +796,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			                    null);
 			filetype = info.get_file_type();
 			string content = info.get_content_type();
-			mime = g_content_type_get_mime_type(content);
+			mime = GLib.ContentType.get_mime_type(content);
 		}
 		catch(GLib.Error e){
 			print("%s\n", e.message);

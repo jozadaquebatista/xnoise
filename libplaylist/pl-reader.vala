@@ -259,7 +259,7 @@ namespace Pl {
 			var file_info = f.query_info("*", FileQueryInfoFlags.NONE, null);
 			//print("File size: %lld bytes\n", file_info.get_size());
 			content_type = file_info.get_content_type();
-			//string mime = g_content_type_get_mime_type(content_type);
+			//string mime = GLib.ContentType.get_mime_type(content_type);
 			//print("Mime type: %s\n",mime);
 			
 			//audio/x-ms-asx => asx

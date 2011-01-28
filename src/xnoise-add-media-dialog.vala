@@ -139,8 +139,8 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			var labeladdstream   = builder.get_object("labeladdstream") as Label;
 			var labelremove      = builder.get_object("labelremove") as Label;
 
-			var bcancel          = (Button)this.dialog.add_button(Gtk.STOCK_CANCEL, 0);
-			var bok              = (Button)this.dialog.add_button(Gtk.STOCK_OK, 1);
+			var bcancel          = (Button)this.dialog.add_button(Gtk.Stock.CANCEL, 0);
+			var bok              = (Button)this.dialog.add_button(Gtk.Stock.OK, 1);
 
 			labeladdfile.label   = _("Add local file");
 			labeladdfolder.label = _("Add local folder");
@@ -251,9 +251,9 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			_("Select media file"),
 			this.dialog,
 			Gtk.FileChooserAction.OPEN,
-			Gtk.STOCK_CANCEL,
+			Gtk.Stock.CANCEL,
 			Gtk.ResponseType.CANCEL,
-			Gtk.STOCK_OPEN,
+			Gtk.Stock.OPEN,
 			Gtk.ResponseType.ACCEPT,
 			null);
 		fcdialog.set_current_folder(Environment.get_home_dir());
@@ -275,9 +275,9 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			_("Select media folder"),
 			this.dialog,
 			Gtk.FileChooserAction.SELECT_FOLDER,
-			Gtk.STOCK_CANCEL,
+			Gtk.Stock.CANCEL,
 			Gtk.ResponseType.CANCEL,
-			Gtk.STOCK_OPEN,
+			Gtk.Stock.OPEN,
 			Gtk.ResponseType.ACCEPT,
 			null);
 		fcdialog.set_current_folder(Environment.get_home_dir());
@@ -305,20 +305,20 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 		radioentry = new Gtk.Entry();
 		radioentry.set_width_chars(50);
-		radioentry.secondary_icon_stock = Gtk.STOCK_CLEAR;
+		radioentry.secondary_icon_stock = Gtk.Stock.CLEAR;
 		radioentry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
 		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
 		});
 		((Gtk.VBox)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
 
-		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_CANCEL, 0);
+		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.CANCEL, 0);
 		radiocancelbutton.clicked.connect( () => {
 			radiodialog.close();
 			radiodialog = null;
 		});
 
-		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.STOCK_OK, 1);
+		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.OK, 1);
 		radiookbutton.clicked.connect( () => {
 			if((radioentry.text!=null)&&
 			   (radioentry.text.strip()!="")) {
