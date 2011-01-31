@@ -26,7 +26,7 @@ using SimpleXml;
 namespace Pl {
 	private class Wpl.FileReader : AbstractFileReader {
 		private unowned File file;
-		private ItemCollection parse(ItemCollection data_collection,ref string base_path = "",string data) throws GLib.Error {
+		private ItemCollection parse(ItemCollection data_collection,ref string base_path, string data) throws GLib.Error {
 			SimpleXml.Reader reader = new SimpleXml.Reader.from_string(data);
 			reader.read();
 			

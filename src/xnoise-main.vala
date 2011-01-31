@@ -102,14 +102,14 @@ public class Xnoise.Main : GLib.Object {
 
 	private void check_database_and_tables() {
 		//creating db instance and destroying it will create a database and the tables
-		DbCreator dbc = null;
-		try {
-			dbc = new DbCreator();
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-		}
-		dbc = null;
+//		DbCreator dbc = null;
+//		try {
+//			dbc = new DbCreator();
+//		}
+//		catch(Error e) {
+//			print("%s\n", e.message);
+//		}
+//		dbc = null;
 	}
 
 	public void add_track_to_gst_player(string uri) {

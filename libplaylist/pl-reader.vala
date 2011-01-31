@@ -338,7 +338,7 @@ namespace Pl {
 	}
 	
 	// create a File for the absolute/relative path or uri
-	public static File get_file_for_location(string adr, ref string base_path = "", out TargetType tt) {
+	public static File get_file_for_location(string adr, ref string base_path, out TargetType tt) {
 		string adress = adr; //work on a copy
 		char* p = adress;
 

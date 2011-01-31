@@ -53,7 +53,7 @@ namespace Pl {
 			return xml;
 		}
 
-		private ItemCollection parse(ItemCollection data_collection,ref string base_path = "",string data) {
+		private ItemCollection parse(ItemCollection data_collection,ref string base_path, string data) {
 			SimpleXml.Reader reader = new SimpleXml.Reader.from_string(data);
 			reader.read();
 			var root = reader.root;

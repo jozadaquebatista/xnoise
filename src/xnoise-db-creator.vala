@@ -115,37 +115,37 @@ public class Xnoise.DbCreator : GLib.Object {
 			string errmsg;
 
 			//Check for Table existance
-			if(db.get_table(STMT_FIND_TABLE, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) {
-				stderr.printf("SQL error: %s\n", errmsg);
+			if(exec_stmnt_string(STMT_FIND_TABLE)) {
+//				stderr.printf("SQL error: %s\n", errmsg);
 				return;
 			}
 
 			//search version table
-			for(int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
-				for(int j = offset*ncolumn; j<(offset+1)*ncolumn; j++) {
-					if(resultArray[j]=="version") {
-						db_table_exists = true; //assume that if version is existing all other tables also exist
-						break;
-					}
-				}
-			}
+//			for(int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
+//				for(int j = offset*ncolumn; j<(offset+1)*ncolumn; j++) {
+//					if(resultArray[j]=="version") {
+//						db_table_exists = true; //assume that if version is existing all other tables also exist
+//						break;
+//					}
+//				}
+//			}
 			if(db_table_exists == true) {
-				if(db.get_table(STMT_GET_VERSION, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) {
-					stderr.printf("SQL error: %s\n", errmsg);
-					return;
-				}
-				//newly create db if major version is devating
-				string major = resultArray[1];
-				if(major!=("%d".printf(DB_VERSION_MAJOR))) {
-					print("Wrong major db version\n"); //TODO: Drop tables and create new
-					db = null;
-					try {
-						xnoisedb.delete(null);
-					}
-					catch(Error e) {
-						print("%s\n", e.message);
-					}
-				}
+//				if(db.get_table(STMT_GET_VERSION, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) {
+//					stderr.printf("SQL error: %s\n", errmsg);
+//					return;
+//				}
+//				//newly create db if major version is devating
+//				string major = resultArray[1];
+//				if(major!=("%d".printf(DB_VERSION_MAJOR))) {
+//					print("Wrong major db version\n"); //TODO: Drop tables and create new
+//					db = null;
+//					try {
+//						xnoisedb.delete(null);
+//					}
+//					catch(Error e) {
+//						print("%s\n", e.message);
+//					}
+//				}
 			}
 			else {
 			//create Tables if not existant

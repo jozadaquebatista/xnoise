@@ -77,7 +77,7 @@ namespace SimpleXml {
 			char* text_pointer = text;
 			try {
 				while(already_written < text.size()) {
-					size = stream.write((void*) text_pointer, text.size() - already_written, null);
+					size = stream.write((uint8[]) text_pointer, null);
 					already_written = already_written + size;
 					text_pointer += size;
 				}
