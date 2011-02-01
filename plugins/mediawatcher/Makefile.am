@@ -11,6 +11,7 @@ INCLUDES = \
     -DDATADIR='"$(datadir)"' \
     -DLOCALE_DIR=\"${datarootdir}/locale\" \
     -include $(CONFIG_HEADER) \
+    -I$(top_srcdir)/src \
     -DGIO_DISABLE_DEPRECATED=1 \
     -DGDK_DISABLE_DEPRECATED=1 \
     -DGDK_PIXBUF_DISABLE_DEPRECATED=1 \
@@ -32,6 +33,7 @@ libMediawatcher_la_VALAFLAGS = \
     --thread \
     --vapidir $(top_srcdir)/vapi \
     --basedir $(top_srcdir)/plugins/mediawatcher \
+    --vapidir $(top_srcdir)/src \
     --pkg gio-2.0 \
     --pkg xnoise-1.0 \
     @XNOISE_PACKAGES@ \

@@ -11,6 +11,7 @@ INCLUDES = \
     -DDATADIR='"$(datadir)"' \
     -DLOCALE_DIR=\"${datarootdir}/locale\" \
     -include $(CONFIG_HEADER) \
+    -I$(top_srcdir)/src \
     $(LIBXML_CFLAGS) \
     $(LIBSOUP_CFLAGS) \
     -DGIO_DISABLE_DEPRECATED=1 \
@@ -34,6 +35,7 @@ libLyricwiki_la_VALAFLAGS = \
     --thread \
     --vapidir $(top_srcdir)/vapi \
     --basedir $(top_srcdir)/plugins/lyricwiki \
+    --vapidir $(top_srcdir)/src \
     --pkg libsoup-2.4 \
     --pkg libxml-2.0 \
     --pkg xnoise-1.0 \

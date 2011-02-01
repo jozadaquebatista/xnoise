@@ -66,7 +66,7 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 			return false;
 		}
 		p.sign_deactivated.connect(mpris_deactivated);
-		
+		print("init\n");
 		Timeout.add(2, () => {
 			server = Indicate.Server.ref_default();
 			server.set("type", "music.xnoise");
@@ -79,6 +79,21 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 	}
 	
 	~SoundMenu() {
+		print("try remove xnoise from soundmenu\n");
+		bool has_soundmenu_schema = false;
+		foreach(unowned string s in Settings.list_schemas()) {
+			if(s == "com.canonical.indicators.sound") {
+				has_soundmenu_schema = true;
+				break;
+			}
+		}
+		if(has_soundmenu_schema) {
+			var settings = new Settings ("com.canonical.indicators.sound");
+			string[] sa;
+			sa = settings.get_strv("blacklisted-media-players");
+			sa += "xnoise";
+			settings.set_strv("blacklisted-media-players", sa);
+		}
 		server.hide();
 		xn.tray_icon.visible = true;
 	}

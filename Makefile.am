@@ -4,6 +4,7 @@ SUBDIRS = \
     data \
     src \
     libplaylist \
+    plugins \
     po \
     vapi \
     tests \

@@ -12,6 +12,7 @@ INCLUDES = \
     -DDATADIR='"$(datadir)"' \
     -DLOCALE_DIR=\"${datarootdir}/locale\" \
     -include $(CONFIG_HEADER) \
+    -I$(top_srcdir)/src \
     $(LIBDBUS_GLIB_CFLAGS) \
     -DGIO_DISABLE_DEPRECATED=1 \
     -DGDK_DISABLE_DEPRECATED=1 \
@@ -34,6 +35,7 @@ libmediakeys_la_VALAFLAGS = \
     --thread \
     --vapidir $(top_srcdir)/vapi \
     --basedir $(top_srcdir)/plugins/mediakeys \
+    --vapidir $(top_srcdir)/src \
     --pkg dbus-glib-1 \
     --pkg xnoise-1.0 \
     @XNOISE_PACKAGES@ \
