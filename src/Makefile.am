@@ -77,7 +77,6 @@ VALAFLAGS = \
     --thread \
     --vapidir $(srcdir)/../vapi \
     --vapi=$(srcdir)/xnoise-1.0.vapi \
-    --deps $(srcdir)/xnoise-1.0.deps \
     --header=$(srcdir)/xnoise.h \
     @XNOISE_PACKAGES@ \
     $(NULL)

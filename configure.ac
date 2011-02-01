@@ -66,7 +66,7 @@ PKG_CHECK_MODULES(XNOISE, \
     gtk+-2.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
     taglib_c >= $TAGLIB_C_REQUIRED \
-    unique-1.0)
+    unique-1.0 cairo)
 
 PKG_CHECK_MODULES(LIBPLAYLIST, \
     glib-2.0 >= $GLIB_REQUIRED \

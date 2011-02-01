@@ -275,14 +275,17 @@ public class MprisPlayer : GLib.Object {
 		});
 		
 		Xnoise.global.notify["image-path-large"].connect( () => {
-			string s = Xnoise.global.image_path_large;
-			if(s == null)
+			string? s = Xnoise.global.image_path_large;
+			if(s == null) {
 				_metadata.insert("mpris:artUrl", "");
-			File f = File.new_for_commandline_arg(s);
-			if(f == null)
-				return;
-			_metadata.insert("mpris:artUrl", f.get_uri());
-			
+			}
+			else {
+				File f = File.new_for_commandline_arg(s);
+				if(f != null)
+					_metadata.insert("mpris:artUrl", f.get_uri());
+				else
+					_metadata.insert("mpris:artUrl", "");
+			}
 			trigger_metadata_update();
 		});
 		

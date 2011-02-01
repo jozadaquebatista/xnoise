@@ -37,6 +37,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 
 	public VideoScreen() {
 		this.xn = Main.instance;
+		rect = Gdk.Rectangle();
+		Gdk.Color.parse("black", out black);
 		init_video_screen();
 		cover_image_available = false;
 		global.notify["image-path-large"].connect(on_image_path_changed);
@@ -76,60 +78,43 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 			print("%s\n", e.message);
 		}
 	}
-
+	
+	private Gdk.Region region;
+	
+	private Gdk.Rectangle rect;
+	
+	private Gdk.Color black;
+	
 	public override bool expose_event(Gdk.EventExpose e) {
-
+		
 		if(e.count > 0) return true; //exposure compression
-
-//		Gdk.draw_rectangle(this.get_window(),
-//		                   this.style.black_gc, true,
-//		                   e.area.x, e.area.y,
-//		                   e.area.width, e.area.height
-//		                   );
-		Cairo.Context cr = Gdk.cairo_create(this.get_window());
-//		cairo_set_line_width (cr, 1.0);
-		Gdk.Color color;
-		Gdk.Color.parse("black", out color);
-		Gdk.cairo_set_source_color(cr, color);
+		
+		rect.x = 0;
+		rect.y = 0;
+		Gtk.Allocation alloc;
+		this.get_allocation(out alloc);
+		rect.width  = e.area.width;
+		rect.height = e.area.height;
+		region = Gdk.Region.rectangle(rect);
+		
+		this.get_window().begin_paint_region(region);
+		Cairo.Context cr = Gdk.cairo_create(e.window);
+		
+		Gdk.cairo_set_source_color(cr, black);
 		cr.rectangle(e.area.x, e.area.y,
 		             e.area.width, e.area.height);
-		cr.stroke();
+		cr.fill();
 		
 		if(!xn.gPl.current_has_video) {
-
+		
 			int y_offset;
 			int x_offset;
-
+		
 			//print("current has no video\n");
 			if(this.logo_pixb!=null) {
 				logo = null;
 				int logowidth, logoheight, widgetwidth, widgetheight;
 				float ratio;
-				var region = new Gdk.Region();
-				var rect = Gdk.Rectangle();
-				rect.x = 0;
-				rect.y = 0;
-				Gtk.Allocation alloc;
-				this.get_allocation(out alloc);
-				rect.width  = alloc.width;
-				rect.height = alloc.height;
-				region = Gdk.Region.rectangle(rect);
-
-				this.get_window().begin_paint_region(region);
-
-//				Gdk.draw_rectangle(this.get_window(),
-//				                   this.style.black_gc, true,
-//				                   e.area.x, e.area.y,
-//				                   e.area.width, e.area.height
-//				                   );
-//				Cairo.Context cr = Gdk.cairo_create(this.get_window());
-		//		cairo_set_line_width (cr, 1.0);
-//				Gdk.Color color;
-//				Gdk.Color.parse("black", out color);
-				Gdk.cairo_set_source_color(cr, color);
-				cr.rectangle(e.area.x, e.area.y,
-						     e.area.width, e.area.height);
-				cr.stroke();
 				
 				logowidth  = logo_pixb.get_width();
 				logoheight = logo_pixb.get_height();
@@ -180,38 +165,10 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 						x_offset = (int)((widgetwidth  * 0.5) - (logowidth  * 0.4));
 					}
 				}
-
-//				Gdk.draw_pixbuf(this.get_window(),    //Destination drawable
-//				                this.style.fg_gc[0],  //a Gdk.GC, used for clipping, or null
-//				                logo,                 //a Gdk.Pixbuf
-//				                0, 0,                 //Source X/Y coordinates within pixbuf.
-//				                x_offset,             //Destination X coordinate within drawable
-//				                y_offset,             //Destination Y coordinate within drawable
-//				                -1,                   //Width of region to render, in pixels, or -1 to use pixbuf width.
-//				                -1,                   //Height of region to render, in pixels, or -1 to use pixbuf height.
-//				                Gdk.RgbDither.NONE,   //Dithering mode for Gdk.RGB.
-//				                0, 0                  //X/Y offsets for dither.
-//				                );
-//				Cairo.Context cr = Gdk.cairo_create(this.get_window());
-				Gdk.cairo_set_source_pixbuf(cr, logo, 0.0, 0.0);
+				Gdk.cairo_set_source_pixbuf(cr, logo, x_offset, y_offset);
 				cr.paint();
-				this.get_window().end_paint();
 			}
-			else if(this.get_window()!=null) {
-//				Gdk.draw_rectangle(this.get_window(),
-//				                   this.style.black_gc, true,
-//				                   e.area.x, e.area.y,
-//				                   e.area.width, e.area.height
-//				                   );
-//				Cairo.Context cr = Gdk.cairo_create(this.get_window());
-		//		cairo_set_line_width (cr, 1.0);
-//				Gdk.Color color;
-//				Gdk.Color.parse("black", out color);
-				Gdk.cairo_set_source_color(cr, color);
-				cr.rectangle(e.area.x, e.area.y,
-						     e.area.width, e.area.height);
-				cr.stroke();
-			}
+			this.get_window().end_paint();
 		}
 		return true;
 	}
