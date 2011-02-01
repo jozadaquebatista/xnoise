@@ -109,14 +109,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		} 
 		set {
 			if((value == true) && (_media_browser_visible != value)) {
-				hide_button.label   = "Hide Media";
-				hide_button_1.label = "Hide Media";
-				hide_button_2.label = "Hide Media";
+				hide_button.label   = _("Hide Media");
+				hide_button_1.label = _("Hide Media");
+				hide_button_2.label = _("Hide Media");
 			}
 			else if((value == false) && (_media_browser_visible != value)) {
-				hide_button.label   = "Show Media";
-				hide_button_1.label = "Show Media";
-				hide_button_2.label = "Show Media";
+				hide_button.label   = _("Show Media");
+				hide_button_1.label = _("Show Media");
+				hide_button_2.label = _("Show Media");
 			}
 			_media_browser_visible = value;
 		} 
