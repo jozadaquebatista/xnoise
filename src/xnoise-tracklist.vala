@@ -1169,7 +1169,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnArtist.sizing      = Gtk.TreeViewColumnSizing.FIXED;
 		columnLength.sizing      = Gtk.TreeViewColumnSizing.FIXED;
 		
-		this.enable_search = false;
+		this.set_enable_search(false);
 		this.rules_hint = true;
 	}
 	

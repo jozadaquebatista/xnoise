@@ -43,7 +43,7 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		xn = Main.instance;
 
 		this.discrete_blocks = 10;
-		this.set_size_request(200, 18);
+		this.set_size_request(180, 18);
 
 		this.set_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.BUTTON1_MOTION_MASK | Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK);
 		this.button_press_event.connect(this.on_press);
