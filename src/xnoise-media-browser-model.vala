@@ -63,7 +63,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	};
 
 	public string searchtext = "";
-	private IconTheme theme = null;
+	private unowned IconTheme theme = null;
 	private Gdk.Pixbuf artist_pixb;
 	private Gdk.Pixbuf album_pixb;
 	private Gdk.Pixbuf title_pixb;
@@ -194,20 +194,28 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			
 			Gtk.Invisible w = new Gtk.Invisible();
 			
-			if(theme.has_icon("system-users")) artist_pixb = theme.load_icon("system-users", 0, 0);
-			else if(theme.has_icon("stock_person")) artist_pixb = theme.load_icon("stock_person", 0, 0);
-			else artist_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
+			radios_pixb  = w.render_icon(Gtk.Stock.CONNECT, IconSize.BUTTON, null);
+			video_pixb  = w.render_icon(Gtk.Stock.FILE, IconSize.BUTTON, null);
+			int iconheight = video_pixb.height;
+			
+			if(theme.has_icon("system-users")) 
+				artist_pixb = theme.load_icon("system-users", iconheight, IconLookupFlags.FORCE_SIZE);
+			else if(theme.has_icon("stock_person")) 
+				artist_pixb = theme.load_icon("stock_person", iconheight, IconLookupFlags.FORCE_SIZE);
+			else 
+				artist_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
 			
 			album_pixb = w.render_icon(Gtk.Stock.CDROM, IconSize.BUTTON, null);
 			
-			if(theme.has_icon("audio-x-generic")) title_pixb = theme.load_icon("audio-x-generic", 0, 0);
-			else title_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
+			if(theme.has_icon("audio-x-generic")) 
+				title_pixb = theme.load_icon("audio-x-generic", iconheight, IconLookupFlags.FORCE_SIZE);
+			else 
+				title_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
 			
-			if(theme.has_icon("video-x-generic")) videos_pixb = theme.load_icon("video-x-generic", 0, 0);
-			else videos_pixb = w.render_icon(Gtk.Stock.MEDIA_RECORD, IconSize.BUTTON, null);
-			
-			radios_pixb  = w.render_icon(Gtk.Stock.CONNECT, IconSize.BUTTON, null);
-			video_pixb  = w.render_icon(Gtk.Stock.FILE, IconSize.BUTTON, null);
+			if(theme.has_icon("video-x-generic")) 
+				videos_pixb = theme.load_icon("video-x-generic", iconheight, IconLookupFlags.FORCE_SIZE);
+			else 
+				videos_pixb = w.render_icon(Gtk.Stock.MEDIA_RECORD, IconSize.BUTTON, null);
 		}
 		catch (GLib.Error e) {
 			print("Error: %s\n",e.message);
