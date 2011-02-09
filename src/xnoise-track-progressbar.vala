@@ -93,34 +93,7 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 	
 	private bool on_scroll(Gdk.EventScroll event) {
 		if(global.track_state != GlobalAccess.TrackState.STOPPED) {
-			if(event.direction == Gdk.ScrollDirection.DOWN) {
-				if((xn.gPl.playing)|(xn.gPl.paused)) {
-					double thisFraction;
-
-					thisFraction = this.fraction - SCROLL_POS_CHANGE;
-
-					if(thisFraction < 0.0) thisFraction = 0.0;
-					if(thisFraction > 1.0) thisFraction = 1.0;
-					this.set_fraction(thisFraction);
-					this.xn.main_window.sign_pos_changed(thisFraction);
-
-					set_value((uint)((thisFraction * xn.gPl.length_time) / 1000000), (uint)(xn.gPl.length_time / 1000000));
-				}
-			}
-			else if(event.direction == Gdk.ScrollDirection.UP) {
-				if((xn.gPl.playing)|(xn.gPl.paused)) {
-					double thisFraction;
-
-					thisFraction = this.fraction + SCROLL_POS_CHANGE;
-
-					if(thisFraction < 0.0) thisFraction = 0.0;
-					if(thisFraction > 1.0) thisFraction = 1.0;
-					this.set_fraction(thisFraction);
-					this.xn.main_window.sign_pos_changed(thisFraction);
-
-					set_value((uint)((thisFraction * xn.gPl.length_time) / 1000000), (uint)(xn.gPl.length_time / 1000000));
-				}
-			}
+			xn.gPl.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
 		}
 		return false;
 	}

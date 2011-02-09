@@ -162,6 +162,7 @@ namespace Xnoise {
 		public void pause ();
 		public void play ();
 		public void playSong (bool force_play = false);
+		public void request_time_offset_seconds (int seconds);
 		public void stop ();
 		public string? Uri { get; set; }
 		public bool buffering { get; private set; }

@@ -203,21 +203,21 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			else if(theme.has_icon("stock_person")) 
 				artist_pixb = theme.load_icon("stock_person", iconheight, IconLookupFlags.FORCE_SIZE);
 			else 
-				artist_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
+				artist_pixb = w.render_icon(Gtk.Stock.ORIENTATION_PORTRAIT, IconSize.BUTTON, null);
 			
 			album_pixb = w.render_icon(Gtk.Stock.CDROM, IconSize.BUTTON, null);
 			
 			if(theme.has_icon("audio-x-generic")) 
 				title_pixb = theme.load_icon("audio-x-generic", iconheight, IconLookupFlags.FORCE_SIZE);
 			else 
-				title_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "guitar.png");
+				title_pixb = w.render_icon(Gtk.Stock.OPEN, IconSize.BUTTON, null);
 			
 			if(theme.has_icon("video-x-generic")) 
 				videos_pixb = theme.load_icon("video-x-generic", iconheight, IconLookupFlags.FORCE_SIZE);
 			else 
 				videos_pixb = w.render_icon(Gtk.Stock.MEDIA_RECORD, IconSize.BUTTON, null);
 		}
-		catch (GLib.Error e) {
+		catch(GLib.Error e) {
 			print("Error: %s\n",e.message);
 		}
 	}
