@@ -102,14 +102,6 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	private RemoteSchemes _remote_schemes = new RemoteSchemes();
 	private LocalSchemes  _local_schemes  = new LocalSchemes();
 
-	// ENUMS
-	public enum TrackState {
-		STOPPED = 0,
-		PLAYING,
-		PAUSED
-	}
-
-
 	// PROPERTIES
 
 	// User specific settings directory following freedesktop standard:

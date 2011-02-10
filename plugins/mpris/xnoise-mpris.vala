@@ -397,11 +397,11 @@ public class MprisPlayer : GLib.Object {
 	public string PlaybackStatus {
 		owned get { //TODO signal org.freedesktop.DBus.Properties.PropertiesChanged
 			switch(global.track_state) {
-				case(GlobalAccess.TrackState.STOPPED):
+				case(TrackState.STOPPED):
 					return "Stopped";
-				case(GlobalAccess.TrackState.PLAYING):
+				case(TrackState.PLAYING):
 					return "Playing";
-				case(GlobalAccess.TrackState.PAUSED):
+				case(TrackState.PAUSED):
 					return "Paused";
 				default:
 					return "Stopped";
@@ -412,13 +412,13 @@ public class MprisPlayer : GLib.Object {
 	public string LoopStatus {
 		owned get {
 			switch(this.xn.main_window.repeatState) {
-				case(MainWindow.Repeat.NOT_AT_ALL):
+				case(MainWindow.PlayerRepeatMode.NOT_AT_ALL):
 					return "None";
-				case(MainWindow.Repeat.SINGLE):
+				case(MainWindow.PlayerRepeatMode.SINGLE):
 					return "Track";
-				case(MainWindow.Repeat.ALL):
+				case(MainWindow.PlayerRepeatMode.ALL):
 					return "Playlist";
-				case(MainWindow.Repeat.RANDOM):
+				case(MainWindow.PlayerRepeatMode.RANDOM):
 					return "Playlist";
 				default:
 					return "Playlist";
@@ -427,16 +427,16 @@ public class MprisPlayer : GLib.Object {
 		set {
 			switch(value) {
 				case("None"):
-					this.xn.main_window.repeatState = MainWindow.Repeat.NOT_AT_ALL;
+					this.xn.main_window.repeatState = MainWindow.PlayerRepeatMode.NOT_AT_ALL;
 					break;
 				case("Track"):
-					this.xn.main_window.repeatState = MainWindow.Repeat.SINGLE;
+					this.xn.main_window.repeatState = MainWindow.PlayerRepeatMode.SINGLE;
 					break;
 				case("Playlist"):
-					this.xn.main_window.repeatState = MainWindow.Repeat.ALL;
+					this.xn.main_window.repeatState = MainWindow.PlayerRepeatMode.ALL;
 					break;
 				default:
-					this.xn.main_window.repeatState = MainWindow.Repeat.ALL;
+					this.xn.main_window.repeatState = MainWindow.PlayerRepeatMode.ALL;
 					break;
 			}
 			Variant variant = value;
@@ -452,17 +452,17 @@ public class MprisPlayer : GLib.Object {
 		}
 	}
 	
-	private MainWindow.Repeat buffer_repeat_state = MainWindow.Repeat.NOT_AT_ALL;
+	private MainWindow.PlayerRepeatMode buffer_repeat_state = MainWindow.PlayerRepeatMode.NOT_AT_ALL;
 	public bool Shuffle {
 		get {
-			if(this.xn.main_window.repeatState == MainWindow.Repeat.RANDOM)
+			if(this.xn.main_window.repeatState == MainWindow.PlayerRepeatMode.RANDOM)
 				return true;
 			return false;
 		}
 		set {
 			if(value == true) {
 				buffer_repeat_state = this.xn.main_window.repeatState;
-				this.xn.main_window.repeatState = MainWindow.Repeat.RANDOM;
+				this.xn.main_window.repeatState = MainWindow.PlayerRepeatMode.RANDOM;
 			}
 			else {
 				this.xn.main_window.repeatState = buffer_repeat_state;
@@ -572,7 +572,7 @@ public class MprisPlayer : GLib.Object {
 				global.current_uri = uri;
 		}
 		
-		global.track_state = GlobalAccess.TrackState.PAUSED;
+		global.track_state = TrackState.PAUSED;
 	}
 	
 	public void PlayPause() {
@@ -582,11 +582,11 @@ public class MprisPlayer : GLib.Object {
 				global.current_uri = uri;
 		}
 		
-		if(global.track_state == GlobalAccess.TrackState.PLAYING) {
-			global.track_state = GlobalAccess.TrackState.PAUSED;
+		if(global.track_state == TrackState.PLAYING) {
+			global.track_state = TrackState.PAUSED;
 		}
 		else {
-			global.track_state = GlobalAccess.TrackState.PLAYING;
+			global.track_state = TrackState.PLAYING;
 		}
 	}
 	
@@ -601,8 +601,8 @@ public class MprisPlayer : GLib.Object {
 				global.current_uri = uri;
 		}
 		
-		if(!(global.track_state == GlobalAccess.TrackState.PLAYING)) {
-			global.track_state = GlobalAccess.TrackState.PLAYING;
+		if(!(global.track_state == TrackState.PLAYING)) {
+			global.track_state = TrackState.PLAYING;
 		}
 	}
 	

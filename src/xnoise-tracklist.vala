@@ -985,7 +985,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			return;
 		}
 		global.current_uri = uri;
-		global.track_state = GlobalAccess.TrackState.PLAYING;
+		global.track_state = TrackState.PLAYING;
 
 		TreeIter iter;
 		this.tracklistmodel.get_iter(out iter, path);

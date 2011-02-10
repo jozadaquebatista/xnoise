@@ -114,12 +114,6 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class GlobalAccess : GLib.Object {
-		[CCode (cprefix = "XNOISE_GLOBAL_ACCESS_TRACK_STATE_", cheader_filename = "xnoise.h")]
-		public enum TrackState {
-			STOPPED,
-			PLAYING,
-			PAUSED
-		}
 		public GlobalAccess ();
 		public void check_image_for_current_track ();
 		public void do_restart_of_current_track ();
@@ -140,7 +134,7 @@ namespace Xnoise {
 		public Gtk.TreeRowReference position_reference_next { get; set; }
 		public Xnoise.RemoteSchemes remote_schemes { get; }
 		public string settings_folder { get; }
-		public Xnoise.GlobalAccess.TrackState track_state { get; set; }
+		public Xnoise.TrackState track_state { get; set; }
 		public signal void before_position_reference_changed ();
 		public signal void before_position_reference_next_changed ();
 		public signal void caught_eos_from_player ();
@@ -227,8 +221,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {
-		[CCode (cprefix = "XNOISE_MAIN_WINDOW_REPEAT_", cheader_filename = "xnoise.h")]
-		public enum Repeat {
+		[CCode (cprefix = "XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_", cheader_filename = "xnoise.h")]
+		public enum PlayerRepeatMode {
 			NOT_AT_ALL,
 			SINGLE,
 			ALL,
@@ -274,7 +268,7 @@ namespace Xnoise {
 		public void toggle_window_visbility ();
 		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
-		public Xnoise.MainWindow.Repeat repeatState { get; set; }
+		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public signal void sign_drag_over_content_area ();
 		public signal void sign_pos_changed (double fraction);
 		public signal void sign_volume_changed (double fraction);
@@ -513,7 +507,7 @@ namespace Xnoise {
 		public void on_position_reference_changed ();
 		public bool path_is_last_row (ref Gtk.TreePath path, out bool trackList_is_empty);
 		public void set_reference_to_last ();
-		public signal void sign_active_path_changed (Xnoise.GlobalAccess.TrackState ts);
+		public signal void sign_active_path_changed (Xnoise.TrackState ts);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackProgressBar : Gtk.ProgressBar {
@@ -664,6 +658,12 @@ namespace Xnoise {
 		TRACKLIST,
 		VIDEO,
 		LYRICS
+	}
+	[CCode (cprefix = "XNOISE_TRACK_STATE_", cheader_filename = "xnoise.h")]
+	public enum TrackState {
+		STOPPED,
+		PLAYING,
+		PAUSED
 	}
 	[CCode (cprefix = "XNOISE_DB_ERROR_", cheader_filename = "xnoise.h")]
 	public errordomain DbError {

@@ -124,11 +124,11 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 						global.current_uri = uri;
 				}
 
-				if(global.track_state == GlobalAccess.TrackState.PLAYING) {
-					global.track_state = GlobalAccess.TrackState.PAUSED;
+				if(global.track_state == TrackState.PLAYING) {
+					global.track_state = TrackState.PAUSED;
 				}
 				else {
-					global.track_state = GlobalAccess.TrackState.PLAYING;
+					global.track_state = TrackState.PLAYING;
 				}
 				break;
 			}

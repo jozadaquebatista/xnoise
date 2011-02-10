@@ -122,14 +122,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		} 
 	}
 	
-	public Repeat repeatState { get; set; }
+	public PlayerRepeatMode repeatState { get; set; }
 	public bool fullscreenwindowvisible { get; set; }
 
 	public signal void sign_pos_changed(double fraction);
 	public signal void sign_volume_changed(double fraction);
 	public signal void sign_drag_over_content_area();
 
-	public enum Repeat {
+	public enum PlayerRepeatMode {
 		NOT_AT_ALL = 0,
 		SINGLE,
 		ALL,
@@ -300,7 +300,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	
 	private void handle_screensaver() {
 		if(fullscreenwindowvisible) {
-			if (global.track_state == GlobalAccess.TrackState.PLAYING) ssm.inhibit();
+			if (global.track_state == TrackState.PLAYING) ssm.inhibit();
 			else ssm.uninhibit();
 		}
 		else {
@@ -519,23 +519,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private void on_repeatState_changed(GLib.ParamSpec pspec) {
 		switch(this.repeatState) {
-			case Repeat.NOT_AT_ALL : {
+			case PlayerRepeatMode.NOT_AT_ALL : {
 				//TODO: create some other images
 				repeatLabel.label = _("no repeat");
 				//repeatImage.stock = Gtk.Stock.EXECUTE;
 				break;
 			}
-			case Repeat.SINGLE : {
+			case PlayerRepeatMode.SINGLE : {
 				repeatLabel.label = _("repeat single");
 				//repeatImage.stock = Gtk.Stock.REDO;
 				break;
 			}
-			case Repeat.ALL : {
+			case PlayerRepeatMode.ALL : {
 				repeatLabel.label = _("repeat all");
 				//repeatImage.stock = Gtk.Stock.REFRESH;
 				break;
 			}
-			case Repeat.RANDOM : {
+			case PlayerRepeatMode.RANDOM : {
 				repeatLabel.label = _("random play");
 				//repeatImage.stock = Gtk.Stock.JUMP_TO;
 				break;
@@ -700,7 +700,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if (wi > 0 && he > 0) {
 			this.resize(wi, he);
 		}
-		this.repeatState = (Repeat)par.get_int_value("repeatstate");
+		this.repeatState = (PlayerRepeatMode)par.get_int_value("repeatstate");
 		double volSlider = par.get_double_value("volume");
 		if((volSlider < 0.0)||
 		   (volSlider > 1.0)) {
@@ -738,7 +738,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 
 	public void stop() {
-		global.track_state = GlobalAccess.TrackState.STOPPED;
+		global.track_state = TrackState.STOPPED;
 		global.current_uri = null;
 	}
 
@@ -766,7 +766,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 		TreePath tmp_path = null;
 		tmp_path = path;
-		if((repeatState == Repeat.RANDOM)) {
+		if((repeatState == PlayerRepeatMode.RANDOM)) {
 			// handle RANDOM
 			if(!this.trackList.tracklistmodel.get_random_row(ref path) || 
 			   (path.to_string() == tmp_path.to_string())) {
@@ -777,7 +777,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		else {
 			if(!used_next_pos) {
 				// get next or previous path
-				if((!(handle_repeat_state && (repeatState == Repeat.SINGLE)))) {
+				if((!(handle_repeat_state && (repeatState == PlayerRepeatMode.SINGLE)))) {
 					if(path == null) 
 						return;
 					if(!this.trackList.tracklistmodel.path_is_last_row(ref path,
@@ -796,7 +796,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					else {
 						//print("path_is_last_row\n");
 						if(direction == ControlButton.Direction.NEXT) {
-							if(repeatState == Repeat.ALL) {
+							if(repeatState == PlayerRepeatMode.ALL) {
 								// only jump to first is repeat all is set
 								trackList.tracklistmodel.get_first_row(ref path);
 							}
@@ -827,11 +827,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		global.position_reference = new TreeRowReference(trackList.tracklistmodel, path);
 
-		if(global.track_state == GlobalAccess.TrackState.PLAYING)
+		if(global.track_state == TrackState.PLAYING)
 			trackList.set_focus_on_iter(ref iter);
 
 		if(path.to_string() == tmp_path.to_string()) {
-			if((repeatState == Repeat.SINGLE)||((repeatState == Repeat.ALL && rowcount == 1))) {
+			if((repeatState == PlayerRepeatMode.SINGLE)||((repeatState == PlayerRepeatMode.ALL && rowcount == 1))) {
 				// Explicit restart
 				global.do_restart_of_current_track();
 			}
@@ -849,9 +849,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_repeat_button_clicked(Button sender) {
-		Repeat temprepeatState = this.repeatState;
-		temprepeatState = (Repeat)((int)temprepeatState + 1);
-		if((int)temprepeatState > 3) temprepeatState = (Repeat)0;
+		PlayerRepeatMode temprepeatState = this.repeatState;
+		temprepeatState = (PlayerRepeatMode)((int)temprepeatState + 1);
+		if((int)temprepeatState > 3) temprepeatState = (PlayerRepeatMode)0;
 		repeatState = temprepeatState;
 	}
 
@@ -1144,7 +1144,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	public void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
 		if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS) {
-			if(global.track_state == GlobalAccess.TrackState.STOPPED)
+			if(global.track_state == TrackState.STOPPED)
 				return;
 			this.change_track(dir);
 		}

@@ -244,6 +244,12 @@ public enum Gst.StreamType {
 	VIDEO   = 2
 }
 
+public enum Xnoise.TrackState {
+	STOPPED = 0,
+	PLAYING,
+	PAUSED
+}
+
 
 
 // DATA TRANSFER CLASS
