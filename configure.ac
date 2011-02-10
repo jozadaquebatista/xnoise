@@ -1,4 +1,4 @@
-AC_PREREQ(2.53)
+AC_PREREQ([2.67])
 
 #xnoise version
 m4_define(xnoise_major_version, 0)
@@ -12,7 +12,7 @@ m4_define(libplaylist_minor_version, 0)
 m4_define(libplaylist_micro_version, 1)
 m4_define(libplaylist_version, libplaylist_major_version.libplaylist_minor_version.libplaylist_micro_version)
 
-AC_INIT(xnoise, xnoise_version, shuerhaakenATgo oglemail.com, [xnoise])
+AC_INIT([xnoise],[xnoise_version],[shuerhaakenATgo oglemail.com],[xnoise])
 
 # require automake-1.11 for vala support
 AM_INIT_AUTOMAKE([1.11 dist-bzip2])
@@ -48,8 +48,8 @@ VALA_REQUIRED=0.11.5
 AC_PROG_CC
 AM_PROG_VALAC($VALA_REQUIRED)
 
-AC_STDC_HEADERS
-AC_PROG_LIBTOOL
+AC_HEADER_STDC
+LT_INIT
 AC_FUNC_MMAP
 
 PKG_CHECK_MODULES(XNOISE, \
