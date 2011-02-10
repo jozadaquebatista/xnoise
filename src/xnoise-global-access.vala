@@ -80,7 +80,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public signal void before_position_reference_next_changed();
 	public signal void position_reference_next_changed();
 	// state changed to playing, paused or stopped
-	public signal void track_state_changed();
+	public signal void player_state_changed();
 	public signal void uri_changed(string? uri);
 	public signal void uri_repeated(string? uri);
 	public signal void tag_changed(ref string? newuri, string? tagname, string? tagvalue);
@@ -94,7 +94,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public signal void sign_song_info_required();
 
 	// PRIVATE FIELDS
-	private TrackState _track_state = TrackState.STOPPED;
+	private PlayerState _player_state = PlayerState.STOPPED;
 	private string? _current_uri = null;
 	private Gtk.TreeRowReference? _position_reference = null;
 	private Gtk.TreeRowReference? _position_reference_next = null;
@@ -113,15 +113,15 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		}
 	}
 
-	public TrackState track_state {
+	public PlayerState player_state {
 		get {
-			return _track_state;
+			return _player_state;
 		}
 		set {
-			if(_track_state != value) {
-				_track_state = value;
+			if(_player_state != value) {
+				_player_state = value;
 				// signal changed
-				track_state_changed();
+				player_state_changed();
 			}
 		}
 	}

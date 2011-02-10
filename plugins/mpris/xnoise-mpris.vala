@@ -396,12 +396,12 @@ public class MprisPlayer : GLib.Object {
 	
 	public string PlaybackStatus {
 		owned get { //TODO signal org.freedesktop.DBus.Properties.PropertiesChanged
-			switch(global.track_state) {
-				case(TrackState.STOPPED):
+			switch(global.player_state) {
+				case(PlayerState.STOPPED):
 					return "Stopped";
-				case(TrackState.PLAYING):
+				case(PlayerState.PLAYING):
 					return "Playing";
-				case(TrackState.PAUSED):
+				case(PlayerState.PAUSED):
 					return "Paused";
 				default:
 					return "Stopped";
@@ -572,7 +572,7 @@ public class MprisPlayer : GLib.Object {
 				global.current_uri = uri;
 		}
 		
-		global.track_state = TrackState.PAUSED;
+		global.player_state = PlayerState.PAUSED;
 	}
 	
 	public void PlayPause() {
@@ -582,11 +582,11 @@ public class MprisPlayer : GLib.Object {
 				global.current_uri = uri;
 		}
 		
-		if(global.track_state == TrackState.PLAYING) {
-			global.track_state = TrackState.PAUSED;
+		if(global.player_state == PlayerState.PLAYING) {
+			global.player_state = PlayerState.PAUSED;
 		}
 		else {
-			global.track_state = TrackState.PLAYING;
+			global.player_state = PlayerState.PLAYING;
 		}
 	}
 	
@@ -601,8 +601,8 @@ public class MprisPlayer : GLib.Object {
 				global.current_uri = uri;
 		}
 		
-		if(!(global.track_state == TrackState.PLAYING)) {
-			global.track_state = TrackState.PLAYING;
+		if(!(global.player_state == PlayerState.PLAYING)) {
+			global.player_state = PlayerState.PLAYING;
 		}
 	}
 	

@@ -148,7 +148,7 @@ typedef struct _XnoiseGlobalAccess XnoiseGlobalAccess;
 typedef struct _XnoiseGlobalAccessClass XnoiseGlobalAccessClass;
 typedef struct _XnoiseGlobalAccessPrivate XnoiseGlobalAccessPrivate;
 
-#define XNOISE_TYPE_TRACK_STATE (xnoise_track_state_get_type ())
+#define XNOISE_TYPE_PLAYER_STATE (xnoise_player_state_get_type ())
 
 #define XNOISE_TYPE_REMOTE_SCHEMES (xnoise_remote_schemes_get_type ())
 #define XNOISE_REMOTE_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_REMOTE_SCHEMES, XnoiseRemoteSchemes))
@@ -699,10 +699,10 @@ struct _XnoiseGlobalAccessClass {
 };
 
 typedef enum  {
-	XNOISE_TRACK_STATE_STOPPED = 0,
-	XNOISE_TRACK_STATE_PLAYING,
-	XNOISE_TRACK_STATE_PAUSED
-} XnoiseTrackState;
+	XNOISE_PLAYER_STATE_STOPPED = 0,
+	XNOISE_PLAYER_STATE_PLAYING,
+	XNOISE_PLAYER_STATE_PAUSED
+} XnoisePlayerState;
 
 struct _XnoiseGstPlayer {
 	GObject parent_instance;
@@ -1333,9 +1333,9 @@ void xnoise_global_access_check_image_for_current_track (XnoiseGlobalAccess* sel
 XnoiseGlobalAccess* xnoise_global_access_new (void);
 XnoiseGlobalAccess* xnoise_global_access_construct (GType object_type);
 const gchar* xnoise_global_access_get_settings_folder (XnoiseGlobalAccess* self);
-GType xnoise_track_state_get_type (void) G_GNUC_CONST;
-XnoiseTrackState xnoise_global_access_get_track_state (XnoiseGlobalAccess* self);
-void xnoise_global_access_set_track_state (XnoiseGlobalAccess* self, XnoiseTrackState value);
+GType xnoise_player_state_get_type (void) G_GNUC_CONST;
+XnoisePlayerState xnoise_global_access_get_player_state (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_player_state (XnoiseGlobalAccess* self, XnoisePlayerState value);
 const gchar* xnoise_global_access_get_current_uri (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_current_uri (XnoiseGlobalAccess* self, const gchar* value);
 const GtkTreeRowReference* xnoise_global_access_get_position_reference (XnoiseGlobalAccess* self);

@@ -112,7 +112,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 	}
 
 	private bool on_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
-		if(global.track_state != TrackState.STOPPED) {
+		if(global.player_state != PlayerState.STOPPED) {
 			if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
 				xn.main_window.change_track(ControlButton.Direction.PREVIOUS, true);
 			}
@@ -132,16 +132,16 @@ public class Xnoise.TrayIcon : StatusIcon {
 	private bool on_query_tooltip(int x, int y, bool keyboard_mod, Tooltip tp) {
 		string state = "";
 		string? uri = global.current_uri;
-		switch(global.track_state) {
-			case TrackState.STOPPED: {
+		switch(global.player_state) {
+			case PlayerState.STOPPED: {
 				state = "stopped";
 				break;
 			}
-			case TrackState.PLAYING: {
+			case PlayerState.PLAYING: {
 				state = "playing";
 				break;
 			}
-			case TrackState.PAUSED: {
+			case PlayerState.PAUSED: {
 				state = "paused";
 				break;
 			}
@@ -152,7 +152,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		}
 		state = Markup.escape_text(state);
 	
-		if(global.track_state == TrackState.STOPPED || uri == null || uri == "") {
+		if(global.player_state == PlayerState.STOPPED || uri == null || uri == "") {
 			tp.set_markup(" xnoise media player \n" +
 				          "<span rise=\"6000\" style =\"italic\"> ready to rock ;)</span>");
 			return true;

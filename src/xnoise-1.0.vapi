@@ -130,14 +130,15 @@ namespace Xnoise {
 		public string? image_path_small { get; set; }
 		public Xnoise.LocalSchemes local_schemes { get; }
 		public bool media_import_in_progress { get; set; }
+		public Xnoise.PlayerState player_state { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
 		public Xnoise.RemoteSchemes remote_schemes { get; }
 		public string settings_folder { get; }
-		public Xnoise.TrackState track_state { get; set; }
 		public signal void before_position_reference_changed ();
 		public signal void before_position_reference_next_changed ();
 		public signal void caught_eos_from_player ();
+		public signal void player_state_changed ();
 		public signal void position_reference_changed ();
 		public signal void position_reference_next_changed ();
 		public signal void sig_item_imported (string uri);
@@ -145,7 +146,6 @@ namespace Xnoise {
 		public signal void sign_restart_song ();
 		public signal void sign_song_info_required ();
 		public signal void tag_changed (ref string? newuri, string? tagname, string? tagvalue);
-		public signal void track_state_changed ();
 		public signal void uri_changed (string? uri);
 		public signal void uri_repeated (string? uri);
 	}
@@ -507,7 +507,7 @@ namespace Xnoise {
 		public void on_position_reference_changed ();
 		public bool path_is_last_row (ref Gtk.TreePath path, out bool trackList_is_empty);
 		public void set_reference_to_last ();
-		public signal void sign_active_path_changed (Xnoise.TrackState ts);
+		public signal void sign_active_path_changed (Xnoise.PlayerState ts);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackProgressBar : Gtk.ProgressBar {
@@ -653,17 +653,17 @@ namespace Xnoise {
 		STREAM,
 		PLAYLISTFILE
 	}
+	[CCode (cprefix = "XNOISE_PLAYER_STATE_", cheader_filename = "xnoise.h")]
+	public enum PlayerState {
+		STOPPED,
+		PLAYING,
+		PAUSED
+	}
 	[CCode (cprefix = "XNOISE_TRACK_LIST_NOTE_BOOK_TAB_", cheader_filename = "xnoise.h")]
 	public enum TrackListNoteBookTab {
 		TRACKLIST,
 		VIDEO,
 		LYRICS
-	}
-	[CCode (cprefix = "XNOISE_TRACK_STATE_", cheader_filename = "xnoise.h")]
-	public enum TrackState {
-		STOPPED,
-		PLAYING,
-		PAUSED
 	}
 	[CCode (cprefix = "XNOISE_DB_ERROR_", cheader_filename = "xnoise.h")]
 	public errordomain DbError {

@@ -92,7 +92,7 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 	}
 	
 	private bool on_scroll(Gdk.EventScroll event) {
-		if(global.track_state != TrackState.STOPPED) {
+		if(global.player_state != PlayerState.STOPPED) {
 			xn.gPl.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
 		}
 		return false;

@@ -244,7 +244,7 @@ public enum Gst.StreamType {
 	VIDEO   = 2
 }
 
-public enum Xnoise.TrackState {
+public enum Xnoise.PlayerState {
 	STOPPED = 0,
 	PLAYING,
 	PAUSED

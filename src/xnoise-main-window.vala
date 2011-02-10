@@ -292,7 +292,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void on_fullscreenwindowvisible(GLib.ParamSpec pspec) {
 		handle_screensaver();
 		if(fullscreenwindowvisible)
-			global.track_state_changed.connect(handle_screensaver);
+			global.player_state_changed.connect(handle_screensaver);
 		
 		this.showvideobuttonTL.set_sensitive(!fullscreenwindowvisible);
 		this.showvideobuttonLY.set_sensitive(!fullscreenwindowvisible);
@@ -300,11 +300,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	
 	private void handle_screensaver() {
 		if(fullscreenwindowvisible) {
-			if (global.track_state == TrackState.PLAYING) ssm.inhibit();
+			if (global.player_state == PlayerState.PLAYING) ssm.inhibit();
 			else ssm.uninhibit();
 		}
 		else {
-			global.track_state_changed.disconnect(handle_screensaver);
+			global.player_state_changed.disconnect(handle_screensaver);
 			ssm.uninhibit();
 		}
 	}
@@ -738,7 +738,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 
 	public void stop() {
-		global.track_state = TrackState.STOPPED;
+		global.player_state = PlayerState.STOPPED;
 		global.current_uri = null;
 	}
 
@@ -827,7 +827,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		global.position_reference = new TreeRowReference(trackList.tracklistmodel, path);
 
-		if(global.track_state == TrackState.PLAYING)
+		if(global.player_state == PlayerState.PLAYING)
 			trackList.set_focus_on_iter(ref iter);
 
 		if(path.to_string() == tmp_path.to_string()) {
@@ -1144,7 +1144,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	public void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
 		if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS) {
-			if(global.track_state == TrackState.STOPPED)
+			if(global.player_state == PlayerState.STOPPED)
 				return;
 			this.change_track(dir);
 		}

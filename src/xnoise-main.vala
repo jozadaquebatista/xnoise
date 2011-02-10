@@ -116,7 +116,7 @@ public class Xnoise.Main : GLib.Object {
 		// TODO: update this function
 		print("add_track_to_gst_player\n");
 		global.current_uri = uri;
-		global.track_state = TrackState.PLAYING;
+		global.player_state = PlayerState.PLAYING;
 		//this.gPl.playSong();
 	}
 
