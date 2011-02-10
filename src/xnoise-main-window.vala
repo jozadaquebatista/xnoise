@@ -1143,10 +1143,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 
 	public void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
-		if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS)
+		if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS) {
+			if(global.track_state == GlobalAccess.TrackState.STOPPED)
+				return;
 			this.change_track(dir);
-		else if(dir == ControlButton.Direction.STOP)
+		}
+		else if(dir == ControlButton.Direction.STOP) {
 			this.stop();
+		}
 	}
 	
 	private void on_hpaned_position_changed() {
