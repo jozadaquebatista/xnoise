@@ -1,8 +1,8 @@
 This work was packaged for Debian by:
 
-    Jörn Magens <shuerhaaken@googlemail.com> on Wed, 07 Jul 2010 15:32:52 +0200
+    Jörn Magens <shuerhaaken@googlemail.com> on Fri, 11 Feb 2011 17:48:15 +0100
 
-It was downloaded from http://code.google.com/p/xnoise/downloads/detail?name=xnoise-0.1.9.tar.bz2
+It was downloaded from http://code.google.com/p/xnoise/downloads/detail?name=xnoise-0.1.14.tar.bz2
 
 Upstream Author(s):
 
@@ -12,7 +12,7 @@ Upstream Author(s):
 
 Copyright:
 
-    Copyright (C) 2008-2010 Jörn Magens
+    Copyright (C) 2008-2011 Jörn Magens
 
 License:
 
@@ -20,7 +20,7 @@ License:
 
 The Debian packaging is:
 
-    Copyright (C) 2010 Jörn Magens <shuerhaaken@googlemail.com>
+    Copyright (C) 2011 Jörn Magens <shuerhaaken@googlemail.com>
 
     GPL version 2 or later see `/usr/share/common-licenses/GPL-2'.
     There is a license exception for the distribution with not GPL compatible Gstreamer plugins

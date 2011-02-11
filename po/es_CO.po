@@ -5,10 +5,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-07 09:34+0200\n"
-"PO-Revision-Date: 2010-10-16 18:51-0500\n"
+"POT-Creation-Date: 2011-02-11 17:13+0100\n"
+"PO-Revision-Date: 2011-02-11 17:32+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: fsistemas <f.sistemas@gmail.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -49,19 +50,20 @@ msgstr "Eliminar"
 msgid "xnoise - Add media to library"
 msgstr "xnoise - Agregar medios a la biblioceta multimedia"
 
-#: ../src/xnoise-add-media-dialog.vala:290 ../src/xnoise-main-window.vala:899
+#: ../src/xnoise-add-media-dialog.vala:251
+#: ../src/xnoise-main-window.vala:976
 msgid "Select media file"
 msgstr "Seleccione un archivo multimedia"
 
-#: ../src/xnoise-add-media-dialog.vala:314
+#: ../src/xnoise-add-media-dialog.vala:275
 msgid "Select media folder"
 msgstr "Seleccione una carpeta multimedia"
 
-#: ../src/xnoise-add-media-dialog.vala:384
+#: ../src/xnoise-add-media-dialog.vala:345
 msgid "Add internet radio link"
 msgstr "Agregar url a emisora de radio por internet"
 
-#: ../src/xnoise-fullscreen-toolbar.vala:164
+#: ../src/xnoise-fullscreen-toolbar.vala:193
 msgid "Leave fullscreen"
 msgstr "Salir de pantalla completa"
 
@@ -85,173 +87,202 @@ msgstr ""
 "El proveedor de Lyrics %s no puede encontrar lyrics para \n"
 "\"%s\" por \"%s\".\n"
 
-#: ../src/xnoise-main-window.vala:39
+#: ../src/xnoise-main-window.vala:41
 msgid "Video"
 msgstr "Video"
 
-#: ../src/xnoise-main-window.vala:40
+#: ../src/xnoise-main-window.vala:42
 msgid "Tracklist"
 msgstr "Lista de reproducción"
 
-#: ../src/xnoise-main-window.vala:41
+#: ../src/xnoise-main-window.vala:43
+#: ../src/xnoise-main-window.vala:117
+#: ../src/xnoise-main-window.vala:118
+#: ../src/xnoise-main-window.vala:119
 msgid "Show Media"
 msgstr "Mostrar medios"
 
-#: ../src/xnoise-main-window.vala:42
+#: ../src/xnoise-main-window.vala:44
+#: ../src/xnoise-main-window.vala:112
+#: ../src/xnoise-main-window.vala:113
+#: ../src/xnoise-main-window.vala:114
 msgid "Hide Media"
 msgstr "Ocultar medios"
 
-#: ../src/xnoise-main-window.vala:133
+#: ../src/xnoise-main-window.vala:140
 msgid "_File"
 msgstr "_Archivo"
 
-#: ../src/xnoise-main-window.vala:134
+#: ../src/xnoise-main-window.vala:141
 msgid "open file"
 msgstr "Abrir archivo"
 
-#: ../src/xnoise-main-window.vala:135
+#: ../src/xnoise-main-window.vala:142
+msgid "Open _Location"
+msgstr "Open _Location"
+
+#: ../src/xnoise-main-window.vala:142
+msgid "open remote location"
+msgstr "open remote location"
+
+#: ../src/xnoise-main-window.vala:143
 msgid "_Add or Remove media"
 msgstr "_Agregar o quitar medios de reproducción"
 
-#: ../src/xnoise-main-window.vala:135
+#: ../src/xnoise-main-window.vala:143
 msgid "manage the content of the xnoise media library"
-msgstr ""
-"gestionar el contenido de la biblioteca de medios de reproducción de xnoise"
+msgstr "gestionar el contenido de la biblioteca de medios de reproducción de xnoise"
 
-#: ../src/xnoise-main-window.vala:137
+#: ../src/xnoise-main-window.vala:145
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/xnoise-main-window.vala:139
+#: ../src/xnoise-main-window.vala:146
+msgid "C_lear tracklist"
+msgstr "C_lear tracklist"
+
+#: ../src/xnoise-main-window.vala:146
+msgid "Clear the tracklist"
+msgstr "Clear the tracklist"
+
+#: ../src/xnoise-main-window.vala:148
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/xnoise-main-window.vala:140
+#: ../src/xnoise-main-window.vala:149
 msgid "_Tracklist"
 msgstr "_Lista de reproducción"
 
-#: ../src/xnoise-main-window.vala:140
+#: ../src/xnoise-main-window.vala:149
 msgid "Go to the tracklist."
 msgstr "Ir a lista de reproducción."
 
-#: ../src/xnoise-main-window.vala:141
+#: ../src/xnoise-main-window.vala:150
 msgid "_Video screen"
 msgstr "_Video"
 
-#: ../src/xnoise-main-window.vala:141
+#: ../src/xnoise-main-window.vala:150
 msgid "Go to the video screen in the main window."
 msgstr "Ir a la pantalla de video en la ventana principal"
 
-#: ../src/xnoise-main-window.vala:142
+#: ../src/xnoise-main-window.vala:151
 msgid "_Lyrics"
 msgstr "_Lyrics"
 
-#: ../src/xnoise-main-window.vala:142
+#: ../src/xnoise-main-window.vala:151
 msgid "Go to the lyrics view."
 msgstr "Ir a el visor de lyrics"
 
-#: ../src/xnoise-main-window.vala:143
+#: ../src/xnoise-main-window.vala:152
 msgid "_Help"
 msgstr "_Ayuda"
 
-#: ../src/xnoise-main-window.vala:145
+#: ../src/xnoise-main-window.vala:154
 msgid "_Config"
 msgstr "_Configuración"
 
-#: ../src/xnoise-main-window.vala:334
+#: ../src/xnoise-main-window.vala:427
 msgid "Add media"
 msgstr "Agregar medios de reproducción"
 
-#: ../src/xnoise-main-window.vala:337
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Esta es la primer vez que inicia xnoise. Usted desea importar medios de "
-"reproducción en su biblioteca de medios de reproducción?"
+#: ../src/xnoise-main-window.vala:430
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Esta es la primer vez que inicia xnoise. Usted desea importar medios de reproducción en su biblioteca de medios de reproducción?"
 
 #. TODO: create some other images
-#: ../src/xnoise-main-window.vala:431
+#: ../src/xnoise-main-window.vala:524
 msgid "no repeat"
 msgstr "no repetir"
 
-#: ../src/xnoise-main-window.vala:436
+#: ../src/xnoise-main-window.vala:529
 msgid "repeat single"
 msgstr "repetir uno"
 
-#: ../src/xnoise-main-window.vala:441
+#: ../src/xnoise-main-window.vala:534
 msgid "repeat all"
 msgstr "repetir todos"
 
-#: ../src/xnoise-main-window.vala:446
+#: ../src/xnoise-main-window.vala:539
 msgid "random play"
 msgstr "Reproducción aleatoria"
 
-#: ../src/xnoise-main-window.vala:494
-msgid "Play/Pause"
-msgstr "Reproducir/Pausar"
+#: ../src/xnoise-main-window.vala:962
+msgid "Enter the URL of the file to open"
+msgstr "Enter the URL of the file to open"
 
-#: ../src/xnoise-main-window.vala:508
-msgid "Previous"
-msgstr "Anterior"
-
-#: ../src/xnoise-main-window.vala:523
-msgid "Next"
-msgstr "Siguiente"
-
-#: ../src/xnoise-main-window.vala:541
-msgid "Exit"
-msgstr "Salir"
-
-#: ../src/xnoise-main-window.vala:964 ../src/xnoise-main-window.vala:987
-#: ../src/xnoise-main-window.vala:1029 ../src/xnoise-main-window.vala:1054
+#: ../src/xnoise-main-window.vala:1041
+#: ../src/xnoise-main-window.vala:1064
+#: ../src/xnoise-main-window.vala:1106
+#: ../src/xnoise-main-window.vala:1131
+#: ../plugins/notifications/xnoise-notifications.vala:152
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:129
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:152
 msgid "by"
 msgstr "por"
 
-#: ../src/xnoise-main-window.vala:966 ../src/xnoise-main-window.vala:989
-#: ../src/xnoise-main-window.vala:1031 ../src/xnoise-main-window.vala:1056
+#: ../src/xnoise-main-window.vala:1043
+#: ../src/xnoise-main-window.vala:1066
+#: ../src/xnoise-main-window.vala:1108
+#: ../src/xnoise-main-window.vala:1133
+#: ../plugins/notifications/xnoise-notifications.vala:154
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
 msgid "on"
 msgstr "en"
 
-#: ../src/xnoise-main-window.vala:986 ../src/xnoise-main-window.vala:1053
+#: ../src/xnoise-main-window.vala:1063
+#: ../src/xnoise-main-window.vala:1130
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:151
 #, c-format
 msgid "unknown title"
 msgstr "Titulo desconocido"
 
-#: ../src/xnoise-main-window.vala:988 ../src/xnoise-main-window.vala:1055
+#: ../src/xnoise-main-window.vala:1065
+#: ../src/xnoise-main-window.vala:1132
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 msgid "unknown artist"
 msgstr "Artista desconocido"
 
-#: ../src/xnoise-main-window.vala:990 ../src/xnoise-main-window.vala:1057
+#: ../src/xnoise-main-window.vala:1067
+#: ../src/xnoise-main-window.vala:1134
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown album"
 msgstr "Album desconocido"
 
-#: ../src/xnoise-main-window.vala:1039
+#: ../src/xnoise-main-window.vala:1116
 msgid "unknown organization"
 msgstr "unknown organization"
 
-#: ../src/xnoise-main-window.vala:1041
+#: ../src/xnoise-main-window.vala:1118
 msgid "unknown location"
 msgstr "unknown location"
 
-#: ../src/xnoise-main-window.vala:1122
+#: ../src/xnoise-main-window.vala:1216
 msgid "Remove all"
 msgstr "Eliminar todo"
 
-#: ../src/xnoise-main-window.vala:1127
+#: ../src/xnoise-main-window.vala:1221
 msgid "Remove selected titles"
 msgstr "Eliminar titulos seleccionados"
 
-#: ../src/xnoise-settings-dialog.vala:543
+#: ../src/xnoise-settings-dialog.vala:624
 msgid "Visible extra columns for tracklist:"
 msgstr "Mostrar columnas adicionales en la lista de reproducción:"
 
-#: ../src/xnoise-tracklist.vala:196
+#: ../src/xnoise-tracklist.vala:200
 msgid "Remove selected"
 msgstr "Eliminar seleccionados"
 
+#~ msgid "Play/Pause"
+#~ msgstr "Reproducir/Pausar"
+#~ msgid "Previous"
+#~ msgstr "Anterior"
+#~ msgid "Next"
+#~ msgstr "Siguiente"
+#~ msgid "Exit"
+#~ msgstr "Salir"
 #~ msgid "Xnoise Media Player"
 #~ msgstr "Xnoise Media Player"
-
 #~ msgid "Collapse"
 #~ msgstr "Collapse"
+

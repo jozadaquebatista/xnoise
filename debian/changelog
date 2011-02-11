@@ -1,3 +1,50 @@
+xnoise (0.1.14-0ubuntu0) maverick; urgency=low
+  * renew mediakeys plugin (remove dbus-glib dependency)
+  * move plugins into xnoise package
+  * fix icon scaling with some themes
+  * use time shifting for track-progressbar scrolling
+  * remove some deprecated code
+  * bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 11 Feb 2011 17:48:15 +0100
+
+xnoise (0.1.13-0ubuntu0) maverick; urgency=low
+  * add xnoise-panel greyscale icon for use in soundmenu
+  * bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 21 Jan 2011 21:26:59 +0100
+
+xnoise (0.1.12-maverick-0ubuntu1) maverick; urgency=low
+  * introduce background worker to seperate import and database access
+from GUI thread
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 18 Oct 2010 22:58:35 +0200
+
+xnoise (0.1.11-1mav-0ubuntu1) maverick; urgency=low
+
+  * create a new playlist handling library (libplaylist)
+  * add fast forward within track on progressbar scroll
+  * change track on trayicon scroll
+  * add mediabrowser automatic linebreaks
+  * fix available size calculation in tracklist
+  * save tracklist column positions and relative width
+  * make some tracklist columns optional
+  * fix font issue in tracklist
+  * open locations dialog
+  * use tooltip on mouseover for trayicon showing metadata
+  * show plugin descriptions in plugin manager
+  * add hebrew and spanish translation
+  * hide mouse pointer when fullscreentoolbar is hidden
+  * redraw videoscreen as soon as albumcover has arrived
+  * reload album images that have been removed from hdd
+  * use spacebar key for play/pause in fullscreen mode
+  * improve logo visibility
+  * fix screensaver handling while track paused, fixes issue #47
+  * honor XDG_CONFIG_HOME environment variable
+  * more bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 29 Sep 2010 10:22:06 +0200
+
 xnoise (0.1.10-0ubuntu3) lucid; urgency=low
 
   * sync version with fixed xnoise-plugins-core
