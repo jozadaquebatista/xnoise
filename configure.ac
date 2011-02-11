@@ -139,23 +139,6 @@ dnl ================================================================
 
 
 
-
-dnl ================================================================
-dnl plugin check for plugins dependent on dbus-glib
-
-PKG_CHECK_MODULES(LIBDBUS_GLIB, \
-                  dbus-glib-1 >= $DBUS_GLIB_REQUIRED, \
-                  have_dbus_glib=yes, \
-                  have_dbus_glib=no)
-if test "x$have_dbus_glib" != "xyes"; then
-    AC_MSG_WARN([dbus-glib $DBUS_GLIB_REQUIRED or greater not found.])
-fi
-AC_SUBST(LIBDBUS_GLIB_CFLAGS)
-AC_SUBST(LIBDBUS_GLIB_LIBS)
-dnl ================================================================
-
-
-
 dnl ================================================================
 dnl plugin check for plugins dependent on libindicate
 
@@ -168,6 +151,38 @@ if test "x$have_libindicate" != "xyes"; then
 fi
 AC_SUBST(LIBINDICATE_CFLAGS)
 AC_SUBST(LIBINDICATE_LIBS)
+dnl ================================================================
+
+
+
+dnl ================================================================
+dnl plugin check for plugins dependent on xlib
+X11_REQUIRED=1.3
+PKG_CHECK_MODULES(X11, \
+                  x11 >= $X11_REQUIRED, \
+                  have_xlib=yes, \
+                  have_xlib=no)
+if test "x$have_xlib" != "xyes"; then
+    AC_MSG_WARN([xlib $X11_REQUIRED or greater not found.])
+fi
+AC_SUBST(X11_CFLAGS)
+AC_SUBST(X11_LIBS)
+dnl ================================================================
+
+
+
+dnl ================================================================
+dnl plugin check for plugins dependent on gdk-x11-2.0
+GDKX11_REQUIRED=2.0
+PKG_CHECK_MODULES(GDKX11, \
+                  gdk-x11-2.0 >= $GDKX11_REQUIRED, \
+                  have_gdkx11=yes, \
+                  have_gdkx11=no)
+if test "x$have_gdkx11" != "xyes"; then
+    AC_MSG_WARN([gdk-x11-2.0 $GDKX11_REQUIRED or greater not found.])
+fi
+AC_SUBST(GDKX11_CFLAGS)
+AC_SUBST(GDKX11_LIBS)
 dnl ================================================================
 
 
@@ -346,8 +361,13 @@ AC_ARG_ENABLE([mediakeys],
     [enable_mediakeys=yes])
 
 if test "x$enable_mediakeys" = "xyes"; then
-    if test "x$have_dbus_glib" = "xyes"; then
-        enable_mediakeys=yes
+    if test "x$have_gdkx11" = "xyes"; then
+        if test "x$have_xlib" = "xyes"; then
+            enable_mediakeys=yes
+        else
+            enable_mediakeys=no
+            AC_MSG_WARN([mediakeys plugin will not be included in the build.])
+        fi
     else
         enable_mediakeys=no
         AC_MSG_WARN([mediakeys plugin will not be included in the build.])

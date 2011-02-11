@@ -29,8 +29,8 @@
  */
 
 using Gtk;
-using DBus;
 using Xnoise;
+using X;
 
 public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 	private unowned Xnoise.Plugin _owner;
@@ -46,42 +46,73 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		}
 	}
 
-	public Connection conn;
-	public dynamic DBus.Object bus;
-	
 	public string name { 
 		get {
 			return "mediakeys";
 		} 
 	}
 
+	private const uint STOP_KEY = 0x1008FF15;
+	private const uint PREV_KEY = 0x1008FF16;
+	private const uint PLAY_KEY = 0x1008FF14;
+	private const uint NEXT_KEY = 0x1008FF17;
+	
+	private GlobalKey stopkey;
+	private GlobalKey prevkey;
+	private GlobalKey playkey;
+	private GlobalKey nextkey;
+	
 	public bool init() {
-		try {
-			conn = DBus.Bus.get(DBus.BusType.SESSION);
-			if(conn == null) return false;
-			
-			bus = conn.get_object("org.gnome.SettingsDaemon",
-			                      "/org/gnome/SettingsDaemon/MediaKeys",
-			                      "org.gnome.SettingsDaemon.MediaKeys");
-			if(bus == null)
-				return false;
-			
-			bus.MediaPlayerKeyPressed.connect(on_media_player_key_pressed);
-			
-			bus.GrabMediaPlayerKeys("xnoise", (uint32)0);
-		}
-		catch(GLib.Error e) {
-			stderr.printf("media keys: failed to setup dbus interface: %s\n", e.message);
-			return false;
-		}
+		stopkey = new GlobalKey((int)STOP_KEY, 0);
+		stopkey.register();
+		stopkey.pressed.connect(
+			() => {
+				this.xn.main_window.stop();
+			}
+		);
+		
+		prevkey = new GlobalKey((int)PREV_KEY, 0);
+		prevkey.register();
+		prevkey.pressed.connect(
+			() => {
+				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
+			}
+		);
+		
+		playkey = new GlobalKey((int)PLAY_KEY, 0);
+		playkey.register();
+		playkey.pressed.connect(
+			() => {
+				if(global.current_uri == null) {
+					string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
+					if((uri != "")&&(uri != null)) 
+						global.current_uri = uri;
+				}
+				if(global.player_state == PlayerState.PLAYING) {
+					global.player_state = PlayerState.PAUSED;
+				}
+				else {
+					global.player_state = PlayerState.PLAYING;
+				}
+			}
+		);
+		
+		nextkey = new GlobalKey((int)NEXT_KEY, 0);
+		nextkey.register();
+		nextkey.pressed.connect(
+			() => {
+				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
+			}
+		);
 		return true;
 	}
 	
 	~MediaKeys() {
-		print("release media keys\n");
-		bus.ReleaseMediaPlayerKeys("xnoise");
+		stopkey.unregister();
+		prevkey.unregister();
+		playkey.unregister();
+		nextkey.unregister();
 	}
-
 
 	public Gtk.Widget? get_settings_widget() {
 		return null;
@@ -98,47 +129,95 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 	public bool has_singleline_settings_widget() {
 		return false;
 	}
-	
-	
-	private void on_media_player_key_pressed(dynamic DBus.Object bus, 
-	                                         string application,
-	                                         string key) {
-		//print("key pressed (%s %s)\n", application, key);
-		if(application != "xnoise")
-			return;
-		
-		//TODO: Create some convenience methods in GlobalAccessrmation class to control xnoise
-		switch(key) {
-			case "Next": {
-				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
-				break;
-			}
-			case "Previous": {
-				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
-				break;
-			}
-			case "Play": {
-				if(global.current_uri == null) {
-					string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
-					if((uri != "")&&(uri != null)) 
-						global.current_uri = uri;
-				}
+}
 
-				if(global.player_state == PlayerState.PLAYING) {
-					global.player_state = PlayerState.PAUSED;
-				}
-				else {
-					global.player_state = PlayerState.PLAYING;
-				}
-				break;
-			}
-			case "Stop": {
-				this.xn.main_window.stop();
-				break;
-			}
-			default:
-				//print("not an used mediakey\n");
-				break;
+
+private class GlobalKey : GLib.Object {
+	private bool _registered = false;
+	private const int GRAB_ASYNC  = 1;
+	private const int KEY_PRESSED = 2;
+	private int keysym;
+	private int keycode;
+	private Gdk.ModifierType modifiers;
+	
+	private unowned Gdk.Window root_window;
+	private unowned X.Display xdisplay;
+	
+	public signal void pressed();
+
+	public bool registered { 
+		get {
+			return _registered;
 		}
+	}
+	
+	public GlobalKey(int _keysym = 0, Gdk.ModifierType _modifiers = 0) {
+
+		this.keysym = _keysym;
+		this.modifiers = _modifiers;
+		
+		this.root_window = Gdk.get_default_root_window();
+		this.xdisplay    = get_x_display_for_window(root_window);
+		
+		this.keycode = xdisplay.keysym_to_keycode(this.keysym);
+	}
+
+	~GlobalKey() {
+		if(_registered == true)
+			this.unregister();
+	}
+	
+	[CCode (instance_pos=-1)]
+	private Gdk.FilterReturn filterfunc(Gdk.XEvent e1, Gdk.Event e2) {
+		void* p = &e1;
+		X.Event* e0 = p;
+		if(e0 == null) {
+			print("event error mediakeys\n");
+			return Gdk.FilterReturn.CONTINUE;
+		}
+		if(e0.xkey.type == KEY_PRESSED && this.keycode == e0.xkey.keycode) {
+			this.pressed();
+			return Gdk.FilterReturn.REMOVE;
+		}
+		return Gdk.FilterReturn.CONTINUE;
+	}
+	
+	
+	public void register() {
+		
+		this.root_window.add_filter(filterfunc);
+		
+		if(xdisplay == null && this.keycode != 0)
+			return;
+		xdisplay.grab_key(this.keycode,
+		                  (uint)this.modifiers,
+		                  get_x_id_for_window(root_window),
+		                  false,
+		                  GRAB_ASYNC,
+		                  GRAB_ASYNC
+		                  );
+		//print("grabbed key %d\n", this.keycode);
+		_registered = true;
+	}
+
+	public void unregister() {
+		this.root_window.remove_filter(filterfunc);
+		
+		if(xdisplay == null)
+			return;
+		xdisplay.ungrab_key(this.keycode,
+		                    (uint)this.modifiers,
+		                    get_x_id_for_window(root_window)
+		                    );
+		//print("ungrabbed key %d\n", this.keycode);
+		_registered = false;
+	}
+
+	private static X.ID get_x_id_for_window(Gdk.Window window) {
+		return Gdk.x11_drawable_get_xid(window);
+	}
+
+	private static unowned X.Display get_x_display_for_window(Gdk.Window window) {
+		return Gdk.x11_drawable_get_xdisplay(Gdk.x11_window_get_drawable_impl(window));
 	}
 }
