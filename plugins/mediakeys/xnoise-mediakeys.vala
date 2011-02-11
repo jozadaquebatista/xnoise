@@ -145,9 +145,9 @@ private class GlobalKey : GLib.Object {
 			return _registered;
 		}
 	}
-	
-	public GlobalKey(int _keysym = 0, Gdk.ModifierType _modifiers = 0) {
 
+	public GlobalKey(int _keysym = 0, Gdk.ModifierType _modifiers = 0) {
+		
 		this.keysym = _keysym;
 		this.modifiers = _modifiers;
 		
@@ -164,7 +164,7 @@ private class GlobalKey : GLib.Object {
 	
 	[CCode (instance_pos=-1)]
 	private Gdk.FilterReturn filterfunc(Gdk.XEvent e1, Gdk.Event e2) {
-		void* p = &e1;
+		void* p = &e1; // use this intermediate pointer, so that vala does not dereference the pointer-to-struct, while casting
 		X.Event* e0 = p;
 		if(e0 == null) {
 			print("event error mediakeys\n");
@@ -180,10 +180,11 @@ private class GlobalKey : GLib.Object {
 	
 	public void register() {
 		
-		this.root_window.add_filter(filterfunc);
-		
-		if(xdisplay == null || this.keycode == 0)
+		if(this.xdisplay == null || this.keycode == 0)
 			return;
+		
+		this.root_window.add_filter(filterfunc);
+
 		xdisplay.grab_key(this.keycode,
 		                  (uint)this.modifiers,
 		                  get_x_id_for_window(root_window),
@@ -196,6 +197,10 @@ private class GlobalKey : GLib.Object {
 	}
 
 	public void unregister() {
+		
+		if(this.xdisplay == null || this.keycode == 0)
+			return;
+		
 		this.root_window.remove_filter(filterfunc);
 		
 		if(xdisplay == null)
