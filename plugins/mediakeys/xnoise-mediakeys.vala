@@ -52,18 +52,13 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		} 
 	}
 
-	private const uint STOP_KEY = 0x1008FF15;
-	private const uint PREV_KEY = 0x1008FF16;
-	private const uint PLAY_KEY = 0x1008FF14;
-	private const uint NEXT_KEY = 0x1008FF17;
-	
 	private GlobalKey stopkey;
 	private GlobalKey prevkey;
 	private GlobalKey playkey;
 	private GlobalKey nextkey;
 	
 	public bool init() {
-		stopkey = new GlobalKey((int)STOP_KEY, 0);
+		stopkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioStop"), 0);
 		stopkey.register();
 		stopkey.pressed.connect(
 			() => {
@@ -71,7 +66,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			}
 		);
 		
-		prevkey = new GlobalKey((int)PREV_KEY, 0);
+		prevkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioPrev"), 0);
 		prevkey.register();
 		prevkey.pressed.connect(
 			() => {
@@ -79,7 +74,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			}
 		);
 		
-		playkey = new GlobalKey((int)PLAY_KEY, 0);
+		playkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioPlay"), 0);
 		playkey.register();
 		playkey.pressed.connect(
 			() => {
@@ -97,7 +92,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			}
 		);
 		
-		nextkey = new GlobalKey((int)NEXT_KEY, 0);
+		nextkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioNext"), 0);
 		nextkey.register();
 		nextkey.pressed.connect(
 			() => {
@@ -187,7 +182,7 @@ private class GlobalKey : GLib.Object {
 		
 		this.root_window.add_filter(filterfunc);
 		
-		if(xdisplay == null && this.keycode != 0)
+		if(xdisplay == null || this.keycode == 0)
 			return;
 		xdisplay.grab_key(this.keycode,
 		                  (uint)this.modifiers,
