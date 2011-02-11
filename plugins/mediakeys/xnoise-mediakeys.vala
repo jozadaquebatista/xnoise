@@ -56,9 +56,10 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 	private GlobalKey prevkey;
 	private GlobalKey playkey;
 	private GlobalKey nextkey;
+	private const uint AnyModifier = 1<<15; // from X.h
 	
 	public bool init() {
-		stopkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioStop"), 0);
+		stopkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioStop"), AnyModifier);
 		stopkey.register();
 		stopkey.pressed.connect(
 			() => {
@@ -66,15 +67,17 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			}
 		);
 		
-		prevkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioPrev"), 0);
+		prevkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioPrev"), AnyModifier);
 		prevkey.register();
 		prevkey.pressed.connect(
 			() => {
+				if(global.player_state == PlayerState.STOPPED)
+					return;
 				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
 			}
 		);
 		
-		playkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioPlay"), 0);
+		playkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioPlay"), AnyModifier);
 		playkey.register();
 		playkey.pressed.connect(
 			() => {
@@ -92,10 +95,12 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			}
 		);
 		
-		nextkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioNext"), 0);
+		nextkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioNext"), AnyModifier);
 		nextkey.register();
 		nextkey.pressed.connect(
 			() => {
+				if(global.player_state == PlayerState.STOPPED)
+					return;
 				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
 			}
 		);
@@ -133,7 +138,7 @@ private class GlobalKey : GLib.Object {
 	private const int KEY_PRESSED = 2;
 	private int keysym;
 	private int keycode;
-	private Gdk.ModifierType modifiers;
+	private uint modifiers;
 	
 	private unowned Gdk.Window root_window;
 	private unowned X.Display xdisplay;
@@ -146,7 +151,7 @@ private class GlobalKey : GLib.Object {
 		}
 	}
 
-	public GlobalKey(int _keysym = 0, Gdk.ModifierType _modifiers = 0) {
+	public GlobalKey(int _keysym = 0, uint _modifiers = 0) {
 		
 		this.keysym = _keysym;
 		this.modifiers = _modifiers;
@@ -186,7 +191,7 @@ private class GlobalKey : GLib.Object {
 		this.root_window.add_filter(filterfunc);
 
 		xdisplay.grab_key(this.keycode,
-		                  (uint)this.modifiers,
+		                  this.modifiers,
 		                  get_x_id_for_window(root_window),
 		                  false,
 		                  GRAB_ASYNC,
@@ -206,7 +211,7 @@ private class GlobalKey : GLib.Object {
 		if(xdisplay == null)
 			return;
 		xdisplay.ungrab_key(this.keycode,
-		                    (uint)this.modifiers,
+		                    this.modifiers,
 		                    get_x_id_for_window(root_window)
 		                    );
 		//print("ungrabbed key %d\n", this.keycode);
