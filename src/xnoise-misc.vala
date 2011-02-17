@@ -359,6 +359,13 @@ public interface Xnoise.IParams : GLib.Object {
 }
 
 
+// this is used by mediakeys plugin. Only works if the interface  is in xnoise itself 
+[DBus (name = "org.gnome.SettingsDaemon.MediaKeys")]
+public interface Xnoise.GnomeMediaKeys : GLib.Object {
+	public abstract void GrabMediaPlayerKeys(string application, uint32 time) throws IOError;
+	public abstract void ReleaseMediaPlayerKeys(string application) throws IOError;
+	public signal void MediaPlayerKeyPressed(string application, string key);
+}
 
 /**
  * ILyrics implementors should be asynchronously look for lyrics

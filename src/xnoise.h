@@ -407,6 +407,16 @@ typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
 typedef struct _XnoiseRemoteSchemesPrivate XnoiseRemoteSchemesPrivate;
 typedef struct _XnoiseLocalSchemesPrivate XnoiseLocalSchemesPrivate;
 
+#define XNOISE_TYPE_GNOME_MEDIA_KEYS (xnoise_gnome_media_keys_get_type ())
+#define XNOISE_GNOME_MEDIA_KEYS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GNOME_MEDIA_KEYS, XnoiseGnomeMediaKeys))
+#define XNOISE_IS_GNOME_MEDIA_KEYS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_GNOME_MEDIA_KEYS))
+#define XNOISE_GNOME_MEDIA_KEYS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_GNOME_MEDIA_KEYS, XnoiseGnomeMediaKeysIface))
+
+typedef struct _XnoiseGnomeMediaKeys XnoiseGnomeMediaKeys;
+typedef struct _XnoiseGnomeMediaKeysIface XnoiseGnomeMediaKeysIface;
+
+#define XNOISE_TYPE_GNOME_MEDIA_KEYS_PROXY (xnoise_gnome_media_keys_proxy_get_type ())
+
 #define XNOISE_TYPE_ILYRICS (xnoise_ilyrics_get_type ())
 #define XNOISE_ILYRICS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ILYRICS, XnoiseILyrics))
 #define XNOISE_IS_ILYRICS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ILYRICS))
@@ -915,6 +925,12 @@ struct _XnoiseLocalSchemes {
 struct _XnoiseLocalSchemesClass {
 	GTypeClass parent_class;
 	void (*finalize) (XnoiseLocalSchemes *self);
+};
+
+struct _XnoiseGnomeMediaKeysIface {
+	GTypeInterface parent_iface;
+	void (*GrabMediaPlayerKeys) (XnoiseGnomeMediaKeys* self, const gchar* application, guint32 time, GError** error);
+	void (*ReleaseMediaPlayerKeys) (XnoiseGnomeMediaKeys* self, const gchar* application, GError** error);
 };
 
 struct _XnoiseILyricsIface {
@@ -1514,6 +1530,11 @@ XnoiseLocalSchemes* xnoise_local_schemes_construct (GType object_type);
 gchar** xnoise_local_schemes_get_list (XnoiseLocalSchemes* self, int* result_length1);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
+GType xnoise_gnome_media_keys_proxy_get_type (void) G_GNUC_CONST;
+guint xnoise_gnome_media_keys_register_object (void* object, GDBusConnection* connection, const gchar* path, GError** error);
+GType xnoise_gnome_media_keys_get_type (void) G_GNUC_CONST;
+void xnoise_gnome_media_keys_GrabMediaPlayerKeys (XnoiseGnomeMediaKeys* self, const gchar* application, guint32 time, GError** error);
+void xnoise_gnome_media_keys_ReleaseMediaPlayerKeys (XnoiseGnomeMediaKeys* self, const gchar* application, GError** error);
 GType xnoise_ilyrics_get_type (void) G_GNUC_CONST;
 void xnoise_ilyrics_find_lyrics (XnoiseILyrics* self);
 gchar* xnoise_ilyrics_get_identifier (XnoiseILyrics* self);

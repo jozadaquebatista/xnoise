@@ -28,9 +28,12 @@
  * Jörn Magens
  */
 
-using Gtk;
+//using Gtk;
 using Xnoise;
 using X;
+
+
+
 
 public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 	private unowned Xnoise.Plugin _owner;
@@ -52,66 +55,162 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		} 
 	}
 
-	private GlobalKey stopkey;
-	private GlobalKey prevkey;
-	private GlobalKey playkey;
-	private GlobalKey nextkey;
+	private GlobalKey stopkey = null;
+	private GlobalKey prevkey = null;
+	private GlobalKey playkey = null;
+	private GlobalKey nextkey = null;
+	
 	private const uint AnyModifier = 1<<15; // from X.h
 	
+	private GnomeMediaKeys gmk = null;
+
+	void on_name_appeared(DBusConnection conn, string name) {
+		stdout.printf("%s appeared\n", name);
+		if(stopkey != null)
+			stopkey.unregister();
+		if(prevkey != null)
+			prevkey.unregister();
+		if(playkey != null)
+			playkey.unregister();
+		if(nextkey != null)
+			nextkey.unregister();
+		
+		try {
+			gmk = Bus.get_proxy_sync(BusType.SESSION, "org.gnome.SettingsDaemon", "/org/gnome/SettingsDaemon/MediaKeys");
+			gmk.GrabMediaPlayerKeys("xnoise", (uint32)0);
+			gmk.MediaPlayerKeyPressed.connect(on_media_player_key_pressed);
+		}
+		catch(GLib.IOError e) {
+			print("Mediakeys error: %s", e.message);
+			gmk = null;
+			if(!setup_x_keys())
+				if(this.owner != null)
+					Idle.add( () => {
+						owner.deactivate();
+						return false;
+					}); 
+		}
+	}
+
+	void on_name_vanished(DBusConnection conn, string name) {
+		stdout.printf("%s vanished\n", name);
+		print("gmk not found\n");
+		if(!setup_x_keys())
+			if(this.owner != null)
+				Idle.add( () => {
+					owner.deactivate();
+					return false;
+				});
+			return;
+		
+	}
+
+	private uint watch;
+	
+	private void get_keys_dbus() {
+		watch = Bus.watch_name(BusType.SESSION,
+		                      "org.gnome.SettingsDaemon",
+		                      BusNameWatcherFlags.NONE,
+		                      on_name_appeared,
+		                      on_name_vanished);
+	}
+
+	private bool setup_x_keys() {
+		if(gmk != null) {
+			gmk.MediaPlayerKeyPressed.connect(on_media_player_key_pressed);
+			try {
+				gmk.GrabMediaPlayerKeys("xnoise", (uint32)0);
+			}
+			catch(Error error) {
+				print("%s", error.message);
+			}
+		}
+		else {
+			stopkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioStop"), AnyModifier);
+			if(stopkey.register()) {
+				stopkey.pressed.connect(
+					() => {
+						this.xn.main_window.stop();
+					}
+				);
+			}
+			else {
+				return false;
+			}
+		
+			prevkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioPrev"), AnyModifier);
+			if(prevkey.register()) {
+				prevkey.pressed.connect(
+					() => {
+						if(global.player_state == PlayerState.STOPPED)
+							return;
+						this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
+					}
+				);
+			}
+			else {
+				return false;
+			}
+		
+			playkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioPlay"), AnyModifier);
+			if(playkey.register()) {
+				playkey.pressed.connect(
+					() => {
+						if(global.current_uri == null) {
+							string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
+							if((uri != "")&&(uri != null)) 
+								global.current_uri = uri;
+						}
+						if(global.player_state == PlayerState.PLAYING) {
+							global.player_state = PlayerState.PAUSED;
+						}
+						else {
+							global.player_state = PlayerState.PLAYING;
+						}
+					}
+				);
+			}
+			else {
+				return false;
+			}
+			
+			nextkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioNext"), AnyModifier);
+			if(nextkey.register()) {
+				nextkey.pressed.connect(
+					() => {
+						if(global.player_state == PlayerState.STOPPED)
+							return;
+						this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
+					}
+				);
+			}
+			else {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public bool init() {
-		stopkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioStop"), AnyModifier);
-		stopkey.register();
-		stopkey.pressed.connect(
-			() => {
-				this.xn.main_window.stop();
-			}
-		);
-		
-		prevkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioPrev"), AnyModifier);
-		prevkey.register();
-		prevkey.pressed.connect(
-			() => {
-				if(global.player_state == PlayerState.STOPPED)
-					return;
-				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
-			}
-		);
-		
-		playkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioPlay"), AnyModifier);
-		playkey.register();
-		playkey.pressed.connect(
-			() => {
-				if(global.current_uri == null) {
-					string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
-					if((uri != "")&&(uri != null)) 
-						global.current_uri = uri;
-				}
-				if(global.player_state == PlayerState.PLAYING) {
-					global.player_state = PlayerState.PAUSED;
-				}
-				else {
-					global.player_state = PlayerState.PLAYING;
-				}
-			}
-		);
-		
-		nextkey = new GlobalKey((int)Gdk.keyval_from_name("XF86AudioNext"), AnyModifier);
-		nextkey.register();
-		nextkey.pressed.connect(
-			() => {
-				if(global.player_state == PlayerState.STOPPED)
-					return;
-				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
-			}
-		);
+		// Try to use gnome settings deamon via dbus interface, first
+		Idle.add( () => {
+			get_keys_dbus();
+			return false;
+		});
 		return true;
 	}
 	
 	~MediaKeys() {
-		stopkey.unregister();
-		prevkey.unregister();
-		playkey.unregister();
-		nextkey.unregister();
+		if(stopkey != null)
+			stopkey.unregister();
+		if(prevkey != null)
+			prevkey.unregister();
+		if(playkey != null)
+			playkey.unregister();
+		if(nextkey != null)
+			nextkey.unregister();
+		if(gmk != null) 
+			gmk.ReleaseMediaPlayerKeys("xnoise");
 	}
 
 	public Gtk.Widget? get_settings_widget() {
@@ -129,8 +228,49 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 	public bool has_singleline_settings_widget() {
 		return false;
 	}
-}
+	
+	private void on_media_player_key_pressed(///GnomeMediaKeys sender, 
+	                                         string application,
+	                                         string key) {
+		//print("key pressed (%s %s)\n", application, key);
+		if(application != "xnoise")
+			return;
+		
+		//TODO: Create some convenience methods in GlobalAccessrmation class to control xnoise
+		switch(key) {
+			case "Next": {
+				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
+				break;
+			}
+			case "Previous": {
+				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
+				break;
+			}
+			case "Play": {
+				if(global.current_uri == null) {
+					string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
+					if((uri != "")&&(uri != null)) 
+						global.current_uri = uri;
+				}
 
+				if(global.player_state == PlayerState.PLAYING) {
+					global.player_state = PlayerState.PAUSED;
+				}
+				else {
+					global.player_state = PlayerState.PLAYING;
+				}
+				break;
+			}
+			case "Stop": {
+				this.xn.main_window.stop();
+				break;
+			}
+			default:
+				//print("not an used mediakey\n");
+				break;
+		}
+	}
+}
 
 private class GlobalKey : GLib.Object {
 	private bool _registered = false;
@@ -183,13 +323,15 @@ private class GlobalKey : GLib.Object {
 	}
 	
 	
-	public void register() {
+	public bool register() {
 		
 		if(this.xdisplay == null || this.keycode == 0)
-			return;
+			return false;
 		
 		this.root_window.add_filter(filterfunc);
-
+		
+		Gdk.error_trap_push();
+		
 		xdisplay.grab_key(this.keycode,
 		                  this.modifiers,
 		                  get_x_id_for_window(root_window),
@@ -197,24 +339,36 @@ private class GlobalKey : GLib.Object {
 		                  GRAB_ASYNC,
 		                  GRAB_ASYNC
 		                  );
+		
+		Gdk.flush();
+		if(Gdk.error_trap_pop() != 0) {
+			_registered = false;
+			print("failed to grab key %d\n", this.keycode);
+			return false;
+		}
 		//print("grabbed key %d\n", this.keycode);
 		_registered = true;
+		return true;
 	}
 
 	public void unregister() {
 		
 		if(this.xdisplay == null || this.keycode == 0)
 			return;
-		
+			
+		if(!_registered)
+			return;
+			
 		this.root_window.remove_filter(filterfunc);
 		
 		if(xdisplay == null)
 			return;
+		
 		xdisplay.ungrab_key(this.keycode,
 		                    this.modifiers,
 		                    get_x_id_for_window(root_window)
 		                    );
-		//print("ungrabbed key %d\n", this.keycode);
+		
 		_registered = false;
 	}
 

@@ -588,6 +588,13 @@ namespace Xnoise {
 		public void push_job (Xnoise.Worker.Job j);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	[DBus (name = "org.gnome.SettingsDaemon.MediaKeys")]
+	public interface GnomeMediaKeys : GLib.Object {
+		public abstract void GrabMediaPlayerKeys (string application, uint32 time) throws GLib.IOError;
+		public abstract void ReleaseMediaPlayerKeys (string application) throws GLib.IOError;
+		public signal void MediaPlayerKeyPressed (string application, string key);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public interface IAlbumCoverImage : GLib.Object {
 		public abstract void find_image ();
 		public signal void sign_image_fetched (string artist, string album, string image_path);
