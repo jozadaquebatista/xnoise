@@ -32,8 +32,8 @@
 // XNOISES' GENERAL NAMESPACE FUNCTIONS
 
 namespace Xnoise {
-	public static Timer t1;
-	public static Timer t2;
+	//public static Timer t1;
+	//public static Timer t2;
 	public static Params par = null;
 	public static GlobalAccess global = null;
 	public static UserInfo userinfo = null;
@@ -63,8 +63,8 @@ namespace Xnoise {
 
 		if(par == null)
 			par = new Params();
-		t1 = new Timer();
-		t2 = new Timer();
+		//t1 = new Timer();
+		//t2 = new Timer();
 	}
 
 	public static string escape_for_local_folder_search(string? value) {

@@ -30,13 +30,14 @@
 
 using Sqlite;
 
-public class Xnoise.DbCreator : GLib.Object {
-	private const string DATABASE_NAME = "db.sqlite";
-	private const string SETTINGS_FOLDER = ".xnoise";
-	private Sqlite.Database? db;
+private static class Xnoise.DbCreator {
+	private static const string DATABASE_NAME = "db.sqlite";
+	private static const string SETTINGS_FOLDER = ".xnoise";
 	public static const int DB_VERSION_MAJOR = 3;
 	public static const int DB_VERSION_MINOR = 1;
-	private static File xnoisedb;
+
+	private static Sqlite.Database? db;
+	private static File? xnoisedb;
 
 	//CREATE TABLE STATEMENTS
 	private static const string STMT_CREATE_LASTUSED =
@@ -67,19 +68,8 @@ public class Xnoise.DbCreator : GLib.Object {
 	private static const string STMT_FIND_TABLE =
 		"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
 
-	public DbCreator() throws Error {
-		this.db = null;
-		this.db = get_db();
-
-		if(this.db == null) 
-			throw new DbError.FAILED("Cannot create database.");
-
-		check_tables();
-	}
-
-	private static Database? get_db () {
+	private static void setup_db_handle() {
 		//TODO: Version check with drop table
-		Database database = null;
 		File xnoise_home = File.new_for_path(global.settings_folder);
 		xnoisedb = xnoise_home.get_child(DATABASE_NAME);
 		if(!xnoise_home.query_exists(null)) {
@@ -91,14 +81,12 @@ public class Xnoise.DbCreator : GLib.Object {
 			}
 		}
 		Database.open_v2(xnoisedb.get_path(),
-		                 out database,
+		                 out db,
 		                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE,
 		                 null) ;
-
-		return database;
 	}
 
-	private bool exec_stmnt_string(string statement) {
+	private static bool exec_stmnt_string(string statement) {
 		string errormsg;
 		if(db.exec(statement, null, out errormsg)!= Sqlite.OK) {
 			stderr.printf("exec_stmnt_string error: %s", errormsg);
@@ -107,58 +95,64 @@ public class Xnoise.DbCreator : GLib.Object {
 		return true;
 	}
 
-	private void check_tables() {
-		if(xnoisedb.query_exists(null) && db!=null) {
+	private static void reset() {
+		db = null;
+		xnoisedb = null;
+	}
+	
+	public static void check_tables() {
+		if(db == null)
+			setup_db_handle();
+		
+		if(db == null) {
+			print("Cannot create database.\n");
+			reset();
+			return;
+		}
+		
+		if(xnoisedb.query_exists(null)) {
 			bool db_table_exists = false;
-//			int nrow,ncolumn;
-//			string[] resultArray;
-//			string errmsg;
-
-			//Check for Table existance
-			if(exec_stmnt_string(STMT_FIND_TABLE)) {
-//				stderr.printf("SQL error: %s\n", errmsg);
-				return;
+			Statement stmt;
+			
+			db.prepare_v2(STMT_FIND_TABLE, -1, out stmt);
+			stmt.reset();
+			while(stmt.step() == Sqlite.ROW) {
+				if(stmt.column_text(0)=="version") {
+					db_table_exists = true;
+					break;
+				}
 			}
-
-			//search version table
-//			for(int offset = 1; offset < nrow + 1 && db_table_exists == false;offset++) {
-//				for(int j = offset*ncolumn; j<(offset+1)*ncolumn; j++) {
-//					if(resultArray[j]=="version") {
-//						db_table_exists = true; //assume that if version is existing all other tables also exist
-//						break;
-//					}
-//				}
-//			}
 			if(db_table_exists == true) {
-//				if(db.get_table(STMT_GET_VERSION, out resultArray, out nrow, out ncolumn, out errmsg) != Sqlite.OK) {
-//					stderr.printf("SQL error: %s\n", errmsg);
-//					return;
-//				}
-//				//newly create db if major version is devating
-//				string major = resultArray[1];
-//				if(major!=("%d".printf(DB_VERSION_MAJOR))) {
-//					print("Wrong major db version\n"); //TODO: Drop tables and create new
-//					db = null;
-//					try {
-//						xnoisedb.delete(null);
-//					}
-//					catch(Error e) {
-//						print("%s\n", e.message);
-//					}
-//				}
+				db.prepare_v2(STMT_GET_VERSION, -1, out stmt);
+				stmt.reset();
+				while(stmt.step() == Sqlite.ROW) {
+					if(stmt.column_int(0) != DB_VERSION_MAJOR) {
+						print("Wrong major db version\n");
+						//newly create db if major version is devating
+						try {
+							xnoisedb.delete(null);
+						}
+						catch(Error e) {
+							print("%s\n", e.message);
+						}						
+						check_tables();
+						reset();
+						return;
+					}
+				}
 			}
 			else {
 			//create Tables if not existant
-				if(!exec_stmnt_string(STMT_CREATE_LASTUSED)     ) return;
-				if(!exec_stmnt_string(STMT_CREATE_MEDIAFOLDERS) ) return;
-				if(!exec_stmnt_string(STMT_CREATE_MEDIAFILES)   ) return;
-				if(!exec_stmnt_string(STMT_CREATE_RADIO)        ) return;
-				if(!exec_stmnt_string(STMT_CREATE_ARTISTS)      ) return;
-				if(!exec_stmnt_string(STMT_CREATE_ALBUMS)       ) return;
-				if(!exec_stmnt_string(STMT_CREATE_URIS)         ) return;
-				if(!exec_stmnt_string(STMT_CREATE_ITEMS)        ) return;
-				if(!exec_stmnt_string(STMT_CREATE_GENRES)       ) return;
-				if(!exec_stmnt_string(STMT_CREATE_VERSION)      ) return;
+				if(!exec_stmnt_string(STMT_CREATE_LASTUSED)     ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_MEDIAFOLDERS) ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_MEDIAFILES)   ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_RADIO)        ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_ARTISTS)      ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_ALBUMS)       ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_URIS)         ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_ITEMS)        ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_GENRES)       ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_VERSION)      ) { reset(); return; }
 				//Set database version
 				exec_stmnt_string("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR));
 			}
@@ -166,6 +160,7 @@ public class Xnoise.DbCreator : GLib.Object {
 		else {
 			print("Could not create or open database.\n");
 		}
+		reset();
 	}
 }
 

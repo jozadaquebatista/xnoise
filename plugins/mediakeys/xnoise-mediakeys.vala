@@ -159,7 +159,7 @@ private class GlobalKey : GLib.Object {
 		this.root_window = Gdk.get_default_root_window();
 		this.xdisplay    = get_x_display_for_window(root_window);
 		
-		this.keycode = xdisplay.keysym_to_keycode(this.keysym);
+		this.keycode     = xdisplay.keysym_to_keycode(this.keysym);
 	}
 
 	~GlobalKey() {
