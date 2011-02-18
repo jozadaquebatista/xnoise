@@ -1,3 +1,10 @@
+xnoise (0.1.15-0ubuntu0) maverick; urgency=low
+  * fixes for mediakeys plugin
+  * fixes for initial db creation
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 18 Feb 2011 11:07:48 +0100
+
+
 xnoise (0.1.14-0ubuntu0) maverick; urgency=low
   * renew mediakeys plugin (remove dbus-glib dependency)
   * move plugins into xnoise package
