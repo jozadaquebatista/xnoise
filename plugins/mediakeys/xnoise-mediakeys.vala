@@ -130,7 +130,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			if(stopkey.register()) {
 				stopkey.pressed.connect(
 					() => {
-						this.xn.main_window.stop();
+						global.stop();
 					}
 				);
 			}
@@ -142,9 +142,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			if(prevkey.register()) {
 				prevkey.pressed.connect(
 					() => {
-						if(global.player_state == PlayerState.STOPPED)
-							return;
-						this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
+						global.prev();
 					}
 				);
 			}
@@ -156,17 +154,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			if(playkey.register()) {
 				playkey.pressed.connect(
 					() => {
-						if(global.current_uri == null) {
-							string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
-							if((uri != "")&&(uri != null)) 
-								global.current_uri = uri;
-						}
-						if(global.player_state == PlayerState.PLAYING) {
-							global.player_state = PlayerState.PAUSED;
-						}
-						else {
-							global.player_state = PlayerState.PLAYING;
-						}
+						global.play(true);
 					}
 				);
 			}
@@ -178,9 +166,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			if(nextkey.register()) {
 				nextkey.pressed.connect(
 					() => {
-						if(global.player_state == PlayerState.STOPPED)
-							return;
-						this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
+						global.next();
 					}
 				);
 			}
@@ -239,30 +225,19 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		//TODO: Create some convenience methods in GlobalAccessrmation class to control xnoise
 		switch(key) {
 			case "Next": {
-				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
+				global.next();
 				break;
 			}
 			case "Previous": {
-				this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
+				global.prev();
 				break;
 			}
 			case "Play": {
-				if(global.current_uri == null) {
-					string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
-					if((uri != "")&&(uri != null)) 
-						global.current_uri = uri;
-				}
-
-				if(global.player_state == PlayerState.PLAYING) {
-					global.player_state = PlayerState.PAUSED;
-				}
-				else {
-					global.player_state = PlayerState.PLAYING;
-				}
+				global.play(true);
 				break;
 			}
 			case "Stop": {
-				this.xn.main_window.stop();
+				global.stop();
 				break;
 			}
 			default:

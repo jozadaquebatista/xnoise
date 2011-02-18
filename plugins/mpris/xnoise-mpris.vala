@@ -557,37 +557,20 @@ public class MprisPlayer : GLib.Object {
 	
 	public void Next() {
 		//print("next\n");
-		this.xn.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
+		global.next();
 	}
 	
 	public void Previous() {
 		//print("prev\n");
-		this.xn.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
+		global.prev();
 	}
 	
 	public void Pause() {
-		if(global.current_uri == null) {
-			string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
-			if((uri != "")&&(uri != null)) 
-				global.current_uri = uri;
-		}
-		
-		global.player_state = PlayerState.PAUSED;
+		global.pause();
 	}
 	
 	public void PlayPause() {
-		if(global.current_uri == null) {
-			string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
-			if((uri != "")&&(uri != null)) 
-				global.current_uri = uri;
-		}
-		
-		if(global.player_state == PlayerState.PLAYING) {
-			global.player_state = PlayerState.PAUSED;
-		}
-		else {
-			global.player_state = PlayerState.PLAYING;
-		}
+		global.play(true);
 	}
 	
 	public void Stop() {
@@ -595,15 +578,7 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public void Play() {
-		if(global.current_uri == null) {
-			string uri = xn.tl.tracklistmodel.get_uri_for_current_position();
-			if((uri != "")&&(uri != null)) 
-				global.current_uri = uri;
-		}
-		
-		if(!(global.player_state == PlayerState.PLAYING)) {
-			global.player_state = PlayerState.PLAYING;
-		}
+		global.play(false);
 	}
 	
 	public void Seek(int64 Offset) {

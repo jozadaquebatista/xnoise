@@ -112,7 +112,12 @@ namespace Xnoise {
 		public void check_image_for_current_track ();
 		public void do_restart_of_current_track ();
 		public void handle_eos ();
+		public void next ();
+		public void pause ();
+		public void play (bool pause_if_playing);
+		public void prev ();
 		public void reset_position_reference ();
+		public void stop ();
 		public string current_album { get; set; }
 		public string current_artist { get; set; }
 		public string current_genre { get; set; }

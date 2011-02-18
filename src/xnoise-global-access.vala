@@ -287,4 +287,41 @@ public class Xnoise.GlobalAccess : GLib.Object {
 			current_organization = null;
 		}
 	}
+	
+	public void prev() {
+		if(player_state == PlayerState.STOPPED)
+			return;
+		Main.instance.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
+	}
+
+	public void play(bool pause_if_playing) {
+		if(current_uri == null) {
+			string uri = Main.instance.tl.tracklistmodel.get_uri_for_current_position();
+			if((uri != "") && (uri != null)) 
+				current_uri = uri;
+		}
+		if(player_state == PlayerState.PLAYING && pause_if_playing) 
+			player_state = PlayerState.PAUSED;
+		else 
+			player_state = PlayerState.PLAYING;
+	}
+
+	public void pause() {
+		if(current_uri == null) {
+			string uri = Main.instance.tl.tracklistmodel.get_uri_for_current_position();
+			if((uri != "") && (uri != null)) 
+				current_uri = uri;
+		}
+		player_state = PlayerState.PAUSED;
+	}
+
+	public void next() {
+		if(global.player_state == PlayerState.STOPPED)
+			return;
+		Main.instance.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
+	}
+
+	public void stop() {
+		Main.instance.main_window.stop();
+	}
 }
