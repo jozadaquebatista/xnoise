@@ -28,12 +28,8 @@
  * Jörn Magens
  */
 
-//using Gtk;
 using Xnoise;
 using X;
-
-
-
 
 public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 	private unowned Xnoise.Plugin _owner;
@@ -63,8 +59,8 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 	private const uint AnyModifier = 1<<15; // from X.h
 	
 	private GnomeMediaKeys gmk = null;
-
-	void on_name_appeared(DBusConnection conn, string name) {
+	
+	private void on_name_appeared(DBusConnection conn, string name) {
 		stdout.printf("%s appeared\n", name);
 		if(stopkey != null)
 			stopkey.unregister();
@@ -77,8 +73,6 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		
 		try {
 			gmk = Bus.get_proxy_sync(BusType.SESSION, "org.gnome.SettingsDaemon", "/org/gnome/SettingsDaemon/MediaKeys");
-			gmk.GrabMediaPlayerKeys("xnoise", (uint32)0);
-			gmk.MediaPlayerKeyPressed.connect(on_media_player_key_pressed);
 		}
 		catch(GLib.IOError e) {
 			print("Mediakeys error: %s", e.message);
@@ -89,10 +83,27 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 						owner.deactivate();
 						return false;
 					}); 
+			return;
+		}
+		
+		try {
+			gmk.GrabMediaPlayerKeys("xnoise", (uint32)0);
+			gmk.MediaPlayerKeyPressed.connect(on_media_player_key_pressed);
+		}
+		catch(Error e) {
+			print("Mediakeys error: %s", e.message);
+			gmk = null;
+			if(!setup_x_keys())
+				if(this.owner != null)
+					Idle.add( () => {
+						owner.deactivate();
+						return false;
+					}); 
+			return;
 		}
 	}
 
-	void on_name_vanished(DBusConnection conn, string name) {
+	private void on_name_vanished(DBusConnection conn, string name) {
 		stdout.printf("%s vanished\n", name);
 		print("gmk not found\n");
 		if(!setup_x_keys())
@@ -222,7 +233,6 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		if(application != "xnoise")
 			return;
 		
-		//TODO: Create some convenience methods in GlobalAccessrmation class to control xnoise
 		switch(key) {
 			case "Next": {
 				global.next();
