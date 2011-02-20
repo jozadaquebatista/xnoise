@@ -61,7 +61,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 	private GnomeMediaKeys gmk = null;
 	
 	private void on_name_appeared(DBusConnection conn, string name) {
-		stdout.printf("%s appeared\n", name);
+		//stdout.printf("%s appeared\n", name);
 		if(stopkey != null)
 			stopkey.unregister();
 		if(prevkey != null)
@@ -76,6 +76,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		}
 		catch(GLib.IOError e) {
 			print("Mediakeys error: %s", e.message);
+			print("Mediakeys: Try to use x keybindings instead of gnome-settings-daemon's dbus service'\n");
 			gmk = null;
 			if(!setup_x_keys())
 				if(this.owner != null)
@@ -91,7 +92,8 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			gmk.MediaPlayerKeyPressed.connect(on_media_player_key_pressed);
 		}
 		catch(Error e) {
-			print("Mediakeys error: %s", e.message);
+			//print("Mediakeys error: %s", e.message);
+			print("Mediakeys: Try to use x keybindings instead of gnome-settings-daemon's dbus service'\n");
 			gmk = null;
 			if(!setup_x_keys())
 				if(this.owner != null)
@@ -104,8 +106,8 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 	}
 
 	private void on_name_vanished(DBusConnection conn, string name) {
-		stdout.printf("%s vanished\n", name);
-		print("gmk not found\n");
+		//stdout.printf("%s vanished\n", name);
+		//print("gmk not found\n");
 		if(!setup_x_keys())
 			if(this.owner != null)
 				Idle.add( () => {
@@ -208,6 +210,10 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			nextkey.unregister();
 		if(gmk != null) 
 			gmk.ReleaseMediaPlayerKeys("xnoise");
+		if(watch != 0) {
+			Bus.unwatch_name(watch);
+			watch = 0;
+		}
 	}
 
 	public Gtk.Widget? get_settings_widget() {

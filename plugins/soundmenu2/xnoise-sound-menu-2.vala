@@ -1,6 +1,6 @@
 /* xnoise-sound-menu.vala
  *
- * Copyright (C) 2010 Jörn Magens
+ * Copyright (C) 2010-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,8 +31,7 @@
 using Xnoise;
 using Indicate;
 
-public class Xnoise.SoundMenu : GLib.Object, IPlugin {
-	private Indicate.Server server;
+public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 	private Xnoise.Plugin p;
 	private unowned Xnoise.Plugin _owner;
 	
@@ -40,7 +39,7 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 	
 	public string name { 
 		get {
-			return "soundmenu";
+			return "soundmenu2";
 		}
 	}
 	
@@ -79,21 +78,12 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 		}
 		p.sign_deactivated.connect(mpris_deactivated);
 		//print("init\n");
-		Timeout.add(2, () => {
-			server = Indicate.Server.ref_default();
-			server.set("type", "music.xnoise");
-			server.set_desktop_file(GLib.Path.build_filename(Config.DATADIR, "applications", "xnoise.desktop", null));
-			server.show();
-			return false;
-		});
 		addremove_xnoise_player_to_blacklist(false);
 		xn.tray_icon.visible = false;
 	}
 	
 	private void on_name_vanished(DBusConnection conn, string name) {
 		//stdout.printf("%s vanished\n", name);
-		if(server != null)
-			server.hide();
 		xn.tray_icon.visible = true;
 	}
 
@@ -142,11 +132,9 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 	}
 
 	
-	~SoundMenu() {
+	~SoundMenu2() {
 		print("try remove xnoise from soundmenu\n");
 		addremove_xnoise_player_to_blacklist(true);
-		if(server != null)
-			server.hide();
 		xn.tray_icon.visible = true;
 		if(watch != 0) {
 			Bus.unwatch_name(watch);

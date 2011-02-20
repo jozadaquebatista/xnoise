@@ -1,6 +1,6 @@
 SUBDIRS = testplugin titleToDecoration
 
-DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers notifications lyricsfly mediakeys mpris mediawatcher chartlyrics lyricwiki soundmenu
+DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers notifications lyricsfly mediakeys mpris mediawatcher chartlyrics lyricwiki soundmenu soundmenu2
 
 if ENABLE_CHARTLYRICS
   SUBDIRS += chartlyrics
@@ -40,7 +40,12 @@ endif
 
 if ENABLE_SOUNDMENU
   SUBDIRS += soundmenu
+else
+  if ENABLE_SOUNDMENU2
+    SUBDIRS += soundmenu2
+  endif
 endif
+
 
 DISTCLEANFILES = \
 	Makefile.in \

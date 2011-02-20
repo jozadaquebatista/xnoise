@@ -350,6 +350,30 @@ fi
 AM_CONDITIONAL(ENABLE_SOUNDMENU, test x"$enable_soundmenu" = "xyes")
 dnl ================================================================
 
+dnl ================================================================
+dnl dependency check for optional build of soundmenu2 plugin (ubuntu maverick+1)
+
+AC_ARG_ENABLE([soundmenu2],
+    AS_HELP_STRING([--disable-soundmenu2],
+    [Disable soundmenu2 plugin (default: enabled)]),
+    [enable_soundmenu2=$enableval],
+    [enable_soundmenu2=yes])
+
+if test "x$enable_soundmenu2" = "xyes"; then
+    if test "x$enable_soundmenu" = "xno"; then
+        if test "x$enable_mpris" = "xyes"; then
+            enable_soundmenu2=yes
+        else
+            enable_soundmenu2=no
+            AC_MSG_WARN([soundmenu2 plugin will not be included in the build.])
+        fi
+    else
+        enable_soundmenu2=no
+        AC_MSG_WARN([soundmenu2 plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_SOUNDMENU2, test x"$enable_soundmenu2" = "xyes")
+dnl ================================================================
 
 dnl ================================================================
 dnl dependency check for optional build of mediakeys plugin 
@@ -475,7 +499,8 @@ AC_CONFIG_FILES([
     plugins/mediakeys/Makefile
     plugins/chartlyrics/Makefile
     plugins/lyricwiki/Makefile
-    plugins/soundmenu/Makefile    
+    plugins/soundmenu/Makefile
+    plugins/soundmenu2/Makefile
     po/Makefile.in
     vapi/Makefile
     tests/Makefile
@@ -505,4 +530,5 @@ echo "
     mpris:                         ${enable_mpris}
     mediakeys:                     ${enable_mediakeys}
     soundmenu:                     ${enable_soundmenu}
+    soundmenu2:                    ${enable_soundmenu2}
 "
