@@ -41,9 +41,9 @@ endif
 if ENABLE_SOUNDMENU
   SUBDIRS += soundmenu
 else
-  if ENABLE_SOUNDMENU2
-    SUBDIRS += soundmenu2
-  endif
+if ENABLE_SOUNDMENU2
+  SUBDIRS += soundmenu2
+endif
 endif
 
 

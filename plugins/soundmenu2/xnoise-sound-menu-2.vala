@@ -1,4 +1,4 @@
-/* xnoise-sound-menu.vala
+/* xnoise-sound-menu-2.vala
  *
  * Copyright (C) 2010-2011  Jörn Magens
  *
@@ -29,10 +29,9 @@
  */
 
 using Xnoise;
-using Indicate;
 
 public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
-	private Xnoise.Plugin p;
+	private unowned Xnoise.Plugin p;
 	private unowned Xnoise.Plugin _owner;
 	
 	public Main xn { get; set; }
@@ -53,7 +52,13 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 	}
 
 	private void on_name_appeared(DBusConnection conn, string name) {
+		if(watch != 0) {
+			Bus.unwatch_name(watch);
+			watch = 0;
+		}
 		//stdout.printf("%s appeared\n", name);
+		if(name != "com.canonical.indicators.sound")
+			return;
 		//TODO check for mpris plugin being active
 		p = xn.plugin_loader.plugin_htable.lookup("mpris");
 		if(p == null) {
@@ -77,8 +82,6 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 			return;
 		}
 		p.sign_deactivated.connect(mpris_deactivated);
-		//print("init\n");
-		addremove_xnoise_player_to_blacklist(false);
 		xn.tray_icon.visible = false;
 	}
 	
@@ -90,11 +93,13 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 	private uint watch;
 
 	private void intitialize() {
+		//print("initialize sm2\n");
 		watch = Bus.watch_name(BusType.SESSION,
-		                      "org.ayatana.indicator.sound",
-		                      BusNameWatcherFlags.NONE,
-		                      on_name_appeared,
-		                      on_name_vanished);
+		                       "com.canonical.indicators.sound",
+		                       BusNameWatcherFlags.NONE,
+		                       on_name_appeared,
+		                       on_name_vanished);
+		addremove_xnoise_player_to_blacklist(false);
 	}
 	
 	public bool init() {
@@ -114,6 +119,7 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 	}
 
 	private void addremove_xnoise_player_to_blacklist(bool add_xnoise) {
+		//print("addremove %s\n", add_xnoise.to_string());
 		if(soundmenu_gsettings_available()) {
 			string[] sa;
 			string[] res = {};
@@ -127,13 +133,19 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 			if(add_xnoise)
 				res += "xnoise";
 			
+			//foreach(string s in res) {
+			//      print("zz: %s\n", s);
+			//}
+			
 			settings.set_strv("blacklisted-media-players", res);
+		}
+		else {
+			print("soundmenu gsetting unavailable\n");
 		}
 	}
 
-	
 	~SoundMenu2() {
-		print("try remove xnoise from soundmenu\n");
+		//print("try remove xnoise from soundmenu\n");
 		addremove_xnoise_player_to_blacklist(true);
 		xn.tray_icon.visible = true;
 		if(watch != 0) {
@@ -168,4 +180,3 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 			}); 
 	}
 }
-
