@@ -1,6 +1,6 @@
-SUBDIRS = testplugin titleToDecoration
+SUBDIRS = testplugin titleToDecoration cyclic-save-state
 
-DIST_SUBDIRS = testplugin titleToDecoration leoslyrics lastfmCovers notifications lyricsfly mediakeys mpris mediawatcher chartlyrics lyricwiki soundmenu soundmenu2
+DIST_SUBDIRS = testplugin titleToDecoration cyclic-save-state leoslyrics lastfmCovers notifications lyricsfly mediakeys mpris mediawatcher chartlyrics lyricwiki soundmenu soundmenu2
 
 if ENABLE_CHARTLYRICS
   SUBDIRS += chartlyrics

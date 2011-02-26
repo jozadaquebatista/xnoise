@@ -177,7 +177,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 			return _media_import_in_progress;
 		}
 		set {
-				_media_import_in_progress = value;
+			_media_import_in_progress = value;
 		}
 	}
 

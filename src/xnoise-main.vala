@@ -125,7 +125,7 @@ public class Xnoise.Main : GLib.Object {
 		instance.quit();
 	}
 
-	private void save_activated_plugins() {
+	public void save_activated_plugins() {
 		//print("\nsaving activated plugins...\n");
 		string[]? activatedplugins = {};
 		foreach(string name in this.plugin_loader.plugin_htable.get_keys()) {

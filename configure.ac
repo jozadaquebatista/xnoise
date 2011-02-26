@@ -490,6 +490,7 @@ AC_CONFIG_FILES([
     plugins/Makefile
     plugins/testplugin/Makefile
     plugins/titleToDecoration/Makefile
+    plugins/cyclic-save-state/Makefile
     plugins/lastfmCovers/Makefile
     plugins/leoslyrics/Makefile
     plugins/lyricsfly/Makefile
@@ -519,7 +520,8 @@ echo "
     VALAC                          ${VALAC}
 
   Plugins included in this build: 
-    titleToDecoration:             yes (always)
+    titleToDecoration:             yes (always build)
+    cyclic-save-state:             yes (always build)
     leoslyrics:                    ${enable_leoslyrics}
     lyricsfly:                     ${enable_lyricsfly}
     chartlyrics:                   ${enable_chartlyrics}

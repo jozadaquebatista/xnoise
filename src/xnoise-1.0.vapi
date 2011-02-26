@@ -214,6 +214,7 @@ namespace Xnoise {
 		public Main ();
 		public void add_track_to_gst_player (string uri);
 		public void quit ();
+		public void save_activated_plugins ();
 		public void save_tracklist ();
 		public void write_final_tracks_to_db_job (Xnoise.Worker.Job job);
 		public static Xnoise.Main instance { get; }
