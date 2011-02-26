@@ -95,9 +95,9 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	private void connect_signals() {
-		Posix.signal(Posix.SIGQUIT, on_posix_finish); // write data to db on posix quit signal
-		Posix.signal(Posix.SIGTERM, on_posix_finish); // write data to db on posix term signal
-		Posix.signal(Posix.SIGKILL, on_posix_finish); // write data to db on posix kill signal
+		Posix.signal(Posix.SIGQUIT, on_posix_finish); // clean up on posix sigquit signal
+		Posix.signal(Posix.SIGTERM, on_posix_finish); // clean up on posix sigterm signal
+		Posix.signal(Posix.SIGINT,  on_posix_finish); // clean up on posix sigint signal
 	}
 
 	private void check_database_and_tables() {
