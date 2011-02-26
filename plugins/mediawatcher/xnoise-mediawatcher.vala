@@ -69,19 +69,15 @@ public class Xnoise.MediawatcherPlugin : GLib.Object, IPlugin {
 		return true;
 	}
 
+	public void uninit() {
+		watcher = null;
+	}
+
 	public Gtk.Widget? get_settings_widget() {
 		return null;
 	}
 
-	public Gtk.Widget? get_singleline_settings_widget() {
-		return null;
-	}
-
 	public bool has_settings_widget() {
-		return false;
-	}
-	
-	public bool has_singleline_settings_widget() {
 		return false;
 	}
 }

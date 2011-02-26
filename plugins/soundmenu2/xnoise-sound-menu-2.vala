@@ -110,6 +110,16 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 		return true;
 	}
 	
+	public void uninit() {
+		//print("try remove xnoise from soundmenu\n");
+		addremove_xnoise_player_to_blacklist(true);
+		xn.tray_icon.visible = true;
+		if(watch != 0) {
+			Bus.unwatch_name(watch);
+			watch = 0;
+		}
+	}
+
 	private bool soundmenu_gsettings_available() {
 		foreach(unowned string s in Settings.list_schemas()) {
 			if(s == "com.canonical.indicators.sound") 
@@ -145,29 +155,13 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 	}
 
 	~SoundMenu2() {
-		//print("try remove xnoise from soundmenu\n");
-		addremove_xnoise_player_to_blacklist(true);
-		xn.tray_icon.visible = true;
-		if(watch != 0) {
-			Bus.unwatch_name(watch);
-			watch = 0;
-		}
 	}
 	
 	public Gtk.Widget? get_settings_widget() {
 		return null;
 	}
 	
-	public Gtk.Widget? get_singleline_settings_widget() {
-		//TODO: provide single line opption widget for the settings dialog
-		return null;
-	}
-	
 	public bool has_settings_widget() {
-		return false;
-	}
-	
-	public bool has_singleline_settings_widget() {
 		return false;
 	}
 	

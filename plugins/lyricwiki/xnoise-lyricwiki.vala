@@ -55,11 +55,10 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 		return true;
 	}
 
-	public Gtk.Widget? get_settings_widget() {
-		return null;
+	public void uninit() {
 	}
 
-	public Gtk.Widget? get_singleline_settings_widget() {
+	public Gtk.Widget? get_settings_widget() {
 		return null;
 	}
 
@@ -67,10 +66,6 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 		return false;
 	}
 	
-	public bool has_singleline_settings_widget() {
-		return false;
-	}
-
 	public Xnoise.ILyrics from_tags(string artist, string title) {
 		return new Lyricwiki(artist, title);
 	}

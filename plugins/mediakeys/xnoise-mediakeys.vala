@@ -199,7 +199,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		return true;
 	}
 	
-	~MediaKeys() {
+	public void uninit() {
 		if(stopkey != null)
 			stopkey.unregister();
 		if(prevkey != null)
@@ -216,11 +216,10 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		}
 	}
 
-	public Gtk.Widget? get_settings_widget() {
-		return null;
+	~MediaKeys() {
 	}
 
-	public Gtk.Widget? get_singleline_settings_widget() {
+	public Gtk.Widget? get_settings_widget() {
 		return null;
 	}
 
@@ -228,12 +227,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		return false;
 	}
 	
-	public bool has_singleline_settings_widget() {
-		return false;
-	}
-	
-	private void on_media_player_key_pressed(///GnomeMediaKeys sender, 
-	                                         string application,
+	private void on_media_player_key_pressed(string application,
 	                                         string key) {
 		//print("key pressed (%s %s)\n", application, key);
 		if(application != "xnoise")

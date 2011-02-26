@@ -64,11 +64,10 @@ public class Xnoise.LyricsLyricsflyPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.
 		return true;
 	}
 
-	public Gtk.Widget? get_settings_widget() {
-		return null;
+	public void uninit() {
 	}
 
-	public Gtk.Widget? get_singleline_settings_widget() {
+	public Gtk.Widget? get_settings_widget() {
 		return null;
 	}
 
@@ -76,10 +75,6 @@ public class Xnoise.LyricsLyricsflyPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.
 		return false;
 	}
 	
-	public bool has_singleline_settings_widget() {
-		return false;
-	}
-
 	public Xnoise.ILyrics from_tags(string artist, string title) {
 		return new LyricsLyricsfly(artist, title);
 	} 

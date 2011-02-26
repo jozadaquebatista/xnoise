@@ -628,10 +628,9 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IPlugin : GLib.Object {
 		public abstract Gtk.Widget? get_settings_widget ();
-		public abstract Gtk.Widget? get_singleline_settings_widget ();
 		public abstract bool has_settings_widget ();
-		public abstract bool has_singleline_settings_widget ();
 		public abstract bool init ();
+		public abstract void uninit ();
 		public abstract string name { get; }
 		public abstract Xnoise.Plugin owner { get; set; }
 		public abstract Xnoise.Main xn { get; set; }

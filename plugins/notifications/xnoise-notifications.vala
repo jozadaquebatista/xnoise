@@ -68,6 +68,10 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		return true;
 	}
 
+	public void uninit() {
+		cleanup();
+	}
+
 	private void on_song_info_required() {
 		if(global.current_uri == "" || global.current_uri == null) {
 			try {
@@ -210,22 +214,13 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 	}
 
 	~Notifications() {
-		cleanup();
 	}
 
 	public Gtk.Widget? get_settings_widget() {
 		return null;
 	}
 
-	public Gtk.Widget? get_singleline_settings_widget() {
-		return null;
-	}
-
 	public bool has_settings_widget() {
-		return false;
-	}
-	
-	public bool has_singleline_settings_widget() {
 		return false;
 	}
 }

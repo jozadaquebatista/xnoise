@@ -59,21 +59,16 @@ public class Xnoise.LastFmCoversPlugin : GLib.Object, IPlugin, IAlbumCoverImageP
 		return true;
 	}
 
+	public void uninit() {
+	}
+
 	public Gtk.Widget? get_settings_widget() {
 		// TODO: Here we maybe need a Widget to put the user/pswd,
 		// key or account date for lastfm
 		return null;
 	}
 
-	public Gtk.Widget? get_singleline_settings_widget() {
-		return null;
-	}
-
 	public bool has_settings_widget() {
-		return false;
-	}
-	
-	public bool has_singleline_settings_widget() {
 		return false;
 	}
 	

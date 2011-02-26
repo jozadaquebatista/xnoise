@@ -161,26 +161,20 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 			return;
 		xn.main_window.set_title(text);
 	}
-
+	
+	public void uninit() {
+		xn.main_window.set_title("xnoise media player");
+	}
 	
 	~TitleToDecoration() {
-		xn.main_window.set_title("xnoise media player");
 	}
 
 	public Gtk.Widget? get_settings_widget() {
 		return null;
 	}
 
-	public Gtk.Widget? get_singleline_settings_widget() {
-		return null;
-	}
-
 	public bool has_settings_widget() {
 		return true;
-	}
-
-	public bool has_singleline_settings_widget() {
-		return false;
 	}
 }
 

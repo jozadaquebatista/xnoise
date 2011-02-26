@@ -49,6 +49,8 @@ public class Xnoise.CyclicSaveState : GLib.Object, IPlugin {
 			return "CyclicSaveState";
 		} 
 	}
+	
+	private uint source = 0;
 
 	public bool init() {
 		source = Timeout.add_seconds(60, () => {
@@ -61,29 +63,23 @@ public class Xnoise.CyclicSaveState : GLib.Object, IPlugin {
 		});
 		return true;
 	}
-	
-	private uint source = 0;
 
-	~CyclicSaveState() {
-		print("remove CyclicSaveState source\n");
+	public void uninit() {
+		//print("remove CyclicSaveState source\n");
 		if(source != 0)
 			Source.remove(source);
+	}
+
+	~CyclicSaveState() {
+		//print("dtor of CyclicSaveState\n");
 	}
 
 	public Gtk.Widget? get_settings_widget() {
 		return null;
 	}
 
-	public Gtk.Widget? get_singleline_settings_widget() {
-		return null;
-	}
-
 	public bool has_settings_widget() {
 		return true;
-	}
-
-	public bool has_singleline_settings_widget() {
-		return false;
 	}
 }
 

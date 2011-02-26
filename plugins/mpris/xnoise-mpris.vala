@@ -98,6 +98,10 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 		return true;
 	}
 	
+	public void uninit() {
+		clean_up();
+	}
+
 	private void clean_up() {
 		if(owner_id == 0)
 			return;
@@ -110,22 +114,13 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	}
 	
 	~Mpris() {
-		clean_up();
 	}
 
 	public Gtk.Widget? get_settings_widget() {
 		return null;
 	}
 
-	public Gtk.Widget? get_singleline_settings_widget() {
-		return null;
-	}
-
 	public bool has_settings_widget() {
-		return false;
-	}
-	
-	public bool has_singleline_settings_widget() {
 		return false;
 	}
 }

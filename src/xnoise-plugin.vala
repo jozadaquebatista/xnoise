@@ -130,7 +130,6 @@ public class Xnoise.Plugin : TypeModule {
 		                           "owner", ow,      //set properties via this, because
 		                           null);            //parameters are not allowed
 		                                             //for this kind of Object construction
-//		((IPlugin)loaded_plugin).parent = this;
 		if(loaded_plugin == null) {
 			message("Failed to load plugin %s. Cannot get type.\n", _info.name);
 			_activated = false;
@@ -147,6 +146,7 @@ public class Xnoise.Plugin : TypeModule {
 
 	public void deactivate() {
 		//print("deactivate\n");
+		((IPlugin)loaded_plugin).uninit();
 		_activated = false;
 		loaded_plugin = null;
 		sign_deactivated();

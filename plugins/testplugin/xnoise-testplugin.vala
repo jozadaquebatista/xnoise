@@ -60,22 +60,17 @@ public class TestPlugin : GLib.Object, IPlugin {
 		return true;
 	}
 
+	public void uninit() {
+	}
+
 	public Gtk.Widget? get_settings_widget() {
 		b = new Gtk.Button.with_label("bingo");
 		b.clicked.connect(on_b_clicked);
 		return b;
 	}
 
-	public Gtk.Widget? get_singleline_settings_widget() {
-		return null;
-	}
-
 	public bool has_settings_widget() {
 		return true;
-	}
-
-	public bool has_singleline_settings_widget() {
-		return false;
 	}
 }
 

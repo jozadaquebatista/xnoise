@@ -1007,10 +1007,9 @@ struct _XnoisePluginInformationClass {
 struct _XnoiseIPluginIface {
 	GTypeInterface parent_iface;
 	gboolean (*init) (XnoiseIPlugin* self);
+	void (*uninit) (XnoiseIPlugin* self);
 	gboolean (*has_settings_widget) (XnoiseIPlugin* self);
-	gboolean (*has_singleline_settings_widget) (XnoiseIPlugin* self);
 	GtkWidget* (*get_settings_widget) (XnoiseIPlugin* self);
-	GtkWidget* (*get_singleline_settings_widget) (XnoiseIPlugin* self);
 	XnoisePlugin* (*get_owner) (XnoiseIPlugin* self);
 	void (*set_owner) (XnoiseIPlugin* self, XnoisePlugin* value);
 	const gchar* (*get_name) (XnoiseIPlugin* self);
@@ -1606,10 +1605,9 @@ const gchar* xnoise_plugin_information_get_copyright (XnoisePluginInformation* s
 const gchar* xnoise_plugin_information_get_author (XnoisePluginInformation* self);
 GType xnoise_iplugin_get_type (void) G_GNUC_CONST;
 gboolean xnoise_iplugin_init (XnoiseIPlugin* self);
+void xnoise_iplugin_uninit (XnoiseIPlugin* self);
 gboolean xnoise_iplugin_has_settings_widget (XnoiseIPlugin* self);
-gboolean xnoise_iplugin_has_singleline_settings_widget (XnoiseIPlugin* self);
 GtkWidget* xnoise_iplugin_get_settings_widget (XnoiseIPlugin* self);
-GtkWidget* xnoise_iplugin_get_singleline_settings_widget (XnoiseIPlugin* self);
 XnoisePlugin* xnoise_iplugin_get_owner (XnoiseIPlugin* self);
 void xnoise_iplugin_set_owner (XnoiseIPlugin* self, XnoisePlugin* value);
 const gchar* xnoise_iplugin_get_name (XnoiseIPlugin* self);
