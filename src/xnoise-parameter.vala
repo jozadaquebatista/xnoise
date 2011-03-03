@@ -87,22 +87,22 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 
 	public void write_all_parameters_to_file() {
 		size_t length;
-
+		
 		KeyFile kf = new GLib.KeyFile();
 		
 		foreach(unowned IParams ip in IParams_implementers) {
 			if(ip != null) ip.write_params_data();
 		}
-
+		
 		foreach(string key in ht_int.get_keys())
 			kf.set_integer(settings_int, key, ht_int.lookup(key));
-
+		
 		foreach(string key in ht_double.get_keys())
 			kf.set_double(settings_double, key, ht_double.lookup(key));
-
+		
 		foreach(string key in ht_string.get_keys())
 			kf.set_string(settings_string, key, ht_string.lookup(key));
-
+		
 		File f = File.new_for_path(build_file_name());
 		try {
 			var fs = f.replace(null, false, FileCreateFlags.NONE, null);

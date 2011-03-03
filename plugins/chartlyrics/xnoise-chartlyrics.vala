@@ -1,6 +1,7 @@
 /* xnoise-chartlyrics.vala
  *
  * Copyright (C) 2010  Andreas Obergrusberger
+ * Copyright (C) 2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,12 +59,14 @@ public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 		}
 	}
 
+	public int priority { get; set; default = 1; }
+	
 	public bool init() {
-		//LyricsLoader.register_backend(this.name, this.from_tags);
 		return true;
 	}
 
 	public void uninit() {
+		Main.instance.main_window.lyricsView.lyrics_provider_unregister(this); // for lyricsloader
 	}
 
 	public Gtk.Widget? get_settings_widget() {
@@ -74,15 +77,15 @@ public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 		return false;
 	}
 	
-	public Xnoise.ILyrics from_tags(string artist, string title) {
-		return new Chartlyrics(artist, title);
+	public Xnoise.ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb) {
+		return new Chartlyrics(loader, _owner, artist, title, cb);
 	}
 	
 }
 
 
 public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
-
+	private const int SECONDS_FOR_TIMEOUT = 12;
 	private static Session session;
 	private Message hid_msg;
 	
@@ -94,49 +97,67 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 	private static const string check_url = "http://api.chartlyrics.com/apiv1.asmx/SearchLyric?artist=%s&song=%s";
 	private static const string text_url = "http://api.chartlyrics.com/apiv1.asmx/GetLyric?lyricId=%s&lyricCheckSum=%s";
 	private static const string xp_hid = "//SearchLyricResult[LyricId != \"\" and LyricChecksum != \"\"]/LyricChecksum";
-	//private static const string xp_hid = "//ArrayOfSearchLyricResult/SearchLyricResult[1]/LyricChecksum";
-	//private static const string xp_hid = "/ArrayOfSearchLyricResult";
 	private static const string xp_id = "//SearchLyricResult[LyricId != \"\" and LyricChecksum != \"\"]/LyricId";
 	private static const string xp_text = "//Lyric";
-	
-	private static bool _is_initialized = false;
 	
 	private string hid;
 	private string id;
 	private string text;
 	private bool? availability;
+	private unowned Plugin owner;
+	private unowned LyricsLoader loader;
+	private LyricsFetchedCallback cb = null;
+	private uint timeout = 0;
 	
-	//public signal void sign_lyrics_fetched(string text);
-	
-	
-	public Chartlyrics(string artist, string title) {
-		if (_is_initialized == false) {
-			//message ("initting");
-			session = new SessionAsync();
-			Xml.Parser.init ();
-			
-			_is_initialized = true;
-		}
+	public Chartlyrics(LyricsLoader _loader, Plugin _owner, string artist, string title, LyricsFetchedCallback _cb) {
+		this.artist = artist;
+		this.title = title;
+		this.owner = _owner;
+		this.loader = _loader;
+		this.cb = _cb;
+		
+		this.owner.sign_deactivated.connect( () => {
+			destruct();
+		});
+		
+		session = new SessionAsync();
+		Xml.Parser.init ();
 		
 		hid = "";
 		id = "";
 		
-		this.artist = artist;
-		this.title = title;
 		availability = null;
 		
 		var gethid_str = new StringBuilder();
 		gethid_str.printf(check_url, Soup.URI.encode(artist, null), Soup.URI.encode(title, null));
-		//gethid_str.assign (gethid_str.str);
 		
-		session = new SessionAsync();
-		//print("%s\n\n", gethid_str.str);
-		hid_msg = new Message("GET", gethid_str.str);
+		session = new Soup.SessionAsync();
+		hid_msg = new Soup.Message("GET", gethid_str.str);
 	}
 	
+	protected bool timeout_elapsed() {
+		if(MainContext.current_source().is_destroyed())
+			return false;
+		
+		Idle.add( () => {
+			if(this.cb != null)
+				this.cb(artist, title, get_credits(), get_identifier(), "");
+			return false;
+		});
+		
+		timeout = 0;
+		Timeout.add_seconds(1, () => {
+			destruct();
+			return false;
+		});
+		return false;
+	}
+
+	public uint get_timeout() {
+		return timeout;
+	}
 	
-	
-	public bool fetch_hid() {
+	private bool fetch_hid() {
 		uint status;
 		status = session.send_message (hid_msg);
 		if (status != KnownStatusCode.OK) return false;
@@ -200,8 +221,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		return true;
 	}
 	
-	
-	public bool fetch_text() {
+	private bool fetch_text() {
 		var gettext_str = new StringBuilder();
 		gettext_str.printf(text_url, id, hid);
 		var text_msg = new Message("GET", gettext_str.str);
@@ -240,31 +260,25 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		text = text_result_node->get_content();
 		//message (text);
 		delete xmldoc;
-		sign_lyrics_fetched(artist, title, get_credits(), get_identifier(), text);
+		Idle.add( () => {
+			if(this.cb != null)
+				this.cb(artist, title, get_credits(), get_identifier(), text);
+			return false;
+		});
 				
 		return true;
 	}
 		
 	
-	public bool? available() {
+	private bool? available() {
 		return availability;
-	}
-	
-	
-	public void* fetch() {
-		if (available() == null) fetch_hid();
-		if (available() == false || hid == "") return null;
-		
-		bool retval = fetch_text();
-		sign_lyrics_fetched (artist, title, get_credits(), get_identifier(), text);
-		return null;
 	}
 	
 	public void find_lyrics() {
 		fetch_hid();
 		fetch_text();
+		timeout = Timeout.add_seconds(SECONDS_FOR_TIMEOUT, timeout_elapsed);
 	}
-	
 	
 	public string get_text() {
 		return text;
@@ -277,6 +291,5 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 	public string get_identifier() {
 		return my_identifier;
 	}
-	
 }
 

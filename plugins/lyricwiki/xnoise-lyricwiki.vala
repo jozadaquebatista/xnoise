@@ -100,14 +100,6 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 	private unowned LyricsLoader loader;
 	private LyricsFetchedCallback cb = null;
 	
-	~Lyricwiki() {
-		//print("remove Lyricswiki IL\n");
-	}
-
-	public uint get_timeout() {
-		return timeout;
-	}
-	
 	public Lyricwiki(LyricsLoader _loader, Plugin _owner, string artist, string title, LyricsFetchedCallback _cb) {
 		this.artist = artist;
 		this.title = title;
@@ -123,6 +115,14 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 		Xml.Parser.init();
 		
 		timeout = 0;
+	}
+	
+	~Lyricwiki() {
+		//print("remove Lyricswiki IL\n");
+	}
+
+	public uint get_timeout() {
+		return timeout;
 	}
 	
 	public string get_credits() {
