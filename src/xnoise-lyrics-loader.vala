@@ -1,6 +1,7 @@
 /* xnoise-lyrics-loader.vala
  *
  * Copyright (C) 2009-2010  softshaker
+ * Copyright (C) 2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,35 +37,61 @@
 */
 //TODO: use priorities
 public class Xnoise.LyricsLoader : GLib.Object {
-	private static ILyricsProvider provider;
-	private static Main xn;
-//	private uint backend_iter;
+	private List<unowned ILyricsProvider> providers = new List<unowned ILyricsProvider>();
+	private unowned ILyricsProvider provider = null;
+	private unowned Main xn;
 	public string artist;
 	public string title;
 
+	private ulong activation_cb = 0;
+	private ulong deactivation_cb = 0;
+	
 	public signal void sign_fetched(string artist, string title, string credits, string identifier, string text);
 
 	public LyricsLoader() {
 		xn = Main.instance;
-		xn.plugin_loader.sign_plugin_activated.connect(LyricsLoader.on_plugin_activated);
+		activation_cb = xn.plugin_loader.sign_plugin_activated.connect(this.on_plugin_activated);
 	}
 
-	private static void on_plugin_activated(Plugin p) {
+	private void on_plugin_activated(PluginLoader sender, Plugin p) {
 		//TODO: use new lyrics plugin hash table instead !?!
 		if(!p.is_lyrics_plugin)
 			return;
-
-		ILyricsProvider provider = p.loaded_plugin as ILyricsProvider;
-
-		if(provider == null) 
+		
+		unowned ILyricsProvider prov = p.loaded_plugin as ILyricsProvider;
+		
+		if(prov == null) 
 			return;
 		
-		LyricsLoader.provider = provider;
-		p.sign_deactivated.connect(LyricsLoader.on_backend_deactivated);
+		providers.prepend(prov);
+		
+		if(this.provider == null)
+			this.provider = prov;
+		
+		if(prov.priority < provider.priority)
+			this.provider = prov;
+		
+		if(deactivation_cb != 0) {
+			p.disconnect(deactivation_cb);
+			deactivation_cb = 0;
+		}
 	}
 
-	private static void on_backend_deactivated() {
-		LyricsLoader.provider = null;
+	public void remove_lyrics_provider(ILyricsProvider lp) {
+		if(this.provider.equals(lp)) {
+			this.provider = null;
+		}
+		
+		foreach(unowned ILyricsProvider x in providers)
+			if(x.equals(lp)) {
+				providers.remove(x);
+				break;
+			}
+		
+		if(providers.length() > 0) {
+			this.provider = providers.first().data;
+		}
+		//TODO: this.provider has to point to highest prio
 	}
 
 	public bool fetch() {
@@ -74,20 +101,18 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		}
 
 		Idle.add( () => {
-			var p = this.provider.from_tags(artist, title);
+			ILyrics* p = this.provider.from_tags(this, artist, title, lyrics_fetched_cb);
 			if(p == null)
 				return false;
-			p.sign_lyrics_fetched.connect(on_lyrics_fetched);
-			p.ref(); //prevent destruction before ready
-			p.find_lyrics();
+			p->find_lyrics();
 			return false;
 		});
 		return true;
 	}
 	
 	//forward result
-	private void on_lyrics_fetched(string artist, string title, string credits, string identifier, string text) {
-		if((text != null)&&(text != "")) {
+	private void lyrics_fetched_cb(string artist, string title, string credits, string identifier, string text) {
+		if((text != null) && (text != "")) {
 			sign_fetched(artist, title, credits, identifier, text);
 		}
 		else {

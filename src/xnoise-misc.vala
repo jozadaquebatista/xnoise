@@ -1,6 +1,6 @@
 /* xnoise-misc.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -343,6 +343,12 @@ public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
 }
 
 
+// DELEGATES
+
+public delegate void Xnoise.LyricsFetchedCallback(string artist, string title, string credits, string identifier, string text);
+
+
+
 
 
 // INTERFACES
@@ -367,24 +373,55 @@ public interface Xnoise.GnomeMediaKeys : GLib.Object {
 	public signal void MediaPlayerKeyPressed(string application, string key);
 }
 
+
 /**
  * ILyrics implementors should be asynchronously look for lyrics
  * The reply is checked for matching artist/title
  */
 public interface Xnoise.ILyrics : GLib.Object {
 	public abstract void find_lyrics();
-
 	public abstract string get_identifier();
 	public abstract string get_credits();
-
-	public signal void sign_lyrics_fetched(string artist, string title, string credits, string identifier, string text);
+	public abstract uint get_timeout();
+	
+	
+	// DEFAULT IMPLEMENTATIONS
+	
+	protected bool timeout_elapsed() { 
+		Timeout.add_seconds(1, () => {
+			this.destruct();
+			return false;
+		});
+		return false;
+	}
+	
+	public void destruct() { // default implementation of explizit destructor
+		Idle.add( () => {
+			if(this.get_timeout() != 0)
+				Source.remove(this.get_timeout());
+			ILyrics* p = this;
+			delete p;
+			return false;
+		});
+	}
 }
 
 
 public interface Xnoise.ILyricsProvider : GLib.Object {
-	public abstract ILyrics from_tags(string artist, string title);
+	public abstract ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb);
+	public abstract int priority { get; set; default = 1;}
+	
+	
+	// DEFAULT IMPLEMENTATIONS
+	
+	public bool equals(ILyricsProvider other) { // default implementation of comparation
+		ILyricsProvider t = (ILyricsProvider)this;
+		if(direct_equal((void*)t, (void*)other)) {
+			return true;
+		}
+		return false;
+	}
 }
-
 
 
 /**

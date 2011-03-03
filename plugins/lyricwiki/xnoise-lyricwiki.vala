@@ -1,6 +1,7 @@
 /* xnoise-lyricwiki.vala
  *
  * Copyright (C) 2010  softshaker
+ * Copyright (C) 2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +27,7 @@
  *
  * Author:
  * 	softshaker  softshaker googlemail.com
+ * 	Jörn Magens
  */
 
 using GLib;
@@ -34,7 +36,7 @@ using Soup;
 public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	private unowned Xnoise.Plugin _owner;
 	
-	public Main xn { get; set; }
+	public unowned Main xn { get; set; }
 
 	public Xnoise.Plugin owner {
 		get {
@@ -50,12 +52,19 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 			return "Lyricwiki";
 		}
 	}
-
+	
+	public int priority { get; set; default = 1; }
+	
 	public bool init() {
 		return true;
 	}
 
 	public void uninit() {
+		Main.instance.main_window.lyricsView.lyrics_provider_unregister(this); // for lyricsloader
+	}
+	
+	~LyricwikiPlugin() {
+		//print("dtor LyricwikiPlugin\n");
 	}
 
 	public Gtk.Widget? get_settings_widget() {
@@ -66,16 +75,19 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 		return false;
 	}
 	
-	public Xnoise.ILyrics from_tags(string artist, string title) {
-		return new Lyricwiki(artist, title);
+	public Xnoise.ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb) {
+		return new Lyricwiki(loader, _owner, artist, title, cb);
 	}
 }
+
+
+
 
 //TODO: find out how to suppress xml parser error messages
 public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 	private string artist;
 	private string title;
-	private const int SECONDS_FOR_TIMEOUT = 30;
+	private const int SECONDS_FOR_TIMEOUT = 12;
 	private uint timeout;
 	private static const string search_url = "http://lyricwiki.org/Special:Search?search=%s:%s";
 	private static const string lyric_node_name = "lyricbox";
@@ -83,15 +95,33 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 	private static const string my_identifier = "Lyricwiki";
 	private static const string additional_escape_chars = "&/%\"&=´`'~#§()?!";
 	private StringBuilder search_str = null;
-	private Session session;
+	private Soup.Session session;
+	private unowned Plugin owner;
+	private unowned LyricsLoader loader;
+	private LyricsFetchedCallback cb = null;
 	
-	public Lyricwiki(string artist, string title) {
+	~Lyricwiki() {
+		//print("remove Lyricswiki IL\n");
+	}
+
+	public uint get_timeout() {
+		return timeout;
+	}
+	
+	public Lyricwiki(LyricsLoader _loader, Plugin _owner, string artist, string title, LyricsFetchedCallback _cb) {
 		this.artist = artist;
 		this.title = title;
+		this.owner = _owner;
+		this.loader = _loader;
+		this.cb = _cb;
 		
-		session = new SessionAsync ();
+		this.owner.sign_deactivated.connect( () => {
+			destruct();
+		});
+		
+		session = new Soup.SessionAsync ();
 		Xml.Parser.init();
-	
+		
 		timeout = 0;
 	}
 	
@@ -103,13 +133,23 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 		return my_identifier;
 	}
 	
-	private bool timeout_elapsed() {
+	protected bool timeout_elapsed() {
 		if(MainContext.current_source().is_destroyed())
 			return false;
-		this.unref();
+		
+		Idle.add( () => {
+			if(this.cb != null)
+				this.cb(artist, title, get_credits(), get_identifier(), "");
+			return false;
+		});
+		
+		timeout = 0;
+		Timeout.add_seconds(1, () => {
+			destruct();
+			return false;
+		});
 		return false;
 	}
-
 	
 	private void find_lyrics() {
 		search_str = new StringBuilder();
@@ -127,26 +167,34 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 		//print("Lyrikwiki: search_cb() called\n");
 		if (mesg.response_body.data == null)
 			return;
-	    	
-	    	//print("Lyricwiki: parsing file\n");
-	    	var doc = Html.Doc.read_doc(((string)mesg.response_body.data), search_str.str);
-	    	//print("Lyricwiki: reading nodes\n");
-	    	if(doc == null)
-	    		return;
-	    	if(doc->last == null) {
-	    		delete doc;
-	    		return;
-	    	}
-	    			
-	    	Xml.Node *lyricnode = find_lyric_div(doc->last);
-	    	if(lyricnode == null) {
-	    		delete doc;
-	    		return;
-	    	}
-	    	
-	    	string lyrics = get_lyric_div_text(lyricnode);
-	    	//print("Lyricwiki: lyrics: \n%s\n", lyrics);
-	    	sign_lyrics_fetched(artist, title, get_credits(), get_identifier(), lyrics);
+			
+		//print("Lyricwiki: parsing file\n");
+		var doc = Html.Doc.read_doc(((string)mesg.response_body.data), search_str.str);
+		//print("Lyricwiki: reading nodes\n");
+		if(doc == null)
+			return;
+		if(doc->last == null) {
+			delete doc;
+			return;
+		}
+				
+		Xml.Node *lyricnode = find_lyric_div(doc->last);
+		if(lyricnode == null) {
+			delete doc;
+			return;
+		}
+		
+		string lyrics = get_lyric_div_text(lyricnode);
+		//print("Lyricwiki: lyrics: \n%s\n", lyrics);
+		Idle.add( () => {
+			if(this.cb != null)
+				this.cb(artist, title, get_credits(), get_identifier(), lyrics);
+			return false;
+		});
+		Timeout.add_seconds(1, () => {
+			destruct();
+			return false;
+		});
 	}
 		
 	/* returns the value of a given node attribute attr_name */

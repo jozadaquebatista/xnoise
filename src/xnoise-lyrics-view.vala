@@ -1,6 +1,7 @@
 /* xnoise-lyrics-view.vala
  *
  * Copyright (C) 2009-2010  softshaker
+ * Copyright (C) 2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,6 +50,10 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		this.set_wrap_mode(Gtk.WrapMode.WORD);
 		global.uri_changed.connect(on_uri_changed);
 	}
+	
+	public void lyrics_provider_unregister(ILyricsProvider lp) {
+		loader.remove_lyrics_provider(lp);
+	}
 
 	private void on_uri_changed(string? uri) {
 		textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);
@@ -60,6 +65,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		                                        on_timout_elapsed);
 	}
 
+	//FIXME: This must be used wtih Worker.Job, so that there are no race conditions!
 	// Use the timeout because gPl is sending the tag_changed signals
 	// sometimes very often at the beginning of a track.
 	private bool on_timout_elapsed() {
@@ -110,7 +116,6 @@ public class Xnoise.LyricsView : Gtk.TextView {
 			set_text((_("\nLyrics provider %s cannot find lyrics for \n\"%s\" by \"%s\".\n")).printf(_identifier,title, artist));
 			return;
 		}
-		
 		set_text_via_idle((_artist + " - " + _title + "\n\n" + _text + "\n\n" + _credits));
 	}
 
@@ -127,7 +132,6 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		// Do not execute if source has been removed in the meantime
 		if(MainContext.current_source().is_destroyed()) 
 			return;
-
 		textbuffer.set_text(text, -1);
 	}
 }

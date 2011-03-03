@@ -195,11 +195,13 @@ namespace Xnoise {
 		public string title;
 		public LyricsLoader ();
 		public bool fetch ();
+		public void remove_lyrics_provider (Xnoise.ILyricsProvider lp);
 		public signal void sign_fetched (string artist, string title, string credits, string identifier, string text);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsView : Gtk.TextView {
 		public LyricsView ();
+		public void lyrics_provider_unregister (Xnoise.ILyricsProvider lp);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Main : GLib.Object {
@@ -611,14 +613,18 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface ILyrics : GLib.Object {
+		public void destruct ();
 		public abstract void find_lyrics ();
 		public abstract string get_credits ();
 		public abstract string get_identifier ();
-		public signal void sign_lyrics_fetched (string artist, string title, string credits, string identifier, string text);
+		public abstract uint get_timeout ();
+		protected bool timeout_elapsed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface ILyricsProvider : GLib.Object {
-		public abstract Xnoise.ILyrics from_tags (string artist, string title);
+		public bool equals (Xnoise.ILyricsProvider other);
+		public abstract Xnoise.ILyrics* from_tags (Xnoise.LyricsLoader loader, string artist, string title, Xnoise.LyricsFetchedCallback cb);
+		public abstract int priority { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IParams : GLib.Object {
@@ -680,6 +686,8 @@ namespace Xnoise {
 		FILE_NOT_FOUND,
 		GENERAL_ERROR,
 	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalAccess global;
 	[CCode (cheader_filename = "xnoise.h")]

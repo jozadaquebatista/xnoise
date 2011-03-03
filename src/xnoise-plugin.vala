@@ -1,6 +1,6 @@
 /* xnoise-plugin.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ public class Xnoise.Plugin : TypeModule {
 	private unowned Main xn;
 	private bool _loaded = false;
 	private Module module;
-	private Type type;
+	private Type _type;
 	private PluginInformation _info;
 	private bool _activated;
 
@@ -95,17 +95,17 @@ public class Xnoise.Plugin : TypeModule {
 		if(init_module == null) 
 			return false;
 			
-		type = init_module(this);
+		_type = init_module(this);
 		_loaded = true;
 		this.configurable = false;
 
-		if(!type.is_a(typeof(IPlugin)))
+		if(!_type.is_a(typeof(IPlugin)))
 			return false;
 
-		if(type.is_a(typeof(ILyricsProvider)))
+		if(_type.is_a(typeof(ILyricsProvider)))
 			this.is_lyrics_plugin = true;
 
-		if(type.is_a(typeof(IAlbumCoverImageProvider)))
+		if(_type.is_a(typeof(IAlbumCoverImageProvider)))
 			this.is_album_image_plugin = true;
 
 		return true;
@@ -124,8 +124,9 @@ public class Xnoise.Plugin : TypeModule {
 		
 		if(module == null)
 			return;
+		
 		unowned Plugin ow = this;
-		loaded_plugin = Object.new(type,
+		loaded_plugin = Object.new(_type,
 		                           "xn", this.xn,
 		                           "owner", ow,      //set properties via this, because
 		                           null);            //parameters are not allowed
@@ -138,6 +139,7 @@ public class Xnoise.Plugin : TypeModule {
 		if(!((IPlugin)loaded_plugin).init()) {
 			message("Failed to load plugin %s. Cannot initialize.\n", _info.name);
 			_activated = false;
+			return;
 		}
 		this.configurable = ((IPlugin)this.loaded_plugin).has_settings_widget();
 		_activated = true;
