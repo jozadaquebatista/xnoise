@@ -32,7 +32,6 @@
 // Plugin for chartlyrics.com plugin API
 
 
-using GLib;
 using Soup;
 using Xml;
 using Xnoise;
@@ -141,7 +140,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), "");
+				this.cb(artist, title, get_credits(), get_identifier(), "", "Chartlyrics");
 			return false;
 		});
 		
@@ -262,7 +261,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		delete xmldoc;
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), text);
+				this.cb(artist, title, get_credits(), get_identifier(), text, "Chartlyrics");
 			return false;
 		});
 				

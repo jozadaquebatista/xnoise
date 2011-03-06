@@ -119,6 +119,15 @@ public class Xnoise.DbBrowser {
 		print("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
 	}
 
+	public delegate void ReaderCallback(Database database);
+	
+	public void do_callback_transaction(ReaderCallback cb) {
+		if(db == null) return;
+		
+		if(cb != null)
+			cb(db);
+	}
+
 	public int count_artists_with_search(ref string searchtext) {
 		Statement stmt;
 		int count = 0;

@@ -43,8 +43,11 @@ namespace Xnoise {
 	}
 	[CCode (ref_function = "xnoise_db_browser_ref", unref_function = "xnoise_db_browser_unref", cheader_filename = "xnoise.h")]
 	public class DbBrowser {
+		[CCode (cheader_filename = "xnoise.h")]
+		public delegate void ReaderCallback (Sqlite.Database database);
 		public DbBrowser () throws GLib.Error;
 		public int count_artists_with_search (ref string searchtext);
+		public void do_callback_transaction (Xnoise.DbBrowser.ReaderCallback cb);
 		public string[] get_albums_2 (string artist);
 		public string[] get_artists_2 ();
 		public string[] get_lastused_uris ();
@@ -74,6 +77,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
+		[CCode (cheader_filename = "xnoise.h")]
+		public delegate void WriterCallback (Sqlite.Database database);
 		public DbWriter () throws Xnoise.DbError;
 		public void add_single_file_to_collection (string uri);
 		public void add_single_folder_to_collection (string mfolder);
@@ -85,6 +90,7 @@ namespace Xnoise {
 		public void del_all_streams ();
 		public bool delete_local_media_data ();
 		public void delete_uri (string uri);
+		public void do_callback_transaction (Xnoise.DbWriter.WriterCallback cb);
 		public int get_track_id_for_uri (string uri);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public int32 insert_title (Xnoise.TrackData td, string uri);
@@ -196,11 +202,12 @@ namespace Xnoise {
 		public LyricsLoader ();
 		public bool fetch ();
 		public void remove_lyrics_provider (Xnoise.ILyricsProvider lp);
-		public signal void sign_fetched (string artist, string title, string credits, string identifier, string text);
+		public signal void sign_fetched (string artist, string title, string credits, string identifier, string text, string provider);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsView : Gtk.TextView {
 		public LyricsView ();
+		public unowned Xnoise.LyricsLoader get_loader ();
 		public void lyrics_provider_unregister (Xnoise.ILyricsProvider lp);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -687,7 +694,7 @@ namespace Xnoise {
 		GENERAL_ERROR,
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text);
+	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text, string providername);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalAccess global;
 	[CCode (cheader_filename = "xnoise.h")]

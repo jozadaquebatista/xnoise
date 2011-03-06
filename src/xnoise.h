@@ -9,6 +9,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sqlite3.h>
 #include <gdk/gdk.h>
 #include <float.h>
 #include <math.h>
@@ -631,6 +632,7 @@ struct _XnoiseDbBrowserClass {
 	void (*finalize) (XnoiseDbBrowser *self);
 };
 
+typedef void (*XnoiseDbBrowserReaderCallback) (sqlite3* database, void* user_data);
 struct _XnoiseStreamData {
 	gchar* Name;
 	gchar* Uri;
@@ -659,6 +661,7 @@ struct _XnoiseDbWriterClass {
 	GObjectClass parent_class;
 };
 
+typedef void (*XnoiseDbWriterWriterCallback) (sqlite3* database, void* user_data);
 struct _XnoiseFullscreenToolbar {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -738,7 +741,7 @@ struct _XnoiseLyricsLoaderClass {
 	GObjectClass parent_class;
 };
 
-typedef void (*XnoiseLyricsFetchedCallback) (const gchar* artist, const gchar* title, const gchar* credits, const gchar* identifier, const gchar* text, void* user_data);
+typedef void (*XnoiseLyricsFetchedCallback) (const gchar* artist, const gchar* title, const gchar* credits, const gchar* identifier, const gchar* text, const gchar* providername, void* user_data);
 struct _XnoiseILyricsIface {
 	GTypeInterface parent_iface;
 	void (*find_lyrics) (XnoiseILyrics* self);
@@ -1237,6 +1240,7 @@ gpointer xnoise_value_get_db_browser (const GValue* value);
 GType xnoise_db_browser_get_type (void) G_GNUC_CONST;
 XnoiseDbBrowser* xnoise_db_browser_new (GError** error);
 XnoiseDbBrowser* xnoise_db_browser_construct (GType object_type, GError** error);
+void xnoise_db_browser_do_callback_transaction (XnoiseDbBrowser* self, XnoiseDbBrowserReaderCallback cb, void* cb_target);
 gint xnoise_db_browser_count_artists_with_search (XnoiseDbBrowser* self, gchar** searchtext);
 gboolean xnoise_db_browser_videos_available (XnoiseDbBrowser* self);
 gboolean xnoise_db_browser_streams_available (XnoiseDbBrowser* self);
@@ -1295,6 +1299,7 @@ void xnoise_db_writer_add_single_stream_to_collection (XnoiseDbWriter* self, con
 void xnoise_db_writer_add_single_file_to_collection (XnoiseDbWriter* self, const gchar* uri);
 void xnoise_db_writer_add_single_folder_to_collection (XnoiseDbWriter* self, const gchar* mfolder);
 void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, gchar** final_tracklist, int final_tracklist_length1, GError** error);
+void xnoise_db_writer_do_callback_transaction (XnoiseDbWriter* self, XnoiseDbWriterWriterCallback cb, void* cb_target);
 void xnoise_db_writer_del_all_folders (XnoiseDbWriter* self);
 void xnoise_db_writer_del_all_files (XnoiseDbWriter* self);
 void xnoise_db_writer_del_all_streams (XnoiseDbWriter* self);
@@ -1423,6 +1428,7 @@ GType xnoise_lyrics_view_get_type (void) G_GNUC_CONST;
 XnoiseLyricsView* xnoise_lyrics_view_new (void);
 XnoiseLyricsView* xnoise_lyrics_view_construct (GType object_type);
 void xnoise_lyrics_view_lyrics_provider_unregister (XnoiseLyricsView* self, XnoiseILyricsProvider* lp);
+XnoiseLyricsLoader* xnoise_lyrics_view_get_loader (XnoiseLyricsView* self);
 GType xnoise_main_get_type (void) G_GNUC_CONST;
 GType xnoise_tray_icon_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_get_type (void) G_GNUC_CONST;

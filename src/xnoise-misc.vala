@@ -345,9 +345,7 @@ public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
 
 // DELEGATES
 
-public delegate void Xnoise.LyricsFetchedCallback(string artist, string title, string credits, string identifier, string text);
-
-
+public delegate void Xnoise.LyricsFetchedCallback(string artist, string title, string credits, string identifier, string text, string providername);
 
 
 
@@ -382,7 +380,7 @@ public interface Xnoise.ILyrics : GLib.Object {
 	public abstract void find_lyrics();
 	public abstract string get_identifier();
 	public abstract string get_credits();
-	public abstract uint get_timeout();
+	public abstract uint get_timeout(); // id of the GLib.Source of the timeout for the search
 	
 	
 	// DEFAULT IMPLEMENTATIONS

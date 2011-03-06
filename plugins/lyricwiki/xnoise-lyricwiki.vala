@@ -30,7 +30,6 @@
  * 	Jörn Magens
  */
 
-using GLib;
 using Soup;
 
 public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
@@ -139,7 +138,7 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 		
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), "");
+				this.cb(artist, title, get_credits(), get_identifier(), "", "Lyricwiki");
 			return false;
 		});
 		
@@ -188,7 +187,7 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 		//print("Lyricwiki: lyrics: \n%s\n", lyrics);
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), lyrics);
+				this.cb(artist, title, get_credits(), get_identifier(), lyrics, "Lyricwiki");
 			return false;
 		});
 		Timeout.add_seconds(1, () => {

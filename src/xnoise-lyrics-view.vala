@@ -54,6 +54,10 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	public void lyrics_provider_unregister(ILyricsProvider lp) {
 		loader.remove_lyrics_provider(lp);
 	}
+	
+	public unowned LyricsLoader get_loader() {
+		return loader;
+	}
 
 	private void on_uri_changed(string? uri) {
 		textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);

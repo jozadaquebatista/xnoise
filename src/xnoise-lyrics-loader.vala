@@ -38,6 +38,9 @@
 //TODO: use priorities
 public class Xnoise.LyricsLoader : GLib.Object {
 	private List<unowned ILyricsProvider> providers = new List<unowned ILyricsProvider>();
+	
+	private unowned ILyricsProvider db_provider = null;
+	
 	private unowned ILyricsProvider provider = null;
 	private unowned Main xn;
 	public string artist;
@@ -46,7 +49,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	private ulong activation_cb = 0;
 	private ulong deactivation_cb = 0;
 	
-	public signal void sign_fetched(string artist, string title, string credits, string identifier, string text);
+	public signal void sign_fetched(string artist, string title, string credits, string identifier, string text, string provider);
 
 	public LyricsLoader() {
 		xn = Main.instance;
@@ -57,6 +60,8 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		//TODO: use new lyrics plugin hash table instead !?!
 		if(!p.is_lyrics_plugin)
 			return;
+		
+		//TODO: check for databaselyrics and handle it seperately
 		
 		unowned ILyricsProvider prov = p.loaded_plugin as ILyricsProvider;
 		
@@ -96,10 +101,10 @@ public class Xnoise.LyricsLoader : GLib.Object {
 
 	public bool fetch() {
 		if(this.provider == null) {
-			sign_fetched(artist, title, "", "", "Enable a lyrics provider plugin for lyrics fetching to work");
+			sign_fetched(artist, title, "", "", "Enable a lyrics provider plugin for lyrics fetching to work", "");
 			return false;
 		}
-
+		
 		Idle.add( () => {
 			ILyrics* p = this.provider.from_tags(this, artist, title, lyrics_fetched_cb);
 			if(p == null)
@@ -111,12 +116,12 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	}
 	
 	//forward result
-	private void lyrics_fetched_cb(string artist, string title, string credits, string identifier, string text) {
+	private void lyrics_fetched_cb(string artist, string title, string credits, string identifier, string text, string providername) {
 		if((text != null) && (text != "")) {
-			sign_fetched(artist, title, credits, identifier, text);
+			sign_fetched(artist, title, credits, identifier, text, providername);
 		}
 		else {
-			sign_fetched(artist, title, credits, identifier, "no lyrics found...");
+			sign_fetched(artist, title, credits, identifier, "no lyrics found...", providername);
 		}
 	}
 }

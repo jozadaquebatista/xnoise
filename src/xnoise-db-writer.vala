@@ -753,7 +753,16 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 		this.commit_transaction();
 	}
-
+	
+	public delegate void WriterCallback(Database database);
+	
+	public void do_callback_transaction(WriterCallback cb) {
+		if(db == null) return;
+		
+		if(cb != null)
+			cb(db);
+	}
+	
 	private void insert_lastused_track(string uri, int mediatype) {
 		this.insert_lastused_entry_statement.reset();
 		this.insert_lastused_entry_statement.bind_text(1, uri);

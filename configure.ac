@@ -502,6 +502,7 @@ AC_CONFIG_FILES([
     plugins/lyricwiki/Makefile
     plugins/soundmenu/Makefile
     plugins/soundmenu2/Makefile
+    plugins/databaseLyrics/Makefile
     po/Makefile.in
     vapi/Makefile
     tests/Makefile

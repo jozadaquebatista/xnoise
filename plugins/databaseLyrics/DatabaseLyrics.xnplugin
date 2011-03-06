@@ -1,0 +1,9 @@
+[XnoisePlugin]
+name=DatabaseLyrics
+module=DatabaseLyrics
+description=Loads/stores lyrics from/to database
+website=http://code.google.com/p/xnoise/
+icon=/path/to/icon
+copyright=Copyright © 2011 Jörn Magens
+license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
+author=Jörn Magens
