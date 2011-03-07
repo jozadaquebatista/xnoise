@@ -43,13 +43,12 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	
 	private unowned ILyricsProvider provider = null;
 	private unowned Main xn;
-	public string artist;
-	public string title;
+	private string artist;
+	private string title;
 
 	private ulong activation_cb = 0;
-	private ulong deactivation_cb = 0;
 	
-	public signal void sign_fetched(string artist, string title, string credits, string identifier, string text, string provider);
+	public signal void sign_fetched(string _artist, string _title, string _credits, string _identifier, string _text, string _provider);
 
 	public LyricsLoader() {
 		xn = Main.instance;
@@ -61,12 +60,15 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		if(!p.is_lyrics_plugin)
 			return;
 		
-		//TODO: check for databaselyrics and handle it seperately
-		
 		unowned ILyricsProvider prov = p.loaded_plugin as ILyricsProvider;
 		
 		if(prov == null) 
 			return;
+		
+		if(p.info.name == "DatabaseLyrics") {
+			db_provider = p.loaded_plugin as ILyricsProvider;
+			return;
+		}
 		
 		providers.prepend(prov);
 		
@@ -75,16 +77,15 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		
 		if(prov.priority < provider.priority)
 			this.provider = prov;
-		
-		if(deactivation_cb != 0) {
-			p.disconnect(deactivation_cb);
-			deactivation_cb = 0;
-		}
 	}
 
 	public void remove_lyrics_provider(ILyricsProvider lp) {
 		if(this.provider.equals(lp)) {
 			this.provider = null;
+		}
+		if(this.db_provider.equals(lp)) {
+			this.db_provider = null;
+			return;
 		}
 		
 		foreach(unowned ILyricsProvider x in providers)
@@ -99,7 +100,23 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		//TODO: this.provider has to point to highest prio
 	}
 
-	public bool fetch() {
+	public bool fetch(string _artist, string _title, bool use_db_provider = true) {
+		this.artist = _artist;
+		this.title  = _title;
+		
+		// always highest prio for databaseprovider
+		if(db_provider != null && use_db_provider) {
+			Idle.add( () => {
+				ILyrics* dbp = null;
+				dbp = this.db_provider.from_tags(this, artist, title, lyrics_fetched_cb);
+				if(dbp == null)
+					return false;
+				dbp->find_lyrics();
+				return false;
+			});
+			return true;
+		}
+		
 		if(this.provider == null) {
 			sign_fetched(artist, title, "", "", "Enable a lyrics provider plugin for lyrics fetching to work", "");
 			return false;
@@ -116,12 +133,21 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	}
 	
 	//forward result
-	private void lyrics_fetched_cb(string artist, string title, string credits, string identifier, string text, string providername) {
-		if((text != null) && (text != "")) {
-			sign_fetched(artist, title, credits, identifier, text, providername);
+	private void lyrics_fetched_cb(string _artist, string _title, string _credits, string _identifier, string _text, string _providername) {
+		print("got lyrics reply from %s %s %s %s\n", _providername, _artist, _title, _identifier);
+		if(_providername == "DatabaseLyrics") {
+			if(_artist == this.artist && _title == this.title &&
+			   (_text == null || _text == "")) {
+				print("NEXT lyrics provider\n");
+				fetch(_artist, _title, false);
+				return;
+			}
+		}
+		if((_text != null) && (_text != "")) {
+			sign_fetched(_artist, _title, _credits, _identifier, _text, _providername);
 		}
 		else {
-			sign_fetched(artist, title, credits, identifier, "no lyrics found...", providername);
+			sign_fetched(_artist, _title, "", _identifier, "no lyrics found...", _providername);
 		}
 	}
 }

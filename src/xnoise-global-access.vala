@@ -93,6 +93,8 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public signal void sign_restart_song();
 	public signal void sign_song_info_required();
 
+	public signal void sign_notify_tracklistnotebook_switched(uint new_page_number);
+
 	// PRIVATE FIELDS
 	private PlayerState _player_state = PlayerState.STOPPED;
 	private string? _current_uri = null;

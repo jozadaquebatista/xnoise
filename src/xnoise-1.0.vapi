@@ -148,6 +148,7 @@ namespace Xnoise {
 		public signal void position_reference_next_changed ();
 		public signal void sig_item_imported (string uri);
 		public signal void sig_media_path_changed ();
+		public signal void sign_notify_tracklistnotebook_switched (uint new_page_number);
 		public signal void sign_restart_song ();
 		public signal void sign_song_info_required ();
 		public signal void tag_changed (ref string? newuri, string? tagname, string? tagvalue);
@@ -197,12 +198,10 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsLoader : GLib.Object {
-		public string artist;
-		public string title;
 		public LyricsLoader ();
-		public bool fetch ();
+		public bool fetch (string _artist, string _title, bool use_db_provider = true);
 		public void remove_lyrics_provider (Xnoise.ILyricsProvider lp);
-		public signal void sign_fetched (string artist, string title, string credits, string identifier, string text, string provider);
+		public signal void sign_fetched (string _artist, string _title, string _credits, string _identifier, string _text, string _provider);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsView : Gtk.TextView {

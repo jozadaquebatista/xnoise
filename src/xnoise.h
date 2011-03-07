@@ -733,8 +733,6 @@ typedef enum  {
 struct _XnoiseLyricsLoader {
 	GObject parent_instance;
 	XnoiseLyricsLoaderPrivate * priv;
-	gchar* artist;
-	gchar* title;
 };
 
 struct _XnoiseLyricsLoaderClass {
@@ -1423,7 +1421,7 @@ XnoiseLyricsLoader* xnoise_lyrics_loader_construct (GType object_type);
 GType xnoise_ilyrics_get_type (void) G_GNUC_CONST;
 GType xnoise_ilyrics_provider_get_type (void) G_GNUC_CONST;
 void xnoise_lyrics_loader_remove_lyrics_provider (XnoiseLyricsLoader* self, XnoiseILyricsProvider* lp);
-gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self);
+gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self, const gchar* _artist, const gchar* _title, gboolean use_db_provider);
 GType xnoise_lyrics_view_get_type (void) G_GNUC_CONST;
 XnoiseLyricsView* xnoise_lyrics_view_new (void);
 XnoiseLyricsView* xnoise_lyrics_view_construct (GType object_type);

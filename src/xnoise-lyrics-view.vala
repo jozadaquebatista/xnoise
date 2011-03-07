@@ -49,6 +49,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		this.set_left_margin(8);
 		this.set_wrap_mode(Gtk.WrapMode.WORD);
 		global.uri_changed.connect(on_uri_changed);
+		
 	}
 	
 	public void lyrics_provider_unregister(ILyricsProvider lp) {
@@ -59,14 +60,31 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		return loader;
 	}
 
+	private bool initialized = false;
 	private void on_uri_changed(string? uri) {
+		if(!initialized) {
+			//if switching to Lyrics View ...
+			global.sign_notify_tracklistnotebook_switched.connect( (s,p) => {
+				if(p != TrackListNoteBookTab.LYRICS)
+					return;
+				textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);
+				if(timeout!=0) {
+					GLib.Source.remove(timeout);
+					timeout = 0;
+				}
+				timeout = GLib.Timeout.add_seconds(1, on_timout_elapsed);
+			});
+			initialized = true;
+		}
 		textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);
-		if(timeout!=0)
+		if(timeout!=0) {
 			GLib.Source.remove(timeout);
-
-		timeout = GLib.Timeout.add_seconds_full(GLib.Priority.DEFAULT_IDLE,
-		                                        3,
-		                                        on_timout_elapsed);
+			timeout = 0;
+		}
+		
+		// Lyrics View is already visible...
+		if(Main.instance.main_window.tracklistnotebook.get_current_page() == TrackListNoteBookTab.LYRICS)
+			timeout = GLib.Timeout.add_seconds(2, on_timout_elapsed);
 	}
 
 	//FIXME: This must be used wtih Worker.Job, so that there are no race conditions!
@@ -84,7 +102,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		if((artist=="unknown artist")||(title =="unknown title" )) {
 			DbBrowser dbb;
 			try {
-				dbb = new DbBrowser();
+				dbb = new DbBrowser(); //TODO: Evil code in this context
 			}
 			catch(Error e) {
 				print("%s\n", e.message);
@@ -105,11 +123,10 @@ public class Xnoise.LyricsView : Gtk.TextView {
 
 		// Do not execute if source has been removed in the meantime
 		if(MainContext.current_source().is_destroyed()) return false;
-
-		loader.artist = artist;
-		loader.title  = title;
+//		loader.artist = artist;
+//		loader.title  = title;
 		set_text((_("\nTrying to find lyrics for \"%s\" by \"%s\"...")).printf(title, artist));
-		loader.fetch();
+		loader.fetch(artist, title, true);
 		return false;
 	}
 

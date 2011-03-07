@@ -395,8 +395,8 @@ public interface Xnoise.ILyrics : GLib.Object {
 	
 	public void destruct() { // default implementation of explizit destructor
 		Idle.add( () => {
-			if(this.get_timeout() != 0)
-				Source.remove(this.get_timeout());
+			if(get_timeout() != 0)
+				Source.remove(get_timeout());
 			ILyrics* p = this;
 			delete p;
 			return false;

@@ -107,12 +107,18 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 		this.loader = _loader;
 		check_table();
 		loader.sign_fetched.connect( (a,t,c,i,tx,p) => {
+			print("prov:%s\n", p);
+			if(p == "DatabaseLyrics")
+				return;
+			if(tx == null || tx == "" || tx.strip() == "no lyrics found...")
+				return;
 			artist = a;
 			title = t;
 			credits = c;
 			identifier = i;
 			txt = tx;
 			provider = p;
+			
 			add_lyrics_entry();
 		});
 	}
@@ -191,16 +197,16 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 
 	private void write_txt_dbcb(Sqlite.Database db) {
 		Statement stmt;
-		
+		//TODO check for entry existance, first
 		if(!cancellable.is_cancelled()) {
 			db.prepare_v2(INSERT_LYRICS, -1, out stmt);
 			stmt.reset();
-			if(stmt.bind_text(1, artist)     != Sqlite.OK ||
-			   stmt.bind_text(2, title)      != Sqlite.OK ||
-			   stmt.bind_text(3, provider)   != Sqlite.OK ||
-			   stmt.bind_text(4, txt)        != Sqlite.OK ||
-			   stmt.bind_text(5, credits)    != Sqlite.OK ||
-			   stmt.bind_text(6, identifier) != Sqlite.OK) {
+			if(stmt.bind_text(1, prepare_for_comparison(artist))     != Sqlite.OK ||
+			   stmt.bind_text(2, prepare_for_comparison(title))      != Sqlite.OK ||
+			   stmt.bind_text(3, provider)                           != Sqlite.OK ||
+			   stmt.bind_text(4, txt)                                != Sqlite.OK ||
+			   stmt.bind_text(5, credits)                            != Sqlite.OK ||
+			   stmt.bind_text(6, identifier)                         != Sqlite.OK) {
 				print("Database lyrics error %d: %s \n\n", db.errcode(), db.errmsg());
 				return;
 			}
@@ -222,7 +228,7 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 	private string artist;
 	private string title;
-	private const int SECONDS_FOR_TIMEOUT = 2;
+	private const int SECONDS_FOR_TIMEOUT = 4;
 	private uint timeout;
 	private unowned Plugin owner;
 	private unowned LyricsLoader loader;
@@ -295,24 +301,37 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 	private void dbcb(Sqlite.Database db) {
 		Statement stmt;
 		if(!cancellable.is_cancelled()) {
-			db.prepare_v2("SELECT txt FROM lyrics WHERE LOWER(artist) = ? AND LOWER(title) = ?", -1, out stmt);
+			db.prepare_v2("SELECT txt, credits, identifier FROM lyrics WHERE LOWER(artist) = ? AND LOWER(title) = ?", -1, out stmt);
 			
 			stmt.reset();
 			
 			string txt = "";
+			string cred = "";
+			string ident = "";
 			
-			if((stmt.bind_text(1, "%s".printf(this.artist)) != Sqlite.OK)|
-			   (stmt.bind_text(2, "%s".printf(this.title)) != Sqlite.OK)) {
+			if((stmt.bind_text(1, "%s".printf(prepare_for_comparison(this.artist))) != Sqlite.OK)|
+			   (stmt.bind_text(2, "%s".printf(prepare_for_comparison(this.title))) != Sqlite.OK)) {
 				print("Error in database lyrics\n");;
 			}
 			if(stmt.step() == Sqlite.ROW) {
 				txt = stmt.column_text(0);
+				cred = stmt.column_text(1);
+				ident = stmt.column_text(2);
+				Idle.add( () => {
+					if(this.cb != null)
+						this.cb(artist, title, cred, ident, txt, "DatabaseLyrics");
+					this.destruct();
+					return false;
+				});
 			}
-			Idle.add( () => {
-				if(this.cb != null)
-					this.cb(artist, title, get_credits(), get_identifier(), txt, "DatabaseLyrics");
-				return false;
-			});
+			else {
+				Idle.add( () => {
+					if(this.cb != null)
+						this.cb(artist, title, cred, ident, "", "DatabaseLyrics");
+					this.destruct();
+					return false;
+				});
+			}
 		}
 		lock(dbb) {
 			dbb = null;

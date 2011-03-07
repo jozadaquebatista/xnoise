@@ -1349,7 +1349,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			mediaBrScrollWin.add(this.mediaBr);
 			browsernotebook    = gb.get_object("notebook1") as Gtk.Notebook;
 			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
-
+			tracklistnotebook.switch_page.connect( (s,np,p) => {
+				global.sign_notify_tracklistnotebook_switched(p);
+			});
 			this.searchEntryMB = new Gtk.Entry();
 			this.searchEntryMB.primary_icon_stock = Gtk.Stock.FIND;
 			this.searchEntryMB.secondary_icon_stock = Gtk.Stock.CLEAR;

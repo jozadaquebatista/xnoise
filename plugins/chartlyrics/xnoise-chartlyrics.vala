@@ -262,6 +262,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		Idle.add( () => {
 			if(this.cb != null)
 				this.cb(artist, title, get_credits(), get_identifier(), text, "Chartlyrics");
+			this.destruct();
 			return false;
 		});
 				

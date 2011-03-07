@@ -188,10 +188,7 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 		Idle.add( () => {
 			if(this.cb != null)
 				this.cb(artist, title, get_credits(), get_identifier(), lyrics, "Lyricwiki");
-			return false;
-		});
-		Timeout.add_seconds(1, () => {
-			destruct();
+			this.destruct();
 			return false;
 		});
 	}
