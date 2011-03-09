@@ -71,7 +71,6 @@ public class Xnoise.LyricsView : Gtk.TextView {
 				   prepare_for_comparison(title) == prepare_for_comparison(global.current_title)) {
 					return; // Do not search if we already have lyrics
 				}
-				//TODO: check if lyrics have already been found
 				textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);
 				if(timeout!=0) {
 					GLib.Source.remove(timeout);
