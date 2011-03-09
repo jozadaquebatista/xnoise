@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-07 15:46+0100\n"
+"POT-Creation-Date: 2011-03-09 15:11+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
@@ -67,9 +67,15 @@ msgstr "Agregar url a emisora de radio por internet"
 msgid "Leave fullscreen"
 msgstr "Salir de pantalla completa"
 
-#. loader.artist = artist;
-#. loader.title  = title;
-#: ../src/xnoise-lyrics-view.vala:128
+#: ../src/xnoise-lyrics-loader.vala:174
+msgid "Enable a lyrics provider plugin for lyrics fetching to work"
+msgstr "Enable a lyrics provider plugin for lyrics fetching to work"
+
+#: ../src/xnoise-lyrics-view.vala:100
+msgid "Player stopped. Not searching for lyrics."
+msgstr "Player stopped. Not searching for lyrics."
+
+#: ../src/xnoise-lyrics-view.vala:133
 #, c-format
 msgid ""
 "\n"
@@ -78,7 +84,7 @@ msgstr ""
 "\n"
 "Intentando buscar Letras de Canciones para \"%s\" por \"%s\"..."
 
-#: ../src/xnoise-lyrics-view.vala:137
+#: ../src/xnoise-lyrics-view.vala:142
 #, c-format
 msgid ""
 "\n"
@@ -234,6 +240,7 @@ msgstr "en"
 
 #: ../src/xnoise-main-window.vala:1063
 #: ../src/xnoise-main-window.vala:1130
+#: ../src/xnoise-tray-icon.vala:189
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:151
 #, c-format
 msgid "unknown title"
@@ -241,12 +248,14 @@ msgstr "titulo desconocido"
 
 #: ../src/xnoise-main-window.vala:1065
 #: ../src/xnoise-main-window.vala:1132
+#: ../src/xnoise-tray-icon.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 msgid "unknown artist"
 msgstr "artista desconocido"
 
 #: ../src/xnoise-main-window.vala:1067
 #: ../src/xnoise-main-window.vala:1134
+#: ../src/xnoise-tray-icon.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown album"
 msgstr "álbum desconocido"
@@ -275,14 +284,35 @@ msgstr "Columnas extras para la Lista de Reproducción:"
 msgid "Remove selected"
 msgstr "Eliminar seleccionados"
 
-#~ msgid "Play/Pause"
-#~ msgstr "Reproducir/Pausar"
-#~ msgid "Previous"
-#~ msgstr "Anterior"
-#~ msgid "Next"
-#~ msgstr "Siguiente"
-#~ msgid "Exit"
-#~ msgstr "Salir"
+#: ../src/xnoise-tray-icon.vala:40
+msgid "Play/Pause"
+msgstr "Reproducir/Pausar"
+
+#: ../src/xnoise-tray-icon.vala:54
+msgid "Previous"
+msgstr "Anterior"
+
+#: ../src/xnoise-tray-icon.vala:69
+msgid "Next"
+msgstr "Siguiente"
+
+#: ../src/xnoise-tray-icon.vala:87
+msgid "Exit"
+msgstr "Salir"
+
+#: ../src/xnoise-tray-icon.vala:136
+#: ../src/xnoise-tray-icon.vala:148
+msgid "stopped"
+msgstr "stopped"
+
+#: ../src/xnoise-tray-icon.vala:140
+msgid "playing"
+msgstr "playing"
+
+#: ../src/xnoise-tray-icon.vala:144
+msgid "paused"
+msgstr "paused"
+
 #~ msgid "Xnoise Media Player"
 #~ msgstr "Xnoise Media Player"
 #~ msgid "Collapse"

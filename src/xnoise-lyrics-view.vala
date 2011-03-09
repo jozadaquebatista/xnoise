@@ -81,6 +81,14 @@ public class Xnoise.LyricsView : Gtk.TextView {
 			});
 			initialized = true;
 		}
+		if(uri == null || uri.strip() == "") {
+			if(timeout!=0) {
+				GLib.Source.remove(timeout);
+				timeout = 0;
+			}
+			textbuffer.set_text(_("Player stopped. Not searching for lyrics."), -1);
+			return;
+		}
 		textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);
 		if(timeout!=0) {
 			GLib.Source.remove(timeout);

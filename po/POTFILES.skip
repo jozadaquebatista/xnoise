@@ -1,10 +1,12 @@
 data/misc/xnoise.desktop.in
+plugins/notifications/xnoise-notifications.c
+plugins/titleToDecoration/xnoise-title-to-decoration.c
 src/xnoise-add-media-dialog.c
 src/xnoise-fullscreen-toolbar.c
+src/xnoise-lyrics-loader.c
 src/xnoise-lyrics-view.c
 src/xnoise-main-window.c
 src/xnoise-settings-dialog.c
 src/xnoise-tracklist.c
 src/xnoise-tray-icon.c
-plugins/notifications/xnoise-notifications.c
-plugins/titleToDecoration/xnoise-title-to-decoration.c
+

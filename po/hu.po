@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-07 15:46+0100\n"
-"PO-Revision-Date: 2011-03-07 15:54+0100\n"
+"POT-Creation-Date: 2011-03-09 15:11+0100\n"
+"PO-Revision-Date: 2011-03-09 15:27+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-l10n-hu>\n"
 "Language: hu\n"
@@ -73,9 +73,15 @@ msgstr "Internetes rádió link hozzáadása"
 msgid "Leave fullscreen"
 msgstr "Teljesképernyős mód elhagyása"
 
-#. loader.artist = artist;
-#. loader.title  = title;
-#: ../src/xnoise-lyrics-view.vala:128
+#: ../src/xnoise-lyrics-loader.vala:174
+msgid "Enable a lyrics provider plugin for lyrics fetching to work"
+msgstr "Enable a lyrics provider plugin for lyrics fetching to work"
+
+#: ../src/xnoise-lyrics-view.vala:100
+msgid "Player stopped. Not searching for lyrics."
+msgstr "Player stopped. Not searching for lyrics."
+
+#: ../src/xnoise-lyrics-view.vala:133
 #, c-format
 msgid ""
 "\n"
@@ -84,7 +90,7 @@ msgstr ""
 "\n"
 "Dalszöveg keresése \"%s\" -hez \"%s\"..."
 
-#: ../src/xnoise-lyrics-view.vala:137
+#: ../src/xnoise-lyrics-view.vala:142
 #, c-format
 msgid ""
 "\n"
@@ -240,6 +246,7 @@ msgstr "on"
 
 #: ../src/xnoise-main-window.vala:1063
 #: ../src/xnoise-main-window.vala:1130
+#: ../src/xnoise-tray-icon.vala:189
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:151
 #, c-format
 msgid "unknown title"
@@ -247,12 +254,14 @@ msgstr "ismeretlen cím"
 
 #: ../src/xnoise-main-window.vala:1065
 #: ../src/xnoise-main-window.vala:1132
+#: ../src/xnoise-tray-icon.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 msgid "unknown artist"
 msgstr "ismeretlen előadó"
 
 #: ../src/xnoise-main-window.vala:1067
 #: ../src/xnoise-main-window.vala:1134
+#: ../src/xnoise-tray-icon.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown album"
 msgstr "ismeretlen album"
@@ -280,4 +289,33 @@ msgstr "Extra oszlop mutatása a track listában:"
 #: ../src/xnoise-tracklist.vala:200
 msgid "Remove selected"
 msgstr "Kiválasztott eltávolítása"
+
+#: ../src/xnoise-tray-icon.vala:40
+msgid "Play/Pause"
+msgstr "Play/Pause"
+
+#: ../src/xnoise-tray-icon.vala:54
+msgid "Previous"
+msgstr "Previous"
+
+#: ../src/xnoise-tray-icon.vala:69
+msgid "Next"
+msgstr "Next"
+
+#: ../src/xnoise-tray-icon.vala:87
+msgid "Exit"
+msgstr "Exit"
+
+#: ../src/xnoise-tray-icon.vala:136
+#: ../src/xnoise-tray-icon.vala:148
+msgid "stopped"
+msgstr "stopped"
+
+#: ../src/xnoise-tray-icon.vala:140
+msgid "playing"
+msgstr "playing"
+
+#: ../src/xnoise-tray-icon.vala:144
+msgid "paused"
+msgstr "paused"
 
