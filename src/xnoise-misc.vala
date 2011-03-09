@@ -108,9 +108,11 @@ namespace Xnoise {
 		return result;
 	}
 
-	public static string prepare_for_comparison(string value) {
+	public static string prepare_for_comparison(string? value) {
 		// transform strings to make it easier to compare them
-		string result = value;
+		if(value == null)
+			return "";
+		string result = value.strip();
 		string[] test_characters = {"/", " ", ".", ",", ";", ":", "\\", "'", "`", "´", "!", "_"};
 		
 		foreach(string s in test_characters)
@@ -393,6 +395,7 @@ public interface Xnoise.ILyrics : GLib.Object {
 		return false;
 	}
 	
+	// ILyrics implementor have to call destruct after signalling the arrival of a new lyrics text
 	public void destruct() { // default implementation of explizit destructor
 		Idle.add( () => {
 			if(get_timeout() != 0)
@@ -405,7 +408,7 @@ public interface Xnoise.ILyrics : GLib.Object {
 }
 
 
-public interface Xnoise.ILyricsProvider : GLib.Object {
+public interface Xnoise.ILyricsProvider : GLib.Object, IPlugin {
 	public abstract ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb);
 	public abstract int priority { get; set; default = 1;}
 	

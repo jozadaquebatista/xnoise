@@ -48,7 +48,7 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 
 	public string name {
 		get {
-			return "Lyricwiki";
+			return LYRICSWIKI;
 		}
 	}
 	
@@ -80,6 +80,7 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 }
 
 
+private static const string LYRICSWIKI = "Lyricwiki";
 
 
 //TODO: find out how to suppress xml parser error messages
@@ -91,7 +92,6 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 	private static const string search_url = "http://lyricwiki.org/Special:Search?search=%s:%s";
 	private static const string lyric_node_name = "lyricbox";
 	private static const string my_credits = "Lyrics provided by lyricwiki.com";
-	private static const string my_identifier = "Lyricwiki";
 	private static const string additional_escape_chars = "&/%\"&=´`'~#§()?!";
 	private StringBuilder search_str = null;
 	private Soup.Session session;
@@ -129,7 +129,7 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 	}
 	
 	public string get_identifier() {
-		return my_identifier;
+		return LYRICSWIKI;
 	}
 	
 	protected bool timeout_elapsed() {
@@ -138,7 +138,7 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 		
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), "", "Lyricwiki");
+				this.cb(artist, title, get_credits(), get_identifier(), "", LYRICSWIKI);
 			return false;
 		});
 		
@@ -187,7 +187,7 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 		//print("Lyricwiki: lyrics: \n%s\n", lyrics);
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), lyrics, "Lyricwiki");
+				this.cb(artist, title, get_credits(), get_identifier(), lyrics, LYRICSWIKI);
 			this.destruct();
 			return false;
 		});

@@ -37,9 +37,9 @@
 */
 //TODO: use priorities
 public class Xnoise.LyricsLoader : GLib.Object {
-	private List<unowned ILyricsProvider> providers = new List<unowned ILyricsProvider>();
 	
 	private unowned ILyricsProvider db_provider = null;
+	private Providers providers;
 	
 	private unowned ILyricsProvider provider = null;
 	private unowned Main xn;
@@ -48,10 +48,69 @@ public class Xnoise.LyricsLoader : GLib.Object {
 
 	private ulong activation_cb = 0;
 	
+	private class Providers : GLib.Object {
+		//TODO: initial setup of priorities
+		private List<unowned ILyricsProvider> list = new List<unowned ILyricsProvider>();
+		
+		public int length {
+			get {
+				return (int)list.length();
+			}
+		}
+		
+		public bool empty() {
+			if(length > 0)
+				return false;
+			return true;
+		}
+		
+		public Providers() {
+		}
+		
+		public void add(ILyricsProvider provider) {
+			list.prepend(provider);
+		}
+		
+		public void remove(ILyricsProvider provider) {
+			foreach(unowned ILyricsProvider x in list)
+				if(x.equals(provider)) {
+					list.remove(x);
+					break;
+				}
+		}
+
+		public unowned ILyricsProvider? highest_prio() {
+			unowned ILyricsProvider res = null;
+			foreach(unowned ILyricsProvider x in list) {
+				if(res == null) {
+					res = x;
+					continue;
+				}
+				if(res.priority > x.priority)
+					res = x;
+			}
+			return res;
+		}
+		
+		public unowned ILyricsProvider? next_prio(ILyricsProvider? current) {
+			unowned ILyricsProvider res = null;
+			if(current == null)
+				return highest_prio();
+			
+			foreach(unowned ILyricsProvider x in list) {
+				
+				if(current.priority > x.priority)
+					res = x;
+			}
+			return res;
+		}
+	}
+	
 	public signal void sign_fetched(string _artist, string _title, string _credits, string _identifier, string _text, string _provider);
 
 	public LyricsLoader() {
 		xn = Main.instance;
+		providers = new Providers();
 		activation_cb = xn.plugin_loader.sign_plugin_activated.connect(this.on_plugin_activated);
 	}
 
@@ -70,7 +129,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 			return;
 		}
 		
-		providers.prepend(prov);
+		providers.add(prov);
 		
 		if(this.provider == null)
 			this.provider = prov;
@@ -80,24 +139,18 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	}
 
 	public void remove_lyrics_provider(ILyricsProvider lp) {
-		if(this.provider.equals(lp)) {
+		if(this.provider.equals(lp))
 			this.provider = null;
-		}
+		
 		if(this.db_provider.equals(lp)) {
 			this.db_provider = null;
 			return;
 		}
 		
-		foreach(unowned ILyricsProvider x in providers)
-			if(x.equals(lp)) {
-				providers.remove(x);
-				break;
-			}
+		providers.remove(lp);
 		
-		if(providers.length() > 0) {
-			this.provider = providers.first().data;
-		}
-		//TODO: this.provider has to point to highest prio
+		if(!providers.empty()) 
+			this.provider = providers.highest_prio();
 	}
 
 	public bool fetch(string _artist, string _title, bool use_db_provider = true) {
@@ -118,7 +171,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		}
 		
 		if(this.provider == null) {
-			sign_fetched(artist, title, "", "", "Enable a lyrics provider plugin for lyrics fetching to work", "");
+			sign_fetched(artist, title, "", "", _("Enable a lyrics provider plugin for lyrics fetching to work"), "");
 			return false;
 		}
 		
@@ -134,7 +187,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	
 	//forward result
 	private void lyrics_fetched_cb(string _artist, string _title, string _credits, string _identifier, string _text, string _providername) {
-		print("got lyrics reply from %s %s %s %s\n", _providername, _artist, _title, _identifier);
+		// print("got lyrics reply from %s %s %s %s\n", _providername, _artist, _title, _identifier);
 		if(_providername == "DatabaseLyrics") {
 			if(_artist == this.artist && _title == this.title &&
 			   (_text == null || _text == "")) {
@@ -143,7 +196,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 				return;
 			}
 		}
-		if((_text != null) && (_text != "")) {
+		if((_text != null) && (_text.strip() != "")) {
 			sign_fetched(_artist, _title, _credits, _identifier, _text, _providername);
 		}
 		else {

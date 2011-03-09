@@ -207,7 +207,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		Timeout.add(200, () => {
 			msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
 		                        UserInfo.ContentClass.WAIT,
-		                        "Importing media data. This may take some time...",
+		                        _("Importing media data. This may take some time..."),
 		                        true,
 		                        5,
 		                        null);

@@ -67,6 +67,11 @@ public class Xnoise.LyricsView : Gtk.TextView {
 			global.sign_notify_tracklistnotebook_switched.connect( (s,p) => {
 				if(p != TrackListNoteBookTab.LYRICS)
 					return;
+				if(prepare_for_comparison(artist) == prepare_for_comparison(global.current_artist) &&
+				   prepare_for_comparison(title) == prepare_for_comparison(global.current_title)) {
+					return; // Do not search if we already have lyrics
+				}
+				//TODO: check if lyrics have already been found
 				textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);
 				if(timeout!=0) {
 					GLib.Source.remove(timeout);
@@ -84,22 +89,23 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		
 		// Lyrics View is already visible...
 		if(Main.instance.main_window.tracklistnotebook.get_current_page() == TrackListNoteBookTab.LYRICS)
-			timeout = GLib.Timeout.add_seconds(2, on_timout_elapsed);
+			timeout = GLib.Timeout.add_seconds(1, on_timout_elapsed);
 	}
 
 	//FIXME: This must be used wtih Worker.Job, so that there are no race conditions!
 	// Use the timeout because gPl is sending the tag_changed signals
 	// sometimes very often at the beginning of a track.
 	private bool on_timout_elapsed() {
-		// Do not execute if source has been removed in the meantime
-		if(MainContext.current_source().is_destroyed()) return false;
-
-		artist = remove_linebreaks(global.current_artist);
-		title  = remove_linebreaks(global.current_title );
-		//print("1. %s - %s\n", artist, title);
-
+		if(global.player_state == PlayerState.STOPPED) {
+			set_text_via_idle(_("Player stopped. Not searching for lyrics."));
+			return false;
+		}
+		
+		artist = prepare_for_comparison(global.current_artist);
+		title  = prepare_for_comparison(global.current_title );
+		
 		// Look into db in case gPl does not provide the tag
-		if((artist=="unknown artist")||(title =="unknown title" )) {
+		if((global.current_artist=="unknown artist")||(global.current_title =="unknown title" )) {
 			DbBrowser dbb;
 			try {
 				dbb = new DbBrowser(); //TODO: Evil code in this context
@@ -116,17 +122,16 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		}
 
 		//print("2. %s - %s\n", artist, title);
-		if((artist=="")||(artist==null)||(artist=="unknown artist")||
-		   (title =="")||(title ==null)||(title =="unknown title" )) {
+		if((artist=="")||(artist==null)||(artist=="unknownartist")||
+		   (title =="")||(title ==null)||(title =="unknowntitle" )) {
 			return false;
 		}
 
 		// Do not execute if source has been removed in the meantime
-		if(MainContext.current_source().is_destroyed()) return false;
-//		loader.artist = artist;
-//		loader.title  = title;
-		set_text((_("\nTrying to find lyrics for \"%s\" by \"%s\"...")).printf(title, artist));
-		loader.fetch(artist, title, true);
+		if(MainContext.current_source().is_destroyed())
+			return false;
+		set_text((_("\nTrying to find lyrics for \"%s\" by \"%s\"...")).printf(global.current_title, global.current_artist));
+		loader.fetch(remove_linebreaks(global.current_artist), remove_linebreaks(global.current_title), true);
 		return false;
 	}
 
@@ -134,7 +139,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		//check if returned track is the one we asked for:
 		if(!((prepare_for_comparison(this.artist) == prepare_for_comparison(_artist))&&
 		     (prepare_for_comparison(this.title)  == prepare_for_comparison(_title)))) {
-			set_text((_("\nLyrics provider %s cannot find lyrics for \n\"%s\" by \"%s\".\n")).printf(_identifier,title, artist));
+			set_text((_("\nLyrics provider %s cannot find lyrics for \n\"%s\" by \"%s\".\n")).printf(_identifier, _title, _artist));
 			return;
 		}
 		set_text_via_idle((_artist + " - " + _title + "\n\n" + _text + "\n\n" + _credits));
@@ -150,9 +155,6 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	}
 	
 	private void set_text(string text) {
-		// Do not execute if source has been removed in the meantime
-		if(MainContext.current_source().is_destroyed()) 
-			return;
 		textbuffer.set_text(text, -1);
 	}
 }

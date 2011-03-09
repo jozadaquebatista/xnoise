@@ -9,12 +9,11 @@ public class Xnoise.TrayIcon : StatusIcon {
 	private const int TOOLTIP_IMAGE_SIZE = 48;
 	
 	public TrayIcon() {
-		set_from_file(Config.UIDIR + "xnoise_bruit_48x48.png");
+		this.icon_name = "xnoise";
 		this.has_tooltip = true;
 		xn = Main.instance;
 		construct_traymenu();
 		this.query_tooltip.connect(on_query_tooltip);
-		
 		
 		popup_menu.connect(this.traymenu_popup);
 		activate.connect(xn.main_window.toggle_window_visbility);
@@ -127,26 +126,26 @@ public class Xnoise.TrayIcon : StatusIcon {
 		traymenu.popup(null, null, i.position_menu, 0, activateTime);
 	}
 	
-	// todo: use global string constants for uknown_[title,album,artist] and state!
+	// todo: use global string constants for unknown_[title,album,artist] and state!
 	// for now they are left uni18ned
 	private bool on_query_tooltip(int x, int y, bool keyboard_mod, Tooltip tp) {
 		string state = "";
 		string? uri = global.current_uri;
 		switch(global.player_state) {
 			case PlayerState.STOPPED: {
-				state = "stopped";
+				state = _("stopped");
 				break;
 			}
 			case PlayerState.PLAYING: {
-				state = "playing";
+				state = _("playing");
 				break;
 			}
 			case PlayerState.PAUSED: {
-				state = "paused";
+				state = _("paused");
 				break;
 			}
 			default: {
-				state = "stopped";
+				state = _("stopped");
 				break;
 			}
 		}
@@ -183,11 +182,12 @@ public class Xnoise.TrayIcon : StatusIcon {
 		}
 		else {
 			if(album == null)
-				album = "unknown album";
+				album = _("unknown album");
 			if(artist == null)
-				artist = "unknown artist";
+				artist = _("unknown artist");
 			if(title == null)
-				title = "unknown title";
+				title = _("unknown title");
+			
 			album = Markup.escape_text(album);
 			artist = Markup.escape_text(artist);
 			title = Markup.escape_text(title);

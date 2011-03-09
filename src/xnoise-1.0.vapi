@@ -627,7 +627,7 @@ namespace Xnoise {
 		protected bool timeout_elapsed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public interface ILyricsProvider : GLib.Object {
+	public interface ILyricsProvider : GLib.Object, Xnoise.IPlugin {
 		public bool equals (Xnoise.ILyricsProvider other);
 		public abstract Xnoise.ILyrics* from_tags (Xnoise.LyricsLoader loader, string artist, string title, Xnoise.LyricsFetchedCallback cb);
 		public abstract int priority { get; set; }
@@ -715,7 +715,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static void initialize (out bool is_first_start);
 	[CCode (cheader_filename = "xnoise.h")]
-	public static string prepare_for_comparison (string value);
+	public static string prepare_for_comparison (string? value);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string prepare_name_from_filename (string? val);
 	[CCode (cheader_filename = "xnoise.h")]

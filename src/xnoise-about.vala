@@ -1,6 +1,6 @@
 /* xnoise-about.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 using GLib;
 
 private class Xnoise.AboutDialog : Gtk.AboutDialog {
-	const string COPYRIGHT = "Copyright \xc2\xa9 2008, 2009-2010 Jörn Magens";
+	const string COPYRIGHT = "Copyright \xc2\xa9 2008-2011 Jörn Magens";
 	const string PROGRAM_NAME = "xnoise";
 	const string WEBSITE = "http://www.xnoise-media-player.com/";
 
@@ -53,14 +53,9 @@ private class Xnoise.AboutDialog : Gtk.AboutDialog {
 		catch(GLib.Error e) {
 			print("%s\n", e.message);
 		}
-
-		try {
-			var pixbuf = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
-			logo = pixbuf;
-		}
-		catch(GLib.Error e) {
-			print("%s\n", e.message);
-		}
+		
+		this.logo_icon_name = PROGRAM_NAME;
+		
 		this.set_default_icon_name(PROGRAM_NAME);
 		this.set_logo_icon_name(PROGRAM_NAME);
 

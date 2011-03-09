@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-11 17:13+0100\n"
+"POT-Creation-Date: 2011-03-07 15:46+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
@@ -46,6 +46,10 @@ msgstr "Eliminar"
 msgid "xnoise - Add media to library"
 msgstr "xnoise - Agregar medios a la biblioteca"
 
+#: ../src/xnoise-add-media-dialog.vala:210
+msgid "Importing media data. This may take some time..."
+msgstr "Importing media data. This may take some time..."
+
 #: ../src/xnoise-add-media-dialog.vala:251
 #: ../src/xnoise-main-window.vala:976
 msgid "Select media file"
@@ -63,7 +67,9 @@ msgstr "Agregar url a emisora de radio por internet"
 msgid "Leave fullscreen"
 msgstr "Salir de pantalla completa"
 
-#: ../src/xnoise-lyrics-view.vala:101
+#. loader.artist = artist;
+#. loader.title  = title;
+#: ../src/xnoise-lyrics-view.vala:128
 #, c-format
 msgid ""
 "\n"
@@ -72,7 +78,7 @@ msgstr ""
 "\n"
 "Intentando buscar Letras de Canciones para \"%s\" por \"%s\"..."
 
-#: ../src/xnoise-lyrics-view.vala:110
+#: ../src/xnoise-lyrics-view.vala:137
 #, c-format
 msgid ""
 "\n"
@@ -210,7 +216,7 @@ msgstr "Enter the URL of the file to open"
 #: ../src/xnoise-main-window.vala:1064
 #: ../src/xnoise-main-window.vala:1106
 #: ../src/xnoise-main-window.vala:1131
-#: ../plugins/notifications/xnoise-notifications.vala:152
+#: ../plugins/notifications/xnoise-notifications.vala:156
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:129
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:152
 msgid "by"
@@ -220,7 +226,7 @@ msgstr "por"
 #: ../src/xnoise-main-window.vala:1066
 #: ../src/xnoise-main-window.vala:1108
 #: ../src/xnoise-main-window.vala:1133
-#: ../plugins/notifications/xnoise-notifications.vala:154
+#: ../plugins/notifications/xnoise-notifications.vala:158
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
 msgid "on"

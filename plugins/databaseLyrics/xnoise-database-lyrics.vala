@@ -47,7 +47,7 @@ public class Xnoise.DatabaseLyricsPlugin : GLib.Object, IPlugin, ILyricsProvider
 
 	public string name {
 		get {
-			return "DatabaseLyrics";
+			return DATABASELYRICS;
 		}
 	}
 	
@@ -92,6 +92,8 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 		"SELECT name FROM sqlite_master WHERE type='table';";
 	private static const string INSERT_LYRICS =
 		"INSERT INTO lyrics (artist, title, provider, txt, credits, identifier) VALUES (?,?,?,?,?,?);";
+	private static const string STMT_CHECK_ENTRY_EXISTS =
+		"SELECT identifier FROM lyrics WHERE artist = ? AND title = ? AND provider = ?";
 	
 	private unowned LyricsLoader loader;
 	
@@ -107,8 +109,7 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 		this.loader = _loader;
 		check_table();
 		loader.sign_fetched.connect( (a,t,c,i,tx,p) => {
-			print("prov:%s\n", p);
-			if(p == "DatabaseLyrics")
+			if(p == DATABASELYRICS) // already buffered in database
 				return;
 			if(tx == null || tx == "" || tx.strip() == "no lyrics found...")
 				return;
@@ -124,7 +125,7 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 	}
 	
 	~DatabaseLyricsWriter() {
-		print("dtor DatabaseLyricsWriter\n");
+		//print("dtor DatabaseLyricsWriter\n");
 	}
 	
 	private void check_table() {
@@ -178,7 +179,7 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 			db.prepare_v2(STMT_FIND_TABLE, -1, out stmt);
 			stmt.reset();
 			while(stmt.step() == Sqlite.ROW) {
-				if(stmt.column_text(0)=="lyrics") {
+				if(stmt.column_text(0) == "lyrics") {
 					db_table_exists = true;
 					break;
 				}
@@ -199,6 +200,18 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 		Statement stmt;
 		//TODO check for entry existance, first
 		if(!cancellable.is_cancelled()) {
+			db.prepare_v2(STMT_CHECK_ENTRY_EXISTS, -1, out stmt);
+			stmt.reset();
+			if(stmt.bind_text(1, prepare_for_comparison(artist))     != Sqlite.OK ||
+			   stmt.bind_text(2, prepare_for_comparison(title))      != Sqlite.OK ||
+			   stmt.bind_text(3, provider)                           != Sqlite.OK) {
+				print("Database lyrics error %d: %s \n\n", db.errcode(), db.errmsg());
+				return;
+			}
+			if(stmt.step() == Sqlite.ROW) {
+				return; // Entry is already in table
+			}
+			
 			db.prepare_v2(INSERT_LYRICS, -1, out stmt);
 			stmt.reset();
 			if(stmt.bind_text(1, prepare_for_comparison(artist))     != Sqlite.OK ||
@@ -223,18 +236,17 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 
 // TODO: add lyrics table to database: artist(text), title(text) --> lyrics(text), credits(text), provider(text)
 
+private static const string DATABASELYRICS = "DatabaseLyrics";
 
 // get lyrics from local database
 public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 	private string artist;
 	private string title;
-	private const int SECONDS_FOR_TIMEOUT = 4;
+	private const int SECONDS_FOR_TIMEOUT = 2;
 	private uint timeout;
 	private unowned Plugin owner;
 	private unowned LyricsLoader loader;
 	private LyricsFetchedCallback cb = null;
-	private static const string my_credits = "";
-	private static const string my_identifier = "DatabaseLyrics";
 	private Cancellable cancellable = new Cancellable();
 	private DbBrowser dbb = null;
 	
@@ -253,7 +265,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 	}
 	
 	~DatabaseLyrics() {
-		print("remove DatabaseLyrics IL\n");
+		//print("remove DatabaseLyrics IL\n");
 	}
 
 	public uint get_timeout() {
@@ -261,11 +273,11 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 	}
 	
 	public string get_credits() {
-		return my_credits;
+		return "";
 	}
 	
 	public string get_identifier() {
-		return my_identifier;
+		return DATABASELYRICS;
 	}
 	
 	protected bool timeout_elapsed() {
@@ -276,7 +288,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 		
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), "", "DatabaseLyrics");
+				this.cb(artist, title, get_credits(), get_identifier(), "", DATABASELYRICS);
 			return false;
 		});
 		
@@ -289,7 +301,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 	}
 	
 	private void find_lyrics() {
-	
+		
 		timeout = Timeout.add_seconds(SECONDS_FOR_TIMEOUT, timeout_elapsed);
 		
 		Worker.Job job;
@@ -319,7 +331,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 				ident = stmt.column_text(2);
 				Idle.add( () => {
 					if(this.cb != null)
-						this.cb(artist, title, cred, ident, txt, "DatabaseLyrics");
+						this.cb(artist, title, cred, ident, txt, DATABASELYRICS);
 					this.destruct();
 					return false;
 				});
@@ -327,7 +339,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 			else {
 				Idle.add( () => {
 					if(this.cb != null)
-						this.cb(artist, title, cred, ident, "", "DatabaseLyrics");
+						this.cb(artist, title, cred, ident, "", DATABASELYRICS);
 					this.destruct();
 					return false;
 				});
@@ -337,7 +349,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 			dbb = null;
 		}
 	}
-	
+
 	private void get_lyrics_from_db(Worker.Job job) {
 		try {
 			lock(dbb) {

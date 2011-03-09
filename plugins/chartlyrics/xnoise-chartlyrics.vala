@@ -54,7 +54,7 @@ public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 
 	public string name {
 		get {
-			return "Chartlyrics";
+			return CHARTLYRICS;
 		}
 	}
 
@@ -82,6 +82,7 @@ public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	
 }
 
+private static const string CHARTLYRICS = "Chartlyrics";
 
 public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 	private const int SECONDS_FOR_TIMEOUT = 12;
@@ -91,7 +92,6 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 	private string artist;
 	private string title;
 		
-	private static const string my_identifier= "Chartlyrics";
 	private static const string auth = "xnoise";
 	private static const string check_url = "http://api.chartlyrics.com/apiv1.asmx/SearchLyric?artist=%s&song=%s";
 	private static const string text_url = "http://api.chartlyrics.com/apiv1.asmx/GetLyric?lyricId=%s&lyricCheckSum=%s";
@@ -140,7 +140,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), "", "Chartlyrics");
+				this.cb(artist, title, get_credits(), get_identifier(), "", CHARTLYRICS);
 			return false;
 		});
 		
@@ -261,7 +261,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		delete xmldoc;
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), text, "Chartlyrics");
+				this.cb(artist, title, get_credits(), get_identifier(), text, CHARTLYRICS);
 			this.destruct();
 			return false;
 		});
@@ -289,7 +289,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 	}
 	
 	public string get_identifier() {
-		return my_identifier;
+		return CHARTLYRICS;
 	}
 }
 
