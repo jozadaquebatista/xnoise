@@ -99,6 +99,9 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		xn = Main.instance;
 		providers = new Providers();
 		activation_cb = xn.plugin_loader.sign_plugin_activated.connect(this.on_plugin_activated);
+		global.uri_changed.connect( () => {
+			n_th_provider = 0;
+		});
 	}
 
 	private void on_plugin_activated(PluginLoader sender, Plugin p) {
