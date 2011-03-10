@@ -269,9 +269,9 @@ mediabrowser_linebreaks=0
 volume=0.080511778431618983
 
 [settings_string]
-prio_lyrics=Leoslyrics;Lyricsfly
+prio_lyrics=Lyricwiki;Chartlyrics
 prio_images=LastfmCovers
-activated_plugins=Chartlyrics;notifications;LastfmCovers;TitleToDecoration;Mediawatcher;mediakeys
+activated_plugins=Lyricwiki;DatabaseLyrics;Chartlyrics;notifications;LastfmCovers;TitleToDecoration;Mediawatcher;mediakeys
 """;
 }
 

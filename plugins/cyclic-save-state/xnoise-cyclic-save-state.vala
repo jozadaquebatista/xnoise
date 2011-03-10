@@ -54,6 +54,8 @@ public class Xnoise.CyclicSaveState : GLib.Object, IPlugin {
 
 	public bool init() {
 		source = Timeout.add_seconds(60, () => {
+			if(MainContext.current_source().is_destroyed())
+				return false;
 			if(!global.media_import_in_progress) {
 				Main.instance.save_tracklist();
 				Main.instance.save_activated_plugins();

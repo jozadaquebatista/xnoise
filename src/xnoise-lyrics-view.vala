@@ -144,6 +144,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 
 	private void on_lyrics_ready(string _artist, string _title, string _credits, string _identifier, string _text) {
 		//check if returned track is the one we asked for:
+		print("%s - %s\n", prepare_for_comparison(this.artist), prepare_for_comparison(_artist));
 		if(!((prepare_for_comparison(this.artist) == prepare_for_comparison(_artist))&&
 		     (prepare_for_comparison(this.title)  == prepare_for_comparison(_title)))) {
 			set_text((_("\nLyrics provider %s cannot find lyrics for \n\"%s\" by \"%s\".\n")).printf(_identifier, _title, _artist));

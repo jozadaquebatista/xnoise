@@ -61,6 +61,7 @@ public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	public int priority { get; set; default = 1; }
 	
 	public bool init() {
+		priority = 2;
 		return true;
 	}
 

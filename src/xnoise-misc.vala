@@ -93,32 +93,92 @@ namespace Xnoise {
 		return tmp;
 	}
 
-	public static string remove_single_character(string haystack, string needle) {
-		//TODO: check if this can be done more efficiently
-		string result = "";
-		if(haystack.contains(needle) == true) {
-			string[] a = haystack.split(needle, 30);
-			foreach(string s in a) {
-				result = result + s;
-			}
-		}
-		else {
-			return haystack;
-		}
-		return result;
-	}
-
+	private string[] characters_not_used_in_comparison__escaped = null;
+	
 	public static string prepare_for_comparison(string? value) {
 		// transform strings to make it easier to compare them
 		if(value == null)
 			return "";
-		string result = value.strip();
-		string[] test_characters = {"/", " ", ".", ",", ";", ":", "\\", "'", "`", "´", "!", "_"};
 		
-		foreach(string s in test_characters)
-			result = remove_single_character(result, s);
+		if(characters_not_used_in_comparison__escaped == null) {
+			string[] characters_not_used_in_comparison = {
+			   "/", 
+			   " ", 
+			   "\\", 
+			   ".", 
+			   ",", 
+			   ";", 
+			   ":", 
+			   "\"", 
+			   "'", 
+			   "'", 
+			   "`", 
+			   "´", 
+			   "!", 
+			   "_", 
+			   "+", 
+			   "*", 
+			   "#", 
+			   "?", 
+			   "(", 
+			   ")", 
+			   "[", 
+			   "]", 
+			   "{", 
+			   "}", 
+			   "&", 
+			   "§", 
+			   "$", 
+			   "%", 
+			   "=", 
+			   "ß", 
+			   "ä", 
+			   "ö", 
+			   "ü", 
+			   "|", 
+			   "µ", 
+			   "@", 
+			   "~"
+			};
+			
+			characters_not_used_in_comparison__escaped = {};
+			foreach(unowned string s in characters_not_used_in_comparison)
+				characters_not_used_in_comparison__escaped += GLib.Regex.escape_string(s);
+		}
+		string result = value.strip().down();
+		try {
+			foreach(unowned string s in characters_not_used_in_comparison__escaped) {
+				var regex = new GLib.Regex(s);
+				result = regex.replace_literal(result, -1, 0, "");
+			}
+		}
+		catch (GLib.RegexError e) {
+			GLib.assert_not_reached ();
+		}
+		return result;
+	}
 
-		return result.down();
+	public static string prepare_for_search(string? val) {
+		// transform strings to improve searches
+		if(val == null)
+			return "";
+		
+		string result = val.strip().down();
+		
+		result = remove_linebreaks(result);
+		
+		result.replace("_", " ");
+		result.replace("%20", " ");
+		result.replace("@", " ");
+		result.replace("<", " ");
+		result.replace(">", " ");
+		//		if(result.contains("<")) 
+		//			result = result.substring(0, result.index_of("<", 0));
+		//		
+		//		if(result.contains(">")) 
+		//			result = result.substring(0, result.index_of(">", 0));
+		
+		return result;
 	}
 
 	public static string remove_linebreaks(string? val) {

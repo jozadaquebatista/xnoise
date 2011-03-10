@@ -49,60 +49,74 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	private ulong activation_cb = 0;
 	
 	private class Providers : GLib.Object {
-		//TODO: initial setup of priorities
 		private List<unowned ILyricsProvider> list = new List<unowned ILyricsProvider>();
 		
-		public int length {
-			get {
-				return (int)list.length();
-			}
-		}
-		
-		public bool empty() {
-			if(length > 0)
-				return false;
-			return true;
-		}
+//		private unowned ILyricsProvider? _highest_prio = null;
 		
 		public Providers() {
 		}
 		
+//		public ILyricsProvider? highest_prio {
+//			get {
+//				return _highest_prio;
+//			}
+//		}
+		
+		public int count {
+			get {
+				return (int)(this.list.length());
+			}
+		}
+		
+		public bool empty {
+			get {
+				if(this.list.length() > 0)
+					return false;
+				return true;
+			}
+		}
+		
+		[CCode (has_target = false)]
+		private static int compare(ILyricsProvider a, ILyricsProvider b) {
+			if(a.priority <  b.priority)
+				return -1;
+			if(a.priority >  b.priority)
+				return 1;
+			return 0;
+		}
+		
+		public unowned ILyricsProvider? get_nth(uint n) {
+			list.sort(compare);
+			return list.nth_data(n);
+		}
+		
 		public void add(ILyricsProvider provider) {
+			list.remove(provider);
 			list.prepend(provider);
+			list.sort(compare);
+//			if(_highest_prio == null)
+//				_highest_prio = provider;
+//			if(_highest_prio.priority > provider.priority) 
+//				_highest_prio = provider;
 		}
 		
 		public void remove(ILyricsProvider provider) {
-			foreach(unowned ILyricsProvider x in list)
-				if(x.equals(provider)) {
-					list.remove(x);
-					break;
-				}
-		}
-
-		public unowned ILyricsProvider? highest_prio() {
-			unowned ILyricsProvider res = null;
-			foreach(unowned ILyricsProvider x in list) {
-				if(res == null) {
-					res = x;
-					continue;
-				}
-				if(res.priority > x.priority)
-					res = x;
-			}
-			return res;
-		}
-		
-		public unowned ILyricsProvider? next_prio(ILyricsProvider? current) {
-			unowned ILyricsProvider res = null;
-			if(current == null)
-				return highest_prio();
+			list.remove(provider);
+			list.sort(compare);
 			
-			foreach(unowned ILyricsProvider x in list) {
-				
-				if(current.priority > x.priority)
-					res = x;
-			}
-			return res;
+//			if(_highest_prio == null)
+//				return;
+//			if(_highest_prio.equals(provider)) {
+//				_highest_prio = null;
+//				unowned ILyricsProvider tmp = null;
+//				foreach(unowned ILyricsProvider x in list) {
+//					if(tmp == null)
+//						tmp = x;
+//					if(tmp.priority > x.priority)
+//						tmp = x;
+//				}
+//				_highest_prio = tmp;
+//			}
 		}
 	}
 	
@@ -131,16 +145,17 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		
 		providers.add(prov);
 		
-		if(this.provider == null)
-			this.provider = prov;
-		
-		if(prov.priority < provider.priority)
-			this.provider = prov;
+		this.provider = providers.get_nth(1);//highest_prio;
+//		if(this.provider == null)
+//			this.provider = prov;
+//		
+//		if(prov.priority < provider.priority)
+//			this.provider = prov;
 	}
 
 	public void remove_lyrics_provider(ILyricsProvider lp) {
-		if(this.provider.equals(lp))
-			this.provider = null;
+//		if(this.provider.equals(lp))
+//			this.provider = null;
 		
 		if(this.db_provider.equals(lp)) {
 			this.db_provider = null;
@@ -149,14 +164,16 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		
 		providers.remove(lp);
 		
-		if(!providers.empty()) 
-			this.provider = providers.highest_prio();
+//		if(!providers.empty()) 
+		this.provider = providers.get_nth(1);//providers.highest_prio;
 	}
 
 	public bool fetch(string _artist, string _title, bool use_db_provider = true) {
-		this.artist = _artist;
-		this.title  = _title;
+		this.artist = prepare_for_search(_artist);
+		this.title  = prepare_for_search(_title);
 		
+		if(db_provider == null)
+			print("db prov is null\n");
 		// always highest prio for databaseprovider
 		if(db_provider != null && use_db_provider) {
 			Idle.add( () => {
@@ -171,37 +188,41 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		}
 		
 		if(this.provider == null) {
-			sign_fetched(artist, title, "", "", _("Enable a lyrics provider plugin for lyrics fetching to work"), "");
+			sign_fetched(artist, title, "", "", "", ""); //_("Enable a lyrics provider plugin for lyrics fetching to work")
 			return false;
 		}
 		
 		Idle.add( () => {
+			if(this.provider == null)
+				return false;
 			ILyrics* p = this.provider.from_tags(this, artist, title, lyrics_fetched_cb);
 			if(p == null)
 				return false;
 			p->find_lyrics();
 			return false;
 		});
+
 		return true;
 	}
 	
 	//forward result
 	private void lyrics_fetched_cb(string _artist, string _title, string _credits, string _identifier, string _text, string _providername) {
-		// print("got lyrics reply from %s %s %s %s\n", _providername, _artist, _title, _identifier);
+		print("got lyrics reply from %s %s %s %s\n", _providername, _artist, _title, _identifier);
 		if(_providername == "DatabaseLyrics") {
-			if(_artist == this.artist && _title == this.title &&
+			if(prepare_for_comparison(_artist) == prepare_for_comparison(this.artist) && 
+			   prepare_for_comparison(_title) == prepare_for_comparison(this.title) &&
 			   (_text == null || _text == "")) {
 				print("NEXT lyrics provider\n");
-				fetch(_artist, _title, false);
+				fetch(artist, title, false);
 				return;
 			}
 		}
-		if((_text != null) && (_text.strip() != "")) {
+		
+		if((_text != null) && (_text.strip() != "")) 
 			sign_fetched(_artist, _title, _credits, _identifier, _text, _providername);
-		}
-		else {
+		else 
 			sign_fetched(_artist, _title, "", _identifier, "no lyrics found...", _providername);
-		}
+		
 	}
 }
 
