@@ -43,13 +43,13 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		xn = Main.instance;
 		loader = new LyricsLoader();
 		loader.sign_fetched.connect(on_lyrics_ready);
+		loader.sign_using_provider.connect(on_using_provider);
 		this.textbuffer = new Gtk.TextBuffer(null);
 		this.set_buffer(textbuffer);
 		this.set_editable(false);
 		this.set_left_margin(8);
 		this.set_wrap_mode(Gtk.WrapMode.WORD);
 		global.uri_changed.connect(on_uri_changed);
-		
 	}
 	
 	public void lyrics_provider_unregister(ILyricsProvider lp) {
@@ -137,9 +137,23 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		// Do not execute if source has been removed in the meantime
 		if(MainContext.current_source().is_destroyed())
 			return false;
-		set_text((_("\nTrying to find lyrics for \"%s\" by \"%s\"...")).printf(global.current_title, global.current_artist));
-		loader.fetch(remove_linebreaks(global.current_artist), remove_linebreaks(global.current_title), true);
+		loader.fetch(remove_linebreaks(global.current_artist), remove_linebreaks(global.current_title));
 		return false;
+	}
+
+	private void on_using_provider(string _provider, string _artist, string _title) {
+		Idle.add( () => {
+			if(prepare_for_comparison(_artist) == prepare_for_comparison(this.artist) && 
+			   prepare_for_comparison(_title) == prepare_for_comparison(this.title)) {
+				//	Gtk.TextIter start_iter;
+				//	Gtk.TextIter end_iter;
+				//	textbuffer.get_start_iter (out start_iter);
+				//	textbuffer.get_start_iter (out end_iter);
+				//	string txt = textbuffer.get_text(start_iter, end_iter, true);
+				set_text((_("\nTrying to find lyrics for \"%s\" by \"%s\"\n\nUsing %s ...")).printf(global.current_title, global.current_artist, _provider));
+			}
+			return false;
+		});
 	}
 
 	private void on_lyrics_ready(string _artist, string _title, string _credits, string _identifier, string _text) {

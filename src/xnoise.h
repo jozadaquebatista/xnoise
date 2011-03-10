@@ -766,6 +766,7 @@ struct _XnoiseILyricsProviderIface {
 	XnoiseILyrics* (*from_tags) (XnoiseILyricsProvider* self, XnoiseLyricsLoader* loader, const gchar* artist, const gchar* title, XnoiseLyricsFetchedCallback cb, void* cb_target);
 	gint (*get_priority) (XnoiseILyricsProvider* self);
 	void (*set_priority) (XnoiseILyricsProvider* self, gint value);
+	const gchar* (*get_provider_name) (XnoiseILyricsProvider* self);
 };
 
 struct _XnoiseLyricsView {
@@ -1424,7 +1425,7 @@ GType xnoise_iplugin_get_type (void) G_GNUC_CONST;
 GType xnoise_ilyrics_get_type (void) G_GNUC_CONST;
 GType xnoise_ilyrics_provider_get_type (void) G_GNUC_CONST;
 void xnoise_lyrics_loader_remove_lyrics_provider (XnoiseLyricsLoader* self, XnoiseILyricsProvider* lp);
-gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self, const gchar* _artist, const gchar* _title, gboolean use_db_provider);
+gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self, const gchar* _artist, const gchar* _title);
 GType xnoise_lyrics_view_get_type (void) G_GNUC_CONST;
 XnoiseLyricsView* xnoise_lyrics_view_new (void);
 XnoiseLyricsView* xnoise_lyrics_view_construct (GType object_type);
@@ -1564,6 +1565,7 @@ XnoiseILyrics* xnoise_ilyrics_provider_from_tags (XnoiseILyricsProvider* self, X
 gboolean xnoise_ilyrics_provider_equals (XnoiseILyricsProvider* self, XnoiseILyricsProvider* other);
 gint xnoise_ilyrics_provider_get_priority (XnoiseILyricsProvider* self);
 void xnoise_ilyrics_provider_set_priority (XnoiseILyricsProvider* self, gint value);
+const gchar* xnoise_ilyrics_provider_get_provider_name (XnoiseILyricsProvider* self);
 GType xnoise_ialbum_cover_image_get_type (void) G_GNUC_CONST;
 void xnoise_ialbum_cover_image_find_image (XnoiseIAlbumCoverImage* self);
 GType xnoise_ialbum_cover_image_provider_get_type (void) G_GNUC_CONST;

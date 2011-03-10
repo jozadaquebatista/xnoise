@@ -199,9 +199,10 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsLoader : GLib.Object {
 		public LyricsLoader ();
-		public bool fetch (string _artist, string _title, bool use_db_provider = true);
+		public bool fetch (string _artist, string _title);
 		public void remove_lyrics_provider (Xnoise.ILyricsProvider lp);
 		public signal void sign_fetched (string _artist, string _title, string _credits, string _identifier, string _text, string _provider);
+		public signal void sign_using_provider (string _provider, string _artist, string _title);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class LyricsView : Gtk.TextView {
@@ -631,6 +632,7 @@ namespace Xnoise {
 		public bool equals (Xnoise.ILyricsProvider other);
 		public abstract Xnoise.ILyrics* from_tags (Xnoise.LyricsLoader loader, string artist, string title, Xnoise.LyricsFetchedCallback cb);
 		public abstract int priority { get; set; }
+		public abstract string provider_name { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public interface IParams : GLib.Object {

@@ -58,6 +58,12 @@ public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 		}
 	}
 
+	public string provider_name {
+		get {
+			return CHARTLYRICS;
+		}
+	}
+	
 	public int priority { get; set; default = 1; }
 	
 	public bool init() {

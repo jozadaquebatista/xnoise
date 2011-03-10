@@ -52,9 +52,16 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 		}
 	}
 	
+	public string provider_name {
+		get {
+			return LYRICSWIKI;
+		}
+	}
+	
 	public int priority { get; set; default = 1; }
 	
 	public bool init() {
+		priority = 1;
 		return true;
 	}
 

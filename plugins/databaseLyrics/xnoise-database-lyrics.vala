@@ -51,9 +51,16 @@ public class Xnoise.DatabaseLyricsPlugin : GLib.Object, IPlugin, ILyricsProvider
 		}
 	}
 	
+	public string provider_name {
+		get {
+			return DATABASELYRICS;
+		}
+	}
+	
 	public int priority { get; set; default = 1; }
 	
 	public bool init() {
+		priority = -1; // highest prio
 		lyrics_writer = new DatabaseLyricsWriter(Main.instance.main_window.lyricsView.get_loader());
 		if(lyrics_writer != null)
 			return true;
@@ -234,7 +241,7 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 	}
 }
 
-// TODO: add lyrics table to database: artist(text), title(text) --> lyrics(text), credits(text), provider(text)
+
 
 private static const string DATABASELYRICS = "DatabaseLyrics";
 

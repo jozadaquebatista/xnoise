@@ -471,6 +471,7 @@ public interface Xnoise.ILyrics : GLib.Object {
 public interface Xnoise.ILyricsProvider : GLib.Object, IPlugin {
 	public abstract ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb);
 	public abstract int priority { get; set; default = 1;}
+	public abstract string provider_name { get; }
 	
 	
 	// DEFAULT IMPLEMENTATIONS
