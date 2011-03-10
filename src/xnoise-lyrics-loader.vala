@@ -139,19 +139,19 @@ public class Xnoise.LyricsLoader : GLib.Object {
 	
 	//forward result
 	private void lyrics_fetched_cb(string _artist, string _title, string _credits, string _identifier, string _text, string _providername) {
-		print("got lyrics reply from %s %s %s %s\n", _providername, _artist, _title, _identifier);
+		//print("got lyrics reply from %s %s %s %s\n", _providername, _artist, _title, _identifier);
 		if(prepare_for_comparison(_artist) == prepare_for_comparison(this.artist) && 
 		   prepare_for_comparison(_title) == prepare_for_comparison(this.title)) {
 			if(_text == null || _text.strip() == "") {
 				n_th_provider++;
 				if(providers.count > n_th_provider) {
-					print("NEXT lyrics provider\n");
+					//print("NEXT lyrics provider\n");
 					fetch(artist, title);
 					return;
 				}
 				else {
 					n_th_provider = 0;
-					sign_fetched(_artist, _title, "", _identifier, "no lyrics found...", _providername);
+					sign_fetched(_artist, _title, "", _identifier, "no lyrics found...", _providername); // the 'no lyrics found...' also appears in the db provider !! 
 				}
 			}
 			else {

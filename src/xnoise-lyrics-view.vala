@@ -68,7 +68,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 				if(p != TrackListNoteBookTab.LYRICS)
 					return;
 				if(prepare_for_comparison(artist) == prepare_for_comparison(global.current_artist) &&
-				   prepare_for_comparison(title) == prepare_for_comparison(global.current_title)) {
+				   prepare_for_comparison(title)  == prepare_for_comparison(global.current_title)) {
 					return; // Do not search if we already have lyrics
 				}
 				textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);
@@ -112,25 +112,26 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		title  = prepare_for_comparison(global.current_title );
 		
 		// Look into db in case gPl does not provide the tag
-		if((global.current_artist=="unknown artist")||(global.current_title =="unknown title" )) {
-			DbBrowser dbb;
-			try {
-				dbb = new DbBrowser(); //TODO: Evil code in this context
-			}
-			catch(Error e) {
-				print("%s\n", e.message);
-				return false;
-			}		
-			TrackData td;
-			if(dbb.get_trackdata_for_uri(xn.gPl.Uri, out td)) {
-				artist = td.Artist;
-				title  = td.Title;
-			}
-		}
+//		if((global.current_artist=="unknown artist")||(global.current_title =="unknown title" )) {
+//			DbBrowser dbb;
+//			try {
+//				dbb = new DbBrowser(); //TODO: Evil code in this context
+//			}
+//			catch(Error e) {
+//				print("%s\n", e.message);
+//				return false;
+//			}		
+//			TrackData td;
+//			if(dbb.get_trackdata_for_uri(xn.gPl.Uri, out td)) {
+//				artist = td.Artist;
+//				title  = td.Title;
+//			}
+//		}
 
 		//print("2. %s - %s\n", artist, title);
 		if((artist=="")||(artist==null)||(artist=="unknownartist")||
 		   (title =="")||(title ==null)||(title =="unknowntitle" )) {
+			set_text_via_idle(_("Insufficient track information. Not searching for lyrics."));
 			return false;
 		}
 
@@ -150,6 +151,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 				//	textbuffer.get_start_iter (out start_iter);
 				//	textbuffer.get_start_iter (out end_iter);
 				//	string txt = textbuffer.get_text(start_iter, end_iter, true);
+				//TODO: Howto append text ?
 				set_text((_("\nTrying to find lyrics for \"%s\" by \"%s\"\n\nUsing %s ...")).printf(global.current_title, global.current_artist, _provider));
 			}
 			return false;
@@ -158,10 +160,10 @@ public class Xnoise.LyricsView : Gtk.TextView {
 
 	private void on_lyrics_ready(string _artist, string _title, string _credits, string _identifier, string _text) {
 		//check if returned track is the one we asked for:
-		print("%s - %s\n", prepare_for_comparison(this.artist), prepare_for_comparison(_artist));
+		//print("%s - %s\n", prepare_for_comparison(this.artist), prepare_for_comparison(_artist));
 		if(!((prepare_for_comparison(this.artist) == prepare_for_comparison(_artist))&&
 		     (prepare_for_comparison(this.title)  == prepare_for_comparison(_title)))) {
-			set_text((_("\nLyrics provider %s cannot find lyrics for \n\"%s\" by \"%s\".\n")).printf(_identifier, _title, _artist));
+			//set_text((_("\nLyrics provider %s cannot find lyrics for \n\"%s\" by \"%s\".\n")).printf(_identifier, _title, _artist));
 			return;
 		}
 		set_text_via_idle((_artist + " - " + _title + "\n\n" + _text + "\n\n" + _credits));
