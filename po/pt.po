@@ -1,25 +1,25 @@
 # Portuguese translation for xnoise
 # This file is in public domain
-# Sérgio Marques <smarquespt@gmail.com>, 2010
+# Sérgio Marques <smarquespt@gmail.com>, 2011
 msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-09 15:11+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
+"Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Poedit-Language: Portuguese\n"
 "X-Poedit-Country: Portugal\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: ../data/misc/xnoise.desktop.in.in.h:1
 msgid "Media Player"
-msgstr "Reprodutpr multimédia"
+msgstr "Reprodutor multimédia"
 
 #: ../data/misc/xnoise.desktop.in.in.h:2
 msgid "Organize and play your music and video collections"
@@ -51,7 +51,7 @@ msgstr "xnoise - Adicionar ficheiros à coleção"
 
 #: ../src/xnoise-add-media-dialog.vala:210
 msgid "Importing media data. This may take some time..."
-msgstr "Importing media data. This may take some time..."
+msgstr "A importar dados. Pode levar algum tempo..."
 
 #: ../src/xnoise-add-media-dialog.vala:251
 #: ../src/xnoise-main-window.vala:976
@@ -72,11 +72,11 @@ msgstr "Sair de ecrã completo"
 
 #: ../src/xnoise-lyrics-loader.vala:174
 msgid "Enable a lyrics provider plugin for lyrics fetching to work"
-msgstr "Enable a lyrics provider plugin for lyrics fetching to work"
+msgstr "Ativar o \"plug-in\" para ser possível obter as letras musicais"
 
 #: ../src/xnoise-lyrics-view.vala:100
 msgid "Player stopped. Not searching for lyrics."
-msgstr "Player stopped. Not searching for lyrics."
+msgstr "Reprodutor parado. Não vão ser procuradas letras."
 
 #: ../src/xnoise-lyrics-view.vala:133
 #, c-format
@@ -289,30 +289,30 @@ msgstr "Remover seleção"
 
 #: ../src/xnoise-tray-icon.vala:40
 msgid "Play/Pause"
-msgstr "Play/Pause"
+msgstr "Reproduzir/Parar"
 
 #: ../src/xnoise-tray-icon.vala:54
 msgid "Previous"
-msgstr "Previous"
+msgstr "Anterior"
 
 #: ../src/xnoise-tray-icon.vala:69
 msgid "Next"
-msgstr "Next"
+msgstr "Seguinte"
 
 #: ../src/xnoise-tray-icon.vala:87
 msgid "Exit"
-msgstr "Exit"
+msgstr "Sair"
 
 #: ../src/xnoise-tray-icon.vala:136
 #: ../src/xnoise-tray-icon.vala:148
 msgid "stopped"
-msgstr "stopped"
+msgstr "parado"
 
 #: ../src/xnoise-tray-icon.vala:140
 msgid "playing"
-msgstr "playing"
+msgstr "a reproduzir"
 
 #: ../src/xnoise-tray-icon.vala:144
 msgid "paused"
-msgstr "paused"
+msgstr "pausado"
 
