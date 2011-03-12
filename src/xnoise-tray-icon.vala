@@ -195,9 +195,9 @@ public class Xnoise.TrayIcon : StatusIcon {
 			tp.set_markup("<span weight=\"bold\">" + 
 			              title +   " </span>\n<span size=\"small\" rise=\"6000\" style=\"italic\">" + 
 			              state + "</span><span size=\"xx-small\">\n</span>" +
-			              "<span size=\"small\" weight=\"light\">     by </span>" + 
+			              "<span size=\"small\" weight=\"light\">     %s </span>".printf(_("by")) + 
 			              artist + " \n" +
-			              "<span size=\"small\" weight=\"light\">     on </span> " + 
+			              "<span size=\"small\" weight=\"light\">     %s </span> ".printf(_("on")) + 
 			              album);
 		}
 		
