@@ -6,10 +6,6 @@ if ENABLE_CHARTLYRICS
   SUBDIRS += chartlyrics
 endif
 
-#if ENABLE_LEOSLYRICS
-#  SUBDIRS += leoslyrics
-#endif
-
 if ENABLE_LASTFMCOVERS
   SUBDIRS += lastfmCovers
 endif
@@ -17,10 +13,6 @@ endif
 if ENABLE_NOTIFICATIONS
   SUBDIRS += notifications
 endif
-
-#if ENABLE_LYRICSFLY
-#  SUBDIRS += lyricsfly
-#endif
 
 #if ENABLE_MEDIAWATCHER
 #  SUBDIRS += mediawatcher
