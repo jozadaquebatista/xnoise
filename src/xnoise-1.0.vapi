@@ -164,15 +164,19 @@ namespace Xnoise {
 		public void playSong (bool force_play = false);
 		public void request_time_offset_seconds (int seconds);
 		public void stop ();
-		public string? Uri { get; set; }
 		public bool buffering { get; private set; }
+		public bool current_has_subtitles { get; set; }
 		public bool current_has_video { get; set; }
+		public int current_text { get; set; }
 		public double gst_position { get; set; }
 		public bool is_stream { get; private set; }
 		public int64 length_time { get; set; }
+		public int n_text { get; }
 		public bool paused { get; set; }
 		public bool playing { get; set; }
 		public bool seeking { get; set; }
+		public string? suburi { get; set; }
+		public string? uri { get; set; }
 		public double volume { get; set; }
 		public signal void sign_buffering (int percent);
 		public signal void sign_paused ();

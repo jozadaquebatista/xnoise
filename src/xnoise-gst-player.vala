@@ -1,6 +1,6 @@
 /* xnoise-gst-player.vala
  *
- * Copyright (C) 2009 - 2010 Jörn Magens
+ * Copyright (C) 2009 - 2011 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,10 +32,14 @@ using Gst;
 
 public class Xnoise.GstPlayer : GLib.Object {
 	private bool _current_has_video;
+	private bool _current_has_subtitles;
+	
 	private uint cycle_time_source;
 	private uint update_tags_source;
 	private uint check_for_video_source;
-	private string? _Uri = null;
+	private uint check_for_subtitles_source;
+	
+	private string? _uri = null;
 	private Gst.TagList _taglist;
 	private int64 _length_time;
 	public VideoScreen videoscreen;
@@ -52,6 +56,15 @@ public class Xnoise.GstPlayer : GLib.Object {
 				videoscreen.trigger_expose();
 			else
 				sign_video_playing();
+		}
+	}
+
+	public bool current_has_subtitles { 
+		get {
+			return _current_has_subtitles;
+		}
+		set {
+			_current_has_subtitles = value;
 		}
 	}
 
@@ -100,16 +113,16 @@ public class Xnoise.GstPlayer : GLib.Object {
 		}
 	}
 
-	public string? Uri {
+	public string? uri {
 		get {
-			return _Uri;
+			return _uri;
 		}
 		set {
 			is_stream = false; //reset
-			_Uri = value;
+			_uri = value;
 			if((value == "")||(value == null)) {
 				playbin.set_state(State.NULL); //stop
-				//print("Uri = null or '' -> set to stop\n");
+				//print("uri = null or '' -> set to stop\n");
 				playing = false;
 				paused = false;
 			}
@@ -125,6 +138,30 @@ public class Xnoise.GstPlayer : GLib.Object {
 					is_stream = true;
 			}
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
+		}
+	}
+
+	public string? suburi {
+		get {
+			return playbin.suburi;
+		}
+		set {
+			playbin.suburi = value;
+		}
+	}
+
+	public int current_text {
+		get {
+			return playbin.current_text;
+		}
+		set {
+			playbin.current_text = value;
+		}
+	}
+
+	public int n_text {
+		get {
+			return playbin.n_text;
 		}
 	}
 
@@ -186,11 +223,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 		sign_missing_plugins.connect(on_sign_missing_plugins); 
 	}
 
-	private void request_location(string? uri) {
+	private void request_location(string? xuri) {
 		bool playing_buf = playing;
 		playbin.set_state(State.READY);
 		
-		this.Uri = uri;
+		this.uri = xuri;
 
 		if(playing_buf)
 			playbin.set_state(State.PLAYING);
@@ -203,25 +240,28 @@ public class Xnoise.GstPlayer : GLib.Object {
 		});
 	}
 	
-	private void on_about_to_finish() {
+	private void on_about_to_finish(Gst.Element sender) {
 		handle_eos_via_idle();
 	}
 
 	private void create_elements() {
-		playbin = ElementFactory.make("playbin2", "playbin");
-		playbin.flags = playbin.flags | (1 << 2); // add playflag text for subtitle; Is this working??
 		taglist = null;
+		playbin = ElementFactory.make("playbin2", "playbin");
+		playbin.text_changed.connect( () => {
+			//TODO
+			print("playbin2 got text-changed signal\n");
+		});
+		playbin.about_to_finish.connect(on_about_to_finish);
+		playbin.audio_tags_changed.connect(on_audio_tags_changed);
 		var bus = new Gst.Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
-		playbin.connect("swapped-object-signal::about-to-finish", on_about_to_finish, this, null);
-		playbin.connect("swapped-object-signal::audio-tags-changed", on_audio_tags_changed, this, null);
 		bus.message.connect(this.on_bus_message);
 		bus.enable_sync_message_emission();
 		bus.sync_message.connect(this.on_sync_message);
 	}
-		
-	private void on_audio_tags_changed(int stream_number) {
+	
+	private void on_audio_tags_changed(Gst.Element sender, int stream_number) {
 		TagList tags = null;
 		Signal.emit_by_name(playbin, "get-audio-tags", stream_number, ref tags);
 		if(taglist == null && tags != null) {
@@ -289,10 +329,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 				Error err;
 				string debug;
 				msg.parse_error(out err, out debug);
-				print("GstError: %s\n", err.message);
+				print("GstError parsed: %s\n", err.message);
 				//print("Debug: %s\n", debug);
 				if(!is_missing_plugins_error(msg)) {
-					print("Error is not missing plugin error\n");
+					//print("Error is not missing plugin error\n");
 					handle_eos_via_idle(); //this is used to go to the next track
 				}
 				break;
@@ -347,12 +387,29 @@ public class Xnoise.GstPlayer : GLib.Object {
 		
 		check_for_video_source = Idle.add( () => {
 			int n_video = 0;
-			playbin.get("n-video", out n_video);
+			n_video = playbin.n_video;
 			if(n_video > 0) {
 				this.current_has_video = true;
 			}
 			else {
 				this.current_has_video = false;
+			}
+			return false;
+		});
+	}
+
+	private void check_for_subtitles() {
+		if(check_for_subtitles_source != 0)
+			Source.remove(check_for_subtitles_source);
+		
+		check_for_subtitles_source = Idle.add( () => {
+			int n_text = 0;
+			n_text = playbin.n_text;
+			if(n_text > 0) {
+				this.current_has_subtitles = true;
+			}
+			else {
+				this.current_has_subtitles = false;
 			}
 			return false;
 		});

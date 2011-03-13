@@ -385,7 +385,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 		TreeIter citer;
 		this.get_iter(out citer, global.position_reference.get_path());
-		string uri;
+		string xuri;
 		if(ts==PlayerState.PLAYING) {
 			bolden_row();
 			pixbuf = w.render_icon(Gtk.Stock.MEDIA_PLAY, IconSize.BUTTON, null);
@@ -399,9 +399,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 
 		this.get(citer,
-				 Column.URI, out uri
+				 Column.URI, out xuri
 				 );
-		if(uri==xn.gPl.Uri) {
+		if(xuri==xn.gPl.uri) {
 			this.set(citer,
 					 Column.ICON, pixbuf,
 					 -1

@@ -492,8 +492,6 @@ AC_CONFIG_FILES([
     plugins/titleToDecoration/Makefile
     plugins/cyclic-save-state/Makefile
     plugins/lastfmCovers/Makefile
-    plugins/leoslyrics/Makefile
-    plugins/lyricsfly/Makefile
     plugins/notifications/Makefile
     plugins/mediawatcher/Makefile
     plugins/mpris/Makefile
