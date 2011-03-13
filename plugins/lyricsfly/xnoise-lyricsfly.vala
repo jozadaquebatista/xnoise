@@ -1,6 +1,7 @@
 /* xnoise-lyricsfly.vala
  *
- * Copyright (C) 2009  softshaker
+ * Copyright (C) 2009 - 2010  softshaker
+ * Copyright (C) 2011 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +26,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	sotshaker
+ * 	softshaker
  */
 
 // Plugin for lyricsfly.com using its PHP API
@@ -35,8 +36,9 @@ using GLib;
 using Soup;
 using Xml;
 
-// In order for lyricsfly to work properly, we have to sign up for an xnoise key, which is free
+private static const string LYRICSFLY = "Lyricsfly";
 
+// In order for lyricsfly to work properly, we have to sign up for an xnoise key, which is free
 
 public class Xnoise.LyricsLyricsflyPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.ILyricsProvider {
 	
@@ -55,10 +57,18 @@ public class Xnoise.LyricsLyricsflyPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.
 
 	public string name { 
 		get {
-			return "Lyricsfly";
+			return LYRICSFLY;
 		} 
 	}
 
+	public string provider_name {
+		get {
+			return LYRICSFLY;
+		}
+	}
+	
+	public int priority { get; set; default = 1; }
+	
 	public bool init() {
 		//LyricsLoader.register_backend(this.name, this.from_tags);
 		return true;
@@ -75,8 +85,8 @@ public class Xnoise.LyricsLyricsflyPlugin : GLib.Object, Xnoise.IPlugin, Xnoise.
 		return false;
 	}
 	
-	public Xnoise.ILyrics from_tags(string artist, string title) {
-		return new LyricsLyricsfly(artist, title);
+	public Xnoise.ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb) {
+		return new LyricsLyricsfly(loader, _owner, artist, title, cb);
 	} 
 }
 
@@ -100,14 +110,25 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 	private static const string my_credits = "These Lyrics are provided by http://www.lyricsfly.com";
 	private string artist;
 	private string title;
+	private unowned Plugin owner;
+	private unowned LyricsLoader loader;
+	private LyricsFetchedCallback cb = null;
 	
 	private string hid;
 
 	private signal void sign_hid_fetched();
 
-	public LyricsLyricsfly(string _artist, string _title) {
+	public LyricsLyricsfly(LyricsLoader _loader, Plugin _owner, string _artist, string _title, LyricsFetchedCallback _cb) {
 		this.artist = _artist;
 		this.title  = _title;
+		this.owner = _owner;
+		this.loader = _loader;
+		this.cb = _cb;
+		
+		this.owner.sign_deactivated.connect( () => {
+			destruct();
+		});
+		
 		session = new SessionAsync();
 		Xml.Parser.init ();
 		hid = "";
@@ -117,20 +138,33 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 	}
 	
 	~LyricsLyricsfly() {
-		if(timeout != 0)
-			Source.remove(timeout);
-//		print("destruct LFmIP\n");
 	}
 
 	public string get_identifier() {return my_identifier;}
 	public string get_credits() {return my_credits;}
 
-
-	private void remove_timeout() {
-		if(timeout != 0)
-			Source.remove(timeout);
+	public uint get_timeout() {
+		return timeout;
 	}
-
+	
+	protected bool timeout_elapsed() {
+		if(MainContext.current_source().is_destroyed())
+			return false;
+		
+		Idle.add( () => {
+			if(this.cb != null)
+				this.cb(artist, title, get_credits(), get_identifier(), "", LYRICSFLY);
+			return false;
+		});
+		
+		timeout = 0;
+		Timeout.add_seconds(1, () => {
+			destruct();
+			return false;
+		});
+		return false;
+	}
+	
 	private void fetch_text() {
 		var gettext_str = new StringBuilder();
 		gettext_str.printf(text_url, 
@@ -151,16 +185,10 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 			return;
 
 		if(mesg.response_body.data == null) {
-			remove_timeout();
-			if(!this.timeout_done)
-				this.unref();
 			return;
 		}
 
 		if(((string)mesg.response_body.flatten().data == null) || ((string)mesg.response_body.data == "")) {
-			remove_timeout();
-			if(!this.timeout_done)
-				this.unref();
 			return;
 		}
 
@@ -169,9 +197,6 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 		
 		Xml.Doc* doc = Xml.Parser.read_doc((string)mesg.response_body.flatten().data);
 		if(doc == null) {
-			remove_timeout();
-			if(!this.timeout_done)
-				this.unref();
 			return;
 		}
 		
@@ -181,9 +206,6 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 		if (xp_result->nodesetval->is_empty()) {
 			//message("empty"); 
 			delete doc;
-			remove_timeout();
-			if(!this.timeout_done)
-				this.unref();
 			return;
 		}
 		
@@ -191,13 +213,10 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 		if(text_result_node == null) {
 			//message("no item");
 			delete doc;
-			remove_timeout();
-			if(!this.timeout_done)
-				this.unref();
 			return;
 		}
 		string lyrics_text = text_result_node->get_content();
-		lyrics_text = remove_single_character(lyrics_text, "[br]");
+		lyrics_text = lyrics_text.replace("[br]", "");// remove_single_character(lyrics_text, "[br]");
 		//message(lyrics_text);
 
 		string reply_artist = "";
@@ -220,21 +239,10 @@ public class Xnoise.LyricsLyricsfly : Object, ILyrics {
 		}
 
 		//print("%s - %s \n", reply_artist, reply_title);
-		sign_lyrics_fetched(reply_artist, reply_title, get_credits(), get_identifier(), lyrics_text);
+		//sign_lyrics_fetched(reply_artist, reply_title, get_credits(), get_identifier(), lyrics_text);
+		this.cb(reply_artist, reply_title, get_credits(), get_identifier(), lyrics_text, LYRICSFLY);
 		
-		remove_timeout();
 		delete doc;
-		if(!this.timeout_done)
-			this.unref();
-	}
-
-	private bool timeout_elapsed() {
-		if(MainContext.current_source().is_destroyed())
-			return false;
-		
-		timeout_done = true;
-		this.unref();
-		return false;
 	}
 
 	public void find_lyrics() {
