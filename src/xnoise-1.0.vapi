@@ -460,17 +460,17 @@ namespace Xnoise {
 	}
 	[CCode (ref_function = "xnoise_track_data_ref", unref_function = "xnoise_track_data_unref", cheader_filename = "xnoise.h")]
 	public class TrackData {
-		public string? Album;
-		public string? Artist;
-		public int Bitrate;
-		public string? Genre;
-		public int32 Length;
-		public Xnoise.MediaType Mediatype;
-		public string? Title;
-		public uint Tracknumber;
-		public string? Uri;
-		public uint Year;
+		public string? album;
+		public string? artist;
+		public int bitrate;
 		public int32 db_id;
+		public string? genre;
+		public int32 length;
+		public Xnoise.MediaType mediatype;
+		public string? title;
+		public uint tracknumber;
+		public string? uri;
+		public uint year;
 		public TrackData ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -666,8 +666,8 @@ namespace Xnoise {
 	}
 	[CCode (type_id = "XNOISE_TYPE_STREAM_DATA", cheader_filename = "xnoise.h")]
 	public struct StreamData {
-		public string Name;
-		public string Uri;
+		public string name;
+		public string uri;
 	}
 	[CCode (cprefix = "XNOISE_MEDIA_TYPE_", cheader_filename = "xnoise.h")]
 	public enum MediaType {

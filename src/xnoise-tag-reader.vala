@@ -45,35 +45,35 @@ public class Xnoise.TagReader {
 				try {
 					// from class Tag
 					if(t != null) {
-						td.Artist      = t.artist;
-						td.Title       = t.title;
-						td.Album       = t.album;
-						td.Genre       = t.genre;
-						td.Year        = t.year;
-						td.Tracknumber = t.track;
-						td.Mediatype   = MediaType.AUDIO;
+						td.artist      = t.artist;
+						td.title       = t.title;
+						td.album       = t.album;
+						td.genre       = t.genre;
+						td.year        = t.year;
+						td.tracknumber = t.track;
+						td.mediatype   = MediaType.AUDIO;
 					} else {
-						td.Artist = "unknown artist";
-						td.Title  = "unknown title";
-						td.Album  = "unknown album";
-						td.Genre  = "unknown genre";
-						td.Tracknumber = (uint)0;
-						td.Mediatype   = MediaType.UNKNOWN;
+						td.artist = "unknown artist";
+						td.title  = "unknown title";
+						td.album  = "unknown album";
+						td.genre  = "unknown genre";
+						td.tracknumber = (uint)0;
+						td.mediatype   = MediaType.UNKNOWN;
 					}	
 					// from class AudioProperties
 					if(ap != null) {
-						td.Length      = (int32)ap.length;
-						td.Bitrate     = ap.bitrate;
+						td.length      = (int32)ap.length;
+						td.bitrate     = ap.bitrate;
 					} else {
-						td.Length = (int32)0;
-						td.Bitrate = 0;
+						td.length = (int32)0;
+						td.bitrate = 0;
 					}		
 				}
 				finally {
-					if((td.Artist == "")||(td.Artist == null)) td.Artist = "unknown artist";
-					if((td.Title  == "")||(td.Title  == null)) td.Title  = "unknown title";
-					if((td.Album  == "")||(td.Album  == null)) td.Album  = "unknown album";
-					if((td.Genre  == "")||(td.Genre  == null)) td.Genre  = "unknown genre";
+					if((td.artist == "")||(td.artist == null)) td.artist = "unknown artist";
+					if((td.title  == "")||(td.title  == null)) td.title  = "unknown title";
+					if((td.album  == "")||(td.album  == null)) td.album  = "unknown album";
+					if((td.genre  == "")||(td.genre  == null)) td.genre  = "unknown genre";
 					t = null;
 					taglib_file = null;
 				}
@@ -81,33 +81,33 @@ public class Xnoise.TagReader {
 			else {
 				td = new TrackData();
 
-				td.Artist = "unknown artist";
-				td.Title  = "unknown title";
-				td.Album  = "unknown album";
-				td.Genre  = "unknown genre";
-				td.Tracknumber = (uint)0;
-				td.Mediatype   = MediaType.UNKNOWN;
+				td.artist = "unknown artist";
+				td.title  = "unknown title";
+				td.album  = "unknown album";
+				td.genre  = "unknown genre";
+				td.tracknumber = (uint)0;
+				td.mediatype   = MediaType.UNKNOWN;
 
-				td.Length = (int32)0;
-				td.Bitrate = 0;
+				td.length = (int32)0;
+				td.bitrate = 0;
 			}
 		}
 		else {
 			td = new TrackData();
 
-			td.Artist = "unknown artist";
-			td.Title  = "unknown title";
-			td.Album  = "unknown album";
-			td.Genre  = "unknown genre";
-			td.Tracknumber = (uint)0;
-			td.Mediatype   = MediaType.UNKNOWN;
+			td.artist = "unknown artist";
+			td.title  = "unknown title";
+			td.album  = "unknown album";
+			td.genre  = "unknown genre";
+			td.tracknumber = (uint)0;
+			td.mediatype   = MediaType.UNKNOWN;
 
-			td.Length = (int32)0;
-			td.Bitrate = 0;
+			td.length = (int32)0;
+			td.bitrate = 0;
 		}
 
-		if(td.Title  == "unknown title") {
-			td.Title = prepare_name_from_filename(GLib.Filename.display_basename(filename));
+		if(td.title  == "unknown title") {
+			td.title = prepare_name_from_filename(GLib.Filename.display_basename(filename));
 		}
 		return td;
 	}

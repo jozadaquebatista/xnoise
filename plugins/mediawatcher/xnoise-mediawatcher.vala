@@ -626,7 +626,7 @@ private class Xnoise.ImportInfoBar : GLib.Object {
 			TrackData data;
 			dbb.get_trackdata_for_uri(last_uri, out data);
 			if(bar_label.get_realized())
-				bar_label.set_markup("<b>" + data.Artist + " - "+ data.Title + "</b> has been added to your media library");
+				bar_label.set_markup("<b>" + data.artist + " - "+ data.title + "</b> has been added to your media library");
 			last_uri = null;
 		}
 		

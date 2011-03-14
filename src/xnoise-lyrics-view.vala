@@ -122,9 +122,9 @@ public class Xnoise.LyricsView : Gtk.TextView {
 //				return false;
 //			}		
 //			TrackData td;
-//			if(dbb.get_trackdata_for_uri(xn.gPl.Uri, out td)) {
-//				artist = td.Artist;
-//				title  = td.Title;
+//			if(dbb.get_trackdata_for_uri(xn.gPl.uri, out td)) {
+//				artist = td.artist;
+//				title  = td.title;
 //			}
 //		}
 

@@ -30,9 +30,9 @@
 
 	// Track meta information class, as defined in xnoise-misc.vala
 	//public class Xnoise.TrackData {
-	//  public string? Artist = null;
-	//  public string? Album = null;
-	//  public string? Title = null;
+	//  public string? artist = null;
+	//  public string? album = null;
+	//  public string? title = null;
 	//  public string? Genre = null;
 	//  public uint Year = 0;
 	//  public uint Tracknumber = 0;
@@ -56,23 +56,23 @@ public class Xnoise.TagWriter {
 		if(taglib_file!=null) {
 			unowned TagLib.Tag t = taglib_file.tag;
 			if(t != null) {
-				if(td.Artist != null && td.Artist != "")
-					t.artist = td.Artist;
+				if(td.artist != null && td.artist != "")
+					t.artist = td.artist;
 					
-				if(td.Title != null && td.Title != "")
-					t.title = td.Title;
+				if(td.title != null && td.title != "")
+					t.title = td.title;
 				
-				if(td.Album != null && td.Album != "")
-					t.album = td.Album;
+				if(td.album != null && td.album != "")
+					t.album = td.album;
 				
-				if(td.Genre != null && td.Genre != "")
-					t.genre = td.Genre;
+				if(td.genre != null && td.genre != "")
+					t.genre = td.genre;
 				
-				if(td.Year != 0)
-					t.year = td.Year;
+				if(td.year != 0)
+					t.year = td.year;
 				
-				if(td.Tracknumber != 0)
-					t.track = td.Tracknumber;
+				if(td.tracknumber != 0)
+					t.track = td.tracknumber;
 				
 				retval = taglib_file.save();
 			}

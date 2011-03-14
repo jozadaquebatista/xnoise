@@ -90,12 +90,12 @@ public class Xnoise.MediaImporter : GLib.Object {
 		else if(psVideo.match_string(mime)) {
 			int idbuffer = dbw.uri_entry_exists(file.get_uri());
 			var td = new TrackData();
-			td.Artist = "unknown artist";
-			td.Album = "unknown album";
-			if(file!=null) td.Title = prepare_name_from_filename(file.get_basename());
-			td.Genre = "";
-			td.Tracknumber = 0;
-			td.Mediatype = MediaType.VIDEO;
+			td.artist = "unknown artist";
+			td.album = "unknown album";
+			if(file!=null) td.title = prepare_name_from_filename(file.get_basename());
+			td.genre = "";
+			td.tracknumber = 0;
+			td.mediatype = MediaType.VIDEO;
 			
 			if(idbuffer== -1) {
 				dbw.insert_title(td, file.get_uri());
@@ -192,10 +192,10 @@ public class Xnoise.MediaImporter : GLib.Object {
 								td = new TrackData();
 								var tr = new TagReader();
 								td = tr.read_tag(filepath);
-								//print("++%s\n", td.Title);
+								//print("++%s\n", td.title);
 								int32 id = dbw.insert_title(td, file.get_uri());
 								td.db_id = id;
-								td.Mediatype = MediaType.AUDIO;
+								td.mediatype = MediaType.AUDIO;
 								tda += td;
 								if(tda.length > 15) {
 									TrackData[] tdax = tda;
@@ -213,12 +213,12 @@ public class Xnoise.MediaImporter : GLib.Object {
 					else if(psVideo.match_string(mime)) {
 						idbuffer = dbw.uri_entry_exists(file.get_uri());
 						td = new TrackData();
-						td.Artist = "unknown artist";
-						td.Album = "unknown album";
-						td.Title = prepare_name_from_filename(file.get_basename());
-						td.Genre = "";
-						td.Tracknumber = 0;
-						td.Mediatype = MediaType.VIDEO;
+						td.artist = "unknown artist";
+						td.album = "unknown album";
+						td.title = prepare_name_from_filename(file.get_basename());
+						td.genre = "";
+						td.tracknumber = 0;
+						td.mediatype = MediaType.VIDEO;
 						if(idbuffer== -1) {
 							dbw.insert_title(td, file.get_uri());
 						}

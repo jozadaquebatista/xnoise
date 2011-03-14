@@ -331,11 +331,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					string current_uri = uris[i];
 					Idle.add( () => {
 						this.trackList.tracklistmodel.insert_title(null,
-							                                       (int)td.Tracknumber,
-							                                       td.Title,
-							                                       td.Album,
-							                                       td.Artist,
-							                                       td.Length,
+							                                       (int)td.tracknumber,
+							                                       td.title,
+							                                       td.album,
+							                                       td.artist,
+							                                       td.length,
 							                                       false,
 							                                       current_uri);
 						
@@ -372,12 +372,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 						if(!(psVideo.match_string(mime))) {
 							var tr = new TagReader(); 
 							tags = tr.read_tag(f.get_path());
-							artist         = tags.Artist;
-							album          = tags.Album;
-							title          = tags.Title;
-							tracknumb      = tags.Tracknumber;
-							length         = tags.Length;
-//							lengthString = make_time_display_from_seconds(tags.Length);
+							artist         = tags.artist;
+							album          = tags.album;
+							title          = tags.title;
+							tracknumb      = tags.tracknumber;
+							length         = tags.length;
+//							lengthString = make_time_display_from_seconds(tags.length);
 						}
 						else { 
 							artist         = "";
@@ -389,7 +389,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					}
 					Idle.add( () => {
 						this.trackList.tracklistmodel.insert_title(null,
-							                                       (int)td.Tracknumber,
+							                                       (int)td.tracknumber,
 							                                       title,
 							                                       album,
 							                                       artist,
@@ -408,7 +408,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					Idle.add( () => {
 						this.trackList.tracklistmodel.insert_title(null,
 							                                       0,
-							                                       td.Title,
+							                                       td.title,
 							                                       "",
 							                                       "",
 							                                       0,

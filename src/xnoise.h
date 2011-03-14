@@ -634,8 +634,8 @@ struct _XnoiseDbBrowserClass {
 
 typedef void (*XnoiseDbBrowserReaderCallback) (sqlite3* database, void* user_data);
 struct _XnoiseStreamData {
-	gchar* Name;
-	gchar* Uri;
+	gchar* name;
+	gchar* uri;
 };
 
 typedef enum  {
@@ -918,16 +918,16 @@ struct _XnoiseTrackData {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
 	XnoiseTrackDataPrivate * priv;
-	gchar* Artist;
-	gchar* Album;
-	gchar* Title;
-	gchar* Genre;
-	guint Year;
-	guint Tracknumber;
-	gint32 Length;
-	gint Bitrate;
-	XnoiseMediaType Mediatype;
-	gchar* Uri;
+	gchar* artist;
+	gchar* album;
+	gchar* title;
+	gchar* genre;
+	guint year;
+	guint tracknumber;
+	gint32 length;
+	gint bitrate;
+	XnoiseMediaType mediatype;
+	gchar* uri;
 	gint32 db_id;
 };
 

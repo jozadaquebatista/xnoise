@@ -106,7 +106,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			TreeIter iter;
 			listmodel.append(out iter);
 			listmodel.set(iter,
-			              0, sd.Uri,
+			              0, sd.uri,
 			              1, MediaStorageType.STREAM,
 			              -1
 			              );

@@ -241,33 +241,33 @@ public class Xnoise.DbBrowser {
 			this.db_error();
 		}
 		if(stmt.step() == Sqlite.ROW) {
-			val.Artist      = stmt.column_text(0);
-			val.Album       = stmt.column_text(1);
-			val.Title       = stmt.column_text(2);
-			val.Tracknumber = stmt.column_int(3);
-			val.Mediatype   = (MediaType)stmt.column_int(4);
-			val.Uri         = stmt.column_text(5);
-			val.Length      = stmt.column_int(6);
+			val.artist      = stmt.column_text(0);
+			val.album       = stmt.column_text(1);
+			val.title       = stmt.column_text(2);
+			val.tracknumber = stmt.column_int(3);
+			val.mediatype   = (MediaType)stmt.column_int(4);
+			val.uri         = stmt.column_text(5);
+			val.length      = stmt.column_int(6);
 		}
 		else {
 			print("get_trackdata_for_id: track is not in db. ID: %d\n", id);
 			return false;
 		}
-		if((val.Artist=="") | (val.Artist==null)) {
-			val.Artist = "unknown artist";
+		if((val.artist=="") | (val.artist==null)) {
+			val.artist = "unknown artist";
 		}
-		if((val.Album== "") | (val.Album== null)) {
-			val.Album = "unknown album";
+		if((val.album== "") | (val.album== null)) {
+			val.album = "unknown album";
 		}
-		if((val.Title== "") | (val.Title== null)) {
-			val.Title = "unknown title";
-			File file = File.new_for_uri(val.Uri);
+		if((val.title== "") | (val.title== null)) {
+			val.title = "unknown title";
+			File file = File.new_for_uri(val.uri);
 			string fileBasename;
 			if(file != null)
 				fileBasename = GLib.Filename.display_basename(file.get_path());
 			else
-				fileBasename = val.Uri;
-			val.Title = fileBasename;
+				fileBasename = val.uri;
+			val.title = fileBasename;
 		}
 		return true;
 	}
@@ -282,11 +282,11 @@ public class Xnoise.DbBrowser {
 			this.db_error();
 		}
 		if(stmt.step() == Sqlite.ROW) {
-			val.Artist      = "";
-			val.Album       = "";
-			val.Title       = stmt.column_text(0);
-			val.Mediatype   = MediaType.STREAM;
-			val.Uri         = stmt.column_text(1);
+			val.artist      = "";
+			val.album       = "";
+			val.title       = stmt.column_text(0);
+			val.mediatype   = MediaType.STREAM;
+			val.uri         = stmt.column_text(1);
 		}
 		else {
 			print("get_stream_td_for_id: track is not in db. ID: %d\n", id);
@@ -339,7 +339,7 @@ public class Xnoise.DbBrowser {
 			this.db_error();
 		}
 		if(stmt.step() == Sqlite.ROW) {
-			val.Title = stmt.column_text(0);
+			val.title = stmt.column_text(0);
 			retval = true;
 		}
 		return retval;
@@ -357,26 +357,26 @@ public class Xnoise.DbBrowser {
 		stmt.reset();
 		stmt.bind_text(1, uri);
 		if(stmt.step() == Sqlite.ROW) {
-			val.Artist      = stmt.column_text(0);
-			val.Album       = stmt.column_text(1);
-			val.Title       = stmt.column_text(2);
-			val.Tracknumber = (uint)stmt.column_int(3);
-			val.Length      = stmt.column_int(4);
+			val.artist      = stmt.column_text(0);
+			val.album       = stmt.column_text(1);
+			val.title       = stmt.column_text(2);
+			val.tracknumber = (uint)stmt.column_int(3);
+			val.length      = stmt.column_int(4);
 			retval = true;
 		}
-		if((val.Artist=="") | (val.Artist==null)) {
-			val.Artist = "unknown artist";
+		if((val.artist=="") | (val.artist==null)) {
+			val.artist = "unknown artist";
 		}
-		if((val.Album== "") | (val.Album== null)) {
-			val.Album = "unknown album";
+		if((val.album== "") | (val.album== null)) {
+			val.album = "unknown album";
 		}
-		if((val.Title== "") | (val.Title== null)) {
-			val.Title = "unknown title";
+		if((val.title== "") | (val.title== null)) {
+			val.title = "unknown title";
 			File file = File.new_for_uri(uri);
 			string fpath = file.get_path();
 			string fileBasename = "";
 			if(fpath!=null) fileBasename = GLib.Filename.display_basename(fpath);
-			val.Title = fileBasename;
+			val.title = fileBasename;
 		}
 		return retval;
 	}
@@ -416,8 +416,8 @@ public class Xnoise.DbBrowser {
 		stmt.reset();
 		while(stmt.step() == Sqlite.ROW) {
 			StreamData sd = StreamData();
-			sd.Name = stmt.column_text(0);
-			sd.Uri  = stmt.column_text(1);
+			sd.name = stmt.column_text(0);
+			sd.uri  = stmt.column_text(1);
 			sData += sd;
 		}
 		return sData;
@@ -666,26 +666,26 @@ public class Xnoise.DbBrowser {
 //		stmt.reset();
 //		stmt.bind_text(1, uri);
 //		if(stmt.step() == Sqlite.ROW) {
-//			val.Artist      = stmt.column_text(0);
-//			val.Album       = stmt.column_text(1);
-//			val.Title       = stmt.column_text(2);
-//			val.Tracknumber = (uint)stmt.column_int(3);
-//			val.Length      = stmt.column_int(4);
+//			val.artist      = stmt.column_text(0);
+//			val.album       = stmt.column_text(1);
+//			val.title       = stmt.column_text(2);
+//			val.tracknumber = (uint)stmt.column_int(3);
+//			val.length      = stmt.column_int(4);
 //			retval = true;
 //		}
-//		if((val.Artist=="") | (val.Artist==null)) {
-//			val.Artist = "unknown artist";
+//		if((val.artist=="") | (val.artist==null)) {
+//			val.artist = "unknown artist";
 //		}
-//		if((val.Album== "") | (val.Album== null)) {
-//			val.Album = "unknown album";
+//		if((val.album== "") | (val.album== null)) {
+//			val.album = "unknown album";
 //		}
-//		if((val.Title== "") | (val.Title== null)) {
-//			val.Title = "unknown title";
+//		if((val.title== "") | (val.title== null)) {
+//			val.title = "unknown title";
 //			File file = File.new_for_uri(uri);
 //			string fpath = file.get_path();
 //			string fileBasename = "";
 //			if(fpath!=null) fileBasename = GLib.Filename.display_basename(fpath);
-//			val.Title = fileBasename;
+//			val.title = fileBasename;
 //		}
 //		return retval;
 //	}	
@@ -705,10 +705,10 @@ public class Xnoise.DbBrowser {
 
 //		while(stmt.step() == Sqlite.ROW) {
 //			var val = new TrackData();
-//			val.Artist      = artist;
-//			val.Album       = album;
-//			val.Title       = stmt.column_text(0);
-//			val.Mediatype   = (MediaType) stmt.column_int(1);
+//			val.artist      = artist;
+//			val.album       = album;
+//			val.title       = stmt.column_text(0);
+//			val.mediatype   = (MediaType) stmt.column_int(1);
 //			val.id          = stmt.column_int(2);
 //			
 //			retval += val;
@@ -757,10 +757,10 @@ public class Xnoise.DbBrowser {
 
 		while(stmt.step() == Sqlite.ROW) {
 			TrackData twt = new TrackData();
-			twt.Title = stmt.column_text(0);
-			twt.Mediatype = (MediaType) stmt.column_int(1);
+			twt.title = stmt.column_text(0);
+			twt.mediatype = (MediaType) stmt.column_int(1);
 			twt.db_id = stmt.column_int(2);
-			twt.Tracknumber = stmt.column_int(3);
+			twt.tracknumber = stmt.column_int(3);
 			val += twt;
 		}
 		return val;

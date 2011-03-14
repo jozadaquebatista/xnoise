@@ -320,16 +320,16 @@ public enum Xnoise.PlayerState {
  * This class is used to move around media information
  */
 public class Xnoise.TrackData { // track meta information
-	public string? Artist = null;
-	public string? Album = null;
-	public string? Title = null;
-	public string? Genre = null;
-	public uint Year = 0;
-	public uint Tracknumber = 0;
-	public int32 Length = 0;
-	public int Bitrate = 0;
-	public MediaType Mediatype = MediaType.UNKNOWN;
-	public string? Uri = null;
+	public string? artist = null;
+	public string? album = null;
+	public string? title = null;
+	public string? genre = null;
+	public uint year = 0;
+	public uint tracknumber = 0;
+	public int32 length = 0;
+	public int bitrate = 0;
+	public MediaType mediatype = MediaType.UNKNOWN;
+	public string? uri = null;
 	public int32 db_id = -1;
 }
 
@@ -386,8 +386,8 @@ public class Xnoise.LocalSchemes {
  * This struct is used to move around certain streams information
  */
 public struct Xnoise.StreamData { // meta information structure
-	public string Name;
-	public string Uri;
+	public string name;
+	public string uri;
 }
 
 /**

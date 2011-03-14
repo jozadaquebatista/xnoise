@@ -460,15 +460,15 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		int k = 0;
 		TreeIter iter, iter_2 = {};
 		while(td_list[k] != null) {
-			string current_uri = td_list[k].Uri;
+			string current_uri = td_list[k].uri;
 
 			if(k == 0) { // First track
 				iter = this.insert_title(null,
-				                         (int)td_list[k].Tracknumber,
-				                         td_list[k].Title,
-				                         td_list[k].Album,
-				                         td_list[k].Artist,
-				                         td_list[k].Length,
+				                         (int)td_list[k].tracknumber,
+				                         td_list[k].title,
+				                         td_list[k].album,
+				                         td_list[k].artist,
+				                         td_list[k].length,
 				                         true,
 				                         current_uri);
 				global.position_reference = null;
@@ -477,25 +477,25 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			}
 			else { // second to last track
 				iter = this.insert_title(null,
-				                         (int)td_list[k].Tracknumber,
-				                         td_list[k].Title,
-				                         td_list[k].Album,
-				                         td_list[k].Artist,
-				                         td_list[k].Length,
+				                         (int)td_list[k].tracknumber,
+				                         td_list[k].title,
+				                         td_list[k].album,
+				                         td_list[k].artist,
+				                         td_list[k].length,
 				                         false,
 				                         current_uri);
 			}
 			k++;
 		}
 
-		if(td_list[0].Uri != null) {
+		if(td_list[0].uri != null) {
 			global.player_state = PlayerState.PLAYING;
-			global.current_uri = td_list[0].Uri;
+			global.current_uri = td_list[0].uri;
 		}
 
 		xn.tl.set_focus_on_iter(ref iter_2);
 
-		//xn.add_track_to_gst_player(td_list[0].Uri); 	// TODO: check this function!!!!
+		//xn.add_track_to_gst_player(td_list[0].uri); 	// TODO: check this function!!!!
 	}
 
 	public void add_uris(string[]? uris) {
@@ -535,11 +535,11 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			}
 			if(k == 0) { // first track
 				iter = this.insert_title(null,
-				                         (int)t.Tracknumber,
-				                         t.Title,
-				                         t.Album,
-				                         t.Artist,
-				                         t.Length,
+				                         (int)t.tracknumber,
+				                         t.title,
+				                         t.album,
+				                         t.artist,
+				                         t.length,
 				                         true,
 				                         uris[k]);
 
@@ -549,11 +549,11 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			}
 			else {
 				iter = this.insert_title(null,
-				                         (int)t.Tracknumber,
-				                         t.Title,
-				                         t.Album,
-				                         t.Artist,
-				                         t.Length,
+				                         (int)t.tracknumber,
+				                         t.title,
+				                         t.album,
+				                         t.artist,
+				                         t.length,
 				                         false,
 				                         uris[k]);
 			}

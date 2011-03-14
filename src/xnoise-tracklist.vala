@@ -568,12 +568,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 					string lengthString = "", artist, album, title, uri;
 					int tracknumb;
 					if(dbBr.get_trackdata_for_id((int)ix.db_id, out td)) {
-						artist    = td.Artist;
-						album     = td.Album;
-						title     = td.Title;
-						tracknumb = (int)td.Tracknumber;
-						lengthString = make_time_display_from_seconds(td.Length);
-						uri = td.Uri;
+						artist    = td.artist;
+						album     = td.album;
+						title     = td.title;
+						tracknumb = (int)td.tracknumber;
+						lengthString = make_time_display_from_seconds(td.length);
+						uri = td.uri;
 						Idle.add( () => {
 					
 							TreeIter iter, new_iter;
@@ -624,12 +624,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 					string lengthString = "", artist, album, title, uri;
 					int tracknumb;
 					if(dbBr.get_stream_td_for_id((int)ix.db_id, out td)) {
-						artist    = td.Artist;
-						album     = td.Album;
-						title     = td.Title;
-						tracknumb = (int)td.Tracknumber;
-						lengthString = make_time_display_from_seconds(td.Length);
-						uri = td.Uri;
+						artist    = td.artist;
+						album     = td.album;
+						title     = td.title;
+						tracknumb = (int)td.tracknumber;
+						lengthString = make_time_display_from_seconds(td.length);
+						uri = td.uri;
 						Idle.add( () => {
 							TreeIter iter, new_iter;
 							TreeIter first_iter = TreeIter();
@@ -809,11 +809,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 			if(!(psVideo.match_string(mime))) {
 				var tr = new TagReader(); // TODO: Check dataimport for video
 				var tags = tr.read_tag(file.get_path());
-				artist         = tags.Artist;
-				album          = tags.Album;
-				title          = tags.Title;
-				tracknumb      = tags.Tracknumber;
-				lengthString = make_time_display_from_seconds(tags.Length);
+				artist         = tags.artist;
+				album          = tags.album;
+				title          = tags.title;
+				tracknumb      = tags.tracknumber;
+				lengthString = make_time_display_from_seconds(tags.length);
 			}
 			else { //TODO: Handle video data
 				artist         = "";

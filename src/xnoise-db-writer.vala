@@ -346,7 +346,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(get_artist_id_statement.step() == Sqlite.ROW)
 			artist_id = get_artist_id_statement.column_int(0);
 
-		if(artist_id == -1) { // Artist not in table, yet
+		if(artist_id == -1) { // artist not in table, yet
 			// Insert artist
 			insert_artist_statement.reset();
 			if(insert_artist_statement.bind_text(1, artist.strip()) != Sqlite.OK) {
@@ -487,7 +487,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 		if(stmt.step() == Sqlite.ROW) {
 			val.db_id = stmt.column_int(0);
-			val.Title = stmt.column_text(1);
+			val.title = stmt.column_text(1);
 			retval = true;
 		}
 		return retval;
@@ -508,12 +508,12 @@ public class Xnoise.DbWriter : GLib.Object {
 
 	public int32 insert_title(TrackData td, string uri) {
 		// make entries in other tables and get references from there
-		int artist_id = handle_artist(ref td.Artist);
+		int artist_id = handle_artist(ref td.artist);
 		if(artist_id == -1) {
 			print("Error importing artist!\n");
 			return -1;
 		}
-		int album_id = handle_album(ref artist_id, ref td.Album);
+		int album_id = handle_album(ref artist_id, ref td.album);
 		if(album_id == -1) {
 			print("Error importing album!\n");
 			return -1;
@@ -523,22 +523,22 @@ public class Xnoise.DbWriter : GLib.Object {
 			print("Error importing uri!\n");
 			return -1;
 		}
-		int genre_id = handle_genre(ref td.Genre);
+		int genre_id = handle_genre(ref td.genre);
 		if(genre_id == -1) {
 			print("Error importing genre!\n");
 			return -1;
 		}
 		insert_title_statement.reset();
-		if(insert_title_statement.bind_int (1,  (int)td.Tracknumber) != Sqlite.OK ||
+		if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
 		   insert_title_statement.bind_int (2,  artist_id)           != Sqlite.OK ||
 		   insert_title_statement.bind_int (3,  album_id)            != Sqlite.OK ||
-		   insert_title_statement.bind_text(4,  td.Title)            != Sqlite.OK ||
+		   insert_title_statement.bind_text(4,  td.title)            != Sqlite.OK ||
 		   insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
-		   insert_title_statement.bind_int (6,  (int)td.Year)        != Sqlite.OK ||
+		   insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
 		   insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
-		   insert_title_statement.bind_int (8,  td.Mediatype)        != Sqlite.OK ||
-		   insert_title_statement.bind_int (9,  td.Length)           != Sqlite.OK ||
-		   insert_title_statement.bind_int (10, td.Bitrate)          != Sqlite.OK) {
+		   insert_title_statement.bind_int (8,  td.mediatype)        != Sqlite.OK ||
+		   insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK ||
+		   insert_title_statement.bind_int (10, td.bitrate)          != Sqlite.OK) {
 			this.db_error();
 		}
 		
@@ -550,7 +550,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		this.db.prepare_v2(STMT_GET_GET_ITEM_ID, -1, out stmt);
 		if(stmt.bind_int (1, artist_id) != Sqlite.OK ||
 		   stmt.bind_int (2, album_id)  != Sqlite.OK ||
-		   stmt.bind_text(3, td.Title)  != Sqlite.OK) {
+		   stmt.bind_text(3, td.title)  != Sqlite.OK) {
 			this.db_error();
 		}
 		stmt.reset();
@@ -562,12 +562,12 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 //	public void insert_title(TrackData td, string uri) {
 //		// make entries in other tables and get references from there
-//		int artist_id = handle_artist(ref td.Artist);
+//		int artist_id = handle_artist(ref td.artist);
 //		if(artist_id == -1) {
 //			print("Error importing artist!\n");
 //			return;
 //		}
-//		int album_id = handle_album(ref artist_id, ref td.Album);
+//		int album_id = handle_album(ref artist_id, ref td.album);
 //		if(album_id == -1) {
 //			print("Error importing album!\n");
 //			return;
@@ -577,22 +577,22 @@ public class Xnoise.DbWriter : GLib.Object {
 //			print("Error importing uri!\n");
 //			return;
 //		}
-//		int genre_id = handle_genre(ref td.Genre);
+//		int genre_id = handle_genre(ref td.genre);
 //		if(genre_id == -1) {
 //			print("Error importing genre!\n");
 //			return;
 //		}
 //		insert_title_statement.reset();
-//		if( insert_title_statement.bind_int (1,  (int)td.Tracknumber) != Sqlite.OK ||
+//		if( insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
 //			insert_title_statement.bind_int (2,  artist_id)           != Sqlite.OK ||
 //			insert_title_statement.bind_int (3,  album_id)            != Sqlite.OK ||
-//			insert_title_statement.bind_text(4,  td.Title)            != Sqlite.OK ||
+//			insert_title_statement.bind_text(4,  td.title)            != Sqlite.OK ||
 //			insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
-//			insert_title_statement.bind_int (6,  (int)td.Year)        != Sqlite.OK ||
+//			insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
 //			insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
-//			insert_title_statement.bind_int (8,  td.Mediatype)        != Sqlite.OK ||
-//			insert_title_statement.bind_int (9,  td.Length)           != Sqlite.OK ||
-//			insert_title_statement.bind_int (10, td.Bitrate)          != Sqlite.OK) {
+//			insert_title_statement.bind_int (8,  td.mediatype)        != Sqlite.OK ||
+//			insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK ||
+//			insert_title_statement.bind_int (10, td.bitrate)          != Sqlite.OK) {
 //			this.db_error();
 //		}
 //		if(insert_title_statement.step()!=Sqlite.DONE)

@@ -270,10 +270,10 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		}
 		TrackData td;
 		if(dbb.get_trackdata_for_uri(newuri, out td)) {
-			current_artist = td.Artist;
-			current_album  = td.Album;
-			current_title  = td.Title;
-			current_genre  = td.Genre;
+			current_artist = td.artist;
+			current_album  = td.album;
+			current_title  = td.title;
+			current_genre  = td.genre;
 		}
 		else { 
 			current_artist = null;
