@@ -49,8 +49,6 @@ plugins/chartlyrics/xnoise-chartlyrics.vala
 plugins/cyclic-save-state/xnoise-cyclic-save-state.vala
 plugins/databaseLyrics/xnoise-database-lyrics.vala
 plugins/lastfmCovers/xnoise-lastfm-covers.vala
-plugins/leoslyrics/xnoise-leoslyrics.vala
-plugins/lyricsfly/xnoise-lyricsfly.vala
 plugins/lyricwiki/xnoise-lyricwiki.vala
 plugins/mediakeys/xnoise-mediakeys.vala
 plugins/mediawatcher/xnoise-mediawatcher.vala
