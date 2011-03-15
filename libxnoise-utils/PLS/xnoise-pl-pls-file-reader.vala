@@ -130,7 +130,7 @@ namespace Xnoise.Pl {
 		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
 			ItemCollection data_collection = new ItemCollection();
 			this.file = _file;
-			size_t a;
+			//size_t a;
 			char* begin;
 			char* end;
 			set_base_path();
@@ -145,12 +145,12 @@ namespace Xnoise.Pl {
 				int numberofentries = 0;
 				string[] line_buf = {};
 				//Read header => [playlist]
-				if((line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, out a)) != null) {
+				if((line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, null)) != null) {
 					if(!line.has_prefix("[playlist]")) {
 						return data_collection;
 					}
 					Item d = null;
-					while(in_stream != null && (line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, out a)) != null) {
+					while(in_stream != null && (line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, null)) != null) {
 						//Ignore blank line
 						if(line._strip().size() == 0) {
 							continue; 

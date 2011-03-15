@@ -1314,10 +1314,10 @@ void main() {
 	
 	// async tests
 	
-//	print("test pls async reading:");
-//	test_pls_async_reading();
-//	ml = new MainLoop(); // reuse mainloop for every async test
-//	ml.run();
+	print("test pls async reading:");
+	test_pls_async_reading();
+	ml = new MainLoop(); // reuse mainloop for every async test
+	ml.run();
 
 //	print("test xml reading and writing:");
 //	if(test_xml_readwrite_01())
@@ -1325,15 +1325,15 @@ void main() {
 //	else
 //		print("\033[50Gfail\n");
 
-//	print("test asx async reading:");
-//	test_asx_async_reading();
-//	ml = new MainLoop(); // reuse mainloop for every async test
-//	ml.run();
+	print("test asx async reading:");
+	test_asx_async_reading();
+	ml = new MainLoop(); // reuse mainloop for every async test
+	ml.run();
 
-//	print("test async xml reading:");
-//	test_async_xml_read();
-//	ml = new MainLoop(); // reuse mainloop for every async test
-//	ml.run();
+	print("test async xml reading:");
+	test_async_xml_read();
+	ml = new MainLoop(); // reuse mainloop for every async test
+	ml.run();
 
 //	print("test m3u async reading:");
 //	test_m3u_async_reading();

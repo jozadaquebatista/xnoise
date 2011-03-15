@@ -32,8 +32,9 @@ libxnoiseutils_la_SOURCES = \
     xnoise-pl-item.vala \
     xnoise-pl-item-collection.vala \
     xnoise-pl-reader.vala \
-    xnoise-simple-xml-reader.vala \
     xnoise-simple-xml-node.vala \
+    xnoise-simple-xml-reader.vala \
+    xnoise-simple-xml-writer.vala \
     ASX/xnoise-pl-asx-file-reader.vala \
     WPL/xnoise-pl-wpl-file-reader.vala \
     M3U/xnoise-pl-m3u-file-reader.vala \

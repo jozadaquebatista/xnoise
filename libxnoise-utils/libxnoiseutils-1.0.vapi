@@ -252,6 +252,11 @@ namespace Xnoise {
 			public signal void started ();
 		}
 		[CCode (cheader_filename = "libxnoiseutils.h")]
+		public class Writer : GLib.Object {
+			public Writer (Xnoise.SimpleXml.Node root, string header_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+			public void write (string filename);
+		}
+		[CCode (cheader_filename = "libxnoiseutils.h")]
 		public const string AMPERSAND_ESCAPED;
 		[CCode (cheader_filename = "libxnoiseutils.h")]
 		public const string APOSTROPH_ESCAPED;

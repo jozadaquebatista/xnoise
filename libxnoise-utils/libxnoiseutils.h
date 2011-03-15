@@ -65,17 +65,6 @@ typedef struct _XnoisePlReader XnoisePlReader;
 typedef struct _XnoisePlReaderClass XnoisePlReaderClass;
 typedef struct _XnoisePlReaderPrivate XnoisePlReaderPrivate;
 
-#define XNOISE_SIMPLE_XML_TYPE_READER (xnoise_simple_xml_reader_get_type ())
-#define XNOISE_SIMPLE_XML_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_XML_TYPE_READER, XnoiseSimpleXmlReader))
-#define XNOISE_SIMPLE_XML_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_XML_TYPE_READER, XnoiseSimpleXmlReaderClass))
-#define XNOISE_SIMPLE_XML_IS_READER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_SIMPLE_XML_TYPE_READER))
-#define XNOISE_SIMPLE_XML_IS_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_SIMPLE_XML_TYPE_READER))
-#define XNOISE_SIMPLE_XML_READER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_SIMPLE_XML_TYPE_READER, XnoiseSimpleXmlReaderClass))
-
-typedef struct _XnoiseSimpleXmlReader XnoiseSimpleXmlReader;
-typedef struct _XnoiseSimpleXmlReaderClass XnoiseSimpleXmlReaderClass;
-typedef struct _XnoiseSimpleXmlReaderPrivate XnoiseSimpleXmlReaderPrivate;
-
 #define XNOISE_SIMPLE_XML_TYPE_NODE (xnoise_simple_xml_node_get_type ())
 #define XNOISE_SIMPLE_XML_NODE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_XML_TYPE_NODE, XnoiseSimpleXmlNode))
 #define XNOISE_SIMPLE_XML_NODE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_XML_TYPE_NODE, XnoiseSimpleXmlNodeClass))
@@ -130,6 +119,28 @@ typedef struct _XnoiseSimpleXmlNodeAttributesKeysIterator XnoiseSimpleXmlNodeAtt
 typedef struct _XnoiseSimpleXmlNodeAttributesKeysIteratorClass XnoiseSimpleXmlNodeAttributesKeysIteratorClass;
 typedef struct _XnoiseSimpleXmlNodeAttributesKeysIteratorPrivate XnoiseSimpleXmlNodeAttributesKeysIteratorPrivate;
 typedef struct _XnoiseSimpleXmlNodeIteratorPrivate XnoiseSimpleXmlNodeIteratorPrivate;
+
+#define XNOISE_SIMPLE_XML_TYPE_READER (xnoise_simple_xml_reader_get_type ())
+#define XNOISE_SIMPLE_XML_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_XML_TYPE_READER, XnoiseSimpleXmlReader))
+#define XNOISE_SIMPLE_XML_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_XML_TYPE_READER, XnoiseSimpleXmlReaderClass))
+#define XNOISE_SIMPLE_XML_IS_READER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_SIMPLE_XML_TYPE_READER))
+#define XNOISE_SIMPLE_XML_IS_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_SIMPLE_XML_TYPE_READER))
+#define XNOISE_SIMPLE_XML_READER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_SIMPLE_XML_TYPE_READER, XnoiseSimpleXmlReaderClass))
+
+typedef struct _XnoiseSimpleXmlReader XnoiseSimpleXmlReader;
+typedef struct _XnoiseSimpleXmlReaderClass XnoiseSimpleXmlReaderClass;
+typedef struct _XnoiseSimpleXmlReaderPrivate XnoiseSimpleXmlReaderPrivate;
+
+#define XNOISE_SIMPLE_XML_TYPE_WRITER (xnoise_simple_xml_writer_get_type ())
+#define XNOISE_SIMPLE_XML_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_XML_TYPE_WRITER, XnoiseSimpleXmlWriter))
+#define XNOISE_SIMPLE_XML_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_XML_TYPE_WRITER, XnoiseSimpleXmlWriterClass))
+#define XNOISE_SIMPLE_XML_IS_WRITER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_SIMPLE_XML_TYPE_WRITER))
+#define XNOISE_SIMPLE_XML_IS_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_SIMPLE_XML_TYPE_WRITER))
+#define XNOISE_SIMPLE_XML_WRITER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_SIMPLE_XML_TYPE_WRITER, XnoiseSimpleXmlWriterClass))
+
+typedef struct _XnoiseSimpleXmlWriter XnoiseSimpleXmlWriter;
+typedef struct _XnoiseSimpleXmlWriterClass XnoiseSimpleXmlWriterClass;
+typedef struct _XnoiseSimpleXmlWriterPrivate XnoiseSimpleXmlWriterPrivate;
 
 typedef enum  {
 	XNOISE_PL_READER_ERROR_UNKNOWN_TYPE,
@@ -217,16 +228,6 @@ struct _XnoisePlReaderClass {
 	GObjectClass parent_class;
 };
 
-struct _XnoiseSimpleXmlReader {
-	GObject parent_instance;
-	XnoiseSimpleXmlReaderPrivate * priv;
-	XnoiseSimpleXmlNode* root;
-};
-
-struct _XnoiseSimpleXmlReaderClass {
-	GObjectClass parent_class;
-};
-
 struct _XnoiseSimpleXmlNode {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -282,6 +283,25 @@ struct _XnoiseSimpleXmlNodeIterator {
 struct _XnoiseSimpleXmlNodeIteratorClass {
 	GTypeClass parent_class;
 	void (*finalize) (XnoiseSimpleXmlNodeIterator *self);
+};
+
+struct _XnoiseSimpleXmlReader {
+	GObject parent_instance;
+	XnoiseSimpleXmlReaderPrivate * priv;
+	XnoiseSimpleXmlNode* root;
+};
+
+struct _XnoiseSimpleXmlReaderClass {
+	GObjectClass parent_class;
+};
+
+struct _XnoiseSimpleXmlWriter {
+	GObject parent_instance;
+	XnoiseSimpleXmlWriterPrivate * priv;
+};
+
+struct _XnoiseSimpleXmlWriterClass {
+	GObjectClass parent_class;
 };
 
 
@@ -409,12 +429,6 @@ XnoisePlListType xnoise_pl_get_type_by_extension (gchar** uri_);
 XnoisePlListType xnoise_pl_get_type_by_data (gchar** uri_);
 glong xnoise_pl_get_duration_from_string (gchar** duration_string);
 GFile* xnoise_pl_get_file_for_location (const gchar* adr, gchar** base_path, XnoisePlTargetType* tt);
-#define XNOISE_SIMPLE_XML_AMPERSAND_ESCAPED "&amp;"
-#define XNOISE_SIMPLE_XML_GREATER_THAN_ESCAPED "&gt;"
-#define XNOISE_SIMPLE_XML_LOWER_THAN_ESCAPED "&lt;"
-#define XNOISE_SIMPLE_XML_QUOTE_ESCAPED "&quot;"
-#define XNOISE_SIMPLE_XML_APOSTROPH_ESCAPED "&apos;"
-GType xnoise_simple_xml_reader_get_type (void) G_GNUC_CONST;
 gpointer xnoise_simple_xml_node_ref (gpointer instance);
 void xnoise_simple_xml_node_unref (gpointer instance);
 GParamSpec* xnoise_simple_xml_param_spec_node (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -422,13 +436,6 @@ void xnoise_simple_xml_value_set_node (GValue* value, gpointer v_object);
 void xnoise_simple_xml_value_take_node (GValue* value, gpointer v_object);
 gpointer xnoise_simple_xml_value_get_node (const GValue* value);
 GType xnoise_simple_xml_node_get_type (void) G_GNUC_CONST;
-XnoiseSimpleXmlReader* xnoise_simple_xml_reader_new (GFile* file);
-XnoiseSimpleXmlReader* xnoise_simple_xml_reader_construct (GType object_type, GFile* file);
-XnoiseSimpleXmlReader* xnoise_simple_xml_reader_new_from_string (const gchar* xml_string);
-XnoiseSimpleXmlReader* xnoise_simple_xml_reader_construct_from_string (GType object_type, const gchar* xml_string);
-void xnoise_simple_xml_reader_read (XnoiseSimpleXmlReader* self, gboolean case_sensitive, GCancellable* cancellable);
-void xnoise_simple_xml_reader_read_asyn (XnoiseSimpleXmlReader* self, gboolean case_sensitive, GCancellable* cancellable, GAsyncReadyCallback _callback_, gpointer _user_data_);
-void xnoise_simple_xml_reader_read_asyn_finish (XnoiseSimpleXmlReader* self, GAsyncResult* _res_);
 gpointer xnoise_simple_xml_node_attributes_ref (gpointer instance);
 void xnoise_simple_xml_node_attributes_unref (gpointer instance);
 GParamSpec* xnoise_simple_xml_node_param_spec_attributes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -505,6 +512,23 @@ XnoiseSimpleXmlNodeIterator* xnoise_simple_xml_node_iterator_construct (GType ob
 gboolean xnoise_simple_xml_node_iterator_next (XnoiseSimpleXmlNodeIterator* self);
 XnoiseSimpleXmlNode* xnoise_simple_xml_node_iterator_get (XnoiseSimpleXmlNodeIterator* self);
 void xnoise_simple_xml_node_iterator_set (XnoiseSimpleXmlNodeIterator* self, XnoiseSimpleXmlNode* node);
+#define XNOISE_SIMPLE_XML_AMPERSAND_ESCAPED "&amp;"
+#define XNOISE_SIMPLE_XML_GREATER_THAN_ESCAPED "&gt;"
+#define XNOISE_SIMPLE_XML_LOWER_THAN_ESCAPED "&lt;"
+#define XNOISE_SIMPLE_XML_QUOTE_ESCAPED "&quot;"
+#define XNOISE_SIMPLE_XML_APOSTROPH_ESCAPED "&apos;"
+GType xnoise_simple_xml_reader_get_type (void) G_GNUC_CONST;
+XnoiseSimpleXmlReader* xnoise_simple_xml_reader_new (GFile* file);
+XnoiseSimpleXmlReader* xnoise_simple_xml_reader_construct (GType object_type, GFile* file);
+XnoiseSimpleXmlReader* xnoise_simple_xml_reader_new_from_string (const gchar* xml_string);
+XnoiseSimpleXmlReader* xnoise_simple_xml_reader_construct_from_string (GType object_type, const gchar* xml_string);
+void xnoise_simple_xml_reader_read (XnoiseSimpleXmlReader* self, gboolean case_sensitive, GCancellable* cancellable);
+void xnoise_simple_xml_reader_read_asyn (XnoiseSimpleXmlReader* self, gboolean case_sensitive, GCancellable* cancellable, GAsyncReadyCallback _callback_, gpointer _user_data_);
+void xnoise_simple_xml_reader_read_asyn_finish (XnoiseSimpleXmlReader* self, GAsyncResult* _res_);
+GType xnoise_simple_xml_writer_get_type (void) G_GNUC_CONST;
+XnoiseSimpleXmlWriter* xnoise_simple_xml_writer_new (XnoiseSimpleXmlNode* root, const gchar* header_string);
+XnoiseSimpleXmlWriter* xnoise_simple_xml_writer_construct (GType object_type, XnoiseSimpleXmlNode* root, const gchar* header_string);
+void xnoise_simple_xml_writer_write (XnoiseSimpleXmlWriter* self, const gchar* filename);
 
 extern const gchar* XNOISE_PL_known_playlist_extensions[5];
 extern const gchar* XNOISE_PL_remote_schemes[2];
