@@ -31,7 +31,7 @@
  */
 
 
-namespace Pl {
+namespace Xnoise.Pl {
 	public class ItemCollection {
 
 		private Item[] _items = {};

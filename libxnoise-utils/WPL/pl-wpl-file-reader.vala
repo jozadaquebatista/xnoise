@@ -21,9 +21,9 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using SimpleXml;
+using Xnoise.SimpleXml;
 
-namespace Pl {
+namespace Xnoise.Pl {
 	private class Wpl.FileReader : AbstractFileReader {
 		private unowned File file;
 		private ItemCollection parse(ItemCollection data_collection,ref string base_path, string data) throws GLib.Error {

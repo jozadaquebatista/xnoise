@@ -21,31 +21,19 @@
  */
 
 
-namespace Pl {
+namespace Xnoise.Pl {
 
 	public errordomain ReaderError {
 		UNKNOWN_TYPE,
 		SOMETHING_ELSE
 	}
 
-	public errordomain WriterError {
-		UNKNOWN_TYPE,
-		NO_DATA,
-		NO_DEST_URI,
-		DEST_REMOTE
-	}
-	
 	private errordomain InternalReaderError {
 		UNKNOWN_TYPE,
 		INVALID_FILE,
 		SOMETHING_ELSE
 	}
 
-	private errordomain InternalWriterError {
-		UNKNOWN_TYPE,
-		SOMETHING_ELSE
-	}
-	
 	//Type of playlist
 	public enum ListType {
 		UNKNOWN = 0,

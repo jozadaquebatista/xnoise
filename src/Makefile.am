@@ -73,9 +73,11 @@ xnoise_SOURCES = \
 
 VALAFLAGS = \
     --basedir $(top_srcdir)/src \
-    --pkg config \
     --thread \
-    --vapidir $(srcdir)/../vapi \
+    --vapidir $(top_srcdir)/vapi \
+    --pkg config \
+    --vapidir $(top_srcdir)/libxnoise-utils \
+    --pkg libxnoiseutils-1.0 \
     --vapi=$(srcdir)/xnoise-1.0.vapi \
     --header=$(srcdir)/xnoise.h \
     @XNOISE_PACKAGES@ \

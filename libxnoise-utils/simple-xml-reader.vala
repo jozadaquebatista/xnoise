@@ -21,7 +21,7 @@
  */
 
 
-namespace SimpleXml {
+namespace Xnoise.SimpleXml {
 
 	public const string AMPERSAND_ESCAPED    = "&amp;";
 	public const string GREATER_THAN_ESCAPED = "&gt;";

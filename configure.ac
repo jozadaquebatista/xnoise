@@ -6,11 +6,11 @@ m4_define(xnoise_minor_version, 1)
 m4_define(xnoise_micro_version, 16)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
-#libplaylist version
-m4_define(libplaylist_major_version, 0)
-m4_define(libplaylist_minor_version, 0)
-m4_define(libplaylist_micro_version, 1)
-m4_define(libplaylist_version, libplaylist_major_version.libplaylist_minor_version.libplaylist_micro_version)
+#libxnoiseutils version
+m4_define(libxnoiseutils_major_version, 0)
+m4_define(libxnoiseutils_minor_version, 0)
+m4_define(libxnoiseutils_micro_version, 1)
+m4_define(libxnoiseutils_version, libxnoiseutils_major_version.libxnoiseutils_minor_version.libxnoiseutils_micro_version)
 
 AC_INIT([xnoise],[xnoise_version],[shuerhaakenATgo oglemail.com],[xnoise])
 
@@ -68,7 +68,7 @@ PKG_CHECK_MODULES(XNOISE, \
     taglib_c >= $TAGLIB_C_REQUIRED \
     unique-1.0 cairo)
 
-PKG_CHECK_MODULES(LIBPLAYLIST, \
+PKG_CHECK_MODULES(LIBXNOISEUTILS, \
     glib-2.0 >= $GLIB_REQUIRED \
     gobject-2.0 >= $GLIB_REQUIRED \
     libxml-2.0 >= $LIBXML_REQUIRED \
@@ -441,7 +441,7 @@ XNOISE_PACKAGES="\
     --pkg linux \
 "
 
-LIBPLAYLIST_PACKAGES="\
+LIBXNOISEUTILS_PACKAGES="\
     --pkg config \
 "
 
@@ -449,9 +449,9 @@ AC_SUBST(XNOISE_CFLAGS)
 AC_SUBST(XNOISE_LIBS)
 AC_SUBST(XNOISE_PACKAGES)
 
-AC_SUBST(LIBPLAYLIST_CFLAGS)
-AC_SUBST(LIBPLAYLIST_LIBS)
-AC_SUBST(LIBPLAYLIST_PACKAGES)
+AC_SUBST(LIBXNOISEUTILS_CFLAGS)
+AC_SUBST(LIBXNOISEUTILS_LIBS)
+AC_SUBST(LIBXNOISEUTILS_PACKAGES)
 
 
 dnl       VAPIDIR is used to place the xnoise vapi file
@@ -478,14 +478,14 @@ AC_CONFIG_FILES([
     data/misc/xnoise.desktop.in
     data/misc/Makefile
     data/misc/xnoise-1.0.pc
-    data/misc/libplaylist-1.0.pc
+    data/misc/libxnoiseutils-1.0.pc
     data/ui/Makefile
     data/icons/Makefile
     data/icons/32x32/Makefile
     data/icons/48x48/Makefile
     data/icons/256x256/Makefile
     data/icons/scalable/Makefile
-    libplaylist/Makefile
+    libxnoise-utils/Makefile
     src/Makefile
     plugins/Makefile
     plugins/testplugin/Makefile

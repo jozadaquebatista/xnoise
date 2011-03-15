@@ -35,7 +35,7 @@ from GUI thread
 
 xnoise (0.1.11-1mav-0ubuntu1) maverick; urgency=low
 
-  * create a new playlist handling library (libplaylist)
+  * create a new playlist handling library (libxnoiseutils)
   * add fast forward within track on progressbar scroll
   * change track on trayicon scroll
   * add mediabrowser automatic linebreaks

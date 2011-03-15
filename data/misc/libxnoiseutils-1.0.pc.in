@@ -7,7 +7,7 @@ datadir=@datadir@
 vapidir=@datadir@/vala/vapi
 
 
-Name: Playlist Library
-Description: Library for reading and writing playlist files
+Name: Xnoise common stuff library
+Description: Library for handling common things for xnoise and plugins
 Version: @VERSION@
 Requires: glib-2.0 gobject-2.0 gio-2.0

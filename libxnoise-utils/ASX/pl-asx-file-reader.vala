@@ -21,9 +21,9 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using SimpleXml;
+using Xnoise.SimpleXml;
 
-namespace Pl {
+namespace Xnoise.Pl {
 	private class Asx.FileReader : AbstractFileReader {
 		private unowned File file;
 

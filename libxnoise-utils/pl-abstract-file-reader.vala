@@ -1,4 +1,4 @@
-/* pl-abstract-file-writer.vala
+/* pl-abstract-file-reader.vala
  *
  * Copyright (C) 2010  Jörn Magens
  *
@@ -21,18 +21,18 @@
  */
 
 
-namespace Pl {
-	// abstract base class for all playlist filewriter implementations
-	private abstract class AbstractFileWriter : GLib.Object {
+namespace Xnoise.Pl {
+	// abstract base class for all playlist filereader implementations
+	private abstract class AbstractFileReader : GLib.Object {
+		// relative paths from playlists are turnedinto absolute paths, by using base path
+		protected string base_path;
+		 
 		public signal void started(string playlist_uri);
 		public signal void finished(string playlist_uri);
 
-		// relative paths from playlists are turnedinto absolute paths, by using base path
-		protected string base_path;
-		
-		public abstract Result write(File file, ItemCollection data_collection, Cancellable? cancellable = null) throws InternalWriterError;
-		public abstract async Result write_asyn(File file, ItemCollection data_collection, Cancellable? cancellable = null) throws InternalWriterError;
-		
+		public abstract ItemCollection read(File file, Cancellable? cancellable = null) throws InternalReaderError;
+		public abstract async ItemCollection read_asyn(File file, Cancellable? cancellable = null) throws InternalReaderError;
+
 		protected abstract void set_base_path();
 	}
 }

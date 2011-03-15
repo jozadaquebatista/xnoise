@@ -2,8 +2,8 @@ NULL =
 
 SUBDIRS = \
     data \
+    libxnoise-utils \
     src \
-    libplaylist \
     plugins \
     po \
     vapi \
@@ -12,8 +12,8 @@ SUBDIRS = \
 
 DIST_SUBDIRS = \
     data \
+    libxnoise-utils \
     src \
-    libplaylist \
     plugins \
     po \
     vapi \
