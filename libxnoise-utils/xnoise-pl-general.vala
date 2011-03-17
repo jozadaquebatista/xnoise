@@ -91,8 +91,12 @@ namespace Xnoise.Pl {
 			return null;
 		string uri = f.get_uri();
 		assert(uri != null);
-		string? ext = uri.rstr(".");
-		return ext;
+		if(uri.contains(".")) {
+			long offset = (long)(uri.last_index_of(".", 0)) + ".".length;
+			string? ext = uri.substring(offset, uri.length - offset);
+			return ext;
+		}
+		return null;
 	}
 }
 

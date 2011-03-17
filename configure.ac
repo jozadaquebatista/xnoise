@@ -3,13 +3,13 @@ AC_PREREQ([2.67])
 #xnoise version
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 1)
-m4_define(xnoise_micro_version, 16)
+m4_define(xnoise_micro_version, 17)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
 #libxnoiseutils version
 m4_define(libxnoiseutils_major_version, 0)
 m4_define(libxnoiseutils_minor_version, 0)
-m4_define(libxnoiseutils_micro_version, 1)
+m4_define(libxnoiseutils_micro_version, 2)
 m4_define(libxnoiseutils_version, libxnoiseutils_major_version.libxnoiseutils_minor_version.libxnoiseutils_micro_version)
 
 AC_INIT([xnoise],[xnoise_version],[shuerhaakenATgo oglemail.com],[xnoise])

@@ -49,7 +49,7 @@ namespace Xnoise.Pl {
 					while((line = in_stream.read_line (null, null)) != null) {
 						
 						//Ignore blank line
-						if(line._strip().size() == 0) { 
+						if(line._strip().length == 0) { 
 							continue; 
 						}
 						if(line.down().contains("numberofentries")) {
@@ -57,7 +57,7 @@ namespace Xnoise.Pl {
 							
 							//Can we rely on existance of numberofentries??
 							if(arrayNumberOfEntries.length == 2) {
-								numberofentries = arrayNumberOfEntries[1].to_int();
+								numberofentries = int.parse(arrayNumberOfEntries[1]); //arrayNumberOfEntries[1].to_int();
 								//print("There are %d entries: \n", numberofentries);
 							}
 							else {
@@ -76,9 +76,10 @@ namespace Xnoise.Pl {
 						for(int j = 0; j < line_buf.length; j++) {
 							if(line_buf[j].has_prefix("File" + i.to_string())) {
 								if(line_buf[j].contains("=")) {
-									char* begin = line_buf[j].str("=");
+									char* begin = line_buf[j]; 
+									begin += line_buf[j].index_of("=");
 									begin++;
-									char* end = (char*)line_buf[j] + line_buf[j].size();
+									char* end = (char*)line_buf[j] + line_buf[j].length;
 									if(begin >= end)
 										break;
 									TargetType tt;
@@ -101,9 +102,10 @@ namespace Xnoise.Pl {
 						for(int j = 0; j < line_buf.length; j++) {
 							if(line_buf[j].has_prefix("Title" + i.to_string())) {
 								if(line_buf[j].contains("=")) {
-									char* begin = line_buf[j].str("=");
+									char* begin =line_buf[j];
+									begin += line_buf[j].index_of("=");
 									begin++;
-									char* end = (char*)line_buf[j] + line_buf[j].size();
+									char* end = (char*)line_buf[j] + line_buf[j].length;
 									if(begin >= end)
 										break;
 									line_buf[j] = ((string)begin)._strip();
@@ -152,14 +154,14 @@ namespace Xnoise.Pl {
 					Item d = null;
 					while(in_stream != null && (line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, null)) != null) {
 						//Ignore blank line
-						if(line._strip().size() == 0) {
+						if(line._strip().length == 0) {
 							continue; 
 						}
 						if(line.down().contains("numberofentries")) {
 							var arrayNumberOfEntries = line.split("=");
 							//Can we rely on existance of numberofentries??
 							if(arrayNumberOfEntries.length == 2) {
-								numberofentries = arrayNumberOfEntries[1].to_int();
+								numberofentries = int.parse(arrayNumberOfEntries[1]); // arrayNumberOfEntries[1].to_int();
 								//print("There are %d entries: \n", numberofentries);
 							}
 							else {
@@ -177,9 +179,10 @@ namespace Xnoise.Pl {
 						for(int k = 0; k < line_buf.length; k++) {
 							if(line_buf[k].has_prefix("File" + i.to_string())) {
 								if(line_buf[k].contains("=")) {
-									begin = line_buf[k].str("=");
+									begin = line_buf[k];
+									begin += line_buf[k].index_of("=", 0);
 									begin++;
-									end = (char*)line_buf[k] + line_buf[k].size();
+									end = (char*)line_buf[k] + line_buf[k].length;
 									if(begin >= end)
 										break;
 									TargetType tt;
@@ -202,9 +205,10 @@ namespace Xnoise.Pl {
 						for(int j = 0; j < line_buf.length; j++) {
 							if(line_buf[j].has_prefix("Title" + i.to_string())) {
 								if(line_buf[j].contains("=")) {
-									begin = line_buf[j].str("=");
+									begin = line_buf[j];
+									begin += line_buf[j].index_of("=", 0);
 									begin++;
-									end = (char*)line_buf[j] + line_buf[j].size();
+									end = (char*)line_buf[j] + line_buf[j].length;
 									if(begin >= end)
 										break;
 									line_buf[j] = ((string)begin)._strip();

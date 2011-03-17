@@ -11,7 +11,6 @@ INCLUDES = \
     -DDATADIR='"$(datadir)"' \
     -DLOCALE_DIR=\"${datarootdir}/locale\" \
     -include $(CONFIG_HEADER) \
-    $(LIBXML_CFLAGS) \
     $(NULL)
 
 xnoiseutils_hdir = $(includedir)/libxnoiseutils-1.0
@@ -61,7 +60,6 @@ libxnoiseutils_la_LDFLAGS = \
 
 libxnoiseutils_la_LIBADD = \
     $(LIBXNOISEUTILS_LIBS) \
-    $(LIBXML_LIBS) \
     $(NULL)
 
 VAPI_FILES = libxnoiseutils-1.0.vapi

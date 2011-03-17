@@ -51,7 +51,7 @@ namespace Xnoise.Pl {
 					if(line.has_prefix("#M3U") || line.has_prefix("#EXTM3U")) {
 						// Read lines until end of file(null) is reached
 						while((line = in_stream.read_line(null, null)) != null && line.strip() != "#EXT-X-ENDLIST") {
-							if(line._strip().size() == 0)
+							if(line._strip().length == 0)
 								continue;
 								
 							lines_buf += line._strip();
@@ -125,8 +125,9 @@ namespace Xnoise.Pl {
 		
 		private bool line_is_extinf(ref string line, ref string title) {
 			if(line.has_prefix("#EXTINF:")) {
-				char* begin = line.str("#EXTINF:");
-				char* end = (char*)line + line.size();
+				char* begin = line;
+				begin += line.index_of("#EXTINF:", 0);
+				char* end = (char*)line + line.length;
 				begin++;
 				if(begin >= end) {
 					print("error reading EXTINF\n");
@@ -134,7 +135,7 @@ namespace Xnoise.Pl {
 					return true;
 				}
 				if(((string)begin).contains(",")) {
-					begin = ((string)begin).str(",");
+					begin += ((string)begin).index_of(",");
 					begin++;
 					title = ((string)begin)._strip();
 					return true;
@@ -173,7 +174,7 @@ namespace Xnoise.Pl {
 							if(line == null || line.strip() == "#EXT-X-ENDLIST")
 								break;
 							
-							if(line._strip().size() == 0)
+							if(line._strip().length == 0)
 								continue;
 							
 							lines_buf += line._strip();

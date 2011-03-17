@@ -47,7 +47,6 @@ namespace Xnoise.SimpleXml {
 				print("Cannot create file. %s\n", e.message);
 				return;
 			}
-			
 			write_header(ref stream);
 
 			if(root == null)
@@ -59,7 +58,7 @@ namespace Xnoise.SimpleXml {
 		private void write_header(ref FileOutputStream stream) {
 			header_string._strip();
 			
-			if(header_string.size() < 4)
+			if(header_string.length < 4)
 				return;
 			
 			write_string_to_stream(header_string, ref stream);
@@ -76,13 +75,13 @@ namespace Xnoise.SimpleXml {
 			ssize_t already_written = 0;
 			char* text_pointer = text;
 			try {
-				while(already_written < text.size()) {
-					size = stream.write((uint8[])text_pointer, null);
+				while(already_written < text.length) {
+					size = stream.write(((string)text_pointer).data, null);
 					already_written = already_written + size;
 					text_pointer += size;
 				}
 			}
-			catch(GLib.Error e) {
+			catch(GLib.IOError e) {
 				print("%s\n", e.message);
 			}
 		}
@@ -140,11 +139,10 @@ namespace Xnoise.SimpleXml {
 				
 				if(node.has_text())
 					write_string_to_stream(escape_text(node.text), ref stream);
-
-				if(!node.has_text()) {
+				
+				if(!node.has_text()) 
 					write_string_to_stream("\n", ref stream);
-				}
-
+				
 				dpth += 2;
 				
 				// Recursion
@@ -154,7 +152,7 @@ namespace Xnoise.SimpleXml {
 
 				if(!node.has_text() && node.children_count > 0) 
 					do_n_spaces(ref stream);
-				
+
 				if(node.has_text() || node.children_count > 0)
 					end_node(node, ref stream);
 			}

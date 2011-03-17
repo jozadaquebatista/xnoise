@@ -20,6 +20,7 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
+//TODO: take care about charsets
 
 namespace Xnoise.SimpleXml {
 
@@ -79,7 +80,7 @@ namespace Xnoise.SimpleXml {
 			assert(xml_string != null);
 			this.xml_string = xml_string;
 			begin = this.xml_string;
-			end = begin + this.xml_string.size();
+			end = begin + this.xml_string.length;
 			current = begin;
 			parse_from_string = true;
 		}
@@ -338,7 +339,7 @@ namespace Xnoise.SimpleXml {
 		}
 
 		private inline string get_text(char* token_begin_pos, char* token_end_pos) {
-			return ((string)(token_begin_pos)).ndup(token_end_pos - token_begin_pos);
+			return ((string)(token_begin_pos)).substring(0, (long)(token_end_pos - token_begin_pos));
 		}
 	
 		private string get_nodename(char* token_begin_pos, char* token_end_pos) {
@@ -352,10 +353,10 @@ namespace Xnoise.SimpleXml {
 				   nn_current[0] == '>') {
 					assert(nn_current > nn_begin);
 					assert(nn_current < token_end_pos);
-					return ((string)(nn_begin)).ndup(nn_current - nn_begin);
+					return ((string)(nn_begin)).substring(0, (long)(nn_current - nn_begin));
 				}
 			}
-			return ((string)(token_begin_pos)).ndup(token_end_pos - token_begin_pos);
+			return ((string)(token_begin_pos)).substring(0, (long)(token_end_pos - token_begin_pos));
 		}
 
 		private string unescape_text(string text) {
@@ -394,7 +395,7 @@ namespace Xnoise.SimpleXml {
 			if(this.current == begin_name) {
 				stderr.printf("invalid or non-existant name");
 			}
-			return((string) begin_name).ndup(this.current - begin_name);
+			return((string) begin_name).substring(0, (long)(this.current - begin_name));
 		}
 
 		private async TokenType read_token_asyn(out Token token, bool case_sensitive) {
@@ -452,7 +453,7 @@ namespace Xnoise.SimpleXml {
 					this.current++;
 					token.begin = this.current;
 					name = read_name();
-					token.end = token.begin + name.size() + 1;
+					token.end = token.begin + name.length + 1;
 					token.begin -= 2;
 					if(this.current >= this.end || this.current[0] != '>') {
 						stderr.printf("Error end element: Invalid xml file! Expected '>'\n");
@@ -494,7 +495,7 @@ namespace Xnoise.SimpleXml {
 								stderr.printf("invalid UTF-8 character");
 							}
 						}
-						string attr_value = unescape_text(((string) attr_begin).ndup(current - attr_begin));
+						string attr_value = unescape_text(((string) attr_begin).substring(0, (long)(current - attr_begin)));
 						if(this.current >= this.end || this.current[0] != '"') {
 							stderr.printf("Found unquoted attribute value! \n");
 							root = null;
