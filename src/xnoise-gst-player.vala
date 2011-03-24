@@ -40,8 +40,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 //	private uint check_for_subtitles_source;
 	
 	private enum SelectableType {
-		NONE,
+		NONE = 0,
 		AUDIO,
+		VIDEO,
 		TEXT
 	}
 	
