@@ -48,18 +48,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private Gst.TagList _taglist;
 	private int64 _length_time;
 	public Xnoise.VideoScreen videoscreen;
-	private string[]? _available_subtitles;
 	private GLib.List<Gst.Message> missing_plugins = new GLib.List<Gst.Message>();
 	private dynamic Element playbin;
 
-	public string[]? available_subtitles {
-		get {
-			return _available_subtitles;
-		}
-		private set {
-			_available_subtitles = value;
-		}
-	}
+	public string[]? available_subtitles { get; private set; }
 
 	public bool current_has_video { // TODO: Determine this elsewhere
 		get {
@@ -133,7 +125,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			}
 			this._current_has_video = false;
 			videoscreen.trigger_expose();
-
+			
 			//reset
 			taglist = null;
 			available_subtitles = null;
@@ -258,7 +250,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		playbin = ElementFactory.make("playbin2", "playbin");
 		
 		playbin.text_changed.connect( () => {
-			Idle.add( () => {
+			Timeout.add_seconds(1, () => {
 				print("playbin2 got text-changed signal. number of texts = %d\n", playbin.n_text);
 				available_subtitles = get_available_languages(SelectableType.TEXT);
 				return false;
@@ -414,7 +406,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			string language_code = null, codec = null;
 			tags.get_string(Gst.TAG_LANGUAGE_CODE, out language_code);
 			tags.get_string(Gst.TAG_CODEC, out codec);
-			
+			//print("language_code: %s      codec: %s\n", language_code, codec);
 			if(language_code != null) {
 				if(result == null) 
 					result = {};
