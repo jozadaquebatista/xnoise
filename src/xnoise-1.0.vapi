@@ -156,8 +156,8 @@ namespace Xnoise {
 		public void request_time_offset_seconds (int seconds);
 		public void stop ();
 		public bool buffering { get; private set; }
-		public bool current_has_subtitles { get; set; }
-		public bool current_has_video { get; set; }
+		public bool current_has_subtitles { get; }
+		public bool current_has_video { get; }
 		public int current_text { get; set; }
 		public double gst_position { get; set; }
 		public bool is_stream { get; private set; }
@@ -174,6 +174,7 @@ namespace Xnoise {
 		public signal void sign_playing ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
+		public signal void sign_subtitles_playing ();
 		public signal void sign_video_playing ();
 		public signal void sign_volume_changed (double volume);
 	}

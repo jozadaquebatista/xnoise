@@ -36,8 +36,14 @@ public class Xnoise.GstPlayer : GLib.Object {
 	
 	private uint cycle_time_source;
 	private uint update_tags_source;
-	private uint check_for_video_source;
-	private uint check_for_subtitles_source;
+//	private uint check_for_video_source;
+//	private uint check_for_subtitles_source;
+	
+	private enum SelectableType {
+		NONE,
+		AUDIO,
+		TEXT
+	}
 	
 	private string? _uri = null;
 	private Gst.TagList _taglist;
@@ -50,21 +56,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 		get {
 			return _current_has_video;
 		}
-		set {
-			_current_has_video = value;
-			if(!_current_has_video) 
-				videoscreen.trigger_expose();
-			else
-				sign_video_playing();
-		}
 	}
 
 	public bool current_has_subtitles { 
 		get {
 			return _current_has_subtitles;
-		}
-		set {
-			_current_has_subtitles = value;
 		}
 	}
 
@@ -126,8 +122,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 				playing = false;
 				paused = false;
 			}
-			this.current_has_video = false;
-			
+			this._current_has_video = false;
+			videoscreen.trigger_expose();
+
 			//reset
 			taglist = null;
 			length_time = 0;
@@ -187,7 +184,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_playing();
 	public signal void sign_paused();
 	public signal void sign_stopped();
+	
 	public signal void sign_video_playing();
+	public signal void sign_subtitles_playing();
+	
 	public signal void sign_buffering(int percent);
 	public signal void sign_volume_changed(double volume);
 
@@ -198,7 +198,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		create_elements();
 		cycle_time_source = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position);
 		update_tags_source = 0;
-		check_for_video_source = 0;
+//		check_for_video_source = 0;
 
 		global.uri_changed.connect( () => {
 			this.request_location(global.current_uri);
@@ -247,12 +247,44 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private void create_elements() {
 		taglist = null;
 		playbin = ElementFactory.make("playbin2", "playbin");
+		
 		playbin.text_changed.connect( () => {
-			//TODO
-			print("playbin2 got text-changed signal\n");
+			print("playbin2 got text-changed signal. number of texts = %d\n", playbin.n_text);
+			foreach(string s in get_available_languages(SelectableType.TEXT))
+				print("found language %s\n", s);
+			Idle.add( () => {
+				int n_text = 0;
+				n_text = playbin.n_text;
+				if(n_text > 0) {
+					this._current_has_subtitles = true;
+					sign_subtitles_playing();
+				}
+				else {
+					this._current_has_subtitles = false;
+				}
+				return false;
+			});
 		});
+		
+		playbin.video_changed.connect( () => {
+			Idle.add( () => {
+				int n_video = 0;
+				n_video = playbin.n_video;
+				if(n_video > 0) {
+					this._current_has_video = true;
+					sign_video_playing();
+				}
+				else {
+					this._current_has_video = false;
+					videoscreen.trigger_expose();
+				}
+				return false;
+			});
+		});
+		
 		playbin.about_to_finish.connect(on_about_to_finish);
 		playbin.audio_tags_changed.connect(on_audio_tags_changed);
+		
 		var bus = new Gst.Bus ();
 		bus = playbin.get_bus();
 		bus.add_signal_watch();
@@ -291,22 +323,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if((msg == null)||(msg.get_structure() == null)) 
 			return;
 		switch(msg.type) {
-			case Gst.MessageType.STATE_CHANGED: {
-				State newstate;
-				State oldstate;
-				
-				if(msg.src != playbin) // only look for playbin state changes
-					break;
-					
-				msg.parse_state_changed(out oldstate, out newstate, null);
-				if((newstate == State.PLAYING)&&((oldstate == State.PAUSED)||(oldstate == State.READY))) {
-					this.check_for_video();
-				}
-				//if((oldstate == State.PLAYING)&&((newstate == State.NULL)||(newstate == State.PAUSED)||(newstate == State.READY))) {
-				//	print("stopped/paused message\n");
-				//}
-				break;
-			}
 			case Gst.MessageType.ELEMENT: {
 				string type = null;
 				string source;
@@ -381,38 +397,92 @@ public class Xnoise.GstPlayer : GLib.Object {
 		return;
 	}
 	
-	private void check_for_video() {
-		if(check_for_video_source != 0)
-			Source.remove(check_for_video_source);
+	private GLib.List<string>? get_available_languages(SelectableType selected) {
+		GLib.List<string>? result = null;
+		int stream_number = 1;
+		int n = 0;
 		
-		check_for_video_source = Idle.add( () => {
-			int n_video = 0;
-			n_video = playbin.n_video;
-			if(n_video > 0) {
-				this.current_has_video = true;
+		switch(selected) {
+			case SelectableType.AUDIO: {
+				if((n = playbin.n_audio) == 0)
+					return null;
+				
+				for(int i = 0; i < n; i++) {
+					TagList tags = null;
+					Signal.emit_by_name(playbin, "get-audio-tags", i, ref tags);
+					
+					if(tags != null) {
+						string language_code = null, codec = null;
+						tags.get_string(Gst.TAG_LANGUAGE_CODE, out language_code);
+						tags.get_string(Gst.TAG_CODEC, out codec);
+						
+						if(language_code != null) {
+							if(result == null) 
+								result = new GLib.List<string>();
+							result.prepend(language_code);
+						}
+						else if(codec != null) {
+							if(result == null) 
+								result = new GLib.List<string>();
+							result.prepend(codec);
+						}
+						else {
+							if(result == null) 
+								result = new GLib.List<string>();
+							result.prepend("%s%d".printf(_("Audio Track #"), stream_number++));
+						}
+					}
+					else {
+						if(result == null) 
+							result = new GLib.List<string>();
+						result.prepend("%s%d".printf(_("Audio Track #"), stream_number++));
+					}
+				}
+				break;
 			}
-			else {
-				this.current_has_video = false;
+			case SelectableType.TEXT: {
+				if((n = playbin.n_text) == 0)
+					return null;
+				
+				for(int i = 0; i < n; i++) {
+					TagList tags = null;
+					Signal.emit_by_name(playbin, "get-audio-tags", i, ref tags);
+					
+					if(tags != null) {
+						string language_code = null, codec = null;
+						tags.get_string(Gst.TAG_LANGUAGE_CODE, out language_code);
+						tags.get_string(Gst.TAG_CODEC, out codec);
+						
+						if(language_code != null) {
+							if(result == null) 
+								result = new GLib.List<string>();
+							result.prepend(language_code);
+						}
+						else if(codec != null) {
+							if(result == null) 
+								result = new GLib.List<string>();
+							result.prepend(codec);
+						}
+						else {
+							if(result == null) 
+								result = new GLib.List<string>();
+							result.prepend("%s%d".printf(_("Subtitle #"), stream_number++));
+						}
+					}
+					else {
+						if(result == null) 
+							result = new GLib.List<string>();
+						result.prepend("%s%d".printf(_("Subtitle #"), stream_number++));
+					}
+				}
+				break;
 			}
-			return false;
-		});
-	}
-
-	private void check_for_subtitles() {
-		if(check_for_subtitles_source != 0)
-			Source.remove(check_for_subtitles_source);
-		
-		check_for_subtitles_source = Idle.add( () => {
-			int n_text = 0;
-			n_text = playbin.n_text;
-			if(n_text > 0) {
-				this.current_has_subtitles = true;
+			default: {
+				print("Invalid selection %s\n", selected.to_string());
+				return null;
 			}
-			else {
-				this.current_has_subtitles = false;
-			}
-			return false;
-		});
+		}
+		return result;
 	}
 
 	/**

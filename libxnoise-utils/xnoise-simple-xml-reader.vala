@@ -20,7 +20,7 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-//TODO: take care about charsets
+//TODO: take care about charsets/encodings
 
 namespace Xnoise.SimpleXml {
 
