@@ -28,20 +28,64 @@
  * 	Jörn Magens
  */
 
+using Gtk;
+
 public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	private Gdk.Pixbuf logo_pixb;
 	private Gdk.Pixbuf cover_image_pixb;
 	private Gdk.Pixbuf logo;
 	private unowned Main xn;
 	private bool cover_image_available;
-
-	public VideoScreen() {
+	private unowned GstPlayer player;
+	
+	public VideoScreen(GstPlayer _player) {
+		this.player = _player;
 		this.xn = Main.instance;
 		rect = Gdk.Rectangle();
 		Gdk.Color.parse("black", out black);
 		init_video_screen();
 		cover_image_available = false;
 		global.notify["image-path-large"].connect(on_image_path_changed);
+		this.button_release_event.connect(on_button_released);
+	}
+
+	private bool on_button_released(Gdk.EventButton e) {
+		if(!((e.button==3) && (e.type==Gdk.EventType.BUTTON_RELEASE))) {
+			return false; //exit here, if it's no the button 3 single click release
+		}
+		else {
+			Menu? menu = create_rightclick_menu();
+			if(menu != null)
+				menu.popup(null, null, null, 0, e.time);
+		}
+		return true;
+	}
+
+	private Menu? create_rightclick_menu() {
+		Menu rightmenu = null;
+		if(player.available_subtitles != null) {
+			rightmenu = new Menu();
+			int i = 0;
+			foreach(unowned string s in player.available_subtitles) {
+				var menuitem = new MenuItem();
+				var menuitemHbox = new HBox(false, 1);
+				var menuitemLabel = new Label(s);
+				var menuitemimage = new Gtk.Image();
+				menuitemimage.set_from_stock(Gtk.Stock.INFO, IconSize.MENU);
+				menuitemHbox.set_homogeneous(false);
+				menuitemHbox.pack_start(menuitemimage, false, false, 0);
+				menuitemHbox.pack_start(menuitemLabel, true, true, 0);
+				menuitem.add(menuitemHbox);
+				int k = ++i;
+				menuitem.activate.connect( () => { 
+					print("menuitem selected: %d\n", k); 
+					this.player.current_text = k;
+				});
+				rightmenu.append(menuitem);
+			}
+			rightmenu.show_all();
+		}
+		return rightmenu;
 	}
 
 	private void on_image_path_changed() {
@@ -70,7 +114,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	
 	private void init_video_screen() {
 		this.set_double_buffered(false);
-		this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
+		this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK |Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
 		try {
 			logo_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_bruit.svg");
 		}

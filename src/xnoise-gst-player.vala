@@ -36,8 +36,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	
 	private uint cycle_time_source;
 	private uint update_tags_source;
-//	private uint check_for_video_source;
-//	private uint check_for_subtitles_source;
 	
 	private enum SelectableType {
 		NONE = 0,
@@ -49,10 +47,20 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private string? _uri = null;
 	private Gst.TagList _taglist;
 	private int64 _length_time;
-	public VideoScreen videoscreen;
+	public Xnoise.VideoScreen videoscreen;
+	private string[]? _available_subtitles;
 	private GLib.List<Gst.Message> missing_plugins = new GLib.List<Gst.Message>();
 	private dynamic Element playbin;
-	
+
+	public string[]? available_subtitles {
+		get {
+			return _available_subtitles;
+		}
+		private set {
+			_available_subtitles = value;
+		}
+	}
+
 	public bool current_has_video { // TODO: Determine this elsewhere
 		get {
 			return _current_has_video;
@@ -128,6 +136,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 			//reset
 			taglist = null;
+			available_subtitles = null;
 			length_time = 0;
 			this.playbin.uri = (value == null ? "" : value);
 			if(value != null) {
@@ -195,11 +204,10 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private signal void sign_missing_plugins();
 
 	public GstPlayer() {
-		videoscreen = new VideoScreen();
+		videoscreen = new Xnoise.VideoScreen(this);
 		create_elements();
 		cycle_time_source = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position);
 		update_tags_source = 0;
-//		check_for_video_source = 0;
 
 		global.uri_changed.connect( () => {
 			this.request_location(global.current_uri);
@@ -244,15 +252,17 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private void on_about_to_finish(Gst.Element sender) {
 		handle_eos_via_idle();
 	}
-
+	
 	private void create_elements() {
 		taglist = null;
 		playbin = ElementFactory.make("playbin2", "playbin");
 		
 		playbin.text_changed.connect( () => {
-			print("playbin2 got text-changed signal. number of texts = %d\n", playbin.n_text);
-			foreach(string s in get_available_languages(SelectableType.TEXT))
-				print("found language %s\n", s);
+			Idle.add( () => {
+				print("playbin2 got text-changed signal. number of texts = %d\n", playbin.n_text);
+				available_subtitles = get_available_languages(SelectableType.TEXT);
+				return false;
+			});
 			Idle.add( () => {
 				int n_text = 0;
 				n_text = playbin.n_text;
@@ -398,83 +408,58 @@ public class Xnoise.GstPlayer : GLib.Object {
 		return;
 	}
 	
-	private GLib.List<string>? get_available_languages(SelectableType selected) {
-		GLib.List<string>? result = null;
-		int stream_number = 1;
-		int n = 0;
-		
+	private string[]? extract_language(ref TagList? tags, string substitute_prefix, int stream_number = 1) {
+		string[]? result = null;
+		if(tags != null) {
+			string language_code = null, codec = null;
+			tags.get_string(Gst.TAG_LANGUAGE_CODE, out language_code);
+			tags.get_string(Gst.TAG_CODEC, out codec);
+			
+			if(language_code != null) {
+				if(result == null) 
+					result = {};
+				result += language_code;
+			}
+			else if(codec != null) {
+				if(result == null) 
+					result = {};
+				result += codec;
+			}
+			else {
+				if(result == null) 
+					result = {};
+				result += "%s%d".printf(substitute_prefix, stream_number);
+			}
+		}
+		else {
+			if(result == null) 
+				result = {};
+			result += "%s%d".printf(substitute_prefix, stream_number);
+		}
+		return result;
+	}
+	
+	private string[]? get_available_languages(SelectableType selected) {
+		string[]? result = null;
+		TagList? tags = null;
 		switch(selected) {
-			case SelectableType.AUDIO: {
-				if((n = playbin.n_audio) == 0)
+			case SelectableType.TEXT: {
+				if(((int)playbin.n_text) == 0)
 					return null;
 				
-				for(int i = 0; i < n; i++) {
-					TagList tags = null;
-					Signal.emit_by_name(playbin, "get-audio-tags", i, ref tags);
-					
-					if(tags != null) {
-						string language_code = null, codec = null;
-						tags.get_string(Gst.TAG_LANGUAGE_CODE, out language_code);
-						tags.get_string(Gst.TAG_CODEC, out codec);
-						
-						if(language_code != null) {
-							if(result == null) 
-								result = new GLib.List<string>();
-							result.prepend(language_code);
-						}
-						else if(codec != null) {
-							if(result == null) 
-								result = new GLib.List<string>();
-							result.prepend(codec);
-						}
-						else {
-							if(result == null) 
-								result = new GLib.List<string>();
-							result.prepend("%s%d".printf(_("Audio Track #"), stream_number++));
-						}
-					}
-					else {
-						if(result == null) 
-							result = new GLib.List<string>();
-						result.prepend("%s%d".printf(_("Audio Track #"), stream_number++));
-					}
+				for(int i = 0; i < ((int)playbin.n_text); i++) {
+					Signal.emit_by_name(playbin, "get-text-tags", i, ref tags);
+					result = extract_language(ref tags, _("Subtitle #"), i + 1);
 				}
 				break;
 			}
-			case SelectableType.TEXT: {
-				if((n = playbin.n_text) == 0)
+			case SelectableType.AUDIO: {
+				if(((int)playbin.n_audio) == 0)
 					return null;
 				
-				for(int i = 0; i < n; i++) {
-					TagList tags = null;
+				for(int i = 0; i < ((int)playbin.n_audio); i++) {
 					Signal.emit_by_name(playbin, "get-audio-tags", i, ref tags);
-					
-					if(tags != null) {
-						string language_code = null, codec = null;
-						tags.get_string(Gst.TAG_LANGUAGE_CODE, out language_code);
-						tags.get_string(Gst.TAG_CODEC, out codec);
-						
-						if(language_code != null) {
-							if(result == null) 
-								result = new GLib.List<string>();
-							result.prepend(language_code);
-						}
-						else if(codec != null) {
-							if(result == null) 
-								result = new GLib.List<string>();
-							result.prepend(codec);
-						}
-						else {
-							if(result == null) 
-								result = new GLib.List<string>();
-							result.prepend("%s%d".printf(_("Subtitle #"), stream_number++));
-						}
-					}
-					else {
-						if(result == null) 
-							result = new GLib.List<string>();
-						result.prepend("%s%d".printf(_("Subtitle #"), stream_number++));
-					}
+					result = extract_language(ref tags, _("Audio Track #"), i + 1);
 				}
 				break;
 			}

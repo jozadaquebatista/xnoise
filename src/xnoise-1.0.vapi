@@ -155,6 +155,7 @@ namespace Xnoise {
 		public void playSong (bool force_play = false);
 		public void request_time_offset_seconds (int seconds);
 		public void stop ();
+		public string[]? available_subtitles { get; private set; }
 		public bool buffering { get; private set; }
 		public bool current_has_subtitles { get; }
 		public bool current_has_video { get; }
@@ -552,7 +553,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class VideoScreen : Gtk.DrawingArea {
-		public VideoScreen ();
+		public VideoScreen (Xnoise.GstPlayer _player);
 		public override bool expose_event (Gdk.EventExpose e);
 		public void trigger_expose ();
 	}

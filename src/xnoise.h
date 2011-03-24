@@ -1388,6 +1388,7 @@ void xnoise_gst_player_pause (XnoiseGstPlayer* self);
 void xnoise_gst_player_stop (XnoiseGstPlayer* self);
 void xnoise_gst_player_playSong (XnoiseGstPlayer* self, gboolean force_play);
 void xnoise_gst_player_request_time_offset_seconds (XnoiseGstPlayer* self, gint seconds);
+gchar** xnoise_gst_player_get_available_subtitles (XnoiseGstPlayer* self, int* result_length1);
 gboolean xnoise_gst_player_get_current_has_video (XnoiseGstPlayer* self);
 gboolean xnoise_gst_player_get_current_has_subtitles (XnoiseGstPlayer* self);
 gdouble xnoise_gst_player_get_volume (XnoiseGstPlayer* self);
@@ -1725,8 +1726,8 @@ void xnoise_user_info_update_text_by_id (XnoiseUserInfo* self, guint id, const g
 void xnoise_user_info_update_extra_widget_by_id (XnoiseUserInfo* self, guint id, GtkWidget* widget);
 void xnoise_user_info_popdown (XnoiseUserInfo* self, guint id);
 guint xnoise_user_info_popup (XnoiseUserInfo* self, XnoiseUserInfoRemovalType removal_type, XnoiseUserInfoContentClass content_class, const gchar* info_text, gboolean bold, gint appearance_time_seconds, GtkWidget* extra_widget);
-XnoiseVideoScreen* xnoise_video_screen_new (void);
-XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type);
+XnoiseVideoScreen* xnoise_video_screen_new (XnoiseGstPlayer* _player);
+XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type, XnoiseGstPlayer* _player);
 void xnoise_video_screen_trigger_expose (XnoiseVideoScreen* self);
 GType xnoise_volume_slider_button_get_type (void) G_GNUC_CONST;
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (void);
