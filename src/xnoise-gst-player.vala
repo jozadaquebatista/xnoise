@@ -36,18 +36,29 @@ public class Xnoise.GstPlayer : GLib.Object {
 	
 	private uint cycle_time_source;
 	private uint update_tags_source;
+
+	private TagList taglist_buffer = null;
 	
-	private enum SelectableType {
+	private enum SelectableStreamType {
 		NONE = 0,
 		AUDIO,
 		VIDEO,
 		TEXT
 	}
 	
+	private class TaglistWithStreamType {
+		public TaglistWithStreamType(SelectableStreamType _sst, TagList _tags) {
+			this.sst = _sst; 
+			this.tags = _tags.copy();
+		}
+		public SelectableStreamType sst;
+		public TagList tags;
+	}
+
 	private string? _uri = null;
-	private Gst.TagList _taglist;
 	private int64 _length_time;
 	public Xnoise.VideoScreen videoscreen;
+	private AsyncQueue<TaglistWithStreamType?> new_tag_queue = new AsyncQueue<TaglistWithStreamType?>();
 	private GLib.List<Gst.Message> missing_plugins = new GLib.List<Gst.Message>();
 	private dynamic Element playbin;
 
@@ -98,18 +109,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 		}
 	}
 
-	private Gst.TagList taglist {
-		get {
-			return _taglist;
-		}
-		private set {
-			if (value != null) {
-				_taglist = value.copy();
-			} else
-				_taglist = null;
-		}
-	}
-
 	public string? uri {
 		get {
 			return _uri;
@@ -127,7 +126,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			videoscreen.trigger_expose();
 			
 			//reset
-			taglist = null;
+			taglist_buffer = null;
 			available_subtitles = null;
 			length_time = 0;
 			this.playbin.uri = (value == null ? "" : value);
@@ -246,13 +245,13 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 	
 	private void create_elements() {
-		taglist = null;
+//		taglist = null;
 		playbin = ElementFactory.make("playbin2", "playbin");
 		
 		playbin.text_changed.connect( () => {
 			Timeout.add_seconds(1, () => {
-				print("playbin2 got text-changed signal. number of texts = %d\n", playbin.n_text);
-				available_subtitles = get_available_languages(SelectableType.TEXT);
+				//print("playbin2 got text-changed signal. number of texts = %d\n", playbin.n_text);
+				available_subtitles = get_available_languages(SelectableStreamType.TEXT);
 				return false;
 			});
 			Idle.add( () => {
@@ -287,6 +286,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 		
 		playbin.about_to_finish.connect(on_about_to_finish);
 		playbin.audio_tags_changed.connect(on_audio_tags_changed);
+		playbin.text_tags_changed.connect(on_text_tags_changed);
+		playbin.video_tags_changed.connect(on_video_tags_changed);
 		
 		var bus = new Gst.Bus ();
 		bus = playbin.get_bus();
@@ -296,30 +297,59 @@ public class Xnoise.GstPlayer : GLib.Object {
 		bus.sync_message.connect(this.on_sync_message);
 	}
 	
-	private void on_audio_tags_changed(Gst.Element sender, int stream_number) {
-		TagList tags = null;
-		Signal.emit_by_name(playbin, "get-audio-tags", stream_number, ref tags);
-		if(taglist == null && tags != null) {
-			taglist = tags;
+	private bool tag_update_func() {
+		TaglistWithStreamType? tlwst;
+		while((tlwst = this.new_tag_queue.try_pop()) != null) {
+			// merge with taglist_buffer. taglist_buffer is set to null as soon as new uri is set
+			if(taglist_buffer == null) 
+				taglist_buffer = tlwst.tags.copy();
+			else
+				taglist_buffer = taglist_buffer.merge(tlwst.tags, TagMergeMode.REPLACE);
+			taglist_buffer.@foreach(foreachtag);
 		}
-		else if(tags != null){
-			taglist.merge(tags, TagMergeMode.REPLACE);
+		lock(update_tags_source) {
+			update_tags_source = 0;
 		}
-		
-		if(this.taglist == null) 
-			return;
-		
-		if(update_tags_source != 0)
-			Source.remove(update_tags_source);
-		
-		update_tags_source = Idle.add(update_tags);
+		return false;
 	}
 
-	private bool update_tags() {
-		if(taglist == null)
-			return false;
-		taglist.@foreach(foreachtag);
-		return false;
+	private void update_tags_in_idle(TagList _tags, SelectableStreamType _sst) {
+		// box data for the async queue
+		TaglistWithStreamType tlwst = new TaglistWithStreamType(_sst, _tags);
+		
+		this.new_tag_queue.push(tlwst); //push with locking
+		
+		lock(update_tags_source) {
+			if(update_tags_source == 0)
+				update_tags_source = Idle.add(tag_update_func);
+		}
+	}
+
+	private void on_video_tags_changed(Gst.Element sender, int stream_number) {
+		TagList tags = null;
+		if(((int)playbin.current_video) != stream_number)
+			return;
+		Signal.emit_by_name(playbin, "get-video-tags", stream_number, ref tags);
+		if(tags != null)
+			update_tags_in_idle(tags, SelectableStreamType.VIDEO);
+	}
+
+	private void on_audio_tags_changed(Gst.Element sender, int stream_number) {
+		TagList tags = null;
+		if(((int)playbin.current_audio) != stream_number)
+			return;
+		Signal.emit_by_name(playbin, "get-audio-tags", stream_number, ref tags);
+		if(tags != null)
+			update_tags_in_idle(tags, SelectableStreamType.AUDIO);
+	}
+
+	private void on_text_tags_changed(Gst.Element sender, int stream_number) {
+		TagList tags = null;
+		if(((int)playbin.current_text) != stream_number)
+			return;
+		Signal.emit_by_name(playbin, "get-text-tags", stream_number, ref tags);
+		if(tags != null)
+			update_tags_in_idle(tags, SelectableStreamType.TEXT);
 	}
 
 	private void on_bus_message(Gst.Message msg) {
@@ -400,22 +430,17 @@ public class Xnoise.GstPlayer : GLib.Object {
 		return;
 	}
 	
+	// helper function of get_available_languages()
 	private string[]? extract_language(ref TagList? tags, string substitute_prefix, int stream_number = 1) {
 		string[]? result = null;
 		if(tags != null) {
-			string language_code = null, codec = null;
+			string language_code = null;
 			tags.get_string(Gst.TAG_LANGUAGE_CODE, out language_code);
-			tags.get_string(Gst.TAG_CODEC, out codec);
-			//print("language_code: %s      codec: %s\n", language_code, codec);
+			//print("language_code: %s\n", language_code);
 			if(language_code != null) {
 				if(result == null) 
 					result = {};
 				result += language_code;
-			}
-			else if(codec != null) {
-				if(result == null) 
-					result = {};
-				result += codec;
 			}
 			else {
 				if(result == null) 
@@ -431,11 +456,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 		return result;
 	}
 	
-	private string[]? get_available_languages(SelectableType selected) {
+	private string[]? get_available_languages(SelectableStreamType selected) {
 		string[]? result = null;
 		TagList? tags = null;
 		switch(selected) {
-			case SelectableType.TEXT: {
+			case SelectableStreamType.TEXT: {
 				if(((int)playbin.n_text) == 0)
 					return null;
 				
@@ -445,7 +470,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				}
 				break;
 			}
-			case SelectableType.AUDIO: {
+			case SelectableStreamType.AUDIO: {
 				if(((int)playbin.n_audio) == 0)
 					return null;
 				
@@ -479,8 +504,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private void foreachtag(TagList list, string tag) {
-		if(list == null)
-			return;
 		string val = null;
 		//print("tag: %s\n", tag);
 		switch(tag) {
