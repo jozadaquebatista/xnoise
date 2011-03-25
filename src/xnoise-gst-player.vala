@@ -252,6 +252,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 	
 	private void set_automatic_subtitles() {
+		if(this._uri == null)
+			return;
 		try {
 			File f = File.new_for_uri(this._uri);
 			if(f.get_path() == null) {// not a local file
