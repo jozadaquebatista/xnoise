@@ -39,7 +39,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	private TagList taglist_buffer = null;
 	
-	private enum SelectableStreamType {
+	private enum PlaybinStreamType {
 		NONE = 0,
 		AUDIO,
 		VIDEO,
@@ -47,11 +47,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 	
 	private class TaglistWithStreamType {
-		public TaglistWithStreamType(SelectableStreamType _sst, TagList _tags) {
-			this.sst = _sst; 
+		public TaglistWithStreamType(PlaybinStreamType _pst, TagList _tags) {
+			this.pst = _pst; 
 			this.tags = _tags.copy();
 		}
-		public SelectableStreamType sst;
+		public PlaybinStreamType pst;
 		public TagList tags;
 	}
 
@@ -251,7 +251,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		playbin.text_changed.connect( () => {
 			Timeout.add_seconds(1, () => {
 				//print("playbin2 got text-changed signal. number of texts = %d\n", playbin.n_text);
-				available_subtitles = get_available_languages(SelectableStreamType.TEXT);
+				available_subtitles = get_available_languages(PlaybinStreamType.TEXT);
 				return false;
 			});
 			Idle.add( () => {
@@ -313,9 +313,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 		return false;
 	}
 
-	private void update_tags_in_idle(TagList _tags, SelectableStreamType _sst) {
+	private void update_tags_in_idle(TagList _tags, PlaybinStreamType _pst) {
 		// box data for the async queue
-		TaglistWithStreamType tlwst = new TaglistWithStreamType(_sst, _tags);
+		TaglistWithStreamType tlwst = new TaglistWithStreamType(_pst, _tags);
 		
 		this.new_tag_queue.push(tlwst); //push with locking
 		
@@ -331,7 +331,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return;
 		Signal.emit_by_name(playbin, "get-video-tags", stream_number, ref tags);
 		if(tags != null)
-			update_tags_in_idle(tags, SelectableStreamType.VIDEO);
+			update_tags_in_idle(tags, PlaybinStreamType.VIDEO);
 	}
 
 	private void on_audio_tags_changed(Gst.Element sender, int stream_number) {
@@ -340,7 +340,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return;
 		Signal.emit_by_name(playbin, "get-audio-tags", stream_number, ref tags);
 		if(tags != null)
-			update_tags_in_idle(tags, SelectableStreamType.AUDIO);
+			update_tags_in_idle(tags, PlaybinStreamType.AUDIO);
 	}
 
 	private void on_text_tags_changed(Gst.Element sender, int stream_number) {
@@ -349,7 +349,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			return;
 		Signal.emit_by_name(playbin, "get-text-tags", stream_number, ref tags);
 		if(tags != null)
-			update_tags_in_idle(tags, SelectableStreamType.TEXT);
+			update_tags_in_idle(tags, PlaybinStreamType.TEXT);
 	}
 
 	private void on_bus_message(Gst.Message msg) {
@@ -456,11 +456,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 		return result;
 	}
 	
-	private string[]? get_available_languages(SelectableStreamType selected) {
+	private string[]? get_available_languages(PlaybinStreamType selected) {
 		string[]? result = null;
 		TagList? tags = null;
 		switch(selected) {
-			case SelectableStreamType.TEXT: {
+			case PlaybinStreamType.TEXT: {
 				if(((int)playbin.n_text) == 0)
 					return null;
 				
@@ -470,7 +470,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				}
 				break;
 			}
-			case SelectableStreamType.AUDIO: {
+			case PlaybinStreamType.AUDIO: {
 				if(((int)playbin.n_audio) == 0)
 					return null;
 				
