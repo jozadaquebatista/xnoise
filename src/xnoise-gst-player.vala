@@ -36,6 +36,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	
 	private uint cycle_time_source;
 	private uint update_tags_source;
+	private uint automatic_subtitles_source;
 
 	private TagList taglist_buffer = null;
 	
@@ -123,13 +124,18 @@ public class Xnoise.GstPlayer : GLib.Object {
 				paused = false;
 			}
 			this._current_has_video = false;
-			videoscreen.trigger_expose();
+			Idle.add( () => {
+				videoscreen.trigger_expose();
+				return false;
+			}); 
+			
 			
 			//reset
 			taglist_buffer = null;
 			available_subtitles = null;
 			length_time = 0;
 			this.playbin.uri = (value == null ? "" : value);
+			set_automatic_subtitles();
 			if(value != null) {
 				File file = File.new_for_commandline_arg(value);
 				if(file.get_uri_scheme() in global.remote_schemes)
@@ -199,6 +205,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		create_elements();
 		cycle_time_source = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position);
 		update_tags_source = 0;
+		automatic_subtitles_source = 0;
 
 		global.uri_changed.connect( () => {
 			this.request_location(global.current_uri);
@@ -244,11 +251,41 @@ public class Xnoise.GstPlayer : GLib.Object {
 		handle_eos_via_idle();
 	}
 	
+	private void set_automatic_subtitles() {
+		try {
+			File f = File.new_for_uri(this._uri);
+			if(f.get_path() == null) {// not a local file
+				return;
+			}
+			File directory = f.get_parent();
+			var enumerator = directory.enumerate_children(FILE_ATTRIBUTE_STANDARD_NAME + "," +
+			                                              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE, 0);
+			FileInfo file_info;
+			string prefix = remove_suffix_from_filename(f.get_basename());
+			while((file_info = enumerator.next_file ()) != null) {
+				if(file_info.get_name().has_prefix(prefix) && 
+				   (file_info.get_content_type() == "application/x-subrip" || 
+				    file_info.get_content_type() == "text/x-ssa")) {
+					File subfile = File.new_for_path(GLib.Path.build_filename(directory.get_path(), file_info.get_name(), null));
+					if(subfile.query_exists(null))
+						this.playbin.suburi = ((string)subfile.get_uri());
+					break; // stop with first suburi
+				}
+			}
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			return;
+		}
+		return;
+	}
+
 	private void create_elements() {
-//		taglist = null;
+		taglist_buffer = null;
 		playbin = ElementFactory.make("playbin2", "playbin");
 		
 		playbin.text_changed.connect( () => {
+			print("text_changed\n");
 			Timeout.add_seconds(1, () => {
 				//print("playbin2 got text-changed signal. number of texts = %d\n", playbin.n_text);
 				available_subtitles = get_available_languages(PlaybinStreamType.TEXT);

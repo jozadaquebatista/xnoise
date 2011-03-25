@@ -722,6 +722,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string remove_linebreaks (string? val);
 	[CCode (cheader_filename = "xnoise.h")]
+	public static string remove_suffix_from_filename (string? val);
+	[CCode (cheader_filename = "xnoise.h")]
 	public static string replace_underline_with_blank_encoded (string value);
 }
 [CCode (cprefix = "Gst", lower_case_cprefix = "gst_")]

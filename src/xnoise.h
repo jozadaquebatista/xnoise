@@ -1539,6 +1539,7 @@ gchar* xnoise_escape_for_local_folder_search (const gchar* value);
 gchar* xnoise_prepare_for_comparison (const gchar* value);
 gchar* xnoise_prepare_for_search (const gchar* val);
 gchar* xnoise_remove_linebreaks (const gchar* val);
+gchar* xnoise_remove_suffix_from_filename (const gchar* val);
 gchar* xnoise_prepare_name_from_filename (const gchar* val);
 gchar* xnoise_replace_underline_with_blank_encoded (const gchar* value);
 GFile* xnoise_get_file_for_current_artistalbum (const gchar* artist, const gchar* album, const gchar* size);

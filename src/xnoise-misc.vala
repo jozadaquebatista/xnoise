@@ -196,6 +196,18 @@ namespace Xnoise {
 		return val;
 	}
 
+	public static string remove_suffix_from_filename(string? val) {
+		if(val == null)
+			return "";
+		string name = val;
+		string prep;
+		if(name.last_index_of(".") != -1) 
+			prep = name.substring(0, name.last_index_of("."));
+		else
+			prep = name;
+		return prep;
+	}
+
 	public static string prepare_name_from_filename(string? val) {
 		if(val == null)
 			return "";
