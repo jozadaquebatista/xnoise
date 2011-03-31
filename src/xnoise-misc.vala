@@ -361,7 +361,7 @@ public class Xnoise.RemoteSchemes {
 	
 	// syntax support for 'in'
 	public bool contains(string location) {
-		foreach(string s in _list) {
+		foreach(unowned string s in _list) {
 			if(location == s) return true;
 		}
 		return false;
@@ -384,7 +384,7 @@ public class Xnoise.LocalSchemes {
 	
 	// syntax support for 'in'
 	public bool contains(string location) {
-		foreach(string s in _list) {
+		foreach(unowned string s in _list) {
 			if(location == s) return true;
 		}
 		return false;

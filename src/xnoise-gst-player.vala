@@ -268,10 +268,12 @@ public class Xnoise.GstPlayer : GLib.Object {
 				if(file_info.get_name().has_prefix(prefix) && 
 				   (file_info.get_content_type() == "application/x-subrip" || 
 				    file_info.get_content_type() == "text/x-ssa")) {
+					
 					File subfile = File.new_for_path(GLib.Path.build_filename(directory.get_path(), file_info.get_name(), null));
-					if(subfile.query_exists(null))
-						this.playbin.suburi = ((string)subfile.get_uri());
+					print("subfile.get_uri(): %s\n", subfile.get_uri());
+					this.playbin.suburi = ((string)subfile.get_uri());
 					break; // stop with first suburi
+					
 				}
 			}
 		}
