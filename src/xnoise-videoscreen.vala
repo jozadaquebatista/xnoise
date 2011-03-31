@@ -66,6 +66,21 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		if(player.available_subtitles != null) {
 			rightmenu = new Menu();
 			int i = 0;
+			var menuitem_empty = new MenuItem();
+			var menuitemHbox_empty = new HBox(false, 1);
+			var menuitemLabel_empty = new Label(_("No Subtitle"));
+			var menuitemimage_empty = new Gtk.Image();
+			menuitemimage_empty.set_from_stock(Gtk.Stock.INFO, IconSize.MENU);
+			menuitemHbox_empty.set_homogeneous(false);
+			menuitemHbox_empty.pack_start(menuitemimage_empty, false, false, 0);
+			menuitemHbox_empty.pack_start(menuitemLabel_empty, true, true, 0);
+			menuitem_empty.add(menuitemHbox_empty);
+			menuitem_empty.activate.connect( () => { 
+				print("menuitem selected: %d\n", 0); 
+				this.player.current_text = -1;
+			});
+			rightmenu.append(menuitem_empty);
+
 			foreach(unowned string s in player.available_subtitles) {
 				var menuitem = new MenuItem();
 				var menuitemHbox = new HBox(false, 1);
