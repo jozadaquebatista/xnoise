@@ -1,6 +1,7 @@
 /* xnoise-mpris.vala
  *
  * Copyright (C) 2010 Andreas Obergrusberger
+ * Copyright (C) 2010 - 2011 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -256,8 +257,19 @@ public class MprisPlayer : GLib.Object {
 	public MprisPlayer(DBusConnection conn) {
 		this.conn = conn;
 		this.xn = Main.instance;
+		Timeout.add_seconds(2, () => {
+			Variant val = "dummy";
+			queue_property_for_notification("DesktopEntry", val);
+			Timeout.add_seconds(2, () => {
+				Variant valx = "xnoise";
+				queue_property_for_notification("DesktopEntry", valx);
+				return false;
+			});
+			return false;
+		});
 		
-		Xnoise.global.notify["track-state"].connect( (s, p) => {
+		Xnoise.global.notify["player-state"].connect( (s, p) => {
+			//print("player state queued for mpris: %s\n", this.PlaybackStatus);
 			Variant variant = this.PlaybackStatus;
 			queue_property_for_notification("PlaybackStatus", variant);
 		});
@@ -302,7 +314,7 @@ public class MprisPlayer : GLib.Object {
 
 		update_metadata_source = Timeout.add(300, () => {
 			//print("trigger_metadata_update %s\n", global.current_artist);
-			Variant variant = this.PlaybackStatus;
+			Variant variant = _metadata;//this.PlaybackStatus;
 			queue_property_for_notification("Metadata", variant);
 			update_metadata_source = 0;
 			return false;
@@ -348,29 +360,34 @@ public class MprisPlayer : GLib.Object {
 		if(changed_properties == null)
 			return false;
 		
-		var builder             = new VariantBuilder(VariantType.ARRAY);
+		var builder             = new VariantBuilder(VariantType.DICTIONARY);
 		var invalidated_builder = new VariantBuilder(new VariantType("as"));
 		
 		foreach(string name in changed_properties.get_keys()) {
 			Variant variant = changed_properties.lookup(name);
+			print("%s changed\n", name);
 			builder.add("{sv}", name, variant);
 		}
 		
 		changed_properties = null;
 		
+		Variant[] arg_tuple = {
+			new Variant("s", this.INTERFACE_NAME),
+			builder.end(),
+			invalidated_builder.end()
+		};
+		Variant args = new Variant.tuple(arg_tuple);
+		//print("tupletypestring: %s\n", tupv.get_type_string());
 		try {
 			conn.emit_signal(null,
 			                 "/org/mpris/MediaPlayer2", 
 			                 "org.freedesktop.DBus.Properties", 
 			                 "PropertiesChanged", 
-			                 new Variant("(sa{sv}as)", 
-			                             this.INTERFACE_NAME, 
-			                             builder, 
-			                             invalidated_builder)
+			                 args
 			                 );
 		}
 		catch(Error e) {
-			print("%s\n", e.message);
+			print("Error emmitting PropertiesChanged dbus signal: %s\n", e.message);
 		}
 		send_property_source = 0;
 		return false;
@@ -468,7 +485,7 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	private HashTable<string,Variant> _metadata = new HashTable<string,Variant>(str_hash, str_equal);
-	public HashTable<string,Variant>? Metadata { //a{sv}
+	public HashTable<string,Variant> Metadata { //a{sv}
 		owned get {
 			Variant variant = "1";
 			_metadata.insert("mpris:trackid", variant);
