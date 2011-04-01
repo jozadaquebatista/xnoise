@@ -1306,41 +1306,41 @@ void main() {
 	// Corrupted FILE TESTS
 	
 	//READ M3U without filename extension
-	print("test read M3U without extension:");
-	if(test_m3u_read_with_no_extension_on_file())
-		print("\033[50Gpass\n");
-	else
-		print("\033[50Gfail\n");
-		
-	//READ XSPF without filename extension
-	print("test read XSPF without extension:");
-	if(test_xpsf_read_with_no_extension_on_file())
-		print("\033[50Gpass\n");
-	else
-		print("\033[50Gfail\n");
-	
-	// async tests
-	
-	print("test pls async reading:");
-	test_pls_async_reading();
-	ml = new MainLoop(); // reuse mainloop for every async test
-	ml.run();
+//	print("test read M3U without extension:");
+//	if(test_m3u_read_with_no_extension_on_file())
+//		print("\033[50Gpass\n");
+//	else
+//		print("\033[50Gfail\n");
+//		
+//	//READ XSPF without filename extension
+//	print("test read XSPF without extension:");
+//	if(test_xpsf_read_with_no_extension_on_file())
+//		print("\033[50Gpass\n");
+//	else
+//		print("\033[50Gfail\n");
+//	
+//	// async tests
+//	
+//	print("test pls async reading:");
+//	test_pls_async_reading();
+//	ml = new MainLoop(); // reuse mainloop for every async test
+//	ml.run();
 
-	print("test xml reading and writing:");
-	if(test_xml_readwrite_01())
-		print("\033[50Gpass\n");
-	else
-		print("\033[50Gfail\n");
+//	print("test xml reading and writing:");
+//	if(test_xml_readwrite_01())
+//		print("\033[50Gpass\n");
+//	else
+//		print("\033[50Gfail\n");
 
-	print("test asx async reading:");
-	test_asx_async_reading();
-	ml = new MainLoop(); // reuse mainloop for every async test
-	ml.run();
+//	print("test asx async reading:");
+//	test_asx_async_reading();
+//	ml = new MainLoop(); // reuse mainloop for every async test
+//	ml.run();
 
-	print("test async xml reading:");
-	test_async_xml_read();
-	ml = new MainLoop(); // reuse mainloop for every async test
-	ml.run();
+//	print("test async xml reading:");
+//	test_async_xml_read();
+//	ml = new MainLoop(); // reuse mainloop for every async test
+//	ml.run();
 
 //	print("test m3u async reading:");
 //	test_m3u_async_reading();

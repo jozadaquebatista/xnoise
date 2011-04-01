@@ -135,7 +135,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			available_subtitles = null;
 			length_time = 0;
 			this.playbin.uri = (value == null ? "" : value);
-			set_automatic_subtitles();
+			// set_automatic_subtitles();
 			if(value != null) {
 				File file = File.new_for_commandline_arg(value);
 				if(file.get_uri_scheme() in global.remote_schemes)
