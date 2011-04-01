@@ -365,7 +365,7 @@ public class MprisPlayer : GLib.Object {
 		
 		foreach(string name in changed_properties.get_keys()) {
 			Variant variant = changed_properties.lookup(name);
-			print("%s changed\n", name);
+			//print("%s changed\n", name);
 			builder.add("{sv}", name, variant);
 		}
 		

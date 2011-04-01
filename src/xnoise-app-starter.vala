@@ -131,9 +131,9 @@ private class Xnoise.AppStarter {
 			}
 		}
 		uris += null; //Null terminated array. Is adding null necessary?
-
-		message( "main thread %d", (int)Linux.gettid() );
-
+		
+		//message( "main thread %d", (int)Linux.gettid() );
+		
 		if(app.is_running) {
 			if(uris.length > 0) {
 				print("Adding tracks to the running instance of xnoise!\n");
