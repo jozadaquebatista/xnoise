@@ -44,7 +44,7 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	private uint object_id_player;
 	public MprisPlayer player = null;
 	public MprisRoot root = null;
-//	public MprisTrackList tracklist = null;
+	public MprisTrackList tracklist = null;
 	private unowned Xnoise.Plugin _owner;
 	private unowned DBusConnection conn;
 	
@@ -64,12 +64,13 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	}
 	private void on_bus_acquired(DBusConnection connection, string name) {
 		this.conn = connection;
-		//print("bus acquired\n");
+		print("bus acquired\n");
 		try {
 			root = new MprisRoot();
 			connection.register_object("/org/mpris/MediaPlayer2", root);
 			player = new MprisPlayer(connection);
 			connection.register_object("/org/mpris/MediaPlayer2", player);
+			connection.register_object("/org/mpris/MediaPlayer2", tracklist);
 		} 
 		catch(IOError e) {
 			print("%s\n", e.message);
@@ -77,11 +78,11 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	}
 
 	private void on_name_acquired(DBusConnection connection, string name) {
-		//print("name acquired\n");
+		print("name acquired\n");
 	}	
 
 	private void on_name_lost(DBusConnection connection, string name) {
-		//print("name_lost\n");
+		print("name_lost\n");
 	}
 	
 	public bool init() {
@@ -269,7 +270,7 @@ public class MprisPlayer : GLib.Object {
 		});
 		
 		Xnoise.global.notify["player-state"].connect( (s, p) => {
-			//print("player state queued for mpris: %s\n", this.PlaybackStatus);
+			print("player state queued for mpris: %s\n", this.PlaybackStatus);
 			Variant variant = this.PlaybackStatus;
 			queue_property_for_notification("PlaybackStatus", variant);
 		});
@@ -297,7 +298,7 @@ public class MprisPlayer : GLib.Object {
 		});
 		
 		this.xn.gPl.notify["length-time"].connect( () => {
-			//print("length-time: %lld\n", ((int64)xn.gPl.length_time/1000));
+			print("length-time: %lld\n", ((int64)xn.gPl.length_time/1000));
 			if(_metadata.lookup("mpris:length") == null)
 				_metadata.insert("mpris:length", ((int64)0));
 				
@@ -322,6 +323,7 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	private void on_tag_changed(Xnoise.GlobalAccess sender, ref string? newuri, string? tagname, string? tagvalue) {
+		print("on_tag_changed newusi: %s,tagname: %s,tagvalue: %s \n",newuri,tagname, tagvalue);
 		switch(tagname){
 			case "artist":
 				string[] sa = {};
@@ -568,80 +570,90 @@ public class MprisPlayer : GLib.Object {
 	public signal void Seeked(int64 Position);
 	
 	public void Next() {
-		//print("next\n");
+		print("next\n");
 		global.next();
 	}
 	
 	public void Previous() {
-		//print("prev\n");
+		print("prev\n");
 		global.prev();
 	}
 	
 	public void Pause() {
+		print("pause\n");
 		global.pause();
 	}
 	
 	public void PlayPause() {
+		print("playpause\n");
 		global.play(true);
 	}
 	
 	public void Stop() {
+		print("stop\n");
 		this.xn.main_window.stop();
 	}
 	
 	public void Play() {
+		print("play\n");
 		global.play(false);
 	}
 	
 	public void Seek(int64 Offset) {
+		print("seek\n");
 		return;
 	}
 	
 	public void SetPosition(string dobj, int64 Position) {
-		//print(" set position %lf\n", ((double)Position/(xn.gPl.length_time / 1000.0)));
+		print(" set position %lf\n", ((double)Position/(xn.gPl.length_time / 1000.0)));
 		xn.gPl.gst_position = ((double)Position/(xn.gPl.length_time / 1000.0));
 	}
 	
 	public void OpenUri(string Uri) {
-		//TODO
-		return;
+		print("OpenUri %s\n",Uri);
+		xn.add_track_to_gst_player(Uri);
 	}
 }
 
 
-//[DBus(name = "org.mpris.MediaPlayer2.Tracklist")]
-//public class MprisTrackList : GLib.Object {
-//	public signal void TrackListChange(int Nb_Tracks);
-//	
-//	
-//	public HashTable<string,Variant>? GetTracksMetadata(int Position) {
-//		return null;
-//	}
-//	
-//	public int GetCurrentTrack() {
-//		return 0;
-//	}
-//	
-//	public int GetLength() {
-//		return 0;
-//	}
-//	
-//	public int AddTrack(string Uri, bool PlayImmediately) { 
-//		return 0;
-//	}
-//	
-//	public void DelTrack(int Position) {
-//	}
-//	
-//	public void SetLoop(bool State) {
-//	}
-//	
-//	public void SetRandom(bool State) {
-//	}
-//}
+[DBus(name = "org.mpris.MediaPlayer2.Tracklist")]
+public class MprisTrackList : GLib.Object {
+	public signal void TrackListChange(int Nb_Tracks);
+	
+	
+	public HashTable<string,Variant>? GetTracksMetadata(int Position) {
+		print("GetTracksMetadata %d\n",Position); 
+		return null;
+	}
 
+	public int AddTrack(string Uri, bool PlayImmediately) {
+		print("AddTrack %s %b\n",Uri,PlayImmediately); 
+		return 0;
+	}
 
-
-
-
-
+	//RemoveTrack
+	//GoTo
+	
+	
+	public int GetCurrentTrack() {
+		print("GetCurrentTrack\n"); 
+		return 0;
+	}
+	
+	public int GetLength() {
+		print("GetLength\n"); 
+		return 0;
+	}
+	
+	public void DelTrack(int Position) {
+		print("DelTrack\n"); 
+	}
+	
+	public void SetLoop(bool State) {
+		print("SetLoop\n"); 
+	}
+	
+	public void SetRandom(bool State) {
+		print("SetRandom\n"); 
+	}
+}
