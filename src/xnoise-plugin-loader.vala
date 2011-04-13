@@ -30,8 +30,8 @@
 
 public class Xnoise.PluginLoader : Object { //, IParams
 	public HashTable<string, Plugin> plugin_htable;
-	public HashTable<string, Plugin> lyrics_plugins_htable;
-	public HashTable<string, Plugin> image_provider_htable;
+	public HashTable<string, unowned Plugin> lyrics_plugins_htable;
+	public HashTable<string, unowned Plugin> image_provider_htable;
 	private Main xn;
 	private PluginInformation info;
 	private GLib.List<string> info_files;

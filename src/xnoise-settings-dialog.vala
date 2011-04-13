@@ -112,9 +112,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		dialog.show_all();
 	}
 
-	private void on_notebook_switched_page() { //Notebook sender, Gtk.NotebookPage page, uint page_num) {
+	private void on_notebook_switched_page(Notebook sender, Gtk.NotebookPage page, uint page_num) {
 		// refresh table
-		if(this.notebook.get_current_page() == NotebookTabs.PRIORITIES) {
+		if(page_num == NotebookTabs.PRIORITIES) {
 			ly_model.foreach(update_lyrics_providers);
 			ai_model.foreach(update_ai_providers);
 		}
@@ -293,11 +293,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		                         typeof(string)
 		                         );
 		ly_tv.model = ly_model;
-
+		
 		var renderer = new CellRendererText();
-
+		
 		var columnText = new TreeViewColumn();
-
+		
 		columnText.pack_start(renderer, true);
 		columnText.add_attribute(renderer,
 		                         "text", LyricsProvider.NAME
@@ -306,30 +306,41 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		                         "sensitive", LyricsProvider.STATE
 		                         );
 		ly_tv.append_column(columnText);
-
+		
 		ly_tv.headers_visible = false;
-
 		ly_hbox.pack_start(ly_tv, true, true, 0);
-
 		ly_tv.get_selection().set_mode(SelectionMode.SINGLE);
-
 		put_data_to_ly_tv();
 	}
 
+	[CCode (has_target = false)]
+	private static int compare_lyrics_providers(Plugin a, Plugin b) {
+		unowned ILyricsProvider prov_a = a.loaded_plugin as ILyricsProvider;
+		unowned ILyricsProvider prov_b = b.loaded_plugin as ILyricsProvider;
+		if(prov_a.priority <  prov_b.priority)
+			return 1;
+		if(prov_a.priority >  prov_b.priority)
+			return -1;
+		return 0;
+	}
+	
 	private void put_data_to_ly_tv() {
 		TreeIter iter;
 		ly_model.clear();
-		string[]? ordered_ly_providers = par.get_string_list_value("prio_lyrics");
 		List<unowned string> ly_prov_list = xn.plugin_loader.lyrics_plugins_htable.get_keys();
+		List<unowned Plugin> ordered_ly_providers = new List<unowned Plugin>();
+		foreach(unowned string name in ly_prov_list) 
+			ordered_ly_providers.prepend(this.xn.plugin_loader.lyrics_plugins_htable.lookup(name));
+		
+		ordered_ly_providers.sort(compare_lyrics_providers);
+		
 		if(ordered_ly_providers != null) {
-			foreach(string name in ordered_ly_providers) {
-				if(is_in_list(ref ly_prov_list, name)) {
-					ly_model.prepend(out iter);
-					ly_model.set(iter,
-					             LyricsProvider.STATE, this.xn.plugin_loader.lyrics_plugins_htable.lookup(name).activated,
-					             LyricsProvider.NAME, name
-					             );
-				}
+			foreach(Plugin pl in ordered_ly_providers) {
+				ly_model.prepend(out iter);
+				ly_model.set(iter,
+				             LyricsProvider.STATE, this.xn.plugin_loader.lyrics_plugins_htable.lookup(pl.info.name).activated,
+				             LyricsProvider.NAME, pl.info.name
+				             );
 			}
 		}
 		else {
@@ -377,11 +388,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		                         typeof(bool),
 		                         typeof(string));
 		ai_tv.model = ai_model;
-
+		
 		var renderer = new CellRendererText();
-
+		
 		var columnText = new TreeViewColumn();
-
+		
 		columnText.pack_start(renderer, true);
 		columnText.add_attribute(renderer,
 		                         "text", AIProvider.NAME
@@ -390,13 +401,13 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		                         "sensitive", AIProvider.STATE
 		                         );
 		ai_tv.append_column(columnText);
-
+		
 		ai_tv.headers_visible = false;
-
+		
 		ai_hbox.pack_start(ai_tv, true, true, 0);
-
+		
 		ai_tv.get_selection().set_mode(SelectionMode.SINGLE);
-
+		
 		put_data_to_ai_tv();
 	}
 

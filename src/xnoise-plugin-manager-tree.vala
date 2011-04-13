@@ -110,22 +110,22 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		checkColumn.pack_start(toggle, false);
 		checkColumn.add_attribute(toggle, "active", Column.TOGGLE);
 		this.append_column(checkColumn);
-
+		
 		iconColumn = new TreeViewColumn();
 		var pixbufRenderer = new CellRendererPixbuf();
 		iconColumn.pack_start(pixbufRenderer, false);
 		iconColumn.add_attribute(pixbufRenderer, "pixbuf", Column.ICON);
 		iconColumn.set_fixed_width(50);
 		this.append_column(iconColumn);
-
+		
 		text = new CellRendererText();
-
+		
 		var column = new TreeViewColumn();
 		column.pack_start(text, true);
 		column.add_attribute(text, "text", Column.NAME);
 		column.set_cell_data_func(text, text_cell_cb);
 		this.append_column(column);
-
+		
 		this.set_headers_visible(false);
 		setup_entries();
 		this.set_model(listmodel);
@@ -133,14 +133,13 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		this.get_selection().set_mode(SelectionMode.NONE);
 		this.button_press_event.connect(this.on_button_press);
 	}
-	
+
 	public void set_width(int w) {
 		text.wrap_mode = Pango.WrapMode.WORD_CHAR;
 		text.wrap_width = w - checkColumn.width - iconColumn.width;
 		this.set_model(null);
 		this.set_model(listmodel);
 	}
-	
 
 	private void setup_entries() {
 		foreach(string s in this.xn.plugin_loader.get_info_files()) {
@@ -156,7 +155,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				website     = kf.get_string(group, "website");
 				license     = kf.get_string(group, "license");
 				copyright   = kf.get_string(group, "copyright");
-
+				
 				var invisible = new Gtk.Invisible();
 				Gdk.Pixbuf pixbuf = invisible.render_icon(Gtk.Stock.UNDO , IconSize.BUTTON, null); //TODO: use plugins' icons
 				unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);

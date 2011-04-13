@@ -280,7 +280,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return false;
 	}
 
-
 	private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath treepath;
 		Gtk.TreeViewColumn column;
