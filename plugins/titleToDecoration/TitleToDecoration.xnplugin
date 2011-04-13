@@ -1,7 +1,7 @@
 [XnoisePlugin]
 name=TitleToDecoration
 module=TitleToDecoration
-description=Sets the window title of xnoise to the current playing media information
+description=Set the window name to the current title
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 

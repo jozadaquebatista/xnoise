@@ -108,6 +108,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		setup_lyrics_provider_tv();
 
 		notebook.switch_page.connect(on_notebook_switched_page);
+		dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
 		dialog.show_all();
 	}
 
@@ -449,17 +450,17 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		//TODO: Make a nicer way to handle column visibility and position
 		visibleColTvModel = new ListStore(DisplayColums.N_COLUMNS,
 		                                  typeof(bool), typeof(string));
-
+		
 		var toggle = new CellRendererToggle();
-		toggle.toggled.connect((toggle, path_as_string) => {
+		toggle.toggled.connect( (toggle, path_as_string) => {
 			var treepath = new TreePath.from_string(path_as_string);
 			TreeIter iter;
 			string? text = null;
 			bool val = false;
 			visibleColTvModel.get_iter(out iter, treepath);
-            visibleColTvModel.set(iter,
-                                  DisplayColums.TOGGLE, !toggle.active
-                                  );
+			visibleColTvModel.set(iter,
+			                      DisplayColums.TOGGLE, !toggle.active
+			                      );
 			visibleColTvModel.get(iter,
 			                      DisplayColums.TEXT, ref text,
 			                      DisplayColums.TOGGLE, ref val
@@ -476,19 +477,19 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 					break;
 				default: break;
 			}
-        });
-
+		});
+		
 		visibleColTv.model = visibleColTvModel;
-
+		
 		var columnToggle = new TreeViewColumn();
 		columnToggle.pack_start(toggle, false);
 		columnToggle.add_attribute(toggle,
 		                           "active", DisplayColums.TOGGLE
 		                           );
 		visibleColTv.append_column(columnToggle);
-
+		
 		var renderer = new CellRendererText();
-
+		
 		var columnText = new TreeViewColumn();
 		columnText.pack_start(renderer, true);
 		columnText.add_attribute(renderer,
@@ -496,7 +497,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		                         );
 		visibleColTv.append_column(columnText);
 		put_data_to_viz_cols_tv();
- 	}
+	}
 
 	// Move the provider up in ranking
 	private void on_ai_up_button_clicked(Gtk.Button sender) {
@@ -582,8 +583,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 			this.add_from_file(SETTINGS_UI_FILE);
 			this.dialog = this.get_object("settingsDialog") as Gtk.Dialog;
+			dialog.set_transient_for(xn.main_window);
 			this.dialog.set_modal(true);
-
+			
 			ai_up_button = this.get_object("ai_up_button") as Gtk.Button;
 			ai_up_button.can_focus = false;
 			ai_up_button.clicked.connect(this.on_ai_up_button_clicked);

@@ -34,12 +34,14 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 	private const string XNOISEICON = Config.UIDIR + "xnoise_16x16.png";
 	private Gtk.Dialog dialog;
-	public Gtk.Builder builder;
 	private ListStore listmodel;
 	private TreeView tv;
 	private string[] list_of_folders;
 	private string[] list_of_files;
 	private string[] list_of_streams;
+	private unowned Main xn;
+	
+	public Gtk.Builder builder;
 
 	private enum MediaStorageType {
 		FILE = 0,
@@ -50,12 +52,14 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	public signal void sign_finish();
 
 	public AddMediaDialog() {
+		xn = Main.instance;
 		builder = new Gtk.Builder();
 		create_widgets();
-
+		
 		fill_media_list();
-
-		this.dialog.show_all();
+		
+		dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
+		dialog.show_all();
 	}
 
 	//	~AddMediaDialog() {
@@ -123,37 +127,39 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void create_widgets() {
 		try {
 			dialog = new Dialog();
-
+			
 			dialog.set_modal(true);
+			dialog.set_transient_for(xn.main_window);
+			
 			builder.add_from_file(Config.UIDIR + "add_media.ui");
-
+			
 			var mainvbox         = builder.get_object("mainvbox") as Gtk.VBox;
 			tv                   = builder.get_object("tv") as TreeView;
 			var baddfile         = builder.get_object("addfilebutton") as Button;
 			var baddfolder       = builder.get_object("addfolderbutton") as Button;
 			var baddradio        = builder.get_object("addradiobutton") as Button;
 			var brem             = builder.get_object("removeButton") as Button;
-
+			
 			var labeladdfile     = builder.get_object("labeladdfile") as Label;
 			var labeladdfolder   = builder.get_object("labeladdfolder") as Label;
 			var labeladdstream   = builder.get_object("labeladdstream") as Label;
 			var labelremove      = builder.get_object("labelremove") as Label;
-
+			
 			var bcancel          = (Button)this.dialog.add_button(Gtk.Stock.CANCEL, 0);
 			var bok              = (Button)this.dialog.add_button(Gtk.Stock.OK, 1);
-
+			
 			labeladdfile.label   = _("Add local file");
 			labeladdfolder.label = _("Add local folder");
 			labeladdstream.label = _("Add media stream");
 			labelremove.label    = _("Remove");
-
+			
 			bok.clicked.connect(on_ok_button_clicked);
 			bcancel.clicked.connect(on_cancel_button_clicked);
 			baddfile.clicked.connect(on_add_file_button_clicked);
 			baddfolder.clicked.connect(on_add_folder_button_clicked);
 			baddradio.clicked.connect(on_add_radio_button_clicked);
 			brem.clicked.connect(on_remove_button_clicked);
-
+			
 			((Gtk.VBox)this.dialog.get_content_area()).add(mainvbox);
 			this.dialog.set_icon_from_file(XNOISEICON);
 			this.dialog.set_title(_("xnoise - Add media to library"));
@@ -167,7 +173,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			msg.run();
 			return;
 		}
-
+		
 		listmodel = new ListStore(2, typeof(string), typeof(int));
 		tv.set_model(listmodel);
 		CellRendererText cell = new Gtk.CellRendererText ();

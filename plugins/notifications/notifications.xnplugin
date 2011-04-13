@@ -1,7 +1,7 @@
 [XnoisePlugin]
 name=notifications
 module=notifications
-description=Use notifications when playing back a song
+description=Show notifications one track change
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 

@@ -133,7 +133,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			//reset
 			taglist_buffer = null;
 			available_subtitles = null;
-			length_time = 0;
+			length_time = (int64)0;
 			this.playbin.uri = (value == null ? "" : value);
 			// set_automatic_subtitles();
 			if(value != null) {
@@ -591,7 +591,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			}
 			if(seeking == false) {
 				playbin.query_duration(ref fmt, out len);
-				length_time = (int64)len;
+				length_time = (this._uri == "" || this._uri == null ? (int64)0 : (int64)len);
 				if(playing == false) return true;
 				if(!playbin.query_position(ref fmt, out pos))
 					return true;

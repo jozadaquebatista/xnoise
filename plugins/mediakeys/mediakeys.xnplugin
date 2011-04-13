@@ -1,7 +1,7 @@
 [XnoisePlugin]
 name=mediakeys
 module=mediakeys
-description=Control xnoise using a mediakeys
+description=Control xnoise using mediakeys
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 Jörn Magens

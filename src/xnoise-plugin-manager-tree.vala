@@ -59,43 +59,53 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 //		print("destruct PluginGuiElement\n");
 //	}
 
-	public static void text_cell_cb (CellLayout cell_layout, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
-		Value v;
-		tree_model.get_value(iter, Column.NAME, out v);
-		string s = v.get_string();
-		string markup = "<b>" + s + "</b>\n";
-		tree_model.get_value(iter, Column.DESCRIPTION, out v);
-		s = v.get_string();
-		markup += s;		
-		((CellRendererText)cell).markup = markup;
-	}
+	public static void text_cell_cb(CellLayout cell_layout, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
+		string val;
+		string markup_string;
 		
+		tree_model.get(iter, Column.DESCRIPTION, out val);
+		markup_string = Markup.printf_escaped("%s", val);
+		
+		tree_model.get(iter, Column.NAME, out val);
+		markup_string += Markup.printf_escaped("\n<b><small>%s</small></b>", val);
+		
+		((CellRendererText)cell).markup = markup_string;
+	}
+
+	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
+		Gtk.TreePath path = null;
+		Gtk.TreeViewColumn column;
+		int x = (int)e.x;
+		int y = (int)e.y;
+		int cell_x, cell_y;
+		
+		if(!this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y))
+			return true;
+		
+		TreeIter iter;
+		listmodel.get_iter(out iter, path);
+		string name;
+		listmodel.get(iter, Column.NAME, out name);
+		
+		if(this.xn.plugin_loader.plugin_htable.lookup(name).activated) 
+			this.xn.plugin_loader.deactivate_single_plugin(name);
+		else 
+			this.xn.plugin_loader.activate_single_plugin(name);
+			
+		unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
+		
+		listmodel.set(iter,
+		              Column.TOGGLE, p.activated
+		              );
+		
+		sign_plugin_activestate_changed(name);
+		return false;
+	}
 
 	public void create_view() {
-		this.set_size_request(200, 200);
-
+		this.set_size_request(-1, 250);
+		
 		var toggle = new CellRendererToggle();
-		toggle.toggled.connect( (toggle, path) => {
-			TreeIter iter;
-			var tree_path = new TreePath.from_string(path);
-			listmodel.get_iter(out iter, tree_path);
-			string name;
-			listmodel.get(iter, Column.NAME, out name);
-
-			if(this.xn.plugin_loader.plugin_htable.lookup(name).activated) 
-				this.xn.plugin_loader.deactivate_single_plugin(name);
-			else 
-				this.xn.plugin_loader.activate_single_plugin(name);
-				
-			unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
-			
-			listmodel.set(iter,
-			              Column.TOGGLE, p.activated
-			              );
-			
-			sign_plugin_activestate_changed(name);
-		});
-
 		checkColumn = new TreeViewColumn();
 		checkColumn.pack_start(toggle, false);
 		checkColumn.add_attribute(toggle, "active", Column.TOGGLE);
@@ -118,7 +128,10 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 
 		this.set_headers_visible(false);
 		setup_entries();
-		this.set_model(listmodel);			
+		this.set_model(listmodel);
+		
+		this.get_selection().set_mode(SelectionMode.NONE);
+		this.button_press_event.connect(this.on_button_press);
 	}
 	
 	public void set_width(int w) {

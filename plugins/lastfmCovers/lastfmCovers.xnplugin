@@ -1,7 +1,7 @@
 [XnoisePlugin]
 name=LastfmCovers
 module=LastfmCovers
-description=Loads album cover images from http://www.lastfm.com
+description=Load album covers from lastfm
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 xnoise developers 

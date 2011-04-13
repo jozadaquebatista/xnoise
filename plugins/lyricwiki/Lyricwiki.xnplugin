@@ -1,7 +1,7 @@
 [XnoisePlugin]
 name=Lyricwiki
 module=Lyricwiki
-description=Loads lyrics from http://www.lyricwiki.com
+description=Load lyrics from http://www.lyricwiki.com
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 softshaker 

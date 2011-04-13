@@ -1,7 +1,7 @@
 [XnoisePlugin]
 name=DatabaseLyrics
 module=DatabaseLyrics
-description=Loads/stores lyrics from/to database
+description=Buffer lyrics in database
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2011 Jörn Magens

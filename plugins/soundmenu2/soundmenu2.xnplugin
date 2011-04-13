@@ -1,7 +1,7 @@
 [XnoisePlugin]
 name=soundmenu2
 module=soundmenu2
-description=Register xnoise to ayatana soundmenu for ubuntu >= maverick+1
+description=Use ayatana soundmenu
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 Jörn Magens

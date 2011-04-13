@@ -1,7 +1,7 @@
 [XnoisePlugin]
 name=CyclicSaveState
 module=CyclicSaveState
-description=cyclically save state, tracklist content and plugin activationstate of xnoise
+description=Always keep the current state of xnoise
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 
