@@ -76,6 +76,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		theme.changed.connect(update_pixbufs);
 		set_pixbufs();
 		set_column_types(col_types);
+		global.notify["image-path-small"].connect( () => {
+			Timeout.add(5, () => {
+				update_album_image();
+				return false;
+			});
+		});
 	}
 	
 	private void update_pixbufs() {
@@ -391,10 +397,22 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private void handle_iter_for_album(ref TrackData td, ref TreeIter artist_iter, out TreeIter album_iter) {
 		string text = null;
 		//print("--%s\n", td.title);
+		File? albumimage_file = get_file_for_current_artistalbum(td.artist, td.album, null);
+		Gdk.Pixbuf albumimage = null;
+		if(albumimage_file != null) {
+			if(albumimage_file.query_exists(null)) {
+				try {
+					albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+				}
+				catch(Error e) {
+					albumimage = null;
+				}
+			}
+		}
 		if(this.iter_n_children(artist_iter) == 0) {
 			this.append(out album_iter, artist_iter);
 			this.set(album_iter,
-			         Column.ICON, album_pixb,
+			         Column.ICON, (albumimage != null ? albumimage : album_pixb),
 			         Column.VIS_TEXT, td.album,
 			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 			         Column.DRAW_SEPTR, 0,
@@ -414,7 +432,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				TreeIter new_album_iter;
 				this.insert_before(out new_album_iter, artist_iter, album_iter);
 				this.set(new_album_iter,
-				         Column.ICON, album_pixb,
+				         Column.ICON, (albumimage != null ? albumimage : album_pixb),
 				         Column.VIS_TEXT, td.album,
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0,
@@ -426,7 +444,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 		this.append(out album_iter, artist_iter);
 		this.set(album_iter,
-		         Column.ICON, album_pixb,
+		         Column.ICON, (albumimage != null ? albumimage : album_pixb),
 		         Column.VIS_TEXT, td.album,
 		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 		         Column.DRAW_SEPTR, 0,
@@ -730,6 +748,51 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		return;
 	}
 	
+	private void update_album_image() {
+		TreeIter artist_iter = TreeIter(), album_iter;
+		if(!global.media_import_in_progress) {
+			string text = null;
+			//print("--%s\n", td.title);
+			string artist = global.current_artist;
+			string album = global.current_album;
+			File? albumimage_file = get_file_for_current_artistalbum(artist, album, null);
+			Gdk.Pixbuf albumimage = null;
+			if(albumimage_file != null) {
+				if(albumimage_file.query_exists(null)) {
+					try {
+						albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+					}
+					catch(Error e) {
+						albumimage = null;
+					}
+				}
+			}
+			for(int i = 0; i < this.iter_n_children(null); i++) {
+				this.iter_nth_child(out artist_iter, null, i);
+				this.get(artist_iter, Column.VIS_TEXT, ref text);
+				text = text.down().strip();
+				if(strcmp(text, artist.down().strip()) == 0) {
+					//found artist
+					break;
+				}
+				if(i == (this.iter_n_children(null) - 1))
+					return;
+			}
+			for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
+				this.iter_nth_child(out album_iter, artist_iter, i);
+				this.get(album_iter, Column.VIS_TEXT, ref text);
+				text = text.down().strip();
+				if(strcmp(text, album.down().strip()) == 0) {
+					//found album
+					this.set(album_iter,
+							 Column.ICON, (albumimage != null ? albumimage : album_pixb)
+							 );
+					break;
+				}
+			}
+		}
+	}
+	
 	private void handle_album(Worker.Job job) {
 		if(job.cancellable.is_cancelled())
 			return;
@@ -753,11 +816,23 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				TreeIter iter_artist, iter_album;
 				this.get_iter(out iter_artist, p);
 				foreach(string album in (string[])job.get_arg("albumArray")) { 			    //ALBUMS
+					File? albumimage_file = get_file_for_current_artistalbum(artist, album, null);
+					Gdk.Pixbuf albumimage = null;
+					if(albumimage_file != null) {
+						if(albumimage_file.query_exists(null)) {
+							try {
+								albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+							}
+							catch(Error e) {
+								albumimage = null;
+							}
+						}
+					}
 					if(job.cancellable.is_cancelled())
 						return false;
 					this.prepend(out iter_album, iter_artist);
 					this.set(iter_album,
-					         Column.ICON, album_pixb,
+					         Column.ICON, (albumimage != null ? albumimage : album_pixb),
 					         Column.VIS_TEXT, album,
 					         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 					         Column.DRAW_SEPTR, 0,
