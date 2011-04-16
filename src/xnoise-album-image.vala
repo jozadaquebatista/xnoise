@@ -45,7 +45,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		xn = Main.instance;
 		this.set_size_request(SIZE, SIZE);
 		this.set_from_stock(Gtk.Stock.CDROM, Gtk.IconSize.LARGE_TOOLBAR);
-
+		
 		loader = new AlbumImageLoader();
 		loader.sign_fetched.connect(on_album_image_fetched);
 		global.uri_changed.connect(on_uri_changed);
@@ -57,7 +57,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			global.check_image_for_current_track();
 			if(global.image_path_small == null) {
 				
-				File f = get_file_for_current_artistalbum(global.current_artist, global.current_album, "medium");
+				File f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");
 				if(f != null && f.query_exists(null)) {
 					global.check_image_for_current_track();
 					set_image_via_idle(f.get_path());
@@ -91,11 +91,11 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	// Startes via timeout because gPl is sending the tag_changed signals
 	// sometimes very often at the beginning of a track.
 	private void search_image(string? uri) {
-
+		
 		if(MainContext.current_source().is_destroyed())
 			return;
 		
-		if(uri == null)
+		if(uri == null || uri == "")
 			return;
 		string _artist = "";
 		string _album = "";
@@ -107,7 +107,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			_artist_raw = global.current_artist;
 			_album_raw  = global.current_album;
 			_artist = escape_for_local_folder_search(_artist_raw);
-			_album  = escape_for_local_folder_search(_album_raw );
+			_album  = escape_album_for_local_folder_search(_artist, _album_raw );
 		}
 		else {
 			return;
@@ -115,11 +115,11 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		
 		if(set_local_image_if_available(ref _artist_raw, ref _album_raw)) 
 			return;
-
+		
 		artist = remove_linebreaks(global.current_artist);
 		album  = remove_linebreaks(global.current_album );
-
-
+		
+		
 		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.fetch_trackdata_job);
 		job.set_arg("artist", artist);
 		job.set_arg("album", album);
@@ -129,38 +129,23 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	
 	
 	private void fetch_trackdata_job(Worker.Job job) {
-		string artist = (string)job.get_arg("artist");
-		string album  = (string)job.get_arg("album");
+		string jartist = (string)job.get_arg("artist");
+		string jalbum  = (string)job.get_arg("album");
 		//string uri    = (string)job.get_arg("uri");
 		
-		if((artist=="")||(artist==null)||(artist=="unknown artist")||
-		   (album =="")||(album ==null)||(album =="unknown album" )) {
+		if((jartist=="")||(jartist==null)||(jartist=="unknown artist")||
+		   (jalbum =="")||(jalbum ==null)||(jalbum =="unknown album" )) {
 			return;
 		}
-
-		var image_path = GLib.Path.build_filename(global.settings_folder,
-		                                          "album_images",
-		                                          null
-		                                          );
-
-		var fileout = File.new_for_path(GLib.Path.build_filename(
-		                                          image_path,
-		                                          escape_for_local_folder_search(artist.down()),
-		                                          escape_for_local_folder_search(album.down()),
-		                                          escape_for_local_folder_search(album.down()) + 
-		                                          "_" + 
-		                                          default_size,
-		                                          null)
-		                                );
-
+		var fileout = get_albumimage_for_artistalbum(jartist, jalbum, default_size);
 		
 		if(fileout.query_exists(null)) {
 			set_image_via_idle(fileout.get_path());
 		}
 		else {
 			Idle.add( () => {
-				loader.artist = artist;
-				loader.album  = album;
+				loader.artist = jartist;
+				loader.album  = check_album_name(jartist, jalbum);
 				loader.fetch_image();
 				return false;
 			});
@@ -169,18 +154,19 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	}
 
 	private bool set_local_image_if_available(ref string _artist, ref string _album) {
-		var image_path = GLib.Path.build_filename(global.settings_folder,
-		                                          "album_images",
-		                                          null
-		                                          );
+//		var image_path = GLib.Path.build_filename(global.settings_folder,
+//		                                          "album_images",
+//		                                          null
+//		                                          );
 
-		var fileout = File.new_for_path(GLib.Path.build_filename(
-		                                          image_path,
-		                                          escape_for_local_folder_search(_artist.down()),
-		                                          escape_for_local_folder_search(_album.down()),
-		                                          escape_for_local_folder_search(_album.down()) + "_" + default_size,
-		                                          null)
-		                                );
+//		var fileout = File.new_for_path(GLib.Path.build_filename(
+//		                                          image_path,
+//		                                          escape_for_local_folder_search(_artist.down()),
+//		                                          escape_for_local_folder_search(check_album_name(_artist, _album)),
+//		                                          escape_for_local_folder_search(check_album_name(_artist, _album)) + "_" + default_size,
+//		                                          null)
+//		                                );
+		var fileout = get_albumimage_for_artistalbum(_artist, _album, default_size);
 		//print("xyz local: %s\n", fileout.get_path());
 		if(fileout.query_exists(null)) {
 			//print("ai exists\n");
@@ -209,20 +195,20 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	private uint source = 0;
 	
 	private void on_album_image_fetched(string _artist, string _album, string image_path) {
-		//print("called on_image_fetched %s - %s : %s", _artist, _album, image_path);
+		//print("\ncalled on_image_fetched %s - %s : %s", _artist, _album, image_path);
 		if(image_path == "") 
 			return;
 		
 		if((prepare_for_comparison(artist) != prepare_for_comparison(_artist))||
-		   (prepare_for_comparison(album)  != prepare_for_comparison(_album ))) 
+		   (prepare_for_comparison(check_album_name(artist, album))  != prepare_for_comparison(check_album_name(_artist, _album)))) 
 			return;
-		
+		//print("  ..  comply\n");
 		File f = File.new_for_path(image_path);
 		if(!f.query_exists(null)) 
 			return;
 		
 		set_image_via_idle(image_path);
-
+		
 		Idle.add( () => {
 			global.check_image_for_current_track();
 			return false;

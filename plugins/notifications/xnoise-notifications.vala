@@ -151,7 +151,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			album = "unknown album";
 		}
 
-		File f = get_file_for_current_artistalbum(artist, album, "medium");
+		File f = get_albumimage_for_artistalbum(artist, album, "medium");
 		string summary = title;
 		string body = _("by") +
 		              " " + artist + " \n" +

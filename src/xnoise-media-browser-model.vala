@@ -364,12 +364,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			this.get(artist_iter, Column.VIS_TEXT, ref text, Column.COLL_TYPE, ref ct);
 			if(ct != CollectionType.HIERARCHICAL)
 				continue;
-			text = text.down().strip();
-			if(strcmp(text, td.artist.down().strip()) == 0) {
+			text = text != null ? text.down().strip() : "";
+			if(strcmp(text, td.artist != null ? td.artist.down().strip() : "") == 0) {
 				//found artist
 				return;
 			}
-			if(strcmp(text, td.artist.down().strip()) > 0) {
+			if(strcmp(text, td.artist != null ? td.artist.down().strip() : "") > 0) {
 				TreeIter new_artist_iter;
 				this.insert_before(out new_artist_iter, null, artist_iter);
 				this.set(new_artist_iter,
@@ -397,7 +397,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private void handle_iter_for_album(ref TrackData td, ref TreeIter artist_iter, out TreeIter album_iter) {
 		string text = null;
 		//print("--%s\n", td.title);
-		File? albumimage_file = get_file_for_current_artistalbum(td.artist, td.album, null);
+		File? albumimage_file = get_albumimage_for_artistalbum(td.artist, td.album, null);
 		Gdk.Pixbuf albumimage = null;
 		if(albumimage_file != null) {
 			if(albumimage_file.query_exists(null)) {
@@ -423,7 +423,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
 			this.iter_nth_child(out album_iter, artist_iter, i);
 			this.get(album_iter, Column.VIS_TEXT, ref text);
-			text = text.down().strip();
+			text = text != null ? text.down().strip() : "";
 			if(strcmp(text, td.album.down().strip()) == 0) {
 				//found album
 				return;
@@ -755,7 +755,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			//print("--%s\n", td.title);
 			string artist = global.current_artist;
 			string album = global.current_album;
-			File? albumimage_file = get_file_for_current_artistalbum(artist, album, null);
+			File? albumimage_file = get_albumimage_for_artistalbum(artist, album, null);
 			Gdk.Pixbuf albumimage = null;
 			if(albumimage_file != null) {
 				if(albumimage_file.query_exists(null)) {
@@ -770,8 +770,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			for(int i = 0; i < this.iter_n_children(null); i++) {
 				this.iter_nth_child(out artist_iter, null, i);
 				this.get(artist_iter, Column.VIS_TEXT, ref text);
-				text = text.down().strip();
-				if(strcmp(text, artist.down().strip()) == 0) {
+				text = text != null ? text.down().strip() : "";
+				if(strcmp(text, artist != null ? artist.down().strip() : "") == 0) {
 					//found artist
 					break;
 				}
@@ -781,8 +781,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
 				this.iter_nth_child(out album_iter, artist_iter, i);
 				this.get(album_iter, Column.VIS_TEXT, ref text);
-				text = text.down().strip();
-				if(strcmp(text, album.down().strip()) == 0) {
+				text = text != null ? text.down().strip() : "";
+				if(strcmp(text, album != null ? album.down().strip() : "") == 0) {
 					//found album
 					this.set(album_iter,
 							 Column.ICON, (albumimage != null ? albumimage : album_pixb)
@@ -816,7 +816,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				TreeIter iter_artist, iter_album;
 				this.get_iter(out iter_artist, p);
 				foreach(string album in (string[])job.get_arg("albumArray")) { 			    //ALBUMS
-					File? albumimage_file = get_file_for_current_artistalbum(artist, album, null);
+					File? albumimage_file = get_albumimage_for_artistalbum(artist, album, null);
 					Gdk.Pixbuf albumimage = null;
 					if(albumimage_file != null) {
 						if(albumimage_file.query_exists(null)) {

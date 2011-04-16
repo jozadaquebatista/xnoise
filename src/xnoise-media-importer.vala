@@ -79,11 +79,13 @@ public class Xnoise.MediaImporter : GLib.Object {
 					var tr = new TagReader();
 					TrackData td = tr.read_tag(file.get_path());
 					td.db_id = dbw.insert_title(td, file.get_uri());
-					TrackData[] tdy = { td };
-					Idle.add( () => {
-						Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdy); 
-						return false; 
-					});
+					if((int)td.db_id != -1) {
+						TrackData[] tdy = { td };
+						Idle.add( () => {
+							Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdy); 
+							return false; 
+						});
+					}
 				}
 			}
 		}
@@ -101,11 +103,13 @@ public class Xnoise.MediaImporter : GLib.Object {
 				dbw.insert_title(td, file.get_uri());
 			}
 			td.db_id = dbw.get_track_id_for_uri(file.get_uri());
-			TrackData[] tdax = { td };
-			Idle.add( () => {
-				Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax); 
-				return false; 
-			});
+			if((int)td.db_id != -1) {
+				TrackData[] tdax = { td };
+				Idle.add( () => {
+					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax); 
+					return false; 
+				});
+			}
 		}
 		dbw.commit_transaction();
 	}
@@ -196,7 +200,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 								int32 id = dbw.insert_title(td, file.get_uri());
 								td.db_id = id;
 								td.mediatype = MediaType.AUDIO;
-								tda += td;
+								if((int)id != -1)
+									tda += td;
 								if(tda.length > 15) {
 									TrackData[] tdax = tda;
 									tda = {};
@@ -223,7 +228,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 							dbw.insert_title(td, file.get_uri());
 						}
 						td.db_id = dbw.get_track_id_for_uri(file.get_uri());
-						tdv += td;
+						if((int)td.db_id != -1)
+							tdv += td;
 						if(tdv.length > 15) {
 							TrackData[] tdvx = tdv;
 							tdv = {};

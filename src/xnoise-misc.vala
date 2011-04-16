@@ -66,7 +66,72 @@ namespace Xnoise {
 		//t1 = new Timer();
 		//t2 = new Timer();
 	}
+	
+	private static string check_album_name(string? artistname, string? albumname) {
+		if(albumname == null || albumname == "")
+			return "";
+		if(artistname == null || artistname == "")
+			return "";
+		
+		string _artistname = artistname.strip().down();
+		string _albumname = albumname.strip().down();
+		string[] self_a = {
+			"self titled",
+			"self-titled",
+			"s/t"
+		};
+		string[] media_a = {
+			"cd",
+			"ep",
+			"7\"",
+			"10\"",
+			"12\"",
+			"7inch",
+			"10inch",
+			"12inch"
+		};
+		foreach(string selfs in self_a) {
+			if(_albumname == selfs) 
+				return _artistname;
+			foreach(string media in media_a) {
+				if(_albumname == (selfs + " " + media)) 
+					return _artistname;
+			}
+		}
+		return _albumname;
+	}
 
+	public static string escape_album_for_local_folder_search(string _artist, string? album_name) {
+		// transform the name to match the naming scheme
+		string artist = _artist;
+		string tmp = "";
+		if(album_name == null)
+			return tmp;
+		if(artist == null)
+			return tmp;
+		
+		tmp = check_album_name(artist, album_name);
+		
+		try {
+			var r = new GLib.Regex("\n");
+			tmp = r.replace(tmp, -1, 0, "_");
+			r = new GLib.Regex(" ");
+			tmp = r.replace(tmp, -1, 0, "_");
+		}
+		catch(RegexError e) {
+			print("%s\n", e.message);
+			return album_name;
+		}
+		if(tmp.contains("/")) {
+			string[] a = tmp.split("/", 20);
+			tmp = "";
+			foreach(string s in a) {
+				tmp = tmp + s;
+			}
+		}
+		return tmp;
+	}
+	
 	public static string escape_for_local_folder_search(string? value) {
 		// transform the name to match the naming scheme
 		string tmp = "";
@@ -145,7 +210,7 @@ namespace Xnoise {
 			foreach(unowned string s in characters_not_used_in_comparison)
 				characters_not_used_in_comparison__escaped += GLib.Regex.escape_string(s);
 		}
-		string result = value.strip().down();
+		string result = value != null ? value.strip().down() : "";
 		try {
 			foreach(unowned string s in characters_not_used_in_comparison__escaped) {
 				var regex = new GLib.Regex(s);
@@ -229,7 +294,6 @@ namespace Xnoise {
 	}
 
 	public static string replace_underline_with_blank_encoded(string value) {
-		// unexpected linebreaks do not look nice
 		try {
 			GLib.Regex r = new GLib.Regex("_");
 			return r.replace(value, -1, 0, "%20");
@@ -240,7 +304,7 @@ namespace Xnoise {
 		return value;
 	}
 
-	public static File? get_file_for_current_artistalbum(string? artist, string? album, string? size) {
+	public static File? get_albumimage_for_artistalbum(string? artist, string? album, string? size) {
 		if(artist == null)
 			return null;
 		if(album == null)
@@ -252,8 +316,8 @@ namespace Xnoise {
 		                                                                             null
 		                                                                             ),
 		                           escape_for_local_folder_search(artist.down()),
-		                           escape_for_local_folder_search(album.down()),
-		                           escape_for_local_folder_search(album.down()) +
+		                           escape_album_for_local_folder_search(artist, album),
+		                           escape_album_for_local_folder_search(artist, album) +
 		                           "_" +
 		                           size,
 		                           null)
@@ -266,7 +330,7 @@ namespace Xnoise {
 		var file = File.new_for_uri(playlist_uri);
 		DataInputStream in_stream = null;
 		string outval = "";
-
+		
 		try{
 			in_stream = new DataInputStream(file.read(null));
 		}

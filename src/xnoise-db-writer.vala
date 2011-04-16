@@ -339,7 +339,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		int artist_id = -1;
 
 		get_artist_id_statement.reset();
-		if(get_artist_id_statement.bind_text(1, artist.down().strip()) != Sqlite.OK) {
+		if(get_artist_id_statement.bind_text(1, (artist != null ? artist.down().strip() : "")) != Sqlite.OK) {
 			this.db_error();
 			return -1;
 		}
@@ -359,7 +359,7 @@ public class Xnoise.DbWriter : GLib.Object {
 			}
 			// Get unique artist id key
 			get_artist_id_statement.reset();
-			if(get_artist_id_statement.bind_text(1, artist.down().strip()) != Sqlite.OK) {
+			if(get_artist_id_statement.bind_text(1, artist != null ? artist.down().strip() : "") != Sqlite.OK) {
 				this.db_error();
 				return -1;
 			}
@@ -374,7 +374,7 @@ public class Xnoise.DbWriter : GLib.Object {
 
 		get_album_id_statement.reset();
 		if(get_album_id_statement.bind_int (1, artist_id)    != Sqlite.OK ||
-		   get_album_id_statement.bind_text(2, album.down().strip()) != Sqlite.OK ) {
+		   get_album_id_statement.bind_text(2, album != null ? album.down().strip() : "") != Sqlite.OK ) {
 			this.db_error();
 			return -1;
 		   }
@@ -396,7 +396,7 @@ public class Xnoise.DbWriter : GLib.Object {
 			// Get unique album id key
 			get_album_id_statement.reset();
 			if(get_album_id_statement.bind_int (1, artist_id           )    != Sqlite.OK ||
-			   get_album_id_statement.bind_text(2, album.down().strip()) != Sqlite.OK ) {
+			   get_album_id_statement.bind_text(2, album != null ? album.down().strip() : "") != Sqlite.OK ) {
 				this.db_error();
 				return -1;
 			}
@@ -445,7 +445,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		if((genre.strip() == "")||(genre == null)) return -2; //NO GENRE
 
 		get_genre_id_statement.reset();
-		if(get_genre_id_statement.bind_text(1, genre.down().strip()) != Sqlite.OK) {
+		if(get_genre_id_statement.bind_text(1, genre != null ? genre.down().strip() : "") != Sqlite.OK) {
 			this.db_error();
 			return -1;
 		}
@@ -465,7 +465,7 @@ public class Xnoise.DbWriter : GLib.Object {
 			}
 			// Get unique genre id key
 			get_genre_id_statement.reset();
-			if(get_genre_id_statement.bind_text(1, genre.down().strip()) != Sqlite.OK) {
+			if(get_genre_id_statement.bind_text(1, genre != null ? genre.down().strip() : "") != Sqlite.OK) {
 				this.db_error();
 				return -1;
 			}
@@ -510,22 +510,22 @@ public class Xnoise.DbWriter : GLib.Object {
 		// make entries in other tables and get references from there
 		int artist_id = handle_artist(ref td.artist);
 		if(artist_id == -1) {
-			print("Error importing artist!\n");
+			print("Error importing artist for %s : '%s' ! \n", uri, td.artist);
 			return -1;
 		}
 		int album_id = handle_album(ref artist_id, ref td.album);
 		if(album_id == -1) {
-			print("Error importing album!\n");
+			print("Error importing album for %s : '%s' ! \n", uri, td.album);
 			return -1;
 		}
 		int uri_id = handle_uri(uri);
 		if(uri_id == -1) {
-			print("Error importing uri!\n");
+			print("Error importing uri for %s : '%s' ! \n", uri, uri);
 			return -1;
 		}
 		int genre_id = handle_genre(ref td.genre);
 		if(genre_id == -1) {
-			print("Error importing genre!\n");
+			print("Error importing genre for %s : '%s' ! \n", uri, td.genre);
 			return -1;
 		}
 		insert_title_statement.reset();

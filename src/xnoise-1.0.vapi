@@ -706,9 +706,11 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Worker worker;
 	[CCode (cheader_filename = "xnoise.h")]
+	public static string escape_album_for_local_folder_search (string _artist, string? album_name);
+	[CCode (cheader_filename = "xnoise.h")]
 	public static string escape_for_local_folder_search (string? value);
 	[CCode (cheader_filename = "xnoise.h")]
-	public static GLib.File? get_file_for_current_artistalbum (string? artist, string? album, string? size);
+	public static GLib.File? get_albumimage_for_artistalbum (string? artist, string? album, string? size);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string get_stream_uri (string playlist_uri);
 	[CCode (cheader_filename = "xnoise.h")]

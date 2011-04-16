@@ -223,7 +223,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public void check_image_for_current_track() {
 		string? small_name = null;
 		string? large_name = null; 
-		File f = get_file_for_current_artistalbum(current_artist, current_album, "medium");
+		File f = get_albumimage_for_artistalbum(current_artist, current_album, "medium");
 		small_name = f != null ? f.get_path() : "";
 		if((small_name == "") || (small_name == null)) {
 			image_path_small = null;

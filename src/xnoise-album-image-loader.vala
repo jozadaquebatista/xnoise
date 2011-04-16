@@ -71,7 +71,7 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 			return false;
 		}
 		Idle.add( () => {
-			var album_image_provider = this.provider.from_tags(artist, album);
+			var album_image_provider = this.provider.from_tags(artist, check_album_name(artist, album));
 			if(album_image_provider == null)
 				return false;
 			album_image_provider.sign_image_fetched.connect(on_image_fetched);
