@@ -68,6 +68,8 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		
 		[CCode (has_target = false)]
 		private static int compare(ILyricsProvider a, ILyricsProvider b) {
+			if(a == null || b == null)
+				return 0;
 			if(a.priority <  b.priority)
 				return -1;
 			if(a.priority >  b.priority)

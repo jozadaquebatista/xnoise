@@ -102,7 +102,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 				return;
 		}
 		initialize_members();
-
 		setup_viz_cols_tv();
 		setup_albumimage_provider_tv();
 		setup_lyrics_provider_tv();
@@ -317,6 +316,8 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private static int compare_lyrics_providers(Plugin a, Plugin b) {
 		unowned ILyricsProvider prov_a = a.loaded_plugin as ILyricsProvider;
 		unowned ILyricsProvider prov_b = b.loaded_plugin as ILyricsProvider;
+		if(prov_a == null || prov_b == null)
+			return 0;
 		if(prov_a.priority <  prov_b.priority)
 			return 1;
 		if(prov_a.priority >  prov_b.priority)
@@ -332,9 +333,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		foreach(unowned string name in ly_prov_list) 
 			ordered_ly_providers.prepend(this.xn.plugin_loader.lyrics_plugins_htable.lookup(name));
 		
-		ordered_ly_providers.sort(compare_lyrics_providers);
 		
 		if(ordered_ly_providers != null) {
+			ordered_ly_providers.sort(compare_lyrics_providers);
 			foreach(Plugin pl in ordered_ly_providers) {
 				ly_model.prepend(out iter);
 				ly_model.set(iter,
@@ -591,7 +592,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		try {
 			File f = File.new_for_path(SETTINGS_UI_FILE);
 			if(!f.query_exists(null)) throw new SettingsDialogError.FILE_NOT_FOUND("Ui file not found!");
-
 			this.add_from_file(SETTINGS_UI_FILE);
 			this.dialog = this.get_object("settingsDialog") as Gtk.Dialog;
 			dialog.set_transient_for(xn.main_window);
@@ -673,5 +673,4 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		dialog.get_child_requisition(out req);
 		plugin_manager_tree.set_width(req.width);
 	}
-		
 }
