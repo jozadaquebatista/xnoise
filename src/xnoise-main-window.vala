@@ -144,6 +144,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			{ "QuitAction", Gtk.Stock.QUIT, null, null, null, quit_now},
 		{ "EditMenuAction", null, N_("_Edit") },
 			{ "ClearTrackListAction", Gtk.Stock.CLEAR, N_("C_lear tracklist"), null, N_("Clear the tracklist"), on_remove_all_button_clicked},
+			{ "RescanLibraryAction", Gtk.Stock.REFRESH, N_("R_escan collection"), null, N_("R_escan collection"), on_reload_collection_button_clicked},
 			{ "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit},
 		{ "ViewMenuAction", null, N_("_View") },
 			{ "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), null, N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
@@ -841,6 +842,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 
+	private void on_reload_collection_button_clicked() {
+		media_importer.reimport_media_groups();
+	}
+
 	private void on_remove_all_button_clicked() {
 		global.position_reference = null;
 		var store = (ListStore)trackList.get_model();
@@ -1164,15 +1169,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
-	/* disables (or enables) the AddRemoveAction in the menus if
+	/* disables (or enables) the AddRemoveAction and the RescanLibraryAction in the menus if
 	   music is (not anymore) being imported */ 
 	private void on_media_import_notify(GLib.Object sender, ParamSpec spec) {
 		if(actions_list == null)
 			actions_list = action_group.list_actions();
 		foreach(Gtk.Action a in actions_list) {
-			if(a.name == "AddRemoveAction") {
+			if(a.name == "AddRemoveAction" || a.name == "RescanLibraryAction") {
 				a.sensitive = !global.media_import_in_progress;
-				break;
 			}
 		}
 	}

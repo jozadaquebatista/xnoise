@@ -67,8 +67,16 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	//	}
 
 	private void fill_media_list() {
-		return_if_fail(listmodel!=null);
-
+		return_if_fail(listmodel != null);
+		
+		Worker.Job job;
+		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, put_media_data_to_model);
+		worker.push_job(job);
+	}
+	
+	private StreamData[] streams = null;
+	
+	private void put_media_data_to_model(Worker.Job job) {
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
@@ -77,44 +85,59 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			print("%s\n", e.message);
 			return;
 		}
-
+		
 		//add folders
-		var mfolders = dbb.get_media_folders();
-		foreach(string mfolder in mfolders) {
-			TreeIter iter;
-			listmodel.append(out iter);
-			listmodel.set(iter,
-			              0, mfolder,
-			              1, MediaStorageType.FOLDER,
-			              -1
-			              );
-		}
-
+		string[] mfolders = dbb.get_media_folders();
+		job.set_arg("mfolders", mfolders);
+		
 		//add files
-		var mfiles = dbb.get_media_files();
-		//print("mfiles length: %d\n", mfiles.length);
-		foreach(string uri in mfiles) {
-			File file = File.new_for_uri(uri);
-			TreeIter iter;
-			listmodel.append(out iter);
-			listmodel.set(iter,
-			              0, file.get_path(),
-			              1, MediaStorageType.FILE,
-			              -1
-			              );
-		}
-
+		string[] mfiles = dbb.get_media_files();
+		job.set_arg("mfiles", mfiles);
+		
 		//add streams to list
-		var streams = dbb.get_streams();
-		foreach(StreamData sd in streams) {
-			TreeIter iter;
-			listmodel.append(out iter);
-			listmodel.set(iter,
-			              0, sd.uri,
-			              1, MediaStorageType.STREAM,
-			              -1
-			              );
-		}
+		streams = dbb.get_streams();
+		
+		Idle.add( () => {
+			foreach(string mfolder in ((string[])job.get_arg("mfolders"))) {
+				TreeIter iter;
+				listmodel.append(out iter);
+				listmodel.set(iter,
+					          0, mfolder,
+					          1, MediaStorageType.FOLDER,
+					          -1
+					          );
+			}
+			return false;
+		});
+		
+		Idle.add( () => {
+			//print("mfiles length: %d\n", mfiles.length);
+			foreach(string uri in ((string[])job.get_arg("mfiles"))) {
+				File file = File.new_for_uri(uri);
+				TreeIter iter;
+				listmodel.append(out iter);
+				listmodel.set(iter,
+					          0, file.get_path(),
+					          1, MediaStorageType.FILE,
+					          -1
+					          );
+			}
+			return false;
+		});
+		
+		Idle.add( () => {
+			foreach(StreamData sd in streams) {
+				TreeIter iter;
+				listmodel.append(out iter);
+				listmodel.set(iter,
+					          0, sd.uri,
+					          1, MediaStorageType.STREAM,
+					          -1
+					          );
+			}
+			streams = null;
+			return false;
+		});
 	}
 
 	private void harvest_media_locations() {
@@ -206,40 +229,22 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		return false;
 	}
 
-	private uint msg_id;
-	
 	private void on_ok_button_clicked() {
 		Main.instance.main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
 		Timeout.add(200, () => {
-			msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
-		                        UserInfo.ContentClass.WAIT,
-		                        _("Importing media data. This may take some time..."),
-		                        true,
-		                        5,
-		                        null);
-		
+			uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
+			                    UserInfo.ContentClass.WAIT,
+			                    _("Importing media data. This may take some time..."),
+			                    true,
+			                    5,
+			                    null);
+			
 			harvest_media_locations();
-
+			
 			global.media_import_in_progress = true;
 			Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
-
-			// global.media_import_in_progress has to be reset in the last job !
-			Worker.Job job;
-			job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.reset_local_data_library_job);
-			worker.push_job(job);
 			
-			job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.store_streams_job);
-			job.set_arg("list_of_streams", list_of_streams);
-			worker.push_job(job);
-			
-			job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.store_files_job);
-			job.set_arg("list_of_files", list_of_files);
-			worker.push_job(job);
-			
-			job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.store_folders_job);
-			job.set_arg("mfolders", list_of_folders);
-			job.set_arg("msg_id", msg_id);
-			worker.push_job(job);
+			media_importer.import_media_groups(list_of_streams, list_of_files, list_of_folders, msg_id);
 			
 			this.dialog.destroy();
 			this.sign_finish();

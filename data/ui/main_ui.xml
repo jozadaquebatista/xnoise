@@ -11,6 +11,7 @@
 
 		<menu name="EditMenu" action="EditMenuAction">
 			<menuitem action="ClearTrackListAction"/>
+			<menuitem action="RescanLibraryAction"/>
 			<separator />
 			<menuitem action="SettingsAction"/>
 		</menu>
