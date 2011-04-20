@@ -1,17 +1,46 @@
+xnoise (0.1.20-maverick-0ubuntu0) maverick; urgency=low
+  * show album covers in media browser
+  * add menu entry for rescanning media library
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Tue, 19 Apr 2011 22:48:57 +0200
+
+
+xnoise (0.1.19.2-maverick-2ubuntu2) maverick; urgency=low
+  * fix build problem
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Sun, 03 Apr 2011 13:21:00 +0200
+
+
+xnoise (0.1.18-maverick-0ubuntu0) maverick; urgency=low
+  * fix tests
+  * do not load external subtitles automatically
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 01 Apr 2011 09:19:34 +0200
+
+
+xnoise (0.1.17-2-maverick-1-2ubuntu1) maverick; urgency=low
+  * redo and improve lyrics fetching
+  * fixes for ayatana-soundmenu
+  * experimental subtitle support
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Thu, 31 Mar 2011 21:59:21 +0200
+
+
+
 xnoise (0.1.16-0ubuntu0) maverick; urgency=low
   * create soundmenu2 (for ubuntu >= maverick+1)
 
  -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 21 Feb 2011 09:32:44 +0100
 
 
-xnoise (0.1.15-natty-0ubuntu0) maverick; urgency=low
+xnoise (0.1.15-maverick-0ubuntu0) maverick; urgency=low
   * fixes for mediakeys plugin
   * fixes for initial db creation
 
  -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 18 Feb 2011 11:07:48 +0100
 
 
-xnoise (0.1.14-natty-0ubuntu0) maverick; urgency=low
+xnoise (0.1.14-maverick-0ubuntu0) maverick; urgency=low
   * renew mediakeys plugin (remove dbus-glib dependency)
   * move plugins into xnoise package
   * fix icon scaling with some themes
