@@ -158,7 +158,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		if((int)(((Gtk.SpinButton)sender).value) > 15) ((Gtk.SpinButton)sender).value = 15;
 		fontsizeMB = (int)((Gtk.SpinButton)sender).value;
 		xn.main_window.mediaBr.fontsizeMB = fontsizeMB;
-		//TODO:immediatly do something with the new value
 	}
 
 	private void on_checkbutton_show_lines_clicked(Gtk.Button sender) {
