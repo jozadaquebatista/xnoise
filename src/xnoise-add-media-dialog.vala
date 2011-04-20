@@ -36,6 +36,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private Gtk.Dialog dialog;
 	private ListStore listmodel;
 	private TreeView tv;
+	private CheckButton fullrescancheckb;
 	private string[] list_of_folders;
 	private string[] list_of_files;
 	private string[] list_of_streams;
@@ -156,25 +157,29 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			
 			builder.add_from_file(Config.UIDIR + "add_media.ui");
 			
-			var mainvbox         = builder.get_object("mainvbox") as Gtk.VBox;
-			tv                   = builder.get_object("tv") as TreeView;
-			var baddfile         = builder.get_object("addfilebutton") as Button;
-			var baddfolder       = builder.get_object("addfolderbutton") as Button;
-			var baddradio        = builder.get_object("addradiobutton") as Button;
-			var brem             = builder.get_object("removeButton") as Button;
+			var mainvbox           = builder.get_object("mainvbox") as Gtk.VBox;
+			tv                     = builder.get_object("tv") as TreeView;
+			var baddfile           = builder.get_object("addfilebutton") as Button;
+			var baddfolder         = builder.get_object("addfolderbutton") as Button;
+			var baddradio          = builder.get_object("addradiobutton") as Button;
+			var brem               = builder.get_object("removeButton") as Button;
 			
-			var labeladdfile     = builder.get_object("labeladdfile") as Label;
-			var labeladdfolder   = builder.get_object("labeladdfolder") as Label;
-			var labeladdstream   = builder.get_object("labeladdstream") as Label;
-			var labelremove      = builder.get_object("labelremove") as Label;
+			var labeladdfile       = builder.get_object("labeladdfile") as Label;
+			var labeladdfolder     = builder.get_object("labeladdfolder") as Label;
+			var labeladdstream     = builder.get_object("labeladdstream") as Label;
+			var labelremove        = builder.get_object("labelremove") as Label;
+			var descriptionlabel   = builder.get_object("descriptionlabel") as Label;
 			
-			var bcancel          = (Button)this.dialog.add_button(Gtk.Stock.CANCEL, 0);
-			var bok              = (Button)this.dialog.add_button(Gtk.Stock.OK, 1);
+			fullrescancheckb       = builder.get_object("fullrescancheckb") as CheckButton;
+			var bcancel            = (Button)this.dialog.add_button(Gtk.Stock.CANCEL, 0);
+			var bok                = (Button)this.dialog.add_button(Gtk.Stock.OK, 1);
 			
-			labeladdfile.label   = _("Add local file");
-			labeladdfolder.label = _("Add local folder");
-			labeladdstream.label = _("Add media stream");
-			labelremove.label    = _("Remove");
+			labeladdfile.label     = _("Add local file");
+			labeladdfolder.label   = _("Add local folder");
+			labeladdstream.label   = _("Add media stream");
+			labelremove.label      = _("Remove");
+			fullrescancheckb.label = _("do a full rescan of the library");
+			descriptionlabel.label = _("Select the local folders or files or media streams to add to the library. \nAll library media will be available in the media browser.");
 			
 			bok.clicked.connect(on_ok_button_clicked);
 			bcancel.clicked.connect(on_cancel_button_clicked);
@@ -242,9 +247,10 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			harvest_media_locations();
 			
 			global.media_import_in_progress = true;
+			
 			Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
 			
-			media_importer.import_media_groups(list_of_streams, list_of_files, list_of_folders, msg_id);
+			media_importer.import_media_groups(list_of_streams, list_of_files, list_of_folders, msg_id, fullrescancheckb.get_active());
 			
 			this.dialog.destroy();
 			this.sign_finish();

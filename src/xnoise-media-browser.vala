@@ -230,10 +230,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			mediabrowsermodel.searchtext = "";
 		}
 		mediabrowsermodel.filter();
-		if(txt != "") 
-			this.expand_all();
-		else
-			this.collapse_all();
 	}
 
 	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
@@ -369,6 +365,13 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		}
 	}
 
+	public bool change_model_data_uncleared() {
+		mediabrowsermodel.populate_model();
+		update_view();
+		this.set_sensitive(true);
+		return false;
+	}
+	
 	public bool change_model_data() {
 		set_model(null);
 		mediabrowsermodel.clear();

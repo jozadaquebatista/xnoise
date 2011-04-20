@@ -42,6 +42,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private Statement begin_statement;
 	private Statement commit_statement;
 	private Statement write_media_folder_statement;
+	private Statement get_media_folder_statement;
 	private Statement del_media_folder_statement;
 	private Statement del_streams_statement;
 	private Statement get_artist_id_statement;
@@ -105,6 +106,8 @@ public class Xnoise.DbWriter : GLib.Object {
 		"INSERT INTO streams (name, uri) VALUES (?, ?)";
 	private static const string STMT_ADD_MFILE =
 		"INSERT INTO media_files (name) VALUES (?)";
+	private static const string STMT_GET_MEDIA_FOLDERS =
+		"SELECT * FROM media_folders";
 	private static const string STMT_GET_ARTIST_ID =
 		"SELECT id FROM artists WHERE LOWER(name) = ?";
 	private static const string STMT_INSERT_ARTIST =
@@ -244,6 +247,8 @@ public class Xnoise.DbWriter : GLib.Object {
 			out this.begin_statement);
 		this.db.prepare_v2(STMT_COMMIT, -1,
 			out this.commit_statement);
+		this.db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1,
+			out this.get_media_folder_statement);
 		this.db.prepare_v2(STMT_WRITE_MEDIA_FOLDERS, -1,
 			out this.write_media_folder_statement);
 		this.db.prepare_v2(STMT_DEL_MEDIA_FOLDERS, -1,
@@ -438,6 +443,14 @@ public class Xnoise.DbWriter : GLib.Object {
 				uri_id = get_uri_id_statement.column_int(0);
 		}
 		return uri_id;
+	}
+
+	public string[] get_media_folders() {
+		string[] sa = {};
+		get_media_folder_statement.reset();
+		while(get_media_folder_statement.step() == Sqlite.ROW)
+			sa += get_media_folder_statement.column_text(0);
+		return sa;
 	}
 
 	private int handle_genre(ref string genre) {
