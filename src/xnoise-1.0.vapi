@@ -340,9 +340,6 @@ namespace Xnoise {
 		public MediaImporter ();
 		public async void add_local_tags (GLib.File dir, Xnoise.Worker.Job job);
 		public void add_single_file (string uri);
-		public void reset_local_data_library_job (Xnoise.Worker.Job job);
-		public void store_files_job (Xnoise.Worker.Job job);
-		public void store_streams_job (Xnoise.Worker.Job job);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {

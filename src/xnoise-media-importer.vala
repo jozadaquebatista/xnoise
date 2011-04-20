@@ -381,7 +381,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		global.media_import_in_progress = false;
 	}
 
-	public void reset_local_data_library_job(Worker.Job job) {
+	private void reset_local_data_library_job(Worker.Job job) {
 		dbw.begin_transaction();
 		if(!dbw.delete_local_media_data())
 			return;
@@ -457,8 +457,9 @@ public class Xnoise.MediaImporter : GLib.Object {
 			global.disconnect(updatefunc);
 		updatefunc = 0;
 	}
+	
 	// add streams to the media path and store them in the db
-	public void store_streams_job(Worker.Job job) {
+	private void store_streams_job(Worker.Job job) {
 		var streams_ht = new HashTable<string,int>(str_hash, str_equal);
 		dbw.begin_transaction();
 
@@ -491,7 +492,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 	}
 	
 	// add files to the media path and store them in the db
-	public void store_files_job(Worker.Job job) {
+	private void store_files_job(Worker.Job job) {
 		if(dbw == null) 
 			return;
 		
