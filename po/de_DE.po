@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-20 14:48+0200\n"
+"POT-Creation-Date: 2011-04-21 12:40+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shuerhaaken <shuerhaaken@googlemail.com>\n"
@@ -58,21 +58,21 @@ msgstr ""
 msgid "xnoise - Add media to library"
 msgstr "xnoise - Zur Bibliothek hinzufügen"
 
-#: ../src/xnoise-add-media-dialog.vala:242
-#: ../src/xnoise-media-importer.vala:87
+#: ../src/xnoise-add-media-dialog.vala:246
+#: ../src/xnoise-media-importer.vala:94
 msgid "Importing media data. This may take some time..."
 msgstr "Import von Mediendaten läuft. Dies könnte ein Weilchen dauern..."
 
-#: ../src/xnoise-add-media-dialog.vala:268
+#: ../src/xnoise-add-media-dialog.vala:273
 #: ../src/xnoise-main-window.vala:981
 msgid "Select media file"
 msgstr "Wähle Mediendatei"
 
-#: ../src/xnoise-add-media-dialog.vala:292
+#: ../src/xnoise-add-media-dialog.vala:297
 msgid "Select media folder"
 msgstr "Wähle Medienordner"
 
-#: ../src/xnoise-add-media-dialog.vala:362
+#: ../src/xnoise-add-media-dialog.vala:367
 msgid "Add internet radio link"
 msgstr "Füge Stream hinzu"
 
@@ -307,16 +307,27 @@ msgstr "Entferne alle"
 msgid "Remove selected titles"
 msgstr "Entferne Ausgewählte"
 
-#. update user info in idle in main thread
-#: ../src/xnoise-media-importer.vala:367
-msgid "Finished import."
-msgstr "Finished import."
+#: ../src/xnoise-media-importer.vala:375
+msgid "Finished import. "
+msgstr "Import beendet."
 
-#: ../src/xnoise-media-importer.vala:367
-msgid "Updated library for new media folders."
+#: ../src/xnoise-media-importer.vala:375
+#, c-format
+msgid "Found %d media files"
+msgstr "%d Mediendateien gefunden."
+
+#: ../src/xnoise-media-importer.vala:377
+#: ../src/xnoise-media-importer.vala:378
+#, fuzzy
+msgid "Updated library for new media folders. "
 msgstr "Aktualisiere die Bibliothek durch neue Ordner."
 
-#: ../src/xnoise-settings-dialog.vala:637
+#: ../src/xnoise-media-importer.vala:377
+#, c-format
+msgid "Found %d new media files"
+msgstr "%d neue Mediendateien gefunden."
+
+#: ../src/xnoise-settings-dialog.vala:636
 msgid "Visible extra columns for tracklist:"
 msgstr "Sichtbare Extra-Spalten für Trackliste:"
 

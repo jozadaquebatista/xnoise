@@ -373,7 +373,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), 
 			                           ( ((bool)job.get_arg("full_rescan")) == true ?
 			                               _("Finished import. ") + _("Found %d media files").printf((int)job.big_counter[0]) : 
-			                               ( (int)job.big_counter[0] > 0 ? 
+			                               ( (int)job.big_counter[1] > 0 ? 
 			                                   _("Updated library for new media folders. ") + _("Found %d new media files").printf((int)job.big_counter[1]) : 
 			                                   _("Updated library for new media folders. ") ) ), 
 			                           false);

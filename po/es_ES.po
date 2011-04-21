@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-09 15:11+0100\n"
+"POT-Creation-Date: 2011-04-21 12:40+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
@@ -26,40 +26,53 @@ msgstr "Organice y reproduzca su colección de música y videos"
 msgid "Xnoise"
 msgstr "Xnoise"
 
-#: ../src/xnoise-add-media-dialog.vala:145
+#: ../src/xnoise-add-media-dialog.vala:177
 msgid "Add local file"
 msgstr "Agregar archivo local"
 
-#: ../src/xnoise-add-media-dialog.vala:146
+#: ../src/xnoise-add-media-dialog.vala:178
 msgid "Add local folder"
 msgstr "Agregar carpeta local"
 
-#: ../src/xnoise-add-media-dialog.vala:147
+#: ../src/xnoise-add-media-dialog.vala:179
 msgid "Add media stream"
 msgstr "Agregar media stream"
 
-#: ../src/xnoise-add-media-dialog.vala:148
+#: ../src/xnoise-add-media-dialog.vala:180
 msgid "Remove"
 msgstr "Eliminar"
 
-#: ../src/xnoise-add-media-dialog.vala:159
+#: ../src/xnoise-add-media-dialog.vala:181
+msgid "do a full rescan of the library"
+msgstr "Media Player"
+
+#: ../src/xnoise-add-media-dialog.vala:182
+msgid ""
+"Select the local folders or files or media streams to add to the library. \n"
+"All library media will be available in the media browser."
+msgstr ""
+"Select the local folders or files or media streams to add to the library. \n"
+"All library media will be available in the media browser."
+
+#: ../src/xnoise-add-media-dialog.vala:193
 msgid "xnoise - Add media to library"
 msgstr "xnoise - Agregar medios a la biblioteca"
 
-#: ../src/xnoise-add-media-dialog.vala:210
+#: ../src/xnoise-add-media-dialog.vala:246
+#: ../src/xnoise-media-importer.vala:94
 msgid "Importing media data. This may take some time..."
 msgstr "Importing media data. This may take some time..."
 
-#: ../src/xnoise-add-media-dialog.vala:251
-#: ../src/xnoise-main-window.vala:976
+#: ../src/xnoise-add-media-dialog.vala:273
+#: ../src/xnoise-main-window.vala:981
 msgid "Select media file"
 msgstr "Seleccione un archivo multimedia"
 
-#: ../src/xnoise-add-media-dialog.vala:275
+#: ../src/xnoise-add-media-dialog.vala:297
 msgid "Select media folder"
 msgstr "Seleccione una carpeta multimedia"
 
-#: ../src/xnoise-add-media-dialog.vala:345
+#: ../src/xnoise-add-media-dialog.vala:367
 msgid "Add internet radio link"
 msgstr "Agregar url a emisora de radio por internet"
 
@@ -67,33 +80,41 @@ msgstr "Agregar url a emisora de radio por internet"
 msgid "Leave fullscreen"
 msgstr "Salir de pantalla completa"
 
-#: ../src/xnoise-lyrics-loader.vala:174
-msgid "Enable a lyrics provider plugin for lyrics fetching to work"
-msgstr "Enable a lyrics provider plugin for lyrics fetching to work"
+#: ../src/xnoise-gst-player.vala:510
+msgid "Subtitle #"
+msgstr "Subtitle #"
 
-#: ../src/xnoise-lyrics-view.vala:100
+#: ../src/xnoise-gst-player.vala:520
+msgid "Audio Track #"
+msgstr "Audio Track #"
+
+#: ../src/xnoise-lyrics-view.vala:88
+#: ../src/xnoise-lyrics-view.vala:107
 msgid "Player stopped. Not searching for lyrics."
 msgstr "Player stopped. Not searching for lyrics."
 
-#: ../src/xnoise-lyrics-view.vala:133
-#, c-format
-msgid ""
-"\n"
-"Trying to find lyrics for \"%s\" by \"%s\"..."
-msgstr ""
-"\n"
-"Intentando buscar Letras de Canciones para \"%s\" por \"%s\"..."
+#: ../src/xnoise-lyrics-view.vala:134
+msgid "Insufficient track information. Not searching for lyrics."
+msgstr "Insufficient track information. Not searching for lyrics."
 
-#: ../src/xnoise-lyrics-view.vala:142
+#. Gtk.TextIter start_iter;
+#. Gtk.TextIter end_iter;
+#. textbuffer.get_start_iter (out start_iter);
+#. textbuffer.get_start_iter (out end_iter);
+#. string txt = textbuffer.get_text(start_iter, end_iter, true);
+#. TODO: Howto append text ?
+#: ../src/xnoise-lyrics-view.vala:155
 #, c-format
 msgid ""
 "\n"
-"Lyrics provider %s cannot find lyrics for \n"
-"\"%s\" by \"%s\".\n"
+"Trying to find lyrics for \"%s\" by \"%s\"\n"
+"\n"
+"Using %s ..."
 msgstr ""
 "\n"
-"El proveedor de Letras de Canciones %s no puede encontrar letras para \n"
-"\"%s\" por \"%s\".\n"
+"Intentando buscar Letras de Canciones para \"%s\" por \"%s\"...\n"
+"\n"
+"Using %s ..."
 
 #: ../src/xnoise-main-window.vala:41
 msgid "Video"
@@ -153,130 +174,157 @@ msgstr "_Limpiar lista de Reproducción"
 msgid "Clear the tracklist"
 msgstr "Limpiar la lista de reproducción"
 
-#: ../src/xnoise-main-window.vala:148
+#: ../src/xnoise-main-window.vala:147
+msgid "R_escan collection"
+msgstr "R_escan collection"
+
+#: ../src/xnoise-main-window.vala:149
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/xnoise-main-window.vala:149
+#: ../src/xnoise-main-window.vala:150
 msgid "_Tracklist"
 msgstr "_Lista de reproducción"
 
-#: ../src/xnoise-main-window.vala:149
+#: ../src/xnoise-main-window.vala:150
 msgid "Go to the tracklist."
 msgstr "Ir a lista de reproducción."
 
-#: ../src/xnoise-main-window.vala:150
+#: ../src/xnoise-main-window.vala:151
 msgid "_Video screen"
 msgstr "Pantalla de _Video"
 
-#: ../src/xnoise-main-window.vala:150
+#: ../src/xnoise-main-window.vala:151
 msgid "Go to the video screen in the main window."
 msgstr "Ir a la pantalla de video en la ventana principal"
 
-#: ../src/xnoise-main-window.vala:151
+#: ../src/xnoise-main-window.vala:152
 msgid "_Lyrics"
 msgstr "_Letras de Canciones"
 
-#: ../src/xnoise-main-window.vala:151
+#: ../src/xnoise-main-window.vala:152
 msgid "Go to the lyrics view."
 msgstr "Ir al visor de Letras de Canciones."
 
-#: ../src/xnoise-main-window.vala:152
+#: ../src/xnoise-main-window.vala:153
 msgid "_Help"
 msgstr "_Ayuda"
 
-#: ../src/xnoise-main-window.vala:154
+#: ../src/xnoise-main-window.vala:155
 msgid "_Config"
 msgstr "_Configuración"
 
-#: ../src/xnoise-main-window.vala:427
+#: ../src/xnoise-main-window.vala:428
 msgid "Add media"
 msgstr "Agregar medios de reproducción"
 
-#: ../src/xnoise-main-window.vala:430
+#: ../src/xnoise-main-window.vala:431
 msgid "You started xnoise for the first time. Do you want to import media into the library?"
 msgstr "Esta es la primer vez que inicia xnoise. Usted desea importar medios de reproducción en su biblioteca de reproducción?"
 
 #. TODO: create some other images
-#: ../src/xnoise-main-window.vala:524
+#: ../src/xnoise-main-window.vala:525
 msgid "no repeat"
 msgstr "no repetir"
 
-#: ../src/xnoise-main-window.vala:529
+#: ../src/xnoise-main-window.vala:530
 msgid "repeat single"
 msgstr "repetir una vez"
 
-#: ../src/xnoise-main-window.vala:534
+#: ../src/xnoise-main-window.vala:535
 msgid "repeat all"
 msgstr "repetir todo"
 
-#: ../src/xnoise-main-window.vala:539
+#: ../src/xnoise-main-window.vala:540
 msgid "random play"
 msgstr "reproducción aleatoria"
 
-#: ../src/xnoise-main-window.vala:962
+#: ../src/xnoise-main-window.vala:967
 msgid "Enter the URL of the file to open"
 msgstr "Enter the URL of the file to open"
 
-#: ../src/xnoise-main-window.vala:1041
-#: ../src/xnoise-main-window.vala:1064
-#: ../src/xnoise-main-window.vala:1106
-#: ../src/xnoise-main-window.vala:1131
+#: ../src/xnoise-main-window.vala:1046
+#: ../src/xnoise-main-window.vala:1069
+#: ../src/xnoise-main-window.vala:1111
+#: ../src/xnoise-main-window.vala:1136
+#: ../src/xnoise-tray-icon.vala:198
 #: ../plugins/notifications/xnoise-notifications.vala:156
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:129
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:152
+#, c-format
 msgid "by"
 msgstr "por"
 
-#: ../src/xnoise-main-window.vala:1043
-#: ../src/xnoise-main-window.vala:1066
-#: ../src/xnoise-main-window.vala:1108
-#: ../src/xnoise-main-window.vala:1133
+#: ../src/xnoise-main-window.vala:1048
+#: ../src/xnoise-main-window.vala:1071
+#: ../src/xnoise-main-window.vala:1113
+#: ../src/xnoise-main-window.vala:1138
+#: ../src/xnoise-tray-icon.vala:200
 #: ../plugins/notifications/xnoise-notifications.vala:158
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
+#, c-format
 msgid "on"
 msgstr "en"
 
-#: ../src/xnoise-main-window.vala:1063
-#: ../src/xnoise-main-window.vala:1130
+#: ../src/xnoise-main-window.vala:1068
+#: ../src/xnoise-main-window.vala:1135
 #: ../src/xnoise-tray-icon.vala:189
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:151
 #, c-format
 msgid "unknown title"
 msgstr "titulo desconocido"
 
-#: ../src/xnoise-main-window.vala:1065
-#: ../src/xnoise-main-window.vala:1132
+#: ../src/xnoise-main-window.vala:1070
+#: ../src/xnoise-main-window.vala:1137
 #: ../src/xnoise-tray-icon.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 msgid "unknown artist"
 msgstr "artista desconocido"
 
-#: ../src/xnoise-main-window.vala:1067
-#: ../src/xnoise-main-window.vala:1134
+#: ../src/xnoise-main-window.vala:1072
+#: ../src/xnoise-main-window.vala:1139
 #: ../src/xnoise-tray-icon.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown album"
 msgstr "álbum desconocido"
 
-#: ../src/xnoise-main-window.vala:1116
+#: ../src/xnoise-main-window.vala:1121
 msgid "unknown organization"
 msgstr "organización desconocida"
 
-#: ../src/xnoise-main-window.vala:1118
+#: ../src/xnoise-main-window.vala:1123
 msgid "unknown location"
 msgstr "ubicación desconocida"
 
-#: ../src/xnoise-main-window.vala:1216
+#: ../src/xnoise-main-window.vala:1220
 msgid "Remove all"
 msgstr "Eliminar todo"
 
-#: ../src/xnoise-main-window.vala:1221
+#: ../src/xnoise-main-window.vala:1225
 msgid "Remove selected titles"
 msgstr "Eliminar títulos seleccionados"
 
-#: ../src/xnoise-settings-dialog.vala:624
+#: ../src/xnoise-media-importer.vala:375
+msgid "Finished import. "
+msgstr "Finished import. "
+
+#: ../src/xnoise-media-importer.vala:375
+#, c-format
+msgid "Found %d media files"
+msgstr "Found %d media files"
+
+#: ../src/xnoise-media-importer.vala:377
+#: ../src/xnoise-media-importer.vala:378
+msgid "Updated library for new media folders. "
+msgstr "Updated library for new media folders. "
+
+#: ../src/xnoise-media-importer.vala:377
+#, c-format
+msgid "Found %d new media files"
+msgstr "Found %d new media files"
+
+#: ../src/xnoise-settings-dialog.vala:636
 msgid "Visible extra columns for tracklist:"
 msgstr "Columnas extras para la Lista de Reproducción:"
 
@@ -313,8 +361,29 @@ msgstr "playing"
 msgid "paused"
 msgstr "paused"
 
+#: ../src/xnoise-tray-icon.vala:156
+#, c-format
+msgid "ready to rock"
+msgstr "ready to rock"
+
+#: ../src/xnoise-videoscreen.vala:71
+msgid "No Subtitle"
+msgstr "No Subtitle"
+
+#~ msgid "Enable a lyrics provider plugin for lyrics fetching to work"
+#~ msgstr "Enable a lyrics provider plugin for lyrics fetching to work"
+
+#~ msgid ""
+#~ "\n"
+#~ "Lyrics provider %s cannot find lyrics for \n"
+#~ "\"%s\" by \"%s\".\n"
+#~ msgstr ""
+#~ "\n"
+#~ "El proveedor de Letras de Canciones %s no puede encontrar letras para \n"
+#~ "\"%s\" por \"%s\".\n"
+
 #~ msgid "Xnoise Media Player"
 #~ msgstr "Xnoise Media Player"
+
 #~ msgid "Collapse"
 #~ msgstr "Colapsar"
-
