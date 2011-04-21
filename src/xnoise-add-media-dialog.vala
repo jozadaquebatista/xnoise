@@ -236,19 +236,24 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 	private void on_ok_button_clicked() {
 		Main.instance.main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
+		var prg_bar = new Gtk.ProgressBar();
+		prg_bar.set_fraction(0.0);
+		prg_bar.set_text("0 / 0");
+		
 		Timeout.add(200, () => {
 			uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
 			                    UserInfo.ContentClass.WAIT,
 			                    _("Importing media data. This may take some time..."),
 			                    true,
 			                    5,
-			                    null);
+			                    prg_bar);
 			
 			harvest_media_locations();
 			
 			global.media_import_in_progress = true;
 			
-			Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
+			if(fullrescancheckb.get_active())
+				Main.instance.main_window.mediaBr.mediabrowsermodel.clear(); // when doing a full import db_ids may change
 			
 			media_importer.import_media_groups(list_of_streams, list_of_files, list_of_folders, msg_id, fullrescancheckb.get_active());
 			

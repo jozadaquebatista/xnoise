@@ -455,6 +455,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private void handle_iter_for_title(ref TrackData td, ref TreeIter album_iter, out TreeIter title_iter) {
 		int tr_no = 0;
+		int32 dbidx = 0;
 		if(this.iter_n_children(album_iter) == 0) {
 			this.append(out title_iter, album_iter);
 			this.set(title_iter,
@@ -471,10 +472,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 		for(int i = 0; i < this.iter_n_children(album_iter); i++) {
 			this.iter_nth_child(out title_iter, album_iter, i);
-			this.get(title_iter, Column.TRACKNUMBER, ref tr_no);
-			if(tr_no != 0 && tr_no == (int)td.tracknumber) { // tr_no has to be != 0 to be used to sort
+			this.get(title_iter, 
+			         Column.TRACKNUMBER, ref tr_no,
+			         Column.DB_ID, ref dbidx);
+			if(dbidx == td.db_id)
 				return; // track is already there 
-			}
+			if(tr_no != 0 && tr_no == (int)td.tracknumber) // tr_no has to be != 0 to be used to sort
+				return; // track is already there 
+			
 			if(tr_no > (int)td.tracknumber) {
 				TreeIter new_title_iter;
 				this.insert_before(out new_title_iter, album_iter, title_iter);

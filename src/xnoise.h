@@ -1179,8 +1179,7 @@ typedef enum  {
 	XNOISE_WORKER_EXECUTION_TYPE_ONCE,
 	XNOISE_WORKER_EXECUTION_TYPE_ONCE_HIGH_PRIORITY,
 	XNOISE_WORKER_EXECUTION_TYPE_TIMED,
-	XNOISE_WORKER_EXECUTION_TYPE_REPEATED,
-	XNOISE_WORKER_EXECUTION_TYPE_REPEATED_LOW_PRIORITY
+	XNOISE_WORKER_EXECUTION_TYPE_REPEATED
 } XnoiseWorkerExecutionType;
 
 typedef gboolean (*XnoiseWorkerAsyncWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
@@ -1423,6 +1422,7 @@ void xnoise_info_bar_enable_close_button (XnoiseInfoBar* self, gboolean enable);
 void xnoise_info_bar_update_symbol_widget (XnoiseInfoBar* self, XnoiseUserInfoContentClass cc);
 void xnoise_info_bar_update_text (XnoiseInfoBar* self, const gchar* txt, gboolean bold);
 void xnoise_info_bar_update_extra_widget (XnoiseInfoBar* self, GtkWidget* widget);
+GtkWidget* xnoise_info_bar_get_extra_widget (XnoiseInfoBar* self);
 GType xnoise_lyrics_loader_get_type (void) G_GNUC_CONST;
 XnoiseLyricsLoader* xnoise_lyrics_loader_new (void);
 XnoiseLyricsLoader* xnoise_lyrics_loader_construct (GType object_type);
@@ -1487,7 +1487,6 @@ GType xnoise_media_browser_filter_model_get_type (void) G_GNUC_CONST;
 XnoiseMediaBrowser* xnoise_media_browser_new (void);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self);
-gboolean xnoise_media_browser_change_model_data_uncleared (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_update_view (XnoiseMediaBrowser* self);
 void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
@@ -1724,6 +1723,7 @@ void xnoise_user_info_enable_close_button_by_id (XnoiseUserInfo* self, guint id,
 void xnoise_user_info_update_symbol_widget_by_id (XnoiseUserInfo* self, guint id, XnoiseUserInfoContentClass cc);
 void xnoise_user_info_update_text_by_id (XnoiseUserInfo* self, guint id, const gchar* txt, gboolean bold);
 void xnoise_user_info_update_extra_widget_by_id (XnoiseUserInfo* self, guint id, GtkWidget* widget);
+GtkWidget* xnoise_user_info_get_extra_widget_by_id (XnoiseUserInfo* self, guint id);
 void xnoise_user_info_popdown (XnoiseUserInfo* self, guint id);
 guint xnoise_user_info_popup (XnoiseUserInfo* self, XnoiseUserInfoRemovalType removal_type, XnoiseUserInfoContentClass content_class, const gchar* info_text, gboolean bold, gint appearance_time_seconds, GtkWidget* extra_widget);
 XnoiseVideoScreen* xnoise_video_screen_new (XnoiseGstPlayer* _player);

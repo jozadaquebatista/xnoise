@@ -56,6 +56,10 @@ public class Xnoise.MediaImporter : GLib.Object {
 	}
 	
 	private void reimport_media_groups_job(Worker.Job job) {
+		Idle.add( () => {
+			Main.instance.main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
+			return false;
+		});
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
@@ -81,13 +85,16 @@ public class Xnoise.MediaImporter : GLib.Object {
 		foreach(StreamData sd in streams)
 			strms += sd.uri;
 		
-		Idle.add( () => {
+		Timeout.add(200, () => {
+			var prg_bar = new Gtk.ProgressBar();
+			prg_bar.set_fraction(0.0);
+			prg_bar.set_text("0 / 0");
 			uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
 			                             UserInfo.ContentClass.WAIT,
 			                             _("Importing media data. This may take some time..."),
 			                             true,
 			                             5,
-			                             null);
+			                             prg_bar);
 			global.media_import_in_progress = true;
 			Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
 			
@@ -117,12 +124,17 @@ public class Xnoise.MediaImporter : GLib.Object {
 		job.set_arg("full_rescan", full_rescan);
 		worker.push_job(job);
 		
+		//Assuming that number of streams and number of files will be relatively small,
+		//the progress of import will only be done for folder imports
 		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.store_folders_job);
 		job.set_arg("mfolders", list_of_folders);
 		job.set_arg("msg_id", msg_id);
 		job.set_arg("full_rescan", full_rescan);
 		worker.push_job(job);
 	}
+
+	private PatternSpec psAudio = new PatternSpec("audio*");
+	private PatternSpec psVideo = new PatternSpec("video*");
 	
 	// store a single file in the db, don't add it to the media path
 	public void add_single_file(string uri) {
@@ -143,8 +155,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 		}
 		string content = info.get_content_type();
 		string mime = GLib.ContentType.get_mime_type(content);
-		PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
-		PatternSpec psVideo = new PatternSpec("video*");
 		
 		if(psAudio.match_string(mime)) {
 			string uri_lc = uri.down();
@@ -210,12 +220,10 @@ public class Xnoise.MediaImporter : GLib.Object {
 			if(tda.length > 0) {
 				TrackData[] tdax2 = tda;
 				tda = {};
-				if(((bool)job.get_arg("full_rescan"))) {
-					Idle.add( () => {
-						Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax2); 
-						return false; 
-					});
-				}
+				Idle.add( () => {
+					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax2); 
+					return false; 
+				});
 			}
 			end_import(job);
 			return;
@@ -232,22 +240,18 @@ public class Xnoise.MediaImporter : GLib.Object {
 						if(tda.length > 0) {
 							TrackData[] tdax1 = tda;
 							tda = {};
-							if(((bool)job.get_arg("full_rescan"))) {
-								Idle.add( () => {
-									Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax1); 
-									return false; 
-								});
-							}
+							Idle.add( () => {
+								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax1); 
+								return false; 
+							});
 						}
 						if(tdv.length > 0) {
 							TrackData[] tdvx = tdv;
 							tdv = {};
-							if(((bool)job.get_arg("full_rescan"))) {
-								Idle.add( () => {
-									Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
-									return false; 
-								});
-							}
+							Idle.add( () => {
+								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
+								return false; 
+							});
 						}
 						end_import(job);
 					}
@@ -281,18 +285,26 @@ public class Xnoise.MediaImporter : GLib.Object {
 								int32 id = dbw.insert_title(td, file.get_uri());
 								td.db_id = id;
 								td.mediatype = MediaType.AUDIO;
-								if((int)id != -1)
+								if((int)id != -1) {
 									tda += td;
+									job.big_counter[1]++;
+									unowned Gtk.ProgressBar pb = (Gtk.ProgressBar) userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id"));
+									Idle.add( () => {
+										if(pb != null) {
+											pb.set_fraction(((double)((double)job.big_counter[1] / (double)job.big_counter[0])));
+											pb.set_text("%d / %d".printf((int)job.big_counter[1], (int)job.big_counter[0]));
+										}
+										return false;
+									});
+								}
 								if(tda.length > 15) {
 									TrackData[] tdax = tda;
 									tda = {};
 									dbw.commit_transaction(); // intermediate commit make tracks fully available for user
-									if(((bool)job.get_arg("full_rescan"))) {
-										Idle.add( () => {
-											Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax); 
-											return false; 
-										});
-									}
+									Idle.add( () => {
+										Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax); 
+										return false; 
+									});
 									dbw.begin_transaction();
 								}
 							}
@@ -317,12 +329,10 @@ public class Xnoise.MediaImporter : GLib.Object {
 							TrackData[] tdvx = tdv;
 							tdv = {};
 							dbw.commit_transaction(); // intermediate commit make tracks fully available for user
-							if(((bool)job.get_arg("full_rescan"))) {
-								Idle.add( () => {
-									Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
-									return false; 
-								});
-							}
+							Idle.add( () => {
+								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
+								return false; 
+							});
 							dbw.begin_transaction();
 						}
 					}
@@ -338,22 +348,18 @@ public class Xnoise.MediaImporter : GLib.Object {
 			if(tda.length > 0) {
 				TrackData[] tdax1 = tda;
 				tda = {};
-				if(((bool)job.get_arg("full_rescan"))) {
-					Idle.add( () => {
-						Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax1); 
-						return false; 
-					});
-				}
+				Idle.add( () => {
+					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax1); 
+					return false; 
+				});
 			}
 			if(tdv.length > 0) {
 				TrackData[] tdvx = tdv;
 				tdv = {};
-				if(((bool)job.get_arg("full_rescan"))) {
-					Idle.add( () => {
-						Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
-						return false; 
-					});
-				}
+				Idle.add( () => {
+					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
+					return false; 
+				});
 			}
 			end_import(job);
 		}
@@ -361,10 +367,18 @@ public class Xnoise.MediaImporter : GLib.Object {
 	}
 
 	private void end_import(Worker.Job job) {
-		print("end import\n");
+		//print("end import\n");
 		Idle.add( () => {
 			// update user info in idle in main thread
-			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), (((bool)job.get_arg("full_rescan")) == true ? _("Finished import.") : _("Updated library for new media folders.")), false);
+			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), 
+			                           ( ((bool)job.get_arg("full_rescan")) == true ?
+			                               _("Finished import. ") + _("Found %d media files").printf((int)job.big_counter[0]) : 
+			                               ( (int)job.big_counter[0] > 0 ? 
+			                                   _("Updated library for new media folders. ") + _("Found %d new media files").printf((int)job.big_counter[1]) : 
+			                                   _("Updated library for new media folders. ") ) ), 
+			                           false);
+			if(userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id")) != null)
+				userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id")).hide();
 			userinfo.update_symbol_widget_by_id((uint)job.get_arg("msg_id"), UserInfo.ContentClass.INFO);
 			return false;
 		});
@@ -391,11 +405,10 @@ public class Xnoise.MediaImporter : GLib.Object {
 	// add folders to the media path and store them in the db
 	// only for Worker.Job usage
 	private void store_folders_job(Worker.Job job){
-		print("store_folders_job \n");
+		//print("store_folders_job \n");
 		var mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
 		dbw.begin_transaction();
 		if(((bool)job.get_arg("full_rescan"))) {
-		
 			dbw.del_all_folders();
 		
 			foreach(string folder in (string[])job.get_arg("mfolders"))
@@ -409,6 +422,12 @@ public class Xnoise.MediaImporter : GLib.Object {
 				end_import(job);
 				return;
 			}
+			// COUNT HERE
+			foreach(string folder in mfolders_ht.get_keys()) {
+				File file = File.new_for_commandline_arg(folder);
+				count_media_files(file, job);
+			}
+			//print("count: %d\n", (int)(job.big_counter[0]));			
 			foreach(string folder in mfolders_ht.get_keys()) {
 				File dir = File.new_for_path(folder);
 				assert(dir != null);
@@ -418,12 +437,15 @@ public class Xnoise.MediaImporter : GLib.Object {
 			mfolders_ht.remove_all();
 		}
 		else { // import new folders only, don't put them into mediabrowsermodel
+			// after import at least the media folder have to be updated
 			string[] dbfolders = dbw.get_media_folders();
-			updatefunc = global.notify["media-import-in-progress"].connect(trigger_mediabrowser_update);
+			
 			foreach(string folder in (string[])job.get_arg("mfolders"))
 				mfolders_ht.insert(folder, 1); // this removes double entries
+			
+			dbw.del_all_folders();
 			foreach(unowned string folder in mfolders_ht.get_keys()) {
-				if(!(folder in dbfolders))
+//				if(!(folder in dbfolders))
 					dbw.add_single_folder_to_collection(folder);
 			}
 			var new_mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
@@ -431,7 +453,12 @@ public class Xnoise.MediaImporter : GLib.Object {
 				if(!(folder in dbfolders))
 					new_mfolders_ht.insert(folder, 1);
 			}
-		
+				// COUNT HERE
+			foreach(string folder in new_mfolders_ht.get_keys()) {
+				File file = File.new_for_commandline_arg(folder);
+				count_media_files(file, job);
+			}
+	
 			if(new_mfolders_ht.get_keys().length() == 0) {
 				dbw.commit_transaction();
 				end_import(job);
@@ -446,16 +473,33 @@ public class Xnoise.MediaImporter : GLib.Object {
 		}
 	}
 	
-	private ulong updatefunc = 0;
-	
-	private void trigger_mediabrowser_update() {
-		Idle.add( () => {
-			Main.instance.main_window.mediaBr.change_model_data_uncleared();
-			return false;
-		});
-		if(updatefunc != 0)
-			global.disconnect(updatefunc);
-		updatefunc = 0;
+	private void count_media_files(File dir, Worker.Job job) {
+		FileInfo info;
+		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
+		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		try {
+			var enumerator = dir.enumerate_children(attr, 0);
+			
+			while((info = enumerator.next_file()) != null) {
+				FileType filetype = info.get_file_type();
+				string filename = info.get_name();
+				string filepath = Path.build_filename(dir.get_path(), filename);
+				File file = File.new_for_path(filepath);
+				if(filetype == FileType.DIRECTORY) {
+					count_media_files(file, job);
+				}
+				else {
+					string content = info.get_content_type();
+					string mime    = ContentType.get_mime_type(content);
+					if(psAudio.match_string(mime) || psVideo.match_string(mime))
+						job.big_counter[0]++;
+				}
+			}
+		} 
+		catch(Error e) {
+			print("%s\n", e.message);
+		}
 	}
 	
 	// add streams to the media path and store them in the db

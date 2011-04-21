@@ -184,6 +184,7 @@ namespace Xnoise {
 	public class InfoBar : Gtk.InfoBar {
 		public InfoBar (Xnoise.UserInfo _uinf, Xnoise.UserInfo.ContentClass _content_class, Xnoise.UserInfo.RemovalType _removal_type, uint _current_id, int _appearance_time_seconds, string _info_text = "", bool bold = true, Gtk.Widget? _extra_widget = null);
 		public void enable_close_button (bool enable);
+		public unowned Gtk.Widget? get_extra_widget ();
 		public void update_extra_widget (Gtk.Widget? widget);
 		public void update_symbol_widget (Xnoise.UserInfo.ContentClass cc);
 		public void update_text (string txt, bool bold = true);
@@ -286,7 +287,6 @@ namespace Xnoise {
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
 		public MediaBrowser ();
 		public bool change_model_data ();
-		public bool change_model_data_uncleared ();
 		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_searchtext_changed ();
@@ -542,6 +542,7 @@ namespace Xnoise {
 		public delegate void AddInfoBarDelegateType (Xnoise.InfoBar ibar);
 		public UserInfo (Xnoise.UserInfo.AddInfoBarDelegateType func);
 		public void enable_close_button_by_id (uint id, bool enable);
+		public unowned Gtk.Widget? get_extra_widget_by_id (uint id);
 		public void popdown (uint id);
 		public uint popup (Xnoise.UserInfo.RemovalType removal_type, Xnoise.UserInfo.ContentClass content_class, string info_text = "", bool bold = true, int appearance_time_seconds = 2, Gtk.Widget? extra_widget = null);
 		public void update_extra_widget_by_id (uint id, Gtk.Widget? widget);
@@ -575,7 +576,7 @@ namespace Xnoise {
 			public Xnoise.TrackData[] track_dat;
 			public GLib.Value? value_arg1;
 			public GLib.Value? value_arg2;
-			public Job (int id = 0, Xnoise.Worker.ExecutionType execution_type = 0, Xnoise.Worker.AsyncWorkFunc? a_func = null, Xnoise.Worker.SyncWorkFunc? s_func = null);
+			public Job (int id = 0, Xnoise.Worker.ExecutionType execution_type = ExecutionType.UNKNOWN, Xnoise.Worker.AsyncWorkFunc? a_func = null, Xnoise.Worker.SyncWorkFunc? s_func = null);
 			public GLib.Value? get_arg (string name);
 			public void set_arg (string? name, GLib.Value? val);
 			public Xnoise.Worker.ExecutionType execution_type { get; }
@@ -587,8 +588,7 @@ namespace Xnoise {
 			ONCE,
 			ONCE_HIGH_PRIORITY,
 			TIMED,
-			REPEATED,
-			REPEATED_LOW_PRIORITY
+			REPEATED
 		}
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate bool AsyncWorkFunc (Xnoise.Worker.Job jb);

@@ -104,7 +104,6 @@ public class Xnoise.UserInfo : GLib.Object {
 	}
 	
 	public void update_text_by_id(uint id, string txt, bool bold = true) {
-		
 		Xnoise.InfoBar? bar = info_messages.lookup(id);
 		
 		if(bar == null)
@@ -114,13 +113,21 @@ public class Xnoise.UserInfo : GLib.Object {
 	}
 	
 	public void update_extra_widget_by_id(uint id, Gtk.Widget? widget) {
-		
 		Xnoise.InfoBar? bar = info_messages.lookup(id);
 		
 		if(bar == null)
 			return;
 			
 		bar.update_extra_widget(widget);
+	}
+	
+	public unowned Gtk.Widget? get_extra_widget_by_id(uint id) {
+		Xnoise.InfoBar? bar = info_messages.lookup(id);
+		
+		if(bar == null)
+			return null;
+			
+		return bar.get_extra_widget();
 	}
 	
 	/*

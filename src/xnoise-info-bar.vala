@@ -97,6 +97,10 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 		}
 	}
 	
+	public unowned Gtk.Widget? get_extra_widget() {
+		return extra_widget;
+	}
+	
 	private Gtk.HBox swbox;
 	private Gtk.HBox ewbox;
 	

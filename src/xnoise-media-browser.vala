@@ -319,7 +319,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		unowned Gtk.TreeSelection selection;
 		selection = this.get_selection();
 		treepaths = selection.get_selected_rows(null);
-//		TreeIter iter;
 		DndData[] ids = {};
 		if(treepaths.length() > 1) {
 			foreach(unowned TreePath treepath in treepaths) { 
@@ -331,13 +330,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			}
 		}
 		else {
+			if(treepaths.length() == 0)
+				return;
 			TreePath tp = filtermodel.convert_path_to_child_path((TreePath)treepaths.data);
 			ids = mediabrowsermodel.get_dnd_data_for_path(ref tp);
 		}
 		Gdk.Atom dnd_atom = Gdk.Atom.intern(src_target_entries[0].target, true);
 		unowned uchar[] data = (uchar[])ids;
 		data.length = (int)(ids.length * sizeof(DndData));
-		
 		selection_data.set(dnd_atom, 8, data);
 	}
 
@@ -365,19 +365,11 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		}
 	}
 
-	public bool change_model_data_uncleared() {
-		mediabrowsermodel.populate_model();
-		update_view();
-		this.set_sensitive(true);
-		return false;
-	}
-	
 	public bool change_model_data() {
 		set_model(null);
 		mediabrowsermodel.clear();
 		mediabrowsermodel.populate_model();
 		update_view();
-//		xn.main_window.searchEntryMB.set_sensitive(true);
 		this.set_sensitive(true);
 		return false;
 	}
