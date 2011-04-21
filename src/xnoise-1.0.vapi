@@ -334,6 +334,7 @@ namespace Xnoise {
 		public void insert_trackdata_sorted (Xnoise.TrackData[] tda);
 		public void insert_video_sorted (Xnoise.TrackData[] tda);
 		public bool populate_model ();
+		public bool populating_model { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaImporter : GLib.Object {

@@ -1515,6 +1515,7 @@ XnoiseDndData* xnoise_media_browser_model_get_dnd_data_for_path (XnoiseMediaBrow
 gchar** xnoise_media_browser_model_build_uri_list_for_treepath (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, XnoiseDbBrowser** dbb, int* result_length1);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
+gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserModel* self);
 XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_new (XnoiseMediaBrowserModel* mbm);
 XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_construct (GType object_type, XnoiseMediaBrowserModel* mbm);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;

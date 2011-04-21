@@ -56,10 +56,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 	}
 	
 	private void reimport_media_groups_job(Worker.Job job) {
-		Idle.add( () => {
-			Main.instance.main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
-			return false;
-		});
+		Main.instance.main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
@@ -98,13 +95,13 @@ public class Xnoise.MediaImporter : GLib.Object {
 			global.media_import_in_progress = true;
 			Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
 			
-			import_media_groups(strms, mfiles, mfolders, msg_id);
+			import_media_groups(strms, mfiles, mfolders, msg_id, true, false);
 			
 			return false;
 		});
 	}
 
-	internal void import_media_groups(string[] list_of_streams, string[] list_of_files, string[] list_of_folders, uint msg_id, bool full_rescan = true) {
+	internal void import_media_groups(string[] list_of_streams, string[] list_of_files, string[] list_of_folders, uint msg_id, bool full_rescan = true, bool interrupted_populate_model = false) {
 		// global.media_import_in_progress has to be reset in the last job !
 		Worker.Job job;
 		if(full_rescan) {
@@ -129,6 +126,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.store_folders_job);
 		job.set_arg("mfolders", list_of_folders);
 		job.set_arg("msg_id", msg_id);
+		job.set_arg("interrupted_populate_model", interrupted_populate_model);
 		job.set_arg("full_rescan", full_rescan);
 		worker.push_job(job);
 	}
@@ -323,8 +321,10 @@ public class Xnoise.MediaImporter : GLib.Object {
 							dbw.insert_title(td, file.get_uri());
 						}
 						td.db_id = dbw.get_track_id_for_uri(file.get_uri());
-						if((int)td.db_id != -1)
+						if((int)td.db_id != -1) {
 							tdv += td;
+							job.big_counter[1]++;
+						}
 						if(tdv.length > 15) {
 							TrackData[] tdvx = tdv;
 							tdv = {};
@@ -372,9 +372,9 @@ public class Xnoise.MediaImporter : GLib.Object {
 			// update user info in idle in main thread
 			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), 
 			                           ( ((bool)job.get_arg("full_rescan")) == true ?
-			                               _("Finished import. ") + _("Found %d media files").printf((int)job.big_counter[0]) : 
+			                               _("Finished import. ") +  " " + _("Found %d media files").printf((int)job.big_counter[0]) : 
 			                               ( (int)job.big_counter[1] > 0 ? 
-			                                   _("Updated library for new media folders. ") + _("Found %d new media files").printf((int)job.big_counter[1]) : 
+			                                   _("Updated library for new media folders. ") + " " + _("Found %d new media files").printf((int)job.big_counter[1]) : 
 			                                   _("Updated library for new media folders. ") ) ), 
 			                           false);
 			if(userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id")) != null)
@@ -438,6 +438,9 @@ public class Xnoise.MediaImporter : GLib.Object {
 		}
 		else { // import new folders only, don't put them into mediabrowsermodel
 			// after import at least the media folder have to be updated
+			if((bool)job.get_arg("interrupted_populate_model"))
+				trigger_mediabrowser_update_id = global.notify["media-import-in-progress"].connect(trigger_mediabrowser_update);
+			
 			string[] dbfolders = dbw.get_media_folders();
 			
 			foreach(string folder in (string[])job.get_arg("mfolders"))
@@ -471,6 +474,20 @@ public class Xnoise.MediaImporter : GLib.Object {
 			}
 			mfolders_ht.remove_all();
 		}
+	}
+	
+	private ulong trigger_mediabrowser_update_id = 0;
+	 
+	private void trigger_mediabrowser_update() {
+		if(global.media_import_in_progress == false) {
+			Idle.add( () => {
+				Main.instance.main_window.mediaBr.change_model_data();
+				return false;
+			});
+			global.disconnect(trigger_mediabrowser_update_id);
+			trigger_mediabrowser_update_id = 0;
+		}
+		return;
 	}
 	
 	private void count_media_files(File dir, Worker.Job job) {

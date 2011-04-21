@@ -71,6 +71,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private Gdk.Pixbuf videos_pixb;
 	private Gdk.Pixbuf radios_pixb;
 
+	private bool _populating_model = false;
+	
+	public bool populating_model {
+		get {
+			return _populating_model;
+		}
+	}
+	
 	construct {
 		theme = IconTheme.get_default();
 		theme.changed.connect(update_pixbufs);
@@ -519,13 +527,13 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private Cancellable populate_model_cancellable = null;
 	public bool populate_model() {
+		_populating_model = true;
 		//print("populate_model\n");
 		if(populate_model_cancellable == null) {
 			populate_model_cancellable = new Cancellable();
 		}
 		else {
-			populate_model_cancellable.cancel();
-			populate_model_cancellable = new Cancellable();
+			populate_model_cancellable.reset();
 		}
 		Worker.Job job;
 		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_listed_data);
@@ -534,6 +542,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		
 		job = new Worker.Job(1, Worker.ExecutionType.REPEATED, this.handle_hierarchical_data, null);
 		job.cancellable = populate_model_cancellable;
+		job.finished.connect( (j) => { 
+			_populating_model = false;
+		});
 		worker.push_job(job);
 		
 		return false;
