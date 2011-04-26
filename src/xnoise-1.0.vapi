@@ -340,7 +340,7 @@ namespace Xnoise {
 	public class MediaImporter : GLib.Object {
 		public MediaImporter ();
 		public async void add_local_tags (GLib.File dir, Xnoise.Worker.Job job);
-		public void add_single_file (string uri);
+		public Xnoise.DbWriter? dbw { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {
@@ -438,10 +438,15 @@ namespace Xnoise {
 		public TagReader ();
 		public Xnoise.TrackData read_tag (string filename);
 	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class TagTitleEditor : GLib.Object {
+		public TagTitleEditor (ref Gtk.TreeRowReference _treerowref);
+		public signal void sign_finish ();
+	}
 	[CCode (ref_function = "xnoise_tag_writer_ref", unref_function = "xnoise_tag_writer_unref", cheader_filename = "xnoise.h")]
 	public class TagWriter {
 		public TagWriter ();
-		public bool write_tag (string filename, Xnoise.TrackData? td);
+		public bool write_tag (GLib.File file, Xnoise.TrackData? td);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TextColumn : Gtk.TreeViewColumn {
@@ -704,6 +709,8 @@ namespace Xnoise {
 	public static Xnoise.UserInfo userinfo;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Worker worker;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.TrackData copy_trackdata (Xnoise.TrackData td);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string escape_album_for_local_folder_search (string _artist, string? album_name);
 	[CCode (cheader_filename = "xnoise.h")]

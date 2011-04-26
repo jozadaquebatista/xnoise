@@ -516,6 +516,17 @@ typedef struct _XnoiseTagReader XnoiseTagReader;
 typedef struct _XnoiseTagReaderClass XnoiseTagReaderClass;
 typedef struct _XnoiseTagReaderPrivate XnoiseTagReaderPrivate;
 
+#define XNOISE_TYPE_TAG_TITLE_EDITOR (xnoise_tag_title_editor_get_type ())
+#define XNOISE_TAG_TITLE_EDITOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditor))
+#define XNOISE_TAG_TITLE_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditorClass))
+#define XNOISE_IS_TAG_TITLE_EDITOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR))
+#define XNOISE_IS_TAG_TITLE_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TAG_TITLE_EDITOR))
+#define XNOISE_TAG_TITLE_EDITOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditorClass))
+
+typedef struct _XnoiseTagTitleEditor XnoiseTagTitleEditor;
+typedef struct _XnoiseTagTitleEditorClass XnoiseTagTitleEditorClass;
+typedef struct _XnoiseTagTitleEditorPrivate XnoiseTagTitleEditorPrivate;
+
 #define XNOISE_TYPE_TAG_WRITER (xnoise_tag_writer_get_type ())
 #define XNOISE_TAG_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TAG_WRITER, XnoiseTagWriter))
 #define XNOISE_TAG_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TAG_WRITER, XnoiseTagWriterClass))
@@ -1058,6 +1069,15 @@ struct _XnoiseTagReaderClass {
 	void (*finalize) (XnoiseTagReader *self);
 };
 
+struct _XnoiseTagTitleEditor {
+	GObject parent_instance;
+	XnoiseTagTitleEditorPrivate * priv;
+};
+
+struct _XnoiseTagTitleEditorClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoiseTagWriter {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -1519,11 +1539,11 @@ gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserMode
 XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_new (XnoiseMediaBrowserModel* mbm);
 XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_construct (GType object_type, XnoiseMediaBrowserModel* mbm);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
-void xnoise_media_importer_add_single_file (XnoiseMediaImporter* self, const gchar* uri);
 void xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir, XnoiseWorkerJob* job, GAsyncReadyCallback _callback_, gpointer _user_data_);
 void xnoise_media_importer_add_local_tags_finish (XnoiseMediaImporter* self, GAsyncResult* _res_);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
+XnoiseDbWriter* xnoise_media_importer_get_dbw (XnoiseMediaImporter* self);
 GType xnoise_params_get_type (void) G_GNUC_CONST;
 extern XnoiseParams* xnoise_par;
 extern XnoiseGlobalAccess* xnoise_global;
@@ -1543,6 +1563,7 @@ gchar* xnoise_prepare_name_from_filename (const gchar* val);
 gchar* xnoise_replace_underline_with_blank_encoded (const gchar* value);
 GFile* xnoise_get_albumimage_for_artistalbum (const gchar* artist, const gchar* album, const gchar* size);
 gchar* xnoise_get_stream_uri (const gchar* playlist_uri);
+XnoiseTrackData* xnoise_copy_trackdata (XnoiseTrackData* td);
 GType gst_stream_type_get_type (void) G_GNUC_CONST;
 XnoiseTrackData* xnoise_track_data_new (void);
 XnoiseTrackData* xnoise_track_data_construct (GType object_type);
@@ -1657,6 +1678,9 @@ GType xnoise_tag_reader_get_type (void) G_GNUC_CONST;
 XnoiseTrackData* xnoise_tag_reader_read_tag (XnoiseTagReader* self, const gchar* filename);
 XnoiseTagReader* xnoise_tag_reader_new (void);
 XnoiseTagReader* xnoise_tag_reader_construct (GType object_type);
+GType xnoise_tag_title_editor_get_type (void) G_GNUC_CONST;
+XnoiseTagTitleEditor* xnoise_tag_title_editor_new (GtkTreeRowReference** _treerowref);
+XnoiseTagTitleEditor* xnoise_tag_title_editor_construct (GType object_type, GtkTreeRowReference** _treerowref);
 gpointer xnoise_tag_writer_ref (gpointer instance);
 void xnoise_tag_writer_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_tag_writer (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -1664,7 +1688,7 @@ void xnoise_value_set_tag_writer (GValue* value, gpointer v_object);
 void xnoise_value_take_tag_writer (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_tag_writer (const GValue* value);
 GType xnoise_tag_writer_get_type (void) G_GNUC_CONST;
-gboolean xnoise_tag_writer_write_tag (XnoiseTagWriter* self, const gchar* filename, XnoiseTrackData* td);
+gboolean xnoise_tag_writer_write_tag (XnoiseTagWriter* self, GFile* file, XnoiseTrackData* td);
 XnoiseTagWriter* xnoise_tag_writer_new (void);
 XnoiseTagWriter* xnoise_tag_writer_construct (GType object_type);
 GType xnoise_text_column_get_type (void) G_GNUC_CONST;

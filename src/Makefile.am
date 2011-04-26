@@ -59,6 +59,7 @@ xnoise_SOURCES = \
     xnoise-screensaver-manager.vala \
     xnoise-settings-dialog.vala \
     xnoise-tag-reader.vala \
+    xnoise-tag-title-editor.vala \
     xnoise-tag-writer.vala \
     xnoise-text-column.vala \
     xnoise-tracklist.vala \

@@ -319,6 +319,52 @@ public class Xnoise.DbWriter : GLib.Object {
 		        
 	}
 
+	private static const string STMT_UPDATE_TITLE_NAME  = "UPDATE items SET title=? WHERE id=?";
+	private static const string STMT_UPDATE_ALBUM_NAME  = "UPDATE albums SET name=? WHERE id=(SELECT items.album FROM items WHERE items.id=?)";
+	private static const string STMT_UPDATE_ARTIST_NAME = "UPDATE artists SET name=? WHERE id=(SELECT items.artist FROM items WHERE items.id=?)";
+	
+	internal void update_title_name(int item_id, string? new_name) {
+		Statement stmt;
+		this.db.prepare_v2(STMT_UPDATE_TITLE_NAME, -1, out stmt);
+		stmt.reset();
+		if(new_name == null)
+			return;
+		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
+		   stmt.bind_int(2, item_id) != Sqlite.OK)
+			this.db_error();
+		
+		if(stmt.step() != Sqlite.DONE) 
+			this.db_error();
+	}
+	
+	internal void update_album_name(int item_id, string? new_name) {
+		Statement stmt;
+		this.db.prepare_v2(STMT_UPDATE_ALBUM_NAME, -1, out stmt);
+		stmt.reset();
+		if(new_name == null)
+			return;
+		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
+		   stmt.bind_int(2, item_id) != Sqlite.OK)
+			this.db_error();
+		
+		if(stmt.step() != Sqlite.DONE) 
+			this.db_error();
+	}
+	
+	internal void update_artist_name(int item_id, string? new_name) {
+		Statement stmt;
+		this.db.prepare_v2(STMT_UPDATE_ARTIST_NAME, -1, out stmt);
+		stmt.reset();
+		if(new_name == null)
+			return;
+		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
+		   stmt.bind_int(2, item_id) != Sqlite.OK)
+			this.db_error();
+		
+		if(stmt.step() != Sqlite.DONE) 
+			this.db_error();
+	}
+	
 	public bool set_local_image_for_album(ref string artist,
 	                                      ref string album,
 	                                      string image_path) {

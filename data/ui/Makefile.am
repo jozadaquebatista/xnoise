@@ -3,8 +3,9 @@ NULL =
 ui_DATA = \
         add_media.ui \
         main_window.ui \
-        main_ui.xml \
         settings.ui \
+        metadat_title.ui \
+        main_ui.xml \
         xnoise_bruit_48x48.png \
         xnoise_bruit_16x16.png \
         xnoise_bruit.svg \

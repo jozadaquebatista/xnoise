@@ -47,12 +47,19 @@ public class Xnoise.TagWriter {
 //	public TagWriter() {
 //		print("construct TagWriter\n");
 //	}
-	public bool write_tag(string filename, TrackData? td) {
+	public bool write_tag(File file, TrackData? td) {
+		// does writes for values that are different from default values
 		if(td == null)
 			return false;
 		bool retval = false;
+
+		string path = null;
+		path = file.get_path();
+		if(path == null)
+			return false;
+
 		TagLib.File taglib_file = null;
-		taglib_file = new TagLib.File(filename);
+		taglib_file = new TagLib.File(path);
 		if(taglib_file!=null) {
 			unowned TagLib.Tag t = taglib_file.tag;
 			if(t != null) {

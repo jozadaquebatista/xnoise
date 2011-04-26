@@ -32,7 +32,7 @@ using Gtk;
 
 public class Xnoise.MediaImporter : GLib.Object {
 	private DbWriter? _dbw;
-	private DbWriter? dbw {
+	public DbWriter? dbw {
 		get {
 			lock(_dbw) {
 				if(_dbw == null) {
@@ -101,6 +101,19 @@ public class Xnoise.MediaImporter : GLib.Object {
 		});
 	}
 
+	internal void update_item_tag(int item_id, TrackData td) {
+		if(global.media_import_in_progress == true)
+			return;
+		
+		dbw.begin_transaction();
+		
+		dbw.update_title_name(item_id, td.title);
+		dbw.update_album_name(item_id, td.album);  // check for existance of changed album name first and use reference, if available
+		dbw.update_artist_name(item_id, td.artist);// check for existance of changed artist name first and use reference, if available
+		
+		dbw.commit_transaction();
+	}
+
 	internal void import_media_groups(string[] list_of_streams, string[] list_of_files, string[] list_of_folders, uint msg_id, bool full_rescan = true, bool interrupted_populate_model = false) {
 		// global.media_import_in_progress has to be reset in the last job !
 		Worker.Job job;
@@ -135,7 +148,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 	private PatternSpec psVideo = new PatternSpec("video*");
 	
 	// store a single file in the db, don't add it to the media path
-	public void add_single_file(string uri) {
+	internal void add_single_file(string uri) {
 		print("add single file %s\n", uri);
 		
 		dbw.begin_transaction();

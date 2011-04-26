@@ -354,6 +354,22 @@ namespace Xnoise {
 		}
 		return outval;
 	}
+	
+	public static TrackData copy_trackdata(TrackData td) {
+		TrackData td_new = new TrackData();
+		td_new.artist      = td.artist;
+		td_new.album       = td.album;
+		td_new.title       = td.title;
+		td_new.genre       = td.genre;
+		td_new.year        = td.year;
+		td_new.tracknumber = td.tracknumber;
+		td_new.length      = td.length;
+		td_new.bitrate     = td.bitrate;
+		td_new.mediatype   = td.mediatype;
+		td_new.uri         = td.uri;
+		td_new.db_id       = td.db_id;
+		return td_new;
+	}
 }
 
 

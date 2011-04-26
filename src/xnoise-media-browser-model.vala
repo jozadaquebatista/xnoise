@@ -465,6 +465,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		int tr_no = 0;
 		int32 dbidx = 0;
 		if(this.iter_n_children(album_iter) == 0) {
+			print("td.db_id : %d\n", td.db_id);
 			this.append(out title_iter, album_iter);
 			this.set(title_iter,
 			         Column.ICON, title_pixb,

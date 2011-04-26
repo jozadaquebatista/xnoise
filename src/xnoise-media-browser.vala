@@ -38,6 +38,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private bool _use_linebreaks = false;
 	private CellRendererText renderer = null;
 	private List<TreePath> expansion_list = null;
+	private Gtk.Menu menu;
 	
 	public MediaBrowserModel mediabrowsermodel;
 	public MediaBrowserFilterModel filtermodel;
@@ -264,7 +265,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				}
 			}
 			case 3: {
-				print("button 3\n"); //TODO
+				//TODO: Handle listed data seperately, or not at all
+				treerowref = new TreeRowReference(this.mediabrowsermodel, treepath);
+				rightclick_menu_popup(treepath.get_depth(), e.time);
+//				open_tagtitle_changer();
 				return false; //TODO check if this is right
 			}
 			default: {
@@ -276,6 +280,47 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return false;
 	}
 
+	private void rightclick_menu_popup(int depth, uint activateTime) {
+		switch(depth) {
+			case 3:
+				this.menu = create_edit_title_tag_menu();
+				break;
+			default:
+				menu = null;
+				break;
+		}
+		if(menu != null)
+			menu.popup(null, null, null, 0, activateTime);
+	}
+
+	private TreeRowReference treerowref = null;
+	
+	private Menu create_edit_title_tag_menu() {
+		var rightmenu = new Menu();
+		var popup_image = new Gtk.Image();
+		popup_image.set_from_stock(Gtk.Stock.INFO, IconSize.MENU);
+		var label = new Label(_("Edit metadata for track"));
+		label.set_alignment(0, 0);
+		var menu_item = new MenuItem();
+		var hbox = new HBox(false, 1);
+		hbox.pack_start(popup_image, false, false, 2);
+		hbox.pack_start(label, true, true, 0);
+		menu_item.add(hbox);
+		menu_item.activate.connect(this.open_tagtitle_changer);
+		rightmenu.append(menu_item);
+		rightmenu.show_all();
+		return rightmenu;
+	}
+
+	private TagTitleEditor tte;
+	private void open_tagtitle_changer() {
+		tte = new TagTitleEditor(ref treerowref);
+		tte.sign_finish.connect( () => {
+			tte = null;
+			menu = null;
+		});
+	}
+	
 	private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath treepath;
 		Gtk.TreeViewColumn column;
@@ -421,8 +466,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //		renderer.family = "Sans"; //TODO: Does not work!?
 //		renderer.size = 9; //TODO: Does not work!?
 		fontsizeMB = par.get_int_value("fontsizeMB");
-
-
 
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
