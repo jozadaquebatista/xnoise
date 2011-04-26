@@ -266,9 +266,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			}
 			case 3: {
 				//TODO: Handle listed data seperately, or not at all
-				treerowref = new TreeRowReference(this.mediabrowsermodel, treepath);
+				TreePath tp = filtermodel.convert_path_to_child_path(treepath);
+				treerowref = new TreeRowReference(this.mediabrowsermodel, tp);
 				rightclick_menu_popup(treepath.get_depth(), e.time);
-//				open_tagtitle_changer();
 				return false; //TODO check if this is right
 			}
 			default: {
