@@ -183,6 +183,9 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		}
 		Idle.add( () => {
 			this.dialog.destroy();
+			return false;
+		});
+		Timeout.add(100, () => {
 			this.sign_finish();
 			return false;
 		});
@@ -196,6 +199,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		TreePath path  = treerowref.get_path();
 		mbm.get_iter(out artist_iter, path);
 		mbm.set(artist_iter, MediaBrowserModel.Column.VIS_TEXT, new_content_name);
+		mbm.move_artist_iter_sorted(ref artist_iter, new_content_name);
 		for(int i = 0; i < mbm.iter_n_children(artist_iter); i++) {
 			mbm.iter_nth_child(out album_iter, artist_iter, i);
 			for(int j = 0; j < mbm.iter_n_children(album_iter); j++) {
@@ -212,9 +216,33 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		artist_job.id_array = ids;
 		artist_job.set_arg("treerowref", treerowref);
 		artist_job.set_arg("content", (int)this.content);
-//		artist_job.finished.connect( () => {
-//		});
 		worker.push_job(artist_job);		
+	}
+
+	private void do_album_rename() {
+		if(mbm == null)
+			return;
+		TreeIter album_iter, title_iter;
+		int32[]? ids = {};
+		TreePath path  = treerowref.get_path();
+		mbm.get_iter(out album_iter, path);
+		mbm.set(album_iter, MediaBrowserModel.Column.VIS_TEXT, new_content_name);
+		mbm.move_album_iter_sorted(ref album_iter, new_content_name);
+		for(int j = 0; j < mbm.iter_n_children(album_iter); j++) {
+			mbm.iter_nth_child(out title_iter, album_iter, j);
+			int32 id = -1;
+			mbm.get(title_iter, MediaBrowserModel.Column.DB_ID, ref id);
+			ids += id;
+		}
+		if(ids.length < 1)
+			return;
+		Worker.Job album_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_tags_job);
+		album_job.set_arg("new_content_name", new_content_name);
+		album_job.id_array = ids;
+		album_job.set_arg("treerowref", treerowref);
+		album_job.set_arg("content", (int)this.content);
+		worker.push_job(album_job);		
+	
 	}
 
 	private void update_tags_job(Worker.Job tag_job) {
@@ -240,33 +268,6 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 				worker.push_job(job);
 			}
 		}
-	}
-
-	private void do_album_rename() {
-		if(mbm == null)
-			return;
-		TreeIter album_iter, title_iter;
-		int32[]? ids = {};
-		TreePath path  = treerowref.get_path();
-		mbm.get_iter(out album_iter, path);
-		mbm.set(album_iter, MediaBrowserModel.Column.VIS_TEXT, new_content_name);
-		for(int j = 0; j < mbm.iter_n_children(album_iter); j++) {
-			mbm.iter_nth_child(out title_iter, album_iter, j);
-			int32 id = -1;
-			mbm.get(title_iter, MediaBrowserModel.Column.DB_ID, ref id);
-			ids += id;
-		}
-		if(ids.length < 1)
-			return;
-		Worker.Job album_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_tags_job);
-		album_job.set_arg("new_content_name", new_content_name);
-		album_job.id_array = ids;
-		album_job.set_arg("treerowref", treerowref);
-		album_job.set_arg("content", (int)this.content);
-//		album_job.finished.connect( () => {
-//		});
-		worker.push_job(album_job);		
-	
 	}
 
 	private void update_single_artist_tag_job(Worker.Job job) {

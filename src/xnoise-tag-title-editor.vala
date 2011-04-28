@@ -211,9 +211,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 					model.get_iter(out iter, path);
 					model.iter_parent(out parent, iter);
 					model.iter_parent(out parentparent, parent);
-					((MediaBrowserModel)model).set(iter,
-					                               MediaBrowserModel.Column.VIS_TEXT, tdx.title
-					                               );
+					((MediaBrowserModel)model).set(iter, MediaBrowserModel.Column.VIS_TEXT, tdx.title);
 					((MediaBrowserModel)model).move_title_iter_sorted(ref iter, ref tdx);
 					
 					// remove empty nodes

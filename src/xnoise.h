@@ -1527,6 +1527,8 @@ void xnoise_media_browser_model_insert_video_sorted (XnoiseMediaBrowserModel* se
 void xnoise_media_browser_model_insert_stream_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
 void xnoise_media_browser_model_insert_trackdata_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
 void xnoise_media_browser_model_move_title_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, XnoiseTrackData** td);
+void xnoise_media_browser_model_move_artist_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, const gchar* name);
+void xnoise_media_browser_model_move_album_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, const gchar* name);
 void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
 gboolean xnoise_media_browser_model_populate_model (XnoiseMediaBrowserModel* self);
 XnoiseTrackData** xnoise_media_browser_model_get_trackdata_listed (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, int* result_length1);

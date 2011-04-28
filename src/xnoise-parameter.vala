@@ -1,6 +1,6 @@
 /* xnoise-parameter.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -269,9 +269,9 @@ mediabrowser_linebreaks=0
 volume=0.080511778431618983
 
 [settings_string]
-prio_lyrics=Lyricwiki;Chartlyrics
+prio_lyrics=DatabaseLyrics;Lyricwiki;Chartlyrics
 prio_images=LastfmCovers
-activated_plugins=Lyricwiki;DatabaseLyrics;Chartlyrics;notifications;LastfmCovers;TitleToDecoration;Mediawatcher;mediakeys
+activated_plugins=soundmenu2;DatabaseLyrics;mpris;notifications;Lyricwiki;TitleToDecoration;Chartlyrics;CyclicSaveState;mediakeys;LastfmCovers
 """;
 }
 

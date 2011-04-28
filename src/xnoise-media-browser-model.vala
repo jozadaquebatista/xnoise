@@ -353,7 +353,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 	}
 	
-	// used to move an iter after editing the tag
+	// used to move an title iter after editing the tag
 	public void move_title_iter_sorted(ref TreeIter org_iter, ref TrackData td) {
 		TreeIter artist_iter, album_iter;
 		
@@ -361,6 +361,55 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		handle_iter_for_album (ref td, ref artist_iter, out album_iter);
 		
 		move_iter_for_title(ref td, ref album_iter , ref org_iter);
+	}
+	
+	// used to move an artist iter after editing the tag
+	public void move_artist_iter_sorted(ref TreeIter org_iter, string name) {
+		TreeIter artist_iter;
+		string text = null;
+		CollectionType ct = CollectionType.UNKNOWN;
+		for(int i = 0; i < this.iter_n_children(null); i++) {
+			this.iter_nth_child(out artist_iter, null, i);
+			this.get(artist_iter, Column.VIS_TEXT, ref text, Column.COLL_TYPE, ref ct);
+			if(ct != CollectionType.HIERARCHICAL)
+				continue;
+			text = text != null ? text.down().strip() : "";
+			if(strcmp(text, name != null ? name.down().strip() : "") == 0 && org_iter != artist_iter) {
+				//found artist TODO: recoursive move org_iter content to artist_iter
+				return;
+			}
+			if(strcmp(text, name != null ? name.down().strip() : "") > 0) {
+				this.move_before(ref org_iter, artist_iter);
+				return;
+			}
+			if(i == this.iter_n_children(artist_iter) - 1)
+				this.move_after(ref org_iter, artist_iter);
+		}
+	}
+
+	// used to move an artist iter after editing the tag
+	public void move_album_iter_sorted(ref TreeIter org_iter, string name) {
+		TreeIter artist_iter, album_iter;
+		string text = null;
+		CollectionType ct = CollectionType.UNKNOWN;
+		this.iter_parent(out artist_iter, org_iter);
+		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
+			this.iter_nth_child(out album_iter, artist_iter, i);
+			this.get(album_iter, Column.VIS_TEXT, ref text, Column.COLL_TYPE, ref ct);
+			if(ct != CollectionType.HIERARCHICAL)
+				continue;
+			text = text != null ? text.down().strip() : "";
+			if(strcmp(text, name != null ? name.down().strip() : "") == 0 && org_iter != album_iter) {
+				//found album TODO: recoursive move org_iter content to album_iter
+				return;
+			}
+			if(strcmp(text, name != null ? name.down().strip() : "") > 0) {
+				this.move_before(ref org_iter, album_iter);
+				return;
+			}
+			if(i == this.iter_n_children(artist_iter) - 1)
+				this.move_after(ref org_iter, album_iter);
+		}
 	}
 
 	// used to move an iter after editing the tag
