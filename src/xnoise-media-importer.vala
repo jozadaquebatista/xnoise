@@ -101,16 +101,15 @@ public class Xnoise.MediaImporter : GLib.Object {
 		});
 	}
 
-	internal void update_item_tag(int item_id, TrackData td) {
+	internal void update_item_tag(int item_id, ref TrackData td) {
 		if(global.media_import_in_progress == true)
 			return;
-		
 		dbw.begin_transaction();
 		
-		dbw.update_title_name(item_id, td.title);
-		dbw.update_album_name(item_id, td.album);  // check for existance of changed album name first and use reference, if available
-		dbw.update_artist_name(item_id, td.artist);// check for existance of changed artist name first and use reference, if available
-		
+		bool retval = dbw.update_title(item_id, ref td);		
+//		dbw.update_title_name(item_id, td.title);
+//		dbw.update_album_name(item_id, td.album);
+//		dbw.update_artist_name(item_id, td.artist);
 		dbw.commit_transaction();
 	}
 
@@ -142,6 +141,28 @@ public class Xnoise.MediaImporter : GLib.Object {
 		job.set_arg("interrupted_populate_model", interrupted_populate_model);
 		job.set_arg("full_rescan", full_rescan);
 		worker.push_job(job);
+	}
+
+	internal void write_final_tracks_to_db_job(Worker.Job job) {
+//		DbWriter dbw = null;
+//		try {
+//			dbw = new DbWriter();
+//		}
+//		catch(Error e) {
+//			print("%s\n", e.message);
+//			return;
+//		}
+//		
+//		if(dbw == null)
+//			return;
+//		
+		string[] final_tracklist = (string[])job.get_arg("final_tracklist");
+		try {
+			dbw.write_final_tracks_to_db(final_tracklist);
+		}
+		catch(Error err) {
+			print("%s\n", err.message);
+		}
 	}
 
 	private PatternSpec psAudio = new PatternSpec("audio*");
@@ -299,8 +320,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 								if((int)id != -1) {
 									tda += td;
 									job.big_counter[1]++;
-									unowned Gtk.ProgressBar pb = (Gtk.ProgressBar) userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id"));
 									Idle.add( () => {
+										unowned Gtk.ProgressBar pb = (Gtk.ProgressBar) userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id"));
 										if(pb != null) {
 											pb.set_fraction(((double)((double)job.big_counter[1] / (double)job.big_counter[0])));
 											pb.set_text("%d / %d".printf((int)job.big_counter[1], (int)job.big_counter[0]));

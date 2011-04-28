@@ -353,6 +353,82 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 	}
 	
+	// used to move an iter after editing the tag
+	public void move_title_iter_sorted(ref TreeIter org_iter, ref TrackData td) {
+		TreeIter artist_iter, album_iter;
+		
+		handle_iter_for_artist(ref td, out artist_iter);
+		handle_iter_for_album (ref td, ref artist_iter, out album_iter);
+		
+		move_iter_for_title(ref td, ref album_iter , ref org_iter);
+	}
+
+	// used to move an iter after editing the tag
+	private void move_iter_for_title(ref TrackData td, ref TreeIter album_iter, ref TreeIter org_iter) {
+		int tr_no = 0;
+		TreeIter title_iter;
+		int32 dbidx = 0;
+		if(this.iter_n_children(album_iter) == 0) {
+			this.append(out title_iter, album_iter);
+			this.set(title_iter,
+			         Column.ICON, title_pixb,
+			         Column.VIS_TEXT, td.title,
+			         Column.DB_ID, td.db_id,
+			         Column.MEDIATYPE , (int)MediaType.AUDIO,
+			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+			         Column.DRAW_SEPTR, 0,
+			         Column.VISIBLE, true,
+			         Column.TRACKNUMBER, td.tracknumber
+			         );
+			this.remove(org_iter);
+			return;
+		}
+		for(int i = 0; i < this.iter_n_children(album_iter); i++) {
+			this.iter_nth_child(out title_iter, album_iter, i);
+			this.get(title_iter, 
+			         Column.TRACKNUMBER, ref tr_no,
+			         Column.DB_ID, ref dbidx);
+			if(dbidx == td.db_id) {
+				this.remove(org_iter);
+				return; // track is already there 
+			}
+			if(tr_no != 0 && tr_no == (int)td.tracknumber) { // tr_no has to be != 0 to be used to sort
+				this.remove(org_iter);
+				return; // track is already there 
+			}
+			if(tr_no > (int)td.tracknumber) {
+				TreeIter new_title_iter;
+				this.insert_before(out new_title_iter, album_iter, title_iter);
+				this.set(new_title_iter,
+				         Column.ICON, title_pixb,
+				         Column.VIS_TEXT, td.title,
+				         Column.DB_ID, td.db_id,
+				         Column.MEDIATYPE , (int)MediaType.AUDIO,
+				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+				         Column.DRAW_SEPTR, 0,
+				         Column.VISIBLE, true,
+				         Column.TRACKNUMBER, td.tracknumber
+				         );
+				title_iter = new_title_iter;
+				this.remove(org_iter);
+				return;
+			}	
+		}
+		this.append(out title_iter, album_iter);
+		this.set(title_iter,
+		         Column.ICON, title_pixb,
+		         Column.VIS_TEXT, td.title,
+		         Column.DB_ID, td.db_id,
+		         Column.MEDIATYPE , (int)MediaType.AUDIO,
+		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+		         Column.DRAW_SEPTR, 0,
+		         Column.VISIBLE, true,
+		         Column.TRACKNUMBER, td.tracknumber
+		         );
+		this.remove(org_iter);
+		return;
+	}
+
 	private void handle_iter_for_artist(ref TrackData td, out TreeIter artist_iter) {
 		string text = null;
 		if(this.iter_n_children(null) == 0) {
@@ -465,7 +541,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		int tr_no = 0;
 		int32 dbidx = 0;
 		if(this.iter_n_children(album_iter) == 0) {
-			print("td.db_id : %d\n", td.db_id);
+			//print("td.db_id : %d\n", td.db_id);
 			this.append(out title_iter, album_iter);
 			this.set(title_iter,
 			         Column.ICON, title_pixb,

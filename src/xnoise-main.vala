@@ -140,31 +140,11 @@ public class Xnoise.Main : GLib.Object {
 	private string[] final_tracklist = null;
 	public void save_tracklist() {
 		final_tracklist = this.main_window.trackList.tracklistmodel.get_all_tracks();
-		var job = new Worker.Job(999, Worker.ExecutionType.ONCE, null, this.write_final_tracks_to_db_job);
+		var job = new Worker.Job(999, Worker.ExecutionType.ONCE, null, media_importer.write_final_tracks_to_db_job);
+		job.set_arg("final_tracklist", final_tracklist);
 		worker.push_job(job);
 	}
 	
-	public void write_final_tracks_to_db_job(Worker.Job job) {
-		DbWriter dbw = null;
-		try {
-			dbw = new DbWriter();
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return;
-		}
-		
-		if(dbw == null)
-			return;
-		
-		try {
-			dbw.write_final_tracks_to_db(final_tracklist);
-		}
-		catch(Error err) {
-			print("%s\n", err.message);
-		}
-	}
-
 	public void quit() {
 		Timeout.add_seconds(1, () => { Gtk.main_quit(); return false;});
 		if(main_window.is_fullscreen) 

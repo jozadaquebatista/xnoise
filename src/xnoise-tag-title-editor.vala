@@ -150,6 +150,11 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 			infolabel.label = _("Please wait while filling media browser. Or cancel, if you do not want to wait.");
 			return;
 		}
+		if(global.media_import_in_progress) {
+			infolabel.label = _("Please wait while importing media. Or cancel, if you do not want to wait.");
+			return;
+		}
+
 		if(td_old == null)
 			return;
 		
@@ -183,7 +188,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		TagWriter tw = new TagWriter();
 		bool retval = tw.write_tag(f, tdx); // maybe use uri stored in td ?
 		if(retval) { // success
-			media_importer.update_item_tag(tdx.db_id, tdx);
+			media_importer.update_item_tag(tdx.db_id, ref tdx);
 				
 			//put into mediabrowser
 			Idle.add( () => {
@@ -197,17 +202,20 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 					model = trf.get_model();
 					path  = trf.get_path();
 					model.get_iter(out iter, path);
+					model.iter_parent(out parent, iter);
+					model.iter_parent(out parentparent, parent);
 					((MediaBrowserModel)model).set(iter,
 					                               MediaBrowserModel.Column.VIS_TEXT, tdx.title
 					                               );
-					model.iter_parent(out parent, iter);
-					((MediaBrowserModel)model).set(parent,
-					                               MediaBrowserModel.Column.VIS_TEXT, tdx.album
-					                               );
-					model.iter_parent(out parentparent, parent);
-					((MediaBrowserModel)model).set(parentparent,
-					                               MediaBrowserModel.Column.VIS_TEXT, tdx.artist
-					                               );
+					((MediaBrowserModel)model).move_title_iter_sorted(ref iter, ref tdx);
+					
+					// remove empty nodes
+					if(((MediaBrowserModel)model).iter_n_children(parent) == 0)
+						((MediaBrowserModel)model).remove(parent);
+					
+					if(((MediaBrowserModel)model).iter_n_children(parentparent) == 0)
+						((MediaBrowserModel)model).remove(parentparent);
+					
 				}
 				return false;
 			});

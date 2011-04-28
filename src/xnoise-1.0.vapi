@@ -87,8 +87,10 @@ namespace Xnoise {
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public int32 insert_title (Xnoise.TrackData td, string uri);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
+		public bool update_title (int32 id, ref Xnoise.TrackData td);
 		public int uri_entry_exists (string uri);
 		public void write_final_tracks_to_db (string[] final_tracklist) throws GLib.Error;
+		public bool in_transaction { get; }
 	}
 	[CCode (ref_function = "xnoise_fullscreen_toolbar_ref", unref_function = "xnoise_fullscreen_toolbar_unref", cheader_filename = "xnoise.h")]
 	public class FullscreenToolbar {
@@ -224,7 +226,6 @@ namespace Xnoise {
 		public void quit ();
 		public void save_activated_plugins ();
 		public void save_tracklist ();
-		public void write_final_tracks_to_db_job (Xnoise.Worker.Job job);
 		public static Xnoise.Main instance { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -333,6 +334,7 @@ namespace Xnoise {
 		public void insert_stream_sorted (Xnoise.TrackData[] tda);
 		public void insert_trackdata_sorted (Xnoise.TrackData[] tda);
 		public void insert_video_sorted (Xnoise.TrackData[] tda);
+		public void move_title_iter_sorted (ref Gtk.TreeIter org_iter, ref Xnoise.TrackData td);
 		public bool populate_model ();
 		public bool populating_model { get; }
 	}

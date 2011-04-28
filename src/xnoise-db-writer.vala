@@ -79,6 +79,11 @@ public class Xnoise.DbWriter : GLib.Object {
 
 	private bool begin_stmt_used;
 	
+	public bool in_transaction {
+		get {
+			return begin_stmt_used;
+		}
+	}
 	//SQLITE CONFIG STATEMENTS
 	private static const string STMT_PRAGMA_FOREIGN_KEYS =
 		"PRAGMA foreign_keys = ON;";
@@ -319,51 +324,51 @@ public class Xnoise.DbWriter : GLib.Object {
 		        
 	}
 
-	private static const string STMT_UPDATE_TITLE_NAME  = "UPDATE items SET title=? WHERE id=?";
-	private static const string STMT_UPDATE_ALBUM_NAME  = "UPDATE albums SET name=? WHERE id=(SELECT items.album FROM items WHERE items.id=?)";
-	private static const string STMT_UPDATE_ARTIST_NAME = "UPDATE artists SET name=? WHERE id=(SELECT items.artist FROM items WHERE items.id=?)";
+//	private static const string STMT_UPDATE_TITLE_NAME  = "UPDATE items SET title=? WHERE id=?";
+//	private static const string STMT_UPDATE_ALBUM_NAME  = "UPDATE albums SET name=? WHERE id=(SELECT items.album FROM items WHERE items.id=?)";
+//	private static const string STMT_UPDATE_ARTIST_NAME = "UPDATE artists SET name=? WHERE id=(SELECT items.artist FROM items WHERE items.id=?)";
 	
-	internal void update_title_name(int item_id, string? new_name) {
-		Statement stmt;
-		this.db.prepare_v2(STMT_UPDATE_TITLE_NAME, -1, out stmt);
-		stmt.reset();
-		if(new_name == null)
-			return;
-		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
-		   stmt.bind_int(2, item_id) != Sqlite.OK)
-			this.db_error();
-		
-		if(stmt.step() != Sqlite.DONE) 
-			this.db_error();
-	}
-	
-	internal void update_album_name(int item_id, string? new_name) {
-		Statement stmt;
-		this.db.prepare_v2(STMT_UPDATE_ALBUM_NAME, -1, out stmt);
-		stmt.reset();
-		if(new_name == null)
-			return;
-		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
-		   stmt.bind_int(2, item_id) != Sqlite.OK)
-			this.db_error();
-		
-		if(stmt.step() != Sqlite.DONE) 
-			this.db_error();
-	}
-	
-	internal void update_artist_name(int item_id, string? new_name) {
-		Statement stmt;
-		this.db.prepare_v2(STMT_UPDATE_ARTIST_NAME, -1, out stmt);
-		stmt.reset();
-		if(new_name == null)
-			return;
-		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
-		   stmt.bind_int(2, item_id) != Sqlite.OK)
-			this.db_error();
-		
-		if(stmt.step() != Sqlite.DONE) 
-			this.db_error();
-	}
+//	internal void update_title_name(int item_id, string? new_name) {
+//		Statement stmt;
+//		this.db.prepare_v2(STMT_UPDATE_TITLE_NAME, -1, out stmt);
+//		stmt.reset();
+//		if(new_name == null)
+//			return;
+//		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
+//		   stmt.bind_int(2, item_id) != Sqlite.OK)
+//			this.db_error();
+//		
+//		if(stmt.step() != Sqlite.DONE) 
+//			this.db_error();
+//	}
+//	
+//	internal void update_album_name(int item_id, string? new_name) {
+//		Statement stmt;
+//		this.db.prepare_v2(STMT_UPDATE_ALBUM_NAME, -1, out stmt);
+//		stmt.reset();
+//		if(new_name == null)
+//			return;
+//		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
+//		   stmt.bind_int(2, item_id) != Sqlite.OK)
+//			this.db_error();
+//		
+//		if(stmt.step() != Sqlite.DONE) 
+//			this.db_error();
+//	}
+//	
+//	internal void update_artist_name(int item_id, string? new_name) {
+//		Statement stmt;
+//		this.db.prepare_v2(STMT_UPDATE_ARTIST_NAME, -1, out stmt);
+//		stmt.reset();
+//		if(new_name == null)
+//			return;
+//		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
+//		   stmt.bind_int(2, item_id) != Sqlite.OK)
+//			this.db_error();
+//		
+//		if(stmt.step() != Sqlite.DONE) 
+//			this.db_error();
+//	}
 	
 	public bool set_local_image_for_album(ref string artist,
 	                                      ref string album,
@@ -387,6 +392,8 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	private int handle_artist(ref string artist) {
+		// find artist, if available or create entry_album
+		// return id for artist
 		int artist_id = -1;
 
 		get_artist_id_statement.reset();
@@ -565,6 +572,39 @@ public class Xnoise.DbWriter : GLib.Object {
 		return val;
 	}
 
+	private static const string STMT_UPDATE_TITLE = "UPDATE items SET artist=?, album=?, title=? WHERE id=?";
+	public bool update_title(int32 id, ref TrackData td) {
+		int artist_id = handle_artist(ref td.artist);
+
+		if(artist_id == -1) {
+			print("Error importing artist for '%s' ! \n", td.artist);
+			return false;
+		}
+		int album_id = handle_album(ref artist_id, ref td.album);
+		if(album_id == -1) {
+			print("Error importing album for '%s' ! \n", td.album);
+			return false;
+		}
+		Statement stmt;
+		this.db.prepare_v2(STMT_UPDATE_TITLE, -1, out stmt);
+		
+		stmt.reset();
+		//print("%d %d %s %d\n", artist_id, album_id, td.title, id);
+		if(stmt.bind_int (1, artist_id) != Sqlite.OK ||
+		   stmt.bind_int (2, album_id)  != Sqlite.OK ||
+		   stmt.bind_text(3, td.title)  != Sqlite.OK ||
+		   stmt.bind_int (4, id)        != Sqlite.OK) {
+			this.db_error();
+			return false;
+		}
+		
+		if(stmt.step() != Sqlite.DONE) {
+			this.db_error();
+			return false;
+		}
+		return true;
+	}
+	
 	public int32 insert_title(TrackData td, string uri) {
 		// make entries in other tables and get references from there
 		int artist_id = handle_artist(ref td.artist);
