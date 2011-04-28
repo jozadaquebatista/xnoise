@@ -43,6 +43,13 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	public signal void sign_finish();
 
 	public TagTitleEditor(ref TreeRowReference _treerowref) {
+		if(!_treerowref.valid()) {
+			Idle.add( () => {
+				sign_finish();
+				return false;
+			});
+			return;
+		}
 		treerowref = _treerowref;
 		xn = Main.instance;
 		builder = new Gtk.Builder();

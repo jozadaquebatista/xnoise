@@ -106,11 +106,28 @@ public class Xnoise.MediaImporter : GLib.Object {
 			return;
 		dbw.begin_transaction();
 		
-		bool retval = dbw.update_title(item_id, ref td);		
-//		dbw.update_title_name(item_id, td.title);
-//		dbw.update_album_name(item_id, td.album);
-//		dbw.update_artist_name(item_id, td.artist);
+		dbw.update_title(item_id, ref td);		
 		dbw.commit_transaction();
+	}
+	
+	internal void update_artist_name(int32 item_id, ref string name) {
+		if(global.media_import_in_progress == true)
+			return;
+		dbw.begin_transaction();
+		dbw.update_artist_name(item_id, name);
+		dbw.commit_transaction();
+	}
+	
+	internal void update_album_name(int32 item_id, ref string name) {
+		if(global.media_import_in_progress == true)
+			return;
+		dbw.begin_transaction();
+		dbw.update_album_name(item_id, name);
+		dbw.commit_transaction();
+	}
+	
+	public string? get_uri_for_item_id(int32 id) {
+		return dbw.get_uri_for_item_id(id);
 	}
 
 	internal void import_media_groups(string[] list_of_streams, string[] list_of_files, string[] list_of_folders, uint msg_id, bool full_rescan = true, bool interrupted_populate_model = false) {

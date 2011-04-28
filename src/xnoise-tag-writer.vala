@@ -28,27 +28,30 @@
  * 	Jörn Magens
  */
 
-	// Track meta information class, as defined in xnoise-misc.vala
-	//public class Xnoise.TrackData {
-	//  public string? artist = null;
-	//  public string? album = null;
-	//  public string? title = null;
-	//  public string? Genre = null;
-	//  public uint Year = 0;
-	//  public uint Tracknumber = 0;
-	//  public int32 Length = 0;
-	//  public int Bitrate = 0;
-	//  public MediaType Mediatype = MediaType.UNKNOWN;
-	//  public string? Uri = null;
-	//}
+
+// Track meta information class, as defined in xnoise-misc.vala
+//public class Xnoise.TrackData {
+//  public string? artist = null;
+//  public string? album = null;
+//  public string? title = null;
+//  public string? Genre = null;
+//  public uint Year = 0;
+//  public uint Tracknumber = 0;
+//  public int32 Length = 0;
+//  public int Bitrate = 0;
+//  public MediaType Mediatype = MediaType.UNKNOWN;
+//  public string? Uri = null;
+//}
 
 
 public class Xnoise.TagWriter {
 //	public TagWriter() {
 //		print("construct TagWriter\n");
 //	}
-	public bool write_tag(File file, TrackData? td) {
+	public bool write_tag(File? file, TrackData? td) {
 		// does writes for values that are different from default values
+		if(file == null)
+			return false;
 		if(td == null)
 			return false;
 		bool retval = false;
@@ -87,5 +90,66 @@ public class Xnoise.TagWriter {
 		taglib_file = null;
 		return retval;
 	}
+
+	public bool write_artist(File? file, string? artist) {
+		// does writes for values that are different from default values
+		if(file == null)
+			return false;
+		if(artist == null)
+			return false;
+		bool retval = false;
+
+		string path = null;
+		path = file.get_path();
+		if(path == null)
+			return false;
+		
+		TagLib.File taglib_file = null;
+		taglib_file = new TagLib.File(path);
+		if(taglib_file!=null) {
+			unowned TagLib.Tag t = taglib_file.tag;
+			if(t != null) {
+				if(artist != "")
+					t.artist = artist;
+				else
+					return false;
+								
+				retval = taglib_file.save();
+			}
+		}
+		taglib_file = null;
+		return retval;
+	}
+
+	public bool write_album(File? file, string? album) {
+		// does writes for values that are different from default values
+		if(file == null)
+			return false;
+		if(album == null)
+			return false;
+		bool retval = false;
+
+		string path = null;
+		path = file.get_path();
+		if(path == null)
+			return false;
+		
+		TagLib.File taglib_file = null;
+		taglib_file = new TagLib.File(path);
+		if(taglib_file!=null) {
+			unowned TagLib.Tag t = taglib_file.tag;
+			if(t != null) {
+				if(album != "")
+					t.album = album;
+				else
+					return false;
+								
+				retval = taglib_file.save();
+			}
+		}
+		taglib_file = null;
+		return retval;
+	}
+
 }
 

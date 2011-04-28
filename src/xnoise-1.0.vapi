@@ -85,6 +85,7 @@ namespace Xnoise {
 		public string[] get_media_folders ();
 		public int get_track_id_for_uri (string uri);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
+		public string? get_uri_for_item_id (int32 id);
 		public int32 insert_title (Xnoise.TrackData td, string uri);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public bool update_title (int32 id, ref Xnoise.TrackData td);
@@ -342,6 +343,7 @@ namespace Xnoise {
 	public class MediaImporter : GLib.Object {
 		public MediaImporter ();
 		public async void add_local_tags (GLib.File dir, Xnoise.Worker.Job job);
+		public string? get_uri_for_item_id (int32 id);
 		public Xnoise.DbWriter? dbw { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -448,7 +450,9 @@ namespace Xnoise {
 	[CCode (ref_function = "xnoise_tag_writer_ref", unref_function = "xnoise_tag_writer_unref", cheader_filename = "xnoise.h")]
 	public class TagWriter {
 		public TagWriter ();
-		public bool write_tag (GLib.File file, Xnoise.TrackData? td);
+		public bool write_album (GLib.File? file, string? album);
+		public bool write_artist (GLib.File? file, string? artist);
+		public bool write_tag (GLib.File? file, Xnoise.TrackData? td);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TextColumn : Gtk.TreeViewColumn {
@@ -578,6 +582,7 @@ namespace Xnoise {
 			public int[] counter;
 			public Xnoise.DndData[] dnd_data;
 			public int64 id;
+			public int32[] id_array;
 			public Xnoise.MediaData[] media_dat;
 			public void* p_arg;
 			public Xnoise.Worker.SyncWorkFunc? s_func;

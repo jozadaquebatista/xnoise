@@ -1216,6 +1216,8 @@ struct _XnoiseWorkerJob {
 	gint track_dat_length1;
 	XnoiseDndData* dnd_data;
 	gint dnd_data_length1;
+	gint32* id_array;
+	gint id_array_length1;
 	gint counter[4];
 	gint32 big_counter[4];
 	gint64 id;
@@ -1307,6 +1309,7 @@ XnoiseTrackData** xnoise_db_browser_get_titles_with_data (XnoiseDbBrowser* self,
 GType xnoise_db_writer_get_type (void) G_GNUC_CONST;
 XnoiseDbWriter* xnoise_db_writer_new (GError** error);
 XnoiseDbWriter* xnoise_db_writer_construct (GType object_type, GError** error);
+gchar* xnoise_db_writer_get_uri_for_item_id (XnoiseDbWriter* self, gint32 id);
 gboolean xnoise_db_writer_set_local_image_for_album (XnoiseDbWriter* self, gchar** artist, gchar** album, const gchar* image_path);
 gchar** xnoise_db_writer_get_media_folders (XnoiseDbWriter* self, int* result_length1);
 gboolean xnoise_db_writer_get_trackdata_for_stream (XnoiseDbWriter* self, const gchar* uri, XnoiseTrackData** val);
@@ -1540,6 +1543,7 @@ gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserMode
 XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_new (XnoiseMediaBrowserModel* mbm);
 XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_construct (GType object_type, XnoiseMediaBrowserModel* mbm);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
+gchar* xnoise_media_importer_get_uri_for_item_id (XnoiseMediaImporter* self, gint32 id);
 GType xnoise_worker_job_get_type (void) G_GNUC_CONST;
 void xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir, XnoiseWorkerJob* job, GAsyncReadyCallback _callback_, gpointer _user_data_);
 void xnoise_media_importer_add_local_tags_finish (XnoiseMediaImporter* self, GAsyncResult* _res_);
@@ -1691,6 +1695,8 @@ void xnoise_value_take_tag_writer (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_tag_writer (const GValue* value);
 GType xnoise_tag_writer_get_type (void) G_GNUC_CONST;
 gboolean xnoise_tag_writer_write_tag (XnoiseTagWriter* self, GFile* file, XnoiseTrackData* td);
+gboolean xnoise_tag_writer_write_artist (XnoiseTagWriter* self, GFile* file, const gchar* artist);
+gboolean xnoise_tag_writer_write_album (XnoiseTagWriter* self, GFile* file, const gchar* album);
 XnoiseTagWriter* xnoise_tag_writer_new (void);
 XnoiseTagWriter* xnoise_tag_writer_construct (GType object_type);
 GType xnoise_text_column_get_type (void) G_GNUC_CONST;

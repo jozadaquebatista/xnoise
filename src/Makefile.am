@@ -58,6 +58,7 @@ xnoise_SOURCES = \
     xnoise-plugin-manager-tree.vala \
     xnoise-screensaver-manager.vala \
     xnoise-settings-dialog.vala \
+    xnoise-tag-artistalbum-editor.vala \
     xnoise-tag-reader.vala \
     xnoise-tag-title-editor.vala \
     xnoise-tag-writer.vala \

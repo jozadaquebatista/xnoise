@@ -265,11 +265,17 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				}
 			}
 			case 3: {
-				//TODO: Handle listed data seperately, or not at all
+				MediaBrowserModel.CollectionType ct = MediaBrowserModel.CollectionType.UNKNOWN;
+
 				TreePath tp = filtermodel.convert_path_to_child_path(treepath);
+				TreeIter iter;
+				this.mediabrowsermodel.get_iter(out iter, tp);
+				this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.COLL_TYPE, ref ct);
+				if(ct != MediaBrowserModel.CollectionType.HIERARCHICAL)
+					return false;
 				treerowref = new TreeRowReference(this.mediabrowsermodel, tp);
 				rightclick_menu_popup(treepath.get_depth(), e.time);
-				return false; //TODO check if this is right
+				return false;
 			}
 			default: {
 				break;
@@ -282,6 +288,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private void rightclick_menu_popup(int depth, uint activateTime) {
 		switch(depth) {
+			case 1:
+				this.menu = create_edit_artist_tag_menu();
+				break;
+			case 2:
+				this.menu = create_edit_album_tag_menu();
+				break;
 			case 3:
 				this.menu = create_edit_title_tag_menu();
 				break;
@@ -295,6 +307,40 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private TreeRowReference treerowref = null;
 	
+	private Menu create_edit_artist_tag_menu() {
+		var rightmenu = new Menu();
+		var popup_image = new Gtk.Image();
+		popup_image.set_from_stock(Gtk.Stock.INFO, IconSize.MENU);
+		var label = new Label(_("Change artist name"));
+		label.set_alignment(0, 0);
+		var menu_item = new MenuItem();
+		var hbox = new HBox(false, 1);
+		hbox.pack_start(popup_image, false, false, 2);
+		hbox.pack_start(label, true, true, 0);
+		menu_item.add(hbox);
+		menu_item.activate.connect(this.open_tagartist_changer);
+		rightmenu.append(menu_item);
+		rightmenu.show_all();
+		return rightmenu;
+	}
+
+	private Menu create_edit_album_tag_menu() {
+		var rightmenu = new Menu();
+		var popup_image = new Gtk.Image();
+		popup_image.set_from_stock(Gtk.Stock.INFO, IconSize.MENU);
+		var label = new Label(_("Change album name"));
+		label.set_alignment(0, 0);
+		var menu_item = new MenuItem();
+		var hbox = new HBox(false, 1);
+		hbox.pack_start(popup_image, false, false, 2);
+		hbox.pack_start(label, true, true, 0);
+		menu_item.add(hbox);
+		menu_item.activate.connect(this.open_tagalbum_changer);
+		rightmenu.append(menu_item);
+		rightmenu.show_all();
+		return rightmenu;
+	}
+
 	private Menu create_edit_title_tag_menu() {
 		var rightmenu = new Menu();
 		var popup_image = new Gtk.Image();
@@ -317,6 +363,23 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		tte = new TagTitleEditor(ref treerowref);
 		tte.sign_finish.connect( () => {
 			tte = null;
+			menu = null;
+		});
+	}
+
+	private TagArtistAlbumEditor tae;
+	private void open_tagartist_changer() {
+		tae = new TagArtistAlbumEditor(ref treerowref);
+		tae.sign_finish.connect( () => {
+			tae = null;
+			menu = null;
+		});
+	}
+
+	private void open_tagalbum_changer() {
+		tae = new TagArtistAlbumEditor(ref treerowref);
+		tae.sign_finish.connect( () => {
+			tae = null;
 			menu = null;
 		});
 	}

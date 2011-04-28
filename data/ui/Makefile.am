@@ -5,6 +5,7 @@ ui_DATA = \
         main_window.ui \
         settings.ui \
         metadat_title.ui \
+        metadat_artist_album.ui \
         main_ui.xml \
         xnoise_bruit_48x48.png \
         xnoise_bruit_16x16.png \
