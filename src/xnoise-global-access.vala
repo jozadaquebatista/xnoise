@@ -47,26 +47,29 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	
 		this.notify.connect( (s, p) => {
 			//print("p.name: %s\n", p.name);
-			switch(p.name) {
-				case "current-artist":
-					this.tag_changed(ref this._current_uri, "artist", this._current_artist);
-					break;
-				case "current-album":
-					this.tag_changed(ref this._current_uri, "album", this._current_album);
-					break;
-				case "current-title":
-					this.tag_changed(ref this._current_uri, "title", this._current_title);
-					break;
-				case "current-location":
-					this.tag_changed(ref this._current_uri, "location", this._current_location);
-					break;
-				case "current-genre":
-					this.tag_changed(ref this._current_uri, "genre", this._current_genre);
-					break;
-				case "current-org":
-					this.tag_changed(ref this._current_uri, "organization", this._current_organization);
-					break;
-			}
+			Idle.add( () => {
+				switch(p.name) {
+					case "current-artist":
+						this.tag_changed(ref this._current_uri, "artist", this._current_artist);
+						break;
+					case "current-album":
+						this.tag_changed(ref this._current_uri, "album", this._current_album);
+						break;
+					case "current-title":
+						this.tag_changed(ref this._current_uri, "title", this._current_title);
+						break;
+					case "current-location":
+						this.tag_changed(ref this._current_uri, "location", this._current_location);
+						break;
+					case "current-genre":
+						this.tag_changed(ref this._current_uri, "genre", this._current_genre);
+						break;
+					case "current-org":
+						this.tag_changed(ref this._current_uri, "organization", this._current_organization);
+						break;
+				}
+				return false;
+			});
 		});
 	}
 
@@ -260,6 +263,16 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		}
 		File file = File.new_for_uri(newuri);
 		basename = file.get_basename();
+		Worker.Job job;
+		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.set_meta_information_job);
+		job.set_arg("newuri", newuri);
+		job.set_arg("basename", basename);
+		worker.push_job(job);
+	}
+	
+	private void set_meta_information_job(Worker.Job job) {
+		string newuri   = (string)job.get_arg("newuri");
+		string basename = (string)job.get_arg("basename");
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
@@ -270,23 +283,30 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		}
 		TrackData td;
 		if(dbb.get_trackdata_for_uri(newuri, out td)) {
-			current_artist = td.artist;
-			current_album  = td.album;
-			current_title  = td.title;
-			current_genre  = td.genre;
+			job.set_arg("td", td);
+			Idle.add( () => {
+				current_artist = ((TrackData)job.get_arg("td")).artist;
+				current_album  = ((TrackData)job.get_arg("td")).album;
+				current_title  = ((TrackData)job.get_arg("td")).title;
+				current_genre  = ((TrackData)job.get_arg("td")).genre;
+				return false;
+			});
 		}
 		else { 
-			current_artist = null;
-			current_album = null;
+			Idle.add( () => {
+				current_artist = null;
+				current_album = null;
 			
-			if(basename.last_index_of(".") != -1) 
-				current_title = prepare_name_from_filename(basename);
-			else 
-				current_title = basename;
+				if(((string)job.get_arg("basename")).last_index_of(".") != -1) 
+					current_title = prepare_name_from_filename((string)job.get_arg("basename"));
+				else 
+					current_title = (string)job.get_arg("basename");
 			
-			current_location = null;
-			current_genre = null;
-			current_organization = null;
+				current_location = null;
+				current_genre = null;
+				current_organization = null;
+				return false;
+			});
 		}
 	}
 	
