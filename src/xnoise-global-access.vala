@@ -264,7 +264,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		try {
 			dbb = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}

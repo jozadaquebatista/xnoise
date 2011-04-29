@@ -118,7 +118,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		try {
 			dbb = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}
@@ -221,7 +221,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			try {
 				dbb = new DbBrowser();
 			}
-			catch(Error e) {
+			catch(DbError e) {
 				print("%s\n", e.message);
 				return;
 			}
@@ -619,7 +619,7 @@ private class Xnoise.ImportInfoBar : GLib.Object {
 			try {
 				dbb = new DbBrowser();
 			}
-			catch(Error e) {
+			catch(DbError e) {
 				print("%s\n", e.message);
 				return false;
 			}

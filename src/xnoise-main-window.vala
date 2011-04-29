@@ -315,7 +315,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		try {
 			dbBr = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}

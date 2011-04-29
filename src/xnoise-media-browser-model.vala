@@ -70,7 +70,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private Gdk.Pixbuf video_pixb;
 	private Gdk.Pixbuf videos_pixb;
 	private Gdk.Pixbuf radios_pixb;
-
+	private unowned Main xn;
+	
 	private bool _populating_model = false;
 	
 	public bool populating_model {
@@ -80,6 +81,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 	
 	construct {
+		xn = Main.instance;
 		theme = IconTheme.get_default();
 		theme.changed.connect(update_pixbufs);
 		set_pixbufs();
@@ -665,11 +667,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			populate_model_cancellable.reset();
 		}
 		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_listed_data);
+		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_listed_data_job);
 		job.cancellable = populate_model_cancellable;
 		worker.push_job(job);
 		
-		job = new Worker.Job(1, Worker.ExecutionType.REPEATED, this.handle_hierarchical_data, null);
+		job = new Worker.Job(1, Worker.ExecutionType.REPEATED, this.handle_hierarchical_data_job, null);
 		job.cancellable = populate_model_cancellable;
 		job.finished.connect( (j) => { 
 			_populating_model = false;
@@ -679,7 +681,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		return false;
 	}
 	
-	private void handle_listed_data(Worker.Job job) {
+	private void handle_listed_data_job(Worker.Job job) {
 		var stream_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_streams);
 		stream_job.cancellable = populate_model_cancellable;
 		worker.push_job(stream_job);
@@ -694,7 +696,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		try {
 			dbb = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}		
@@ -738,7 +740,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		try {
 			dbb = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}		
@@ -778,7 +780,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	//repeat until returns false
-	private bool handle_hierarchical_data(Worker.Job job) {
+	private bool handle_hierarchical_data_job(Worker.Job job) {
 		DbBrowser dbb = null;
 		//TODO: Use Cancellable
 		if(job.cancellable.is_cancelled())
@@ -788,7 +790,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			try {
 				dbb = new DbBrowser();
 			}
-			catch(Error e) {
+			catch(DbError e) {
 				print("%s\n", e.message);
 				dbb = null;
 				return false;
@@ -806,7 +808,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				try {
 					dbb = new DbBrowser();
 				}
-				catch(Error e) {
+				catch(DbError e) {
 					print("%s\n", e.message);
 					dbb = null;
 					return false;
@@ -855,11 +857,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		try {
 			dbb = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}
-		artistArray = dbb.get_some_artists_2(ARTIST_FOR_ONE_JOB, job.big_counter[1]);
+		artistArray = dbb.get_some_artists(ARTIST_FOR_ONE_JOB, job.big_counter[1]);
 		//print("artistArray lenght init %d\n", artistArray.length);
 		job.big_counter[1] += artistArray.length;
 		
@@ -945,12 +947,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		try {
 			dbb = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}		
 		string artist = (string)job.get_arg("artist");
-		string[] albumArray = dbb.get_albums_2(artist);
+		string[] albumArray = dbb.get_albums(artist);
 		
 		job.set_arg("albumArray", albumArray);
 		Idle.add( () => {
@@ -1003,7 +1005,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		try {
 			dbb = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}
@@ -1052,119 +1054,173 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		});
 	}
 
-	public TrackData[] get_trackdata_listed(Gtk.TreePath treepath) {
-		//this is only used for path.get_depth() == 2 !
-		int dbid = -1;
-		MediaType mtype = MediaType.UNKNOWN;
-		TreeIter iter;
-		TrackData[] tdata = {};
+	private void queue_listed_data_job(Worker.Job job) {
+		TrackData[] tda = job.track_dat;
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
-			return tdata;
-		}		
-		this.get_iter(out iter, treepath);
-		this.get(iter,
-		         Column.DB_ID, ref dbid,
-		         Column.MEDIATYPE, ref mtype
-		         );
-		if(dbid!=-1) {
-			TrackData td;
-			switch(mtype) {
-				case MediaType.VIDEO: {
-					if(dbb.get_trackdata_for_id(dbid, out td)) tdata += td;
-					break;
+			return;
+		}
+		foreach(MediaData md in job.media_dat) {
+			if(md.id > 0) {
+				TrackData td;
+				switch(md.mediatype) {
+					case MediaType.VIDEO: {
+						if(dbb.get_trackdata_for_id(md.id, out td))
+							tda += td;
+						break;
+					}
+					case MediaType.STREAM: {
+						if(dbb.get_stream_td_for_id(md.id, out td))
+							tda += td;
+						break;
+					}
+					default:
+						break;
 				}
-				case MediaType.STREAM: {
-					if(dbb.get_stream_td_for_id(dbid, out td)) tdata += td;
-					break;
-				}
-				default:
-					break;
 			}
 		}
-		return tdata;
+		job.track_dat = tda;
+		//Add tracks in default thread
+		Idle.add( () => {
+			xn.tl.tracklistmodel.add_tracks(job.track_dat, true);
+			job.track_dat = null;
+			job.media_dat = null;
+			return false;
+		});
 	}
-
-	public TrackData[] get_trackdata_hierarchical(Gtk.TreePath treepath) {
-		TreeIter iter, iterChild;
-		int dbid = -1;
-		TrackData[] tdata = {};
-		if(treepath.get_depth() ==1)
-			return tdata;
+	
+	private void get_mediadata_of_listed(ref MediaData[] mda, Gtk.TreePath treepath) {
+		//this is only used for path.get_depth() == 2 !
+		TreeIter iter;
+		MediaData[] mda_local = mda;
+		MediaData md = MediaData();
+		md.id = -1;
+		this.get_iter(out iter, treepath);
+		this.get(iter,
+		         Column.VIS_TEXT,  ref md.name,
+		         Column.DB_ID,     ref md.id,
+		         Column.MEDIATYPE, ref md.mediatype
+		         );
+		if(md.id > -1)
+			mda_local += md;
+		
+		mda = mda_local;
+	}
+	
+	private void queue_hierarchical_data_job(Worker.Job job) {
+		TrackData[] tda = job.track_dat;
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
-			return tdata;
+			return;
 		}
+		foreach(MediaData md in job.media_dat) {
+			TrackData td;
+			if(dbb.get_trackdata_for_id(md.id, out td)) 
+				tda += td;
+		}
+		job.track_dat = tda;
+		//Add tracks in default thread
+		Idle.add( () => {
+			xn.tl.tracklistmodel.add_tracks(job.track_dat, true);
+			job.track_dat = null;
+			job.media_dat = null;
+			return false;
+		});
+	}
+	
+	private void get_mediadata_of_hierarchical(ref MediaData[] mda, Gtk.TreePath treepath) {
+		TreeIter iter, iterChild;
+		MediaData[] mda_local = mda;
+		if(treepath.get_depth() ==1)
+			return;
 		switch(treepath.get_depth()) {
 			case 1: //ARTIST (this case is currently not used)
 				break;
 			case 2: //ALBUM
 				this.get_iter(out iter, treepath);
 
-				for(int i = 0; i < this.iter_n_children(iter); i++) {
-					dbid = -1;
+				for(int i = 0; i < this.iter_n_children(iter); i++) { // for each track
 					this.iter_nth_child(out iterChild, iter, i);
-					this.get(iterChild, Column.DB_ID, ref dbid);
-					if(dbid==-1)
+					
+					MediaData md = MediaData();
+					md.id = -1;
+					
+					this.get(iterChild,
+							 Column.VIS_TEXT,  ref md.name,
+							 Column.DB_ID,     ref md.id,
+							 Column.MEDIATYPE, ref md.mediatype
+							 );
+					if(md.id < 0)
 						continue;
-					TrackData td;
-					if(dbb.get_trackdata_for_id(dbid, out td)) 
-						tdata += td;
+					 mda_local += md;
 				}
 				break;
 			case 3: //TITLE
-				dbid = -1;
 				this.get_iter(out iter, treepath);
-				this.get(iter, Column.DB_ID, ref dbid);
-				if(dbid==-1) 
-					break;
-				TrackData td;
-				if(dbb.get_trackdata_for_id(dbid, out td)) 
-					tdata += td;
+				
+				MediaData md = MediaData();
+				md.id = -1;
+				
+				this.get(iter,
+						 Column.VIS_TEXT,  ref md.name,
+						 Column.DB_ID,     ref md.id,
+						 Column.MEDIATYPE, ref md.mediatype
+						 );
+				if(md.id < 0)
+					return;
+				
+				mda_local += md;
 				break;
+			default: break;
 		}
-		return tdata;
+		mda = mda_local;
 	}
 
-	public TrackData[] get_trackdata_for_treepath(Gtk.TreePath treepath) {
+	public void queue_path_for_tracklist(Gtk.TreePath treepath) {
+		handle_queue_path_for_tracklist(treepath);
+	}
+	
+	private void handle_queue_path_for_tracklist(Gtk.TreePath treepath) {
 		TreeIter iter;
 		CollectionType br_ct = CollectionType.UNKNOWN;
-		TrackData[] tdata = {};
 		this.get_iter(out iter, treepath);
 		this.get(iter, Column.COLL_TYPE, ref br_ct);
 		if(br_ct == CollectionType.LISTED) {
-			return get_trackdata_listed(treepath);
+			var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.queue_listed_data_job);
+			job.media_dat = {};
+			job.track_dat = {};
+			get_mediadata_of_listed(ref job.media_dat, treepath);
+			worker.push_job(job);
 		}
 		else if(br_ct == CollectionType.HIERARCHICAL) {
-			return get_trackdata_hierarchical(treepath);
+			var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.queue_hierarchical_data_job);
+			job.media_dat = {};
+			job.track_dat = {};
+			get_mediadata_of_hierarchical(ref job.media_dat, treepath);
+			worker.push_job(job);
 		}
-		return tdata;
 	}
 
 	//TODO: How to do this for videos/streams?
 	public DndData[] get_dnd_data_for_path(ref TreePath treepath) {
 		TreeIter iter, iterChild, iterChildChild;
-//		int32[] urilist = {};
 		DndData[] dnd_data_array = {};
 		MediaType mtype = MediaType.UNKNOWN;
 		int dbid = -1;
 		//string uri;
-//		TreePath treepath;
 		CollectionType br_ct = CollectionType.UNKNOWN;
-//		treepath = this.get_path(iter);
 		bool visible = false;
 		this.get_iter(out iter, treepath);
 		switch(treepath.get_depth()) {
 			case 1:
-			//this.get_iter(out iter, treepath);
 				this.get(iter, Column.COLL_TYPE, ref br_ct);
 				if(br_ct == CollectionType.LISTED) {
 					dbid = -1;
@@ -1177,7 +1233,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						         Column.MEDIATYPE, ref mtype
 						         );
 						if(visible) {
-//							urilist += dbid;
 							DndData dnd_data = { dbid, (MediaType)mtype };
 							dnd_data_array += dnd_data;
 						}

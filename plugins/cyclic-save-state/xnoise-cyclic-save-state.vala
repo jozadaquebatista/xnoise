@@ -31,24 +31,16 @@
 using Xnoise;
 
 public class Xnoise.CyclicSaveState : GLib.Object, IPlugin {
-	private unowned Xnoise.Plugin _owner;
+	private unowned Xnoise.Plugin _owner; // the unowned owner
 
 	public Main xn { get; set; }
 	
-	public Xnoise.Plugin owner {
-		get {
-			return _owner;
-		}
-		set {
-			_owner = value;
-		}
+	public Xnoise.Plugin owner { 
+		get { return _owner; }
+		set { _owner = value; }
 	}
 
-	public string name { 
-		get {
-			return "CyclicSaveState";
-		} 
-	}
+	public string name { get { return "CyclicSaveState"; }}
 	
 	private uint source = 0;
 
@@ -56,7 +48,9 @@ public class Xnoise.CyclicSaveState : GLib.Object, IPlugin {
 		source = Timeout.add_seconds(60, () => {
 			if(MainContext.current_source().is_destroyed())
 				return false;
-			if(!global.media_import_in_progress) {
+			if(!global.media_import_in_progress && 
+			   !Main.instance.main_window.mediaBr.mediabrowsermodel.populating_model) {
+				
 				Main.instance.save_tracklist();
 				Main.instance.save_activated_plugins();
 				par.write_all_parameters_to_file();

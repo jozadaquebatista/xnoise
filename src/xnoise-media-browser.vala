@@ -463,14 +463,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	private void on_row_activated(Gtk.Widget sender, TreePath treepath, TreeViewColumn column) {
-		if(treepath.get_depth() > 1) {
-			TrackData[] td_list = mediabrowsermodel.get_trackdata_for_treepath(filtermodel.convert_path_to_child_path(treepath));
-			this.xn.tl.tracklistmodel.add_tracks(td_list, true);
-			td_list = null;
-		}
-		else {
+		if(treepath.get_depth() > 1)
+			mediabrowsermodel.queue_path_for_tracklist(filtermodel.convert_path_to_child_path(treepath));
+		else
 			this.expand_row(treepath, false);
-		}
 	}
 
 	public bool change_model_data() {

@@ -93,7 +93,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		try {
 			dbb = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}		

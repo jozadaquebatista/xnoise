@@ -364,7 +364,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 					dbb = new DbBrowser();
 			}
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}

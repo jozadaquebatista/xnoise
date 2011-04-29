@@ -117,7 +117,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 //			try {
 //				dbb = new DbBrowser(); //TODO: Evil code in this context
 //			}
-//			catch(Error e) {
+//			catch(DbError e) {
 //				print("%s\n", e.message);
 //				return false;
 //			}		

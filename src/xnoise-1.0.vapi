@@ -36,23 +36,23 @@ namespace Xnoise {
 	public class DbBrowser {
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate void ReaderCallback (Sqlite.Database database);
-		public DbBrowser () throws GLib.Error;
+		public DbBrowser () throws Xnoise.DbError;
 		public int count_artists_with_search (ref string searchtext);
 		public void do_callback_transaction (Xnoise.DbBrowser.ReaderCallback cb);
-		public string[] get_albums_2 (string artist);
-		public string[] get_artists_2 ();
+		public string[] get_albums (string artist);
+		public string[] get_artists ();
 		public string[] get_lastused_uris ();
 		public string? get_local_image_path_for_track (ref string? uri);
 		public string[] get_media_files ();
 		public string[] get_media_folders ();
 		public string? get_single_stream_uri (string name);
-		public string[] get_some_artists_2 (int limit, int offset);
+		public string[] get_some_artists (int limit, int offset);
 		public Xnoise.MediaData[] get_stream_data (ref string searchtext);
 		public bool get_stream_for_id (int id, out string uri);
 		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 		public Xnoise.StreamData[] get_streams ();
 		public Xnoise.TrackData[] get_titles_with_data (string artist, string album);
-		public Xnoise.MediaData[] get_titles_with_mediatypes_and_ids_2 (string artist, string album);
+		public Xnoise.MediaData[] get_titles_with_mediatypes_and_ids (string artist, string album);
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
@@ -329,9 +329,6 @@ namespace Xnoise {
 		public void filter ();
 		public Xnoise.DndData[] get_dnd_data_for_path (ref Gtk.TreePath treepath);
 		public int get_max_icon_width ();
-		public Xnoise.TrackData[] get_trackdata_for_treepath (Gtk.TreePath treepath);
-		public Xnoise.TrackData[] get_trackdata_hierarchical (Gtk.TreePath treepath);
-		public Xnoise.TrackData[] get_trackdata_listed (Gtk.TreePath treepath);
 		public void insert_stream_sorted (Xnoise.TrackData[] tda);
 		public void insert_trackdata_sorted (Xnoise.TrackData[] tda);
 		public void insert_video_sorted (Xnoise.TrackData[] tda);
@@ -339,6 +336,7 @@ namespace Xnoise {
 		public void move_artist_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_title_iter_sorted (ref Gtk.TreeIter org_iter, ref Xnoise.TrackData td);
 		public bool populate_model ();
+		public void queue_path_for_tracklist (Gtk.TreePath treepath);
 		public bool populating_model { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]

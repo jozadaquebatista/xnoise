@@ -550,7 +550,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		try {
 			dbBr = new DbBrowser();
 		}
-		catch(Error e) {
+		catch(DbError e) {
 			print("%s\n", e.message);
 			return;
 		}
