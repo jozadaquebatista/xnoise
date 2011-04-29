@@ -263,8 +263,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		}
 		File file = File.new_for_uri(newuri);
 		basename = file.get_basename();
-		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.set_meta_information_job);
+		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.set_meta_information_job);
 		job.set_arg("newuri", newuri);
 		job.set_arg("basename", basename);
 		worker.push_job(job);
@@ -272,7 +271,6 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	
 	private void set_meta_information_job(Worker.Job job) {
 		string newuri   = (string)job.get_arg("newuri");
-		string basename = (string)job.get_arg("basename");
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();

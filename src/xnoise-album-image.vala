@@ -68,12 +68,10 @@ public class Xnoise.AlbumImage : Gtk.Image {
 				global.check_image_for_current_track();
 				if(timeout != 0)
 					Source.remove(timeout);
-				timeout = Timeout.add_seconds_full(GLib.Priority.DEFAULT,
-				                                    1,
-				                                    () => {
-				                                    	search_image(current_uri1);
-				                                    	return false;
-				                                    });
+				timeout = Timeout.add_seconds(1, () => {
+					search_image(current_uri1);
+					return false;
+				});
 			}
 			else {
 				File f = File.new_for_path(global.image_path_small);
@@ -154,24 +152,9 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	}
 
 	private bool set_local_image_if_available(ref string _artist, ref string _album) {
-//		var image_path = GLib.Path.build_filename(global.settings_folder,
-//		                                          "album_images",
-//		                                          null
-//		                                          );
-
-//		var fileout = File.new_for_path(GLib.Path.build_filename(
-//		                                          image_path,
-//		                                          escape_for_local_folder_search(_artist.down()),
-//		                                          escape_for_local_folder_search(check_album_name(_artist, _album)),
-//		                                          escape_for_local_folder_search(check_album_name(_artist, _album)) + "_" + default_size,
-//		                                          null)
-//		                                );
 		var fileout = get_albumimage_for_artistalbum(_artist, _album, default_size);
-		//print("xyz local: %s\n", fileout.get_path());
 		if(fileout.query_exists(null)) {
-			//print("ai exists\n");
 			set_image_via_idle(fileout.get_path());
-			//update_image_path_in_db(ref _artist, ref _album, fileout.get_path());
 			return true;
 		}
 		return false;

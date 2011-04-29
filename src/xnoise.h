@@ -1536,7 +1536,6 @@ GType xnoise_dnd_data_get_type (void) G_GNUC_CONST;
 XnoiseDndData* xnoise_dnd_data_dup (const XnoiseDndData* self);
 void xnoise_dnd_data_free (XnoiseDndData* self);
 XnoiseDndData* xnoise_media_browser_model_get_dnd_data_for_path (XnoiseMediaBrowserModel* self, GtkTreePath** treepath, int* result_length1);
-gchar** xnoise_media_browser_model_build_uri_list_for_treepath (XnoiseMediaBrowserModel* self, GtkTreePath* treepath, XnoiseDbBrowser** dbb, int* result_length1);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
 gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserModel* self);

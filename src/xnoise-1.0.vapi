@@ -324,7 +324,6 @@ namespace Xnoise {
 		}
 		public string searchtext;
 		public MediaBrowserModel ();
-		public string[] build_uri_list_for_treepath (Gtk.TreePath treepath, ref Xnoise.DbBrowser dbb);
 		public void cancel_fill_model ();
 		public void filter ();
 		public Xnoise.DndData[] get_dnd_data_for_path (ref Gtk.TreePath treepath);

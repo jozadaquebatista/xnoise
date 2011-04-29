@@ -90,9 +90,8 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		
 		KeyFile kf = new GLib.KeyFile();
 		
-		foreach(unowned IParams ip in IParams_implementers) {
+		foreach(unowned IParams ip in IParams_implementers)
 			if(ip != null) ip.write_params_data();
-		}
 		
 		foreach(string key in ht_int.get_keys())
 			kf.set_integer(settings_int, key, ht_int.lookup(key));

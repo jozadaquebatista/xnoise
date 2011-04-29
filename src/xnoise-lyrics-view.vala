@@ -111,22 +111,6 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		artist = prepare_for_comparison(global.current_artist);
 		title  = prepare_for_comparison(global.current_title );
 		
-		// Look into db in case gPl does not provide the tag
-//		if((global.current_artist=="unknown artist")||(global.current_title =="unknown title" )) {
-//			DbBrowser dbb;
-//			try {
-//				dbb = new DbBrowser(); //TODO: Evil code in this context
-//			}
-//			catch(DbError e) {
-//				print("%s\n", e.message);
-//				return false;
-//			}		
-//			TrackData td;
-//			if(dbb.get_trackdata_for_uri(xn.gPl.uri, out td)) {
-//				artist = td.artist;
-//				title  = td.title;
-//			}
-//		}
 
 		//print("2. %s - %s\n", artist, title);
 		if((artist=="")||(artist==null)||(artist=="unknownartist")||
