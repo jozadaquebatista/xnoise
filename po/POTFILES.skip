@@ -12,3 +12,8 @@ src/xnoise-tray-icon.c
 src/xnoise-gst-player.c
 src/xnoise-videoscreen.c
 src/xnoise-media-importer.c
+data/ui/metadat_artist_album.ui
+data/ui/metadat_title.ui
+src/xnoise-media-browser.c
+src/xnoise-tag-artistalbum-editor.c
+src/xnoise-tag-title-editor.c
