@@ -35,39 +35,52 @@
  */
 
 public class Xnoise.GlobalAccess : GLib.Object {
-
+	private uint check_image_for_current_track_source = 0;
 	construct {
 		_settings_folder = 
 		GLib.Path.build_filename(GLib.Environment.get_user_config_dir(),
 		                         "xnoise",
 		                         null);
 		uri_changed.connect( (s,v) => {
-			this.set_meta_information(v);
+		//print("uri_changed\n");
+			current_artist = null;
+			current_album = null;
+			current_title = null;
+			current_location = null;
+			current_genre = null;
+			current_organization = null;
 		});
 	
 		this.notify.connect( (s, p) => {
 			//print("p.name: %s\n", p.name);
-			Idle.add( () => {
-				switch(p.name) {
-					case "current-artist":
-						this.tag_changed(ref this._current_uri, "artist", this._current_artist);
-						break;
-					case "current-album":
-						this.tag_changed(ref this._current_uri, "album", this._current_album);
-						break;
-					case "current-title":
-						this.tag_changed(ref this._current_uri, "title", this._current_title);
-						break;
-					case "current-location":
-						this.tag_changed(ref this._current_uri, "location", this._current_location);
-						break;
-					case "current-genre":
-						this.tag_changed(ref this._current_uri, "genre", this._current_genre);
-						break;
-					case "current-org":
-						this.tag_changed(ref this._current_uri, "organization", this._current_organization);
-						break;
-				}
+			switch(p.name) {
+				case "current-artist":
+					this.tag_changed(ref this._current_uri, "artist", this._current_artist);
+					break;
+				case "current-album":
+					this.tag_changed(ref this._current_uri, "album", this._current_album);
+					break;
+				case "current-title":
+					this.tag_changed(ref this._current_uri, "title", this._current_title);
+					break;
+				case "current-location":
+					this.tag_changed(ref this._current_uri, "location", this._current_location);
+					break;
+				case "current-genre":
+					this.tag_changed(ref this._current_uri, "genre", this._current_genre);
+					break;
+				case "current-org":
+					this.tag_changed(ref this._current_uri, "organization", this._current_organization);
+					break;
+			}
+			if(check_image_for_current_track_source != 0) {
+				Source.remove(check_image_for_current_track_source);
+				check_image_for_current_track_source = 0;
+			}
+			check_image_for_current_track_source = Timeout.add(200, () => {
+				if(MainContext.current_source().is_destroyed())
+					return false;
+				check_image_for_current_track();
 				return false;
 			});
 		});
@@ -95,7 +108,10 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	
 	public signal void sign_restart_song();
 	public signal void sign_song_info_required();
-
+	
+	public signal void sign_image_path_large_changed();
+	public signal void sign_image_path_small_changed();
+	
 	public signal void sign_notify_tracklistnotebook_switched(uint new_page_number);
 
 	// PRIVATE FIELDS
@@ -206,8 +222,31 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public string current_genre { get; set; default = null; }
 	public string current_organization { get; set; default = null; }
 	
-	public string? image_path_small { get; set; default = null; }
-	public string? image_path_large { get; set; default = null; }
+	private string? _image_path_small = null;
+	public string? image_path_small { 
+		get {
+			return _image_path_small;
+		}
+		set {
+			if(_image_path_small == value)
+				return;
+			_image_path_small = value;
+			sign_image_path_small_changed();
+		}
+	}
+
+	private string? _image_path_large = null;
+	public string? image_path_large { 
+		get {
+			return _image_path_large;
+		}
+		set {
+			if(_image_path_large == value)
+				return;
+			_image_path_large = value;
+			sign_image_path_large_changed();
+		}
+	}
 	
 	// PUBLIC GLOBAL FUNCTIONS
 	public void reset_position_reference() {
@@ -245,67 +284,6 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		else
 			image_path_large = large_name;
 		image_path_small = small_name;
-	}
-	
-	// set meta information after start of new track/stream from 
-	// database. If not available, just reset tag info and wait for 
-	// data from gstreamer
-	private void set_meta_information(string? newuri) {
-		string basename = null;
-		if((newuri == "")|(newuri == null)) {
-			current_artist = null;
-			current_album = null;
-			current_title = null;
-			current_location = null;
-			current_genre = null;
-			current_organization = null;
-			return;
-		}
-		File file = File.new_for_uri(newuri);
-		basename = file.get_basename();
-		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.set_meta_information_job);
-		job.set_arg("newuri", newuri);
-		job.set_arg("basename", basename);
-		worker.push_job(job);
-	}
-	
-	private void set_meta_information_job(Worker.Job job) {
-		string newuri   = (string)job.get_arg("newuri");
-		DbBrowser dbb = null;
-		try {
-			dbb = new DbBrowser();
-		}
-		catch(DbError e) {
-			print("%s\n", e.message);
-			return;
-		}
-		TrackData td;
-		if(dbb.get_trackdata_for_uri(newuri, out td)) {
-			job.set_arg("td", td);
-			Idle.add( () => {
-				current_artist = ((TrackData)job.get_arg("td")).artist;
-				current_album  = ((TrackData)job.get_arg("td")).album;
-				current_title  = ((TrackData)job.get_arg("td")).title;
-				current_genre  = ((TrackData)job.get_arg("td")).genre;
-				return false;
-			});
-		}
-		else { 
-			Idle.add( () => {
-				current_artist = null;
-				current_album = null;
-			
-				if(((string)job.get_arg("basename")).last_index_of(".") != -1) 
-					current_title = prepare_name_from_filename((string)job.get_arg("basename"));
-				else 
-					current_title = (string)job.get_arg("basename");
-			
-				current_location = null;
-				current_genre = null;
-				current_organization = null;
-				return false;
-			});
-		}
 	}
 	
 	public void prev() {

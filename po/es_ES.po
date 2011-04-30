@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-21 12:40+0200\n"
+"POT-Creation-Date: 2011-04-29 15:49+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
@@ -58,21 +58,21 @@ msgstr ""
 msgid "xnoise - Add media to library"
 msgstr "xnoise - Agregar medios a la biblioteca"
 
-#: ../src/xnoise-add-media-dialog.vala:246
-#: ../src/xnoise-media-importer.vala:94
+#: ../src/xnoise-add-media-dialog.vala:252
+#: ../src/xnoise-media-importer.vala:91
 msgid "Importing media data. This may take some time..."
 msgstr "Importing media data. This may take some time..."
 
-#: ../src/xnoise-add-media-dialog.vala:273
+#: ../src/xnoise-add-media-dialog.vala:279
 #: ../src/xnoise-main-window.vala:981
 msgid "Select media file"
 msgstr "Seleccione un archivo multimedia"
 
-#: ../src/xnoise-add-media-dialog.vala:297
+#: ../src/xnoise-add-media-dialog.vala:303
 msgid "Select media folder"
 msgstr "Seleccione una carpeta multimedia"
 
-#: ../src/xnoise-add-media-dialog.vala:367
+#: ../src/xnoise-add-media-dialog.vala:373
 msgid "Add internet radio link"
 msgstr "Agregar url a emisora de radio por internet"
 
@@ -93,7 +93,7 @@ msgstr "Audio Track #"
 msgid "Player stopped. Not searching for lyrics."
 msgstr "Player stopped. Not searching for lyrics."
 
-#: ../src/xnoise-lyrics-view.vala:134
+#: ../src/xnoise-lyrics-view.vala:118
 msgid "Insufficient track information. Not searching for lyrics."
 msgstr "Insufficient track information. Not searching for lyrics."
 
@@ -103,7 +103,7 @@ msgstr "Insufficient track information. Not searching for lyrics."
 #. textbuffer.get_start_iter (out end_iter);
 #. string txt = textbuffer.get_text(start_iter, end_iter, true);
 #. TODO: Howto append text ?
-#: ../src/xnoise-lyrics-view.vala:155
+#: ../src/xnoise-lyrics-view.vala:139
 #, c-format
 msgid ""
 "\n"
@@ -305,21 +305,33 @@ msgstr "Eliminar todo"
 msgid "Remove selected titles"
 msgstr "Eliminar títulos seleccionados"
 
-#: ../src/xnoise-media-importer.vala:375
+#: ../src/xnoise-media-browser.vala:314
+msgid "Change artist name"
+msgstr "Change artist name"
+
+#: ../src/xnoise-media-browser.vala:331
+msgid "Change album name"
+msgstr "Change album name"
+
+#: ../src/xnoise-media-browser.vala:348
+msgid "Edit metadata for track"
+msgstr "Edit metadata for track"
+
+#: ../src/xnoise-media-importer.vala:426
 msgid "Finished import. "
 msgstr "Finished import. "
 
-#: ../src/xnoise-media-importer.vala:375
+#: ../src/xnoise-media-importer.vala:426
 #, c-format
 msgid "Found %d media files"
 msgstr "Found %d media files"
 
-#: ../src/xnoise-media-importer.vala:377
-#: ../src/xnoise-media-importer.vala:378
+#: ../src/xnoise-media-importer.vala:428
+#: ../src/xnoise-media-importer.vala:429
 msgid "Updated library for new media folders. "
 msgstr "Updated library for new media folders. "
 
-#: ../src/xnoise-media-importer.vala:377
+#: ../src/xnoise-media-importer.vala:428
 #, c-format
 msgid "Found %d new media files"
 msgstr "Found %d new media files"

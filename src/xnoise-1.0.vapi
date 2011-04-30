@@ -143,6 +143,8 @@ namespace Xnoise {
 		public signal void position_reference_next_changed ();
 		public signal void sig_item_imported (string uri);
 		public signal void sig_media_path_changed ();
+		public signal void sign_image_path_large_changed ();
+		public signal void sign_image_path_small_changed ();
 		public signal void sign_notify_tracklistnotebook_switched (uint new_page_number);
 		public signal void sign_restart_song ();
 		public signal void sign_song_info_required ();
