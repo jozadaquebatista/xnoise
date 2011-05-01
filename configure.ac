@@ -36,6 +36,7 @@ TAGLIB_C_REQUIRED=1.5.0
 
 dnl required versions for plugins
 LIBNOTIFY_REQUIRED=0.4.5
+LIBNOTIFY_07_REQUIRED=0.7.0
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
 DBUS_GLIB_REQUIRED=0.0.1
@@ -130,8 +131,19 @@ PKG_CHECK_MODULES(LIBNOTIFY, \
                   libnotify >= $LIBNOTIFY_REQUIRED, \
                   have_libnotify=yes, \
                   have_libnotify=no)
+PKG_CHECK_MODULES(LIBNOTIFY07, \
+                  libnotify >= 0.7.0, \
+                  have_libnotify07=yes, \
+                  have_libnotify07=no)
+
 if test "x$have_libnotify" != "xyes"; then
     AC_MSG_WARN([libnotify $LIBNOTIFY_REQUIRED or greater not found.])
+fi
+if test "x$have_libnotify07" = "xyes"; then
+    PKG_CHECK_MODULES(LIBNOTIFY, \
+                      libnotify >= 0.7.0, \
+                      have_libnotify07=yes, \
+                      have_libnotify07=no)
 fi
 AC_SUBST(LIBNOTIFY_CFLAGS)
 AC_SUBST(LIBNOTIFY_LIBS)
@@ -278,13 +290,23 @@ AC_ARG_ENABLE([notifications],
 
 if test "x$enable_notifications" = "xyes"; then
     if test "x$have_libnotify" = "xyes"; then
-        enable_notifications=yes
+        if test "x$have_libnotify07" = "xyes"; then
+            enable_notifications=no
+            enable_notifications07=yes
+            echo "Notifications plugin will be build with 0.7 API."
+        else
+            enable_notifications=yes
+            enable_notifications07=no
+            echo "Notifications plugin will be build with 0.5 API."
+        fi
     else
         enable_notifications=no
+        enable_notifications07=no
         AC_MSG_WARN([notifications plugin will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_NOTIFICATIONS, test x"$enable_notifications" = "xyes")
+AM_CONDITIONAL(ENABLE_NOTIFICATIONS2, test x"$enable_notifications07" = "xyes")
 dnl ================================================================
 
 dnl ================================================================
@@ -493,6 +515,7 @@ AC_CONFIG_FILES([
     plugins/cyclic-save-state/Makefile
     plugins/lastfmCovers/Makefile
     plugins/notifications/Makefile
+    plugins/notifications2/Makefile
     plugins/mediawatcher/Makefile
     plugins/mpris/Makefile
     plugins/mediakeys/Makefile
@@ -527,6 +550,7 @@ echo "
     lyricwiki:                     ${enable_lyricwiki}
     lastfm covers:                 ${enable_lastfmcovers}
     notifications:                 ${enable_notifications}
+    notifications (0.7 API):       ${enable_notifications07}
     mediawatcher:                  ${enable_mediawatcher}
     mpris:                         ${enable_mpris}
     mediakeys:                     ${enable_mediakeys}

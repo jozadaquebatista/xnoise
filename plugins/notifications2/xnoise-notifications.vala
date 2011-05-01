@@ -99,7 +99,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		if(image_pixb != null)
 			notification.set_icon_from_pixbuf(image_pixb);
 	}
-
+	
 	private void on_song_info_required() {
 		if(global.current_uri == "" || global.current_uri == null) {
 			try {
@@ -158,43 +158,37 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		if(!xn.gPl.is_stream)
 			basename = file.get_basename();
 
-		if(global.current_artist != null) {
+		if(global.current_artist != null)
 			artist = remove_linebreaks(global.current_artist);
-		}
-		else {
+		else
 			artist = "unknown artist";
-		}
 
-		if(global.current_title != null) {
+		if(global.current_title != null)
 			title = remove_linebreaks(global.current_title);
-		}
-		else {
+		else
 			title = "unknown title";
-		}
 
-		if(global.current_album != null) {
+		if(global.current_album != null)
 			album = remove_linebreaks(global.current_album);
-		}
-		else {
+		else
 			album = "unknown album";
-		}
 
-		File f = get_albumimage_for_artistalbum(artist, album, "medium");
+		//File f = get_albumimage_for_artistalbum(artist, album, "medium");
 		string summary = title;
 		string body = _("by") +
 		              " " + artist + " \n" +
 		              _("on") + 
 		              " " + album;
 		if(notification == null) {
-			notification = new Notification(summary, body, null, null);
+			notification = new Notification(summary, body, null);
 		}
 		else {
 			notification.clear_hints();
 			notification.update(summary, body, "");
 		}
-		if(f.query_exists()) {
+		if(global.image_path_small != null) { // f.query_exists()) {
 			try {
-				image_pixb = new Gdk.Pixbuf.from_file(f.get_path());
+				image_pixb = new Gdk.Pixbuf.from_file(global.image_path_small);//f.get_path());
 				if(image_pixb != null) {
 					image_pixb = image_pixb.scale_simple(IMAGE_SIZE, IMAGE_SIZE, Gdk.InterpType.BILINEAR);
 				}
@@ -211,12 +205,12 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 				print("%s\n", e.message);
 			}
 		}
-		if(image_pixb != null) {
+		if(image_pixb != null)
 			notification.set_icon_from_pixbuf(image_pixb);
-		}
+		
 		notification.set_urgency(Notify.Urgency.NORMAL);
 		notification.set_timeout(2000);
-		show();
+		this.show();
 	}
 
 	public void show() {
