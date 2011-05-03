@@ -81,7 +81,6 @@ VALAFLAGS = \
     --pkg libxnoiseutils-1.0 \
     --vapi=$(srcdir)/xnoise-1.0.vapi \
     --header=$(srcdir)/xnoise.h \
-    --pkg config \
     @XNOISE_PACKAGES@ \
     $(NULL)
 

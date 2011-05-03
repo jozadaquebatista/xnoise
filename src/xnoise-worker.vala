@@ -107,6 +107,7 @@ public class Xnoise.Worker : Object {
 		//public int32[] id_array;
 		public TrackData[] track_dat; 
 		public DndData[] dnd_data;
+		public Gtk.TreeRowReference[] treerowrefs;
 		public int32[] id_array;
 		// It is useful to have some Job persistent counters available
 		public int counter[4];

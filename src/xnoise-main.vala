@@ -146,7 +146,7 @@ public class Xnoise.Main : GLib.Object {
 	}
 	
 	public void quit() {
-		Timeout.add_seconds(1, () => { Gtk.main_quit(); return false;});
+		print ("closing...\n");
 		if(main_window.is_fullscreen) 
 			this.main_window.get_window().unfullscreen();
 		main_window.hide();
@@ -155,6 +155,6 @@ public class Xnoise.Main : GLib.Object {
 		this.save_activated_plugins();
 		par.write_all_parameters_to_file();
 		par = null;
-		print ("closing...\n");
+		Timeout.add_seconds(1, () => { Gtk.main_quit(); return false;});
 	}
 }

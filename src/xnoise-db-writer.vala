@@ -375,7 +375,6 @@ public class Xnoise.DbWriter : GLib.Object {
 	public string? get_uri_for_item_id(int32 id) {
 		string? val = null;
 		Statement stmt;
-		
 		this.db.prepare_v2(STMT_GET_URI_FOR_ITEM_ID, -1, out stmt);
 		stmt.reset();
 		if(stmt.bind_int(1, id)!= Sqlite.OK ) {

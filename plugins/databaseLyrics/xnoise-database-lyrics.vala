@@ -28,6 +28,7 @@
  * 	Jörn Magens
  */
 
+using Xnoise;
 using Sqlite;
 
 public class Xnoise.DatabaseLyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
@@ -150,31 +151,11 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 	}
 	
 	private void check_table_cb(Worker.Job job) {
-		try {
-			lock(dbw) {
-				if(dbw == null)
-					dbw = new DbWriter();
-			}
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return;
-		}
-		dbw.do_callback_transaction(create_table_dbcb);
+		media_importer.dbw.do_callback_transaction(create_table_dbcb);
 	}
 	
 	private void add_lyrics_entry_cb(Worker.Job job) {
-		try {
-			lock(dbw) {
-				if(dbw == null)
-					dbw = new DbWriter();
-			}
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-			return;
-		}
-		dbw.do_callback_transaction(write_txt_dbcb);
+		media_importer.dbw.do_callback_transaction(write_txt_dbcb);
 	}
 	
 	private void create_table_dbcb(Sqlite.Database db) {
@@ -263,7 +244,6 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 		this.owner = _owner;
 		this.loader = _loader;
 		this.cb = _cb;
-		
 		this.owner.sign_deactivated.connect( () => {
 			destruct();
 		});

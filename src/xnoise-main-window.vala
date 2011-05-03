@@ -1032,7 +1032,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				title = remove_linebreaks(global.current_title);
 			}
 			else {
-				title = "unknown title";
+				title = prepare_name_from_filename(basename);//"unknown title";
 			}
 			if(global.current_album!=null) {
 				album = remove_linebreaks(global.current_album);

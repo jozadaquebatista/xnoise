@@ -153,7 +153,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	}
 	
 	private string new_content_name = null;
-	private unowned MediaBrowserModel mbm = null;
+	private MediaBrowserModel mbm = null;
 	
 	private void on_ok_button_clicked(Gtk.Button sender) {
 		if(!treerowref.valid())
@@ -197,16 +197,42 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		TreeIter artist_iter, album_iter, title_iter;
 		int32[]? ids = {};
 		TreePath path  = treerowref.get_path();
+		TrackData[] local_track_dat = {};
+		TrackData[] local_track_dat2 = {};
+		TreeRowReference[] local_trra = {};
+		var mover_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.move_iter_job);
 		mbm.get_iter(out artist_iter, path);
-		mbm.set(artist_iter, MediaBrowserModel.Column.VIS_TEXT, new_content_name);
-		mbm.move_artist_iter_sorted(ref artist_iter, new_content_name);
 		for(int i = 0; i < mbm.iter_n_children(artist_iter); i++) {
 			mbm.iter_nth_child(out album_iter, artist_iter, i);
 			for(int j = 0; j < mbm.iter_n_children(album_iter); j++) {
 				mbm.iter_nth_child(out title_iter, album_iter, j);
-				int32 id = -1;
-				mbm.get(title_iter, MediaBrowserModel.Column.DB_ID, ref id);
-				ids += id;
+				bool visible = false;
+				TrackData td = new TrackData();
+				mbm.get(title_iter, 
+					    MediaBrowserModel.Column.VIS_TEXT, ref td.title,
+					    MediaBrowserModel.Column.DB_ID, ref td.db_id, 
+					    MediaBrowserModel.Column.MEDIATYPE , ref td.mediatype,
+					    MediaBrowserModel.Column.VISIBLE, ref visible,
+					    MediaBrowserModel.Column.TRACKNUMBER, ref td.tracknumber
+					    );
+				if(visible) {
+					ids += td.db_id; // for db update
+					td.artist = new_content_name;
+					mbm.iter_parent(out artist_iter, album_iter);
+					mbm.get(album_iter, MediaBrowserModel.Column.VIS_TEXT, ref td.album);
+					Gtk.TreePath tp = mbm.get_path(title_iter);
+					TreeRowReference rr = new TreeRowReference(mbm, tp);
+					local_trra += rr;
+					local_track_dat += td;
+					local_track_dat2 += copy_trackdata(td);
+				}
+				// remove empty nodes
+				if(mbm.iter_n_children(album_iter) == 0)
+					mbm.remove(album_iter);
+			
+				if(mbm.iter_n_children(artist_iter) == 0)
+					mbm.remove(artist_iter);
+				
 			}
 		}
 		if(ids.length < 1)
@@ -216,64 +242,137 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		artist_job.id_array = ids;
 		artist_job.set_arg("treerowref", treerowref);
 		artist_job.set_arg("content", (int)this.content);
+		artist_job.track_dat = local_track_dat2;
 		worker.push_job(artist_job);		
+				
+		mover_job.treerowrefs = local_trra;
+		mover_job.track_dat = local_track_dat;
+		worker.push_job(mover_job);	
 	}
 
 	private void do_album_rename() {
 		if(mbm == null)
 			return;
-		TreeIter album_iter, title_iter;
+		TreeIter artist_iter = TreeIter(), album_iter, title_iter;
 		int32[]? ids = {};
 		TreePath path  = treerowref.get_path();
+		TrackData[] local_track_dat = {};
+		TrackData[] local_track_dat2 = {};
+		TreeRowReference[] local_trra = {};
+		var mover_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.move_iter_job);
 		mbm.get_iter(out album_iter, path);
-		mbm.set(album_iter, MediaBrowserModel.Column.VIS_TEXT, new_content_name);
-		mbm.move_album_iter_sorted(ref album_iter, new_content_name);
 		for(int j = 0; j < mbm.iter_n_children(album_iter); j++) {
 			mbm.iter_nth_child(out title_iter, album_iter, j);
+			bool visible = false;
+			TrackData td = new TrackData();
 			int32 id = -1;
-			mbm.get(title_iter, MediaBrowserModel.Column.DB_ID, ref id);
-			ids += id;
+			mbm.get(title_iter, 
+			        MediaBrowserModel.Column.VIS_TEXT, ref td.title,
+			        MediaBrowserModel.Column.DB_ID, ref id, 
+			        MediaBrowserModel.Column.MEDIATYPE , ref td.mediatype,
+			        MediaBrowserModel.Column.VISIBLE, ref visible,
+			        MediaBrowserModel.Column.TRACKNUMBER, ref td.tracknumber
+			        );
+			if(visible) {
+				td.db_id = id;
+				ids += id; // for db update
+				td.album = new_content_name;
+				mbm.iter_parent(out artist_iter, album_iter);
+				mbm.get(artist_iter, MediaBrowserModel.Column.VIS_TEXT, ref td.artist);
+				Gtk.TreePath tp = mbm.get_path(title_iter);
+				TreeRowReference rr = new TreeRowReference(mbm, tp);
+				local_trra += rr;
+				local_track_dat += td;
+				local_track_dat2 += copy_trackdata(td);
+			}
 		}
 		if(ids.length < 1)
 			return;
-		Worker.Job album_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_tags_job);
+		var album_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_tags_job);
 		album_job.set_arg("new_content_name", new_content_name);
 		album_job.id_array = ids;
-		album_job.set_arg("treerowref", treerowref);
 		album_job.set_arg("content", (int)this.content);
+		album_job.track_dat = local_track_dat2;
 		worker.push_job(album_job);		
-	
+				
+		mover_job.treerowrefs = local_trra;
+		mover_job.track_dat = local_track_dat;
+		worker.push_job(mover_job);	
 	}
 
+	private void move_iter_job(Worker.Job job) {
+			Idle.add( () => {
+				int i = 0;
+				foreach(TreeRowReference rr in job.treerowrefs) {
+					TreeRowReference rra = job.treerowrefs[i];
+					if(rra == null) {
+						print("ref is null!!\n");
+						return false;
+					}
+					if(!rra.valid()) {
+						print("ref is not valid!!\n");
+						return false;
+					}
+					TreeIter artist_iter, album_iter, title_iter;
+					// TODO check path depth
+				
+					MediaBrowserModel m    = (MediaBrowserModel)(rra.get_model());
+					TreePath path          = (TreePath)(rra.get_path());
+			
+					TrackData td = job.track_dat[i];
+			
+					m.get_iter(out title_iter, path);
+			
+					m.iter_parent(out album_iter, title_iter);
+					m.iter_parent(out artist_iter, album_iter);
+			
+					m.move_title_iter_sorted(ref title_iter, ref td); 
+			
+					// remove empty nodes
+					if(m.iter_n_children(album_iter) == 0)
+						m.remove(album_iter);
+			
+					if(m.iter_n_children(artist_iter) == 0)
+						m.remove(artist_iter);
+				
+					i++;
+				}
+				return false;
+			});
+			job.finished.connect( () => {
+				Main.instance.main_window.mediaBr.on_searchtext_changed();
+			});
+	}
+	
 	private void update_tags_job(Worker.Job tag_job) {
 		bool first = true;
 		Content ctnt = (Content) ((int)tag_job.get_arg("content"));
+		int i = 0;
 		foreach(int32 id in tag_job.id_array) {
 			if(ctnt == Content.ARTIST) {
 				var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_single_artist_tag_job);
 				job.set_arg("new_content_name", ((string)tag_job.get_arg("new_content_name")));
 				job.set_arg("id", id);
-				job.set_arg("first", first);
-				if(first)
-					first = false;
+				TrackData td = (TrackData)tag_job.track_dat[i];
+				job.set_arg("td", td);
 				worker.push_job(job);
 			}
 			else if(ctnt == Content.ALBUM) {
 				var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_single_album_tag_job);
 				job.set_arg("new_content_name", ((string)tag_job.get_arg("new_content_name")));
 				job.set_arg("id", id);
-				job.set_arg("first", first);
-				if(first)
-					first = false;
+				TrackData td = (TrackData)tag_job.track_dat[i];
+				job.set_arg("td", td);
 				worker.push_job(job);
 			}
+			i++;
 		}
 	}
 
 	private void update_single_artist_tag_job(Worker.Job job) {
 		string text = (string)job.get_arg("new_content_name");
 		int32 id = (int32)job.get_arg("id");
-		bool first = (bool)job.get_arg("first");
+		TrackData td = (TrackData)job.get_arg("td");
 		string? uri = null;
 		if(text == null)
 			return;
@@ -284,15 +383,14 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		TagWriter tw = new TagWriter();
 		bool retval = tw.write_artist(f, text);
 		
-		if(retval && first) {
-			media_importer.update_artist_name(id, ref text);
-		}
+		if(retval)
+			media_importer.update_item_tag(id, ref td);
 	}
 
 	private void update_single_album_tag_job(Worker.Job job) {
 		string text = (string)job.get_arg("new_content_name");
 		int32 id = (int32)job.get_arg("id");
-		bool first = (bool)job.get_arg("first");
+		TrackData td = (TrackData)job.get_arg("td");
 		string? uri = null;
 		if(text == null)
 			return;
@@ -303,9 +401,8 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		TagWriter tw = new TagWriter();
 		bool retval = tw.write_album(f, text);
 		
-		if(retval && first) {
-			media_importer.update_album_name(id, ref text);
-		}
+		if(retval)
+			media_importer.update_item_tag(id, ref td);
 	}
 
 	private void on_cancel_button_clicked(Gtk.Button sender) {

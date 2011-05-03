@@ -588,6 +588,7 @@ namespace Xnoise {
 			public void* p_arg;
 			public Xnoise.Worker.SyncWorkFunc? s_func;
 			public Xnoise.TrackData[] track_dat;
+			public Gtk.TreeRowReference[] treerowrefs;
 			public GLib.Value? value_arg1;
 			public GLib.Value? value_arg2;
 			public Job (int id = 0, Xnoise.Worker.ExecutionType execution_type = ExecutionType.UNKNOWN, Xnoise.Worker.AsyncWorkFunc? a_func = null, Xnoise.Worker.SyncWorkFunc? s_func = null);

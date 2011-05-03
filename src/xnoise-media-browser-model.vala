@@ -1099,13 +1099,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		MediaData[] mda_local = mda;
 		MediaData md = MediaData();
 		md.id = -1;
+		bool visible = false;
 		this.get_iter(out iter, treepath);
 		this.get(iter,
 		         Column.VIS_TEXT,  ref md.name,
 		         Column.DB_ID,     ref md.id,
-		         Column.MEDIATYPE, ref md.mediatype
+		         Column.MEDIATYPE, ref md.mediatype,
+		         Column.VISIBLE, ref visible
 		         );
-		if(md.id > -1)
+		if(md.id > -1 && visible)
 			mda_local += md;
 		
 		mda = mda_local;
@@ -1149,16 +1151,17 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 				for(int i = 0; i < this.iter_n_children(iter); i++) { // for each track
 					this.iter_nth_child(out iterChild, iter, i);
-					
+					bool visible = false;
 					MediaData md = MediaData();
 					md.id = -1;
 					
 					this.get(iterChild,
 							 Column.VIS_TEXT,  ref md.name,
 							 Column.DB_ID,     ref md.id,
-							 Column.MEDIATYPE, ref md.mediatype
+							 Column.MEDIATYPE, ref md.mediatype,
+							 Column.VISIBLE, ref visible
 							 );
-					if(md.id < 0)
+					if(md.id < 0 || !visible)
 						continue;
 					 mda_local += md;
 				}

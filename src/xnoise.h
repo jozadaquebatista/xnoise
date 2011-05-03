@@ -1216,6 +1216,8 @@ struct _XnoiseWorkerJob {
 	gint track_dat_length1;
 	XnoiseDndData* dnd_data;
 	gint dnd_data_length1;
+	GtkTreeRowReference** treerowrefs;
+	gint treerowrefs_length1;
 	gint32* id_array;
 	gint id_array_length1;
 	gint counter[4];

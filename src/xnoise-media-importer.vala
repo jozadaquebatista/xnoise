@@ -104,27 +104,29 @@ public class Xnoise.MediaImporter : GLib.Object {
 	internal void update_item_tag(int item_id, ref TrackData td) {
 		if(global.media_import_in_progress == true)
 			return;
+		
 		dbw.begin_transaction();
 		
-		dbw.update_title(item_id, ref td);		
+		dbw.update_title(item_id, ref td);	
+			
 		dbw.commit_transaction();
 	}
 	
-	internal void update_artist_name(int32 item_id, ref string name) {
-		if(global.media_import_in_progress == true)
-			return;
-		dbw.begin_transaction();
-		dbw.update_artist_name(item_id, name);
-		dbw.commit_transaction();
-	}
-	
-	internal void update_album_name(int32 item_id, ref string name) {
-		if(global.media_import_in_progress == true)
-			return;
-		dbw.begin_transaction();
-		dbw.update_album_name(item_id, name);
-		dbw.commit_transaction();
-	}
+	//internal void update_artist_name(int32 item_id, ref string name) {
+	//	if(global.media_import_in_progress == true)
+	//		return;
+	//	dbw.begin_transaction();
+	//	dbw.update_artist_name(item_id, name);
+	//	dbw.commit_transaction();
+	//}
+
+	//internal void update_album_name(int32 item_id, ref string name) {
+	//	if(global.media_import_in_progress == true)
+	//		return;
+	//	dbw.begin_transaction();
+	//	dbw.update_album_name(item_id, name);
+	//	dbw.commit_transaction();
+	//}
 	
 	public string? get_uri_for_item_id(int32 id) {
 		return dbw.get_uri_for_item_id(id);
