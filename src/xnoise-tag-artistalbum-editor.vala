@@ -35,9 +35,12 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	private Dialog dialog;
 	private Gtk.Builder builder;
 	private Content content;
+	private string new_content_name = null;
+	private string org_content_name = null;
+	private unowned MediaBrowserModel mbm = null;
 	
 	private Entry entry;
-	private unowned TreeRowReference treerowref;
+	private TreeRowReference treerowref;
 	
 	private enum Content {
 		ARTIST,
@@ -75,6 +78,15 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		xn = Main.instance;
 		builder = new Gtk.Builder();
 		create_widgets();
+		mbm = (MediaBrowserModel)treerowref.get_model();
+		mbm.notify["populating-model"].connect( () => {
+			if(!global.media_import_in_progress && !mbm.populating_model)
+				infolabel.label = "";
+		});
+		global.notify["media-import-in-progress"].connect( () => {
+			if(!global.media_import_in_progress && !mbm.populating_model)
+				infolabel.label = "";
+		});
 		
 		fill_entries();
 		dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
@@ -94,7 +106,8 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 			model.get(iter, MediaBrowserModel.Column.VIS_TEXT, out content_text);
 			if(content_text == null)
 				content_text = "";
-			new_content_name = content_text;
+			new_content_name = content_text.strip();
+			org_content_name = content_text.strip();
 			Idle.add( () => {
 				// put data to entry
 				entry.text = content_text;
@@ -152,13 +165,9 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		}
 	}
 	
-	private string new_content_name = null;
-	private MediaBrowserModel mbm = null;
-	
 	private void on_ok_button_clicked(Gtk.Button sender) {
 		if(!treerowref.valid())
 			return; // TODO: user info
-		mbm = (MediaBrowserModel)treerowref.get_model();
 		if(mbm.populating_model) {
 			infolabel.label = _("Please wait while filling media browser. Or cancel, if you do not want to wait.");
 			return;
@@ -173,14 +182,19 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		// TODO: UTF-8 validation
 		switch(content) {
 			case Content.ARTIST:
+				if(org_content_name.down() ==  new_content_name.down())
+					do_artist_case_correction();
 				do_artist_rename();
 				break;
 			case Content.ALBUM:
+				if(org_content_name.down() ==  new_content_name.down())
+					do_album_case_correction();
 				do_album_rename();
 				break;
 			default:
 				break;	
 		}
+		mbm = null;
 		Idle.add( () => {
 			this.dialog.destroy();
 			return false;
@@ -191,6 +205,102 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		});
 	}
 	
+	private void do_artist_case_correction() {
+		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.do_artist_case_correction_job);
+		job.set_arg("new_content_name", new_content_name);
+		job.set_arg("org_content_name", org_content_name);
+		job.set_arg("treerowref", treerowref);
+		worker.push_job(job);
+	}
+	
+	private void do_artist_case_correction_job(Worker.Job job) {
+		string oldname = (string)job.get_arg("org_content_name");
+		string newname = (string)job.get_arg("new_content_name");
+		media_importer.update_artist_name(oldname, newname); // For case corrections
+
+		string[] uris_for_update = media_importer.get_uris_for_artist(newname);
+		//foreach(string s in uris_for_update)
+		//	print("cccc_ %s\n", s);
+		var tagjob = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.do_artist_tag_case_correction_job);
+		tagjob.set_arg("artist", newname);
+		tagjob.set_arg("uris_for_update", uris_for_update);
+		worker.push_job(tagjob);
+		
+		Idle.add( () => {
+			TreeRowReference tf = (TreeRowReference)job.get_arg("treerowref");
+			TreeIter iter;
+			TreePath path  = tf.get_path();
+			MediaBrowserModel mtmp = (MediaBrowserModel)tf.get_model();
+			mtmp.get_iter(out iter, path);
+			mtmp.set(iter, MediaBrowserModel.Column.VIS_TEXT, newname);	
+			return false;
+		});
+	}
+
+	private void do_album_case_correction() {
+		TreeIter artist_iter, album_iter;
+		string artist = "";
+		TreePath path  = treerowref.get_path();
+		mbm.get_iter(out album_iter, path);
+		mbm.iter_parent(out artist_iter, album_iter);
+		mbm.get(artist_iter, MediaBrowserModel.Column.VIS_TEXT, ref artist);
+
+		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.do_album_case_correction_job);
+		job.set_arg("artist", artist);
+		job.set_arg("new_content_name", new_content_name);
+		job.set_arg("org_content_name", org_content_name);
+		job.set_arg("treerowref", treerowref);
+		worker.push_job(job);
+	}
+
+	private void do_album_case_correction_job(Worker.Job job) {
+		string oldname = (string)job.get_arg("org_content_name");
+		string newname = (string)job.get_arg("new_content_name");
+		string artist  = (string)job.get_arg("artist");
+		
+		media_importer.update_album_name(artist, oldname, newname); // For case corrections
+
+		string[] uris_for_update = media_importer.get_uris_for_artistalbum(artist, newname);
+		//foreach(string s in uris_for_update)
+		//	print("cccc_ %s\n", s);
+		var tagjob = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.do_album_tag_case_correction_job);
+		tagjob.set_arg("album", newname);
+		tagjob.set_arg("uris_for_update", uris_for_update);
+		worker.push_job(tagjob);
+		
+		Idle.add( () => {
+			TreeRowReference tf = (TreeRowReference)job.get_arg("treerowref");
+			TreeIter iter;
+			TreePath path  = tf.get_path();
+			MediaBrowserModel mtmp = (MediaBrowserModel)tf.get_model();
+			mtmp.get_iter(out iter, path);
+			mtmp.set(iter, MediaBrowserModel.Column.VIS_TEXT, newname);	
+			return false;
+		});
+	}
+	
+	private void do_album_tag_case_correction_job(Worker.Job job) {
+		string album = (string)job.get_arg("album");
+		foreach(string s in ((string[])job.get_arg("uris_for_update"))) {
+			//print("%s\n", s);
+			File f = File.new_for_uri(s);
+			TagWriter tw = new TagWriter();
+			if(!tw.write_album(f, album))
+				print("Error writing tag for '%s'\n", s);
+		}
+	}
+
+	private void do_artist_tag_case_correction_job(Worker.Job job) {
+		string artist = (string)job.get_arg("artist");
+		foreach(string s in ((string[])job.get_arg("uris_for_update"))) {
+			//print("%s\n", s);
+			File f = File.new_for_uri(s);
+			TagWriter tw = new TagWriter();
+			if(!tw.write_artist(f, artist))
+				print("Error writing tag for '%s'\n", s);
+		}
+	}
+
 	private void do_artist_rename() {
 		if(mbm == null)
 			return;
@@ -345,7 +455,6 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	}
 	
 	private void update_tags_job(Worker.Job tag_job) {
-		bool first = true;
 		Content ctnt = (Content) ((int)tag_job.get_arg("content"));
 		int i = 0;
 		foreach(int32 id in tag_job.id_array) {

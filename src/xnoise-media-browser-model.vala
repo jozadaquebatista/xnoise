@@ -72,13 +72,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private Gdk.Pixbuf radios_pixb;
 	private unowned Main xn;
 	
-	private bool _populating_model = false;
-	
-	public bool populating_model {
-		get {
-			return _populating_model;
-		}
-	}
+	public bool populating_model { get; private set; default = false; }
 	
 	construct {
 		xn = Main.instance;
@@ -511,12 +505,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				TreeIter new_artist_iter;
 				this.insert_before(out new_artist_iter, null, artist_iter);
 				this.set(new_artist_iter,
-				         Column.ICON, artist_pixb,
-				         Column.VIS_TEXT, td.artist,
-				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-				         Column.DRAW_SEPTR, 0,
-				         Column.VISIBLE, true
-				         );
+					     Column.ICON, artist_pixb,
+					     Column.VIS_TEXT, td.artist,
+					     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+					     Column.DRAW_SEPTR, 0,
+					     Column.VISIBLE, true
+					     );
 				artist_iter = new_artist_iter;
 				return;
 			}
@@ -570,15 +564,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				TreeIter new_album_iter;
 				this.insert_before(out new_album_iter, artist_iter, album_iter);
 				this.set(new_album_iter,
-				         Column.ICON, (albumimage != null ? albumimage : album_pixb),
-				         Column.VIS_TEXT, td.album,
-				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-				         Column.DRAW_SEPTR, 0,
-				         Column.VISIBLE, true
-				         );
+					     Column.ICON, (albumimage != null ? albumimage : album_pixb),
+					     Column.VIS_TEXT, td.album,
+					     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+					     Column.DRAW_SEPTR, 0,
+					     Column.VISIBLE, true
+					     );
 				album_iter = new_album_iter;
 				return;
 			}
+
 		}
 		this.append(out album_iter, artist_iter);
 		this.set(album_iter,
@@ -595,7 +590,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		int tr_no = 0;
 		int32 dbidx = 0;
 		if(this.iter_n_children(album_iter) == 0) {
-			//print("td.db_id : %d\n", td.db_id);
+			//print("td.db_id : %d\n", td.db_id);ha
 			this.append(out title_iter, album_iter);
 			this.set(title_iter,
 			         Column.ICON, title_pixb,
@@ -658,7 +653,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private Cancellable populate_model_cancellable = null;
 	public bool populate_model() {
-		_populating_model = true;
+		populating_model = true;
 		//print("populate_model\n");
 		if(populate_model_cancellable == null) {
 			populate_model_cancellable = new Cancellable();
@@ -674,7 +669,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		job = new Worker.Job(1, Worker.ExecutionType.REPEATED, this.handle_hierarchical_data_job, null);
 		job.cancellable = populate_model_cancellable;
 		job.finished.connect( (j) => { 
-			_populating_model = false;
+			populating_model = false;
 		});
 		worker.push_job(job);
 		

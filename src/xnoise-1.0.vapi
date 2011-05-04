@@ -338,7 +338,7 @@ namespace Xnoise {
 		public void move_title_iter_sorted (ref Gtk.TreeIter org_iter, ref Xnoise.TrackData td);
 		public bool populate_model ();
 		public void queue_path_for_tracklist (Gtk.TreePath treepath);
-		public bool populating_model { get; }
+		public bool populating_model { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaImporter : GLib.Object {

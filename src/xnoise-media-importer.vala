@@ -1,6 +1,6 @@
 /* xnoise-media-importer.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -112,21 +112,29 @@ public class Xnoise.MediaImporter : GLib.Object {
 		dbw.commit_transaction();
 	}
 	
-	//internal void update_artist_name(int32 item_id, ref string name) {
-	//	if(global.media_import_in_progress == true)
-	//		return;
-	//	dbw.begin_transaction();
-	//	dbw.update_artist_name(item_id, name);
-	//	dbw.commit_transaction();
-	//}
+	internal void update_artist_name(string old_name, string name) {
+		if(global.media_import_in_progress == true)
+			return;
+		dbw.begin_transaction();
+		dbw.update_artist_name(name, old_name);
+		dbw.commit_transaction();
+	}
 
-	//internal void update_album_name(int32 item_id, ref string name) {
-	//	if(global.media_import_in_progress == true)
-	//		return;
-	//	dbw.begin_transaction();
-	//	dbw.update_album_name(item_id, name);
-	//	dbw.commit_transaction();
-	//}
+	internal void update_album_name(string artist, string old_name, string name) {
+		if(global.media_import_in_progress == true)
+			return;
+		dbw.begin_transaction();
+		dbw.update_album_name(artist, name, old_name);
+		dbw.commit_transaction();
+	}
+	
+	internal string[] get_uris_for_artistalbum(string artist, string album) {
+		return dbw.get_uris_for_artistalbum(artist, album);
+	}
+	
+	internal string[] get_uris_for_artist(string artist) {
+		return dbw.get_uris_for_artist(artist);
+	}
 	
 	public string? get_uri_for_item_id(int32 id) {
 		return dbw.get_uri_for_item_id(id);

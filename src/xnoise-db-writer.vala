@@ -1,6 +1,6 @@
 /* xnoise-db-writer.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -340,36 +340,66 @@ public class Xnoise.DbWriter : GLib.Object {
 //			this.db_error();
 //	}
 	
-	private static const string STMT_UPDATE_ALBUM_NAME  = "UPDATE albums SET name=? WHERE id=(SELECT items.album FROM items WHERE items.id=?)";
-	internal void update_album_name(int item_id, string? new_name) {
+	private static const string STMT_UPDATE_ALBUM  = "UPDATE albums SET name=? WHERE name=?";
+	internal void update_album_name(string artist, string new_name, string old_name) {
 		Statement stmt;
-		this.db.prepare_v2(STMT_UPDATE_ALBUM_NAME, -1, out stmt);
+		this.db.prepare_v2(STMT_UPDATE_ALBUM, -1, out stmt);
 		stmt.reset();
-		if(new_name == null)
+		if(new_name == "")
 			return;
 		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
-		   stmt.bind_int(2, item_id) != Sqlite.OK)
+		   stmt.bind_text(2, old_name) != Sqlite.OK ||
+		   stmt.bind_text(3, artist.down()) != Sqlite.OK)
 			this.db_error();
 		
 		if(stmt.step() != Sqlite.DONE) 
 			this.db_error();
 	}
 	
-	private static const string STMT_UPDATE_ARTIST_NAME = "UPDATE artists SET name=? WHERE id=(SELECT items.artist FROM items WHERE items.id=?)";
-	internal void update_artist_name(int item_id, string? new_name) {
+	private static const string STMT_UPDATE_ARTIST = "UPDATE artists SET name=? WHERE name=? AND id=(SELECT artists.id from artists WHERE LOWER(artists.name)=?)";
+	internal void update_artist_name(string new_name, string old_name) {
 		Statement stmt;
-		this.db.prepare_v2(STMT_UPDATE_ARTIST_NAME, -1, out stmt);
+		this.db.prepare_v2(STMT_UPDATE_ARTIST, -1, out stmt);
 		stmt.reset();
-		if(new_name == null)
+		if(new_name == "")
 			return;
 		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
-		   stmt.bind_int(2, item_id) != Sqlite.OK)
+		   stmt.bind_text(2, old_name) != Sqlite.OK)
 			this.db_error();
 		
 		if(stmt.step() != Sqlite.DONE) 
 			this.db_error();
 	}
 
+	private static const string STMT_URIS_FOR_ARTISTALBUM = "SELECT u.name FROM uris u, items it, albums al, artists ar WHERE it.uri = u.id AND al.id = it.album AND it.artist = ar.id AND LOWER(ar.name)=? AND LOWER(al.name)=?";
+	internal string[] get_uris_for_artistalbum(string artist, string album) {
+		Statement stmt;
+		string[] val = {};
+		this.db.prepare_v2(STMT_URIS_FOR_ARTISTALBUM, -1, out stmt);
+		stmt.reset();
+		if(stmt.bind_text(1, artist.down()) != Sqlite.OK ||
+		   stmt.bind_text(2, album.down()) != Sqlite.OK)
+			this.db_error();
+		
+		while(stmt.step() == Sqlite.ROW) 
+			val += stmt.column_text(0);
+		return val;
+	}
+	
+	private static const string STMT_URIS_FOR_ARTIST = "SELECT u.name FROM uris u, items it, artists ar WHERE it.uri = u.id AND it.artist = ar.id AND LOWER(ar.name)=?";	
+	internal string[] get_uris_for_artist(string artist) {
+		Statement stmt;
+		string[] val = {};
+		this.db.prepare_v2(STMT_URIS_FOR_ARTIST, -1, out stmt);
+		stmt.reset();
+		if(stmt.bind_text(1, artist.down()) != Sqlite.OK)
+			this.db_error();
+		
+		while(stmt.step() == Sqlite.ROW) 
+			val += stmt.column_text(0);
+		return val;
+	}
+	
 	private static const string STMT_GET_URI_FOR_ITEM_ID =
 		"SELECT u.name FROM uris u, items it WHERE it.uri = u.id AND it.id = ?";
 	public string? get_uri_for_item_id(int32 id) {
@@ -408,7 +438,8 @@ public class Xnoise.DbWriter : GLib.Object {
 		return true;
 	}
 
-	private int handle_artist(ref string artist) {
+	private static const string STMT_UPDATE_ARTIST_NAME = "UPDATE artists SET name=? WHERE id=?";
+	private int handle_artist(ref string artist, bool update_artist = false) {
 		// find artist, if available or create entry_album
 		// return id for artist
 		int artist_id = -1;
@@ -441,10 +472,25 @@ public class Xnoise.DbWriter : GLib.Object {
 			if(get_artist_id_statement.step() == Sqlite.ROW)
 				artist_id = get_artist_id_statement.column_int(0);
 		}
+		if(update_artist) {
+			Statement stmt;
+			this.db.prepare_v2(STMT_UPDATE_ARTIST_NAME, -1, out stmt);
+			stmt.reset();
+			if(stmt.bind_text(1, artist)    != Sqlite.OK ||
+			   stmt.bind_int (2, artist_id) != Sqlite.OK ) {
+				this.db_error();
+				return -1;
+			}
+			if(stmt.step() != Sqlite.DONE) {
+				this.db_error();
+				return -1;
+			}
+		}
 		return artist_id;
 	}
 
-	private int handle_album(ref int artist_id, ref string album) {
+	private static const string STMT_UPDATE_ALBUM_NAME  = "UPDATE albums SET name=? WHERE id=?";
+	private int handle_album(ref int artist_id, ref string album, bool update_album = false) {
 		int album_id = -1;
 
 		get_album_id_statement.reset();
@@ -477,6 +523,21 @@ public class Xnoise.DbWriter : GLib.Object {
 			}
 			if(get_album_id_statement.step() == Sqlite.ROW)
 				album_id = get_album_id_statement.column_int(0);
+		}
+		if(update_album) {
+			Statement stmt;
+			this.db.prepare_v2(STMT_UPDATE_ALBUM_NAME, -1, out stmt);
+			stmt.reset();
+			if(stmt.bind_text(1, album)    != Sqlite.OK ||
+			   stmt.bind_int (2, album_id) != Sqlite.OK ) {
+				this.db_error();
+				return -1;
+			}
+			if(stmt.step() != Sqlite.DONE) {
+				this.db_error();
+				return -1;
+			}
+
 		}
 		return album_id;
 	}
@@ -591,13 +652,13 @@ public class Xnoise.DbWriter : GLib.Object {
 
 	private static const string STMT_UPDATE_TITLE = "UPDATE items SET artist=?, album=?, title=? WHERE id=?";
 	public bool update_title(int32 id, ref TrackData td) {
-		int artist_id = handle_artist(ref td.artist);
+		int artist_id = handle_artist(ref td.artist, true);
 
 		if(artist_id == -1) {
 			print("Error importing artist for '%s' ! \n", td.artist);
 			return false;
 		}
-		int album_id = handle_album(ref artist_id, ref td.album);
+		int album_id = handle_album(ref artist_id, ref td.album, true);
 		if(album_id == -1) {
 			print("Error importing album for '%s' ! \n", td.album);
 			return false;
@@ -676,44 +737,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 		return val;
 	}
-//	public void insert_title(TrackData td, string uri) {
-//		// make entries in other tables and get references from there
-//		int artist_id = handle_artist(ref td.artist);
-//		if(artist_id == -1) {
-//			print("Error importing artist!\n");
-//			return;
-//		}
-//		int album_id = handle_album(ref artist_id, ref td.album);
-//		if(album_id == -1) {
-//			print("Error importing album!\n");
-//			return;
-//		}
-//		int uri_id = handle_uri(uri);
-//		if(uri_id == -1) {
-//			print("Error importing uri!\n");
-//			return;
-//		}
-//		int genre_id = handle_genre(ref td.genre);
-//		if(genre_id == -1) {
-//			print("Error importing genre!\n");
-//			return;
-//		}
-//		insert_title_statement.reset();
-//		if( insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
-//			insert_title_statement.bind_int (2,  artist_id)           != Sqlite.OK ||
-//			insert_title_statement.bind_int (3,  album_id)            != Sqlite.OK ||
-//			insert_title_statement.bind_text(4,  td.title)            != Sqlite.OK ||
-//			insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
-//			insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
-//			insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
-//			insert_title_statement.bind_int (8,  td.mediatype)        != Sqlite.OK ||
-//			insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK ||
-//			insert_title_statement.bind_int (10, td.bitrate)          != Sqlite.OK) {
-//			this.db_error();
-//		}
-//		if(insert_title_statement.step()!=Sqlite.DONE)
-//			this.db_error();
-//	}
 
 	/*
 	* Delete a row from the uri table and delete every item that references it and
