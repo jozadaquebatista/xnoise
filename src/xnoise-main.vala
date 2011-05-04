@@ -142,15 +142,19 @@ public class Xnoise.Main : GLib.Object {
 		final_tracklist = this.main_window.trackList.tracklistmodel.get_all_tracks();
 		var job = new Worker.Job(999, Worker.ExecutionType.ONCE, null, media_importer.write_final_tracks_to_db_job);
 		job.set_arg("final_tracklist", final_tracklist);
-		job.finished.connect( () => { preparing_quit = false; });
+		job.finished.connect( () => {
+			if(maxtime_quit_src != 0)
+				Source.remove(maxtime_quit_src);
+			preparing_quit = false;
+		});
 		worker.push_job(job);
 	}
 	
 	private static bool preparing_quit = false;
-	
+	private uint maxtime_quit_src = 0;
 	public void quit() {
 		preparing_quit = true;
-		Timeout.add_seconds(4, () => { // maximum time for shutdown
+		maxtime_quit_src = Timeout.add_seconds(4, () => { // maximum time for shutdown
 			Gtk.main_quit(); 
 			return false;
 		});

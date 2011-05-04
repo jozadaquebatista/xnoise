@@ -324,47 +324,47 @@ public class Xnoise.DbWriter : GLib.Object {
 		        
 	}
 
-//	private static const string STMT_UPDATE_TITLE_NAME  = "UPDATE items SET title=? WHERE id=?";
+	//private static const string STMT_UPDATE_TITLE_NAME  = "UPDATE items SET title=? WHERE id=?";
+
+	//internal void update_title_name(int item_id, string? new_name) {
+	//	Statement stmt;
+	//	this.db.prepare_v2(STMT_UPDATE_TITLE_NAME, -1, out stmt);
+	//	stmt.reset();
+	//	if(new_name == null)
+	//		return;
+	//	if(stmt.bind_text(1, new_name) != Sqlite.OK ||
+	//	   stmt.bind_int(2, item_id) != Sqlite.OK)
+	//		this.db_error();
+	//	
+	//	if(stmt.step() != Sqlite.DONE) 
+	//		this.db_error();
+	//}
 	
-//	internal void update_title_name(int item_id, string? new_name) {
-//		Statement stmt;
-//		this.db.prepare_v2(STMT_UPDATE_TITLE_NAME, -1, out stmt);
-//		stmt.reset();
-//		if(new_name == null)
-//			return;
-//		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
-//		   stmt.bind_int(2, item_id) != Sqlite.OK)
-//			this.db_error();
-//		
-//		if(stmt.step() != Sqlite.DONE) 
-//			this.db_error();
-//	}
-	
-	private static const string STMT_UPDATE_ALBUM  = "UPDATE albums SET name=? WHERE name=?";
+	private static const string STMT_UPDATE_ALBUM  = "UPDATE albums SET name=? WHERE LOWER(name)=? AND artist=(SELECT artists.id from artists WHERE LOWER(artists.name)=?)";
 	internal void update_album_name(string artist, string new_name, string old_name) {
 		Statement stmt;
 		this.db.prepare_v2(STMT_UPDATE_ALBUM, -1, out stmt);
 		stmt.reset();
 		if(new_name == "")
 			return;
-		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
-		   stmt.bind_text(2, old_name) != Sqlite.OK ||
-		   stmt.bind_text(3, artist.down()) != Sqlite.OK)
+		if(stmt.bind_text(1, new_name)        != Sqlite.OK ||
+		   stmt.bind_text(2, old_name.down()) != Sqlite.OK ||
+		   stmt.bind_text(3, artist.down())   != Sqlite.OK)
 			this.db_error();
 		
 		if(stmt.step() != Sqlite.DONE) 
 			this.db_error();
 	}
 	
-	private static const string STMT_UPDATE_ARTIST = "UPDATE artists SET name=? WHERE name=? AND id=(SELECT artists.id from artists WHERE LOWER(artists.name)=?)";
+	private static const string STMT_UPDATE_ARTIST = "UPDATE artists SET name=? WHERE LOWER(artists.name)=?"; // AND id=(SELECT artists.id from artists WHERE LOWER(artists.name)=?)
 	internal void update_artist_name(string new_name, string old_name) {
 		Statement stmt;
 		this.db.prepare_v2(STMT_UPDATE_ARTIST, -1, out stmt);
 		stmt.reset();
 		if(new_name == "")
 			return;
-		if(stmt.bind_text(1, new_name) != Sqlite.OK ||
-		   stmt.bind_text(2, old_name) != Sqlite.OK)
+		if(stmt.bind_text(1, new_name)        != Sqlite.OK ||
+		   stmt.bind_text(2, old_name.down()) != Sqlite.OK)
 			this.db_error();
 		
 		if(stmt.step() != Sqlite.DONE) 
