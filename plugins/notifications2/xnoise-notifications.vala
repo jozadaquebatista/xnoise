@@ -174,11 +174,11 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			album = "unknown album";
 
 		//File f = get_albumimage_for_artistalbum(artist, album, "medium");
-		string summary = title;
+		string summary = Markup.printf_escaped("%s", title);
 		string body = _("by") +
-		              " " + artist + " \n" +
+		              " " + Markup.printf_escaped("%s", artist) + " \n" +
 		              _("on") + 
-		              " " + album;
+		              " " + Markup.printf_escaped("%s", album);
 		if(notification == null) {
 			notification = new Notification(summary, body, null);
 		}
