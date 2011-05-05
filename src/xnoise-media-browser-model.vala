@@ -86,6 +86,24 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				return false;
 			});
 		});
+		this.notify["populating-model"].connect( () => {
+			if(this.populating_model)
+				return;
+			Timeout.add(250, () => {
+				// print("refreshing search ...\n");
+				Main.instance.main_window.mediaBr.on_searchtext_changed();
+				return false;
+			});
+		});
+		global.notify["media-import-in-progress"].connect( () => {
+			if(global.media_import_in_progress)
+				return;
+			Timeout.add(250, () => {
+				//print("refreshing search ...\n");
+				Main.instance.main_window.mediaBr.on_searchtext_changed();
+				return false;
+			});
+		});
 	}
 	
 	private void update_pixbufs() {

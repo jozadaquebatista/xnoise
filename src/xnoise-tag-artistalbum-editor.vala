@@ -350,7 +350,6 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		Worker.Job artist_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_tags_job);
 		artist_job.set_arg("new_content_name", new_content_name);
 		artist_job.id_array = ids;
-		artist_job.set_arg("treerowref", treerowref);
 		artist_job.set_arg("content", (int)this.content);
 		artist_job.track_dat = local_track_dat2;
 		worker.push_job(artist_job);		
@@ -411,47 +410,51 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	}
 
 	private void move_iter_job(Worker.Job job) {
-			Idle.add( () => {
-				int i = 0;
-				foreach(TreeRowReference rr in job.treerowrefs) {
-					TreeRowReference rra = job.treerowrefs[i];
-					if(rra == null) {
-						print("ref is null!!\n");
-						return false;
-					}
-					if(!rra.valid()) {
-						print("ref is not valid!!\n");
-						return false;
-					}
-					TreeIter artist_iter, album_iter, title_iter;
-					// TODO check path depth
-				
-					MediaBrowserModel m    = (MediaBrowserModel)(rra.get_model());
-					TreePath path          = (TreePath)(rra.get_path());
-			
-					TrackData td = job.track_dat[i];
-			
-					m.get_iter(out title_iter, path);
-			
-					m.iter_parent(out album_iter, title_iter);
-					m.iter_parent(out artist_iter, album_iter);
-			
-					m.move_title_iter_sorted(ref title_iter, ref td); 
-			
-					// remove empty nodes
-					if(m.iter_n_children(album_iter) == 0)
-						m.remove(album_iter);
-			
-					if(m.iter_n_children(artist_iter) == 0)
-						m.remove(artist_iter);
-				
-					i++;
+		Idle.add( () => {
+			int i = 0;
+			foreach(TreeRowReference rr in job.treerowrefs) {
+				if(job.treerowrefs == null) {
+					print("ref is null!!\n");
+					return false;
 				}
+				if(!rr.valid()) {
+					print("ref is not valid!!\n");
+					return false;
+				}
+				TreeIter artist_iter, album_iter, title_iter;
+				// TODO check path depth
+			
+				MediaBrowserModel m    = (MediaBrowserModel)(rr.get_model());
+				TreePath path          = (TreePath)(rr.get_path());
+		
+				TrackData td = job.track_dat[i];
+				if(td == null) {
+					print("got null trackdata in move iter job\n");
+					return false;
+				}
+				m.get_iter(out title_iter, path);
+		
+				m.iter_parent(out album_iter, title_iter);
+				m.iter_parent(out artist_iter, album_iter);
+		
+				m.move_title_iter_sorted(ref title_iter, ref td); 
+		
+				// remove empty nodes
+				if(m.iter_n_children(album_iter) == 0)
+					m.remove(album_iter);
+		
+				if(m.iter_n_children(artist_iter) == 0)
+					m.remove(artist_iter);
+			
+				i++;
+			}
+			Timeout.add(100, () => {
+				// print("refreshing search ...\n");
+				Main.instance.main_window.mediaBr.on_searchtext_changed();
 				return false;
 			});
-			job.finished.connect( () => {
-				Main.instance.main_window.mediaBr.on_searchtext_changed();
-			});
+			return false;
+		});
 	}
 	
 	private void update_tags_job(Worker.Job tag_job) {
@@ -489,7 +492,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		if(uri == null)
 			return;
 		File f = File.new_for_uri(uri);
-		TagWriter tw = new TagWriter();
+		var tw = new TagWriter();
 		bool retval = tw.write_artist(f, text);
 		
 		if(retval)
