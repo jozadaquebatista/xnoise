@@ -1,5 +1,6 @@
 data/misc/xnoise.desktop.in
 plugins/notifications/xnoise-notifications.c
+plugins/notifications2/xnoise-notifications.c
 plugins/titleToDecoration/xnoise-title-to-decoration.c
 src/xnoise-add-media-dialog.c
 src/xnoise-fullscreen-toolbar.c

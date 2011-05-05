@@ -32,7 +32,9 @@ src/xnoise-plugin-loader.vala
 src/xnoise-plugin-manager-tree.vala
 src/xnoise-screensaver-manager.vala
 src/xnoise-settings-dialog.vala
+src/xnoise-tag-artistalbum-editor.vala
 src/xnoise-tag-reader.vala
+src/xnoise-tag-title-editor.vala
 src/xnoise-tag-writer.vala
 src/xnoise-text-column.vala
 src/xnoise-tracklist.vala
@@ -54,6 +56,7 @@ plugins/mediakeys/xnoise-mediakeys.vala
 plugins/mediawatcher/xnoise-mediawatcher.vala
 plugins/mpris/xnoise-mpris.vala
 plugins/notifications/xnoise-notifications.vala
+plugins/notifications2/xnoise-notifications.vala
 plugins/soundmenu/xnoise-sound-menu.vala
 plugins/soundmenu2/xnoise-sound-menu-2.vala
 plugins/testplugin/xnoise-testplugin.vala
