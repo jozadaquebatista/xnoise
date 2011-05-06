@@ -1,3 +1,16 @@
+xnoise (0.1.22.1-natty-0ubuntu0) natty; urgency=low
+  * tag editing support in media browser
+  * add chinese translation
+  * add possibility to build notification plugin with libnotify for the 0.7 API
+  * refresh search after import, track rename or rescanning library
+  * move remaining database tasks to non-GUI thread
+  * handle activated rows in media browser in non-GUI thread
+  * many bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Thu, 05 May 2011 17:40:53 +0200
+
+
+
 xnoise (0.1.21-natty-0ubuntu0) natty; urgency=low
   * track media import (show progress in user info bar)
   * add import option without full library scan

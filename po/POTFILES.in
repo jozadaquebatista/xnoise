@@ -53,7 +53,6 @@ plugins/databaseLyrics/xnoise-database-lyrics.vala
 plugins/lastfmCovers/xnoise-lastfm-covers.vala
 plugins/lyricwiki/xnoise-lyricwiki.vala
 plugins/mediakeys/xnoise-mediakeys.vala
-plugins/mediawatcher/xnoise-mediawatcher.vala
 plugins/mpris/xnoise-mpris.vala
 plugins/notifications/xnoise-notifications.vala
 plugins/notifications2/xnoise-notifications.vala

@@ -312,19 +312,19 @@ dnl ================================================================
 dnl ================================================================
 dnl dependency check for optional build of mediawatcher plugin 
 
-AC_ARG_ENABLE([mediawatcher],
-    AS_HELP_STRING([--disable-mediawatcher],
-    [Disable mediawatcher plugin (default: enabled)]),
-    [enable_mediawatcher=$enableval],
-    [enable_mediawatcher=yes])
-
-if test "x$enable_mediawatcher" = "xyes"; then
-	enable_mediawatcher=yes
-else
-   	enable_mediawatcher=no
-   	AC_MSG_WARN([mediawatcher plugin will not be included in the build.])
-fi
-AM_CONDITIONAL(ENABLE_MEDIAWATCHER, test x"$enable_mediawatcher" = "xyes")
+dnl AC_ARG_ENABLE([mediawatcher],
+dnl     AS_HELP_STRING([--disable-mediawatcher],
+dnl     [Disable mediawatcher plugin (default: enabled)]),
+dnl     [enable_mediawatcher=$enableval],
+dnl     [enable_mediawatcher=yes])
+dnl 
+dnl if test "x$enable_mediawatcher" = "xyes"; then
+dnl 	enable_mediawatcher=yes
+dnl else
+dnl    	enable_mediawatcher=no
+dnl    	AC_MSG_WARN([mediawatcher plugin will not be included in the build.])
+dnl fi
+dnl AM_CONDITIONAL(ENABLE_MEDIAWATCHER, test x"$enable_mediawatcher" = "xyes")
 dnl ================================================================
 
 dnl ================================================================
@@ -516,7 +516,6 @@ AC_CONFIG_FILES([
     plugins/lastfmCovers/Makefile
     plugins/notifications/Makefile
     plugins/notifications2/Makefile
-    plugins/mediawatcher/Makefile
     plugins/mpris/Makefile
     plugins/mediakeys/Makefile
     plugins/chartlyrics/Makefile
@@ -551,7 +550,6 @@ echo "
     lastfm covers:                 ${enable_lastfmcovers}
     notifications:                 ${enable_notifications}
     notifications (0.7 API):       ${enable_notifications07}
-    mediawatcher:                  ${enable_mediawatcher}
     mpris:                         ${enable_mpris}
     mediakeys:                     ${enable_mediakeys}
     soundmenu:                     ${enable_soundmenu}
