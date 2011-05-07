@@ -1,0 +1,156 @@
+xnoise (0.1.22.1-maverick-0ubuntu0) maverick; urgency=low
+  * tag editing support in media browser
+  * add chinese translation
+  * add possibility to build notification plugin with libnotify for the 0.7 API
+  * refresh search after import, track rename or rescanning library
+  * move remaining database tasks to non-GUI thread
+  * handle activated rows in media browser in non-GUI thread
+  * many bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Thu, 05 May 2011 17:40:53 +0200
+
+
+
+xnoise (0.1.21-maverick-0ubuntu0) maverick; urgency=low
+  * track media import (show progress in user info bar)
+  * add import option without full library scan
+  * handle special naming schemes in album art search
+  * add mpris extension for open uri (francisco)
+  * fix d'n'd crasher bug
+  * more bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Thu, 21 Apr 2011 23:54:50 +0200
+
+
+xnoise (0.1.20-maverick-0ubuntu0) maverick; urgency=low
+  * show album covers in media browser
+  * add menu entry for rescanning media library
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Tue, 19 Apr 2011 22:48:57 +0200
+
+
+xnoise (0.1.19.2-maverick-2ubuntu2) maverick; urgency=low
+  * fix build problem
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Sun, 03 Apr 2011 13:21:00 +0200
+
+
+xnoise (0.1.18-maverick-0ubuntu0) maverick; urgency=low
+  * fix tests
+  * do not load external subtitles automatically
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 01 Apr 2011 09:19:34 +0200
+
+
+xnoise (0.1.17-2-maverick-1-2ubuntu1) maverick; urgency=low
+  * redo and improve lyrics fetching
+  * fixes for ayatana-soundmenu
+  * experimental subtitle support
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Thu, 31 Mar 2011 21:59:21 +0200
+
+
+
+xnoise (0.1.16-0ubuntu0) maverick; urgency=low
+  * create soundmenu2 (for ubuntu >= maverick+1)
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 21 Feb 2011 09:32:44 +0100
+
+
+xnoise (0.1.15-maverick-0ubuntu0) maverick; urgency=low
+  * fixes for mediakeys plugin
+  * fixes for initial db creation
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 18 Feb 2011 11:07:48 +0100
+
+
+xnoise (0.1.14-maverick-0ubuntu0) maverick; urgency=low
+  * renew mediakeys plugin (remove dbus-glib dependency)
+  * move plugins into xnoise package
+  * fix icon scaling with some themes
+  * use time shifting for track-progressbar scrolling
+  * remove some deprecated code
+  * bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 11 Feb 2011 17:48:15 +0100
+
+xnoise (0.1.13-0ubuntu0) maverick; urgency=low
+  * add xnoise-panel greyscale icon for use in soundmenu
+  * bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 21 Jan 2011 21:26:59 +0100
+
+xnoise (0.1.12-maverick-0ubuntu1) maverick; urgency=low
+  * introduce background worker to seperate import and database access
+from GUI thread
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 18 Oct 2010 22:58:35 +0200
+
+xnoise (0.1.11-1mav-0ubuntu1) maverick; urgency=low
+
+  * create a new playlist handling library (libxnoiseutils)
+  * add fast forward within track on progressbar scroll
+  * change track on trayicon scroll
+  * add mediabrowser automatic linebreaks
+  * fix available size calculation in tracklist
+  * save tracklist column positions and relative width
+  * make some tracklist columns optional
+  * fix font issue in tracklist
+  * open locations dialog
+  * use tooltip on mouseover for trayicon showing metadata
+  * show plugin descriptions in plugin manager
+  * add hebrew and spanish translation
+  * hide mouse pointer when fullscreentoolbar is hidden
+  * redraw videoscreen as soon as albumcover has arrived
+  * reload album images that have been removed from hdd
+  * use spacebar key for play/pause in fullscreen mode
+  * improve logo visibility
+  * fix screensaver handling while track paused, fixes issue #47
+  * honor XDG_CONFIG_HOME environment variable
+  * more bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 29 Sep 2010 10:22:06 +0200
+
+xnoise (0.1.10-0ubuntu3) lucid; urgency=low
+
+  * sync version with fixed xnoise-plugins-core
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 07 Jul 2010 23:30:57 +0200
+
+xnoise (0.1.9-0ubuntu1) lucid; urgency=low
+
+  * add user info system
+  * add initial import dialog
+  * add open file dialog (play tracks without adding them to the library)
+  * improve random mode
+  * use new icons
+  * show user info on media import
+  * distribute vapi directories with released tarballs
+  * several bugfixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 07 Jul 2010 15:32:52 +0200
+
+xnoise (0.1.8-0ubuntu5) lucid; urgency=low
+
+  * Fixes for package creation
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Thu, 24 Jun 2010 12:37:39 +0200
+
+xnoise (0.1.7-0ubuntu3) lucid; urgency=low
+
+  * Fixes for package creation
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Thu, 24 Jun 2010 11:37:37 +0200
+
+xnoise (0.1.6-1ubuntu4) lucid; urgency=low
+
+  * Fix for crash on media import with corrupted vorbis headers
+  * New screensaver deactivation feature on fullscreen video
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 21 Jun 2010 17:37:15 +0200
+
+xnoise (0.1.5-1) lucid; urgency=low
+
+  * Initial release
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 16 Jun 2010 15:57:42 +0200
