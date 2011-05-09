@@ -37,6 +37,7 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate void ReaderCallback (Sqlite.Database database);
 		public DbBrowser () throws Xnoise.DbError;
+		public int count_artists ();
 		public int count_artists_with_search (ref string searchtext);
 		public void do_callback_transaction (Xnoise.DbBrowser.ReaderCallback cb);
 		public string[] get_albums (string artist);

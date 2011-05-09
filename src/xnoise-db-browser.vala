@@ -40,8 +40,6 @@ public class Xnoise.DbBrowser {
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private string DATABASE;
 
-	private static const string STMT_GET_ARTIST_COUNT_WITH_SEARCH =
-		"SELECT COUNT (ar.name) FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY LOWER(ar.name) DESC";
 	private static const string STMT_IMAGE_PATH_FOR_URI =
 		"SELECT al.image FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND u.name = ?";
 	private static const string STMT_COUNT_FOR_STREAMS =
@@ -120,6 +118,8 @@ public class Xnoise.DbBrowser {
 			cb(db);
 	}
 
+	private static const string STMT_GET_ARTIST_COUNT_WITH_SEARCH =
+		"SELECT COUNT (ar.name) FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?)";
 	public int count_artists_with_search(ref string searchtext) {
 		Statement stmt;
 		int count = 0;
@@ -133,6 +133,21 @@ public class Xnoise.DbBrowser {
 		   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 		}
+		if(stmt.step() == Sqlite.ROW) {
+			count = stmt.column_int(0);
+		}
+		return count;
+	}
+
+	private static const string STMT_GET_ARTIST_COUNT = "SELECT COUNT (name) FROM artists";
+	public int count_artists() {
+		Statement stmt;
+		int count = 0;
+		
+		this.db.prepare_v2(STMT_GET_ARTIST_COUNT, -1, out stmt);
+		
+		stmt.reset();
+		
 		if(stmt.step() == Sqlite.ROW) {
 			count = stmt.column_int(0);
 		}
@@ -615,16 +630,18 @@ public class Xnoise.DbBrowser {
 		Statement stmt;
 		
 		this.db.prepare_v2(STMT_GET_ITEMS_WITH_DATA, -1, out stmt);
-
+		
 		stmt.reset();
 		if((stmt.bind_text(1, artist)!=Sqlite.OK)|
 		   (stmt.bind_text(2, album )!=Sqlite.OK)) {
 			this.db_error();
 		}
-
+		
 		while(stmt.step() == Sqlite.ROW) {
 			TrackData twt = new TrackData();
-			twt.title = stmt.column_text(0);
+			twt.artist    = artist;
+			twt.album     = album;
+			twt.title     = stmt.column_text(0);
 			twt.mediatype = (MediaType) stmt.column_int(1);
 			twt.db_id = stmt.column_int(2);
 			twt.tracknumber = stmt.column_int(3);

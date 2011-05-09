@@ -732,6 +732,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				foreach(unowned MediaData tmi in job.media_dat) {
 					if(job.cancellable.is_cancelled())
 						break;
+					bool visible = false;
+					if(this.searchtext == "" || tmi.name.down().contains(this.searchtext)) {
+						visible = true;
+						this.set(iter_radios, Column.VISIBLE, visible);
+					}
 					this.prepend(out iter_singleradios, iter_radios);
 					this.set(iter_singleradios,
 						     Column.ICON,        radios_pixb,
@@ -771,11 +776,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						 Column.VIS_TEXT, "Videos",
 						 Column.COLL_TYPE, CollectionType.LISTED,
 						 Column.DRAW_SEPTR, 0,
-						 Column.VISIBLE, true
+						 Column.VISIBLE, false
 						 );
 				foreach(unowned MediaData tmi in job.media_dat) {
 					if(job.cancellable.is_cancelled())
 						break;
+					bool visible = false;
+					if(this.searchtext == "" || tmi.name.down().contains(this.searchtext)) {
+						visible = true;
+						this.set(iter_videos, Column.VISIBLE, visible);
+					}
 					this.prepend(out iter_singlevideo, iter_videos);
 					this.set(iter_singlevideo,
 					         Column.ICON, video_pixb,
@@ -784,7 +794,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					         Column.MEDIATYPE , (int) MediaType.VIDEO,
 					         Column.COLL_TYPE, CollectionType.LISTED,
 					         Column.DRAW_SEPTR, 0,
-					         Column.VISIBLE, true
+					         Column.VISIBLE, visible
 					         );
 				}
 			}
@@ -792,10 +802,10 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		});
 	}
 
-	//repeat until returns false
+	// used for populating the data model
 	private bool handle_hierarchical_data_job(Worker.Job job) {
+	//repeat until returns false
 		DbBrowser dbb = null;
-		//TODO: Use Cancellable
 		if(job.cancellable.is_cancelled())
 			return false;
 		
@@ -831,7 +841,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					return false;
 				}
 			}
-			job.big_counter[0] = (int32)dbb.count_artists_with_search(ref searchtext);
+			job.big_counter[0] = (int32)dbb.count_artists(); // search needed ? 
 		}
 		
 		if(job.big_counter[0] == 0) {
@@ -849,10 +859,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		artist_job.cancellable = populate_model_cancellable;
 		artist_job.big_counter[1] = job.big_counter[1]; //current offset
 		
-
 		if(job.cancellable.is_cancelled())
 			return false;
-			
+		
 		worker.push_job(artist_job);
 		
 		// increment offset
@@ -862,8 +871,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 	
 	private const int ARTIST_FOR_ONE_JOB = 12;
+	//Used for populating model
 	private void handle_artists(Worker.Job job) {
-		if(job.cancellable.is_cancelled())
+		if(job.cancellable == null || job.cancellable.is_cancelled())
 			return;
 		string[] artistArray;
 		DbBrowser dbb = null;
@@ -892,7 +902,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.VIS_TEXT, artist,
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0,
-				         Column.VISIBLE, true
+				         Column.VISIBLE, false
 				         );
 				
 				Gtk.TreePath p = this.get_path(iter_artist);
@@ -953,6 +963,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 	}
 	
+	//Used for populating model
 	private void handle_album(Worker.Job job) {
 		if(job.cancellable.is_cancelled())
 			return;
@@ -996,7 +1007,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					         Column.VIS_TEXT, album,
 					         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 					         Column.DRAW_SEPTR, 0,
-					         Column.VISIBLE, true
+					         Column.VISIBLE, false
 					         );
 					Gtk.TreePath p1 = this.get_path(iter_album);
 					TreeRowReference treerowref = new TreeRowReference(this, p1);
@@ -1011,6 +1022,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		});
 	}
 
+	//Used for populating model
 	private void handle_titles(Worker.Job job) {
 		if(job.cancellable.is_cancelled())
 			return;
@@ -1032,36 +1044,30 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				return false;
 			TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
 			TreePath p = row_ref.get_path();
-			TreeIter iter_title, iter_album;
+			TreeIter iter_title, iter_album, iter_artist;
 			this.get_iter(out iter_album, p);
-			foreach(unowned TrackData tmi in job.track_dat) {	         //TITLES WITH MEDIATYPES
+			foreach(unowned TrackData td in job.track_dat) {	         //TITLES
 				if(job.cancellable.is_cancelled())
 					return false;
+				bool visible = false;
+				if(this.searchtext == "" || td.artist.down().contains(this.searchtext) || td.album.down().contains(this.searchtext) || td.title.down().contains(this.searchtext)) {
+					//print("visible for %s-%s-%s    %s\n", td.artist, td.album, td.title, this.searchtext);
+					visible = true;
+					this.set(iter_album, Column.VISIBLE, visible);
+					if(this.iter_parent(out iter_artist, iter_album))
+						this.set(iter_artist, Column.VISIBLE, visible);
+				}
 				this.prepend(out iter_title, iter_album);
-				if(tmi.mediatype == MediaType.AUDIO) {
-					this.set(iter_title,
-					         Column.ICON, title_pixb,
-					         Column.VIS_TEXT, tmi.title,
-					         Column.DB_ID, tmi.db_id,
-					         Column.MEDIATYPE , tmi.mediatype,
-					         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-					         Column.DRAW_SEPTR, 0,
-					         Column.VISIBLE, true,
-					         Column.TRACKNUMBER, tmi.tracknumber
-					         );
-				}
-				else {
-					this.set(iter_title,
-					         Column.ICON, video_pixb,
-					         Column.VIS_TEXT, tmi.title,
-					         Column.DB_ID, tmi.db_id,
-					         Column.MEDIATYPE, tmi.mediatype,
-					         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-					         Column.DRAW_SEPTR, 0,
-					         Column.VISIBLE, true,
-					         Column.TRACKNUMBER, tmi.tracknumber
-					         );
-				}
+				this.set(iter_title,
+				         Column.ICON, (td.mediatype == MediaType.AUDIO ? title_pixb : video_pixb),
+				         Column.VIS_TEXT, td.title,
+				         Column.DB_ID, td.db_id,
+				         Column.MEDIATYPE , td.mediatype,
+				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+				         Column.DRAW_SEPTR, 0,
+				         Column.VISIBLE, visible,
+				         Column.TRACKNUMBER, td.tracknumber
+				         );
 			}
 			return false;
 		});
