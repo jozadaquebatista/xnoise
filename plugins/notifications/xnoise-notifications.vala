@@ -180,7 +180,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		}
 
 		File f = get_albumimage_for_artistalbum(artist, album, "medium");
-		string summary = Markup.printf_escaped("%s", title);
+		string summary = title;
 		string body = _("by") +
 		              " " + Markup.printf_escaped("%s", artist) + " \n" +
 		              _("on") + 
