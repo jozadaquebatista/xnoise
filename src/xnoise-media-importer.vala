@@ -452,7 +452,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 			});
 			return false;
 		});
-		_dbw = null;
+		_dbw = null; // TODO
 		global.media_import_in_progress = false;
 	}
 
@@ -497,7 +497,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 			}
 			mfolders_ht.remove_all();
 		}
-		else { // import new folders only, don't put them into mediabrowsermodel
+		else { // import new folders only
 			// after import at least the media folder have to be updated
 			if((bool)job.get_arg("interrupted_populate_model"))
 				trigger_mediabrowser_update_id = global.notify["media-import-in-progress"].connect(trigger_mediabrowser_update);
