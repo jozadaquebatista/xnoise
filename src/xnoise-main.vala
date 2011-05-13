@@ -42,13 +42,6 @@ public class Xnoise.Main : GLib.Object {
 
 	public Main() {
 		bool is_first_start;
-		
-		// use RTL layout for RTL languages
-		unowned string lang = Environment.get_variable("LANG");
-		if(lang.has_prefix("he") || lang.has_prefix("ar")) {
-			print("using RTL layout for %s localization\n", lang);
-			Gtk.Widget.set_default_direction(Gtk.TextDirection.RTL);
-		}
 		Xnoise.initialize(out is_first_start);
 
 		check_database_and_tables();
