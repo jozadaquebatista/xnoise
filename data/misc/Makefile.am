@@ -24,9 +24,6 @@ DISTCLEANFILES = \
     $(pkgconfig_DATA) \
     $(plpkgconfig_DATA) \
     $(NULL)
-	
-MAINTAINERCLEANFILES = \
-    Makefile.in \
-    $(NULL)
+
 
 

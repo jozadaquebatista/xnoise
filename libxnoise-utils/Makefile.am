@@ -68,8 +68,6 @@ DEPS_FILES = libxnoiseutils-1.0.deps
 vapidir = $(VAPIDIR)
 vapi_DATA = $(VAPI_FILES) $(DEPS_FILES)
 
-MAINTAINERCLEANFILES = Makefile.in $(BUILT_SOURCES)
-
 EXTRA_DIST = \
     $(VAPI_FILES) \
     $(DEPS_FILES) \

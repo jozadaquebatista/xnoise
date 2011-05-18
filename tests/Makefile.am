@@ -3,7 +3,9 @@ include $(top_srcdir)/Makefile.decl
 NULL =
 
 AM_CPPFLAGS = \
+    -include $(CONFIG_HEADER) \
 	-I$(top_srcdir)/libxnoise-utils \
+    -DTESTDIR=\"$(top_srcdir)/tests/\" \
 	$(LIBXNOISEUTILS_CFLAGS) \
 	$(NULL)
 
@@ -24,7 +26,7 @@ tests_DEPENDENCIES = $(top_srcdir)/libxnoise-utils/libxnoiseutils-1.0.vapi
 
 tests_SOURCES = tests.vala.stamp $(tests_VALASOURCES:.vala=.c)
 tests.vala.stamp: $(tests_VALASOURCES)
-	$(VALAC) -C --basedir $(top_srcdir) --vapidir $(top_srcdir)/libxnoise-utils --pkg libxnoiseutils-1.0 --pkg gio-2.0 --pkg posix $^
+	$(VALAC) -C --basedir $(top_srcdir) --vapidir $(top_srcdir)/libxnoise-utils --vapidir $(top_srcdir)/vapi --pkg libxnoiseutils-1.0 --pkg gio-2.0 --pkg posix --pkg config $^
 	touch $@
 tests_LDADD = $(progs_ldadd)
 

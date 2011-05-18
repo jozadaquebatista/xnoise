@@ -20,7 +20,7 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
-AM_MAINTAINER_MODE
+AM_MAINTAINER_MODE([enable])
 
 # Disable generation of static libraries
 AC_DISABLE_STATIC
@@ -43,14 +43,18 @@ DBUS_GLIB_REQUIRED=0.0.1
 LIBINDICATE_REQUIRED=0.4.2
 GDBUS_REQUIRED=2.26
 
-dnl required versions for vala, if used
-VALA_REQUIRED=0.11.5
+VALA_REQUIRED=0.11.6
 
+
+dnl CFLAGS="-O3"
 AC_PROG_CC
+AC_HEADER_STDC
+AC_FUNC_MMAP
 
+dnl Replacement for AM_PROG_VALAC ===========
 AC_PATH_PROG([VALAC], [valac], [])
  AS_IF([test -z "$VALAC"],
-   [AC_MSG_WARN([No Vala compiler found. You will not be able to compile .vala source files.])],
+   [AC_MSG_WARN([No Vala compiler found. Build uses C files only. You will not be able to compile changed .vala source files.])],
    [AS_IF([test -n "$VALA_REQUIRED"],
       [AC_MSG_CHECKING([$VALAC is at least version $VALA_REQUIRED])
        am__vala_version=`$VALAC --version | sed 's/Vala  *//'`
@@ -58,15 +62,12 @@ AC_PATH_PROG([VALAC], [valac], [])
          [AC_MSG_RESULT([yes])],
          [AC_MSG_RESULT([yes])],
          [AC_MSG_RESULT([no])
-          AC_MSG_WARN([Vala $VALA_REQUIRED not found.  You will not be able to compile .vala source files.])
+          AC_MSG_WARN([Vala $VALA_REQUIRED not found. Your vala version is too old! Build uses C files only. You will not be able to compile changed .vala source files.])
           VALAC=""])])])
 AM_CONDITIONAL(USE_VALA, [test -n "$VALAC"])
-dnl AM_PROG_VALAC($VALA_REQUIRED)
+dnl =========================================
 
-
-AC_HEADER_STDC
 LT_INIT
-AC_FUNC_MMAP
 
 PKG_CHECK_MODULES(XNOISE, \
     gdk-2.0 \
@@ -325,24 +326,6 @@ AM_CONDITIONAL(ENABLE_NOTIFICATIONS2, test x"$enable_notifications07" = "xyes")
 dnl ================================================================
 
 dnl ================================================================
-dnl dependency check for optional build of mediawatcher plugin 
-
-dnl AC_ARG_ENABLE([mediawatcher],
-dnl     AS_HELP_STRING([--disable-mediawatcher],
-dnl     [Disable mediawatcher plugin (default: enabled)]),
-dnl     [enable_mediawatcher=$enableval],
-dnl     [enable_mediawatcher=yes])
-dnl 
-dnl if test "x$enable_mediawatcher" = "xyes"; then
-dnl 	enable_mediawatcher=yes
-dnl else
-dnl    	enable_mediawatcher=no
-dnl    	AC_MSG_WARN([mediawatcher plugin will not be included in the build.])
-dnl fi
-dnl AM_CONDITIONAL(ENABLE_MEDIAWATCHER, test x"$enable_mediawatcher" = "xyes")
-dnl ================================================================
-
-dnl ================================================================
 dnl dependency check for optional build of mpris plugin 
 
 AC_ARG_ENABLE([mpris],
@@ -553,7 +536,7 @@ echo "
     gettext_package:               ${GETTEXT_PACKAGE}
     prefix:                        ${prefix}
     CFLAGS:                        ${CFLAGS}
-    VALAC                          ${VALAC}
+    VALAC:                         ${VALAC}
 
   Plugins included in this build: 
     titleToDecoration:             yes (always build)

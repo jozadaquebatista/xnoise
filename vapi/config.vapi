@@ -9,5 +9,6 @@ namespace Config {
 	public const string LIBDIR;
 	public const string LOCALE_DIR;
 	public const string PACKAGE_VERSION;
+	public const string TESTDIR;
 }
 
