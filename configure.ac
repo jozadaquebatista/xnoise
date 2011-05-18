@@ -47,7 +47,22 @@ dnl required versions for vala, if used
 VALA_REQUIRED=0.11.5
 
 AC_PROG_CC
-AM_PROG_VALAC($VALA_REQUIRED)
+
+AC_PATH_PROG([VALAC], [valac], [])
+ AS_IF([test -z "$VALAC"],
+   [AC_MSG_WARN([No Vala compiler found. You will not be able to compile .vala source files.])],
+   [AS_IF([test -n "$VALA_REQUIRED"],
+      [AC_MSG_CHECKING([$VALAC is at least version $VALA_REQUIRED])
+       am__vala_version=`$VALAC --version | sed 's/Vala  *//'`
+       AS_VERSION_COMPARE([$VALA_REQUIRED], ["$am__vala_version"],
+         [AC_MSG_RESULT([yes])],
+         [AC_MSG_RESULT([yes])],
+         [AC_MSG_RESULT([no])
+          AC_MSG_WARN([Vala $VALA_REQUIRED not found.  You will not be able to compile .vala source files.])
+          VALAC=""])])])
+AM_CONDITIONAL(USE_VALA, [test -n "$VALAC"])
+dnl AM_PROG_VALAC($VALA_REQUIRED)
+
 
 AC_HEADER_STDC
 LT_INIT

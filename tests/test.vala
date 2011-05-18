@@ -8,7 +8,7 @@ bool test_reader_creation() {
 bool test_m3u_type_recognition() {
 	File f = File.new_for_path("./playlist-examples/test_m3u.m3u");
 	var reader = new Xnoise.Pl.Reader();
-	try {
+	try { 
 		reader.read(f.get_uri(), null);
 	}
 	catch(Error e) {

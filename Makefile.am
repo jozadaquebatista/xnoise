@@ -7,7 +7,6 @@ SUBDIRS = \
     plugins \
     po \
     vapi \
-    tests \
     $(NULL)
 
 DIST_SUBDIRS = \
@@ -19,6 +18,11 @@ DIST_SUBDIRS = \
     vapi \
     tests \
     $(NULL)
+
+
+if USE_VALA
+  SUBDIRS += tests
+endif
 
 xnoiselicense_DATA =  \
     COPYING \
