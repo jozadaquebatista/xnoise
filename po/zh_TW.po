@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-05 09:44+0200\n"
+"POT-Creation-Date: 2011-05-17 11:12+0200\n"
 "PO-Revision-Date: 2011-05-05 10:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -65,8 +65,7 @@ msgstr "xnoise - 加入媒體到媒體庫"
 msgid "Importing media data. This may take some time..."
 msgstr "匯入媒體資料。這也許會花一點時間…"
 
-#: ../src/xnoise-add-media-dialog.vala:279
-#: ../src/xnoise-main-window.vala:981
+#: ../src/xnoise-add-media-dialog.vala:279 ../src/xnoise-main-window.vala:981
 msgid "Select media file"
 msgstr "選取媒體檔案"
 
@@ -90,8 +89,7 @@ msgstr "子標題 #"
 msgid "Audio Track #"
 msgstr "音訊軌段 #"
 
-#: ../src/xnoise-lyrics-view.vala:88
-#: ../src/xnoise-lyrics-view.vala:107
+#: ../src/xnoise-lyrics-view.vala:88 ../src/xnoise-lyrics-view.vala:107
 msgid "Player stopped. Not searching for lyrics."
 msgstr "播放器已停止。無法搜尋歌詞。"
 
@@ -126,17 +124,13 @@ msgstr "影片"
 msgid "Tracklist"
 msgstr "軌段列表"
 
-#: ../src/xnoise-main-window.vala:43
-#: ../src/xnoise-main-window.vala:117
-#: ../src/xnoise-main-window.vala:118
-#: ../src/xnoise-main-window.vala:119
+#: ../src/xnoise-main-window.vala:43 ../src/xnoise-main-window.vala:117
+#: ../src/xnoise-main-window.vala:118 ../src/xnoise-main-window.vala:119
 msgid "Show Media"
 msgstr "顯示媒體"
 
-#: ../src/xnoise-main-window.vala:44
-#: ../src/xnoise-main-window.vala:112
-#: ../src/xnoise-main-window.vala:113
-#: ../src/xnoise-main-window.vala:114
+#: ../src/xnoise-main-window.vala:44 ../src/xnoise-main-window.vala:112
+#: ../src/xnoise-main-window.vala:113 ../src/xnoise-main-window.vala:114
 msgid "Hide Media"
 msgstr "隱藏媒體"
 
@@ -221,7 +215,9 @@ msgid "Add media"
 msgstr "加入媒體"
 
 #: ../src/xnoise-main-window.vala:431
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
 msgstr "您是首次啟動 xnoise，要將媒體匯入媒體庫嗎？"
 
 #. TODO: create some other images
@@ -245,47 +241,42 @@ msgstr "隨機播放"
 msgid "Enter the URL of the file to open"
 msgstr "輸入要開啟的檔案網址"
 
-#: ../src/xnoise-main-window.vala:1046
-#: ../src/xnoise-main-window.vala:1069
-#: ../src/xnoise-main-window.vala:1111
-#: ../src/xnoise-main-window.vala:1136
+#: ../src/xnoise-main-window.vala:1046 ../src/xnoise-main-window.vala:1069
+#: ../src/xnoise-main-window.vala:1111 ../src/xnoise-main-window.vala:1136
 #: ../src/xnoise-tray-icon.vala:198
 #: ../plugins/notifications/xnoise-notifications.vala:184
+#: ../plugins/notifications2/xnoise-notifications.vala:178
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:129
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:152
 #, c-format
 msgid "by"
 msgstr "由"
 
-#: ../src/xnoise-main-window.vala:1048
-#: ../src/xnoise-main-window.vala:1071
-#: ../src/xnoise-main-window.vala:1113
-#: ../src/xnoise-main-window.vala:1138
+#: ../src/xnoise-main-window.vala:1048 ../src/xnoise-main-window.vala:1071
+#: ../src/xnoise-main-window.vala:1113 ../src/xnoise-main-window.vala:1138
 #: ../src/xnoise-tray-icon.vala:200
 #: ../plugins/notifications/xnoise-notifications.vala:186
+#: ../plugins/notifications2/xnoise-notifications.vala:180
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
 #, c-format
 msgid "on"
 msgstr "於"
 
-#: ../src/xnoise-main-window.vala:1068
-#: ../src/xnoise-main-window.vala:1135
+#: ../src/xnoise-main-window.vala:1068 ../src/xnoise-main-window.vala:1135
 #: ../src/xnoise-tray-icon.vala:189
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:151
 #, c-format
 msgid "unknown title"
 msgstr "不明標題"
 
-#: ../src/xnoise-main-window.vala:1070
-#: ../src/xnoise-main-window.vala:1137
+#: ../src/xnoise-main-window.vala:1070 ../src/xnoise-main-window.vala:1137
 #: ../src/xnoise-tray-icon.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 msgid "unknown artist"
 msgstr "不明演出者"
 
-#: ../src/xnoise-main-window.vala:1072
-#: ../src/xnoise-main-window.vala:1139
+#: ../src/xnoise-main-window.vala:1072 ../src/xnoise-main-window.vala:1139
 #: ../src/xnoise-tray-icon.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown album"
@@ -328,8 +319,7 @@ msgstr "已完成匯入。"
 msgid "Found %d media files"
 msgstr "找到了 %d 個媒體檔案"
 
-#: ../src/xnoise-media-importer.vala:438
-#: ../src/xnoise-media-importer.vala:439
+#: ../src/xnoise-media-importer.vala:438 ../src/xnoise-media-importer.vala:439
 msgid "Updated library for new media folders. "
 msgstr "更新的媒體庫用於新媒體資料夾。"
 
@@ -365,13 +355,19 @@ msgstr "Album:"
 
 #: ../src/xnoise-tag-artistalbum-editor.vala:172
 #: ../src/xnoise-tag-title-editor.vala:157
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
-msgstr "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
 
 #: ../src/xnoise-tag-artistalbum-editor.vala:176
 #: ../src/xnoise-tag-title-editor.vala:161
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "Please wait while importing media. Or cancel, if you do not want to wait."
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
 
 #: ../src/xnoise-tracklist.vala:200
 msgid "Remove selected"
@@ -393,8 +389,7 @@ msgstr "下一個"
 msgid "Exit"
 msgstr "離開"
 
-#: ../src/xnoise-tray-icon.vala:136
-#: ../src/xnoise-tray-icon.vala:148
+#: ../src/xnoise-tray-icon.vala:136 ../src/xnoise-tray-icon.vala:148
 msgid "stopped"
 msgstr "已停止"
 
@@ -414,4 +409,3 @@ msgstr "準備開始搖滾"
 #: ../src/xnoise-videoscreen.vala:71
 msgid "No Subtitle"
 msgstr "沒有子標題"
-
