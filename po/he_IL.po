@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-29 15:49+0200\n"
+"POT-Creation-Date: 2011-05-17 11:12+0200\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -69,8 +69,7 @@ msgstr "xnoise - הוספת מדיה לספריה"
 msgid "Importing media data. This may take some time..."
 msgstr "מייבא מידע מדיה. זה עלול לקחת קצת זמן..."
 
-#: ../src/xnoise-add-media-dialog.vala:279
-#: ../src/xnoise-main-window.vala:981
+#: ../src/xnoise-add-media-dialog.vala:279 ../src/xnoise-main-window.vala:981
 msgid "Select media file"
 msgstr "בחירת קובץ מדיה"
 
@@ -94,8 +93,7 @@ msgstr "כתוביות #"
 msgid "Audio Track #"
 msgstr "רצועת שמע #"
 
-#: ../src/xnoise-lyrics-view.vala:88
-#: ../src/xnoise-lyrics-view.vala:107
+#: ../src/xnoise-lyrics-view.vala:88 ../src/xnoise-lyrics-view.vala:107
 msgid "Player stopped. Not searching for lyrics."
 msgstr "הנגן הפסיק. לא מחפש את מילות השיר."
 
@@ -130,17 +128,13 @@ msgstr "וידאו"
 msgid "Tracklist"
 msgstr "רשימת רצועות"
 
-#: ../src/xnoise-main-window.vala:43
-#: ../src/xnoise-main-window.vala:117
-#: ../src/xnoise-main-window.vala:118
-#: ../src/xnoise-main-window.vala:119
+#: ../src/xnoise-main-window.vala:43 ../src/xnoise-main-window.vala:117
+#: ../src/xnoise-main-window.vala:118 ../src/xnoise-main-window.vala:119
 msgid "Show Media"
 msgstr "הצגת מדיה"
 
-#: ../src/xnoise-main-window.vala:44
-#: ../src/xnoise-main-window.vala:112
-#: ../src/xnoise-main-window.vala:113
-#: ../src/xnoise-main-window.vala:114
+#: ../src/xnoise-main-window.vala:44 ../src/xnoise-main-window.vala:112
+#: ../src/xnoise-main-window.vala:113 ../src/xnoise-main-window.vala:114
 msgid "Hide Media"
 msgstr "הסתרת מדיה"
 
@@ -225,7 +219,9 @@ msgid "Add media"
 msgstr "הוספת מדיה"
 
 #: ../src/xnoise-main-window.vala:431
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
 msgstr "הפעלת את xnoise לראשונה. האם ברצונך לייבא מדיה לספריה?"
 
 #. TODO: create some other images
@@ -249,47 +245,42 @@ msgstr "נגינה אקראית"
 msgid "Enter the URL of the file to open"
 msgstr "הכנס את ה-URL של בקובץ שברצונך לפתוח"
 
-#: ../src/xnoise-main-window.vala:1046
-#: ../src/xnoise-main-window.vala:1069
-#: ../src/xnoise-main-window.vala:1111
-#: ../src/xnoise-main-window.vala:1136
+#: ../src/xnoise-main-window.vala:1046 ../src/xnoise-main-window.vala:1069
+#: ../src/xnoise-main-window.vala:1111 ../src/xnoise-main-window.vala:1136
 #: ../src/xnoise-tray-icon.vala:198
-#: ../plugins/notifications/xnoise-notifications.vala:156
+#: ../plugins/notifications/xnoise-notifications.vala:184
+#: ../plugins/notifications2/xnoise-notifications.vala:178
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:129
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:152
 #, c-format
 msgid "by"
 msgstr "של"
 
-#: ../src/xnoise-main-window.vala:1048
-#: ../src/xnoise-main-window.vala:1071
-#: ../src/xnoise-main-window.vala:1113
-#: ../src/xnoise-main-window.vala:1138
+#: ../src/xnoise-main-window.vala:1048 ../src/xnoise-main-window.vala:1071
+#: ../src/xnoise-main-window.vala:1113 ../src/xnoise-main-window.vala:1138
 #: ../src/xnoise-tray-icon.vala:200
-#: ../plugins/notifications/xnoise-notifications.vala:158
+#: ../plugins/notifications/xnoise-notifications.vala:186
+#: ../plugins/notifications2/xnoise-notifications.vala:180
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
 #, c-format
 msgid "on"
 msgstr "מהאלבום"
 
-#: ../src/xnoise-main-window.vala:1068
-#: ../src/xnoise-main-window.vala:1135
+#: ../src/xnoise-main-window.vala:1068 ../src/xnoise-main-window.vala:1135
 #: ../src/xnoise-tray-icon.vala:189
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:151
 #, c-format
 msgid "unknown title"
 msgstr "כותרת בלתי ידועה"
 
-#: ../src/xnoise-main-window.vala:1070
-#: ../src/xnoise-main-window.vala:1137
+#: ../src/xnoise-main-window.vala:1070 ../src/xnoise-main-window.vala:1137
 #: ../src/xnoise-tray-icon.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 msgid "unknown artist"
 msgstr "אמן בלתי ידוע"
 
-#: ../src/xnoise-main-window.vala:1072
-#: ../src/xnoise-main-window.vala:1139
+#: ../src/xnoise-main-window.vala:1072 ../src/xnoise-main-window.vala:1139
 #: ../src/xnoise-tray-icon.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown album"
@@ -323,21 +314,20 @@ msgstr "שנה את שם האלבום"
 msgid "Edit metadata for track"
 msgstr "ערוך את ה-metadata של הרצועה"
 
-#: ../src/xnoise-media-importer.vala:426
+#: ../src/xnoise-media-importer.vala:436
 msgid "Finished import. "
 msgstr "סיים לייבא. "
 
-#: ../src/xnoise-media-importer.vala:426
+#: ../src/xnoise-media-importer.vala:436
 #, c-format
 msgid "Found %d media files"
 msgstr "נמצאו %d קבצי מדיה"
 
-#: ../src/xnoise-media-importer.vala:428
-#: ../src/xnoise-media-importer.vala:429
+#: ../src/xnoise-media-importer.vala:438 ../src/xnoise-media-importer.vala:439
 msgid "Updated library for new media folders. "
 msgstr "הספריה עודכנה עבור הקבצים החדשים. "
 
-#: ../src/xnoise-media-importer.vala:428
+#: ../src/xnoise-media-importer.vala:438
 #, c-format
 msgid "Found %d new media files"
 msgstr "נמצאו %d קבצי מדיה חדשים"
@@ -345,6 +335,43 @@ msgstr "נמצאו %d קבצי מדיה חדשים"
 #: ../src/xnoise-settings-dialog.vala:636
 msgid "Visible extra columns for tracklist:"
 msgstr "עמודות נוספות גלויות ברשימת הרצועות:"
+
+#: ../src/xnoise-tag-artistalbum-editor.vala:143
+#: ../src/xnoise-tag-title-editor.vala:139
+#, fuzzy
+msgid "xnoise - Edit metadata"
+msgstr "xnoise - הוספת מדיה לספריה"
+
+#: ../src/xnoise-tag-artistalbum-editor.vala:146
+#, fuzzy
+msgid "Type new artist name."
+msgstr "שנה את שם האומן"
+
+#: ../src/xnoise-tag-artistalbum-editor.vala:147
+msgid "Artist:"
+msgstr ""
+
+#: ../src/xnoise-tag-artistalbum-editor.vala:150
+#, fuzzy
+msgid "Type new album name."
+msgstr "שנה את שם האלבום"
+
+#: ../src/xnoise-tag-artistalbum-editor.vala:151
+msgid "Album:"
+msgstr ""
+
+#: ../src/xnoise-tag-artistalbum-editor.vala:172
+#: ../src/xnoise-tag-title-editor.vala:157
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+
+#: ../src/xnoise-tag-artistalbum-editor.vala:176
+#: ../src/xnoise-tag-title-editor.vala:161
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
 
 #: ../src/xnoise-tracklist.vala:200
 msgid "Remove selected"
@@ -366,8 +393,7 @@ msgstr "הבא"
 msgid "Exit"
 msgstr "צא"
 
-#: ../src/xnoise-tray-icon.vala:136
-#: ../src/xnoise-tray-icon.vala:148
+#: ../src/xnoise-tray-icon.vala:136 ../src/xnoise-tray-icon.vala:148
 msgid "stopped"
 msgstr "נעצר"
 
