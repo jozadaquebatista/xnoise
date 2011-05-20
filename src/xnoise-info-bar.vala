@@ -42,7 +42,7 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 	               UserInfo.ContentClass _content_class, 
 	               UserInfo.RemovalType _removal_type,
 	               uint _current_id,
-	               int _appearance_time_seconds,
+	               int _appearance_time_seconds = 5,
 	               string _info_text = "", 
 	               bool bold = true,
 	               Gtk.Widget? _extra_widget = null) {
@@ -51,7 +51,7 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 		removal_type  = _removal_type;
 		current_id = _current_id;
 		extra_widget  = _extra_widget;
-		setup_layout(_content_class, _info_text, bold, _appearance_time_seconds = 2);
+		setup_layout(_content_class, _info_text, bold, _appearance_time_seconds);
 	}
 
 	//~InfoBar() {
@@ -146,6 +146,25 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 										uinf.popdown(current_id);
 										return false;
 				});
+				break;
+			case(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON):
+				Timeout.add_seconds(appearance_time_seconds, 
+				                    () => {
+										if(MainContext.current_source().is_destroyed())
+											return false;
+										uinf.popdown(current_id);
+										return false;
+				});
+				close_button = new Gtk.Button.from_stock(Gtk.Stock.CLOSE);
+				close_button.clicked.connect( () => {
+					Idle.add( () => {
+						if(MainContext.current_source().is_destroyed())
+							return false;
+						uinf.popdown(current_id);
+						return false;
+					});
+				});
+				bx.pack_start(close_button, false, false , 0);
 				break;
 			default:
 				break;

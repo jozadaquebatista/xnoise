@@ -38,6 +38,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private uint cycle_time_source;
 	private uint update_tags_source;
 	private uint automatic_subtitles_source;
+	
+	private uint suburi_msg_id = 0;
 
 	private TagList taglist_buffer = null;
 	
@@ -148,21 +150,35 @@ public class Xnoise.GstPlayer : GLib.Object {
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar
 		}
 	}
-
+	
 	public string? suburi { 
 		get { return playbin.suburi; }
 		set {
 			if(this.suburi == value)
 				return;
-				
+			
+			// check if suburi file name matches video file name
 			File sf = File.new_for_uri(value);
 			File uf = File.new_for_uri(this._uri);
 			string sb = sf.get_basename();
 			string ub = uf.get_basename();
 			if(ub.contains("."))
 				ub = ub.substring(0, ub.last_index_of("."));
-			if(!sb.has_prefix(ub)) {
-				print("The subtitle name is not matching the video name! Not setting subtitle uri.\n");
+			if(!sb.has_prefix(ub)) { // not matching, inform user
+				//print("The subtitle name is not matching the video name! Not using subtitle file.\n");
+				if(suburi_msg_id != 0) {
+					userinfo.popdown(suburi_msg_id);
+					suburi_msg_id = 0;
+				}
+				Timeout.add_seconds(1, () => {
+					this.suburi_msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+						                 UserInfo.ContentClass.WARNING,
+						                 _("The subtitle name is not matching the video name! Not using subtitle file."),
+						                 false,
+						                 12,
+						                 null);
+					return false;
+				});	
 				return;
 			}
 			playbin.set_state(State.READY);

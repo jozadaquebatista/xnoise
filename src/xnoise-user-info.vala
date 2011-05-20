@@ -37,9 +37,10 @@ public class Xnoise.UserInfo : GLib.Object {
 	
 	// Set how the infobar should be removed
 	public enum RemovalType {
-		CLOSE_BUTTON = 0, //Info is removed, if close button is clicked
-		TIMER,            //Info is removed, if timer has elapsed
-		EXTERNAL          //Info is removed, if external function is called with messge id; no remove button available and no timer used
+		CLOSE_BUTTON = 0,      //Info is removed, if close button is clicked
+		TIMER,                 //Info is removed, if timer has elapsed
+		TIMER_OR_CLOSE_BUTTON, //Info is removed, if timer has elapsed or close button is clicked
+		EXTERNAL               //Info is removed, if external function is called with messge id; no remove button available and no timer used
 	}
 
 	// Set the type of content. Used to choose picture/spinner

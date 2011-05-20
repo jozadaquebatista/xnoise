@@ -192,7 +192,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class InfoBar : Gtk.InfoBar {
-		public InfoBar (Xnoise.UserInfo _uinf, Xnoise.UserInfo.ContentClass _content_class, Xnoise.UserInfo.RemovalType _removal_type, uint _current_id, int _appearance_time_seconds, string _info_text = "", bool bold = true, Gtk.Widget? _extra_widget = null);
+		public InfoBar (Xnoise.UserInfo _uinf, Xnoise.UserInfo.ContentClass _content_class, Xnoise.UserInfo.RemovalType _removal_type, uint _current_id, int _appearance_time_seconds = 5, string _info_text = "", bool bold = true, Gtk.Widget? _extra_widget = null);
 		public void enable_close_button (bool enable);
 		public unowned Gtk.Widget? get_extra_widget ();
 		public void update_extra_widget (Gtk.Widget? widget);
@@ -554,6 +554,7 @@ namespace Xnoise {
 		public enum RemovalType {
 			CLOSE_BUTTON,
 			TIMER,
+			TIMER_OR_CLOSE_BUTTON,
 			EXTERNAL
 		}
 		[CCode (cheader_filename = "xnoise.h")]
