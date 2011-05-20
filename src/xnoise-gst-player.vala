@@ -31,8 +31,9 @@
 using Gst;
 
 public class Xnoise.GstPlayer : GLib.Object {
-	private bool _current_has_video;
+	private bool _current_has_video_track;
 	private bool _current_has_subtitles;
+	private bool _current_has_audiotracks;
 	
 	private uint cycle_time_source;
 	private uint update_tags_source;
@@ -63,11 +64,12 @@ public class Xnoise.GstPlayer : GLib.Object {
 	private GLib.List<Gst.Message> missing_plugins = new GLib.List<Gst.Message>();
 	private dynamic Element playbin;
 
-	public string[]? available_subtitles { get; private set; }
-
-	public bool current_has_video { // TODO: Determine this elsewhere
+	public string[]? available_subtitles   { get; private set; default = null; }
+	public string[]? available_audiotracks { get; private set; default = null; }
+	
+	public bool current_has_video_track { // TODO: Determine this elsewhere
 		get {
-			return _current_has_video;
+			return _current_has_video_track;
 		}
 	}
 
@@ -123,7 +125,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				playing = false;
 				paused = false;
 			}
-			this._current_has_video = false;
+			this._current_has_video_track = false;
 			Idle.add( () => {
 				videoscreen.trigger_expose();
 				return false;
@@ -133,6 +135,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 			//reset
 			taglist_buffer = null;
 			available_subtitles = null;
+			available_audiotracks = null;
+			this.playbin.suburi = null;
 			length_time = (int64)0;
 			this.playbin.uri = (value == null ? "" : value);
 			// set_automatic_subtitles();
@@ -145,28 +149,41 @@ public class Xnoise.GstPlayer : GLib.Object {
 		}
 	}
 
-	public string? suburi {
-		get {
-			return playbin.suburi;
-		}
+	public string? suburi { 
+		get { return playbin.suburi; }
 		set {
+			if(this.suburi == value)
+				return;
+				
+			File sf = File.new_for_uri(value);
+			File uf = File.new_for_uri(this._uri);
+			string sb = sf.get_basename();
+			string ub = uf.get_basename();
+			if(ub.contains("."))
+				ub = ub.substring(0, ub.last_index_of("."));
+			if(!sb.has_prefix(ub)) {
+				print("The subtitle name is not matching the video name! Not setting subtitle uri.\n");
+				return;
+			}
+			playbin.set_state(State.READY);
 			playbin.suburi = value;
+			// print("got suburi: %s\n", value);
+			this.play();
 		}
 	}
+	
+	public int current_text { 
+		get { return playbin.current_text; }
+		set { playbin.current_text = value; }
+	}
 
-	public int current_text {
-		get {
-			return playbin.current_text;
-		}
-		set {
-			playbin.current_text = value;
-		}
+	public int current_audio {
+		get { return playbin.current_audio; }
+		set { playbin.current_audio = value; }
 	}
 
 	public int n_text {
-		get {
-			return playbin.n_text;
-		}
+		get { return playbin.n_text; }
 	}
 
 	public double gst_position {
@@ -193,7 +210,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public signal void sign_stopped();
 	
 	public signal void sign_video_playing();
-	public signal void sign_subtitles_playing();
+	public signal void sign_subtitles_available();
+	public signal void sign_audiotracks_available();
 	
 	public signal void sign_buffering(int percent);
 	public signal void sign_volume_changed(double volume);
@@ -223,7 +241,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		global.sign_restart_song.connect( () => {
 			playbin.seek(1.0, Gst.Format.TIME,
 			             Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-			             Gst.SeekType.SET, (int64)(0.0 * _length_time),
+			             Gst.SeekType.SET, (int64)0,
 			             Gst.SeekType.NONE, -1);
 			this.playSong();
 		});
@@ -251,37 +269,13 @@ public class Xnoise.GstPlayer : GLib.Object {
 		handle_eos_via_idle();
 	}
 	
-	private void set_automatic_subtitles() {
+	public void set_subtitles_for_current_video(string s_uri) {
 		if(this._uri == null)
 			return;
-		try {
-			File f = File.new_for_uri(this._uri);
-			if(f.get_path() == null) {// not a local file
-				return;
-			}
-			File directory = f.get_parent();
-			var enumerator = directory.enumerate_children(FILE_ATTRIBUTE_STANDARD_NAME + "," +
-			                                              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE, 0);
-			FileInfo file_info;
-			string prefix = remove_suffix_from_filename(f.get_basename());
-			while((file_info = enumerator.next_file ()) != null) {
-				if(file_info.get_name().has_prefix(prefix) && 
-				   (file_info.get_content_type() == "application/x-subrip" || 
-				    file_info.get_content_type() == "text/x-ssa")) {
-					
-					File subfile = File.new_for_path(GLib.Path.build_filename(directory.get_path(), file_info.get_name(), null));
-					print("subfile.get_uri(): %s\n", subfile.get_uri());
-					this.playbin.suburi = ((string)subfile.get_uri());
-					break; // stop with first suburi
-					
-				}
-			}
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
+		if(!current_has_video_track)
 			return;
-		}
-		return;
+		File f = File.new_for_uri(s_uri);
+		this.suburi = f.get_uri();
 	}
 
 	private void create_elements() {
@@ -289,7 +283,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		playbin = ElementFactory.make("playbin2", "playbin");
 		
 		playbin.text_changed.connect( () => {
-			print("text_changed\n");
+			//print("text_changed\n");
 			Timeout.add_seconds(1, () => {
 				//print("playbin2 got text-changed signal. number of texts = %d\n", playbin.n_text);
 				available_subtitles = get_available_languages(PlaybinStreamType.TEXT);
@@ -300,10 +294,31 @@ public class Xnoise.GstPlayer : GLib.Object {
 				n_text = playbin.n_text;
 				if(n_text > 0) {
 					this._current_has_subtitles = true;
-					sign_subtitles_playing();
+					sign_subtitles_available();
 				}
 				else {
 					this._current_has_subtitles = false;
+				}
+				return false;
+			});
+		});
+		
+		playbin.audio_changed.connect( () => {
+			//print("audio_changed\n");
+			Timeout.add_seconds(1, () => {
+				//print("playbin2 got audio-changed signal. number of audio = %d\n", playbin.n_audio);
+				available_audiotracks = get_available_languages(PlaybinStreamType.AUDIO);
+				return false;
+			});
+			Idle.add( () => {
+				int n_audio = 0;
+				n_audio = playbin.n_audio;
+				if(n_audio > 0) { // TODO maybe more than 1 ?
+					this._current_has_audiotracks = true;
+					sign_audiotracks_available();
+				}
+				else {
+					this._current_has_audiotracks = false;
 				}
 				return false;
 			});
@@ -314,11 +329,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 				int n_video = 0;
 				n_video = playbin.n_video;
 				if(n_video > 0) {
-					this._current_has_video = true;
+					this._current_has_video_track = true;
 					sign_video_playing();
 				}
 				else {
-					this._current_has_video = false;
+					this._current_has_video_track = false;
 					videoscreen.trigger_expose();
 				}
 				return false;
@@ -330,8 +345,21 @@ public class Xnoise.GstPlayer : GLib.Object {
 		playbin.text_tags_changed.connect(on_text_tags_changed);
 		playbin.video_tags_changed.connect(on_video_tags_changed);
 		
-		var bus = new Gst.Bus ();
+		//playbin.notify["current-audio"].connect( () => {
+		//	print("current audio track set to %d\n", this.current_audio);
+		//});
+
+		//playbin.notify["current-text"].connect( () => {
+		//	print("current text set to %d\n", this.current_text);
+		//});
+
+		//playbin.notify["suburi"].connect( () => {
+		//	print("current text set to %s\n", this.suburi);
+		//});
+
+		Gst.Bus bus;
 		bus = playbin.get_bus();
+		bus.set_flushing(true);
 		bus.add_signal_watch();
 		bus.message.connect(this.on_bus_message);
 		bus.enable_sync_message_emission();
@@ -472,32 +500,26 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 	
 	// helper function of get_available_languages()
-	private string[]? extract_language(ref TagList? tags, string substitute_prefix, int stream_number = 1) {
-		string[]? result = null;
+	private string? extract_language(ref TagList? tags, string substitute_prefix, int stream_number = 1) {
+		string? result = null;
 		if(tags != null) {
 			string language_code = null;
 			tags.get_string(Gst.TAG_LANGUAGE_CODE, out language_code);
-			//print("language_code: %s\n", language_code);
 			if(language_code != null) {
-				if(result == null) 
-					result = {};
-				result += language_code;
+				result = "%s%d: %s".printf(substitute_prefix, stream_number, language_code);
 			}
 			else {
-				if(result == null) 
-					result = {};
-				result += "%s%d".printf(substitute_prefix, stream_number);
+				result = "%s%d".printf(substitute_prefix, stream_number);
 			}
 		}
 		else {
-			if(result == null) 
-				result = {};
-			result += "%s%d".printf(substitute_prefix, stream_number);
+			result = null; // "%s%d".printf(substitute_prefix, stream_number);
 		}
 		return result;
 	}
 	
 	private string[]? get_available_languages(PlaybinStreamType selected) {
+		//print("playbin.n_audio: %d    playbin.n_text: %d\n", (int)playbin.n_audio, (int)playbin.n_text);
 		string[]? result = null;
 		TagList? tags = null;
 		switch(selected) {
@@ -507,7 +529,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 				
 				for(int i = 0; i < ((int)playbin.n_text); i++) {
 					Signal.emit_by_name(playbin, "get-text-tags", i, ref tags);
-					result = extract_language(ref tags, _("Subtitle #"), i + 1);
+					string? buf = extract_language(ref tags, _("Subtitle #"), i + 1);
+					if(buf != null)
+						result += buf;
 				}
 				break;
 			}
@@ -517,7 +541,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 				
 				for(int i = 0; i < ((int)playbin.n_audio); i++) {
 					Signal.emit_by_name(playbin, "get-audio-tags", i, ref tags);
-					result = extract_language(ref tags, _("Audio Track #"), i + 1);
+					string? buf = extract_language(ref tags, _("Audio Track #"), i + 1);
+					if(buf != null)
+						result += buf; //extract_language(ref tags, _("Audio Track #"), i + 1);
 				}
 				break;
 			}

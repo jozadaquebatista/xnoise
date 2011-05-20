@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-17 11:12+0200\n"
+"POT-Creation-Date: 2011-05-20 14:44+0200\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -85,11 +85,11 @@ msgstr "הוספת קישור לרדיו אינטרנט"
 msgid "Leave fullscreen"
 msgstr "יציאה ממסך מלא"
 
-#: ../src/xnoise-gst-player.vala:510
+#: ../src/xnoise-gst-player.vala:532
 msgid "Subtitle #"
 msgstr "כתוביות #"
 
-#: ../src/xnoise-gst-player.vala:520
+#: ../src/xnoise-gst-player.vala:544
 msgid "Audio Track #"
 msgstr "רצועת שמע #"
 
@@ -302,15 +302,15 @@ msgstr "הסרת הכול"
 msgid "Remove selected titles"
 msgstr "הסרת כל הכותרות הנבחרות"
 
-#: ../src/xnoise-media-browser.vala:314
+#: ../src/xnoise-media-browser.vala:313
 msgid "Change artist name"
 msgstr "שנה את שם האומן"
 
-#: ../src/xnoise-media-browser.vala:331
+#: ../src/xnoise-media-browser.vala:323
 msgid "Change album name"
 msgstr "שנה את שם האלבום"
 
-#: ../src/xnoise-media-browser.vala:348
+#: ../src/xnoise-media-browser.vala:333
 msgid "Edit metadata for track"
 msgstr "ערוך את ה-metadata של הרצועה"
 
@@ -373,7 +373,7 @@ msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
 
-#: ../src/xnoise-tracklist.vala:200
+#: ../src/xnoise-tracklist.vala:199
 msgid "Remove selected"
 msgstr "הסרת הנבחרים"
 
@@ -410,9 +410,13 @@ msgstr "השהה"
 msgid "ready to rock"
 msgstr "ready to rock"
 
-#: ../src/xnoise-videoscreen.vala:71
-msgid "No Subtitle"
-msgstr "ללא כתוביות"
+#: ../src/xnoise-videoscreen.vala:40
+#, fuzzy
+msgid "Select external subtitle file"
+msgstr "בחירת קובץ מדיה"
+
+#~ msgid "No Subtitle"
+#~ msgstr "ללא כתוביות"
 
 #~ msgid "Enable a lyrics provider plugin for lyrics fetching to work"
 #~ msgstr "Enable a lyrics provider plugin for lyrics fetching to work"

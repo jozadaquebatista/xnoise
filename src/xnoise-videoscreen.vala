@@ -37,6 +37,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	private unowned Main xn;
 	private bool cover_image_available;
 	private unowned GstPlayer player;
+	private static const string SELECT_EXT_SUBTITLE_FILE = _("Select external subtitle file");
 	
 	public VideoScreen(GstPlayer _player) {
 		this.player = _player;
@@ -60,47 +61,79 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 		return true;
 	}
-
+	
 	private Menu? create_rightclick_menu() {
 		Menu rightmenu = null;
+		int groupcnt = 0;
 		if(player.available_subtitles != null) {
-			rightmenu = new Menu();
+			if(rightmenu == null)
+				rightmenu = new Menu();
 			int i = 0;
-			var menuitem_empty = new MenuItem();
-			var menuitemHbox_empty = new HBox(false, 1);
-			var menuitemLabel_empty = new Label(_("No Subtitle"));
-			var menuitemimage_empty = new Gtk.Image();
-			menuitemimage_empty.set_from_stock(Gtk.Stock.INFO, IconSize.MENU);
-			menuitemHbox_empty.set_homogeneous(false);
-			menuitemHbox_empty.pack_start(menuitemimage_empty, false, false, 0);
-			menuitemHbox_empty.pack_start(menuitemLabel_empty, true, true, 0);
-			menuitem_empty.add(menuitemHbox_empty);
-			menuitem_empty.activate.connect( () => { 
-				print("menuitem selected: %d\n", 0); 
-				this.player.current_text = -1;
-			});
-			rightmenu.append(menuitem_empty);
-
 			foreach(unowned string s in player.available_subtitles) {
-				var menuitem = new MenuItem();
-				var menuitemHbox = new HBox(false, 1);
-				var menuitemLabel = new Label(s);
-				var menuitemimage = new Gtk.Image();
-				menuitemimage.set_from_stock(Gtk.Stock.INFO, IconSize.MENU);
-				menuitemHbox.set_homogeneous(false);
-				menuitemHbox.pack_start(menuitemimage, false, false, 0);
-				menuitemHbox.pack_start(menuitemLabel, true, true, 0);
-				menuitem.add(menuitemHbox);
-				int k = ++i;
+				var menuitem = new ImageMenuItem.from_stock (Gtk.Stock.INDEX, null);
+				menuitem.set_label(s);
+				int k = i++;
 				menuitem.activate.connect( () => { 
-					print("menuitem selected: %d\n", k); 
+					//print("text selected: %d\n", k); 
 					this.player.current_text = k;
 				});
 				rightmenu.append(menuitem);
 			}
-			rightmenu.show_all();
+			if(player.available_subtitles.length > 0)
+				groupcnt++;
 		}
+		if(player.available_audiotracks != null && player.available_audiotracks.length > 1) {
+			if(rightmenu == null)
+				rightmenu = new Menu();
+			if(groupcnt > 0)
+				rightmenu.append(new SeparatorMenuItem());
+			int i = 0;
+			foreach(unowned string s in player.available_audiotracks) {
+				var menuitem = new ImageMenuItem.from_stock (Gtk.Stock.INFO, null);
+				menuitem.set_label(s);
+				int k = i++;
+				menuitem.activate.connect( () => { 
+					//print("audio selected: %d\n", k); 
+					this.player.current_audio = k;
+				});
+				rightmenu.append(menuitem);
+			}
+			if(player.available_audiotracks.length > 1)
+				groupcnt++;
+		}
+		if(player.current_has_video_track) {
+			if(rightmenu == null)
+				rightmenu = new Menu();
+			if(groupcnt > 0)
+				rightmenu.append(new SeparatorMenuItem());
+			var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.EDIT, null);
+			menu_item.set_label(SELECT_EXT_SUBTITLE_FILE);
+			menu_item.activate.connect(this.open_suburi_filechooser);
+			rightmenu.append(menu_item);			
+		}
+		if(rightmenu != null)
+			rightmenu.show_all();
 		return rightmenu;
+	}
+	
+	private void open_suburi_filechooser() {
+		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
+			SELECT_EXT_SUBTITLE_FILE,
+			xn.main_window,
+			Gtk.FileChooserAction.OPEN,
+			Gtk.Stock.CANCEL,
+			Gtk.ResponseType.CANCEL,
+			Gtk.Stock.OPEN,
+			Gtk.ResponseType.ACCEPT,
+			null);
+		fcdialog.set_current_folder(Environment.get_home_dir());
+		if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
+			File f = File.new_for_path(fcdialog.get_filename());
+			//print("got suburi xxx : %s\n", f.get_uri());
+			player.set_subtitles_for_current_video(f.get_uri());
+		}
+		fcdialog.destroy();
+		fcdialog = null;
 	}
 
 	private void on_image_path_changed() {
@@ -164,7 +197,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		             e.area.width, e.area.height);
 		cr.fill();
 		
-		if(!xn.gPl.current_has_video) {
+		if(!xn.gPl.current_has_video_track) {
 		
 			int y_offset;
 			int x_offset;

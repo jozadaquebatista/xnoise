@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-17 11:12+0200\n"
+"POT-Creation-Date: 2011-05-20 14:44+0200\n"
 "PO-Revision-Date: 2011-04-29 20:41+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -84,11 +84,11 @@ msgstr "Добавить ссылку на интернет-радио"
 msgid "Leave fullscreen"
 msgstr "Выйти из полноэкранного режима"
 
-#: ../src/xnoise-gst-player.vala:510
+#: ../src/xnoise-gst-player.vala:532
 msgid "Subtitle #"
 msgstr "Subtitle #"
 
-#: ../src/xnoise-gst-player.vala:520
+#: ../src/xnoise-gst-player.vala:544
 msgid "Audio Track #"
 msgstr "Audio Track #"
 
@@ -303,15 +303,15 @@ msgstr "Remove all"
 msgid "Remove selected titles"
 msgstr "Remove selected titles"
 
-#: ../src/xnoise-media-browser.vala:314
+#: ../src/xnoise-media-browser.vala:313
 msgid "Change artist name"
 msgstr "Change artist name"
 
-#: ../src/xnoise-media-browser.vala:331
+#: ../src/xnoise-media-browser.vala:323
 msgid "Change album name"
 msgstr "Change album name"
 
-#: ../src/xnoise-media-browser.vala:348
+#: ../src/xnoise-media-browser.vala:333
 msgid "Edit metadata for track"
 msgstr "Edit metadata for track"
 
@@ -374,7 +374,7 @@ msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
 
-#: ../src/xnoise-tracklist.vala:200
+#: ../src/xnoise-tracklist.vala:199
 msgid "Remove selected"
 msgstr "Remove selected"
 
@@ -411,9 +411,13 @@ msgstr "paused"
 msgid "ready to rock"
 msgstr "ready to rock"
 
-#: ../src/xnoise-videoscreen.vala:71
-msgid "No Subtitle"
-msgstr "No Subtitle"
+#: ../src/xnoise-videoscreen.vala:40
+#, fuzzy
+msgid "Select external subtitle file"
+msgstr "Select media file"
+
+#~ msgid "No Subtitle"
+#~ msgstr "No Subtitle"
 
 #~ msgid "Enable a lyrics provider plugin for lyrics fetching to work"
 #~ msgstr "Enable a lyrics provider plugin for lyrics fetching to work"

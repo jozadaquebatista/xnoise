@@ -161,11 +161,14 @@ namespace Xnoise {
 		public void play ();
 		public void playSong (bool force_play = false);
 		public void request_time_offset_seconds (int seconds);
+		public void set_subtitles_for_current_video (string s_uri);
 		public void stop ();
+		public string[]? available_audiotracks { get; private set; }
 		public string[]? available_subtitles { get; private set; }
 		public bool buffering { get; private set; }
+		public int current_audio { get; set; }
 		public bool current_has_subtitles { get; }
-		public bool current_has_video { get; }
+		public bool current_has_video_track { get; }
 		public int current_text { get; set; }
 		public double gst_position { get; set; }
 		public bool is_stream { get; private set; }
@@ -177,12 +180,13 @@ namespace Xnoise {
 		public string? suburi { get; set; }
 		public string? uri { get; set; }
 		public double volume { get; set; }
+		public signal void sign_audiotracks_available ();
 		public signal void sign_buffering (int percent);
 		public signal void sign_paused ();
 		public signal void sign_playing ();
 		public signal void sign_song_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
-		public signal void sign_subtitles_playing ();
+		public signal void sign_subtitles_available ();
 		public signal void sign_video_playing ();
 		public signal void sign_volume_changed (double volume);
 	}

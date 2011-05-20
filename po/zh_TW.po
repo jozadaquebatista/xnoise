@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-17 11:12+0200\n"
+"POT-Creation-Date: 2011-05-20 14:44+0200\n"
 "PO-Revision-Date: 2011-05-05 10:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -81,11 +81,11 @@ msgstr "加入網際網路電臺鏈結"
 msgid "Leave fullscreen"
 msgstr "保持全螢幕"
 
-#: ../src/xnoise-gst-player.vala:510
+#: ../src/xnoise-gst-player.vala:532
 msgid "Subtitle #"
 msgstr "子標題 #"
 
-#: ../src/xnoise-gst-player.vala:520
+#: ../src/xnoise-gst-player.vala:544
 msgid "Audio Track #"
 msgstr "音訊軌段 #"
 
@@ -298,15 +298,15 @@ msgstr "全部移除"
 msgid "Remove selected titles"
 msgstr "移除已選標題"
 
-#: ../src/xnoise-media-browser.vala:314
+#: ../src/xnoise-media-browser.vala:313
 msgid "Change artist name"
 msgstr "Change artist name"
 
-#: ../src/xnoise-media-browser.vala:331
+#: ../src/xnoise-media-browser.vala:323
 msgid "Change album name"
 msgstr "Change album name"
 
-#: ../src/xnoise-media-browser.vala:348
+#: ../src/xnoise-media-browser.vala:333
 msgid "Edit metadata for track"
 msgstr "Edit metadata for track"
 
@@ -369,7 +369,7 @@ msgid ""
 msgstr ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 
-#: ../src/xnoise-tracklist.vala:200
+#: ../src/xnoise-tracklist.vala:199
 msgid "Remove selected"
 msgstr "移除已選"
 
@@ -406,6 +406,10 @@ msgstr "已暫停"
 msgid "ready to rock"
 msgstr "準備開始搖滾"
 
-#: ../src/xnoise-videoscreen.vala:71
-msgid "No Subtitle"
-msgstr "沒有子標題"
+#: ../src/xnoise-videoscreen.vala:40
+#, fuzzy
+msgid "Select external subtitle file"
+msgstr "選取媒體檔案"
+
+#~ msgid "No Subtitle"
+#~ msgstr "沒有子標題"

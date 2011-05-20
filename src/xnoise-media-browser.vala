@@ -309,15 +309,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	
 	private Menu create_edit_artist_tag_menu() {
 		var rightmenu = new Menu();
-		var popup_image = new Gtk.Image();
-		popup_image.set_from_stock(Gtk.Stock.INFO, IconSize.MENU);
-		var label = new Label(_("Change artist name"));
-		label.set_alignment(0, 0);
-		var menu_item = new MenuItem();
-		var hbox = new HBox(false, 1);
-		hbox.pack_start(popup_image, false, false, 2);
-		hbox.pack_start(label, true, true, 0);
-		menu_item.add(hbox);
+		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
+		menu_item.set_label(_("Change artist name"));
 		menu_item.activate.connect(this.open_tagartist_changer);
 		rightmenu.append(menu_item);
 		rightmenu.show_all();
@@ -326,15 +319,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private Menu create_edit_album_tag_menu() {
 		var rightmenu = new Menu();
-		var popup_image = new Gtk.Image();
-		popup_image.set_from_stock(Gtk.Stock.INFO, IconSize.MENU);
-		var label = new Label(_("Change album name"));
-		label.set_alignment(0, 0);
-		var menu_item = new MenuItem();
-		var hbox = new HBox(false, 1);
-		hbox.pack_start(popup_image, false, false, 2);
-		hbox.pack_start(label, true, true, 0);
-		menu_item.add(hbox);
+		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
+		menu_item.set_label(_("Change album name"));
 		menu_item.activate.connect(this.open_tagalbum_changer);
 		rightmenu.append(menu_item);
 		rightmenu.show_all();
@@ -343,15 +329,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private Menu create_edit_title_tag_menu() {
 		var rightmenu = new Menu();
-		var popup_image = new Gtk.Image();
-		popup_image.set_from_stock(Gtk.Stock.INFO, IconSize.MENU);
-		var label = new Label(_("Edit metadata for track"));
-		label.set_alignment(0, 0);
-		var menu_item = new MenuItem();
-		var hbox = new HBox(false, 1);
-		hbox.pack_start(popup_image, false, false, 2);
-		hbox.pack_start(label, true, true, 0);
-		menu_item.add(hbox);
+		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
+		menu_item.set_label(_("Edit metadata for track"));
 		menu_item.activate.connect(this.open_tagtitle_changer);
 		rightmenu.append(menu_item);
 		rightmenu.show_all();

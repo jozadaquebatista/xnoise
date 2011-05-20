@@ -195,19 +195,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 	private Menu create_rightclick_menu() {
 		var rightmenu = new Menu();
-		var playpause_popup_image = new Gtk.Image();
-		playpause_popup_image.set_from_stock(Gtk.Stock.DELETE, IconSize.MENU);
-		var removeLabel = new Label(_("Remove selected"));
-		removeLabel.set_alignment(0, 0);
-		removeLabel.set_width_chars(20);
-		var removetrackItem = new MenuItem();
-		var removeHbox = new HBox(false,1);
-		removeHbox.set_spacing(10);
-		removeHbox.pack_start(playpause_popup_image, false, true, 0);
-		removeHbox.pack_start(removeLabel, true, true, 0);
-		removetrackItem.add(removeHbox);
-		removetrackItem.activate.connect(this.remove_selected_rows);
-		rightmenu.append(removetrackItem);
+		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.DELETE, null);
+		menu_item.set_label(_("Remove selected"));
+		menu_item.activate.connect(this.remove_selected_rows);
+		rightmenu.append(menu_item);
 		rightmenu.show_all();
 		return rightmenu;
 	}

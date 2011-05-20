@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-17 11:12+0200\n"
+"POT-Creation-Date: 2011-05-20 14:44+0200\n"
 "PO-Revision-Date: 2011-05-14 12:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: fsistemas <f.sistemas@gmail.com>\n"
@@ -84,11 +84,11 @@ msgstr "Agregar url a emisora de radio por internet"
 msgid "Leave fullscreen"
 msgstr "Salir de pantalla completa"
 
-#: ../src/xnoise-gst-player.vala:510
+#: ../src/xnoise-gst-player.vala:532
 msgid "Subtitle #"
 msgstr "Subtitle #"
 
-#: ../src/xnoise-gst-player.vala:520
+#: ../src/xnoise-gst-player.vala:544
 msgid "Audio Track #"
 msgstr "Audio Track #"
 
@@ -304,15 +304,15 @@ msgstr "Eliminar todo"
 msgid "Remove selected titles"
 msgstr "Eliminar titulos seleccionados"
 
-#: ../src/xnoise-media-browser.vala:314
+#: ../src/xnoise-media-browser.vala:313
 msgid "Change artist name"
 msgstr "Cambiar nombre del artista"
 
-#: ../src/xnoise-media-browser.vala:331
+#: ../src/xnoise-media-browser.vala:323
 msgid "Change album name"
 msgstr "Cambiar nombre del album"
 
-#: ../src/xnoise-media-browser.vala:348
+#: ../src/xnoise-media-browser.vala:333
 msgid "Edit metadata for track"
 msgstr "Editar metadatos a la canción"
 
@@ -375,7 +375,7 @@ msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
 
-#: ../src/xnoise-tracklist.vala:200
+#: ../src/xnoise-tracklist.vala:199
 msgid "Remove selected"
 msgstr "Eliminar seleccionados"
 
@@ -412,9 +412,13 @@ msgstr "paused"
 msgid "ready to rock"
 msgstr "ready to rock"
 
-#: ../src/xnoise-videoscreen.vala:71
-msgid "No Subtitle"
-msgstr "Sin subtitulo"
+#: ../src/xnoise-videoscreen.vala:40
+#, fuzzy
+msgid "Select external subtitle file"
+msgstr "Seleccione un archivo multimedia"
+
+#~ msgid "No Subtitle"
+#~ msgstr "Sin subtitulo"
 
 #~ msgid "Enable a lyrics provider plugin for lyrics fetching to work"
 #~ msgstr "Enable a lyrics provider plugin for lyrics fetching to work"
