@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-20 14:44+0200\n"
+"POT-Creation-Date: 2011-05-20 15:44+0200\n"
 "PO-Revision-Date: 2011-04-29 20:41+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -84,11 +84,16 @@ msgstr "Добавить ссылку на интернет-радио"
 msgid "Leave fullscreen"
 msgstr "Выйти из полноэкранного режима"
 
-#: ../src/xnoise-gst-player.vala:532
+#: ../src/xnoise-gst-player.vala:176
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
+msgstr ""
+
+#: ../src/xnoise-gst-player.vala:548
 msgid "Subtitle #"
 msgstr "Subtitle #"
 
-#: ../src/xnoise-gst-player.vala:544
+#: ../src/xnoise-gst-player.vala:560
 msgid "Audio Track #"
 msgstr "Audio Track #"
 
