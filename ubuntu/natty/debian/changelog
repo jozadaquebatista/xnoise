@@ -1,3 +1,16 @@
+xnoise (0.1.23.2-natty-0ubuntu0) natty; urgency=low
+  * make choosing of subtitles, audio tracks and external subtitle files usable
+  * inform the user in case a non-matching external subtitle file has been chosen
+  * honor searchterm while doing full library scans
+  * honor searchterms while initial population of mediabrowser model
+  * fix: summary for notifications must not be escaped
+  * update translations
+  * fix: use ui files with lower gtk requirement
+  * try workaround AM_PROG_VALAC issue
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 20 May 2011 15:55:50 +0200
+
+
 xnoise (0.1.22.2-natty-0ubuntu0) natty; urgency=low
   * fix package dependencies
 
