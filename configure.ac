@@ -39,7 +39,6 @@ LIBNOTIFY_REQUIRED=0.4.5
 LIBNOTIFY_07_REQUIRED=0.7.0
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
-DBUS_GLIB_REQUIRED=0.0.1
 LIBINDICATE_REQUIRED=0.4.2
 GDBUS_REQUIRED=2.26
 
@@ -459,11 +458,14 @@ XNOISE_PACKAGES="\
     --pkg taglib_c \
     --pkg unique-1.0 \
     --pkg linux \
+	--target-glib=`pkg-config --modversion glib-2.0` \
 "
 
 LIBXNOISEUTILS_PACKAGES="\
     --pkg config \
+	--target-glib=`pkg-config --modversion glib-2.0` \
 "
+
 
 AC_SUBST(XNOISE_CFLAGS)
 AC_SUBST(XNOISE_LIBS)
