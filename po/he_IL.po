@@ -89,7 +89,7 @@ msgstr "יציאה ממסך מלא"
 msgid ""
 "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr ""
-
+"שם הכתוביות אינו מתאים לשם הוידאו! לא משתמש בקובץ כתוביות.
 #: ../src/xnoise-gst-player.vala:548
 msgid "Subtitle #"
 msgstr "כתוביות #"
@@ -100,11 +100,11 @@ msgstr "רצועת שמע #"
 
 #: ../src/xnoise-lyrics-view.vala:88 ../src/xnoise-lyrics-view.vala:107
 msgid "Player stopped. Not searching for lyrics."
-msgstr "הנגן הפסיק. לא מחפש את מילות השיר."
+msgstr "הנגן הפסיק. לא מחפש אחר מילות השיר."
 
 #: ../src/xnoise-lyrics-view.vala:118
 msgid "Insufficient track information. Not searching for lyrics."
-msgstr "רצועת המידע אינה מספיקה. לא מחפש את מילות השיר."
+msgstr "רצועת המידע אינה מספיקה. לא מחפש אחר מילות השיר."
 
 #. Gtk.TextIter start_iter;
 #. Gtk.TextIter end_iter;
@@ -161,7 +161,7 @@ msgstr "פתח מיקום מרוחק"
 
 #: ../src/xnoise-main-window.vala:143
 msgid "_Add or Remove media"
-msgstr "הוס_פה או הסרה של מדיה"
+msgstr "הו_ספה או הסרה של מדיה"
 
 #: ../src/xnoise-main-window.vala:143
 msgid "manage the content of the xnoise media library"
@@ -181,7 +181,7 @@ msgstr "פינוי רשימת הרצועות"
 
 #: ../src/xnoise-main-window.vala:147
 msgid "R_escan collection"
-msgstr "סרוק אוסף שוב"
+msgstr "_סרוק אוסף שוב"
 
 #: ../src/xnoise-main-window.vala:149
 msgid "_View"
@@ -309,7 +309,7 @@ msgstr "הסרת כל הכותרות הנבחרות"
 
 #: ../src/xnoise-media-browser.vala:313
 msgid "Change artist name"
-msgstr "שנה את שם האומן"
+msgstr "שנה את שם האמן"
 
 #: ../src/xnoise-media-browser.vala:323
 msgid "Change album name"
@@ -350,11 +350,11 @@ msgstr "xnoise - הוספת מדיה לספריה"
 #: ../src/xnoise-tag-artistalbum-editor.vala:146
 #, fuzzy
 msgid "Type new artist name."
-msgstr "שנה את שם האומן"
+msgstr "שנה את שם האמן"
 
 #: ../src/xnoise-tag-artistalbum-editor.vala:147
 msgid "Artist:"
-msgstr ""
+msgstr "אמן:"
 
 #: ../src/xnoise-tag-artistalbum-editor.vala:150
 #, fuzzy
@@ -363,7 +363,7 @@ msgstr "שנה את שם האלבום"
 
 #: ../src/xnoise-tag-artistalbum-editor.vala:151
 msgid "Album:"
-msgstr ""
+msgstr "אלבום:"
 
 #: ../src/xnoise-tag-artistalbum-editor.vala:172
 #: ../src/xnoise-tag-title-editor.vala:157
@@ -371,13 +371,13 @@ msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
 "wait."
 msgstr ""
-
+"אנא המתן בעת מילוי דפדפן המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 #: ../src/xnoise-tag-artistalbum-editor.vala:176
 #: ../src/xnoise-tag-title-editor.vala:161
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
-
+"אנא המתן בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 #: ../src/xnoise-tracklist.vala:199
 msgid "Remove selected"
 msgstr "הסרת הנבחרים"
