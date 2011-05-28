@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-20 15:44+0200\n"
+"POT-Creation-Date: 2011-05-29 01:01+0200\n"
 "PO-Revision-Date: 2011-05-05 10:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -65,7 +65,7 @@ msgstr "xnoise - 加入媒體到媒體庫"
 msgid "Importing media data. This may take some time..."
 msgstr "匯入媒體資料。這也許會花一點時間…"
 
-#: ../src/xnoise-add-media-dialog.vala:279 ../src/xnoise-main-window.vala:981
+#: ../src/xnoise-add-media-dialog.vala:279 ../src/xnoise-main-window.vala:982
 msgid "Select media file"
 msgstr "選取媒體檔案"
 
@@ -121,7 +121,8 @@ msgstr ""
 "\n"
 "使用 %3$s…"
 
-#: ../src/xnoise-main-window.vala:41
+#: ../src/xnoise-main-window.vala:41 ../src/xnoise-main-window.vala:1231
+#: ../src/xnoise-main-window.vala:1235
 msgid "Video"
 msgstr "影片"
 
@@ -129,125 +130,130 @@ msgstr "影片"
 msgid "Tracklist"
 msgstr "軌段列表"
 
-#: ../src/xnoise-main-window.vala:43 ../src/xnoise-main-window.vala:117
-#: ../src/xnoise-main-window.vala:118 ../src/xnoise-main-window.vala:119
+#: ../src/xnoise-main-window.vala:43
+#, fuzzy
+msgid "Lyrics"
+msgstr "歌詞(_L)"
+
+#: ../src/xnoise-main-window.vala:44 ../src/xnoise-main-window.vala:118
+#: ../src/xnoise-main-window.vala:119 ../src/xnoise-main-window.vala:120
 msgid "Show Media"
 msgstr "顯示媒體"
 
-#: ../src/xnoise-main-window.vala:44 ../src/xnoise-main-window.vala:112
-#: ../src/xnoise-main-window.vala:113 ../src/xnoise-main-window.vala:114
+#: ../src/xnoise-main-window.vala:45 ../src/xnoise-main-window.vala:113
+#: ../src/xnoise-main-window.vala:114 ../src/xnoise-main-window.vala:115
 msgid "Hide Media"
 msgstr "隱藏媒體"
 
-#: ../src/xnoise-main-window.vala:140
+#: ../src/xnoise-main-window.vala:141
 msgid "_File"
 msgstr "檔案(_F)"
 
-#: ../src/xnoise-main-window.vala:141
+#: ../src/xnoise-main-window.vala:142
 msgid "open file"
 msgstr "開啟檔案"
 
-#: ../src/xnoise-main-window.vala:142
+#: ../src/xnoise-main-window.vala:143
 msgid "Open _Location"
 msgstr "開啟位置(_L)"
 
-#: ../src/xnoise-main-window.vala:142
+#: ../src/xnoise-main-window.vala:143
 msgid "open remote location"
 msgstr "開啟遠端位置"
 
-#: ../src/xnoise-main-window.vala:143
+#: ../src/xnoise-main-window.vala:144
 msgid "_Add or Remove media"
 msgstr "加入或移除媒體(_A)"
 
-#: ../src/xnoise-main-window.vala:143
+#: ../src/xnoise-main-window.vala:144
 msgid "manage the content of the xnoise media library"
 msgstr "管理 xnoise 媒體庫的內容"
 
-#: ../src/xnoise-main-window.vala:145
+#: ../src/xnoise-main-window.vala:146
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: ../src/xnoise-main-window.vala:146
+#: ../src/xnoise-main-window.vala:147
 msgid "C_lear tracklist"
 msgstr "清空軌段列表(_L)"
 
-#: ../src/xnoise-main-window.vala:146
+#: ../src/xnoise-main-window.vala:147
 msgid "Clear the tracklist"
 msgstr "將軌段列表清空"
 
-#: ../src/xnoise-main-window.vala:147
+#: ../src/xnoise-main-window.vala:148
 msgid "R_escan collection"
 msgstr "重新掃描收藏(_E)"
 
-#: ../src/xnoise-main-window.vala:149
+#: ../src/xnoise-main-window.vala:150
 msgid "_View"
 msgstr "檢視(_V)"
 
-#: ../src/xnoise-main-window.vala:150
+#: ../src/xnoise-main-window.vala:151
 msgid "_Tracklist"
 msgstr "軌段列表(_T)"
 
-#: ../src/xnoise-main-window.vala:150
+#: ../src/xnoise-main-window.vala:151
 msgid "Go to the tracklist."
 msgstr "前往軌段列表。"
 
-#: ../src/xnoise-main-window.vala:151
+#: ../src/xnoise-main-window.vala:152
 msgid "_Video screen"
 msgstr "影片畫面(_V)"
 
-#: ../src/xnoise-main-window.vala:151
+#: ../src/xnoise-main-window.vala:152
 msgid "Go to the video screen in the main window."
 msgstr "前往主視窗中的影片畫面。"
 
-#: ../src/xnoise-main-window.vala:152
+#: ../src/xnoise-main-window.vala:153
 msgid "_Lyrics"
 msgstr "歌詞(_L)"
 
-#: ../src/xnoise-main-window.vala:152
+#: ../src/xnoise-main-window.vala:153
 msgid "Go to the lyrics view."
 msgstr "前往歌詞檢視。"
 
-#: ../src/xnoise-main-window.vala:153
+#: ../src/xnoise-main-window.vala:154
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: ../src/xnoise-main-window.vala:155
+#: ../src/xnoise-main-window.vala:156
 msgid "_Config"
 msgstr "組配(_C)"
 
-#: ../src/xnoise-main-window.vala:428
+#: ../src/xnoise-main-window.vala:429
 msgid "Add media"
 msgstr "加入媒體"
 
-#: ../src/xnoise-main-window.vala:431
+#: ../src/xnoise-main-window.vala:432
 msgid ""
 "You started xnoise for the first time. Do you want to import media into the "
 "library?"
 msgstr "您是首次啟動 xnoise，要將媒體匯入媒體庫嗎？"
 
 #. TODO: create some other images
-#: ../src/xnoise-main-window.vala:525
+#: ../src/xnoise-main-window.vala:526
 msgid "no repeat"
 msgstr "不重複"
 
-#: ../src/xnoise-main-window.vala:530
+#: ../src/xnoise-main-window.vala:531
 msgid "repeat single"
 msgstr "重複單曲"
 
-#: ../src/xnoise-main-window.vala:535
+#: ../src/xnoise-main-window.vala:536
 msgid "repeat all"
 msgstr "重複所有"
 
-#: ../src/xnoise-main-window.vala:540
+#: ../src/xnoise-main-window.vala:541
 msgid "random play"
 msgstr "隨機播放"
 
-#: ../src/xnoise-main-window.vala:967
+#: ../src/xnoise-main-window.vala:968
 msgid "Enter the URL of the file to open"
 msgstr "輸入要開啟的檔案網址"
 
-#: ../src/xnoise-main-window.vala:1046 ../src/xnoise-main-window.vala:1069
-#: ../src/xnoise-main-window.vala:1111 ../src/xnoise-main-window.vala:1136
+#: ../src/xnoise-main-window.vala:1047 ../src/xnoise-main-window.vala:1070
+#: ../src/xnoise-main-window.vala:1112 ../src/xnoise-main-window.vala:1137
 #: ../src/xnoise-tray-icon.vala:198
 #: ../plugins/notifications/xnoise-notifications.vala:184
 #: ../plugins/notifications2/xnoise-notifications.vala:178
@@ -257,8 +263,8 @@ msgstr "輸入要開啟的檔案網址"
 msgid "by"
 msgstr "由"
 
-#: ../src/xnoise-main-window.vala:1048 ../src/xnoise-main-window.vala:1071
-#: ../src/xnoise-main-window.vala:1113 ../src/xnoise-main-window.vala:1138
+#: ../src/xnoise-main-window.vala:1049 ../src/xnoise-main-window.vala:1072
+#: ../src/xnoise-main-window.vala:1114 ../src/xnoise-main-window.vala:1139
 #: ../src/xnoise-tray-icon.vala:200
 #: ../plugins/notifications/xnoise-notifications.vala:186
 #: ../plugins/notifications2/xnoise-notifications.vala:180
@@ -268,38 +274,38 @@ msgstr "由"
 msgid "on"
 msgstr "於"
 
-#: ../src/xnoise-main-window.vala:1068 ../src/xnoise-main-window.vala:1135
+#: ../src/xnoise-main-window.vala:1069 ../src/xnoise-main-window.vala:1136
 #: ../src/xnoise-tray-icon.vala:189
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:151
 #, c-format
 msgid "unknown title"
 msgstr "不明標題"
 
-#: ../src/xnoise-main-window.vala:1070 ../src/xnoise-main-window.vala:1137
+#: ../src/xnoise-main-window.vala:1071 ../src/xnoise-main-window.vala:1138
 #: ../src/xnoise-tray-icon.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 msgid "unknown artist"
 msgstr "不明演出者"
 
-#: ../src/xnoise-main-window.vala:1072 ../src/xnoise-main-window.vala:1139
+#: ../src/xnoise-main-window.vala:1073 ../src/xnoise-main-window.vala:1140
 #: ../src/xnoise-tray-icon.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown album"
 msgstr "不明專輯"
 
-#: ../src/xnoise-main-window.vala:1121
+#: ../src/xnoise-main-window.vala:1122
 msgid "unknown organization"
 msgstr "不明組織"
 
-#: ../src/xnoise-main-window.vala:1123
+#: ../src/xnoise-main-window.vala:1124
 msgid "unknown location"
 msgstr "不明位置"
 
-#: ../src/xnoise-main-window.vala:1220
+#: ../src/xnoise-main-window.vala:1221
 msgid "Remove all"
 msgstr "全部移除"
 
-#: ../src/xnoise-main-window.vala:1225
+#: ../src/xnoise-main-window.vala:1226
 msgid "Remove selected titles"
 msgstr "移除已選標題"
 

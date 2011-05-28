@@ -40,6 +40,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string MENU_UI_FILE     = Config.UIDIR + "main_ui.xml";
 	private const string SHOWVIDEO        = _("Video");
 	private const string SHOWTRACKLIST    = _("Tracklist");
+	private const string SHOWLYRICS       = _("Lyrics");
 	private const string SHOWMEDIABROWSER = _("Show Media");
 	private const string HIDEMEDIABROWSER = _("Hide Media");
 	private unowned Main xn;
@@ -1227,27 +1228,33 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//SHOW VIDEO BUTTONS
 			showvideobuttonTL                = gb.get_object("showvideobuttonTL") as Gtk.Button;
+			showvideobuttonTL.label          = SHOWVIDEO;
 			showvideobuttonTL.can_focus      = false;
 			showvideobuttonTL.clicked.connect(this.on_show_video_button_clicked);
 			showvideobuttonLY                = gb.get_object("showVideobuttonLY") as Gtk.Button;
+			showvideobuttonLY.label          = SHOWVIDEO;
 			showvideobuttonLY.can_focus      = false;
 			showvideobuttonLY.clicked.connect(this.on_show_video_button_clicked);
 			//--------------------
 
 			//SHOW TRACKLIST BUTTONS
 			showtracklistbuttonLY            = gb.get_object("showTLbuttonLY") as Gtk.Button;
+			showtracklistbuttonLY.label      = SHOWTRACKLIST;
 			showtracklistbuttonLY.can_focus  = false;
 			showtracklistbuttonLY.clicked.connect(this.on_show_tracklist_button_clicked);
 			showtracklistbuttonVid           = gb.get_object("showTLbuttonv") as Gtk.Button;
+			showtracklistbuttonVid.label     = SHOWTRACKLIST;
 			showtracklistbuttonVid.can_focus = false;
 			showtracklistbuttonVid.clicked.connect(this.on_show_tracklist_button_clicked);
 			//--------------------
 
 			//SHOW LYRICS BUTTONS
 			showlyricsbuttonTL               = gb.get_object("showLyricsbuttonTL") as Gtk.Button;
+			showlyricsbuttonTL.label         = SHOWLYRICS;
 			showlyricsbuttonTL.can_focus     = false;
 			showlyricsbuttonTL.clicked.connect(this.on_show_lyrics_button_clicked);
 			showlyricsbuttonVid              = gb.get_object("showLyricsbuttonv") as Gtk.Button;
+			showlyricsbuttonVid.label        = SHOWLYRICS;
 			showlyricsbuttonVid.can_focus    = false;
 			showlyricsbuttonVid.clicked.connect(this.on_show_lyrics_button_clicked);
 			//--------------------
