@@ -40,6 +40,9 @@ xnoise_SOURCES = \
     xnoise-global-access.vala \
     xnoise-gst-player.vala \
     xnoise-info-bar.vala \
+    xnoise-item.vala \
+    xnoise-item-handler.vala \
+    xnoise-item-handler-manager.vala \
     xnoise-lyrics-loader.vala \
     xnoise-lyrics-view.vala \
     xnoise-main.vala \

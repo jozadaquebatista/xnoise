@@ -2,6 +2,16 @@
 
 [CCode (cprefix = "Xnoise", lower_case_cprefix = "xnoise_")]
 namespace Xnoise {
+	[Compact]
+	[CCode (cheader_filename = "xnoise.h")]
+	public class Action {
+		public weak Xnoise.ItemHandler.ActionType? action;
+		public Xnoise.ActionContext context;
+		public weak string info;
+		public weak string name;
+		public weak string text;
+		public Action ();
+	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class AddMediaDialog : GLib.Object {
 		public Gtk.Builder builder;
@@ -198,6 +208,29 @@ namespace Xnoise {
 		public void update_extra_widget (Gtk.Widget? widget);
 		public void update_symbol_widget (Xnoise.UserInfo.ContentClass cc);
 		public void update_text (string txt, bool bold = true);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public abstract class ItemHandler : GLib.Object {
+		[CCode (cheader_filename = "xnoise.h")]
+		public delegate void ActionType (Xnoise.Item item, GLib.Value? data);
+		protected weak Xnoise.ItemHandlerManager uhm;
+		public ItemHandler ();
+		public abstract GLib.Array<Xnoise.Item?>? convert (Xnoise.Item item);
+		public abstract unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
+		public abstract unowned string handler_name ();
+		public abstract Xnoise.ItemHandlerType handler_type ();
+		public bool set_manager (Xnoise.ItemHandlerManager _uhm);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class ItemHandlerManager : GLib.Object {
+		public ItemHandlerManager ();
+		public void add_uri_handler (Xnoise.ItemHandler handler);
+		public Xnoise.Item create_uri_item (string uri);
+		public static void execute_actions_for_item (Xnoise.Item item, Xnoise.ActionContext context, GLib.Value? data);
+		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context);
+		public Xnoise.ItemHandler get_handler_by_name (string name);
+		public Xnoise.ItemHandler get_handler_by_type (Xnoise.ItemHandlerType type);
+		public void test_func ();
 	}
 	[CCode (ref_function = "xnoise_local_schemes_ref", unref_function = "xnoise_local_schemes_unref", cheader_filename = "xnoise.h")]
 	public class LocalSchemes {
@@ -670,6 +703,13 @@ namespace Xnoise {
 		public int32 db_id;
 		public Xnoise.MediaType mediatype;
 	}
+	[CCode (type_id = "XNOISE_TYPE_ITEM", cheader_filename = "xnoise.h")]
+	public struct Item {
+		public Xnoise.ItemType type;
+		public uint32 db_id;
+		public string? uri;
+		public Item (Xnoise.ItemType _type = ItemType.UNKNOWN, string? _uri = null, uint32 _db_id = 0);
+	}
 	[CCode (type_id = "XNOISE_TYPE_MEDIA_DATA", cheader_filename = "xnoise.h")]
 	public struct MediaData {
 		public string name;
@@ -680,6 +720,38 @@ namespace Xnoise {
 	public struct StreamData {
 		public string name;
 		public string uri;
+	}
+	[CCode (cprefix = "XNOISE_ACTION_CONTEXT_", cheader_filename = "xnoise.h")]
+	public enum ActionContext {
+		ANY,
+		TRACKLIST_ITEM_ACTIVATED,
+		TRACKLIST_MENU_QUERY,
+		TRACKLIST_DROP,
+		MEDIABROWSER_ITEM_ACTIVATED,
+		MEDIABROWSER_MENU_QUERY,
+		MAXCOUNT
+	}
+	[CCode (cprefix = "XNOISE_ITEM_HANDLER_TYPE_", cheader_filename = "xnoise.h")]
+	public enum ItemHandlerType {
+		UNKNOWN,
+		OTHER,
+		TRACKLIST_ADDER,
+		PLAYLIST_PARSER,
+		VIDEO_THUMBNAILER,
+		TAG_EDITOR
+	}
+	[CCode (cprefix = "XNOISE_ITEM_TYPE_", cheader_filename = "xnoise.h")]
+	public enum ItemType {
+		UNKNOWN,
+		LOCAL_AUDIO_TRACK,
+		LOCAL_VIDEO_TRACK,
+		STREAM,
+		CDROM_TRACK,
+		PLAYLIST,
+		LOCAL_FOLDER,
+		COLLECTION_CONTAINER_ARTIST,
+		COLLECTION_CONTAINER_ALBUM,
+		MAXCOUNT
 	}
 	[CCode (cprefix = "XNOISE_MEDIA_TYPE_", cheader_filename = "xnoise.h")]
 	public enum MediaType {
@@ -720,6 +792,8 @@ namespace Xnoise {
 	public static Xnoise.MediaImporter media_importer;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.ItemHandlerManager uri_handler_manager;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.UserInfo userinfo;
 	[CCode (cheader_filename = "xnoise.h")]
