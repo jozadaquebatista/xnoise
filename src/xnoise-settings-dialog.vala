@@ -635,6 +635,14 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			var vizcols_label = this.get_object("vizcols_label") as Gtk.Label;
 			vizcols_label.label = _("Visible extra columns for tracklist:");
 			visibleColTv = this.get_object("vizcols_tv") as Gtk.TreeView;
+			var fontsize_label = this.get_object("fontsize_label") as Gtk.Label;
+			fontsize_label.label = _("Media browser fontsize:");
+			var checkB_showlines = this.get_object("checkB_showlines") as Gtk.CheckButton;
+			checkB_showlines.label = _("use helper lines in media browser");
+			var checkB_mediaBrLinebreaks = this.get_object("checkB_mediaBrLinebreaks") as Gtk.CheckButton;
+			checkB_mediaBrLinebreaks.label = _("use linebreaks in media browser");
+			var checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
+			checkB_compact.label = _("Compact layout");
 
 			sb = this.get_object("spinbutton1") as Gtk.SpinButton;
 			sb.set_value(8.0);

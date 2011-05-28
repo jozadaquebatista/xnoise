@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-29 01:01+0200\n"
+"POT-Creation-Date: 2011-05-29 01:27+0200\n"
 "PO-Revision-Date: 2011-05-05 10:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -121,8 +121,7 @@ msgstr ""
 "\n"
 "使用 %3$s…"
 
-#: ../src/xnoise-main-window.vala:41 ../src/xnoise-main-window.vala:1231
-#: ../src/xnoise-main-window.vala:1235
+#: ../src/xnoise-main-window.vala:41
 msgid "Video"
 msgstr "影片"
 
@@ -342,6 +341,22 @@ msgstr "找到了 %d 個新媒體檔案"
 #: ../src/xnoise-settings-dialog.vala:636
 msgid "Visible extra columns for tracklist:"
 msgstr "軌段列表的其他可見欄位："
+
+#: ../src/xnoise-settings-dialog.vala:639
+msgid "Media browser fontsize:"
+msgstr ""
+
+#: ../src/xnoise-settings-dialog.vala:641
+msgid "use helper lines in media browser"
+msgstr ""
+
+#: ../src/xnoise-settings-dialog.vala:643
+msgid "use linebreaks in media browser"
+msgstr ""
+
+#: ../src/xnoise-settings-dialog.vala:645
+msgid "Compact layout"
+msgstr ""
 
 #: ../src/xnoise-tag-artistalbum-editor.vala:143
 #: ../src/xnoise-tag-title-editor.vala:139
