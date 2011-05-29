@@ -61,6 +61,17 @@ typedef struct _XnoiseHandlerAddToTracklist XnoiseHandlerAddToTracklist;
 typedef struct _XnoiseHandlerAddToTracklistClass XnoiseHandlerAddToTracklistClass;
 typedef struct _XnoiseHandlerAddToTracklistPrivate XnoiseHandlerAddToTracklistPrivate;
 
+#define XNOISE_TYPE_HANDLER_PLAY_ITEM (xnoise_handler_play_item_get_type ())
+#define XNOISE_HANDLER_PLAY_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_PLAY_ITEM, XnoiseHandlerPlayItem))
+#define XNOISE_HANDLER_PLAY_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_PLAY_ITEM, XnoiseHandlerPlayItemClass))
+#define XNOISE_IS_HANDLER_PLAY_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_PLAY_ITEM))
+#define XNOISE_IS_HANDLER_PLAY_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_PLAY_ITEM))
+#define XNOISE_HANDLER_PLAY_ITEM_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_PLAY_ITEM, XnoiseHandlerPlayItemClass))
+
+typedef struct _XnoiseHandlerPlayItem XnoiseHandlerPlayItem;
+typedef struct _XnoiseHandlerPlayItemClass XnoiseHandlerPlayItemClass;
+typedef struct _XnoiseHandlerPlayItemPrivate XnoiseHandlerPlayItemPrivate;
+
 #define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
 #define XNOISE_ADD_MEDIA_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialog))
 #define XNOISE_ADD_MEDIA_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialogClass))
@@ -627,7 +638,8 @@ typedef enum  {
 	XNOISE_ITEM_HANDLER_TYPE_TRACKLIST_ADDER,
 	XNOISE_ITEM_HANDLER_TYPE_PLAYLIST_PARSER,
 	XNOISE_ITEM_HANDLER_TYPE_VIDEO_THUMBNAILER,
-	XNOISE_ITEM_HANDLER_TYPE_TAG_EDITOR
+	XNOISE_ITEM_HANDLER_TYPE_TAG_EDITOR,
+	XNOISE_ITEM_HANDLER_TYPE_PLAY_NOW
 } XnoiseItemHandlerType;
 
 typedef enum  {
@@ -644,12 +656,14 @@ typedef enum  {
 } XnoiseItemType;
 
 typedef enum  {
+	XNOISE_ACTION_CONTEXT_NONE,
 	XNOISE_ACTION_CONTEXT_ANY,
 	XNOISE_ACTION_CONTEXT_TRACKLIST_ITEM_ACTIVATED,
 	XNOISE_ACTION_CONTEXT_TRACKLIST_MENU_QUERY,
 	XNOISE_ACTION_CONTEXT_TRACKLIST_DROP,
 	XNOISE_ACTION_CONTEXT_MEDIABROWSER_ITEM_ACTIVATED,
 	XNOISE_ACTION_CONTEXT_MEDIABROWSER_MENU_QUERY,
+	XNOISE_ACTION_CONTEXT_MEDIABROWSER_LOAD,
 	XNOISE_ACTION_CONTEXT_MAXCOUNT
 } XnoiseActionContext;
 
@@ -679,6 +693,15 @@ struct _XnoiseHandlerAddToTracklist {
 };
 
 struct _XnoiseHandlerAddToTracklistClass {
+	XnoiseItemHandlerClass parent_class;
+};
+
+struct _XnoiseHandlerPlayItem {
+	XnoiseItemHandler parent_instance;
+	XnoiseHandlerPlayItemPrivate * priv;
+};
+
+struct _XnoiseHandlerPlayItemClass {
 	XnoiseItemHandlerClass parent_class;
 };
 
@@ -1214,7 +1237,8 @@ typedef enum  {
 	XNOISE_TRACK_LIST_MODEL_COLUMN_ARTIST,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_LENGTH,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_WEIGHT,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_URI
+	XNOISE_TRACK_LIST_MODEL_COLUMN_URI,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_ITEM
 } XnoiseTrackListModelColumn;
 
 struct _XnoiseTrackList {
@@ -1318,8 +1342,8 @@ struct _XnoiseWorkerJob {
 	GValue* value_arg1;
 	GValue* value_arg2;
 	void* p_arg;
-	XnoiseItem* media_dat;
-	gint media_dat_length1;
+	XnoiseItem* items;
+	gint items_length1;
 	XnoiseTrackData** track_dat;
 	gint track_dat_length1;
 	XnoiseDndData* dnd_data;
@@ -1359,6 +1383,9 @@ GType xnoise_item_handler_manager_get_type (void) G_GNUC_CONST;
 GType xnoise_handler_add_to_tracklist_get_type (void) G_GNUC_CONST;
 XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_new (void);
 XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_construct (GType object_type);
+GType xnoise_handler_play_item_get_type (void) G_GNUC_CONST;
+XnoiseHandlerPlayItem* xnoise_handler_play_item_new (void);
+XnoiseHandlerPlayItem* xnoise_handler_play_item_construct (GType object_type);
 GType xnoise_add_media_dialog_get_type (void) G_GNUC_CONST;
 XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
 XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
@@ -1582,7 +1609,7 @@ XnoiseAction* xnoise_item_handler_get_action (XnoiseItemHandler* self, XnoiseIte
 GArray* xnoise_item_handler_convert (XnoiseItemHandler* self, XnoiseItem* item);
 XnoiseItemHandler* xnoise_item_handler_construct (GType object_type);
 GArray* xnoise_item_handler_manager_get_actions (XnoiseItemHandlerManager* self, XnoiseItemType type, XnoiseActionContext context);
-void xnoise_item_handler_manager_add_uri_handler (XnoiseItemHandlerManager* self, XnoiseItemHandler* handler);
+void xnoise_item_handler_manager_add_handler (XnoiseItemHandlerManager* self, XnoiseItemHandler* handler);
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_type (XnoiseItemHandlerManager* self, XnoiseItemHandlerType type);
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_name (XnoiseItemHandlerManager* self, const gchar* name);
 void xnoise_item_handler_manager_test_func (XnoiseItemHandlerManager* self);
@@ -1876,12 +1903,12 @@ gboolean xnoise_track_list_model_path_is_last_row (XnoiseTrackListModel* self, G
 void xnoise_track_list_model_on_position_reference_changed (XnoiseTrackListModel* self);
 gboolean xnoise_track_list_model_get_current_path (XnoiseTrackListModel* self, GtkTreePath** treepath);
 gboolean xnoise_track_list_model_get_active_path (XnoiseTrackListModel* self, GtkTreePath** treepath, gboolean* used_next_pos);
-void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, GdkPixbuf* pixbuf, gint tracknumber, const gchar* title, const gchar* album, const gchar* artist, gint length, gboolean bold, const gchar* uri, GtkTreeIter* result);
+void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, GdkPixbuf* pixbuf, gint tracknumber, const gchar* title, const gchar* album, const gchar* artist, gint length, gboolean bold, const gchar* uri, XnoiseItem* item, GtkTreeIter* result);
 gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
 void xnoise_track_list_model_set_reference_to_last (XnoiseTrackListModel* self);
 gchar** xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
 gchar* xnoise_track_list_model_get_uri_for_current_position (XnoiseTrackListModel* self);
-void xnoise_track_list_model_add_tracks (XnoiseTrackListModel* self, XnoiseTrackData** td_list, int td_list_length1, gboolean imediate_play);
+void xnoise_track_list_model_add_tracks (XnoiseTrackListModel* self, XnoiseTrackData** tda, int tda_length1, gboolean imediate_play);
 void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, gchar** uris, int uris_length1);
 XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_new (XnoiseTrackListModel* tlm);
 XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_construct (GType object_type, XnoiseTrackListModel* tlm);

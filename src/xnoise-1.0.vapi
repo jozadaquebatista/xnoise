@@ -209,6 +209,14 @@ namespace Xnoise {
 		public override Xnoise.ItemHandlerType handler_type ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class HandlerPlayItem : Xnoise.ItemHandler {
+		public HandlerPlayItem ();
+		public override GLib.Array<Xnoise.Item?>? convert (Xnoise.Item item);
+		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
+		public override unowned string handler_name ();
+		public override Xnoise.ItemHandlerType handler_type ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class InfoBar : Gtk.InfoBar {
 		public InfoBar (Xnoise.UserInfo _uinf, Xnoise.UserInfo.ContentClass _content_class, Xnoise.UserInfo.RemovalType _removal_type, uint _current_id, int _appearance_time_seconds = 5, string _info_text = "", bool bold = true, Gtk.Widget? _extra_widget = null);
 		public void enable_close_button (bool enable);
@@ -232,7 +240,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class ItemHandlerManager : GLib.Object {
 		public ItemHandlerManager ();
-		public void add_uri_handler (Xnoise.ItemHandler handler);
+		public void add_handler (Xnoise.ItemHandler handler);
 		public Xnoise.Item create_uri_item (string uri);
 		public static void execute_actions_for_item (Xnoise.Item item, Xnoise.ActionContext context, GLib.Value? data);
 		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context);
@@ -555,10 +563,11 @@ namespace Xnoise {
 			ARTIST,
 			LENGTH,
 			WEIGHT,
-			URI
+			URI,
+			ITEM
 		}
 		public TrackListModel ();
-		public void add_tracks (Xnoise.TrackData[]? td_list, bool imediate_play = true);
+		public void add_tracks (Xnoise.TrackData[]? tda, bool imediate_play = true);
 		public void add_uris (string[]? uris);
 		public bool get_active_path (out Gtk.TreePath treepath, out bool used_next_pos);
 		public string[] get_all_tracks ();
@@ -566,7 +575,7 @@ namespace Xnoise {
 		public bool get_first_row (ref Gtk.TreePath treepath);
 		public bool get_random_row (ref Gtk.TreePath treepath);
 		public string get_uri_for_current_position ();
-		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, int length = 0, bool bold = false, string uri);
+		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, int length = 0, bool bold = false, string uri, Xnoise.Item item);
 		public Xnoise.TrackListModel.Iterator iterator ();
 		public bool not_empty ();
 		public void on_before_position_reference_changed ();
@@ -634,7 +643,7 @@ namespace Xnoise {
 			public Xnoise.DndData[] dnd_data;
 			public int64 id;
 			public int32[] id_array;
-			public Xnoise.Item[] media_dat;
+			public Xnoise.Item[] items;
 			public void* p_arg;
 			public Xnoise.Worker.SyncWorkFunc? s_func;
 			public Xnoise.TrackData[] track_dat;
@@ -728,12 +737,14 @@ namespace Xnoise {
 	}
 	[CCode (cprefix = "XNOISE_ACTION_CONTEXT_", cheader_filename = "xnoise.h")]
 	public enum ActionContext {
+		NONE,
 		ANY,
 		TRACKLIST_ITEM_ACTIVATED,
 		TRACKLIST_MENU_QUERY,
 		TRACKLIST_DROP,
 		MEDIABROWSER_ITEM_ACTIVATED,
 		MEDIABROWSER_MENU_QUERY,
+		MEDIABROWSER_LOAD,
 		MAXCOUNT
 	}
 	[CCode (cprefix = "XNOISE_ITEM_HANDLER_TYPE_", cheader_filename = "xnoise.h")]
@@ -743,7 +754,8 @@ namespace Xnoise {
 		TRACKLIST_ADDER,
 		PLAYLIST_PARSER,
 		VIDEO_THUMBNAILER,
-		TAG_EDITOR
+		TAG_EDITOR,
+		PLAY_NOW
 	}
 	[CCode (cprefix = "XNOISE_ITEM_TYPE_", cheader_filename = "xnoise.h")]
 	public enum ItemType {

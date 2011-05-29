@@ -56,7 +56,7 @@ namespace Xnoise {
 			return item_actions;
 		}
 	
-		public void add_uri_handler(ItemHandler handler) {
+		public void add_handler(ItemHandler handler) {
 			assert(handler.set_manager(this) == true);
 			_handlers.append_val(handler);
 			if(handler.handler_type() != ItemHandlerType.OTHER && handler.handler_type() != ItemHandlerType.UNKNOWN)
@@ -84,7 +84,7 @@ namespace Xnoise {
 		private PatternSpec psAudio = new PatternSpec("audio*");
 		
 		public Item create_uri_item(string uri) {
-			Item item = Item(ItemType.UNKNOWN);
+			Item item = Item(ItemType.UNKNOWN, uri);
 			
 			File f = File.new_for_uri(uri);
 			string scheme = f.get_uri_scheme();

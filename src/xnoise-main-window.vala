@@ -339,7 +339,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 							                                       td.artist,
 							                                       td.length,
 							                                       false,
-							                                       current_uri);
+							                                       current_uri,
+							                                       item_handler_manager.create_uri_item(current_uri));
 						
 						return false;
 					});
@@ -397,7 +398,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 							                                       artist,
 							                                       length,
 							                                       false,
-							                                       current_uri);
+							                                       current_uri,
+							                                       item_handler_manager.create_uri_item(current_uri));
 						
 						return false;
 					});
@@ -415,7 +417,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 							                                       "",
 							                                       0,
 							                                       false,
-							                                       current_uri);
+							                                       current_uri,
+							                                       item_handler_manager.create_uri_item(current_uri));
 						
 						return false;
 					});
@@ -954,7 +957,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				                                           "",
 				                                           0,
 				                                           false,
-				                                           uri);
+				                                           uri,
+				                                           item_handler_manager.create_uri_item(uri));
 			}
 			radiodialog.close();
 			radiodialog = null;

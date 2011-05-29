@@ -103,7 +103,7 @@ public class Xnoise.Worker : Object {
 		public Value? value_arg2 = null;
 		public void* p_arg = null;
 		
-		public Item[] media_dat;
+		public Item[] items;
 		//public int32[] id_array;
 		public TrackData[] track_dat; 
 		public DndData[] dnd_data;

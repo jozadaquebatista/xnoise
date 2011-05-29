@@ -1159,7 +1159,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	private void queue_listed_data_job(Worker.Job job) {
-		TrackData[] tda = job.track_dat;
+		TrackData[] tda = {};// job.track_dat;
+		Item[] ita = {};
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
@@ -1174,11 +1175,13 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				switch(td.mediatype) {
 					case ItemType.LOCAL_VIDEO_TRACK: {
 						if(dbb.get_trackdata_for_id(td.db_id, out tdl))
+							ita += item_handler_manager.create_uri_item(td.uri);
 							tda += tdl;
 						break;
 					}
 					case ItemType.STREAM: {
 						if(dbb.get_stream_td_for_id(td.db_id, out tdl))
+							ita += item_handler_manager.create_uri_item(td.uri);
 							tda += tdl;
 						break;
 					}
@@ -1188,6 +1191,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 		}
 		job.track_dat = tda;
+		job.items = ita;
 		//Add tracks in default thread
 		Idle.add( () => {
 			xn.tl.tracklistmodel.add_tracks(job.track_dat, true);
@@ -1200,7 +1204,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private void get_mediadata_of_listed(ref TrackData[] mda, Gtk.TreePath treepath) {
 		//this is only used for path.get_depth() == 2 !
 		TreeIter iter;
-		TrackData[] mda_local = mda;
+		TrackData[] mda_local = {};// = mda;
 		TrackData md = new TrackData();
 		md.db_id = -1;
 		bool visible = false;
@@ -1219,6 +1223,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private void queue_hierarchical_data_job(Worker.Job job) {
 		TrackData[] tda = {};//job.track_dat;
+		Item[] ita = {};
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
@@ -1229,15 +1234,17 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 		foreach(TrackData md in job.track_dat) {
 			TrackData td;
-			if(dbb.get_trackdata_for_id(md.db_id, out td)) 
+			if(dbb.get_trackdata_for_id(md.db_id, out td)) {
+				Item it = item_handler_manager.create_uri_item(td.uri);
+				td.item = it;
 				tda += td;
+			}
 		}
 		job.track_dat = tda;
 		//Add tracks in default thread
 		Idle.add( () => {
 			xn.tl.tracklistmodel.add_tracks(job.track_dat, true);
 			job.track_dat = null;
-			job.media_dat = null;
 			return false;
 		});
 	}
@@ -1302,14 +1309,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		this.get(iter, Column.COLL_TYPE, ref br_ct);
 		if(br_ct == CollectionType.LISTED) {
 			var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.queue_listed_data_job);
-			job.media_dat = {};
 			job.track_dat = {};
 			get_mediadata_of_listed(ref job.track_dat, treepath);
 			worker.push_job(job);
 		}
 		else if(br_ct == CollectionType.HIERARCHICAL) {
 			var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.queue_hierarchical_data_job);
-			job.media_dat = {};
 			job.track_dat = {};
 			get_mediadata_of_hierarchical(ref job.track_dat, treepath);
 			worker.push_job(job);
