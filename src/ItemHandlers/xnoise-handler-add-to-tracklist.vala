@@ -106,7 +106,6 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	
 	private void tracklist_drop_action(Item item, GLib.Value? data) {
 		print("%s triggered tracklist_drop_action for %s\n", item.uri, item.type.to_string());
-		((ItemHandlerManager)data).test_func(); 
 	}
 }
 

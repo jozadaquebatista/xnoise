@@ -51,14 +51,14 @@ public class Xnoise.TagReader {
 						td.genre       = t.genre;
 						td.year        = t.year;
 						td.tracknumber = t.track;
-						td.mediatype   = MediaType.AUDIO;
+						td.mediatype   = ItemType.LOCAL_AUDIO_TRACK;
 					} else {
 						td.artist = "unknown artist";
 						td.title  = "unknown title";
 						td.album  = "unknown album";
 						td.genre  = "unknown genre";
 						td.tracknumber = (uint)0;
-						td.mediatype   = MediaType.UNKNOWN;
+						td.mediatype   = ItemType.UNKNOWN;
 					}	
 					// from class AudioProperties
 					if(ap != null) {
@@ -86,7 +86,7 @@ public class Xnoise.TagReader {
 				td.album  = "unknown album";
 				td.genre  = "unknown genre";
 				td.tracknumber = (uint)0;
-				td.mediatype   = MediaType.UNKNOWN;
+				td.mediatype   = ItemType.UNKNOWN;
 
 				td.length = (int32)0;
 				td.bitrate = 0;
@@ -100,7 +100,7 @@ public class Xnoise.TagReader {
 			td.album  = "unknown album";
 			td.genre  = "unknown genre";
 			td.tracknumber = (uint)0;
-			td.mediatype   = MediaType.UNKNOWN;
+			td.mediatype   = ItemType.UNKNOWN;
 
 			td.length = (int32)0;
 			td.bitrate = 0;

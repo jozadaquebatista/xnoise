@@ -31,13 +31,13 @@
 
 namespace Xnoise {
 	public struct Item {
-		public Item(ItemType _type = ItemType.UNKNOWN, string? _uri = null, uint32 _db_id = 0) {
+		public Item(ItemType _type = ItemType.UNKNOWN, string? _uri = null, int32 _db_id = -1) {
 			this.type  = _type;
 			this.db_id = _db_id;
 			this.uri   = _uri;
 		}
 		public ItemType type;
-		public uint32 db_id;  // the id in the database or 0; to be verified, if coming from tracklist
+		public int32 db_id;  // the id in the database or -1; to be verified, if coming from tracklist
 		public string? uri;    // uri of item 
 	}
 

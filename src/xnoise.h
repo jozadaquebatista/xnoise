@@ -131,11 +131,6 @@ typedef struct _XnoiseTrackDataClass XnoiseTrackDataClass;
 #define XNOISE_TYPE_STREAM_DATA (xnoise_stream_data_get_type ())
 typedef struct _XnoiseStreamData XnoiseStreamData;
 
-#define XNOISE_TYPE_MEDIA_DATA (xnoise_media_data_get_type ())
-
-#define XNOISE_TYPE_MEDIA_TYPE (xnoise_media_type_get_type ())
-typedef struct _XnoiseMediaData XnoiseMediaData;
-
 #define XNOISE_TYPE_DB_WRITER (xnoise_db_writer_get_type ())
 #define XNOISE_DB_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DB_WRITER, XnoiseDbWriter))
 #define XNOISE_DB_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DB_WRITER, XnoiseDbWriterClass))
@@ -660,7 +655,7 @@ typedef enum  {
 
 struct _XnoiseItem {
 	XnoiseItemType type;
-	guint32 db_id;
+	gint32 db_id;
 	gchar* uri;
 };
 
@@ -751,20 +746,6 @@ typedef void (*XnoiseDbBrowserReaderCallback) (sqlite3* database, void* user_dat
 struct _XnoiseStreamData {
 	gchar* name;
 	gchar* uri;
-};
-
-typedef enum  {
-	XNOISE_MEDIA_TYPE_UNKNOWN = 0,
-	XNOISE_MEDIA_TYPE_AUDIO,
-	XNOISE_MEDIA_TYPE_VIDEO,
-	XNOISE_MEDIA_TYPE_STREAM,
-	XNOISE_MEDIA_TYPE_PLAYLISTFILE
-} XnoiseMediaType;
-
-struct _XnoiseMediaData {
-	gchar* name;
-	gint id;
-	XnoiseMediaType mediatype;
 };
 
 struct _XnoiseDbWriter {
@@ -1011,6 +992,7 @@ typedef enum  {
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_DRAW_SEPTR,
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_VISIBLE,
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_TRACKNUMBER,
+	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_ITEM,
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_N_COLUMNS
 } XnoiseMediaBrowserModelColumn;
 
@@ -1022,7 +1004,7 @@ typedef enum  {
 
 struct _XnoiseDndData {
 	gint32 db_id;
-	XnoiseMediaType mediatype;
+	XnoiseItemType mediatype;
 };
 
 struct _XnoiseMediaBrowserFilterModel {
@@ -1057,11 +1039,12 @@ struct _XnoiseTrackData {
 	gchar* album;
 	gchar* title;
 	gchar* genre;
+	gchar* name;
 	guint year;
 	guint tracknumber;
 	gint32 length;
 	gint bitrate;
-	XnoiseMediaType mediatype;
+	XnoiseItemType mediatype;
 	gchar* uri;
 	gint32 db_id;
 };
@@ -1334,7 +1317,7 @@ struct _XnoiseWorkerJob {
 	GValue* value_arg1;
 	GValue* value_arg2;
 	void* p_arg;
-	XnoiseMediaData* media_dat;
+	XnoiseItem* media_dat;
 	gint media_dat_length1;
 	XnoiseTrackData** track_dat;
 	gint track_dat_length1;
@@ -1433,19 +1416,13 @@ gchar* xnoise_db_browser_get_single_stream_uri (XnoiseDbBrowser* self, const gch
 gint xnoise_db_browser_get_track_id_for_path (XnoiseDbBrowser* self, const gchar* uri);
 gchar** xnoise_db_browser_get_lastused_uris (XnoiseDbBrowser* self, int* result_length1);
 gchar** xnoise_db_browser_get_uris (XnoiseDbBrowser* self, const gchar* search_string, int* result_length1);
-GType xnoise_media_data_get_type (void) G_GNUC_CONST;
-GType xnoise_media_type_get_type (void) G_GNUC_CONST;
-XnoiseMediaData* xnoise_media_data_dup (const XnoiseMediaData* self);
-void xnoise_media_data_free (XnoiseMediaData* self);
-void xnoise_media_data_copy (const XnoiseMediaData* self, XnoiseMediaData* dest);
-void xnoise_media_data_destroy (XnoiseMediaData* self);
-XnoiseMediaData* xnoise_db_browser_get_video_data (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
-XnoiseMediaData* xnoise_db_browser_get_stream_data (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
+XnoiseTrackData** xnoise_db_browser_get_video_data (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
+XnoiseTrackData** xnoise_db_browser_get_stream_data (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
 gchar** xnoise_db_browser_get_videos (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
 gchar** xnoise_db_browser_get_some_artists (XnoiseDbBrowser* self, gint limit, gint offset, int* result_length1);
 gchar** xnoise_db_browser_get_artists (XnoiseDbBrowser* self, int* result_length1);
 gchar** xnoise_db_browser_get_albums (XnoiseDbBrowser* self, const gchar* artist, int* result_length1);
-XnoiseMediaData* xnoise_db_browser_get_titles_with_mediatypes_and_ids (XnoiseDbBrowser* self, const gchar* artist, const gchar* album, int* result_length1);
+XnoiseTrackData** xnoise_db_browser_get_titles_with_mediatypes_and_ids (XnoiseDbBrowser* self, const gchar* artist, const gchar* album, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_titles_with_data (XnoiseDbBrowser* self, const gchar* artist, const gchar* album, int* result_length1);
 GType xnoise_db_writer_get_type (void) G_GNUC_CONST;
 XnoiseDbWriter* xnoise_db_writer_new (GError** error);
@@ -1593,7 +1570,7 @@ void xnoise_info_bar_update_symbol_widget (XnoiseInfoBar* self, XnoiseUserInfoCo
 void xnoise_info_bar_update_text (XnoiseInfoBar* self, const gchar* txt, gboolean bold);
 void xnoise_info_bar_update_extra_widget (XnoiseInfoBar* self, GtkWidget* widget);
 GtkWidget* xnoise_info_bar_get_extra_widget (XnoiseInfoBar* self);
-void xnoise_item_init (XnoiseItem *self, XnoiseItemType _type, const gchar* _uri, guint32 _db_id);
+void xnoise_item_init (XnoiseItem *self, XnoiseItemType _type, const gchar* _uri, gint32 _db_id);
 extern XnoiseItemHandlerManager* xnoise_uri_handler_manager;
 XnoiseAction* xnoise_action_new (void);
 XnoiseAction* xnoise_action_new (void);

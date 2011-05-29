@@ -378,13 +378,13 @@ namespace Xnoise {
 
 // ENUMS
 
-public enum Xnoise.MediaType { // used in various places
-	UNKNOWN = 0,
-	AUDIO,
-	VIDEO,
-	STREAM,
-	PLAYLISTFILE
-}
+//public enum Xnoise.ItemType { // used in various places
+//	UNKNOWN = 0,
+//	AUDIO,
+//	VIDEO,
+//	STREAM,
+//	PLAYLISTFILE
+//}
 
 public enum Xnoise.TrackListNoteBookTab { // used in various places
 	TRACKLIST = 0,
@@ -416,11 +416,12 @@ public class Xnoise.TrackData { // track meta information
 	public string? album = null;
 	public string? title = null;
 	public string? genre = null;
+	public string? name = null;
 	public uint year = 0;
 	public uint tracknumber = 0;
 	public int32 length = 0;
 	public int bitrate = 0;
-	public MediaType mediatype = MediaType.UNKNOWN;
+	public ItemType mediatype = ItemType.UNKNOWN;
 	public string? uri = null;
 	public int32 db_id = -1;
 }
@@ -485,15 +486,15 @@ public struct Xnoise.StreamData { // meta information structure
 /**
  * This struct is used to move around certain media information
  */
-public struct Xnoise.MediaData {
-	public string name;
-	public int id;
-	public MediaType mediatype;
-}
+//public struct Xnoise.Item {
+//	public string name;
+//	public int id;
+//	public ItemType mediatype;
+//}
 
 public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
 	public int32 db_id;
-	public MediaType mediatype;
+	public ItemType mediatype;
 }
 
 

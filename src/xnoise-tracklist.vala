@@ -554,8 +554,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 		//TODO: Decide if it is video or stream or local file and then get data from the right source
 		foreach(DndData ix in ids) {
 			switch(ix.mediatype) {
-				case MediaType.VIDEO: 
-				case MediaType.AUDIO: {
+				case ItemType.LOCAL_VIDEO_TRACK: 
+				case ItemType.LOCAL_AUDIO_TRACK: {
 					string lengthString = "", artist, album, title, uri;
 					int tracknumb;
 					if(dbBr.get_trackdata_for_id((int)ix.db_id, out td)) {
@@ -611,7 +611,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 					}
 					break;
 				}
-				case MediaType.STREAM: {
+				case ItemType.STREAM: {
 					string lengthString = "", artist, album, title, uri;
 					int tracknumb;
 					if(dbBr.get_stream_td_for_id((int)ix.db_id, out td)) {
@@ -666,7 +666,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 					}
 					break;
 				}
-//				case MediaType.STREAM:
+//				case ItemType.STREAM:
 //					break;
 				default:
 					break;

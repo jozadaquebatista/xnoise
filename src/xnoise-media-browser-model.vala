@@ -42,6 +42,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		DRAW_SEPTR,
 		VISIBLE,
 		TRACKNUMBER,
+		ITEM,
 		N_COLUMNS
 	}
 
@@ -59,7 +60,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		typeof(int),        //COLL_TYPE
 		typeof(int),        //DRAW SEPARATOR
 		typeof(bool),       //VISIBLE
-		typeof(int)         //TRACKNUMBER
+		typeof(int),        //TRACKNUMBER
+		typeof(Xnoise.Item) //ITEM
 	};
 
 	public string searchtext = "";
@@ -304,7 +306,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.ICON,        videos_pixb,
 			         Column.VIS_TEXT,    td.title,
 			         Column.DB_ID,       td.db_id,
-			         Column.MEDIATYPE ,  (int)MediaType.VIDEO,
+			         Column.MEDIATYPE ,  ItemType.LOCAL_VIDEO_TRACK,
 			         Column.COLL_TYPE,   CollectionType.LISTED,
 			         Column.DRAW_SEPTR,  0,
 			         Column.VISIBLE, visible
@@ -354,7 +356,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.ICON,        radios_pixb,
 			         Column.VIS_TEXT,    td.title,
 			         Column.DB_ID,       td.db_id,
-			         Column.MEDIATYPE ,  (int)MediaType.STREAM,
+			         Column.MEDIATYPE ,  (int)ItemType.STREAM,
 			         Column.COLL_TYPE,   CollectionType.LISTED,
 			         Column.DRAW_SEPTR,  0,
 			         Column.VISIBLE, true
@@ -402,7 +404,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.ICON, title_pixb,
 			         Column.VIS_TEXT, td.title,
 			         Column.DB_ID, td.db_id,
-			         Column.MEDIATYPE , (int)MediaType.AUDIO,
+			         Column.MEDIATYPE , ItemType.LOCAL_AUDIO_TRACK,
 			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 			         Column.DRAW_SEPTR, 0,
 			         Column.VISIBLE, visible,
@@ -442,7 +444,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.ICON, title_pixb,
 				         Column.VIS_TEXT, td.title,
 				         Column.DB_ID, td.db_id,
-				         Column.MEDIATYPE , (int)MediaType.AUDIO,
+				         Column.MEDIATYPE , ItemType.LOCAL_AUDIO_TRACK,
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0,
 				         Column.VISIBLE, visible,
@@ -466,7 +468,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		         Column.ICON, title_pixb,
 		         Column.VIS_TEXT, td.title,
 		         Column.DB_ID, td.db_id,
-		         Column.MEDIATYPE , (int)MediaType.AUDIO,
+		         Column.MEDIATYPE , ItemType.LOCAL_AUDIO_TRACK,
 		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 		         Column.DRAW_SEPTR, 0,
 		         Column.VISIBLE, visible,
@@ -654,7 +656,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.ICON, title_pixb,
 			         Column.VIS_TEXT, td.title,
 			         Column.DB_ID, td.db_id,
-			         Column.MEDIATYPE , (int)MediaType.AUDIO,
+			         Column.MEDIATYPE , ItemType.LOCAL_AUDIO_TRACK,
 			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 			         Column.DRAW_SEPTR, 0,
 			         Column.VISIBLE, visible,
@@ -687,7 +689,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.ICON, title_pixb,
 				         Column.VIS_TEXT, td.title,
 				         Column.DB_ID, td.db_id,
-				         Column.MEDIATYPE , (int)MediaType.AUDIO,
+				         Column.MEDIATYPE , ItemType.LOCAL_AUDIO_TRACK,
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0,
 				         Column.VISIBLE, visible,
@@ -710,7 +712,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		         Column.ICON, title_pixb,
 		         Column.VIS_TEXT, td.title,
 		         Column.DB_ID, td.db_id,
-		         Column.MEDIATYPE , (int)MediaType.AUDIO,
+		         Column.MEDIATYPE , ItemType.LOCAL_AUDIO_TRACK,
 		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 		         Column.DRAW_SEPTR, 0,
 		         Column.VISIBLE, visible,
@@ -769,9 +771,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			print("%s\n", e.message);
 			return;
 		}		
-		job.media_dat = dbb.get_stream_data(ref searchtext);
+		job.track_dat = dbb.get_stream_data(ref searchtext);
 		
-		if(job.media_dat.length == 0)
+		if(job.track_dat.length == 0)
 			return;
 		
 		Idle.add( () => {
@@ -779,30 +781,30 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				TreeIter iter_radios, iter_singleradios;
 				this.prepend(out iter_radios, null);
 				this.set(iter_radios,
-					     Column.ICON, radios_pixb,
-					     Column.VIS_TEXT, "Streams",
-					     Column.COLL_TYPE, CollectionType.LISTED,
-					     Column.DRAW_SEPTR, 0,
-					     Column.VISIBLE, true
-					     );
-				foreach(unowned MediaData tmi in job.media_dat) {
+				         Column.ICON, radios_pixb,
+				         Column.VIS_TEXT, "Streams",
+				         Column.COLL_TYPE, CollectionType.LISTED,
+				         Column.DRAW_SEPTR, 0,
+				         Column.VISIBLE, true
+				         );
+				foreach(TrackData td in job.track_dat) {
 					if(job.cancellable.is_cancelled())
 						break;
 					bool visible = false;
-					if(this.searchtext == "" || tmi.name.down().contains(this.searchtext)) {
+					if(this.searchtext == "" || td.name.down().contains(this.searchtext)) {
 						visible = true;
 						this.set(iter_radios, Column.VISIBLE, visible);
 					}
 					this.prepend(out iter_singleradios, iter_radios);
 					this.set(iter_singleradios,
-						     Column.ICON,        radios_pixb,
-						     Column.VIS_TEXT,    tmi.name,
-						     Column.DB_ID,       tmi.id,
-						     Column.MEDIATYPE ,  (int)MediaType.STREAM,
-						     Column.COLL_TYPE,   CollectionType.LISTED,
-						     Column.DRAW_SEPTR,  0,
-						     Column.VISIBLE, true
-						     );
+					         Column.ICON,        radios_pixb,
+					         Column.VIS_TEXT,    td.name,
+					         Column.DB_ID,       td.db_id,
+					         Column.MEDIATYPE ,  (int)ItemType.STREAM,
+					         Column.COLL_TYPE,   CollectionType.LISTED,
+					         Column.DRAW_SEPTR,  0,
+					         Column.VISIBLE, true
+					         );
 				}
 			}
 			return false;
@@ -818,9 +820,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			print("%s\n", e.message);
 			return;
 		}		
-		job.media_dat = dbb.get_video_data(ref searchtext);
+		job.track_dat = dbb.get_video_data(ref searchtext);
 		
-		if(job.media_dat.length == 0)
+		if(job.track_dat.length == 0)
 			return;
 		
 		Idle.add( () => {
@@ -834,20 +836,20 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						 Column.DRAW_SEPTR, 0,
 						 Column.VISIBLE, false
 						 );
-				foreach(unowned MediaData tmi in job.media_dat) {
+				foreach(unowned TrackData td in job.track_dat) {
 					if(job.cancellable.is_cancelled())
 						break;
 					bool visible = false;
-					if(this.searchtext == "" || tmi.name.down().contains(this.searchtext)) {
+					if(this.searchtext == "" || td.name.down().contains(this.searchtext)) {
 						visible = true;
 						this.set(iter_videos, Column.VISIBLE, visible);
 					}
 					this.prepend(out iter_singlevideo, iter_videos);
 					this.set(iter_singlevideo,
 					         Column.ICON, video_pixb,
-					         Column.VIS_TEXT, tmi.name,
-					         Column.DB_ID, tmi.id,
-					         Column.MEDIATYPE , (int) MediaType.VIDEO,
+					         Column.VIS_TEXT, td.name,
+					         Column.DB_ID, td.db_id,
+					         Column.MEDIATYPE , (int) ItemType.LOCAL_VIDEO_TRACK,
 					         Column.COLL_TYPE, CollectionType.LISTED,
 					         Column.DRAW_SEPTR, 0,
 					         Column.VISIBLE, visible
@@ -952,13 +954,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			foreach(string artist in (string[])job.get_arg("artistArray")) { 	              //ARTISTS
 				if(job.cancellable.is_cancelled())
 					break;
+				Item item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
 				this.append(out iter_artist, null);
 				this.set(iter_artist,
 				         Column.ICON, artist_pixb,
 				         Column.VIS_TEXT, artist,
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0,
-				         Column.VISIBLE, false
+				         Column.VISIBLE, false,
+				         Column.ITEM, item
 				         );
 				
 				Gtk.TreePath p = this.get_path(iter_artist);
@@ -1057,13 +1061,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					}
 					if(job.cancellable.is_cancelled())
 						return false;
+					Item item = Item(ItemType.COLLECTION_CONTAINER_ALBUM);
 					this.prepend(out iter_album, iter_artist);
 					this.set(iter_album,
 					         Column.ICON, (albumimage != null ? albumimage : album_pixb),
 					         Column.VIS_TEXT, album,
 					         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 					         Column.DRAW_SEPTR, 0,
-					         Column.VISIBLE, false
+					         Column.VISIBLE, false,
+					         Column.ITEM, item
 					         );
 					Gtk.TreePath p1 = this.get_path(iter_album);
 					TreeRowReference treerowref = new TreeRowReference(this, p1);
@@ -1113,16 +1119,18 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					if(this.iter_parent(out iter_artist, iter_album))
 						this.set(iter_artist, Column.VISIBLE, visible);
 				}
+				Item item = Item((td.mediatype == ItemType.LOCAL_AUDIO_TRACK ? ItemType.LOCAL_AUDIO_TRACK : ItemType.LOCAL_VIDEO_TRACK), td.uri, td.db_id);
 				this.prepend(out iter_title, iter_album);
 				this.set(iter_title,
-				         Column.ICON, (td.mediatype == MediaType.AUDIO ? title_pixb : video_pixb),
+				         Column.ICON, (td.mediatype == ItemType.LOCAL_AUDIO_TRACK ? title_pixb : video_pixb),
 				         Column.VIS_TEXT, td.title,
 				         Column.DB_ID, td.db_id,
 				         Column.MEDIATYPE , td.mediatype,
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0,
 				         Column.VISIBLE, visible,
-				         Column.TRACKNUMBER, td.tracknumber
+				         Column.TRACKNUMBER, td.tracknumber,
+				         Column.ITEM, item
 				         );
 			}
 			return false;
@@ -1139,18 +1147,18 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			print("%s\n", e.message);
 			return;
 		}
-		foreach(MediaData md in job.media_dat) {
-			if(md.id > 0) {
-				TrackData td;
-				switch(md.mediatype) {
-					case MediaType.VIDEO: {
-						if(dbb.get_trackdata_for_id(md.id, out td))
-							tda += td;
+		foreach(TrackData td in job.track_dat) {
+			if(td.db_id > 0) {
+				TrackData tdl;
+				switch(td.mediatype) {
+					case ItemType.LOCAL_VIDEO_TRACK: {
+						if(dbb.get_trackdata_for_id(td.db_id, out tdl))
+							tda += tdl;
 						break;
 					}
-					case MediaType.STREAM: {
-						if(dbb.get_stream_td_for_id(md.id, out td))
-							tda += td;
+					case ItemType.STREAM: {
+						if(dbb.get_stream_td_for_id(td.db_id, out tdl))
+							tda += tdl;
 						break;
 					}
 					default:
@@ -1163,33 +1171,33 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		Idle.add( () => {
 			xn.tl.tracklistmodel.add_tracks(job.track_dat, true);
 			job.track_dat = null;
-			job.media_dat = null;
+//			job.media_dat = null;
 			return false;
 		});
 	}
 	
-	private void get_mediadata_of_listed(ref MediaData[] mda, Gtk.TreePath treepath) {
+	private void get_mediadata_of_listed(ref TrackData[] mda, Gtk.TreePath treepath) {
 		//this is only used for path.get_depth() == 2 !
 		TreeIter iter;
-		MediaData[] mda_local = mda;
-		MediaData md = MediaData();
-		md.id = -1;
+		TrackData[] mda_local = mda;
+		TrackData md = new TrackData();
+		md.db_id = -1;
 		bool visible = false;
 		this.get_iter(out iter, treepath);
 		this.get(iter,
 		         Column.VIS_TEXT,  ref md.name,
-		         Column.DB_ID,     ref md.id,
+		         Column.DB_ID,     ref md.db_id,
 		         Column.MEDIATYPE, ref md.mediatype,
 		         Column.VISIBLE, ref visible
 		         );
-		if(md.id > -1 && visible)
+		if(md.db_id > -1 && visible)
 			mda_local += md;
 		
 		mda = mda_local;
 	}
 	
 	private void queue_hierarchical_data_job(Worker.Job job) {
-		TrackData[] tda = job.track_dat;
+		TrackData[] tda = {};//job.track_dat;
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
@@ -1198,9 +1206,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			print("%s\n", e.message);
 			return;
 		}
-		foreach(MediaData md in job.media_dat) {
+		foreach(TrackData md in job.track_dat) {
 			TrackData td;
-			if(dbb.get_trackdata_for_id(md.id, out td)) 
+			if(dbb.get_trackdata_for_id(md.db_id, out td)) 
 				tda += td;
 		}
 		job.track_dat = tda;
@@ -1213,9 +1221,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		});
 	}
 	
-	private void get_mediadata_of_hierarchical(ref MediaData[] mda, Gtk.TreePath treepath) {
+	private void get_mediadata_of_hierarchical(ref TrackData[] mda, Gtk.TreePath treepath) {
 		TreeIter iter, iterChild;
-		MediaData[] mda_local = mda;
+		TrackData[] mda_local = {};//mda;
 		if(treepath.get_depth() ==1)
 			return;
 		switch(treepath.get_depth()) {
@@ -1227,32 +1235,32 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				for(int i = 0; i < this.iter_n_children(iter); i++) { // for each track
 					this.iter_nth_child(out iterChild, iter, i);
 					bool visible = false;
-					MediaData md = MediaData();
-					md.id = -1;
+					TrackData md = new TrackData();
+					md.db_id = -1;
 					
 					this.get(iterChild,
 							 Column.VIS_TEXT,  ref md.name,
-							 Column.DB_ID,     ref md.id,
+							 Column.DB_ID,     ref md.db_id,
 							 Column.MEDIATYPE, ref md.mediatype,
 							 Column.VISIBLE, ref visible
 							 );
-					if(md.id < 0 || !visible)
+					if(md.db_id < 0 || !visible)
 						continue;
-					 mda_local += md;
+					mda_local += md;
 				}
 				break;
 			case 3: //TITLE
 				this.get_iter(out iter, treepath);
 				
-				MediaData md = MediaData();
-				md.id = -1;
+				TrackData md = new TrackData();
+				md.db_id = -1;
 				
 				this.get(iter,
 						 Column.VIS_TEXT,  ref md.name,
-						 Column.DB_ID,     ref md.id,
+						 Column.DB_ID,     ref md.db_id,
 						 Column.MEDIATYPE, ref md.mediatype
 						 );
-				if(md.id < 0)
+				if(md.db_id < 0)
 					return;
 				
 				mda_local += md;
@@ -1275,14 +1283,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.queue_listed_data_job);
 			job.media_dat = {};
 			job.track_dat = {};
-			get_mediadata_of_listed(ref job.media_dat, treepath);
+			get_mediadata_of_listed(ref job.track_dat, treepath);
 			worker.push_job(job);
 		}
 		else if(br_ct == CollectionType.HIERARCHICAL) {
 			var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.queue_hierarchical_data_job);
 			job.media_dat = {};
 			job.track_dat = {};
-			get_mediadata_of_hierarchical(ref job.media_dat, treepath);
+			get_mediadata_of_hierarchical(ref job.track_dat, treepath);
 			worker.push_job(job);
 		}
 	}
@@ -1291,7 +1299,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	public DndData[] get_dnd_data_for_path(ref TreePath treepath) {
 		TreeIter iter, iterChild, iterChildChild;
 		DndData[] dnd_data_array = {};
-		MediaType mtype = MediaType.UNKNOWN;
+		ItemType mtype = ItemType.UNKNOWN;
 		int dbid = -1;
 		//string uri;
 		CollectionType br_ct = CollectionType.UNKNOWN;
@@ -1311,16 +1319,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						         Column.MEDIATYPE, ref mtype
 						         );
 						if(visible) {
-							DndData dnd_data = { dbid, (MediaType)mtype };
+							DndData dnd_data = { dbid, (ItemType)mtype };
 							dnd_data_array += dnd_data;
 						}
 //						if(dbid==-1) break;
 //						switch(mtype) {
-//							case MediaType.VIDEO: {
+//							case ItemType.VIDEO: {
 //								if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 //								break;
 //							}
-//							case MediaType.STREAM : {
+//							case ItemType.STREAM : {
 //								if(dbb.get_stream_for_id(dbid, out uri)) urilist += uri;
 //								break;
 //							}
@@ -1346,7 +1354,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 							         Column.MEDIATYPE, ref mtype
 							         );
 							if(dbid != -1 && visible) {
-								DndData dnd_data = { dbid, (MediaType)mtype };
+								DndData dnd_data = { dbid, (ItemType)mtype };
 								dnd_data_array += dnd_data;
 //								urilist += dbid;
 							}
@@ -1359,7 +1367,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				this.get(iter, Column.COLL_TYPE, ref br_ct);
 				if(br_ct == CollectionType.LISTED) {
 					dbid = -1;
-					mtype = MediaType.UNKNOWN;
+					mtype = ItemType.UNKNOWN;
 					this.get(iter,
 					         Column.DB_ID, ref dbid,
 					         Column.VISIBLE, ref visible,
@@ -1368,18 +1376,18 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					if(dbid==-1) break;
 					
 					if(visible) {
-						DndData dnd_data = { dbid, (MediaType)mtype };
+						DndData dnd_data = { dbid, (ItemType)mtype };
 						dnd_data_array += dnd_data;
 //						urilist += dbid;
 					}
 					
 //						switch(mtype) {
-//						case MediaType.VIDEO: {
+//						case ItemType.VIDEO: {
 //							//print("is VIDEO\n");
 //							if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
 //							break;
 //						}
-//						case MediaType.STREAM : {
+//						case ItemType.STREAM : {
 //							//print("is STREAM\n");
 //							if(dbb.get_stream_for_id(dbid, out uri)) urilist += uri;
 //							break;
@@ -1399,7 +1407,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						         Column.MEDIATYPE, ref mtype
 						         );
 							if(dbid != -1 && visible) {
-								DndData dnd_data = { dbid, (MediaType)mtype };
+								DndData dnd_data = { dbid, (ItemType)mtype };
 								dnd_data_array += dnd_data;
 //								urilist += dbid;
 							}
@@ -1412,7 +1420,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				if(dbid==-1) break;
 				if(dbid != -1) {
 //					urilist += dbid;
-					DndData dnd_data = { dbid, (MediaType)mtype };
+					DndData dnd_data = { dbid, (ItemType)mtype };
 					dnd_data_array += dnd_data;
 				}
 				break;

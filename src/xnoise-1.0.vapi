@@ -58,19 +58,19 @@ namespace Xnoise {
 		public string[] get_media_folders ();
 		public string? get_single_stream_uri (string name);
 		public string[] get_some_artists (int limit, int offset);
-		public Xnoise.MediaData[] get_stream_data (ref string searchtext);
+		public Xnoise.TrackData[] get_stream_data (ref string searchtext);
 		public bool get_stream_for_id (int id, out string uri);
 		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 		public Xnoise.StreamData[] get_streams ();
 		public Xnoise.TrackData[] get_titles_with_data (string artist, string album);
-		public Xnoise.MediaData[] get_titles_with_mediatypes_and_ids (string artist, string album);
+		public Xnoise.TrackData[] get_titles_with_mediatypes_and_ids (string artist, string album);
 		public int get_track_id_for_path (string uri);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public bool get_trackdata_for_uri (string? uri, out Xnoise.TrackData val);
 		public bool get_uri_for_id (int id, out string val);
 		public string[] get_uris (string search_string);
-		public Xnoise.MediaData[] get_video_data (ref string searchtext);
+		public Xnoise.TrackData[] get_video_data (ref string searchtext);
 		public string[] get_videos (ref string searchtext);
 		public bool stream_in_db (string uri);
 		public bool streams_available ();
@@ -368,6 +368,7 @@ namespace Xnoise {
 			DRAW_SEPTR,
 			VISIBLE,
 			TRACKNUMBER,
+			ITEM,
 			N_COLUMNS
 		}
 		public string searchtext;
@@ -516,7 +517,8 @@ namespace Xnoise {
 		public int32 db_id;
 		public string? genre;
 		public int32 length;
-		public Xnoise.MediaType mediatype;
+		public Xnoise.ItemType mediatype;
+		public string? name;
 		public string? title;
 		public uint tracknumber;
 		public string? uri;
@@ -631,7 +633,7 @@ namespace Xnoise {
 			public Xnoise.DndData[] dnd_data;
 			public int64 id;
 			public int32[] id_array;
-			public Xnoise.MediaData[] media_dat;
+			public Xnoise.Item[] media_dat;
 			public void* p_arg;
 			public Xnoise.Worker.SyncWorkFunc? s_func;
 			public Xnoise.TrackData[] track_dat;
@@ -709,20 +711,14 @@ namespace Xnoise {
 	[CCode (type_id = "XNOISE_TYPE_DND_DATA", cheader_filename = "xnoise.h")]
 	public struct DndData {
 		public int32 db_id;
-		public Xnoise.MediaType mediatype;
+		public Xnoise.ItemType mediatype;
 	}
 	[CCode (type_id = "XNOISE_TYPE_ITEM", cheader_filename = "xnoise.h")]
 	public struct Item {
 		public Xnoise.ItemType type;
-		public uint32 db_id;
+		public int32 db_id;
 		public string? uri;
-		public Item (Xnoise.ItemType _type = ItemType.UNKNOWN, string? _uri = null, uint32 _db_id = 0);
-	}
-	[CCode (type_id = "XNOISE_TYPE_MEDIA_DATA", cheader_filename = "xnoise.h")]
-	public struct MediaData {
-		public string name;
-		public int id;
-		public Xnoise.MediaType mediatype;
+		public Item (Xnoise.ItemType _type = ItemType.UNKNOWN, string? _uri = null, int32 _db_id = -1);
 	}
 	[CCode (type_id = "XNOISE_TYPE_STREAM_DATA", cheader_filename = "xnoise.h")]
 	public struct StreamData {
@@ -760,14 +756,6 @@ namespace Xnoise {
 		COLLECTION_CONTAINER_ARTIST,
 		COLLECTION_CONTAINER_ALBUM,
 		MAXCOUNT
-	}
-	[CCode (cprefix = "XNOISE_MEDIA_TYPE_", cheader_filename = "xnoise.h")]
-	public enum MediaType {
-		UNKNOWN,
-		AUDIO,
-		VIDEO,
-		STREAM,
-		PLAYLISTFILE
 	}
 	[CCode (cprefix = "XNOISE_PLAYER_STATE_", cheader_filename = "xnoise.h")]
 	public enum PlayerState {
