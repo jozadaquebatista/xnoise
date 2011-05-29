@@ -6,9 +6,9 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
+#include <gtk/gtk.h>
 #include <sqlite3.h>
 #include <gdk/gdk.h>
 #include <float.h>
@@ -18,6 +18,48 @@
 
 G_BEGIN_DECLS
 
+
+#define XNOISE_TYPE_ITEM_HANDLER (xnoise_item_handler_get_type ())
+#define XNOISE_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandler))
+#define XNOISE_ITEM_HANDLER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandlerClass))
+#define XNOISE_IS_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ITEM_HANDLER))
+#define XNOISE_IS_ITEM_HANDLER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ITEM_HANDLER))
+#define XNOISE_ITEM_HANDLER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandlerClass))
+
+typedef struct _XnoiseItemHandler XnoiseItemHandler;
+typedef struct _XnoiseItemHandlerClass XnoiseItemHandlerClass;
+typedef struct _XnoiseItemHandlerPrivate XnoiseItemHandlerPrivate;
+
+#define XNOISE_TYPE_ITEM_HANDLER_TYPE (xnoise_item_handler_type_get_type ())
+
+#define XNOISE_TYPE_ITEM_TYPE (xnoise_item_type_get_type ())
+
+#define XNOISE_TYPE_ACTION_CONTEXT (xnoise_action_context_get_type ())
+typedef struct _XnoiseAction XnoiseAction;
+
+#define XNOISE_TYPE_ITEM (xnoise_item_get_type ())
+typedef struct _XnoiseItem XnoiseItem;
+
+#define XNOISE_TYPE_ITEM_HANDLER_MANAGER (xnoise_item_handler_manager_get_type ())
+#define XNOISE_ITEM_HANDLER_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER_MANAGER, XnoiseItemHandlerManager))
+#define XNOISE_ITEM_HANDLER_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_HANDLER_MANAGER, XnoiseItemHandlerManagerClass))
+#define XNOISE_IS_ITEM_HANDLER_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ITEM_HANDLER_MANAGER))
+#define XNOISE_IS_ITEM_HANDLER_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ITEM_HANDLER_MANAGER))
+#define XNOISE_ITEM_HANDLER_MANAGER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ITEM_HANDLER_MANAGER, XnoiseItemHandlerManagerClass))
+
+typedef struct _XnoiseItemHandlerManager XnoiseItemHandlerManager;
+typedef struct _XnoiseItemHandlerManagerClass XnoiseItemHandlerManagerClass;
+
+#define XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST (xnoise_handler_add_to_tracklist_get_type ())
+#define XNOISE_HANDLER_ADD_TO_TRACKLIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST, XnoiseHandlerAddToTracklist))
+#define XNOISE_HANDLER_ADD_TO_TRACKLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST, XnoiseHandlerAddToTracklistClass))
+#define XNOISE_IS_HANDLER_ADD_TO_TRACKLIST(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST))
+#define XNOISE_IS_HANDLER_ADD_TO_TRACKLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST))
+#define XNOISE_HANDLER_ADD_TO_TRACKLIST_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST, XnoiseHandlerAddToTracklistClass))
+
+typedef struct _XnoiseHandlerAddToTracklist XnoiseHandlerAddToTracklist;
+typedef struct _XnoiseHandlerAddToTracklistClass XnoiseHandlerAddToTracklistClass;
+typedef struct _XnoiseHandlerAddToTracklistPrivate XnoiseHandlerAddToTracklistPrivate;
 
 #define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
 #define XNOISE_ADD_MEDIA_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialog))
@@ -205,37 +247,6 @@ typedef struct _XnoiseUserInfoClass XnoiseUserInfoClass;
 #define XNOISE_USER_INFO_TYPE_CONTENT_CLASS (xnoise_user_info_content_class_get_type ())
 
 #define XNOISE_USER_INFO_TYPE_REMOVAL_TYPE (xnoise_user_info_removal_type_get_type ())
-
-#define XNOISE_TYPE_ITEM (xnoise_item_get_type ())
-
-#define XNOISE_TYPE_ITEM_TYPE (xnoise_item_type_get_type ())
-typedef struct _XnoiseItem XnoiseItem;
-
-#define XNOISE_TYPE_ACTION_CONTEXT (xnoise_action_context_get_type ())
-
-#define XNOISE_TYPE_ITEM_HANDLER_TYPE (xnoise_item_handler_type_get_type ())
-
-#define XNOISE_TYPE_ITEM_HANDLER_MANAGER (xnoise_item_handler_manager_get_type ())
-#define XNOISE_ITEM_HANDLER_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER_MANAGER, XnoiseItemHandlerManager))
-#define XNOISE_ITEM_HANDLER_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_HANDLER_MANAGER, XnoiseItemHandlerManagerClass))
-#define XNOISE_IS_ITEM_HANDLER_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ITEM_HANDLER_MANAGER))
-#define XNOISE_IS_ITEM_HANDLER_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ITEM_HANDLER_MANAGER))
-#define XNOISE_ITEM_HANDLER_MANAGER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ITEM_HANDLER_MANAGER, XnoiseItemHandlerManagerClass))
-
-typedef struct _XnoiseItemHandlerManager XnoiseItemHandlerManager;
-typedef struct _XnoiseItemHandlerManagerClass XnoiseItemHandlerManagerClass;
-typedef struct _XnoiseAction XnoiseAction;
-
-#define XNOISE_TYPE_ITEM_HANDLER (xnoise_item_handler_get_type ())
-#define XNOISE_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandler))
-#define XNOISE_ITEM_HANDLER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandlerClass))
-#define XNOISE_IS_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ITEM_HANDLER))
-#define XNOISE_IS_ITEM_HANDLER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ITEM_HANDLER))
-#define XNOISE_ITEM_HANDLER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandlerClass))
-
-typedef struct _XnoiseItemHandler XnoiseItemHandler;
-typedef struct _XnoiseItemHandlerClass XnoiseItemHandlerClass;
-typedef struct _XnoiseItemHandlerPrivate XnoiseItemHandlerPrivate;
 typedef struct _XnoiseItemHandlerManagerPrivate XnoiseItemHandlerManagerPrivate;
 
 #define XNOISE_TYPE_LYRICS_LOADER (xnoise_lyrics_loader_get_type ())
@@ -615,6 +626,67 @@ typedef struct _XnoiseWorkerPrivate XnoiseWorkerPrivate;
 #define XNOISE_WORKER_TYPE_EXECUTION_TYPE (xnoise_worker_execution_type_get_type ())
 typedef struct _XnoiseWorkerJobPrivate XnoiseWorkerJobPrivate;
 
+typedef enum  {
+	XNOISE_ITEM_HANDLER_TYPE_UNKNOWN,
+	XNOISE_ITEM_HANDLER_TYPE_OTHER,
+	XNOISE_ITEM_HANDLER_TYPE_TRACKLIST_ADDER,
+	XNOISE_ITEM_HANDLER_TYPE_PLAYLIST_PARSER,
+	XNOISE_ITEM_HANDLER_TYPE_VIDEO_THUMBNAILER,
+	XNOISE_ITEM_HANDLER_TYPE_TAG_EDITOR
+} XnoiseItemHandlerType;
+
+typedef enum  {
+	XNOISE_ITEM_TYPE_UNKNOWN = 0,
+	XNOISE_ITEM_TYPE_LOCAL_AUDIO_TRACK,
+	XNOISE_ITEM_TYPE_LOCAL_VIDEO_TRACK,
+	XNOISE_ITEM_TYPE_STREAM,
+	XNOISE_ITEM_TYPE_CDROM_TRACK,
+	XNOISE_ITEM_TYPE_PLAYLIST,
+	XNOISE_ITEM_TYPE_LOCAL_FOLDER,
+	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ARTIST,
+	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ALBUM,
+	XNOISE_ITEM_TYPE_MAXCOUNT
+} XnoiseItemType;
+
+typedef enum  {
+	XNOISE_ACTION_CONTEXT_ANY,
+	XNOISE_ACTION_CONTEXT_TRACKLIST_ITEM_ACTIVATED,
+	XNOISE_ACTION_CONTEXT_TRACKLIST_MENU_QUERY,
+	XNOISE_ACTION_CONTEXT_TRACKLIST_DROP,
+	XNOISE_ACTION_CONTEXT_MEDIABROWSER_ITEM_ACTIVATED,
+	XNOISE_ACTION_CONTEXT_MEDIABROWSER_MENU_QUERY,
+	XNOISE_ACTION_CONTEXT_MAXCOUNT
+} XnoiseActionContext;
+
+struct _XnoiseItem {
+	XnoiseItemType type;
+	guint32 db_id;
+	gchar* uri;
+};
+
+struct _XnoiseItemHandler {
+	GObject parent_instance;
+	XnoiseItemHandlerPrivate * priv;
+	XnoiseItemHandlerManager* uhm;
+};
+
+struct _XnoiseItemHandlerClass {
+	GObjectClass parent_class;
+	XnoiseItemHandlerType (*handler_type) (XnoiseItemHandler* self);
+	const gchar* (*handler_name) (XnoiseItemHandler* self);
+	XnoiseAction* (*get_action) (XnoiseItemHandler* self, XnoiseItemType type, XnoiseActionContext context);
+	GArray* (*convert) (XnoiseItemHandler* self, XnoiseItem* item);
+};
+
+struct _XnoiseHandlerAddToTracklist {
+	XnoiseItemHandler parent_instance;
+	XnoiseHandlerAddToTracklistPrivate * priv;
+};
+
+struct _XnoiseHandlerAddToTracklistClass {
+	XnoiseItemHandlerClass parent_class;
+};
+
 struct _XnoiseAddMediaDialog {
 	GObject parent_instance;
 	XnoiseAddMediaDialogPrivate * priv;
@@ -774,44 +846,6 @@ typedef enum  {
 	XNOISE_USER_INFO_REMOVAL_TYPE_EXTERNAL
 } XnoiseUserInfoRemovalType;
 
-typedef enum  {
-	XNOISE_ITEM_TYPE_UNKNOWN = 0,
-	XNOISE_ITEM_TYPE_LOCAL_AUDIO_TRACK,
-	XNOISE_ITEM_TYPE_LOCAL_VIDEO_TRACK,
-	XNOISE_ITEM_TYPE_STREAM,
-	XNOISE_ITEM_TYPE_CDROM_TRACK,
-	XNOISE_ITEM_TYPE_PLAYLIST,
-	XNOISE_ITEM_TYPE_LOCAL_FOLDER,
-	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ARTIST,
-	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ALBUM,
-	XNOISE_ITEM_TYPE_MAXCOUNT
-} XnoiseItemType;
-
-struct _XnoiseItem {
-	XnoiseItemType type;
-	guint32 db_id;
-	gchar* uri;
-};
-
-typedef enum  {
-	XNOISE_ACTION_CONTEXT_ANY,
-	XNOISE_ACTION_CONTEXT_TRACKLIST_ITEM_ACTIVATED,
-	XNOISE_ACTION_CONTEXT_TRACKLIST_MENU_QUERY,
-	XNOISE_ACTION_CONTEXT_TRACKLIST_DROP,
-	XNOISE_ACTION_CONTEXT_MEDIABROWSER_ITEM_ACTIVATED,
-	XNOISE_ACTION_CONTEXT_MEDIABROWSER_MENU_QUERY,
-	XNOISE_ACTION_CONTEXT_MAXCOUNT
-} XnoiseActionContext;
-
-typedef enum  {
-	XNOISE_ITEM_HANDLER_TYPE_UNKNOWN,
-	XNOISE_ITEM_HANDLER_TYPE_OTHER,
-	XNOISE_ITEM_HANDLER_TYPE_TRACKLIST_ADDER,
-	XNOISE_ITEM_HANDLER_TYPE_PLAYLIST_PARSER,
-	XNOISE_ITEM_HANDLER_TYPE_VIDEO_THUMBNAILER,
-	XNOISE_ITEM_HANDLER_TYPE_TAG_EDITOR
-} XnoiseItemHandlerType;
-
 typedef void (*XnoiseItemHandlerActionType) (XnoiseItem* item, GValue* data, void* user_data);
 struct _XnoiseAction {
 	XnoiseItemHandlerActionType action;
@@ -820,20 +854,6 @@ struct _XnoiseAction {
 	const gchar* info;
 	const gchar* text;
 	XnoiseActionContext context;
-};
-
-struct _XnoiseItemHandler {
-	GObject parent_instance;
-	XnoiseItemHandlerPrivate * priv;
-	XnoiseItemHandlerManager* uhm;
-};
-
-struct _XnoiseItemHandlerClass {
-	GObjectClass parent_class;
-	XnoiseItemHandlerType (*handler_type) (XnoiseItemHandler* self);
-	const gchar* (*handler_name) (XnoiseItemHandler* self);
-	XnoiseAction* (*get_action) (XnoiseItemHandler* self, XnoiseItemType type, XnoiseActionContext context);
-	GArray* (*convert) (XnoiseItemHandler* self, XnoiseItem* item);
 };
 
 struct _XnoiseItemHandlerManager {
@@ -1341,6 +1361,20 @@ struct _XnoiseWorkerJobClass {
 };
 
 
+GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
+GType xnoise_item_handler_type_get_type (void) G_GNUC_CONST;
+GType xnoise_item_type_get_type (void) G_GNUC_CONST;
+GType xnoise_action_context_get_type (void) G_GNUC_CONST;
+void xnoise_action_free (XnoiseAction* self);
+GType xnoise_item_get_type (void) G_GNUC_CONST;
+XnoiseItem* xnoise_item_dup (const XnoiseItem* self);
+void xnoise_item_free (XnoiseItem* self);
+void xnoise_item_copy (const XnoiseItem* self, XnoiseItem* dest);
+void xnoise_item_destroy (XnoiseItem* self);
+GType xnoise_item_handler_manager_get_type (void) G_GNUC_CONST;
+GType xnoise_handler_add_to_tracklist_get_type (void) G_GNUC_CONST;
+XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_new (void);
+XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_construct (GType object_type);
 GType xnoise_add_media_dialog_get_type (void) G_GNUC_CONST;
 XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
 XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
@@ -1559,21 +1593,10 @@ void xnoise_info_bar_update_symbol_widget (XnoiseInfoBar* self, XnoiseUserInfoCo
 void xnoise_info_bar_update_text (XnoiseInfoBar* self, const gchar* txt, gboolean bold);
 void xnoise_info_bar_update_extra_widget (XnoiseInfoBar* self, GtkWidget* widget);
 GtkWidget* xnoise_info_bar_get_extra_widget (XnoiseInfoBar* self);
-GType xnoise_item_get_type (void) G_GNUC_CONST;
-GType xnoise_item_type_get_type (void) G_GNUC_CONST;
-XnoiseItem* xnoise_item_dup (const XnoiseItem* self);
-void xnoise_item_free (XnoiseItem* self);
-void xnoise_item_copy (const XnoiseItem* self, XnoiseItem* dest);
-void xnoise_item_destroy (XnoiseItem* self);
 void xnoise_item_init (XnoiseItem *self, XnoiseItemType _type, const gchar* _uri, guint32 _db_id);
-GType xnoise_action_context_get_type (void) G_GNUC_CONST;
-GType xnoise_item_handler_type_get_type (void) G_GNUC_CONST;
-GType xnoise_item_handler_manager_get_type (void) G_GNUC_CONST;
 extern XnoiseItemHandlerManager* xnoise_uri_handler_manager;
-void xnoise_action_free (XnoiseAction* self);
 XnoiseAction* xnoise_action_new (void);
 XnoiseAction* xnoise_action_new (void);
-GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
 gboolean xnoise_item_handler_set_manager (XnoiseItemHandler* self, XnoiseItemHandlerManager* _uhm);
 XnoiseItemHandlerType xnoise_item_handler_handler_type (XnoiseItemHandler* self);
 const gchar* xnoise_item_handler_handler_name (XnoiseItemHandler* self);

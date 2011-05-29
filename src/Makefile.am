@@ -27,6 +27,7 @@ BUILT_SOURCES = \
     $(NULL)
 
 xnoise_SOURCES = \
+    ItemHandlers/xnoise-handler-add-to-tracklist.vala \
     xnoise-about.vala \
     xnoise-add-media-dialog.vala \
     xnoise-album-image.vala \
