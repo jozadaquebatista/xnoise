@@ -516,6 +516,7 @@ namespace Xnoise {
 		public int bitrate;
 		public int32 db_id;
 		public string? genre;
+		public Xnoise.Item item;
 		public int32 length;
 		public Xnoise.ItemType mediatype;
 		public string? name;
@@ -782,6 +783,8 @@ namespace Xnoise {
 	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text, string providername);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalAccess global;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.ItemHandlerManager item_handler_manager;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static GLib.MainContext mc;
 	[CCode (cheader_filename = "xnoise.h")]

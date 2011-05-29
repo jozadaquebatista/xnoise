@@ -408,7 +408,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 			         Column.DRAW_SEPTR, 0,
 			         Column.VISIBLE, visible,
-			         Column.TRACKNUMBER, td.tracknumber
+			         Column.TRACKNUMBER, td.tracknumber,
+			         Column.ITEM, item_handler_manager.create_uri_item(td.uri)
 			         );
 			this.remove(org_iter);
 			return;
@@ -448,7 +449,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0,
 				         Column.VISIBLE, visible,
-				         Column.TRACKNUMBER, td.tracknumber
+				         Column.TRACKNUMBER, td.tracknumber,
+				         Column.ITEM, item_handler_manager.create_uri_item(td.uri)
 				         );
 				title_iter = new_title_iter;
 				this.remove(org_iter);
@@ -472,7 +474,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 		         Column.DRAW_SEPTR, 0,
 		         Column.VISIBLE, visible,
-		         Column.TRACKNUMBER, td.tracknumber
+		         Column.TRACKNUMBER, td.tracknumber,
+		         Column.ITEM, item_handler_manager.create_uri_item(td.uri)
 		         );
 		this.remove(org_iter);
 		return;
@@ -530,13 +533,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private void handle_iter_for_artist(ref TrackData td, out TreeIter artist_iter) {
 		string text = null;
 		if(this.iter_n_children(null) == 0) {
+			Item item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
 			this.append(out artist_iter, null);
 			this.set(artist_iter,
 			         Column.ICON, artist_pixb,
 			         Column.VIS_TEXT, td.artist,
 			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 			         Column.DRAW_SEPTR, 0,
-			         Column.VISIBLE, false
+			         Column.VISIBLE, false,
+			         Column.ITEM, item
 			         );
 			return;
 		}
@@ -553,25 +558,29 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 			if(strcmp(text, td.artist != null ? td.artist.down().strip() : "") > 0) {
 				TreeIter new_artist_iter;
+				Item item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
 				this.insert_before(out new_artist_iter, null, artist_iter);
 				this.set(new_artist_iter,
-					     Column.ICON, artist_pixb,
-					     Column.VIS_TEXT, td.artist,
-					     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-					     Column.DRAW_SEPTR, 0,
-					     Column.VISIBLE, false
-					     );
+				         Column.ICON, artist_pixb,
+				         Column.VIS_TEXT, td.artist,
+				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+				         Column.DRAW_SEPTR, 0,
+				         Column.VISIBLE, false,
+				         Column.ITEM, item
+				         );
 				artist_iter = new_artist_iter;
 				return;
 			}
 		}
+		Item item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
 		this.append(out artist_iter, null);
 		this.set(artist_iter,
 		         Column.ICON, artist_pixb,
 		         Column.VIS_TEXT, td.artist,
 		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 		         Column.DRAW_SEPTR, 0,
-		         Column.VISIBLE, false
+		         Column.VISIBLE, false,
+		         Column.ITEM, item
 		         );
 		return;
 	}
@@ -592,13 +601,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 		}
 		if(this.iter_n_children(artist_iter) == 0) {
+			Item item = Item(ItemType.COLLECTION_CONTAINER_ALBUM);
 			this.append(out album_iter, artist_iter);
 			this.set(album_iter,
 			         Column.ICON, (albumimage != null ? albumimage : album_pixb),
 			         Column.VIS_TEXT, td.album,
 			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 			         Column.DRAW_SEPTR, 0,
-			         Column.VISIBLE, false
+			         Column.VISIBLE, false,
+			         Column.ITEM, item
 			         );
 			return;
 		}
@@ -612,26 +623,30 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 			if(strcmp(text, td.album.down().strip()) > 0) {
 				TreeIter new_album_iter;
+				Item item = Item(ItemType.COLLECTION_CONTAINER_ALBUM);
 				this.insert_before(out new_album_iter, artist_iter, album_iter);
 				this.set(new_album_iter,
-					     Column.ICON, (albumimage != null ? albumimage : album_pixb),
-					     Column.VIS_TEXT, td.album,
-					     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-					     Column.DRAW_SEPTR, 0,
-					     Column.VISIBLE, false
-					     );
+				         Column.ICON, (albumimage != null ? albumimage : album_pixb),
+				         Column.VIS_TEXT, td.album,
+				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+				         Column.DRAW_SEPTR, 0,
+				         Column.VISIBLE, false,
+				         Column.ITEM, item
+				         );
 				album_iter = new_album_iter;
 				return;
 			}
-
+		
 		}
+		Item item = Item(ItemType.COLLECTION_CONTAINER_ALBUM);
 		this.append(out album_iter, artist_iter);
 		this.set(album_iter,
 		         Column.ICON, (albumimage != null ? albumimage : album_pixb),
 		         Column.VIS_TEXT, td.album,
 		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 		         Column.DRAW_SEPTR, 0,
-		         Column.VISIBLE, false
+		         Column.VISIBLE, false,
+		         Column.ITEM, item
 		         );
 		return;
 	}
@@ -651,6 +666,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				if(this.iter_parent(out iter_artist, album_iter))
 					this.set(iter_artist, Column.VISIBLE, visible);
 			}
+			Item item = item_handler_manager.create_uri_item(td.uri);
 			this.append(out title_iter, album_iter);
 			this.set(title_iter,
 			         Column.ICON, title_pixb,
@@ -660,7 +676,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 			         Column.DRAW_SEPTR, 0,
 			         Column.VISIBLE, visible,
-			         Column.TRACKNUMBER, td.tracknumber
+			         Column.TRACKNUMBER, td.tracknumber,
+			         Column.ITEM, item
 			         );
 			return;
 		}
@@ -684,6 +701,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					if(this.iter_parent(out iter_artist, album_iter))
 						this.set(iter_artist, Column.VISIBLE, visible);
 				}
+				Item item = item_handler_manager.create_uri_item(td.uri);
 				this.insert_before(out new_title_iter, album_iter, title_iter);
 				this.set(new_title_iter,
 				         Column.ICON, title_pixb,
@@ -693,7 +711,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0,
 				         Column.VISIBLE, visible,
-				         Column.TRACKNUMBER, td.tracknumber
+				         Column.TRACKNUMBER, td.tracknumber,
+				         Column.ITEM, item
 				         );
 				title_iter = new_title_iter;
 				return;
@@ -707,6 +726,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			if(this.iter_parent(out iter_artist, album_iter))
 				this.set(iter_artist, Column.VISIBLE, visible);
 		}
+		Item item = item_handler_manager.create_uri_item(td.uri);
 		this.append(out title_iter, album_iter);
 		this.set(title_iter,
 		         Column.ICON, title_pixb,
@@ -716,7 +736,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 		         Column.DRAW_SEPTR, 0,
 		         Column.VISIBLE, visible,
-		         Column.TRACKNUMBER, td.tracknumber
+		         Column.TRACKNUMBER, td.tracknumber,
+		         Column.ITEM, item
 		         );
 		return;
 	}

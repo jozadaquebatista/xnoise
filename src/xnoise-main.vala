@@ -39,34 +39,34 @@ public class Xnoise.Main : GLib.Object {
 	public GstPlayer gPl;
 	public static bool show_plugin_state;
 	public static bool no_plugins;
-
+	
 	public Main() {
 		bool is_first_start;
 		Xnoise.initialize(out is_first_start);
-
+		
 		check_database_and_tables();
-
+		
 		_instance = this;
-
+		
 		gPl = new GstPlayer();
-
+		
 		plugin_loader = new PluginLoader();
 		tlm = new TrackListModel();
 		tl = new TrackList();
 		main_window = new MainWindow();
 		tray_icon = new TrayIcon();
-
+		
 		userinfo = new UserInfo(main_window.show_status_info);
-
+		
 		if(!no_plugins) {
 			plugin_loader.load_all();
-
+			
 			foreach(string name in par.get_string_list_value("activated_plugins")) {
 				if(!plugin_loader.activate_single_plugin(name)) {
 					print("\t%s plugin failed to activate!\n", name);
 				}
 			}
-
+			
 			if(show_plugin_state) print(" PLUGIN INFO:\n");
 			foreach(string name in plugin_loader.plugin_htable.get_keys()) {
 				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).loaded))
@@ -81,13 +81,14 @@ public class Xnoise.Main : GLib.Object {
 				else {
 					if(show_plugin_state) print("\t%s NOT activated\n", name);
 				}
-
-				if(show_plugin_state) print("\n");
+				
+				if(show_plugin_state) 
+					print("\n");
 			}
 		}
-
+		
 		connect_signals();
-
+		
 		par.set_start_parameters_in_implementors();
 		
 		if(is_first_start)

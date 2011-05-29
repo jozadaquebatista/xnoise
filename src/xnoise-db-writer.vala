@@ -632,6 +632,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(stmt.step() == Sqlite.ROW) {
 			val.db_id = stmt.column_int(0);
 			val.title = stmt.column_text(1);
+			val.uri = uri;
 			retval = true;
 		}
 		return retval;

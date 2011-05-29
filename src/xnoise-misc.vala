@@ -38,7 +38,8 @@ namespace Xnoise {
 	public static GlobalAccess global = null;
 	public static UserInfo userinfo = null;
 	public static Worker worker = null;
-	public static MediaImporter media_importer;
+	public static MediaImporter media_importer = null;
+	public static ItemHandlerManager item_handler_manager = null;
 	public static MainContext mc;
 	/*
 	 * This function is used to create static instances of Params
@@ -46,6 +47,9 @@ namespace Xnoise {
 	 */
 	public static void initialize(out bool is_first_start) {
 		is_first_start = false;
+		
+		item_handler_manager = new ItemHandlerManager();
+		
 		media_importer = new MediaImporter();
 		
 		// setup worker with reference to default context
@@ -422,6 +426,7 @@ public class Xnoise.TrackData { // track meta information
 	public int32 length = 0;
 	public int bitrate = 0;
 	public ItemType mediatype = ItemType.UNKNOWN;
+	public Item item = Item(ItemType.UNKNOWN);
 	public string? uri = null;
 	public int32 db_id = -1;
 }

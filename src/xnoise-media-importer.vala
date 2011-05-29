@@ -222,6 +222,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 				if(idbuffer== -1) {
 					var tr = new TagReader();
 					TrackData td = tr.read_tag(file.get_path());
+					td.uri = file.get_uri();
 					td.db_id = dbw.insert_title(td, file.get_uri());
 					if((int)td.db_id != -1) {
 						TrackData[] tdy = { td };
@@ -236,6 +237,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		else if(psVideo.match_string(mime)) {
 			int idbuffer = dbw.uri_entry_exists(file.get_uri());
 			var td = new TrackData();
+			td.uri = file.get_uri();
 			td.artist = "unknown artist";
 			td.album = "unknown album";
 			if(file!=null) td.title = prepare_name_from_filename(file.get_basename());
@@ -340,6 +342,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 								td = new TrackData();
 								var tr = new TagReader();
 								td = tr.read_tag(filepath);
+								td.uri = file.get_uri();
 								//print("++%s\n", td.title);
 								int32 id = dbw.insert_title(td, file.get_uri());
 								td.db_id = id;

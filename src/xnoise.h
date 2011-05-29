@@ -1045,6 +1045,7 @@ struct _XnoiseTrackData {
 	gint32 length;
 	gint bitrate;
 	XnoiseItemType mediatype;
+	XnoiseItem item;
 	gchar* uri;
 	gint32 db_id;
 };
@@ -1697,6 +1698,7 @@ extern XnoiseUserInfo* xnoise_userinfo;
 GType xnoise_worker_get_type (void) G_GNUC_CONST;
 extern XnoiseWorker* xnoise_worker;
 extern XnoiseMediaImporter* xnoise_media_importer;
+extern XnoiseItemHandlerManager* xnoise_item_handler_manager;
 extern GMainContext* xnoise_mc;
 void xnoise_initialize (gboolean* is_first_start);
 gchar* xnoise_escape_album_for_local_folder_search (const gchar* _artist, const gchar* album_name);
