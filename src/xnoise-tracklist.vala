@@ -890,12 +890,14 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void on_row_activated(Gtk.Widget sender, TreePath path, TreeViewColumn column) {
-		string uri = null;
+		Item item = Item(ItemType.UNKNOWN);
+//		Item* x   = &item;
 		TreeIter iter;
 		if(tracklistmodel.get_iter(out iter, path)) {
-			tracklistmodel.get(iter, TrackListModel.Column.URI, out uri);
+			tracklistmodel.get(iter, TrackListModel.Column.ITEM, out item);
 		}
-		this.on_activated(uri, path);
+print("tracklist itemtype %s\n", item.type.to_string());
+		this.on_activated(item, path);
 	}
 
 	private bool on_key_released(Gtk.Widget sender, Gdk.EventKey ek) {
@@ -960,14 +962,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 		if(removed_playing_title) tracklistmodel.set_reference_to_last();
 	}
 
-	public void on_activated(string uri, TreePath path) {
-		//check for existance on local files
-		File track = File.new_for_uri(uri);
-
-		if(track.get_uri_scheme() in global.local_schemes) {
-			if(!track.query_exists(null)) return;
-		}
-
+	public void on_activated(Item item, TreePath path) {//(string uri, TreePath path) {
+print("++1\n");
 		if(path != null) {
 			global.position_reference = new TreeRowReference(this.tracklistmodel, path);
 		}
@@ -975,17 +971,24 @@ public class Xnoise.TrackList : TreeView, IParams {
 			print("cannot setup treerowref\n");
 			return;
 		}
-		global.current_uri = uri;
-		global.player_state = PlayerState.PLAYING;
-
+print("++2\n");
+		if(item.type != ItemType.UNKNOWN) {
+print("++3\n");
+			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
+			if(tmp == null)
+				return;
+print("++4\n");
+			unowned Action? action = tmp.get_action(item.type, ActionContext.ANY);
+			if(action != null)
+				action.action(item, null);
+print("++5\n");
+		}
+		
 		TreeIter iter;
 		this.tracklistmodel.get_iter(out iter, path);
 		this.set_focus_on_iter(ref iter);
 	}
 	
-	/*private void column_visibility_changed();
-	private void column_resizability_changed();*/
-
 	// i hide the default insert_colum, so we can load the column's position
 	// from the config file before actually inserting it
 	private new void insert_column(Gtk.TreeViewColumn column, int position) {

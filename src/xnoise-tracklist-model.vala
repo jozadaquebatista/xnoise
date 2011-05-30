@@ -493,9 +493,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			k++;
 		}
 		
-		if(tda[0].item.uri != null) {
-//			global.player_state = PlayerState.PLAYING;
-//			global.current_uri = tda[0].uri;
+		if(tda[0].item.type != ItemType.UNKNOWN) {
+print("tlm itemtype %s\n", tda[0].item.type.to_string());
 			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;
@@ -503,8 +502,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			if(action != null)
 				action.action(tda[0].item, null);
 		}
-		else
-			print("no uri to play!! Item empty\n");
 		xn.tl.set_focus_on_iter(ref iter_2);
 	}
 

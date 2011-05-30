@@ -539,7 +539,7 @@ namespace Xnoise {
 		public Xnoise.TrackListModel tracklistmodel;
 		public TrackList ();
 		public void handle_resize ();
-		public void on_activated (string uri, Gtk.TreePath path);
+		public void on_activated (Xnoise.Item item, Gtk.TreePath path);
 		public void remove_selected_rows ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
 		public bool column_album_visible { get; set; }

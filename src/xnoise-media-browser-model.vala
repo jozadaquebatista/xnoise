@@ -1223,7 +1223,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private void queue_hierarchical_data_job(Worker.Job job) {
 		TrackData[] tda = {};//job.track_dat;
-		Item[] ita = {};
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();

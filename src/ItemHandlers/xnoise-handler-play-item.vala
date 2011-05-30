@@ -65,8 +65,8 @@ public class Xnoise.HandlerPlayItem : ItemHandler {
 	
 	private void play_uri(Item item, GLib.Value? data) { // forward playlists to parser
 		print(":: play_uri\n");
-		global.player_state = PlayerState.PLAYING;
 		global.current_uri = item.uri;
+		global.player_state = PlayerState.PLAYING;
 	}
 }
 
