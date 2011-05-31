@@ -1,4 +1,4 @@
-/* xnoise-handler-play-item.vala
+/* xnoise-handler-remove-track.vala
  *
  * Copyright (C) 2011  Jörn Magens
  *
@@ -30,16 +30,16 @@
 
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext/ItemType
-public class Xnoise.HandlerPlayItem : ItemHandler {
+public class Xnoise.HandlerRemoveTrack : ItemHandler {
 	private Action a;
-	private const string ainfo = "A HandlerPlayIteminfo";
-	private const string aname = "A HandlerPlayItemname";
+	private const string ainfo = _("Remove selected track");
+	private const string aname = "HandlerRemoveTrack";
 	
-	private const string name = "HandlerPlayItem";
+	private const string name = "HandlerRemoveTrack";
 	
-	public HandlerPlayItem() {
+	public HandlerRemoveTrack() {
 		a = new Action();
-		a.action = play_uri;
+		a.action = remove_track;
 		a.info = this.ainfo;
 		a.name = this.aname;
 		a.context = ActionContext.NONE;
@@ -48,7 +48,7 @@ public class Xnoise.HandlerPlayItem : ItemHandler {
 	}
 
 	public override ItemHandlerType handler_type() {
-		return ItemHandlerType.PLAY_NOW;
+		return ItemHandlerType.OTHER;
 	}
 	
 	public override unowned string handler_name() {
@@ -56,8 +56,6 @@ public class Xnoise.HandlerPlayItem : ItemHandler {
 	}
 
 	public override unowned Action? get_action(ItemType type, ActionContext context) {
-		if(context == ActionContext.TRACKLIST_MENU_QUERY)
-			return null;
 		return a;
 	}
 
@@ -65,10 +63,11 @@ public class Xnoise.HandlerPlayItem : ItemHandler {
 		return null;
 	}
 	
-	private void play_uri(Item item, GLib.Value? data) { // forward playlists to parser
-		//print(":: play_uri .. %s  uri: %s\n", item.type.to_string(), item.uri);
-		global.current_uri = item.uri;
-		global.player_state = PlayerState.PLAYING;
+	private void remove_track(Item item, GLib.Value? data) { // forward playlists to parser
+		print("remove_track    %s\n", item.type.to_string());
+		Main.instance.tl.remove_selected_rows();
+//		global.current_uri = item.uri;
+//		global.player_state = PlayerState.PLAYING;
 	}
 }
 

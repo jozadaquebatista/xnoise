@@ -45,7 +45,9 @@ namespace Xnoise {
 			//check if ItemType is supported
 			//return right action for context and handlers
 			
-			//print("uhm get_actions : %d, %s\n", (int)type, context.to_string());
+			//TODO: return unique entries
+			
+			print("uhm get_actions : %d, %s\n", (int)type, context.to_string());
 			Array<unowned Action?> item_actions = new Array<unowned Action?>(true, true, sizeof(Action));
 			for(int i = 0; i< _handlers.length; i++) {
 				ItemHandler current_handler = _handlers.index(i);
@@ -135,8 +137,8 @@ namespace Xnoise {
 			return item;
 		}
 		
-		public static void execute_actions_for_item(Item item, ActionContext context, GLib.Value? data) {
-			Array<Action?> item_actions = uri_handler_manager.get_actions(item.type, context);
+		public void execute_actions_for_item(Item item, ActionContext context, GLib.Value? data) {
+			Array<Action?> item_actions = this.get_actions(item.type, context);
 			//print("item_actions.length: %u\n", item_actions.length);
 			for(int i = 0; i < item_actions.length; i++) {
 				unowned Action current = item_actions.index(i);

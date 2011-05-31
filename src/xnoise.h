@@ -72,6 +72,17 @@ typedef struct _XnoiseHandlerPlayItem XnoiseHandlerPlayItem;
 typedef struct _XnoiseHandlerPlayItemClass XnoiseHandlerPlayItemClass;
 typedef struct _XnoiseHandlerPlayItemPrivate XnoiseHandlerPlayItemPrivate;
 
+#define XNOISE_TYPE_HANDLER_REMOVE_TRACK (xnoise_handler_remove_track_get_type ())
+#define XNOISE_HANDLER_REMOVE_TRACK(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_REMOVE_TRACK, XnoiseHandlerRemoveTrack))
+#define XNOISE_HANDLER_REMOVE_TRACK_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_REMOVE_TRACK, XnoiseHandlerRemoveTrackClass))
+#define XNOISE_IS_HANDLER_REMOVE_TRACK(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_REMOVE_TRACK))
+#define XNOISE_IS_HANDLER_REMOVE_TRACK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_REMOVE_TRACK))
+#define XNOISE_HANDLER_REMOVE_TRACK_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_REMOVE_TRACK, XnoiseHandlerRemoveTrackClass))
+
+typedef struct _XnoiseHandlerRemoveTrack XnoiseHandlerRemoveTrack;
+typedef struct _XnoiseHandlerRemoveTrackClass XnoiseHandlerRemoveTrackClass;
+typedef struct _XnoiseHandlerRemoveTrackPrivate XnoiseHandlerRemoveTrackPrivate;
+
 #define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
 #define XNOISE_ADD_MEDIA_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialog))
 #define XNOISE_ADD_MEDIA_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialogClass))
@@ -707,6 +718,15 @@ struct _XnoiseHandlerPlayItemClass {
 	XnoiseItemHandlerClass parent_class;
 };
 
+struct _XnoiseHandlerRemoveTrack {
+	XnoiseItemHandler parent_instance;
+	XnoiseHandlerRemoveTrackPrivate * priv;
+};
+
+struct _XnoiseHandlerRemoveTrackClass {
+	XnoiseItemHandlerClass parent_class;
+};
+
 struct _XnoiseAddMediaDialog {
 	GObject parent_instance;
 	XnoiseAddMediaDialogPrivate * priv;
@@ -859,6 +879,7 @@ struct _XnoiseAction {
 	const gchar* name;
 	const gchar* info;
 	const gchar* text;
+	const gchar* stock_item;
 	XnoiseActionContext context;
 };
 
@@ -1388,6 +1409,9 @@ XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_construct (GType ob
 GType xnoise_handler_play_item_get_type (void) G_GNUC_CONST;
 XnoiseHandlerPlayItem* xnoise_handler_play_item_new (void);
 XnoiseHandlerPlayItem* xnoise_handler_play_item_construct (GType object_type);
+GType xnoise_handler_remove_track_get_type (void) G_GNUC_CONST;
+XnoiseHandlerRemoveTrack* xnoise_handler_remove_track_new (void);
+XnoiseHandlerRemoveTrack* xnoise_handler_remove_track_construct (GType object_type);
 GType xnoise_add_media_dialog_get_type (void) G_GNUC_CONST;
 XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
 XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
@@ -1616,7 +1640,7 @@ XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_type (XnoiseItemHa
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_name (XnoiseItemHandlerManager* self, const gchar* name);
 void xnoise_item_handler_manager_test_func (XnoiseItemHandlerManager* self);
 XnoiseItem* xnoise_item_handler_manager_create_uri_item (XnoiseItemHandlerManager* self, const gchar* uri);
-void xnoise_item_handler_manager_execute_actions_for_item (XnoiseItem* item, XnoiseActionContext context, GValue* data);
+void xnoise_item_handler_manager_execute_actions_for_item (XnoiseItemHandlerManager* self, XnoiseItem* item, XnoiseActionContext context, GValue* data);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_new (void);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_construct (GType object_type);
 GType xnoise_lyrics_loader_get_type (void) G_GNUC_CONST;

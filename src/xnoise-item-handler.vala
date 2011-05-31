@@ -60,6 +60,7 @@ namespace Xnoise {
 		public unowned string name;
 		public unowned string info;
 		public unowned string text;    // text used in the context of the Action, e.g. a menu entry text
+		public unowned string stock_item = Gtk.Stock.MISSING_IMAGE;
 		public ActionContext context;  // ActionContext the Action was created for
 	}
 

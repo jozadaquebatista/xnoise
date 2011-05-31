@@ -9,6 +9,7 @@ namespace Xnoise {
 		public Xnoise.ActionContext context;
 		public weak string info;
 		public weak string name;
+		public weak string stock_item;
 		public weak string text;
 		public Action ();
 	}
@@ -217,6 +218,14 @@ namespace Xnoise {
 		public override Xnoise.ItemHandlerType handler_type ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class HandlerRemoveTrack : Xnoise.ItemHandler {
+		public HandlerRemoveTrack ();
+		public override GLib.Array<Xnoise.Item?>? convert (Xnoise.Item item);
+		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
+		public override unowned string handler_name ();
+		public override Xnoise.ItemHandlerType handler_type ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public class InfoBar : Gtk.InfoBar {
 		public InfoBar (Xnoise.UserInfo _uinf, Xnoise.UserInfo.ContentClass _content_class, Xnoise.UserInfo.RemovalType _removal_type, uint _current_id, int _appearance_time_seconds = 5, string _info_text = "", bool bold = true, Gtk.Widget? _extra_widget = null);
 		public void enable_close_button (bool enable);
@@ -242,7 +251,7 @@ namespace Xnoise {
 		public ItemHandlerManager ();
 		public void add_handler (Xnoise.ItemHandler handler);
 		public Xnoise.Item? create_uri_item (string? uri);
-		public static void execute_actions_for_item (Xnoise.Item item, Xnoise.ActionContext context, GLib.Value? data);
+		public void execute_actions_for_item (Xnoise.Item item, Xnoise.ActionContext context, GLib.Value? data);
 		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context);
 		public Xnoise.ItemHandler get_handler_by_name (string name);
 		public Xnoise.ItemHandler get_handler_by_type (Xnoise.ItemHandlerType type);

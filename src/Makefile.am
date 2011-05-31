@@ -29,6 +29,7 @@ BUILT_SOURCES = \
 xnoise_SOURCES = \
     ItemHandlers/xnoise-handler-add-to-tracklist.vala \
     ItemHandlers/xnoise-handler-play-item.vala \
+    ItemHandlers/xnoise-handler-remove-track.vala \
     xnoise-about.vala \
     xnoise-add-media-dialog.vala \
     xnoise-album-image.vala \

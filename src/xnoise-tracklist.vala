@@ -134,7 +134,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.button_release_event.connect(this.on_button_release);
 		this.button_press_event.connect(this.on_button_press);
 		
-		menu = create_rightclick_menu();
+//		menu = create_rightclick_menu();
 	}
 	
 	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
@@ -190,15 +190,35 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void rightclick_menu_popup(uint activateTime) {
-		menu.popup(null, null, null, 0, activateTime);
+		menu = create_rightclick_menu();
+		if(menu != null)
+			menu.popup(null, null, null, 0, activateTime);
 	}
 
 	private Menu create_rightclick_menu() {
+		TreeIter iter;
 		var rightmenu = new Menu();
-		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.DELETE, null);
-		menu_item.set_label(_("Remove selected"));
-		menu_item.activate.connect(this.remove_selected_rows);
-		rightmenu.append(menu_item);
+		GLib.List<TreePath> list;
+		list = this.get_selection().get_selected_rows(null);
+		Item? item = null;
+		Array<unowned Action?> array = null;
+//		foreach(unowned Gtk.TreePath path in list) { //TODO
+//		}
+		TreePath path = (TreePath)list.data;
+		tracklistmodel.get_iter(out iter, path);
+		tracklistmodel.get(iter, TrackListModel.Column.ITEM, out item);
+		array = item_handler_manager.get_actions(item.type, ActionContext.TRACKLIST_MENU_QUERY);
+		for(int i =0; i < array.length; i++) {
+			print("%s\n", array.index(i).name);
+			var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.DELETE, null);
+			menu_item.set_label(array.index(i).info);
+			Value? v = list;
+			unowned Action x = array.index(i);
+			menu_item.activate.connect( () => {
+				x.action(item, null);
+			});
+			rightmenu.append(menu_item);
+		}
 		rightmenu.show_all();
 		return rightmenu;
 	}
