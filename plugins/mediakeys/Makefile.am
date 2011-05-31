@@ -67,6 +67,7 @@ EXTRA_DIST = \
     $(NULL)
 
 DISTCLEANFILES = \
+    *.xnplugin \
     *.c \
     libmediakeys_la_vala.stamp \
     Makefile.in \

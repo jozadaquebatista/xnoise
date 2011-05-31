@@ -63,6 +63,7 @@ EXTRA_DIST = \
     $(NULL)
 
 DISTCLEANFILES = \
+    *.xnplugin \
     *.c \
     libsoundmenu2_la_vala.stamp \
     Makefile.in \

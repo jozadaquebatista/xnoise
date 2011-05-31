@@ -63,6 +63,7 @@ EXTRA_DIST = \
 
 DISTCLEANFILES = \
     *.c \
+    *.xnplugin \
     libCyclicSaveState_la_vala.stamp \
     Makefile.in \
     $(NULL)

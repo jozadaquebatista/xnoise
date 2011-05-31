@@ -891,7 +891,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 	private void on_row_activated(Gtk.Widget sender, TreePath path, TreeViewColumn column) {
 		Item item = Item(ItemType.UNKNOWN);
-//		Item* x   = &item;
 		TreeIter iter;
 		if(tracklistmodel.get_iter(out iter, path)) {
 			tracklistmodel.get(iter, TrackListModel.Column.ITEM, out item);

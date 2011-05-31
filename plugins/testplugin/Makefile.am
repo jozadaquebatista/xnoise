@@ -60,6 +60,7 @@ EXTRA_DIST = \
     $(NULL)
 
 DISTCLEANFILES = \
+    *.xnplugin \
     *.c \
     libxnoisetest_la_vala.stamp \
     Makefile.in \

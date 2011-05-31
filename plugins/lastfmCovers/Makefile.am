@@ -68,6 +68,7 @@ EXTRA_DIST = \
     $(NULL)
 
 DISTCLEANFILES = \
+    *.xnplugin \
     *.c \
     libLastfmCovers_la_vala.stamp \
     Makefile.in \

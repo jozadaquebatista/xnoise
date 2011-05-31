@@ -62,6 +62,7 @@ EXTRA_DIST = \
     $(NULL)
 
 DISTCLEANFILES = \
+    *.xnplugin \
     *.c \
     libTitleToDecoration_la_vala.stamp \
     Makefile.in \
