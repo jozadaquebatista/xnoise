@@ -1,7 +1,9 @@
 [XnoisePlugin]
 name=soundmenu2
+name[de_DE]=Soundmenu
 module=soundmenu2
 description=Use ayatana soundmenu
+description[de_DE]=Ayatana SoundMenu benutzen
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 Jörn Magens

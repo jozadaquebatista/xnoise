@@ -1,7 +1,9 @@
 [XnoisePlugin]
 name=TitleToDecoration
+name[de_DE]=Titel-Dekoration
 module=TitleToDecoration
 description=Set the window name to the current title
+description[de_DE]=Das Fenster nach dem aktuellen Titel benennen
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 

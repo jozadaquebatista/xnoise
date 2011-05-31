@@ -1,7 +1,9 @@
 [XnoisePlugin]
 name=CyclicSaveState
+name[de_DE]=Zyklisches Speichern
 module=CyclicSaveState
 description=Always keep the current state of xnoise
+description[de_DE]=Den aktuellen Zustand von xnoise immer erhalten
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 

@@ -1,7 +1,9 @@
 [XnoisePlugin]
 name=Test
+name[de_DE]=Test
 module=xnoisetest
 description=Demo plugin for xnoise
+description[de_DE]=Demo plugin for xnoise
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 

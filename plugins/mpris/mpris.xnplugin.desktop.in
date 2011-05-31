@@ -1,11 +1,9 @@
 [XnoisePlugin]
-name=Chartlyrics
-name[de_DE]=Chartlyrics
-module=chartlyrics
-description=Load lyrics from chartlyrics.com
-description[de_DE]=Texte von chartlyrics.com herunterladen
+_name=mpris
+module=mpris
+_description=Control xnoise with a MPRIS v2 dbus interface
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
-copyright=Copyright © 2010 Andreas Obergrusberger 
+copyright=Copyright © 2010 Andreas Obergrusber
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
 author=Andreas Obergrusberger <softshaker@googlemail.com>

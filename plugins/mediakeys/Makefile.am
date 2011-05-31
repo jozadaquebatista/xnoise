@@ -51,13 +51,19 @@ libmediakeys_la_LIBADD = \
     $(GDKX11_LIBS) \
     $(NULL)
 
-mediakeysinformation_DATA = mediakeys.xnplugin
-mediakeysinformationdir = $(libdir)/xnoise
+#mediakeysinformation_DATA = mediakeys.xnplugin
+#mediakeysinformationdir = $(libdir)/xnoise
+plugindir = $(libdir)/xnoise
+plugin_in_files = mediakeys.xnplugin.desktop.in
+
+%.xnplugin: %.xnplugin.desktop.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po) ; $(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
+plugin_DATA = $(plugin_in_files:.xnplugin.desktop.in=.xnplugin)
 
 EXTRA_DIST = \
+    $(plugin_in_files) \
     $(libmediakeys_DATA) \
     $(libmediakeys_la_SOURCES) \
-    $(mediakeysinformation_DATA) \
     $(NULL)
 
 DISTCLEANFILES = \

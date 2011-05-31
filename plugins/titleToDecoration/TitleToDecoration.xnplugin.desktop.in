@@ -1,9 +1,7 @@
 [XnoisePlugin]
-name=notifications
-name[de_DE]=Benachrichtigungen
-module=notifications
-description=Show notifications one track change
-description[de_DE]=Benachrichtigungen beim Wechsel des Titels anzeigen
+_name=TitleToDecoration
+module=TitleToDecoration
+_description=Set the window name to the current title
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 

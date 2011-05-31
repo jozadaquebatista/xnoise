@@ -1,9 +1,7 @@
 [XnoisePlugin]
-name=notifications
-name[de_DE]=Benachrichtigungen
-module=notifications
-description=Show notifications one track change
-description[de_DE]=Benachrichtigungen beim Wechsel des Titels anzeigen
+_name=Test
+module=xnoisetest
+_description=Demo plugin for xnoise
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 

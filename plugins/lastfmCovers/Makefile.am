@@ -52,13 +52,19 @@ libLastfmCovers_la_LIBADD = \
     $(LIBSOUP_LIBS) \
     $(NULL)
 
-lastfmcovers_DATA = lastfmCovers.xnplugin
-lastfmcoversdir = $(libdir)/xnoise
+#lastfmcovers_DATA = lastfmCovers.xnplugin
+#lastfmcoversdir = $(libdir)/xnoise
+plugindir = $(libdir)/xnoise
+plugin_in_files = lastfmCovers.xnplugin.desktop.in
+
+%.xnplugin: %.xnplugin.desktop.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po) ; $(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
+plugin_DATA = $(plugin_in_files:.xnplugin.desktop.in=.xnplugin)
 
 EXTRA_DIST = \
+    $(plugin_in_files) \
     $(libLastfmCovers_DATA) \
     $(libLastfmCovers_la_SOURCES) \
-    $(lastfmcovers_DATA) \
     $(NULL)
 
 DISTCLEANFILES = \

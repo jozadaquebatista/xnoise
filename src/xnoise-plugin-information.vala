@@ -96,8 +96,8 @@ public class Xnoise.PluginInformation : GLib.Object {
 		try	{
 			kf.load_from_file(xplug_file, KeyFileFlags.NONE);
 			if (!kf.has_group(group)) return false;
-			_name        = kf.get_string(group, "name");
-			_description = kf.get_string(group, "description");
+			_name        = kf.get_locale_string(group, "name");
+			_description = kf.get_locale_string(group, "description");
 			_module      = kf.get_string(group, "module");
 			_icon        = kf.get_string(group, "icon");
 			_author      = kf.get_string(group, "author");

@@ -46,13 +46,19 @@ libDatabaseLyrics_la_LIBADD = \
     $(XNOISE_LIBS) \
     $(NULL)
 
-databaseLyricsinformation_DATA = DatabaseLyrics.xnplugin
-databaseLyricsinformationdir = $(libdir)/xnoise
+#databaseLyricsinformation_DATA = DatabaseLyrics.xnplugin
+#databaseLyricsinformationdir = $(libdir)/xnoise
+plugindir = $(libdir)/xnoise
+plugin_in_files = DatabaseLyrics.xnplugin.desktop.in
+
+%.xnplugin: %.xnplugin.desktop.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po) ; $(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
+plugin_DATA = $(plugin_in_files:.xnplugin.desktop.in=.xnplugin)
 
 EXTRA_DIST = \
+    $(plugin_in_files) \
     $(libDatabaseLyrics_DATA) \
     $(libDatabaseLyrics_la_SOURCES) \
-    $(databaseLyricsinformation_DATA) \
     $(NULL)
 
 DISTCLEANFILES = \

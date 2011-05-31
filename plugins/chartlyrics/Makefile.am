@@ -52,13 +52,19 @@ libchartlyrics_la_LIBADD = \
     $(LIBSOUP_LIBS) \
     $(NULL)
 
-chartlyricsinformation_DATA = chartlyrics.xnplugin
-chartlyricsinformationdir = $(libdir)/xnoise
+#chartlyricsinformation_DATA = chartlyrics.xnplugin
+#chartlyricsinformationdir = $(libdir)/xnoise
+plugindir = $(libdir)/xnoise
+plugin_in_files = chartlyrics.xnplugin.desktop.in
+
+%.xnplugin: %.xnplugin.desktop.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po) ; $(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
+plugin_DATA = $(plugin_in_files:.xnplugin.desktop.in=.xnplugin)
 
 EXTRA_DIST = \
+    $(plugin_in_files) \
     $(libchartlyrics_DATA) \
     $(libchartlyrics_la_SOURCES) \
-    $(chartlyricsinformation_DATA) \
     $(NULL)
 
 DISTCLEANFILES = \

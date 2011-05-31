@@ -47,13 +47,19 @@ libsoundmenu2_la_LIBADD = \
     $(XNOISE_LIBS) \
     $(NULL)
 
-soundmenu2information_DATA = soundmenu2.xnplugin
-soundmenu2informationdir = $(libdir)/xnoise
+#soundmenu2information_DATA = soundmenu2.xnplugin
+#soundmenu2informationdir = $(libdir)/xnoise
+plugindir = $(libdir)/xnoise
+plugin_in_files = soundmenu2.xnplugin.desktop.in
+
+%.xnplugin: %.xnplugin.desktop.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po) ; $(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
+plugin_DATA = $(plugin_in_files:.xnplugin.desktop.in=.xnplugin)
 
 EXTRA_DIST = \
+    $(plugin_in_files) \
     $(libsoundmenu2_DATA) \
     $(libsoundmenu2_la_SOURCES) \
-    $(soundmenu2information_DATA) \
     $(NULL)
 
 DISTCLEANFILES = \

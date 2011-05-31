@@ -1,9 +1,7 @@
 [XnoisePlugin]
-name=Chartlyrics
-name[de_DE]=Chartlyrics
+_name=Chartlyrics
 module=chartlyrics
-description=Load lyrics from chartlyrics.com
-description[de_DE]=Texte von chartlyrics.com herunterladen
+_description=Load lyrics from chartlyrics.com
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 Andreas Obergrusberger 

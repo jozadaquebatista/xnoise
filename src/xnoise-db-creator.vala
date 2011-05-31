@@ -30,7 +30,7 @@
 
 using Sqlite;
 
-private static class Xnoise.DbCreator {
+private class Xnoise.DbCreator {
 	private static const string DATABASE_NAME = "db.sqlite";
 	private static const string SETTINGS_FOLDER = ".xnoise";
 	public static const int DB_VERSION_MAJOR = 3;

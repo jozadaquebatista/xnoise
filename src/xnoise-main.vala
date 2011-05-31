@@ -61,25 +61,25 @@ public class Xnoise.Main : GLib.Object {
 		if(!no_plugins) {
 			plugin_loader.load_all();
 
-			foreach(string name in par.get_string_list_value("activated_plugins")) {
-				if(!plugin_loader.activate_single_plugin(name)) {
-					print("\t%s plugin failed to activate!\n", name);
+			foreach(string module in par.get_string_list_value("activated_plugins")) {
+				if(!plugin_loader.activate_single_plugin(module)) {
+					print("\t%s plugin failed to activate!\n", module);
 				}
 			}
 
 			if(show_plugin_state) print(" PLUGIN INFO:\n");
-			foreach(string name in plugin_loader.plugin_htable.get_keys()) {
-				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).loaded))
-					if(show_plugin_state) print("\t%s loaded\n", name);
+			foreach(string module in plugin_loader.plugin_htable.get_keys()) {
+				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(module).loaded))
+					if(show_plugin_state) print("\t%s loaded\n", module);
 				else {
-					print("\t%s NOT loaded\n\n", name);
+					print("\t%s NOT loaded\n\n", module);
 					continue;
 				}
-				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).activated)) {
-					print("\t%s activated\n", name);
+				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(module).activated)) {
+					print("\t%s activated\n", module);
 				}
 				else {
-					if(show_plugin_state) print("\t%s NOT activated\n", name);
+					if(show_plugin_state) print("\t%s NOT activated\n", module);
 				}
 
 				if(show_plugin_state) print("\n");
@@ -128,9 +128,9 @@ public class Xnoise.Main : GLib.Object {
 	public void save_activated_plugins() {
 		//print("\nsaving activated plugins...\n");
 		string[]? activatedplugins = {};
-		foreach(string name in this.plugin_loader.plugin_htable.get_keys()) {
-			if(this.plugin_loader.plugin_htable.lookup(name).activated)
-				activatedplugins += name;
+		foreach(string module in this.plugin_loader.plugin_htable.get_keys()) {
+			if(this.plugin_loader.plugin_htable.lookup(module).activated)
+				activatedplugins += module;
 		}
 		if(activatedplugins.length <= 0)
 			activatedplugins = null;

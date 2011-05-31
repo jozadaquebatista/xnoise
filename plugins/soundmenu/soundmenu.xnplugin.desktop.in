@@ -1,9 +1,7 @@
 [XnoisePlugin]
-name=mediakeys
-name[de_DE]=Medien-Steuertasten
-module=mediakeys
-description=Control xnoise using mediakeys
-description[de_DE]=Xnoise mit Medien-Steuertasten bedienen
+_name=soundmenu
+module=soundmenu
+_description=Use ayatana soundmenu
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 Jörn Magens
