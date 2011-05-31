@@ -83,8 +83,8 @@ public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 		return false;
 	}
 	
-	public Xnoise.ILyrics from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb) {
-		return new Chartlyrics(loader, _owner, artist, title, cb);
+	public Xnoise.ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb) {
+		return (ILyrics*)new Chartlyrics(loader, _owner, artist, title, cb);
 	}
 	
 }
