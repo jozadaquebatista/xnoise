@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-29 01:27+0200\n"
+"POT-Creation-Date: 2011-05-30 17:01+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
@@ -62,7 +62,7 @@ msgstr "xnoise - Agregar medios a la biblioteca"
 msgid "Importing media data. This may take some time..."
 msgstr "Importación en proceso. Esto puede tomar algún tiempo..."
 
-#: ../src/xnoise-add-media-dialog.vala:279 ../src/xnoise-main-window.vala:982
+#: ../src/xnoise-add-media-dialog.vala:279 ../src/xnoise-main-window.vala:989
 msgid "Select media file"
 msgstr "Seleccione un archivo multimedia"
 
@@ -247,12 +247,12 @@ msgstr "repetir todo"
 msgid "random play"
 msgstr "reproducción aleatoria"
 
-#: ../src/xnoise-main-window.vala:968
+#: ../src/xnoise-main-window.vala:975
 msgid "Enter the URL of the file to open"
 msgstr "Ingrese la dirección URL del archivo para abrir"
 
-#: ../src/xnoise-main-window.vala:1047 ../src/xnoise-main-window.vala:1070
-#: ../src/xnoise-main-window.vala:1112 ../src/xnoise-main-window.vala:1137
+#: ../src/xnoise-main-window.vala:1054 ../src/xnoise-main-window.vala:1077
+#: ../src/xnoise-main-window.vala:1119 ../src/xnoise-main-window.vala:1144
 #: ../src/xnoise-tray-icon.vala:198
 #: ../plugins/notifications/xnoise-notifications.vala:184
 #: ../plugins/notifications2/xnoise-notifications.vala:178
@@ -262,8 +262,8 @@ msgstr "Ingrese la dirección URL del archivo para abrir"
 msgid "by"
 msgstr "por"
 
-#: ../src/xnoise-main-window.vala:1049 ../src/xnoise-main-window.vala:1072
-#: ../src/xnoise-main-window.vala:1114 ../src/xnoise-main-window.vala:1139
+#: ../src/xnoise-main-window.vala:1056 ../src/xnoise-main-window.vala:1079
+#: ../src/xnoise-main-window.vala:1121 ../src/xnoise-main-window.vala:1146
 #: ../src/xnoise-tray-icon.vala:200
 #: ../plugins/notifications/xnoise-notifications.vala:186
 #: ../plugins/notifications2/xnoise-notifications.vala:180
@@ -273,38 +273,38 @@ msgstr "por"
 msgid "on"
 msgstr "en"
 
-#: ../src/xnoise-main-window.vala:1069 ../src/xnoise-main-window.vala:1136
+#: ../src/xnoise-main-window.vala:1076 ../src/xnoise-main-window.vala:1143
 #: ../src/xnoise-tray-icon.vala:189
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:151
 #, c-format
 msgid "unknown title"
 msgstr "titulo desconocido"
 
-#: ../src/xnoise-main-window.vala:1071 ../src/xnoise-main-window.vala:1138
+#: ../src/xnoise-main-window.vala:1078 ../src/xnoise-main-window.vala:1145
 #: ../src/xnoise-tray-icon.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 msgid "unknown artist"
 msgstr "artista desconocido"
 
-#: ../src/xnoise-main-window.vala:1073 ../src/xnoise-main-window.vala:1140
+#: ../src/xnoise-main-window.vala:1080 ../src/xnoise-main-window.vala:1147
 #: ../src/xnoise-tray-icon.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown album"
 msgstr "álbum desconocido"
 
-#: ../src/xnoise-main-window.vala:1122
+#: ../src/xnoise-main-window.vala:1129
 msgid "unknown organization"
 msgstr "organización desconocida"
 
-#: ../src/xnoise-main-window.vala:1124
+#: ../src/xnoise-main-window.vala:1131
 msgid "unknown location"
 msgstr "ubicación desconocida"
 
-#: ../src/xnoise-main-window.vala:1221
+#: ../src/xnoise-main-window.vala:1228
 msgid "Remove all"
 msgstr "Eliminar todo"
 
-#: ../src/xnoise-main-window.vala:1226
+#: ../src/xnoise-main-window.vala:1233
 msgid "Remove selected titles"
 msgstr "Eliminar títulos seleccionados"
 
@@ -436,6 +436,94 @@ msgstr "ready to rock"
 #, fuzzy
 msgid "Select external subtitle file"
 msgstr "Seleccione un archivo multimedia"
+
+#: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
+msgid "Demo plugin for xnoise"
+msgstr ""
+
+#: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:2
+msgid "Test"
+msgstr ""
+
+#: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
+msgid "Chartlyrics"
+msgstr ""
+
+#: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:2
+msgid "Load lyrics from chartlyrics.com"
+msgstr ""
+
+#: ../plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in.h:1
+msgid "Always keep the current state of xnoise"
+msgstr ""
+
+#: ../plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in.h:2
+msgid "CyclicSaveState"
+msgstr ""
+
+#: ../plugins/lastfmCovers/lastfmCovers.xnplugin.desktop.in.h:1
+msgid "LastfmCovers"
+msgstr ""
+
+#: ../plugins/lastfmCovers/lastfmCovers.xnplugin.desktop.in.h:2
+msgid "Load album covers from lastfm"
+msgstr ""
+
+#: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
+msgid "Load lyrics from http://www.lyricwiki.com"
+msgstr ""
+
+#: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:2
+#, fuzzy
+msgid "Lyricwiki"
+msgstr "_Letra"
+
+#: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
+msgid "Control xnoise using mediakeys"
+msgstr ""
+
+#: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:2
+msgid "mediakeys"
+msgstr ""
+
+#: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
+msgid "Control xnoise with a MPRIS v2 dbus interface"
+msgstr ""
+
+#: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
+msgid "mpris"
+msgstr ""
+
+#: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1
+#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
+msgid "Show notifications one track change"
+msgstr ""
+
+#: ../plugins/notifications/notifications.xnplugin.desktop.in.h:2
+#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:2
+msgid "notifications"
+msgstr ""
+
+#: ../plugins/soundmenu/soundmenu.xnplugin.desktop.in.h:1
+#: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
+msgid "Use ayatana soundmenu"
+msgstr ""
+
+#: ../plugins/soundmenu/soundmenu.xnplugin.desktop.in.h:2
+msgid "soundmenu"
+msgstr ""
+
+#: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:2
+msgid "soundmenu2"
+msgstr ""
+
+#: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
+msgid "Set the window name to the current title"
+msgstr ""
+
+#: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
+msgid "TitleToDecoration"
+msgstr ""
 
 #~ msgid "No Subtitle"
 #~ msgstr "Sin subtitulo"

@@ -62,14 +62,14 @@ public class Xnoise.PluginLoader : Object { //, IParams
 				plugin = new Plugin(info);
 				plugin.load();
 				if(plugin.loaded == true)
-					plugin_htable.insert(info.name, plugin); //Hold reference to plugin in hash table
+					plugin_htable.insert(info.module, plugin); //Hold reference to plugin in hash table
 				else
 					continue;
 				if(plugin.is_lyrics_plugin) {
-					lyrics_plugins_htable.insert(info.name, plugin);
+					lyrics_plugins_htable.insert(info.module, plugin);
 				}
 				if(plugin.is_album_image_plugin) {
-					image_provider_htable.insert(info.name, plugin);
+					image_provider_htable.insert(info.module, plugin);
 				}
 			}
 			else {
@@ -120,8 +120,8 @@ public class Xnoise.PluginLoader : Object { //, IParams
 		}
 	}
 
-	public bool activate_single_plugin(string name) {
-		Plugin p = this.plugin_htable.lookup(name);
+	public bool activate_single_plugin(string module) {
+		Plugin p = this.plugin_htable.lookup(module);
 		if(p == null) return false;
 		p.activate();
 		if(p.activated) {//notifications
@@ -131,8 +131,8 @@ public class Xnoise.PluginLoader : Object { //, IParams
 		return false;
 	}
 
-	public void deactivate_single_plugin(string name) {
-		Plugin p = this.plugin_htable.lookup(name);
+	public void deactivate_single_plugin(string module) {
+		Plugin p = this.plugin_htable.lookup(module);
 		if(p == null) return;
 		p.deactivate();
 		sign_plugin_deactivated(p);

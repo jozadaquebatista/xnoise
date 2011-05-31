@@ -63,14 +63,14 @@ namespace Xnoise.Pl {
 	public const string[] known_playlist_extensions = {"asx", "pls", "m3u", "wpl", "xspf"};
 	
 	// string constants for content types
-	private static class ContentType {
-		public const string ASX         = "audio/x-ms-asx";
-		public const string PLS         = "audio/x-scpls";
-		public const string APPLE_MPEG  = "application/vnd.apple.mpegurl";
-		public const string X_MPEG      = "audio/x-mpegurl";
-		public const string MPEG        = "audio/mpegurl";
-		public const string XSPF        = "application/xspf+xml";
-		public const string WPL         = "application/vnd.ms-wpl";
+	private class ContentType {
+		public static const string ASX         = "audio/x-ms-asx";
+		public static const string PLS         = "audio/x-scpls";
+		public static const string APPLE_MPEG  = "application/vnd.apple.mpegurl";
+		public static const string X_MPEG      = "audio/x-mpegurl";
+		public static const string MPEG        = "audio/mpegurl";
+		public static const string XSPF        = "application/xspf+xml";
+		public static const string WPL         = "application/vnd.ms-wpl";
 	}
 	
 	//put some debug messages into the code

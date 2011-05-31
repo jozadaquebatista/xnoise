@@ -52,13 +52,19 @@ libLyricwiki_la_LIBADD = \
     $(LIBSOUP_LIBS) \
     $(NULL)
 
-lyricwikiinformation_DATA = Lyricwiki.xnplugin
-lyricwikiinformationdir = $(libdir)/xnoise
+#lyricwikiinformation_DATA = Lyricwiki.xnplugin
+#lyricwikiinformationdir = $(libdir)/xnoise
+plugindir = $(libdir)/xnoise
+plugin_in_files = Lyricwiki.xnplugin.desktop.in
+
+%.xnplugin: %.xnplugin.desktop.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po) ; $(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
+plugin_DATA = $(plugin_in_files:.xnplugin.desktop.in=.xnplugin)
 
 EXTRA_DIST = \
+    $(plugin_in_files) \
     $(libLyricwiki_DATA) \
     $(libLyricwiki_la_SOURCES) \
-    $(lyricwikiinformation_DATA) \
     $(NULL)
 
 DISTCLEANFILES = \

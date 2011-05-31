@@ -581,6 +581,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const int F_KEY = 0x0066;
 	private const int D_KEY = 0x0064;
 	private const int M_KEY = 0x006D;
+	private const int Q_KEY = 0x0071;
 	private const int SPACE_KEY = 0x0020;
 	private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
 		//print("%d : %d\n",(int)e.keyval, (int)e.state);
@@ -626,6 +627,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			case M_KEY: {
 					if(!this.searchEntryMB.has_focus)
 						toggle_media_browser_visibility();
+					break;
+				}
+			case Q_KEY: {
+					if(e.state != 0x0014) // Ctrl Modifier
+						return false;
+					quit_now();
 					break;
 				}
 			default:

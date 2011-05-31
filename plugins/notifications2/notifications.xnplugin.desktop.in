@@ -1,7 +1,7 @@
 [XnoisePlugin]
-name=notifications
+_name=notifications
 module=notifications
-description=Show notifications one track change
+_description=Show notifications one track change
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 

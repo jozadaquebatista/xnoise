@@ -1,9 +1,9 @@
 [XnoisePlugin]
-name=soundmenu
-module=soundmenu
-description=Use ayatana soundmenu
+_name=LastfmCovers
+module=LastfmCovers
+_description=Load album covers from lastfm
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
-copyright=Copyright © 2010 Jörn Magens
+copyright=Copyright © 2009 xnoise developers 
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
-author=Jörn Magens <shuerhaaken@googlemail.com>
+author=fsistemas

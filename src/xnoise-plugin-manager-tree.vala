@@ -38,6 +38,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		ICON,
 		NAME,
 		DESCRIPTION,
+		MODULE,
 		N_COLUMNS
 	}
 	private CellRendererText text;
@@ -84,21 +85,21 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		
 		TreeIter iter;
 		listmodel.get_iter(out iter, path);
-		string name;
-		listmodel.get(iter, Column.NAME, out name);
+		string module;
+		listmodel.get(iter, Column.MODULE, out module);
 		
-		if(this.xn.plugin_loader.plugin_htable.lookup(name).activated) 
-			this.xn.plugin_loader.deactivate_single_plugin(name);
+		if(this.xn.plugin_loader.plugin_htable.lookup(module).activated) 
+			this.xn.plugin_loader.deactivate_single_plugin(module);
 		else 
-			this.xn.plugin_loader.activate_single_plugin(name);
+			this.xn.plugin_loader.activate_single_plugin(module);
 			
-		unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
+		unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(module);
 		
 		listmodel.set(iter,
 		              Column.TOGGLE, p.activated
 		              );
 		
-		sign_plugin_activestate_changed(name);
+		sign_plugin_activestate_changed(module);
 		return false;
 	}
 
@@ -143,13 +144,14 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 
 	private void setup_entries() {
 		foreach(string s in this.xn.plugin_loader.get_info_files()) {
-			string name, description, icon, author, website, license, copyright;
+			string name, description, icon, author, website, license, copyright, module;
 			try {
 				var kf = new KeyFile();
 				kf.load_from_file(s, KeyFileFlags.NONE);
 				if(!kf.has_group(group)) continue;
-				name        = kf.get_string(group, "name"); //TODO: Write this data into cell; maybe info button?
-				description = kf.get_string(group, "description");
+				name        = kf.get_locale_string(group, "name"); //TODO: Write this data into cell; maybe info button?
+				description = kf.get_locale_string(group, "description");
+				module      = kf.get_string(group, "module");
 				icon        = kf.get_string(group, "icon");
 				author      = kf.get_string(group, "author");
 				website     = kf.get_string(group, "website");
@@ -158,7 +160,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				
 				var invisible = new Gtk.Invisible();
 				Gdk.Pixbuf pixbuf = invisible.render_icon(Gtk.Stock.UNDO , IconSize.BUTTON, null); //TODO: use plugins' icons
-				unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
+				unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(module);
 				p.sign_activated.connect( () => {
 					refresh_tree();
 				});
@@ -171,7 +173,8 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				              Column.TOGGLE, p.activated,
 				              Column.ICON, pixbuf,
 				              Column.NAME, name,
-				              Column.DESCRIPTION, description);
+				              Column.DESCRIPTION, description,
+				              Column.MODULE, module);
 			}
 			catch(Error e) {
 				print("Error plugin information: %s\n", e.message);
@@ -185,11 +188,11 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 	
 	private bool update_acivation_state(TreeModel sender, TreePath path, TreeIter iter) {
 		//update activation state
-		string? name = null;
-		sender.get(iter, Column.NAME, out name);
-		unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
+		string? module = null;
+		sender.get(iter, Column.MODULE, out module);
+		unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(module);
 		if(p == null) {
-			print("p is null! %s\n", name);
+			print("p is null! %s\n", module);
 			return true;
 		}
 		listmodel.set(iter,
@@ -202,6 +205,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		listmodel = new ListStore(Column.N_COLUMNS,
 		                          typeof(bool),
 		                          typeof(Gdk.Pixbuf),
+		                          typeof(string),
 		                          typeof(string),
 		                          typeof(string));
 	}

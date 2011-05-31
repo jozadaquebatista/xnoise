@@ -1,7 +1,7 @@
 [XnoisePlugin]
-name=CyclicSaveState
-module=CyclicSaveState
-description=Always keep the current state of xnoise
+_name=Test
+module=xnoisetest
+_description=Demo plugin for xnoise
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2009 Jörn Magens 

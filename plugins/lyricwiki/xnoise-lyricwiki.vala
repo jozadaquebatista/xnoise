@@ -82,7 +82,7 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	}
 	
 	public Xnoise.ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb) {
-		return new Lyricwiki(loader, _owner, artist, title, cb);
+		return (ILyrics*)new Lyricwiki(loader, _owner, artist, title, cb);
 	}
 }
 

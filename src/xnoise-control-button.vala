@@ -36,7 +36,7 @@ using Gtk;
  */
 public class Xnoise.ControlButton : Gtk.Button {
 	
-	public static enum Direction {
+	public enum Direction {
 		NEXT = 0,
 		PREVIOUS,
 		STOP

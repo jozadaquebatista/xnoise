@@ -46,13 +46,19 @@ libCyclicSaveState_la_LIBADD = \
     $(XNOISE_LIBS) \
     $(NULL)
 
-CyclicSaveStateinformation_DATA = CyclicSaveState.xnplugin
-CyclicSaveStateinformationdir = $(libdir)/xnoise
+#CyclicSaveStateinformation_DATA = CyclicSaveState.xnplugin
+#CyclicSaveStateinformationdir = $(libdir)/xnoise
+plugindir = $(libdir)/xnoise
+plugin_in_files = CyclicSaveState.xnplugin.desktop.in
+
+%.xnplugin: %.xnplugin.desktop.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po) ; $(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
+
+plugin_DATA = $(plugin_in_files:.xnplugin.desktop.in=.xnplugin)
 
 EXTRA_DIST = \
+    $(plugin_in_files) \
     $(libCyclicSaveState_DATA) \
     $(libCyclicSaveState_la_SOURCES) \
-    $(CyclicSaveStateinformation_DATA) \
     $(NULL)
 
 DISTCLEANFILES = \

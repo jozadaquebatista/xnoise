@@ -86,7 +86,7 @@ public class Xnoise.DatabaseLyricsPlugin : GLib.Object, IPlugin, ILyricsProvider
 	}
 	
 	public Xnoise.ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb) {
-		return new DatabaseLyrics(loader, _owner, artist, title, cb);
+		return (ILyrics*)new DatabaseLyrics(loader, _owner, artist, title, cb);
 	}
 }
 
