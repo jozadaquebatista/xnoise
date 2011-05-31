@@ -553,20 +553,23 @@ public class Xnoise.TrackList : TreeView, IParams {
 			path = row_ref.get_path();
 		//TODO: Decide if it is video or stream or local file and then get data from the right source
 		foreach(DndData ix in ids) {
+//print("ix.dbid %d   is.mediatype %s\n", ix.db_id, ix.mediatype.to_string());
 			switch(ix.mediatype) {
 				case ItemType.LOCAL_VIDEO_TRACK: 
 				case ItemType.LOCAL_AUDIO_TRACK: {
 					string lengthString = "", artist, album, title, uri;
 					int tracknumb;
+					Item item = Item(ItemType.UNKNOWN);
 					if(dbBr.get_trackdata_for_id((int)ix.db_id, out td)) {
-						artist    = td.artist;
-						album     = td.album;
-						title     = td.title;
-						tracknumb = (int)td.tracknumber;
+						artist       = td.artist;
+						album        = td.album;
+						title        = td.title;
+						tracknumb    = (int)td.tracknumber;
 						lengthString = make_time_display_from_seconds(td.length);
-						uri = td.uri;
+						uri          = td.uri;
+						item         = td.item;
 						Idle.add( () => {
-					
+						
 							TreeIter iter, new_iter;
 							TreeIter first_iter = TreeIter();
 							if((path == null)||(!this.tracklistmodel.get_iter_first(out first_iter))) { 
@@ -604,6 +607,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 							                   TrackListModel.Column.LENGTH, lengthString,
 							                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
 							                   TrackListModel.Column.URI, uri,
+							                   TrackListModel.Column.ITEM, item,
 							                   -1);
 							path = tracklistmodel.get_path(new_iter);
 							return false;
@@ -614,13 +618,15 @@ public class Xnoise.TrackList : TreeView, IParams {
 				case ItemType.STREAM: {
 					string lengthString = "", artist, album, title, uri;
 					int tracknumb;
+					Item item = Item(ItemType.UNKNOWN);
 					if(dbBr.get_stream_td_for_id((int)ix.db_id, out td)) {
-						artist    = td.artist;
-						album     = td.album;
-						title     = td.title;
-						tracknumb = (int)td.tracknumber;
+						artist       = td.artist;
+						album        = td.album;
+						title        = td.title;
+						tracknumb    = (int)td.tracknumber;
 						lengthString = make_time_display_from_seconds(td.length);
-						uri = td.uri;
+						uri          = td.uri;
+						item         = td.item;
 						Idle.add( () => {
 							TreeIter iter, new_iter;
 							TreeIter first_iter = TreeIter();
@@ -659,6 +665,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 							                   TrackListModel.Column.LENGTH, lengthString,
 							                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
 							                   TrackListModel.Column.URI, uri,
+							                   TrackListModel.Column.ITEM, item,
 							                   -1);
 							path = tracklistmodel.get_path(new_iter);
 							return false;
@@ -890,13 +897,13 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void on_row_activated(Gtk.Widget sender, TreePath path, TreeViewColumn column) {
-		Item item = Item(ItemType.UNKNOWN);
+		Item? item = Item(ItemType.UNKNOWN);
 		TreeIter iter;
 		if(tracklistmodel.get_iter(out iter, path)) {
 			tracklistmodel.get(iter, TrackListModel.Column.ITEM, out item);
+			this.on_activated(item, path);
+			//print("tracklist itemtype %s\n", item.type.to_string());
 		}
-print("tracklist itemtype %s\n", item.type.to_string());
-		this.on_activated(item, path);
 	}
 
 	private bool on_key_released(Gtk.Widget sender, Gdk.EventKey ek) {
@@ -962,7 +969,6 @@ print("tracklist itemtype %s\n", item.type.to_string());
 	}
 
 	public void on_activated(Item item, TreePath path) {//(string uri, TreePath path) {
-print("++1\n");
 		if(path != null) {
 			global.position_reference = new TreeRowReference(this.tracklistmodel, path);
 		}
@@ -970,17 +976,13 @@ print("++1\n");
 			print("cannot setup treerowref\n");
 			return;
 		}
-print("++2\n");
 		if(item.type != ItemType.UNKNOWN) {
-print("++3\n");
 			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;
-print("++4\n");
 			unowned Action? action = tmp.get_action(item.type, ActionContext.ANY);
 			if(action != null)
 				action.action(item, null);
-print("++5\n");
 		}
 		
 		TreeIter iter;

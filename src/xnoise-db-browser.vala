@@ -256,6 +256,7 @@ public class Xnoise.DbBrowser {
 			val.uri         = stmt.column_text(5);
 			val.length      = stmt.column_int(6);
 			val.db_id       = id;
+			val.item        = Item((ItemType)stmt.column_int(4), stmt.column_text(5), id);
 		}
 		else {
 			print("get_trackdata_for_id: track is not in db. ID: %d\n", id);
