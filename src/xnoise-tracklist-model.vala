@@ -57,7 +57,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		typeof(string),     // LENGTH
 		typeof(int),        // WEIGHT
 		typeof(string),     // URI
-		typeof(Xnoise.Item) // Item
+		typeof(Xnoise.Item?)// Item
 	};
 
 	public signal void sign_active_path_changed(PlayerState ts);
@@ -149,7 +149,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		return false;
 	}
 
-	public bool path_is_last_row(ref TreePath path, out bool trackList_is_empty) { //TODO: Implement errordomain
+	public bool path_is_last_row(ref TreePath path, out bool trackList_is_empty) {
 		trackList_is_empty = false;
 		int n_children = this.iter_n_children(null);
 
@@ -498,7 +498,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 		
 		if(tda[0].item.type != ItemType.UNKNOWN) {
-print("tlm itemtype %s\n", tda[0].item.type.to_string());
 			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;

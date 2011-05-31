@@ -426,7 +426,7 @@ public class Xnoise.TrackData { // track meta information
 	public int32 length = 0;
 	public int bitrate = 0;
 	public ItemType mediatype = ItemType.UNKNOWN;
-	public Item item = Item(ItemType.UNKNOWN);
+	public Item? item = Item(ItemType.UNKNOWN);
 	public string? uri = null;
 	public int32 db_id = -1;
 }

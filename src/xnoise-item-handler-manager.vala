@@ -83,8 +83,10 @@ namespace Xnoise {
 		private PatternSpec psVideo = new PatternSpec("video*");
 		private PatternSpec psAudio = new PatternSpec("audio*");
 		
-		public Item create_uri_item(string uri) {
-			Item item = Item(ItemType.UNKNOWN, uri);
+		public Item? create_uri_item(string? uri) {
+			if(uri == null)
+				return Item(ItemType.UNKNOWN);
+			Item? item = Item(ItemType.UNKNOWN, uri);
 			
 			File f = File.new_for_uri(uri);
 			string scheme = f.get_uri_scheme();

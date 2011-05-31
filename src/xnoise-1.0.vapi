@@ -241,7 +241,7 @@ namespace Xnoise {
 	public class ItemHandlerManager : GLib.Object {
 		public ItemHandlerManager ();
 		public void add_handler (Xnoise.ItemHandler handler);
-		public Xnoise.Item create_uri_item (string uri);
+		public Xnoise.Item? create_uri_item (string? uri);
 		public static void execute_actions_for_item (Xnoise.Item item, Xnoise.ActionContext context, GLib.Value? data);
 		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context);
 		public Xnoise.ItemHandler get_handler_by_name (string name);
@@ -524,7 +524,7 @@ namespace Xnoise {
 		public int bitrate;
 		public int32 db_id;
 		public string? genre;
-		public Xnoise.Item item;
+		public Xnoise.Item? item;
 		public int32 length;
 		public Xnoise.ItemType mediatype;
 		public string? name;
@@ -768,6 +768,8 @@ namespace Xnoise {
 		LOCAL_FOLDER,
 		COLLECTION_CONTAINER_ARTIST,
 		COLLECTION_CONTAINER_ALBUM,
+		COLLECTION_CONTAINER_VIDEO,
+		COLLECTION_CONTAINER_STREAM,
 		MAXCOUNT
 	}
 	[CCode (cprefix = "XNOISE_PLAYER_STATE_", cheader_filename = "xnoise.h")]

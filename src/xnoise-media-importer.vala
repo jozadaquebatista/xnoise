@@ -346,6 +346,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 								//print("++%s\n", td.title);
 								int32 id = dbw.insert_title(td, file.get_uri());
 								td.db_id = id;
+								td.item = Item(ItemType.LOCAL_AUDIO_TRACK, file.get_uri(), id);
 								td.mediatype = ItemType.LOCAL_AUDIO_TRACK;
 								if((int)id != -1) {
 									tda += td;
@@ -386,6 +387,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 						}
 						td.db_id = dbw.get_track_id_for_uri(file.get_uri());
 						if((int)td.db_id != -1) {
+							td.item = Item(ItemType.LOCAL_VIDEO_TRACK, file.get_uri(), td.db_id);
 							tdv += td;
 							job.big_counter[1]++;
 						}

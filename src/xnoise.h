@@ -652,6 +652,8 @@ typedef enum  {
 	XNOISE_ITEM_TYPE_LOCAL_FOLDER,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ARTIST,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ALBUM,
+	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_VIDEO,
+	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_STREAM,
 	XNOISE_ITEM_TYPE_MAXCOUNT
 } XnoiseItemType;
 
@@ -1068,7 +1070,7 @@ struct _XnoiseTrackData {
 	gint32 length;
 	gint bitrate;
 	XnoiseItemType mediatype;
-	XnoiseItem item;
+	XnoiseItem* item;
 	gchar* uri;
 	gint32 db_id;
 };
@@ -1613,7 +1615,7 @@ void xnoise_item_handler_manager_add_handler (XnoiseItemHandlerManager* self, Xn
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_type (XnoiseItemHandlerManager* self, XnoiseItemHandlerType type);
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_name (XnoiseItemHandlerManager* self, const gchar* name);
 void xnoise_item_handler_manager_test_func (XnoiseItemHandlerManager* self);
-void xnoise_item_handler_manager_create_uri_item (XnoiseItemHandlerManager* self, const gchar* uri, XnoiseItem* result);
+XnoiseItem* xnoise_item_handler_manager_create_uri_item (XnoiseItemHandlerManager* self, const gchar* uri);
 void xnoise_item_handler_manager_execute_actions_for_item (XnoiseItem* item, XnoiseActionContext context, GValue* data);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_new (void);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_construct (GType object_type);

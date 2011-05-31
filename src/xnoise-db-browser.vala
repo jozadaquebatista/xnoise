@@ -65,7 +65,7 @@ public class Xnoise.DbBrowser {
 	private static const string STMT_GET_LASTUSED =
 		"SELECT uri FROM lastused";
 	private static const string STMT_GET_VIDEO_DATA =
-		"SELECT DISTINCT title, mediatype, id FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
+		"SELECT DISTINCT i.title, i.mediatype, i.id, u.name FROM items i, uris u WHERE i.uri = u.id AND title LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
 	private static const string STMT_GET_VIDEOS =
 		"SELECT DISTINCT title FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
 	private static const string STMT_GET_ITEMS =
@@ -501,6 +501,7 @@ public class Xnoise.DbBrowser {
 			vd.name = stmt.column_text(0);
 			vd.mediatype = (ItemType)stmt.column_int(1);
 			vd.db_id = stmt.column_int(2);
+			vd.item = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(3), stmt.column_int(2));
 			val += vd;
 		}
 		return val;
@@ -521,6 +522,7 @@ public class Xnoise.DbBrowser {
 			vd.db_id = stmt.column_int(0);
 			vd.name = stmt.column_text(1);
 			vd.mediatype = ItemType.STREAM;
+			vd.item = Item(ItemType.STREAM, stmt.column_text(2), stmt.column_int(0));
 			val += vd;
 		}
 		return val;

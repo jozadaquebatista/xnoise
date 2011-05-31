@@ -51,6 +51,8 @@ namespace Xnoise {
 		LOCAL_FOLDER,                // item to be converted
 		COLLECTION_CONTAINER_ARTIST, // item to be converted
 		COLLECTION_CONTAINER_ALBUM,  // item to be converted
+		COLLECTION_CONTAINER_VIDEO,  // item to be converted
+		COLLECTION_CONTAINER_STREAM, // item to be converted
 		MAXCOUNT
 		//to be extended
 	}
