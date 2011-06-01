@@ -212,7 +212,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			print("%s\n", array.index(i).name);
 			var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.DELETE, null);
 			menu_item.set_label(array.index(i).info);
-			Value? v = list;
+			//Value? v = list;
 			unowned Action x = array.index(i);
 			menu_item.activate.connect( () => {
 				x.action(item, null);
@@ -1001,6 +1001,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			if(tmp == null)
 				return;
 			unowned Action? action = tmp.get_action(item.type, ActionContext.ANY);
+
 			if(action != null)
 				action.action(item, null);
 		}

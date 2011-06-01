@@ -39,10 +39,10 @@ public class Xnoise.HandlerRemoveTrack : ItemHandler {
 	
 	public HandlerRemoveTrack() {
 		a = new Action();
-		a.action = remove_track;
+		a.action = remove_track_from_tracklist;
 		a.info = this.ainfo;
 		a.name = this.aname;
-		a.context = ActionContext.NONE;
+		a.context = ActionContext.TRACKLIST_MENU_QUERY;
 		
 		print("constructed HandlerPlayItem\n");
 	}
@@ -56,14 +56,17 @@ public class Xnoise.HandlerRemoveTrack : ItemHandler {
 	}
 
 	public override unowned Action? get_action(ItemType type, ActionContext context) {
-		return a;
+		if(context == ActionContext.TRACKLIST_MENU_QUERY)
+			return a;
+		else
+			return null;
 	}
 
 	public override Array<Item?>? convert(Item item) {
 		return null;
 	}
 	
-	private void remove_track(Item item, GLib.Value? data) { // forward playlists to parser
+	private void remove_track_from_tracklist(Item item, GLib.Value? data) { // forward playlists to parser
 		print("remove_track    %s\n", item.type.to_string());
 		Main.instance.tl.remove_selected_rows();
 //		global.current_uri = item.uri;

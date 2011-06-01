@@ -91,21 +91,34 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	
 	// Action Payload
 	private void playlist_action(Item item, GLib.Value? data) { // forward playlists to parser
-		print(":: playlist adder\n");
-		ItemHandler? tmp = this.uhm.get_handler_by_type(ItemHandlerType.PLAYLIST_PARSER);
-		if(tmp == null)
-			return;
-		Array<Item?>? playlist_content = tmp.convert(item);
-		if(playlist_content != null) {
-			for(int i = 0; i < playlist_content.length; i++) {
-				unowned Item current_item = playlist_content.index(i);
-				this.uhm.execute_actions_for_item(current_item, ActionContext.TRACKLIST_DROP, data);
-			}
-		}
+//		print(":: playlist adder\n");
+//		ItemHandler? tmp = this.uhm.get_handler_by_type(ItemHandlerType.PLAYLIST_PARSER);
+//		if(tmp == null)
+//			return;
+//		Array<Item?>? playlist_content = tmp.convert(item);
+//		if(playlist_content != null) {
+//			for(int i = 0; i < playlist_content.length; i++) {
+//				unowned Item current_item = playlist_content.index(i);
+//				this.uhm.execute_actions_for_item(current_item, ActionContext.TRACKLIST_DROP, data);
+//			}
+//		}
 	}
-	
+//			Array<string> stringarray = new Array<string>(true, true, sizeof(string));
+//			string s1 = "stringarray1";
+//			string s2 = "stringarray2";
+//			string s3 = "stringarray3";
+//			stringarray.append_val(s1);
+//			stringarray.append_val(s2);
+//			stringarray.append_val(s3);
 	private void tracklist_drop_action(Item item, GLib.Value? data) {
 		print("%s triggered tracklist_drop_action for %s\n", item.uri, item.type.to_string());
+		if(data != null) {
+			Array<string> dar = (Array<string>)data;
+			print("dar.length = %u\n", dar.length);
+			for(int i = 0; i < dar.length; i++) {
+				print("%s\n", dar.index(i));
+			}
+		}
 	}
 }
 
