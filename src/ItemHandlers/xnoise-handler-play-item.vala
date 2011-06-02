@@ -61,10 +61,6 @@ public class Xnoise.HandlerPlayItem : ItemHandler {
 		return a;
 	}
 
-	public override Array<Item?>? convert(Item item) {
-		return null;
-	}
-	
 	private void play_uri(Item item, GLib.Value? data) { // forward playlists to parser
 		//print(":: play_uri .. %s  uri: %s\n", item.type.to_string(), item.uri);
 		global.current_uri = item.uri;

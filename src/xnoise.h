@@ -37,9 +37,6 @@ typedef struct _XnoiseItemHandlerPrivate XnoiseItemHandlerPrivate;
 #define XNOISE_TYPE_ACTION_CONTEXT (xnoise_action_context_get_type ())
 typedef struct _XnoiseAction XnoiseAction;
 
-#define XNOISE_TYPE_ITEM (xnoise_item_get_type ())
-typedef struct _XnoiseItem XnoiseItem;
-
 #define XNOISE_TYPE_ITEM_HANDLER_MANAGER (xnoise_item_handler_manager_get_type ())
 #define XNOISE_ITEM_HANDLER_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER_MANAGER, XnoiseItemHandlerManager))
 #define XNOISE_ITEM_HANDLER_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_HANDLER_MANAGER, XnoiseItemHandlerManagerClass))
@@ -153,6 +150,9 @@ typedef struct _XnoiseTrackDataClass XnoiseTrackDataClass;
 #define XNOISE_TYPE_STREAM_DATA (xnoise_stream_data_get_type ())
 typedef struct _XnoiseStreamData XnoiseStreamData;
 
+#define XNOISE_TYPE_ITEM (xnoise_item_get_type ())
+typedef struct _XnoiseItem XnoiseItem;
+
 #define XNOISE_TYPE_DB_WRITER (xnoise_db_writer_get_type ())
 #define XNOISE_DB_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DB_WRITER, XnoiseDbWriter))
 #define XNOISE_DB_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DB_WRITER, XnoiseDbWriterClass))
@@ -264,6 +264,17 @@ typedef struct _XnoiseUserInfoClass XnoiseUserInfoClass;
 #define XNOISE_USER_INFO_TYPE_CONTENT_CLASS (xnoise_user_info_content_class_get_type ())
 
 #define XNOISE_USER_INFO_TYPE_REMOVAL_TYPE (xnoise_user_info_removal_type_get_type ())
+
+#define XNOISE_TYPE_ITEM_CONVERTER (xnoise_item_converter_get_type ())
+#define XNOISE_ITEM_CONVERTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_CONVERTER, XnoiseItemConverter))
+#define XNOISE_ITEM_CONVERTER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_CONVERTER, XnoiseItemConverterClass))
+#define XNOISE_IS_ITEM_CONVERTER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ITEM_CONVERTER))
+#define XNOISE_IS_ITEM_CONVERTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ITEM_CONVERTER))
+#define XNOISE_ITEM_CONVERTER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ITEM_CONVERTER, XnoiseItemConverterClass))
+
+typedef struct _XnoiseItemConverter XnoiseItemConverter;
+typedef struct _XnoiseItemConverterClass XnoiseItemConverterClass;
+typedef struct _XnoiseItemConverterPrivate XnoiseItemConverterPrivate;
 typedef struct _XnoiseItemHandlerManagerPrivate XnoiseItemHandlerManagerPrivate;
 
 #define XNOISE_TYPE_LYRICS_LOADER (xnoise_lyrics_loader_get_type ())
@@ -680,12 +691,6 @@ typedef enum  {
 	XNOISE_ACTION_CONTEXT_MAXCOUNT
 } XnoiseActionContext;
 
-struct _XnoiseItem {
-	XnoiseItemType type;
-	gint32 db_id;
-	gchar* uri;
-};
-
 struct _XnoiseItemHandler {
 	GObject parent_instance;
 	XnoiseItemHandlerPrivate * priv;
@@ -697,7 +702,6 @@ struct _XnoiseItemHandlerClass {
 	XnoiseItemHandlerType (*handler_type) (XnoiseItemHandler* self);
 	const gchar* (*handler_name) (XnoiseItemHandler* self);
 	XnoiseAction* (*get_action) (XnoiseItemHandler* self, XnoiseItemType type, XnoiseActionContext context);
-	GArray* (*convert) (XnoiseItemHandler* self, XnoiseItem* item);
 };
 
 struct _XnoiseHandlerAddToTracklist {
@@ -793,6 +797,13 @@ struct _XnoiseStreamData {
 	gchar* uri;
 };
 
+struct _XnoiseItem {
+	XnoiseItemType type;
+	gint32 db_id;
+	gchar* uri;
+	gchar* text;
+};
+
 struct _XnoiseDbWriter {
 	GObject parent_instance;
 	XnoiseDbWriterPrivate * priv;
@@ -871,6 +882,15 @@ typedef enum  {
 	XNOISE_USER_INFO_REMOVAL_TYPE_TIMER_OR_CLOSE_BUTTON,
 	XNOISE_USER_INFO_REMOVAL_TYPE_EXTERNAL
 } XnoiseUserInfoRemovalType;
+
+struct _XnoiseItemConverter {
+	GObject parent_instance;
+	XnoiseItemConverterPrivate * priv;
+};
+
+struct _XnoiseItemConverterClass {
+	GObjectClass parent_class;
+};
 
 typedef void (*XnoiseItemHandlerActionType) (XnoiseItem* item, GValue* data, void* user_data);
 struct _XnoiseAction {
@@ -1397,11 +1417,6 @@ GType xnoise_item_handler_type_get_type (void) G_GNUC_CONST;
 GType xnoise_item_type_get_type (void) G_GNUC_CONST;
 GType xnoise_action_context_get_type (void) G_GNUC_CONST;
 void xnoise_action_free (XnoiseAction* self);
-GType xnoise_item_get_type (void) G_GNUC_CONST;
-XnoiseItem* xnoise_item_dup (const XnoiseItem* self);
-void xnoise_item_free (XnoiseItem* self);
-void xnoise_item_copy (const XnoiseItem* self, XnoiseItem* dest);
-void xnoise_item_destroy (XnoiseItem* self);
 GType xnoise_item_handler_manager_get_type (void) G_GNUC_CONST;
 GType xnoise_handler_add_to_tracklist_get_type (void) G_GNUC_CONST;
 XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_new (void);
@@ -1473,9 +1488,17 @@ gchar** xnoise_db_browser_get_uris (XnoiseDbBrowser* self, const gchar* search_s
 XnoiseTrackData** xnoise_db_browser_get_video_data (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_stream_data (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
 gchar** xnoise_db_browser_get_videos (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
-gchar** xnoise_db_browser_get_some_artists (XnoiseDbBrowser* self, gint limit, gint offset, int* result_length1);
+GType xnoise_item_get_type (void) G_GNUC_CONST;
+XnoiseItem* xnoise_item_dup (const XnoiseItem* self);
+void xnoise_item_free (XnoiseItem* self);
+void xnoise_item_copy (const XnoiseItem* self, XnoiseItem* dest);
+void xnoise_item_destroy (XnoiseItem* self);
+XnoiseItem* xnoise_db_browser_get_some_artists (XnoiseDbBrowser* self, gint limit, gint offset, int* result_length1);
 gchar** xnoise_db_browser_get_artists (XnoiseDbBrowser* self, int* result_length1);
-gchar** xnoise_db_browser_get_albums (XnoiseDbBrowser* self, const gchar* artist, int* result_length1);
+GArray* xnoise_db_browser_get_trackdata_by_albumid (XnoiseDbBrowser* self, gint32 id);
+GArray* xnoise_db_browser_get_trackdata_by_artistid (XnoiseDbBrowser* self, gint32 id);
+GArray* xnoise_db_browser_get_trackdata_by_titleid (XnoiseDbBrowser* self, gint32 id);
+XnoiseItem* xnoise_db_browser_get_albums (XnoiseDbBrowser* self, const gchar* artist, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_titles_with_mediatypes_and_ids (XnoiseDbBrowser* self, const gchar* artist, const gchar* album, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_titles_with_data (XnoiseDbBrowser* self, const gchar* artist, const gchar* album, int* result_length1);
 GType xnoise_db_writer_get_type (void) G_GNUC_CONST;
@@ -1625,6 +1648,10 @@ void xnoise_info_bar_update_text (XnoiseInfoBar* self, const gchar* txt, gboolea
 void xnoise_info_bar_update_extra_widget (XnoiseInfoBar* self, GtkWidget* widget);
 GtkWidget* xnoise_info_bar_get_extra_widget (XnoiseInfoBar* self);
 void xnoise_item_init (XnoiseItem *self, XnoiseItemType _type, const gchar* _uri, gint32 _db_id);
+GType xnoise_item_converter_get_type (void) G_GNUC_CONST;
+GArray* xnoise_item_converter_to_tracks (XnoiseItemConverter* self, GArray* items, XnoiseDbBrowser** dbb);
+XnoiseItemConverter* xnoise_item_converter_new (void);
+XnoiseItemConverter* xnoise_item_converter_construct (GType object_type);
 extern XnoiseItemHandlerManager* xnoise_uri_handler_manager;
 XnoiseAction* xnoise_action_new (void);
 XnoiseAction* xnoise_action_new (void);
@@ -1632,7 +1659,6 @@ gboolean xnoise_item_handler_set_manager (XnoiseItemHandler* self, XnoiseItemHan
 XnoiseItemHandlerType xnoise_item_handler_handler_type (XnoiseItemHandler* self);
 const gchar* xnoise_item_handler_handler_name (XnoiseItemHandler* self);
 XnoiseAction* xnoise_item_handler_get_action (XnoiseItemHandler* self, XnoiseItemType type, XnoiseActionContext context);
-GArray* xnoise_item_handler_convert (XnoiseItemHandler* self, XnoiseItem* item);
 XnoiseItemHandler* xnoise_item_handler_construct (GType object_type);
 GArray* xnoise_item_handler_manager_get_actions (XnoiseItemHandlerManager* self, XnoiseItemType type, XnoiseActionContext context);
 void xnoise_item_handler_manager_add_handler (XnoiseItemHandlerManager* self, XnoiseItemHandler* handler);
@@ -1752,6 +1778,7 @@ GType xnoise_worker_get_type (void) G_GNUC_CONST;
 extern XnoiseWorker* xnoise_worker;
 extern XnoiseMediaImporter* xnoise_media_importer;
 extern XnoiseItemHandlerManager* xnoise_item_handler_manager;
+extern XnoiseItemConverter* xnoise_item_converter;
 extern GMainContext* xnoise_mc;
 void xnoise_initialize (gboolean* is_first_start);
 gchar* xnoise_escape_album_for_local_folder_search (const gchar* _artist, const gchar* album_name);

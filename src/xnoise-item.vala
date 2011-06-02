@@ -36,9 +36,10 @@ namespace Xnoise {
 			this.db_id = _db_id;
 			this.uri   = _uri;
 		}
-		public ItemType type;
-		public int32 db_id;  // the id in the database or -1; to be verified, if coming from tracklist
-		public string? uri;    // uri of item 
+		public ItemType  type;
+		public int32     db_id;    // the id in the database or -1; to be verified, if coming from tracklist
+		public string?   uri;    // uri of item
+		public string?   text;   // some extra text
 	}
 
 	public enum ItemType {
@@ -46,13 +47,13 @@ namespace Xnoise {
 		LOCAL_AUDIO_TRACK,
 		LOCAL_VIDEO_TRACK,
 		STREAM,
-		CDROM_TRACK,
-		PLAYLIST,                    // item to be converted
-		LOCAL_FOLDER,                // item to be converted
-		COLLECTION_CONTAINER_ARTIST, // item to be converted
-		COLLECTION_CONTAINER_ALBUM,  // item to be converted
-		COLLECTION_CONTAINER_VIDEO,  // item to be converted
-		COLLECTION_CONTAINER_STREAM, // item to be converted
+		CDROM_TRACK,                 // not possible, yet
+		PLAYLIST,                    // item can be converted
+		LOCAL_FOLDER,                // item can be converted
+		COLLECTION_CONTAINER_ARTIST, // item can be converted
+		COLLECTION_CONTAINER_ALBUM,  // item can be converted
+		COLLECTION_CONTAINER_VIDEO,  // item can be converted
+		COLLECTION_CONTAINER_STREAM, // item can be converted
 		MAXCOUNT
 		//to be extended
 	}

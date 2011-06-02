@@ -545,9 +545,10 @@ public class Xnoise.DbBrowser {
 	}
 
 	private static const string STMT_GET_SOME_ARTISTS = 
-		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id ORDER BY LOWER(ar.name) ASC limit ? offset ?";
-	public string[] get_some_artists(int limit, int offset) {
-		string[] val = {};
+		"SELECT DISTINCT ar.name , ar.id FROM artists ar ORDER BY LOWER(ar.name) ASC limit ? offset ?";
+	public Item[] get_some_artists(int limit, int offset) {
+		Item[] val = {};
+//		string[] val = {};
 		Statement stmt;
 		
 		this.db.prepare_v2(STMT_GET_SOME_ARTISTS, -1, out stmt);
@@ -559,7 +560,10 @@ public class Xnoise.DbBrowser {
 			this.db_error();
 		}
 		while(stmt.step() == Sqlite.ROW) {
-			val += stmt.column_text(0);
+			Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, stmt.column_int(1));
+			i.text = stmt.column_text(0);
+			val += i;
+//			val += stmt.column_text(0);
 		}
 		return val;
 	}
@@ -578,10 +582,95 @@ public class Xnoise.DbBrowser {
 		return val;
 	}
 
+	private static const string STMT_GET_TRACK_ITEMS_BY_ALBUMID =
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND al.id = ? ORDER BY t.tracknumber DESC, t.title DESC";
+	public Array<TrackData>? get_trackdata_by_albumid(int32 id) {
+		Array<TrackData> val = new Array<TrackData>.sized(true, true, sizeof(TrackData), 8);
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_TRACK_ITEMS_BY_ALBUMID, -1, out stmt);
+		
+		stmt.reset();
+		if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+			this.db_error();
+			return null;
+		}
+		while(stmt.step() == Sqlite.ROW) {
+			TrackData td = new TrackData();
+			Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+			
+			td.artist      = stmt.column_text(5);
+			td.album       = stmt.column_text(6);
+			td.title       = stmt.column_text(0);
+			td.item        = i;
+			td.tracknumber = stmt.column_int(3);
+			
+			val.append_val(td);
+		}
+		return val;
+	}
+
+	private static const string STMT_GET_TRACK_ITEMS_BY_ARTISTID =
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND ar.id = ? ORDER BY t.tracknumber DESC, t.title DESC";
+	public Array<TrackData>? get_trackdata_by_artistid(int32 id) {
+		Array<TrackData> val = new Array<TrackData>.sized(true, true, sizeof(TrackData), 20);
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_TRACK_ITEMS_BY_ARTISTID, -1, out stmt);
+		
+		stmt.reset();
+		if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+			this.db_error();
+			return null;
+		}
+		while(stmt.step() == Sqlite.ROW) {
+			TrackData td = new TrackData();
+			Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+			
+			td.artist      = stmt.column_text(5);
+			td.album       = stmt.column_text(6);
+			td.title       = stmt.column_text(0);
+			td.item        = i;
+			td.tracknumber = stmt.column_int(3);
+			
+			val.append_val(td);
+		}
+		return val;
+	}
+
+	private static const string STMT_GET_TRACK_ITEMS_BY_TITLEID =
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.id = ? ORDER BY t.tracknumber DESC, t.title DESC";
+	public Array<TrackData>? get_trackdata_by_titleid(int32 id) {
+		Array<TrackData> val = new Array<TrackData>.sized(true, true, sizeof(TrackData), 1);
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_TRACK_ITEMS_BY_TITLEID, -1, out stmt);
+		
+		stmt.reset();
+		if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+			this.db_error();
+			return null;
+		}
+		if(stmt.step() == Sqlite.ROW) {
+//		while((k = stmt.step()) == Sqlite.ROW) {
+			TrackData td = new TrackData();
+			Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+			
+			td.artist      = stmt.column_text(5);
+			td.album       = stmt.column_text(6);
+			td.title       = stmt.column_text(0);
+			td.item        = i;
+			td.tracknumber = stmt.column_int(3);
+			
+			val.append_val(td);
+		}
+		return val;
+	}
+
 	private static const string STMT_GET_ALBUMS =
-		"SELECT DISTINCT al.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? ORDER BY LOWER(al.name) DESC";
-	public string[] get_albums(string artist) {
-		string[] val = {};
+		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE al.artist = ar.id AND ar.name = ? ORDER BY LOWER(al.name) DESC";
+	public Item[] get_albums(string artist) {
+		Item[] val = {};
 		Statement stmt;
 		
 		this.db.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
@@ -591,7 +680,9 @@ public class Xnoise.DbBrowser {
 			this.db_error();
 		}
 		while(stmt.step() == Sqlite.ROW) {
-			val += stmt.column_text(0);
+			Item i = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, stmt.column_int(1));
+			i.text = stmt.column_text(0);
+			val += i;
 		}
 		return val;
 	}

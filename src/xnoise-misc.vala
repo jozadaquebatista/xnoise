@@ -32,14 +32,13 @@
 // XNOISES' GENERAL NAMESPACE FUNCTIONS
 
 namespace Xnoise {
-	//public static Timer t1;
-	//public static Timer t2;
 	public static Params par = null;
 	public static GlobalAccess global = null;
 	public static UserInfo userinfo = null;
 	public static Worker worker = null;
 	public static MediaImporter media_importer = null;
 	public static ItemHandlerManager item_handler_manager = null;
+	public static ItemConverter item_converter = null;
 	public static MainContext mc;
 	/*
 	 * This function is used to create static instances of Params
@@ -49,7 +48,7 @@ namespace Xnoise {
 		is_first_start = false;
 		
 		item_handler_manager = new ItemHandlerManager();
-		
+		item_converter = new ItemConverter();
 		media_importer = new MediaImporter();
 		
 		// setup worker with reference to default context

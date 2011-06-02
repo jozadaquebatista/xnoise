@@ -44,6 +44,7 @@ xnoise_SOURCES = \
     xnoise-gst-player.vala \
     xnoise-info-bar.vala \
     xnoise-item.vala \
+    xnoise-item-converter.vala \
     xnoise-item-handler.vala \
     xnoise-item-handler-manager.vala \
     xnoise-lyrics-loader.vala \

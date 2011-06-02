@@ -574,6 +574,16 @@ public class Xnoise.TrackList : TreeView, IParams {
 		//TODO: Decide if it is video or stream or local file and then get data from the right source
 		foreach(DndData ix in ids) {
 //print("ix.dbid %d   is.mediatype %s\n", ix.db_id, ix.mediatype.to_string());
+
+//Array<Item?> xitems = new Array<Item?>(true, true, sizeof(Item));
+//Item xi = Item(ix.mediatype, null, ix.db_id);
+//xitems.append_val(xi);
+//Array<TrackData> xdat = item_converter.to_tracks(xitems, ref dbBr);
+//if(xdat == null)
+//	print("xdat is null\n");
+//print("len:%d\n", (int)xdat.length);
+//TrackData xxtd = xdat.index(0);
+//print("title:%s\n", xxtd.title);
 			switch(ix.mediatype) {
 				case ItemType.LOCAL_VIDEO_TRACK: 
 				case ItemType.LOCAL_AUDIO_TRACK: {

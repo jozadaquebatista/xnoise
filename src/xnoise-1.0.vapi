@@ -51,14 +51,14 @@ namespace Xnoise {
 		public int count_artists ();
 		public int count_artists_with_search (ref string searchtext);
 		public void do_callback_transaction (Xnoise.DbBrowser.ReaderCallback cb);
-		public string[] get_albums (string artist);
+		public Xnoise.Item[] get_albums (string artist);
 		public string[] get_artists ();
 		public string[] get_lastused_uris ();
 		public string? get_local_image_path_for_track (ref string? uri);
 		public string[] get_media_files ();
 		public string[] get_media_folders ();
 		public string? get_single_stream_uri (string name);
-		public string[] get_some_artists (int limit, int offset);
+		public Xnoise.Item[] get_some_artists (int limit, int offset);
 		public Xnoise.TrackData[] get_stream_data (ref string searchtext);
 		public bool get_stream_for_id (int id, out string uri);
 		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
@@ -66,6 +66,9 @@ namespace Xnoise {
 		public Xnoise.TrackData[] get_titles_with_data (string artist, string album);
 		public Xnoise.TrackData[] get_titles_with_mediatypes_and_ids (string artist, string album);
 		public int get_track_id_for_path (string uri);
+		public GLib.Array<Xnoise.TrackData>? get_trackdata_by_albumid (int32 id);
+		public GLib.Array<Xnoise.TrackData>? get_trackdata_by_artistid (int32 id);
+		public GLib.Array<Xnoise.TrackData>? get_trackdata_by_titleid (int32 id);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public bool get_trackdata_for_uri (string? uri, out Xnoise.TrackData val);
@@ -204,7 +207,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class HandlerAddToTracklist : Xnoise.ItemHandler {
 		public HandlerAddToTracklist ();
-		public override GLib.Array<Xnoise.Item?>? convert (Xnoise.Item item);
 		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
 		public override unowned string handler_name ();
 		public override Xnoise.ItemHandlerType handler_type ();
@@ -212,7 +214,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class HandlerPlayItem : Xnoise.ItemHandler {
 		public HandlerPlayItem ();
-		public override GLib.Array<Xnoise.Item?>? convert (Xnoise.Item item);
 		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
 		public override unowned string handler_name ();
 		public override Xnoise.ItemHandlerType handler_type ();
@@ -220,7 +221,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class HandlerRemoveTrack : Xnoise.ItemHandler {
 		public HandlerRemoveTrack ();
-		public override GLib.Array<Xnoise.Item?>? convert (Xnoise.Item item);
 		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
 		public override unowned string handler_name ();
 		public override Xnoise.ItemHandlerType handler_type ();
@@ -235,12 +235,16 @@ namespace Xnoise {
 		public void update_text (string txt, bool bold = true);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
+	public class ItemConverter : GLib.Object {
+		public ItemConverter ();
+		public GLib.Array<Xnoise.TrackData>? to_tracks (GLib.Array<Xnoise.Item?>? items, ref Xnoise.DbBrowser dbb);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
 	public abstract class ItemHandler : GLib.Object {
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate void ActionType (Xnoise.Item item, GLib.Value? data);
 		protected weak Xnoise.ItemHandlerManager uhm;
 		public ItemHandler ();
-		public abstract GLib.Array<Xnoise.Item?>? convert (Xnoise.Item item);
 		public abstract unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
 		public abstract unowned string handler_name ();
 		public abstract Xnoise.ItemHandlerType handler_type ();
@@ -737,6 +741,7 @@ namespace Xnoise {
 		public Xnoise.ItemType type;
 		public int32 db_id;
 		public string? uri;
+		public string? text;
 		public Item (Xnoise.ItemType _type = ItemType.UNKNOWN, string? _uri = null, int32 _db_id = -1);
 	}
 	[CCode (type_id = "XNOISE_TYPE_STREAM_DATA", cheader_filename = "xnoise.h")]
@@ -806,6 +811,8 @@ namespace Xnoise {
 	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text, string providername);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalAccess global;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.ItemConverter item_converter;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.ItemHandlerManager item_handler_manager;
 	[CCode (cheader_filename = "xnoise.h")]

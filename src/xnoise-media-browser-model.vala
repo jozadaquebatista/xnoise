@@ -970,7 +970,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private void handle_artists(Worker.Job job) {
 		if(job.cancellable == null || job.cancellable.is_cancelled())
 			return;
-		string[] artistArray;
+//		string[] artistArray;
 		DbBrowser dbb = null;
 		try {
 			dbb = new DbBrowser();
@@ -979,27 +979,28 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			print("%s\n", e.message);
 			return;
 		}
-		artistArray = dbb.get_some_artists(ARTIST_FOR_ONE_JOB, job.big_counter[1]);
+//		artistArray 
+		job.items = dbb.get_some_artists(ARTIST_FOR_ONE_JOB, job.big_counter[1]);
 		//print("artistArray lenght init %d\n", artistArray.length);
-		job.big_counter[1] += artistArray.length;
+		job.big_counter[1] += job.items.length;
 		
-		job.set_arg("artistArray", artistArray);
+//		job.set_arg("artistArray", artistArray);
 		Idle.add( () => {
 			if(job.cancellable.is_cancelled())
 				return false;
 			TreeIter iter_artist;
-			foreach(string artist in (string[])job.get_arg("artistArray")) { 	              //ARTISTS
+			foreach(Item artist in job.items) {//(string[])job.get_arg("artistArray")) { 	              //ARTISTS
 				if(job.cancellable.is_cancelled())
 					break;
-				Item item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
+//				Item item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
 				this.append(out iter_artist, null);
 				this.set(iter_artist,
 				         Column.ICON, artist_pixb,
-				         Column.VIS_TEXT, artist,
+				         Column.VIS_TEXT, artist.text,
 				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				         Column.DRAW_SEPTR, 0,
 				         Column.VISIBLE, false,
-				         Column.ITEM, item
+				         Column.ITEM, artist
 				         );
 				
 				Gtk.TreePath p = this.get_path(iter_artist);
@@ -1007,7 +1008,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				var job_album = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_album);
 				job_album.cancellable = populate_model_cancellable;
 				job_album.set_arg("treerowref", treerowref);
-				job_album.set_arg("artist", artist);
+				job_album.set_arg("artist", artist.text); // todo use artist id to speed up
 				worker.push_job(job_album);
 			}
 			return false;
@@ -1073,9 +1074,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			return;
 		}		
 		string artist = (string)job.get_arg("artist");
-		string[] albumArray = dbb.get_albums(artist);
 		
-		job.set_arg("albumArray", albumArray);
+		job.items = dbb.get_albums(artist);
 		Idle.add( () => {
 				if(job.cancellable.is_cancelled())
 					return false;
@@ -1083,8 +1083,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				TreePath p = row_ref.get_path();
 				TreeIter iter_artist, iter_album;
 				this.get_iter(out iter_artist, p);
-				foreach(string album in (string[])job.get_arg("albumArray")) { 			    //ALBUMS
-					File? albumimage_file = get_albumimage_for_artistalbum(artist, album, null);
+				foreach(Item album in job.items) { 			    //ALBUMS
+					File? albumimage_file = get_albumimage_for_artistalbum(artist, album.text, null);
 					Gdk.Pixbuf albumimage = null;
 					if(albumimage_file != null) {
 						if(albumimage_file.query_exists(null)) {
@@ -1098,15 +1098,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					}
 					if(job.cancellable.is_cancelled())
 						return false;
-					Item item = Item(ItemType.COLLECTION_CONTAINER_ALBUM);
 					this.prepend(out iter_album, iter_artist);
 					this.set(iter_album,
 					         Column.ICON, (albumimage != null ? albumimage : album_pixb),
-					         Column.VIS_TEXT, album,
+					         Column.VIS_TEXT, album.text,
 					         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 					         Column.DRAW_SEPTR, 0,
 					         Column.VISIBLE, false,
-					         Column.ITEM, item
+					         Column.ITEM, album
 					         );
 					Gtk.TreePath p1 = this.get_path(iter_album);
 					TreeRowReference treerowref = new TreeRowReference(this, p1);
@@ -1114,7 +1113,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					job_title.cancellable = populate_model_cancellable;
 					job_title.set_arg("treerowref", treerowref);
 					job_title.set_arg("artist", artist);
-					job_title.set_arg("album", album);
+					job_title.set_arg("album", album.text);
 					worker.push_job(job_title);
 				}
 			return false;

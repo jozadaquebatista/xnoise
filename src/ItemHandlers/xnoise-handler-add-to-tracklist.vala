@@ -33,9 +33,9 @@
 // has one or more Actions
 public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	private Action a;
-	private const string ainfo = "A HandlerAddToTracklistinfo";
-	private const string aname = "A HandlerAddToTracklistname";
-	private Action b;
+	private const string ainfo = "Add album container to tracklist";
+	private const string aname = "HandlerAddToTracklistnameActionAlbumContainer";
+	private Action add_album;
 	private const string binfo = "B HandlerAddToTracklistinfo";
 	private const string bname = "B HandlerAddToTracklistname";
 	
@@ -45,14 +45,15 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		a = new Action();
 		a.action = playlist_action;
 		a.info = this.ainfo;
-		a.name = this.aname;// (char[])"HandlerAddToTracklist";
+		a.name = this.aname;
 		a.context = ActionContext.MEDIABROWSER_ITEM_ACTIVATED;
 		
-		b = new Action();
-		b.action = tracklist_drop_action;
-		b.info = this.binfo;
-		b.name = this.bname;// (char[])"HandlerAddToTracklist";
-		b.context = ActionContext.TRACKLIST_DROP;
+		//action for adding album item
+		add_album = new Action(); 
+		add_album.action = add_collection_container_album_action;
+		add_album.info = this.binfo;
+		add_album.name = this.bname;// (char[])"HandlerAddToTracklist";
+		add_album.context = ActionContext.TRACKLIST_DROP;
 		print("constructed HandlerAddToTracklist\n");
 	}
 
@@ -66,14 +67,9 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 
 	public override unowned Action? get_action(ItemType type, ActionContext context) {
 		if((context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED ||
-		    context == ActionContext.TRACKLIST_DROP
-		    ) &&
-		   (type == ItemType.LOCAL_AUDIO_TRACK ||
-		    type == ItemType.LOCAL_FOLDER ||
-		    type == ItemType.LOCAL_VIDEO_TRACK
-		    )
-		   )
-			return b;
+		    context == ActionContext.TRACKLIST_DROP) &&
+		    type == ItemType.COLLECTION_CONTAINER_ALBUM)
+			return add_album;
 			
 		if((context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED ||
 		    context == ActionContext.TRACKLIST_DROP
@@ -85,10 +81,6 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		return null;
 	}
 
-	public override Array<Item?>? convert(Item item) {
-		return null;
-	}
-	
 	// Action Payload
 	private void playlist_action(Item item, GLib.Value? data) { // forward playlists to parser
 //		print(":: playlist adder\n");
@@ -110,15 +102,17 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 //			stringarray.append_val(s1);
 //			stringarray.append_val(s2);
 //			stringarray.append_val(s3);
-	private void tracklist_drop_action(Item item, GLib.Value? data) {
-		print("%s triggered tracklist_drop_action for %s\n", item.uri, item.type.to_string());
-		if(data != null) {
-			Array<string> dar = (Array<string>)data;
-			print("dar.length = %u\n", dar.length);
-			for(int i = 0; i < dar.length; i++) {
-				print("%s\n", dar.index(i));
-			}
-		}
+
+	private void add_collection_container_album_action(Item item, GLib.Value? data) {
+		// Maybe convert to tracks and forward this to some other action ?
+//		print("%s triggered tracklist_drop_action for %s\n", item.uri, item.type.to_string());
+//		if(data != null) {
+//			Array<string> dar = (Array<string>)data;
+//			print("dar.length = %u\n", dar.length);
+//			for(int i = 0; i < dar.length; i++) {
+//				print("%s\n", dar.index(i));
+//			}
+//		}
 	}
 }
 

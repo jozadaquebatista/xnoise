@@ -83,6 +83,6 @@ namespace Xnoise {
 		public abstract ItemHandlerType handler_type(); 
 		public abstract unowned string handler_name();
 		public abstract unowned Action? get_action(ItemType type, ActionContext context);
-		public abstract Array<Item?>? convert(Item item); 
+//		public abstract Array<Item?>? convert(Item item); 
 	}
 }
