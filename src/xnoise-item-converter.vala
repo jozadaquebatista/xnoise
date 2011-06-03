@@ -32,14 +32,12 @@ public class Xnoise.ItemConverter : Object {
 
 	//this function uses the database so use it in the database thread, only
 	public TrackData[]? to_trackdata(Item? item, ref DbBrowser dbb) {
-//	public Array<TrackData>? to_trackdata(Item? item, ref DbBrowser dbb) {
 		// Take input and convert to tracks
 		if(item == null)
 			return null;
 		
 		TrackData[] result = {};
-//		Array<TrackData> result = null;
-	// Now assuming everything is in db !
+		// Now assuming everything is in db !
 		
 		switch(item.type) {
 			case ItemType.LOCAL_AUDIO_TRACK:
@@ -47,34 +45,23 @@ public class Xnoise.ItemConverter : Object {
 				if(item.db_id > -1) {
 					result = {};//new Array<TrackData>.sized(true, true, sizeof(Item), 1);
 					TrackData? tmp = dbb.get_trackdata_by_titleid(item.db_id);
-//					Array<TrackData>? tmp = dbb.get_trackdata_by_titleid(item.db_id);
 					if(tmp == null)
 						break;
-//					if(tmp.length == 0)
-//						break;
 					result += tmp;
-//					result.append_val(tmp.index(0)); // only one
 				}
 				break;
 			case ItemType.COLLECTION_CONTAINER_ALBUM:
 				if(item.db_id > -1) {
 					result = {};//new Array<TrackData>.sized(true, true, sizeof(Item), 8);
 					result = dbb.get_trackdata_by_albumid(item.db_id);
-//					if(tmp == null)
-						break;
-//					for(int j = 0; j < tmp.length; j++)
-//						result.append_val(tmp.index(j)); // append_vals does not work 
+					break;
 				}
 				break;
 			case ItemType.COLLECTION_CONTAINER_ARTIST:
 				if(item.db_id > -1) {
-					result = {};//new Array<TrackData>.sized(true, true, sizeof(Item), 20);
-//					TrackData[] tmp 
+					result = {};
 					result = dbb.get_trackdata_by_artistid(item.db_id);
-//					if(tmp == null)
-						break;
-//					for(int j = 0; j < tmp.length; j++)
-//						result.append_val(tmp.index(j)); // append_vals does not work 
+					break;
 				}
 				break;
 			case ItemType.STREAM:

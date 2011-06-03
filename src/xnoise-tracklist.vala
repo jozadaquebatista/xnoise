@@ -671,52 +671,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 	}
 
-//	private void handle_dropped_stream(ref string streamuri, ref TreePath? path, 
-//	                                   ref bool is_first) {
-//		//Function to import music STREAMS in drag'n'drop
-//		TreeIter iter, new_iter;
-//		File file = File.new_for_uri(streamuri);
-
-//		string artist, album, title;
-//		artist    = "";
-//		album     = "";
-//		title     = file.get_uri();
-
-//		TreeIter first_iter;
-//		if(!this.tracklistmodel.get_iter_first(out first_iter)) { //dropped on empty list, first uri
-//			this.tracklistmodel.insert(out new_iter, 0);
-//		}
-//		else if(path==null) { //dropped below all entries, first uri
-//			tracklistmodel.append(out new_iter);
-//		}
-//		else { //all other uris
-//			this.tracklistmodel.get_iter(out iter, path);
-//			if(is_first) {
-//				if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
-//				   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
-//				   //Determine drop position for first, insert all others after first
-//					this.tracklistmodel.insert_before(out new_iter, iter);
-//				}
-//				else {
-//					this.tracklistmodel.insert_after(out new_iter, iter);
-//				}
-//				is_first = false;
-//			}
-//			else {
-//				this.tracklistmodel.insert_after(out new_iter, iter);
-//			}
-//		}
-//		//TODO use insert_title function of tracklistmodel instead ?!?
-//		tracklistmodel.set(new_iter,
-//		                   TrackListModel.Column.TITLE, title,
-//		                   TrackListModel.Column.ALBUM, album,
-//		                   TrackListModel.Column.ARTIST, artist,
-//		                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-//		                   TrackListModel.Column.URI, streamuri,
-//		                   -1);
-//		path = tracklistmodel.get_path(new_iter);
-//	}
-
 	private string make_time_display_from_seconds(int length) {
 		string lengthString = "";
 		if(length > 0) {
@@ -1269,35 +1223,27 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 	
 	
-		
+	
 	public void write_params_data() {
 		var columns = this.get_columns();
 		int counter = 0;
 		foreach(TreeViewColumn c in columns) {
 			if(c == null) continue;
-
+			
 			// write column position, counting from 1 onwards
 			counter++;
 			par.set_int_value("position_" + c.title + "_column", counter);
-
+			
 			// write relative column sizes
 			if(!c.resizable) continue;
 			double? relative_size = relative_column_sizes.lookup(c.title);
 			if(relative_size == null) continue;
 			par.set_double_value("relative_size_" + c.title + "_column", (double)relative_size);
 		} 
-
 	}
 	
 	public void read_params_data() {
 	}
 	
 }
-
-
-
-
-				
-				
-		
 

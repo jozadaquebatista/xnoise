@@ -460,54 +460,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		         -1);
 	}
 
-//	public void append_tracks(TrackData[]? tda, bool imediate_play = true)	{
-//		if(tda == null) return;
-//		if(tda[0] == null) return;
-//		
-//		int k = 0;
-//		TreeIter iter, iter_2 = {};
-//		while(tda[k] != null) {
-//			string current_uri = tda[k].uri;
-//			
-//			if(k == 0) { // First track
-//				iter = this.insert_title(null,
-//				                         (int)tda[k].tracknumber,
-//				                         tda[k].title,
-//				                         tda[k].album,
-//				                         tda[k].artist,
-//				                         tda[k].length,
-//				                         true,
-//				                         current_uri,
-//				                         tda[k].item);
-//				global.position_reference = null;
-//				global.position_reference = new TreeRowReference(this, this.get_path(iter));
-//				iter_2 = iter;
-//			}
-//			else { // second to last track
-//				iter = this.insert_title(null,
-//				                         (int)tda[k].tracknumber,
-//				                         tda[k].title,
-//				                         tda[k].album,
-//				                         tda[k].artist,
-//				                         tda[k].length,
-//				                         false,
-//				                         current_uri,
-//				                         tda[k].item);
-//			}
-//			k++;
-//		}
-//		
-//		if(tda[0].item.type != ItemType.UNKNOWN) {
-//			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
-//			if(tmp == null)
-//				return;
-//			unowned Action? action = tmp.get_action(tda[0].item.type, ActionContext.ANY);
-//			if(action != null)
-//				action.action(tda[0].item, null);
-//		}
-//		xn.tl.set_focus_on_iter(ref iter_2);
-//	}
-
 	public void add_uris(string[]? uris) {
 		if(uris == null) return;
 		if(uris[0] == null) return;
