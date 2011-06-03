@@ -66,9 +66,9 @@ namespace Xnoise {
 		public Xnoise.TrackData[] get_titles_with_data (string artist, string album);
 		public Xnoise.TrackData[] get_titles_with_mediatypes_and_ids (string artist, string album);
 		public int get_track_id_for_path (string uri);
-		public GLib.Array<Xnoise.TrackData>? get_trackdata_by_albumid (int32 id);
-		public GLib.Array<Xnoise.TrackData>? get_trackdata_by_artistid (int32 id);
-		public GLib.Array<Xnoise.TrackData>? get_trackdata_by_titleid (int32 id);
+		public Xnoise.TrackData[]? get_trackdata_by_albumid (int32 id);
+		public Xnoise.TrackData[]? get_trackdata_by_artistid (int32 id);
+		public Xnoise.TrackData? get_trackdata_by_titleid (int32 id);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public bool get_trackdata_for_uri (string? uri, out Xnoise.TrackData val);
@@ -101,7 +101,7 @@ namespace Xnoise {
 		public int get_track_id_for_uri (string uri);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public string? get_uri_for_item_id (int32 id);
-		public int32 insert_title (Xnoise.TrackData td, string uri);
+		public bool insert_title (ref Xnoise.TrackData td, string uri);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public bool update_title (int32 id, ref Xnoise.TrackData td);
 		public int uri_entry_exists (string uri);
@@ -237,7 +237,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class ItemConverter : GLib.Object {
 		public ItemConverter ();
-		public GLib.Array<Xnoise.TrackData>? to_tracks (GLib.Array<Xnoise.Item?>? items, ref Xnoise.DbBrowser dbb);
+		public Xnoise.TrackData[]? to_trackdata (Xnoise.Item? item, ref Xnoise.DbBrowser dbb);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public abstract class ItemHandler : GLib.Object {
@@ -535,6 +535,8 @@ namespace Xnoise {
 		public string? album;
 		public string? artist;
 		public int bitrate;
+		public int32 dat1;
+		public int32 dat2;
 		public int32 db_id;
 		public string? genre;
 		public Xnoise.Item? item;
@@ -659,6 +661,7 @@ namespace Xnoise {
 			public Xnoise.Item[] items;
 			public void* p_arg;
 			public Xnoise.Worker.SyncWorkFunc? s_func;
+			public GLib.Array<Xnoise.TrackData> td_array;
 			public Xnoise.TrackData[] track_dat;
 			public Gtk.TreeRowReference[] treerowrefs;
 			public GLib.Value? value_arg1;

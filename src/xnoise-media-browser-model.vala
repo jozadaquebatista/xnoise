@@ -289,7 +289,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
 				this.prepend(out iter_videos, null);
 				this.set(iter_videos,
-				         Column.ICON, video_pixb,
+				         Column.ICON, videos_pixb,
 				         Column.VIS_TEXT, "Videos",
 				         Column.COLL_TYPE, CollectionType.LISTED,
 				         Column.DRAW_SEPTR, 0,
@@ -307,7 +307,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 			this.prepend(out iter_singlevideos, iter_videos);
 			this.set(iter_singlevideos,
-			         Column.ICON,        videos_pixb,
+			         Column.ICON,        video_pixb,
 			         Column.VIS_TEXT,    td.title,
 			         Column.DB_ID,       td.db_id,
 			         Column.MEDIATYPE ,  ItemType.LOCAL_VIDEO_TRACK,
@@ -409,6 +409,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				this.set(iter_artist, Column.VISIBLE, visible);
 		}
 		if(this.iter_n_children(album_iter) == 0) {
+			Item? item = item_handler_manager.create_uri_item(td.uri);
+			item.db_id = td.db_id;
 			this.append(out title_iter, album_iter);
 			this.set(title_iter,
 			         Column.ICON, title_pixb,
@@ -419,7 +421,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.DRAW_SEPTR, 0,
 			         Column.VISIBLE, visible,
 			         Column.TRACKNUMBER, td.tracknumber,
-			         Column.ITEM, item_handler_manager.create_uri_item(td.uri)
+			         Column.ITEM, item
 			         );
 			this.remove(org_iter);
 			return;
@@ -450,6 +452,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					if(this.iter_parent(out iter_artist, album_iter))
 						this.set(iter_artist, Column.VISIBLE, visible);
 				}
+				Item? item = item_handler_manager.create_uri_item(td.uri);
+				item.db_id = td.db_id;
 				this.insert_before(out new_title_iter, album_iter, title_iter);
 				this.set(new_title_iter,
 				         Column.ICON, title_pixb,
@@ -460,7 +464,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.DRAW_SEPTR, 0,
 				         Column.VISIBLE, visible,
 				         Column.TRACKNUMBER, td.tracknumber,
-				         Column.ITEM, item_handler_manager.create_uri_item(td.uri)
+				         Column.ITEM, item
 				         );
 				title_iter = new_title_iter;
 				this.remove(org_iter);
@@ -475,6 +479,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			if(this.iter_parent(out iter_artist, album_iter))
 				this.set(iter_artist, Column.VISIBLE, visible);
 		}
+		Item? item = item_handler_manager.create_uri_item(td.uri);
+		item.db_id = td.db_id;
 		this.append(out title_iter, album_iter);
 		this.set(title_iter,
 		         Column.ICON, title_pixb,
@@ -485,7 +491,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		         Column.DRAW_SEPTR, 0,
 		         Column.VISIBLE, visible,
 		         Column.TRACKNUMBER, td.tracknumber,
-		         Column.ITEM, item_handler_manager.create_uri_item(td.uri)
+		         Column.ITEM, item
 		         );
 		this.remove(org_iter);
 		return;
@@ -543,7 +549,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private void handle_iter_for_artist(ref TrackData td, out TreeIter artist_iter) {
 		string text = null;
 		if(this.iter_n_children(null) == 0) {
-			Item item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
+			Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, td.dat1);
 			this.append(out artist_iter, null);
 			this.set(artist_iter,
 			         Column.ICON, artist_pixb,
@@ -568,7 +574,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 			if(strcmp(text, td.artist != null ? td.artist.down().strip() : "") > 0) {
 				TreeIter new_artist_iter;
-				Item item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
+				Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, td.dat1);
 				this.insert_before(out new_artist_iter, null, artist_iter);
 				this.set(new_artist_iter,
 				         Column.ICON, artist_pixb,
@@ -582,7 +588,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				return;
 			}
 		}
-		Item item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
+		Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, td.dat1);
 		this.append(out artist_iter, null);
 		this.set(artist_iter,
 		         Column.ICON, artist_pixb,
@@ -611,7 +617,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 		}
 		if(this.iter_n_children(artist_iter) == 0) {
-			Item item = Item(ItemType.COLLECTION_CONTAINER_ALBUM);
+			Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, td.dat2);
 			this.append(out album_iter, artist_iter);
 			this.set(album_iter,
 			         Column.ICON, (albumimage != null ? albumimage : album_pixb),
@@ -633,7 +639,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 			if(strcmp(text, td.album.down().strip()) > 0) {
 				TreeIter new_album_iter;
-				Item item = Item(ItemType.COLLECTION_CONTAINER_ALBUM);
+				Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, td.dat2);
 				this.insert_before(out new_album_iter, artist_iter, album_iter);
 				this.set(new_album_iter,
 				         Column.ICON, (albumimage != null ? albumimage : album_pixb),
@@ -648,7 +654,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 		
 		}
-		Item item = Item(ItemType.COLLECTION_CONTAINER_ALBUM);
+		Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, td.dat2);
 		this.append(out album_iter, artist_iter);
 		this.set(album_iter,
 		         Column.ICON, (albumimage != null ? albumimage : album_pixb),
@@ -676,7 +682,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				if(this.iter_parent(out iter_artist, album_iter))
 					this.set(iter_artist, Column.VISIBLE, visible);
 			}
-			Item item = item_handler_manager.create_uri_item(td.uri);
+			Item? item = item_handler_manager.create_uri_item(td.uri);
+			item.db_id = td.db_id;
 			this.append(out title_iter, album_iter);
 			this.set(title_iter,
 			         Column.ICON, title_pixb,
@@ -711,7 +718,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					if(this.iter_parent(out iter_artist, album_iter))
 						this.set(iter_artist, Column.VISIBLE, visible);
 				}
-				Item item = item_handler_manager.create_uri_item(td.uri);
+				Item? item = item_handler_manager.create_uri_item(td.uri);
+				item.db_id = td.db_id;
 				this.insert_before(out new_title_iter, album_iter, title_iter);
 				this.set(new_title_iter,
 				         Column.ICON, title_pixb,
@@ -736,7 +744,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			if(this.iter_parent(out iter_artist, album_iter))
 				this.set(iter_artist, Column.VISIBLE, visible);
 		}
-		Item item = item_handler_manager.create_uri_item(td.uri);
+		Item? item = item_handler_manager.create_uri_item(td.uri);
+		item.db_id = td.db_id;
 		this.append(out title_iter, album_iter);
 		this.set(title_iter,
 		         Column.ICON, title_pixb,
@@ -989,10 +998,10 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			if(job.cancellable.is_cancelled())
 				return false;
 			TreeIter iter_artist;
-			foreach(Item artist in job.items) {//(string[])job.get_arg("artistArray")) { 	              //ARTISTS
+			foreach(Item? artist in job.items) {//(string[])job.get_arg("artistArray")) { 	              //ARTISTS
 				if(job.cancellable.is_cancelled())
 					break;
-//				Item item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
+//				Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST);
 				this.append(out iter_artist, null);
 				this.set(iter_artist,
 				         Column.ICON, artist_pixb,
@@ -1083,7 +1092,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				TreePath p = row_ref.get_path();
 				TreeIter iter_artist, iter_album;
 				this.get_iter(out iter_artist, p);
-				foreach(Item album in job.items) { 			    //ALBUMS
+				foreach(Item? album in job.items) { 			    //ALBUMS
 					File? albumimage_file = get_albumimage_for_artistalbum(artist, album.text, null);
 					Gdk.Pixbuf albumimage = null;
 					if(albumimage_file != null) {
@@ -1155,7 +1164,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					if(this.iter_parent(out iter_artist, iter_album))
 						this.set(iter_artist, Column.VISIBLE, visible);
 				}
-				Item item = Item((td.mediatype == ItemType.LOCAL_AUDIO_TRACK ? ItemType.LOCAL_AUDIO_TRACK : ItemType.LOCAL_VIDEO_TRACK), td.uri, td.db_id);
+				Item? item = Item((td.mediatype == ItemType.LOCAL_AUDIO_TRACK ? ItemType.LOCAL_AUDIO_TRACK : ItemType.LOCAL_VIDEO_TRACK), td.uri, td.db_id);
 				this.prepend(out iter_title, iter_album);
 				this.set(iter_title,
 				         Column.ICON, (td.mediatype == ItemType.LOCAL_AUDIO_TRACK ? title_pixb : video_pixb),
@@ -1250,7 +1259,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		foreach(TrackData md in job.track_dat) {
 			TrackData td;
 			if(dbb.get_trackdata_for_id(md.db_id, out td)) {
-				Item it = item_handler_manager.create_uri_item(td.uri);
+				Item? it = item_handler_manager.create_uri_item(td.uri);
 				td.item = it;
 				tda += td;
 			}
@@ -1340,148 +1349,102 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 	//TODO: How to do this for videos/streams?
 	public DndData[] get_dnd_data_for_path(ref TreePath treepath) {
-		TreeIter iter, iterChild, iterChildChild;
+		TreeIter iter;//, iterChild, iterChildChild;
 		DndData[] dnd_data_array = {};
-		ItemType mtype = ItemType.UNKNOWN;
+//		ItemType mtype = ItemType.UNKNOWN;
 		int dbid = -1;
-		//string uri;
-		CollectionType br_ct = CollectionType.UNKNOWN;
+//		CollectionType br_ct = CollectionType.UNKNOWN;
 		bool visible = false;
 		this.get_iter(out iter, treepath);
-		switch(treepath.get_depth()) {
-			case 1:
-				this.get(iter, Column.COLL_TYPE, ref br_ct);
-				if(br_ct == CollectionType.LISTED) {
-					dbid = -1;
-					for(int i = 0; i < this.iter_n_children(iter); i++) {
-						dbid = -1;
-						Item? item = null;
-						this.iter_nth_child(out iterChild, iter, i);
-						this.get(iterChild,
-//						         Column.DB_ID,     out dbid,
-						         Column.VISIBLE,   out visible,
-//						         Column.MEDIATYPE, out mtype,
-						         Column.ITEM,      out item
-						         );
-						if(visible && item != null) {
-							DndData dnd_data = { item.db_id, item.type };//{ dbid, (ItemType)mtype };
-							dnd_data_array += dnd_data;
-						}
-//						if(dbid==-1) break;
-//						switch(mtype) {
-//							case ItemType.VIDEO: {
-//								if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
-//								break;
-//							}
-//							case ItemType.STREAM : {
-//								if(dbb.get_stream_for_id(dbid, out uri)) urilist += uri;
-//								break;
-//							}
-//							default:
-//								break;
+//		switch(treepath.get_depth()) {
+//			case 1:
+//				this.get(iter, Column.COLL_TYPE, ref br_ct);
+//				if(br_ct == CollectionType.LISTED) {
+//					dbid = -1;
+//					for(int i = 0; i < this.iter_n_children(iter); i++) {
+//						dbid = -1;
+//						Item? item = null;
+//						this.iter_nth_child(out iterChild, iter, i);
+//						this.get(iterChild,
+//						         Column.VISIBLE,   out visible,
+//						         Column.ITEM,      out item
+//						         );
+//						if(visible && item != null) {
+//							DndData dnd_data = { item.db_id, item.type };//{ dbid, (ItemType)mtype };
+//							dnd_data_array += dnd_data;
 //						}
-					}
-				}
-				else if(br_ct == CollectionType.HIERARCHICAL) {
-					for(int i = 0; i < this.iter_n_children(iter); i++) {
-						this.iter_nth_child(out iterChild, iter, i);
-						this.get(iterChild,
-						         Column.VISIBLE, ref visible
-						         );
-						if(!visible)
-							continue;
-						for(int j = 0; j<this.iter_n_children(iterChild); j++) {
-							dbid = -1;
-							Item? item = null;
-							this.iter_nth_child(out iterChildChild, iterChild, j);
-							this.get(iterChildChild, 
-//							         Column.DB_ID,     out dbid,
-							         Column.VISIBLE,   out visible,
-//							         Column.MEDIATYPE, out mtype,
-							         Column.ITEM,      out item
-							         );
-							if(item != null && item.db_id != -1 && visible) {
-								DndData dnd_data = { item.db_id, item.type };//{ dbid, (ItemType)mtype };
-								dnd_data_array += dnd_data;
-//								urilist += dbid;
-							}
-						}
-					}
-				}
-				break;
-			case 2:
-//				this.get_iter(out iter, treepath);
-				this.get(iter, Column.COLL_TYPE, ref br_ct);
-				if(br_ct == CollectionType.LISTED) {
-					dbid = -1;
-					mtype = ItemType.UNKNOWN;
-					Item? item = null;
-					this.get(iter,
-//					         Column.DB_ID,     out dbid,
-					         Column.VISIBLE,   out visible,
-//					         Column.MEDIATYPE, out mtype,
-					         Column.ITEM,      out item
-					         );
-					if(item == null)
-						break;
-					if(item.db_id==-1) break;
-					
-					if(visible) {
-						DndData dnd_data =  { item.db_id, item.type };//{ dbid, (ItemType)mtype };
-						dnd_data_array += dnd_data;
-//						urilist += dbid;
-					}
-					
-//						switch(mtype) {
-//						case ItemType.VIDEO: {
-//							//print("is VIDEO\n");
-//							if(dbb.get_uri_for_id(dbid, out uri)) urilist += uri;
-//							break;
-//						}
-//						case ItemType.STREAM : {
-//							//print("is STREAM\n");
-//							if(dbb.get_stream_for_id(dbid, out uri)) urilist += uri;
-//							break;
-//						}
-//						default:
-//							break;
 //					}
-				}
-				else if(br_ct == CollectionType.HIERARCHICAL) {
-
-					for(int i = 0; i < this.iter_n_children(iter); i++) {
-						dbid = -1;
-						Item? item = null;
-						this.iter_nth_child(out iterChild, iter, i);
-						this.get(iterChild, 
-//						         Column.DB_ID,     out dbid,
-						         Column.VISIBLE,   out visible,
-//						         Column.MEDIATYPE, out mtype,
-						         Column.ITEM,      out item
-						         );
-							if(item != null && item.db_id != -1 && visible) {
-								DndData dnd_data = { item.db_id, item.type };//{ dbid, (ItemType)mtype };
-								dnd_data_array += dnd_data;
-//								urilist += dbid;
-							}
-					}
-				}
-				break;
-			case 3: //TITLE
+//				}
+//				else if(br_ct == CollectionType.HIERARCHICAL) {
+//					for(int i = 0; i < this.iter_n_children(iter); i++) {
+//						this.iter_nth_child(out iterChild, iter, i);
+//						this.get(iterChild,
+//						         Column.VISIBLE, ref visible
+//						         );
+//						if(!visible)
+//							continue;
+//						for(int j = 0; j<this.iter_n_children(iterChild); j++) {
+//							dbid = -1;
+//							Item? item = null;
+//							this.iter_nth_child(out iterChildChild, iterChild, j);
+//							this.get(iterChildChild, 
+//							         Column.VISIBLE,   out visible,
+//							         Column.ITEM,      out item
+//							         );
+//							if(item != null && item.db_id != -1 && visible) {
+//								DndData dnd_data = { item.db_id, item.type };//{ dbid, (ItemType)mtype };
+//								dnd_data_array += dnd_data;
+//							}
+//						}
+//					}
+//				}
+//				break;
+//			case 2:
+//				this.get(iter, Column.COLL_TYPE, ref br_ct);
+//				if(br_ct == CollectionType.LISTED) {
+//					dbid = -1;
+//					mtype = ItemType.UNKNOWN;
+//					Item? item = null;
+//					this.get(iter,
+//					         Column.VISIBLE,   out visible,
+//					         Column.ITEM,      out item
+//					         );
+//					if(item == null)
+//						break;
+//					if(item.db_id==-1) break;
+//					
+//					if(visible) {
+//						DndData dnd_data =  { item.db_id, item.type };//{ dbid, (ItemType)mtype };
+//						dnd_data_array += dnd_data;
+//					}
+//				}
+//				else if(br_ct == CollectionType.HIERARCHICAL) {
+//					for(int i = 0; i < this.iter_n_children(iter); i++) {
+//						dbid = -1;
+//						Item? item = null;
+//						this.iter_nth_child(out iterChild, iter, i);
+//						this.get(iterChild, 
+//						         Column.VISIBLE,   out visible,
+//						         Column.ITEM,      out item
+//						         );
+//							if(item != null && item.db_id != -1 && visible) {
+//								DndData dnd_data = { item.db_id, item.type };//{ dbid, (ItemType)mtype };
+//								dnd_data_array += dnd_data;
+//							}
+//					}
+//				}
+//				break;
+//			case 3: //TITLE
 				dbid = -1;
 				Item? item = null;
-//				this.get(iter, Column.DB_ID, ref dbid, Column.MEDIATYPE, ref mtype);
 				this.get(iter, Column.ITEM, out item);
-				if(item == null)
-					break;
-				if(item.db_id==-1) break;
-//				if(dbid != -1) {
-//					urilist += dbid;
+				if(item != null && item.db_id != -1) {
+//					break;
 					DndData dnd_data = { item.db_id, item.type };//{ dbid, (ItemType)mtype };
 					dnd_data_array += dnd_data;
-//				}
-				break;
-		}
+				}
+//				break;
+//		}
 		return dnd_data_array;
 	}
 }

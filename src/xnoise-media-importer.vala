@@ -223,8 +223,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 					var tr = new TagReader();
 					TrackData td = tr.read_tag(file.get_path());
 					td.uri = file.get_uri();
-					td.db_id = dbw.insert_title(td, file.get_uri());
-					if((int)td.db_id != -1) {
+//					td.db_id = dbw.insert_title(ref td, file.get_uri());
+					if(dbw.insert_title(ref td, file.get_uri())) {
 						TrackData[] tdy = { td };
 						Idle.add( () => {
 							Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdy); 
@@ -245,11 +245,11 @@ public class Xnoise.MediaImporter : GLib.Object {
 			td.tracknumber = 0;
 			td.mediatype = ItemType.LOCAL_VIDEO_TRACK;
 			
-			if(idbuffer== -1) {
-				dbw.insert_title(td, file.get_uri());
-			}
-			td.db_id = dbw.get_track_id_for_uri(file.get_uri());
-			if((int)td.db_id != -1) {
+			if(idbuffer== -1 && dbw.insert_title(ref td, file.get_uri())) {
+//				dbw.insert_title(td, file.get_uri());
+//			}
+//			td.db_id = dbw.get_track_id_for_uri(file.get_uri());
+//			if((int)td.db_id != -1) {
 				TrackData[] tdax = { td };
 				Idle.add( () => {
 					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax); 
@@ -344,11 +344,11 @@ public class Xnoise.MediaImporter : GLib.Object {
 								td = tr.read_tag(filepath);
 								td.uri = file.get_uri();
 								//print("++%s\n", td.title);
-								int32 id = dbw.insert_title(td, file.get_uri());
-								td.db_id = id;
-								td.item = Item(ItemType.LOCAL_AUDIO_TRACK, file.get_uri(), id);
+//								int32 id = dbw.insert_title(td, file.get_uri());
+//								td.db_id = id;
+								td.item = Item(ItemType.LOCAL_AUDIO_TRACK, file.get_uri(), td.db_id);
 								td.mediatype = ItemType.LOCAL_AUDIO_TRACK;
-								if((int)id != -1) {
+								if(dbw.insert_title(ref td, file.get_uri())) {
 									tda += td;
 									job.big_counter[1]++;
 									Idle.add( () => {
@@ -382,11 +382,11 @@ public class Xnoise.MediaImporter : GLib.Object {
 						td.genre = "";
 						td.tracknumber = 0;
 						td.mediatype = ItemType.LOCAL_VIDEO_TRACK;
-						if(idbuffer== -1) {
-							dbw.insert_title(td, file.get_uri());
-						}
-						td.db_id = dbw.get_track_id_for_uri(file.get_uri());
-						if((int)td.db_id != -1) {
+						if(idbuffer== -1 && dbw.insert_title(ref td, file.get_uri())) {
+//							dbw.insert_title(td, file.get_uri());
+//						}
+//						td.db_id = dbw.get_track_id_for_uri(file.get_uri());
+//						if((int)td.db_id != -1) {
 							td.item = Item(ItemType.LOCAL_VIDEO_TRACK, file.get_uri(), td.db_id);
 							tdv += td;
 							job.big_counter[1]++;

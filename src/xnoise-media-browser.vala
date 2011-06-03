@@ -407,20 +407,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		selection = this.get_selection();
 		treepaths = selection.get_selected_rows(null);
 		DndData[] ids = {};
-		if(treepaths.length() > 1) {
-			foreach(unowned TreePath treepath in treepaths) { 
-				TreePath tp = filtermodel.convert_path_to_child_path(treepath);
-				DndData[] l = mediabrowsermodel.get_dnd_data_for_path(ref tp); 
-				foreach(DndData u in l) {
-					ids += u; // this is necessary, if more than one path can be selected
-				}
+		if(treepaths.length() < 1)
+			return;
+		foreach(unowned TreePath treepath in treepaths) { 
+			TreePath tp = filtermodel.convert_path_to_child_path(treepath);
+			DndData[] l = mediabrowsermodel.get_dnd_data_for_path(ref tp); 
+			foreach(DndData u in l) {
+				//print("dnd data get %d  %s\n", u.db_id, u.mediatype.to_string());
+				ids += u; // this is necessary, if more than one path can be selected
 			}
-		}
-		else {
-			if(treepaths.length() == 0)
-				return;
-			TreePath tp = filtermodel.convert_path_to_child_path((TreePath)treepaths.data);
-			ids = mediabrowsermodel.get_dnd_data_for_path(ref tp);
 		}
 		Gdk.Atom dnd_atom = Gdk.Atom.intern(src_target_entries[0].target, true);
 		unowned uchar[] data = (uchar[])ids;

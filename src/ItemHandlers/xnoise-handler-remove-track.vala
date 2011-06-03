@@ -44,7 +44,7 @@ public class Xnoise.HandlerRemoveTrack : ItemHandler {
 		a.name = this.aname;
 		a.context = ActionContext.TRACKLIST_MENU_QUERY;
 		
-		print("constructed HandlerPlayItem\n");
+		print("constructed HandlerRemoveTrack\n");
 	}
 
 	public override ItemHandlerType handler_type() {

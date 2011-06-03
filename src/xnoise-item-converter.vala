@@ -31,65 +31,68 @@
 public class Xnoise.ItemConverter : Object {
 
 	//this function uses the database so use it in the database thread, only
-	public Array<TrackData>? to_tracks(Array<Item?>? items, ref DbBrowser dbb) {
+	public TrackData[]? to_trackdata(Item? item, ref DbBrowser dbb) {
+//	public Array<TrackData>? to_trackdata(Item? item, ref DbBrowser dbb) {
 		// Take input and convert to tracks
-		if(items == null)
-			return null;
-		if(items.length == 0)
+		if(item == null)
 			return null;
 		
-		Array<TrackData> result = new Array<TrackData>.sized(true, true, sizeof(Item), 2 * items.length);
-		for(int i = 0; i < items.length; i++) {
-			unowned Item item = items.index(i);
-			switch(item.type) {
-				case ItemType.LOCAL_AUDIO_TRACK:
-				case ItemType.LOCAL_VIDEO_TRACK:
-					// Now assuming everything is in db !
-					if(item.db_id > -1) {
-						Array<TrackData>? tmp = dbb.get_trackdata_by_titleid(item.db_id);
-						if(tmp == null)
-							break;
-						if(tmp.length == 0)
-							break;
-						result.append_val(tmp.index(0)); // only one
-					}
-					break;
-				case ItemType.COLLECTION_CONTAINER_ALBUM:
-					if(item.db_id > -1) {
-						Array<TrackData>? tmp = dbb.get_trackdata_by_albumid(item.db_id);
-						if(tmp == null)
-							break;
-						for(int j = 0; j < tmp.length; j++)
-							result.append_val(tmp.index(j)); // append_vals does not work 
-					}
-					break;
-				case ItemType.COLLECTION_CONTAINER_ARTIST:
-					if(item.db_id > -1) {
-						Array<TrackData>? tmp = dbb.get_trackdata_by_artistid(item.db_id);
-						if(tmp == null)
-							break;
-						for(int j = 0; j < tmp.length; j++)
-							result.append_val(tmp.index(j)); // append_vals does not work 
-					}
-					break;
-				case ItemType.STREAM:
-					break;
-				case ItemType.PLAYLIST:
-					//result.append_val(item);
-					break;
-				case ItemType.LOCAL_FOLDER:
-					//result.append_val(item);
-					break;
-				case ItemType.COLLECTION_CONTAINER_VIDEO:
-					//get all video
-					break;
-				case ItemType.COLLECTION_CONTAINER_STREAM:
-					// get all streams
-					break;
-				default:
-					break;
-			}
-			
+		TrackData[] result = {};
+//		Array<TrackData> result = null;
+	// Now assuming everything is in db !
+		
+		switch(item.type) {
+			case ItemType.LOCAL_AUDIO_TRACK:
+			case ItemType.LOCAL_VIDEO_TRACK:
+				if(item.db_id > -1) {
+					result = {};//new Array<TrackData>.sized(true, true, sizeof(Item), 1);
+					TrackData? tmp = dbb.get_trackdata_by_titleid(item.db_id);
+//					Array<TrackData>? tmp = dbb.get_trackdata_by_titleid(item.db_id);
+					if(tmp == null)
+						break;
+//					if(tmp.length == 0)
+//						break;
+					result += tmp;
+//					result.append_val(tmp.index(0)); // only one
+				}
+				break;
+			case ItemType.COLLECTION_CONTAINER_ALBUM:
+				if(item.db_id > -1) {
+					result = {};//new Array<TrackData>.sized(true, true, sizeof(Item), 8);
+					result = dbb.get_trackdata_by_albumid(item.db_id);
+//					if(tmp == null)
+						break;
+//					for(int j = 0; j < tmp.length; j++)
+//						result.append_val(tmp.index(j)); // append_vals does not work 
+				}
+				break;
+			case ItemType.COLLECTION_CONTAINER_ARTIST:
+				if(item.db_id > -1) {
+					result = {};//new Array<TrackData>.sized(true, true, sizeof(Item), 20);
+//					TrackData[] tmp 
+					result = dbb.get_trackdata_by_artistid(item.db_id);
+//					if(tmp == null)
+						break;
+//					for(int j = 0; j < tmp.length; j++)
+//						result.append_val(tmp.index(j)); // append_vals does not work 
+				}
+				break;
+			case ItemType.STREAM:
+				break;
+			case ItemType.PLAYLIST:
+				//result.append_val(item);
+				break;
+			case ItemType.LOCAL_FOLDER:
+				//result.append_val(item);
+				break;
+			case ItemType.COLLECTION_CONTAINER_VIDEO:
+				//get all video from db
+				break;
+			case ItemType.COLLECTION_CONTAINER_STREAM:
+				// get all streams from db
+				break;
+			default:
+				break;
 		}
 		return result;
 	}

@@ -32,28 +32,19 @@
 // provides the right Action for the given ActionContext
 // has one or more Actions
 public class Xnoise.HandlerAddToTracklist : ItemHandler {
-	private Action a;
-	private const string ainfo = "Add album container to tracklist";
-	private const string aname = "HandlerAddToTracklistnameActionAlbumContainer";
-	private Action add_album;
+	private Action add;
 	private const string binfo = "B HandlerAddToTracklistinfo";
 	private const string bname = "B HandlerAddToTracklistname";
 	
 	private const string name = "HandlerAddToTracklist";
 	
 	public HandlerAddToTracklist() {
-		a = new Action();
-		a.action = playlist_action;
-		a.info = this.ainfo;
-		a.name = this.aname;
-		a.context = ActionContext.MEDIABROWSER_ITEM_ACTIVATED;
-		
-		//action for adding album item
-		add_album = new Action(); 
-		add_album.action = add_collection_container_album_action;
-		add_album.info = this.binfo;
-		add_album.name = this.bname;// (char[])"HandlerAddToTracklist";
-		add_album.context = ActionContext.TRACKLIST_DROP;
+		//action for adding item(s)
+		add = new Action(); 
+		add.action = add_action;
+		add.info = this.binfo;
+		add.name = this.bname;// (char[])"HandlerAddToTracklist";
+		add.context = ActionContext.MEDIABROWSER_ITEM_ACTIVATED;
 		print("constructed HandlerAddToTracklist\n");
 	}
 
@@ -66,53 +57,15 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	}
 
 	public override unowned Action? get_action(ItemType type, ActionContext context) {
-		if((context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED ||
-		    context == ActionContext.TRACKLIST_DROP) &&
-		    type == ItemType.COLLECTION_CONTAINER_ALBUM)
-			return add_album;
-			
-		if((context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED ||
-		    context == ActionContext.TRACKLIST_DROP
-		    ) &&
-		   (type == ItemType.PLAYLIST)
-		   )
-			return a;
-
+		if(context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED
+			return add;
+		
 		return null;
 	}
 
-	// Action Payload
-	private void playlist_action(Item item, GLib.Value? data) { // forward playlists to parser
-//		print(":: playlist adder\n");
-//		ItemHandler? tmp = this.uhm.get_handler_by_type(ItemHandlerType.PLAYLIST_PARSER);
-//		if(tmp == null)
-//			return;
-//		Array<Item?>? playlist_content = tmp.convert(item);
-//		if(playlist_content != null) {
-//			for(int i = 0; i < playlist_content.length; i++) {
-//				unowned Item current_item = playlist_content.index(i);
-//				this.uhm.execute_actions_for_item(current_item, ActionContext.TRACKLIST_DROP, data);
-//			}
-//		}
-	}
-//			Array<string> stringarray = new Array<string>(true, true, sizeof(string));
-//			string s1 = "stringarray1";
-//			string s2 = "stringarray2";
-//			string s3 = "stringarray3";
-//			stringarray.append_val(s1);
-//			stringarray.append_val(s2);
-//			stringarray.append_val(s3);
-
-	private void add_collection_container_album_action(Item item, GLib.Value? data) {
+	private void add_action(Item item, GLib.Value? data) {
 		// Maybe convert to tracks and forward this to some other action ?
-//		print("%s triggered tracklist_drop_action for %s\n", item.uri, item.type.to_string());
-//		if(data != null) {
-//			Array<string> dar = (Array<string>)data;
-//			print("dar.length = %u\n", dar.length);
-//			for(int i = 0; i < dar.length; i++) {
-//				print("%s\n", dar.index(i));
-//			}
-//		}
+		
 	}
 }
 

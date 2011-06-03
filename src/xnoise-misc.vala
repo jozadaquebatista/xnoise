@@ -428,6 +428,8 @@ public class Xnoise.TrackData { // track meta information
 	public Item? item = Item(ItemType.UNKNOWN);
 	public string? uri = null;
 	public int32 db_id = -1;
+	public int32 dat1 = -1;
+	public int32 dat2 = -1;
 }
 
 public class Xnoise.RemoteSchemes {

@@ -1114,6 +1114,8 @@ struct _XnoiseTrackData {
 	XnoiseItem* item;
 	gchar* uri;
 	gint32 db_id;
+	gint32 dat1;
+	gint32 dat2;
 };
 
 struct _XnoiseTrackDataClass {
@@ -1387,6 +1389,7 @@ struct _XnoiseWorkerJob {
 	void* p_arg;
 	XnoiseItem* items;
 	gint items_length1;
+	GArray* td_array;
 	XnoiseTrackData** track_dat;
 	gint track_dat_length1;
 	XnoiseDndData* dnd_data;
@@ -1495,9 +1498,9 @@ void xnoise_item_copy (const XnoiseItem* self, XnoiseItem* dest);
 void xnoise_item_destroy (XnoiseItem* self);
 XnoiseItem* xnoise_db_browser_get_some_artists (XnoiseDbBrowser* self, gint limit, gint offset, int* result_length1);
 gchar** xnoise_db_browser_get_artists (XnoiseDbBrowser* self, int* result_length1);
-GArray* xnoise_db_browser_get_trackdata_by_albumid (XnoiseDbBrowser* self, gint32 id);
-GArray* xnoise_db_browser_get_trackdata_by_artistid (XnoiseDbBrowser* self, gint32 id);
-GArray* xnoise_db_browser_get_trackdata_by_titleid (XnoiseDbBrowser* self, gint32 id);
+XnoiseTrackData** xnoise_db_browser_get_trackdata_by_albumid (XnoiseDbBrowser* self, gint32 id, int* result_length1);
+XnoiseTrackData** xnoise_db_browser_get_trackdata_by_artistid (XnoiseDbBrowser* self, gint32 id, int* result_length1);
+XnoiseTrackData* xnoise_db_browser_get_trackdata_by_titleid (XnoiseDbBrowser* self, gint32 id);
 XnoiseItem* xnoise_db_browser_get_albums (XnoiseDbBrowser* self, const gchar* artist, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_titles_with_mediatypes_and_ids (XnoiseDbBrowser* self, const gchar* artist, const gchar* album, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_titles_with_data (XnoiseDbBrowser* self, const gchar* artist, const gchar* album, int* result_length1);
@@ -1510,7 +1513,7 @@ gchar** xnoise_db_writer_get_media_folders (XnoiseDbWriter* self, int* result_le
 gboolean xnoise_db_writer_get_trackdata_for_stream (XnoiseDbWriter* self, const gchar* uri, XnoiseTrackData** val);
 gint xnoise_db_writer_get_track_id_for_uri (XnoiseDbWriter* self, const gchar* uri);
 gboolean xnoise_db_writer_update_title (XnoiseDbWriter* self, gint32 id, XnoiseTrackData** td);
-gint32 xnoise_db_writer_insert_title (XnoiseDbWriter* self, XnoiseTrackData* td, const gchar* uri);
+gboolean xnoise_db_writer_insert_title (XnoiseDbWriter* self, XnoiseTrackData** td, const gchar* uri);
 void xnoise_db_writer_delete_uri (XnoiseDbWriter* self, const gchar* uri);
 gint xnoise_db_writer_uri_entry_exists (XnoiseDbWriter* self, const gchar* uri);
 void xnoise_db_writer_add_single_stream_to_collection (XnoiseDbWriter* self, const gchar* uri, const gchar* name);
@@ -1649,7 +1652,7 @@ void xnoise_info_bar_update_extra_widget (XnoiseInfoBar* self, GtkWidget* widget
 GtkWidget* xnoise_info_bar_get_extra_widget (XnoiseInfoBar* self);
 void xnoise_item_init (XnoiseItem *self, XnoiseItemType _type, const gchar* _uri, gint32 _db_id);
 GType xnoise_item_converter_get_type (void) G_GNUC_CONST;
-GArray* xnoise_item_converter_to_tracks (XnoiseItemConverter* self, GArray* items, XnoiseDbBrowser** dbb);
+XnoiseTrackData** xnoise_item_converter_to_trackdata (XnoiseItemConverter* self, XnoiseItem* item, XnoiseDbBrowser** dbb, int* result_length1);
 XnoiseItemConverter* xnoise_item_converter_new (void);
 XnoiseItemConverter* xnoise_item_converter_construct (GType object_type);
 extern XnoiseItemHandlerManager* xnoise_uri_handler_manager;
