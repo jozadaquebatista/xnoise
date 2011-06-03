@@ -437,10 +437,24 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	private void on_row_activated(Gtk.Widget sender, TreePath treepath, TreeViewColumn column) {
-		if(treepath.get_depth() > 1)
-			mediabrowsermodel.queue_path_for_tracklist(filtermodel.convert_path_to_child_path(treepath));
-		else
+		if(treepath.get_depth() > 1) {
+			Item? item = Item(ItemType.UNKNOWN);
+			TreeIter iter;
+			this.mediabrowsermodel.get_iter(out iter, treepath);
+			this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out item);
+			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
+			if(tmp == null)
+				return;
+			unowned Action? action = tmp.get_action(item.type, ActionContext.MEDIABROWSER_ITEM_ACTIVATED);
+			
+			if(action != null)
+				action.action(item, null);
+			else
+				print("action was null\n");
+		}
+		else {
 			this.expand_row(treepath, false);
+		}
 	}
 
 	public bool change_model_data() {

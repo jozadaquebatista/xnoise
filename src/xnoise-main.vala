@@ -60,6 +60,7 @@ public class Xnoise.Main : GLib.Object {
 		
 		item_handler_manager.add_handler(new HandlerPlayItem());
 		item_handler_manager.add_handler(new HandlerRemoveTrack());
+		item_handler_manager.add_handler(new HandlerAddToTracklist());
 		
 		if(!no_plugins) {
 			plugin_loader.load_all();

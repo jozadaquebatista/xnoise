@@ -555,7 +555,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void insert_dnd_data_job(Worker.Job job) {
-		DndData[] ids = job.dnd_data;
+		DndData[] ids = job.dnd_data; //TODO !!!
 		DbBrowser dbBr = null;
 		try {
 			dbBr = new DbBrowser();

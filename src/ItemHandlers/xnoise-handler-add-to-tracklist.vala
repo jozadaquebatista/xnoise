@@ -28,6 +28,7 @@
  * 	Jörn Magens
  */
 
+using Gtk;
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext
 // has one or more Actions
@@ -37,11 +38,13 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	private const string bname = "B HandlerAddToTracklistname";
 	
 	private const string name = "HandlerAddToTracklist";
+	private unowned Main xn;
 	
 	public HandlerAddToTracklist() {
 		//action for adding item(s)
+		xn = Main.instance;
 		add = new Action(); 
-		add.action = add_action;
+		add.action = on_mediabrowser_activated;
 		add.info = this.binfo;
 		add.name = this.bname;// (char[])"HandlerAddToTracklist";
 		add.context = ActionContext.MEDIABROWSER_ITEM_ACTIVATED;
@@ -57,15 +60,85 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	}
 
 	public override unowned Action? get_action(ItemType type, ActionContext context) {
-		if(context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED
+		if(context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED)
 			return add;
 		
 		return null;
 	}
 
-	private void add_action(Item item, GLib.Value? data) {
-		// Maybe convert to tracks and forward this to some other action ?
+	private void on_mediabrowser_activated(Item item, GLib.Value? data) {
+		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.add_item_job);
+		job.item = item;
+		worker.push_job(job);
+	}
+	
+	private void add_item_job(Worker.Job job) {
+		Item? item = job.item;//(Item?)job.get_arg("item");
+		//print("item.type is %s\n", item.type.to_string());
+		DbBrowser dbBr = null;
+		try {
+			dbBr = new DbBrowser();
+		}
+		catch(DbError e) {
+			print("%s\n", e.message);
+			return;
+		}
+		job.track_dat = item_converter.to_trackdata(item, ref dbBr);;
 		
+		if(job.track_dat != null) {
+			Idle.add( () => {
+				append_tracks(ref job.track_dat);
+				return false;
+			});
+		}
+	}
+	
+	private void append_tracks(ref TrackData[]? tda) {
+		if(tda == null || tda[0] == null) 
+			return;
+		
+		int k = 0;
+		TreeIter iter, iter_2 = {};
+		while(tda[k] != null) {
+			string current_uri = tda[k].uri;
+			
+			if(k == 0) { // First track
+				iter = xn.tlm.insert_title(null,
+				                         (int)tda[k].tracknumber,
+				                         tda[k].title,
+				                         tda[k].album,
+				                         tda[k].artist,
+				                         tda[k].length,
+				                         true,
+				                         current_uri,
+				                         tda[k].item);
+				global.position_reference = null;
+				global.position_reference = new TreeRowReference(xn.tlm, xn.tlm.get_path(iter));
+				iter_2 = iter;
+			}
+			else { // from second to last track
+				iter = xn.tlm.insert_title(null,
+				                         (int)tda[k].tracknumber,
+				                         tda[k].title,
+				                         tda[k].album,
+				                         tda[k].artist,
+				                         tda[k].length,
+				                         false,
+				                         current_uri,
+				                         tda[k].item);
+			}
+			k++;
+		}
+		
+		if(tda[0].item.type != ItemType.UNKNOWN) {
+			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
+			if(tmp == null)
+				return;
+			unowned Action? action = tmp.get_action(tda[0].item.type, ActionContext.ANY);
+			if(action != null)
+				action.action(tda[0].item, null);
+		}
+		xn.tl.set_focus_on_iter(ref iter_2);
 	}
 }
 

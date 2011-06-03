@@ -405,7 +405,6 @@ namespace Xnoise {
 		public void move_artist_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_title_iter_sorted (ref Gtk.TreeIter org_iter, ref Xnoise.TrackData td);
 		public bool populate_model ();
-		public void queue_path_for_tracklist (Gtk.TreePath treepath);
 		public bool populating_model { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -582,7 +581,6 @@ namespace Xnoise {
 			ITEM
 		}
 		public TrackListModel ();
-		public void add_tracks (Xnoise.TrackData[]? tda, bool imediate_play = true);
 		public void add_uris (string[]? uris);
 		public bool get_active_path (out Gtk.TreePath treepath, out bool used_next_pos);
 		public string[] get_all_tracks ();
@@ -658,10 +656,10 @@ namespace Xnoise {
 			public Xnoise.DndData[] dnd_data;
 			public int64 id;
 			public int32[] id_array;
+			public Xnoise.Item? item;
 			public Xnoise.Item[] items;
 			public void* p_arg;
 			public Xnoise.Worker.SyncWorkFunc? s_func;
-			public GLib.Array<Xnoise.TrackData> td_array;
 			public Xnoise.TrackData[] track_dat;
 			public Gtk.TreeRowReference[] treerowrefs;
 			public GLib.Value? value_arg1;

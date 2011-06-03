@@ -1387,9 +1387,9 @@ struct _XnoiseWorkerJob {
 	GValue* value_arg1;
 	GValue* value_arg2;
 	void* p_arg;
+	XnoiseItem* item;
 	XnoiseItem* items;
 	gint items_length1;
-	GArray* td_array;
 	XnoiseTrackData** track_dat;
 	gint track_dat_length1;
 	XnoiseDndData* dnd_data;
@@ -1755,7 +1755,6 @@ void xnoise_media_browser_model_move_artist_iter_sorted (XnoiseMediaBrowserModel
 void xnoise_media_browser_model_move_album_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, const gchar* name);
 void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
 gboolean xnoise_media_browser_model_populate_model (XnoiseMediaBrowserModel* self);
-void xnoise_media_browser_model_queue_path_for_tracklist (XnoiseMediaBrowserModel* self, GtkTreePath* treepath);
 GType xnoise_dnd_data_get_type (void) G_GNUC_CONST;
 XnoiseDndData* xnoise_dnd_data_dup (const XnoiseDndData* self);
 void xnoise_dnd_data_free (XnoiseDndData* self);
@@ -1964,7 +1963,6 @@ gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
 void xnoise_track_list_model_set_reference_to_last (XnoiseTrackListModel* self);
 gchar** xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
 gchar* xnoise_track_list_model_get_uri_for_current_position (XnoiseTrackListModel* self);
-void xnoise_track_list_model_add_tracks (XnoiseTrackListModel* self, XnoiseTrackData** tda, int tda_length1, gboolean imediate_play);
 void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, gchar** uris, int uris_length1);
 XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_new (XnoiseTrackListModel* tlm);
 XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_construct (GType object_type, XnoiseTrackListModel* tlm);
