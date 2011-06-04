@@ -83,7 +83,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 			print("%s\n", e.message);
 			return;
 		}
-		job.track_dat = item_converter.to_trackdata(item, ref dbBr);;
+		job.track_dat = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext, ref dbBr);;
 		
 		if(job.track_dat != null) {
 			Idle.add( () => {

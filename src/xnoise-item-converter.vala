@@ -31,7 +31,7 @@
 public class Xnoise.ItemConverter : Object {
 
 	//this function uses the database so use it in the database thread, only
-	public TrackData[]? to_trackdata(Item? item, ref DbBrowser dbb) {
+	public TrackData[]? to_trackdata(Item? item, ref string searchtext, ref DbBrowser dbb) {
 		// Take input and convert to tracks
 		if(item == null)
 			return null;
@@ -44,7 +44,7 @@ public class Xnoise.ItemConverter : Object {
 			case ItemType.LOCAL_VIDEO_TRACK:
 				if(item.db_id > -1) {
 					result = {};//new Array<TrackData>.sized(true, true, sizeof(Item), 1);
-					TrackData? tmp = dbb.get_trackdata_by_titleid(item.db_id);
+					TrackData? tmp = dbb.get_trackdata_by_titleid(ref searchtext, item.db_id);
 					if(tmp == null)
 						break;
 					result += tmp;
@@ -53,14 +53,14 @@ public class Xnoise.ItemConverter : Object {
 			case ItemType.COLLECTION_CONTAINER_ALBUM:
 				if(item.db_id > -1) {
 					result = {};//new Array<TrackData>.sized(true, true, sizeof(Item), 8);
-					result = dbb.get_trackdata_by_albumid(item.db_id);
+					result = dbb.get_trackdata_by_albumid(ref searchtext, item.db_id);
 					break;
 				}
 				break;
 			case ItemType.COLLECTION_CONTAINER_ARTIST:
 				if(item.db_id > -1) {
 					result = {};
-					result = dbb.get_trackdata_by_artistid(item.db_id);
+					result = dbb.get_trackdata_by_artistid(ref searchtext, item.db_id);
 					break;
 				}
 				break;

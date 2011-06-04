@@ -64,12 +64,11 @@ namespace Xnoise {
 		public bool get_stream_for_id (int id, out string uri);
 		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 		public Xnoise.StreamData[] get_streams ();
-		public Xnoise.TrackData[] get_titles_with_data (string artist, string album);
 		public Xnoise.TrackData[] get_titles_with_mediatypes_and_ids (string artist, string album);
 		public int get_track_id_for_path (string uri);
-		public Xnoise.TrackData[]? get_trackdata_by_albumid (int32 id);
-		public Xnoise.TrackData[]? get_trackdata_by_artistid (int32 id);
-		public Xnoise.TrackData? get_trackdata_by_titleid (int32 id);
+		public Xnoise.TrackData[]? get_trackdata_by_albumid (ref string searchtext, int32 id);
+		public Xnoise.TrackData[]? get_trackdata_by_artistid (ref string searchtext, int32 id);
+		public Xnoise.TrackData? get_trackdata_by_titleid (ref string searchtext, int32 id);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public bool get_trackdata_for_uri (string? uri, out Xnoise.TrackData val);
@@ -238,7 +237,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class ItemConverter : GLib.Object {
 		public ItemConverter ();
-		public Xnoise.TrackData[]? to_trackdata (Xnoise.Item? item, ref Xnoise.DbBrowser dbb);
+		public Xnoise.TrackData[]? to_trackdata (Xnoise.Item? item, ref string searchtext, ref Xnoise.DbBrowser dbb);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public abstract class ItemHandler : GLib.Object {
