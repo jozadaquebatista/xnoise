@@ -447,6 +447,14 @@ typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 
 typedef struct _XnoiseMediaBrowserModel XnoiseMediaBrowserModel;
 typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
+typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
+
+#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLUMN (xnoise_media_browser_model_column_get_type ())
+
+#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_media_browser_model_collection_type_get_type ())
+
+#define XNOISE_TYPE_DND_DATA (xnoise_dnd_data_get_type ())
+typedef struct _XnoiseDndData XnoiseDndData;
 
 #define XNOISE_TYPE_MEDIA_BROWSER_FILTER_MODEL (xnoise_media_browser_filter_model_get_type ())
 #define XNOISE_MEDIA_BROWSER_FILTER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_FILTER_MODEL, XnoiseMediaBrowserFilterModel))
@@ -457,14 +465,6 @@ typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
 
 typedef struct _XnoiseMediaBrowserFilterModel XnoiseMediaBrowserFilterModel;
 typedef struct _XnoiseMediaBrowserFilterModelClass XnoiseMediaBrowserFilterModelClass;
-typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
-
-#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLUMN (xnoise_media_browser_model_column_get_type ())
-
-#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_media_browser_model_collection_type_get_type ())
-
-#define XNOISE_TYPE_DND_DATA (xnoise_dnd_data_get_type ())
-typedef struct _XnoiseDndData XnoiseDndData;
 typedef struct _XnoiseMediaBrowserFilterModelPrivate XnoiseMediaBrowserFilterModelPrivate;
 
 #define XNOISE_TYPE_MEDIA_IMPORTER (xnoise_media_importer_get_type ())
@@ -666,6 +666,7 @@ typedef enum  {
 
 typedef enum  {
 	XNOISE_ITEM_TYPE_UNKNOWN = 0,
+	XNOISE_ITEM_TYPE_LOADER,
 	XNOISE_ITEM_TYPE_LOCAL_AUDIO_TRACK,
 	XNOISE_ITEM_TYPE_LOCAL_VIDEO_TRACK,
 	XNOISE_ITEM_TYPE_STREAM,
@@ -1032,7 +1033,6 @@ struct _XnoiseMediaBrowser {
 	GtkTreeView parent_instance;
 	XnoiseMediaBrowserPrivate * priv;
 	XnoiseMediaBrowserModel* mediabrowsermodel;
-	XnoiseMediaBrowserFilterModel* filtermodel;
 };
 
 struct _XnoiseMediaBrowserClass {
@@ -1455,6 +1455,7 @@ gpointer xnoise_value_get_db_browser (const GValue* value);
 GType xnoise_db_browser_get_type (void) G_GNUC_CONST;
 XnoiseDbBrowser* xnoise_db_browser_new (GError** error);
 XnoiseDbBrowser* xnoise_db_browser_construct (GType object_type, GError** error);
+void xnoise_db_browser_cancel (XnoiseDbBrowser* self);
 void xnoise_db_browser_do_callback_transaction (XnoiseDbBrowser* self, XnoiseDbBrowserReaderCallback cb, void* cb_target);
 gint xnoise_db_browser_count_artists_with_search (XnoiseDbBrowser* self, gchar** searchtext);
 gint xnoise_db_browser_count_artists (XnoiseDbBrowser* self);
@@ -1497,11 +1498,11 @@ void xnoise_item_free (XnoiseItem* self);
 void xnoise_item_copy (const XnoiseItem* self, XnoiseItem* dest);
 void xnoise_item_destroy (XnoiseItem* self);
 XnoiseItem* xnoise_db_browser_get_some_artists (XnoiseDbBrowser* self, gint limit, gint offset, int* result_length1);
-gchar** xnoise_db_browser_get_artists (XnoiseDbBrowser* self, int* result_length1);
+XnoiseItem* xnoise_db_browser_get_artists_with_search (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_trackdata_by_albumid (XnoiseDbBrowser* self, gint32 id, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_trackdata_by_artistid (XnoiseDbBrowser* self, gint32 id, int* result_length1);
 XnoiseTrackData* xnoise_db_browser_get_trackdata_by_titleid (XnoiseDbBrowser* self, gint32 id);
-XnoiseItem* xnoise_db_browser_get_albums (XnoiseDbBrowser* self, const gchar* artist, int* result_length1);
+XnoiseItem* xnoise_db_browser_get_albums_with_search (XnoiseDbBrowser* self, gchar** searchtext, gint32 id, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_titles_with_mediatypes_and_ids (XnoiseDbBrowser* self, const gchar* artist, const gchar* album, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_titles_with_data (XnoiseDbBrowser* self, const gchar* artist, const gchar* album, int* result_length1);
 GType xnoise_db_writer_get_type (void) G_GNUC_CONST;
@@ -1730,14 +1731,12 @@ void xnoise_main_window_set_fullscreenwindowvisible (XnoiseMainWindow* self, gbo
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
 GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
-GType xnoise_media_browser_filter_model_get_type (void) G_GNUC_CONST;
 XnoiseMediaBrowser* xnoise_media_browser_new (void);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_update_view (XnoiseMediaBrowser* self);
 void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
-void xnoise_media_browser_on_row_collapsed (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
 void xnoise_media_browser_resize_line_width (XnoiseMediaBrowser* self, gint new_width);
 gboolean xnoise_media_browser_get_use_linebreaks (XnoiseMediaBrowser* self);
 void xnoise_media_browser_set_use_linebreaks (XnoiseMediaBrowser* self, gboolean value);
@@ -1755,6 +1754,7 @@ void xnoise_media_browser_model_move_artist_iter_sorted (XnoiseMediaBrowserModel
 void xnoise_media_browser_model_move_album_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, const gchar* name);
 void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
 gboolean xnoise_media_browser_model_populate_model (XnoiseMediaBrowserModel* self);
+void xnoise_media_browser_model_load_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
 GType xnoise_dnd_data_get_type (void) G_GNUC_CONST;
 XnoiseDndData* xnoise_dnd_data_dup (const XnoiseDndData* self);
 void xnoise_dnd_data_free (XnoiseDndData* self);
@@ -1762,6 +1762,7 @@ XnoiseDndData* xnoise_media_browser_model_get_dnd_data_for_path (XnoiseMediaBrow
 XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
 gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserModel* self);
+GType xnoise_media_browser_filter_model_get_type (void) G_GNUC_CONST;
 XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_new (XnoiseMediaBrowserModel* mbm);
 XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_construct (GType object_type, XnoiseMediaBrowserModel* mbm);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;

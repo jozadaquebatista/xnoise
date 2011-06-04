@@ -48,11 +48,12 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate void ReaderCallback (Sqlite.Database database);
 		public DbBrowser () throws Xnoise.DbError;
+		public void cancel ();
 		public int count_artists ();
 		public int count_artists_with_search (ref string searchtext);
 		public void do_callback_transaction (Xnoise.DbBrowser.ReaderCallback cb);
-		public Xnoise.Item[] get_albums (string artist);
-		public string[] get_artists ();
+		public Xnoise.Item[] get_albums_with_search (ref string searchtext, int32 id);
+		public Xnoise.Item[] get_artists_with_search (ref string searchtext);
 		public string[] get_lastused_uris ();
 		public string? get_local_image_path_for_track (ref string? uri);
 		public string[] get_media_files ();
@@ -354,11 +355,9 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
-		public Xnoise.MediaBrowserFilterModel filtermodel;
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
 		public MediaBrowser ();
 		public bool change_model_data ();
-		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_searchtext_changed ();
 		public void resize_line_width (int new_width);
@@ -401,6 +400,7 @@ namespace Xnoise {
 		public void insert_stream_sorted (Xnoise.TrackData[] tda);
 		public void insert_trackdata_sorted (Xnoise.TrackData[] tda);
 		public void insert_video_sorted (Xnoise.TrackData[] tda);
+		public void load_children (ref Gtk.TreeIter iter);
 		public void move_album_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_artist_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_title_iter_sorted (ref Gtk.TreeIter org_iter, ref Xnoise.TrackData td);
@@ -775,6 +775,7 @@ namespace Xnoise {
 	[CCode (cprefix = "XNOISE_ITEM_TYPE_", cheader_filename = "xnoise.h")]
 	public enum ItemType {
 		UNKNOWN,
+		LOADER,
 		LOCAL_AUDIO_TRACK,
 		LOCAL_VIDEO_TRACK,
 		STREAM,

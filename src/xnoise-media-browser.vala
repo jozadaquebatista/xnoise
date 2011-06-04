@@ -41,7 +41,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private Gtk.Menu menu;
 	
 	public MediaBrowserModel mediabrowsermodel;
-	public MediaBrowserFilterModel filtermodel;
+//	public MediaBrowserFilterModel filtermodel;
 //	public TreeModelSort sortmodel;
 	//public bool drag_from_mediabrowser = false;
 	
@@ -114,7 +114,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.xn = Main.instance;
 		par.iparams_register(this);
 		mediabrowsermodel = new MediaBrowserModel();
-		filtermodel = new MediaBrowserFilterModel(mediabrowsermodel);
+//		filtermodel = new MediaBrowserFilterModel(mediabrowsermodel);
 //		sortmodel = new TreeModelSort.with_model(filtermodel);
 //		sortmodel.set_sort_column_id(MediaBrowserModel.Column.VIS_TEXT, SortType.ASCENDING);
 		setup_view();
@@ -157,7 +157,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	// with GLib.Idle
 	private bool populate_model() {
 		bool res = mediabrowsermodel.populate_model();
-		this.set_model(filtermodel);//mediabrowsermodel);
+		this.set_model(mediabrowsermodel);//mediabrowsermodel);
 		return res;
 	}
 
@@ -267,13 +267,13 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			case 3: {
 				MediaBrowserModel.CollectionType ct = MediaBrowserModel.CollectionType.UNKNOWN;
 
-				TreePath tp = filtermodel.convert_path_to_child_path(treepath);
+				//TreePath tp = filtermodel.convert_path_to_child_path(treepath);
 				TreeIter iter;
-				this.mediabrowsermodel.get_iter(out iter, tp);
+				this.mediabrowsermodel.get_iter(out iter, treepath);
 				this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.COLL_TYPE, ref ct);
 				if(ct != MediaBrowserModel.CollectionType.HIERARCHICAL)
 					return false;
-				treerowref = new TreeRowReference(this.mediabrowsermodel, tp);
+				treerowref = new TreeRowReference(this.mediabrowsermodel, treepath);
 				rightclick_menu_popup(treepath.get_depth(), e.time);
 				return false;
 			}
@@ -409,9 +409,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		DndData[] ids = {};
 		if(treepaths.length() < 1)
 			return;
-		foreach(unowned TreePath treepath in treepaths) { 
-			TreePath tp = filtermodel.convert_path_to_child_path(treepath);
-			DndData[] l = mediabrowsermodel.get_dnd_data_for_path(ref tp); 
+		foreach(TreePath treepath in treepaths) { 
+			//TreePath tp = filtermodel.convert_path_to_child_path(treepath);
+			DndData[] l = mediabrowsermodel.get_dnd_data_for_path(ref treepath); 
 			foreach(DndData u in l) {
 				//print("dnd data get %d  %s\n", u.db_id, u.mediatype.to_string());
 				ids += u; // this is necessary, if more than one path can be selected
@@ -461,7 +461,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		set_model(null);
 		mediabrowsermodel.clear();
 		mediabrowsermodel.populate_model();
-		update_view();
+//		update_view();
 		this.set_sensitive(true);
 		return false;
 	}
@@ -470,42 +470,68 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	   expanded rows are kept as well as the scrollbar position */
 	public bool update_view() {
 		double scroll_position = xn.main_window.mediaBrScrollWin.vadjustment.value;
-		this.row_collapsed.disconnect(on_row_collapsed);
-		this.row_expanded.disconnect(on_row_expanded);
+//		this.row_collapsed.disconnect(on_row_collapsed);
+//		this.row_expanded.disconnect(on_row_expanded);
 		this.set_model(null);
-		this.set_model(filtermodel);//mediabrowsermodel);
+		this.set_model(mediabrowsermodel);
 		//TODO: delete the expanion list after import
-		foreach(TreePath tp in this.expansion_list)
-			this.expand_row(tp, false);
+//		foreach(TreePath tp in this.expansion_list)
+//			this.expand_row(tp, false);
 		xn.main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);
 		xn.main_window.mediaBrScrollWin.vadjustment.value_changed();
-		this.row_collapsed.connect(on_row_collapsed);
-		this.row_expanded.connect(on_row_expanded);
+//		this.row_collapsed.connect(on_row_collapsed);
+//		this.row_expanded.connect(on_row_expanded);
 		return false;
 	}
 		
 	
 	public void on_row_expanded(TreeIter iter, TreePath path) {
-		this.expansion_list.append(path);
+		print("on_row_expanded\n");
+		mediabrowsermodel.load_children(ref iter);
 	}
 	
-	public void on_row_collapsed(TreeIter iter, TreePath path) {
-		uint list_iter = 0;
-		foreach(TreePath tp in this.expansion_list) {
-			if(path.compare(tp) == 0) {
-				this.expansion_list.delete_link(this.expansion_list.nth(list_iter));
-				break;
-			}
-			list_iter++;
-		}	
-	}
+//	private remove_loader_child(ref iter) {
+//		print("remove_loader_child\n");
+//	}
+//	
+//	private bool row_is_resolved(ref TreeIter iter) {
+//		if(mediabrowsermodel.iter_n_children(iter) != 1)
+//			return true;
+//		TreeIter child;
+//		Item? item = Item(ItemType.UNKNOWN);
+//		mediabrowsermodel.iter_nth_child(out child, iter, 0);
+//		mediabrowsermodel.get(child, MediaBrowserModel.Column.ITEM, out item);
+//		return (item.type != ItemType.LOADER);
+////		for(int i = 0; i < mediabrowsermodel.iter_n_children(iter); i++) {
+////			this.iter_nth_child(out child, iter, i);
+////			this.get(child, MediaBrowserModel.Column.ITEM, ref item);
+////			text = text != null ? text.down().strip() : "";
+////			if(strcmp(text, artist != null ? artist.down().strip() : "") == 0) {
+////				//found artist
+////				break;
+////			}
+////			if(i == (this.iter_n_children(null) - 1))
+////				return;
+////		}
+//	}
+
+//	public void on_row_collapsed(TreeIter iter, TreePath path) {
+//		uint list_iter = 0;
+//		foreach(TreePath tp in this.expansion_list) {
+//			if(path.compare(tp) == 0) {
+//				this.expansion_list.delete_link(this.expansion_list.nth(list_iter));
+//				break;
+//			}
+//			list_iter++;
+//		}	
+//	}
 
 	private void setup_view() {
 		
 		//we keep track of which rows are expanded, so we can expand them again
 		//when the view is updated
 		expansion_list = new List<TreePath>();
-		this.row_collapsed.connect(on_row_collapsed);
+//		this.row_collapsed.connect(on_row_collapsed);
 		this.row_expanded.connect(on_row_expanded);
 		
 		this.set_size_request (300,500);
@@ -516,7 +542,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
-
+		
 		var column = new TreeViewColumn();
 
 		column.pack_start(pixbufRenderer, false);

@@ -93,8 +93,21 @@ public class Xnoise.DbBrowser {
 		if(this.db == null) {
 			throw new DbError.FAILED("failed messge");
 		}
+		db.progress_handler(5, progress_handler);
 	}
 	
+	public void cancel() {
+		abort = true;
+	}
+	
+	private bool abort = false;
+	private int progress_handler() {
+		if(abort) {
+			abort = false;
+			return 1;
+		}
+		return 0;
+	}
 	//~DbBrowser() {
 	//	print("dtor db browser\n");
 	//}
@@ -568,19 +581,51 @@ public class Xnoise.DbBrowser {
 		return val;
 	}
 
+	private static const string STMT_GET_ARTISTS_WITH_SEARCH =
+		"SELECT DISTINCT ar.name, ar.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY ar.name ASC"; // LOWER
+
 	private static const string STMT_GET_ARTISTS =
-		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id ORDER BY LOWER(ar.name) DESC";
-	public string[] get_artists() {
-		string[] val = {};
-		Statement stmt;
-		this.db.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
-		stmt.reset();
+		"SELECT DISTINCT ar.name, ar.id  FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id ORDER BY ar.name ASC"; //LOWER(ar.name)
+	
+	public Item[] get_artists_with_search(ref string searchtext) {
 		
-		while(stmt.step() == Sqlite.ROW)
-			val += stmt.column_text(0);
+		Item[] val = {};
+		Statement stmt;
+		if(searchtext != "") {
+			this.db.prepare_v2(STMT_GET_ARTISTS_WITH_SEARCH, -1, out stmt);
+			stmt.reset();
+			if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+				this.db_error();
+				return val;
+			}
+		}
+		else {
+			this.db.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
+			stmt.reset();
+		}
+		
+		while(stmt.step() == Sqlite.ROW) {
+			Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, stmt.column_int(1));
+			i.text = stmt.column_text(0);
+			val += i;
+		}
 		
 		return val;
 	}
+
+//	public string[] get_artists() {
+//		string[] val = {};
+//		Statement stmt;
+//		this.db.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
+//		stmt.reset();
+//		
+//		while(stmt.step() == Sqlite.ROW)
+//			val += stmt.column_text(0);
+//		
+//		return val;
+//	}
 
 	private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
 		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND al.id = ? ORDER BY t.tracknumber ASC, t.title ASC";
@@ -670,17 +715,53 @@ public class Xnoise.DbBrowser {
 		return td;
 	}
 
+//	public Item[] get_albums(string artist) {
+//		Item[] val = {};
+//		Statement stmt;
+//		
+//		this.db.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
+//		
+//		stmt.reset();
+//		if((stmt.bind_text(1, artist)!=Sqlite.OK)) {
+//			this.db_error();
+//			return val;
+//		}
+//		while(stmt.step() == Sqlite.ROW) {
+//			Item i = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, stmt.column_int(1));
+//			i.text = stmt.column_text(0);
+//			val += i;
+//		}
+//		return val;
+//	}
+
+	private static const string STMT_GET_ALBUMS_WITH_SEARCH =
+		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t WHERE ar.id = al.artist AND ar.id = t.artist AND ar.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY al.name ASC";
+
 	private static const string STMT_GET_ALBUMS =
-		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE al.artist = ar.id AND ar.name = ? ORDER BY LOWER(al.name) DESC";
-	public Item[] get_albums(string artist) {
+		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY al.name DESC";
+
+	public Item[] get_albums_with_search(ref string searchtext, int32 id) {
 		Item[] val = {};
 		Statement stmt;
 		
-		this.db.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
-		
-		stmt.reset();
-		if((stmt.bind_text(1, artist)!=Sqlite.OK)) {
-			this.db_error();
+		if(searchtext != "") {
+			this.db.prepare_v2(STMT_GET_ALBUMS_WITH_SEARCH, -1, out stmt);
+			stmt.reset();
+			if((stmt.bind_int (1, id) != Sqlite.OK) ||
+			   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+				this.db_error();
+				return val;
+			}
+		}
+		else {
+			this.db.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
+			stmt.reset();
+			if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+				this.db_error();
+				return val;
+			}
 		}
 		while(stmt.step() == Sqlite.ROW) {
 			Item i = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, stmt.column_int(1));
