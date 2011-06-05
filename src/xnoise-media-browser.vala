@@ -462,7 +462,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		mediabrowsermodel.filter();
 //		mediabrowsermodel.populate_model();
 //		update_view();
-		this.set_sensitive(true);
+
+//		this.set_sensitive(true);
 		return false;
 	}
 	
@@ -470,6 +471,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	   expanded rows are kept as well as the scrollbar position */
 	public bool update_view() {
 		double scroll_position = xn.main_window.mediaBrScrollWin.vadjustment.value;
+//print("scroll_position: %.3lf\n", scroll_position);
 //		this.row_collapsed.disconnect(on_row_collapsed);
 //		this.row_expanded.disconnect(on_row_expanded);
 		this.set_model(null);

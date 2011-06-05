@@ -129,7 +129,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //		return 0;
 //	}
 	
-	
 	public void filter() {
 		print("filter\n");
 		this.clear();
@@ -709,6 +708,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private Cancellable populate_model_cancellable = null;
 	public bool populate_model() {
+		if(populating_model)
+			return false;
 		populating_model = true;
 		//print("populate_model\n");
 		if(populate_model_cancellable == null) {
@@ -728,7 +729,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //			populating_model = false;
 //		});
 //		worker.push_job(job);
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.artist_import_job);
+		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.populate_artists_job);
 		job.cancellable = populate_model_cancellable;
 		job.finished.connect( (j) => { 
 			populating_model = false;
@@ -839,8 +840,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	// used for populating the data model
-	private void artist_import_job(Worker.Job job) {
-		print("artist_import_job\n");
+	private void populate_artists_job(Worker.Job job) {
+		print("populate_artists_job\n");
 		
 		if(job.cancellable.is_cancelled())
 			return;
@@ -943,7 +944,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         );
 				Gtk.TreePath p1 = this.get_path(iter_album);
 				TreeRowReference treerowref = new TreeRowReference(this, p1);
-				var job_title = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.import_title_job);
+				var job_title = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.populate_title_job);
 //				job_title.cancellable = populate_model_cancellable;
 				job_title.set_arg("treerowref", treerowref);
 				job_title.set_arg("artist", artist.db_id);
@@ -976,17 +977,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		this.iter_nth_child(out child, iter, 0);
 		this.get(child, MediaBrowserModel.Column.ITEM, out item);
 		return (item.type != ItemType.LOADER);
-//		for(int i = 0; i < this.iter_n_children(iter); i++) {
-//			this.iter_nth_child(out child, iter, i);
-//			this.get(child, Column.ITEM, ref item);
-//			text = text != null ? text.down().strip() : "";
-//			if(strcmp(text, artist != null ? artist.down().strip() : "") == 0) {
-//				//found artist
-//				break;
-//			}
-//			if(i == (this.iter_n_children(null) - 1))
-//				return;
-//		}
 	}
 
 	private void update_album_image() {
@@ -1036,7 +1026,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 
 	//Used for populating model
-	private void import_title_job(Worker.Job job) {
+	private void populate_title_job(Worker.Job job) {
 		int32 al = (int32)job.get_arg("album");
 		job.track_dat = db_browser.get_trackdata_by_albumid(ref searchtext, al);
 		Idle.add( () => {
