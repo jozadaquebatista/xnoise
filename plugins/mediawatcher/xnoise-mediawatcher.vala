@@ -114,15 +114,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 	/* creates file monitors for all directories in the media path */ 
 	private void setup_monitors_job(Worker.Job job) {
 		monitor_list = new List<DataPair>();
-		DbBrowser dbb = null;
-		try {
-			dbb = new DbBrowser();
-		}
-		catch(DbError e) {
-			print("%s\n", e.message);
-			return;
-		}
-		var mfolders = dbb.get_media_folders();
+		
+		var mfolders = db_browser.get_media_folders();
 		
 		foreach(string mfolder in mfolders)
 			setup_monitor_for_path(mfolder);
@@ -205,33 +198,17 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		//(we might need to store the directory of files in the db)
 		File file = (File)job.get_arg("file");
 		print("File deleted: \'%s\'\n", file.get_path());
-		DbWriter dbw = null;
-		if(dbw == null) {
-			try {
-				dbw = new DbWriter();
-			}
-			catch(Error e) {
-				print("%s\n", e.message);
-				return;
-			}
-		}
+
 		if(monitor_in_list(file.get_path())) {
 			print("%s was a directory\n", file.get_path());
-			DbBrowser dbb = null;
-			try {
-				dbb = new DbBrowser();
-			}
-			catch(DbError e) {
-				print("%s\n", e.message);
-				return;
-			}
+			
 			
 
 			var search_string = file.get_uri();
 			search_string = search_string.replace("%", "\\%");
 			search_string = search_string.replace("_", "\\_");
 			search_string += "/%";
-			var results = dbb.get_uris(search_string);
+			var results = db_browser.get_uris(search_string);
 			foreach (string a in results) {
 				print("deleting %s from db\n", a);
 				dbw.delete_uri(a);
@@ -615,16 +592,9 @@ private class Xnoise.ImportInfoBar : GLib.Object {
 			}); 
 		}
 		else {
-			DbBrowser dbb = null;
-			try {
-				dbb = new DbBrowser();
-			}
-			catch(DbError e) {
-				print("%s\n", e.message);
-				return false;
-			}
+			
 			TrackData data;
-			dbb.get_trackdata_for_uri(last_uri, out data);
+			db_browser.get_trackdata_for_uri(last_uri, out data);
 			if(bar_label.get_realized())
 				bar_label.set_markup("<b>" + data.artist + " - "+ data.title + "</b> has been added to your media library");
 			last_uri = null;

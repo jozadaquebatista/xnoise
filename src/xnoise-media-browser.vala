@@ -459,8 +459,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	public bool change_model_data() {
 		set_model(null);
-		mediabrowsermodel.clear();
-		mediabrowsermodel.populate_model();
+		mediabrowsermodel.filter();
+//		mediabrowsermodel.populate_model();
 //		update_view();
 		this.set_sensitive(true);
 		return false;

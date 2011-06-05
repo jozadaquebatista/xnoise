@@ -556,14 +556,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 	private void insert_dnd_data_job(Worker.Job job) {
 		DndData[] ids = job.dnd_data; //TODO !!!
-		DbBrowser dbBr = null;
-		try {
-			dbBr = new DbBrowser();
-		}
-		catch(DbError e) {
-			print("%s\n", e.message);
-			return;
-		}
 		bool is_first = true;
 		TreeViewDropPosition drop_pos_1 = (TreeViewDropPosition)job.get_arg("drop_pos");
 		TreeRowReference row_ref = (TreeRowReference)job.get_arg("row_ref");
@@ -573,7 +565,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		TrackData[] localarray = {};
 		foreach(DndData ix in ids) {
 			Item i = Item(ix.mediatype, null, ix.db_id);
-			TrackData[]? tmp = item_converter.to_trackdata(i, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext, ref dbBr);
+			TrackData[]? tmp = item_converter.to_trackdata(i, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
 			if(tmp != null) {
 				foreach(TrackData tmpdata in tmp) {
 					if(tmpdata == null) {
