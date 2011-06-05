@@ -1652,7 +1652,7 @@ void xnoise_info_bar_update_extra_widget (XnoiseInfoBar* self, GtkWidget* widget
 GtkWidget* xnoise_info_bar_get_extra_widget (XnoiseInfoBar* self);
 void xnoise_item_init (XnoiseItem *self, XnoiseItemType _type, const gchar* _uri, gint32 _db_id);
 GType xnoise_item_converter_get_type (void) G_GNUC_CONST;
-XnoiseTrackData** xnoise_item_converter_to_trackdata (XnoiseItemConverter* self, XnoiseItem* item, gchar** searchtext, XnoiseDbBrowser** dbb, int* result_length1);
+XnoiseTrackData** xnoise_item_converter_to_trackdata (XnoiseItemConverter* self, XnoiseItem* item, gchar** searchtext, int* result_length1);
 XnoiseItemConverter* xnoise_item_converter_new (void);
 XnoiseItemConverter* xnoise_item_converter_construct (GType object_type);
 extern XnoiseItemHandlerManager* xnoise_uri_handler_manager;
@@ -1771,7 +1771,6 @@ void xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir
 void xnoise_media_importer_add_local_tags_finish (XnoiseMediaImporter* self, GAsyncResult* _res_);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
-XnoiseDbWriter* xnoise_media_importer_get_dbw (XnoiseMediaImporter* self);
 GType xnoise_params_get_type (void) G_GNUC_CONST;
 extern XnoiseParams* xnoise_par;
 extern XnoiseGlobalAccess* xnoise_global;
@@ -1782,6 +1781,8 @@ extern XnoiseMediaImporter* xnoise_media_importer;
 extern XnoiseItemHandlerManager* xnoise_item_handler_manager;
 extern XnoiseItemConverter* xnoise_item_converter;
 extern GMainContext* xnoise_mc;
+extern XnoiseDbBrowser* xnoise_db_browser;
+extern XnoiseDbWriter* xnoise_db_writer;
 void xnoise_initialize (gboolean* is_first_start);
 gchar* xnoise_escape_album_for_local_folder_search (const gchar* _artist, const gchar* album_name);
 gchar* xnoise_escape_for_local_folder_search (const gchar* value);

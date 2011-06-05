@@ -89,18 +89,11 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	private void query_trackdata_job(Worker.Job job) {
 		// callback for query in other thread
 		TrackData td = null;
-		DbBrowser dbb = null;
-		try {
-			dbb = new DbBrowser();
-		}
-		catch(DbError e) {
-			print("%s\n", e.message);
-			return;
-		}		
+				
 		
 		int dbid       = (int)job.value_arg1;
 		
-		dbb.get_trackdata_for_id(dbid, out td);
+		db_browser.get_trackdata_for_id(dbid, out td);
 		
 		td_old = copy_trackdata(td);
 		

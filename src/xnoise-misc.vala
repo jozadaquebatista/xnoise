@@ -40,6 +40,8 @@ namespace Xnoise {
 	public static ItemHandlerManager item_handler_manager = null;
 	public static ItemConverter item_converter = null;
 	public static MainContext mc;
+	public static DbBrowser db_browser;
+	public static DbWriter db_writer;
 	/*
 	 * This function is used to create static instances of Params
 	 * and GlobalInfo in the xnoise namespace.

@@ -75,15 +75,8 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	private void add_item_job(Worker.Job job) {
 		Item? item = job.item;//(Item?)job.get_arg("item");
 		//print("item.type is %s\n", item.type.to_string());
-		DbBrowser dbBr = null;
-		try {
-			dbBr = new DbBrowser();
-		}
-		catch(DbError e) {
-			print("%s\n", e.message);
-			return;
-		}
-		job.track_dat = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext, ref dbBr);;
+		
+		job.track_dat = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);;
 		
 		if(job.track_dat != null) {
 			Idle.add( () => {

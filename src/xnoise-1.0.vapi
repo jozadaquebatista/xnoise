@@ -237,7 +237,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class ItemConverter : GLib.Object {
 		public ItemConverter ();
-		public Xnoise.TrackData[]? to_trackdata (Xnoise.Item? item, ref string searchtext, ref Xnoise.DbBrowser dbb);
+		public Xnoise.TrackData[]? to_trackdata (Xnoise.Item? item, ref string searchtext);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public abstract class ItemHandler : GLib.Object {
@@ -411,7 +411,6 @@ namespace Xnoise {
 		public MediaImporter ();
 		public async void add_local_tags (GLib.File dir, Xnoise.Worker.Job job);
 		public string? get_uri_for_item_id (int32 id);
-		public Xnoise.DbWriter? dbw { get; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {
@@ -810,6 +809,10 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text, string providername);
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.DbBrowser db_browser;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.DbWriter db_writer;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalAccess global;
 	[CCode (cheader_filename = "xnoise.h")]

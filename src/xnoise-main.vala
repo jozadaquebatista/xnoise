@@ -44,9 +44,18 @@ public class Xnoise.Main : GLib.Object {
 		bool is_first_start;
 		Xnoise.initialize(out is_first_start);
 		
+		_instance = this;
+		
 		check_database_and_tables();
 		
-		_instance = this;
+		try {
+			db_browser = new DbBrowser();
+			db_writer  = new DbWriter();
+		}
+		catch(DbError e) {
+			print("%s", e.message);
+			return;
+		}
 		
 		gPl = new GstPlayer();
 		

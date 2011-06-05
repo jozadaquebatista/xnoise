@@ -312,24 +312,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void add_lastused_titles_to_tracklist(Worker.Job job) {
-		DbBrowser dbBr = null;
-		try {
-			dbBr = new DbBrowser();
-		}
-		catch(DbError e) {
-			print("%s\n", e.message);
-			return;
-		}
-		if(dbBr == null)
-			return;
-		string[] uris = dbBr.get_lastused_uris();
+		string[] uris = db_browser.get_lastused_uris();
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
 		for(int i = 0; i < uris.length; i++) {
 			File file = File.new_for_uri(uris[i]);
 			if(!(file.get_uri_scheme() in global.remote_schemes)) {
 				TrackData td;
-				if(dbBr.get_trackdata_for_uri(uris[i], out td)) {
+				if(db_browser.get_trackdata_for_uri(uris[i], out td)) {
 					string current_uri = uris[i];
 					Idle.add( () => {
 						this.trackList.tracklistmodel.insert_title(null,
@@ -407,7 +397,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			}
 			else {
 				TrackData td;
-				if(dbBr.get_trackdata_for_stream(uris[i], out td)) {
+				if(db_browser.get_trackdata_for_stream(uris[i], out td)) {
 					string current_uri = uris[i];
 					Idle.add( () => {
 						this.trackList.tracklistmodel.insert_title(null,
