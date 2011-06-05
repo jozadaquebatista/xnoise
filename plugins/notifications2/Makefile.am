@@ -66,6 +66,7 @@ EXTRA_DIST = \
     $(NULL)
 
 DISTCLEANFILES = \
+    *.xnplugin \
     *.c \
     libnotifications_la_vala.stamp \
     Makefile.in \

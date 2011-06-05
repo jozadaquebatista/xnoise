@@ -69,6 +69,7 @@ EXTRA_DIST = \
 
 DISTCLEANFILES = \
     *.c \
+    *.xnplugin \
     libchartlyrics_la_vala.stamp \
     Makefile.in \
     $(NULL)

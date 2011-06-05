@@ -95,7 +95,7 @@ public class Xnoise.DatabaseLyricsPlugin : GLib.Object, IPlugin, ILyricsProvider
 private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 	
 	private Cancellable cancellable = new Cancellable();
-	private DbWriter dbw = null;
+	
 	private static const string STMT_FIND_TABLE =
 		"SELECT name FROM sqlite_master WHERE type='table';";
 	private static const string INSERT_LYRICS =
@@ -151,11 +151,11 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 	}
 	
 	private void check_table_cb(Worker.Job job) {
-		media_importer.dbw.do_callback_transaction(create_table_dbcb);
+		db_writer.do_callback_transaction(create_table_dbcb);
 	}
 	
 	private void add_lyrics_entry_cb(Worker.Job job) {
-		media_importer.dbw.do_callback_transaction(write_txt_dbcb);
+		db_writer.do_callback_transaction(write_txt_dbcb);
 	}
 	
 	private void create_table_dbcb(Sqlite.Database db) {
@@ -178,9 +178,6 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 					stderr.printf("exec_stmnt_string error: %s", errormsg);
 				}
 			}
-		}
-		lock(dbw) {
-			dbw = null;
 		}
 	}
 
@@ -216,9 +213,6 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 				return;
 			}
 		}
-		lock(dbw) {
-			dbw = null;
-		}
 	}
 }
 
@@ -236,7 +230,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 	private unowned LyricsLoader loader;
 	private LyricsFetchedCallback cb = null;
 	private Cancellable cancellable = new Cancellable();
-	private DbBrowser dbb = null;
+
 	
 	public DatabaseLyrics(LyricsLoader _loader, Plugin _owner, string artist, string title, LyricsFetchedCallback _cb) {
 		this.artist = artist;
@@ -332,22 +326,12 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 				});
 			}
 		}
-		lock(dbb) {
-			dbb = null;
-		}
+		//lock(dbb) {
+		//	dbb = null;
+		//}
 	}
 
 	private void get_lyrics_from_db(Worker.Job job) {
-		try {
-			lock(dbb) {
-				if(dbb == null)
-					dbb = new DbBrowser();
-			}
-		}
-		catch(DbError e) {
-			print("%s\n", e.message);
-			return;
-		}
-		dbb.do_callback_transaction(dbcb);
+		db_browser.do_callback_transaction(dbcb);
 	}
 }

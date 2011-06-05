@@ -31,24 +31,9 @@
 using Gtk;
 
 public class Xnoise.MediaImporter : GLib.Object {
-	private DbWriter? _dbw;
-	public DbWriter? dbw {
-		get {
-			lock(_dbw) {
-				if(_dbw == null) {
-					try {
-						_dbw = new DbWriter();
-					}
-					catch(Error e) {
-						print("%s\n", e.message);
-						return null;
-					}
-				}
-			}
-			return _dbw;
-		}
-	}
 
+	private static int FILE_COUNT = 10;
+	
 	internal void reimport_media_groups() {
 		Worker.Job job;
 		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, media_importer.reimport_media_groups_job);
@@ -57,25 +42,17 @@ public class Xnoise.MediaImporter : GLib.Object {
 	
 	private void reimport_media_groups_job(Worker.Job job) {
 		Main.instance.main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
-		DbBrowser dbb = null;
-		try {
-			dbb = new DbBrowser();
-		}
-		catch(DbError e) {
-			print("%s\n", e.message);
-			return;
-		}
 		
 		//add folders
-		string[] mfolders = dbb.get_media_folders();
+		string[] mfolders = db_browser.get_media_folders();
 		job.set_arg("mfolders", mfolders);
 		
 		//add files
-		string[] mfiles = dbb.get_media_files();
+		string[] mfiles = db_browser.get_media_files();
 		job.set_arg("mfiles", mfiles);
 		
 		//add streams to list
-		StreamData[] streams = dbb.get_streams();
+		StreamData[] streams = db_browser.get_streams();
 		
 		string[] strms = {};
 		
@@ -105,39 +82,39 @@ public class Xnoise.MediaImporter : GLib.Object {
 		if(global.media_import_in_progress == true)
 			return;
 		
-		dbw.begin_transaction();
+		db_writer.begin_transaction();
 		
-		dbw.update_title(item_id, ref td);	
+		db_writer.update_title(item_id, ref td);	
 			
-		dbw.commit_transaction();
+		db_writer.commit_transaction();
 	}
 	
 	internal void update_artist_name(string old_name, string name) {
 		if(global.media_import_in_progress == true)
 			return;
-		dbw.begin_transaction();
-		dbw.update_artist_name(name, old_name);
-		dbw.commit_transaction();
+		db_writer.begin_transaction();
+		db_writer.update_artist_name(name, old_name);
+		db_writer.commit_transaction();
 	}
 
 	internal void update_album_name(string artist, string old_name, string name) {
 		if(global.media_import_in_progress == true)
 			return;
-		dbw.begin_transaction();
-		dbw.update_album_name(artist, name, old_name);
-		dbw.commit_transaction();
+		db_writer.begin_transaction();
+		db_writer.update_album_name(artist, name, old_name);
+		db_writer.commit_transaction();
 	}
 	
 	internal string[] get_uris_for_artistalbum(string artist, string album) {
-		return dbw.get_uris_for_artistalbum(artist, album);
+		return db_writer.get_uris_for_artistalbum(artist, album);
 	}
 	
 	internal string[] get_uris_for_artist(string artist) {
-		return dbw.get_uris_for_artist(artist);
+		return db_writer.get_uris_for_artist(artist);
 	}
 	
 	public string? get_uri_for_item_id(int32 id) {
-		return dbw.get_uri_for_item_id(id);
+		return db_writer.get_uri_for_item_id(id);
 	}
 
 	internal void import_media_groups(string[] list_of_streams, string[] list_of_files, string[] list_of_folders, uint msg_id, bool full_rescan = true, bool interrupted_populate_model = false) {
@@ -171,21 +148,9 @@ public class Xnoise.MediaImporter : GLib.Object {
 	}
 
 	internal void write_final_tracks_to_db_job(Worker.Job job) {
-//		DbWriter dbw = null;
-//		try {
-//			dbw = new DbWriter();
-//		}
-//		catch(Error e) {
-//			print("%s\n", e.message);
-//			return;
-//		}
-//		
-//		if(dbw == null)
-//			return;
-//		
 		string[] final_tracklist = (string[])job.get_arg("final_tracklist");
 		try {
-			dbw.write_final_tracks_to_db(final_tracklist);
+			db_writer.write_final_tracks_to_db(final_tracklist);
 		}
 		catch(Error err) {
 			print("%s\n", err.message);
@@ -199,7 +164,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 	internal void add_single_file(string uri) {
 		print("add single file %s\n", uri);
 		
-		dbw.begin_transaction();
+		db_writer.begin_transaction();
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
 		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
@@ -218,12 +183,13 @@ public class Xnoise.MediaImporter : GLib.Object {
 		if(psAudio.match_string(mime)) {
 			string uri_lc = uri.down();
 			if(!(uri_lc.has_suffix(".m3u")||uri_lc.has_suffix(".pls")||uri_lc.has_suffix(".asx")||uri_lc.has_suffix(".xspf")||uri_lc.has_suffix(".wpl"))) {
-				int idbuffer = dbw.uri_entry_exists(file.get_uri());
+				int idbuffer = db_writer.uri_entry_exists(file.get_uri());
 				if(idbuffer== -1) {
 					var tr = new TagReader();
 					TrackData td = tr.read_tag(file.get_path());
-					td.db_id = dbw.insert_title(td, file.get_uri());
-					if((int)td.db_id != -1) {
+					td.uri = file.get_uri();
+//					td.db_id = db_writer.insert_title(ref td, file.get_uri());
+					if(db_writer.insert_title(ref td, file.get_uri())) {
 						TrackData[] tdy = { td };
 						Idle.add( () => {
 							Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdy); 
@@ -234,20 +200,21 @@ public class Xnoise.MediaImporter : GLib.Object {
 			}
 		}
 		else if(psVideo.match_string(mime)) {
-			int idbuffer = dbw.uri_entry_exists(file.get_uri());
+			int idbuffer = db_writer.uri_entry_exists(file.get_uri());
 			var td = new TrackData();
+			td.uri = file.get_uri();
 			td.artist = "unknown artist";
 			td.album = "unknown album";
 			if(file!=null) td.title = prepare_name_from_filename(file.get_basename());
 			td.genre = "";
 			td.tracknumber = 0;
-			td.mediatype = MediaType.VIDEO;
+			td.mediatype = ItemType.LOCAL_VIDEO_TRACK;
 			
-			if(idbuffer== -1) {
-				dbw.insert_title(td, file.get_uri());
-			}
-			td.db_id = dbw.get_track_id_for_uri(file.get_uri());
-			if((int)td.db_id != -1) {
+			if(idbuffer== -1 && db_writer.insert_title(ref td, file.get_uri())) {
+//				db_writer.insert_title(td, file.get_uri());
+//			}
+//			td.db_id = db_writer.get_track_id_for_uri(file.get_uri());
+//			if((int)td.db_id != -1) {
 				TrackData[] tdax = { td };
 				Idle.add( () => {
 					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax); 
@@ -255,7 +222,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 				});
 			}
 		}
-		dbw.commit_transaction();
+		db_writer.commit_transaction();
 	}
 
 	// TODO: Can these be stored in a specific Worker.Job?
@@ -290,12 +257,12 @@ public class Xnoise.MediaImporter : GLib.Object {
 		GLib.List<GLib.FileInfo> infos;
 		try {
 			while(true) {
-				infos = yield enumerator.next_files_async(15, Priority.DEFAULT, null);
+				infos = yield enumerator.next_files_async(FILE_COUNT, Priority.DEFAULT, null);
 				
 				if(infos == null) {
 					job.counter[0]--;
 					if(job.counter[0] == 0) {
-						dbw.commit_transaction();
+						db_writer.commit_transaction();
 						if(tda.length > 0) {
 							TrackData[] tdax1 = tda;
 							tda = {};
@@ -335,16 +302,18 @@ public class Xnoise.MediaImporter : GLib.Object {
 					else if(psAudio.match_string(mime)) {
 						string uri_lc = filename.down();
 						if(!(uri_lc.has_suffix(".m3u")||uri_lc.has_suffix(".pls")||uri_lc.has_suffix(".asx")||uri_lc.has_suffix(".xspf")||uri_lc.has_suffix(".wpl"))) {
-							idbuffer = dbw.uri_entry_exists(file.get_uri()); //TODO wird das verwendet?
+							idbuffer = db_writer.uri_entry_exists(file.get_uri()); //TODO wird das verwendet?
 							if(idbuffer== -1) {
 								td = new TrackData();
 								var tr = new TagReader();
 								td = tr.read_tag(filepath);
+								td.uri = file.get_uri();
 								//print("++%s\n", td.title);
-								int32 id = dbw.insert_title(td, file.get_uri());
-								td.db_id = id;
-								td.mediatype = MediaType.AUDIO;
-								if((int)id != -1) {
+//								int32 id = db_writer.insert_title(td, file.get_uri());
+//								td.db_id = id;
+								td.item = Item(ItemType.LOCAL_AUDIO_TRACK, file.get_uri(), td.db_id);
+								td.mediatype = ItemType.LOCAL_AUDIO_TRACK;
+								if(db_writer.insert_title(ref td, file.get_uri())) {
 									tda += td;
 									job.big_counter[1]++;
 									Idle.add( () => {
@@ -356,45 +325,46 @@ public class Xnoise.MediaImporter : GLib.Object {
 										return false;
 									});
 								}
-								if(tda.length > 15) {
+								if(tda.length > FILE_COUNT) {
 									TrackData[] tdax = tda;
 									tda = {};
-									dbw.commit_transaction(); // intermediate commit make tracks fully available for user
+									db_writer.commit_transaction(); // intermediate commit make tracks fully available for user
 									Idle.add( () => {
 										Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax); 
 										return false; 
 									});
-									dbw.begin_transaction();
+									db_writer.begin_transaction();
 								}
 							}
 						}
 					}
 					else if(psVideo.match_string(mime)) {
-						idbuffer = dbw.uri_entry_exists(file.get_uri());
+						idbuffer = db_writer.uri_entry_exists(file.get_uri());
 						td = new TrackData();
 						td.artist = "unknown artist";
 						td.album = "unknown album";
 						td.title = prepare_name_from_filename(file.get_basename());
 						td.genre = "";
 						td.tracknumber = 0;
-						td.mediatype = MediaType.VIDEO;
-						if(idbuffer== -1) {
-							dbw.insert_title(td, file.get_uri());
-						}
-						td.db_id = dbw.get_track_id_for_uri(file.get_uri());
-						if((int)td.db_id != -1) {
+						td.mediatype = ItemType.LOCAL_VIDEO_TRACK;
+						if(idbuffer== -1 && db_writer.insert_title(ref td, file.get_uri())) {
+//							db_writer.insert_title(td, file.get_uri());
+//						}
+//						td.db_id = db_writer.get_track_id_for_uri(file.get_uri());
+//						if((int)td.db_id != -1) {
+							td.item = Item(ItemType.LOCAL_VIDEO_TRACK, file.get_uri(), td.db_id);
 							tdv += td;
 							job.big_counter[1]++;
 						}
-						if(tdv.length > 15) {
+						if(tdv.length > FILE_COUNT) {
 							TrackData[] tdvx = tdv;
 							tdv = {};
-							dbw.commit_transaction(); // intermediate commit make tracks fully available for user
+							db_writer.commit_transaction(); // intermediate commit make tracks fully available for user
 							Idle.add( () => {
 								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
 								return false; 
 							});
-							dbw.begin_transaction();
+							db_writer.begin_transaction();
 						}
 					}
 				}
@@ -405,7 +375,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		}
 		job.counter[0]--;
 		if(job.counter[0] == 0) {
-			dbw.commit_transaction();
+			db_writer.commit_transaction();
 			if(tda.length > 0) {
 				TrackData[] tdax1 = tda;
 				tda = {};
@@ -452,15 +422,14 @@ public class Xnoise.MediaImporter : GLib.Object {
 			});
 			return false;
 		});
-		_dbw = null; // TODO
 		global.media_import_in_progress = false;
 	}
 
 	private void reset_local_data_library_job(Worker.Job job) {
-		dbw.begin_transaction();
-		if(!dbw.delete_local_media_data())
+		db_writer.begin_transaction();
+		if(!db_writer.delete_local_media_data())
 			return;
-		dbw.commit_transaction();
+		db_writer.commit_transaction();
 	}
 
 	// add folders to the media path and store them in the db
@@ -468,18 +437,18 @@ public class Xnoise.MediaImporter : GLib.Object {
 	private void store_folders_job(Worker.Job job){
 		//print("store_folders_job \n");
 		var mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
-		dbw.begin_transaction();
+		db_writer.begin_transaction();
 		if(((bool)job.get_arg("full_rescan"))) {
-			dbw.del_all_folders();
+			db_writer.del_all_folders();
 		
 			foreach(string folder in (string[])job.get_arg("mfolders"))
 				mfolders_ht.insert(folder, 1); // this removes double entries
 		
 			foreach(unowned string folder in mfolders_ht.get_keys())
-				dbw.add_single_folder_to_collection(folder);
+				db_writer.add_single_folder_to_collection(folder);
 		
 			if(mfolders_ht.get_keys().length() == 0) {
-				dbw.commit_transaction();
+				db_writer.commit_transaction();
 				end_import(job);
 				return;
 			}
@@ -502,15 +471,15 @@ public class Xnoise.MediaImporter : GLib.Object {
 			if((bool)job.get_arg("interrupted_populate_model"))
 				trigger_mediabrowser_update_id = global.notify["media-import-in-progress"].connect(trigger_mediabrowser_update);
 			
-			string[] dbfolders = dbw.get_media_folders();
+			string[] dbfolders = db_writer.get_media_folders();
 			
 			foreach(string folder in (string[])job.get_arg("mfolders"))
 				mfolders_ht.insert(folder, 1); // this removes double entries
 			
-			dbw.del_all_folders();
+			db_writer.del_all_folders();
 			foreach(unowned string folder in mfolders_ht.get_keys()) {
 //				if(!(folder in dbfolders))
-					dbw.add_single_folder_to_collection(folder);
+					db_writer.add_single_folder_to_collection(folder);
 			}
 			var new_mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
 			foreach(unowned string folder in mfolders_ht.get_keys()) {
@@ -524,7 +493,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 			}
 	
 			if(new_mfolders_ht.get_keys().length() == 0) {
-				dbw.commit_transaction();
+				db_writer.commit_transaction();
 				end_import(job);
 				return;
 			}
@@ -583,24 +552,24 @@ public class Xnoise.MediaImporter : GLib.Object {
 	// add streams to the media path and store them in the db
 	private void store_streams_job(Worker.Job job) {
 		var streams_ht = new HashTable<string,int>(str_hash, str_equal);
-		dbw.begin_transaction();
+		db_writer.begin_transaction();
 
-		dbw.del_all_streams();
+		db_writer.del_all_streams();
 
 		foreach(string strm in (string[])job.get_arg("list_of_streams")) {
 			streams_ht.insert(strm, 1); // remove duplicates
 		}
 
 		foreach(string strm in streams_ht.get_keys()) {
-			dbw.add_single_stream_to_collection(strm, strm); //TODO: Use name different from uri
+			db_writer.add_single_stream_to_collection(strm, strm); //TODO: Use name different from uri
 		}
 		
-		dbw.commit_transaction();
+		db_writer.commit_transaction();
 		
 		TrackData val;
 		TrackData[] tdax = {};
 		foreach(string strm in streams_ht.get_keys()) {
-			dbw.get_trackdata_for_stream(strm, out val);
+			db_writer.get_trackdata_for_stream(strm, out val);
 			tdax += val;
 		}
 		job.track_dat = tdax;
@@ -615,12 +584,12 @@ public class Xnoise.MediaImporter : GLib.Object {
 	
 	// add files to the media path and store them in the db
 	private void store_files_job(Worker.Job job) {
-		if(dbw == null) 
+		if(db_writer == null) 
 			return;
 		
 		var files_ht = new HashTable<string,int>(str_hash, str_equal);
 
-		dbw.del_all_files();
+		db_writer.del_all_files();
 
 		foreach(string strm in (string[])job.get_arg("list_of_files")) {
 			files_ht.insert(strm, 1);
@@ -628,7 +597,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		
 		//put in db
 		foreach(string uri in files_ht.get_keys()) {
-			dbw.add_single_file_to_collection(uri);
+			db_writer.add_single_file_to_collection(uri);
 		}
 
 		//put in mediabrowser

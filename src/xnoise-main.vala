@@ -39,55 +39,69 @@ public class Xnoise.Main : GLib.Object {
 	public GstPlayer gPl;
 	public static bool show_plugin_state;
 	public static bool no_plugins;
-
+	
 	public Main() {
 		bool is_first_start;
 		Xnoise.initialize(out is_first_start);
-
-		check_database_and_tables();
-
+		
 		_instance = this;
-
+		
+		check_database_and_tables();
+		
+		try {
+			db_browser = new DbBrowser();
+			db_writer  = new DbWriter();
+		}
+		catch(DbError e) {
+			print("%s", e.message);
+			return;
+		}
+		
 		gPl = new GstPlayer();
-
+		
 		plugin_loader = new PluginLoader();
 		tlm = new TrackListModel();
 		tl = new TrackList();
 		main_window = new MainWindow();
 		tray_icon = new TrayIcon();
-
+		
 		userinfo = new UserInfo(main_window.show_status_info);
-
+		
+		item_handler_manager.add_handler(new HandlerPlayItem());
+		item_handler_manager.add_handler(new HandlerRemoveTrack());
+		item_handler_manager.add_handler(new HandlerAddToTracklist());
+		
 		if(!no_plugins) {
 			plugin_loader.load_all();
-
-			foreach(string module in par.get_string_list_value("activated_plugins")) {
-				if(!plugin_loader.activate_single_plugin(module)) {
-					print("\t%s plugin failed to activate!\n", module);
+			
+			foreach(string name in par.get_string_list_value("activated_plugins")) {
+				if(!plugin_loader.activate_single_plugin(name)) {
+					print("\t%s plugin failed to activate!\n", name);
 				}
 			}
-
+			
 			if(show_plugin_state) print(" PLUGIN INFO:\n");
-			foreach(string module in plugin_loader.plugin_htable.get_keys()) {
-				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(module).loaded))
-					if(show_plugin_state) print("\t%s loaded\n", module);
+			foreach(string name in plugin_loader.plugin_htable.get_keys()) {
+				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).loaded))
+					if(show_plugin_state) print("\t%s loaded\n", name);
 				else {
-					print("\t%s NOT loaded\n\n", module);
+					print("\t%s NOT loaded\n\n", name);
 					continue;
 				}
-				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(module).activated)) {
-					print("\t%s activated\n", module);
+				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).activated)) {
+					print("\t%s activated\n", name);
 				}
 				else {
-					if(show_plugin_state) print("\t%s NOT activated\n", module);
+					if(show_plugin_state) print("\t%s NOT activated\n", name);
 				}
-
-				if(show_plugin_state) print("\n");
+				
+				if(show_plugin_state) 
+					print("\n");
 			}
 		}
-
+		
 		connect_signals();
-
+		
 		par.set_start_parameters_in_implementors();
 		
 		if(is_first_start)
@@ -128,9 +142,9 @@ public class Xnoise.Main : GLib.Object {
 	public void save_activated_plugins() {
 		//print("\nsaving activated plugins...\n");
 		string[]? activatedplugins = {};
-		foreach(string module in this.plugin_loader.plugin_htable.get_keys()) {
-			if(this.plugin_loader.plugin_htable.lookup(module).activated)
-				activatedplugins += module;
+		foreach(string name in this.plugin_loader.plugin_htable.get_keys()) {
+			if(this.plugin_loader.plugin_htable.lookup(name).activated)
+				activatedplugins += name;
 		}
 		if(activatedplugins.length <= 0)
 			activatedplugins = null;

@@ -63,6 +63,7 @@ EXTRA_DIST = \
     $(NULL)
 
 DISTCLEANFILES = \
+    *.xnplugin \
     *.c \
     libmpris_la_vala.stamp \
     Makefile.in \

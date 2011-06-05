@@ -312,24 +312,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void add_lastused_titles_to_tracklist(Worker.Job job) {
-		DbBrowser dbBr = null;
-		try {
-			dbBr = new DbBrowser();
-		}
-		catch(DbError e) {
-			print("%s\n", e.message);
-			return;
-		}
-		if(dbBr == null)
-			return;
-		string[] uris = dbBr.get_lastused_uris();
+		string[] uris = db_browser.get_lastused_uris();
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
 		for(int i = 0; i < uris.length; i++) {
 			File file = File.new_for_uri(uris[i]);
 			if(!(file.get_uri_scheme() in global.remote_schemes)) {
 				TrackData td;
-				if(dbBr.get_trackdata_for_uri(uris[i], out td)) {
+				if(db_browser.get_trackdata_for_uri(uris[i], out td)) {
 					string current_uri = uris[i];
 					Idle.add( () => {
 						this.trackList.tracklistmodel.insert_title(null,
@@ -339,7 +329,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 							                                       td.artist,
 							                                       td.length,
 							                                       false,
-							                                       current_uri);
+							                                       current_uri,
+							                                       item_handler_manager.create_uri_item(current_uri));
 						
 						return false;
 					});
@@ -397,7 +388,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 							                                       artist,
 							                                       length,
 							                                       false,
-							                                       current_uri);
+							                                       current_uri,
+							                                       item_handler_manager.create_uri_item(current_uri));
 						
 						return false;
 					});
@@ -405,7 +397,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			}
 			else {
 				TrackData td;
-				if(dbBr.get_trackdata_for_stream(uris[i], out td)) {
+				if(db_browser.get_trackdata_for_stream(uris[i], out td)) {
 					string current_uri = uris[i];
 					Idle.add( () => {
 						this.trackList.tracklistmodel.insert_title(null,
@@ -415,7 +407,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 							                                       "",
 							                                       0,
 							                                       false,
-							                                       current_uri);
+							                                       current_uri,
+							                                       item_handler_manager.create_uri_item(current_uri));
 						
 						return false;
 					});
@@ -961,7 +954,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				                                           "",
 				                                           0,
 				                                           false,
-				                                           uri);
+				                                           uri,
+				                                           item_handler_manager.create_uri_item(uri));
 			}
 			radiodialog.close();
 			radiodialog = null;
@@ -1235,33 +1229,39 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//SHOW VIDEO BUTTONS
 			showvideobuttonTL                = gb.get_object("showvideobuttonTL") as Gtk.Button;
-			showvideobuttonTL.label          = SHOWVIDEO;
 			showvideobuttonTL.can_focus      = false;
 			showvideobuttonTL.clicked.connect(this.on_show_video_button_clicked);
 			showvideobuttonLY                = gb.get_object("showVideobuttonLY") as Gtk.Button;
-			showvideobuttonLY.label          = SHOWVIDEO;
+			var vidlabel1                    = gb.get_object("showvideolabel") as Gtk.Label;
+			vidlabel1.label                  = SHOWVIDEO;
+			var vidlabel2                    = gb.get_object("showvideolabelLY") as Gtk.Label;
+			vidlabel2.label                  = SHOWVIDEO;
 			showvideobuttonLY.can_focus      = false;
 			showvideobuttonLY.clicked.connect(this.on_show_video_button_clicked);
 			//--------------------
 
 			//SHOW TRACKLIST BUTTONS
 			showtracklistbuttonLY            = gb.get_object("showTLbuttonLY") as Gtk.Button;
-			showtracklistbuttonLY.label      = SHOWTRACKLIST;
 			showtracklistbuttonLY.can_focus  = false;
 			showtracklistbuttonLY.clicked.connect(this.on_show_tracklist_button_clicked);
 			showtracklistbuttonVid           = gb.get_object("showTLbuttonv") as Gtk.Button;
-			showtracklistbuttonVid.label     = SHOWTRACKLIST;
+			var tllabel1                     = gb.get_object("showtracklistlabel") as Gtk.Label;
+			tllabel1.label                   = SHOWTRACKLIST;
+			var tllabel2                     = gb.get_object("label12") as Gtk.Label;
+			tllabel2.label                   = SHOWTRACKLIST;
 			showtracklistbuttonVid.can_focus = false;
 			showtracklistbuttonVid.clicked.connect(this.on_show_tracklist_button_clicked);
 			//--------------------
 
 			//SHOW LYRICS BUTTONS
 			showlyricsbuttonTL               = gb.get_object("showLyricsbuttonTL") as Gtk.Button;
-			showlyricsbuttonTL.label         = SHOWLYRICS;
 			showlyricsbuttonTL.can_focus     = false;
 			showlyricsbuttonTL.clicked.connect(this.on_show_lyrics_button_clicked);
 			showlyricsbuttonVid              = gb.get_object("showLyricsbuttonv") as Gtk.Button;
-			showlyricsbuttonVid.label        = SHOWLYRICS;
+			var lylabel1                     = gb.get_object("label9") as Gtk.Label;
+			lylabel1.label                   = SHOWLYRICS;
+			var lylabel2                     = gb.get_object("label10") as Gtk.Label;
+			lylabel2.label                   = SHOWLYRICS;
 			showlyricsbuttonVid.can_focus    = false;
 			showlyricsbuttonVid.clicked.connect(this.on_show_lyrics_button_clicked);
 			//--------------------

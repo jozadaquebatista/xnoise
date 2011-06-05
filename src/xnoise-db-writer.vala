@@ -129,8 +129,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		"SELECT id FROM genres WHERE LOWER(name) = ?";
 	private static const string STMT_INSERT_GENRE =
 		"INSERT INTO genres (name) VALUES (?)";
-	private static const string STMT_INSERT_TITLE =
-		"INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length, bitrate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static const string STMT_GET_TITLE_ID =
 		"SELECT id FROM items WHERE artist = ? AND album = ? AND LOWER(title) = ?";
 	private static const string STMT_DEL_ARTISTS =
@@ -143,8 +141,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		"DELETE FROM uris";
 	private static const string STMT_DEL_GENRES =
 		"DELETE FROM genres";
-	private static const string STMT_GET_GET_ITEM_ID = 
-		"SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
 	private static const string STMT_DEL_URI = 
 		"DELETE FROM uris WHERE id = ?";
 	private static const string STMT_DEL_ITEM = 
@@ -632,6 +628,8 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(stmt.step() == Sqlite.ROW) {
 			val.db_id = stmt.column_int(0);
 			val.title = stmt.column_text(1);
+			val.uri = uri;
+			val.item = Item(ItemType.STREAM, uri, stmt.column_int(0));
 			retval = true;
 		}
 		return retval;
@@ -683,32 +681,38 @@ public class Xnoise.DbWriter : GLib.Object {
 		return true;
 	}
 	
-	public int32 insert_title(TrackData td, string uri) {
+	private static const string STMT_GET_GET_ITEM_ID = 
+		"SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
+	
+	private static const string STMT_INSERT_TITLE =
+		"INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length, bitrate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	
+	public bool insert_title(ref TrackData td, string uri) {
 		// make entries in other tables and get references from there
-		int artist_id = handle_artist(ref td.artist);
-		if(artist_id == -1) {
+		td.dat1 = handle_artist(ref td.artist);
+		if(td.dat1 == -1) {
 			print("Error importing artist for %s : '%s' ! \n", uri, td.artist);
-			return -1;
+			return false;
 		}
-		int album_id = handle_album(ref artist_id, ref td.album);
-		if(album_id == -1) {
+		td.dat2 = handle_album(ref td.dat1, ref td.album);
+		if(td.dat2 == -1) {
 			print("Error importing album for %s : '%s' ! \n", uri, td.album);
-			return -1;
+			return false;
 		}
 		int uri_id = handle_uri(uri);
 		if(uri_id == -1) {
 			print("Error importing uri for %s : '%s' ! \n", uri, uri);
-			return -1;
+			return false;
 		}
 		int genre_id = handle_genre(ref td.genre);
 		if(genre_id == -1) {
 			print("Error importing genre for %s : '%s' ! \n", uri, td.genre);
-			return -1;
+			return false;
 		}
 		insert_title_statement.reset();
 		if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
-		   insert_title_statement.bind_int (2,  artist_id)           != Sqlite.OK ||
-		   insert_title_statement.bind_int (3,  album_id)            != Sqlite.OK ||
+		   insert_title_statement.bind_int (2,  td.dat1)             != Sqlite.OK ||
+		   insert_title_statement.bind_int (3,  td.dat2)             != Sqlite.OK ||
 		   insert_title_statement.bind_text(4,  td.title)            != Sqlite.OK ||
 		   insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
 		   insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
@@ -717,25 +721,29 @@ public class Xnoise.DbWriter : GLib.Object {
 		   insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK ||
 		   insert_title_statement.bind_int (10, td.bitrate)          != Sqlite.OK) {
 			this.db_error();
+			return false;
 		}
 		
-		if(insert_title_statement.step()!=Sqlite.DONE)
+		if(insert_title_statement.step()!=Sqlite.DONE) {
 			this.db_error();
+			return false;
+		}
 		
 		//get id back
 		Statement stmt;
 		this.db.prepare_v2(STMT_GET_GET_ITEM_ID, -1, out stmt);
-		if(stmt.bind_int (1, artist_id) != Sqlite.OK ||
-		   stmt.bind_int (2, album_id)  != Sqlite.OK ||
+		if(stmt.bind_int (1, td.dat1)   != Sqlite.OK ||
+		   stmt.bind_int (2, td.dat2)   != Sqlite.OK ||
 		   stmt.bind_text(3, td.title)  != Sqlite.OK) {
 			this.db_error();
+			return false;
 		}
 		stmt.reset();
-		int32 val = -1;
 		if(stmt.step() == Sqlite.ROW) {
-			val = (int32)stmt.column_int(0);
+			td.db_id = (int32)stmt.column_int(0);
+			return true;
 		}
-		return val;
+		return false;
 	}
 
 	/*

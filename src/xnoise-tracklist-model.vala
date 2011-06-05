@@ -44,7 +44,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		ARTIST,
 		LENGTH,
 		WEIGHT,
-		URI
+		URI,
+		ITEM
 	}
 
 	private GLib.Type[] col_types = new GLib.Type[] {
@@ -55,7 +56,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		typeof(string),     // ARTIST
 		typeof(string),     // LENGTH
 		typeof(int),        // WEIGHT
-		typeof(string)      // URI
+		typeof(string),     // URI
+		typeof(Xnoise.Item?)// Item
 	};
 
 	public signal void sign_active_path_changed(PlayerState ts);
@@ -147,7 +149,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		return false;
 	}
 
-	public bool path_is_last_row(ref TreePath path, out bool trackList_is_empty) { //TODO: Implement errordomain
+	public bool path_is_last_row(ref TreePath path, out bool trackList_is_empty) {
 		trackList_is_empty = false;
 		int n_children = this.iter_n_children(null);
 
@@ -267,7 +269,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	                             string artist,
 	                             int length = 0,
 	                             bool bold = false,
-	                             string uri) {
+	                             string uri,
+	                             Item item) {
 		TreeIter iter;
 		int int_bold = Pango.Weight.NORMAL;
 		string? tracknumberString = null;
@@ -299,7 +302,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		         Column.LENGTH, lengthString,
 		         Column.WEIGHT, int_bold,
 		         Column.URI, uri,
-		         -1);
+		         Column.ITEM ,item);
 		return iter;
 	}
 
@@ -337,12 +340,16 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 
 	private string[] list_of_uris;
 	private bool list_foreach(TreeModel sender, TreePath path, TreeIter iter) {
-		GLib.Value gv;
-		sender.get_value(
-			iter,
-			Column.URI,
-			out gv);
-		list_of_uris += gv.get_string();
+//		GLib.Value gv;
+//		sender.get_value(
+//			iter,
+//			Column.URI,
+//			out gv);
+		Item? item = null;
+		sender.get(iter, Column.ITEM, out item);
+		if(item == null)
+			return false;
+		list_of_uris += item.uri; //gv.get_string();
 		return false;
 	}
 
@@ -453,51 +460,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		         -1);
 	}
 
-	public void add_tracks(TrackData[]? td_list, bool imediate_play = true)	{
-		if(td_list == null) return;
-		if(td_list[0] == null) return;
-
-		int k = 0;
-		TreeIter iter, iter_2 = {};
-		while(td_list[k] != null) {
-			string current_uri = td_list[k].uri;
-
-			if(k == 0) { // First track
-				iter = this.insert_title(null,
-				                         (int)td_list[k].tracknumber,
-				                         td_list[k].title,
-				                         td_list[k].album,
-				                         td_list[k].artist,
-				                         td_list[k].length,
-				                         true,
-				                         current_uri);
-				global.position_reference = null;
-				global.position_reference = new TreeRowReference(this, this.get_path(iter));
-				iter_2 = iter;
-			}
-			else { // second to last track
-				iter = this.insert_title(null,
-				                         (int)td_list[k].tracknumber,
-				                         td_list[k].title,
-				                         td_list[k].album,
-				                         td_list[k].artist,
-				                         td_list[k].length,
-				                         false,
-				                         current_uri);
-			}
-			k++;
-		}
-
-		if(td_list[0].uri != null) {
-			global.player_state = PlayerState.PLAYING;
-			global.current_uri = td_list[0].uri;
-		}
-
-		xn.tl.set_focus_on_iter(ref iter_2);
-
-		//xn.add_track_to_gst_player(td_list[0].uri); 	// TODO: check this function!!!!
-	}
-
 	public void add_uris(string[]? uris) {
 		if(uris == null) return;
 		if(uris[0] == null) return;
@@ -505,6 +467,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		TreeIter iter, iter_2;
 		FileType filetype;
 		this.get_iter_first(out iter_2); //iter_2 = TreeIter();
+		Item item = Item(ItemType.UNKNOWN);
 		while(uris[k] != null) { //because foreach is not working for this array coming from libunique
 			File file = File.new_for_uri(uris[k]);
 			TagReader tr = new TagReader();
@@ -524,7 +487,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 					continue;
 				}
 				if(filetype==GLib.FileType.REGULAR) {
-					t = tr.read_tag(file.get_path());
+					t = tr.read_tag(file.get_path()); // move to worker thread
 				}
 				else {
 					is_stream = true;
@@ -533,6 +496,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			else if(urischeme in global.remote_schemes) {
 				is_stream = true;
 			}
+			item = item_handler_manager.create_uri_item(uris[k]);
 			if(k == 0) { // first track
 				iter = this.insert_title(null,
 				                         (int)t.tracknumber,
@@ -541,8 +505,10 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				                         t.artist,
 				                         t.length,
 				                         true,
-				                         uris[k]);
-
+				                         uris[k],
+				                         item
+				                         );
+				
 				global.position_reference = null; // TODO: Is this necessary???
 				global.position_reference = new TreeRowReference(this, this.get_path(iter));
 				iter_2 = iter;
@@ -555,15 +521,25 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				                         t.artist,
 				                         t.length,
 				                         false,
-				                         uris[k]);
+				                         uris[k],
+				                         item_handler_manager.create_uri_item(uris[k])
+				                         );
 			}
 			tr = null;
 			k++;
 		}
-		if(uris[0] != null) {
-			global.current_uri = uris[0];
-			global.player_state = PlayerState.PLAYING;
+		if(item.type != ItemType.UNKNOWN) {
+			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
+			if(tmp == null)
+				return;
+			unowned Action? action = tmp.get_action(item.type, ActionContext.ANY);
+			if(action != null)
+				action.action(item, null);
 		}
+//		if(uris[0] != null) {
+//			global.current_uri = uris[0];
+//			global.player_state = PlayerState.PLAYING;
+//		}
 		xn.tl.set_focus_on_iter(ref iter_2);
 	}
 }

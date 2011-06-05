@@ -39,7 +39,7 @@
 //  public uint Tracknumber = 0;
 //  public int32 Length = 0;
 //  public int Bitrate = 0;
-//  public MediaType Mediatype = MediaType.UNKNOWN;
+//  public ItemType Mediatype = ItemType.UNKNOWN;
 //  public string? Uri = null;
 //}
 

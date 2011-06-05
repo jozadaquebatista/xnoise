@@ -10,6 +10,7 @@ syntax: glob
 *.lo
 *.Po
 *.Plo
+*.xnplugin
 *~
 Makefile
 Makefile.in

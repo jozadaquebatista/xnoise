@@ -32,20 +32,25 @@
 // XNOISES' GENERAL NAMESPACE FUNCTIONS
 
 namespace Xnoise {
-	//public static Timer t1;
-	//public static Timer t2;
 	public static Params par = null;
 	public static GlobalAccess global = null;
 	public static UserInfo userinfo = null;
 	public static Worker worker = null;
-	public static MediaImporter media_importer;
+	public static MediaImporter media_importer = null;
+	public static ItemHandlerManager item_handler_manager = null;
+	public static ItemConverter item_converter = null;
 	public static MainContext mc;
+	public static DbBrowser db_browser;
+	public static DbWriter db_writer;
 	/*
 	 * This function is used to create static instances of Params
 	 * and GlobalInfo in the xnoise namespace.
 	 */
 	public static void initialize(out bool is_first_start) {
 		is_first_start = false;
+		
+		item_handler_manager = new ItemHandlerManager();
+		item_converter = new ItemConverter();
 		media_importer = new MediaImporter();
 		
 		// setup worker with reference to default context
@@ -378,13 +383,13 @@ namespace Xnoise {
 
 // ENUMS
 
-public enum Xnoise.MediaType { // used in various places
-	UNKNOWN = 0,
-	AUDIO,
-	VIDEO,
-	STREAM,
-	PLAYLISTFILE
-}
+//public enum Xnoise.ItemType { // used in various places
+//	UNKNOWN = 0,
+//	AUDIO,
+//	VIDEO,
+//	STREAM,
+//	PLAYLISTFILE
+//}
 
 public enum Xnoise.TrackListNoteBookTab { // used in various places
 	TRACKLIST = 0,
@@ -416,13 +421,17 @@ public class Xnoise.TrackData { // track meta information
 	public string? album = null;
 	public string? title = null;
 	public string? genre = null;
+	public string? name = null;
 	public uint year = 0;
 	public uint tracknumber = 0;
 	public int32 length = 0;
 	public int bitrate = 0;
-	public MediaType mediatype = MediaType.UNKNOWN;
+	public ItemType mediatype = ItemType.UNKNOWN;
+	public Item? item = Item(ItemType.UNKNOWN);
 	public string? uri = null;
 	public int32 db_id = -1;
+	public int32 dat1 = -1;
+	public int32 dat2 = -1;
 }
 
 public class Xnoise.RemoteSchemes {
@@ -485,15 +494,15 @@ public struct Xnoise.StreamData { // meta information structure
 /**
  * This struct is used to move around certain media information
  */
-public struct Xnoise.MediaData {
-	public string name;
-	public int id;
-	public MediaType mediatype;
-}
+//public struct Xnoise.Item {
+//	public string name;
+//	public int id;
+//	public ItemType mediatype;
+//}
 
 public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
 	public int32 db_id;
-	public MediaType mediatype;
+	public ItemType mediatype;
 }
 
 

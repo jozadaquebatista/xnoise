@@ -65,7 +65,7 @@ public class Xnoise.DbBrowser {
 	private static const string STMT_GET_LASTUSED =
 		"SELECT uri FROM lastused";
 	private static const string STMT_GET_VIDEO_DATA =
-		"SELECT DISTINCT title, mediatype, id FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
+		"SELECT DISTINCT i.title, i.mediatype, i.id, u.name FROM items i, uris u WHERE i.uri = u.id AND title LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
 	private static const string STMT_GET_VIDEOS =
 		"SELECT DISTINCT title FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
 	private static const string STMT_GET_ITEMS =
@@ -93,8 +93,21 @@ public class Xnoise.DbBrowser {
 		if(this.db == null) {
 			throw new DbError.FAILED("failed messge");
 		}
+		db.progress_handler(5, progress_handler);
 	}
 	
+	public void cancel() {
+		abort = true;
+	}
+	
+	private bool abort = false;
+	private int progress_handler() {
+		if(abort) {
+			abort = false;
+			return 1;
+		}
+		return 0;
+	}
 	//~DbBrowser() {
 	//	print("dtor db browser\n");
 	//}
@@ -162,7 +175,7 @@ public class Xnoise.DbBrowser {
 			
 		stmt.reset();
 
-		if(stmt.bind_int(1, MediaType.VIDEO) != Sqlite.OK) {
+		if(stmt.bind_int(1, ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK) {
 			this.db_error();
 		}
 		if(stmt.step() == Sqlite.ROW) {
@@ -252,10 +265,11 @@ public class Xnoise.DbBrowser {
 			val.album       = stmt.column_text(1);
 			val.title       = stmt.column_text(2);
 			val.tracknumber = stmt.column_int(3);
-			val.mediatype   = (MediaType)stmt.column_int(4);
+			val.mediatype   = (ItemType)stmt.column_int(4);
 			val.uri         = stmt.column_text(5);
 			val.length      = stmt.column_int(6);
 			val.db_id       = id;
+			val.item        = Item((ItemType)stmt.column_int(4), stmt.column_text(5), id);
 		}
 		else {
 			print("get_trackdata_for_id: track is not in db. ID: %d\n", id);
@@ -293,7 +307,7 @@ public class Xnoise.DbBrowser {
 			val.artist      = "";
 			val.album       = "";
 			val.title       = stmt.column_text(0);
-			val.mediatype   = MediaType.STREAM;
+			val.mediatype   = ItemType.STREAM;
 			val.uri         = stmt.column_text(1);
 		}
 		else {
@@ -484,30 +498,31 @@ public class Xnoise.DbBrowser {
 		return results;
 	}
 
-	public MediaData[] get_video_data(ref string searchtext) {
-		MediaData[] val = {};
+	public TrackData[] get_video_data(ref string searchtext) {
+		TrackData[] val = {};
 		Statement stmt;
 		
 		this.db.prepare_v2(STMT_GET_VIDEO_DATA, -1, out stmt);
 		
 		stmt.reset();
-		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (stmt.bind_int (2, (int)MediaType.VIDEO)        != Sqlite.OK)) {
+		if((stmt.bind_text(1, "%%%s%%".printf(searchtext))     != Sqlite.OK)|
+		   (stmt.bind_int (2, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(stmt.step() == Sqlite.ROW) {
-			MediaData vd = MediaData();
+			TrackData vd = new TrackData();
 			vd.name = stmt.column_text(0);
-			vd.mediatype = (MediaType)stmt.column_int(1);
-			vd.id = stmt.column_int(2);
+			vd.mediatype = (ItemType)stmt.column_int(1);
+			vd.db_id = stmt.column_int(2);
+			vd.item = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(3), stmt.column_int(2));
 			val += vd;
 		}
 		return val;
 	}
 
-	public MediaData[] get_stream_data(ref string searchtext) {
+	public TrackData[] get_stream_data(ref string searchtext) {
 		//	print("in get_stream_data\n");
-		MediaData[] val = {};
+		TrackData[] val = {};
 		Statement stmt;
 		
 		this.db.prepare_v2(STMT_GET_RADIO_DATA, -1, out stmt);
@@ -516,10 +531,11 @@ public class Xnoise.DbBrowser {
 			this.db_error();
 		}
 		while(stmt.step() == Sqlite.ROW) {
-			MediaData vd = MediaData();
-			vd.id = stmt.column_int(0);
+			TrackData vd = new TrackData();
+			vd.db_id = stmt.column_int(0);
 			vd.name = stmt.column_text(1);
-			vd.mediatype = MediaType.STREAM;
+			vd.mediatype = ItemType.STREAM;
+			vd.item = Item(ItemType.STREAM, stmt.column_text(2), stmt.column_int(0));
 			val += vd;
 		}
 		return val;
@@ -531,8 +547,8 @@ public class Xnoise.DbBrowser {
 		this.db.prepare_v2(STMT_GET_VIDEOS, -1, out stmt);
 			
 		stmt.reset();
-		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (stmt.bind_int (2, (int)MediaType.VIDEO)        != Sqlite.OK)) {
+		if((stmt.bind_text(1, "%%%s%%".printf(searchtext))     != Sqlite.OK)|
+		   (stmt.bind_int (2, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(stmt.step() == Sqlite.ROW) {
@@ -542,9 +558,10 @@ public class Xnoise.DbBrowser {
 	}
 
 	private static const string STMT_GET_SOME_ARTISTS = 
-		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id ORDER BY LOWER(ar.name) ASC limit ? offset ?";
-	public string[] get_some_artists(int limit, int offset) {
-		string[] val = {};
+		"SELECT DISTINCT ar.name , ar.id FROM artists ar ORDER BY LOWER(ar.name) ASC limit ? offset ?";
+	public Item[] get_some_artists(int limit, int offset) {
+		Item[] val = {};
+//		string[] val = {};
 		Statement stmt;
 		
 		this.db.prepare_v2(STMT_GET_SOME_ARTISTS, -1, out stmt);
@@ -556,39 +573,198 @@ public class Xnoise.DbBrowser {
 			this.db_error();
 		}
 		while(stmt.step() == Sqlite.ROW) {
-			val += stmt.column_text(0);
+			Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, stmt.column_int(1));
+			i.text = stmt.column_text(0);
+			val += i;
+//			val += stmt.column_text(0);
 		}
 		return val;
 	}
+
+	private static const string STMT_GET_ARTISTS_WITH_SEARCH =
+		"SELECT DISTINCT ar.name, ar.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY ar.name ASC"; // LOWER
 
 	private static const string STMT_GET_ARTISTS =
-		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id ORDER BY LOWER(ar.name) DESC";
-	public string[] get_artists() {
-		string[] val = {};
-		Statement stmt;
-		this.db.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
-		stmt.reset();
+		"SELECT DISTINCT ar.name, ar.id  FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id ORDER BY ar.name ASC"; //LOWER(ar.name)
+	
+	public Item[] get_artists_with_search(ref string searchtext) {
 		
-		while(stmt.step() == Sqlite.ROW)
-			val += stmt.column_text(0);
+		Item[] val = {};
+		Statement stmt;
+		if(searchtext != "") {
+			this.db.prepare_v2(STMT_GET_ARTISTS_WITH_SEARCH, -1, out stmt);
+			stmt.reset();
+			if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+				this.db_error();
+				return val;
+			}
+		}
+		else {
+			this.db.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
+			stmt.reset();
+		}
+		
+		while(stmt.step() == Sqlite.ROW) {
+			Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, stmt.column_int(1));
+			i.text = stmt.column_text(0);
+			val += i;
+		}
 		
 		return val;
 	}
 
-	private static const string STMT_GET_ALBUMS =
-		"SELECT DISTINCT al.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? ORDER BY LOWER(al.name) DESC";
-	public string[] get_albums(string artist) {
-		string[] val = {};
+//	public string[] get_artists() {
+//		string[] val = {};
+//		Statement stmt;
+//		this.db.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
+//		stmt.reset();
+//		
+//		while(stmt.step() == Sqlite.ROW)
+//			val += stmt.column_text(0);
+//		
+//		return val;
+//	}
+
+	private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND al.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY t.tracknumber ASC, t.title ASC";
+	
+	private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND al.id = ? ORDER BY t.tracknumber ASC, t.title ASC";
+	
+	public TrackData[]? get_trackdata_by_albumid(ref string searchtext, int32 id) {
+		TrackData[] val = {};
 		Statement stmt;
 		
-		this.db.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
-		
-		stmt.reset();
-		if((stmt.bind_text(1, artist)!=Sqlite.OK)) {
-			this.db_error();
+		if(searchtext != "") {
+			this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH, -1, out stmt);
+			stmt.reset();
+			if((stmt.bind_int (1, id) != Sqlite.OK) ||
+			   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+				this.db_error();
+				return val;
+			}
+		}
+		else {
+			this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID, -1, out stmt);
+			stmt.reset();
+			if((stmt.bind_int(1, id) != Sqlite.OK)) {
+				this.db_error();
+				return null;
+			}
 		}
 		while(stmt.step() == Sqlite.ROW) {
-			val += stmt.column_text(0);
+			TrackData td = new TrackData();
+			Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+			
+			td.artist      = stmt.column_text(5);
+			td.album       = stmt.column_text(6);
+			td.title       = stmt.column_text(0);
+			td.item        = i;
+			td.uri         = i.uri;
+			td.tracknumber = stmt.column_int(3);
+			td.length      = stmt.column_int(7);
+			
+			val += td;
+		}
+		return val;
+	}
+
+	private static const string STMT_GET_TRACKDATA_BY_ARTISTID =
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND ar.id = ? ORDER BY al.name ASC, t.tracknumber ASC, t.title ASC";
+	
+	public TrackData[]? get_trackdata_by_artistid(ref string searchtext, int32 id) {
+		TrackData[] val = {};
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ARTISTID, -1, out stmt);
+		
+		stmt.reset();
+		if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+			this.db_error();
+			return null;
+		}
+		while(stmt.step() == Sqlite.ROW) {
+			TrackData td = new TrackData();
+			Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+			
+			td.artist      = stmt.column_text(5);
+			td.album       = stmt.column_text(6);
+			td.title       = stmt.column_text(0);
+			td.item        = i;
+			td.uri         = i.uri;
+			td.tracknumber = stmt.column_int(3);
+			td.length      = stmt.column_int(7);
+			
+			val += td;
+		}
+		return val;
+	}
+
+	private static const string STMT_GET_TRACKDATA_BY_TITLEID =
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.id = ?";
+		
+	public TrackData? get_trackdata_by_titleid(ref string searchtext, int32 id) {
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_TRACKDATA_BY_TITLEID, -1, out stmt);
+		
+		stmt.reset();
+		if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+			this.db_error();
+			return null;
+		}
+		TrackData td = null; 
+		if(stmt.step() == Sqlite.ROW) {
+			td = new TrackData();
+			Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+			
+			td.artist      = stmt.column_text(5);
+			td.album       = stmt.column_text(6);
+			td.title       = stmt.column_text(0);
+			td.item        = i;
+			td.uri         = i.uri;
+			td.tracknumber = stmt.column_int(3);
+			td.length      = stmt.column_int(7);
+		}
+		return td;
+	}
+
+	private static const string STMT_GET_ALBUMS_WITH_SEARCH =
+		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t WHERE ar.id = t.artist AND al.id = t.album AND ar.id = ? AND (al.name LIKE ? OR t.title LIKE ?) ORDER BY al.name ASC";
+
+	private static const string STMT_GET_ALBUMS =
+		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY al.name ASC";
+
+	public Item[] get_albums_with_search(ref string searchtext, int32 id) {
+		Item[] val = {};
+		Statement stmt;
+		
+		if(searchtext != "") {
+			this.db.prepare_v2(STMT_GET_ALBUMS_WITH_SEARCH, -1, out stmt);
+			stmt.reset();
+			if((stmt.bind_int (1, id) != Sqlite.OK) ||
+			   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+				this.db_error();
+				return val;
+			}
+		}
+		else {
+			this.db.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
+			stmt.reset();
+			if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+				this.db_error();
+				return val;
+			}
+		}
+		while(stmt.step() == Sqlite.ROW) {
+			Item i = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, stmt.column_int(1));
+			i.text = stmt.column_text(0);
+			val += i;
 		}
 		return val;
 	}
@@ -600,8 +776,8 @@ public class Xnoise.DbBrowser {
 	private static const string STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS =
 		"SELECT DISTINCT t.title, t.mediatype, t.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? ORDER BY t.tracknumber DESC, t.title DESC";
 
-	public MediaData[] get_titles_with_mediatypes_and_ids(string artist, string album) {
-		MediaData[] val = {};
+	public TrackData[] get_titles_with_mediatypes_and_ids(string artist, string album) {
+		TrackData[] val = {};
 		Statement stmt;
 		
 		this.db.prepare_v2(STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS, -1, out stmt);
@@ -613,41 +789,74 @@ public class Xnoise.DbBrowser {
 		}
 
 		while(stmt.step() == Sqlite.ROW) {
-			MediaData twt = MediaData();
-			twt.name = stmt.column_text(0);
-			twt.mediatype = (MediaType) stmt.column_int(1);
-			twt.id = stmt.column_int(2);
-			val += twt;
-		}
-		return val;
-	}
-
-	private static const string STMT_GET_ITEMS_WITH_DATA =
-		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? ORDER BY t.tracknumber DESC, t.title DESC";
-
-	public TrackData[] get_titles_with_data(string artist, string album) {
-		TrackData[] val = {};
-		Statement stmt;
-		
-		this.db.prepare_v2(STMT_GET_ITEMS_WITH_DATA, -1, out stmt);
-		
-		stmt.reset();
-		if((stmt.bind_text(1, artist)!=Sqlite.OK)|
-		   (stmt.bind_text(2, album )!=Sqlite.OK)) {
-			this.db_error();
-		}
-		
-		while(stmt.step() == Sqlite.ROW) {
 			TrackData twt = new TrackData();
-			twt.artist    = artist;
-			twt.album     = album;
-			twt.title     = stmt.column_text(0);
-			twt.mediatype = (MediaType) stmt.column_int(1);
+			twt.name = stmt.column_text(0);
+			twt.mediatype = (ItemType) stmt.column_int(1);
 			twt.db_id = stmt.column_int(2);
-			twt.tracknumber = stmt.column_int(3);
 			val += twt;
 		}
 		return val;
 	}
+
+//	private static const string STMT_GET_TRACKDATA_f =
+//		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND ar.name = ? AND al.name = ? ORDER BY t.tracknumber DESC, t.title DESC";
+
+//	private static const string STMT_GET_ITEMS_WITH_DATA =
+//		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND ar.name = ? AND al.name = ? ORDER BY t.tracknumber DESC, t.title DESC";
+
+//	public TrackData[] get_trackdata_with_search(ref string searchtext, int32 artist_id, int32 album_id) {
+//		TrackData[] val = {};
+//		Statement stmt;
+//		
+//		this.db.prepare_v2(STMT_GET_ITEMS_WITH_DATA, -1, out stmt);
+//		
+//		stmt.reset();
+////		if((stmt.bind_text(1, artist)!=Sqlite.OK)|
+////		   (stmt.bind_text(2, album )!=Sqlite.OK)) {
+////			this.db_error();
+////		}
+//		
+//		while(stmt.step() == Sqlite.ROW) {
+//			TrackData twt = new TrackData();
+//			twt.artist    = artist;
+//			twt.album     = album;
+//			twt.title     = stmt.column_text(0);
+//			twt.mediatype = (ItemType) stmt.column_int(1);
+//			twt.db_id = stmt.column_int(2);
+//			twt.tracknumber = stmt.column_int(3);
+//			twt.uri = stmt.column_text(4);
+//			val += twt;
+//		}
+//		return val;
+//	}
+
+//	private static const string STMT_GET_ITEMS_WITH_DATA =
+//		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND ar.name = ? AND al.name = ? ORDER BY t.tracknumber DESC, t.title DESC";
+
+//	public TrackData[] get_titles_with_data(string artist, string album) {
+//		TrackData[] val = {};
+//		Statement stmt;
+//		
+//		this.db.prepare_v2(STMT_GET_ITEMS_WITH_DATA, -1, out stmt);
+//		
+//		stmt.reset();
+//		if((stmt.bind_text(1, artist)!=Sqlite.OK)|
+//		   (stmt.bind_text(2, album )!=Sqlite.OK)) {
+//			this.db_error();
+//		}
+//		
+//		while(stmt.step() == Sqlite.ROW) {
+//			TrackData twt = new TrackData();
+//			twt.artist    = artist;
+//			twt.album     = album;
+//			twt.title     = stmt.column_text(0);
+//			twt.mediatype = (ItemType) stmt.column_int(1);
+//			twt.db_id = stmt.column_int(2);
+//			twt.tracknumber = stmt.column_int(3);
+//			twt.uri = stmt.column_text(4);
+//			val += twt;
+//		}
+//		return val;
+//	}
 }
 

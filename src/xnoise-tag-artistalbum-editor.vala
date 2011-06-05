@@ -410,6 +410,9 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	}
 
 	private void move_iter_job(Worker.Job job) {
+		foreach(TrackData tdg in job.track_dat) {
+			tdg.uri = media_importer.get_uri_for_item_id(tdg.db_id);
+		}
 		Idle.add( () => {
 			int i = 0;
 			foreach(TreeRowReference rr in job.treerowrefs) {

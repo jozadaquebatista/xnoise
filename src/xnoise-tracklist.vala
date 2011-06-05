@@ -134,7 +134,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.button_release_event.connect(this.on_button_release);
 		this.button_press_event.connect(this.on_button_press);
 		
-		menu = create_rightclick_menu();
+//		menu = create_rightclick_menu();
 	}
 	
 	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
@@ -190,15 +190,35 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void rightclick_menu_popup(uint activateTime) {
-		menu.popup(null, null, null, 0, activateTime);
+		menu = create_rightclick_menu();
+		if(menu != null)
+			menu.popup(null, null, null, 0, activateTime);
 	}
 
 	private Menu create_rightclick_menu() {
+		TreeIter iter;
 		var rightmenu = new Menu();
-		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.DELETE, null);
-		menu_item.set_label(_("Remove selected"));
-		menu_item.activate.connect(this.remove_selected_rows);
-		rightmenu.append(menu_item);
+		GLib.List<TreePath> list;
+		list = this.get_selection().get_selected_rows(null);
+		Item? item = null;
+		Array<unowned Action?> array = null;
+//		foreach(unowned Gtk.TreePath path in list) { //TODO
+//		}
+		TreePath path = (TreePath)list.data;
+		tracklistmodel.get_iter(out iter, path);
+		tracklistmodel.get(iter, TrackListModel.Column.ITEM, out item);
+		array = item_handler_manager.get_actions(item.type, ActionContext.TRACKLIST_MENU_QUERY);
+		for(int i =0; i < array.length; i++) {
+			print("%s\n", array.index(i).name);
+			var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.DELETE, null);
+			menu_item.set_label(array.index(i).info);
+			//Value? v = list;
+			unowned Action x = array.index(i);
+			menu_item.activate.connect( () => {
+				x.action(item, null);
+			});
+			rightmenu.append(menu_item);
+		}
 		rightmenu.show_all();
 		return rightmenu;
 	}
@@ -535,142 +555,74 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void insert_dnd_data_job(Worker.Job job) {
-		DndData[] ids = job.dnd_data;
-		TrackData td;
-		DbBrowser dbBr = null;
-		try {
-			dbBr = new DbBrowser();
-		}
-		catch(DbError e) {
-			print("%s\n", e.message);
-			return;
-		}
+		DndData[] ids = job.dnd_data; //TODO !!!
 		bool is_first = true;
 		TreeViewDropPosition drop_pos_1 = (TreeViewDropPosition)job.get_arg("drop_pos");
 		TreeRowReference row_ref = (TreeRowReference)job.get_arg("row_ref");
 		TreePath path = null;
 		if(row_ref != null && row_ref.valid())
 			path = row_ref.get_path();
-		//TODO: Decide if it is video or stream or local file and then get data from the right source
+		TrackData[] localarray = {};
 		foreach(DndData ix in ids) {
-			switch(ix.mediatype) {
-				case MediaType.VIDEO: 
-				case MediaType.AUDIO: {
-					string lengthString = "", artist, album, title, uri;
-					int tracknumb;
-					if(dbBr.get_trackdata_for_id((int)ix.db_id, out td)) {
-						artist    = td.artist;
-						album     = td.album;
-						title     = td.title;
-						tracknumb = (int)td.tracknumber;
-						lengthString = make_time_display_from_seconds(td.length);
-						uri = td.uri;
-						Idle.add( () => {
-					
-							TreeIter iter, new_iter;
-							TreeIter first_iter = TreeIter();
-							if((path == null)||(!this.tracklistmodel.get_iter_first(out first_iter))) { 
-								//dropped below all entries, first uri OR
-								//dropped on empty list, first uri
-								tracklistmodel.append(out new_iter);
-								drop_pos_1 = Gtk.TreeViewDropPosition.AFTER;
-							}
-							else { //all other uris
-								this.tracklistmodel.get_iter(out iter, path);
-								if(is_first) {
-									if((drop_pos_1 == Gtk.TreeViewDropPosition.BEFORE)||
-									   (drop_pos_1 == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
-									   //Determine drop position for first, insert all others after first
-										this.tracklistmodel.insert_before(out new_iter, iter);
-									}
-									else {
-										this.tracklistmodel.insert_after(out new_iter, iter);
-									}
-									is_first = false;
-								}
-								else {
-									this.tracklistmodel.insert_after(out new_iter, iter);
-								}
-							}
-							string tracknumberString = null;
-							if(tracknumb!=0) {
-								tracknumberString = "%u".printf(tracknumb);
-							}
-							tracklistmodel.set(new_iter,
-							                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
-							                   TrackListModel.Column.TITLE, title,
-							                   TrackListModel.Column.ALBUM, album,
-							                   TrackListModel.Column.ARTIST, artist,
-							                   TrackListModel.Column.LENGTH, lengthString,
-							                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-							                   TrackListModel.Column.URI, uri,
-							                   -1);
-							path = tracklistmodel.get_path(new_iter);
-							return false;
-						});
+			Item i = Item(ix.mediatype, null, ix.db_id);
+			TrackData[]? tmp = item_converter.to_trackdata(i, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
+			if(tmp != null) {
+				foreach(TrackData tmpdata in tmp) {
+					if(tmpdata == null) {
+						print("tmpdata is null\n");
+						continue;
 					}
-					break;
+					localarray += tmpdata;
 				}
-				case MediaType.STREAM: {
-					string lengthString = "", artist, album, title, uri;
-					int tracknumb;
-					if(dbBr.get_stream_td_for_id((int)ix.db_id, out td)) {
-						artist    = td.artist;
-						album     = td.album;
-						title     = td.title;
-						tracknumb = (int)td.tracknumber;
-						lengthString = make_time_display_from_seconds(td.length);
-						uri = td.uri;
-						Idle.add( () => {
-							TreeIter iter, new_iter;
-							TreeIter first_iter = TreeIter();
-							if((path == null)||(!this.tracklistmodel.get_iter_first(out first_iter))) { 
-								//dropped below all entries, first uri OR
-								//dropped on empty list, first uri
-								tracklistmodel.append(out new_iter);
-								drop_pos_1 = Gtk.TreeViewDropPosition.AFTER;
-							}
-							else { //all other uris
-								this.tracklistmodel.get_iter(out iter, path);
-								if(is_first) {
-									if((drop_pos_1 == Gtk.TreeViewDropPosition.BEFORE)||
-									   (drop_pos_1 == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
-									   //Determine drop position for first, insert all others after first
-										this.tracklistmodel.insert_before(out new_iter, iter);
-									}
-									else {
-										this.tracklistmodel.insert_after(out new_iter, iter);
-									}
-									is_first = false;
-								}
-								else {
-									this.tracklistmodel.insert_after(out new_iter, iter);
-								}
-							}
-							string tracknumberString = null;
-							if(tracknumb!=0) {
-								tracknumberString = "%u".printf(tracknumb);
-							}
-							tracklistmodel.set(new_iter,
-							                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
-							                   TrackListModel.Column.TITLE, title,
-							                   TrackListModel.Column.ALBUM, album,
-							                   TrackListModel.Column.ARTIST, artist,
-							                   TrackListModel.Column.LENGTH, lengthString,
-							                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-							                   TrackListModel.Column.URI, uri,
-							                   -1);
-							path = tracklistmodel.get_path(new_iter);
-							return false;
-						});
-					}
-					break;
-				}
-//				case MediaType.STREAM:
-//					break;
-				default:
-					break;
 			}
+		}
+		job.track_dat = localarray;
+		
+		if(job.track_dat != null) { // && job.track_dat.length > 0) {
+			Idle.add( () => {
+				foreach(TrackData tdx in job.track_dat) {
+					TreeIter iter, new_iter;
+					TreeIter first_iter = TreeIter();
+					if((path == null)||(!this.tracklistmodel.get_iter_first(out first_iter))) { 
+						//dropped below all entries, first uri OR
+						//dropped on empty list, first uri
+						tracklistmodel.append(out new_iter);
+						drop_pos_1 = Gtk.TreeViewDropPosition.AFTER;
+					}
+					else { //all other uris
+						this.tracklistmodel.get_iter(out iter, path);
+						if(is_first) {
+							if((drop_pos_1 == Gtk.TreeViewDropPosition.BEFORE)||
+							   (drop_pos_1 == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
+							   //Determine drop position for first, insert all others after first
+								this.tracklistmodel.insert_before(out new_iter, iter);
+							}
+							else {
+								this.tracklistmodel.insert_after(out new_iter, iter);
+							}
+							is_first = false;
+						}
+						else {
+							this.tracklistmodel.insert_after(out new_iter, iter);
+						}
+					}
+					string tracknumberString = "";
+					if(tdx.tracknumber != 0) {
+						tracknumberString = "%u".printf(tdx.tracknumber);
+					}
+					tracklistmodel.set(new_iter,
+					                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
+					                   TrackListModel.Column.TITLE, tdx.title,
+					                   TrackListModel.Column.ALBUM, tdx.album,
+					                   TrackListModel.Column.ARTIST, tdx.artist,
+					                   TrackListModel.Column.LENGTH, make_time_display_from_seconds(tdx.length),
+					                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
+					                   TrackListModel.Column.URI, tdx.item.uri,
+					                   TrackListModel.Column.ITEM, tdx.item);
+					path = tracklistmodel.get_path(new_iter);
+				}
+				return false;
+			});
 		}
 	}
 
@@ -710,52 +662,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 			return;
 		}
 	}
-
-//	private void handle_dropped_stream(ref string streamuri, ref TreePath? path, 
-//	                                   ref bool is_first) {
-//		//Function to import music STREAMS in drag'n'drop
-//		TreeIter iter, new_iter;
-//		File file = File.new_for_uri(streamuri);
-
-//		string artist, album, title;
-//		artist    = "";
-//		album     = "";
-//		title     = file.get_uri();
-
-//		TreeIter first_iter;
-//		if(!this.tracklistmodel.get_iter_first(out first_iter)) { //dropped on empty list, first uri
-//			this.tracklistmodel.insert(out new_iter, 0);
-//		}
-//		else if(path==null) { //dropped below all entries, first uri
-//			tracklistmodel.append(out new_iter);
-//		}
-//		else { //all other uris
-//			this.tracklistmodel.get_iter(out iter, path);
-//			if(is_first) {
-//				if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
-//				   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
-//				   //Determine drop position for first, insert all others after first
-//					this.tracklistmodel.insert_before(out new_iter, iter);
-//				}
-//				else {
-//					this.tracklistmodel.insert_after(out new_iter, iter);
-//				}
-//				is_first = false;
-//			}
-//			else {
-//				this.tracklistmodel.insert_after(out new_iter, iter);
-//			}
-//		}
-//		//TODO use insert_title function of tracklistmodel instead ?!?
-//		tracklistmodel.set(new_iter,
-//		                   TrackListModel.Column.TITLE, title,
-//		                   TrackListModel.Column.ALBUM, album,
-//		                   TrackListModel.Column.ARTIST, artist,
-//		                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-//		                   TrackListModel.Column.URI, streamuri,
-//		                   -1);
-//		path = tracklistmodel.get_path(new_iter);
-//	}
 
 	private string make_time_display_from_seconds(int length) {
 		string lengthString = "";
@@ -890,12 +796,13 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void on_row_activated(Gtk.Widget sender, TreePath path, TreeViewColumn column) {
-		string uri = null;
+		Item? item = Item(ItemType.UNKNOWN);
 		TreeIter iter;
 		if(tracklistmodel.get_iter(out iter, path)) {
-			tracklistmodel.get(iter, TrackListModel.Column.URI, out uri);
+			tracklistmodel.get(iter, TrackListModel.Column.ITEM, out item);
+			this.on_activated(item, path);
+			//print("tracklist itemtype %s\n", item.type.to_string());
 		}
-		this.on_activated(uri, path);
 	}
 
 	private bool on_key_released(Gtk.Widget sender, Gdk.EventKey ek) {
@@ -960,14 +867,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		if(removed_playing_title) tracklistmodel.set_reference_to_last();
 	}
 
-	public void on_activated(string uri, TreePath path) {
-		//check for existance on local files
-		File track = File.new_for_uri(uri);
-
-		if(track.get_uri_scheme() in global.local_schemes) {
-			if(!track.query_exists(null)) return;
-		}
-
+	public void on_activated(Item item, TreePath path) {//(string uri, TreePath path) {
 		if(path != null) {
 			global.position_reference = new TreeRowReference(this.tracklistmodel, path);
 		}
@@ -975,17 +875,21 @@ public class Xnoise.TrackList : TreeView, IParams {
 			print("cannot setup treerowref\n");
 			return;
 		}
-		global.current_uri = uri;
-		global.player_state = PlayerState.PLAYING;
+		if(item.type != ItemType.UNKNOWN) {
+			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
+			if(tmp == null)
+				return;
+			unowned Action? action = tmp.get_action(item.type, ActionContext.ANY);
 
+			if(action != null)
+				action.action(item, null);
+		}
+		
 		TreeIter iter;
 		this.tracklistmodel.get_iter(out iter, path);
 		this.set_focus_on_iter(ref iter);
 	}
 	
-	/*private void column_visibility_changed();
-	private void column_resizability_changed();*/
-
 	// i hide the default insert_colum, so we can load the column's position
 	// from the config file before actually inserting it
 	private new void insert_column(Gtk.TreeViewColumn column, int position) {
@@ -1311,35 +1215,27 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 	
 	
-		
+	
 	public void write_params_data() {
 		var columns = this.get_columns();
 		int counter = 0;
 		foreach(TreeViewColumn c in columns) {
 			if(c == null) continue;
-
+			
 			// write column position, counting from 1 onwards
 			counter++;
 			par.set_int_value("position_" + c.title + "_column", counter);
-
+			
 			// write relative column sizes
 			if(!c.resizable) continue;
 			double? relative_size = relative_column_sizes.lookup(c.title);
 			if(relative_size == null) continue;
 			par.set_double_value("relative_size_" + c.title + "_column", (double)relative_size);
 		} 
-
 	}
 	
 	public void read_params_data() {
 	}
 	
 }
-
-
-
-
-				
-				
-		
 
