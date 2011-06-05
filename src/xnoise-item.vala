@@ -44,7 +44,6 @@ namespace Xnoise {
 
 	public enum ItemType {
 		UNKNOWN = 0,
-		LOADER,
 		LOCAL_AUDIO_TRACK,
 		LOCAL_VIDEO_TRACK,
 		STREAM,
@@ -55,6 +54,7 @@ namespace Xnoise {
 		COLLECTION_CONTAINER_ALBUM,  // item can be converted
 		COLLECTION_CONTAINER_VIDEO,  // item can be converted
 		COLLECTION_CONTAINER_STREAM, // item can be converted
+		LOADER,
 		MAXCOUNT
 		//to be extended
 	}

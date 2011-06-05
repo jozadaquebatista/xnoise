@@ -956,7 +956,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				}
 				if(job.cancellable.is_cancelled())
 					return false;
-				this.prepend(out iter_album, iter_artist);
+				this.append(out iter_album, iter_artist);
 				this.set(iter_album,
 				         Column.ICON, (albumimage != null ? albumimage : album_pixb),
 				         Column.VIS_TEXT, album.text,
@@ -1085,7 +1085,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			foreach(unowned TrackData td in job.track_dat) {
 				if(job.cancellable.is_cancelled())
 					return false;
-				this.prepend(out iter_title, iter_album);
+				this.append(out iter_title, iter_album);
 				this.set(iter_title,
 				         Column.ICON, (td.mediatype == ItemType.LOCAL_AUDIO_TRACK ? title_pixb : video_pixb),
 				         Column.VIS_TEXT, td.title,

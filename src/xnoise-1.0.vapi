@@ -774,7 +774,6 @@ namespace Xnoise {
 	[CCode (cprefix = "XNOISE_ITEM_TYPE_", cheader_filename = "xnoise.h")]
 	public enum ItemType {
 		UNKNOWN,
-		LOADER,
 		LOCAL_AUDIO_TRACK,
 		LOCAL_VIDEO_TRACK,
 		STREAM,
@@ -785,6 +784,7 @@ namespace Xnoise {
 		COLLECTION_CONTAINER_ALBUM,
 		COLLECTION_CONTAINER_VIDEO,
 		COLLECTION_CONTAINER_STREAM,
+		LOADER,
 		MAXCOUNT
 	}
 	[CCode (cprefix = "XNOISE_PLAYER_STATE_", cheader_filename = "xnoise.h")]
