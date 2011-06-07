@@ -32,7 +32,7 @@
 // provides the right Action for the given ActionContext/ItemType
 public class Xnoise.HandlerPlayItem : ItemHandler {
 	private Action a;
-	private const string ainfo = "A HandlerPlayIteminfo";
+	private const string ainfo = _("Play");
 	private const string aname = "A HandlerPlayItemname";
 	
 	private const string name = "HandlerPlayItem";
@@ -56,9 +56,9 @@ public class Xnoise.HandlerPlayItem : ItemHandler {
 	}
 
 	public override unowned Action? get_action(ItemType type, ActionContext context) {
-		if(context == ActionContext.TRACKLIST_MENU_QUERY)
-			return null;
-		return a;
+		if(context == ActionContext.REQUESTED)
+			return a;
+		return null;
 	}
 
 	private void play_uri(Item item, GLib.Value? data) { // forward playlists to parser

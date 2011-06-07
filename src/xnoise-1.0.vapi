@@ -751,7 +751,7 @@ namespace Xnoise {
 	[CCode (cprefix = "XNOISE_ACTION_CONTEXT_", cheader_filename = "xnoise.h")]
 	public enum ActionContext {
 		NONE,
-		ANY,
+		REQUESTED,
 		TRACKLIST_ITEM_ACTIVATED,
 		TRACKLIST_MENU_QUERY,
 		TRACKLIST_DROP,

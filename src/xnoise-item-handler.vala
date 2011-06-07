@@ -31,7 +31,7 @@
 namespace Xnoise {
 	public enum ActionContext {
 		NONE,
-		ANY,
+		REQUESTED,
 		TRACKLIST_ITEM_ACTIVATED,
 		TRACKLIST_MENU_QUERY,
 		TRACKLIST_DROP,

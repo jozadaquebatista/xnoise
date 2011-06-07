@@ -266,7 +266,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			}
 			case 3: {
 				MediaBrowserModel.CollectionType ct = MediaBrowserModel.CollectionType.UNKNOWN;
-
+				
+				if(selection.count_selected_rows()< 1)
+					return false;
+				
 				//TreePath tp = filtermodel.convert_path_to_child_path(treepath);
 				TreeIter iter;
 				this.mediabrowsermodel.get_iter(out iter, treepath);
@@ -274,8 +277,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				if(ct != MediaBrowserModel.CollectionType.HIERARCHICAL)
 					return false;
 				treerowref = new TreeRowReference(this.mediabrowsermodel, treepath);
-				rightclick_menu_popup(treepath.get_depth(), e.time);
-				return false;
+				rightclick_menu_popup(e.time);
+				return true;
 			}
 			default: {
 				break;
@@ -285,25 +288,57 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			selection.select_path(treepath);
 		return false;
 	}
-
-	private void rightclick_menu_popup(int depth, uint activateTime) {
-		switch(depth) {
-			case 1:
-				this.menu = create_edit_artist_tag_menu();
-				break;
-			case 2:
-				this.menu = create_edit_album_tag_menu();
-				break;
-			case 3:
-				this.menu = create_edit_title_tag_menu();
-				break;
-			default:
-				menu = null;
-				break;
-		}
+	private void rightclick_menu_popup(uint activateTime) {
+		menu = create_rightclick_menu();
 		if(menu != null)
 			menu.popup(null, null, null, 0, activateTime);
 	}
+
+	private Menu create_rightclick_menu() {
+		TreeIter iter;
+		var rightmenu = new Menu();
+		GLib.List<TreePath> list;
+		list = this.get_selection().get_selected_rows(null);
+		Item? item = null;
+		Array<unowned Action?> array = null;
+//		foreach(unowned Gtk.TreePath path in list) { //TODO
+//		}
+		TreePath path = (TreePath)list.data;
+		mediabrowsermodel.get_iter(out iter, path);
+		mediabrowsermodel.get(iter, TrackListModel.Column.ITEM, out item);
+		array = item_handler_manager.get_actions(item.type, ActionContext.MEDIABROWSER_MENU_QUERY);
+		for(int i =0; i < array.length; i++) {
+			unowned Action x = array.index(i);
+			print("%s\n", x.name);
+			var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
+			menu_item.set_label(x.info);
+			menu_item.activate.connect( () => {
+				x.action(item, null);
+			});
+			rightmenu.append(menu_item);
+		}
+		rightmenu.show_all();
+		return rightmenu;
+	}
+
+//	private void rightclick_menu_popup(int depth, uint activateTime) {
+//		switch(depth) {
+//			case 1:
+//				this.menu = create_edit_artist_tag_menu();
+//				break;
+//			case 2:
+//				this.menu = create_edit_album_tag_menu();
+//				break;
+//			case 3:
+//				this.menu = create_edit_title_tag_menu();
+//				break;
+//			default:
+//				menu = null;
+//				break;
+//		}
+//		if(menu != null)
+//			menu.popup(null, null, null, 0, activateTime);
+//	}
 
 	private TreeRowReference treerowref = null;
 	

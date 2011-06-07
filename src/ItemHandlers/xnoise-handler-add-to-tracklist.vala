@@ -34,8 +34,12 @@ using Gtk;
 // has one or more Actions
 public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	private Action add;
-	private const string binfo = "B HandlerAddToTracklistinfo";
-	private const string bname = "B HandlerAddToTracklistname";
+	private const string binfo = "";
+	private const string bname = "HandlerAddToTracklistAction1";
+	
+	private Action menu_add;
+	private const string ainfo = _("Add to tracklist");
+	private const string aname = "HandlerAddToTracklistAction2";
 	
 	private const string name = "HandlerAddToTracklist";
 	private unowned Main xn;
@@ -43,11 +47,19 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	public HandlerAddToTracklist() {
 		//action for adding item(s)
 		xn = Main.instance;
+		
 		add = new Action(); 
 		add.action = on_mediabrowser_activated;
 		add.info = this.binfo;
-		add.name = this.bname;// (char[])"HandlerAddToTracklist";
+		add.name = this.bname;
 		add.context = ActionContext.MEDIABROWSER_ITEM_ACTIVATED;
+		
+		menu_add = new Action(); 
+		menu_add.action = on_menu_add;
+		menu_add.info = this.ainfo;
+		menu_add.name = this.aname;
+		menu_add.stock_item = Gtk.Stock.ADD;
+		menu_add.context = ActionContext.MEDIABROWSER_MENU_QUERY;
 		print("constructed HandlerAddToTracklist\n");
 	}
 
@@ -63,9 +75,51 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		if(context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED)
 			return add;
 		
+		if(context == ActionContext.MEDIABROWSER_MENU_QUERY)
+			return menu_add;
+		
 		return null;
 	}
 
+	private void on_menu_add(Item item, GLib.Value? data) {
+		GLib.List<TreePath> list;
+		list = xn.main_window.mediaBr.get_selection().get_selected_rows(null);
+		if(list.length() == 0) return;
+		Item? ix = Item(ItemType.UNKNOWN);
+		TreeIter iter;
+//		list.reverse();
+		Item[] items = {};
+		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.menu_add_job);
+		foreach(TreePath path in list) {
+			xn.main_window.mediaBr.mediabrowsermodel.get_iter(out iter, path);
+			xn.main_window.mediaBr.mediabrowsermodel.get(iter, TrackListModel.Column.ITEM, out ix);
+			items += ix;
+		}
+		job.items = items;
+		worker.push_job(job);
+	}
+
+	private void menu_add_job(Worker.Job job) {
+		TrackData[] tmp = {};
+		TrackData[] tda = {};
+		foreach(Item item in job.items) {
+			tmp = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
+			if(tmp == null)
+				continue;
+			foreach(TrackData td in tmp) {
+				tda += td;
+			}
+		}
+		job.track_dat = tda;
+		
+		if(job.track_dat != null) {
+			Idle.add( () => {
+				append_tracks(ref job.track_dat, false);
+				return false;
+			});
+		}
+	}
+	
 	private void on_mediabrowser_activated(Item item, GLib.Value? data) {
 		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.add_item_job);
 		job.item = item;
@@ -76,17 +130,17 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		Item? item = job.item;//(Item?)job.get_arg("item");
 		//print("item.type is %s\n", item.type.to_string());
 		
-		job.track_dat = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);;
+		job.track_dat = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
 		
 		if(job.track_dat != null) {
 			Idle.add( () => {
-				append_tracks(ref job.track_dat);
+				append_tracks(ref job.track_dat, true);
 				return false;
 			});
 		}
 	}
 	
-	private void append_tracks(ref TrackData[]? tda) {
+	private void append_tracks(ref TrackData[]? tda, bool immediate_play = true) {
 		if(tda == null || tda[0] == null) 
 			return;
 		
@@ -95,7 +149,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		while(tda[k] != null) {
 			string current_uri = tda[k].uri;
 			
-			if(k == 0) { // First track
+			if(k == 0 && immediate_play) { // First track
 				iter = xn.tlm.insert_title(null,
 				                         (int)tda[k].tracknumber,
 				                         tda[k].title,
@@ -122,16 +176,16 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 			}
 			k++;
 		}
-		
-		if(tda[0].item.type != ItemType.UNKNOWN) {
+		if(tda[0].item.type != ItemType.UNKNOWN && immediate_play) {
 			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;
-			unowned Action? action = tmp.get_action(tda[0].item.type, ActionContext.ANY);
+			unowned Action? action = tmp.get_action(tda[0].item.type, ActionContext.REQUESTED);
 			if(action != null)
 				action.action(tda[0].item, null);
 		}
-		xn.tl.set_focus_on_iter(ref iter_2);
+		if(immediate_play)
+			xn.tl.set_focus_on_iter(ref iter_2);
 	}
 }
 

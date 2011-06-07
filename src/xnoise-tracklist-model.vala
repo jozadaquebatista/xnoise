@@ -532,7 +532,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;
-			unowned Action? action = tmp.get_action(item.type, ActionContext.ANY);
+			unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED);
 			if(action != null)
 				action.action(item, null);
 		}
