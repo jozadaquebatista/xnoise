@@ -298,14 +298,17 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		var rightmenu = new Menu();
 		GLib.List<TreePath> list;
 		list = this.get_selection().get_selected_rows(null);
+		ItemSelectionType itemselection = ItemSelectionType.SINGLE;
+		if(list.length() > 1)
+			itemselection = ItemSelectionType.MULTIPLE;
 		Item? item = null;
 		Array<unowned Action?> array = null;
-//		foreach(unowned Gtk.TreePath path in list) { //TODO
+//		foreach(Gtk.TreePath path in list) { //TODO
 //		}
 		TreePath path = (TreePath)list.data;
 		mediabrowsermodel.get_iter(out iter, path);
 		mediabrowsermodel.get(iter, TrackListModel.Column.ITEM, out item);
-		array = item_handler_manager.get_actions(item.type, ActionContext.MEDIABROWSER_MENU_QUERY);
+		array = item_handler_manager.get_actions(item.type, ActionContext.MEDIABROWSER_MENU_QUERY, itemselection);
 		for(int i =0; i < array.length; i++) {
 			unowned Action x = array.index(i);
 			print("%s\n", x.name);
@@ -371,32 +374,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //		return rightmenu;
 //	}
 
-//	private TagTitleEditor tte;
-//	private void open_tagtitle_changer() {
-//		tte = new TagTitleEditor(ref treerowref);
-//		tte.sign_finish.connect( () => {
-//			tte = null;
-//			menu = null;
-//		});
-//	}
 
-//	private TagArtistAlbumEditor tae;
-//	private void open_tagartist_changer() {
-//		tae = new TagArtistAlbumEditor(ref treerowref);
-//		tae.sign_finish.connect( () => {
-//			tae = null;
-//			menu = null;
-//		});
-//	}
-
-//	private void open_tagalbum_changer() {
-//		tae = new TagArtistAlbumEditor(ref treerowref);
-//		tae.sign_finish.connect( () => {
-//			tae = null;
-//			menu = null;
-//		});
-//	}
-//	
 	private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath treepath;
 		Gtk.TreeViewColumn column;
@@ -479,7 +457,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
 			if(tmp == null)
 				return;
-			unowned Action? action = tmp.get_action(item.type, ActionContext.MEDIABROWSER_ITEM_ACTIVATED);
+			unowned Action? action = tmp.get_action(item.type, ActionContext.MEDIABROWSER_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
 			
 			if(action != null)
 				action.action(item, null);

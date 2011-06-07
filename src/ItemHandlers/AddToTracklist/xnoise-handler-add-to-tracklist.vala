@@ -71,7 +71,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		return name;
 	}
 
-	public override unowned Action? get_action(ItemType type, ActionContext context) {
+	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
 		if(context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED)
 			return add;
 		
@@ -180,7 +180,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;
-			unowned Action? action = tmp.get_action(tda[0].item.type, ActionContext.REQUESTED);
+			unowned Action? action = tmp.get_action(tda[0].item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
 			if(action != null)
 				action.action(tda[0].item, null);
 		}

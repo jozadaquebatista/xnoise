@@ -43,6 +43,13 @@ namespace Xnoise {
 		MAXCOUNT
 	}
 	
+	[Flags]
+	public enum ItemSelectionType {
+		NOT_SET = 0,
+		SINGLE = 1 << 0,
+		MULTIPLE = 1 << 1
+	}
+	
 	public enum ItemHandlerType {
 		UNKNOWN,
 		OTHER,
@@ -84,6 +91,7 @@ namespace Xnoise {
 		
 		public abstract ItemHandlerType handler_type(); 
 		public abstract unowned string handler_name();
-		public abstract unowned Action? get_action(ItemType type, ActionContext context); // Maybe return more than one Action
+		// TODO: Maybe return more than one Action
+		public abstract unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection); 
 	}
 }

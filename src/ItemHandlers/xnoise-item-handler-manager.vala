@@ -41,17 +41,17 @@ namespace Xnoise {
 		  = new HashTable<string, unowned ItemHandler?>(str_hash, str_equal);
 	
 	
-		public Array<unowned Action?> get_actions(ItemType type, ActionContext context) {
+		public Array<unowned Action?> get_actions(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
 			//check if ItemType is supported
 			//return right action for context and handlers
 			
 			//TODO: return unique entries
 			
-			print("uhm get_actions : %d, %s\n", (int)type, context.to_string());
+			//print("uhm get_actions : %s, %s\n", type.to_string(), context.to_string());
 			Array<unowned Action?> item_actions = new Array<unowned Action?>(true, true, sizeof(Action));
 			for(int i = 0; i< _handlers.length; i++) {
 				ItemHandler current_handler = _handlers.index(i);
-				unowned Action? tmp = current_handler.get_action(type, context);
+				unowned Action? tmp = current_handler.get_action(type, context, selection);
 				if(tmp != null)
 					item_actions.append_val(tmp);
 			}

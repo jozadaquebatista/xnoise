@@ -106,6 +106,8 @@ typedef struct _XnoiseItemHandlerPrivate XnoiseItemHandlerPrivate;
 #define XNOISE_TYPE_ITEM_TYPE (xnoise_item_type_get_type ())
 
 #define XNOISE_TYPE_ACTION_CONTEXT (xnoise_action_context_get_type ())
+
+#define XNOISE_TYPE_ITEM_SELECTION_TYPE (xnoise_item_selection_type_get_type ())
 typedef struct _XnoiseAction XnoiseAction;
 
 #define XNOISE_TYPE_ITEM_HANDLER_MANAGER (xnoise_item_handler_manager_get_type ())
@@ -129,6 +131,31 @@ typedef struct _XnoiseHandlerAddToTracklist XnoiseHandlerAddToTracklist;
 typedef struct _XnoiseHandlerAddToTracklistClass XnoiseHandlerAddToTracklistClass;
 typedef struct _XnoiseHandlerAddToTracklistPrivate XnoiseHandlerAddToTracklistPrivate;
 
+#define XNOISE_TYPE_HANDLER_EDIT_TAGS (xnoise_handler_edit_tags_get_type ())
+#define XNOISE_HANDLER_EDIT_TAGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_EDIT_TAGS, XnoiseHandlerEditTags))
+#define XNOISE_HANDLER_EDIT_TAGS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_EDIT_TAGS, XnoiseHandlerEditTagsClass))
+#define XNOISE_IS_HANDLER_EDIT_TAGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_EDIT_TAGS))
+#define XNOISE_IS_HANDLER_EDIT_TAGS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_EDIT_TAGS))
+#define XNOISE_HANDLER_EDIT_TAGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_EDIT_TAGS, XnoiseHandlerEditTagsClass))
+
+typedef struct _XnoiseHandlerEditTags XnoiseHandlerEditTags;
+typedef struct _XnoiseHandlerEditTagsClass XnoiseHandlerEditTagsClass;
+typedef struct _XnoiseHandlerEditTagsPrivate XnoiseHandlerEditTagsPrivate;
+
+#define XNOISE_TYPE_TAG_TITLE_EDITOR (xnoise_tag_title_editor_get_type ())
+#define XNOISE_TAG_TITLE_EDITOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditor))
+#define XNOISE_TAG_TITLE_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditorClass))
+#define XNOISE_IS_TAG_TITLE_EDITOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR))
+#define XNOISE_IS_TAG_TITLE_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TAG_TITLE_EDITOR))
+#define XNOISE_TAG_TITLE_EDITOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditorClass))
+
+typedef struct _XnoiseTagTitleEditor XnoiseTagTitleEditor;
+typedef struct _XnoiseTagTitleEditorClass XnoiseTagTitleEditorClass;
+typedef struct _XnoiseTagTitleEditorPrivate XnoiseTagTitleEditorPrivate;
+
+#define XNOISE_TYPE_ITEM (xnoise_item_get_type ())
+typedef struct _XnoiseItem XnoiseItem;
+
 #define XNOISE_TYPE_HANDLER_PLAY_ITEM (xnoise_handler_play_item_get_type ())
 #define XNOISE_HANDLER_PLAY_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_PLAY_ITEM, XnoiseHandlerPlayItem))
 #define XNOISE_HANDLER_PLAY_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_PLAY_ITEM, XnoiseHandlerPlayItemClass))
@@ -150,9 +177,6 @@ typedef struct _XnoiseHandlerPlayItemPrivate XnoiseHandlerPlayItemPrivate;
 typedef struct _XnoiseHandlerRemoveTrack XnoiseHandlerRemoveTrack;
 typedef struct _XnoiseHandlerRemoveTrackClass XnoiseHandlerRemoveTrackClass;
 typedef struct _XnoiseHandlerRemoveTrackPrivate XnoiseHandlerRemoveTrackPrivate;
-
-#define XNOISE_TYPE_ITEM (xnoise_item_get_type ())
-typedef struct _XnoiseItem XnoiseItem;
 
 #define XNOISE_TYPE_ITEM_CONVERTER (xnoise_item_converter_get_type ())
 #define XNOISE_ITEM_CONVERTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_CONVERTER, XnoiseItemConverter))
@@ -698,6 +722,12 @@ typedef enum  {
 	XNOISE_ACTION_CONTEXT_MAXCOUNT
 } XnoiseActionContext;
 
+typedef enum  {
+	XNOISE_ITEM_SELECTION_TYPE_NOT_SET = 0,
+	XNOISE_ITEM_SELECTION_TYPE_SINGLE = 1 << 0,
+	XNOISE_ITEM_SELECTION_TYPE_MULTIPLE = 1 << 1
+} XnoiseItemSelectionType;
+
 struct _XnoiseItemHandler {
 	GObject parent_instance;
 	XnoiseItemHandlerPrivate * priv;
@@ -708,7 +738,7 @@ struct _XnoiseItemHandlerClass {
 	GObjectClass parent_class;
 	XnoiseItemHandlerType (*handler_type) (XnoiseItemHandler* self);
 	const gchar* (*handler_name) (XnoiseItemHandler* self);
-	XnoiseAction* (*get_action) (XnoiseItemHandler* self, XnoiseItemType type, XnoiseActionContext context);
+	XnoiseAction* (*get_action) (XnoiseItemHandler* self, XnoiseItemType type, XnoiseActionContext context, XnoiseItemSelectionType selection);
 };
 
 struct _XnoiseHandlerAddToTracklist {
@@ -718,6 +748,31 @@ struct _XnoiseHandlerAddToTracklist {
 
 struct _XnoiseHandlerAddToTracklistClass {
 	XnoiseItemHandlerClass parent_class;
+};
+
+struct _XnoiseHandlerEditTags {
+	XnoiseItemHandler parent_instance;
+	XnoiseHandlerEditTagsPrivate * priv;
+};
+
+struct _XnoiseHandlerEditTagsClass {
+	XnoiseItemHandlerClass parent_class;
+};
+
+struct _XnoiseTagTitleEditor {
+	GObject parent_instance;
+	XnoiseTagTitleEditorPrivate * priv;
+};
+
+struct _XnoiseTagTitleEditorClass {
+	GObjectClass parent_class;
+};
+
+struct _XnoiseItem {
+	XnoiseItemType type;
+	gint32 db_id;
+	gchar* uri;
+	gchar* text;
 };
 
 struct _XnoiseHandlerPlayItem {
@@ -736,13 +791,6 @@ struct _XnoiseHandlerRemoveTrack {
 
 struct _XnoiseHandlerRemoveTrackClass {
 	XnoiseItemHandlerClass parent_class;
-};
-
-struct _XnoiseItem {
-	XnoiseItemType type;
-	gint32 db_id;
-	gchar* uri;
-	gchar* text;
 };
 
 struct _XnoiseItemConverter {
@@ -1418,22 +1466,29 @@ GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
 GType xnoise_item_handler_type_get_type (void) G_GNUC_CONST;
 GType xnoise_item_type_get_type (void) G_GNUC_CONST;
 GType xnoise_action_context_get_type (void) G_GNUC_CONST;
+GType xnoise_item_selection_type_get_type (void) G_GNUC_CONST;
 void xnoise_action_free (XnoiseAction* self);
 GType xnoise_item_handler_manager_get_type (void) G_GNUC_CONST;
 GType xnoise_handler_add_to_tracklist_get_type (void) G_GNUC_CONST;
 XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_new (void);
 XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_construct (GType object_type);
+GType xnoise_handler_edit_tags_get_type (void) G_GNUC_CONST;
+XnoiseHandlerEditTags* xnoise_handler_edit_tags_new (void);
+XnoiseHandlerEditTags* xnoise_handler_edit_tags_construct (GType object_type);
+GType xnoise_tag_title_editor_get_type (void) G_GNUC_CONST;
+GType xnoise_item_get_type (void) G_GNUC_CONST;
+XnoiseItem* xnoise_item_dup (const XnoiseItem* self);
+void xnoise_item_free (XnoiseItem* self);
+void xnoise_item_copy (const XnoiseItem* self, XnoiseItem* dest);
+void xnoise_item_destroy (XnoiseItem* self);
+XnoiseTagTitleEditor* xnoise_tag_title_editor_new (XnoiseItem* _item);
+XnoiseTagTitleEditor* xnoise_tag_title_editor_construct (GType object_type, XnoiseItem* _item);
 GType xnoise_handler_play_item_get_type (void) G_GNUC_CONST;
 XnoiseHandlerPlayItem* xnoise_handler_play_item_new (void);
 XnoiseHandlerPlayItem* xnoise_handler_play_item_construct (GType object_type);
 GType xnoise_handler_remove_track_get_type (void) G_GNUC_CONST;
 XnoiseHandlerRemoveTrack* xnoise_handler_remove_track_new (void);
 XnoiseHandlerRemoveTrack* xnoise_handler_remove_track_construct (GType object_type);
-GType xnoise_item_get_type (void) G_GNUC_CONST;
-XnoiseItem* xnoise_item_dup (const XnoiseItem* self);
-void xnoise_item_free (XnoiseItem* self);
-void xnoise_item_copy (const XnoiseItem* self, XnoiseItem* dest);
-void xnoise_item_destroy (XnoiseItem* self);
 void xnoise_item_init (XnoiseItem *self, XnoiseItemType _type, const gchar* _uri, gint32 _db_id);
 GType xnoise_item_converter_get_type (void) G_GNUC_CONST;
 gpointer xnoise_track_data_ref (gpointer instance);
@@ -1452,9 +1507,9 @@ XnoiseAction* xnoise_action_new (void);
 gboolean xnoise_item_handler_set_manager (XnoiseItemHandler* self, XnoiseItemHandlerManager* _uhm);
 XnoiseItemHandlerType xnoise_item_handler_handler_type (XnoiseItemHandler* self);
 const gchar* xnoise_item_handler_handler_name (XnoiseItemHandler* self);
-XnoiseAction* xnoise_item_handler_get_action (XnoiseItemHandler* self, XnoiseItemType type, XnoiseActionContext context);
+XnoiseAction* xnoise_item_handler_get_action (XnoiseItemHandler* self, XnoiseItemType type, XnoiseActionContext context, XnoiseItemSelectionType selection);
 XnoiseItemHandler* xnoise_item_handler_construct (GType object_type);
-GArray* xnoise_item_handler_manager_get_actions (XnoiseItemHandlerManager* self, XnoiseItemType type, XnoiseActionContext context);
+GArray* xnoise_item_handler_manager_get_actions (XnoiseItemHandlerManager* self, XnoiseItemType type, XnoiseActionContext context, XnoiseItemSelectionType selection);
 void xnoise_item_handler_manager_add_handler (XnoiseItemHandlerManager* self, XnoiseItemHandler* handler);
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_type (XnoiseItemHandlerManager* self, XnoiseItemHandlerType type);
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_name (XnoiseItemHandlerManager* self, const gchar* name);

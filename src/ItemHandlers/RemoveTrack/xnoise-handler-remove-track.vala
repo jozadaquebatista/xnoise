@@ -55,7 +55,7 @@ public class Xnoise.HandlerRemoveTrack : ItemHandler {
 		return name;
 	}
 
-	public override unowned Action? get_action(ItemType type, ActionContext context) {
+	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
 		if(context == ActionContext.TRACKLIST_MENU_QUERY)
 			return a;
 		else

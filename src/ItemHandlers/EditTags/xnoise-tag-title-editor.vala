@@ -38,19 +38,21 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	private Entry entry_artist;
 	private Entry entry_album;
 	private Entry entry_title;
-	private unowned TreeRowReference treerowref;
+//	private unowned TreeRowReference treerowref;
+	private Item? item;
 	
 	public signal void sign_finish();
 
-	public TagTitleEditor(ref TreeRowReference _treerowref) {
-		if(!_treerowref.valid()) {
-			Idle.add( () => {
-				sign_finish();
-				return false;
-			});
-			return;
-		}
-		treerowref = _treerowref;
+	public TagTitleEditor(Item _item) {
+//		if(!_treerowref.valid()) {
+//			Idle.add( () => {
+//				sign_finish();
+//				return false;
+//			});
+//			return;
+//		}
+//		treerowref = _treerowref;
+		item = _item;
 		xn = Main.instance;
 		builder = new Gtk.Builder();
 		create_widgets();
@@ -62,38 +64,37 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	
 	private void fill_entries() {
 		// read tags and put them to the entries; store current tags to be able to realize changes
-		TreePath path;
-		TreeModel model;
-		TreeIter iter;
-		int db_id = -1;
-		if(treerowref.valid()) {
-			model = treerowref.get_model();
-			path  = treerowref.get_path();
-			
-			model.get_iter(out iter, path);
-			model.get(iter, MediaBrowserModel.Column.DB_ID, out db_id);
-			query_trackdata(db_id);
-		}
-	}
-
-	private void query_trackdata(int db_id) {
-		// push query to other thread
+//		TreePath path;
+//		TreeModel model;
+//		TreeIter iter;
+//		if(treerowref.valid()) {
+//			model = treerowref.get_model();
+//			path  = treerowref.get_path();
+//			
+//			model.get_iter(out iter, path);
+//			model.get(iter, MediaBrowserModel.Column.DB_ID, out db_id);
 		Worker.Job job;
 		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.query_trackdata_job);
-		job.value_arg1 = db_id;
+		job.item = item;
 		worker.push_job(job);
 	}
+
+//	private void query_trackdata(int db_id) {
+//		// push query to other thread
+
+//	}
 	
 	private TrackData td_old = null;
 	
 	private void query_trackdata_job(Worker.Job job) {
 		// callback for query in other thread
-		TrackData td = null;
-				
+		TrackData[] tmp = {};
+		TrackData[] tda = {};
+		tmp = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
+		if(tmp == null && tmp[0] != null)
+			return;
 		
-		int dbid       = (int)job.value_arg1;
-		
-		db_browser.get_trackdata_for_id(dbid, out td);
+		TrackData td = tmp[0];
 		
 		td_old = copy_trackdata(td);
 		
@@ -143,41 +144,41 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	}
 	
 	private void on_ok_button_clicked(Gtk.Button sender) {
-		if(!treerowref.valid())
-			return; // TODO: user info
-		TreeModel model = treerowref.get_model();
-		if(((MediaBrowserModel)model).populating_model) {
-			infolabel.label = _("Please wait while filling media browser. Or cancel, if you do not want to wait.");
-			return;
-		}
-		if(global.media_import_in_progress) {
-			infolabel.label = _("Please wait while importing media. Or cancel, if you do not want to wait.");
-			return;
-		}
+//		if(!treerowref.valid())
+//			return; // TODO: user info
+//		TreeModel model = treerowref.get_model();
+//		if(((MediaBrowserModel)model).populating_model) {
+//			infolabel.label = _("Please wait while filling media browser. Or cancel, if you do not want to wait.");
+//			return;
+//		}
+//		if(global.media_import_in_progress) {
+//			infolabel.label = _("Please wait while importing media. Or cancel, if you do not want to wait.");
+//			return;
+//		}
 
-		if(td_old == null)
-			return;
-		
-		infolabel.label = "";
-		TrackData tdx = copy_trackdata(td_old);
-		if(entry_artist.text != null && entry_artist.text._strip() != "")
-			tdx.artist = entry_artist.text;
-		if(entry_album.text != null && entry_album.text._strip() != "")
-			tdx.album  = entry_album.text;
-		if(entry_title.text != null && entry_title.text._strip() != "")
-			tdx.title  = entry_title.text;
-		// TODO: UTF-8 validation
-		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_tag_job);
-		job.set_arg("tdx", tdx);
-		job.set_arg("treerowref", treerowref);
-		worker.push_job(job);		
-		
-		Idle.add( () => {
-			this.dialog.destroy();
-			this.sign_finish();
-			return false;
-		});
+//		if(td_old == null)
+//			return;
+//		
+//		infolabel.label = "";
+//		TrackData tdx = copy_trackdata(td_old);
+//		if(entry_artist.text != null && entry_artist.text._strip() != "")
+//			tdx.artist = entry_artist.text;
+//		if(entry_album.text != null && entry_album.text._strip() != "")
+//			tdx.album  = entry_album.text;
+//		if(entry_title.text != null && entry_title.text._strip() != "")
+//			tdx.title  = entry_title.text;
+//		// TODO: UTF-8 validation
+//		Worker.Job job;
+//		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_tag_job);
+//		job.set_arg("tdx", tdx);
+//		job.set_arg("treerowref", treerowref);
+//		worker.push_job(job);		
+//		
+//		Idle.add( () => {
+//			this.dialog.destroy();
+//			this.sign_finish();
+//			return false;
+//		});
 	}
 
 	private void update_tag_job(Worker.Job job) {

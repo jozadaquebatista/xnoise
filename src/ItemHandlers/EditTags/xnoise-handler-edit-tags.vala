@@ -35,6 +35,10 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 	private const string titleinfo = _("Edit metadata for track");
 	private const string titlename = "HandlerEditTagsActionTitle";
 	
+	private Action edit_album_mediabrowser;
+	private const string albuminfo = _("Change album name");
+	private const string albumname = "HandlerEditTagsActionAlbum";
+	
 	private const string name = "HandlerEditTags";
 	private unowned Main xn;
 	
@@ -47,6 +51,14 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 		edit_title_mediabrowser.name = this.titlename;
 		edit_title_mediabrowser.stock_item = Gtk.Stock.EDIT;
 		edit_title_mediabrowser.context = ActionContext.MEDIABROWSER_MENU_QUERY;
+
+		edit_album_mediabrowser = new Action(); 
+		edit_album_mediabrowser.action = on_edit_album_mediabrowser;
+		edit_album_mediabrowser.info = this.albuminfo;
+		edit_album_mediabrowser.name = this.albumname;
+		edit_album_mediabrowser.stock_item = Gtk.Stock.EDIT;
+		edit_album_mediabrowser.context = ActionContext.MEDIABROWSER_MENU_QUERY;
+
 		print("constructed %s\n", this.name);
 	}
 
@@ -58,65 +70,30 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 		return name;
 	}
 
-	public override unowned Action? get_action(ItemType type, ActionContext context) {
-		if(context == ActionContext.MEDIABROWSER_MENU_QUERY)
-			return edit_title_mediabrowser;
-		
+	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.SINGLE|ItemSelectionType.MULTIPLE) {
+		if(selection != ItemSelectionType.SINGLE)
+			return null;
+		if(context == ActionContext.MEDIABROWSER_MENU_QUERY) {
+			switch(type) {
+				case ItemType.COLLECTION_CONTAINER_ALBUM:
+					return edit_album_mediabrowser;
+				case ItemType.LOCAL_AUDIO_TRACK:
+					return edit_title_mediabrowser;
+				default:
+					break;
+			}
+		}
 		return null;
 	}
 
 	private void on_edit_title_mediabrowser(Item item, GLib.Value? data) {
-		if(item.type != ItemType.LOCAL_AUDIO_TRACK)
-			return;
-		this.open_tagtitle_changer(item);
-//		switch(item.type) {
-//			case ItemType.COLLECTION_CONTAINER_ARTIST:
-//				this.open_tagartist_changer();
-//				break;
-//			case ItemType.COLLECTION_CONTAINER_ALBUM:
-//				this.open_tagalbum_changer();
-//				break;
-//			case ItemType.LOCAL_AUDIO_TRACK:
-//				this.open_tagtitle_changer();
-//				break;
-//			default:
-//				menu = null;
-//				break;
-//		}
-//		GLib.List<TreePath> list;
-//		list = xn.main_window.mediaBr.get_selection().get_selected_rows(null);
-//		if(list.length() == 0) return;
-//		Item? ix = Item(ItemType.UNKNOWN);
-//		TreeIter iter;
-////		list.reverse();
-//		Item[] items = {};
-//		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.edit_title_mediabrowser_job);
-//		TreePath path = list.data; // only first
-//		xn.main_window.mediaBr.mediabrowsermodel.get_iter(out iter, path);
-//		xn.main_window.mediaBr.mediabrowsermodel.get(iter, TrackListModel.Column.ITEM, out ix);
-//		job.item = ix;
-//		worker.push_job(job);
+		if(item.type == ItemType.LOCAL_AUDIO_TRACK)
+			this.open_tagtitle_changer(item);
 	}
 
-	private void edit_title_mediabrowser_job(Worker.Job job) {
-//		TrackData[] tmp = {};
-//		TrackData[] tda = {};
-//		foreach(Item item in job.items) {
-//			tmp = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
-//			if(tmp == null)
-//				continue;
-//			foreach(TrackData td in tmp) {
-//				tda += td;
-//			}
-//		}
-//		job.track_dat = tda;
-//		
-//		if(job.track_dat != null) {
-//			Idle.add( () => {
-//				append_tracks(ref job.track_dat, false);
-//				return false;
-//			});
-//		}
+	private void on_edit_album_mediabrowser(Item item, GLib.Value? data) {
+		if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM)
+			this.open_tagalbum_changer(item);
 	}
 
 //	private Menu create_edit_artist_tag_menu() {
@@ -139,40 +116,28 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 //		return rightmenu;
 //	}
 
-//	private Menu create_edit_title_tag_menu() {
-//		var rightmenu = new Menu();
-//		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
-//		menu_item.set_label(_("Edit metadata for track"));
-//		menu_item.activate.connect(this.open_tagtitle_changer);
-//		rightmenu.append(menu_item);
-//		rightmenu.show_all();
-//		return rightmenu;
-//	}
-
 	private TagTitleEditor tte;
 	private void open_tagtitle_changer(Item item) {
 		tte = new TagTitleEditor(item);
 		tte.sign_finish.connect( () => {
 			tte = null;
-			menu = null;
 		});
 	}
 
-//	private TagArtistAlbumEditor tae;
+	private TagArtistAlbumEditor tae;
+	
 //	private void open_tagartist_changer() {
 //		tae = new TagArtistAlbumEditor(ref treerowref);
 //		tae.sign_finish.connect( () => {
 //			tae = null;
-//			menu = null;
 //		});
 //	}
 
-//	private void open_tagalbum_changer() {
-//		tae = new TagArtistAlbumEditor(ref treerowref);
-//		tae.sign_finish.connect( () => {
-//			tae = null;
-//			menu = null;
-//		});
-//	}
+	private void open_tagalbum_changer(Item item) {
+		tae = new TagArtistAlbumEditor(item);
+		tae.sign_finish.connect( () => {
+			tae = null;
+		});
+	}
 }
 

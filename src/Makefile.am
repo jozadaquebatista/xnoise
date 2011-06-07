@@ -31,13 +31,13 @@ BUILT_SOURCES = \
     xnoise.h \
     $(NULL)
 
-#    ItemHandlers/EditTags/xnoise-handler-edit-tags.vala
-#    ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala
-#    ItemHandlers/EditTags/xnoise-tag-title-editor.vala
 xnoise_SOURCES = \
     xnoise.vala \
     xnoise-main.vala \
     ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala \
+    ItemHandlers/EditTags/xnoise-handler-edit-tags.vala \
+    ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala \
+    ItemHandlers/EditTags/xnoise-tag-title-editor.vala \
     ItemHandlers/PlayItem/xnoise-handler-play-item.vala \
     ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala \
     ItemHandlers/xnoise-item.vala \

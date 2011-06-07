@@ -207,21 +207,28 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class HandlerAddToTracklist : Xnoise.ItemHandler {
 		public HandlerAddToTracklist ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
+		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
+		public override unowned string handler_name ();
+		public override Xnoise.ItemHandlerType handler_type ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class HandlerEditTags : Xnoise.ItemHandler {
+		public HandlerEditTags ();
+		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.SINGLE | ItemSelectionType.MULTIPLE);
 		public override unowned string handler_name ();
 		public override Xnoise.ItemHandlerType handler_type ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class HandlerPlayItem : Xnoise.ItemHandler {
 		public HandlerPlayItem ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
+		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
 		public override unowned string handler_name ();
 		public override Xnoise.ItemHandlerType handler_type ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class HandlerRemoveTrack : Xnoise.ItemHandler {
 		public HandlerRemoveTrack ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
+		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
 		public override unowned string handler_name ();
 		public override Xnoise.ItemHandlerType handler_type ();
 	}
@@ -245,7 +252,7 @@ namespace Xnoise {
 		public delegate void ActionType (Xnoise.Item item, GLib.Value? data);
 		protected weak Xnoise.ItemHandlerManager uhm;
 		public ItemHandler ();
-		public abstract unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context);
+		public abstract unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
 		public abstract unowned string handler_name ();
 		public abstract Xnoise.ItemHandlerType handler_type ();
 		public bool set_manager (Xnoise.ItemHandlerManager _uhm);
@@ -256,7 +263,7 @@ namespace Xnoise {
 		public void add_handler (Xnoise.ItemHandler handler);
 		public Xnoise.Item? create_uri_item (string? uri);
 		public void execute_actions_for_item (Xnoise.Item item, Xnoise.ActionContext context, GLib.Value? data);
-		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context);
+		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
 		public Xnoise.ItemHandler get_handler_by_name (string name);
 		public Xnoise.ItemHandler get_handler_by_type (Xnoise.ItemHandlerType type);
 		public void test_func ();
@@ -507,6 +514,11 @@ namespace Xnoise {
 	public class TagReader {
 		public TagReader ();
 		public Xnoise.TrackData read_tag (string filename);
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class TagTitleEditor : GLib.Object {
+		public TagTitleEditor (Xnoise.Item _item);
+		public signal void sign_finish ();
 	}
 	[CCode (ref_function = "xnoise_tag_writer_ref", unref_function = "xnoise_tag_writer_unref", cheader_filename = "xnoise.h")]
 	public class TagWriter {
@@ -766,6 +778,13 @@ namespace Xnoise {
 		VIDEO_THUMBNAILER,
 		TAG_EDITOR,
 		PLAY_NOW
+	}
+	[CCode (cprefix = "XNOISE_ITEM_SELECTION_TYPE_", cheader_filename = "xnoise.h")]
+	[Flags]
+	public enum ItemSelectionType {
+		NOT_SET,
+		SINGLE,
+		MULTIPLE
 	}
 	[CCode (cprefix = "XNOISE_ITEM_TYPE_", cheader_filename = "xnoise.h")]
 	public enum ItemType {
