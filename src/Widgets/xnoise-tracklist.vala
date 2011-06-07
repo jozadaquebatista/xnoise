@@ -200,6 +200,13 @@ public class Xnoise.TrackList : TreeView, IParams {
 		var rightmenu = new Menu();
 		GLib.List<TreePath> list;
 		list = this.get_selection().get_selected_rows(null);
+		if(list == null)
+			return rightmenu;
+		ItemSelectionType itsel;
+		if(list.length() > 1)
+			itsel = ItemSelectionType.MULTIPLE;
+		else
+			itsel = ItemSelectionType.SINGLE;
 		Item? item = null;
 		Array<unowned Action?> array = null;
 //		foreach(unowned Gtk.TreePath path in list) { //TODO
@@ -207,7 +214,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 		TreePath path = (TreePath)list.data;
 		tracklistmodel.get_iter(out iter, path);
 		tracklistmodel.get(iter, TrackListModel.Column.ITEM, out item);
-		array = item_handler_manager.get_actions(item.type, ActionContext.TRACKLIST_MENU_QUERY);
+		array = item_handler_manager.get_actions(item.type, ActionContext.TRACKLIST_MENU_QUERY, itsel);
+		print("array.length:::%u\n", array.length);
 		for(int i =0; i < array.length; i++) {
 			print("%s\n", array.index(i).name);
 			var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.DELETE, null);

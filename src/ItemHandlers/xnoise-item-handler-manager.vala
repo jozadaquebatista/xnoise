@@ -41,7 +41,7 @@ namespace Xnoise {
 		  = new HashTable<string, unowned ItemHandler?>(str_hash, str_equal);
 	
 	
-		public Array<unowned Action?> get_actions(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
+		public Array<unowned Action?> get_actions(ItemType type, ActionContext context, ItemSelectionType selection) {
 			//check if ItemType is supported
 			//return right action for context and handlers
 			
@@ -137,8 +137,8 @@ namespace Xnoise {
 			return item;
 		}
 		
-		public void execute_actions_for_item(Item item, ActionContext context, GLib.Value? data) {
-			Array<Action?> item_actions = this.get_actions(item.type, context);
+		public void execute_actions_for_item(Item item, ActionContext context, GLib.Value? data, ItemSelectionType selection) {
+			Array<Action?> item_actions = this.get_actions(item.type, context, selection);
 			//print("item_actions.length: %u\n", item_actions.length);
 			for(int i = 0; i < item_actions.length; i++) {
 				unowned Action current = item_actions.index(i);
