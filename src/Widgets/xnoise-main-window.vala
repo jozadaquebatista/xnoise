@@ -1320,6 +1320,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//VOLUME SLIDE BUTTON
 			this.volumeSliderButton = new VolumeSliderButton();
+			var vol_image = volumeSliderButton.get_image();
 			var afVol = gb.get_object("aFrameVolumeButton") as Gtk.AspectFrame;
 			afVol.add(volumeSliderButton);
 
@@ -1339,7 +1340,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.nextButton.sign_clicked.connect(handle_control_button_click);
 			playback_hbox.pack_start(nextButton, false, false, 0);
 			nextButton.show();
-
+			
+			var buttons_sizegroup = new Gtk.SizeGroup(SizeGroupMode.BOTH);
+			buttons_sizegroup.add_widget(volumeSliderButton);
+			buttons_sizegroup.add_widget(previousButton);
+			buttons_sizegroup.add_widget(playPauseButton);
+			buttons_sizegroup.add_widget(stopButton);
+			buttons_sizegroup.add_widget(nextButton);
+			
 			//PROGRESS BAR
 			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
 			this.songProgressBar = new TrackProgressBar();
