@@ -225,6 +225,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	public void on_searchtext_changed() {
 		string txt = xn.main_window.searchEntryMB.text;
 		if(txt != null) {
+			if(txt.down() == mediabrowsermodel.searchtext)
+				return;
 			mediabrowsermodel.searchtext = txt.down();
 		}
 		else {
