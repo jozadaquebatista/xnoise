@@ -266,17 +266,16 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			}
 			case 3: {
 				MediaBrowserModel.CollectionType ct = MediaBrowserModel.CollectionType.UNKNOWN;
-				
-				if(selection.count_selected_rows()< 1)
-					return false;
-				
-				//TreePath tp = filtermodel.convert_path_to_child_path(treepath);
 				TreeIter iter;
 				this.mediabrowsermodel.get_iter(out iter, treepath);
 				this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.COLL_TYPE, ref ct);
 				if(ct != MediaBrowserModel.CollectionType.HIERARCHICAL)
 					return false;
-				treerowref = new TreeRowReference(this.mediabrowsermodel, treepath);
+//				treerowref = new TreeRowReference(this.mediabrowsermodel, treepath);
+				if(!selection.path_is_selected(treepath)) {
+					selection.unselect_all();
+					selection.select_path(treepath);
+				}
 				rightclick_menu_popup(e.time);
 				return true;
 			}
@@ -340,7 +339,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //			menu.popup(null, null, null, 0, activateTime);
 //	}
 
-	private TreeRowReference treerowref = null;
+//	private TreeRowReference treerowref = null;
 	
 //	private Menu create_edit_artist_tag_menu() {
 //		var rightmenu = new Menu();

@@ -33,7 +33,7 @@
 using Gtk;
 
 public class Xnoise.AlbumImage : Gtk.Image {
-	private const int SIZE = 50;
+	private const int SIZE = 48;
 	private AlbumImageLoader loader = null;
 	private Main xn;
 	private string artist = "";

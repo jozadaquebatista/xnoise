@@ -1320,7 +1320,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//VOLUME SLIDE BUTTON
 			this.volumeSliderButton = new VolumeSliderButton();
-			var vol_image = volumeSliderButton.get_image();
 			var afVol = gb.get_object("aFrameVolumeButton") as Gtk.AspectFrame;
 			afVol.add(volumeSliderButton);
 
