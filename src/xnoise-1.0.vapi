@@ -508,11 +508,6 @@ namespace Xnoise {
 		public TagReader ();
 		public Xnoise.TrackData read_tag (string filename);
 	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class TagTitleEditor : GLib.Object {
-		public TagTitleEditor (ref Gtk.TreeRowReference _treerowref);
-		public signal void sign_finish ();
-	}
 	[CCode (ref_function = "xnoise_tag_writer_ref", unref_function = "xnoise_tag_writer_unref", cheader_filename = "xnoise.h")]
 	public class TagWriter {
 		public TagWriter ();
@@ -758,6 +753,8 @@ namespace Xnoise {
 		MEDIABROWSER_ITEM_ACTIVATED,
 		MEDIABROWSER_MENU_QUERY,
 		MEDIABROWSER_LOAD,
+		VIDEOSCREEN_ACTIVATED,
+		VIDEOSCREEN_MENU_QUERY,
 		MAXCOUNT
 	}
 	[CCode (cprefix = "XNOISE_ITEM_HANDLER_TYPE_", cheader_filename = "xnoise.h")]
@@ -843,6 +840,8 @@ namespace Xnoise {
 	public static string get_stream_uri (string playlist_uri);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static void initialize (out bool is_first_start);
+	[CCode (cheader_filename = "xnoise.h")]
+	public static int main (string[] args);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string prepare_for_comparison (string? value);
 	[CCode (cheader_filename = "xnoise.h")]

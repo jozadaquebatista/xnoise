@@ -1,5 +1,10 @@
 NULL =
 
+AUTOMAKE_OPTIONS = subdir-objects
+
+SUBDIRS = \
+    $(NULL)
+
 bin_PROGRAMS = xnoise
 
 INCLUDES = \
@@ -26,58 +31,60 @@ BUILT_SOURCES = \
     xnoise.h \
     $(NULL)
 
+#    ItemHandlers/EditTags/xnoise-handler-edit-tags.vala
+#    ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala
+#    ItemHandlers/EditTags/xnoise-tag-title-editor.vala
 xnoise_SOURCES = \
-    ItemHandlers/xnoise-handler-add-to-tracklist.vala \
-    ItemHandlers/xnoise-handler-play-item.vala \
-    ItemHandlers/xnoise-handler-remove-track.vala \
-    xnoise-about.vala \
-    xnoise-add-media-dialog.vala \
-    xnoise-album-image.vala \
-    xnoise-album-image-loader.vala \
-    xnoise-app-starter.vala \
-    xnoise-control-button.vala \
-    xnoise-db-browser.vala \
-    xnoise-db-creator.vala \
-    xnoise-db-writer.vala \
-    xnoise-fullscreen-toolbar.vala \
-    xnoise-global-access.vala \
-    xnoise-gst-player.vala \
-    xnoise-info-bar.vala \
-    xnoise-item.vala \
-    xnoise-item-converter.vala \
-    xnoise-item-handler.vala \
-    xnoise-item-handler-manager.vala \
-    xnoise-lyrics-loader.vala \
-    xnoise-lyrics-view.vala \
+    xnoise.vala \
     xnoise-main.vala \
-    xnoise-main-window.vala \
-    xnoise-media-browser.vala \
-    xnoise-media-browser-model.vala \
-    xnoise-media-browser-filtermodel.vala \
-    xnoise-media-importer.vala \
-    xnoise-misc.vala \
-    xnoise-parameter.vala \
-    xnoise-play-pause-button.vala \
-    xnoise-plugin.vala \
-    xnoise-plugin-loader.vala \
-    xnoise-plugin-information.vala \
-    xnoise-plugin-interface.vala \
-    xnoise-plugin-manager-tree.vala \
-    xnoise-screensaver-manager.vala \
-    xnoise-settings-dialog.vala \
-    xnoise-tag-artistalbum-editor.vala \
-    xnoise-tag-reader.vala \
-    xnoise-tag-title-editor.vala \
-    xnoise-tag-writer.vala \
-    xnoise-text-column.vala \
-    xnoise-tracklist.vala \
-    xnoise-tracklist-model.vala \
-    xnoise-track-progressbar.vala \
-    xnoise-tray-icon.vala \
-    xnoise-user-info.vala \
-    xnoise-videoscreen.vala \
-    xnoise-volume-slider-button.vala \
-    xnoise-worker.vala \
+    ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala \
+    ItemHandlers/PlayItem/xnoise-handler-play-item.vala \
+    ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala \
+    ItemHandlers/xnoise-item.vala \
+    ItemHandlers/xnoise-item-converter.vala \
+    ItemHandlers/xnoise-item-handler.vala \
+    ItemHandlers/xnoise-item-handler-manager.vala \
+    Database/xnoise-db-browser.vala \
+    Database/xnoise-db-creator.vala \
+    Database/xnoise-db-writer.vala \
+    Models/xnoise-media-browser-model.vala \
+    Models/xnoise-media-browser-filtermodel.vala \
+    Models/xnoise-tracklist-model.vala \
+    Player/xnoise-gst-player.vala \
+    Plugin/xnoise-plugin.vala \
+    Plugin/xnoise-plugin-loader.vala \
+    Plugin/xnoise-plugin-information.vala \
+    Plugin/xnoise-plugin-interface.vala \
+    TagAccess/xnoise-tag-reader.vala \
+    TagAccess/xnoise-tag-writer.vala \
+    TrayIcon/xnoise-tray-icon.vala \
+    Utils/xnoise-album-image-loader.vala \
+    Utils/xnoise-app-starter.vala \
+    Utils/xnoise-global-access.vala \
+    Utils/xnoise-lyrics-loader.vala \
+    Utils/xnoise-media-importer.vala \
+    Utils/xnoise-misc.vala \
+    Utils/xnoise-parameter.vala \
+    Utils/xnoise-screensaver-manager.vala \
+    Utils/xnoise-user-info.vala \
+    Utils/xnoise-worker.vala \
+    Widgets/xnoise-about.vala \
+    Widgets/xnoise-add-media-dialog.vala \
+    Widgets/xnoise-album-image.vala \
+    Widgets/xnoise-control-button.vala \
+    Widgets/xnoise-fullscreen-toolbar.vala \
+    Widgets/xnoise-info-bar.vala \
+    Widgets/xnoise-lyrics-view.vala \
+    Widgets/xnoise-main-window.vala \
+    Widgets/xnoise-media-browser.vala \
+    Widgets/xnoise-play-pause-button.vala \
+    Widgets/xnoise-plugin-manager-tree.vala \
+    Widgets/xnoise-settings-dialog.vala \
+    Widgets/xnoise-text-column.vala \
+    Widgets/xnoise-tracklist.vala \
+    Widgets/xnoise-track-progressbar.vala \
+    Widgets/xnoise-videoscreen.vala \
+    Widgets/xnoise-volume-slider-button.vala \
     $(NULL)
 
 VALAFLAGS = \
@@ -112,6 +119,17 @@ EXTRA_DIST = \
 
 DISTCLEANFILES = \
     *.c \
+    ItemHandlers/*.c \
+    ItemHandlers/AddToTracklist/*.c \
+    ItemHandlers/PlayItem/*.c \
+    ItemHandlers/RemoveTrack/*.c \
+    Database/*.c \
+    Utils/*.c \
+    Widgets/*.c \
+    TrayIcon/*.c \
+    Player/*.c \
+    Plugin/*.c \
+    Models/*.c \
     xnoise_vala.stamp \
     Makefile.in \
     $(NULL)

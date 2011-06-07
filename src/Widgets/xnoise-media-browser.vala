@@ -342,62 +342,62 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private TreeRowReference treerowref = null;
 	
-	private Menu create_edit_artist_tag_menu() {
-		var rightmenu = new Menu();
-		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
-		menu_item.set_label(_("Change artist name"));
-		menu_item.activate.connect(this.open_tagartist_changer);
-		rightmenu.append(menu_item);
-		rightmenu.show_all();
-		return rightmenu;
-	}
+//	private Menu create_edit_artist_tag_menu() {
+//		var rightmenu = new Menu();
+//		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
+//		menu_item.set_label(_("Change artist name"));
+//		menu_item.activate.connect(this.open_tagartist_changer);
+//		rightmenu.append(menu_item);
+//		rightmenu.show_all();
+//		return rightmenu;
+//	}
 
-	private Menu create_edit_album_tag_menu() {
-		var rightmenu = new Menu();
-		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
-		menu_item.set_label(_("Change album name"));
-		menu_item.activate.connect(this.open_tagalbum_changer);
-		rightmenu.append(menu_item);
-		rightmenu.show_all();
-		return rightmenu;
-	}
+//	private Menu create_edit_album_tag_menu() {
+//		var rightmenu = new Menu();
+//		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
+//		menu_item.set_label(_("Change album name"));
+//		menu_item.activate.connect(this.open_tagalbum_changer);
+//		rightmenu.append(menu_item);
+//		rightmenu.show_all();
+//		return rightmenu;
+//	}
 
-	private Menu create_edit_title_tag_menu() {
-		var rightmenu = new Menu();
-		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
-		menu_item.set_label(_("Edit metadata for track"));
-		menu_item.activate.connect(this.open_tagtitle_changer);
-		rightmenu.append(menu_item);
-		rightmenu.show_all();
-		return rightmenu;
-	}
+//	private Menu create_edit_title_tag_menu() {
+//		var rightmenu = new Menu();
+//		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
+//		menu_item.set_label(_("Edit metadata for track"));
+//		menu_item.activate.connect(this.open_tagtitle_changer);
+//		rightmenu.append(menu_item);
+//		rightmenu.show_all();
+//		return rightmenu;
+//	}
 
-	private TagTitleEditor tte;
-	private void open_tagtitle_changer() {
-		tte = new TagTitleEditor(ref treerowref);
-		tte.sign_finish.connect( () => {
-			tte = null;
-			menu = null;
-		});
-	}
+//	private TagTitleEditor tte;
+//	private void open_tagtitle_changer() {
+//		tte = new TagTitleEditor(ref treerowref);
+//		tte.sign_finish.connect( () => {
+//			tte = null;
+//			menu = null;
+//		});
+//	}
 
-	private TagArtistAlbumEditor tae;
-	private void open_tagartist_changer() {
-		tae = new TagArtistAlbumEditor(ref treerowref);
-		tae.sign_finish.connect( () => {
-			tae = null;
-			menu = null;
-		});
-	}
+//	private TagArtistAlbumEditor tae;
+//	private void open_tagartist_changer() {
+//		tae = new TagArtistAlbumEditor(ref treerowref);
+//		tae.sign_finish.connect( () => {
+//			tae = null;
+//			menu = null;
+//		});
+//	}
 
-	private void open_tagalbum_changer() {
-		tae = new TagArtistAlbumEditor(ref treerowref);
-		tae.sign_finish.connect( () => {
-			tae = null;
-			menu = null;
-		});
-	}
-	
+//	private void open_tagalbum_changer() {
+//		tae = new TagArtistAlbumEditor(ref treerowref);
+//		tae.sign_finish.connect( () => {
+//			tae = null;
+//			menu = null;
+//		});
+//	}
+//	
 	private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath treepath;
 		Gtk.TreeViewColumn column;

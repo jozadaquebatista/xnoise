@@ -38,6 +38,8 @@ namespace Xnoise {
 		MEDIABROWSER_ITEM_ACTIVATED,
 		MEDIABROWSER_MENU_QUERY,
 		MEDIABROWSER_LOAD,
+		VIDEOSCREEN_ACTIVATED,
+		VIDEOSCREEN_MENU_QUERY,
 		MAXCOUNT
 	}
 	
@@ -82,7 +84,6 @@ namespace Xnoise {
 		
 		public abstract ItemHandlerType handler_type(); 
 		public abstract unowned string handler_name();
-		public abstract unowned Action? get_action(ItemType type, ActionContext context);
-//		public abstract Array<Item?>? convert(Item item); 
+		public abstract unowned Action? get_action(ItemType type, ActionContext context); // Maybe return more than one Action
 	}
 }

@@ -1,6 +1,6 @@
-/* xnoise-app-starter.vala
+/* xnoise.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,27 +28,16 @@
  * 	Jörn Magens
  */
 
-private class Xnoise.AppStarter {
-	public static Unique.Response on_message_received(Unique.App sender,
-	                                                  int command,
-	                                                  Unique.MessageData message_data,
-	                                                  uint time) {
-		xn.main_window.present();
-		xn.tl.tracklistmodel.add_uris(message_data.get_uris());
-		return Unique.Response.OK;
-	}
-
-	public static Main xn;
-
-	static bool _plugininfo;
-	static bool _noplugins;
-	static bool _reset;
-	static bool _version;
+namespace Xnoise {
+	private static bool _plugininfo;
+	private static bool _noplugins;
+	private static bool _reset;
+	private static bool _version;
+	
 	[CCode (array_length = false, array_null_terminated = true)]
-	[NoArrayLength]
-	static string[] _fileargs;
+	private static string[] _fileargs;
 
-	const OptionEntry[] options = {
+	private const OptionEntry[] options = {
 		{ "version", 'V', 0, OptionArg.NONE, ref _version, "Show the application's version.", null },
 		{ "plugin-info", 'p', 0, OptionArg.NONE, ref _plugininfo, "Show loaded and activated plugins on app start.", null },
 		{ "no-plugins", 'N', 0, OptionArg.NONE, ref _noplugins, "Start without loding any plugins.", null },
@@ -65,7 +54,7 @@ private class Xnoise.AppStarter {
 		//Environment.atexit(mem_profile); This can be used if xnoise is compiled with new memory statistic switch
 
 		var opt_context = new OptionContext("- Xnoise Media Player");
-		opt_context.set_description("Xnoise is a media player for Gtk+. It uses the gstreamer framework. \nMore information on the project website: \nhttp://code.google.com/p/xnoise/\n");
+		opt_context.set_description("Xnoise is a media player for Gtk+. It uses the gstreamer framework. \nMore information on the project website: \nhttp://www.xnoise-media-player.com/\n");
 		opt_context.set_help_enabled(true);
 		opt_context.add_main_entries(options, null);
 		try {
@@ -94,14 +83,14 @@ private class Xnoise.AppStarter {
 		Gst.init(ref args);
 		Unique.App app;
 		var app_starter = new AppStarter();
-		app = new Unique.App.with_commands("org.gnome.xnoise", "xnoise", null);
+		app = new Unique.App.with_commands("org.gtk.xnoise", "xnoise", null);
 		string[] uris = {};
 		File f = null;
 		string mime;
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+			          FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 		if(_fileargs != null) {
 			var ls = new Xnoise.LocalSchemes();
 			foreach(string s in _fileargs) {
@@ -131,9 +120,9 @@ private class Xnoise.AppStarter {
 			}
 		}
 		uris += null; //Null terminated array. Is adding null necessary?
-		
+	
 		//message( "main thread %d", (int)Linux.gettid() );
-		
+	
 		if(app.is_running) {
 			if(uris.length > 0) {
 				print("Adding tracks to the running instance of xnoise!\n");
@@ -153,19 +142,19 @@ private class Xnoise.AppStarter {
 				print("singleton app response fail.\n");
 		}
 		else {
-			xn = Main.instance;
-			app.watch_window((Gtk.Window)xn.main_window);
+			Xnoise.AppStarter.xn = Xnoise.Main.instance;
+			app.watch_window((Gtk.Window)Xnoise.AppStarter.xn.main_window);
 			app.message_received.connect(app_starter.on_message_received);
-
-			xn.main_window.show_all();
-
-			xn.tl.tracklistmodel.add_uris(uris);
-
+			
+			Xnoise.AppStarter.xn.main_window.show_all();
+			
+			Xnoise.AppStarter.xn.tl.tracklistmodel.add_uris(uris);
+			
 			//Gdk.threads_enter();
 			Gtk.main();
 			//Gdk.threads_leave();
-			app = null;
 		}
 		return 0;
 	}
 }
+
