@@ -39,6 +39,7 @@ public class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
 	private Main xn;
 	public VolumeSliderButton() {
 		this.xn = Main.instance;
+		this.size = Gtk.IconSize.LARGE_TOOLBAR;
 		this.can_focus = false;
 		this.relief = Gtk.ReliefStyle.NONE;
 		this.set_value(0.3); //Default value
