@@ -33,13 +33,16 @@
 	</menubar>
 	<menubar name="ConfigButtonMenu">
 		<menu name="ConfigMenu" action="ConfigMenuAction">
-			<menuitem action ="AddRemoveAction"/>
-			<menuitem action ="OpenAction"/>
-			<menuitem action ="OpenLocationAction"/>
-			<menuitem action ="SettingsAction"/>
-			<menuitem action ="AboutAction"/>
+			<menuitem action="OpenAction"/>
+			<menuitem action="OpenLocationAction"/>
+			<separator />
+			<menuitem action="AddRemoveAction"/>
+			<menuitem action="ClearTrackListAction"/>
+			<separator />
+			<menuitem action="SettingsAction"/>
+			<menuitem action="AboutAction"/>
 			<separator/>
-			<menuitem action ="QuitAction"/>
+			<menuitem action="QuitAction"/>
 		</menu>
 	</menubar>
 </ui>

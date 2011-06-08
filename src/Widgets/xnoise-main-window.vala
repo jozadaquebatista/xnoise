@@ -38,7 +38,7 @@ public extern void widget_style_get_property(Gtk.Widget widget, string property_
 public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string MAIN_UI_FILE     = Config.UIDIR + "main_window.ui";
 	private const string MENU_UI_FILE     = Config.UIDIR + "main_ui.xml";
-	private const string SHOWVIDEO        = _("Video");
+	private const string SHOWVIDEO        = _("Now Playing");
 	private const string SHOWTRACKLIST    = _("Tracklist");
 	private const string SHOWLYRICS       = _("Lyrics");
 	private const string SHOWMEDIABROWSER = _("Show Media");
@@ -103,6 +103,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public TrackList trackList;
 	public Gtk.Window fullscreenwindow;
 	public Gtk.Button config_button;
+	private static const string HIDE_LIBRARY = _("Hide Library");
+	private static const string SHOW_LIBRARY = _("Show Library");
 	
 	private bool media_browser_visible { 
 		get {
@@ -110,14 +112,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		} 
 		set {
 			if((value == true) && (_media_browser_visible != value)) {
-				hide_button.label   = _("Hide Media");
-				hide_button_1.label = _("Hide Media");
-				hide_button_2.label = _("Hide Media");
+				hide_button.label   = HIDE_LIBRARY;
+				hide_button_1.label = HIDE_LIBRARY;
+				hide_button_2.label = HIDE_LIBRARY;
 			}
 			else if((value == false) && (_media_browser_visible != value)) {
-				hide_button.label   = _("Show Media");
-				hide_button_1.label = _("Show Media");
-				hide_button_2.label = _("Show Media");
+				hide_button.label   = SHOW_LIBRARY;
+				hide_button_1.label = SHOW_LIBRARY;
+				hide_button_2.label = SHOW_LIBRARY;
 			}
 			_media_browser_visible = value;
 		} 
@@ -1265,7 +1267,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			showlyricsbuttonVid.can_focus    = false;
 			showlyricsbuttonVid.clicked.connect(this.on_show_lyrics_button_clicked);
 			//--------------------
-
+			var buttons_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+			buttons_sizegroup.add_widget(showvideobuttonTL);
+			buttons_sizegroup.add_widget(showvideobuttonLY);
+			buttons_sizegroup.add_widget(showtracklistbuttonLY);
+			buttons_sizegroup.add_widget(showtracklistbuttonVid);
+			buttons_sizegroup.add_widget(showlyricsbuttonTL);
+			buttons_sizegroup.add_widget(showlyricsbuttonVid);
+			
 			//REPEAT MODE SELECTOR
 			repeatButton                = gb.get_object("repeatButton") as Gtk.Button;
 			repeatButton.can_focus      = false;
@@ -1339,13 +1348,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.nextButton.sign_clicked.connect(handle_control_button_click);
 			playback_hbox.pack_start(nextButton, false, false, 0);
 			nextButton.show();
-			
-			var buttons_sizegroup = new Gtk.SizeGroup(SizeGroupMode.BOTH);
-			buttons_sizegroup.add_widget(volumeSliderButton);
-			buttons_sizegroup.add_widget(previousButton);
-			buttons_sizegroup.add_widget(playPauseButton);
-			buttons_sizegroup.add_widget(stopButton);
-			buttons_sizegroup.add_widget(nextButton);
 			
 			//PROGRESS BAR
 			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
@@ -1453,7 +1455,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			//Config button for compact layout		
 			//render the preferences icon with a down arrow next to it
-			config_button_image = new Gtk.Image.from_stock(Gtk.Stock.PREFERENCES, Gtk.IconSize.LARGE_TOOLBAR);
+			config_button_image = new Gtk.Image.from_stock(Gtk.Stock.EXECUTE, Gtk.IconSize.LARGE_TOOLBAR);
 			config_button = new Button();
 			var config_hbox = new HBox(false, 0);
 			config_hbox.pack_start(config_button_image, false, false, 0);
