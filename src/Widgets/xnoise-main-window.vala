@@ -151,7 +151,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			{ "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit},
 		{ "ViewMenuAction", null, N_("_View") },
 			{ "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), null, N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
-			{ "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Video screen"), null, N_("Go to the video screen in the main window."), on_show_video_menu_clicked},
+			{ "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), null, N_("Go to the now playing screen in the main window."), on_show_video_menu_clicked},
 			{ "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), null, N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
 		{ "HelpMenuAction", null, N_("_Help") },
 			{ "AboutAction", Gtk.Stock.ABOUT, null, null, null, on_help_about},
@@ -1237,8 +1237,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			showvideobuttonTL.clicked.connect(this.on_show_video_button_clicked);
 			showvideobuttonLY                = gb.get_object("showVideobuttonLY") as Gtk.Button;
 			var vidlabel1                    = gb.get_object("showvideolabel") as Gtk.Label;
+			vidlabel1.xalign                 = 0.1f;
 			vidlabel1.label                  = SHOWVIDEO;
 			var vidlabel2                    = gb.get_object("showvideolabelLY") as Gtk.Label;
+			vidlabel2.xalign                 = 0.1f;
 			vidlabel2.label                  = SHOWVIDEO;
 			showvideobuttonLY.can_focus      = false;
 			showvideobuttonLY.set_relief(ReliefStyle.HALF);
@@ -1252,8 +1254,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			showtracklistbuttonLY.clicked.connect(this.on_show_tracklist_button_clicked);
 			showtracklistbuttonVid           = gb.get_object("showTLbuttonv") as Gtk.Button;
 			var tllabel1                     = gb.get_object("showtracklistlabel") as Gtk.Label;
+			tllabel1.xalign                  = 0.1f;
 			tllabel1.label                   = SHOWTRACKLIST;
 			var tllabel2                     = gb.get_object("label12") as Gtk.Label;
+			tllabel2.xalign                  = 0.1f;
 			tllabel2.label                   = SHOWTRACKLIST;
 			showtracklistbuttonVid.can_focus = false;
 			showtracklistbuttonVid.set_relief(ReliefStyle.HALF);
@@ -1267,8 +1271,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			showlyricsbuttonTL.clicked.connect(this.on_show_lyrics_button_clicked);
 			showlyricsbuttonVid              = gb.get_object("showLyricsbuttonv") as Gtk.Button;
 			var lylabel1                     = gb.get_object("label9") as Gtk.Label;
+			lylabel1.xalign                  = 0.1f;
 			lylabel1.label                   = SHOWLYRICS;
 			var lylabel2                     = gb.get_object("label10") as Gtk.Label;
+			lylabel2.xalign                  = 0.1f;
 			lylabel2.label                   = SHOWLYRICS;
 			showlyricsbuttonVid.can_focus    = false;
 			showlyricsbuttonVid.set_relief(ReliefStyle.HALF);

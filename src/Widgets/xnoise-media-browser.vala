@@ -562,9 +562,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		var column = new TreeViewColumn();
 
 		column.pack_start(pixbufRenderer, false);
-		column.add_attribute(pixbufRenderer, "pixbuf", 0);
+		column.add_attribute(pixbufRenderer, "pixbuf", MediaBrowserModel.Column.ICON);
 		column.pack_start(renderer, false);
-		column.add_attribute(renderer, "text", 1); // no markup!!
+		column.add_attribute(renderer, "text", MediaBrowserModel.Column.VIS_TEXT); // no markup!!
 		this.insert_column(column, -1);
 
 		this.headers_visible = false;

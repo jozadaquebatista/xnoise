@@ -410,6 +410,7 @@ ready to rock</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -449,6 +450,7 @@ ready to rock</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -548,6 +550,7 @@ ready to rock</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -587,6 +590,7 @@ ready to rock</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -694,6 +698,7 @@ ready to rock</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -733,6 +738,7 @@ ready to rock</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>

@@ -763,7 +763,7 @@ namespace Xnoise {
 		MEDIABROWSER_LOAD,
 		VIDEOSCREEN_ACTIVATED,
 		VIDEOSCREEN_MENU_QUERY,
-		MAXCOUNT
+		TRACKLIST_COLUMN_HEADER_MENU_QUERY
 	}
 	[CCode (cprefix = "XNOISE_ITEM_HANDLER_TYPE_", cheader_filename = "xnoise.h")]
 	public enum ItemHandlerType {
@@ -773,6 +773,7 @@ namespace Xnoise {
 		PLAYLIST_PARSER,
 		VIDEO_THUMBNAILER,
 		TAG_EDITOR,
+		MENU_PROVIDER,
 		PLAY_NOW
 	}
 	[CCode (cprefix = "XNOISE_ITEM_SELECTION_TYPE_", cheader_filename = "xnoise.h")]
@@ -837,8 +838,6 @@ namespace Xnoise {
 	public static Xnoise.MediaImporter media_importer;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
-	[CCode (cheader_filename = "xnoise.h")]
-	public static Xnoise.ItemHandlerManager uri_handler_manager;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.UserInfo userinfo;
 	[CCode (cheader_filename = "xnoise.h")]

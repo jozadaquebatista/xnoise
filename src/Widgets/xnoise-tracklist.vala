@@ -66,32 +66,19 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private int n_columns = 0;
 	
 	public bool column_length_visible {
-		get {
-			return this.columnLength.visible;
-		}
-		set {
-			this.columnLength.visible = value;
-		}
+		get { return this.columnLength.visible; }
+		set { this.columnLength.visible = value; }
 	}
 	
 	public bool column_tracknumber_visible {
-		get {
-			return this.columnTracknumber.visible;
-		}
-		set {
-			this.columnTracknumber.visible = value;
-		}
+		get { return this.columnTracknumber.visible; }
+		set { this.columnTracknumber.visible = value; }
 	}
 	
-	public bool column_album_visible {
-		get {
-			return this.columnAlbum.visible;
-		}
-		set {
-			this.columnAlbum.visible = value;
-		}
+	public bool column_album_visible { 
+		get { return this.columnAlbum.visible; }
+		set { this.columnAlbum.visible = value; }
 	}
-			
 
 	public TrackListModel tracklistmodel;
 
@@ -128,13 +115,20 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.drag_data_get.connect(this.on_drag_data_get);
 		this.drag_end.connect(this.on_drag_end);
 		this.drag_motion.connect(this.on_drag_motion);
-//		this.drag_drop.connect(this.on_drag_drop);
 		this.drag_data_received.connect(this.on_drag_data_received);
 		this.drag_leave.connect(this.on_drag_leave);
 		this.button_release_event.connect(this.on_button_release);
 		this.button_press_event.connect(this.on_button_press);
 		
-//		menu = create_rightclick_menu();
+		this.set_headers_clickable(true);
+		Idle.add( () => {
+			foreach(TreeViewColumn col in this.get_columns()) {
+				col.set_widget(new Label(col.title));
+				col.get_widget().show();
+				((Button)col.get_widget().get_ancestor(typeof(Button))).button_press_event.connect(on_press_header);
+			}
+			return false;
+		});
 	}
 	
 	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
@@ -971,7 +965,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnPixb.reorderable = false;
 		this.insert_column(columnPixb, -1);
 
-
 		// TRACKNUMBER
 		renderer = new CellRendererText();
 		columnTracknumber = new TextColumn("#", renderer, TrackListModel.Column.TRACKNUMBER);
@@ -1077,6 +1070,14 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.rules_hint = true;
 	}
 	
+	private bool on_press_header(Gtk.Widget sender, Gdk.EventButton e) {
+		if(e.button != 3)
+			return false;
+		print("on_press_header\n");
+		// TODO
+		return true;
+	}
+
 	private int available_width {
 		get {
 			if(xn.main_window == null) 

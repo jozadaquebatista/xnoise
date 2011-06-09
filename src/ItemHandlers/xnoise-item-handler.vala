@@ -40,7 +40,7 @@ namespace Xnoise {
 		MEDIABROWSER_LOAD,
 		VIDEOSCREEN_ACTIVATED,
 		VIDEOSCREEN_MENU_QUERY,
-		MAXCOUNT
+		TRACKLIST_COLUMN_HEADER_MENU_QUERY
 	}
 	
 	[Flags]
@@ -57,12 +57,11 @@ namespace Xnoise {
 		PLAYLIST_PARSER,
 		VIDEO_THUMBNAILER,
 		TAG_EDITOR,
+		MENU_PROVIDER,
 		PLAY_NOW
 	}
 
 
-	public static ItemHandlerManager uri_handler_manager;
-	
 	[Compact]
 	public class Action {
 		public unowned ItemHandler.ActionType? action = null;

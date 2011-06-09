@@ -689,6 +689,7 @@ typedef enum  {
 	XNOISE_ITEM_HANDLER_TYPE_PLAYLIST_PARSER,
 	XNOISE_ITEM_HANDLER_TYPE_VIDEO_THUMBNAILER,
 	XNOISE_ITEM_HANDLER_TYPE_TAG_EDITOR,
+	XNOISE_ITEM_HANDLER_TYPE_MENU_PROVIDER,
 	XNOISE_ITEM_HANDLER_TYPE_PLAY_NOW
 } XnoiseItemHandlerType;
 
@@ -719,7 +720,7 @@ typedef enum  {
 	XNOISE_ACTION_CONTEXT_MEDIABROWSER_LOAD,
 	XNOISE_ACTION_CONTEXT_VIDEOSCREEN_ACTIVATED,
 	XNOISE_ACTION_CONTEXT_VIDEOSCREEN_MENU_QUERY,
-	XNOISE_ACTION_CONTEXT_MAXCOUNT
+	XNOISE_ACTION_CONTEXT_TRACKLIST_COLUMN_HEADER_MENU_QUERY
 } XnoiseActionContext;
 
 typedef enum  {
@@ -1495,7 +1496,6 @@ GType xnoise_track_data_get_type (void) G_GNUC_CONST;
 XnoiseTrackData** xnoise_item_converter_to_trackdata (XnoiseItemConverter* self, XnoiseItem* item, gchar** searchtext, int* result_length1);
 XnoiseItemConverter* xnoise_item_converter_new (void);
 XnoiseItemConverter* xnoise_item_converter_construct (GType object_type);
-extern XnoiseItemHandlerManager* xnoise_uri_handler_manager;
 XnoiseAction* xnoise_action_new (void);
 XnoiseAction* xnoise_action_new (void);
 gboolean xnoise_item_handler_set_manager (XnoiseItemHandler* self, XnoiseItemHandlerManager* _uhm);

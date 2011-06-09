@@ -194,30 +194,15 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	}
 	
 	private void on_ok_button_clicked() {
-		
-		int buf = 0;
-		// show album column
-		if(show_album_col)
-			buf = 1;
-		else
-			buf = 0;
-		par.set_int_value("use_album_column", buf);
+		par.set_int_value("use_album_column", (show_album_col == true ? 1 : 0));
 		xn.tl.column_album_visible = show_album_col;
 		
 		// show length column
-		if(show_length_col)
-			buf = 1;
-		else
-			buf = 0;
-		par.set_int_value("use_length_column", buf);
+		par.set_int_value("use_length_column", (show_length_col == true ? 1 : 0));
 		xn.tl.column_length_visible = show_length_col;
 
 		// show track number column
-		if(show_trackno_col)
-			buf = 1;
-		else
-			buf = 0;
-		par.set_int_value("use_tracknumber_column", buf);
+		par.set_int_value("use_tracknumber_column", (show_trackno_col == true ? 1 : 0));
 		xn.tl.column_tracknumber_visible = show_trackno_col;
 
 		//write priorities for lyrics providers
