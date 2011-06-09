@@ -951,7 +951,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(!exec_prepared_stmt(this.delete_albums_statement )) return false;
 		if(!exec_prepared_stmt(this.delete_items_statement  )) return false;
 		if(!exec_prepared_stmt(this.delete_uris_statement   )) return false;
-		if(!exec_prepared_stmt(this.delete_genres_statement )) return false;
+//		if(!exec_prepared_stmt(this.delete_genres_statement )) return false;
 		return true;
 	}
 

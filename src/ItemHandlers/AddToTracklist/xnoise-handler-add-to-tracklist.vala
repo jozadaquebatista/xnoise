@@ -89,7 +89,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		TreeIter iter;
 //		list.reverse();
 		Item[] items = {};
-		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.menu_add_job);
+		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.menu_add_job);
 		foreach(TreePath path in list) {
 			xn.main_window.mediaBr.mediabrowsermodel.get_iter(out iter, path);
 			xn.main_window.mediaBr.mediabrowsermodel.get(iter, TrackListModel.Column.ITEM, out ix);
@@ -99,7 +99,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		worker.push_job(job);
 	}
 
-	private void menu_add_job(Worker.Job job) {
+	private bool menu_add_job(Worker.Job job) {
 		TrackData[] tmp = {};
 		TrackData[] tda = {};
 		foreach(Item item in job.items) {
@@ -118,15 +118,16 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 				return false;
 			});
 		}
+		return false;
 	}
 	
 	private void on_mediabrowser_activated(Item item, GLib.Value? data) {
-		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.add_item_job);
+		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_item_job);
 		job.item = item;
 		worker.push_job(job);
 	}
 	
-	private void add_item_job(Worker.Job job) {
+	private bool add_item_job(Worker.Job job) {
 		Item? item = job.item;//(Item?)job.get_arg("item");
 		//print("item.type is %s\n", item.type.to_string());
 		
@@ -138,6 +139,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 				return false;
 			});
 		}
+		return false;
 	}
 	
 	private void append_tracks(ref TrackData[]? tda, bool immediate_play = true) {

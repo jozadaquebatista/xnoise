@@ -74,7 +74,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 //			model.get_iter(out iter, path);
 //			model.get(iter, MediaBrowserModel.Column.DB_ID, out db_id);
 		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.query_trackdata_job);
+		job = new Worker.Job(Worker.ExecutionType.ONCE, this.query_trackdata_job);
 		job.item = item;
 		worker.push_job(job);
 	}
@@ -86,13 +86,13 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	
 	private TrackData td_old = null;
 	
-	private void query_trackdata_job(Worker.Job job) {
+	private bool query_trackdata_job(Worker.Job job) {
 		// callback for query in other thread
 		TrackData[] tmp = {};
 		TrackData[] tda = {};
 		tmp = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
 		if(tmp == null && tmp[0] != null)
-			return;
+			return false;
 		
 		TrackData td = tmp[0];
 		
@@ -105,6 +105,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 			entry_title.text  = td.title;
 			return false;
 		});
+		return false;
 	}
 	
 	private Label infolabel;

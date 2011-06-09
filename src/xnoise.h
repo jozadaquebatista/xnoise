@@ -1207,8 +1207,7 @@ typedef enum  {
 	XNOISE_WORKER_EXECUTION_TYPE_REPEATED
 } XnoiseWorkerExecutionType;
 
-typedef gboolean (*XnoiseWorkerAsyncWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
-typedef void (*XnoiseWorkerSyncWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
+typedef gboolean (*XnoiseWorkerWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
 struct _XnoiseWorkerJob {
 	GObject parent_instance;
 	XnoiseWorkerJobPrivate * priv;
@@ -1228,13 +1227,8 @@ struct _XnoiseWorkerJob {
 	gint id_array_length1;
 	gint counter[4];
 	gint32 big_counter[4];
-	gint64 id;
-	XnoiseWorkerAsyncWorkFunc a_func;
-	gpointer a_func_target;
-	GDestroyNotify a_func_target_destroy_notify;
-	XnoiseWorkerSyncWorkFunc s_func;
-	gpointer s_func_target;
-	GDestroyNotify s_func_target_destroy_notify;
+	XnoiseWorkerWorkFunc func;
+	gpointer func_target;
 	GCancellable* cancellable;
 };
 
@@ -1907,8 +1901,8 @@ GType xnoise_worker_execution_type_get_type (void) G_GNUC_CONST;
 XnoiseWorker* xnoise_worker_new (GMainContext* mc);
 XnoiseWorker* xnoise_worker_construct (GType object_type, GMainContext* mc);
 void xnoise_worker_push_job (XnoiseWorker* self, XnoiseWorkerJob* j);
-XnoiseWorkerJob* xnoise_worker_job_new (gint id, XnoiseWorkerExecutionType execution_type, XnoiseWorkerAsyncWorkFunc a_func, void* a_func_target, XnoiseWorkerSyncWorkFunc s_func, void* s_func_target);
-XnoiseWorkerJob* xnoise_worker_job_construct (GType object_type, gint id, XnoiseWorkerExecutionType execution_type, XnoiseWorkerAsyncWorkFunc a_func, void* a_func_target, XnoiseWorkerSyncWorkFunc s_func, void* s_func_target);
+XnoiseWorkerJob* xnoise_worker_job_new (XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, gint _timer_seconds);
+XnoiseWorkerJob* xnoise_worker_job_construct (GType object_type, XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, gint _timer_seconds);
 void xnoise_worker_job_set_arg (XnoiseWorkerJob* self, const gchar* name, GValue* val);
 GValue* xnoise_worker_job_get_arg (XnoiseWorkerJob* self, const gchar* name);
 XnoiseWorkerExecutionType xnoise_worker_job_get_execution_type (XnoiseWorkerJob* self);

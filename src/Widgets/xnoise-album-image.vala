@@ -118,7 +118,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		album  = remove_linebreaks(global.current_album );
 		
 		
-		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.fetch_trackdata_job);
+		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.fetch_trackdata_job);
 		job.set_arg("artist", artist);
 		job.set_arg("album", album);
 		job.set_arg("uri", xn.gPl.uri);
@@ -126,14 +126,14 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	}
 	
 	
-	private void fetch_trackdata_job(Worker.Job job) {
+	private bool fetch_trackdata_job(Worker.Job job) {
 		string jartist = (string)job.get_arg("artist");
 		string jalbum  = (string)job.get_arg("album");
 		//string uri    = (string)job.get_arg("uri");
 		
 		if((jartist=="")||(jartist==null)||(jartist=="unknown artist")||
 		   (jalbum =="")||(jalbum ==null)||(jalbum =="unknown album" )) {
-			return;
+			return false;
 		}
 		var fileout = get_albumimage_for_artistalbum(jartist, jalbum, default_size);
 		
@@ -148,7 +148,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 				return false;
 			});
 		}
-		return;
+		return false;
 	}
 
 	private bool set_local_image_if_available(ref string _artist, ref string _album) {

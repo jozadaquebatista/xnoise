@@ -38,11 +38,11 @@ namespace Xnoise {
 	private static string[] _fileargs;
 
 	private const OptionEntry[] options = {
-		{ "version", 'V', 0, OptionArg.NONE, ref _version, "Show the application's version.", null },
+		{ "version",     'V', 0, OptionArg.NONE, ref _version,    "Show the application's version.",                 null },
 		{ "plugin-info", 'p', 0, OptionArg.NONE, ref _plugininfo, "Show loaded and activated plugins on app start.", null },
-		{ "no-plugins", 'N', 0, OptionArg.NONE, ref _noplugins, "Start without loding any plugins.", null },
-		{ "reset", 'R', 0, OptionArg.NONE, ref _reset, "Reset all settings.", null },
-		{ "", 0, 0, OptionArg.FILENAME_ARRAY, ref _fileargs, null, "FILE..." },
+		{ "no-plugins",  'N', 0, OptionArg.NONE, ref _noplugins,  "Start without loding any plugins.",               null },
+		{ "reset",       'R', 0, OptionArg.NONE, ref _reset,      "Reset all settings.",                             null },
+		{ "", 0, 0, OptionArg.FILENAME_ARRAY, ref _fileargs,      null,                                              "[FILE ...]" },
 		{null}
 	};
 
@@ -53,8 +53,8 @@ namespace Xnoise {
 		Environment.set_application_name(Config.GETTEXT_PACKAGE);
 		//Environment.atexit(mem_profile); This can be used if xnoise is compiled with new memory statistic switch
 
-		var opt_context = new OptionContext("- Xnoise Media Player");
-		opt_context.set_description("Xnoise is a media player for Gtk+. It uses the gstreamer framework. \nMore information on the project website: \nhttp://www.xnoise-media-player.com/\n");
+		var opt_context = new OptionContext("     Xnoise Media Player     ");
+		opt_context.set_description("%s %s \n%s \nhttp://www.xnoise-media-player.com/\n".printf(_("Xnoise is a media player for Gtk+."), _("It uses the gstreamer framework."),_("More information on the project website:")));
 		opt_context.set_help_enabled(true);
 		opt_context.add_main_entries(options, null);
 		try {
@@ -62,7 +62,7 @@ namespace Xnoise {
 		}
 		catch(OptionError e) {
 			print("%s\n", e.message);
-			print("Run '%s --help' to see a full list of available command line options.\n", args[0]);
+			print(_("Run 'xnoise --help' to see a full list of available command line options.\n"));
 			return 0;
 		}
 		if(_reset) {
@@ -124,11 +124,11 @@ namespace Xnoise {
 		//message( "main thread %d", (int)Linux.gettid() );
 	
 		if(app.is_running) {
-			if(uris.length > 0) {
-				print("Adding tracks to the running instance of xnoise!\n");
+			if(uris.length >= 1) {
+				print(_("Using the running instance of xnoise!\n"));
 			}
 			else {
-				print("Showing the running instance of xnoise.\n");
+				print(_("Showing the running instance of xnoise.\n"));
 			}
 			Unique.Command command;
 			Unique.Response response;

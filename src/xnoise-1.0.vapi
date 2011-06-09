@@ -654,22 +654,20 @@ namespace Xnoise {
 	public class Worker : GLib.Object {
 		[CCode (cheader_filename = "xnoise.h")]
 		public class Job : GLib.Object {
-			public Xnoise.Worker.AsyncWorkFunc? a_func;
 			public int32[] big_counter;
 			public GLib.Cancellable? cancellable;
 			public int[] counter;
 			public Xnoise.DndData[] dnd_data;
-			public int64 id;
+			public weak Xnoise.Worker.WorkFunc? func;
 			public int32[] id_array;
 			public Xnoise.Item? item;
 			public Xnoise.Item[] items;
 			public void* p_arg;
-			public Xnoise.Worker.SyncWorkFunc? s_func;
 			public Xnoise.TrackData[] track_dat;
 			public Gtk.TreeRowReference[] treerowrefs;
 			public GLib.Value? value_arg1;
 			public GLib.Value? value_arg2;
-			public Job (int id = 0, Xnoise.Worker.ExecutionType execution_type = ExecutionType.UNKNOWN, Xnoise.Worker.AsyncWorkFunc? a_func = null, Xnoise.Worker.SyncWorkFunc? s_func = null);
+			public Job (Xnoise.Worker.ExecutionType execution_type = ExecutionType.UNKNOWN, Xnoise.Worker.WorkFunc? func = null, int _timer_seconds = 0);
 			public GLib.Value? get_arg (string name);
 			public void set_arg (string? name, GLib.Value? val);
 			public Xnoise.Worker.ExecutionType execution_type { get; }
@@ -684,9 +682,7 @@ namespace Xnoise {
 			REPEATED
 		}
 		[CCode (cheader_filename = "xnoise.h")]
-		public delegate bool AsyncWorkFunc (Xnoise.Worker.Job jb);
-		[CCode (cheader_filename = "xnoise.h")]
-		public delegate void SyncWorkFunc (Xnoise.Worker.Job jb);
+		public delegate bool WorkFunc (Xnoise.Worker.Job jb);
 		public Worker (GLib.MainContext mc);
 		public void push_job (Xnoise.Worker.Job j);
 	}

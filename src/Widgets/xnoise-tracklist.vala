@@ -454,7 +454,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 					if(path != null)
 						row_ref = new TreeRowReference(this.model, path);
 					
-					var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.insert_dnd_data_job);
+					var job = new Worker.Job(Worker.ExecutionType.ONCE, this.insert_dnd_data_job);
 					job.set_arg("row_ref", row_ref);
 					job.set_arg("drop_pos", drop_pos);
 					job.dnd_data = ids;
@@ -562,7 +562,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 	}
 
-	private void insert_dnd_data_job(Worker.Job job) {
+	private bool insert_dnd_data_job(Worker.Job job) {
 		DndData[] ids = job.dnd_data; //TODO !!!
 		bool is_first = true;
 		TreeViewDropPosition drop_pos_1 = (TreeViewDropPosition)job.get_arg("drop_pos");
@@ -632,6 +632,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 				return false;
 			});
 		}
+		return false;
 	}
 
 	private void handle_dropped_files_for_folders(File dir, ref TreePath? path, ref bool is_first) {

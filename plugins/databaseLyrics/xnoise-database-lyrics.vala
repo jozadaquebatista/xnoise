@@ -138,24 +138,26 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 	
 	private void check_table() {
 		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.check_table_cb);
+		job = new Worker.Job(Worker.ExecutionType.ONCE, this.check_table_cb);
 		job.cancellable = this.cancellable;
 		worker.push_job(job);
 	}
 	
 	private void add_lyrics_entry() {
 		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.add_lyrics_entry_cb);
+		job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_lyrics_entry_cb);
 		job.cancellable = this.cancellable;
 		worker.push_job(job);
 	}
 	
-	private void check_table_cb(Worker.Job job) {
+	private bool check_table_cb(Worker.Job job) {
 		db_writer.do_callback_transaction(create_table_dbcb);
+		return false;
 	}
 	
-	private void add_lyrics_entry_cb(Worker.Job job) {
+	private bool add_lyrics_entry_cb(Worker.Job job) {
 		db_writer.do_callback_transaction(write_txt_dbcb);
+		return false;
 	}
 	
 	private void create_table_dbcb(Sqlite.Database db) {
@@ -286,7 +288,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 		timeout = Timeout.add_seconds(SECONDS_FOR_TIMEOUT, timeout_elapsed);
 		
 		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.get_lyrics_from_db);
+		job = new Worker.Job(Worker.ExecutionType.ONCE, this.get_lyrics_from_db);
 		job.cancellable = this.cancellable;
 		worker.push_job(job);
 	}
@@ -331,7 +333,8 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 		//}
 	}
 
-	private void get_lyrics_from_db(Worker.Job job) {
+	private bool get_lyrics_from_db(Worker.Job job) {
 		db_browser.do_callback_transaction(dbcb);
+		return false;
 	}
 }

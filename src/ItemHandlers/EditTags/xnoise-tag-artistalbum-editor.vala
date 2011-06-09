@@ -34,7 +34,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	private unowned Xnoise.Main xn;
 	private Dialog dialog;
 	private Gtk.Builder builder;
-	private Content content;
+//	private Content content;
 	private string new_content_name = null;
 	private string org_content_name = null;
 	private unowned MediaBrowserModel mbm = null;
@@ -42,10 +42,10 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	private Entry entry;
 	private TreeRowReference treerowref;
 	
-	private enum Content {
-		ARTIST,
-		ALBUM
-	}
+//	private enum Content {
+//		ARTIST,
+//		ALBUM
+//	}
 	
 	private Item? item;
 	
@@ -63,11 +63,12 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //		TreePath path = null;
 //		path = treerowref.get_path();
 //		int depth = path.get_depth();
-//		switch(depth) {
-//			case 1:
+		this.item = _item;
+//		switch(item.type) {
+//			case ItemType.COLLECTION_CONTAINER_ARTIST:
 //				content = Content.ARTIST;
 //				break;
-//			case 2:
+//			case ItemType.COLLECTION_CONTAINER_ARTIST:
 //				content = Content.ALBUM;
 //				break;
 //			default:
@@ -77,7 +78,6 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //				});
 //				return;	
 //		}
-		this.item = _item;
 		xn = Main.instance;
 		td_old = {};
 		builder = new Gtk.Builder();
@@ -120,14 +120,14 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 			
 //		}
 		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.query_trackdata_job);
+		job = new Worker.Job(Worker.ExecutionType.ONCE, this.query_trackdata_job);
 		job.item = item;
 		worker.push_job(job);
 	}
 
 	private TrackData[] td_old;
 	
-	private void query_trackdata_job(Worker.Job job) {
+	private bool query_trackdata_job(Worker.Job job) {
 		// callback for query in other thread
 		td_old = item_converter.to_trackdata(this.item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
 		
@@ -138,6 +138,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 			entry.text  = td.album;
 			return false;
 		});
+		return false;
 	}
 
 	private Label infolabel;

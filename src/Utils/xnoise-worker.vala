@@ -53,16 +53,16 @@ public class Xnoise.Worker : Object {
 	}
 	
 	//TODO: Maybe use only one working function type
-	// AsyncWorkFunc will repeatedly be executed from an async function until it returns false
-	public delegate bool AsyncWorkFunc(Job jb);
+	// WorkFunc will repeatedly be executed from an async function until it returns false
+	public delegate bool WorkFunc(Job jb);
 	
-	// SyncWorkFunc will be executed in one shot as soon as the worker thread is idle
-	public delegate void SyncWorkFunc(Job jb);
+//	// SyncWorkFunc will be executed in one shot as soon as the worker thread is idle
+//	public delegate void SyncWorkFunc(Job jb);
 	
 	public enum ExecutionType {
 		UNKNOWN = 0,
 		ONCE,
-		ONCE_HIGH_PRIORITY, // not used,yet
+		ONCE_HIGH_PRIORITY,     // not used,yet
 		TIMED,                  // queue timed job if working function returns true -> queue again
 		REPEATED                // repeat until worker function returns false
 	}
@@ -71,15 +71,13 @@ public class Xnoise.Worker : Object {
 		private HashTable<string,Value?> ht = new HashTable<string,Value?> (str_hash, str_equal);
 		private ExecutionType _execution_type;
 		
-		public Job(int id = 0, 
-		           ExecutionType execution_type = ExecutionType.UNKNOWN, 
-		           AsyncWorkFunc? a_func = null,
-		           SyncWorkFunc? s_func = null
+		public Job(ExecutionType execution_type = ExecutionType.UNKNOWN, 
+		           WorkFunc? func = null,
+		           int _timer_seconds = 0
 		           ) {
-			this.id = id;
 			this._execution_type = execution_type;
-			this.a_func = a_func;
-			this.s_func = s_func;
+			this.func = func;
+			this.timer_seconds = _timer_seconds;
 		}
 		
 		// using the setter/getter will use a copy of the values for simple types, strings, arrays and structs
@@ -97,7 +95,7 @@ public class Xnoise.Worker : Object {
 			this.ht.remove_all();
 			//print("dtor job\n"); 
 		}
-		
+		int timer_seconds;
 		// These can be used as references to other objects, structs, arrays, simple types, strings, arrays and structs
 		public Value? value_arg1 = null;
 		public Value? value_arg2 = null;
@@ -116,15 +114,10 @@ public class Xnoise.Worker : Object {
 		// Finished signals will be sent in the main thread
 		public signal void finished();
 		
-		// This can be used to identify the job or it's origin, etc.
-		// This could also be used to mark the creation time of a job, if useful
-		public int64 id; //TODO: Is this needed?
-		
 		// readonly execution type for the job (sync, async, ..)
 		public ExecutionType execution_type { get { return _execution_type; } }
 		
-		public AsyncWorkFunc? a_func = null;
-		public SyncWorkFunc?  s_func = null;
+		public unowned WorkFunc? func = null;
 		public Cancellable? cancellable = null;
 	}
 	
@@ -148,7 +141,7 @@ public class Xnoise.Worker : Object {
 		bool repeat = true;
 		while(repeat) {
 			//message( "thread %d ; job %d", (int)Linux.gettid(), current_job.id);
-			repeat = current_job.a_func(current_job);
+			repeat = current_job.func(current_job);
 			var source = new IdleSource();
 			source.set_callback(async_func.callback);
 			//execute async function in local context
@@ -172,7 +165,7 @@ public class Xnoise.Worker : Object {
 			return;
 		}
 		//message( "thread %d ; sync job %d", (int)Linux.gettid(), current_job.id);
-		current_job.s_func(current_job);
+		current_job.func(current_job);
 		Source s2 = new IdleSource(); 
 		s2.set_callback(() => {
 			current_job.finished();
@@ -185,8 +178,8 @@ public class Xnoise.Worker : Object {
 	public void push_job(Job j) {
 		switch(j.execution_type) {
 			case ExecutionType.ONCE:
-				if(j.s_func == null) {
-					print("Error: There must be a SyncWorkFunc in a sync job.\n");
+				if(j.func == null) {
+					print("Error: There must be a WorkFunc in a job.\n");
 					break;
 				}
 				sync_job_queue.push(j);
@@ -198,8 +191,8 @@ public class Xnoise.Worker : Object {
 				source.attach(local_context);
 				break;
 			case ExecutionType.REPEATED:
-				if(j.a_func == null) {
-					print("Error: There must be a AsyncWorkFunc in an async job.\n");
+				if(j.func == null) {
+					print("Error: There must be a WorkFunc in a job.\n");
 					break;
 				}
 				async_job_queue.push(j);

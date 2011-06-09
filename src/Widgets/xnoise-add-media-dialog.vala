@@ -71,15 +71,13 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		return_if_fail(listmodel != null);
 		
 		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, put_media_data_to_model);
+		job = new Worker.Job(Worker.ExecutionType.ONCE, put_media_data_to_model);
 		worker.push_job(job);
 	}
 	
 	private StreamData[] streams = null;
 	
-	private void put_media_data_to_model(Worker.Job job) {
-		
-		
+	private bool put_media_data_to_model(Worker.Job job) {
 		//add folders
 		string[] mfolders = db_browser.get_media_folders();
 		job.set_arg("mfolders", mfolders);
@@ -132,6 +130,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			streams = null;
 			return false;
 		});
+		return false;
 	}
 
 	private void harvest_media_locations() {

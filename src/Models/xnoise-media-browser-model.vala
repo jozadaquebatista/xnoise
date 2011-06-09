@@ -77,8 +77,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	public bool populating_model { get; private set; default = false; }
 	
+	private uint refresh_timeout = 0;
+	
 	construct {
-
 		xn = Main.instance;
 		theme = IconTheme.get_default();
 		theme.changed.connect(update_pixbufs);
@@ -90,15 +91,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				return false;
 			});
 		});
-//		global.notify["media-import-in-progress"].connect( () => {
-//			if(global.media_import_in_progress)
-//				return;
-//			Timeout.add(250, () => {
-//				//print("refreshing search ...\n");
-//				Main.instance.main_window.mediaBr.on_searchtext_changed();
-//				return false;
-//			});
-//		});
+		global.notify["media-import-in-progress"].connect( () => {
+			if(!global.media_import_in_progress) {
+				Idle.add( () => {
+					filter();
+					return false;
+				});
+			}
+		});
 	}
 	
 	private void update_pixbufs() {
@@ -719,7 +719,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			populate_model_cancellable.reset();
 		}
 		Worker.Job job;
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_listed_data_job);
+		job = new Worker.Job(Worker.ExecutionType.ONCE, this.handle_listed_data_job);
 		job.cancellable = populate_model_cancellable;
 		worker.push_job(job);
 		
@@ -729,7 +729,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //			populating_model = false;
 //		});
 //		worker.push_job(job);
-		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.populate_artists_job);
+		job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_artists_job);
 		job.cancellable = populate_model_cancellable;
 		job.finished.connect( (j) => { 
 			populating_model = false;
@@ -739,22 +739,23 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		return false;
 	}
 	
-	private void handle_listed_data_job(Worker.Job job) {
-		var stream_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_streams);
+	private bool handle_listed_data_job(Worker.Job job) {
+		var stream_job = new Worker.Job(Worker.ExecutionType.ONCE, this.handle_streams);
 		stream_job.cancellable = populate_model_cancellable;
 		worker.push_job(stream_job);
 		
-		var video_job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.handle_videos);
+		var video_job = new Worker.Job(Worker.ExecutionType.ONCE, this.handle_videos);
 		video_job.cancellable = populate_model_cancellable;
 		worker.push_job(video_job);
+		return false;
 	}
 	
-	private void handle_streams(Worker.Job job) {
+	private bool handle_streams(Worker.Job job) {
 			
 		job.track_dat = db_browser.get_stream_data(ref searchtext);
 		
 		if(job.track_dat.length == 0)
-			return;
+			return false;
 		
 		Idle.add( () => {
 			if(!job.cancellable.is_cancelled()) {
@@ -792,14 +793,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 			return false;
 		});
+		return false;
 	}
 	
-	private void handle_videos(Worker.Job job) {
+	private bool handle_videos(Worker.Job job) {
 			
 		job.track_dat = db_browser.get_video_data(ref searchtext);
 		
 		if(job.track_dat.length == 0)
-			return;
+			return false;
 		
 		Idle.add( () => {
 			if(!job.cancellable.is_cancelled()) {
@@ -837,14 +839,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 			return false;
 		});
+		return false;
 	}
 
 	// used for populating the data model
-	private void populate_artists_job(Worker.Job job) {
+	private bool populate_artists_job(Worker.Job job) {
 		print("populate_artists_job\n");
 		
 		if(job.cancellable.is_cancelled())
-			return;
+			return false;
 		
 		job.items = db_browser.get_artists_with_search(ref this.searchtext);
 		print("job.items.length = %d\n", job.items.length);
@@ -877,6 +880,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 			return false;
 		});
+		return false;
 	}
 
 	private static const string LOADING = _("Loading ...");
@@ -902,7 +906,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		this.get(iter, Column.ITEM, out item);
 		print("item.type: %s\n", item.type.to_string());
 		if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
-			job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.load_album_and_titles_job);
+			job = new Worker.Job(Worker.ExecutionType.ONCE, this.load_album_and_titles_job);
 			//job.cancellable = populate_model_cancellable;
 			job.set_arg("treerowref", treerowref);
 			job.set_arg("id", item.db_id);
@@ -910,7 +914,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 	}
 
-	private void load_album_and_titles_job(Worker.Job job) {
+	private bool load_album_and_titles_job(Worker.Job job) {
 		job.items = db_browser.get_albums_with_search(ref searchtext, (int32)job.get_arg("id"));
 		print("job.items cnt =%d\n", job.items.length);
 		Idle.add( () => {
@@ -944,7 +948,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         );
 				Gtk.TreePath p1 = this.get_path(iter_album);
 				TreeRowReference treerowref = new TreeRowReference(this, p1);
-				var job_title = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.populate_title_job);
+				var job_title = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_title_job);
 //				job_title.cancellable = populate_model_cancellable;
 				job_title.set_arg("treerowref", treerowref);
 				job_title.set_arg("artist", artist.db_id);
@@ -954,6 +958,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			remove_loader_child(ref iter_artist);
 			return false;
 		});
+		return false;
 	}
 	
 	private void remove_loader_child(ref TreeIter iter) {
@@ -1026,7 +1031,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 
 	//Used for populating model
-	private void populate_title_job(Worker.Job job) {
+	private bool populate_title_job(Worker.Job job) {
 		int32 al = (int32)job.get_arg("album");
 		job.track_dat = db_browser.get_trackdata_by_albumid(ref searchtext, al);
 		Idle.add( () => {
@@ -1049,6 +1054,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			}
 			return false;
 		});
+		return false;
 	}
 
 	//TODO: How to do this for videos/streams?

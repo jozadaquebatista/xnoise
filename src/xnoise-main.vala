@@ -155,7 +155,7 @@ public class Xnoise.Main : GLib.Object {
 	private string[] final_tracklist = null;
 	public void save_tracklist() {
 		final_tracklist = this.main_window.trackList.tracklistmodel.get_all_tracks();
-		var job = new Worker.Job(999, Worker.ExecutionType.ONCE, null, media_importer.write_final_tracks_to_db_job);
+		var job = new Worker.Job(Worker.ExecutionType.ONCE, media_importer.write_final_tracks_to_db_job);
 		job.set_arg("final_tracklist", final_tracklist);
 		job.finished.connect( () => {
 			if(maxtime_quit_src != 0)
@@ -178,10 +178,9 @@ public class Xnoise.Main : GLib.Object {
 			this.main_window.get_window().unfullscreen();
 		main_window.hide();
 		this.gPl.stop();
-		this.save_tracklist();
 		this.save_activated_plugins();
 		par.write_all_parameters_to_file();
-		par = null;
+		this.save_tracklist();
 		
 		Timeout.add(100, () => {
 			if(preparing_quit)

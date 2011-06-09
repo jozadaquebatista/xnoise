@@ -211,7 +211,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		ssm = new ScreenSaverManager();
 
 		//restore last state
-		var job = new Worker.Job(999, Worker.ExecutionType.ONCE, null, this.add_lastused_titles_to_tracklist);
+		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_lastused_titles_to_tracklist);
 		worker.push_job(job);
 
 		active_notifier = this.notify["is-active"].connect(buffer_position);
@@ -313,7 +313,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 
-	private void add_lastused_titles_to_tracklist(Worker.Job job) {
+	private bool add_lastused_titles_to_tracklist(Worker.Job job) {
 		string[] uris = db_browser.get_lastused_uris();
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
@@ -359,7 +359,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					}
 					catch(GLib.Error e){
 						print("%s\n", e.message);
-						return;
+						return false;
 					}
 					if((filetype == GLib.FileType.REGULAR)&
 					   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
@@ -417,6 +417,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 			}
 		}
+		return false;
 	}
 	
 	public void ask_for_initial_media_import() {
@@ -1232,6 +1233,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//SHOW VIDEO BUTTONS
 			showvideobuttonTL                = gb.get_object("showvideobuttonTL") as Gtk.Button;
 			showvideobuttonTL.can_focus      = false;
+			showvideobuttonTL.set_relief(ReliefStyle.HALF);
 			showvideobuttonTL.clicked.connect(this.on_show_video_button_clicked);
 			showvideobuttonLY                = gb.get_object("showVideobuttonLY") as Gtk.Button;
 			var vidlabel1                    = gb.get_object("showvideolabel") as Gtk.Label;
@@ -1239,12 +1241,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var vidlabel2                    = gb.get_object("showvideolabelLY") as Gtk.Label;
 			vidlabel2.label                  = SHOWVIDEO;
 			showvideobuttonLY.can_focus      = false;
+			showvideobuttonLY.set_relief(ReliefStyle.HALF);
 			showvideobuttonLY.clicked.connect(this.on_show_video_button_clicked);
 			//--------------------
 
 			//SHOW TRACKLIST BUTTONS
 			showtracklistbuttonLY            = gb.get_object("showTLbuttonLY") as Gtk.Button;
 			showtracklistbuttonLY.can_focus  = false;
+			showtracklistbuttonLY.set_relief(ReliefStyle.HALF);
 			showtracklistbuttonLY.clicked.connect(this.on_show_tracklist_button_clicked);
 			showtracklistbuttonVid           = gb.get_object("showTLbuttonv") as Gtk.Button;
 			var tllabel1                     = gb.get_object("showtracklistlabel") as Gtk.Label;
@@ -1252,12 +1256,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var tllabel2                     = gb.get_object("label12") as Gtk.Label;
 			tllabel2.label                   = SHOWTRACKLIST;
 			showtracklistbuttonVid.can_focus = false;
+			showtracklistbuttonVid.set_relief(ReliefStyle.HALF);
 			showtracklistbuttonVid.clicked.connect(this.on_show_tracklist_button_clicked);
 			//--------------------
 
 			//SHOW LYRICS BUTTONS
 			showlyricsbuttonTL               = gb.get_object("showLyricsbuttonTL") as Gtk.Button;
 			showlyricsbuttonTL.can_focus     = false;
+			showlyricsbuttonTL.set_relief(ReliefStyle.HALF);
 			showlyricsbuttonTL.clicked.connect(this.on_show_lyrics_button_clicked);
 			showlyricsbuttonVid              = gb.get_object("showLyricsbuttonv") as Gtk.Button;
 			var lylabel1                     = gb.get_object("label9") as Gtk.Label;
@@ -1265,6 +1271,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var lylabel2                     = gb.get_object("label10") as Gtk.Label;
 			lylabel2.label                   = SHOWLYRICS;
 			showlyricsbuttonVid.can_focus    = false;
+			showlyricsbuttonVid.set_relief(ReliefStyle.HALF);
 			showlyricsbuttonVid.clicked.connect(this.on_show_lyrics_button_clicked);
 			//--------------------
 			var buttons_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
@@ -1464,7 +1471,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			config_button.add(config_hbox);
 			
 			config_button.can_focus = false;
-			config_button.set_relief(Gtk.ReliefStyle.NONE);
+			config_button.set_relief(Gtk.ReliefStyle.HALF);
 			a_frame_config_button = gb.get_object("aFrameConfigButton") as Gtk.AspectFrame;	
 		}
 		catch(GLib.Error e) {
