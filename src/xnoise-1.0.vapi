@@ -265,7 +265,7 @@ namespace Xnoise {
 		public void execute_actions_for_item (Xnoise.Item item, Xnoise.ActionContext context, GLib.Value? data, Xnoise.ItemSelectionType selection);
 		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
 		public Xnoise.ItemHandler get_handler_by_name (string name);
-		public Xnoise.ItemHandler get_handler_by_type (Xnoise.ItemHandlerType type);
+		public Xnoise.ItemHandler? get_handler_by_type (Xnoise.ItemHandlerType type);
 		public void test_func ();
 	}
 	[CCode (ref_function = "xnoise_local_schemes_ref", unref_function = "xnoise_local_schemes_unref", cheader_filename = "xnoise.h")]

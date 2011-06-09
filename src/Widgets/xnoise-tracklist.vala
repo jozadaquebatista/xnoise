@@ -989,7 +989,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		renderer = new CellRendererText();
 		renderer.ellipsize = Pango.EllipsizeMode.END;
 		renderer.ellipsize_set = true;
-		columnTitle = new TextColumn("Title", renderer, TrackListModel.Column.TITLE);
+		columnTitle = new TextColumn(_("Title"), renderer, TrackListModel.Column.TITLE);
 		columnTitle.add_attribute(renderer,
 		                          "text", TrackListModel.Column.TITLE);
 		columnTitle.add_attribute(renderer,
@@ -1005,7 +1005,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		renderer = new CellRendererText();
 		renderer.ellipsize = Pango.EllipsizeMode.END;
 		renderer.ellipsize_set = true;
-		columnAlbum = new TextColumn("Album", renderer, TrackListModel.Column.ALBUM);
+		columnAlbum = new TextColumn(_("Album"), renderer, TrackListModel.Column.ALBUM);
 		columnAlbum.add_attribute(renderer,
 		                          "text", TrackListModel.Column.ALBUM);
 		columnAlbum.add_attribute(renderer,
@@ -1027,7 +1027,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		renderer = new CellRendererText();
 		renderer.ellipsize = Pango.EllipsizeMode.END;
 		renderer.ellipsize_set = true;
-		columnArtist = new TextColumn("Artist", renderer, TrackListModel.Column.ARTIST);
+		columnArtist = new TextColumn(_("Artist"), renderer, TrackListModel.Column.ARTIST);
 		columnArtist.add_attribute(renderer,
 		                           "text", TrackListModel.Column.ARTIST);
 		columnArtist.add_attribute(renderer,
@@ -1040,7 +1040,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 		// LENGTH
 		renderer = new CellRendererText();
-		columnLength = new TextColumn("Length", renderer, TrackListModel.Column.LENGTH);
+		columnLength = new TextColumn(_("Length"), renderer, TrackListModel.Column.LENGTH);
 		columnLength.add_attribute(renderer,
 		                           "text", TrackListModel.Column.LENGTH);
 		columnLength.add_attribute(renderer,
@@ -1074,10 +1074,59 @@ public class Xnoise.TrackList : TreeView, IParams {
 		if(e.button != 3)
 			return false;
 		print("on_press_header\n");
-		// TODO
+		menu = create_header_rightclick_menu();
+		if(menu != null)
+			menu.popup(null, null, null, 0, e.time);
 		return true;
 	}
 
+	private Menu create_header_rightclick_menu() {
+		var rightmenu = new Menu();
+		CheckMenuItem menu_item;
+		
+		// TRACKNUMBER
+		menu_item = new CheckMenuItem.with_label(_("Tracknumber"));
+		menu_item.set_active((par.get_int_value("use_tracknumber_column") == 1 ? true : false));
+		menu_item.toggled.connect( (s) => {
+			par.set_int_value("use_tracknumber_column", (s.get_active() == true ? 1 : 0));
+			this.column_tracknumber_visible = s.get_active();
+			Idle.add( () => {
+				handle_resize();
+				return false;
+			});
+		});
+		rightmenu.append(menu_item);
+		
+		// ALBUM
+		menu_item = new CheckMenuItem.with_label(_("Album"));
+		menu_item.set_active((par.get_int_value("use_album_column") == 1 ? true : false));
+		menu_item.toggled.connect( (s) => {
+			par.set_int_value("use_album_column", (s.get_active() == true ? 1 : 0));
+			this.column_album_visible = s.get_active();
+			Idle.add( () => {
+				handle_resize();
+				return false;
+			});
+		});
+		rightmenu.append(menu_item);
+
+		// LENGTH
+		menu_item = new CheckMenuItem.with_label(_("Length"));
+		menu_item.set_active((par.get_int_value("use_length_column") == 1 ? true : false));
+		menu_item.toggled.connect( (s) => {
+			par.set_int_value("use_length_column", (s.get_active() == true ? 1 : 0));
+			this.column_length_visible = s.get_active();
+			Idle.add( () => {
+				handle_resize();
+				return false;
+			});
+		});
+		rightmenu.append(menu_item);
+		
+		rightmenu.show_all();
+		return rightmenu;
+	}
+	
 	private int available_width {
 		get {
 			if(xn.main_window == null) 

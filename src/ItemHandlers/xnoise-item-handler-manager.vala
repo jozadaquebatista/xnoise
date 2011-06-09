@@ -61,13 +61,28 @@ namespace Xnoise {
 		public void add_handler(ItemHandler handler) {
 			assert(handler.set_manager(this) == true);
 			_handlers.append_val(handler);
-			if(handler.handler_type() != ItemHandlerType.OTHER && handler.handler_type() != ItemHandlerType.UNKNOWN)
+			if(handler.handler_type() != ItemHandlerType.OTHER && 
+			   handler.handler_type() != ItemHandlerType.UNKNOWN && 
+			   handler.handler_type() != ItemHandlerType.MENU_PROVIDER)
 				handler_type_map.insert(handler.handler_type(), handler);
 			handler_name_map.insert(handler.handler_name(), handler);
 		}
 		
-		public ItemHandler get_handler_by_type(ItemHandlerType type) {
-			return handler_type_map.lookup(type);
+		public ItemHandler? get_handler_by_type(ItemHandlerType type) {
+			ItemHandler? hndl = null;
+			hndl = handler_type_map.lookup(type);
+			if(hndl == null) {
+				for(int i = 0; i< _handlers.length; i++) {
+					hndl = _handlers.index(i);
+					if(hndl.handler_type() == type) {
+						return hndl;
+					}
+				}
+			}
+			else {
+				return hndl;
+			}
+			return null;
 		}
 		
 		public ItemHandler get_handler_by_name(string name) {
