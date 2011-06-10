@@ -96,7 +96,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 			items += ix;
 		}
 		job.items = items;
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 
 	private bool menu_add_job(Worker.Job job) {
@@ -124,7 +124,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	private void on_mediabrowser_activated(Item item, GLib.Value? data) {
 		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_item_job);
 		job.item = item;
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 	
 	private bool add_item_job(Worker.Job job) {

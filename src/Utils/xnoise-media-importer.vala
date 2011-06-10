@@ -37,7 +37,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 	internal void reimport_media_groups() {
 		Worker.Job job;
 		job = new Worker.Job(Worker.ExecutionType.ONCE, reimport_media_groups_job);
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 	
 	private bool reimport_media_groups_job(Worker.Job job) {
@@ -123,20 +123,20 @@ public class Xnoise.MediaImporter : GLib.Object {
 		Worker.Job job;
 		if(full_rescan) {
 			job = new Worker.Job(Worker.ExecutionType.ONCE, reset_local_data_library_job);
-			worker.push_job(job);
+			db_worker.push_job(job);
 		}
 		
 		if(list_of_streams.length > 0) {
 			job = new Worker.Job(Worker.ExecutionType.ONCE, store_streams_job);
 			job.set_arg("list_of_streams", list_of_streams);
 			job.set_arg("full_rescan", full_rescan);
-			worker.push_job(job);
+			db_worker.push_job(job);
 		}
 		
 		job = new Worker.Job(Worker.ExecutionType.ONCE, store_files_job);
 		job.set_arg("list_of_files", list_of_files);
 		job.set_arg("full_rescan", full_rescan);
-		worker.push_job(job);
+		db_worker.push_job(job);
 		
 		//Assuming that number of streams and number of files will be relatively small,
 		//the progress of import will only be done for folder imports
@@ -145,7 +145,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		job.set_arg("msg_id", msg_id);
 		job.set_arg("interrupted_populate_model", interrupted_populate_model);
 		job.set_arg("full_rescan", full_rescan);
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 
 	internal bool write_final_tracks_to_db_job(Worker.Job job) {

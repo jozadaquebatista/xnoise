@@ -225,6 +225,8 @@ typedef struct _XnoiseDbWriter XnoiseDbWriter;
 typedef struct _XnoiseDbWriterClass XnoiseDbWriterClass;
 typedef struct _XnoiseDbWriterPrivate XnoiseDbWriterPrivate;
 
+#define XNOISE_DB_WRITER_TYPE_CHANGE_TYPE (xnoise_db_writer_change_type_get_type ())
+
 #define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
 #define XNOISE_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModel))
 #define XNOISE_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
@@ -242,17 +244,6 @@ typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
 
 #define XNOISE_TYPE_DND_DATA (xnoise_dnd_data_get_type ())
 typedef struct _XnoiseDndData XnoiseDndData;
-
-#define XNOISE_TYPE_MEDIA_BROWSER_FILTER_MODEL (xnoise_media_browser_filter_model_get_type ())
-#define XNOISE_MEDIA_BROWSER_FILTER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_FILTER_MODEL, XnoiseMediaBrowserFilterModel))
-#define XNOISE_MEDIA_BROWSER_FILTER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_FILTER_MODEL, XnoiseMediaBrowserFilterModelClass))
-#define XNOISE_IS_MEDIA_BROWSER_FILTER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER_FILTER_MODEL))
-#define XNOISE_IS_MEDIA_BROWSER_FILTER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER_FILTER_MODEL))
-#define XNOISE_MEDIA_BROWSER_FILTER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER_FILTER_MODEL, XnoiseMediaBrowserFilterModelClass))
-
-typedef struct _XnoiseMediaBrowserFilterModel XnoiseMediaBrowserFilterModel;
-typedef struct _XnoiseMediaBrowserFilterModelClass XnoiseMediaBrowserFilterModelClass;
-typedef struct _XnoiseMediaBrowserFilterModelPrivate XnoiseMediaBrowserFilterModelPrivate;
 typedef struct _XnoiseTrackListModelPrivate XnoiseTrackListModelPrivate;
 
 #define XNOISE_TRACK_LIST_MODEL_TYPE_COLUMN (xnoise_track_list_model_column_get_type ())
@@ -853,6 +844,18 @@ struct _XnoiseDbWriterClass {
 	GObjectClass parent_class;
 };
 
+typedef enum  {
+	XNOISE_DB_WRITER_CHANGE_TYPE_ADD_ARTIST,
+	XNOISE_DB_WRITER_CHANGE_TYPE_ADD_ALBUM,
+	XNOISE_DB_WRITER_CHANGE_TYPE_ADD_TITLE,
+	XNOISE_DB_WRITER_CHANGE_TYPE_REMOVE_ARTIST,
+	XNOISE_DB_WRITER_CHANGE_TYPE_REMOVE_ALBUM,
+	XNOISE_DB_WRITER_CHANGE_TYPE_REMOVE_TITLE,
+	XNOISE_DB_WRITER_CHANGE_TYPE_REMOVE_URI,
+	XNOISE_DB_WRITER_CHANGE_TYPE_CLEAR_DB
+} XnoiseDbWriterChangeType;
+
+typedef void (*XnoiseDbWriterChangeNotificationCallback) (XnoiseDbWriterChangeType changetype, XnoiseItem* item, void* user_data);
 typedef void (*XnoiseDbWriterWriterCallback) (sqlite3* database, void* user_data);
 struct _XnoiseMediaBrowserModel {
 	GtkTreeStore parent_instance;
@@ -886,15 +889,6 @@ typedef enum  {
 struct _XnoiseDndData {
 	gint32 db_id;
 	XnoiseItemType mediatype;
-};
-
-struct _XnoiseMediaBrowserFilterModel {
-	GtkTreeModelFilter parent_instance;
-	XnoiseMediaBrowserFilterModelPrivate * priv;
-};
-
-struct _XnoiseMediaBrowserFilterModelClass {
-	GtkTreeModelFilterClass parent_class;
 };
 
 struct _XnoiseTrackListModel {
@@ -1556,12 +1550,15 @@ XnoiseItem* xnoise_db_browser_get_some_artists (XnoiseDbBrowser* self, gint limi
 XnoiseItem* xnoise_db_browser_get_artists_with_search (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_trackdata_by_albumid (XnoiseDbBrowser* self, gchar** searchtext, gint32 id, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_trackdata_by_artistid (XnoiseDbBrowser* self, gchar** searchtext, gint32 id, int* result_length1);
+XnoiseItem* xnoise_db_browser_get_artistitem_by_artistid (XnoiseDbBrowser* self, gchar** searchtext, gint32 id);
 XnoiseTrackData* xnoise_db_browser_get_trackdata_by_titleid (XnoiseDbBrowser* self, gchar** searchtext, gint32 id);
 XnoiseItem* xnoise_db_browser_get_albums_with_search (XnoiseDbBrowser* self, gchar** searchtext, gint32 id, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_titles_with_mediatypes_and_ids (XnoiseDbBrowser* self, const gchar* artist, const gchar* album, int* result_length1);
 GType xnoise_db_writer_get_type (void) G_GNUC_CONST;
+GType xnoise_db_writer_change_type_get_type (void) G_GNUC_CONST;
 XnoiseDbWriter* xnoise_db_writer_new (GError** error);
 XnoiseDbWriter* xnoise_db_writer_construct (GType object_type, GError** error);
+void xnoise_db_writer_register_change_callback (XnoiseDbWriter* self, XnoiseDbWriterChangeNotificationCallback cb, void* cb_target);
 gchar* xnoise_db_writer_get_uri_for_item_id (XnoiseDbWriter* self, gint32 id);
 gboolean xnoise_db_writer_set_local_image_for_album (XnoiseDbWriter* self, gchar** artist, gchar** album, const gchar* image_path);
 gchar** xnoise_db_writer_get_media_folders (XnoiseDbWriter* self, int* result_length1);
@@ -1604,9 +1601,6 @@ XnoiseDndData* xnoise_media_browser_model_get_dnd_data_for_path (XnoiseMediaBrow
 XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
 gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserModel* self);
-GType xnoise_media_browser_filter_model_get_type (void) G_GNUC_CONST;
-XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_new (XnoiseMediaBrowserModel* mbm);
-XnoiseMediaBrowserFilterModel* xnoise_media_browser_filter_model_construct (GType object_type, XnoiseMediaBrowserModel* mbm);
 GType xnoise_track_list_model_column_get_type (void) G_GNUC_CONST;
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
 XnoiseTrackListModel* xnoise_track_list_model_construct (GType object_type);
@@ -1816,7 +1810,8 @@ extern XnoiseGlobalAccess* xnoise_global;
 GType xnoise_user_info_get_type (void) G_GNUC_CONST;
 extern XnoiseUserInfo* xnoise_userinfo;
 GType xnoise_worker_get_type (void) G_GNUC_CONST;
-extern XnoiseWorker* xnoise_worker;
+extern XnoiseWorker* xnoise_db_worker;
+extern XnoiseWorker* xnoise_io_worker;
 extern XnoiseMediaImporter* xnoise_media_importer;
 extern XnoiseItemHandlerManager* xnoise_item_handler_manager;
 extern XnoiseItemConverter* xnoise_item_converter;

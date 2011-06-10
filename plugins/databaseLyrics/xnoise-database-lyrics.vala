@@ -140,14 +140,14 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 		Worker.Job job;
 		job = new Worker.Job(Worker.ExecutionType.ONCE, this.check_table_cb);
 		job.cancellable = this.cancellable;
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 	
 	private void add_lyrics_entry() {
 		Worker.Job job;
 		job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_lyrics_entry_cb);
 		job.cancellable = this.cancellable;
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 	
 	private bool check_table_cb(Worker.Job job) {
@@ -290,7 +290,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 		Worker.Job job;
 		job = new Worker.Job(Worker.ExecutionType.ONCE, this.get_lyrics_from_db);
 		job.cancellable = this.cancellable;
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 	
 	private void dbcb(Sqlite.Database db) {

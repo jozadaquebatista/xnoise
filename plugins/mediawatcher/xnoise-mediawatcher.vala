@@ -98,7 +98,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		iib = new ImportInfoBar();
 		
 		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.setup_monitors_job);
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 	
 	private class DataPair : GLib.Object{
@@ -135,7 +135,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 			monitor_list = null;
 		}
 		var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.setup_monitors_job);
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 	
 	/* setup file monitors for a directory and all its subdirectories, reference them and

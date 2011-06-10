@@ -48,7 +48,6 @@ xnoise_SOURCES = \
     Database/xnoise-db-creator.vala \
     Database/xnoise-db-writer.vala \
     Models/xnoise-media-browser-model.vala \
-    Models/xnoise-media-browser-filtermodel.vala \
     Models/xnoise-tracklist-model.vala \
     Player/xnoise-gst-player.vala \
     Plugin/xnoise-plugin.vala \

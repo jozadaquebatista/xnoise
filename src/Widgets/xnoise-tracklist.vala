@@ -452,7 +452,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 					job.set_arg("row_ref", row_ref);
 					job.set_arg("drop_pos", drop_pos);
 					job.dnd_data = ids;
-					worker.push_job(job);
+					db_worker.push_job(job);
 					break;
 				case 1: // uri list from outside
 					uris = selection.get_uris();

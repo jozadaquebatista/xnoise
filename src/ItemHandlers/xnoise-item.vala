@@ -30,14 +30,14 @@
 
 
 namespace Xnoise {
-	public struct Item {
+	public struct Item { // TODO: use db id for artist album track
 		public Item(ItemType _type = ItemType.UNKNOWN, string? _uri = null, int32 _db_id = -1) {
 			this.type  = _type;
 			this.db_id = _db_id;
 			this.uri   = _uri;
 		}
 		public ItemType  type;
-		public int32     db_id;    // the id in the database or -1; to be verified, if coming from tracklist
+		public int32     db_id;  // the id in the database or -1; to be verified, if coming from tracklist
 		public string?   uri;    // uri of item
 		public string?   text;   // some text
 	}

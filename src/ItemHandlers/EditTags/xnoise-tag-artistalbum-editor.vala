@@ -122,7 +122,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		Worker.Job job;
 		job = new Worker.Job(Worker.ExecutionType.ONCE, this.query_trackdata_job);
 		job.item = item;
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 
 	private TrackData[] td_old;
@@ -234,7 +234,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //		job.set_arg("new_content_name", new_content_name);
 //		job.set_arg("org_content_name", org_content_name);
 //		job.set_arg("treerowref", treerowref);
-//		worker.push_job(job);
+//		db_worker.push_job(job);
 //	}
 //	
 //	private void do_artist_case_correction_job(Worker.Job job) {
@@ -248,7 +248,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //		var tagjob = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.do_artist_tag_case_correction_job);
 //		tagjob.set_arg("artist", newname);
 //		tagjob.set_arg("uris_for_update", uris_for_update);
-//		worker.push_job(tagjob);
+//		db_worker.push_job(tagjob);
 //		
 //		Idle.add( () => {
 //			TreeRowReference tf = (TreeRowReference)job.get_arg("treerowref");
@@ -274,7 +274,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //		job.set_arg("new_content_name", new_content_name);
 //		job.set_arg("org_content_name", org_content_name);
 //		job.set_arg("treerowref", treerowref);
-//		worker.push_job(job);
+//		db_worker.push_job(job);
 //	}
 
 //	private void do_album_case_correction_job(Worker.Job job) {
@@ -290,7 +290,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //		var tagjob = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.do_album_tag_case_correction_job);
 //		tagjob.set_arg("album", newname);
 //		tagjob.set_arg("uris_for_update", uris_for_update);
-//		worker.push_job(tagjob);
+//		db_worker.push_job(tagjob);
 //		
 //		Idle.add( () => {
 //			TreeRowReference tf = (TreeRowReference)job.get_arg("treerowref");
@@ -376,11 +376,11 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //		artist_job.id_array = ids;
 //		artist_job.set_arg("content", (int)this.content);
 //		artist_job.track_dat = local_track_dat2;
-//		worker.push_job(artist_job);		
+//		db_worker.push_job(artist_job);		
 //				
 //		mover_job.treerowrefs = local_trra;
 //		mover_job.track_dat = local_track_dat;
-//		worker.push_job(mover_job);	
+//		db_worker.push_job(mover_job);	
 //	}
 
 //	private void do_album_rename() {
@@ -426,11 +426,11 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //		album_job.id_array = ids;
 //		album_job.set_arg("content", (int)this.content);
 //		album_job.track_dat = local_track_dat2;
-//		worker.push_job(album_job);		
+//		db_worker.push_job(album_job);		
 //				
 //		mover_job.treerowrefs = local_trra;
 //		mover_job.track_dat = local_track_dat;
-//		worker.push_job(mover_job);	
+//		db_worker.push_job(mover_job);	
 //	}
 
 //	private void move_iter_job(Worker.Job job) {
@@ -494,7 +494,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //				job.set_arg("id", id);
 //				TrackData td = (TrackData)tag_job.track_dat[i];
 //				job.set_arg("td", td);
-//				worker.push_job(job);
+//				db_worker.push_job(job);
 //			}
 //			else if(ctnt == Content.ALBUM) {
 //				var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_single_album_tag_job);
@@ -502,7 +502,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //				job.set_arg("id", id);
 //				TrackData td = (TrackData)tag_job.track_dat[i];
 //				job.set_arg("td", td);
-//				worker.push_job(job);
+//				db_worker.push_job(job);
 //			}
 //			i++;
 //		}

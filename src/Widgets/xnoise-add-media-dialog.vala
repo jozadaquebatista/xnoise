@@ -72,7 +72,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		
 		Worker.Job job;
 		job = new Worker.Job(Worker.ExecutionType.ONCE, put_media_data_to_model);
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 	
 	private StreamData[] streams = null;

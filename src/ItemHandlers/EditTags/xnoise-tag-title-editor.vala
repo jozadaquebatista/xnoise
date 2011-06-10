@@ -76,7 +76,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		Worker.Job job;
 		job = new Worker.Job(Worker.ExecutionType.ONCE, this.query_trackdata_job);
 		job.item = item;
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 
 //	private void query_trackdata(int db_id) {
@@ -173,7 +173,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 //		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_tag_job);
 //		job.set_arg("tdx", tdx);
 //		job.set_arg("treerowref", treerowref);
-//		worker.push_job(job);		
+//		db_worker.push_job(job);		
 //		
 //		Idle.add( () => {
 //			this.dialog.destroy();

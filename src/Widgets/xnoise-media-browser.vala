@@ -502,35 +502,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		
 	
 	public void on_row_expanded(TreeIter iter, TreePath path) {
-		print("on_row_expanded\n");
+		//print("on_row_expanded\n");
 		mediabrowsermodel.load_children(ref iter);
 	}
 	
-//	private remove_loader_child(ref iter) {
-//		print("remove_loader_child\n");
-//	}
-//	
-//	private bool row_is_resolved(ref TreeIter iter) {
-//		if(mediabrowsermodel.iter_n_children(iter) != 1)
-//			return true;
-//		TreeIter child;
-//		Item? item = Item(ItemType.UNKNOWN);
-//		mediabrowsermodel.iter_nth_child(out child, iter, 0);
-//		mediabrowsermodel.get(child, MediaBrowserModel.Column.ITEM, out item);
-//		return (item.type != ItemType.LOADER);
-////		for(int i = 0; i < mediabrowsermodel.iter_n_children(iter); i++) {
-////			this.iter_nth_child(out child, iter, i);
-////			this.get(child, MediaBrowserModel.Column.ITEM, ref item);
-////			text = text != null ? text.down().strip() : "";
-////			if(strcmp(text, artist != null ? artist.down().strip() : "") == 0) {
-////				//found artist
-////				break;
-////			}
-////			if(i == (this.iter_n_children(null) - 1))
-////				return;
-////		}
-//	}
-
 //	public void on_row_collapsed(TreeIter iter, TreePath path) {
 //		uint list_iter = 0;
 //		foreach(TreePath tp in this.expansion_list) {
@@ -539,7 +514,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //				break;
 //			}
 //			list_iter++;
-//		}	
+//		}
 //	}
 
 	private void setup_view() {
