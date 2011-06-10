@@ -84,10 +84,8 @@ msgid "Leave fullscreen"
 msgstr "Sair de ecrã completo"
 
 #: ../src/Player/xnoise-gst-player.vala:176
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../src/Player/xnoise-gst-player.vala:548
 msgid "Subtitle #"
@@ -126,9 +124,8 @@ msgstr ""
 "A utilizar %s ..."
 
 #: ../src/Widgets/xnoise-main-window.vala:41
-#, fuzzy
 msgid "Now Playing"
-msgstr "a reproduzir"
+msgstr "A reproduzir"
 
 #: ../src/Widgets/xnoise-main-window.vala:42
 msgid "Tracklist"
@@ -147,14 +144,12 @@ msgid "Hide Media"
 msgstr "Ocultar multimédia"
 
 #: ../src/Widgets/xnoise-main-window.vala:106
-#, fuzzy
 msgid "Hide Library"
-msgstr "Ocultar multimédia"
+msgstr "Ocultar coleção"
 
 #: ../src/Widgets/xnoise-main-window.vala:107
-#, fuzzy
 msgid "Show Library"
-msgstr "Mostrar multimédia"
+msgstr "Mostrar coleção"
 
 #: ../src/Widgets/xnoise-main-window.vala:143
 msgid "_File"
@@ -237,12 +232,8 @@ msgid "Add media"
 msgstr "Adicionar multimédia"
 
 #: ../src/Widgets/xnoise-main-window.vala:427
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
-"a coleção?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para a coleção?"
 
 #. TODO: create some other images
 #: ../src/Widgets/xnoise-main-window.vala:521
@@ -331,7 +322,7 @@ msgstr "Remover títulos selecionados"
 
 #: ../src/Models/xnoise-media-browser-model.vala:882
 msgid "Loading ..."
-msgstr ""
+msgstr "A carregar..."
 
 #: ../src/Utils/xnoise-media-importer.vala:406
 msgid "Finished import. "
@@ -433,91 +424,90 @@ msgstr "Selecione o ficheiro de legendas"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
-msgstr ""
+msgstr "Plugin Demo para xnoise"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:2
 msgid "Test"
-msgstr ""
+msgstr "Teste"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
 msgid "Chartlyrics"
-msgstr ""
+msgstr "Chartlyrics"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from chartlyrics.com"
-msgstr ""
+msgstr "Procurar letras das músicas em chartlyrics.com"
 
 #: ../plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in.h:1
 msgid "Always keep the current state of xnoise"
-msgstr ""
+msgstr "Guardar sempre o estado do xnoise"
 
 #: ../plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in.h:2
 msgid "CyclicSaveState"
-msgstr ""
+msgstr "Gravar estado"
 
 #: ../plugins/lastfmCovers/lastfmCovers.xnplugin.desktop.in.h:1
 msgid "LastfmCovers"
-msgstr ""
+msgstr "Capas de álbum Lastfm"
 
 #: ../plugins/lastfmCovers/lastfmCovers.xnplugin.desktop.in.h:2
 msgid "Load album covers from lastfm"
-msgstr ""
+msgstr "Procurar capas de álbum na lastfm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Load lyrics from http://www.lyricwiki.com"
-msgstr ""
+msgstr "Procurar letras das músicas em lyricwiki.com"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:2
-#, fuzzy
 msgid "Lyricwiki"
-msgstr "Letras musicais"
+msgstr "Lyricwiki"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
 msgid "Control xnoise using mediakeys"
-msgstr ""
+msgstr "Controlar xnoise através de teclas multimédia"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:2
 msgid "mediakeys"
-msgstr ""
+msgstr "Teclas multimédia"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
-msgstr ""
+msgstr "Controlar xnoise através de uma interface MPRIS v2"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
 msgid "mpris"
-msgstr ""
+msgstr "Mpris"
 
 #: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
 msgid "Show notifications one track change"
-msgstr ""
+msgstr "Mostrar notificações ao alterar de faixa"
 
 #: ../plugins/notifications/notifications.xnplugin.desktop.in.h:2
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:2
 msgid "notifications"
-msgstr ""
+msgstr "Notificações"
 
 #: ../plugins/soundmenu/soundmenu.xnplugin.desktop.in.h:1
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 msgid "Use ayatana soundmenu"
-msgstr ""
+msgstr "Utilizar menu de som ayatana"
 
 #: ../plugins/soundmenu/soundmenu.xnplugin.desktop.in.h:2
 msgid "soundmenu"
-msgstr ""
+msgstr "Menu de som"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:2
 msgid "soundmenu2"
-msgstr ""
+msgstr "Menu de som 2"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
-msgstr ""
+msgstr "Utilizar o título da faixa como título da janela"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "TitleToDecoration"
-msgstr ""
+msgstr "Título da janela"
 
 #~ msgid "Video"
 #~ msgstr "Vídeo"
