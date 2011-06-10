@@ -1073,7 +1073,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private bool on_press_header(Gtk.Widget sender, Gdk.EventButton e) {
 		if(e.button != 3)
 			return false;
-		print("on_press_header\n");
+		//print("on_press_header\n");
 		menu = create_header_rightclick_menu();
 		if(menu != null)
 			menu.popup(null, null, null, 0, e.time);
