@@ -235,7 +235,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //	}
 	
 	public void filter() {
-		print("filter\n");
+		//print("filter\n");
 		this.clear();
 		this.populate_model();
 	}
@@ -949,13 +949,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 	// used for populating the data model
 	private bool populate_artists_job(Worker.Job job) {
-		print("populate_artists_job\n");
-		
 		if(job.cancellable.is_cancelled())
 			return false;
 		
 		job.items = db_browser.get_artists_with_search(ref this.searchtext);
-		print("job.items.length = %d\n", job.items.length);
+		//print("job.items.length = %d\n", job.items.length);
 		Idle.add( () => { // TODO Maybe in packages of 1000
 			if(job.cancellable.is_cancelled())
 				return false;
@@ -991,14 +989,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private static const string LOADING = _("Loading ...");
 	
 	public void load_children(ref TreeIter iter) {
-		//print("load_children\n");
-		if(!row_is_resolved(ref iter)) {
+		if(!row_is_resolved(ref iter))
 			load_album_and_titles(ref iter);
-			//print("not resolved\n");
-		}
-		//else {
-		//	print("resolved\n");
-		//}
 	}
 	
 	private void load_album_and_titles(ref TreeIter iter) {
@@ -1020,10 +1012,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 
 	private bool load_album_and_titles_job(Worker.Job job) {
+		if(this.populating_model)
+			return false;
 		job.items = db_browser.get_albums_with_search(ref searchtext, (int32)job.get_arg("id"));
 		//print("job.items cnt = %d\n", job.items.length);
 		Idle.add( () => {
 			TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+			if(row_ref == null || !row_ref.valid())
+				return false;
 			TreePath p = row_ref.get_path();
 			TreeIter iter_artist, iter_album;
 			this.get_iter(out iter_artist, p);
@@ -1137,10 +1133,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 	//Used for populating model
 	private bool populate_title_job(Worker.Job job) {
+		if(this.populating_model)
+			return false;
 		int32 al = (int32)job.get_arg("album");
 		job.track_dat = db_browser.get_trackdata_by_albumid(ref searchtext, al);
 		Idle.add( () => {
 			TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+			if((row_ref == null) || (!row_ref.valid()))
+				return false;
 			TreePath p = row_ref.get_path();
 			TreeIter iter_title, iter_album;
 			this.get_iter(out iter_album, p);
