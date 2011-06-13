@@ -720,26 +720,26 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_INSERT_TITLE =
 		"INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length, bitrate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
-	public bool insert_title(ref TrackData td, string uri) {
+	public bool insert_title(ref TrackData td) { // , string uri
 		// make entries in other tables and get references from there
 		td.dat1 = handle_artist(ref td.artist);
 		if(td.dat1 == -1) {
-			print("Error importing artist for %s : '%s' ! \n", uri, td.artist);
+			print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.artist);
 			return false;
 		}
 		td.dat2 = handle_album(ref td.dat1, ref td.album);
 		if(td.dat2 == -1) {
-			print("Error importing album for %s : '%s' ! \n", uri, td.album);
+			print("Error importing album for %s : '%s' ! \n", td.item.uri, td.album);
 			return false;
 		}
-		int uri_id = handle_uri(uri);
+		int uri_id = handle_uri(td.item.uri);
 		if(uri_id == -1) {
-			print("Error importing uri for %s : '%s' ! \n", uri, uri);
+//			print("Error importing uri for %s : '%s' ! \n", uri, uri);
 			return false;
 		}
 		int genre_id = handle_genre(ref td.genre);
 		if(genre_id == -1) {
-			print("Error importing genre for %s : '%s' ! \n", uri, td.genre);
+			print("Error importing genre for %s : '%s' ! \n", td.item.uri, td.genre);
 			return false;
 		}
 		insert_title_statement.reset();

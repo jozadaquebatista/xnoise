@@ -406,16 +406,6 @@ typedef struct _XnoiseMediaImporter XnoiseMediaImporter;
 typedef struct _XnoiseMediaImporterClass XnoiseMediaImporterClass;
 typedef struct _XnoiseMediaImporterPrivate XnoiseMediaImporterPrivate;
 
-#define XNOISE_WORKER_TYPE_JOB (xnoise_worker_job_get_type ())
-#define XNOISE_WORKER_JOB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJob))
-#define XNOISE_WORKER_JOB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJobClass))
-#define XNOISE_WORKER_IS_JOB(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_WORKER_TYPE_JOB))
-#define XNOISE_WORKER_IS_JOB_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_WORKER_TYPE_JOB))
-#define XNOISE_WORKER_JOB_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJobClass))
-
-typedef struct _XnoiseWorkerJob XnoiseWorkerJob;
-typedef struct _XnoiseWorkerJobClass XnoiseWorkerJobClass;
-
 #define XNOISE_TYPE_PARAMS (xnoise_params_get_type ())
 #define XNOISE_PARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PARAMS, XnoiseParams))
 #define XNOISE_PARAMS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PARAMS, XnoiseParamsClass))
@@ -505,6 +495,16 @@ typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
 typedef struct _XnoiseWorkerPrivate XnoiseWorkerPrivate;
 
 #define XNOISE_WORKER_TYPE_EXECUTION_TYPE (xnoise_worker_execution_type_get_type ())
+
+#define XNOISE_WORKER_TYPE_JOB (xnoise_worker_job_get_type ())
+#define XNOISE_WORKER_JOB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJob))
+#define XNOISE_WORKER_JOB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJobClass))
+#define XNOISE_WORKER_IS_JOB(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_WORKER_TYPE_JOB))
+#define XNOISE_WORKER_IS_JOB_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_WORKER_TYPE_JOB))
+#define XNOISE_WORKER_JOB_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJobClass))
+
+typedef struct _XnoiseWorkerJob XnoiseWorkerJob;
+typedef struct _XnoiseWorkerJobClass XnoiseWorkerJobClass;
 typedef struct _XnoiseWorkerJobPrivate XnoiseWorkerJobPrivate;
 
 #define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
@@ -1565,7 +1565,7 @@ gchar** xnoise_db_writer_get_media_folders (XnoiseDbWriter* self, int* result_le
 gboolean xnoise_db_writer_get_trackdata_for_stream (XnoiseDbWriter* self, const gchar* uri, XnoiseTrackData** val);
 gint xnoise_db_writer_get_track_id_for_uri (XnoiseDbWriter* self, const gchar* uri);
 gboolean xnoise_db_writer_update_title (XnoiseDbWriter* self, gint32 id, XnoiseTrackData** td);
-gboolean xnoise_db_writer_insert_title (XnoiseDbWriter* self, XnoiseTrackData** td, const gchar* uri);
+gboolean xnoise_db_writer_insert_title (XnoiseDbWriter* self, XnoiseTrackData** td);
 void xnoise_db_writer_delete_uri (XnoiseDbWriter* self, const gchar* uri);
 gint xnoise_db_writer_uri_entry_exists (XnoiseDbWriter* self, const gchar* uri);
 void xnoise_db_writer_add_single_stream_to_collection (XnoiseDbWriter* self, const gchar* uri, const gchar* name);
@@ -1799,9 +1799,6 @@ void xnoise_lyrics_loader_remove_lyrics_provider (XnoiseLyricsLoader* self, Xnoi
 gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self, const gchar* _artist, const gchar* _title);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
 gchar* xnoise_media_importer_get_uri_for_item_id (XnoiseMediaImporter* self, gint32 id);
-GType xnoise_worker_job_get_type (void) G_GNUC_CONST;
-void xnoise_media_importer_add_local_tags (XnoiseMediaImporter* self, GFile* dir, XnoiseWorkerJob* job, GAsyncReadyCallback _callback_, gpointer _user_data_);
-void xnoise_media_importer_add_local_tags_finish (XnoiseMediaImporter* self, GAsyncResult* _res_);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
 GType xnoise_params_get_type (void) G_GNUC_CONST;
@@ -1895,6 +1892,7 @@ guint xnoise_user_info_popup (XnoiseUserInfo* self, XnoiseUserInfoRemovalType re
 GType xnoise_worker_execution_type_get_type (void) G_GNUC_CONST;
 XnoiseWorker* xnoise_worker_new (GMainContext* mc);
 XnoiseWorker* xnoise_worker_construct (GType object_type, GMainContext* mc);
+GType xnoise_worker_job_get_type (void) G_GNUC_CONST;
 void xnoise_worker_push_job (XnoiseWorker* self, XnoiseWorkerJob* j);
 XnoiseWorkerJob* xnoise_worker_job_new (XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, gint _timer_seconds);
 XnoiseWorkerJob* xnoise_worker_job_construct (GType object_type, XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, gint _timer_seconds);

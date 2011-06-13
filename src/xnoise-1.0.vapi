@@ -115,7 +115,7 @@ namespace Xnoise {
 		public int get_track_id_for_uri (string uri);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public string? get_uri_for_item_id (int32 id);
-		public bool insert_title (ref Xnoise.TrackData td, string uri);
+		public bool insert_title (ref Xnoise.TrackData td);
 		public void register_change_callback (Xnoise.DbWriter.ChangeNotificationCallback cb);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public bool update_title (int32 id, ref Xnoise.TrackData td);
@@ -427,7 +427,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaImporter : GLib.Object {
 		public MediaImporter ();
-		public async void add_local_tags (GLib.File dir, Xnoise.Worker.Job job);
 		public string? get_uri_for_item_id (int32 id);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
