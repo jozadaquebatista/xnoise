@@ -32,7 +32,7 @@ using Gtk;
 
 public class Xnoise.MediaImporter : GLib.Object {
 
-	private static int FILE_COUNT = 100;
+	private static int FILE_COUNT = 250;
 	
 	internal void reimport_media_groups() {
 		Worker.Job job;
@@ -680,8 +680,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 	private void dec_and_test_job_cnt() {
 		AtomicInt.dec_and_test(ref job_count);
 		if(AtomicInt.get(ref job_count) <= 0 && io_import_job_running == false) {
-			print("NOW !\n");
-			print("set import to false\n");
+			//print("NOW !\n");
+			//print("set import to false\n");
 			global.media_import_in_progress = false;
 			if(current_import_msg_id != 0) {
 				userinfo.popdown(current_import_msg_id);

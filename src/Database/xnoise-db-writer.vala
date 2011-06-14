@@ -762,21 +762,21 @@ public class Xnoise.DbWriter : GLib.Object {
 			return false;
 		}
 		
-		//get id back
-		Statement stmt;
-		this.db.prepare_v2(STMT_GET_GET_ITEM_ID, -1, out stmt);
-		if(stmt.bind_int (1, td.dat1)   != Sqlite.OK ||
-		   stmt.bind_int (2, td.dat2)   != Sqlite.OK ||
-		   stmt.bind_text(3, td.title)  != Sqlite.OK) {
-			this.db_error();
-			return false;
-		}
-		stmt.reset();
-		if(stmt.step() == Sqlite.ROW) {
-			td.db_id = (int32)stmt.column_int(0);
-			return true;
-		}
-		return false;
+//		//get id back
+//		Statement stmt;
+//		this.db.prepare_v2(STMT_GET_GET_ITEM_ID, -1, out stmt);
+//		if(stmt.bind_int (1, td.dat1)   != Sqlite.OK ||
+//		   stmt.bind_int (2, td.dat2)   != Sqlite.OK ||
+//		   stmt.bind_text(3, td.title)  != Sqlite.OK) {
+//			this.db_error();
+//			return false;
+//		}
+//		stmt.reset();
+//		if(stmt.step() == Sqlite.ROW) {
+//			td.db_id = (int32)stmt.column_int(0);
+//			return true;
+//		}
+		return true;
 	}
 
 	/*
