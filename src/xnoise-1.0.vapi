@@ -379,6 +379,7 @@ namespace Xnoise {
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
 		public MediaBrowser ();
 		public bool change_model_data ();
+		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_searchtext_changed ();
 		public void resize_line_width (int new_width);
@@ -422,6 +423,7 @@ namespace Xnoise {
 		public void move_artist_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_title_iter_sorted (ref Gtk.TreeIter org_iter, ref Xnoise.TrackData td);
 		public bool populate_model ();
+		public void unload_children (ref Gtk.TreeIter iter);
 		public bool populating_model { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]

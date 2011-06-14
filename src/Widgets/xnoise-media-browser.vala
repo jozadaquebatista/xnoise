@@ -506,7 +506,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		mediabrowsermodel.load_children(ref iter);
 	}
 	
-//	public void on_row_collapsed(TreeIter iter, TreePath path) {
+	public void on_row_collapsed(TreeIter iter, TreePath path) {
+		mediabrowsermodel.unload_children(ref iter);
 //		uint list_iter = 0;
 //		foreach(TreePath tp in this.expansion_list) {
 //			if(path.compare(tp) == 0) {
@@ -515,14 +516,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //			}
 //			list_iter++;
 //		}
-//	}
+	}
 
 	private void setup_view() {
 		
 		//we keep track of which rows are expanded, so we can expand them again
 		//when the view is updated
 		expansion_list = new List<TreePath>();
-//		this.row_collapsed.connect(on_row_collapsed);
+		this.row_collapsed.connect(on_row_collapsed);
 		this.row_expanded.connect(on_row_expanded);
 		
 		this.set_size_request (300,500);

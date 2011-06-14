@@ -500,6 +500,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 			}
 			else {
 				get_last_unselected_path(ref path);
+				if(path == null)
+					return;
 				drop_rowref = new TreeRowReference(this.tracklistmodel, path);
 				if(drop_rowref == null || !drop_rowref.valid()) {
 					return;

@@ -1593,6 +1593,7 @@ void xnoise_media_browser_model_move_artist_iter_sorted (XnoiseMediaBrowserModel
 void xnoise_media_browser_model_move_album_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, const gchar* name);
 void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
 gboolean xnoise_media_browser_model_populate_model (XnoiseMediaBrowserModel* self);
+void xnoise_media_browser_model_unload_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
 void xnoise_media_browser_model_load_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
 GType xnoise_dnd_data_get_type (void) G_GNUC_CONST;
 XnoiseDndData* xnoise_dnd_data_dup (const XnoiseDndData* self);
@@ -1972,6 +1973,7 @@ void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_update_view (XnoiseMediaBrowser* self);
 void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
+void xnoise_media_browser_on_row_collapsed (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
 void xnoise_media_browser_resize_line_width (XnoiseMediaBrowser* self, gint new_width);
 gboolean xnoise_media_browser_get_use_linebreaks (XnoiseMediaBrowser* self);
 void xnoise_media_browser_set_use_linebreaks (XnoiseMediaBrowser* self, gboolean value);

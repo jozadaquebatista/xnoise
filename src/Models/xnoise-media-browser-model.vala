@@ -111,30 +111,87 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					print("GOT -1\n");
 					return;
 				}
-				Idle.add( () => {
-					add_imported_artist(item);
-					return false;
-				});
+				Worker.Job job;
+				job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_imported_artist_job);
+				job.item = item;
+				db_worker.push_job(job);
 				break;
 			default: break;
 		}
 	}
 	
-	private void add_imported_artist(Item? item) {
-		if(item.type == ItemType.UNKNOWN) // not matching searchtext
-			return;
-		if(populating_model) // don't try to put an artist to the model in case we are filling anyway
-			return;
-		string text = null;
-		TreeIter iter_search, artist_iter;
-		if(this.iter_n_children(null) == 0) {
+	private bool add_imported_artist_job(Worker.Job job) {
+		int32 _id = job.item.db_id;
+		job.item = db_browser.get_artistitem_by_artistid(ref searchtext, _id); // necessary because of search
+		if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
+			return false;
+		Idle.add( () => {
+			if(populating_model) // don't try to put an artist to the model in case we are filling anyway
+				return false;
+			string text = null;
+			TreeIter iter_search, artist_iter;
+			if(this.iter_n_children(null) == 0) {
+				this.append(out artist_iter, null);
+				this.set(artist_iter,
+					     Column.ICON, artist_pixb,
+					     Column.VIS_TEXT, job.item.text,
+					     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+					     Column.DRAW_SEPTR, 0,
+					     Column.ITEM, job.item
+					     );
+				Item? loader_item = Item(ItemType.LOADER);
+				this.append(out iter_search, artist_iter);
+				this.set(iter_search,
+					     Column.ICON, loading_pixb,
+					     Column.VIS_TEXT, LOADING,
+					     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+					     Column.DRAW_SEPTR, 0,
+					     Column.ITEM, loader_item
+					     );
+				return false;
+			}
+			CollectionType ct = CollectionType.UNKNOWN;
+			string itemtext_prep = job.item.text.down().strip();
+			for(int i = 0; i < this.iter_n_children(null); i++) {
+				this.iter_nth_child(out artist_iter, null, i);
+				this.get(artist_iter, Column.VIS_TEXT, out text, Column.COLL_TYPE, out ct);
+				if(ct != CollectionType.HIERARCHICAL)
+					continue;
+				text = text != null ? text.down().strip() : "";
+				if(strcmp(text, itemtext_prep) == 0) {
+					//found artist
+					return false;
+				}
+				if(strcmp(text, itemtext_prep) > 0) {
+					TreeIter new_artist_iter;
+					this.insert_before(out new_artist_iter, null, artist_iter);
+					this.set(new_artist_iter,
+						     Column.ICON, artist_pixb,
+						     Column.VIS_TEXT, job.item.text,
+						     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+						     Column.DRAW_SEPTR, 0,
+						     Column.ITEM, job.item
+						     );
+					artist_iter = new_artist_iter;
+					Item? loader_item = Item(ItemType.LOADER);
+					this.append(out iter_search, artist_iter);
+					this.set(iter_search,
+							 Column.ICON, loading_pixb,
+							 Column.VIS_TEXT, LOADING,
+							 Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+							 Column.DRAW_SEPTR, 0,
+							 Column.ITEM, loader_item
+							 );
+					return false;
+				}
+			}
 			this.append(out artist_iter, null);
 			this.set(artist_iter,
 				     Column.ICON, artist_pixb,
-				     Column.VIS_TEXT, item.text,
+				     Column.VIS_TEXT, job.item.text,
 				     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
 				     Column.DRAW_SEPTR, 0,
-				     Column.ITEM, item
+				     Column.ITEM, job.item
 				     );
 			Item? loader_item = Item(ItemType.LOADER);
 			this.append(out iter_search, artist_iter);
@@ -145,61 +202,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				     Column.DRAW_SEPTR, 0,
 				     Column.ITEM, loader_item
 				     );
-			return;
-		}
-		CollectionType ct = CollectionType.UNKNOWN;
-		string itemtext_prep = item.text.down().strip();
-		for(int i = 0; i < this.iter_n_children(null); i++) {
-			this.iter_nth_child(out artist_iter, null, i);
-			this.get(artist_iter, Column.VIS_TEXT, out text, Column.COLL_TYPE, out ct);
-			if(ct != CollectionType.HIERARCHICAL)
-				continue;
-			text = text != null ? text.down().strip() : "";
-			if(strcmp(text, itemtext_prep) == 0) {
-				//found artist
-				return;
-			}
-			if(strcmp(text, itemtext_prep) > 0) {
-				TreeIter new_artist_iter;
-				this.insert_before(out new_artist_iter, null, artist_iter);
-				this.set(new_artist_iter,
-					     Column.ICON, artist_pixb,
-					     Column.VIS_TEXT, item.text,
-					     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-					     Column.DRAW_SEPTR, 0,
-					     Column.ITEM, item
-					     );
-				artist_iter = new_artist_iter;
-				Item? loader_item = Item(ItemType.LOADER);
-				this.append(out iter_search, artist_iter);
-				this.set(iter_search,
-						 Column.ICON, loading_pixb,
-						 Column.VIS_TEXT, LOADING,
-						 Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-						 Column.DRAW_SEPTR, 0,
-						 Column.ITEM, loader_item
-						 );
-				return;
-			}
-		}
-		this.append(out artist_iter, null);
-		this.set(artist_iter,
-			     Column.ICON, artist_pixb,
-			     Column.VIS_TEXT, item.text,
-			     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-			     Column.DRAW_SEPTR, 0,
-			     Column.ITEM, item
-			     );
-		Item? loader_item = Item(ItemType.LOADER);
-		this.append(out iter_search, artist_iter);
-		this.set(iter_search,
-			     Column.ICON, loading_pixb,
-			     Column.VIS_TEXT, LOADING,
-			     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-			     Column.DRAW_SEPTR, 0,
-			     Column.ITEM, loader_item
-			     );
-		return;
+			return false;
+		});
+		return false;
 	}
 	
 	private void update_pixbufs() {
@@ -984,6 +989,29 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 	private static const string LOADING = _("Loading ...");
 	
+	public void unload_children(ref TreeIter iter) {
+		TreeIter iter_loader;
+		Item? item = Item(ItemType.UNKNOWN);
+		this.get(iter, Column.ITEM, out item);
+		if(item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
+			return;
+		Item? loader_item = Item(ItemType.LOADER);
+		this.append(out iter_loader, iter);
+		this.set(iter_loader,
+		         Column.ICON, loading_pixb,
+		         Column.VIS_TEXT, LOADING,
+		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
+		         Column.DRAW_SEPTR, 0,
+		         Column.VISIBLE, false,
+		         Column.ITEM, loader_item
+		         );
+		TreeIter child;
+		for(int i = (this.iter_n_children(iter) -2); i >= 0 ; i--) {
+			this.iter_nth_child(out child, iter, i);
+			this.remove(child);
+		}
+	}
+	
 	public void load_children(ref TreeIter iter) {
 		if(!row_is_resolved(ref iter))
 			load_album_and_titles(ref iter);
@@ -997,7 +1025,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		TreePath path = this.get_path(iter);
 		TreeRowReference treerowref = new TreeRowReference(this, path);
 		this.get(iter, Column.ITEM, out item);
-		print("item.type: %s\n", item.type.to_string());
+		//print("item.type: %s\n", item.type.to_string());
 		if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
 			job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_album_and_titles_job);
 			//job.cancellable = populate_model_cancellable;
