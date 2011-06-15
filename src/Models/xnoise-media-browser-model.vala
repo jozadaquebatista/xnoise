@@ -1195,9 +1195,26 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			TreeIter iter_title, iter_album;
 			this.get_iter(out iter_album, p);
 			foreach(unowned TrackData td in job.track_dat) {
+				Gdk.Pixbuf thumbnail = null;
+				bool has_thumbnail = false;
+				if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
+					File thumb = null;
+					if(thumbnail_available(td.item.uri, out thumb)) {
+						try {
+							if(thumb != null) {
+								thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), 30, 30, true);
+								has_thumbnail = true;
+							}
+						}
+						catch(Error e) {
+							thumbnail = null;
+							has_thumbnail = false;
+						}
+					}
+				}
 				this.append(out iter_title, iter_album);
 				this.set(iter_title,
-				         Column.ICON, (td.item.type == ItemType.LOCAL_AUDIO_TRACK ? title_pixb : video_pixb),
+				         Column.ICON, (td.item.type == ItemType.LOCAL_AUDIO_TRACK ? title_pixb : (has_thumbnail == true ? thumbnail : video_pixb)),
 				         Column.VIS_TEXT, td.title,
 				         Column.DB_ID, td.db_id,
 				         Column.MEDIATYPE , td.mediatype,
