@@ -39,6 +39,10 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 	private const string albuminfo = _("Change album name");
 	private const string albumname = "HandlerEditTagsActionAlbum";
 	
+	private Action edit_artist_mediabrowser;
+	private const string artistinfo = _("Change artist name");
+	private const string artistname = "HandlerEditTagsActionArtist";
+	
 	private const string name = "HandlerEditTags";
 	private unowned Main xn;
 	
@@ -59,6 +63,13 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 		edit_album_mediabrowser.stock_item = Gtk.Stock.EDIT;
 		edit_album_mediabrowser.context = ActionContext.MEDIABROWSER_MENU_QUERY;
 
+		edit_artist_mediabrowser = new Action(); 
+		edit_artist_mediabrowser.action = on_edit_artist_mediabrowser;
+		edit_artist_mediabrowser.info = this.artistinfo;
+		edit_artist_mediabrowser.name = this.artistname;
+		edit_artist_mediabrowser.stock_item = Gtk.Stock.EDIT;
+		edit_artist_mediabrowser.context = ActionContext.MEDIABROWSER_MENU_QUERY;
+
 		print("constructed %s\n", this.name);
 	}
 
@@ -70,11 +81,13 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 		return name;
 	}
 
-	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.SINGLE|ItemSelectionType.MULTIPLE) {
+	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection) {
 		if(selection != ItemSelectionType.SINGLE)
 			return null;
 		if(context == ActionContext.MEDIABROWSER_MENU_QUERY) {
 			switch(type) {
+				case ItemType.COLLECTION_CONTAINER_ARTIST:
+					return edit_artist_mediabrowser;
 				case ItemType.COLLECTION_CONTAINER_ALBUM:
 					return edit_album_mediabrowser;
 				case ItemType.LOCAL_AUDIO_TRACK:
@@ -94,6 +107,11 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 	private void on_edit_album_mediabrowser(Item item, GLib.Value? data) {
 		if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM)
 			this.open_tagalbum_changer(item);
+	}
+
+	private void on_edit_artist_mediabrowser(Item item, GLib.Value? data) {
+		if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST)
+			this.open_tagartist_changer(item);
 	}
 
 //	private Menu create_edit_artist_tag_menu() {
@@ -126,12 +144,12 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 
 	private TagArtistAlbumEditor tae;
 	
-//	private void open_tagartist_changer() {
-//		tae = new TagArtistAlbumEditor(ref treerowref);
-//		tae.sign_finish.connect( () => {
-//			tae = null;
-//		});
-//	}
+	private void open_tagartist_changer(Item item) {
+		tae = new TagArtistAlbumEditor(item);
+		tae.sign_finish.connect( () => {
+			tae = null;
+		});
+	}
 
 	private void open_tagalbum_changer(Item item) {
 		tae = new TagArtistAlbumEditor(item);

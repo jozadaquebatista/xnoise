@@ -32,7 +32,7 @@ using Gtk;
 
 public class Xnoise.MediaImporter : GLib.Object {
 
-	private static int FILE_COUNT = 250;
+	private static int FILE_COUNT = 150;
 	
 	internal void reimport_media_groups() {
 		Worker.Job job;

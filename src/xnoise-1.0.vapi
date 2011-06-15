@@ -229,7 +229,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class HandlerEditTags : Xnoise.ItemHandler {
 		public HandlerEditTags ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.SINGLE | ItemSelectionType.MULTIPLE);
+		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
 		public override unowned string handler_name ();
 		public override Xnoise.ItemHandlerType handler_type ();
 	}

@@ -82,11 +82,11 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		td_old = {};
 		builder = new Gtk.Builder();
 		create_widgets();
-//		mbm = (MediaBrowserModel)treerowref.get_model();
-//		mbm.notify["populating-model"].connect( () => {
-//			if(!global.media_import_in_progress && !mbm.populating_model)
-//				infolabel.label = "";
-//		});
+		mbm = xn.main_window.mediaBr.mediabrowsermodel;
+		mbm.notify["populating-model"].connect( () => {
+			if(!global.media_import_in_progress && !mbm.populating_model)
+				infolabel.label = "";
+		});
 		global.notify["media-import-in-progress"].connect( () => {
 			if(!global.media_import_in_progress && !mbm.populating_model)
 				infolabel.label = "";
@@ -132,12 +132,28 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		td_old = item_converter.to_trackdata(this.item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
 		
 		TrackData td = td_old[0];
-		
-		Idle.add( () => {
-			// put data to entry
-			entry.text  = td.album;
-			return false;
-		});
+		switch(item.type) {
+			case ItemType.COLLECTION_CONTAINER_ARTIST:
+				Idle.add( () => {
+					// put data to entry
+					entry.text  = td.artist;
+					return false;
+				});
+				break;
+			case ItemType.COLLECTION_CONTAINER_ALBUM:
+				Idle.add( () => {
+					// put data to entry
+					entry.text  = td.album;
+					return false;
+				});
+				break;
+			default:
+				Idle.add( () => {
+					sign_finish();
+					return false;
+				});
+				break;
+		}
 		return false;
 	}
 
@@ -192,32 +208,32 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	private void on_ok_button_clicked(Gtk.Button sender) {
 //		if(!treerowref.valid())
 //			return; // TODO: user info
-//		if(mbm.populating_model) {
-//			infolabel.label = _("Please wait while filling media browser. Or cancel, if you do not want to wait.");
-//			return;
-//		}
-//		if(global.media_import_in_progress) {
-//			infolabel.label = _("Please wait while importing media. Or cancel, if you do not want to wait.");
-//			return;
-//		}
-//		infolabel.label = "";
-//		if(entry.text != null && entry.text.strip() != "")
-//			new_content_name = entry.text.strip();
-//		// TODO: UTF-8 validation
-//		switch(content) {
-//			case Content.ARTIST:
+		if(mbm.populating_model) {
+			infolabel.label = _("Please wait while filling media browser. Or cancel, if you do not want to wait.");
+			return;
+		}
+		if(global.media_import_in_progress) {
+			infolabel.label = _("Please wait while importing media. Or cancel, if you do not want to wait.");
+			return;
+		}
+		infolabel.label = "";
+		if(entry.text != null && entry.text.strip() != "")
+			new_content_name = entry.text.strip();
+		// TODO: UTF-8 validation
+		switch(item.type) {
+			case ItemType.COLLECTION_CONTAINER_ARTIST:
 //				if(org_content_name.down() ==  new_content_name.down())
 //					do_artist_case_correction();
-//				do_artist_rename();
-//				break;
-//			case Content.ALBUM:
+				do_artist_rename();
+				break;
+			case ItemType.COLLECTION_CONTAINER_ALBUM:
 //				if(org_content_name.down() ==  new_content_name.down())
 //					do_album_case_correction();
-//				do_album_rename();
-//				break;
-//			default:
-//				break;	
-//		}
+				do_album_rename();
+				break;
+			default:
+				break;	
+		}
 //		mbm = null;
 		Idle.add( () => {
 			this.dialog.destroy();
@@ -325,7 +341,10 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //		}
 //	}
 
-//	private void do_artist_rename() {
+	private void do_artist_rename() {
+	
+		// retag and rename in db, if successful, then filter in mbm
+		
 //		if(mbm == null)
 //			return;
 //		TreeIter artist_iter, album_iter, title_iter;
@@ -350,7 +369,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //					    MediaBrowserModel.Column.TRACKNUMBER, ref td.tracknumber
 //					    );
 //				if(visible) {
-//					ids += td.db_id; // for db update
+//					ids += td.db_id;  for db update
 //					td.artist = new_content_name;
 //					mbm.iter_parent(out artist_iter, album_iter);
 //					mbm.get(album_iter, MediaBrowserModel.Column.VIS_TEXT, ref td.album);
@@ -360,7 +379,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //					local_track_dat += td;
 //					local_track_dat2 += copy_trackdata(td);
 //				}
-//				// remove empty nodes
+//				 remove empty nodes
 //				if(mbm.iter_n_children(album_iter) == 0)
 //					mbm.remove(album_iter);
 //			
@@ -381,9 +400,9 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //		mover_job.treerowrefs = local_trra;
 //		mover_job.track_dat = local_track_dat;
 //		db_worker.push_job(mover_job);	
-//	}
+	}
 
-//	private void do_album_rename() {
+	private void do_album_rename() {
 //		if(mbm == null)
 //			return;
 //		TreeIter artist_iter = TreeIter(), album_iter, title_iter;
@@ -431,7 +450,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //		mover_job.treerowrefs = local_trra;
 //		mover_job.track_dat = local_track_dat;
 //		db_worker.push_job(mover_job);	
-//	}
+	}
 
 //	private void move_iter_job(Worker.Job job) {
 //		foreach(TrackData tdg in job.track_dat) {
