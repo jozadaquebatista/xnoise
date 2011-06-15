@@ -824,24 +824,18 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		else {
 			populate_model_cancellable.reset();
 		}
-		Worker.Job job;
-		job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
-		job.cancellable = populate_model_cancellable;
-		db_worker.push_job(job);
 		
-//		job = new Worker.Job(1, Worker.ExecutionType.REPEATED, this.handle_hierarchical_data_job, null);
-//		job.cancellable = populate_model_cancellable;
-//		job.finished.connect( (j) => { 
-//			populating_model = false;
-//		});
-//		db_worker.push_job(job);
-		job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
-		job.cancellable = populate_model_cancellable;
-		job.finished.connect( (j) => { 
+		var v_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
+		v_job.cancellable = populate_model_cancellable;
+		db_worker.push_job(v_job);
+		
+		var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
+		a_job.cancellable = populate_model_cancellable;
+		a_job.finished.connect( (j) => { 
 			populating_model = false;
 		});
-		db_worker.push_job(job);
-
+		db_worker.push_job(a_job);
+		
 		return false;
 	}
 	
@@ -914,7 +908,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 	
 	private bool handle_videos(Worker.Job job) {
-			
 		int32 cnt = db_browser.count_videos(ref searchtext);
 		if(cnt == 0)
 			return false;
