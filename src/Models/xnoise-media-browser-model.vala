@@ -902,6 +902,17 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		return false;
 	}
 	
+	private bool thumbnail_available(string uri, out File? _thumb) {
+		string md5string = Checksum.compute_for_string(ChecksumType.MD5, uri);
+		File thumb = File.new_for_path(GLib.Path.build_filename(Environment.get_home_dir(), ".thumbnails", "normal", md5string + ".png"));
+		if(thumb.query_exists(null)) {
+			_thumb = thumb;
+			return true;
+		}
+		_thumb = null;
+		return false;
+	}
+	
 	private bool handle_videos(Worker.Job job) {
 			
 		job.track_dat = db_browser.get_video_data(ref searchtext);
@@ -930,9 +941,24 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						visible = true;
 						this.set(iter_videos, Column.VISIBLE, visible);
 					}
+					Gdk.Pixbuf thumbnail = null;
+					File thumb = null;
+					bool has_thumbnail = false;
+					if(thumbnail_available(td.item.uri, out thumb)) {
+						try {
+							if(thumb != null) {
+								thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), 30, 30, true);
+								has_thumbnail = true;
+							}
+						}
+						catch(Error e) {
+							thumbnail = null;
+							has_thumbnail = false;
+						}
+					}
 					this.prepend(out iter_singlevideo, iter_videos);
 					this.set(iter_singlevideo,
-					         Column.ICON, video_pixb,
+					         Column.ICON, (has_thumbnail == true ? thumbnail : video_pixb),
 					         Column.VIS_TEXT, td.name,
 					         Column.DB_ID, td.db_id,
 					         Column.MEDIATYPE , (int) ItemType.LOCAL_VIDEO_TRACK,
