@@ -51,8 +51,10 @@ namespace Xnoise {
 		public void cancel ();
 		public int count_artists ();
 		public int count_artists_with_search (ref string searchtext);
+		public int32 count_videos (ref string searchtext);
 		public void do_callback_transaction (Xnoise.DbBrowser.ReaderCallback cb);
 		public Xnoise.Item[] get_albums_with_search (ref string searchtext, int32 id);
+		public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);
 		public Xnoise.Item[] get_artists_with_search (ref string searchtext);
 		public string[] get_lastused_uris ();
 		public string? get_local_image_path_for_track (ref string? uri);
@@ -83,6 +85,19 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class DbWriter : GLib.Object {
+		[CCode (cprefix = "XNOISE_DB_WRITER_CHANGE_TYPE_", cheader_filename = "xnoise.h")]
+		public enum ChangeType {
+			ADD_ARTIST,
+			ADD_ALBUM,
+			ADD_TITLE,
+			REMOVE_ARTIST,
+			REMOVE_ALBUM,
+			REMOVE_TITLE,
+			REMOVE_URI,
+			CLEAR_DB
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public delegate void ChangeNotificationCallback (Xnoise.DbWriter.ChangeType changetype, Xnoise.Item? item);
 		[CCode (cheader_filename = "xnoise.h")]
 		public delegate void WriterCallback (Sqlite.Database database);
 		public DbWriter () throws Xnoise.DbError;
@@ -101,7 +116,8 @@ namespace Xnoise {
 		public int get_track_id_for_uri (string uri);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public string? get_uri_for_item_id (int32 id);
-		public bool insert_title (ref Xnoise.TrackData td, string uri);
+		public bool insert_title (ref Xnoise.TrackData td);
+		public void register_change_callback (Xnoise.DbWriter.ChangeNotificationCallback cb);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public bool update_title (int32 id, ref Xnoise.TrackData td);
 		public int uri_entry_exists (string uri);
@@ -214,7 +230,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class HandlerEditTags : Xnoise.ItemHandler {
 		public HandlerEditTags ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.SINGLE | ItemSelectionType.MULTIPLE);
+		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
 		public override unowned string handler_name ();
 		public override Xnoise.ItemHandlerType handler_type ();
 	}
@@ -364,6 +380,7 @@ namespace Xnoise {
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
 		public MediaBrowser ();
 		public bool change_model_data ();
+		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_searchtext_changed ();
 		public void resize_line_width (int new_width);
@@ -371,10 +388,6 @@ namespace Xnoise {
 		public bool use_linebreaks { get; set; }
 		public bool use_treelines { get; set; }
 		public signal void sign_activated ();
-	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class MediaBrowserFilterModel : Gtk.TreeModelFilter, Gtk.TreeModel {
-		public MediaBrowserFilterModel (Xnoise.MediaBrowserModel mbm);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
@@ -411,12 +424,12 @@ namespace Xnoise {
 		public void move_artist_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_title_iter_sorted (ref Gtk.TreeIter org_iter, ref Xnoise.TrackData td);
 		public bool populate_model ();
+		public void unload_children (ref Gtk.TreeIter iter);
 		public bool populating_model { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class MediaImporter : GLib.Object {
 		public MediaImporter ();
-		public async void add_local_tags (GLib.File dir, Xnoise.Worker.Job job);
 		public string? get_uri_for_item_id (int32 id);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -825,9 +838,13 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.DbBrowser db_browser;
 	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.Worker db_worker;
+	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.DbWriter db_writer;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalAccess global;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.Worker io_worker;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.ItemConverter item_converter;
 	[CCode (cheader_filename = "xnoise.h")]
@@ -840,8 +857,6 @@ namespace Xnoise {
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.UserInfo userinfo;
-	[CCode (cheader_filename = "xnoise.h")]
-	public static Xnoise.Worker worker;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.TrackData copy_trackdata (Xnoise.TrackData td);
 	[CCode (cheader_filename = "xnoise.h")]

@@ -12,6 +12,8 @@ src/Widgets/xnoise-fullscreen-toolbar.c
 src/Widgets/xnoise-lyrics-view.c
 src/Widgets/xnoise-main-window.c
 src/Widgets/xnoise-settings-dialog.c
+src/Widgets/xnoise-tracklist.c
+src/xnoise.c
 data/ui/metadat_artist_album.ui
 data/ui/metadat_title.ui
 

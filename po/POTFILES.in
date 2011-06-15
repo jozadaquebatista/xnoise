@@ -19,7 +19,6 @@ src/Widgets/xnoise-lyrics-view.vala
 src/xnoise-main.vala
 src/xnoise.vala
 src/Widgets/xnoise-main-window.vala
-src/Models/xnoise-media-browser-filtermodel.vala
 src/Widgets/xnoise-media-browser.vala
 src/Models/xnoise-media-browser-model.vala
 src/Utils/xnoise-media-importer.vala

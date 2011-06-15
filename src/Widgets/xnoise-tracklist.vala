@@ -448,11 +448,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 					if(path != null)
 						row_ref = new TreeRowReference(this.model, path);
 					
-					var job = new Worker.Job(Worker.ExecutionType.ONCE, this.insert_dnd_data_job);
+					var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.insert_dnd_data_job);
 					job.set_arg("row_ref", row_ref);
 					job.set_arg("drop_pos", drop_pos);
 					job.dnd_data = ids;
-					worker.push_job(job);
+					db_worker.push_job(job);
 					break;
 				case 1: // uri list from outside
 					uris = selection.get_uris();
@@ -500,6 +500,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 			}
 			else {
 				get_last_unselected_path(ref path);
+				if(path == null)
+					return;
 				drop_rowref = new TreeRowReference(this.tracklistmodel, path);
 				if(drop_rowref == null || !drop_rowref.valid()) {
 					return;

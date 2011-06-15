@@ -35,7 +35,8 @@ namespace Xnoise {
 	public static Params par = null;
 	public static GlobalAccess global = null;
 	public static UserInfo userinfo = null;
-	public static Worker worker = null;
+	public static Worker db_worker = null;
+	public static Worker io_worker = null;
 	public static MediaImporter media_importer = null;
 	public static ItemHandlerManager item_handler_manager = null;
 	public static ItemConverter item_converter = null;
@@ -54,7 +55,8 @@ namespace Xnoise {
 		media_importer = new MediaImporter();
 		
 		// setup worker with reference to default context
-		worker = new Worker(MainContext.default());
+		db_worker = new Worker(MainContext.default());
+		io_worker = new Worker(MainContext.default());
 		
 		if(global == null)
 			global = new GlobalAccess();

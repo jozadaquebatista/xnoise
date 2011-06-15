@@ -122,7 +122,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		job.set_arg("artist", artist);
 		job.set_arg("album", album);
 		job.set_arg("uri", xn.gPl.uri);
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 	
 	

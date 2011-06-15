@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-08 15:09+0200\n"
+"POT-Creation-Date: 2011-06-15 16:08+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Alexey Morsov <swi@altlinux.ru>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -31,27 +31,27 @@ msgstr "Организовывайте и проигрывайте ваши му
 msgid "Xnoise"
 msgstr "Xnoise"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:170
+#: ../src/Widgets/xnoise-add-media-dialog.vala:169
 msgid "Add local file"
 msgstr "Добавить локальный файл"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:171
+#: ../src/Widgets/xnoise-add-media-dialog.vala:170
 msgid "Add local folder"
 msgstr "Добавить локальную папку"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:172
+#: ../src/Widgets/xnoise-add-media-dialog.vala:171
 msgid "Add media stream"
 msgstr "Добавить медиа поток"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:173
+#: ../src/Widgets/xnoise-add-media-dialog.vala:172
 msgid "Remove"
 msgstr "Удалить"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:174
+#: ../src/Widgets/xnoise-add-media-dialog.vala:173
 msgid "do a full rescan of the library"
 msgstr "Провести полное обновление библиотеки"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:175
+#: ../src/Widgets/xnoise-add-media-dialog.vala:174
 msgid ""
 "Select the local folders or files or media streams to add to the library. \n"
 "All library media will be available in the media browser."
@@ -60,25 +60,25 @@ msgstr ""
 "в библиотеку. \n"
 "Все медиа файлы или потоки в библиотеке будут доступны в медиабраузере."
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:186
+#: ../src/Widgets/xnoise-add-media-dialog.vala:185
 msgid "xnoise - Add media to library"
 msgstr "xnoise - Добавить медиа в библиотеку"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:245
+#: ../src/Widgets/xnoise-add-media-dialog.vala:244
 #: ../src/Utils/xnoise-media-importer.vala:68
 msgid "Importing media data. This may take some time..."
 msgstr "Идет импортирование медиафайлов. Это может занять некоторое время..."
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:272
-#: ../src/Widgets/xnoise-main-window.vala:985
+#: ../src/Widgets/xnoise-add-media-dialog.vala:271
+#: ../src/Widgets/xnoise-main-window.vala:986
 msgid "Select media file"
 msgstr "Выберите медиа файл"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:296
+#: ../src/Widgets/xnoise-add-media-dialog.vala:295
 msgid "Select media folder"
 msgstr "Выберите папку с медиа"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:366
+#: ../src/Widgets/xnoise-add-media-dialog.vala:365
 msgid "Add internet radio link"
 msgstr "Добавить ссылку на интернет-радио"
 
@@ -128,6 +128,32 @@ msgstr ""
 "Пытаемся найти текст для \"%s\" by \"%s\"...\n"
 "\n"
 "Используется %s ..."
+
+#: ../src/xnoise.vala:57
+#, c-format
+msgid "Xnoise is a media player for Gtk+."
+msgstr ""
+
+#: ../src/xnoise.vala:57
+msgid "It uses the gstreamer framework."
+msgstr ""
+
+#: ../src/xnoise.vala:57
+msgid "More information on the project website:"
+msgstr ""
+
+#: ../src/xnoise.vala:65
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr ""
+
+#: ../src/xnoise.vala:128
+msgid "Using the running instance of xnoise!\n"
+msgstr ""
+
+#: ../src/xnoise.vala:131
+msgid "Showing the running instance of xnoise.\n"
+msgstr ""
 
 #: ../src/Widgets/xnoise-main-window.vala:41
 #, fuzzy
@@ -214,11 +240,13 @@ msgid "Go to the tracklist."
 msgstr "Перейти к списку дорожек."
 
 #: ../src/Widgets/xnoise-main-window.vala:154
-msgid "_Video screen"
-msgstr "Экран _Видео"
+#, fuzzy
+msgid "_Now Playing"
+msgstr "проигрывает"
 
 #: ../src/Widgets/xnoise-main-window.vala:154
-msgid "Go to the video screen in the main window."
+#, fuzzy
+msgid "Go to the now playing screen in the main window."
 msgstr "Перейти к видео экрану в главном окне."
 
 #: ../src/Widgets/xnoise-main-window.vala:155
@@ -237,11 +265,11 @@ msgstr "_Помощь"
 msgid "_Config"
 msgstr "_Настройка"
 
-#: ../src/Widgets/xnoise-main-window.vala:424
+#: ../src/Widgets/xnoise-main-window.vala:425
 msgid "Add media"
 msgstr "Добавить медиа"
 
-#: ../src/Widgets/xnoise-main-window.vala:427
+#: ../src/Widgets/xnoise-main-window.vala:428
 msgid ""
 "You started xnoise for the first time. Do you want to import media into the "
 "library?"
@@ -249,31 +277,31 @@ msgstr ""
 "Вы запустили xnoise первый раз. Вы хотите импортировать медиа в библиотеку?"
 
 #. TODO: create some other images
-#: ../src/Widgets/xnoise-main-window.vala:521
+#: ../src/Widgets/xnoise-main-window.vala:522
 msgid "no repeat"
 msgstr "без повтора"
 
-#: ../src/Widgets/xnoise-main-window.vala:526
+#: ../src/Widgets/xnoise-main-window.vala:527
 msgid "repeat single"
 msgstr "повторять трек"
 
-#: ../src/Widgets/xnoise-main-window.vala:531
+#: ../src/Widgets/xnoise-main-window.vala:532
 msgid "repeat all"
 msgstr "повторять все"
 
-#: ../src/Widgets/xnoise-main-window.vala:536
+#: ../src/Widgets/xnoise-main-window.vala:537
 msgid "random play"
 msgstr "случайный порядок"
 
-#: ../src/Widgets/xnoise-main-window.vala:971
+#: ../src/Widgets/xnoise-main-window.vala:972
 msgid "Enter the URL of the file to open"
 msgstr "Введи URL файла для открытия"
 
-#: ../src/Widgets/xnoise-main-window.vala:1050
-#: ../src/Widgets/xnoise-main-window.vala:1073
-#: ../src/Widgets/xnoise-main-window.vala:1115
-#: ../src/Widgets/xnoise-main-window.vala:1140
-#: ../src/TrayIcon/xnoise-tray-icon.vala:198
+#: ../src/Widgets/xnoise-main-window.vala:1051
+#: ../src/Widgets/xnoise-main-window.vala:1074
+#: ../src/Widgets/xnoise-main-window.vala:1116
+#: ../src/Widgets/xnoise-main-window.vala:1141
+#: ../src/TrayIcon/xnoise-tray-icon.vala:227
 #: ../plugins/notifications/xnoise-notifications.vala:184
 #: ../plugins/notifications2/xnoise-notifications.vala:178
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:129
@@ -282,11 +310,11 @@ msgstr "Введи URL файла для открытия"
 msgid "by"
 msgstr "by"
 
-#: ../src/Widgets/xnoise-main-window.vala:1052
-#: ../src/Widgets/xnoise-main-window.vala:1075
-#: ../src/Widgets/xnoise-main-window.vala:1117
-#: ../src/Widgets/xnoise-main-window.vala:1142
-#: ../src/TrayIcon/xnoise-tray-icon.vala:200
+#: ../src/Widgets/xnoise-main-window.vala:1053
+#: ../src/Widgets/xnoise-main-window.vala:1076
+#: ../src/Widgets/xnoise-main-window.vala:1118
+#: ../src/Widgets/xnoise-main-window.vala:1143
+#: ../src/TrayIcon/xnoise-tray-icon.vala:229
 #: ../plugins/notifications/xnoise-notifications.vala:186
 #: ../plugins/notifications2/xnoise-notifications.vala:180
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
@@ -295,141 +323,164 @@ msgstr "by"
 msgid "on"
 msgstr "on"
 
-#: ../src/Widgets/xnoise-main-window.vala:1072
-#: ../src/Widgets/xnoise-main-window.vala:1139
-#: ../src/TrayIcon/xnoise-tray-icon.vala:189
+#: ../src/Widgets/xnoise-main-window.vala:1073
+#: ../src/Widgets/xnoise-main-window.vala:1140
+#: ../src/TrayIcon/xnoise-tray-icon.vala:218
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:151
 #, c-format
 msgid "unknown title"
 msgstr "unknown title"
 
-#: ../src/Widgets/xnoise-main-window.vala:1074
-#: ../src/Widgets/xnoise-main-window.vala:1141
-#: ../src/TrayIcon/xnoise-tray-icon.vala:187
+#: ../src/Widgets/xnoise-main-window.vala:1075
+#: ../src/Widgets/xnoise-main-window.vala:1142
+#: ../src/TrayIcon/xnoise-tray-icon.vala:216
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 msgid "unknown artist"
 msgstr "unknown artist"
 
-#: ../src/Widgets/xnoise-main-window.vala:1076
-#: ../src/Widgets/xnoise-main-window.vala:1143
-#: ../src/TrayIcon/xnoise-tray-icon.vala:185
+#: ../src/Widgets/xnoise-main-window.vala:1077
+#: ../src/Widgets/xnoise-main-window.vala:1144
+#: ../src/TrayIcon/xnoise-tray-icon.vala:214
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown album"
 msgstr "unknown album"
 
-#: ../src/Widgets/xnoise-main-window.vala:1125
+#: ../src/Widgets/xnoise-main-window.vala:1126
 msgid "unknown organization"
 msgstr "unknown organization"
 
-#: ../src/Widgets/xnoise-main-window.vala:1127
+#: ../src/Widgets/xnoise-main-window.vala:1128
 msgid "unknown location"
 msgstr "unknown location"
 
-#: ../src/Widgets/xnoise-main-window.vala:1224
+#: ../src/Widgets/xnoise-main-window.vala:1225
 msgid "Remove all"
 msgstr "Удалить все"
 
-#: ../src/Widgets/xnoise-main-window.vala:1229
+#: ../src/Widgets/xnoise-main-window.vala:1230
 msgid "Remove selected titles"
 msgstr "Удалить выбранные"
 
-#: ../src/Models/xnoise-media-browser-model.vala:882
+#: ../src/Models/xnoise-media-browser-model.vala:1036
 msgid "Loading ..."
 msgstr ""
 
-#: ../src/Utils/xnoise-media-importer.vala:406
-msgid "Finished import. "
-msgstr "Импорт закончен."
+#: ../src/Utils/xnoise-media-importer.vala:490
+msgid "Finished reading. Updating Library"
+msgstr ""
 
-#: ../src/Utils/xnoise-media-importer.vala:406
-#, c-format
-msgid "Found %d media files"
-msgstr "Найдено %d медиа файлов"
-
-#: ../src/Utils/xnoise-media-importer.vala:408
-#: ../src/Utils/xnoise-media-importer.vala:409
-msgid "Updated library for new media folders. "
-msgstr "Библиотека обновлена для новых папок с медиа."
-
-#: ../src/Utils/xnoise-media-importer.vala:408
-#, c-format
-msgid "Found %d new media files"
-msgstr "Найдено %d новых медиа файлов"
-
-#: ../src/Widgets/xnoise-settings-dialog.vala:636
-msgid "Visible extra columns for tracklist:"
-msgstr "Дополнительные колонки для списка треков:"
-
-#: ../src/Widgets/xnoise-settings-dialog.vala:639
+#: ../src/Widgets/xnoise-settings-dialog.vala:624
 msgid "Media browser fontsize:"
 msgstr ""
 
-#: ../src/Widgets/xnoise-settings-dialog.vala:641
+#: ../src/Widgets/xnoise-settings-dialog.vala:626
 msgid "use helper lines in media browser"
 msgstr ""
 
-#: ../src/Widgets/xnoise-settings-dialog.vala:643
+#: ../src/Widgets/xnoise-settings-dialog.vala:628
 msgid "use linebreaks in media browser"
 msgstr ""
 
-#: ../src/Widgets/xnoise-settings-dialog.vala:645
+#: ../src/Widgets/xnoise-settings-dialog.vala:630
 msgid "Compact layout"
 msgstr ""
 
-#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
-#: ../src/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:183
+#: ../src/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
 #, fuzzy
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - Add media to library"
 
-#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:169
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:186
 #, fuzzy
 msgid "Type new artist name."
 msgstr "Change artist name"
 
-#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:187
 msgid "Artist:"
 msgstr "Исполнитель:"
 
-#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:173
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:190
 #, fuzzy
 msgid "Type new album name."
 msgstr "Change album name"
 
-#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:174
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:191
 msgid "Album:"
 msgstr "Альбом:"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:40
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:212
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Пожалуйста, подождите пока панель медиа заполнится. Илл отмените, если вы не "
+"хотите ждать."
+
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:216
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Пожалуйста, подождите пока импортируются файлы. Или отмените, если вы не "
+"хотите ждать."
+
+#: ../src/Widgets/xnoise-tracklist.vala:994
+msgid "Title"
+msgstr ""
+
+#. ALBUM
+#: ../src/Widgets/xnoise-tracklist.vala:1010
+#: ../src/Widgets/xnoise-tracklist.vala:1103
+#, fuzzy
+msgid "Album"
+msgstr "Альбом:"
+
+#: ../src/Widgets/xnoise-tracklist.vala:1032
+#, fuzzy
+msgid "Artist"
+msgstr "Исполнитель:"
+
+#. LENGTH
+#: ../src/Widgets/xnoise-tracklist.vala:1045
+#: ../src/Widgets/xnoise-tracklist.vala:1116
+msgid "Length"
+msgstr ""
+
+#. TRACKNUMBER
+#: ../src/Widgets/xnoise-tracklist.vala:1090
+msgid "Tracknumber"
+msgstr ""
+
+#: ../src/TrayIcon/xnoise-tray-icon.vala:69
 msgid "Play/Pause"
 msgstr "Проигрывать/Пауза"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:54
+#: ../src/TrayIcon/xnoise-tray-icon.vala:83
 msgid "Previous"
 msgstr "Предыдущий"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:69
+#: ../src/TrayIcon/xnoise-tray-icon.vala:98
 msgid "Next"
 msgstr "Следующий"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:87
+#: ../src/TrayIcon/xnoise-tray-icon.vala:116
 msgid "Exit"
 msgstr "Выход"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:136
-#: ../src/TrayIcon/xnoise-tray-icon.vala:148
+#: ../src/TrayIcon/xnoise-tray-icon.vala:165
+#: ../src/TrayIcon/xnoise-tray-icon.vala:177
 msgid "stopped"
 msgstr "остановлен"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:140
+#: ../src/TrayIcon/xnoise-tray-icon.vala:169
 msgid "playing"
 msgstr "проигрывает"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:144
+#: ../src/TrayIcon/xnoise-tray-icon.vala:173
 msgid "paused"
 msgstr "приостановлен"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:156
+#: ../src/TrayIcon/xnoise-tray-icon.vala:185
 #, c-format
 msgid "ready to rock"
 msgstr "ready to rock"
@@ -527,6 +578,24 @@ msgstr ""
 msgid "TitleToDecoration"
 msgstr ""
 
+#~ msgid "_Video screen"
+#~ msgstr "Экран _Видео"
+
+#~ msgid "Finished import. "
+#~ msgstr "Импорт закончен."
+
+#~ msgid "Found %d media files"
+#~ msgstr "Найдено %d медиа файлов"
+
+#~ msgid "Updated library for new media folders. "
+#~ msgstr "Библиотека обновлена для новых папок с медиа."
+
+#~ msgid "Found %d new media files"
+#~ msgstr "Найдено %d новых медиа файлов"
+
+#~ msgid "Visible extra columns for tracklist:"
+#~ msgstr "Дополнительные колонки для списка треков:"
+
 #~ msgid "Video"
 #~ msgstr "Видео"
 
@@ -538,19 +607,6 @@ msgstr ""
 
 #~ msgid "Edit metadata for track"
 #~ msgstr "Редактировать метаданные трека"
-
-#~ msgid ""
-#~ "Please wait while filling media browser. Or cancel, if you do not want to "
-#~ "wait."
-#~ msgstr ""
-#~ "Пожалуйста, подождите пока панель медиа заполнится. Илл отмените, если вы "
-#~ "не хотите ждать."
-
-#~ msgid ""
-#~ "Please wait while importing media. Or cancel, if you do not want to wait."
-#~ msgstr ""
-#~ "Пожалуйста, подождите пока импортируются файлы. Или отмените, если вы не "
-#~ "хотите ждать."
 
 #~ msgid "Remove selected"
 #~ msgstr "Удалить выбранные"

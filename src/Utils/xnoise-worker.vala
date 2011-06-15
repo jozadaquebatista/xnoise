@@ -33,8 +33,9 @@
 
 public class Xnoise.Worker : Object {
 	
-	private AsyncQueue<Job> async_job_queue    = new AsyncQueue<Job>();
-	private AsyncQueue<Job> sync_job_queue     = new AsyncQueue<Job>();
+	private AsyncQueue<Job> async_job_queue          = new AsyncQueue<Job>();
+	private AsyncQueue<Job> sync_job_queue           = new AsyncQueue<Job>();
+	private AsyncQueue<Job> sync_high_prio_job_queue = new AsyncQueue<Job>();
 	
 	private unowned Thread<int> thread;
 	private MainContext local_context;
@@ -159,7 +160,9 @@ public class Xnoise.Worker : Object {
 	
 	// Execution of sync jobs
 	private void sync_func() {
-		Job current_job = sync_job_queue.try_pop();
+		Job current_job = null;
+		if((current_job = sync_high_prio_job_queue.try_pop()) == null)
+			current_job = sync_job_queue.try_pop();
 		if(current_job == null) {
 			print("no sync job\n");
 			return;
@@ -177,6 +180,19 @@ public class Xnoise.Worker : Object {
 	// After pushing a Job, it will be executed and removed
 	public void push_job(Job j) {
 		switch(j.execution_type) {
+			case ExecutionType.ONCE_HIGH_PRIORITY:
+				if(j.func == null) {
+					print("Error: There must be a WorkFunc in a job.\n");
+					break;
+				}
+				sync_high_prio_job_queue.push(j);
+				Source source = new IdleSource(); 
+				source.set_callback(() => {
+					sync_func(); 
+					return false;
+				});
+				source.attach(local_context);
+				break;
 			case ExecutionType.ONCE:
 				if(j.func == null) {
 					print("Error: There must be a WorkFunc in a job.\n");

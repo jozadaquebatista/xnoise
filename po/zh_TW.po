@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-08 15:09+0200\n"
+"POT-Creation-Date: 2011-06-15 16:08+0200\n"
 "PO-Revision-Date: 2011-05-05 10:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -28,27 +28,27 @@ msgstr "Xnoise 組織和播放您收藏的音樂和影片"
 msgid "Xnoise"
 msgstr "極限噪音"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:170
+#: ../src/Widgets/xnoise-add-media-dialog.vala:169
 msgid "Add local file"
 msgstr "加入本機檔案"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:171
+#: ../src/Widgets/xnoise-add-media-dialog.vala:170
 msgid "Add local folder"
 msgstr "加入本地資料夾"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:172
+#: ../src/Widgets/xnoise-add-media-dialog.vala:171
 msgid "Add media stream"
 msgstr "加入媒體串流"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:173
+#: ../src/Widgets/xnoise-add-media-dialog.vala:172
 msgid "Remove"
 msgstr "移除"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:174
+#: ../src/Widgets/xnoise-add-media-dialog.vala:173
 msgid "do a full rescan of the library"
 msgstr "進行媒體庫的完整重新掃描"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:175
+#: ../src/Widgets/xnoise-add-media-dialog.vala:174
 msgid ""
 "Select the local folders or files or media streams to add to the library. \n"
 "All library media will be available in the media browser."
@@ -56,25 +56,25 @@ msgstr ""
 "選取本機資料夾或檔案或媒體串流以加入到媒體庫。\n"
 "所有庫藏媒體均可用於媒體瀏覽器中。"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:186
+#: ../src/Widgets/xnoise-add-media-dialog.vala:185
 msgid "xnoise - Add media to library"
 msgstr "xnoise - 加入媒體到媒體庫"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:245
+#: ../src/Widgets/xnoise-add-media-dialog.vala:244
 #: ../src/Utils/xnoise-media-importer.vala:68
 msgid "Importing media data. This may take some time..."
 msgstr "匯入媒體資料。這也許會花一點時間…"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:272
-#: ../src/Widgets/xnoise-main-window.vala:985
+#: ../src/Widgets/xnoise-add-media-dialog.vala:271
+#: ../src/Widgets/xnoise-main-window.vala:986
 msgid "Select media file"
 msgstr "選取媒體檔案"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:296
+#: ../src/Widgets/xnoise-add-media-dialog.vala:295
 msgid "Select media folder"
 msgstr "選取媒體資料夾"
 
-#: ../src/Widgets/xnoise-add-media-dialog.vala:366
+#: ../src/Widgets/xnoise-add-media-dialog.vala:365
 msgid "Add internet radio link"
 msgstr "加入網際網路電臺鏈結"
 
@@ -122,6 +122,32 @@ msgstr ""
 "嘗試尋找「%2$s」的「%1$s」歌詞\n"
 "\n"
 "使用 %3$s…"
+
+#: ../src/xnoise.vala:57
+#, c-format
+msgid "Xnoise is a media player for Gtk+."
+msgstr ""
+
+#: ../src/xnoise.vala:57
+msgid "It uses the gstreamer framework."
+msgstr ""
+
+#: ../src/xnoise.vala:57
+msgid "More information on the project website:"
+msgstr ""
+
+#: ../src/xnoise.vala:65
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr ""
+
+#: ../src/xnoise.vala:128
+msgid "Using the running instance of xnoise!\n"
+msgstr ""
+
+#: ../src/xnoise.vala:131
+msgid "Showing the running instance of xnoise.\n"
+msgstr ""
 
 #: ../src/Widgets/xnoise-main-window.vala:41
 #, fuzzy
@@ -208,11 +234,13 @@ msgid "Go to the tracklist."
 msgstr "前往軌段列表。"
 
 #: ../src/Widgets/xnoise-main-window.vala:154
-msgid "_Video screen"
-msgstr "影片畫面(_V)"
+#, fuzzy
+msgid "_Now Playing"
+msgstr "播放中"
 
 #: ../src/Widgets/xnoise-main-window.vala:154
-msgid "Go to the video screen in the main window."
+#, fuzzy
+msgid "Go to the now playing screen in the main window."
 msgstr "前往主視窗中的影片畫面。"
 
 #: ../src/Widgets/xnoise-main-window.vala:155
@@ -231,42 +259,42 @@ msgstr "求助(_H)"
 msgid "_Config"
 msgstr "組配(_C)"
 
-#: ../src/Widgets/xnoise-main-window.vala:424
+#: ../src/Widgets/xnoise-main-window.vala:425
 msgid "Add media"
 msgstr "加入媒體"
 
-#: ../src/Widgets/xnoise-main-window.vala:427
+#: ../src/Widgets/xnoise-main-window.vala:428
 msgid ""
 "You started xnoise for the first time. Do you want to import media into the "
 "library?"
 msgstr "您是首次啟動 xnoise，要將媒體匯入媒體庫嗎？"
 
 #. TODO: create some other images
-#: ../src/Widgets/xnoise-main-window.vala:521
+#: ../src/Widgets/xnoise-main-window.vala:522
 msgid "no repeat"
 msgstr "不重複"
 
-#: ../src/Widgets/xnoise-main-window.vala:526
+#: ../src/Widgets/xnoise-main-window.vala:527
 msgid "repeat single"
 msgstr "重複單曲"
 
-#: ../src/Widgets/xnoise-main-window.vala:531
+#: ../src/Widgets/xnoise-main-window.vala:532
 msgid "repeat all"
 msgstr "重複所有"
 
-#: ../src/Widgets/xnoise-main-window.vala:536
+#: ../src/Widgets/xnoise-main-window.vala:537
 msgid "random play"
 msgstr "隨機播放"
 
-#: ../src/Widgets/xnoise-main-window.vala:971
+#: ../src/Widgets/xnoise-main-window.vala:972
 msgid "Enter the URL of the file to open"
 msgstr "輸入要開啟的檔案網址"
 
-#: ../src/Widgets/xnoise-main-window.vala:1050
-#: ../src/Widgets/xnoise-main-window.vala:1073
-#: ../src/Widgets/xnoise-main-window.vala:1115
-#: ../src/Widgets/xnoise-main-window.vala:1140
-#: ../src/TrayIcon/xnoise-tray-icon.vala:198
+#: ../src/Widgets/xnoise-main-window.vala:1051
+#: ../src/Widgets/xnoise-main-window.vala:1074
+#: ../src/Widgets/xnoise-main-window.vala:1116
+#: ../src/Widgets/xnoise-main-window.vala:1141
+#: ../src/TrayIcon/xnoise-tray-icon.vala:227
 #: ../plugins/notifications/xnoise-notifications.vala:184
 #: ../plugins/notifications2/xnoise-notifications.vala:178
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:129
@@ -275,11 +303,11 @@ msgstr "輸入要開啟的檔案網址"
 msgid "by"
 msgstr "由"
 
-#: ../src/Widgets/xnoise-main-window.vala:1052
-#: ../src/Widgets/xnoise-main-window.vala:1075
-#: ../src/Widgets/xnoise-main-window.vala:1117
-#: ../src/Widgets/xnoise-main-window.vala:1142
-#: ../src/TrayIcon/xnoise-tray-icon.vala:200
+#: ../src/Widgets/xnoise-main-window.vala:1053
+#: ../src/Widgets/xnoise-main-window.vala:1076
+#: ../src/Widgets/xnoise-main-window.vala:1118
+#: ../src/Widgets/xnoise-main-window.vala:1143
+#: ../src/TrayIcon/xnoise-tray-icon.vala:229
 #: ../plugins/notifications/xnoise-notifications.vala:186
 #: ../plugins/notifications2/xnoise-notifications.vala:180
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
@@ -288,138 +316,160 @@ msgstr "由"
 msgid "on"
 msgstr "於"
 
-#: ../src/Widgets/xnoise-main-window.vala:1072
-#: ../src/Widgets/xnoise-main-window.vala:1139
-#: ../src/TrayIcon/xnoise-tray-icon.vala:189
+#: ../src/Widgets/xnoise-main-window.vala:1073
+#: ../src/Widgets/xnoise-main-window.vala:1140
+#: ../src/TrayIcon/xnoise-tray-icon.vala:218
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:151
 #, c-format
 msgid "unknown title"
 msgstr "不明標題"
 
-#: ../src/Widgets/xnoise-main-window.vala:1074
-#: ../src/Widgets/xnoise-main-window.vala:1141
-#: ../src/TrayIcon/xnoise-tray-icon.vala:187
+#: ../src/Widgets/xnoise-main-window.vala:1075
+#: ../src/Widgets/xnoise-main-window.vala:1142
+#: ../src/TrayIcon/xnoise-tray-icon.vala:216
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 msgid "unknown artist"
 msgstr "不明演出者"
 
-#: ../src/Widgets/xnoise-main-window.vala:1076
-#: ../src/Widgets/xnoise-main-window.vala:1143
-#: ../src/TrayIcon/xnoise-tray-icon.vala:185
+#: ../src/Widgets/xnoise-main-window.vala:1077
+#: ../src/Widgets/xnoise-main-window.vala:1144
+#: ../src/TrayIcon/xnoise-tray-icon.vala:214
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown album"
 msgstr "不明專輯"
 
-#: ../src/Widgets/xnoise-main-window.vala:1125
+#: ../src/Widgets/xnoise-main-window.vala:1126
 msgid "unknown organization"
 msgstr "不明組織"
 
-#: ../src/Widgets/xnoise-main-window.vala:1127
+#: ../src/Widgets/xnoise-main-window.vala:1128
 msgid "unknown location"
 msgstr "不明位置"
 
-#: ../src/Widgets/xnoise-main-window.vala:1224
+#: ../src/Widgets/xnoise-main-window.vala:1225
 msgid "Remove all"
 msgstr "全部移除"
 
-#: ../src/Widgets/xnoise-main-window.vala:1229
+#: ../src/Widgets/xnoise-main-window.vala:1230
 msgid "Remove selected titles"
 msgstr "移除已選標題"
 
-#: ../src/Models/xnoise-media-browser-model.vala:882
+#: ../src/Models/xnoise-media-browser-model.vala:1036
 msgid "Loading ..."
 msgstr ""
 
-#: ../src/Utils/xnoise-media-importer.vala:406
-msgid "Finished import. "
-msgstr "已完成匯入。"
+#: ../src/Utils/xnoise-media-importer.vala:490
+msgid "Finished reading. Updating Library"
+msgstr ""
 
-#: ../src/Utils/xnoise-media-importer.vala:406
-#, c-format
-msgid "Found %d media files"
-msgstr "找到了 %d 個媒體檔案"
-
-#: ../src/Utils/xnoise-media-importer.vala:408
-#: ../src/Utils/xnoise-media-importer.vala:409
-msgid "Updated library for new media folders. "
-msgstr "更新的媒體庫用於新媒體資料夾。"
-
-#: ../src/Utils/xnoise-media-importer.vala:408
-#, c-format
-msgid "Found %d new media files"
-msgstr "找到了 %d 個新媒體檔案"
-
-#: ../src/Widgets/xnoise-settings-dialog.vala:636
-msgid "Visible extra columns for tracklist:"
-msgstr "軌段列表的其他可見欄位："
-
-#: ../src/Widgets/xnoise-settings-dialog.vala:639
+#: ../src/Widgets/xnoise-settings-dialog.vala:624
 msgid "Media browser fontsize:"
 msgstr ""
 
-#: ../src/Widgets/xnoise-settings-dialog.vala:641
+#: ../src/Widgets/xnoise-settings-dialog.vala:626
 msgid "use helper lines in media browser"
 msgstr ""
 
-#: ../src/Widgets/xnoise-settings-dialog.vala:643
+#: ../src/Widgets/xnoise-settings-dialog.vala:628
 msgid "use linebreaks in media browser"
 msgstr ""
 
-#: ../src/Widgets/xnoise-settings-dialog.vala:645
+#: ../src/Widgets/xnoise-settings-dialog.vala:630
 msgid "Compact layout"
 msgstr ""
 
-#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
-#: ../src/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:183
+#: ../src/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - Edit metadata"
 
-#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:169
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:186
 msgid "Type new artist name."
 msgstr "Type new artist name."
 
-#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:187
 msgid "Artist:"
 msgstr "Artist:"
 
-#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:173
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:190
 msgid "Type new album name."
 msgstr "Type new album name."
 
-#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:174
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:191
 msgid "Album:"
 msgstr "Album:"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:40
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:212
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+
+#: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:216
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+
+#: ../src/Widgets/xnoise-tracklist.vala:994
+msgid "Title"
+msgstr ""
+
+#. ALBUM
+#: ../src/Widgets/xnoise-tracklist.vala:1010
+#: ../src/Widgets/xnoise-tracklist.vala:1103
+#, fuzzy
+msgid "Album"
+msgstr "Album:"
+
+#: ../src/Widgets/xnoise-tracklist.vala:1032
+#, fuzzy
+msgid "Artist"
+msgstr "Artist:"
+
+#. LENGTH
+#: ../src/Widgets/xnoise-tracklist.vala:1045
+#: ../src/Widgets/xnoise-tracklist.vala:1116
+msgid "Length"
+msgstr ""
+
+#. TRACKNUMBER
+#: ../src/Widgets/xnoise-tracklist.vala:1090
+msgid "Tracknumber"
+msgstr ""
+
+#: ../src/TrayIcon/xnoise-tray-icon.vala:69
 msgid "Play/Pause"
 msgstr "播放/暫停"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:54
+#: ../src/TrayIcon/xnoise-tray-icon.vala:83
 msgid "Previous"
 msgstr "上一個"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:69
+#: ../src/TrayIcon/xnoise-tray-icon.vala:98
 msgid "Next"
 msgstr "下一個"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:87
+#: ../src/TrayIcon/xnoise-tray-icon.vala:116
 msgid "Exit"
 msgstr "離開"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:136
-#: ../src/TrayIcon/xnoise-tray-icon.vala:148
+#: ../src/TrayIcon/xnoise-tray-icon.vala:165
+#: ../src/TrayIcon/xnoise-tray-icon.vala:177
 msgid "stopped"
 msgstr "已停止"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:140
+#: ../src/TrayIcon/xnoise-tray-icon.vala:169
 msgid "playing"
 msgstr "播放中"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:144
+#: ../src/TrayIcon/xnoise-tray-icon.vala:173
 msgid "paused"
 msgstr "已暫停"
 
-#: ../src/TrayIcon/xnoise-tray-icon.vala:156
+#: ../src/TrayIcon/xnoise-tray-icon.vala:185
 #, c-format
 msgid "ready to rock"
 msgstr "準備開始搖滾"
@@ -517,6 +567,24 @@ msgstr ""
 msgid "TitleToDecoration"
 msgstr ""
 
+#~ msgid "_Video screen"
+#~ msgstr "影片畫面(_V)"
+
+#~ msgid "Finished import. "
+#~ msgstr "已完成匯入。"
+
+#~ msgid "Found %d media files"
+#~ msgstr "找到了 %d 個媒體檔案"
+
+#~ msgid "Updated library for new media folders. "
+#~ msgstr "更新的媒體庫用於新媒體資料夾。"
+
+#~ msgid "Found %d new media files"
+#~ msgstr "找到了 %d 個新媒體檔案"
+
+#~ msgid "Visible extra columns for tracklist:"
+#~ msgstr "軌段列表的其他可見欄位："
+
 #~ msgid "Video"
 #~ msgstr "影片"
 
@@ -528,18 +596,6 @@ msgstr ""
 
 #~ msgid "Edit metadata for track"
 #~ msgstr "Edit metadata for track"
-
-#~ msgid ""
-#~ "Please wait while filling media browser. Or cancel, if you do not want to "
-#~ "wait."
-#~ msgstr ""
-#~ "Please wait while filling media browser. Or cancel, if you do not want to "
-#~ "wait."
-
-#~ msgid ""
-#~ "Please wait while importing media. Or cancel, if you do not want to wait."
-#~ msgstr ""
-#~ "Please wait while importing media. Or cancel, if you do not want to wait."
 
 #~ msgid "Remove selected"
 #~ msgstr "移除已選"

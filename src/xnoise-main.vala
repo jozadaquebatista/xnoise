@@ -162,7 +162,7 @@ public class Xnoise.Main : GLib.Object {
 				Source.remove(maxtime_quit_src);
 			preparing_quit = false;
 		});
-		worker.push_job(job);
+		db_worker.push_job(job);
 	}
 	
 	private static bool preparing_quit = false;

@@ -148,7 +148,8 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 			try {
 				var kf = new KeyFile();
 				kf.load_from_file(s, KeyFileFlags.NONE);
-				if(!kf.has_group(group)) continue;
+				if(!kf.has_group(group))
+					continue;
 				name        = kf.get_locale_string(group, "name"); //TODO: Write this data into cell; maybe info button?
 				description = kf.get_locale_string(group, "description");
 				module      = kf.get_string(group, "module");
@@ -159,8 +160,11 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				copyright   = kf.get_string(group, "copyright");
 				
 				var invisible = new Gtk.Invisible();
-				Gdk.Pixbuf pixbuf = invisible.render_icon(Gtk.Stock.UNDO , IconSize.BUTTON, null); //TODO: use plugins' icons
-				unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(module);
+				Gdk.Pixbuf pixbuf = invisible.render_icon(Gtk.Stock.EXECUTE , IconSize.BUTTON, null); //TODO: use plugins' icons
+				unowned Plugin p = null;
+				p = this.xn.plugin_loader.plugin_htable.lookup(module);
+				if(p == null)
+					continue;
 				p.sign_activated.connect( () => {
 					refresh_tree();
 				});

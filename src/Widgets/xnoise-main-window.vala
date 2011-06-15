@@ -212,7 +212,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		//restore last state
 		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_lastused_titles_to_tracklist);
-		worker.push_job(job);
+		db_worker.push_job(job);
 
 		active_notifier = this.notify["is-active"].connect(buffer_position);
 		this.notify["repeatState"].connect(on_repeatState_changed);

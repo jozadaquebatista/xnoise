@@ -34,7 +34,6 @@ public class Xnoise.DbWriter : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private Sqlite.Database db = null;
-	private Statement pragma_foreign_keys_statement;
 	private Statement update_album_image_statement;
 	private Statement insert_lastused_entry_statement;
 	private Statement add_radio_statement;
@@ -65,7 +64,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static Statement delete_uri_statement;
 	private static Statement delete_item_statement;
 
-    private Statement get_artist_for_uri_id_statement;
+	private Statement get_artist_for_uri_id_statement;
 	private Statement count_artist_in_items_statement;
 	private Statement delete_artist_statement;
 
@@ -76,7 +75,20 @@ public class Xnoise.DbWriter : GLib.Object {
 	private Statement get_genre_for_uri_id_statement;
 	private Statement count_genre_in_items_statement;
 	private Statement delete_genre_statement;
-
+	
+	public delegate void ChangeNotificationCallback(ChangeType changetype, Item? item);
+	
+	public enum ChangeType {
+		ADD_ARTIST,
+		ADD_ALBUM,
+		ADD_TITLE,
+		REMOVE_ARTIST,
+		REMOVE_ALBUM,
+		REMOVE_TITLE,
+		REMOVE_URI,
+		CLEAR_DB
+	}
+	
 	private bool begin_stmt_used;
 	
 	public bool in_transaction {
@@ -85,8 +97,10 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 	//SQLITE CONFIG STATEMENTS
-	private static const string STMT_PRAGMA_FOREIGN_KEYS =
+	private static const string STMT_PRAGMA_SET_FOREIGN_KEYS_ON =
 		"PRAGMA foreign_keys = ON;";
+	private static const string STMT_PRAGMA_GET_FOREIGN_KEYS_ON =
+		"PRAGMA foreign_keys;";
 
 	// DBWRITER STATEMENTS
 	private static const string STMT_BEGIN =
@@ -192,15 +206,8 @@ public class Xnoise.DbWriter : GLib.Object {
 		setup_db();
 	}
 	
-	private bool setup_db() {
-		begin_transaction();
-		bool retval = exec_prepared_stmt(pragma_foreign_keys_statement);
-		if (!retval) {
-			print("Setup of database constraints failed \n");	
-		}
-		commit_transaction();
-		
-		return retval;
+	private void setup_db() {
+		setup_pragmas();
 	}
 	
 	private static Database? get_db () {
@@ -236,8 +243,6 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	private void prepare_statements() {
-		this.db.prepare_v2(STMT_PRAGMA_FOREIGN_KEYS, -1,
-			out this.pragma_foreign_keys_statement);
 		this.db.prepare_v2(STMT_UPDATE_ALBUM_IMAGE, -1,
 			out this.update_album_image_statement);
 		this.db.prepare_v2(STMT_CHECK_TRACK_EXISTS, -1,
@@ -336,6 +341,11 @@ public class Xnoise.DbWriter : GLib.Object {
 	//		this.db_error();
 	//}
 	
+	private unowned ChangeNotificationCallback change_cb = null;
+	public void register_change_callback(ChangeNotificationCallback cb) {
+		change_cb = cb;
+	}
+	
 	private static const string STMT_UPDATE_ALBUM  = "UPDATE albums SET name=? WHERE LOWER(name)=? AND artist=(SELECT artists.id from artists WHERE LOWER(artists.name)=?)";
 	internal void update_album_name(string artist, string new_name, string old_name) {
 		Statement stmt;
@@ -352,6 +362,23 @@ public class Xnoise.DbWriter : GLib.Object {
 			this.db_error();
 	}
 	
+	private void setup_pragmas() {
+		Statement stmt;
+		int val = 0;
+		int retv = 0;
+		string errormsg;
+		if(db.exec(STMT_PRAGMA_SET_FOREIGN_KEYS_ON, null, out errormsg)!= Sqlite.OK) {
+			stderr.printf("exec_stmnt_string error: %s", errormsg);
+			return;
+		}
+		//val = 0;
+		//this.db.prepare_v2(STMT_PRAGMA_GET_FOREIGN_KEYS_ON, -1, out stmt);
+		//retv = stmt.step();
+		//val = stmt.column_int(0);
+		//if(val != 1)
+		//	print("ERROR Setting up pragmas\n");
+	}
+
 	private static const string STMT_UPDATE_ARTIST = "UPDATE artists SET name=? WHERE LOWER(artists.name)=?"; // AND id=(SELECT artists.id from artists WHERE LOWER(artists.name)=?)
 	internal void update_artist_name(string new_name, string old_name) {
 		Statement stmt;
@@ -467,6 +494,12 @@ public class Xnoise.DbWriter : GLib.Object {
 			}
 			if(get_artist_id_statement.step() == Sqlite.ROW)
 				artist_id = get_artist_id_statement.column_int(0);
+			// change notification
+			if(change_cb != null) {
+				Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+				item.text = artist.strip();
+				change_cb(ChangeType.ADD_ARTIST, item);
+			}
 		}
 		if(update_artist) {
 			Statement stmt;
@@ -687,26 +720,26 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_INSERT_TITLE =
 		"INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length, bitrate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
-	public bool insert_title(ref TrackData td, string uri) {
+	public bool insert_title(ref TrackData td) { // , string uri
 		// make entries in other tables and get references from there
 		td.dat1 = handle_artist(ref td.artist);
 		if(td.dat1 == -1) {
-			print("Error importing artist for %s : '%s' ! \n", uri, td.artist);
+			print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.artist);
 			return false;
 		}
 		td.dat2 = handle_album(ref td.dat1, ref td.album);
 		if(td.dat2 == -1) {
-			print("Error importing album for %s : '%s' ! \n", uri, td.album);
+			print("Error importing album for %s : '%s' ! \n", td.item.uri, td.album);
 			return false;
 		}
-		int uri_id = handle_uri(uri);
+		int uri_id = handle_uri(td.item.uri);
 		if(uri_id == -1) {
-			print("Error importing uri for %s : '%s' ! \n", uri, uri);
+//			print("Error importing uri for %s : '%s' ! \n", uri, uri);
 			return false;
 		}
 		int genre_id = handle_genre(ref td.genre);
 		if(genre_id == -1) {
-			print("Error importing genre for %s : '%s' ! \n", uri, td.genre);
+			print("Error importing genre for %s : '%s' ! \n", td.item.uri, td.genre);
 			return false;
 		}
 		insert_title_statement.reset();
@@ -729,21 +762,21 @@ public class Xnoise.DbWriter : GLib.Object {
 			return false;
 		}
 		
-		//get id back
-		Statement stmt;
-		this.db.prepare_v2(STMT_GET_GET_ITEM_ID, -1, out stmt);
-		if(stmt.bind_int (1, td.dat1)   != Sqlite.OK ||
-		   stmt.bind_int (2, td.dat2)   != Sqlite.OK ||
-		   stmt.bind_text(3, td.title)  != Sqlite.OK) {
-			this.db_error();
-			return false;
-		}
-		stmt.reset();
-		if(stmt.step() == Sqlite.ROW) {
-			td.db_id = (int32)stmt.column_int(0);
-			return true;
-		}
-		return false;
+//		//get id back
+//		Statement stmt;
+//		this.db.prepare_v2(STMT_GET_GET_ITEM_ID, -1, out stmt);
+//		if(stmt.bind_int (1, td.dat1)   != Sqlite.OK ||
+//		   stmt.bind_int (2, td.dat2)   != Sqlite.OK ||
+//		   stmt.bind_text(3, td.title)  != Sqlite.OK) {
+//			this.db_error();
+//			return false;
+//		}
+//		stmt.reset();
+//		if(stmt.step() == Sqlite.ROW) {
+//			td.db_id = (int32)stmt.column_int(0);
+//			return true;
+//		}
+		return true;
 	}
 
 	/*

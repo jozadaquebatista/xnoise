@@ -121,7 +121,7 @@ namespace Xnoise {
 		}
 		uris += null; //Null terminated array. Is adding null necessary?
 	
-		//message( "main thread %d", (int)Linux.gettid() );
+		message( "main thread %d", (int)Linux.gettid() );
 	
 		if(app.is_running) {
 			if(uris.length >= 1) {
