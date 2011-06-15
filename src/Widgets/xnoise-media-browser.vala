@@ -41,9 +41,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private Gtk.Menu menu;
 	
 	public MediaBrowserModel mediabrowsermodel;
-//	public MediaBrowserFilterModel filtermodel;
-//	public TreeModelSort sortmodel;
-	//public bool drag_from_mediabrowser = false;
 	
 	public bool use_linebreaks {
 		get {
@@ -114,9 +111,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.xn = Main.instance;
 		par.iparams_register(this);
 		mediabrowsermodel = new MediaBrowserModel();
-//		filtermodel = new MediaBrowserFilterModel(mediabrowsermodel);
-//		sortmodel = new TreeModelSort.with_model(filtermodel);
-//		sortmodel.set_sort_column_id(MediaBrowserModel.Column.VIS_TEXT, SortType.ASCENDING);
 		setup_view();
 		Idle.add(this.populate_model);
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);
@@ -273,7 +267,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //				this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.COLL_TYPE, ref ct);
 //				if(ct != MediaBrowserModel.CollectionType.HIERARCHICAL)
 //					return false;
-//				treerowref = new TreeRowReference(this.mediabrowsermodel, treepath);
 				if(!selection.path_is_selected(treepath)) {
 					selection.unselect_all();
 					selection.select_path(treepath);

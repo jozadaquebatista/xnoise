@@ -197,7 +197,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 				if(idbuffer== -1) {
 					var tr = new TagReader();
 					TrackData td = tr.read_tag(file.get_path());
-					td.uri = file.get_uri();
+//					td.uri = file.get_uri();
 //					td.db_id = db_writer.insert_title(ref td, file.get_uri());
 //					if(db_writer.insert_title(ref td, file.get_uri())) {
 ////						TrackData[] tdy = { td };
@@ -212,13 +212,14 @@ public class Xnoise.MediaImporter : GLib.Object {
 		else if(psVideo.match_string(mime)) {
 			int idbuffer = db_writer.uri_entry_exists(file.get_uri());
 			var td = new TrackData();
-			td.uri = file.get_uri();
+//			td.uri = file.get_uri();
 			td.artist = "unknown artist";
 			td.album = "unknown album";
-			if(file!=null) td.title = prepare_name_from_filename(file.get_basename());
+			if(file!=null) 
+				td.title = prepare_name_from_filename(file.get_basename());
 			td.genre = "";
 			td.tracknumber = 0;
-			td.mediatype = ItemType.LOCAL_VIDEO_TRACK;
+//			td.mediatype = ItemType.LOCAL_VIDEO_TRACK;
 			
 //			if(idbuffer== -1 && db_writer.insert_title(ref td, file.get_uri())) {
 ////				db_writer.insert_title(td, file.get_uri());
@@ -599,9 +600,9 @@ public class Xnoise.MediaImporter : GLib.Object {
 					if(!(uri_lc.has_suffix(".m3u")||uri_lc.has_suffix(".pls")||uri_lc.has_suffix(".asx")||uri_lc.has_suffix(".xspf")||uri_lc.has_suffix(".wpl"))) {
 						var tr = new TagReader();
 						td = tr.read_tag(filepath);
-						td.uri = file.get_uri();
-						td.item = Item(ItemType.LOCAL_AUDIO_TRACK, file.get_uri(), td.db_id);
-						td.mediatype = ItemType.LOCAL_AUDIO_TRACK;
+//						td.uri = file.get_uri();
+//						td.item = Item(ItemType.LOCAL_AUDIO_TRACK, file.get_uri(), td.db_id);
+//						td.mediatype = ItemType.LOCAL_AUDIO_TRACK;
 						tda += td;
 						job.big_counter[1]++;
 						if(job.big_counter[1] % 50 == 0) {
@@ -632,9 +633,9 @@ public class Xnoise.MediaImporter : GLib.Object {
 					td.title = prepare_name_from_filename(file.get_basename());
 					td.genre = "";
 					td.tracknumber = 0;
-					td.uri = file.get_uri();
-					td.mediatype = ItemType.LOCAL_VIDEO_TRACK;
-					td.item = Item(ItemType.LOCAL_VIDEO_TRACK, td.uri);
+//					td.uri = file.get_uri();
+//					td.mediatype = ItemType.LOCAL_VIDEO_TRACK;
+					td.item = Item(ItemType.LOCAL_VIDEO_TRACK, file.get_uri());
 					tdv += td;
 					job.big_counter[1]++;
 					if(job.big_counter[1] % 50 == 0) {

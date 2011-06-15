@@ -37,9 +37,11 @@ namespace Xnoise {
 			this.uri   = _uri;
 		}
 		public ItemType  type;
-		public int32     db_id;  // the id in the database or -1; to be verified, if coming from tracklist
-		public string?   uri;    // uri of item
-		public string?   text;   // some text
+		public int32     artist_id;  // the id in the database or -1; to be verified, if coming from tracklist
+		public int32     album_id;   // the id in the database or -1; to be verified, if coming from tracklist
+		public int32     db_id;      // the id in the database or -1; to be verified, if coming from tracklist
+		public string?   uri;        // uri of item
+		public string?   text;       // some text
 	}
 
 	public enum ItemType {

@@ -548,15 +548,12 @@ namespace Xnoise {
 		public int bitrate;
 		public int32 dat1;
 		public int32 dat2;
-		public int32 db_id;
 		public string? genre;
 		public Xnoise.Item? item;
 		public int32 length;
-		public Xnoise.ItemType mediatype;
 		public string? name;
 		public string? title;
 		public uint tracknumber;
-		public string? uri;
 		public uint year;
 		public TrackData ();
 	}
@@ -589,7 +586,7 @@ namespace Xnoise {
 			ARTIST,
 			LENGTH,
 			WEIGHT,
-			URI,
+			GENRE,
 			ITEM
 		}
 		public TrackListModel ();
@@ -748,6 +745,8 @@ namespace Xnoise {
 	[CCode (type_id = "XNOISE_TYPE_ITEM", cheader_filename = "xnoise.h")]
 	public struct Item {
 		public Xnoise.ItemType type;
+		public int32 artist_id;
+		public int32 album_id;
 		public int32 db_id;
 		public string? uri;
 		public string? text;

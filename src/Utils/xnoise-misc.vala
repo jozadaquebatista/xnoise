@@ -372,9 +372,7 @@ namespace Xnoise {
 		td_new.tracknumber = td.tracknumber;
 		td_new.length      = td.length;
 		td_new.bitrate     = td.bitrate;
-		td_new.mediatype   = td.mediatype;
-		td_new.uri         = td.uri;
-		td_new.db_id       = td.db_id;
+		td_new.item        = td.item;
 		return td_new;
 	}
 }
@@ -428,10 +426,7 @@ public class Xnoise.TrackData { // track meta information
 	public uint tracknumber = 0;
 	public int32 length = 0;
 	public int bitrate = 0;
-	public ItemType mediatype = ItemType.UNKNOWN;
 	public Item? item = Item(ItemType.UNKNOWN);
-	public string? uri = null;
-	public int32 db_id = -1;
 	public int32 dat1 = -1;
 	public int32 dat2 = -1;
 }

@@ -186,12 +186,12 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		TrackData tdx = (TrackData)job.get_arg("tdx");
 		if(tdx == null)
 			return;
-		File f = File.new_for_uri(tdx.uri);
+		File f = File.new_for_uri(tdx.item.uri);
 		TagWriter tw = new TagWriter();
 		bool retval = tw.write_tag(f, tdx); // maybe use uri stored in td ?
 		// TODO: check extension on fail
 		if(retval) { // success
-			media_importer.update_item_tag(tdx.db_id, ref tdx);
+			media_importer.update_item_tag(tdx.item.db_id, ref tdx);
 				
 			//put into mediabrowser
 			Idle.add( () => {

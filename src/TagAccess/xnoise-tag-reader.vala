@@ -34,6 +34,7 @@ public class Xnoise.TagReader {
 //		print("construct TagReader\n");
 //	}
 	public TrackData read_tag(string filename) {
+		File f = File.new_for_path(filename);
 		TrackData td;
 		TagLib.File taglib_file = null;
 		taglib_file = new TagLib.File(filename);
@@ -45,20 +46,23 @@ public class Xnoise.TagReader {
 				try {
 					// from class Tag
 					if(t != null) {
+						Item? item = Item(ItemType.LOCAL_AUDIO_TRACK, f.get_uri());
 						td.artist      = t.artist;
 						td.title       = t.title;
 						td.album       = t.album;
 						td.genre       = t.genre;
 						td.year        = t.year;
 						td.tracknumber = t.track;
-						td.mediatype   = ItemType.LOCAL_AUDIO_TRACK;
-					} else {
+						td.item        = item;
+					} 
+					else {
+						Item? item = item_handler_manager.create_uri_item(f.get_uri());// Item(ItemType.LOCAL_AUDIO_TRACK, f.get_uri());
 						td.artist = "unknown artist";
 						td.title  = "unknown title";
 						td.album  = "unknown album";
 						td.genre  = "unknown genre";
 						td.tracknumber = (uint)0;
-						td.mediatype   = ItemType.UNKNOWN;
+						td.item   = item;
 					}	
 					// from class AudioProperties
 					if(ap != null) {
@@ -80,13 +84,13 @@ public class Xnoise.TagReader {
 			}
 			else {
 				td = new TrackData();
-
+				Item? item = item_handler_manager.create_uri_item(f.get_uri());
 				td.artist = "unknown artist";
 				td.title  = "unknown title";
 				td.album  = "unknown album";
 				td.genre  = "unknown genre";
 				td.tracknumber = (uint)0;
-				td.mediatype   = ItemType.UNKNOWN;
+				td.item   = item;
 
 				td.length = (int32)0;
 				td.bitrate = 0;
@@ -100,7 +104,7 @@ public class Xnoise.TagReader {
 			td.album  = "unknown album";
 			td.genre  = "unknown genre";
 			td.tracknumber = (uint)0;
-			td.mediatype   = ItemType.UNKNOWN;
+			td.item   = Item(ItemType.UNKNOWN, f.get_uri());
 
 			td.length = (int32)0;
 			td.bitrate = 0;

@@ -659,9 +659,7 @@ public class Xnoise.DbWriter : GLib.Object {
 			this.db_error();
 		}
 		if(stmt.step() == Sqlite.ROW) {
-			val.db_id = stmt.column_int(0);
 			val.title = stmt.column_text(1);
-			val.uri = uri;
 			val.item = Item(ItemType.STREAM, uri, stmt.column_int(0));
 			retval = true;
 		}
@@ -750,7 +748,7 @@ public class Xnoise.DbWriter : GLib.Object {
 		   insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
 		   insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
 		   insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
-		   insert_title_statement.bind_int (8,  td.mediatype)        != Sqlite.OK ||
+		   insert_title_statement.bind_int (8,  td.item.type)        != Sqlite.OK ||
 		   insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK ||
 		   insert_title_statement.bind_int (10, td.bitrate)          != Sqlite.OK) {
 			this.db_error();
@@ -762,20 +760,20 @@ public class Xnoise.DbWriter : GLib.Object {
 			return false;
 		}
 		
-//		//get id back
-//		Statement stmt;
-//		this.db.prepare_v2(STMT_GET_GET_ITEM_ID, -1, out stmt);
-//		if(stmt.bind_int (1, td.dat1)   != Sqlite.OK ||
-//		   stmt.bind_int (2, td.dat2)   != Sqlite.OK ||
-//		   stmt.bind_text(3, td.title)  != Sqlite.OK) {
-//			this.db_error();
-//			return false;
-//		}
-//		stmt.reset();
-//		if(stmt.step() == Sqlite.ROW) {
-//			td.db_id = (int32)stmt.column_int(0);
-//			return true;
-//		}
+		//		//get id back
+		//		Statement stmt;
+		//		this.db.prepare_v2(STMT_GET_GET_ITEM_ID, -1, out stmt);
+		//		if(stmt.bind_int (1, td.dat1)   != Sqlite.OK ||
+		//		   stmt.bind_int (2, td.dat2)   != Sqlite.OK ||
+		//		   stmt.bind_text(3, td.title)  != Sqlite.OK) {
+		//			this.db_error();
+		//			return false;
+		//		}
+		//		stmt.reset();
+		//		if(stmt.step() == Sqlite.ROW) {
+		//			td.db_id = (int32)stmt.column_int(0);
+		//			return true;
+		//		}
 		return true;
 	}
 

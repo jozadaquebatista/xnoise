@@ -413,8 +413,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 		uris = new string[(int)paths.length() + 1];
 		foreach(unowned TreePath path in paths) {
 			this.tracklistmodel.get_iter(out iter, path);
-			this.tracklistmodel.get_value(iter, TrackListModel.Column.URI, out uri);
-			uris[i] = uri.get_string();
+			Item? item;
+			this.tracklistmodel.get(iter, TrackListModel.Column.ITEM, out item);
+			uris[i] = item.uri;
 			i++;
 			TreeRowReference treerowref = new TreeRowReference(this.tracklistmodel, path);
 			if(treerowref.valid()) {
@@ -621,7 +622,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 					                   TrackListModel.Column.ARTIST, tdx.artist,
 					                   TrackListModel.Column.LENGTH, make_time_display_from_seconds(tdx.length),
 					                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-					                   TrackListModel.Column.URI, tdx.item.uri,
 					                   TrackListModel.Column.ITEM, tdx.item);
 					path = tracklistmodel.get_path(new_iter);
 				}
@@ -751,6 +751,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			if(tracknumb!=0) {
 				tracknumberString = "%u".printf(tracknumb);
 			}
+			Item? item = item_handler_manager.create_uri_item(fileuri);
 			tracklistmodel.set(new_iter,
 			                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
 			                   TrackListModel.Column.TITLE, title,
@@ -758,8 +759,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 			                   TrackListModel.Column.ARTIST, artist,
 			                   TrackListModel.Column.LENGTH, lengthString,
 			                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-			                   TrackListModel.Column.URI, fileuri,
-			                   -1);
+			                   TrackListModel.Column.ITEM, item
+			                   );
 			path = tracklistmodel.get_path(new_iter);
 		}
 		else if(filetype==GLib.FileType.DIRECTORY) {
@@ -1297,6 +1298,5 @@ public class Xnoise.TrackList : TreeView, IParams {
 	
 	public void read_params_data() {
 	}
-	
 }
 

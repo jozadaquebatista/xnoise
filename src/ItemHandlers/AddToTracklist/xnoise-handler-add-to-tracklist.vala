@@ -149,7 +149,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		int k = 0;
 		TreeIter iter, iter_2 = {};
 		while(tda[k] != null) {
-			string current_uri = tda[k].uri;
+			string current_uri = tda[k].item.uri;
 			
 			if(k == 0 && immediate_play) { // First track
 				iter = xn.tlm.insert_title(null,

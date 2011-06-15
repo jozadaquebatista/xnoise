@@ -762,6 +762,8 @@ struct _XnoiseTagTitleEditorClass {
 
 struct _XnoiseItem {
 	XnoiseItemType type;
+	gint32 artist_id;
+	gint32 album_id;
 	gint32 db_id;
 	gchar* uri;
 	gchar* text;
@@ -903,7 +905,7 @@ typedef enum  {
 	XNOISE_TRACK_LIST_MODEL_COLUMN_ARTIST,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_LENGTH,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_WEIGHT,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_URI,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_GENRE,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_ITEM
 } XnoiseTrackListModelColumn;
 
@@ -1089,10 +1091,7 @@ struct _XnoiseTrackData {
 	guint tracknumber;
 	gint32 length;
 	gint bitrate;
-	XnoiseItemType mediatype;
 	XnoiseItem* item;
-	gchar* uri;
-	gint32 db_id;
 	gint32 dat1;
 	gint32 dat2;
 };
