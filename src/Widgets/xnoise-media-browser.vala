@@ -270,9 +270,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				MediaBrowserModel.CollectionType ct = MediaBrowserModel.CollectionType.UNKNOWN;
 				TreeIter iter;
 				this.mediabrowsermodel.get_iter(out iter, treepath);
-				this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.COLL_TYPE, ref ct);
-				if(ct != MediaBrowserModel.CollectionType.HIERARCHICAL)
-					return false;
+//				this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.COLL_TYPE, ref ct);
+//				if(ct != MediaBrowserModel.CollectionType.HIERARCHICAL)
+//					return false;
 //				treerowref = new TreeRowReference(this.mediabrowsermodel, treepath);
 				if(!selection.path_is_selected(treepath)) {
 					selection.unselect_all();
@@ -309,7 +309,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //		}
 		TreePath path = (TreePath)list.data;
 		mediabrowsermodel.get_iter(out iter, path);
-		mediabrowsermodel.get(iter, TrackListModel.Column.ITEM, out item);
+		mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out item);
 		array = item_handler_manager.get_actions(item.type, ActionContext.MEDIABROWSER_MENU_QUERY, itemselection);
 		for(int i =0; i < array.length; i++) {
 			unowned Action x = array.index(i);

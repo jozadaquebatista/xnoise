@@ -92,7 +92,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_job);
 		foreach(TreePath path in list) {
 			xn.main_window.mediaBr.mediabrowsermodel.get_iter(out iter, path);
-			xn.main_window.mediaBr.mediabrowsermodel.get(iter, TrackListModel.Column.ITEM, out ix);
+			xn.main_window.mediaBr.mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out ix);
 			items += ix;
 		}
 		job.items = items;

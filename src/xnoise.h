@@ -870,12 +870,7 @@ struct _XnoiseMediaBrowserModelClass {
 typedef enum  {
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_ICON = 0,
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_VIS_TEXT,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_DB_ID,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_MEDIATYPE,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_COLL_TYPE,
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_DRAW_SEPTR,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_VISIBLE,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_TRACKNUMBER,
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_ITEM,
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_N_COLUMNS
 } XnoiseMediaBrowserModelColumn;
@@ -1588,7 +1583,6 @@ gint xnoise_media_browser_model_get_max_icon_width (XnoiseMediaBrowserModel* sel
 void xnoise_media_browser_model_filter (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_insert_video_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
 void xnoise_media_browser_model_insert_stream_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
-void xnoise_media_browser_model_insert_trackdata_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
 void xnoise_media_browser_model_move_title_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, XnoiseTrackData** td);
 void xnoise_media_browser_model_move_artist_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, const gchar* name);
 void xnoise_media_browser_model_move_album_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, const gchar* name);

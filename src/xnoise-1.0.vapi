@@ -401,12 +401,7 @@ namespace Xnoise {
 		public enum Column {
 			ICON,
 			VIS_TEXT,
-			DB_ID,
-			MEDIATYPE,
-			COLL_TYPE,
 			DRAW_SEPTR,
-			VISIBLE,
-			TRACKNUMBER,
 			ITEM,
 			N_COLUMNS
 		}
@@ -417,7 +412,6 @@ namespace Xnoise {
 		public Xnoise.DndData[] get_dnd_data_for_path (ref Gtk.TreePath treepath);
 		public int get_max_icon_width ();
 		public void insert_stream_sorted (Xnoise.TrackData[] tda);
-		public void insert_trackdata_sorted (Xnoise.TrackData[] tda);
 		public void insert_video_sorted (Xnoise.TrackData[] tda);
 		public void load_children (ref Gtk.TreeIter iter);
 		public void move_album_iter_sorted (ref Gtk.TreeIter org_iter, string name);
