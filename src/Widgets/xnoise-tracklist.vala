@@ -46,6 +46,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private const string USE_LEN_COL     = "use_length_column";
 	private const string USE_TR_NO_COL   = "use_tracknumber_column";
 	private const string USE_ALBUM_COL   = "use_album_column";
+	private const string USE_GENRE_COL   = "use_genre_column";
 
 	private TreeViewColumn columnPixb;
 	private TextColumn columnAlbum;
@@ -53,6 +54,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private TextColumn columnArtist;
 	private TextColumn columnLength;
 	private TextColumn columnTracknumber;
+	private TextColumn columnGenre;
 	private int variable_col_count = 0;
 	private TreeRowReference[] rowref_list;
 	private bool dragging;
@@ -78,6 +80,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 	public bool column_album_visible { 
 		get { return this.columnAlbum.visible; }
 		set { this.columnAlbum.visible = value; }
+	}
+
+	public bool column_genre_visible { 
+		get { return this.columnGenre.visible; }
+		set { this.columnGenre.visible = value; }
 	}
 
 	public TrackListModel tracklistmodel;
@@ -953,10 +960,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 			}
 			handle_resize();
 		});
-				
-				 
-				
-
+		
+		
 		// STATUS ICON
 		var pixbufRenderer = new CellRendererPixbuf();
 		columnPixb         = new TreeViewColumn();
@@ -1062,12 +1067,35 @@ public class Xnoise.TrackList : TreeView, IParams {
 			columnLength.visible = false;
 		}
 
+		// Genre
+		renderer = new CellRendererText();
+		renderer.ellipsize = Pango.EllipsizeMode.END;
+		renderer.ellipsize_set = true;
+		columnGenre = new TextColumn(_("Genre"), renderer, TrackListModel.Column.GENRE);
+		columnGenre.add_attribute(renderer,
+		                          "text", TrackListModel.Column.GENRE);
+		columnGenre.add_attribute(renderer,
+		                          "weight", TrackListModel.Column.WEIGHT);
+		columnGenre.min_width = 80;
+		columnGenre.resizable = true;
+		columnGenre.reorderable = true;
+		this.insert_column(columnGenre, -1);
+		variable_col_count++;
+		
+		if(par.get_int_value(USE_GENRE_COL) == 1) {
+			columnGenre.visible = true;
+		}
+		else {
+			columnGenre.visible = false;
+		}
+
 		columnPixb.sizing        = Gtk.TreeViewColumnSizing.FIXED;
 		columnTracknumber.sizing = Gtk.TreeViewColumnSizing.FIXED;
 		columnTitle.sizing       = Gtk.TreeViewColumnSizing.FIXED;
 		columnAlbum.sizing       = Gtk.TreeViewColumnSizing.FIXED;
 		columnArtist.sizing      = Gtk.TreeViewColumnSizing.FIXED;
 		columnLength.sizing      = Gtk.TreeViewColumnSizing.FIXED;
+		columnGenre.sizing       = Gtk.TreeViewColumnSizing.FIXED;
 		
 		this.set_enable_search(false);
 		this.rules_hint = true;
@@ -1113,7 +1141,20 @@ public class Xnoise.TrackList : TreeView, IParams {
 		});
 		rightmenu.append(menu_item);
 
-		// LENGTH
+		// GENRE
+		menu_item = new CheckMenuItem.with_label(_("Genre"));
+		menu_item.set_active((par.get_int_value("use_genre_column") == 1 ? true : false));
+		menu_item.toggled.connect( (s) => {
+			par.set_int_value("use_genre_column", (s.get_active() == true ? 1 : 0));
+			this.column_genre_visible = s.get_active();
+			Idle.add( () => {
+				handle_resize();
+				return false;
+			});
+		});
+		rightmenu.append(menu_item);
+		
+		// LENGTH 
 		menu_item = new CheckMenuItem.with_label(_("Length"));
 		menu_item.set_active((par.get_int_value("use_length_column") == 1 ? true : false));
 		menu_item.toggled.connect( (s) => {
@@ -1125,7 +1166,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			});
 		});
 		rightmenu.append(menu_item);
-		
+
 		rightmenu.show_all();
 		return rightmenu;
 	}

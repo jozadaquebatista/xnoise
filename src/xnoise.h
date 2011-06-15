@@ -2007,6 +2007,8 @@ gboolean xnoise_track_list_get_column_tracknumber_visible (XnoiseTrackList* self
 void xnoise_track_list_set_column_tracknumber_visible (XnoiseTrackList* self, gboolean value);
 gboolean xnoise_track_list_get_column_album_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_album_visible (XnoiseTrackList* self, gboolean value);
+gboolean xnoise_track_list_get_column_genre_visible (XnoiseTrackList* self);
+void xnoise_track_list_set_column_genre_visible (XnoiseTrackList* self, gboolean value);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_new (void);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_construct (GType object_type);
 void xnoise_track_progress_bar_set_value (XnoiseTrackProgressBar* self, guint pos, guint len);
