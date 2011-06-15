@@ -145,7 +145,27 @@ public class Xnoise.DbBrowser {
 		   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
 		   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
+			return 0;
 		}
+		if(stmt.step() == Sqlite.ROW) {
+			count = stmt.column_int(0);
+		}
+		return count;
+	}
+
+	private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (t.id) FROM items t WHERE t.mediatype=? AND t.title LIKE ?";
+	public int32 count_videos(ref string searchtext) {
+		Statement stmt;
+		int count = 0;
+		
+		this.db.prepare_v2(STMT_GET_VIDEO_COUNT, -1, out stmt);
+		
+		if(stmt.bind_int (1, ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK ||
+		   stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) {
+			this.db_error();
+			return 0;
+		}
+		
 		if(stmt.step() == Sqlite.ROW) {
 			count = stmt.column_int(0);
 		}

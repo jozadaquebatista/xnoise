@@ -493,8 +493,16 @@ public class Xnoise.MediaImporter : GLib.Object {
 								userinfo.get_extra_widget_by_id((uint)s.get_arg("msg_id")).hide();
 							return false;
 						});
-						Timeout.add_seconds(4, () => { 
+						Timeout.add_seconds(4, () => {
+							//print("reset io_import_job_running flag\n");
 							io_import_job_running = false;
+							if(AtomicInt.get(ref job_count) <= 0) {
+								global.media_import_in_progress = false;
+								if(current_import_msg_id != 0) {
+									userinfo.popdown(current_import_msg_id);
+									current_import_msg_id = 0;
+								}
+							}
 							return false;
 						});
 					});
@@ -679,6 +687,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 	
 	private void dec_and_test_job_cnt() {
 		AtomicInt.dec_and_test(ref job_count);
+		//print("AtomicInt.get(ref job_count): %d\n", AtomicInt.get(ref job_count));
 		if(AtomicInt.get(ref job_count) <= 0 && io_import_job_running == false) {
 			//print("NOW !\n");
 			//print("set import to false\n");

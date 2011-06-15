@@ -1519,6 +1519,7 @@ XnoiseDbBrowser* xnoise_db_browser_construct (GType object_type, GError** error)
 void xnoise_db_browser_cancel (XnoiseDbBrowser* self);
 void xnoise_db_browser_do_callback_transaction (XnoiseDbBrowser* self, XnoiseDbBrowserReaderCallback cb, void* cb_target);
 gint xnoise_db_browser_count_artists_with_search (XnoiseDbBrowser* self, gchar** searchtext);
+gint32 xnoise_db_browser_count_videos (XnoiseDbBrowser* self, gchar** searchtext);
 gint xnoise_db_browser_count_artists (XnoiseDbBrowser* self);
 gboolean xnoise_db_browser_videos_available (XnoiseDbBrowser* self);
 gboolean xnoise_db_browser_streams_available (XnoiseDbBrowser* self);

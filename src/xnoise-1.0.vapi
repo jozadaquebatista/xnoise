@@ -51,6 +51,7 @@ namespace Xnoise {
 		public void cancel ();
 		public int count_artists ();
 		public int count_artists_with_search (ref string searchtext);
+		public int32 count_videos (ref string searchtext);
 		public void do_callback_transaction (Xnoise.DbBrowser.ReaderCallback cb);
 		public Xnoise.Item[] get_albums_with_search (ref string searchtext, int32 id);
 		public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);

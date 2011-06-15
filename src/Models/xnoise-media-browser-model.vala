@@ -915,60 +915,87 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private bool handle_videos(Worker.Job job) {
 			
+		int32 cnt = db_browser.count_videos(ref searchtext);
+		if(cnt == 0)
+			return false;
+		Idle.add( () => {
+			if(job.cancellable.is_cancelled())
+				return false;
+			TreeIter iter_videos, iter_loader;
+			Item item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+			this.prepend(out iter_videos, null);
+			this.set(iter_videos,
+			         Column.ICON, videos_pixb,
+			         Column.VIS_TEXT, "Videos",
+			         Column.COLL_TYPE, CollectionType.LISTED,
+			         Column.DRAW_SEPTR, 0,
+			         Column.VISIBLE, false,
+			         Column.ITEM, item
+			         );
+			Item? loader_item = Item(ItemType.LOADER);
+			this.append(out iter_loader, iter_videos);
+			this.set(iter_loader,
+			         Column.ICON, loading_pixb,
+			         Column.VIS_TEXT, LOADING,
+			         Column.COLL_TYPE, CollectionType.LISTED,
+			         Column.DRAW_SEPTR, 0,
+			         Column.VISIBLE, false,
+			         Column.ITEM, loader_item
+			         );
+			return false;
+		});
+		return false;
+	}
+	
+	private bool load_videos_job(Worker.Job job) {
 		job.track_dat = db_browser.get_video_data(ref searchtext);
 		
 		if(job.track_dat.length == 0)
 			return false;
 		
 		Idle.add( () => {
-			if(!job.cancellable.is_cancelled()) {
-				TreeIter iter_videos, iter_singlevideo;
-				Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-				this.prepend(out iter_videos, null);
-				this.set(iter_videos,
-				         Column.ICON, videos_pixb,
-				         Column.VIS_TEXT, "Videos",
+			TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+			if(row_ref == null || !row_ref.valid())
+				return false;
+			TreePath p = row_ref.get_path();
+			TreeIter iter_videos, iter_singlevideo;
+			this.get_iter(out iter_videos, p);
+			foreach(unowned TrackData td in job.track_dat) {
+				if(job.cancellable.is_cancelled())
+					break;
+				bool visible = false;
+				if(this.searchtext == "" || td.name.down().contains(this.searchtext)) {
+					visible = true;
+					this.set(iter_videos, Column.VISIBLE, visible);
+				}
+				Gdk.Pixbuf thumbnail = null;
+				File thumb = null;
+				bool has_thumbnail = false;
+				if(thumbnail_available(td.item.uri, out thumb)) {
+					try {
+						if(thumb != null) {
+							thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), 30, 30, true);
+							has_thumbnail = true;
+						}
+					}
+					catch(Error e) {
+						thumbnail = null;
+						has_thumbnail = false;
+					}
+				}
+				this.prepend(out iter_singlevideo, iter_videos);
+				this.set(iter_singlevideo,
+				         Column.ICON, (has_thumbnail == true ? thumbnail : video_pixb),
+				         Column.VIS_TEXT, td.name,
+				         Column.DB_ID, td.db_id,
+				         Column.MEDIATYPE , (int) ItemType.LOCAL_VIDEO_TRACK,
 				         Column.COLL_TYPE, CollectionType.LISTED,
 				         Column.DRAW_SEPTR, 0,
-				         Column.VISIBLE, false,
-				         Column.ITEM, item
-						 );
-				foreach(unowned TrackData td in job.track_dat) {
-					if(job.cancellable.is_cancelled())
-						break;
-					bool visible = false;
-					if(this.searchtext == "" || td.name.down().contains(this.searchtext)) {
-						visible = true;
-						this.set(iter_videos, Column.VISIBLE, visible);
-					}
-					Gdk.Pixbuf thumbnail = null;
-					File thumb = null;
-					bool has_thumbnail = false;
-					if(thumbnail_available(td.item.uri, out thumb)) {
-						try {
-							if(thumb != null) {
-								thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), 30, 30, true);
-								has_thumbnail = true;
-							}
-						}
-						catch(Error e) {
-							thumbnail = null;
-							has_thumbnail = false;
-						}
-					}
-					this.prepend(out iter_singlevideo, iter_videos);
-					this.set(iter_singlevideo,
-					         Column.ICON, (has_thumbnail == true ? thumbnail : video_pixb),
-					         Column.VIS_TEXT, td.name,
-					         Column.DB_ID, td.db_id,
-					         Column.MEDIATYPE , (int) ItemType.LOCAL_VIDEO_TRACK,
-					         Column.COLL_TYPE, CollectionType.LISTED,
-					         Column.DRAW_SEPTR, 0,
-					         Column.VISIBLE, visible,
-					         Column.ITEM, td.item
-					         );
-				}
+				         Column.VISIBLE, visible,
+				         Column.ITEM, td.item
+				         );
 			}
+			remove_loader_child(ref iter_videos);
 			return false;
 		});
 		return false;
@@ -1019,7 +1046,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		TreeIter iter_loader;
 		Item? item = Item(ItemType.UNKNOWN);
 		this.get(iter, Column.ITEM, out item);
-		if(item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
+		if(item.type != ItemType.COLLECTION_CONTAINER_ARTIST && 
+		   item.type != ItemType.COLLECTION_CONTAINER_VIDEO)
 			return;
 		Item? loader_item = Item(ItemType.LOADER);
 		this.append(out iter_loader, iter);
@@ -1057,6 +1085,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			//job.cancellable = populate_model_cancellable;
 			job.set_arg("treerowref", treerowref);
 			job.set_arg("id", item.db_id);
+			db_worker.push_job(job);
+		}
+		if(item.type == ItemType.COLLECTION_CONTAINER_VIDEO) {
+			job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_videos_job);
+			//job.cancellable = populate_model_cancellable;
+			job.set_arg("treerowref", treerowref);
 			db_worker.push_job(job);
 		}
 	}
@@ -1115,7 +1149,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private void remove_loader_child(ref TreeIter iter) {
 		TreeIter child;
 		Item? item;
-		for(int i = 0; i < this.iter_n_children(iter); i++) {
+		for(int i = (this.iter_n_children(iter) - 1); i >= 0 ; i--) {
 			this.iter_nth_child(out child, iter, i);
 			this.get(child, Column.ITEM, out item);
 			if(item.type == ItemType.LOADER) {
