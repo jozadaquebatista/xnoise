@@ -350,6 +350,7 @@ namespace Xnoise {
 		public Xnoise.TrackProgressBar songProgressBar;
 		public Xnoise.ControlButton stopButton;
 		public Xnoise.TrackListNoteBookTab temporary_tab;
+		public Gtk.Label timelabel;
 		public Xnoise.TrackList trackList;
 		public Gtk.ScrolledWindow trackListScrollWin;
 		public Gtk.Notebook tracklistnotebook;
@@ -569,6 +570,7 @@ namespace Xnoise {
 		public bool column_genre_visible { get; set; }
 		public bool column_length_visible { get; set; }
 		public bool column_tracknumber_visible { get; set; }
+		public bool column_year_visible { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackListModel : Gtk.ListStore, Gtk.TreeModel {
@@ -588,6 +590,7 @@ namespace Xnoise {
 			LENGTH,
 			WEIGHT,
 			GENRE,
+			YEAR,
 			ITEM
 		}
 		public TrackListModel ();

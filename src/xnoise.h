@@ -906,6 +906,7 @@ typedef enum  {
 	XNOISE_TRACK_LIST_MODEL_COLUMN_LENGTH,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_WEIGHT,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_GENRE,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_YEAR,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_ITEM
 } XnoiseTrackListModelColumn;
 
@@ -1301,6 +1302,7 @@ struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	GtkActionGroup* action_group;
+	GtkLabel* timelabel;
 	GtkScrolledWindow* mediaBrScrollWin;
 	GtkScrolledWindow* trackListScrollWin;
 	gboolean _seek;
@@ -2009,6 +2011,8 @@ gboolean xnoise_track_list_get_column_album_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_album_visible (XnoiseTrackList* self, gboolean value);
 gboolean xnoise_track_list_get_column_genre_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_genre_visible (XnoiseTrackList* self, gboolean value);
+gboolean xnoise_track_list_get_column_year_visible (XnoiseTrackList* self);
+void xnoise_track_list_set_column_year_visible (XnoiseTrackList* self, gboolean value);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_new (void);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_construct (GType object_type);
 void xnoise_track_progress_bar_set_value (XnoiseTrackProgressBar* self, guint pos, guint len);

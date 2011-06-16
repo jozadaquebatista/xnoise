@@ -47,6 +47,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private const string USE_TR_NO_COL   = "use_tracknumber_column";
 	private const string USE_ALBUM_COL   = "use_album_column";
 	private const string USE_GENRE_COL   = "use_genre_column";
+	private const string USE_YEAR_COL    = "use_year_column";
 
 	private TreeViewColumn columnPixb;
 	private TextColumn columnAlbum;
@@ -55,6 +56,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private TextColumn columnLength;
 	private TextColumn columnTracknumber;
 	private TextColumn columnGenre;
+	private TextColumn columnYear;
 	private int variable_col_count = 0;
 	private TreeRowReference[] rowref_list;
 	private bool dragging;
@@ -85,6 +87,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 	public bool column_genre_visible { 
 		get { return this.columnGenre.visible; }
 		set { this.columnGenre.visible = value; }
+	}
+
+	public bool column_year_visible { 
+		get { return this.columnYear.visible; }
+		set { this.columnYear.visible = value; }
 	}
 
 	public TrackListModel tracklistmodel;
@@ -1067,6 +1074,28 @@ public class Xnoise.TrackList : TreeView, IParams {
 			columnLength.visible = false;
 		}
 
+		// year
+		renderer = new CellRendererText();
+		renderer.ellipsize = Pango.EllipsizeMode.END;
+		renderer.ellipsize_set = true;
+		columnYear = new TextColumn(_("Year"), renderer, TrackListModel.Column.YEAR);
+		columnYear.add_attribute(renderer,
+		                          "text", TrackListModel.Column.YEAR);
+		columnYear.add_attribute(renderer,
+		                          "weight", TrackListModel.Column.WEIGHT);
+		columnYear.min_width = 80;
+		columnYear.resizable = true;
+		columnYear.reorderable = true;
+		this.insert_column(columnYear, -1);
+		variable_col_count++;
+		
+		if(par.get_int_value(USE_YEAR_COL) == 1) {
+			columnYear.visible = true;
+		}
+		else {
+			columnYear.visible = false;
+		}
+
 		// Genre
 		renderer = new CellRendererText();
 		renderer.ellipsize = Pango.EllipsizeMode.END;
@@ -1096,6 +1125,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnArtist.sizing      = Gtk.TreeViewColumnSizing.FIXED;
 		columnLength.sizing      = Gtk.TreeViewColumnSizing.FIXED;
 		columnGenre.sizing       = Gtk.TreeViewColumnSizing.FIXED;
+		columnYear.sizing       = Gtk.TreeViewColumnSizing.FIXED;
 		
 		this.set_enable_search(false);
 		this.rules_hint = true;
@@ -1147,6 +1177,19 @@ public class Xnoise.TrackList : TreeView, IParams {
 		menu_item.toggled.connect( (s) => {
 			par.set_int_value("use_genre_column", (s.get_active() == true ? 1 : 0));
 			this.column_genre_visible = s.get_active();
+			Idle.add( () => {
+				handle_resize();
+				return false;
+			});
+		});
+		rightmenu.append(menu_item);
+		
+		// YEAR
+		menu_item = new CheckMenuItem.with_label(_("Year"));
+		menu_item.set_active((par.get_int_value("use_year_column") == 1 ? true : false));
+		menu_item.toggled.connect( (s) => {
+			par.set_int_value("use_year_column", (s.get_active() == true ? 1 : 0));
+			this.column_year_visible = s.get_active();
 			Idle.add( () => {
 				handle_resize();
 				return false;

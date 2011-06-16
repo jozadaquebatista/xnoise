@@ -43,7 +43,7 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		xn = Main.instance;
 
 		this.discrete_blocks = 10;
-		this.set_size_request(180, 18);
+//		this.set_size_request(180, 18);
 
 		this.set_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.BUTTON1_MOTION_MASK | Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK);
 		this.button_press_event.connect(this.on_press);
@@ -54,7 +54,8 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		global.caught_eos_from_player.connect(on_eos);
 		xn.gPl.sign_stopped.connect(on_stopped);
 
-		this.set_text("00:00 / 00:00");
+		//this.set_text("00:00 / 00:00");
+//xn.main_window.timelabel.label = "00:00 / 00:00";
 		this.fraction = 0.0;
 	}
 
@@ -139,11 +140,13 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 			pos_min = (int)(pos / 60000);
 			pos_sec = (int)((pos % 60000) / 1000);
 			string timeinfo = "%02d:%02d / %02d:%02d".printf(pos_min, pos_sec, dur_min, dur_sec);
-			this.set_text(timeinfo);
+			xn.main_window.timelabel.label = timeinfo;
+//			this.set_text(timeinfo);
 		}
 		else {
 			this.set_fraction(0.0);
-			this.set_text("00:00 / 00:00");
+//			this.set_text("00:00 / 00:00");
+xn.main_window.timelabel.label = "00:00 / 00:00";
 			this.set_sensitive(false);
 		}
 	}

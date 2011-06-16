@@ -2,17 +2,44 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-add</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-properties</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-quit</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-fullscreen</property>
+    <property name="icon-size">1</property>
+  </object>
   <object class="GtkImage" id="imagecollapse">
     <property name="visible">True</property>
+    <property name="can_focus">False</property>
     <property name="tooltip_text" translatable="yes">Collapse all</property>
     <property name="stock">gtk-unindent</property>
     <property name="icon-size">1</property>
   </object>
   <object class="GtkVBox" id="mainvbox">
     <property name="visible">True</property>
+    <property name="can_focus">False</property>
     <child>
       <object class="GtkVBox" id="menuvbox">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <child>
           <placeholder/>
         </child>
@@ -26,14 +53,18 @@
     <child>
       <object class="GtkHBox" id="hbox1">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">4</property>
         <child>
           <object class="GtkAspectFrame" id="aFramePlayerControls">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
               <object class="GtkHBox" id="playback_hbox">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
                 <child>
                   <placeholder/>
@@ -58,61 +89,21 @@
           </packing>
         </child>
         <child>
-          <object class="GtkAspectFrame" id="aspectframe2">
+          <object class="GtkAspectFrame" id="aspectframe1">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="border_width">2</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
-            <property name="yalign">1</property>
+            <property name="obey_child">False</property>
             <child>
-              <object class="GtkVBox" id="vbox1">
+              <object class="GtkHBox" id="aibox">
+                <property name="width_request">48</property>
+                <property name="height_request">48</property>
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkAspectFrame" id="aspectframe3">
-                    <property name="visible">True</property>
-                    <property name="label_xalign">0</property>
-                    <property name="shadow_type">none</property>
-                    <child>
-                      <object class="GtkViewport" id="songprogress_viewport">
-                        <property name="visible">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="resize_mode">queue</property>
-                        <property name="shadow_type">none</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">2</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="repeatButton">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="relief">none</property>
-                    <property name="focus_on_click">False</property>
-                    <child>
-                      <object class="GtkLabel" id="repeatLabel">
-                        <property name="visible">True</property>
-                        <property name="yalign">0</property>
-                        <property name="label" translatable="yes">no repeat</property>
-                        <attributes>
-                          <attribute name="size" value="9000"/>
-                        </attributes>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -124,76 +115,120 @@
           </packing>
         </child>
         <child>
-          <object class="GtkAspectFrame" id="aspectframe1">
+          <object class="GtkVBox" id="vbox1">
             <property name="visible">True</property>
-            <property name="border_width">2</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
-            <property name="obey_child">False</property>
+            <property name="can_focus">False</property>
             <child>
-              <object class="GtkHBox" id="aibox">
-                <property name="width_request">48</property>
-                <property name="height_request">48</property>
+              <object class="GtkLabel" id="song_title_label">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="xalign">0.019999999552965164</property>
+                <property name="label" translatable="yes">&lt;b&gt;xnoise&lt;/b&gt; - ready to rock</property>
+                <property name="use_markup">True</property>
+                <property name="ellipsize">end</property>
+                <property name="width_chars">30</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkVBox" id="vbox2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
                   <placeholder/>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="single_line_mode">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+              </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="song_title_label">
+          <object class="GtkLabel" id="timelabel">
             <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">&lt;b&gt;xnoise&lt;/b&gt;
-ready to rock</property>
-            <property name="use_markup">True</property>
-            <property name="ellipsize">end</property>
-            <property name="width_chars">30</property>
+            <property name="can_focus">False</property>
+            <property name="yalign">0.60000002384185791</property>
+            <property name="label" translatable="yes">00:00 / 00:00</property>
+            <property name="width_chars">11</property>
+            <property name="single_line_mode">True</property>
           </object>
           <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
             <property name="position">3</property>
           </packing>
         </child>
         <child>
-          <object class="GtkAspectFrame" id="aFrameConfigButton">
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="padding">2</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkAspectFrame" id="aFrameVolumeButton">
+          <object class="GtkHBox" id="hbox4">
             <property name="visible">True</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="can_focus">False</property>
             <child>
-              <placeholder/>
+              <object class="GtkAspectFrame" id="aFrameVolumeButton">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAspectFrame" id="aFrameConfigButton">
+                <property name="can_focus">False</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">none</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">2</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">5</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
+        <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
     </child>
@@ -204,9 +239,11 @@ ready to rock</property>
         <child>
           <object class="GtkVBox" id="vbox6">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <child>
               <object class="GtkNotebook" id="notebook1">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="tab_pos">left</property>
                 <property name="show_tabs">False</property>
                 <property name="show_border">False</property>
@@ -217,16 +254,19 @@ ready to rock</property>
                 <child>
                   <object class="GtkVBox" id="vboxmusicBr">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkHBox" id="sexyentryBox">
                         <property name="width_request">200</property>
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="collapsebutton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="tooltip_text" translatable="yes">Collapse all</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="image">imagecollapse</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
@@ -261,6 +301,8 @@ ready to rock</property>
                         </child>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -269,6 +311,7 @@ ready to rock</property>
                 <child type="tab">
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="ypad">10</property>
                     <property name="label" translatable="yes">Collection</property>
                     <property name="use_markup">True</property>
@@ -281,6 +324,8 @@ ready to rock</property>
                 </child>
               </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -293,15 +338,18 @@ ready to rock</property>
         <child>
           <object class="GtkVBox" id="contentvbox">
             <property name="visible">True</property>
+            <property name="can_focus">False</property>
             <child>
               <object class="GtkNotebook" id="tracklistnotebook">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <property name="tab_pos">right</property>
                 <property name="show_tabs">False</property>
                 <property name="show_border">False</property>
                 <child>
                   <object class="GtkVBox" id="vbox3">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkScrolledWindow" id="scroll_tracklist">
                         <property name="visible">True</property>
@@ -313,18 +361,22 @@ ready to rock</property>
                         </child>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkHBox" id="hbox3">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="hide_button">
                             <property name="label" translatable="yes">Hide Media</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                           </object>
@@ -339,11 +391,13 @@ ready to rock</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                             <child>
                               <object class="GtkImage" id="image2y1">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="stock">gtk-delete</property>
                                 <property name="icon-size">1</property>
                               </object>
@@ -351,6 +405,7 @@ ready to rock</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="padding">2</property>
                             <property name="position">1</property>
                           </packing>
@@ -360,11 +415,13 @@ ready to rock</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                             <child>
                               <object class="GtkImage" id="image1y1">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <property name="stock">gtk-clear</property>
                                 <property name="icon-size">1</property>
                               </object>
@@ -372,26 +429,57 @@ ready to rock</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="repeatButton">
+                            <property name="width_request">120</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="relief">none</property>
+                            <property name="focus_on_click">False</property>
+                            <child>
+                              <object class="GtkLabel" id="repeatLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">no repeat</property>
+                                <attributes>
+                                  <attribute name="size" value="9000"/>
+                                </attributes>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkVSeparator" id="vseparator3">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="fill">True</property>
                             <property name="padding">10</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="label4x">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                           </object>
                           <packing>
+                            <property name="expand">True</property>
                             <property name="fill">False</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                         <child>
@@ -399,27 +487,34 @@ ready to rock</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <child>
                               <object class="GtkHBox" id="hbox2">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkImage" id="imageLy01">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="stock">gtk-about</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="label9">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">Lyrics</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -430,7 +525,7 @@ ready to rock</property>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                         <child>
@@ -438,28 +533,35 @@ ready to rock</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                             <child>
                               <object class="GtkHBox" id="hbox5">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkImage" id="showvideoimage">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="stock">gtk-fullscreen</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="showvideolabel">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">Video</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -471,12 +573,13 @@ ready to rock</property>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="padding">2</property>
-                            <property name="position">6</property>
+                            <property name="position">7</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -485,6 +588,7 @@ ready to rock</property>
                 <child type="tab">
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Tracklist</property>
                     <property name="use_markup">True</property>
                     <property name="angle">90</property>
@@ -496,26 +600,32 @@ ready to rock</property>
                 <child>
                   <object class="GtkVBox" id="vbox4">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkVBox" id="videovbox">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <placeholder/>
                         </child>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkHBox" id="hbox2v">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="hide_button_1">
                             <property name="label" translatable="yes">Hide Media</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                           </object>
@@ -528,8 +638,10 @@ ready to rock</property>
                         <child>
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                           </object>
                           <packing>
+                            <property name="expand">True</property>
                             <property name="fill">False</property>
                             <property name="position">1</property>
                           </packing>
@@ -539,27 +651,34 @@ ready to rock</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <child>
                               <object class="GtkHBox" id="hbox8">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkImage" id="imagely02">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="stock">gtk-about</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="label10">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">Lyrics</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -578,28 +697,35 @@ ready to rock</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                             <child>
                               <object class="GtkHBox" id="hbox6">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkImage" id="showvideoimage1">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="stock">gtk-index</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="showtracklistlabel">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">Tracklist</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -617,6 +743,7 @@ ready to rock</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -628,6 +755,7 @@ ready to rock</property>
                 <child type="tab">
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Video</property>
                     <property name="use_markup">True</property>
                     <property name="angle">90</property>
@@ -640,6 +768,7 @@ ready to rock</property>
                 <child>
                   <object class="GtkVBox" id="vbox5">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledlyricsview">
                         <property name="visible">True</property>
@@ -652,18 +781,22 @@ ready to rock</property>
                         </child>
                       </object>
                       <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkHBox" id="hbox2v1">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <object class="GtkButton" id="hide_button_2">
                             <property name="label" translatable="yes">Hide Media</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                           </object>
@@ -676,8 +809,10 @@ ready to rock</property>
                         <child>
                           <object class="GtkLabel" id="label11">
                             <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                           </object>
                           <packing>
+                            <property name="expand">True</property>
                             <property name="fill">False</property>
                             <property name="position">1</property>
                           </packing>
@@ -687,27 +822,34 @@ ready to rock</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <child>
                               <object class="GtkHBox" id="hbox11">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkImage" id="imagetl01">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="stock">gtk-index</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="label12">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">Tracklist</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -726,28 +868,35 @@ ready to rock</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                             <child>
                               <object class="GtkHBox" id="hbox9">
                                 <property name="visible">True</property>
+                                <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkImage" id="showvideoimage2">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="stock">gtk-fullscreen</property>
                                     <property name="icon-size">1</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="showvideolabelLY">
                                     <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">Video</property>
                                   </object>
                                   <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -765,6 +914,7 @@ ready to rock</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -776,6 +926,7 @@ ready to rock</property>
                 <child type="tab">
                   <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
+                    <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Lyrics</property>
                     <property name="use_markup">True</property>
                     <property name="angle">90</property>
@@ -787,6 +938,8 @@ ready to rock</property>
                 </child>
               </object>
               <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
                 <property name="pack_type">end</property>
                 <property name="position">0</property>
               </packing>
@@ -799,28 +952,10 @@ ready to rock</property>
         </child>
       </object>
       <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
         <property name="position">2</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="stock">gtk-fullscreen</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="stock">gtk-quit</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="stock">gtk-properties</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="stock">gtk-add</property>
-    <property name="icon-size">1</property>
   </object>
 </interface>

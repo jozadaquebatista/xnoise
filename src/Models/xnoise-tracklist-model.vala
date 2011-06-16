@@ -45,6 +45,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		LENGTH,
 		WEIGHT,
 		GENRE,
+		YEAR,
 		ITEM
 	}
 
@@ -57,6 +58,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		typeof(string),      // LENGTH
 		typeof(int),         // WEIGHT
 		typeof(string),      // GENRE
+		typeof(string),      // YEAR
 		typeof(Xnoise.Item?) // Item
 	};
 

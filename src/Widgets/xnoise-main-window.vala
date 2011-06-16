@@ -67,6 +67,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button repeatButton;
 	private int buffer_last_page;
 	private Label repeatLabel;
+	public Label timelabel;
 	private VBox menuvbox;
 	private VBox mainvbox;
 	private VBox contentvbox;
@@ -1019,7 +1020,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		string text, album, artist, title, organization, location, genre;
 		string basename = null;
 		if((newuri == "")|(newuri == null)) {
-			text = "<b>XNOISE</b>\nready to rock! ;-)";
+			text = "<b>XNOISE</b> - ready to rock! ;-)";
 			song_title_label.set_text(text);
 			song_title_label.use_markup = true;
 			return;
@@ -1046,7 +1047,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				album = "unknown album";
 			}
 			if((newuri!=null) && (newuri!="")) {
-				text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>",
+				text = Markup.printf_escaped("<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>",
 					title,
 					_("by"),
 					artist,
@@ -1069,7 +1070,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					text = "<b>XNOISE</b>\nready to rock! ;-)";
 				}
 				else {
-					text = "<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
+					text = "<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
 						_("unknown title"),
 						_("by"),
 						_("unknown artist"),
@@ -1111,7 +1112,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				location = "unknown location";
 
 			if((newuri!=null) && (newuri!="")) {
-				text = Markup.printf_escaped("<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>",
+				text = Markup.printf_escaped("<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>",
 					title,
 					_("by"),
 					artist,
@@ -1133,10 +1134,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			else {
 				if((!xn.gPl.playing) &&
 				   (!xn.gPl.paused)) {
-					text = "<b>XNOISE</b>\nready to rock! ;-)";
+					text = "<b>XNOISE</b> - ready to rock! ;-)";
 				}
 				else {
-					text = "<b>%s</b>\n<i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
+					text = "<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
 						_("unknown title"),
 						_("by"),
 						_("unknown artist"),
@@ -1363,10 +1364,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			nextButton.show();
 			
 			//PROGRESS BAR
-			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
+			timelabel = gb.get_object("timelabel") as Gtk.Label;
+			var progbox = gb.get_object("vbox2") as Gtk.VBox;
+//			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
 			this.songProgressBar = new TrackProgressBar();
-			//playback_hbox.pack_start(songProgressBar,false,false,0);
-			songprogress_viewport.add(songProgressBar);
+			progbox.pack_start(songProgressBar, true, true, 0);
+//			songprogress_viewport.add(songProgressBar);
 			//---------------------
 
 			///BOX FOR MAIN MENU
