@@ -372,6 +372,7 @@ namespace Xnoise {
 		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
+		public bool usestop { get; set; }
 		public signal void sign_drag_over_content_area ();
 		public signal void sign_pos_changed (double fraction);
 		public signal void sign_volume_changed (double fraction);

@@ -1962,6 +1962,8 @@ XnoiseMainWindowPlayerRepeatMode xnoise_main_window_get_repeatState (XnoiseMainW
 void xnoise_main_window_set_repeatState (XnoiseMainWindow* self, XnoiseMainWindowPlayerRepeatMode value);
 gboolean xnoise_main_window_get_fullscreenwindowvisible (XnoiseMainWindow* self);
 void xnoise_main_window_set_fullscreenwindowvisible (XnoiseMainWindow* self, gboolean value);
+gboolean xnoise_main_window_get_usestop (XnoiseMainWindow* self);
+void xnoise_main_window_set_usestop (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
 XnoiseMediaBrowser* xnoise_media_browser_new (void);

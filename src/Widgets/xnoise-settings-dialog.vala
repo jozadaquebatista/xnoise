@@ -49,11 +49,12 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private CheckButton checkB_showL;
 	private CheckButton checkB_compact;
 	private CheckButton checkB_mediaBrLinebreaks;
+	private CheckButton checkB_usestop;
 //	private HBox ai_hbox;
 //	private HBox ly_hbox;
-	private bool show_album_col;
-	private bool show_length_col;
-	private bool show_trackno_col;
+//	private bool show_album_col;
+//	private bool show_length_col;
+//	private bool show_trackno_col;
 //	private ListStore ai_model;
 //	private ListStore ly_model;
 //	private TreeView ai_tv;
@@ -121,9 +122,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	private void initialize_members() {
 		//Visible Cols
-		show_length_col = (par.get_int_value("use_length_column") == 1 ? true : false);
-		show_trackno_col = (par.get_int_value("use_tracknumber_column") == 1 ? true : false);
-		show_album_col = (par.get_int_value("use_album_column") == 1 ? true : false);
+//		show_length_col = (par.get_int_value("use_length_column") == 1 ? true : false);
+//		show_trackno_col = (par.get_int_value("use_tracknumber_column") == 1 ? true : false);
+//		show_album_col = (par.get_int_value("use_album_column") == 1 ? true : false);
 		
 		//Treelines
 		if(par.get_int_value("use_treelines") > 0)
@@ -136,6 +137,12 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_compact.active = true;
 		else
 			checkB_compact.active = false;
+			
+		//use stop button
+		if(par.get_int_value("usestop") > 0)
+			checkB_usestop.active = true;
+		else
+			checkB_usestop.active = false;
 			
 		//media browser line breaks
 		if(par.get_int_value("mediabrowser_linebreaks") > 0)
@@ -182,6 +189,17 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		}
 	}
 	
+	private void on_checkbutton_usestop_clicked(Gtk.Button sender) {
+		if(this.checkB_usestop.active) {
+			par.set_int_value("usestop", 1);
+			xn.main_window.usestop = true;
+		}
+		else {
+			par.set_int_value("usestop", 0);
+			xn.main_window.usestop = false;
+		}
+	}
+	
 	private void on_checkbutton_mediabr_linebreaks_clicked(Gtk.Button sender) {
 		if(this.checkB_mediaBrLinebreaks.active) {
 			par.set_int_value("mediabrowser_linebreaks", 1);
@@ -194,16 +212,16 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	}
 	
 	private void on_ok_button_clicked() {
-		par.set_int_value("use_album_column", (show_album_col == true ? 1 : 0));
-		xn.tl.column_album_visible = show_album_col;
-		
-		// show length column
-		par.set_int_value("use_length_column", (show_length_col == true ? 1 : 0));
-		xn.tl.column_length_visible = show_length_col;
+//		par.set_int_value("use_album_column", (show_album_col == true ? 1 : 0));
+//		xn.tl.column_album_visible = show_album_col;
+//		
+//		// show length column
+//		par.set_int_value("use_length_column", (show_length_col == true ? 1 : 0));
+//		xn.tl.column_length_visible = show_length_col;
 
-		// show track number column
-		par.set_int_value("use_tracknumber_column", (show_trackno_col == true ? 1 : 0));
-		xn.tl.column_tracknumber_visible = show_trackno_col;
+//		// show track number column
+//		par.set_int_value("use_tracknumber_column", (show_trackno_col == true ? 1 : 0));
+//		xn.tl.column_tracknumber_visible = show_trackno_col;
 
 		//write priorities for lyrics providers
 //		ly_model.foreach(lyrics_list_foreach);
@@ -604,10 +622,17 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_mediaBrLinebreaks = this.get_object("checkB_mediaBrLinebreaks") as Gtk.CheckButton;
 			checkB_mediaBrLinebreaks.can_focus = false;
 			checkB_mediaBrLinebreaks.clicked.connect(this.on_checkbutton_mediabr_linebreaks_clicked);
+			checkB_mediaBrLinebreaks.label = _("use helper lines in media browser");
 			
 			checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
 			checkB_compact.can_focus = false;
 			checkB_compact.clicked.connect(this.on_checkbutton_compact_clicked);
+			checkB_compact.label = _("Compact layout");
+
+			checkB_usestop = this.get_object("checkB_usestop") as Gtk.CheckButton;
+			checkB_usestop.can_focus = false;
+			checkB_usestop.clicked.connect(this.on_checkbutton_usestop_clicked);
+			checkB_compact.label = _("Use stop button");
 
 			var okButton = this.get_object("buttonOK") as Gtk.Button;
 			okButton.can_focus = false;
@@ -617,17 +642,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			cancelButton.can_focus = false;
 			cancelButton.clicked.connect(this.on_cancel_button_clicked);
 
-//			var vizcols_label = this.get_object("vizcols_label") as Gtk.Label;
-//			vizcols_label.label = _("Visible extra columns for tracklist:");
-//			visibleColTv = this.get_object("vizcols_tv") as Gtk.TreeView;
 			var fontsize_label = this.get_object("fontsize_label") as Gtk.Label;
 			fontsize_label.label = _("Media browser fontsize:");
-			var checkB_showlines = this.get_object("checkB_showlines") as Gtk.CheckButton;
-			checkB_showlines.label = _("use helper lines in media browser");
-			var checkB_mediaBrLinebreaks = this.get_object("checkB_mediaBrLinebreaks") as Gtk.CheckButton;
-			checkB_mediaBrLinebreaks.label = _("use linebreaks in media browser");
-			var checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
-			checkB_compact.label = _("Compact layout");
+//			var checkB_showlines = this.get_object("checkB_showlines") as Gtk.CheckButton;
+//			var checkB_mediaBrLinebreaks = this.get_object("checkB_mediaBrLinebreaks") as Gtk.CheckButton;
+//			var checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
 
 			sb = this.get_object("spinbutton1") as Gtk.SpinButton;
 			sb.set_value(8.0);

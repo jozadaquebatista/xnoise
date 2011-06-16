@@ -169,6 +169,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		return ui_manager;
 	}
 	
+	private bool _usestop;
+	public bool usestop {
+		get {
+			return _usestop;
+		}
+		set {
+			if(value == true)
+				stopButton.show_all();
+			else
+				stopButton.hide();
+			_usestop = value;
+		}
+	}
+	
 	private bool _compact_layout;
 	public bool compact_layout {
 		get {
@@ -183,7 +197,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				if(a_frame_config_button != null && config_button.get_parent() == null) 
 					a_frame_config_button.add(config_button);
 				config_button.show_all();
-				stopButton.hide();
+				if(_usestop == false)
+					stopButton.hide();
 			}
 			else {
 				if(a_frame_config_button != null && config_button.get_realized()) 
@@ -193,7 +208,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					menuvbox.add(menubar);
 					menubar.show();
 				}
-				stopButton.show_all();
+				if(_usestop == true)
+					stopButton.show_all();
 			}
 		}
 	}
@@ -521,13 +537,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		switch(this.repeatState) {
 			case PlayerRepeatMode.NOT_AT_ALL : {
 				//TODO: create some other images
-				repeatimage.set_from_icon_name("xn-no-repeat", IconSize.MENU);
+				repeatimage.set_from_icon_name("xn-no-repeat", IconSize.LARGE_TOOLBAR);
 				repeatButton.set_tooltip_text(_("no repeat"));
 				//repeatImage.stock = Gtk.Stock.EXECUTE;
 				break;
 			}
 			case PlayerRepeatMode.SINGLE : {
-				repeatimage.set_from_icon_name("xn-repeat-single", IconSize.MENU);
+				repeatimage.set_from_icon_name("xn-repeat-single", IconSize.LARGE_TOOLBAR);
 				repeatButton.has_tooltip = true;
 				repeatButton.set_tooltip_text(_("repeat single"));
 //				repeatLabel.label = _("repeat single");
@@ -535,7 +551,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				break;
 			}
 			case PlayerRepeatMode.ALL : {
-				repeatimage.set_from_icon_name("xn-repeat-all", IconSize.MENU);
+				repeatimage.set_from_icon_name("xn-repeat-all", IconSize.LARGE_TOOLBAR);
 				repeatButton.has_tooltip = true;
 				repeatButton.set_tooltip_text(_("repeat all"));
 //				repeatLabel.label = _("repeat all");
@@ -543,7 +559,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				break;
 			}
 			case PlayerRepeatMode.RANDOM : {
-				repeatimage.set_from_icon_name("xn-shuffle", IconSize.MENU);
+				repeatimage.set_from_icon_name("xn-shuffle", IconSize.LARGE_TOOLBAR);
 				repeatButton.has_tooltip = true;
 				repeatButton.set_tooltip_text(_("random play"));
 //				repeatLabel.label = _("random play");
@@ -1527,6 +1543,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		config_button.clicked.connect(() => {
 			config_button_menu.popup(null, null, position_config_menu, 0, Gtk.get_current_event_time());
 		});
+		
+		if(par.get_int_value("usestop") > 0) usestop = true;
+		else usestop = false;
+
 		if(par.get_int_value("compact_layout") > 0) compact_layout = true;
 		else compact_layout = false;
 
