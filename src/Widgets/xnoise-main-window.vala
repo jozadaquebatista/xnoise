@@ -108,6 +108,29 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private static const string HIDE_LIBRARY = _("Hide Library");
 	private static const string SHOW_LIBRARY = _("Show Library");
 	
+	private bool _active_lyrics;
+	public bool active_lyrics {
+		get {
+			return _active_lyrics;
+		}
+		set {
+			if(value == true) {
+				showlyricsbuttonVid.show();
+				showlyricsbuttonTL.show();
+			}
+			else {
+				showlyricsbuttonVid.hide();
+				showlyricsbuttonTL.hide();
+			}
+			Idle.add( () => {
+				foreach(Gtk.Action a in action_group.list_actions())
+					if(a.name == "ShowLyricsAction") a.set_visible(value);
+				return false;
+			});
+			_active_lyrics = value;
+		}
+	}
+	
 	private bool media_browser_visible { 
 		get {
 			return _media_browser_visible;
@@ -636,6 +659,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			case 3_KEY: {
 					if(e.state != 0x0018) // ALT Modifier
 						return false;
+					if(active_lyrics == false)
+						return false;
 					this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
 				}
 				return true;
@@ -667,14 +692,38 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_show_video_menu_clicked() {
+		Idle.add( () => {
+			buffer_last_page = TrackListNoteBookTab.VIDEO;
+			if(aimage_timeout != 0) {
+				Source.remove(aimage_timeout);
+				aimage_timeout = 0;
+			}
+			return false;
+		});
 		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 	}
 
 	private void on_show_tracklist_menu_clicked() {
+		Idle.add( () => {
+			buffer_last_page = TrackListNoteBookTab.TRACKLIST;
+			if(aimage_timeout != 0) {
+				Source.remove(aimage_timeout);
+				aimage_timeout = 0;
+			}
+			return false;
+		});
 		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 	}
 
 	private void on_show_lyrics_menu_clicked() {
+		Idle.add( () => {
+			buffer_last_page = TrackListNoteBookTab.LYRICS;
+			if(aimage_timeout != 0) {
+				Source.remove(aimage_timeout);
+				aimage_timeout = 0;
+			}
+			return false;
+		});
 		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
 	}
 
@@ -1297,7 +1346,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			showlyricsbuttonTL.can_focus     = false;
 			showlyricsbuttonTL.set_relief(ReliefStyle.HALF);
 			showlyricsbuttonTL.clicked.connect(this.on_show_lyrics_button_clicked);
+			showlyricsbuttonTL.set_no_show_all(true);
+			showlyricsbuttonTL.hide();
 			showlyricsbuttonVid              = gb.get_object("showLyricsbuttonv") as Gtk.Button;
+			showlyricsbuttonVid.set_no_show_all(true);
 			var lylabel1                     = gb.get_object("label9") as Gtk.Label;
 			lylabel1.xalign                  = 0.1f;
 			lylabel1.label                   = SHOWLYRICS;
@@ -1307,6 +1359,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			showlyricsbuttonVid.can_focus    = false;
 			showlyricsbuttonVid.set_relief(ReliefStyle.HALF);
 			showlyricsbuttonVid.clicked.connect(this.on_show_lyrics_button_clicked);
+			showlyricsbuttonVid.hide();
 			//--------------------
 			var buttons_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 			buttons_sizegroup.add_widget(showvideobuttonTL);
@@ -1569,8 +1622,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {
 		aimage_timeout = Timeout.add(300, () => {
 			buffer_last_page = this.tracklistnotebook.get_current_page();
-//			if(global.image_path_large != null)
-				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+			//print("ai_ebox_enter buffer_last_page: %d\n", buffer_last_page);
+			//if(global.image_path_large != null)
+			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			this.aimage_timeout = 0;
 			return false;
 		});

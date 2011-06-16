@@ -54,6 +54,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		typeof(Xnoise.Item?)//ITEM
 	};
 
+	private static const int VIDEOTHUMBNAILSIZE = 40;
 	public string searchtext = "";
 	private unowned IconTheme theme = null;
 	private Gdk.Pixbuf artist_pixb;
@@ -866,7 +867,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				if(thumbnail_available(td.item.uri, out thumb)) {
 					try {
 						if(thumb != null) {
-							thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), 30, 30, true);
+							thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), VIDEOTHUMBNAILSIZE, VIDEOTHUMBNAILSIZE, true);
 							has_thumbnail = true;
 						}
 					}
@@ -1111,7 +1112,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					if(thumbnail_available(td.item.uri, out thumb)) {
 						try {
 							if(thumb != null) {
-								thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), 30, 30, true);
+								thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), VIDEOTHUMBNAILSIZE, VIDEOTHUMBNAILSIZE, true);
 								has_thumbnail = true;
 							}
 						}

@@ -56,7 +56,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 
 	private void on_uri_changed(string? uri) {
 		string current_uri = uri;
-		Idle.add( () => {
+		Timeout.add(200, () => {
 			global.check_image_for_current_track();
 			if(global.image_path_small == null) {
 				File f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");

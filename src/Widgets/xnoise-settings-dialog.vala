@@ -599,22 +599,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			dialog.set_transient_for(xn.main_window);
 			this.dialog.set_modal(true);
 			
-//			ai_up_button = this.get_object("ai_up_button") as Gtk.Button;
-//			ai_up_button.can_focus = false;
-//			ai_up_button.clicked.connect(this.on_ai_up_button_clicked);
-
-//			ai_down_button = this.get_object("ai_down_button") as Gtk.Button;
-//			ai_down_button.can_focus = false;
-//			ai_down_button.clicked.connect(this.on_ai_down_button_clicked);
-
-//			ly_up_button = this.get_object("ly_up_button") as Gtk.Button;
-//			ly_up_button.can_focus = false;
-//			ly_up_button.clicked.connect(this.on_ly_up_button_clicked);
-
-//			ly_down_button = this.get_object("ly_down_button") as Gtk.Button;
-//			ly_down_button.can_focus = false;
-//			ly_down_button.clicked.connect(this.on_ly_down_button_clicked);
-
 			checkB_showL = this.get_object("checkB_showlines") as Gtk.CheckButton;
 			checkB_showL.can_focus = false;
 			checkB_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
@@ -632,7 +616,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_usestop = this.get_object("checkB_usestop") as Gtk.CheckButton;
 			checkB_usestop.can_focus = false;
 			checkB_usestop.clicked.connect(this.on_checkbutton_usestop_clicked);
-			checkB_compact.label = _("Use stop button");
+			checkB_usestop.label = _("Use stop button");
 
 			var okButton = this.get_object("buttonOK") as Gtk.Button;
 			okButton.can_focus = false;
@@ -644,17 +628,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 			var fontsize_label = this.get_object("fontsize_label") as Gtk.Label;
 			fontsize_label.label = _("Media browser fontsize:");
-//			var checkB_showlines = this.get_object("checkB_showlines") as Gtk.CheckButton;
-//			var checkB_mediaBrLinebreaks = this.get_object("checkB_mediaBrLinebreaks") as Gtk.CheckButton;
-//			var checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
 
 			sb = this.get_object("spinbutton1") as Gtk.SpinButton;
 			sb.set_value(8.0);
 			sb.changed.connect(this.on_mb_font_changed);
 
-//			ai_hbox = this.get_object("ai_hbox") as Gtk.HBox;
-//			ly_hbox = this.get_object("ly_hbox") as Gtk.HBox;
-			
 			scrollWinPlugins = this.get_object("scrollWinPlugins") as Gtk.ScrolledWindow;
 
 			notebook = this.get_object("notebook1") as Gtk.Notebook;

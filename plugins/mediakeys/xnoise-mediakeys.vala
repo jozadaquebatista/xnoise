@@ -76,7 +76,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		}
 		catch(GLib.IOError e) {
 			print("Mediakeys error: %s", e.message);
-			print("Mediakeys: Try to use x keybindings instead of gnome-settings-daemon's dbus service'\n");
+			print("Mediakeys: Using x keybindings instead of gnome-settings-daemon's dbus service'\n");
 			gmk = null;
 			if(!setup_x_keys())
 				if(this.owner != null)
@@ -93,7 +93,7 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 		}
 		catch(Error e) {
 			//print("Mediakeys error: %s", e.message);
-			print("Mediakeys: Try to use x keybindings instead of gnome-settings-daemon's dbus service'\n");
+			print("Mediakeys: Using x keybindings instead of gnome-settings-daemon's dbus service'\n");
 			gmk = null;
 			if(!setup_x_keys())
 				if(this.owner != null)

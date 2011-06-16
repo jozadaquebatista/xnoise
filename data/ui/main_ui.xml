@@ -37,11 +37,11 @@
 			<menuitem action="OpenLocationAction"/>
 			<separator />
 			<menuitem action="AddRemoveAction"/>
+			<menuitem action="SettingsAction"/>
+			<separator />
 			<menuitem action="ClearTrackListAction"/>
 			<separator />
-			<menuitem action="SettingsAction"/>
 			<menuitem action="AboutAction"/>
-			<separator/>
 			<menuitem action="QuitAction"/>
 		</menu>
 	</menubar>

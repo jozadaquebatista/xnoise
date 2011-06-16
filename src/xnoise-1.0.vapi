@@ -369,6 +369,7 @@ namespace Xnoise {
 		public void stop ();
 		public void toggle_fullscreen ();
 		public void toggle_window_visbility ();
+		public bool active_lyrics { get; set; }
 		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
