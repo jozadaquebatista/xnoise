@@ -627,10 +627,10 @@ public class Xnoise.DbBrowser {
 //	}
 
 	private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =
-		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND al.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY t.tracknumber ASC, t.title ASC";
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND al.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) GROUP BY LOWER(t.title) ORDER BY t.tracknumber ASC, t.title ASC";
 	
 	private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
-		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND al.id = ? ORDER BY t.tracknumber ASC, t.title ASC";
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND al.id = ? GROUP BY LOWER(t.title) ORDER BY t.tracknumber ASC, t.title ASC";
 	
 	public TrackData[]? get_trackdata_by_albumid(ref string searchtext, int32 id) {
 		TrackData[] val = {};
