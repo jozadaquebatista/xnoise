@@ -45,6 +45,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 	private const string USE_LEN_COL     = "use_length_column";
 	private const string USE_TR_NO_COL   = "use_tracknumber_column";
+	private const string USE_ARTIST_COL  = "use_artist_column";
 	private const string USE_ALBUM_COL   = "use_album_column";
 	private const string USE_GENRE_COL   = "use_genre_column";
 	private const string USE_YEAR_COL    = "use_year_column";
@@ -79,6 +80,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 		set { this.columnTracknumber.visible = value; }
 	}
 	
+	public bool column_artist_visible { 
+		get { return this.columnArtist.visible; }
+		set { this.columnArtist.visible = value; }
+	}
+
 	public bool column_album_visible { 
 		get { return this.columnAlbum.visible; }
 		set { this.columnAlbum.visible = value; }
@@ -1030,7 +1036,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnAlbum.reorderable = true;
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
-		
 		if(par.get_int_value(USE_ALBUM_COL) == 1) {
 			columnAlbum.visible = true;
 		}
@@ -1052,6 +1057,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnArtist.reorderable = true;
 		this.insert_column(columnArtist, -1);
 		variable_col_count++;
+		if(par.get_int_value(USE_ARTIST_COL) == 1) {
+			columnArtist.visible = true;
+		}
+		else {
+			columnArtist.visible = false;
+		}
 
 		// LENGTH
 		renderer = new CellRendererText();
@@ -1158,6 +1169,19 @@ public class Xnoise.TrackList : TreeView, IParams {
 		});
 		rightmenu.append(menu_item);
 		
+		// ARTIST
+		menu_item = new CheckMenuItem.with_label(_("Artist"));
+		menu_item.set_active((par.get_int_value("use_artist_column") == 1 ? true : false));
+		menu_item.toggled.connect( (s) => {
+			par.set_int_value("use_artist_column", (s.get_active() == true ? 1 : 0));
+			this.column_artist_visible = s.get_active();
+			Idle.add( () => {
+				handle_resize();
+				return false;
+			});
+		});
+		rightmenu.append(menu_item);
+
 		// ALBUM
 		menu_item = new CheckMenuItem.with_label(_("Album"));
 		menu_item.set_active((par.get_int_value("use_album_column") == 1 ? true : false));

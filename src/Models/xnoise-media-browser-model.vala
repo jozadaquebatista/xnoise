@@ -813,17 +813,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		return false;
 	}
 	
-	private bool thumbnail_available(string uri, out File? _thumb) {
-		string md5string = Checksum.compute_for_string(ChecksumType.MD5, uri);
-		File thumb = File.new_for_path(GLib.Path.build_filename(Environment.get_home_dir(), ".thumbnails", "normal", md5string + ".png"));
-		if(thumb.query_exists(null)) {
-			_thumb = thumb;
-			return true;
-		}
-		_thumb = null;
-		return false;
-	}
-	
 	private bool handle_videos(Worker.Job job) {
 		int32 cnt = db_browser.count_videos(ref searchtext);
 		if(cnt == 0)

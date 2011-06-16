@@ -66,7 +66,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button showvideobuttonLY;
 	private Button repeatButton;
 	private int buffer_last_page;
-	private Label repeatLabel;
+	private Image repeatimage; 
+//	private Label repeatLabel;
 	public Label timelabel;
 	private VBox menuvbox;
 	private VBox mainvbox;
@@ -520,22 +521,32 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		switch(this.repeatState) {
 			case PlayerRepeatMode.NOT_AT_ALL : {
 				//TODO: create some other images
-				repeatLabel.label = _("no repeat");
+				repeatimage.set_from_icon_name("xn-no-repeat", IconSize.MENU);
+				repeatButton.set_tooltip_text(_("no repeat"));
 				//repeatImage.stock = Gtk.Stock.EXECUTE;
 				break;
 			}
 			case PlayerRepeatMode.SINGLE : {
-				repeatLabel.label = _("repeat single");
+				repeatimage.set_from_icon_name("xn-repeat-single", IconSize.MENU);
+				repeatButton.has_tooltip = true;
+				repeatButton.set_tooltip_text(_("repeat single"));
+//				repeatLabel.label = _("repeat single");
 				//repeatImage.stock = Gtk.Stock.REDO;
 				break;
 			}
 			case PlayerRepeatMode.ALL : {
-				repeatLabel.label = _("repeat all");
+				repeatimage.set_from_icon_name("xn-repeat-all", IconSize.MENU);
+				repeatButton.has_tooltip = true;
+				repeatButton.set_tooltip_text(_("repeat all"));
+//				repeatLabel.label = _("repeat all");
 				//repeatImage.stock = Gtk.Stock.REFRESH;
 				break;
 			}
 			case PlayerRepeatMode.RANDOM : {
-				repeatLabel.label = _("random play");
+				repeatimage.set_from_icon_name("xn-shuffle", IconSize.MENU);
+				repeatButton.has_tooltip = true;
+				repeatButton.set_tooltip_text(_("random play"));
+//				repeatLabel.label = _("random play");
 				//repeatImage.stock = Gtk.Stock.JUMP_TO;
 				break;
 			}
@@ -1293,14 +1304,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			repeatButton                = gb.get_object("repeatButton") as Gtk.Button;
 			repeatButton.can_focus      = false;
 			repeatButton.clicked.connect(this.on_repeat_button_clicked);
-			repeatLabel                 = gb.get_object("repeatLabel") as Gtk.Label;
+			repeatimage                 = gb.get_object("repeatimage") as Gtk.Image;
+//			repeatLabel                 = gb.get_object("repeatLabel") as Gtk.Label;
 			//repeatImage                 = gb.get_object("repeatImage01") as Gtk.Image;
 			
 			//give the button a slim appearance
-			RcStyle repeat_button_style = new RcStyle();
-			repeat_button_style.xthickness = 0;
-			repeat_button_style.ythickness = 0;
-			repeatButton.modify_style(repeat_button_style);			
+//			RcStyle repeat_button_style = new RcStyle();
+//			repeat_button_style.xthickness = 0;
+//			repeat_button_style.ythickness = 0;
+//			repeatButton.modify_style(repeat_button_style);
 			
 			//--------------------
 
@@ -1535,13 +1547,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 	
 	private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {
-		aimage_timeout = Timeout.add_seconds(1, () => {
-					buffer_last_page = this.tracklistnotebook.get_current_page();
-					if(global.image_path_large != null)
-						this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
-					this.aimage_timeout = 0;
-					return false;
-				});
+		aimage_timeout = Timeout.add(300, () => {
+			buffer_last_page = this.tracklistnotebook.get_current_page();
+//			if(global.image_path_large != null)
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+			this.aimage_timeout = 0;
+			return false;
+		});
 		return false;
 	}
 }

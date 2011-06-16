@@ -331,7 +331,18 @@ namespace Xnoise {
 		                           );
 		return f;
 	}
-
+	
+	public static bool thumbnail_available(string uri, out File? _thumb) {
+		string md5string = Checksum.compute_for_string(ChecksumType.MD5, uri);
+		File thumb = File.new_for_path(GLib.Path.build_filename(Environment.get_home_dir(), ".thumbnails", "normal", md5string + ".png"));
+		if(thumb.query_exists(null)) {
+			_thumb = thumb;
+			return true;
+		}
+		_thumb = null;
+		return false;
+	}
+	
 	public static string get_stream_uri(string playlist_uri) {
 		//print("playlist_uri: %s\n", playlist_uri);
 		var file = File.new_for_uri(playlist_uri);

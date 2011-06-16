@@ -567,6 +567,7 @@ namespace Xnoise {
 		public void remove_selected_rows ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
 		public bool column_album_visible { get; set; }
+		public bool column_artist_visible { get; set; }
 		public bool column_genre_visible { get; set; }
 		public bool column_length_visible { get; set; }
 		public bool column_tracknumber_visible { get; set; }
@@ -880,6 +881,8 @@ namespace Xnoise {
 	public static string remove_suffix_from_filename (string? val);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static string replace_underline_with_blank_encoded (string value);
+	[CCode (cheader_filename = "xnoise.h")]
+	public static bool thumbnail_available (string uri, out GLib.File? _thumb);
 }
 [CCode (cprefix = "Gst", lower_case_cprefix = "gst_")]
 namespace Gst {

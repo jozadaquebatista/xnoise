@@ -44,7 +44,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	public AlbumImage() {
 		xn = Main.instance;
 		this.set_size_request(SIZE, SIZE);
-		this.set_from_stock(Gtk.Stock.CDROM, Gtk.IconSize.LARGE_TOOLBAR);
+		this.set_from_icon_name("xnoise-panel", Gtk.IconSize.DIALOG);
 		
 		loader = new AlbumImageLoader();
 		loader.sign_fetched.connect(on_album_image_fetched);
@@ -108,6 +108,10 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			_album  = escape_album_for_local_folder_search(_artist, _album_raw );
 		}
 		else {
+			File? thumb = null;
+			if(thumbnail_available(global.current_uri, out thumb)) {
+				set_image_via_idle(thumb.get_path());
+			}
 			return;
 		}
 		
@@ -162,7 +166,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	
 	public void load_default_image() {
 		this.set_size_request(SIZE, SIZE);
-		this.set_from_stock(Gtk.Stock.CDROM, Gtk.IconSize.LARGE_TOOLBAR);
+		this.set_from_icon_name("xnoise-panel", Gtk.IconSize.DIALOG);
 	}
 
 	private void set_albumimage_from_path(string? image_path) {

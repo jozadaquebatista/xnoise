@@ -54,7 +54,7 @@
       <object class="GtkHBox" id="hbox1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="spacing">4</property>
+        <property name="spacing">6</property>
         <child>
           <object class="GtkAspectFrame" id="aFramePlayerControls">
             <property name="visible">True</property>
@@ -94,7 +94,7 @@
             <property name="can_focus">False</property>
             <property name="border_width">2</property>
             <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="shadow_type">in</property>
             <property name="obey_child">False</property>
             <child>
               <object class="GtkHBox" id="aibox">
@@ -388,7 +388,6 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="repeatButton">
-                            <property name="width_request">120</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -396,13 +395,10 @@
                             <property name="relief">none</property>
                             <property name="focus_on_click">False</property>
                             <child>
-                              <object class="GtkLabel" id="repeatLabel">
+                              <object class="GtkImage" id="repeatimage">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">no repeat</property>
-                                <attributes>
-                                  <attribute name="size" value="9000"/>
-                                </attributes>
+                                <property name="stock">gtk-revert-to-saved</property>
                               </object>
                             </child>
                           </object>
