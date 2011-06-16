@@ -84,10 +84,8 @@ msgid "Leave fullscreen"
 msgstr "Sair de ecrã completo"
 
 #: ../src/Player/xnoise-gst-player.vala:176
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../src/Player/xnoise-gst-player.vala:548
 msgid "Subtitle #"
@@ -128,28 +126,27 @@ msgstr ""
 #: ../src/xnoise.vala:57
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
-msgstr ""
+msgstr "Xnoise é um reprodutor multimédia para GTK+"
 
 #: ../src/xnoise.vala:57
 msgid "It uses the gstreamer framework."
-msgstr ""
+msgstr "Utiliza a infraestrutura gstreamer"
 
 #: ../src/xnoise.vala:57
 msgid "More information on the project website:"
-msgstr ""
+msgstr "Mais informações na página web:"
 
 #: ../src/xnoise.vala:65
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
 
 #: ../src/xnoise.vala:128
 msgid "Using the running instance of xnoise!\n"
-msgstr ""
+msgstr "Utilizar a instância atual do xnoise!\n"
 
 #: ../src/xnoise.vala:131
 msgid "Showing the running instance of xnoise.\n"
-msgstr ""
+msgstr "Mostrando a intância atual do xnoise!\n"
 
 #: ../src/Widgets/xnoise-main-window.vala:41
 msgid "Now Playing"
@@ -232,14 +229,12 @@ msgid "Go to the tracklist."
 msgstr "Ir para a lista de faixas"
 
 #: ../src/Widgets/xnoise-main-window.vala:154
-#, fuzzy
 msgid "_Now Playing"
-msgstr "A reproduzir"
+msgstr "A reprodu_zir"
 
 #: ../src/Widgets/xnoise-main-window.vala:154
-#, fuzzy
 msgid "Go to the now playing screen in the main window."
-msgstr "Ir para o ecrã de vídeo da janela principal"
+msgstr "Ir para o ecrã de reprodução na janela principal"
 
 #: ../src/Widgets/xnoise-main-window.vala:155
 msgid "_Lyrics"
@@ -262,12 +257,8 @@ msgid "Add media"
 msgstr "Adicionar multimédia"
 
 #: ../src/Widgets/xnoise-main-window.vala:428
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
-"a coleção?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para a coleção?"
 
 #. TODO: create some other images
 #: ../src/Widgets/xnoise-main-window.vala:522
@@ -360,7 +351,7 @@ msgstr "A carregar..."
 
 #: ../src/Utils/xnoise-media-importer.vala:490
 msgid "Finished reading. Updating Library"
-msgstr ""
+msgstr "Terminado. A atualizar coleção..."
 
 #: ../src/Widgets/xnoise-settings-dialog.vala:624
 msgid "Media browser fontsize:"
@@ -400,45 +391,37 @@ msgid "Album:"
 msgstr "Álbum:"
 
 #: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:212
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Por favor, aguarde o preenchimento da coleção. Cancele se não quiser "
-"aguardar."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Por favor, aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
 
 #: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:216
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #: ../src/Widgets/xnoise-tracklist.vala:994
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #. ALBUM
 #: ../src/Widgets/xnoise-tracklist.vala:1010
 #: ../src/Widgets/xnoise-tracklist.vala:1103
-#, fuzzy
 msgid "Album"
-msgstr "Álbum:"
+msgstr "Álbum"
 
 #: ../src/Widgets/xnoise-tracklist.vala:1032
-#, fuzzy
 msgid "Artist"
-msgstr "Artista:"
+msgstr "Artista"
 
 #. LENGTH
 #: ../src/Widgets/xnoise-tracklist.vala:1045
 #: ../src/Widgets/xnoise-tracklist.vala:1116
 msgid "Length"
-msgstr ""
+msgstr "Duração"
 
 #. TRACKNUMBER
 #: ../src/Widgets/xnoise-tracklist.vala:1090
 msgid "Tracknumber"
-msgstr ""
+msgstr "Número da faixa"
 
 #: ../src/TrayIcon/xnoise-tray-icon.vala:69
 msgid "Play/Pause"
