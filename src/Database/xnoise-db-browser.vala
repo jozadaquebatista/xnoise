@@ -65,9 +65,9 @@ public class Xnoise.DbBrowser {
 	private static const string STMT_GET_LASTUSED =
 		"SELECT uri FROM lastused";
 	private static const string STMT_GET_VIDEO_DATA =
-		"SELECT DISTINCT i.title, i.mediatype, i.id, u.name FROM items i, uris u WHERE i.uri = u.id AND title LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
+		"SELECT DISTINCT i.title, i.mediatype, i.id, u.name FROM items i, uris u WHERE i.uri = u.id AND title LIKE ? AND mediatype = ? GROUP BY LOWER(i.title) ORDER BY LOWER(i.title) DESC";
 	private static const string STMT_GET_VIDEOS =
-		"SELECT DISTINCT title FROM items WHERE title LIKE ? AND mediatype = ? ORDER BY LOWER(title) DESC";
+		"SELECT DISTINCT title FROM items WHERE title LIKE ? AND mediatype = ? GROUP BY LOWER(title) ORDER BY LOWER(title) DESC";
 	private static const string STMT_GET_ITEMS =
 		"SELECT DISTINCT t.title FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND t.title LIKE ? ORDER BY t.tracknumber DESC, LOWER(t.title) DESC";
 	private static const string STMT_GET_URIS = 

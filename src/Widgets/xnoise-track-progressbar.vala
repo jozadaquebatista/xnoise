@@ -100,7 +100,7 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		return false;
 	}
 
-	public double invert_if_rtl(double to_invert) {
+	private double invert_if_rtl(double to_invert) {
 		if(Widget.get_default_direction() == TextDirection.RTL)
 			return 1.0 - to_invert;
 		return to_invert;

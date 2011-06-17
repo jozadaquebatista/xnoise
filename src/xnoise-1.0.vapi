@@ -616,7 +616,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackProgressBar : Gtk.ProgressBar {
 		public TrackProgressBar ();
-		public double invert_if_rtl (double to_invert);
 		public void set_value (uint pos, uint len);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
