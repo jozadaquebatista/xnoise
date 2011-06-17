@@ -2020,6 +2020,7 @@ gboolean xnoise_track_list_get_column_year_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_year_visible (XnoiseTrackList* self, gboolean value);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_new (void);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_construct (GType object_type);
+gdouble xnoise_track_progress_bar_invert_if_rtl (XnoiseTrackProgressBar* self, gdouble to_invert);
 void xnoise_track_progress_bar_set_value (XnoiseTrackProgressBar* self, guint pos, guint len);
 XnoiseVideoScreen* xnoise_video_screen_new (XnoiseGstPlayer* _player);
 XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type, XnoiseGstPlayer* _player);
