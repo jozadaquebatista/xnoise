@@ -56,7 +56,7 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 
 		//this.set_text("00:00 / 00:00");
 //xn.main_window.timelabel.label = "00:00 / 00:00";
-		this.fraction = 0.0;
+		this.fraction = invert_if_rtl(0.0);
 	}
 
 	private bool on_press(Gdk.EventButton e) {
@@ -84,8 +84,8 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 			xn.gPl.seeking = false;
 			if(thisFraction < 0.0) thisFraction = 0.0;
 			if(thisFraction > 1.0) thisFraction = 1.0;
-			this.set_fraction(thisFraction);
-			this.xn.main_window.sign_pos_changed(thisFraction);
+			this.set_fraction(invert_if_rtl(thisFraction));
+			this.xn.main_window.sign_pos_changed(invert_if_rtl(thisFraction));
 
 			set_value((uint)((thisFraction * xn.gPl.length_time) / 1000000), (uint)(xn.gPl.length_time / 1000000));
 		}
@@ -98,7 +98,13 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		}
 		return false;
 	}
-	
+
+	public double invert_if_rtl(double to_invert) {
+		if(Widget.get_default_direction() == TextDirection.RTL)
+			return 1.0 - to_invert;
+		return to_invert;
+	}
+
 	private bool on_motion_notify(Gdk.EventMotion e) {
 		double thisFraction;
 		double mouse_x, mouse_y;
@@ -111,8 +117,8 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		if(thisFraction < 0.0) thisFraction = 0.0;
 		if(thisFraction > 1.0) thisFraction = 1.0;
 
-		this.set_fraction(thisFraction);
-		this.xn.main_window.sign_pos_changed(thisFraction);
+		this.set_fraction(invert_if_rtl(thisFraction));
+		this.xn.main_window.sign_pos_changed(invert_if_rtl(thisFraction));
 
 		return false;
 	}
@@ -131,7 +137,7 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 			double fraction = (double)pos/(double)len;
 			if(fraction<0.0) fraction = 0.0;
 			if(fraction>1.0) fraction = 1.0;
-			this.set_fraction(fraction);
+			this.set_fraction(invert_if_rtl(fraction));
 
 			this.set_sensitive(true);
 
@@ -144,7 +150,7 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 //			this.set_text(timeinfo);
 		}
 		else {
-			this.set_fraction(0.0);
+			this.set_fraction(invert_if_rtl(0.0));
 //			this.set_text("00:00 / 00:00");
 xn.main_window.timelabel.label = "00:00 / 00:00";
 			this.set_sensitive(false);

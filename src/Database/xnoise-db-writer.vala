@@ -680,7 +680,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	private static const string STMT_UPDATE_TITLE = "UPDATE items SET artist=?, album=?, title=? WHERE id=?";
-	public bool update_title(int32 id, ref TrackData td) {
+	public bool update_title(ref TrackData td) {
 		int artist_id = handle_artist(ref td.artist, true);
 
 		if(artist_id == -1) {
@@ -697,10 +697,10 @@ public class Xnoise.DbWriter : GLib.Object {
 		
 		stmt.reset();
 		//print("%d %d %s %d\n", artist_id, album_id, td.title, id);
-		if(stmt.bind_int (1, artist_id) != Sqlite.OK ||
-		   stmt.bind_int (2, album_id)  != Sqlite.OK ||
-		   stmt.bind_text(3, td.title)  != Sqlite.OK ||
-		   stmt.bind_int (4, id)        != Sqlite.OK) {
+		if(stmt.bind_int (1, artist_id)     != Sqlite.OK ||
+		   stmt.bind_int (2, album_id)      != Sqlite.OK ||
+		   stmt.bind_text(3, td.title)      != Sqlite.OK ||
+		   stmt.bind_int (4, td.item.db_id) != Sqlite.OK) {
 			this.db_error();
 			return false;
 		}

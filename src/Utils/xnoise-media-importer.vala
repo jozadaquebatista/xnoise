@@ -79,15 +79,15 @@ public class Xnoise.MediaImporter : GLib.Object {
 		return false;
 	}
 
-	internal void update_item_tag(int item_id, ref TrackData td) {
+	internal void update_item_tag(ref TrackData td) {
 		if(global.media_import_in_progress == true)
 			return;
 		
-		db_writer.begin_transaction();
+//		db_writer.begin_transaction();
 		
-		db_writer.update_title(item_id, ref td);	
+		db_writer.update_title(ref td);	
 			
-		db_writer.commit_transaction();
+//		db_writer.commit_transaction();
 	}
 	
 	internal void update_artist_name(string old_name, string name) {

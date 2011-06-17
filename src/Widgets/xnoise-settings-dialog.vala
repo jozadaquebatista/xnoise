@@ -606,7 +606,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_mediaBrLinebreaks = this.get_object("checkB_mediaBrLinebreaks") as Gtk.CheckButton;
 			checkB_mediaBrLinebreaks.can_focus = false;
 			checkB_mediaBrLinebreaks.clicked.connect(this.on_checkbutton_mediabr_linebreaks_clicked);
-			checkB_mediaBrLinebreaks.label = _("use helper lines in media browser");
+			checkB_mediaBrLinebreaks.label = _("use linebreaks in media browser");
 			
 			checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
 			checkB_compact.can_focus = false;

@@ -119,7 +119,7 @@ namespace Xnoise {
 		public bool insert_title (ref Xnoise.TrackData td);
 		public void register_change_callback (Xnoise.DbWriter.ChangeNotificationCallback cb);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
-		public bool update_title (int32 id, ref Xnoise.TrackData td);
+		public bool update_title (ref Xnoise.TrackData td);
 		public int uri_entry_exists (string uri);
 		public void write_final_tracks_to_db (string[] final_tracklist) throws GLib.Error;
 		public bool in_transaction { get; }
@@ -752,8 +752,6 @@ namespace Xnoise {
 	[CCode (type_id = "XNOISE_TYPE_ITEM", cheader_filename = "xnoise.h")]
 	public struct Item {
 		public Xnoise.ItemType type;
-		public int32 artist_id;
-		public int32 album_id;
 		public int32 db_id;
 		public string? uri;
 		public string? text;

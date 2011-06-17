@@ -74,7 +74,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 //			model.get_iter(out iter, path);
 //			model.get(iter, MediaBrowserModel.Column.DB_ID, out db_id);
 		Worker.Job job;
-		job = new Worker.Job(Worker.ExecutionType.ONCE, this.query_trackdata_job);
+		job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.query_trackdata_job);
 		job.item = item;
 		db_worker.push_job(job);
 	}
@@ -191,7 +191,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		bool retval = tw.write_tag(f, tdx); // maybe use uri stored in td ?
 		// TODO: check extension on fail
 		if(retval) { // success
-			media_importer.update_item_tag(tdx.item.db_id, ref tdx);
+			media_importer.update_item_tag(ref tdx);
 				
 			//put into mediabrowser
 			Idle.add( () => {
