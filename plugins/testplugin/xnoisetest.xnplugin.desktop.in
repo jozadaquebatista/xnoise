@@ -1,5 +1,5 @@
 [XnoisePlugin]
-_name=Test
+name=Test
 module=xnoisetest
 _description=Demo plugin for xnoise
 website=http://code.google.com/p/xnoise/

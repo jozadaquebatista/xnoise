@@ -1,5 +1,5 @@
 [XnoisePlugin]
-_name=notifications
+name=notifications
 module=notifications
 _description=Show notifications one track change
 website=http://code.google.com/p/xnoise/

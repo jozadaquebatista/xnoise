@@ -1,5 +1,5 @@
 [XnoisePlugin]
-_name=LastfmCovers
+name=LastfmCovers
 module=LastfmCovers
 _description=Load album covers from lastfm
 website=http://code.google.com/p/xnoise/

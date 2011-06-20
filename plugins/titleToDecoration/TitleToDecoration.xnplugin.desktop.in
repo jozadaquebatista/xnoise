@@ -1,5 +1,5 @@
 [XnoisePlugin]
-_name=TitleToDecoration
+name=TitleToDecoration
 module=TitleToDecoration
 _description=Set the window name to the current title
 website=http://code.google.com/p/xnoise/

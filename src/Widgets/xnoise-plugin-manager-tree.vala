@@ -150,7 +150,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				kf.load_from_file(s, KeyFileFlags.NONE);
 				if(!kf.has_group(group))
 					continue;
-				name        = kf.get_locale_string(group, "name"); //TODO: Write this data into cell; maybe info button?
+				name        = kf.get_string(group, "name"); //TODO: Write this data into cell; maybe info button?
 				description = kf.get_locale_string(group, "description");
 				module      = kf.get_string(group, "module");
 				icon        = kf.get_string(group, "icon");

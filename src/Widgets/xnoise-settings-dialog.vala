@@ -634,6 +634,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			sb.changed.connect(this.on_mb_font_changed);
 
 			scrollWinPlugins = this.get_object("scrollWinPlugins") as Gtk.ScrolledWindow;
+			scrollWinPlugins.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
 
 			notebook = this.get_object("notebook1") as Gtk.Notebook;
 

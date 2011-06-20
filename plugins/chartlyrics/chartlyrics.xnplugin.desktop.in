@@ -1,5 +1,5 @@
 [XnoisePlugin]
-_name=Chartlyrics
+name=Chartlyrics
 module=chartlyrics
 _description=Load lyrics from chartlyrics.com
 website=http://code.google.com/p/xnoise/

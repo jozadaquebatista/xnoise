@@ -1,5 +1,5 @@
 [XnoisePlugin]
-_name=CyclicSaveState
+name=CyclicSaveState
 module=CyclicSaveState
 _description=Always keep the current state of xnoise
 website=http://code.google.com/p/xnoise/

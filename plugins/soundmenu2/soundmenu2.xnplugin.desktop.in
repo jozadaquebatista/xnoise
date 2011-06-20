@@ -1,5 +1,5 @@
 [XnoisePlugin]
-_name=soundmenu2
+name=soundmenu2
 module=soundmenu2
 _description=Use ayatana soundmenu
 website=http://code.google.com/p/xnoise/
