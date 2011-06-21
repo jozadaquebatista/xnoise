@@ -404,7 +404,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		db_worker.push_job(xjob);
 		if(job.items.length < LIMIT) {
 			print("got %d tracks for tracklist\n", job.big_counter[0]);
-			userinfo.popdown(msg_id);
+			if(userinfo != null)
+				userinfo.popdown(msg_id);
 			return false;
 		}
 		else {
