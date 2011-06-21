@@ -152,9 +152,11 @@ public class Xnoise.MediaImporter : GLib.Object {
 	private int job_count = 0;
 
 	internal bool write_final_tracks_to_db_job(Worker.Job job) {
-		string[] final_tracklist = (string[])job.get_arg("final_tracklist");
+//		string[] final_tracklist = (string[])job.get_arg("final_tracklist");
+		if(job.items.length == 0)
+			return false;
 		try {
-			db_writer.write_final_tracks_to_db(final_tracklist);
+			db_writer.write_final_tracks_to_db(job);
 		}
 		catch(Error err) {
 			print("%s\n", err.message);

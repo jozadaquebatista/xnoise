@@ -244,24 +244,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			(val) => { this.current_volume = val; }
 		);
 		create_widgets();
-
+		
 		//initialization of videoscreen
 		initialize_video_screen();
-
+		
 		//initialize screen saver management
 		ssm = new ScreenSaverManager();
-
+		
 		//restore last state
-		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.add_lastused_titles_to_tracklist);
+		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.restore_lastused_job);
 		db_worker.push_job(job);
-
+	
 		active_notifier = this.notify["is-active"].connect(buffer_position);
 		this.notify["repeatState"].connect(on_repeatState_changed);
 		this.notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
 		global.notify["media-import-in-progress"].connect(on_media_import_notify);
-
+		
 		buffer_last_page = 0;
-
+		
 		global.caught_eos_from_player.connect(on_caught_eos_from_player);
 		global.tag_changed.connect(this.set_displayed_title);
 		xn.gPl.sign_video_playing.connect( () => { 
@@ -353,111 +353,69 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			ssm.uninhibit();
 		}
 	}
+	
+	private uint msg_id = 0;
+	private bool restore_lastused_job(Worker.Job xjob) {
+		uint lastused_cnt = 0;
+		if((lastused_cnt = db_browser.count_lastused_items()) > 1000) {
+			Timeout.add(200, () => {
+				msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+				                        UserInfo.ContentClass.INFO,
+				                        _("Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower.".printf(lastused_cnt)),
+				                        false,
+				                        4,
+				                        null);
+				return false;
+			});
+		}
+		var job = new Worker.Job(Worker.ExecutionType.REPEATED, this.add_lastused_titles_to_tracklist_job);
+		job.big_counter[0] = 0;
+		db_worker.push_job(job);
+		return false;
+	}
 
-	private bool add_lastused_titles_to_tracklist(Worker.Job job) {
-		string[] uris = db_browser.get_lastused_uris();
-		var psVideo = new PatternSpec("video*");
-		var psAudio = new PatternSpec("audio*");
-		for(int i = 0; i < uris.length; i++) {
-			File file = File.new_for_uri(uris[i]);
-			if(!(file.get_uri_scheme() in global.remote_schemes)) {
-				TrackData td;
-				if(db_browser.get_trackdata_for_uri(uris[i], out td)) {
-					string current_uri = uris[i];
-					Idle.add( () => {
-						this.trackList.tracklistmodel.insert_title(null,
-							                                       (int)td.tracknumber,
-							                                       td.title,
-							                                       td.album,
-							                                       td.artist,
-							                                       td.length,
-							                                       false,
-							                                       current_uri,
-							                                       item_handler_manager.create_uri_item(current_uri));
-						
-						return false;
-					});
-				}
-				else {
-					string artist = "", album = "", title = "";
-					int length = 0;
-					string current_uri = uris[i];
-					File f;
-					FileType filetype;
-					TrackData tags;
-					string mime;
-					string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-								  FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
-					try {
-						f = File.new_for_uri(current_uri);
-						FileInfo info = f.query_info(
-									      attr,
-									      FileQueryInfoFlags.NONE,
-									      null);
-						filetype = info.get_file_type();
-						string content = info.get_content_type();
-						mime = GLib.ContentType.get_mime_type(content);
-					}
-					catch(GLib.Error e){
-						print("%s\n", e.message);
-						return false;
-					}
-					if((filetype == GLib.FileType.REGULAR)&
-					   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
-						uint tracknumb;
-						if(!(psVideo.match_string(mime))) {
-							var tr = new TagReader(); 
-							tags = tr.read_tag(f.get_path());
-							artist         = tags.artist;
-							album          = tags.album;
-							title          = tags.title;
-							tracknumb      = tags.tracknumber;
-							length         = tags.length;
-//							lengthString = make_time_display_from_seconds(tags.length);
-						}
-						else { 
-							artist         = "";
-							album          = "";
-							title          = f.get_basename();
-							tracknumb      = 0;
-							length         = 0;
-						}
-					}
-					Idle.add( () => {
-						this.trackList.tracklistmodel.insert_title(null,
-							                                       (int)td.tracknumber,
-							                                       title,
-							                                       album,
-							                                       artist,
-							                                       length,
-							                                       false,
-							                                       current_uri,
-							                                       item_handler_manager.create_uri_item(current_uri));
-						
-						return false;
-					});
-				}
-			}
-			else {
-				TrackData td;
-				if(db_browser.get_trackdata_for_stream(uris[i], out td)) {
-					string current_uri = uris[i];
-					Idle.add( () => {
-						this.trackList.tracklistmodel.insert_title(null,
-							                                       0,
-							                                       td.title,
-							                                       "",
-							                                       "",
-							                                       0,
-							                                       false,
-							                                       current_uri,
-							                                       item_handler_manager.create_uri_item(current_uri));
-						
-						return false;
-					});
-				}
+	private int LIMIT = 300;
+	private bool add_lastused_titles_to_tracklist_job(Worker.Job job) {
+		job.items = db_browser.get_some_lastused_items(LIMIT, job.big_counter[0]);
+		job.big_counter[0] += job.items.length;
+		TrackData[] tda = {};
+		TrackData[] tmp;
+		string searchtext = "";
+		foreach(Item? item in job.items) {
+			tmp = item_converter.to_trackdata(item, ref searchtext);
+			if(tmp == null)
+				continue;
+			foreach(TrackData td in tmp) {
+				tda += td;
 			}
 		}
+		var xjob = new Worker.Job(Worker.ExecutionType.ONCE, this.add_some_lastused_job);
+		xjob.track_dat = tda;
+		db_worker.push_job(xjob);
+		if(job.items.length < LIMIT) {
+			print("got %d tracks for tracklist\n", job.big_counter[0]);
+			userinfo.popdown(msg_id);
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
+	private bool add_some_lastused_job(Worker.Job job) {
+		Idle.add( () => {
+			foreach(TrackData td in job.track_dat) {
+				this.trackList.tracklistmodel.insert_title(null,
+				                                           (int)td.tracknumber,
+				                                           td.title,
+				                                           td.album,
+				                                           td.artist,
+				                                           td.length,
+				                                           false,
+				                                           td.item);
+			}
+			return false;
+		});
 		return false;
 	}
 	
@@ -1034,8 +992,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				                                           "",
 				                                           0,
 				                                           false,
-				                                           uri,
-				                                           item_handler_manager.create_uri_item(uri));
+				                                           item_handler_manager.create_item(uri));
 			}
 			radiodialog.close();
 			radiodialog = null;

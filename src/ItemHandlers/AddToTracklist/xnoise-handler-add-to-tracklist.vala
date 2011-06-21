@@ -159,7 +159,6 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 				                         tda[k].artist,
 				                         tda[k].length,
 				                         true,
-				                         current_uri,
 				                         tda[k].item);
 				global.position_reference = null;
 				global.position_reference = new TreeRowReference(xn.tlm, xn.tlm.get_path(iter));
@@ -173,7 +172,6 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 				                         tda[k].artist,
 				                         tda[k].length,
 				                         false,
-				                         current_uri,
 				                         tda[k].item);
 			}
 			k++;

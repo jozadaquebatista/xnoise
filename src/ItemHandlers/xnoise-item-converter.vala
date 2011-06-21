@@ -30,29 +30,40 @@
 
 public class Xnoise.ItemConverter : Object {
 
-	//this function uses the database so use it in the database thread, only
+	//this function uses the database so use it in the database thread
 	public TrackData[]? to_trackdata(Item? item, ref string searchtext) {
 		// Take input and convert to tracks
 		if(item == null)
 			return null;
 		
 		TrackData[] result = {};
-		// Now assuming everything is in db !
+		// Now assuming everything is in db ! TODO: create trackdata for empty items
 		
 		switch(item.type) {
 			case ItemType.LOCAL_AUDIO_TRACK:
 			case ItemType.LOCAL_VIDEO_TRACK:
 				if(item.db_id > -1) {
-					result = {};//new Array<TrackData>.sized(true, true, sizeof(Item), 1);
+					result = {};
 					TrackData? tmp = db_browser.get_trackdata_by_titleid(ref searchtext, item.db_id);
 					if(tmp == null)
 						break;
 					result += tmp;
 				}
+				else if(item.uri != null) {
+					TrackData? tmp;
+					if(db_browser.get_trackdata_for_uri(ref item.uri, out tmp)) {
+						if(tmp == null)
+							break;
+						if(tmp.item.type == ItemType.UNKNOWN)
+							tmp.item.type = item_handler_manager.create_item(item.uri).type;
+						if(tmp.item.type != ItemType.UNKNOWN)
+							result += tmp;
+					}
+				}
 				break;
 			case ItemType.COLLECTION_CONTAINER_ALBUM:
 				if(item.db_id > -1) {
-					result = {};//new Array<TrackData>.sized(true, true, sizeof(Item), 8);
+					result = {};
 					result = db_browser.get_trackdata_by_albumid(ref searchtext, item.db_id);
 					break;
 				}

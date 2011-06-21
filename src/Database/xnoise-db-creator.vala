@@ -33,7 +33,7 @@ using Sqlite;
 private class Xnoise.DbCreator {
 	private static const string DATABASE_NAME = "db.sqlite";
 	private static const string SETTINGS_FOLDER = ".xnoise";
-	public static const int DB_VERSION_MAJOR = 3;
+	public static const int DB_VERSION_MAJOR = 4;
 	public static const int DB_VERSION_MINOR = 1;
 
 	private static Sqlite.Database? db;
@@ -41,7 +41,7 @@ private class Xnoise.DbCreator {
 
 	//CREATE TABLE STATEMENTS
 	private static const string STMT_CREATE_LASTUSED =
-		"CREATE TABLE lastused(uri text, mediatype integer);";
+		"CREATE TABLE lastused(uri TEXT, mediatype INTEGER, id INTEGER);";
 	private static const string STMT_CREATE_MEDIAFOLDERS =
 		"CREATE TABLE media_folders(name TEXT PRIMARY KEY);";
 	private static const string STMT_CREATE_MEDIAFILES =
@@ -101,7 +101,7 @@ private class Xnoise.DbCreator {
 		xnoisedb = null;
 	}
 	
-	public static void check_tables() {
+	public static void check_tables(ref bool is_first_start) {
 		if(db == null)
 			setup_db_handle();
 		
@@ -130,13 +130,15 @@ private class Xnoise.DbCreator {
 					if(stmt.column_int(0) != DB_VERSION_MAJOR) {
 						print("Wrong major db version\n");
 						//newly create db if major version is devating
-						try {
+						db = null;
+						is_first_start = true;
+						try { 
 							xnoisedb.delete(null);
 						}
 						catch(Error e) {
 							print("%s\n", e.message);
-						}						
-						check_tables();
+						}
+						check_tables(ref is_first_start);
 						reset();
 						return;
 					}

@@ -272,17 +272,16 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	                             string artist,
 	                             int length = 0,
 	                             bool bold = false,
-	                             string uri,
 	                             Item item) {
 		TreeIter iter;
 		int int_bold = Pango.Weight.NORMAL;
 		string? tracknumberString = null;
 		string? lengthString = null;
 		this.append(out iter);
-
+		
 		if(!(tracknumber==0))
 			tracknumberString = "%d".printf(tracknumber);
-
+		
 		if(length > 0) {
 			// convert seconds to a user convenient mm:ss display
 			int dur_min, dur_sec;
@@ -290,12 +289,12 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			dur_sec = (int)(length % 60);
 			lengthString = "%02d:%02d".printf(dur_min, dur_sec);
 		}
-
+		
 		if(bold)
 			int_bold = Pango.Weight.BOLD;
 		else
 			int_bold = Pango.Weight.NORMAL;
-
+		
 		this.set(iter,
 		         TrackListModel.Column.ITEM ,item,
 		         TrackListModel.Column.ICON, pixbuf,
@@ -335,19 +334,19 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	// used for saving current tracks in list before quit
-	public string[] get_all_tracks() {
-		list_of_uris = {};
+	public Item[] get_all_tracks() {
+		list_of_items = {};
 		this.foreach(list_foreach);
-		return list_of_uris;
+		return list_of_items;
 	}
 
-	private string[] list_of_uris;
+	private Item[] list_of_items;
 	private bool list_foreach(TreeModel sender, TreePath path, TreeIter iter) {
 		Item? item = null;
 		sender.get(iter, Column.ITEM, out item);
 		if(item == null)
 			return false;
-		list_of_uris += item.uri; //gv.get_string();
+		list_of_items += item;
 		return false;
 	}
 
@@ -462,8 +461,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		int k = 0;
 		TreeIter iter, iter_2;
 		FileType filetype;
-		this.get_iter_first(out iter_2); //iter_2 = TreeIter();
-		Item item = Item(ItemType.UNKNOWN);
+		this.get_iter_first(out iter_2);
+		Item? item = Item(ItemType.UNKNOWN);
 		while(uris[k] != null) { //because foreach is not working for this array coming from libunique
 			File file = File.new_for_uri(uris[k]);
 			TagReader tr = new TagReader();
@@ -477,7 +476,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				                                    null);
 					filetype = info.get_file_type();
 				}
-				catch(GLib.Error e){
+				catch(GLib.Error e) {
 					print("%s\n", e.message);
 					k++;
 					continue;
@@ -492,7 +491,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			else if(urischeme in global.remote_schemes) {
 				is_stream = true;
 			}
-			item = item_handler_manager.create_uri_item(uris[k]);
+			item = item_handler_manager.create_item(uris[k]);
 			if(k == 0) { // first track
 				iter = this.insert_title(null,
 				                         (int)t.tracknumber,
@@ -501,7 +500,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				                         t.artist,
 				                         t.length,
 				                         true,
-				                         uris[k],
 				                         item
 				                         );
 				
@@ -517,14 +515,13 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				                         t.artist,
 				                         t.length,
 				                         false,
-				                         uris[k],
-				                         item_handler_manager.create_uri_item(uris[k])
+				                         item_handler_manager.create_item(uris[k])
 				                         );
 			}
 			tr = null;
 			k++;
 		}
-		if(item.type != ItemType.UNKNOWN) {
+		if(item.type != ItemType.UNKNOWN) { // TODO ????
 			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;

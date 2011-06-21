@@ -236,6 +236,16 @@ typedef struct _XnoiseDbWriterPrivate XnoiseDbWriterPrivate;
 
 typedef struct _XnoiseMediaBrowserModel XnoiseMediaBrowserModel;
 typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
+
+#define XNOISE_WORKER_TYPE_JOB (xnoise_worker_job_get_type ())
+#define XNOISE_WORKER_JOB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJob))
+#define XNOISE_WORKER_JOB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJobClass))
+#define XNOISE_WORKER_IS_JOB(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_WORKER_TYPE_JOB))
+#define XNOISE_WORKER_IS_JOB_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_WORKER_TYPE_JOB))
+#define XNOISE_WORKER_JOB_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJobClass))
+
+typedef struct _XnoiseWorkerJob XnoiseWorkerJob;
+typedef struct _XnoiseWorkerJobClass XnoiseWorkerJobClass;
 typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
 
 #define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLUMN (xnoise_media_browser_model_column_get_type ())
@@ -495,16 +505,6 @@ typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
 typedef struct _XnoiseWorkerPrivate XnoiseWorkerPrivate;
 
 #define XNOISE_WORKER_TYPE_EXECUTION_TYPE (xnoise_worker_execution_type_get_type ())
-
-#define XNOISE_WORKER_TYPE_JOB (xnoise_worker_job_get_type ())
-#define XNOISE_WORKER_JOB(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJob))
-#define XNOISE_WORKER_JOB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJobClass))
-#define XNOISE_WORKER_IS_JOB(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_WORKER_TYPE_JOB))
-#define XNOISE_WORKER_IS_JOB_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_WORKER_TYPE_JOB))
-#define XNOISE_WORKER_JOB_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_WORKER_TYPE_JOB, XnoiseWorkerJobClass))
-
-typedef struct _XnoiseWorkerJob XnoiseWorkerJob;
-typedef struct _XnoiseWorkerJobClass XnoiseWorkerJobClass;
 typedef struct _XnoiseWorkerJobPrivate XnoiseWorkerJobPrivate;
 
 #define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
@@ -1497,7 +1497,7 @@ void xnoise_item_handler_manager_add_handler (XnoiseItemHandlerManager* self, Xn
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_type (XnoiseItemHandlerManager* self, XnoiseItemHandlerType type);
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_name (XnoiseItemHandlerManager* self, const gchar* name);
 void xnoise_item_handler_manager_test_func (XnoiseItemHandlerManager* self);
-XnoiseItem* xnoise_item_handler_manager_create_uri_item (XnoiseItemHandlerManager* self, const gchar* uri);
+XnoiseItem* xnoise_item_handler_manager_create_item (XnoiseItemHandlerManager* self, const gchar* uri);
 void xnoise_item_handler_manager_execute_actions_for_item (XnoiseItemHandlerManager* self, XnoiseItem* item, XnoiseActionContext context, GValue* data, XnoiseItemSelectionType selection);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_new (void);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_construct (GType object_type);
@@ -1526,7 +1526,7 @@ gboolean xnoise_db_browser_get_stream_td_for_id (XnoiseDbBrowser* self, gint id,
 gboolean xnoise_db_browser_get_stream_for_id (XnoiseDbBrowser* self, gint id, gchar** uri);
 gchar* xnoise_db_browser_get_local_image_path_for_track (XnoiseDbBrowser* self, gchar** uri);
 gboolean xnoise_db_browser_get_trackdata_for_stream (XnoiseDbBrowser* self, const gchar* uri, XnoiseTrackData** val);
-gboolean xnoise_db_browser_get_trackdata_for_uri (XnoiseDbBrowser* self, const gchar* uri, XnoiseTrackData** val);
+gboolean xnoise_db_browser_get_trackdata_for_uri (XnoiseDbBrowser* self, gchar** uri, XnoiseTrackData** val);
 gchar** xnoise_db_browser_get_media_files (XnoiseDbBrowser* self, int* result_length1);
 gchar** xnoise_db_browser_get_media_folders (XnoiseDbBrowser* self, int* result_length1);
 GType xnoise_stream_data_get_type (void) G_GNUC_CONST;
@@ -1537,7 +1537,9 @@ void xnoise_stream_data_destroy (XnoiseStreamData* self);
 XnoiseStreamData* xnoise_db_browser_get_streams (XnoiseDbBrowser* self, int* result_length1);
 gchar* xnoise_db_browser_get_single_stream_uri (XnoiseDbBrowser* self, const gchar* name);
 gint xnoise_db_browser_get_track_id_for_path (XnoiseDbBrowser* self, const gchar* uri);
-gchar** xnoise_db_browser_get_lastused_uris (XnoiseDbBrowser* self, int* result_length1);
+XnoiseItem* xnoise_db_browser_get_some_lastused_items (XnoiseDbBrowser* self, gint limit, gint offset, int* result_length1);
+guint xnoise_db_browser_count_lastused_items (XnoiseDbBrowser* self);
+XnoiseItem* xnoise_db_browser_get_lastused_items (XnoiseDbBrowser* self, int* result_length1);
 gchar** xnoise_db_browser_get_uris (XnoiseDbBrowser* self, const gchar* search_string, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_video_data (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_stream_data (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
@@ -1568,7 +1570,8 @@ gint xnoise_db_writer_uri_entry_exists (XnoiseDbWriter* self, const gchar* uri);
 void xnoise_db_writer_add_single_stream_to_collection (XnoiseDbWriter* self, const gchar* uri, const gchar* name);
 void xnoise_db_writer_add_single_file_to_collection (XnoiseDbWriter* self, const gchar* uri);
 void xnoise_db_writer_add_single_folder_to_collection (XnoiseDbWriter* self, const gchar* mfolder);
-void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, gchar** final_tracklist, int final_tracklist_length1, GError** error);
+GType xnoise_worker_job_get_type (void) G_GNUC_CONST;
+void xnoise_db_writer_write_final_tracks_to_db (XnoiseDbWriter* self, XnoiseWorkerJob* job, GError** error);
 void xnoise_db_writer_do_callback_transaction (XnoiseDbWriter* self, XnoiseDbWriterWriterCallback cb, void* cb_target);
 void xnoise_db_writer_del_all_folders (XnoiseDbWriter* self);
 void xnoise_db_writer_del_all_files (XnoiseDbWriter* self);
@@ -1616,10 +1619,10 @@ gboolean xnoise_track_list_model_path_is_last_row (XnoiseTrackListModel* self, G
 void xnoise_track_list_model_on_position_reference_changed (XnoiseTrackListModel* self);
 gboolean xnoise_track_list_model_get_current_path (XnoiseTrackListModel* self, GtkTreePath** treepath);
 gboolean xnoise_track_list_model_get_active_path (XnoiseTrackListModel* self, GtkTreePath** treepath, gboolean* used_next_pos);
-void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, GdkPixbuf* pixbuf, gint tracknumber, const gchar* title, const gchar* album, const gchar* artist, gint length, gboolean bold, const gchar* uri, XnoiseItem* item, GtkTreeIter* result);
+void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, GdkPixbuf* pixbuf, gint tracknumber, const gchar* title, const gchar* album, const gchar* artist, gint length, gboolean bold, XnoiseItem* item, GtkTreeIter* result);
 gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
 void xnoise_track_list_model_set_reference_to_last (XnoiseTrackListModel* self);
-gchar** xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
+XnoiseItem* xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
 gchar* xnoise_track_list_model_get_uri_for_current_position (XnoiseTrackListModel* self);
 void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, gchar** uris, int uris_length1);
 XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_new (XnoiseTrackListModel* tlm);
@@ -1890,7 +1893,6 @@ guint xnoise_user_info_popup (XnoiseUserInfo* self, XnoiseUserInfoRemovalType re
 GType xnoise_worker_execution_type_get_type (void) G_GNUC_CONST;
 XnoiseWorker* xnoise_worker_new (GMainContext* mc);
 XnoiseWorker* xnoise_worker_construct (GType object_type, GMainContext* mc);
-GType xnoise_worker_job_get_type (void) G_GNUC_CONST;
 void xnoise_worker_push_job (XnoiseWorker* self, XnoiseWorkerJob* j);
 XnoiseWorkerJob* xnoise_worker_job_new (XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, gint _timer_seconds);
 XnoiseWorkerJob* xnoise_worker_job_construct (GType object_type, XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, gint _timer_seconds);

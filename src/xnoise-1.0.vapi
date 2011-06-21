@@ -51,17 +51,19 @@ namespace Xnoise {
 		public void cancel ();
 		public int count_artists ();
 		public int count_artists_with_search (ref string searchtext);
+		public uint count_lastused_items ();
 		public int32 count_videos (ref string searchtext);
 		public void do_callback_transaction (Xnoise.DbBrowser.ReaderCallback cb);
 		public Xnoise.Item[] get_albums_with_search (ref string searchtext, int32 id);
 		public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);
 		public Xnoise.Item[] get_artists_with_search (ref string searchtext);
-		public string[] get_lastused_uris ();
+		public Xnoise.Item[] get_lastused_items ();
 		public string? get_local_image_path_for_track (ref string? uri);
 		public string[] get_media_files ();
 		public string[] get_media_folders ();
 		public string? get_single_stream_uri (string name);
 		public Xnoise.Item[] get_some_artists (int limit, int offset);
+		public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
 		public Xnoise.TrackData[] get_stream_data (ref string searchtext);
 		public bool get_stream_for_id (int id, out string uri);
 		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
@@ -73,7 +75,7 @@ namespace Xnoise {
 		public Xnoise.TrackData? get_trackdata_by_titleid (ref string searchtext, int32 id);
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
-		public bool get_trackdata_for_uri (string? uri, out Xnoise.TrackData val);
+		public bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 		public bool get_uri_for_id (int id, out string val);
 		public string[] get_uris (string search_string);
 		public Xnoise.TrackData[] get_video_data (ref string searchtext);
@@ -122,7 +124,7 @@ namespace Xnoise {
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public bool update_title (ref Xnoise.TrackData td);
 		public int uri_entry_exists (string uri);
-		public void write_final_tracks_to_db (string[] final_tracklist) throws GLib.Error;
+		public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
 		public bool in_transaction { get; }
 	}
 	[CCode (ref_function = "xnoise_fullscreen_toolbar_ref", unref_function = "xnoise_fullscreen_toolbar_unref", cheader_filename = "xnoise.h")]
@@ -278,7 +280,7 @@ namespace Xnoise {
 	public class ItemHandlerManager : GLib.Object {
 		public ItemHandlerManager ();
 		public void add_handler (Xnoise.ItemHandler handler);
-		public Xnoise.Item? create_uri_item (string? uri);
+		public Xnoise.Item? create_item (string? uri);
 		public void execute_actions_for_item (Xnoise.Item item, Xnoise.ActionContext context, GLib.Value? data, Xnoise.ItemSelectionType selection);
 		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
 		public Xnoise.ItemHandler get_handler_by_name (string name);
@@ -601,12 +603,12 @@ namespace Xnoise {
 		public TrackListModel ();
 		public void add_uris (string[]? uris);
 		public bool get_active_path (out Gtk.TreePath treepath, out bool used_next_pos);
-		public string[] get_all_tracks ();
+		public Xnoise.Item[] get_all_tracks ();
 		public bool get_current_path (out Gtk.TreePath treepath);
 		public bool get_first_row (ref Gtk.TreePath treepath);
 		public bool get_random_row (ref Gtk.TreePath treepath);
 		public string get_uri_for_current_position ();
-		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, int length = 0, bool bold = false, string uri, Xnoise.Item item);
+		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, int length = 0, bool bold = false, Xnoise.Item item);
 		public Xnoise.TrackListModel.Iterator iterator ();
 		public bool not_empty ();
 		public void on_before_position_reference_changed ();

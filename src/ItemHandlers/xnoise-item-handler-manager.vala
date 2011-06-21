@@ -100,9 +100,10 @@ namespace Xnoise {
 		private PatternSpec psVideo = new PatternSpec("video*");
 		private PatternSpec psAudio = new PatternSpec("audio*");
 		
-		public Item? create_uri_item(string? uri) {
+		public Item? create_item(string? uri) {
 			if(uri == null)
 				return Item(ItemType.UNKNOWN);
+			
 			Item? item = Item(ItemType.UNKNOWN, uri);
 			
 			File f = File.new_for_uri(uri);
@@ -125,28 +126,28 @@ namespace Xnoise {
 				   uri.has_suffix("xspf")||
 				   uri.has_suffix("pls") ||
 				   uri.has_suffix("wpl")) {
-					item = Item(Xnoise.ItemType.PLAYLIST, uri);
+					item.type = Xnoise.ItemType.PLAYLIST;
 				}
 				else {
 					if(scheme == "file" || scheme == "cdda") {
-						item = Item(Xnoise.ItemType.LOCAL_AUDIO_TRACK, uri);
+						item.type = Xnoise.ItemType.LOCAL_AUDIO_TRACK;
 					}
 					else {
-						item = Item(Xnoise.ItemType.STREAM, uri);
+						item.type = ItemType.STREAM;
 					}
 				}
 			}
 			else if(psVideo.match_string(mime)) {
 					if(scheme == "file" || scheme == "dvd") {
-						item  = Item(Xnoise.ItemType.LOCAL_VIDEO_TRACK, uri);
+						item.type = ItemType.LOCAL_VIDEO_TRACK;
 					}
 					else {
-						item = Item(Xnoise.ItemType.STREAM, uri);
+						item.type = ItemType.STREAM;
 					}
 			}
 			else if(info.get_file_type() == FileType.DIRECTORY) {
-				if(scheme == "file" || scheme == "dvd") {
-					item = Item(Xnoise.ItemType.LOCAL_FOLDER, uri);
+				if(scheme == "file" || scheme == "dvd") { //local scheme
+					item.type = ItemType.LOCAL_FOLDER;
 				}
 			}
 			return item;

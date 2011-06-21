@@ -113,7 +113,7 @@ public class Xnoise.DbWriter : GLib.Object {
 	private static const string STMT_CHECK_TRACK_EXISTS =
 		"SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
 	private static const string STMT_INSERT_LASTUSED =
-		"INSERT INTO lastused (uri, mediatype) VALUES (?,?)";
+		"INSERT INTO lastused (uri, mediatype, id) VALUES (?,?,?)";
 	private static const string STMT_WRITE_MEDIA_FOLDERS =
 		"INSERT INTO media_folders (name) VALUES (?)";
 	private static const string STMT_DEL_MEDIA_FOLDERS =
@@ -929,15 +929,15 @@ public class Xnoise.DbWriter : GLib.Object {
 		}
 	}
 
-	public void write_final_tracks_to_db(string[] final_tracklist) throws Error {
+	public void write_final_tracks_to_db(Worker.Job job) throws Error {
 		if(db == null) return;
-
+		
 		this.begin_transaction();
 		if(db.exec("DELETE FROM lastused;", null, null)!= Sqlite.OK) {
 			throw new DbError.FAILED("Error while removing old music folders");
 		}
-		foreach(string uri in final_tracklist) {
-			this.insert_lastused_track(uri, 0);
+		foreach(Item? i in job.items) {
+			this.insert_lastused_track(ref i);
 		}
 		this.commit_transaction();
 	}
@@ -951,10 +951,13 @@ public class Xnoise.DbWriter : GLib.Object {
 			cb(db);
 	}
 	
-	private void insert_lastused_track(string uri, int mediatype) {
+	private void insert_lastused_track(ref Item? item) {
+		if(item.type == ItemType.UNKNOWN)
+			return;
 		this.insert_lastused_entry_statement.reset();
-		this.insert_lastused_entry_statement.bind_text(1, uri);
-		this.insert_lastused_entry_statement.bind_int (2, mediatype);
+		this.insert_lastused_entry_statement.bind_text(1, item.uri);
+		this.insert_lastused_entry_statement.bind_int (2, item.type);
+		this.insert_lastused_entry_statement.bind_int (3, item.db_id);
 		if(insert_lastused_entry_statement.step() != Sqlite.DONE) {
 			this.db_error();
 		}

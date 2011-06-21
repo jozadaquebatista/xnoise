@@ -52,8 +52,6 @@ public class Xnoise.DbBrowser {
 		"SELECT COUNT (title) FROM items WHERE mediatype = ?";
 	private static const string STMT_COUNT_FOR_URI =
 		"SELECT COUNT (i.title) FROM items i, uris u WHERE i.uri = u.id AND u.name = ?";
-	private static const string STMT_TRACKDATA_FOR_URI =
-		"SELECT ar.name, al.name, t.title, t.tracknumber, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND u.name = ?";
 	private static const string STMT_TRACKDATA_FOR_ID =
 		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.id = ?";
 	private static const string STMT_STREAM_TD_FOR_ID =
@@ -383,7 +381,10 @@ public class Xnoise.DbBrowser {
 		return retval;
 	}
 
-	public bool get_trackdata_for_uri(string? uri, out TrackData val) {
+	private static const string STMT_TRACKDATA_FOR_URI =
+		"SELECT ar.name, al.name, t.title, t.tracknumber, t.length, t.mediatype, t.id FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND u.name = ?";
+
+	public bool get_trackdata_for_uri(ref string? uri, out TrackData val) {
 		bool retval = false;
 		val = new TrackData();
 		if(uri == null)
@@ -400,6 +401,7 @@ public class Xnoise.DbBrowser {
 			val.title       = stmt.column_text(2);
 			val.tracknumber = (uint)stmt.column_int(3);
 			val.length      = stmt.column_int(4);
+			val.item        = Item((ItemType)stmt.column_int(5), uri, stmt.column_int(6));
 			retval = true;
 		}
 		if((val.artist=="") | (val.artist==null)) {
@@ -482,14 +484,53 @@ public class Xnoise.DbBrowser {
 		return val;
 	}
 
-	public string[] get_lastused_uris() {
-		string[] val = {};
+	private static const string STMT_GET_SOME_LASTUSED_ITEMS =
+		"SELECT mediatype, uri, id FROM lastused LIMIT ? OFFSET ?";
+	public Item[] get_some_lastused_items(int limit, int offset) {
+		Item[] val = {};
 		Statement stmt;
 		
-		this.db.prepare_v2(STMT_GET_LASTUSED, -1,out stmt);
+		this.db.prepare_v2(STMT_GET_SOME_LASTUSED_ITEMS, -1, out stmt);
+		
+		if((stmt.bind_int(1, limit)  != Sqlite.OK) ||
+		   (stmt.bind_int(2, offset) != Sqlite.OK)) {
+			this.db_error();
+			return val;
+		}
 		
 		while(stmt.step() == Sqlite.ROW) {
-			val += stmt.column_text(0);
+			Item? item = Item((ItemType)stmt.column_int(0), stmt.column_text(1), stmt.column_int(2));
+			val += item;
+		}
+		return val;
+	}
+	
+	private static const string STMT_CNT_LASTUSED =
+		"SELECT COUNT(mediatype) FROM lastused";
+	
+	public uint count_lastused_items() {
+		uint val = 0;
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_CNT_LASTUSED, -1, out stmt);
+		
+		if(stmt.step() == Sqlite.ROW) {
+			return stmt.column_int(0);
+		}
+		return val;
+	}
+	
+	private static const string STMT_GET_LASTUSED_ITEMS =
+		"SELECT mediatype, uri, id FROM lastused";
+	public Item[] get_lastused_items() {
+		Item[] val = {};
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_LASTUSED_ITEMS, -1, out stmt);
+		
+		while(stmt.step() == Sqlite.ROW) {
+			Item? item = Item((ItemType)stmt.column_int(0), stmt.column_text(1), stmt.column_int(2));
+			val += item;
 		}
 		return val;
 	}
