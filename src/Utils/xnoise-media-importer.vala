@@ -239,204 +239,37 @@ public class Xnoise.MediaImporter : GLib.Object {
 	// TODO: Can these be stored in a specific Worker.Job?
 	private TrackData[] tda = {}; 
 	private TrackData[] tdv = {};
-//	// store a folder in the db, don't add it to the media path
-//	// This is a recoursive function.
-//	public async void add_local_tags(File dir, Worker.Job job) {
-//		job.counter[0]++;
-//		print( "add_local_tags thread %d", (int)Linux.gettid() );
-//		FileEnumerator enumerator;
-//		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
-//		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-//		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
-//		try {
-//			enumerator = yield dir.enumerate_children_async(attr, FileQueryInfoFlags.NONE, Priority.DEFAULT, null);
-//		} 
-//		catch (Error error) {
-//			critical("Error importing directory %s. %s\n", dir.get_path(), error.message);
-//			job.counter[0]--;
-//			if(tda.length > 0) {
-////				TrackData[] tdax2 = tda;
-//				tda = {};
-//				Idle.add( () => {
-////					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax2); 
-//					return false; 
-//				});
-//			}
-//			end_import(job);
-//			return;
-//		}
-//		GLib.List<GLib.FileInfo> infos;
-//		try {
-//			while(true) {
-//				infos = yield enumerator.next_files_async(FILE_COUNT, Priority.DEFAULT, null);
-//				
-//				if(infos == null) {
-//					job.counter[0]--;
-//					if(job.counter[0] == 0) {
-//						db_writer.commit_transaction();
-//						if(tda.length > 0) {
-////							TrackData[] tdax1 = tda;
-//							tda = {};
-//							Idle.add( () => {
-////								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax1); 
-//								return false; 
-//							});
-//						}
-//						if(tdv.length > 0) {
-////							TrackData[] tdvx = tdv;
-//							tdv = {};
-//							Idle.add( () => {
-////								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
-//								return false; 
-//							});
-//						}
-//						end_import(job);
-//					}
-//					return;
-//				}
-//				TrackData td;
-//				foreach(FileInfo info in infos) {
-//					int idbuffer;
-//					string filename = info.get_name();
-//					string filepath = Path.build_filename(dir.get_path(), filename);
-//					File file = File.new_for_path(filepath);
-//					FileType filetype = info.get_file_type();
-
-//					string content = info.get_content_type();
-//					string mime = GLib.ContentType.get_mime_type(content);
-//					PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
-//					PatternSpec psVideo = new PatternSpec("video*");
-
-//					if(filetype == FileType.DIRECTORY) {
-//						yield this.add_local_tags(file, job);
-//					}
-//					else if(psAudio.match_string(mime)) {
-//						string uri_lc = filename.down();
-//						if(!(uri_lc.has_suffix(".m3u")||uri_lc.has_suffix(".pls")||uri_lc.has_suffix(".asx")||uri_lc.has_suffix(".xspf")||uri_lc.has_suffix(".wpl"))) {
-//							idbuffer = db_writer.uri_entry_exists(file.get_uri()); //TODO wird das verwendet?
-//							if(idbuffer== -1) {
-//								td = new TrackData();
-//								var tr = new TagReader();
-//								td = tr.read_tag(filepath);
-//								td.uri = file.get_uri();
-//								//print("++%s\n", td.title);
-////								int32 id = db_writer.insert_title(td, file.get_uri());
-////								td.db_id = id;
-//								td.item = Item(ItemType.LOCAL_AUDIO_TRACK, file.get_uri(), td.db_id);
-//								td.mediatype = ItemType.LOCAL_AUDIO_TRACK;
-//								if(db_writer.insert_title(ref td, file.get_uri())) {
-//									tda += td;
-//									job.big_counter[1]++;
-//									Idle.add( () => {
-//										unowned Gtk.ProgressBar pb = (Gtk.ProgressBar) userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id"));
-//										if(pb != null) {
-//											pb.set_fraction(((double)((double)job.big_counter[1] / (double)job.big_counter[0])));
-//											pb.set_text("%d / %d".printf((int)job.big_counter[1], (int)job.big_counter[0]));
-//										}
-//										return false;
-//									});
-//								}
-//								if(tda.length > FILE_COUNT) {
-////									TrackData[] tdax = tda;
-//									tda = {};
-//									db_writer.commit_transaction(); // intermediate commit make tracks fully available for user
-//									Idle.add( () => {
-////										Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax); 
-//										return false; 
-//									});
-//									db_writer.begin_transaction();
-//								}
-//							}
-//						}
-//					}
-//					else if(psVideo.match_string(mime)) {
-//						idbuffer = db_writer.uri_entry_exists(file.get_uri());
-//						td = new TrackData();
-//						td.artist = "unknown artist";
-//						td.album = "unknown album";
-//						td.title = prepare_name_from_filename(file.get_basename());
-//						td.genre = "";
-//						td.tracknumber = 0;
-//						td.mediatype = ItemType.LOCAL_VIDEO_TRACK;
-//						if(idbuffer== -1 && db_writer.insert_title(ref td, file.get_uri())) {
-////							db_writer.insert_title(td, file.get_uri());
-////						}
-////						td.db_id = db_writer.get_track_id_for_uri(file.get_uri());
-////						if((int)td.db_id != -1) {
-//							td.item = Item(ItemType.LOCAL_VIDEO_TRACK, file.get_uri(), td.db_id);
-//							tdv += td;
-//							job.big_counter[1]++;
-//						}
-//						if(tdv.length > FILE_COUNT) {
-////							TrackData[] tdvx = tdv;
-//							tdv = {};
-//							db_writer.commit_transaction(); // intermediate commit make tracks fully available for user
-//							Idle.add( () => {
-////								Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
-//								return false; 
-//							});
-//							db_writer.begin_transaction();
-//						}
-//					}
-//				}
-//			}
-//		}
-//		catch(Error e) {
-//			print("%s\n", e.message);
-//		}
-//		job.counter[0]--;
-//		if(job.counter[0] == 0) {
-//			db_writer.commit_transaction();
-//			if(tda.length > 0) {
-////				TrackData[] tdax1 = tda;
-//				tda = {};
-//				Idle.add( () => {
-////					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdax1); 
-//					return false; 
-//				});
-//			}
-//			if(tdv.length > 0) {
-////				TrackData[] tdvx = tdv;
-//				tdv = {};
-//				Idle.add( () => {
-////					Main.instance.main_window.mediaBr.mediabrowsermodel.insert_video_sorted(tdvx); 
-//					return false; 
-//				});
-//			}
-//			end_import(job);
-//		}
-//		return;
-//	}
 
 	private void end_import(Worker.Job job) {
-		print("end import\n");
-//		Idle.add( () => {
-//			// update user info in idle in main thread
-//			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), 
-//			                           ( ((bool)job.get_arg("full_rescan")) == true ?
-//			                               _("Finished import. ") +  " " + _("Found %d media files").printf((int)job.big_counter[0]) : 
-//			                               ( (int)job.big_counter[1] > 0 ? 
-//			                                   _("Updated library for new media folders. ") + " " + _("Found %d new media files").printf((int)job.big_counter[1]) : 
-//			                                   _("Updated library for new media folders. ") ) ), 
-//			                           false);
-//			if(userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id")) != null)
-//				userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id")).hide();
-//			userinfo.update_symbol_widget_by_id((uint)job.get_arg("msg_id"), UserInfo.ContentClass.INFO);
-//			return false;
-//		});
-//		Timeout.add_seconds(4, () => {
-//			// remove user info after some seconds
-////			userinfo.popdown((uint)job.get_arg("msg_id"));
-//			Idle.add( () => {
-//				global.sig_media_path_changed();
-//				return false;
-//			});
-//			io_import_job_running = false;
-//			return false;
-//		});
-//		print("set import to false\n");
-//		global.media_import_in_progress = false;
+		print("end import 1 %d %d\n", job.counter[1], job.counter[2]);
+		if(job.counter[1] != job.counter[2])
+			return;
+		
+		Idle.add( () => {
+			// update user info in idle in main thread
+			userinfo.update_text_by_id((uint)job.get_arg("msg_id"), _("Finished import. Updating library ... "), false);
+			if(userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id")) != null)
+				userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id")).hide();
+			return false;
+		});
+		print("end import 2\n");
+		var finisher_job = new Worker.Job(Worker.ExecutionType.ONCE, finish_import_job);
+		db_worker.push_job(finisher_job);
 	}
+	
+	private bool finish_import_job(Worker.Job job) {
+		print("finish_import_job\n");
+		Idle.add( () => {
+			global.media_import_in_progress = false;
+			if(current_import_msg_id != 0) {
+				userinfo.popdown(current_import_msg_id);
+				current_import_msg_id = 0;
+			}
+			return false;
+		});
+		return false;
+	}
+
 
 	private bool reset_local_data_library_job(Worker.Job job) {
 		db_writer.begin_transaction();
@@ -467,46 +300,22 @@ public class Xnoise.MediaImporter : GLib.Object {
 				return false;
 			}
 			// COUNT HERE
-			foreach(string folder in mfolders_ht.get_keys()) {
-				File file = File.new_for_commandline_arg(folder);
-				count_media_files(file, job);
-			}
+//			foreach(string folder in mfolders_ht.get_keys()) {
+//				File file = File.new_for_commandline_arg(folder);
+//				count_media_files(file, job);
+//			}
 			//print("count: %d\n", (int)(job.big_counter[0]));			
-			int cnt = 0;
+			int cnt = 1;
 			foreach(string folder in mfolders_ht.get_keys()) {
 				File dir = File.new_for_path(folder);
 				assert(dir != null);
 				// import all the files
-//				add_local_tags.begin(dir, job);
 				var reader_job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
 				reader_job.set_arg("dir", dir);
 				reader_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
 				reader_job.set_arg("full_rescan", (bool)job.get_arg("full_rescan"));
-				if(cnt==(mfolders_ht.get_keys().length() - 1))
-					reader_job.finished.connect( (s) => {
-			//			print("end import\n");
-						Idle.add( () => {
-							// update user info in idle in main thread
-							userinfo.update_text_by_id((uint)s.get_arg("msg_id"), 
-										               _("Finished reading. Updating Library"),
-										               false);
-							if(userinfo.get_extra_widget_by_id((uint)s.get_arg("msg_id")) != null)
-								userinfo.get_extra_widget_by_id((uint)s.get_arg("msg_id")).hide();
-							return false;
-						});
-						Timeout.add_seconds(4, () => {
-							//print("reset io_import_job_running flag\n");
-							io_import_job_running = false;
-							if(AtomicInt.get(ref job_count) <= 0) {
-								global.media_import_in_progress = false;
-								if(current_import_msg_id != 0) {
-									userinfo.popdown(current_import_msg_id);
-									current_import_msg_id = 0;
-								}
-							}
-							return false;
-						});
-					});
+				reader_job.counter[1] = cnt;
+				reader_job.counter[2] = (int)mfolders_ht.get_keys().length();
 				io_worker.push_job(reader_job);
 				cnt ++;
 			}
@@ -533,16 +342,17 @@ public class Xnoise.MediaImporter : GLib.Object {
 					new_mfolders_ht.insert(folder, 1);
 			}
 				// COUNT HERE
-			foreach(string folder in new_mfolders_ht.get_keys()) {
-				File file = File.new_for_commandline_arg(folder);
-				count_media_files(file, job);
-			}
+//			foreach(string folder in new_mfolders_ht.get_keys()) {
+//				File file = File.new_for_commandline_arg(folder);
+//				count_media_files(file, job);
+//			}
 	
 			if(new_mfolders_ht.get_keys().length() == 0) {
 				db_writer.commit_transaction();
 				end_import(job);
 				return false;
 			}
+			int cnt = 1;
 			foreach(string folder in new_mfolders_ht.get_keys()) {
 				File dir = File.new_for_path(folder);
 				assert(dir != null);
@@ -550,9 +360,10 @@ public class Xnoise.MediaImporter : GLib.Object {
 				reader_job.set_arg("dir", dir);
 				reader_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
 				reader_job.set_arg("full_rescan", (bool)job.get_arg("full_rescan"));
-				
+				reader_job.counter[1] = cnt;
+				reader_job.counter[2] = (int)new_mfolders_ht.get_keys().length();
 				io_worker.push_job(reader_job);
-//				add_local_tags.begin(dir, job); 
+				cnt++;
 			}
 			mfolders_ht.remove_all();
 		}
@@ -597,12 +408,13 @@ public class Xnoise.MediaImporter : GLib.Object {
 				}
 				else if(psAudio.match_string(mime)) {
 					string uri_lc = filename.down();
-					if(!(uri_lc.has_suffix(".m3u")||uri_lc.has_suffix(".pls")||uri_lc.has_suffix(".asx")||uri_lc.has_suffix(".xspf")||uri_lc.has_suffix(".wpl"))) {
+					if(!(uri_lc.has_suffix(".m3u")||
+					     uri_lc.has_suffix(".pls")||
+					     uri_lc.has_suffix(".asx")||
+					     uri_lc.has_suffix(".xspf")||
+					     uri_lc.has_suffix(".wpl"))) {
 						var tr = new TagReader();
 						td = tr.read_tag(filepath);
-//						td.uri = file.get_uri();
-//						td.item = Item(ItemType.LOCAL_AUDIO_TRACK, file.get_uri(), td.db_id);
-//						td.mediatype = ItemType.LOCAL_AUDIO_TRACK;
 						tda += td;
 						job.big_counter[1]++;
 						if(job.big_counter[1] % 50 == 0) {
@@ -620,8 +432,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 							db_job.track_dat = tda;
 							db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
 							tda = {};
-							AtomicInt.inc(ref job_count);
-							db_job.finished.connect(dec_and_test_job_cnt);
 							db_worker.push_job(db_job);
 						}
 					}
@@ -633,8 +443,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 					td.title = prepare_name_from_filename(file.get_basename());
 					td.genre = "";
 					td.tracknumber = 0;
-//					td.uri = file.get_uri();
-//					td.mediatype = ItemType.LOCAL_VIDEO_TRACK;
 					td.item = Item(ItemType.LOCAL_VIDEO_TRACK, file.get_uri());
 					tdv += td;
 					job.big_counter[1]++;
@@ -652,8 +460,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 						var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
 						db_job.track_dat = tda;
 						tdv = {};
-						AtomicInt.inc(ref job_count);
-						db_job.finished.connect(dec_and_test_job_cnt);
 						db_worker.push_job(db_job);
 					}
 				}
@@ -668,8 +474,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 				var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
 				db_job.track_dat = tda;
 				tda = {};
-				AtomicInt.inc(ref job_count);
-				db_job.finished.connect(dec_and_test_job_cnt);
 				db_worker.push_job(db_job);
 			}
 			if(tdv.length > 0) {
@@ -677,27 +481,11 @@ public class Xnoise.MediaImporter : GLib.Object {
 				var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
 				db_job.track_dat = tdv;
 				tdv = {};
-				AtomicInt.inc(ref job_count);
-				db_job.finished.connect(dec_and_test_job_cnt);
 				db_worker.push_job(db_job);
 			}
 			end_import(job);
 		}
 		return;
-	}
-	
-	private void dec_and_test_job_cnt() {
-		AtomicInt.dec_and_test(ref job_count);
-		//print("AtomicInt.get(ref job_count): %d\n", AtomicInt.get(ref job_count));
-		if(AtomicInt.get(ref job_count) <= 0 && io_import_job_running == false) {
-			//print("NOW !\n");
-			//print("set import to false\n");
-			global.media_import_in_progress = false;
-			if(current_import_msg_id != 0) {
-				userinfo.popdown(current_import_msg_id);
-				current_import_msg_id = 0;
-			}
-		}
 	}
 	
 	private bool insert_trackdata_job(Worker.Job job) {
@@ -771,34 +559,5 @@ public class Xnoise.MediaImporter : GLib.Object {
 //		global.sig_media_path_changed();
 		return false;
 	}
-	
-	// add files to the media path and store them in the db
-	private bool store_files_job(Worker.Job job) {
-		if(db_writer == null) 
-			return false;
-		
-		var files_ht = new HashTable<string,int>(str_hash, str_equal);
-
-		db_writer.del_all_files();
-
-		foreach(string strm in (string[])job.get_arg("list_of_files")) {
-			files_ht.insert(strm, 1);
-		}
-		
-		//put in db
-		foreach(string uri in files_ht.get_keys()) {
-			db_writer.add_single_file_to_collection(uri);
-		}
-
-		//put in mediabrowser
-		foreach(string uri in files_ht.get_keys()) {
-			this.add_single_file(uri);
-		}
-
-		files_ht.remove_all();
-//		global.sig_media_path_changed();
-		return false;
-	}
-
 }
 
