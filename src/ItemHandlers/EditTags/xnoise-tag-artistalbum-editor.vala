@@ -160,8 +160,6 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	}
 	
 	private void on_ok_button_clicked(Gtk.Button sender) {
-//		if(!treerowref.valid())
-//			return; // TODO: user info
 		if(mbm.populating_model) {
 			infolabel.label = _("Please wait while filling media browser. Or cancel, if you do not want to wait.");
 			return;
@@ -176,19 +174,14 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		// TODO: UTF-8 validation
 		switch(item.type) {
 			case ItemType.COLLECTION_CONTAINER_ARTIST:
-//				if(org_content_name.down() ==  new_content_name.down())
-//					do_artist_case_correction();
 				do_artist_rename();
 				break;
 			case ItemType.COLLECTION_CONTAINER_ALBUM:
-//				if(org_content_name.down() ==  new_content_name.down())
-//					do_album_case_correction();
 				do_album_rename();
 				break;
 			default:
 				break;	
 		}
-//		mbm = null;
 		Idle.add( () => {
 			this.dialog.destroy();
 			return false;
@@ -333,7 +326,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	}
 
 	private bool update_filetags_job(Worker.Job job) {
-		print("job.track_dat len : %d\n", job.track_dat.length);
+		//print("job.track_dat len : %d\n", job.track_dat.length);
 		for(int i = 0; i<job.track_dat.length; i++) {
 			File f = File.new_for_uri(job.track_dat[i].item.uri);
 			var tw = new TagWriter();
@@ -347,6 +340,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 				var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
 				TrackData td = job.track_dat[i];
 				dbjob.set_arg("td", td);
+				dbjob.item = job.item;
 				db_worker.push_job(dbjob);
 			}
 		}
@@ -370,7 +364,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 
 	private bool update_db_job(Worker.Job job) {
 		TrackData td = (TrackData)job.get_arg("td");
-		media_importer.update_item_tag(ref td);
+		media_importer.update_item_tag(ref job.item, ref td);
 		return false;
 	}
 

@@ -122,7 +122,7 @@ namespace Xnoise {
 		public bool insert_title (ref Xnoise.TrackData td);
 		public void register_change_callback (Xnoise.MediaBrowserModel mbm, Xnoise.DbWriter.ChangeNotificationCallback cb);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
-		public bool update_title (ref Xnoise.TrackData td);
+		public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
 		public int uri_entry_exists (string uri);
 		public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
 		public bool in_transaction { get; }

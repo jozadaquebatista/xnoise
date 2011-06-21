@@ -34,6 +34,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	private unowned Xnoise.Main xn;	
 	private Dialog dialog;
 	private Gtk.Builder builder;
+	private unowned MediaBrowserModel mbm = null;
 	
 	private Entry entry_artist;
 	private Entry entry_album;
@@ -44,19 +45,11 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	public signal void sign_finish();
 
 	public TagTitleEditor(Item _item) {
-//		if(!_treerowref.valid()) {
-//			Idle.add( () => {
-//				sign_finish();
-//				return false;
-//			});
-//			return;
-//		}
-//		treerowref = _treerowref;
 		item = _item;
 		xn = Main.instance;
 		builder = new Gtk.Builder();
 		create_widgets();
-		
+		mbm = xn.main_window.mediaBr.mediabrowsermodel;
 		fill_entries();
 		dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
 		dialog.show_all();
@@ -64,26 +57,12 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	
 	private void fill_entries() {
 		// read tags and put them to the entries; store current tags to be able to realize changes
-//		TreePath path;
-//		TreeModel model;
-//		TreeIter iter;
-//		if(treerowref.valid()) {
-//			model = treerowref.get_model();
-//			path  = treerowref.get_path();
-//			
-//			model.get_iter(out iter, path);
-//			model.get(iter, MediaBrowserModel.Column.DB_ID, out db_id);
 		Worker.Job job;
 		job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.query_trackdata_job);
 		job.item = item;
 		db_worker.push_job(job);
 	}
 
-//	private void query_trackdata(int db_id) {
-//		// push query to other thread
-
-//	}
-	
 	private TrackData td_old = null;
 	
 	private bool query_trackdata_job(Worker.Job job) {
@@ -98,7 +77,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		
 		td_old = copy_trackdata(td);
 		
-		Idle.add( () => {
+		Idle.add( () => { // TODO more kinds of data
 			// put data to entry
 			entry_artist.text = td.artist;
 			entry_album.text  = td.album;
@@ -145,82 +124,88 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	}
 	
 	private void on_ok_button_clicked(Gtk.Button sender) {
-//		if(!treerowref.valid())
-//			return; // TODO: user info
-//		TreeModel model = treerowref.get_model();
-//		if(((MediaBrowserModel)model).populating_model) {
-//			infolabel.label = _("Please wait while filling media browser. Or cancel, if you do not want to wait.");
-//			return;
-//		}
-//		if(global.media_import_in_progress) {
-//			infolabel.label = _("Please wait while importing media. Or cancel, if you do not want to wait.");
-//			return;
-//		}
+		if(mbm.populating_model) {
+			infolabel.label = _("Please wait while filling media browser. Or cancel, if you do not want to wait.");
+			return;
+		}
+		if(global.media_import_in_progress) {
+			infolabel.label = _("Please wait while importing media. Or cancel, if you do not want to wait.");
+			return;
+		}
 
-//		if(td_old == null)
-//			return;
-//		
-//		infolabel.label = "";
-//		TrackData tdx = copy_trackdata(td_old);
-//		if(entry_artist.text != null && entry_artist.text._strip() != "")
-//			tdx.artist = entry_artist.text;
-//		if(entry_album.text != null && entry_album.text._strip() != "")
-//			tdx.album  = entry_album.text;
-//		if(entry_title.text != null && entry_title.text._strip() != "")
-//			tdx.title  = entry_title.text;
-//		// TODO: UTF-8 validation
-//		Worker.Job job;
-//		job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.update_tag_job);
-//		job.set_arg("tdx", tdx);
-//		job.set_arg("treerowref", treerowref);
-//		db_worker.push_job(job);		
-//		
-//		Idle.add( () => {
-//			this.dialog.destroy();
-//			this.sign_finish();
-//			return false;
-//		});
+		if(td_old == null)
+			return;
+		
+		infolabel.label = "";
+		TrackData td_new = copy_trackdata(td_old);
+		if(entry_artist.text != null && entry_artist.text._strip() != "")
+			td_new.artist = entry_artist.text;
+		if(entry_album.text != null && entry_album.text._strip() != "")
+			td_new.album  = entry_album.text;
+		if(entry_title.text != null && entry_title.text._strip() != "")
+			td_new.title  = entry_title.text;
+		// TODO: UTF-8 validation
+		do_track_rename(td_old, td_new);
+		Idle.add( () => {
+			this.dialog.destroy();
+			return false;
+		});
+	}
+	
+	private void do_track_rename(TrackData td_old, TrackData td_new) {
+		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_tag_job);
+		TrackData[] tda = new TrackData[2];
+		tda[0] = td_old;
+		tda[1] = td_new;
+		job.track_dat = tda;
+		db_worker.push_job(job);
+	}
+	
+	// job to update tag in files
+	private bool update_tag_job(Worker.Job tag_job) {
+		if(tag_job.track_dat[0].item.type == ItemType.LOCAL_AUDIO_TRACK ||
+		   tag_job.track_dat[0].item.type == ItemType.LOCAL_VIDEO_TRACK) {
+			var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
+			job.track_dat = tag_job.track_dat;
+			io_worker.push_job(job);
+		}
+		return false;
+	}
+	
+	private bool update_filetags_job(Worker.Job job) {
+		File f = File.new_for_uri(job.track_dat[1].item.uri);
+		var tw = new TagWriter();
+		bool ret = false;
+		//print("%s\n", job.item.type.to_string());
+		ret = tw.write_tag(f, job.track_dat[1]);
+		if(ret) {
+			var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
+			dbjob.track_dat = job.track_dat;
+			dbjob.item = job.track_dat[0].item;
+			db_worker.push_job(dbjob);
+		}
+		var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
+		
+		db_worker.push_job(fin_job);
+		return false;
+	}
+	
+	private bool update_db_job(Worker.Job job) {
+	print("job.track_dat[1] title = %s\n", job.track_dat[1].title);
+		media_importer.update_item_tag(ref job.item, ref job.track_dat[1]);
+		return false;
 	}
 
-	private void update_tag_job(Worker.Job job) {
-		TrackData tdx = (TrackData)job.get_arg("tdx");
-		if(tdx == null)
-			return;
-		File f = File.new_for_uri(tdx.item.uri);
-		TagWriter tw = new TagWriter();
-		bool retval = tw.write_tag(f, tdx); // maybe use uri stored in td ?
-		// TODO: check extension on fail
-		if(retval) { // success
-			media_importer.update_item_tag(ref tdx);
-				
-			//put into mediabrowser
-			Idle.add( () => {
-				TreePath path;
-				TreeModel model;
-				TreeIter iter = TreeIter();
-				TreeIter parent = TreeIter();
-				TreeIter parentparent = TreeIter();
-				TreeRowReference trf = (TreeRowReference)job.get_arg("treerowref");
-				if(trf.valid()) {
-					model = trf.get_model();
-					path  = trf.get_path();
-					model.get_iter(out iter, path);
-					model.iter_parent(out parent, iter);
-					model.iter_parent(out parentparent, parent);
-					((MediaBrowserModel)model).set(iter, MediaBrowserModel.Column.VIS_TEXT, tdx.title);
-					((MediaBrowserModel)model).move_title_iter_sorted(ref iter, ref tdx);
-					
-					// remove empty nodes
-					if(((MediaBrowserModel)model).iter_n_children(parent) == 0)
-						((MediaBrowserModel)model).remove(parent);
-					
-					if(((MediaBrowserModel)model).iter_n_children(parentparent) == 0)
-						((MediaBrowserModel)model).remove(parentparent);
-					
-				}
-				return false;
-			});
-		}
+	private bool finish_job(Worker.Job job) {
+		Timeout.add(200, () => {
+			Main.instance.main_window.mediaBr.mediabrowsermodel.filter();
+			return false;
+		});
+		Timeout.add(300, () => {
+			this.sign_finish();
+			return false;
+		});
+		return false;
 	}
 
 	private void on_cancel_button_clicked(Gtk.Button sender) {

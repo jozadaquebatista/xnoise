@@ -1563,7 +1563,7 @@ gboolean xnoise_db_writer_set_local_image_for_album (XnoiseDbWriter* self, gchar
 gchar** xnoise_db_writer_get_media_folders (XnoiseDbWriter* self, int* result_length1);
 gboolean xnoise_db_writer_get_trackdata_for_stream (XnoiseDbWriter* self, const gchar* uri, XnoiseTrackData** val);
 gint xnoise_db_writer_get_track_id_for_uri (XnoiseDbWriter* self, const gchar* uri);
-gboolean xnoise_db_writer_update_title (XnoiseDbWriter* self, XnoiseTrackData** td);
+gboolean xnoise_db_writer_update_title (XnoiseDbWriter* self, XnoiseItem** item, XnoiseTrackData** td);
 gboolean xnoise_db_writer_insert_title (XnoiseDbWriter* self, XnoiseTrackData** td);
 void xnoise_db_writer_delete_uri (XnoiseDbWriter* self, const gchar* uri);
 gint xnoise_db_writer_uri_entry_exists (XnoiseDbWriter* self, const gchar* uri);

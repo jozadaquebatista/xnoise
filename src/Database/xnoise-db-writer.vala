@@ -683,9 +683,9 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	private static const string STMT_UPDATE_TITLE = "UPDATE items SET artist=?, album=?, title=? WHERE id=?";
-	public bool update_title(ref TrackData td) {
+	public bool update_title(ref Item? item, ref TrackData td) {
 		int artist_id = handle_artist(ref td.artist, true);
-
+		
 		if(artist_id == -1) {
 			print("Error importing artist for '%s' ! \n", td.artist);
 			return false;
@@ -698,8 +698,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		Statement stmt;
 		this.db.prepare_v2(STMT_UPDATE_TITLE, -1, out stmt);
 		
-		stmt.reset();
-		//print("%d %d %s %d\n", artist_id, album_id, td.title, id);
 		if(stmt.bind_int (1, artist_id)     != Sqlite.OK ||
 		   stmt.bind_int (2, album_id)      != Sqlite.OK ||
 		   stmt.bind_text(3, td.title)      != Sqlite.OK ||
@@ -711,6 +709,81 @@ public class Xnoise.DbWriter : GLib.Object {
 		if(stmt.step() != Sqlite.DONE) {
 			this.db_error();
 			return false;
+		}
+		if(item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
+			count_album_in_items_statement.reset();
+			if(count_album_in_items_statement.bind_int (1, item.db_id) != Sqlite.OK) {
+				this.db_error();
+				return false;
+			}
+			int cnt = 0;
+			if(count_album_in_items_statement.step() == Sqlite.ROW) {
+				cnt = count_album_in_items_statement.column_int(0);
+			}
+			if(cnt == 0) {
+				delete_album_statement.reset();
+				if(delete_album_statement.bind_int (1, item.db_id) != Sqlite.OK) {
+					this.db_error();
+					return false;
+				}
+				delete_album_statement.step();
+			}
+		}
+		else if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
+			count_artist_in_items_statement.reset();
+			if(count_artist_in_items_statement.bind_int (1, item.db_id) != Sqlite.OK) {
+				this.db_error();
+				return false;
+			}
+			int cnt = 0;
+			if(count_artist_in_items_statement.step() == Sqlite.ROW) {
+				cnt = count_artist_in_items_statement.column_int(0);
+			}
+			if(cnt == 0) {
+				delete_artist_statement.reset();
+				if(delete_artist_statement.bind_int (1, item.db_id) != Sqlite.OK) {
+					this.db_error();
+					return false;
+				}
+				delete_artist_statement.step();
+			}
+		}
+		else if(item.type == ItemType.LOCAL_AUDIO_TRACK || 
+		        item.type == ItemType.LOCAL_VIDEO_TRACK) {
+			count_album_in_items_statement.reset();
+			if(count_album_in_items_statement.bind_int (1, album_id) != Sqlite.OK) {
+				this.db_error();
+				return false;
+			}
+			int cnt = 0;
+			if(count_album_in_items_statement.step() == Sqlite.ROW) {
+				cnt = count_album_in_items_statement.column_int(0);
+			}
+			if(cnt == 0) {
+				delete_album_statement.reset();
+				if(delete_album_statement.bind_int (1, item.db_id) != Sqlite.OK) {
+					this.db_error();
+					return false;
+				}
+				delete_album_statement.step();
+			}
+			count_artist_in_items_statement.reset();
+			if(count_artist_in_items_statement.bind_int (1, artist_id) != Sqlite.OK) {
+				this.db_error();
+				return false;
+			}
+			cnt = 0;
+			if(count_artist_in_items_statement.step() == Sqlite.ROW) {
+				cnt = count_artist_in_items_statement.column_int(0);
+			}
+			if(cnt == 0) {
+				delete_artist_statement.reset();
+				if(delete_artist_statement.bind_int (1, item.db_id) != Sqlite.OK) {
+					this.db_error();
+					return false;
+				}
+				delete_artist_statement.step();
+			}
 		}
 		return true;
 	}
