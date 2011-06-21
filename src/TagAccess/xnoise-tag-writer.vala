@@ -63,26 +63,26 @@ public class Xnoise.TagWriter {
 
 		TagLib.File taglib_file = null;
 		taglib_file = new TagLib.File(path);
-		if(taglib_file!=null) {
-			unowned TagLib.Tag t = taglib_file.tag;
+		if(taglib_file != null && taglib_file.is_valid()) {
+			unowned TagLib.Tag tag = taglib_file.tag;
 			if(t != null) {
 				if(td.artist != null && td.artist != "")
-					t.artist = td.artist;
+					tag.artist = td.artist;
 					
 				if(td.title != null && td.title != "")
-					t.title = td.title;
+					tag.title = td.title;
 				
 				if(td.album != null && td.album != "")
-					t.album = td.album;
+					tag.album = td.album;
 				
 				if(td.genre != null && td.genre != "")
-					t.genre = td.genre;
+					tag.genre = td.genre;
 				
 				if(td.year != 0)
-					t.year = td.year;
+					tag.year = td.year;
 				
 				if(td.tracknumber != 0)
-					t.track = td.tracknumber;
+					tag.track = td.tracknumber;
 				
 				retval = taglib_file.save();
 			}
@@ -107,10 +107,10 @@ public class Xnoise.TagWriter {
 		TagLib.File taglib_file = null;
 		taglib_file = new TagLib.File(path);
 		if(taglib_file!=null) {
-			unowned TagLib.Tag t = taglib_file.tag;
+			unowned TagLib.Tag tag = taglib_file.tag;
 			if(t != null) {
 				if(artist != "")
-					t.artist = artist;
+					tag.artist = artist;
 				else
 					return false;
 								
@@ -137,10 +137,10 @@ public class Xnoise.TagWriter {
 		TagLib.File taglib_file = null;
 		taglib_file = new TagLib.File(path);
 		if(taglib_file!=null) {
-			unowned TagLib.Tag t = taglib_file.tag;
+			unowned TagLib.Tag tag = taglib_file.tag;
 			if(t != null) {
 				if(album != "")
-					t.album = album;
+					tag.album = album;
 				else
 					return false;
 								

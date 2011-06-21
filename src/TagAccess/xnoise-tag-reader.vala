@@ -1,6 +1,6 @@
 /* xnoise-tag-reader.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,39 +30,39 @@
 
 
 public class Xnoise.TagReader {
-//	public TagReader() {
-//		print("construct TagReader\n");
-//	}
-	public TrackData read_tag(string filename) {
+	public TrackData? read_tag(string filename) {
 		File f = File.new_for_path(filename);
+		Item? item = item_handler_manager.create_uri_item(f.get_uri());
 		TrackData td;
 		TagLib.File taglib_file = null;
+		if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK)
+			return null;
 		taglib_file = new TagLib.File(filename);
-		if(taglib_file!=null) {
-			unowned TagLib.Tag t              = taglib_file.tag;
-			unowned TagLib.AudioProperties ap = taglib_file.audioproperties;
-			td = new TrackData();
-			if(t != null && ap != null) {
+		if(taglib_file != null && taglib_file.is_valid()) {
+			unowned TagLib.Tag tag            = null;
+			tag = taglib_file.tag;
+			unowned TagLib.AudioProperties ap = null;
+			ap = taglib_file.audioproperties;
+			if(tag != null && ap != null) {
+				td = new TrackData();
 				try {
 					// from class Tag
-					if(t != null) {
-						Item? item = Item(ItemType.LOCAL_AUDIO_TRACK, f.get_uri());
-						td.artist      = t.artist;
-						td.title       = t.title;
-						td.album       = t.album;
-						td.genre       = t.genre;
-						td.year        = t.year;
-						td.tracknumber = t.track;
+					if(tag != null) {
+						td.artist      = tag.artist;
+						td.title       = tag.title;
+						td.album       = tag.album;
+						td.genre       = tag.genre;
+						td.year        = tag.year;
+						td.tracknumber = tag.track;
 						td.item        = item;
 					} 
 					else {
-						Item? item = item_handler_manager.create_uri_item(f.get_uri());// Item(ItemType.LOCAL_AUDIO_TRACK, f.get_uri());
-						td.artist = "unknown artist";
-						td.title  = "unknown title";
-						td.album  = "unknown album";
-						td.genre  = "unknown genre";
+						td.artist      = "unknown artist";
+						td.title       = "unknown title";
+						td.album       = "unknown album";
+						td.genre       = "unknown genre";
 						td.tracknumber = (uint)0;
-						td.item   = item;
+						td.item        = item;
 					}	
 					// from class AudioProperties
 					if(ap != null) {
@@ -78,41 +78,36 @@ public class Xnoise.TagReader {
 					if((td.title  == "")||(td.title  == null)) td.title  = "unknown title";
 					if((td.album  == "")||(td.album  == null)) td.album  = "unknown album";
 					if((td.genre  == "")||(td.genre  == null)) td.genre  = "unknown genre";
-					t = null;
+					tag = null;
 					taglib_file = null;
 				}
 			}
 			else {
 				td = new TrackData();
-				Item? item = item_handler_manager.create_uri_item(f.get_uri());
-				td.artist = "unknown artist";
-				td.title  = "unknown title";
-				td.album  = "unknown album";
-				td.genre  = "unknown genre";
+				td.artist      = "unknown artist";
+				td.title       = "unknown title";
+				td.album       = "unknown album";
+				td.genre       = "unknown genre";
 				td.tracknumber = (uint)0;
-				td.item   = item;
-
-				td.length = (int32)0;
-				td.bitrate = 0;
+				td.item        = item;
+				td.length      = (int32)0;
+				td.bitrate     = 0;
 			}
 		}
 		else {
 			td = new TrackData();
-
-			td.artist = "unknown artist";
-			td.title  = "unknown title";
-			td.album  = "unknown album";
-			td.genre  = "unknown genre";
+			td.artist      = "unknown artist";
+			td.title       = "unknown title";
+			td.album       = "unknown album";
+			td.genre       = "unknown genre";
 			td.tracknumber = (uint)0;
-			td.item   = Item(ItemType.UNKNOWN, f.get_uri());
-
-			td.length = (int32)0;
-			td.bitrate = 0;
+			td.item        = item;
+			td.length      = (int32)0;
+			td.bitrate     = 0;
 		}
-
-		if(td.title  == "unknown title") {
+		if(td.title  == "unknown title")
 			td.title = prepare_name_from_filename(GLib.Filename.display_basename(filename));
-		}
+		
 		return td;
 	}
 }

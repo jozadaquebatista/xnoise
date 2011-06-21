@@ -90,6 +90,7 @@ namespace Xnoise {
 			ADD_ARTIST,
 			ADD_ALBUM,
 			ADD_TITLE,
+			ADD_VIDEO,
 			REMOVE_ARTIST,
 			REMOVE_ALBUM,
 			REMOVE_TITLE,
@@ -117,7 +118,7 @@ namespace Xnoise {
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public string? get_uri_for_item_id (int32 id);
 		public bool insert_title (ref Xnoise.TrackData td);
-		public void register_change_callback (Xnoise.DbWriter.ChangeNotificationCallback cb);
+		public void register_change_callback (Xnoise.MediaBrowserModel mbm, Xnoise.DbWriter.ChangeNotificationCallback cb);
 		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 		public bool update_title (ref Xnoise.TrackData td);
 		public int uri_entry_exists (string uri);
@@ -420,7 +421,9 @@ namespace Xnoise {
 		public void move_album_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_artist_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_title_iter_sorted (ref Gtk.TreeIter org_iter, ref Xnoise.TrackData td);
+		public bool populate_listed ();
 		public bool populate_model ();
+		public void remove_all ();
 		public void unload_children (ref Gtk.TreeIter iter);
 		public bool populating_model { get; private set; }
 	}
@@ -523,7 +526,7 @@ namespace Xnoise {
 	[CCode (ref_function = "xnoise_tag_reader_ref", unref_function = "xnoise_tag_reader_unref", cheader_filename = "xnoise.h")]
 	public class TagReader {
 		public TagReader ();
-		public Xnoise.TrackData read_tag (string filename);
+		public Xnoise.TrackData? read_tag (string filename);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TagTitleEditor : GLib.Object {

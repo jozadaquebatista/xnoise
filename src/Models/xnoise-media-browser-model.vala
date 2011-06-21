@@ -90,7 +90,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //				});
 //			}
 //		});
-		db_writer.register_change_callback(database_change_cb);
+		db_writer.register_change_callback(this, database_change_cb);
 	}
 	
 	// this function is running in db thread so use idle
@@ -107,13 +107,65 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				job.item = item;
 				db_worker.push_job(job);
 				break;
+//			case DbWriter.ChangeType.ADD_VIDEO:
+//				if(video_in_tree)
+//					break;
+//				Idle.add( () => {
+//					TreeIter iter_videos = TreeIter(), iter_loader;
+//					CollectionType ct = CollectionType.UNKNOWN; 
+//					if(this.iter_n_children(null) == 0) {
+//						Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+//						this.prepend(out iter_videos, null);
+//						this.set(iter_videos,
+//								 Column.ICON, videos_pixb,
+//								 Column.VIS_TEXT, "Videos",
+//								 Column.ITEM, i
+//								 );
+//						Item? loader_item = Item(ItemType.LOADER);
+//						this.append(out iter_loader, iter_videos);
+//						this.set(iter_loader,
+//								 Column.ICON, loading_pixb,
+//								 Column.VIS_TEXT, LOADING,
+//								 Column.ITEM, loader_item
+//								 );
+//						video_in_tree = true;
+//						return false;
+//					}
+//					else {
+//						for(int i = 0; i < this.iter_n_children(null); i++) {
+//							this.iter_nth_child(out iter_videos, null, i);
+//							Item? ix;
+//							this.get(iter_videos, Column.ITEM, out ix);
+//							if(ix.type == ItemType.COLLECTION_CONTAINER_VIDEO) {
+//								return false;
+//							}
+//						}
+//						Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+//						this.prepend(out iter_videos, null);
+//						this.set(iter_videos,
+//								 Column.ICON, videos_pixb,
+//								 Column.VIS_TEXT, "Videos",
+//								 Column.ITEM, i
+//								 );
+//						Item? loader_item = Item(ItemType.LOADER);
+//						this.append(out iter_loader, iter_videos);
+//						this.set(iter_loader,
+//								 Column.ICON, loading_pixb,
+//								 Column.VIS_TEXT, LOADING,
+//								 Column.ITEM, loader_item
+//								 );
+//						video_in_tree = true;
+//					}
+//					return false;
+//				});
+//				break;
 			default: break;
 		}
 	}
 	
 	private bool add_imported_artist_job(Worker.Job job) {
-		int32 _id = job.item.db_id;
-		job.item = db_browser.get_artistitem_by_artistid(ref searchtext, _id); // necessary because of search
+//		int32 _id = job.item.db_id;
+		job.item = db_browser.get_artistitem_by_artistid(ref searchtext, job.item.db_id); // necessary because of search
 		if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
 			return false;
 		Idle.add( () => {
@@ -141,9 +193,10 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			string itemtext_prep = job.item.text.down().strip();
 			for(int i = 0; i < this.iter_n_children(null); i++) {
 				this.iter_nth_child(out artist_iter, null, i);
-				this.get(artist_iter, Column.VIS_TEXT, out text); //, Column.COLL_TYPE, out ct
-//				if(ct != CollectionType.HIERARCHICAL)
-//					continue;
+				Item? current_item;
+				this.get(artist_iter, Column.VIS_TEXT, out text, Column.ITEM, out current_item);
+				if(current_item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
+					continue;
 				text = text != null ? text.down().strip() : "";
 				if(strcmp(text, itemtext_prep) == 0) {
 					//found artist
@@ -155,8 +208,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					this.set(new_artist_iter,
 						     Column.ICON, artist_pixb,
 						     Column.VIS_TEXT, job.item.text,
-//						     Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-						     //Column.DRAW_SEPTR, 0,
 						     Column.ITEM, job.item
 						     );
 					artist_iter = new_artist_iter;
@@ -165,8 +216,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					this.set(iter_search,
 							 Column.ICON, loading_pixb,
 							 Column.VIS_TEXT, LOADING,
-//							 Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-							 //Column.DRAW_SEPTR, 0,
 							 Column.ITEM, loader_item
 							 );
 					return false;
@@ -222,6 +271,10 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		//print("filter\n");
 		this.clear();
 		this.populate_model();
+	}
+	
+	public void remove_all() {
+		this.clear();
 	}
 
 	private void set_pixbufs() {
@@ -743,13 +796,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		if(populating_model)
 			return false;
 		populating_model = true;
+//		video_in_tree = false;
 		//print("populate_model\n");
-		if(populate_model_cancellable == null) {
-			populate_model_cancellable = new Cancellable();
-		}
-		else {
-			populate_model_cancellable.reset();
-		}
 		
 		var v_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
 		v_job.cancellable = populate_model_cancellable;
@@ -761,6 +809,18 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			populating_model = false;
 		});
 		db_worker.push_job(a_job);
+		
+		return false;
+	}
+	
+	public bool populate_listed() {
+		if(populating_model)
+			return false;
+		populating_model = true;
+//		video_in_tree = false;
+		
+		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
+		db_worker.push_job(job);
 		
 		return false;
 	}

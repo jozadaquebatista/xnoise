@@ -848,6 +848,7 @@ typedef enum  {
 	XNOISE_DB_WRITER_CHANGE_TYPE_ADD_ARTIST,
 	XNOISE_DB_WRITER_CHANGE_TYPE_ADD_ALBUM,
 	XNOISE_DB_WRITER_CHANGE_TYPE_ADD_TITLE,
+	XNOISE_DB_WRITER_CHANGE_TYPE_ADD_VIDEO,
 	XNOISE_DB_WRITER_CHANGE_TYPE_REMOVE_ARTIST,
 	XNOISE_DB_WRITER_CHANGE_TYPE_REMOVE_ALBUM,
 	XNOISE_DB_WRITER_CHANGE_TYPE_REMOVE_TITLE,
@@ -1553,7 +1554,8 @@ GType xnoise_db_writer_get_type (void) G_GNUC_CONST;
 GType xnoise_db_writer_change_type_get_type (void) G_GNUC_CONST;
 XnoiseDbWriter* xnoise_db_writer_new (GError** error);
 XnoiseDbWriter* xnoise_db_writer_construct (GType object_type, GError** error);
-void xnoise_db_writer_register_change_callback (XnoiseDbWriter* self, XnoiseDbWriterChangeNotificationCallback cb, void* cb_target);
+GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
+void xnoise_db_writer_register_change_callback (XnoiseDbWriter* self, XnoiseMediaBrowserModel* mbm, XnoiseDbWriterChangeNotificationCallback cb, void* cb_target);
 gchar* xnoise_db_writer_get_uri_for_item_id (XnoiseDbWriter* self, gint32 id);
 gboolean xnoise_db_writer_set_local_image_for_album (XnoiseDbWriter* self, gchar** artist, gchar** album, const gchar* image_path);
 gchar** xnoise_db_writer_get_media_folders (XnoiseDbWriter* self, int* result_length1);
@@ -1575,11 +1577,11 @@ gboolean xnoise_db_writer_delete_local_media_data (XnoiseDbWriter* self);
 void xnoise_db_writer_begin_transaction (XnoiseDbWriter* self);
 void xnoise_db_writer_commit_transaction (XnoiseDbWriter* self);
 gboolean xnoise_db_writer_get_in_transaction (XnoiseDbWriter* self);
-GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_model_column_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_model_collection_type_get_type (void) G_GNUC_CONST;
 gint xnoise_media_browser_model_get_max_icon_width (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_filter (XnoiseMediaBrowserModel* self);
+void xnoise_media_browser_model_remove_all (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_insert_video_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
 void xnoise_media_browser_model_insert_stream_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
 void xnoise_media_browser_model_move_title_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, XnoiseTrackData** td);
@@ -1587,6 +1589,7 @@ void xnoise_media_browser_model_move_artist_iter_sorted (XnoiseMediaBrowserModel
 void xnoise_media_browser_model_move_album_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, const gchar* name);
 void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
 gboolean xnoise_media_browser_model_populate_model (XnoiseMediaBrowserModel* self);
+gboolean xnoise_media_browser_model_populate_listed (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_unload_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
 void xnoise_media_browser_model_load_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
 GType xnoise_dnd_data_get_type (void) G_GNUC_CONST;

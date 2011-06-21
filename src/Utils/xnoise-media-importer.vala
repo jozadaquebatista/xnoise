@@ -70,7 +70,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 			                             5,
 			                             prg_bar);
 			global.media_import_in_progress = true;
-			Main.instance.main_window.mediaBr.mediabrowsermodel.clear();
+			Main.instance.main_window.mediaBr.mediabrowsermodel.remove_all();
 			
 			import_media_groups(strms, mfiles, mfolders, msg_id, true, false);
 			
@@ -238,6 +238,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 	private bool finish_import_job(Worker.Job job) {
 		Idle.add( () => {
 			print("finish import\n");
+			Main.instance.main_window.mediaBr.mediabrowsermodel.populate_listed();
 			global.media_import_in_progress = false;
 			if(current_import_msg_id != 0) {
 				userinfo.popdown(current_import_msg_id);
@@ -360,8 +361,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		job.counter[0]++;
 		FileEnumerator enumerator;
 		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
-		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		              FILE_ATTRIBUTE_STANDARD_TYPE;
 		try {
 			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE);
 		} 
@@ -381,14 +381,10 @@ public class Xnoise.MediaImporter : GLib.Object {
 				string filepath = Path.build_filename(dir.get_path(), filename);
 				File file = File.new_for_path(filepath);
 				FileType filetype = info.get_file_type();
-				string content = info.get_content_type();
-				string mime = GLib.ContentType.get_mime_type(content);
-				PatternSpec psAudio = new PatternSpec("audio*"); //TODO: handle *.m3u and *.pls seperately
-				PatternSpec psVideo = new PatternSpec("video*");
 				if(filetype == FileType.DIRECTORY) {
 					read_recoursive(file, job);
 				}
-				else if(psAudio.match_string(mime)) {
+				else {
 					string uri_lc = filename.down();
 					if(!(uri_lc.has_suffix(".m3u")||
 					     uri_lc.has_suffix(".pls")||
@@ -397,10 +393,12 @@ public class Xnoise.MediaImporter : GLib.Object {
 					     uri_lc.has_suffix(".wpl"))) {
 						var tr = new TagReader();
 						td = tr.read_tag(filepath);
-						tda += td;
-						job.big_counter[1]++;
-						lock(current_import_track_count) {
-							current_import_track_count++;
+						if(td != null) {
+							tda += td;
+							job.big_counter[1]++;
+							lock(current_import_track_count) {
+								current_import_track_count++;
+							}
 						}
 						if(job.big_counter[1] % 50 == 0) {
 							Idle.add( () => {  // Update progress bar
@@ -425,40 +423,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 						}
 					}
 				}
-				else if(psVideo.match_string(mime)) {
-					td = new TrackData();
-					td.artist = "unknown artist";
-					td.album = "unknown album";
-					td.title = prepare_name_from_filename(file.get_basename());
-					td.genre = "";
-					td.tracknumber = 0;
-					td.item = Item(ItemType.LOCAL_VIDEO_TRACK, file.get_uri());
-					tdv += td;
-					job.big_counter[1]++;
-					lock(current_import_track_count) {
-						current_import_track_count++;
-					}
-					if(job.big_counter[1] % 50 == 0) {
-						Idle.add( () => {  // Update progress bar
-							uint xcnt = 0;
-							lock(current_import_track_count) {
-								xcnt = current_import_track_count;
-							}
-							unowned Gtk.ProgressBar pb = (Gtk.ProgressBar) userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id"));
-							if(pb != null) {
-								pb.pulse();
-								pb.set_text("%u tracks found".printf(xcnt));
-							}
-							return false;
-						});
-					}
-					if(tdv.length > FILE_COUNT) {
-						var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-						db_job.track_dat = tda;
-						tdv = {};
-						db_worker.push_job(db_job);
-					}
-				}
 			}
 		}
 		catch(Error e) {
@@ -470,13 +434,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 				var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
 				db_job.track_dat = tda;
 				tda = {};
-				db_worker.push_job(db_job);
-			}
-			if(tdv.length > 0) {
-				TrackData[] tdvx = tdv;
-				var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-				db_job.track_dat = tdv;
-				tdv = {};
 				db_worker.push_job(db_job);
 			}
 			end_import(job);
