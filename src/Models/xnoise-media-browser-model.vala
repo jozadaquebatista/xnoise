@@ -93,6 +93,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		db_writer.register_change_callback(this, database_change_cb);
 	}
 	
+	private bool video_in_tree = false;
+	
 	// this function is running in db thread so use idle
 	private void database_change_cb(DbWriter.ChangeType changetype, Item? item) {
 		switch(changetype) {
@@ -107,58 +109,58 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				job.item = item;
 				db_worker.push_job(job);
 				break;
-//			case DbWriter.ChangeType.ADD_VIDEO:
-//				if(video_in_tree)
-//					break;
-//				Idle.add( () => {
-//					TreeIter iter_videos = TreeIter(), iter_loader;
-//					CollectionType ct = CollectionType.UNKNOWN; 
-//					if(this.iter_n_children(null) == 0) {
-//						Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-//						this.prepend(out iter_videos, null);
-//						this.set(iter_videos,
-//								 Column.ICON, videos_pixb,
-//								 Column.VIS_TEXT, "Videos",
-//								 Column.ITEM, i
-//								 );
-//						Item? loader_item = Item(ItemType.LOADER);
-//						this.append(out iter_loader, iter_videos);
-//						this.set(iter_loader,
-//								 Column.ICON, loading_pixb,
-//								 Column.VIS_TEXT, LOADING,
-//								 Column.ITEM, loader_item
-//								 );
-//						video_in_tree = true;
-//						return false;
-//					}
-//					else {
-//						for(int i = 0; i < this.iter_n_children(null); i++) {
-//							this.iter_nth_child(out iter_videos, null, i);
-//							Item? ix;
-//							this.get(iter_videos, Column.ITEM, out ix);
-//							if(ix.type == ItemType.COLLECTION_CONTAINER_VIDEO) {
-//								return false;
-//							}
-//						}
-//						Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-//						this.prepend(out iter_videos, null);
-//						this.set(iter_videos,
-//								 Column.ICON, videos_pixb,
-//								 Column.VIS_TEXT, "Videos",
-//								 Column.ITEM, i
-//								 );
-//						Item? loader_item = Item(ItemType.LOADER);
-//						this.append(out iter_loader, iter_videos);
-//						this.set(iter_loader,
-//								 Column.ICON, loading_pixb,
-//								 Column.VIS_TEXT, LOADING,
-//								 Column.ITEM, loader_item
-//								 );
-//						video_in_tree = true;
-//					}
-//					return false;
-//				});
-//				break;
+			case DbWriter.ChangeType.ADD_VIDEO:
+				if(video_in_tree)
+					break;
+				video_in_tree = true;
+				Idle.add( () => {
+					TreeIter iter_videos = TreeIter(), iter_loader;
+					CollectionType ct = CollectionType.UNKNOWN; 
+					if(this.iter_n_children(null) == 0) {
+						Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+						this.prepend(out iter_videos, null);
+						this.set(iter_videos,
+								 Column.ICON, videos_pixb,
+								 Column.VIS_TEXT, "Videos",
+								 Column.ITEM, i
+								 );
+						Item? loader_item = Item(ItemType.LOADER);
+						this.append(out iter_loader, iter_videos);
+						this.set(iter_loader,
+								 Column.ICON, loading_pixb,
+								 Column.VIS_TEXT, LOADING,
+								 Column.ITEM, loader_item
+								 );
+						return false;
+					}
+					else {
+						for(int i = 0; i < this.iter_n_children(null); i++) {
+							this.iter_nth_child(out iter_videos, null, i);
+							Item? ix;
+							this.get(iter_videos, Column.ITEM, out ix);
+							if(ix.type == ItemType.COLLECTION_CONTAINER_VIDEO) {
+								video_in_tree = true;
+								return false;
+							}
+						}
+						Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+						this.prepend(out iter_videos, null);
+						this.set(iter_videos,
+								 Column.ICON, videos_pixb,
+								 Column.VIS_TEXT, "Videos",
+								 Column.ITEM, i
+								 );
+						Item? loader_item = Item(ItemType.LOADER);
+						this.append(out iter_loader, iter_videos);
+						this.set(iter_loader,
+								 Column.ICON, loading_pixb,
+								 Column.VIS_TEXT, LOADING,
+								 Column.ITEM, loader_item
+								 );
+					}
+					return false;
+				});
+				break;
 			default: break;
 		}
 	}
@@ -274,6 +276,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 	
 	public void remove_all() {
+		this.video_in_tree = false;
 		this.clear();
 	}
 
@@ -796,7 +799,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		if(populating_model)
 			return false;
 		populating_model = true;
-//		video_in_tree = false;
+		video_in_tree = false;
 		//print("populate_model\n");
 		
 		var v_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
@@ -809,18 +812,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			populating_model = false;
 		});
 		db_worker.push_job(a_job);
-		
-		return false;
-	}
-	
-	public bool populate_listed() {
-		if(populating_model)
-			return false;
-		populating_model = true;
-//		video_in_tree = false;
-		
-		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
-		db_worker.push_job(job);
 		
 		return false;
 	}
@@ -896,6 +887,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.VIS_TEXT, LOADING,
 			         Column.ITEM, loader_item
 			         );
+			video_in_tree = true;
 			return false;
 		});
 		return false;
@@ -917,10 +909,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			foreach(unowned TrackData td in job.track_dat) {
 				if(job.cancellable.is_cancelled())
 					break;
-//				bool visible = false;
-//				if(this.searchtext == "" || td.name.down().contains(this.searchtext)) {
-//					visible = true;
-//				}
 				Gdk.Pixbuf thumbnail = null;
 				File thumb = null;
 				bool has_thumbnail = false;
@@ -1016,6 +1004,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		Item? item = Item(ItemType.UNKNOWN);
 		
 		TreePath path = this.get_path(iter);
+		if(path == null)
+			return;
 		TreeRowReference treerowref = new TreeRowReference(this, path);
 		this.get(iter, Column.ITEM, out item);
 		//print("item.type: %s\n", item.type.to_string());

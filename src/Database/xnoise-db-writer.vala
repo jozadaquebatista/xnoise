@@ -743,12 +743,13 @@ public class Xnoise.DbWriter : GLib.Object {
 			print("Error importing genre for %s : '%s' ! \n", td.item.uri, td.genre);
 			return false;
 		}
-//		if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
-//			if(change_cb != null) {
-//				Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-//				change_cb(ChangeType.ADD_VIDEO, item);
-//			}
-//		}
+//		print("insert_title td.item.type %s\n", td.item.type.to_string());
+		if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
+			if(change_cb != null) {
+				Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+				change_cb(ChangeType.ADD_VIDEO, item);
+			}
+		}
 		insert_title_statement.reset();
 		if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
 		   insert_title_statement.bind_int (2,  td.dat1)             != Sqlite.OK ||

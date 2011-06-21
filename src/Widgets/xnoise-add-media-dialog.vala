@@ -247,7 +247,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			global.media_import_in_progress = true;
 			
 			if(fullrescancheckb.get_active())
-				Main.instance.main_window.mediaBr.mediabrowsermodel.clear(); // when doing a full import db_ids may change
+				Main.instance.main_window.mediaBr.mediabrowsermodel.remove_all(); // when doing a full import db_ids may change
 			
 			media_importer.import_media_groups(list_of_streams, list_of_files, list_of_folders, msg_id, fullrescancheckb.get_active(), interrupted_populate_model);
 			

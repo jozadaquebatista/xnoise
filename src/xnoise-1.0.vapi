@@ -421,7 +421,6 @@ namespace Xnoise {
 		public void move_album_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_artist_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_title_iter_sorted (ref Gtk.TreeIter org_iter, ref Xnoise.TrackData td);
-		public bool populate_listed ();
 		public bool populate_model ();
 		public void remove_all ();
 		public void unload_children (ref Gtk.TreeIter iter);

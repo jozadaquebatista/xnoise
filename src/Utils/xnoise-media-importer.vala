@@ -238,7 +238,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 	private bool finish_import_job(Worker.Job job) {
 		Idle.add( () => {
 			print("finish import\n");
-			Main.instance.main_window.mediaBr.mediabrowsermodel.populate_listed();
 			global.media_import_in_progress = false;
 			if(current_import_msg_id != 0) {
 				userinfo.popdown(current_import_msg_id);
