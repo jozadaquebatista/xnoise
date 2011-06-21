@@ -151,12 +151,10 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			
 			var mainvbox           = builder.get_object("mainvbox") as Gtk.VBox;
 			tv                     = builder.get_object("tv") as TreeView;
-			var baddfile           = builder.get_object("addfilebutton") as Button;
 			var baddfolder         = builder.get_object("addfolderbutton") as Button;
 			var baddradio          = builder.get_object("addradiobutton") as Button;
 			var brem               = builder.get_object("removeButton") as Button;
 			
-			var labeladdfile       = builder.get_object("labeladdfile") as Label;
 			var labeladdfolder     = builder.get_object("labeladdfolder") as Label;
 			var labeladdstream     = builder.get_object("labeladdstream") as Label;
 			var labelremove        = builder.get_object("labelremove") as Label;
@@ -166,16 +164,14 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			var bcancel            = (Button)this.dialog.add_button(Gtk.Stock.CANCEL, 0);
 			var bok                = (Button)this.dialog.add_button(Gtk.Stock.OK, 1);
 			
-			labeladdfile.label     = _("Add local file");
 			labeladdfolder.label   = _("Add local folder");
 			labeladdstream.label   = _("Add media stream");
 			labelremove.label      = _("Remove");
 			fullrescancheckb.label = _("do a full rescan of the library");
-			descriptionlabel.label = _("Select the local folders or files or media streams to add to the library. \nAll library media will be available in the media browser.");
+			descriptionlabel.label = _("Select local media folders or remote media streams. \nAll library media will be available in the library.");
 			
 			bok.clicked.connect(on_ok_button_clicked);
 			bcancel.clicked.connect(on_cancel_button_clicked);
-			baddfile.clicked.connect(on_add_file_button_clicked);
 			baddfolder.clicked.connect(on_add_folder_button_clicked);
 			baddradio.clicked.connect(on_add_radio_button_clicked);
 			brem.clicked.connect(on_remove_button_clicked);
@@ -264,30 +260,6 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void on_cancel_button_clicked() {
 		this.dialog.destroy();
 		this.sign_finish();
-	}
-
-	private void on_add_file_button_clicked() {
-		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
-			_("Select media file"),
-			this.dialog,
-			Gtk.FileChooserAction.OPEN,
-			Gtk.Stock.CANCEL,
-			Gtk.ResponseType.CANCEL,
-			Gtk.Stock.OPEN,
-			Gtk.ResponseType.ACCEPT,
-			null);
-		fcdialog.set_current_folder(Environment.get_home_dir());
-		if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
-			TreeIter iter;
-			listmodel.append(out iter);
-			listmodel.set(iter,
-			              0, fcdialog.get_filename(),
-			              1, MediaStorageType.FILE,
-			              -1
-			              );
-		}
-		fcdialog.destroy();
-		fcdialog = null;
 	}
 
 	private void on_add_folder_button_clicked() {
