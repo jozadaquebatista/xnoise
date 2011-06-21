@@ -108,6 +108,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private static const string HIDE_LIBRARY = _("Hide Library");
 	private static const string SHOW_LIBRARY = _("Show Library");
 	
+	private bool _not_show_art_on_hover_image;
+	public bool not_show_art_on_hover_image {
+		get {
+			return _not_show_art_on_hover_image;
+		}
+		set {
+			_not_show_art_on_hover_image = value;
+		}
+	}
+	
 	private bool _active_lyrics;
 	public bool active_lyrics {
 		get {
@@ -748,11 +758,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		else {
 			xn.gPl.volume = volSlider;
 		}
-
+		
 		int hp_position = par.get_int_value("hp_position");
 		if (hp_position > 0) {
 			this.hpaned.set_position(hp_position);
 		}
+		not_show_art_on_hover_image = (par.get_int_value("not_show_art_on_hover_image") == 1 ? true : false );
 	}
 
 	public void write_params_data() {
@@ -765,12 +776,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.get_size(out wi, out he);
 		par.set_int_value("width", wi);
 		par.set_int_value("height", he);
-
+		
 		par.set_int_value("hp_position", this.hpaned.get_position());
-
+		
 		par.set_int_value("repeatstate", repeatState);
-
+		
 		par.set_double_value("volume", current_volume);
+		
+		par.set_int_value("not_show_art_on_hover_image", (not_show_art_on_hover_image == true ? 1 : 0));
 	}
 
 	//END REGION IParameter
@@ -1355,8 +1368,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			aimage_timeout = 0;
 			
 			ebox.enter_notify_event.connect(ai_ebox_enter);
-
+			
 			ebox.leave_notify_event.connect( (s, e) => {
+				if(not_show_art_on_hover_image)
+					return false;
 				if(aimage_timeout != 0) {
 					Source.remove(aimage_timeout);
 					aimage_timeout = 0;
@@ -1577,6 +1592,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 	
 	private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {
+		if(not_show_art_on_hover_image)
+			return false;
 		aimage_timeout = Timeout.add(300, () => {
 			buffer_last_page = this.tracklistnotebook.get_current_page();
 			//print("ai_ebox_enter buffer_last_page: %d\n", buffer_last_page);

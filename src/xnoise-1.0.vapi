@@ -375,6 +375,7 @@ namespace Xnoise {
 		public bool active_lyrics { get; set; }
 		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
+		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public bool usestop { get; set; }
 		public signal void sign_drag_over_content_area ();

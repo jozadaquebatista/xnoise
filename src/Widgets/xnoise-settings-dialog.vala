@@ -44,30 +44,15 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private SpinButton sb;
 	private int fontsizeMB;
 	private ScrolledWindow scrollWinPlugins;
-//	private TreeView visibleColTv;
-//	private ListStore visibleColTvModel;
 	private CheckButton checkB_showL;
 	private CheckButton checkB_compact;
 	private CheckButton checkB_mediaBrLinebreaks;
 	private CheckButton checkB_usestop;
-//	private HBox ai_hbox;
-//	private HBox ly_hbox;
-//	private bool show_album_col;
-//	private bool show_length_col;
-//	private bool show_trackno_col;
-//	private ListStore ai_model;
-//	private ListStore ly_model;
-//	private TreeView ai_tv;
-//	private TreeView ly_tv;
-//	private Button ai_down_button;
-//	private Button ly_down_button;
-//	private Button ai_up_button;
-//	private Button ly_up_button;
+	private CheckButton checkB_hoverimage;
 	
 	private enum NotebookTabs {
 		GENERAL = 0,
 		PLUGINS,
-//		PRIORITIES,
 		N_COLUMNS
 	}
 
@@ -76,18 +61,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		TEXT,
 		N_COLUMNS
 	}
-
-//	private enum AIProvider {
-//		STATE,
-//		NAME,
-//		N_COLUMNS
-//	}
-
-//	private enum LyricsProvider {
-//		STATE,
-//		NAME,
-//		N_COLUMNS
-//	}
 	
 	public Gtk.Dialog dialog;
 
@@ -103,28 +76,13 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 				return;
 		}
 		initialize_members();
-//		setup_viz_cols_tv();
-//		setup_albumimage_provider_tv();
-//		setup_lyrics_provider_tv();
-
-		notebook.switch_page.connect(on_notebook_switched_page);
+		
 		dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
 		dialog.show_all();
 	}
 
-	private void on_notebook_switched_page(Notebook sender, Gtk.NotebookPage page, uint page_num) {
-		// refresh table
-//		if(page_num == NotebookTabs.PRIORITIES) {
-//			ly_model.foreach(update_lyrics_providers);
-//			ai_model.foreach(update_ai_providers);
-//		}
-	}
-
 	private void initialize_members() {
 		//Visible Cols
-//		show_length_col = (par.get_int_value("use_length_column") == 1 ? true : false);
-//		show_trackno_col = (par.get_int_value("use_tracknumber_column") == 1 ? true : false);
-//		show_album_col = (par.get_int_value("use_album_column") == 1 ? true : false);
 		
 		//Treelines
 		if(par.get_int_value("use_treelines") > 0)
@@ -143,7 +101,13 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_usestop.active = true;
 		else
 			checkB_usestop.active = false;
-			
+		
+		//not_show_art_on_hover_image
+		if(par.get_int_value("not_show_art_on_hover_image") > 0)
+			checkB_hoverimage.active = true;
+		else
+			checkB_hoverimage.active = false;
+		
 		//media browser line breaks
 		if(par.get_int_value("mediabrowser_linebreaks") > 0)
 			checkB_mediaBrLinebreaks.active = true;
@@ -197,6 +161,17 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		else {
 			par.set_int_value("usestop", 0);
 			xn.main_window.usestop = false;
+		}
+	}
+	
+	private void on_checkbutton_mediabr_hoverimage_clicked(Gtk.Button sender) {
+		if(this.checkB_hoverimage.active) {
+			par.set_int_value("not_show_art_on_hover_image", 1);
+			xn.main_window.not_show_art_on_hover_image = true;
+		}
+		else {
+			par.set_int_value("not_show_art_on_hover_image", 0);
+			xn.main_window.not_show_art_on_hover_image = false;
 		}
 	}
 	
@@ -608,6 +583,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_mediaBrLinebreaks.clicked.connect(this.on_checkbutton_mediabr_linebreaks_clicked);
 			checkB_mediaBrLinebreaks.label = _("use linebreaks in media browser");
 			
+			checkB_hoverimage = this.get_object("checkB_hoverimage") as Gtk.CheckButton;
+			checkB_hoverimage.can_focus = false;
+			checkB_hoverimage.clicked.connect(this.on_checkbutton_mediabr_hoverimage_clicked);
+			checkB_hoverimage.label = _("don't show video screen while hovering album image");
+
 			checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
 			checkB_compact.can_focus = false;
 			checkB_compact.clicked.connect(this.on_checkbutton_compact_clicked);

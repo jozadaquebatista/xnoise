@@ -40,17 +40,20 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	private string album = "";
 	private static uint timeout = 0;
 	private string default_size = "medium";
+	private string? current_path = null;
 
 	public AlbumImage() {
 		xn = Main.instance;
 		this.set_size_request(SIZE, SIZE);
 		this.set_from_icon_name("xnoise-panel", Gtk.IconSize.DIALOG);
+		current_path = "default";
 		
 		loader = new AlbumImageLoader();
 		loader.sign_fetched.connect(on_album_image_fetched);
 		global.uri_changed.connect(on_uri_changed);
 		global.sign_image_path_large_changed.connect( () => {
 			set_image_via_idle(global.image_path_large);
+			using_thumbnail = false;
 		});
 	}
 
@@ -81,6 +84,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 				}
 				else {
 					set_image_via_idle(global.image_path_small);
+					using_thumbnail = false;
 				}
 			}
 			return false;
@@ -111,6 +115,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			File? thumb = null;
 			if(thumbnail_available(global.current_uri, out thumb)) {
 				set_image_via_idle(thumb.get_path());
+				using_thumbnail = true;
 			}
 			return;
 		}
@@ -159,6 +164,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		var fileout = get_albumimage_for_artistalbum(_artist, _album, default_size);
 		if(fileout.query_exists(null)) {
 			set_image_via_idle(fileout.get_path());
+			using_thumbnail = false;
 			return true;
 		}
 		return false;
@@ -167,6 +173,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	public void load_default_image() {
 		this.set_size_request(SIZE, SIZE);
 		this.set_from_icon_name("xnoise-panel", Gtk.IconSize.DIALOG);
+		current_path = "default";
 	}
 
 	private void set_albumimage_from_path(string? image_path) {
@@ -183,8 +190,32 @@ public class Xnoise.AlbumImage : Gtk.Image {
 			return;
 		}
 		this.set_from_file(image_path);
+		current_path = image_path;
 		Gdk.Pixbuf temp = this.get_pixbuf().scale_simple(SIZE, SIZE, Gdk.InterpType.BILINEAR);
 		this.set_from_pixbuf(temp);
+		current_path = image_path;
+		if(!using_thumbnail) {
+			Timeout.add_seconds(2, () => {
+				var fileout = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");
+				if(fileout == null) {
+					//print("image not fitting. set default\n");
+					if(current_path != "default")
+						load_default_image();
+					return false;
+				}
+				if(fileout.get_path() != current_path) {
+					//print("this.file not fitting curren album im age (%s). redoing search\n", current_path);
+					string _artist_raw = global.current_artist;
+					string _album_raw  = global.current_album;
+					if(!set_local_image_if_available(ref _artist_raw, ref _album_raw)) {
+						if(current_path != "default")
+							load_default_image();
+					}
+					return false;
+				}
+				return false;
+			});
+		}
 	}
 
 	private uint source = 0;
@@ -204,7 +235,10 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		
 		global.check_image_for_current_track();
 		set_image_via_idle(image_path);
+		using_thumbnail = false;
 	}
+	
+	private bool using_thumbnail = false;
 	
 	private void set_image_via_idle(string? image_path) {
 		if(image_path == null || image_path == "")

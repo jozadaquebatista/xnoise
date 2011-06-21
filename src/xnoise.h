@@ -1960,6 +1960,8 @@ void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, gchar** new
 void xnoise_main_window_handle_control_button_click (XnoiseMainWindow* self, XnoiseControlButton* sender, XnoiseControlButtonDirection dir);
 void xnoise_main_window_display_info_bar (XnoiseMainWindow* self, GtkInfoBar* bar);
 void xnoise_main_window_show_status_info (XnoiseMainWindow* self, XnoiseInfoBar* bar);
+gboolean xnoise_main_window_get_not_show_art_on_hover_image (XnoiseMainWindow* self);
+void xnoise_main_window_set_not_show_art_on_hover_image (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_active_lyrics (XnoiseMainWindow* self);
 void xnoise_main_window_set_active_lyrics (XnoiseMainWindow* self, gboolean value);
 XnoiseMainWindowPlayerRepeatMode xnoise_main_window_get_repeatState (XnoiseMainWindow* self);
