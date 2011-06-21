@@ -586,7 +586,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_hoverimage = this.get_object("checkB_hoverimage") as Gtk.CheckButton;
 			checkB_hoverimage.can_focus = false;
 			checkB_hoverimage.clicked.connect(this.on_checkbutton_mediabr_hoverimage_clicked);
-			checkB_hoverimage.label = _("don't show video screen while hovering album image");
+			checkB_hoverimage.label = _("Don't show video screen while hovering album image");
 
 			checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
 			checkB_compact.can_focus = false;
