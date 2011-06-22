@@ -1003,12 +1003,14 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 
 	public void write_final_tracks_to_db(Worker.Job job) throws Error {
-		if(db == null) return;
+		if(db == null)
+			return;
 		
-		this.begin_transaction();
 		if(db.exec("DELETE FROM lastused;", null, null)!= Sqlite.OK) {
 			throw new DbError.FAILED("Error while removing old music folders");
 		}
+		this.begin_transaction();
+		print("write_final_tracks_to_db\n");
 		foreach(Item? i in job.items) {
 			this.insert_lastused_track(ref i);
 		}
