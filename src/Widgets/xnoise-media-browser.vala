@@ -151,7 +151,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	// with GLib.Idle
 	private bool populate_model() {
 		bool res = mediabrowsermodel.populate_model();
-		this.set_model(mediabrowsermodel);//mediabrowsermodel);
+		//this.set_model(mediabrowsermodel);//mediabrowsermodel);
 		return res;
 	}
 
@@ -465,7 +465,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	public bool change_model_data() {
-		set_model(null);
+		//set_model(null);
 		mediabrowsermodel.filter();
 //		mediabrowsermodel.populate_model();
 //		update_view();

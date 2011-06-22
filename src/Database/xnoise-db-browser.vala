@@ -62,8 +62,6 @@ public class Xnoise.DbBrowser {
 		"SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
 	private static const string STMT_GET_LASTUSED =
 		"SELECT uri FROM lastused";
-	private static const string STMT_GET_VIDEO_DATA =
-		"SELECT DISTINCT i.title, i.mediatype, i.id, u.name FROM items i, uris u WHERE i.uri = u.id AND title LIKE ? AND mediatype = ? GROUP BY LOWER(i.title) ORDER BY LOWER(i.title) DESC";
 	private static const string STMT_GET_VIDEOS =
 		"SELECT DISTINCT title FROM items WHERE title LIKE ? AND mediatype = ? GROUP BY LOWER(title) ORDER BY LOWER(title) DESC";
 	private static const string STMT_GET_ITEMS =
@@ -550,21 +548,60 @@ public class Xnoise.DbBrowser {
 		return results;
 	}
 
+	private static const string STMT_GET_VIDEO_DATA =
+		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, t.genre FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND mediatype = ? AND title LIKE ? GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) DESC";
+
 	public TrackData[] get_video_data(ref string searchtext) {
 		TrackData[] val = {};
 		Statement stmt;
 		
 		this.db.prepare_v2(STMT_GET_VIDEO_DATA, -1, out stmt);
 		
-		if((stmt.bind_text(1, "%%%s%%".printf(searchtext))     != Sqlite.OK)|
-		   (stmt.bind_int (2, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)) {
+		if((stmt.bind_int (1, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)||
+		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
 			this.db_error();
+			return val;
 		}
 		while(stmt.step() == Sqlite.ROW) {
-			TrackData vd = new TrackData();
-			vd.name = stmt.column_text(0);
-			vd.item = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(3), stmt.column_int(2));
-			val += vd;
+			TrackData td = new TrackData();
+			td.artist      = stmt.column_text(4);
+			td.album       = stmt.column_text(5);
+			td.title       = stmt.column_text(0);
+			td.tracknumber = stmt.column_int(2);
+			td.length      = stmt.column_int(6);
+			td.genre       = stmt.column_text(7);
+			td.name        = stmt.column_text(0);
+			td.item        = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(3), stmt.column_int(1));
+			val += td;
+		}
+		return val;
+	}
+
+	private static const string STMT_GET_TRACKDATA_FOR_VIDEO =
+		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, t.genre FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND mediatype = ? AND title LIKE ? GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) ASC";
+
+	public TrackData[] get_trackdata_for_video(ref string searchtext) {
+		TrackData[] val = {};
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_TRACKDATA_FOR_VIDEO, -1, out stmt);
+		
+		if((stmt.bind_int (1, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)||
+		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
+			this.db_error();
+			return val;
+		}
+		while(stmt.step() == Sqlite.ROW) {
+			TrackData td = new TrackData();
+			td.artist      = stmt.column_text(4);
+			td.album       = stmt.column_text(5);
+			td.title       = stmt.column_text(0);
+			td.tracknumber = stmt.column_int(2);
+			td.length      = stmt.column_int(6);
+			td.genre       = stmt.column_text(7);
+			td.name        = stmt.column_text(0);
+			td.item        = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(3), stmt.column_int(1));
+			val += td;
 		}
 		return val;
 	}

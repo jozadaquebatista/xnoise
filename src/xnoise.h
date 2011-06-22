@@ -1542,6 +1542,7 @@ guint xnoise_db_browser_count_lastused_items (XnoiseDbBrowser* self);
 XnoiseItem* xnoise_db_browser_get_lastused_items (XnoiseDbBrowser* self, int* result_length1);
 gchar** xnoise_db_browser_get_uris (XnoiseDbBrowser* self, const gchar* search_string, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_video_data (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
+XnoiseTrackData** xnoise_db_browser_get_trackdata_for_video (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_db_browser_get_stream_data (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
 gchar** xnoise_db_browser_get_videos (XnoiseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseItem* xnoise_db_browser_get_some_artists (XnoiseDbBrowser* self, gint limit, gint offset, int* result_length1);

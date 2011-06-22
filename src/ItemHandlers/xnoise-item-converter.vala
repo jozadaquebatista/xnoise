@@ -43,7 +43,6 @@ public class Xnoise.ItemConverter : Object {
 			case ItemType.LOCAL_AUDIO_TRACK:
 			case ItemType.LOCAL_VIDEO_TRACK:
 				if(item.db_id > -1) {
-					result = {};
 					TrackData? tmp = db_browser.get_trackdata_by_titleid(ref searchtext, item.db_id);
 					if(tmp == null)
 						break;
@@ -63,17 +62,19 @@ public class Xnoise.ItemConverter : Object {
 				break;
 			case ItemType.COLLECTION_CONTAINER_ALBUM:
 				if(item.db_id > -1) {
-					result = {};
 					result = db_browser.get_trackdata_by_albumid(ref searchtext, item.db_id);
 					break;
 				}
 				break;
 			case ItemType.COLLECTION_CONTAINER_ARTIST:
 				if(item.db_id > -1) {
-					result = {};
 					result = db_browser.get_trackdata_by_artistid(ref searchtext, item.db_id);
 					break;
 				}
+				break;
+			case ItemType.COLLECTION_CONTAINER_VIDEO:
+				result = db_browser.get_trackdata_for_video(ref searchtext);
+				print("result len %d\n", result.length);
 				break;
 			case ItemType.STREAM:
 				break;
@@ -82,9 +83,6 @@ public class Xnoise.ItemConverter : Object {
 				break;
 			case ItemType.LOCAL_FOLDER:
 				//result.append_val(item);
-				break;
-			case ItemType.COLLECTION_CONTAINER_VIDEO:
-				//get all video from db
 				break;
 			case ItemType.COLLECTION_CONTAINER_STREAM:
 				// get all streams from db

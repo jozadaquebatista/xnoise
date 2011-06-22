@@ -590,6 +590,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		TrackData[] localarray = {};
 		foreach(DndData ix in ids) {
 			Item i = Item(ix.mediatype, null, ix.db_id);
+			print("insert type %s\n", i.type.to_string());
 			TrackData[]? tmp = item_converter.to_trackdata(i, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
 			if(tmp != null) {
 				foreach(TrackData tmpdata in tmp) {

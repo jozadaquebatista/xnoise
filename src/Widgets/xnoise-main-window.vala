@@ -367,7 +367,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private uint msg_id = 0;
 	private bool restore_lastused_job(Worker.Job xjob) {
 		uint lastused_cnt = 0;
-		if((lastused_cnt = db_browser.count_lastused_items()) > 1000) {
+		if((lastused_cnt = db_browser.count_lastused_items()) > 1500) {
 			Timeout.add(200, () => {
 				msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
 				                        UserInfo.ContentClass.INFO,
@@ -386,6 +386,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private int LIMIT = 300;
 	private bool add_lastused_titles_to_tracklist_job(Worker.Job job) {
+		Main.instance.tl.set_model(null);
 		job.items = db_browser.get_some_lastused_items(LIMIT, job.big_counter[0]);
 		job.big_counter[0] += job.items.length;
 		TrackData[] tda = {};
@@ -403,6 +404,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		xjob.track_dat = tda;
 		db_worker.push_job(xjob);
 		if(job.items.length < LIMIT) {
+			Main.instance.tl.set_model(Main.instance.tlm);
 			print("got %d tracks for tracklist\n", job.big_counter[0]);
 			if(userinfo != null)
 				userinfo.popdown(msg_id);

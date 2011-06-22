@@ -76,6 +76,7 @@ namespace Xnoise {
 		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 		public bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
+		public Xnoise.TrackData[] get_trackdata_for_video (ref string searchtext);
 		public bool get_uri_for_id (int id, out string val);
 		public string[] get_uris (string search_string);
 		public Xnoise.TrackData[] get_video_data (ref string searchtext);
