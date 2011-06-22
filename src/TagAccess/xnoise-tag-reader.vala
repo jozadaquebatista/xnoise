@@ -61,6 +61,7 @@ public class Xnoise.TagReader {
 						td.title       = "unknown title";
 						td.album       = "unknown album";
 						td.genre       = "unknown genre";
+						td.year        = 0;
 						td.tracknumber = (uint)0;
 						td.item        = item;
 					}	
@@ -88,6 +89,7 @@ public class Xnoise.TagReader {
 				td.title       = "unknown title";
 				td.album       = "unknown album";
 				td.genre       = "unknown genre";
+				td.year        = 0;
 				td.tracknumber = (uint)0;
 				td.item        = item;
 				td.length      = (int32)0;
@@ -100,6 +102,7 @@ public class Xnoise.TagReader {
 			td.title       = "unknown title";
 			td.album       = "unknown album";
 			td.genre       = "unknown genre";
+			td.year        = 0;
 			td.tracknumber = (uint)0;
 			td.item        = item;
 			td.length      = (int32)0;

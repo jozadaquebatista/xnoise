@@ -191,7 +191,6 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	}
 	
 	private bool update_db_job(Worker.Job job) {
-	print("job.track_dat[1] title = %s\n", job.track_dat[1].title);
 		media_importer.update_item_tag(ref job.item, ref job.track_dat[1]);
 		return false;
 	}

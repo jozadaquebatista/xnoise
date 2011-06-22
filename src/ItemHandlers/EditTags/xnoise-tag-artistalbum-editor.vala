@@ -327,6 +327,10 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 
 	private bool update_filetags_job(Worker.Job job) {
 		//print("job.track_dat len : %d\n", job.track_dat.length);
+		if(job.track_dat.length > 0) {
+			var bjob = new Worker.Job(Worker.ExecutionType.ONCE, this.begin_job);
+			db_worker.push_job(bjob);
+		}
 		for(int i = 0; i<job.track_dat.length; i++) {
 			File f = File.new_for_uri(job.track_dat[i].item.uri);
 			var tw = new TagWriter();
@@ -350,7 +354,13 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		return false;
 	}
 	
+	private bool begin_job(Worker.Job job) {
+		db_writer.begin_transaction();
+		return false;
+	}
+	
 	private bool finish_job(Worker.Job job) {
+		db_writer.commit_transaction();
 		Timeout.add(200, () => {
 			Main.instance.main_window.mediaBr.mediabrowsermodel.filter();
 			return false;

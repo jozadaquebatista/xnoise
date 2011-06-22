@@ -60,7 +60,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		menu_add.name = this.aname;
 		menu_add.stock_item = Gtk.Stock.ADD;
 		menu_add.context = ActionContext.MEDIABROWSER_MENU_QUERY;
-		print("constructed HandlerAddToTracklist\n");
+		//print("constructed HandlerAddToTracklist\n");
 	}
 
 	public override ItemHandlerType handler_type() {

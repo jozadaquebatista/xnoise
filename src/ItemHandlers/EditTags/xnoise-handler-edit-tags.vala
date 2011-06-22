@@ -70,7 +70,7 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 		edit_artist_mediabrowser.stock_item = Gtk.Stock.EDIT;
 		edit_artist_mediabrowser.context = ActionContext.MEDIABROWSER_MENU_QUERY;
 
-		print("constructed %s\n", this.name);
+		//print("constructed %s\n", this.name);
 	}
 
 	public override ItemHandlerType handler_type() {

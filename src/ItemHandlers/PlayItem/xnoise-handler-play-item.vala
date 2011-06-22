@@ -44,7 +44,7 @@ public class Xnoise.HandlerPlayItem : ItemHandler {
 		a.name = this.aname;
 		a.context = ActionContext.NONE;
 		
-		print("constructed HandlerPlayItem\n");
+		//print("constructed HandlerPlayItem\n");
 	}
 
 	public override ItemHandlerType handler_type() {
