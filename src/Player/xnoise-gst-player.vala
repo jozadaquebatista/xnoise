@@ -281,10 +281,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 		});
 	}
 	
-//	private void on_about_to_finish(Gst.Element sender) {
-//		handle_eos_via_idle();
-//	}
-	
 	public void set_subtitles_for_current_video(string s_uri) {
 		if(this._uri == null)
 			return;
@@ -356,22 +352,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 			});
 		});
 		
-//		playbin.about_to_finish.connect(on_about_to_finish);
 		playbin.audio_tags_changed.connect(on_audio_tags_changed);
 		playbin.text_tags_changed.connect(on_text_tags_changed);
 		playbin.video_tags_changed.connect(on_video_tags_changed);
-		
-		//playbin.notify["current-audio"].connect( () => {
-		//	print("current audio track set to %d\n", this.current_audio);
-		//});
-
-		//playbin.notify["current-text"].connect( () => {
-		//	print("current text set to %d\n", this.current_text);
-		//});
-
-		//playbin.notify["suburi"].connect( () => {
-		//	print("current text set to %s\n", this.suburi);
-		//});
 
 		Gst.Bus bus;
 		bus = playbin.get_bus();
@@ -445,13 +428,13 @@ public class Xnoise.GstPlayer : GLib.Object {
 			case Gst.MessageType.ELEMENT: {
 				string type = null;
 				string source;
-
+				
 				source = msg.src.get_name();
 				type   = msg.get_structure().get_name();
-
+				
 				if(type == null)
 					break;
-
+				
 				if(type == "missing-plugin") {
 					//print("missing plugins msg for element\n");
 					//print("src_name: %s; type_name: %s\n", source, type);
