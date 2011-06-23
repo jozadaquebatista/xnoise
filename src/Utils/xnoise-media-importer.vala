@@ -218,7 +218,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 				xcnt = current_import_track_count;
 			}
 			userinfo.update_text_by_id((uint)job.get_arg("msg_id"),
-			                           _("Found %u tracks. Updating library ... ".printf(xcnt)),
+			                           _("Found %u tracks. Updating library ...".printf(xcnt)),
 			                           false);
 			if(userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id")) != null)
 				userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id")).hide();

@@ -281,9 +281,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 		});
 	}
 	
-	private void on_about_to_finish(Gst.Element sender) {
-		handle_eos_via_idle();
-	}
+//	private void on_about_to_finish(Gst.Element sender) {
+//		handle_eos_via_idle();
+//	}
 	
 	public void set_subtitles_for_current_video(string s_uri) {
 		if(this._uri == null)
@@ -356,7 +356,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			});
 		});
 		
-		playbin.about_to_finish.connect(on_about_to_finish);
+//		playbin.about_to_finish.connect(on_about_to_finish);
 		playbin.audio_tags_changed.connect(on_audio_tags_changed);
 		playbin.text_tags_changed.connect(on_text_tags_changed);
 		playbin.video_tags_changed.connect(on_video_tags_changed);
@@ -438,7 +438,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private void on_bus_message(Gst.Message msg) {
-		if((msg == null)||(msg.get_structure() == null)) 
+		//print("msg arrived %s\n", msg.type.to_string());
+		if(msg == null) 
 			return;
 		switch(msg.type) {
 			case Gst.MessageType.ELEMENT: {
