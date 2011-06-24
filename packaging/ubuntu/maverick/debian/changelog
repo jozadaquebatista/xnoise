@@ -1,3 +1,23 @@
+xnoise (0.1.25.0-maverick-0ubuntu0) maverick; urgency=low
+  * bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 24 Jun 2011 10:48:15 +0200
+
+
+xnoise (0.1.24.3-maverick-0ubuntu0) maverick; urgency=low
+  * GUI changes (mainly new track progess bar, remove old stuff from settings dialog)
+  * introduce extendable itemhandler architecture
+  * move xnoise to a new lazy-loading media browser to make handling of large collections easy and to make application start ultra fast
+  * asynchronous import for lastused items into tracklist on application start
+  * introduce io worker for slow io tasks (to improve long running media import performance)
+  * show video thumbnails, if available
+  * changed db structure (old databases are not migrated!)
+  * update translations
+  * bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 22 Jun 2011 14:43:38 +0200
+
+
 xnoise (0.1.23.2-maverick-0ubuntu0) maverick; urgency=low
   * make choosing of subtitles, audio tracks and external subtitle files usable
   * inform the user in case a non-matching external subtitle file has been chosen
