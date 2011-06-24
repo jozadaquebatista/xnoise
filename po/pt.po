@@ -46,13 +46,12 @@ msgid "do a full rescan of the library"
 msgstr "reanalisar a coleção"
 
 #: ../src/Widgets/xnoise-add-media-dialog.vala:171
-#, fuzzy
 msgid ""
 "Select local media folders or remote media streams. \n"
 "All library media will be available in the library."
 msgstr ""
-"Selecione as pastas, ficheiros e emissões a adicionar à coleção. \n"
-"Todos os elementos ficarão disponíveis no navegador."
+"Selecione as pastas e/ou emissões a adicionar. \n"
+"Todos os elementos ficarão disponíveis na coleção."
 
 #: ../src/Widgets/xnoise-add-media-dialog.vala:181
 msgid "xnoise - Add media to library"
@@ -76,10 +75,8 @@ msgid "Leave fullscreen"
 msgstr "Sair de ecrã completo"
 
 #: ../src/Player/xnoise-gst-player.vala:176
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../src/Player/xnoise-gst-player.vala:548
 msgid "Subtitle #"
@@ -131,10 +128,8 @@ msgid "More information on the project website:"
 msgstr "Mais informações na página web:"
 
 #: ../src/xnoise.vala:65
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
 
 #: ../src/xnoise.vala:128
 msgid "Using the running instance of xnoise!\n"
@@ -190,7 +185,7 @@ msgstr "abrir local remoto"
 
 #: ../src/Widgets/xnoise-main-window.vala:181
 msgid "_Add or Remove media"
-msgstr "_Adicionar ou remover media"
+msgstr "_Adicionar ou remover multimédia"
 
 #: ../src/Widgets/xnoise-main-window.vala:181
 msgid "manage the content of the xnoise media library"
@@ -250,22 +245,16 @@ msgstr "_Configurar"
 
 #: ../src/Widgets/xnoise-main-window.vala:374
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "A restaurar %u faixas na lista de faixas. Este é um número elevado e pode atrasar o arranque do xnoise."
 
 #: ../src/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
 msgstr "Adicionar multimédia"
 
 #: ../src/Widgets/xnoise-main-window.vala:438
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
-"a coleção?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para a coleção?"
 
 #: ../src/Widgets/xnoise-main-window.vala:533
 msgid "no repeat"
@@ -360,9 +349,9 @@ msgid "Loading ..."
 msgstr "A carregar..."
 
 #: ../src/Utils/xnoise-media-importer.vala:224
-#, fuzzy, c-format
+#, c-format
 msgid "Found %u tracks. Updating library ... "
-msgstr "Terminado. A atualizar coleção..."
+msgstr "Encontrada(s) %u faixa(s). A atualizar coleção..."
 
 #: ../src/Widgets/xnoise-settings-dialog.vala:584
 msgid "use linebreaks in media browser"
@@ -370,7 +359,7 @@ msgstr "utilizar quebras de linha no navegador"
 
 #: ../src/Widgets/xnoise-settings-dialog.vala:589
 msgid "Don't show video screen while hovering album image"
-msgstr ""
+msgstr "Não mostrar o ecrã de vídeo ao passar com o rato na capa de álbum"
 
 #: ../src/Widgets/xnoise-settings-dialog.vala:594
 msgid "Compact layout"
@@ -378,7 +367,7 @@ msgstr "Esquema compacto"
 
 #: ../src/Widgets/xnoise-settings-dialog.vala:599
 msgid "Use stop button"
-msgstr ""
+msgstr "Utilizar o botão para \"Parar\""
 
 #: ../src/Widgets/xnoise-settings-dialog.vala:610
 msgid "Media browser fontsize:"
@@ -407,19 +396,13 @@ msgstr "Álbum:"
 
 #: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:164
 #: ../src/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:128
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Por favor, aguarde o preenchimento da coleção. Cancele se não quiser "
-"aguardar."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Por favor, aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
 
 #: ../src/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:168
 #: ../src/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:132
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #: ../src/Widgets/xnoise-tracklist.vala:1013
 msgid "Title"
@@ -447,13 +430,13 @@ msgstr "Duração"
 #: ../src/Widgets/xnoise-tracklist.vala:1092
 #: ../src/Widgets/xnoise-tracklist.vala:1212
 msgid "Year"
-msgstr ""
+msgstr "Ano"
 
 #. GENRE
 #: ../src/Widgets/xnoise-tracklist.vala:1114
 #: ../src/Widgets/xnoise-tracklist.vala:1199
 msgid "Genre"
-msgstr ""
+msgstr "Género"
 
 #. TRACKNUMBER
 #: ../src/Widgets/xnoise-tracklist.vala:1160
