@@ -1421,7 +1421,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			//PROGRESS BAR
 			timelabel = gb.get_object("timelabel") as Gtk.Label;
-			var progbox = gb.get_object("vbox2") as Gtk.VBox;
+			var progbox = gb.get_object("progresshbox") as Gtk.HBox;
 //			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
 			this.songProgressBar = new TrackProgressBar();
 			progbox.pack_start(songProgressBar, true, true, 0);
