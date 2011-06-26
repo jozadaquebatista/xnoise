@@ -68,7 +68,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	private bool query_trackdata_job(Worker.Job job) {
 		// callback for query in other thread
 		TrackData[] tmp = {};
-		TrackData[] tda = {};
+//		TrackData[] tda = {};
 		tmp = item_converter.to_trackdata(item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
 		if(tmp == null && tmp[0] != null)
 			return false;

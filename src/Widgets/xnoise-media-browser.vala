@@ -261,7 +261,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				}
 			}
 			case 3: {
-				MediaBrowserModel.CollectionType ct = MediaBrowserModel.CollectionType.UNKNOWN;
+//				MediaBrowserModel.CollectionType ct = MediaBrowserModel.CollectionType.UNKNOWN;
 				TreeIter iter;
 				this.mediabrowsermodel.get_iter(out iter, treepath);
 //				this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.COLL_TYPE, ref ct);

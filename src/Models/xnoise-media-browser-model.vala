@@ -68,8 +68,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	public bool populating_model { get; private set; default = false; }
 	
-	private uint refresh_timeout = 0;
-	
 	construct {
 		xn = Main.instance;
 		theme = IconTheme.get_default();
@@ -82,14 +80,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				return false;
 			});
 		});
-//		global.notify["media-import-in-progress"].connect( () => {
-//			if(!global.media_import_in_progress) {
-//				Idle.add( () => {
-//					filter();
-//					return false;
-//				});
-//			}
-//		});
 		db_writer.register_change_callback(this, database_change_cb);
 	}
 	
@@ -115,7 +105,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				video_in_tree = true;
 				Idle.add( () => {
 					TreeIter iter_videos = TreeIter(), iter_loader;
-					CollectionType ct = CollectionType.UNKNOWN; 
 					if(this.iter_n_children(null) == 0) {
 						Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
 						this.prepend(out iter_videos, null);
@@ -191,7 +180,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					     );
 				return false;
 			}
-			CollectionType ct = CollectionType.UNKNOWN;
 			string itemtext_prep = job.item.text.down().strip();
 			for(int i = 0; i < this.iter_n_children(null); i++) {
 				this.iter_nth_child(out artist_iter, null, i);
@@ -324,7 +312,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	public void insert_video_sorted(TrackData[] tda) {
 		string text = null;
 		TreeIter iter_videos = TreeIter(), iter_singlevideos;
-		CollectionType ct = CollectionType.UNKNOWN; 
 		if(this.iter_n_children(null) == 0) {
 			Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
 			this.prepend(out iter_videos, null);
@@ -375,7 +362,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	public void insert_stream_sorted(TrackData[] tda) {
 		string text = null;
 		TreeIter iter_radios = TreeIter(), iter_singleradios;
-		CollectionType ct = CollectionType.UNKNOWN; 
 		if(this.iter_n_children(null) == 0) {
 			Item? item = Item(ItemType.COLLECTION_CONTAINER_STREAM);
 			this.prepend(out iter_radios, null);
@@ -440,8 +426,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	// used to move an iter after editing the tag
 	private void move_iter_for_title(ref TrackData td, ref TreeIter album_iter, ref TreeIter org_iter) {
 		int tr_no = 0;
-		TreeIter iter_artist, title_iter;
-		int32 dbidx = 0;
+		TreeIter title_iter; // iter_artist, 
+//		int32 dbidx = 0;
 		bool visible = false;
 		if(this.searchtext == "" || td.artist.down().contains(this.searchtext) || td.album.down().contains(this.searchtext) || td.title.down().contains(this.searchtext)) {
 			//print("visible for %s-%s-%s    %s\n", td.artist, td.album, td.title, this.searchtext);
@@ -525,7 +511,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	public void move_artist_iter_sorted(ref TreeIter org_iter, string name) {
 		TreeIter artist_iter;
 		string text = null;
-		CollectionType ct = CollectionType.UNKNOWN;
 		for(int i = 0; i < this.iter_n_children(null); i++) {
 			this.iter_nth_child(out artist_iter, null, i);
 			this.get(artist_iter, Column.VIS_TEXT, out text);
@@ -549,7 +534,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	public void move_album_iter_sorted(ref TreeIter org_iter, string name) {
 		TreeIter artist_iter, album_iter;
 		string text = null;
-		CollectionType ct = CollectionType.UNKNOWN;
 		this.iter_parent(out artist_iter, org_iter);
 		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
 			this.iter_nth_child(out album_iter, artist_iter, i);
@@ -590,7 +574,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         );
 			return;
 		}
-		CollectionType ct = CollectionType.UNKNOWN;
 		for(int i = 0; i < this.iter_n_children(null); i++) {
 			this.iter_nth_child(out artist_iter, null, i);
 			this.get(artist_iter, Column.VIS_TEXT, out text);

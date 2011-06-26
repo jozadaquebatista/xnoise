@@ -422,7 +422,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 	                              uint target_type, uint etime) {
 		rowref_list = {};
 		TreeIter iter;
-		GLib.Value uri;
 		List<unowned TreePath> paths;
 		unowned Gtk.TreeSelection sel;
 		string[] uris;

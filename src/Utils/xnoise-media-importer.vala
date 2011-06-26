@@ -101,13 +101,13 @@ public class Xnoise.MediaImporter : GLib.Object {
 		db_writer.commit_transaction();
 	}
 	
-	internal string[] get_uris_for_artistalbum(string artist, string album) {
-		return db_writer.get_uris_for_artistalbum(artist, album);
-	}
-	
-	internal string[] get_uris_for_artist(string artist) {
-		return db_writer.get_uris_for_artist(artist);
-	}
+//	internal string[] get_uris_for_artistalbum(string artist, string album) {
+//		return db_writer.get_uris_for_artistalbum(artist, album);
+//	}
+//	
+//	internal string[] get_uris_for_artist(string artist) {
+//		return db_writer.get_uris_for_artist(artist);
+//	}
 	
 	public string? get_uri_for_item_id(int32 id) {
 		return db_writer.get_uri_for_item_id(id);
@@ -144,7 +144,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		db_worker.push_job(job);
 	}
 	private bool io_import_job_running = false;
-	private int job_count = 0;
+//	private int job_count = 0;
 
 	internal bool write_final_tracks_to_db_job(Worker.Job job) {
 		try {
@@ -156,8 +156,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 		return false;
 	}
 
-	private PatternSpec psAudio = new PatternSpec("audio*");
-	private PatternSpec psVideo = new PatternSpec("video*");
+//	private PatternSpec psAudio = new PatternSpec("audio*");
+//	private PatternSpec psVideo = new PatternSpec("video*");
 	
 	// store a single file in the db, don't add it to the media path
 //	internal void add_single_file(string uri) {
@@ -203,7 +203,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 //	}
 
 	private TrackData[] tda = {}; 
-	private TrackData[] tdv = {};
+//	private TrackData[] tdv = {};
 
 	// running in io thread
 	private void end_import(Worker.Job job) {
@@ -369,7 +369,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		try {
 			while((info = enumerator.next_file()) != null) {
 				TrackData td = null;
-				int idbuffer;
+//				int idbuffer;
 				string filename = info.get_name();
 				string filepath = Path.build_filename(dir.get_path(), filename);
 				File file = File.new_for_path(filepath);

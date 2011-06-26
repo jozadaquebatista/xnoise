@@ -362,9 +362,9 @@ public class Xnoise.DbWriter : GLib.Object {
 	}
 	
 	private void setup_pragmas() {
-		Statement stmt;
-		int val = 0;
-		int retv = 0;
+//		Statement stmt;
+//		int val = 0;
+//		int retv = 0;
 		string errormsg;
 		if(db.exec(STMT_PRAGMA_SET_FOREIGN_KEYS_ON, null, out errormsg)!= Sqlite.OK) {
 			stderr.printf("exec_stmnt_string error: %s", errormsg);
@@ -1134,7 +1134,6 @@ public class Xnoise.DbWriter : GLib.Object {
 		
 		if(db.exec("DELETE FROM lastused;", null, null)!= Sqlite.OK) {
 			throw new DbError.FAILED("Error while removing old music folders");
-			return;
 		}
 		this.begin_transaction();
 		foreach(Item? i in job.items)

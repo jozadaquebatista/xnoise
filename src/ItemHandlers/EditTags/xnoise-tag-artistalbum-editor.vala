@@ -36,11 +36,11 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	private Gtk.Builder builder;
 //	private Content content;
 	private string new_content_name = null;
-	private string org_content_name = null;
+//	private string org_content_name = null;
 	private unowned MediaBrowserModel mbm = null;
 	
 	private Entry entry;
-	private TreeRowReference treerowref;
+//	private TreeRowReference treerowref;
 	
 //	private enum Content {
 //		ARTIST,

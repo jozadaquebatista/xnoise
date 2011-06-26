@@ -352,13 +352,13 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 //		return false;
 //	}
 
-	private bool is_in_list(ref List<string> list, string text) {
-		foreach(unowned string s in list)	{
-			if(text == s)
-				return true;
-		}
-		return false;
-	}
+//	private bool is_in_list(ref List<string> list, string text) {
+//		foreach(unowned string s in list)	{
+//			if(text == s)
+//				return true;
+//		}
+//		return false;
+//	}
 	
 //	private void setup_albumimage_provider_tv() {
 //		ai_tv = new TreeView();
@@ -577,6 +577,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_showL = this.get_object("checkB_showlines") as Gtk.CheckButton;
 			checkB_showL.can_focus = false;
 			checkB_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
+			checkB_showL.label = _("use helper lines in media browser");
 			
 			checkB_mediaBrLinebreaks = this.get_object("checkB_mediaBrLinebreaks") as Gtk.CheckButton;
 			checkB_mediaBrLinebreaks.can_focus = false;
@@ -587,46 +588,46 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_hoverimage.can_focus = false;
 			checkB_hoverimage.clicked.connect(this.on_checkbutton_mediabr_hoverimage_clicked);
 			checkB_hoverimage.label = _("Don't show video screen while hovering album image");
-
+			
 			checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
 			checkB_compact.can_focus = false;
 			checkB_compact.clicked.connect(this.on_checkbutton_compact_clicked);
 			checkB_compact.label = _("Compact layout");
-
+			
 			checkB_usestop = this.get_object("checkB_usestop") as Gtk.CheckButton;
 			checkB_usestop.can_focus = false;
 			checkB_usestop.clicked.connect(this.on_checkbutton_usestop_clicked);
 			checkB_usestop.label = _("Use stop button");
-
+			
 			var okButton = this.get_object("buttonOK") as Gtk.Button;
 			okButton.can_focus = false;
 			okButton.clicked.connect(this.on_ok_button_clicked);
-
+			
 			var cancelButton = this.get_object("button1") as Gtk.Button;
 			cancelButton.can_focus = false;
 			cancelButton.clicked.connect(this.on_cancel_button_clicked);
-
+			
 			var fontsize_label = this.get_object("fontsize_label") as Gtk.Label;
 			fontsize_label.label = _("Media browser fontsize:");
-
+			
 			sb = this.get_object("spinbutton1") as Gtk.SpinButton;
 			sb.set_value(8.0);
 			sb.changed.connect(this.on_mb_font_changed);
-
+			
 			scrollWinPlugins = this.get_object("scrollWinPlugins") as Gtk.ScrolledWindow;
 			scrollWinPlugins.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
-
+			
 			notebook = this.get_object("notebook1") as Gtk.Notebook;
-
+			
 			this.dialog.set_default_icon_name("xnoise");
 			this.dialog.set_position(Gtk.WindowPosition.CENTER);
-
+			
 			add_plugin_tabs();
-
+			
 			plugin_manager_tree = new PluginManagerTree();
 			this.dialog.realize.connect(on_dialog_realized);
 			scrollWinPlugins.add(plugin_manager_tree);
-
+			
 			plugin_manager_tree.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
 		}
 		catch (GLib.Error e) {

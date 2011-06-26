@@ -176,7 +176,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	public void on_position_reference_changed() {
 		TreePath treepath;
 		TreeIter iter;
-		string uri = "";
+//		string uri = "";
 
 		// Handle uri stuff
 		if(get_current_path(out treepath)) {
@@ -351,7 +351,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	public string get_uri_for_current_position() {
-		string uri = "";
+//		string uri = "";
 		TreeIter iter;
 		Item? item = Item(ItemType.UNKNOWN);
 		if((global.position_reference != null)&&
@@ -390,7 +390,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 		TreeIter citer;
 		this.get_iter(out citer, global.position_reference.get_path());
-		string xuri;
+//		string xuri;
 		if(ts==PlayerState.PLAYING) {
 			bolden_row();
 			pixbuf = w.render_icon(Gtk.Stock.MEDIA_PLAY, IconSize.BUTTON, null);

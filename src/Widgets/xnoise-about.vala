@@ -36,6 +36,8 @@ private class Xnoise.AboutDialog : Gtk.AboutDialog {
 	const string WEBSITE = "http://www.xnoise-media-player.com/";
 
 	public AboutDialog() {
+		this.set_modal(true);
+		this.set_transient_for(main_window);
 		string contents;
 		try {
 			GLib.FileUtils.get_contents(GLib.Path.build_filename(Config.LICENSEDIR + "COPYING"), out contents);
