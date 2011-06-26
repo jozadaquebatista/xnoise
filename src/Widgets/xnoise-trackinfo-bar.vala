@@ -159,9 +159,11 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 	}
 	
 	private void setup_widgets() {
-		title_label = new Label("xnoise - ready to rock! ;)");
+		title_label = new Label("<b>XNOISE</b> - ready to rock! ;-)");
+		title_label.set_use_markup(true);
 		title_label.set_single_line_mode(true);
 		title_label.set_alignment(0.0f, 0.5f);
+		title_label.set_ellipsize(Pango.EllipsizeMode.END);
 		title_label.xpad = 10;
 		
 		ebox = new EventBox(); 
