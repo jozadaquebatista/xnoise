@@ -16,110 +16,44 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 	}
 	
 	public TrackInfobar(Xnoise.GstPlayer _player) {
-		GLib.Object(homogeneous:false, spacing:5);
+		GLib.Object(homogeneous:false, spacing:4);
 		assert(_player != null);
 		this.player = _player;
 		setup_widgets();
 		
-		this.ebox.button_press_event.connect(this.on_title_press);
-		this.ebox.button_release_event.connect(this.on_title_release);
-		this.ebox.scroll_event.connect(this.on_title_scroll);
-		
-		this.progress.set_events(Gdk.EventMask.SCROLL_MASK |
-		                         Gdk.EventMask.BUTTON1_MOTION_MASK |
-		                         Gdk.EventMask.BUTTON_PRESS_MASK |
-		                         Gdk.EventMask.BUTTON_RELEASE_MASK
-		                         );
-		this.progress.button_press_event.connect(this.on_progress_press);
-		this.progress.button_release_event.connect(this.on_progress_release);
-		this.progress.scroll_event.connect(this.on_progress_scroll);
+		this.ebox.button_press_event.connect(this.on_press);
+		this.ebox.button_release_event.connect(this.on_release);
+		this.ebox.scroll_event.connect(this.on_scroll);
 		
 		this.player.sign_song_position_changed.connect(set_value);
 		global.caught_eos_from_player.connect(on_eos);
 		this.player.sign_stopped.connect(on_stopped);
 	}
 
-	private bool on_progress_press(Gdk.EventButton e) {
-		if((this.player.playing)|(this.player.paused)) {
-			this.player.seeking = true;
-			this.progress.motion_notify_event.connect(on_progress_motion_notify);
-		}
-		return false;
-	}
-
-	private bool on_progress_release(Gdk.EventButton e) {
-		if((this.player.playing)||(this.player.paused)) {
-			double thisFraction;
-			
-			double mouse_x, mouse_y;
-			mouse_x = e.x;
-			mouse_y = e.y;
-			
-			Allocation progress_loc;
-			this.progress.get_allocation(out progress_loc);
-			thisFraction = mouse_x / progress_loc.width;
-			thisFraction = invert_if_rtl(thisFraction);
-			
-			this.progress.motion_notify_event.disconnect(on_progress_motion_notify);
-			
-			this.player.seeking = false;
-			if(thisFraction < 0.0) thisFraction = 0.0;
-			if(thisFraction > 1.0) thisFraction = 1.0;
-			this.progress.set_fraction(thisFraction);
-			this.player.gst_position = thisFraction;
-			
-			set_value((uint)((thisFraction * this.player.length_time) / 1000000), (uint)(this.player.length_time / 1000000));
-		}
-		return false;
-	}
-	
-	private bool on_progress_scroll(Gdk.EventScroll event) {
-		if(global.player_state != PlayerState.STOPPED) {
-			this.player.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
-		}
-		return false;
-	}
-
-	private bool on_progress_motion_notify(Gdk.EventMotion e) {
-		double thisFraction;
-		double mouse_x, mouse_y;
-		mouse_x = e.x;
-		mouse_y = e.y;
+	private bool on_press(Gdk.EventButton e) {
 		Allocation progress_loc;
 		this.progress.get_allocation(out progress_loc);
-		thisFraction = mouse_x / progress_loc.width;
-		thisFraction = invert_if_rtl(thisFraction);
-
-		if(thisFraction < 0.0) thisFraction = 0.0;
-		if(thisFraction > 1.0) thisFraction = 1.0;
-		this.progress.set_fraction(thisFraction);
-		this.player.gst_position = thisFraction;
-		return false;
-	}
-
-	private bool on_title_press(Gdk.EventButton e) {
-	print("on_title_press\n");
+		if(e.x > progress_loc.width)
+			return true;
 		if((this.player.playing)|(this.player.paused)) {
 			this.player.seeking = true;
-			this.ebox.motion_notify_event.connect(on_title_motion_notify);
+			this.ebox.motion_notify_event.connect(on_motion_notify);
 		}
-		return false;
+		return true;
 	}
 
-	private bool on_title_release(Gdk.EventButton e) {
+	private bool on_release(Gdk.EventButton e) {
+		Allocation progress_loc;
+		this.progress.get_allocation(out progress_loc);
+		if(e.x > progress_loc.width)
+			return true;
 		if((this.player.playing)||(this.player.paused)) {
 			double thisFraction;
 			
-			double mouse_x, mouse_y;
-			mouse_x = e.x;
-			mouse_y = e.y;
-			
-			Allocation progress_loc;
-			this.title_label.get_allocation(out progress_loc);
-			thisFraction = mouse_x / progress_loc.width;
+			thisFraction = e.x / progress_loc.width;
 			thisFraction = invert_if_rtl(thisFraction);
 			
-			this.ebox.motion_notify_event.disconnect(on_title_motion_notify);
+			this.ebox.motion_notify_event.disconnect(on_motion_notify);
 			
 			this.player.seeking = false;
 			if(thisFraction < 0.0) thisFraction = 0.0;
@@ -130,31 +64,28 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 			
 			set_value((uint)((thisFraction * this.player.length_time) / 1000000), (uint)(this.player.length_time / 1000000));
 		}
-		return false;
+		return true;
 	}
 	
-	private bool on_title_scroll(Gdk.EventScroll event) {
+	private bool on_scroll(Gdk.EventScroll event) {
 		if(global.player_state != PlayerState.STOPPED) {
 			this.player.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
 		}
-		return false;
+		return true;
 	}
 
-	private bool on_title_motion_notify(Gdk.EventMotion e) {
+	private bool on_motion_notify(Gdk.EventMotion e) {
 		double thisFraction;
-		double mouse_x, mouse_y;
-		mouse_x = e.x;
-		mouse_y = e.y;
 		Allocation progress_loc;
-		this.title_label.get_allocation(out progress_loc);
-		thisFraction = mouse_x / progress_loc.width;
+		this.progress.get_allocation(out progress_loc);
+		thisFraction = e.x / progress_loc.width;
 		thisFraction = invert_if_rtl(thisFraction);
 
 		if(thisFraction < 0.0) thisFraction = 0.0;
 		if(thisFraction > 1.0) thisFraction = 1.0;
 		this.progress.set_fraction(thisFraction);
 		this.player.gst_position = thisFraction;
-		return false;
+		return true;
 	}
 
 	private double invert_if_rtl(double to_invert) {
@@ -207,13 +138,12 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		                Gdk.EventMask.BUTTON_RELEASE_MASK
 		                );
 		
-		ebox.add(title_label);
-		
-		this.pack_start(ebox, false, true, 0);
+		var eventbox = new Gtk.VBox(false, 0);
+		eventbox.pack_start(title_label, false, true, 0);
 		
 		var hbox = new Gtk.HBox(false, 2);
 		var vbox = new Gtk.VBox(false, 0);
-		
+		vbox.set_border_width(4);
 		progress = new ProgressBar();
 		progress.set_size_request(-1, 10);
 		vbox.pack_start(progress, false, true, 0);
@@ -224,6 +154,8 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		time_label.set_single_line_mode(true);
 		time_label.width_chars = 12;
 		hbox.pack_start(time_label, false, false, 0);
-		this.pack_start(hbox, false, false, 0);
+		eventbox.pack_start(hbox, false, false, 0);
+		ebox.add(eventbox);
+		this.pack_start(ebox, true, true, 0);
 	}
 }
