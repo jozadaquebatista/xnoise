@@ -67,7 +67,7 @@ public class Xnoise.FullscreenToolbar {
 		var leavefullscreen = new LeaveVideoFSButton();
 		var volume          = new VolumeSliderButton();
 
-		bar = new TrackProgressBar();
+		bar = new TrackProgressBar(Main.instance.gPl);
 		var vp = new Gtk.Alignment(0,0.5f,0,0);
 		vp.add (bar);
 

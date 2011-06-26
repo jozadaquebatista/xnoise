@@ -115,7 +115,8 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		if(thisFraction < 0.0) thisFraction = 0.0;
 		if(thisFraction > 1.0) thisFraction = 1.0;
 		this.progress.set_fraction(thisFraction);
-		this.player.gst_position = thisFraction;
+		if(this.player != null)
+			this.player.gst_position = thisFraction;
 		return true;
 	}
 

@@ -36,67 +36,65 @@ using Gtk;
 * currently played item and changes it upon user input
 */
 public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
-	private unowned Main xn;
 	private const double SCROLL_POS_CHANGE = 0.02;
-
-	public TrackProgressBar() {
-		xn = Main.instance;
-
-//		this.discrete_blocks = 10;
+	private unowned GstPlayer player;
+	
+	public TrackProgressBar(Xnoise.GstPlayer _player) {
+		assert(_player != null);
+		this.player = _player;
 		this.set_size_request(-1, 10);
-
+		
 		this.set_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.BUTTON1_MOTION_MASK | Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK);
 		this.button_press_event.connect(this.on_press);
 		this.button_release_event.connect(this.on_release);
 		this.scroll_event.connect(this.on_scroll);
-
-		xn.gPl.sign_song_position_changed.connect(set_value);
+		
+		this.player.sign_song_position_changed.connect(set_value);
 		global.caught_eos_from_player.connect(on_eos);
-		xn.gPl.sign_stopped.connect(on_stopped);
-
-		//this.set_text("00:00 / 00:00");
-//xn.main_window.timelabel.label = "00:00 / 00:00";
+		this.player.sign_stopped.connect(on_stopped);
+		
+		this.set_text("00:00 / 00:00");
 		this.fraction = 0.0;
 	}
 
 	private bool on_press(Gdk.EventButton e) {
-		if((xn.gPl.playing)|(xn.gPl.paused)) {
-			xn.gPl.seeking = true;
+		if((this.player.playing)|(this.player.paused)) {
+			this.player.seeking = true;
 			this.motion_notify_event.connect(on_motion_notify);
 		}
 		return false;
 	}
 
 	private bool on_release(Gdk.EventButton e) {
-		if((xn.gPl.playing)|(xn.gPl.paused)) {
+		if((this.player.playing)|(this.player.paused)) {
 			double thisFraction;
-
+			
 			double mouse_x, mouse_y;
 			mouse_x = e.x;
 			mouse_y = e.y;
-
+			
 			Allocation progress_loc;
 			this.get_allocation(out progress_loc);
 			thisFraction = mouse_x / progress_loc.width;
 			thisFraction = invert_if_rtl(thisFraction);
-
+			
 			this.motion_notify_event.disconnect(on_motion_notify);
-
-			xn.gPl.seeking = false;
+			
+			this.player.seeking = false;
 			if(thisFraction < 0.0) thisFraction = 0.0;
 			if(thisFraction > 1.0) thisFraction = 1.0;
 			this.set_fraction(thisFraction);
-//			this.xn.main_window.sign_pos_changed(thisFraction);
-			Main.instance.gPl.gst_position = thisFraction;
-
-			set_value((uint)((thisFraction * xn.gPl.length_time) / 1000000), (uint)(xn.gPl.length_time / 1000000));
+			if(this.player != null)
+				this.player.gst_position = thisFraction;
+			
+			set_value((uint)((thisFraction * this.player.length_time) / 1000000), (uint)(this.player.length_time / 1000000));
 		}
 		return false;
 	}
 	
 	private bool on_scroll(Gdk.EventScroll event) {
 		if(global.player_state != PlayerState.STOPPED) {
-			xn.gPl.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
+			this.player.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
 		}
 		return false;
 	}
@@ -116,12 +114,12 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		this.get_allocation(out progress_loc);
 		thisFraction = mouse_x / progress_loc.width;
 		thisFraction = invert_if_rtl(thisFraction);
-
+		
 		if(thisFraction < 0.0) thisFraction = 0.0;
 		if(thisFraction > 1.0) thisFraction = 1.0;
 		this.set_fraction(thisFraction);
-//		this.xn.main_window.sign_pos_changed(thisFraction);
-		Main.instance.gPl.gst_position = thisFraction;
+		if(this.player != null)
+			this.player.gst_position = thisFraction;
 		return false;
 	}
 
@@ -140,21 +138,19 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 			if(fraction<0.0) fraction = 0.0;
 			if(fraction>1.0) fraction = 1.0;
 			this.set_fraction(fraction);
-
+			
 			this.set_sensitive(true);
-
+			
 			dur_min = (int)(len / 60000);
 			dur_sec = (int)((len % 60000) / 1000);
 			pos_min = (int)(pos / 60000);
 			pos_sec = (int)((pos % 60000) / 1000);
 			string timeinfo = "%02d:%02d / %02d:%02d".printf(pos_min, pos_sec, dur_min, dur_sec);
-//			xn.main_window.timelabel.label = timeinfo;
-//			this.set_text(timeinfo);
+			this.set_text(timeinfo);
 		}
 		else {
 			this.set_fraction(0.0);
-//			this.set_text("00:00 / 00:00");
-//xn.main_window.timelabel.label = "00:00 / 00:00";
+			this.set_text("00:00 / 00:00");
 			this.set_sensitive(false);
 		}
 	}

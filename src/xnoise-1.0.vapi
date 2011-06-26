@@ -625,7 +625,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackProgressBar : Gtk.ProgressBar {
-		public TrackProgressBar ();
+		public TrackProgressBar (Xnoise.GstPlayer _player);
 		public void set_value (uint pos, uint len);
 	}
 	[CCode (cheader_filename = "xnoise.h")]

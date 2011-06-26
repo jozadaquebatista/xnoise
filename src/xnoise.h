@@ -2050,8 +2050,8 @@ void xnoise_track_list_set_column_genre_visible (XnoiseTrackList* self, gboolean
 gboolean xnoise_track_list_get_column_year_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_year_visible (XnoiseTrackList* self, gboolean value);
 GType xnoise_track_progress_bar_get_type (void) G_GNUC_CONST;
-XnoiseTrackProgressBar* xnoise_track_progress_bar_new (void);
-XnoiseTrackProgressBar* xnoise_track_progress_bar_construct (GType object_type);
+XnoiseTrackProgressBar* xnoise_track_progress_bar_new (XnoiseGstPlayer* _player);
+XnoiseTrackProgressBar* xnoise_track_progress_bar_construct (GType object_type, XnoiseGstPlayer* _player);
 void xnoise_track_progress_bar_set_value (XnoiseTrackProgressBar* self, guint pos, guint len);
 XnoiseVideoScreen* xnoise_video_screen_new (XnoiseGstPlayer* _player);
 XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type, XnoiseGstPlayer* _player);
