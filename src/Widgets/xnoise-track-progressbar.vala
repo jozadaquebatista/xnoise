@@ -86,7 +86,8 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 			if(thisFraction < 0.0) thisFraction = 0.0;
 			if(thisFraction > 1.0) thisFraction = 1.0;
 			this.set_fraction(thisFraction);
-			this.xn.main_window.sign_pos_changed(thisFraction);
+//			this.xn.main_window.sign_pos_changed(thisFraction);
+			Main.instance.gPl.gst_position = thisFraction;
 
 			set_value((uint)((thisFraction * xn.gPl.length_time) / 1000000), (uint)(xn.gPl.length_time / 1000000));
 		}
@@ -119,8 +120,8 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		if(thisFraction < 0.0) thisFraction = 0.0;
 		if(thisFraction > 1.0) thisFraction = 1.0;
 		this.set_fraction(thisFraction);
-		this.xn.main_window.sign_pos_changed(thisFraction);
-
+//		this.xn.main_window.sign_pos_changed(thisFraction);
+		Main.instance.gPl.gst_position = thisFraction;
 		return false;
 	}
 
@@ -147,13 +148,13 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 			pos_min = (int)(pos / 60000);
 			pos_sec = (int)((pos % 60000) / 1000);
 			string timeinfo = "%02d:%02d / %02d:%02d".printf(pos_min, pos_sec, dur_min, dur_sec);
-			xn.main_window.timelabel.label = timeinfo;
+//			xn.main_window.timelabel.label = timeinfo;
 //			this.set_text(timeinfo);
 		}
 		else {
 			this.set_fraction(0.0);
 //			this.set_text("00:00 / 00:00");
-xn.main_window.timelabel.label = "00:00 / 00:00";
+//xn.main_window.timelabel.label = "00:00 / 00:00";
 			this.set_sensitive(false);
 		}
 	}

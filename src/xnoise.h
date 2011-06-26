@@ -587,15 +587,15 @@ typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 typedef struct _XnoisePlayPauseButton XnoisePlayPauseButton;
 typedef struct _XnoisePlayPauseButtonClass XnoisePlayPauseButtonClass;
 
-#define XNOISE_TYPE_TRACK_PROGRESS_BAR (xnoise_track_progress_bar_get_type ())
-#define XNOISE_TRACK_PROGRESS_BAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_PROGRESS_BAR, XnoiseTrackProgressBar))
-#define XNOISE_TRACK_PROGRESS_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_PROGRESS_BAR, XnoiseTrackProgressBarClass))
-#define XNOISE_IS_TRACK_PROGRESS_BAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_PROGRESS_BAR))
-#define XNOISE_IS_TRACK_PROGRESS_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_PROGRESS_BAR))
-#define XNOISE_TRACK_PROGRESS_BAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_PROGRESS_BAR, XnoiseTrackProgressBarClass))
+#define XNOISE_TYPE_TRACK_INFOBAR (xnoise_track_infobar_get_type ())
+#define XNOISE_TRACK_INFOBAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_INFOBAR, XnoiseTrackInfobar))
+#define XNOISE_TRACK_INFOBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_INFOBAR, XnoiseTrackInfobarClass))
+#define XNOISE_IS_TRACK_INFOBAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_INFOBAR))
+#define XNOISE_IS_TRACK_INFOBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_INFOBAR))
+#define XNOISE_TRACK_INFOBAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_INFOBAR, XnoiseTrackInfobarClass))
 
-typedef struct _XnoiseTrackProgressBar XnoiseTrackProgressBar;
-typedef struct _XnoiseTrackProgressBarClass XnoiseTrackProgressBarClass;
+typedef struct _XnoiseTrackInfobar XnoiseTrackInfobar;
+typedef struct _XnoiseTrackInfobarClass XnoiseTrackInfobarClass;
 
 #define XNOISE_TYPE_MEDIA_BROWSER (xnoise_media_browser_get_type ())
 #define XNOISE_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowser))
@@ -643,7 +643,18 @@ typedef struct _XnoiseSettingsDialogPrivate XnoiseSettingsDialogPrivate;
 typedef struct _XnoiseTextColumn XnoiseTextColumn;
 typedef struct _XnoiseTextColumnClass XnoiseTextColumnClass;
 typedef struct _XnoiseTextColumnPrivate XnoiseTextColumnPrivate;
+typedef struct _XnoiseTrackInfobarPrivate XnoiseTrackInfobarPrivate;
 typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
+
+#define XNOISE_TYPE_TRACK_PROGRESS_BAR (xnoise_track_progress_bar_get_type ())
+#define XNOISE_TRACK_PROGRESS_BAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_PROGRESS_BAR, XnoiseTrackProgressBar))
+#define XNOISE_TRACK_PROGRESS_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_PROGRESS_BAR, XnoiseTrackProgressBarClass))
+#define XNOISE_IS_TRACK_PROGRESS_BAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_PROGRESS_BAR))
+#define XNOISE_IS_TRACK_PROGRESS_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_PROGRESS_BAR))
+#define XNOISE_TRACK_PROGRESS_BAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_PROGRESS_BAR, XnoiseTrackProgressBarClass))
+
+typedef struct _XnoiseTrackProgressBar XnoiseTrackProgressBar;
+typedef struct _XnoiseTrackProgressBarClass XnoiseTrackProgressBarClass;
 typedef struct _XnoiseTrackProgressBarPrivate XnoiseTrackProgressBarPrivate;
 typedef struct _XnoiseVideoScreenPrivate XnoiseVideoScreenPrivate;
 
@@ -1301,7 +1312,6 @@ struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	GtkActionGroup* action_group;
-	GtkLabel* timelabel;
 	GtkScrolledWindow* mediaBrScrollWin;
 	GtkScrolledWindow* trackListScrollWin;
 	gboolean _seek;
@@ -1321,7 +1331,7 @@ struct _XnoiseMainWindow {
 	GtkNotebook* browsernotebook;
 	GtkNotebook* tracklistnotebook;
 	XnoiseAlbumImage* albumimage;
-	XnoiseTrackProgressBar* songProgressBar;
+	XnoiseTrackInfobar* songProgressBar;
 	XnoiseMediaBrowser* mediaBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* fullscreenwindow;
@@ -1389,6 +1399,15 @@ struct _XnoiseTextColumn {
 
 struct _XnoiseTextColumnClass {
 	GtkTreeViewColumnClass parent_class;
+};
+
+struct _XnoiseTrackInfobar {
+	GtkVBox parent_instance;
+	XnoiseTrackInfobarPrivate * priv;
+};
+
+struct _XnoiseTrackInfobarClass {
+	GtkVBoxClass parent_class;
 };
 
 struct _XnoiseTrackList {
@@ -1944,7 +1963,7 @@ XnoiseLyricsLoader* xnoise_lyrics_view_get_loader (XnoiseLyricsView* self);
 gboolean gdk_window_ensure_native (GdkWindow* window);
 void gtk_widget_style_get_property (GtkWidget* widget, const gchar* property_name, GValue* val);
 GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
-GType xnoise_track_progress_bar_get_type (void) G_GNUC_CONST;
+GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_player_repeat_mode_get_type (void) G_GNUC_CONST;
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
@@ -2007,6 +2026,11 @@ XnoiseTextColumn* xnoise_text_column_new (const gchar* title, GtkCellRendererTex
 XnoiseTextColumn* xnoise_text_column_construct (GType object_type, const gchar* title, GtkCellRendererText* renderer, XnoiseTrackListModelColumn col_id);
 void xnoise_text_column_adjust_width (XnoiseTextColumn* self, gint width);
 XnoiseTrackListModelColumn xnoise_text_column_get_id (XnoiseTextColumn* self);
+XnoiseTrackInfobar* xnoise_track_infobar_new (XnoiseGstPlayer* _player);
+XnoiseTrackInfobar* xnoise_track_infobar_construct (GType object_type, XnoiseGstPlayer* _player);
+void xnoise_track_infobar_set_value (XnoiseTrackInfobar* self, guint pos, guint len);
+const gchar* xnoise_track_infobar_get_title_text (XnoiseTrackInfobar* self);
+void xnoise_track_infobar_set_title_text (XnoiseTrackInfobar* self, const gchar* value);
 XnoiseTrackList* xnoise_track_list_new (void);
 XnoiseTrackList* xnoise_track_list_construct (GType object_type);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
@@ -2025,6 +2049,7 @@ gboolean xnoise_track_list_get_column_genre_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_genre_visible (XnoiseTrackList* self, gboolean value);
 gboolean xnoise_track_list_get_column_year_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_year_visible (XnoiseTrackList* self, gboolean value);
+GType xnoise_track_progress_bar_get_type (void) G_GNUC_CONST;
 XnoiseTrackProgressBar* xnoise_track_progress_bar_new (void);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_construct (GType object_type);
 void xnoise_track_progress_bar_set_value (XnoiseTrackProgressBar* self, guint pos, guint len);

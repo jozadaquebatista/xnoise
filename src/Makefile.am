@@ -80,6 +80,7 @@ xnoise_SOURCES = \
     Widgets/xnoise-plugin-manager-tree.vala \
     Widgets/xnoise-settings-dialog.vala \
     Widgets/xnoise-text-column.vala \
+    Widgets/xnoise-trackinfo-bar.vala \
     Widgets/xnoise-tracklist.vala \
     Widgets/xnoise-track-progressbar.vala \
     Widgets/xnoise-videoscreen.vala \

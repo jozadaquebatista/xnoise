@@ -47,7 +47,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private uint search_idlesource = 0;
 	public Gtk.ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
-	private Label song_title_label;
+//	private Label song_title_label;
 	private VolumeSliderButton volumeSliderButton;
 	private int _posX_buffer;
 	private int _posY_buffer;
@@ -68,7 +68,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private int buffer_last_page;
 	private Image repeatimage; 
 //	private Label repeatLabel;
-	public Label timelabel;
+//	public Label timelabel;
 	private VBox menuvbox;
 	private VBox mainvbox;
 	private VBox contentvbox;
@@ -100,7 +100,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public Notebook browsernotebook;
 	public Notebook tracklistnotebook;
 	public AlbumImage albumimage;
-	public TrackProgressBar songProgressBar;
+	public TrackInfobar songProgressBar;
 	public MediaBrowser mediaBr = null;
 	public TrackList trackList;
 	public Gtk.Window fullscreenwindow;
@@ -163,7 +163,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public PlayerRepeatMode repeatState { get; set; }
 	public bool fullscreenwindowvisible { get; set; }
 
-	public signal void sign_pos_changed(double fraction);
 	public signal void sign_volume_changed(double fraction);
 	public signal void sign_drag_over_content_area();
 
@@ -278,9 +277,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//handle stop signal from gst player
 			if(!this.fullscreenwindowvisible)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
-		});
-		this.sign_pos_changed.connect( (s, fraction) => {
-			xn.gPl.gst_position = fraction;
 		});
 		
 		this.check_resize.connect(on_resized);
@@ -1070,8 +1066,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		string basename = null;
 		if((newuri == "")|(newuri == null)) {
 			text = "<b>XNOISE</b> - ready to rock! ;-)";
-			song_title_label.set_text(text);
-			song_title_label.use_markup = true;
+			songProgressBar.title_text = text; //song_title_label.set_text(text);
+//			song_title_label.use_markup = true;
 			return;
 		}
 		File file = File.new_for_uri(newuri);
@@ -1196,8 +1192,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 			}
 		}
-		song_title_label.set_text(text);
-		song_title_label.use_markup = true;
+		songProgressBar.title_text = text; //song_title_label.set_text(text);
+		//song_title_label.use_markup = true;
 	}
 
 
@@ -1387,8 +1383,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//--------------------
 
 			//PLAYING TITLE NAME
-			this.song_title_label           = gb.get_object("song_title_label") as Gtk.Label;
-			this.song_title_label.use_markup= true;
+//			this.song_title_label           = gb.get_object("song_title_label") as Gtk.Label;
+//			this.song_title_label.use_markup= true;
 			//--------------------
 
 			this.hpaned = gb.get_object("hpaned1") as Gtk.HPaned;
@@ -1420,10 +1416,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			nextButton.show();
 			
 			//PROGRESS BAR
-			timelabel = gb.get_object("timelabel") as Gtk.Label;
-			var progbox = gb.get_object("vbox2") as Gtk.VBox;
+//			timelabel = gb.get_object("timelabel") as Gtk.Label;
+			var progbox = gb.get_object("vbox1") as Gtk.VBox;
 //			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
-			this.songProgressBar = new TrackProgressBar();
+			this.songProgressBar = new TrackInfobar(Main.instance.gPl);
 			progbox.pack_start(songProgressBar, true, true, 0);
 //			songprogress_viewport.add(songProgressBar);
 			//---------------------

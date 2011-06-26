@@ -351,10 +351,9 @@ namespace Xnoise {
 		public Xnoise.PlayPauseButton playPauseButton;
 		public Xnoise.ControlButton previousButton;
 		public Gtk.Entry searchEntryMB;
-		public Xnoise.TrackProgressBar songProgressBar;
+		public Xnoise.TrackInfobar songProgressBar;
 		public Xnoise.ControlButton stopButton;
 		public Xnoise.TrackListNoteBookTab temporary_tab;
-		public Gtk.Label timelabel;
 		public Xnoise.TrackList trackList;
 		public Gtk.ScrolledWindow trackListScrollWin;
 		public Gtk.Notebook tracklistnotebook;
@@ -380,7 +379,6 @@ namespace Xnoise {
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public bool usestop { get; set; }
 		public signal void sign_drag_over_content_area ();
-		public signal void sign_pos_changed (double fraction);
 		public signal void sign_volume_changed (double fraction);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
@@ -565,6 +563,12 @@ namespace Xnoise {
 		public uint tracknumber;
 		public uint year;
 		public TrackData ();
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class TrackInfobar : Gtk.VBox {
+		public TrackInfobar (Xnoise.GstPlayer _player);
+		public void set_value (uint pos, uint len);
+		public string title_text { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackList : Gtk.TreeView, Xnoise.IParams {
