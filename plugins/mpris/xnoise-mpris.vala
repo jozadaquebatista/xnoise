@@ -224,7 +224,7 @@ public class MprisRoot : GLib.Object {
 	}
 	
 	public void Raise() {
-		xn.main_window.show_window();
+		main_window.show_window();
 	}
 }
 
@@ -258,8 +258,8 @@ public class MprisPlayer : GLib.Object {
 		
 		Xnoise.global.tag_changed.connect(on_tag_changed);
 		
-		this.xn.gPl.notify["volume"].connect( () => {
-			Variant variant = this.xn.gPl.volume;
+		gPl.notify["volume"].connect( () => {
+			Variant variant = gPl.volume;
 			queue_property_for_notification("Volume", variant);
 		});
 		
@@ -278,15 +278,15 @@ public class MprisPlayer : GLib.Object {
 			trigger_metadata_update();
 		});
 		
-		this.xn.gPl.notify["length-time"].connect( () => {
-			//print("length-time: %lld\n", (int64)(xn.gPl.length_time / (int64)1000));
+		gPl.notify["length-time"].connect( () => {
+			//print("length-time: %lld\n", (int64)(gPl.length_time / (int64)1000));
 			if(_metadata.lookup("mpris:length") == null) {
 				_metadata.insert("mpris:length", ((int64)0));
 				trigger_metadata_update();
 				return;
 			}
 			
-			int64 length_val = (int64)(xn.gPl.length_time / (int64)1000);
+			int64 length_val = (int64)(gPl.length_time / (int64)1000);
 			if(((int64)_metadata.lookup("mpris:length")) != length_val) { 
 				_metadata.insert("mpris:length", length_val);
 				trigger_metadata_update();
@@ -410,7 +410,7 @@ public class MprisPlayer : GLib.Object {
 	
 	public string LoopStatus {
 		owned get {
-			switch(this.xn.main_window.repeatState) {
+			switch(main_window.repeatState) {
 				case(MainWindow.PlayerRepeatMode.NOT_AT_ALL):
 					return "None";
 				case(MainWindow.PlayerRepeatMode.SINGLE):
@@ -426,16 +426,16 @@ public class MprisPlayer : GLib.Object {
 		set {
 			switch(value) {
 				case("None"):
-					this.xn.main_window.repeatState = MainWindow.PlayerRepeatMode.NOT_AT_ALL;
+					main_window.repeatState = MainWindow.PlayerRepeatMode.NOT_AT_ALL;
 					break;
 				case("Track"):
-					this.xn.main_window.repeatState = MainWindow.PlayerRepeatMode.SINGLE;
+					main_window.repeatState = MainWindow.PlayerRepeatMode.SINGLE;
 					break;
 				case("Playlist"):
-					this.xn.main_window.repeatState = MainWindow.PlayerRepeatMode.ALL;
+					main_window.repeatState = MainWindow.PlayerRepeatMode.ALL;
 					break;
 				default:
-					this.xn.main_window.repeatState = MainWindow.PlayerRepeatMode.ALL;
+					main_window.repeatState = MainWindow.PlayerRepeatMode.ALL;
 					break;
 			}
 			Variant variant = value;
@@ -448,17 +448,17 @@ public class MprisPlayer : GLib.Object {
 	private MainWindow.PlayerRepeatMode buffer_repeat_state = MainWindow.PlayerRepeatMode.NOT_AT_ALL;
 	public bool Shuffle {
 		get {
-			if(this.xn.main_window.repeatState == MainWindow.PlayerRepeatMode.RANDOM)
+			if(main_window.repeatState == MainWindow.PlayerRepeatMode.RANDOM)
 				return true;
 			return false;
 		}
 		set {
 			if(value == true) {
-				buffer_repeat_state = this.xn.main_window.repeatState;
-				this.xn.main_window.repeatState = MainWindow.PlayerRepeatMode.RANDOM;
+				buffer_repeat_state = main_window.repeatState;
+				main_window.repeatState = MainWindow.PlayerRepeatMode.RANDOM;
 			}
 			else {
-				this.xn.main_window.repeatState = buffer_repeat_state;
+				main_window.repeatState = buffer_repeat_state;
 			}
 			Variant variant = value;
 			queue_property_for_notification("Shuffle", variant);
@@ -476,7 +476,7 @@ public class MprisPlayer : GLib.Object {
 	
 	public double Volume {
 		get {
-			return this.xn.gPl.volume;
+			return gPl.volume;
 		}
 		set {
 			if(value < 0.0)
@@ -484,17 +484,17 @@ public class MprisPlayer : GLib.Object {
 			if(value > 1.0)
 				value = 1.0;
 
-			this.xn.gPl.volume = value;
+			gPl.volume = value;
 		}
 	}
 	
 	public int64 Position {
 		get {
 			//print("get position\n");
-			if(xn.gPl.length_time == 0)
+			if(gPl.length_time == 0)
 				return -1;
-			double pos = xn.gPl.gst_position;
-			return (int64)(pos * xn.gPl.length_time / 1000.0);
+			double pos = gPl.gst_position;
+			return (int64)(pos * gPl.length_time / 1000.0);
 		}
 	}
 	
@@ -552,8 +552,8 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public void SetPosition(string dobj, int64 Position) {
-		print(" set position %lf\n", ((double)Position/(xn.gPl.length_time / 1000.0)));
-		xn.gPl.gst_position = ((double)Position/(xn.gPl.length_time / 1000.0));
+		print(" set position %lf\n", ((double)Position/(gPl.length_time / 1000.0)));
+		gPl.gst_position = ((double)Position/(gPl.length_time / 1000.0));
 	}
 	
 	public void OpenUri(string Uri) {

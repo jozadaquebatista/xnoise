@@ -243,10 +243,10 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	private void update_pixbufs() {
 		this.set_pixbufs();
-		if(Main.instance.main_window != null)
-			if(Main.instance.main_window.mediaBr != null) {
+		if(main_window != null)
+			if(main_window.mediaBr != null) {
 				this.ref();
-				Main.instance.main_window.mediaBr.change_model_data();
+				main_window.mediaBr.change_model_data();
 				this.unref();
 			}
 	}
@@ -801,7 +801,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		populating_model = true;
 		video_in_tree = false;
 		//print("populate_model\n");
-		Main.instance.main_window.mediaBr.set_model(null);
+		main_window.mediaBr.set_model(null);
 		var v_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
 		v_job.cancellable = populate_model_cancellable;
 		db_worker.push_job(v_job);
@@ -965,7 +965,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.ITEM, loader_item
 				         );
 			}
-			Main.instance.main_window.mediaBr.set_model(this);
+			main_window.mediaBr.set_model(this);
 			return false;
 		});
 		return false;

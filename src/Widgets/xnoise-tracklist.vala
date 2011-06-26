@@ -104,11 +104,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 	public TrackList() {
 		this.xn = Main.instance;
-		if(xn.tlm == null)
+		if(tlm == null)
 			print("tracklist model instance not available\n");
 		
 		par.iparams_register(this);
-		tracklistmodel = xn.tlm;
+		tracklistmodel = tlm;
 		this.set_model(tracklistmodel);
 		this.setup_view();
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);
@@ -410,9 +410,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 		win.get_pointer(out px, out py, null);
 		
 		if(px < 0 || py < 0) {
-			if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
-				xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
-				xn.main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
+			if(main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+				main_window.tracklistnotebook.set_current_page(main_window.temporary_tab);
+				main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
 			}
 		}
 	}
@@ -564,14 +564,14 @@ public class Xnoise.TrackList : TreeView, IParams {
 		//After dropping an item hide the tracklist with a delay of HIDE_TIMEOUT ms 
 		//if it was only shown temporarily
 		
-		if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+		if(main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
 			if(hide_timer != 0) 
 				GLib.Source.remove(hide_timer);
 			
 			hide_timer = Timeout.add(HIDE_TIMEOUT, () => {
-				if(xn.main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
-					xn.main_window.tracklistnotebook.set_current_page(xn.main_window.temporary_tab);
-					xn.main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
+				if(main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+					main_window.tracklistnotebook.set_current_page(main_window.temporary_tab);
+					main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
 				}
 				hide_timer = 0;
 				return false;
@@ -591,7 +591,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		foreach(DndData ix in ids) {
 			Item i = Item(ix.mediatype, null, ix.db_id);
 			print("insert type %s\n", i.type.to_string());
-			TrackData[]? tmp = item_converter.to_trackdata(i, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
+			TrackData[]? tmp = item_converter.to_trackdata(i, ref main_window.mediaBr.mediabrowsermodel.searchtext);
 			if(tmp != null) {
 				foreach(TrackData tmpdata in tmp) {
 					if(tmpdata == null) {
@@ -1241,15 +1241,15 @@ public class Xnoise.TrackList : TreeView, IParams {
 	
 	private int available_width {
 		get {
-			if(xn.main_window == null) 
+			if(main_window == null) 
 				return 0;
 	
 			int h, w;
 			int scrollbar_w = 0;
-			xn.main_window.get_size(out w, out h);
+			main_window.get_size(out w, out h);
 			
-			if(xn.main_window.trackListScrollWin != null) {
-				var scrollbar = xn.main_window.trackListScrollWin.get_vscrollbar();
+			if(main_window.trackListScrollWin != null) {
+				var scrollbar = main_window.trackListScrollWin.get_vscrollbar();
 				if(scrollbar != null) {
 					Requisition req; 
 					scrollbar.get_child_requisition(out req);
@@ -1262,20 +1262,20 @@ public class Xnoise.TrackList : TreeView, IParams {
 			//int vertical_separator_size = v.get_int();
 			
 			//print("|%i|%i", w - (scrollbar_w + 
-			//            xn.main_window.hpaned.position + 
+			//            main_window.hpaned.position + 
 			//            n_columns * vertical_separator_size), n_columns);
 			
 			return w - (scrollbar_w + 
-			            xn.main_window.hpaned.position);/* + 
+			            main_window.hpaned.position);/* + 
 			            n_columns * vertical_separator_size);*/		
 		}
 	}
 	
 	
 	public void handle_resize() {
-		if(xn.main_window == null)
+		if(main_window == null)
 			return;
-		if(xn.main_window.get_window() == null)
+		if(main_window.get_window() == null)
 			return;
 		resize_column_range_relatively(0);
 	}

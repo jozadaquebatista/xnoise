@@ -41,7 +41,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 	}
 	
 	private bool reimport_media_groups_job(Worker.Job job) {
-		Main.instance.main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
+		main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
 		
 		//add folders
 		string[] mfolders = db_browser.get_media_folders();
@@ -70,7 +70,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 			                             5,
 			                             prg_bar);
 			global.media_import_in_progress = true;
-			Main.instance.main_window.mediaBr.mediabrowsermodel.remove_all();
+			main_window.mediaBr.mediabrowsermodel.remove_all();
 			
 			import_media_groups(strms, mfiles, mfolders, msg_id, true, false);
 			
@@ -500,7 +500,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		}
 		job.track_dat = tdax;
 		Idle.add( () => {
-//			Main.instance.main_window.mediaBr.mediabrowsermodel.insert_stream_sorted(job.track_dat); 
+//			main_window.mediaBr.mediabrowsermodel.insert_stream_sorted(job.track_dat); 
 			return false; 
 		});
 		

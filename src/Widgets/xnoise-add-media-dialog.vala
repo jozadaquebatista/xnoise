@@ -145,7 +145,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			dialog = new Dialog();
 			
 			dialog.set_modal(true);
-			dialog.set_transient_for(xn.main_window);
+			dialog.set_transient_for(main_window);
 			
 			builder.add_from_file(Config.UIDIR + "add_media.ui");
 			
@@ -224,12 +224,12 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
 	private void on_ok_button_clicked() {
 		bool interrupted_populate_model = false;
-		if(Main.instance.main_window.mediaBr.mediabrowsermodel.populating_model) {
+		if(main_window.mediaBr.mediabrowsermodel.populating_model) {
 			interrupted_populate_model = true; // that means we have to complete filling of the model after import
 			//print("was still populating model\n");
 		}
 		
-		Main.instance.main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
+		main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
 		var prg_bar = new Gtk.ProgressBar();
 		prg_bar.set_fraction(0.0);
 		prg_bar.set_text("0 / 0");
@@ -247,7 +247,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			global.media_import_in_progress = true;
 			
 			if(fullrescancheckb.get_active())
-				Main.instance.main_window.mediaBr.mediabrowsermodel.remove_all(); // when doing a full import db_ids may change
+				main_window.mediaBr.mediabrowsermodel.remove_all(); // when doing a full import db_ids may change
 			
 			media_importer.import_media_groups(list_of_streams, list_of_files, list_of_folders, msg_id, fullrescancheckb.get_active(), interrupted_populate_model);
 			

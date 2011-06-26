@@ -44,11 +44,11 @@ public class Xnoise.FullscreenToolbar {
 	
 	private void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
 		if(xn == null) return;
-		if(xn.main_window == null) return;
+		if(main_window == null) return;
 		if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS)
-			xn.main_window.change_track(dir);
+			main_window.change_track(dir);
 		else if(dir == ControlButton.Direction.STOP)
-			xn.main_window.stop();
+			main_window.stop();
 	}
 
 	public FullscreenToolbar(Gtk.Window fullscreenwindow) {
@@ -67,7 +67,7 @@ public class Xnoise.FullscreenToolbar {
 		var leavefullscreen = new LeaveVideoFSButton();
 		var volume          = new VolumeSliderButton();
 
-		bar = new TrackProgressBar(Main.instance.gPl);
+		bar = new TrackProgressBar(gPl);
 		var vp = new Gtk.Alignment(0,0.5f,0,0);
 		vp.add (bar);
 
@@ -95,11 +95,11 @@ public class Xnoise.FullscreenToolbar {
 	private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
 		switch(e.keyval) {
 			case KEY_ESC: {
-				this.xn.main_window.toggle_fullscreen();
+				main_window.toggle_fullscreen();
 				return true;
 			}
 			case SPACE_KEY: {
-				this.xn.main_window.playPauseButton.clicked();
+				main_window.playPauseButton.clicked();
 				return true;
 			}
 			default: 
@@ -194,13 +194,13 @@ public class Xnoise.FullscreenToolbar {
 		}
 
 		public void on_clicked() {
-			this.xn.main_window.videoscreen.get_window().unfullscreen();
-			this.xn.main_window.videoscreen.reparent(this.xn.main_window.videovbox);
-			this.xn.main_window.fullscreenwindow.hide_all();
-			this.xn.main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
-			this.xn.main_window.fullscreenwindowvisible = false;
-			this.xn.main_window.videovbox.show();
-			this.xn.main_window.fullscreentoolbar.hide();
+			main_window.videoscreen.get_window().unfullscreen();
+			main_window.videoscreen.reparent(main_window.videovbox);
+			main_window.fullscreenwindow.hide_all();
+			main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+			main_window.fullscreenwindowvisible = false;
+			main_window.videovbox.show();
+			main_window.fullscreentoolbar.hide();
 		}
 	}
 }

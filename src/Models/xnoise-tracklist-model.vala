@@ -406,7 +406,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		this.get(citer,
 				 Column.ITEM, out item
 				 );
-		if(item.uri == xn.gPl.uri) {
+		if(item.uri == gPl.uri) {
 			this.set(citer, Column.ICON, pixbuf);
 		}
 		return true;
@@ -529,6 +529,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			if(action != null)
 				action.action(item, null);
 		}
-		xn.tl.set_focus_on_iter(ref iter_2);
+		tl.set_focus_on_iter(ref iter_2);
 	}
 }

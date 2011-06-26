@@ -310,14 +310,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Main : GLib.Object {
-		public Xnoise.GstPlayer gPl;
-		public Xnoise.MainWindow main_window;
 		public static bool no_plugins;
-		public Xnoise.PluginLoader plugin_loader;
 		public static bool show_plugin_state;
-		public Xnoise.TrackList tl;
-		public Xnoise.TrackListModel tlm;
-		public Xnoise.TrayIcon tray_icon;
 		public Main ();
 		public void add_track_to_gst_player (string uri);
 		public void quit ();
@@ -850,6 +844,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.DbWriter db_writer;
 	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.GstPlayer gPl;
+	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalAccess global;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Worker io_worker;
@@ -858,11 +854,21 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.ItemHandlerManager item_handler_manager;
 	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.MainWindow main_window;
+	[CCode (cheader_filename = "xnoise.h")]
 	public static GLib.MainContext mc;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.MediaImporter media_importer;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.PluginLoader plugin_loader;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.TrackList tl;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.TrackListModel tlm;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.TrayIcon tray_icon;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.UserInfo userinfo;
 	[CCode (cheader_filename = "xnoise.h")]

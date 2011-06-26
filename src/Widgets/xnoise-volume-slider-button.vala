@@ -44,11 +44,11 @@ public class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
 		this.relief = Gtk.ReliefStyle.NONE;
 		this.set_value(0.3); //Default value
 		this.value_changed.connect(on_change);
-		this.xn.gPl.sign_volume_changed.connect(on_volume_change);
+		gPl.sign_volume_changed.connect(on_volume_change);
 	}
 
 	private void on_change() {
-		this.xn.gPl.volume = get_value();
+		gPl.volume = get_value();
 	}
 
 	private void on_volume_change(double val) {

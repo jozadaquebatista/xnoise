@@ -58,11 +58,11 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			}
 			renderer.set_fixed_height_from_font(-1);
 			renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
-			if(xn.main_window == null)
+			if(main_window == null)
 				return;
-			if(xn.main_window.hpaned == null)
+			if(main_window.hpaned == null)
 				return;
-			this.resize_line_width(xn.main_window.hpaned.position);
+			this.resize_line_width(main_window.hpaned.position);
 		}
 	}
 	
@@ -217,7 +217,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 	
 	public void on_searchtext_changed() {
-		string txt = xn.main_window.searchEntryMB.text;
+		string txt = main_window.searchEntryMB.text;
 		if(txt != null) {
 			if(txt.down() == mediabrowsermodel.searchtext)
 				return;
@@ -477,7 +477,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	/* updates the view, leaves the original model untouched.
 	   expanded rows are kept as well as the scrollbar position */
 	public bool update_view() {
-		double scroll_position = xn.main_window.mediaBrScrollWin.vadjustment.value;
+		double scroll_position = main_window.mediaBrScrollWin.vadjustment.value;
 //print("scroll_position: %.3lf\n", scroll_position);
 //		this.row_collapsed.disconnect(on_row_collapsed);
 //		this.row_expanded.disconnect(on_row_expanded);
@@ -486,8 +486,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		//TODO: delete the expanion list after import
 //		foreach(TreePath tp in this.expansion_list)
 //			this.expand_row(tp, false);
-		xn.main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);
-		xn.main_window.mediaBrScrollWin.vadjustment.value_changed();
+		main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);
+		main_window.mediaBrScrollWin.vadjustment.value_changed();
 //		this.row_collapsed.connect(on_row_collapsed);
 //		this.row_expanded.connect(on_row_expanded);
 		return false;
@@ -560,8 +560,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		//check for options
 		//get scrollbar width of the scrolled window
 		int scrollbar_w = 0;
-		if(xn.main_window.mediaBrScrollWin != null) {
-			var scrollbar = xn.main_window.trackListScrollWin.get_vscrollbar();
+		if(main_window.mediaBrScrollWin != null) {
+			var scrollbar = main_window.trackListScrollWin.get_vscrollbar();
 			if(scrollbar != null) {
 				Requisition req; 
 				scrollbar.get_child_requisition(out req);

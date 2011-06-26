@@ -128,61 +128,61 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		if((int)(((Gtk.SpinButton)sender).value) < 7 ) ((Gtk.SpinButton)sender).value = 7;
 		if((int)(((Gtk.SpinButton)sender).value) > 15) ((Gtk.SpinButton)sender).value = 15;
 		fontsizeMB = (int)((Gtk.SpinButton)sender).value;
-		xn.main_window.mediaBr.fontsizeMB = fontsizeMB;
+		main_window.mediaBr.fontsizeMB = fontsizeMB;
 	}
 
 	private void on_checkbutton_show_lines_clicked(Gtk.Button sender) {
 		if(this.checkB_showL.active) {
 			par.set_int_value("use_treelines", 1);
-			xn.main_window.mediaBr.use_treelines = true;
+			main_window.mediaBr.use_treelines = true;
 		}
 		else {
 			par.set_int_value("use_treelines", 0);
-			xn.main_window.mediaBr.use_treelines = false;
+			main_window.mediaBr.use_treelines = false;
 		}
 	}
 	
 	private void on_checkbutton_compact_clicked(Gtk.Button sender) {
 		if(this.checkB_compact.active) {
 			par.set_int_value("compact_layout", 1);
-			xn.main_window.compact_layout = true;
+			main_window.compact_layout = true;
 		}
 		else {
 			par.set_int_value("compact_layout", 0);
-			xn.main_window.compact_layout = false;
+			main_window.compact_layout = false;
 		}
 	}
 	
 	private void on_checkbutton_usestop_clicked(Gtk.Button sender) {
 		if(this.checkB_usestop.active) {
 			par.set_int_value("usestop", 1);
-			xn.main_window.usestop = true;
+			main_window.usestop = true;
 		}
 		else {
 			par.set_int_value("usestop", 0);
-			xn.main_window.usestop = false;
+			main_window.usestop = false;
 		}
 	}
 	
 	private void on_checkbutton_mediabr_hoverimage_clicked(Gtk.Button sender) {
 		if(this.checkB_hoverimage.active) {
 			par.set_int_value("not_show_art_on_hover_image", 1);
-			xn.main_window.not_show_art_on_hover_image = true;
+			main_window.not_show_art_on_hover_image = true;
 		}
 		else {
 			par.set_int_value("not_show_art_on_hover_image", 0);
-			xn.main_window.not_show_art_on_hover_image = false;
+			main_window.not_show_art_on_hover_image = false;
 		}
 	}
 	
 	private void on_checkbutton_mediabr_linebreaks_clicked(Gtk.Button sender) {
 		if(this.checkB_mediaBrLinebreaks.active) {
 			par.set_int_value("mediabrowser_linebreaks", 1);
-			xn.main_window.mediaBr.use_linebreaks = true;
+			main_window.mediaBr.use_linebreaks = true;
 		}
 		else {
 			par.set_int_value("mediabrowser_linebreaks", 0);
-			xn.main_window.mediaBr.use_linebreaks = false;
+			main_window.mediaBr.use_linebreaks = false;
 		}
 	}
 	
@@ -235,8 +235,8 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	private void add_plugin_tabs() {
 		int count = 0;
-		foreach(string name in this.xn.plugin_loader.plugin_htable.get_keys()) {
-			unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(name);
+		foreach(string name in plugin_loader.plugin_htable.get_keys()) {
+			unowned Plugin p = plugin_loader.plugin_htable.lookup(name);
 			if((p.activated) && (p.configurable)) {
 			   Widget? w = p.settingwidget();
 				if(w!=null) notebook.append_page(w, new Gtk.Label(name));
@@ -571,7 +571,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			if(!f.query_exists(null)) throw new SettingsDialogError.FILE_NOT_FOUND("Ui file not found!");
 			this.add_from_file(SETTINGS_UI_FILE);
 			this.dialog = this.get_object("settingsDialog") as Gtk.Dialog;
-			dialog.set_transient_for(xn.main_window);
+			dialog.set_transient_for(main_window);
 			this.dialog.set_modal(true);
 			
 			checkB_showL = this.get_object("checkB_showlines") as Gtk.CheckButton;

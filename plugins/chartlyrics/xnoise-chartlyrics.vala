@@ -72,7 +72,7 @@ public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	}
 
 	public void uninit() {
-		Main.instance.main_window.lyricsView.lyrics_provider_unregister(this); // for lyricsloader
+		main_window.lyricsView.lyrics_provider_unregister(this); // for lyricsloader
 	}
 
 	public Gtk.Widget? get_settings_widget() {

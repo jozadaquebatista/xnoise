@@ -249,7 +249,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public MainWindow() {
 		this.xn = Main.instance;
 		par.iparams_register(this);
-		xn.gPl.sign_volume_changed.connect(
+		gPl.sign_volume_changed.connect(
 			(val) => { this.current_volume = val; }
 		);
 		create_widgets();
@@ -273,7 +273,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		
 		global.caught_eos_from_player.connect(on_caught_eos_from_player);
 		global.tag_changed.connect(this.set_displayed_title);
-		xn.gPl.sign_video_playing.connect( () => { 
+		gPl.sign_video_playing.connect( () => { 
 			//handle stop signal from gst player
 			if(!this.fullscreenwindowvisible)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
@@ -382,7 +382,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	private int LIMIT = 300;
 	private bool add_lastused_titles_to_tracklist_job(Worker.Job job) {
-		Main.instance.tl.set_model(null);
+		tl.set_model(null);
 		job.items = db_browser.get_some_lastused_items(LIMIT, job.big_counter[0]);
 		job.big_counter[0] += job.items.length;
 		TrackData[] tda = {};
@@ -400,7 +400,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		xjob.track_dat = tda;
 		db_worker.push_job(xjob);
 		if(job.items.length < LIMIT) {
-			Main.instance.tl.set_model(Main.instance.tlm);
+			tl.set_model(tlm);
 			print("got %d tracks for tracklist\n", job.big_counter[0]);
 			if(userinfo != null)
 				userinfo.popdown(msg_id);
@@ -752,10 +752,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		double volSlider = par.get_double_value("volume");
 		if((volSlider < 0.0)||
 		   (volSlider > 1.0)) {
-			xn.gPl.volume = 0.5;
+			gPl.volume = 0.5;
 		}
 		else {
-			xn.gPl.volume = volSlider;
+			gPl.volume = volSlider;
 		}
 		
 		int hp_position = par.get_int_value("hp_position");
@@ -1071,7 +1071,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return;
 		}
 		File file = File.new_for_uri(newuri);
-		if(!xn.gPl.is_stream) {
+		if(!gPl.is_stream) {
 			basename = file.get_basename();
 			if(global.current_artist!=null) {
 				artist = remove_linebreaks(global.current_artist);
@@ -1110,8 +1110,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					}
 			}
 			else {
-				if((!xn.gPl.playing)&&
-					(!xn.gPl.paused)) {
+				if((!gPl.playing)&&
+					(!gPl.paused)) {
 					text = "<b>XNOISE</b>\nready to rock! ;-)";
 				}
 				else {
@@ -1177,8 +1177,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 			}
 			else {
-				if((!xn.gPl.playing) &&
-				   (!xn.gPl.paused)) {
+				if((!gPl.playing) &&
+				   (!gPl.paused)) {
 					text = "<b>XNOISE</b> - ready to rock! ;-)";
 				}
 				else {
@@ -1260,7 +1260,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.contentvbox = gb.get_object("contentvbox") as Gtk.VBox;
 
 			//DRAWINGAREA FOR VIDEO
-			videoscreen = xn.gPl.videoscreen;
+			videoscreen = gPl.videoscreen;
 			videovbox = gb.get_object("videovbox") as Gtk.VBox;
 			videovbox.pack_start(videoscreen,true,true,0);
 
@@ -1419,7 +1419,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //			timelabel = gb.get_object("timelabel") as Gtk.Label;
 			var progbox = gb.get_object("vbox1") as Gtk.VBox;
 //			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
-			this.songProgressBar = new TrackInfobar(Main.instance.gPl);
+			this.songProgressBar = new TrackInfobar(gPl);
 			progbox.pack_start(songProgressBar, true, true, 0);
 //			songprogress_viewport.add(songProgressBar);
 			//---------------------
@@ -1428,7 +1428,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			menuvbox                     = gb.get_object("menuvbox") as Gtk.VBox;
 
 			///Tracklist (right)
-			this.trackList = xn.tl; //new TrackList();
+			this.trackList = tl; //new TrackList();
 			this.trackList.set_size_request(100,100);
 			trackListScrollWin = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
 			trackListScrollWin.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);

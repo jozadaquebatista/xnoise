@@ -66,7 +66,7 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	}
 
 	public void uninit() {
-		Main.instance.main_window.lyricsView.lyrics_provider_unregister(this); // for lyricsloader
+		main_window.lyricsView.lyrics_provider_unregister(this); // for lyricsloader
 	}
 	
 	~LyricwikiPlugin() {

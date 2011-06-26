@@ -56,7 +56,7 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 	private void on_name_appeared(DBusConnection conn, string name) {
 		//stdout.printf("%s appeared\n", name);
 		//TODO check for mpris plugin being active
-		p = xn.plugin_loader.plugin_htable.lookup("mpris");
+		p = plugin_loader.plugin_htable.lookup("mpris");
 		if(p == null) {
 			if(this.owner != null)
 				Idle.add( () => {
@@ -87,14 +87,14 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 			return false;
 		});
 		addremove_xnoise_player_to_blacklist(false);
-		xn.tray_icon.visible = false;
+		tray_icon.visible = false;
 	}
 	
 	private void on_name_vanished(DBusConnection conn, string name) {
 		//stdout.printf("%s vanished\n", name);
 		if(server != null)
 			server.hide();
-		xn.tray_icon.visible = true;
+		tray_icon.visible = true;
 	}
 
 	private uint watch;
@@ -120,7 +120,7 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 		addremove_xnoise_player_to_blacklist(true);
 		if(server != null)
 			server.hide();
-		xn.tray_icon.visible = true;
+		tray_icon.visible = true;
 		if(watch != 0) {
 			Bus.unwatch_name(watch);
 			watch = 0;

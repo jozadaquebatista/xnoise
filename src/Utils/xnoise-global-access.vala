@@ -289,12 +289,12 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public void prev() {
 		if(player_state == PlayerState.STOPPED)
 			return;
-		Main.instance.main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
+		main_window.change_track(Xnoise.ControlButton.Direction.PREVIOUS);
 	}
 
 	public void play(bool pause_if_playing) {
 		if(current_uri == null) {
-			string uri = Main.instance.tl.tracklistmodel.get_uri_for_current_position();
+			string uri = tl.tracklistmodel.get_uri_for_current_position();
 			if((uri != "") && (uri != null)) 
 				current_uri = uri;
 		}
@@ -306,7 +306,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 
 	public void pause() {
 		if(current_uri == null) {
-			string uri = Main.instance.tl.tracklistmodel.get_uri_for_current_position();
+			string uri = tl.tracklistmodel.get_uri_for_current_position();
 			if((uri != "") && (uri != null)) 
 				current_uri = uri;
 		}
@@ -316,10 +316,10 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public void next() {
 		if(global.player_state == PlayerState.STOPPED)
 			return;
-		Main.instance.main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
+		main_window.change_track(Xnoise.ControlButton.Direction.NEXT);
 	}
 
 	public void stop() {
-		Main.instance.main_window.stop();
+		main_window.stop();
 	}
 }

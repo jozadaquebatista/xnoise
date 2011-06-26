@@ -80,11 +80,11 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 		string text, album, artist, title, genre, location, organization;
 		string basename = null;
 		if(newuri == null) {
-			xn.main_window.title = "xnoise media player";
+			main_window.title = "xnoise media player";
 			return;
 		}
 		File file = File.new_for_uri(newuri);
-		if(!xn.gPl.is_stream)
+		if(!gPl.is_stream)
 			basename = file.get_basename();
 		if(global.current_artist != null) {
 			//print("global.current_artist: %s\n", global.current_artist);
@@ -142,8 +142,8 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 					text = "%s".printf("xnoise media player");
 		}
 		else {
-			if((!xn.gPl.playing)&&
-				(!xn.gPl.paused)) {
+			if((!gPl.playing)&&
+				(!gPl.paused)) {
 				text = "xnoise media player";
 			}
 			else {
@@ -159,11 +159,11 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 		//print("text: %s\n", text);
 		if(MainContext.current_source().is_destroyed()) 
 			return;
-		xn.main_window.set_title(text);
+		main_window.set_title(text);
 	}
 	
 	public void uninit() {
-		xn.main_window.set_title("xnoise media player");
+		main_window.set_title("xnoise media player");
 	}
 	
 	~TitleToDecoration() {

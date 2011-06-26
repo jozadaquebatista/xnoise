@@ -85,7 +85,7 @@ namespace Xnoise {
 		private int exit_status;
 
 		private int get_window_id() {
-			var win = Main.instance.main_window.get_window();
+			var win = main_window.get_window();
 			if(win == null) return -1;
 			X.ID id = Gdk.x11_drawable_get_xid(win);
 			return (int)id;

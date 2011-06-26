@@ -130,7 +130,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.fetch_trackdata_job);
 		job.set_arg("artist", artist);
 		job.set_arg("album", album);
-		job.set_arg("uri", xn.gPl.uri);
+		job.set_arg("uri", gPl.uri);
 		db_worker.push_job(job);
 	}
 	

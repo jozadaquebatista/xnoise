@@ -33,8 +33,8 @@ private class Xnoise.AppStarter {
 	                                                  int command,
 	                                                  Unique.MessageData message_data,
 	                                                  uint time) {
-		xn.main_window.present();
-		xn.tl.tracklistmodel.add_uris(message_data.get_uris());
+		main_window.present();
+		tl.tracklistmodel.add_uris(message_data.get_uris());
 		return Unique.Response.OK;
 	}
 	

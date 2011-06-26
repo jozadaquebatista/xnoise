@@ -95,7 +95,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		}
 		
 		// Lyrics View is already visible...
-		if(Main.instance.main_window.tracklistnotebook.get_current_page() == TrackListNoteBookTab.LYRICS)
+		if(main_window.tracklistnotebook.get_current_page() == TrackListNoteBookTab.LYRICS)
 			timeout = GLib.Timeout.add_seconds(1, on_timout_elapsed);
 	}
 

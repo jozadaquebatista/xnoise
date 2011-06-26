@@ -57,7 +57,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		td_old = {};
 		builder = new Gtk.Builder();
 		create_widgets();
-		mbm = xn.main_window.mediaBr.mediabrowsermodel;
+		mbm = main_window.mediaBr.mediabrowsermodel;
 		mbm.notify["populating-model"].connect( () => {
 			if(!global.media_import_in_progress && !mbm.populating_model)
 				infolabel.label = "";
@@ -83,7 +83,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	
 	private bool query_trackdata_job(Worker.Job job) {
 		// callback for query in other thread
-		td_old = item_converter.to_trackdata(this.item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
+		td_old = item_converter.to_trackdata(this.item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
 		
 		TrackData td = td_old[0];
 		switch(item.type) {
@@ -117,7 +117,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 			dialog = new Dialog();
 			
 			dialog.set_modal(true);
-			dialog.set_transient_for(xn.main_window);
+			dialog.set_transient_for(main_window);
 			
 			builder.add_from_file(Config.UIDIR + "metadat_artist_album.ui");
 			
@@ -303,7 +303,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
 			var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
 			//print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
-			job.track_dat = item_converter.to_trackdata(tag_job.item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
+			job.track_dat = item_converter.to_trackdata(tag_job.item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
 			if(job.track_dat == null)
 				return false;
 			job.item = tag_job.item;
@@ -314,7 +314,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		}
 		else if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
 			var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-			job.track_dat = item_converter.to_trackdata(tag_job.item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
+			job.track_dat = item_converter.to_trackdata(tag_job.item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
 			if(job.track_dat == null)
 				return false;
 			job.item = tag_job.item;
@@ -362,7 +362,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	private bool finish_job(Worker.Job job) {
 		db_writer.commit_transaction();
 		Timeout.add(200, () => {
-			Main.instance.main_window.mediaBr.mediabrowsermodel.filter();
+			main_window.mediaBr.mediabrowsermodel.filter();
 			return false;
 		});
 		Timeout.add(300, () => {

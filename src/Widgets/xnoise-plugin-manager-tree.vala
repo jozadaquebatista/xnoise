@@ -88,12 +88,12 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		string module;
 		listmodel.get(iter, Column.MODULE, out module);
 		
-		if(this.xn.plugin_loader.plugin_htable.lookup(module).activated) 
-			this.xn.plugin_loader.deactivate_single_plugin(module);
+		if(plugin_loader.plugin_htable.lookup(module).activated) 
+			plugin_loader.deactivate_single_plugin(module);
 		else 
-			this.xn.plugin_loader.activate_single_plugin(module);
+			plugin_loader.activate_single_plugin(module);
 			
-		unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(module);
+		unowned Plugin p = plugin_loader.plugin_htable.lookup(module);
 		
 		listmodel.set(iter,
 		              Column.TOGGLE, p.activated
@@ -143,7 +143,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 	}
 
 	private void setup_entries() {
-		foreach(string s in this.xn.plugin_loader.get_info_files()) {
+		foreach(string s in plugin_loader.get_info_files()) {
 			string name, description, icon, author, website, license, copyright, module;
 			try {
 				var kf = new KeyFile();
@@ -162,7 +162,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				var invisible = new Gtk.Invisible();
 				Gdk.Pixbuf pixbuf = invisible.render_icon(Gtk.Stock.EXECUTE , IconSize.BUTTON, null); //TODO: use plugins' icons
 				unowned Plugin p = null;
-				p = this.xn.plugin_loader.plugin_htable.lookup(module);
+				p = plugin_loader.plugin_htable.lookup(module);
 				if(p == null)
 					continue;
 				p.sign_activated.connect( () => {
@@ -194,7 +194,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		//update activation state
 		string? module = null;
 		sender.get(iter, Column.MODULE, out module);
-		unowned Plugin p = this.xn.plugin_loader.plugin_htable.lookup(module);
+		unowned Plugin p = plugin_loader.plugin_htable.lookup(module);
 		if(p == null) {
 			print("p is null! %s\n", module);
 			return true;

@@ -49,7 +49,7 @@ public class Xnoise.CyclicSaveState : GLib.Object, IPlugin {
 			if(MainContext.current_source().is_destroyed())
 				return false;
 			if(!global.media_import_in_progress && 
-			   !Main.instance.main_window.mediaBr.mediabrowsermodel.populating_model) {
+			   !main_window.mediaBr.mediabrowsermodel.populating_model) {
 				
 				Main.instance.save_tracklist();
 				Main.instance.save_activated_plugins();

@@ -60,7 +60,7 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 		if(name != "com.canonical.indicators.sound")
 			return;
 		//TODO check for mpris plugin being active
-		p = xn.plugin_loader.plugin_htable.lookup("mpris");
+		p = plugin_loader.plugin_htable.lookup("mpris");
 		if(p == null) {
 			if(this.owner != null)
 				Idle.add( () => {
@@ -82,12 +82,12 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 			return;
 		}
 		p.sign_deactivated.connect(mpris_deactivated);
-		xn.tray_icon.visible = false;
+		tray_icon.visible = false;
 	}
 	
 	private void on_name_vanished(DBusConnection conn, string name) {
 		//stdout.printf("%s vanished\n", name);
-		xn.tray_icon.visible = true;
+		tray_icon.visible = true;
 	}
 
 	private uint watch;
@@ -113,7 +113,7 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 	public void uninit() {
 		//print("try remove xnoise from soundmenu\n");
 		addremove_xnoise_player_to_blacklist(true);
-		xn.tray_icon.visible = true;
+		tray_icon.visible = true;
 		if(watch != 0) {
 			Bus.unwatch_name(watch);
 			watch = 0;

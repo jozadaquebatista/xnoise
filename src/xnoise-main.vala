@@ -31,39 +31,14 @@
 public class Xnoise.Main : GLib.Object {
 	private static Main _instance = null;
 	
-	public TrayIcon tray_icon;
-	public MainWindow main_window;
-	public TrackList tl;
-	public TrackListModel tlm;
-	public PluginLoader plugin_loader;
-	public GstPlayer gPl;
 	public static bool show_plugin_state;
 	public static bool no_plugins;
 	
 	public Main() {
 		bool is_first_start;
-		Xnoise.initialize(out is_first_start);
-		
 		_instance = this;
 		
-		check_database_and_tables(ref is_first_start);
-		
-		try {
-			db_browser = new DbBrowser();
-			db_writer  = new DbWriter();
-		}
-		catch(DbError e) {
-			print("%s", e.message);
-			return;
-		}
-		
-		gPl = new GstPlayer();
-		
-		plugin_loader = new PluginLoader();
-		tlm = new TrackListModel();
-		tl = new TrackList();
-		main_window = new MainWindow();
-		tray_icon = new TrayIcon();
+		Xnoise.initialize(out is_first_start);
 		
 		userinfo = new UserInfo(main_window.show_status_info);
 		
@@ -124,16 +99,12 @@ public class Xnoise.Main : GLib.Object {
 		Posix.signal(Posix.SIGINT,  on_posix_finish); // clean up on posix sigint signal
 	}
 
-	private void check_database_and_tables(ref bool is_first_start) {
-		DbCreator.check_tables(ref is_first_start);
-	}
-
 	public void add_track_to_gst_player(string uri) {
 		// TODO: update this function
 		print("add_track_to_gst_player\n");
 		global.current_uri = uri;
 		global.player_state = PlayerState.PLAYING;
-		//this.gPl.playSong();
+		//gPl.playSong();
 	}
 
 	public static Main instance {
@@ -152,8 +123,8 @@ public class Xnoise.Main : GLib.Object {
 	public void save_activated_plugins() {
 		//print("\nsaving activated plugins...\n");
 		string[]? activatedplugins = {};
-		foreach(string name in this.plugin_loader.plugin_htable.get_keys()) {
-			if(this.plugin_loader.plugin_htable.lookup(name).activated)
+		foreach(string name in plugin_loader.plugin_htable.get_keys()) {
+			if(plugin_loader.plugin_htable.lookup(name).activated)
 				activatedplugins += name;
 		}
 		if(activatedplugins.length <= 0)
@@ -164,7 +135,7 @@ public class Xnoise.Main : GLib.Object {
 	private string[] final_tracklist = null;
 	public void save_tracklist() {
 		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_final_tracks_to_db_job);
-		job.items = this.main_window.trackList.tracklistmodel.get_all_tracks();
+		job.items = main_window.trackList.tracklistmodel.get_all_tracks();
 //		job.set_arg("final_tracklist", final_tracklist);
 		job.finished.connect( () => {
 			if(maxtime_quit_src != 0)
@@ -184,9 +155,9 @@ public class Xnoise.Main : GLib.Object {
 		});
 		print ("closing...\n");
 		if(main_window.is_fullscreen) 
-			this.main_window.get_window().unfullscreen();
+			main_window.get_window().unfullscreen();
 		main_window.hide();
-		this.gPl.stop();
+		gPl.stop();
 		this.save_activated_plugins();
 		par.write_all_parameters_to_file();
 		this.save_tracklist();

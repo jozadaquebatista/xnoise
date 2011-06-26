@@ -45,7 +45,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		this.query_tooltip.connect(on_query_tooltip);
 		
 		popup_menu.connect(this.traymenu_popup);
-		activate.connect(xn.main_window.toggle_window_visbility);
+		activate.connect(main_window.toggle_window_visbility);
 		scroll_event.connect(this.on_scrolled);
 		button_press_event.connect(this.on_clicked);
 	}
@@ -55,14 +55,14 @@ public class Xnoise.TrayIcon : StatusIcon {
 
 		playpause_popup_image = new Image();
 		playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.MENU);
-		xn.gPl.sign_playing.connect( () => {
+		gPl.sign_playing.connect( () => {
 			this.playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PAUSE, IconSize.MENU);
 		});
-		xn.gPl.sign_stopped.connect( () => {
+		gPl.sign_stopped.connect( () => {
 			if(this.playpause_popup_image==null) print("this.playpause_popup_image == null\n");
 			this.playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.MENU);
 		});
-		xn.gPl.sign_paused.connect( () => {
+		gPl.sign_paused.connect( () => {
 			this.playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.MENU);
 		});
 
@@ -75,7 +75,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		playHbox.pack_start(playpause_popup_image, false, true, 0);
 		playHbox.pack_start(playLabel, true, true, 0);
 		playpauseItem.add(playHbox);
-		playpauseItem.activate.connect(xn.main_window.playPauseButton.on_menu_clicked);
+		playpauseItem.activate.connect(main_window.playPauseButton.on_menu_clicked);
 		traymenu.append(playpauseItem);
 
 		var previousImage = new Image();
@@ -89,7 +89,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		previousHbox.pack_start(previousLabel, true, true, 0);
 		previousItem.add(previousHbox);
 		previousItem.activate.connect( () => {
-			xn.main_window.handle_control_button_click(xn.main_window.previousButton, ControlButton.Direction.PREVIOUS);
+			main_window.handle_control_button_click(main_window.previousButton, ControlButton.Direction.PREVIOUS);
 		});
 		traymenu.append(previousItem);
 
@@ -104,7 +104,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		nextHbox.pack_start(nextLabel, true, true, 0);
 		nextItem.add(nextHbox);
 		nextItem.activate.connect( () => {
-			xn.main_window.handle_control_button_click(xn.main_window.nextButton, ControlButton.Direction.NEXT);
+			main_window.handle_control_button_click(main_window.nextButton, ControlButton.Direction.NEXT);
 		});
 		traymenu.append(nextItem);
 
@@ -131,7 +131,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		switch(e.button) {
 			case 2:
 				//ugly, we should move play/resume code out of there.
-				xn.main_window.playPauseButton.on_clicked(new Gtk.Button());
+				main_window.playPauseButton.on_clicked(new Gtk.Button());
 				break;
 			default:
 				break;
@@ -142,10 +142,10 @@ public class Xnoise.TrayIcon : StatusIcon {
 	private bool on_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
 		if(global.player_state != PlayerState.STOPPED) {
 			if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
-				xn.main_window.change_track(ControlButton.Direction.PREVIOUS, true);
+				main_window.change_track(ControlButton.Direction.PREVIOUS, true);
 			}
 			else if(event.scroll.direction == Gdk.ScrollDirection.UP) {
-				xn.main_window.change_track(ControlButton.Direction.NEXT, true);
+				main_window.change_track(ControlButton.Direction.NEXT, true);
 			}
 		}
 		return false;

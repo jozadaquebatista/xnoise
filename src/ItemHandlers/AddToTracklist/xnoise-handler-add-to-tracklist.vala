@@ -83,7 +83,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 
 	private void on_menu_add(Item item, GLib.Value? data) {
 		GLib.List<TreePath> list;
-		list = xn.main_window.mediaBr.get_selection().get_selected_rows(null);
+		list = main_window.mediaBr.get_selection().get_selected_rows(null);
 		if(list.length() == 0) return;
 		Item? ix = Item(ItemType.UNKNOWN);
 		TreeIter iter;
@@ -91,8 +91,8 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		Item[] items = {};
 		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_job);
 		foreach(TreePath path in list) {
-			xn.main_window.mediaBr.mediabrowsermodel.get_iter(out iter, path);
-			xn.main_window.mediaBr.mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out ix);
+			main_window.mediaBr.mediabrowsermodel.get_iter(out iter, path);
+			main_window.mediaBr.mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out ix);
 			items += ix;
 		}
 		job.items = items;
@@ -103,7 +103,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		TrackData[] tmp = {};
 		TrackData[] tda = {};
 		foreach(Item item in job.items) {
-			tmp = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
+			tmp = item_converter.to_trackdata(item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
 			if(tmp == null)
 				continue;
 			foreach(TrackData td in tmp) {
@@ -131,7 +131,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		Item? item = job.item;//(Item?)job.get_arg("item");
 		//print("item.type is %s\n", item.type.to_string());
 		
-		job.track_dat = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
+		job.track_dat = item_converter.to_trackdata(item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
 		
 		if(job.track_dat != null) {
 			Idle.add( () => {
@@ -152,7 +152,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 			string current_uri = tda[k].item.uri;
 			
 			if(k == 0 && immediate_play) { // First track
-				iter = xn.tlm.insert_title(null,
+				iter = tlm.insert_title(null,
 				                         (int)tda[k].tracknumber,
 				                         tda[k].title,
 				                         tda[k].album,
@@ -161,11 +161,11 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 				                         true,
 				                         tda[k].item);
 				global.position_reference = null;
-				global.position_reference = new TreeRowReference(xn.tlm, xn.tlm.get_path(iter));
+				global.position_reference = new TreeRowReference(tlm, tlm.get_path(iter));
 				iter_2 = iter;
 			}
 			else { // from second to last track
-				iter = xn.tlm.insert_title(null,
+				iter = tlm.insert_title(null,
 				                         (int)tda[k].tracknumber,
 				                         tda[k].title,
 				                         tda[k].album,
@@ -185,7 +185,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 				action.action(tda[0].item, null);
 		}
 		if(immediate_play)
-			xn.tl.set_focus_on_iter(ref iter_2);
+			tl.set_focus_on_iter(ref iter_2);
 	}
 }
 

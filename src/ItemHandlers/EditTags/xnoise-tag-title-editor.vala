@@ -49,7 +49,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		xn = Main.instance;
 		builder = new Gtk.Builder();
 		create_widgets();
-		mbm = xn.main_window.mediaBr.mediabrowsermodel;
+		mbm = main_window.mediaBr.mediabrowsermodel;
 		fill_entries();
 		dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
 		dialog.show_all();
@@ -69,7 +69,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		// callback for query in other thread
 		TrackData[] tmp = {};
 		TrackData[] tda = {};
-		tmp = item_converter.to_trackdata(item, ref xn.main_window.mediaBr.mediabrowsermodel.searchtext);
+		tmp = item_converter.to_trackdata(item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
 		if(tmp == null && tmp[0] != null)
 			return false;
 		
@@ -93,7 +93,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 			dialog = new Dialog();
 			
 			dialog.set_modal(true);
-			dialog.set_transient_for(xn.main_window);
+			dialog.set_transient_for(main_window);
 			
 			builder.add_from_file(Config.UIDIR + "metadat_title.ui");
 			
@@ -197,7 +197,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 
 	private bool finish_job(Worker.Job job) {
 		Timeout.add(200, () => {
-			Main.instance.main_window.mediaBr.mediabrowsermodel.filter();
+			main_window.mediaBr.mediabrowsermodel.filter();
 			return false;
 		});
 		Timeout.add(300, () => {

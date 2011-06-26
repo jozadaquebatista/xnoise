@@ -62,7 +62,7 @@ public class Xnoise.DatabaseLyricsPlugin : GLib.Object, IPlugin, ILyricsProvider
 	
 	public bool init() {
 		priority = -1; // highest prio
-		lyrics_writer = new DatabaseLyricsWriter(Main.instance.main_window.lyricsView.get_loader());
+		lyrics_writer = new DatabaseLyricsWriter(main_window.lyricsView.get_loader());
 		if(lyrics_writer != null)
 			return true;
 		return false;
@@ -70,7 +70,7 @@ public class Xnoise.DatabaseLyricsPlugin : GLib.Object, IPlugin, ILyricsProvider
 
 	public void uninit() {
 		lyrics_writer = null;
-		Main.instance.main_window.lyricsView.lyrics_provider_unregister(this); // for lyricsloader
+		main_window.lyricsView.lyrics_provider_unregister(this); // for lyricsloader
 	}
 	
 	~DatabaseLyricsPlugin() {

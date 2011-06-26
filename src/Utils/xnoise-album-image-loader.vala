@@ -40,7 +40,7 @@ public class Xnoise.AlbumImageLoader : GLib.Object {
 
 	public AlbumImageLoader() {
 		xn = Main.instance;
-		xn.plugin_loader.sign_plugin_activated.connect(AlbumImageLoader.on_plugin_activated);
+		plugin_loader.sign_plugin_activated.connect(AlbumImageLoader.on_plugin_activated);
 		backend_iter = 0;
 	}
 

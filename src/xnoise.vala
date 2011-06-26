@@ -143,12 +143,12 @@ namespace Xnoise {
 		}
 		else {
 			Xnoise.AppStarter.xn = Xnoise.Main.instance;
-			app.watch_window((Gtk.Window)Xnoise.AppStarter.xn.main_window);
+			app.watch_window((Gtk.Window)main_window);
 			app.message_received.connect(app_starter.on_message_received);
 			
-			Xnoise.AppStarter.xn.main_window.show_all();
+			main_window.show_all();
 			
-			Xnoise.AppStarter.xn.tl.tracklistmodel.add_uris(uris);
+			tl.tracklistmodel.add_uris(uris);
 			
 			//Gdk.threads_enter();
 			Gtk.main();

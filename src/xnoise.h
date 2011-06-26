@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib-object.h>
-#include <gtk/gtk.h>
 #include <sqlite3.h>
+#include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
 #include <float.h>
 #include <math.h>
@@ -29,66 +29,6 @@ G_BEGIN_DECLS
 typedef struct _XnoiseMain XnoiseMain;
 typedef struct _XnoiseMainClass XnoiseMainClass;
 typedef struct _XnoiseMainPrivate XnoiseMainPrivate;
-
-#define XNOISE_TYPE_TRAY_ICON (xnoise_tray_icon_get_type ())
-#define XNOISE_TRAY_ICON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIcon))
-#define XNOISE_TRAY_ICON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIconClass))
-#define XNOISE_IS_TRAY_ICON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRAY_ICON))
-#define XNOISE_IS_TRAY_ICON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRAY_ICON))
-#define XNOISE_TRAY_ICON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIconClass))
-
-typedef struct _XnoiseTrayIcon XnoiseTrayIcon;
-typedef struct _XnoiseTrayIconClass XnoiseTrayIconClass;
-
-#define XNOISE_TYPE_MAIN_WINDOW (xnoise_main_window_get_type ())
-#define XNOISE_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindow))
-#define XNOISE_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
-#define XNOISE_IS_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MAIN_WINDOW))
-#define XNOISE_IS_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MAIN_WINDOW))
-#define XNOISE_MAIN_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
-
-typedef struct _XnoiseMainWindow XnoiseMainWindow;
-typedef struct _XnoiseMainWindowClass XnoiseMainWindowClass;
-
-#define XNOISE_TYPE_TRACK_LIST (xnoise_track_list_get_type ())
-#define XNOISE_TRACK_LIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_LIST, XnoiseTrackList))
-#define XNOISE_TRACK_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_LIST, XnoiseTrackListClass))
-#define XNOISE_IS_TRACK_LIST(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_LIST))
-#define XNOISE_IS_TRACK_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_LIST))
-#define XNOISE_TRACK_LIST_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_LIST, XnoiseTrackListClass))
-
-typedef struct _XnoiseTrackList XnoiseTrackList;
-typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
-
-#define XNOISE_TYPE_TRACK_LIST_MODEL (xnoise_track_list_model_get_type ())
-#define XNOISE_TRACK_LIST_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_LIST_MODEL, XnoiseTrackListModel))
-#define XNOISE_TRACK_LIST_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_LIST_MODEL, XnoiseTrackListModelClass))
-#define XNOISE_IS_TRACK_LIST_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_LIST_MODEL))
-#define XNOISE_IS_TRACK_LIST_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_LIST_MODEL))
-#define XNOISE_TRACK_LIST_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_LIST_MODEL, XnoiseTrackListModelClass))
-
-typedef struct _XnoiseTrackListModel XnoiseTrackListModel;
-typedef struct _XnoiseTrackListModelClass XnoiseTrackListModelClass;
-
-#define XNOISE_TYPE_PLUGIN_LOADER (xnoise_plugin_loader_get_type ())
-#define XNOISE_PLUGIN_LOADER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLUGIN_LOADER, XnoisePluginLoader))
-#define XNOISE_PLUGIN_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLUGIN_LOADER, XnoisePluginLoaderClass))
-#define XNOISE_IS_PLUGIN_LOADER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PLUGIN_LOADER))
-#define XNOISE_IS_PLUGIN_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_PLUGIN_LOADER))
-#define XNOISE_PLUGIN_LOADER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_PLUGIN_LOADER, XnoisePluginLoaderClass))
-
-typedef struct _XnoisePluginLoader XnoisePluginLoader;
-typedef struct _XnoisePluginLoaderClass XnoisePluginLoaderClass;
-
-#define XNOISE_TYPE_GST_PLAYER (xnoise_gst_player_get_type ())
-#define XNOISE_GST_PLAYER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayer))
-#define XNOISE_GST_PLAYER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayerClass))
-#define XNOISE_IS_GST_PLAYER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_GST_PLAYER))
-#define XNOISE_IS_GST_PLAYER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_GST_PLAYER))
-#define XNOISE_GST_PLAYER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayerClass))
-
-typedef struct _XnoiseGstPlayer XnoiseGstPlayer;
-typedef struct _XnoiseGstPlayerClass XnoiseGstPlayerClass;
 
 #define XNOISE_TYPE_ITEM_HANDLER (xnoise_item_handler_get_type ())
 #define XNOISE_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandler))
@@ -254,6 +194,16 @@ typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
 
 #define XNOISE_TYPE_DND_DATA (xnoise_dnd_data_get_type ())
 typedef struct _XnoiseDndData XnoiseDndData;
+
+#define XNOISE_TYPE_TRACK_LIST_MODEL (xnoise_track_list_model_get_type ())
+#define XNOISE_TRACK_LIST_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_LIST_MODEL, XnoiseTrackListModel))
+#define XNOISE_TRACK_LIST_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_LIST_MODEL, XnoiseTrackListModelClass))
+#define XNOISE_IS_TRACK_LIST_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_LIST_MODEL))
+#define XNOISE_IS_TRACK_LIST_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_LIST_MODEL))
+#define XNOISE_TRACK_LIST_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_LIST_MODEL, XnoiseTrackListModelClass))
+
+typedef struct _XnoiseTrackListModel XnoiseTrackListModel;
+typedef struct _XnoiseTrackListModelClass XnoiseTrackListModelClass;
 typedef struct _XnoiseTrackListModelPrivate XnoiseTrackListModelPrivate;
 
 #define XNOISE_TRACK_LIST_MODEL_TYPE_COLUMN (xnoise_track_list_model_column_get_type ())
@@ -268,6 +218,16 @@ typedef struct _XnoiseTrackListModelPrivate XnoiseTrackListModelPrivate;
 typedef struct _XnoiseTrackListModelIterator XnoiseTrackListModelIterator;
 typedef struct _XnoiseTrackListModelIteratorClass XnoiseTrackListModelIteratorClass;
 typedef struct _XnoiseTrackListModelIteratorPrivate XnoiseTrackListModelIteratorPrivate;
+
+#define XNOISE_TYPE_GST_PLAYER (xnoise_gst_player_get_type ())
+#define XNOISE_GST_PLAYER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayer))
+#define XNOISE_GST_PLAYER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayerClass))
+#define XNOISE_IS_GST_PLAYER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_GST_PLAYER))
+#define XNOISE_IS_GST_PLAYER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_GST_PLAYER))
+#define XNOISE_GST_PLAYER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayerClass))
+
+typedef struct _XnoiseGstPlayer XnoiseGstPlayer;
+typedef struct _XnoiseGstPlayerClass XnoiseGstPlayerClass;
 typedef struct _XnoiseGstPlayerPrivate XnoiseGstPlayerPrivate;
 
 #define XNOISE_TYPE_VIDEO_SCREEN (xnoise_video_screen_get_type ())
@@ -300,6 +260,16 @@ typedef struct _XnoisePluginPrivate XnoisePluginPrivate;
 
 typedef struct _XnoisePluginInformation XnoisePluginInformation;
 typedef struct _XnoisePluginInformationClass XnoisePluginInformationClass;
+
+#define XNOISE_TYPE_PLUGIN_LOADER (xnoise_plugin_loader_get_type ())
+#define XNOISE_PLUGIN_LOADER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLUGIN_LOADER, XnoisePluginLoader))
+#define XNOISE_PLUGIN_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLUGIN_LOADER, XnoisePluginLoaderClass))
+#define XNOISE_IS_PLUGIN_LOADER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PLUGIN_LOADER))
+#define XNOISE_IS_PLUGIN_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_PLUGIN_LOADER))
+#define XNOISE_PLUGIN_LOADER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_PLUGIN_LOADER, XnoisePluginLoaderClass))
+
+typedef struct _XnoisePluginLoader XnoisePluginLoader;
+typedef struct _XnoisePluginLoaderClass XnoisePluginLoaderClass;
 typedef struct _XnoisePluginLoaderPrivate XnoisePluginLoaderPrivate;
 typedef struct _XnoisePluginInformationPrivate XnoisePluginInformationPrivate;
 
@@ -332,6 +302,16 @@ typedef struct _XnoiseTagReaderPrivate XnoiseTagReaderPrivate;
 typedef struct _XnoiseTagWriter XnoiseTagWriter;
 typedef struct _XnoiseTagWriterClass XnoiseTagWriterClass;
 typedef struct _XnoiseTagWriterPrivate XnoiseTagWriterPrivate;
+
+#define XNOISE_TYPE_TRAY_ICON (xnoise_tray_icon_get_type ())
+#define XNOISE_TRAY_ICON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIcon))
+#define XNOISE_TRAY_ICON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIconClass))
+#define XNOISE_IS_TRAY_ICON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRAY_ICON))
+#define XNOISE_IS_TRAY_ICON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRAY_ICON))
+#define XNOISE_TRAY_ICON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIconClass))
+
+typedef struct _XnoiseTrayIcon XnoiseTrayIcon;
+typedef struct _XnoiseTrayIconClass XnoiseTrayIconClass;
 typedef struct _XnoiseTrayIconPrivate XnoiseTrayIconPrivate;
 
 #define XNOISE_TYPE_ALBUM_IMAGE_LOADER (xnoise_album_image_loader_get_type ())
@@ -445,6 +425,26 @@ typedef struct _XnoiseUserInfoClass XnoiseUserInfoClass;
 
 typedef struct _XnoiseWorker XnoiseWorker;
 typedef struct _XnoiseWorkerClass XnoiseWorkerClass;
+
+#define XNOISE_TYPE_MAIN_WINDOW (xnoise_main_window_get_type ())
+#define XNOISE_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindow))
+#define XNOISE_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
+#define XNOISE_IS_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MAIN_WINDOW))
+#define XNOISE_IS_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MAIN_WINDOW))
+#define XNOISE_MAIN_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
+
+typedef struct _XnoiseMainWindow XnoiseMainWindow;
+typedef struct _XnoiseMainWindowClass XnoiseMainWindowClass;
+
+#define XNOISE_TYPE_TRACK_LIST (xnoise_track_list_get_type ())
+#define XNOISE_TRACK_LIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_LIST, XnoiseTrackList))
+#define XNOISE_TRACK_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_LIST, XnoiseTrackListClass))
+#define XNOISE_IS_TRACK_LIST(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_LIST))
+#define XNOISE_IS_TRACK_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_LIST))
+#define XNOISE_TRACK_LIST_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_LIST, XnoiseTrackListClass))
+
+typedef struct _XnoiseTrackList XnoiseTrackList;
+typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 
 #define XNOISE_TYPE_TRACK_LIST_NOTE_BOOK_TAB (xnoise_track_list_note_book_tab_get_type ())
 
@@ -672,12 +672,6 @@ typedef struct _XnoiseVolumeSliderButtonPrivate XnoiseVolumeSliderButtonPrivate;
 struct _XnoiseMain {
 	GObject parent_instance;
 	XnoiseMainPrivate * priv;
-	XnoiseTrayIcon* tray_icon;
-	XnoiseMainWindow* main_window;
-	XnoiseTrackList* tl;
-	XnoiseTrackListModel* tlm;
-	XnoisePluginLoader* plugin_loader;
-	XnoiseGstPlayer* gPl;
 };
 
 struct _XnoiseMainClass {
@@ -1450,12 +1444,6 @@ struct _XnoiseVolumeSliderButtonClass {
 
 gint xnoise_main (gchar** args, int args_length1);
 GType xnoise_main_get_type (void) G_GNUC_CONST;
-GType xnoise_tray_icon_get_type (void) G_GNUC_CONST;
-GType xnoise_main_window_get_type (void) G_GNUC_CONST;
-GType xnoise_track_list_get_type (void) G_GNUC_CONST;
-GType xnoise_track_list_model_get_type (void) G_GNUC_CONST;
-GType xnoise_plugin_loader_get_type (void) G_GNUC_CONST;
-GType xnoise_gst_player_get_type (void) G_GNUC_CONST;
 extern gboolean xnoise_main_show_plugin_state;
 extern gboolean xnoise_main_no_plugins;
 XnoiseMain* xnoise_main_new (void);
@@ -1621,6 +1609,7 @@ XnoiseDndData* xnoise_media_browser_model_get_dnd_data_for_path (XnoiseMediaBrow
 XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
 XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
 gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserModel* self);
+GType xnoise_track_list_model_get_type (void) G_GNUC_CONST;
 GType xnoise_track_list_model_column_get_type (void) G_GNUC_CONST;
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
 XnoiseTrackListModel* xnoise_track_list_model_construct (GType object_type);
@@ -1649,6 +1638,7 @@ XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_new (XnoiseTrackL
 XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_construct (GType object_type, XnoiseTrackListModel* tlm);
 gboolean xnoise_track_list_model_iterator_next (XnoiseTrackListModelIterator* self);
 void xnoise_track_list_model_iterator_get (XnoiseTrackListModelIterator* self, GtkTreeIter* result);
+GType xnoise_gst_player_get_type (void) G_GNUC_CONST;
 GType xnoise_video_screen_get_type (void) G_GNUC_CONST;
 XnoiseGstPlayer* xnoise_gst_player_new (void);
 XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type);
@@ -1698,6 +1688,7 @@ gboolean xnoise_plugin_get_activated (XnoisePlugin* self);
 gboolean xnoise_plugin_get_configurable (XnoisePlugin* self);
 gboolean xnoise_plugin_get_is_lyrics_plugin (XnoisePlugin* self);
 gboolean xnoise_plugin_get_is_album_image_plugin (XnoisePlugin* self);
+GType xnoise_plugin_loader_get_type (void) G_GNUC_CONST;
 XnoisePluginLoader* xnoise_plugin_loader_new (void);
 XnoisePluginLoader* xnoise_plugin_loader_construct (GType object_type);
 GList* xnoise_plugin_loader_get_info_files (XnoisePluginLoader* self);
@@ -1748,6 +1739,7 @@ gboolean xnoise_tag_writer_write_artist (XnoiseTagWriter* self, GFile* file, con
 gboolean xnoise_tag_writer_write_album (XnoiseTagWriter* self, GFile* file, const gchar* album);
 XnoiseTagWriter* xnoise_tag_writer_new (void);
 XnoiseTagWriter* xnoise_tag_writer_construct (GType object_type);
+GType xnoise_tray_icon_get_type (void) G_GNUC_CONST;
 XnoiseTrayIcon* xnoise_tray_icon_new (void);
 XnoiseTrayIcon* xnoise_tray_icon_construct (GType object_type);
 GType xnoise_album_image_loader_get_type (void) G_GNUC_CONST;
@@ -1835,6 +1827,14 @@ extern XnoiseItemConverter* xnoise_item_converter;
 extern GMainContext* xnoise_mc;
 extern XnoiseDbBrowser* xnoise_db_browser;
 extern XnoiseDbWriter* xnoise_db_writer;
+extern XnoiseGstPlayer* xnoise_gPl;
+extern XnoisePluginLoader* xnoise_plugin_loader;
+extern XnoiseTrayIcon* xnoise_tray_icon;
+GType xnoise_main_window_get_type (void) G_GNUC_CONST;
+extern XnoiseMainWindow* xnoise_main_window;
+GType xnoise_track_list_get_type (void) G_GNUC_CONST;
+extern XnoiseTrackList* xnoise_tl;
+extern XnoiseTrackListModel* xnoise_tlm;
 void xnoise_initialize (gboolean* is_first_start);
 gchar* xnoise_escape_album_for_local_folder_search (const gchar* _artist, const gchar* album_name);
 gchar* xnoise_escape_for_local_folder_search (const gchar* value);

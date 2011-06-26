@@ -218,8 +218,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 		dbw.delete_uri(file.get_uri());
 		remove_dir_monitors(file.get_path());
 	
-//		if(Main.instance.main_window.mediaBr != null)
-//			Main.instance.main_window.mediaBr.change_model_data();
+//		if(main_window.mediaBr != null)
+//			main_window.mediaBr.change_model_data();
 //		Idle.add( () => {
 		dbw = null;
 //			return false;
@@ -249,8 +249,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 //			return false;
 //		});
 //		Idle.add( () => {
-//			if(Main.instance.main_window.mediaBr != null)
-//				Main.instance.main_window.mediaBr.change_model_data(); // where is this used
+//			if(main_window.mediaBr != null)
+//				main_window.mediaBr.change_model_data(); // where is this used
 //			return false;
 //		});
 		async_running = false;
@@ -368,7 +368,7 @@ print("++1\n");
 			td.db_id = dbw.insert_title(td, f.get_uri());
 			TrackData[] tdy = { td };
 			Idle.add( () => {
-				Main.instance.main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdy); 
+				main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdy); 
 				return false; 
 			});
 		}
@@ -403,8 +403,8 @@ print("++1\n");
 //				setup_monitor_for_path(file.get_path());
 //			}
 //			Idle.add( () => {
-//				if(Main.instance.main_window.mediaBr != null)
-//					Main.instance.main_window.mediaBr.change_model_data();
+//				if(main_window.mediaBr != null)
+//					main_window.mediaBr.change_model_data();
 //				return false;
 //			});
 //		} 
@@ -550,7 +550,7 @@ private class Xnoise.ImportInfoBar : GLib.Object {
 			last_uri = uri;
 		
 			if (shown == false) {
-				Main.instance.main_window.display_info_bar(bar);
+				main_window.display_info_bar(bar);
 				shown = true;
 			}
 		

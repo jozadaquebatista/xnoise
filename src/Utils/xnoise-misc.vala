@@ -43,6 +43,13 @@ namespace Xnoise {
 	public static MainContext mc;
 	public static DbBrowser db_browser;
 	public static DbWriter db_writer;
+	public static GstPlayer gPl;
+	public static PluginLoader plugin_loader;
+	public static TrayIcon tray_icon;
+	public static MainWindow main_window;
+	public static TrackList tl;
+	public static TrackListModel tlm;
+
 	/*
 	 * This function is used to create static instances of Params
 	 * and GlobalInfo in the xnoise namespace.
@@ -50,30 +57,63 @@ namespace Xnoise {
 	public static void initialize(out bool is_first_start) {
 		is_first_start = false;
 		
+		// ITEM STUFF
 		item_handler_manager = new ItemHandlerManager();
 		item_converter = new ItemConverter();
 		media_importer = new MediaImporter();
 		
-		// setup worker with reference to default context
+		// WORKERS
 		db_worker = new Worker(MainContext.default());
 		io_worker = new Worker(MainContext.default());
 		
+		
+		//GLOBAL ACCESS
 		if(global == null)
 			global = new GlobalAccess();
 		
+		// PARAMS
 		File xnoise_home = File.new_for_path(global.settings_folder);
 		File xnoiseini = null;
 		xnoiseini = xnoise_home.get_child("db.sqlite");
 		if(!xnoiseini.query_exists(null)) {
 			is_first_start = true;
 		}
-
+		
 		if(par == null)
 			par = new Params();
-		//t1 = new Timer();
-		//t2 = new Timer();
+		
+		// DATABASE
+		check_database_and_tables(ref is_first_start);
+		
+		try {
+			db_browser = new DbBrowser();
+			db_writer  = new DbWriter();
+		}
+		catch(DbError e) {
+			print("%s", e.message);
+			return;
+		}
+		
+		// PLAYER
+		gPl = new GstPlayer();
+		
+		
+		// PLUGINS
+		plugin_loader = new PluginLoader();
+		
+		
+		// STATIC WIDGETS
+		tlm = new TrackListModel();
+		tl = new TrackList();
+		main_window = new MainWindow();
+		tray_icon = new TrayIcon();
+		
 	}
-	
+
+	private static void check_database_and_tables(ref bool is_first_start) {
+		DbCreator.check_tables(ref is_first_start);
+	}
+
 	private static string check_album_name(string? artistname, string? albumname) {
 		if(albumname == null || albumname == "")
 			return "";

@@ -119,7 +119,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	private void open_suburi_filechooser() {
 		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
 			SELECT_EXT_SUBTITLE_FILE,
-			xn.main_window,
+			main_window,
 			Gtk.FileChooserAction.OPEN,
 			Gtk.Stock.CANCEL,
 			Gtk.ResponseType.CANCEL,
@@ -197,7 +197,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		             e.area.width, e.area.height);
 		cr.fill();
 		
-		if(!xn.gPl.current_has_video_track) {
+		if(!gPl.current_has_video_track) {
 		
 			int y_offset;
 			int x_offset;
