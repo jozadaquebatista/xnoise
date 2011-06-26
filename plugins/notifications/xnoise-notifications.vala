@@ -155,7 +155,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		string basename = null;
 		File file = File.new_for_uri(newuri);
 
-		if(!gPl.is_stream)
+		if(!gst_player.is_stream)
 			basename = file.get_basename();
 
 		if(global.current_artist != null) {

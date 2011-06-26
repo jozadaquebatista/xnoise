@@ -50,9 +50,9 @@ public class Xnoise.PlayPauseButton: Gtk.Button {
 		this.update_picture();
 
 		this.clicked.connect(this.on_clicked);
-		gPl.sign_paused.connect(this.update_picture);
-		gPl.sign_stopped.connect(this.update_picture);
-		gPl.sign_playing.connect(this.update_picture);
+		gst_player.sign_paused.connect(this.update_picture);
+		gst_player.sign_stopped.connect(this.update_picture);
+		gst_player.sign_playing.connect(this.update_picture);
 	}
 
 	public void on_menu_clicked(Gtk.MenuItem sender) {
@@ -89,7 +89,7 @@ public class Xnoise.PlayPauseButton: Gtk.Button {
 	}
 
 	public void update_picture() {
-		if(gPl.playing == true)
+		if(gst_player.playing == true)
 			this.set_play_picture();
 		else
 			this.set_pause_picture();

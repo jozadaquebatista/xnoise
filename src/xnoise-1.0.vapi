@@ -844,9 +844,9 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.DbWriter db_writer;
 	[CCode (cheader_filename = "xnoise.h")]
-	public static Xnoise.GstPlayer gPl;
-	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalAccess global;
+	[CCode (cheader_filename = "xnoise.h")]
+	public static Xnoise.GstPlayer gst_player;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Worker io_worker;
 	[CCode (cheader_filename = "xnoise.h")]

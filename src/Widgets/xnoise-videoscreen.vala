@@ -197,7 +197,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		             e.area.width, e.area.height);
 		cr.fill();
 		
-		if(!gPl.current_has_video_track) {
+		if(!gst_player.current_has_video_track) {
 		
 			int y_offset;
 			int x_offset;

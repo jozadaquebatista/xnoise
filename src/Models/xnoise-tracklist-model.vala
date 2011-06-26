@@ -406,7 +406,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		this.get(citer,
 				 Column.ITEM, out item
 				 );
-		if(item.uri == gPl.uri) {
+		if(item.uri == gst_player.uri) {
 			this.set(citer, Column.ICON, pixbuf);
 		}
 		return true;

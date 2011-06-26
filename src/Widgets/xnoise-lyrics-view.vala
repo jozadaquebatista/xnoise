@@ -100,7 +100,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	}
 
 	//FIXME: This must be used wtih Worker.Job, so that there are no race conditions!
-	// Use the timeout because gPl is sending the tag_changed signals
+	// Use the timeout because gst_player is sending the tag_changed signals
 	// sometimes very often at the beginning of a track.
 	private bool on_timout_elapsed() {
 		if(global.player_state == PlayerState.STOPPED) {

@@ -55,14 +55,14 @@ public class Xnoise.TrayIcon : StatusIcon {
 
 		playpause_popup_image = new Image();
 		playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.MENU);
-		gPl.sign_playing.connect( () => {
+		gst_player.sign_playing.connect( () => {
 			this.playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PAUSE, IconSize.MENU);
 		});
-		gPl.sign_stopped.connect( () => {
+		gst_player.sign_stopped.connect( () => {
 			if(this.playpause_popup_image==null) print("this.playpause_popup_image == null\n");
 			this.playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.MENU);
 		});
-		gPl.sign_paused.connect( () => {
+		gst_player.sign_paused.connect( () => {
 			this.playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.MENU);
 		});
 

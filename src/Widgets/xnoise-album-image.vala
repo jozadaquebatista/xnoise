@@ -91,7 +91,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		});
 	}
 
-	// Startes via timeout because gPl is sending the tag_changed signals
+	// Startes via timeout because gst_player is sending the tag_changed signals
 	// sometimes very often at the beginning of a track.
 	private void search_image(string? uri) {
 		if(MainContext.current_source().is_destroyed())
@@ -130,7 +130,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		var job = new Worker.Job(Worker.ExecutionType.ONCE, this.fetch_trackdata_job);
 		job.set_arg("artist", artist);
 		job.set_arg("album", album);
-		job.set_arg("uri", gPl.uri);
+		job.set_arg("uri", gst_player.uri);
 		db_worker.push_job(job);
 	}
 	

@@ -43,7 +43,7 @@ namespace Xnoise {
 	public static MainContext mc;
 	public static DbBrowser db_browser;
 	public static DbWriter db_writer;
-	public static GstPlayer gPl;
+	public static GstPlayer gst_player;
 	public static PluginLoader plugin_loader;
 	public static TrayIcon tray_icon;
 	public static MainWindow main_window;
@@ -95,7 +95,7 @@ namespace Xnoise {
 		}
 		
 		// PLAYER
-		gPl = new GstPlayer();
+		gst_player = new GstPlayer();
 		
 		
 		// PLUGINS

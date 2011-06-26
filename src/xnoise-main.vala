@@ -35,41 +35,42 @@ public class Xnoise.Main : GLib.Object {
 	public static bool no_plugins;
 	
 	public Main() {
-		bool is_first_start;
 		_instance = this;
 		
+		bool is_first_start;
 		Xnoise.initialize(out is_first_start);
 		
 		userinfo = new UserInfo(main_window.show_status_info);
 		
+		// ITEM HANDLERS
 		item_handler_manager.add_handler(new HandlerPlayItem());
 		item_handler_manager.add_handler(new HandlerRemoveTrack());
 		item_handler_manager.add_handler(new HandlerAddToTracklist());
 		item_handler_manager.add_handler(new HandlerEditTags());
 		
+		// LOAD PLUGINS
 		if(!no_plugins) {
 			plugin_loader.load_all();
 			
 			foreach(string name in par.get_string_list_value("activated_plugins")) {
-				if(!plugin_loader.activate_single_plugin(name)) {
+				if(!plugin_loader.activate_single_plugin(name))
 					print("\t%s plugin failed to activate!\n", name);
-				}
 			}
 			
 			if(show_plugin_state) print(" PLUGIN INFO:\n");
 			foreach(string name in plugin_loader.plugin_htable.get_keys()) {
 				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).loaded))
-					if(show_plugin_state) print("\t%s loaded\n", name);
+					if(show_plugin_state)
+						print("\t%s loaded\n", name);
 				else {
 					print("\t%s NOT loaded\n\n", name);
 					continue;
 				}
-				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).activated)) {
+				
+				if((show_plugin_state)&&(plugin_loader.plugin_htable.lookup(name).activated))
 					print("\t%s activated\n", name);
-				}
-				else {
+				else
 					if(show_plugin_state) print("\t%s NOT activated\n", name);
-				}
 				
 				if(show_plugin_state) 
 					print("\n");
@@ -85,10 +86,13 @@ public class Xnoise.Main : GLib.Object {
 			main_window.active_lyrics = tmp;
 		}
 		
+		// POSIX SIGNALS
 		connect_signals();
 		
+		// RESTORE PARAMS IN SUBSCRIBERS
 		par.set_start_parameters_in_implementors();
 		
+		// FIRST START? FILL DB!
 		if(is_first_start)
 			main_window.ask_for_initial_media_import();
 	}
@@ -100,11 +104,9 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	public void add_track_to_gst_player(string uri) {
-		// TODO: update this function
 		print("add_track_to_gst_player\n");
 		global.current_uri = uri;
 		global.player_state = PlayerState.PLAYING;
-		//gPl.playSong();
 	}
 
 	public static Main instance {
@@ -132,11 +134,10 @@ public class Xnoise.Main : GLib.Object {
 		par.set_string_list_value("activated_plugins", activatedplugins);
 	}
 
-	private string[] final_tracklist = null;
+	
 	public void save_tracklist() {
 		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_final_tracks_to_db_job);
 		job.items = main_window.trackList.tracklistmodel.get_all_tracks();
-//		job.set_arg("final_tracklist", final_tracklist);
 		job.finished.connect( () => {
 			if(maxtime_quit_src != 0)
 				Source.remove(maxtime_quit_src);
@@ -147,6 +148,7 @@ public class Xnoise.Main : GLib.Object {
 	
 	private static bool preparing_quit = false;
 	private uint maxtime_quit_src = 0;
+	
 	public void quit() {
 		preparing_quit = true;
 		maxtime_quit_src = Timeout.add_seconds(4, () => { // maximum time for shutdown
@@ -157,7 +159,7 @@ public class Xnoise.Main : GLib.Object {
 		if(main_window.is_fullscreen) 
 			main_window.get_window().unfullscreen();
 		main_window.hide();
-		gPl.stop();
+		gst_player.stop();
 		this.save_activated_plugins();
 		par.write_all_parameters_to_file();
 		this.save_tracklist();

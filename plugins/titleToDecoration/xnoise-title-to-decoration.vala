@@ -84,7 +84,7 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 			return;
 		}
 		File file = File.new_for_uri(newuri);
-		if(!gPl.is_stream)
+		if(!gst_player.is_stream)
 			basename = file.get_basename();
 		if(global.current_artist != null) {
 			//print("global.current_artist: %s\n", global.current_artist);
@@ -142,8 +142,8 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 					text = "%s".printf("xnoise media player");
 		}
 		else {
-			if((!gPl.playing)&&
-				(!gPl.paused)) {
+			if((!gst_player.playing)&&
+				(!gst_player.paused)) {
 				text = "xnoise media player";
 			}
 			else {

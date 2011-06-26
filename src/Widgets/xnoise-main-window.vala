@@ -249,7 +249,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public MainWindow() {
 		this.xn = Main.instance;
 		par.iparams_register(this);
-		gPl.sign_volume_changed.connect(
+		gst_player.sign_volume_changed.connect(
 			(val) => { this.current_volume = val; }
 		);
 		create_widgets();
@@ -273,7 +273,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		
 		global.caught_eos_from_player.connect(on_caught_eos_from_player);
 		global.tag_changed.connect(this.set_displayed_title);
-		gPl.sign_video_playing.connect( () => { 
+		gst_player.sign_video_playing.connect( () => { 
 			//handle stop signal from gst player
 			if(!this.fullscreenwindowvisible)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
@@ -752,10 +752,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		double volSlider = par.get_double_value("volume");
 		if((volSlider < 0.0)||
 		   (volSlider > 1.0)) {
-			gPl.volume = 0.5;
+			gst_player.volume = 0.5;
 		}
 		else {
-			gPl.volume = volSlider;
+			gst_player.volume = volSlider;
 		}
 		
 		int hp_position = par.get_int_value("hp_position");
@@ -1071,7 +1071,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return;
 		}
 		File file = File.new_for_uri(newuri);
-		if(!gPl.is_stream) {
+		if(!gst_player.is_stream) {
 			basename = file.get_basename();
 			if(global.current_artist!=null) {
 				artist = remove_linebreaks(global.current_artist);
@@ -1110,8 +1110,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					}
 			}
 			else {
-				if((!gPl.playing)&&
-					(!gPl.paused)) {
+				if((!gst_player.playing)&&
+					(!gst_player.paused)) {
 					text = "<b>XNOISE</b>\nready to rock! ;-)";
 				}
 				else {
@@ -1177,8 +1177,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 			}
 			else {
-				if((!gPl.playing) &&
-				   (!gPl.paused)) {
+				if((!gst_player.playing) &&
+				   (!gst_player.paused)) {
 					text = "<b>XNOISE</b> - ready to rock! ;-)";
 				}
 				else {
@@ -1260,7 +1260,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.contentvbox = gb.get_object("contentvbox") as Gtk.VBox;
 
 			//DRAWINGAREA FOR VIDEO
-			videoscreen = gPl.videoscreen;
+			videoscreen = gst_player.videoscreen;
 			videovbox = gb.get_object("videovbox") as Gtk.VBox;
 			videovbox.pack_start(videoscreen,true,true,0);
 
@@ -1419,7 +1419,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //			timelabel = gb.get_object("timelabel") as Gtk.Label;
 			var progbox = gb.get_object("vbox1") as Gtk.VBox;
 //			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
-			this.songProgressBar = new TrackInfobar(gPl);
+			this.songProgressBar = new TrackInfobar(gst_player);
 			progbox.pack_start(songProgressBar, true, true, 0);
 //			songprogress_viewport.add(songProgressBar);
 			//---------------------

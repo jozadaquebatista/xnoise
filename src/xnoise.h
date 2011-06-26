@@ -1827,7 +1827,7 @@ extern XnoiseItemConverter* xnoise_item_converter;
 extern GMainContext* xnoise_mc;
 extern XnoiseDbBrowser* xnoise_db_browser;
 extern XnoiseDbWriter* xnoise_db_writer;
-extern XnoiseGstPlayer* xnoise_gPl;
+extern XnoiseGstPlayer* xnoise_gst_player;
 extern XnoisePluginLoader* xnoise_plugin_loader;
 extern XnoiseTrayIcon* xnoise_tray_icon;
 GType xnoise_main_window_get_type (void) G_GNUC_CONST;
