@@ -208,14 +208,21 @@ public class Xnoise.GstPlayer : GLib.Object {
 			Gst.Format format = Gst.Format.TIME;
 			if(!playbin.query_position(ref format, out pos))
 					return 0.0;
+			if(_length_time == 0.0)
+				return 0.0;
 			return (double)pos/(double)_length_time;
 		}
 		set {
 			if(seeking == false) {
-				playbin.seek(1.0, Gst.Format.TIME,
-				             Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-				             Gst.SeekType.SET, (int64)(value * _length_time),
-				             Gst.SeekType.NONE, -1);
+				if(value > 1.0)
+					value = 1.0;
+				int64 len;
+				Gst.Format fmt = Gst.Format.TIME;
+				playbin.query_duration(ref fmt, out len);
+				_length_time = (this._uri == null || this._uri == "" ? (int64)0 : (int64)len);
+				playbin.seek_simple(Gst.Format.TIME,
+				                    Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
+				                    (int64)(value * _length_time));
 			}
 		}
 	}
@@ -255,10 +262,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 		});
 		
 		global.sign_restart_song.connect( () => {
-			playbin.seek(1.0, Gst.Format.TIME,
-			             Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-			             Gst.SeekType.SET, (int64)0,
-			             Gst.SeekType.NONE, -1);
+			playbin.seek_simple(Gst.Format.TIME,
+			                    Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
+			                    (int64)0);
 			this.playSong();
 		});
 		sign_missing_plugins.connect(on_sign_missing_plugins); 
@@ -604,6 +610,9 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 
 	private bool on_cyclic_send_song_position() {
+		//print("current:%s \n",playbin.current_state.to_string());
+		if(global.player_state == PlayerState.PLAYING && playbin.current_state != State.PLAYING)
+			playbin.set_state(Gst.State.PLAYING);
 		if(!is_stream) {
 			Gst.Format fmt = Gst.Format.TIME;
 			int64 pos, len;
@@ -623,7 +632,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 					return true;
 				sign_song_position_changed((uint)(pos/1000000), (uint)(len/1000000));
 			}
-	//		print("current:%s \n",playbin.current_state.to_string());
 		}
 		//print("flags: %d\n", (int)playbin.flags);
 		return true;
@@ -676,16 +684,15 @@ public class Xnoise.GstPlayer : GLib.Object {
 				int64 pos, new_pos;
 				if(!playbin.query_position(ref fmt, out pos))
 					return;
-				new_pos = pos + (int64)((int64)seconds * (int64)1000000000);
+				new_pos = pos + (int64)((int64)seconds * Gst.SECOND);//(int64)1000000000
 				//print("%lli %lli %lli %lli\n", pos, new_pos, _length_time, (int64)((int64)seconds * (int64)1000000000));
 			
 				if(new_pos > _length_time) new_pos = _length_time;
 				if(new_pos < 0)            new_pos = 0;
 				
-				playbin.seek(1.0, Gst.Format.TIME,
-				             Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-				             Gst.SeekType.SET, new_pos,
-				             Gst.SeekType.NONE, -1);
+				playbin.seek_simple(Gst.Format.TIME,
+				                    Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
+				                    new_pos);
 				sign_song_position_changed((uint)(new_pos/1000000), (uint)(_length_time/1000000));
 			}
 		}

@@ -142,9 +142,15 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		return true;
 	}
 
+	private uint scroll_source = 0;
 	private bool on_scroll(Gdk.EventScroll event) {
-		if(global.player_state != PlayerState.STOPPED)
-			this.player.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
+		if(scroll_source != 0)
+			Source.remove(scroll_source);
+		scroll_source = Idle.add( () => {
+			if(global.player_state != PlayerState.STOPPED)
+				this.player.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
+			return false;
+		});
 		return true;
 	}
 
