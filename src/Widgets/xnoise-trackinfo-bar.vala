@@ -62,10 +62,21 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 	}
 
 	private bool on_press(Gdk.EventButton e) {
-		Allocation progress_loc;
-		this.progress.get_allocation(out progress_loc);
-		if(e.x > progress_loc.width)
-			return true;
+		Allocation allocation;
+		this.progress.get_allocation(out allocation);
+		uint progress_width = allocation.width;
+		if(is_rtl()) {
+			this.time_label.get_allocation(out allocation);
+			
+			if(e.x < allocation.width)
+				return true;
+			
+			if(e.x > allocation.width + progress_width)
+				return true;
+		}
+		else
+			if(e.x > progress_width)
+				return true;
 		if((this.player.playing)|(this.player.paused)) {
 			this.player.seeking = true;
 			this.ebox.motion_notify_event.connect(on_motion_notify);
@@ -74,15 +85,27 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 	}
 
 	private bool on_release(Gdk.EventButton e) {
-		Allocation progress_loc;
-		this.progress.get_allocation(out progress_loc);
-		if(e.x > progress_loc.width)
-			return true;
+		double mouse_x = e.x;
+		Allocation allocation;
+		this.progress.get_allocation(out allocation);
+		uint progress_width = allocation.width;
+		bool isrtl = is_rtl();
+		if(isrtl) {
+			this.time_label.get_allocation(out allocation);
+			uint time_width = allocation.width;
+			
+			mouse_x -= time_width;
+			
+			if(mouse_x < 0)
+				return true;
+		}
+		
 		if((this.player.playing)||(this.player.paused)) {
 			double thisFraction;
 			
-			thisFraction = e.x / progress_loc.width;
-			thisFraction = invert_if_rtl(thisFraction);
+			thisFraction = mouse_x / progress_width;
+			if(isrtl)
+				thisFraction = 1 - thisFraction;
 			
 			this.ebox.motion_notify_event.disconnect(on_motion_notify);
 			
@@ -98,20 +121,19 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		return true;
 	}
 	
-	private bool on_scroll(Gdk.EventScroll event) {
-		if(global.player_state != PlayerState.STOPPED) {
-			this.player.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
-		}
-		return true;
-	}
-
 	private bool on_motion_notify(Gdk.EventMotion e) {
 		double thisFraction;
-		Allocation progress_loc;
-		this.progress.get_allocation(out progress_loc);
-		thisFraction = e.x / progress_loc.width;
-		thisFraction = invert_if_rtl(thisFraction);
-
+		Allocation allocation;
+		this.progress.get_allocation(out allocation);
+		uint progress_width = allocation.width;
+		if(is_rtl()) {
+			this.time_label.get_allocation(out allocation);
+			
+			thisFraction = 1 - (e.x - allocation.width) / progress_width;
+		}
+		else
+			thisFraction = e.x / progress_width;
+		
 		if(thisFraction < 0.0) thisFraction = 0.0;
 		if(thisFraction > 1.0) thisFraction = 1.0;
 		this.progress.set_fraction(thisFraction);
@@ -120,10 +142,18 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		return true;
 	}
 
-	private double invert_if_rtl(double to_invert) {
+	private bool on_scroll(Gdk.EventScroll event) {
+		if(global.player_state != PlayerState.STOPPED)
+			this.player.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
+		return true;
+	}
+
+	// Checks weather the TrackInfoBar is threated in RTL direction by Gtk.
+	private static bool is_rtl() {
 		if(Widget.get_default_direction() == TextDirection.RTL)
-			return 1.0 - to_invert;
-		return to_invert;
+			return true;
+		// TextDirection.NONE isn't allowed for Gtk default direction
+		return false;
 	}
 	
 	private void on_eos() {
