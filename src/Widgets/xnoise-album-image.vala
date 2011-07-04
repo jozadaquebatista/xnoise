@@ -31,6 +31,7 @@
  */
 
 using Gtk;
+using Xnoise.Services;
 
 public class Xnoise.AlbumImage : Gtk.Image {
 	private const int SIZE = 48;

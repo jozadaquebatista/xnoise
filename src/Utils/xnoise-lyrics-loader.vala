@@ -30,6 +30,12 @@
  * 	Jörn Magens
  */
 
+
+using Xnoise.Services;
+
+
+public delegate void Xnoise.LyricsFetchedCallback(string artist, string title, string credits, string identifier, string text, string providername);
+
 /* TODO: * try different sources in order of their priority if backends fail to find lyrics
 	 * ensure everything's radio-stream-proof
 	 * make preferences options

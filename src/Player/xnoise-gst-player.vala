@@ -275,11 +275,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 		playbin.set_state(State.READY);
 		
 		this.uri = xuri;
-
+		
 		if(playing_buf)
 			playbin.set_state(State.PLAYING);
 	}
-
+	
 	private void handle_eos_via_idle() {
 		Idle.add ( () => { 
 			global.handle_eos();
@@ -461,8 +461,16 @@ public class Xnoise.GstPlayer : GLib.Object {
 				}
 				break;
 			}
+			case Gst.MessageType.STREAM_STATUS: {
+				//Gst.StreamStatusType sst;
+				//unowned Gst.Element owner;
+				//msg.parse_stream_status (out sst, out owner);
+				//print("GstStreamStatus parsed: %s from %s\n", sst.to_string(), msg.src.get_name());
+				break;
+			}
 			case Gst.MessageType.EOS: {
 				handle_eos_via_idle();
+				print("EOS\n");
 				break;
 			}
 			default: break;
@@ -630,7 +638,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				if(playing == false) return true;
 				if(!playbin.query_position(ref fmt, out pos))
 					return true;
-				sign_song_position_changed((uint)(pos/1000000), (uint)(len/1000000));
+				sign_song_position_changed((uint)(pos/Gst.MSECOND), (uint)(len/Gst.MSECOND));
 			}
 		}
 		//print("flags: %d\n", (int)playbin.flags);
@@ -684,7 +692,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				int64 pos, new_pos;
 				if(!playbin.query_position(ref fmt, out pos))
 					return;
-				new_pos = pos + (int64)((int64)seconds * Gst.SECOND);//(int64)1000000000
+				new_pos = pos + (int64)((int64)seconds * Gst.SECOND); //(int64)1000000000
 				//print("%lli %lli %lli %lli\n", pos, new_pos, _length_time, (int64)((int64)seconds * (int64)1000000000));
 			
 				if(new_pos > _length_time) new_pos = _length_time;
@@ -693,7 +701,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				playbin.seek_simple(Gst.Format.TIME,
 				                    Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
 				                    new_pos);
-				sign_song_position_changed((uint)(new_pos/1000000), (uint)(_length_time/1000000));
+				sign_song_position_changed((uint)(new_pos/Gst.MSECOND), (uint)(_length_time/Gst.MSECOND));
 			}
 		}
 	}

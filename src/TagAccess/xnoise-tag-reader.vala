@@ -28,6 +28,7 @@
  * 	Jörn Magens
  */
 
+using Xnoise.Services;
 
 public class Xnoise.TagReader {
 	public TrackData? read_tag(string filename) {

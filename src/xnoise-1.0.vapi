@@ -2,6 +2,21 @@
 
 [CCode (cprefix = "Xnoise", lower_case_cprefix = "xnoise_")]
 namespace Xnoise {
+	[CCode (cprefix = "XnoiseServices", lower_case_cprefix = "xnoise_services_")]
+	namespace Services {
+		[CCode (cheader_filename = "xnoise.h")]
+		public static string prepare_for_comparison (string? value);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static string prepare_for_search (string? val);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static string prepare_name_from_filename (string? val);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static string remove_linebreaks (string? val);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static string remove_suffix_from_filename (string? val);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static string replace_underline_with_blank_encoded (string value);
+	}
 	[Compact]
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Action {
@@ -885,18 +900,6 @@ namespace Xnoise {
 	public static void initialize (out bool is_first_start);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static int main (string[] args);
-	[CCode (cheader_filename = "xnoise.h")]
-	public static string prepare_for_comparison (string? value);
-	[CCode (cheader_filename = "xnoise.h")]
-	public static string prepare_for_search (string? val);
-	[CCode (cheader_filename = "xnoise.h")]
-	public static string prepare_name_from_filename (string? val);
-	[CCode (cheader_filename = "xnoise.h")]
-	public static string remove_linebreaks (string? val);
-	[CCode (cheader_filename = "xnoise.h")]
-	public static string remove_suffix_from_filename (string? val);
-	[CCode (cheader_filename = "xnoise.h")]
-	public static string replace_underline_with_blank_encoded (string value);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static bool thumbnail_available (string uri, out GLib.File? _thumb);
 }

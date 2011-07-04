@@ -30,6 +30,8 @@
  * 	Jörn Magens
  */
 
+using Xnoise.Services;
+
 public class Xnoise.LyricsView : Gtk.TextView {
 	private LyricsLoader loader = null;
 	private Main xn;

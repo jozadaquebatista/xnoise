@@ -29,8 +29,8 @@
  */
 
 
-using GLib;
 using Gtk;
+using Xnoise.Services;
 
 public class Xnoise.TrayIcon : StatusIcon {
 	private Menu traymenu;

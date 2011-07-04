@@ -29,6 +29,8 @@
  */
 
 using Gtk;
+using Xnoise.Services;
+
 [CCode (cname = "gdk_window_ensure_native")]
 public extern bool ensure_native(Gdk.Window window);
 

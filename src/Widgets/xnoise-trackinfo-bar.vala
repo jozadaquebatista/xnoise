@@ -61,6 +61,7 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		this.player.sign_stopped.connect(on_stopped);
 	}
 
+	private bool press_was_valid = false;
 	private bool on_press(Gdk.EventButton e) {
 		Allocation allocation;
 		this.progress.get_allocation(out allocation);
@@ -74,17 +75,21 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 			if(e.x > allocation.width + progress_width)
 				return true;
 		}
-		else
+		else {
 			if(e.x > progress_width)
 				return true;
+		}
 		if((this.player.playing)|(this.player.paused)) {
 			this.player.seeking = true;
+			press_was_valid = true;
 			this.ebox.motion_notify_event.connect(on_motion_notify);
 		}
 		return true;
 	}
 
 	private bool on_release(Gdk.EventButton e) {
+		if(press_was_valid == false)
+			return true;
 		double mouse_x = e.x;
 		Allocation allocation;
 		this.progress.get_allocation(out allocation);
@@ -96,8 +101,10 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 			
 			mouse_x -= time_width;
 			
-			if(mouse_x < 0)
-				return true;
+			//if(mouse_x < 0) {
+			//	press_was_valid = false;
+			//	return true;
+			//}
 		}
 		
 		if((this.player.playing)||(this.player.paused)) {
@@ -118,6 +125,7 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 			
 			set_value((uint)((thisFraction * this.player.length_time) / 1000000), (uint)(this.player.length_time / 1000000));
 		}
+		press_was_valid = false;
 		return true;
 	}
 	
@@ -171,6 +179,7 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 	}
 
 	public void set_value(uint pos, uint len) {
+		// pos and len are ms
 		if(len > 0) {
 			int dur_min, dur_sec, pos_min, pos_sec;
 			double fraction = (double)pos/(double)len;
