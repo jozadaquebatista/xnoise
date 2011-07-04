@@ -34,6 +34,9 @@ BUILT_SOURCES = \
 xnoise_SOURCES = \
     xnoise.vala \
     xnoise-main.vala \
+    AlbumImages/xnoise-album-image-loader.vala \
+    AlbumImages/xnoise-i-album-cover-image.vala \
+    AlbumImages/xnoise-i-album-cover-image-provider.vala \
     ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala \
     ItemHandlers/EditTags/xnoise-handler-edit-tags.vala \
     ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala \
@@ -47,6 +50,9 @@ xnoise_SOURCES = \
     Database/xnoise-db-browser.vala \
     Database/xnoise-db-creator.vala \
     Database/xnoise-db-writer.vala \
+    Lyrics/xnoise-i-lyrics.vala \
+    Lyrics/xnoise-i-lyrics-provider.vala \
+    Lyrics/xnoise-lyrics-loader.vala \
     Models/xnoise-media-browser-model.vala \
     Models/xnoise-tracklist-model.vala \
     Player/xnoise-gst-player.vala \
@@ -58,15 +64,9 @@ xnoise_SOURCES = \
     TagAccess/xnoise-tag-reader.vala \
     TagAccess/xnoise-tag-writer.vala \
     TrayIcon/xnoise-tray-icon.vala \
-    Utils/xnoise-album-image-loader.vala \
     Utils/xnoise-app-starter.vala \
-    Utils/xnoise-i-album-cover-image.vala \
-    Utils/xnoise-i-album-cover-image-provider.vala \
-    Utils/xnoise-i-lyrics.vala \
-    Utils/xnoise-i-lyrics-provider.vala \
     Utils/xnoise-i-params.vala \
     Utils/xnoise-global-access.vala \
-    Utils/xnoise-lyrics-loader.vala \
     Utils/xnoise-media-importer.vala \
     Utils/xnoise-misc.vala \
     Utils/xnoise-parameter.vala \
