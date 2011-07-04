@@ -253,18 +253,6 @@ public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
 
 // INTERFACES
 
-/**
- * Implementors of this interface have to register themselves in
- * the static Parameter class instance `par' at start time of xnoise.
- * The read_* and write_* methods will be called then to put some
- * configuration data to the implementing class instances.
- */
-public interface Xnoise.IParams : GLib.Object {
-	public abstract void read_params_data();
-	public abstract void write_params_data();
-}
-
-
 // this is used by mediakeys plugin. Only works if the interface  is in xnoise itself 
 [DBus (name = "org.gnome.SettingsDaemon.MediaKeys")]
 public interface Xnoise.GnomeMediaKeys : GLib.Object {
@@ -274,18 +262,3 @@ public interface Xnoise.GnomeMediaKeys : GLib.Object {
 }
 
 
-/**
- * IAlbumCoverImage implementors should be asynchronously look for images
- * The reply is checked for matching artist/album
- */
-public interface Xnoise.IAlbumCoverImage : GLib.Object {
-	//delivers local image path on success, "" otherwise
-	public signal void sign_image_fetched(string artist, string album, string image_path);
-	//start image search
-	public abstract void find_image();
-}
-
-
-public interface Xnoise.IAlbumCoverImageProvider : GLib.Object {
-	public abstract IAlbumCoverImage from_tags(string artist, string album);
-}

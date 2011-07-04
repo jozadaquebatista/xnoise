@@ -60,8 +60,11 @@ xnoise_SOURCES = \
     TrayIcon/xnoise-tray-icon.vala \
     Utils/xnoise-album-image-loader.vala \
     Utils/xnoise-app-starter.vala \
+    Utils/xnoise-i-album-cover-image.vala \
+    Utils/xnoise-i-album-cover-image-provider.vala \
     Utils/xnoise-i-lyrics.vala \
     Utils/xnoise-i-lyrics-provider.vala \
+    Utils/xnoise-i-params.vala \
     Utils/xnoise-global-access.vala \
     Utils/xnoise-lyrics-loader.vala \
     Utils/xnoise-media-importer.vala \

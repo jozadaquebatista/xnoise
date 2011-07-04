@@ -325,6 +325,22 @@ typedef struct _XnoiseAlbumImageLoader XnoiseAlbumImageLoader;
 typedef struct _XnoiseAlbumImageLoaderClass XnoiseAlbumImageLoaderClass;
 typedef struct _XnoiseAlbumImageLoaderPrivate XnoiseAlbumImageLoaderPrivate;
 
+#define XNOISE_TYPE_IALBUM_COVER_IMAGE (xnoise_ialbum_cover_image_get_type ())
+#define XNOISE_IALBUM_COVER_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE, XnoiseIAlbumCoverImage))
+#define XNOISE_IS_IALBUM_COVER_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE))
+#define XNOISE_IALBUM_COVER_IMAGE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE, XnoiseIAlbumCoverImageIface))
+
+typedef struct _XnoiseIAlbumCoverImage XnoiseIAlbumCoverImage;
+typedef struct _XnoiseIAlbumCoverImageIface XnoiseIAlbumCoverImageIface;
+
+#define XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER (xnoise_ialbum_cover_image_provider_get_type ())
+#define XNOISE_IALBUM_COVER_IMAGE_PROVIDER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER, XnoiseIAlbumCoverImageProvider))
+#define XNOISE_IS_IALBUM_COVER_IMAGE_PROVIDER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER))
+#define XNOISE_IALBUM_COVER_IMAGE_PROVIDER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER, XnoiseIAlbumCoverImageProviderIface))
+
+typedef struct _XnoiseIAlbumCoverImageProvider XnoiseIAlbumCoverImageProvider;
+typedef struct _XnoiseIAlbumCoverImageProviderIface XnoiseIAlbumCoverImageProviderIface;
+
 #define XNOISE_TYPE_ILYRICS (xnoise_ilyrics_get_type ())
 #define XNOISE_ILYRICS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ILYRICS, XnoiseILyrics))
 #define XNOISE_IS_ILYRICS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ILYRICS))
@@ -350,6 +366,14 @@ typedef struct _XnoiseILyricsProviderIface XnoiseILyricsProviderIface;
 
 typedef struct _XnoiseLyricsLoader XnoiseLyricsLoader;
 typedef struct _XnoiseLyricsLoaderClass XnoiseLyricsLoaderClass;
+
+#define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
+#define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
+#define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
+#define XNOISE_IPARAMS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParamsIface))
+
+typedef struct _XnoiseIParams XnoiseIParams;
+typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 
 #define XNOISE_TYPE_GLOBAL_ACCESS (xnoise_global_access_get_type ())
 #define XNOISE_GLOBAL_ACCESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccess))
@@ -452,14 +476,6 @@ typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 typedef struct _XnoiseRemoteSchemesPrivate XnoiseRemoteSchemesPrivate;
 typedef struct _XnoiseLocalSchemesPrivate XnoiseLocalSchemesPrivate;
 
-#define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
-#define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
-#define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
-#define XNOISE_IPARAMS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParamsIface))
-
-typedef struct _XnoiseIParams XnoiseIParams;
-typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
-
 #define XNOISE_TYPE_GNOME_MEDIA_KEYS (xnoise_gnome_media_keys_get_type ())
 #define XNOISE_GNOME_MEDIA_KEYS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GNOME_MEDIA_KEYS, XnoiseGnomeMediaKeys))
 #define XNOISE_IS_GNOME_MEDIA_KEYS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_GNOME_MEDIA_KEYS))
@@ -469,22 +485,6 @@ typedef struct _XnoiseGnomeMediaKeys XnoiseGnomeMediaKeys;
 typedef struct _XnoiseGnomeMediaKeysIface XnoiseGnomeMediaKeysIface;
 
 #define XNOISE_TYPE_GNOME_MEDIA_KEYS_PROXY (xnoise_gnome_media_keys_proxy_get_type ())
-
-#define XNOISE_TYPE_IALBUM_COVER_IMAGE (xnoise_ialbum_cover_image_get_type ())
-#define XNOISE_IALBUM_COVER_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE, XnoiseIAlbumCoverImage))
-#define XNOISE_IS_IALBUM_COVER_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE))
-#define XNOISE_IALBUM_COVER_IMAGE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE, XnoiseIAlbumCoverImageIface))
-
-typedef struct _XnoiseIAlbumCoverImage XnoiseIAlbumCoverImage;
-typedef struct _XnoiseIAlbumCoverImageIface XnoiseIAlbumCoverImageIface;
-
-#define XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER (xnoise_ialbum_cover_image_provider_get_type ())
-#define XNOISE_IALBUM_COVER_IMAGE_PROVIDER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER, XnoiseIAlbumCoverImageProvider))
-#define XNOISE_IS_IALBUM_COVER_IMAGE_PROVIDER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER))
-#define XNOISE_IALBUM_COVER_IMAGE_PROVIDER_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IALBUM_COVER_IMAGE_PROVIDER, XnoiseIAlbumCoverImageProviderIface))
-
-typedef struct _XnoiseIAlbumCoverImageProvider XnoiseIAlbumCoverImageProvider;
-typedef struct _XnoiseIAlbumCoverImageProviderIface XnoiseIAlbumCoverImageProviderIface;
 typedef struct _XnoiseParamsPrivate XnoiseParamsPrivate;
 typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
 typedef struct _XnoiseUserInfoPrivate XnoiseUserInfoPrivate;
@@ -1021,6 +1021,16 @@ struct _XnoiseAlbumImageLoaderClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseIAlbumCoverImageIface {
+	GTypeInterface parent_iface;
+	void (*find_image) (XnoiseIAlbumCoverImage* self);
+};
+
+struct _XnoiseIAlbumCoverImageProviderIface {
+	GTypeInterface parent_iface;
+	XnoiseIAlbumCoverImage* (*from_tags) (XnoiseIAlbumCoverImageProvider* self, const gchar* artist, const gchar* album);
+};
+
 struct _XnoiseILyricsIface {
 	GTypeInterface parent_iface;
 	void (*find_lyrics) (XnoiseILyrics* self);
@@ -1036,6 +1046,12 @@ struct _XnoiseILyricsProviderIface {
 	gint (*get_priority) (XnoiseILyricsProvider* self);
 	void (*set_priority) (XnoiseILyricsProvider* self, gint value);
 	const gchar* (*get_provider_name) (XnoiseILyricsProvider* self);
+};
+
+struct _XnoiseIParamsIface {
+	GTypeInterface parent_iface;
+	void (*read_params_data) (XnoiseIParams* self);
+	void (*write_params_data) (XnoiseIParams* self);
 };
 
 struct _XnoiseGlobalAccess {
@@ -1105,26 +1121,10 @@ struct _XnoiseLocalSchemesClass {
 	void (*finalize) (XnoiseLocalSchemes *self);
 };
 
-struct _XnoiseIParamsIface {
-	GTypeInterface parent_iface;
-	void (*read_params_data) (XnoiseIParams* self);
-	void (*write_params_data) (XnoiseIParams* self);
-};
-
 struct _XnoiseGnomeMediaKeysIface {
 	GTypeInterface parent_iface;
 	void (*GrabMediaPlayerKeys) (XnoiseGnomeMediaKeys* self, const gchar* application, guint32 time, GError** error);
 	void (*ReleaseMediaPlayerKeys) (XnoiseGnomeMediaKeys* self, const gchar* application, GError** error);
-};
-
-struct _XnoiseIAlbumCoverImageIface {
-	GTypeInterface parent_iface;
-	void (*find_image) (XnoiseIAlbumCoverImage* self);
-};
-
-struct _XnoiseIAlbumCoverImageProviderIface {
-	GTypeInterface parent_iface;
-	XnoiseIAlbumCoverImage* (*from_tags) (XnoiseIAlbumCoverImageProvider* self, const gchar* artist, const gchar* album);
 };
 
 struct _XnoiseParams {
@@ -1756,6 +1756,10 @@ GType xnoise_album_image_loader_get_type (void) G_GNUC_CONST;
 XnoiseAlbumImageLoader* xnoise_album_image_loader_new (void);
 XnoiseAlbumImageLoader* xnoise_album_image_loader_construct (GType object_type);
 gboolean xnoise_album_image_loader_fetch_image (XnoiseAlbumImageLoader* self);
+GType xnoise_ialbum_cover_image_get_type (void) G_GNUC_CONST;
+void xnoise_ialbum_cover_image_find_image (XnoiseIAlbumCoverImage* self);
+GType xnoise_ialbum_cover_image_provider_get_type (void) G_GNUC_CONST;
+XnoiseIAlbumCoverImage* xnoise_ialbum_cover_image_provider_from_tags (XnoiseIAlbumCoverImageProvider* self, const gchar* artist, const gchar* album);
 GType xnoise_ilyrics_get_type (void) G_GNUC_CONST;
 void xnoise_ilyrics_find_lyrics (XnoiseILyrics* self);
 gchar* xnoise_ilyrics_get_identifier (XnoiseILyrics* self);
@@ -1770,6 +1774,9 @@ gboolean xnoise_ilyrics_provider_equals (XnoiseILyricsProvider* self, XnoiseILyr
 gint xnoise_ilyrics_provider_get_priority (XnoiseILyricsProvider* self);
 void xnoise_ilyrics_provider_set_priority (XnoiseILyricsProvider* self, gint value);
 const gchar* xnoise_ilyrics_provider_get_provider_name (XnoiseILyricsProvider* self);
+GType xnoise_iparams_get_type (void) G_GNUC_CONST;
+void xnoise_iparams_read_params_data (XnoiseIParams* self);
+void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_global_access_get_type (void) G_GNUC_CONST;
 void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
 void xnoise_global_access_do_restart_of_current_track (XnoiseGlobalAccess* self);
@@ -1868,18 +1875,11 @@ gboolean xnoise_local_schemes_contains (XnoiseLocalSchemes* self, const gchar* l
 XnoiseLocalSchemes* xnoise_local_schemes_new (void);
 XnoiseLocalSchemes* xnoise_local_schemes_construct (GType object_type);
 gchar** xnoise_local_schemes_get_list (XnoiseLocalSchemes* self, int* result_length1);
-GType xnoise_iparams_get_type (void) G_GNUC_CONST;
-void xnoise_iparams_read_params_data (XnoiseIParams* self);
-void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_gnome_media_keys_proxy_get_type (void) G_GNUC_CONST;
 guint xnoise_gnome_media_keys_register_object (void* object, GDBusConnection* connection, const gchar* path, GError** error);
 GType xnoise_gnome_media_keys_get_type (void) G_GNUC_CONST;
 void xnoise_gnome_media_keys_GrabMediaPlayerKeys (XnoiseGnomeMediaKeys* self, const gchar* application, guint32 time, GError** error);
 void xnoise_gnome_media_keys_ReleaseMediaPlayerKeys (XnoiseGnomeMediaKeys* self, const gchar* application, GError** error);
-GType xnoise_ialbum_cover_image_get_type (void) G_GNUC_CONST;
-void xnoise_ialbum_cover_image_find_image (XnoiseIAlbumCoverImage* self);
-GType xnoise_ialbum_cover_image_provider_get_type (void) G_GNUC_CONST;
-XnoiseIAlbumCoverImage* xnoise_ialbum_cover_image_provider_from_tags (XnoiseIAlbumCoverImageProvider* self, const gchar* artist, const gchar* album);
 XnoiseParams* xnoise_params_new (void);
 XnoiseParams* xnoise_params_construct (GType object_type);
 void xnoise_params_iparams_register (XnoiseParams* self, XnoiseIParams* iparam);
