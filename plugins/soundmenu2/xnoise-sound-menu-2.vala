@@ -29,10 +29,12 @@
  */
 
 using Xnoise;
+using Xnoise.PluginModule;
+
 
 public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
-	private unowned Xnoise.Plugin p;
-	private unowned Xnoise.Plugin _owner;
+	private unowned PluginModule.Container p;
+	private unowned PluginModule.Container _owner;
 	
 	public Main xn { get; set; }
 	
@@ -42,7 +44,7 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 		}
 	}
 	
-	public Xnoise.Plugin owner {
+	public PluginModule.Container owner {
 		get {
 			return _owner;
 		}

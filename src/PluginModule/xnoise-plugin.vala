@@ -29,18 +29,18 @@
  */
  
 
-public class Xnoise.Plugin : TypeModule {
+public class Xnoise.PluginModule.Container : TypeModule {
 	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT FROM MODULE
 	private unowned Main xn;
 	private bool _loaded = false;
 	private Module module;
 	private Type _type;
-	private PluginInformation _info;
+	private Information _info;
 	private bool _activated;
 
 	public Object loaded_plugin;
 	
-	public PluginInformation info {
+	public Information info {
 		get {
 			return _info;
 		}
@@ -65,13 +65,13 @@ public class Xnoise.Plugin : TypeModule {
 
 	private delegate Type InitModuleFunction(TypeModule module);
 
-	public Plugin(PluginInformation info) {
+	public Container(Information info) {
 		Object();
 		base.set_name(info.name);
 		this._info = info;
 		this.xn = Main.instance;
 		this.notify["activated"].connect( (s, p) => {
-			if(((Plugin)s).activated)
+			if(((Container)s).activated)
 				activate();
 			else
 				deactivate();
@@ -125,7 +125,7 @@ public class Xnoise.Plugin : TypeModule {
 		if(module == null)
 			return;
 		
-		unowned Plugin ow = this;
+		unowned Container ow = this;
 		loaded_plugin = Object.new(_type,
 		                           "xn", this.xn,
 		                           "owner", ow,      //set properties via this, because

@@ -27,15 +27,16 @@
  * Author:
  * 	Jörn Magens
  */
- 
-using Xnoise;
+
 using Gtk;
+using Xnoise;
+using Xnoise.PluginModule;
 
 public class TestPlugin : GLib.Object, IPlugin {
 	private Gtk.Button b;
-	private unowned Xnoise.Plugin _owner;
+	private unowned PluginModule.Container _owner;
 	
-	public Xnoise.Plugin owner {
+	public PluginModule.Container owner {
 		get {
 			return _owner;
 		}

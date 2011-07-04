@@ -31,15 +31,17 @@
  
 using Gtk;
 using Notify;
+
 using Xnoise;
 using Xnoise.Services;
+using Xnoise.PluginModule;
 
 
 public class Xnoise.Notifications : GLib.Object, IPlugin {
 	public Main xn { get; set; }
-	private unowned Xnoise.Plugin _owner;
+	private unowned PluginModule.Container _owner;
 	
-	public Xnoise.Plugin owner {
+	public PluginModule.Container owner {
 		get {
 			return _owner;
 		}
@@ -47,11 +49,13 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			_owner = value;
 		}
 	}
+	
 	public string name { 
 		get {
 			return "notifications";
 		} 
 	}
+	
 	private const int IMAGE_SIZE = 64;
 	private Notification notification = null;
 	private uint timeout;

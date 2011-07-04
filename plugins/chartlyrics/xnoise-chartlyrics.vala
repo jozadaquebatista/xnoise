@@ -35,15 +35,16 @@
 using Soup;
 using Xml;
 using Xnoise;
+using Xnoise.PluginModule;
 
 // XML PARSING DOES NOT YET WORK
 
 public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
-	private unowned Xnoise.Plugin _owner;
+	private unowned PluginModule.Container _owner;
 	
 	public Main xn { get; set; }
 	
-	public Xnoise.Plugin owner {
+	public PluginModule.Container owner {
 		get {
 			return _owner;
 		}
@@ -110,12 +111,12 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 	private string id;
 	private string text;
 	private bool? availability;
-	private unowned Plugin owner;
+	private unowned PluginModule.Container owner;
 	private unowned LyricsLoader loader;
 	private LyricsFetchedCallback cb = null;
 	private uint timeout = 0;
 	
-	public Chartlyrics(LyricsLoader _loader, Plugin _owner, string artist, string title, LyricsFetchedCallback _cb) {
+	public Chartlyrics(LyricsLoader _loader, PluginModule.Container _owner, string artist, string title, LyricsFetchedCallback _cb) {
 		this.artist = artist;
 		this.title = title;
 		this.owner = _owner;
@@ -277,9 +278,9 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 	}
 		
 	
-	private bool? available() {
-		return availability;
-	}
+//	private bool? available() {
+//		return availability;
+//	}
 	
 	public void find_lyrics() {
 		fetch_hid();

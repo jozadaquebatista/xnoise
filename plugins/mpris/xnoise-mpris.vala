@@ -36,6 +36,8 @@
 
 using Gtk;
 using Xnoise;
+using Xnoise.PluginModule;
+
 
 public class Xnoise.Mpris : GLib.Object, IPlugin {
 	public Main xn { get; set; }
@@ -45,10 +47,10 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	public MprisPlayer player = null;
 	public MprisRoot root = null;
 	public MprisTrackList tracklist = null;
-	private unowned Xnoise.Plugin _owner;
+	private unowned PluginModule.Container _owner;
 	private unowned DBusConnection conn;
 	
-	public Xnoise.Plugin owner {
+	public PluginModule.Container owner {
 		get {
 			return _owner;
 		}

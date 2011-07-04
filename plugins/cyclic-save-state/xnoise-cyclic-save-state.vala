@@ -28,14 +28,16 @@
  * 	Jörn Magens
  */
  
+
 using Xnoise;
+using Xnoise.PluginModule;
 
 public class Xnoise.CyclicSaveState : GLib.Object, IPlugin {
-	private unowned Xnoise.Plugin _owner; // the unowned owner
+	private unowned PluginModule.Container _owner; // the unowned owner
 
 	public Main xn { get; set; }
 	
-	public Xnoise.Plugin owner { 
+	public PluginModule.Container owner { 
 		get { return _owner; }
 		set { _owner = value; }
 	}

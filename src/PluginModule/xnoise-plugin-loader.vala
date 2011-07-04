@@ -28,24 +28,24 @@
  * 	Jörn Magens
  */
 
-public class Xnoise.PluginLoader : Object { //, IParams
-	public HashTable<string, Plugin> plugin_htable;
-	public HashTable<string, unowned Plugin> lyrics_plugins_htable;
-	public HashTable<string, unowned Plugin> image_provider_htable;
+public class Xnoise.PluginModule.Loader : Object { //, IParams
+	public HashTable<string, Container> plugin_htable;
+	public HashTable<string, unowned Container> lyrics_plugins_htable;
+	public HashTable<string, unowned Container> image_provider_htable;
 	private Main xn;
-	private PluginInformation info;
+	private Information info;
 	private GLib.List<string> info_files;
 
-	public signal void sign_plugin_activated(Plugin p);
-	public signal void sign_plugin_deactivated(Plugin p);
+	public signal void sign_plugin_activated(Container p);
+	public signal void sign_plugin_deactivated(Container p);
 
-	public PluginLoader() {
+	public Loader() {
 		assert(Module.supported());
 //		par.iparams_register(this);
 		this.xn = Main.instance;
-		plugin_htable = new HashTable<string, Plugin>(str_hash, str_equal);
-		lyrics_plugins_htable   = new HashTable<string, unowned Plugin>(str_hash, str_equal);
-		image_provider_htable   = new HashTable<string, unowned Plugin>(str_hash, str_equal);
+		plugin_htable = new HashTable<string, Container>(str_hash, str_equal);
+		lyrics_plugins_htable   = new HashTable<string, unowned Container>(str_hash, str_equal);
+		image_provider_htable   = new HashTable<string, unowned Container>(str_hash, str_equal);
 	}
 
 	public unowned GLib.List<string> get_info_files() {
@@ -53,13 +53,13 @@ public class Xnoise.PluginLoader : Object { //, IParams
 	}
 
 	public bool load_all() {
-		Plugin plugin;
+		Container plugin;
 		File dir = File.new_for_path(Config.PLUGINSDIR);
 		this.get_plugin_information_files(dir);
 		foreach(string pluginInfoFile in info_files) {
-			info = new PluginInformation(pluginInfoFile);
+			info = new PluginModule.Information(pluginInfoFile);
 			if(info.load_info()) {
-				plugin = new Plugin(info);
+				plugin = new PluginModule.Container(info);
 				plugin.load();
 				if(plugin.loaded == true)
 					plugin_htable.insert(info.module, plugin); //Hold reference to plugin in hash table
@@ -121,7 +121,7 @@ public class Xnoise.PluginLoader : Object { //, IParams
 	}
 
 	public bool activate_single_plugin(string module) {
-		Plugin p = this.plugin_htable.lookup(module);
+		Container p = this.plugin_htable.lookup(module);
 		if(p == null) return false;
 		p.activate();
 		if(p.activated) {//notifications
@@ -132,7 +132,7 @@ public class Xnoise.PluginLoader : Object { //, IParams
 	}
 
 	public void deactivate_single_plugin(string module) {
-		Plugin p = this.plugin_htable.lookup(module);
+		Container p = this.plugin_htable.lookup(module);
 		if(p == null) return;
 		p.deactivate();
 		sign_plugin_deactivated(p);

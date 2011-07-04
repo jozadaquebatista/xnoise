@@ -28,7 +28,7 @@
  * 	Jörn Magens
  */
 
-public class Xnoise.PluginInformation : GLib.Object {
+public class Xnoise.PluginModule.Information : GLib.Object {
 	private string _author;
 	private string _copyright;
 	private string _description;
@@ -85,7 +85,7 @@ public class Xnoise.PluginInformation : GLib.Object {
 		}
 	}
 
-	public PluginInformation(string xplug_file) {
+	public Information(string xplug_file) {
 		this._xplug_file = xplug_file;
 	}
 

@@ -29,6 +29,8 @@
  */
 
 
+using Xnoise;
+using Xnoise.PluginModule;
 
 public interface Xnoise.ILyricsProvider : GLib.Object, IPlugin {
 	public abstract ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb);

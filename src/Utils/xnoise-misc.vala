@@ -30,6 +30,9 @@
 
 using Xnoise;
 using Xnoise.Database;
+using Xnoise.PluginModule;
+
+
 
 namespace Xnoise {
 	public static Params par = null;
@@ -46,7 +49,9 @@ namespace Xnoise {
 	public static Database.DbWriter  db_writer;
 	
 	public static GstPlayer gst_player;
-	public static PluginLoader plugin_loader;
+	
+	public static PluginModule.Loader plugin_loader;
+	
 	public static TrayIcon tray_icon;
 	public static MainWindow main_window;
 	public static TrackList tl;
@@ -101,7 +106,7 @@ namespace Xnoise {
 		
 		
 		// PLUGINS
-		plugin_loader = new PluginLoader();
+		plugin_loader = new PluginModule.Loader();
 		
 		
 		// STATIC WIDGETS

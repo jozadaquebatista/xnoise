@@ -41,14 +41,15 @@
 
 using Gtk;
 using Xnoise;
+using Xnoise.PluginModule;
 
 
 public class Xnoise.MediawatcherPlugin : GLib.Object, IPlugin {
-	private unowned Xnoise.Plugin _owner;
+	private unowned PluginModule.Container _owner;
 
 	public Mediawatcher watcher;
 	
-	public Xnoise.Plugin owner {
+	public PluginModule.Container owner {
 		get {
 			return _owner;
 		}

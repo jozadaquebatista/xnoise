@@ -31,9 +31,13 @@
 using Xnoise;
 using Indicate;
 
+using Xnoise;
+using Xnoise.PluginModule;
+
+
 public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 	private Indicate.Server server;
-	private Xnoise.Plugin p;
+	private PluginModule.Container p;
 	private unowned Xnoise.Plugin _owner;
 	
 	public Main xn { get; set; }
@@ -44,7 +48,7 @@ public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 		}
 	}
 	
-	public Xnoise.Plugin owner {
+	public PluginModule.Container owner {
 		get {
 			return _owner;
 		}

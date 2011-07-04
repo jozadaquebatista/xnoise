@@ -31,15 +31,16 @@
 using Sqlite;
 using Xnoise;
 using Xnoise.Services;
+using Xnoise.PluginModule;
 
 
 public class Xnoise.DatabaseLyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
-	private unowned Xnoise.Plugin _owner;
+	private unowned Container _owner;
 	private DatabaseLyricsWriter lyrics_writer;
 	
 	public unowned Main xn { get; set; }
 
-	public Xnoise.Plugin owner {
+	public Container owner {
 		get {
 			return _owner;
 		}
@@ -230,13 +231,13 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 	private string title;
 	private const int SECONDS_FOR_TIMEOUT = 2;
 	private uint timeout;
-	private unowned Plugin owner;
+	private unowned PluginModule.Container owner;
 	private unowned LyricsLoader loader;
 	private LyricsFetchedCallback cb = null;
 	private Cancellable cancellable = new Cancellable();
 
 	
-	public DatabaseLyrics(LyricsLoader _loader, Plugin _owner, string artist, string title, LyricsFetchedCallback _cb) {
+	public DatabaseLyrics(LyricsLoader _loader, PluginModule.Container _owner, string artist, string title, LyricsFetchedCallback _cb) {
 		this.artist = artist;
 		this.title = title;
 		this.owner = _owner;

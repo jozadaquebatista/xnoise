@@ -31,13 +31,14 @@
 using Gtk;
 using Xnoise;
 using Xnoise.Services;
+using Xnoise.PluginModule;
 
 public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
-	private unowned Xnoise.Plugin _owner;
+	private unowned PluginModule.Container _owner;
 
 	public Main xn { get; set; }
 	
-	public Xnoise.Plugin owner {
+	public PluginModule.Container owner {
 		get {
 			return _owner;
 		}

@@ -29,6 +29,9 @@
  * 	Jörn Magens
  */
 
+using Xnoise;
+using Xnoise.PluginModule;
+
 //TODO: use priorities
 namespace Xnoise {
 	public static File? get_albumimage_for_artistalbum(string? artist, string? album, string? size) {
@@ -169,7 +172,7 @@ namespace Xnoise {
 			backend_iter = 0;
 		}
 
-		private static void on_plugin_activated(Plugin p) {
+		private static void on_plugin_activated(Container p) {
 			if(!p.is_album_image_plugin) 
 				return;
 		

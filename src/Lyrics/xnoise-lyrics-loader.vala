@@ -31,7 +31,9 @@
  */
 
 
+using Xnoise;
 using Xnoise.Services;
+using Xnoise.PluginModule;
 
 
 public delegate void Xnoise.LyricsFetchedCallback(string artist, string title, string credits, string identifier, string text, string providername);
@@ -112,7 +114,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		});
 	}
 
-	private void on_plugin_activated(PluginLoader sender, Plugin p) {
+	private void on_plugin_activated(Loader sender, Container p) {
 		if(!p.is_lyrics_plugin)
 			return;
 		main_window.active_lyrics = true;

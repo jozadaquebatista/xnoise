@@ -28,7 +28,11 @@
  * 	softshaker  softshaker googlemail.com
  * 	Jörn Magens
  */
-//TODO: use priorities
+
+using Xnoise;
+using Xnoise.PluginModule;
+
+
 namespace Xnoise {
 	public static File? get_albumimage_for_artistalbum(string? artist, string? album, string? size) {
 		if(artist == null)
@@ -168,7 +172,7 @@ namespace Xnoise {
 			backend_iter = 0;
 		}
 
-		private static void on_plugin_activated(Plugin p) {
+		private static void on_plugin_activated(Container p) {
 			if(!p.is_album_image_plugin) 
 				return;
 		

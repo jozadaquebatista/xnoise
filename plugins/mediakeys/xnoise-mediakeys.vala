@@ -28,15 +28,18 @@
  * Jörn Magens
  */
 
-using Xnoise;
 using X;
+using Xnoise;
+using Xnoise.Services;
+using Xnoise.PluginModule;
+
 
 public class Xnoise.MediaKeys : GLib.Object, IPlugin {
-	private unowned Xnoise.Plugin _owner;
+	private unowned PluginModule.Container _owner;
 
 	public unowned Main xn { get; set; }
 	
-	public Xnoise.Plugin owner {
+	public PluginModule.Container owner {
 		get {
 			return _owner;
 		}

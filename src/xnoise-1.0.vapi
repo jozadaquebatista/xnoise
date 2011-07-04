@@ -94,6 +94,64 @@ namespace Xnoise {
 			FAILED,
 		}
 	}
+	[CCode (cprefix = "XnoisePluginModule", lower_case_cprefix = "xnoise_plugin_module_")]
+	namespace PluginModule {
+		[CCode (cheader_filename = "xnoise.h")]
+		public class Container : GLib.TypeModule {
+			public GLib.Object loaded_plugin;
+			public Container (Xnoise.PluginModule.Information info);
+			public void activate ();
+			public void deactivate ();
+			public override bool load ();
+			public Gtk.Widget? settingwidget ();
+			public override void unload ();
+			public bool activated { get; }
+			public bool configurable { get; private set; }
+			public Xnoise.PluginModule.Information info { get; }
+			public bool is_album_image_plugin { get; private set; }
+			public bool is_lyrics_plugin { get; private set; }
+			public bool loaded { get; }
+			public signal void sign_activated ();
+			public signal void sign_deactivated ();
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class Information : GLib.Object {
+			public Information (string xplug_file);
+			public bool load_info ();
+			public string author { get; }
+			public string copyright { get; }
+			public string description { get; }
+			public string icon { get; }
+			public string license { get; }
+			public string module { get; }
+			public string name { get; }
+			public string website { get; }
+			public string xplug_file { get; }
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class Loader : GLib.Object {
+			public GLib.HashTable<string,weak Xnoise.PluginModule.Container> image_provider_htable;
+			public GLib.HashTable<string,weak Xnoise.PluginModule.Container> lyrics_plugins_htable;
+			public GLib.HashTable<string,Xnoise.PluginModule.Container> plugin_htable;
+			public Loader ();
+			public bool activate_single_plugin (string module);
+			public void deactivate_single_plugin (string module);
+			public unowned GLib.List<string> get_info_files ();
+			public bool load_all ();
+			public signal void sign_plugin_activated (Xnoise.PluginModule.Container p);
+			public signal void sign_plugin_deactivated (Xnoise.PluginModule.Container p);
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public interface IPlugin : GLib.Object {
+			public abstract Gtk.Widget? get_settings_widget ();
+			public abstract bool has_settings_widget ();
+			public abstract bool init ();
+			public abstract void uninit ();
+			public abstract string name { get; }
+			public abstract Xnoise.PluginModule.Container owner { get; set; }
+			public abstract Xnoise.Main xn { get; set; }
+		}
+	}
 	[CCode (cprefix = "XnoiseServices", lower_case_cprefix = "xnoise_services_")]
 	namespace Services {
 		[CCode (cheader_filename = "xnoise.h")]
@@ -491,51 +549,6 @@ namespace Xnoise {
 		public void update_picture ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class Plugin : GLib.TypeModule {
-		public GLib.Object loaded_plugin;
-		public Plugin (Xnoise.PluginInformation info);
-		public void activate ();
-		public void deactivate ();
-		public override bool load ();
-		public Gtk.Widget? settingwidget ();
-		public override void unload ();
-		public bool activated { get; }
-		public bool configurable { get; private set; }
-		public Xnoise.PluginInformation info { get; }
-		public bool is_album_image_plugin { get; private set; }
-		public bool is_lyrics_plugin { get; private set; }
-		public bool loaded { get; }
-		public signal void sign_activated ();
-		public signal void sign_deactivated ();
-	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class PluginInformation : GLib.Object {
-		public PluginInformation (string xplug_file);
-		public bool load_info ();
-		public string author { get; }
-		public string copyright { get; }
-		public string description { get; }
-		public string icon { get; }
-		public string license { get; }
-		public string module { get; }
-		public string name { get; }
-		public string website { get; }
-		public string xplug_file { get; }
-	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class PluginLoader : GLib.Object {
-		public GLib.HashTable<string,weak Xnoise.Plugin> image_provider_htable;
-		public GLib.HashTable<string,weak Xnoise.Plugin> lyrics_plugins_htable;
-		public GLib.HashTable<string,Xnoise.Plugin> plugin_htable;
-		public PluginLoader ();
-		public bool activate_single_plugin (string module);
-		public void deactivate_single_plugin (string module);
-		public unowned GLib.List<string> get_info_files ();
-		public bool load_all ();
-		public signal void sign_plugin_activated (Xnoise.Plugin p);
-		public signal void sign_plugin_deactivated (Xnoise.Plugin p);
-	}
-	[CCode (cheader_filename = "xnoise.h")]
 	public class PluginManagerTree : Gtk.TreeView {
 		public PluginManagerTree ();
 		public void create_view ();
@@ -752,7 +765,7 @@ namespace Xnoise {
 		protected bool timeout_elapsed ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public interface ILyricsProvider : GLib.Object, Xnoise.IPlugin {
+	public interface ILyricsProvider : GLib.Object, Xnoise.PluginModule.IPlugin {
 		public bool equals (Xnoise.ILyricsProvider other);
 		public abstract Xnoise.ILyrics* from_tags (Xnoise.LyricsLoader loader, string artist, string title, Xnoise.LyricsFetchedCallback cb);
 		public abstract int priority { get; set; }
@@ -762,16 +775,6 @@ namespace Xnoise {
 	public interface IParams : GLib.Object {
 		public abstract void read_params_data ();
 		public abstract void write_params_data ();
-	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public interface IPlugin : GLib.Object {
-		public abstract Gtk.Widget? get_settings_widget ();
-		public abstract bool has_settings_widget ();
-		public abstract bool init ();
-		public abstract void uninit ();
-		public abstract string name { get; }
-		public abstract Xnoise.Plugin owner { get; set; }
-		public abstract Xnoise.Main xn { get; set; }
 	}
 	[CCode (type_id = "XNOISE_TYPE_DND_DATA", cheader_filename = "xnoise.h")]
 	public struct DndData {
@@ -883,7 +886,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise.h")]
-	public static Xnoise.PluginLoader plugin_loader;
+	public static Xnoise.PluginModule.Loader plugin_loader;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.TrackList tl;
 	[CCode (cheader_filename = "xnoise.h")]

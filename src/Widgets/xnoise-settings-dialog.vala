@@ -30,6 +30,7 @@
 
 using Gtk;
 using Xnoise;
+using Xnoise.PluginModule;
 
 public errordomain Xnoise.SettingsDialogError {
 	FILE_NOT_FOUND,
@@ -237,7 +238,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private void add_plugin_tabs() {
 		int count = 0;
 		foreach(string name in plugin_loader.plugin_htable.get_keys()) {
-			unowned Plugin p = plugin_loader.plugin_htable.lookup(name);
+			unowned PluginModule.Container p = plugin_loader.plugin_htable.lookup(name);
 			if((p.activated) && (p.configurable)) {
 			   Widget? w = p.settingwidget();
 				if(w!=null) notebook.append_page(w, new Gtk.Label(name));

@@ -95,7 +95,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		else 
 			plugin_loader.activate_single_plugin(module);
 			
-		unowned Plugin p = plugin_loader.plugin_htable.lookup(module);
+		unowned PluginModule.Container p = plugin_loader.plugin_htable.lookup(module);
 		
 		listmodel.set(iter,
 		              Column.TOGGLE, p.activated
@@ -163,7 +163,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 				
 				var invisible = new Gtk.Invisible();
 				Gdk.Pixbuf pixbuf = invisible.render_icon(Gtk.Stock.EXECUTE , IconSize.BUTTON, null); //TODO: use plugins' icons
-				unowned Plugin p = null;
+				unowned PluginModule.Container p = null;
 				p = plugin_loader.plugin_htable.lookup(module);
 				if(p == null)
 					continue;
@@ -196,7 +196,7 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		//update activation state
 		string? module = null;
 		sender.get(iter, Column.MODULE, out module);
-		unowned Plugin p = plugin_loader.plugin_htable.lookup(module);
+		unowned PluginModule.Container p = plugin_loader.plugin_htable.lookup(module);
 		if(p == null) {
 			print("p is null! %s\n", module);
 			return true;

@@ -56,10 +56,10 @@ xnoise_SOURCES = \
     Models/xnoise-media-browser-model.vala \
     Models/xnoise-tracklist-model.vala \
     Player/xnoise-gst-player.vala \
-    Plugin/xnoise-plugin.vala \
-    Plugin/xnoise-plugin-loader.vala \
-    Plugin/xnoise-plugin-information.vala \
-    Plugin/xnoise-plugin-interface.vala \
+    PluginModule/xnoise-plugin.vala \
+    PluginModule/xnoise-plugin-loader.vala \
+    PluginModule/xnoise-plugin-information.vala \
+    PluginModule/xnoise-plugin-interface.vala \
     Services/xnoise-services.vala \
     TagAccess/xnoise-tag-reader.vala \
     TagAccess/xnoise-tag-writer.vala \
