@@ -30,6 +30,9 @@
 
 using Sqlite;
 
+using Xnoise;
+using Xnoise.Services;
+
 public class Xnoise.Database.DbWriter : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
@@ -210,7 +213,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	private static Sqlite.Database? get_db () {
 		// there was more luck on creating the db on first start, if using a static function
 		Sqlite.Database database = null;
-		File xnoise_home = File.new_for_path(global.settings_folder);
+		File xnoise_home = File.new_for_path(data_folder());
 		File xnoisedb = xnoise_home.get_child(DATABASE_NAME);
 		if (!xnoise_home.query_exists(null)) {
 			print("Cannot find settings folder!\n");

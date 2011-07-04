@@ -291,6 +291,25 @@ typedef struct _XnoiseTrackListModelIterator XnoiseTrackListModelIterator;
 typedef struct _XnoiseTrackListModelIteratorClass XnoiseTrackListModelIteratorClass;
 typedef struct _XnoiseTrackListModelIteratorPrivate XnoiseTrackListModelIteratorPrivate;
 
+#define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
+#define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
+#define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
+#define XNOISE_IPARAMS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParamsIface))
+
+typedef struct _XnoiseIParams XnoiseIParams;
+typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
+
+#define XNOISE_TYPE_PARAMS (xnoise_params_get_type ())
+#define XNOISE_PARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PARAMS, XnoiseParams))
+#define XNOISE_PARAMS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PARAMS, XnoiseParamsClass))
+#define XNOISE_IS_PARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PARAMS))
+#define XNOISE_IS_PARAMS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_PARAMS))
+#define XNOISE_PARAMS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_PARAMS, XnoiseParamsClass))
+
+typedef struct _XnoiseParams XnoiseParams;
+typedef struct _XnoiseParamsClass XnoiseParamsClass;
+typedef struct _XnoiseParamsPrivate XnoiseParamsPrivate;
+
 #define XNOISE_TYPE_GST_PLAYER (xnoise_gst_player_get_type ())
 #define XNOISE_GST_PLAYER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayer))
 #define XNOISE_GST_PLAYER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GST_PLAYER, XnoiseGstPlayerClass))
@@ -368,14 +387,6 @@ typedef struct _XnoiseTrayIcon XnoiseTrayIcon;
 typedef struct _XnoiseTrayIconClass XnoiseTrayIconClass;
 typedef struct _XnoiseTrayIconPrivate XnoiseTrayIconPrivate;
 
-#define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
-#define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
-#define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
-#define XNOISE_IPARAMS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParamsIface))
-
-typedef struct _XnoiseIParams XnoiseIParams;
-typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
-
 #define XNOISE_TYPE_GLOBAL_ACCESS (xnoise_global_access_get_type ())
 #define XNOISE_GLOBAL_ACCESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccess))
 #define XNOISE_GLOBAL_ACCESS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccessClass))
@@ -419,16 +430,6 @@ typedef struct _XnoiseLocalSchemesClass XnoiseLocalSchemesClass;
 typedef struct _XnoiseMediaImporter XnoiseMediaImporter;
 typedef struct _XnoiseMediaImporterClass XnoiseMediaImporterClass;
 typedef struct _XnoiseMediaImporterPrivate XnoiseMediaImporterPrivate;
-
-#define XNOISE_TYPE_PARAMS (xnoise_params_get_type ())
-#define XNOISE_PARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PARAMS, XnoiseParams))
-#define XNOISE_PARAMS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PARAMS, XnoiseParamsClass))
-#define XNOISE_IS_PARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PARAMS))
-#define XNOISE_IS_PARAMS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_PARAMS))
-#define XNOISE_PARAMS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_PARAMS, XnoiseParamsClass))
-
-typedef struct _XnoiseParams XnoiseParams;
-typedef struct _XnoiseParamsClass XnoiseParamsClass;
 
 #define XNOISE_TYPE_USER_INFO (xnoise_user_info_get_type ())
 #define XNOISE_USER_INFO(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_USER_INFO, XnoiseUserInfo))
@@ -485,7 +486,6 @@ typedef struct _XnoiseGnomeMediaKeys XnoiseGnomeMediaKeys;
 typedef struct _XnoiseGnomeMediaKeysIface XnoiseGnomeMediaKeysIface;
 
 #define XNOISE_TYPE_GNOME_MEDIA_KEYS_PROXY (xnoise_gnome_media_keys_proxy_get_type ())
-typedef struct _XnoiseParamsPrivate XnoiseParamsPrivate;
 typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
 typedef struct _XnoiseUserInfoPrivate XnoiseUserInfoPrivate;
 
@@ -985,6 +985,21 @@ struct _XnoiseTrackListModelIteratorClass {
 	void (*finalize) (XnoiseTrackListModelIterator *self);
 };
 
+struct _XnoiseIParamsIface {
+	GTypeInterface parent_iface;
+	void (*read_params_data) (XnoiseIParams* self);
+	void (*write_params_data) (XnoiseIParams* self);
+};
+
+struct _XnoiseParams {
+	GObject parent_instance;
+	XnoiseParamsPrivate * priv;
+};
+
+struct _XnoiseParamsClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
@@ -1057,12 +1072,6 @@ struct _XnoiseTrayIconClass {
 	GtkStatusIconClass parent_class;
 };
 
-struct _XnoiseIParamsIface {
-	GTypeInterface parent_iface;
-	void (*read_params_data) (XnoiseIParams* self);
-	void (*write_params_data) (XnoiseIParams* self);
-};
-
 struct _XnoiseGlobalAccess {
 	GObject parent_instance;
 	XnoiseGlobalAccessPrivate * priv;
@@ -1125,15 +1134,6 @@ struct _XnoiseGnomeMediaKeysIface {
 	GTypeInterface parent_iface;
 	void (*GrabMediaPlayerKeys) (XnoiseGnomeMediaKeys* self, const gchar* application, guint32 time, GError** error);
 	void (*ReleaseMediaPlayerKeys) (XnoiseGnomeMediaKeys* self, const gchar* application, GError** error);
-};
-
-struct _XnoiseParams {
-	GObject parent_instance;
-	XnoiseParamsPrivate * priv;
-};
-
-struct _XnoiseParamsClass {
-	GObjectClass parent_class;
 };
 
 struct _XnoiseTrackData {
@@ -1670,6 +1670,26 @@ XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_new (XnoiseTrackL
 XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_construct (GType object_type, XnoiseTrackListModel* tlm);
 gboolean xnoise_track_list_model_iterator_next (XnoiseTrackListModelIterator* self);
 void xnoise_track_list_model_iterator_get (XnoiseTrackListModelIterator* self, GtkTreeIter* result);
+GType xnoise_iparams_get_type (void) G_GNUC_CONST;
+void xnoise_iparams_read_params_data (XnoiseIParams* self);
+void xnoise_iparams_write_params_data (XnoiseIParams* self);
+GType xnoise_params_get_type (void) G_GNUC_CONST;
+void xnoise_params_init (void);
+void xnoise_params_iparams_register (XnoiseIParams* iparam);
+void xnoise_params_set_start_parameters_in_implementors (void);
+void xnoise_params_write_all_parameters_to_file (void);
+gint xnoise_params_get_int_value (const gchar* key);
+gdouble xnoise_params_get_double_value (const gchar* key);
+gchar** xnoise_params_get_string_list_value (const gchar* key, int* result_length1);
+gchar* xnoise_params_get_string_value (const gchar* key);
+void xnoise_params_set_int_value (const gchar* key, gint value);
+void xnoise_params_set_double_value (const gchar* key, gdouble value);
+void xnoise_params_set_string_list_value (const gchar* key, gchar** value, int value_length1);
+void xnoise_params_set_string_value (const gchar* key, const gchar* value);
+gint xnoise_params_get_lyric_provider_priority (const gchar* name);
+gint xnoise_params_get_image_provider_priority (const gchar* name);
+XnoiseParams* xnoise_params_new (void);
+XnoiseParams* xnoise_params_construct (GType object_type);
 GType xnoise_gst_player_get_type (void) G_GNUC_CONST;
 GType xnoise_video_screen_get_type (void) G_GNUC_CONST;
 XnoiseGstPlayer* xnoise_gst_player_new (void);
@@ -1747,6 +1767,9 @@ void xnoise_plugin_module_iplugin_set_owner (XnoisePluginModuleIPlugin* self, Xn
 const gchar* xnoise_plugin_module_iplugin_get_name (XnoisePluginModuleIPlugin* self);
 XnoiseMain* xnoise_plugin_module_iplugin_get_xn (XnoisePluginModuleIPlugin* self);
 void xnoise_plugin_module_iplugin_set_xn (XnoisePluginModuleIPlugin* self, XnoiseMain* value);
+gchar* xnoise_services_settings_folder (void);
+gchar* xnoise_services_data_folder (void);
+void xnoise_services_verify_xnoise_directories (void);
 gchar* xnoise_services_prepare_for_comparison (const gchar* value);
 gchar* xnoise_services_prepare_for_search (const gchar* val);
 gchar* xnoise_services_remove_linebreaks (const gchar* val);
@@ -1778,9 +1801,6 @@ XnoiseTagAccessTagWriter* xnoise_tag_access_tag_writer_construct (GType object_t
 GType xnoise_tray_icon_get_type (void) G_GNUC_CONST;
 XnoiseTrayIcon* xnoise_tray_icon_new (void);
 XnoiseTrayIcon* xnoise_tray_icon_construct (GType object_type);
-GType xnoise_iparams_get_type (void) G_GNUC_CONST;
-void xnoise_iparams_read_params_data (XnoiseIParams* self);
-void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_global_access_get_type (void) G_GNUC_CONST;
 void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
 void xnoise_global_access_do_restart_of_current_track (XnoiseGlobalAccess* self);
@@ -1793,7 +1813,6 @@ void xnoise_global_access_next (XnoiseGlobalAccess* self);
 void xnoise_global_access_stop (XnoiseGlobalAccess* self);
 XnoiseGlobalAccess* xnoise_global_access_new (void);
 XnoiseGlobalAccess* xnoise_global_access_construct (GType object_type);
-const gchar* xnoise_global_access_get_settings_folder (XnoiseGlobalAccess* self);
 GType xnoise_player_state_get_type (void) G_GNUC_CONST;
 XnoisePlayerState xnoise_global_access_get_player_state (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_player_state (XnoiseGlobalAccess* self, XnoisePlayerState value);
@@ -1841,7 +1860,6 @@ GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
 gchar* xnoise_media_importer_get_uri_for_item_id (XnoiseMediaImporter* self, gint32 id);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
-GType xnoise_params_get_type (void) G_GNUC_CONST;
 extern XnoiseParams* xnoise_par;
 extern XnoiseGlobalAccess* xnoise_global;
 GType xnoise_user_info_get_type (void) G_GNUC_CONST;
@@ -1880,21 +1898,6 @@ guint xnoise_gnome_media_keys_register_object (void* object, GDBusConnection* co
 GType xnoise_gnome_media_keys_get_type (void) G_GNUC_CONST;
 void xnoise_gnome_media_keys_GrabMediaPlayerKeys (XnoiseGnomeMediaKeys* self, const gchar* application, guint32 time, GError** error);
 void xnoise_gnome_media_keys_ReleaseMediaPlayerKeys (XnoiseGnomeMediaKeys* self, const gchar* application, GError** error);
-XnoiseParams* xnoise_params_new (void);
-XnoiseParams* xnoise_params_construct (GType object_type);
-void xnoise_params_iparams_register (XnoiseParams* self, XnoiseIParams* iparam);
-void xnoise_params_set_start_parameters_in_implementors (XnoiseParams* self);
-void xnoise_params_write_all_parameters_to_file (XnoiseParams* self);
-gint xnoise_params_get_int_value (XnoiseParams* self, const gchar* key);
-gdouble xnoise_params_get_double_value (XnoiseParams* self, const gchar* key);
-gchar** xnoise_params_get_string_list_value (XnoiseParams* self, const gchar* key, int* result_length1);
-gchar* xnoise_params_get_string_value (XnoiseParams* self, const gchar* key);
-void xnoise_params_set_int_value (XnoiseParams* self, const gchar* key, gint value);
-void xnoise_params_set_double_value (XnoiseParams* self, const gchar* key, gdouble value);
-void xnoise_params_set_string_list_value (XnoiseParams* self, const gchar* key, gchar** value, int value_length1);
-void xnoise_params_set_string_value (XnoiseParams* self, const gchar* key, const gchar* value);
-gint xnoise_params_get_lyric_provider_priority (XnoiseParams* self, const gchar* name);
-gint xnoise_params_get_image_provider_priority (XnoiseParams* self, const gchar* name);
 XnoiseTrackData* xnoise_track_data_new (void);
 XnoiseTrackData* xnoise_track_data_construct (GType object_type);
 XnoiseTrackData* xnoise_copy_trackdata (XnoiseTrackData* td);

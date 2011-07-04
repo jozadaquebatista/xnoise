@@ -30,6 +30,10 @@
 
 using Sqlite;
 
+using Xnoise;
+using Xnoise.Services;
+
+
 private class Xnoise.Database.DbCreator {
 	private static const string DATABASE_NAME = "db.sqlite";
 	private static const string SETTINGS_FOLDER = ".xnoise";
@@ -71,7 +75,7 @@ private class Xnoise.Database.DbCreator {
 
 	private static void setup_db_handle() {
 		//TODO: Version check with drop table
-		File xnoise_home = File.new_for_path(global.settings_folder);
+		File xnoise_home = File.new_for_path(data_folder());
 		xnoisedb = xnoise_home.get_child(DATABASE_NAME);
 		if(!xnoise_home.query_exists(null)) {
 			try {

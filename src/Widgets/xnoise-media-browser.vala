@@ -109,7 +109,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	public MediaBrowser() {
 		this.xn = Main.instance;
-		par.iparams_register(this);
+		Params.iparams_register(this);
 		mediabrowsermodel = new MediaBrowserModel();
 		setup_view();
 		Idle.add(this.populate_model);
@@ -157,12 +157,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	// IParams functions
 	public void read_params_data() {
-		if(par.get_int_value("use_treelines") == 1)
+		if(Params.get_int_value("use_treelines") == 1)
 			use_treelines = true;
 		else
 			use_treelines = false;
 		
-		if(par.get_int_value("use_linebreaks") == 1)
+		if(Params.get_int_value("use_linebreaks") == 1)
 			use_linebreaks = true;
 		else
 			use_linebreaks = false;
@@ -170,15 +170,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	public void write_params_data() {
 		if(this.use_treelines)
-			par.set_int_value("use_treelines", 1);
+			Params.set_int_value("use_treelines", 1);
 		else
-			par.set_int_value("use_treelines", 0);
+			Params.set_int_value("use_treelines", 0);
 			
 		if(this.use_linebreaks)
-			par.set_int_value("use_linebreaks", 1);
+			Params.set_int_value("use_linebreaks", 1);
 		else
-			par.set_int_value("use_linebreaks", 0);
-		par.set_int_value("fontsizeMB", fontsizeMB);
+			Params.set_int_value("use_linebreaks", 0);
+		Params.set_int_value("fontsizeMB", fontsizeMB);
 	}
 	// end IParams functions
 
@@ -523,7 +523,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		renderer = new CellRendererText();
 //		renderer.family = "Sans"; //TODO: Does not work!?
 //		renderer.size = 9; //TODO: Does not work!?
-		fontsizeMB = par.get_int_value("fontsizeMB");
+		fontsizeMB = Params.get_int_value("fontsizeMB");
 
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;

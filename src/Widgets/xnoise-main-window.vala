@@ -250,7 +250,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 	public MainWindow() {
 		this.xn = Main.instance;
-		par.iparams_register(this);
+		Params.iparams_register(this);
 		gst_player.sign_volume_changed.connect(
 			(val) => { this.current_volume = val; }
 		);
@@ -742,16 +742,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	//REGION IParameter
 
 	public void read_params_data() {
-		int posX = par.get_int_value("posX");
-		int posY = par.get_int_value("posY");
+		int posX = Params.get_int_value("posX");
+		int posY = Params.get_int_value("posY");
 		this.move(posX, posY);
-		int wi = par.get_int_value("width");
-		int he = par.get_int_value("height");
+		int wi = Params.get_int_value("width");
+		int he = Params.get_int_value("height");
 		if (wi > 0 && he > 0) {
 			this.resize(wi, he);
 		}
-		this.repeatState = (PlayerRepeatMode)par.get_int_value("repeatstate");
-		double volSlider = par.get_double_value("volume");
+		this.repeatState = (PlayerRepeatMode)Params.get_int_value("repeatstate");
+		double volSlider = Params.get_double_value("volume");
 		if((volSlider < 0.0)||
 		   (volSlider > 1.0)) {
 			gst_player.volume = 0.5;
@@ -760,31 +760,31 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			gst_player.volume = volSlider;
 		}
 		
-		int hp_position = par.get_int_value("hp_position");
+		int hp_position = Params.get_int_value("hp_position");
 		if (hp_position > 0) {
 			this.hpaned.set_position(hp_position);
 		}
-		not_show_art_on_hover_image = (par.get_int_value("not_show_art_on_hover_image") == 1 ? true : false );
+		not_show_art_on_hover_image = (Params.get_int_value("not_show_art_on_hover_image") == 1 ? true : false );
 	}
 
 	public void write_params_data() {
 		int posX, posY;
 		this.get_position(out posX, out posY);
 		this.get_position(out _posX_buffer, out _posY_buffer);
-		par.set_int_value("posX", posX);
-		par.set_int_value("posY", posY);
+		Params.set_int_value("posX", posX);
+		Params.set_int_value("posY", posY);
 		int  wi, he;
 		this.get_size(out wi, out he);
-		par.set_int_value("width", wi);
-		par.set_int_value("height", he);
+		Params.set_int_value("width", wi);
+		Params.set_int_value("height", he);
 		
-		par.set_int_value("hp_position", this.hpaned.get_position());
+		Params.set_int_value("hp_position", this.hpaned.get_position());
 		
-		par.set_int_value("repeatstate", repeatState);
+		Params.set_int_value("repeatstate", repeatState);
 		
-		par.set_double_value("volume", current_volume);
+		Params.set_double_value("volume", current_volume);
 		
-		par.set_int_value("not_show_art_on_hover_image", (not_show_art_on_hover_image == true ? 1 : 0));
+		Params.set_int_value("not_show_art_on_hover_image", (not_show_art_on_hover_image == true ? 1 : 0));
 	}
 
 	//END REGION IParameter
@@ -1570,10 +1570,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			config_button_menu.popup(null, null, position_config_menu, 0, Gtk.get_current_event_time());
 		});
 		
-		if(par.get_int_value("usestop") > 0) usestop = true;
+		if(Params.get_int_value("usestop") > 0) usestop = true;
 		else usestop = false;
 
-		if(par.get_int_value("compact_layout") > 0) compact_layout = true;
+		if(Params.get_int_value("compact_layout") > 0) compact_layout = true;
 		else compact_layout = false;
 
 		this.delete_event.connect(this.on_close); //only send to tray

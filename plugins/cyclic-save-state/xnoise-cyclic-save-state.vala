@@ -55,7 +55,7 @@ public class Xnoise.CyclicSaveState : GLib.Object, IPlugin {
 				
 				Main.instance.save_tracklist();
 				Main.instance.save_activated_plugins();
-				par.write_all_parameters_to_file();
+				Params.write_all_parameters_to_file();
 			}
 			return true;
 		});

@@ -31,6 +31,9 @@
 
 using Sqlite;
 
+using Xnoise;
+using Xnoise.Services;
+
 public errordomain Xnoise.Database.DbError {
 	FAILED;
 }
@@ -111,7 +114,7 @@ public class Xnoise.Database.DbBrowser {
 	private Sqlite.Database db;
 
 	private string dbFileName() {
-		return GLib.Path.build_filename(global.settings_folder, DATABASE_NAME, null);
+		return GLib.Path.build_filename(data_folder(), DATABASE_NAME, null);
 	}
 
 	private void db_error() {

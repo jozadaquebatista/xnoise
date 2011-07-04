@@ -109,7 +109,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		if(tlm == null)
 			print("tracklist model instance not available\n");
 		
-		par.iparams_register(this);
+		Params.iparams_register(this);
 		tracklistmodel = tlm;
 		this.set_model(tracklistmodel);
 		this.setup_view();
@@ -922,7 +922,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	// from the config file before actually inserting it
 	private new void insert_column(Gtk.TreeViewColumn column, int position) {
 		if(position < 0) {
-			position = par.get_int_value("position_" + column.title + "_column");
+			position = Params.get_int_value("position_" + column.title + "_column");
 		}
 
 		// in the config file we count from 1 onwards, because 0 means "not set"
@@ -946,7 +946,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 				if(c == null) continue;
 				if(relative_column_sizes.lookup(c.title) == null && c.title != "") {
 					if(c.resizable) {
-						double rel_size = par.get_double_value("relative_size_" + c.title + "_column");
+						double rel_size = Params.get_double_value("relative_size_" + c.title + "_column");
 						relative_column_sizes.insert(c.title, rel_size);
 						((TextColumn)c).resized.connect(on_column_resized);
 					}
@@ -1000,7 +1000,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnTracknumber.resizable = false;
 		columnTracknumber.reorderable = true;
 		this.insert_column(columnTracknumber, -1);
-		if(par.get_int_value(USE_TR_NO_COL) == 1) {
+		if(Params.get_int_value(USE_TR_NO_COL) == 1) {
 			columnTracknumber.visible = true;
 		}
 		else {
@@ -1038,7 +1038,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnAlbum.reorderable = true;
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
-		if(par.get_int_value(USE_ALBUM_COL) == 1) {
+		if(Params.get_int_value(USE_ALBUM_COL) == 1) {
 			columnAlbum.visible = true;
 		}
 		else {
@@ -1059,7 +1059,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnArtist.reorderable = true;
 		this.insert_column(columnArtist, -1);
 		variable_col_count++;
-		if(par.get_int_value(USE_ARTIST_COL) == 1) {
+		if(Params.get_int_value(USE_ARTIST_COL) == 1) {
 			columnArtist.visible = true;
 		}
 		else {
@@ -1080,7 +1080,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnLength.reorderable = true;
 		this.insert_column(columnLength, -1);
 
-		if(par.get_int_value(USE_LEN_COL) == 1) {
+		if(Params.get_int_value(USE_LEN_COL) == 1) {
 			columnLength.visible = true;
 		}
 		else {
@@ -1102,7 +1102,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.insert_column(columnYear, -1);
 		variable_col_count++;
 		
-		if(par.get_int_value(USE_YEAR_COL) == 1) {
+		if(Params.get_int_value(USE_YEAR_COL) == 1) {
 			columnYear.visible = true;
 		}
 		else {
@@ -1124,7 +1124,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.insert_column(columnGenre, -1);
 		variable_col_count++;
 		
-		if(par.get_int_value(USE_GENRE_COL) == 1) {
+		if(Params.get_int_value(USE_GENRE_COL) == 1) {
 			columnGenre.visible = true;
 		}
 		else {
@@ -1160,9 +1160,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 		
 		// TRACKNUMBER
 		menu_item = new CheckMenuItem.with_label(_("Tracknumber"));
-		menu_item.set_active((par.get_int_value("use_tracknumber_column") == 1 ? true : false));
+		menu_item.set_active((Params.get_int_value("use_tracknumber_column") == 1 ? true : false));
 		menu_item.toggled.connect( (s) => {
-			par.set_int_value("use_tracknumber_column", (s.get_active() == true ? 1 : 0));
+			Params.set_int_value("use_tracknumber_column", (s.get_active() == true ? 1 : 0));
 			this.column_tracknumber_visible = s.get_active();
 			Idle.add( () => {
 				handle_resize();
@@ -1173,9 +1173,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 		
 		// ARTIST
 		menu_item = new CheckMenuItem.with_label(_("Artist"));
-		menu_item.set_active((par.get_int_value("use_artist_column") == 1 ? true : false));
+		menu_item.set_active((Params.get_int_value("use_artist_column") == 1 ? true : false));
 		menu_item.toggled.connect( (s) => {
-			par.set_int_value("use_artist_column", (s.get_active() == true ? 1 : 0));
+			Params.set_int_value("use_artist_column", (s.get_active() == true ? 1 : 0));
 			this.column_artist_visible = s.get_active();
 			Idle.add( () => {
 				handle_resize();
@@ -1186,9 +1186,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 		// ALBUM
 		menu_item = new CheckMenuItem.with_label(_("Album"));
-		menu_item.set_active((par.get_int_value("use_album_column") == 1 ? true : false));
+		menu_item.set_active((Params.get_int_value("use_album_column") == 1 ? true : false));
 		menu_item.toggled.connect( (s) => {
-			par.set_int_value("use_album_column", (s.get_active() == true ? 1 : 0));
+			Params.set_int_value("use_album_column", (s.get_active() == true ? 1 : 0));
 			this.column_album_visible = s.get_active();
 			Idle.add( () => {
 				handle_resize();
@@ -1199,9 +1199,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 		// GENRE
 		menu_item = new CheckMenuItem.with_label(_("Genre"));
-		menu_item.set_active((par.get_int_value("use_genre_column") == 1 ? true : false));
+		menu_item.set_active((Params.get_int_value("use_genre_column") == 1 ? true : false));
 		menu_item.toggled.connect( (s) => {
-			par.set_int_value("use_genre_column", (s.get_active() == true ? 1 : 0));
+			Params.set_int_value("use_genre_column", (s.get_active() == true ? 1 : 0));
 			this.column_genre_visible = s.get_active();
 			Idle.add( () => {
 				handle_resize();
@@ -1212,9 +1212,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 		
 		// YEAR
 		menu_item = new CheckMenuItem.with_label(_("Year"));
-		menu_item.set_active((par.get_int_value("use_year_column") == 1 ? true : false));
+		menu_item.set_active((Params.get_int_value("use_year_column") == 1 ? true : false));
 		menu_item.toggled.connect( (s) => {
-			par.set_int_value("use_year_column", (s.get_active() == true ? 1 : 0));
+			Params.set_int_value("use_year_column", (s.get_active() == true ? 1 : 0));
 			this.column_year_visible = s.get_active();
 			Idle.add( () => {
 				handle_resize();
@@ -1225,9 +1225,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 		
 		// LENGTH 
 		menu_item = new CheckMenuItem.with_label(_("Length"));
-		menu_item.set_active((par.get_int_value("use_length_column") == 1 ? true : false));
+		menu_item.set_active((Params.get_int_value("use_length_column") == 1 ? true : false));
 		menu_item.toggled.connect( (s) => {
-			par.set_int_value("use_length_column", (s.get_active() == true ? 1 : 0));
+			Params.set_int_value("use_length_column", (s.get_active() == true ? 1 : 0));
 			this.column_length_visible = s.get_active();
 			Idle.add( () => {
 				handle_resize();
@@ -1396,13 +1396,13 @@ public class Xnoise.TrackList : TreeView, IParams {
 			
 			// write column position, counting from 1 onwards
 			counter++;
-			par.set_int_value("position_" + c.title + "_column", counter);
+			Params.set_int_value("position_" + c.title + "_column", counter);
 			
 			// write relative column sizes
 			if(!c.resizable) continue;
 			double? relative_size = relative_column_sizes.lookup(c.title);
 			if(relative_size == null) continue;
-			par.set_double_value("relative_size_" + c.title + "_column", (double)relative_size);
+			Params.set_double_value("relative_size_" + c.title + "_column", (double)relative_size);
 		} 
 	}
 	

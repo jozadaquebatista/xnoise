@@ -1,6 +1,6 @@
 /* xnoise-mediakeys.vala
  *
- * Copyright (C) 2010  Jörn Magens
+ * Copyright (C) 2010 - 2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -211,8 +211,13 @@ public class Xnoise.MediaKeys : GLib.Object, IPlugin {
 			playkey.unregister();
 		if(nextkey != null)
 			nextkey.unregister();
-		if(gmk != null) 
-			gmk.ReleaseMediaPlayerKeys("xnoise");
+		try {
+			if(gmk != null) 
+				gmk.ReleaseMediaPlayerKeys("xnoise");
+		}
+		catch(IOError e) {
+			print("%s", e.message);
+		}
 		if(watch != 0) {
 			Bus.unwatch_name(watch);
 			watch = 0;

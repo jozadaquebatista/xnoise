@@ -35,12 +35,8 @@
  */
 
 public class Xnoise.GlobalAccess : GLib.Object {
-	private uint check_image_for_current_track_source = 0;
+	
 	construct {
-		_settings_folder = 
-		GLib.Path.build_filename(GLib.Environment.get_user_config_dir(),
-		                         "xnoise",
-		                         null);
 		uri_changed.connect( (s,v) => {
 		//print("uri_changed\n");
 			current_artist = null;
@@ -73,6 +69,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 					this.tag_changed(ref this._current_uri, "organization", this._current_organization);
 					break;
 			}
+			
 			if(check_image_for_current_track_source != 0) {
 				Source.remove(check_image_for_current_track_source);
 				check_image_for_current_track_source = 0;
@@ -120,19 +117,12 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	private Gtk.TreeRowReference? _position_reference = null;
 	private Gtk.TreeRowReference? _position_reference_next = null;
 	
+	private uint check_image_for_current_track_source = 0;
+	
 	private RemoteSchemes _remote_schemes = new RemoteSchemes();
 	private LocalSchemes  _local_schemes  = new LocalSchemes();
 
 	// PROPERTIES
-
-	// User specific settings directory following freedesktop standard:
-	//http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
-	private string _settings_folder = "";
-	public string settings_folder { 
-		get {
-			return _settings_folder;
-		}
-	}
 
 	public PlayerState player_state {
 		get {

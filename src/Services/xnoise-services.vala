@@ -31,6 +31,72 @@
 
 
 namespace Xnoise.Services {
+	
+	//http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+	private static string _settings_folder = null; 
+	public static string settings_folder() {
+		if(_settings_folder == null)
+			_settings_folder = GLib.Path.build_filename(GLib.Environment.get_user_config_dir(),
+			                                            "xnoise",
+			                                            null);
+		return _settings_folder;
+	}
+
+	//http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+	private static string _data_folder = null; 
+	public static string data_folder() {
+		if(_data_folder == null)
+			_data_folder = GLib.Path.build_filename(GLib.Environment.get_user_data_dir(),
+			                                        "xnoise",
+			                                        null);
+		return _data_folder;
+	}
+	
+	public static void verify_xnoise_directories() {
+		File f;
+		try {
+			f = File.new_for_path(settings_folder());
+		}
+		catch(Error e) {
+			print("%s", e.message);
+		}
+		
+		if(f == null) {
+			print("xnoise settings folder error\n");
+			return;
+		}
+		
+		if(!f.query_exists(null)) {
+			try {
+				f.make_directory_with_parents();
+			}
+			catch(Error e) {
+				print("%s", e.message);
+			}
+		}
+		
+		try {
+			f = File.new_for_path(data_folder());
+		}
+		catch(Error e) {
+			print("%s", e.message);
+		}
+		
+		if(f == null) {
+			print("xnoise data folder error\n");
+			return;
+		}
+		
+		if(!f.query_exists(null)) {
+			try {
+				f.make_directory_with_parents();
+			}
+			catch(Error e) {
+				print("%s", e.message);
+			}
+		}
+	}
+
 	private string[] characters_not_used_in_comparison__escaped = null;
 	
 	public static string prepare_for_comparison(string? value) {

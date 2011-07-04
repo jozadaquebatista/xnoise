@@ -55,6 +55,8 @@ xnoise_SOURCES = \
     Lyrics/xnoise-lyrics-loader.vala \
     Models/xnoise-media-browser-model.vala \
     Models/xnoise-tracklist-model.vala \
+    Parameter/xnoise-i-params.vala \
+    Parameter/xnoise-parameter.vala \
     Player/xnoise-gst-player.vala \
     PluginModule/xnoise-plugin.vala \
     PluginModule/xnoise-plugin-loader.vala \
@@ -65,11 +67,9 @@ xnoise_SOURCES = \
     TagAccess/xnoise-tag-writer.vala \
     TrayIcon/xnoise-tray-icon.vala \
     Utils/xnoise-app-starter.vala \
-    Utils/xnoise-i-params.vala \
     Utils/xnoise-global-access.vala \
     Utils/xnoise-media-importer.vala \
     Utils/xnoise-misc.vala \
-    Utils/xnoise-parameter.vala \
     Utils/xnoise-screensaver-manager.vala \
     Utils/xnoise-track-data.vala \
     Utils/xnoise-user-info.vala \

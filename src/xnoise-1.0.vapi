@@ -155,6 +155,8 @@ namespace Xnoise {
 	[CCode (cprefix = "XnoiseServices", lower_case_cprefix = "xnoise_services_")]
 	namespace Services {
 		[CCode (cheader_filename = "xnoise.h")]
+		public static string data_folder ();
+		[CCode (cheader_filename = "xnoise.h")]
 		public static string prepare_for_comparison (string? value);
 		[CCode (cheader_filename = "xnoise.h")]
 		public static string prepare_for_search (string? val);
@@ -166,6 +168,10 @@ namespace Xnoise {
 		public static string remove_suffix_from_filename (string? val);
 		[CCode (cheader_filename = "xnoise.h")]
 		public static string replace_underline_with_blank_encoded (string value);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static string settings_folder ();
+		[CCode (cheader_filename = "xnoise.h")]
+		public static void verify_xnoise_directories ();
 	}
 	[CCode (cprefix = "XnoiseTagAccess", lower_case_cprefix = "xnoise_tag_access_")]
 	namespace TagAccess {
@@ -264,7 +270,6 @@ namespace Xnoise {
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
 		public Xnoise.RemoteSchemes remote_schemes { get; }
-		public string settings_folder { get; }
 		public signal void before_position_reference_changed ();
 		public signal void before_position_reference_next_changed ();
 		public signal void caught_eos_from_player ();
@@ -525,19 +530,20 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public class Params : GLib.Object {
 		public Params ();
-		public double get_double_value (string key);
-		public int get_image_provider_priority (string name);
-		public int get_int_value (string key);
-		public int get_lyric_provider_priority (string name);
-		public string[]? get_string_list_value (string key);
-		public string get_string_value (string key);
-		public void iparams_register (Xnoise.IParams iparam);
-		public void set_double_value (string key, double value);
-		public void set_int_value (string key, int value);
-		public void set_start_parameters_in_implementors ();
-		public void set_string_list_value (string key, string[]? value);
-		public void set_string_value (string key, string value);
-		public void write_all_parameters_to_file ();
+		public static double get_double_value (string key);
+		public static int get_image_provider_priority (string name);
+		public static int get_int_value (string key);
+		public static int get_lyric_provider_priority (string name);
+		public static string[]? get_string_list_value (string key);
+		public static string get_string_value (string key);
+		public static void init ();
+		public static void iparams_register (Xnoise.IParams iparam);
+		public static void set_double_value (string key, double value);
+		public static void set_int_value (string key, int value);
+		public static void set_start_parameters_in_implementors ();
+		public static void set_string_list_value (string key, string[]? value);
+		public static void set_string_value (string key, string value);
+		public static void write_all_parameters_to_file ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class PlayPauseButton : Gtk.Button {

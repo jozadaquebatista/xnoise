@@ -41,7 +41,7 @@ public class Xnoise.PluginModule.Loader : Object { //, IParams
 
 	public Loader() {
 		assert(Module.supported());
-//		par.iparams_register(this);
+//		Params.iparams_register(this);
 		this.xn = Main.instance;
 		plugin_htable = new HashTable<string, Container>(str_hash, str_equal);
 		lyrics_plugins_htable   = new HashTable<string, unowned Container>(str_hash, str_equal);
@@ -161,7 +161,7 @@ public class Xnoise.PluginModule.Loader : Object { //, IParams
 //		foreach(int i in n_list_ai)
 //			prio_array_ai += image_provider_priority.lookup(i.to_string());
 //		
-//		par.set_string_list_value("prio_images", prio_array_ai);
+//		Params.set_string_list_value("prio_images", prio_array_ai);
 
 //		List<int> n_list_ly = new List<int>();
 //		List<string> list_ly = lyrics_plugins_priority.get_keys();
@@ -172,7 +172,7 @@ public class Xnoise.PluginModule.Loader : Object { //, IParams
 //		foreach(int i in n_list_ly)
 //			prio_array_ly += lyrics_plugins_priority.lookup(i.to_string());
 //		
-//		par.set_string_list_value("prio_lyrics", prio_array_ly);
+//		Params.set_string_list_value("prio_lyrics", prio_array_ly);
 //	}
 
 	/// END REGION IParams

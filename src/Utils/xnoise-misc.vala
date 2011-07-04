@@ -29,6 +29,7 @@
  */
 
 using Xnoise;
+using Xnoise.Services;
 using Xnoise.Database;
 using Xnoise.PluginModule;
 
@@ -64,6 +65,8 @@ namespace Xnoise {
 	public static void initialize(out bool is_first_start) {
 		is_first_start = false;
 		
+		verify_xnoise_directories();
+		
 		// ITEM STUFF
 		item_handler_manager = new ItemHandlerManager();
 		item_converter = new ItemConverter();
@@ -79,15 +82,17 @@ namespace Xnoise {
 			global = new GlobalAccess();
 		
 		// PARAMS
-		File xnoise_home = File.new_for_path(global.settings_folder);
+		File xnoise_data_home = File.new_for_path(data_folder());
+		
 		File xnoiseini = null;
-		xnoiseini = xnoise_home.get_child("db.sqlite");
+		xnoiseini = xnoise_data_home.get_child("db.sqlite");
 		if(!xnoiseini.query_exists(null)) {
 			is_first_start = true;
 		}
 		
-		if(par == null)
-			par = new Params();
+//		if(par == null)
+//			par = new Params();
+		Params.init();
 		
 		// DATABASE
 		check_database_and_tables(ref is_first_start);

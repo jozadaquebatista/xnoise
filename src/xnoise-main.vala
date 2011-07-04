@@ -52,7 +52,7 @@ public class Xnoise.Main : GLib.Object {
 		if(!no_plugins) {
 			plugin_loader.load_all();
 			
-			foreach(string name in par.get_string_list_value("activated_plugins")) {
+			foreach(string name in Params.get_string_list_value("activated_plugins")) {
 				if(!plugin_loader.activate_single_plugin(name))
 					print("\t%s plugin failed to activate!\n", name);
 			}
@@ -90,7 +90,7 @@ public class Xnoise.Main : GLib.Object {
 		connect_signals();
 		
 		// RESTORE PARAMS IN SUBSCRIBERS
-		par.set_start_parameters_in_implementors();
+		Params.set_start_parameters_in_implementors();
 		
 		// FIRST START? FILL DB!
 		if(is_first_start)
@@ -131,7 +131,7 @@ public class Xnoise.Main : GLib.Object {
 		}
 		if(activatedplugins.length <= 0)
 			activatedplugins = null;
-		par.set_string_list_value("activated_plugins", activatedplugins);
+		Params.set_string_list_value("activated_plugins", activatedplugins);
 	}
 
 	
@@ -161,7 +161,7 @@ public class Xnoise.Main : GLib.Object {
 		main_window.hide();
 		gst_player.stop();
 		this.save_activated_plugins();
-		par.write_all_parameters_to_file();
+		Params.write_all_parameters_to_file();
 		this.save_tracklist();
 		
 		Timeout.add(100, () => {

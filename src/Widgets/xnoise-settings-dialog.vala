@@ -87,40 +87,40 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		//Visible Cols
 		
 		//Treelines
-		if(par.get_int_value("use_treelines") > 0)
+		if(Params.get_int_value("use_treelines") > 0)
 			checkB_showL.active = true;
 		else
 			checkB_showL.active = false;
 		
 		//compact layout
-		if(par.get_int_value("compact_layout") > 0)
+		if(Params.get_int_value("compact_layout") > 0)
 			checkB_compact.active = true;
 		else
 			checkB_compact.active = false;
 			
 		//use stop button
-		if(par.get_int_value("usestop") > 0)
+		if(Params.get_int_value("usestop") > 0)
 			checkB_usestop.active = true;
 		else
 			checkB_usestop.active = false;
 		
 		//not_show_art_on_hover_image
-		if(par.get_int_value("not_show_art_on_hover_image") > 0)
+		if(Params.get_int_value("not_show_art_on_hover_image") > 0)
 			checkB_hoverimage.active = true;
 		else
 			checkB_hoverimage.active = false;
 		
 		//media browser line breaks
-		if(par.get_int_value("mediabrowser_linebreaks") > 0)
+		if(Params.get_int_value("mediabrowser_linebreaks") > 0)
 			checkB_mediaBrLinebreaks.active = true;
 		else
 			checkB_mediaBrLinebreaks.active = false;
 
 		// SpinButton
 		sb.configure(new Gtk.Adjustment(8.0, 7.0, 14.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
-		if((par.get_int_value("fontsizeMB") >= 7)&&
-		    (par.get_int_value("fontsizeMB") <= 14))
-			sb.set_value((double)par.get_int_value("fontsizeMB"));
+		if((Params.get_int_value("fontsizeMB") >= 7)&&
+		    (Params.get_int_value("fontsizeMB") <= 14))
+			sb.set_value((double)Params.get_int_value("fontsizeMB"));
 		else
 			sb.set_value(9.0);
 		sb.set_numeric(true);
@@ -135,80 +135,80 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 
 	private void on_checkbutton_show_lines_clicked(Gtk.Button sender) {
 		if(this.checkB_showL.active) {
-			par.set_int_value("use_treelines", 1);
+			Params.set_int_value("use_treelines", 1);
 			main_window.mediaBr.use_treelines = true;
 		}
 		else {
-			par.set_int_value("use_treelines", 0);
+			Params.set_int_value("use_treelines", 0);
 			main_window.mediaBr.use_treelines = false;
 		}
 	}
 	
 	private void on_checkbutton_compact_clicked(Gtk.Button sender) {
 		if(this.checkB_compact.active) {
-			par.set_int_value("compact_layout", 1);
+			Params.set_int_value("compact_layout", 1);
 			main_window.compact_layout = true;
 		}
 		else {
-			par.set_int_value("compact_layout", 0);
+			Params.set_int_value("compact_layout", 0);
 			main_window.compact_layout = false;
 		}
 	}
 	
 	private void on_checkbutton_usestop_clicked(Gtk.Button sender) {
 		if(this.checkB_usestop.active) {
-			par.set_int_value("usestop", 1);
+			Params.set_int_value("usestop", 1);
 			main_window.usestop = true;
 		}
 		else {
-			par.set_int_value("usestop", 0);
+			Params.set_int_value("usestop", 0);
 			main_window.usestop = false;
 		}
 	}
 	
 	private void on_checkbutton_mediabr_hoverimage_clicked(Gtk.Button sender) {
 		if(this.checkB_hoverimage.active) {
-			par.set_int_value("not_show_art_on_hover_image", 1);
+			Params.set_int_value("not_show_art_on_hover_image", 1);
 			main_window.not_show_art_on_hover_image = true;
 		}
 		else {
-			par.set_int_value("not_show_art_on_hover_image", 0);
+			Params.set_int_value("not_show_art_on_hover_image", 0);
 			main_window.not_show_art_on_hover_image = false;
 		}
 	}
 	
 	private void on_checkbutton_mediabr_linebreaks_clicked(Gtk.Button sender) {
 		if(this.checkB_mediaBrLinebreaks.active) {
-			par.set_int_value("mediabrowser_linebreaks", 1);
+			Params.set_int_value("mediabrowser_linebreaks", 1);
 			main_window.mediaBr.use_linebreaks = true;
 		}
 		else {
-			par.set_int_value("mediabrowser_linebreaks", 0);
+			Params.set_int_value("mediabrowser_linebreaks", 0);
 			main_window.mediaBr.use_linebreaks = false;
 		}
 	}
 	
 	private void on_ok_button_clicked() {
-//		par.set_int_value("use_album_column", (show_album_col == true ? 1 : 0));
+//		Params.set_int_value("use_album_column", (show_album_col == true ? 1 : 0));
 //		xn.tl.column_album_visible = show_album_col;
 //		
 //		// show length column
-//		par.set_int_value("use_length_column", (show_length_col == true ? 1 : 0));
+//		Params.set_int_value("use_length_column", (show_length_col == true ? 1 : 0));
 //		xn.tl.column_length_visible = show_length_col;
 
 //		// show track number column
-//		par.set_int_value("use_tracknumber_column", (show_trackno_col == true ? 1 : 0));
+//		Params.set_int_value("use_tracknumber_column", (show_trackno_col == true ? 1 : 0));
 //		xn.tl.column_tracknumber_visible = show_trackno_col;
 
 		//write priorities for lyrics providers
 //		ly_model.foreach(lyrics_list_foreach);
-//		par.set_string_list_value("prio_lyrics", priorities_lyrics);
+//		Params.set_string_list_value("prio_lyrics", priorities_lyrics);
 
 		//write priorities for image providers
 //		ai_model.foreach(images_list_foreach);
-//		par.set_string_list_value("prio_images", priorities_images);
+//		Params.set_string_list_value("prio_images", priorities_images);
 
-		par.write_all_parameters_to_file();
+		Params.write_all_parameters_to_file();
 		this.dialog.destroy();
 		sign_finish();
 	}
@@ -394,7 +394,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 //	private void put_data_to_ai_tv() {
 //		TreeIter iter;
 //		ai_model.clear();
-//		string[]? ordered_ai_providers = par.get_string_list_value("prio_images");
+//		string[]? ordered_ai_providers = Params.get_string_list_value("prio_images");
 //		List<unowned string> ai_prov_list = xn.plugin_loader.image_provider_htable.get_keys();
 //		if(ordered_ai_providers != null) {
 //			foreach(string name in ordered_ai_providers) {

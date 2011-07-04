@@ -28,28 +28,34 @@
  * 	Jörn Magens
  */
 
-public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
-	private const string INIFILE   = "xnoise.ini";
-	private const string INIFOLDER = ".xnoise";
-	private List<IParams> IParams_implementers = new GLib.List<IParams>();
-	private const string settings_int    = "settings_int";
-	private const string settings_double = "settings_double";
-	private const string settings_string = "settings_string";
-	private GLib.HashTable<string,int>     ht_int    = new GLib.HashTable<string,int>(str_hash, str_equal);
-	private GLib.HashTable<string,double?> ht_double = new GLib.HashTable<string,double?>(str_hash, str_equal);
-	private GLib.HashTable<string,string>  ht_string = new GLib.HashTable<string,string>(str_hash, str_equal);
+using Xnoise;
+using Xnoise.Services;
 
-	public Params() {
+public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
+	private static const string INIFILE   = "xnoise.ini";
+	private static List<IParams> IParams_implementers;// = new GLib.List<IParams>();
+	private static const string settings_int    = "settings_int";
+	private static const string settings_double = "settings_double";
+	private static const string settings_string = "settings_string";
+	private static HashTable<string,int>     ht_int;//     = new GLib.HashTable<string,int>(str_hash, str_equal);
+	private static HashTable<string,double?> ht_double;//  = new GLib.HashTable<string,double?>(str_hash, str_equal);
+	private static HashTable<string,string>  ht_string;//  = new GLib.HashTable<string,string>(str_hash, str_equal);
+	
+	public static void init() {
+		IParams_implementers = new GLib.List<IParams>();
+		ht_int    = new GLib.HashTable<string,int>(str_hash, str_equal);
+		ht_double = new GLib.HashTable<string,double?>(str_hash, str_equal);
+		ht_string = new GLib.HashTable<string,string>(str_hash, str_equal);
 		read_all_parameters_from_file(); //Fill hash tables on construction time
 	}
 
-	public void iparams_register(IParams iparam) {
+	public static void iparams_register(IParams iparam) {
 		//Each IParams interface implementor goes to the List
 		IParams_implementers.remove(iparam); //..and shouldn't be doubled
 		IParams_implementers.append(iparam);
 	}
 
-	private void read_all_parameters_from_file() {
+	private static void read_all_parameters_from_file() {
 		//Put all values to hashtables on startup
 		KeyFile kf = new GLib.KeyFile();
 		try {
@@ -79,13 +85,13 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		}
 	}
 
-	public void set_start_parameters_in_implementors() {
+	public static void set_start_parameters_in_implementors() {
 		foreach(unowned IParams ip in IParams_implementers) {
 			ip.read_params_data();
 		}
 	}
 
-	public void write_all_parameters_to_file() {
+	public static void write_all_parameters_to_file() {
 		size_t length;
 		
 		KeyFile kf = new GLib.KeyFile();
@@ -118,7 +124,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 
 	//  GETTERS FOR THE HASH TABLE
 	//Type int
-	public int get_int_value(string key) {
+	public static int get_int_value(string key) {
 		int? val = ht_int.lookup(key);
 		if(val!=null)
 			return val;
@@ -126,7 +132,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 			return 0;
 	}
 	//Type double
-	public double get_double_value(string key) {
+	public static double get_double_value(string key) {
 		double? val = ht_double.lookup(key);
 		if(val!=null)
 			return val;
@@ -134,7 +140,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 			return 0.0;
 	}
 	//Type string list
-	public string[]? get_string_list_value(string key) {
+	public static string[]? get_string_list_value(string key) {
 		string? buffer = ht_string.lookup(key);
 		if((buffer==null)||(buffer=="#00"))
 			return null;
@@ -142,7 +148,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		return list;
 	}
 	//Type string
-	public string get_string_value(string key) {
+	public static string get_string_value(string key) {
 		string val = ht_string.lookup(key);
 		return val == null ? "" : val;
 	}
@@ -151,15 +157,15 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 
 	//  SETTERS FOR THE HASH TABLE
 	//Type int
-	public void set_int_value(string key, int value) {
+	public static void set_int_value(string key, int value) {
 		ht_int.insert(key,value);
 	}
 	//Type double
-	public void set_double_value(string key, double value) {
+	public static void set_double_value(string key, double value) {
 		ht_double.insert(key,value);
 	}
 	//Type string list
-	public void set_string_list_value(string key, string[]? value) {
+	public static void set_string_list_value(string key, string[]? value) {
 		string? buffer = null;
 		if(value!=null) {
 			foreach(string s in value) {
@@ -177,11 +183,11 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		if(buffer!=null) ht_string.insert(key,buffer);
 	}
 	//Type string
-	public void set_string_value(string key, string value) {
+	public static void set_string_value(string key, string value) {
 		ht_string.insert(key,value);
 	}
 
-	public int get_lyric_provider_priority(string name) {
+	public static int get_lyric_provider_priority(string name) {
 		string[]? prio_order = get_string_list_value("prio_lyrics");
 		if(prio_order == null)
 			return 99;
@@ -197,7 +203,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		return i;
 	}
 	
-	public int get_image_provider_priority(string name) {
+	public static int get_image_provider_priority(string name) {
 		string[]? prio_order = get_string_list_value("prio_images");
 		if(prio_order == null)
 			return 99;
@@ -213,15 +219,12 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		return i;
 	}
 
-	private string? build_file_name() {
-		if(!check_file_folder())
-			print("Error with creating configuration directory.\n");
-		string fname = GLib.Path.build_filename(global.settings_folder, INIFILE, null);
-		File f = File.new_for_path(fname);
+	private static string? build_file_name() {
+		File f = File.new_for_path(GLib.Path.build_filename(settings_folder(), INIFILE, null));
 		return create_default_if_not_exist(f);
 	}
 
-	private string? create_default_if_not_exist(File f) {
+	private static string? create_default_if_not_exist(File f) {
 		if(!f.query_exists(null)) {
 			try {
 				var fs = f.create(FileCreateFlags.NONE, null);
@@ -235,44 +238,43 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		return f.get_path();
 	}
 
-	private bool check_file_folder() {
-		File xnoise_home = File.new_for_path(global.settings_folder);
-		if(!xnoise_home.query_exists(null)) {
-			try {
-				xnoise_home.make_directory_with_parents(null);
-			}
-			catch(Error e) {
-				print("%s\n", e.message);
-			}
-		}
-		return true;
-	}
-
-private const string default_content = """
-[settings_int]
-use_lyrics=1
-use_length_column=1
-use_album_column=1
+private static const string default_content = 
+"""[settings_int]
+not_show_art_on_hover_image=0
+position_Album_column=4
+hp_position=241
+position_Länge_column=6
+mediabrowser_linebreaks=1
+usestop=1
+use_tracknumber_column=0
+repeatstate=2
+width=1124
 posY=0
 posX=0
-height=550
-fontsizeMB=8
-compact_layout=0
-width=1116
-use_tracknumber_column=0
-hp_position=241
+compact_layout=1
+position_#_column=2
+position_Genre_column=8
+position__column=1
 use_treelines=0
-show_album_images=1
-repeatstate=2
-mediabrowser_linebreaks=0
+use_album_column=1
+position_Künstler_column=5
+use_linebreaks=1
+fontsizeMB=9
+use_length_column=1
+position_Titel_column=3
+position_Jahr_column=7
+height=579
 
 [settings_double]
+relative_size_Album_column=0
+relative_size_Künstler_column=0
 volume=0.080511778431618983
+relative_size_Genre_column=0
+relative_size_Jahr_column=0
+relative_size_Titel_column=0
 
 [settings_string]
-prio_lyrics=DatabaseLyrics;Lyricwiki;Chartlyrics
-prio_images=LastfmCovers
-activated_plugins=soundmenu2;DatabaseLyrics;mpris;notifications;Lyricwiki;chartlyrics;TitleToDecoration;CyclicSaveState;mediakeys;LastfmCovers
+activated_plugins=soundmenu2;DatabaseLyrics;mpris;notifications;Lyricwiki;chartlyrics;CyclicSaveState;mediakeys;LastfmCovers
 """;
 }
 

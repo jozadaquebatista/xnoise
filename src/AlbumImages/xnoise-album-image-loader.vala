@@ -1,6 +1,6 @@
 /* xnoise-album-image-loader.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
  */
 
 using Xnoise;
+using Xnoise.Services;
 using Xnoise.PluginModule;
 
 
@@ -41,7 +42,7 @@ namespace Xnoise {
 			return null;
 		if(size == null)
 			size = "medium";
-		File f = File.new_for_path(GLib.Path.build_filename(GLib.Path.build_filename(global.settings_folder,
+		File f = File.new_for_path(GLib.Path.build_filename(GLib.Path.build_filename(data_folder(),
 		                                                                             "album_images",
 		                                                                             null
 		                                                                             ),

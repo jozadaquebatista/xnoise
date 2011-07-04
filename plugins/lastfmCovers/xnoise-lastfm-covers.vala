@@ -113,7 +113,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	public LastFmCovers(string _artist, string _album) {
 		this.artist = _artist;
 		this.album  = _album;
-		image_path = GLib.Path.build_filename(global.settings_folder,
+		image_path = GLib.Path.build_filename(data_folder(),
 		                                      "album_images",
 		                                      null
 		                                      );
