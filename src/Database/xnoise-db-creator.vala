@@ -30,7 +30,7 @@
 
 using Sqlite;
 
-private class Xnoise.DbCreator {
+private class Xnoise.Database.DbCreator {
 	private static const string DATABASE_NAME = "db.sqlite";
 	private static const string SETTINGS_FOLDER = ".xnoise";
 	public static const int DB_VERSION_MAJOR = 4;
@@ -81,10 +81,10 @@ private class Xnoise.DbCreator {
 				print("%s\n", e.message);
 			}
 		}
-		Database.open_v2(xnoisedb.get_path(),
-		                 out db,
-		                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE,
-		                 null) ;
+		Sqlite.Database.open_v2(xnoisedb.get_path(),
+		                        out db,
+		                        Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE,
+		                        null) ;
 	}
 
 	private static bool exec_stmnt_string(string statement) {

@@ -31,6 +31,8 @@
  */
 
 using Soup;
+using Xnoise;
+using Xnoise.Services;
 
 public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	private unowned Xnoise.Plugin _owner;

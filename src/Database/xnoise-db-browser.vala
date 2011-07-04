@@ -31,11 +31,11 @@
 
 using Sqlite;
 
-public errordomain Xnoise.DbError {
+public errordomain Xnoise.Database.DbError {
 	FAILED;
 }
 
-public class Xnoise.DbBrowser {
+public class Xnoise.Database.DbBrowser {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private string DATABASE;
@@ -82,7 +82,7 @@ public class Xnoise.DbBrowser {
 	public DbBrowser() throws DbError {
 		DATABASE = dbFileName();
 		db = null;
-		if(Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) {
+		if(Sqlite.Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) {
 			print("Can't open database: %s\n", (string)this.db.errmsg);
 			throw new DbError.FAILED("failed messge");
 		}
@@ -108,7 +108,7 @@ public class Xnoise.DbBrowser {
 	//	print("dtor db browser\n");
 	//}
 
-	private Database db;
+	private Sqlite.Database db;
 
 	private string dbFileName() {
 		return GLib.Path.build_filename(global.settings_folder, DATABASE_NAME, null);
@@ -118,7 +118,7 @@ public class Xnoise.DbBrowser {
 		print("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
 	}
 
-	public delegate void ReaderCallback(Database database);
+	public delegate void ReaderCallback(Sqlite.Database database);
 	
 	public void do_callback_transaction(ReaderCallback cb) {
 		if(db == null) return;

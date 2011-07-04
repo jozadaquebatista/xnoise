@@ -28,6 +28,7 @@
  * 	softshaker  softshaker googlemail.com
  * 	Jörn Magens
  */
+
 //TODO: use priorities
 namespace Xnoise {
 	public static File? get_albumimage_for_artistalbum(string? artist, string? album, string? size) {

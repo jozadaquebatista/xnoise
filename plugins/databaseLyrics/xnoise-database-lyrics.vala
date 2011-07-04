@@ -28,8 +28,10 @@
  * 	Jörn Magens
  */
 
-using Xnoise;
 using Sqlite;
+using Xnoise;
+using Xnoise.Services;
+
 
 public class Xnoise.DatabaseLyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	private unowned Xnoise.Plugin _owner;

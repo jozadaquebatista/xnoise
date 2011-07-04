@@ -28,8 +28,9 @@
  * 	Jörn Magens
  */
  
-using Xnoise;
 using Gtk;
+using Xnoise;
+using Xnoise.Services;
 
 public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 	private unowned Xnoise.Plugin _owner;

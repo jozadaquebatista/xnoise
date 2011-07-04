@@ -30,7 +30,7 @@
 
 using Xnoise.Services;
 
-public class Xnoise.TagReader {
+public class Xnoise.TagAccess.TagReader {
 	public TrackData? read_tag(string filename) {
 		File f = File.new_for_path(filename);
 		Item? item = item_handler_manager.create_item(f.get_uri());

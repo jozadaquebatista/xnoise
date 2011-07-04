@@ -31,7 +31,9 @@
  */
 
 
+using Xnoise;
 using Xnoise.Services;
+using Xnoise.Plugins;
 
 
 public delegate void Xnoise.LyricsFetchedCallback(string artist, string title, string credits, string identifier, string text, string providername);

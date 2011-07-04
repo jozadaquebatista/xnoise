@@ -29,25 +29,7 @@
  */
 
 
-// Track meta information class, as defined in xnoise-misc.vala
-//public class Xnoise.TrackData {
-//  public string? artist = null;
-//  public string? album = null;
-//  public string? title = null;
-//  public string? Genre = null;
-//  public uint Year = 0;
-//  public uint Tracknumber = 0;
-//  public int32 Length = 0;
-//  public int Bitrate = 0;
-//  public ItemType Mediatype = ItemType.UNKNOWN;
-//  public string? Uri = null;
-//}
-
-
-public class Xnoise.TagWriter {
-//	public TagWriter() {
-//		print("construct TagWriter\n");
-//	}
+public class Xnoise.TagAccess.TagWriter {
 	public bool write_tag(File? file, TrackData? td) {
 		// does writes for values that are different from default values
 		if(file == null)
@@ -150,6 +132,5 @@ public class Xnoise.TagWriter {
 		taglib_file = null;
 		return retval;
 	}
-
 }
 

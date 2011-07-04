@@ -31,6 +31,9 @@
  
 using Gtk;
 using Notify;
+using Xnoise;
+using Xnoise.Services;
+
 
 public class Xnoise.Notifications : GLib.Object, IPlugin {
 	public Main xn { get; set; }
@@ -154,31 +157,31 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		Gdk.Pixbuf image_pixb = null;
 		string basename = null;
 		File file = File.new_for_uri(newuri);
-
+		
 		if(!gst_player.is_stream)
 			basename = file.get_basename();
-
+		
 		if(global.current_artist != null) {
 			artist = remove_linebreaks(global.current_artist);
 		}
 		else {
 			artist = "unknown artist";
 		}
-
+		
 		if(global.current_title != null) {
 			title = remove_linebreaks(global.current_title);
 		}
 		else {
 			title = "unknown title";
 		}
-
+		
 		if(global.current_album != null) {
 			album = remove_linebreaks(global.current_album);
 		}
 		else {
 			album = "unknown album";
 		}
-
+		
 		File f = get_albumimage_for_artistalbum(artist, album, "medium");
 		string summary = title;
 		string body = _("by") +

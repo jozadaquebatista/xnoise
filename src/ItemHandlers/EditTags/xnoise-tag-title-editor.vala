@@ -29,6 +29,8 @@
  */
 
 using Gtk;
+using Xnoise.TagAccess;
+
 
 public class Xnoise.TagTitleEditor : GLib.Object {
 	private unowned Xnoise.Main xn;	

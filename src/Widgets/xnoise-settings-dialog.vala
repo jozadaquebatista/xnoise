@@ -29,6 +29,7 @@
  */
 
 using Gtk;
+using Xnoise;
 
 public errordomain Xnoise.SettingsDialogError {
 	FILE_NOT_FOUND,

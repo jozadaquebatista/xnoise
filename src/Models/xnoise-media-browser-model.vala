@@ -30,6 +30,7 @@
 
 
 using Gtk;
+using Xnoise.Database;
 
 public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 

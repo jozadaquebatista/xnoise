@@ -30,6 +30,7 @@
 
 using Gtk;
 using Gdk;
+using Xnoise.TagAccess;
 
 public class Xnoise.TrackListModel : ListStore, TreeModel {
 

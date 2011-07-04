@@ -29,6 +29,8 @@
  */
 
 using Gtk;
+using Xnoise;
+
 
 public class Xnoise.PluginManagerTree: Gtk.TreeView {
 	private const string group = "XnoisePlugin";

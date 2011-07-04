@@ -33,6 +33,8 @@
 using Gtk;
 using Soup;
 using Xml;
+using Xnoise;
+using Xnoise.Services;
 
 // Plugin for lastfm.com PHP API
 

@@ -28,8 +28,8 @@
  * 	Jörn Magens
  */
 
-
-// XNOISES' GENERAL NAMESPACE FUNCTIONS
+using Xnoise;
+using Xnoise.Database;
 
 namespace Xnoise {
 	public static Params par = null;
@@ -41,8 +41,10 @@ namespace Xnoise {
 	public static ItemHandlerManager item_handler_manager = null;
 	public static ItemConverter item_converter = null;
 	public static MainContext mc;
-	public static DbBrowser db_browser;
-	public static DbWriter db_writer;
+	
+	public static Database.DbBrowser db_browser;
+	public static Database.DbWriter  db_writer;
+	
 	public static GstPlayer gst_player;
 	public static PluginLoader plugin_loader;
 	public static TrayIcon tray_icon;
@@ -111,7 +113,7 @@ namespace Xnoise {
 	}
 
 	private static void check_database_and_tables(ref bool is_first_start) {
-		DbCreator.check_tables(ref is_first_start);
+		Database.DbCreator.check_tables(ref is_first_start);
 	}
 
 	public static string get_stream_uri(string playlist_uri) {

@@ -30,6 +30,8 @@
 
 using Gtk;
 using Gdk;
+using Xnoise.TagAccess;
+
 
 public class Xnoise.TrackList : TreeView, IParams {
 	private Main xn;

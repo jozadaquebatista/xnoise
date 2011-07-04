@@ -2,6 +2,98 @@
 
 [CCode (cprefix = "Xnoise", lower_case_cprefix = "xnoise_")]
 namespace Xnoise {
+	[CCode (cprefix = "XnoiseDatabase", lower_case_cprefix = "xnoise_database_")]
+	namespace Database {
+		[CCode (ref_function = "xnoise_database_db_browser_ref", unref_function = "xnoise_database_db_browser_unref", cheader_filename = "xnoise.h")]
+		public class DbBrowser {
+			[CCode (cheader_filename = "xnoise.h")]
+			public delegate void ReaderCallback (Sqlite.Database database);
+			public DbBrowser () throws Xnoise.Database.DbError;
+			public void cancel ();
+			public int count_artists ();
+			public int count_artists_with_search (ref string searchtext);
+			public uint count_lastused_items ();
+			public int32 count_videos (ref string searchtext);
+			public void do_callback_transaction (Xnoise.Database.DbBrowser.ReaderCallback cb);
+			public Xnoise.Item[] get_albums_with_search (ref string searchtext, int32 id);
+			public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);
+			public Xnoise.Item[] get_artists_with_search (ref string searchtext);
+			public Xnoise.Item[] get_lastused_items ();
+			public string? get_local_image_path_for_track (ref string? uri);
+			public string[] get_media_files ();
+			public string[] get_media_folders ();
+			public string? get_single_stream_uri (string name);
+			public Xnoise.Item[] get_some_artists (int limit, int offset);
+			public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
+			public Xnoise.TrackData[] get_stream_data (ref string searchtext);
+			public bool get_stream_for_id (int id, out string uri);
+			public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
+			public Xnoise.StreamData[] get_streams ();
+			public Xnoise.TrackData[] get_titles_with_mediatypes_and_ids (string artist, string album);
+			public int get_track_id_for_path (string uri);
+			public Xnoise.TrackData[]? get_trackdata_by_albumid (ref string searchtext, int32 id);
+			public Xnoise.TrackData[]? get_trackdata_by_artistid (ref string searchtext, int32 id);
+			public Xnoise.TrackData? get_trackdata_by_titleid (ref string searchtext, int32 id);
+			public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
+			public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
+			public bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
+			public Xnoise.TrackData[] get_trackdata_for_video (ref string searchtext);
+			public bool get_uri_for_id (int id, out string val);
+			public string[] get_uris (string search_string);
+			public Xnoise.TrackData[] get_video_data (ref string searchtext);
+			public string[] get_videos (ref string searchtext);
+			public bool stream_in_db (string uri);
+			public bool streams_available ();
+			public bool track_in_db (string uri);
+			public bool videos_available ();
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class DbWriter : GLib.Object {
+			[CCode (cprefix = "XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_", cheader_filename = "xnoise.h")]
+			public enum ChangeType {
+				ADD_ARTIST,
+				ADD_ALBUM,
+				ADD_TITLE,
+				ADD_VIDEO,
+				REMOVE_ARTIST,
+				REMOVE_ALBUM,
+				REMOVE_TITLE,
+				REMOVE_URI,
+				CLEAR_DB
+			}
+			[CCode (cheader_filename = "xnoise.h")]
+			public delegate void ChangeNotificationCallback (Xnoise.Database.DbWriter.ChangeType changetype, Xnoise.Item? item);
+			[CCode (cheader_filename = "xnoise.h")]
+			public delegate void WriterCallback (Sqlite.Database database);
+			public DbWriter () throws Xnoise.Database.DbError;
+			public void add_single_file_to_collection (string uri);
+			public void add_single_folder_to_collection (string mfolder);
+			public void add_single_stream_to_collection (string uri, string name = "");
+			public void begin_transaction ();
+			public void commit_transaction ();
+			public void del_all_files ();
+			public void del_all_folders ();
+			public void del_all_streams ();
+			public bool delete_local_media_data ();
+			public void delete_uri (string uri);
+			public void do_callback_transaction (Xnoise.Database.DbWriter.WriterCallback cb);
+			public string[] get_media_folders ();
+			public int get_track_id_for_uri (string uri);
+			public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
+			public string? get_uri_for_item_id (int32 id);
+			public bool insert_title (ref Xnoise.TrackData td);
+			public void register_change_callback (Xnoise.MediaBrowserModel mbm, Xnoise.Database.DbWriter.ChangeNotificationCallback cb);
+			public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
+			public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
+			public int uri_entry_exists (string uri);
+			public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
+			public bool in_transaction { get; }
+		}
+		[CCode (cprefix = "XNOISE_DATABASE_DB_ERROR_", cheader_filename = "xnoise.h")]
+		public errordomain DbError {
+			FAILED,
+		}
+	}
 	[CCode (cprefix = "XnoiseServices", lower_case_cprefix = "xnoise_services_")]
 	namespace Services {
 		[CCode (cheader_filename = "xnoise.h")]
@@ -16,6 +108,21 @@ namespace Xnoise {
 		public static string remove_suffix_from_filename (string? val);
 		[CCode (cheader_filename = "xnoise.h")]
 		public static string replace_underline_with_blank_encoded (string value);
+	}
+	[CCode (cprefix = "XnoiseTagAccess", lower_case_cprefix = "xnoise_tag_access_")]
+	namespace TagAccess {
+		[CCode (ref_function = "xnoise_tag_access_tag_reader_ref", unref_function = "xnoise_tag_access_tag_reader_unref", cheader_filename = "xnoise.h")]
+		public class TagReader {
+			public TagReader ();
+			public Xnoise.TrackData? read_tag (string filename);
+		}
+		[CCode (ref_function = "xnoise_tag_access_tag_writer_ref", unref_function = "xnoise_tag_access_tag_writer_unref", cheader_filename = "xnoise.h")]
+		public class TagWriter {
+			public TagWriter ();
+			public bool write_album (GLib.File? file, string? album);
+			public bool write_artist (GLib.File? file, string? artist);
+			public bool write_tag (GLib.File? file, Xnoise.TrackData? td);
+		}
 	}
 	[Compact]
 	[CCode (cheader_filename = "xnoise.h")]
@@ -57,91 +164,6 @@ namespace Xnoise {
 		}
 		public ControlButton (Xnoise.ControlButton.Direction _direction = Direction.STOP);
 		public signal void sign_clicked (Xnoise.ControlButton.Direction dir);
-	}
-	[CCode (ref_function = "xnoise_db_browser_ref", unref_function = "xnoise_db_browser_unref", cheader_filename = "xnoise.h")]
-	public class DbBrowser {
-		[CCode (cheader_filename = "xnoise.h")]
-		public delegate void ReaderCallback (Sqlite.Database database);
-		public DbBrowser () throws Xnoise.DbError;
-		public void cancel ();
-		public int count_artists ();
-		public int count_artists_with_search (ref string searchtext);
-		public uint count_lastused_items ();
-		public int32 count_videos (ref string searchtext);
-		public void do_callback_transaction (Xnoise.DbBrowser.ReaderCallback cb);
-		public Xnoise.Item[] get_albums_with_search (ref string searchtext, int32 id);
-		public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);
-		public Xnoise.Item[] get_artists_with_search (ref string searchtext);
-		public Xnoise.Item[] get_lastused_items ();
-		public string? get_local_image_path_for_track (ref string? uri);
-		public string[] get_media_files ();
-		public string[] get_media_folders ();
-		public string? get_single_stream_uri (string name);
-		public Xnoise.Item[] get_some_artists (int limit, int offset);
-		public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
-		public Xnoise.TrackData[] get_stream_data (ref string searchtext);
-		public bool get_stream_for_id (int id, out string uri);
-		public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
-		public Xnoise.StreamData[] get_streams ();
-		public Xnoise.TrackData[] get_titles_with_mediatypes_and_ids (string artist, string album);
-		public int get_track_id_for_path (string uri);
-		public Xnoise.TrackData[]? get_trackdata_by_albumid (ref string searchtext, int32 id);
-		public Xnoise.TrackData[]? get_trackdata_by_artistid (ref string searchtext, int32 id);
-		public Xnoise.TrackData? get_trackdata_by_titleid (ref string searchtext, int32 id);
-		public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
-		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
-		public bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
-		public Xnoise.TrackData[] get_trackdata_for_video (ref string searchtext);
-		public bool get_uri_for_id (int id, out string val);
-		public string[] get_uris (string search_string);
-		public Xnoise.TrackData[] get_video_data (ref string searchtext);
-		public string[] get_videos (ref string searchtext);
-		public bool stream_in_db (string uri);
-		public bool streams_available ();
-		public bool track_in_db (string uri);
-		public bool videos_available ();
-	}
-	[CCode (cheader_filename = "xnoise.h")]
-	public class DbWriter : GLib.Object {
-		[CCode (cprefix = "XNOISE_DB_WRITER_CHANGE_TYPE_", cheader_filename = "xnoise.h")]
-		public enum ChangeType {
-			ADD_ARTIST,
-			ADD_ALBUM,
-			ADD_TITLE,
-			ADD_VIDEO,
-			REMOVE_ARTIST,
-			REMOVE_ALBUM,
-			REMOVE_TITLE,
-			REMOVE_URI,
-			CLEAR_DB
-		}
-		[CCode (cheader_filename = "xnoise.h")]
-		public delegate void ChangeNotificationCallback (Xnoise.DbWriter.ChangeType changetype, Xnoise.Item? item);
-		[CCode (cheader_filename = "xnoise.h")]
-		public delegate void WriterCallback (Sqlite.Database database);
-		public DbWriter () throws Xnoise.DbError;
-		public void add_single_file_to_collection (string uri);
-		public void add_single_folder_to_collection (string mfolder);
-		public void add_single_stream_to_collection (string uri, string name = "");
-		public void begin_transaction ();
-		public void commit_transaction ();
-		public void del_all_files ();
-		public void del_all_folders ();
-		public void del_all_streams ();
-		public bool delete_local_media_data ();
-		public void delete_uri (string uri);
-		public void do_callback_transaction (Xnoise.DbWriter.WriterCallback cb);
-		public string[] get_media_folders ();
-		public int get_track_id_for_uri (string uri);
-		public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
-		public string? get_uri_for_item_id (int32 id);
-		public bool insert_title (ref Xnoise.TrackData td);
-		public void register_change_callback (Xnoise.MediaBrowserModel mbm, Xnoise.DbWriter.ChangeNotificationCallback cb);
-		public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
-		public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
-		public int uri_entry_exists (string uri);
-		public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
-		public bool in_transaction { get; }
 	}
 	[CCode (ref_function = "xnoise_fullscreen_toolbar_ref", unref_function = "xnoise_fullscreen_toolbar_unref", cheader_filename = "xnoise.h")]
 	public class FullscreenToolbar {
@@ -533,22 +555,10 @@ namespace Xnoise {
 		public SettingsDialog ();
 		public signal void sign_finish ();
 	}
-	[CCode (ref_function = "xnoise_tag_reader_ref", unref_function = "xnoise_tag_reader_unref", cheader_filename = "xnoise.h")]
-	public class TagReader {
-		public TagReader ();
-		public Xnoise.TrackData? read_tag (string filename);
-	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TagTitleEditor : GLib.Object {
 		public TagTitleEditor (Xnoise.Item _item);
 		public signal void sign_finish ();
-	}
-	[CCode (ref_function = "xnoise_tag_writer_ref", unref_function = "xnoise_tag_writer_unref", cheader_filename = "xnoise.h")]
-	public class TagWriter {
-		public TagWriter ();
-		public bool write_album (GLib.File? file, string? album);
-		public bool write_artist (GLib.File? file, string? artist);
-		public bool write_tag (GLib.File? file, Xnoise.TrackData? td);
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TextColumn : Gtk.TreeViewColumn {
@@ -841,10 +851,6 @@ namespace Xnoise {
 		VIDEO,
 		LYRICS
 	}
-	[CCode (cprefix = "XNOISE_DB_ERROR_", cheader_filename = "xnoise.h")]
-	public errordomain DbError {
-		FAILED,
-	}
 	[CCode (cprefix = "XNOISE_SETTINGS_DIALOG_ERROR_", cheader_filename = "xnoise.h")]
 	public errordomain SettingsDialogError {
 		FILE_NOT_FOUND,
@@ -853,11 +859,11 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text, string providername);
 	[CCode (cheader_filename = "xnoise.h")]
-	public static Xnoise.DbBrowser db_browser;
+	public static Xnoise.Database.DbBrowser db_browser;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.Worker db_worker;
 	[CCode (cheader_filename = "xnoise.h")]
-	public static Xnoise.DbWriter db_writer;
+	public static Xnoise.Database.DbWriter db_writer;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.GlobalAccess global;
 	[CCode (cheader_filename = "xnoise.h")]

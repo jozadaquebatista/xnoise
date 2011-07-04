@@ -31,6 +31,8 @@
  
 using Gtk;
 using Notify;
+using Xnoise;
+using Xnoise.Services;
 
 public class Xnoise.Notifications : GLib.Object, IPlugin {
 	public Main xn { get; set; }
