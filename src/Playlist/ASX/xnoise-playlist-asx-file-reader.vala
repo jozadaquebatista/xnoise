@@ -21,9 +21,9 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using Xnoise.SimpleXml;
+using Xnoise.SimpleMarkup;
 
-namespace Xnoise.Pl {
+namespace Xnoise.Playlist {
 	private class Asx.FileReader : AbstractFileReader {
 		private unowned File file;
 
@@ -32,7 +32,7 @@ namespace Xnoise.Pl {
 			string down;
 			string xml=content;
 			MatchInfo match_info = null;
-			string[] resultado;
+			string[] result;
 			Regex regex = null;
 			
 			try {
@@ -42,11 +42,11 @@ namespace Xnoise.Pl {
 				print("%s\n", e.message);
 			}
 			while(regex.match_all(xml,0,out match_info)) {
-				resultado = match_info.fetch_all ();
-				if(resultado!=null && resultado.length > 0) {
-					up = resultado[0].up();
-					down = resultado[0].down();
-					xml = xml.replace(resultado[0],down);
+				result = match_info.fetch_all ();
+				if(result!=null && result.length > 0) {
+					up = result[0].up();
+					down = result[0].down();
+					xml = xml.replace(result[0],down);
 					xml = xml.replace(up,down);
 				}
 			}
@@ -54,7 +54,7 @@ namespace Xnoise.Pl {
 		}
 
 		private ItemCollection parse(ItemCollection data_collection,ref string base_path, string data) {
-			SimpleXml.Reader reader = new SimpleXml.Reader.from_string(data);
+			SimpleMarkup.Reader reader = new SimpleMarkup.Reader.from_string(data);
 			reader.read();
 			var root = reader.root;
 			if(root != null && root.has_children()) {
@@ -68,9 +68,9 @@ namespace Xnoise.Pl {
 					}
 					var entrys = asx.get_children_by_name("entry");
 					if(entrys != null && entrys.length>0) {
-						Pl.Item d = null;
-						foreach(SimpleXml.Node entry in entrys) {
-							d = new Pl.Item();
+						Playlist.Item d = null;
+						foreach(SimpleMarkup.Node entry in entrys) {
+							d = new Playlist.Item();
 							var title = entry.get_child_by_name("title");
 							if(title != null) {
 								d.add_field(Item.Field.TITLE,title.text);
@@ -145,14 +145,14 @@ namespace Xnoise.Pl {
 			var data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
-			var mr = new SimpleXml.Reader(file);
+			var mr = new SimpleMarkup.Reader(file);
 			yield mr.read_asyn(false); //read not case sensitive
 			if(mr.root == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error with async asx reading\n");
 			}
 			
 			//get asx root node
-			unowned SimpleXml.Node asx_base = mr.root.get_child_by_name("asx");
+			unowned SimpleMarkup.Node asx_base = mr.root.get_child_by_name("asx");
 			if(asx_base == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error with async asx reading\n");
 			}
@@ -160,15 +160,15 @@ namespace Xnoise.Pl {
 			//print("name: %s\n", asx_base.name);
 			
 			//get all entry nodes
-			SimpleXml.Node[] entries = asx_base.get_children_by_name("entry");
+			SimpleMarkup.Node[] entries = asx_base.get_children_by_name("entry");
 			if(entries == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error 2 with async asx reading. No entries\n");
 			}
 			
-			foreach(unowned SimpleXml.Node nd in entries) {
+			foreach(unowned SimpleMarkup.Node nd in entries) {
 					Item d = new Item();
 
-					unowned SimpleXml.Node tmp = nd.get_child_by_name("ref");
+					unowned SimpleMarkup.Node tmp = nd.get_child_by_name("ref");
 					if(tmp == null)
 						continue; //error?
 

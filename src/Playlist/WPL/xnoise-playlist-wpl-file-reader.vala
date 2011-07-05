@@ -21,13 +21,13 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using Xnoise.SimpleXml;
+using Xnoise.SimpleMarkup;
 
-namespace Xnoise.Pl {
+namespace Xnoise.Playlist {
 	private class Wpl.FileReader : AbstractFileReader {
 		private unowned File file;
 		private ItemCollection parse(ItemCollection data_collection,ref string base_path, string data) throws GLib.Error {
-			SimpleXml.Reader reader = new SimpleXml.Reader.from_string(data);
+			SimpleMarkup.Reader reader = new SimpleMarkup.Reader.from_string(data);
 			reader.read();
 			
 			var root = reader.root;
@@ -37,21 +37,21 @@ namespace Xnoise.Pl {
 				//print("smil: %s\n",smil.name.down());
 				var body = smil.get_child_by_name("body");
 				if(body != null && body.has_children()) {
-					Pl.Item d = null;
+					Playlist.Item d = null;
 					//print("body: %s\n",body.name.down());
 					var seq = body.get_child_by_name("seq");
 					if(seq != null && seq.has_children()) {
 						//print("seq: %s\n",seq.name.down());
-						SimpleXml.Node[] medias = 
+						SimpleMarkup.Node[] medias = 
 						seq.get_children_by_name("media");
 
 						if(medias != null && medias.length>0) {
-							foreach(SimpleXml.Node media in medias) {
+							foreach(SimpleMarkup.Node media in medias) {
 								var attrs = media.attributes;
 								if(attrs != null) {
 									string src = attrs.get("src");
 									if(src != null ) {
-										d = new Pl.Item();
+										d = new Playlist.Item();
 										TargetType tt;
 										File tmp = get_file_for_location(src, ref base_path, out tt);
 										d.target_type = tt;
@@ -86,9 +86,9 @@ namespace Xnoise.Pl {
 				//data_collection.add_field(Item.Field.AUTHOR, author.text);
 				}
 
-				SimpleXml.Node[] metas = head.get_children_by_name("meta");
+				SimpleMarkup.Node[] metas = head.get_children_by_name("meta");
 				if(metas != null && metas.length > 0) {
-					foreach(SimpleXml.Node meta in metas) {
+					foreach(SimpleMarkup.Node meta in metas) {
 						var attrs = meta.attributes;
 						if(attrs != null) {
 							string name = attrs.get("name");
@@ -141,22 +141,22 @@ namespace Xnoise.Pl {
 			var data_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
-			var mr = new SimpleXml.Reader(file);
+			var mr = new SimpleMarkup.Reader(file);
 			yield mr.read_asyn(false); //read not case sensitive
 			if(mr.root == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error with async wpl reading\n");
 			}
 			
 			//get asx root node
-			unowned SimpleXml.Node wpl_base = mr.root.get_child_by_name("smil");
+			unowned SimpleMarkup.Node wpl_base = mr.root.get_child_by_name("smil");
 			if(wpl_base == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error with async wpl reading\n");
 			}
 			//print("children: %d\n", wpl_base.children_count);
 			//print("name: %s\n", wpl_base.name);
 			
-			unowned SimpleXml.Node tmp;
-			unowned SimpleXml.Node tmp_head;
+			unowned SimpleMarkup.Node tmp;
+			unowned SimpleMarkup.Node tmp_head;
 			
 			tmp_head = wpl_base.get_child_by_name("head");
 
@@ -168,9 +168,9 @@ namespace Xnoise.Pl {
 			if(tmp != null && tmp.text != null)
 				data_collection.add_general_info("title", tmp.text);
 
-			SimpleXml.Node[] metas = tmp_head.get_children_by_name("meta");
+			SimpleMarkup.Node[] metas = tmp_head.get_children_by_name("meta");
 			if(metas != null) {
-				foreach(unowned SimpleXml.Node nx in metas) {
+				foreach(unowned SimpleMarkup.Node nx in metas) {
 					if(nx.attributes["name"] != null && nx.attributes["content"] != null)
 						data_collection.add_general_info(nx.attributes["name"], nx.attributes["content"]);
 				}
@@ -181,12 +181,12 @@ namespace Xnoise.Pl {
 				throw new InternalReaderError.INVALID_FILE("internal error 2 with async wpl reading. No entries\n");
 			}
 			tmp = tmp.get_child_by_name("seq");
-			SimpleXml.Node[] entries = tmp.get_children_by_name("media");
+			SimpleMarkup.Node[] entries = tmp.get_children_by_name("media");
 			if(entries == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error 3 with async wpl reading. No entries\n");
 			}
 			
-			foreach(unowned SimpleXml.Node nd in entries) {
+			foreach(unowned SimpleMarkup.Node nd in entries) {
 				Item d = new Item();
 				
 				string? target = null;

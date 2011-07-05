@@ -21,7 +21,7 @@
  */
 
 
-namespace Xnoise.SimpleXml {
+namespace Xnoise.SimpleMarkup {
 
 	public class Writer : Object {
 		// simple xml writer that fits with vala more than libxml 
@@ -122,11 +122,11 @@ namespace Xnoise.SimpleXml {
 			return result;
 		}
 		
-		private void write_node_data(SimpleXml.Node? mrnode, ref FileOutputStream stream) {
+		private void write_node_data(SimpleMarkup.Node? mrnode, ref FileOutputStream stream) {
 			if(mrnode == null)
 				return;
 
-			foreach(SimpleXml.Node node in mrnode) {
+			foreach(SimpleMarkup.Node node in mrnode) {
 				do_n_spaces(ref stream);
 				
 				begin_node(node, ref stream);

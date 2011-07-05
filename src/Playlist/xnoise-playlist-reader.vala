@@ -21,7 +21,7 @@
  */
 
 
-namespace Xnoise.Pl {
+namespace Xnoise.Playlist {
 	public class Reader : GLib.Object {
 		
 		// _data_collection is the collection of data entries in one playlist

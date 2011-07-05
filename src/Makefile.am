@@ -58,11 +58,24 @@ xnoise_SOURCES = \
     Parameter/xnoise-i-params.vala \
     Parameter/xnoise-parameter.vala \
     Player/xnoise-gst-player.vala \
+    Playlist/xnoise-playlist-abstract-file-reader.vala \
+    Playlist/xnoise-playlist-general.vala \
+    Playlist/xnoise-playlist-item.vala \
+    Playlist/xnoise-playlist-item-collection.vala \
+    Playlist/xnoise-playlist-reader.vala \
+    Playlist/ASX/xnoise-playlist-asx-file-reader.vala \
+    Playlist/WPL/xnoise-playlist-wpl-file-reader.vala \
+    Playlist/M3U/xnoise-playlist-m3u-file-reader.vala \
+    Playlist/PLS/xnoise-playlist-pls-file-reader.vala \
+    Playlist/XSPF/xnoise-playlist-xspf-file-reader.vala \
     PluginModule/xnoise-plugin.vala \
     PluginModule/xnoise-plugin-loader.vala \
     PluginModule/xnoise-plugin-information.vala \
     PluginModule/xnoise-plugin-interface.vala \
     Services/xnoise-services.vala \
+    SimpleMarkup/xnoise-markup-node.vala \
+    SimpleMarkup/xnoise-markup-reader.vala \
+    SimpleMarkup/xnoise-markup-writer.vala \
     TagAccess/xnoise-tag-reader.vala \
     TagAccess/xnoise-tag-writer.vala \
     TrayIcon/xnoise-tray-icon.vala \

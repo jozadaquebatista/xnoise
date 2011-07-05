@@ -1,13 +1,13 @@
-using Xnoise.Pl;
+using Xnoise.Playlist;
 
 bool test_reader_creation() {
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	return reader != null;
 }
 
 bool test_m3u_type_recognition() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/test_m3u.m3u"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try { 
 		reader.read(f.get_uri(), null);
 	}
@@ -21,7 +21,7 @@ bool test_m3u_type_recognition() {
 
 bool test_pls_type_recognition() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/pls_test.pls"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -34,7 +34,7 @@ bool test_pls_type_recognition() {
 
 bool test_asx_type_recognition() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/asx_test.asx"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -47,7 +47,7 @@ bool test_asx_type_recognition() {
 
 bool test_wpl_type_recognition() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/wpl_test.wpl"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -61,7 +61,7 @@ bool test_wpl_type_recognition() {
 
 bool test_xspf_type_recognition() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples//xspf.xspf"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -75,7 +75,7 @@ bool test_xspf_type_recognition() {
 
 bool test_m3u_reading() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/test_m3u.m3u"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -91,7 +91,7 @@ bool test_m3u_reading() {
 bool test_m3u_reading_2() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/test_ext_m3u.m3u"));
 	File t1 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -107,7 +107,7 @@ bool test_m3u_reading_2() {
 bool test_asx_remote_reading() {
 	File f = File.new_for_uri("http://streams.br-online.de/bayern2_1.asx");
 	File t1 = File.new_for_commandline_arg("mms://gffstream-w3a.wm.llnwd.net/gffstream_w3a");
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 //		t = new Timer();
 //		t.start();
@@ -128,7 +128,7 @@ bool test_asx_remote_reading() {
 bool test_asx_bad_xml_remote_reading() {
 	File f = File.new_for_uri("http://www.tropicalisima.fm/wmbaladas48.asx");
 	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -147,7 +147,7 @@ bool test_pls_reading_2() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/pls_test.pls"));
 	File t1 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 	File t5 = File.new_for_commandline_arg("http://www.site.com:8000/listen.pls");
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -164,7 +164,7 @@ bool test_pls_reading_2() {
 
 bool test_asx_reading() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/asx_test.asx"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -179,7 +179,7 @@ bool test_asx_reading() {
 
 bool test_wpl_reading() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/wpl_test.wpl"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -196,7 +196,7 @@ bool test_wpl_reading() {
 bool test_xspf_reading() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/xspf.xspf"));
 	File t1 = File.new_for_commandline_arg("/media/Disco de datos/Musica/ILONA-BUSCANDO UN FINAL.ogg");
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -218,7 +218,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.ASX, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.ASX, true);
 //	
 //	ItemCollection data_collection = new ItemCollection();
 //	
@@ -240,7 +240,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -259,7 +259,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.M3U, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.M3U, true);
 //	
 //	ItemCollection data_collection = new ItemCollection();
 //	
@@ -281,7 +281,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -300,7 +300,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.PLS, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.PLS, true);
 //	
 //	ItemCollection data_collection = new ItemCollection();
 //	
@@ -322,7 +322,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -341,7 +341,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.XSPF, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.XSPF, true);
 //	
 //	ItemCollection data_collection = new ItemCollection();
 //	
@@ -363,7 +363,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -383,7 +383,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.ASX, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.ASX, true);
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
@@ -409,7 +409,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -435,7 +435,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.M3U, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.M3U, true);
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
@@ -460,7 +460,7 @@ bool test_xspf_reading() {
 //		print("m3u test error writing %s\n", e.message);
 //		return false;
 //	}
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -484,7 +484,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3");
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.PLS, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.PLS, true);
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
@@ -509,7 +509,7 @@ bool test_xspf_reading() {
 //		print("pls test error writing %s\n", e.message);
 //		return false;
 //	}
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -533,7 +533,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.XSPF, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.XSPF, true);
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
@@ -558,7 +558,7 @@ bool test_xspf_reading() {
 //		print("pls test error writing %s\n", e.message);
 //		return false;
 //	}
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -584,7 +584,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.ASX, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.ASX, true);
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
@@ -610,7 +610,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -633,7 +633,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.M3U, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.M3U, true);
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
@@ -659,7 +659,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -683,7 +683,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.PLS, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.PLS, true);
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
@@ -709,7 +709,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -733,7 +733,7 @@ bool test_xspf_reading() {
 //	File t2 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
 //	string current_title_1 = "BUSCANDO UN FINAL";
 //	string current_title_2 = "everclear - SMFTA";
-//	var writer = new Xnoise.Pl.Writer(ListType.XSPF, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.XSPF, true);
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
@@ -765,7 +765,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -785,7 +785,7 @@ bool test_xspf_reading() {
 //bool test_conversion_asx_xspf() {
 //	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/asx_test.asx"));
 //	File target = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/tmp_copy_as_xspf.xspf"));
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -794,7 +794,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	ItemCollection d = reader.data_collection;
-//	var writer = new Xnoise.Pl.Writer(ListType.XSPF, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.XSPF, true);
 //	try {
 //		writer.write(d, target.get_uri(), null);
 //	}
@@ -808,7 +808,7 @@ bool test_xspf_reading() {
 //bool test_conversion_wpl_asx() {
 //	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/wpl_test.wpl"));
 //	File target = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/tmp_copy_wpl_as_asx.asx"));
-//	var reader = new Xnoise.Pl.Reader();
+//	var reader = new Xnoise.Playlist.Reader();
 //	try {
 //		reader.read(f.get_uri(), null);
 //	}
@@ -817,7 +817,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	ItemCollection d = reader.data_collection;
-//	var writer = new Xnoise.Pl.Writer(ListType.ASX, true);
+//	var writer = new Xnoise.Playlist.Writer(ListType.ASX, true);
 //	try {
 //		writer.write(d, target.get_uri(), null);
 //	}
@@ -831,7 +831,7 @@ bool test_xspf_reading() {
 bool test_m3u_read_with_no_extension_on_file() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/test_ext_m3u"));
 	File t1 = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/Alternative/everclear - SMFTA.mp3"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri(), null);
 	}
@@ -846,7 +846,7 @@ bool test_m3u_read_with_no_extension_on_file() {
 
 bool test_xpsf_read_with_no_extension_on_file() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/xf"));
-	var reader = new Xnoise.Pl.Reader();
+	var reader = new Xnoise.Playlist.Reader();
 	try {
 		reader.read(f.get_uri());
 	}
@@ -862,7 +862,7 @@ bool test_xpsf_read_with_no_extension_on_file() {
 MainLoop ml;
 void test_asx_async_reading() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/malformed_asx.asx"));//"http://www.tropicalisima.fm/wmbaladas48.asx");//"http://www.tropicalisima.fm/audios/suave128k.pls");
-	var asxreader = new Xnoise.Pl.Reader();
+	var asxreader = new Xnoise.Playlist.Reader();
 	asxreader.finished.connect(asx_async_finished_cb01);
 	asxreader.ref(); //prevent destruction
 	try {
@@ -876,7 +876,7 @@ void test_asx_async_reading() {
 	return;// uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
 }
 
-void asx_async_finished_cb01(Xnoise.Pl.Reader sender, string pluri) {
+void asx_async_finished_cb01(Xnoise.Playlist.Reader sender, string pluri) {
 	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
 	var uris = sender.get_found_uris();
 	if(uris[0] == t1.get_uri() && sender.get_number_of_entries() == 1)
@@ -890,7 +890,7 @@ void asx_async_finished_cb01(Xnoise.Pl.Reader sender, string pluri) {
 
 void test_pls_async_reading() {
 	File f = File.new_for_commandline_arg(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/pls_test.pls"));
-	var asxreader = new Xnoise.Pl.Reader();
+	var asxreader = new Xnoise.Playlist.Reader();
 	asxreader.finished.connect(pls_async_finished_cb01);
 	asxreader.ref(); //prevent destruction
 	try {
@@ -904,7 +904,7 @@ void test_pls_async_reading() {
 	return;// uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
 }
 
-void pls_async_finished_cb01(Xnoise.Pl.Reader sender, string pluri) {
+void pls_async_finished_cb01(Xnoise.Playlist.Reader sender, string pluri) {
 //	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
 	var uris = sender.get_found_uris();
 	if(sender.get_title_for_uri(ref uris[0]) == "Everclear - So Much For The Afterglow")
@@ -925,24 +925,24 @@ bool test_xml_readwrite_01() {
 	File source = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/asx_test_enc.asx"));//"./playlist-examples/asx_test.asx");
 	File target = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/tmp_asx.xml"));
 
-	var mr = new Xnoise.SimpleXml.Reader(source);
+	var mr = new Xnoise.SimpleMarkup.Reader(source);
 	mr.read(); // all data is now in mr.root if read was successful
 	if(mr.root == null)
 		print("xml reading 1 with errors\n");
 
-	Xnoise.SimpleXml.Node sourcenode = mr.root;
-	Xnoise.SimpleXml.Node targetnode;
+	Xnoise.SimpleMarkup.Node sourcenode = mr.root;
+	Xnoise.SimpleMarkup.Node targetnode;
 	//the following can be used to display the nodes with children:
 //	int dpth = 0;
 //	show_node_data(mr.root, ref dpth);
 	
 
 //	//write
-//	var mw = new Xnoise.SimpleXml.Writer(mr.root, ""); 
+//	var mw = new Xnoise.SimpleMarkup.Writer(mr.root, ""); 
 //	//noheader used
 //	mw.write(target.get_uri());
 
-//	var res_mr = new Xnoise.SimpleXml.Reader(target);
+//	var res_mr = new Xnoise.SimpleMarkup.Reader(target);
 //	res_mr.read(); // all data is now in mr.root if read was successful
 //	if(res_mr.root == null)
 //		print("xml reading 2 with errors\n");
@@ -964,10 +964,10 @@ return true;
 //	for(int i = 0; i< dpth; i++)
 //		print(" ");
 //}
-//void show_node_data(Xnoise.SimpleXml.Node? mrnode, ref int dpth) {
+//void show_node_data(Xnoise.SimpleMarkup.Node? mrnode, ref int dpth) {
 //	if(mrnode == null)
 //		return;
-//	foreach(Xnoise.SimpleXml.Node node in mrnode) {
+//	foreach(Xnoise.SimpleMarkup.Node node in mrnode) {
 //		do_n_spaces(ref dpth);
 //		print("%s ", node.name);
 //		foreach(string s in node.attributes.key_list)
@@ -985,16 +985,16 @@ return true;
 
 void test_async_xml_read() {
 	File source = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/asx_test.asx"));
-	var mr = new Xnoise.SimpleXml.Reader(source);
+	var mr = new Xnoise.SimpleMarkup.Reader(source);
 	mr.finished.connect(xml_async_finished_cb01);
 	mr.ref(); //prevent destruction
 	mr.read_asyn.begin(); // all data is now in mr.root if read was successful
 }
-void xml_async_finished_cb01(Xnoise.SimpleXml.Reader sender) {
+void xml_async_finished_cb01(Xnoise.SimpleMarkup.Reader sender) {
 	if(sender.root == null)
 		print("test async xml reading 01 with errors\n");
 
-	Xnoise.SimpleXml.Node sourcenode = sender.root;
+	Xnoise.SimpleMarkup.Node sourcenode = sender.root;
 	if(sourcenode == null) {
 		print("sourcenode is null\n");
 		print("\033[50Gfail\n");
@@ -1016,7 +1016,7 @@ void xml_async_finished_cb01(Xnoise.SimpleXml.Reader sender) {
 
 void test_m3u_async_reading() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/test_m3u.m3u"));
-	var asxreader = new Xnoise.Pl.Reader();
+	var asxreader = new Xnoise.Playlist.Reader();
 	asxreader.finished.connect(m3u_async_finished_cb01);
 	asxreader.ref(); //prevent destruction
 	try {
@@ -1029,7 +1029,7 @@ void test_m3u_async_reading() {
 	}
 	return;// uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
 }
-void m3u_async_finished_cb01(Xnoise.Pl.Reader sender, string pluri) {
+void m3u_async_finished_cb01(Xnoise.Playlist.Reader sender, string pluri) {
 //	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
 	var uris = sender.get_found_uris();
 	if(uris[0] == "http://media.example.com/entire.ts" && sender.get_number_of_entries() == 1)
@@ -1044,7 +1044,7 @@ void m3u_async_finished_cb01(Xnoise.Pl.Reader sender, string pluri) {
 
 void test_wpl_async_reading() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/wpl_test.wpl"));
-	var wplreader = new Xnoise.Pl.Reader();
+	var wplreader = new Xnoise.Playlist.Reader();
 	wplreader.finished.connect(wpl_async_finished_cb01);
 	wplreader.ref(); //prevent destruction
 	try {
@@ -1057,7 +1057,7 @@ void test_wpl_async_reading() {
 	}
 	return;// uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
 }
-void wpl_async_finished_cb01(Xnoise.Pl.Reader sender, string pluri) {
+void wpl_async_finished_cb01(Xnoise.Playlist.Reader sender, string pluri) {
 //	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
 	var uris = sender.get_found_uris();
 	if(uris[0] == "mms://win40nj.audiovideoweb.com/avwebdsnjwinlive4051" && sender.get_number_of_entries() == 3)
@@ -1071,7 +1071,7 @@ void wpl_async_finished_cb01(Xnoise.Pl.Reader sender, string pluri) {
 
 void test_xspf_async_reading() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/xspf.xspf"));
-	var xspfreader = new Xnoise.Pl.Reader();
+	var xspfreader = new Xnoise.Playlist.Reader();
 	xspfreader.finished.connect(xspf_async_finished_cb01);
 	xspfreader.ref(); //prevent destruction
 	try {
@@ -1084,7 +1084,7 @@ void test_xspf_async_reading() {
 	}
 	return;// uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
 }
-void xspf_async_finished_cb01(Xnoise.Pl.Reader sender, string pluri) {
+void xspf_async_finished_cb01(Xnoise.Playlist.Reader sender, string pluri) {
 //	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
 	var uris = sender.get_found_uris();
 	if(uris[0] == "http://www.example.com/music/bar.ogg" && sender.get_number_of_entries() == 2)

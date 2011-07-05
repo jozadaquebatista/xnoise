@@ -8,12 +8,10 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = xnoise-1.0.pc
 plpkgconfigdir = $(libdir)/pkgconfig
-plpkgconfig_DATA = libxnoiseutils-1.0.pc
 
 EXTRA_DIST = \
     $(desktop_in_files) \
     xnoise-1.0.pc.in \
-    libxnoiseutils-1.0.pc.in \
     $(NULL)
 
 CLEANFILES = \

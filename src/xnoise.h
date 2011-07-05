@@ -330,6 +330,58 @@ typedef struct _XnoiseGstPlayerPrivate XnoiseGstPlayerPrivate;
 
 typedef struct _XnoiseVideoScreen XnoiseVideoScreen;
 typedef struct _XnoiseVideoScreenClass XnoiseVideoScreenClass;
+
+#define XNOISE_PLAYLIST_TYPE_LIST_TYPE (xnoise_playlist_list_type_get_type ())
+
+#define XNOISE_PLAYLIST_TYPE_RESULT (xnoise_playlist_result_get_type ())
+
+#define XNOISE_PLAYLIST_TYPE_TARGET_TYPE (xnoise_playlist_target_type_get_type ())
+
+#define XNOISE_PLAYLIST_TYPE_ITEM (xnoise_playlist_item_get_type ())
+#define XNOISE_PLAYLIST_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_PLAYLIST_TYPE_ITEM, XnoisePlaylistItem))
+#define XNOISE_PLAYLIST_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_PLAYLIST_TYPE_ITEM, XnoisePlaylistItemClass))
+#define XNOISE_PLAYLIST_IS_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_PLAYLIST_TYPE_ITEM))
+#define XNOISE_PLAYLIST_IS_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_PLAYLIST_TYPE_ITEM))
+#define XNOISE_PLAYLIST_ITEM_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_PLAYLIST_TYPE_ITEM, XnoisePlaylistItemClass))
+
+typedef struct _XnoisePlaylistItem XnoisePlaylistItem;
+typedef struct _XnoisePlaylistItemClass XnoisePlaylistItemClass;
+typedef struct _XnoisePlaylistItemPrivate XnoisePlaylistItemPrivate;
+
+#define XNOISE_PLAYLIST_ITEM_TYPE_FIELD (xnoise_playlist_item_field_get_type ())
+
+#define XNOISE_PLAYLIST_TYPE_ITEM_COLLECTION (xnoise_playlist_item_collection_get_type ())
+#define XNOISE_PLAYLIST_ITEM_COLLECTION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_PLAYLIST_TYPE_ITEM_COLLECTION, XnoisePlaylistItemCollection))
+#define XNOISE_PLAYLIST_ITEM_COLLECTION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_PLAYLIST_TYPE_ITEM_COLLECTION, XnoisePlaylistItemCollectionClass))
+#define XNOISE_PLAYLIST_IS_ITEM_COLLECTION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_PLAYLIST_TYPE_ITEM_COLLECTION))
+#define XNOISE_PLAYLIST_IS_ITEM_COLLECTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_PLAYLIST_TYPE_ITEM_COLLECTION))
+#define XNOISE_PLAYLIST_ITEM_COLLECTION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_PLAYLIST_TYPE_ITEM_COLLECTION, XnoisePlaylistItemCollectionClass))
+
+typedef struct _XnoisePlaylistItemCollection XnoisePlaylistItemCollection;
+typedef struct _XnoisePlaylistItemCollectionClass XnoisePlaylistItemCollectionClass;
+typedef struct _XnoisePlaylistItemCollectionPrivate XnoisePlaylistItemCollectionPrivate;
+
+#define XNOISE_PLAYLIST_ITEM_COLLECTION_TYPE_ITERATOR (xnoise_playlist_item_collection_iterator_get_type ())
+#define XNOISE_PLAYLIST_ITEM_COLLECTION_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_PLAYLIST_ITEM_COLLECTION_TYPE_ITERATOR, XnoisePlaylistItemCollectionIterator))
+#define XNOISE_PLAYLIST_ITEM_COLLECTION_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_PLAYLIST_ITEM_COLLECTION_TYPE_ITERATOR, XnoisePlaylistItemCollectionIteratorClass))
+#define XNOISE_PLAYLIST_ITEM_COLLECTION_IS_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_PLAYLIST_ITEM_COLLECTION_TYPE_ITERATOR))
+#define XNOISE_PLAYLIST_ITEM_COLLECTION_IS_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_PLAYLIST_ITEM_COLLECTION_TYPE_ITERATOR))
+#define XNOISE_PLAYLIST_ITEM_COLLECTION_ITERATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_PLAYLIST_ITEM_COLLECTION_TYPE_ITERATOR, XnoisePlaylistItemCollectionIteratorClass))
+
+typedef struct _XnoisePlaylistItemCollectionIterator XnoisePlaylistItemCollectionIterator;
+typedef struct _XnoisePlaylistItemCollectionIteratorClass XnoisePlaylistItemCollectionIteratorClass;
+typedef struct _XnoisePlaylistItemCollectionIteratorPrivate XnoisePlaylistItemCollectionIteratorPrivate;
+
+#define XNOISE_PLAYLIST_TYPE_READER (xnoise_playlist_reader_get_type ())
+#define XNOISE_PLAYLIST_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_PLAYLIST_TYPE_READER, XnoisePlaylistReader))
+#define XNOISE_PLAYLIST_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_PLAYLIST_TYPE_READER, XnoisePlaylistReaderClass))
+#define XNOISE_PLAYLIST_IS_READER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_PLAYLIST_TYPE_READER))
+#define XNOISE_PLAYLIST_IS_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_PLAYLIST_TYPE_READER))
+#define XNOISE_PLAYLIST_READER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_PLAYLIST_TYPE_READER, XnoisePlaylistReaderClass))
+
+typedef struct _XnoisePlaylistReader XnoisePlaylistReader;
+typedef struct _XnoisePlaylistReaderClass XnoisePlaylistReaderClass;
+typedef struct _XnoisePlaylistReaderPrivate XnoisePlaylistReaderPrivate;
 typedef struct _XnoisePluginModuleContainerPrivate XnoisePluginModuleContainerPrivate;
 
 #define XNOISE_PLUGIN_MODULE_TYPE_INFORMATION (xnoise_plugin_module_information_get_type ())
@@ -373,6 +425,83 @@ typedef struct _XnoiseRemoteSchemesClass XnoiseRemoteSchemesClass;
 
 typedef struct _XnoiseLocalSchemes XnoiseLocalSchemes;
 typedef struct _XnoiseLocalSchemesClass XnoiseLocalSchemesClass;
+
+#define XNOISE_SIMPLE_MARKUP_TYPE_NODE (xnoise_simple_markup_node_get_type ())
+#define XNOISE_SIMPLE_MARKUP_NODE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_MARKUP_TYPE_NODE, XnoiseSimpleMarkupNode))
+#define XNOISE_SIMPLE_MARKUP_NODE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_MARKUP_TYPE_NODE, XnoiseSimpleMarkupNodeClass))
+#define XNOISE_SIMPLE_MARKUP_IS_NODE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_SIMPLE_MARKUP_TYPE_NODE))
+#define XNOISE_SIMPLE_MARKUP_IS_NODE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_SIMPLE_MARKUP_TYPE_NODE))
+#define XNOISE_SIMPLE_MARKUP_NODE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_SIMPLE_MARKUP_TYPE_NODE, XnoiseSimpleMarkupNodeClass))
+
+typedef struct _XnoiseSimpleMarkupNode XnoiseSimpleMarkupNode;
+typedef struct _XnoiseSimpleMarkupNodeClass XnoiseSimpleMarkupNodeClass;
+typedef struct _XnoiseSimpleMarkupNodePrivate XnoiseSimpleMarkupNodePrivate;
+
+#define XNOISE_SIMPLE_MARKUP_NODE_TYPE_ATTRIBUTES (xnoise_simple_markup_node_attributes_get_type ())
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_MARKUP_NODE_TYPE_ATTRIBUTES, XnoiseSimpleMarkupNodeAttributes))
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_MARKUP_NODE_TYPE_ATTRIBUTES, XnoiseSimpleMarkupNodeAttributesClass))
+#define XNOISE_SIMPLE_MARKUP_NODE_IS_ATTRIBUTES(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_SIMPLE_MARKUP_NODE_TYPE_ATTRIBUTES))
+#define XNOISE_SIMPLE_MARKUP_NODE_IS_ATTRIBUTES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_SIMPLE_MARKUP_NODE_TYPE_ATTRIBUTES))
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_SIMPLE_MARKUP_NODE_TYPE_ATTRIBUTES, XnoiseSimpleMarkupNodeAttributesClass))
+
+typedef struct _XnoiseSimpleMarkupNodeAttributes XnoiseSimpleMarkupNodeAttributes;
+typedef struct _XnoiseSimpleMarkupNodeAttributesClass XnoiseSimpleMarkupNodeAttributesClass;
+
+#define XNOISE_SIMPLE_MARKUP_NODE_TYPE_ITERATOR (xnoise_simple_markup_node_iterator_get_type ())
+#define XNOISE_SIMPLE_MARKUP_NODE_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_MARKUP_NODE_TYPE_ITERATOR, XnoiseSimpleMarkupNodeIterator))
+#define XNOISE_SIMPLE_MARKUP_NODE_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_MARKUP_NODE_TYPE_ITERATOR, XnoiseSimpleMarkupNodeIteratorClass))
+#define XNOISE_SIMPLE_MARKUP_NODE_IS_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_SIMPLE_MARKUP_NODE_TYPE_ITERATOR))
+#define XNOISE_SIMPLE_MARKUP_NODE_IS_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_SIMPLE_MARKUP_NODE_TYPE_ITERATOR))
+#define XNOISE_SIMPLE_MARKUP_NODE_ITERATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_SIMPLE_MARKUP_NODE_TYPE_ITERATOR, XnoiseSimpleMarkupNodeIteratorClass))
+
+typedef struct _XnoiseSimpleMarkupNodeIterator XnoiseSimpleMarkupNodeIterator;
+typedef struct _XnoiseSimpleMarkupNodeIteratorClass XnoiseSimpleMarkupNodeIteratorClass;
+typedef struct _XnoiseSimpleMarkupNodeAttributesPrivate XnoiseSimpleMarkupNodeAttributesPrivate;
+
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_TYPE_KEYS (xnoise_simple_markup_node_attributes_keys_get_type ())
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_TYPE_KEYS, XnoiseSimpleMarkupNodeAttributesKeys))
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_TYPE_KEYS, XnoiseSimpleMarkupNodeAttributesKeysClass))
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_IS_KEYS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_TYPE_KEYS))
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_IS_KEYS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_TYPE_KEYS))
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_TYPE_KEYS, XnoiseSimpleMarkupNodeAttributesKeysClass))
+
+typedef struct _XnoiseSimpleMarkupNodeAttributesKeys XnoiseSimpleMarkupNodeAttributesKeys;
+typedef struct _XnoiseSimpleMarkupNodeAttributesKeysClass XnoiseSimpleMarkupNodeAttributesKeysClass;
+typedef struct _XnoiseSimpleMarkupNodeAttributesKeysPrivate XnoiseSimpleMarkupNodeAttributesKeysPrivate;
+
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_TYPE_ITERATOR (xnoise_simple_markup_node_attributes_keys_iterator_get_type ())
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_TYPE_ITERATOR, XnoiseSimpleMarkupNodeAttributesKeysIterator))
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_TYPE_ITERATOR, XnoiseSimpleMarkupNodeAttributesKeysIteratorClass))
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_IS_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_TYPE_ITERATOR))
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_IS_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_TYPE_ITERATOR))
+#define XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_ITERATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_SIMPLE_MARKUP_NODE_ATTRIBUTES_KEYS_TYPE_ITERATOR, XnoiseSimpleMarkupNodeAttributesKeysIteratorClass))
+
+typedef struct _XnoiseSimpleMarkupNodeAttributesKeysIterator XnoiseSimpleMarkupNodeAttributesKeysIterator;
+typedef struct _XnoiseSimpleMarkupNodeAttributesKeysIteratorClass XnoiseSimpleMarkupNodeAttributesKeysIteratorClass;
+typedef struct _XnoiseSimpleMarkupNodeAttributesKeysIteratorPrivate XnoiseSimpleMarkupNodeAttributesKeysIteratorPrivate;
+typedef struct _XnoiseSimpleMarkupNodeIteratorPrivate XnoiseSimpleMarkupNodeIteratorPrivate;
+
+#define XNOISE_SIMPLE_MARKUP_TYPE_READER (xnoise_simple_markup_reader_get_type ())
+#define XNOISE_SIMPLE_MARKUP_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_MARKUP_TYPE_READER, XnoiseSimpleMarkupReader))
+#define XNOISE_SIMPLE_MARKUP_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_MARKUP_TYPE_READER, XnoiseSimpleMarkupReaderClass))
+#define XNOISE_SIMPLE_MARKUP_IS_READER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_SIMPLE_MARKUP_TYPE_READER))
+#define XNOISE_SIMPLE_MARKUP_IS_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_SIMPLE_MARKUP_TYPE_READER))
+#define XNOISE_SIMPLE_MARKUP_READER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_SIMPLE_MARKUP_TYPE_READER, XnoiseSimpleMarkupReaderClass))
+
+typedef struct _XnoiseSimpleMarkupReader XnoiseSimpleMarkupReader;
+typedef struct _XnoiseSimpleMarkupReaderClass XnoiseSimpleMarkupReaderClass;
+typedef struct _XnoiseSimpleMarkupReaderPrivate XnoiseSimpleMarkupReaderPrivate;
+
+#define XNOISE_SIMPLE_MARKUP_TYPE_WRITER (xnoise_simple_markup_writer_get_type ())
+#define XNOISE_SIMPLE_MARKUP_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_MARKUP_TYPE_WRITER, XnoiseSimpleMarkupWriter))
+#define XNOISE_SIMPLE_MARKUP_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_MARKUP_TYPE_WRITER, XnoiseSimpleMarkupWriterClass))
+#define XNOISE_SIMPLE_MARKUP_IS_WRITER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_SIMPLE_MARKUP_TYPE_WRITER))
+#define XNOISE_SIMPLE_MARKUP_IS_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_SIMPLE_MARKUP_TYPE_WRITER))
+#define XNOISE_SIMPLE_MARKUP_WRITER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_SIMPLE_MARKUP_TYPE_WRITER, XnoiseSimpleMarkupWriterClass))
+
+typedef struct _XnoiseSimpleMarkupWriter XnoiseSimpleMarkupWriter;
+typedef struct _XnoiseSimpleMarkupWriterClass XnoiseSimpleMarkupWriterClass;
+typedef struct _XnoiseSimpleMarkupWriterPrivate XnoiseSimpleMarkupWriterPrivate;
 
 #define XNOISE_TAG_ACCESS_TYPE_TAG_READER (xnoise_tag_access_tag_reader_get_type ())
 #define XNOISE_TAG_ACCESS_TAG_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TAG_ACCESS_TYPE_TAG_READER, XnoiseTagAccessTagReader))
@@ -1021,6 +1150,92 @@ struct _XnoiseGstPlayerClass {
 	GObjectClass parent_class;
 };
 
+typedef enum  {
+	XNOISE_PLAYLIST_READER_ERROR_UNKNOWN_TYPE,
+	XNOISE_PLAYLIST_READER_ERROR_SOMETHING_ELSE
+} XnoisePlaylistReaderError;
+#define XNOISE_PLAYLIST_READER_ERROR xnoise_playlist_reader_error_quark ()
+typedef enum  {
+	XNOISE_PLAYLIST_LIST_TYPE_UNKNOWN = 0,
+	XNOISE_PLAYLIST_LIST_TYPE_IGNORED,
+	XNOISE_PLAYLIST_LIST_TYPE_M3U,
+	XNOISE_PLAYLIST_LIST_TYPE_PLS,
+	XNOISE_PLAYLIST_LIST_TYPE_ASX,
+	XNOISE_PLAYLIST_LIST_TYPE_XSPF,
+	XNOISE_PLAYLIST_LIST_TYPE_WPL
+} XnoisePlaylistListType;
+
+typedef enum  {
+	XNOISE_PLAYLIST_RESULT_UNHANDLED = 0,
+	XNOISE_PLAYLIST_RESULT_ERROR,
+	XNOISE_PLAYLIST_RESULT_IGNORED,
+	XNOISE_PLAYLIST_RESULT_SUCCESS,
+	XNOISE_PLAYLIST_RESULT_EMPTY,
+	XNOISE_PLAYLIST_RESULT_DOUBLE_WRITE
+} XnoisePlaylistResult;
+
+typedef enum  {
+	XNOISE_PLAYLIST_TARGET_TYPE_URI,
+	XNOISE_PLAYLIST_TARGET_TYPE_REL_PATH,
+	XNOISE_PLAYLIST_TARGET_TYPE_ABS_PATH
+} XnoisePlaylistTargetType;
+
+struct _XnoisePlaylistItem {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoisePlaylistItemPrivate * priv;
+};
+
+struct _XnoisePlaylistItemClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoisePlaylistItem *self);
+};
+
+typedef enum  {
+	XNOISE_PLAYLIST_ITEM_FIELD_URI = 0,
+	XNOISE_PLAYLIST_ITEM_FIELD_TITLE,
+	XNOISE_PLAYLIST_ITEM_FIELD_AUTHOR,
+	XNOISE_PLAYLIST_ITEM_FIELD_GENRE,
+	XNOISE_PLAYLIST_ITEM_FIELD_ALBUM,
+	XNOISE_PLAYLIST_ITEM_FIELD_COPYRIGHT,
+	XNOISE_PLAYLIST_ITEM_FIELD_DURATION,
+	XNOISE_PLAYLIST_ITEM_FIELD_PARAM_NAME,
+	XNOISE_PLAYLIST_ITEM_FIELD_PARAM_VALUE,
+	XNOISE_PLAYLIST_ITEM_FIELD_IS_REMOTE,
+	XNOISE_PLAYLIST_ITEM_FIELD_IS_PLAYLIST
+} XnoisePlaylistItemField;
+
+struct _XnoisePlaylistItemCollection {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoisePlaylistItemCollectionPrivate * priv;
+};
+
+struct _XnoisePlaylistItemCollectionClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoisePlaylistItemCollection *self);
+};
+
+struct _XnoisePlaylistItemCollectionIterator {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoisePlaylistItemCollectionIteratorPrivate * priv;
+};
+
+struct _XnoisePlaylistItemCollectionIteratorClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoisePlaylistItemCollectionIterator *self);
+};
+
+struct _XnoisePlaylistReader {
+	GObject parent_instance;
+	XnoisePlaylistReaderPrivate * priv;
+};
+
+struct _XnoisePlaylistReaderClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoisePluginModuleContainer {
 	GTypeModule parent_instance;
 	XnoisePluginModuleContainerPrivate * priv;
@@ -1049,6 +1264,82 @@ struct _XnoisePluginModuleInformation {
 };
 
 struct _XnoisePluginModuleInformationClass {
+	GObjectClass parent_class;
+};
+
+struct _XnoiseSimpleMarkupNode {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseSimpleMarkupNodePrivate * priv;
+	XnoiseSimpleMarkupNodeAttributes* attributes;
+};
+
+struct _XnoiseSimpleMarkupNodeClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseSimpleMarkupNode *self);
+};
+
+struct _XnoiseSimpleMarkupNodeAttributes {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseSimpleMarkupNodeAttributesPrivate * priv;
+	XnoiseSimpleMarkupNodeAttributesKeys* keys;
+};
+
+struct _XnoiseSimpleMarkupNodeAttributesClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseSimpleMarkupNodeAttributes *self);
+};
+
+struct _XnoiseSimpleMarkupNodeAttributesKeys {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseSimpleMarkupNodeAttributesKeysPrivate * priv;
+};
+
+struct _XnoiseSimpleMarkupNodeAttributesKeysClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseSimpleMarkupNodeAttributesKeys *self);
+};
+
+struct _XnoiseSimpleMarkupNodeAttributesKeysIterator {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseSimpleMarkupNodeAttributesKeysIteratorPrivate * priv;
+};
+
+struct _XnoiseSimpleMarkupNodeAttributesKeysIteratorClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseSimpleMarkupNodeAttributesKeysIterator *self);
+};
+
+struct _XnoiseSimpleMarkupNodeIterator {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseSimpleMarkupNodeIteratorPrivate * priv;
+};
+
+struct _XnoiseSimpleMarkupNodeIteratorClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseSimpleMarkupNodeIterator *self);
+};
+
+struct _XnoiseSimpleMarkupReader {
+	GObject parent_instance;
+	XnoiseSimpleMarkupReaderPrivate * priv;
+	XnoiseSimpleMarkupNode* root;
+};
+
+struct _XnoiseSimpleMarkupReaderClass {
+	GObjectClass parent_class;
+};
+
+struct _XnoiseSimpleMarkupWriter {
+	GObject parent_instance;
+	XnoiseSimpleMarkupWriterPrivate * priv;
+};
+
+struct _XnoiseSimpleMarkupWriterClass {
 	GObjectClass parent_class;
 };
 
@@ -1748,6 +2039,130 @@ void xnoise_gst_player_set_current_audio (XnoiseGstPlayer* self, gint value);
 gint xnoise_gst_player_get_n_text (XnoiseGstPlayer* self);
 gdouble xnoise_gst_player_get_gst_position (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_gst_position (XnoiseGstPlayer* self, gdouble value);
+GQuark xnoise_playlist_reader_error_quark (void);
+GType xnoise_playlist_list_type_get_type (void) G_GNUC_CONST;
+GType xnoise_playlist_result_get_type (void) G_GNUC_CONST;
+GType xnoise_playlist_target_type_get_type (void) G_GNUC_CONST;
+extern gboolean xnoise_playlist_debug;
+gboolean xnoise_playlist_is_known_playlist_extension (gchar** ext);
+gchar* xnoise_playlist_get_extension (GFile* f);
+gpointer xnoise_playlist_item_ref (gpointer instance);
+void xnoise_playlist_item_unref (gpointer instance);
+GParamSpec* xnoise_playlist_param_spec_item (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_playlist_value_set_item (GValue* value, gpointer v_object);
+void xnoise_playlist_value_take_item (GValue* value, gpointer v_object);
+gpointer xnoise_playlist_value_get_item (const GValue* value);
+GType xnoise_playlist_item_get_type (void) G_GNUC_CONST;
+GType xnoise_playlist_item_field_get_type (void) G_GNUC_CONST;
+XnoisePlaylistItem* xnoise_playlist_item_new (void);
+XnoisePlaylistItem* xnoise_playlist_item_construct (GType object_type);
+void xnoise_playlist_item_add_field (XnoisePlaylistItem* self, XnoisePlaylistItemField field, const gchar* val);
+XnoisePlaylistItemField* xnoise_playlist_item_get_contained_fields (XnoisePlaylistItem* self, int* result_length1);
+gchar* xnoise_playlist_item_get_field (XnoisePlaylistItem* self, XnoisePlaylistItemField field);
+gchar* xnoise_playlist_item_get_uri (XnoisePlaylistItem* self);
+gchar* xnoise_playlist_item_get_rel_path (XnoisePlaylistItem* self);
+gchar* xnoise_playlist_item_get_abs_path (XnoisePlaylistItem* self);
+gchar* xnoise_playlist_item_get_title (XnoisePlaylistItem* self);
+gchar* xnoise_playlist_item_get_author (XnoisePlaylistItem* self);
+gchar* xnoise_playlist_item_get_genre (XnoisePlaylistItem* self);
+gchar* xnoise_playlist_item_get_album (XnoisePlaylistItem* self);
+gchar* xnoise_playlist_item_get_copyright (XnoisePlaylistItem* self);
+gchar* xnoise_playlist_item_get_duration_string (XnoisePlaylistItem* self);
+gchar* xnoise_playlist_item_get_param_name (XnoisePlaylistItem* self);
+gchar* xnoise_playlist_item_get_param_value (XnoisePlaylistItem* self);
+glong xnoise_playlist_item_get_duration (XnoisePlaylistItem* self);
+gboolean xnoise_playlist_item_is_remote (XnoisePlaylistItem* self);
+gboolean xnoise_playlist_item_is_playlist (XnoisePlaylistItem* self);
+XnoisePlaylistTargetType xnoise_playlist_item_get_target_type (XnoisePlaylistItem* self);
+void xnoise_playlist_item_set_target_type (XnoisePlaylistItem* self, XnoisePlaylistTargetType value);
+const gchar* xnoise_playlist_item_get_base_path (XnoisePlaylistItem* self);
+void xnoise_playlist_item_set_base_path (XnoisePlaylistItem* self, const gchar* value);
+gpointer xnoise_playlist_item_collection_ref (gpointer instance);
+void xnoise_playlist_item_collection_unref (gpointer instance);
+GParamSpec* xnoise_playlist_param_spec_item_collection (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_playlist_value_set_item_collection (GValue* value, gpointer v_object);
+void xnoise_playlist_value_take_item_collection (GValue* value, gpointer v_object);
+gpointer xnoise_playlist_value_get_item_collection (const GValue* value);
+GType xnoise_playlist_item_collection_get_type (void) G_GNUC_CONST;
+XnoisePlaylistItemCollection* xnoise_playlist_item_collection_new (void);
+XnoisePlaylistItemCollection* xnoise_playlist_item_collection_construct (GType object_type);
+gint xnoise_playlist_item_collection_get_size (XnoisePlaylistItemCollection* self);
+void xnoise_playlist_item_collection_add_general_info (XnoisePlaylistItemCollection* self, const gchar* key, const gchar* val);
+gchar** xnoise_playlist_item_collection_get_general_info_keys (XnoisePlaylistItemCollection* self, int* result_length1);
+gchar* xnoise_playlist_item_collection_get_general_info (XnoisePlaylistItemCollection* self, const gchar* key);
+gboolean xnoise_playlist_item_collection_data_available (XnoisePlaylistItemCollection* self);
+gchar** xnoise_playlist_item_collection_get_found_uris (XnoisePlaylistItemCollection* self, int* result_length1);
+gchar* xnoise_playlist_item_collection_get_title_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+gchar* xnoise_playlist_item_collection_get_author_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+gchar* xnoise_playlist_item_collection_get_genre_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+gchar* xnoise_playlist_item_collection_get_album_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+gchar* xnoise_playlist_item_collection_get_copyright_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+gchar* xnoise_playlist_item_collection_get_duration_string_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+glong xnoise_playlist_item_collection_get_duration_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+gchar* xnoise_playlist_item_collection_get_param_name_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+gchar* xnoise_playlist_item_collection_get_param_value_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+gboolean xnoise_playlist_item_collection_get_is_remote_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+gboolean xnoise_playlist_item_collection_get_is_playlist_for_uri (XnoisePlaylistItemCollection* self, gchar** uri_needle);
+gint xnoise_playlist_item_collection_get_number_of_entries (XnoisePlaylistItemCollection* self);
+gboolean xnoise_playlist_item_collection_contains (XnoisePlaylistItemCollection* self, XnoisePlaylistItem* d);
+gboolean xnoise_playlist_item_collection_contains_field (XnoisePlaylistItemCollection* self, XnoisePlaylistItemField field, const gchar* value);
+XnoisePlaylistItemField* xnoise_playlist_item_collection_get_contained_fields_for_idx (XnoisePlaylistItemCollection* self, gint idx, int* result_length1);
+XnoisePlaylistItemField* xnoise_playlist_item_collection_get_contained_fields_for_uri (XnoisePlaylistItemCollection* self, gchar** uri, int* result_length1);
+gpointer xnoise_playlist_item_collection_iterator_ref (gpointer instance);
+void xnoise_playlist_item_collection_iterator_unref (gpointer instance);
+GParamSpec* xnoise_playlist_item_collection_param_spec_iterator (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_playlist_item_collection_value_set_iterator (GValue* value, gpointer v_object);
+void xnoise_playlist_item_collection_value_take_iterator (GValue* value, gpointer v_object);
+gpointer xnoise_playlist_item_collection_value_get_iterator (const GValue* value);
+GType xnoise_playlist_item_collection_iterator_get_type (void) G_GNUC_CONST;
+XnoisePlaylistItemCollectionIterator* xnoise_playlist_item_collection_iterator (XnoisePlaylistItemCollection* self);
+gint xnoise_playlist_item_collection_index_of (XnoisePlaylistItemCollection* self, XnoisePlaylistItem* d);
+XnoisePlaylistItem* xnoise_playlist_item_collection_get (XnoisePlaylistItemCollection* self, gint index);
+void xnoise_playlist_item_collection_set (XnoisePlaylistItemCollection* self, gint index, XnoisePlaylistItem* item);
+gboolean xnoise_playlist_item_collection_append (XnoisePlaylistItemCollection* self, XnoisePlaylistItem* item);
+void xnoise_playlist_item_collection_insert (XnoisePlaylistItemCollection* self, gint index, XnoisePlaylistItem* item);
+gboolean xnoise_playlist_item_collection_remove (XnoisePlaylistItemCollection* self, XnoisePlaylistItem* item);
+XnoisePlaylistItem* xnoise_playlist_item_collection_remove_at (XnoisePlaylistItemCollection* self, gint index);
+void xnoise_playlist_item_collection_clear (XnoisePlaylistItemCollection* self);
+void xnoise_playlist_item_collection_merge (XnoisePlaylistItemCollection* self, XnoisePlaylistItemCollection* data_collection);
+XnoisePlaylistItemCollectionIterator* xnoise_playlist_item_collection_iterator_new (XnoisePlaylistItemCollection* dc);
+XnoisePlaylistItemCollectionIterator* xnoise_playlist_item_collection_iterator_construct (GType object_type, XnoisePlaylistItemCollection* dc);
+gboolean xnoise_playlist_item_collection_iterator_next (XnoisePlaylistItemCollectionIterator* self);
+gboolean xnoise_playlist_item_collection_iterator_first (XnoisePlaylistItemCollectionIterator* self);
+XnoisePlaylistItem* xnoise_playlist_item_collection_iterator_get (XnoisePlaylistItemCollectionIterator* self);
+void xnoise_playlist_item_collection_iterator_remove (XnoisePlaylistItemCollectionIterator* self);
+gboolean xnoise_playlist_item_collection_iterator_previous (XnoisePlaylistItemCollectionIterator* self);
+gboolean xnoise_playlist_item_collection_iterator_has_previous (XnoisePlaylistItemCollectionIterator* self);
+void xnoise_playlist_item_collection_iterator_set (XnoisePlaylistItemCollectionIterator* self, XnoisePlaylistItem* item);
+void xnoise_playlist_item_collection_iterator_insert (XnoisePlaylistItemCollectionIterator* self, XnoisePlaylistItem* item);
+void xnoise_playlist_item_collection_iterator_append (XnoisePlaylistItemCollectionIterator* self, XnoisePlaylistItem* item);
+gint xnoise_playlist_item_collection_iterator_index (XnoisePlaylistItemCollectionIterator* self);
+GType xnoise_playlist_reader_get_type (void) G_GNUC_CONST;
+XnoisePlaylistReader* xnoise_playlist_reader_new (void);
+XnoisePlaylistReader* xnoise_playlist_reader_construct (GType object_type);
+XnoisePlaylistResult xnoise_playlist_reader_read (XnoisePlaylistReader* self, const gchar* list_uri, GCancellable* cancellable, GError** error);
+void xnoise_playlist_reader_read_asyn (XnoisePlaylistReader* self, const gchar* list_uri, GCancellable* cancellable, GAsyncReadyCallback _callback_, gpointer _user_data_);
+XnoisePlaylistResult xnoise_playlist_reader_read_asyn_finish (XnoisePlaylistReader* self, GAsyncResult* _res_, GError** error);
+gboolean xnoise_playlist_reader_data_available (XnoisePlaylistReader* self);
+gint xnoise_playlist_reader_get_number_of_entries (XnoisePlaylistReader* self);
+gchar** xnoise_playlist_reader_get_found_uris (XnoisePlaylistReader* self, int* result_length1);
+gchar* xnoise_playlist_reader_get_title_for_uri (XnoisePlaylistReader* self, gchar** uri_needle);
+gchar* xnoise_playlist_reader_get_author_for_uri (XnoisePlaylistReader* self, gchar** uri_needle);
+gchar* xnoise_playlist_reader_get_genre_for_uri (XnoisePlaylistReader* self, gchar** uri_needle);
+gchar* xnoise_playlist_reader_get_album_for_uri (XnoisePlaylistReader* self, gchar** uri_needle);
+gchar* xnoise_playlist_reader_get_copyright_for_uri (XnoisePlaylistReader* self, gchar** uri_needle);
+gchar* xnoise_playlist_reader_get_duration_string_for_uri (XnoisePlaylistReader* self, gchar** uri_needle);
+glong xnoise_playlist_reader_get_duration_for_uri (XnoisePlaylistReader* self, gchar** uri_needle);
+gboolean xnoise_playlist_reader_get_is_remote_for_uri (XnoisePlaylistReader* self, gchar** uri_needle);
+gboolean xnoise_playlist_reader_get_is_playlist_for_uri (XnoisePlaylistReader* self, gchar** uri_needle);
+XnoisePlaylistListType xnoise_playlist_reader_get_ptype (XnoisePlaylistReader* self);
+const gchar* xnoise_playlist_reader_get_playlist_uri (XnoisePlaylistReader* self);
+XnoisePlaylistItemCollection* xnoise_playlist_reader_get_data_collection (XnoisePlaylistReader* self);
+XnoisePlaylistListType xnoise_playlist_get_playlist_type_for_uri (gchar** uri_);
+XnoisePlaylistListType xnoise_playlist_get_type_by_extension (gchar** uri_);
+XnoisePlaylistListType xnoise_playlist_get_type_by_data (gchar** uri_);
+glong xnoise_playlist_get_duration_from_string (gchar** duration_string);
+GFile* xnoise_playlist_get_file_for_location (const gchar* adr, gchar** base_path, XnoisePlaylistTargetType* tt);
 GType xnoise_plugin_module_information_get_type (void) G_GNUC_CONST;
 XnoisePluginModuleContainer* xnoise_plugin_module_container_new (XnoisePluginModuleInformation* info);
 XnoisePluginModuleContainer* xnoise_plugin_module_container_construct (GType object_type, XnoisePluginModuleInformation* info);
@@ -1813,6 +2228,106 @@ gchar* xnoise_services_remove_linebreaks (const gchar* val);
 gchar* xnoise_services_remove_suffix_from_filename (const gchar* val);
 gchar* xnoise_services_prepare_name_from_filename (const gchar* val);
 gchar* xnoise_services_replace_underline_with_blank_encoded (const gchar* value);
+gpointer xnoise_simple_markup_node_ref (gpointer instance);
+void xnoise_simple_markup_node_unref (gpointer instance);
+GParamSpec* xnoise_simple_markup_param_spec_node (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_simple_markup_value_set_node (GValue* value, gpointer v_object);
+void xnoise_simple_markup_value_take_node (GValue* value, gpointer v_object);
+gpointer xnoise_simple_markup_value_get_node (const GValue* value);
+GType xnoise_simple_markup_node_get_type (void) G_GNUC_CONST;
+gpointer xnoise_simple_markup_node_attributes_ref (gpointer instance);
+void xnoise_simple_markup_node_attributes_unref (gpointer instance);
+GParamSpec* xnoise_simple_markup_node_param_spec_attributes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_simple_markup_node_value_set_attributes (GValue* value, gpointer v_object);
+void xnoise_simple_markup_node_value_take_attributes (GValue* value, gpointer v_object);
+gpointer xnoise_simple_markup_node_value_get_attributes (const GValue* value);
+GType xnoise_simple_markup_node_attributes_get_type (void) G_GNUC_CONST;
+XnoiseSimpleMarkupNode* xnoise_simple_markup_node_new (const gchar* name);
+XnoiseSimpleMarkupNode* xnoise_simple_markup_node_construct (GType object_type, const gchar* name);
+gboolean xnoise_simple_markup_node_has_text (XnoiseSimpleMarkupNode* self);
+gboolean xnoise_simple_markup_node_has_children (XnoiseSimpleMarkupNode* self);
+gboolean xnoise_simple_markup_node_has_attributes (XnoiseSimpleMarkupNode* self);
+void xnoise_simple_markup_node_prepend_child (XnoiseSimpleMarkupNode* self, XnoiseSimpleMarkupNode* node);
+void xnoise_simple_markup_node_append_child (XnoiseSimpleMarkupNode* self, XnoiseSimpleMarkupNode* node);
+void xnoise_simple_markup_node_insert_child (XnoiseSimpleMarkupNode* self, gint pos, XnoiseSimpleMarkupNode* node);
+XnoiseSimpleMarkupNode* xnoise_simple_markup_node_get_child_by_name (XnoiseSimpleMarkupNode* self, const gchar* childname);
+XnoiseSimpleMarkupNode** xnoise_simple_markup_node_get_children_by_name (XnoiseSimpleMarkupNode* self, const gchar* childname, int* result_length1);
+gint xnoise_simple_markup_node_get_idx_of_child (XnoiseSimpleMarkupNode* self, XnoiseSimpleMarkupNode* node);
+XnoiseSimpleMarkupNode* xnoise_simple_markup_node_get (XnoiseSimpleMarkupNode* self, gint idx);
+void xnoise_simple_markup_node_set (XnoiseSimpleMarkupNode* self, gint idx, XnoiseSimpleMarkupNode* node);
+gboolean xnoise_simple_markup_node_remove_child (XnoiseSimpleMarkupNode* self, XnoiseSimpleMarkupNode* node);
+gboolean xnoise_simple_markup_node_remove_child_at_idx (XnoiseSimpleMarkupNode* self, gint idx);
+void xnoise_simple_markup_node_clear (XnoiseSimpleMarkupNode* self);
+gpointer xnoise_simple_markup_node_iterator_ref (gpointer instance);
+void xnoise_simple_markup_node_iterator_unref (gpointer instance);
+GParamSpec* xnoise_simple_markup_node_param_spec_iterator (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_simple_markup_node_value_set_iterator (GValue* value, gpointer v_object);
+void xnoise_simple_markup_node_value_take_iterator (GValue* value, gpointer v_object);
+gpointer xnoise_simple_markup_node_value_get_iterator (const GValue* value);
+GType xnoise_simple_markup_node_iterator_get_type (void) G_GNUC_CONST;
+XnoiseSimpleMarkupNodeIterator* xnoise_simple_markup_node_iterator (XnoiseSimpleMarkupNode* self);
+const gchar* xnoise_simple_markup_node_get_text (XnoiseSimpleMarkupNode* self);
+void xnoise_simple_markup_node_set_text (XnoiseSimpleMarkupNode* self, const gchar* value);
+const gchar* xnoise_simple_markup_node_get_name (XnoiseSimpleMarkupNode* self);
+XnoiseSimpleMarkupNode* xnoise_simple_markup_node_get_parent (XnoiseSimpleMarkupNode* self);
+XnoiseSimpleMarkupNode* xnoise_simple_markup_node_get_previous (XnoiseSimpleMarkupNode* self);
+XnoiseSimpleMarkupNode* xnoise_simple_markup_node_get_next (XnoiseSimpleMarkupNode* self);
+gint xnoise_simple_markup_node_get_children_count (XnoiseSimpleMarkupNode* self);
+gpointer xnoise_simple_markup_node_attributes_keys_ref (gpointer instance);
+void xnoise_simple_markup_node_attributes_keys_unref (gpointer instance);
+GParamSpec* xnoise_simple_markup_node_attributes_param_spec_keys (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_simple_markup_node_attributes_value_set_keys (GValue* value, gpointer v_object);
+void xnoise_simple_markup_node_attributes_value_take_keys (GValue* value, gpointer v_object);
+gpointer xnoise_simple_markup_node_attributes_value_get_keys (const GValue* value);
+GType xnoise_simple_markup_node_attributes_keys_get_type (void) G_GNUC_CONST;
+XnoiseSimpleMarkupNodeAttributes* xnoise_simple_markup_node_attributes_new (void);
+XnoiseSimpleMarkupNodeAttributes* xnoise_simple_markup_node_attributes_construct (GType object_type);
+void xnoise_simple_markup_node_attributes_add (XnoiseSimpleMarkupNodeAttributes* self, const gchar* key, const gchar* val);
+void xnoise_simple_markup_node_attributes_replace (XnoiseSimpleMarkupNodeAttributes* self, const gchar* key, const gchar* val);
+void xnoise_simple_markup_node_attributes_remove (XnoiseSimpleMarkupNodeAttributes* self, const gchar* key);
+void xnoise_simple_markup_node_attributes_clear (XnoiseSimpleMarkupNodeAttributes* self);
+gchar* xnoise_simple_markup_node_attributes_get (XnoiseSimpleMarkupNodeAttributes* self, const gchar* key);
+void xnoise_simple_markup_node_attributes_set (XnoiseSimpleMarkupNodeAttributes* self, const gchar* key, const gchar* val);
+gint xnoise_simple_markup_node_attributes_get_item_count (XnoiseSimpleMarkupNodeAttributes* self);
+GList* xnoise_simple_markup_node_attributes_get_key_list (XnoiseSimpleMarkupNodeAttributes* self);
+GList* xnoise_simple_markup_node_attributes_get_value_list (XnoiseSimpleMarkupNodeAttributes* self);
+XnoiseSimpleMarkupNodeAttributesKeys* xnoise_simple_markup_node_attributes_keys_new (XnoiseSimpleMarkupNodeAttributes* _attrib);
+XnoiseSimpleMarkupNodeAttributesKeys* xnoise_simple_markup_node_attributes_keys_construct (GType object_type, XnoiseSimpleMarkupNodeAttributes* _attrib);
+gboolean xnoise_simple_markup_node_attributes_keys_contains (XnoiseSimpleMarkupNodeAttributesKeys* self, const gchar* needle_key);
+gpointer xnoise_simple_markup_node_attributes_keys_iterator_ref (gpointer instance);
+void xnoise_simple_markup_node_attributes_keys_iterator_unref (gpointer instance);
+GParamSpec* xnoise_simple_markup_node_attributes_keys_param_spec_iterator (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_simple_markup_node_attributes_keys_value_set_iterator (GValue* value, gpointer v_object);
+void xnoise_simple_markup_node_attributes_keys_value_take_iterator (GValue* value, gpointer v_object);
+gpointer xnoise_simple_markup_node_attributes_keys_value_get_iterator (const GValue* value);
+GType xnoise_simple_markup_node_attributes_keys_iterator_get_type (void) G_GNUC_CONST;
+XnoiseSimpleMarkupNodeAttributesKeysIterator* xnoise_simple_markup_node_attributes_keys_iterator (XnoiseSimpleMarkupNodeAttributesKeys* self);
+XnoiseSimpleMarkupNodeAttributesKeysIterator* xnoise_simple_markup_node_attributes_keys_iterator_new (XnoiseSimpleMarkupNodeAttributes* _iter_attib);
+XnoiseSimpleMarkupNodeAttributesKeysIterator* xnoise_simple_markup_node_attributes_keys_iterator_construct (GType object_type, XnoiseSimpleMarkupNodeAttributes* _iter_attib);
+gboolean xnoise_simple_markup_node_attributes_keys_iterator_next (XnoiseSimpleMarkupNodeAttributesKeysIterator* self);
+gchar* xnoise_simple_markup_node_attributes_keys_iterator_get (XnoiseSimpleMarkupNodeAttributesKeysIterator* self);
+XnoiseSimpleMarkupNodeIterator* xnoise_simple_markup_node_iterator_new (XnoiseSimpleMarkupNode* parent_node);
+XnoiseSimpleMarkupNodeIterator* xnoise_simple_markup_node_iterator_construct (GType object_type, XnoiseSimpleMarkupNode* parent_node);
+gboolean xnoise_simple_markup_node_iterator_next (XnoiseSimpleMarkupNodeIterator* self);
+XnoiseSimpleMarkupNode* xnoise_simple_markup_node_iterator_get (XnoiseSimpleMarkupNodeIterator* self);
+void xnoise_simple_markup_node_iterator_set (XnoiseSimpleMarkupNodeIterator* self, XnoiseSimpleMarkupNode* node);
+#define XNOISE_SIMPLE_MARKUP_AMPERSAND_ESCAPED "&amp;"
+#define XNOISE_SIMPLE_MARKUP_GREATER_THAN_ESCAPED "&gt;"
+#define XNOISE_SIMPLE_MARKUP_LOWER_THAN_ESCAPED "&lt;"
+#define XNOISE_SIMPLE_MARKUP_QUOTE_ESCAPED "&quot;"
+#define XNOISE_SIMPLE_MARKUP_APOSTROPH_ESCAPED "&apos;"
+GType xnoise_simple_markup_reader_get_type (void) G_GNUC_CONST;
+XnoiseSimpleMarkupReader* xnoise_simple_markup_reader_new (GFile* file);
+XnoiseSimpleMarkupReader* xnoise_simple_markup_reader_construct (GType object_type, GFile* file);
+XnoiseSimpleMarkupReader* xnoise_simple_markup_reader_new_from_string (const gchar* xml_string);
+XnoiseSimpleMarkupReader* xnoise_simple_markup_reader_construct_from_string (GType object_type, const gchar* xml_string);
+void xnoise_simple_markup_reader_read (XnoiseSimpleMarkupReader* self, gboolean case_sensitive, GCancellable* cancellable);
+void xnoise_simple_markup_reader_read_asyn (XnoiseSimpleMarkupReader* self, gboolean case_sensitive, GCancellable* cancellable, GAsyncReadyCallback _callback_, gpointer _user_data_);
+void xnoise_simple_markup_reader_read_asyn_finish (XnoiseSimpleMarkupReader* self, GAsyncResult* _res_);
+GType xnoise_simple_markup_writer_get_type (void) G_GNUC_CONST;
+XnoiseSimpleMarkupWriter* xnoise_simple_markup_writer_new (XnoiseSimpleMarkupNode* root, const gchar* header_string);
+XnoiseSimpleMarkupWriter* xnoise_simple_markup_writer_construct (GType object_type, XnoiseSimpleMarkupNode* root, const gchar* header_string);
+void xnoise_simple_markup_writer_write (XnoiseSimpleMarkupWriter* self, const gchar* filename);
 gpointer xnoise_tag_access_tag_reader_ref (gpointer instance);
 void xnoise_tag_access_tag_reader_unref (gpointer instance);
 GParamSpec* xnoise_tag_access_param_spec_tag_reader (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -2086,6 +2601,8 @@ GType xnoise_volume_slider_button_get_type (void) G_GNUC_CONST;
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (void);
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_construct (GType object_type);
 
+extern const gchar* XNOISE_PLAYLIST_known_playlist_extensions[5];
+extern const gchar* XNOISE_PLAYLIST_remote_schemes[2];
 
 G_END_DECLS
 

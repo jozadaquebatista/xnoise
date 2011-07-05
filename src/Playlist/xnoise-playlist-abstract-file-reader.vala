@@ -21,7 +21,7 @@
  */
 
 
-namespace Xnoise.Pl {
+namespace Xnoise.Playlist {
 	// abstract base class for all playlist filereader implementations
 	private abstract class AbstractFileReader : GLib.Object {
 		// relative paths from playlists are turnedinto absolute paths, by using base path

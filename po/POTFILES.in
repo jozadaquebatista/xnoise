@@ -4,7 +4,7 @@ data/misc/xnoise.desktop.in.in
 src/Widgets/xnoise-about.vala
 src/Widgets/xnoise-add-media-dialog.vala
 src/Widgets/xnoise-album-image.vala
-src/Utils/xnoise-album-image-loader.vala
+src/AlbumImages/xnoise-album-image-loader.vala
 src/Utils/xnoise-app-starter.vala
 src/Widgets/xnoise-control-button.vala
 src/Database/xnoise-db-browser.vala
@@ -23,12 +23,12 @@ src/Widgets/xnoise-media-browser.vala
 src/Models/xnoise-media-browser-model.vala
 src/Utils/xnoise-media-importer.vala
 src/Utils/xnoise-misc.vala
-src/Utils/xnoise-parameter.vala
+src/Parameter/xnoise-parameter.vala
 src/Widgets/xnoise-play-pause-button.vala
-src/Plugin/xnoise-plugin.vala
-src/Plugin/xnoise-plugin-information.vala
-src/Plugin/xnoise-plugin-interface.vala
-src/Plugin/xnoise-plugin-loader.vala
+src/PluginModule/xnoise-plugin.vala
+src/PluginModule/xnoise-plugin-information.vala
+src/PluginModule/xnoise-plugin-interface.vala
+src/PluginModule/xnoise-plugin-loader.vala
 src/Widgets/xnoise-plugin-manager-tree.vala
 src/Utils/xnoise-screensaver-manager.vala
 src/Widgets/xnoise-settings-dialog.vala

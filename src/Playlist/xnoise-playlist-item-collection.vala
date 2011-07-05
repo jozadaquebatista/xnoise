@@ -31,7 +31,7 @@
  */
 
 
-namespace Xnoise.Pl {
+namespace Xnoise.Playlist {
 	public class ItemCollection {
 
 		private Item[] _items = {};
@@ -218,16 +218,16 @@ namespace Xnoise.Pl {
 			return false;
 		}
 
-		public Pl.Item.Field[] get_contained_fields_for_idx(int idx) {
+		public Playlist.Item.Field[] get_contained_fields_for_idx(int idx) {
 			return _items[idx].get_contained_fields();
 		}
 		
-		public Pl.Item.Field[] get_contained_fields_for_uri(ref string uri) {
+		public Playlist.Item.Field[] get_contained_fields_for_uri(ref string uri) {
 			for(int index = 0; index < _size; index++) {
 				if(_items[index].get_uri() == uri)
 					return _items[index].get_contained_fields();
 			}
-			return new Pl.Item.Field[0];
+			return new Playlist.Item.Field[0];
 		}
 		
 		public Iterator iterator() {

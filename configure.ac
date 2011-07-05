@@ -6,12 +6,6 @@ m4_define(xnoise_minor_version, 1)
 m4_define(xnoise_micro_version, 25)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
-#libxnoiseutils version
-m4_define(libxnoiseutils_major_version, 0)
-m4_define(libxnoiseutils_minor_version, 0)
-m4_define(libxnoiseutils_micro_version, 2)
-m4_define(libxnoiseutils_version, libxnoiseutils_major_version.libxnoiseutils_minor_version.libxnoiseutils_micro_version)
-
 AC_INIT([xnoise],[xnoise_version],[shuerhaakenATgo oglemail.com],[xnoise])
 
 # require automake-1.11 for vala support
@@ -64,6 +58,7 @@ AC_PATH_PROG([VALAC], [valac], [])
           AC_MSG_WARN([Vala $VALA_REQUIRED not found. Your vala version is too old! Build uses C files only. You will not be able to compile changed .vala source files.])
           VALAC=""])])])
 AM_CONDITIONAL(USE_VALA, [test -n "$VALAC"])
+AC_SUBST(USE_VALA)
 dnl =========================================
 
 LT_INIT
@@ -83,12 +78,6 @@ PKG_CHECK_MODULES(XNOISE, \
     sqlite3 >= $SQLITE_REQUIRED \
     taglib_c >= $TAGLIB_C_REQUIRED \
     unique-1.0 cairo)
-
-PKG_CHECK_MODULES(LIBXNOISEUTILS, \
-    glib-2.0 >= $GLIB_REQUIRED \
-    gobject-2.0 >= $GLIB_REQUIRED \
-    libxml-2.0 >= $LIBXML_REQUIRED \
-    gio-2.0 >= $GIO_REQUIRED)
 
 
 dnl ================================================================
@@ -461,19 +450,10 @@ XNOISE_PACKAGES="\
 	--target-glib=`pkg-config --modversion glib-2.0` \
 "
 
-LIBXNOISEUTILS_PACKAGES="\
-    --pkg config \
-	--target-glib=`pkg-config --modversion glib-2.0` \
-"
-
 
 AC_SUBST(XNOISE_CFLAGS)
 AC_SUBST(XNOISE_LIBS)
 AC_SUBST(XNOISE_PACKAGES)
-
-AC_SUBST(LIBXNOISEUTILS_CFLAGS)
-AC_SUBST(LIBXNOISEUTILS_LIBS)
-AC_SUBST(LIBXNOISEUTILS_PACKAGES)
 
 
 dnl       VAPIDIR is used to place the xnoise vapi file
@@ -500,14 +480,12 @@ AC_CONFIG_FILES([
     data/misc/xnoise.desktop.in
     data/misc/Makefile
     data/misc/xnoise-1.0.pc
-    data/misc/libxnoiseutils-1.0.pc
     data/ui/Makefile
     data/icons/Makefile
     data/icons/32x32/Makefile
     data/icons/48x48/Makefile
     data/icons/256x256/Makefile
     data/icons/scalable/Makefile
-    libxnoise-utils/Makefile
     src/Makefile
     plugins/Makefile
     plugins/testplugin/Makefile
@@ -532,7 +510,7 @@ AC_OUTPUT
 
 echo "
   ${PACKAGE} ${VERSION}
-  ~~~~~~~~~~~~
+  ~~~~~~~~~~~~~
   
   Configuration Info:
     gettext_package:               ${GETTEXT_PACKAGE}

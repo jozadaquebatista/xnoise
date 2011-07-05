@@ -21,7 +21,7 @@
  */
 
 
-namespace Xnoise.Pl {
+namespace Xnoise.Playlist {
 
 	public errordomain ReaderError {
 		UNKNOWN_TYPE,

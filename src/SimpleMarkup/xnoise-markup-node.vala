@@ -21,7 +21,7 @@
  */
 
 
-namespace Xnoise.SimpleXml {
+namespace Xnoise.SimpleMarkup {
 
 	public class Node {
 		// Represents a xml node. Can contain more nodes, text and attributes

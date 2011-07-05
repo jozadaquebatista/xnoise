@@ -94,6 +94,184 @@ namespace Xnoise {
 			FAILED,
 		}
 	}
+	[CCode (cprefix = "XnoisePlaylist", lower_case_cprefix = "xnoise_playlist_")]
+	namespace Playlist {
+		[CCode (cprefix = "XnoisePlaylistAsx", lower_case_cprefix = "xnoise_playlist_asx_")]
+		namespace Asx {
+		}
+		[CCode (cprefix = "XnoisePlaylistM3u", lower_case_cprefix = "xnoise_playlist_m3u_")]
+		namespace M3u {
+		}
+		[CCode (cprefix = "XnoisePlaylistPls", lower_case_cprefix = "xnoise_playlist_pls_")]
+		namespace Pls {
+		}
+		[CCode (cprefix = "XnoisePlaylistWpl", lower_case_cprefix = "xnoise_playlist_wpl_")]
+		namespace Wpl {
+		}
+		[CCode (cprefix = "XnoisePlaylistXspf", lower_case_cprefix = "xnoise_playlist_xspf_")]
+		namespace Xspf {
+		}
+		[CCode (ref_function = "xnoise_playlist_item_ref", unref_function = "xnoise_playlist_item_unref", cheader_filename = "xnoise.h")]
+		public class Item {
+			[CCode (cprefix = "XNOISE_PLAYLIST_ITEM_FIELD_", cheader_filename = "xnoise.h")]
+			public enum Field {
+				URI,
+				TITLE,
+				AUTHOR,
+				GENRE,
+				ALBUM,
+				COPYRIGHT,
+				DURATION,
+				PARAM_NAME,
+				PARAM_VALUE,
+				IS_REMOTE,
+				IS_PLAYLIST
+			}
+			public Item ();
+			public void add_field (Xnoise.Playlist.Item.Field field, string val);
+			public string? get_abs_path ();
+			public string? get_album ();
+			public string? get_author ();
+			public Xnoise.Playlist.Item.Field[] get_contained_fields ();
+			public string? get_copyright ();
+			public long get_duration ();
+			public string? get_duration_string ();
+			public string get_field (Xnoise.Playlist.Item.Field field);
+			public string? get_genre ();
+			public string? get_param_name ();
+			public string? get_param_value ();
+			public string? get_rel_path ();
+			public string? get_title ();
+			public string? get_uri ();
+			public bool is_playlist ();
+			public bool is_remote ();
+			public string? base_path { get; set; }
+			public Xnoise.Playlist.TargetType target_type { get; set; }
+		}
+		[CCode (ref_function = "xnoise_playlist_item_collection_ref", unref_function = "xnoise_playlist_item_collection_unref", cheader_filename = "xnoise.h")]
+		public class ItemCollection {
+			[CCode (ref_function = "xnoise_playlist_item_collection_iterator_ref", unref_function = "xnoise_playlist_item_collection_iterator_unref", cheader_filename = "xnoise.h")]
+			public class Iterator {
+				public Iterator (Xnoise.Playlist.ItemCollection dc);
+				public void append (Xnoise.Playlist.Item item);
+				public bool first ();
+				public Xnoise.Playlist.Item @get ();
+				public bool has_previous ();
+				public int index ();
+				public void insert (Xnoise.Playlist.Item item);
+				public bool next ();
+				public bool previous ();
+				public void remove ();
+				public void @set (Xnoise.Playlist.Item item);
+			}
+			public ItemCollection ();
+			public void add_general_info (string key, string val);
+			public bool append (Xnoise.Playlist.Item item);
+			public void clear ();
+			public bool contains (Xnoise.Playlist.Item d);
+			public bool contains_field (Xnoise.Playlist.Item.Field field, string value);
+			public bool data_available ();
+			public Xnoise.Playlist.Item @get (int index);
+			public string? get_album_for_uri (ref string uri_needle);
+			public string? get_author_for_uri (ref string uri_needle);
+			public Xnoise.Playlist.Item.Field[] get_contained_fields_for_idx (int idx);
+			public Xnoise.Playlist.Item.Field[] get_contained_fields_for_uri (ref string uri);
+			public string? get_copyright_for_uri (ref string uri_needle);
+			public long get_duration_for_uri (ref string uri_needle);
+			public string? get_duration_string_for_uri (ref string uri_needle);
+			public string[] get_found_uris ();
+			public string get_general_info (string key);
+			public string[] get_general_info_keys ();
+			public string? get_genre_for_uri (ref string uri_needle);
+			public bool get_is_playlist_for_uri (ref string uri_needle);
+			public bool get_is_remote_for_uri (ref string uri_needle);
+			public int get_number_of_entries ();
+			public string? get_param_name_for_uri (ref string uri_needle);
+			public string? get_param_value_for_uri (ref string uri_needle);
+			public int get_size ();
+			public string? get_title_for_uri (ref string uri_needle);
+			public int index_of (Xnoise.Playlist.Item d);
+			public void insert (int index, Xnoise.Playlist.Item item);
+			public Xnoise.Playlist.ItemCollection.Iterator iterator ();
+			public void merge (Xnoise.Playlist.ItemCollection data_collection);
+			public bool remove (Xnoise.Playlist.Item item);
+			public Xnoise.Playlist.Item remove_at (int index);
+			public void @set (int index, Xnoise.Playlist.Item item);
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class Reader : GLib.Object {
+			public Reader ();
+			public bool data_available ();
+			public string? get_album_for_uri (ref string uri_needle);
+			public string? get_author_for_uri (ref string uri_needle);
+			public string? get_copyright_for_uri (ref string uri_needle);
+			public long get_duration_for_uri (ref string uri_needle);
+			public string? get_duration_string_for_uri (ref string uri_needle);
+			public string[] get_found_uris ();
+			public string? get_genre_for_uri (ref string uri_needle);
+			public bool get_is_playlist_for_uri (ref string uri_needle);
+			public bool get_is_remote_for_uri (ref string uri_needle);
+			public int get_number_of_entries ();
+			public string? get_title_for_uri (ref string uri_needle);
+			public Xnoise.Playlist.Result read (string list_uri, GLib.Cancellable? cancellable = null) throws Xnoise.Playlist.ReaderError;
+			public async Xnoise.Playlist.Result read_asyn (string list_uri, GLib.Cancellable? cancellable = null) throws Xnoise.Playlist.ReaderError;
+			public Xnoise.Playlist.ItemCollection data_collection { get; }
+			public string playlist_uri { get; }
+			public Xnoise.Playlist.ListType ptype { get; }
+			public signal void finished (string playlist_uri);
+			public signal void started (string playlist_uri);
+		}
+		[CCode (cprefix = "XNOISE_PLAYLIST_LIST_TYPE_", cheader_filename = "xnoise.h")]
+		public enum ListType {
+			UNKNOWN,
+			IGNORED,
+			M3U,
+			PLS,
+			ASX,
+			XSPF,
+			WPL
+		}
+		[CCode (cprefix = "XNOISE_PLAYLIST_RESULT_", cheader_filename = "xnoise.h")]
+		public enum Result {
+			UNHANDLED,
+			ERROR,
+			IGNORED,
+			SUCCESS,
+			EMPTY,
+			DOUBLE_WRITE
+		}
+		[CCode (cprefix = "XNOISE_PLAYLIST_TARGET_TYPE_", cheader_filename = "xnoise.h")]
+		public enum TargetType {
+			URI,
+			REL_PATH,
+			ABS_PATH
+		}
+		[CCode (cprefix = "XNOISE_PLAYLIST_READER_ERROR_", cheader_filename = "xnoise.h")]
+		public errordomain ReaderError {
+			UNKNOWN_TYPE,
+			SOMETHING_ELSE,
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public static bool debug;
+		[CCode (cheader_filename = "xnoise.h")]
+		public const string[] known_playlist_extensions;
+		[CCode (cheader_filename = "xnoise.h")]
+		public const string[] remote_schemes;
+		[CCode (cheader_filename = "xnoise.h")]
+		public static long get_duration_from_string (ref string? duration_string);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static string? get_extension (GLib.File? f);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static GLib.File get_file_for_location (string adr, ref string base_path, out Xnoise.Playlist.TargetType tt);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static Xnoise.Playlist.ListType get_playlist_type_for_uri (ref string uri_);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static Xnoise.Playlist.ListType get_type_by_data (ref string uri_);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static Xnoise.Playlist.ListType get_type_by_extension (ref string uri_);
+		[CCode (cheader_filename = "xnoise.h")]
+		public static bool is_known_playlist_extension (ref string ext);
+	}
 	[CCode (cprefix = "XnoisePluginModule", lower_case_cprefix = "xnoise_plugin_module_")]
 	namespace PluginModule {
 		[CCode (cheader_filename = "xnoise.h")]
@@ -176,6 +354,93 @@ namespace Xnoise {
 		public static string settings_folder ();
 		[CCode (cheader_filename = "xnoise.h")]
 		public static bool verify_xnoise_directories ();
+	}
+	[CCode (cprefix = "XnoiseSimpleMarkup", lower_case_cprefix = "xnoise_simple_markup_")]
+	namespace SimpleMarkup {
+		[CCode (ref_function = "xnoise_simple_markup_node_ref", unref_function = "xnoise_simple_markup_node_unref", cheader_filename = "xnoise.h")]
+		public class Node {
+			[CCode (ref_function = "xnoise_simple_markup_node_attributes_ref", unref_function = "xnoise_simple_markup_node_attributes_unref", cheader_filename = "xnoise.h")]
+			public class Attributes {
+				[CCode (ref_function = "xnoise_simple_markup_node_attributes_keys_ref", unref_function = "xnoise_simple_markup_node_attributes_keys_unref", cheader_filename = "xnoise.h")]
+				public class Keys {
+					[CCode (ref_function = "xnoise_simple_markup_node_attributes_keys_iterator_ref", unref_function = "xnoise_simple_markup_node_attributes_keys_iterator_unref", cheader_filename = "xnoise.h")]
+					public class Iterator {
+						public Iterator (Xnoise.SimpleMarkup.Node.Attributes _iter_attib);
+						public string? @get ();
+						public bool next ();
+					}
+					public Keys (Xnoise.SimpleMarkup.Node.Attributes _attrib);
+					public bool contains (string needle_key);
+					public Xnoise.SimpleMarkup.Node.Attributes.Keys.Iterator iterator ();
+				}
+				public Xnoise.SimpleMarkup.Node.Attributes.Keys keys;
+				public Attributes ();
+				public void add (string key, string val);
+				public void clear ();
+				public string? @get (string key);
+				public void remove (string key);
+				public void replace (string key, string val);
+				public void @set (string key, string? val);
+				public int item_count { get; }
+				public GLib.List<weak string> key_list { owned get; }
+				public GLib.List<weak string> value_list { owned get; }
+			}
+			[CCode (ref_function = "xnoise_simple_markup_node_iterator_ref", unref_function = "xnoise_simple_markup_node_iterator_unref", cheader_filename = "xnoise.h")]
+			public class Iterator {
+				public Iterator (Xnoise.SimpleMarkup.Node parent_node);
+				public unowned Xnoise.SimpleMarkup.Node @get ();
+				public bool next ();
+				public void @set (Xnoise.SimpleMarkup.Node node);
+			}
+			public Xnoise.SimpleMarkup.Node.Attributes attributes;
+			public Node (string? name);
+			public void append_child (Xnoise.SimpleMarkup.Node node);
+			public void clear ();
+			public unowned Xnoise.SimpleMarkup.Node? @get (int idx);
+			public unowned Xnoise.SimpleMarkup.Node? get_child_by_name (string childname);
+			public Xnoise.SimpleMarkup.Node[] get_children_by_name (string childname);
+			public int get_idx_of_child (Xnoise.SimpleMarkup.Node node);
+			public bool has_attributes ();
+			public bool has_children ();
+			public bool has_text ();
+			public void insert_child (int pos, Xnoise.SimpleMarkup.Node node);
+			public Xnoise.SimpleMarkup.Node.Iterator iterator ();
+			public void prepend_child (Xnoise.SimpleMarkup.Node node);
+			public bool remove_child (Xnoise.SimpleMarkup.Node node);
+			public bool remove_child_at_idx (int idx);
+			public void @set (int idx, Xnoise.SimpleMarkup.Node node);
+			public int children_count { get; }
+			public string? name { get; }
+			public Xnoise.SimpleMarkup.Node? next { get; }
+			public Xnoise.SimpleMarkup.Node? parent { get; }
+			public Xnoise.SimpleMarkup.Node? previous { get; }
+			public string? text { get; set; }
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class Reader : GLib.Object {
+			public Xnoise.SimpleMarkup.Node root;
+			public Reader (GLib.File file);
+			public Reader.from_string (string? xml_string);
+			public void read (bool case_sensitive = true, GLib.Cancellable? cancellable = null);
+			public async void read_asyn (bool case_sensitive = true, GLib.Cancellable? cancellable = null);
+			public signal void finished ();
+			public signal void started ();
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public class Writer : GLib.Object {
+			public Writer (Xnoise.SimpleMarkup.Node root, string header_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+			public void write (string filename);
+		}
+		[CCode (cheader_filename = "xnoise.h")]
+		public const string AMPERSAND_ESCAPED;
+		[CCode (cheader_filename = "xnoise.h")]
+		public const string APOSTROPH_ESCAPED;
+		[CCode (cheader_filename = "xnoise.h")]
+		public const string GREATER_THAN_ESCAPED;
+		[CCode (cheader_filename = "xnoise.h")]
+		public const string LOWER_THAN_ESCAPED;
+		[CCode (cheader_filename = "xnoise.h")]
+		public const string QUOTE_ESCAPED;
 	}
 	[CCode (cprefix = "XnoiseTagAccess", lower_case_cprefix = "xnoise_tag_access_")]
 	namespace TagAccess {

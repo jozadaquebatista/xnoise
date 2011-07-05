@@ -21,7 +21,7 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-namespace Xnoise.Pl {
+namespace Xnoise.Playlist {
 	// base class for all playlist filereader implementations
 	private class Pls.FileReader : AbstractFileReader {
 		private unowned File file;

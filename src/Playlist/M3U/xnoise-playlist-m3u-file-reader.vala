@@ -21,7 +21,7 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-namespace Xnoise.Pl {
+namespace Xnoise.Playlist {
 	private class M3u.FileReader : AbstractFileReader {
 		private unowned File file;
 		private string[] lines_buf;

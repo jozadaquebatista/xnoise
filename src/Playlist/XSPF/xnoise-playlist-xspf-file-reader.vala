@@ -21,28 +21,28 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-using Xnoise.SimpleXml;
+using Xnoise.SimpleMarkup;
 
-namespace Xnoise.Pl {
+namespace Xnoise.Playlist {
 	private class Xspf.FileReader : AbstractFileReader {
 		private unowned File file;
 
 		private ItemCollection parse(ItemCollection item_collection,
 			                         ref string data) throws GLib.Error {
-			Pl.Item d = null;
-			SimpleXml.Reader reader = new SimpleXml.Reader.from_string(data);
+			Playlist.Item d = null;
+			SimpleMarkup.Reader reader = new SimpleMarkup.Reader.from_string(data);
 			reader.read();
 			var root = reader.root;
 			if(root != null && root.has_children()) {
 				var playlist = root[0];
 				if(playlist != null && playlist.name.down() == "playlist" && playlist.has_children()) {
-					SimpleXml.Node trackList = playlist[0];
+					SimpleMarkup.Node trackList = playlist[0];
 					if(trackList != null && trackList.name.down() == "tracklist" && trackList.has_children()) {
-						SimpleXml.Node[] tracks = trackList.get_children_by_name("track");
+						SimpleMarkup.Node[] tracks = trackList.get_children_by_name("track");
 						if(tracks != null && tracks.length > 0) {
-							foreach(SimpleXml.Node track in tracks) {
+							foreach(SimpleMarkup.Node track in tracks) {
 								if(track.has_children()) {
-									d = new Pl.Item();
+									d = new Playlist.Item();
 									var title = track.get_child_by_name("title");
 									if(title != null) {
 										d.add_field(Item.Field.TITLE, title.text);
@@ -100,19 +100,19 @@ namespace Xnoise.Pl {
 			var item_collection = new ItemCollection();
 			this.file = _file;
 			set_base_path();
-			var mr = new SimpleXml.Reader(file);
+			var mr = new SimpleMarkup.Reader(file);
 			yield mr.read_asyn(false); //read not case sensitive (lowercase)
 			if(mr.root == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error with async xspf reading\n");
 			}
 			
 			//get xspf root node
-			unowned SimpleXml.Node? playlist = mr.root.get_child_by_name("playlist");
+			unowned SimpleMarkup.Node? playlist = mr.root.get_child_by_name("playlist");
 			if(playlist == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error with async xspf reading\n");
 			}
 			
-			unowned SimpleXml.Node? xspf_tmp = null;
+			unowned SimpleMarkup.Node? xspf_tmp = null;
 			
 			// playlist title
 			xspf_tmp = playlist.get_child_by_name("title");
@@ -150,15 +150,15 @@ namespace Xnoise.Pl {
 			}
 			
 			//get all entry nodes
-			SimpleXml.Node[] entries = xspf_tmp.get_children_by_name("track");
+			SimpleMarkup.Node[] entries = xspf_tmp.get_children_by_name("track");
 			if(entries == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error 3 with async xspf reading. No entries\n");
 			}
 
-			foreach(unowned SimpleXml.Node nd in entries) {
+			foreach(unowned SimpleMarkup.Node nd in entries) {
 				Item d = new Item();
 
-				unowned SimpleXml.Node tmp = nd.get_child_by_name("location");
+				unowned SimpleMarkup.Node tmp = nd.get_child_by_name("location");
 				if(tmp == null)
 					continue; //error?
 

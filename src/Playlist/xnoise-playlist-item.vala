@@ -21,7 +21,7 @@
  */
 
 // an instance of this Item object represents one entry in the list. An entry contains one or more data fields, at least the uri to the target
-namespace Xnoise.Pl {
+namespace Xnoise.Playlist {
 	public class Item {
 		private HashTable<Field, string> htable = null;
 		
