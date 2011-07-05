@@ -89,6 +89,7 @@ xnoise_SOURCES = \
     Widgets/xnoise-text-column.vala \
     Widgets/xnoise-trackinfo-bar.vala \
     Widgets/xnoise-tracklist.vala \
+    Widgets/xnoise-tracklist-column.vala \
     Widgets/xnoise-track-progressbar.vala \
     Widgets/xnoise-videoscreen.vala \
     Widgets/xnoise-volume-slider-button.vala \

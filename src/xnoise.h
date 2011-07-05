@@ -633,6 +633,17 @@ typedef struct _XnoiseSettingsDialog XnoiseSettingsDialog;
 typedef struct _XnoiseSettingsDialogClass XnoiseSettingsDialogClass;
 typedef struct _XnoiseSettingsDialogPrivate XnoiseSettingsDialogPrivate;
 
+#define XNOISE_TYPE_TRACK_LIST_COLUMN (xnoise_track_list_column_get_type ())
+#define XNOISE_TRACK_LIST_COLUMN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_LIST_COLUMN, XnoiseTrackListColumn))
+#define XNOISE_TRACK_LIST_COLUMN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_LIST_COLUMN, XnoiseTrackListColumnClass))
+#define XNOISE_IS_TRACK_LIST_COLUMN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_LIST_COLUMN))
+#define XNOISE_IS_TRACK_LIST_COLUMN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_LIST_COLUMN))
+#define XNOISE_TRACK_LIST_COLUMN_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_LIST_COLUMN, XnoiseTrackListColumnClass))
+
+typedef struct _XnoiseTrackListColumn XnoiseTrackListColumn;
+typedef struct _XnoiseTrackListColumnClass XnoiseTrackListColumnClass;
+typedef struct _XnoiseTrackListColumnPrivate XnoiseTrackListColumnPrivate;
+
 #define XNOISE_TYPE_TEXT_COLUMN (xnoise_text_column_get_type ())
 #define XNOISE_TEXT_COLUMN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TEXT_COLUMN, XnoiseTextColumn))
 #define XNOISE_TEXT_COLUMN_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TEXT_COLUMN, XnoiseTextColumnClass))
@@ -1386,13 +1397,23 @@ struct _XnoiseSettingsDialogClass {
 	GtkBuilderClass parent_class;
 };
 
-struct _XnoiseTextColumn {
+struct _XnoiseTrackListColumn {
 	GtkTreeViewColumn parent_instance;
+	XnoiseTrackListColumnPrivate * priv;
+	gchar* tracklist_col_name;
+};
+
+struct _XnoiseTrackListColumnClass {
+	GtkTreeViewColumnClass parent_class;
+};
+
+struct _XnoiseTextColumn {
+	XnoiseTrackListColumn parent_instance;
 	XnoiseTextColumnPrivate * priv;
 };
 
 struct _XnoiseTextColumnClass {
-	GtkTreeViewColumnClass parent_class;
+	XnoiseTrackListColumnClass parent_class;
 };
 
 struct _XnoiseTrackInfobar {
@@ -2024,6 +2045,7 @@ GQuark xnoise_settings_dialog_error_quark (void);
 GType xnoise_settings_dialog_get_type (void) G_GNUC_CONST;
 XnoiseSettingsDialog* xnoise_settings_dialog_new (void);
 XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type);
+GType xnoise_track_list_column_get_type (void) G_GNUC_CONST;
 GType xnoise_text_column_get_type (void) G_GNUC_CONST;
 XnoiseTextColumn* xnoise_text_column_new (const gchar* title, GtkCellRendererText* renderer, XnoiseTrackListModelColumn col_id);
 XnoiseTextColumn* xnoise_text_column_construct (GType object_type, const gchar* title, GtkCellRendererText* renderer, XnoiseTrackListModelColumn col_id);
@@ -2052,6 +2074,8 @@ gboolean xnoise_track_list_get_column_genre_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_genre_visible (XnoiseTrackList* self, gboolean value);
 gboolean xnoise_track_list_get_column_year_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_year_visible (XnoiseTrackList* self, gboolean value);
+XnoiseTrackListColumn* xnoise_track_list_column_new (const gchar* _tracklist_col_name);
+XnoiseTrackListColumn* xnoise_track_list_column_construct (GType object_type, const gchar* _tracklist_col_name);
 GType xnoise_track_progress_bar_get_type (void) G_GNUC_CONST;
 XnoiseTrackProgressBar* xnoise_track_progress_bar_new (XnoiseGstPlayer* _player);
 XnoiseTrackProgressBar* xnoise_track_progress_bar_construct (GType object_type, XnoiseGstPlayer* _player);

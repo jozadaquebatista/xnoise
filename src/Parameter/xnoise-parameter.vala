@@ -37,16 +37,20 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	private static const string settings_int    = "settings_int";
 	private static const string settings_double = "settings_double";
 	private static const string settings_string = "settings_string";
-	private static HashTable<string,int>     ht_int;//     = new GLib.HashTable<string,int>(str_hash, str_equal);
-	private static HashTable<string,double?> ht_double;//  = new GLib.HashTable<string,double?>(str_hash, str_equal);
-	private static HashTable<string,string>  ht_string;//  = new GLib.HashTable<string,string>(str_hash, str_equal);
+	private static HashTable<string,int>     ht_int;
+	private static HashTable<string,double?> ht_double;
+	private static HashTable<string,string>  ht_string;
+	private static bool inited = false;
 	
 	public static void init() {
+		if(inited == true)
+			return;
 		IParams_implementers = new GLib.List<IParams>();
 		ht_int    = new GLib.HashTable<string,int>(str_hash, str_equal);
 		ht_double = new GLib.HashTable<string,double?>(str_hash, str_equal);
 		ht_string = new GLib.HashTable<string,string>(str_hash, str_equal);
 		read_all_parameters_from_file(); //Fill hash tables on construction time
+		inited = true;
 	}
 
 	public static void iparams_register(IParams iparam) {
@@ -241,37 +245,40 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 private static const string default_content = 
 """[settings_int]
 not_show_art_on_hover_image=0
-position_Album_column=4
+position_title_column=2
 hp_position=241
-position_Länge_column=6
-mediabrowser_linebreaks=1
 usestop=1
 use_tracknumber_column=0
-repeatstate=2
-width=1124
+mediabrowser_linebreaks=1
+position_artist_column=5
+position_album_column=4
+use_artist_column=1
 posY=0
 posX=0
 compact_layout=1
-position_#_column=2
-position_Genre_column=8
-position__column=1
+height=579
+repeatstate=2
+width=1124
 use_treelines=0
 use_album_column=1
-position_Künstler_column=5
+position_genre_column=7
 use_linebreaks=1
+use_year_column=0
 fontsizeMB=9
+position_tracknumber_column=3
 use_length_column=1
-position_Titel_column=3
-position_Jahr_column=7
-height=579
+position_status-icon_column=1
+position_length_column=8
+position_year_column=6
+use_genre_column=0
 
 [settings_double]
-relative_size_Album_column=0
-relative_size_Künstler_column=0
-volume=0.080511778431618983
-relative_size_Genre_column=0
-relative_size_Jahr_column=0
-relative_size_Titel_column=0
+relative_size_genre_column=0.092059838895281937
+volume=0.060511778431618979
+relative_size_year_column=0.092059838895281937
+relative_size_title_column=0.29113924050632911
+relative_size_album_column=0.32336018411967782
+relative_size_artist_column=0.26927502876869963
 
 [settings_string]
 activated_plugins=soundmenu2;DatabaseLyrics;mpris;notifications;Lyricwiki;chartlyrics;CyclicSaveState;mediakeys;LastfmCovers

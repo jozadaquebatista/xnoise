@@ -580,7 +580,7 @@ namespace Xnoise {
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise.h")]
-	public class TextColumn : Gtk.TreeViewColumn {
+	public class TextColumn : Xnoise.TrackListColumn {
 		public TextColumn (string title, Gtk.CellRendererText renderer, Xnoise.TrackListModel.Column col_id);
 		public void adjust_width (int width);
 		public Xnoise.TrackListModel.Column id { get; }
@@ -622,6 +622,11 @@ namespace Xnoise {
 		public bool column_length_visible { get; set; }
 		public bool column_tracknumber_visible { get; set; }
 		public bool column_year_visible { get; set; }
+	}
+	[CCode (cheader_filename = "xnoise.h")]
+	public class TrackListColumn : Gtk.TreeViewColumn {
+		public string tracklist_col_name;
+		public TrackListColumn (string _tracklist_col_name = "");
 	}
 	[CCode (cheader_filename = "xnoise.h")]
 	public class TrackListModel : Gtk.ListStore, Gtk.TreeModel {

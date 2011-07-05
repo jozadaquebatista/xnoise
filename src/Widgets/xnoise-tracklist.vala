@@ -922,7 +922,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 	// from the config file before actually inserting it
 	private new void insert_column(Gtk.TreeViewColumn column, int position) {
 		if(position < 0) {
-			position = Params.get_int_value("position_" + column.title + "_column");
+			string xnoise_name;
+			xnoise_name = ((TrackListColumn)column).tracklist_col_name;
+			position = Params.get_int_value("position_" + xnoise_name + "_column");
 		}
 
 		// in the config file we count from 1 onwards, because 0 means "not set"
@@ -937,17 +939,18 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private void setup_view() {
 		CellRendererText renderer;
 		
-		
 		relative_column_sizes = new HashTable<string,double?>(str_hash, str_equal);
 		this.columns_changed.connect(() => {
 			bool new_column = false;
 			var columns = this.get_columns();
 			foreach(TreeViewColumn c in columns) {
 				if(c == null) continue;
-				if(relative_column_sizes.lookup(c.title) == null && c.title != "") {
+				string xnoise_name;
+				xnoise_name = ((TrackListColumn)c).tracklist_col_name;
+				if(relative_column_sizes.lookup(xnoise_name) == null && xnoise_name != "") {
 					if(c.resizable) {
-						double rel_size = Params.get_double_value("relative_size_" + c.title + "_column");
-						relative_column_sizes.insert(c.title, rel_size);
+						double rel_size = Params.get_double_value("relative_size_" + xnoise_name + "_column");
+						relative_column_sizes.insert(xnoise_name, rel_size);
 						((TextColumn)c).resized.connect(on_column_resized);
 					}
 					new_column = true;
@@ -969,7 +972,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 			foreach(TreeViewColumn c in columns) {
 				if(c == null) continue;
 				if(!c.resizable) continue;
-				double? rel_size = relative_column_sizes.lookup(c.title);
+				string xnoise_name;
+				xnoise_name = ((TrackListColumn)c).tracklist_col_name;
+				double? rel_size = relative_column_sizes.lookup(xnoise_name);
 				if(rel_size == null) continue;
 				((TextColumn)c).adjust_width((int)((double)rel_size * (double)available_width));
 			}
@@ -979,13 +984,14 @@ public class Xnoise.TrackList : TreeView, IParams {
 		
 		// STATUS ICON
 		var pixbufRenderer = new CellRendererPixbuf();
-		columnPixb         = new TreeViewColumn();
+		columnPixb         = new TrackListColumn();
 		pixbufRenderer.set_fixed_size(-1,22);
 		columnPixb.pack_start(pixbufRenderer, false);
 		columnPixb.add_attribute(pixbufRenderer, "pixbuf", TrackListModel.Column.ICON);
 		columnPixb.set_fixed_width(30);
 		columnPixb.min_width = 30;
 		columnPixb.reorderable = false;
+		((TrackListColumn)columnPixb).tracklist_col_name = "status-icon";
 		this.insert_column(columnPixb, -1);
 
 		// TRACKNUMBER
@@ -999,6 +1005,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnTracknumber.min_width = 32;
 		columnTracknumber.resizable = false;
 		columnTracknumber.reorderable = true;
+		columnTracknumber.tracklist_col_name = "tracknumber";
 		this.insert_column(columnTracknumber, -1);
 		if(Params.get_int_value(USE_TR_NO_COL) == 1) {
 			columnTracknumber.visible = true;
@@ -1020,6 +1027,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnTitle.min_width = 80;
 		columnTitle.resizable = true;
 		columnTitle.reorderable = true;
+		columnTitle.tracklist_col_name = "title";
 		this.insert_column(columnTitle, -1);
 		variable_col_count++;
 
@@ -1036,6 +1044,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnAlbum.min_width = 80;
 		columnAlbum.resizable = true;
 		columnAlbum.reorderable = true;
+		columnAlbum.tracklist_col_name = "album";
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
 		if(Params.get_int_value(USE_ALBUM_COL) == 1) {
@@ -1057,6 +1066,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnArtist.min_width = 80;
 		columnArtist.resizable = true; // This is the case for the current column order
 		columnArtist.reorderable = true;
+		columnArtist.tracklist_col_name = "artist";
 		this.insert_column(columnArtist, -1);
 		variable_col_count++;
 		if(Params.get_int_value(USE_ARTIST_COL) == 1) {
@@ -1078,6 +1088,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnLength.min_width = 75;
 		columnLength.resizable = false;
 		columnLength.reorderable = true;
+		columnLength.tracklist_col_name = "length";
 		this.insert_column(columnLength, -1);
 
 		if(Params.get_int_value(USE_LEN_COL) == 1) {
@@ -1099,6 +1110,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnYear.min_width = 80;
 		columnYear.resizable = true;
 		columnYear.reorderable = true;
+		columnYear.tracklist_col_name = "year";
 		this.insert_column(columnYear, -1);
 		variable_col_count++;
 		
@@ -1121,6 +1133,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnGenre.min_width = 80;
 		columnGenre.resizable = true;
 		columnGenre.reorderable = true;
+		columnGenre.tracklist_col_name = "genre";
 		this.insert_column(columnGenre, -1);
 		variable_col_count++;
 		
@@ -1138,7 +1151,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnArtist.sizing      = Gtk.TreeViewColumnSizing.FIXED;
 		columnLength.sizing      = Gtk.TreeViewColumnSizing.FIXED;
 		columnGenre.sizing       = Gtk.TreeViewColumnSizing.FIXED;
-		columnYear.sizing       = Gtk.TreeViewColumnSizing.FIXED;
+		columnYear.sizing        = Gtk.TreeViewColumnSizing.FIXED;
 		
 		this.set_enable_search(false);
 		this.rules_hint = true;
@@ -1286,10 +1299,14 @@ public class Xnoise.TrackList : TreeView, IParams {
 		int iter = 0;
 		int result = 0;
 		
+		string sender_xnoise_name;
+		sender_xnoise_name = sender.tracklist_col_name;
+			
 		//print("Column resize: %s\n", sender.title);
-		
 		foreach(TreeViewColumn c in columns) {
-			if(sender.title == c.title) {
+			string xnoise_name;
+			xnoise_name = ((TrackListColumn)c).tracklist_col_name;
+			if(sender_xnoise_name == xnoise_name) {
 				/* now we have the position number of the column that has been resized */
 				result = resize_column_range_relatively(iter+1);
 				if(result < 0) {
@@ -1300,7 +1317,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			}
 			if(c.resizable)
 				/* store the column's new relative size in a hash table */
-				relative_column_sizes.replace(c.title, (double)c.width / (double)available_width);
+				relative_column_sizes.replace(xnoise_name, (double)c.width / (double)available_width);
 			iter++;
 		}
 	}
@@ -1347,7 +1364,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 			
 			if(c.resizable) {
 				min_dynamic_width += c.min_width;
-				double? rel_size = relative_column_sizes.lookup(c.title);
+				string xnoise_name;
+				xnoise_name = ((TrackListColumn)c).tracklist_col_name;
+				double? rel_size = relative_column_sizes.lookup(xnoise_name);
 				if(rel_size == null) rel_size = 0.15;
 				rel_size_sum += (double)rel_size - (double)c.min_width / (double)available_width;
 				continue;
@@ -1372,13 +1391,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 		foreach(TreeViewColumn c in starting_column_node) {
 			if(c.resizable) {
 				//get the column's relative size
-				double? rel_size = relative_column_sizes.lookup(c.title);
+				string xnoise_name;
+				xnoise_name = ((TrackListColumn)c).tracklist_col_name;
+				double? rel_size = relative_column_sizes.lookup(xnoise_name);
 				if(rel_size == null) rel_size = 0.15;
 				rel_size = ((double)rel_size - (double)c.min_width / (double)available_width) / rel_size_sum;
 				
-				/* print("resizing %s to %d, rel_size %f\n", c.title, c.min_width + 
-					(int)(((double)distributable_width) * (double)rel_size), rel_size); */
-						
 				((TextColumn) c).adjust_width(c.min_width + 
 					(int)(((double)distributable_width) * (double)rel_size));
 			}
@@ -1396,13 +1414,15 @@ public class Xnoise.TrackList : TreeView, IParams {
 			
 			// write column position, counting from 1 onwards
 			counter++;
-			Params.set_int_value("position_" + c.title + "_column", counter);
+			string xnoise_name;
+			xnoise_name = ((TrackListColumn)c).tracklist_col_name;
+			Params.set_int_value("position_" + xnoise_name + "_column", counter);
 			
 			// write relative column sizes
 			if(!c.resizable) continue;
-			double? relative_size = relative_column_sizes.lookup(c.title);
+			double? relative_size = relative_column_sizes.lookup(xnoise_name);
 			if(relative_size == null) continue;
-			Params.set_double_value("relative_size_" + c.title + "_column", (double)relative_size);
+			Params.set_double_value("relative_size_" + xnoise_name + "_column", (double)relative_size);
 		} 
 	}
 	

@@ -30,7 +30,7 @@
 
 using Gtk;
 
-public class Xnoise.TextColumn : TreeViewColumn {
+public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 	private int last_size = 0;
 	private TrackListModel.Column _id;
 	private unowned Main xn;
