@@ -12,7 +12,7 @@ INCLUDES = \
     -DDATADIR='"$(datadir)"' \
     -DLOCALE_DIR=\"${datarootdir}/locale\" \
     -include $(CONFIG_HEADER) \
-    -I$(top_srcdir)/src \
+    -I$(top_srcdir)/libxnoise \
     $(LIBNOTIFY_CFLAGS) \
     -DGIO_DISABLE_DEPRECATED=1 \
     -DGDK_DISABLE_DEPRECATED=1 \
@@ -34,7 +34,7 @@ libnotifications_la_SOURCES = \
 libnotifications_la_VALAFLAGS = \
     --thread \
     --basedir $(top_srcdir)/plugins/notifications2 \
-    --vapidir $(top_srcdir)/src \
+    --vapidir $(top_srcdir)/libxnoise \
     --vapidir $(top_srcdir)/vapi \
     --pkg xnoise-1.0 \
     --pkg libnotify \

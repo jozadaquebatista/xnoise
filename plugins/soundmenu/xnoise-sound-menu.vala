@@ -38,7 +38,7 @@ using Xnoise.PluginModule;
 public class Xnoise.SoundMenu : GLib.Object, IPlugin {
 	private Indicate.Server server;
 	private PluginModule.Container p;
-	private unowned Xnoise.Plugin _owner;
+	private unowned Xnoise.PluginModule.Container _owner;
 	
 	public Main xn { get; set; }
 	

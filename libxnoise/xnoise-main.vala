@@ -28,6 +28,8 @@
  * 	Jörn Magens
  */
 
+
+
 public class Xnoise.Main : GLib.Object {
 	private static Main _instance = null;
 	

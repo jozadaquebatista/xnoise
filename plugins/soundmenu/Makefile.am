@@ -12,7 +12,7 @@ INCLUDES = \
     -DDATADIR='"$(datadir)"' \
     -DLOCALE_DIR=\"${datarootdir}/locale\" \
     -include $(CONFIG_HEADER) \
-    -I$(top_srcdir)/src \
+    -I$(top_srcdir)/libxnoise \
     $(LIBINDICATE_CFLAGS) \
     -DGIO_DISABLE_DEPRECATED=1 \
     -DGDK_DISABLE_DEPRECATED=1 \
@@ -35,7 +35,7 @@ libsoundmenu_la_VALAFLAGS = \
     --thread \
     --vapidir $(top_srcdir)/vapi \
     --basedir $(top_srcdir)/plugins/soundmenu \
-    --vapidir $(top_srcdir)/src \
+    --vapidir $(top_srcdir)/libxnoise \
     --pkg indicate \
     --pkg xnoise-1.0 \
     @XNOISE_PACKAGES@ \

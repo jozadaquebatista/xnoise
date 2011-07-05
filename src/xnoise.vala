@@ -27,8 +27,9 @@
  * Author:
  * 	Jörn Magens
  */
-
-namespace Xnoise {
+ 
+using Xnoise;
+//namespace Xnoise {
 	private static bool _plugininfo;
 	private static bool _noplugins;
 	private static bool _reset;
@@ -82,7 +83,7 @@ namespace Xnoise {
 		Gtk.init(ref args);
 		Gst.init(ref args);
 		Unique.App app;
-		var app_starter = new AppStarter();
+		var app_starter = new Xnoise.AppStarter();
 		app = new Unique.App.with_commands("org.gtk.xnoise", "xnoise", null);
 		string[] uris = {};
 		File f = null;
@@ -156,5 +157,5 @@ namespace Xnoise {
 		}
 		return 0;
 	}
-}
+//}
 

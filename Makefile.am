@@ -2,6 +2,7 @@ NULL =
 
 SUBDIRS = \
     data \
+    libxnoise \
     src \
     plugins \
     po \
@@ -10,17 +11,18 @@ SUBDIRS = \
 
 DIST_SUBDIRS = \
     data \
+    libxnoise \
     src \
     plugins \
     po \
     vapi \
+    tests
     $(NULL)
-#    tests
 
 
-#if USE_VALA
-#  SUBDIRS += tests
-#endif
+if USE_VALA
+  SUBDIRS += tests
+endif
 
 xnoiselicense_DATA =  \
     COPYING \

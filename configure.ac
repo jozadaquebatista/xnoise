@@ -3,7 +3,7 @@ AC_PREREQ([2.67])
 #xnoise version
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 1)
-m4_define(xnoise_micro_version, 25)
+m4_define(xnoise_micro_version, 26)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
 AC_INIT([xnoise],[xnoise_version],[shuerhaakenATgo oglemail.com],[xnoise])
@@ -486,6 +486,7 @@ AC_CONFIG_FILES([
     data/icons/48x48/Makefile
     data/icons/256x256/Makefile
     data/icons/scalable/Makefile
+    libxnoise/Makefile
     src/Makefile
     plugins/Makefile
     plugins/testplugin/Makefile

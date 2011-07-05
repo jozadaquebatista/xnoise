@@ -4,7 +4,7 @@ NULL =
 
 AM_CPPFLAGS = \
     -include $(CONFIG_HEADER) \
-	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/libxnoise \
     -DTESTDIR=\"$(top_srcdir)/tests/\" \
 	$(XNOISE_CFLAGS) \
 	$(NULL)
@@ -12,7 +12,7 @@ AM_CPPFLAGS = \
 noinst_PROGRAMS = $(TEST_PROGS)
 
 progs_ldadd = $(GLIB_LIBS) \
-              ../src/xnoise \
+              ../libxnoise/libxnoise.la \
               $(XNOISE_LIBS)
 
 BUILT_SOURCES = tests.vala.stamp
@@ -22,11 +22,11 @@ tests_VALASOURCES = \
        test.vala \
        $(NULL)
 
-tests_DEPENDENCIES = $(top_srcdir)/src/xnoise-1.0.vapi
+tests_DEPENDENCIES = $(top_srcdir)/libxnoise/xnoise-1.0.vapi
 
 tests_SOURCES = tests.vala.stamp $(tests_VALASOURCES:.vala=.c)
 tests.vala.stamp: $(tests_VALASOURCES)
-	$(VALAC) -C --basedir $(top_srcdir) --vapidir $(top_srcdir)/src --vapidir $(top_srcdir)/vapi --pkg xnoise-1.0 --pkg gio-2.0 --pkg posix --pkg config $^
+	$(VALAC) -C --basedir $(top_srcdir) --vapidir $(top_srcdir)/libxnoise --vapidir $(top_srcdir)/vapi --pkg xnoise-1.0 --pkg gio-2.0 --pkg posix --pkg config $^
 	touch $@
 tests_LDADD = $(progs_ldadd)
 

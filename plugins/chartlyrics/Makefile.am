@@ -19,7 +19,7 @@ INCLUDES = \
     -DG_DISABLE_DEPRECATED=1 \
     -DPANGO_DISABLE_DEPRECATED=1 \
     -DGSEAL_ENABLE=1 \
-    -I$(top_srcdir)/src \
+    -I$(top_srcdir)/libxnoise \
     $(NULL)
 
 libchartlyricsdir = $(libdir)/xnoise
@@ -35,7 +35,7 @@ libchartlyrics_la_VALAFLAGS = \
     --thread \
     --vapidir $(top_srcdir)/vapi \
     --basedir $(top_srcdir)/plugins/chartlyrics \
-    --vapidir $(top_srcdir)/src \
+    --vapidir $(top_srcdir)/libxnoise \
     --pkg libxml-2.0 \
     --pkg libsoup-2.4 \
     --pkg xnoise-1.0 \
