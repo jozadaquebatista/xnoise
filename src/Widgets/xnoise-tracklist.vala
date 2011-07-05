@@ -922,9 +922,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 	// from the config file before actually inserting it
 	private new void insert_column(Gtk.TreeViewColumn column, int position) {
 		if(position < 0) {
-			string xnoise_name;
-			xnoise_name = ((TrackListColumn)column).tracklist_col_name;
-			position = Params.get_int_value("position_" + xnoise_name + "_column");
+			string col_name;
+			col_name = ((TrackListColumn)column).tracklist_col_name;
+			position = Params.get_int_value("position_" + col_name + "_column");
 		}
 
 		// in the config file we count from 1 onwards, because 0 means "not set"
@@ -945,12 +945,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 			var columns = this.get_columns();
 			foreach(TreeViewColumn c in columns) {
 				if(c == null) continue;
-				string xnoise_name;
-				xnoise_name = ((TrackListColumn)c).tracklist_col_name;
-				if(relative_column_sizes.lookup(xnoise_name) == null && xnoise_name != "") {
+				string col_name;
+				col_name = ((TrackListColumn)c).tracklist_col_name;
+				if(relative_column_sizes.lookup(col_name) == null && col_name != "") {
 					if(c.resizable) {
-						double rel_size = Params.get_double_value("relative_size_" + xnoise_name + "_column");
-						relative_column_sizes.insert(xnoise_name, rel_size);
+						double rel_size = Params.get_double_value("relative_size_" + col_name + "_column");
+						relative_column_sizes.insert(col_name, rel_size);
 						((TextColumn)c).resized.connect(on_column_resized);
 					}
 					new_column = true;
@@ -972,9 +972,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 			foreach(TreeViewColumn c in columns) {
 				if(c == null) continue;
 				if(!c.resizable) continue;
-				string xnoise_name;
-				xnoise_name = ((TrackListColumn)c).tracklist_col_name;
-				double? rel_size = relative_column_sizes.lookup(xnoise_name);
+				string col_name;
+				col_name = ((TrackListColumn)c).tracklist_col_name;
+				double? rel_size = relative_column_sizes.lookup(col_name);
 				if(rel_size == null) continue;
 				((TextColumn)c).adjust_width((int)((double)rel_size * (double)available_width));
 			}
@@ -1299,14 +1299,14 @@ public class Xnoise.TrackList : TreeView, IParams {
 		int iter = 0;
 		int result = 0;
 		
-		string sender_xnoise_name;
-		sender_xnoise_name = sender.tracklist_col_name;
+		string sender_col_name;
+		sender_col_name = sender.tracklist_col_name;
 			
 		//print("Column resize: %s\n", sender.title);
 		foreach(TreeViewColumn c in columns) {
-			string xnoise_name;
-			xnoise_name = ((TrackListColumn)c).tracklist_col_name;
-			if(sender_xnoise_name == xnoise_name) {
+			string col_name;
+			col_name = ((TrackListColumn)c).tracklist_col_name;
+			if(sender_col_name == col_name) {
 				/* now we have the position number of the column that has been resized */
 				result = resize_column_range_relatively(iter+1);
 				if(result < 0) {
@@ -1317,7 +1317,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			}
 			if(c.resizable)
 				/* store the column's new relative size in a hash table */
-				relative_column_sizes.replace(xnoise_name, (double)c.width / (double)available_width);
+				relative_column_sizes.replace(col_name, (double)c.width / (double)available_width);
 			iter++;
 		}
 	}
@@ -1364,9 +1364,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 			
 			if(c.resizable) {
 				min_dynamic_width += c.min_width;
-				string xnoise_name;
-				xnoise_name = ((TrackListColumn)c).tracklist_col_name;
-				double? rel_size = relative_column_sizes.lookup(xnoise_name);
+				string col_name;
+				col_name = ((TrackListColumn)c).tracklist_col_name;
+				double? rel_size = relative_column_sizes.lookup(col_name);
 				if(rel_size == null) rel_size = 0.15;
 				rel_size_sum += (double)rel_size - (double)c.min_width / (double)available_width;
 				continue;
@@ -1391,9 +1391,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 		foreach(TreeViewColumn c in starting_column_node) {
 			if(c.resizable) {
 				//get the column's relative size
-				string xnoise_name;
-				xnoise_name = ((TrackListColumn)c).tracklist_col_name;
-				double? rel_size = relative_column_sizes.lookup(xnoise_name);
+				string col_name;
+				col_name = ((TrackListColumn)c).tracklist_col_name;
+				double? rel_size = relative_column_sizes.lookup(col_name);
 				if(rel_size == null) rel_size = 0.15;
 				rel_size = ((double)rel_size - (double)c.min_width / (double)available_width) / rel_size_sum;
 				
@@ -1414,15 +1414,15 @@ public class Xnoise.TrackList : TreeView, IParams {
 			
 			// write column position, counting from 1 onwards
 			counter++;
-			string xnoise_name;
-			xnoise_name = ((TrackListColumn)c).tracklist_col_name;
-			Params.set_int_value("position_" + xnoise_name + "_column", counter);
+			string col_name;
+			col_name = ((TrackListColumn)c).tracklist_col_name;
+			Params.set_int_value("position_" + col_name + "_column", counter);
 			
 			// write relative column sizes
 			if(!c.resizable) continue;
-			double? relative_size = relative_column_sizes.lookup(xnoise_name);
+			double? relative_size = relative_column_sizes.lookup(col_name);
 			if(relative_size == null) continue;
-			Params.set_double_value("relative_size_" + xnoise_name + "_column", (double)relative_size);
+			Params.set_double_value("relative_size_" + col_name + "_column", (double)relative_size);
 		} 
 	}
 	

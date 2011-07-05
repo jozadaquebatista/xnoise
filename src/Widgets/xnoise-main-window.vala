@@ -29,6 +29,8 @@
  */
 
 using Gtk;
+
+using Xnoise;
 using Xnoise.Services;
 
 [CCode (cname = "gdk_window_ensure_native")]
@@ -49,7 +51,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private uint search_idlesource = 0;
 	public Gtk.ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
-//	private Label song_title_label;
 	private VolumeSliderButton volumeSliderButton;
 	private int _posX_buffer;
 	private int _posY_buffer;
@@ -69,8 +70,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button repeatButton;
 	private int buffer_last_page;
 	private Image repeatimage; 
-//	private Label repeatLabel;
-//	public Label timelabel;
 	private VBox menuvbox;
 	private VBox mainvbox;
 	private VBox contentvbox;
@@ -112,12 +111,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	
 	private bool _not_show_art_on_hover_image;
 	public bool not_show_art_on_hover_image {
-		get {
-			return _not_show_art_on_hover_image;
-		}
-		set {
-			_not_show_art_on_hover_image = value;
-		}
+		get { return _not_show_art_on_hover_image;  }
+		set { _not_show_art_on_hover_image = value; }
 	}
 	
 	private bool _active_lyrics;
@@ -531,31 +526,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				//TODO: create some other images
 				repeatimage.set_from_icon_name("xn-no-repeat", IconSize.LARGE_TOOLBAR);
 				repeatButton.set_tooltip_text(_("no repeat"));
-				//repeatImage.stock = Gtk.Stock.EXECUTE;
 				break;
 			}
 			case PlayerRepeatMode.SINGLE : {
 				repeatimage.set_from_icon_name("xn-repeat-single", IconSize.LARGE_TOOLBAR);
 				repeatButton.has_tooltip = true;
 				repeatButton.set_tooltip_text(_("repeat single"));
-//				repeatLabel.label = _("repeat single");
-				//repeatImage.stock = Gtk.Stock.REDO;
 				break;
 			}
 			case PlayerRepeatMode.ALL : {
 				repeatimage.set_from_icon_name("xn-repeat-all", IconSize.LARGE_TOOLBAR);
 				repeatButton.has_tooltip = true;
 				repeatButton.set_tooltip_text(_("repeat all"));
-//				repeatLabel.label = _("repeat all");
-				//repeatImage.stock = Gtk.Stock.REFRESH;
 				break;
 			}
 			case PlayerRepeatMode.RANDOM : {
 				repeatimage.set_from_icon_name("xn-shuffle", IconSize.LARGE_TOOLBAR);
 				repeatButton.has_tooltip = true;
 				repeatButton.set_tooltip_text(_("random play"));
-//				repeatLabel.label = _("random play");
-				//repeatImage.stock = Gtk.Stock.JUMP_TO;
 				break;
 			}
 		}
@@ -1069,7 +1057,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if((newuri == "")|(newuri == null)) {
 			text = "<b>XNOISE</b> - ready to rock! ;-)";
 			songProgressBar.title_text = text; //song_title_label.set_text(text);
-//			song_title_label.use_markup = true;
 			return;
 		}
 		File file = File.new_for_uri(newuri);
@@ -1345,15 +1332,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			repeatButton.can_focus      = false;
 			repeatButton.clicked.connect(this.on_repeat_button_clicked);
 			repeatimage                 = gb.get_object("repeatimage") as Gtk.Image;
-//			repeatLabel                 = gb.get_object("repeatLabel") as Gtk.Label;
-			//repeatImage                 = gb.get_object("repeatImage01") as Gtk.Image;
-			
-			//give the button a slim appearance
-//			RcStyle repeat_button_style = new RcStyle();
-//			repeat_button_style.xthickness = 0;
-//			repeat_button_style.ythickness = 0;
-//			repeatButton.modify_style(repeat_button_style);
-			
 			//--------------------
 
 			//PLAYING TITLE IMAGE
@@ -1381,14 +1359,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				this.tracklistnotebook.set_current_page(buffer_last_page);
 				return false;
 			});
-
 			//--------------------
-
-			//PLAYING TITLE NAME
-//			this.song_title_label           = gb.get_object("song_title_label") as Gtk.Label;
-//			this.song_title_label.use_markup= true;
-			//--------------------
-
 			this.hpaned = gb.get_object("hpaned1") as Gtk.HPaned;
 			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
 			this.hpaned.button_press_event.connect(on_hpaned_button_event);
@@ -1418,12 +1389,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			nextButton.show();
 			
 			//PROGRESS BAR
-//			timelabel = gb.get_object("timelabel") as Gtk.Label;
 			var progbox = gb.get_object("vbox1") as Gtk.VBox;
-//			var songprogress_viewport = gb.get_object("songprogress_viewport") as Gtk.Viewport;
 			this.songProgressBar = new TrackInfobar(gst_player);
 			progbox.pack_start(songProgressBar, true, true, 0);
-//			songprogress_viewport.add(songProgressBar);
 			//---------------------
 
 			///BOX FOR MAIN MENU
@@ -1435,9 +1403,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			trackListScrollWin = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
 			trackListScrollWin.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
 			trackListScrollWin.add(this.trackList);
-			//trackListScrollWin.hadjustment.changed.connect(on_tracklistwin_resized);
-
-
+			
 			///MediaBrowser (left)
 			this.mediaBr = new MediaBrowser();
 			this.mediaBr.set_size_request(100,100);
@@ -1492,8 +1458,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			sexyentryBox.add(searchEntryMB);
 			
 			collapsebutton = gb.get_object("collapsebutton") as Gtk.Button;
-			//var labelcoll =  gb.get_object("labelcoll") as Gtk.Label;
-			//labelcoll.label = _("Collapse");
 			collapsebutton.clicked.connect( () => {
 				mediaBr.collapse_all();
 			});
@@ -1597,8 +1561,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return false;
 		aimage_timeout = Timeout.add(300, () => {
 			buffer_last_page = this.tracklistnotebook.get_current_page();
-			//print("ai_ebox_enter buffer_last_page: %d\n", buffer_last_page);
-			//if(global.image_path_large != null)
 			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			this.aimage_timeout = 0;
 			return false;
