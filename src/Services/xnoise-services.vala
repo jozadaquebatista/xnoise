@@ -31,6 +31,13 @@
 
 
 namespace Xnoise.Services {
+	public static RemoteSchemes get_remote_schemes() { 
+		return _remote_schemes;
+	}
+	
+	public static LocalSchemes get_local_schemes() { 
+		return _local_schemes;
+	}
 	
 	//http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 	private static string _settings_folder = null; 
@@ -52,18 +59,27 @@ namespace Xnoise.Services {
 		return _data_folder;
 	}
 	
-	public static void verify_xnoise_directories() {
+	public static bool verify_xnoise_directories() {
 		File f;
 		try {
 			f = File.new_for_path(settings_folder());
 		}
 		catch(Error e) {
+			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+			                                Gtk.ButtonsType.OK,
+			                                "Failed to xnoise directories! \n" + e.message);
+			msg.run();
 			print("%s", e.message);
+			return false;
 		}
 		
 		if(f == null) {
+			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+			                                Gtk.ButtonsType.OK,
+			                                "Failed to xnoise directories! \n" + "xnoise settings folder error\n");
+			msg.run();
 			print("xnoise settings folder error\n");
-			return;
+			return false;
 		}
 		
 		if(!f.query_exists(null)) {
@@ -72,6 +88,11 @@ namespace Xnoise.Services {
 			}
 			catch(Error e) {
 				print("%s", e.message);
+				var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+				                                Gtk.ButtonsType.OK,
+				                                "Failed to xnoise directories! \n" + e.message);
+				msg.run();
+				return false;
 			}
 		}
 		
@@ -80,11 +101,20 @@ namespace Xnoise.Services {
 		}
 		catch(Error e) {
 			print("%s", e.message);
+			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+			                                Gtk.ButtonsType.OK,
+			                                "Failed to xnoise directories! \n" + e.message);
+			msg.run();
+			return false;
 		}
 		
 		if(f == null) {
+			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+			                                Gtk.ButtonsType.OK,
+			                                "Failed to xnoise directories! \n" + "xnoise data folder error\n");
+			msg.run();
 			print("xnoise data folder error\n");
-			return;
+			return false;
 		}
 		
 		if(!f.query_exists(null)) {
@@ -93,8 +123,14 @@ namespace Xnoise.Services {
 			}
 			catch(Error e) {
 				print("%s", e.message);
+				var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+				                                Gtk.ButtonsType.OK,
+				                                "Failed to xnoise directories! \n" + e.message);
+				msg.run();
+				return false;
 			}
 		}
+		return true;
 	}
 
 	private string[] characters_not_used_in_comparison__escaped = null;

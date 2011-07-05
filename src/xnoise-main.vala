@@ -43,10 +43,10 @@ public class Xnoise.Main : GLib.Object {
 		userinfo = new UserInfo(main_window.show_status_info);
 		
 		// ITEM HANDLERS
-		item_handler_manager.add_handler(new HandlerPlayItem());
-		item_handler_manager.add_handler(new HandlerRemoveTrack());
-		item_handler_manager.add_handler(new HandlerAddToTracklist());
-		item_handler_manager.add_handler(new HandlerEditTags());
+		itemhandler_manager.add_handler(new HandlerPlayItem());
+		itemhandler_manager.add_handler(new HandlerRemoveTrack());
+		itemhandler_manager.add_handler(new HandlerAddToTracklist());
+		itemhandler_manager.add_handler(new HandlerEditTags());
 		
 		// LOAD PLUGINS
 		if(!no_plugins) {

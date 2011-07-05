@@ -54,7 +54,7 @@ public class Xnoise.ItemConverter : Object {
 						if(tmp == null)
 							break;
 						if(tmp.item.type == ItemType.UNKNOWN)
-							tmp.item.type = item_handler_manager.create_item(item.uri).type;
+							tmp.item.type = itemhandler_manager.create_item(item.uri).type;
 						if(tmp.item.type != ItemType.UNKNOWN)
 							result += tmp;
 					}

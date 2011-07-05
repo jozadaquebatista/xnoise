@@ -30,6 +30,9 @@
 
 using Gst;
 
+using Xnoise;
+using Xnoise.Services;
+
 public class Xnoise.GstPlayer : GLib.Object {
 	private bool _current_has_video_track;
 	private bool _current_has_subtitles;
@@ -144,7 +147,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			// set_automatic_subtitles();
 			if(value != null) {
 				File file = File.new_for_commandline_arg(value);
-				if(file.get_uri_scheme() in global.remote_schemes)
+				if(file.get_uri_scheme() in get_remote_schemes())
 					is_stream = true;
 			}
 			sign_song_position_changed((uint)0, (uint)0); //immediately reset song progressbar

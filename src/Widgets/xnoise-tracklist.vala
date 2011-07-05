@@ -30,6 +30,9 @@
 
 using Gtk;
 using Gdk;
+
+using Xnoise;
+using Xnoise.Services;
 using Xnoise.TagAccess;
 
 
@@ -230,7 +233,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		TreePath path = (TreePath)list.data;
 		tracklistmodel.get_iter(out iter, path);
 		tracklistmodel.get(iter, TrackListModel.Column.ITEM, out item);
-		array = item_handler_manager.get_actions(item.type, ActionContext.TRACKLIST_MENU_QUERY, itsel);
+		array = itemhandler_manager.get_actions(item.type, ActionContext.TRACKLIST_MENU_QUERY, itsel);
 		print("array.length:::%u\n", array.length);
 		for(int i =0; i < array.length; i++) {
 			print("%s\n", array.index(i).name);
@@ -485,7 +488,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 					foreach(string uri in uris) {
 						bool is_stream = false;
 						file = File.new_for_uri(uri);
-						if(file.get_uri_scheme() in global.remote_schemes) is_stream = true;
+						if(file.get_uri_scheme() in get_remote_schemes()) 
+							is_stream = true;
 						if(!is_stream) {
 							try {
 								FileInfo info = file.query_info(attr,
@@ -773,7 +777,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			if(tracknumb!=0) {
 				tracknumberString = "%u".printf(tracknumb);
 			}
-			Item? item = item_handler_manager.create_item(fileuri);
+			Item? item = itemhandler_manager.create_item(fileuri);
 			tracklistmodel.set(new_iter,
 			                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
 			                   TrackListModel.Column.TITLE, title,
@@ -904,7 +908,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			return;
 		}
 		if(item.type != ItemType.UNKNOWN) {
-			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
+			ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;
 			unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);

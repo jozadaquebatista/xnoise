@@ -119,9 +119,6 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	
 	private uint check_image_for_current_track_source = 0;
 	
-	private RemoteSchemes _remote_schemes = new RemoteSchemes();
-	private LocalSchemes  _local_schemes  = new LocalSchemes();
-
 	// PROPERTIES
 
 	public PlayerState player_state {
@@ -192,18 +189,6 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		}
 	}
 
-	public RemoteSchemes remote_schemes { 
-		get {
-			return _remote_schemes;
-		}
-	}
-	
-	public LocalSchemes local_schemes { 
-		get {
-			return _local_schemes;
-		}
-	}
-	
 	// Current track's meta data
 	public string current_artist { get; set; default = null; }
 	public string current_album { get; set; default = null; }

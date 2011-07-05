@@ -157,6 +157,10 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise.h")]
 		public static string data_folder ();
 		[CCode (cheader_filename = "xnoise.h")]
+		public static Xnoise.LocalSchemes get_local_schemes ();
+		[CCode (cheader_filename = "xnoise.h")]
+		public static Xnoise.RemoteSchemes get_remote_schemes ();
+		[CCode (cheader_filename = "xnoise.h")]
 		public static string prepare_for_comparison (string? value);
 		[CCode (cheader_filename = "xnoise.h")]
 		public static string prepare_for_search (string? val);
@@ -171,7 +175,7 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise.h")]
 		public static string settings_folder ();
 		[CCode (cheader_filename = "xnoise.h")]
-		public static void verify_xnoise_directories ();
+		public static bool verify_xnoise_directories ();
 	}
 	[CCode (cprefix = "XnoiseTagAccess", lower_case_cprefix = "xnoise_tag_access_")]
 	namespace TagAccess {
@@ -264,12 +268,10 @@ namespace Xnoise {
 		public string? current_uri { get; set; }
 		public string? image_path_large { get; set; }
 		public string? image_path_small { get; set; }
-		public Xnoise.LocalSchemes local_schemes { get; }
 		public bool media_import_in_progress { get; set; }
 		public Xnoise.PlayerState player_state { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
 		public Gtk.TreeRowReference position_reference_next { get; set; }
-		public Xnoise.RemoteSchemes remote_schemes { get; }
 		public signal void before_position_reference_changed ();
 		public signal void before_position_reference_next_changed ();
 		public signal void caught_eos_from_player ();
@@ -887,7 +889,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.ItemConverter item_converter;
 	[CCode (cheader_filename = "xnoise.h")]
-	public static Xnoise.ItemHandlerManager item_handler_manager;
+	public static Xnoise.ItemHandlerManager itemhandler_manager;
 	[CCode (cheader_filename = "xnoise.h")]
 	public static Xnoise.MainWindow main_window;
 	[CCode (cheader_filename = "xnoise.h")]
@@ -914,8 +916,6 @@ namespace Xnoise {
 	public static string escape_for_local_folder_search (string? value);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static GLib.File? get_albumimage_for_artistalbum (string? artist, string? album, string? size);
-	[CCode (cheader_filename = "xnoise.h")]
-	public static string get_stream_uri (string playlist_uri);
 	[CCode (cheader_filename = "xnoise.h")]
 	public static void initialize (out bool is_first_start);
 	[CCode (cheader_filename = "xnoise.h")]

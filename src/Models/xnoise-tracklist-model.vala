@@ -30,6 +30,9 @@
 
 using Gtk;
 using Gdk;
+
+using Xnoise;
+using Xnoise.Services;
 using Xnoise.TagAccess;
 
 public class Xnoise.TrackListModel : ListStore, TreeModel {
@@ -470,7 +473,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			bool is_stream = false;
 			string urischeme = file.get_uri_scheme();
 			var t = new TrackData();
-			if(urischeme in global.local_schemes) {
+			if(urischeme in get_local_schemes()) {
 				try {
 					FileInfo info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE,
 				                                    FileQueryInfoFlags.NONE,
@@ -489,10 +492,10 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 					is_stream = true;
 				}
 			}
-			else if(urischeme in global.remote_schemes) {
+			else if(urischeme in get_remote_schemes()) {
 				is_stream = true;
 			}
-			item = item_handler_manager.create_item(uris[k]);
+			item = itemhandler_manager.create_item(uris[k]);
 			if(k == 0) { // first track
 				iter = this.insert_title(null,
 				                         (int)t.tracknumber,
@@ -516,14 +519,14 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				                         t.artist,
 				                         t.length,
 				                         false,
-				                         item_handler_manager.create_item(uris[k])
+				                         itemhandler_manager.create_item(uris[k])
 				                         );
 			}
 			tr = null;
 			k++;
 		}
 		if(item.type != ItemType.UNKNOWN) { // TODO ????
-			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
+			ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;
 			unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);

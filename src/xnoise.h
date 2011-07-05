@@ -354,6 +354,26 @@ typedef struct _XnoisePluginModuleLoaderClass XnoisePluginModuleLoaderClass;
 typedef struct _XnoisePluginModuleLoaderPrivate XnoisePluginModuleLoaderPrivate;
 typedef struct _XnoisePluginModuleInformationPrivate XnoisePluginModuleInformationPrivate;
 
+#define XNOISE_TYPE_REMOTE_SCHEMES (xnoise_remote_schemes_get_type ())
+#define XNOISE_REMOTE_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_REMOTE_SCHEMES, XnoiseRemoteSchemes))
+#define XNOISE_REMOTE_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_REMOTE_SCHEMES, XnoiseRemoteSchemesClass))
+#define XNOISE_IS_REMOTE_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_REMOTE_SCHEMES))
+#define XNOISE_IS_REMOTE_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_REMOTE_SCHEMES))
+#define XNOISE_REMOTE_SCHEMES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_REMOTE_SCHEMES, XnoiseRemoteSchemesClass))
+
+typedef struct _XnoiseRemoteSchemes XnoiseRemoteSchemes;
+typedef struct _XnoiseRemoteSchemesClass XnoiseRemoteSchemesClass;
+
+#define XNOISE_TYPE_LOCAL_SCHEMES (xnoise_local_schemes_get_type ())
+#define XNOISE_LOCAL_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemes))
+#define XNOISE_LOCAL_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemesClass))
+#define XNOISE_IS_LOCAL_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_LOCAL_SCHEMES))
+#define XNOISE_IS_LOCAL_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_LOCAL_SCHEMES))
+#define XNOISE_LOCAL_SCHEMES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemesClass))
+
+typedef struct _XnoiseLocalSchemes XnoiseLocalSchemes;
+typedef struct _XnoiseLocalSchemesClass XnoiseLocalSchemesClass;
+
 #define XNOISE_TAG_ACCESS_TYPE_TAG_READER (xnoise_tag_access_tag_reader_get_type ())
 #define XNOISE_TAG_ACCESS_TAG_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TAG_ACCESS_TYPE_TAG_READER, XnoiseTagAccessTagReader))
 #define XNOISE_TAG_ACCESS_TAG_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TAG_ACCESS_TYPE_TAG_READER, XnoiseTagAccessTagReaderClass))
@@ -399,26 +419,7 @@ typedef struct _XnoiseGlobalAccessClass XnoiseGlobalAccessClass;
 typedef struct _XnoiseGlobalAccessPrivate XnoiseGlobalAccessPrivate;
 
 #define XNOISE_TYPE_PLAYER_STATE (xnoise_player_state_get_type ())
-
-#define XNOISE_TYPE_REMOTE_SCHEMES (xnoise_remote_schemes_get_type ())
-#define XNOISE_REMOTE_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_REMOTE_SCHEMES, XnoiseRemoteSchemes))
-#define XNOISE_REMOTE_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_REMOTE_SCHEMES, XnoiseRemoteSchemesClass))
-#define XNOISE_IS_REMOTE_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_REMOTE_SCHEMES))
-#define XNOISE_IS_REMOTE_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_REMOTE_SCHEMES))
-#define XNOISE_REMOTE_SCHEMES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_REMOTE_SCHEMES, XnoiseRemoteSchemesClass))
-
-typedef struct _XnoiseRemoteSchemes XnoiseRemoteSchemes;
-typedef struct _XnoiseRemoteSchemesClass XnoiseRemoteSchemesClass;
-
-#define XNOISE_TYPE_LOCAL_SCHEMES (xnoise_local_schemes_get_type ())
-#define XNOISE_LOCAL_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemes))
-#define XNOISE_LOCAL_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemesClass))
-#define XNOISE_IS_LOCAL_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_LOCAL_SCHEMES))
-#define XNOISE_IS_LOCAL_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_LOCAL_SCHEMES))
-#define XNOISE_LOCAL_SCHEMES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemesClass))
-
-typedef struct _XnoiseLocalSchemes XnoiseLocalSchemes;
-typedef struct _XnoiseLocalSchemesClass XnoiseLocalSchemesClass;
+typedef struct _XnoiseLocalSchemesPrivate XnoiseLocalSchemesPrivate;
 
 #define XNOISE_TYPE_MEDIA_IMPORTER (xnoise_media_importer_get_type ())
 #define XNOISE_MEDIA_IMPORTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_IMPORTER, XnoiseMediaImporter))
@@ -474,8 +475,6 @@ typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 #define XNOISE_TYPE_TRACK_LIST_NOTE_BOOK_TAB (xnoise_track_list_note_book_tab_get_type ())
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
-typedef struct _XnoiseRemoteSchemesPrivate XnoiseRemoteSchemesPrivate;
-typedef struct _XnoiseLocalSchemesPrivate XnoiseLocalSchemesPrivate;
 
 #define XNOISE_TYPE_GNOME_MEDIA_KEYS (xnoise_gnome_media_keys_get_type ())
 #define XNOISE_GNOME_MEDIA_KEYS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GNOME_MEDIA_KEYS, XnoiseGnomeMediaKeys))
@@ -486,6 +485,7 @@ typedef struct _XnoiseGnomeMediaKeys XnoiseGnomeMediaKeys;
 typedef struct _XnoiseGnomeMediaKeysIface XnoiseGnomeMediaKeysIface;
 
 #define XNOISE_TYPE_GNOME_MEDIA_KEYS_PROXY (xnoise_gnome_media_keys_proxy_get_type ())
+typedef struct _XnoiseRemoteSchemesPrivate XnoiseRemoteSchemesPrivate;
 typedef struct _XnoiseTrackDataPrivate XnoiseTrackDataPrivate;
 typedef struct _XnoiseUserInfoPrivate XnoiseUserInfoPrivate;
 
@@ -1098,6 +1098,17 @@ typedef enum  {
 	XNOISE_PLAYER_STATE_PAUSED
 } XnoisePlayerState;
 
+struct _XnoiseLocalSchemes {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseLocalSchemesPrivate * priv;
+};
+
+struct _XnoiseLocalSchemesClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseLocalSchemes *self);
+};
+
 struct _XnoiseMediaImporter {
 	GObject parent_instance;
 	XnoiseMediaImporterPrivate * priv;
@@ -1119,6 +1130,12 @@ typedef enum  {
 	GST_STREAM_TYPE_VIDEO = 2
 } GstStreamType;
 
+struct _XnoiseGnomeMediaKeysIface {
+	GTypeInterface parent_iface;
+	void (*GrabMediaPlayerKeys) (XnoiseGnomeMediaKeys* self, const gchar* application, guint32 time, GError** error);
+	void (*ReleaseMediaPlayerKeys) (XnoiseGnomeMediaKeys* self, const gchar* application, GError** error);
+};
+
 struct _XnoiseRemoteSchemes {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -1128,23 +1145,6 @@ struct _XnoiseRemoteSchemes {
 struct _XnoiseRemoteSchemesClass {
 	GTypeClass parent_class;
 	void (*finalize) (XnoiseRemoteSchemes *self);
-};
-
-struct _XnoiseLocalSchemes {
-	GTypeInstance parent_instance;
-	volatile int ref_count;
-	XnoiseLocalSchemesPrivate * priv;
-};
-
-struct _XnoiseLocalSchemesClass {
-	GTypeClass parent_class;
-	void (*finalize) (XnoiseLocalSchemes *self);
-};
-
-struct _XnoiseGnomeMediaKeysIface {
-	GTypeInterface parent_iface;
-	void (*GrabMediaPlayerKeys) (XnoiseGnomeMediaKeys* self, const gchar* application, guint32 time, GError** error);
-	void (*ReleaseMediaPlayerKeys) (XnoiseGnomeMediaKeys* self, const gchar* application, GError** error);
 };
 
 struct _XnoiseTrackData {
@@ -1316,9 +1316,9 @@ struct _XnoiseLyricsViewClass {
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
-	GtkActionGroup* action_group;
 	GtkScrolledWindow* mediaBrScrollWin;
 	GtkScrolledWindow* trackListScrollWin;
+	GtkActionGroup* action_group;
 	gboolean _seek;
 	gboolean is_fullscreen;
 	gboolean drag_on_content_area;
@@ -1788,9 +1788,25 @@ void xnoise_plugin_module_iplugin_set_owner (XnoisePluginModuleIPlugin* self, Xn
 const gchar* xnoise_plugin_module_iplugin_get_name (XnoisePluginModuleIPlugin* self);
 XnoiseMain* xnoise_plugin_module_iplugin_get_xn (XnoisePluginModuleIPlugin* self);
 void xnoise_plugin_module_iplugin_set_xn (XnoisePluginModuleIPlugin* self, XnoiseMain* value);
+gpointer xnoise_remote_schemes_ref (gpointer instance);
+void xnoise_remote_schemes_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_remote_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_remote_schemes (GValue* value, gpointer v_object);
+void xnoise_value_take_remote_schemes (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_remote_schemes (const GValue* value);
+GType xnoise_remote_schemes_get_type (void) G_GNUC_CONST;
+XnoiseRemoteSchemes* xnoise_services_get_remote_schemes (void);
+gpointer xnoise_local_schemes_ref (gpointer instance);
+void xnoise_local_schemes_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_local_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_local_schemes (GValue* value, gpointer v_object);
+void xnoise_value_take_local_schemes (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_local_schemes (const GValue* value);
+GType xnoise_local_schemes_get_type (void) G_GNUC_CONST;
+XnoiseLocalSchemes* xnoise_services_get_local_schemes (void);
 gchar* xnoise_services_settings_folder (void);
 gchar* xnoise_services_data_folder (void);
-void xnoise_services_verify_xnoise_directories (void);
+gboolean xnoise_services_verify_xnoise_directories (void);
 gchar* xnoise_services_prepare_for_comparison (const gchar* value);
 gchar* xnoise_services_prepare_for_search (const gchar* val);
 gchar* xnoise_services_remove_linebreaks (const gchar* val);
@@ -1845,22 +1861,6 @@ const GtkTreeRowReference* xnoise_global_access_get_position_reference_next (Xno
 void xnoise_global_access_set_position_reference_next (XnoiseGlobalAccess* self, const GtkTreeRowReference* value);
 gboolean xnoise_global_access_get_media_import_in_progress (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_media_import_in_progress (XnoiseGlobalAccess* self, gboolean value);
-gpointer xnoise_remote_schemes_ref (gpointer instance);
-void xnoise_remote_schemes_unref (gpointer instance);
-GParamSpec* xnoise_param_spec_remote_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void xnoise_value_set_remote_schemes (GValue* value, gpointer v_object);
-void xnoise_value_take_remote_schemes (GValue* value, gpointer v_object);
-gpointer xnoise_value_get_remote_schemes (const GValue* value);
-GType xnoise_remote_schemes_get_type (void) G_GNUC_CONST;
-XnoiseRemoteSchemes* xnoise_global_access_get_remote_schemes (XnoiseGlobalAccess* self);
-gpointer xnoise_local_schemes_ref (gpointer instance);
-void xnoise_local_schemes_unref (gpointer instance);
-GParamSpec* xnoise_param_spec_local_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void xnoise_value_set_local_schemes (GValue* value, gpointer v_object);
-void xnoise_value_take_local_schemes (GValue* value, gpointer v_object);
-gpointer xnoise_value_get_local_schemes (const GValue* value);
-GType xnoise_local_schemes_get_type (void) G_GNUC_CONST;
-XnoiseLocalSchemes* xnoise_global_access_get_local_schemes (XnoiseGlobalAccess* self);
 const gchar* xnoise_global_access_get_current_artist (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_current_artist (XnoiseGlobalAccess* self, const gchar* value);
 const gchar* xnoise_global_access_get_current_album (XnoiseGlobalAccess* self);
@@ -1877,6 +1877,10 @@ const gchar* xnoise_global_access_get_image_path_small (XnoiseGlobalAccess* self
 void xnoise_global_access_set_image_path_small (XnoiseGlobalAccess* self, const gchar* value);
 const gchar* xnoise_global_access_get_image_path_large (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_image_path_large (XnoiseGlobalAccess* self, const gchar* value);
+gboolean xnoise_local_schemes_contains (XnoiseLocalSchemes* self, const gchar* location);
+XnoiseLocalSchemes* xnoise_local_schemes_new (void);
+XnoiseLocalSchemes* xnoise_local_schemes_construct (GType object_type);
+gchar** xnoise_local_schemes_get_list (XnoiseLocalSchemes* self, int* result_length1);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
 gchar* xnoise_media_importer_get_uri_for_item_id (XnoiseMediaImporter* self, gint32 id);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
@@ -1889,7 +1893,7 @@ GType xnoise_worker_get_type (void) G_GNUC_CONST;
 extern XnoiseWorker* xnoise_db_worker;
 extern XnoiseWorker* xnoise_io_worker;
 extern XnoiseMediaImporter* xnoise_media_importer;
-extern XnoiseItemHandlerManager* xnoise_item_handler_manager;
+extern XnoiseItemHandlerManager* xnoise_itemhandler_manager;
 extern XnoiseItemConverter* xnoise_item_converter;
 extern GMainContext* xnoise_mc;
 extern XnoiseDatabaseDbBrowser* xnoise_db_browser;
@@ -1903,22 +1907,17 @@ GType xnoise_track_list_get_type (void) G_GNUC_CONST;
 extern XnoiseTrackList* xnoise_tl;
 extern XnoiseTrackListModel* xnoise_tlm;
 void xnoise_initialize (gboolean* is_first_start);
-gchar* xnoise_get_stream_uri (const gchar* playlist_uri);
 GType xnoise_track_list_note_book_tab_get_type (void) G_GNUC_CONST;
 GType gst_stream_type_get_type (void) G_GNUC_CONST;
-gboolean xnoise_remote_schemes_contains (XnoiseRemoteSchemes* self, const gchar* location);
-XnoiseRemoteSchemes* xnoise_remote_schemes_new (void);
-XnoiseRemoteSchemes* xnoise_remote_schemes_construct (GType object_type);
-gchar** xnoise_remote_schemes_get_list (XnoiseRemoteSchemes* self, int* result_length1);
-gboolean xnoise_local_schemes_contains (XnoiseLocalSchemes* self, const gchar* location);
-XnoiseLocalSchemes* xnoise_local_schemes_new (void);
-XnoiseLocalSchemes* xnoise_local_schemes_construct (GType object_type);
-gchar** xnoise_local_schemes_get_list (XnoiseLocalSchemes* self, int* result_length1);
 GType xnoise_gnome_media_keys_proxy_get_type (void) G_GNUC_CONST;
 guint xnoise_gnome_media_keys_register_object (void* object, GDBusConnection* connection, const gchar* path, GError** error);
 GType xnoise_gnome_media_keys_get_type (void) G_GNUC_CONST;
 void xnoise_gnome_media_keys_GrabMediaPlayerKeys (XnoiseGnomeMediaKeys* self, const gchar* application, guint32 time, GError** error);
 void xnoise_gnome_media_keys_ReleaseMediaPlayerKeys (XnoiseGnomeMediaKeys* self, const gchar* application, GError** error);
+gboolean xnoise_remote_schemes_contains (XnoiseRemoteSchemes* self, const gchar* location);
+XnoiseRemoteSchemes* xnoise_remote_schemes_new (void);
+XnoiseRemoteSchemes* xnoise_remote_schemes_construct (GType object_type);
+gchar** xnoise_remote_schemes_get_list (XnoiseRemoteSchemes* self, int* result_length1);
 XnoiseTrackData* xnoise_track_data_new (void);
 XnoiseTrackData* xnoise_track_data_construct (GType object_type);
 XnoiseTrackData* xnoise_copy_trackdata (XnoiseTrackData* td);

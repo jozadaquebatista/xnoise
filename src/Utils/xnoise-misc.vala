@@ -42,7 +42,7 @@ namespace Xnoise {
 	public static Worker db_worker = null;
 	public static Worker io_worker = null;
 	public static MediaImporter media_importer = null;
-	public static ItemHandlerManager item_handler_manager = null;
+	public static ItemHandlerManager itemhandler_manager = null;
 	public static ItemConverter item_converter = null;
 	public static MainContext mc;
 	
@@ -57,7 +57,8 @@ namespace Xnoise {
 	public static MainWindow main_window;
 	public static TrackList tl;
 	public static TrackListModel tlm;
-
+	private static RemoteSchemes _remote_schemes;
+	private static LocalSchemes  _local_schemes;
 	/*
 	 * This function is used to create static instances of Params
 	 * and GlobalInfo in the xnoise namespace.
@@ -65,10 +66,13 @@ namespace Xnoise {
 	public static void initialize(out bool is_first_start) {
 		is_first_start = false;
 		
-		verify_xnoise_directories();
+		if(!verify_xnoise_directories()) {
+			Main.instance.quit();
+			return;
+		}
 		
 		// ITEM STUFF
-		item_handler_manager = new ItemHandlerManager();
+		itemhandler_manager = new ItemHandlerManager();
 		item_converter = new ItemConverter();
 		media_importer = new MediaImporter();
 		
@@ -76,6 +80,8 @@ namespace Xnoise {
 		db_worker = new Worker(MainContext.default());
 		io_worker = new Worker(MainContext.default());
 		
+		_remote_schemes = new RemoteSchemes();
+		_local_schemes  = new LocalSchemes();
 		
 		//GLOBAL ACCESS
 		if(global == null)
@@ -90,12 +96,10 @@ namespace Xnoise {
 			is_first_start = true;
 		}
 		
-//		if(par == null)
-//			par = new Params();
 		Params.init();
 		
 		// DATABASE
-		check_database_and_tables(ref is_first_start);
+		Database.DbCreator.check_tables(ref is_first_start);
 		
 		try {
 			db_browser = new DbBrowser();
@@ -119,57 +123,12 @@ namespace Xnoise {
 		tl = new TrackList();
 		main_window = new MainWindow();
 		tray_icon = new TrayIcon();
-		
-	}
-
-	private static void check_database_and_tables(ref bool is_first_start) {
-		Database.DbCreator.check_tables(ref is_first_start);
-	}
-
-	public static string get_stream_uri(string playlist_uri) {
-		//print("playlist_uri: %s\n", playlist_uri);
-		var file = File.new_for_uri(playlist_uri);
-		DataInputStream in_stream = null;
-		string outval = "";
-		
-		try{
-			in_stream = new DataInputStream(file.read(null));
-		}
-		catch(Error e) {
-			print("Error: %s\n", e.message);
-		}
-		string line;
-		string[] keyval;
-		try {
-			while ((line = in_stream.read_line(null, null))!=null) {
-				//print("line: %s\n", line);
-				keyval = line.split ("=", 2);
-				if (keyval[0] == "File1") {
-					outval = keyval[1];
-					return outval;
-				}
-			}
-		}
-		catch(Error e) {
-			print("%s\n", e.message);
-		}
-		return outval;
 	}
 }
 
 
 
 // PROJECT WIDE USED STRUCTS, INTERFACES AND ENUMS
-
-// ENUMS
-
-//public enum Xnoise.ItemType { // used in various places
-//	UNKNOWN = 0,
-//	AUDIO,
-//	VIDEO,
-//	STREAM,
-//	PLAYLISTFILE
-//}
 
 public enum Xnoise.TrackListNoteBookTab { // used in various places
 	TRACKLIST = 0,
@@ -191,71 +150,13 @@ public enum Xnoise.PlayerState {
 
 
 
-public class Xnoise.RemoteSchemes {
-	// remote types for data
-	private string[] _list = {
-		"http", 
-		"https", 
-		"ftp"
-	};
-
-	public string[] list {
-		get {
-			return _list;
-		}
-	}
-	
-	// syntax support for 'in'
-	public bool contains(string location) {
-		foreach(unowned string s in _list) {
-			if(location == s) return true;
-		}
-		return false;
-	}
-}
-
-public class Xnoise.LocalSchemes {
-	// locally mounted types for data
-	private string[] _list = {
-		"file", 
-		"dvd", 
-		"cdda"
-	};
-
-	public string[] list {
-		get {
-			return _list;
-		}
-	}
-	
-	// syntax support for 'in'
-	public bool contains(string location) {
-		foreach(unowned string s in _list) {
-			if(location == s) return true;
-		}
-		return false;
-	}
-}
-
 
 // STRUCTS
 
-/**
- * This struct is used to move around certain streams information
- */
 public struct Xnoise.StreamData { // meta information structure
 	public string name;
 	public string uri;
 }
-
-/**
- * This struct is used to move around certain media information
- */
-//public struct Xnoise.Item {
-//	public string name;
-//	public int id;
-//	public ItemType mediatype;
-//}
 
 public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
 	public int32 db_id;

@@ -438,7 +438,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //				this.set(iter_artist, Column.VISIBLE, visible);
 		}
 		if(this.iter_n_children(album_iter) == 0) {
-//			Item? item = item_handler_manager.create_item(td.uri);
+//			Item? item = itemhandler_manager.create_item(td.uri);
 //			item.db_id = td.db_id;
 			this.append(out title_iter, album_iter);
 			this.set(title_iter,
@@ -475,7 +475,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //					if(this.iter_parent(out iter_artist, album_iter))
 //						this.set(iter_artist, Column.VISIBLE, visible);
 				}
-//				Item? item = item_handler_manager.create_item(td.uri);
+//				Item? item = itemhandler_manager.create_item(td.uri);
 //				item.db_id = td.db_id;
 				this.insert_before(out new_title_iter, album_iter, title_iter);
 				this.set(new_title_iter,
@@ -496,7 +496,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //			if(this.iter_parent(out iter_artist, album_iter))
 //				this.set(iter_artist, Column.VISIBLE, visible);
 		}
-//		Item? item = item_handler_manager.create_item(td.uri);
+//		Item? item = itemhandler_manager.create_item(td.uri);
 //		item.db_id = td.db_id;
 		this.append(out title_iter, album_iter);
 		this.set(title_iter,
@@ -702,7 +702,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //			if(this.iter_parent(out iter_artist, album_iter))
 //				remove_loader_child(ref iter_artist);
 
-//			Item? item = item_handler_manager.create_item(td.uri);
+//			Item? item = itemhandler_manager.create_item(td.uri);
 //			item.db_id = td.db_id;
 //			this.append(out title_iter, album_iter);
 //			this.set(title_iter,
@@ -731,7 +731,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //				TreeIter new_title_iter;
 //				if(this.iter_parent(out iter_artist, album_iter))
 //					remove_loader_child(ref iter_artist);
-//				Item? item = item_handler_manager.create_item(td.uri);
+//				Item? item = itemhandler_manager.create_item(td.uri);
 //				item.db_id = td.db_id;
 //				this.insert_before(out new_title_iter, album_iter, title_iter);
 //				this.set(new_title_iter,
@@ -756,7 +756,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //			remove_loader_child(ref iter_artist);
 //		if(visible == false)
 //			return;
-//		Item? item = item_handler_manager.create_item(td.uri);
+//		Item? item = itemhandler_manager.create_item(td.uri);
 //		item.db_id = td.db_id;
 //		this.append(out title_iter, album_iter);
 //		this.set(title_iter,

@@ -303,7 +303,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		TreePath path = (TreePath)list.data;
 		mediabrowsermodel.get_iter(out iter, path);
 		mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out item);
-		array = item_handler_manager.get_actions(item.type, ActionContext.MEDIABROWSER_MENU_QUERY, itemselection);
+		array = itemhandler_manager.get_actions(item.type, ActionContext.MEDIABROWSER_MENU_QUERY, itemselection);
 		for(int i =0; i < array.length; i++) {
 			unowned Action x = array.index(i);
 			print("%s\n", x.name);
@@ -449,7 +449,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			TreeIter iter;
 			this.mediabrowsermodel.get_iter(out iter, treepath);
 			this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out item);
-			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
+			ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
 			if(tmp == null)
 				return;
 			unowned Action? action = tmp.get_action(item.type, ActionContext.MEDIABROWSER_ITEM_ACTIVATED, ItemSelectionType.SINGLE);

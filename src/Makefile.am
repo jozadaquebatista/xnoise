@@ -68,8 +68,10 @@ xnoise_SOURCES = \
     TrayIcon/xnoise-tray-icon.vala \
     Utils/xnoise-app-starter.vala \
     Utils/xnoise-global-access.vala \
+    Utils/xnoise-local-schemes.vala \
     Utils/xnoise-media-importer.vala \
     Utils/xnoise-misc.vala \
+    Utils/xnoise-remote-schemes.vala \
     Utils/xnoise-screensaver-manager.vala \
     Utils/xnoise-track-data.vala \
     Utils/xnoise-user-info.vala \

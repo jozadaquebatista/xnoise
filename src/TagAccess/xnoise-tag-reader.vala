@@ -33,7 +33,7 @@ using Xnoise.Services;
 public class Xnoise.TagAccess.TagReader {
 	public TrackData? read_tag(string filename) {
 		File f = File.new_for_path(filename);
-		Item? item = item_handler_manager.create_item(f.get_uri());
+		Item? item = itemhandler_manager.create_item(f.get_uri());
 		TrackData td;
 		TagLib.File taglib_file = null;
 		if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK)

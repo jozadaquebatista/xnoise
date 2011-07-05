@@ -49,7 +49,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string HIDEMEDIABROWSER = _("Hide Media");
 	private unowned Main xn;
 	private uint search_idlesource = 0;
-	public Gtk.ActionGroup action_group;
 	private UIManager ui_manager = new UIManager();
 	private VolumeSliderButton volumeSliderButton;
 	private int _posX_buffer;
@@ -84,6 +83,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private List<Gtk.Action> actions_list = null;
 	public ScrolledWindow mediaBrScrollWin = null;
 	public ScrolledWindow trackListScrollWin = null;
+	public Gtk.ActionGroup action_group;
 	public bool _seek;
 	public bool is_fullscreen = false;
 	public bool drag_on_content_area = false;
@@ -994,7 +994,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				                                           "",
 				                                           0,
 				                                           false,
-				                                           item_handler_manager.create_item(uri));
+				                                           itemhandler_manager.create_item(uri));
 			}
 			radiodialog.close();
 			radiodialog = null;

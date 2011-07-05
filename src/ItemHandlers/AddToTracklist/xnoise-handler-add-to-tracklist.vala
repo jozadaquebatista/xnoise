@@ -175,7 +175,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 			k++;
 		}
 		if(tda[0].item.type != ItemType.UNKNOWN && immediate_play) {
-			ItemHandler? tmp = item_handler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
+			ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;
 			unowned Action? action = tmp.get_action(tda[0].item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
