@@ -87,21 +87,21 @@ public class Xnoise.MediaImporter : GLib.Object {
 		db_writer.update_title(ref item, ref td);
 	}
 	
-	internal void update_artist_name(string old_name, string name) {
-		if(global.media_import_in_progress == true)
-			return;
-		db_writer.begin_transaction();
-		db_writer.update_artist_name(name, old_name);
-		db_writer.commit_transaction();
-	}
+//	internal void update_artist_name(string old_name, string name) {
+//		if(global.media_import_in_progress == true)
+//			return;
+//		db_writer.begin_transaction();
+//		db_writer.update_artist_name(name, old_name);
+//		db_writer.commit_transaction();
+//	}
 
-	internal void update_album_name(string artist, string old_name, string name) {
-		if(global.media_import_in_progress == true)
-			return;
-		db_writer.begin_transaction();
-		db_writer.update_album_name(artist, name, old_name);
-		db_writer.commit_transaction();
-	}
+//	internal void update_album_name(string artist, string old_name, string name) {
+//		if(global.media_import_in_progress == true)
+//			return;
+//		db_writer.begin_transaction();
+//		db_writer.update_album_name(artist, name, old_name);
+//		db_writer.commit_transaction();
+//	}
 	
 //	internal string[] get_uris_for_artistalbum(string artist, string album) {
 //		return db_writer.get_uris_for_artistalbum(artist, album);

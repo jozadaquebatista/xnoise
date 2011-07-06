@@ -348,21 +348,21 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		change_cb = cb;
 	}
 	
-	private static const string STMT_UPDATE_ALBUM  = "UPDATE albums SET name=? WHERE LOWER(name)=? AND artist=(SELECT artists.id from artists WHERE LOWER(artists.name)=?)";
-	internal void update_album_name(string artist, string new_name, string old_name) {
-		Statement stmt;
-		this.db.prepare_v2(STMT_UPDATE_ALBUM, -1, out stmt);
-		stmt.reset();
-		if(new_name == "")
-			return;
-		if(stmt.bind_text(1, new_name)        != Sqlite.OK ||
-		   stmt.bind_text(2, old_name.down()) != Sqlite.OK ||
-		   stmt.bind_text(3, artist.down())   != Sqlite.OK)
-			this.db_error();
-		
-		if(stmt.step() != Sqlite.DONE) 
-			this.db_error();
-	}
+//	private static const string STMT_UPDATE_ALBUM  = "UPDATE albums SET name=? WHERE LOWER(name)=? AND artist=(SELECT artists.id from artists WHERE LOWER(artists.name)=?)";
+//	internal void update_album_name(string artist, string new_name, string old_name) {
+//		Statement stmt;
+//		this.db.prepare_v2(STMT_UPDATE_ALBUM, -1, out stmt);
+//		stmt.reset();
+//		if(new_name == "")
+//			return;
+//		if(stmt.bind_text(1, new_name)        != Sqlite.OK ||
+//		   stmt.bind_text(2, old_name.down()) != Sqlite.OK ||
+//		   stmt.bind_text(3, artist.down())   != Sqlite.OK)
+//			this.db_error();
+//		
+//		if(stmt.step() != Sqlite.DONE) 
+//			this.db_error();
+//	}
 	
 	private void setup_pragmas() {
 //		Statement stmt;
@@ -381,49 +381,49 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		//	print("ERROR Setting up pragmas\n");
 	}
 
-	private static const string STMT_UPDATE_ARTIST = "UPDATE artists SET name=? WHERE LOWER(artists.name)=?"; // AND id=(SELECT artists.id from artists WHERE LOWER(artists.name)=?)
-	internal void update_artist_name(string new_name, string old_name) {
-		Statement stmt;
-		this.db.prepare_v2(STMT_UPDATE_ARTIST, -1, out stmt);
-		stmt.reset();
-		if(new_name == "")
-			return;
-		if(stmt.bind_text(1, new_name)        != Sqlite.OK ||
-		   stmt.bind_text(2, old_name.down()) != Sqlite.OK)
-			this.db_error();
-		
-		if(stmt.step() != Sqlite.DONE) 
-			this.db_error();
-	}
+//	private static const string STMT_UPDATE_ARTIST = "UPDATE artists SET name=? WHERE LOWER(artists.name)=?"; // AND id=(SELECT artists.id from artists WHERE LOWER(artists.name)=?)
+//	internal void update_artist_name(string new_name, string old_name) {
+//		Statement stmt;
+//		this.db.prepare_v2(STMT_UPDATE_ARTIST, -1, out stmt);
+//		stmt.reset();
+//		if(new_name == "")
+//			return;
+//		if(stmt.bind_text(1, new_name)        != Sqlite.OK ||
+//		   stmt.bind_text(2, old_name.down()) != Sqlite.OK)
+//			this.db_error();
+//		
+//		if(stmt.step() != Sqlite.DONE) 
+//			this.db_error();
+//	}
 
-	private static const string STMT_URIS_FOR_ARTISTALBUM = "SELECT u.name FROM uris u, items it, albums al, artists ar WHERE it.uri = u.id AND al.id = it.album AND it.artist = ar.id AND LOWER(ar.name)=? AND LOWER(al.name)=?";
-	internal string[] get_uris_for_artistalbum(string artist, string album) {
-		Statement stmt;
-		string[] val = {};
-		this.db.prepare_v2(STMT_URIS_FOR_ARTISTALBUM, -1, out stmt);
-		stmt.reset();
-		if(stmt.bind_text(1, artist.down()) != Sqlite.OK ||
-		   stmt.bind_text(2, album.down()) != Sqlite.OK)
-			this.db_error();
-		
-		while(stmt.step() == Sqlite.ROW) 
-			val += stmt.column_text(0);
-		return val;
-	}
+//	private static const string STMT_URIS_FOR_ARTISTALBUM = "SELECT u.name FROM uris u, items it, albums al, artists ar WHERE it.uri = u.id AND al.id = it.album AND it.artist = ar.id AND LOWER(ar.name)=? AND LOWER(al.name)=?";
+//	internal string[] get_uris_for_artistalbum(string artist, string album) {
+//		Statement stmt;
+//		string[] val = {};
+//		this.db.prepare_v2(STMT_URIS_FOR_ARTISTALBUM, -1, out stmt);
+//		stmt.reset();
+//		if(stmt.bind_text(1, artist.down()) != Sqlite.OK ||
+//		   stmt.bind_text(2, album.down()) != Sqlite.OK)
+//			this.db_error();
+//		
+//		while(stmt.step() == Sqlite.ROW) 
+//			val += stmt.column_text(0);
+//		return val;
+//	}
 	
-	private static const string STMT_URIS_FOR_ARTIST = "SELECT u.name FROM uris u, items it, artists ar WHERE it.uri = u.id AND it.artist = ar.id AND LOWER(ar.name)=?";	
-	internal string[] get_uris_for_artist(string artist) {
-		Statement stmt;
-		string[] val = {};
-		this.db.prepare_v2(STMT_URIS_FOR_ARTIST, -1, out stmt);
-		stmt.reset();
-		if(stmt.bind_text(1, artist.down()) != Sqlite.OK)
-			this.db_error();
-		
-		while(stmt.step() == Sqlite.ROW) 
-			val += stmt.column_text(0);
-		return val;
-	}
+//	private static const string STMT_URIS_FOR_ARTIST = "SELECT u.name FROM uris u, items it, artists ar WHERE it.uri = u.id AND it.artist = ar.id AND LOWER(ar.name)=?";	
+//	internal string[] get_uris_for_artist(string artist) {
+//		Statement stmt;
+//		string[] val = {};
+//		this.db.prepare_v2(STMT_URIS_FOR_ARTIST, -1, out stmt);
+//		stmt.reset();
+//		if(stmt.bind_text(1, artist.down()) != Sqlite.OK)
+//			this.db_error();
+//		
+//		while(stmt.step() == Sqlite.ROW) 
+//			val += stmt.column_text(0);
+//		return val;
+//	}
 	
 	private static const string STMT_GET_URI_FOR_ITEM_ID =
 		"SELECT u.name FROM uris u, items it WHERE it.uri = u.id AND it.id = ?";

@@ -60,25 +60,22 @@ namespace Xnoise.Services {
 	}
 	
 	public static bool verify_xnoise_directories() {
-		File f;
-		try {
-			f = File.new_for_path(settings_folder());
-		}
-		catch(Error e) {
+		File f = File.new_for_path(settings_folder());
+		if(f == null) {
+			print("Failed to get xnoise directories! \n");
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
 			                                Gtk.ButtonsType.OK,
-			                                "Failed to xnoise directories! \n" + e.message);
+			                                "Failed to get xnoise directories! \n");
 			msg.run();
-			print("%s", e.message);
 			return false;
 		}
 		
 		if(f == null) {
+			print("xnoise settings folder error\n");
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
 			                                Gtk.ButtonsType.OK,
-			                                "Failed to xnoise directories! \n" + "xnoise settings folder error\n");
+			                                "Failed to get xnoise directories! \n" + "xnoise settings folder error\n");
 			msg.run();
-			print("xnoise settings folder error\n");
 			return false;
 		}
 		
@@ -90,30 +87,28 @@ namespace Xnoise.Services {
 				print("%s", e.message);
 				var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
 				                                Gtk.ButtonsType.OK,
-				                                "Failed to xnoise directories! \n" + e.message);
+				                                "Failed to get xnoise directories! \n" + e.message);
 				msg.run();
 				return false;
 			}
 		}
 		
-		try {
-			f = File.new_for_path(data_folder());
-		}
-		catch(Error e) {
-			print("%s", e.message);
+		f = File.new_for_path(data_folder());
+		if(f == null) {
+			print("Failed to get xnoise directories! \n");
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
 			                                Gtk.ButtonsType.OK,
-			                                "Failed to xnoise directories! \n" + e.message);
+			                                "Failed to get xnoise directories! \n");
 			msg.run();
 			return false;
 		}
 		
 		if(f == null) {
+			print("xnoise data folder error\n");
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
 			                                Gtk.ButtonsType.OK,
 			                                "Failed to xnoise directories! \n" + "xnoise data folder error\n");
 			msg.run();
-			print("xnoise data folder error\n");
 			return false;
 		}
 		
