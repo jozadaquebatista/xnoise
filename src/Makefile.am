@@ -35,6 +35,8 @@ VALAFLAGS = \
     $(NULL)
 
 xnoise_LDADD = \
+    $(XNOISE_LIBS) \
+    -lgstpbutils-0.10 \
     $(top_builddir)/libxnoise/libxnoise.la \
     $(NULL)
 

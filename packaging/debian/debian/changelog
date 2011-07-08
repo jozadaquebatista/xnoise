@@ -1,23 +1,6 @@
-xnoise (0.1.25.0) unstable; urgency=low
-  * bug fixes
+xnoise (0.1.26-1) unstable; urgency=low
+  * Closes: #632932
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 24 Jun 2011 10:48:15 +0200
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 08 Jul 2011 14:53:26 +0200
 
 
-xnoise (0.1.24.0) unstable; urgency=low
-
-  * GUI changes (mainly new track progess bar, remove old stuff from
-    settings dialog, repeat button layout)
-  * introduce extendable itemhandler architecture
-  * use lazy-loading in media browser to make handling of
-    large collections easy and application start ultra fast
-  * asynchronous import for lastused items into tracklist on
-    application start
-  * introduce io worker for slow io tasks (to improve long running
-    media import performance)
-  * show video thumbnails, if available
-  * changed db structure (old databases are not migrated!)
-  * update translations
-  * bug fixes
-
- -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 20 May 2011 15:55:50 +0200

@@ -503,6 +503,7 @@ AC_CONFIG_FILES([
     plugins/soundmenu2/Makefile
     plugins/databaseLyrics/Makefile
     po/Makefile.in
+    doc/Makefile
     vapi/Makefile
     tests/Makefile
 ])

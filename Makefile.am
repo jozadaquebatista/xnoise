@@ -6,6 +6,7 @@ SUBDIRS = \
     src \
     plugins \
     po \
+    doc \
     vapi \
     $(NULL)
 
@@ -15,6 +16,7 @@ DIST_SUBDIRS = \
     src \
     plugins \
     po \
+    doc \
     vapi \
     tests
     $(NULL)
@@ -24,15 +26,14 @@ if USE_VALA
   SUBDIRS += tests
 endif
 
-xnoiselicense_DATA =  \
+noinst_DATA =  \
     COPYING \
     AUTHORS \
     $(NULL)
 
-xnoiselicensedir = $(datadir)/xnoise/license
 
 EXTRA_DIST = \
-    $(xnoiselicense_DATA) \
+    $(noinst_DATA) \
     intltool-extract.in \
     intltool-merge.in \
     intltool-update.in\
