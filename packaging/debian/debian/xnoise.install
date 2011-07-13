@@ -1,7 +1,7 @@
 usr/bin
-usr/lib/xnoise/*.so
-usr/lib/xnoise/*.so.*
-usr/lib/xnoise/*.xnplugin
+usr/lib/xnoise/libxnoise.so
+usr/lib/xnoise/libxnoise.so.0
+usr/lib/xnoise/libxnoise.so.0.0.0
 usr/share/applications
 usr/share/icons
 usr/share/locale
