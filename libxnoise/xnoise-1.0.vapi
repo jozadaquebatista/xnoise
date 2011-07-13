@@ -945,6 +945,7 @@ namespace Xnoise {
 		public void on_before_position_reference_changed ();
 		public void on_position_reference_changed ();
 		public bool path_is_last_row (ref Gtk.TreePath path, out bool trackList_is_empty);
+		public bool reset_state ();
 		public void set_reference_to_last ();
 		public signal void sign_active_path_changed (Xnoise.PlayerState ts);
 	}

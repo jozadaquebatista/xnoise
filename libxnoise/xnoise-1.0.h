@@ -1999,6 +1999,7 @@ gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
 void xnoise_track_list_model_set_reference_to_last (XnoiseTrackListModel* self);
 XnoiseItem* xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
 gchar* xnoise_track_list_model_get_uri_for_current_position (XnoiseTrackListModel* self);
+gboolean xnoise_track_list_model_reset_state (XnoiseTrackListModel* self);
 void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, gchar** uris, int uris_length1);
 XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_new (XnoiseTrackListModel* tlm);
 XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_construct (GType object_type, XnoiseTrackListModel* tlm);

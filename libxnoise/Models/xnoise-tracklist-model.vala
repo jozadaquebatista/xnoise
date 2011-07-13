@@ -405,6 +405,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 		else if(ts==PlayerState.STOPPED) {
 			unbolden_row();
+			this.set(citer, Column.ICON, null);
+			return true;
 		}
 		Item? item;
 		this.get(citer,
@@ -416,7 +418,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		return true;
 	}
 
-	private bool reset_state() {
+	public bool reset_state() {
 		return set_player_state(PlayerState.STOPPED);
 	}
 

@@ -247,6 +247,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	public GstPlayer() {
 		videoscreen = new Xnoise.VideoScreen(this);
 		create_elements();
+		missing_plugins_user_message = MissingPluginsUserInfo();
 		cycle_time_source = GLib.Timeout.add_seconds(1, on_cyclic_send_song_position);
 		update_tags_source = 0;
 		automatic_subtitles_source = 0;
@@ -429,6 +430,59 @@ public class Xnoise.GstPlayer : GLib.Object {
 			update_tags_in_idle(tags, PlaybinStreamType.TEXT);
 	}
 
+	private uint send_user_info_message(string message_string) {
+			return userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+			                      UserInfo.ContentClass.INFO,
+			                      message_string,
+			                      false,
+			                      5,
+			                      null);
+	}
+	
+	private uint send_user_error_message(string message_string) {
+			return userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+			                      UserInfo.ContentClass.CRITICAL,
+			                      message_string,
+			                      false,
+			                      20,
+			                      null);
+	}
+	
+	private void install_plugins_res_func(Gst.InstallPluginsReturn result) {
+		//print("InstallPluginsReturn: %d\n", (int)result);
+		if(missing_plugins_user_message.id != 0) {
+			userinfo.popdown(missing_plugins_user_message.id);
+		}
+		switch(result) {
+			case Gst.InstallPluginsReturn.SUCCESS:
+			case Gst.InstallPluginsReturn.PARTIAL_SUCCESS:
+				send_user_info_message("%s: %s".printf(_("Success on installing missing gstreamer plugin"), 
+				                                       missing_plugins_user_message.info_text));
+				break;
+			case Gst.InstallPluginsReturn.USER_ABORT:
+				send_user_error_message("%s: %s".printf(_("User aborted installation of missing gstreamer plugin"), 
+				                                        missing_plugins_user_message.info_text));
+				break;
+			case Gst.InstallPluginsReturn.NOT_FOUND:
+				send_user_error_message("%s: %s".printf(_("Missing gstreamer plugin was not found"), 
+				                                        missing_plugins_user_message.info_text));
+				break;
+			case Gst.InstallPluginsReturn.ERROR:
+			case Gst.InstallPluginsReturn.CRASHED:
+			default:
+				send_user_error_message("%s: %s".printf(_("Critical error while installation of missing gstreamer plugin"),
+				                                        missing_plugins_user_message.info_text));
+				break;
+		}
+	}
+	
+	private MissingPluginsUserInfo missing_plugins_user_message;
+	
+	private struct MissingPluginsUserInfo {
+		public uint id;
+		public string info_text;
+	}
+	
 	private void on_bus_message(Gst.Message msg) {
 		//print("msg arrived %s\n", msg.type.to_string());
 		if(msg == null) 
@@ -448,6 +502,49 @@ public class Xnoise.GstPlayer : GLib.Object {
 					//print("missing plugins msg for element\n");
 					//print("src_name: %s; type_name: %s\n", source, type);
 					missing_plugins.prepend(msg);
+					var install_context = new InstallPluginsContext();
+					string[] details = {};
+					details += Gst.missing_plugin_message_get_installer_detail(msg);
+					
+					Gst.InstallPluginsReturn retval = Gst.install_plugins_async(details, install_context, install_plugins_res_func);
+					
+					if(retval != Gst.InstallPluginsReturn.STARTED_OK) {
+						if(retval == Gst.InstallPluginsReturn.HELPER_MISSING) {
+							if(missing_plugins_user_message.id != 0) {
+								userinfo.popdown(missing_plugins_user_message.id);
+								missing_plugins_user_message = MissingPluginsUserInfo();
+							}
+							missing_plugins_user_message.info_text = Gst.missing_plugin_message_get_description(msg);
+							missing_plugins_user_message.id = send_user_error_message("%s: %s \n%s".printf(_("Missing gstreamer plugin"), 
+							                                             missing_plugins_user_message.info_text,
+							                                             _("Automatic missing codec installation not supported"))
+							                       );
+						}
+						else {
+							if(missing_plugins_user_message.id != 0) {
+								userinfo.popdown(missing_plugins_user_message.id);
+								missing_plugins_user_message = MissingPluginsUserInfo();
+							}
+							missing_plugins_user_message.info_text = Gst.missing_plugin_message_get_description(msg);
+							missing_plugins_user_message.id = send_user_error_message("%s: %s \n%s".printf(_("Missing gstreamer plugin"), 
+							                                             missing_plugins_user_message.info_text,
+							                                             _("Failed to start automatic gstreamer plugin installation."))
+							                       );
+						}
+						
+					}
+					else {
+						if(missing_plugins_user_message.id != 0) {
+							userinfo.popdown(missing_plugins_user_message.id);
+							missing_plugins_user_message = MissingPluginsUserInfo();
+						}
+						missing_plugins_user_message.info_text = Gst.missing_plugin_message_get_description(msg);
+						missing_plugins_user_message.id = send_user_info_message("%s: %s \n%s".printf(_("Missing gstreamer plugin"), 
+						                                             missing_plugins_user_message.info_text,
+						                                             _("Trying to install missing gstreamer plugin"))
+						                       );
+					}
+					stop();
 					return;
 				}
 				break;
@@ -459,8 +556,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 				print("GstError parsed: %s\n", err.message);
 				//print("Debug: %s\n", debug);
 				if(!is_missing_plugins_error(msg)) {
-					//print("Error is not missing plugin error\n");
-					handle_eos_via_idle(); //this is used to go to the next track
+					send_user_error_message("GstError parsed: %s".printf(err.message));
+					stop();
 				}
 				break;
 			}
@@ -511,7 +608,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	}
 	
 	private void on_sign_missing_plugins() {
-		//print("sign_missing_plugins!!!!\n");
+		print("sign_missing_plugins!!!!\n");
 		stop();
 		return;
 	}
@@ -666,6 +763,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 		playbin.set_state(State.NULL); //READY
 		playing = false;
 		paused = false;
+		global.stop();
+		tlm.reset_state(); // dirty
 		sign_stopped();
 	}
 
