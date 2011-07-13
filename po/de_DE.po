@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-05 17:04+0200\n"
+"POT-Creation-Date: 2011-07-13 18:54+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shuerhaaken <shuerhaaken@googlemail.com>\n"
@@ -79,11 +79,50 @@ msgstr ""
 "Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere "
 "Untertitel-Datei"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:549
+#: ../libxnoise/Player/xnoise-gst-player.vala:459
+#, c-format
+msgid "Success on installing missing gstreamer plugin"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:463
+#, c-format
+msgid "User aborted installation of missing gstreamer plugin"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:467
+#, c-format
+msgid "Missing gstreamer plugin was not found"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:473
+#, c-format
+msgid "Critical error while installation of missing gstreamer plugin"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:518
+#: ../libxnoise/Player/xnoise-gst-player.vala:529
+#: ../libxnoise/Player/xnoise-gst-player.vala:542
+#, c-format
+msgid "Missing gstreamer plugin"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:520
+msgid "Automatic missing codec installation not supported"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:531
+msgid "Failed to start automatic gstreamer plugin installation."
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:544
+msgid "Trying to install missing gstreamer plugin"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:646
 msgid "Subtitle #"
 msgstr "Untertitel #"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:561
+#: ../libxnoise/Player/xnoise-gst-player.vala:658
 msgid "Audio Track #"
 msgstr "Audio-Track #"
 
@@ -476,30 +515,30 @@ msgstr "ready to rock"
 msgid "Select external subtitle file"
 msgstr "Wähle Untertitel-Datei"
 
-#: ../src/xnoise.vala:58
+#: ../src/xnoise.vala:60
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise ist ein Medien-Abspieler für Gtk+."
 
-#: ../src/xnoise.vala:58
+#: ../src/xnoise.vala:60
 msgid "It uses the gstreamer framework."
 msgstr "Er benutzt das GStreamer Rahmenwerk."
 
-#: ../src/xnoise.vala:58
+#: ../src/xnoise.vala:61
 msgid "More information on the project website:"
 msgstr "Mehr Infos auf der Website:"
 
-#: ../src/xnoise.vala:66
+#: ../src/xnoise.vala:70
 msgid ""
 "Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr ""
 "Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
 
-#: ../src/xnoise.vala:129
+#: ../src/xnoise.vala:130
 msgid "Using the running instance of xnoise!\n"
 msgstr "Verwende die laufende Instanz von xnoise!\n"
 
-#: ../src/xnoise.vala:132
+#: ../src/xnoise.vala:133
 msgid "Showing the running instance of xnoise.\n"
 msgstr "Zeige die laufende Instanz von xnoise.\n"
 
