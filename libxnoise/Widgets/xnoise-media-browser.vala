@@ -85,12 +85,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			if (_fontsizeMB == 0) { //intialization
 				if((value < 7)||(value > 14)) _fontsizeMB = 7;
 				else _fontsizeMB = value;
-				renderer.font = "Sans " + fontsizeMB.to_string();
+				renderer.size_points = fontsizeMB;
 			}
 			else {
 				if((value < 7)||(value > 14)) _fontsizeMB = 7;
 				else _fontsizeMB = value;
-				renderer.font = "Sans " + fontsizeMB.to_string();
+				renderer.size_points = fontsizeMB;
 				Idle.add(update_view);
 			}
 		}
@@ -521,8 +521,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		
 		this.set_size_request (300,500);
 		renderer = new CellRendererText();
-//		renderer.family = "Sans"; //TODO: Does not work!?
-//		renderer.size = 9; //TODO: Does not work!?
 		fontsizeMB = Params.get_int_value("fontsizeMB");
 
 		var pixbufRenderer = new CellRendererPixbuf();
