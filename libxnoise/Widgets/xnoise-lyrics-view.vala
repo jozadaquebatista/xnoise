@@ -40,9 +40,13 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	private string artist = "";
 	private string title = "";
 	private uint source = 0;
-
+	Gdk.Color black;
+	Gdk.Color light_gray;
+	
 	public LyricsView() {
 		xn = Main.instance;
+		Gdk.Color.parse("black", out black);
+		Gdk.Color.parse("#dddddddddddd", out light_gray);
 		loader = new LyricsLoader();
 		loader.sign_fetched.connect(on_lyrics_ready);
 		loader.sign_using_provider.connect(on_using_provider);
@@ -52,6 +56,13 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		this.set_left_margin(8);
 		this.set_wrap_mode(Gtk.WrapMode.WORD);
 		global.uri_changed.connect(on_uri_changed);
+		this.modify_base(Gtk.StateType.NORMAL, black);
+		this.modify_text(Gtk.StateType.NORMAL, light_gray);
+		var font_description = new Pango.FontDescription();
+		font_description.set_family("Sans");
+		font_description.set_size((int)(12 * Pango.SCALE));
+		this.modify_font(font_description);
+
 	}
 	
 	public void lyrics_provider_unregister(ILyricsProvider lp) {
@@ -73,7 +84,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 				   prepare_for_comparison(title)  == prepare_for_comparison(global.current_title)) {
 					return; // Do not search if we already have lyrics
 				}
-				textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);
+				set_text("LYRICS VIEWER\n\nwaiting...");
 				if(timeout!=0) {
 					GLib.Source.remove(timeout);
 					timeout = 0;
@@ -87,10 +98,10 @@ public class Xnoise.LyricsView : Gtk.TextView {
 				GLib.Source.remove(timeout);
 				timeout = 0;
 			}
-			textbuffer.set_text(_("Player stopped. Not searching for lyrics."), -1);
+			set_text(_("Player stopped. Not searching for lyrics."));
 			return;
 		}
-		textbuffer.set_text("LYRICS VIEWER\n\nwaiting...", -1);
+		set_text("LYRICS VIEWER\n\nwaiting...");
 		if(timeout!=0) {
 			GLib.Source.remove(timeout);
 			timeout = 0;
