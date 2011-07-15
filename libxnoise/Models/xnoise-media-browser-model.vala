@@ -287,7 +287,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			
 			album_pixb = w.render_icon(Gtk.Stock.CDROM, IconSize.BUTTON, null);
 			
-			if(theme.has_icon("audio-x-generic")) 
+			if(theme.has_icon("media-audio")) 
+				title_pixb = theme.load_icon("media-audio", iconheight, IconLookupFlags.FORCE_SIZE);
+			else if(theme.has_icon("audio-x-generic")) 
 				title_pixb = theme.load_icon("audio-x-generic", iconheight, IconLookupFlags.FORCE_SIZE);
 			else 
 				title_pixb = w.render_icon(Gtk.Stock.OPEN, IconSize.BUTTON, null);
