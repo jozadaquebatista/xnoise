@@ -253,21 +253,19 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 						int ciheight = (int)(cover_image_height * ratio * 0.7);
 						
 						//TODO: Set max scale for logo
-						ctx = Gdk.cairo_create(this.get_window());
 						var font_description = new Pango.FontDescription();
 						font_description.set_family(font_family);
 						font_description.set_size((int)(font_size * Pango.SCALE));
 		
-						var pango_layout = Pango.cairo_create_layout(ctx);
+						var pango_layout = Pango.cairo_create_layout(cr);
 						pango_layout.set_font_description(font_description);
 						pango_layout.set_markup(get_content_text() , -1);
 						
-						ctx.set_source_rgb(0.0, 0.0, 0.0);    // black background
-						ctx.paint();
-						ctx.set_source_rgb(0.9, 0.9, 0.9); // light gray font color
+						cr.set_source_rgb(0.0, 0.0, 0.0);    // black background
+						cr.paint();
+						cr.set_source_rgb(0.9, 0.9, 0.9); // light gray font color
 						int pango_x_offset = 50;
-						ctx.translate(pango_x_offset, (widgetheight/3));
-//						ctx.translate(this.x_offset, this.y_offset);
+						cr.translate(pango_x_offset, (widgetheight/3));
 						
 						pango_layout.set_width( (int)(layout_width  * Pango.SCALE));
 						pango_layout.set_height((int)(layout_height * Pango.SCALE));
@@ -275,8 +273,10 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 						pango_layout.set_ellipsize(Pango.EllipsizeMode.END);
 						pango_layout.set_alignment(Pango.Alignment.LEFT);
 						
-						ctx.move_to(0, 0);
-						Pango.cairo_show_layout(ctx, pango_layout);
+						cr.move_to(0, 0);
+						Pango.cairo_show_layout(cr, pango_layout);
+						cr.move_to(0, 0);
+						cr.translate(-pango_x_offset, -(widgetheight/3));
 						
 						logo = cover_image_pixb.scale_simple(ciwidth, ciheight, Gdk.InterpType.HYPER);
 						
@@ -303,11 +303,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		string result = "";
 		string? uri = global.current_uri;
 		
-//		if(global.player_state == PlayerState.STOPPED || uri == null || uri == "") {
-//			result = "xnoise media player \n" + "<span rise=\"6000\" style =\"italic\"> %s ;)</span>".printf(_("ready to rock"));
-//			return result;
-//		}
-	
 		string? title = global.current_title;
 		string? artist = global.current_artist;
 		string? album = global.current_album;
@@ -327,8 +322,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	
 		//todo: handle streams, change label layout, pack into a box with padding and use Tooltip.set_custom
 		if((title == null && artist == null && filename != null) || (filename == title /*&& artist == null*/)) {
-			result = "\n<b>" + prepare_name_from_filename(filename) + " </b><span size=\"xx-small\">\n</span>" +
-			         "<span size=\"small\" style=\"italic\" rise=\"6000\"></span>\n";
+			result = "<b>" + prepare_name_from_filename(filename) + " </b>";
 		}
 		else {
 			if(album == null)
@@ -359,16 +353,9 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	
 	private int layout_width     = 100;
 	private int layout_height    = 100;
-//	private int x_margin         = 5;
-//	private int y_margin         = 5;
-//	private int x_offset         = 25;
-//	private int y_offset         = 25;
 
 	public void trigger_expose() {
-		//trigger a redraw by gtk using our expose_event handler
-//		Gtk.Allocation alloc;
-//		this.get_allocation(out alloc);
-		this.queue_draw();//_area(0, 0, alloc.width, alloc.height);
+		this.queue_draw();
 	}
 }
 
