@@ -1,6 +1,6 @@
 /* xnoise-videoscreen.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2011  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,9 @@
  */
 
 using Gtk;
+
+using Xnoise;
+using Xnoise.Services;
 
 public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	private Gdk.Pixbuf logo_pixb;
@@ -233,23 +236,54 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				}
 				else {
 					if(cover_image_pixb != null) {
+						//Pango
+						layout_width  = alloc.width/3; //300; //current_alloc.width - (x_offset + x_margin);
+						layout_height = 300; //current_alloc.height - (y_offset + y_margin);
+						//---
+						
 						int cover_image_width  = cover_image_pixb.get_width();
 						int cover_image_height = cover_image_pixb.get_height();
-
+						
 						if((float)widgetwidth/cover_image_width>(float)widgetheight/cover_image_height)
 							ratio = (float)widgetheight/cover_image_height;
 						else
 							ratio = (float)widgetwidth/cover_image_width;
-
-						int ciwidth  = (int)(cover_image_width  * ratio * 0.8);
-						int ciheight = (int)(cover_image_height * ratio * 0.8);
 						
-						//TODO: Set max scale
+						int ciwidth  = (int)(cover_image_width  * ratio * 0.7);
+						int ciheight = (int)(cover_image_height * ratio * 0.7);
+						
+						//TODO: Set max scale for logo
+						var font_description = new Pango.FontDescription();
+						font_description.set_family(font_family);
+						font_description.set_size((int)(font_size * Pango.SCALE));
+		
+						var pango_layout = Pango.cairo_create_layout(cr);
+						pango_layout.set_font_description(font_description);
+						pango_layout.set_markup(get_content_text() , -1);
+						
+						cr.set_source_rgb(0.0, 0.0, 0.0);    // black background
+						cr.paint();
+						cr.set_source_rgb(0.9, 0.9, 0.9); // light gray font color
+						int pango_x_offset = 50;
+						cr.translate(pango_x_offset, (widgetheight/3));
+						
+						pango_layout.set_width( (int)(layout_width  * Pango.SCALE));
+						pango_layout.set_height((int)(layout_height * Pango.SCALE));
+						
+						pango_layout.set_ellipsize(Pango.EllipsizeMode.END);
+						pango_layout.set_alignment(Pango.Alignment.LEFT);
+						
+						cr.move_to(0, 0);
+						Pango.cairo_show_layout(cr, pango_layout);
+						cr.move_to(0, 0);
+						cr.translate(-pango_x_offset, -(widgetheight/3));
 						
 						logo = cover_image_pixb.scale_simple(ciwidth, ciheight, Gdk.InterpType.HYPER);
-
-						y_offset = (int)((widgetheight * 0.5) - (ciheight * 0.5));
-						x_offset = (int)((widgetwidth  * 0.5) - (ciwidth  * 0.5));
+						
+						y_offset = (int)((widgetheight * 0.5)  - (ciheight * 0.5));
+						x_offset = (int)((widgetwidth  * 0.65) - (ciwidth  * 0.5));
+						if(x_offset < (layout_width + pango_x_offset))
+							x_offset = layout_width + pango_x_offset;
 					}
 					else {
 						logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
@@ -264,12 +298,64 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 		return true;
 	}
+	
+	private string get_content_text() {
+		string result = "";
+		string? uri = global.current_uri;
+		
+		string? title = global.current_title;
+		string? artist = global.current_artist;
+		string? album = global.current_album;
+	
+		string? filename = null;
+		if(uri != null) {
+			File f = File.new_for_uri(uri);
+			if(f != null) {
+				filename = f.get_basename();
+				filename = Markup.escape_text(filename);
+			}
+		}
+	
+		//if neither title nor artist are known, show filename instead
+		//if there is no title, the title is the same as the filename
+		//shouldn't global rather return null if there is no title?
+	
+		//todo: handle streams, change label layout, pack into a box with padding and use Tooltip.set_custom
+		if((title == null && artist == null && filename != null) || (filename == title /*&& artist == null*/)) {
+			result = "<b>" + prepare_name_from_filename(filename) + " </b>";
+		}
+		else {
+			if(album == null)
+				album = _("unknown album");
+			if(artist == null)
+				artist = _("unknown artist");
+			if(title == null)
+				title = _("unknown title");
+			
+			album = Markup.escape_text(album);
+			artist = Markup.escape_text(artist);
+			title = Markup.escape_text(title);
+			
+			result = "<span weight=\"bold\">" + 
+			          title +   " </span>\n<span size=\"small\" rise=\"6000\" style=\"italic\"></span><span size=\"xx-small\">\n</span>" +
+			          "<span size=\"small\" weight=\"light\">%s </span>".printf(_("by")) + 
+			          artist + " \n" +
+			          "<span size=\"small\" weight=\"light\">%s </span> ".printf(_("on")) + 
+			          album;
+		}
+		return result;
+	}
+	
+
+	public string font_family    { get; set; default = "Sans"; }
+	public double font_size      { get; set; default = 18; }
+	public string text           { get; set; }
+	
+	private int layout_width     = 100;
+	private int layout_height    = 100;
 
 	public void trigger_expose() {
-		//trigger a redraw by gtk using our expose_event handler
-		Gtk.Allocation alloc;
-		this.get_allocation(out alloc);
-		this.queue_draw_area(0, 0, alloc.width, alloc.height);
+		this.queue_draw();
 	}
 }
 

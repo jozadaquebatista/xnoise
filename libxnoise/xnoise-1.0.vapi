@@ -992,6 +992,9 @@ namespace Xnoise {
 		public VideoScreen (Xnoise.GstPlayer _player);
 		public override bool expose_event (Gdk.EventExpose e);
 		public void trigger_expose ();
+		public string font_family { get; set; }
+		public double font_size { get; set; }
+		public string text { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class VolumeSliderButton : Gtk.VolumeButton {
