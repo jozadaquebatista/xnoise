@@ -2631,6 +2631,12 @@ void xnoise_track_progress_bar_set_value (XnoiseTrackProgressBar* self, guint po
 XnoiseVideoScreen* xnoise_video_screen_new (XnoiseGstPlayer* _player);
 XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type, XnoiseGstPlayer* _player);
 void xnoise_video_screen_trigger_expose (XnoiseVideoScreen* self);
+const gchar* xnoise_video_screen_get_font_family (XnoiseVideoScreen* self);
+void xnoise_video_screen_set_font_family (XnoiseVideoScreen* self, const gchar* value);
+gdouble xnoise_video_screen_get_font_size (XnoiseVideoScreen* self);
+void xnoise_video_screen_set_font_size (XnoiseVideoScreen* self, gdouble value);
+const gchar* xnoise_video_screen_get_text (XnoiseVideoScreen* self);
+void xnoise_video_screen_set_text (XnoiseVideoScreen* self, const gchar* value);
 GType xnoise_volume_slider_button_get_type (void) G_GNUC_CONST;
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (void);
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_construct (GType object_type);

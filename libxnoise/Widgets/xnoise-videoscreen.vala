@@ -233,21 +233,48 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				}
 				else {
 					if(cover_image_pixb != null) {
+						
 						int cover_image_width  = cover_image_pixb.get_width();
 						int cover_image_height = cover_image_pixb.get_height();
-
+						
 						if((float)widgetwidth/cover_image_width>(float)widgetheight/cover_image_height)
 							ratio = (float)widgetheight/cover_image_height;
 						else
 							ratio = (float)widgetwidth/cover_image_width;
-
-						int ciwidth  = (int)(cover_image_width  * ratio * 0.8);
-						int ciheight = (int)(cover_image_height * ratio * 0.8);
 						
-						//TODO: Set max scale
+						int ciwidth  = (int)(cover_image_width  * ratio * 0.7);
+						int ciheight = (int)(cover_image_height * ratio * 0.7);
 						
+						//TODO: Set max scale for logo
+						
+						layout_width  = 300; //current_alloc.width - (x_offset + x_margin);
+						layout_height = 300; //current_alloc.width - (y_offset + y_margin);
+						var font_description = new Pango.FontDescription();
+						font_description.set_family(font_family);
+						font_description.set_size((int)(font_size * Pango.SCALE));
+		
+						var pango_layout = Pango.cairo_create_layout(cr);
+						pango_layout.set_font_description(font_description);
+						pango_layout.set_markup("<b>some title</b> <i>by</i>\n<b>the Artist formerly known as shit</b> <i>on</i>\n<b>AlbumName</b>" , -1);
+						
+						cr.set_source_rgb(0.0, 0.0, 0.0);    // black background
+						cr.paint();
+						cr.set_source_rgb(0.9, 0.9, 0.9); // light gray font color
+						cr.translate((((int)widgetwidth/10) > 50 ? ((int)widgetwidth/10) : 50), (widgetheight/4));
+//						cr.translate(this.x_offset, this.y_offset);
+		
+						pango_layout.set_width( (int)(layout_width  * Pango.SCALE));
+						pango_layout.set_height((int)(layout_height * Pango.SCALE));
+		
+						pango_layout.set_ellipsize(Pango.EllipsizeMode.END);
+						pango_layout.set_alignment(Pango.Alignment.LEFT);
+		
+						cr.move_to(0, 0);
+						Pango.cairo_show_layout(cr, pango_layout);
+						
+						cr.reset_clip();
 						logo = cover_image_pixb.scale_simple(ciwidth, ciheight, Gdk.InterpType.HYPER);
-
+						
 						y_offset = (int)((widgetheight * 0.5) - (ciheight * 0.5));
 						x_offset = (int)((widgetwidth  * 0.5) - (ciwidth  * 0.5));
 					}
@@ -265,11 +292,22 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		return true;
 	}
 
+	public string font_family    { get; set; default = "Sans"; }
+	public double font_size      { get; set; default = 15; }
+	public string text           { get; set; }
+	
+	private int layout_width     = 100;
+	private int layout_height    = 100;
+//	private int x_margin         = 5;
+//	private int y_margin         = 5;
+//	private int x_offset         = 25;
+//	private int y_offset         = 25;
+
 	public void trigger_expose() {
 		//trigger a redraw by gtk using our expose_event handler
-		Gtk.Allocation alloc;
-		this.get_allocation(out alloc);
-		this.queue_draw_area(0, 0, alloc.width, alloc.height);
+//		Gtk.Allocation alloc;
+//		this.get_allocation(out alloc);
+		this.queue_draw();//_area(0, 0, alloc.width, alloc.height);
 	}
 }
 
