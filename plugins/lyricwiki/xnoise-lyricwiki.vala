@@ -36,6 +36,7 @@ using Xnoise.Services;
 using Xnoise.PluginModule;
 
 public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
+	private unowned PluginModule.Container p;
 	private unowned Container _owner;
 	
 	public unowned Main xn { get; set; }
@@ -65,6 +66,28 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	
 	public bool init() {
 		priority = 1;
+		p = plugin_loader.plugin_htable.lookup("DatabaseLyrics");
+		if(p == null) {
+			if(this.owner != null)
+				Idle.add( () => {
+					owner.deactivate();
+					return false;
+				}); 
+			return false;
+		}
+		if(!p.activated)
+			plugin_loader.activate_single_plugin(p.info.name);
+		
+		if(!p.activated) {
+			print("cannot start DatabaseLyrics plugin\n");
+			if(this.owner != null)
+				Idle.add( () => {
+					owner.deactivate();
+					return false;
+				}); 
+			return false;
+		}
+		p.sign_deactivated.connect(dblyrics_deactivated);
 		return true;
 	}
 
@@ -86,6 +109,22 @@ public class Xnoise.LyricwikiPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	
 	public Xnoise.ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb) {
 		return (ILyrics*)new Lyricwiki(loader, _owner, artist, title, cb);
+	}
+
+	private uint deactivation_source = 0;
+	private void dblyrics_deactivated() {
+		if(deactivation_source != 0)
+			Source.remove(deactivation_source);
+		deactivation_source = Idle.add( () => {
+			
+			if(this.owner != null) {
+				Idle.add( () => {
+					owner.deactivate();
+					return false;
+				}); 
+			}
+			return false;
+		});
 	}
 }
 

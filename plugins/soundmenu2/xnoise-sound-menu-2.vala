@@ -71,8 +71,8 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
 				}); 
 			return;
 		}
-		
-		p.activate();
+		if(!p.activated)
+			plugin_loader.activate_single_plugin(p.info.name);
 		
 		if(!p.activated) {
 			print("cannot start mpris plugin\n");
