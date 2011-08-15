@@ -60,9 +60,8 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		//this.modify_text(Gtk.StateType.NORMAL, light_gray);
 		var font_description = new Pango.FontDescription();
 		font_description.set_family("Sans");
-		font_description.set_size((int)(12 * Pango.SCALE));
+		font_description.set_size((int)(12 * Pango.SCALE)); // TODO: make this configurable
 		this.modify_font(font_description);
-
 	}
 	
 	public void lyrics_provider_unregister(ILyricsProvider lp) {
