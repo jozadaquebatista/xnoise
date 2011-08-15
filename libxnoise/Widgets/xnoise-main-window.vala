@@ -1252,7 +1252,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			videoscreen = gst_player.videoscreen;
 			videovbox = gb.get_object("videovbox") as Gtk.VBox;
 			videovbox.pack_start(videoscreen,true,true,0);
-
+			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;
 			removeAllButton.can_focus      = false;

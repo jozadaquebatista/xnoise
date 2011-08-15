@@ -152,6 +152,7 @@ public class Xnoise.Main : GLib.Object {
 	private uint maxtime_quit_src = 0;
 	
 	public void quit() {
+		global.player_state = PlayerState.STOPPED;
 		preparing_quit = true;
 		maxtime_quit_src = Timeout.add_seconds(4, () => { // maximum time for shutdown
 			Gtk.main_quit(); 

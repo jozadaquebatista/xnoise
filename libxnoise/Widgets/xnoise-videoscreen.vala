@@ -34,13 +34,13 @@ using Xnoise;
 using Xnoise.Services;
 
 public class Xnoise.VideoScreen : Gtk.DrawingArea {
+	private static const string SELECT_EXT_SUBTITLE_FILE = _("Select external subtitle file");
 	private Gdk.Pixbuf logo_pixb;
 	private Gdk.Pixbuf cover_image_pixb;
 	private Gdk.Pixbuf logo;
 	private unowned Main xn;
 	private bool cover_image_available;
 	private unowned GstPlayer player;
-	private static const string SELECT_EXT_SUBTITLE_FILE = _("Select external subtitle file");
 	
 	public VideoScreen(GstPlayer _player) {
 		this.player = _player;
@@ -73,7 +73,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				rightmenu = new Menu();
 			int i = 0;
 			foreach(unowned string s in player.available_subtitles) {
-				var menuitem = new ImageMenuItem.from_stock (Gtk.Stock.INDEX, null);
+				var menuitem = new ImageMenuItem.from_stock(Gtk.Stock.INDEX, null);
 				menuitem.set_label(s);
 				int k = i++;
 				menuitem.activate.connect( () => { 
@@ -92,7 +92,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				rightmenu.append(new SeparatorMenuItem());
 			int i = 0;
 			foreach(unowned string s in player.available_audiotracks) {
-				var menuitem = new ImageMenuItem.from_stock (Gtk.Stock.INFO, null);
+				var menuitem = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
 				menuitem.set_label(s);
 				int k = i++;
 				menuitem.activate.connect( () => { 
@@ -112,8 +112,18 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 			var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.EDIT, null);
 			menu_item.set_label(SELECT_EXT_SUBTITLE_FILE);
 			menu_item.activate.connect(this.open_suburi_filechooser);
-			rightmenu.append(menu_item);			
+			rightmenu.append(menu_item);
 		}
+		if(rightmenu == null)
+			rightmenu = new Menu();
+		else
+			rightmenu.append(new SeparatorMenuItem());
+		var fullscreenmenuitem = new ImageMenuItem.from_stock((main_window.fullscreenwindowvisible ? Gtk.Stock.LEAVE_FULLSCREEN : Gtk.Stock.FULLSCREEN), null);
+		fullscreenmenuitem.set_label((main_window.fullscreenwindowvisible ? _("Leave Fullscreen") : _("Fullscreen")));
+		fullscreenmenuitem.activate.connect( () => { 
+			main_window.toggle_fullscreen();
+		});
+		rightmenu.append(fullscreenmenuitem);
 		if(rightmenu != null)
 			rightmenu.show_all();
 		return rightmenu;
@@ -160,6 +170,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		else {
 			cover_image_pixb = null;
 			cover_image_available = false;
+			trigger_expose();
 		}
 	}
 	
@@ -181,7 +192,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	private Gdk.Color black;
 	
 	public override bool expose_event(Gdk.EventExpose e) {
-		
 		if(e.count > 0) return true; //exposure compression
 		
 		rect.x = 0;
