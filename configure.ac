@@ -3,7 +3,7 @@ AC_PREREQ([2.67])
 #xnoise version
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 1)
-m4_define(xnoise_micro_version, 26)
+m4_define(xnoise_micro_version, 27)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
 AC_INIT([xnoise],[xnoise_version],[shuerhaakenATgo oglemail.com],[xnoise])
@@ -39,7 +39,6 @@ GDBUS_REQUIRED=2.26
 VALA_REQUIRED=0.11.6
 
 
-dnl CFLAGS="-O3"
 AC_PROG_CC
 AC_HEADER_STDC
 AC_FUNC_MMAP

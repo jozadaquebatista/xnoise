@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-13 18:54+0200\n"
+"POT-Creation-Date: 2011-08-15 15:28+0200\n"
 "PO-Revision-Date: 2011-07-14 04:44+0100\n"
 "Last-Translator: Tubuntu <tubuntu@testimonium.be>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -72,8 +72,11 @@ msgid "Leave fullscreen"
 msgstr "Quitter le plein écran"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
-msgstr "Le nom du fichier de sous-titres ne correspond pas à celui du fichier vidéo! Aucun fichier de sous-titres ne sera utilisé."
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
+msgstr ""
+"Le nom du fichier de sous-titres ne correspond pas à celui du fichier vidéo! "
+"Aucun fichier de sous-titres ne sera utilisé."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
@@ -122,12 +125,17 @@ msgstr "Sous-titres #"
 msgid "Audio Track #"
 msgstr "Piste Audio #"
 
-#: ../libxnoise/Widgets/xnoise-lyrics-view.vala:90
-#: ../libxnoise/Widgets/xnoise-lyrics-view.vala:109
+#. the 'no lyrics found...' also appears in the db provider !!
+#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:182
+msgid "no lyrics found..."
+msgstr ""
+
+#: ../libxnoise/Widgets/xnoise-lyrics-view.vala:100
+#: ../libxnoise/Widgets/xnoise-lyrics-view.vala:119
 msgid "Player stopped. Not searching for lyrics."
 msgstr "Lecteur arrêté. Pas de recherche de paroles."
 
-#: ../libxnoise/Widgets/xnoise-lyrics-view.vala:120
+#: ../libxnoise/Widgets/xnoise-lyrics-view.vala:130
 msgid "Insufficient track information. Not searching for lyrics."
 msgstr "Information de piste insuffisante. Pas de recherche de paroles."
 
@@ -137,7 +145,7 @@ msgstr "Information de piste insuffisante. Pas de recherche de paroles."
 #. textbuffer.get_start_iter (out end_iter);
 #. string txt = textbuffer.get_text(start_iter, end_iter, true);
 #. TODO: Howto append text ?
-#: ../libxnoise/Widgets/xnoise-lyrics-view.vala:141
+#: ../libxnoise/Widgets/xnoise-lyrics-view.vala:151
 #, c-format
 msgid ""
 "\n"
@@ -170,132 +178,141 @@ msgstr "Afficher Média"
 msgid "Hide Media"
 msgstr "Masquer Média"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:109
+#: ../libxnoise/Widgets/xnoise-main-window.vala:113
 msgid "Hide Library"
 msgstr "Masquer Bibliothèque"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:110
+#: ../libxnoise/Widgets/xnoise-main-window.vala:114
 msgid "Show Library"
 msgstr "Afficher Bibliothèque"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:174
+#: ../libxnoise/Widgets/xnoise-main-window.vala:184
 msgid "_File"
 msgstr "_Fichier"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:175
+#: ../libxnoise/Widgets/xnoise-main-window.vala:185
 msgid "open file"
 msgstr "ouvrir le fichier"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:176
+#: ../libxnoise/Widgets/xnoise-main-window.vala:186
 msgid "Open _Location"
 msgstr "Ouvrir emp_lacement"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:176
+#: ../libxnoise/Widgets/xnoise-main-window.vala:186
 msgid "open remote location"
 msgstr "ouvrir un emplacement distant"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:177
+#: ../libxnoise/Widgets/xnoise-main-window.vala:187
 msgid "_Add or Remove media"
 msgstr "_Ajout/Suppression média"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:177
+#: ../libxnoise/Widgets/xnoise-main-window.vala:187
 msgid "manage the content of the xnoise media library"
 msgstr "gérer le contenu de la bibliothèque de médias de xnoise"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:179
+#: ../libxnoise/Widgets/xnoise-main-window.vala:189
 msgid "_Edit"
 msgstr "_Edition"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:180
+#: ../libxnoise/Widgets/xnoise-main-window.vala:190
 msgid "C_lear tracklist"
 msgstr "Vider _liste de lecture"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:180
+#: ../libxnoise/Widgets/xnoise-main-window.vala:190
 msgid "Clear the tracklist"
 msgstr "vide la liste de lecture"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:181
+#: ../libxnoise/Widgets/xnoise-main-window.vala:191
 msgid "R_escan collection"
 msgstr "R_escanner les collections"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:183
+#: ../libxnoise/Widgets/xnoise-main-window.vala:193
 msgid "_View"
 msgstr "_Afficher"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:184
+#: ../libxnoise/Widgets/xnoise-main-window.vala:194
 msgid "_Tracklist"
 msgstr "Lis_te de lecture"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:184
+#: ../libxnoise/Widgets/xnoise-main-window.vala:194
 msgid "Go to the tracklist."
 msgstr "Afficher la liste de lecture dans la fenêtre principale."
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:185
+#: ../libxnoise/Widgets/xnoise-main-window.vala:195
 msgid "_Now Playing"
 msgstr "Lecture _actuelle"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:185
+#: ../libxnoise/Widgets/xnoise-main-window.vala:195
 msgid "Go to the now playing screen in the main window."
 msgstr "Afficher la lecture en cours dans la fenêtre principale."
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:186
+#: ../libxnoise/Widgets/xnoise-main-window.vala:196
 msgid "_Lyrics"
 msgstr "Paro_les"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:186
+#: ../libxnoise/Widgets/xnoise-main-window.vala:196
 msgid "Go to the lyrics view."
 msgstr "Afficher les paroles dans la fenêtre principale."
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:187
+#: ../libxnoise/Widgets/xnoise-main-window.vala:197
 msgid "_Help"
 msgstr "_Aide"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:189
+#: ../libxnoise/Widgets/xnoise-main-window.vala:199
 msgid "_Config"
 msgstr "_Configuration"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:367
+#: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "Restitution de %u pistes dans la liste de lecture. Ce nombre est important et peut ralentir le démarrage de xnoise."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"Restitution de %u pistes dans la liste de lecture. Ce nombre est important "
+"et peut ralentir le démarrage de xnoise."
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:430
+#: ../libxnoise/Widgets/xnoise-main-window.vala:440
 msgid "Add media"
 msgstr "Ajout de médias"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:433
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
-msgstr "Vous exécutez xnoise pour la première fois. Désirez-vous importer des médias dans la bibliothèque?"
+#: ../libxnoise/Widgets/xnoise-main-window.vala:443
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
+msgstr ""
+"Vous exécutez xnoise pour la première fois. Désirez-vous importer des médias "
+"dans la bibliothèque?"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:528
+#: ../libxnoise/Widgets/xnoise-main-window.vala:538
 msgid "no repeat"
 msgstr "pas de répétition"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:534
+#: ../libxnoise/Widgets/xnoise-main-window.vala:544
 msgid "repeat single"
 msgstr "répétition du média"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:540
+#: ../libxnoise/Widgets/xnoise-main-window.vala:550
 msgid "repeat all"
 msgstr "répétition de tous les médias"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:546
+#: ../libxnoise/Widgets/xnoise-main-window.vala:556
 msgid "random play"
 msgstr "lecture aléatoire"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1008
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1028
 msgid "Enter the URL of the file to open"
 msgstr "Introduisez l'URL du fichier à ouvrir"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1022
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1042
 msgid "Select media file"
 msgstr "Sélectionner un fichier média"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1086
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1109
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1151
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1176
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1106
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1129
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1171
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1196
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:351
 #: ../plugins/notifications/xnoise-notifications.vala:191
 #: ../plugins/notifications2/xnoise-notifications.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
@@ -304,11 +321,12 @@ msgstr "Sélectionner un fichier média"
 msgid "by"
 msgstr "de"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1088
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1111
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1153
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1178
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1108
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1131
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1173
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1198
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:353
 #: ../plugins/notifications/xnoise-notifications.vala:193
 #: ../plugins/notifications2/xnoise-notifications.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:133
@@ -317,45 +335,52 @@ msgstr "de"
 msgid "on"
 msgstr "le"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1108
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1175
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1128
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1195
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:218
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:343
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 #, c-format
 msgid "unknown title"
 msgstr "titre inconnu"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1110
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1177
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1130
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1197
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:216
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:341
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown artist"
 msgstr "artiste inconnu"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1112
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1179
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1132
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1199
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:214
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:339
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 msgid "unknown album"
 msgstr "album inconnu"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1161
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1181
 msgid "unknown organization"
 msgstr "organisation inconnue"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1163
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1183
 msgid "unknown location"
 msgstr "emplacement inconnu"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1260
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1280
 msgid "Remove all"
 msgstr "Tout retirer"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1265
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1285
 msgid "Remove selected titles"
 msgstr "Retirer les titres sélectionnés"
 
-#: ../libxnoise/Models/xnoise-media-browser-model.vala:958
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1527
+msgid "Show application main menu"
+msgstr ""
+
+#: ../libxnoise/Models/xnoise-media-browser-model.vala:960
 msgid "Loading ..."
 msgstr "En chargement..."
 
@@ -364,27 +389,31 @@ msgstr "En chargement..."
 msgid "Found %u tracks. Updating library ..."
 msgstr "%u pistes trouvées. Mise à jour de la bibliothèque..."
 
-#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:582
+#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:260
 msgid "use helper lines in media browser"
 msgstr "Utiliser les guides d'indentation dans le navigateur de médias"
 
-#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:587
+#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:265
 msgid "use linebreaks in media browser"
 msgstr "Utiliser le retour de ligne dans le navigateur de médias"
 
-#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:592
+#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:270
 msgid "Don't show video screen while hovering album image"
 msgstr "Ne pas afficher l'écran vidéo lors du survol de l'image de l'album"
 
-#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:597
+#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:275
 msgid "Compact layout"
 msgstr "Visualisation compacte"
 
-#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:602
+#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:280
 msgid "Use stop button"
 msgstr "Utiliser le bouton Stop"
 
-#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:613
+#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:285
+msgid "Quit application if window is closed"
+msgstr ""
+
+#: ../libxnoise/Widgets/xnoise-settings-dialog.vala:296
 msgid "Media browser fontsize:"
 msgstr "Grandeur des caratères dans le navigateur de médias:"
 
@@ -411,13 +440,20 @@ msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
-msgstr "Veuillez patienter pendant la mise à jour du navigateur de médias, ou annulez si vous ne voulez pas attendre."
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Veuillez patienter pendant la mise à jour du navigateur de médias, ou "
+"annulez si vous ne voulez pas attendre."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "Veuillez patienter pendant l'importation des médias, ou annulez si vous ne voulez pas attendre."
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Veuillez patienter pendant l'importation des médias, ou annulez si vous ne "
+"voulez pas attendre."
 
 #: ../libxnoise/Widgets/xnoise-tracklist.vala:1026
 msgid "Title"
@@ -492,9 +528,19 @@ msgstr "en pause"
 msgid "ready to rock"
 msgstr "ready to rock"
 
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:40
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:37
 msgid "Select external subtitle file"
 msgstr "Sélectionner le fichier externe des sous-titres"
+
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:122
+#, fuzzy
+msgid "Leave Fullscreen"
+msgstr "Quitter le plein écran"
+
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:122
+#, fuzzy
+msgid "Fullscreen"
+msgstr "Quitter le plein écran"
 
 #: ../src/xnoise.vala:60
 #, c-format
@@ -510,8 +556,11 @@ msgid "More information on the project website:"
 msgstr "Plus d'informations sur site internet du projet:"
 
 #: ../src/xnoise.vala:70
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr "Exécuter 'xnoise --help' pour visualiser la liste complète des options disponibles en ligne de commande.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr ""
+"Exécuter 'xnoise --help' pour visualiser la liste complète des options "
+"disponibles en ligne de commande.\n"
 
 #: ../src/xnoise.vala:130
 msgid "Using the running instance of xnoise!\n"
@@ -569,54 +618,79 @@ msgstr "Remplacer le nom de la fenêtre par le titre courant"
 
 #~ msgid "Add local file"
 #~ msgstr "Ajouter un fichier local"
+
 #~ msgid "Test"
 #~ msgstr "Test"
+
 #~ msgid "Chartlyrics"
 #~ msgstr "ChartLyrics"
+
 #~ msgid "CyclicSaveState"
 #~ msgstr "CyclicSaveState"
+
 #~ msgid "LastfmCovers"
 #~ msgstr "LastfmCovers"
+
 #~ msgid "Lyricwiki"
 #~ msgstr "LyricWiki"
+
 #~ msgid "mediakeys"
 #~ msgstr "touches multimédias"
+
 #~ msgid "mpris"
 #~ msgstr "mpris"
+
 #~ msgid "notifications"
 #~ msgstr "notifications"
+
 #~ msgid "soundmenu"
 #~ msgstr "soundmenu"
+
 #~ msgid "soundmenu2"
 #~ msgstr "soundmenu2"
+
 #~ msgid "TitleToDecoration"
 #~ msgstr "TitleToDecoration"
+
 #~ msgid "_Video screen"
 #~ msgstr "_Video screen"
+
 #~ msgid "Finished import. "
 #~ msgstr "Finished import. "
+
 #~ msgid "Found %d media files"
 #~ msgstr "Found %d media files"
+
 #~ msgid "Updated library for new media folders. "
 #~ msgstr "Updated library for new media folders. "
+
 #~ msgid "Found %d new media files"
 #~ msgstr "Found %d new media files"
+
 #~ msgid "Visible extra columns for tracklist:"
 #~ msgstr "Visible extra columns for tracklist:"
+
 #~ msgid "Video"
 #~ msgstr "Video"
+
 #~ msgid "Change artist name"
 #~ msgstr "Change artist name"
+
 #~ msgid "Change album name"
 #~ msgstr "Change album name"
+
 #~ msgid "Edit metadata for track"
 #~ msgstr "Edit metadata for track"
+
 #~ msgid "Remove selected"
 #~ msgstr "Remove selected"
+
 #~ msgid "No Subtitle"
 #~ msgstr "No Subtitle"
+
 #~ msgid "Enable a lyrics provider plugin for lyrics fetching to work"
 #~ msgstr "Enable a lyrics provider plugin for lyrics fetching to work"
+
 #~ msgid ""
 #~ "\n"
 #~ "Lyrics provider %s cannot find lyrics for \n"
@@ -625,4 +699,3 @@ msgstr "Remplacer le nom de la fenêtre par le titre courant"
 #~ "\n"
 #~ "Lyrics provider %s cannot find lyrics for \n"
 #~ "\"%s\" by \"%s\".\n"
-

@@ -1,5 +1,17 @@
 xnoise (0.1.27-1) natty; urgency=low
-  * Closes: #632932
+  * present the currently played track data together with the album cover in the 'now playing' view
+  * check missing gstreamer plugins (codecs) and inform the user
+  * add option for quitting application on closing window (not default option)
+  * set_tooltip for compact mode application menu button
+  * use icons only for hide/show library buttons
+  * improve track icon loading (for elementary theme)
+  * move all code to new libxnoise
+  * changes in project structure; add new name spaces
+  * use XDG data dir for xnoise data
+  * add french translation
+  * add polish translation
+  * update some translation
+  * bug fixes
 
  -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 11 Jul 2011 16:36:56 +0200
 
