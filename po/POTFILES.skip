@@ -13,6 +13,8 @@ libxnoise/Widgets/xnoise-lyrics-view.c
 libxnoise/Widgets/xnoise-main-window.c
 libxnoise/Widgets/xnoise-settings-dialog.c
 libxnoise/Widgets/xnoise-tracklist.c
+libxnoise/Lyrics/xnoise-lyrics-loader.c
+libxnoise/Widgets/xnoise-videoscreen.c
 src/xnoise.c
 data/ui/metadat_artist_album.ui
 data/ui/metadat_title.ui

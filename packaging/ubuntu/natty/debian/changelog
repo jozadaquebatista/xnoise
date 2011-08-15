@@ -1,3 +1,9 @@
+xnoise (0.1.27-1) natty; urgency=low
+  * Closes: #632932
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 11 Jul 2011 16:36:56 +0200
+
+
 xnoise (0.1.25.0-natty-0ubuntu0) natty; urgency=low
   * bug fixes
 
@@ -193,3 +199,4 @@ xnoise (0.1.5-1) lucid; urgency=low
   * Initial release
 
  -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 16 Jun 2010 15:57:42 +0200
+
