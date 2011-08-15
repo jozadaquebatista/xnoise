@@ -1630,6 +1630,7 @@ struct _XnoiseLyricsViewClass {
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
+	gboolean quit_if_closed;
 	GtkScrolledWindow* mediaBrScrollWin;
 	GtkScrolledWindow* trackListScrollWin;
 	GtkActionGroup* action_group;

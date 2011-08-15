@@ -51,6 +51,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private CheckButton checkB_mediaBrLinebreaks;
 	private CheckButton checkB_usestop;
 	private CheckButton checkB_hoverimage;
+	private CheckButton checkB_quitifclosed;
 	
 	private enum NotebookTabs {
 		GENERAL = 0,
@@ -99,6 +100,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_compact.active = false;
 			
 		//use stop button
+		if(Params.get_int_value("quit_if_closed") > 0)
+			checkB_quitifclosed.active = true;
+		else
+			checkB_quitifclosed.active = false;
+		
 		if(Params.get_int_value("usestop") > 0)
 			checkB_usestop.active = true;
 		else
@@ -155,6 +161,17 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		}
 	}
 	
+	private void on_checkbutton_quitifclosed_clicked(Gtk.Button sender) {
+		if(this.checkB_quitifclosed.active) {
+			Params.set_int_value("quit_if_closed", 1);
+			main_window.quit_if_closed = true;
+		}
+		else {
+			Params.set_int_value("quit_if_closed", 0);
+			main_window.quit_if_closed = false;
+		}
+	}
+	
 	private void on_checkbutton_usestop_clicked(Gtk.Button sender) {
 		if(this.checkB_usestop.active) {
 			Params.set_int_value("usestop", 1);
@@ -189,46 +206,10 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	}
 	
 	private void on_ok_button_clicked() {
-//		Params.set_int_value("use_album_column", (show_album_col == true ? 1 : 0));
-//		xn.tl.column_album_visible = show_album_col;
-//		
-//		// show length column
-//		Params.set_int_value("use_length_column", (show_length_col == true ? 1 : 0));
-//		xn.tl.column_length_visible = show_length_col;
-
-//		// show track number column
-//		Params.set_int_value("use_tracknumber_column", (show_trackno_col == true ? 1 : 0));
-//		xn.tl.column_tracknumber_visible = show_trackno_col;
-
-		//write priorities for lyrics providers
-//		ly_model.foreach(lyrics_list_foreach);
-//		Params.set_string_list_value("prio_lyrics", priorities_lyrics);
-
-		//write priorities for image providers
-//		ai_model.foreach(images_list_foreach);
-//		Params.set_string_list_value("prio_images", priorities_images);
-
 		Params.write_all_parameters_to_file();
 		this.dialog.destroy();
 		sign_finish();
 	}
-
-//	private string[] priorities_lyrics = {};
-//	private string[] priorities_images = {};
-//	
-//	private bool lyrics_list_foreach(TreeModel sender, TreePath path, TreeIter iter) {
-//		string? name = null;
-//		sender.get(iter, LyricsProvider.NAME, out name);
-//		priorities_lyrics += name;
-//		return false;
-//	}
-	
-//	private bool images_list_foreach(TreeModel sender, TreePath path, TreeIter iter) {
-//		string? name = null;
-//		sender.get(iter, LyricsProvider.NAME, out name);
-//		priorities_lyrics += name;
-//		return false;
-//	}
 
 	private void on_cancel_button_clicked() {
 		this.dialog.destroy();
@@ -264,309 +245,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		this.dialog.show_all();
 	}
 
-//	private void setup_lyrics_provider_tv() {
-//		ly_tv = new TreeView();
-//		ly_model = new ListStore(LyricsProvider.N_COLUMNS,
-//		                         typeof(bool),
-//		                         typeof(string)
-//		                         );
-//		ly_tv.model = ly_model;
-//		
-//		var renderer = new CellRendererText();
-//		
-//		var columnText = new TreeViewColumn();
-//		
-//		columnText.pack_start(renderer, true);
-//		columnText.add_attribute(renderer,
-//		                         "text", LyricsProvider.NAME
-//		                         );
-//		columnText.add_attribute(renderer,
-//		                         "sensitive", LyricsProvider.STATE
-//		                         );
-//		ly_tv.append_column(columnText);
-//		
-//		ly_tv.headers_visible = false;
-//		ly_hbox.pack_start(ly_tv, true, true, 0);
-//		ly_tv.get_selection().set_mode(SelectionMode.SINGLE);
-//		put_data_to_ly_tv();
-//	}
-
-//	[CCode (has_target = false)]
-//	private static int compare_lyrics_providers(Plugin a, Plugin b) {
-//		unowned ILyricsProvider prov_a = a.loaded_plugin as ILyricsProvider;
-//		unowned ILyricsProvider prov_b = b.loaded_plugin as ILyricsProvider;
-//		if(prov_a == null || prov_b == null)
-//			return 0;
-//		if(prov_a.priority <  prov_b.priority)
-//			return 1;
-//		if(prov_a.priority >  prov_b.priority)
-//			return -1;
-//		return 0;
-//	}
-	
-//	private void put_data_to_ly_tv() {
-//		TreeIter iter;
-//		ly_model.clear();
-//		List<unowned string> ly_prov_list = xn.plugin_loader.lyrics_plugins_htable.get_keys();
-//		List<unowned Plugin> ordered_ly_providers = new List<unowned Plugin>();
-//		foreach(unowned string name in ly_prov_list) 
-//			ordered_ly_providers.prepend(this.xn.plugin_loader.lyrics_plugins_htable.lookup(name));
-//		
-//		
-//		if(ordered_ly_providers != null) {
-//			ordered_ly_providers.sort(compare_lyrics_providers);
-//			foreach(Plugin pl in ordered_ly_providers) {
-//				ly_model.prepend(out iter);
-//				ly_model.set(iter,
-//				             LyricsProvider.STATE, this.xn.plugin_loader.lyrics_plugins_htable.lookup(pl.info.name).activated,
-//				             LyricsProvider.NAME, pl.info.name
-//				             );
-//			}
-//		}
-//		else {
-//			foreach(unowned string name in ly_prov_list) {
-//				ly_model.prepend(out iter);
-//				ly_model.set(iter,
-//				             LyricsProvider.STATE, this.xn.plugin_loader.lyrics_plugins_htable.lookup(name).activated,
-//				             LyricsProvider.NAME, name
-//				             );
-//			}
-//		}
-//	}
-
-//	private bool update_lyrics_providers(TreeModel sender, TreePath path, TreeIter iter) {
-//		//update activation state in lyrics providers
-//		string? name = null;
-//		sender.get(iter, LyricsProvider.NAME, out name);
-//		ly_model.set(iter,
-//		             LyricsProvider.STATE, this.xn.plugin_loader.lyrics_plugins_htable.lookup(name).activated
-//		             );
-//		return false;
-//	}
-
-//	private bool update_ai_providers(TreeModel sender, TreePath path, TreeIter iter) {
-//		//update activation state in image providers
-//		string? name = null;
-//		sender.get(iter, AIProvider.NAME, out name);
-//		ai_model.set(iter,
-//		             AIProvider.STATE, this.xn.plugin_loader.image_provider_htable.lookup(name).activated
-//		             );
-//		return false;
-//	}
-
-//	private bool is_in_list(ref List<string> list, string text) {
-//		foreach(unowned string s in list)	{
-//			if(text == s)
-//				return true;
-//		}
-//		return false;
-//	}
-	
-//	private void setup_albumimage_provider_tv() {
-//		ai_tv = new TreeView();
-//		ai_model = new ListStore(AIProvider.N_COLUMNS,
-//		                         typeof(bool),
-//		                         typeof(string));
-//		ai_tv.model = ai_model;
-//		
-//		var renderer = new CellRendererText();
-//		
-//		var columnText = new TreeViewColumn();
-//		
-//		columnText.pack_start(renderer, true);
-//		columnText.add_attribute(renderer,
-//		                         "text", AIProvider.NAME
-//		                         );
-//		columnText.add_attribute(renderer,
-//		                         "sensitive", AIProvider.STATE
-//		                         );
-//		ai_tv.append_column(columnText);
-//		
-//		ai_tv.headers_visible = false;
-//		
-//		ai_hbox.pack_start(ai_tv, true, true, 0);
-//		
-//		ai_tv.get_selection().set_mode(SelectionMode.SINGLE);
-//		
-//		put_data_to_ai_tv();
-//	}
-
-//	private void put_data_to_ai_tv() {
-//		TreeIter iter;
-//		ai_model.clear();
-//		string[]? ordered_ai_providers = Params.get_string_list_value("prio_images");
-//		List<unowned string> ai_prov_list = xn.plugin_loader.image_provider_htable.get_keys();
-//		if(ordered_ai_providers != null) {
-//			foreach(string name in ordered_ai_providers) {
-//				if(is_in_list(ref ai_prov_list, name)) {
-//					ai_model.prepend(out iter);
-//					ai_model.set(iter,
-//					             AIProvider.STATE, this.xn.plugin_loader.image_provider_htable.lookup(name).activated,
-//					             AIProvider.NAME, name
-//					             );
-//				}
-//			}
-//		}
-//		else {
-//			foreach(unowned string name in ai_prov_list) {
-//				ai_model.prepend(out iter);
-//				ai_model.set(iter,
-//				             AIProvider.STATE, this.xn.plugin_loader.image_provider_htable.lookup(name).activated,
-//				             AIProvider.NAME, name
-//				             );
-//			}
-//		}
-//	}
-
-//	private void put_data_to_viz_cols_tv() {
-//		TreeIter iter;
-//		visibleColTvModel.prepend(out iter);
-//		visibleColTvModel.set(iter,
-//			DisplayColums.TOGGLE, this.show_album_col,
-//			DisplayColums.TEXT, "Album"
-//			);
-//		visibleColTvModel.prepend(out iter);
-//		visibleColTvModel.set(iter,
-//			DisplayColums.TOGGLE, this.show_length_col,
-//			DisplayColums.TEXT, "Length"
-//			);
-//		visibleColTvModel.prepend(out iter);
-//		visibleColTvModel.set(iter,
-//			DisplayColums.TOGGLE, this.show_trackno_col,
-//			DisplayColums.TEXT, "Track number"
-//			);
-//	}
-
-//	private void setup_viz_cols_tv() {
-//		//TODO: Make a nicer way to handle column visibility and position
-//		visibleColTvModel = new ListStore(DisplayColums.N_COLUMNS,
-//		                                  typeof(bool), typeof(string));
-//		
-//		var toggle = new CellRendererToggle();
-//		toggle.toggled.connect( (toggle, path_as_string) => {
-//			var treepath = new TreePath.from_string(path_as_string);
-//			TreeIter iter;
-//			string? text = null;
-//			bool val = false;
-//			visibleColTvModel.get_iter(out iter, treepath);
-//			visibleColTvModel.set(iter,
-//			                      DisplayColums.TOGGLE, !toggle.active
-//			                      );
-//			visibleColTvModel.get(iter,
-//			                      DisplayColums.TEXT, ref text,
-//			                      DisplayColums.TOGGLE, ref val
-//			                      );
-//			switch(text) {
-//				case "Album":
-//					this.show_album_col = val;
-//					break;
-//				case "Length":
-//					this.show_length_col = val;
-//					break;
-//				case "Track number":
-//					this.show_trackno_col = val;
-//					break;
-//				default: break;
-//			}
-//		});
-//		
-//		visibleColTv.model = visibleColTvModel;
-//		
-//		var columnToggle = new TreeViewColumn();
-//		columnToggle.pack_start(toggle, false);
-//		columnToggle.add_attribute(toggle,
-//		                           "active", DisplayColums.TOGGLE
-//		                           );
-//		visibleColTv.append_column(columnToggle);
-//		
-//		var renderer = new CellRendererText();
-//		
-//		var columnText = new TreeViewColumn();
-//		columnText.pack_start(renderer, true);
-//		columnText.add_attribute(renderer,
-//		                         "text", DisplayColums.TEXT
-//		                         );
-//		visibleColTv.append_column(columnText);
-//		put_data_to_viz_cols_tv();
-//	}
-
-//	// Move the provider up in ranking
-//	private void on_ai_up_button_clicked(Gtk.Button sender) {
-//		unowned TreeSelection sel = ai_tv.get_selection();
-//		TreeIter iter;
-//		TreeIter next_iter;
-//		List<TreePath> treepaths = sel.get_selected_rows(null);
-//		
-//		if(treepaths == null)
-//			return;
-//		
-//		TreePath tp = (TreePath)treepaths.first().data;
-//		if(!ai_model.get_iter(out iter, tp)) 
-//			return;
-//		tp.prev();
-//		if(!ai_model.get_iter(out next_iter, tp)) 
-//			return;
-//		ai_model.move_before(ref iter, next_iter); //move
-//	}
-
-//	// Move the provider down in ranking
-//	private void on_ai_down_button_clicked(Gtk.Button sender) {
-//		unowned TreeSelection sel = ai_tv.get_selection();
-//		TreeIter iter;
-//		TreeIter next_iter;
-//		List<TreePath> treepaths = sel.get_selected_rows(null);
-//		
-//		if(treepaths == null)
-//			return;
-//		
-//		TreePath tp = (TreePath)treepaths.first().data;
-//		if(!ai_model.get_iter(out iter, tp)) 
-//			return;
-//		tp.next();
-//		if(!ai_model.get_iter(out next_iter, tp)) 
-//			return;
-//		ai_model.move_after(ref iter, next_iter); //move
-//	}
-
-//	// Move the provider up in ranking
-//	private void on_ly_up_button_clicked(Gtk.Button sender) {
-//		unowned TreeSelection sel = ly_tv.get_selection();
-//		TreeIter iter;
-//		TreeIter next_iter;
-//		List<TreePath> treepaths = sel.get_selected_rows(null);
-//		
-//		if(treepaths == null)
-//			return;
-//		
-//		TreePath tp = (TreePath)treepaths.first().data;
-//		if(!ly_model.get_iter(out iter, tp)) 
-//			return;
-//		tp.prev();
-//		if(!ly_model.get_iter(out next_iter, tp)) 
-//			return;
-//		ly_model.move_before(ref iter, next_iter); //move
-//	}
-
-//	// Move the provider down in ranking
-//	private void on_ly_down_button_clicked(Gtk.Button sender) {
-//		unowned TreeSelection sel = ly_tv.get_selection();
-//		TreeIter iter;
-//		TreeIter next_iter;
-//		List<TreePath> treepaths = sel.get_selected_rows(null);
-//		
-//		if(treepaths == null)
-//			return;
-//		
-//		TreePath tp = (TreePath)treepaths.first().data;
-//		
-//		if(!ly_model.get_iter(out iter, tp)) 
-//			return;
-//		tp.next();
-//		if(!ly_model.get_iter(out next_iter, tp)) 
-//			return;
-//		ly_model.move_after(ref iter, next_iter); //move
-//	}
-
 	private bool setup_widgets() throws Error {
 		try {
 			File f = File.new_for_path(SETTINGS_UI_FILE);
@@ -600,6 +278,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_usestop.can_focus = false;
 			checkB_usestop.clicked.connect(this.on_checkbutton_usestop_clicked);
 			checkB_usestop.label = _("Use stop button");
+			
+			checkB_quitifclosed = this.get_object("checkB_quitifclosed") as Gtk.CheckButton;
+			checkB_quitifclosed.can_focus = false;
+			checkB_quitifclosed.clicked.connect(this.on_checkbutton_quitifclosed_clicked);
+			checkB_quitifclosed.label = _("Quit application if window is closed");
 			
 			var okButton = this.get_object("buttonOK") as Gtk.Button;
 			okButton.can_focus = false;

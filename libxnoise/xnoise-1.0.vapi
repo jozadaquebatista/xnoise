@@ -726,6 +726,7 @@ namespace Xnoise {
 		public Xnoise.ControlButton nextButton;
 		public Xnoise.PlayPauseButton playPauseButton;
 		public Xnoise.ControlButton previousButton;
+		public bool quit_if_closed;
 		public Gtk.Entry searchEntryMB;
 		public Xnoise.TrackInfobar songProgressBar;
 		public Xnoise.ControlButton stopButton;

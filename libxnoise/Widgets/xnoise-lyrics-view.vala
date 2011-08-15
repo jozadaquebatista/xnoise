@@ -40,13 +40,13 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	private string artist = "";
 	private string title = "";
 	private uint source = 0;
-	Gdk.Color black;
-	Gdk.Color light_gray;
+	//private Gdk.Color black;
+	//private Gdk.Color light_gray;
 	
 	public LyricsView() {
 		xn = Main.instance;
-		Gdk.Color.parse("black", out black);
-		Gdk.Color.parse("#dddddddddddd", out light_gray);
+		//Gdk.Color.parse("black", out black);
+		//Gdk.Color.parse("#dddddddddddd", out light_gray);
 		loader = new LyricsLoader();
 		loader.sign_fetched.connect(on_lyrics_ready);
 		loader.sign_using_provider.connect(on_using_provider);
@@ -56,8 +56,8 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		this.set_left_margin(8);
 		this.set_wrap_mode(Gtk.WrapMode.WORD);
 		global.uri_changed.connect(on_uri_changed);
-		this.modify_base(Gtk.StateType.NORMAL, black);
-		this.modify_text(Gtk.StateType.NORMAL, light_gray);
+		//this.modify_base(Gtk.StateType.NORMAL, black);
+		//this.modify_text(Gtk.StateType.NORMAL, light_gray);
 		var font_description = new Pango.FontDescription();
 		font_description.set_family("Sans");
 		font_description.set_size((int)(12 * Pango.SCALE));

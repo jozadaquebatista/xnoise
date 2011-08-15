@@ -81,6 +81,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private ulong active_notifier = 0;
 	private ScreenSaverManager ssm = null;
 	private List<Gtk.Action> actions_list = null;
+	public bool quit_if_closed;
 	public ScrolledWindow mediaBrScrollWin = null;
 	public ScrolledWindow trackListScrollWin = null;
 	public Gtk.ActionGroup action_group;
@@ -747,12 +748,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		else {
 			gst_player.volume = volSlider;
 		}
-		
+		this.quit_if_closed = Params.get_int_value("quit_if_closed") == 1;
 		int hp_position = Params.get_int_value("hp_position");
 		if (hp_position > 0) {
 			this.hpaned.set_position(hp_position);
 		}
-		not_show_art_on_hover_image = (Params.get_int_value("not_show_art_on_hover_image") == 1 ? true : false );
+		not_show_art_on_hover_image = Params.get_int_value("not_show_art_on_hover_image") == 1;
 	}
 
 	public void write_params_data() {
@@ -940,9 +941,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.disconnect(active_notifier);
 			active_notifier = 0;
 		}
-		this.get_position(out _posX_buffer, out _posY_buffer);
-		this.hide();
-		return true;
+		if(!quit_if_closed) {
+			this.get_position(out _posX_buffer, out _posY_buffer);
+			this.hide();
+			return true;
+		}
+		else {
+			Idle.add( () => {
+				quit_now();
+				return false;
+			});
+			this.hide();
+			return true;
+		}
 	}
 
 	private void on_help_about() {
