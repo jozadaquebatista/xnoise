@@ -177,7 +177,9 @@ public class Xnoise.LyricsLoader : GLib.Object {
 				}
 				else {
 					n_th_provider = 0;
-					sign_fetched(_artist, _title, "", _identifier, "no lyrics found...", _providername); // the 'no lyrics found...' also appears in the db provider !! 
+					
+					// the 'no lyrics found...' also appears in the db provider !! 
+					sign_fetched(_artist, _title, "", _identifier, _("no lyrics found..."), _providername); 
 				}
 			}
 			else {
