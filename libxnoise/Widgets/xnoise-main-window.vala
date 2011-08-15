@@ -1509,6 +1509,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			config_button.add(config_hbox);
 			
 			config_button.can_focus = false;
+			config_button.set_tooltip_text(_("Show application main menu"));
 			config_button.set_relief(Gtk.ReliefStyle.HALF);
 			a_frame_config_button = gb.get_object("aFrameConfigButton") as Gtk.AspectFrame;	
 		}
