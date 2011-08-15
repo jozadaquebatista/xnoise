@@ -60,6 +60,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button hide_button;
 	private Button hide_button_1;
 	private Button hide_button_2;
+	private Image hide_button_image;
+	private Image hide_button_image_1;
+	private Image hide_button_image_2;
 	private Button showlyricsbuttonVid;
 	private Button showlyricsbuttonTL;
 	private Button showtracklistbuttonVid;
@@ -145,14 +148,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		} 
 		set {
 			if((value == true) && (_media_browser_visible != value)) {
-				hide_button.label   = HIDE_LIBRARY;
-				hide_button_1.label = HIDE_LIBRARY;
-				hide_button_2.label = HIDE_LIBRARY;
+				hide_button_image.set_from_stock(Gtk.Stock.GO_BACK, Gtk.IconSize.MENU);
+				hide_button_image_1.set_from_stock(Gtk.Stock.GO_BACK, Gtk.IconSize.MENU);
+				hide_button_image_2.set_from_stock(Gtk.Stock.GO_BACK, Gtk.IconSize.MENU);
+				hide_button.set_tooltip_text(HIDE_LIBRARY);
+				hide_button_1.set_tooltip_text(HIDE_LIBRARY);
+				hide_button_2.set_tooltip_text(HIDE_LIBRARY);
 			}
 			else if((value == false) && (_media_browser_visible != value)) {
-				hide_button.label   = SHOW_LIBRARY;
-				hide_button_1.label = SHOW_LIBRARY;
-				hide_button_2.label = SHOW_LIBRARY;
+				hide_button_image.set_from_stock(Gtk.Stock.GO_FORWARD, Gtk.IconSize.MENU);
+				hide_button_image_1.set_from_stock(Gtk.Stock.GO_FORWARD, Gtk.IconSize.MENU);
+				hide_button_image_2.set_from_stock(Gtk.Stock.GO_FORWARD, Gtk.IconSize.MENU);
+				hide_button.set_tooltip_text(SHOW_LIBRARY);
+				hide_button_1.set_tooltip_text(SHOW_LIBRARY);
+				hide_button_2.set_tooltip_text(SHOW_LIBRARY);
 			}
 			_media_browser_visible = value;
 		} 
@@ -1474,13 +1483,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			});
 
 			hide_button = gb.get_object("hide_button") as Gtk.Button;
+			hide_button.can_focus = false;
 			hide_button.clicked.connect(this.toggle_media_browser_visibility);
+			hide_button_image = gb.get_object("hide_button_image") as Gtk.Image;
 			
 			hide_button_1 = gb.get_object("hide_button_1") as Gtk.Button;
+			hide_button_1.can_focus = false;
 			hide_button_1.clicked.connect(this.toggle_media_browser_visibility);
+			hide_button_image_1 = gb.get_object("hide_button_image_1") as Gtk.Image;
 			
 			hide_button_2 = gb.get_object("hide_button_2") as Gtk.Button;
-			hide_button_2.clicked.connect(this.toggle_media_browser_visibility); 
+			hide_button_2.can_focus = false;
+			hide_button_2.clicked.connect(this.toggle_media_browser_visibility);
+			hide_button_image_2 = gb.get_object("hide_button_image_2") as Gtk.Image;
 
 			///Textbuffer for the lyrics
 			var scrolledlyricsview = gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;
