@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-16 10:26+0200\n"
-"PO-Revision-Date: 2011-06-22 13:53+0100\n"
-"Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
+"PO-Revision-Date: 2011-08-16 13:12+0200\n"
+"Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -78,48 +78,47 @@ msgid "Leave fullscreen"
 msgstr "יציאה ממסך מלא"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "שם הכתוביות אינו מתאים לשם הוידאו! לא משתמש בקובץ כתוביות."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
-msgstr ""
+msgstr "הצלחה בעת התקנת פלאגין חסר של GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:463
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr ""
+msgstr "המשתמש ביטל את ההתקנה של הפלאגין החסר של GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:467
 #, c-format
 msgid "Missing gstreamer plugin was not found"
-msgstr ""
+msgstr "פלאגין חסר של GStreamer לא נמצא"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:473
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
-msgstr ""
+msgstr "שגיאה קריטית בעת התקנת פלאגין חסר של GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:518
 #: ../libxnoise/Player/xnoise-gst-player.vala:529
 #: ../libxnoise/Player/xnoise-gst-player.vala:542
 #, c-format
 msgid "Missing gstreamer plugin"
-msgstr ""
+msgstr "פלאגין חסר של GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:520
 msgid "Automatic missing codec installation not supported"
-msgstr ""
+msgstr "התקנת מקודד חסר באופן אוטומטי אינה נתמכת"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:531
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr ""
+msgstr "נכשל להתחיל אוטומטית את התקנת פלאגין חסר של GStreamer."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:544
 msgid "Trying to install missing gstreamer plugin"
-msgstr ""
+msgstr "מנסה להתקין פלאגין חסר של GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:646
 msgid "Subtitle #"
@@ -132,7 +131,7 @@ msgstr "רצועת שמע #"
 #. the 'no lyrics found...' also appears in the db provider !!
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:182
 msgid "no lyrics found..."
-msgstr ""
+msgstr "לא נמצאו כתוביות..."
 
 #: ../libxnoise/Widgets/xnoise-lyrics-view.vala:100
 #: ../libxnoise/Widgets/xnoise-lyrics-view.vala:119
@@ -268,21 +267,15 @@ msgstr "ה_גדרה"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של "
-"xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של xnoise."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:440
 msgid "Add media"
 msgstr "הוספת מדיה"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:443
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
 msgstr "הפעלת את xnoise לראשונה. האם ברצונך לייבא מדיה לספריה?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:538
@@ -380,24 +373,22 @@ msgstr "הסרת כל הכותרות הנבחרות"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1527
 msgid "Show application main menu"
-msgstr ""
+msgstr "הצג את התפריט הראשי"
 
 #: ../libxnoise/Models/xnoise-media-browser-model.vala:960
 msgid "Loading ..."
 msgstr "טוען ..."
 
 #: ../libxnoise/Utils/xnoise-media-importer.vala:223
-#, fuzzy, c-format
+#, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr "מצא %u רצועות. מעדכן ספרייה ..."
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:260
-#, fuzzy
 msgid "Enable grid lines in media browser"
-msgstr "שבור שורות בדפדפן המדיה"
+msgstr "הצג את שורות הרשת בדפדפן המדיה"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:265
-#, fuzzy
 msgid "Use linebreaks in media browser"
 msgstr "שבור שורות בדפדפן המדיה"
 
@@ -415,7 +406,7 @@ msgstr "השתמש בכפתור עצירה"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:285
 msgid "Quit application if window is closed"
-msgstr ""
+msgstr "צא מהתכנה בסגירת החלון"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:296
 msgid "Media browser fontsize:"
@@ -444,15 +435,12 @@ msgstr "אלבום:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
 msgstr "אנא המתן בעת מילוי דפדפן המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "אנא המתן בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #: ../libxnoise/Widgets/xnoise-tracklist.vala:1026
@@ -533,14 +521,12 @@ msgid "Select external subtitle file"
 msgstr "בחר קובץ כתוביות חיצוני"
 
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:122
-#, fuzzy
 msgid "Leave Fullscreen"
 msgstr "יציאה ממסך מלא"
 
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:122
-#, fuzzy
 msgid "Fullscreen"
-msgstr "יציאה ממסך מלא"
+msgstr "מסך מלא"
 
 #: ../src/xnoise.vala:60
 #, c-format
@@ -556,8 +542,7 @@ msgid "More information on the project website:"
 msgstr "מידע נוסף ניתן למצוא באתר הפרויקט:"
 
 #: ../src/xnoise.vala:70
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr "הרץ 'xnoise --help' על מנת לראות רשימה מלאה של אפשרויות שורת הפקודה.\n"
 
 #: ../src/xnoise.vala:130
@@ -570,7 +555,7 @@ msgstr "מראה את השלב הרץ של xnoise.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Buffer lyrics in database"
-msgstr ""
+msgstr "אצור כתוביות בבסיס הנתונים"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
