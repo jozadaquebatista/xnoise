@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-15 15:28+0200\n"
+"POT-Creation-Date: 2011-08-16 10:26+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -83,41 +83,41 @@ msgstr ""
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
-msgstr ""
+msgstr "Instalação do plugin gstreamer efetuada com sucesso"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:463
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr ""
+msgstr "O utilizador cancelou a instalação do plugin"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:467
 #, c-format
 msgid "Missing gstreamer plugin was not found"
-msgstr ""
+msgstr "Plugin gstreamer não encontrado"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:473
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
-msgstr ""
+msgstr "Erro crítico ao tentar instalar o plugin em falta."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:518
 #: ../libxnoise/Player/xnoise-gst-player.vala:529
 #: ../libxnoise/Player/xnoise-gst-player.vala:542
 #, c-format
 msgid "Missing gstreamer plugin"
-msgstr ""
+msgstr "Plugin gstreamer em falta"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:520
 msgid "Automatic missing codec installation not supported"
-msgstr ""
+msgstr "Não existe suporte à instalação automática de plugins"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:531
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr ""
+msgstr "Falha ao tentar instalar o plugin gstreamer."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:544
 msgid "Trying to install missing gstreamer plugin"
-msgstr ""
+msgstr "A tentar instalar o plugin gstreamer..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:646
 msgid "Subtitle #"
@@ -130,7 +130,7 @@ msgstr "Faixa áudio #"
 #. the 'no lyrics found...' also appears in the db provider !!
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:182
 msgid "no lyrics found..."
-msgstr ""
+msgstr "nenhuma letra encontrada..."
 
 #: ../libxnoise/Widgets/xnoise-lyrics-view.vala:100
 #: ../libxnoise/Widgets/xnoise-lyrics-view.vala:119
@@ -380,7 +380,7 @@ msgstr "Remover títulos selecionados"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1527
 msgid "Show application main menu"
-msgstr ""
+msgstr "Mostrar menu principal"
 
 #: ../libxnoise/Models/xnoise-media-browser-model.vala:960
 msgid "Loading ..."
@@ -392,11 +392,13 @@ msgid "Found %u tracks. Updating library ..."
 msgstr "Encontrada(s) %u faixa(s). A atualizar coleção..."
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:260
-msgid "use helper lines in media browser"
+#, fuzzy
+msgid "Enable grid lines in media browser"
 msgstr "Utilizar linhas de ajuda no navegador"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:265
-msgid "use linebreaks in media browser"
+#, fuzzy
+msgid "Use linebreaks in media browser"
 msgstr "Utilizar quebras de linha no navegador"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:270
@@ -413,7 +415,7 @@ msgstr "Utilizar o botão para \"Parar\""
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:285
 msgid "Quit application if window is closed"
-msgstr ""
+msgstr "Sair da aplicação ao fechar a janela"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:296
 msgid "Media browser fontsize:"
@@ -534,14 +536,12 @@ msgid "Select external subtitle file"
 msgstr "Selecione o ficheiro de legendas"
 
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:122
-#, fuzzy
 msgid "Leave Fullscreen"
 msgstr "Sair de ecrã completo"
 
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:122
-#, fuzzy
 msgid "Fullscreen"
-msgstr "Sair de ecrã completo"
+msgstr "Ecrã completo"
 
 #: ../src/xnoise.vala:60
 #, c-format

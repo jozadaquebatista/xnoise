@@ -38,6 +38,7 @@ libxnoise_la_SOURCES = \
     AlbumImages/xnoise-album-image-loader.vala \
     AlbumImages/xnoise-i-album-cover-image.vala \
     AlbumImages/xnoise-i-album-cover-image-provider.vala \
+    ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala \
     ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala \
     ItemHandlers/EditTags/xnoise-handler-edit-tags.vala \
     ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala \

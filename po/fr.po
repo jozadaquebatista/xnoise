@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-15 15:28+0200\n"
+"POT-Creation-Date: 2011-08-16 10:26+0200\n"
 "PO-Revision-Date: 2011-07-14 04:44+0100\n"
 "Last-Translator: Tubuntu <tubuntu@testimonium.be>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -390,11 +390,13 @@ msgid "Found %u tracks. Updating library ..."
 msgstr "%u pistes trouvées. Mise à jour de la bibliothèque..."
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:260
-msgid "use helper lines in media browser"
+#, fuzzy
+msgid "Enable grid lines in media browser"
 msgstr "Utiliser les guides d'indentation dans le navigateur de médias"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:265
-msgid "use linebreaks in media browser"
+#, fuzzy
+msgid "Use linebreaks in media browser"
 msgstr "Utiliser le retour de ligne dans le navigateur de médias"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:270

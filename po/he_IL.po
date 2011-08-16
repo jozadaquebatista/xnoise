@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-15 15:28+0200\n"
+"POT-Creation-Date: 2011-08-16 10:26+0200\n"
 "PO-Revision-Date: 2011-06-22 13:53+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -393,11 +393,12 @@ msgstr "מצא %u רצועות. מעדכן ספרייה ..."
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:260
 #, fuzzy
-msgid "use helper lines in media browser"
+msgid "Enable grid lines in media browser"
 msgstr "שבור שורות בדפדפן המדיה"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:265
-msgid "use linebreaks in media browser"
+#, fuzzy
+msgid "Use linebreaks in media browser"
 msgstr "שבור שורות בדפדפן המדיה"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:270

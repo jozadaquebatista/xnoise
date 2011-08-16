@@ -269,6 +269,50 @@ public class Xnoise.Database.DbBrowser {
 		return false;
 	}
 
+	private static const string STMT_ALL_TRACKDATA =
+		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY ar.name ASC, al.name ASC, t.tracknumber ASC";
+
+	public TrackData[]? get_all_tracks(ref string searchtext) {
+		Statement stmt;
+		TrackData[] retv = {};
+		
+		this.db.prepare_v2(STMT_ALL_TRACKDATA , -1, out stmt);
+		
+		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+		   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+		   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+			this.db_error();
+			return null;
+		}
+		while(stmt.step() == Sqlite.ROW) {
+			TrackData val = new TrackData();
+			val.artist      = stmt.column_text(0);
+			val.album       = stmt.column_text(1);
+			val.title       = stmt.column_text(2);
+			val.tracknumber = stmt.column_int(3);
+			val.length      = stmt.column_int(6);
+			val.item        = Item((ItemType)stmt.column_int(4), stmt.column_text(5), stmt.column_int(7));
+			if((val.artist=="") || (val.artist==null)) {
+				val.artist = "unknown artist";
+			}
+			if((val.album== "") || (val.album== null)) {
+				val.album = "unknown album";
+			}
+			if((val.title== "") || (val.title== null)) {
+				val.title = "unknown title";
+				File file = File.new_for_uri(val.item.uri);
+				string fileBasename;
+				if(file != null)
+					fileBasename = GLib.Filename.display_basename(file.get_path());
+				else
+					fileBasename = val.item.uri;
+				val.title = fileBasename;
+			}
+			retv += val;
+		}
+		return retv;
+	}
+
 	public bool get_trackdata_for_id(int id, out TrackData val) {
 		Statement stmt;
 		val = new TrackData();

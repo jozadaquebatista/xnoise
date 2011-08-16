@@ -257,12 +257,12 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_showL = this.get_object("checkB_showlines") as Gtk.CheckButton;
 			checkB_showL.can_focus = false;
 			checkB_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
-			checkB_showL.label = _("use helper lines in media browser");
+			checkB_showL.label = _("Enable grid lines in media browser");
 			
 			checkB_mediaBrLinebreaks = this.get_object("checkB_mediaBrLinebreaks") as Gtk.CheckButton;
 			checkB_mediaBrLinebreaks.can_focus = false;
 			checkB_mediaBrLinebreaks.clicked.connect(this.on_checkbutton_mediabr_linebreaks_clicked);
-			checkB_mediaBrLinebreaks.label = _("use linebreaks in media browser");
+			checkB_mediaBrLinebreaks.label = _("Use linebreaks in media browser");
 			
 			checkB_hoverimage = this.get_object("checkB_hoverimage") as Gtk.CheckButton;
 			checkB_hoverimage.can_focus = false;

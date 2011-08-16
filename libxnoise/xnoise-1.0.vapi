@@ -25,6 +25,7 @@ namespace Xnoise {
 			public int32 count_videos (ref string searchtext);
 			public void do_callback_transaction (Xnoise.Database.DbBrowser.ReaderCallback cb);
 			public Xnoise.Item[] get_albums_with_search (ref string searchtext, int32 id);
+			public Xnoise.TrackData[]? get_all_tracks (ref string searchtext);
 			public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);
 			public Xnoise.Item[] get_artists_with_search (ref string searchtext);
 			public Xnoise.Item[] get_lastused_items ();
@@ -605,6 +606,13 @@ namespace Xnoise {
 		public signal void sign_subtitles_available ();
 		public signal void sign_video_playing ();
 		public signal void sign_volume_changed (double volume);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class HandlerAddAllToTracklist : Xnoise.ItemHandler {
+		public HandlerAddAllToTracklist ();
+		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
+		public override unowned string handler_name ();
+		public override Xnoise.ItemHandlerType handler_type ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class HandlerAddToTracklist : Xnoise.ItemHandler {

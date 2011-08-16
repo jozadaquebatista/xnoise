@@ -1,14 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
+# Xnoise Polish Translation.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This file is distributed under the same license as the xnoise package.
+# Krzysztof AS <krzysztof1987@gmail.com>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-15 15:28+0200\n"
-"PO-Revision-Date: 2011-08-06 12:37+0100\n"
+"POT-Creation-Date: 2011-08-16 10:26+0200\n"
+"PO-Revision-Date: 2011-08-15 22:32+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
 "Language: \n"
@@ -86,41 +86,41 @@ msgstr "Brak pliku napisów pasującego do nazwy filmu! Bez użycia napisów."
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
-msgstr ""
+msgstr "Zainstalowano brakującą wtyczkę gstreamera"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:463
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr ""
+msgstr "Brak wtyczki gstreamera lub użytkownik przerwał instalację"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:467
 #, c-format
 msgid "Missing gstreamer plugin was not found"
-msgstr ""
+msgstr "Nie odnaleziono brakującej wtyczki gstreamera"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:473
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
-msgstr ""
+msgstr "Instalacja wtyczki gstreamera zakończona błędami"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:518
 #: ../libxnoise/Player/xnoise-gst-player.vala:529
 #: ../libxnoise/Player/xnoise-gst-player.vala:542
 #, c-format
 msgid "Missing gstreamer plugin"
-msgstr ""
+msgstr "Brakująca wtyczka gstreamera"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:520
 msgid "Automatic missing codec installation not supported"
-msgstr ""
+msgstr "Automatyczna instalacja kodeków nie jest obsługiwana"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:531
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr ""
+msgstr "Problem z uruchomienie automatycznej instalacji wtyczek gstreamera"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:544
 msgid "Trying to install missing gstreamer plugin"
-msgstr ""
+msgstr "Próbuję zainstalować brakującą wtyczkę gstreamera"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:646
 msgid "Subtitle #"
@@ -128,12 +128,12 @@ msgstr "Napisy #"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:658
 msgid "Audio Track #"
-msgstr ""
+msgstr "Numer Utworu #"
 
 #. the 'no lyrics found...' also appears in the db provider !!
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:182
 msgid "no lyrics found..."
-msgstr ""
+msgstr "nie odnaleziono tekstu..."
 
 #: ../libxnoise/Widgets/xnoise-lyrics-view.vala:100
 #: ../libxnoise/Widgets/xnoise-lyrics-view.vala:119
@@ -292,7 +292,7 @@ msgstr "nie powtarzaj"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:544
 msgid "repeat single"
-msgstr "powtarzaj pojedyńczy"
+msgstr "powtarzaj pojedynczy"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:550
 msgid "repeat all"
@@ -381,7 +381,7 @@ msgstr "Usuń zaznaczone"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1527
 msgid "Show application main menu"
-msgstr ""
+msgstr "Pokaż główne menu aplikacji"
 
 #: ../libxnoise/Models/xnoise-media-browser-model.vala:960
 msgid "Loading ..."
@@ -393,16 +393,18 @@ msgid "Found %u tracks. Updating library ..."
 msgstr "Znaleziono %u utworów. Aktualizacja biblioteki ..."
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:260
-msgid "use helper lines in media browser"
-msgstr "użyj pomocnych linii w przeglądarce mediów"
+#, fuzzy
+msgid "Enable grid lines in media browser"
+msgstr "Użyj pomocnych linii w przeglądarce mediów"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:265
-msgid "use linebreaks in media browser"
-msgstr ""
+#, fuzzy
+msgid "Use linebreaks in media browser"
+msgstr "Użyj pomocnych linii w przeglądarce mediów"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:270
 msgid "Don't show video screen while hovering album image"
-msgstr "Nie pokazuj ekranu filmów gdy zakrywa obraz albumu"
+msgstr "Nie pokazuj ekranu filmów gdy kursor zakrywa okładkę"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:275
 msgid "Compact layout"
@@ -414,7 +416,7 @@ msgstr "Pokaż przycisk stop"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:285
 msgid "Quit application if window is closed"
-msgstr ""
+msgstr "Zakończ po zamknięciu okna"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:296
 msgid "Media browser fontsize:"
@@ -508,7 +510,7 @@ msgstr "Następny"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:116
 msgid "Exit"
-msgstr "Wyjdź"
+msgstr "Zakończ"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:165
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:177
@@ -526,7 +528,7 @@ msgstr "wstrzymane"
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:185
 #, c-format
 msgid "ready to rock"
-msgstr "gotowy dać popalić"
+msgstr ""
 
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:37
 msgid "Select external subtitle file"
@@ -538,9 +540,8 @@ msgid "Leave Fullscreen"
 msgstr "Opuść tryb pełnoekranowy"
 
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:122
-#, fuzzy
 msgid "Fullscreen"
-msgstr "Opuść tryb pełnoekranowy"
+msgstr "Tryb pełnoekranowy"
 
 #: ../src/xnoise.vala:60
 #, c-format
@@ -582,7 +583,7 @@ msgstr "Pobieranie tekstów z chartlyrics.com"
 
 #: ../plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in.h:1
 msgid "Always keep the current state of xnoise"
-msgstr ""
+msgstr "Zawsze pamiętaj aktualny stan xnoise"
 
 #: ../plugins/lastfmCovers/lastfmCovers.xnplugin.desktop.in.h:1
 msgid "Load album covers from lastfm"
@@ -603,12 +604,12 @@ msgstr "Kontrolowanie xnoise przy pomocy dbus MPRIS v2"
 #: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
 msgid "Show notifications one track change"
-msgstr "Powiadomianie przy zmianie utworu"
+msgstr "Powiadamianie przy zmianie utworu"
 
 #: ../plugins/soundmenu/soundmenu.xnplugin.desktop.in.h:1
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 msgid "Use ayatana soundmenu"
-msgstr "Użyj menu ayatana"
+msgstr "Używaj ayatana soundmenu"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"

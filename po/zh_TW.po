@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-15 15:28+0200\n"
+"POT-Creation-Date: 2011-08-16 10:26+0200\n"
 "PO-Revision-Date: 2011-05-05 10:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -393,11 +393,11 @@ msgid "Found %u tracks. Updating library ..."
 msgstr ""
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:260
-msgid "use helper lines in media browser"
+msgid "Enable grid lines in media browser"
 msgstr ""
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:265
-msgid "use linebreaks in media browser"
+msgid "Use linebreaks in media browser"
 msgstr ""
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:270

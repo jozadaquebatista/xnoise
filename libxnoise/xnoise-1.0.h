@@ -88,6 +88,17 @@ typedef struct _XnoiseAction XnoiseAction;
 typedef struct _XnoiseItemHandlerManager XnoiseItemHandlerManager;
 typedef struct _XnoiseItemHandlerManagerClass XnoiseItemHandlerManagerClass;
 
+#define XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST (xnoise_handler_add_all_to_tracklist_get_type ())
+#define XNOISE_HANDLER_ADD_ALL_TO_TRACKLIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST, XnoiseHandlerAddAllToTracklist))
+#define XNOISE_HANDLER_ADD_ALL_TO_TRACKLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST, XnoiseHandlerAddAllToTracklistClass))
+#define XNOISE_IS_HANDLER_ADD_ALL_TO_TRACKLIST(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST))
+#define XNOISE_IS_HANDLER_ADD_ALL_TO_TRACKLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST))
+#define XNOISE_HANDLER_ADD_ALL_TO_TRACKLIST_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST, XnoiseHandlerAddAllToTracklistClass))
+
+typedef struct _XnoiseHandlerAddAllToTracklist XnoiseHandlerAddAllToTracklist;
+typedef struct _XnoiseHandlerAddAllToTracklistClass XnoiseHandlerAddAllToTracklistClass;
+typedef struct _XnoiseHandlerAddAllToTracklistPrivate XnoiseHandlerAddAllToTracklistPrivate;
+
 #define XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST (xnoise_handler_add_to_tracklist_get_type ())
 #define XNOISE_HANDLER_ADD_TO_TRACKLIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST, XnoiseHandlerAddToTracklist))
 #define XNOISE_HANDLER_ADD_TO_TRACKLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST, XnoiseHandlerAddToTracklistClass))
@@ -909,6 +920,15 @@ struct _XnoiseItemHandlerClass {
 	XnoiseItemHandlerType (*handler_type) (XnoiseItemHandler* self);
 	const gchar* (*handler_name) (XnoiseItemHandler* self);
 	XnoiseAction* (*get_action) (XnoiseItemHandler* self, XnoiseItemType type, XnoiseActionContext context, XnoiseItemSelectionType selection);
+};
+
+struct _XnoiseHandlerAddAllToTracklist {
+	XnoiseItemHandler parent_instance;
+	XnoiseHandlerAddAllToTracklistPrivate * priv;
+};
+
+struct _XnoiseHandlerAddAllToTracklistClass {
+	XnoiseItemHandlerClass parent_class;
 };
 
 struct _XnoiseHandlerAddToTracklist {
@@ -1807,6 +1827,9 @@ GType xnoise_action_context_get_type (void) G_GNUC_CONST;
 GType xnoise_item_selection_type_get_type (void) G_GNUC_CONST;
 void xnoise_action_free (XnoiseAction* self);
 GType xnoise_item_handler_manager_get_type (void) G_GNUC_CONST;
+GType xnoise_handler_add_all_to_tracklist_get_type (void) G_GNUC_CONST;
+XnoiseHandlerAddAllToTracklist* xnoise_handler_add_all_to_tracklist_new (void);
+XnoiseHandlerAddAllToTracklist* xnoise_handler_add_all_to_tracklist_construct (GType object_type);
 GType xnoise_handler_add_to_tracklist_get_type (void) G_GNUC_CONST;
 XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_new (void);
 XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_construct (GType object_type);
@@ -1875,6 +1898,7 @@ gboolean xnoise_database_db_browser_streams_available (XnoiseDatabaseDbBrowser* 
 gboolean xnoise_database_db_browser_stream_in_db (XnoiseDatabaseDbBrowser* self, const gchar* uri);
 gboolean xnoise_database_db_browser_track_in_db (XnoiseDatabaseDbBrowser* self, const gchar* uri);
 gboolean xnoise_database_db_browser_get_uri_for_id (XnoiseDatabaseDbBrowser* self, gint id, gchar** val);
+XnoiseTrackData** xnoise_database_db_browser_get_all_tracks (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 gboolean xnoise_database_db_browser_get_trackdata_for_id (XnoiseDatabaseDbBrowser* self, gint id, XnoiseTrackData** val);
 gboolean xnoise_database_db_browser_get_stream_td_for_id (XnoiseDatabaseDbBrowser* self, gint id, XnoiseTrackData** val);
 gboolean xnoise_database_db_browser_get_stream_for_id (XnoiseDatabaseDbBrowser* self, gint id, gchar** uri);
