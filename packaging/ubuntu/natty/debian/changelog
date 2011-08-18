@@ -1,4 +1,4 @@
-xnoise (0.1.27-1) natty; urgency=low
+xnoise (0.1.27.2) natty; urgency=low
   * present the currently played track data together with the album cover in the 'now playing' view
   * check missing gstreamer plugins (codecs) and inform the user
   * new handler for adding all visible tracks to tracklist
