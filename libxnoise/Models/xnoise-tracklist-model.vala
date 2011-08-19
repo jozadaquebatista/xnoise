@@ -93,7 +93,11 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				default: break;
 			}
 		});
-		icon_theme.changed.connect(on_position_reference_changed);
+		icon_theme.changed.connect(update_icons); //TODO update icon
+	}
+	
+	private void update_icons() {
+		//TODO
 	}
 	
 	public Iterator iterator() {
