@@ -404,7 +404,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 								unowned Gtk.ProgressBar pb = (Gtk.ProgressBar) userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id"));
 								if(pb != null) {
 									pb.pulse();
-									pb.set_text("%u tracks found".printf(xcnt));
+									pb.set_text(_("%u tracks found").printf(xcnt));
 								}
 								return false;
 							});

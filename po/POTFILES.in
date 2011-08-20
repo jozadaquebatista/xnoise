@@ -1,6 +1,16 @@
 [encoding: UTF-8]
 # List of source files which contain translatable strings.
 data/misc/xnoise.desktop.in.in
+libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala
+libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala
+libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala
+libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala
+libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala
+libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala
+libxnoise/ItemHandlers/xnoise-item-converter.vala
+libxnoise/ItemHandlers/xnoise-item-handler-manager.vala
+libxnoise/ItemHandlers/xnoise-item-handler.vala
+libxnoise/ItemHandlers/xnoise-item.vala
 libxnoise/Widgets/xnoise-about.vala
 libxnoise/Widgets/xnoise-add-media-dialog.vala
 libxnoise/Widgets/xnoise-album-image.vala
@@ -31,9 +41,7 @@ libxnoise/PluginModule/xnoise-plugin-loader.vala
 libxnoise/Widgets/xnoise-plugin-manager-tree.vala
 libxnoise/Utils/xnoise-screensaver-manager.vala
 libxnoise/Widgets/xnoise-settings-dialog.vala
-libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala
 libxnoise/TagAccess/xnoise-tag-reader.vala
-libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala
 libxnoise/TagAccess/xnoise-tag-writer.vala
 libxnoise/Widgets/xnoise-text-column.vala
 libxnoise/Widgets/xnoise-tracklist.vala

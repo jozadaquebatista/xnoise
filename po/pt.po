@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-16 10:26+0200\n"
+"POT-Creation-Date: 2011-08-20 14:23+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -28,6 +28,62 @@ msgstr "Organização e reprodução das suas músicas e vídeos"
 #: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Xnoise"
 msgstr "Xnoise"
+
+#: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
+#, fuzzy
+msgid "Add all visible tracks to tracklist"
+msgstr "Colunas vísiveis na lista de faixas:"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:115
+msgid "xnoise - Edit metadata"
+msgstr "xnoise - Editar detalhes"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:142
+msgid "Type new artist name."
+msgstr "Indique o novo nome do artista"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
+msgid "Artist:"
+msgstr "Artista:"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:146
+msgid "Type new album name."
+msgstr "Indique o novo nome do álbum"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:147
+msgid "Album:"
+msgstr "Álbum:"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Por favor, aguarde o preenchimento da coleção. Cancele se não quiser "
+"aguardar."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
+
+#: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:41
+#, fuzzy
+msgid "Add to tracklist"
+msgstr "Ir para a lista de faixas"
+
+#: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
+msgid "Play"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
+#, fuzzy
+msgid "Remove selected track"
+msgstr "Remover seleção"
 
 #: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:167
 msgid "Add local folder"
@@ -75,8 +131,10 @@ msgid "Leave fullscreen"
 msgstr "Sair de ecrã completo"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
-msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
+msgstr ""
+"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
@@ -89,8 +147,8 @@ msgid "User aborted installation of missing gstreamer plugin"
 msgstr "O utilizador cancelou a instalação do plugin"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:467
-#, c-format
-msgid "Missing gstreamer plugin was not found"
+#, fuzzy, c-format
+msgid "Gstreamer plugin not found in repositories"
 msgstr "Plugin gstreamer não encontrado"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:473
@@ -264,16 +322,24 @@ msgstr "_Configurar"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar o arranque do xnoise."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar "
+"o arranque do xnoise."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:440
 msgid "Add media"
 msgstr "Adicionar multimédia"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:443
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
-msgstr "Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para a coleção?"
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
+msgstr ""
+"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
+"a coleção?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:538
 msgid "no repeat"
@@ -381,6 +447,11 @@ msgstr "A carregar..."
 msgid "Found %u tracks. Updating library ..."
 msgstr "Encontrada(s) %u faixa(s). A atualizar coleção..."
 
+#: ../libxnoise/Utils/xnoise-media-importer.vala:407
+#, fuzzy, c-format
+msgid "%u tracks found"
+msgstr "nenhuma letra encontrada..."
+
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:260
 msgid "Enable grid lines in media browser"
 msgstr "Utilizar linhas de grelha no navegador"
@@ -408,37 +479,6 @@ msgstr "Sair da aplicação ao fechar a janela"
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:296
 msgid "Media browser fontsize:"
 msgstr "Tamanho da letra no navegador:"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:115
-msgid "xnoise - Edit metadata"
-msgstr "xnoise - Editar detalhes"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:142
-msgid "Type new artist name."
-msgstr "Indique o novo nome do artista"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
-msgid "Artist:"
-msgstr "Artista:"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:146
-msgid "Type new album name."
-msgstr "Indique o novo nome do álbum"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:147
-msgid "Album:"
-msgstr "Álbum:"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
-msgstr "Por favor, aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #: ../libxnoise/Widgets/xnoise-tracklist.vala:1026
 msgid "Title"
@@ -539,8 +579,10 @@ msgid "More information on the project website:"
 msgstr "Mais informações na página web:"
 
 #: ../src/xnoise.vala:70
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr "Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr ""
+"Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
 
 #: ../src/xnoise.vala:130
 msgid "Using the running instance of xnoise!\n"
@@ -647,9 +689,6 @@ msgstr "Utilizar o título da faixa como título da janela"
 #~ msgid "Found %d new media files"
 #~ msgstr "Encontrados %d novos ficheiros"
 
-#~ msgid "Visible extra columns for tracklist:"
-#~ msgstr "Colunas vísiveis na lista de faixas:"
-
 #~ msgid "Video"
 #~ msgstr "Vídeo"
 
@@ -661,6 +700,3 @@ msgstr "Utilizar o título da faixa como título da janela"
 
 #~ msgid "Edit metadata for track"
 #~ msgstr "Editar detalhes da música"
-
-#~ msgid "Remove selected"
-#~ msgstr "Remover seleção"

@@ -464,7 +464,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				                                        missing_plugins_user_message.info_text));
 				break;
 			case Gst.InstallPluginsReturn.NOT_FOUND:
-				send_user_error_message("%s: %s".printf(_("Missing gstreamer plugin was not found"), 
+				send_user_error_message("%s: %s".printf(_("Gstreamer plugin not found in repositories"), 
 				                                        missing_plugins_user_message.info_text));
 				break;
 			case Gst.InstallPluginsReturn.ERROR:

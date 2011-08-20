@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-16 10:26+0200\n"
+"POT-Creation-Date: 2011-08-20 14:23+0200\n"
 "PO-Revision-Date: 2011-08-16 13:12+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -31,6 +31,59 @@ msgstr "ארגון ונגינת אוספי המוזיקה והווידאו של�
 #: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Xnoise"
 msgstr "Xnoise"
+
+#: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
+#, fuzzy
+msgid "Add all visible tracks to tracklist"
+msgstr "עמודות נוספות גלויות ברשימת הרצועות:"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:115
+msgid "xnoise - Edit metadata"
+msgstr "xnoise - ערוך מטה-דטה(metadata)"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:142
+msgid "Type new artist name."
+msgstr "שנה את שם האמן."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
+msgid "Artist:"
+msgstr "אמן:"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:146
+msgid "Type new album name."
+msgstr "שנה את שם האלבום."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:147
+msgid "Album:"
+msgstr "אלבום:"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr "אנא המתן בעת מילוי דפדפן המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "אנא המתן בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
+
+#: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:41
+#, fuzzy
+msgid "Add to tracklist"
+msgstr "מעבר לרשימת הרצועות."
+
+#: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
+msgid "Play"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
+#, fuzzy
+msgid "Remove selected track"
+msgstr "הסרת הנבחרים"
 
 #: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:167
 msgid "Add local folder"
@@ -78,7 +131,8 @@ msgid "Leave fullscreen"
 msgstr "יציאה ממסך מלא"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "שם הכתוביות אינו מתאים לשם הוידאו! לא משתמש בקובץ כתוביות."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
@@ -92,8 +146,8 @@ msgid "User aborted installation of missing gstreamer plugin"
 msgstr "המשתמש ביטל את ההתקנה של הפלאגין החסר של GStreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:467
-#, c-format
-msgid "Missing gstreamer plugin was not found"
+#, fuzzy, c-format
+msgid "Gstreamer plugin not found in repositories"
 msgstr "פלאגין חסר של GStreamer לא נמצא"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:473
@@ -267,15 +321,21 @@ msgstr "ה_גדרה"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של xnoise."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של "
+"xnoise."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:440
 msgid "Add media"
 msgstr "הוספת מדיה"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:443
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
 msgstr "הפעלת את xnoise לראשונה. האם ברצונך לייבא מדיה לספריה?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:538
@@ -384,6 +444,11 @@ msgstr "טוען ..."
 msgid "Found %u tracks. Updating library ..."
 msgstr "מצא %u רצועות. מעדכן ספרייה ..."
 
+#: ../libxnoise/Utils/xnoise-media-importer.vala:407
+#, fuzzy, c-format
+msgid "%u tracks found"
+msgstr "לא נמצאו כתוביות..."
+
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:260
 msgid "Enable grid lines in media browser"
 msgstr "הצג את שורות הרשת בדפדפן המדיה"
@@ -411,37 +476,6 @@ msgstr "צא מהתכנה בסגירת החלון"
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:296
 msgid "Media browser fontsize:"
 msgstr "גודל גופן דפדפן המדיה:"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:115
-msgid "xnoise - Edit metadata"
-msgstr "xnoise - ערוך מטה-דטה(metadata)"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:142
-msgid "Type new artist name."
-msgstr "שנה את שם האמן."
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
-msgid "Artist:"
-msgstr "אמן:"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:146
-msgid "Type new album name."
-msgstr "שנה את שם האלבום."
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:147
-msgid "Album:"
-msgstr "אלבום:"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
-msgstr "אנא המתן בעת מילוי דפדפן המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "אנא המתן בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #: ../libxnoise/Widgets/xnoise-tracklist.vala:1026
 msgid "Title"
@@ -542,7 +576,8 @@ msgid "More information on the project website:"
 msgstr "מידע נוסף ניתן למצוא באתר הפרויקט:"
 
 #: ../src/xnoise.vala:70
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr "הרץ 'xnoise --help' על מנת לראות רשימה מלאה של אפשרויות שורת הפקודה.\n"
 
 #: ../src/xnoise.vala:130
@@ -621,9 +656,6 @@ msgstr "קבע את שם החלון לשם הכותרת הנוכחית"
 #~ msgid "Found %d new media files"
 #~ msgstr "נמצאו %d קבצי מדיה חדשים"
 
-#~ msgid "Visible extra columns for tracklist:"
-#~ msgstr "עמודות נוספות גלויות ברשימת הרצועות:"
-
 #~ msgid "Video"
 #~ msgstr "וידאו"
 
@@ -635,9 +667,6 @@ msgstr "קבע את שם החלון לשם הכותרת הנוכחית"
 
 #~ msgid "Edit metadata for track"
 #~ msgstr "ערוך את ה-metadata של הרצועה"
-
-#~ msgid "Remove selected"
-#~ msgstr "הסרת הנבחרים"
 
 #~ msgid "No Subtitle"
 #~ msgstr "ללא כתוביות"

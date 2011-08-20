@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-16 10:26+0200\n"
+"POT-Creation-Date: 2011-08-20 14:23+0200\n"
 "PO-Revision-Date: 2011-05-05 10:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -27,6 +27,62 @@ msgstr "Xnoise 組織和播放您收藏的音樂和影片"
 #: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Xnoise"
 msgstr "極限噪音"
+
+#: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
+#, fuzzy
+msgid "Add all visible tracks to tracklist"
+msgstr "軌段列表的其他可見欄位："
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:115
+msgid "xnoise - Edit metadata"
+msgstr "xnoise - Edit metadata"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:142
+msgid "Type new artist name."
+msgstr "Type new artist name."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
+msgid "Artist:"
+msgstr "Artist:"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:146
+msgid "Type new album name."
+msgstr "Type new album name."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:147
+msgid "Album:"
+msgstr "Album:"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+
+#: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:41
+#, fuzzy
+msgid "Add to tracklist"
+msgstr "前往軌段列表。"
+
+#: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
+msgid "Play"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
+#, fuzzy
+msgid "Remove selected track"
+msgstr "移除已選"
 
 #: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:167
 msgid "Add local folder"
@@ -91,7 +147,7 @@ msgstr ""
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:467
 #, c-format
-msgid "Missing gstreamer plugin was not found"
+msgid "Gstreamer plugin not found in repositories"
 msgstr ""
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:473
@@ -392,6 +448,11 @@ msgstr ""
 msgid "Found %u tracks. Updating library ..."
 msgstr ""
 
+#: ../libxnoise/Utils/xnoise-media-importer.vala:407
+#, c-format
+msgid "%u tracks found"
+msgstr ""
+
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:260
 msgid "Enable grid lines in media browser"
 msgstr ""
@@ -419,43 +480,6 @@ msgstr ""
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:296
 msgid "Media browser fontsize:"
 msgstr ""
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:115
-msgid "xnoise - Edit metadata"
-msgstr "xnoise - Edit metadata"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:142
-msgid "Type new artist name."
-msgstr "Type new artist name."
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
-msgid "Artist:"
-msgstr "Artist:"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:146
-msgid "Type new album name."
-msgstr "Type new album name."
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:147
-msgid "Album:"
-msgstr "Album:"
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
 
 #: ../libxnoise/Widgets/xnoise-tracklist.vala:1026
 msgid "Title"
@@ -641,9 +665,6 @@ msgstr ""
 #~ msgid "Found %d new media files"
 #~ msgstr "找到了 %d 個新媒體檔案"
 
-#~ msgid "Visible extra columns for tracklist:"
-#~ msgstr "軌段列表的其他可見欄位："
-
 #~ msgid "Video"
 #~ msgstr "影片"
 
@@ -655,9 +676,6 @@ msgstr ""
 
 #~ msgid "Edit metadata for track"
 #~ msgstr "Edit metadata for track"
-
-#~ msgid "Remove selected"
-#~ msgstr "移除已選"
 
 #~ msgid "No Subtitle"
 #~ msgstr "沒有子標題"
