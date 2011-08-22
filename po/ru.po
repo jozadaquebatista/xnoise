@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-20 14:23+0200\n"
+"POT-Creation-Date: 2011-08-22 09:39+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Alexey Morsov <swi@altlinux.ru>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -76,6 +76,18 @@ msgid ""
 msgstr ""
 "Пожалуйста, подождите пока импортируются файлы. Или отмените, если вы не "
 "хотите ждать."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
+msgid "Edit metadata for track"
+msgstr "Редактировать метаданные трека"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
+msgid "Change album name"
+msgstr "Изменить название альбома"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
+msgid "Change artist name"
+msgstr "Изменить исполнителя"
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:41
 #, fuzzy
@@ -450,7 +462,7 @@ msgstr "Удалить выбранные"
 msgid "Show application main menu"
 msgstr ""
 
-#: ../libxnoise/Models/xnoise-media-browser-model.vala:960
+#: ../libxnoise/Models/xnoise-media-browser-model.vala:961
 msgid "Loading ..."
 msgstr ""
 
@@ -678,15 +690,6 @@ msgstr ""
 
 #~ msgid "Video"
 #~ msgstr "Видео"
-
-#~ msgid "Change artist name"
-#~ msgstr "Изменить исполнителя"
-
-#~ msgid "Change album name"
-#~ msgstr "Изменить название альбома"
-
-#~ msgid "Edit metadata for track"
-#~ msgstr "Редактировать метаданные трека"
 
 #~ msgid "No Subtitle"
 #~ msgstr "No Subtitle"

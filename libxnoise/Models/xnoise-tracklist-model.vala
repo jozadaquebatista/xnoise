@@ -97,6 +97,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 	
 	private void update_icons() {
+	print("update_icons tlm\n");
 		//TODO
 	}
 	

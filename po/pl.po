@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-20 14:23+0200\n"
+"POT-Creation-Date: 2011-08-22 09:39+0200\n"
 "PO-Revision-Date: 2011-08-15 22:32+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -71,6 +71,20 @@ msgstr ""
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "Czekaj na zaimportowanie mediów lub anuluj, gdy nie chcesz czekać."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
+msgid "Edit metadata for track"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
+#, fuzzy
+msgid "Change album name"
+msgstr "Wstaw nazwę albumu."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
+#, fuzzy
+msgid "Change artist name"
+msgstr "Wstaw nazwę wykonawcy."
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:41
 #, fuzzy
@@ -436,7 +450,7 @@ msgstr "Usuń zaznaczone"
 msgid "Show application main menu"
 msgstr "Pokaż główne menu aplikacji"
 
-#: ../libxnoise/Models/xnoise-media-browser-model.vala:960
+#: ../libxnoise/Models/xnoise-media-browser-model.vala:961
 msgid "Loading ..."
 msgstr "Ładowanie ..."
 

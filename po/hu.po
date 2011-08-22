@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-20 14:23+0200\n"
+"POT-Creation-Date: 2011-08-22 09:39+0200\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-"
@@ -74,6 +74,18 @@ msgstr ""
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
+msgid "Edit metadata for track"
+msgstr "Edit metadata for track"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
+msgid "Change album name"
+msgstr "Change album name"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
+msgid "Change artist name"
+msgstr "Change artist name"
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:41
 #, fuzzy
@@ -446,7 +458,7 @@ msgstr "Kiválasztott címek eltávolítása"
 msgid "Show application main menu"
 msgstr ""
 
-#: ../libxnoise/Models/xnoise-media-browser-model.vala:960
+#: ../libxnoise/Models/xnoise-media-browser-model.vala:961
 msgid "Loading ..."
 msgstr ""
 
@@ -672,15 +684,6 @@ msgstr ""
 
 #~ msgid "Video"
 #~ msgstr "Videó"
-
-#~ msgid "Change artist name"
-#~ msgstr "Change artist name"
-
-#~ msgid "Change album name"
-#~ msgstr "Change album name"
-
-#~ msgid "Edit metadata for track"
-#~ msgstr "Edit metadata for track"
 
 #~ msgid "No Subtitle"
 #~ msgstr "No Subtitle"

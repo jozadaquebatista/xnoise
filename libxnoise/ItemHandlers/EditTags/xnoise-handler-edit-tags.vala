@@ -46,6 +46,7 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 	private const string name = "HandlerEditTags";
 	private unowned Main xn;
 	
+	
 	public HandlerEditTags() {
 		xn = Main.instance;
 		

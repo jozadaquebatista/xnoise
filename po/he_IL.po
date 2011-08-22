@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-20 14:23+0200\n"
+"POT-Creation-Date: 2011-08-22 09:39+0200\n"
 "PO-Revision-Date: 2011-08-16 13:12+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -70,6 +70,18 @@ msgstr "אנא המתן בעת מילוי דפדפן המדיה. ביכולתך 
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "אנא המתן בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
+msgid "Edit metadata for track"
+msgstr "ערוך את ה-metadata של הרצועה"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
+msgid "Change album name"
+msgstr "שנה את שם האלבום"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
+msgid "Change artist name"
+msgstr "שנה את שם האמן"
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:41
 #, fuzzy
@@ -435,7 +447,7 @@ msgstr "הסרת כל הכותרות הנבחרות"
 msgid "Show application main menu"
 msgstr "הצג את התפריט הראשי"
 
-#: ../libxnoise/Models/xnoise-media-browser-model.vala:960
+#: ../libxnoise/Models/xnoise-media-browser-model.vala:961
 msgid "Loading ..."
 msgstr "טוען ..."
 
@@ -658,15 +670,6 @@ msgstr "קבע את שם החלון לשם הכותרת הנוכחית"
 
 #~ msgid "Video"
 #~ msgstr "וידאו"
-
-#~ msgid "Change artist name"
-#~ msgstr "שנה את שם האמן"
-
-#~ msgid "Change album name"
-#~ msgstr "שנה את שם האלבום"
-
-#~ msgid "Edit metadata for track"
-#~ msgstr "ערוך את ה-metadata של הרצועה"
 
 #~ msgid "No Subtitle"
 #~ msgstr "ללא כתוביות"

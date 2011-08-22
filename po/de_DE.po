@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-20 14:23+0200\n"
+"POT-Creation-Date: 2011-08-22 09:39+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shuerhaaken <shuerhaaken@googlemail.com>\n"
@@ -53,13 +53,31 @@ msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
-msgstr "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "Please wait while importing media. Or cancel, if you do not want to wait."
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
+msgid "Edit metadata for track"
+msgstr "Bearbeite Metadaten des Titels"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
+msgid "Change album name"
+msgstr "Ändere Albumnamen"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
+msgid "Change artist name"
+msgstr "Ändere Künstler/Band"
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:41
 msgid "Add to tracklist"
@@ -94,7 +112,8 @@ msgid ""
 "Select local media folders or remote media streams. \n"
 "All library media will be available in the library."
 msgstr ""
-"Wähle lokale Ordner oder Internet-Radio-Adressen um sie zur Bibliothek hinzuzufügen. \n"
+"Wähle lokale Ordner oder Internet-Radio-Adressen um sie zur Bibliothek "
+"hinzuzufügen. \n"
 "Alle Medien werden im Medien-Browser zur Verfügung gestellt."
 
 #: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:181
@@ -119,8 +138,11 @@ msgid "Leave fullscreen"
 msgstr "Verlasse Vollbildmodus"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
-msgstr "Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere Untertitel-Datei"
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
+msgstr ""
+"Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere "
+"Untertitel-Datei"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
@@ -130,7 +152,8 @@ msgstr "Fehlendes GStreamer Plugin konnte installiert werden"
 #: ../libxnoise/Player/xnoise-gst-player.vala:463
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr "Benutzer hat die Installation des fehlenden GStreamer Plugins abgebrochen"
+msgstr ""
+"Benutzer hat die Installation des fehlenden GStreamer Plugins abgebrochen"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:467
 #, c-format
@@ -155,7 +178,8 @@ msgstr "Automatische Suche nach fehlendem Codec wird nicht unterstützt"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:531
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr "Automatische GStreamer Plugin Installation konnte nicht gestartet werden."
+msgstr ""
+"Automatische GStreamer Plugin Installation konnte nicht gestartet werden."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:544
 msgid "Trying to install missing gstreamer plugin"
@@ -308,16 +332,24 @@ msgstr "_Konfiguration"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "%u Titel werden in der Titel-Liste wiederhergestellt. Das ist eine relativ große Zahl und kann den Start von xnoise verlangsamen."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"%u Titel werden in der Titel-Liste wiederhergestellt. Das ist eine relativ "
+"große Zahl und kann den Start von xnoise verlangsamen."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:440
 msgid "Add media"
 msgstr "Medien hinzufügen"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:443
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
-msgstr "Du hast xnoise zum ersten Mal gestartet. Möchtest du Musik oder Videos in die Bibliothek importieren? "
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
+msgstr ""
+"Du hast xnoise zum ersten Mal gestartet. Möchtest du Musik oder Videos in "
+"die Bibliothek importieren? "
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:538
 msgid "no repeat"
@@ -416,7 +448,7 @@ msgstr "Entferne Ausgewählte"
 msgid "Show application main menu"
 msgstr "Zeige Hauptmenü der Anwendung"
 
-#: ../libxnoise/Models/xnoise-media-browser-model.vala:960
+#: ../libxnoise/Models/xnoise-media-browser-model.vala:961
 msgid "Loading ..."
 msgstr "Lade ..."
 
@@ -440,7 +472,8 @@ msgstr "Umbrüche im Medien Browser verwenden"
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:270
 msgid "Don't show video screen while hovering album image"
-msgstr "Zeige nicht die Video Ansicht, wenn der Mauszeiger über dem Albumbild ist."
+msgstr ""
+"Zeige nicht die Video Ansicht, wenn der Mauszeiger über dem Albumbild ist."
 
 #: ../libxnoise/Widgets/xnoise-settings-dialog.vala:275
 msgid "Compact layout"
@@ -557,8 +590,10 @@ msgid "More information on the project website:"
 msgstr "Mehr Infos auf der Website:"
 
 #: ../src/xnoise.vala:70
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr "Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr ""
+"Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
 
 #: ../src/xnoise.vala:130
 msgid "Using the running instance of xnoise!\n"
@@ -667,15 +702,6 @@ msgstr "Das Fenster nach dem aktuellen Titel benennen"
 
 #~ msgid "Video"
 #~ msgstr "Video"
-
-#~ msgid "Change artist name"
-#~ msgstr "Ändere Künstler/Band"
-
-#~ msgid "Change album name"
-#~ msgstr "Ändere Albumnamen"
-
-#~ msgid "Edit metadata for track"
-#~ msgstr "Bearbeite Metadaten des Titels"
 
 #~ msgid "No Subtitle"
 #~ msgstr "Keine Untertitel"
