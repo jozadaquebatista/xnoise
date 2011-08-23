@@ -47,7 +47,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	public AlbumImage() {
 		xn = Main.instance;
 		this.set_size_request(SIZE, SIZE);
-		this.set_from_icon_name("xnoise-panel", Gtk.IconSize.DIALOG);
+		this.set_from_icon_name("xnoise-grey", Gtk.IconSize.DIALOG);
 		current_path = "default";
 		
 		loader = new AlbumImageLoader();
@@ -174,7 +174,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	
 	public void load_default_image() {
 		this.set_size_request(SIZE, SIZE);
-		this.set_from_icon_name("xnoise-panel", Gtk.IconSize.DIALOG);
+		this.set_from_icon_name("xnoise-grey", Gtk.IconSize.DIALOG);
 		current_path = "default";
 	}
 
