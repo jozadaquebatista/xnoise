@@ -51,8 +51,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private uint search_idlesource = 0;
 	private UIManager ui_manager = new UIManager();
 	private VolumeSliderButton volumeSliderButton;
-	private int _posX_buffer;
-	private int _posY_buffer;
+	private int _posX;
+	private int _posY;
 	private uint aimage_timeout;
 	private Gtk.Image config_button_image;
 	private Gtk.AspectFrame a_frame_config_button = null;
@@ -291,7 +291,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 	
 	private void buffer_position() {
-		this.get_position(out _posX_buffer, out _posY_buffer);
+		this.get_position(out _posX, out _posY);
 	}
 	
 	private void on_resized() {
@@ -564,7 +564,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			is_fullscreen = true;
 		}
 		else if(e.new_window_state==Gdk.WindowState.ICONIFIED) {
-			this.get_position(out _posX_buffer, out _posY_buffer);
+			this.get_position(out _posX, out _posY);
 			is_fullscreen = false;
 		}
 		else {
@@ -655,6 +655,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 	
 	private void quit_now() {
+		this.get_position(out _posX, out _posY);
+		this.hide();
 		xn.quit();
 	}
 
@@ -711,16 +713,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			active_notifier = 0;
 		}
 		if(this.is_active) {
-			this.get_position(out _posX_buffer, out _posY_buffer);
+			this.get_position(out _posX, out _posY);
 			this.hide();
 		}
 		else if(this.get_window().is_visible() == true) {
-			this.move(_posX_buffer, _posY_buffer);
+			this.move(_posX, _posY);
 			this.present();
 			active_notifier = this.notify["is-active"].connect(buffer_position);
 		}
 		else {
-			this.move(_posX_buffer, _posY_buffer);
+			this.move(_posX, _posY);
 			this.present();
 			active_notifier = this.notify["is-active"].connect(buffer_position);
 		}
@@ -731,7 +733,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.present();
 		}
 		else {
-			this.move(_posX_buffer, _posY_buffer);
+			this.move(_posX, _posY);
 			this.present();
 		}
 	}
@@ -766,11 +768,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	public void write_params_data() {
-		int posX, posY;
-		this.get_position(out posX, out posY);
-		this.get_position(out _posX_buffer, out _posY_buffer);
-		Params.set_int_value("posX", posX);
-		Params.set_int_value("posY", posY);
+		Params.set_int_value("posX", _posX);
+		Params.set_int_value("posY", _posY);
 		int  wi, he;
 		this.get_size(out wi, out he);
 		Params.set_int_value("width", wi);
@@ -950,8 +949,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.disconnect(active_notifier);
 			active_notifier = 0;
 		}
+		
 		if(!quit_if_closed) {
-			this.get_position(out _posX_buffer, out _posY_buffer);
+			this.get_position(out _posX, out _posY);
 			this.hide();
 			return true;
 		}
@@ -960,7 +960,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				quit_now();
 				return false;
 			});
-			this.hide();
 			return true;
 		}
 	}
