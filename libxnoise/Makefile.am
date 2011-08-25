@@ -62,8 +62,8 @@ libxnoise_la_SOURCES = \
     Player/xnoise-gst-player.vala \
     Playlist/xnoise-playlist-abstract-file-reader.vala \
     Playlist/xnoise-playlist-general.vala \
-    Playlist/xnoise-playlist-item.vala \
-    Playlist/xnoise-playlist-item-collection.vala \
+    Playlist/xnoise-playlist-entry.vala \
+    Playlist/xnoise-playlist-entry-collection.vala \
     Playlist/xnoise-playlist-reader.vala \
     Playlist/ASX/xnoise-playlist-asx-file-reader.vala \
     Playlist/WPL/xnoise-playlist-wpl-file-reader.vala \
