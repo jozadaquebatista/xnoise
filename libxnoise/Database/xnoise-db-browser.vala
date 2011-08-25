@@ -270,7 +270,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_ALL_TRACKDATA =
-		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY ar.name ASC, al.name ASC, t.tracknumber ASC";
+		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY LOWER(ar.name) ASC, LOWER(al.name) ASC, t.tracknumber ASC";
 
 	public TrackData[]? get_all_tracks(ref string searchtext) {
 		Statement stmt;
