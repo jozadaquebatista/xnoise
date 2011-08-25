@@ -641,6 +641,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 					if(tdx.tracknumber != 0) {
 						tracknumberString = "%u".printf(tdx.tracknumber);
 					}
+					string? yearString = null;
+					if(tdx.year > 0) {
+						yearString = "%u".printf(tdx.year);
+					}
 					tracklistmodel.set(new_iter,
 					                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
 					                   TrackListModel.Column.TITLE, tdx.title,
@@ -648,7 +652,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 					                   TrackListModel.Column.ARTIST, tdx.artist,
 					                   TrackListModel.Column.LENGTH, make_time_display_from_seconds(tdx.length),
 					                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-					                   TrackListModel.Column.ITEM, tdx.item);
+					                   TrackListModel.Column.ITEM, tdx.item,
+					                   TrackListModel.Column.YEAR, yearString,
+					                   TrackListModel.Column.GENRE, tdx.genre);
 					path = tracklistmodel.get_path(new_iter);
 				}
 				return false;
@@ -732,7 +738,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 		if((filetype == GLib.FileType.REGULAR)&
 		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
-			string artist, album, title, lengthString = "";
+			string artist, album, title, lengthString = "", genre = "unknown genre";
+			string? yearString = null;
 			uint tracknumb;
 			if(!(psVideo.match_string(mime))) {
 				var tr = new TagReader(); // TODO: Check dataimport for video
@@ -741,7 +748,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 				album          = tags.album;
 				title          = tags.title;
 				tracknumb      = tags.tracknumber;
+				genre          = tags.genre;
 				lengthString = make_time_display_from_seconds(tags.length);
+				if(tags.year > 0) {
+					yearString = "%u".printf(tags.year);
+				}
 			}
 			else { //TODO: Handle video data
 				artist         = "";
@@ -785,7 +796,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 			                   TrackListModel.Column.ARTIST, artist,
 			                   TrackListModel.Column.LENGTH, lengthString,
 			                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-			                   TrackListModel.Column.ITEM, item
+			                   TrackListModel.Column.ITEM, item,
+			                   TrackListModel.Column.YEAR, yearString,
+			                   TrackListModel.Column.GENRE, genre
 			                   );
 			path = tracklistmodel.get_path(new_iter);
 		}
@@ -1011,12 +1024,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnTracknumber.reorderable = true;
 		columnTracknumber.tracklist_col_name = "tracknumber";
 		this.insert_column(columnTracknumber, -1);
-		if(Params.get_int_value(USE_TR_NO_COL) == 1) {
-			columnTracknumber.visible = true;
-		}
-		else {
-			columnTracknumber.visible = false;
-		}
+		columnTracknumber.visible = (Params.get_int_value(USE_TR_NO_COL) == 1);
 
 
 		// TITLE
@@ -1051,12 +1059,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnAlbum.tracklist_col_name = "album";
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
-		if(Params.get_int_value(USE_ALBUM_COL) == 1) {
-			columnAlbum.visible = true;
-		}
-		else {
-			columnAlbum.visible = false;
-		}
+		columnAlbum.visible = (Params.get_int_value(USE_ALBUM_COL) == 1);
 
 		// ARTIST
 		renderer = new CellRendererText();
@@ -1073,12 +1076,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnArtist.tracklist_col_name = "artist";
 		this.insert_column(columnArtist, -1);
 		variable_col_count++;
-		if(Params.get_int_value(USE_ARTIST_COL) == 1) {
-			columnArtist.visible = true;
-		}
-		else {
-			columnArtist.visible = false;
-		}
+		columnArtist.visible = (Params.get_int_value(USE_ARTIST_COL) == 1);
 
 		// LENGTH
 		renderer = new CellRendererText();
@@ -1095,35 +1093,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnLength.tracklist_col_name = "length";
 		this.insert_column(columnLength, -1);
 
-		if(Params.get_int_value(USE_LEN_COL) == 1) {
-			columnLength.visible = true;
-		}
-		else {
-			columnLength.visible = false;
-		}
-
-		// year
-		renderer = new CellRendererText();
-		renderer.ellipsize = Pango.EllipsizeMode.END;
-		renderer.ellipsize_set = true;
-		columnYear = new TextColumn(_("Year"), renderer, TrackListModel.Column.YEAR);
-		columnYear.add_attribute(renderer,
-		                          "text", TrackListModel.Column.YEAR);
-		columnYear.add_attribute(renderer,
-		                          "weight", TrackListModel.Column.WEIGHT);
-		columnYear.min_width = 80;
-		columnYear.resizable = true;
-		columnYear.reorderable = true;
-		columnYear.tracklist_col_name = "year";
-		this.insert_column(columnYear, -1);
-		variable_col_count++;
-		
-		if(Params.get_int_value(USE_YEAR_COL) == 1) {
-			columnYear.visible = true;
-		}
-		else {
-			columnYear.visible = false;
-		}
+		columnLength.visible = (Params.get_int_value(USE_LEN_COL) == 1);
 
 		// Genre
 		renderer = new CellRendererText();
@@ -1141,12 +1111,26 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.insert_column(columnGenre, -1);
 		variable_col_count++;
 		
-		if(Params.get_int_value(USE_GENRE_COL) == 1) {
-			columnGenre.visible = true;
-		}
-		else {
-			columnGenre.visible = false;
-		}
+		columnGenre.visible = (Params.get_int_value(USE_GENRE_COL) == 1);
+
+		// year
+		renderer = new CellRendererText();
+		renderer.ellipsize = Pango.EllipsizeMode.END;
+		renderer.ellipsize_set = true;
+		columnYear = new TextColumn(_("Year"), renderer, TrackListModel.Column.YEAR);
+		columnYear.add_attribute(renderer,
+		                          "text", TrackListModel.Column.YEAR);
+		columnYear.add_attribute(renderer,
+		                          "weight", TrackListModel.Column.WEIGHT);
+		columnYear.min_width = 80;
+		columnYear.resizable = true;
+		columnYear.reorderable = true;
+		columnYear.tracklist_col_name = "year";
+		this.insert_column(columnYear, -1);
+		variable_col_count++;
+		
+		columnYear.visible = (Params.get_int_value(USE_YEAR_COL) == 1);
+
 
 		columnPixb.sizing        = Gtk.TreeViewColumnSizing.FIXED;
 		columnTracknumber.sizing = Gtk.TreeViewColumnSizing.FIXED;

@@ -275,44 +275,44 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	public TreeIter insert_title(Gdk.Pixbuf? pixbuf,
-	                             int tracknumber,
-	                             string title,
-	                             string album,
-	                             string artist,
-	                             int length = 0,
-	                             bool bold = false,
-	                             Item item) {
+	                             ref TrackData td,
+	                             bool bold = false) {
 		TreeIter iter;
 		int int_bold = Pango.Weight.NORMAL;
 		string? tracknumberString = null;
 		string? lengthString = null;
+		string? yearString = null;
 		this.append(out iter);
 		
-		if(!(tracknumber==0))
-			tracknumberString = "%d".printf(tracknumber);
+		if(!(td.tracknumber==0))
+			tracknumberString = "%u".printf(td.tracknumber);
 		
-		if(length > 0) {
+		if(td.length > 0) {
 			// convert seconds to a user convenient mm:ss display
 			int dur_min, dur_sec;
-			dur_min = (int)(length / 60);
-			dur_sec = (int)(length % 60);
+			dur_min = (int)(td.length / 60);
+			dur_sec = (int)(td.length % 60);
 			lengthString = "%02d:%02d".printf(dur_min, dur_sec);
 		}
-		
+		if(td.year > 0) {
+			yearString = "%u".printf(td.year);
+		}
 		if(bold)
 			int_bold = Pango.Weight.BOLD;
 		else
 			int_bold = Pango.Weight.NORMAL;
 		
 		this.set(iter,
-		         TrackListModel.Column.ITEM ,item,
+		         TrackListModel.Column.ITEM ,td.item,
 		         TrackListModel.Column.ICON, pixbuf,
 		         TrackListModel.Column.TRACKNUMBER, tracknumberString,
-		         TrackListModel.Column.TITLE, title,
-		         TrackListModel.Column.ALBUM, album,
-		         TrackListModel.Column.ARTIST, artist,
+		         TrackListModel.Column.TITLE, td.title,
+		         TrackListModel.Column.ALBUM, td.album,
+		         TrackListModel.Column.ARTIST, td.artist,
 		         TrackListModel.Column.LENGTH, lengthString,
-		         TrackListModel.Column.WEIGHT, int_bold
+		         TrackListModel.Column.WEIGHT, int_bold,
+		         TrackListModel.Column.YEAR, yearString,
+		         TrackListModel.Column.GENRE, td.genre
 		         );
 		return iter;
 	}
@@ -479,7 +479,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			TagReader tr = new TagReader();
 			bool is_stream = false;
 			string urischeme = file.get_uri_scheme();
-			var t = new TrackData();
+			var td = new TrackData();
 			if(urischeme in get_local_schemes()) {
 				try {
 					FileInfo info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE,
@@ -492,8 +492,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 					k++;
 					continue;
 				}
-				if(filetype==GLib.FileType.REGULAR) {
-					t = tr.read_tag(file.get_path()); // move to worker thread
+				if(filetype == GLib.FileType.REGULAR) {
+					td = tr.read_tag(file.get_path()); // move to worker thread
 				}
 				else {
 					is_stream = true;
@@ -505,29 +505,18 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			item = itemhandler_manager.create_item(uris[k]);
 			if(k == 0) { // first track
 				iter = this.insert_title(null,
-				                         (int)t.tracknumber,
-				                         t.title,
-				                         t.album,
-				                         t.artist,
-				                         t.length,
-				                         true,
-				                         item
-				                         );
+				                         ref td,
+				                         true);
 				
 				global.position_reference = null; // TODO: Is this necessary???
 				global.position_reference = new TreeRowReference(this, this.get_path(iter));
 				iter_2 = iter;
 			}
 			else {
+				td.item = itemhandler_manager.create_item(uris[k]);
 				iter = this.insert_title(null,
-				                         (int)t.tracknumber,
-				                         t.title,
-				                         t.album,
-				                         t.artist,
-				                         t.length,
-				                         false,
-				                         itemhandler_manager.create_item(uris[k])
-				                         );
+				                         ref td,
+				                         false);
 			}
 			tr = null;
 			k++;

@@ -422,13 +422,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		Idle.add( () => {
 			foreach(TrackData td in job.track_dat) {
 				this.trackList.tracklistmodel.insert_title(null,
-				                                           (int)td.tracknumber,
-				                                           td.title,
-				                                           td.album,
-				                                           td.artist,
-				                                           td.length,
-				                                           false,
-				                                           td.item);
+				                                           ref td,
+				                                           false);
 			}
 			return false;
 		});
@@ -1006,14 +1001,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			if((radioentry.text!=null) && (radioentry.text.strip() != "")) {
 				var uri = radioentry.text.strip();
 				File f = File.new_for_uri(uri);
+				var td = new TrackData();
+				td.tracknumber = 0;
+				td.title       = prepare_name_from_filename(f.get_basename());
+				td.album       = "";
+				td.artist      = "";
+				td.genre       = "";
+				td.length      = 0;
+				td.item        = itemhandler_manager.create_item(uri);
 				this.trackList.tracklistmodel.insert_title(null,
-				                                           0,
-				                                           prepare_name_from_filename(f.get_basename()),
-				                                           "",
-				                                           "",
-				                                           0,
-				                                           false,
-				                                           itemhandler_manager.create_item(uri));
+				                                           ref td,
+				                                           false);
 			}
 			radiodialog.close();
 			radiodialog = null;

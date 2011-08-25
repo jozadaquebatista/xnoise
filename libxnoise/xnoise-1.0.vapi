@@ -948,7 +948,7 @@ namespace Xnoise {
 		public bool get_first_row (ref Gtk.TreePath treepath);
 		public bool get_random_row (ref Gtk.TreePath treepath);
 		public string get_uri_for_current_position ();
-		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, int tracknumber, string title, string album, string artist, int length = 0, bool bold = false, Xnoise.Item item);
+		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, ref Xnoise.TrackData td, bool bold = false);
 		public Xnoise.TrackListModel.Iterator iterator ();
 		public bool not_empty ();
 		public void on_before_position_reference_changed ();

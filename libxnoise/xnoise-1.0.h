@@ -2019,7 +2019,7 @@ gboolean xnoise_track_list_model_path_is_last_row (XnoiseTrackListModel* self, G
 void xnoise_track_list_model_on_position_reference_changed (XnoiseTrackListModel* self);
 gboolean xnoise_track_list_model_get_current_path (XnoiseTrackListModel* self, GtkTreePath** treepath);
 gboolean xnoise_track_list_model_get_active_path (XnoiseTrackListModel* self, GtkTreePath** treepath, gboolean* used_next_pos);
-void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, GdkPixbuf* pixbuf, gint tracknumber, const gchar* title, const gchar* album, const gchar* artist, gint length, gboolean bold, XnoiseItem* item, GtkTreeIter* result);
+void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, GdkPixbuf* pixbuf, XnoiseTrackData** td, gboolean bold, GtkTreeIter* result);
 gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
 void xnoise_track_list_model_set_reference_to_last (XnoiseTrackListModel* self);
 XnoiseItem* xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);

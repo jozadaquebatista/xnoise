@@ -93,13 +93,8 @@ public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
 		TreeIter iter;
 		while(tda[k] != null) {
 			iter = tlm.insert_title(null,
-			                         (int)tda[k].tracknumber,
-			                         tda[k].title,
-			                         tda[k].album,
-			                         tda[k].artist,
-			                         tda[k].length,
-			                         false,
-			                         tda[k].item);
+			                        ref tda[k],
+			                        false);
 			k++;
 		}
 	}
