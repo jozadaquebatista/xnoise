@@ -53,7 +53,7 @@ namespace Xnoise.Playlist {
 			return xml;
 		}
 
-		private ItemCollection parse(ItemCollection data_collection,ref string base_path, string data) {
+		private EntryCollection parse(EntryCollection data_collection,ref string base_path, string data) {
 			SimpleMarkup.Reader reader = new SimpleMarkup.Reader.from_string(data);
 			reader.read();
 			var root = reader.root;
@@ -68,12 +68,12 @@ namespace Xnoise.Playlist {
 					}
 					var entrys = asx.get_children_by_name("entry");
 					if(entrys != null && entrys.length>0) {
-						Playlist.Item d = null;
+						Playlist.Entry d = null;
 						foreach(SimpleMarkup.Node entry in entrys) {
-							d = new Playlist.Item();
+							d = new Playlist.Entry();
 							var title = entry.get_child_by_name("title");
 							if(title != null) {
-								d.add_field(Item.Field.TITLE,title.text);
+								d.add_field(Entry.Field.TITLE,title.text);
 							}
 							//Autor
 							var author = entry.get_child_by_name("author");
@@ -93,11 +93,11 @@ namespace Xnoise.Playlist {
 									TargetType tt;
 									File tmp = get_file_for_location(href, ref base_path, out tt);
 									d.target_type = tt;
-									d.add_field(Item.Field.URI, tmp.get_uri());
+									d.add_field(Entry.Field.URI, tmp.get_uri());
 									string? ext = get_extension(tmp);
 									if(ext != null) {
 										if(is_known_playlist_extension(ref ext)) {
-											d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+											d.add_field(Entry.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
 										}
 									}
 									data_collection.append(d);
@@ -111,9 +111,9 @@ namespace Xnoise.Playlist {
 			return data_collection;
 		}
 
-		//public ItemCollection read_xml(File _file) throws InternalReaderError {
-		public override ItemCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			ItemCollection data_collection = new ItemCollection();
+		//public EntryCollection read_xml(File _file) throws InternalReaderError {
+		public override EntryCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			EntryCollection data_collection = new EntryCollection();
 			this.file = _file;
 			set_base_path();
 			
@@ -141,8 +141,8 @@ namespace Xnoise.Playlist {
 			return data_collection;
 		}
 
-		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			var data_collection = new ItemCollection();
+		public override async EntryCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			var data_collection = new EntryCollection();
 			this.file = _file;
 			set_base_path();
 			var mr = new SimpleMarkup.Reader(file);
@@ -166,7 +166,7 @@ namespace Xnoise.Playlist {
 			}
 			
 			foreach(unowned SimpleMarkup.Node nd in entries) {
-					Item d = new Item();
+					Entry d = new Entry();
 
 					unowned SimpleMarkup.Node tmp = nd.get_child_by_name("ref");
 					if(tmp == null)
@@ -181,11 +181,11 @@ namespace Xnoise.Playlist {
 						File f = get_file_for_location(target._strip(), ref base_path, out tt);
 						d.target_type = tt;
 						//print("\nasx read uri: %s\n", f.get_uri());
-						d.add_field(Item.Field.URI, f.get_uri());
+						d.add_field(Entry.Field.URI, f.get_uri());
 						string? ext = get_extension(f);
 						if(ext != null) {
 							if(is_known_playlist_extension(ref ext))
-								d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+								d.add_field(Entry.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
 						}
 					}
 					else
@@ -193,7 +193,7 @@ namespace Xnoise.Playlist {
 			
 					tmp = nd.get_child_by_name("title");
 					if(tmp != null && tmp.has_text()) {
-						d.add_field(Item.Field.TITLE, tmp.text);
+						d.add_field(Entry.Field.TITLE, tmp.text);
 					}
 					
 					data_collection.append(d);

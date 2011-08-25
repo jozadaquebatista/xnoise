@@ -26,8 +26,8 @@ namespace Xnoise.Playlist {
 	private class Pls.FileReader : AbstractFileReader {
 		private unowned File file;
 		
-		public override ItemCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			ItemCollection data_collection = new ItemCollection();
+		public override EntryCollection read(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			EntryCollection data_collection = new EntryCollection();
 			this.file = _file;
 			set_base_path();
 			if(!file.query_exists(null)) { 
@@ -45,7 +45,7 @@ namespace Xnoise.Playlist {
 					if(!line.has_prefix( "[playlist]")) {
 						return data_collection;
 					}
-					Item d = null;
+					Entry d = null;
 					while((line = in_stream.read_line (null, null)) != null) {
 						
 						//Ignore blank line
@@ -72,7 +72,7 @@ namespace Xnoise.Playlist {
 					}
 					
 					for(int i = 1; i <= numberofentries; i++) {
-						d = new Item();
+						d = new Entry();
 						for(int j = 0; j < line_buf.length; j++) {
 							if(line_buf[j].has_prefix("File" + i.to_string())) {
 								if(line_buf[j].contains("=")) {
@@ -84,12 +84,12 @@ namespace Xnoise.Playlist {
 										break;
 									TargetType tt;
 									File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
-									d.add_field(Item.Field.URI, tmp.get_uri());
+									d.add_field(Entry.Field.URI, tmp.get_uri());
 									d.target_type = tt;
 									string? ext = get_extension(tmp);
 									if(ext != null) {
 										if(is_known_playlist_extension(ref ext))
-											d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+											d.add_field(Entry.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
 									}
 									break;
 								}
@@ -109,7 +109,7 @@ namespace Xnoise.Playlist {
 									if(begin >= end)
 										break;
 									line_buf[j] = ((string)begin)._strip();
-									d.add_field(Item.Field.TITLE, line_buf[j]);
+									d.add_field(Entry.Field.TITLE, line_buf[j]);
 									break;
 								}
 								else {
@@ -129,8 +129,8 @@ namespace Xnoise.Playlist {
 			return data_collection;
 		}
 
-		public override async ItemCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
-			ItemCollection data_collection = new ItemCollection();
+		public override async EntryCollection read_asyn(File _file, Cancellable? cancellable = null) throws InternalReaderError {
+			EntryCollection data_collection = new EntryCollection();
 			this.file = _file;
 			//size_t a;
 			char* begin;
@@ -151,7 +151,7 @@ namespace Xnoise.Playlist {
 					if(!line.has_prefix("[playlist]")) {
 						return data_collection;
 					}
-					Item d = null;
+					Entry d = null;
 					while(in_stream != null && (line = yield in_stream.read_line_async(GLib.Priority.DEFAULT, null, null)) != null) {
 						//Ignore blank line
 						if(line._strip().length == 0) {
@@ -175,7 +175,7 @@ namespace Xnoise.Playlist {
 					}
 					
 					for(int i = 1; i <= numberofentries; i++) {
-						d = new Item();
+						d = new Entry();
 						for(int k = 0; k < line_buf.length; k++) {
 							if(line_buf[k].has_prefix("File" + i.to_string())) {
 								if(line_buf[k].contains("=")) {
@@ -187,12 +187,12 @@ namespace Xnoise.Playlist {
 										break;
 									TargetType tt;
 									File tmp = get_file_for_location(((string)begin)._strip(), ref base_path, out tt);
-									d.add_field(Item.Field.URI, tmp.get_uri());
+									d.add_field(Entry.Field.URI, tmp.get_uri());
 									d.target_type = tt;
 									string? ext = get_extension(tmp);
 									if(ext != null) {
 										if(is_known_playlist_extension(ref ext))
-											d.add_field(Item.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+											d.add_field(Entry.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
 									}
 									break;
 								}
@@ -212,7 +212,7 @@ namespace Xnoise.Playlist {
 									if(begin >= end)
 										break;
 									line_buf[j] = ((string)begin)._strip();
-									d.add_field(Item.Field.TITLE, line_buf[j]);
+									d.add_field(Entry.Field.TITLE, line_buf[j]);
 									break;
 								}
 								else {

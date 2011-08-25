@@ -121,9 +121,9 @@ namespace Xnoise {
 		[CCode (cprefix = "XnoisePlaylistXspf", lower_case_cprefix = "xnoise_playlist_xspf_")]
 		namespace Xspf {
 		}
-		[CCode (ref_function = "xnoise_playlist_item_ref", unref_function = "xnoise_playlist_item_unref", cheader_filename = "xnoise-1.0.h")]
-		public class Item {
-			[CCode (cprefix = "XNOISE_PLAYLIST_ITEM_FIELD_", cheader_filename = "xnoise-1.0.h")]
+		[CCode (ref_function = "xnoise_playlist_entry_ref", unref_function = "xnoise_playlist_entry_unref", cheader_filename = "xnoise-1.0.h")]
+		public class Entry {
+			[CCode (cprefix = "XNOISE_PLAYLIST_ENTRY_FIELD_", cheader_filename = "xnoise-1.0.h")]
 			public enum Field {
 				URI,
 				TITLE,
@@ -137,16 +137,16 @@ namespace Xnoise {
 				IS_REMOTE,
 				IS_PLAYLIST
 			}
-			public Item ();
-			public void add_field (Xnoise.Playlist.Item.Field field, string val);
+			public Entry ();
+			public void add_field (Xnoise.Playlist.Entry.Field field, string val);
 			public string? get_abs_path ();
 			public string? get_album ();
 			public string? get_author ();
-			public Xnoise.Playlist.Item.Field[] get_contained_fields ();
+			public Xnoise.Playlist.Entry.Field[] get_contained_fields ();
 			public string? get_copyright ();
 			public long get_duration ();
 			public string? get_duration_string ();
-			public string get_field (Xnoise.Playlist.Item.Field field);
+			public string get_field (Xnoise.Playlist.Entry.Field field);
 			public string? get_genre ();
 			public string? get_param_name ();
 			public string? get_param_value ();
@@ -158,34 +158,34 @@ namespace Xnoise {
 			public string? base_path { get; set; }
 			public Xnoise.Playlist.TargetType target_type { get; set; }
 		}
-		[CCode (ref_function = "xnoise_playlist_item_collection_ref", unref_function = "xnoise_playlist_item_collection_unref", cheader_filename = "xnoise-1.0.h")]
-		public class ItemCollection {
-			[CCode (ref_function = "xnoise_playlist_item_collection_iterator_ref", unref_function = "xnoise_playlist_item_collection_iterator_unref", cheader_filename = "xnoise-1.0.h")]
+		[CCode (ref_function = "xnoise_playlist_entry_collection_ref", unref_function = "xnoise_playlist_entry_collection_unref", cheader_filename = "xnoise-1.0.h")]
+		public class EntryCollection {
+			[CCode (ref_function = "xnoise_playlist_entry_collection_iterator_ref", unref_function = "xnoise_playlist_entry_collection_iterator_unref", cheader_filename = "xnoise-1.0.h")]
 			public class Iterator {
-				public Iterator (Xnoise.Playlist.ItemCollection dc);
-				public void append (Xnoise.Playlist.Item item);
+				public Iterator (Xnoise.Playlist.EntryCollection dc);
+				public void append (Xnoise.Playlist.Entry item);
 				public bool first ();
-				public Xnoise.Playlist.Item @get ();
+				public Xnoise.Playlist.Entry @get ();
 				public bool has_previous ();
 				public int index ();
-				public void insert (Xnoise.Playlist.Item item);
+				public void insert (Xnoise.Playlist.Entry item);
 				public bool next ();
 				public bool previous ();
 				public void remove ();
-				public void @set (Xnoise.Playlist.Item item);
+				public void @set (Xnoise.Playlist.Entry item);
 			}
-			public ItemCollection ();
+			public EntryCollection ();
 			public void add_general_info (string key, string val);
-			public bool append (Xnoise.Playlist.Item item);
+			public bool append (Xnoise.Playlist.Entry item);
 			public void clear ();
-			public bool contains (Xnoise.Playlist.Item d);
-			public bool contains_field (Xnoise.Playlist.Item.Field field, string value);
+			public bool contains (Xnoise.Playlist.Entry d);
+			public bool contains_field (Xnoise.Playlist.Entry.Field field, string value);
 			public bool data_available ();
-			public Xnoise.Playlist.Item @get (int index);
+			public Xnoise.Playlist.Entry @get (int index);
 			public string? get_album_for_uri (ref string uri_needle);
 			public string? get_author_for_uri (ref string uri_needle);
-			public Xnoise.Playlist.Item.Field[] get_contained_fields_for_idx (int idx);
-			public Xnoise.Playlist.Item.Field[] get_contained_fields_for_uri (ref string uri);
+			public Xnoise.Playlist.Entry.Field[] get_contained_fields_for_idx (int idx);
+			public Xnoise.Playlist.Entry.Field[] get_contained_fields_for_uri (ref string uri);
 			public string? get_copyright_for_uri (ref string uri_needle);
 			public long get_duration_for_uri (ref string uri_needle);
 			public string? get_duration_string_for_uri (ref string uri_needle);
@@ -200,13 +200,13 @@ namespace Xnoise {
 			public string? get_param_value_for_uri (ref string uri_needle);
 			public int get_size ();
 			public string? get_title_for_uri (ref string uri_needle);
-			public int index_of (Xnoise.Playlist.Item d);
-			public void insert (int index, Xnoise.Playlist.Item item);
-			public Xnoise.Playlist.ItemCollection.Iterator iterator ();
-			public void merge (Xnoise.Playlist.ItemCollection data_collection);
-			public bool remove (Xnoise.Playlist.Item item);
-			public Xnoise.Playlist.Item remove_at (int index);
-			public void @set (int index, Xnoise.Playlist.Item item);
+			public int index_of (Xnoise.Playlist.Entry d);
+			public void insert (int index, Xnoise.Playlist.Entry item);
+			public Xnoise.Playlist.EntryCollection.Iterator iterator ();
+			public void merge (Xnoise.Playlist.EntryCollection data_collection);
+			public bool remove (Xnoise.Playlist.Entry item);
+			public Xnoise.Playlist.Entry remove_at (int index);
+			public void @set (int index, Xnoise.Playlist.Entry item);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class Reader : GLib.Object {
@@ -225,7 +225,7 @@ namespace Xnoise {
 			public string? get_title_for_uri (ref string uri_needle);
 			public Xnoise.Playlist.Result read (string list_uri, GLib.Cancellable? cancellable = null) throws Xnoise.Playlist.ReaderError;
 			public async Xnoise.Playlist.Result read_asyn (string list_uri, GLib.Cancellable? cancellable = null) throws Xnoise.Playlist.ReaderError;
-			public Xnoise.Playlist.ItemCollection data_collection { get; }
+			public Xnoise.Playlist.EntryCollection data_collection { get; }
 			public string playlist_uri { get; }
 			public Xnoise.Playlist.ListType ptype { get; }
 			public signal void finished (string playlist_uri);

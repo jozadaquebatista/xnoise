@@ -220,16 +220,16 @@ bool test_xspf_reading() {
 //	string current_title_2 = "everclear - SMFTA";
 //	var writer = new Xnoise.Playlist.Writer(ListType.ASX, true);
 //	
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1);
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1);
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2);
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2);
 //	data_collection.append(data);
 //	
 //	try {
@@ -261,16 +261,16 @@ bool test_xspf_reading() {
 //	string current_title_2 = "everclear - SMFTA";
 //	var writer = new Xnoise.Playlist.Writer(ListType.M3U, true);
 //	
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1); //titles are still ignored
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1); //titles are still ignored
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2); //titles are still ignored
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2); //titles are still ignored
 //	data_collection.append(data);
 //	
 //	try {
@@ -302,16 +302,16 @@ bool test_xspf_reading() {
 //	string current_title_2 = "everclear - SMFTA";
 //	var writer = new Xnoise.Playlist.Writer(ListType.PLS, true);
 //	
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1); //titles are still ignored
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1); //titles are still ignored
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2); //titles are still ignored
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2); //titles are still ignored
 //	data_collection.append(data);
 //	
 //	try {
@@ -343,16 +343,16 @@ bool test_xspf_reading() {
 //	string current_title_2 = "everclear - SMFTA";
 //	var writer = new Xnoise.Playlist.Writer(ListType.XSPF, true);
 //	
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1); //titles are still ignored
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1); //titles are still ignored
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2); //titles are still ignored
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2); //titles are still ignored
 //	data_collection.append(data);
 //	
 //	try {
@@ -387,17 +387,17 @@ bool test_xspf_reading() {
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1);
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1);
 //	data.target_type = TargetType.ABS_PATH;
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2);
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2);
 //	data.target_type = TargetType.REL_PATH;
 //	data_collection.append(data);
 //	
@@ -439,17 +439,17 @@ bool test_xspf_reading() {
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1);
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1);
 //	data.target_type = TargetType.ABS_PATH;
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2);
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2);
 //	data.target_type = TargetType.REL_PATH;
 //	data_collection.append(data);
 //	
@@ -488,17 +488,17 @@ bool test_xspf_reading() {
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1);
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1);
 //	data.target_type = TargetType.ABS_PATH;
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2);
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2);
 //	data.target_type = TargetType.REL_PATH;
 //	data_collection.append(data);
 //	
@@ -537,17 +537,17 @@ bool test_xspf_reading() {
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1);
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1);
 //	data.target_type = TargetType.ABS_PATH;
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2);
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2);
 //	data.target_type = TargetType.REL_PATH;
 //	data_collection.append(data);
 //	
@@ -588,17 +588,17 @@ bool test_xspf_reading() {
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1);
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1);
 //	data.target_type = TargetType.ABS_PATH;
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2);
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2);
 //	data.target_type = TargetType.REL_PATH;
 //	data_collection.append(data);
 //	
@@ -619,7 +619,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	TargetType[] tts = {};
-//	foreach(Item d in reader.data_collection) {
+//	foreach(Entry d in reader.data_collection) {
 //		tts += d.target_type;
 //	}
 //	//print("\n%s\n", tts[0].to_string());
@@ -637,17 +637,17 @@ bool test_xspf_reading() {
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1);
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1);
 //	data.target_type = TargetType.ABS_PATH;
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2);
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2);
 //	data.target_type = TargetType.REL_PATH;
 //	data_collection.append(data);
 //	
@@ -668,7 +668,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	TargetType[] tts = {};
-//	foreach(Item d in reader.data_collection) {
+//	foreach(Entry d in reader.data_collection) {
 //		tts += d.target_type;
 //	}
 //	//print("\n%s\n", tts[0].to_string());
@@ -687,17 +687,17 @@ bool test_xspf_reading() {
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1);
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1);
 //	data.target_type = TargetType.ABS_PATH;
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2);
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2);
 //	data.target_type = TargetType.URI;
 //	data_collection.append(data);
 //	
@@ -718,7 +718,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	TargetType[] tts = {};
-//	foreach(Item d in reader.data_collection) {
+//	foreach(Entry d in reader.data_collection) {
 //		tts += d.target_type;
 //	}
 //	//print("\n%s\n", tts[0].to_string());
@@ -737,23 +737,23 @@ bool test_xspf_reading() {
 //	
 //	//print("\nuri1: %s\n", t1.get_uri());
 //	//print("uri2: %s\n", t2.get_uri());
-//	ItemCollection data_collection = new ItemCollection();
+//	EntryCollection data_collection = new EntryCollection();
 //	
-//	var data = new Item();
-//	data.add_field(Item.Field.URI, t1.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_1);
+//	var data = new Entry();
+//	data.add_field(Entry.Field.URI, t1.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_1);
 //	data.target_type = TargetType.ABS_PATH;
 //	data_collection.append(data);
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
-//	data.add_field(Item.Field.TITLE, current_title_2);
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
+//	data.add_field(Entry.Field.TITLE, current_title_2);
 //	data.target_type = TargetType.REL_PATH;
 //	data_collection.append(data);
 //	
 //	
-//	data = new Item();
-//	data.add_field(Item.Field.URI, t2.get_uri());
+//	data = new Entry();
+//	data.add_field(Entry.Field.URI, t2.get_uri());
 //	data.target_type = TargetType.URI;
 //	data_collection.append(data);
 
@@ -774,7 +774,7 @@ bool test_xspf_reading() {
 //		return false;
 //	}
 //	TargetType[] tts = {};
-//	foreach(Item d in reader.data_collection) {
+//	foreach(Entry d in reader.data_collection) {
 //		tts += d.target_type;
 //	}
 //	//print("\n%s\n", tts[0].to_string());
@@ -793,7 +793,7 @@ bool test_xspf_reading() {
 //		print("asx test error reading\n");
 //		return false;
 //	}
-//	ItemCollection d = reader.data_collection;
+//	EntryCollection d = reader.data_collection;
 //	var writer = new Xnoise.Playlist.Writer(ListType.XSPF, true);
 //	try {
 //		writer.write(d, target.get_uri(), null);
@@ -816,7 +816,7 @@ bool test_xspf_reading() {
 //		print("wpl test error reading\n");
 //		return false;
 //	}
-//	ItemCollection d = reader.data_collection;
+//	EntryCollection d = reader.data_collection;
 //	var writer = new Xnoise.Playlist.Writer(ListType.ASX, true);
 //	try {
 //		writer.write(d, target.get_uri(), null);

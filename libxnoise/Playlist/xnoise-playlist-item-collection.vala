@@ -32,15 +32,15 @@
 
 
 namespace Xnoise.Playlist {
-	public class ItemCollection {
+	public class EntryCollection {
 
-		private Item[] _items = {};
+		private Entry[] _items = {};
 		private int _size;
 		private int _stamp = 0;
 		private HashTable<string, string> _general_info = new HashTable<string, string>(str_hash, str_equal);
 
-		public ItemCollection() {
-			this._items = new Item[4];
+		public EntryCollection() {
+			this._items = new Entry[4];
 		}
 
 		public int get_size() {
@@ -73,7 +73,7 @@ namespace Xnoise.Playlist {
 
 		public string[] get_found_uris() {
 			string[] retval = {};
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() != null)
 					retval += d.get_uri();
 			}
@@ -82,7 +82,7 @@ namespace Xnoise.Playlist {
 	
 		public string? get_title_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_title();
 					break;
@@ -92,7 +92,7 @@ namespace Xnoise.Playlist {
 		}
 		public string? get_author_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_author();
 					break;
@@ -103,7 +103,7 @@ namespace Xnoise.Playlist {
 		
 		public string? get_genre_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_genre();
 					break;
@@ -114,7 +114,7 @@ namespace Xnoise.Playlist {
 		
 		public string? get_album_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_album();
 					break;
@@ -125,7 +125,7 @@ namespace Xnoise.Playlist {
 		
 		public string? get_copyright_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_copyright();
 					break;
@@ -136,7 +136,7 @@ namespace Xnoise.Playlist {
 
 		public string? get_duration_string_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_duration_string();
 					break;
@@ -147,7 +147,7 @@ namespace Xnoise.Playlist {
 
 		public long get_duration_for_uri(ref string uri_needle) {
 			long retval = -1;
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_duration();
 					break;
@@ -158,7 +158,7 @@ namespace Xnoise.Playlist {
 
 		public string? get_param_name_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_param_name();
 					break;
@@ -169,7 +169,7 @@ namespace Xnoise.Playlist {
 
 		public string? get_param_value_for_uri(ref string uri_needle) {
 			string? retval = null;
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					retval = d.get_param_value();
 					break;
@@ -179,7 +179,7 @@ namespace Xnoise.Playlist {
 		}
 
 		public bool get_is_remote_for_uri(ref string uri_needle) {
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					return d.is_remote();
 				}
@@ -188,7 +188,7 @@ namespace Xnoise.Playlist {
 		}
 
 		public bool get_is_playlist_for_uri(ref string uri_needle) {
-			foreach(Item d in this) {
+			foreach(Entry d in this) {
 				if(d.get_uri() == uri_needle) {
 					return d.is_playlist();
 				}
@@ -201,7 +201,7 @@ namespace Xnoise.Playlist {
 		}
 
 		//in operator: bool b = needle in obj
-		public bool contains(Item d) {
+		public bool contains(Entry d) {
 			for(int index = 0; index < _size; index++) {
 				if(direct_equal(_items[index], d))
 					return true;
@@ -209,8 +209,8 @@ namespace Xnoise.Playlist {
 			return false;
 		}
 
-		//find Item with certain field content
-		public bool contains_field(Item.Field field, string value) {
+		//find Entry with certain field content
+		public bool contains_field(Entry.Field field, string value) {
 			for(int index = 0; index < _size; index++) {
 				if(_items[index].get_field(field) == value)
 					return true;
@@ -218,23 +218,23 @@ namespace Xnoise.Playlist {
 			return false;
 		}
 
-		public Playlist.Item.Field[] get_contained_fields_for_idx(int idx) {
+		public Playlist.Entry.Field[] get_contained_fields_for_idx(int idx) {
 			return _items[idx].get_contained_fields();
 		}
 		
-		public Playlist.Item.Field[] get_contained_fields_for_uri(ref string uri) {
+		public Playlist.Entry.Field[] get_contained_fields_for_uri(ref string uri) {
 			for(int index = 0; index < _size; index++) {
 				if(_items[index].get_uri() == uri)
 					return _items[index].get_contained_fields();
 			}
-			return new Playlist.Item.Field[0];
+			return new Playlist.Entry.Field[0];
 		}
 		
 		public Iterator iterator() {
 			return new Iterator(this);
 		}
 
-		public int index_of(Item d) {
+		public int index_of(Entry d) {
 			for(int index = 0; index < _size; index++) {
 				if(direct_equal(_items[index], d))
 					return index;
@@ -243,20 +243,20 @@ namespace Xnoise.Playlist {
 		}
 
 		//index access: obj[index]
-		public Item get(int index) {
+		public Entry get(int index) {
 			assert(index >= 0);
 			assert(index < _size);
 			return _items[index];
 		}
 
 		//index assignment: obj[index] = item
-		public void set(int index, Item item) {
+		public void set(int index, Entry item) {
 			assert(index >= 0);
 			assert(index < _size);
 			_items[index] = item;
 		}
 
-		public bool append(Item item) {
+		public bool append(Entry item) {
 			if(_size == _items.length) {
 				grow_if_needed(1);
 			}
@@ -265,7 +265,7 @@ namespace Xnoise.Playlist {
 			return true;
 		}
 
-		public void insert(int index, Item item) {
+		public void insert(int index, Entry item) {
 			assert(index >= 0);
 			assert(index <= _size);
 
@@ -277,7 +277,7 @@ namespace Xnoise.Playlist {
 			_stamp++;
 		}
 
-		public bool remove(Item item) {
+		public bool remove(Entry item) {
 			for(int index = 0; index < _size; index++) {
 				if(direct_equal(_items[index], item)) {
 					remove_at(index);
@@ -287,10 +287,10 @@ namespace Xnoise.Playlist {
 			return false;
 		}
 
-		public Item remove_at(int index) {
+		public Entry remove_at(int index) {
 			assert(index >= 0);
 			assert(index < _size);
-			Item item = _items[index];
+			Entry item = _items[index];
 			_items[index] = null;
 			shift(index + 1, -1);
 			_stamp++;
@@ -305,12 +305,12 @@ namespace Xnoise.Playlist {
 			_stamp++;
 		}
 
-		public void merge(ItemCollection data_collection) {
+		public void merge(EntryCollection data_collection) {
 			if(data_collection.get_size() == 0) 
 				return;
 			
 			grow_if_needed(data_collection.get_size());
-			foreach(Item item in data_collection)
+			foreach(Entry item in data_collection)
 				_items[_size++] = item;
 			
 			_stamp++;
@@ -339,14 +339,14 @@ namespace Xnoise.Playlist {
 		}
 
 		public class Iterator {
-			private ItemCollection _dc;
+			private EntryCollection _dc;
 			private int _index = -1;
 			private bool _removed = false;
 
 			// concurrent modification protection
 			private int _stamp = 0;
 
-			public Iterator(ItemCollection dc) {
+			public Iterator(EntryCollection dc) {
 				_dc = dc;
 				_stamp = _dc._stamp;
 			}
@@ -371,7 +371,7 @@ namespace Xnoise.Playlist {
 				return true;
 			}
 
-			public Item get() {
+			public Entry get() {
 				assert(_stamp == _dc._stamp);
 				assert(_index >= 0);
 				assert(_index < _dc._size);
@@ -404,7 +404,7 @@ namespace Xnoise.Playlist {
 				return(_index - 1 >= 0);
 			}
 
-			public void set(Item item) {
+			public void set(Entry item) {
 				assert(_stamp == _dc._stamp);
 				assert(_index >= 0);
 				assert(_index < _dc._size);
@@ -412,7 +412,7 @@ namespace Xnoise.Playlist {
 				_stamp = ++_dc._stamp;
 			}
 
-			public void insert(Item item) {
+			public void insert(Entry item) {
 				assert(_stamp == _dc._stamp);
 				assert(_index >= 0);
 				assert(_index < _dc._size);
@@ -421,7 +421,7 @@ namespace Xnoise.Playlist {
 				_stamp = _dc._stamp;
 			}
 
-			public void append(Item item) {
+			public void append(Entry item) {
 				assert(_stamp == _dc._stamp);
 				assert(_index >= 0);
 				assert(_index < _dc._size);

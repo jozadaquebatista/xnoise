@@ -20,9 +20,9 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
-// an instance of this Item object represents one entry in the list. An entry contains one or more data fields, at least the uri to the target
+// an instance of this Entry object represents one entry in the list. An entry contains one or more data fields, at least the uri to the target
 namespace Xnoise.Playlist {
-	public class Item {
+	public class Entry {
 		private HashTable<Field, string> htable = null;
 		
 		public enum Field {
@@ -42,11 +42,11 @@ namespace Xnoise.Playlist {
 		public TargetType target_type { get; set; default = TargetType.URI; }
 		public string? base_path      { get; set; default = null; }
 		
-		public Item() {
+		public Entry() {
 			htable = new HashTable<Field, string>(direct_hash, direct_equal);
 		}
 		
-		~Item() {
+		~Entry() {
 			htable = null;
 		}
 		

@@ -25,7 +25,7 @@ namespace Xnoise.Playlist {
 	public class Reader : GLib.Object {
 		
 		// _data_collection is the collection of data entries in one playlist
-		private ItemCollection _data_collection;
+		private EntryCollection _data_collection;
 		private File? file = null;
 		private ListType _ptype;
 		private AbstractFileReader? plfile_reader = null;
@@ -47,7 +47,7 @@ namespace Xnoise.Playlist {
 			} 
 		}
 		
-		public ItemCollection data_collection {
+		public EntryCollection data_collection {
 			get {
 				return _data_collection;
 			} 
@@ -61,7 +61,7 @@ namespace Xnoise.Playlist {
 		
 		//Constructor
 		public Reader() {
-			_data_collection = new ItemCollection();
+			_data_collection = new EntryCollection();
 			read_in_progress_mutex = new Mutex();
 		}
 		
