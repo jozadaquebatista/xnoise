@@ -55,8 +55,9 @@ libxnoise_la_SOURCES = \
     Lyrics/xnoise-i-lyrics.vala \
     Lyrics/xnoise-i-lyrics-provider.vala \
     Lyrics/xnoise-lyrics-loader.vala \
-    Models/xnoise-media-browser-model.vala \
-    Models/xnoise-tracklist-model.vala \
+    Lyrics/xnoise-lyrics-view.vala \
+    MediaBrowser/xnoise-media-browser.vala \
+    MediaBrowser/xnoise-media-browser-model.vala \
     Parameter/xnoise-i-params.vala \
     Parameter/xnoise-parameter.vala \
     Player/xnoise-gst-player.vala \
@@ -75,11 +76,17 @@ libxnoise_la_SOURCES = \
     PluginModule/xnoise-plugin-information.vala \
     PluginModule/xnoise-plugin-interface.vala \
     Services/xnoise-services.vala \
+    Settings/xnoise-plugin-manager-tree.vala \
+    Settings/xnoise-settings-dialog.vala \
     SimpleMarkup/xnoise-markup-node.vala \
     SimpleMarkup/xnoise-markup-reader.vala \
     SimpleMarkup/xnoise-markup-writer.vala \
     TagAccess/xnoise-tag-reader.vala \
     TagAccess/xnoise-tag-writer.vala \
+    TrackList/xnoise-text-column.vala \
+    TrackList/xnoise-tracklist.vala \
+    TrackList/xnoise-tracklist-column.vala \
+    TrackList/xnoise-tracklist-model.vala \
     TrayIcon/xnoise-tray-icon.vala \
     Utils/xnoise-app-starter.vala \
     Utils/xnoise-global-access.vala \
@@ -97,16 +104,9 @@ libxnoise_la_SOURCES = \
     Widgets/xnoise-control-button.vala \
     Widgets/xnoise-fullscreen-toolbar.vala \
     Widgets/xnoise-info-bar.vala \
-    Widgets/xnoise-lyrics-view.vala \
     Widgets/xnoise-main-window.vala \
-    Widgets/xnoise-media-browser.vala \
     Widgets/xnoise-play-pause-button.vala \
-    Widgets/xnoise-plugin-manager-tree.vala \
-    Widgets/xnoise-settings-dialog.vala \
-    Widgets/xnoise-text-column.vala \
     Widgets/xnoise-trackinfo-bar.vala \
-    Widgets/xnoise-tracklist.vala \
-    Widgets/xnoise-tracklist-column.vala \
     Widgets/xnoise-track-progressbar.vala \
     Widgets/xnoise-videoscreen.vala \
     Widgets/xnoise-volume-slider-button.vala \
@@ -154,18 +154,22 @@ DISTCLEANFILES = \
     AlbumImages/*.c \
     Database/*.c \
     ItemHandlers/*.c \
+    ItemHandlers/AddAllToTracklist/*.c \
     ItemHandlers/AddToTracklist/*.c \
+    ItemHandlers/EditTags/*.c \
     ItemHandlers/PlayItem/*.c \
     ItemHandlers/RemoveTrack/*.c \
     Lyrics/*.c \
-    Models/*.c \
+    MediaBrowser/*.c \
     Parameter/*.c \
     Player/*.c \
     Playlist/*.c \
     PluginModule/*.c \
     Services/*.c \
+    Settings/*.c \
     SimpleMarkup/*.c \
     TagAccess/*.c \
+    TrackList/*.c \
     TrayIcon/*.c \
     Utils/*.c \
     Widgets/*.c \
