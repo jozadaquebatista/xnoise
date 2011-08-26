@@ -341,7 +341,6 @@ namespace Xnoise.Playlist {
 	public static File get_file_for_location(string adr, ref string base_path, out TargetType tt) {
 		string adress = adr; //work on a copy
 		char* p = adress;
-
 		tt = TargetType.URI; // source was of this target type
 		
 		if(p[0] == '\\' && p[1] != '\\') {
@@ -351,14 +350,14 @@ namespace Xnoise.Playlist {
 		
 		adress._delimit("\\", '/'); //make slashes from backslashes in place
 		
-		if((p[0].isalpha() && (!((string)(p + 1)).contains("://"))) || (p[0] == '/' && p[1] != '/')) {
+		if(p[0].isalnum() && !((string)(p + 1)).contains("://") ) { //} || (p[0] == '/' && p[1] != '/')) {
 			//relative paths
 			if(p[0] != '/') { // Could a path starting with / also be relative path
 				adress = base_path + "/" + adress;
 				tt = TargetType.REL_PATH; // source was of this target type
 			}
 		}
-		else if((p[0].isalpha()) && ((string)(p + 1)).has_prefix("://")) {
+		else if((p[0].isalnum()) && ((string)(p + 1)).has_prefix("://")) {
 			// relative to a windows drive letter
 			File base_path_file = File.new_for_commandline_arg(base_path);
 			File tmp = base_path_file.get_child(((string)p[2]));
@@ -376,7 +375,6 @@ namespace Xnoise.Playlist {
 			// if it looks like an absolute path here it is an absolute path
 			tt = TargetType.ABS_PATH;
 		}
-		
 		
 		File retval = File.new_for_commandline_arg(adress);
 		return retval;

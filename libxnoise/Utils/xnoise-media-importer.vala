@@ -29,8 +29,9 @@
  */
 
 using Gtk;
-using Xnoise.TagAccess;
 
+using Xnoise;
+using Xnoise.TagAccess;
 
 public class Xnoise.MediaImporter : GLib.Object {
 
@@ -415,6 +416,44 @@ public class Xnoise.MediaImporter : GLib.Object {
 							db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
 							tda = {};
 							db_worker.push_job(db_job);
+						}
+					}
+					else {
+						//TODO use Item converter
+						print("found playlist file\n");
+						Item item = itemhandler_manager.create_item(file.get_uri());
+						string? searcht = null;
+						TrackData[]? playlist_content = item_converter.to_trackdata(item, ref searcht);
+						if(playlist_content != null) {
+							foreach(var tdat in playlist_content) {
+								//print("fnd playlist_content : %s - %s\n", tdat.item.uri, tdat.title);
+								tda += tdat;
+								job.big_counter[1]++;
+								lock(current_import_track_count) {
+									current_import_track_count++;
+								}
+							}
+							if(job.big_counter[1] % 50 == 0) {
+								Idle.add( () => {  // Update progress bar
+									uint xcnt = 0;
+									lock(current_import_track_count) {
+										xcnt = current_import_track_count;
+									}
+									unowned Gtk.ProgressBar pb = (Gtk.ProgressBar) userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id"));
+									if(pb != null) {
+										pb.pulse();
+										pb.set_text(_("%u tracks found").printf(xcnt));
+									}
+									return false;
+								});
+							}
+							if(tda.length > FILE_COUNT) {
+								var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+								db_job.track_dat = tda;
+								db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
+								tda = {};
+								db_worker.push_job(db_job);
+							}
 						}
 					}
 				}

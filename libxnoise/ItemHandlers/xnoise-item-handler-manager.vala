@@ -95,12 +95,12 @@ namespace Xnoise {
 		}
 		
 		
-		private string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," + FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		private static string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," + FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 
-		private PatternSpec psVideo = new PatternSpec("video*");
-		private PatternSpec psAudio = new PatternSpec("audio*");
+		private static PatternSpec psVideo;// = new PatternSpec("video*");
+		private static PatternSpec psAudio;// = new PatternSpec("audio*");
 		
-		public Item? create_item(string? uri) {
+		public static Item? create_item(string? uri) {
 			if(uri == null)
 				return Item(ItemType.UNKNOWN);
 			
@@ -120,6 +120,11 @@ namespace Xnoise {
 				return item;
 			string content = info.get_content_type();
 			string mime = GLib.ContentType.get_mime_type(content);
+			if(psVideo == null)
+				psVideo = new PatternSpec("video*");
+			if(psAudio == null)
+				psAudio = new PatternSpec("audio*");
+
 			if(psAudio.match_string(mime)) {
 				if(uri.has_suffix("m3u") ||
 				   uri.has_suffix("asx") || 

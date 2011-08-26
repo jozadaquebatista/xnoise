@@ -1874,7 +1874,7 @@ void xnoise_item_handler_manager_add_handler (XnoiseItemHandlerManager* self, Xn
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_type (XnoiseItemHandlerManager* self, XnoiseItemHandlerType type);
 XnoiseItemHandler* xnoise_item_handler_manager_get_handler_by_name (XnoiseItemHandlerManager* self, const gchar* name);
 void xnoise_item_handler_manager_test_func (XnoiseItemHandlerManager* self);
-XnoiseItem* xnoise_item_handler_manager_create_item (XnoiseItemHandlerManager* self, const gchar* uri);
+XnoiseItem* xnoise_item_handler_manager_create_item (const gchar* uri);
 void xnoise_item_handler_manager_execute_actions_for_item (XnoiseItemHandlerManager* self, XnoiseItem* item, XnoiseActionContext context, GValue* data, XnoiseItemSelectionType selection);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_new (void);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_construct (GType object_type);

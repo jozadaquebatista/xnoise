@@ -28,6 +28,9 @@
  * 	Jörn Magens
  */
 
+using Xnoise;
+using Xnoise.Playlist;
+
 public class Xnoise.ItemConverter : Object {
 
 	//this function uses the database so use it in the database thread
@@ -79,13 +82,30 @@ public class Xnoise.ItemConverter : Object {
 			case ItemType.STREAM:
 				break;
 			case ItemType.PLAYLIST:
-				//result.append_val(item);
+				var pr = new Playlist.Reader();
+				Playlist.Result rslt = pr.read(item.uri , null);
+				if(rslt != Playlist.Result.SUCCESS)
+					return null;
+				EntryCollection ec = pr.data_collection;
+				if(ec != null) {
+					foreach(Entry e in ec) {
+						var tmp = new TrackData();
+						tmp.title  = (e.get_title()  != null ? e.get_title()  : "unknown title");
+						tmp.album  = (e.get_album()  != null ? e.get_album()  : "unknown album");
+						tmp.artist = (e.get_author() != null ? e.get_author() : "unknown artist");
+						tmp.genre  = (e.get_genre()  != null ? e.get_genre()  : "unknown genre");
+						tmp.item = ItemHandlerManager.create_item(e.get_uri());
+						result += tmp;
+					}
+					break;
+				}
+				else {
+					return null;
+				}
 				break;
 			case ItemType.LOCAL_FOLDER:
-				//result.append_val(item);
 				break;
 			case ItemType.COLLECTION_CONTAINER_STREAM:
-				// get all streams from db
 				break;
 			default:
 				break;

@@ -671,7 +671,7 @@ namespace Xnoise {
 	public class ItemHandlerManager : GLib.Object {
 		public ItemHandlerManager ();
 		public void add_handler (Xnoise.ItemHandler handler);
-		public Xnoise.Item? create_item (string? uri);
+		public static Xnoise.Item? create_item (string? uri);
 		public void execute_actions_for_item (Xnoise.Item item, Xnoise.ActionContext context, GLib.Value? data, Xnoise.ItemSelectionType selection);
 		public GLib.Array<weak Xnoise.Action?> get_actions (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
 		public Xnoise.ItemHandler get_handler_by_name (string name);
