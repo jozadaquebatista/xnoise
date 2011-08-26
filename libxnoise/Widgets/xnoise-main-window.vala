@@ -1008,7 +1008,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				td.artist      = "";
 				td.genre       = "";
 				td.length      = 0;
-				td.item        = itemhandler_manager.create_item(uri);
+				td.item        = ItemHandlerManager.create_item(uri);
 				this.trackList.tracklistmodel.insert_title(null,
 				                                           ref td,
 				                                           false);

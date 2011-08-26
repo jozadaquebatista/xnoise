@@ -788,7 +788,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			if(tracknumb!=0) {
 				tracknumberString = "%u".printf(tracknumb);
 			}
-			Item? item = itemhandler_manager.create_item(fileuri);
+			Item? item = ItemHandlerManager.create_item(fileuri);
 			tracklistmodel.set(new_iter,
 			                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
 			                   TrackListModel.Column.TITLE, title,

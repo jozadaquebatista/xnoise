@@ -352,10 +352,10 @@ namespace Xnoise.Playlist {
 		
 		if(p[0].isalnum() && !((string)(p + 1)).contains("://") ) { //} || (p[0] == '/' && p[1] != '/')) {
 			//relative paths
-			if(p[0] != '/') { // Could a path starting with / also be relative path
+			//if(p[0] != '/') { // Could a path starting with / also be relative path
 				adress = base_path + "/" + adress;
 				tt = TargetType.REL_PATH; // source was of this target type
-			}
+			//}
 		}
 		else if((p[0].isalnum()) && ((string)(p + 1)).has_prefix("://")) {
 			// relative to a windows drive letter

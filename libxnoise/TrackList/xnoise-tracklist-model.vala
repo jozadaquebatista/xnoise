@@ -502,7 +502,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 			else if(urischeme in get_remote_schemes()) {
 				is_stream = true;
 			}
-			item = itemhandler_manager.create_item(uris[k]);
+			item = ItemHandlerManager.create_item(uris[k]);
 			if(k == 0) { // first track
 				iter = this.insert_title(null,
 				                         ref td,
@@ -513,7 +513,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				iter_2 = iter;
 			}
 			else {
-				td.item = itemhandler_manager.create_item(uris[k]);
+				td.item = ItemHandlerManager.create_item(uris[k]);
 				iter = this.insert_title(null,
 				                         ref td,
 				                         false);

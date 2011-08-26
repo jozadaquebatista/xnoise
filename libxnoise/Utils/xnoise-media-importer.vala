@@ -421,7 +421,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 					else {
 						//TODO use Item converter
 						print("found playlist file\n");
-						Item item = itemhandler_manager.create_item(file.get_uri());
+						Item item = ItemHandlerManager.create_item(file.get_uri());
 						string? searcht = null;
 						TrackData[]? playlist_content = item_converter.to_trackdata(item, ref searcht);
 						if(playlist_content != null) {
