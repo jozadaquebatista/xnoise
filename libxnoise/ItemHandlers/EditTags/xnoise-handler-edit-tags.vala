@@ -31,6 +31,10 @@
 using Gtk;
 
 public class Xnoise.HandlerEditTags : ItemHandler {
+	private Action edit_title_tracklist;
+	private const string tltitleinfo = _("Edit metadata for track");
+	private const string tltitlename = "HandlerEditTagsActionTitleTL";
+
 	private Action edit_title_mediabrowser;
 	private const string titleinfo = _("Edit metadata for track");
 	private const string titlename = "HandlerEditTagsActionTitle";
@@ -71,6 +75,13 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 		edit_artist_mediabrowser.stock_item = Gtk.Stock.EDIT;
 		edit_artist_mediabrowser.context = ActionContext.MEDIABROWSER_MENU_QUERY;
 
+		edit_title_tracklist = new Action(); 
+		edit_title_tracklist.action = on_edit_title_tracklist;
+		edit_title_tracklist.info = this.tltitleinfo;
+		edit_title_tracklist.name = this.tltitlename;
+		edit_title_tracklist.stock_item = Gtk.Stock.EDIT;
+		edit_title_tracklist.context = ActionContext.TRACKLIST_MENU_QUERY;
+
 		//print("constructed %s\n", this.name);
 	}
 
@@ -97,6 +108,14 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 					break;
 			}
 		}
+		if(context == ActionContext.TRACKLIST_MENU_QUERY) {
+			switch(type) {
+				case ItemType.LOCAL_AUDIO_TRACK:
+					return edit_title_tracklist;
+				default:
+					break;
+			}
+		}
 		return null;
 	}
 
@@ -113,6 +132,11 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 	private void on_edit_artist_mediabrowser(Item item, GLib.Value? data) {
 		if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST)
 			this.open_tagartist_changer(item);
+	}
+	
+	private void on_edit_title_tracklist(Item item, GLib.Value? data) {
+		if(item.type == ItemType.LOCAL_AUDIO_TRACK)
+			this.open_tagtitle_changer(item); //TODO: Add routine to update in tracklist
 	}
 
 //	private Menu create_edit_artist_tag_menu() {

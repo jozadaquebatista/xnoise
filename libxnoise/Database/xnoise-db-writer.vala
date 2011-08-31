@@ -687,7 +687,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		return val;
 	}
 
-	private static const string STMT_UPDATE_TITLE = "UPDATE items SET artist=?, album=?, title=? WHERE id=?";
+	private static const string STMT_UPDATE_TITLE = "UPDATE items SET artist=?, album=?, title=?, genre=?, year=?, tracknumber=? WHERE id=?";
 	private static const string STMT_UPDATE_ARTISTALBUM = "UPDATE items SET artist=?, album=? WHERE id=?";
 	public bool update_title(ref Item? item, ref TrackData td) {
 		if(item.type != ItemType.LOCAL_AUDIO_TRACK &&
@@ -772,13 +772,21 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 				print("Error updating album for '%s' ! \n", td.album);
 				return false;
 			}
+			int genre_id = handle_genre(ref td.genre);
+			if(genre_id == -1) {
+				print("Error updating genre for '%s' ! \n", td.genre);
+				return false;
+			}
 			Statement stmt;
 			this.db.prepare_v2(STMT_UPDATE_TITLE, -1, out stmt);
-		
+			
 			if(stmt.bind_int (1, artist_id)     != Sqlite.OK ||
 			   stmt.bind_int (2, album_id)      != Sqlite.OK ||
 			   stmt.bind_text(3, td.title)      != Sqlite.OK ||
-			   stmt.bind_int (4, td.item.db_id) != Sqlite.OK) {
+			   stmt.bind_int (4, genre_id)      != Sqlite.OK ||
+			   stmt.bind_int (5, (int)td.year)       != Sqlite.OK ||
+			   stmt.bind_int (6, (int)td.tracknumber)!= Sqlite.OK ||
+			   stmt.bind_int (7, td.item.db_id) != Sqlite.OK) {
 				this.db_error();
 				return false;
 			}

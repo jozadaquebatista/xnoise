@@ -41,7 +41,10 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	private Entry entry_artist;
 	private Entry entry_album;
 	private Entry entry_title;
-//	private unowned TreeRowReference treerowref;
+	private Entry entry_tracknumber;
+	private Entry entry_year;
+	private Entry entry_genre;
+	private Entry entry_uri;
 	private Item? item;
 	
 	public signal void sign_finish();
@@ -79,11 +82,17 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		
 		td_old = copy_trackdata(td);
 		
-		Idle.add( () => { // TODO more kinds of data
+		Idle.add( () => {
 			// put data to entry
-			entry_artist.text = td.artist;
-			entry_album.text  = td.album;
-			entry_title.text  = td.title;
+			entry_artist.text      = td.artist;
+			entry_album.text       = td.album;
+			entry_title.text       = td.title;
+			entry_tracknumber.text = (td.tracknumber > 0 ? td.tracknumber.to_string() : "");
+			entry_year.text        = (td.year > 0 ? td.year.to_string() : "");
+			entry_genre.text       = td.genre;
+			
+			File f = File.new_for_uri(td.item.uri);
+			entry_uri.text         = f.get_path() != null ? f.get_path() : td.item.uri;
 			return false;
 		});
 		return false;
@@ -99,13 +108,17 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 			
 			builder.add_from_file(Config.UIDIR + "metadat_title.ui");
 			
-			var mainvbox           = builder.get_object("vbox1")        as Gtk.VBox;
-			var okbutton           = builder.get_object("okbutton")     as Gtk.Button;
-			var cancelbutton       = builder.get_object("cancelbutton") as Gtk.Button;
-			entry_artist           = builder.get_object("entry_artist") as Gtk.Entry;
-			entry_album            = builder.get_object("entry_album")  as Gtk.Entry;
-			entry_title            = builder.get_object("entry_title")  as Gtk.Entry;
-			infolabel              = builder.get_object("label5")       as Gtk.Label;
+			var mainvbox           = builder.get_object("vbox1")             as Gtk.VBox;
+			var okbutton           = builder.get_object("okbutton")          as Gtk.Button;
+			var cancelbutton       = builder.get_object("cancelbutton")      as Gtk.Button;
+			entry_artist           = builder.get_object("entry_artist")      as Gtk.Entry;
+			entry_album            = builder.get_object("entry_album")       as Gtk.Entry;
+			entry_title            = builder.get_object("entry_title")       as Gtk.Entry;
+			entry_tracknumber      = builder.get_object("entry_tracknumber") as Gtk.Entry;
+			entry_year             = builder.get_object("entry_year")        as Gtk.Entry;
+			entry_genre            = builder.get_object("entry_genre")       as Gtk.Entry;
+			entry_uri              = builder.get_object("entry_uri")         as Gtk.Entry;
+			infolabel              = builder.get_object("label5")            as Gtk.Label;
 		
 			((Gtk.VBox)this.dialog.get_content_area()).add(mainvbox);
 			okbutton.clicked.connect(on_ok_button_clicked);
@@ -146,6 +159,12 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 			td_new.album  = entry_album.text;
 		if(entry_title.text != null && entry_title.text._strip() != "")
 			td_new.title  = entry_title.text;
+		if(entry_genre.text != null && entry_genre.text._strip() != "")
+			td_new.genre  = entry_genre.text;
+		if(entry_year.text != null && entry_year.text._strip() != "")
+			td_new.year  = (uint)int.parse(entry_year.text);
+		if(entry_tracknumber.text != null && entry_tracknumber.text._strip() != "")
+			td_new.tracknumber  = (uint)int.parse(entry_tracknumber.text); //TODO: add check
 		// TODO: UTF-8 validation
 		do_track_rename(td_old, td_new);
 		Idle.add( () => {
@@ -167,30 +186,45 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	private bool update_tag_job(Worker.Job tag_job) {
 		if(tag_job.track_dat[0].item.type == ItemType.LOCAL_AUDIO_TRACK ||
 		   tag_job.track_dat[0].item.type == ItemType.LOCAL_VIDEO_TRACK) {
-			var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-			job.track_dat = tag_job.track_dat;
-			io_worker.push_job(job);
+			File f = File.new_for_uri(tag_job.track_dat[1].item.uri);
+			var tw = new TagWriter();
+			bool ret = false;
+			//print("%s\n", tag_job.item.type.to_string());
+			ret = tw.write_tag(f, tag_job.track_dat[1]);
+			if(ret) {
+				var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
+				dbjob.track_dat = tag_job.track_dat;
+				dbjob.item = tag_job.track_dat[0].item;
+				db_worker.push_job(dbjob);
+			}
+			var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
+			
+			db_worker.push_job(fin_job);
+			return false;
+//			var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
+//			job.track_dat = tag_job.track_dat;
+//			io_worker.push_job(job);
 		}
 		return false;
 	}
 	
-	private bool update_filetags_job(Worker.Job job) {
-		File f = File.new_for_uri(job.track_dat[1].item.uri);
-		var tw = new TagWriter();
-		bool ret = false;
-		//print("%s\n", job.item.type.to_string());
-		ret = tw.write_tag(f, job.track_dat[1]);
-		if(ret) {
-			var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
-			dbjob.track_dat = job.track_dat;
-			dbjob.item = job.track_dat[0].item;
-			db_worker.push_job(dbjob);
-		}
-		var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
-		
-		db_worker.push_job(fin_job);
-		return false;
-	}
+//	private bool update_filetags_job(Worker.Job job) {
+//		File f = File.new_for_uri(job.track_dat[1].item.uri);
+//		var tw = new TagWriter();
+//		bool ret = false;
+//		//print("%s\n", job.item.type.to_string());
+//		ret = tw.write_tag(f, job.track_dat[1]);
+//		if(ret) {
+//			var dbjob = new Worker.Job(Worker.ExecutionType.ONCE, this.update_db_job);
+//			dbjob.track_dat = job.track_dat;
+//			dbjob.item = job.track_dat[0].item;
+//			db_worker.push_job(dbjob);
+//		}
+//		var fin_job = new Worker.Job(Worker.ExecutionType.ONCE, this.finish_job);
+//		
+//		db_worker.push_job(fin_job);
+//		return false;
+//	}
 	
 	private bool update_db_job(Worker.Job job) {
 		media_importer.update_item_tag(ref job.item, ref job.track_dat[1]);

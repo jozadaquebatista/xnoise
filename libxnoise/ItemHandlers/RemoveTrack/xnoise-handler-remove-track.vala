@@ -39,10 +39,11 @@ public class Xnoise.HandlerRemoveTrack : ItemHandler {
 	
 	public HandlerRemoveTrack() {
 		a = new Action();
-		a.action = remove_track_from_tracklist;
-		a.info = this.ainfo;
-		a.name = this.aname;
-		a.context = ActionContext.TRACKLIST_MENU_QUERY;
+		a.action     = remove_track_from_tracklist;
+		a.info       = this.ainfo;
+		a.name       = this.aname;
+		a.stock_item = Gtk.Stock.DELETE;
+		a.context    = ActionContext.TRACKLIST_MENU_QUERY;
 		
 		//print("constructed HandlerRemoveTrack\n");
 	}
