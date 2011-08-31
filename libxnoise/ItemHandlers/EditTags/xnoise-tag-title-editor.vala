@@ -41,8 +41,8 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	private Entry entry_artist;
 	private Entry entry_album;
 	private Entry entry_title;
-	private Entry entry_tracknumber;
-	private Entry entry_year;
+	private SpinButton spinbutton_tracknumber;
+	private SpinButton spinbutton_year;
 	private Entry entry_genre;
 	private Entry entry_uri;
 	private Item? item;
@@ -87,9 +87,9 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 			entry_artist.text      = td.artist;
 			entry_album.text       = td.album;
 			entry_title.text       = td.title;
-			entry_tracknumber.text = (td.tracknumber > 0 ? td.tracknumber.to_string() : "");
-			entry_year.text        = (td.year > 0 ? td.year.to_string() : "");
 			entry_genre.text       = td.genre;
+			spinbutton_tracknumber.set_value(td.tracknumber);
+			spinbutton_year.set_value(td.year);
 			
 			File f = File.new_for_uri(td.item.uri);
 			entry_uri.text         = f.get_path() != null ? f.get_path() : td.item.uri;
@@ -114,12 +114,23 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 			entry_artist           = builder.get_object("entry_artist")      as Gtk.Entry;
 			entry_album            = builder.get_object("entry_album")       as Gtk.Entry;
 			entry_title            = builder.get_object("entry_title")       as Gtk.Entry;
-			entry_tracknumber      = builder.get_object("entry_tracknumber") as Gtk.Entry;
-			entry_year             = builder.get_object("entry_year")        as Gtk.Entry;
+			spinbutton_tracknumber = builder.get_object("spinbutton_tracknumber") as Gtk.SpinButton;
+			spinbutton_year        = builder.get_object("spinbutton_year")        as Gtk.SpinButton;
 			entry_genre            = builder.get_object("entry_genre")       as Gtk.Entry;
 			entry_uri              = builder.get_object("entry_uri")         as Gtk.Entry;
 			infolabel              = builder.get_object("label5")            as Gtk.Label;
-		
+			spinbutton_tracknumber.set_numeric(true);
+			spinbutton_tracknumber.configure(new Gtk.Adjustment(0.0, 0.0, 999.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
+			spinbutton_tracknumber.changed.connect( (sender) => {
+				if((int)(((Gtk.SpinButton)sender).value) < 0.0 ) ((Gtk.SpinButton)sender).value = 0.0;
+				if((int)(((Gtk.SpinButton)sender).value) > 999.0) ((Gtk.SpinButton)sender).value = 999.0;
+			});
+			spinbutton_year.set_numeric(true);
+			spinbutton_year.configure(new Gtk.Adjustment(0.0, 0.0, 2100.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
+			spinbutton_year.changed.connect( (sender) => {
+				if((int)(((Gtk.SpinButton)sender).value) < 0.0 ) ((Gtk.SpinButton)sender).value = 0.0;
+				if((int)(((Gtk.SpinButton)sender).value) > 2100.0) ((Gtk.SpinButton)sender).value = 2100.0;
+			});
 			((Gtk.VBox)this.dialog.get_content_area()).add(mainvbox);
 			okbutton.clicked.connect(on_ok_button_clicked);
 			cancelbutton.clicked.connect(on_cancel_button_clicked);
@@ -161,10 +172,8 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 			td_new.title  = entry_title.text;
 		if(entry_genre.text != null && entry_genre.text._strip() != "")
 			td_new.genre  = entry_genre.text;
-		if(entry_year.text != null && entry_year.text._strip() != "")
-			td_new.year  = (uint)int.parse(entry_year.text);
-		if(entry_tracknumber.text != null && entry_tracknumber.text._strip() != "")
-			td_new.tracknumber  = (uint)int.parse(entry_tracknumber.text); //TODO: add check
+		td_new.year         = spinbutton_year.get_value_as_int();
+		td_new.tracknumber  = (uint)spinbutton_tracknumber.get_value_as_int(); //TODO: add check
 		// TODO: UTF-8 validation
 		do_track_rename(td_old, td_new);
 		Idle.add( () => {
