@@ -86,6 +86,7 @@ namespace Xnoise {
 		}
 		Gtk.init(ref args);
 		Gst.init(ref args);
+		// Gtk.Widget.set_default_direction(Gtk.TextDirection.RTL); // RTL testing
 		Unique.App app;
 		var app_starter = new Xnoise.AppStarter();
 		app = new Unique.App.with_commands("org.gtk.xnoise", "xnoise", null);

@@ -34,6 +34,12 @@ using Xnoise.Database;
 
 public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
+	public enum TrackSorting {
+		ARTIST_ALBUM_TITLE = 0,
+		GENRE_ARTIST_TITLE,
+		ARTIST_YEAR_TITLE
+	}
+
 	public enum Column {
 		ICON = 0,
 		VIS_TEXT,

@@ -302,6 +302,8 @@ typedef struct _XnoiseMediaBrowserClass XnoiseMediaBrowserClass;
 typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
 
+#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_TRACK_SORTING (xnoise_media_browser_model_track_sorting_get_type ())
+
 #define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLUMN (xnoise_media_browser_model_column_get_type ())
 
 #define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_media_browser_model_collection_type_get_type ())
@@ -1131,6 +1133,12 @@ struct _XnoiseMediaBrowserModel {
 struct _XnoiseMediaBrowserModelClass {
 	GtkTreeStoreClass parent_class;
 };
+
+typedef enum  {
+	XNOISE_MEDIA_BROWSER_MODEL_TRACK_SORTING_ARTIST_ALBUM_TITLE = 0,
+	XNOISE_MEDIA_BROWSER_MODEL_TRACK_SORTING_GENRE_ARTIST_TITLE,
+	XNOISE_MEDIA_BROWSER_MODEL_TRACK_SORTING_ARTIST_YEAR_TITLE
+} XnoiseMediaBrowserModelTrackSorting;
 
 typedef enum  {
 	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_ICON = 0,
@@ -2000,6 +2008,7 @@ gboolean xnoise_media_browser_get_use_linebreaks (XnoiseMediaBrowser* self);
 void xnoise_media_browser_set_use_linebreaks (XnoiseMediaBrowser* self, gboolean value);
 gboolean xnoise_media_browser_get_use_treelines (XnoiseMediaBrowser* self);
 void xnoise_media_browser_set_use_treelines (XnoiseMediaBrowser* self, gboolean value);
+GType xnoise_media_browser_model_track_sorting_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_model_column_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_model_collection_type_get_type (void) G_GNUC_CONST;
 gint xnoise_media_browser_model_get_max_icon_width (XnoiseMediaBrowserModel* self);

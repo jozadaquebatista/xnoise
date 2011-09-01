@@ -90,7 +90,7 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 	private bool on_release(Gdk.EventButton e) {
 		if(press_was_valid == false)
 			return true;
-		double mouse_x = e.x;
+		double mouse_x = e.x - this.get_spacing();
 		Allocation allocation;
 		this.progress.get_allocation(out allocation);
 		uint progress_width = allocation.width;
@@ -98,13 +98,7 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		if(isrtl) {
 			this.time_label.get_allocation(out allocation);
 			uint time_width = allocation.width;
-			
-			mouse_x -= time_width;
-			
-			//if(mouse_x < 0) {
-			//	press_was_valid = false;
-			//	return true;
-			//}
+			mouse_x -= (time_width +  VBOX_BORDER_WIDTH);
 		}
 		
 		if((this.player.playing)||(this.player.paused)) {
@@ -137,10 +131,10 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		if(is_rtl()) {
 			this.time_label.get_allocation(out allocation);
 			
-			thisFraction = 1 - (e.x - allocation.width) / progress_width;
+			thisFraction = 1 - (e.x - (allocation.width + this.get_spacing() +  VBOX_BORDER_WIDTH)) / progress_width;
 		}
 		else
-			thisFraction = e.x / progress_width;
+			thisFraction = (e.x - this.get_spacing()) / progress_width;
 		
 		if(thisFraction < 0.0) thisFraction = 0.0;
 		if(thisFraction > 1.0) thisFraction = 1.0;
@@ -202,7 +196,7 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 			this.progress.set_sensitive(false);
 		}
 	}
-	
+	private static const int VBOX_BORDER_WIDTH = 4;
 	private void setup_widgets() {
 		title_label = new Label("<b>XNOISE</b> - ready to rock! ;-)");
 		title_label.set_use_markup(true);
@@ -223,7 +217,7 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		
 		var hbox = new Gtk.HBox(false, 2);
 		var vbox = new Gtk.VBox(false, 0);
-		vbox.set_border_width(4);
+		vbox.set_border_width(VBOX_BORDER_WIDTH);
 		progress = new ProgressBar();
 		progress.set_size_request(-1, 10);
 		vbox.pack_start(progress, false, true, 0);

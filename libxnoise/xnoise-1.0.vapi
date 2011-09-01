@@ -796,6 +796,12 @@ namespace Xnoise {
 			ITEM,
 			N_COLUMNS
 		}
+		[CCode (cprefix = "XNOISE_MEDIA_BROWSER_MODEL_TRACK_SORTING_", cheader_filename = "xnoise-1.0.h")]
+		public enum TrackSorting {
+			ARTIST_ALBUM_TITLE,
+			GENRE_ARTIST_TITLE,
+			ARTIST_YEAR_TITLE
+		}
 		public string searchtext;
 		public MediaBrowserModel ();
 		public void cancel_fill_model ();
