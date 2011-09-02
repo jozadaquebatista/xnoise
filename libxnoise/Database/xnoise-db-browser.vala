@@ -66,9 +66,9 @@ public class Xnoise.Database.DbBrowser {
 	private static const string STMT_GET_LASTUSED =
 		"SELECT uri FROM lastused";
 	private static const string STMT_GET_VIDEOS =
-		"SELECT DISTINCT title FROM items WHERE title LIKE ? AND mediatype = ? GROUP BY LOWER(title) ORDER BY LOWER(title) DESC";
-	private static const string STMT_GET_ITEMS =
-		"SELECT DISTINCT t.title FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND t.title LIKE ? ORDER BY t.tracknumber DESC, LOWER(t.title) DESC";
+		"SELECT DISTINCT title FROM items i, uris u WHERE u.id = i.uri AND (i.title LIKE ? OR u.name LIKE ?) AND mediatype = ? GROUP BY LOWER(title) ORDER BY LOWER(title) DESC";
+//	private static const string STMT_GET_ITEMS =
+//		"SELECT DISTINCT t.title FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? AND t.title LIKE ? ORDER BY t.tracknumber DESC, LOWER(t.title) DESC";
 	private static const string STMT_GET_URIS = 
 		"SELECT name FROM uris WHERE name LIKE ? ESCAPE \'\\\'";
 	private static const string STMT_GET_RADIOS =
@@ -131,7 +131,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_ARTIST_COUNT_WITH_SEARCH =
-		"SELECT COUNT (ar.name) FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?)";
+		"SELECT COUNT (ar.name) FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND u.id = t.uri AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ? OR u.name LIKE ?)";
 	public int count_artists_with_search(ref string searchtext) {
 		Statement stmt;
 		int count = 0;
@@ -140,9 +140,10 @@ public class Xnoise.Database.DbBrowser {
 			
 		stmt.reset();
 
-		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)|
-		   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)||
+		   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK)||
+		   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)||
+		   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 			return 0;
 		}
@@ -152,7 +153,7 @@ public class Xnoise.Database.DbBrowser {
 		return count;
 	}
 
-	private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (t.id) FROM items t WHERE t.mediatype=? AND t.title LIKE ?";
+	private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (t.id) FROM items t, uris u WHERE t.mediatype=? AND u.id = t.uri AND (t.title LIKE ? OR u.name LIKE ?)";
 	public int32 count_videos(ref string searchtext) {
 		Statement stmt;
 		int count = 0;
@@ -160,7 +161,8 @@ public class Xnoise.Database.DbBrowser {
 		this.db.prepare_v2(STMT_GET_VIDEO_COUNT, -1, out stmt);
 		
 		if(stmt.bind_int (1, ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK ||
-		   stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) {
+		   stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK ||
+		   stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK) {
 			this.db_error();
 			return 0;
 		}
@@ -270,7 +272,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_ALL_TRACKDATA =
-		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY LOWER(ar.name) ASC, LOWER(al.name) ASC, t.tracknumber ASC";
+		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ? OR u.name LIKE ?) ORDER BY LOWER(ar.name) ASC, LOWER(al.name) ASC, t.tracknumber ASC";
 
 	public TrackData[]? get_all_tracks(ref string searchtext) {
 		Statement stmt;
@@ -606,7 +608,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_VIDEO_DATA =
-		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, t.genre FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND mediatype = ? AND title LIKE ? GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) DESC";
+		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, t.genre FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.mediatype = ? AND (t.title LIKE ? OR u.name LIKE ?) GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) DESC";
 
 	public TrackData[] get_video_data(ref string searchtext) {
 		TrackData[] val = {};
@@ -615,7 +617,8 @@ public class Xnoise.Database.DbBrowser {
 		this.db.prepare_v2(STMT_GET_VIDEO_DATA, -1, out stmt);
 		
 		if((stmt.bind_int (1, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)||
-		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
+		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)||
+		   (stmt.bind_text(3, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
 			this.db_error();
 			return val;
 		}
@@ -635,7 +638,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_TRACKDATA_FOR_VIDEO =
-		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND mediatype = ? AND title LIKE ? GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) ASC";
+		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.mediatype = ? AND (t.title LIKE ? OR u.name LIKE ?) GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) ASC";
 
 	public TrackData[] get_trackdata_for_video(ref string searchtext) {
 		TrackData[] val = {};
@@ -644,7 +647,8 @@ public class Xnoise.Database.DbBrowser {
 		this.db.prepare_v2(STMT_GET_TRACKDATA_FOR_VIDEO, -1, out stmt);
 		
 		if((stmt.bind_int (1, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)||
-		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
+		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)||
+		   (stmt.bind_text(3, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
 			this.db_error();
 			return val;
 		}
@@ -687,8 +691,9 @@ public class Xnoise.Database.DbBrowser {
 		string[] val = {};
 		this.db.prepare_v2(STMT_GET_VIDEOS, -1, out stmt);
 			
-		if((stmt.bind_text(1, "%%%s%%".printf(searchtext))     != Sqlite.OK)|
-		   (stmt.bind_int (2, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)) {
+		if((stmt.bind_text(1, "%%%s%%".printf(searchtext))     != Sqlite.OK)||
+		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)||
+		   (stmt.bind_int (3, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)) {
 			this.db_error();
 		}
 		while(stmt.step() == Sqlite.ROW) {
@@ -719,7 +724,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_ARTISTS_WITH_SEARCH =
-		"SELECT DISTINCT ar.name, ar.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY LOWER(ar.name) ASC";
+		"SELECT DISTINCT ar.name, ar.id FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND u.id = t.uri AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ? OR u.name LIKE ?) ORDER BY LOWER(ar.name) ASC";
 
 	private static const string STMT_GET_ARTISTS =
 		"SELECT DISTINCT ar.name, ar.id  FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id ORDER BY LOWER(ar.name) ASC"; //LOWER(ar.name)
@@ -732,7 +737,8 @@ public class Xnoise.Database.DbBrowser {
 			this.db.prepare_v2(STMT_GET_ARTISTS_WITH_SEARCH, -1, out stmt);
 			if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
 			   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
-			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 				this.db_error();
 				return val;
 			}
@@ -763,7 +769,7 @@ public class Xnoise.Database.DbBrowser {
 //	}
 
 	private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =
-		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) GROUP BY LOWER(t.title) ORDER BY t.tracknumber ASC, t.title ASC";
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ? OR u.name LIKE ?) GROUP BY LOWER(t.title) ORDER BY t.tracknumber ASC, t.title ASC";
 	
 	private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
 		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY LOWER(t.title) ORDER BY t.tracknumber ASC, t.title ASC";
@@ -777,7 +783,8 @@ public class Xnoise.Database.DbBrowser {
 			if((stmt.bind_int (1, id) != Sqlite.OK) ||
 			   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
 			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
-			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)||
+			   (stmt.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 				this.db_error();
 				return val;
 			}
@@ -807,7 +814,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH =
-		"SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) GROUP BY LOWER(t.title), al.id ORDER BY al.name ASC, t.tracknumber ASC, t.title ASC";
+		"SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ? OR u.name LIKE ?) GROUP BY LOWER(t.title), al.id ORDER BY al.name ASC, t.tracknumber ASC, t.title ASC";
 	
 	private static const string STMT_GET_TRACKDATA_BY_ARTISTID =
 		"SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY LOWER(t.title), al.id ORDER BY al.name ASC, t.tracknumber ASC, t.title ASC";
@@ -821,7 +828,8 @@ public class Xnoise.Database.DbBrowser {
 			if((stmt.bind_int (1, id) != Sqlite.OK) ||
 			   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
 			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
-			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 				this.db_error();
 				return val;
 			}
@@ -851,7 +859,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH =
-		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?)";
+		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND u.id = t.uri AND ar.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ? OR u.name LIKE ?)";
 	
 	private static const string STMT_GET_ARTISTITEM_BY_ARTISTID =
 		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ?";
@@ -864,7 +872,8 @@ public class Xnoise.Database.DbBrowser {
 			if((stmt.bind_int (1, id) != Sqlite.OK) ||
 			   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
 			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
-			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 				this.db_error();
 				return i;
 			}
@@ -913,7 +922,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_ALBUMS_WITH_SEARCH =
-		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t WHERE ar.id = t.artist AND al.id = t.album AND ar.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ?) ORDER BY LOWER(al.name) ASC";
+		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t, uris u WHERE ar.id = t.artist AND al.id = t.album AND u.id = t.uri AND ar.id = ? AND (ar.name LIKE ? OR al.name LIKE ? OR t.title LIKE ? OR u.name LIKE ?) ORDER BY LOWER(al.name) ASC";
 
 	private static const string STMT_GET_ALBUMS =
 		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY LOWER(al.name) ASC";
@@ -927,7 +936,8 @@ public class Xnoise.Database.DbBrowser {
 			if((stmt.bind_int (1, id) != Sqlite.OK) ||
 			   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
 			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
-			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+			   (stmt.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 				this.db_error();
 				return val;
 			}
