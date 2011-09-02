@@ -282,7 +282,8 @@ public class Xnoise.Database.DbBrowser {
 		
 		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
 		   (stmt.bind_text(2, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
-		   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+		   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
+		   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 			this.db_error();
 			return null;
 		}
