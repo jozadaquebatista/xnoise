@@ -7,7 +7,6 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = xnoise-1.0.pc
-plpkgconfigdir = $(libdir)/pkgconfig
 
 EXTRA_DIST = \
     $(desktop_in_files) \
@@ -20,7 +19,6 @@ CLEANFILES = \
 DISTCLEANFILES = \
     Makefile.in \
     $(pkgconfig_DATA) \
-    $(plpkgconfig_DATA) \
     $(NULL)
 
 

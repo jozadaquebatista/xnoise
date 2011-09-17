@@ -1475,6 +1475,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			sexyentryBox.add(searchEntryMB);
 			
 			collapsebutton = gb.get_object("collapsebutton") as Gtk.Button;
+			var coll_img   = gb.get_object("imagecollapse") as Gtk.Image;
+			coll_img.set_tooltip_text(_("Collapse all"));
 			collapsebutton.clicked.connect( () => {
 				mediaBr.collapse_all();
 			});
