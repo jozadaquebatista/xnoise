@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-17 14:26+0200\n"
+"POT-Creation-Date: 2011-09-18 22:50+0200\n"
 "PO-Revision-Date: 2011-08-15 22:32+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -38,7 +38,7 @@ msgid "Add all visible tracks to tracklist"
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:161
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - Edycja metadanych"
 
@@ -59,7 +59,7 @@ msgid "Album:"
 msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:154
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
 "wait."
@@ -67,10 +67,53 @@ msgstr ""
 "Czekaj na zapełnienie przeglądarki mediów lub anuluj, gdy nie chcesz czekać."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:158
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:180
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "Czekaj na zaimportowanie mediów lub anuluj, gdy nie chcesz czekać."
+
+#. ARTIST
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1068
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1176
+msgid "Artist"
+msgstr "Wykonawca"
+
+#. ALBUM
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:127
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1051
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1189
+msgid "Album"
+msgstr "Album"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1034
+msgid "Title"
+msgstr "Tytuł"
+
+#. GENRE
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1202
+msgid "Genre"
+msgstr "Gatunek"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:136
+msgid "Uri"
+msgstr ""
+
+#. YEAR
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1120
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1215
+msgid "Year"
+msgstr "Rok"
+
+#. TRACKNUMBER
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1163
+msgid "Tracknumber"
+msgstr "Numer utworu"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
@@ -470,74 +513,49 @@ msgstr "Znaleziono %u utworów. Aktualizacja biblioteki ..."
 msgid "%u tracks found"
 msgstr "nie odnaleziono tekstu..."
 
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:258
+msgid "General"
+msgstr ""
+
 #: ../libxnoise/Settings/xnoise-settings-dialog.vala:260
+msgid "Plugins"
+msgstr ""
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:265
 #, fuzzy
 msgid "Enable grid lines in media browser"
 msgstr "Użyj pomocnych linii w przeglądarce mediów"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:265
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:270
 #, fuzzy
 msgid "Use linebreaks in media browser"
 msgstr "Użyj pomocnych linii w przeglądarce mediów"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:270
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:275
 msgid "Don't show video screen while hovering album image"
 msgstr "Nie pokazuj ekranu filmów gdy kursor zakrywa okładkę"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:275
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:280
 msgid "Compact layout"
 msgstr "Minimalistyczny wygląd"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:280
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:285
 msgid "Use stop button"
 msgstr "Pokaż przycisk stop"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:285
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:290
 msgid "Quit application if window is closed"
 msgstr "Zakończ po zamknięciu okna"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:296
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:301
 msgid "Media browser fontsize:"
 msgstr "Rozmiar czcionki przeglądarki mediów:"
-
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1034
-msgid "Title"
-msgstr "Tytuł"
-
-#. ALBUM
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1051
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1189
-msgid "Album"
-msgstr "Album"
-
-#. ARTIST
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1068
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1176
-msgid "Artist"
-msgstr "Wykonawca"
 
 #. LENGTH
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1083
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1228
 msgid "Length"
 msgstr "Długość"
-
-#. GENRE
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1202
-msgid "Genre"
-msgstr "Gatunek"
-
-#. YEAR
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1120
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1215
-msgid "Year"
-msgstr "Rok"
-
-#. TRACKNUMBER
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1163
-msgid "Tracknumber"
-msgstr "Numer utworu"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:69
 msgid "Play/Pause"

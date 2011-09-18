@@ -254,6 +254,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			dialog.set_transient_for(main_window);
 			this.dialog.set_modal(true);
 			
+			Label general_label = this.get_object("label1") as Gtk.Label;
+			general_label.set_text(_("General"));
+			Label plugins_label = this.get_object("label6") as Gtk.Label;
+			plugins_label.set_text(_("Plugins"));
+			
 			checkB_showL = this.get_object("checkB_showlines") as Gtk.CheckButton;
 			checkB_showL.can_focus = false;
 			checkB_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);

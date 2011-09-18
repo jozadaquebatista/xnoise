@@ -119,6 +119,28 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 			entry_genre            = builder.get_object("entry_genre")       as Gtk.Entry;
 			entry_uri              = builder.get_object("entry_uri")         as Gtk.Entry;
 			infolabel              = builder.get_object("label5")            as Gtk.Label;
+			
+			var artist_label       = builder.get_object("label1")            as Gtk.Label;
+			artist_label.set_text(_("Artist") + ":");
+			
+			var album_label        = builder.get_object("label2")            as Gtk.Label;
+			album_label.set_text(_("Album") + ":");
+			
+			var title_label        = builder.get_object("label3")            as Gtk.Label;
+			title_label.set_text(_("Title") + ":");
+			
+			var genre_label        = builder.get_object("label_genre")       as Gtk.Label;
+			genre_label.set_text(_("Genre") + ":");
+			
+			var uri_label          = builder.get_object("label_uri")         as Gtk.Label;
+			uri_label.set_text(_("Uri") + ":");
+			
+			var year_label         = builder.get_object("label_year")        as Gtk.Label;
+			year_label.set_text(_("Year") + ":");
+
+			var trakno_label       = builder.get_object("tracknumberlabel")  as Gtk.Label;
+			trakno_label.set_text(_("Tracknumber") + ":");
+
 			spinbutton_tracknumber.set_numeric(true);
 			spinbutton_tracknumber.configure(new Gtk.Adjustment(0.0, 0.0, 999.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
 			spinbutton_tracknumber.changed.connect( (sender) => {

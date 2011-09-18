@@ -686,31 +686,34 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	private void foreachtag(TagList list, string tag) {
 		string val = null;
-		//print("tag: %s\n", tag);
+		print("tag: %s\n", tag);
 		switch(tag) {
-		case "artist":
+		case Gst.TAG_ARTIST:
 			if(list.get_string(tag, out val))
 				if(val != global.current_artist) global.current_artist = val;
 			break;
-		case "album":
+		case Gst.TAG_ALBUM:
 			if(list.get_string(tag, out val))
 				if(val != global.current_album) global.current_album = val;
 			break;
-		case "title":
+		case Gst.TAG_TITLE:
 			if(list.get_string(tag, out val))
 				if(val != global.current_title) global.current_title = val;
 			break;
-		case "location":
+		case Gst.TAG_LOCATION:
 			if(list.get_string(tag, out val))
 				if(val != global.current_location) global.current_location = val;
 			break;
-		case "genre":
+		case Gst.TAG_GENRE:
 			if(list.get_string(tag, out val))
 				if(val != global.current_genre) global.current_genre = val;
 			break;
-		case "organization":
+		case Gst.TAG_ORGANIZATION:
 			if(list.get_string(tag, out val))
 				if(val != global.current_organization) global.current_organization = val;
+			break;
+		case Gst.TAG_IMAGE:
+			print("found image\n");
 			break;
 		default:
 			break;
