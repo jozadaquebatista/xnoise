@@ -42,6 +42,7 @@ public class Xnoise.FirstMpris : GLib.Object, IPlugin {
 	private uint owner_id;
 	private uint object_id_root;
 	private uint object_id_player;
+	private uint object_id_tracklist;
 	public FirstMprisPlayer player = null;
 	public FirstMprisRoot root = null;
 	public FirstMprisTrackList tracklist = null;
@@ -68,11 +69,11 @@ public class Xnoise.FirstMpris : GLib.Object, IPlugin {
 		//print("bus acquired\n");
 		try {
 			root = new FirstMprisRoot(connection);
-			connection.register_object("/", root);
+			object_id_root = connection.register_object("/", root);
 			player = new FirstMprisPlayer(connection);
-			connection.register_object("/Player", player); //"/org/mpris/MediaPlayer2", player);
+			object_id_player = connection.register_object("/Player", player); //"/org/mpris/MediaPlayer2", player);
 			tracklist = new FirstMprisTrackList(connection);
-			connection.register_object("/TrackList", tracklist);
+			object_id_tracklist = connection.register_object("/TrackList", tracklist);
 		} 
 		catch(IOError e) {
 			print("%s\n", e.message);
@@ -84,7 +85,7 @@ public class Xnoise.FirstMpris : GLib.Object, IPlugin {
 	}	
 
 	private void on_name_lost(DBusConnection connection, string name) {
-		print("name_lost\n");
+		print("name_lost mpris v1\n");
 	}
 	
 	public bool init() {
@@ -109,10 +110,12 @@ public class Xnoise.FirstMpris : GLib.Object, IPlugin {
 	private void clean_up() {
 		if(owner_id == 0)
 			return;
+		this.conn.unregister_object(object_id_tracklist);
 		this.conn.unregister_object(object_id_player);
 		this.conn.unregister_object(object_id_root);
 		Bus.unown_name(owner_id);
 		object_id_player = 0;
+		object_id_tracklist = 0;
 		object_id_root = 0;
 		owner_id = 0;
 	}
@@ -320,15 +323,17 @@ public struct StatusStruct {
 
 [DBus(name = "org.freedesktop.MediaPlayer")]
 public class FirstMprisTrackList : GLib.Object {
+	
 	private unowned Xnoise.Main xn;
 	private unowned DBusConnection conn;
+	
 	public signal void TrackListChange(int Nb_Tracks);
 	
 	public FirstMprisTrackList(DBusConnection conn) {
 		this.conn = conn;
 		this.xn = Main.instance;
 	}
-
+	
 	public HashTable<string, Variant?>? GetMetadata(int Position) {
 		return null;
 	}
