@@ -44,6 +44,7 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	private uint owner_id;
 	private uint object_id_root;
 	private uint object_id_player;
+	private uint object_id_tracklist;
 	public MprisPlayer player = null;
 	public MprisRoot root = null;
 	public MprisTrackList tracklist = null;
@@ -70,11 +71,11 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 		//print("bus acquired\n");
 		try {
 			root = new MprisRoot();
-			connection.register_object("/org/mpris/MediaPlayer2", root);
+			object_id_root = connection.register_object("/org/mpris/MediaPlayer2", root);
 			player = new MprisPlayer(connection);
-			connection.register_object("/org/mpris/MediaPlayer2", player);
+			object_id_player = connection.register_object("/org/mpris/MediaPlayer2", player);
 			tracklist = new MprisTrackList(connection);
-			connection.register_object("/org/mpris/MediaPlayer2", tracklist);
+			object_id_tracklist = connection.register_object("/org/mpris/MediaPlayer2", tracklist);
 		} 
 		catch(IOError e) {
 			print("%s\n", e.message);
@@ -112,9 +113,11 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 		if(owner_id == 0)
 			return;
 		this.conn.unregister_object(object_id_player);
+		this.conn.unregister_object(object_id_tracklist);
 		this.conn.unregister_object(object_id_root);
 		Bus.unown_name(owner_id);
 		object_id_player = 0;
+		object_id_tracklist =0;
 		object_id_root = 0;
 		owner_id = 0;
 	}

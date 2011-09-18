@@ -25,7 +25,6 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * Andreas Obergrusberger
  * Jörn Magens
  */
 
@@ -73,7 +72,7 @@ public class Xnoise.FirstMpris : GLib.Object, IPlugin {
 			player = new FirstMprisPlayer(connection);
 			connection.register_object("/Player", player); //"/org/mpris/MediaPlayer2", player);
 			tracklist = new FirstMprisTrackList(connection);
-			connection.register_object("/org/mpris/MediaPlayer2", tracklist);
+			connection.register_object("/TrackList", tracklist);
 		} 
 		catch(IOError e) {
 			print("%s\n", e.message);
@@ -96,7 +95,7 @@ public class Xnoise.FirstMpris : GLib.Object, IPlugin {
 			                         on_name_acquired,
 			                         on_name_lost);
 		if(owner_id == 0) {
-			print("mpris error\n");
+			print("mpris v1 error\n");
 			return false;
 		}
 		owner.sign_deactivated.connect(clean_up);
@@ -164,7 +163,7 @@ public struct VersionStruct {
 
 
 
-[DBus(name = "org.mpris.MediaPlayer.Player")]
+[DBus(name = "org.mpris.MediaPlayer")]
 public class FirstMprisPlayer : GLib.Object {
 	private unowned Main xn;
 	private unowned DBusConnection conn;
