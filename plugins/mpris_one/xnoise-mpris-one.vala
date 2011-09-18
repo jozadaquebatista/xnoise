@@ -71,7 +71,7 @@ public class Xnoise.FirstMpris : GLib.Object, IPlugin {
 			root = new FirstMprisRoot(connection);
 			object_id_root = connection.register_object("/", root);
 			player = new FirstMprisPlayer(connection);
-			object_id_player = connection.register_object("/Player", player); //"/org/mpris/MediaPlayer2", player);
+			object_id_player = connection.register_object("/Player", player);
 			tracklist = new FirstMprisTrackList(connection);
 			object_id_tracklist = connection.register_object("/TrackList", tracklist);
 		} 
