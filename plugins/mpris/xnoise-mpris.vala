@@ -112,9 +112,9 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
 	private void clean_up() {
 		if(owner_id == 0)
 			return;
-		this.conn.unregister_object(object_id_player);
-		this.conn.unregister_object(object_id_tracklist);
-		this.conn.unregister_object(object_id_root);
+		//this.conn.unregister_object(object_id_player);
+		//this.conn.unregister_object(object_id_tracklist);
+		//this.conn.unregister_object(object_id_root);
 		Bus.unown_name(owner_id);
 		object_id_player = 0;
 		object_id_tracklist =0;
