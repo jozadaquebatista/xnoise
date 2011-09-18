@@ -3,7 +3,7 @@ AC_PREREQ([2.67])
 #xnoise version
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 1)
-m4_define(xnoise_micro_version, 27)
+m4_define(xnoise_micro_version, 28)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 
 AC_INIT([xnoise],[xnoise_version],[shuerhaakenATgo oglemail.com],[xnoise])
@@ -326,7 +326,7 @@ if test "x$enable_mpris" = "xyes"; then
         enable_mpris=yes
     else
         enable_mpris=no
-        AC_MSG_WARN([mpris plugin will not be included in the build.])
+        AC_MSG_WARN([mpris plugins will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_MPRIS, test x"$enable_mpris" = "xyes")
@@ -495,6 +495,7 @@ AC_CONFIG_FILES([
     plugins/notifications/Makefile
     plugins/notifications2/Makefile
     plugins/mpris/Makefile
+    plugins/mpris_one/Makefile
     plugins/mediakeys/Makefile
     plugins/chartlyrics/Makefile
     plugins/lyricwiki/Makefile
@@ -529,7 +530,7 @@ echo "
     lastfm covers:                 ${enable_lastfmcovers}
     notifications:                 ${enable_notifications}
     notifications (0.7 API):       ${enable_notifications07}
-    mpris:                         ${enable_mpris}
+    mpris v1/v2:                   ${enable_mpris}
     mediakeys:                     ${enable_mediakeys}
     soundmenu:                     ${enable_soundmenu}
     soundmenu2:                    ${enable_soundmenu2}

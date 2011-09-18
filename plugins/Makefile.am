@@ -1,6 +1,6 @@
 SUBDIRS = testplugin titleToDecoration cyclic-save-state databaseLyrics
 
-DIST_SUBDIRS = testplugin titleToDecoration cyclic-save-state lastfmCovers notifications notifications2 mediakeys mpris chartlyrics lyricwiki soundmenu soundmenu2 databaseLyrics
+DIST_SUBDIRS = testplugin titleToDecoration cyclic-save-state lastfmCovers notifications notifications2 mediakeys mpris mpris_one chartlyrics lyricwiki soundmenu soundmenu2 databaseLyrics
 
 if ENABLE_CHARTLYRICS
   SUBDIRS += chartlyrics
@@ -20,6 +20,7 @@ endif
 
 if ENABLE_MPRIS
   SUBDIRS += mpris
+  SUBDIRS += mpris_one
 endif
 
 if ENABLE_MEDIAKEYS
