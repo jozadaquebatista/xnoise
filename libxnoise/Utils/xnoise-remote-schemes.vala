@@ -34,6 +34,7 @@ public class Xnoise.RemoteSchemes {
 	private string[] _list = {
 		"http", 
 		"https", 
+		"mms",
 		"ftp"
 	};
 

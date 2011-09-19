@@ -76,7 +76,7 @@ namespace Xnoise.Playlist {
 	//put some debug messages into the code
 	public bool debug = false;
 	
-	public const string[] remote_schemes = { "http", "ftp" }; // TODO: add more
+	public const string[] remote_schemes = { "http", "ftp", "mms" }; // TODO: add more
 	
 	public static bool is_known_playlist_extension(ref string ext) {
 		foreach(string s in known_playlist_extensions) {

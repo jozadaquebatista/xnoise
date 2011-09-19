@@ -166,7 +166,7 @@ public class MprisRoot : GLib.Object {
 	
 	public string[] SupportedUriSchemes {
 		owned get {
-			string[] sa = {"http", "file", "https", "ftp"};
+			string[] sa = {"http", "file", "https", "ftp", "mms"};
 			return sa;
 		}
 	}
