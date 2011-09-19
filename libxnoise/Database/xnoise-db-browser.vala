@@ -57,8 +57,6 @@ public class Xnoise.Database.DbBrowser {
 		"SELECT COUNT (i.title) FROM items i, uris u WHERE i.uri = u.id AND u.name = ?";
 	private static const string STMT_TRACKDATA_FOR_ID =
 		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.id = ?";
-	private static const string STMT_STREAM_TD_FOR_ID =
-		"SELECT name, uri FROM streams WHERE id = ?";
 	private static const string STMT_URI_FOR_ID =
 		"SELECT u.name FROM items t, uris u WHERE t.uri = u.id AND t.id = ?";
 	private static const string STMT_TRACK_ID_FOR_URI =
@@ -362,14 +360,20 @@ public class Xnoise.Database.DbBrowser {
 		return true;
 	}
 
+	private static const string STMT_STREAM_TD_FOR_ID =
+		"SELECT name, uri FROM streams WHERE id = ?";
+	//	private static const string STMT_STREAM_TD_FOR_ID_WITH_SEARCH =
+	//		"SELECT name, uri FROM streams WHERE id = ? AND uri LIKE ?";
+
 	public bool get_stream_td_for_id(int id, out TrackData val) {
 		Statement stmt;
 		val = new TrackData();
 		this.db.prepare_v2(STMT_STREAM_TD_FOR_ID , -1, out stmt);
 			
 		stmt.reset();
-		if(stmt.bind_int(1, id) != Sqlite.OK) {
+		if(stmt.bind_int (1, id) != Sqlite.OK) {
 			this.db_error();
+			return false;
 		}
 		if(stmt.step() == Sqlite.ROW) {
 			val.artist      = "";
@@ -384,21 +388,21 @@ public class Xnoise.Database.DbBrowser {
 		return true;
 	}
 
-	public bool get_stream_for_id(int id, out string uri) {
-		Statement stmt;
-		
-		this.db.prepare_v2(STMT_STREAM_TD_FOR_ID , -1, out stmt);
-		
-		stmt.reset();
-		if(stmt.bind_int(1, id) != Sqlite.OK) {
-			this.db_error();
-		}
-		if(stmt.step() == Sqlite.ROW) {
-			uri = stmt.column_text(1);
-			return true;
-		}
-		return false;
-	}
+//	public bool get_stream_for_id(int id, out string uri) {
+//		Statement stmt;
+//		
+//		this.db.prepare_v2(STMT_STREAM_TD_FOR_ID , -1, out stmt);
+//		
+//		stmt.reset();
+//		if(stmt.bind_int(1, id) != Sqlite.OK) {
+//			this.db_error();
+//		}
+//		if(stmt.step() == Sqlite.ROW) {
+//			uri = stmt.column_text(1);
+//			return true;
+//		}
+//		return false;
+//	}
 
 	public string? get_local_image_path_for_track(ref string? uri) {
 		Statement stmt;
@@ -608,6 +612,30 @@ public class Xnoise.Database.DbBrowser {
 		return results;
 	}
 
+	private static const string STMT_GET_STREAM_DATA =
+		"SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE s.name LIKE ? ORDER BY LOWER(s.name) DESC";
+
+	public TrackData[] get_stream_data(ref string searchtext) {
+		TrackData[] val = {};
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_GET_STREAM_DATA, -1, out stmt);
+		
+		if(stmt.bind_text(1, "%%%s%%".printf(searchtext))     != Sqlite.OK) {
+			this.db_error();
+			return val;
+		}
+		while(stmt.step() == Sqlite.ROW) {
+			TrackData td = new TrackData();
+			td.title       = stmt.column_text(2);
+			td.name        = stmt.column_text(1);
+			td.item        = Item(ItemType.STREAM, stmt.column_text(1), stmt.column_int(0));
+			td.item.text   = stmt.column_text(2);
+			val += td;
+		}
+		return val;
+	}
+
 	private static const string STMT_GET_VIDEO_DATA =
 		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, t.genre FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.mediatype = ? AND (t.title LIKE ? OR u.name LIKE ?) GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) DESC";
 
@@ -669,23 +697,48 @@ public class Xnoise.Database.DbBrowser {
 		return val;
 	}
 
-	public TrackData[] get_stream_data(ref string searchtext) {
-		//	print("in get_stream_data\n");
+	private static const string STMT_GET_TRACKDATA_FOR_STREAMS =
+		"SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE s.name LIKE ? OR s.uri LIKE ? ORDER BY LOWER(s.name) ASC";
+
+	public TrackData[] get_trackdata_for_streams(ref string searchtext) {
 		TrackData[] val = {};
 		Statement stmt;
 		
-		this.db.prepare_v2(STMT_GET_RADIO_DATA, -1, out stmt);
-		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+		this.db.prepare_v2(STMT_GET_TRACKDATA_FOR_STREAMS, -1, out stmt);
+		
+		if((stmt.bind_text(1, "%%%s%%".printf(searchtext))     != Sqlite.OK)||
+		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
 			this.db_error();
+			return val;
 		}
 		while(stmt.step() == Sqlite.ROW) {
-			TrackData vd = new TrackData();
-			vd.name = stmt.column_text(1);
-			vd.item = Item(ItemType.STREAM, stmt.column_text(2), stmt.column_int(0));
-			val += vd;
+			TrackData td = new TrackData();
+			td.title       = stmt.column_text(2);
+			td.name        = stmt.column_text(2);
+			td.item        = Item(ItemType.STREAM, stmt.column_text(1), stmt.column_int(0));
+			td.item.text   = stmt.column_text(2);
+			val += td;
 		}
 		return val;
 	}
+
+//	public TrackData[] get_stream_data(ref string searchtext) {
+//		//	print("in get_stream_data\n");
+//		TrackData[] val = {};
+//		Statement stmt;
+//		
+//		this.db.prepare_v2(STMT_GET_RADIO_DATA, -1, out stmt);
+//		if((stmt.bind_text(1, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
+//			this.db_error();
+//		}
+//		while(stmt.step() == Sqlite.ROW) {
+//			TrackData vd = new TrackData();
+//			vd.name = stmt.column_text(1);
+//			vd.item = Item(ItemType.STREAM, stmt.column_text(2), stmt.column_int(0));
+//			val += vd;
+//		}
+//		return val;
+//	}
 
 	public string[] get_videos(ref string searchtext) {
 		Statement stmt;

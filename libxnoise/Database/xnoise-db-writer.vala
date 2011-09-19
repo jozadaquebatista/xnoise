@@ -86,6 +86,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		ADD_ALBUM,
 		ADD_TITLE,
 		ADD_VIDEO,
+		ADD_STREAM,
 		REMOVE_ARTIST,
 		REMOVE_ALBUM,
 		REMOVE_TITLE,
@@ -1101,7 +1102,9 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		return id;
 	}
 	
-
+	private static const string STMT_GET_STREAM_ID_BY_URI =
+		"SELECT id FROM streams WHERE uri=?";
+		
 	// Single stream for collection
 	public void add_single_stream_to_collection(string uri, string name = "") {
 		if(db == null) return;
@@ -1112,9 +1115,26 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		if(add_radio_statement.bind_text(1, name) != Sqlite.OK||
 		   add_radio_statement.bind_text(2, uri)  != Sqlite.OK) {
 			this.db_error();
+			return;
 		}
 		if(add_radio_statement.step() != Sqlite.DONE) {
 			this.db_error();
+			return;
+		}
+		Statement stmt;
+		this.db.prepare_v2(STMT_GET_STREAM_ID_BY_URI, -1, out stmt);
+		if(stmt.bind_text(1, uri) != Sqlite.OK) {
+			this.db_error();
+			return;
+		}
+		int stream_id = -1;
+		if(stmt.step() == Sqlite.ROW)
+			stream_id = stmt.column_int(0);
+		// change notification
+		if(change_cb != null && stream_id > -1) {
+			Item? item = Item(ItemType.STREAM, null, stream_id);
+			item.text = name;
+			change_cb(ChangeType.ADD_STREAM, item);
 		}
 	}
 

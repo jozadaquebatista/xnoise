@@ -254,6 +254,9 @@ public class Xnoise.MediaImporter : GLib.Object {
 		if(!db_writer.delete_local_media_data())
 			return false;
 		db_writer.commit_transaction();
+		
+		// remove streams
+		db_writer.del_all_streams();
 		return false;
 	}
 
@@ -537,6 +540,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		TrackData[] tdax = {};
 		foreach(string strm in streams_ht.get_keys()) {
 			db_writer.get_trackdata_for_stream(strm, out val);
+			print("stream: %s\n", strm);
 			tdax += val;
 		}
 		job.track_dat = tdax;

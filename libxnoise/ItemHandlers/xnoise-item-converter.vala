@@ -77,9 +77,24 @@ public class Xnoise.ItemConverter : Object {
 				break;
 			case ItemType.COLLECTION_CONTAINER_VIDEO:
 				result = db_browser.get_trackdata_for_video(ref searchtext);
-				print("result len %d\n", result.length);
+				//print("result len %d\n", result.length);
+				break;
+			case ItemType.COLLECTION_CONTAINER_STREAM:
+				result = db_browser.get_trackdata_for_streams(ref searchtext);
+				//print("result len %d\n", result.length);
 				break;
 			case ItemType.STREAM:
+				if(item.db_id > -1) {
+					var tmp = new TrackData();
+					if(db_browser.get_stream_td_for_id(item.db_id, out tmp)) {
+						result += tmp;
+						return result;
+					}
+					else {
+						return null;
+					}
+					break;
+				}
 				break;
 			case ItemType.PLAYLIST:
 				var pr = new Playlist.Reader();
@@ -104,8 +119,6 @@ public class Xnoise.ItemConverter : Object {
 				}
 				break;
 			case ItemType.LOCAL_FOLDER:
-				break;
-			case ItemType.COLLECTION_CONTAINER_STREAM:
 				break;
 			default:
 				break;

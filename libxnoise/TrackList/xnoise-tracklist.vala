@@ -912,7 +912,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		if(removed_playing_title) tracklistmodel.set_reference_to_last();
 	}
 
-	public void on_activated(Item item, TreePath path) {//(string uri, TreePath path) {
+	private void on_activated(Item item, TreePath path) {//(string uri, TreePath path) {
 		if(path != null) {
 			global.position_reference = new TreeRowReference(this.tracklistmodel, path);
 		}

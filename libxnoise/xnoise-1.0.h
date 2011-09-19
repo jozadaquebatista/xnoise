@@ -1051,6 +1051,7 @@ typedef enum  {
 	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_ALBUM,
 	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_TITLE,
 	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_VIDEO,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_STREAM,
 	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_ARTIST,
 	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_ALBUM,
 	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_TITLE,
@@ -1911,7 +1912,6 @@ gboolean xnoise_database_db_browser_get_uri_for_id (XnoiseDatabaseDbBrowser* sel
 XnoiseTrackData** xnoise_database_db_browser_get_all_tracks (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 gboolean xnoise_database_db_browser_get_trackdata_for_id (XnoiseDatabaseDbBrowser* self, gint id, XnoiseTrackData** val);
 gboolean xnoise_database_db_browser_get_stream_td_for_id (XnoiseDatabaseDbBrowser* self, gint id, XnoiseTrackData** val);
-gboolean xnoise_database_db_browser_get_stream_for_id (XnoiseDatabaseDbBrowser* self, gint id, gchar** uri);
 gchar* xnoise_database_db_browser_get_local_image_path_for_track (XnoiseDatabaseDbBrowser* self, gchar** uri);
 gboolean xnoise_database_db_browser_get_trackdata_for_stream (XnoiseDatabaseDbBrowser* self, const gchar* uri, XnoiseTrackData** val);
 gboolean xnoise_database_db_browser_get_trackdata_for_uri (XnoiseDatabaseDbBrowser* self, gchar** uri, XnoiseTrackData** val);
@@ -1929,9 +1929,10 @@ XnoiseItem* xnoise_database_db_browser_get_some_lastused_items (XnoiseDatabaseDb
 guint xnoise_database_db_browser_count_lastused_items (XnoiseDatabaseDbBrowser* self);
 XnoiseItem* xnoise_database_db_browser_get_lastused_items (XnoiseDatabaseDbBrowser* self, int* result_length1);
 gchar** xnoise_database_db_browser_get_uris (XnoiseDatabaseDbBrowser* self, const gchar* search_string, int* result_length1);
+XnoiseTrackData** xnoise_database_db_browser_get_stream_data (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_db_browser_get_video_data (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_db_browser_get_trackdata_for_video (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
-XnoiseTrackData** xnoise_database_db_browser_get_stream_data (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
+XnoiseTrackData** xnoise_database_db_browser_get_trackdata_for_streams (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 gchar** xnoise_database_db_browser_get_videos (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseItem* xnoise_database_db_browser_get_some_artists (XnoiseDatabaseDbBrowser* self, gint limit, gint offset, int* result_length1);
 XnoiseItem* xnoise_database_db_browser_get_artists_with_search (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
@@ -2420,7 +2421,6 @@ XnoiseTrackList* xnoise_track_list_new (void);
 XnoiseTrackList* xnoise_track_list_construct (GType object_type);
 void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_selected_rows (XnoiseTrackList* self);
-void xnoise_track_list_on_activated (XnoiseTrackList* self, XnoiseItem* item, GtkTreePath* path);
 void xnoise_track_list_handle_resize (XnoiseTrackList* self);
 gboolean xnoise_track_list_get_column_length_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_length_visible (XnoiseTrackList* self, gboolean value);
@@ -2678,7 +2678,7 @@ XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (void);
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_construct (GType object_type);
 
 extern const gchar* XNOISE_PLAYLIST_known_playlist_extensions[5];
-extern const gchar* XNOISE_PLAYLIST_remote_schemes[2];
+extern const gchar* XNOISE_PLAYLIST_remote_schemes[3];
 
 G_END_DECLS
 

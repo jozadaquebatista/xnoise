@@ -91,6 +91,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 	
 	private bool video_in_tree = false;
+	private bool stream_in_tree = false;
 	
 	// this function is running in db thread so use idle
 	private void database_change_cb(DbWriter.ChangeType changetype, Item? item) {
@@ -148,6 +149,57 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 								 );
 						Item? loader_item = Item(ItemType.LOADER);
 						this.append(out iter_loader, iter_videos);
+						this.set(iter_loader,
+								 Column.ICON, loading_pixb,
+								 Column.VIS_TEXT, LOADING,
+								 Column.ITEM, loader_item
+								 );
+					}
+					return false;
+				});
+				break;
+			case DbWriter.ChangeType.ADD_STREAM:
+				if(stream_in_tree)
+					break;
+				stream_in_tree = true;
+				Idle.add( () => {
+					TreeIter iter_streams = TreeIter(), iter_loader;
+					if(this.iter_n_children(null) == 0) {
+						Item? i = Item(ItemType.COLLECTION_CONTAINER_STREAM);
+						this.prepend(out iter_streams, null);
+						this.set(iter_streams,
+								 Column.ICON, this.radios_pixb,
+								 Column.VIS_TEXT, "Streams",
+								 Column.ITEM, i
+								 );
+						Item? loader_item = Item(ItemType.LOADER);
+						this.append(out iter_loader, iter_streams);
+						this.set(iter_loader,
+								 Column.ICON, loading_pixb,
+								 Column.VIS_TEXT, LOADING,
+								 Column.ITEM, loader_item
+								 );
+						return false;
+					}
+					else {
+						for(int i = 0; i < this.iter_n_children(null); i++) {
+							this.iter_nth_child(out iter_streams, null, i);
+							Item? ix;
+							this.get(iter_streams, Column.ITEM, out ix);
+							if(ix.type == ItemType.COLLECTION_CONTAINER_STREAM) {
+								stream_in_tree = true;
+								return false;
+							}
+						}
+						Item? i = Item(ItemType.COLLECTION_CONTAINER_STREAM);
+						this.prepend(out iter_streams, null);
+						this.set(iter_streams,
+								 Column.ICON, radios_pixb,
+								 Column.VIS_TEXT, "Streams",
+								 Column.ITEM, i
+								 );
+						Item? loader_item = Item(ItemType.LOADER);
+						this.append(out iter_loader, iter_streams);
 						this.set(iter_loader,
 								 Column.ICON, loading_pixb,
 								 Column.VIS_TEXT, LOADING,
@@ -273,6 +325,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	public void remove_all() {
 		this.video_in_tree = false;
+		this.stream_in_tree = false;
 		this.clear();
 	}
 
@@ -793,6 +846,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			return false;
 		populating_model = true;
 		video_in_tree = false;
+		stream_in_tree = false;
 		//print("populate_model\n");
 		main_window.mediaBr.set_model(null);
 		var v_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
@@ -851,6 +905,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					         Column.VIS_TEXT,    td.name,
 					         Column.ITEM, td.item
 					         );
+					stream_in_tree = true;
 				}
 			}
 			return false;
@@ -925,6 +980,35 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         );
 			}
 			remove_loader_child(ref iter_videos);
+			return false;
+		});
+		return false;
+	}
+
+	private bool load_streams_job(Worker.Job job) {
+		job.track_dat = db_browser.get_stream_data(ref searchtext);
+		
+		if(job.track_dat.length == 0)
+			return false;
+		
+		Idle.add( () => {
+			TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+			if(row_ref == null || !row_ref.valid())
+				return false;
+			TreePath p = row_ref.get_path();
+			TreeIter iter_streams, iter_singlestream;
+			this.get_iter(out iter_streams, p);
+			foreach(unowned TrackData td in job.track_dat) {
+				if(job.cancellable.is_cancelled())
+					break;
+				this.prepend(out iter_singlestream, iter_streams);
+				this.set(iter_singlestream,
+				         Column.ICON, radios_pixb,
+				         Column.VIS_TEXT, td.name,
+				         Column.ITEM, td.item
+				         );
+			}
+			remove_loader_child(ref iter_streams);
 			return false;
 		});
 		return false;
@@ -1012,6 +1096,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 		if(item.type == ItemType.COLLECTION_CONTAINER_VIDEO) {
 			job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_videos_job);
+			//job.cancellable = populate_model_cancellable;
+			job.set_arg("treerowref", treerowref);
+			db_worker.push_job(job);
+		}
+		if(item.type == ItemType.COLLECTION_CONTAINER_STREAM) {
+			job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_streams_job);
 			//job.cancellable = populate_model_cancellable;
 			job.set_arg("treerowref", treerowref);
 			db_worker.push_job(job);

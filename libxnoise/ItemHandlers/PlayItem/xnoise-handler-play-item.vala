@@ -63,7 +63,7 @@ public class Xnoise.HandlerPlayItem : ItemHandler {
 
 	private void play_uri(Item item, GLib.Value? data) { // forward playlists to parser
 		//print(":: play_uri .. %s  uri: %s\n", item.type.to_string(), item.uri);
-		if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK) 
+		if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK && item.type != ItemType.STREAM) 
 			return;
 		global.current_uri = item.uri;
 		global.player_state = PlayerState.PLAYING;

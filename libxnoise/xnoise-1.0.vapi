@@ -36,7 +36,6 @@ namespace Xnoise {
 			public Xnoise.Item[] get_some_artists (int limit, int offset);
 			public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
 			public Xnoise.TrackData[] get_stream_data (ref string searchtext);
-			public bool get_stream_for_id (int id, out string uri);
 			public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 			public Xnoise.StreamData[] get_streams ();
 			public Xnoise.TrackData[] get_titles_with_mediatypes_and_ids (string artist, string album);
@@ -46,6 +45,7 @@ namespace Xnoise {
 			public Xnoise.TrackData? get_trackdata_by_titleid (ref string searchtext, int32 id);
 			public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
 			public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
+			public Xnoise.TrackData[] get_trackdata_for_streams (ref string searchtext);
 			public bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 			public Xnoise.TrackData[] get_trackdata_for_video (ref string searchtext);
 			public bool get_uri_for_id (int id, out string val);
@@ -65,6 +65,7 @@ namespace Xnoise {
 				ADD_ALBUM,
 				ADD_TITLE,
 				ADD_VIDEO,
+				ADD_STREAM,
 				REMOVE_ARTIST,
 				REMOVE_ALBUM,
 				REMOVE_TITLE,
@@ -910,7 +911,6 @@ namespace Xnoise {
 		public Xnoise.TrackListModel tracklistmodel;
 		public TrackList ();
 		public void handle_resize ();
-		public void on_activated (Xnoise.Item item, Gtk.TreePath path);
 		public void remove_selected_rows ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
 		public bool column_album_visible { get; set; }

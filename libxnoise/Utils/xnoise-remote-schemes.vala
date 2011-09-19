@@ -35,6 +35,7 @@ public class Xnoise.RemoteSchemes {
 		"http", 
 		"https", 
 		"mms",
+		"rtsp",
 		"ftp"
 	};
 
