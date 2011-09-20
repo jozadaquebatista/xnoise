@@ -165,6 +165,12 @@ public struct VersionStruct {
 }
 
 
+public struct StatusStruct {
+	int playback_state;
+	int shuffle_state;
+	int repeat_current_state;
+	int endless_state;
+}
 
 [DBus(name = "org.mpris.MediaPlayer")]
 public class FirstMprisPlayer : GLib.Object {
@@ -189,11 +195,23 @@ public class FirstMprisPlayer : GLib.Object {
 		
 		
 		// TODO: Event handlers do not exist yet!!!
-//		Xnoise.global.notify["player-state"].connect( (s, p) => {
-//			//print("player state queued for mpris: %s\n", this.PlaybackStatus);
-//			Variant variant = this.PlaybackStatus;
-//			queue_property_for_notification("PlaybackStatus", variant);
-//		});
+		Xnoise.global.notify["player-state"].connect( (s, p) => {
+			int playbackstate;
+			switch(global.player_state) {
+				case PlayerState.STOPPED: playbackstate = 2; break;
+				case PlayerState.PLAYING: playbackstate = 0; break;
+				case PlayerState.PAUSED:  playbackstate = 1; break;
+				default: playbackstate = 2; break;
+			}
+			// incomplete implementation
+			StatusStruct stat = {
+				playbackstate, 0, 0, 0
+			};
+			Idle.add( () => {
+				StatusChange(stat);
+				return false;
+			});
+		});
 		
 //		Xnoise.global.tag_changed.connect(on_tag_changed);
 //		
@@ -231,6 +249,24 @@ public class FirstMprisPlayer : GLib.Object {
 //				trigger_metadata_update();
 //			}
 //		});
+	}
+	
+	public HashTable<string, Variant> GetMetadata() {
+		HashTable<string, Variant> retv = new HashTable<string, Variant>(str_hash, str_equal);
+		// For now, this is working for the currently played track, only!
+		if(global.current_artist != null && global.current_artist != "")
+			retv.insert("artist", global.current_artist);
+		if(global.current_album != null && global.current_album != "")
+			retv.insert("album", global.current_album);
+		if(global.current_title != null && global.current_title != "")
+			retv.insert("title", global.current_title);
+		if(global.current_location != null && global.current_location != "")
+			retv.insert("location", global.current_location);
+		if(global.current_genre != null && global.current_genre != "")
+			retv.insert("genre", global.current_genre);
+		if(global.current_organization != null && global.current_organization != "")
+			retv.insert("organization", global.current_organization);
+		return retv;
 	}
 	
 	private static enum Direction {
@@ -272,13 +308,17 @@ public class FirstMprisPlayer : GLib.Object {
 	}
 	
 	public StatusStruct GetStatus() {
-		var ss = StatusStruct();
-		//ss.playback_state = 
-		return ss;
-	}
-	
-	public HashTable<string, Variant?>? GetMetadata() {
-		return null;
+		int playbackstate;
+		switch(global.player_state) {
+			case PlayerState.STOPPED: playbackstate = 2; break;
+			case PlayerState.PLAYING: playbackstate = 0; break;
+			case PlayerState.PAUSED:  playbackstate = 1; break;
+			default: playbackstate = 2; break;
+		}
+		StatusStruct stat = {
+			playbackstate, 0, 0, 0
+		};
+		return stat;
 	}
 	
 	public int GetCaps() {
@@ -296,14 +336,14 @@ public class FirstMprisPlayer : GLib.Object {
 	}
 	
 	public int VolumeGet() {
-		double vol = 100.0*gst_player.volume;
+		double vol = 100.0 * gst_player.volume;
 		return (int)vol;
 		
 	}
 	
 	public void PositionSet(int Position) {
 		if(gst_player.length_time == 0) return; 
-		gst_player.gst_position = (double)Position/(double)(gst_player.length_time/1000000);
+		gst_player.gst_position = (double)Position / (double)(gst_player.length_time / 1000000);
 	}
 	
 	public int PositionGet() {
@@ -312,13 +352,6 @@ public class FirstMprisPlayer : GLib.Object {
 		double rel_pos = pos * gst_player.length_time / 1000000;
 		return (int)rel_pos;//buf.to_int();
 	}
-}
-
-public struct StatusStruct {
-	int playback_state;
-	int shuffle_state;
-	int repeat_current_state;
-	int endless_state;
 }
 
 [DBus(name = "org.freedesktop.MediaPlayer")]
@@ -334,8 +367,22 @@ public class FirstMprisTrackList : GLib.Object {
 		this.xn = Main.instance;
 	}
 	
-	public HashTable<string, Variant?>? GetMetadata(int Position) {
-		return null;
+	public HashTable<string, Variant> GetMetadata(int Position) {
+		HashTable<string, Variant> retv = new HashTable<string, Variant>(str_hash, str_equal);
+		// For now, this is working for the currently played track, only!
+		if(global.current_artist != null && global.current_artist != "")
+			retv.insert("artist", global.current_artist);
+		if(global.current_album != null && global.current_album != "")
+			retv.insert("album", global.current_album);
+		if(global.current_title != null && global.current_title != "")
+			retv.insert("title", global.current_title);
+		if(global.current_location != null && global.current_location != "")
+			retv.insert("location", global.current_location);
+		if(global.current_genre != null && global.current_genre != "")
+			retv.insert("genre", global.current_genre);
+		if(global.current_organization != null && global.current_organization != "")
+			retv.insert("organization", global.current_organization);
+		return retv;
 	}
 	
 	public int GetCurrentTrack() {
