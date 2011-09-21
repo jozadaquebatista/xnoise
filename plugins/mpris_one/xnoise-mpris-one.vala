@@ -172,12 +172,11 @@ public struct StatusStruct {
 	int endless_state;
 }
 
-[DBus(name = "org.mpris.MediaPlayer")]
+[DBus(name = "org.freedesktop.MediaPlayer")]
 public class FirstMprisPlayer : GLib.Object {
 	private unowned Main xn;
 	private unowned DBusConnection conn;
-	
-	private const string INTERFACE_NAME = "org.mpris.MediaPlayer.Player";
+	private uint trackchange_source_id = 0;
 	
 //	private uint send_property_source = 0;
 //	private uint update_metadata_source = 0;
@@ -194,7 +193,6 @@ public class FirstMprisPlayer : GLib.Object {
 		this.xn = Main.instance;
 		
 		
-		// TODO: Event handlers do not exist yet!!!
 		Xnoise.global.notify["player-state"].connect( (s, p) => {
 			int playbackstate;
 			switch(global.player_state) {
@@ -203,7 +201,7 @@ public class FirstMprisPlayer : GLib.Object {
 				case PlayerState.PAUSED:  playbackstate = 1; break;
 				default: playbackstate = 2; break;
 			}
-			// incomplete implementation
+			// incomplete implementation !!
 			StatusStruct stat = {
 				playbackstate, 0, 0, 0
 			};
@@ -213,42 +211,15 @@ public class FirstMprisPlayer : GLib.Object {
 			});
 		});
 		
-//		Xnoise.global.tag_changed.connect(on_tag_changed);
-//		
-//		gst_player.notify["volume"].connect( () => {
-//			Variant variant = gst_player.volume;
-//			queue_property_for_notification("Volume", variant);
-//		});
-//		
-//		Xnoise.global.notify["image-path-large"].connect( () => {
-//			string? s = Xnoise.global.image_path_large;
-//			if(s == null) {
-//				_metadata.insert("mpris:artUrl", "");
-//			}
-//			else {
-//				File f = File.new_for_commandline_arg(s);
-//				if(f != null)
-//					_metadata.insert("mpris:artUrl", f.get_uri());
-//				else
-//					_metadata.insert("mpris:artUrl", "");
-//			}
-//			trigger_metadata_update();
-//		});
-//		
-//		gst_player.notify["length-time"].connect( () => {
-//			//print("length-time: %lld\n", (int64)(gst_player.length_time / (int64)1000));
-//			if(_metadata.lookup("mpris:length") == null) {
-//				_metadata.insert("mpris:length", ((int64)0));
-//				trigger_metadata_update();
-//				return;
-//			}
-//			
-//			int64 length_val = (int64)(gst_player.length_time / (int64)1000);
-//			if(((int64)_metadata.lookup("mpris:length")) != length_val) { 
-//				_metadata.insert("mpris:length", length_val);
-//				trigger_metadata_update();
-//			}
-//		});
+		global.notify["current-uri"].connect( () => {
+			if(trackchange_source_id != 0)
+				Source.remove(trackchange_source_id);
+			trackchange_source_id = Timeout.add_seconds(1, () => { 
+				//send delayed so metadata will already be available
+				TrackChange(GetMetadata());
+				return false;
+			});
+		});
 	}
 	
 	public HashTable<string, Variant> GetMetadata() {
@@ -266,6 +237,12 @@ public class FirstMprisPlayer : GLib.Object {
 			retv.insert("genre", global.current_genre);
 		if(global.current_organization != null && global.current_organization != "")
 			retv.insert("organization", global.current_organization);
+		uint32 len_ms = (uint32)(gst_player.length_time / Gst.MSECOND);
+		uint32 len_s  = (uint32)(gst_player.length_time / Gst.SECOND);
+		retv.insert("mtime", len_ms);
+		retv.insert("time",  len_s );
+		if(global.current_uri != null && global.current_uri != "")
+			retv.insert("location", global.current_uri);
 		return retv;
 	}
 	
