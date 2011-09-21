@@ -217,6 +217,7 @@ public class FirstMprisPlayer : GLib.Object {
 			trackchange_source_id = Timeout.add_seconds(1, () => { 
 				//send delayed so metadata will already be available
 				TrackChange(GetMetadata());
+				trackchange_source_id = 0;
 				return false;
 			});
 		});
