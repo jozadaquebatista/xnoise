@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-18 22:50+0200\n"
+"POT-Creation-Date: 2011-10-01 21:57+0200\n"
 "PO-Revision-Date: 2011-08-15 22:32+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -498,7 +498,7 @@ msgstr ""
 msgid "Show application main menu"
 msgstr "Pokaż główne menu aplikacji"
 
-#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:967
+#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:1051
 msgid "Loading ..."
 msgstr "Ładowanie ..."
 
@@ -507,8 +507,8 @@ msgstr "Ładowanie ..."
 msgid "Found %u tracks. Updating library ..."
 msgstr "Znaleziono %u utworów. Aktualizacja biblioteki ..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:408
-#: ../libxnoise/Utils/xnoise-media-importer.vala:445
+#: ../libxnoise/Utils/xnoise-media-importer.vala:411
+#: ../libxnoise/Utils/xnoise-media-importer.vala:448
 #, fuzzy, c-format
 msgid "%u tracks found"
 msgstr "nie odnaleziono tekstu..."
@@ -660,6 +660,11 @@ msgstr "Obsługa przycisków multimedialnych dla xnoise"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
+msgstr "Kontrolowanie xnoise przy pomocy dbus MPRIS v2"
+
+#: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "Kontrolowanie xnoise przy pomocy dbus MPRIS v2"
 
 #: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1

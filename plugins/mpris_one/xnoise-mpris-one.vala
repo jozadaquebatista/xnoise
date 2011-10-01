@@ -178,22 +178,15 @@ public class FirstMprisPlayer : GLib.Object {
 	private unowned DBusConnection conn;
 	private uint trackchange_source_id = 0;
 	
-//	private uint send_property_source = 0;
-//	private uint update_metadata_source = 0;
-//	private HashTable<string,Variant> changed_properties = null;
-//	
-//	private enum Direction {
-//		NEXT = 0,
-//		PREVIOUS,
-//		STOP
-//	}
-	
+	public signal void TrackChange(HashTable<string, Variant?> Metadata);
+	public signal void StatusChange(StatusStruct Status);
+	public signal void CapsChange(int Capabilities);
+
 	public FirstMprisPlayer(DBusConnection conn) {
 		this.conn = conn;
 		this.xn = Main.instance;
 		
-		
-		Xnoise.global.notify["player-state"].connect( (s, p) => {
+		global.notify["player-state"].connect( (s, p) => {
 			int playbackstate;
 			switch(global.player_state) {
 				case PlayerState.STOPPED: playbackstate = 2; break;
@@ -247,33 +240,19 @@ public class FirstMprisPlayer : GLib.Object {
 		return retv;
 	}
 	
-	private static enum Direction {
-		NEXT = 0,
-		PREVIOUS,
-		STOP
-	}	
-	
-	public signal void TrackChange(HashTable<string, Variant?> Metadata);
-	public signal void StatusChange(StatusStruct Status);
-	public signal void CapsChange(int Capabilities);
-
 	public void Next() {
-		//print("next\n");
 		global.next();
 	}
 	
 	public void Prev() {
-		//print("prev\n");
 		global.prev();
 	}
 	
 	public void Pause() {
-		//print("pause\n");
 		global.pause();
 	}
 	
 	public void Play() {
-		//print("play\n");
 		global.play(false);
 	}
 
@@ -281,7 +260,6 @@ public class FirstMprisPlayer : GLib.Object {
 	}
 	
 	public void Stop() {
-		//print("stop\n");
 		global.stop();
 	}
 	
@@ -300,7 +278,17 @@ public class FirstMprisPlayer : GLib.Object {
 	}
 	
 	public int GetCaps() {
-		return 0;
+		int val = 0;
+		
+		val |= 1 << 0;
+		val |= 1 << 1;
+		val |= 1 << 2;
+		val |= 1 << 3;
+		val |= 1 << 4;
+		val |= 1 << 5;
+		// val |= 1 << 6;
+		
+		return val;
 	}
 	
 	public void VolumeSet(int Volume) {
@@ -348,18 +336,18 @@ public class FirstMprisTrackList : GLib.Object {
 	public HashTable<string, Variant> GetMetadata(int Position) {
 		HashTable<string, Variant> retv = new HashTable<string, Variant>(str_hash, str_equal);
 		// For now, this is working for the currently played track, only!
-		if(global.current_artist != null && global.current_artist != "")
-			retv.insert("artist", global.current_artist);
-		if(global.current_album != null && global.current_album != "")
-			retv.insert("album", global.current_album);
-		if(global.current_title != null && global.current_title != "")
-			retv.insert("title", global.current_title);
-		if(global.current_location != null && global.current_location != "")
-			retv.insert("location", global.current_location);
-		if(global.current_genre != null && global.current_genre != "")
-			retv.insert("genre", global.current_genre);
-		if(global.current_organization != null && global.current_organization != "")
-			retv.insert("organization", global.current_organization);
+		//if(global.current_artist != null && global.current_artist != "")
+		//	retv.insert("artist", global.current_artist);
+		//if(global.current_album != null && global.current_album != "")
+		//	retv.insert("album", global.current_album);
+		//if(global.current_title != null && global.current_title != "")
+		//	retv.insert("title", global.current_title);
+		//if(global.current_location != null && global.current_location != "")
+		//	retv.insert("location", global.current_location);
+		//if(global.current_genre != null && global.current_genre != "")
+		//	retv.insert("genre", global.current_genre);
+		//if(global.current_organization != null && global.current_organization != "")
+		//	retv.insert("organization", global.current_organization);
 		return retv;
 	}
 	

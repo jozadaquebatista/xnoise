@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-18 22:50+0200\n"
+"POT-Creation-Date: 2011-10-01 21:57+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -56,13 +56,19 @@ msgstr "Álbum:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
-msgstr "Por favor, aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Por favor, aguarde o preenchimento da coleção. Cancele se não quiser "
+"aguardar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:180
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
@@ -178,8 +184,10 @@ msgid "Leave fullscreen"
 msgstr "Sair de ecrã completo"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
-msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
+msgstr ""
+"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
@@ -367,16 +375,24 @@ msgstr "_Configurar"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar o arranque do xnoise."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar "
+"o arranque do xnoise."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
 msgstr "Adicionar multimédia"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:438
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
-msgstr "Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para a coleção?"
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
+msgstr ""
+"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
+"a coleção?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:533
 msgid "no repeat"
@@ -479,7 +495,7 @@ msgstr "Recolher"
 msgid "Show application main menu"
 msgstr "Mostrar menu principal"
 
-#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:967
+#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:1051
 msgid "Loading ..."
 msgstr "A carregar..."
 
@@ -488,8 +504,8 @@ msgstr "A carregar..."
 msgid "Found %u tracks. Updating library ..."
 msgstr "Encontrada(s) %u faixa(s). A atualizar coleção..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:408
-#: ../libxnoise/Utils/xnoise-media-importer.vala:445
+#: ../libxnoise/Utils/xnoise-media-importer.vala:411
+#: ../libxnoise/Utils/xnoise-media-importer.vala:448
 #, c-format
 msgid "%u tracks found"
 msgstr "%u faixas encontradas"
@@ -596,8 +612,10 @@ msgid "More information on the project website:"
 msgstr "Mais informações na página web:"
 
 #: ../src/xnoise.vala:70
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr "Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr ""
+"Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
 
 #: ../src/xnoise.vala:131
 msgid "Using the running instance of xnoise!\n"
@@ -637,6 +655,11 @@ msgstr "Controlar xnoise através de teclas multimédia"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
+msgstr "Controlar xnoise através de uma interface MPRIS v2"
+
+#: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "Controlar xnoise através de uma interface MPRIS v2"
 
 #: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-17 14:26+0200\n"
+"POT-Creation-Date: 2011-10-01 21:57+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor ANanjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -37,7 +37,7 @@ msgid "Add all visible tracks to tracklist"
 msgstr "Добавить все видимые треки в список"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:161
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - Правка метаданных"
 
@@ -58,7 +58,7 @@ msgid "Album:"
 msgstr "Альбом:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:154
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
 "wait."
@@ -67,12 +67,55 @@ msgstr ""
 "хотите ждать."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:158
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:180
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
-"Пожалуйста, подождите пока импортируются файлы. Или отмените, если не "
-"хотите ждать."
+"Пожалуйста, подождите пока импортируются файлы. Или отмените, если не хотите "
+"ждать."
+
+#. ARTIST
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1068
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1176
+msgid "Artist"
+msgstr "Исполнитель"
+
+#. ALBUM
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:127
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1051
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1189
+msgid "Album"
+msgstr "Альбом"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1034
+msgid "Title"
+msgstr "Название"
+
+#. GENRE
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1202
+msgid "Genre"
+msgstr "Жанр"
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:136
+msgid "Uri"
+msgstr ""
+
+#. YEAR
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1120
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1215
+msgid "Year"
+msgstr "Год"
+
+#. TRACKNUMBER
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1163
+msgid "Tracknumber"
+msgstr "Номер"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
@@ -341,7 +384,8 @@ msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
 "startup of xnoise slower."
 msgstr ""
-"Восстанавливается %u дорожек в списке проигрывания. Это большое количество и может увеличить время запуска xnoise"
+"Восстанавливается %u дорожек в списке проигрывания. Это большое количество и "
+"может увеличить время запуска xnoise"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
@@ -455,7 +499,7 @@ msgstr "Свернуть все"
 msgid "Show application main menu"
 msgstr "Показывать главное меню"
 
-#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:967
+#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:1051
 msgid "Loading ..."
 msgstr "Загрузка ..."
 
@@ -464,78 +508,53 @@ msgstr "Загрузка ..."
 msgid "Found %u tracks. Updating library ..."
 msgstr "Найдено %u дорожек. Обновление библиотеки ..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:408
-#: ../libxnoise/Utils/xnoise-media-importer.vala:445
+#: ../libxnoise/Utils/xnoise-media-importer.vala:411
+#: ../libxnoise/Utils/xnoise-media-importer.vala:448
 #, c-format
 msgid "%u tracks found"
 msgstr "Найдено %u дорожек"
 
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:258
+msgid "General"
+msgstr ""
+
 #: ../libxnoise/Settings/xnoise-settings-dialog.vala:260
+msgid "Plugins"
+msgstr ""
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:265
 msgid "Enable grid lines in media browser"
 msgstr "Использовать затенение строк в списке воспроизведения"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:265
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:270
 msgid "Use linebreaks in media browser"
 msgstr "Использовать разрывы строки в списке воспроизведения"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:270
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:275
 msgid "Don't show video screen while hovering album image"
 msgstr "Не показывать экран видео при наведении на иконку альбома"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:275
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:280
 msgid "Compact layout"
 msgstr "Компактный вид"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:280
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:285
 msgid "Use stop button"
 msgstr "Использовать кнопку стоп"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:285
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:290
 msgid "Quit application if window is closed"
 msgstr "Выйти из приложения, если окно закрывается"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:296
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:301
 msgid "Media browser fontsize:"
 msgstr "Размер шрифта списка воспроизведения:"
-
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1034
-msgid "Title"
-msgstr "Название"
-
-#. ALBUM
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1051
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:
-msgid "Album"
-msgstr "Альбом"
-
-#. ARTIST
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1068
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1176
-msgid "Artist"
-msgstr "Исполнитель"
 
 #. LENGTH
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1083
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1228
 msgid "Length"
 msgstr "Длина"
-
-#. GENRE
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1202
-msgid "Genre"
-msgstr "Жанр"
-
-#. YEAR
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1120
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1215
-msgid "Year"
-msgstr "Год"
-
-#. TRACKNUMBER
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1163
-msgid "Tracknumber"
-msgstr "Номер"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:69
 msgid "Play/Pause"
@@ -600,7 +619,8 @@ msgstr "Больше информации доступно на веб сайт�
 msgid ""
 "Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr ""
-"Запустите 'xnoise --help', чтобы посмотреть полный список доступных параметров.\n"
+"Запустите 'xnoise --help', чтобы посмотреть полный список доступных "
+"параметров.\n"
 
 #: ../src/xnoise.vala:131
 msgid "Using the running instance of xnoise!\n"
@@ -640,6 +660,11 @@ msgstr "Управление xnoise при помощи мультимедиа �
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
+msgstr "Управление xnoise при помощи интерфейса MPRIS2"
+
+#: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "Управление xnoise при помощи интерфейса MPRIS2"
 
 #: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1
