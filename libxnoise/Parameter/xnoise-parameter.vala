@@ -129,8 +129,8 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	//  GETTERS FOR THE HASH TABLE
 	//Type int
 	public static int get_int_value(string key) {
-		int? val = ht_int.lookup(key);
-		if(val!=null)
+		int val = ht_int.lookup(key);
+		if(val!=0)
 			return val;
 		else
 			return 0;
