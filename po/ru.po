@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-01 21:57+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
-"Last-Translator: Victor ANanjevsky <ananasik@gmail.com>\n"
+"Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -102,7 +102,7 @@ msgstr "Жанр"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:136
 msgid "Uri"
-msgstr ""
+msgstr "Адрес"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
@@ -115,7 +115,7 @@ msgstr "Год"
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1163
 msgid "Tracknumber"
-msgstr "Номер"
+msgstr "Номер трека"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
@@ -212,7 +212,7 @@ msgstr "Модуль gstreamer не найден в репозитории"
 #: ../libxnoise/Player/xnoise-gst-player.vala:473
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
-msgstr ""
+msgstr "Критическая ошибка при установке недостающего модуля gstreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:518
 #: ../libxnoise/Player/xnoise-gst-player.vala:529
@@ -239,7 +239,7 @@ msgstr "Субтитр #"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:658
 msgid "Audio Track #"
-msgstr "Аудио дорожка #"
+msgstr "Аудио трек #"
 
 #. the 'no lyrics found...' also appears in the db provider !!
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:182
@@ -270,7 +270,7 @@ msgid ""
 "Using %s ..."
 msgstr ""
 "\n"
-"Пытаемся найти текст для \"%s\" by \"%s\"...\n"
+"Пытаемся найти текст для \"%s\" от \"%s\"...\n"
 "\n"
 "Используется %s ..."
 
@@ -516,11 +516,11 @@ msgstr "Найдено %u дорожек"
 
 #: ../libxnoise/Settings/xnoise-settings-dialog.vala:258
 msgid "General"
-msgstr ""
+msgstr "Основные"
 
 #: ../libxnoise/Settings/xnoise-settings-dialog.vala:260
 msgid "Plugins"
-msgstr ""
+msgstr "Дополнения"
 
 #: ../libxnoise/Settings/xnoise-settings-dialog.vala:265
 msgid "Enable grid lines in media browser"
@@ -663,9 +663,8 @@ msgid "Control xnoise with a MPRIS v2 dbus interface"
 msgstr "Управление xnoise при помощи интерфейса MPRIS2"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Control xnoise with a MPRIS v1 dbus interface"
-msgstr "Управление xnoise при помощи интерфейса MPRIS2"
+msgstr "Управление xnoise при помощи интерфейса MPRIS"
 
 #: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
