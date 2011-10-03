@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-01 21:57+0200\n"
-"PO-Revision-Date: 2011-09-20 13:42+0100\n"
+"PO-Revision-Date: 2011-10-03 11:00+0100\n"
 "Last-Translator: Andrea Ranaldi <andrea.ranaldi@gmail.com>\n"
 "Language-Team: shkn <xnoise@googlegroups.com>\n"
 "Language: Italian\n"
@@ -53,19 +53,13 @@ msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Attendi il popolamento del media browser. Oppure annulla se non vuoi "
-"attendere."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Attendi il popolamento del media browser. Oppure annulla se non vuoi attendere."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:180
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Attendi l'importazione dei media. Oppure annulla se non vuoi attendere."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Attendi l'importazione dei media. Oppure annulla se non vuoi attendere."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
@@ -156,8 +150,7 @@ msgid ""
 "Select local media folders or remote media streams. \n"
 "All library media will be available in the library."
 msgstr ""
-"Seleziona il file, la cartella o il media stream da aggiungere alla "
-"libreria. \n"
+"Seleziona il file, la cartella o il media stream da aggiungere alla libreria. \n"
 "Tutta la libreria multimediale sarà raggiungibile dal media browser."
 
 #: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:181
@@ -182,11 +175,8 @@ msgid "Leave fullscreen"
 msgstr "Abbandona \"schermo intero\""
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"Il nome dei sottotitoli non corrisponde al nome del video! Non verrà "
-"utilizzato il file sottotitoli."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "Il nome dei sottotitoli non corrisponde al nome del video! Non verrà utilizzato il file sottotitoli."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
@@ -374,24 +364,16 @@ msgstr "_Config"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"Ripristina %u brani nella lista brani. Si tratta di un gran numero e può "
-"rallentare l'avvio di xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "Ripristina %u brani nella lista brani. Si tratta di un gran numero e può rallentare l'avvio di xnoise."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
 msgstr "Aggiungi media"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:438
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Questa é la prima esecuzione di xnoise. Vuoi importare dei media nella "
-"libreria multimediale?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Questa é la prima esecuzione di xnoise. Vuoi importare dei media nella libreria multimediale?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:533
 msgid "no repeat"
@@ -611,11 +593,8 @@ msgid "More information on the project website:"
 msgstr "Altre informazioni nel sito del progetto:"
 
 #: ../src/xnoise.vala:70
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Esegui 'xnoise --help' per vedere la lista completa delle opzioni da linea "
-"di comando.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Esegui 'xnoise --help' per vedere la lista completa delle opzioni da linea di comando.\n"
 
 #: ../src/xnoise.vala:131
 msgid "Using the running instance of xnoise!\n"
@@ -658,9 +637,8 @@ msgid "Control xnoise with a MPRIS v2 dbus interface"
 msgstr "Controlla xnoise con una interfaccia dbus MPRIS v2"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Control xnoise with a MPRIS v1 dbus interface"
-msgstr "Controlla xnoise con una interfaccia dbus MPRIS v2"
+msgstr "Controlla xnoise con una interfaccia dbus MPRIS v1"
 
 #: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
