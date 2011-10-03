@@ -1,26 +1,66 @@
-xnoise 0.1.10
-=============
+xnoise (0.1.29) unstable; urgency=low
+  * redo import and use of streams
+  * add mpris v1 plugin
+  * update translations for german, hebrew, italian, polish, portugese, russian
+  * use a recent vala version
+  * bug fixes
 
- * sync version update with xnoise-plugins-core
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 03 Oct 2011 15:59:12 +0200
 
 
-xnoise 0.1.9
-============
 
- * add user info system
- * add initial import dialog
- * add open file dialog (play tracks without adding them to the library)
- * improve random mode
- * use new icons
- * show user info on media import
- * distribute vapi directories with released tarballs
- * several bugfixes
+xnoise (0.1.28) unstable; urgency=low
+  * add collapse button tooltip text to translatable strings
+  * fix the errors that dpkg-buildpackage gives because of Xnoise icons change
+  * add forgotten string binding
+  * also make use of uri for searches in media browser
+  * improve dragging of track position in trackinfo-bar
+  * extend tag information and editing possibilities
+  * use static method for item creation
+  * first basic playlistfile import (testing)
+  * reorganize file structure
+  * use year and genre everywhere
+  * change file names
+  * change playlist file entry name
+  * fix sorting of 'get_all_tracks' function
+  * adjust app icon
+  * fix window position restore and update default parameters for first run
+  * update spanish translation (colombia)
+  * adjust icon outline
+  * remove shadow around album image
+  * change default replacement icon for album image
+  * update translatable strings
+  * update translatable strings. fix issue 79
+  * workaroud track restart on icon theme change
+  * Added tag 0.1.27 for changeset f0818d23de44
+  * update ubuntu packaging data
+  * add updates for translations; update packaging data
 
-xnoise 0.1.6
-============
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Sat, 17 Sep 2011 21:01:53 +0200
 
- * added screensaver management
- * several bugfixes
- * enhance handling of corrupted tags on tag reading
- * enlarge icons on playback buttons
+
+xnoise (0.1.27-1) unstable; urgency=low
+  * present the currently played track data together with the album cover in the 'now playing' view
+  * check missing gstreamer plugins (codecs) and inform the user
+  * new handler for adding all visible tracks to tracklist
+  * new option for quitting application on closing window (not default option)
+  * set_tooltip for compact mode application menu button
+  * use icons only for hide/show library buttons
+  * improve track icon loading (for elementary theme)
+  * move all code to new libxnoise
+  * changes in project structure; add new name spaces
+  * use XDG data dir for xnoise data
+  * add french translation
+  * add polish translation
+  * update some translation
+  * bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Tue, 16 Aug 2011 14:50:10 +0200
+
+
+xnoise (0.1.26-1) unstable; urgency=low
+  * Closes: #632932
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 11 Jul 2011 16:36:56 +0200
+
 

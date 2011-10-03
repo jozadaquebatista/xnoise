@@ -1,3 +1,45 @@
+xnoise (0.1.29) natty; urgency=low
+  * redo import and use of streams
+  * add mpris v1 plugin
+  * update translations for german, hebrew, italian, polish, portugese, russian
+  * use a recent vala version
+  * bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 03 Oct 2011 15:59:12 +0200
+
+
+
+xnoise (0.1.28) natty; urgency=low
+  * add collapse button tooltip text to translatable strings
+  * fix the errors that dpkg-buildpackage gives because of Xnoise icons change
+  * add forgotten string binding
+  * also make use of uri for searches in media browser
+  * improve dragging of track position in trackinfo-bar
+  * extend tag information and editing possibilities
+  * use static method for item creation
+  * first basic playlistfile import (testing)
+  * reorganize file structure
+  * use year and genre everywhere
+  * change file names
+  * change playlist file entry name
+  * fix sorting of 'get_all_tracks' function
+  * adjust app icon
+  * fix window position restore and update default parameters for first run
+  * update spanish translation (colombia)
+  * adjust icon outline
+  * remove shadow around album image
+  * change default replacement icon for album image
+  * update translatable strings
+  * update translatable strings. fix issue 79
+  * workaroud track restart on icon theme change
+  * Added tag 0.1.27 for changeset f0818d23de44
+  * update ubuntu packaging data
+  * add updates for translations; update packaging data
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Sat, 17 Sep 2011 21:01:53 +0200
+
+
+
 xnoise (0.1.27.2) natty; urgency=low
   * present the currently played track data together with the album cover in the 'now playing' view
   * check missing gstreamer plugins (codecs) and inform the user
