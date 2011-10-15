@@ -14,12 +14,6 @@ INCLUDES = \
     -I$(top_srcdir)/libxnoise \
     $(LIBXML_CFLAGS) \
     $(LIBSOUP_CFLAGS) \
-    -DGIO_DISABLE_DEPRECATED=1 \
-    -DGDK_DISABLE_DEPRECATED=1 \
-    -DGDK_PIXBUF_DISABLE_DEPRECATED=1 \
-    -DG_DISABLE_DEPRECATED=1 \
-    -DPANGO_DISABLE_DEPRECATED=1 \
-    -DGSEAL_ENABLE=1 \
     $(NULL)
 
 libLastfmCoversdir = $(libdir)/xnoise
