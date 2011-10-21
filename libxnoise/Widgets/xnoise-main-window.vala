@@ -891,6 +891,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		media_importer.reimport_media_groups();
 	}
 
+	private void on_posjumper_button_clicked() {
+		if(global.position_reference == null || !global.position_reference.valid())
+			return;
+		TreePath path = global.position_reference.get_path();
+		var store = (ListStore)trackList.get_model();
+		TreeIter iter;
+		store.get_iter(out iter, path);
+		tl.set_focus_on_iter(ref iter);
+	}
+
 	private void on_remove_all_button_clicked() {
 		global.position_reference = null;
 		var store = (ListStore)trackList.get_model();
@@ -1280,6 +1290,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//removeSelectedButton.can_focus = false;
 			removeSelectedButton.clicked.connect(this.on_remove_selected_button_clicked);
 			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
+			
+			var posjumper                  = gb.get_object("posjumper") as Gtk.Button;
+			posjumper.can_focus      = false;
+			posjumper.clicked.connect(this.on_posjumper_button_clicked);
+			posjumper.set_tooltip_text(_("Jump to current position"));
+
+
 			//--------------------
 
 			//SHOW VIDEO BUTTONS

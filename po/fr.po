@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-01 21:57+0200\n"
+"POT-Creation-Date: 2011-10-22 01:23+0200\n"
 "PO-Revision-Date: 2011-07-14 04:44+0100\n"
 "Last-Translator: Tubuntu <tubuntu@testimonium.be>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -412,18 +412,18 @@ msgstr "répétition de tous les médias"
 msgid "random play"
 msgstr "lecture aléatoire"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1025
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1035
 msgid "Enter the URL of the file to open"
 msgstr "Introduisez l'URL du fichier à ouvrir"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1039
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1049
 msgid "Select media file"
 msgstr "Sélectionner un fichier média"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1103
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1126
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1168
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1193
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1113
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1136
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1178
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1203
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:351
 #: ../plugins/notifications/xnoise-notifications.vala:191
@@ -434,10 +434,10 @@ msgstr "Sélectionner un fichier média"
 msgid "by"
 msgstr "de"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1105
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1128
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1170
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1195
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1115
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1138
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1180
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1205
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:353
 #: ../plugins/notifications/xnoise-notifications.vala:193
@@ -448,8 +448,8 @@ msgstr "de"
 msgid "on"
 msgstr "le"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1125
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1192
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1135
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1202
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:218
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:343
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
@@ -457,43 +457,47 @@ msgstr "le"
 msgid "unknown title"
 msgstr "titre inconnu"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1127
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1194
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1137
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1204
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:216
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:341
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown artist"
 msgstr "artiste inconnu"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1129
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1196
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1139
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1206
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:214
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:339
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 msgid "unknown album"
 msgstr "album inconnu"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1178
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1188
 msgid "unknown organization"
 msgstr "organisation inconnue"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1180
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1190
 msgid "unknown location"
 msgstr "emplacement inconnu"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1277
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1287
 msgid "Remove all"
 msgstr "Tout retirer"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1282
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1292
 msgid "Remove selected titles"
 msgstr "Retirer les titres sélectionnés"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1479
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1297
+msgid "Jump to current position"
+msgstr ""
+
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1496
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1526
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1543
 msgid "Show application main menu"
 msgstr ""
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.22"/>
-  <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -225,9 +224,6 @@
                 <property name="show_tabs">False</property>
                 <property name="show_border">False</property>
                 <property name="scrollable">True</property>
-                <property name="tab_border">0</property>
-                <property name="tab_hborder">0</property>
-                <property name="tab_vborder">0</property>
                 <child>
                   <object class="GtkVBox" id="vboxmusicBr">
                     <property name="visible">True</property>
@@ -271,7 +267,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">never</property>
-                        <property name="vscrollbar_policy">automatic</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -330,8 +325,6 @@
                       <object class="GtkScrolledWindow" id="scroll_tracklist">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">automatic</property>
-                        <property name="vscrollbar_policy">automatic</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -440,6 +433,28 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkButton" id="posjumper">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="relief">none</property>
+                            <child>
+                              <object class="GtkImage" id="posjumperimage">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="stock">gtk-justify-fill</property>
+                                <property name="icon-size">1</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">5</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkLabel" id="label4x">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -447,7 +462,7 @@
                           <packing>
                             <property name="expand">True</property>
                             <property name="fill">False</property>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                         <child>
@@ -493,7 +508,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">6</property>
+                            <property name="position">7</property>
                           </packing>
                         </child>
                         <child>
@@ -541,7 +556,7 @@
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="padding">2</property>
-                            <property name="position">7</property>
+                            <property name="position">8</property>
                           </packing>
                         </child>
                       </object>
@@ -759,8 +774,6 @@
                       <object class="GtkScrolledWindow" id="scrolledlyricsview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">automatic</property>
-                        <property name="vscrollbar_policy">automatic</property>
                         <property name="shadow_type">in</property>
                         <child>
                           <placeholder/>

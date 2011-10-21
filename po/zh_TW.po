@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-01 21:57+0200\n"
+"POT-Creation-Date: 2011-10-22 01:23+0200\n"
 "PO-Revision-Date: 2011-05-05 10:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -416,18 +416,18 @@ msgstr "重複所有"
 msgid "random play"
 msgstr "隨機播放"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1025
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1035
 msgid "Enter the URL of the file to open"
 msgstr "輸入要開啟的檔案網址"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1039
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1049
 msgid "Select media file"
 msgstr "選取媒體檔案"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1103
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1126
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1168
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1193
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1113
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1136
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1178
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1203
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:351
 #: ../plugins/notifications/xnoise-notifications.vala:191
@@ -438,10 +438,10 @@ msgstr "選取媒體檔案"
 msgid "by"
 msgstr "由"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1105
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1128
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1170
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1195
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1115
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1138
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1180
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1205
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:353
 #: ../plugins/notifications/xnoise-notifications.vala:193
@@ -452,8 +452,8 @@ msgstr "由"
 msgid "on"
 msgstr "於"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1125
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1192
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1135
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1202
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:218
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:343
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
@@ -461,43 +461,47 @@ msgstr "於"
 msgid "unknown title"
 msgstr "不明標題"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1127
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1194
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1137
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1204
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:216
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:341
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown artist"
 msgstr "不明演出者"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1129
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1196
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1139
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1206
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:214
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:339
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 msgid "unknown album"
 msgstr "不明專輯"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1178
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1188
 msgid "unknown organization"
 msgstr "不明組織"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1180
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1190
 msgid "unknown location"
 msgstr "不明位置"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1277
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1287
 msgid "Remove all"
 msgstr "全部移除"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1282
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1292
 msgid "Remove selected titles"
 msgstr "移除已選標題"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1479
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1297
+msgid "Jump to current position"
+msgstr ""
+
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1496
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1526
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1543
 msgid "Show application main menu"
 msgstr ""
 
