@@ -29,6 +29,7 @@ libxnoise_LTLIBRARIES = libxnoise.la
 
 libxnoise_la_SOURCES = \
     xnoise-main.vala \
+    AlbumImages/xnoise-album-image.vala \
     AlbumImages/xnoise-album-image-loader.vala \
     AlbumImages/xnoise-i-album-cover-image.vala \
     AlbumImages/xnoise-i-album-cover-image-provider.vala \
@@ -55,16 +56,16 @@ libxnoise_la_SOURCES = \
     Parameter/xnoise-i-params.vala \
     Parameter/xnoise-parameter.vala \
     Player/xnoise-gst-player.vala \
-    Playlist/xnoise-playlist-abstract-file-reader.vala \
-    Playlist/xnoise-playlist-general.vala \
-    Playlist/xnoise-playlist-entry.vala \
-    Playlist/xnoise-playlist-entry-collection.vala \
-    Playlist/xnoise-playlist-reader.vala \
-    Playlist/ASX/xnoise-playlist-asx-file-reader.vala \
-    Playlist/WPL/xnoise-playlist-wpl-file-reader.vala \
-    Playlist/M3U/xnoise-playlist-m3u-file-reader.vala \
-    Playlist/PLS/xnoise-playlist-pls-file-reader.vala \
-    Playlist/XSPF/xnoise-playlist-xspf-file-reader.vala \
+    PlaylistReader/xnoise-playlist-abstract-file-reader.vala \
+    PlaylistReader/xnoise-playlist-general.vala \
+    PlaylistReader/xnoise-playlist-entry.vala \
+    PlaylistReader/xnoise-playlist-entry-collection.vala \
+    PlaylistReader/xnoise-playlist-reader.vala \
+    PlaylistReader/ASX/xnoise-playlist-asx-file-reader.vala \
+    PlaylistReader/WPL/xnoise-playlist-wpl-file-reader.vala \
+    PlaylistReader/M3U/xnoise-playlist-m3u-file-reader.vala \
+    PlaylistReader/PLS/xnoise-playlist-pls-file-reader.vala \
+    PlaylistReader/XSPF/xnoise-playlist-xspf-file-reader.vala \
     PluginModule/xnoise-plugin.vala \
     PluginModule/xnoise-plugin-loader.vala \
     PluginModule/xnoise-plugin-information.vala \
@@ -94,7 +95,6 @@ libxnoise_la_SOURCES = \
     Utils/xnoise-worker.vala \
     Widgets/xnoise-about.vala \
     Widgets/xnoise-add-media-dialog.vala \
-    Widgets/xnoise-album-image.vala \
     Widgets/xnoise-control-button.vala \
     Widgets/xnoise-fullscreen-toolbar.vala \
     Widgets/xnoise-info-bar.vala \

@@ -8,9 +8,9 @@
 #include <glib-object.h>
 #include <stdlib.h>
 #include <string.h>
+#include <gtk/gtk.h>
 #include <gio/gio.h>
 #include <sqlite3.h>
-#include <gtk/gtk.h>
 #include <float.h>
 #include <math.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -30,6 +30,17 @@ G_BEGIN_DECLS
 typedef struct _XnoiseMain XnoiseMain;
 typedef struct _XnoiseMainClass XnoiseMainClass;
 typedef struct _XnoiseMainPrivate XnoiseMainPrivate;
+
+#define XNOISE_TYPE_ALBUM_IMAGE (xnoise_album_image_get_type ())
+#define XNOISE_ALBUM_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImage))
+#define XNOISE_ALBUM_IMAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImageClass))
+#define XNOISE_IS_ALBUM_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ALBUM_IMAGE))
+#define XNOISE_IS_ALBUM_IMAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ALBUM_IMAGE))
+#define XNOISE_ALBUM_IMAGE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImageClass))
+
+typedef struct _XnoiseAlbumImage XnoiseAlbumImage;
+typedef struct _XnoiseAlbumImageClass XnoiseAlbumImageClass;
+typedef struct _XnoiseAlbumImagePrivate XnoiseAlbumImagePrivate;
 
 #define XNOISE_TYPE_ALBUM_IMAGE_LOADER (xnoise_album_image_loader_get_type ())
 #define XNOISE_ALBUM_IMAGE_LOADER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_IMAGE_LOADER, XnoiseAlbumImageLoader))
@@ -739,17 +750,6 @@ typedef struct _XnoiseAddMediaDialog XnoiseAddMediaDialog;
 typedef struct _XnoiseAddMediaDialogClass XnoiseAddMediaDialogClass;
 typedef struct _XnoiseAddMediaDialogPrivate XnoiseAddMediaDialogPrivate;
 
-#define XNOISE_TYPE_ALBUM_IMAGE (xnoise_album_image_get_type ())
-#define XNOISE_ALBUM_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImage))
-#define XNOISE_ALBUM_IMAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImageClass))
-#define XNOISE_IS_ALBUM_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ALBUM_IMAGE))
-#define XNOISE_IS_ALBUM_IMAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ALBUM_IMAGE))
-#define XNOISE_ALBUM_IMAGE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImageClass))
-
-typedef struct _XnoiseAlbumImage XnoiseAlbumImage;
-typedef struct _XnoiseAlbumImageClass XnoiseAlbumImageClass;
-typedef struct _XnoiseAlbumImagePrivate XnoiseAlbumImagePrivate;
-
 #define XNOISE_TYPE_CONTROL_BUTTON (xnoise_control_button_get_type ())
 #define XNOISE_CONTROL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_CONTROL_BUTTON, XnoiseControlButton))
 #define XNOISE_CONTROL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_CONTROL_BUTTON, XnoiseControlButtonClass))
@@ -841,6 +841,15 @@ struct _XnoiseMain {
 
 struct _XnoiseMainClass {
 	GObjectClass parent_class;
+};
+
+struct _XnoiseAlbumImage {
+	GtkImage parent_instance;
+	XnoiseAlbumImagePrivate * priv;
+};
+
+struct _XnoiseAlbumImageClass {
+	GtkImageClass parent_class;
 };
 
 struct _XnoiseAlbumImageLoader {
@@ -1668,15 +1677,6 @@ struct _XnoiseAddMediaDialogClass {
 	GObjectClass parent_class;
 };
 
-struct _XnoiseAlbumImage {
-	GtkImage parent_instance;
-	XnoiseAlbumImagePrivate * priv;
-};
-
-struct _XnoiseAlbumImageClass {
-	GtkImageClass parent_class;
-};
-
 struct _XnoiseControlButton {
 	GtkButton parent_instance;
 	XnoiseControlButtonPrivate * priv;
@@ -1819,6 +1819,10 @@ void xnoise_main_save_activated_plugins (XnoiseMain* self);
 void xnoise_main_save_tracklist (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
 XnoiseMain* xnoise_main_get_instance (void);
+GType xnoise_album_image_get_type (void) G_GNUC_CONST;
+XnoiseAlbumImage* xnoise_album_image_new (void);
+XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
+void xnoise_album_image_load_default_image (XnoiseAlbumImage* self);
 GFile* xnoise_get_albumimage_for_artistalbum (const gchar* artist, const gchar* album, const gchar* size);
 gboolean xnoise_thumbnail_available (const gchar* uri, GFile** _thumb);
 gchar* xnoise_escape_album_for_local_folder_search (const gchar* _artist, const gchar* album_name);
@@ -2584,10 +2588,6 @@ XnoiseWorkerExecutionType xnoise_worker_job_get_execution_type (XnoiseWorkerJob*
 GType xnoise_add_media_dialog_get_type (void) G_GNUC_CONST;
 XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
 XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
-GType xnoise_album_image_get_type (void) G_GNUC_CONST;
-XnoiseAlbumImage* xnoise_album_image_new (void);
-XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
-void xnoise_album_image_load_default_image (XnoiseAlbumImage* self);
 GType xnoise_control_button_get_type (void) G_GNUC_CONST;
 GType xnoise_control_button_direction_get_type (void) G_GNUC_CONST;
 XnoiseControlButton* xnoise_control_button_new (XnoiseControlButtonDirection _direction);
