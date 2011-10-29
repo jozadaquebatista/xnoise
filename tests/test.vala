@@ -918,11 +918,10 @@ void pls_async_finished_cb01(Xnoise.Playlist.Reader sender, string pluri) {
 
 
 
-
 ////---XML Read/Write
 bool test_xml_readwrite_01() {
 	//read 
-	File source = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/asx_test_enc.asx"));//"./playlist-examples/asx_test.asx");
+	File source = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/asx_test.asx"));//"./playlist-examples/asx_test.asx");
 	File target = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/tmp_asx.xml"));
 
 	var mr = new Xnoise.SimpleMarkup.Reader(source);
@@ -1326,11 +1325,11 @@ void main() {
 //	ml = new MainLoop(); // reuse mainloop for every async test
 //	ml.run();
 
-//	print("test xml reading and writing:");
-//	if(test_xml_readwrite_01())
-//		print("\033[50Gpass\n");
-//	else
-//		print("\033[50Gfail\n");
+	print("test xml reading and writing:");
+	if(test_xml_readwrite_01())
+		print("\033[50Gpass\n");
+	else
+		print("\033[50Gfail\n");
 
 //	print("test asx async reading:");
 //	test_asx_async_reading();

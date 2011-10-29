@@ -22,7 +22,13 @@
 
 
 namespace Xnoise.SimpleMarkup {
-
+	
+	public const string AMPERSAND_ESCAPED    = "&amp;";
+	public const string GREATER_THAN_ESCAPED = "&gt;";
+	public const string LOWER_THAN_ESCAPED   = "&lt;";
+	public const string QUOTE_ESCAPED        = "&quot;";
+	public const string APOSTROPH_ESCAPED    = "&apos;";
+	
 	public class Writer : Object {
 		// simple xml writer that fits with vala more than libxml 
 		// TODO: Implement async writing

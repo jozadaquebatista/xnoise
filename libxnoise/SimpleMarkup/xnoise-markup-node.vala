@@ -39,31 +39,11 @@ namespace Xnoise.SimpleMarkup {
 			this._name = name;
 		}
 	
-		public string? text { get; set; default = null; }
-	
-		public string? name {
-			get {
-				return _name;
-			}
-		}
-
-		public Node? parent { 
-			get {
-				return _parent;
-			}
-		}
-
-		public Node? previous { 
-			get {
-				return _previous;
-			}
-		}
-
-		public Node? next { 
-			get {
-				return _next;
-			}
-		}
+		public string? text     { get; set; default = null; }
+		public string? name     { get { return _name; } }
+		public Node? parent     { get { return _parent; } }
+		public Node? previous   { get { return _previous; } }
+		public Node? next       { get { return _next; } }
 
 		public class Attributes {
 		
@@ -311,7 +291,7 @@ namespace Xnoise.SimpleMarkup {
 			unowned Node? nd = null;;
 			if(idx == 0) {
 				nd = this._first;
-			} 
+			}
 			else if(idx == this._children_count - 1) {
 				nd = this._last;
 			} 

@@ -101,7 +101,7 @@ namespace Xnoise.Playlist {
 			this.file = _file;
 			set_base_path();
 			var mr = new SimpleMarkup.Reader(file);
-			yield mr.read_asyn(false); //read not case sensitive (lowercase)
+			yield mr.read_asyn(); //read not case sensitive (lowercase)
 			if(mr.root == null) {
 				throw new InternalReaderError.INVALID_FILE("internal error with async xspf reading\n");
 			}

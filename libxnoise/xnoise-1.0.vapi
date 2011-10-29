@@ -411,8 +411,8 @@ namespace Xnoise {
 			public Xnoise.SimpleMarkup.Node root;
 			public Reader (GLib.File file);
 			public Reader.from_string (string? xml_string);
-			public void read (bool case_sensitive = true, GLib.Cancellable? cancellable = null);
-			public async void read_asyn (bool case_sensitive = true, GLib.Cancellable? cancellable = null);
+			public void read ();
+			public async void read_asyn (GLib.Cancellable? cancellable = null);
 			public signal void finished ();
 			public signal void started ();
 		}

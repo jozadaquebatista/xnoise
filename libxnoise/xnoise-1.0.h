@@ -2373,19 +2373,19 @@ XnoiseSimpleMarkupNodeIterator* xnoise_simple_markup_node_iterator_construct (GT
 gboolean xnoise_simple_markup_node_iterator_next (XnoiseSimpleMarkupNodeIterator* self);
 XnoiseSimpleMarkupNode* xnoise_simple_markup_node_iterator_get (XnoiseSimpleMarkupNodeIterator* self);
 void xnoise_simple_markup_node_iterator_set (XnoiseSimpleMarkupNodeIterator* self, XnoiseSimpleMarkupNode* node);
-#define XNOISE_SIMPLE_MARKUP_AMPERSAND_ESCAPED "&amp;"
-#define XNOISE_SIMPLE_MARKUP_GREATER_THAN_ESCAPED "&gt;"
-#define XNOISE_SIMPLE_MARKUP_LOWER_THAN_ESCAPED "&lt;"
-#define XNOISE_SIMPLE_MARKUP_QUOTE_ESCAPED "&quot;"
-#define XNOISE_SIMPLE_MARKUP_APOSTROPH_ESCAPED "&apos;"
 GType xnoise_simple_markup_reader_get_type (void) G_GNUC_CONST;
 XnoiseSimpleMarkupReader* xnoise_simple_markup_reader_new (GFile* file);
 XnoiseSimpleMarkupReader* xnoise_simple_markup_reader_construct (GType object_type, GFile* file);
 XnoiseSimpleMarkupReader* xnoise_simple_markup_reader_new_from_string (const gchar* xml_string);
 XnoiseSimpleMarkupReader* xnoise_simple_markup_reader_construct_from_string (GType object_type, const gchar* xml_string);
-void xnoise_simple_markup_reader_read (XnoiseSimpleMarkupReader* self, gboolean case_sensitive, GCancellable* cancellable);
-void xnoise_simple_markup_reader_read_asyn (XnoiseSimpleMarkupReader* self, gboolean case_sensitive, GCancellable* cancellable, GAsyncReadyCallback _callback_, gpointer _user_data_);
+void xnoise_simple_markup_reader_read (XnoiseSimpleMarkupReader* self);
+void xnoise_simple_markup_reader_read_asyn (XnoiseSimpleMarkupReader* self, GCancellable* cancellable, GAsyncReadyCallback _callback_, gpointer _user_data_);
 void xnoise_simple_markup_reader_read_asyn_finish (XnoiseSimpleMarkupReader* self, GAsyncResult* _res_);
+#define XNOISE_SIMPLE_MARKUP_AMPERSAND_ESCAPED "&amp;"
+#define XNOISE_SIMPLE_MARKUP_GREATER_THAN_ESCAPED "&gt;"
+#define XNOISE_SIMPLE_MARKUP_LOWER_THAN_ESCAPED "&lt;"
+#define XNOISE_SIMPLE_MARKUP_QUOTE_ESCAPED "&quot;"
+#define XNOISE_SIMPLE_MARKUP_APOSTROPH_ESCAPED "&apos;"
 GType xnoise_simple_markup_writer_get_type (void) G_GNUC_CONST;
 XnoiseSimpleMarkupWriter* xnoise_simple_markup_writer_new (XnoiseSimpleMarkupNode* root, const gchar* header_string);
 XnoiseSimpleMarkupWriter* xnoise_simple_markup_writer_construct (GType object_type, XnoiseSimpleMarkupNode* root, const gchar* header_string);
