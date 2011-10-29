@@ -93,12 +93,18 @@ public class Xnoise.ItemConverter : Object {
 					else {
 						return null;
 					}
-					break;
 				}
 				break;
 			case ItemType.PLAYLIST:
 				var pr = new Playlist.Reader();
-				Playlist.Result rslt = pr.read(item.uri , null);
+				Playlist.Result rslt;
+				try {
+					rslt = pr.read(item.uri , null);
+				}
+				catch(Playlist.ReaderError e) {
+					print("%s\n", e.message);
+					return null;
+				}
 				if(rslt != Playlist.Result.SUCCESS)
 					return null;
 				EntryCollection ec = pr.data_collection;
@@ -117,7 +123,6 @@ public class Xnoise.ItemConverter : Object {
 				else {
 					return null;
 				}
-				break;
 			case ItemType.LOCAL_FOLDER:
 				break;
 			default:

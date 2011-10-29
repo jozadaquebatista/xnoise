@@ -91,23 +91,23 @@ public class Xnoise.PluginModule.Container : TypeModule {
 		}
 		void* func;
 		module.symbol("init_module", out func);
-		InitModuleFunction init_module = (InitModuleFunction)func;
+		unowned InitModuleFunction init_module = (InitModuleFunction)func;
 		if(init_module == null) 
 			return false;
 			
 		_type = init_module(this);
 		_loaded = true;
 		this.configurable = false;
-
+		
 		if(!_type.is_a(typeof(IPlugin)))
 			return false;
-
+		
 		if(_type.is_a(typeof(ILyricsProvider)))
 			this.is_lyrics_plugin = true;
-
+		
 		if(_type.is_a(typeof(IAlbumCoverImageProvider)))
 			this.is_album_image_plugin = true;
-
+		
 		return true;
 	}
 

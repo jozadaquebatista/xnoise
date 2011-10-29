@@ -57,7 +57,7 @@ public class Xnoise.UserInfo : GLib.Object {
 	// delegate type used to place the info bar
 	public delegate void AddInfoBarDelegateType(InfoBar ibar);
 
-	private AddInfoBarDelegateType add_info_bar;
+	private unowned AddInfoBarDelegateType add_info_bar;
 	private HashTable<uint, Xnoise.InfoBar> info_messages;
 	private uint id_count;
 
