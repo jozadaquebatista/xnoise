@@ -2050,8 +2050,6 @@ void xnoise_params_set_int_value (const gchar* key, gint value);
 void xnoise_params_set_double_value (const gchar* key, gdouble value);
 void xnoise_params_set_string_list_value (const gchar* key, gchar** value, int value_length1);
 void xnoise_params_set_string_value (const gchar* key, const gchar* value);
-gint xnoise_params_get_lyric_provider_priority (const gchar* name);
-gint xnoise_params_get_image_provider_priority (const gchar* name);
 XnoiseParams* xnoise_params_new (void);
 XnoiseParams* xnoise_params_construct (GType object_type);
 GType xnoise_gst_player_get_type (void) G_GNUC_CONST;

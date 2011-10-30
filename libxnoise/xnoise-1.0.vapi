@@ -800,9 +800,7 @@ namespace Xnoise {
 	public class Params : GLib.Object {
 		public Params ();
 		public static double get_double_value (string key);
-		public static int get_image_provider_priority (string name);
 		public static int get_int_value (string key);
-		public static int get_lyric_provider_priority (string name);
 		public static string[]? get_string_list_value (string key);
 		public static string get_string_value (string key);
 		public static void init ();

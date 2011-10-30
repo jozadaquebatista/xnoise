@@ -25,7 +25,7 @@
 namespace Xnoise.SimpleMarkup {
 
 	public class Reader : Object {
-	
+		
 		private const GLib.MarkupParser mp = {
 			start_cb,       // when an element opens
 			end_cb,         // when an element closes
@@ -33,9 +33,7 @@ namespace Xnoise.SimpleMarkup {
 			null,           // when comments are found
 			null            // when errors occur
 		};
-	
 		private MarkupParseContext ctx;
-		private int depth = 0;
 		private File file;
 		private string content;
 		private bool parse_from_string = false;
@@ -63,10 +61,10 @@ namespace Xnoise.SimpleMarkup {
 		
 		private void setup_ctx() {
 			ctx = new MarkupParseContext(
-			   mp,       // the structure with the callbacks
-			   0, // MarkupParseFlags
-			   this,     // extra argument for the callbacks, methods in this case
-			   destroy   // when the parsing ends
+			   mp,
+			   0,
+			   this,
+			   destroy
 			);
 		}
 	
@@ -138,6 +136,25 @@ namespace Xnoise.SimpleMarkup {
 			if(!file.has_uri_scheme("file"))
 				file = yield buffer_locally_asyn();
 			load_markup_file(); //TODO
+			
+			if (!file.query_exists ()) {
+				print("File '%s' doesn't exist.\n", file.get_path ());
+				return;
+			}
+			
+			var content_builder = new StringBuilder ();
+			try {
+				var dis = new DataInputStream(file.read());
+				string line;
+				while((line = yield dis.read_line_async(Priority.DEFAULT)) != null) {
+					content_builder.append(line);
+					content_builder.append_c('\n');
+				}
+			}
+			catch(Error e) {
+				print("%s", e.message);
+			}
+			content = content_builder.str;
 		}
 		
 		public void read() {
@@ -184,7 +201,7 @@ namespace Xnoise.SimpleMarkup {
 					finished();
 					return false;
 				});
-			
+				
 				if(locally_buffered) {
 					Idle.add( () => {
 						remove_locally_buffered_file(); //cleanup
@@ -206,29 +223,26 @@ namespace Xnoise.SimpleMarkup {
 			}
 		}
 		
-		private void start_cb(MarkupParseContext ctx, string name,
-			                   string[] attr_keys, string[] attr_values) throws MarkupError {
+		private void start_cb(MarkupParseContext ctx, string name, string[] attribute_keys, string[] attribute_values) throws MarkupError {
 			Node n = new Node(name);
-			for(int i = 0; i < attr_keys.length; i++) {
-				n.attributes[attr_keys[i]] = attr_values[i];
-			}
+			for(int i = 0; i < attribute_keys.length; i++)
+				n.attributes[attribute_keys[i]] = attribute_values[i];
+			
 			current_node.append_child(n);
 			current_node = n;
-			depth ++;
 		}
-	
+		
 		private void end_cb(MarkupParseContext ctx, string name) throws MarkupError {
 			//one level up in the hierarchy
 			if(current_node.parent != null) {
 				current_node = current_node.parent;
-				depth --;
 			}
 			else {
 				print("reached root end\n");
 				finished();
 			}
 		}
-	
+		
 		private void text_cb(MarkupParseContext ctx, string text, size_t text_len) throws MarkupError {
 			current_node.text = text; //unescape_text(text);
 		}

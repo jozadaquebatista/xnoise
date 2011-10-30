@@ -191,38 +191,6 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		ht_string.insert(key,value);
 	}
 
-	public static int get_lyric_provider_priority(string name) {
-		string[]? prio_order = get_string_list_value("prio_lyrics");
-		if(prio_order == null)
-			return 99;
-		
-		int i = 0;
-		foreach(string s in prio_order) {
-			if(name == s)
-				return i;
-			else
-				i++;
-		}
-		
-		return i;
-	}
-	
-	public static int get_image_provider_priority(string name) {
-		string[]? prio_order = get_string_list_value("prio_images");
-		if(prio_order == null)
-			return 99;
-		
-		int i = 0;
-		foreach(string s in prio_order) {
-			if(name == s)
-				return i;
-			else
-				i++;
-		}
-		
-		return i;
-	}
-
 	private static string? build_file_name() {
 		File f = File.new_for_path(GLib.Path.build_filename(settings_folder(), INIFILE, null));
 		return create_default_if_not_exist(f);
