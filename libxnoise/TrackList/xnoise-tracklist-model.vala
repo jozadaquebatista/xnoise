@@ -543,15 +543,14 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				print("%s\n", e.message);
 				return;
 			}
-			if((filetype == GLib.FileType.REGULAR)&
-			   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
+			bool is_playlist = Playlist.is_playlist_extension(get_suffix_from_filename(file.get_uri()));
+			if((filetype == GLib.FileType.REGULAR)&&
+			   (psAudio.match_string(mime)||
+			    psVideo.match_string(mime)||
+			    is_playlist == true)) {
 				
-				if(fileuri.has_suffix("m3u") ||
-				   fileuri.has_suffix("asx") ||
-				   fileuri.has_suffix("xspf")||
-				   fileuri.has_suffix("pls") ||
-				   fileuri.has_suffix("wpl")) {
-					print("Playlist: %s\n",fileuri);
+				if(is_playlist) {
+					//print("Playlist: %s\n",fileuri);
 					Reader reader = new Reader();
 					Result result = reader.read(fileuri);
 					if(result != Result.UNHANDLED) {

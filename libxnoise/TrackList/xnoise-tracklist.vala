@@ -30,9 +30,9 @@
 
 using Gtk;
 using Gdk;
-using Xnoise.Playlist;
 
 using Xnoise;
+using Xnoise.Playlist;
 using Xnoise.Services;
 using Xnoise.TagAccess;
 
@@ -814,19 +814,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 			print("%s\n", e.message);
 			return;
 		}
+		bool is_playlist = Playlist.is_playlist_extension(get_suffix_from_filename(file.get_uri()));
 		if(filetype == GLib.FileType.REGULAR &&
 		   (psAudio.match_string(mime)||
 		    psVideo.match_string(mime)||
-		    fileuri.has_suffix("m3u") ||
-		    fileuri.has_suffix("asx") || 
-		   fileuri.has_suffix("xspf") ||
-		   fileuri.has_suffix("pls")  ||
-		   fileuri.has_suffix("wpl"))) {
-			if(fileuri.has_suffix("m3u") ||
-			   fileuri.has_suffix("asx") || 
-			   fileuri.has_suffix("xspf")||
-			   fileuri.has_suffix("pls") ||
-			   fileuri.has_suffix("wpl")) {
+		    is_playlist)) {
+			if(is_playlist) {
 				Reader reader = new Reader();
 				Result result = reader.read(fileuri);
 				if(result != Result.UNHANDLED) {

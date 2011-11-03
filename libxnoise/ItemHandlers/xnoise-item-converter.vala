@@ -30,6 +30,7 @@
 
 using Xnoise;
 using Xnoise.Playlist;
+using Xnoise.Services;
 
 public class Xnoise.ItemConverter : Object {
 
@@ -84,17 +85,18 @@ public class Xnoise.ItemConverter : Object {
 				//print("result len %d\n", result.length);
 				break;
 			case ItemType.STREAM:
+				var tmp = new TrackData();
 				if(item.db_id > -1) {
-					var tmp = new TrackData();
 					if(db_browser.get_stream_td_for_id(item.db_id, out tmp)) {
 						result += tmp;
 						return result;
 					}
-					else {
-						return null;
-					}
 				}
-				break;
+				tmp.item = item;
+				File ft = File.new_for_uri(item.uri);
+				tmp.title = prepare_name_from_filename(ft.get_basename());
+				result += tmp;
+				return result;
 			case ItemType.PLAYLIST:
 				var pr = new Playlist.Reader();
 				Playlist.Result rslt;

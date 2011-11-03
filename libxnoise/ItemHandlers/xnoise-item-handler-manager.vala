@@ -138,9 +138,8 @@ namespace Xnoise {
 				psVideo = new PatternSpec("video*");
 			if(psAudio == null)
 				psAudio = new PatternSpec("audio*");
-			bool is_playlist = false;
-			if(psAudio.match_string(mime)||
-			   (is_playlist = Playlist.is_playlist_extension(get_suffix_from_filename(f.get_uri()))) == true ) {
+			bool is_playlist = Playlist.is_playlist_extension(get_suffix_from_filename(f.get_uri()));
+			if(psAudio.match_string(mime)|| is_playlist == true ) {
 				if(is_playlist == true) {
 					item.type = Xnoise.ItemType.PLAYLIST;
 				}
