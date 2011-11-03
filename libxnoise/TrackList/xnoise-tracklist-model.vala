@@ -34,6 +34,7 @@ using Gdk;
 using Xnoise;
 using Xnoise.Services;
 using Xnoise.TagAccess;
+using Xnoise.Playlist;
 
 public class Xnoise.TrackListModel : ListStore, TreeModel {
 
@@ -438,14 +439,14 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	private void bolden_row() {
 		if(global.position_reference == null) return;
 		if(!global.position_reference.valid()) return;
-
+		
 		var tpath = global.position_reference.get_path();
-
+		
 		if(tpath == null) return;
-
+		
 		TreeIter citer;
 		this.get_iter(out citer, tpath);
-
+		
 		this.set(citer,
 		         Column.WEIGHT, Pango.Weight.BOLD,
 		         -1);
@@ -454,11 +455,11 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	private void unbolden_row() {
 		if(global.position_reference == null) return;
 		if(!global.position_reference.valid()) return;
-
+		
 		var tpath = global.position_reference.get_path();
-
+		
 		if(tpath == null) return;
-
+		
 		TreeIter citer;
 		this.get_iter(out citer, tpath);
 		this.set(citer,
@@ -466,68 +467,128 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		         -1);
 	}
 
+	private Item add_uri_helper(string fileuri,ref bool first) {
+		//print("xnoise-tracklist-model add_uri_helper %s\n", fileuri);
+		
+		Item? item = Item(ItemType.UNKNOWN);
+		TreeIter iter, iter_2;
+		
+		TrackData td;
+		
+		File file = File.new_for_uri(fileuri);
+		item = ItemHandlerManager.create_item(fileuri);
+		
+		// TODO: maybe a check for remote schemes is necessary to avoid blocking
+		TagReader tr = new TagReader();
+		td = tr.read_tag(file.get_path()); // move to worker thread
+		
+		if(td == null) { //This is a possible URL
+			td = new TrackData();
+			td.title = file.get_basename();
+		}
+		
+		if(first == true) {
+			iter = this.insert_title(null, ref td, true);
+			
+			global.position_reference = new TreeRowReference(this, this.get_path(iter));
+			
+			iter_2 = iter;
+			first = false;
+		}
+		else {
+			iter = this.insert_title(null, ref td, false);
+		}
+		return item;
+	}
+
 	public void add_uris(string[]? uris) {
+		print("FIME: xnoise-tracklist-model.vala add_uris\n"); 
+		//Cuando se abre por primer con doble click o abrir con agrega los elementos antes de la lista
+		//File f = File.new_for_uri("/home/fsistemas/datos.txt");
 		if(uris == null) return;
 		if(uris[0] == null) return;
 		int k = 0;
+		
 		TreeIter iter, iter_2;
 		FileType filetype;
 		this.get_iter_first(out iter_2);
 		Item? item = Item(ItemType.UNKNOWN);
+		Item? item2 = item;
+		bool first = true;
+		
+		File file;
+		//FileType filetype;
+		string mime;
+		
+		var psVideo = new PatternSpec("video*");
+		var psAudio = new PatternSpec("audio*");
+		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+			      FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		
 		while(uris[k] != null) { //because foreach is not working for this array coming from libunique
-			File file = File.new_for_uri(uris[k]);
-			TagReader tr = new TagReader();
-			bool is_stream = false;
-			string urischeme = file.get_uri_scheme();
-			var td = new TrackData();
-			if(urischeme in get_local_schemes()) {
-				try {
-					FileInfo info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE,
-				                                    FileQueryInfoFlags.NONE,
-				                                    null);
-					filetype = info.get_file_type();
-				}
-				catch(GLib.Error e) {
-					print("%s\n", e.message);
-					k++;
-					continue;
-				}
-				if(filetype == GLib.FileType.REGULAR) {
-					td = tr.read_tag(file.get_path()); // move to worker thread
+			//print("1. add_uris %s\n",uris[k]);
+			//write(f,"1. add_uris %s\n",uris[k]);
+			var fileuri = uris[k];
+			try {
+				file = File.new_for_uri(fileuri);
+				FileInfo info = file.query_info(
+					            attr,
+					            FileQueryInfoFlags.NONE,
+					            null);
+				filetype = info.get_file_type();
+				string content = info.get_content_type();
+				mime = GLib.ContentType.get_mime_type(content);
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+				return;
+			}
+			if((filetype == GLib.FileType.REGULAR)&
+			   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
+				
+				if(fileuri.has_suffix("m3u") ||
+				   fileuri.has_suffix("asx") ||
+				   fileuri.has_suffix("xspf")||
+				   fileuri.has_suffix("pls") ||
+				   fileuri.has_suffix("wpl")) {
+					print("Playlist: %s\n",fileuri);
+					Reader reader = new Reader();
+					Result result = reader.read(fileuri);
+					if(result != Result.UNHANDLED) {
+						EntryCollection results = reader.data_collection;
+						if(results != null) {
+							int size = results.get_size();
+							for(int i = 0; i < size; i++) {
+								Xnoise.Playlist.Entry entry = results[i];
+								string current_uri = entry.get_uri();
+								item = this.add_uri_helper(current_uri,ref first);
+								if(k == 0 && item2.type == ItemType.UNKNOWN) {
+									item2 = item;
+								}
+								//print("add_uri_helper %s\n", current_uri);
+							}
+						}
+					}
 				}
 				else {
-					is_stream = true;
+					//this.add_uri_helper(ref fileuri,ref path,ref is_first);
+					item = this.add_uri_helper(fileuri,ref first);
+					if(k == 0 && item2.type == ItemType.UNKNOWN) {
+						item2 = item;
+					}
+					//print("add_uri_helper %s\n", fileuri);
 				}
 			}
-			else if(urischeme in get_remote_schemes()) {
-				is_stream = true;
-			}
-			item = ItemHandlerManager.create_item(uris[k]);
-			if(k == 0) { // first track
-				iter = this.insert_title(null,
-				                         ref td,
-				                         true);
-				
-				global.position_reference = null; // TODO: Is this necessary???
-				global.position_reference = new TreeRowReference(this, this.get_path(iter));
-				iter_2 = iter;
-			}
-			else {
-				td.item = ItemHandlerManager.create_item(uris[k]);
-				iter = this.insert_title(null,
-				                         ref td,
-				                         false);
-			}
-			tr = null;
 			k++;
 		}
-		if(item.type != ItemType.UNKNOWN) { // TODO ????
+		//Play first uri added to playlist
+		if(item2.type != ItemType.UNKNOWN) { // TODO ????
 			ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.PLAY_NOW);
 			if(tmp == null)
 				return;
-			unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
+			unowned Action? action = tmp.get_action(item2.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
 			if(action != null)
-				action.action(item, null);
+				action.action(item2, null);
 		}
 		tl.set_focus_on_iter(ref iter_2);
 	}

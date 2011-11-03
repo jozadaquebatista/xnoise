@@ -436,7 +436,7 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class TagReader {
 			public TagReader ();
-			public Xnoise.TrackData? read_tag (string filename);
+			public Xnoise.TrackData? read_tag (string? filename);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class TagWriter {

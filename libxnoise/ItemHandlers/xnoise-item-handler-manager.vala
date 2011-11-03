@@ -28,6 +28,10 @@
  * 	Jörn Magens
  */
 
+
+using Xnoise;
+using Xnoise.Services;
+
 namespace Xnoise {
 
 	public class ItemHandlerManager : Object {
@@ -108,6 +112,13 @@ namespace Xnoise {
 			
 			File f = File.new_for_uri(uri);
 			string scheme = f.get_uri_scheme();
+			
+			if(scheme in get_remote_schemes()) {
+				//TODO: at least check for a supported extension
+				item.type = Xnoise.ItemType.STREAM;
+				return item;
+			}
+			
 			FileInfo info = null;
 			try {
 				info = f.query_info(attr, FileQueryInfoFlags.NONE , null);
@@ -124,7 +135,7 @@ namespace Xnoise {
 				psVideo = new PatternSpec("video*");
 			if(psAudio == null)
 				psAudio = new PatternSpec("audio*");
-
+			
 			if(psAudio.match_string(mime)) {
 				if(uri.has_suffix("m3u") ||
 				   uri.has_suffix("asx") || 
@@ -143,7 +154,7 @@ namespace Xnoise {
 				}
 			}
 			else if(psVideo.match_string(mime)) {
-					if(scheme == "file" || scheme == "dvd") {
+					if(scheme in get_local_schemes()) {
 						item.type = ItemType.LOCAL_VIDEO_TRACK;
 					}
 					else {
@@ -151,7 +162,7 @@ namespace Xnoise {
 					}
 			}
 			else if(info.get_file_type() == FileType.DIRECTORY) {
-				if(scheme == "file" || scheme == "dvd") { //local scheme
+				if(scheme in get_local_schemes()) { //local scheme
 					item.type = ItemType.LOCAL_FOLDER;
 				}
 			}

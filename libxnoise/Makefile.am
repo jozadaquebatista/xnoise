@@ -157,7 +157,7 @@ DISTCLEANFILES = \
     MediaBrowser/*.c \
     Parameter/*.c \
     Player/*.c \
-    Playlist/*.c \
+    PlaylistReader/*.c \
     PluginModule/*.c \
     Services/*.c \
     Settings/*.c \

@@ -495,7 +495,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		
 	
 	public void on_row_expanded(TreeIter iter, TreePath path) {
-		//print("on_row_expanded\n");
+		print("FIXME: xnoise-media-browser.vala - on_row_expanded\n");
 		mediabrowsermodel.load_children(ref iter);
 	}
 	

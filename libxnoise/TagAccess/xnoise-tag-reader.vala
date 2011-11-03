@@ -31,16 +31,20 @@
 using Xnoise.Services;
 
 public class Xnoise.TagAccess.TagReader {
-	public TrackData? read_tag(string filename) {
-		File f = File.new_for_path(filename);
+	public TrackData? read_tag(string? filename) {
+		if(filename == null || filename.strip() == "")
+			return null;
+		File f = File.new_for_commandline_arg(filename);
 		Item? item = ItemHandlerManager.create_item(f.get_uri());
 		TrackData td;
 		TagLib.File taglib_file = null;
 		if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK)
 			return null;
-		taglib_file = new TagLib.File(filename);
+		if(f.get_path() == null)
+			return null;
+		taglib_file = new TagLib.File(f.get_path());
 		if(taglib_file != null && taglib_file.is_valid()) {
-			unowned TagLib.Tag tag            = null;
+			unowned TagLib.Tag tag = null;
 			tag = taglib_file.tag;
 			unowned TagLib.AudioProperties ap = null;
 			ap = taglib_file.audioproperties;

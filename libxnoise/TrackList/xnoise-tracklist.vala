@@ -30,6 +30,7 @@
 
 using Gtk;
 using Gdk;
+using Xnoise.Playlist;
 
 using Xnoise;
 using Xnoise.Services;
@@ -502,6 +503,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 								return;
 							}
 							if(filetype != GLib.FileType.DIRECTORY) {
+								//print("1. on_drag_data_received - Aqui se llama a handle_dropped_file");
 								handle_dropped_file(ref uri, ref path, ref is_first);	//FILES
 							}
 							else {
@@ -690,6 +692,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 				}
 				else {
 					string buffer = file.get_uri();
+					print("2. on_drag_data_received - Aqui se llama a handle_dropped_file");
 					handle_dropped_file(ref buffer, ref path, ref is_first);
 				}
 			}
@@ -712,12 +715,85 @@ public class Xnoise.TrackList : TreeView, IParams {
 		return lengthString;
 	}
 
-	private void handle_dropped_file(ref string fileuri, ref TreePath? path, ref bool is_first) {
-		//Function to import music FILES in drag'n'drop
+	private void add_dropped_uri(ref string fileuri, ref TreePath? path, ref bool is_first) {
+	//Add dropped uri to current playlist
+		//print("add_dropped_uri: %s\n",fileuri);
 		TreeIter iter, new_iter;
+		string artist="", album = "", title = "", lengthString = "", genre = "unknown genre";
+		string? yearString = null;
+		uint tracknumb = 0;
+		
+		File file = File.new_for_uri(fileuri);
+		var tr = new TagReader();
+		var tags = tr.read_tag(file.get_path());
+		if(tags == null) {
+			//print("add_dropped_uri sin tags %s\n",fileuri);
+			title          = file.get_basename();
+		}
+		else {
+			//print("add_dropped_uri con tags %s\n",fileuri);
+			artist         = tags.artist;
+			album          = tags.album;
+			title          = tags.title;
+			tracknumb      = tags.tracknumber;
+			genre          = tags.genre;
+			lengthString = make_time_display_from_seconds(tags.length);
+			if(tags.year > 0) {
+				yearString = "%u".printf(tags.year);
+			}
+		}
+		
+		TreeIter first_iter;
+		if((path == null) || ( !this.tracklistmodel.get_iter_first(out first_iter) ) ) {
+			tracklistmodel.append(out new_iter);
+			drop_pos = Gtk.TreeViewDropPosition.AFTER;
+		}
+		else {
+			this.tracklistmodel.get_iter(out iter, path);
+			
+			if(is_first) {
+				if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
+				   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
+				   	//Determine drop position for first, insert all others after first
+					this.tracklistmodel.insert_before(out new_iter, iter);
+				}
+				else {
+					this.tracklistmodel.insert_after(out new_iter, iter);
+				}
+				is_first = false;
+			}
+			else {
+				this.tracklistmodel.insert_after(out new_iter, iter);
+			}
+		}
+
+		string tracknumberString = null;
+		if(tracknumb!=0) {
+			tracknumberString = "%u".printf(tracknumb);
+		}
+		
+		Item? item = ItemHandlerManager.create_item(fileuri);
+		tracklistmodel.set(new_iter,
+		                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
+		                   TrackListModel.Column.TITLE, title,
+		                   TrackListModel.Column.ALBUM, album,
+		                   TrackListModel.Column.ARTIST, artist,
+		                   TrackListModel.Column.LENGTH, lengthString,
+		                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
+		                   TrackListModel.Column.ITEM, item,
+		                   TrackListModel.Column.YEAR, yearString,
+		                   TrackListModel.Column.GENRE, genre
+		                   );
+		path = this.tracklistmodel.get_path(new_iter);
+	}
+
+	private void handle_dropped_file(ref string fileuri, ref TreePath? path, ref bool is_first) {
+		//print ("1. xnoise-tracklist.vala => Ingresando a handle_dropped_file\n");
+		//Function to import music FILES in drag'n'drop
 		File file;
 		FileType filetype;
 		string mime;
+		
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
@@ -732,81 +808,43 @@ public class Xnoise.TrackList : TreeView, IParams {
 			string content = info.get_content_type();
 			mime = GLib.ContentType.get_mime_type(content);
 		}
-		catch(GLib.Error e){
+		catch(GLib.Error e) {
 			print("%s\n", e.message);
 			return;
 		}
 		if((filetype == GLib.FileType.REGULAR)&
 		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
-			string artist, album, title, lengthString = "", genre = "unknown genre";
-			string? yearString = null;
-			uint tracknumb;
-			if(!(psVideo.match_string(mime))) {
-				var tr = new TagReader(); // TODO: Check dataimport for video
-				var tags = tr.read_tag(file.get_path());
-				artist         = tags.artist;
-				album          = tags.album;
-				title          = tags.title;
-				tracknumb      = tags.tracknumber;
-				genre          = tags.genre;
-				lengthString = make_time_display_from_seconds(tags.length);
-				if(tags.year > 0) {
-					yearString = "%u".printf(tags.year);
-				}
-			}
-			else { //TODO: Handle video data
-				artist         = "";
-				album          = "";
-				title          = file.get_basename();
-				tracknumb      = 0;
-			}
-			TreeIter first_iter;
-			if((path == null)||(!this.tracklistmodel.get_iter_first(out first_iter))) { 
-				//dropped below all entries, first uri OR
-				//dropped on empty list, first uri
-				tracklistmodel.append(out new_iter);
-				drop_pos = Gtk.TreeViewDropPosition.AFTER;
-			}
-			else { //all other uris
-				this.tracklistmodel.get_iter(out iter, path);
-				if(is_first) {
-					if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
-					   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
-					   //Determine drop position for first, insert all others after first
-						this.tracklistmodel.insert_before(out new_iter, iter);
+			
+			if(fileuri.has_suffix("m3u") ||
+			   fileuri.has_suffix("asx") || 
+			   fileuri.has_suffix("xspf")||
+			   fileuri.has_suffix("pls") ||
+			   fileuri.has_suffix("wpl")) {
+				
+				Reader reader = new Reader();
+				Result result = reader.read(fileuri);
+				if(result != Result.UNHANDLED) {
+					EntryCollection results = reader.data_collection;
+					if(results != null) {
+						int size = results.get_size();
+						for(int i = 0; i < size; i++) {
+							Xnoise.Playlist.Entry entry = results[i];
+							string current_uri = entry.get_uri();
+							//print("add_dropped_uri con o sin tags %s\n",current_uri);
+							this.add_dropped_uri(ref current_uri, ref path, ref is_first);
+						}
 					}
-					else {
-						this.tracklistmodel.insert_after(out new_iter, iter);
-					}
-					is_first = false;
-				}
-				else {
-					this.tracklistmodel.insert_after(out new_iter, iter);
 				}
 			}
-			string tracknumberString = null;
-			if(tracknumb!=0) {
-				tracknumberString = "%u".printf(tracknumb);
+			else {
+				this.add_dropped_uri(ref fileuri, ref path, ref is_first);
 			}
-			Item? item = ItemHandlerManager.create_item(fileuri);
-			tracklistmodel.set(new_iter,
-			                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
-			                   TrackListModel.Column.TITLE, title,
-			                   TrackListModel.Column.ALBUM, album,
-			                   TrackListModel.Column.ARTIST, artist,
-			                   TrackListModel.Column.LENGTH, lengthString,
-			                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-			                   TrackListModel.Column.ITEM, item,
-			                   TrackListModel.Column.YEAR, yearString,
-			                   TrackListModel.Column.GENRE, genre
-			                   );
-			path = tracklistmodel.get_path(new_iter);
 		}
 		else if(filetype==GLib.FileType.DIRECTORY) {
 			assert_not_reached();
 		}
 		else {
-			print("Not a regular file or at least no audio file: %s\n", fileuri);
+			print("Not a regular file or at least no media file: %s\n", fileuri);
 		}
 	}
 

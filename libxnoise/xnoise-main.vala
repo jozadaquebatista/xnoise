@@ -107,9 +107,25 @@ public class Xnoise.Main : GLib.Object {
 	}
 
 	public void add_track_to_gst_player(string uri) {
-		print("add_track_to_gst_player\n");
+		print("xnoise-main.vala - FIXME: Implement playlist support");
+		print("add_track_to_gst_player %s\n",uri);
+
 		global.current_uri = uri;
 		global.player_state = PlayerState.PLAYING;
+
+		/*
+		string last_uri = "";//main_window.trackList.add_uri(uri);
+
+		if(last_uri != null) {
+			try {
+				print("Uri: %s\n",last_uri);
+				//global.current_uri = last_uri;
+				//global.player_state = PlayerState.PLAYING;
+			} catch(Error e) {
+				print("%s\n",e.message);
+			}
+		}
+		*/
 	}
 
 	public static Main instance {
