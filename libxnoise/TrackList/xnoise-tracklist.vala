@@ -716,7 +716,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void add_dropped_uri(ref string fileuri, ref TreePath? path, ref bool is_first) {
-	//Add dropped uri to current playlist
+	//Add dropped uri to tracklist
 		TreeIter iter, new_iter;
 		string artist="", album = "", title = "", lengthString = "", genre = "unknown genre";
 		string? yearString = null;
