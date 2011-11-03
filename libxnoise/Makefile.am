@@ -86,6 +86,7 @@ libxnoise_la_SOURCES = \
     Utils/xnoise-app-starter.vala \
     Utils/xnoise-global-access.vala \
     Utils/xnoise-local-schemes.vala \
+    Utils/xnoise-media-extensions.vala \
     Utils/xnoise-media-importer.vala \
     Utils/xnoise-misc.vala \
     Utils/xnoise-remote-schemes.vala \

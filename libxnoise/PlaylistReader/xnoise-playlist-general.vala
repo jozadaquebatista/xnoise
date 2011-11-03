@@ -60,7 +60,15 @@ namespace Xnoise.Playlist {
 		ABS_PATH       // absolute path (local only !)
 	}
 	
-	public const string[] known_playlist_extensions = {"asx", "pls", "m3u", "wpl", "xspf"};
+	private static const string[] known_playlist_extensions = { "asx", "pls", "m3u", "wpl", "xspf" };
+	
+	public static bool is_playlist_extension(string ext) {
+		for(int i = 0; i < known_playlist_extensions.length; i++) {
+			if(known_playlist_extensions[i] == ext)
+				return true;
+		}
+		return false;
+	}
 	
 	// string constants for content types
 	private class ContentType {

@@ -449,6 +449,16 @@ typedef struct _XnoiseRemoteSchemesClass XnoiseRemoteSchemesClass;
 typedef struct _XnoiseLocalSchemes XnoiseLocalSchemes;
 typedef struct _XnoiseLocalSchemesClass XnoiseLocalSchemesClass;
 
+#define XNOISE_TYPE_MEDIA_EXTENSIONS (xnoise_media_extensions_get_type ())
+#define XNOISE_MEDIA_EXTENSIONS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_EXTENSIONS, XnoiseMediaExtensions))
+#define XNOISE_MEDIA_EXTENSIONS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_EXTENSIONS, XnoiseMediaExtensionsClass))
+#define XNOISE_IS_MEDIA_EXTENSIONS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_EXTENSIONS))
+#define XNOISE_IS_MEDIA_EXTENSIONS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_EXTENSIONS))
+#define XNOISE_MEDIA_EXTENSIONS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_EXTENSIONS, XnoiseMediaExtensionsClass))
+
+typedef struct _XnoiseMediaExtensions XnoiseMediaExtensions;
+typedef struct _XnoiseMediaExtensionsClass XnoiseMediaExtensionsClass;
+
 #define XNOISE_TYPE_PLUGIN_MANAGER_TREE (xnoise_plugin_manager_tree_get_type ())
 #define XNOISE_PLUGIN_MANAGER_TREE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLUGIN_MANAGER_TREE, XnoisePluginManagerTree))
 #define XNOISE_PLUGIN_MANAGER_TREE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLUGIN_MANAGER_TREE, XnoisePluginManagerTreeClass))
@@ -662,6 +672,7 @@ typedef struct _XnoiseGlobalAccessPrivate XnoiseGlobalAccessPrivate;
 
 #define XNOISE_TYPE_PLAYER_STATE (xnoise_player_state_get_type ())
 typedef struct _XnoiseLocalSchemesPrivate XnoiseLocalSchemesPrivate;
+typedef struct _XnoiseMediaExtensionsPrivate XnoiseMediaExtensionsPrivate;
 
 #define XNOISE_TYPE_MEDIA_IMPORTER (xnoise_media_importer_get_type ())
 #define XNOISE_MEDIA_IMPORTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_IMPORTER, XnoiseMediaImporter))
@@ -1535,6 +1546,17 @@ struct _XnoiseLocalSchemesClass {
 	void (*finalize) (XnoiseLocalSchemes *self);
 };
 
+struct _XnoiseMediaExtensions {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseMediaExtensionsPrivate * priv;
+};
+
+struct _XnoiseMediaExtensionsClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseMediaExtensions *self);
+};
+
 struct _XnoiseMediaImporter {
 	GObject parent_instance;
 	XnoiseMediaImporterPrivate * priv;
@@ -2093,6 +2115,7 @@ GQuark xnoise_playlist_reader_error_quark (void);
 GType xnoise_playlist_list_type_get_type (void) G_GNUC_CONST;
 GType xnoise_playlist_result_get_type (void) G_GNUC_CONST;
 GType xnoise_playlist_target_type_get_type (void) G_GNUC_CONST;
+gboolean xnoise_playlist_is_playlist_extension (const gchar* ext);
 extern gboolean xnoise_playlist_debug;
 gboolean xnoise_playlist_is_known_playlist_extension (gchar** ext);
 gchar* xnoise_playlist_get_extension (GFile* f);
@@ -2269,6 +2292,14 @@ void xnoise_value_take_local_schemes (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_local_schemes (const GValue* value);
 GType xnoise_local_schemes_get_type (void) G_GNUC_CONST;
 XnoiseLocalSchemes* xnoise_services_get_local_schemes (void);
+gpointer xnoise_media_extensions_ref (gpointer instance);
+void xnoise_media_extensions_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_media_extensions (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_media_extensions (GValue* value, gpointer v_object);
+void xnoise_value_take_media_extensions (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_media_extensions (const GValue* value);
+GType xnoise_media_extensions_get_type (void) G_GNUC_CONST;
+XnoiseMediaExtensions* xnoise_services_get_media_extensions (void);
 gchar* xnoise_services_settings_folder (void);
 gchar* xnoise_services_data_folder (void);
 gboolean xnoise_services_verify_xnoise_directories (void);
@@ -2276,6 +2307,7 @@ gchar* xnoise_services_prepare_for_comparison (const gchar* value);
 gchar* xnoise_services_prepare_for_search (const gchar* val);
 gchar* xnoise_services_remove_linebreaks (const gchar* val);
 gchar* xnoise_services_remove_suffix_from_filename (const gchar* val);
+gchar* xnoise_services_get_suffix_from_filename (const gchar* val);
 gchar* xnoise_services_prepare_name_from_filename (const gchar* val);
 gchar* xnoise_services_replace_underline_with_blank_encoded (const gchar* value);
 GType xnoise_plugin_manager_tree_get_type (void) G_GNUC_CONST;
@@ -2523,6 +2555,10 @@ gboolean xnoise_local_schemes_contains (XnoiseLocalSchemes* self, const gchar* l
 XnoiseLocalSchemes* xnoise_local_schemes_new (void);
 XnoiseLocalSchemes* xnoise_local_schemes_construct (GType object_type);
 gchar** xnoise_local_schemes_get_list (XnoiseLocalSchemes* self, int* result_length1);
+gboolean xnoise_media_extensions_contains (XnoiseMediaExtensions* self, const gchar* extension);
+XnoiseMediaExtensions* xnoise_media_extensions_new (void);
+XnoiseMediaExtensions* xnoise_media_extensions_construct (GType object_type);
+gchar** xnoise_media_extensions_get_list (XnoiseMediaExtensions* self, int* result_length1);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
 gchar* xnoise_media_importer_get_uri_for_item_id (XnoiseMediaImporter* self, gint32 id);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
@@ -2675,7 +2711,6 @@ GType xnoise_volume_slider_button_get_type (void) G_GNUC_CONST;
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (void);
 XnoiseVolumeSliderButton* xnoise_volume_slider_button_construct (GType object_type);
 
-extern const gchar* XNOISE_PLAYLIST_known_playlist_extensions[5];
 extern const gchar* XNOISE_PLAYLIST_remote_schemes[3];
 
 G_END_DECLS

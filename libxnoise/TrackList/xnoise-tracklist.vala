@@ -724,6 +724,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 		uint tracknumb = 0;
 		
 		File file = File.new_for_uri(fileuri);
+		Item? item = ItemHandlerManager.create_item(file.get_uri());
+		if(item.type == ItemType.UNKNOWN) // only handle file, if we know it
+			return;
+		print("item.type: %s\n", item.type.to_string());
 		var tr = new TagReader();
 		var tags = tr.read_tag(file.get_path());
 		if(tags == null) {
@@ -744,7 +748,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 		
 		TreeIter first_iter;
-		if((path == null) || ( !this.tracklistmodel.get_iter_first(out first_iter) ) ) {
+		if(path == null || !this.tracklistmodel.get_iter_first(out first_iter)) {
 			tracklistmodel.append(out new_iter);
 			drop_pos = Gtk.TreeViewDropPosition.AFTER;
 		}
@@ -766,24 +770,22 @@ public class Xnoise.TrackList : TreeView, IParams {
 				this.tracklistmodel.insert_after(out new_iter, iter);
 			}
 		}
-
+		
 		string tracknumberString = null;
 		if(tracknumb!=0) {
 			tracknumberString = "%u".printf(tracknumb);
 		}
-		
-		Item? item = ItemHandlerManager.create_item(fileuri);
 		tracklistmodel.set(new_iter,
-		                   TrackListModel.Column.TRACKNUMBER, tracknumberString,
-		                   TrackListModel.Column.TITLE, title,
-		                   TrackListModel.Column.ALBUM, album,
-		                   TrackListModel.Column.ARTIST, artist,
-		                   TrackListModel.Column.LENGTH, lengthString,
-		                   TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
-		                   TrackListModel.Column.ITEM, item,
-		                   TrackListModel.Column.YEAR, yearString,
-		                   TrackListModel.Column.GENRE, genre
-		                   );
+		               TrackListModel.Column.TRACKNUMBER, tracknumberString,
+		               TrackListModel.Column.TITLE, title,
+		               TrackListModel.Column.ALBUM, album,
+		               TrackListModel.Column.ARTIST, artist,
+		               TrackListModel.Column.LENGTH, lengthString,
+		               TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
+		               TrackListModel.Column.ITEM, item,
+		               TrackListModel.Column.YEAR, yearString,
+		               TrackListModel.Column.GENRE, genre
+		               );
 		path = this.tracklistmodel.get_path(new_iter);
 	}
 
@@ -812,15 +814,19 @@ public class Xnoise.TrackList : TreeView, IParams {
 			print("%s\n", e.message);
 			return;
 		}
-		if((filetype == GLib.FileType.REGULAR)&
-		   ((psAudio.match_string(mime))|(psVideo.match_string(mime)))) {
-			
+		if(filetype == GLib.FileType.REGULAR &&
+		   (psAudio.match_string(mime)||
+		    psVideo.match_string(mime)||
+		    fileuri.has_suffix("m3u") ||
+		    fileuri.has_suffix("asx") || 
+		   fileuri.has_suffix("xspf") ||
+		   fileuri.has_suffix("pls")  ||
+		   fileuri.has_suffix("wpl"))) {
 			if(fileuri.has_suffix("m3u") ||
 			   fileuri.has_suffix("asx") || 
 			   fileuri.has_suffix("xspf")||
 			   fileuri.has_suffix("pls") ||
 			   fileuri.has_suffix("wpl")) {
-				
 				Reader reader = new Reader();
 				Result result = reader.read(fileuri);
 				if(result != Result.UNHANDLED) {

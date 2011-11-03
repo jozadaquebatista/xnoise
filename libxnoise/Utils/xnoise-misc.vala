@@ -57,8 +57,9 @@ namespace Xnoise {
 	public static MainWindow main_window;
 	public static TrackList tl;
 	public static TrackListModel tlm;
-	private static RemoteSchemes _remote_schemes;
-	private static LocalSchemes  _local_schemes;
+	private static RemoteSchemes   _remote_schemes;
+	private static LocalSchemes    _local_schemes;
+	private static MediaExtensions _media_extensions;
 	/*
 	 * This function is used to create static instances of Params
 	 * and GlobalInfo in the xnoise namespace.
@@ -80,8 +81,9 @@ namespace Xnoise {
 		db_worker = new Worker(MainContext.default());
 		io_worker = new Worker(MainContext.default());
 		
-		_remote_schemes = new RemoteSchemes();
-		_local_schemes  = new LocalSchemes();
+		_remote_schemes   = new RemoteSchemes();
+		_local_schemes    = new LocalSchemes();
+		_media_extensions = new MediaExtensions();
 		
 		//GLOBAL ACCESS
 		if(global == null)

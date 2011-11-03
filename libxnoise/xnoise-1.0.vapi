@@ -251,8 +251,6 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static bool debug;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
-		public const string[] known_playlist_extensions;
-		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string[] remote_schemes;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static long get_duration_from_string (ref string? duration_string);
@@ -268,6 +266,8 @@ namespace Xnoise {
 		public static Xnoise.Playlist.ListType get_type_by_extension (ref string uri_);
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static bool is_known_playlist_extension (ref string ext);
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public static bool is_playlist_extension (string ext);
 	}
 	namespace PluginModule {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -332,7 +332,11 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static Xnoise.LocalSchemes get_local_schemes ();
 		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public static Xnoise.MediaExtensions get_media_extensions ();
+		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static Xnoise.RemoteSchemes get_remote_schemes ();
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public static string get_suffix_from_filename (string? val);
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static string prepare_for_comparison (string? value);
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -790,6 +794,12 @@ namespace Xnoise {
 		public void remove_all ();
 		public void unload_children (ref Gtk.TreeIter iter);
 		public bool populating_model { get; private set; }
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class MediaExtensions {
+		public MediaExtensions ();
+		public bool contains (string extension);
+		public string[] list { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaImporter : GLib.Object {

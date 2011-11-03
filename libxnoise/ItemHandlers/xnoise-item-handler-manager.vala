@@ -114,11 +114,14 @@ namespace Xnoise {
 			string scheme = f.get_uri_scheme();
 			
 			if(scheme in get_remote_schemes()) {
-				//TODO: at least check for a supported extension
+				if(get_suffix_from_filename(f.get_uri()) in get_media_extensions())
 				item.type = Xnoise.ItemType.STREAM;
 				return item;
 			}
-			
+			if(!f.query_exists(null)) {
+				print("Local file does not exist %s\n", f.get_path());
+				return item;
+			}
 			FileInfo info = null;
 			try {
 				info = f.query_info(attr, FileQueryInfoFlags.NONE , null);
@@ -135,13 +138,10 @@ namespace Xnoise {
 				psVideo = new PatternSpec("video*");
 			if(psAudio == null)
 				psAudio = new PatternSpec("audio*");
-			
-			if(psAudio.match_string(mime)) {
-				if(uri.has_suffix("m3u") ||
-				   uri.has_suffix("asx") || 
-				   uri.has_suffix("xspf")||
-				   uri.has_suffix("pls") ||
-				   uri.has_suffix("wpl")) {
+			bool is_playlist = false;
+			if(psAudio.match_string(mime)||
+			   (is_playlist = Playlist.is_playlist_extension(get_suffix_from_filename(f.get_uri()))) == true ) {
+				if(is_playlist == true) {
 					item.type = Xnoise.ItemType.PLAYLIST;
 				}
 				else {

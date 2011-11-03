@@ -39,6 +39,10 @@ namespace Xnoise.Services {
 		return _local_schemes;
 	}
 	
+	public static MediaExtensions get_media_extensions() { 
+		return _media_extensions;
+	}
+	
 	//http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 	private static string _settings_folder = null; 
 	public static string settings_folder() {
@@ -234,12 +238,25 @@ namespace Xnoise.Services {
 	public static string remove_suffix_from_filename(string? val) {
 		if(val == null)
 			return "";
-		string name = val;
+		unowned string name = val;
 		string prep;
 		if(name.last_index_of(".") != -1) 
 			prep = name.substring(0, name.last_index_of("."));
 		else
 			prep = name;
+		return prep;
+	}
+
+	public static string get_suffix_from_filename(string? val) {
+		if(val == null)
+			return "";
+		unowned string name = val;
+		string prep = "";
+		int inx = -1;
+		if((inx = name.last_index_of(".")) != -1) 
+			prep = name.substring(inx + 1, name.length - inx -1);
+		else
+			return "";
 		return prep;
 	}
 
