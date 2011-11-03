@@ -717,7 +717,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 	private void add_dropped_uri(ref string fileuri, ref TreePath? path, ref bool is_first) {
 	//Add dropped uri to current playlist
-		//print("add_dropped_uri: %s\n",fileuri);
 		TreeIter iter, new_iter;
 		string artist="", album = "", title = "", lengthString = "", genre = "unknown genre";
 		string? yearString = null;
@@ -727,26 +726,38 @@ public class Xnoise.TrackList : TreeView, IParams {
 		Item? item = ItemHandlerManager.create_item(file.get_uri());
 		if(item.type == ItemType.UNKNOWN) // only handle file, if we know it
 			return;
-		print("item.type: %s\n", item.type.to_string());
-		var tr = new TagReader();
-		var tags = tr.read_tag(file.get_path());
-		if(tags == null) {
-			//print("add_dropped_uri sin tags %s\n",fileuri);
-			title          = file.get_basename();
+		
+		string sstr = "";
+		TrackData td = new TrackData();
+		TrackData[]? tmp = item_converter.to_trackdata(item, ref sstr);
+		if(tmp != null) {
+			td = tmp[0];
+			artist         = td.artist;
+			album          = td.album;
+			title          = td.title;
+			tracknumb      = td.tracknumber;
+			genre          = td.genre;
+			if(td.year > 0)
+				yearString = "%u".printf(td.year);
+			lengthString = make_time_display_from_seconds(td.length);
 		}
 		else {
-			//print("add_dropped_uri con tags %s\n",fileuri);
-			artist         = tags.artist;
-			album          = tags.album;
-			title          = tags.title;
-			tracknumb      = tags.tracknumber;
-			genre          = tags.genre;
-			lengthString = make_time_display_from_seconds(tags.length);
-			if(tags.year > 0) {
-				yearString = "%u".printf(tags.year);
+			var tr = new TagReader();
+			var tags = tr.read_tag(file.get_path());
+			if(tags == null) {
+				title          = prepare_name_from_filename(file.get_basename());
+			}
+			else {
+				artist         = tags.artist;
+				album          = tags.album;
+				title          = tags.title;
+				tracknumb      = tags.tracknumber;
+				genre          = tags.genre;
+				lengthString = make_time_display_from_seconds(tags.length);
+				if(tags.year > 0) 
+					yearString = "%u".printf(tags.year);
 			}
 		}
-		
 		TreeIter first_iter;
 		if(path == null || !this.tracklistmodel.get_iter_first(out first_iter)) {
 			tracklistmodel.append(out new_iter);
@@ -827,7 +838,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 					if(results != null) {
 						int size = results.get_size();
 						for(int i = 0; i < size; i++) {
-							Xnoise.Playlist.Entry entry = results[i];
+							Playlist.Entry entry = results[i];
 							string current_uri = entry.get_uri();
 							//print("add_dropped_uri con o sin tags %s\n",current_uri);
 							this.add_dropped_uri(ref current_uri, ref path, ref is_first);
