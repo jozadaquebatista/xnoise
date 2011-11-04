@@ -715,7 +715,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		return lengthString;
 	}
 
-	private void add_dropped_uri(ref string fileuri, ref TreePath? path, ref bool is_first) {
+	private void add_dropped_uri(ref string fileuri, ref TreePath? path, ref bool is_first, bool from_playlist = false) {
 	//Add dropped uri to tracklist
 		TreeIter iter, new_iter;
 		string artist="", album = "", title = "", lengthString = "", genre = "unknown genre";
@@ -725,7 +725,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 		File file = File.new_for_uri(fileuri);
 		Item? item = ItemHandlerManager.create_item(file.get_uri());
 		if(item.type == ItemType.UNKNOWN) // only handle file, if we know it
-			return;
+			if(from_playlist == false)
+				return;
+			else
+				item.type = Xnoise.ItemType.STREAM; //When it is call from playlist then acept STREAM
 		
 		string sstr = "";
 		TrackData td = new TrackData();
@@ -841,7 +844,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 							Playlist.Entry entry = results[i];
 							string current_uri = entry.get_uri();
 							//print("add_dropped_uri con o sin tags %s\n",current_uri);
-							this.add_dropped_uri(ref current_uri, ref path, ref is_first);
+							this.add_dropped_uri(ref current_uri, ref path, ref is_first,true);
 						}
 					}
 				}

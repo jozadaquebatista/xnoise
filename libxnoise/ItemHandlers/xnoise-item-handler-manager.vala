@@ -115,8 +115,10 @@ namespace Xnoise {
 			
 			if(scheme in get_remote_schemes()) {
 				if(get_suffix_from_filename(f.get_uri()) in get_media_extensions())
-				item.type = Xnoise.ItemType.STREAM;
-				return item;
+					item.type = Xnoise.ItemType.STREAM;
+				//else
+				//	item.type = Xnoise.ItemType.STREAM;
+				//return item;
 			}
 			if(!f.query_exists(null)) {
 				print("Local file does not exist %s\n", f.get_path());

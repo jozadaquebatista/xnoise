@@ -467,7 +467,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		         -1);
 	}
 
-	private Item add_uri_helper(string fileuri,ref bool first) {
+	private Item add_uri_helper(string fileuri,ref bool first,bool from_playlist = false) {
 		//print("xnoise-tracklist-model add_uri_helper %s\n", fileuri);
 		
 		Item? item = Item(ItemType.UNKNOWN);
@@ -477,6 +477,10 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		
 		File file = File.new_for_uri(fileuri);
 		item = ItemHandlerManager.create_item(fileuri);
+
+		if(item.type == ItemType.UNKNOWN) // only handle file, if we know it
+			if(from_playlist == true)
+				item.type = Xnoise.ItemType.STREAM;
 		
 		// TODO: maybe a check for remote schemes is necessary to avoid blocking
 		TagReader tr = new TagReader();
@@ -503,8 +507,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 
 	public void add_uris(string[]? uris) {
 		print("FIME: xnoise-tracklist-model.vala add_uris\n"); 
-		//Cuando se abre por primer con doble click o abrir con agrega los elementos antes de la lista
-		//File f = File.new_for_uri("/home/fsistemas/datos.txt");
+		//FIXME: When open xnoise first time(restore last playlist) or when open a playlist using double click or open with Xnoise.
+		//Try stop and play, then error, FIXME
 		if(uris == null) return;
 		if(uris[0] == null) return;
 		int k = 0;
@@ -560,7 +564,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 							for(int i = 0; i < size; i++) {
 								Xnoise.Playlist.Entry entry = results[i];
 								string current_uri = entry.get_uri();
-								item = this.add_uri_helper(current_uri,ref first);
+								item = this.add_uri_helper(current_uri,ref first,true);
 								if(k == 0 && item2.type == ItemType.UNKNOWN) {
 									item2 = item;
 								}
