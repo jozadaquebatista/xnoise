@@ -29,15 +29,17 @@
  */
 
 using Gtk;
+using Lastfm;
+
 using Xnoise;
 using Xnoise.PluginModule;
 
 
-public class Xnoise.Lastfm : GLib.Object, IPlugin {
+public class Xnoise.Lfm : GLib.Object, IPlugin {
 	public Main xn { get; set; }
 	private unowned PluginModule.Container _owner;
 	private unowned DBusConnection conn;
-	private Lastfm.Session;
+	private Session session;
 	
 	public PluginModule.Container owner {
 		get {

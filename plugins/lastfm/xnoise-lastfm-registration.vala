@@ -30,5 +30,5 @@
  
 [ModuleInit]
 public Type init_module(TypeModule module) { 
-	return typeof(Xnoise.Lastfm);
+	return typeof(Xnoise.Lfm);
 }

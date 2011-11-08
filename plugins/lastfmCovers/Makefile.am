@@ -46,8 +46,6 @@ libLastfmCovers_la_LIBADD = \
     $(LIBSOUP_LIBS) \
     $(NULL)
 
-#lastfmcovers_DATA = lastfmCovers.xnplugin
-#lastfmcoversdir = $(libdir)/xnoise
 plugindir = $(libdir)/xnoise
 plugin_in_files = lastfmCovers.xnplugin.desktop.in
 

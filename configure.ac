@@ -502,6 +502,7 @@ AC_CONFIG_FILES([
     plugins/soundmenu/Makefile
     plugins/soundmenu2/Makefile
     plugins/databaseLyrics/Makefile
+    plugins/lastfm/Makefile
     po/Makefile.in
     doc/Makefile
     vapi/Makefile
