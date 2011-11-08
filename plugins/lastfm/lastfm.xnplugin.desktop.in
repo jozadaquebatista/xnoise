@@ -1,0 +1,9 @@
+[XnoisePlugin]
+name=lastfm
+module=lastfm
+_description=Use lastfm's web services
+website=http://code.google.com/p/xnoise/
+icon=/path/to/icon
+copyright=Copyright © 2011 Jörn Magens
+license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
+author=Jörn Magens <shuerhaaken@googlemail.com>
