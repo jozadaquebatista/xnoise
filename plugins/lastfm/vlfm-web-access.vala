@@ -55,10 +55,9 @@ namespace Lastfm {
 		public int post_data(string? url) {
 			if(url == null || url.strip() == "")
 				return -1;
-			print("post url: %s\n", url);
+			//print("post url: %s\n", url);
 			if(session == null)
 				session = new Soup.SessionAsync();
-			//print("\ngetting page from: %s\n\n", url);
 			var message = new Soup.Message("POST", url);
 			session.queue_message(message, soup_cb);
 		
@@ -72,7 +71,7 @@ namespace Lastfm {
 		public int request_data(string? url) {
 			if(url == null || url.strip() == "")
 				return -1;
-			print("url: %s\n", url);
+			//print("url: %s\n", url);
 			if(session == null)
 				session = new Soup.SessionAsync();
 			//print("\ngetting page from: %s\n\n", url);

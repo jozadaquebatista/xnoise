@@ -686,7 +686,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 
 	private void foreachtag(TagList list, string tag) {
 		string val = null;
-		print("tag: %s\n", tag);
+		//print("tag: %s\n", tag);
 		switch(tag) {
 			case Gst.TAG_ARTIST:
 				if(list.get_string(tag, out val))
@@ -713,7 +713,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 					if(val != global.current_organization) global.current_organization = val;
 				break;
 			case Gst.TAG_IMAGE:
-				print("found image\n");
+				print("found embedded image\n");
 				// TODO: Handle Image extraction and usage
 				break;
 			default: break;

@@ -82,19 +82,17 @@ namespace Lastfm {
 			DESKTOP
 		}
 		
-		private string? password;
 		private string auth_token;
 		private string api_key;
 		private string secret;
 		private string session_key;
-		private string session_id;
-		private bool _logged_in = false;
+		//private bool _logged_in = false;
 		private AuthenticationType _auth_type;
 		private WebAccess _web;
 		private string? _username = null;
 		private string? lang = null;
 		
-		public bool logged_in                  { get { return _logged_in; } }
+		public bool logged_in                  { get; set; }
 		public AuthenticationType auth_type    { get { return _auth_type; } }
 		public WebAccess web                   { get { return _web; } }
 		public string? username                { get { return _username; } }
@@ -117,6 +115,7 @@ namespace Lastfm {
 		}
 		
 		public void login(string user, string pass) {
+			this.logged_in = false;
 			string pass_hash = Checksum.compute_for_string(ChecksumType.MD5, pass);
 			string buffer    = "%s%s".printf(user, pass_hash);
 			this.auth_token  = Checksum.compute_for_string(ChecksumType.MD5, buffer);
@@ -164,25 +163,25 @@ namespace Lastfm {
 		}
 		
 		private void login_token_cb(int id, string response) {
-			print("finish login response a: \n%s\n", response);
+			//print("finish login response a: \n%s\n", response);
 			var r = new SimpleMarkup.Reader.from_string(response);
 			r.read();
 			
 			if(!check_response_status_ok(ref r.root)) {
 				this._username = null;
-				_logged_in = false;
+				logged_in = false;
 				return;
 			}
 			var lfm = r.root.get_child_by_name("lfm");
 			if(lfm == null) {
 				this._username = null;
-				_logged_in = false;
+				logged_in = false;
 				return;
 			}
 			var token = lfm.get_child_by_name("token");
 			if(token == null) {
 				this._username = null;
-				_logged_in = false;
+				logged_in = false;
 				return;
 			}
 			string token_text = token.text;
@@ -221,46 +220,46 @@ namespace Lastfm {
 		}
 		
 		private void login_cb(int id, string response) {
-			print("finish login response b: \n%s\n", response);
+			//print("finish login response b: \n%s\n", response);
 			var r = new SimpleMarkup.Reader.from_string(response);
 			r.read();
 			
 			if(!check_response_status_ok(ref r.root)) {
 				this._username = null;
-				_logged_in = false;
+				logged_in = false;
 				return;
 			}
 			
 			var lfm = r.root.get_child_by_name("lfm");
 			if(lfm == null) {
 				this._username = null;
-				_logged_in = false;
+				logged_in = false;
 				return;
 			}
 			var sess = lfm.get_child_by_name("session");
 			if(sess == null) {
 				this._username = null;
-				_logged_in = false;
+				logged_in = false;
 				return;
 			}
 			var key = sess.get_child_by_name("key");
 			if(key == null) {
 				this._username = null;
-				_logged_in = false;
+				logged_in = false;
 				return;
 			}
 			this.session_key = key.text;
 			var u = sess.get_child_by_name("name");
 			if(u == null) {
 				this._username = null;
-				_logged_in = false;
+				logged_in = false;
 				return;
 			}
 			this._username = u.text;
-			_logged_in = true;
+			logged_in = true;
 			
 			Idle.add( () => {
-				_logged_in = true;
+				logged_in = true;
 				this.login_successful(this._username);
 				return false;
 			});

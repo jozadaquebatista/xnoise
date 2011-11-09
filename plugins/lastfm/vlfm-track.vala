@@ -38,7 +38,6 @@ namespace Lastfm {
 		public string album_name;
 		public string title_name;
 		private string api_key;
-		private string api_sig;
 		public unowned Session parent_session;
 		private string? username;
 		private string? session_key;
@@ -46,7 +45,7 @@ namespace Lastfm {
 		public string? releasedate;
 		private string secret;
 		
-		public signal void scrobbled(string title, string? album = null, string artist, bool success = false);
+		public signal void scrobbled(string artist, string? album = null, string title, bool success = false);
 		
 		public Track(Session session, string _artist_name, string _album_name,
 		             string _title_name,
@@ -126,7 +125,7 @@ namespace Lastfm {
 			
 			if(!check_response_status_ok(ref mr.root)) {
 				Idle.add( () => {
-					scrobbled(this.title_name, this.album_name, this.artist_name, false);
+					scrobbled(this.artist_name, this.album_name, this.title_name, false);
 					return false;
 				});
 			}
@@ -135,13 +134,13 @@ namespace Lastfm {
 			
 			if(n.attributes["accepted"] == "1") {
 				Idle.add( () => {
-					scrobbled(this.title_name, this.album_name, this.artist_name, true);
+					scrobbled(this.artist_name, this.album_name, this.title_name, true);
 					return false;
 				});
 			}
 			else {
 				Idle.add( () => {
-					scrobbled(this.title_name, this.album_name, this.artist_name, false);
+					scrobbled(this.artist_name, this.album_name, this.title_name, false);
 					return false;
 				});
 			}
