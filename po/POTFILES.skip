@@ -2,6 +2,7 @@ data/misc/xnoise.desktop.in
 plugins/notifications/xnoise-notifications.c
 plugins/notifications2/xnoise-notifications.c
 plugins/titleToDecoration/xnoise-title-to-decoration.c
+plugins/lastfm/xnoise-lastfm.c
 libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.c
 libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.c
 libxnoise/Player/xnoise-gst-player.c

@@ -8,6 +8,9 @@ endif
 
 if ENABLE_LASTFMCOVERS
   SUBDIRS += lastfmCovers
+endif
+
+if ENABLE_LASTFM
   SUBDIRS += lastfm
 endif
 

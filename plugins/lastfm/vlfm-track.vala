@@ -66,6 +66,7 @@ namespace Lastfm {
 			});
 		}
 		
+		// start_time: Unix time format of track play start time
 		public bool scrobble(int64 start_time) {
 			string artist_escaped, album_escaped, title_escaped;
 			uint trackno = 0;

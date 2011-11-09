@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-22 01:23+0200\n"
+"POT-Creation-Date: 2011-11-09 13:49+0100\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-"
@@ -77,27 +77,27 @@ msgstr ""
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1068
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1176
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1119
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1227
 msgid "Artist"
 msgstr ""
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:127
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1051
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1189
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1240
 msgid "Album"
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1034
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1085
 msgid "Title"
 msgstr ""
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1202
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1153
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1253
 msgid "Genre"
 msgstr ""
 
@@ -107,14 +107,14 @@ msgstr ""
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1120
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1215
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1171
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1266
 msgid "Year"
 msgstr ""
 
 #. TRACKNUMBER
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1163
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1214
 msgid "Tracknumber"
 msgstr ""
 
@@ -145,51 +145,42 @@ msgstr ""
 msgid "Remove selected track"
 msgstr "Kiválasztott eltávolítása"
 
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:167
-msgid "Add local folder"
-msgstr "Helyi mappa hozzáadása"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:168
-msgid "Add media stream"
-msgstr "Média folyam hozzáadása"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:169
-msgid "Remove"
-msgstr "Eltávolítás"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:170
-msgid "do a full rescan of the library"
-msgstr "do a full rescan of the library"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:171
-#, fuzzy
-msgid ""
-"Select local media folders or remote media streams. \n"
-"All library media will be available in the library."
+#. the 'no lyrics found...' also appears in the db provider !!
+#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:182
+msgid "no lyrics found..."
 msgstr ""
-"Select the local folders or files or media streams to add to the library. \n"
-"All library media will be available in the media browser."
 
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:181
-msgid "xnoise - Add media to library"
-msgstr "xnoise- Média hozzáadása a könyvtárhoz"
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:100
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:119
+msgid "Player stopped. Not searching for lyrics."
+msgstr "Player stopped. Not searching for lyrics."
 
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:240
-#: ../libxnoise/Utils/xnoise-media-importer.vala:71
-msgid "Importing media data. This may take some time..."
-msgstr "Importing media data. This may take some time..."
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:130
+msgid "Insufficient track information. Not searching for lyrics."
+msgstr "Insufficient track information. Not searching for lyrics."
 
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:267
-msgid "Select media folder"
-msgstr "Média mappa kiválasztása"
+#. Gtk.TextIter start_iter;
+#. Gtk.TextIter end_iter;
+#. textbuffer.get_start_iter (out start_iter);
+#. textbuffer.get_start_iter (out end_iter);
+#. string txt = textbuffer.get_text(start_iter, end_iter, true);
+#. TODO: Howto append text ?
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:151
+#, c-format
+msgid ""
+"\n"
+"Trying to find lyrics for \"%s\" by \"%s\"\n"
+"\n"
+"Using %s ..."
+msgstr ""
+"\n"
+"Dalszöveg keresése \"%s\" -hez \"%s\"...\n"
+"\n"
+"Using %s ..."
 
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:337
-msgid "Add internet radio link"
-msgstr "Internetes rádió link hozzáadása"
-
-#: ../libxnoise/Widgets/xnoise-fullscreen-toolbar.vala:193
-msgid "Leave fullscreen"
-msgstr "Teljesképernyős mód elhagyása"
+#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:1051
+msgid "Loading ..."
+msgstr ""
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
 msgid ""
@@ -243,38 +234,191 @@ msgstr "Subtitle #"
 msgid "Audio Track #"
 msgstr "Audio Track #"
 
-#. the 'no lyrics found...' also appears in the db provider !!
-#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:182
-msgid "no lyrics found..."
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:258
+msgid "General"
 msgstr ""
 
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:100
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:119
-msgid "Player stopped. Not searching for lyrics."
-msgstr "Player stopped. Not searching for lyrics."
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:260
+msgid "Plugins"
+msgstr ""
 
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:130
-msgid "Insufficient track information. Not searching for lyrics."
-msgstr "Insufficient track information. Not searching for lyrics."
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:265
+msgid "Enable grid lines in media browser"
+msgstr ""
 
-#. Gtk.TextIter start_iter;
-#. Gtk.TextIter end_iter;
-#. textbuffer.get_start_iter (out start_iter);
-#. textbuffer.get_start_iter (out end_iter);
-#. string txt = textbuffer.get_text(start_iter, end_iter, true);
-#. TODO: Howto append text ?
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:151
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:270
+msgid "Use linebreaks in media browser"
+msgstr ""
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:275
+msgid "Don't show video screen while hovering album image"
+msgstr ""
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:280
+msgid "Compact layout"
+msgstr ""
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:285
+msgid "Use stop button"
+msgstr ""
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:290
+msgid "Quit application if window is closed"
+msgstr ""
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:301
+msgid "Media browser fontsize:"
+msgstr ""
+
+#. LENGTH
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1134
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1279
+msgid "Length"
+msgstr ""
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:69
+msgid "Play/Pause"
+msgstr "Play/Pause"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:83
+msgid "Previous"
+msgstr "Previous"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:98
+msgid "Next"
+msgstr "Next"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:116
+msgid "Exit"
+msgstr "Exit"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:165
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:177
+msgid "stopped"
+msgstr "stopped"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:169
+msgid "playing"
+msgstr "playing"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:173
+msgid "paused"
+msgstr "paused"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:185
 #, c-format
-msgid ""
-"\n"
-"Trying to find lyrics for \"%s\" by \"%s\"\n"
-"\n"
-"Using %s ..."
+msgid "ready to rock"
+msgstr "Viktor Orbán is stupid"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:214
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1140
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1207
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:339
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
+msgid "unknown album"
+msgstr "ismeretlen album"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:216
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1138
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1205
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:341
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
+msgid "unknown artist"
+msgstr "ismeretlen előadó"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:218
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1136
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1203
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:343
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
+#, c-format
+msgid "unknown title"
+msgstr "ismeretlen cím"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1114
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1137
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1179
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1204
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:351
+#: ../plugins/notifications/xnoise-notifications.vala:191
+#: ../plugins/notifications2/xnoise-notifications.vala:185
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
+#, c-format
+msgid "by"
+msgstr "by"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1116
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1139
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1181
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1206
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:353
+#: ../plugins/notifications/xnoise-notifications.vala:193
+#: ../plugins/notifications2/xnoise-notifications.vala:187
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:133
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:156
+#, c-format
+msgid "on"
+msgstr "on"
+
+#: ../libxnoise/Utils/xnoise-media-importer.vala:71
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:240
+msgid "Importing media data. This may take some time..."
+msgstr "Importing media data. This may take some time..."
+
+#: ../libxnoise/Utils/xnoise-media-importer.vala:224
+#, c-format
+msgid "Found %u tracks. Updating library ..."
 msgstr ""
-"\n"
-"Dalszöveg keresése \"%s\" -hez \"%s\"...\n"
-"\n"
-"Using %s ..."
+
+#: ../libxnoise/Utils/xnoise-media-importer.vala:411
+#: ../libxnoise/Utils/xnoise-media-importer.vala:448
+#, c-format
+msgid "%u tracks found"
+msgstr ""
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:167
+msgid "Add local folder"
+msgstr "Helyi mappa hozzáadása"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:168
+msgid "Add media stream"
+msgstr "Média folyam hozzáadása"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:169
+msgid "Remove"
+msgstr "Eltávolítás"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:170
+msgid "do a full rescan of the library"
+msgstr "do a full rescan of the library"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:171
+#, fuzzy
+msgid ""
+"Select local media folders or remote media streams. \n"
+"All library media will be available in the library."
+msgstr ""
+"Select the local folders or files or media streams to add to the library. \n"
+"All library media will be available in the media browser."
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:181
+msgid "xnoise - Add media to library"
+msgstr "xnoise- Média hozzáadása a könyvtárhoz"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:267
+msgid "Select media folder"
+msgstr "Média mappa kiválasztása"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:337
+msgid "Add internet radio link"
+msgstr "Internetes rádió link hozzáadása"
+
+#: ../libxnoise/Widgets/xnoise-fullscreen-toolbar.vala:193
+msgid "Leave fullscreen"
+msgstr "Teljesképernyős mód elhagyása"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:45
 #, fuzzy
@@ -421,185 +565,41 @@ msgstr "összes ismétlése"
 msgid "random play"
 msgstr "véletlenszerű lejátszás"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1035
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1036
 msgid "Enter the URL of the file to open"
 msgstr "Enter the URL of the file to open"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1049
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1050
 msgid "Select media file"
 msgstr "Média fájl kiválasztása"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1113
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1136
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1178
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1203
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:351
-#: ../plugins/notifications/xnoise-notifications.vala:191
-#: ../plugins/notifications2/xnoise-notifications.vala:185
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
-#, c-format
-msgid "by"
-msgstr "by"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1115
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1138
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1180
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1205
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:353
-#: ../plugins/notifications/xnoise-notifications.vala:193
-#: ../plugins/notifications2/xnoise-notifications.vala:187
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:133
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:156
-#, c-format
-msgid "on"
-msgstr "on"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1135
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1202
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:218
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:343
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
-#, c-format
-msgid "unknown title"
-msgstr "ismeretlen cím"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1137
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1204
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:216
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:341
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
-msgid "unknown artist"
-msgstr "ismeretlen előadó"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1139
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1206
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:214
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:339
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
-msgid "unknown album"
-msgstr "ismeretlen album"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1188
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1189
 msgid "unknown organization"
 msgstr "ismeretlen szervezet"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1190
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1191
 msgid "unknown location"
 msgstr "ismeretlen hely"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1287
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1288
 msgid "Remove all"
 msgstr "Összes eltávolítása"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1292
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1293
 msgid "Remove selected titles"
 msgstr "Kiválasztott címek eltávolítása"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1297
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1298
 msgid "Jump to current position"
 msgstr ""
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1496
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1497
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1543
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1544
 msgid "Show application main menu"
 msgstr ""
-
-#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:1051
-msgid "Loading ..."
-msgstr ""
-
-#: ../libxnoise/Utils/xnoise-media-importer.vala:224
-#, c-format
-msgid "Found %u tracks. Updating library ..."
-msgstr ""
-
-#: ../libxnoise/Utils/xnoise-media-importer.vala:411
-#: ../libxnoise/Utils/xnoise-media-importer.vala:448
-#, c-format
-msgid "%u tracks found"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:258
-msgid "General"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:260
-msgid "Plugins"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:265
-msgid "Enable grid lines in media browser"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:270
-msgid "Use linebreaks in media browser"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:275
-msgid "Don't show video screen while hovering album image"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:280
-msgid "Compact layout"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:285
-msgid "Use stop button"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:290
-msgid "Quit application if window is closed"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:301
-msgid "Media browser fontsize:"
-msgstr ""
-
-#. LENGTH
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1083
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1228
-msgid "Length"
-msgstr ""
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:69
-msgid "Play/Pause"
-msgstr "Play/Pause"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:83
-msgid "Previous"
-msgstr "Previous"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:98
-msgid "Next"
-msgstr "Next"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:116
-msgid "Exit"
-msgstr "Exit"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:165
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:177
-msgid "stopped"
-msgstr "stopped"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:169
-msgid "playing"
-msgstr "playing"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:173
-msgid "paused"
-msgstr "paused"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:185
-#, c-format
-msgid "ready to rock"
-msgstr "Viktor Orbán is stupid"
 
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:37
 #, fuzzy

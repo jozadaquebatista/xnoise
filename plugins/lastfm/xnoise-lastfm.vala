@@ -40,6 +40,8 @@ public class Xnoise.Lfm : GLib.Object, IPlugin {
 	private unowned PluginModule.Container _owner;
 	private Session session;
 	private Track t;
+	private uint scrobble_source = 0;
+	private int WAIT_TIME_BEFORE_SCROBBLE = 15;
 	
 	public PluginModule.Container owner {
 		get {
@@ -92,15 +94,18 @@ public class Xnoise.Lfm : GLib.Object, IPlugin {
 	}
 
 	private void clean_up() {
-		session.abort();
+		if(session != null) {
+			session.abort();
+			session.disconnect(c);
+			session.disconnect(d);
+			session = null;
+		}
 		global.disconnect(a);
 		global.disconnect(b);
-		session.disconnect(c);
-		session.disconnect(d);
-		session = null;
+		t = null;
 	}
 	
-	~Mpris() {
+	~Lfm() {
 	}
 
 	public Gtk.Widget? get_settings_widget() {
@@ -123,9 +128,6 @@ public class Xnoise.Lfm : GLib.Object, IPlugin {
 		return this.session.logged_in;
 	}
 	
-	private uint scrobble_source = 0;
-	private ulong scrobble_reply = 0;
-	
 	private void on_current_track_changed(GLib.Object sender, ParamSpec p) {
 		//scrobble
 		if(!session.logged_in)
@@ -133,15 +135,18 @@ public class Xnoise.Lfm : GLib.Object, IPlugin {
 		if(global.current_title != null && global.current_artist != null) {
 			if(scrobble_source != 0) 
 				Source.remove(scrobble_source);
-			scrobble_source = Timeout.add_seconds(15, () => {
+			scrobble_source = Timeout.add_seconds(WAIT_TIME_BEFORE_SCROBBLE, () => {
+				// Use session's 'factory method to get Track
 				t = session.factory_make_track(global.current_artist, global.current_album, global.current_title);
-				scrobble_reply = t.scrobbled.connect( (sender, ar, al, tr, su) => {
-					print("scrobbeled %s-%s-%s %s\n", ar, al, tr, (su == true ? "successfully" : "unsuccessfully"));
-					t.disconnect(scrobble_reply);
-					scrobble_reply = 0;
-				});
+				
+				//ulong scrobble_reply = t.scrobbled.connect( (sender, ar, al, tr, su) => {
+				//	print("scrobbeled %s-%s-%s %s\n", ar, al, tr, (su == true ? "successfully" : "unsuccessfully"));
+				//	t.disconnect(scrobble_reply);
+				//});
+				
 				var dt = new DateTime.now_utc();
 				int64 start_time = dt.to_unix();
+				// SCROBBLE TRACK
 				t.scrobble(start_time);
 				scrobble_source = 0;
 				return false;
@@ -158,6 +163,9 @@ public class Xnoise.LfmWidget: Gtk.VBox {
 	private Entry pass_entry;
 	private Label feedback_label;
 	private Button b;
+	private string username_last;
+	private string password_last;
+	
 	
 	public LfmWidget(Xnoise.Lfm lfm) {
 		GLib.Object(homogeneous:false, spacing:10);
@@ -172,6 +180,7 @@ public class Xnoise.LfmWidget: Gtk.VBox {
 		b.clicked.connect(on_entry_changed);
 	}
 
+	//show if user is logged in
 	private void do_user_feedback() {
 		//print("do_user_feedback\n");
 		if(this.lfm.logged_in()) {
@@ -183,9 +192,6 @@ public class Xnoise.LfmWidget: Gtk.VBox {
 			feedback_label.set_use_markup(true);
 		}
 	}
-	
-	private string username_last;
-	private string password_last;
 	
 	private void on_entry_changed() {
 		//print("take over entry\n");

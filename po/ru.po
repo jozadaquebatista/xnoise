@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-22 01:23+0200\n"
+"POT-Creation-Date: 2011-11-09 13:49+0100\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -76,27 +76,27 @@ msgstr ""
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1068
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1176
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1119
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1227
 msgid "Artist"
 msgstr "Исполнитель"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:127
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1051
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1189
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1240
 msgid "Album"
 msgstr "Альбом"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1034
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1085
 msgid "Title"
 msgstr "Название"
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1202
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1153
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1253
 msgid "Genre"
 msgstr "Жанр"
 
@@ -106,14 +106,14 @@ msgstr "Адрес"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1120
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1215
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1171
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1266
 msgid "Year"
 msgstr "Год"
 
 #. TRACKNUMBER
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1163
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1214
 msgid "Tracknumber"
 msgstr "Номер трека"
 
@@ -142,50 +142,42 @@ msgstr "Играть"
 msgid "Remove selected track"
 msgstr "Удалить выбранные треки"
 
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:167
-msgid "Add local folder"
-msgstr "Добавить локальную папку"
+#. the 'no lyrics found...' also appears in the db provider !!
+#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:182
+msgid "no lyrics found..."
+msgstr "текст не найден..."
 
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:168
-msgid "Add media stream"
-msgstr "Добавить медиа поток"
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:100
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:119
+msgid "Player stopped. Not searching for lyrics."
+msgstr "Плеер остановлен. Поиск текста прекращен."
 
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:169
-msgid "Remove"
-msgstr "Удалить"
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:130
+msgid "Insufficient track information. Not searching for lyrics."
+msgstr "Недостаточно информации о треке. Поиск текста прекращеню"
 
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:170
-msgid "do a full rescan of the library"
-msgstr "Провести полное обновление библиотеки"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:171
+#. Gtk.TextIter start_iter;
+#. Gtk.TextIter end_iter;
+#. textbuffer.get_start_iter (out start_iter);
+#. textbuffer.get_start_iter (out end_iter);
+#. string txt = textbuffer.get_text(start_iter, end_iter, true);
+#. TODO: Howto append text ?
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:151
+#, c-format
 msgid ""
-"Select local media folders or remote media streams. \n"
-"All library media will be available in the library."
+"\n"
+"Trying to find lyrics for \"%s\" by \"%s\"\n"
+"\n"
+"Using %s ..."
 msgstr ""
-"Выберете локальные папки или мультимедийные потоки для добавления. \n"
-"Все медиа файлы или потоки в библиотеке будут доступны в библиотеке."
+"\n"
+"Пытаемся найти текст для \"%s\" от \"%s\"...\n"
+"\n"
+"Используется %s ..."
 
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:181
-msgid "xnoise - Add media to library"
-msgstr "xnoise - Добавить медиа в библиотеку"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:240
-#: ../libxnoise/Utils/xnoise-media-importer.vala:71
-msgid "Importing media data. This may take some time..."
-msgstr "Идет импортирование медиафайлов. Это может занять некоторое время..."
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:267
-msgid "Select media folder"
-msgstr "Выберите папку с медиа"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:337
-msgid "Add internet radio link"
-msgstr "Добавить ссылку на интернет-радио"
-
-#: ../libxnoise/Widgets/xnoise-fullscreen-toolbar.vala:193
-msgid "Leave fullscreen"
-msgstr "Выйти из полноэкранного режима"
+#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:1051
+msgid "Loading ..."
+msgstr "Загрузка ..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
 msgid ""
@@ -241,38 +233,190 @@ msgstr "Субтитр #"
 msgid "Audio Track #"
 msgstr "Аудио трек #"
 
-#. the 'no lyrics found...' also appears in the db provider !!
-#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:182
-msgid "no lyrics found..."
-msgstr "текст не найден..."
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:258
+msgid "General"
+msgstr "Основные"
 
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:100
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:119
-msgid "Player stopped. Not searching for lyrics."
-msgstr "Плеер остановлен. Поиск текста прекращен."
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:260
+msgid "Plugins"
+msgstr "Дополнения"
 
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:130
-msgid "Insufficient track information. Not searching for lyrics."
-msgstr "Недостаточно информации о треке. Поиск текста прекращеню"
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:265
+msgid "Enable grid lines in media browser"
+msgstr "Использовать затенение строк в списке воспроизведения"
 
-#. Gtk.TextIter start_iter;
-#. Gtk.TextIter end_iter;
-#. textbuffer.get_start_iter (out start_iter);
-#. textbuffer.get_start_iter (out end_iter);
-#. string txt = textbuffer.get_text(start_iter, end_iter, true);
-#. TODO: Howto append text ?
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:151
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:270
+msgid "Use linebreaks in media browser"
+msgstr "Использовать разрывы строки в списке воспроизведения"
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:275
+msgid "Don't show video screen while hovering album image"
+msgstr "Не показывать экран видео при наведении на иконку альбома"
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:280
+msgid "Compact layout"
+msgstr "Компактный вид"
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:285
+msgid "Use stop button"
+msgstr "Использовать кнопку стоп"
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:290
+msgid "Quit application if window is closed"
+msgstr "Выйти из приложения, если окно закрывается"
+
+#: ../libxnoise/Settings/xnoise-settings-dialog.vala:301
+msgid "Media browser fontsize:"
+msgstr "Размер шрифта списка воспроизведения:"
+
+#. LENGTH
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1134
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1279
+msgid "Length"
+msgstr "Длина"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:69
+msgid "Play/Pause"
+msgstr "Проигрывать/Пауза"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:83
+msgid "Previous"
+msgstr "Предыдущий"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:98
+msgid "Next"
+msgstr "Следующий"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:116
+msgid "Exit"
+msgstr "Выход"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:165
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:177
+msgid "stopped"
+msgstr "остановлен"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:169
+msgid "playing"
+msgstr "проигрывает"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:173
+msgid "paused"
+msgstr "приостановлен"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:185
 #, c-format
+msgid "ready to rock"
+msgstr "ready to rock"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:214
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1140
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1207
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:339
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
+msgid "unknown album"
+msgstr "неизвестный альбом"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:216
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1138
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1205
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:341
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
+msgid "unknown artist"
+msgstr "неизвестный исполнитель"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:218
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1136
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1203
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:343
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
+#, c-format
+msgid "unknown title"
+msgstr "неизвестный заголовок"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1114
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1137
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1179
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1204
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:351
+#: ../plugins/notifications/xnoise-notifications.vala:191
+#: ../plugins/notifications2/xnoise-notifications.vala:185
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
+#, c-format
+msgid "by"
+msgstr "от"
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1116
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1139
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1181
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1206
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:353
+#: ../plugins/notifications/xnoise-notifications.vala:193
+#: ../plugins/notifications2/xnoise-notifications.vala:187
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:133
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:156
+#, c-format
+msgid "on"
+msgstr "из"
+
+#: ../libxnoise/Utils/xnoise-media-importer.vala:71
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:240
+msgid "Importing media data. This may take some time..."
+msgstr "Идет импортирование медиафайлов. Это может занять некоторое время..."
+
+#: ../libxnoise/Utils/xnoise-media-importer.vala:224
+#, c-format
+msgid "Found %u tracks. Updating library ..."
+msgstr "Найдено %u дорожек. Обновление библиотеки ..."
+
+#: ../libxnoise/Utils/xnoise-media-importer.vala:411
+#: ../libxnoise/Utils/xnoise-media-importer.vala:448
+#, c-format
+msgid "%u tracks found"
+msgstr "Найдено %u дорожек"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:167
+msgid "Add local folder"
+msgstr "Добавить локальную папку"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:168
+msgid "Add media stream"
+msgstr "Добавить медиа поток"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:169
+msgid "Remove"
+msgstr "Удалить"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:170
+msgid "do a full rescan of the library"
+msgstr "Провести полное обновление библиотеки"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:171
 msgid ""
-"\n"
-"Trying to find lyrics for \"%s\" by \"%s\"\n"
-"\n"
-"Using %s ..."
+"Select local media folders or remote media streams. \n"
+"All library media will be available in the library."
 msgstr ""
-"\n"
-"Пытаемся найти текст для \"%s\" от \"%s\"...\n"
-"\n"
-"Используется %s ..."
+"Выберете локальные папки или мультимедийные потоки для добавления. \n"
+"Все медиа файлы или потоки в библиотеке будут доступны в библиотеке."
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:181
+msgid "xnoise - Add media to library"
+msgstr "xnoise - Добавить медиа в библиотеку"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:267
+msgid "Select media folder"
+msgstr "Выберите папку с медиа"
+
+#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:337
+msgid "Add internet radio link"
+msgstr "Добавить ссылку на интернет-радио"
+
+#: ../libxnoise/Widgets/xnoise-fullscreen-toolbar.vala:193
+msgid "Leave fullscreen"
+msgstr "Выйти из полноэкранного режима"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:45
 msgid "Now Playing"
@@ -414,185 +558,41 @@ msgstr "повторять все"
 msgid "random play"
 msgstr "случайный порядок"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1035
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1036
 msgid "Enter the URL of the file to open"
 msgstr "Введите URL файла для открытия"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1049
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1050
 msgid "Select media file"
 msgstr "Выберите медиа файл"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1113
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1136
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1178
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1203
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:351
-#: ../plugins/notifications/xnoise-notifications.vala:191
-#: ../plugins/notifications2/xnoise-notifications.vala:185
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
-#, c-format
-msgid "by"
-msgstr "от"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1115
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1138
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1180
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1205
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:353
-#: ../plugins/notifications/xnoise-notifications.vala:193
-#: ../plugins/notifications2/xnoise-notifications.vala:187
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:133
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:156
-#, c-format
-msgid "on"
-msgstr "из"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1135
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1202
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:218
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:343
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
-#, c-format
-msgid "unknown title"
-msgstr "неизвестный заголовок"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1137
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1204
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:216
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:341
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
-msgid "unknown artist"
-msgstr "неизвестный исполнитель"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1139
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1206
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:214
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:339
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
-msgid "unknown album"
-msgstr "неизвестный альбом"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1188
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1189
 msgid "unknown organization"
 msgstr "неизвестная организация"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1190
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1191
 msgid "unknown location"
 msgstr "неизвестное расположение"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1287
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1288
 msgid "Remove all"
 msgstr "Удалить все"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1292
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1293
 msgid "Remove selected titles"
 msgstr "Удалить выбранные"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1297
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1298
 msgid "Jump to current position"
 msgstr ""
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1496
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1497
 msgid "Collapse all"
 msgstr "Свернуть все"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1543
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1544
 msgid "Show application main menu"
 msgstr "Показывать главное меню"
-
-#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:1051
-msgid "Loading ..."
-msgstr "Загрузка ..."
-
-#: ../libxnoise/Utils/xnoise-media-importer.vala:224
-#, c-format
-msgid "Found %u tracks. Updating library ..."
-msgstr "Найдено %u дорожек. Обновление библиотеки ..."
-
-#: ../libxnoise/Utils/xnoise-media-importer.vala:411
-#: ../libxnoise/Utils/xnoise-media-importer.vala:448
-#, c-format
-msgid "%u tracks found"
-msgstr "Найдено %u дорожек"
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:258
-msgid "General"
-msgstr "Основные"
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:260
-msgid "Plugins"
-msgstr "Дополнения"
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:265
-msgid "Enable grid lines in media browser"
-msgstr "Использовать затенение строк в списке воспроизведения"
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:270
-msgid "Use linebreaks in media browser"
-msgstr "Использовать разрывы строки в списке воспроизведения"
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:275
-msgid "Don't show video screen while hovering album image"
-msgstr "Не показывать экран видео при наведении на иконку альбома"
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:280
-msgid "Compact layout"
-msgstr "Компактный вид"
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:285
-msgid "Use stop button"
-msgstr "Использовать кнопку стоп"
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:290
-msgid "Quit application if window is closed"
-msgstr "Выйти из приложения, если окно закрывается"
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:301
-msgid "Media browser fontsize:"
-msgstr "Размер шрифта списка воспроизведения:"
-
-#. LENGTH
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1083
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1228
-msgid "Length"
-msgstr "Длина"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:69
-msgid "Play/Pause"
-msgstr "Проигрывать/Пауза"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:83
-msgid "Previous"
-msgstr "Предыдущий"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:98
-msgid "Next"
-msgstr "Следующий"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:116
-msgid "Exit"
-msgstr "Выход"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:165
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:177
-msgid "stopped"
-msgstr "остановлен"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:169
-msgid "playing"
-msgstr "проигрывает"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:173
-msgid "paused"
-msgstr "приостановлен"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:185
-#, c-format
-msgid "ready to rock"
-msgstr "ready to rock"
 
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:37
 msgid "Select external subtitle file"

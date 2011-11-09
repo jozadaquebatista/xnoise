@@ -283,6 +283,26 @@ AM_CONDITIONAL(ENABLE_LASTFMCOVERS, test x"$enable_lastfmcovers" = "xyes")
 dnl ================================================================
 
 dnl ================================================================
+dnl dependency check for optional build of lastfmcovers plugin 
+
+AC_ARG_ENABLE([lastfm],
+    AS_HELP_STRING([--disable-lastfm],
+    [Disable lastfm plugin (default: enabled)]),
+    [enable_lastfm=$enableval],
+    [enable_lastfm=yes])
+
+if test "x$enable_lastfm" = "xyes"; then
+    if test "x$have_libsoup" = "xyes"; then
+        enable_lastfm=yes
+    else
+        enable_lastfm=no
+        AC_MSG_WARN([lastfm plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_LASTFM, test x"$enable_lastfm" = "xyes")
+dnl ================================================================
+
+dnl ================================================================
 dnl dependency check for optional build of notifications plugin 
 
 AC_ARG_ENABLE([notifications],
@@ -529,6 +549,7 @@ echo "
     chartlyrics:                   ${enable_chartlyrics}
     lyricwiki:                     ${enable_lyricwiki}
     lastfm covers:                 ${enable_lastfmcovers}
+    lastfm webservices:            ${enable_lastfm}
     notifications:                 ${enable_notifications}
     notifications (0.7 API):       ${enable_notifications07}
     mpris v1/v2:                   ${enable_mpris}
