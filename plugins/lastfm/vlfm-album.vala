@@ -45,6 +45,8 @@ namespace Lastfm {
 		private string? session_key;
 		private string? lang;
 		public string? releasedate;
+		public string reply_artist;
+		public string reply_album;
 		
 		public signal void received_info(string albumname);
 		
@@ -99,9 +101,19 @@ namespace Lastfm {
 			//album name
 			SimpleMarkup.Node album_name  = album.get_child_by_name("name");
 			if(album_name == null) {
+				print("could not find album name node\n");
+				return;
+			}
+			reply_album = album_name.text;
+			
+			//artist name
+			SimpleMarkup.Node artist_name  = album.get_child_by_name("artist");
+			if(artist_name == null) {
 				print("could not find artist name node\n");
 				return;
 			}
+			reply_artist = artist_name.text;
+			
 			//album release date
 			SimpleMarkup.Node releasedate_node  = album.get_child_by_name("releasedate");
 			if(releasedate_node == null) {

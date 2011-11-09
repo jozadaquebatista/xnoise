@@ -35,6 +35,7 @@ public class Xnoise.PluginModule.Loader : Object { //, IParams
 	private Main xn;
 	private Information info;
 	private GLib.List<string> info_files;
+	private string[] banned_plugins;
 
 	public signal void sign_plugin_activated(Container p);
 	public signal void sign_plugin_deactivated(Container p);
@@ -43,6 +44,11 @@ public class Xnoise.PluginModule.Loader : Object { //, IParams
 		assert(Module.supported());
 //		Params.iparams_register(this);
 		this.xn = Main.instance;
+		
+		// setup banned 
+		banned_plugins = {};
+		banned_plugins += "LastfmCovers";
+		
 		plugin_htable = new HashTable<string, Container>(str_hash, str_equal);
 		lyrics_plugins_htable   = new HashTable<string, unowned Container>(str_hash, str_equal);
 		image_provider_htable   = new HashTable<string, unowned Container>(str_hash, str_equal);
@@ -50,6 +56,14 @@ public class Xnoise.PluginModule.Loader : Object { //, IParams
 
 	public unowned GLib.List<string> get_info_files() {
 		return info_files;
+	}
+	
+	private bool is_banned(string name) {
+		foreach(string s in banned_plugins) {
+			if(name == s)
+				return true;
+		}
+		return false;
 	}
 
 	public bool load_all() {
@@ -59,6 +73,8 @@ public class Xnoise.PluginModule.Loader : Object { //, IParams
 		foreach(string pluginInfoFile in info_files) {
 			info = new PluginModule.Information(pluginInfoFile);
 			if(info.load_info()) {
+				if(is_banned(info.name))
+					continue;
 				plugin = new PluginModule.Container(info);
 				plugin.load();
 				if(plugin.loaded == true)

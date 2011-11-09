@@ -43,7 +43,7 @@ namespace Lastfm {
 		public string? date;
 	}
 	
-	private static bool check_response_status_ok(ref SimpleMarkup.Node? nd) {
+	public static bool check_response_status_ok(ref SimpleMarkup.Node? nd) {
 		if(nd == null) {
 			print("xml reading 1 with errors\n");
 			return false;

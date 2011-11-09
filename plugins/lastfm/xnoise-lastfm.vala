@@ -32,16 +32,21 @@ using Gtk;
 using Lastfm;
 
 using Xnoise;
+using Xnoise.Services;
 using Xnoise.PluginModule;
 
 
-public class Xnoise.Lfm : GLib.Object, IPlugin {
+public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 	public Main xn { get; set; }
 	private unowned PluginModule.Container _owner;
 	private Session session;
 	private Track t;
 	private uint scrobble_source = 0;
 	private int WAIT_TIME_BEFORE_SCROBBLE = 15;
+	private ulong a = 0;
+	private ulong b = 0;
+	private ulong c = 0;
+	private ulong d = 0;
 	
 	public PluginModule.Container owner {
 		get {
@@ -83,11 +88,6 @@ public class Xnoise.Lfm : GLib.Object, IPlugin {
 		b = global.notify["current-artist"].connect(on_current_track_changed);
 		return true;
 	}
-	
-	private ulong a = 0;
-	private ulong b = 0;
-	private ulong c = 0;
-	private ulong d = 0;
 	
 	public void uninit() {
 		clean_up();
@@ -152,6 +152,166 @@ public class Xnoise.Lfm : GLib.Object, IPlugin {
 				return false;
 			});
 		}
+	}
+	
+	public Xnoise.IAlbumCoverImage from_tags(string artist, string album) {
+		return new LastFmCovers(artist, album, this.session);
+	}
+}
+
+
+
+/**
+ * The LastFmCovers class tries to find cover images on 
+ * lastFm.
+ * The images are downloaded to a local folder below ~/.xnoise
+ * The download folder is returned via a signal together with
+ * the artist name and the album name for identification.
+ * 
+ * This class should be called from a closure to work with full
+ * mainloop integration. No threads needed!
+ * Copying is also done asynchonously.
+ */
+public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
+	private const int SECONDS_FOR_TIMEOUT = 12;
+	// Maybe add this key as a construct only property. Then it can be an individual key for each user
+//	private const string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
+	
+	private const string INIFOLDER = ".xnoise";
+//	private SessionAsync session;
+	private string artist;
+	private string album;
+	private File f = null;
+	private string image_path;
+	private string[] sizes;
+	private File[] image_sources;
+	private uint timeout;
+	private bool timeout_done;
+	private unowned Lastfm.Session session;
+	private Lastfm.Album alb;
+	
+	public LastFmCovers(string _artist, string _album, Lastfm.Session session) {
+		this.artist = _artist;
+		this.album  = _album;
+		this.session = session;
+		
+		image_path = GLib.Path.build_filename(data_folder(),
+		                                      "album_images",
+		                                      null
+		                                      );
+		image_sources = {};
+		sizes = {"medium", "extralarge"}; //Two are enough
+		timeout = 0;
+		timeout_done = false;
+		alb = this.session.factory_make_album(artist, album);
+		alb.received_info.connect( (sender, al) => {
+			print("got album info: %s , %s\n", sender.artist_name, al);
+			//print("image extralarge: %s\n", sender.image_uris.lookup("extralarge"));
+			string default_size = "medium";
+			string uri_image;
+			foreach(string s in sizes) {
+				f = get_albumimage_for_artistalbum(artist, album, s);
+				if(default_size == s) uri_image = f.get_path();
+				
+				string pth = "";
+				File f_path = f.get_parent();
+				if(!f_path.query_exists(null)) {
+					try {
+						f_path.make_directory_with_parents(null);
+					}
+					catch(GLib.Error e) {
+						print("Error with create image directory: %s\npath: %s", e.message, pth);
+						remove_timeout();
+						this.unref();
+						return;
+					}
+				}
+				
+				if(!f.query_exists(null)) {
+					var remote_file = File.new_for_uri(sender.image_uris.lookup(s));
+					image_sources += remote_file;
+				}
+				else {
+					//print("Local file already exists\n");
+					continue; //Local file exists
+				}
+			}
+			this.copy_covers_async(sender.reply_artist.down(), sender.reply_album.down());
+		});
+	}
+	
+	~LastFmCovers() {
+		if(timeout != 0)
+			Source.remove(timeout);
+	}
+
+	private void remove_timeout() {
+		if(timeout != 0)
+			Source.remove(timeout);
+	}
+	
+	public void find_image() {
+		//print("find_lastfm_image to %s - %s\n", artist, album);
+		if((artist=="unknown artist")||
+		   (album=="unknown album")) {
+			sign_image_fetched(artist, album, "");
+			this.unref();
+			return;
+		}
+		
+		alb.get_info(); // no login required
+		//Add timeout for response
+		timeout = Timeout.add_seconds(SECONDS_FOR_TIMEOUT, timeout_elapsed);
+	}
+	
+	private bool timeout_elapsed() {
+		this.timeout_done = true;
+		this.unref();
+		return false;
+	}
+	
+
+	private async void copy_covers_async(string _reply_artist, string _reply_album) {
+		File destination;
+		bool buf = false;
+		string default_path = "";
+		int i = 0;
+		string reply_artist = _reply_artist;
+		string reply_album = _reply_album;
+		
+		foreach(File f in image_sources) {
+			var s = sizes[i];
+			destination = get_albumimage_for_artistalbum(reply_artist, reply_album, s);
+			try {
+				if(f.query_exists(null)) { //remote file exist
+					
+					buf = yield f.copy_async(destination,
+					                         FileCopyFlags.OVERWRITE,
+					                         Priority.DEFAULT,
+					                         null,
+					                         null);
+				}
+				else {
+					continue;
+				}
+				if(sizes[i] == "medium") default_path = destination.get_path();
+				i++;
+			}
+			catch(GLib.Error e) {
+				print("Error: %s\n", e.message);
+				i++;
+				continue;
+			}
+		}
+		// signal finish with artist, album in order to identify the sent image
+		sign_image_fetched(reply_artist, reply_album, default_path);
+		
+		remove_timeout();
+		
+		if(!this.timeout_done) {
+			this.unref(); // After this point LastFmCovers downloader can safely be removed
+		}
+		return;
 	}
 }
 

@@ -6,9 +6,9 @@ if ENABLE_CHARTLYRICS
   SUBDIRS += chartlyrics
 endif
 
-if ENABLE_LASTFMCOVERS
-  SUBDIRS += lastfmCovers
-endif
+#if ENABLE_LASTFMCOVERS
+#  SUBDIRS += lastfmCovers
+#endif
 
 if ENABLE_LASTFM
   SUBDIRS += lastfm
