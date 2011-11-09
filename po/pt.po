@@ -56,19 +56,13 @@ msgstr "Álbum:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Por favor, aguarde o preenchimento da coleção. Cancele se não quiser "
-"aguardar."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Por favor, aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:180
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
@@ -176,10 +170,8 @@ msgid "Loading ..."
 msgstr "A carregar..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
@@ -519,24 +511,16 @@ msgstr "_Configurar"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar "
-"o arranque do xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar o arranque do xnoise."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
 msgstr "Adicionar multimédia"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:438
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
-"a coleção?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para a coleção?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:533
 msgid "no repeat"
@@ -580,7 +564,7 @@ msgstr "Remover títulos selecionados"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1298
 msgid "Jump to current position"
-msgstr ""
+msgstr "Ir para a posição atual"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1497
 msgid "Collapse all"
@@ -616,10 +600,8 @@ msgid "More information on the project website:"
 msgstr "Mais informações na página web:"
 
 #: ../src/xnoise.vala:70
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
 
 #: ../src/xnoise.vala:131
 msgid "Using the running instance of xnoise!\n"
@@ -637,7 +619,7 @@ msgstr "Colocar letras na base de dados"
 #: ../plugins/lastfm/xnoise-lastfm.vala:413
 #, c-format
 msgid "User logged in!"
-msgstr ""
+msgstr "Sessão iniciada"
 
 #. feedback
 #: ../plugins/lastfm/xnoise-lastfm.vala:351
@@ -645,26 +627,26 @@ msgstr ""
 #: ../plugins/lastfm/xnoise-lastfm.vala:416
 #, c-format
 msgid "User not logged in!"
-msgstr ""
+msgstr "Sessão não iniciada"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:381
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr ""
+msgstr "Por favor, indique o utilizador e a senha last.fm."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:390
 #, c-format
 msgid "Username:"
-msgstr ""
+msgstr "Utilizador:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:396
 #, c-format
 msgid "Password:"
-msgstr ""
+msgstr "Senha:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:425
 msgid "Apply"
-msgstr ""
+msgstr "Aplicar"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
@@ -680,7 +662,7 @@ msgstr "Guardar sempre o estado do xnoise"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "Use lastfm's web services"
-msgstr ""
+msgstr "Utilizar serviços web da last.fm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Load lyrics from http://www.lyricwiki.com"
