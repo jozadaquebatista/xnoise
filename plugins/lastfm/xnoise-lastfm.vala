@@ -50,49 +50,53 @@ public class Xnoise.Lfm : GLib.Object, IPlugin {
 		}
 	}
 	
-	public string name { 
-		get {
-			return "mpris";
-		} 
-	}
+	public string name { get { return "lastfm"; } }
 	
 	public signal void login_state_change();
 	
 	public bool init() {
 		owner.sign_deactivated.connect(clean_up);
+		
 		session = new Lastfm.Session(
 		   Lastfm.Session.AuthenticationType.MOBILE,   // session authentication type
 		   "a39db9ab0d1fb9a18fabab96e20b0a34",         // xnoise api_key for noncomercial use
 		   "55993a9f95470890c6806271085159a3",         // secret
 		   null//"de"                                  // language TODO
 		);
-		session.notify["logged-in"].connect( () => {
+		c = session.notify["logged-in"].connect( () => {
 			Idle.add( () => {
 				login_state_change();
 				return false;
 			});
 		});
-		session.login_successful.connect( (sender, un) => {
+		d = session.login_successful.connect( (sender, un) => {
 			print("Lastfm plugin logged in %s successfully\n", un); // TODO: real feedback needed
 		});
 		string username = Xnoise.Params.get_string_value("lfm_user");
 		string password = Xnoise.Params.get_string_value("lfm_pass");
-		if(username != "" && password != "") {
-			//print("username and password available\n");
+		if(username != "" && password != "")
 			this.login(username, password);
-		}
-		//else {
-			//print("username and password NOT available\n");
-		//}
-		global.notify["current-title"].connect(on_current_track_changed);
-		global.notify["current-artist"].connect(on_current_track_changed);
+		
+		a = global.notify["current-title"].connect(on_current_track_changed);
+		b = global.notify["current-artist"].connect(on_current_track_changed);
 		return true;
 	}
 	
+	private ulong a = 0;
+	private ulong b = 0;
+	private ulong c = 0;
+	private ulong d = 0;
+	
 	public void uninit() {
+		clean_up();
 	}
 
 	private void clean_up() {
+		session.abort();
+		global.disconnect(a);
+		global.disconnect(b);
+		session.disconnect(c);
+		session.disconnect(d);
 		session = null;
 	}
 	

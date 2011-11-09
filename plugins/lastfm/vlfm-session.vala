@@ -64,7 +64,7 @@ namespace Lastfm {
 	
 	private delegate void ResponseHandler(int id, string response);
 	
-	private class ResponseHandlerContainer {
+	private class ResponseHandlerContainer : GLib.Object {
 		public ResponseHandlerContainer(ResponseHandler? _func = null, int _id  = -1) {
 			this.func = _func;
 			this.id = _id;
@@ -108,10 +108,17 @@ namespace Lastfm {
 			this.secret = secret;
 			this.lang = lang;
 			_web = new WebAccess();
-			_web.reply_received.connect(this.web_reply_received);
+			a = _web.reply_received.connect(this.web_reply_received);
 		}
 		
 		~Session() {
+			_web.disconnect(a);
+		}
+		
+		private ulong a =0;
+		
+		public void abort() {
+			handlers.remove_all();
 		}
 		
 		public void login(string user, string pass) {
