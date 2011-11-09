@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: amarok\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-09 13:49+0100\n"
+"POT-Creation-Date: 2011-11-09 16:36+0100\n"
 "PO-Revision-Date: 2011-10-19 15:33+0200\n"
 "Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -640,6 +640,39 @@ msgstr "Ukázat běžící xnoise.\n"
 msgid "Buffer lyrics in database"
 msgstr "Uložit texty v databázi"
 
+#: ../plugins/lastfm/xnoise-lastfm.vala:347
+#: ../plugins/lastfm/xnoise-lastfm.vala:413
+#, c-format
+msgid "User logged in!"
+msgstr ""
+
+#. feedback
+#: ../plugins/lastfm/xnoise-lastfm.vala:351
+#: ../plugins/lastfm/xnoise-lastfm.vala:411
+#: ../plugins/lastfm/xnoise-lastfm.vala:416
+#, c-format
+msgid "User not logged in!"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:381
+#, c-format
+msgid "Please enter your lastfm username and password."
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:390
+#, c-format
+msgid "Username:"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:396
+#, c-format
+msgid "Password:"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:425
+msgid "Apply"
+msgstr ""
+
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
 msgstr "Ukázkový přídavný modul pro xnoise"
@@ -652,9 +685,9 @@ msgstr "Texty stáhnout z chartlyrics.com"
 msgid "Always keep the current state of xnoise"
 msgstr "Vždy obdržet současný stav xnoise"
 
-#: ../plugins/lastfmCovers/lastfmCovers.xnplugin.desktop.in.h:1
-msgid "Load album covers from lastfm"
-msgstr "Obaly nahrát z last.fm"
+#: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
+msgid "Use lastfm's web services"
+msgstr ""
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Load lyrics from http://www.lyricwiki.com"
@@ -685,6 +718,9 @@ msgstr "Používat Ayatana SoundMenu"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "Název okna pojmenovat po současné skladbě"
+
+#~ msgid "Load album covers from lastfm"
+#~ msgstr "Obaly nahrát z last.fm"
 
 #~ msgid "Add local file"
 #~ msgstr "Lokale Datei hinzufügen"

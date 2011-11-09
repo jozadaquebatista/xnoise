@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-09 13:49+0100\n"
+"POT-Creation-Date: 2011-11-09 16:36+0100\n"
 "PO-Revision-Date: 2011-07-14 04:44+0100\n"
 "Last-Translator: Tubuntu <tubuntu@testimonium.be>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -640,6 +640,39 @@ msgstr "Afficher l'instance en cours de xnoise.\n"
 msgid "Buffer lyrics in database"
 msgstr "Mettre les paroles de la base de données en cache"
 
+#: ../plugins/lastfm/xnoise-lastfm.vala:347
+#: ../plugins/lastfm/xnoise-lastfm.vala:413
+#, c-format
+msgid "User logged in!"
+msgstr ""
+
+#. feedback
+#: ../plugins/lastfm/xnoise-lastfm.vala:351
+#: ../plugins/lastfm/xnoise-lastfm.vala:411
+#: ../plugins/lastfm/xnoise-lastfm.vala:416
+#, c-format
+msgid "User not logged in!"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:381
+#, c-format
+msgid "Please enter your lastfm username and password."
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:390
+#, c-format
+msgid "Username:"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:396
+#, c-format
+msgid "Password:"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:425
+msgid "Apply"
+msgstr ""
+
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
 msgstr "Greffon démo pour xnoise"
@@ -652,9 +685,9 @@ msgstr "Charger les paroles à partir de ChartLyrics.com"
 msgid "Always keep the current state of xnoise"
 msgstr "Toujours conserver l'état courant de xnoise"
 
-#: ../plugins/lastfmCovers/lastfmCovers.xnplugin.desktop.in.h:1
-msgid "Load album covers from lastfm"
-msgstr "Charger les pochettes d'album à partir de Last.fm"
+#: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
+msgid "Use lastfm's web services"
+msgstr ""
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Load lyrics from http://www.lyricwiki.com"
@@ -686,6 +719,9 @@ msgstr "Utiliser le menu son d'ayatana"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "Remplacer le nom de la fenêtre par le titre courant"
+
+#~ msgid "Load album covers from lastfm"
+#~ msgstr "Charger les pochettes d'album à partir de Last.fm"
 
 #~ msgid "Add local file"
 #~ msgstr "Ajouter un fichier local"

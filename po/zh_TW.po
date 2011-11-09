@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-09 13:49+0100\n"
+"POT-Creation-Date: 2011-11-09 16:36+0100\n"
 "PO-Revision-Date: 2011-05-05 10:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -641,6 +641,39 @@ msgstr ""
 msgid "Buffer lyrics in database"
 msgstr ""
 
+#: ../plugins/lastfm/xnoise-lastfm.vala:347
+#: ../plugins/lastfm/xnoise-lastfm.vala:413
+#, c-format
+msgid "User logged in!"
+msgstr ""
+
+#. feedback
+#: ../plugins/lastfm/xnoise-lastfm.vala:351
+#: ../plugins/lastfm/xnoise-lastfm.vala:411
+#: ../plugins/lastfm/xnoise-lastfm.vala:416
+#, c-format
+msgid "User not logged in!"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:381
+#, c-format
+msgid "Please enter your lastfm username and password."
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:390
+#, c-format
+msgid "Username:"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:396
+#, c-format
+msgid "Password:"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:425
+msgid "Apply"
+msgstr ""
+
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
 msgstr ""
@@ -653,8 +686,8 @@ msgstr ""
 msgid "Always keep the current state of xnoise"
 msgstr ""
 
-#: ../plugins/lastfmCovers/lastfmCovers.xnplugin.desktop.in.h:1
-msgid "Load album covers from lastfm"
+#: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
+msgid "Use lastfm's web services"
 msgstr ""
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-09 13:49+0100\n"
+"POT-Creation-Date: 2011-11-09 16:36+0100\n"
 "PO-Revision-Date: 2011-10-01 23:26+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -629,6 +629,39 @@ msgstr "מראה את השלב הרץ של xnoise.\n"
 msgid "Buffer lyrics in database"
 msgstr "אצור כתוביות בבסיס הנתונים"
 
+#: ../plugins/lastfm/xnoise-lastfm.vala:347
+#: ../plugins/lastfm/xnoise-lastfm.vala:413
+#, c-format
+msgid "User logged in!"
+msgstr ""
+
+#. feedback
+#: ../plugins/lastfm/xnoise-lastfm.vala:351
+#: ../plugins/lastfm/xnoise-lastfm.vala:411
+#: ../plugins/lastfm/xnoise-lastfm.vala:416
+#, c-format
+msgid "User not logged in!"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:381
+#, c-format
+msgid "Please enter your lastfm username and password."
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:390
+#, c-format
+msgid "Username:"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:396
+#, c-format
+msgid "Password:"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:425
+msgid "Apply"
+msgstr ""
+
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
 msgstr "פלאגין ניסיוני(דמו) עבור xnoise"
@@ -641,9 +674,9 @@ msgstr "טען את מילות השיר מהאתר chartlyrics.com"
 msgid "Always keep the current state of xnoise"
 msgstr "שמור תמיד על המצב הנוכחי של xnoise"
 
-#: ../plugins/lastfmCovers/lastfmCovers.xnplugin.desktop.in.h:1
-msgid "Load album covers from lastfm"
-msgstr "טען תמונות אלבום מהאתר lastfm"
+#: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
+msgid "Use lastfm's web services"
+msgstr ""
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Load lyrics from http://www.lyricwiki.com"
@@ -674,6 +707,9 @@ msgstr "השתמש ב-soundmenu של ayatana"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "קבע את שם החלון לשם הכותרת הנוכחית"
+
+#~ msgid "Load album covers from lastfm"
+#~ msgstr "טען תמונות אלבום מהאתר lastfm"
 
 #~ msgid "Add local file"
 #~ msgstr "הוספת קובץ מקומי"
