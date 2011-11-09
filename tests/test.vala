@@ -104,44 +104,44 @@ bool test_m3u_reading_2() {
 	return uris[0] == t1.get_uri() && reader.get_number_of_entries() == 5;
 }
 
-bool test_asx_remote_reading() {
-	File f = File.new_for_uri("http://streams.br-online.de/bayern2_1.asx");
-	File t1 = File.new_for_commandline_arg("mms://gffstream-w3a.wm.llnwd.net/gffstream_w3a");
-	var reader = new Xnoise.Playlist.Reader();
-	try {
-//		t = new Timer();
-//		t.start();
-		reader.read(f.get_uri(), null);
-//		print("%f\n", t.elapsed(null));
-	}
-	catch(Error e) {
-		print("asx remote test error reading\n");
-		return false;
-	}
-	var uris = reader.get_found_uris();
-	//print("Size: %s\n", uris.length.to_string());
-  //print("URI0: %s\n", uris[0]);
-  //print("URI1: %s\n", uris[1]);
-	return uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
-}
+//bool test_asx_remote_reading() {
+//	File f = File.new_for_uri("http://streams.br-online.de/bayern2_1.asx");
+//	File t1 = File.new_for_commandline_arg("mms://gffstream-w3a.wm.llnwd.net/gffstream_w3a");
+//	var reader = new Xnoise.Playlist.Reader();
+//	try {
+////		t = new Timer();
+////		t.start();
+//		reader.read(f.get_uri(), null);
+////		print("%f\n", t.elapsed(null));
+//	}
+//	catch(Error e) {
+//		print("asx remote test error reading\n");
+//		return false;
+//	}
+//	var uris = reader.get_found_uris();
+//	//print("Size: %s\n", uris.length.to_string());
+//  //print("URI0: %s\n", uris[0]);
+//  //print("URI1: %s\n", uris[1]);
+//	return uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
+//}
 
-bool test_asx_bad_xml_remote_reading() {
-	File f = File.new_for_uri("http://www.tropicalisima.fm/wmbaladas48.asx");
-	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
-	var reader = new Xnoise.Playlist.Reader();
-	try {
-		reader.read(f.get_uri(), null);
-	}
-	catch(Error e) {
-		print("asx bad xml remote test error reading\n");
-		return false;
-	}
-	var uris = reader.get_found_uris();
-	//print("Size: %s\n", uris.length.to_string());
-  //print("URI0: %s\n", uris[0]);
-  //print("URI1: %s\n", uris[1]);
-	return uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
-}
+//bool test_asx_bad_xml_remote_reading() {
+//	File f = File.new_for_uri("http://www.tropicalisima.fm/wmbaladas48.asx");
+//	File t1 = File.new_for_commandline_arg("mms://67.159.60.125/baladas");
+//	var reader = new Xnoise.Playlist.Reader();
+//	try {
+//		reader.read(f.get_uri(), null);
+//	}
+//	catch(Error e) {
+//		print("asx bad xml remote test error reading\n");
+//		return false;
+//	}
+//	var uris = reader.get_found_uris();
+//	//print("Size: %s\n", uris.length.to_string());
+//  //print("URI0: %s\n", uris[0]);
+//  //print("URI1: %s\n", uris[1]);
+//	return uris[0] == t1.get_uri();// && reader.get_number_of_entries() == 5;
+//}
 
 bool test_pls_reading_2() {
 	File f = File.new_for_path(GLib.Path.build_filename(Config.TESTDIR, "/playlist-examples/pls_test.pls"));
@@ -1153,17 +1153,17 @@ void main() {
 	else
 		print("\033[50Gfail\n");
 	
-	print("test asx remote reading:");
-	if(test_asx_remote_reading())
-		print("\033[50Gpass\n");
-	else
-		print("\033[50Gfail\n");
+//	print("test asx remote reading:");
+//	if(test_asx_remote_reading())
+//		print("\033[50Gpass\n");
+//	else
+//		print("\033[50Gfail\n");
 
-	print("test asx bad xml remote reading:");
-	if(test_asx_bad_xml_remote_reading())
-		print("\033[50Gpass\n");
-	else
-		print("\033[50Gfail\n");
+//	print("test asx bad xml remote reading:");
+//	if(test_asx_bad_xml_remote_reading())
+//		print("\033[50Gpass\n");
+//	else
+//		print("\033[50Gfail\n");
 
 	//READ PLS
 	//	print("test pls reading:");

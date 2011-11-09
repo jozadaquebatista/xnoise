@@ -265,23 +265,6 @@ dnl ================================================================
 dnl ================================================================
 dnl dependency check for optional build of lastfmcovers plugin 
 
-AC_ARG_ENABLE([lastfm-covers],
-    AS_HELP_STRING([--disable-lastfm-covers],
-    [Disable lastfm covers plugin (default: enabled)]),
-    [enable_lastfmcovers=$enableval],
-    [enable_lastfmcovers=yes])
-
-if test "x$enable_lastfmcovers" = "xyes"; then
-    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
-        enable_lastfmcovers=yes
-    else
-        enable_lastfmcovers=no
-        AC_MSG_WARN([lastfmcovers plugin will not be included in the build.])
-    fi
-fi
-AM_CONDITIONAL(ENABLE_LASTFMCOVERS, test x"$enable_lastfmcovers" = "xyes")
-dnl ================================================================
-
 dnl ================================================================
 dnl dependency check for optional build of lastfmcovers plugin 
 
@@ -511,7 +494,6 @@ AC_CONFIG_FILES([
     plugins/testplugin/Makefile
     plugins/titleToDecoration/Makefile
     plugins/cyclic-save-state/Makefile
-    plugins/lastfmCovers/Makefile
     plugins/notifications/Makefile
     plugins/notifications2/Makefile
     plugins/mpris/Makefile
@@ -548,7 +530,6 @@ echo "
     lyricsfly:                     ${enable_lyricsfly}
     chartlyrics:                   ${enable_chartlyrics}
     lyricwiki:                     ${enable_lyricwiki}
-    lastfm covers:                 ${enable_lastfmcovers}
     lastfm webservices:            ${enable_lastfm}
     notifications:                 ${enable_notifications}
     notifications (0.7 API):       ${enable_notifications07}

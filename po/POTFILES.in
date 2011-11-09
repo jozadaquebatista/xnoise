@@ -60,7 +60,6 @@ plugins/chartlyrics/xnoise-chartlyrics.vala
 plugins/cyclic-save-state/xnoise-cyclic-save-state.vala
 plugins/databaseLyrics/xnoise-database-lyrics.vala
 plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in
-plugins/lastfmCovers/xnoise-lastfm-covers.vala
 plugins/lastfm/xnoise-lastfm.vala
 plugins/lyricwiki/xnoise-lyricwiki.vala
 plugins/mediakeys/xnoise-mediakeys.vala
@@ -74,7 +73,6 @@ plugins/titleToDecoration/xnoise-title-to-decoration.vala
 plugins/testplugin/xnoisetest.xnplugin.desktop.in
 plugins/chartlyrics/chartlyrics.xnplugin.desktop.in
 plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in
-plugins/lastfmCovers/lastfmCovers.xnplugin.desktop.in
 plugins/lastfm/lastfm.xnplugin.desktop.in
 plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in
 plugins/mediakeys/mediakeys.xnplugin.desktop.in
