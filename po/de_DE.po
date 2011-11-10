@@ -53,19 +53,13 @@ msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Please wait while filling media browser. Or cancel, if you do not want to wait."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:180
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Please wait while importing media. Or cancel, if you do not want to wait."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
@@ -173,11 +167,8 @@ msgid "Loading ..."
 msgstr "Lade ..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere "
-"Untertitel-Datei"
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "Der Name der Untertitel-Datei passt nicht zum Video Namen! Ignoriere Untertitel-Datei"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
@@ -187,8 +178,7 @@ msgstr "Fehlendes GStreamer Plugin konnte installiert werden"
 #: ../libxnoise/Player/xnoise-gst-player.vala:463
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr ""
-"Benutzer hat die Installation des fehlenden GStreamer Plugins abgebrochen"
+msgstr "Benutzer hat die Installation des fehlenden GStreamer Plugins abgebrochen"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:467
 #, c-format
@@ -213,8 +203,7 @@ msgstr "Automatische Suche nach fehlendem Codec wird nicht unterstützt"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:531
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr ""
-"Automatische GStreamer Plugin Installation konnte nicht gestartet werden."
+msgstr "Automatische GStreamer Plugin Installation konnte nicht gestartet werden."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:544
 msgid "Trying to install missing gstreamer plugin"
@@ -246,8 +235,7 @@ msgstr "Umbrüche im Medien Browser verwenden"
 
 #: ../libxnoise/Settings/xnoise-settings-dialog.vala:275
 msgid "Don't show video screen while hovering album image"
-msgstr ""
-"Zeige nicht die Video Ansicht, wenn der Mauszeiger über dem Albumbild ist."
+msgstr "Zeige nicht die Video Ansicht, wenn der Mauszeiger über dem Albumbild ist."
 
 #: ../libxnoise/Settings/xnoise-settings-dialog.vala:280
 msgid "Compact layout"
@@ -395,8 +383,7 @@ msgid ""
 "Select local media folders or remote media streams. \n"
 "All library media will be available in the library."
 msgstr ""
-"Wähle lokale Ordner oder Internet-Radio-Adressen um sie zur Bibliothek "
-"hinzuzufügen. \n"
+"Wähle lokale Ordner oder Internet-Radio-Adressen um sie zur Bibliothek hinzuzufügen. \n"
 "Alle Medien werden im Medien-Browser zur Verfügung gestellt."
 
 #: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:181
@@ -521,24 +508,16 @@ msgstr "_Konfiguration"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"%u Titel werden in der Titel-Liste wiederhergestellt. Das ist eine relativ "
-"große Zahl und kann den Start von xnoise verlangsamen."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "%u Titel werden in der Titel-Liste wiederhergestellt. Das ist eine relativ große Zahl und kann den Start von xnoise verlangsamen."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
 msgstr "Medien hinzufügen"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:438
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Du hast xnoise zum ersten Mal gestartet. Möchtest du Musik oder Videos in "
-"die Bibliothek importieren? "
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Du hast xnoise zum ersten Mal gestartet. Möchtest du Musik oder Videos in die Bibliothek importieren? "
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:533
 msgid "no repeat"
@@ -582,7 +561,7 @@ msgstr "Entferne Ausgewählte"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1298
 msgid "Jump to current position"
-msgstr ""
+msgstr "Springe zur aktuellen Zeile"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1497
 msgid "Collapse all"
@@ -618,10 +597,8 @@ msgid "More information on the project website:"
 msgstr "Mehr Infos auf der Website:"
 
 #: ../src/xnoise.vala:70
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Gib 'xnoise --help' ein um die vollständige Liste der Optionen zu sehen.\n"
 
 #: ../src/xnoise.vala:131
 msgid "Using the running instance of xnoise!\n"
@@ -639,7 +616,7 @@ msgstr "Texte in Datenbank speichern"
 #: ../plugins/lastfm/xnoise-lastfm.vala:413
 #, c-format
 msgid "User logged in!"
-msgstr ""
+msgstr "Benutzer angemeldet!"
 
 #. feedback
 #: ../plugins/lastfm/xnoise-lastfm.vala:351
@@ -647,26 +624,26 @@ msgstr ""
 #: ../plugins/lastfm/xnoise-lastfm.vala:416
 #, c-format
 msgid "User not logged in!"
-msgstr ""
+msgstr "Kein Benutzer angemeldet!"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:381
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr ""
+msgstr "Bitte Benutzernamen und Passwort für Lastfm eingeben"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:390
 #, c-format
 msgid "Username:"
-msgstr ""
+msgstr "Benutzername:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:396
 #, c-format
 msgid "Password:"
-msgstr ""
+msgstr "Passwort:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:425
 msgid "Apply"
-msgstr ""
+msgstr "Anwenden"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
@@ -682,7 +659,7 @@ msgstr "Den aktuellen Zustand von xnoise immer erhalten"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "Use lastfm's web services"
-msgstr ""
+msgstr "Benutze die Netzdienste von Lastfm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Load lyrics from http://www.lyricwiki.com"
