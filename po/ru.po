@@ -642,7 +642,7 @@ msgstr "Сохранение текстов в базе данных"
 #: ../plugins/lastfm/xnoise-lastfm.vala:413
 #, c-format
 msgid "User logged in!"
-msgstr ""
+msgstr "Пользователь вошел в систему"
 
 #. feedback
 #: ../plugins/lastfm/xnoise-lastfm.vala:351
@@ -650,26 +650,26 @@ msgstr ""
 #: ../plugins/lastfm/xnoise-lastfm.vala:416
 #, c-format
 msgid "User not logged in!"
-msgstr ""
+msgstr "Пользователь не вошел в систему"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:381
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr ""
+msgstr "Пожалуйства, введите ваши имя и пароль для lastfm."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:390
 #, c-format
 msgid "Username:"
-msgstr ""
+msgstr "Имя:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:396
 #, c-format
 msgid "Password:"
-msgstr ""
+msgstr "Пароль:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:425
 msgid "Apply"
-msgstr ""
+msgstr "Применить"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
@@ -685,7 +685,7 @@ msgstr "Постоянное сохранение текущего состоя�
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "Use lastfm's web services"
-msgstr ""
+msgstr "Использовать веб-сервисы lastfm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Load lyrics from http://www.lyricwiki.com"
