@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-11-09 16:36+0100\n"
-"PO-Revision-Date: 2011-10-01 23:26+0200\n"
+"PO-Revision-Date: 2011-11-11 11:03+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
 "Language: he\n"
@@ -59,15 +59,12 @@ msgstr "אלבום:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
 msgstr "אנא המתן בעת מילוי דפדפן המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:180
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "אנא המתן בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #. ARTIST
@@ -176,8 +173,7 @@ msgid "Loading ..."
 msgstr "טוען ..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "שם הכתוביות אינו מתאים לשם הוידאו! לא משתמש בקובץ כתוביות."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
@@ -518,21 +514,15 @@ msgstr "ה_גדרה"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של "
-"xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של xnoise."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
 msgstr "הוספת מדיה"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:438
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
 msgstr "הפעלת את xnoise לראשונה. האם ברצונך לייבא מדיה לספריה?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:533
@@ -577,7 +567,7 @@ msgstr "הסרת כל הכותרות הנבחרות"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1298
 msgid "Jump to current position"
-msgstr ""
+msgstr "קפוץ למיקום הנוכחי"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1497
 msgid "Collapse all"
@@ -613,8 +603,7 @@ msgid "More information on the project website:"
 msgstr "מידע נוסף ניתן למצוא באתר הפרויקט:"
 
 #: ../src/xnoise.vala:70
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr "הרץ 'xnoise --help' על מנת לראות רשימה מלאה של אפשרויות שורת הפקודה.\n"
 
 #: ../src/xnoise.vala:131
@@ -633,7 +622,7 @@ msgstr "אצור כתוביות בבסיס הנתונים"
 #: ../plugins/lastfm/xnoise-lastfm.vala:413
 #, c-format
 msgid "User logged in!"
-msgstr ""
+msgstr "משתמש מחובר!"
 
 #. feedback
 #: ../plugins/lastfm/xnoise-lastfm.vala:351
@@ -641,26 +630,26 @@ msgstr ""
 #: ../plugins/lastfm/xnoise-lastfm.vala:416
 #, c-format
 msgid "User not logged in!"
-msgstr ""
+msgstr "משתמש אינו מחובר!"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:381
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr ""
+msgstr "אנה הכנס את שם המשתמש והססמה של חשבון ה-Last.fm שלך."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:390
 #, c-format
 msgid "Username:"
-msgstr ""
+msgstr "שם משתמש:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:396
 #, c-format
 msgid "Password:"
-msgstr ""
+msgstr "ססמה:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:425
 msgid "Apply"
-msgstr ""
+msgstr "החל"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
@@ -676,7 +665,7 @@ msgstr "שמור תמיד על המצב הנוכחי של xnoise"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "Use lastfm's web services"
-msgstr ""
+msgstr "השתמש בשירותי האינטרנט של Last.fm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Load lyrics from http://www.lyricwiki.com"
