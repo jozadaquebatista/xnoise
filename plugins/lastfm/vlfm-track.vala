@@ -65,7 +65,158 @@ namespace Lastfm {
 				this.username = un;
 			});
 		}
+
+		public bool love() {
+			if(!parent_session.logged_in) {
+				print("not logged in!\n");
+				return false;
+			}
+
+			string artist_escaped = parent_session.web.escape(this.artist_name);
+			string title_escaped  = parent_session.web.escape(this.title_name);
+
+			string parameters;
+			string api_sig;
+			string buffer;
+
+			parameters = "api_key=" + this.api_key;
+			parameters+= "&artist=" + this.artist_name;
+			parameters+= "&method=track.love";
+			parameters+= "&sk=" + this.session_key;
+			parameters+= "&track=" + this.title_name;
+
+			api_sig = Util.get_api_sig_url(parameters,this.secret);
+
+			parameters+= "&api_sig=" + api_sig;
+
+			//Replace unescaped values for scaped values.
+			parameters = parameters.replace(this.artist_name,artist_escaped);
+			parameters = parameters.replace(this.title_name,title_escaped);
+
+			print("api_sig: %s\n",api_sig);
+
+			buffer = ROOT_URL + "?" + parameters;
+
+			print("URL: %s\n",buffer);
 		
+			int id = parent_session.web.post_data(buffer);
+			var rhc = new ResponseHandlerContainer(this.love_cb, id);
+			parent_session.handlers.insert(id, rhc);
+			return true;			
+
+		}
+
+		private void love_cb(int id, string response) {
+			print("response:\n%s\n", response);
+			var mr = new Xnoise.SimpleMarkup.Reader.from_string(response);
+			mr.read();
+			
+			if(!check_response_status_ok(ref mr.root)) {
+				print("Can not love a track in last.fm");
+				return;
+			}
+		}
+
+		public bool unlove() {
+			if(!parent_session.logged_in) {
+				print("not logged in!\n");
+				return false;
+			}
+			
+			string artist_escaped = parent_session.web.escape(this.artist_name);
+			string title_escaped  = parent_session.web.escape(this.title_name);
+			
+			string parameters;
+			string api_sig;
+			string buffer;
+			
+			parameters = "api_key=" + this.api_key;
+			parameters+= "&artist=" + this.artist_name;
+			parameters+= "&method=track.unlove";
+			parameters+= "&sk=" + this.session_key;
+			parameters+= "&track=" + this.title_name;
+			
+			api_sig = Util.get_api_sig_url(parameters,this.secret);
+			
+			parameters+= "&api_sig=" + api_sig;
+			
+			//Replace unescaped values for scaped values.
+			parameters = parameters.replace(this.artist_name,artist_escaped);
+			parameters = parameters.replace(this.title_name,title_escaped);
+			
+			print("api_sig: %s\n",api_sig);
+			
+			buffer = ROOT_URL + "?" + parameters;
+			
+			print("URL: %s\n",buffer);
+			
+			int id = parent_session.web.post_data(buffer);
+			var rhc = new ResponseHandlerContainer(this.unlove_cb, id);
+			parent_session.handlers.insert(id, rhc);
+			return true;			
+		}
+
+		private void unlove_cb(int id, string response) {
+			print("response:\n%s\n", response);
+			var mr = new Xnoise.SimpleMarkup.Reader.from_string(response);
+			mr.read();
+			
+			if(!check_response_status_ok(ref mr.root)) {
+				print("Can not unlove a track in last.fm");
+				return;
+			}
+		}
+
+		public bool updateNowPlaying() {
+			if(!parent_session.logged_in) {
+				print("not logged in!\n");
+				return false;
+			}
+			
+			string artist_escaped = parent_session.web.escape(this.artist_name);
+			string title_escaped  = parent_session.web.escape(this.title_name);
+			
+			string parameters;
+			string api_sig;
+			string buffer;
+			
+			
+			parameters = "api_key=" + this.api_key;
+			parameters+= "&artist=" + this.artist_name;
+			parameters+= "&method=track.updatenowplaying";
+			parameters+= "&sk=" + this.session_key;
+			parameters+= "&track=" + this.title_name;
+			api_sig = Util.get_api_sig_url(parameters,this.secret);
+			
+			parameters+= "&api_sig=" + api_sig;
+			
+			//Replace unescaped values for scaped values.
+			parameters = parameters.replace(this.artist_name,artist_escaped);
+			parameters = parameters.replace(this.title_name,title_escaped);
+			
+			print("api_sig: %s\n",api_sig);
+			
+			buffer = ROOT_URL + "?" + parameters;
+			
+			print("URL: %s\n",buffer);
+			
+			int id = parent_session.web.post_data(buffer);
+			var rhc = new ResponseHandlerContainer(this.now_playing_cb, id);
+			parent_session.handlers.insert(id, rhc);
+			return true;
+		}
+
+		private void now_playing_cb(int id, string response) {
+			print("response:\n%s\n", response);
+			var mr = new Xnoise.SimpleMarkup.Reader.from_string(response);
+			mr.read();
+			
+			if(!check_response_status_ok(ref mr.root)) {
+				print("Can not update now playing to last.fm");
+				return;
+			}
+		}
+
 		// start_time: Unix time format of track play start time
 		public bool scrobble(int64 start_time) {
 			string artist_escaped, album_escaped, title_escaped;
@@ -132,7 +283,7 @@ namespace Lastfm {
 			}
 			
 			var n = mr.root.get_child_by_name("lfm").get_child_by_name("scrobbles");
-			
+
 			if(n.attributes["accepted"] == "1") {
 				Idle.add( () => {
 					scrobbled(this.artist_name, this.album_name, this.title_name, true);

@@ -26,6 +26,7 @@ liblastfm_la_SOURCES = \
     vlfm-album.vala \
     vlfm-track.vala \
     vlfm-web-access.vala \
+    vlfm-util.vala \
     xnoise-lastfm.vala \
     xnoise-lastfm-registration.vala \
     $(NULL)
