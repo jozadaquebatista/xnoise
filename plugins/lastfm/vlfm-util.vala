@@ -30,15 +30,11 @@
 
 namespace Lastfm {
 	public class Util {
-
+		
 		private static string md5(string str) {
-			string hexmd5;
-			Checksum ch = new Checksum(ChecksumType.MD5);
-			ch.update((uchar[])str.to_utf8(), -1);
-			hexmd5 = ch.get_string();
-			return hexmd5;
+			return Checksum.compute_for_string(ChecksumType.MD5, str);
 		}
-
+		
 		//Generate API_SIG from URI paramaters
 		public static string get_api_sig_url(string param, string apiSecret) {
 			string result = "";

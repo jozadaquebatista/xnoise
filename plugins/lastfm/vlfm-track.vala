@@ -47,13 +47,13 @@ namespace Lastfm {
 		
 		public signal void scrobbled(string artist, string? album = null, string title, bool success = false);
 		
-		public Track(Session session, string _artist_name, string _album_name,
-		             string _title_name,
+		public Track(Session session, string? _artist_name, string? _album_name,
+		             string? _title_name,
 		             string api_key, string? username = null,
 		             string? session_key = null, string? lang = null, string _secret) {
-			this.artist_name = _artist_name;
-			this.album_name = _album_name;
-			this.title_name = _title_name;
+			this.artist_name = (_artist_name != null ? _artist_name : "unknown artist");
+			this.album_name  = (_album_name != null ? _album_name : "unknown album");
+			this.title_name  = (_title_name != null ? _title_name : "unknown title");
 			this.api_key = api_key;
 			this.parent_session = session;
 			this.username = username;
@@ -71,32 +71,32 @@ namespace Lastfm {
 				print("not logged in!\n");
 				return false;
 			}
-
+			
 			string artist_escaped = parent_session.web.escape(this.artist_name);
 			string title_escaped  = parent_session.web.escape(this.title_name);
-
+			
 			string parameters;
 			string api_sig;
 			string buffer;
-
+			
 			parameters = "api_key=" + this.api_key;
 			parameters+= "&artist=" + this.artist_name;
 			parameters+= "&method=track.love";
 			parameters+= "&sk=" + this.session_key;
 			parameters+= "&track=" + this.title_name;
-
-			api_sig = Util.get_api_sig_url(parameters,this.secret);
-
+			
+			api_sig = Util.get_api_sig_url(parameters, this.secret);
+			
 			parameters+= "&api_sig=" + api_sig;
-
+			
 			//Replace unescaped values for scaped values.
-			parameters = parameters.replace(this.artist_name,artist_escaped);
-			parameters = parameters.replace(this.title_name,title_escaped);
-
+			parameters = parameters.replace(this.artist_name, artist_escaped);
+			parameters = parameters.replace(this.title_name, title_escaped);
+			
 			print("api_sig: %s\n",api_sig);
-
+			
 			buffer = ROOT_URL + "?" + parameters;
-
+			
 			print("URL: %s\n",buffer);
 		
 			int id = parent_session.web.post_data(buffer);
@@ -153,7 +153,7 @@ namespace Lastfm {
 			int id = parent_session.web.post_data(buffer);
 			var rhc = new ResponseHandlerContainer(this.unlove_cb, id);
 			parent_session.handlers.insert(id, rhc);
-			return true;			
+			return true;
 		}
 
 		private void unlove_cb(int id, string response) {
@@ -186,19 +186,20 @@ namespace Lastfm {
 			parameters+= "&method=track.updatenowplaying";
 			parameters+= "&sk=" + this.session_key;
 			parameters+= "&track=" + this.title_name;
-			api_sig = Util.get_api_sig_url(parameters,this.secret);
+			
+			api_sig = Util.get_api_sig_url(parameters, this.secret);
 			
 			parameters+= "&api_sig=" + api_sig;
 			
-			//Replace unescaped values for scaped values.
-			parameters = parameters.replace(this.artist_name,artist_escaped);
-			parameters = parameters.replace(this.title_name,title_escaped);
+			//Replace unescaped values with escaped values.
+			parameters = parameters.replace(this.artist_name, artist_escaped);
+			parameters = parameters.replace(this.title_name, title_escaped);
 			
-			print("api_sig: %s\n",api_sig);
+			print("api_sig: %s\n", api_sig);
 			
 			buffer = ROOT_URL + "?" + parameters;
 			
-			print("URL: %s\n",buffer);
+			print("URL: %s\n", buffer);
 			
 			int id = parent_session.web.post_data(buffer);
 			var rhc = new ResponseHandlerContainer(this.now_playing_cb, id);
@@ -222,6 +223,9 @@ namespace Lastfm {
 			string artist_escaped, album_escaped, title_escaped;
 			uint trackno = 0;
 			uint length = 0;
+			
+			//this.updateNowPlaying();
+			//return true;
 			
 			if( start_time == 0) {
 				print("Missing start time in scrobble\n");

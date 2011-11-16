@@ -49,7 +49,7 @@ namespace Lastfm {
 		}
 	
 		public static string escape(string uri_part) {
-			return Soup.URI.encode(uri_part.replace("_", " "), "&+");
+			return Soup.URI.encode(uri_part, "&+_");
 		}
 	
 		public int post_data(string? url) {
