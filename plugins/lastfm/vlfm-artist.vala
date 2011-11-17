@@ -69,15 +69,56 @@ namespace Lastfm {
 		private string? current_city = null;
 		
 		public void get_events(string? city = null) {
-			string artist_escaped;
-			string buffer;
-			current_city = city;
+			var ub = new Lastfm.UrlBuilder();
+			ub.add_param(UrlParamType.METHOD, "artist.getevents");
+			ub.add_param(UrlParamType.API_KEY, this.api_key);
+			ub.add_param(UrlParamType.ARTIST, this.name);
+			ub.add_param(UrlParamType.AUTOCORRECT, 1);
 			
-			artist_escaped = parent_session.web.escape(this.name);
-			buffer = "%s?method=artist.getevents&api_key=%s&artist=%s&autocorrect=1".printf(ROOT_URL, this.api_key, artist_escaped);
-			
-			int id = parent_session.web.request_data(buffer);
+			string? turl = ub.get_url(ROOT_URL, false);
+			if(turl == null) {
+				print("Error building artist.getInfo url\n");
+				return;
+			}
+			int id = parent_session.web.request_data(turl);
 			var rhc = new ResponseHandlerContainer(this.get_events_cb, id);
+			parent_session.handlers.insert(id, rhc);
+		}
+		
+		public void get_info() {
+			var ub = new Lastfm.UrlBuilder();
+			ub.add_param(UrlParamType.METHOD, "artist.getinfo");
+			ub.add_param(UrlParamType.API_KEY, this.api_key);
+			ub.add_param(UrlParamType.ARTIST, this.name);
+			ub.add_param(UrlParamType.AUTOCORRECT, 1);
+			if(this.username != null)
+				ub.add_param(UrlParamType.USERNAME, this.username);
+			if(this.lang != null)
+				ub.add_param(UrlParamType.LANGUAGE, "&lang=%s".printf(lang));
+			
+			string? turl = ub.get_url(ROOT_URL, false);
+			if(turl == null) {
+				print("Error building artist.getInfo url\n");
+				return;
+			}
+			int id = parent_session.web.request_data(turl);
+			var rhc = new ResponseHandlerContainer(this.get_info_cb, id);
+			parent_session.handlers.insert(id, rhc);
+		}
+		
+		public void get_correction() {
+			var ub = new Lastfm.UrlBuilder();
+			ub.add_param(UrlParamType.METHOD, "artist.getcorrection");
+			ub.add_param(UrlParamType.ARTIST, this.name);
+			ub.add_param(UrlParamType.API_KEY, this.api_key);
+			
+			string? turl = ub.get_url(ROOT_URL, false);
+			if(turl == null) {
+				print("Error building artist.getCorrection url\n");
+				return;
+			}
+			int id = parent_session.web.request_data(turl);
+			var rhc = new ResponseHandlerContainer(this.get_correction_cb, id);
 			parent_session.handlers.insert(id, rhc);
 		}
 		
@@ -139,36 +180,6 @@ namespace Lastfm {
 				received_events(this.name);
 				return false;
 			});
-		}
-		
-		public void get_info() {
-			string artist_escaped;
-			string buffer;
-			
-			artist_escaped = parent_session.web.escape(this.name);
-			buffer = "%s?method=artist.getinfo&api_key=%s&artist=%s&autocorrect=1".printf(ROOT_URL, this.api_key, artist_escaped);
-			
-			if(this.username != null)
-				buffer = buffer + "&username=%s".printf(this.username);
-			
-			if(this.lang != null)
-				buffer = buffer + "&lang=%s".printf(lang);
-			
-			int id = parent_session.web.request_data(buffer);
-			var rhc = new ResponseHandlerContainer(this.get_info_cb, id);
-			parent_session.handlers.insert(id, rhc);
-		}
-		
-		public void get_correction() {
-			string artist_escaped;
-			string buffer;
-			
-			artist_escaped = parent_session.web.escape(this.name);
-			buffer = "%s?method=artist.getcorrection&artist=%s&api_key=%s".printf(ROOT_URL, artist_escaped, this.api_key);
-			
-			int id = parent_session.web.request_data(buffer);
-			var rhc = new ResponseHandlerContainer(this.get_correction_cb, id);
-			parent_session.handlers.insert(id, rhc);
 		}
 		
 		private void get_info_cb(int id, string response) {

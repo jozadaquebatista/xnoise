@@ -67,20 +67,24 @@ namespace Lastfm {
 		}
 		
 		public void get_info() {
-			string artist_escaped, album_escaped;
-			string buffer;
-			
-			artist_escaped = parent_session.web.escape(this.artist_name);
-			album_escaped  = parent_session.web.escape(this.album_name);
-			buffer = "%s?method=album.getinfo&api_key=%s&album=%s&artist=%s&autocorrect=1".printf(ROOT_URL, this.api_key, album_escaped, artist_escaped);
-			
+			var ub = new Lastfm.UrlBuilder();
+			ub.add_param(UrlParamType.METHOD, "album.getinfo");
+			ub.add_param(UrlParamType.API_KEY, this.api_key);
+			ub.add_param(UrlParamType.ALBUM,  this.album_name);
+			ub.add_param(UrlParamType.ARTIST, this.artist_name);
+			ub.add_param(UrlParamType.AUTOCORRECT, 1);
 			if(this.username != null)
-				buffer = buffer + "&username=%s".printf(this.username);
+				ub.add_param(UrlParamType.USERNAME, this.username);
 			
 			if(this.lang != null)
-				buffer = buffer + "&lang=%s".printf(lang);
+				ub.add_param(UrlParamType.LANGUAGE, "&lang=%s".printf(lang));
 			
-			int id = parent_session.web.request_data(buffer);
+			string? turl = ub.get_url(ROOT_URL, false);
+			if(turl == null) {
+				print("Error building album.getInfo url\n");
+				return;
+			}
+			int id = parent_session.web.request_data(turl);
 			var rhc = new ResponseHandlerContainer(this.get_info_cb, id);
 			parent_session.handlers.insert(id, rhc);
 		}

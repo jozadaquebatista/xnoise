@@ -71,43 +71,27 @@ namespace Lastfm {
 				print("not logged in!\n");
 				return false;
 			}
+			var ub = new Lastfm.UrlBuilder();
+			ub.add_param(UrlParamType.API_KEY, this.api_key);
+			ub.add_param(UrlParamType.ARTIST, this.artist_name);
+			ub.add_param(UrlParamType.METHOD, "track.love");
+			ub.add_param(UrlParamType.SESSION_KEY, this.session_key);
+			ub.add_param(UrlParamType.TITLE, this.title_name);
+			ub.add_param(UrlParamType.SECRET, this.secret);
+			string? turl = ub.get_url(ROOT_URL, true);
+			if(turl == null) {
+				print("Error building trck.love url\n");
+				return false;
+			}
 			
-			string artist_escaped = parent_session.web.escape(this.artist_name);
-			string title_escaped  = parent_session.web.escape(this.title_name);
-			
-			string parameters;
-			string api_sig;
-			string buffer;
-			
-			parameters = "api_key=" + this.api_key;
-			parameters+= "&artist=" + this.artist_name;
-			parameters+= "&method=track.love";
-			parameters+= "&sk=" + this.session_key;
-			parameters+= "&track=" + this.title_name;
-			
-			api_sig = Util.get_api_sig_url(parameters, this.secret);
-			
-			parameters+= "&api_sig=" + api_sig;
-			
-			//Replace unescaped values for scaped values.
-			parameters = parameters.replace(this.artist_name, artist_escaped);
-			parameters = parameters.replace(this.title_name, title_escaped);
-			
-			print("api_sig: %s\n",api_sig);
-			
-			buffer = ROOT_URL + "?" + parameters;
-			
-			print("URL: %s\n",buffer);
-		
-			int id = parent_session.web.post_data(buffer);
+			int id = parent_session.web.post_data(turl);
 			var rhc = new ResponseHandlerContainer(this.love_cb, id);
 			parent_session.handlers.insert(id, rhc);
 			return true;			
-
 		}
 
 		private void love_cb(int id, string response) {
-			print("response:\n%s\n", response);
+			//print("response:\n%s\n", response);
 			var mr = new Xnoise.SimpleMarkup.Reader.from_string(response);
 			mr.read();
 			
@@ -123,34 +107,19 @@ namespace Lastfm {
 				return false;
 			}
 			
-			string artist_escaped = parent_session.web.escape(this.artist_name);
-			string title_escaped  = parent_session.web.escape(this.title_name);
-			
-			string parameters;
-			string api_sig;
-			string buffer;
-			
-			parameters = "api_key=" + this.api_key;
-			parameters+= "&artist=" + this.artist_name;
-			parameters+= "&method=track.unlove";
-			parameters+= "&sk=" + this.session_key;
-			parameters+= "&track=" + this.title_name;
-			
-			api_sig = Util.get_api_sig_url(parameters,this.secret);
-			
-			parameters+= "&api_sig=" + api_sig;
-			
-			//Replace unescaped values for scaped values.
-			parameters = parameters.replace(this.artist_name,artist_escaped);
-			parameters = parameters.replace(this.title_name,title_escaped);
-			
-			print("api_sig: %s\n",api_sig);
-			
-			buffer = ROOT_URL + "?" + parameters;
-			
-			print("URL: %s\n",buffer);
-			
-			int id = parent_session.web.post_data(buffer);
+			var ub = new Lastfm.UrlBuilder();
+			ub.add_param(UrlParamType.API_KEY, this.api_key);
+			ub.add_param(UrlParamType.ARTIST, this.artist_name);
+			ub.add_param(UrlParamType.METHOD, "track.unlove");
+			ub.add_param(UrlParamType.SESSION_KEY, this.session_key);
+			ub.add_param(UrlParamType.TITLE, this.title_name);
+			ub.add_param(UrlParamType.SECRET, this.secret);
+			string? turl = ub.get_url(ROOT_URL, true);
+			if(turl == null) {
+				print("Error building trck.love url\n");
+				return false;
+			}
+			int id = parent_session.web.post_data(turl);
 			var rhc = new ResponseHandlerContainer(this.unlove_cb, id);
 			parent_session.handlers.insert(id, rhc);
 			return true;
@@ -172,43 +141,26 @@ namespace Lastfm {
 				print("not logged in!\n");
 				return false;
 			}
-			
-			string artist_escaped = parent_session.web.escape(this.artist_name);
-			string title_escaped  = parent_session.web.escape(this.title_name);
-			
-			string parameters;
-			string api_sig;
-			string buffer;
-			
-			
-			parameters = "api_key=" + this.api_key;
-			parameters+= "&artist=" + this.artist_name;
-			parameters+= "&method=track.updatenowplaying";
-			parameters+= "&sk=" + this.session_key;
-			parameters+= "&track=" + this.title_name;
-			
-			api_sig = Util.get_api_sig_url(parameters, this.secret);
-			
-			parameters+= "&api_sig=" + api_sig;
-			
-			//Replace unescaped values with escaped values.
-			parameters = parameters.replace(this.artist_name, artist_escaped);
-			parameters = parameters.replace(this.title_name, title_escaped);
-			
-			print("api_sig: %s\n", api_sig);
-			
-			buffer = ROOT_URL + "?" + parameters;
-			
-			print("URL: %s\n", buffer);
-			
-			int id = parent_session.web.post_data(buffer);
+			var ub = new Lastfm.UrlBuilder();
+			ub.add_param(UrlParamType.API_KEY, this.api_key);
+			ub.add_param(UrlParamType.ARTIST, this.artist_name);
+			ub.add_param(UrlParamType.METHOD, "track.updatenowplaying");
+			ub.add_param(UrlParamType.SESSION_KEY, this.session_key);
+			ub.add_param(UrlParamType.TITLE, this.title_name);
+			ub.add_param(UrlParamType.SECRET, this.secret);
+			string? turl = ub.get_url(ROOT_URL, true);
+			if(turl == null) {
+				print("Error building updateNowPlaying url\n");
+				return false;
+			}
+			int id = parent_session.web.post_data(turl);
 			var rhc = new ResponseHandlerContainer(this.now_playing_cb, id);
 			parent_session.handlers.insert(id, rhc);
 			return true;
 		}
 
 		private void now_playing_cb(int id, string response) {
-			print("response:\n%s\n", response);
+			//print("response:\n%s\n", response);
 			var mr = new Xnoise.SimpleMarkup.Reader.from_string(response);
 			mr.read();
 			
@@ -220,14 +172,11 @@ namespace Lastfm {
 
 		// start_time: Unix time format of track play start time
 		public bool scrobble(int64 start_time) {
-			string artist_escaped, album_escaped, title_escaped;
-			uint trackno = 0;
-			uint length = 0;
 			
-			//this.updateNowPlaying();
+			//this.unlove();
 			//return true;
 			
-			if( start_time == 0) {
+			if(start_time == 0) {
 				print("Missing start time in scrobble\n");
 				return false;
 			}
@@ -237,38 +186,23 @@ namespace Lastfm {
 				return false;
 			}
 			
-			artist_escaped = parent_session.web.escape(this.artist_name);
-			album_escaped  = parent_session.web.escape(this.album_name);
-			title_escaped  = parent_session.web.escape(this.title_name);
-			
-			string buffer = "album%sapi_key%sartist%sduration%umethod%ssk%stimestamp%lutrack%strackNumber%u%s".printf(
-			   this.album_name,
-			   this.api_key,
-			   this.artist_name,
-			   length,
-			   "track.scrobble",
-			   this.session_key,
-			   (ulong)start_time,
-			   title_name,
-			   trackno,
-			   this.secret
-			);
-			string api_sig = Checksum.compute_for_string(ChecksumType.MD5, buffer);
-			
-			buffer = "%s?album=%s&api_key=%s&api_sig=%s&artist=%s&duration=%u&method=track.scrobble&timestamp=%lu&track=%s&trackNumber=%u&sk=%s".printf(
-			   ROOT_URL,
-			   album_escaped,
-			   this.api_key,
-			   api_sig,
-			   artist_escaped,
-			   length,
-			   (ulong)start_time,
-			   title_escaped,
-			   trackno,
-			   this.session_key
-			);
-			
-			int id = parent_session.web.post_data(buffer);
+			var ub = new Lastfm.UrlBuilder();
+			ub.add_param(UrlParamType.ALBUM, this.album_name);
+			ub.add_param(UrlParamType.API_KEY, this.api_key);
+			ub.add_param(UrlParamType.ARTIST, this.artist_name);
+			//ub.add_param(UrlParamType.DURATION, length);
+			ub.add_param(UrlParamType.METHOD, "track.scrobble");
+			ub.add_param(UrlParamType.SESSION_KEY, this.session_key);
+			ub.add_param(UrlParamType.TIMESTAMP, start_time);
+			ub.add_param(UrlParamType.TITLE, this.title_name);
+			//ub.add_param(UrlParamType.TRACKNUMBER, trackno);
+			ub.add_param(UrlParamType.SECRET, this.secret);
+			string? turl = ub.get_url(ROOT_URL, true);
+			if(turl == null) {
+				print("Error building scrobbble url\n");
+				return false;
+			}
+			int id = parent_session.web.post_data(turl);
 			var rhc = new ResponseHandlerContainer(this.scrobble_cb, id);
 			parent_session.handlers.insert(id, rhc);
 			return true;
@@ -287,7 +221,7 @@ namespace Lastfm {
 			}
 			
 			var n = mr.root.get_child_by_name("lfm").get_child_by_name("scrobbles");
-
+			
 			if(n.attributes["accepted"] == "1") {
 				Idle.add( () => {
 					scrobbled(this.artist_name, this.album_name, this.title_name, true);
