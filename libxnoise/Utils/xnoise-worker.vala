@@ -74,11 +74,11 @@ public class Xnoise.Worker : Object {
 		
 		public Job(ExecutionType execution_type = ExecutionType.UNKNOWN, 
 		           WorkFunc? func = null,
-		           int _timer_seconds = 0
+		           uint _timer_seconds = 0
 		           ) {
 			this._execution_type = execution_type;
 			this.func = func;
-			this.timer_seconds = _timer_seconds;
+			this._timer_seconds = _timer_seconds;
 		}
 		
 		// using the setter/getter will use a copy of the values for simple types, strings, arrays and structs
@@ -96,7 +96,8 @@ public class Xnoise.Worker : Object {
 			this.ht.remove_all();
 			//print("dtor job\n"); 
 		}
-		int timer_seconds;
+		private uint _timer_seconds = 0;
+		public uint timer_seconds { get { return _timer_seconds; } }
 		// These can be used as references to other objects, structs, arrays, simple types, strings, arrays and structs
 		public Value? value_arg1 = null;
 		public Value? value_arg2 = null;
@@ -216,6 +217,22 @@ public class Xnoise.Worker : Object {
 				source.set_callback(() => {
 					async_func(); 
 					return false;
+				});
+				source.attach(local_context);
+				break;
+			case ExecutionType.TIMED:
+				if(j.func == null) {
+					print("Error: There must be a WorkFunc in a job.\n");
+					break;
+				}
+				if(j.timer_seconds == 0) {
+					print("Error: There must be a time in a timed job.\n");
+					break;
+				}
+				Source source = new TimeoutSource.seconds(j.timer_seconds);
+				source.set_callback( () => {
+					unowned WorkFunc wf = j.func;
+					return wf(j);
 				});
 				source.attach(local_context);
 				break;

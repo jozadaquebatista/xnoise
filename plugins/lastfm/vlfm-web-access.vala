@@ -38,7 +38,7 @@ namespace Lastfm {
 		private HashTable<int, Soup.Message> messages =
 		   new HashTable<int, Soup.Message>(direct_hash, direct_equal);
 	
-		public signal void reply_received(int id, string data);
+		public signal void reply_received(int id, string? data);
 	
 		public WebAccess() {
 		}
@@ -46,6 +46,8 @@ namespace Lastfm {
 		~WebAccess() {
 			if(soup_session != null)
 				soup_session.abort();
+			if(messages != null)
+				messages.remove_all();
 		}
 	
 		public static string escape(string uri_part) {
@@ -64,7 +66,18 @@ namespace Lastfm {
 			messages.insert(cnt, message);
 			int cnt_old = cnt;
 			cnt++;
-		
+			Timeout.add_seconds(10, () => {
+				//print("message.status_code : %u\n", message.status_code);
+				if(message.status_code == KnownStatusCode.OK)
+					return false;
+				soup_session.cancel_message(message, KnownStatusCode.CANCELLED);
+				messages.remove(cnt_old);
+				Idle.add( () => {
+					this.reply_received(cnt_old, null);
+					return false;
+				});
+				return false;
+			});
 			return cnt_old; //return message id
 		}
 	
@@ -88,15 +101,15 @@ namespace Lastfm {
 		private void soup_cb(Soup.Session sender, Message message) {
 			if(sender != this.soup_session)
 				return;
-		
+			
 			if(message == null ||
 			   message.response_body == null ||
 			   message.response_body.data == null)
 				return;
-		
+			
 			string response = (string)message.response_body.flatten().data;
 			int id = 0;
-		
+			
 			foreach(int i in messages.get_keys()) {
 				if(messages.lookup(i) == message) {
 					id = i;
@@ -105,9 +118,9 @@ namespace Lastfm {
 			}
 			if(id == 0)
 				return;
-		
+			
 			messages.remove(id);
-		
+			
 			Idle.add( () => {
 				this.reply_received(id, response);
 				return false;

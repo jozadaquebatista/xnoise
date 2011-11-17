@@ -86,6 +86,7 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 		
 		a = global.notify["current-title"].connect(on_current_track_changed);
 		b = global.notify["current-artist"].connect(on_current_track_changed);
+		global.player_in_shutdown.connect( () => { clean_up(); });
 		return true;
 	}
 	
@@ -128,19 +129,14 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 	
 	private void on_current_track_changed(GLib.Object sender, ParamSpec p) {
 		//scrobble
-		if(!session.logged_in)
-			return;
 		if(global.current_title != null && global.current_artist != null) {
+			if(!session.logged_in)
+				return;
 			if(scrobble_source != 0) 
 				Source.remove(scrobble_source);
 			scrobble_source = Timeout.add_seconds(WAIT_TIME_BEFORE_SCROBBLE, () => {
 				// Use session's 'factory method to get Track
 				t = session.factory_make_track(global.current_artist, global.current_album, global.current_title);
-				
-				//ulong scrobble_reply = t.scrobbled.connect( (sender, ar, al, tr, su) => {
-				//	print("scrobbeled %s-%s-%s %s\n", ar, al, tr, (su == true ? "successfully" : "unsuccessfully"));
-				//	t.disconnect(scrobble_reply);
-				//});
 				
 				var dt = new DateTime.now_utc();
 				int64 start_time = dt.to_unix();

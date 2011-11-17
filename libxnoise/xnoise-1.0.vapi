@@ -537,6 +537,7 @@ namespace Xnoise {
 		public signal void before_position_reference_changed ();
 		public signal void before_position_reference_next_changed ();
 		public signal void caught_eos_from_player ();
+		public signal void player_in_shutdown ();
 		public signal void player_state_changed ();
 		public signal void position_reference_changed ();
 		public signal void position_reference_next_changed ();
@@ -1005,10 +1006,11 @@ namespace Xnoise {
 			public Gtk.TreeRowReference[] treerowrefs;
 			public GLib.Value? value_arg1;
 			public GLib.Value? value_arg2;
-			public Job (Xnoise.Worker.ExecutionType execution_type = ExecutionType.UNKNOWN, Xnoise.Worker.WorkFunc? func = null, int _timer_seconds = 0);
+			public Job (Xnoise.Worker.ExecutionType execution_type = ExecutionType.UNKNOWN, Xnoise.Worker.WorkFunc? func = null, uint _timer_seconds = 0);
 			public GLib.Value? get_arg (string name);
 			public void set_arg (string? name, GLib.Value? val);
 			public Xnoise.Worker.ExecutionType execution_type { get; }
+			public uint timer_seconds { get; }
 			public signal void finished ();
 		}
 		public enum ExecutionType {

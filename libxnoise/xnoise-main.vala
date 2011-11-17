@@ -158,8 +158,9 @@ public class Xnoise.Main : GLib.Object {
 		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_final_tracks_to_db_job);
 		job.items = main_window.trackList.tracklistmodel.get_all_tracks();
 		job.finished.connect( () => {
-			if(maxtime_quit_src != 0)
-				Source.remove(maxtime_quit_src);
+//			if(maxtime_quit_src != 0)
+//				Source.remove(maxtime_quit_src);
+			print("finished db saving\n");
 			preparing_quit = false;
 		});
 		db_worker.push_job(job);
@@ -168,12 +169,24 @@ public class Xnoise.Main : GLib.Object {
 	private static bool preparing_quit = false;
 	private uint maxtime_quit_src = 0;
 	
+	private bool quit_job(Worker.Job job) {
+		Gtk.main_quit();
+		return false;
+	}
+	
 	public void quit() {
+		global.player_in_shutdown();
 		global.player_state = PlayerState.STOPPED;
 		preparing_quit = true;
-		maxtime_quit_src = Timeout.add_seconds(4, () => { // maximum time for shutdown
+//		maxtime_quit_src = Timeout.add_seconds(4, () => { // maximum time for shutdown
+//			Gtk.main_quit(); 
+//			return false;
+//		});
+		var jx = new Worker.Job(Worker.ExecutionType.TIMED, quit_job, 4);
+		io_worker.push_job(jx);
+		jx.finished.connect( () => {
 			Gtk.main_quit(); 
-			return false;
+			preparing_quit = false;
 		});
 		print ("closing...\n");
 		if(main_window.is_fullscreen) 

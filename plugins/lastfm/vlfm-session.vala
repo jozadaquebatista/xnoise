@@ -112,7 +112,10 @@ namespace Lastfm {
 		}
 		
 		~Session() {
-			_web.disconnect(a);
+			if(_web != null) {
+				_web.disconnect(a);
+				_web = null;
+			}
 		}
 		
 		private ulong a =0;
@@ -273,13 +276,14 @@ namespace Lastfm {
 			
 		}
 
-		private void web_reply_received(WebAccess sender, int id, string response) {
+		private void web_reply_received(WebAccess sender, int id, string? response) {
 			if(id < 0)
 				return;
 			ResponseHandlerContainer rhc = handlers.lookup(id);
-			if(rhc != null && rhc.func != null && rhc.id > -1 && rhc.id == id)
-				rhc.func(id, response);
-			
+			if(rhc != null && rhc.func != null && rhc.id > -1 && rhc.id == id) {
+				if(response != null)
+					rhc.func(id, response);
+			}
 			handlers.remove(id);
 		}
 		
