@@ -40,11 +40,11 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 	public Main xn { get; set; }
 	private unowned PluginModule.Container _owner;
 	private Session session;
-	private Track t;
 	private uint scrobble_source = 0;
-	private int WAIT_TIME_BEFORE_SCROBBLE = 15;
-	private ulong a = 0;
-	private ulong b = 0;
+	private uint now_play_source = 0;
+	private int WAIT_TIME_BEFORE_SCROBBLE = 25;
+	private int WAIT_TIME_BEFORE_NOW_PLAYING = 5;
+	
 	private ulong c = 0;
 	private ulong d = 0;
 	
@@ -84,8 +84,9 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 		if(username != "" && password != "")
 			this.login(username, password);
 		
-		a = global.notify["current-title"].connect(on_current_track_changed);
-		b = global.notify["current-artist"].connect(on_current_track_changed);
+		global.notify["current-title"].connect(on_current_track_changed);
+		global.notify["current-artist"].connect(on_current_track_changed);
+		global.uri_changed.connect(on_current_uri_changed);
 		global.player_in_shutdown.connect( () => { clean_up(); });
 		return true;
 	}
@@ -101,7 +102,8 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 			session.disconnect(d);
 			session = null;
 		}
-		t = null;
+		scrobble_track = null;
+		now_play_track = null;
 	}
 	
 	~Lfm() {
@@ -127,22 +129,60 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 		return this.session.logged_in;
 	}
 	
-	private void on_current_track_changed(GLib.Object sender, ParamSpec p) {
+	private Track scrobble_track;
+	private Track now_play_track;
+	
+	private struct ScrobbleData {
+		public string? uri;
+		public string? artist;
+		public string? album;
+		public string? title;
+		public int64 playtime;
+	}
+	
+	private ScrobbleData sd_last;
+	
+	private void on_current_uri_changed(GLib.Object sender, string? p) {
 		//scrobble
-		if(global.current_title != null && global.current_artist != null) {
-			if(!session.logged_in)
+		if(sd_last.title != null && sd_last.artist != null) {
+			if(session == null || !session.logged_in)
 				return;
-			if(scrobble_source != 0) 
-				Source.remove(scrobble_source);
-			scrobble_source = Timeout.add_seconds(WAIT_TIME_BEFORE_SCROBBLE, () => {
-				// Use session's 'factory method to get Track
-				t = session.factory_make_track(global.current_artist, global.current_album, global.current_title);
-				
+			scrobble_source = Idle.add( () => {
 				var dt = new DateTime.now_utc();
-				int64 start_time = dt.to_unix();
+				int64 pt = dt.to_unix();
+				if((pt - sd_last.playtime) < WAIT_TIME_BEFORE_SCROBBLE)
+					return false;
+				// Use session's 'factory method to get Track
+				scrobble_track = session.factory_make_track(sd_last.artist, sd_last.album, sd_last.title);
+				
 				// SCROBBLE TRACK
-				t.scrobble(start_time);
+				scrobble_track.scrobble(sd_last.playtime);
 				scrobble_source = 0;
+				return false;
+			});
+		}
+	}
+	
+	private void on_current_track_changed(GLib.Object sender, ParamSpec p) {
+		if(global.current_title != null && global.current_artist != null) {
+			if(session == null || !session.logged_in)
+				return;
+			//updateNowPlaying
+			if(now_play_source != 0) 
+				Source.remove(now_play_source);
+			now_play_source = Timeout.add_seconds(WAIT_TIME_BEFORE_NOW_PLAYING, () => {
+				// Use session's 'factory method to get Track
+				now_play_track = session.factory_make_track(global.current_artist, global.current_album, global.current_title);
+				sd_last = ScrobbleData();
+				sd_last.uri    = global.current_uri;
+				sd_last.artist = global.current_artist;
+				sd_last.album  = global.current_album;
+				sd_last.title  = global.current_title;
+				var dt = new DateTime.now_utc();
+				sd_last.playtime = dt.to_unix();
+				// UPDATE NOW PLAYING TRACK
+				now_play_track.updateNowPlaying();
+				now_play_source = 0;
 				return false;
 			});
 		}
