@@ -49,7 +49,7 @@ namespace Lastfm {
 	}
 	
 	private class UrlBuilder {
-		
+		// class to build lastfm url with signatures from parameters
 		private HashTable<UrlParamType, Value?> values = new HashTable<UrlParamType, Value?>(direct_hash, direct_equal);
 		private UrlParamType[] pta = new UrlParamType[0];
 		
