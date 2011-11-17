@@ -48,7 +48,7 @@ namespace Lastfm {
 		MAX
 	}
 	
-	private class UrlBuilder {
+	private class UrlBuilder : GLib.Object {
 		// class to build lastfm url with signatures from parameters
 		private HashTable<UrlParamType, Value?> values = new HashTable<UrlParamType, Value?>(direct_hash, direct_equal);
 		private UrlParamType[] pta = new UrlParamType[0];
@@ -371,7 +371,7 @@ namespace Lastfm {
 		}
 	}
 	
-	public class Util {
+	public class Util : GLib.Object {
 		//Generate API_SIG from URI paramaters
 		public static string get_api_sig_url(string param, string apiSecret) {
 			string result = "";

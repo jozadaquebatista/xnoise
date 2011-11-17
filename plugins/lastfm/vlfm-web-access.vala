@@ -33,7 +33,7 @@ using Soup;
 
 namespace Lastfm {
 	public class WebAccess : GLib.Object {
-		private Soup.SessionAsync session;
+		private Soup.SessionAsync soup_session;
 		private int cnt = 1;
 		private HashTable<int, Soup.Message> messages =
 		   new HashTable<int, Soup.Message>(direct_hash, direct_equal);
@@ -44,8 +44,8 @@ namespace Lastfm {
 		}
 	
 		~WebAccess() {
-			if(session != null)
-				session.abort();
+			if(soup_session != null)
+				soup_session.abort();
 		}
 	
 		public static string escape(string uri_part) {
@@ -56,10 +56,10 @@ namespace Lastfm {
 			if(url == null || url.strip() == "")
 				return -1;
 			//print("post url: %s\n", url);
-			if(session == null)
-				session = new Soup.SessionAsync();
+			if(soup_session == null)
+				soup_session = new Soup.SessionAsync();
 			var message = new Soup.Message("POST", url);
-			session.queue_message(message, soup_cb);
+			soup_session.queue_message(message, soup_cb);
 		
 			messages.insert(cnt, message);
 			int cnt_old = cnt;
@@ -72,11 +72,11 @@ namespace Lastfm {
 			if(url == null || url.strip() == "")
 				return -1;
 			//print("url: %s\n", url);
-			if(session == null)
-				session = new Soup.SessionAsync();
+			if(soup_session == null)
+				soup_session = new Soup.SessionAsync();
 			//print("\ngetting page from: %s\n\n", url);
 			var message = new Soup.Message("GET", url);
-			session.queue_message(message, soup_cb);
+			soup_session.queue_message(message, soup_cb);
 		
 			messages.insert(cnt, message);
 			int cnt_old = cnt;
@@ -86,7 +86,7 @@ namespace Lastfm {
 		}
 	
 		private void soup_cb(Soup.Session sender, Message message) {
-			if(sender != this.session)
+			if(sender != this.soup_session)
 				return;
 		
 			if(message == null ||

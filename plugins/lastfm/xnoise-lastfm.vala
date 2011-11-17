@@ -100,8 +100,6 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 			session.disconnect(d);
 			session = null;
 		}
-		global.disconnect(a);
-		global.disconnect(b);
 		t = null;
 	}
 	
