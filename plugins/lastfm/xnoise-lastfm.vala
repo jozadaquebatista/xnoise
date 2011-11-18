@@ -147,7 +147,9 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 		if(sd_last.title != null && sd_last.artist != null) {
 			if(session == null || !session.logged_in)
 				return;
-			scrobble_source = Idle.add( () => {
+			if(scrobble_source != 0)
+				Source.remove(scrobble_source);
+			scrobble_source = Timeout.add(500, () => {
 				var dt = new DateTime.now_utc();
 				int64 pt = dt.to_unix();
 				if((pt - sd_last.playtime) < WAIT_TIME_BEFORE_SCROBBLE)
