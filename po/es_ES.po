@@ -421,7 +421,7 @@ msgstr "Lista de reproducción"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:47
 #, fuzzy
 msgid "Lyrics"
-msgstr "_Letra"
+msgstr "Letra"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:48
 msgid "Show Media"
