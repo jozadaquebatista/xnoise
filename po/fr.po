@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-09 16:36+0100\n"
+"POT-Creation-Date: 2011-11-19 15:37+0100\n"
 "PO-Revision-Date: 2011-07-14 04:44+0100\n"
 "Last-Translator: Tubuntu <tubuntu@testimonium.be>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -32,7 +32,7 @@ msgid "Add all visible tracks to tracklist"
 msgstr "Visible extra columns for tracklist:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:161
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:168
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - Modification des métadonnées"
 
@@ -53,7 +53,7 @@ msgid "Album:"
 msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:183
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
 "wait."
@@ -62,7 +62,7 @@ msgstr ""
 "annulez si vous ne voulez pas attendre."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:180
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:187
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
@@ -70,44 +70,44 @@ msgstr ""
 "voulez pas attendre."
 
 #. ARTIST
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:131
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1119
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1227
 msgid "Artist"
 msgstr "Artiste"
 
 #. ALBUM
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:127
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1240
 msgid "Album"
 msgstr "Album"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:137
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1085
 msgid "Title"
 msgstr "Titre"
 
 #. GENRE
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:140
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1153
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1253
 msgid "Genre"
 msgstr "Genre"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:136
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:143
 msgid "Uri"
 msgstr ""
 
 #. YEAR
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1171
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1266
 msgid "Year"
 msgstr "Année"
 
 #. TRACKNUMBER
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1214
 msgid "Tracknumber"
 msgstr "N° de piste"
@@ -339,7 +339,6 @@ msgstr "titre inconnu"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1179
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1204
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:351
-#: ../plugins/notifications/xnoise-notifications.vala:191
 #: ../plugins/notifications2/xnoise-notifications.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
@@ -353,7 +352,6 @@ msgstr "de"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1181
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1206
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:353
-#: ../plugins/notifications/xnoise-notifications.vala:193
 #: ../plugins/notifications2/xnoise-notifications.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:133
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:156
@@ -640,36 +638,36 @@ msgstr "Afficher l'instance en cours de xnoise.\n"
 msgid "Buffer lyrics in database"
 msgstr "Mettre les paroles de la base de données en cache"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:347
-#: ../plugins/lastfm/xnoise-lastfm.vala:413
+#: ../plugins/lastfm/xnoise-lastfm.vala:383
+#: ../plugins/lastfm/xnoise-lastfm.vala:449
 #, c-format
 msgid "User logged in!"
 msgstr ""
 
 #. feedback
-#: ../plugins/lastfm/xnoise-lastfm.vala:351
-#: ../plugins/lastfm/xnoise-lastfm.vala:411
-#: ../plugins/lastfm/xnoise-lastfm.vala:416
+#: ../plugins/lastfm/xnoise-lastfm.vala:387
+#: ../plugins/lastfm/xnoise-lastfm.vala:447
+#: ../plugins/lastfm/xnoise-lastfm.vala:452
 #, c-format
 msgid "User not logged in!"
 msgstr ""
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:381
+#: ../plugins/lastfm/xnoise-lastfm.vala:417
 #, c-format
 msgid "Please enter your lastfm username and password."
 msgstr ""
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:390
+#: ../plugins/lastfm/xnoise-lastfm.vala:426
 #, c-format
 msgid "Username:"
 msgstr ""
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:396
+#: ../plugins/lastfm/xnoise-lastfm.vala:432
 #, c-format
 msgid "Password:"
 msgstr ""
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:425
+#: ../plugins/lastfm/xnoise-lastfm.vala:461
 msgid "Apply"
 msgstr ""
 
@@ -706,12 +704,10 @@ msgstr "Contrôler xnoise avec l'interface dbus MPRIS v2"
 msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "Contrôler xnoise avec l'interface dbus MPRIS v2"
 
-#: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
 msgid "Show notifications one track change"
 msgstr "Afficher les notifications au changement de piste"
 
-#: ../plugins/soundmenu/soundmenu.xnplugin.desktop.in.h:1
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 msgid "Use ayatana soundmenu"
 msgstr "Utiliser le menu son d'ayatana"

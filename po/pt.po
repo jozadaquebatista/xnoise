@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-09 16:36+0100\n"
+"POT-Creation-Date: 2011-11-19 15:37+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -34,7 +34,7 @@ msgid "Add all visible tracks to tracklist"
 msgstr "Adicionar faixas visíveis à lista de faixas"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:161
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:168
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - Editar detalhes"
 
@@ -55,54 +55,60 @@ msgid "Album:"
 msgstr "Álbum:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
-msgstr "Por favor, aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:183
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+"Por favor, aguarde o preenchimento da coleção. Cancele se não quiser "
+"aguardar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:180
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr "Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:187
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+"Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #. ARTIST
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:131
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1119
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1227
 msgid "Artist"
 msgstr "Artista"
 
 #. ALBUM
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:127
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1240
 msgid "Album"
 msgstr "Álbum"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:137
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1085
 msgid "Title"
 msgstr "Título"
 
 #. GENRE
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:140
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1153
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1253
 msgid "Genre"
 msgstr "Género"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:136
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:143
 msgid "Uri"
 msgstr "Uri"
 
 #. YEAR
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1171
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1266
 msgid "Year"
 msgstr "Ano"
 
 #. TRACKNUMBER
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1214
 msgid "Tracknumber"
 msgstr "Número da faixa"
@@ -170,8 +176,10 @@ msgid "Loading ..."
 msgstr "A carregar..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
-msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
+msgstr ""
+"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
@@ -327,7 +335,6 @@ msgstr "título desconhecido"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1179
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1204
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:351
-#: ../plugins/notifications/xnoise-notifications.vala:191
 #: ../plugins/notifications2/xnoise-notifications.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
@@ -341,7 +348,6 @@ msgstr "por"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1181
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1206
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:353
-#: ../plugins/notifications/xnoise-notifications.vala:193
 #: ../plugins/notifications2/xnoise-notifications.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:133
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:156
@@ -511,16 +517,24 @@ msgstr "_Configurar"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar o arranque do xnoise."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar "
+"o arranque do xnoise."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
 msgstr "Adicionar multimédia"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:438
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
-msgstr "Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para a coleção?"
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
+msgstr ""
+"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
+"a coleção?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:533
 msgid "no repeat"
@@ -600,8 +614,10 @@ msgid "More information on the project website:"
 msgstr "Mais informações na página web:"
 
 #: ../src/xnoise.vala:70
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr "Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr ""
+"Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
 
 #: ../src/xnoise.vala:131
 msgid "Using the running instance of xnoise!\n"
@@ -615,36 +631,36 @@ msgstr "A exibir a instância atual do xnoise!\n"
 msgid "Buffer lyrics in database"
 msgstr "Colocar letras na base de dados"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:347
-#: ../plugins/lastfm/xnoise-lastfm.vala:413
+#: ../plugins/lastfm/xnoise-lastfm.vala:383
+#: ../plugins/lastfm/xnoise-lastfm.vala:449
 #, c-format
 msgid "User logged in!"
 msgstr "Sessão iniciada"
 
 #. feedback
-#: ../plugins/lastfm/xnoise-lastfm.vala:351
-#: ../plugins/lastfm/xnoise-lastfm.vala:411
-#: ../plugins/lastfm/xnoise-lastfm.vala:416
+#: ../plugins/lastfm/xnoise-lastfm.vala:387
+#: ../plugins/lastfm/xnoise-lastfm.vala:447
+#: ../plugins/lastfm/xnoise-lastfm.vala:452
 #, c-format
 msgid "User not logged in!"
 msgstr "Sessão não iniciada"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:381
+#: ../plugins/lastfm/xnoise-lastfm.vala:417
 #, c-format
 msgid "Please enter your lastfm username and password."
 msgstr "Por favor, indique o utilizador e a senha last.fm."
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:390
+#: ../plugins/lastfm/xnoise-lastfm.vala:426
 #, c-format
 msgid "Username:"
 msgstr "Utilizador:"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:396
+#: ../plugins/lastfm/xnoise-lastfm.vala:432
 #, c-format
 msgid "Password:"
 msgstr "Senha:"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:425
+#: ../plugins/lastfm/xnoise-lastfm.vala:461
 msgid "Apply"
 msgstr "Aplicar"
 
@@ -680,12 +696,10 @@ msgstr "Controlar xnoise através de uma interface MPRIS v2"
 msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "Controlar xnoise através de uma interface MPRIS v1"
 
-#: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
 msgid "Show notifications one track change"
 msgstr "Mostrar notificações ao alterar de faixa"
 
-#: ../plugins/soundmenu/soundmenu.xnplugin.desktop.in.h:1
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 msgid "Use ayatana soundmenu"
 msgstr "Utilizar menu de som ayatana"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-09 16:36+0100\n"
+"POT-Creation-Date: 2011-11-19 15:37+0100\n"
 "PO-Revision-Date: 2011-11-11 11:03+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -37,7 +37,7 @@ msgid "Add all visible tracks to tracklist"
 msgstr "הוספת הרצועות המוצגות לרשימה"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:161
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:168
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - ערוך מטה-דטה(metadata)"
 
@@ -58,54 +58,57 @@ msgid "Album:"
 msgstr "אלבום:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:183
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
 msgstr "אנא המתן בעת מילוי דפדפן המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:180
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:187
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "אנא המתן בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #. ARTIST
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:124
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:131
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1119
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1227
 msgid "Artist"
 msgstr "אמן"
 
 #. ALBUM
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:127
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1102
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1240
 msgid "Album"
 msgstr "אלבום"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:130
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:137
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1085
 msgid "Title"
 msgstr "כותרת"
 
 #. GENRE
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:140
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1153
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1253
 msgid "Genre"
 msgstr "ז'אנר"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:136
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:143
 msgid "Uri"
 msgstr "כתובת URI"
 
 #. YEAR
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1171
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1266
 msgid "Year"
 msgstr "שנה"
 
 #. TRACKNUMBER
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1214
 msgid "Tracknumber"
 msgstr "מספר הרצועה"
@@ -173,7 +176,8 @@ msgid "Loading ..."
 msgstr "טוען ..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "שם הכתוביות אינו מתאים לשם הוידאו! לא משתמש בקובץ כתוביות."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
@@ -330,7 +334,6 @@ msgstr "כותרת בלתי ידועה"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1179
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1204
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:351
-#: ../plugins/notifications/xnoise-notifications.vala:191
 #: ../plugins/notifications2/xnoise-notifications.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
@@ -344,7 +347,6 @@ msgstr "של"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1181
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1206
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:353
-#: ../plugins/notifications/xnoise-notifications.vala:193
 #: ../plugins/notifications2/xnoise-notifications.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:133
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:156
@@ -514,15 +516,21 @@ msgstr "ה_גדרה"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של xnoise."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של "
+"xnoise."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
 msgstr "הוספת מדיה"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:438
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
 msgstr "הפעלת את xnoise לראשונה. האם ברצונך לייבא מדיה לספריה?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:533
@@ -603,7 +611,8 @@ msgid "More information on the project website:"
 msgstr "מידע נוסף ניתן למצוא באתר הפרויקט:"
 
 #: ../src/xnoise.vala:70
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr "הרץ 'xnoise --help' על מנת לראות רשימה מלאה של אפשרויות שורת הפקודה.\n"
 
 #: ../src/xnoise.vala:131
@@ -618,36 +627,36 @@ msgstr "מראה את השלב הרץ של xnoise.\n"
 msgid "Buffer lyrics in database"
 msgstr "אצור כתוביות בבסיס הנתונים"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:347
-#: ../plugins/lastfm/xnoise-lastfm.vala:413
+#: ../plugins/lastfm/xnoise-lastfm.vala:383
+#: ../plugins/lastfm/xnoise-lastfm.vala:449
 #, c-format
 msgid "User logged in!"
 msgstr "משתמש מחובר!"
 
 #. feedback
-#: ../plugins/lastfm/xnoise-lastfm.vala:351
-#: ../plugins/lastfm/xnoise-lastfm.vala:411
-#: ../plugins/lastfm/xnoise-lastfm.vala:416
+#: ../plugins/lastfm/xnoise-lastfm.vala:387
+#: ../plugins/lastfm/xnoise-lastfm.vala:447
+#: ../plugins/lastfm/xnoise-lastfm.vala:452
 #, c-format
 msgid "User not logged in!"
 msgstr "משתמש אינו מחובר!"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:381
+#: ../plugins/lastfm/xnoise-lastfm.vala:417
 #, c-format
 msgid "Please enter your lastfm username and password."
 msgstr "אנה הכנס את שם המשתמש והססמה של חשבון ה-Last.fm שלך."
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:390
+#: ../plugins/lastfm/xnoise-lastfm.vala:426
 #, c-format
 msgid "Username:"
 msgstr "שם משתמש:"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:396
+#: ../plugins/lastfm/xnoise-lastfm.vala:432
 #, c-format
 msgid "Password:"
 msgstr "ססמה:"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:425
+#: ../plugins/lastfm/xnoise-lastfm.vala:461
 msgid "Apply"
 msgstr "החל"
 
@@ -683,12 +692,10 @@ msgstr "שלוט על xnoise עם ממשק ה-dbus של MPRIS v2"
 msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "שלוט על xnoise עם ממשק ה-dbus של MPRIS v1"
 
-#: ../plugins/notifications/notifications.xnplugin.desktop.in.h:1
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
 msgid "Show notifications one track change"
 msgstr "הצג התראות ברגע שהרצועה משתנה"
 
-#: ../plugins/soundmenu/soundmenu.xnplugin.desktop.in.h:1
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 msgid "Use ayatana soundmenu"
 msgstr "השתמש ב-soundmenu של ayatana"
