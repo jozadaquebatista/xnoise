@@ -1,3 +1,17 @@
+xnoise (0.1.30) unstable; urgency=low
+  * add new lastfm plugin (scrobble, replace lastfmcovers plugin)
+  * add more support for importing playlist files (Francisco Pérez Cuadrado)
+  * add new jump to position button
+  * use Ctrl-M for media browser toggling
+  * add Czech translation
+  * update translations
+  * replace markup reader with wrapper class for glib's markup reader
+  * autotools: remove *_DEPRECATED macros (fix issue 87)
+  * fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Sat, 19 Nov 2011 10:00:33 +0100
+
+
 xnoise (0.1.29) unstable; urgency=low
   * redo import and use of streams
   * add mpris v1 plugin
