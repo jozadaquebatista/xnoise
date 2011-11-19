@@ -1,9 +1,0 @@
-[XnoisePlugin]
-name=soundmenu
-module=soundmenu
-_description=Use ayatana soundmenu
-website=http://code.google.com/p/xnoise/
-icon=/path/to/icon
-copyright=Copyright © 2010 Jörn Magens
-license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
-author=Jörn Magens <shuerhaaken@googlemail.com>

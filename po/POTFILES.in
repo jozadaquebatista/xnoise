@@ -64,9 +64,7 @@ plugins/lastfm/xnoise-lastfm.vala
 plugins/lyricwiki/xnoise-lyricwiki.vala
 plugins/mediakeys/xnoise-mediakeys.vala
 plugins/mpris/xnoise-mpris.vala
-plugins/notifications/xnoise-notifications.vala
 plugins/notifications2/xnoise-notifications.vala
-plugins/soundmenu/xnoise-sound-menu.vala
 plugins/soundmenu2/xnoise-sound-menu-2.vala
 plugins/testplugin/xnoise-testplugin.vala
 plugins/titleToDecoration/xnoise-title-to-decoration.vala
@@ -78,9 +76,7 @@ plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in
 plugins/mediakeys/mediakeys.xnplugin.desktop.in
 plugins/mpris/mpris.xnplugin.desktop.in
 plugins/mpris_one/mpris_one.xnplugin.desktop.in
-plugins/notifications/notifications.xnplugin.desktop.in
 plugins/notifications2/notifications.xnplugin.desktop.in
-plugins/soundmenu/soundmenu.xnplugin.desktop.in
 plugins/soundmenu2/soundmenu2.xnplugin.desktop.in
 plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in
 

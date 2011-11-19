@@ -29,11 +29,9 @@ SQLITE_REQUIRED=3.4
 TAGLIB_C_REQUIRED=1.5.0
 
 dnl required versions for plugins
-LIBNOTIFY_REQUIRED=0.4.5
-LIBNOTIFY_07_REQUIRED=0.7.0
+LIBNOTIFY_REQUIRED=0.7.0
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
-LIBINDICATE_REQUIRED=0.4.2
 GDBUS_REQUIRED=2.26
 
 VALA_REQUIRED=0.11.6
@@ -134,39 +132,15 @@ PKG_CHECK_MODULES(LIBNOTIFY, \
                   libnotify >= $LIBNOTIFY_REQUIRED, \
                   have_libnotify=yes, \
                   have_libnotify=no)
-PKG_CHECK_MODULES(LIBNOTIFY07, \
-                  libnotify >= 0.7.0, \
-                  have_libnotify07=yes, \
-                  have_libnotify07=no)
 
 if test "x$have_libnotify" != "xyes"; then
     AC_MSG_WARN([libnotify $LIBNOTIFY_REQUIRED or greater not found.])
-fi
-if test "x$have_libnotify07" = "xyes"; then
-    PKG_CHECK_MODULES(LIBNOTIFY, \
-                      libnotify >= 0.7.0, \
-                      have_libnotify07=yes, \
-                      have_libnotify07=no)
 fi
 AC_SUBST(LIBNOTIFY_CFLAGS)
 AC_SUBST(LIBNOTIFY_LIBS)
 dnl ================================================================
 
 
-
-dnl ================================================================
-dnl plugin check for plugins dependent on libindicate
-
-PKG_CHECK_MODULES(LIBINDICATE, \
-                  indicate >= $LIBINDICATE_REQUIRED, \
-                  have_libindicate=yes, \
-                  have_libindicate=no)
-if test "x$have_libindicate" != "xyes"; then
-    AC_MSG_WARN([libindicate $LIBINDICATE_REQUIRED or greater not found.])
-fi
-AC_SUBST(LIBINDICATE_CFLAGS)
-AC_SUBST(LIBINDICATE_LIBS)
-dnl ================================================================
 
 
 
@@ -296,23 +270,13 @@ AC_ARG_ENABLE([notifications],
 
 if test "x$enable_notifications" = "xyes"; then
     if test "x$have_libnotify" = "xyes"; then
-        if test "x$have_libnotify07" = "xyes"; then
-            enable_notifications=no
-            enable_notifications07=yes
-            echo "Notifications plugin will be build with 0.7 API."
-        else
-            enable_notifications=yes
-            enable_notifications07=no
-            echo "Notifications plugin will be build with 0.5 API."
-        fi
+        enable_notifications=yes
     else
         enable_notifications=no
-        enable_notifications07=no
         AC_MSG_WARN([notifications plugin will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_NOTIFICATIONS, test x"$enable_notifications" = "xyes")
-AM_CONDITIONAL(ENABLE_NOTIFICATIONS2, test x"$enable_notifications07" = "xyes")
 dnl ================================================================
 
 dnl ================================================================
@@ -335,30 +299,6 @@ fi
 AM_CONDITIONAL(ENABLE_MPRIS, test x"$enable_mpris" = "xyes")
 dnl ================================================================
 
-dnl ================================================================
-dnl dependency check for optional build of soundmenu plugin 
-
-AC_ARG_ENABLE([soundmenu],
-    AS_HELP_STRING([--disable-soundmenu],
-    [Disable soundmenu plugin (default: enabled)]),
-    [enable_soundmenu=$enableval],
-    [enable_soundmenu=yes])
-
-if test "x$enable_soundmenu" = "xyes"; then
-    if test "x$have_libindicate" = "xyes"; then
-        if test "x$enable_mpris" = "xyes"; then
-            enable_soundmenu=yes
-        else
-            enable_soundmenu=no
-            AC_MSG_WARN([soundmenu plugin will not be included in the build.])
-        fi
-    else
-        enable_soundmenu=no
-        AC_MSG_WARN([soundmenu plugin will not be included in the build.])
-    fi
-fi
-AM_CONDITIONAL(ENABLE_SOUNDMENU, test x"$enable_soundmenu" = "xyes")
-dnl ================================================================
 
 dnl ================================================================
 dnl dependency check for optional build of soundmenu2 plugin (ubuntu maverick+1)
@@ -369,20 +309,11 @@ AC_ARG_ENABLE([soundmenu2],
     [enable_soundmenu2=$enableval],
     [enable_soundmenu2=yes])
 
-if test "x$enable_soundmenu2" = "xyes"; then
-    if test "x$enable_soundmenu" = "xno"; then
-        if test "x$enable_mpris" = "xyes"; then
-            enable_soundmenu2=yes
-        else
-            enable_soundmenu2=no
-            AC_MSG_WARN([soundmenu2 plugin will not be included in the build.])
-        fi
-    else
-        enable_soundmenu2=no
-        AC_MSG_WARN([soundmenu2 plugin will not be included in the build.])
-    fi
+if test "x$enable_soundmenu2" != "xyes"; then
+    enable_soundmenu2=no
+    AC_MSG_WARN([soundmenu2 plugin will not be included in the build.])
 fi
-AM_CONDITIONAL(ENABLE_SOUNDMENU2, test x"$enable_soundmenu2" = "xyes")
+AM_CONDITIONAL(ENABLE_SOUNDMENU, test x"$enable_soundmenu2" = "xyes")
 dnl ================================================================
 
 dnl ================================================================
@@ -494,14 +425,12 @@ AC_CONFIG_FILES([
     plugins/testplugin/Makefile
     plugins/titleToDecoration/Makefile
     plugins/cyclic-save-state/Makefile
-    plugins/notifications/Makefile
     plugins/notifications2/Makefile
     plugins/mpris/Makefile
     plugins/mpris_one/Makefile
     plugins/mediakeys/Makefile
     plugins/chartlyrics/Makefile
     plugins/lyricwiki/Makefile
-    plugins/soundmenu/Makefile
     plugins/soundmenu2/Makefile
     plugins/databaseLyrics/Makefile
     plugins/lastfm/Makefile
@@ -532,9 +461,7 @@ echo "
     lyricwiki:                     ${enable_lyricwiki}
     lastfm webservices:            ${enable_lastfm}
     notifications:                 ${enable_notifications}
-    notifications (0.7 API):       ${enable_notifications07}
     mpris v1/v2:                   ${enable_mpris}
     mediakeys:                     ${enable_mediakeys}
-    soundmenu:                     ${enable_soundmenu}
-    soundmenu2:                    ${enable_soundmenu2}
+    soundmenu:                     ${enable_soundmenu2}
 "
