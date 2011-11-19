@@ -174,6 +174,10 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 				Source.remove(now_play_source);
 			now_play_source = Timeout.add_seconds(WAIT_TIME_BEFORE_NOW_PLAYING, () => {
 				// Use session's 'factory method to get Track
+				if(global.current_title == null || global.current_artist == null) {
+					now_play_source = 0;
+					return false;
+				}
 				now_play_track = session.factory_make_track(global.current_artist, global.current_album, global.current_title);
 				sd_last = ScrobbleData();
 				sd_last.uri    = global.current_uri;
