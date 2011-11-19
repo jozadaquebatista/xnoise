@@ -74,6 +74,13 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		// callback for query in other thread
 		TrackData[] tmp = {};
 //		TrackData[] tda = {};
+		if(global.media_import_in_progress) {
+			Idle.add( () => {
+				this.dialog.destroy();
+				return false;
+			});
+			return false;
+		}
 		tmp = item_converter.to_trackdata(item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
 		if(tmp == null && tmp[0] != null)
 			return false;

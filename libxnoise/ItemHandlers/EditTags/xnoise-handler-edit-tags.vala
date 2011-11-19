@@ -94,6 +94,8 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 	}
 
 	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection) {
+		if(global.media_import_in_progress)
+			return null;
 		if(selection != ItemSelectionType.SINGLE)
 			return null;
 		if(context == ActionContext.MEDIABROWSER_MENU_QUERY) {
@@ -135,6 +137,8 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 	}
 	
 	private void on_edit_title_tracklist(Item item, GLib.Value? data) {
+		if(global.media_import_in_progress)
+			return;
 		if(item.type == ItemType.LOCAL_AUDIO_TRACK)
 			this.open_tagtitle_changer(item); //TODO: Add routine to update in tracklist
 	}
