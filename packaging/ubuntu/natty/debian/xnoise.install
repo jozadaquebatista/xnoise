@@ -2,7 +2,7 @@ usr/bin
 usr/lib/xnoise/libchartlyrics.so
 usr/lib/xnoise/libCyclicSaveState.so
 usr/lib/xnoise/libDatabaseLyrics.so
-usr/lib/xnoise/libLastfmCovers.so
+usr/lib/xnoise/liblastfm.so
 usr/lib/xnoise/libLyricwiki.so
 usr/lib/xnoise/libmediakeys.so
 usr/lib/xnoise/libmpris.so
