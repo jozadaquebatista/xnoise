@@ -680,7 +680,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		if(message_name=="prepare-xwindow-id") {
 			var imagesink = (XOverlay)(msg.src);
 			imagesink.set_property("force-aspect-ratio", true);
-			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.get_window()));
+//			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.get_window()));
 		}
 	}
 

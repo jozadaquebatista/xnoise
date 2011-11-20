@@ -21,7 +21,7 @@ AC_DISABLE_STATIC
 
 dnl required versions for xnoise
 GSTREAMER_REQUIRED=0.10.23
-GLIB_REQUIRED=2.12.0
+GLIB_REQUIRED=2.30.0
 LIBXML_REQUIRED=2.6.32
 GIO_REQUIRED=2.16
 GTK_REQUIRED=2.18.0
@@ -34,7 +34,7 @@ LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
 GDBUS_REQUIRED=2.26
 
-VALA_REQUIRED=0.11.6
+VALA_REQUIRED=0.14.0
 
 
 AC_PROG_CC
@@ -61,9 +61,8 @@ dnl =========================================
 LT_INIT
 
 PKG_CHECK_MODULES(XNOISE, \
-    gdk-2.0 \
-    gdk-pixbuf-2.0 \
-    gdk-x11-2.0 \
+    gdk-3.0 \
+    gdk-x11-3.0 \
     glib-2.0 >= $GLIB_REQUIRED \
     gmodule-2.0 \
     gobject-2.0 >= $GLIB_REQUIRED \
@@ -71,10 +70,10 @@ PKG_CHECK_MODULES(XNOISE, \
     gstreamer-0.10 >= $GSTREAMER_REQUIRED \
     gstreamer-interfaces-0.10 \
     gstreamer-plugins-base-0.10 \
-    gtk+-2.0 >= $GTK_REQUIRED \
+    gtk+-3.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
     taglib_c >= $TAGLIB_C_REQUIRED \
-    unique-1.0 cairo)
+    unique-3.0 cairo)
 
 
 dnl ================================================================
@@ -365,22 +364,21 @@ dnl ================================================================
 
 XNOISE_PACKAGES="\
     --pkg config \
-    --pkg gdk-2.0 \
-    --pkg gdk-pixbuf-2.0 \
-    --pkg gdk-x11-2.0 \
+    --pkg gdk-3.0 \
+    --pkg gdk-x11-3.0 \
     --pkg gio-2.0 \
     --pkg libxml-2.0 \
     --pkg gmodule-2.0 \
     --pkg gstreamer-0.10 \
     --pkg gstreamer-pbutils-0.10 \
     --pkg gstreamer-interfaces-0.10 \
-    --pkg gtk+-2.0 \
+    --pkg gtk+-3.0 \
     --pkg posix \
     --pkg sqlite3 \
     --pkg taglib_c \
-    --pkg unique-1.0 \
+    --pkg unique-3.0 \
     --pkg linux \
-	--target-glib=`pkg-config --modversion glib-2.0` \
+    --target-glib=`pkg-config --modversion glib-2.0` \
 "
 
 
@@ -421,19 +419,6 @@ AC_CONFIG_FILES([
     data/icons/scalable/Makefile
     libxnoise/Makefile
     src/Makefile
-    plugins/Makefile
-    plugins/testplugin/Makefile
-    plugins/titleToDecoration/Makefile
-    plugins/cyclic-save-state/Makefile
-    plugins/notifications2/Makefile
-    plugins/mpris/Makefile
-    plugins/mpris_one/Makefile
-    plugins/mediakeys/Makefile
-    plugins/chartlyrics/Makefile
-    plugins/lyricwiki/Makefile
-    plugins/soundmenu2/Makefile
-    plugins/databaseLyrics/Makefile
-    plugins/lastfm/Makefile
     po/Makefile.in
     doc/Makefile
     vapi/Makefile

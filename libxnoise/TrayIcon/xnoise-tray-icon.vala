@@ -46,7 +46,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		
 		popup_menu.connect(this.traymenu_popup);
 		activate.connect(main_window.toggle_window_visbility);
-		scroll_event.connect(this.on_scrolled);
+//		scroll_event.connect(this.on_scrolled);
 		button_press_event.connect(this.on_clicked);
 	}
 	

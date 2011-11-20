@@ -502,7 +502,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		else {
 			this.videoscreen.get_window().unfullscreen();
 			this.videoscreen.reparent(videovbox);
-			fullscreenwindow.hide_all();
+			fullscreenwindow.hide();
 
 			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			fullscreenwindowvisible = false;

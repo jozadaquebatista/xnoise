@@ -14,7 +14,9 @@
 #include <float.h>
 #include <math.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <unique/unique.h>
+#include <unique/uniqueapp.h>
+#include <unique/uniquemessage.h>
+#include <unique/uniqueenumtypes.h>
 #include <gdk/gdk.h>
 
 G_BEGIN_DECLS
