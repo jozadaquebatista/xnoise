@@ -56,19 +56,13 @@ msgstr "Álbum:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:183
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Por favor, aguarde o preenchimento da coleção. Cancele se não quiser "
-"aguardar."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Por favor, aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:187
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:131
@@ -116,7 +110,7 @@ msgstr "Número da faixa"
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
 msgid "Edit metadata for track"
-msgstr "Editar detalhes da música"
+msgstr "Editar detalhes da faixa"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
 msgid "Change album name"
@@ -176,10 +170,8 @@ msgid "Loading ..."
 msgstr "A carregar..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
 #, c-format
@@ -214,7 +206,7 @@ msgstr "Não existe suporte à instalação automática de plugins"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:531
 msgid "Failed to start automatic gstreamer plugin installation."
-msgstr "Falha ao tentar instalar o plugin gstreamer."
+msgstr "Falha ao tentar instalar o plugin gstreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:544
 msgid "Trying to install missing gstreamer plugin"
@@ -449,15 +441,15 @@ msgstr "abrir ficheiro"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:186
 msgid "Open _Location"
-msgstr "Abrir _local"
+msgstr "A_brir localização"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:186
 msgid "open remote location"
-msgstr "abrir local remoto"
+msgstr "abrir localização remota"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:187
 msgid "_Add or Remove media"
-msgstr "_Adicionar ou remover multimédia"
+msgstr "A_dicionar ou remover multimédia"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:187
 msgid "manage the content of the xnoise media library"
@@ -469,7 +461,7 @@ msgstr "_Editar"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:190
 msgid "C_lear tracklist"
-msgstr "Apagar _lista de faixas"
+msgstr "Apagar li_sta de faixas"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:190
 msgid "Clear the tracklist"
@@ -517,24 +509,16 @@ msgstr "_Configurar"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar "
-"o arranque do xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar o arranque do xnoise."
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
 msgstr "Adicionar multimédia"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:438
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
-"a coleção?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para a coleção?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:533
 msgid "no repeat"
@@ -614,10 +598,8 @@ msgid "More information on the project website:"
 msgstr "Mais informações na página web:"
 
 #: ../src/xnoise.vala:70
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
 
 #: ../src/xnoise.vala:131
 msgid "Using the running instance of xnoise!\n"
@@ -648,7 +630,7 @@ msgstr "Sessão não iniciada"
 #: ../plugins/lastfm/xnoise-lastfm.vala:417
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr "Por favor, indique o utilizador e a senha last.fm."
+msgstr "Por favor, indique o utilizador e a senha last.fm"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:426
 #, c-format
@@ -708,59 +690,3 @@ msgstr "Utilizar menu de som ayatana"
 msgid "Set the window name to the current title"
 msgstr "Utilizar o título da faixa como título da janela"
 
-#~ msgid "Load album covers from lastfm"
-#~ msgstr "Procurar capas de álbum na lastfm"
-
-#~ msgid "Add local file"
-#~ msgstr "Adicionar ficheiro local"
-
-#~ msgid "Test"
-#~ msgstr "Teste"
-
-#~ msgid "Chartlyrics"
-#~ msgstr "Chartlyrics"
-
-#~ msgid "CyclicSaveState"
-#~ msgstr "Gravar estado"
-
-#~ msgid "LastfmCovers"
-#~ msgstr "Capas de álbum Lastfm"
-
-#~ msgid "Lyricwiki"
-#~ msgstr "Lyricwiki"
-
-#~ msgid "mediakeys"
-#~ msgstr "Teclas multimédia"
-
-#~ msgid "mpris"
-#~ msgstr "Mpris"
-
-#~ msgid "notifications"
-#~ msgstr "Notificações"
-
-#~ msgid "soundmenu"
-#~ msgstr "Menu de som"
-
-#~ msgid "soundmenu2"
-#~ msgstr "Menu de som 2"
-
-#~ msgid "TitleToDecoration"
-#~ msgstr "Título da janela"
-
-#~ msgid "_Video screen"
-#~ msgstr "Ecrã do _vídeo"
-
-#~ msgid "Finished import. "
-#~ msgstr "Terminou a importação"
-
-#~ msgid "Found %d media files"
-#~ msgstr "Encontrados %d ficheiros"
-
-#~ msgid "Updated library for new media folders. "
-#~ msgstr "A coleção foi atualizada com novas pastas"
-
-#~ msgid "Found %d new media files"
-#~ msgstr "Encontrados %d novos ficheiros"
-
-#~ msgid "Video"
-#~ msgstr "Vídeo"
