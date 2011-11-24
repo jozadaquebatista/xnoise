@@ -749,12 +749,11 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
-		public MediaBrowser ();
+		public MediaBrowser (Gtk.Widget ow);
 		public bool change_model_data ();
 		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_searchtext_changed ();
-		public void resize_line_width (int new_width);
 		public bool update_view ();
 		public bool use_linebreaks { get; set; }
 		public bool use_treelines { get; set; }

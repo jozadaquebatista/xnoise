@@ -352,7 +352,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void get_autoscroll_delta(ref double delta) {
-		int y_pos;
+		int x_pos, y_pos;
+//		Gdk.Device device ;
+//		Gdk.ModifierType mask;.get_device_position(device, out x_pos, out y_pos, out mask); //
 		this.get_window().get_pointer(null, out y_pos, null);
 		delta = 0.0;
 		if(y_pos < autoscroll_distance) 
@@ -1019,7 +1021,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 					if(c.resizable) {
 						double rel_size = Params.get_double_value("relative_size_" + col_name + "_column");
 						relative_column_sizes.insert(col_name, rel_size);
-						((TextColumn)c).resized.connect(on_column_resized);
+//						((TextColumn)c).resized.connect(on_column_resized);
 					}
 					new_column = true;
 				}
@@ -1044,7 +1046,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 				col_name = ((TrackListColumn)c).tracklist_col_name;
 				double? rel_size = relative_column_sizes.lookup(col_name);
 				if(rel_size == null) continue;
-				((TextColumn)c).adjust_width((int)((double)rel_size * (double)available_width));
+//				((TextColumn)c).adjust_width((int)((double)rel_size * (double)available_width));
 			}
 			handle_resize();
 		});
@@ -1333,34 +1335,34 @@ public class Xnoise.TrackList : TreeView, IParams {
 		resize_column_range_relatively(0);
 	}
 	
-	private void on_column_resized(TextColumn sender, bool grow, int delta, TrackListModel.Column id) {
-		var columns = this.get_columns();
-		int iter = 0;
-		int result = 0;
-		
-		string sender_col_name;
-		sender_col_name = sender.tracklist_col_name;
-			
-		//print("Column resize: %s\n", sender.title);
-		foreach(TreeViewColumn c in columns) {
-			string col_name;
-			col_name = ((TrackListColumn)c).tracklist_col_name;
-			if(sender_col_name == col_name) {
-				/* now we have the position number of the column that has been resized */
-				result = resize_column_range_relatively(iter+1);
-				if(result < 0) {
-					/* the column was resized to a size that exceeds the available space
-					by result, lower its size by result again */
-					sender.adjust_width(sender.width + result);
-				}
-			}
-			if(c.resizable)
-				/* store the column's new relative size in a hash table */
-				relative_column_sizes.replace(col_name, (double)c.width / (double)available_width);
-			iter++;
-		}
-	}
-	
+//	private void on_column_resized(TextColumn sender, bool grow, int delta, TrackListModel.Column id) {
+//		var columns = this.get_columns();
+//		int iter = 0;
+//		int result = 0;
+//		
+//		string sender_col_name;
+//		sender_col_name = sender.tracklist_col_name;
+//			
+//		//print("Column resize: %s\n", sender.title);
+//		foreach(TreeViewColumn c in columns) {
+//			string col_name;
+//			col_name = ((TrackListColumn)c).tracklist_col_name;
+//			if(sender_col_name == col_name) {
+//				/* now we have the position number of the column that has been resized */
+//				result = resize_column_range_relatively(iter+1);
+//				if(result < 0) {
+//					/* the column was resized to a size that exceeds the available space
+//					by result, lower its size by result again */
+//					sender.adjust_width(sender.width + result);
+//				}
+//			}
+//			if(c.resizable)
+//				/* store the column's new relative size in a hash table */
+//				relative_column_sizes.replace(col_name, (double)c.width / (double)available_width);
+//			iter++;
+//		}
+//	}
+//	
 
 	// DANGER: resizable columns need to be text columns
 	
@@ -1436,8 +1438,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 				if(rel_size == null) rel_size = 0.15;
 				rel_size = ((double)rel_size - (double)c.min_width / (double)available_width) / rel_size_sum;
 				
-				((TextColumn) c).adjust_width(c.min_width + 
-					(int)(((double)distributable_width) * (double)rel_size));
+//				((TextColumn) c).adjust_width(c.min_width + 
+//					(int)(((double)distributable_width) * (double)rel_size));
 			}
 		}	
 		return distributable_width;

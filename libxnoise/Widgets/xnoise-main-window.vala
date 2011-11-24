@@ -1225,17 +1225,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
-	private void on_hpaned_position_changed() {
-		hpaned_resized = true;
-		if(this.hpaned.position == 0)
-			media_browser_visible = false;
-		else
-			media_browser_visible = true;
-			
-		if(this.get_window() != null) {
-			this.trackList.handle_resize();
-		}
-	}
+//	private void on_hpaned_position_changed() {
+//		hpaned_resized = true;
+//		if(this.hpaned.position == 0)
+//			media_browser_visible = false;
+//		else
+//			media_browser_visible = true;
+//			
+//		if(this.get_window() != null) {
+//			this.trackList.handle_resize();
+//		}
+//	}
 	
 	/* disables (or enables) the AddRemoveAction and the RescanLibraryAction in the menus if
 	   music is (not anymore) being imported */ 
@@ -1249,20 +1249,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
-	private bool hpaned_button_one;
-	private bool hpaned_resized = false;
-	private bool on_hpaned_button_event(Gdk.EventButton e) {
-		if(e.button == 1 && e.type == Gdk.EventType.BUTTON_PRESS)
-			hpaned_button_one = true;
-		else if(e.button == 1 && e.type == Gdk.EventType.BUTTON_RELEASE) {
-			if(hpaned_resized && hpaned_button_one)  {
-				hpaned_resized = false;
-				this.mediaBr.resize_line_width(this.hpaned.position);
-			}
-			hpaned_button_one = false;
-		}
-		return false;
-	}
+//	private bool hpaned_button_one;
+//	private bool hpaned_resized = false;
+//	private bool on_hpaned_button_event(Gdk.EventButton e) {
+//		if(e.button == 1 && e.type == Gdk.EventType.BUTTON_PRESS)
+//			hpaned_button_one = true;
+//		else if(e.button == 1 && e.type == Gdk.EventType.BUTTON_RELEASE) {
+//			if(hpaned_resized && hpaned_button_one)  {
+//				hpaned_resized = false;
+//				this.mediaBr.resize_line_width(this.hpaned.position);
+//			}
+//			hpaned_button_one = false;
+//		}
+//		return false;
+//	}
 
 	
 	private void create_widgets() {
@@ -1396,9 +1396,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			});
 			//--------------------
 			this.hpaned = gb.get_object("hpaned1") as Gtk.HPaned;
-			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
-			this.hpaned.button_press_event.connect(on_hpaned_button_event);
-			this.hpaned.button_release_event.connect(on_hpaned_button_event);
+//			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
+//			this.hpaned.button_press_event.connect(on_hpaned_button_event);
+//			this.hpaned.button_release_event.connect(on_hpaned_button_event);
 			//----------------
 
 			//VOLUME SLIDE BUTTON
@@ -1440,10 +1440,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			trackListScrollWin.add(this.trackList);
 			
 			///MediaBrowser (left)
-			this.mediaBr = new MediaBrowser();
-			this.mediaBr.set_size_request(100,100);
 			mediaBrScrollWin = gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
-			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
+//			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
+			this.mediaBr = new MediaBrowser(mediaBrScrollWin);
+			this.mediaBr.set_size_request(100,100);
 			mediaBrScrollWin.add(this.mediaBr);
 			browsernotebook    = gb.get_object("notebook1") as Gtk.Notebook;
 			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
@@ -1543,7 +1543,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			config_button.can_focus = false;
 			config_button.set_tooltip_text(_("Show application main menu"));
 			config_button.set_relief(Gtk.ReliefStyle.HALF);
-			a_frame_config_button = gb.get_object("aFrameConfigButton") as Gtk.AspectFrame;	
+			a_frame_config_button = gb.get_object("aFrameConfigButton") as Gtk.AspectFrame;
+			
+			// GTk3 resize grip
+			this.set_has_resize_grip(true);
 		}
 		catch(GLib.Error e) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,

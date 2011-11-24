@@ -53,8 +53,8 @@ public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 	}		
 	
 	private void on_visibility_changed() {
-		if(this.visible) this.notify["width"].connect(on_width_changed);
-		else this.notify["width"].disconnect(on_width_changed);
+//		if(this.visible) this.notify["width"].connect(on_width_changed);
+//		else this.notify["width"].disconnect(on_width_changed);
 	}
 	
 	public TextColumn(string title, CellRendererText renderer, TrackListModel.Column col_id) {
@@ -63,9 +63,9 @@ public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 		this._id = col_id;
 		this.pack_start(renderer, true);
 		this.last_size = this.width;
-		this.notify["visible"].connect(on_visibility_changed);
-		if(this.visible)
-			this.notify["width"].connect(on_width_changed);
+//		this.notify["visible"].connect(on_visibility_changed);
+//		if(this.visible)
+//			this.notify["width"].connect(on_width_changed);
 	}
 	
 	// this function sets the size without emmiting the resized signal
