@@ -594,15 +594,16 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		font_description.set_size((int)(fontsizeMB * Pango.SCALE));
 		
 		renderer = new FlowingTextRenderer(this.ow, font_description);
-		this.ow.size_allocate.connect_after( (s, a) => {
-			TreeViewColumn tvc = this.get_column(0);
-			tvc.max_width = this.ow.get_allocated_width() - 20;
-			tvc.min_width = this.ow.get_allocated_width() - 20;
-			this.get_model().foreach( (m, p, i) => {
-				m.row_changed(p, i);
-				return false;
+		Idle.add( () => {
+			this.ow.size_allocate.connect_after( (s, a) => {
+				TreeViewColumn tvc = this.get_column(0);
+				tvc.max_width = this.ow.get_allocated_width() - 20;
+				tvc.min_width = this.ow.get_allocated_width() - 20;
+				this.get_model().foreach(owforeach);
 			});
+			return false;
 		});
+		
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
 		
@@ -625,6 +626,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		
 	}
 	
+	private bool owforeach(TreeModel mo, TreePath pt, TreeIter it) {
+		mo.row_changed(pt, it);
+		return false;
+	}
 	
 	/* TODO: Find a more cpu efficient way to update the linebreaks, which also
 		 keeps the currently expanded nodes expanded!

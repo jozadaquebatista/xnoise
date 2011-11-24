@@ -96,7 +96,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public VBox videovbox;
 	public LyricsView lyricsView;
 	public VideoScreen videoscreen;
-	public HPaned hpaned;
+	public Paned hpaned;
 	public Entry searchEntryMB;
 	public PlayPauseButton playPauseButton;
 	public ControlButton previousButton;
@@ -1395,7 +1395,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				return false;
 			});
 			//--------------------
-			this.hpaned = gb.get_object("hpaned1") as Gtk.HPaned;
+			this.hpaned = gb.get_object("paned1") as Gtk.Paned;
+			var mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
 //			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
 //			this.hpaned.button_press_event.connect(on_hpaned_button_event);
 //			this.hpaned.button_release_event.connect(on_hpaned_button_event);
@@ -1440,22 +1441,51 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			trackListScrollWin.add(this.trackList);
 			
 			///MediaBrowser (left)
-			mediaBrScrollWin = gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
+			mediaBrScrollWin = new ScrolledWindow(null, null);//gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
 //			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
 			this.mediaBr = new MediaBrowser(mediaBrScrollWin);
-			this.mediaBr.set_size_request(100,100);
+//			this.mediaBr.set_size_request(100,100);
 			mediaBrScrollWin.add(this.mediaBr);
-			browsernotebook    = gb.get_object("notebook1") as Gtk.Notebook;
-			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
-			tracklistnotebook.switch_page.connect( (s,np,p) => {
-				global.sign_notify_tracklistnotebook_switched(p);
-			});
+			var mbbx = new Gtk.Box(Orientation.VERTICAL, 0);
+			var sbx  = new Gtk.Box(Orientation.HORIZONTAL, 0);
+			collapsebutton = new Gtk.Button();//gb.get_object("collapsebutton") as Gtk.Button;
+			var coll_img   = new Gtk.Image.from_stock(Gtk.Stock.UNINDENT, Gtk.IconSize.MENU);//gb.get_object("imagecollapse") as Gtk.Image;
+			collapsebutton.set_image(coll_img);
+			coll_img.set_tooltip_text(_("Collapse all"));
+			sbx.pack_start(collapsebutton, false, false, 0);
+			
 			this.searchEntryMB = new Gtk.Entry();
 			this.searchEntryMB.primary_icon_stock = Gtk.Stock.FIND;
 			this.searchEntryMB.secondary_icon_stock = Gtk.Stock.CLEAR;
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, true);
 			this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
 			this.searchEntryMB.set_sensitive(true);
+			
+			sbx.pack_start(searchEntryMB, true, true, 0);
+			mbbx.pack_start(sbx, false, false, 0);
+			mbbx.pack_start(mediaBrScrollWin, true, true, 0);
+			
+//			browsernotebook    = new Gtk.Notebook(); //gb.get_object("notebook1") as Gtk.Notebook;
+//			browsernotebook.append_page(mbbx, new Label("bla"));
+//			browsernotebook.set_show_tabs(false);
+//			w1 = new Window(WindowType.TOPLEVEL);
+//			w1.add(mbbx);//browsernotebook);
+//			w1.show_all();#
+			mbbox01.pack_start(mbbx, true, true, 0);
+//			hpaned.pack1(mbbx, false, false);
+//			hpaned.show_all();
+//			Timeout.add_seconds(2, () => {
+//				hpaned.show();
+//				hpaned.set_position(100);
+//				return false;
+//			});
+			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
+			tracklistnotebook.switch_page.connect( (s,np,p) => {
+				global.sign_notify_tracklistnotebook_switched(p);
+			});
+			collapsebutton.clicked.connect( () => {
+				mediaBr.collapse_all();
+			});
 			this.searchEntryMB.key_release_event.connect( (s, e) => {
 				var entry = (Entry)s;
 				if(search_idlesource != 0)
@@ -1489,16 +1519,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 			});
 			
-			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox;
-			sexyentryBox.add(searchEntryMB);
+//			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox;
+//			sexyentryBox.add(searchEntryMB);
 			
-			collapsebutton = gb.get_object("collapsebutton") as Gtk.Button;
-			var coll_img   = gb.get_object("imagecollapse") as Gtk.Image;
-			coll_img.set_tooltip_text(_("Collapse all"));
-			collapsebutton.clicked.connect( () => {
-				mediaBr.collapse_all();
-			});
-
 			hide_button = gb.get_object("hide_button") as Gtk.Button;
 			hide_button.can_focus = false;
 			hide_button.clicked.connect(this.toggle_media_browser_visibility);
@@ -1602,7 +1625,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		contentvbox.pack_end(bar, false, false, 0);
 		bar.show_all();
 	}
-	
+	Gtk.Window w1;
 	private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {
 		if(not_show_art_on_hover_image)
 			return false;

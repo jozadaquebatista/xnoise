@@ -352,10 +352,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 	}
 
 	private void get_autoscroll_delta(ref double delta) {
-		int x_pos, y_pos;
-//		Gdk.Device device ;
-//		Gdk.ModifierType mask;.get_device_position(device, out x_pos, out y_pos, out mask); //
-		this.get_window().get_pointer(null, out y_pos, null);
+		int y_pos;
+		this.get_pointer(null, out y_pos);
 		delta = 0.0;
 		if(y_pos < autoscroll_distance) 
 			delta = (double)(y_pos - autoscroll_distance);
@@ -412,10 +410,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 		stop_autoscroll();
 		
 		Gdk.Window win = this.get_window();
-		if(win == null) return;
+		if(win == null)
+			return;
 		
 		int px = 0, py = 0;
-		win.get_pointer(out px, out py, null);
+//		win.get_pointer(out px, out py, null);
+		this.get_pointer(out px, out py); //using widget pointer instead of widget.window pointer
 		
 		if(px < 0 || py < 0) {
 			if(main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {

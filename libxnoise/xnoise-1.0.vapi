@@ -706,7 +706,7 @@ namespace Xnoise {
 		public bool drag_on_content_area;
 		public Xnoise.FullscreenToolbar fullscreentoolbar;
 		public Gtk.Window fullscreenwindow;
-		public Gtk.HPaned hpaned;
+		public Gtk.Paned hpaned;
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;
