@@ -7,16 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-19 15:37+0100\n"
-"PO-Revision-Date: 2011-10-02 09:33+0100\n"
+"POT-Creation-Date: 2011-11-24 13:11+0100\n"
+"PO-Revision-Date: 2011-11-24 13:30+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -60,16 +59,12 @@ msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:183
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Czekaj na zapełnienie przeglądarki mediów lub anuluj, gdy nie chcesz czekać."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Czekaj na zapełnienie przeglądarki mediów lub anuluj, gdy nie chcesz czekać."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:187
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "Czekaj na zaimportowanie mediów lub anuluj, gdy nie chcesz czekać."
 
 #. ARTIST
@@ -178,8 +173,7 @@ msgid "Loading ..."
 msgstr "Ładowanie ..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:179
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "Brak pliku napisów pasującego do nazwy filmu! Bez użycia napisów."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:459
@@ -518,21 +512,15 @@ msgstr "_Ustawienia"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:377
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"Przywracanie %u utworów na liście plików. Duża ilość może spowolnić start "
-"xnoise"
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "Przywracanie %u utworów na liście plików. Duża ilość może spowolnić start xnoise"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:435
 msgid "Add media"
 msgstr "Dodaj media"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:438
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
 msgstr "Pierwsze uruchomienie xnoise. Chcesz dodać multimedia do biblioteki?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:533
@@ -577,7 +565,7 @@ msgstr "Usuń zaznaczone"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1298
 msgid "Jump to current position"
-msgstr ""
+msgstr "Przeskok listy do obecnie odtwarzanego utworu"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1497
 msgid "Collapse all"
@@ -613,8 +601,7 @@ msgid "More information on the project website:"
 msgstr "Więcej informacji na stronie projektu:"
 
 #: ../src/xnoise.vala:70
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr "Uruchom 'xnoise --help' by zobaczyć pełną listę dostępnych poleceń.\n"
 
 #: ../src/xnoise.vala:131
@@ -629,38 +616,38 @@ msgstr "Pokazuję uruchomioną instancję xnoise.\n"
 msgid "Buffer lyrics in database"
 msgstr "Buforowanie tekstów w bazie danych"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:383
-#: ../plugins/lastfm/xnoise-lastfm.vala:449
+#: ../plugins/lastfm/xnoise-lastfm.vala:387
+#: ../plugins/lastfm/xnoise-lastfm.vala:453
 #, c-format
 msgid "User logged in!"
-msgstr ""
+msgstr "Zalogowany!"
 
 #. feedback
-#: ../plugins/lastfm/xnoise-lastfm.vala:387
-#: ../plugins/lastfm/xnoise-lastfm.vala:447
-#: ../plugins/lastfm/xnoise-lastfm.vala:452
+#: ../plugins/lastfm/xnoise-lastfm.vala:391
+#: ../plugins/lastfm/xnoise-lastfm.vala:451
+#: ../plugins/lastfm/xnoise-lastfm.vala:456
 #, c-format
 msgid "User not logged in!"
-msgstr ""
+msgstr "Nie zalogowany!"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:417
+#: ../plugins/lastfm/xnoise-lastfm.vala:421
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr ""
+msgstr "Wprowadź swój login i hasło do lastfm:"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:426
+#: ../plugins/lastfm/xnoise-lastfm.vala:430
 #, c-format
 msgid "Username:"
-msgstr ""
+msgstr "Login:"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:432
+#: ../plugins/lastfm/xnoise-lastfm.vala:436
 #, c-format
 msgid "Password:"
-msgstr ""
+msgstr "Hasło:"
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:461
+#: ../plugins/lastfm/xnoise-lastfm.vala:465
 msgid "Apply"
-msgstr ""
+msgstr "Zastosuj"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
@@ -676,7 +663,7 @@ msgstr "Zawsze pamiętaj aktualny stan xnoise"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "Use lastfm's web services"
-msgstr ""
+msgstr "Używaj usługi lastfm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Load lyrics from http://www.lyricwiki.com"
