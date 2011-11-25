@@ -36,16 +36,8 @@ namespace Xnoise {
 	class ScreenSaverManager {
 		private SSMBackend backend = null;
 		public ScreenSaverManager() {
-			/*if (!gssm.is_available()) backend = gssm;
-			else {*/
-				var xdgssm = new XdgSSM();
-				if(xdgssm.is_available()) backend = xdgssm;
-				/*else {
-					var x11ssm = new X11SSM();
-					if (x11ssm.is_available()) backend = x11ssm;
-				/
-			}*/
-		
+			var xdgssm = new XdgSSM();
+			if(xdgssm.is_available()) backend = xdgssm;
 			if(backend == null) return;
 			if (!backend.init()) backend = null;
 		}
@@ -87,7 +79,7 @@ namespace Xnoise {
 		private int get_window_id() {
 			var win = main_window.get_window();
 			if(win == null) return -1;
-			X.ID id = Gdk.x11_drawable_get_xid(win);
+			X.ID id = gdk_x11_window_get_xid(win); // TODO
 			return (int)id;
 		}
 		
@@ -148,99 +140,5 @@ namespace Xnoise {
 			return false;
 		}
 	}
-
-	/*
-	//requires dbus
-	 class GnomeSSM : GLib.Object, SSMBackend {
-		private const string GS_SERVICE = "org.gnome.ScreenSaver";
-		private const string GS_PATH = "/";
-		private const string GS_INTERFACE = "org.gnome.ScreenSaver";
-
-		private DBus.Connection conn;
-		private dynamic DBus.Object gs = null;
-		private uint32 cookie;
-
-		public bool is_available() {
-			return true;
-		}
-
-		public bool init() {
-			message("connecting to session bus");
-			try {
-				conn = DBus.Bus.get (DBus.BusType.SESSION);
-			}
-			catch (DBus.Error e) {
-				error ("Failed to connect to session bus: %s", e.message);
-				return false;
-			}
-		
-			message("getting dbus object for gnome-screensaver");
-			gs = conn.get_object (GS_SERVICE, GS_PATH, GS_INTERFACE);
-			if (gs == null) {
-				error ("Failed to retrieve dbus object %s%s%s", GS_SERVICE, GS_PATH, GS_INTERFACE);
-				return false;
-			}
-			return true;
-		}
-	
-		public bool inhibit() {
-			try {
-				gs.Inhibit("xnoise", "Fullscreen multimedia playback", out cookie); 
-			}
-			catch (DBus.Error e) {
-				error ("Failed to call Inhibit: %s", e.message);
-				return false;
-			}
-			return true;
-		}
-	
-		public bool uninhibit() {
-			try {
-				gs.UnInhibit(cookie);
-			}
-			catch (DBus.Error e) {
-				error ("Failed to call UnInhibit: %s", e.message);
-				return false;
-			}
-			return true;
-		}
-	}
-
-
-	// needs x11.vapi from svn
-	class X11SSM : GLib.Object, SSMBackend {
-		private Display dp = null;
-	
-		private int timeout;
-		private int interval;
-		private int prefer_blanking;
-		private int allow_exposure;
-
-		public bool is_available() {
-			return init();
-		}
-	
-		public bool init() {
-			dp = new Display();
-			if (dp == null) return false;
-			return true;
-		}
-	
-		public bool inhibit() {
-			dp.lock_display();
-			dp.get_screensaver(out timeout, out interval, out prefer_blanking, out allow_exposure);
-			dp.set_screensaver(0, 0, 0, 0);
-			dp.unlock_display();
-			return true;
-		}
-	
-		public bool uninhibit() {
-			dp.lock_display();
-			dp.set_screensaver(timeout, interval, prefer_blanking, allow_exposure);
-			dp.unlock_display();
-			return true;
-		}
-	}
-	*/
 }
 

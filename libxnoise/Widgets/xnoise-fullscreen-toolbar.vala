@@ -87,7 +87,7 @@ public class Xnoise.FullscreenToolbar {
 		fullscreenwindow.key_release_event.connect(this.on_key_released);
 		resize ();
 		
-		invisible_cursor = new Gdk.Cursor(Gdk.CursorType.BLANK_CURSOR);
+//		invisible_cursor = new Gdk.Cursor(Gdk.CursorType.BLANK_CURSOR);
 	}
 
 	private const int SPACE_KEY = 0x0020;
@@ -196,7 +196,7 @@ public class Xnoise.FullscreenToolbar {
 		public void on_clicked() {
 			main_window.videoscreen.get_window().unfullscreen();
 			main_window.videoscreen.reparent(main_window.videovbox);
-			main_window.fullscreenwindow.hide_all();
+			main_window.fullscreenwindow.hide();
 			main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			main_window.fullscreenwindowvisible = false;
 			main_window.videovbox.show();

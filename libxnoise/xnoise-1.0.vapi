@@ -706,7 +706,7 @@ namespace Xnoise {
 		public bool drag_on_content_area;
 		public Xnoise.FullscreenToolbar fullscreentoolbar;
 		public Gtk.Window fullscreenwindow;
-		public Gtk.HPaned hpaned;
+		public Gtk.Paned hpaned;
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;
@@ -749,12 +749,11 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
-		public MediaBrowser ();
+		public MediaBrowser (Gtk.Widget ow);
 		public bool change_model_data ();
 		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_searchtext_changed ();
-		public void resize_line_width (int new_width);
 		public bool update_view ();
 		public bool use_linebreaks { get; set; }
 		public bool use_treelines { get; set; }
@@ -980,7 +979,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class VideoScreen : Gtk.DrawingArea {
 		public VideoScreen (Xnoise.GstPlayer _player);
-		public override bool expose_event (Gdk.EventExpose e);
+		public override bool draw (Cairo.Context cr);
 		public void trigger_expose ();
 		public string font_family { get; set; }
 		public double font_size { get; set; }
@@ -1195,6 +1194,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static bool thumbnail_available (string uri, out GLib.File? _thumb);
 }
+[CCode (cheader_filename = "xnoise-1.0.h", cname = "gdk_x11_window_get_xid")]
+public static uint gdk_x11_window_get_xid (Gdk.Window window);
 [CCode (cheader_filename = "xnoise-1.0.h", cname = "gdk_window_ensure_native")]
 public static bool ensure_native (Gdk.Window window);
 [CCode (cheader_filename = "xnoise-1.0.h", cname = "gtk_widget_style_get_property")]

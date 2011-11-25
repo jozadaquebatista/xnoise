@@ -366,7 +366,8 @@ private class GlobalKey : GLib.Object {
 	}
 
 	private static X.ID get_x_id_for_window(Gdk.Window window) {
-		return Gdk.x11_drawable_get_xid(window);
+//		return Gdk.x11_drawable_get_xid(window);
+		return (X.ID)gdk_x11_window_get_xid(window);
 	}
 
 	private static unowned X.Display get_x_display_for_window(Gdk.Window window) {

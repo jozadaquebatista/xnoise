@@ -13,9 +13,11 @@
 #include <sqlite3.h>
 #include <float.h>
 #include <math.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include <unique/unique.h>
 #include <gdk/gdk.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <unique/uniqueapp.h>
+#include <unique/uniquemessage.h>
+#include <unique/uniqueenumtypes.h>
 
 G_BEGIN_DECLS
 
@@ -1758,7 +1760,7 @@ struct _XnoiseMainWindow {
 	GtkVBox* videovbox;
 	XnoiseLyricsView* lyricsView;
 	XnoiseVideoScreen* videoscreen;
-	GtkHPaned* hpaned;
+	GtkPaned* hpaned;
 	GtkEntry* searchEntryMB;
 	XnoisePlayPauseButton* playPauseButton;
 	XnoiseControlButton* previousButton;
@@ -2023,14 +2025,13 @@ void xnoise_lyrics_view_lyrics_provider_unregister (XnoiseLyricsView* self, Xnoi
 XnoiseLyricsLoader* xnoise_lyrics_view_get_loader (XnoiseLyricsView* self);
 GType xnoise_iparams_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
-XnoiseMediaBrowser* xnoise_media_browser_new (void);
-XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type);
+XnoiseMediaBrowser* xnoise_media_browser_new (GtkWidget* ow);
+XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, GtkWidget* ow);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_update_view (XnoiseMediaBrowser* self);
 void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
 void xnoise_media_browser_on_row_collapsed (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
-void xnoise_media_browser_resize_line_width (XnoiseMediaBrowser* self, gint new_width);
 gboolean xnoise_media_browser_get_use_linebreaks (XnoiseMediaBrowser* self);
 void xnoise_media_browser_set_use_linebreaks (XnoiseMediaBrowser* self, gboolean value);
 gboolean xnoise_media_browser_get_use_treelines (XnoiseMediaBrowser* self);
@@ -2111,6 +2112,7 @@ void xnoise_gst_player_set_current_audio (XnoiseGstPlayer* self, gint value);
 gint xnoise_gst_player_get_n_text (XnoiseGstPlayer* self);
 gdouble xnoise_gst_player_get_gst_position (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_gst_position (XnoiseGstPlayer* self, gdouble value);
+guint gdk_x11_window_get_xid (GdkWindow* window);
 GQuark xnoise_playlist_reader_error_quark (void);
 GType xnoise_playlist_list_type_get_type (void) G_GNUC_CONST;
 GType xnoise_playlist_result_get_type (void) G_GNUC_CONST;

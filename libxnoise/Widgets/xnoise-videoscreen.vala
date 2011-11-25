@@ -185,29 +185,34 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 	}
 	
-	private Gdk.Region region;
+//	private Gdk.Region region;
 	
 	private Gdk.Rectangle rect;
 	
 	private Gdk.Color black;
 	
-	public override bool expose_event(Gdk.EventExpose e) {
-		if(e.count > 0) return true; //exposure compression
+	public override bool draw(Cairo.Context cr) {//Gdk.EventExpose e) {
+//		if(e.count > 0) return true; //exposure compression
 		
 		rect.x = 0;
 		rect.y = 0;
 		Gtk.Allocation alloc;
 		this.get_allocation(out alloc);
-		rect.width  = e.area.width;
-		rect.height = e.area.height;
-		region = Gdk.Region.rectangle(rect);
+		rect.width = get_allocated_width ();
+		rect.height = get_allocated_height ();
+
+//		rect.width  = e.area.width;
+//		rect.height = e.area.height;
+//		region = Gdk.Region.rectangle(rect);
 		
-		this.get_window().begin_paint_region(region);
-		Cairo.Context cr = Gdk.cairo_create(e.window);
+//		this.get_window().begin_paint_region(region);
+//		Cairo.Context cr = Gdk.cairo_create(e.window);
 		
 		Gdk.cairo_set_source_color(cr, black);
-		cr.rectangle(e.area.x, e.area.y,
-		             e.area.width, e.area.height);
+		cr.rectangle(rect.x, rect.y,
+		             rect.width, rect.height);
+//		cr.rectangle(e.area.x, e.area.y,
+//		             e.area.width, e.area.height);
 		cr.fill();
 		
 		if(!gst_player.current_has_video_track) {
@@ -236,7 +241,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 
 				if(logowidth<=1||logoheight<=1) {
 					// Do not paint for small pictures
-					this.get_window().end_paint();
+//					this.get_window().end_paint();
 					return true;
 				}
 				if(!cover_image_available) {
@@ -304,7 +309,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				Gdk.cairo_set_source_pixbuf(cr, logo, x_offset, y_offset);
 				cr.paint();
 			}
-			this.get_window().end_paint();
+//			this.get_window().end_paint();
 		}
 		return true;
 	}

@@ -139,12 +139,12 @@ public class Xnoise.TrayIcon : StatusIcon {
 		return false;
 	}
 
-	private bool on_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
+	private bool on_scrolled(Gtk.StatusIcon sender, Gdk.EventScroll event) {
 		if(global.player_state != PlayerState.STOPPED) {
-			if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
+			if(event.direction == Gdk.ScrollDirection.DOWN) {
 				main_window.change_track(ControlButton.Direction.PREVIOUS, true);
 			}
-			else if(event.scroll.direction == Gdk.ScrollDirection.UP) {
+			else if(event.direction == Gdk.ScrollDirection.UP) {
 				main_window.change_track(ControlButton.Direction.NEXT, true);
 			}
 		}

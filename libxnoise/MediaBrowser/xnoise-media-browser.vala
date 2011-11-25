@@ -35,7 +35,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private unowned Main xn;
 	private bool dragging;
 	private bool _use_treelines = false;
-	private bool _use_linebreaks = false;
+	private bool _use_linebreaks = true;
 	private CellRendererText renderer = null;
 	private List<TreePath> expansion_list = null;
 	private Gtk.Menu menu;
@@ -47,22 +47,22 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			return _use_linebreaks;
 		}
 		set {
-			if(_use_linebreaks == value) return;
-			_use_linebreaks = value;
-			if(!value) {
-				renderer.set_fixed_height_from_font(1);
-				renderer.wrap_width = -1;
-				if(visible)
-					Idle.add(update_view);
-				return;
-			}
-			renderer.set_fixed_height_from_font(-1);
-			renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
-			if(main_window == null)
-				return;
-			if(main_window.hpaned == null)
-				return;
-			this.resize_line_width(main_window.hpaned.position);
+//			if(_use_linebreaks == value) return;
+//			_use_linebreaks = value;
+//			if(!value) {
+////				renderer.set_fixed_height_from_font(1);
+////				renderer.wrap_width = -1;
+//				if(visible)
+//					Idle.add(update_view);
+//				return;
+//			}
+//			renderer.set_fixed_height_from_font(-1);
+//			renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
+//			if(main_window == null)
+//				return;
+//			if(main_window.hpaned == null)
+//				return;
+//			this.resize_line_width(main_window.hpaned.position);
 		}
 	}
 	
@@ -106,9 +106,13 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private const TargetEntry[] dest_target_entries = {
 		{"text/uri-list", TargetFlags.OTHER_APP, 0}
 	};// This is not a very long list but uris are so universal
-
-	public MediaBrowser() {
+	
+	//parent container of this widget (most likely scrolled window)
+	private unowned Widget ow;
+	
+	public MediaBrowser(Widget ow) {
 		this.xn = Main.instance;
+		this.ow = ow;
 		Params.iparams_register(this);
 		mediabrowsermodel = new MediaBrowserModel();
 		setup_view();
@@ -469,7 +473,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		mediabrowsermodel.filter();
 //		mediabrowsermodel.populate_model();
 //		update_view();
-
+		
 //		this.set_sensitive(true);
 		return false;
 	}
@@ -511,29 +515,105 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //		}
 	}
 
+	private class FlowingTextRenderer : CellRendererText {
+		
+		private unowned Widget ow;
+		private unowned Pango.FontDescription font_description;
+	
+		public FlowingTextRenderer(Widget ow, Pango.FontDescription font_description) {
+			GLib.Object();
+			this.ow = ow;
+			this.font_description = font_description;
+		}
+	
+		private static const int  BORDER_DIST = 30; //TODO: make it dynamic
+		
+		public override void get_preferred_height_for_width (Gtk.Widget widget, int width, out int minimum_height, out int natural_height) {
+			//print("get_preferred_height_for_width %d\n", width);
+			Gdk.Window? w = ow.get_window();
+			if(w == null) {
+				print("no window\n");
+				natural_height = minimum_height = 30;
+				return;
+			}
+			Cairo.Context cr = Gdk.cairo_create(w);
+			var pango_layout = Pango.cairo_create_layout(cr);
+			pango_layout.set_font_description(this.font_description);
+			pango_layout.set_text(text , -1);
+			pango_layout.set_alignment(Pango.Alignment.LEFT);
+			pango_layout.set_width( (int)((ow.get_allocated_width() -  BORDER_DIST) * Pango.SCALE));
+			pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
+			int wi = 0, he = 0;
+			pango_layout.get_pixel_size(out wi, out he);
+			natural_height = minimum_height = he;
+		}
+	
+		public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
+			                          out int x_offset, out int y_offset,
+			                          out int width, out int height) {
+			// function not used for gtk+-3.0 !
+			x_offset = 0;
+			y_offset = 0;
+			width = 0;
+			height = 0;
+		}
+	
+		public override void render(Cairo.Context cr, Widget widget,
+			                        Gdk.Rectangle background_area,
+			                        Gdk.Rectangle cell_area,
+			                        CellRendererState flags) {
+			var pango_layout = Pango.cairo_create_layout(cr);
+			pango_layout.set_font_description(this.font_description);
+			pango_layout.set_text(text , -1);
+			pango_layout.set_alignment(Pango.Alignment.LEFT);
+			pango_layout.set_width( (int)((ow.get_allocated_width() - BORDER_DIST) * Pango.SCALE));
+			pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
+			//int wi=0;
+			//pango_layout.get_pixel_size(out wi, out heightp);
+			//cr.set_source_rgba(0.1, 0.1, 0.1, 1.0);   // font color
+			cr.move_to(cell_area.x, cell_area.y);
+			Pango.cairo_show_layout(cr, pango_layout);
+		}
+	}
+	
+	private Pango.FontDescription font_description;
+	
 	private void setup_view() {
 		
-		//we keep track of which rows are expanded, so we can expand them again
-		//when the view is updated
-		expansion_list = new List<TreePath>();
 		this.row_collapsed.connect(on_row_collapsed);
 		this.row_expanded.connect(on_row_expanded);
 		
 		this.set_size_request (300,500);
-		renderer = new CellRendererText();
+		
 		fontsizeMB = Params.get_int_value("fontsizeMB");
-
+		Style style = Widget.get_default_style();
+		font_description = style.font_desc.copy(); // TODO: Add update mechanism
+		font_description.set_size((int)(fontsizeMB * Pango.SCALE));
+		
+		renderer = new FlowingTextRenderer(this.ow, font_description);
+		Idle.add( () => {
+			this.ow.size_allocate.connect_after( (s, a) => {
+				TreeViewColumn tvc = this.get_column(0);
+				tvc.max_width = this.ow.get_allocated_width() - 20;
+				tvc.min_width = this.ow.get_allocated_width() - 20;
+				TreeModel? xm = this.get_model();
+				if(xm != null)
+					xm.foreach(owforeach);
+			});
+			return false;
+		});
+		
 		var pixbufRenderer = new CellRendererPixbuf();
 		pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
 		
 		var column = new TreeViewColumn();
-
+		
 		column.pack_start(pixbufRenderer, false);
 		column.add_attribute(pixbufRenderer, "pixbuf", MediaBrowserModel.Column.ICON);
 		column.pack_start(renderer, false);
 		column.add_attribute(renderer, "text", MediaBrowserModel.Column.VIS_TEXT); // no markup!!
 		this.insert_column(column, -1);
-
+		
 		this.headers_visible = false;
 		this.enable_search = false;
 		this.set_row_separator_func((m, iter) => {
@@ -545,39 +625,41 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		
 	}
 	
-	
-	/* TODO: Find a more cpu efficient way to update the linebreaks, which also
-		 keeps the currently expanded nodes expanded!
-		 
-	   TODO: Find out the correct expander size at runtime */
-		 
-	/* calculates the size available for the text in the treeview */
-	public void resize_line_width(int new_width) {
-		if(!use_linebreaks)
-			return;
-		//check for options
-		//get scrollbar width of the scrolled window
-		int scrollbar_w = 0;
-		if(main_window.mediaBrScrollWin != null) {
-			var scrollbar = main_window.trackListScrollWin.get_vscrollbar();
-			if(scrollbar != null) {
-				Requisition req; 
-				scrollbar.get_child_requisition(out req);
-				scrollbar_w = req.width;				
-			}
-		}
-		//substract scrollbar width, expander width, vertical separator width and the space used 
-		//up by the icons from the total width
-		Value v = Value(typeof(int));
-		widget_style_get_property(this, "expander-size", v);
-		int expander_size = v.get_int();
-		v.reset();
-		widget_style_get_property(this, "vertical-separator", v);
-		int vertical_separator_size = v.get_int();
-		new_width -= mediabrowsermodel.get_max_icon_width() + scrollbar_w + expander_size + vertical_separator_size * 4;
-		if(new_width < 60) return;
-		renderer.wrap_width = new_width;
-		Idle.add(update_view);
+	private bool owforeach(TreeModel? mo, TreePath pt, TreeIter it) {
+		if(mo == null)
+			return true;
+		mo.row_changed(pt, it);
+		return false;
 	}
+	
+//	public void resize_line_width(int new_width) {
+//		if(!use_linebreaks)
+//			return;
+//		//check for options
+//		//get scrollbar width of the scrolled window
+//		int scrollbar_w = 0;
+//		if(main_window.mediaBrScrollWin != null) {
+//			var scrollbar = main_window.trackListScrollWin.get_vscrollbar();
+//			if(scrollbar != null) {
+//				Requisition req;
+//				scrollbar.get_child_requisition(out req);
+//				scrollbar_w = req.width;
+//			}
+//		}
+//		//substract scrollbar width, expander width, vertical separator width and the space used 
+//		//up by the icons from the total width
+//		Value v = Value(typeof(int));
+//		widget_style_get_property(this, "expander-size", v);
+//		int expander_size = v.get_int();
+//		v.reset();
+//		widget_style_get_property(this, "vertical-separator", v);
+//		int vertical_separator_size = v.get_int();
+//		new_width -= (mediabrowsermodel.get_max_icon_width() + scrollbar_w + expander_size + vertical_separator_size * 4);
+//		if(new_width < 60) return;
+//		renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
+//		renderer.wrap_width = new_width;
+//		renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
+//		Idle.add(update_view);
+//	}
 }
 
