@@ -58,7 +58,7 @@ namespace Unique {
 		public void  @set (uchar[] data, ssize_t length);
 		public void set_filename (string filename);
 		public bool set_text (string str, ssize_t length);
-		public bool set_uris (string uris);
+		public bool set_uris ([CCode (array_length = false)] string[] uris);
 	}
 	[CCode (cprefix = "UNIQUE_", cheader_filename = "unique/uniqueenumtypes.h")]
 	public enum Command {

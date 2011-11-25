@@ -24,8 +24,7 @@ VALAFLAGS = \
     --vapidir $(top_srcdir)/libxnoise \
     --pkg xnoise-1.0 \
     --vapidir $(top_srcdir)/vapi \
-    --pkg config \
-    --pkg linux \
+    @XNOISE_PACKAGES@ \
     $(NULL)
 
 xnoise_LDADD = \

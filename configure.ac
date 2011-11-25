@@ -161,13 +161,13 @@ dnl ================================================================
 
 dnl ================================================================
 dnl plugin check for plugins dependent on gdk-x11-2.0
-GDKX11_REQUIRED=2.0
+GDKX11_REQUIRED=3.0
 PKG_CHECK_MODULES(GDKX11, \
-                  gdk-x11-2.0 >= $GDKX11_REQUIRED, \
+                  gdk-x11-3.0 >= $GDKX11_REQUIRED, \
                   have_gdkx11=yes, \
                   have_gdkx11=no)
 if test "x$have_gdkx11" != "xyes"; then
-    AC_MSG_WARN([gdk-x11-2.0 $GDKX11_REQUIRED or greater not found.])
+    AC_MSG_WARN([gdk-x11-3.0 $GDKX11_REQUIRED or greater not found.])
 fi
 AC_SUBST(GDKX11_CFLAGS)
 AC_SUBST(GDKX11_LIBS)
