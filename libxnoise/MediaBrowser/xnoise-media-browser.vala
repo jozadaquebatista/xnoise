@@ -526,10 +526,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			this.font_description = font_description;
 		}
 	
-		private static const int  BORDER_DIST = 30;
+		private static const int  BORDER_DIST = 30; //TODO: make it dynamic
 		
 		public override void get_preferred_height_for_width (Gtk.Widget widget, int width, out int minimum_height, out int natural_height) {
-	//		print("get_preferred_height_for_width %d\n", width);
+			//print("get_preferred_height_for_width %d\n", width);
 			Gdk.Window? w = ow.get_window();
 			if(w == null) {
 				print("no window\n");
@@ -543,24 +543,21 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			pango_layout.set_alignment(Pango.Alignment.LEFT);
 			pango_layout.set_width( (int)((ow.get_allocated_width() -  BORDER_DIST) * Pango.SCALE));
 			pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-			int wi=0, he=0;
+			int wi = 0, he = 0;
 			pango_layout.get_pixel_size(out wi, out he);
 			natural_height = minimum_height = he;
 		}
 	
-		/* get_size method, always request a 50x50 area */
 		public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
 			                          out int x_offset, out int y_offset,
 			                          out int width, out int height) {
-			// function not used for gtk+-3.0
+			// function not used for gtk+-3.0 !
 			x_offset = 0;
 			y_offset = 0;
 			width = 0;
 			height = 0;
 		}
 	
-	//	int heightp = 37;
-		/* render method */
 		public override void render(Cairo.Context cr, Widget widget,
 			                        Gdk.Rectangle background_area,
 			                        Gdk.Rectangle cell_area,
@@ -571,9 +568,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			pango_layout.set_alignment(Pango.Alignment.LEFT);
 			pango_layout.set_width( (int)((ow.get_allocated_width() - BORDER_DIST) * Pango.SCALE));
 			pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-	//		int wi=0;
-	//		pango_layout.get_pixel_size(out wi, out heightp);
-//			cr.set_source_rgba(0.1, 0.1, 0.1, 1.0);   // font color
+			//int wi=0;
+			//pango_layout.get_pixel_size(out wi, out heightp);
+			//cr.set_source_rgba(0.1, 0.1, 0.1, 1.0);   // font color
 			cr.move_to(cell_area.x, cell_area.y);
 			Pango.cairo_show_layout(cr, pango_layout);
 		}
@@ -590,9 +587,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		
 		fontsizeMB = Params.get_int_value("fontsizeMB");
 		Style style = Widget.get_default_style();
-		
-		font_description = style.font_desc.copy();//new Pango.FontDescription();
-//		font_description.set_family("Sans");
+		font_description = style.font_desc.copy(); // TODO: Add update mechanism
 		font_description.set_size((int)(fontsizeMB * Pango.SCALE));
 		
 		renderer = new FlowingTextRenderer(this.ow, font_description);
@@ -637,21 +632,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return false;
 	}
 	
-	/* TODO: Find a more cpu efficient way to update the linebreaks, which also
-		 keeps the currently expanded nodes expanded!
-		 
-	   TODO: Find out the correct expander size at runtime */
-		 
-	/* calculates the size available for the text in the treeview */
 //	public void resize_line_width(int new_width) {
-//	print("rlw#1  %d\n", new_width);
 //		if(!use_linebreaks)
 //			return;
-//	print("rlw#2  %d\n", new_width);
 //		//check for options
 //		//get scrollbar width of the scrolled window
 //		int scrollbar_w = 0;
-//	print("rlw#3  %d\n", new_width);
 //		if(main_window.mediaBrScrollWin != null) {
 //			var scrollbar = main_window.trackListScrollWin.get_vscrollbar();
 //			if(scrollbar != null) {
@@ -660,7 +646,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //				scrollbar_w = req.width;
 //			}
 //		}
-//	print("rlw#4  %d\n", new_width);
 //		//substract scrollbar width, expander width, vertical separator width and the space used 
 //		//up by the icons from the total width
 //		Value v = Value(typeof(int));
@@ -671,7 +656,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //		int vertical_separator_size = v.get_int();
 //		new_width -= (mediabrowsermodel.get_max_icon_width() + scrollbar_w + expander_size + vertical_separator_size * 4);
 //		if(new_width < 60) return;
-//	print("rlw#5  %d\n", new_width);
 //		renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
 //		renderer.wrap_width = new_width;
 //		renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
