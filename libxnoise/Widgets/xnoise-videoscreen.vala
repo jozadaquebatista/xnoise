@@ -191,123 +191,128 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	
 	private Gdk.Color black;
 	
-//	public override bool draw(Cairo.Context cr) {//Gdk.EventExpose e) {
-////		if(e.count > 0) return true; //exposure compression
-//		
-//		rect.x = 0;
-//		rect.y = 0;
-//		Gtk.Allocation alloc;
-//		this.get_allocation(out alloc);
+	public override bool draw(Cairo.Context cr) {//Gdk.EventExpose e) {
+//		if(e.count > 0) return true; //exposure compression
+		
+		rect.x = 0;
+		rect.y = 0;
+		Gtk.Allocation alloc;
+		this.get_allocation(out alloc);
+		rect.width = get_allocated_width ();
+		rect.height = get_allocated_height ();
+
 //		rect.width  = e.area.width;
 //		rect.height = e.area.height;
-////		region = Gdk.Region.rectangle(rect);
-//		
-////		this.get_window().begin_paint_region(region);
-////		Cairo.Context cr = Gdk.cairo_create(e.window);
-//		
-//		Gdk.cairo_set_source_color(cr, black);
+//		region = Gdk.Region.rectangle(rect);
+		
+//		this.get_window().begin_paint_region(region);
+//		Cairo.Context cr = Gdk.cairo_create(e.window);
+		
+		Gdk.cairo_set_source_color(cr, black);
+		cr.rectangle(rect.x, rect.y,
+		             rect.width, rect.height);
 //		cr.rectangle(e.area.x, e.area.y,
 //		             e.area.width, e.area.height);
-//		cr.fill();
-//		
-//		if(!gst_player.current_has_video_track) {
-//		
-//			int y_offset;
-//			int x_offset;
-//		
-//			//print("current has no video\n");
-//			if(this.logo_pixb!=null) {
-//				logo = null;
-//				int logowidth, logoheight, widgetwidth, widgetheight;
-//				float ratio;
-//				
-//				logowidth  = logo_pixb.get_width();
-//				logoheight = logo_pixb.get_height();
-//				widgetwidth  = alloc.width;
-//				widgetheight = alloc.height;
+		cr.fill();
+		
+		if(!gst_player.current_has_video_track) {
+		
+			int y_offset;
+			int x_offset;
+		
+			//print("current has no video\n");
+			if(this.logo_pixb!=null) {
+				logo = null;
+				int logowidth, logoheight, widgetwidth, widgetheight;
+				float ratio;
+				
+				logowidth  = logo_pixb.get_width();
+				logoheight = logo_pixb.get_height();
+				widgetwidth  = alloc.width;
+				widgetheight = alloc.height;
 
-//				if((float)widgetwidth/logowidth>(float)widgetheight/logoheight)
-//					ratio = (float)widgetheight/logoheight;
-//				else
-//					ratio = (float)widgetwidth/logowidth;
+				if((float)widgetwidth/logowidth>(float)widgetheight/logoheight)
+					ratio = (float)widgetheight/logoheight;
+				else
+					ratio = (float)widgetwidth/logowidth;
 
-//				logowidth  = (int)(logowidth  *ratio);
-//				logoheight = (int)(logoheight *ratio);
+				logowidth  = (int)(logowidth  *ratio);
+				logoheight = (int)(logoheight *ratio);
 
-//				if(logowidth<=1||logoheight<=1) {
-//					// Do not paint for small pictures
+				if(logowidth<=1||logoheight<=1) {
+					// Do not paint for small pictures
 //					this.get_window().end_paint();
-//					return true;
-//				}
-//				if(!cover_image_available) {
-//					logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
-//					y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
-//					x_offset = (int)((widgetwidth  * 0.5) - (logowidth  * 0.4));
-//				}
-//				else {
-//					if(cover_image_pixb != null) {
-//						//Pango
-//						layout_width  = alloc.width/3; //300; //current_alloc.width - (x_offset + x_margin);
-//						layout_height = 300; //current_alloc.height - (y_offset + y_margin);
-//						//---
-//						
-//						int cover_image_width  = cover_image_pixb.get_width();
-//						int cover_image_height = cover_image_pixb.get_height();
-//						
-//						if((float)widgetwidth/cover_image_width>(float)widgetheight/cover_image_height)
-//							ratio = (float)widgetheight/cover_image_height;
-//						else
-//							ratio = (float)widgetwidth/cover_image_width;
-//						
-//						int ciwidth  = (int)(cover_image_width  * ratio * 0.7);
-//						int ciheight = (int)(cover_image_height * ratio * 0.7);
-//						
-//						//TODO: Set max scale for logo
-//						var font_description = new Pango.FontDescription();
-//						font_description.set_family(font_family);
-//						font_description.set_size((int)(font_size * Pango.SCALE));
-//		
-//						var pango_layout = Pango.cairo_create_layout(cr);
-//						pango_layout.set_font_description(font_description);
-//						pango_layout.set_markup(get_content_text() , -1);
-//						
-//						cr.set_source_rgb(0.0, 0.0, 0.0);    // black background
-//						cr.paint();
-//						cr.set_source_rgb(0.9, 0.9, 0.9); // light gray font color
-//						int pango_x_offset = 50;
-//						cr.translate(pango_x_offset, (widgetheight/3));
-//						
-//						pango_layout.set_width( (int)(layout_width  * Pango.SCALE));
-//						pango_layout.set_height((int)(layout_height * Pango.SCALE));
-//						
-//						pango_layout.set_ellipsize(Pango.EllipsizeMode.END);
-//						pango_layout.set_alignment(Pango.Alignment.LEFT);
-//						
-//						cr.move_to(0, 0);
-//						Pango.cairo_show_layout(cr, pango_layout);
-//						cr.move_to(0, 0);
-//						cr.translate(-pango_x_offset, -(widgetheight/3));
-//						
-//						logo = cover_image_pixb.scale_simple(ciwidth, ciheight, Gdk.InterpType.HYPER);
-//						
-//						y_offset = (int)((widgetheight * 0.5)  - (ciheight * 0.5));
-//						x_offset = (int)((widgetwidth  * 0.65) - (ciwidth  * 0.5));
-//						if(x_offset < (layout_width + pango_x_offset))
-//							x_offset = layout_width + pango_x_offset;
-//					}
-//					else {
-//						logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
-//						y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
-//						x_offset = (int)((widgetwidth  * 0.5) - (logowidth  * 0.4));
-//					}
-//				}
-//				Gdk.cairo_set_source_pixbuf(cr, logo, x_offset, y_offset);
-//				cr.paint();
-//			}
+					return true;
+				}
+				if(!cover_image_available) {
+					logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
+					y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
+					x_offset = (int)((widgetwidth  * 0.5) - (logowidth  * 0.4));
+				}
+				else {
+					if(cover_image_pixb != null) {
+						//Pango
+						layout_width  = alloc.width/3; //300; //current_alloc.width - (x_offset + x_margin);
+						layout_height = 300; //current_alloc.height - (y_offset + y_margin);
+						//---
+						
+						int cover_image_width  = cover_image_pixb.get_width();
+						int cover_image_height = cover_image_pixb.get_height();
+						
+						if((float)widgetwidth/cover_image_width>(float)widgetheight/cover_image_height)
+							ratio = (float)widgetheight/cover_image_height;
+						else
+							ratio = (float)widgetwidth/cover_image_width;
+						
+						int ciwidth  = (int)(cover_image_width  * ratio * 0.7);
+						int ciheight = (int)(cover_image_height * ratio * 0.7);
+						
+						//TODO: Set max scale for logo
+						var font_description = new Pango.FontDescription();
+						font_description.set_family(font_family);
+						font_description.set_size((int)(font_size * Pango.SCALE));
+		
+						var pango_layout = Pango.cairo_create_layout(cr);
+						pango_layout.set_font_description(font_description);
+						pango_layout.set_markup(get_content_text() , -1);
+						
+						cr.set_source_rgb(0.0, 0.0, 0.0);    // black background
+						cr.paint();
+						cr.set_source_rgb(0.9, 0.9, 0.9); // light gray font color
+						int pango_x_offset = 50;
+						cr.translate(pango_x_offset, (widgetheight/3));
+						
+						pango_layout.set_width( (int)(layout_width  * Pango.SCALE));
+						pango_layout.set_height((int)(layout_height * Pango.SCALE));
+						
+						pango_layout.set_ellipsize(Pango.EllipsizeMode.END);
+						pango_layout.set_alignment(Pango.Alignment.LEFT);
+						
+						cr.move_to(0, 0);
+						Pango.cairo_show_layout(cr, pango_layout);
+						cr.move_to(0, 0);
+						cr.translate(-pango_x_offset, -(widgetheight/3));
+						
+						logo = cover_image_pixb.scale_simple(ciwidth, ciheight, Gdk.InterpType.HYPER);
+						
+						y_offset = (int)((widgetheight * 0.5)  - (ciheight * 0.5));
+						x_offset = (int)((widgetwidth  * 0.65) - (ciwidth  * 0.5));
+						if(x_offset < (layout_width + pango_x_offset))
+							x_offset = layout_width + pango_x_offset;
+					}
+					else {
+						logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
+						y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
+						x_offset = (int)((widgetwidth  * 0.5) - (logowidth  * 0.4));
+					}
+				}
+				Gdk.cairo_set_source_pixbuf(cr, logo, x_offset, y_offset);
+				cr.paint();
+			}
 //			this.get_window().end_paint();
-//		}
-//		return true;
-//	}
+		}
+		return true;
+	}
 	
 	private string get_content_text() {
 		string result = "";

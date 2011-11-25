@@ -78,12 +78,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private MenuBar menubar;
 	private ImageMenuItem config_button_menu_root;
 	private Menu config_button_menu;
-	private bool _media_browser_visible;
+	private bool _media_browser_visible = true;
 	private double current_volume; //keep it global for saving to params
 	private int window_width = 0;
 	private ulong active_notifier = 0;
 	private ScreenSaverManager ssm = null;
 	private List<Gtk.Action> actions_list = null;
+	private Box mbbox01;
 	public bool quit_if_closed;
 	public ScrolledWindow mediaBrScrollWin = null;
 	public ScrolledWindow trackListScrollWin = null;
@@ -932,10 +933,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void toggle_media_browser_visibility() {
 		if(media_browser_visible) {
 			hpaned_position_buffer = hpaned.get_position(); // buffer last position
+			mbbox01.hide();
 			hpaned.set_position(0);
 			media_browser_visible = false;
 		}
 		else {
+			mbbox01.show();
 			if(hpaned_position_buffer > 20) { // min value
 				hpaned.set_position(hpaned_position_buffer);
 			}
@@ -1396,7 +1399,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			});
 			//--------------------
 			this.hpaned = gb.get_object("paned1") as Gtk.Paned;
-			var mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
+			mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
+			hpaned.remove(mbbox01);
+			this.hpaned.pack1(mbbox01, false, false);
 //			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
 //			this.hpaned.button_press_event.connect(on_hpaned_button_event);
 //			this.hpaned.button_release_event.connect(on_hpaned_button_event);
@@ -1618,7 +1623,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		contentvbox.pack_end(bar, false, false, 0);
 		bar.show_all();
 	}
-	Gtk.Window w1;
+	
 	private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {
 		if(not_show_art_on_hover_image)
 			return false;

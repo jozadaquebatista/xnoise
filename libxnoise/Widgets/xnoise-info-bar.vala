@@ -114,19 +114,20 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 		
 		update_text(info_text, bold);
 		
-		bx.pack_start(swbox, false, false , 0);
+		bx.pack_start(swbox, false, false , 4);
 		
 		if(symbol_widget != null)
 			swbox.pack_start(symbol_widget, false, false , 0);
 		
 		info_label.set_ellipsize(Pango.EllipsizeMode.END);
-		bx.pack_start(info_label, true, true , 0);
-
+		info_label.set_hexpand(true);
+		bx.pack_start(info_label, true, true , 2);
+		
 		bx.pack_start(ewbox, false, false , 0);
 		
 		if(extra_widget != null)
 			ewbox.pack_start(extra_widget, false, false , 0);
-
+		
 		switch(removal_type) {
 			case(UserInfo.RemovalType.CLOSE_BUTTON):
 				close_button = new Gtk.Button.from_stock(Gtk.Stock.CLOSE);

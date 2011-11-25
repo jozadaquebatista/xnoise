@@ -259,6 +259,7 @@
                       <object class="GtkHBox" id="hbox3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <object class="GtkButton" id="hide_button">
                             <property name="visible">True</property>
@@ -375,13 +376,14 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label4x">
+                          <object class="GtkLabel" id="label2xx">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
-                            <property name="fill">False</property>
+                            <property name="fill">True</property>
                             <property name="position">6</property>
                           </packing>
                         </child>
@@ -392,6 +394,7 @@
                             <property name="receives_default">True</property>
                             <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
+                            <property name="focus_on_click">False</property>
                             <child>
                               <object class="GtkHBox" id="hbox2">
                                 <property name="visible">True</property>
@@ -405,7 +408,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="fill">True</property>
+                                    <property name="fill">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -416,8 +419,8 @@
                                     <property name="label" translatable="yes">Lyrics</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -452,7 +455,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="fill">True</property>
+                                    <property name="fill">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -463,8 +466,8 @@
                                     <property name="label" translatable="yes">Video</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -475,7 +478,6 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="padding">2</property>
                             <property name="position">8</property>
                           </packing>
                         </child>
@@ -587,7 +589,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="fill">True</property>
+                                    <property name="fill">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -598,8 +600,8 @@
                                     <property name="label" translatable="yes">Lyrics</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -634,7 +636,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="fill">True</property>
+                                    <property name="fill">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -645,8 +647,8 @@
                                     <property name="label" translatable="yes">Tracklist</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -774,7 +776,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="fill">True</property>
+                                    <property name="fill">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -785,8 +787,8 @@
                                     <property name="label" translatable="yes">Tracklist</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -821,7 +823,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="fill">True</property>
+                                    <property name="fill">False</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -832,8 +834,8 @@
                                     <property name="label" translatable="yes">Video</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
                                     <property name="padding">2</property>
                                     <property name="position">1</property>
                                   </packing>

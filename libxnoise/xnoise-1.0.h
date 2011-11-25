@@ -13,11 +13,11 @@
 #include <sqlite3.h>
 #include <float.h>
 #include <math.h>
+#include <gdk/gdk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <unique/uniqueapp.h>
 #include <unique/uniquemessage.h>
 #include <unique/uniqueenumtypes.h>
-#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -2112,6 +2112,7 @@ void xnoise_gst_player_set_current_audio (XnoiseGstPlayer* self, gint value);
 gint xnoise_gst_player_get_n_text (XnoiseGstPlayer* self);
 gdouble xnoise_gst_player_get_gst_position (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_gst_position (XnoiseGstPlayer* self, gdouble value);
+guint gdk_x11_window_get_xid (GdkWindow* window);
 GQuark xnoise_playlist_reader_error_quark (void);
 GType xnoise_playlist_list_type_get_type (void) G_GNUC_CONST;
 GType xnoise_playlist_result_get_type (void) G_GNUC_CONST;

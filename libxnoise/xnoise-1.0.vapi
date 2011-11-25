@@ -979,6 +979,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class VideoScreen : Gtk.DrawingArea {
 		public VideoScreen (Xnoise.GstPlayer _player);
+		public override bool draw (Cairo.Context cr);
 		public void trigger_expose ();
 		public string font_family { get; set; }
 		public double font_size { get; set; }
@@ -1193,6 +1194,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static bool thumbnail_available (string uri, out GLib.File? _thumb);
 }
+[CCode (cheader_filename = "xnoise-1.0.h", cname = "gdk_x11_window_get_xid")]
+public static uint gdk_x11_window_get_xid (Gdk.Window window);
 [CCode (cheader_filename = "xnoise-1.0.h", cname = "gdk_window_ensure_native")]
 public static bool ensure_native (Gdk.Window window);
 [CCode (cheader_filename = "xnoise-1.0.h", cname = "gtk_widget_style_get_property")]

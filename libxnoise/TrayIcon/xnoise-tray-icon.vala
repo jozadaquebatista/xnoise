@@ -46,7 +46,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		
 		popup_menu.connect(this.traymenu_popup);
 		activate.connect(main_window.toggle_window_visbility);
-//		scroll_event.connect(this.on_scrolled);
+		scroll_event.connect(this.on_scrolled);
 		button_press_event.connect(this.on_clicked);
 	}
 	
@@ -139,12 +139,12 @@ public class Xnoise.TrayIcon : StatusIcon {
 		return false;
 	}
 
-	private bool on_scrolled(Gtk.StatusIcon sender, Gdk.Event event) {
+	private bool on_scrolled(Gtk.StatusIcon sender, Gdk.EventScroll event) {
 		if(global.player_state != PlayerState.STOPPED) {
-			if(event.scroll.direction == Gdk.ScrollDirection.DOWN) {
+			if(event.direction == Gdk.ScrollDirection.DOWN) {
 				main_window.change_track(ControlButton.Direction.PREVIOUS, true);
 			}
-			else if(event.scroll.direction == Gdk.ScrollDirection.UP) {
+			else if(event.direction == Gdk.ScrollDirection.UP) {
 				main_window.change_track(ControlButton.Direction.NEXT, true);
 			}
 		}
