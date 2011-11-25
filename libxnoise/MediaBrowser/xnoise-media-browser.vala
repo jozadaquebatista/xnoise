@@ -589,8 +589,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.set_size_request (300,500);
 		
 		fontsizeMB = Params.get_int_value("fontsizeMB");
-		font_description = new Pango.FontDescription();
-		font_description.set_family("Sans");
+		Style style = Widget.get_default_style();
+		
+		font_description = style.font_desc.copy();//new Pango.FontDescription();
+//		font_description.set_family("Sans");
 		font_description.set_size((int)(fontsizeMB * Pango.SCALE));
 		
 		renderer = new FlowingTextRenderer(this.ow, font_description);
@@ -599,7 +601,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				TreeViewColumn tvc = this.get_column(0);
 				tvc.max_width = this.ow.get_allocated_width() - 20;
 				tvc.min_width = this.ow.get_allocated_width() - 20;
-				this.get_model().foreach(owforeach);
+				TreeModel? xm = this.get_model();
+				if(xm != null)
+					xm.foreach(owforeach);
 			});
 			return false;
 		});
@@ -626,7 +630,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		
 	}
 	
-	private bool owforeach(TreeModel mo, TreePath pt, TreeIter it) {
+	private bool owforeach(TreeModel? mo, TreePath pt, TreeIter it) {
+		if(mo == null)
+			return true;
 		mo.row_changed(pt, it);
 		return false;
 	}

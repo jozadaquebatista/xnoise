@@ -1472,13 +1472,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //			w1.add(mbbx);//browsernotebook);
 //			w1.show_all();#
 			mbbox01.pack_start(mbbx, true, true, 0);
-//			hpaned.pack1(mbbx, false, false);
-//			hpaned.show_all();
-//			Timeout.add_seconds(2, () => {
-//				hpaned.show();
-//				hpaned.set_position(100);
-//				return false;
-//			});
 			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
 			tracklistnotebook.switch_page.connect( (s,np,p) => {
 				global.sign_notify_tracklistnotebook_switched(p);
