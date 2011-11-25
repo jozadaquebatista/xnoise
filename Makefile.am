@@ -4,6 +4,7 @@ SUBDIRS = \
     data \
     libxnoise \
     src \
+    plugins \
     po \
     doc \
     vapi \
@@ -13,6 +14,7 @@ DIST_SUBDIRS = \
     data \
     libxnoise \
     src \
+    plugins \
     po \
     doc \
     vapi \
