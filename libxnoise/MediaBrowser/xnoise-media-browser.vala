@@ -478,6 +478,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return false;
 	}
 	
+	private bool in_update_view = false;
 	/* updates the view, leaves the original model untouched.
 	   expanded rows are kept as well as the scrollbar position */
 	public bool update_view() {
@@ -485,8 +486,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 //print("scroll_position: %.3lf\n", scroll_position);
 //		this.row_collapsed.disconnect(on_row_collapsed);
 //		this.row_expanded.disconnect(on_row_expanded);
+		in_update_view = true;
 		this.set_model(null);
 		this.set_model(mediabrowsermodel);
+		Idle.add( () => {
+			in_update_view = false;
+			return false;
+		});
+		
 		//TODO: delete the expanion list after import
 //		foreach(TreePath tp in this.expansion_list)
 //			this.expand_row(tp, false);
@@ -526,20 +533,21 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			this.font_description = font_description;
 		}
 	
-		private static const int  BORDER_DIST = 30; //TODO: make it dynamic
+		private static const int  BORDER_DIST = 35; //TODO: make it dynamic
 		
 		public override void get_preferred_height_for_width (Gtk.Widget widget, int width, out int minimum_height, out int natural_height) {
 			//print("get_preferred_height_for_width %d\n", width);
+			//minimum_height = natural_height = 25;
+			//TODO: Calculating the row height this way is very bad performance wise
 			Gdk.Window? w = ow.get_window();
 			if(w == null) {
 				print("no window\n");
 				natural_height = minimum_height = 30;
 				return;
 			}
-			Cairo.Context cr = Gdk.cairo_create(w);
-			var pango_layout = Pango.cairo_create_layout(cr);
+			var pango_layout = widget.create_pango_layout(text);
 			pango_layout.set_font_description(this.font_description);
-			pango_layout.set_text(text , -1);
+//			pango_layout.set_text(text , -1);
 			pango_layout.set_alignment(Pango.Alignment.LEFT);
 			pango_layout.set_width( (int)((ow.get_allocated_width() -  BORDER_DIST) * Pango.SCALE));
 			pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
@@ -577,6 +585,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 	
 	private Pango.FontDescription font_description;
+	private int last_width;
 	
 	private void setup_view() {
 		
@@ -593,11 +602,18 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		renderer = new FlowingTextRenderer(this.ow, font_description);
 		Idle.add( () => {
 			this.ow.size_allocate.connect_after( (s, a) => {
-				TreeViewColumn tvc = this.get_column(0);
-				tvc.max_width = this.ow.get_allocated_width() - 20;
-				tvc.min_width = this.ow.get_allocated_width() - 20;
+				unowned TreeViewColumn tvc = this.get_column(0);
+				int current_width = this.ow.get_allocated_width();
+				if(last_width == current_width)
+					return;
+				
+				last_width = current_width;
+				
+				tvc.max_width = current_width - 25;
+				tvc.min_width = current_width - 25;
+				
 				TreeModel? xm = this.get_model();
-				if(xm != null)
+				if(xm != null && !in_update_view)
 					xm.foreach(owforeach);
 			});
 			return false;
@@ -616,12 +632,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		
 		this.headers_visible = false;
 		this.enable_search = false;
-		this.set_row_separator_func((m, iter) => {
-			int sepatator = 0;
-			m.get(iter, MediaBrowserModel.Column.DRAW_SEPTR, ref sepatator);
-			if(sepatator==0) return false;
-			return true;
-		});
+//		this.set_row_separator_func((m, iter) => {
+//			int sepatator = 0;
+//			m.get(iter, MediaBrowserModel.Column.DRAW_SEPTR, ref sepatator);
+//			if(sepatator==0) return false;
+//			return true;
+//		});
 		
 	}
 	
