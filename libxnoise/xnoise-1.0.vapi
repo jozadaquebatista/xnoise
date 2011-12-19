@@ -481,10 +481,12 @@ namespace Xnoise {
 		public signal void sign_fetched (string artist, string album, string image_path);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class AppStarter {
+	public class Application : GLib.Application {
 		public static Xnoise.Main xn;
-		public AppStarter ();
-		public static Unique.Response on_message_received (Unique.App sender, int command, Unique.MessageData message_data, uint time);
+		public Application ();
+		public void on_activated ();
+		public int on_command_line (GLib.ApplicationCommandLine command_line);
+		public void on_startup ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class ControlButton : Gtk.Button {
@@ -681,6 +683,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Main : GLib.Object {
+		public static weak Xnoise.Application app;
 		public static bool no_plugins;
 		public static bool show_plugin_state;
 		public Main ();

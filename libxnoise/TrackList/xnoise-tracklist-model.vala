@@ -512,7 +512,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		if(uris == null) return;
 		if(uris[0] == null) return;
 		int k = 0;
-		
+print("##1\n");
 		TreeIter iter, iter_2;
 		FileType filetype;
 		this.get_iter_first(out iter_2);

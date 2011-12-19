@@ -35,6 +35,7 @@ public class Xnoise.Main : GLib.Object {
 	
 	public static bool show_plugin_state;
 	public static bool no_plugins;
+	public static unowned Xnoise.Application app;
 	
 	public Main() {
 		_instance = this;
@@ -170,7 +171,8 @@ public class Xnoise.Main : GLib.Object {
 	private uint maxtime_quit_src = 0;
 	
 	private bool quit_job(Worker.Job job) {
-		Gtk.main_quit();
+		this.app.quit_mainloop();
+//		Gtk.main_quit();
 		return false;
 	}
 	
@@ -185,7 +187,8 @@ public class Xnoise.Main : GLib.Object {
 		var jx = new Worker.Job(Worker.ExecutionType.TIMED, quit_job, 4);
 		io_worker.push_job(jx);
 		jx.finished.connect( () => {
-			Gtk.main_quit(); 
+//			Gtk.main_quit();
+			this.app.quit_mainloop();
 			preparing_quit = false;
 		});
 		print ("closing...\n");
@@ -200,7 +203,8 @@ public class Xnoise.Main : GLib.Object {
 		Timeout.add(100, () => {
 			if(preparing_quit)
 				return true;
-			Gtk.main_quit(); 
+			this.app.quit_mainloop();
+//			Gtk.main_quit(); 
 			return false;
 		});
 	}

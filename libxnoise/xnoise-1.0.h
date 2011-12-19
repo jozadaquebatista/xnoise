@@ -6,18 +6,15 @@
 
 #include <glib.h>
 #include <glib-object.h>
+#include <gio/gio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <gtk/gtk.h>
-#include <gio/gio.h>
 #include <sqlite3.h>
 #include <float.h>
 #include <math.h>
 #include <gdk/gdk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <unique/uniqueapp.h>
-#include <unique/uniquemessage.h>
-#include <unique/uniqueenumtypes.h>
 
 G_BEGIN_DECLS
 
@@ -32,6 +29,16 @@ G_BEGIN_DECLS
 typedef struct _XnoiseMain XnoiseMain;
 typedef struct _XnoiseMainClass XnoiseMainClass;
 typedef struct _XnoiseMainPrivate XnoiseMainPrivate;
+
+#define XNOISE_TYPE_APPLICATION (xnoise_application_get_type ())
+#define XNOISE_APPLICATION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_APPLICATION, XnoiseApplication))
+#define XNOISE_APPLICATION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_APPLICATION, XnoiseApplicationClass))
+#define XNOISE_IS_APPLICATION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_APPLICATION))
+#define XNOISE_IS_APPLICATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_APPLICATION))
+#define XNOISE_APPLICATION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_APPLICATION, XnoiseApplicationClass))
+
+typedef struct _XnoiseApplication XnoiseApplication;
+typedef struct _XnoiseApplicationClass XnoiseApplicationClass;
 
 #define XNOISE_TYPE_ALBUM_IMAGE (xnoise_album_image_get_type ())
 #define XNOISE_ALBUM_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_IMAGE, XnoiseAlbumImage))
@@ -649,17 +656,7 @@ typedef struct _XnoiseTrackListModelIteratorPrivate XnoiseTrackListModelIterator
 typedef struct _XnoiseTrayIcon XnoiseTrayIcon;
 typedef struct _XnoiseTrayIconClass XnoiseTrayIconClass;
 typedef struct _XnoiseTrayIconPrivate XnoiseTrayIconPrivate;
-
-#define XNOISE_TYPE_APP_STARTER (xnoise_app_starter_get_type ())
-#define XNOISE_APP_STARTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_APP_STARTER, XnoiseAppStarter))
-#define XNOISE_APP_STARTER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_APP_STARTER, XnoiseAppStarterClass))
-#define XNOISE_IS_APP_STARTER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_APP_STARTER))
-#define XNOISE_IS_APP_STARTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_APP_STARTER))
-#define XNOISE_APP_STARTER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_APP_STARTER, XnoiseAppStarterClass))
-
-typedef struct _XnoiseAppStarter XnoiseAppStarter;
-typedef struct _XnoiseAppStarterClass XnoiseAppStarterClass;
-typedef struct _XnoiseAppStarterPrivate XnoiseAppStarterPrivate;
+typedef struct _XnoiseApplicationPrivate XnoiseApplicationPrivate;
 
 #define XNOISE_TYPE_GLOBAL_ACCESS (xnoise_global_access_get_type ())
 #define XNOISE_GLOBAL_ACCESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccess))
@@ -1511,15 +1508,13 @@ struct _XnoiseTrayIconClass {
 	GtkStatusIconClass parent_class;
 };
 
-struct _XnoiseAppStarter {
-	GTypeInstance parent_instance;
-	volatile int ref_count;
-	XnoiseAppStarterPrivate * priv;
+struct _XnoiseApplication {
+	GApplication parent_instance;
+	XnoiseApplicationPrivate * priv;
 };
 
-struct _XnoiseAppStarterClass {
-	GTypeClass parent_class;
-	void (*finalize) (XnoiseAppStarter *self);
+struct _XnoiseApplicationClass {
+	GApplicationClass parent_class;
 };
 
 struct _XnoiseGlobalAccess {
@@ -1836,6 +1831,8 @@ struct _XnoiseVolumeSliderButtonClass {
 GType xnoise_main_get_type (void) G_GNUC_CONST;
 extern gboolean xnoise_main_show_plugin_state;
 extern gboolean xnoise_main_no_plugins;
+GType xnoise_application_get_type (void) G_GNUC_CONST;
+extern XnoiseApplication* xnoise_main_app;
 XnoiseMain* xnoise_main_new (void);
 XnoiseMain* xnoise_main_construct (GType object_type);
 void xnoise_main_add_track_to_gst_player (XnoiseMain* self, const gchar* uri);
@@ -2503,17 +2500,12 @@ void xnoise_track_list_model_iterator_get (XnoiseTrackListModelIterator* self, G
 GType xnoise_tray_icon_get_type (void) G_GNUC_CONST;
 XnoiseTrayIcon* xnoise_tray_icon_new (void);
 XnoiseTrayIcon* xnoise_tray_icon_construct (GType object_type);
-gpointer xnoise_app_starter_ref (gpointer instance);
-void xnoise_app_starter_unref (gpointer instance);
-GParamSpec* xnoise_param_spec_app_starter (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void xnoise_value_set_app_starter (GValue* value, gpointer v_object);
-void xnoise_value_take_app_starter (GValue* value, gpointer v_object);
-gpointer xnoise_value_get_app_starter (const GValue* value);
-GType xnoise_app_starter_get_type (void) G_GNUC_CONST;
-extern XnoiseMain* xnoise_app_starter_xn;
-UniqueResponse xnoise_app_starter_on_message_received (UniqueApp* sender, gint command, UniqueMessageData* message_data, guint time);
-XnoiseAppStarter* xnoise_app_starter_new (void);
-XnoiseAppStarter* xnoise_app_starter_construct (GType object_type);
+extern XnoiseMain* xnoise_application_xn;
+XnoiseApplication* xnoise_application_new (void);
+XnoiseApplication* xnoise_application_construct (GType object_type);
+void xnoise_application_on_activated (XnoiseApplication* self);
+void xnoise_application_on_startup (XnoiseApplication* self);
+gint xnoise_application_on_command_line (XnoiseApplication* self, GApplicationCommandLine* command_line);
 GType xnoise_global_access_get_type (void) G_GNUC_CONST;
 void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
 void xnoise_global_access_do_restart_of_current_track (XnoiseGlobalAccess* self);

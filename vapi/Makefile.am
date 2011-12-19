@@ -1,5 +1,5 @@
 noinst_DATA = \
-	config.vapi libnotify-0.5.vapi indicate.vapi
+	config.vapi
 
 EXTRA_DIST = \
 	$(noinst_DATA)

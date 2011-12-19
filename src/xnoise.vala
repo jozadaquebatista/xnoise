@@ -31,33 +31,31 @@
 
 namespace Xnoise {
 
- private static bool _plugininfo;
- private static bool _noplugins;
- private static bool _reset;
- private static bool _version;
+	private static bool _plugininfo;
+	private static bool _noplugins;
+	private static bool _reset;
+	private static bool _version;
 
- [CCode (array_length = false, array_null_terminated = true)]
- private static string[] _fileargs;
+	[CCode (array_length = false, array_null_terminated = true)]
+	private static string[] _fileargs;
 
- private const OptionEntry[] options = {
-   { "version",     'V', 0, OptionArg.NONE, ref _version,    "Show the application's version.",                 null },
-   { "plugin-info", 'p', 0, OptionArg.NONE, ref _plugininfo, "Show loaded and activated plugins on app start.", null },
-   { "no-plugins",  'N', 0, OptionArg.NONE, ref _noplugins,  "Start without loding any plugins.",               null },
-   { "reset",       'R', 0, OptionArg.NONE, ref _reset,      "Reset all settings.",                             null },
-   { "", 0, 0, OptionArg.FILENAME_ARRAY, ref _fileargs,      null,                                              "[FILE ...]" },
-   {null}
- };
+	private const OptionEntry[] options = {
+		{ "version",     'V', 0, OptionArg.NONE, ref _version,    "Show the application's version.",                 null },
+		{ "plugin-info", 'p', 0, OptionArg.NONE, ref _plugininfo, "Show loaded and activated plugins on app start.", null },
+		{ "no-plugins",  'N', 0, OptionArg.NONE, ref _noplugins,  "Start without loding any plugins.",               null },
+		{ "reset",       'R', 0, OptionArg.NONE, ref _reset,      "Reset all settings.",                             null },
+		{ "", 0, 0, OptionArg.FILENAME_ARRAY,    ref _fileargs,   null,                                      "[FILE ...]" },
+		{null}
+	};
 
 	public static int main(string[] args) {
-		GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
-		GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
-		Environment.set_application_name(Config.GETTEXT_PACKAGE);
 		//Environment.atexit(mem_profile); This can be used if xnoise is compiled with new memory statistic switch
-		
+print("args len: %d\n", args.length);
 		var opt_context = new OptionContext("     Xnoise Media Player     ");
 		opt_context.set_description(
 		   "%s %s \n%s \nhttp://www.xnoise-media-player.com/\n".printf(
-		      _("Xnoise is a media player for Gtk+."), _("It uses the gstreamer framework."),
+		      _("Xnoise is a media player for Gtk+."),
+		      _("It uses the gstreamer framework."),
 		      _("More information on the project website:"))
 		);
 		opt_context.set_help_enabled(true);
@@ -70,92 +68,32 @@ namespace Xnoise {
 			print(_("Run 'xnoise --help' to see a full list of available command line options.\n"));
 			return 0;
 		}
-		if(_reset) {
-			print("Reset not implemented, yet.\n");
-			return 0;
-		}
+print("++1\n");
 		if(_version) {
 			print("xnoise %s\n", Config.PACKAGE_VERSION);
 			return 0;
 		}
-		if(_plugininfo) {
-			Main.show_plugin_state = true;
+print("++2\n");
+		Xnoise.Application app = new Xnoise.Application();
+		app.activate.connect(app.on_activated);
+		app.startup.connect(app.on_startup);
+		app.command_line.connect(app.on_command_line);
+print("++3\n");
+		try {
+			app.register(null);
+print("++4\n");
 		}
-		if(_noplugins) {
-			Main.no_plugins = true;
+		catch(Error e) {
+			print("AppError: %s\n", e.message);
+			return -1;
 		}
-		Gtk.init(ref args);
-		Gst.init(ref args);
-		// Gtk.Widget.set_default_direction(Gtk.TextDirection.RTL); // RTL testing
-		Unique.App app;
-		var app_starter = new Xnoise.AppStarter();
-		app = new Unique.App.with_commands("org.gtk.xnoise", "xnoise", null);
-		string[] uris = {};
-		File f = null;
-		string mime;
-		var psVideo = new PatternSpec("video*");
-		var psAudio = new PatternSpec("audio*");
-		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-			          FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
-		if(_fileargs != null) {
-			var ls = new Xnoise.LocalSchemes();
-			foreach(string s in _fileargs) {
-				f = File.new_for_commandline_arg(s); //fileargs[i]);
-				if(f == null) continue;
-				if(!f.query_exists(null)) continue;
-				string urischeme = f.get_uri_scheme();
-				string content = null;
-				if(urischeme in ls) {
-					try {
-						FileInfo info = f.query_info(attr, FileQueryInfoFlags.NONE, null);
-						content = info.get_content_type();
-						mime = GLib.ContentType.get_mime_type(content);
-						
-						if((psAudio.match_string(mime))||
-						   (psVideo.match_string(mime))) {
-							uris += f.get_uri();
-						}
-					}
-					catch(GLib.Error e) {
-						print("Arg error: %s\n", e.message);
-						continue;
-					}
-				}
-			}
-		}
-		uris += null; //Null terminated array. Is adding null necessary?
-		//message( "main thread %d", (int)Linux.gettid() );
-		
-		if(app.is_running()) {
-			if(uris.length >= 1) {
-				print(_("Using the running instance of xnoise!\n"));
-			}
-			else {
-				print(_("Showing the running instance of xnoise.\n"));
-			}
-			Unique.Command command;
-			Unique.Response response;
-			Unique.MessageData message_data = new Unique.MessageData();
-			command = Unique.Command.ACTIVATE;
-			message_data.set_uris(uris);
-			response = app.send_message(command, message_data);
-			app = null;
-			
-			if (response != Unique.Response.OK)
-				print("singleton app response fail.\n");
-		}
-		else {
-			Xnoise.AppStarter.xn = Xnoise.Main.instance;
-			app.watch_window((Gtk.Window)main_window);
-			app.message_received.connect(app_starter.on_message_received);
-			
-			main_window.show_all();
-			
-			tl.tracklistmodel.add_uris(uris);
-			
-			Gtk.main();
-		}
-		return 0;
+//		if(app.get_is_remote() && _fileargs == null) {
+//			app.activate();
+//			return 0;
+//		}
+print("++5\n");
+		return app.run(args);
+print("++6\n");
 	}
 }
 

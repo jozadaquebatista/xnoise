@@ -37,7 +37,7 @@ libxnoise/TrackList/xnoise-text-column.vala
 libxnoise/TrackList/xnoise-tracklist.vala
 libxnoise/TrackList/xnoise-tracklist-model.vala
 libxnoise/TrayIcon/xnoise-tray-icon.vala
-libxnoise/Utils/xnoise-app-starter.vala
+libxnoise/Utils/xnoise-application.vala
 libxnoise/Utils/xnoise-media-importer.vala
 libxnoise/Utils/xnoise-misc.vala
 libxnoise/Utils/xnoise-screensaver-manager.vala

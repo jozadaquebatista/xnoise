@@ -83,7 +83,7 @@ libxnoise_la_SOURCES = \
     TrackList/xnoise-tracklist-column.vala \
     TrackList/xnoise-tracklist-model.vala \
     TrayIcon/xnoise-tray-icon.vala \
-    Utils/xnoise-app-starter.vala \
+    Utils/xnoise-application.vala \
     Utils/xnoise-global-access.vala \
     Utils/xnoise-local-schemes.vala \
     Utils/xnoise-media-extensions.vala \

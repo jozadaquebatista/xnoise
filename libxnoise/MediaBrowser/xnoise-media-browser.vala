@@ -535,9 +535,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	
 		private static const int  BORDER_DIST = 35; //TODO: make it dynamic
 		
-		public override void get_preferred_height_for_width (Gtk.Widget widget, int width, out int minimum_height, out int natural_height) {
-			//print("get_preferred_height_for_width %d\n", width);
-			//minimum_height = natural_height = 25;
+		public override void get_preferred_height_for_width(Gtk.Widget widget,
+		                                                    int width,
+		                                                    out int minimum_height,
+		                                                    out int natural_height) {
 			//TODO: Calculating the row height this way is very bad performance wise
 			Gdk.Window? w = ow.get_window();
 			if(w == null) {

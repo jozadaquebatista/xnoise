@@ -73,7 +73,7 @@ PKG_CHECK_MODULES(XNOISE, \
     gtk+-3.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
     taglib_c >= $TAGLIB_C_REQUIRED \
-    unique-3.0 cairo)
+    cairo)
 
 
 dnl ================================================================
@@ -376,7 +376,6 @@ XNOISE_PACKAGES="\
     --pkg posix \
     --pkg sqlite3 \
     --pkg taglib_c \
-    --pkg unique-3.0 \
     --pkg linux \
     --target-glib=`pkg-config --modversion glib-2.0` \
 "
