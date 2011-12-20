@@ -19,9 +19,9 @@ if ENABLE_MPRIS
   SUBDIRS += mpris_one
 endif
 
-#if ENABLE_MEDIAKEYS
-#  SUBDIRS += mediakeys
-#endif
+if ENABLE_MEDIAKEYS
+  SUBDIRS += mediakeys
+endif
 
 if ENABLE_LYRICWIKI
   SUBDIRS += lyricwiki

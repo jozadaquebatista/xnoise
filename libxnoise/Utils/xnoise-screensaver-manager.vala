@@ -79,7 +79,7 @@ namespace Xnoise {
 		private int get_window_id() {
 			var win = main_window.get_window();
 			if(win == null) return -1;
-			X.ID id = gdk_x11_window_get_xid(win); // TODO
+			X.ID id = Gdk.X11Window.get_xid(win);//gdk_x11_window_get_xid(win); // TODO
 			return (int)id;
 		}
 		

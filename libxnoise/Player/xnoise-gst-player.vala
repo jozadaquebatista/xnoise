@@ -681,7 +681,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			var imagesink = (XOverlay)(msg.src);
 			imagesink.set_property("force-aspect-ratio", true);
 //			imagesink.set_xwindow_id(Gdk.x11_drawable_get_xid(videoscreen.get_window()));
-			imagesink.set_window_handle(gdk_x11_window_get_xid(videoscreen.get_window()));
+			imagesink.set_window_handle((uint)(Gdk.X11Window.get_xid(videoscreen.get_window()))); //gdk_x11_window_get_xid(videoscreen.get_window()));
 		}
 	}
 
@@ -812,6 +812,6 @@ public class Xnoise.GstPlayer : GLib.Object {
 		}
 	}
 }
-[CCode (cname = "gdk_x11_window_get_xid")]
-public extern uint gdk_x11_window_get_xid(Gdk.Window window);
+//[CCode (cname = "gdk_x11_window_get_xid")]
+//public extern uint gdk_x11_window_get_xid(Gdk.Window window);
 
