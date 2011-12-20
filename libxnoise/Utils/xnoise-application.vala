@@ -55,16 +55,11 @@ public class Xnoise.Application : GLib.Application {
 	}
 	
 	public void on_activated() {
-		print("on_activated\n");
 		main_window.present();
 	}
 	
 	public void on_startup() {
-		print("on_startup\n");
 		if(!this.get_is_remote()) {
-			GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
-			GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
-			Environment.set_application_name(Config.GETTEXT_PACKAGE);
 			unowned string[] args = null;
 			Gtk.init(ref args);
 			Gst.init(ref args);
@@ -78,11 +73,18 @@ public class Xnoise.Application : GLib.Application {
 	}
 	
 	public int on_command_line(ApplicationCommandLine command_line) {
-		print("on_command_line\n");
+		//if(!command_line.get_is_remote()) {
+		//	print("MI on_command_line\n");
+		//}
+		//else {
+		//	print("New on_command_line\n");
+		//}
 		string[] args = command_line.get_arguments();
-		foreach(string astr in args)
-			print("astr: %s\n", astr);
-		unowned string[] uargs = args;
+		string[] sa_args = {};
+		foreach(string arg in args) {
+			sa_args += arg;
+		}
+		unowned string[] uargs = sa_args; // option parser needs unowned array of string
 		var opt_context = new OptionContext("     Xnoise Media Player     ");
 		opt_context.set_description(
 		   "%s %s \n%s \nhttp://www.xnoise-media-player.com/\n".printf(
@@ -109,7 +111,6 @@ public class Xnoise.Application : GLib.Application {
 		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
 		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 		if(_fileargs != null) {
-		print("_fileargs not null\n");
 			var ls = new Xnoise.LocalSchemes();
 			foreach(string s in _fileargs) {
 				f = File.new_for_commandline_arg(s);
@@ -126,7 +127,6 @@ public class Xnoise.Application : GLib.Application {
 						if((psAudio.match_string(mime))||
 						   (psVideo.match_string(mime))) {
 							uris += f.get_uri();
-							print("handled uri\n");
 						}
 					}
 					catch(GLib.Error e) {
@@ -136,12 +136,16 @@ public class Xnoise.Application : GLib.Application {
 				}
 			}
 		}
-		if(uris.length >= 1) {
-			tl.tracklistmodel.add_uris(uris);
+		if(uris.length > 0) {
+			Idle.add( () => {
+				tl.tracklistmodel.add_uris(uris);
+				return false;
+			});
+			
 		}
 		this.activate();
-		if(!this.get_is_remote()) {
-			run_mainloop();
+		if(!command_line.get_is_remote()) {
+			this.hold();
 		}
 		return 0;
 	}

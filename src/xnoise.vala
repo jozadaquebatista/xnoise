@@ -50,7 +50,11 @@ namespace Xnoise {
 
 	public static int main(string[] args) {
 		//Environment.atexit(mem_profile); This can be used if xnoise is compiled with new memory statistic switch
-print("args len: %d\n", args.length);
+		GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
+		GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
+		Environment.set_application_name(Config.GETTEXT_PACKAGE);
+		string[] sa_args = {};
+		sa_args += Config.GETTEXT_PACKAGE;
 		var opt_context = new OptionContext("     Xnoise Media Player     ");
 		opt_context.set_description(
 		   "%s %s \n%s \nhttp://www.xnoise-media-player.com/\n".printf(
@@ -68,32 +72,64 @@ print("args len: %d\n", args.length);
 			print(_("Run 'xnoise --help' to see a full list of available command line options.\n"));
 			return 0;
 		}
-print("++1\n");
 		if(_version) {
 			print("xnoise %s\n", Config.PACKAGE_VERSION);
 			return 0;
 		}
-print("++2\n");
+		if(_plugininfo) sa_args += "-p";
+		if(_reset)      sa_args += "-R";
+		if(_noplugins)  sa_args += "-N";
+		string[] uris = {};
+		string mime;
+		var psVideo = new PatternSpec("video*");
+		var psAudio = new PatternSpec("audio*");
+		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
+		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		if(_fileargs != null) {
+			var ls = new Xnoise.LocalSchemes();
+			foreach(string s in _fileargs) {
+				File current_file = File.new_for_path(GLib.Path.build_filename(Environment.get_current_dir(), s, null));
+				
+				if(current_file == null)             continue;
+				if(!current_file.query_exists(null)) continue;
+				
+				string urischeme = current_file.get_uri_scheme();
+				string content = null;
+				if(urischeme in ls) {
+					try {
+						FileInfo info = current_file.query_info(attr, FileQueryInfoFlags.NONE, null);
+						content = info.get_content_type();
+						mime = GLib.ContentType.get_mime_type(content);
+						
+						if((psAudio.match_string(mime))||
+						   (psVideo.match_string(mime))) {
+							sa_args += current_file.get_path();
+							uris += current_file.get_uri();
+						}
+					}
+					catch(GLib.Error e) {
+						print("Arg error: %s\n", e.message);
+						continue;
+					}
+				}
+			}
+		}
 		Xnoise.Application app = new Xnoise.Application();
 		app.activate.connect(app.on_activated);
 		app.startup.connect(app.on_startup);
 		app.command_line.connect(app.on_command_line);
-print("++3\n");
 		try {
 			app.register(null);
-print("++4\n");
 		}
 		catch(Error e) {
 			print("AppError: %s\n", e.message);
 			return -1;
 		}
-//		if(app.get_is_remote() && _fileargs == null) {
-//			app.activate();
-//			return 0;
-//		}
-print("++5\n");
-		return app.run(args);
-print("++6\n");
+		if(app.get_is_remote() && _fileargs == null) {
+			app.activate();
+			return 0;
+		}
+		return app.run(sa_args);
 	}
 }
 

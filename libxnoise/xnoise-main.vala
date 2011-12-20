@@ -171,8 +171,7 @@ public class Xnoise.Main : GLib.Object {
 	private uint maxtime_quit_src = 0;
 	
 	private bool quit_job(Worker.Job job) {
-		this.app.quit_mainloop();
-//		Gtk.main_quit();
+		this.app.release();
 		return false;
 	}
 	
@@ -180,15 +179,10 @@ public class Xnoise.Main : GLib.Object {
 		global.player_in_shutdown();
 		global.player_state = PlayerState.STOPPED;
 		preparing_quit = true;
-//		maxtime_quit_src = Timeout.add_seconds(4, () => { // maximum time for shutdown
-//			Gtk.main_quit(); 
-//			return false;
-//		});
 		var jx = new Worker.Job(Worker.ExecutionType.TIMED, quit_job, 4);
 		io_worker.push_job(jx);
 		jx.finished.connect( () => {
-//			Gtk.main_quit();
-			this.app.quit_mainloop();
+			this.app.release();
 			preparing_quit = false;
 		});
 		print ("closing...\n");
@@ -203,8 +197,7 @@ public class Xnoise.Main : GLib.Object {
 		Timeout.add(100, () => {
 			if(preparing_quit)
 				return true;
-			this.app.quit_mainloop();
-//			Gtk.main_quit(); 
+			this.app.release();
 			return false;
 		});
 	}
