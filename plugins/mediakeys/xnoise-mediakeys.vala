@@ -302,8 +302,7 @@ private class GlobalKey : GLib.Object {
 	
 	[CCode (instance_pos=-1)]
 	private Gdk.FilterReturn filterfunc(Gdk.XEvent e1, Gdk.Event e2) {
-//		void* p = &e1; // use this intermediate pointer, so that vala does not dereference the pointer-to-struct, while casting
-		X.Event* e0 = (X.Event*) e1;//p;
+		X.Event* e0 = (X.Event*) e1;
 		if(e0 == null) {
 			print("event error mediakeys\n");
 			return Gdk.FilterReturn.CONTINUE;
@@ -366,12 +365,10 @@ private class GlobalKey : GLib.Object {
 	}
 
 	private static X.ID get_x_id_for_window(Gdk.Window window) {
-//		return Gdk.x11_drawable_get_xid(window);
 		return (X.ID)Gdk.X11Window.get_xid(window);
 	}
 
 	private static unowned X.Display get_x_display_for_window(Gdk.Window window) {
 		return Gdk.X11Display.get_xdisplay (window.get_display());
-//		return Gdk.x11_drawable_get_xdisplay(Gdk.x11_window_get_drawable_impl(window));
 	}
 }
