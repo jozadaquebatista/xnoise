@@ -16,7 +16,7 @@ libxnoise/Settings/xnoise-settings-dialog.c
 libxnoise/TrackList/xnoise-tracklist.c
 libxnoise/Lyrics/xnoise-lyrics-loader.c
 libxnoise/Widgets/xnoise-videoscreen.c
-libxnoise/Utils/xnoise-application.c
+libxnoise/Application/xnoise-application.c
 src/xnoise.c
 data/ui/metadat_artist_album.ui
 data/ui/metadat_title.ui

@@ -70,6 +70,7 @@ public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 	
 	// this function sets the size without emmiting the resized signal
 	public void adjust_width(int width) {
+print("tracklist adjust_width : %s : %d\n", this.tracklist_col_name, width);
 		last_size = width;
 		if(width > this.min_width)
 			this.set_fixed_width(width);

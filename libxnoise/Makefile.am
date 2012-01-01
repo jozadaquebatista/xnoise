@@ -28,11 +28,11 @@ libxnoisedir = $(libdir)/xnoise
 libxnoise_LTLIBRARIES = libxnoise.la
 
 libxnoise_la_SOURCES = \
-    xnoise-main.vala \
     AlbumImages/xnoise-album-image.vala \
     AlbumImages/xnoise-album-image-loader.vala \
     AlbumImages/xnoise-i-album-cover-image.vala \
     AlbumImages/xnoise-i-album-cover-image-provider.vala \
+    Application/xnoise-application.vala \
     ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala \
     ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala \
     ItemHandlers/EditTags/xnoise-handler-edit-tags.vala \
@@ -47,10 +47,12 @@ libxnoise_la_SOURCES = \
     Database/xnoise-db-browser.vala \
     Database/xnoise-db-creator.vala \
     Database/xnoise-db-writer.vala \
+    GlobalAccess/xnoise-global-access.vala \
     Lyrics/xnoise-i-lyrics.vala \
     Lyrics/xnoise-i-lyrics-provider.vala \
     Lyrics/xnoise-lyrics-loader.vala \
     Lyrics/xnoise-lyrics-view.vala \
+    Main/xnoise-main.vala \
     MediaBrowser/xnoise-media-browser.vala \
     MediaBrowser/xnoise-media-browser-model.vala \
     Parameter/xnoise-i-params.vala \
@@ -70,6 +72,7 @@ libxnoise_la_SOURCES = \
     PluginModule/xnoise-plugin-loader.vala \
     PluginModule/xnoise-plugin-information.vala \
     PluginModule/xnoise-plugin-interface.vala \
+    ScreensaverManager/xnoise-screensaver-manager.vala \
     Services/xnoise-services.vala \
     Settings/xnoise-plugin-manager-tree.vala \
     Settings/xnoise-settings-dialog.vala \
@@ -83,17 +86,13 @@ libxnoise_la_SOURCES = \
     TrackList/xnoise-tracklist-column.vala \
     TrackList/xnoise-tracklist-model.vala \
     TrayIcon/xnoise-tray-icon.vala \
-    Utils/xnoise-application.vala \
-    Utils/xnoise-global-access.vala \
     Utils/xnoise-local-schemes.vala \
     Utils/xnoise-media-extensions.vala \
     Utils/xnoise-media-importer.vala \
     Utils/xnoise-misc.vala \
     Utils/xnoise-remote-schemes.vala \
-    Utils/xnoise-screensaver-manager.vala \
     Utils/xnoise-track-data.vala \
     Utils/xnoise-user-info.vala \
-    Utils/xnoise-worker.vala \
     Widgets/xnoise-about.vala \
     Widgets/xnoise-add-media-dialog.vala \
     Widgets/xnoise-control-button.vala \
@@ -105,6 +104,7 @@ libxnoise_la_SOURCES = \
     Widgets/xnoise-track-progressbar.vala \
     Widgets/xnoise-videoscreen.vala \
     Widgets/xnoise-volume-slider-button.vala \
+    Worker/xnoise-worker.vala \
     $(NULL)
 
 libxnoise_la_VALAFLAGS = \
@@ -147,7 +147,9 @@ DISTCLEANFILES = \
     libxnoise_la_vala.stamp \
     Makefile.in \
     AlbumImages/*.c \
+    Application/*.c \
     Database/*.c \
+    GlobalAccess/*.c \
     ItemHandlers/*.c \
     ItemHandlers/AddAllToTracklist/*.c \
     ItemHandlers/AddToTracklist/*.c \
@@ -155,11 +157,13 @@ DISTCLEANFILES = \
     ItemHandlers/PlayItem/*.c \
     ItemHandlers/RemoveTrack/*.c \
     Lyrics/*.c \
+    Main/*.c \
     MediaBrowser/*.c \
     Parameter/*.c \
     Player/*.c \
     PlaylistReader/*.c \
     PluginModule/*.c \
+    ScreensaverManager/*.c \
     Services/*.c \
     Settings/*.c \
     SimpleMarkup/*.c \
@@ -168,5 +172,6 @@ DISTCLEANFILES = \
     TrayIcon/*.c \
     Utils/*.c \
     Widgets/*.c \
+    Worker/*.c \
     $(NULL)
 

@@ -3,6 +3,7 @@
 data/misc/xnoise.desktop.in.in
 libxnoise/AlbumImages/xnoise-album-image.vala
 libxnoise/AlbumImages/xnoise-album-image-loader.vala
+libxnoise/Application/xnoise-application.vala
 libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala
 libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala
 libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala
@@ -17,10 +18,10 @@ libxnoise/ItemHandlers/xnoise-item.vala
 libxnoise/Database/xnoise-db-browser.vala
 libxnoise/Database/xnoise-db-creator.vala
 libxnoise/Database/xnoise-db-writer.vala
-libxnoise/Utils/xnoise-global-access.vala
+libxnoise/GlobalAccess/xnoise-global-access.vala
 libxnoise/Lyrics/xnoise-lyrics-loader.vala
 libxnoise/Lyrics/xnoise-lyrics-view.vala
-libxnoise/xnoise-main.vala
+libxnoise/Main/xnoise-main.vala
 libxnoise/MediaBrowser/xnoise-media-browser.vala
 libxnoise/MediaBrowser/xnoise-media-browser-model.vala
 libxnoise/Parameter/xnoise-parameter.vala
@@ -29,6 +30,7 @@ libxnoise/PluginModule/xnoise-plugin.vala
 libxnoise/PluginModule/xnoise-plugin-information.vala
 libxnoise/PluginModule/xnoise-plugin-interface.vala
 libxnoise/PluginModule/xnoise-plugin-loader.vala
+libxnoise/ScreensaverManager/xnoise-screensaver-manager.vala
 libxnoise/Settings/xnoise-plugin-manager-tree.vala
 libxnoise/Settings/xnoise-settings-dialog.vala
 libxnoise/TagAccess/xnoise-tag-reader.vala
@@ -37,10 +39,8 @@ libxnoise/TrackList/xnoise-text-column.vala
 libxnoise/TrackList/xnoise-tracklist.vala
 libxnoise/TrackList/xnoise-tracklist-model.vala
 libxnoise/TrayIcon/xnoise-tray-icon.vala
-libxnoise/Utils/xnoise-application.vala
 libxnoise/Utils/xnoise-media-importer.vala
 libxnoise/Utils/xnoise-misc.vala
-libxnoise/Utils/xnoise-screensaver-manager.vala
 libxnoise/Utils/xnoise-user-info.vala
 libxnoise/Widgets/xnoise-about.vala
 libxnoise/Widgets/xnoise-add-media-dialog.vala

@@ -892,7 +892,6 @@ namespace Xnoise {
 	public class TrackList : Gtk.TreeView, Xnoise.IParams {
 		public Xnoise.TrackListModel tracklistmodel;
 		public TrackList ();
-		public void handle_resize ();
 		public void remove_selected_rows ();
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
 		public bool column_album_visible { get; set; }

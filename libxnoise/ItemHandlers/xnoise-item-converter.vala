@@ -63,6 +63,9 @@ public class Xnoise.ItemConverter : Object {
 							result += tmp;
 					}
 				}
+				else {
+					return null;
+				}
 				break;
 			case ItemType.COLLECTION_CONTAINER_ALBUM:
 				if(item.db_id > -1) {

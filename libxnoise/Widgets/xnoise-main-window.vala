@@ -301,7 +301,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		int w, x;
 		this.get_size(out w, out x);
 		if(w != window_width) {
-			this.trackList.handle_resize();
+//			this.trackList.handle_resize();
 			window_width = w;
 		}
 	}
