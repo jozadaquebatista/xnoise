@@ -72,11 +72,15 @@ public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 	public void adjust_width(int width) {
 print("tracklist adjust_width : %s : %d\n", this.tracklist_col_name, width);
 		last_size = width;
-		if(width > this.min_width)
+		if(width > this.min_width) {
+print("tracklist adjust_width ##1\n");
 			this.set_fixed_width(width);
+		}
+		else if(this.width > this.min_width) {
+print("tracklist adjust_width ##2\n");
 		// this is badly needed in order to prevent us from getting cought in an infinite loop
 		// of notify["width"] signals	
-		else if(this.width > this.min_width)
 			this.set_fixed_width(this.min_width); 
+		}
 	}
 }

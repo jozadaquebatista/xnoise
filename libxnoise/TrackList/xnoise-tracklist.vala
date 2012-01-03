@@ -1299,8 +1299,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 	
 	private int available_width {
 		get {
-			if(main_window == null) 
-				return 0;
+print("available_width ##1\n");
+			if(this.get_window() == null) 
+				return 600;
+print("available_width ##2\n");
 	
 			int h, w;
 			int scrollbar_w = 0;
@@ -1322,7 +1324,8 @@ print("scrollbar_w: %d\n", scrollbar_w);
 			//print("|%i|%i", w - (scrollbar_w + 
 			//            main_window.hpaned.position + 
 			//            n_columns * vertical_separator_size), n_columns);
-			this.parent.get_size_request(out w, out h);
+			w = this.get_window().get_width();
+print("tlpar s r : %d\n", w);
 			return w - (scrollbar_w + (int)this.parent.get_border_width());
 		}
 	}
