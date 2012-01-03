@@ -539,7 +539,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		                                                    int width,
 		                                                    out int minimum_height,
 		                                                    out int natural_height) {
-			//TODO: Calculating the row height this way is very bad performance wise
 			Gdk.Window? w = ow.get_window();
 			if(w == null) {
 				print("no window\n");
@@ -548,9 +547,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			}
 			var pango_layout = widget.create_pango_layout(text);
 			pango_layout.set_font_description(this.font_description);
-//			pango_layout.set_text(text , -1);
 			pango_layout.set_alignment(Pango.Alignment.LEFT);
-			pango_layout.set_width( (int)((ow.get_allocated_width() -  BORDER_DIST) * Pango.SCALE));
+			pango_layout.set_width( (int)((ow.get_allocated_width() - BORDER_DIST) * Pango.SCALE));
 			pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
 			int wi = 0, he = 0;
 			pango_layout.get_pixel_size(out wi, out he);
@@ -571,17 +569,20 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			                        Gdk.Rectangle background_area,
 			                        Gdk.Rectangle cell_area,
 			                        CellRendererState flags) {
+			StyleContext context;
 			var pango_layout = Pango.cairo_create_layout(cr);
 			pango_layout.set_font_description(this.font_description);
 			pango_layout.set_text(text , -1);
 			pango_layout.set_alignment(Pango.Alignment.LEFT);
 			pango_layout.set_width( (int)((ow.get_allocated_width() - BORDER_DIST) * Pango.SCALE));
 			pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-			//int wi=0;
-			//pango_layout.get_pixel_size(out wi, out heightp);
-			//cr.set_source_rgba(0.1, 0.1, 0.1, 1.0);   // font color
-			cr.move_to(cell_area.x, cell_area.y);
-			Pango.cairo_show_layout(cr, pango_layout);
+			context = widget.get_style_context();
+			int wi = 0, he = 0;
+			pango_layout.get_pixel_size(out wi, out he);
+			if(cell_area.height > he)
+				context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
+			else
+				context.render_layout(cr, cell_area.x, cell_area.y, pango_layout);
 		}
 	}
 	
@@ -593,7 +594,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.row_collapsed.connect(on_row_collapsed);
 		this.row_expanded.connect(on_row_expanded);
 		
-		this.set_size_request (300,500);
+		this.set_size_request(300, 500);
 		
 		fontsizeMB = Params.get_int_value("fontsizeMB");
 		Style style = Widget.get_default_style();
