@@ -52,14 +52,16 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		global.notify["image-path-large"].connect(on_image_path_changed);
 		this.button_release_event.connect(on_button_released);
 	}
-
-	private bool on_button_released(Gdk.EventButton e) {
+	
+	private Menu? menu;
+	
+	private bool on_button_released(Gtk.Widget sender, Gdk.EventButton e) {
 		if(!((e.button==3) && (e.type==Gdk.EventType.BUTTON_RELEASE))) {
 			return false; //exit here, if it's no the button 3 single click release
 		}
 		else {
-			Menu? menu = create_rightclick_menu();
-			if(menu != null)
+			menu = create_rightclick_menu();
+			if(menu != null) 
 				menu.popup(null, null, null, 0, e.time);
 		}
 		return true;
@@ -71,6 +73,14 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		if(player.available_subtitles != null) {
 			if(rightmenu == null)
 				rightmenu = new Menu();
+			if(player.available_subtitles.length > 0) {
+				var menuitem = new ImageMenuItem.from_stock(Gtk.Stock.INDEX, null);
+				menuitem.set_label(_("No Subtitle"));
+				menuitem.activate.connect( () => { 
+					this.player.current_text = -1;
+				});
+				rightmenu.append(menuitem);
+			}
 			int i = 0;
 			foreach(unowned string s in player.available_subtitles) {
 				var menuitem = new ImageMenuItem.from_stock(Gtk.Stock.INDEX, null);
@@ -82,7 +92,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				});
 				rightmenu.append(menuitem);
 			}
-			if(player.available_subtitles.length > 0)
+			if(player.available_subtitles.length > 1) // 1 is used for choosing no subtitles
 				groupcnt++;
 		}
 		if(player.available_audiotracks != null && player.available_audiotracks.length > 1) {
@@ -118,8 +128,13 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 			rightmenu = new Menu();
 		else
 			rightmenu.append(new SeparatorMenuItem());
-		var fullscreenmenuitem = new ImageMenuItem.from_stock((main_window.fullscreenwindowvisible ? Gtk.Stock.LEAVE_FULLSCREEN : Gtk.Stock.FULLSCREEN), null);
-		fullscreenmenuitem.set_label((main_window.fullscreenwindowvisible ? _("Leave Fullscreen") : _("Fullscreen")));
+		var fullscreenmenuitem = new ImageMenuItem.from_stock(
+		   (main_window.fullscreenwindowvisible ? Gtk.Stock.LEAVE_FULLSCREEN : Gtk.Stock.FULLSCREEN),
+		   null
+		);
+		fullscreenmenuitem.set_label(
+		   (main_window.fullscreenwindowvisible ? _("Leave Fullscreen") : _("Fullscreen"))
+		);
 		fullscreenmenuitem.activate.connect( () => { 
 			main_window.toggle_fullscreen();
 		});
@@ -185,20 +200,16 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 	}
 	
-//	private Gdk.Region region;
-	
 	private Gdk.Rectangle rect;
 	
 	private Gdk.Color black;
 	
-	public override bool draw(Cairo.Context cr) {//Gdk.EventExpose e) {
-//		if(e.count > 0) return true; //exposure compression
-		
+	public override bool draw(Cairo.Context cr) {
 		rect.x = 0;
 		rect.y = 0;
 		Gtk.Allocation alloc;
 		this.get_allocation(out alloc);
-		rect.width = get_allocated_width ();
+		rect.width  = get_allocated_width ();
 		rect.height = get_allocated_height ();
 
 //		rect.width  = e.area.width;

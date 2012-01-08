@@ -193,7 +193,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 	
 	public int current_text { 
 		get { return playbin.current_text; }
-		set { playbin.current_text = value; }
+		set { print("current_text: %d\n", value); playbin.current_text = value; }
 	}
 
 	public int current_audio {
