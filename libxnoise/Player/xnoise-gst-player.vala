@@ -33,6 +33,21 @@ using Gst;
 using Xnoise;
 using Xnoise.Services;
 
+// GstPlayFlags flags of playbin2
+[Flags]
+private enum Gst.PlayFlag {
+	VIDEO         = (1 << 0),
+	AUDIO         = (1 << 1),
+	TEXT          = (1 << 2),
+	VIS           = (1 << 3),
+	SOFT_VOLUME   = (1 << 4),
+	NATIVE_AUDIO  = (1 << 5),
+	NATIVE_VIDEO  = (1 << 6),
+	DOWNLOAD      = (1 << 7),
+	BUFFERING     = (1 << 8),
+	DEINTERLACE   = (1 << 9)
+}
+
 public class Xnoise.GstPlayer : GLib.Object {
 	private bool _current_has_video_track;
 	private bool _current_has_subtitles;
@@ -193,7 +208,22 @@ public class Xnoise.GstPlayer : GLib.Object {
 	
 	public int current_text { 
 		get { return playbin.current_text; }
-		set { print("current_text: %d\n", value); playbin.current_text = value; }
+		set {
+			Gst.PlayFlag flags = (Gst.PlayFlag)0;
+			playbin.get("flags", out flags);
+			if (value == -2) {
+				flags &= ~Gst.PlayFlag.TEXT;
+				playbin.set("flags", flags,
+				            "current-text", -1
+				            );
+			}
+			else {
+				flags |= Gst.PlayFlag.TEXT;
+				playbin.set("flags", flags,
+				            "current-text", value
+				            );
+			}
+		}
 	}
 
 	public int current_audio {

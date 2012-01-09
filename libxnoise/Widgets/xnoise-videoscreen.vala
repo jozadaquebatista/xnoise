@@ -77,7 +77,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 				var menuitem = new ImageMenuItem.from_stock(Gtk.Stock.INDEX, null);
 				menuitem.set_label(_("No Subtitle"));
 				menuitem.activate.connect( () => { 
-					this.player.current_text = -1;
+					this.player.current_text = -2;
 				});
 				rightmenu.append(menuitem);
 			}
