@@ -31,6 +31,7 @@
 
 
 namespace Xnoise.Services {
+	private static const string EMPTYSTRING = "";
 	public static RemoteSchemes get_remote_schemes() { 
 		return _remote_schemes;
 	}
@@ -50,7 +51,7 @@ namespace Xnoise.Services {
 			_settings_folder = GLib.Path.build_filename(GLib.Environment.get_user_config_dir(),
 			                                            "xnoise",
 			                                            null);
-		return _settings_folder;
+		return (owned)_settings_folder;
 	}
 
 	//http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
@@ -60,7 +61,7 @@ namespace Xnoise.Services {
 			_data_folder = GLib.Path.build_filename(GLib.Environment.get_user_data_dir(),
 			                                        "xnoise",
 			                                        null);
-		return _data_folder;
+		return (owned)_data_folder;
 	}
 	
 	public static bool verify_xnoise_directories() {
@@ -137,7 +138,7 @@ namespace Xnoise.Services {
 	public static string prepare_for_comparison(string? value) {
 		// transform strings to make it easier to compare them
 		if(value == null)
-			return "";
+			return EMPTYSTRING;
 		
 		if(characters_not_used_in_comparison__escaped == null) {
 			string[] characters_not_used_in_comparison = {
@@ -184,23 +185,23 @@ namespace Xnoise.Services {
 			foreach(unowned string s in characters_not_used_in_comparison)
 				characters_not_used_in_comparison__escaped += GLib.Regex.escape_string(s);
 		}
-		string result = value != null ? value.strip().down() : "";
+		string result = value != null ? value.strip().down() : EMPTYSTRING;
 		try {
 			foreach(unowned string s in characters_not_used_in_comparison__escaped) {
 				var regex = new GLib.Regex(s);
-				result = regex.replace_literal(result, -1, 0, "");
+				result = regex.replace_literal(result, -1, 0, EMPTYSTRING);
 			}
 		}
 		catch (GLib.RegexError e) {
 			GLib.assert_not_reached ();
 		}
-		return result;
+		return (owned)result;
 	}
 
 	public static string prepare_for_search(string? val) {
 		// transform strings to improve searches
 		if(val == null)
-			return "";
+			return EMPTYSTRING;
 		
 		string result = val.strip().down();
 		
@@ -217,17 +218,17 @@ namespace Xnoise.Services {
 		//		if(result.contains(">")) 
 		//			result = result.substring(0, result.index_of(">", 0));
 		
-		return result;
+		return (owned)result;
 	}
 
 	public static string remove_linebreaks(string? val) {
 		// unexpected linebreaks do not look nice
 		if(val == null)
-			return "";
+			return EMPTYSTRING;
 		
 		try {
 			GLib.Regex r = new GLib.Regex("\n");
-			return r.replace(val, -1, 0, " ");
+			return (owned)r.replace(val, -1, 0, " ");
 		}
 		catch(GLib.RegexError e) {
 			print("%s\n", e.message);
@@ -237,32 +238,32 @@ namespace Xnoise.Services {
 
 	public static string remove_suffix_from_filename(string? val) {
 		if(val == null)
-			return "";
+			return EMPTYSTRING;
 		unowned string name = val;
 		string prep;
 		if(name.last_index_of(".") != -1) 
 			prep = name.substring(0, name.last_index_of("."));
 		else
 			prep = name;
-		return prep;
+		return (owned)prep;
 	}
 
 	public static string get_suffix_from_filename(string? val) {
 		if(val == null)
-			return "";
+			return EMPTYSTRING;
 		unowned string name = val;
-		string prep = "";
+		string prep = EMPTYSTRING;
 		int inx = -1;
 		if((inx = name.last_index_of(".")) != -1) 
 			prep = name.substring(inx + 1, name.length - inx -1);
 		else
-			return "";
-		return prep;
+			return EMPTYSTRING;
+		return (owned)prep;
 	}
 
 	public static string prepare_name_from_filename(string? val) {
 		if(val == null)
-			return "";
+			return EMPTYSTRING;
 		string name = val;
 		string prep;
 		if(name.last_index_of(".") != -1) 
@@ -277,13 +278,13 @@ namespace Xnoise.Services {
 		catch(GLib.RegexError e) {
 			print("%s\n", e.message);
 		}
-		return prep;
+		return (owned)prep;
 	}
 
 	public static string replace_underline_with_blank_encoded(string value) {
 		try {
 			GLib.Regex r = new GLib.Regex("_");
-			return r.replace(value, -1, 0, "%20");
+			return (owned)r.replace(value, -1, 0, "%20");
 		}
 		catch(GLib.RegexError e) {
 			print("%s\n", e.message);
