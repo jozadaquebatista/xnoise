@@ -44,13 +44,14 @@ public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 	public signal void resized(bool grow, int delta, TrackListModel.Column source_id);
 	
 	private void on_width_changed() {
-		if(last_size != this.width) {
-			bool grow = (this.width > last_size);
-			int delta = (this.width - last_size).abs();
-			last_size = this.width;
-			resized(grow, delta, this.id); //emit signal
-		}
-	}		
+//		print("on_width_changed\n");
+//		if(last_size != this.width) {
+//			bool grow = (this.width > last_size);
+//			int delta = (this.width - last_size).abs();
+//			last_size = this.width;
+//			resized(grow, delta, this.id); //emit signal
+//		}
+	}
 	
 	private void on_visibility_changed() {
 //		if(this.visible) this.notify["width"].connect(on_width_changed);
@@ -70,17 +71,17 @@ public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 	
 	// this function sets the size without emmiting the resized signal
 	public void adjust_width(int width) {
-print("tracklist adjust_width : %s : %d\n", this.tracklist_col_name, width);
-		last_size = width;
-		if(width > this.min_width) {
-print("tracklist adjust_width ##1\n");
-			this.set_fixed_width(width);
-		}
-		else if(this.width > this.min_width) {
-print("tracklist adjust_width ##2\n");
-		// this is badly needed in order to prevent us from getting cought in an infinite loop
-		// of notify["width"] signals	
-			this.set_fixed_width(this.min_width); 
-		}
+//print("tracklist adjust_width : %s : %d\n", this.tracklist_col_name, width);
+//		last_size = width;
+//		if(width > this.min_width) {
+//print("tracklist adjust_width ##1\n");
+//			this.set_fixed_width(width);
+//		}
+//		else if(this.width > this.min_width) {
+//print("tracklist adjust_width ##2\n");
+//		// this is badly needed in order to prevent us from getting cought in an infinite loop
+//		// of notify["width"] signals	
+//			this.set_fixed_width(this.min_width); 
+//		}
 	}
 }

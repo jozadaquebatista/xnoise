@@ -5,6 +5,16 @@ m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 1)
 m4_define(xnoise_micro_version, 31)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
+m4_define([xnoise_name], [xnoise])
+
+XNOISE_MAJOR_VERSION=xnoise_major_version
+XNOISE_MINOR_VERSION=xnoise_minor_version
+XNOISE_MICRO_VERSION=xnoise_micro_version
+XNOISE_VERSION=xnoise_version
+AC_SUBST(XNOISE_MAJOR_VERSION)
+AC_SUBST(XNOISE_MINOR_VERSION)
+AC_SUBST(XNOISE_MICRO_VERSION)
+AC_SUBST(XNOISE_VERSION)
 
 AC_INIT([xnoise],[xnoise_version],[shuerhaakenATgo oglemail.com],[xnoise])
 

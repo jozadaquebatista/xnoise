@@ -94,9 +94,8 @@ namespace Xnoise {
 		
 		File xnoiseini = null;
 		xnoiseini = xnoise_data_home.get_child("db.sqlite");
-		if(!xnoiseini.query_exists(null)) {
+		if(!xnoiseini.query_exists(null))
 			is_first_start = true;
-		}
 		
 		Params.init();
 		

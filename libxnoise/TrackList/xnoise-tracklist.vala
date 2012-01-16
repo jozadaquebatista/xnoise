@@ -73,7 +73,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private bool reorder_dragging = false;
 	private uint hide_timer = 0;
 	private const uint HIDE_TIMEOUT = 1000;
-	private HashTable<string,double?> relative_column_sizes;
+//	private HashTable<string,double?> relative_column_sizes;
 	private int n_columns = 0;
 	
 	public bool column_length_visible {
@@ -996,10 +996,10 @@ public class Xnoise.TrackList : TreeView, IParams {
 		if(position < 0) {
 			position = Params.get_int_value("position_" + col_name + "_column");
 		}
-//		col_name = ((TrackListColumn)column).tracklist_col_name;
+		col_name = ((TrackListColumn)column).tracklist_col_name;
 		double? rel_size = Params.get_double_value("relative_size_" + col_name + "_column"); //relative_column_sizes.lookup(col_name);
 		if(column.resizable && rel_size != null) {
-			print("rel_size::%lf\n", rel_size);
+//			print("rel_size::%lf\n", rel_size);
 			((TextColumn)column).adjust_width((int)((double)rel_size * (double)available_width));
 			// in the config file we count from 1 onwards, because 0 means "not set"
 			// if position is 0, it will -1, meaning it will be placed at the end
@@ -1014,48 +1014,32 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private void setup_view() {
 		CellRendererText renderer;
 		
-		relative_column_sizes = new HashTable<string,double?>(str_hash, str_equal);
-		this.columns_changed.connect(() => {
-			bool new_column = false;
-			var columns = this.get_columns();
-			foreach(TreeViewColumn c in columns) {
-				if(c == null) continue;
-				string col_name;
-				col_name = ((TrackListColumn)c).tracklist_col_name;
-				if(relative_column_sizes.lookup(col_name) == null && col_name != "") {
-					if(c.resizable) {
-						double rel_size = Params.get_double_value("relative_size_" + col_name + "_column");
-						relative_column_sizes.insert(col_name, rel_size);
-//						((TextColumn)c).resized.connect(on_column_resized);
-					}
-					new_column = true;
-				}
-				// connect to visibility property change
-				// connect to resizable property change
-				// override this class' insert_column with this code			
-			}
-			if(new_column)
-				n_columns++;
-			else
-				n_columns--;
-//			handle_resize();
-		});
-		
-		this.show.connect(() => {
-			// give the columns their relative sizes
-			var columns = this.get_columns();
-			foreach(TreeViewColumn c in columns) {
-				if(c == null) continue;
-				if(!c.resizable) continue;
-				string col_name;
-				col_name = ((TrackListColumn)c).tracklist_col_name;
-				double? rel_size = relative_column_sizes.lookup(col_name);
-				if(rel_size == null) continue;
-				((TextColumn)c).adjust_width((int)((double)rel_size * (double)available_width));
-			}
-//			handle_resize();
-		});
-		
+//		relative_column_sizes = new HashTable<string,double?>(str_hash, str_equal);
+//		this.columns_changed.connect(() => {
+//			bool new_column = false;
+//			var columns = this.get_columns();
+//			foreach(TreeViewColumn c in columns) {
+//				if(c == null) continue;
+//				string col_name;
+//				col_name = ((TrackListColumn)c).tracklist_col_name;
+//				if(relative_column_sizes.lookup(col_name) == null && col_name != "") {
+//					if(c.resizable) {
+//						double rel_size = Params.get_double_value("relative_size_" + col_name + "_column");
+//						relative_column_sizes.insert(col_name, rel_size);
+//print("ADD %s %lf\n", col_name, rel_size);
+////						((TextColumn)c).resized.connect(on_column_resized);
+//					}
+//					new_column = true;
+//				}
+//				// connect to visibility property change
+//				// connect to resizable property change
+//				// override this class' insert_column with this code
+//			}
+//			if(new_column)
+//				n_columns++;
+//			else
+//				n_columns--;
+//		});
 		
 		// STATUS ICON
 		var pixbufRenderer = new CellRendererPixbuf();
@@ -1097,6 +1081,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnTitle.min_width = 80;
 		columnTitle.resizable = true;
 		columnTitle.reorderable = true;
+		columnTitle.expand = true;
 		columnTitle.tracklist_col_name = "title";
 		this.insert_column(columnTitle, -1);
 		variable_col_count++;
@@ -1114,11 +1099,12 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnAlbum.min_width = 80;
 		columnAlbum.resizable = true;
 		columnAlbum.reorderable = true;
+		columnAlbum.expand = true;
 		columnAlbum.tracklist_col_name = "album";
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
 		columnAlbum.visible = (Params.get_int_value(USE_ALBUM_COL) == 1);
-
+		
 		// ARTIST
 		renderer = new CellRendererText();
 		renderer.ellipsize = Pango.EllipsizeMode.END;
@@ -1131,6 +1117,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnArtist.min_width = 80;
 		columnArtist.resizable = true; // This is the case for the current column order
 		columnArtist.reorderable = true;
+		columnArtist.expand = true;
 		columnArtist.tracklist_col_name = "artist";
 		this.insert_column(columnArtist, -1);
 		variable_col_count++;
@@ -1146,6 +1133,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 		columnLength.adjust_width(75);
 		columnLength.min_width = 75;
+		columnLength.max_width = 75;
 		columnLength.resizable = false;
 		columnLength.reorderable = true;
 		columnLength.tracklist_col_name = "length";
@@ -1165,6 +1153,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnGenre.min_width = 80;
 		columnGenre.resizable = true;
 		columnGenre.reorderable = true;
+		columnGenre.expand = true;
 		columnGenre.tracklist_col_name = "genre";
 		this.insert_column(columnGenre, -1);
 		variable_col_count++;
@@ -1181,7 +1170,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnYear.add_attribute(renderer,
 		                          "weight", TrackListModel.Column.WEIGHT);
 		columnYear.min_width = 80;
-		columnYear.resizable = true;
+		columnYear.max_width = 80;
+		columnYear.resizable = false;
 		columnYear.reorderable = true;
 		columnYear.tracklist_col_name = "year";
 		this.insert_column(columnYear, -1);
@@ -1221,10 +1211,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		menu_item.toggled.connect( (s) => {
 			Params.set_int_value("use_tracknumber_column", (s.get_active() == true ? 1 : 0));
 			this.column_tracknumber_visible = s.get_active();
-//			Idle.add( () => {
-//				handle_resize();
-//				return false;
-//			});
 		});
 		rightmenu.append(menu_item);
 		
@@ -1234,10 +1220,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		menu_item.toggled.connect( (s) => {
 			Params.set_int_value("use_artist_column", (s.get_active() == true ? 1 : 0));
 			this.column_artist_visible = s.get_active();
-//			Idle.add( () => {
-//				handle_resize();
-//				return false;
-//			});
 		});
 		rightmenu.append(menu_item);
 
@@ -1247,23 +1229,15 @@ public class Xnoise.TrackList : TreeView, IParams {
 		menu_item.toggled.connect( (s) => {
 			Params.set_int_value("use_album_column", (s.get_active() == true ? 1 : 0));
 			this.column_album_visible = s.get_active();
-//			Idle.add( () => {
-//				handle_resize();
-//				return false;
-//			});
 		});
 		rightmenu.append(menu_item);
-
+		
 		// GENRE
 		menu_item = new CheckMenuItem.with_label(_("Genre"));
 		menu_item.set_active((Params.get_int_value("use_genre_column") == 1 ? true : false));
 		menu_item.toggled.connect( (s) => {
 			Params.set_int_value("use_genre_column", (s.get_active() == true ? 1 : 0));
 			this.column_genre_visible = s.get_active();
-//			Idle.add( () => {
-//				handle_resize();
-//				return false;
-//			});
 		});
 		rightmenu.append(menu_item);
 		
@@ -1273,10 +1247,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		menu_item.toggled.connect( (s) => {
 			Params.set_int_value("use_year_column", (s.get_active() == true ? 1 : 0));
 			this.column_year_visible = s.get_active();
-//			Idle.add( () => {
-//				handle_resize();
-//				return false;
-//			});
 		});
 		rightmenu.append(menu_item);
 		
@@ -1286,10 +1256,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		menu_item.toggled.connect( (s) => {
 			Params.set_int_value("use_length_column", (s.get_active() == true ? 1 : 0));
 			this.column_length_visible = s.get_active();
-//			Idle.add( () => {
-//				handle_resize();
-//				return false;
-//			});
 		});
 		rightmenu.append(menu_item);
 
@@ -1299,157 +1265,42 @@ public class Xnoise.TrackList : TreeView, IParams {
 	
 	private int available_width {
 		get {
-print("available_width ##1\n");
-			if(this.get_window() == null) 
+//print("available_width ##1\n");
+//			if(this.get_window() == null || this.ow == null) 
 				return 600;
-print("available_width ##2\n");
-	
-			int h, w;
-			int scrollbar_w = 0;
-//			main_window.get_size(out w, out h);
-			
-			if(main_window.trackListScrollWin != null) {
-				var scrollbar = main_window.trackListScrollWin.get_vscrollbar();
-				if(scrollbar != null) {
-					Requisition req; 
-					scrollbar.get_child_requisition(out req);
-					scrollbar_w = req.width;
-				}
-			}
-print("scrollbar_w: %d\n", scrollbar_w);
-			//Value v = Value(typeof(int));
-			//((TreeView)this).style_get_property("vertical-separator", out v);
-			//int vertical_separator_size = v.get_int();
-			
-			//print("|%i|%i", w - (scrollbar_w + 
-			//            main_window.hpaned.position + 
-			//            n_columns * vertical_separator_size), n_columns);
-			w = this.get_window().get_width();
-print("tlpar s r : %d\n", w);
-			return w - (scrollbar_w + (int)this.parent.get_border_width());
-		}
-	}
-	
-	
-//	public void handle_resize() {
-//		if(main_window == null)
-//			return;
-//		if(main_window.get_window() == null)
-//			return;
-//		resize_column_range_relatively(0);
-//	}
-	
-//	private void on_column_resized(TextColumn sender, bool grow, int delta, TrackListModel.Column id) {
-//		var columns = this.get_columns();
-//		int iter = 0;
-//		int result = 0;
-//		
-//		string sender_col_name;
-//		sender_col_name = sender.tracklist_col_name;
+//print("available_width ##2\n");
+//			int w;
+//			int scrollbar_w = 0;
+////			main_window.get_size(out w, out h);
 //			
-//		//print("Column resize: %s\n", sender.title);
-//		foreach(TreeViewColumn c in columns) {
-//			string col_name;
-//			col_name = ((TrackListColumn)c).tracklist_col_name;
-//			if(sender_col_name == col_name) {
-//				/* now we have the position number of the column that has been resized */
-//				result = resize_column_range_relatively(iter+1);
-//				if(result < 0) {
-//					/* the column was resized to a size that exceeds the available space
-//					by result, lower its size by result again */
-//					sender.adjust_width(sender.width + result);
+//			if(main_window.trackListScrollWin != null) {
+//				var scrollbar = main_window.trackListScrollWin.get_vscrollbar();
+//				if(scrollbar != null) {
+////					print("got scrollbar\n");
+//					scrollbar.visible = false;
+////					Requisition req;
+//					int w, h;
+//					scrollbar.get_size_request(out w, out h);
+////					scrollbar.get_child_requisition(out req);
+//					scrollbar_w = 0;//w; //req.width;
 //				}
 //			}
-//			if(c.resizable)
-//				/* store the column's new relative size in a hash table */
-//				relative_column_sizes.replace(col_name, (double)c.width / (double)available_width);
-//			iter++;
-//		}
-//	}
-//	
-
-	// DANGER: resizable columns need to be text columns
-	
-	/* resizes a range of columns relatively the start of that range is marked
-	by the number of the first column and its end is marked by the last column
-	int the treeview, delta is the difference in size */
-//	private int resize_column_range_relatively(int starting_column) {
-//		if(!this.visible) return 0;
-//		//print("\nresizing from column %d\n", starting_column);
-//	
-//		var columns = this.get_columns();
-//		int iter = -1;
-//		
-//		/* that's the width to the left, we don't touch it.
-//		only the columns to the right are resized */
-//		int left_width = 0;
-//		
-//		/* that's the width of the fixed size columns */
-//		int fixed_width = 0;
-//		
-//		/* the minimun width for resizable columns*/
-//		int min_dynamic_width = 0;
-//		
-//		/* the sum of all relative column sizes, only for resizable columns.
-//		the single sizes are the part of each column's width that exceeds the column's
-//		minimun width, relative to the treeview's width as a whole.
-//		we can divide the min_width in this formula by an arbitrary number if we want the
-//		size to be distributed more equally among the columns. */
-//		double rel_size_sum = 0;
-//		
-//		/* iterate over the columns and calculate those sizes */
-//		foreach(TreeViewColumn c in columns) {
-//			iter++;
-//			/* only handle visible columns */
-//			if(!c.visible) continue;
-//			if(iter < starting_column) {
-//				left_width += c.width;
-//				continue;
-//			}
+////print("scrollbar_w: %d\n", scrollbar_w);
+//			//Value v = Value(typeof(int));
+//			//((TreeView)this).style_get_property("vertical-separator", out v);
+//			//int vertical_separator_size = v.get_int();
 //			
-//			if(c.resizable) {
-//				min_dynamic_width += c.min_width;
-//				string col_name;
-//				col_name = ((TrackListColumn)c).tracklist_col_name;
-//				double? rel_size = relative_column_sizes.lookup(col_name);
-//				if(rel_size == null) rel_size = 0.15;
-//				rel_size_sum += (double)rel_size - (double)c.min_width / (double)available_width;
-//				continue;
-//			}
-//			
-//			fixed_width += c.width;
-//		}
-//		
-//		if(starting_column > iter) return 0;
-//		
-//		
-//		/* the width that is not statically allocated as minimum or fixed width 
-//		and must be distributed among the resizable columns */
-//		int distributable_width = available_width - (left_width + min_dynamic_width + fixed_width);
-//		
-//		if(left_width <= 0 && available_width <= (min_dynamic_width + fixed_width)) distributable_width = 0;
-//		
-//		//print("width to dsitribute %d\n", distributable_width);
-//		//print("available width %d, fixed_width %d, min_dynamic_width %d, left_width %d, rel_size_sum %f\n", available_width, fixed_width, min_dynamic_width, left_width, rel_size_sum);
-//		
-//		unowned List<TreeViewColumn> starting_column_node = columns.nth(starting_column);
-//		foreach(TreeViewColumn c in starting_column_node) {
-//			if(c.resizable) {
-//				//get the column's relative size
-//				string col_name;
-//				col_name = ((TrackListColumn)c).tracklist_col_name;
-//				double? rel_size = relative_column_sizes.lookup(col_name);
-//				if(rel_size == null) rel_size = 0.15;
-//				rel_size = ((double)rel_size - (double)c.min_width / (double)available_width) / rel_size_sum;
-//				
-////				((TextColumn) c).adjust_width(c.min_width + 
-////					(int)(((double)distributable_width) * (double)rel_size));
-//			}
-//		}	
-//		return distributable_width;
-//	}
-	
-	
+//			//print("|%i|%i", w - (scrollbar_w + 
+//			//            main_window.hpaned.position + 
+//			//            n_columns * vertical_separator_size), n_columns);
+////			w = this.get_window().get_width();
+//		int paned_width = this.ow.get_allocated_width();
+//		int paned_pos = this.ow.get_position();
+//		return paned_width - paned_pos - scrollbar_w;
+//print("tlpar s r : %d\n", w);
+//			return w - (scrollbar_w + (int)this.parent.get_border_width());
+		}
+	}
 	
 	public void write_params_data() {
 		var columns = this.get_columns();
@@ -1463,11 +1314,11 @@ print("tlpar s r : %d\n", w);
 			col_name = ((TrackListColumn)c).tracklist_col_name;
 			Params.set_int_value("position_" + col_name + "_column", counter);
 			
-			// write relative column sizes
-			if(!c.resizable) continue;
-			double? relative_size = relative_column_sizes.lookup(col_name);
-			if(relative_size == null) continue;
-			Params.set_double_value("relative_size_" + col_name + "_column", (double)relative_size);
+//			// write relative column sizes
+//			if(!c.resizable) continue;
+//			double? relative_size = relative_column_sizes.lookup(col_name);
+//			if(relative_size == null) continue;
+//			Params.set_double_value("relative_size_" + col_name + "_column", (double)relative_size);
 		} 
 	}
 	

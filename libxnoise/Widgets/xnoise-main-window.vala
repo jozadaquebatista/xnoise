@@ -296,14 +296,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 	
 	private void on_resized() {
-		if(this.get_window() == null)
-			return;
-		int w, x;
-		this.get_size(out w, out x);
-		if(w != window_width) {
+//	print("on_resized\n");
+//		if(this.get_window() == null)
+//			return;
+//		int w, x;
+//		this.get_size(out w, out x);
+//		if(w != window_width) {
 //			this.trackList.handle_resize();
-			window_width = w;
-		}
+//			window_width = w;
+//		}
 	}
 	
 	private void initialize_video_screen() {
@@ -460,7 +461,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	
 	public void position_config_menu(Menu menu, out int x, out int y, out bool push) {
 		//the upper right corner of the popup menu should be just beneath the lower right corner of the button
-
+		
 		int o_x = 0, o_y = 0;
 		this.get_window().get_position(out o_x, out o_y);
 		Requisition req; 
@@ -491,7 +492,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			fullscreenwindow.show_all();
 			this.videoscreen.reparent(fullscreenwindow);
 			this.videoscreen.get_window().process_updates(true);
-
+			
 			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 			fullscreenwindowvisible = true;
 			fullscreentoolbar.show();
@@ -504,7 +505,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.videoscreen.get_window().unfullscreen();
 			this.videoscreen.reparent(videovbox);
 			fullscreenwindow.hide();
-
+			
 			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			fullscreenwindowvisible = false;
 			this.videovbox.show();
@@ -1228,17 +1229,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
-//	private void on_hpaned_position_changed() {
+	private void on_hpaned_position_changed() {
 //		hpaned_resized = true;
 //		if(this.hpaned.position == 0)
 //			media_browser_visible = false;
 //		else
 //			media_browser_visible = true;
-//			
+			
 //		if(this.get_window() != null) {
 //			this.trackList.handle_resize();
 //		}
-//	}
+	}
 	
 	/* disables (or enables) the AddRemoveAction and the RescanLibraryAction in the menus if
 	   music is (not anymore) being imported */ 
@@ -1266,7 +1267,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //		}
 //		return false;
 //	}
-
 	
 	private void create_widgets() {
 		try {
@@ -1299,7 +1299,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			posjumper.can_focus      = false;
 			posjumper.clicked.connect(this.on_posjumper_button_clicked);
 			posjumper.set_tooltip_text(_("Jump to current position"));
-
 
 			//--------------------
 
@@ -1401,8 +1400,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.hpaned = gb.get_object("paned1") as Gtk.Paned;
 			mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
 			hpaned.remove(mbbox01);
+//			var contentvbox = gb.get_object("contentvbox") as Gtk.Box;
 			this.hpaned.pack1(mbbox01, false, false);
-//			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
+//			this.hpaned.pack2(contentvbox, false, true);
+			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
 //			this.hpaned.button_press_event.connect(on_hpaned_button_event);
 //			this.hpaned.button_release_event.connect(on_hpaned_button_event);
 			//----------------
@@ -1443,6 +1444,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.trackList.set_size_request(100,100);
 			trackListScrollWin = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
 			trackListScrollWin.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
+//			tl.set_container(hpaned);
 			trackListScrollWin.add(this.trackList);
 			
 			///MediaBrowser (left)

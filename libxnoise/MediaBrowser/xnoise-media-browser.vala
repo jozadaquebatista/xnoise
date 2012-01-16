@@ -85,12 +85,20 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			if (_fontsizeMB == 0) { //intialization
 				if((value < 7)||(value > 14)) _fontsizeMB = 7;
 				else _fontsizeMB = value;
-				renderer.size_points = fontsizeMB;
+				Idle.add( () => {
+					font_description.set_size((int)(_fontsizeMB * Pango.SCALE));
+					renderer.size_points = fontsizeMB;
+					return false;
+				});
 			}
 			else {
 				if((value < 7)||(value > 14)) _fontsizeMB = 7;
 				else _fontsizeMB = value;
-				renderer.size_points = fontsizeMB;
+				Idle.add( () => {
+					font_description.set_size((int)(_fontsizeMB * Pango.SCALE));
+					renderer.size_points = fontsizeMB;
+					return false;
+				});
 				Idle.add(update_view);
 			}
 		}
