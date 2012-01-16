@@ -1,6 +1,6 @@
 /* xnoise-main-window.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -72,15 +72,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Button repeatButton;
 	private int buffer_last_page;
 	private Image repeatimage; 
-	private VBox menuvbox;
-	private VBox mainvbox;
-	private VBox contentvbox;
+	private Box menuvbox;
+	private Box mainvbox;
+	private Box infobox;
 	private MenuBar menubar;
 	private ImageMenuItem config_button_menu_root;
 	private Menu config_button_menu;
 	private bool _media_browser_visible = true;
 	private double current_volume; //keep it global for saving to params
-	private int window_width = 0;
+//	private int window_width = 0;
 	private ulong active_notifier = 0;
 	private ScreenSaverManager ssm = null;
 	private List<Gtk.Action> actions_list = null;
@@ -1002,7 +1002,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
 		});
-		((Gtk.VBox)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
+		((Gtk.Box)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
 
 		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.CANCEL, 0);
 		radiocancelbutton.clicked.connect( () => {
@@ -1049,6 +1049,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			radioentry.text = text;
 		}
 	}
+	
 	private void on_file_add() {
 		Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
 			_("Select media file"),
@@ -1277,7 +1278,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.title = "xnoise media player";
 			this.set_default_icon_name("xnoise");
 			
-			this.contentvbox = gb.get_object("contentvbox") as Gtk.VBox;
+			this.infobox = gb.get_object("infobox") as Gtk.Box;
 
 			//DRAWINGAREA FOR VIDEO
 			videoscreen = gst_player.videoscreen;
@@ -1400,9 +1401,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.hpaned = gb.get_object("paned1") as Gtk.Paned;
 			mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
 			hpaned.remove(mbbox01);
-//			var contentvbox = gb.get_object("contentvbox") as Gtk.Box;
 			this.hpaned.pack1(mbbox01, false, false);
-//			this.hpaned.pack2(contentvbox, false, true);
 			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
 //			this.hpaned.button_press_event.connect(on_hpaned_button_event);
 //			this.hpaned.button_release_event.connect(on_hpaned_button_event);
@@ -1616,13 +1615,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.window_state_event.connect(this.on_window_state_change);
 	}
 	
-	public void display_info_bar(Gtk.InfoBar bar) {
-		contentvbox.pack_start(bar, false, false, 0);
-		bar.show();
-	}
-	
 	public void show_status_info(Xnoise.InfoBar bar) {
-		contentvbox.pack_end(bar, false, false, 0);
+		infobox.pack_start(bar, false, false, 0);
 		bar.show_all();
 	}
 	

@@ -35,10 +35,12 @@ using Xnoise.Services;
 public class Xnoise.ItemConverter : Object {
 
 	//this function uses the database so use it in the database thread
-	public TrackData[]? to_trackdata(Item? item, ref string searchtext) {
+	public TrackData[]? to_trackdata(Item? item, ref string? searchtext) {
 		// Take input and convert to tracks
 		if(item == null)
 			return null;
+		if(searchtext == null)
+			searchtext = "";
 		
 		TrackData[] result = {};
 		// Now assuming everything is in db ! TODO: create trackdata for empty items

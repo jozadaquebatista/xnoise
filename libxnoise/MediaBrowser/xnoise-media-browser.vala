@@ -1,6 +1,6 @@
 /* xnoise-media-browser.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,36 +35,11 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private unowned Main xn;
 	private bool dragging;
 	private bool _use_treelines = false;
-	private bool _use_linebreaks = true;
 	private CellRendererText renderer = null;
-	private List<TreePath> expansion_list = null;
+//	private List<TreePath> expansion_list = null;
 	private Gtk.Menu menu;
 	
 	public MediaBrowserModel mediabrowsermodel;
-	
-	public bool use_linebreaks {
-		get {
-			return _use_linebreaks;
-		}
-		set {
-//			if(_use_linebreaks == value) return;
-//			_use_linebreaks = value;
-//			if(!value) {
-////				renderer.set_fixed_height_from_font(1);
-////				renderer.wrap_width = -1;
-//				if(visible)
-//					Idle.add(update_view);
-//				return;
-//			}
-//			renderer.set_fixed_height_from_font(-1);
-//			renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
-//			if(main_window == null)
-//				return;
-//			if(main_window.hpaned == null)
-//				return;
-//			this.resize_line_width(main_window.hpaned.position);
-		}
-	}
 	
 	public bool use_treelines {
 		get {
@@ -173,11 +148,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			use_treelines = true;
 		else
 			use_treelines = false;
-		
-		if(Params.get_int_value("use_linebreaks") == 1)
-			use_linebreaks = true;
-		else
-			use_linebreaks = false;
 	}
 
 	public void write_params_data() {
@@ -186,10 +156,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		else
 			Params.set_int_value("use_treelines", 0);
 			
-		if(this.use_linebreaks)
-			Params.set_int_value("use_linebreaks", 1);
-		else
-			Params.set_int_value("use_linebreaks", 0);
 		Params.set_int_value("fontsizeMB", fontsizeMB);
 	}
 	// end IParams functions
@@ -330,58 +296,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		return rightmenu;
 	}
 
-//	private void rightclick_menu_popup(int depth, uint activateTime) {
-//		switch(depth) {
-//			case 1:
-//				this.menu = create_edit_artist_tag_menu();
-//				break;
-//			case 2:
-//				this.menu = create_edit_album_tag_menu();
-//				break;
-//			case 3:
-//				this.menu = create_edit_title_tag_menu();
-//				break;
-//			default:
-//				menu = null;
-//				break;
-//		}
-//		if(menu != null)
-//			menu.popup(null, null, null, 0, activateTime);
-//	}
-
-//	private TreeRowReference treerowref = null;
-	
-//	private Menu create_edit_artist_tag_menu() {
-//		var rightmenu = new Menu();
-//		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
-//		menu_item.set_label(_("Change artist name"));
-//		menu_item.activate.connect(this.open_tagartist_changer);
-//		rightmenu.append(menu_item);
-//		rightmenu.show_all();
-//		return rightmenu;
-//	}
-
-//	private Menu create_edit_album_tag_menu() {
-//		var rightmenu = new Menu();
-//		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
-//		menu_item.set_label(_("Change album name"));
-//		menu_item.activate.connect(this.open_tagalbum_changer);
-//		rightmenu.append(menu_item);
-//		rightmenu.show_all();
-//		return rightmenu;
-//	}
-
-//	private Menu create_edit_title_tag_menu() {
-//		var rightmenu = new Menu();
-//		var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.INFO, null);
-//		menu_item.set_label(_("Edit metadata for track"));
-//		menu_item.activate.connect(this.open_tagtitle_changer);
-//		rightmenu.append(menu_item);
-//		rightmenu.show_all();
-//		return rightmenu;
-//	}
-
-
 	private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
 		Gtk.TreePath treepath;
 		Gtk.TreeViewColumn column;
@@ -408,14 +322,24 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private void on_drag_begin(Gtk.Widget sender, DragContext context) {
 		this.dragging = true;
-		//this.drag_from_mediabrowser = true;
+		List<unowned TreePath> treepaths;
 		Gdk.drag_abort(context, Gtk.get_current_event_time());
 		Gtk.TreeSelection selection = this.get_selection();
-		if(selection.count_selected_rows() > 1) {
-			Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND_MULTIPLE);
+		treepaths = selection.get_selected_rows(null);
+		if(treepaths != null) {
+			TreeIter iter;
+			Pixbuf p;
+			this.mediabrowsermodel.get_iter(out iter, treepaths.nth_data(0));
+			this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.ICON, out p);
+			Gtk.drag_source_set_icon_pixbuf(this, p);
 		}
 		else {
-			Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND);
+			if(selection.count_selected_rows() > 1) {
+				Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND_MULTIPLE);
+			}
+			else {
+				Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND);
+			}
 		}
 		return;
 	}
@@ -520,14 +444,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	
 	public void on_row_collapsed(TreeIter iter, TreePath path) {
 		mediabrowsermodel.unload_children(ref iter);
-//		uint list_iter = 0;
-//		foreach(TreePath tp in this.expansion_list) {
-//			if(path.compare(tp) == 0) {
-//				this.expansion_list.delete_link(this.expansion_list.nth(list_iter));
-//				break;
-//			}
-//			list_iter++;
-//		}
 	}
 
 	private class FlowingTextRenderer : CellRendererText {
@@ -642,13 +558,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		
 		this.headers_visible = false;
 		this.enable_search = false;
-//		this.set_row_separator_func((m, iter) => {
-//			int sepatator = 0;
-//			m.get(iter, MediaBrowserModel.Column.DRAW_SEPTR, ref sepatator);
-//			if(sepatator==0) return false;
-//			return true;
-//		});
-		
 	}
 	
 	private bool owforeach(TreeModel? mo, TreePath pt, TreeIter it) {
@@ -657,35 +566,5 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		mo.row_changed(pt, it);
 		return false;
 	}
-	
-//	public void resize_line_width(int new_width) {
-//		if(!use_linebreaks)
-//			return;
-//		//check for options
-//		//get scrollbar width of the scrolled window
-//		int scrollbar_w = 0;
-//		if(main_window.mediaBrScrollWin != null) {
-//			var scrollbar = main_window.trackListScrollWin.get_vscrollbar();
-//			if(scrollbar != null) {
-//				Requisition req;
-//				scrollbar.get_child_requisition(out req);
-//				scrollbar_w = req.width;
-//			}
-//		}
-//		//substract scrollbar width, expander width, vertical separator width and the space used 
-//		//up by the icons from the total width
-//		Value v = Value(typeof(int));
-//		widget_style_get_property(this, "expander-size", v);
-//		int expander_size = v.get_int();
-//		v.reset();
-//		widget_style_get_property(this, "vertical-separator", v);
-//		int vertical_separator_size = v.get_int();
-//		new_width -= (mediabrowsermodel.get_max_icon_width() + scrollbar_w + expander_size + vertical_separator_size * 4);
-//		if(new_width < 60) return;
-//		renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
-//		renderer.wrap_width = new_width;
-//		renderer.wrap_mode = Pango.WrapMode.WORD_CHAR;
-//		Idle.add(update_view);
-//	}
 }
 

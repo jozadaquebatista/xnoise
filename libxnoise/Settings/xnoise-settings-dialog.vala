@@ -1,6 +1,6 @@
 /* xnoise-settings-dialog.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,7 +48,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 	private ScrolledWindow scrollWinPlugins;
 	private CheckButton checkB_showL;
 	private CheckButton checkB_compact;
-	private CheckButton checkB_mediaBrLinebreaks;
 	private CheckButton checkB_usestop;
 	private CheckButton checkB_hoverimage;
 	private CheckButton checkB_quitifclosed;
@@ -116,12 +115,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		else
 			checkB_hoverimage.active = false;
 		
-		//media browser line breaks
-		if(Params.get_int_value("mediabrowser_linebreaks") > 0)
-			checkB_mediaBrLinebreaks.active = true;
-		else
-			checkB_mediaBrLinebreaks.active = false;
-
 		// SpinButton
 		sb.configure(new Gtk.Adjustment(8.0, 7.0, 14.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
 		if((Params.get_int_value("fontsizeMB") >= 7)&&
@@ -194,17 +187,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		}
 	}
 	
-	private void on_checkbutton_mediabr_linebreaks_clicked(Gtk.Button sender) {
-		if(this.checkB_mediaBrLinebreaks.active) {
-			Params.set_int_value("mediabrowser_linebreaks", 1);
-			main_window.mediaBr.use_linebreaks = true;
-		}
-		else {
-			Params.set_int_value("mediabrowser_linebreaks", 0);
-			main_window.mediaBr.use_linebreaks = false;
-		}
-	}
-	
 	private void on_ok_button_clicked() {
 		Params.write_all_parameters_to_file();
 		this.dialog.destroy();
@@ -263,11 +245,6 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_showL.can_focus = false;
 			checkB_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
 			checkB_showL.label = _("Enable grid lines in media browser");
-			
-			checkB_mediaBrLinebreaks = this.get_object("checkB_mediaBrLinebreaks") as Gtk.CheckButton;
-			checkB_mediaBrLinebreaks.can_focus = false;
-			checkB_mediaBrLinebreaks.clicked.connect(this.on_checkbutton_mediabr_linebreaks_clicked);
-			checkB_mediaBrLinebreaks.label = _("Use linebreaks in media browser");
 			
 			checkB_hoverimage = this.get_object("checkB_hoverimage") as Gtk.CheckButton;
 			checkB_hoverimage.can_focus = false;

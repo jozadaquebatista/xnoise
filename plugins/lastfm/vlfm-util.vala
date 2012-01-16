@@ -1,6 +1,7 @@
 /* vlfm-util.vala
  *
  * Copyright (C) 2011  Francisco Pérez Cuadrado
+ * Copyright (C) 2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -249,7 +250,7 @@ namespace Lastfm {
 				sb.append("&api_sig=");
 				sb.append(signature);
 			}
-			return sb.str;
+			return (owned)sb.str;
 		}
 		
 		private string? build_signature() {
@@ -386,7 +387,7 @@ namespace Lastfm {
 			string aaa = result;
 			result = Checksum.compute_for_string(ChecksumType.MD5, result);
 			print("API_SIG: from %s == %s\n", aaa, result);
-			return result;
+			return (owned)result;
 		}
 	}
 }

@@ -1,6 +1,6 @@
 /* xnoise-add-media-dialog.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -149,7 +149,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			
 			builder.add_from_file(Config.UIDIR + "add_media.ui");
 			
-			var mainvbox           = builder.get_object("mainvbox") as Gtk.VBox;
+			var mainvbox           = builder.get_object("mainvbox") as Gtk.Box;
 			tv                     = builder.get_object("tv") as TreeView;
 			var baddfolder         = builder.get_object("addfolderbutton") as Button;
 			var baddradio          = builder.get_object("addradiobutton") as Button;
@@ -176,7 +176,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			baddradio.clicked.connect(on_add_radio_button_clicked);
 			brem.clicked.connect(on_remove_button_clicked);
 			
-			((Gtk.VBox)this.dialog.get_content_area()).add(mainvbox);
+			((Gtk.Box)this.dialog.get_content_area()).add(mainvbox);
 			this.dialog.set_icon_from_file(XNOISEICON);
 			this.dialog.set_title(_("xnoise - Add media to library"));
 		}

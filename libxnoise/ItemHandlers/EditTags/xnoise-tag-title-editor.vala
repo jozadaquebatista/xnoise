@@ -1,6 +1,6 @@
 /* xnoise-tag-title-editor.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011 - 2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -115,7 +115,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 			
 			builder.add_from_file(Config.UIDIR + "metadat_title.ui");
 			
-			var mainvbox           = builder.get_object("vbox1")             as Gtk.VBox;
+			var mainvbox           = builder.get_object("vbox1")             as Gtk.Box;
 			var okbutton           = builder.get_object("okbutton")          as Gtk.Button;
 			var cancelbutton       = builder.get_object("cancelbutton")      as Gtk.Button;
 			entry_artist           = builder.get_object("entry_artist")      as Gtk.Entry;
@@ -160,7 +160,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 				if((int)(((Gtk.SpinButton)sender).value) < 0.0 ) ((Gtk.SpinButton)sender).value = 0.0;
 				if((int)(((Gtk.SpinButton)sender).value) > 2100.0) ((Gtk.SpinButton)sender).value = 2100.0;
 			});
-			((Gtk.VBox)this.dialog.get_content_area()).add(mainvbox);
+			((Gtk.Box)this.dialog.get_content_area()).add(mainvbox);
 			okbutton.clicked.connect(on_ok_button_clicked);
 			cancelbutton.clicked.connect(on_cancel_button_clicked);
 			

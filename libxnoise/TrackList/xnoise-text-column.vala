@@ -1,6 +1,6 @@
 /* xnoise-text-column.vala
  *
- * Copyright (C) 2011 Jörn Magens
+ * Copyright (C) 2011-2012 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 	
 	public signal void resized(bool grow, int delta, TrackListModel.Column source_id);
 	
-	private void on_width_changed() {
+//	private void on_width_changed() {
 //		print("on_width_changed\n");
 //		if(last_size != this.width) {
 //			bool grow = (this.width > last_size);
@@ -51,12 +51,12 @@ public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 //			last_size = this.width;
 //			resized(grow, delta, this.id); //emit signal
 //		}
-	}
+//	}
 	
-	private void on_visibility_changed() {
+//	private void on_visibility_changed() {
 //		if(this.visible) this.notify["width"].connect(on_width_changed);
 //		else this.notify["width"].disconnect(on_width_changed);
-	}
+//	}
 	
 	public TextColumn(string title, CellRendererText renderer, TrackListModel.Column col_id) {
 		xn = Main.instance;

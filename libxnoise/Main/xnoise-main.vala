@@ -1,6 +1,6 @@
 /* xnoise-main.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -168,7 +168,7 @@ public class Xnoise.Main : GLib.Object {
 	}
 	
 	private static bool preparing_quit = false;
-	private uint maxtime_quit_src = 0;
+//	private uint maxtime_quit_src = 0;
 	
 	private bool quit_job(Worker.Job job) {
 		this.app.release();

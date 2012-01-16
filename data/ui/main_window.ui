@@ -229,6 +229,21 @@
           <object class="GtkVBox" id="contentvbox">
             <property name="can_focus">False</property>
             <child>
+              <object class="GtkBox" id="infobox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkNotebook" id="tracklistnotebook">
                 <property name="can_focus">False</property>
                 <property name="tab_pos">right</property>
@@ -876,7 +891,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>

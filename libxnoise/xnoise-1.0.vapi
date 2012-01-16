@@ -26,7 +26,6 @@ namespace Xnoise {
 			public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);
 			public Xnoise.Item[] get_artists_with_search (ref string searchtext);
 			public Xnoise.Item[] get_lastused_items ();
-			public string? get_local_image_path_for_track (ref string? uri);
 			public string[] get_media_files ();
 			public string[] get_media_folders ();
 			public string? get_single_stream_uri (string name);
@@ -46,7 +45,7 @@ namespace Xnoise {
 			public bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 			public Xnoise.TrackData[] get_trackdata_for_video (ref string searchtext);
 			public bool get_uri_for_id (int id, out string val);
-			public string[] get_uris (string search_string);
+			public string[] get_uris (ref string search_string);
 			public Xnoise.TrackData[] get_video_data (ref string searchtext);
 			public string[] get_videos (ref string searchtext);
 			public bool stream_in_db (string uri);
@@ -638,7 +637,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class ItemConverter : GLib.Object {
 		public ItemConverter ();
-		public Xnoise.TrackData[]? to_trackdata (Xnoise.Item? item, ref string searchtext);
+		public Xnoise.TrackData[]? to_trackdata (Xnoise.Item? item, ref string? searchtext);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class ItemHandler : GLib.Object {
@@ -730,7 +729,6 @@ namespace Xnoise {
 		public MainWindow ();
 		public void ask_for_initial_media_import ();
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
-		public void display_info_bar (Gtk.InfoBar bar);
 		public Gtk.UIManager get_ui_manager ();
 		public void handle_control_button_click (Xnoise.ControlButton sender, Xnoise.ControlButton.Direction dir);
 		public void position_config_menu (Gtk.Menu menu, out int x, out int y, out bool push);
@@ -758,7 +756,6 @@ namespace Xnoise {
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_searchtext_changed ();
 		public bool update_view ();
-		public bool use_linebreaks { get; set; }
 		public bool use_treelines { get; set; }
 		public signal void sign_activated ();
 	}
@@ -792,7 +789,6 @@ namespace Xnoise {
 		public void load_children (ref Gtk.TreeIter iter);
 		public void move_album_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public void move_artist_iter_sorted (ref Gtk.TreeIter org_iter, string name);
-		public void move_title_iter_sorted (ref Gtk.TreeIter org_iter, ref Xnoise.TrackData td);
 		public bool populate_model ();
 		public void remove_all ();
 		public void unload_children (ref Gtk.TreeIter iter);
@@ -883,7 +879,7 @@ namespace Xnoise {
 		public TrackData ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class TrackInfobar : Gtk.VBox {
+	public class TrackInfobar : Gtk.Box {
 		public TrackInfobar (Xnoise.GstPlayer _player);
 		public void set_value (uint pos, uint len);
 		public string title_text { get; set; }

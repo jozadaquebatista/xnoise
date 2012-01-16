@@ -125,7 +125,7 @@ namespace Xnoise.SimpleMarkup {
 			result = result.replace("<", LOWER_THAN_ESCAPED);
 			result = result.replace("\"", QUOTE_ESCAPED);
 			result = result.replace("'", APOSTROPH_ESCAPED);
-			return result;
+			return (owned)result;
 		}
 		
 		private void write_node_data(SimpleMarkup.Node? mrnode, ref FileOutputStream stream) {

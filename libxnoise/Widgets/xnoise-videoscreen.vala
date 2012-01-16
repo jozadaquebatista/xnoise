@@ -369,7 +369,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 			          "<span size=\"small\" weight=\"light\">%s </span> ".printf(_("on")) + 
 			          album;
 		}
-		return result;
+		return (owned)result;
 	}
 	
 

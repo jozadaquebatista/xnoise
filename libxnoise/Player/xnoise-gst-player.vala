@@ -659,7 +659,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		else {
 			result = null; // "%s%d".printf(substitute_prefix, stream_number);
 		}
-		return result;
+		return (owned)result;
 	}
 	
 	private string[]? get_available_languages(PlaybinStreamType selected) {

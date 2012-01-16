@@ -1,6 +1,6 @@
 /* xnoise-tag-artistalbum-editor.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011 - 2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 			
 			builder.add_from_file(Config.UIDIR + "metadat_artist_album.ui");
 			
-			var mainvbox           = builder.get_object("vbox1")           as Gtk.VBox;
+			var mainvbox           = builder.get_object("vbox1")           as Gtk.Box;
 			var okbutton           = builder.get_object("okbutton")        as Gtk.Button;
 			var cancelbutton       = builder.get_object("cancelbutton")    as Gtk.Button;
 			entry                  = builder.get_object("entry1")          as Gtk.Entry;
@@ -131,7 +131,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 			var explainer_label    = builder.get_object("explainer_label") as Gtk.Label;
 			var content_label      = builder.get_object("content_label")   as Gtk.Label;
 			
-			((Gtk.VBox)this.dialog.get_content_area()).add(mainvbox);
+			((Gtk.Box)this.dialog.get_content_area()).add(mainvbox);
 			okbutton.clicked.connect(on_ok_button_clicked);
 			cancelbutton.clicked.connect(on_cancel_button_clicked);
 			

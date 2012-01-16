@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="2.20"/>
-  <!-- interface-naming-policy project-wide -->
-  <object class="GtkVBox" id="vbox1">
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkBox" id="vbox1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkHBox" id="hbox1">
+      <object class="GtkBox" id="box2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -29,10 +29,9 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">•</property>
+            <property name="invisible_char_set">True</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
-            <property name="primary_icon_sensitive">True</property>
-            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -50,7 +49,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkHBox" id="hbox2">
+      <object class="GtkBox" id="box3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -72,10 +71,9 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">•</property>
+            <property name="invisible_char_set">True</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
-            <property name="primary_icon_sensitive">True</property>
-            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -93,7 +91,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkHBox" id="hbox3">
+      <object class="GtkBox" id="box4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -115,10 +113,9 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="invisible_char">•</property>
+            <property name="invisible_char_set">True</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
-            <property name="primary_icon_sensitive">True</property>
-            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -136,7 +133,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkHBox" id="hbox7">
+      <object class="GtkBox" id="box6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -161,8 +158,6 @@
             <property name="invisible_char_set">True</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
-            <property name="primary_icon_sensitive">True</property>
-            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -180,7 +175,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkHBox" id="hbox9">
+      <object class="GtkBox" id="box5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -207,8 +202,6 @@
             <property name="caps_lock_warning">False</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
-            <property name="primary_icon_sensitive">True</property>
-            <property name="secondary_icon_sensitive">True</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -226,7 +219,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkHBox" id="hbox8">
+      <object class="GtkBox" id="box7">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -262,10 +255,9 @@
             <property name="max_length">4</property>
             <property name="invisible_char">•</property>
             <property name="width_chars">4</property>
+            <property name="invisible_char_set">True</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
-            <property name="primary_icon_sensitive">True</property>
-            <property name="secondary_icon_sensitive">True</property>
             <property name="climb_rate">1</property>
           </object>
           <packing>
@@ -295,10 +287,9 @@
             <property name="max_length">4</property>
             <property name="invisible_char">•</property>
             <property name="width_chars">3</property>
+            <property name="invisible_char_set">True</property>
             <property name="primary_icon_activatable">False</property>
             <property name="secondary_icon_activatable">False</property>
-            <property name="primary_icon_sensitive">True</property>
-            <property name="secondary_icon_sensitive">True</property>
             <property name="climb_rate">1</property>
           </object>
           <packing>
@@ -339,7 +330,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkHBox" id="hbox4">
+      <object class="GtkBox" id="box8">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -354,7 +345,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="hbox5">
+          <object class="GtkBox" id="box9">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">4</property>
@@ -393,33 +384,34 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="padding">3</property>
             <property name="position">1</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="fill">False</property>
-        <property name="padding">2</property>
+        <property name="fill">True</property>
         <property name="position">7</property>
       </packing>
     </child>
   </object>
   <object class="GtkSizeGroup" id="entry_sizegroup">
     <widgets>
-      <widget name="spinbutton_year"/>
-      <widget name="spinbutton_tracknumber"/>
+      <widget name="entry_artist"/>
+      <widget name="entry_album"/>
+      <widget name="entry_title"/>
+      <widget name="entry_genre"/>
+      <widget name="entry_uri"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="label_sizegroup">
     <widgets>
-      <widget name="label3"/>
-      <widget name="label2"/>
       <widget name="label1"/>
-      <widget name="label_dummy"/>
+      <widget name="label2"/>
+      <widget name="label3"/>
       <widget name="label_genre"/>
       <widget name="label_uri"/>
+      <widget name="label_dummy"/>
     </widgets>
   </object>
 </interface>

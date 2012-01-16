@@ -1,6 +1,6 @@
 /* xnoise-trackinfo-bar.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011 - 2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 
 using Gtk;
 
-public class Xnoise.TrackInfobar : Gtk.VBox {
+public class Xnoise.TrackInfobar : Gtk.Box {
 	private Label title_label;
 	private Label time_label;
 	private ProgressBar progress;
@@ -47,7 +47,7 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 	}
 	
 	public TrackInfobar(Xnoise.GstPlayer _player) {
-		GLib.Object(homogeneous:false, spacing:4);
+		GLib.Object(orientation:Orientation.VERTICAL, spacing:4);
 		assert(_player != null);
 		this.player = _player;
 		setup_widgets();
@@ -212,11 +212,11 @@ public class Xnoise.TrackInfobar : Gtk.VBox {
 		                Gdk.EventMask.BUTTON_RELEASE_MASK
 		                );
 		
-		var eventbox = new Gtk.VBox(false, 0);
+		var eventbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		eventbox.pack_start(title_label, false, true, 0);
 		
-		var hbox = new Gtk.HBox(false, 2);
-		var vbox = new Gtk.VBox(false, 0);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 2);
+		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox.set_border_width(VBOX_BORDER_WIDTH);
 		progress = new ProgressBar();
 		progress.set_size_request(-1, 10);

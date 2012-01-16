@@ -1,6 +1,6 @@
 /* xnoise-parameter.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -217,7 +217,6 @@ position_title_column=3
 hp_position=255
 not_show_art_on_hover_image=1
 position_album_column=4
-mediabrowser_linebreaks=1
 position_artist_column=5
 use_tracknumber_column=1
 repeatstate=2

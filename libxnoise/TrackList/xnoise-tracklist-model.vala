@@ -240,6 +240,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	public bool get_active_path(out TreePath treepath, out bool used_next_pos) {
 		TreeIter iter;
 		used_next_pos = false;
+		treepath = null;
 		if((global.position_reference.valid()&&
 		  (global.position_reference != null))) {
 			treepath = global.position_reference.get_path();
@@ -512,7 +513,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		if(uris == null) return;
 		if(uris[0] == null) return;
 		int k = 0;
-		TreeIter iter, iter_2;
+		TreeIter iter_2;
 		FileType filetype;
 		this.get_iter_first(out iter_2);
 		Item? item = Item(ItemType.UNKNOWN);
@@ -555,7 +556,14 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				if(is_playlist) {
 					//print("Playlist: %s\n",fileuri);
 					Reader reader = new Reader();
-					Result result = reader.read(fileuri);
+					Result result = Result.UNHANDLED;
+					try {
+						result = reader.read(fileuri);
+					}
+					catch(Error e) {
+						print("%s\n", e.message);
+						result = Result.UNHANDLED;
+					}
 					if(result != Result.UNHANDLED) {
 						EntryCollection results = reader.data_collection;
 						if(results != null) {

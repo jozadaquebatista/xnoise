@@ -1,6 +1,6 @@
 /* xnoise-tracklist.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private uint hide_timer = 0;
 	private const uint HIDE_TIMEOUT = 1000;
 //	private HashTable<string,double?> relative_column_sizes;
-	private int n_columns = 0;
+//	private int n_columns = 0;
 	
 	public bool column_length_visible {
 		get { return this.columnLength.visible; }
@@ -714,7 +714,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			dur_sec = (int)(length % 60);
 			lengthString = "%02d:%02d".printf(dur_min, dur_sec);
 		}
-		return lengthString;
+		return (owned)lengthString;
 	}
 
 	private void add_dropped_uri(ref string fileuri, ref TreePath? path, ref bool is_first, bool from_playlist = false) {
@@ -837,7 +837,14 @@ public class Xnoise.TrackList : TreeView, IParams {
 		    is_playlist)) {
 			if(is_playlist) {
 				Reader reader = new Reader();
-				Result result = reader.read(fileuri);
+				Result result = Result.UNHANDLED;
+				try {
+					result = reader.read(fileuri);
+				}
+				catch(Error e) {
+					print("%s\n", e.message);
+					result = Result.UNHANDLED;
+				}
 				if(result != Result.UNHANDLED) {
 					EntryCollection results = reader.data_collection;
 					if(results != null) {

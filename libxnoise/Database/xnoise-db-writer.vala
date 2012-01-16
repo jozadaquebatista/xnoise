@@ -440,7 +440,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		if(stmt.step() == Sqlite.ROW) {
 			val = stmt.column_text(0);
 		}
-		return val;
+		return (owned)val;
 	}
 	
 	public bool set_local_image_for_album(ref string artist,
@@ -619,7 +619,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		get_media_folder_statement.reset();
 		while(get_media_folder_statement.step() == Sqlite.ROW)
 			sa += get_media_folder_statement.column_text(0);
-		return sa;
+		return (owned)sa;
 	}
 
 	private int handle_genre(ref string genre) {
@@ -1097,7 +1097,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 			this.db_error();
 		}
 		while(check_track_exists_statement.step() == Sqlite.ROW) {
-	        id = check_track_exists_statement.column_int(0);
+			id = check_track_exists_statement.column_int(0);
 		}
 		return id;
 	}

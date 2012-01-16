@@ -1746,12 +1746,12 @@ struct _XnoisePlayPauseButtonClass {
 };
 
 struct _XnoiseTrackInfobar {
-	GtkVBox parent_instance;
+	GtkBox parent_instance;
 	XnoiseTrackInfobarPrivate * priv;
 };
 
 struct _XnoiseTrackInfobarClass {
-	GtkVBoxClass parent_class;
+	GtkBoxClass parent_class;
 };
 
 struct _XnoiseTrackProgressBar {
@@ -1933,7 +1933,6 @@ gboolean xnoise_database_db_browser_get_uri_for_id (XnoiseDatabaseDbBrowser* sel
 XnoiseTrackData** xnoise_database_db_browser_get_all_tracks (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 gboolean xnoise_database_db_browser_get_trackdata_for_id (XnoiseDatabaseDbBrowser* self, gint id, XnoiseTrackData** val);
 gboolean xnoise_database_db_browser_get_stream_td_for_id (XnoiseDatabaseDbBrowser* self, gint id, XnoiseTrackData** val);
-gchar* xnoise_database_db_browser_get_local_image_path_for_track (XnoiseDatabaseDbBrowser* self, gchar** uri);
 gboolean xnoise_database_db_browser_get_trackdata_for_stream (XnoiseDatabaseDbBrowser* self, const gchar* uri, XnoiseTrackData** val);
 gboolean xnoise_database_db_browser_get_trackdata_for_uri (XnoiseDatabaseDbBrowser* self, gchar** uri, XnoiseTrackData** val);
 gchar** xnoise_database_db_browser_get_media_files (XnoiseDatabaseDbBrowser* self, int* result_length1);
@@ -1949,7 +1948,7 @@ gint xnoise_database_db_browser_get_track_id_for_path (XnoiseDatabaseDbBrowser* 
 XnoiseItem* xnoise_database_db_browser_get_some_lastused_items (XnoiseDatabaseDbBrowser* self, gint limit, gint offset, int* result_length1);
 guint xnoise_database_db_browser_count_lastused_items (XnoiseDatabaseDbBrowser* self);
 XnoiseItem* xnoise_database_db_browser_get_lastused_items (XnoiseDatabaseDbBrowser* self, int* result_length1);
-gchar** xnoise_database_db_browser_get_uris (XnoiseDatabaseDbBrowser* self, const gchar* search_string, int* result_length1);
+gchar** xnoise_database_db_browser_get_uris (XnoiseDatabaseDbBrowser* self, gchar** search_string, int* result_length1);
 XnoiseTrackData** xnoise_database_db_browser_get_stream_data (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_db_browser_get_video_data (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_db_browser_get_trackdata_for_video (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
@@ -2074,8 +2073,6 @@ gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_update_view (XnoiseMediaBrowser* self);
 void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
 void xnoise_media_browser_on_row_collapsed (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
-gboolean xnoise_media_browser_get_use_linebreaks (XnoiseMediaBrowser* self);
-void xnoise_media_browser_set_use_linebreaks (XnoiseMediaBrowser* self, gboolean value);
 gboolean xnoise_media_browser_get_use_treelines (XnoiseMediaBrowser* self);
 void xnoise_media_browser_set_use_treelines (XnoiseMediaBrowser* self, gboolean value);
 GType xnoise_media_browser_model_track_sorting_get_type (void) G_GNUC_CONST;
@@ -2086,7 +2083,6 @@ void xnoise_media_browser_model_filter (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_remove_all (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_insert_video_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
 void xnoise_media_browser_model_insert_stream_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
-void xnoise_media_browser_model_move_title_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, XnoiseTrackData** td);
 void xnoise_media_browser_model_move_artist_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, const gchar* name);
 void xnoise_media_browser_model_move_album_iter_sorted (XnoiseMediaBrowserModel* self, GtkTreeIter* org_iter, const gchar* name);
 void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
@@ -2651,7 +2647,6 @@ void xnoise_main_window_stop (XnoiseMainWindow* self);
 void xnoise_main_window_change_track (XnoiseMainWindow* self, XnoiseControlButtonDirection direction, gboolean handle_repeat_state);
 void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, gchar** newuri, const gchar* tagname, const gchar* tagvalue);
 void xnoise_main_window_handle_control_button_click (XnoiseMainWindow* self, XnoiseControlButton* sender, XnoiseControlButtonDirection dir);
-void xnoise_main_window_display_info_bar (XnoiseMainWindow* self, GtkInfoBar* bar);
 void xnoise_main_window_show_status_info (XnoiseMainWindow* self, XnoiseInfoBar* bar);
 gboolean xnoise_main_window_get_not_show_art_on_hover_image (XnoiseMainWindow* self);
 void xnoise_main_window_set_not_show_art_on_hover_image (XnoiseMainWindow* self, gboolean value);

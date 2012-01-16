@@ -1,6 +1,6 @@
 /* xnoise-db-browser.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -316,7 +316,7 @@ public class Xnoise.Database.DbBrowser {
 			}
 			retv += val;
 		}
-		return retv;
+		return (owned)retv;
 	}
 
 	public bool get_trackdata_for_id(int id, out TrackData val) {
@@ -404,23 +404,6 @@ public class Xnoise.Database.DbBrowser {
 //		return false;
 //	}
 
-	public string? get_local_image_path_for_track(ref string? uri) {
-		Statement stmt;
-		string retval = null;
-		if(uri == null) 
-			return retval;
-		this.db.prepare_v2(STMT_IMAGE_PATH_FOR_URI, -1, out stmt);
-		
-		stmt.reset();
-		if(stmt.bind_text(1, uri) != Sqlite.OK) {
-			this.db_error();
-		}
-		if(stmt.step() == Sqlite.ROW) {
-			retval = stmt.column_text(0);
-		}
-		return retval;
-	}
-
 	public bool get_trackdata_for_stream(string uri, out TrackData val) {
 		Statement stmt;
 		bool retval = false;
@@ -493,7 +476,7 @@ public class Xnoise.Database.DbBrowser {
 		while(stmt.step() == Sqlite.ROW) {
 			mfiles += stmt.column_text(0);
 		}
-		return mfiles;
+		return (owned)mfiles;
 	}
 
 	public string[] get_media_folders() {
@@ -505,7 +488,7 @@ public class Xnoise.Database.DbBrowser {
 		while(stmt.step() == Sqlite.ROW) {
 			mfolders += stmt.column_text(0);
 		}
-		return mfolders;
+		return (owned)mfolders;
 	}
 
 	public StreamData[] get_streams() {
@@ -520,7 +503,7 @@ public class Xnoise.Database.DbBrowser {
 			sd.uri  = stmt.column_text(1);
 			sData += sd;
 		}
-		return sData;
+		return (owned)sData;
 	}
 
 	public string? get_single_stream_uri(string name) {
@@ -557,14 +540,14 @@ public class Xnoise.Database.DbBrowser {
 		if((stmt.bind_int(1, limit)  != Sqlite.OK) ||
 		   (stmt.bind_int(2, offset) != Sqlite.OK)) {
 			this.db_error();
-			return val;
+			return (owned)val;
 		}
 		
 		while(stmt.step() == Sqlite.ROW) {
 			Item? item = Item((ItemType)stmt.column_int(0), stmt.column_text(1), stmt.column_int(2));
 			val += item;
 		}
-		return val;
+		return (owned)val;
 	}
 	
 	private static const string STMT_CNT_LASTUSED =
@@ -594,11 +577,10 @@ public class Xnoise.Database.DbBrowser {
 			Item? item = Item((ItemType)stmt.column_int(0), stmt.column_text(1), stmt.column_int(2));
 			val += item;
 		}
-		return val;
+		return (owned)val;
 	}
 	
-	public string[] get_uris(string search_string) {
-		//print("searching for %s\n", STMT_GET_URIS.replace("?", search_string));
+	public string[] get_uris(ref string search_string) {
 		string[] results = {};
 		Statement stmt;
 		
@@ -609,7 +591,7 @@ public class Xnoise.Database.DbBrowser {
 			//print("found %s", stmt.column_text(0));
 			results += stmt.column_text(0);
 		}
-		return results;
+		return (owned)results;
 	}
 
 	private static const string STMT_GET_STREAM_DATA =
@@ -623,7 +605,7 @@ public class Xnoise.Database.DbBrowser {
 		
 		if(stmt.bind_text(1, "%%%s%%".printf(searchtext))     != Sqlite.OK) {
 			this.db_error();
-			return val;
+			return (owned)val;
 		}
 		while(stmt.step() == Sqlite.ROW) {
 			TrackData td = new TrackData();
@@ -633,7 +615,7 @@ public class Xnoise.Database.DbBrowser {
 			td.item.text   = stmt.column_text(2);
 			val += td;
 		}
-		return val;
+		return (owned)val;
 	}
 
 	private static const string STMT_GET_VIDEO_DATA =
@@ -649,7 +631,7 @@ public class Xnoise.Database.DbBrowser {
 		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)||
 		   (stmt.bind_text(3, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
 			this.db_error();
-			return val;
+			return (owned)val;
 		}
 		while(stmt.step() == Sqlite.ROW) {
 			TrackData td = new TrackData();
@@ -663,7 +645,7 @@ public class Xnoise.Database.DbBrowser {
 			td.item        = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(3), stmt.column_int(1));
 			val += td;
 		}
-		return val;
+		return (owned)val;
 	}
 
 	private static const string STMT_GET_TRACKDATA_FOR_VIDEO =
@@ -679,7 +661,7 @@ public class Xnoise.Database.DbBrowser {
 		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)||
 		   (stmt.bind_text(3, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
 			this.db_error();
-			return val;
+			return (owned)val;
 		}
 		while(stmt.step() == Sqlite.ROW) {
 			TrackData td = new TrackData();
@@ -694,7 +676,7 @@ public class Xnoise.Database.DbBrowser {
 			td.item        = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(3), stmt.column_int(1));
 			val += td;
 		}
-		return val;
+		return (owned)val;
 	}
 
 	private static const string STMT_GET_TRACKDATA_FOR_STREAMS =
@@ -709,7 +691,7 @@ public class Xnoise.Database.DbBrowser {
 		if((stmt.bind_text(1, "%%%s%%".printf(searchtext))     != Sqlite.OK)||
 		   (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
 			this.db_error();
-			return val;
+			return (owned)val;
 		}
 		while(stmt.step() == Sqlite.ROW) {
 			TrackData td = new TrackData();
@@ -719,7 +701,7 @@ public class Xnoise.Database.DbBrowser {
 			td.item.text   = stmt.column_text(2);
 			val += td;
 		}
-		return val;
+		return (owned)val;
 	}
 
 //	public TrackData[] get_stream_data(ref string searchtext) {
@@ -753,7 +735,7 @@ public class Xnoise.Database.DbBrowser {
 		while(stmt.step() == Sqlite.ROW) {
 			val += stmt.column_text(0);
 		}
-		return val;
+		return (owned)val;
 	}
 
 	private static const string STMT_GET_SOME_ARTISTS = 
@@ -774,7 +756,7 @@ public class Xnoise.Database.DbBrowser {
 			i.text = stmt.column_text(0);
 			val += i;
 		}
-		return val;
+		return (owned)val;
 	}
 
 	private static const string STMT_GET_ARTISTS_WITH_SEARCH =
@@ -794,7 +776,7 @@ public class Xnoise.Database.DbBrowser {
 			   (stmt.bind_text(3, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
 			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 				this.db_error();
-				return val;
+				return (owned)val;
 			}
 		}
 		else {
@@ -807,7 +789,7 @@ public class Xnoise.Database.DbBrowser {
 			val += i;
 		}
 		
-		return val;
+		return (owned)val;
 	}
 
 //	public string[] get_artists() {
@@ -840,7 +822,7 @@ public class Xnoise.Database.DbBrowser {
 			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK)||
 			   (stmt.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 				this.db_error();
-				return val;
+				return (owned)val;
 			}
 		}
 		else {
@@ -864,7 +846,7 @@ public class Xnoise.Database.DbBrowser {
 			td.year        = stmt.column_int(9);
 			val += td;
 		}
-		return val;
+		return (owned)val;
 	}
 
 	private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH =
@@ -885,7 +867,7 @@ public class Xnoise.Database.DbBrowser {
 			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
 			   (stmt.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 				this.db_error();
-				return val;
+				return (owned)val;
 			}
 		}
 		else {
@@ -909,7 +891,7 @@ public class Xnoise.Database.DbBrowser {
 			td.year        = stmt.column_int(9);
 			val += td;
 		}
-		return val;
+		return (owned)val;
 	}
 
 	private static const string STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH =
@@ -929,21 +911,21 @@ public class Xnoise.Database.DbBrowser {
 			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
 			   (stmt.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 				this.db_error();
-				return i;
+				return (owned)i;
 			}
 		}
 		else {
 			this.db.prepare_v2(STMT_GET_ARTISTITEM_BY_ARTISTID, -1, out stmt);
 			if((stmt.bind_int(1, id)!=Sqlite.OK)) {
 				this.db_error();
-				return i;
+				return (owned)i;
 			}
 		}
 		if(stmt.step() == Sqlite.ROW) {
 			i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, id);
 			i.text = stmt.column_text(0);
 		}
-		return i;
+		return (owned)i;
 	}
 
 	private static const string STMT_GET_TRACKDATA_BY_TITLEID =
@@ -972,7 +954,7 @@ public class Xnoise.Database.DbBrowser {
 			td.genre       = stmt.column_text(8);
 			td.year        = stmt.column_int(9);
 		}
-		return td;
+		return (owned)td;
 	}
 
 	private static const string STMT_GET_ALBUMS_WITH_SEARCH =
@@ -993,14 +975,14 @@ public class Xnoise.Database.DbBrowser {
 			   (stmt.bind_text(4, "%%%s%%".printf(searchtext)) != Sqlite.OK) ||
 			   (stmt.bind_text(5, "%%%s%%".printf(searchtext)) != Sqlite.OK)) {
 				this.db_error();
-				return val;
+				return (owned)val;
 			}
 		}
 		else {
 			this.db.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
 			if((stmt.bind_int(1, id)!=Sqlite.OK)) {
 				this.db_error();
-				return val;
+				return (owned)val;
 			}
 		}
 		while(stmt.step() == Sqlite.ROW) {
@@ -1008,7 +990,7 @@ public class Xnoise.Database.DbBrowser {
 			i.text = stmt.column_text(0);
 			val += i;
 		}
-		return val;
+		return (owned)val;
 	}
 
 //	private static const string STMT_GET_TRACKDATA_FOR_ARTISTALBUM =
@@ -1035,7 +1017,7 @@ public class Xnoise.Database.DbBrowser {
 			twt.item = Item((ItemType)stmt.column_int(1), null , stmt.column_int(2)) ;
 			val += twt;
 		}
-		return val;
+		return (owned)val;
 	}
 
 //	private static const string STMT_GET_TRACKDATA_f =
