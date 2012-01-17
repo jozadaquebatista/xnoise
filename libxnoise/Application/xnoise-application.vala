@@ -73,12 +73,12 @@ public class Xnoise.Application : GLib.Application {
 	}
 	
 	public int on_command_line(ApplicationCommandLine command_line) {
-		//if(!command_line.get_is_remote()) {
-		//	print("MI on_command_line\n");
-		//}
-		//else {
-		//	print("New on_command_line\n");
-		//}
+		if(!command_line.get_is_remote()) {
+			print("MI on_command_line\n");
+		}
+		else {
+			print("New on_command_line\n");
+		}
 		string[] args = command_line.get_arguments();
 		string[] sa_args = {};
 		foreach(string arg in args) {

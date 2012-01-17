@@ -88,8 +88,8 @@ namespace Xnoise {
 		if(_fileargs != null) {
 			var ls = new Xnoise.LocalSchemes();
 			foreach(string s in _fileargs) {
-				File current_file = File.new_for_path(GLib.Path.build_filename(Environment.get_current_dir(), s, null));
-				
+				File current_file;
+				current_file = File.new_for_commandline_arg(s);
 				if(current_file == null)             continue;
 				if(!current_file.query_exists(null)) continue;
 				
@@ -103,8 +103,7 @@ namespace Xnoise {
 						
 						if((psAudio.match_string(mime))||
 						   (psVideo.match_string(mime))) {
-							sa_args += current_file.get_path();
-							uris += current_file.get_uri();
+							sa_args += current_file.get_uri();
 						}
 					}
 					catch(GLib.Error e) {
