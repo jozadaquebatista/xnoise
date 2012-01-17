@@ -39,6 +39,7 @@ using Xnoise.TagAccess;
 
 public class Xnoise.TrackList : TreeView, IParams {
 	private Main xn;
+	private unowned IconTheme theme = null;
 	private const TargetEntry[] src_target_entries = {
 		{"text/uri-list", Gtk.TargetFlags.SAME_WIDGET, 0}
 	};
@@ -110,6 +111,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 	public TrackList() {
 		this.xn = Main.instance;
+		theme = IconTheme.get_default();
 		if(tlm == null)
 			print("tracklist model instance not available\n");
 		
@@ -383,13 +385,27 @@ public class Xnoise.TrackList : TreeView, IParams {
 		if(selection.count_selected_rows() == 0) {
 			return;
 		}
+		try {
+			Gtk.Invisible w = new Gtk.Invisible();
+			Pixbuf title_pixb;
+			if(theme.has_icon("media-audio")) 
+				title_pixb = theme.load_icon("media-audio", 22, IconLookupFlags.FORCE_SIZE);
+			else if(theme.has_icon("audio-x-generic")) 
+				title_pixb = theme.load_icon("audio-x-generic", 22, IconLookupFlags.FORCE_SIZE);
+			else 
+				title_pixb = w.render_icon(Gtk.Stock.OPEN, IconSize.BUTTON, null);
+			Gtk.drag_source_set_icon_pixbuf(this, title_pixb);
+		}
+		catch(Error e) {
+			print("%s\n", e.message);
+			if(selection.count_selected_rows() > 1) {
+				Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND_MULTIPLE);
+			}
+			else {
+				Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND);
+			}
+		}
 
-		if(selection.count_selected_rows() > 1) {
-			Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND_MULTIPLE);
-		}
-		else {
-			Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND);
-		}
 		return;
 	}
 

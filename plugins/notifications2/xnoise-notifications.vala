@@ -1,6 +1,6 @@
 /* xnoise-notifications.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -156,7 +156,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 	}
 	
 	private void show_notification(string newuri) {
-		string uri = newuri;
+		//string uri = newuri;
 		string album, artist, title;
 		Gdk.Pixbuf image_pixb = null;
 		string basename = null;
