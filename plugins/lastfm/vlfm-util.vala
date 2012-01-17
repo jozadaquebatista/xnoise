@@ -1,7 +1,7 @@
 /* vlfm-util.vala
  *
  * Copyright (C) 2011  Francisco Pérez Cuadrado
- * Copyright (C) 2012  Jörn Magens
+ * Copyright (C) 2011-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
