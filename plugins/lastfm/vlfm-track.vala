@@ -137,6 +137,8 @@ namespace Lastfm {
 		}
 
 		public bool updateNowPlaying() {
+			if(Xnoise.Params.get_int_value("lfm_use_scrobble") == 0)
+				return true; //successfully doing nothing
 			if(!parent_session.logged_in) {
 				print("not logged in!\n");
 				return false;
@@ -172,7 +174,8 @@ namespace Lastfm {
 
 		// start_time: Unix time format of track play start time
 		public bool scrobble(int64 start_time) {
-			
+			if(Xnoise.Params.get_int_value("lfm_use_scrobble") == 0)
+				return true; //successfully doing nothing
 			//this.unlove();
 			//return true;
 			

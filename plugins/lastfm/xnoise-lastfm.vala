@@ -361,6 +361,7 @@ public class Xnoise.LfmWidget: Gtk.Box {
 	private unowned Xnoise.Lfm lfm;
 	private Entry user_entry;
 	private Entry pass_entry;
+	private CheckButton use_scrobble_check;
 	private Label feedback_label;
 	private Button b;
 	private string username_last;
@@ -378,6 +379,9 @@ public class Xnoise.LfmWidget: Gtk.Box {
 		this.set_hexpand(true);
 		user_entry.text = Xnoise.Params.get_string_value("lfm_user");
 		pass_entry.text = Xnoise.Params.get_string_value("lfm_pass");
+		use_scrobble_check.set_active(Xnoise.Params.get_int_value("lfm_use_scrobble") != 0);
+		
+		use_scrobble_check.toggled.connect(on_use_scrobble_toggled);
 		b.clicked.connect(on_entry_changed);
 	}
 
@@ -392,6 +396,13 @@ public class Xnoise.LfmWidget: Gtk.Box {
 			feedback_label.set_markup("<b><i>%s</i></b>".printf(_("User not logged in!")));
 			feedback_label.set_use_markup(true);
 		}
+	}
+	
+	private void on_use_scrobble_toggled(ToggleButton sender) {
+		if(sender.get_active())
+			Xnoise.Params.set_int_value("lfm_use_scrobble", 1);
+		else
+			Xnoise.Params.set_int_value("lfm_use_scrobble", 0);
 	}
 	
 	private void on_entry_changed() {
@@ -429,12 +440,14 @@ public class Xnoise.LfmWidget: Gtk.Box {
 		
 		var hbox1 = new Box(Orientation.HORIZONTAL, 2);
 		var user_label = new Label("%s".printf(_("Username:")));
+		user_label.xalign = 0.0f;
 		hbox1.pack_start(user_label, false, false, 0);
 		user_entry = new Entry();
 		hbox1.pack_start(user_entry, true, true, 0);
 		
 		var hbox2 = new Box(Orientation.HORIZONTAL, 2);
 		var pass_label = new Label("%s".printf(_("Password:")));
+		pass_label.xalign = 0.0f;
 		hbox2.pack_start(pass_label, false, false, 0);
 		pass_entry = new Entry();
 		pass_entry.set_visibility(false);
@@ -447,6 +460,9 @@ public class Xnoise.LfmWidget: Gtk.Box {
 		
 		this.pack_start(hbox1, false, false, 4);
 		this.pack_start(hbox2, false, false, 4);
+		
+		use_scrobble_check = new CheckButton.with_label(_("Scrobble played tracks on lastfm"));
+		this.pack_start(use_scrobble_check, false, false, 0);
 		
 		//feedback
 		feedback_label = new Label("<b><i>%s</i></b>".printf(_("User not logged in!")));
