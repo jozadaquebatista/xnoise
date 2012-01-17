@@ -116,6 +116,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_hoverimage.active = false;
 		
 		// SpinButton
+		sb.changed.disconnect(this.on_mb_font_changed);
 		sb.configure(new Gtk.Adjustment(8.0, 7.0, 14.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
 		if((Params.get_int_value("fontsizeMB") >= 7)&&
 		    (Params.get_int_value("fontsizeMB") <= 14))
@@ -123,6 +124,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		else
 			sb.set_value(9.0);
 		sb.set_numeric(true);
+		sb.changed.connect(this.on_mb_font_changed);
 	}
 
 	private void on_mb_font_changed(Gtk.Editable sender) {
