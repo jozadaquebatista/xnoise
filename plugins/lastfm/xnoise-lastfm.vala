@@ -1,6 +1,6 @@
 /* xnoise-mpris.vala
  *
- * Copyright (C) 2011 Jörn Magens
+ * Copyright (C) 2011-2012 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -356,7 +356,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 }
 
 
-public class Xnoise.LfmWidget: Gtk.VBox {
+public class Xnoise.LfmWidget: Gtk.Box {
 	private unowned Main xn;
 	private unowned Xnoise.Lfm lfm;
 	private Entry user_entry;
@@ -368,13 +368,14 @@ public class Xnoise.LfmWidget: Gtk.VBox {
 	
 	
 	public LfmWidget(Xnoise.Lfm lfm) {
-		GLib.Object(homogeneous:false, spacing:10);
+		GLib.Object(orientation:Gtk.Orientation.VERTICAL, spacing:10);
 		this.lfm = lfm;
 		this.xn = Main.instance;
 		setup_widgets();
 		
 		this.lfm.login_state_change.connect(do_user_feedback);
-		
+		this.set_vexpand(true);
+		this.set_hexpand(true);
 		user_entry.text = Xnoise.Params.get_string_value("lfm_user");
 		pass_entry.text = Xnoise.Params.get_string_value("lfm_pass");
 		b.clicked.connect(on_entry_changed);
@@ -426,13 +427,13 @@ public class Xnoise.LfmWidget: Gtk.VBox {
 		title_label.ypad = 10;
 		this.pack_start(title_label, false, false, 0);
 		
-		var hbox1 = new HBox(false, 2);
+		var hbox1 = new Box(Orientation.HORIZONTAL, 2);
 		var user_label = new Label("%s".printf(_("Username:")));
 		hbox1.pack_start(user_label, false, false, 0);
 		user_entry = new Entry();
 		hbox1.pack_start(user_entry, true, true, 0);
 		
-		var hbox2 = new HBox(false, 2);
+		var hbox2 = new Box(Orientation.HORIZONTAL, 2);
 		var pass_label = new Label("%s".printf(_("Password:")));
 		hbox2.pack_start(pass_label, false, false, 0);
 		pass_entry = new Entry();

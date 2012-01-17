@@ -1,6 +1,6 @@
 /* xnoise-info-bar.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -101,16 +101,16 @@ public class Xnoise.InfoBar : Gtk.InfoBar {
 		return extra_widget;
 	}
 	
-	private Gtk.HBox swbox;
-	private Gtk.HBox ewbox;
+	private Gtk.Box swbox;
+	private Gtk.Box ewbox;
 	
 	private void setup_layout(UserInfo.ContentClass content_class, string info_text, bool bold = true, int appearance_time_seconds) {
 		symbol_widget     = create_symbol_widget(content_class);
 		info_label        = new Gtk.Label(null);
 		var content_area  = this.get_content_area();
-		var bx            = new Gtk.HBox(false, 0);
-		swbox             = new Gtk.HBox(false, 0);
-		ewbox             = new Gtk.HBox(false, 0);
+		var bx            = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		swbox             = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		ewbox             = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		
 		update_text(info_text, bold);
 		

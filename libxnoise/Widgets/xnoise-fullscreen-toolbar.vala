@@ -1,6 +1,6 @@
 /* xnoise-fullscreen-toolbar.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public class Xnoise.FullscreenToolbar {
 		this.fullscreenwindow = fullscreenwindow;
 		window = new Gtk.Window (Gtk.WindowType.POPUP);
 
-		var mainbox = new Gtk.HBox(false,8);
+		var mainbox = new Gtk.Box(Orientation.HORIZONTAL, 8);
 
 		var nextbutton      = new ControlButton(ControlButton.Direction.NEXT);
 		nextbutton.sign_clicked.connect(handle_control_button_click);
@@ -197,9 +197,11 @@ public class Xnoise.FullscreenToolbar {
 			main_window.videoscreen.get_window().unfullscreen();
 			main_window.videoscreen.reparent(main_window.videovbox);
 			main_window.fullscreenwindow.hide();
+			main_window.videoscreen.set_vexpand(true);
+			main_window.videoscreen.set_hexpand(true);
 			main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			main_window.fullscreenwindowvisible = false;
-			main_window.videovbox.show();
+			main_window.videovbox.show_all();
 			main_window.fullscreentoolbar.hide();
 		}
 	}

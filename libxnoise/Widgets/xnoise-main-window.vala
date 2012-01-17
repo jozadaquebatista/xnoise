@@ -80,7 +80,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Menu config_button_menu;
 	private bool _media_browser_visible = true;
 	private double current_volume; //keep it global for saving to params
-//	private int window_width = 0;
 	private ulong active_notifier = 0;
 	private ScreenSaverManager ssm = null;
 	private List<Gtk.Action> actions_list = null;
@@ -94,7 +93,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public bool drag_on_content_area = false;
 	public TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
 	public FullscreenToolbar fullscreentoolbar;
-	public VBox videovbox;
+	public Box videovbox;
 	public LyricsView lyricsView;
 	public VideoScreen videoscreen;
 	public Paned hpaned;
@@ -184,17 +183,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const Gtk.ActionEntry[] action_entries = {
 		{ "FileMenuAction", null, N_("_File") },
 			{ "OpenAction", Gtk.Stock.OPEN, null, null, N_("open file"), on_file_add},
-			{ "OpenLocationAction", Gtk.Stock.NETWORK, N_("Open _Location"), null, N_("open remote location"), on_location_add },
-			{ "AddRemoveAction", Gtk.Stock.ADD, N_("_Add or Remove media"), null, N_("manage the content of the xnoise media library"), on_menu_add},
+			{ "OpenLocationAction", Gtk.Stock.NETWORK, N_("Open _Location"), null,
+			   N_("open remote location"), on_location_add },
+			{ "AddRemoveAction", Gtk.Stock.ADD, N_("_Add or Remove media"), null,
+			   N_("manage the content of the xnoise media library"), on_menu_add},
 			{ "QuitAction", Gtk.Stock.QUIT, null, null, null, quit_now},
 		{ "EditMenuAction", null, N_("_Edit") },
-			{ "ClearTrackListAction", Gtk.Stock.CLEAR, N_("C_lear tracklist"), null, N_("Clear the tracklist"), on_remove_all_button_clicked},
-			{ "RescanLibraryAction", Gtk.Stock.REFRESH, N_("R_escan collection"), null, N_("R_escan collection"), on_reload_collection_button_clicked},
+			{ "ClearTrackListAction", Gtk.Stock.CLEAR, N_("C_lear tracklist"), null,
+			   N_("Clear the tracklist"), on_remove_all_button_clicked},
+			{ "RescanLibraryAction", Gtk.Stock.REFRESH, N_("R_escan collection"), null,
+			   N_("R_escan collection"), on_reload_collection_button_clicked},
 			{ "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit},
 		{ "ViewMenuAction", null, N_("_View") },
-			{ "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), null, N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
-			{ "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), null, N_("Go to the now playing screen in the main window."), on_show_video_menu_clicked},
-			{ "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), null, N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
+			{ "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), null,
+			   N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
+			{ "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), null,
+			   N_("Go to the now playing screen in the main window."), on_show_video_menu_clicked},
+			{ "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), null,
+			   N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
 		{ "HelpMenuAction", null, N_("_Help") },
 			{ "AboutAction", Gtk.Stock.ABOUT, null, null, null, on_help_about},
 		{ "ConfigMenuAction", null, N_("_Config") }
@@ -505,10 +511,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.videoscreen.get_window().unfullscreen();
 			this.videoscreen.reparent(videovbox);
 			fullscreenwindow.hide();
-			
+			videoscreen.set_vexpand(true);
+			videoscreen.set_hexpand(true);
 			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			fullscreenwindowvisible = false;
-			this.videovbox.show();
+			this.videovbox.show_all();
 			fullscreentoolbar.hide();
 			Idle.add( () => {
 				this.videoscreen.trigger_expose();
@@ -1274,7 +1281,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			Builder gb = new Gtk.Builder();
 			gb.add_from_file(MAIN_UI_FILE);
 
-			this.mainvbox = gb.get_object("mainvbox") as Gtk.VBox;
+			this.mainvbox = gb.get_object("mainvbox") as Gtk.Box;
 			this.title = "xnoise media player";
 			this.set_default_icon_name("xnoise");
 			
@@ -1282,8 +1289,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//DRAWINGAREA FOR VIDEO
 			videoscreen = gst_player.videoscreen;
-			videovbox = gb.get_object("videovbox") as Gtk.VBox;
-			videovbox.pack_start(videoscreen,true,true,0);
+			videovbox = gb.get_object("videovbox") as Gtk.Box;
+			videovbox.pack_start(videoscreen,true ,true ,0);
 			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
 			var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;
@@ -1373,7 +1380,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//--------------------
 
 			//PLAYING TITLE IMAGE
-			var aibox                     = gb.get_object("aibox") as Gtk.HBox;
+			var aibox                     = gb.get_object("aibox") as Gtk.Box;
 			
 			this.albumimage = new AlbumImage();
 			EventBox ebox = new EventBox(); 
@@ -1413,7 +1420,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			afVol.add(volumeSliderButton);
 
 			//PLAYBACK CONTROLLS
-			var playback_hbox = gb.get_object("playback_hbox") as Gtk.HBox;
+			var playback_hbox = gb.get_object("playback_hbox") as Gtk.Box;
 			this.previousButton = new ControlButton(ControlButton.Direction.PREVIOUS);
 			this.previousButton.sign_clicked.connect(handle_control_button_click);
 			playback_hbox.pack_start(previousButton, false, false, 0);
@@ -1430,13 +1437,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			nextButton.show();
 			
 			//PROGRESS BAR
-			var progbox = gb.get_object("vbox1") as Gtk.VBox;
+			var progbox = gb.get_object("vbox1") as Gtk.Box;
 			this.songProgressBar = new TrackInfobar(gst_player);
 			progbox.pack_start(songProgressBar, true, true, 0);
 			//---------------------
 
 			///BOX FOR MAIN MENU
-			menuvbox                     = gb.get_object("menuvbox") as Gtk.VBox;
+			menuvbox                     = gb.get_object("menuvbox") as Gtk.Box;
 
 			///Tracklist (right)
 			this.trackList = tl; //new TrackList();
@@ -1518,7 +1525,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 			});
 			
-//			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.HBox;
+//			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.Box;
 //			sexyentryBox.add(searchEntryMB);
 			
 			hide_button = gb.get_object("hide_button") as Gtk.Button;
@@ -1556,7 +1563,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//render the preferences icon with a down arrow next to it
 			config_button_image = new Gtk.Image.from_stock(Gtk.Stock.EXECUTE, Gtk.IconSize.LARGE_TOOLBAR);
 			config_button = new Button();
-			var config_hbox = new HBox(false, 0);
+			var config_hbox = new Box(Orientation.HORIZONTAL, 0);
 			config_hbox.pack_start(config_button_image, false, false, 0);
 			var config_arrow = new Arrow(ArrowType.DOWN, ShadowType.NONE);
 			config_hbox.pack_start(config_arrow, false, false, 0);

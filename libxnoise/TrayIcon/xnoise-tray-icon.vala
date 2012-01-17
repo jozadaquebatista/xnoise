@@ -1,6 +1,6 @@
 /* xnoise-tray-icon.vala
  *
- * Copyright (C) 2010  Jörn Magens
+ * Copyright (C) 2010-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		playLabel.set_alignment(0, 0);
 		playLabel.set_width_chars(20);
 		var playpauseItem = new MenuItem();
-		var playHbox = new HBox(false,1);
+		var playHbox = new Box(Orientation.HORIZONTAL, 1);
 		playHbox.set_spacing(10);
 		playHbox.pack_start(playpause_popup_image, false, true, 0);
 		playHbox.pack_start(playLabel, true, true, 0);
@@ -83,7 +83,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		var previousLabel = new Label(_("Previous"));
 		previousLabel.set_alignment(0, 0);
 		var previousItem = new MenuItem();
-		var previousHbox = new HBox(false,1);
+		var previousHbox = new Box(Orientation.HORIZONTAL, 1);
 		previousHbox.set_spacing(10);
 		previousHbox.pack_start(previousImage, false, true, 0);
 		previousHbox.pack_start(previousLabel, true, true, 0);
@@ -98,7 +98,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		var nextLabel = new Label(_("Next"));
 		nextLabel.set_alignment(0, 0);
 		var nextItem = new MenuItem();
-		var nextHbox = new HBox(false,1);
+		var nextHbox = new Box(Orientation.HORIZONTAL, 1);
 		nextHbox.set_spacing(10);
 		nextHbox.pack_start(nextImage, false, true, 0);
 		nextHbox.pack_start(nextLabel, true, true, 0);
@@ -116,7 +116,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		var exitLabel = new Label(_("Exit"));
 		exitLabel.set_alignment(0, 0);
 		var exitItem = new MenuItem();
-		var exitHbox = new HBox(false,1);
+		var exitHbox = new Box(Orientation.HORIZONTAL, 1);
 		exitHbox.set_spacing(10);
 		exitHbox.pack_start(exitImage, false, true, 0);
 		exitHbox.pack_start(exitLabel, true, true, 0);

@@ -725,7 +725,7 @@ namespace Xnoise {
 		public Gtk.ScrolledWindow trackListScrollWin;
 		public Gtk.Notebook tracklistnotebook;
 		public Xnoise.VideoScreen videoscreen;
-		public Gtk.VBox videovbox;
+		public Gtk.Box videovbox;
 		public MainWindow ();
 		public void ask_for_initial_media_import ();
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);

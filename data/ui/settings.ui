@@ -53,7 +53,7 @@
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
@@ -66,18 +66,20 @@
             <property name="scrollable">True</property>
             <property name="enable_popup">True</property>
             <child>
-              <object class="GtkVBox" id="vbox1">
+              <object class="GtkBox" id="vbox1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkAlignment" id="alignment1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="left_padding">4</property>
                     <child>
-                      <object class="GtkVBox" id="vbox2">
+                      <object class="GtkBox" id="vbox2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="orientation">vertical</property>
                         <property name="spacing">4</property>
                         <child>
                           <object class="GtkCheckButton" id="checkB_compact">
@@ -162,7 +164,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkHBox" id="hbox1">
+                          <object class="GtkBox" id="hbox1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <child>
@@ -216,7 +218,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHSeparator" id="hseparator2">
+                  <object class="GtkSeparator" id="hseparator2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>

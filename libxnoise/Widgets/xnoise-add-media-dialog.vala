@@ -302,7 +302,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
 			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
 		});
-		((Gtk.VBox)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
+		((Gtk.Box)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
 
 		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.CANCEL, 0);
 		radiocancelbutton.clicked.connect( () => {

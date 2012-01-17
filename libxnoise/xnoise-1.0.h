@@ -1706,7 +1706,7 @@ struct _XnoiseMainWindow {
 	gboolean drag_on_content_area;
 	XnoiseTrackListNoteBookTab temporary_tab;
 	XnoiseFullscreenToolbar* fullscreentoolbar;
-	GtkVBox* videovbox;
+	GtkBox* videovbox;
 	XnoiseLyricsView* lyricsView;
 	XnoiseVideoScreen* videoscreen;
 	GtkPaned* hpaned;
