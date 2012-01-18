@@ -59,7 +59,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		
 		string[] strms = {};
 		
-		foreach(StreamData sd in streams)
+		foreach(unowned StreamData sd in streams)
 			strms += sd.uri;
 		
 		Timeout.add(200, () => {
@@ -268,7 +268,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		if(((bool)job.get_arg("full_rescan"))) {
 			db_writer.del_all_folders();
 		
-			foreach(string folder in (string[])job.get_arg("mfolders"))
+			foreach(unowned string folder in (string[])job.get_arg("mfolders"))
 				mfolders_ht.insert(folder, 1); // this removes double entries
 		
 			foreach(unowned string folder in mfolders_ht.get_keys())
@@ -286,7 +286,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 //			}
 			//print("count: %d\n", (int)(job.big_counter[0]));			
 			int cnt = 1;
-			foreach(string folder in mfolders_ht.get_keys()) {
+			foreach(unowned string folder in mfolders_ht.get_keys()) {
 				File dir = File.new_for_path(folder);
 				assert(dir != null);
 				// import all the files
@@ -306,7 +306,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 			
 			string[] dbfolders = db_writer.get_media_folders();
 			
-			foreach(string folder in (string[])job.get_arg("mfolders"))
+			foreach(unowned string folder in (string[])job.get_arg("mfolders"))
 				mfolders_ht.insert(folder, 1); // this removes double entries
 			
 			db_writer.del_all_folders();
@@ -331,7 +331,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 				return false;
 			}
 			int cnt = 1;
-			foreach(string folder in new_mfolders_ht.get_keys()) {
+			foreach(unowned string folder in new_mfolders_ht.get_keys()) {
 				File dir = File.new_for_path(folder);
 				assert(dir != null);
 				var reader_job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
@@ -428,7 +428,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 						string? searcht = null;
 						TrackData[]? playlist_content = item_converter.to_trackdata(item, ref searcht);
 						if(playlist_content != null) {
-							foreach(var tdat in playlist_content) {
+							foreach(unowned TrackData tdat in playlist_content) {
 								//print("fnd playlist_content : %s - %s\n", tdat.item.uri, tdat.title);
 								tda += tdat;
 								job.big_counter[1]++;
@@ -523,11 +523,11 @@ public class Xnoise.MediaImporter : GLib.Object {
 
 		db_writer.del_all_streams();
 
-		foreach(string strm in (string[])job.get_arg("list_of_streams")) {
+		foreach(unowned string strm in (string[])job.get_arg("list_of_streams")) {
 			streams_ht.insert(strm, 1); // remove duplicates
 		}
 
-		foreach(string strm in streams_ht.get_keys()) {
+		foreach(unowned string strm in streams_ht.get_keys()) {
 			db_writer.add_single_stream_to_collection(strm, strm); //TODO: Use name different from uri
 			lock(current_import_track_count) {
 				current_import_track_count++;
@@ -538,7 +538,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		
 		TrackData val;
 		TrackData[] tdax = {};
-		foreach(string strm in streams_ht.get_keys()) {
+		foreach(unowned string strm in streams_ht.get_keys()) {
 			db_writer.get_trackdata_for_stream(strm, out val);
 			print("stream: %s\n", strm);
 			tdax += val;
