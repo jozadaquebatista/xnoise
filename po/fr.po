@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-20 15:53+0100\n"
-"PO-Revision-Date: 2012-01-20 15:58+0100\n"
+"PO-Revision-Date: 2012-01-20 16:44+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
 "Language: French\n"
@@ -43,9 +43,8 @@ msgid "More information on the project website:"
 msgstr "Plus d'informations sur site internet du projet:"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
-#, fuzzy
 msgid "Add all visible tracks to tracklist"
-msgstr "Visible extra columns for tracklist:"
+msgstr ""
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:168
@@ -135,18 +134,16 @@ msgid "Change artist name"
 msgstr "Change artist name"
 
 #: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:41
-#, fuzzy
 msgid "Add to tracklist"
-msgstr "Afficher la liste de lecture dans la fenêtre principale."
+msgstr ""
 
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
 msgstr "Lecture"
 
 #: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
-#, fuzzy
 msgid "Remove selected track"
-msgstr "Remove selected"
+msgstr ""
 
 #. the 'no lyrics found...' also appears in the db provider !!
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:182
@@ -200,9 +197,9 @@ msgid "User aborted installation of missing gstreamer plugin"
 msgstr "L'utilisateur à abandonné l'installation du greffon manquant gstreamer"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:497
-#, fuzzy, c-format
+#, c-format
 msgid "Gstreamer plugin not found in repositories"
-msgstr "Le greffon manquant gstreamer n'a pu être trouvé"
+msgstr "Le greffon manquant gstreamer n'a pu être trouvé en les repositoires"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:503
 #, c-format
