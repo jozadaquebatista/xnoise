@@ -1,6 +1,6 @@
 /* xnoise-worker.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,8 +57,8 @@ public class Xnoise.Worker : Object {
 	// WorkFunc will repeatedly be executed from an async function until it returns false
 	public delegate bool WorkFunc(Job jb);
 	
-//	// SyncWorkFunc will be executed in one shot as soon as the worker thread is idle
-//	public delegate void SyncWorkFunc(Job jb);
+	// SyncWorkFunc will be executed in one shot as soon as the worker thread is idle
+	//	public delegate void SyncWorkFunc(Job jb);
 	
 	public enum ExecutionType {
 		UNKNOWN = 0,
@@ -98,17 +98,12 @@ public class Xnoise.Worker : Object {
 		}
 		private uint _timer_seconds = 0;
 		public uint timer_seconds { get { return _timer_seconds; } }
-		// These can be used as references to other objects, structs, arrays, simple types, strings, arrays and structs
-		public Value? value_arg1 = null;
-		public Value? value_arg2 = null;
-		public void* p_arg = null;
+		// payload
 		public Item? item;
 		public Item[] items;
-		//public int32[] id_array;
 		public TrackData[] track_dat; 
 		public DndData[] dnd_data;
 		public Gtk.TreeRowReference[] treerowrefs;
-		public int32[] id_array;
 		// It is useful to have some Job persistent counters available
 		public int counter[4];
 		// 4 more big couters

@@ -1,6 +1,6 @@
 /* xnoise-services.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -212,12 +212,6 @@ namespace Xnoise.Services {
 		result.replace("@", " ");
 		result.replace("<", " ");
 		result.replace(">", " ");
-		//		if(result.contains("<")) 
-		//			result = result.substring(0, result.index_of("<", 0));
-		//		
-		//		if(result.contains(">")) 
-		//			result = result.substring(0, result.index_of(">", 0));
-		
 		return (owned)result;
 	}
 

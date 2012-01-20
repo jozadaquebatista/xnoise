@@ -302,20 +302,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	public int get_max_icon_width() {
 		return artist_pixb.width + title_pixb.width + album_pixb.width;
 	}
-		
-
-//	public void cancel_filling() {
-//		cancel = true;
-//	}
-//	
-//	private static bool cancel = false;
-//	private static int progress_handler() {
-//		if(cancel) {
-//			cancel = false;
-//			return 1;
-//		}
-//		return 0;
-//	}
 	
 	public void filter() {
 		//print("filter\n");
@@ -366,12 +352,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 	}
 
-	//	private void prepend_separator() {
-	//		TreeIter iter;
-	//		this.prepend(out iter, null);
-	//		this.set(iter, Column.DRAW_SEPTR, 1, -1);
-	//	}
-
 	public void insert_video_sorted(TrackData[] tda) {
 		string text = null;
 		TreeIter iter_videos = TreeIter(), iter_singlevideos;
@@ -407,10 +387,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 		foreach(TrackData td in tda) {
 			bool visible = false;
-			if(this.searchtext == "" || td.artist.down().contains(this.searchtext) || td.album.down().contains(this.searchtext) || td.title.down().contains(this.searchtext)) {
-				//print("visible for %s-%s-%s    %s\n", td.artist, td.album, td.title, this.searchtext);
+			if(this.searchtext == "" ||
+			   td.artist.down().contains(this.searchtext) ||
+			   td.album.down().contains(this.searchtext)  ||
+			   td.title.down().contains(this.searchtext))   {
 				visible = true;
-//				this.set(iter_videos, Column.VISIBLE, visible);
 			}
 			this.prepend(out iter_singlevideos, iter_videos);
 			this.set(iter_singlevideos,
@@ -438,8 +419,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			bool found = false;
 			for(int i = 0; i < this.iter_n_children(null); i++) {
 				this.iter_nth_child(out iter_radios, null, i);
-				this.get(iter_radios, Column.VIS_TEXT, out text); //, Column.COLL_TYPE, out ct
-				if(strcmp(text, "Streams") == 0) { // && ct == CollectionType.LISTED) {
+				this.get(iter_radios, Column.VIS_TEXT, out text);
+				if(strcmp(text, "Streams") == 0) { 
 					//found streams
 					found = true;
 					break;
@@ -465,111 +446,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 	}
 
-//	public void insert_trackdata_sorted(TrackData[] tda) {
-//		TreeIter artist_iter, album_iter;
-//		//print("insert_trackdata_sorted : %s - %s - %s - %d \n", tda[0].artist,tda[0].album,tda[0].title,tda[0].db_id);
-//		foreach(TrackData td in tda) {
-//			//print("XX title: %s\n", td.title);
-//			handle_iter_for_artist(ref td, out artist_iter);
-//			handle_iter_for_album (ref td, ref artist_iter, out album_iter);
-//			handle_iter_for_title (ref td, ref album_iter);
-//		}
-//	}
-	
-//	// used to move an title iter after editing the tag
-//	public void move_title_iter_sorted(ref TreeIter org_iter, ref TrackData td) {
-//		TreeIter artist_iter, album_iter;
-//		
-//		handle_iter_for_artist(ref td, out artist_iter);
-//		handle_iter_for_album (ref td, ref artist_iter, out album_iter);
-//		
-//		move_iter_for_title(ref td, ref album_iter , ref org_iter);
-//	}
-	
-//	// used to move an iter after editing the tag
-//	private void move_iter_for_title(ref TrackData td, ref TreeIter album_iter, ref TreeIter org_iter) {
-//		int tr_no = 0;
-//		TreeIter title_iter; // iter_artist, 
-////		int32 dbidx = 0;
-//		bool visible = false;
-//		if(this.searchtext == "" || td.artist.down().contains(this.searchtext) || td.album.down().contains(this.searchtext) || td.title.down().contains(this.searchtext)) {
-//			//print("visible for %s-%s-%s    %s\n", td.artist, td.album, td.title, this.searchtext);
-//			visible = true;
-////			this.set(album_iter, Column.VISIBLE, visible);
-////			if(this.iter_parent(out iter_artist, album_iter))
-////				this.set(iter_artist, Column.VISIBLE, visible);
-//		}
-//		if(this.iter_n_children(album_iter) == 0) {
-////			Item? item = ItemHandlerManager.create_item(td.uri);
-////			item.db_id = td.db_id;
-//			this.append(out title_iter, album_iter);
-//			this.set(title_iter,
-//			         Column.ICON, title_pixb,
-//			         Column.VIS_TEXT, td.title,
-//			         Column.ITEM, td.item
-//			         );
-//			this.remove(org_iter);
-//			return;
-//		}
-//		for(int i = 0; i < this.iter_n_children(album_iter); i++) {
-//			this.iter_nth_child(out title_iter, album_iter, i);
-//			TreeIter parent_of_org_iter;
-//			this.iter_parent(out parent_of_org_iter, org_iter);
-////			this.get(title_iter,  Column.TRACKNUMBER, out tr_no, Column.DB_ID, out dbidx);
-////			if(dbidx == td.db_id && parent_of_org_iter != album_iter) {
-////				this.remove(org_iter);
-////				return; // track is already in target pos 
-////			}
-////			else if(dbidx == td.db_id && parent_of_org_iter == album_iter) {
-////				return; // track is already there 
-////			}
-//			if(tr_no != 0 && tr_no == (int)td.tracknumber) { // tr_no has to be != 0 to be used to sort
-//				this.remove(org_iter);
-//				return; // track is already there 
-//			}
-//			if(tr_no > (int)td.tracknumber) {
-//				TreeIter new_title_iter;
-//				visible = false;
-//				if(this.searchtext == "" || td.artist.down().contains(this.searchtext) || td.album.down().contains(this.searchtext) || td.title.down().contains(this.searchtext)) {
-//					//print("visible for %s-%s-%s    %s\n", td.artist, td.album, td.title, this.searchtext);
-//					visible = true;
-////					this.set(album_iter, Column.VISIBLE, visible);
-////					if(this.iter_parent(out iter_artist, album_iter))
-////						this.set(iter_artist, Column.VISIBLE, visible);
-//				}
-////				Item? item = ItemHandlerManager.create_item(td.uri);
-////				item.db_id = td.db_id;
-//				this.insert_before(out new_title_iter, album_iter, title_iter);
-//				this.set(new_title_iter,
-//				         Column.ICON, title_pixb,
-//				         Column.VIS_TEXT, td.title,
-//				         Column.ITEM, td.item
-//				         );
-//				title_iter = new_title_iter;
-//				this.remove(org_iter);
-//				return;
-//			}	
-//		}
-//		visible = false;
-//		if(this.searchtext == "" || td.artist.down().contains(this.searchtext) || td.album.down().contains(this.searchtext) || td.title.down().contains(this.searchtext)) {
-//			//print("visible for %s-%s-%s    %s\n", td.artist, td.album, td.title, this.searchtext);
-//			visible = true;
-////			this.set(album_iter, Column.VISIBLE, visible);
-////			if(this.iter_parent(out iter_artist, album_iter))
-////				this.set(iter_artist, Column.VISIBLE, visible);
-//		}
-////		Item? item = ItemHandlerManager.create_item(td.uri);
-////		item.db_id = td.db_id;
-//		this.append(out title_iter, album_iter);
-//		this.set(title_iter,
-//		         Column.ICON, title_pixb,
-//		         Column.VIS_TEXT, td.title,
-//		         Column.ITEM, td.item
-//		         );
-//		this.remove(org_iter);
-//		return;
-//	}
-
 	// used to move an artist iter after editing the tag
 	public void move_artist_iter_sorted(ref TreeIter org_iter, string name) {
 		TreeIter artist_iter;
@@ -577,8 +453,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		for(int i = 0; i < this.iter_n_children(null); i++) {
 			this.iter_nth_child(out artist_iter, null, i);
 			this.get(artist_iter, Column.VIS_TEXT, out text);
-//			if(ct != CollectionType.HIERARCHICAL)
-//				continue;
 			text = text != null ? text.down().strip() : "";
 			if(strcmp(text, name != null ? name.down().strip() : "") == 0 && org_iter != artist_iter) {
 				//found artist TODO: recoursive move org_iter content to artist_iter
@@ -601,8 +475,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
 			this.iter_nth_child(out album_iter, artist_iter, i);
 			this.get(album_iter, Column.VIS_TEXT, out text);
-//			if(ct != CollectionType.HIERARCHICAL)
-//				continue;
 			text = text != null ? text.down().strip() : "";
 			if(strcmp(text, name != null ? name.down().strip() : "") == 0 && org_iter != album_iter) {
 				//found album TODO: recoursive move org_iter content to album_iter
@@ -616,223 +488,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				this.move_after(ref org_iter, album_iter);
 		}
 	}
-
-//	private void handle_iter_for_artist(ref TrackData td, out TreeIter artist_iter) {
-//		string text = null;
-//		TreeIter iter_search;
-//		if(this.iter_n_children(null) == 0) {
-//			Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, td.dat1);
-//			this.append(out artist_iter, null);
-//			this.set(artist_iter,
-//			         Column.ICON, artist_pixb,
-//			         Column.VIS_TEXT, td.artist,
-//			         Column.ITEM, item
-//			         );
-//			Item? loader_item = Item(ItemType.LOADER);
-//			this.append(out iter_search, artist_iter);
-//			this.set(iter_search,
-//			         Column.ICON, loading_pixb,
-//			         Column.VIS_TEXT, LOADING,
-//			         Column.ITEM, loader_item
-//			         );
-//			return;
-//		}
-//		for(int i = 0; i < this.iter_n_children(null); i++) {
-//			this.iter_nth_child(out artist_iter, null, i);
-//			this.get(artist_iter, Column.VIS_TEXT, out text);
-////			if(ct != CollectionType.HIERARCHICAL)
-////				continue;
-//			text = text != null ? text.down().strip() : "";
-//			if(strcmp(text, td.artist != null ? td.artist.down().strip() : "") == 0) {
-//				//found artist
-//				return;
-//			}
-//			if(strcmp(text, td.artist != null ? td.artist.down().strip() : "") > 0) {
-//				TreeIter new_artist_iter;
-//				Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, td.dat1);
-//				this.insert_before(out new_artist_iter, null, artist_iter);
-//				this.set(new_artist_iter,
-//				         Column.ICON, artist_pixb,
-//				         Column.VIS_TEXT, td.artist,
-//				         Column.ITEM, item
-//				         );
-//				artist_iter = new_artist_iter;
-//				Item? loader_item = Item(ItemType.LOADER);
-//				this.append(out iter_search, artist_iter);
-//				this.set(iter_search,
-//					     Column.ICON, loading_pixb,
-//					     Column.VIS_TEXT, LOADING,
-//					     Column.ITEM, loader_item
-//					     );
-//				return;
-//			}
-//		}
-//		Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, td.dat1);
-//		this.append(out artist_iter, null);
-//		this.set(artist_iter,
-//		         Column.ICON, artist_pixb,
-//		         Column.VIS_TEXT, td.artist,
-//		         Column.ITEM, item
-//		         );
-//		Item? loader_item = Item(ItemType.LOADER);
-//		this.append(out iter_search, artist_iter);
-//		this.set(iter_search,
-//		         Column.ICON, loading_pixb,
-//		         Column.VIS_TEXT, LOADING,
-//		         Column.ITEM, loader_item
-//		         );
-//		return;
-//	}
-	
-//	private void handle_iter_for_album(ref TrackData td, ref TreeIter artist_iter, out TreeIter album_iter) {
-//		string text = null;
-//		//print("--%s\n", td.title);
-//		bool visible = false;
-//		if(this.searchtext == "" || td.artist.down().contains(this.searchtext) || td.album.down().contains(this.searchtext) || td.title.down().contains(this.searchtext)) {
-//			visible = true;
-//		}
-//		if(!visible)
-//			return;
-//		File? albumimage_file = get_albumimage_for_artistalbum(td.artist, td.album, null);
-//		Gdk.Pixbuf albumimage = null;
-//		if(albumimage_file != null) {
-//			if(albumimage_file.query_exists(null)) {
-//				try {
-//					albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
-//				}
-//				catch(Error e) {
-//					albumimage = null;
-//				}
-//			}
-//		}
-//		if(this.iter_n_children(artist_iter) == 0) {
-//			Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, td.dat2);
-//			this.append(out album_iter, artist_iter);
-//			this.set(album_iter,
-//			         Column.ICON, (albumimage != null ? albumimage : album_pixb),
-//			         Column.VIS_TEXT, td.album,
-//			         Column.ITEM, item
-//			         );
-//			return;
-//		}
-//		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
-//			this.iter_nth_child(out album_iter, artist_iter, i);
-//			this.get(album_iter, Column.VIS_TEXT, out text);
-//			text = text != null ? text.down().strip() : "";
-//			if(strcmp(text, td.album.down().strip()) == 0) {
-//				//found album
-//				return;
-//			}
-//			if(strcmp(text, td.album.down().strip()) > 0) {
-//				TreeIter new_album_iter;
-//				Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, td.dat2);
-//				this.insert_before(out new_album_iter, artist_iter, album_iter);
-//				this.set(new_album_iter,
-//				         Column.ICON, (albumimage != null ? albumimage : album_pixb),
-//				         Column.VIS_TEXT, td.album,
-//				         Column.ITEM, item
-//				         );
-//				album_iter = new_album_iter;
-//				return;
-//			}
-//		
-//		}
-//		Item? item = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, td.dat2);
-//		this.append(out album_iter, artist_iter);
-//		this.set(album_iter,
-//		         Column.ICON, (albumimage != null ? albumimage : album_pixb),
-//		         Column.VIS_TEXT, td.album,
-//		         Column.ITEM, item
-//		         );
-//		return;
-//	}
-	
-//	private void handle_iter_for_title(ref TrackData td, ref TreeIter album_iter) {
-//		TreeIter title_iter;
-//		int tr_no = 0;
-//		int32 dbidx = 0;
-//		TreeIter iter_artist;
-//		bool visible = false;
-//		if(this.searchtext == "" || td.artist.down().contains(this.searchtext) || td.album.down().contains(this.searchtext) || td.title.down().contains(this.searchtext)) {
-//			visible = true;
-//		}
-//		if(!visible)
-//			return;
-//		
-//		if(this.iter_n_children(album_iter) == 0) {
-//			//print("td.db_id : %d\n", td.db_id);ha
-//			if(this.iter_parent(out iter_artist, album_iter))
-//				remove_loader_child(ref iter_artist);
-
-//			Item? item = ItemHandlerManager.create_item(td.uri);
-//			item.db_id = td.db_id;
-//			this.append(out title_iter, album_iter);
-//			this.set(title_iter,
-//			         Column.ICON, title_pixb,
-//			         Column.VIS_TEXT, td.title,
-////			         Column.DB_ID, td.db_id,
-////			         Column.MEDIATYPE , ItemType.LOCAL_AUDIO_TRACK,
-////			         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-////			         Column.DRAW_SEPTR, 0,
-////			         Column.TRACKNUMBER, td.tracknumber,
-//			         Column.ITEM, item
-//			         );
-//			return;
-//		}
-//		for(int i = 0; i < this.iter_n_children(album_iter); i++) {
-//			this.iter_nth_child(out title_iter, album_iter, i);
-//			this.get(title_iter, 
-////			         Column.TRACKNUMBER, out tr_no,
-//			         Column.DB_ID, out dbidx);
-//			if(dbidx == td.db_id)
-//				return; // track is already there 
-//			if(tr_no != 0 && tr_no == (int)td.tracknumber) // tr_no has to be != 0 to be used to sort
-//				return; // track is already there 
-//			
-//			if(tr_no > (int)td.tracknumber) {
-//				TreeIter new_title_iter;
-//				if(this.iter_parent(out iter_artist, album_iter))
-//					remove_loader_child(ref iter_artist);
-//				Item? item = ItemHandlerManager.create_item(td.uri);
-//				item.db_id = td.db_id;
-//				this.insert_before(out new_title_iter, album_iter, title_iter);
-//				this.set(new_title_iter,
-//				         Column.ICON, title_pixb,
-//				         Column.VIS_TEXT, td.title,
-////				         Column.DB_ID, td.db_id,
-////				         Column.MEDIATYPE , ItemType.LOCAL_AUDIO_TRACK,
-////				         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-////				         Column.DRAW_SEPTR, 0,
-////				         Column.TRACKNUMBER, td.tracknumber,
-//				         Column.ITEM, item
-//				         );
-//				title_iter = new_title_iter;
-//				return;
-//			}
-//		}
-//		visible = false;
-//		if(this.searchtext == "" || td.artist.down().contains(this.searchtext) || td.album.down().contains(this.searchtext) || td.title.down().contains(this.searchtext)) {
-//			visible = true;
-//		}
-//		if(this.iter_parent(out iter_artist, album_iter))
-//			remove_loader_child(ref iter_artist);
-//		if(visible == false)
-//			return;
-//		Item? item = ItemHandlerManager.create_item(td.uri);
-//		item.db_id = td.db_id;
-//		this.append(out title_iter, album_iter);
-//		this.set(title_iter,
-//		         Column.ICON, title_pixb,
-//		         Column.VIS_TEXT, td.title,
-////		         Column.DB_ID, td.db_id,
-////		         Column.MEDIATYPE , ItemType.LOCAL_AUDIO_TRACK,
-////		         Column.COLL_TYPE, CollectionType.HIERARCHICAL,
-////		         Column.DRAW_SEPTR, 0,
-////		         Column.TRACKNUMBER, td.tracknumber,
-//		         Column.ITEM, item
-//		         );
-//		return;
-//	}
 	
 	public void cancel_fill_model() {
 		if(populate_model_cancellable == null)
@@ -895,10 +550,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					if(job.cancellable.is_cancelled())
 						break;
 					bool visible = false;
-					if(this.searchtext == "" || td.name.down().contains(this.searchtext)) {
-						visible = true;
-//						this.set(iter_radios, Column.VISIBLE, visible);
-					}
 					this.prepend(out iter_singleradios, iter_radios);
 					this.set(iter_singleradios,
 					         Column.ICON,        radios_pixb,

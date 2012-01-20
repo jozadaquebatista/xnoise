@@ -58,10 +58,6 @@ public class Xnoise.PluginManagerTree: Gtk.TreeView {
 		this.create_view();
 	}
 
-//	~PluginManagerTree() {
-//		print("destruct PluginGuiElement\n");
-//	}
-
 	public static void text_cell_cb(CellLayout cell_layout, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
 		string val;
 		string markup_string;

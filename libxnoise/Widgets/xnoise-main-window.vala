@@ -292,25 +292,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			if(!this.fullscreenwindowvisible)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 		});
-		
-		this.check_resize.connect(on_resized);
-		
 	}
 	
 	private void buffer_position() {
 		this.get_position(out _posX, out _posY);
-	}
-	
-	private void on_resized() {
-//	print("on_resized\n");
-//		if(this.get_window() == null)
-//			return;
-//		int w, x;
-//		this.get_size(out w, out x);
-//		if(w != window_width) {
-//			this.trackList.handle_resize();
-//			window_width = w;
-//		}
 	}
 	
 	private void initialize_video_screen() {
@@ -1237,17 +1222,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
-	private void on_hpaned_position_changed() {
-//		hpaned_resized = true;
-//		if(this.hpaned.position == 0)
-//			media_browser_visible = false;
-//		else
-//			media_browser_visible = true;
+	//	private void on_hpaned_position_changed() {
+	//		hpaned_resized = true;
+	//		if(this.hpaned.position == 0)
+	//			media_browser_visible = false;
+	//		else
+	//			media_browser_visible = true;
 			
-//		if(this.get_window() != null) {
-//			this.trackList.handle_resize();
-//		}
-	}
+	//		if(this.get_window() != null) {
+	//			this.trackList.handle_resize();
+	//		}
+	//	}
 	
 	/* disables (or enables) the AddRemoveAction and the RescanLibraryAction in the menus if
 	   music is (not anymore) being imported */ 
@@ -1409,9 +1394,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
 			hpaned.remove(mbbox01);
 			this.hpaned.pack1(mbbox01, false, false);
-			this.hpaned.notify["position"].connect(on_hpaned_position_changed);
-//			this.hpaned.button_press_event.connect(on_hpaned_button_event);
-//			this.hpaned.button_release_event.connect(on_hpaned_button_event);
+			//this.hpaned.notify["position"].connect(on_hpaned_position_changed);
 			//----------------
 
 			//VOLUME SLIDE BUTTON

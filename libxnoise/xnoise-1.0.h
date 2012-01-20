@@ -1802,9 +1802,6 @@ typedef gboolean (*XnoiseWorkerWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
 struct _XnoiseWorkerJob {
 	GObject parent_instance;
 	XnoiseWorkerJobPrivate * priv;
-	GValue* value_arg1;
-	GValue* value_arg2;
-	void* p_arg;
 	XnoiseItem* item;
 	XnoiseItem* items;
 	gint items_length1;
@@ -1814,8 +1811,6 @@ struct _XnoiseWorkerJob {
 	gint dnd_data_length1;
 	GtkTreeRowReference** treerowrefs;
 	gint treerowrefs_length1;
-	gint32* id_array;
-	gint id_array_length1;
 	gint counter[4];
 	gint32 big_counter[4];
 	XnoiseWorkerWorkFunc func;
@@ -1969,7 +1964,6 @@ XnoiseDatabaseDbWriter* xnoise_database_db_writer_construct (GType object_type, 
 GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
 void xnoise_database_db_writer_register_change_callback (XnoiseDatabaseDbWriter* self, XnoiseMediaBrowserModel* mbm, XnoiseDatabaseDbWriterChangeNotificationCallback cb, void* cb_target);
 gchar* xnoise_database_db_writer_get_uri_for_item_id (XnoiseDatabaseDbWriter* self, gint32 id);
-gboolean xnoise_database_db_writer_set_local_image_for_album (XnoiseDatabaseDbWriter* self, gchar** artist, gchar** album, const gchar* image_path);
 gchar** xnoise_database_db_writer_get_media_folders (XnoiseDatabaseDbWriter* self, int* result_length1);
 gboolean xnoise_database_db_writer_get_trackdata_for_stream (XnoiseDatabaseDbWriter* self, const gchar* uri, XnoiseTrackData** val);
 gint xnoise_database_db_writer_get_track_id_for_uri (XnoiseDatabaseDbWriter* self, const gchar* uri);
@@ -2486,7 +2480,6 @@ GType xnoise_text_column_get_type (void) G_GNUC_CONST;
 GType xnoise_track_list_model_column_get_type (void) G_GNUC_CONST;
 XnoiseTextColumn* xnoise_text_column_new (const gchar* title, GtkCellRendererText* renderer, XnoiseTrackListModelColumn col_id);
 XnoiseTextColumn* xnoise_text_column_construct (GType object_type, const gchar* title, GtkCellRendererText* renderer, XnoiseTrackListModelColumn col_id);
-void xnoise_text_column_adjust_width (XnoiseTextColumn* self, gint width);
 XnoiseTrackListModelColumn xnoise_text_column_get_id (XnoiseTextColumn* self);
 GType xnoise_track_list_get_type (void) G_GNUC_CONST;
 GType xnoise_track_list_model_get_type (void) G_GNUC_CONST;

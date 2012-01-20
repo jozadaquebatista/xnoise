@@ -191,7 +191,10 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	
 	private void init_video_screen() {
 		this.set_double_buffered(false);
-		this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK |Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
+		this.set_events(Gdk.EventMask.BUTTON_PRESS_MASK |
+		                Gdk.EventMask.BUTTON_RELEASE_MASK |
+		                Gdk.EventMask.POINTER_MOTION_MASK |
+		                Gdk.EventMask.ENTER_NOTIFY_MASK);
 		try {
 			logo_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_bruit.svg");
 		}

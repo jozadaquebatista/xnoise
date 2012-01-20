@@ -87,7 +87,6 @@ namespace Xnoise {
 			public string? get_uri_for_item_id (int32 id);
 			public bool insert_title (ref Xnoise.TrackData td);
 			public void register_change_callback (Xnoise.MediaBrowserModel mbm, Xnoise.Database.DbWriter.ChangeNotificationCallback cb);
-			public bool set_local_image_for_album (ref string artist, ref string album, string image_path);
 			public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
 			public int uri_entry_exists (string uri);
 			public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
@@ -858,9 +857,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TextColumn : Xnoise.TrackListColumn {
 		public TextColumn (string title, Gtk.CellRendererText renderer, Xnoise.TrackListModel.Column col_id);
-		public void adjust_width (int width);
 		public Xnoise.TrackListModel.Column id { get; }
-		public signal void resized (bool grow, int delta, Xnoise.TrackListModel.Column source_id);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackData {
@@ -995,14 +992,10 @@ namespace Xnoise {
 			public int[] counter;
 			public Xnoise.DndData[] dnd_data;
 			public weak Xnoise.Worker.WorkFunc? func;
-			public int32[] id_array;
 			public Xnoise.Item? item;
 			public Xnoise.Item[] items;
-			public void* p_arg;
 			public Xnoise.TrackData[] track_dat;
 			public Gtk.TreeRowReference[] treerowrefs;
-			public GLib.Value? value_arg1;
-			public GLib.Value? value_arg2;
 			public Job (Xnoise.Worker.ExecutionType execution_type = ExecutionType.UNKNOWN, Xnoise.Worker.WorkFunc? func = null, uint _timer_seconds = 0);
 			public GLib.Value? get_arg (string name);
 			public void set_arg (string? name, GLib.Value? val);

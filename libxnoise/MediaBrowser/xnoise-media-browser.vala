@@ -36,7 +36,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	private bool dragging;
 	private bool _use_treelines = false;
 	private CellRendererText renderer = null;
-//	private List<TreePath> expansion_list = null;
 	private Gtk.Menu menu;
 	
 	public MediaBrowserModel mediabrowsermodel;
@@ -138,7 +137,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	// with GLib.Idle
 	private bool populate_model() {
 		bool res = mediabrowsermodel.populate_model();
-		//this.set_model(mediabrowsermodel);//mediabrowsermodel);
 		return res;
 	}
 
@@ -239,12 +237,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				}
 			}
 			case 3: {
-//				MediaBrowserModel.CollectionType ct = MediaBrowserModel.CollectionType.UNKNOWN;
 				TreeIter iter;
 				this.mediabrowsermodel.get_iter(out iter, treepath);
-//				this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.COLL_TYPE, ref ct);
-//				if(ct != MediaBrowserModel.CollectionType.HIERARCHICAL)
-//					return false;
 				if(!selection.path_is_selected(treepath)) {
 					selection.unselect_all();
 					selection.select_path(treepath);
@@ -401,12 +395,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 
 	public bool change_model_data() {
-		//set_model(null);
 		mediabrowsermodel.filter();
-//		mediabrowsermodel.populate_model();
-//		update_view();
-		
-//		this.set_sensitive(true);
 		return false;
 	}
 	
@@ -415,9 +404,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	   expanded rows are kept as well as the scrollbar position */
 	public bool update_view() {
 		double scroll_position = main_window.mediaBrScrollWin.vadjustment.value;
-//print("scroll_position: %.3lf\n", scroll_position);
-//		this.row_collapsed.disconnect(on_row_collapsed);
-//		this.row_expanded.disconnect(on_row_expanded);
 		in_update_view = true;
 		this.set_model(null);
 		this.set_model(mediabrowsermodel);
@@ -425,14 +411,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			in_update_view = false;
 			return false;
 		});
-		
-		//TODO: delete the expanion list after import
-//		foreach(TreePath tp in this.expansion_list)
-//			this.expand_row(tp, false);
 		main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);
 		main_window.mediaBrScrollWin.vadjustment.value_changed();
-//		this.row_collapsed.connect(on_row_collapsed);
-//		this.row_expanded.connect(on_row_expanded);
 		return false;
 	}
 		

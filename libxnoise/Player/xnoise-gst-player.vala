@@ -827,7 +827,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				int64 pos, new_pos;
 				if(!playbin.query_position(ref fmt, out pos))
 					return;
-				new_pos = pos + (int64)((int64)seconds * Gst.SECOND); //(int64)1000000000
+				new_pos = pos + (int64)((int64)seconds * Gst.SECOND);
 				//print("%lli %lli %lli %lli\n", pos, new_pos, _length_time, (int64)((int64)seconds * (int64)1000000000));
 			
 				if(new_pos > _length_time) new_pos = _length_time;

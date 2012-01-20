@@ -28,7 +28,7 @@
  * 	Jörn Magens
  */
 
-public class Xnoise.PluginModule.Loader : Object { //, IParams
+public class Xnoise.PluginModule.Loader : Object {
 	public HashTable<string, Container> plugin_htable;
 	public HashTable<string, unowned Container> lyrics_plugins_htable;
 	public HashTable<string, unowned Container> image_provider_htable;
@@ -42,7 +42,6 @@ public class Xnoise.PluginModule.Loader : Object { //, IParams
 
 	public Loader() {
 		assert(Module.supported());
-//		Params.iparams_register(this);
 		this.xn = Main.instance;
 		
 		// setup banned 
@@ -153,43 +152,4 @@ public class Xnoise.PluginModule.Loader : Object { //, IParams
 		p.deactivate();
 		sign_plugin_deactivated(p);
 	}
-	
-//	private int sort_compare_func(void* a, void* b) {
-//		if((int)a < (int)b)  return -1;
-//		if((int)a == (int)b) return  0;
-//		if((int)a > (int)b)  return  1;
-//		return 0;
-//	}
-//	
-//	
-//	/// REGION IParams
-
-//	public void read_params_data() {
-//	}
-
-//	public void write_params_data() {
-//		List<int> n_list_ai = new List<int>();
-//		List<string> list_ai = image_provider_priority.get_keys();
-//		foreach(string s in list_ai)
-//			n_list_ai.insert_sorted_with_data(s.to_int(), sort_compare_func);
-//		
-//		string[] prio_array_ai = {};
-//		foreach(int i in n_list_ai)
-//			prio_array_ai += image_provider_priority.lookup(i.to_string());
-//		
-//		Params.set_string_list_value("prio_images", prio_array_ai);
-
-//		List<int> n_list_ly = new List<int>();
-//		List<string> list_ly = lyrics_plugins_priority.get_keys();
-//		foreach(string s in list_ly)
-//			n_list_ly.insert_sorted_with_data(s.to_int(), sort_compare_func);
-//		
-//		string[] prio_array_ly = {};
-//		foreach(int i in n_list_ly)
-//			prio_array_ly += lyrics_plugins_priority.lookup(i.to_string());
-//		
-//		Params.set_string_list_value("prio_lyrics", prio_array_ly);
-//	}
-
-	/// END REGION IParams
 }

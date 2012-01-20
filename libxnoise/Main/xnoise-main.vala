@@ -110,23 +110,9 @@ public class Xnoise.Main : GLib.Object {
 	public void add_track_to_gst_player(string uri) {
 		print("xnoise-main.vala - FIXME: Implement playlist support");
 		print("add_track_to_gst_player %s\n",uri);
-
+		
 		global.current_uri = uri;
 		global.player_state = PlayerState.PLAYING;
-
-		/*
-		string last_uri = "";//main_window.trackList.add_uri(uri);
-
-		if(last_uri != null) {
-			try {
-				print("Uri: %s\n",last_uri);
-				//global.current_uri = last_uri;
-				//global.player_state = PlayerState.PLAYING;
-			} catch(Error e) {
-				print("%s\n",e.message);
-			}
-		}
-		*/
 	}
 
 	public static Main instance {
@@ -159,8 +145,6 @@ public class Xnoise.Main : GLib.Object {
 		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_final_tracks_to_db_job);
 		job.items = main_window.trackList.tracklistmodel.get_all_tracks();
 		job.finished.connect( () => {
-//			if(maxtime_quit_src != 0)
-//				Source.remove(maxtime_quit_src);
 			print("finished db saving\n");
 			preparing_quit = false;
 		});
@@ -168,7 +152,6 @@ public class Xnoise.Main : GLib.Object {
 	}
 	
 	private static bool preparing_quit = false;
-//	private uint maxtime_quit_src = 0;
 	
 	private bool quit_job(Worker.Job job) {
 		this.app.release();

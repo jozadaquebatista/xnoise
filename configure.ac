@@ -460,8 +460,9 @@ echo "
     VALAC:                         ${VALAC}
 
   Plugins included in this build: 
-    titleToDecoration:             yes (always build)
-    cyclic-save-state:             yes (always build)
+    test plugin:                   yes (always)
+    titleToDecoration:             yes (always)
+    cyclic-save-state:             yes (always)
     leoslyrics:                    ${enable_leoslyrics}
     lyricsfly:                     ${enable_lyricsfly}
     chartlyrics:                   ${enable_chartlyrics}

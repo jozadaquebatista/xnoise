@@ -401,7 +401,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		}
 		TreeIter citer;
 		this.get_iter(out citer, global.position_reference.get_path());
-//		string xuri;
 		if(ts==PlayerState.PLAYING) {
 			bolden_row();
 			pixbuf = w.render_icon(Gtk.Stock.MEDIA_PLAY, IconSize.BUTTON, null);
@@ -507,7 +506,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	public void add_uris(string[]? uris) {
-		print("FIME: xnoise-tracklist-model.vala add_uris\n"); 
+		//print("FIME: xnoise-tracklist-model.vala add_uris\n"); 
 		//FIXME: When open xnoise first time(restore last playlist) or when open a playlist using double click or open with Xnoise.
 		//Try stop and play, then error, FIXME
 		if(uris == null) return;
@@ -521,7 +520,6 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		bool first = true;
 		
 		File file;
-		//FileType filetype;
 		string mime;
 		
 		var psVideo = new PatternSpec("video*");

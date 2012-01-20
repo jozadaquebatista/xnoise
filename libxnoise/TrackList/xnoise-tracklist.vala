@@ -430,7 +430,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 			return;
 		
 		int px = 0, py = 0;
-//		win.get_pointer(out px, out py, null);
 		this.get_pointer(out px, out py); //using widget pointer instead of widget.window pointer
 		
 		if(px < 0 || py < 0) {
@@ -1020,15 +1019,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 			position = Params.get_int_value("position_" + col_name + "_column");
 		}
 		col_name = ((TrackListColumn)column).tracklist_col_name;
-		double? rel_size = Params.get_double_value("relative_size_" + col_name + "_column"); //relative_column_sizes.lookup(col_name);
-		if(column.resizable && rel_size != null) {
-//			print("rel_size::%lf\n", rel_size);
-			((TextColumn)column).adjust_width((int)((double)rel_size * (double)available_width));
-			// in the config file we count from 1 onwards, because 0 means "not set"
-			// if position is 0, it will -1, meaning it will be placed at the end
-		}
+		//double? rel_size = Params.get_double_value("relative_size_" + col_name + "_column"); //relative_column_sizes.lookup(col_name);
 		position--;
-		
 		base.insert_column(column, position);
 	}
 
@@ -1036,33 +1028,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 
 	private void setup_view() {
 		CellRendererText renderer;
-		
-//		relative_column_sizes = new HashTable<string,double?>(str_hash, str_equal);
-//		this.columns_changed.connect(() => {
-//			bool new_column = false;
-//			var columns = this.get_columns();
-//			foreach(TreeViewColumn c in columns) {
-//				if(c == null) continue;
-//				string col_name;
-//				col_name = ((TrackListColumn)c).tracklist_col_name;
-//				if(relative_column_sizes.lookup(col_name) == null && col_name != "") {
-//					if(c.resizable) {
-//						double rel_size = Params.get_double_value("relative_size_" + col_name + "_column");
-//						relative_column_sizes.insert(col_name, rel_size);
-//print("ADD %s %lf\n", col_name, rel_size);
-////						((TextColumn)c).resized.connect(on_column_resized);
-//					}
-//					new_column = true;
-//				}
-//				// connect to visibility property change
-//				// connect to resizable property change
-//				// override this class' insert_column with this code
-//			}
-//			if(new_column)
-//				n_columns++;
-//			else
-//				n_columns--;
-//		});
 		
 		// STATUS ICON
 		var pixbufRenderer = new CellRendererPixbuf();
@@ -1083,7 +1048,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		                                "text", TrackListModel.Column.TRACKNUMBER);
 		columnTracknumber.add_attribute(renderer,
 		                                "weight", TrackListModel.Column.WEIGHT);
-		columnTracknumber.adjust_width(32);
 		columnTracknumber.min_width = 32;
 		columnTracknumber.resizable = false;
 		columnTracknumber.reorderable = true;
@@ -1154,7 +1118,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnLength.add_attribute(renderer,
 		                           "weight", TrackListModel.Column.WEIGHT);
 
-		columnLength.adjust_width(75);
 		columnLength.min_width = 75;
 		columnLength.max_width = 75;
 		columnLength.resizable = false;
@@ -1286,45 +1249,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		return rightmenu;
 	}
 	
-	private int available_width {
-		get {
-//print("available_width ##1\n");
-//			if(this.get_window() == null || this.ow == null) 
-				return 600;
-//print("available_width ##2\n");
-//			int w;
-//			int scrollbar_w = 0;
-////			main_window.get_size(out w, out h);
-//			
-//			if(main_window.trackListScrollWin != null) {
-//				var scrollbar = main_window.trackListScrollWin.get_vscrollbar();
-//				if(scrollbar != null) {
-////					print("got scrollbar\n");
-//					scrollbar.visible = false;
-////					Requisition req;
-//					int w, h;
-//					scrollbar.get_size_request(out w, out h);
-////					scrollbar.get_child_requisition(out req);
-//					scrollbar_w = 0;//w; //req.width;
-//				}
-//			}
-////print("scrollbar_w: %d\n", scrollbar_w);
-//			//Value v = Value(typeof(int));
-//			//((TreeView)this).style_get_property("vertical-separator", out v);
-//			//int vertical_separator_size = v.get_int();
-//			
-//			//print("|%i|%i", w - (scrollbar_w + 
-//			//            main_window.hpaned.position + 
-//			//            n_columns * vertical_separator_size), n_columns);
-////			w = this.get_window().get_width();
-//		int paned_width = this.ow.get_allocated_width();
-//		int paned_pos = this.ow.get_position();
-//		return paned_width - paned_pos - scrollbar_w;
-//print("tlpar s r : %d\n", w);
-//			return w - (scrollbar_w + (int)this.parent.get_border_width());
-		}
-	}
-	
 	public void write_params_data() {
 		var columns = this.get_columns();
 		int counter = 0;
@@ -1336,13 +1260,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			string col_name;
 			col_name = ((TrackListColumn)c).tracklist_col_name;
 			Params.set_int_value("position_" + col_name + "_column", counter);
-			
-//			// write relative column sizes
-//			if(!c.resizable) continue;
-//			double? relative_size = relative_column_sizes.lookup(col_name);
-//			if(relative_size == null) continue;
-//			Params.set_double_value("relative_size_" + col_name + "_column", (double)relative_size);
-		} 
+		}
 	}
 	
 	public void read_params_data() {
