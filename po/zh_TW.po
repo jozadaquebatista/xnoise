@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-17 22:05+0100\n"
+"POT-Creation-Date: 2012-01-20 15:53+0100\n"
 "PO-Revision-Date: 2011-05-05 10:09+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -85,29 +85,29 @@ msgstr ""
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:131
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1135
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1241
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1099
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1204
 #, fuzzy
 msgid "Artist"
 msgstr "Artist:"
 
 #. ALBUM
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1117
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1250
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1081
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1213
 #, fuzzy
 msgid "Album"
 msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:137
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1099
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1063
 msgid "Title"
 msgstr ""
 
 #. GENRE
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:140
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1171
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1259
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1134
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1222
 msgid "Genre"
 msgstr ""
 
@@ -117,14 +117,14 @@ msgstr ""
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1190
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1268
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1153
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1231
 msgid "Year"
 msgstr ""
 
 #. TRACKNUMBER
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1232
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1195
 msgid "Tracknumber"
 msgstr ""
 
@@ -188,7 +188,7 @@ msgstr ""
 "\n"
 "使用 %3$s…"
 
-#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:1051
+#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:702
 msgid "Loading ..."
 msgstr ""
 
@@ -277,8 +277,8 @@ msgid "Media browser fontsize:"
 msgstr ""
 
 #. LENGTH
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1151
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1277
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1115
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1240
 msgid "Length"
 msgstr ""
 
@@ -317,36 +317,36 @@ msgid "ready to rock"
 msgstr "準備開始搖滾"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:214
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1152
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1219
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:355
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1137
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1204
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:358
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 msgid "unknown album"
 msgstr "不明專輯"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:216
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1150
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1217
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:357
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1135
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1202
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:360
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 msgid "unknown artist"
 msgstr "不明演出者"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:218
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1148
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1215
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:359
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1133
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1200
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:362
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:153
 #, c-format
 msgid "unknown title"
 msgstr "不明標題"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1126
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1149
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1191
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1216
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:367
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1111
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1134
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1176
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1201
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:370
 #: ../plugins/notifications2/xnoise-notifications.vala:185
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:131
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:154
@@ -355,11 +355,11 @@ msgid "by"
 msgstr "由"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1128
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1151
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1193
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1218
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:369
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1113
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1136
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1178
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1203
+#: ../libxnoise/Widgets/xnoise-videoscreen.vala:372
 #: ../plugins/notifications2/xnoise-notifications.vala:187
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:133
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:156
@@ -372,13 +372,13 @@ msgstr "於"
 msgid "Importing media data. This may take some time..."
 msgstr "匯入媒體資料。這也許會花一點時間…"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:224
+#: ../libxnoise/Utils/xnoise-media-importer.vala:153
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr ""
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:411
-#: ../libxnoise/Utils/xnoise-media-importer.vala:448
+#: ../libxnoise/Utils/xnoise-media-importer.vala:338
+#: ../libxnoise/Utils/xnoise-media-importer.vala:375
 #, c-format
 msgid "%u tracks found"
 msgstr ""
@@ -535,72 +535,72 @@ msgstr "求助(_H)"
 msgid "_Config"
 msgstr "組配(_C)"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:385
+#: ../libxnoise/Widgets/xnoise-main-window.vala:370
 #, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
 "startup of xnoise slower."
 msgstr ""
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:443
+#: ../libxnoise/Widgets/xnoise-main-window.vala:428
 msgid "Add media"
 msgstr "加入媒體"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:446
+#: ../libxnoise/Widgets/xnoise-main-window.vala:431
 msgid ""
 "You started xnoise for the first time. Do you want to import media into the "
 "library?"
 msgstr "您是首次啟動 xnoise，要將媒體匯入媒體庫嗎？"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:542
+#: ../libxnoise/Widgets/xnoise-main-window.vala:527
 msgid "no repeat"
 msgstr "不重複"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:548
+#: ../libxnoise/Widgets/xnoise-main-window.vala:533
 msgid "repeat single"
 msgstr "重複單曲"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:554
+#: ../libxnoise/Widgets/xnoise-main-window.vala:539
 msgid "repeat all"
 msgstr "重複所有"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:560
+#: ../libxnoise/Widgets/xnoise-main-window.vala:545
 msgid "random play"
 msgstr "隨機播放"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1047
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1032
 msgid "Enter the URL of the file to open"
 msgstr "輸入要開啟的檔案網址"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1062
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1047
 msgid "Select media file"
 msgstr "選取媒體檔案"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1201
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1186
 msgid "unknown organization"
 msgstr "不明組織"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1203
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1188
 msgid "unknown location"
 msgstr "不明位置"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1299
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1284
 msgid "Remove all"
 msgstr "全部移除"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1304
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1289
 msgid "Remove selected titles"
 msgstr "移除已選標題"
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1309
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1294
 msgid "Jump to current position"
 msgstr ""
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1467
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1450
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1573
+#: ../libxnoise/Widgets/xnoise-main-window.vala:1556
 msgid "Show application main menu"
 msgstr ""
 
