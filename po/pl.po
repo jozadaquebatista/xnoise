@@ -7,42 +7,44 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-17 22:05+0100\n"
-"PO-Revision-Date: 2011-11-24 13:30+0100\n"
+"POT-Creation-Date: 2012-01-20 12:45+0100\n"
+"PO-Revision-Date: 2012-01-20 12:48+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: ../data/misc/xnoise.desktop.in.in.h:1
-msgid "Media Player"
-msgstr "Odtwarzacz multimedialny"
-
-#: ../data/misc/xnoise.desktop.in.in.h:2
-msgid "Organize and play your music and video collections"
-msgstr "Organizuj i odtwarzaj swoją kolekcję muzyki i filmów"
-
-#: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Xnoise"
 msgstr "Xnoise"
 
-#: ../libxnoise/Application/xnoise-application.vala:91 ../src/xnoise.vala:61
+#: ../data/misc/xnoise.desktop.in.in.h:2
+msgid "Media Player"
+msgstr "Odtwarzacz multimedialny"
+
+#: ../data/misc/xnoise.desktop.in.in.h:3
+msgid "Organize and play your music and video collections"
+msgstr "Organizuj i odtwarzaj swoją kolekcję muzyki i filmów"
+
+#: ../libxnoise/Application/xnoise-application.vala:91
+#: ../src/xnoise.vala:61
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise jest odtwarzaczem dla Gtk+."
 
-#: ../libxnoise/Application/xnoise-application.vala:92 ../src/xnoise.vala:62
+#: ../libxnoise/Application/xnoise-application.vala:92
+#: ../src/xnoise.vala:62
 msgid "It uses the gstreamer framework."
 msgstr "Używa gstreamera."
 
-#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
+#: ../libxnoise/Application/xnoise-application.vala:93
+#: ../src/xnoise.vala:63
 msgid "More information on the project website:"
 msgstr "Więcej informacji na stronie projektu:"
 
@@ -73,16 +75,12 @@ msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:183
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Czekaj na zapełnienie przeglądarki mediów lub anuluj, gdy nie chcesz czekać."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Czekaj na zapełnienie przeglądarki mediów lub anuluj, gdy nie chcesz czekać."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:170
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:187
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "Czekaj na zaimportowanie mediów lub anuluj, gdy nie chcesz czekać."
 
 #. ARTIST
@@ -191,8 +189,7 @@ msgid "Loading ..."
 msgstr "Ładowanie ..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:194
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "Brak pliku napisów pasującego do nazwy filmu! Bez użycia napisów."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:489
@@ -528,21 +525,15 @@ msgstr "_Ustawienia"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:385
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"Przywracanie %u utworów na liście plików. Duża ilość może spowolnić start "
-"xnoise"
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "Przywracanie %u utworów na liście plików. Duża ilość może spowolnić start xnoise"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:443
 msgid "Add media"
 msgstr "Dodaj media"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:446
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
 msgstr "Pierwsze uruchomienie xnoise. Chcesz dodać multimedia do biblioteki?"
 
 #: ../libxnoise/Widgets/xnoise-main-window.vala:542
@@ -602,9 +593,8 @@ msgid "Select external subtitle file"
 msgstr "Wybierz zewnętrzny plik napisów"
 
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:78
-#, fuzzy
 msgid "No Subtitle"
-msgstr "Napisy #"
+msgstr "Brak napisów"
 
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:136
 msgid "Leave Fullscreen"
@@ -615,8 +605,7 @@ msgid "Fullscreen"
 msgstr "Tryb pełnoekranowy"
 
 #: ../src/xnoise.vala:72
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr "Uruchom 'xnoise --help' by zobaczyć pełną listę dostępnych poleceń.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
@@ -654,7 +643,7 @@ msgstr "Hasło:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:464
 msgid "Scrobble played tracks on lastfm"
-msgstr ""
+msgstr "Scrobbluj odtwarzane utwory na lastfm"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:482
 msgid "Apply"
