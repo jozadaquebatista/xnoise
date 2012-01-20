@@ -72,9 +72,9 @@ namespace Xnoise {
 		string artist = _artist;
 		string tmp = "";
 		if(album_name == null)
-			return tmp;
+			return (owned)tmp;
 		if(artist == null)
-			return tmp;
+			return (owned)tmp;
 		
 		tmp = check_album_name(artist, album_name);
 		
@@ -95,14 +95,14 @@ namespace Xnoise {
 				tmp = tmp + s;
 			}
 		}
-		return tmp;
+		return (owned)tmp;
 	}
 	
 	public static string escape_for_local_folder_search(string? value) {
 		// transform the name to match the naming scheme
 		string tmp = "";
 		if(value == null)
-			return tmp;
+			return (owned)tmp;
 		
 		try {
 			var r = new GLib.Regex("\n");
@@ -121,7 +121,7 @@ namespace Xnoise {
 				tmp = tmp + s;
 			}
 		}
-		return tmp;
+		return (owned)tmp;
 	}
 
 	private static string check_album_name(string? artistname, string? albumname) {
@@ -149,13 +149,13 @@ namespace Xnoise {
 		};
 		foreach(string selfs in self_a) {
 			if(_albumname == selfs) 
-				return _artistname;
+				return (owned)_artistname;
 			foreach(string media in media_a) {
 				if(_albumname == (selfs + " " + media)) 
-					return _artistname;
+					return (owned)_artistname;
 			}
 		}
-		return _albumname;
+		return (owned)_albumname;
 	}
 
 	public class AlbumImageLoader : GLib.Object {

@@ -64,8 +64,13 @@ namespace Lastfm {
 				assert(sender == this.parent_session);
 				this.username = un;
 			});
+			//print("constr track\n");
 		}
-
+		
+		//~Track() {
+		//	print("track dtor\n");
+		//}
+		
 		public bool love() {
 			if(!parent_session.logged_in) {
 				print("not logged in!\n");
@@ -87,7 +92,7 @@ namespace Lastfm {
 			int id = parent_session.web.post_data(turl);
 			var rhc = new ResponseHandlerContainer(this.love_cb, id);
 			parent_session.handlers.insert(id, rhc);
-			return true;			
+			return true;
 		}
 
 		private void love_cb(int id, string response) {
@@ -217,8 +222,11 @@ namespace Lastfm {
 			mr.read();
 			
 			if(!check_response_status_ok(ref mr.root)) {
+				string ar = this.artist_name;
+				string al = this.album_name;
+				string ti = this.title_name;
 				Idle.add( () => {
-					scrobbled(this.artist_name, this.album_name, this.title_name, false);
+					scrobbled(ar, al, ti, false);
 					return false;
 				});
 			}
@@ -226,14 +234,20 @@ namespace Lastfm {
 			var n = mr.root.get_child_by_name("lfm").get_child_by_name("scrobbles");
 			
 			if(n.attributes["accepted"] == "1") {
+				string ar = this.artist_name;
+				string al = this.album_name;
+				string ti = this.title_name;
 				Idle.add( () => {
-					scrobbled(this.artist_name, this.album_name, this.title_name, true);
+					scrobbled(ar, al, ti, true);
 					return false;
 				});
 			}
 			else {
+				string ar = this.artist_name;
+				string al = this.album_name;
+				string ti = this.title_name;
 				Idle.add( () => {
-					scrobbled(this.artist_name, this.album_name, this.title_name, false);
+					scrobbled(ar, al, ti, false);
 					return false;
 				});
 			}
