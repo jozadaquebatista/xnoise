@@ -501,8 +501,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		this.set_size_request(300, 500);
 		
 		fontsizeMB = Params.get_int_value("fontsizeMB");
-		Style style = Widget.get_default_style();
-		font_description = style.font_desc.copy(); // TODO: Add update mechanism
+		Gtk.StyleContext context = this.get_style_context();
+		font_description = context.get_font(StateFlags.NORMAL).copy();
 		font_description.set_size((int)(fontsizeMB * Pango.SCALE));
 		
 		renderer = new FlowingTextRenderer(this.ow, font_description);
