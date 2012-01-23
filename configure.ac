@@ -1,4 +1,4 @@
-AC_PREREQ([2.67])
+AC_PREREQ([2.68])
 
 #xnoise version
 m4_define(xnoise_major_version, 0)
@@ -18,7 +18,6 @@ AC_SUBST(XNOISE_VERSION)
 
 AC_INIT([xnoise],[xnoise_version],[shuerhaakenATgo oglemail.com],[xnoise])
 
-# require automake-1.11 for vala support
 AM_INIT_AUTOMAKE([1.11 dist-bzip2])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_CONFIG_SRCDIR([Makefile.am])
@@ -31,7 +30,7 @@ AC_DISABLE_STATIC
 
 dnl required versions for xnoise
 GSTREAMER_REQUIRED=0.10.23
-GLIB_REQUIRED=2.30.0
+GLIB_REQUIRED=2.28.0
 LIBXML_REQUIRED=2.6.32
 GIO_REQUIRED=2.16
 GTK_REQUIRED=3.0.0
@@ -42,7 +41,6 @@ dnl required versions for plugins
 LIBNOTIFY_REQUIRED=0.7.0
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
-GDBUS_REQUIRED=2.26
 
 VALA_REQUIRED=0.15.0
 
@@ -54,7 +52,7 @@ AC_FUNC_MMAP
 dnl Replacement for AM_PROG_VALAC ===========
 AC_PATH_PROG([VALAC], [valac], [])
  AS_IF([test -z "$VALAC"],
-   [AC_MSG_WARN([No Vala compiler found. Build uses C files only. You will not be able to compile changed .vala source files.])],
+   [AC_MSG_WARN([No Vala compiler found. Build uses C files only. While this is fine, you will not be able to compile changed .vala source files.])],
    [AS_IF([test -n "$VALA_REQUIRED"],
       [AC_MSG_CHECKING([$VALAC is at least version $VALA_REQUIRED])
        am__vala_version=`$VALAC --version | sed 's/Vala  *//'`
@@ -62,7 +60,7 @@ AC_PATH_PROG([VALAC], [valac], [])
          [AC_MSG_RESULT([yes])],
          [AC_MSG_RESULT([yes])],
          [AC_MSG_RESULT([no])
-          AC_MSG_WARN([Vala $VALA_REQUIRED not found. Your vala version is too old! Build uses C files only. You will not be able to compile changed .vala source files.])
+          AC_MSG_WARN([Vala $VALA_REQUIRED not found. Your vala version is too old! Build uses C files only. While this is fine, you will not be able to compile changed .vala source files.])
           VALAC=""])])])
 AM_CONDITIONAL(USE_VALA, [test -n "$VALAC"])
 AC_SUBST(USE_VALA)
@@ -94,7 +92,7 @@ PKG_CHECK_MODULES(LIBXML, \
                   have_libxml=yes, \
                   have_libxml=no)
 if test "x$have_libxml" = "xno"; then
-    AC_MSG_WARN([libxml $LIBXML_REQUIRED or greater not found.])
+    AC_MSG_NOTICE([libxml $LIBXML_REQUIRED or greater not found.])
 fi
 AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
@@ -105,11 +103,11 @@ dnl ================================================================
 dnl plugin check for plugins dependent on GDBus
 
 PKG_CHECK_MODULES(GDBUS, \
-                  glib-2.0 >= $GDBUS_REQUIRED, \
+                  glib-2.0 >= $GLIB_REQUIRED, \
                   have_gdbus=yes, \
                   have_gdbus=no)
 if test "x$have_gdbus" = "xno"; then
-    AC_MSG_WARN([gdbus is not available.])
+    AC_MSG_NOTICE([gdbus is not available.])
 fi
 AC_SUBST(GDBUS_CFLAGS)
 AC_SUBST(GDBUS_LIBS)
@@ -125,7 +123,7 @@ PKG_CHECK_MODULES(LIBSOUP, \
                   have_libsoup=yes, \
                   have_libsoup=no)
 if test "x$have_libsoup" != "xyes"; then
-    AC_MSG_WARN([libsoup $LIBSOUP_REQUIRED or greater not found.])
+    AC_MSG_NOTICE([libsoup $LIBSOUP_REQUIRED or greater not found.])
 fi
 AC_SUBST(LIBSOUP_CFLAGS)
 AC_SUBST(LIBSOUP_LIBS)
@@ -143,7 +141,7 @@ PKG_CHECK_MODULES(LIBNOTIFY, \
                   have_libnotify=no)
 
 if test "x$have_libnotify" != "xyes"; then
-    AC_MSG_WARN([libnotify $LIBNOTIFY_REQUIRED or greater not found.])
+    AC_MSG_NOTICE([libnotify $LIBNOTIFY_REQUIRED or greater not found.])
 fi
 AC_SUBST(LIBNOTIFY_CFLAGS)
 AC_SUBST(LIBNOTIFY_LIBS)
@@ -161,7 +159,7 @@ PKG_CHECK_MODULES(X11, \
                   have_xlib=yes, \
                   have_xlib=no)
 if test "x$have_xlib" != "xyes"; then
-    AC_MSG_WARN([xlib $X11_REQUIRED or greater not found.])
+    AC_MSG_NOTICE([xlib $X11_REQUIRED or greater not found.])
 fi
 AC_SUBST(X11_CFLAGS)
 AC_SUBST(X11_LIBS)
@@ -177,7 +175,7 @@ PKG_CHECK_MODULES(GDKX11, \
                   have_gdkx11=yes, \
                   have_gdkx11=no)
 if test "x$have_gdkx11" != "xyes"; then
-    AC_MSG_WARN([gdk-x11-3.0 $GDKX11_REQUIRED or greater not found.])
+    AC_MSG_NOTICE([gdk-x11-3.0 $GDKX11_REQUIRED or greater not found.])
 fi
 AC_SUBST(GDKX11_CFLAGS)
 AC_SUBST(GDKX11_LIBS)
@@ -199,7 +197,7 @@ if test "x$enable_leoslyrics" = "xyes"; then
         enable_leoslyrics=yes
     else
         enable_leoslyrics=no
-        AC_MSG_WARN([leoslyrics plugin will not be included in the build.])
+        AC_MSG_NOTICE([leoslyrics plugin will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_LEOSLYRICS, test x"$enable_leoslyrics" = "xyes")
@@ -219,7 +217,7 @@ if test "x$enable_lyricsfly" = "xyes"; then
         enable_lyricsfly=yes
     else
         enable_lyricsfly=no
-        AC_MSG_WARN([lyricsfly plugin will not be included in the build.])
+        AC_MSG_NOTICE([lyricsfly plugin will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_LYRICSFLY, test x"$enable_lyricsfly" = "xyes")
@@ -239,7 +237,7 @@ if test "x$enable_lyricwiki" = "xyes"; then
         enable_lyricwiki=yes
     else
         enable_lyricwiki=no
-        AC_MSG_WARN([lyricwiki plugin will not be included in the build.])
+        AC_MSG_NOTICE([lyricwiki plugin will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_LYRICWIKI, test x"$enable_lyricwiki" = "xyes")
@@ -262,7 +260,7 @@ if test "x$enable_lastfm" = "xyes"; then
         enable_lastfm=yes
     else
         enable_lastfm=no
-        AC_MSG_WARN([lastfm plugin will not be included in the build.])
+        AC_MSG_NOTICE([lastfm plugin will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_LASTFM, test x"$enable_lastfm" = "xyes")
@@ -282,7 +280,7 @@ if test "x$enable_notifications" = "xyes"; then
         enable_notifications=yes
     else
         enable_notifications=no
-        AC_MSG_WARN([notifications plugin will not be included in the build.])
+        AC_MSG_NOTICE([notifications plugin will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_NOTIFICATIONS, test x"$enable_notifications" = "xyes")
@@ -302,7 +300,7 @@ if test "x$enable_mpris" = "xyes"; then
         enable_mpris=yes
     else
         enable_mpris=no
-        AC_MSG_WARN([mpris plugins will not be included in the build.])
+        AC_MSG_NOTICE([mpris plugins will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_MPRIS, test x"$enable_mpris" = "xyes")
@@ -320,7 +318,7 @@ AC_ARG_ENABLE([soundmenu2],
 
 if test "x$enable_soundmenu2" != "xyes"; then
     enable_soundmenu2=no
-    AC_MSG_WARN([soundmenu2 plugin will not be included in the build.])
+    AC_MSG_NOTICE([soundmenu2 plugin will not be included in the build.])
 fi
 AM_CONDITIONAL(ENABLE_SOUNDMENU, test x"$enable_soundmenu2" = "xyes")
 dnl ================================================================
@@ -340,11 +338,11 @@ if test "x$enable_mediakeys" = "xyes"; then
             enable_mediakeys=yes
         else
             enable_mediakeys=no
-            AC_MSG_WARN([mediakeys plugin will not be included in the build.])
+            AC_MSG_NOTICE([mediakeys plugin will not be included in the build.])
         fi
     else
         enable_mediakeys=no
-        AC_MSG_WARN([mediakeys plugin will not be included in the build.])
+        AC_MSG_NOTICE([mediakeys plugin will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_MEDIAKEYS, test x"$enable_mediakeys" = "xyes")
@@ -364,7 +362,7 @@ if test "x$enable_chartlyrics" = "xyes"; then
         enable_chartlyrics=yes
     else
         enable_chartlyrics=no
-        AC_MSG_WARN([chartlyrics plugin will not be included in the build.])
+        AC_MSG_NOTICE([chartlyrics plugin will not be included in the build.])
     fi
 fi
 AM_CONDITIONAL(ENABLE_CHARTLYRICS, test x"$enable_chartlyrics" = "xyes")
@@ -454,8 +452,8 @@ echo "
   ~~~~~~~~~~~~~
   
   Configuration Info:
-    gettext_package:               ${GETTEXT_PACKAGE}
     prefix:                        ${prefix}
+    gettext_package:               ${GETTEXT_PACKAGE}
     CFLAGS:                        ${CFLAGS}
     VALAC:                         ${VALAC}
 
@@ -469,7 +467,11 @@ echo "
     lyricwiki:                     ${enable_lyricwiki}
     lastfm webservices:            ${enable_lastfm}
     notifications:                 ${enable_notifications}
-    mpris v1/v2:                   ${enable_mpris}
-    mediakeys:                     ${enable_mediakeys}
-    soundmenu:                     ${enable_soundmenu2}
+    mpris v1/v2 interface:         ${enable_mpris}
+    mediakeys control:             ${enable_mediakeys}
+    ayatana soundmenu:             ${enable_soundmenu2}
+
+  Note: Single plugin builds can be deactivated
+        manually by user option or automatically
+        if the dependencies are not available.
 "

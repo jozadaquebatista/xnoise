@@ -1,3 +1,20 @@
+xnoise (0.1.31) unstable; urgency=low
+  * port xnoise to gtk+-3.0
+  * add option for disabling video subtitles
+  * stop using uris for the title search
+  * mediabrowser: gtk3 compatible font rendering with linebreaks
+  * update some translation
+  * lastfm plugin: make scrobbling optional (cover fetching can be used without logging an user into lastfm)
+  * remove deprecated HBox/VBox widgets
+  * use icons for drag'n'drop
+  * drop dependency to libunique (now gio's application class)
+  * introduce gtk2 branch in version control
+  * remove old versions of notification and soundmenu plugin
+  * many bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 20 Jan 2012 17:38:52 +0100
+
+
 xnoise (0.1.30) unstable; urgency=low
   * add new lastfm plugin (scrobble, replace lastfmcovers plugin)
   * add more support for importing playlist files (Francisco Pérez Cuadrado)
