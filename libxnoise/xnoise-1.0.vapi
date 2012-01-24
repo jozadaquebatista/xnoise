@@ -336,6 +336,8 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static string get_suffix_from_filename (string? val);
 		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public static string make_time_display_from_seconds (int length);
+		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static string prepare_for_comparison (string? value);
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static string prepare_for_search (string? val);

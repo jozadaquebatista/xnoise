@@ -390,11 +390,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		string searchtext = "";
 		foreach(Item? item in job.items) {
 			tmp = item_converter.to_trackdata(item, ref searchtext);
-			if(tmp == null)
+			if(tmp == null) {
+				var ttd = new TrackData();
+				ttd.item = item;
+				ttd.title = (item.text == null ? item.uri : item.text);
+				tda += ttd;
 				continue;
-			foreach(TrackData td in tmp) {
-				tda += td;
 			}
+			else {
+				tda += tmp[0];
+			}
+//			foreach(TrackData td in tmp) {
+//				tda += td;
+//			}
 		}
 		var xjob = new Worker.Job(Worker.ExecutionType.ONCE, this.add_some_lastused_job);
 		xjob.track_dat = tda;

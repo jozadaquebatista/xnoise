@@ -2343,6 +2343,7 @@ gchar* xnoise_services_remove_suffix_from_filename (const gchar* val);
 gchar* xnoise_services_get_suffix_from_filename (const gchar* val);
 gchar* xnoise_services_prepare_name_from_filename (const gchar* val);
 gchar* xnoise_services_replace_underline_with_blank_encoded (const gchar* value);
+gchar* xnoise_services_make_time_display_from_seconds (gint length);
 GType xnoise_plugin_manager_tree_get_type (void) G_GNUC_CONST;
 XnoisePluginManagerTree* xnoise_plugin_manager_tree_new (void);
 XnoisePluginManagerTree* xnoise_plugin_manager_tree_construct (GType object_type);

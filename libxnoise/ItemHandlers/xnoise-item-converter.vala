@@ -31,6 +31,7 @@
 using Xnoise;
 using Xnoise.Playlist;
 using Xnoise.Services;
+using Xnoise.TagAccess;
 
 public class Xnoise.ItemConverter : Object {
 
@@ -57,12 +58,39 @@ public class Xnoise.ItemConverter : Object {
 				else if(item.uri != null) {
 					TrackData? tmp;
 					if(db_browser.get_trackdata_for_uri(ref item.uri, out tmp)) {
-						if(tmp == null)
-							break;
-						if(tmp.item.type == ItemType.UNKNOWN)
-							tmp.item.type = ItemHandlerManager.create_item(item.uri).type;
-						if(tmp.item.type != ItemType.UNKNOWN)
-							result += tmp;
+						if(tmp != null) {
+							if(tmp.item.type == ItemType.UNKNOWN)
+								tmp.item.type = ItemHandlerManager.create_item(item.uri).type;
+							if(tmp.item.type != ItemType.UNKNOWN)
+								result += tmp;
+						}
+						else {
+							return null;
+						}
+					}
+					else {
+						print("Using tag reader in item converter.\n");
+						string artist="", album = "", title = "", lengthString = "", genre = "unknown genre";
+						string? yearString = null;
+						uint tracknumb = 0;
+						File file = File.new_for_uri(item.uri);
+						var tr = new TagReader();
+						var tags = tr.read_tag(file.get_path());
+						if(tags == null) {
+							title          = prepare_name_from_filename(file.get_basename());
+						}
+						else {
+							artist         = tags.artist;
+							album          = tags.album;
+							title          = tags.title;
+							tracknumb      = tags.tracknumber;
+							genre          = tags.genre;
+							lengthString = make_time_display_from_seconds(tags.length);
+							if(tags.year > 0) 
+								yearString = "%u".printf(tags.year);
+						}
+						tags.item = item;
+						result += tags;
 					}
 				}
 				else {

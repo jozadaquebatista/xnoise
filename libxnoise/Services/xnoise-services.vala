@@ -285,4 +285,16 @@ namespace Xnoise.Services {
 		}
 		return value;
 	}
+
+	public static string make_time_display_from_seconds(int length) {
+		string lengthString = "";
+		if(length > 0) {
+			// convert seconds to a user convenient mm:ss display
+			int dur_min, dur_sec;
+			dur_min = (int)(length / 60);
+			dur_sec = (int)(length % 60);
+			lengthString = "%02d:%02d".printf(dur_min, dur_sec);
+		}
+		return (owned)lengthString;
+	}
 }

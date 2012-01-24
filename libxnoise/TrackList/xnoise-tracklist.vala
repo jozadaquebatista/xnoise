@@ -720,18 +720,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 		}
 	}
 
-	private string make_time_display_from_seconds(int length) {
-		string lengthString = "";
-		if(length > 0) {
-			// convert seconds to a user convenient mm:ss display
-			int dur_min, dur_sec;
-			dur_min = (int)(length / 60);
-			dur_sec = (int)(length % 60);
-			lengthString = "%02d:%02d".printf(dur_min, dur_sec);
-		}
-		return (owned)lengthString;
-	}
-
 	private void add_dropped_uri(ref string fileuri, ref TreePath? path, ref bool is_first, bool from_playlist = false) {
 	//Add dropped uri to tracklist
 		TreeIter iter, new_iter;
