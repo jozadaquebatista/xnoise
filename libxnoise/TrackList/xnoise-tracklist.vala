@@ -656,7 +656,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 							this.tracklistmodel.insert_after(out new_iter, iter);
 						}
 					}
-					string tracknumberString = "";
+					string tracknumberString = EMPTYSTRING;
 					if(tdx.tracknumber != 0) {
 						tracknumberString = "%u".printf(tdx.tracknumber);
 					}
@@ -723,7 +723,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private void add_dropped_uri(ref string fileuri, ref TreePath? path, ref bool is_first, bool from_playlist = false) {
 	//Add dropped uri to tracklist
 		TreeIter iter, new_iter;
-		string artist="", album = "", title = "", lengthString = "", genre = "unknown genre";
+		string artist=EMPTYSTRING, album = EMPTYSTRING, title = EMPTYSTRING, lengthString = EMPTYSTRING, genre = UNKNOWN_GENRE;
 		string? yearString = null;
 		uint tracknumb = 0;
 		
@@ -735,7 +735,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			else
 				item.type = Xnoise.ItemType.STREAM; //When it is call from playlist then acept STREAM
 		
-		string sstr = "";
+		string sstr = EMPTYSTRING;
 		TrackData td = new TrackData();
 		TrackData[]? tmp = item_converter.to_trackdata(item, ref sstr);
 		if(tmp != null && tmp[0] != null) {

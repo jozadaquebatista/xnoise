@@ -32,6 +32,10 @@
 
 using Gtk;
 
+using Xnoise;
+using Xnoise.Services;
+
+
 /**
 * A PlayPauseButton is a Gtk.Button that accordingly pauses, unpauses or starts playback
 */
@@ -76,7 +80,7 @@ public class Xnoise.PlayPauseButton: Gtk.Button {
 		if(global.current_uri == null) {
 			string uri = tl.tracklistmodel.get_uri_for_current_position();
 			
-			if((uri != "")&&(uri != null)) 
+			if((uri != null) && (uri != EMPTYSTRING)) 
 				global.current_uri = uri;
 			else
 				return false;

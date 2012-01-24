@@ -1,6 +1,6 @@
 /* xnoise-handler-add-to-tracklist.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,12 +29,17 @@
  */
 
 using Gtk;
+
+using Xnoise;
+using Xnoise.Services;
+
+
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext
 // has one or more Actions
 public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	private Action add;
-	private const string binfo = "";
+	private const string binfo = EMPTYSTRING;
 	private const string bname = "HandlerAddToTracklistAction1";
 	
 	private Action menu_add;

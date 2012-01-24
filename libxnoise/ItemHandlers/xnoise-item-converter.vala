@@ -1,6 +1,6 @@
 /* xnoise-item-converter.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,10 +41,9 @@ public class Xnoise.ItemConverter : Object {
 		if(item == null)
 			return null;
 		if(searchtext == null)
-			searchtext = "";
+			searchtext = EMPTYSTRING;
 		
 		TrackData[] result = {};
-		// Now assuming everything is in db ! TODO: create trackdata for empty items
 		
 		switch(item.type) {
 			case ItemType.LOCAL_AUDIO_TRACK:
@@ -70,7 +69,7 @@ public class Xnoise.ItemConverter : Object {
 					}
 					else {
 						print("Using tag reader in item converter.\n");
-						string artist="", album = "", title = "", lengthString = "", genre = "unknown genre";
+						string artist=EMPTYSTRING, album = EMPTYSTRING, title = EMPTYSTRING, lengthString = EMPTYSTRING, genre = UNKNOWN_GENRE;
 						string? yearString = null;
 						uint tracknumb = 0;
 						File file = File.new_for_uri(item.uri);
@@ -146,10 +145,10 @@ public class Xnoise.ItemConverter : Object {
 				if(ec != null) {
 					foreach(Entry e in ec) {
 						var tmp = new TrackData();
-						tmp.title  = (e.get_title()  != null ? e.get_title()  : "unknown title");
-						tmp.album  = (e.get_album()  != null ? e.get_album()  : "unknown album");
-						tmp.artist = (e.get_author() != null ? e.get_author() : "unknown artist");
-						tmp.genre  = (e.get_genre()  != null ? e.get_genre()  : "unknown genre");
+						tmp.title  = (e.get_title()  != null ? e.get_title()  : UNKNOWN_TITLE);
+						tmp.album  = (e.get_album()  != null ? e.get_album()  : UNKNOWN_ALBUM);
+						tmp.artist = (e.get_author() != null ? e.get_author() : UNKNOWN_ARTIST);
+						tmp.genre  = (e.get_genre()  != null ? e.get_genre()  : UNKNOWN_GENRE);
 						tmp.item = ItemHandlerManager.create_item(e.get_uri());
 						result += tmp;
 					}

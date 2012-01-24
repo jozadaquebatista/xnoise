@@ -81,7 +81,7 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 		});
 		string username = Xnoise.Params.get_string_value("lfm_user");
 		string password = Xnoise.Params.get_string_value("lfm_pass");
-		if(username != "" && password != "")
+		if(username != EMPTYSTRING && password != EMPTYSTRING)
 			this.login(username, password);
 		
 		global.notify["current-title"].connect(on_current_track_changed);
@@ -253,7 +253,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 				f = get_albumimage_for_artistalbum(artist, album, s);
 				if(default_size == s) uri_image = f.get_path();
 				
-				string pth = "";
+				string pth = EMPTYSTRING;
 				File f_path = f.get_parent();
 				if(!f_path.query_exists(null)) {
 					try {
@@ -292,9 +292,9 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	
 	public void find_image() {
 		//print("find_lastfm_image to %s - %s\n", artist, album);
-		if((artist=="unknown artist")||
-		   (album=="unknown album")) {
-			sign_image_fetched(artist, album, "");
+		if((artist==UNKNOWN_ARTIST)||
+		   (album==UNKNOWN_ALBUM)) {
+			sign_image_fetched(artist, album, EMPTYSTRING);
 			this.unref();
 			return;
 		}
@@ -314,7 +314,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	private async void copy_covers_async(string _reply_artist, string _reply_album) {
 		File destination;
 		bool buf = false;
-		string default_path = "";
+		string default_path = EMPTYSTRING;
 		int i = 0;
 		string reply_artist = _reply_artist;
 		string reply_album = _reply_album;
@@ -407,14 +407,14 @@ public class Xnoise.LfmWidget: Gtk.Box {
 	
 	private void on_entry_changed() {
 		//print("take over entry\n");
-		string username = "", password = "";
+		string username = EMPTYSTRING, password = EMPTYSTRING;
 		if(user_entry.text != null)
 			username = user_entry.text.strip();
 		if(pass_entry.text != null)
 			password = pass_entry.text.strip();
 		if(username_last == user_entry.text.strip() && password_last == pass_entry.text.strip())
 			return; // no need to spam!
-		if(username != "" && password != "") {
+		if(username != EMPTYSTRING && password != EMPTYSTRING) {
 			//print("got login data\n");
 			Xnoise.Params.set_string_value("lfm_user", username);
 			Xnoise.Params.set_string_value("lfm_pass", password);

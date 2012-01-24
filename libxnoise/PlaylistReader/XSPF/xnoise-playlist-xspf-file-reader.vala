@@ -1,6 +1,6 @@
 /* pl-xspf-file-reader.vala
  *
- * Copyright(C) 2010  Jörn Magens
+ * Copyright(C) 2010-2012  Jörn Magens
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,6 +21,8 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
+using Xnoise;
+using Xnoise.Services;
 using Xnoise.SimpleMarkup;
 
 namespace Xnoise.Playlist {
@@ -82,7 +84,7 @@ namespace Xnoise.Playlist {
 			try {
 				string contenido;
 				var stream = new DataInputStream(file.read(null));
-				contenido = stream.read_until("", null, null);
+				contenido = stream.read_until(EMPTYSTRING, null, null);
 			
 				if(contenido == null) {
 					return item_collection;

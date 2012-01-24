@@ -37,8 +37,8 @@ public class Xnoise.LyricsView : Gtk.TextView {
 	private Main xn;
 	private Gtk.TextBuffer textbuffer;
 	private uint timeout = 0;
-	private string artist = "";
-	private string title = "";
+	private string artist = EMPTYSTRING;
+	private string title = EMPTYSTRING;
 	private uint source = 0;
 	//private Gdk.Color black;
 	//private Gdk.Color light_gray;
@@ -92,7 +92,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
 			});
 			initialized = true;
 		}
-		if(uri == null || uri.strip() == "") {
+		if(uri == null || uri.strip() == EMPTYSTRING) {
 			if(timeout!=0) {
 				GLib.Source.remove(timeout);
 				timeout = 0;
@@ -125,8 +125,8 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		
 
 		//print("2. %s - %s\n", artist, title);
-		if((artist=="")||(artist==null)||(artist=="unknownartist")||
-		   (title =="")||(title ==null)||(title =="unknowntitle" )) {
+		if((artist==EMPTYSTRING)||(artist==null)||(artist=="unknownartist")||
+		   (title ==EMPTYSTRING)||(title ==null)||(title =="unknowntitle" )) {
 			set_text_via_idle(_("Insufficient track information. Not searching for lyrics."));
 			return false;
 		}

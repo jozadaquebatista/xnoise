@@ -158,7 +158,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 	// todo: use global string constants for unknown_[title,album,artist] and state!
 	// for now they are left uni18ned
 	private bool on_query_tooltip(int x, int y, bool keyboard_mod, Tooltip tp) {
-		string state = "";
+		string state = EMPTYSTRING;
 		string? uri = global.current_uri;
 		switch(global.player_state) {
 			case PlayerState.STOPPED: {
@@ -180,7 +180,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		}
 		state = Markup.escape_text(state);
 	
-		if(global.player_state == PlayerState.STOPPED || uri == null || uri == "") {
+		if(global.player_state == PlayerState.STOPPED || uri == null || uri == EMPTYSTRING) {
 			tp.set_markup(" xnoise media player \n" +
 				          "<span rise=\"6000\" style =\"italic\"> %s ;)</span>".printf(_("ready to rock")));
 			return true;
@@ -211,11 +211,11 @@ public class Xnoise.TrayIcon : StatusIcon {
 		}
 		else {
 			if(album == null)
-				album = _("unknown album");
+				album = _(UNKNOWN_ALBUM);
 			if(artist == null)
-				artist = _("unknown artist");
+				artist = _(UNKNOWN_ARTIST);
 			if(title == null)
-				title = _("unknown title");
+				title = _(UNKNOWN_TITLE);
 			
 			album = Markup.escape_text(album);
 			artist = Markup.escape_text(artist);

@@ -1,6 +1,6 @@
 /* xnoise-db-writer.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -358,7 +358,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		int artist_id = -1;
 
 		get_artist_id_statement.reset();
-		if(get_artist_id_statement.bind_text(1, (artist != null ? artist.down().strip() : "")) != Sqlite.OK) {
+		if(get_artist_id_statement.bind_text(1, (artist != null ? artist.down().strip() : EMPTYSTRING)) != Sqlite.OK) {
 			this.db_error();
 			return -1;
 		}
@@ -378,7 +378,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 			}
 			// Get unique artist id key
 			get_artist_id_statement.reset();
-			if(get_artist_id_statement.bind_text(1, artist != null ? artist.down().strip() : "") != Sqlite.OK) {
+			if(get_artist_id_statement.bind_text(1, artist != null ? artist.down().strip() : EMPTYSTRING) != Sqlite.OK) {
 				this.db_error();
 				return -1;
 			}
@@ -417,7 +417,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		
 		get_album_id_statement.reset();
 		if(get_album_id_statement.bind_int (1, artist_id) != Sqlite.OK ||
-		   get_album_id_statement.bind_text(2, album != null ? album.down().strip() : "") != Sqlite.OK ) {
+		   get_album_id_statement.bind_text(2, album != null ? album.down().strip() : EMPTYSTRING) != Sqlite.OK ) {
 			this.db_error();
 			return -1;
 		   }
@@ -508,10 +508,10 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 
 	private int handle_genre(ref string genre) {
 		int genre_id = -1;
-		if((genre.strip() == "")||(genre == null)) return -2; //NO GENRE
+		if((genre.strip() == EMPTYSTRING)||(genre == null)) return -2; //NO GENRE
 
 		get_genre_id_statement.reset();
-		if(get_genre_id_statement.bind_text(1, genre != null ? genre.down().strip() : "") != Sqlite.OK) {
+		if(get_genre_id_statement.bind_text(1, genre != null ? genre.down().strip() : EMPTYSTRING) != Sqlite.OK) {
 			this.db_error();
 			return -1;
 		}
@@ -531,7 +531,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 			}
 			// Get unique genre id key
 			get_genre_id_statement.reset();
-			if(get_genre_id_statement.bind_text(1, genre != null ? genre.down().strip() : "") != Sqlite.OK) {
+			if(get_genre_id_statement.bind_text(1, genre != null ? genre.down().strip() : EMPTYSTRING) != Sqlite.OK) {
 				this.db_error();
 				return -1;
 			}
@@ -900,8 +900,8 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	public void add_single_stream_to_collection(string uri, string name = "") {
 		if(db == null) return;
 		print("add stream : %s \n", uri);
-		if((uri == null) || (uri == "")) return;
-		if(name == "") name = uri;
+		if((uri == null) || (uri == EMPTYSTRING)) return;
+		if(name == EMPTYSTRING) name = uri;
 		add_radio_statement.reset();
 		if(add_radio_statement.bind_text(1, name) != Sqlite.OK||
 		   add_radio_statement.bind_text(2, uri)  != Sqlite.OK) {
@@ -932,7 +932,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	// Single file for collection
 	public void add_single_file_to_collection(string uri) {
 		if(db == null) return;
-		if((uri == null) || (uri == "")) return;
+		if((uri == null) || (uri == EMPTYSTRING)) return;
 		add_mfile_statement.reset();
 		if(add_mfile_statement.bind_text(1, uri) != Sqlite.OK) {
 			this.db_error();

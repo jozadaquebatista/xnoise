@@ -1,6 +1,6 @@
 /* xnoise-tag-writer.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
  * 	Jörn Magens
  */
 
+using Xnoise;
+using Xnoise.Services;
 
 public class Xnoise.TagAccess.TagWriter {
 	public bool write_tag(File? file, TrackData? td) {
@@ -48,16 +50,16 @@ public class Xnoise.TagAccess.TagWriter {
 		if(taglib_file != null && taglib_file.is_valid()) {
 			unowned TagLib.Tag tag = taglib_file.tag;
 			if(tag != null) {
-				if(td.artist != null && td.artist != "")
+				if(td.artist != null && td.artist != EMPTYSTRING)
 					tag.artist = td.artist;
 					
-				if(td.title != null && td.title != "")
+				if(td.title != null && td.title != EMPTYSTRING)
 					tag.title = td.title;
 				
-				if(td.album != null && td.album != "")
+				if(td.album != null && td.album != EMPTYSTRING)
 					tag.album = td.album;
 				
-				if(td.genre != null && td.genre != "")
+				if(td.genre != null && td.genre != EMPTYSTRING)
 					tag.genre = td.genre;
 				
 				if(td.year != 0)
@@ -91,7 +93,7 @@ public class Xnoise.TagAccess.TagWriter {
 		if(taglib_file!=null) {
 			unowned TagLib.Tag tag = taglib_file.tag;
 			if(tag != null) {
-				if(artist != "")
+				if(artist != EMPTYSTRING)
 					tag.artist = artist;
 				else
 					return false;
@@ -121,7 +123,7 @@ public class Xnoise.TagAccess.TagWriter {
 		if(taglib_file!=null) {
 			unowned TagLib.Tag tag = taglib_file.tag;
 			if(tag != null) {
-				if(album != "")
+				if(album != EMPTYSTRING)
 					tag.album = album;
 				else
 					return false;

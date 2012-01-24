@@ -139,7 +139,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 		set {
 			is_stream = false; //reset
 			_uri = value;
-			if((value == "")||(value == null)) {
+			if((value == EMPTYSTRING)||(value == null)) {
 				playbin.set_state(State.NULL); //stop
 				//print("uri = null or '' -> set to stop\n");
 				playing = false;
@@ -158,7 +158,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			available_audiotracks = null;
 			this.playbin.suburi = null;
 			length_time = (int64)0;
-			this.playbin.uri = (value == null ? "" : value);
+			this.playbin.uri = (value == null ? EMPTYSTRING : value);
 			// set_automatic_subtitles();
 			if(value != null) {
 				File file = File.new_for_commandline_arg(value);
@@ -252,7 +252,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 				int64 len;
 				Gst.Format fmt = Gst.Format.TIME;
 				playbin.query_duration(ref fmt, out len);
-				_length_time = (this._uri == null || this._uri == "" ? (int64)0 : (int64)len);
+				_length_time = (this._uri == null || this._uri == EMPTYSTRING ? (int64)0 : (int64)len);
 				playbin.seek_simple(Gst.Format.TIME,
 				                    Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
 				                    (int64)(value * _length_time));
@@ -767,7 +767,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			}
 			if(seeking == false) {
 				playbin.query_duration(ref fmt, out len);
-				length_time = (this._uri == "" || this._uri == null ? (int64)0 : (int64)len);
+				length_time = (this._uri == EMPTYSTRING || this._uri == null ? (int64)0 : (int64)len);
 				if(playing == false) return true;
 				if(!playbin.query_position(ref fmt, out pos))
 					return true;

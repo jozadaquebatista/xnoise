@@ -29,6 +29,7 @@
  */
 
 using Xnoise;
+using Xnoise.Services;
 using Xnoise.SimpleMarkup;
 
 namespace Lastfm {
@@ -51,9 +52,9 @@ namespace Lastfm {
 		             string? _title_name,
 		             string api_key, string? username = null,
 		             string? session_key = null, string? lang = null, string _secret) {
-			this.artist_name = (_artist_name != null ? _artist_name : "unknown artist");
-			this.album_name  = (_album_name != null ? _album_name : "unknown album");
-			this.title_name  = (_title_name != null ? _title_name : "unknown title");
+			this.artist_name = (_artist_name != null ? _artist_name : UNKNOWN_ARTIST);
+			this.album_name  = (_album_name != null ? _album_name : UNKNOWN_ALBUM);
+			this.title_name  = (_title_name != null ? _title_name : UNKNOWN_TITLE);
 			this.api_key = api_key;
 			this.parent_session = session;
 			this.username = username;

@@ -1,6 +1,6 @@
 /* xnoise-title-to-decoration.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,7 +35,8 @@ using Xnoise.PluginModule;
 
 public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 	private unowned PluginModule.Container _owner;
-
+	private static const string XN_MEDIA_PLAYER = "xnoise media player";
+	
 	public Main xn { get; set; }
 	
 	public PluginModule.Container owner {
@@ -82,7 +83,7 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 		string text, album, artist, title, genre, location, organization;
 		string basename = null;
 		if(newuri == null) {
-			main_window.title = "xnoise media player";
+			main_window.title = XN_MEDIA_PLAYER;
 			return;
 		}
 		File file = File.new_for_uri(newuri);
@@ -93,39 +94,39 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 			artist = remove_linebreaks(global.current_artist);
 		}
 		else {
-			artist = "unknown artist";
+			artist = UNKNOWN_ARTIST;
 		}
 		if(global.current_title != null) {
 			title = remove_linebreaks(global.current_title);
 		}
 		else {
-			title = "unknown title";
+			title = UNKNOWN_TITLE;
 		}
 		if(global.current_album != null) {
 			album = remove_linebreaks(global.current_album);
 		}
 		else {
-			album = "unknown album";
+			album = UNKNOWN_ALBUM;
 		}
 		if(global.current_organization != null) {
 			organization = remove_linebreaks(global.current_organization);
 		}
 		else {
-			organization = "unknown organization";
+			organization = UNKNOWN_ORGANIZATION;
 		}
 		if(global.current_genre!=null) {
 			genre = remove_linebreaks(global.current_genre);
 		}
 		else {
-			genre = "unknown genre";
+			genre = UNKNOWN_GENRE;
 		}
 		if(global.current_location != null) {
 			location = remove_linebreaks(global.current_location);
 		}
 		else {
-			location = "unknown location";
+			location = UNKNOWN_LOCATION;
 		}
-		if((newuri != null) && (newuri != "")) {
+		if((newuri != null) && (newuri != EMPTYSTRING)) {
 			text = "%s %s %s %s %s ".printf( 
 				title, 
 				_("by"), 
@@ -133,28 +134,28 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 				_("on"), 
 				album
 				);
-			if(album == "unknown album" && 
-			   artist == "unknown artist" && 
-			   title == "unknown title") 
-				if(organization != "unknown organization") 
+			if(album == UNKNOWN_ALBUM && 
+			   artist == UNKNOWN_ARTIST && 
+			   title == UNKNOWN_TITLE) 
+				if(organization != UNKNOWN_ORGANIZATION) 
 					text = "%s".printf(organization);
-				else if(location != "unknown location") 
+				else if(location != UNKNOWN_LOCATION) 
 					text = "%s".printf(location);
 				else
-					text = "%s".printf("xnoise media player");
+					text = XN_MEDIA_PLAYER;
 		}
 		else {
 			if((!gst_player.playing)&&
 				(!gst_player.paused)) {
-				text = "xnoise media player";
+				text = XN_MEDIA_PLAYER;
 			}
 			else {
 				text = "%s %s %s %s %s ".printf( 
-					_("unknown title"), 
+					_(UNKNOWN_TITLE), 
 					_("by"), 
-					_("unknown artist"),
+					_(UNKNOWN_ARTIST),
 					_("on"), 
-					_("unknown album")
+					_(UNKNOWN_ALBUM)
 					);
 			}
 		}
@@ -165,7 +166,7 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 	}
 	
 	public void uninit() {
-		main_window.set_title("xnoise media player");
+		main_window.set_title(XN_MEDIA_PLAYER);
 	}
 	
 	~TitleToDecoration() {

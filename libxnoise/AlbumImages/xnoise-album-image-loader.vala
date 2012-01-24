@@ -1,6 +1,6 @@
 /* xnoise-album-image-loader.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ namespace Xnoise {
 	public static string escape_album_for_local_folder_search(string _artist, string? album_name) {
 		// transform the name to match the naming scheme
 		string artist = _artist;
-		string tmp = "";
+		string tmp = EMPTYSTRING;
 		if(album_name == null)
 			return (owned)tmp;
 		if(artist == null)
@@ -90,7 +90,7 @@ namespace Xnoise {
 		}
 		if(tmp.contains("/")) {
 			string[] a = tmp.split("/", 20);
-			tmp = "";
+			tmp = EMPTYSTRING;
 			foreach(string s in a) {
 				tmp = tmp + s;
 			}
@@ -100,7 +100,7 @@ namespace Xnoise {
 	
 	public static string escape_for_local_folder_search(string? value) {
 		// transform the name to match the naming scheme
-		string tmp = "";
+		string tmp = EMPTYSTRING;
 		if(value == null)
 			return (owned)tmp;
 		
@@ -116,7 +116,7 @@ namespace Xnoise {
 		}
 		if(tmp.contains("/")) {
 			string[] a = tmp.split("/", 20);
-			tmp = "";
+			tmp = EMPTYSTRING;
 			foreach(string s in a) {
 				tmp = tmp + s;
 			}
@@ -125,10 +125,10 @@ namespace Xnoise {
 	}
 
 	private static string check_album_name(string? artistname, string? albumname) {
-		if(albumname == null || albumname == "")
-			return "";
-		if(artistname == null || artistname == "")
-			return "";
+		if(albumname == null || albumname == EMPTYSTRING)
+			return EMPTYSTRING;
+		if(artistname == null || artistname == EMPTYSTRING)
+			return EMPTYSTRING;
 		
 		string _artistname = artistname.strip().down();
 		string _albumname = albumname.strip().down();
@@ -196,7 +196,7 @@ namespace Xnoise {
 
 		public bool fetch_image() {
 			if(this.provider == null) {
-				sign_fetched("", "", "");
+				sign_fetched(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING);
 				return false;
 			}
 			Idle.add( () => {

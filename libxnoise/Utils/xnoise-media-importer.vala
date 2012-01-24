@@ -1,6 +1,6 @@
 /* xnoise-media-importer.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 using Gtk;
 
 using Xnoise;
+using Xnoise.Services;
 using Xnoise.TagAccess;
 
 public class Xnoise.MediaImporter : GLib.Object {
@@ -312,11 +313,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 				}
 				else {
 					string uri_lc = filename.down();
-					if(!(uri_lc.has_suffix(".m3u")||
-					     uri_lc.has_suffix(".pls")||
-					     uri_lc.has_suffix(".asx")||
-					     uri_lc.has_suffix(".xspf")||
-					     uri_lc.has_suffix(".wpl"))) {
+					if(!Playlist.is_playlist_extension(get_suffix_from_filename(uri_lc))) {
 						var tr = new TagReader();
 						td = tr.read_tag(filepath);
 						if(td != null) {

@@ -186,19 +186,19 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	public void on_position_reference_changed() {
 		TreePath treepath;
 		TreeIter iter;
-//		string uri = "";
+//		string uri = EMPTYSTRING;
 
 		// Handle uri stuff
 		if(get_current_path(out treepath)) {
 			Item? item;
 			this.get_iter(out iter, treepath);
 			this.get(iter, Column.ITEM, out item);
-			if((item.uri != "") && (item.uri == global.current_uri)) {
+			if((item.uri != EMPTYSTRING) && (item.uri == global.current_uri)) {
 				global.do_restart_of_current_track();
 				global.uri_repeated(item.uri);
 			}
 			
-			if(item.uri != "")
+			if(item.uri != EMPTYSTRING)
 				global.current_uri = item.uri;
 			
 		}
@@ -362,7 +362,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	public string get_uri_for_current_position() {
-//		string uri = "";
+//		string uri = EMPTYSTRING;
 		TreeIter iter;
 		Item? item = Item(ItemType.UNKNOWN);
 		if((global.position_reference != null)&&

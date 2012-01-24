@@ -1,6 +1,6 @@
 /* pl-m3u-file-reader.vala
  *
- * Copyright(C) 2010  Jörn Magens
+ * Copyright(C) 2010-2012  Jörn Magens
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,10 @@
  * 	Francisco Pérez Cuadrado <fsistemas@gmail.com>
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
+
+
+using Xnoise;
+using Xnoise.Services;
 
 namespace Xnoise.Playlist {
 	private class M3u.FileReader : AbstractFileReader {
@@ -58,8 +62,8 @@ namespace Xnoise.Playlist {
 						}
 						Entry d = null;
 						for(int i = 0; i < lines_buf.length && lines_buf[i] != null;i++) {
-							string title = "";
-							string adress = "";
+							string title = EMPTYSTRING;
+							string adress = EMPTYSTRING;
 							if(line_is_comment(ref lines_buf[i])) {
 								if(!line_is_extinf(ref lines_buf[i], ref title)) {
 									continue;
@@ -73,7 +77,7 @@ namespace Xnoise.Playlist {
 											if(line_is_extinf(ref lines_buf[j], ref title)) {
 												//is extinf, so it is used and adress is deleted
 												i = j;
-												adress = "";
+												adress = EMPTYSTRING;
 												break;
 											}
 										}
@@ -91,7 +95,7 @@ namespace Xnoise.Playlist {
 								adress = lines_buf[i];
 								d = new Entry();
 							}
-							if(adress != "") {
+							if(adress != EMPTYSTRING) {
 								TargetType tt;
 								File tmp = get_file_for_location(adress, ref base_path, out tt);
 								d.add_field(Entry.Field.URI, tmp.get_uri());
@@ -101,7 +105,7 @@ namespace Xnoise.Playlist {
 									if(is_known_playlist_extension(ref ext))
 										d.add_field(Entry.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
 								}
-								if(title != "") {
+								if(title != EMPTYSTRING) {
 									d.add_field(Entry.Field.TITLE, title);
 								}
 								data_collection.append(d);
@@ -131,7 +135,7 @@ namespace Xnoise.Playlist {
 				begin++;
 				if(begin >= end) {
 					print("error reading EXTINF\n");
-					title = "";
+					title = EMPTYSTRING;
 					return true;
 				}
 				if(((string)begin).contains(",")) {
@@ -141,7 +145,7 @@ namespace Xnoise.Playlist {
 					return true;
 				}
 				else {
-					title = "";
+					title = EMPTYSTRING;
 					return true;
 				}
 			}
@@ -181,8 +185,8 @@ namespace Xnoise.Playlist {
 						}
 						Entry d = null;
 						for(int i = 0; i < lines_buf.length && lines_buf[i] != null;i++) {
-							string title = "";
-							string adress = "";
+							string title = EMPTYSTRING;
+							string adress = EMPTYSTRING;
 							if(line_is_comment(ref lines_buf[i])) {
 								if(!line_is_extinf(ref lines_buf[i], ref title)) {
 									continue;
@@ -196,7 +200,7 @@ namespace Xnoise.Playlist {
 											if(line_is_extinf(ref lines_buf[j], ref title)) {
 												//is extinf, so it is used and adress is deleted
 												i = j;
-												adress = "";
+												adress = EMPTYSTRING;
 												break;
 											}
 										}
@@ -214,7 +218,7 @@ namespace Xnoise.Playlist {
 								adress = lines_buf[i];
 								d = new Entry();
 							}
-							if(adress != "") {
+							if(adress != EMPTYSTRING) {
 								TargetType tt;
 								File tmp = get_file_for_location(adress, ref base_path, out tt);
 								d.add_field(Entry.Field.URI, tmp.get_uri());
@@ -224,7 +228,7 @@ namespace Xnoise.Playlist {
 									if(is_known_playlist_extension(ref ext))
 										d.add_field(Entry.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
 								}
-								if(title != "") {
+								if(title != EMPTYSTRING) {
 									d.add_field(Entry.Field.TITLE, title);
 								}
 								data_collection.append(d);

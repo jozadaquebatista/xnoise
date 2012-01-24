@@ -187,7 +187,7 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 		
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), "", LYRICSWIKI);
+				this.cb(artist, title, get_credits(), get_identifier(), EMPTYSTRING, LYRICSWIKI);
 			return false;
 		});
 		
@@ -253,11 +253,11 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 		}
 		
 		if(property == null)
-			return "";
+			return EMPTYSTRING;
 		else if(property->children == null)
-			return "";
+			return EMPTYSTRING;
 		else if(property->children->content == null)
-			return "";
+			return EMPTYSTRING;
 			
 		return property->children->content;
 	}
@@ -279,7 +279,7 @@ public class Xnoise.Lyricwiki : GLib.Object, ILyrics {
 	
 	/* gets the text from the lyrics node retrieved with find_lyrics_div */
 	private string get_lyric_div_text(Xml.Node *lyric_div) {
-		string ret = "";
+		string ret = EMPTYSTRING;
 		Xml.Node *child = lyric_div->children;
 		while(child != null) {
 			if(child->name == "text")

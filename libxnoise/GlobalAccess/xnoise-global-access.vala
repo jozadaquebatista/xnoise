@@ -1,6 +1,6 @@
 /* xnoise-global-access.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,6 +33,9 @@
  * This class is used to hold application wide states like if the application is playing, the uri of the current title...
  * All these are properties, so that changes can be tracked application wide.
  */
+
+using Xnoise;
+using Xnoise.Services;
 
 public class Xnoise.GlobalAccess : GLib.Object {
 	
@@ -243,8 +246,8 @@ public class Xnoise.GlobalAccess : GLib.Object {
 		string? small_name = null;
 		string? large_name = null; 
 		File f = get_albumimage_for_artistalbum(current_artist, current_album, "medium");
-		small_name = f != null ? f.get_path() : "";
-		if((small_name == "") || (small_name == null)) {
+		small_name = f != null ? f.get_path() : EMPTYSTRING;
+		if((small_name == EMPTYSTRING) || (small_name == null)) {
 			image_path_small = null;
 			image_path_large = null;
 			return;
@@ -272,7 +275,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public void play(bool pause_if_playing) {
 		if(current_uri == null) {
 			string uri = tl.tracklistmodel.get_uri_for_current_position();
-			if((uri != "") && (uri != null)) 
+			if((uri != EMPTYSTRING) && (uri != null)) 
 				current_uri = uri;
 		}
 		if(player_state == PlayerState.PLAYING && pause_if_playing) 
@@ -284,7 +287,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
 	public void pause() {
 		if(current_uri == null) {
 			string uri = tl.tracklistmodel.get_uri_for_current_position();
-			if((uri != "") && (uri != null)) 
+			if((uri != EMPTYSTRING) && (uri != null)) 
 				current_uri = uri;
 		}
 		player_state = PlayerState.PAUSED;

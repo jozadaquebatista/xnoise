@@ -1,6 +1,6 @@
 /* pl-reader.vala
  *
- * Copyright (C) 2010  Jörn Magens
+ * Copyright (C) 2010-2012  Jörn Magens
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,8 @@
  * 	Jörn Magens <shuerhaaken@googlemail.com>
  */
 
+using Xnoise;
+using Xnoise.Services;
 
 namespace Xnoise.Playlist {
 	public class Reader : GLib.Object {
@@ -253,7 +255,7 @@ namespace Xnoise.Playlist {
 	}
 
 	public static ListType get_type_by_data(ref string uri_) {
-		string content_type = "";
+		string content_type = EMPTYSTRING;
 		File f = File.new_for_uri(uri_);
 		try {
 			var file_info = f.query_info("*", FileQueryInfoFlags.NONE, null);

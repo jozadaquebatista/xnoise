@@ -30,6 +30,10 @@
  * 	JM <shuerhaaken@googlemail.com>
  */
 
+using Xnoise;
+using Xnoise.Services;
+
+
 namespace Lastfm {
 	
 	private enum UrlParamType {
@@ -375,7 +379,7 @@ namespace Lastfm {
 	public class Util : GLib.Object {
 		//Generate API_SIG from URI paramaters
 		public static string get_api_sig_url(string param, string apiSecret) {
-			string result = "";
+			string result = EMPTYSTRING;
 			var arrayParams = param.split("&");
 			for(int i = 0; i < arrayParams.length; i++) {
 				var nameValue = arrayParams[i].split("=");

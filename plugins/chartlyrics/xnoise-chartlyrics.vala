@@ -1,7 +1,7 @@
 /* xnoise-chartlyrics.vala
  *
  * Copyright (C) 2010  Andreas Obergrusberger
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,8 +34,11 @@
 
 using Soup;
 using Xml;
+
 using Xnoise;
+using Xnoise.Services;
 using Xnoise.PluginModule;
+
 
 // XML PARSING DOES NOT YET WORK
 
@@ -169,8 +172,8 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		session = new SessionAsync();
 		Xml.Parser.init ();
 		
-		hid = "";
-		id = "";
+		hid = EMPTYSTRING;
+		id = EMPTYSTRING;
 		
 		availability = null;
 		
@@ -187,7 +190,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), "", CHARTLYRICS);
+				this.cb(artist, title, get_credits(), get_identifier(), EMPTYSTRING, CHARTLYRICS);
 			return false;
 		});
 		
@@ -215,7 +218,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		// Web API call ok, do the xml processing
 		string xmltext = (string)hid_msg.response_body.data;
 		xmltext = xmltext.replace("<ArrayOfSearchLyricResult xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"http://api.chartlyrics.com/\">", "<ArrayOfSearchLyricResult>");
-		xmltext = xmltext.replace("<SearchLyricResult xsi:nil=\"true\" />", "");
+		xmltext = xmltext.replace("<SearchLyricResult xsi:nil=\"true\" />", EMPTYSTRING);
 		//message(xmltext);
 		
 		Xml.Doc* xmldoc = Xml.Parser.read_doc(xmltext);
@@ -258,7 +261,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		//message(id);
 		delete xmldoc;
 		
-		if (hid == "" || id == "") {
+		if (hid == EMPTYSTRING || id == EMPTYSTRING) {
 			availability = false;
 			return false;
 		}

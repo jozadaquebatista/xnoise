@@ -108,7 +108,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 	}
 	
 	private void on_song_info_required() {
-		if(global.current_uri == "" || global.current_uri == null) {
+		if(global.current_uri == EMPTYSTRING || global.current_uri == null) {
 			try {
 				if(notification != null) {
 					notification.clear_hints();
@@ -136,7 +136,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 			timeout = 0;
 		}
 
-		if(uri == "" || uri == null) {
+		if(uri == EMPTYSTRING || uri == null) {
 			try {
 				if(notification != null) {
 					notification.clear_hints();
@@ -168,17 +168,17 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		if(global.current_artist != null)
 			artist = remove_linebreaks(global.current_artist);
 		else
-			artist = "unknown artist";
+			artist = UNKNOWN_ARTIST;
 
 		if(global.current_title != null)
 			title = remove_linebreaks(global.current_title);
 		else
-			title = "unknown title";
+			title = UNKNOWN_TITLE;
 
 		if(global.current_album != null)
 			album = remove_linebreaks(global.current_album);
 		else
-			album = "unknown album";
+			album = UNKNOWN_ALBUM;
 
 		//File f = get_albumimage_for_artistalbum(artist, album, "medium");
 		string summary = title;
@@ -191,7 +191,7 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		}
 		else {
 			notification.clear_hints();
-			notification.update(summary, body, "");
+			notification.update(summary, body, EMPTYSTRING);
 		}
 		if(global.image_path_small != null) { // f.query_exists()) {
 			try {

@@ -494,7 +494,7 @@ private class Xnoise.ImportInfoBar : GLib.Object {
 		import_count = 0;
 		bar = new Gtk.InfoBar();
 
-		bar_label = new Label("");
+		bar_label = new Label(EMPTYSTRING);
 		bar_label.height_request = 20;
 		var content_area = bar.get_content_area();
 		((Container)content_area).add(bar_label);
@@ -541,7 +541,7 @@ private class Xnoise.ImportInfoBar : GLib.Object {
 	private void on_import(string uri) {
 		if(!global.media_import_in_progress) {
 			if(bar_label == null)
-				bar_label = new Label("");
+				bar_label = new Label(EMPTYSTRING);
 	
 			bar_label.set_text("Adding new files to the media database...");
 		
@@ -580,7 +580,7 @@ private class Xnoise.ImportInfoBar : GLib.Object {
 		//GLib.Source.remove (import_notify_timeout);
 		
 		if(bar_label == null)
-			bar_label = new Label("");
+			bar_label = new Label(EMPTYSTRING);
 			
 		if(import_count > 1) {
 			Idle.add( () => {

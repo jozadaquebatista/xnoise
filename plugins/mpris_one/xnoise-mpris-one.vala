@@ -1,6 +1,6 @@
 /* xnoise-mpris-one.vala
  *
- * Copyright (C) 2011 Jörn Magens
+ * Copyright (C) 2011-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,7 +33,9 @@
 // http://www.mpris.org/1.0/spec.html
 
 using Gtk;
+
 using Xnoise;
+using Xnoise.Services;
 using Xnoise.PluginModule;
 
 
@@ -219,23 +221,23 @@ public class FirstMprisPlayer : GLib.Object {
 	public HashTable<string, Variant> GetMetadata() {
 		HashTable<string, Variant> retv = new HashTable<string, Variant>(str_hash, str_equal);
 		// For now, this is working for the currently played track, only!
-		if(global.current_artist != null && global.current_artist != "")
+		if(global.current_artist != null && global.current_artist != EMPTYSTRING)
 			retv.insert("artist", global.current_artist);
-		if(global.current_album != null && global.current_album != "")
+		if(global.current_album != null && global.current_album != EMPTYSTRING)
 			retv.insert("album", global.current_album);
-		if(global.current_title != null && global.current_title != "")
+		if(global.current_title != null && global.current_title != EMPTYSTRING)
 			retv.insert("title", global.current_title);
-		if(global.current_location != null && global.current_location != "")
+		if(global.current_location != null && global.current_location != EMPTYSTRING)
 			retv.insert("location", global.current_location);
-		if(global.current_genre != null && global.current_genre != "")
+		if(global.current_genre != null && global.current_genre != EMPTYSTRING)
 			retv.insert("genre", global.current_genre);
-		if(global.current_organization != null && global.current_organization != "")
+		if(global.current_organization != null && global.current_organization != EMPTYSTRING)
 			retv.insert("organization", global.current_organization);
 		uint32 len_ms = (uint32)(gst_player.length_time / Gst.MSECOND);
 		uint32 len_s  = (uint32)(gst_player.length_time / Gst.SECOND);
 		retv.insert("mtime", len_ms);
 		retv.insert("time",  len_s );
-		if(global.current_uri != null && global.current_uri != "")
+		if(global.current_uri != null && global.current_uri != EMPTYSTRING)
 			retv.insert("location", global.current_uri);
 		return retv;
 	}
@@ -336,17 +338,17 @@ public class FirstMprisTrackList : GLib.Object {
 	public HashTable<string, Variant> GetMetadata(int Position) {
 		HashTable<string, Variant> retv = new HashTable<string, Variant>(str_hash, str_equal);
 		// For now, this is working for the currently played track, only!
-		//if(global.current_artist != null && global.current_artist != "")
+		//if(global.current_artist != null && global.current_artist != EMPTYSTRING)
 		//	retv.insert("artist", global.current_artist);
-		//if(global.current_album != null && global.current_album != "")
+		//if(global.current_album != null && global.current_album != EMPTYSTRING)
 		//	retv.insert("album", global.current_album);
-		//if(global.current_title != null && global.current_title != "")
+		//if(global.current_title != null && global.current_title != EMPTYSTRING)
 		//	retv.insert("title", global.current_title);
-		//if(global.current_location != null && global.current_location != "")
+		//if(global.current_location != null && global.current_location != EMPTYSTRING)
 		//	retv.insert("location", global.current_location);
-		//if(global.current_genre != null && global.current_genre != "")
+		//if(global.current_genre != null && global.current_genre != EMPTYSTRING)
 		//	retv.insert("genre", global.current_genre);
-		//if(global.current_organization != null && global.current_organization != "")
+		//if(global.current_organization != null && global.current_organization != EMPTYSTRING)
 		//	retv.insert("organization", global.current_organization);
 		return retv;
 	}

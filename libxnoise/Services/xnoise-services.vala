@@ -31,7 +31,14 @@
 
 
 namespace Xnoise.Services {
-	private static const string EMPTYSTRING = "";
+	public static const string UNKNOWN_ARTIST       = "unknown artist";
+	public static const string UNKNOWN_TITLE        = "unknown title";
+	public static const string UNKNOWN_ALBUM        = "unknown album";
+	public static const string UNKNOWN_GENRE        = "unknown genre";
+	public static const string UNKNOWN_ORGANIZATION = "unknown organization";
+	public static const string UNKNOWN_LOCATION     = "unknown location";
+	public static const string EMPTYSTRING          = "";
+	
 	public static RemoteSchemes get_remote_schemes() { 
 		return _remote_schemes;
 	}
@@ -258,7 +265,7 @@ namespace Xnoise.Services {
 	public static string prepare_name_from_filename(string? val) {
 		if(val == null)
 			return EMPTYSTRING;
-		string name = val;
+		unowned string name = val;
 		string prep;
 		if(name.last_index_of(".") != -1) 
 			prep = name.substring(0, name.last_index_of("."));

@@ -29,11 +29,14 @@
  */
 
 using Gtk;
+
+using Xnoise;
+using Xnoise.Services;
 using Xnoise.TagAccess;
 
 
 public class Xnoise.TagTitleEditor : GLib.Object {
-	private unowned Xnoise.Main xn;	
+	private unowned Xnoise.Main xn;
 	private Dialog dialog;
 	private Gtk.Builder builder;
 	private unowned MediaBrowserModel mbm = null;
@@ -73,7 +76,6 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 	private bool query_trackdata_job(Worker.Job job) {
 		// callback for query in other thread
 		TrackData[] tmp = {};
-//		TrackData[] tda = {};
 		if(global.media_import_in_progress) {
 			Idle.add( () => {
 				this.dialog.destroy();
@@ -191,15 +193,15 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		if(td_old == null)
 			return;
 		
-		infolabel.label = "";
+		infolabel.label = EMPTYSTRING;
 		TrackData td_new = copy_trackdata(td_old);
-		if(entry_artist.text != null && entry_artist.text._strip() != "")
+		if(entry_artist.text != null && entry_artist.text._strip() != EMPTYSTRING)
 			td_new.artist = entry_artist.text;
-		if(entry_album.text != null && entry_album.text._strip() != "")
+		if(entry_album.text != null && entry_album.text._strip() != EMPTYSTRING)
 			td_new.album  = entry_album.text;
-		if(entry_title.text != null && entry_title.text._strip() != "")
+		if(entry_title.text != null && entry_title.text._strip() != EMPTYSTRING)
 			td_new.title  = entry_title.text;
-		if(entry_genre.text != null && entry_genre.text._strip() != "")
+		if(entry_genre.text != null && entry_genre.text._strip() != EMPTYSTRING)
 			td_new.genre  = entry_genre.text;
 		td_new.year         = spinbutton_year.get_value_as_int();
 		td_new.tracknumber  = (uint)spinbutton_tracknumber.get_value_as_int(); //TODO: add check

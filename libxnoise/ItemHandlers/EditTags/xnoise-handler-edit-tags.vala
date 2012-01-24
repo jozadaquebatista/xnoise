@@ -48,11 +48,9 @@ public class Xnoise.HandlerEditTags : ItemHandler {
 	private const string artistname = "HandlerEditTagsActionArtist";
 	
 	private const string name = "HandlerEditTags";
-	private unowned Main xn;
 	
 	
 	public HandlerEditTags() {
-		xn = Main.instance;
 		
 		edit_title_mediabrowser = new Action(); 
 		edit_title_mediabrowser.action = on_edit_title_mediabrowser;

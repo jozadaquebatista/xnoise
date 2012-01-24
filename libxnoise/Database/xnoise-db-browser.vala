@@ -250,7 +250,7 @@ public class Xnoise.Database.DbBrowser {
 
 	public bool get_uri_for_id(int id, out string val) {
 		Statement stmt;
-		val = "";
+		val = EMPTYSTRING;
 		this.db.prepare_v2(STMT_URI_FOR_ID, -1, out stmt);
 		stmt.reset();
 		if(stmt.bind_int(1, id) != Sqlite.OK) {
@@ -288,17 +288,17 @@ public class Xnoise.Database.DbBrowser {
 			val.item        = Item((ItemType)stmt.column_int(4), stmt.column_text(5), stmt.column_int(7));
 			val.genre       = stmt.column_text(8);
 			val.year        = stmt.column_int(9);
-			if((val.artist=="") || (val.artist==null)) {
-				val.artist = "unknown artist";
+			if((val.artist==EMPTYSTRING) || (val.artist==null)) {
+				val.artist = UNKNOWN_ARTIST;
 			}
-			if((val.album== "") || (val.album== null)) {
-				val.album = "unknown album";
+			if((val.album== EMPTYSTRING) || (val.album== null)) {
+				val.album = UNKNOWN_ALBUM;
 			}
-			if((val.genre== "") || (val.genre== null)) {
-				val.genre = "unknown genre";
+			if((val.genre== EMPTYSTRING) || (val.genre== null)) {
+				val.genre = UNKNOWN_GENRE;
 			}
-			if((val.title== "") || (val.title== null)) {
-				val.title = "unknown title";
+			if((val.title== EMPTYSTRING) || (val.title== null)) {
+				val.title = UNKNOWN_TITLE;
 				File file = File.new_for_uri(val.item.uri);
 				string fileBasename;
 				if(file != null)
@@ -334,14 +334,14 @@ public class Xnoise.Database.DbBrowser {
 			print("get_trackdata_for_id: track is not in db. ID: %d\n", id);
 			return false;
 		}
-		if((val.artist=="") | (val.artist==null)) {
-			val.artist = "unknown artist";
+		if((val.artist==EMPTYSTRING) | (val.artist==null)) {
+			val.artist = UNKNOWN_ARTIST;
 		}
-		if((val.album== "") | (val.album== null)) {
-			val.album = "unknown album";
+		if((val.album== EMPTYSTRING) | (val.album== null)) {
+			val.album = UNKNOWN_ALBUM;
 		}
-		if((val.title== "") | (val.title== null)) {
-			val.title = "unknown title";
+		if((val.title== EMPTYSTRING) | (val.title== null)) {
+			val.title = UNKNOWN_TITLE;
 			File file = File.new_for_uri(val.item.uri);
 			string fileBasename;
 			if(file != null)
@@ -369,8 +369,8 @@ public class Xnoise.Database.DbBrowser {
 			return false;
 		}
 		if(stmt.step() == Sqlite.ROW) {
-			val.artist      = "";
-			val.album       = "";
+			val.artist      = EMPTYSTRING;
+			val.album       = EMPTYSTRING;
 			val.title       = stmt.column_text(0);
 			val.item        = Item(ItemType.STREAM, stmt.column_text(1), id);
 		}
@@ -423,20 +423,20 @@ public class Xnoise.Database.DbBrowser {
 			val.year        = stmt.column_int(8);
 			retval = true;
 		}
-		if((val.artist=="") | (val.artist==null)) {
-			val.artist = "unknown artist";
+		if((val.artist==EMPTYSTRING) | (val.artist==null)) {
+			val.artist = UNKNOWN_ARTIST;
 		}
-		if((val.album== "") | (val.album== null)) {
-			val.album = "unknown album";
+		if((val.album== EMPTYSTRING) | (val.album== null)) {
+			val.album = UNKNOWN_ALBUM;
 		}
-		if((val.genre== "") | (val.genre== null)) {
-			val.genre = "unknown genre";
+		if((val.genre== EMPTYSTRING) | (val.genre== null)) {
+			val.genre = UNKNOWN_GENRE;
 		}
-		if((val.title== "") | (val.title== null)) {
-			val.title = "unknown title";
+		if((val.title== EMPTYSTRING) | (val.title== null)) {
+			val.title = UNKNOWN_TITLE;
 			File file = File.new_for_uri(uri);
 			string fpath = file.get_path();
-			string fileBasename = "";
+			string fileBasename = EMPTYSTRING;
 			if(fpath!=null) fileBasename = GLib.Filename.display_basename(fpath);
 			val.title = fileBasename;
 		}
@@ -725,7 +725,7 @@ public class Xnoise.Database.DbBrowser {
 		
 		Item[] val = {};
 		Statement stmt;
-		if(searchtext != "") {
+		if(searchtext != EMPTYSTRING) {
 			string st = "%%%s%%".printf(searchtext);
 			this.db.prepare_v2(STMT_GET_ARTISTS_WITH_SEARCH, -1, out stmt);
 			if((stmt.bind_text(1, st) != Sqlite.OK) ||
@@ -757,7 +757,7 @@ public class Xnoise.Database.DbBrowser {
 	public TrackData[]? get_trackdata_by_albumid(ref string searchtext, int32 id) {
 		TrackData[] val = {};
 		Statement stmt;
-		if(searchtext != "") {
+		if(searchtext != EMPTYSTRING) {
 			string st = "%%%s%%".printf(searchtext);
 			this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH, -1, out stmt);
 			if((stmt.bind_int (1, id) != Sqlite.OK) ||
@@ -801,7 +801,7 @@ public class Xnoise.Database.DbBrowser {
 	public TrackData[]? get_trackdata_by_artistid(ref string searchtext, int32 id) {
 		TrackData[] val = {};
 		Statement stmt;
-		if(searchtext != "") {
+		if(searchtext != EMPTYSTRING) {
 			string st = "%%%s%%".printf(searchtext);
 			this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH, -1, out stmt);
 			if((stmt.bind_int (1, id) != Sqlite.OK) ||
@@ -845,7 +845,7 @@ public class Xnoise.Database.DbBrowser {
 	public Item? get_artistitem_by_artistid(ref string searchtext, int32 id) {
 		Statement stmt;
 		Item? i = Item(ItemType.UNKNOWN);
-		if(searchtext != "") {
+		if(searchtext != EMPTYSTRING) {
 			string st = "%%%s%%".printf(searchtext);
 			this.db.prepare_v2(STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH, -1, out stmt);
 			if((stmt.bind_int (1, id) != Sqlite.OK) ||
@@ -908,7 +908,7 @@ public class Xnoise.Database.DbBrowser {
 	public Item[] get_albums_with_search(ref string searchtext, int32 id) {
 		Item[] val = {};
 		Statement stmt;
-		if(searchtext != "") {
+		if(searchtext != EMPTYSTRING) {
 			string st = "%%%s%%".printf(searchtext);
 			this.db.prepare_v2(STMT_GET_ALBUMS_WITH_SEARCH, -1, out stmt);
 			if((stmt.bind_int (1, id) != Sqlite.OK) ||

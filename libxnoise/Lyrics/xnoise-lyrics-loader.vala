@@ -145,7 +145,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		this.title  = prepare_for_search(_title);
 		
 		if(providers.get_nth(n_th_provider) == null) {
-			sign_fetched(artist, title, "", "", "", ""); //_("Enable a lyrics provider plugin for lyrics fetching to work")
+			sign_fetched(artist, title, EMPTYSTRING, EMPTYSTRING, EMPTYSTRING, EMPTYSTRING); //_("Enable a lyrics provider plugin for lyrics fetching to work")
 			return false;
 		}
 		Idle.add( () => {
@@ -168,7 +168,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 		//print("got lyrics reply from %s %s %s %s\n", _providername, _artist, _title, _identifier);
 		if(prepare_for_comparison(_artist) == prepare_for_comparison(this.artist) && 
 		   prepare_for_comparison(_title) == prepare_for_comparison(this.title)) {
-			if(_text == null || _text.strip() == "") {
+			if(_text == null || _text.strip() == EMPTYSTRING) {
 				n_th_provider++;
 				if(providers.count > n_th_provider) {
 					//print("NEXT lyrics provider\n");
@@ -179,7 +179,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
 					n_th_provider = 0;
 					
 					// the 'no lyrics found...' also appears in the db provider !! 
-					sign_fetched(_artist, _title, "", _identifier, _("no lyrics found..."), _providername); 
+					sign_fetched(_artist, _title, EMPTYSTRING, _identifier, _("no lyrics found..."), _providername); 
 				}
 			}
 			else {

@@ -937,7 +937,7 @@ bool test_xml_readwrite_01() {
 	
 
 //	//write
-//	var mw = new Xnoise.SimpleMarkup.Writer(mr.root, ""); 
+//	var mw = new Xnoise.SimpleMarkup.Writer(mr.root, EMPTYSTRING); 
 //	//noheader used
 //	mw.write(target.get_uri());
 

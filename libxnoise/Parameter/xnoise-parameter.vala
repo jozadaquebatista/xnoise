@@ -154,7 +154,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 	//Type string
 	public static string get_string_value(string key) {
 		string val = ht_string.lookup(key);
-		return val == null ? "" : val;
+		return val == null ? EMPTYSTRING : val;
 	}
 
 

@@ -33,7 +33,6 @@ using Gtk;
 public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 	private int last_size = 0;
 	private TrackListModel.Column _id;
-	private unowned Main xn;
 	
 	public TrackListModel.Column id { 
 		get {
@@ -42,7 +41,6 @@ public class Xnoise.TextColumn : Xnoise.TrackListColumn {
 	}
 	
 	public TextColumn(string title, CellRendererText renderer, TrackListModel.Column col_id) {
-		xn = Main.instance;
 		this.set_title(title);
 		this._id = col_id;
 		this.pack_start(renderer, true);

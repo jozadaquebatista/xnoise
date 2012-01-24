@@ -2309,6 +2309,13 @@ void xnoise_plugin_module_iplugin_set_owner (XnoisePluginModuleIPlugin* self, Xn
 const gchar* xnoise_plugin_module_iplugin_get_name (XnoisePluginModuleIPlugin* self);
 XnoiseMain* xnoise_plugin_module_iplugin_get_xn (XnoisePluginModuleIPlugin* self);
 void xnoise_plugin_module_iplugin_set_xn (XnoisePluginModuleIPlugin* self, XnoiseMain* value);
+#define XNOISE_SERVICES_UNKNOWN_ARTIST "unknown artist"
+#define XNOISE_SERVICES_UNKNOWN_TITLE "unknown title"
+#define XNOISE_SERVICES_UNKNOWN_ALBUM "unknown album"
+#define XNOISE_SERVICES_UNKNOWN_GENRE "unknown genre"
+#define XNOISE_SERVICES_UNKNOWN_ORGANIZATION "unknown organization"
+#define XNOISE_SERVICES_UNKNOWN_LOCATION "unknown location"
+#define XNOISE_SERVICES_EMPTYSTRING ""
 gpointer xnoise_remote_schemes_ref (gpointer instance);
 void xnoise_remote_schemes_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_remote_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);

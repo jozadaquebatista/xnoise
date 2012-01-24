@@ -387,7 +387,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		job.big_counter[0] += job.items.length;
 		TrackData[] tda = {};
 		TrackData[] tmp;
-		string searchtext = "";
+		string searchtext = EMPTYSTRING;
 		foreach(Item? item in job.items) {
 			tmp = item_converter.to_trackdata(item, ref searchtext);
 			if(tmp == null) {
@@ -603,7 +603,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			case D_KEY: {
 					if(e.state != 0x0014) // Ctrl Modifier
 						return false;
-					searchEntryMB.text = "";
+					searchEntryMB.text = EMPTYSTRING;
 					searchEntryMB.modify_base(StateType.NORMAL, null);
 					this.mediaBr.on_searchtext_changed();
 				}
@@ -1000,7 +1000,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		radioentry.secondary_icon_stock = Gtk.Stock.CLEAR;
 		radioentry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
 		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
-			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
+			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = EMPTYSTRING;
 		});
 		((Gtk.Box)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
 
@@ -1013,15 +1013,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.OK, 1);
 		radiookbutton.clicked.connect( () => {
 
-			if((radioentry.text!=null) && (radioentry.text.strip() != "")) {
+			if((radioentry.text!=null) && (radioentry.text.strip() != EMPTYSTRING)) {
 				var uri = radioentry.text.strip();
 				File f = File.new_for_uri(uri);
 				var td = new TrackData();
 				td.tracknumber = 0;
 				td.title       = prepare_name_from_filename(f.get_basename());
-				td.album       = "";
-				td.artist      = "";
-				td.genre       = "";
+				td.album       = EMPTYSTRING;
+				td.artist      = EMPTYSTRING;
+				td.genre       = EMPTYSTRING;
 				td.length      = 0;
 				td.item        = ItemHandlerManager.create_item(uri);
 				this.trackList.tracklistmodel.insert_title(null,
@@ -1064,7 +1064,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		fcdialog.set_current_folder(Environment.get_home_dir());
 		if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
 			GLib.SList<string> res = fcdialog.get_uris();
-			if(!(res == null || res.data == "")) {
+			if(!(res == null || res.data == EMPTYSTRING)) {
 				string[] media_files = {};
 				foreach(string s in res) {
 					media_files += s;
@@ -1087,7 +1087,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public void set_displayed_title(ref string? newuri, string? tagname, string? tagvalue) {
 		string text, album, artist, title, organization, location, genre;
 		string basename = null;
-		if((newuri == "")|(newuri == null)) {
+		if((newuri == EMPTYSTRING)|(newuri == null)) {
 			text = "<b>XNOISE</b> - ready to rock! ;-)";
 			songProgressBar.title_text = text; //song_title_label.set_text(text);
 			return;
@@ -1099,21 +1099,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				artist = remove_linebreaks(global.current_artist);
 			}
 			else {
-				artist = "unknown artist";
+				artist = UNKNOWN_ARTIST;
 			}
 			if(global.current_title!=null) {
 				title = remove_linebreaks(global.current_title);
 			}
 			else {
-				title = prepare_name_from_filename(basename);//"unknown title";
+				title = prepare_name_from_filename(basename);//UNKNOWN_TITLE;
 			}
 			if(global.current_album!=null) {
 				album = remove_linebreaks(global.current_album);
 			}
 			else {
-				album = "unknown album";
+				album = UNKNOWN_ALBUM;
 			}
-			if((newuri!=null) && (newuri!="")) {
+			if((newuri!=null) && (newuri!=EMPTYSTRING)) {
 				text = Markup.printf_escaped("<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>",
 					title,
 					_("by"),
@@ -1121,10 +1121,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					_("on"),
 					album
 					);
-				if(album=="unknown album" &&
-				   artist=="unknown artist" &&
-				   title=="unknown title")
-					if((basename == null)||(basename == "")) {
+				if(album==UNKNOWN_ALBUM &&
+				   artist==UNKNOWN_ARTIST &&
+				   title==UNKNOWN_TITLE)
+					if((basename == null)||(basename == EMPTYSTRING)) {
 						text = Markup.printf_escaped("<b>...</b>");
 					}
 					else {
@@ -1138,11 +1138,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 				else {
 					text = "<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
-						_("unknown title"),
+						_(UNKNOWN_TITLE),
 						_("by"),
-						_("unknown artist"),
+						_(UNKNOWN_ARTIST),
 						_("on"),
-						_("unknown album")
+						_(UNKNOWN_ALBUM)
 						);
 				}
 			}
@@ -1151,34 +1151,34 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			if(global.current_artist!=null)
 				artist = remove_linebreaks(global.current_artist);
 			else
-				artist = "unknown artist";
+				artist = UNKNOWN_ARTIST;
 
 			if(global.current_title!=null)
 				title = remove_linebreaks(global.current_title);
 			else
-				title = "unknown title";
+				title = UNKNOWN_TITLE;
 
 			if(global.current_album!=null)
 				album = remove_linebreaks(global.current_album);
 			else
-				album = "unknown album";
+				album = UNKNOWN_ALBUM;
 
 			if(global.current_organization!=null)
 				organization = remove_linebreaks(global.current_organization);
 			else
-				organization = "unknown organization";
+				organization = UNKNOWN_ORGANIZATION;
 
 			if(global.current_genre!=null)
 				genre = remove_linebreaks(global.current_genre);
 			else
-				genre = "unknown genre";
+				genre = UNKNOWN_GENRE;
 
 			if(global.current_location!=null)
 				location = remove_linebreaks(global.current_location);
 			else
-				location = "unknown location";
+				location = UNKNOWN_LOCATION;
 
-			if((newuri!=null) && (newuri!="")) {
+			if((newuri!=null) && (newuri!=EMPTYSTRING)) {
 				text = Markup.printf_escaped("<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>",
 					title,
 					_("by"),
@@ -1186,14 +1186,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					_("on"),
 					album
 					);
-				if(album=="unknown album" &&
-				   artist=="unknown artist" &&
-				   title=="unknown title") {
+				if(album==UNKNOWN_ALBUM &&
+				   artist==UNKNOWN_ARTIST &&
+				   title==UNKNOWN_TITLE) {
 
-					if(organization!="unknown organization")
-						text = Markup.printf_escaped("<b>%s</b>", _("unknown organization"));
-					else if(location!="unknown location")
-						text = Markup.printf_escaped("<b>%s</b>", _("unknown location"));
+					if(organization!=UNKNOWN_ORGANIZATION)
+						text = Markup.printf_escaped("<b>%s</b>", _(UNKNOWN_ORGANIZATION));
+					else if(location!=UNKNOWN_LOCATION)
+						text = Markup.printf_escaped("<b>%s</b>", _(UNKNOWN_LOCATION));
 					else
 						text = Markup.printf_escaped("<b>%s</b>", file.get_uri());
 				}
@@ -1205,11 +1205,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 				else {
 					text = "<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
-						_("unknown title"),
+						_(UNKNOWN_TITLE),
 						_("by"),
-						_("unknown artist"),
+						_(UNKNOWN_ARTIST),
 						_("on"),
-						_("unknown album")
+						_(UNKNOWN_ALBUM)
 						);
 				}
 			}
@@ -1492,7 +1492,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					this.search_idlesource = 0;
 					return false;
 				});
-				if(entry.text != "") {
+				if(entry.text != EMPTYSTRING) {
 					Gdk.Color color;
 					Gdk.Color.parse("DarkSalmon", out color);
 					entry.modify_base(StateType.NORMAL, color);
@@ -1510,7 +1510,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					this.mediaBr.on_searchtext_changed();
 				}
 				if(p0 == Gtk.EntryIconPosition.SECONDARY) {
-					s.text = "";
+					s.text = EMPTYSTRING;
 					entry.modify_base(StateType.NORMAL, null);
 					this.mediaBr.on_searchtext_changed();
 				}

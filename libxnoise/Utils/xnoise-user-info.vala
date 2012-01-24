@@ -33,6 +33,7 @@
 
 using Gtk;
 
+
 public class Xnoise.UserInfo : GLib.Object {
 	
 	// Set how the infobar should be removed

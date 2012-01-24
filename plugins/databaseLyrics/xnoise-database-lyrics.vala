@@ -122,7 +122,7 @@ private class Xnoise.DatabaseLyricsWriter : GLib.Object {
 		loader.sign_fetched.connect( (a,t,c,i,tx,p) => {
 			if(p == DATABASELYRICS) // already buffered in database
 				return;
-			if(tx == null || tx == "" || tx.strip() == "no lyrics found...")
+			if(tx == null || tx == EMPTYSTRING || tx.strip() == "no lyrics found...")
 				return;
 			artist = a;
 			title = t;
@@ -259,7 +259,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 	}
 	
 	public string get_credits() {
-		return "";
+		return EMPTYSTRING;
 	}
 	
 	public string get_identifier() {
@@ -274,7 +274,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 		
 		Idle.add( () => {
 			if(this.cb != null)
-				this.cb(artist, title, get_credits(), get_identifier(), "", DATABASELYRICS);
+				this.cb(artist, title, get_credits(), get_identifier(), EMPTYSTRING, DATABASELYRICS);
 			return false;
 		});
 		
@@ -303,9 +303,9 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 			
 			stmt.reset();
 			
-			string txt = "";
-			string cred = "";
-			string ident = "";
+			string txt = EMPTYSTRING;
+			string cred = EMPTYSTRING;
+			string ident = EMPTYSTRING;
 			
 			if((stmt.bind_text(1, "%s".printf(prepare_for_comparison(this.artist))) != Sqlite.OK)|
 			   (stmt.bind_text(2, "%s".printf(prepare_for_comparison(this.title))) != Sqlite.OK)) {
@@ -325,7 +325,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
 			else {
 				Idle.add( () => {
 					if(this.cb != null)
-						this.cb(artist, title, cred, ident, "", DATABASELYRICS);
+						this.cb(artist, title, cred, ident, EMPTYSTRING, DATABASELYRICS);
 					this.destruct();
 					return false;
 				});

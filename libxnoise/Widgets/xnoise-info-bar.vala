@@ -28,6 +28,8 @@
  * 	Jörn Magens
  */
 
+
+
 public class Xnoise.InfoBar : Gtk.InfoBar {
 
 	private Gtk.Label info_label;

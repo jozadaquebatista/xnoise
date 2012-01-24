@@ -1,6 +1,6 @@
 /* xnoise-tag-reader.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,17 +28,21 @@
  * 	Jörn Magens
  */
 
+using Xnoise;
 using Xnoise.Services;
 
 public class Xnoise.TagAccess.TagReader {
 	public TrackData? read_tag(string? filename) {
-		if(filename == null || filename.strip() == "")
+		if(filename == null || filename.strip() == EMPTYSTRING)
 			return null;
-		File f = File.new_for_commandline_arg(filename);
-		Item? item = ItemHandlerManager.create_item(f.get_uri());
-		TrackData td;
+		File f = null;
+		f = File.new_for_path(filename);
+		if(f == null)
+			return null;
+		TrackData td = new TrackData();
+		td.item = ItemHandlerManager.create_item(f.get_uri());
 		TagLib.File taglib_file = null;
-		if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK)
+		if(td.item.type != ItemType.LOCAL_AUDIO_TRACK && td.item.type != ItemType.LOCAL_VIDEO_TRACK)
 			return null;
 		if(f.get_path() == null)
 			return null;
@@ -49,7 +53,6 @@ public class Xnoise.TagAccess.TagReader {
 			unowned TagLib.AudioProperties ap = null;
 			ap = taglib_file.audioproperties;
 			if(tag != null && ap != null) {
-				td = new TrackData();
 				try {
 					// from class Tag
 					if(tag != null) {
@@ -59,16 +62,14 @@ public class Xnoise.TagAccess.TagReader {
 						td.genre       = tag.genre;
 						td.year        = tag.year;
 						td.tracknumber = tag.track;
-						td.item        = item;
 					} 
 					else {
-						td.artist      = "unknown artist";
-						td.title       = "unknown title";
-						td.album       = "unknown album";
-						td.genre       = "unknown genre";
+						td.artist      = UNKNOWN_ARTIST;
+						td.title       = UNKNOWN_TITLE;
+						td.album       = UNKNOWN_ALBUM;
+						td.genre       = UNKNOWN_GENRE;
 						td.year        = 0;
 						td.tracknumber = (uint)0;
-						td.item        = item;
 					}	
 					// from class AudioProperties
 					if(ap != null) {
@@ -80,43 +81,39 @@ public class Xnoise.TagAccess.TagReader {
 					}		
 				}
 				finally {
-					if((td.artist == "")||(td.artist == null)) td.artist = "unknown artist";
-					if((td.title  == "")||(td.title  == null)) td.title  = "unknown title";
-					if((td.album  == "")||(td.album  == null)) td.album  = "unknown album";
-					if((td.genre  == "")||(td.genre  == null)) td.genre  = "unknown genre";
+					if((td.artist == EMPTYSTRING)||(td.artist == null)) td.artist = UNKNOWN_ARTIST;
+					if((td.title  == EMPTYSTRING)||(td.title  == null)) td.title  = UNKNOWN_TITLE;
+					if((td.album  == EMPTYSTRING)||(td.album  == null)) td.album  = UNKNOWN_ALBUM;
+					if((td.genre  == EMPTYSTRING)||(td.genre  == null)) td.genre  = UNKNOWN_GENRE;
 					tag = null;
 					taglib_file = null;
 				}
 			}
 			else {
-				td = new TrackData();
-				td.artist      = "unknown artist";
-				td.title       = "unknown title";
-				td.album       = "unknown album";
-				td.genre       = "unknown genre";
+				td.artist      = UNKNOWN_ARTIST;
+				td.title       = UNKNOWN_TITLE;
+				td.album       = UNKNOWN_ALBUM;
+				td.genre       = UNKNOWN_GENRE;
 				td.year        = 0;
 				td.tracknumber = (uint)0;
-				td.item        = item;
 				td.length      = (int32)0;
 				td.bitrate     = 0;
 			}
 		}
 		else {
-			td = new TrackData();
-			td.artist      = "unknown artist";
-			td.title       = "unknown title";
-			td.album       = "unknown album";
-			td.genre       = "unknown genre";
+			td.artist      = UNKNOWN_ARTIST;
+			td.title       = UNKNOWN_TITLE;
+			td.album       = UNKNOWN_ALBUM;
+			td.genre       = UNKNOWN_GENRE;
 			td.year        = 0;
 			td.tracknumber = (uint)0;
-			td.item        = item;
 			td.length      = (int32)0;
 			td.bitrate     = 0;
 		}
-		if(td.title  == "unknown title")
+		if(td.title  == UNKNOWN_TITLE)
 			td.title = prepare_name_from_filename(GLib.Filename.display_basename(filename));
 		
-		return td;
+		return (owned)td;
 	}
 }
 

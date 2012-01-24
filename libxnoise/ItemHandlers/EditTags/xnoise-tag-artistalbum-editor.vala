@@ -29,6 +29,9 @@
  */
 
 using Gtk;
+
+using Xnoise;
+using Xnoise.Services;
 using Xnoise.TagAccess;
 
 
@@ -36,18 +39,11 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 	private unowned Xnoise.Main xn;
 	private Dialog dialog;
 	private Gtk.Builder builder;
-//	private Content content;
 	private string new_content_name = null;
-//	private string org_content_name = null;
 	private unowned MediaBrowserModel mbm = null;
 	
 	private Entry entry;
-//	private TreeRowReference treerowref;
 	
-//	private enum Content {
-//		ARTIST,
-//		ALBUM
-//	}
 	
 	private Item? item;
 	
@@ -62,11 +58,11 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 		mbm = main_window.mediaBr.mediabrowsermodel;
 		mbm.notify["populating-model"].connect( () => {
 			if(!global.media_import_in_progress && !mbm.populating_model)
-				infolabel.label = "";
+				infolabel.label = EMPTYSTRING;
 		});
 		global.notify["media-import-in-progress"].connect( () => {
 			if(!global.media_import_in_progress && !mbm.populating_model)
-				infolabel.label = "";
+				infolabel.label = EMPTYSTRING;
 		});
 		
 		fill_entries();
@@ -170,8 +166,8 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 			infolabel.label = _("Please wait while importing media. Or cancel, if you do not want to wait.");
 			return;
 		}
-		infolabel.label = "";
-		if(entry.text != null && entry.text.strip() != "")
+		infolabel.label = EMPTYSTRING;
+		if(entry.text != null && entry.text.strip() != EMPTYSTRING)
 			new_content_name = entry.text.strip();
 		// TODO: UTF-8 validation
 		switch(item.type) {
@@ -224,7 +220,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 
 //	private void do_album_case_correction() {
 //		TreeIter artist_iter, album_iter;
-//		string artist = "";
+//		string artist = EMPTYSTRING;
 //		TreePath path  = treerowref.get_path();
 //		mbm.get_iter(out album_iter, path);
 //		mbm.iter_parent(out artist_iter, album_iter);

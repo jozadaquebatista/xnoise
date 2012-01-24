@@ -38,8 +38,8 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	private const int SIZE = 48;
 	private AlbumImageLoader loader = null;
 	private Main xn;
-	private string artist = "";
-	private string album = "";
+	private string artist = EMPTYSTRING;
+	private string album = EMPTYSTRING;
 	private static uint timeout = 0;
 	private string default_size = "medium";
 	private string? current_path = null;
@@ -99,15 +99,15 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		if(MainContext.current_source().is_destroyed())
 			return;
 		
-		if(uri == null || uri == "")
+		if(uri == null || uri == EMPTYSTRING)
 			return;
-		string _artist = "";
-		string _album = "";
-		string _artist_raw = "";
-		string _album_raw = "";
+		string _artist = EMPTYSTRING;
+		string _album = EMPTYSTRING;
+		string _artist_raw = EMPTYSTRING;
+		string _album_raw = EMPTYSTRING;
 		
-		if((global.current_artist != null && global.current_artist != "unknown artist") && 
-		   (global.current_album != null && global.current_album != "unknown album")) {
+		if((global.current_artist != null && global.current_artist != UNKNOWN_ARTIST) && 
+		   (global.current_album != null && global.current_album != UNKNOWN_ALBUM)) {
 			_artist_raw = global.current_artist;
 			_album_raw  = global.current_album;
 			_artist = escape_for_local_folder_search(_artist_raw);
@@ -142,8 +142,8 @@ public class Xnoise.AlbumImage : Gtk.Image {
 		string jalbum  = (string)job.get_arg("album");
 		//string uri    = (string)job.get_arg("uri");
 		
-		if((jartist=="")||(jartist==null)||(jartist=="unknown artist")||
-		   (jalbum =="")||(jalbum ==null)||(jalbum =="unknown album" )) {
+		if((jartist==EMPTYSTRING)||(jartist==null)||(jartist==UNKNOWN_ARTIST)||
+		   (jalbum ==EMPTYSTRING)||(jalbum ==null)||(jalbum ==UNKNOWN_ALBUM )) {
 			return false;
 		}
 		var fileout = get_albumimage_for_artistalbum(jartist, jalbum, default_size);
@@ -224,7 +224,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	
 	private void on_album_image_fetched(string _artist, string _album, string image_path) {
 		//print("\ncalled on_image_fetched %s - %s : %s", _artist, _album, image_path);
-		if(image_path == "") 
+		if(image_path == EMPTYSTRING) 
 			return;
 		
 		if((prepare_for_comparison(artist) != prepare_for_comparison(_artist))||
@@ -243,7 +243,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
 	private bool using_thumbnail = false;
 	
 	private void set_image_via_idle(string? image_path) {
-		if(image_path == null || image_path == "")
+		if(image_path == null || image_path == EMPTYSTRING)
 			return;
 		
 		if(source != 0) {

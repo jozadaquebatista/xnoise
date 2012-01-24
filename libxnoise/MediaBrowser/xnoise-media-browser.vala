@@ -31,6 +31,10 @@
 using Gtk;
 using Gdk;
 
+using Xnoise;
+using Xnoise.Services;
+
+
 public class Xnoise.MediaBrowser : TreeView, IParams {
 	private unowned Main xn;
 	private bool dragging;
@@ -200,7 +204,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			mediabrowsermodel.searchtext = txt.down();
 		}
 		else {
-			mediabrowsermodel.searchtext = "";
+			mediabrowsermodel.searchtext = EMPTYSTRING;
 		}
 		mediabrowsermodel.filter();
 	}

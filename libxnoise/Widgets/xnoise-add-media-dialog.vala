@@ -30,6 +30,10 @@
 
 using Gtk;
 
+using Xnoise;
+using Xnoise.Services;
+
+
 public class Xnoise.AddMediaDialog : GLib.Object {
 
 	private const string XNOISEICON = Config.UIDIR + "xnoise_16x16.png";
@@ -300,7 +304,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		radioentry.secondary_icon_stock = Gtk.Stock.CLEAR;
 		radioentry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
 		radioentry.icon_press.connect( (s, p0, p1) => { // s:Entry, p0:Position, p1:Gdk.Event
-			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = "";
+			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = EMPTYSTRING;
 		});
 		((Gtk.Box)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
 
@@ -313,7 +317,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.OK, 1);
 		radiookbutton.clicked.connect( () => {
 			if((radioentry.text!=null)&&
-			   (radioentry.text.strip()!="")) {
+			   (radioentry.text.strip() != EMPTYSTRING)) {
 				TreeIter iter;
 				listmodel.append(out iter);
 				listmodel.set(iter,

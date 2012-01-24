@@ -30,7 +30,11 @@
 
 
 using Gtk;
+
+using Xnoise;
+using Xnoise.Services;
 using Xnoise.Database;
+
 
 public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
@@ -62,7 +66,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	};
 
 	private static const int VIDEOTHUMBNAILSIZE = 40;
-	public string searchtext = "";
+	public string searchtext = EMPTYSTRING;
 	private unowned IconTheme theme = null;
 	private Gdk.Pixbuf artist_pixb;
 	private Gdk.Pixbuf album_pixb;
@@ -246,7 +250,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				this.get(artist_iter, Column.VIS_TEXT, out text, Column.ITEM, out current_item);
 				if(current_item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
 					continue;
-				text = text != null ? text.down().strip() : "";
+				text = text != null ? text.down().strip() : EMPTYSTRING;
 				if(strcmp(text, itemtext_prep) == 0) {
 					//found artist
 					return false;
@@ -387,7 +391,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		}
 		foreach(TrackData td in tda) {
 			bool visible = false;
-			if(this.searchtext == "" ||
+			if(this.searchtext == EMPTYSTRING ||
 			   td.artist.down().contains(this.searchtext) ||
 			   td.album.down().contains(this.searchtext)  ||
 			   td.title.down().contains(this.searchtext))   {
@@ -453,12 +457,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		for(int i = 0; i < this.iter_n_children(null); i++) {
 			this.iter_nth_child(out artist_iter, null, i);
 			this.get(artist_iter, Column.VIS_TEXT, out text);
-			text = text != null ? text.down().strip() : "";
-			if(strcmp(text, name != null ? name.down().strip() : "") == 0 && org_iter != artist_iter) {
+			text = text != null ? text.down().strip() : EMPTYSTRING;
+			if(strcmp(text, name != null ? name.down().strip() : EMPTYSTRING) == 0 && org_iter != artist_iter) {
 				//found artist TODO: recoursive move org_iter content to artist_iter
 				return;
 			}
-			if(strcmp(text, name != null ? name.down().strip() : "") > 0) {
+			if(strcmp(text, name != null ? name.down().strip() : EMPTYSTRING) > 0) {
 				this.move_before(ref org_iter, artist_iter);
 				return;
 			}
@@ -475,12 +479,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
 			this.iter_nth_child(out album_iter, artist_iter, i);
 			this.get(album_iter, Column.VIS_TEXT, out text);
-			text = text != null ? text.down().strip() : "";
-			if(strcmp(text, name != null ? name.down().strip() : "") == 0 && org_iter != album_iter) {
+			text = text != null ? text.down().strip() : EMPTYSTRING;
+			if(strcmp(text, name != null ? name.down().strip() : EMPTYSTRING) == 0 && org_iter != album_iter) {
 				//found album TODO: recoursive move org_iter content to album_iter
 				return;
 			}
-			if(strcmp(text, name != null ? name.down().strip() : "") > 0) {
+			if(strcmp(text, name != null ? name.down().strip() : EMPTYSTRING) > 0) {
 				this.move_before(ref org_iter, album_iter);
 				return;
 			}
@@ -852,8 +856,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			for(int i = 0; i < this.iter_n_children(null); i++) {
 				this.iter_nth_child(out artist_iter, null, i);
 				this.get(artist_iter, Column.VIS_TEXT, out text);
-				text = text != null ? text.down().strip() : "";
-				if(strcmp(text, artist != null ? artist.down().strip() : "") == 0) {
+				text = text != null ? text.down().strip() : EMPTYSTRING;
+				if(strcmp(text, artist != null ? artist.down().strip() : EMPTYSTRING) == 0) {
 					//found artist
 					break;
 				}
@@ -863,8 +867,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
 				this.iter_nth_child(out album_iter, artist_iter, i);
 				this.get(album_iter, Column.VIS_TEXT, out text);
-				text = text != null ? text.down().strip() : "";
-				if(strcmp(text, album != null ? album.down().strip() : "") == 0) {
+				text = text != null ? text.down().strip() : EMPTYSTRING;
+				if(strcmp(text, album != null ? album.down().strip() : EMPTYSTRING) == 0) {
 					//found album
 					this.set(album_iter,
 							 Column.ICON, (albumimage != null ? albumimage : album_pixb)

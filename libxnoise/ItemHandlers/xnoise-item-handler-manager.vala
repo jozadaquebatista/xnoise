@@ -1,6 +1,6 @@
 /* xnoise-item-handler-manager.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -118,10 +118,6 @@ namespace Xnoise {
 					item.type = Xnoise.ItemType.STREAM;
 				return item;
 			}
-			if(!f.query_exists(null)) {
-				print("Local file does not exist %s\n", f.get_path());
-				return item;
-			}
 			FileInfo info = null;
 			try {
 				info = f.query_info(attr, FileQueryInfoFlags.NONE , null);
@@ -144,7 +140,7 @@ namespace Xnoise {
 					item.type = Xnoise.ItemType.PLAYLIST;
 				}
 				else {
-					if(scheme == "file" || scheme == "cdda") {
+					if(scheme in get_local_schemes()) { //== "file" || scheme == "cdda") {
 						item.type = Xnoise.ItemType.LOCAL_AUDIO_TRACK;
 					}
 					else {

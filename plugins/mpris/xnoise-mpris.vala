@@ -1,7 +1,7 @@
 /* xnoise-mpris.vala
  *
  * Copyright (C) 2010 Andreas Obergrusberger
- * Copyright (C) 2010 - 2011 Jörn Magens
+ * Copyright (C) 2010 - 2012 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,7 +35,9 @@
 // http://www.mpris.org/2.0/spec/
 
 using Gtk;
+
 using Xnoise;
+using Xnoise.Services;
 using Xnoise.PluginModule;
 
 
@@ -271,14 +273,14 @@ public class MprisPlayer : GLib.Object {
 		Xnoise.global.notify["image-path-large"].connect( () => {
 			string? s = Xnoise.global.image_path_large;
 			if(s == null) {
-				_metadata.insert("mpris:artUrl", "");
+				_metadata.insert("mpris:artUrl", EMPTYSTRING);
 			}
 			else {
 				File f = File.new_for_commandline_arg(s);
 				if(f != null)
 					_metadata.insert("mpris:artUrl", f.get_uri());
 				else
-					_metadata.insert("mpris:artUrl", "");
+					_metadata.insert("mpris:artUrl", EMPTYSTRING);
 			}
 			trigger_metadata_update();
 		});
@@ -318,25 +320,25 @@ public class MprisPlayer : GLib.Object {
 			case "artist":
 				string[] sa = {};
 				if(tagvalue == null)
-					tagvalue = "";
+					tagvalue = EMPTYSTRING;
 				sa += tagvalue;
 				_metadata.insert("xesam:artist", sa);
 				break;
 			case "album":
 				if(tagvalue == null)
-					tagvalue = "";
+					tagvalue = EMPTYSTRING;
 				string s = tagvalue;
 				_metadata.insert("xesam:album", s);
 				break;
 			case "title":
 				if(tagvalue == null)
-					tagvalue = "";
+					tagvalue = EMPTYSTRING;
 				string s = tagvalue;
 				_metadata.insert("xesam:title", s);
 				break;
 			case "genre":
 				if(tagvalue == null)
-					tagvalue = "";
+					tagvalue = EMPTYSTRING;
 				string[] sa = {};
 				sa += tagvalue;
 				_metadata.insert("xesam:genre", sa);

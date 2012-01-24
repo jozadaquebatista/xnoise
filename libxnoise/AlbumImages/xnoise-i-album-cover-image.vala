@@ -35,7 +35,7 @@
  * The reply is checked for matching artist/album
  */
 public interface Xnoise.IAlbumCoverImage : GLib.Object {
-	//delivers local image path on success, "" otherwise
+	//delivers local image path on success, EMPTYSTRING otherwise
 	public signal void sign_image_fetched(string artist, string album, string image_path);
 	//start image search
 	public abstract void find_image();

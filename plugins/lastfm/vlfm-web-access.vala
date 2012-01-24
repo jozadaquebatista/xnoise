@@ -1,6 +1,6 @@
 /* vlfm-web-access.vala
  *
- * Copyright (C) 2011  Jörn Magens
+ * Copyright (C) 2011-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,10 @@
 
 using Soup;
 
+using Xnoise;
+using Xnoise.Services;
+
+
 namespace Lastfm {
 	public class WebAccess : GLib.Object {
 		private Soup.SessionAsync soup_session;
@@ -55,7 +59,7 @@ namespace Lastfm {
 		}
 	
 		public int post_data(string? url) {
-			if(url == null || url.strip() == "")
+			if(url == null || url.strip() == EMPTYSTRING)
 				return -1;
 			//print("post url: %s\n", url);
 			if(soup_session == null)
@@ -82,7 +86,7 @@ namespace Lastfm {
 		}
 	
 		public int request_data(string? url) {
-			if(url == null || url.strip() == "")
+			if(url == null || url.strip() == EMPTYSTRING)
 				return -1;
 			//print("url: %s\n", url);
 			if(soup_session == null)

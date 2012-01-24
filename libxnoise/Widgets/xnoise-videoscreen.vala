@@ -329,7 +329,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	}
 	
 	private string get_content_text() {
-		string result = "";
+		string result = EMPTYSTRING;
 		string? uri = global.current_uri;
 		
 		string? title = global.current_title;
@@ -355,11 +355,11 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 		else {
 			if(album == null)
-				album = _("unknown album");
+				album = _(UNKNOWN_ALBUM);
 			if(artist == null)
-				artist = _("unknown artist");
+				artist = _(UNKNOWN_ARTIST);
 			if(title == null)
-				title = _("unknown title");
+				title = _(UNKNOWN_TITLE);
 			
 			album = Markup.escape_text(album);
 			artist = Markup.escape_text(artist);
