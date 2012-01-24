@@ -151,11 +151,11 @@ public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {
 			}
 			else {
 				text = "%s %s %s %s %s ".printf( 
-					_(UNKNOWN_TITLE), 
+					UNKNOWN_TITLE_LOCALIZED, 
 					_("by"), 
-					_(UNKNOWN_ARTIST),
+					UNKNOWN_ARTIST_LOCALIZED,
 					_("on"), 
-					_(UNKNOWN_ALBUM)
+					UNKNOWN_ALBUM_LOCALIZED
 					);
 			}
 		}

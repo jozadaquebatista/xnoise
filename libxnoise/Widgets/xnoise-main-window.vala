@@ -1138,11 +1138,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 				else {
 					text = "<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
-						_(UNKNOWN_TITLE),
+						UNKNOWN_TITLE_LOCALIZED,
 						_("by"),
-						_(UNKNOWN_ARTIST),
+						UNKNOWN_ARTIST_LOCALIZED,
 						_("on"),
-						_(UNKNOWN_ALBUM)
+						UNKNOWN_ALBUM_LOCALIZED
 						);
 				}
 			}
@@ -1205,11 +1205,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 				else {
 					text = "<b>%s</b> <i>%s</i> <b>%s</b> <i>%s</i> <b>%s</b>".printf(
-						_(UNKNOWN_TITLE),
+						UNKNOWN_TITLE_LOCALIZED,
 						_("by"),
-						_(UNKNOWN_ARTIST),
+						UNKNOWN_ARTIST_LOCALIZED,
 						_("on"),
-						_(UNKNOWN_ALBUM)
+						UNKNOWN_ALBUM_LOCALIZED
 						);
 				}
 			}

@@ -355,11 +355,11 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 		else {
 			if(album == null)
-				album = _(UNKNOWN_ALBUM);
+				album = UNKNOWN_ALBUM_LOCALIZED;
 			if(artist == null)
-				artist = _(UNKNOWN_ARTIST);
+				artist = UNKNOWN_ARTIST_LOCALIZED;
 			if(title == null)
-				title = _(UNKNOWN_TITLE);
+				title = UNKNOWN_TITLE_LOCALIZED;
 			
 			album = Markup.escape_text(album);
 			artist = Markup.escape_text(artist);

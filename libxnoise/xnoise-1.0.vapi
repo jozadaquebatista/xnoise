@@ -330,7 +330,11 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string UNKNOWN_ALBUM;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string UNKNOWN_ALBUM_LOCALIZED;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string UNKNOWN_ARTIST;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string UNKNOWN_ARTIST_LOCALIZED;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string UNKNOWN_GENRE;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -339,6 +343,8 @@ namespace Xnoise {
 		public const string UNKNOWN_ORGANIZATION;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string UNKNOWN_TITLE;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string UNKNOWN_TITLE_LOCALIZED;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static string data_folder ();
 		[CCode (cheader_filename = "xnoise-1.0.h")]

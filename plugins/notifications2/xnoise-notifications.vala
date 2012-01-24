@@ -165,21 +165,28 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
 		if(!gst_player.is_stream)
 			basename = file.get_basename();
 
-		if(global.current_artist != null)
+		if(global.current_artist != null && global.current_artist != EMPTYSTRING)
 			artist = remove_linebreaks(global.current_artist);
 		else
-			artist = UNKNOWN_ARTIST;
+			artist = UNKNOWN_ARTIST_LOCALIZED;
 
-		if(global.current_title != null)
+		if(global.current_title != null && global.current_title != EMPTYSTRING)
 			title = remove_linebreaks(global.current_title);
 		else
-			title = UNKNOWN_TITLE;
+			title = UNKNOWN_TITLE_LOCALIZED;
 
-		if(global.current_album != null)
+		if(global.current_album != null && global.current_album != EMPTYSTRING)
 			album = remove_linebreaks(global.current_album);
 		else
-			album = UNKNOWN_ALBUM;
+			album = UNKNOWN_ALBUM_LOCALIZED;
 
+		if(album == UNKNOWN_ALBUM)
+			album = UNKNOWN_ALBUM_LOCALIZED;
+		if(artist == UNKNOWN_ARTIST)
+			artist = UNKNOWN_ARTIST_LOCALIZED;
+		if(title == UNKNOWN_TITLE)
+			title = UNKNOWN_TITLE_LOCALIZED;
+		
 		//File f = get_albumimage_for_artistalbum(artist, album, "medium");
 		string summary = title;
 		string body = _("by") +

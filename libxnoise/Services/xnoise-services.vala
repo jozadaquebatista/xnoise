@@ -39,6 +39,10 @@ namespace Xnoise.Services {
 	public static const string UNKNOWN_LOCATION     = "unknown location";
 	public static const string EMPTYSTRING          = "";
 	
+	public static const string UNKNOWN_ARTIST_LOCALIZED = _("unknown artist");
+	public static const string UNKNOWN_TITLE_LOCALIZED  = _("unknown title");
+	public static const string UNKNOWN_ALBUM_LOCALIZED  = _("unknown album");
+	
 	public static RemoteSchemes get_remote_schemes() { 
 		return _remote_schemes;
 	}

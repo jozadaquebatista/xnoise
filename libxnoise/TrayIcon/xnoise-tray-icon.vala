@@ -210,12 +210,12 @@ public class Xnoise.TrayIcon : StatusIcon {
 			              state + "</span>\n");
 		}
 		else {
-			if(album == null)
-				album = _(UNKNOWN_ALBUM);
-			if(artist == null)
-				artist = _(UNKNOWN_ARTIST);
-			if(title == null)
-				title = _(UNKNOWN_TITLE);
+			if(album == null || album == EMPTYSTRING || album == UNKNOWN_ALBUM)
+				album = UNKNOWN_ALBUM_LOCALIZED;
+			if(artist == null || artist == EMPTYSTRING || artist == UNKNOWN_ARTIST)
+				artist = UNKNOWN_ARTIST_LOCALIZED;
+			if(title == null || title == EMPTYSTRING || title == UNKNOWN_TITLE)
+				title = UNKNOWN_TITLE_LOCALIZED;
 			
 			album = Markup.escape_text(album);
 			artist = Markup.escape_text(artist);

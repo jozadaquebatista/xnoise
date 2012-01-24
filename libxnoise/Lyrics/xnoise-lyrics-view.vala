@@ -30,6 +30,7 @@
  * 	Jörn Magens
  */
 
+using Xnoise;
 using Xnoise.Services;
 
 public class Xnoise.LyricsView : Gtk.TextView {
@@ -125,8 +126,8 @@ public class Xnoise.LyricsView : Gtk.TextView {
 		
 
 		//print("2. %s - %s\n", artist, title);
-		if((artist==EMPTYSTRING)||(artist==null)||(artist=="unknownartist")||
-		   (title ==EMPTYSTRING)||(title ==null)||(title =="unknowntitle" )) {
+		if((artist == null)||(artist == EMPTYSTRING)||(artist == UNKNOWN_ARTIST)||
+		   (title == null)||(title == EMPTYSTRING)||(title == UNKNOWN_TITLE)) {
 			set_text_via_idle(_("Insufficient track information. Not searching for lyrics."));
 			return false;
 		}
