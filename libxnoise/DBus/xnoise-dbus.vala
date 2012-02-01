@@ -70,7 +70,7 @@ public class Xnoise.Dbus : GLib.Object {
 		                         on_name_acquired,
 		                         on_name_lost);
 		if(owner_id == 0) {
-			print("mpris error\n");
+			print("dbus error\n");
 		}
 	}
 	
