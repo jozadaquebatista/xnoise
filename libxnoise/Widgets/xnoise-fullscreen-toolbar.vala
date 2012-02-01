@@ -88,7 +88,7 @@ public class Xnoise.FullscreenToolbar {
 		fullscreenwindow.key_release_event.connect(this.on_key_released);
 		resize ();
 		
-//		invisible_cursor = new Gdk.Cursor(Gdk.CursorType.BLANK_CURSOR);
+		invisible_cursor = new Gdk.Cursor(Gdk.CursorType.BLANK_CURSOR);
 	}
 
 	private const int SPACE_KEY = 0x0020;
@@ -171,7 +171,7 @@ public class Xnoise.FullscreenToolbar {
 		//hide cursor
 		Gdk.Window w = fullscreenwindow.get_window();
 		w.set_cursor(invisible_cursor);
-				
+		
 		if(hide_event_id != 0) {
 			 GLib.Source.remove (hide_event_id);
 			 hide_event_id = 0;
