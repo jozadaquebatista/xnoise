@@ -53,7 +53,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		this.button_release_event.connect(on_button_released);
 	}
 	
-	private Menu? menu;
+	private Gtk.Menu? menu;
 	
 	private bool on_button_released(Gtk.Widget sender, Gdk.EventButton e) {
 		if(!((e.button==3) && (e.type==Gdk.EventType.BUTTON_RELEASE))) {
@@ -67,12 +67,12 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		return true;
 	}
 	
-	private Menu? create_rightclick_menu() {
-		Menu rightmenu = null;
+	private Gtk.Menu? create_rightclick_menu() {
+		Gtk.Menu rightmenu = null;
 		int groupcnt = 0;
 		if(player.available_subtitles != null) {
 			if(rightmenu == null)
-				rightmenu = new Menu();
+				rightmenu = new Gtk.Menu();
 			if(player.available_subtitles.length > 0) {
 				var menuitem = new ImageMenuItem.from_stock(Gtk.Stock.INDEX, null);
 				menuitem.set_label(_("No Subtitle"));
@@ -97,7 +97,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 		if(player.available_audiotracks != null && player.available_audiotracks.length > 1) {
 			if(rightmenu == null)
-				rightmenu = new Menu();
+				rightmenu = new Gtk.Menu();
 			if(groupcnt > 0)
 				rightmenu.append(new SeparatorMenuItem());
 			int i = 0;
@@ -116,7 +116,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		}
 		if(player.current_has_video_track) {
 			if(rightmenu == null)
-				rightmenu = new Menu();
+				rightmenu = new Gtk.Menu();
 			if(groupcnt > 0)
 				rightmenu.append(new SeparatorMenuItem());
 			var menu_item = new ImageMenuItem.from_stock(Gtk.Stock.EDIT, null);
@@ -125,7 +125,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 			rightmenu.append(menu_item);
 		}
 		if(rightmenu == null)
-			rightmenu = new Menu();
+			rightmenu = new Gtk.Menu();
 		else
 			rightmenu.append(new SeparatorMenuItem());
 		var fullscreenmenuitem = new ImageMenuItem.from_stock(

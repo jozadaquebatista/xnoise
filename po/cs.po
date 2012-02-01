@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-24 17:45+0100\n"
+"POT-Creation-Date: 2012-01-28 10:48+0100\n"
 "PO-Revision-Date: 2011-10-19 15:33+0200\n"
 "Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -27,16 +27,16 @@ msgstr "Spravujte a přehrávejte své hudební a filmové sbírky"
 msgid "Xnoise"
 msgstr "Xnoise"
 
-#: ../libxnoise/Application/xnoise-application.vala:91 ../src/xnoise.vala:61
+#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise je přehrávač skladeb pro Gtk+."
 
-#: ../libxnoise/Application/xnoise-application.vala:92 ../src/xnoise.vala:62
+#: ../libxnoise/Application/xnoise-application.vala:94 ../src/xnoise.vala:64
 msgid "It uses the gstreamer framework."
 msgstr "Používá  soustavu GStreamer"
 
-#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
+#: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "Více informací na projektových stránkách:"
 
@@ -336,7 +336,7 @@ msgstr "Připraveno na hraní"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1184
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1209
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:370
-#: ../plugins/notifications2/xnoise-notifications.vala:185
+#: ../plugins/notifications2/xnoise-notifications.vala:192
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:132
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 #, c-format
@@ -349,7 +349,7 @@ msgstr "Od"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1186
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1211
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:372
-#: ../plugins/notifications2/xnoise-notifications.vala:187
+#: ../plugins/notifications2/xnoise-notifications.vala:194
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 #, c-format
@@ -599,7 +599,7 @@ msgstr "Opustit režim celé obrazovky"
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
-#: ../src/xnoise.vala:72
+#: ../src/xnoise.vala:74
 msgid ""
 "Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr ""

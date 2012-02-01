@@ -85,8 +85,8 @@ namespace Xnoise {
 		string mime;
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
-		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		string attr = FileAttribute.STANDARD_TYPE + "," +
+		              FileAttribute.STANDARD_CONTENT_TYPE;
 		if(_fileargs != null) {
 			var ls = new Xnoise.LocalSchemes();
 			foreach(string s in _fileargs) {

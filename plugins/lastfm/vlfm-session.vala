@@ -62,9 +62,9 @@ namespace Lastfm {
 		return true;
 	}
 	
-	private delegate void ResponseHandler(int id, string response);
+	public delegate void ResponseHandler(int id, string response);
 	
-	private class ResponseHandlerContainer : GLib.Object {
+	public class ResponseHandlerContainer : GLib.Object {
 		public ResponseHandlerContainer(ResponseHandler? _func = null, int _id  = -1) {
 			this.func = _func;
 			this.id = _id;

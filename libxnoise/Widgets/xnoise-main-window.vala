@@ -77,7 +77,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Box infobox;
 	private MenuBar menubar;
 	private ImageMenuItem config_button_menu_root;
-	private Menu config_button_menu;
+	private Gtk.Menu config_button_menu;
 	private bool _media_browser_visible = true;
 	private double current_volume; //keep it global for saving to params
 	private ulong active_notifier = 0;
@@ -458,7 +458,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		});
 	}
 	
-	public void position_config_menu(Menu menu, out int x, out int y, out bool push) {
+	public void position_config_menu(Gtk.Menu menu, out int x, out int y, out bool push) {
 		//the upper right corner of the popup menu should be just beneath the lower right corner of the button
 		
 		int o_x = 0, o_y = 0;
@@ -1596,7 +1596,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.add(mainvbox);
 		
 		config_button_menu_root = (ImageMenuItem)ui_manager.get_widget("/ConfigButtonMenu/ConfigMenu");
-		config_button_menu = (Menu)config_button_menu_root.get_submenu();
+		config_button_menu = (Gtk.Menu)config_button_menu_root.get_submenu();
 		config_button.clicked.connect(() => {
 			config_button_menu.popup(null, null, position_config_menu, 0, Gtk.get_current_event_time());
 		});

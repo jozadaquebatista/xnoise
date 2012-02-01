@@ -288,8 +288,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 	private void read_recoursive(File dir, Worker.Job job) {
 		job.counter[0]++;
 		FileEnumerator enumerator;
-		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
-		              FILE_ATTRIBUTE_STANDARD_TYPE;
+		string attr = FileAttribute.STANDARD_NAME + "," +
+		              FileAttribute.STANDARD_TYPE;
 		try {
 			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE);
 		} 

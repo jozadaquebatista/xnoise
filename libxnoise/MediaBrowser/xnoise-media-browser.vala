@@ -264,9 +264,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			menu.popup(null, null, null, 0, activateTime);
 	}
 
-	private Menu create_rightclick_menu() {
+	private Gtk.Menu create_rightclick_menu() {
 		TreeIter iter;
-		var rightmenu = new Menu();
+		var rightmenu = new Gtk.Menu();
 		GLib.List<TreePath> list;
 		list = this.get_selection().get_selected_rows(null);
 		ItemSelectionType itemselection = ItemSelectionType.SINGLE;

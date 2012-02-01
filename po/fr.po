@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-24 17:45+0100\n"
+"POT-Creation-Date: 2012-01-28 10:48+0100\n"
 "PO-Revision-Date: 2012-01-20 16:44+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -26,16 +26,16 @@ msgstr "Organise et joue vos collections musicales et vidéos"
 msgid "Xnoise"
 msgstr "Xnoise"
 
-#: ../libxnoise/Application/xnoise-application.vala:91 ../src/xnoise.vala:61
+#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise est un lecteur média pour GTK+"
 
-#: ../libxnoise/Application/xnoise-application.vala:92 ../src/xnoise.vala:62
+#: ../libxnoise/Application/xnoise-application.vala:94 ../src/xnoise.vala:64
 msgid "It uses the gstreamer framework."
 msgstr "Il utilise le framework gstreamer."
 
-#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
+#: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "Plus d'informations sur site internet du projet:"
 
@@ -331,7 +331,7 @@ msgstr "ready to rock"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1184
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1209
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:370
-#: ../plugins/notifications2/xnoise-notifications.vala:185
+#: ../plugins/notifications2/xnoise-notifications.vala:192
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:132
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
 #, c-format
@@ -344,7 +344,7 @@ msgstr "de"
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1186
 #: ../libxnoise/Widgets/xnoise-main-window.vala:1211
 #: ../libxnoise/Widgets/xnoise-videoscreen.vala:372
-#: ../plugins/notifications2/xnoise-notifications.vala:187
+#: ../plugins/notifications2/xnoise-notifications.vala:194
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 #, c-format
@@ -595,7 +595,7 @@ msgstr "Quitter le plein écran"
 msgid "Fullscreen"
 msgstr "Quitter le plein écran"
 
-#: ../src/xnoise.vala:72
+#: ../src/xnoise.vala:74
 msgid ""
 "Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr ""

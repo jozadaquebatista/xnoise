@@ -68,7 +68,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private int variable_col_count = 0;
 	private TreeRowReference[] rowref_list;
 	private bool dragging;
-	private Menu menu;
+	private Gtk.Menu menu;
 	private const int autoscroll_distance = 50;
 	private uint autoscroll_source = 0;
 	private bool reorder_dragging = false;
@@ -217,9 +217,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 			menu.popup(null, null, null, 0, activateTime);
 	}
 
-	private Menu create_rightclick_menu() {
+	private Gtk.Menu create_rightclick_menu() {
 		TreeIter iter;
-		var rightmenu = new Menu();
+		var rightmenu = new Gtk.Menu();
 		GLib.List<TreePath> list;
 		list = this.get_selection().get_selected_rows(null);
 		if(list == null)
@@ -501,8 +501,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 					uris = selection.get_uris();
 					drop_rowref = null;
 					bool is_first = true;
-					string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-					              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+					string attr = FileAttribute.STANDARD_TYPE + "," +
+					              FileAttribute.STANDARD_CONTENT_TYPE;
 					foreach(string uri in uris) {
 						bool is_stream = false;
 						file = File.new_for_uri(uri);
@@ -688,8 +688,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 		//the TreePath path is just passed through if it is a directory
 		FileEnumerator enumerator;
 		try {
-			string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
-			              FILE_ATTRIBUTE_STANDARD_TYPE;
+			string attr = FileAttribute.STANDARD_NAME + "," +
+			              FileAttribute.STANDARD_TYPE;
 			enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
 		}
 		catch(Error e) {
@@ -817,8 +817,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 		
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
-		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		string attr = FileAttribute.STANDARD_TYPE + "," +
+		              FileAttribute.STANDARD_CONTENT_TYPE;
 		try {
 			file = File.new_for_uri(fileuri);
 			FileInfo info = file.query_info(
@@ -1175,8 +1175,8 @@ public class Xnoise.TrackList : TreeView, IParams {
 		return true;
 	}
 
-	private Menu create_header_rightclick_menu() {
-		var rightmenu = new Menu();
+	private Gtk.Menu create_header_rightclick_menu() {
+		var rightmenu = new Gtk.Menu();
 		CheckMenuItem menu_item;
 		
 		// TRACKNUMBER

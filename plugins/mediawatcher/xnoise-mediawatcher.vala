@@ -280,7 +280,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
 //		}
 //		var mi = new MediaImporter();
 		try {
-			var info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
+			var info = file.query_info(FileAttribute.STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
 			if(info.get_file_type() == FileType.REGULAR) media_importer.add_single_file(file.get_uri());
 			else if (info.get_file_type() == FileType.DIRECTORY) {
 				add_local_tags.begin(file);
@@ -299,9 +299,9 @@ print("++1\n");
 	private async void add_local_tags(File dir) { //DbWriter dbw,
 		
 		FileEnumerator enumerator;
-		string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
-		              FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-		              FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		string attr = FileAttribute.STANDARD_NAME + "," +
+		              FileAttribute.STANDARD_TYPE + "," +
+		              FileAttribute.STANDARD_CONTENT_TYPE;
 		try {
 			enumerator = yield dir.enumerate_children_async(attr, FileQueryInfoFlags.NONE, GLib.Priority.DEFAULT, null);
 		} 
@@ -396,7 +396,7 @@ print("++1\n");
 //		}
 //		var mi = new MediaImporter();
 //		try {
-//			var info = file.query_info(FILE_ATTRIBUTE_STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
+//			var info = file.query_info(FileAttribute.STANDARD_TYPE, FileQueryInfoFlags.NONE, null);
 //		
 //			if(info.get_file_type() == FileType.REGULAR) mi.add_single_file(file.get_uri(), ref dbw);	
 //			else if (info.get_file_type() == FileType.DIRECTORY) {
@@ -440,8 +440,8 @@ print("++1\n");
 	 stores them in monitor_list */
 	private void monitor_all_subdirs(File f) {
 		try {
-			var enumerator = f.enumerate_children(FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-			                                      FILE_ATTRIBUTE_STANDARD_NAME,
+			var enumerator = f.enumerate_children(FileAttribute.STANDARD_TYPE + "," +
+			                                      FileAttribute.STANDARD_NAME,
 			                                      0,
 			                                      null);
 			FileInfo info;

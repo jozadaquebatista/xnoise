@@ -99,7 +99,7 @@ namespace Xnoise {
 		}
 		
 		
-		private static string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," + FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		private static string attr = FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_CONTENT_TYPE;
 
 		private static PatternSpec psVideo;// = new PatternSpec("video*");
 		private static PatternSpec psAudio;// = new PatternSpec("audio*");

@@ -33,7 +33,7 @@ using Gtk;
 using Xnoise.Services;
 
 public class Xnoise.TrayIcon : StatusIcon {
-	private Menu traymenu;
+	private Gtk.Menu traymenu;
 	private unowned Main xn;
 	private Image playpause_popup_image;
 	
@@ -51,7 +51,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 	}
 	
 	private void construct_traymenu() {
-		traymenu = new Menu();
+		traymenu = new Gtk.Menu();
 
 		playpause_popup_image = new Image();
 		playpause_popup_image.set_from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.MENU);
@@ -69,7 +69,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		var playLabel = new Label(_("Play/Pause"));
 		playLabel.set_alignment(0, 0);
 		playLabel.set_width_chars(20);
-		var playpauseItem = new MenuItem();
+		var playpauseItem = new Gtk.MenuItem();
 		var playHbox = new Box(Orientation.HORIZONTAL, 1);
 		playHbox.set_spacing(10);
 		playHbox.pack_start(playpause_popup_image, false, true, 0);
@@ -82,7 +82,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		previousImage.set_from_stock(Gtk.Stock.MEDIA_PREVIOUS, IconSize.MENU);
 		var previousLabel = new Label(_("Previous"));
 		previousLabel.set_alignment(0, 0);
-		var previousItem = new MenuItem();
+		var previousItem = new Gtk.MenuItem();
 		var previousHbox = new Box(Orientation.HORIZONTAL, 1);
 		previousHbox.set_spacing(10);
 		previousHbox.pack_start(previousImage, false, true, 0);
@@ -97,7 +97,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		nextImage.set_from_stock(Gtk.Stock.MEDIA_NEXT, IconSize.MENU);
 		var nextLabel = new Label(_("Next"));
 		nextLabel.set_alignment(0, 0);
-		var nextItem = new MenuItem();
+		var nextItem = new Gtk.MenuItem();
 		var nextHbox = new Box(Orientation.HORIZONTAL, 1);
 		nextHbox.set_spacing(10);
 		nextHbox.pack_start(nextImage, false, true, 0);
@@ -115,7 +115,7 @@ public class Xnoise.TrayIcon : StatusIcon {
 		exitImage.set_from_stock(Gtk.Stock.QUIT, IconSize.MENU);
 		var exitLabel = new Label(_("Exit"));
 		exitLabel.set_alignment(0, 0);
-		var exitItem = new MenuItem();
+		var exitItem = new Gtk.MenuItem();
 		var exitHbox = new Box(Orientation.HORIZONTAL, 1);
 		exitHbox.set_spacing(10);
 		exitHbox.pack_start(exitImage, false, true, 0);

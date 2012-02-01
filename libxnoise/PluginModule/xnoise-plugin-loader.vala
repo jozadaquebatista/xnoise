@@ -105,8 +105,8 @@ public class Xnoise.PluginModule.Loader : Object {
 			FileEnumerator enumerator;
 			info_files = new GLib.List<string>();
 			try {
-				string attr = FILE_ATTRIBUTE_STANDARD_NAME + "," +
-					          FILE_ATTRIBUTE_STANDARD_TYPE;
+				string attr = FileAttribute.STANDARD_NAME + "," +
+					          FileAttribute.STANDARD_TYPE;
 				enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE, null);
 			} 
 			catch(Error error) {

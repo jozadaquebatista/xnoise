@@ -524,8 +524,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");
-		string attr = FILE_ATTRIBUTE_STANDARD_TYPE + "," +
-			      FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+		string attr = FileAttribute.STANDARD_TYPE + "," +
+			      FileAttribute.STANDARD_CONTENT_TYPE;
 		
 		while(uris[k] != null) { //because foreach is not working for this array coming from libunique
 			//print("1. add_uris %s\n",uris[k]);
