@@ -1,2 +1,2 @@
 version=3
-http://googlecode.debian.net/p/xnoise/xnoise-(\d+.*)\.tar\.bz2 
+https://github.com/shuerhaaken/xnoise-media-player/tags .*/tarball/(\d[\d\.]+)
