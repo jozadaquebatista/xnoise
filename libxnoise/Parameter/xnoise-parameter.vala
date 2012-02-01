@@ -210,6 +210,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		return f.get_path();
 	}
 
+// default parameter set (used if nothing else is available)
 private static const string default_content = 
 """[settings_int]
 usestop=1
