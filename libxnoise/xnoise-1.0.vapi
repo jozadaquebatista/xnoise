@@ -965,7 +965,7 @@ namespace Xnoise {
 		public signal void sign_active_path_changed (Xnoise.PlayerState ts);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class TrackProgressBar : Gtk.ProgressBar {
+	public class TrackProgressBar : Gtk.EventBox {
 		public TrackProgressBar (Xnoise.GstPlayer _player);
 		public void set_value (uint pos, uint len);
 	}

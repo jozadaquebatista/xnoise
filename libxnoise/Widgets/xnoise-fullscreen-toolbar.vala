@@ -68,6 +68,7 @@ public class Xnoise.FullscreenToolbar {
 		var volume          = new VolumeSliderButton();
 
 		bar = new TrackProgressBar(gst_player);
+		
 		var vp = new Gtk.Alignment(0,0.5f,0,0);
 		vp.add (bar);
 

@@ -1,6 +1,6 @@
 /* xnoise-track-progressbar.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,20 +35,21 @@ using Gtk;
 * A SongProgressBar is a Gtk.ProgressBar that shows the playback position in the
 * currently played item and changes it upon user input
 */
-public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
+public class Xnoise.TrackProgressBar : Gtk.EventBox {
 	private const double SCROLL_POS_CHANGE = 0.02;
 	private unowned GstPlayer player;
+	private ProgressBar bar;
 	
 	public TrackProgressBar(Xnoise.GstPlayer _player) {
 		assert(_player != null);
 		this.player = _player;
-		this.set_size_request(-1, 10);
-		
+		bar = new Gtk.ProgressBar();
 		this.set_events(Gdk.EventMask.SCROLL_MASK |
-		                Gdk.EventMask.BUTTON1_MOTION_MASK |
-		                Gdk.EventMask.BUTTON_PRESS_MASK |
-		                Gdk.EventMask.BUTTON_RELEASE_MASK
-		                );
+	                Gdk.EventMask.BUTTON1_MOTION_MASK |
+	                Gdk.EventMask.BUTTON_PRESS_MASK |
+	                Gdk.EventMask.BUTTON_RELEASE_MASK);
+		this.add(bar);
+		bar.set_size_request(-1, 10);
 		this.button_press_event.connect(this.on_press);
 		this.button_release_event.connect(this.on_release);
 		this.scroll_event.connect(this.on_scroll);
@@ -57,8 +58,8 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		global.caught_eos_from_player.connect(on_eos);
 		this.player.sign_stopped.connect(on_stopped);
 		
-		this.set_text("00:00 / 00:00");
-		this.fraction = 0.0;
+		bar.set_text("00:00 / 00:00");
+		bar.fraction = 0.0;
 	}
 
 	private bool on_press(Gdk.EventButton e) {
@@ -78,7 +79,7 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 			mouse_y = e.y;
 			
 			Allocation progress_loc;
-			this.get_allocation(out progress_loc);
+			bar.get_allocation(out progress_loc);
 			thisFraction = mouse_x / progress_loc.width;
 			thisFraction = invert_if_rtl(thisFraction);
 			
@@ -87,7 +88,7 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 			this.player.seeking = false;
 			if(thisFraction < 0.0) thisFraction = 0.0;
 			if(thisFraction > 1.0) thisFraction = 1.0;
-			this.set_fraction(thisFraction);
+			bar.set_fraction(thisFraction);
 			if(this.player != null)
 				this.player.gst_position = thisFraction;
 			
@@ -115,13 +116,13 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 		mouse_x = e.x;
 		mouse_y = e.y;
 		Allocation progress_loc;
-		this.get_allocation(out progress_loc);
+		bar.get_allocation(out progress_loc);
 		thisFraction = mouse_x / progress_loc.width;
 		thisFraction = invert_if_rtl(thisFraction);
 		
 		if(thisFraction < 0.0) thisFraction = 0.0;
 		if(thisFraction > 1.0) thisFraction = 1.0;
-		this.set_fraction(thisFraction);
+		bar.set_fraction(thisFraction);
 		if(this.player != null)
 			this.player.gst_position = thisFraction;
 		return false;
@@ -141,21 +142,21 @@ public class Xnoise.TrackProgressBar : Gtk.ProgressBar {
 			double fraction = (double)pos/(double)len;
 			if(fraction<0.0) fraction = 0.0;
 			if(fraction>1.0) fraction = 1.0;
-			this.set_fraction(fraction);
+			bar.set_fraction(fraction);
 			
-			this.set_sensitive(true);
+			bar.set_sensitive(true);
 			
 			dur_min = (int)(len / 60000);
 			dur_sec = (int)((len % 60000) / 1000);
 			pos_min = (int)(pos / 60000);
 			pos_sec = (int)((pos % 60000) / 1000);
 			string timeinfo = "%02d:%02d / %02d:%02d".printf(pos_min, pos_sec, dur_min, dur_sec);
-			this.set_text(timeinfo);
+			bar.set_text(timeinfo);
 		}
 		else {
-			this.set_fraction(0.0);
-			this.set_text("00:00 / 00:00");
-			this.set_sensitive(false);
+			bar.set_fraction(0.0);
+			bar.set_text("00:00 / 00:00");
+			bar.set_sensitive(false);
 		}
 	}
 }

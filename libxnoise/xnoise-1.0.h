@@ -1796,12 +1796,12 @@ struct _XnoiseTrackInfobarClass {
 };
 
 struct _XnoiseTrackProgressBar {
-	GtkProgressBar parent_instance;
+	GtkEventBox parent_instance;
 	XnoiseTrackProgressBarPrivate * priv;
 };
 
 struct _XnoiseTrackProgressBarClass {
-	GtkProgressBarClass parent_class;
+	GtkEventBoxClass parent_class;
 };
 
 struct _XnoiseVideoScreen {
