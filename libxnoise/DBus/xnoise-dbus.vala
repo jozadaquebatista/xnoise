@@ -96,7 +96,7 @@ public class PlayerDbusService : GLib.Object {
 	
 	private unowned DBusConnection conn;
 	
-	private const string INTERFACE_NAME = "org.gtk.xnoise";
+	private const string INTERFACE_NAME = "org.gtk.xnoise.PlayerEngine";
 	
 	private uint send_property_source = 0;
 	private uint update_metadata_source = 0;
