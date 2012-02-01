@@ -44,6 +44,7 @@ public class Xnoise.TrackProgressBar : Gtk.EventBox {
 		assert(_player != null);
 		this.player = _player;
 		bar = new Gtk.ProgressBar();
+		bar.set_show_text(true);
 		this.set_events(Gdk.EventMask.SCROLL_MASK |
 	                Gdk.EventMask.BUTTON1_MOTION_MASK |
 	                Gdk.EventMask.BUTTON_PRESS_MASK |
@@ -92,7 +93,7 @@ public class Xnoise.TrackProgressBar : Gtk.EventBox {
 			if(this.player != null)
 				this.player.gst_position = thisFraction;
 			
-			set_value((uint)((thisFraction * this.player.length_time) / 1000000), (uint)(this.player.length_time / 1000000));
+			set_value((uint)((thisFraction * this.player.length_time) / Gst.MSECOND), (uint)(this.player.length_time / Gst.MSECOND));
 		}
 		return false;
 	}
