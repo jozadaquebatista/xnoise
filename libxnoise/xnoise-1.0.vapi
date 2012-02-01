@@ -519,6 +519,11 @@ namespace Xnoise {
 		public signal void sign_clicked (Xnoise.ControlButton.Direction dir);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class Dbus : GLib.Object {
+		public PlayerDbusService service;
+		public Dbus ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class FullscreenToolbar {
 		public class LeaveVideoFSButton : Gtk.Button {
 			public LeaveVideoFSButton ();
@@ -704,6 +709,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Main : GLib.Object {
 		public static weak Xnoise.Application app;
+		public static bool no_dbus;
 		public static bool no_plugins;
 		public static bool show_plugin_state;
 		public Main ();
@@ -1206,6 +1212,27 @@ namespace Xnoise {
 	public static void initialize (out bool is_first_start);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static bool thumbnail_available (string uri, out GLib.File? _thumb);
+}
+[CCode (cheader_filename = "xnoise-1.0.h")]
+[DBus (name = "org.gtk.xnoise.PlayerEngine")]
+public class PlayerDbusService : GLib.Object {
+	public PlayerDbusService (GLib.DBusConnection conn);
+	public void Next ();
+	public void OpenUri (string Uri);
+	public void Pause ();
+	public void Play ();
+	public void Previous ();
+	public void Quit ();
+	public void Raise ();
+	public void Stop ();
+	public void TogglePlaying ();
+	public int64 Length { get; }
+	public GLib.HashTable<string,GLib.Variant> Metadata { owned get; }
+	public string PlaybackStatus { owned get; }
+	public int64 Position { get; set; }
+	public string RepeatStatus { owned get; set; }
+	public bool Shuffle { get; set; }
+	public double Volume { get; set; }
 }
 [CCode (cheader_filename = "xnoise-1.0.h", cname = "gdk_window_ensure_native")]
 public static bool ensure_native (Gdk.Window window);

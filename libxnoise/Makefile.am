@@ -47,6 +47,7 @@ libxnoise_la_SOURCES = \
     Database/xnoise-db-browser.vala \
     Database/xnoise-db-creator.vala \
     Database/xnoise-db-writer.vala \
+    DBus/xnoise-dbus.vala \
     GlobalAccess/xnoise-global-access.vala \
     Lyrics/xnoise-i-lyrics.vala \
     Lyrics/xnoise-i-lyrics-provider.vala \

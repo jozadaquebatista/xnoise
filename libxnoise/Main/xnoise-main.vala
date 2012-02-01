@@ -31,10 +31,11 @@
 
 
 public class Xnoise.Main : GLib.Object {
-	private static Main _instance = null;
-	
+	private static Main _instance;
+	private static Xnoise.Dbus dbus;
 	public static bool show_plugin_state;
 	public static bool no_plugins;
+	public static bool no_dbus;
 	public static unowned Xnoise.Application app;
 	
 	public Main() {
@@ -95,6 +96,14 @@ public class Xnoise.Main : GLib.Object {
 		
 		// RESTORE PARAMS IN SUBSCRIBERS
 		Params.set_start_parameters_in_implementors();
+
+		// LOAD DBUS
+		if(!no_dbus) {
+			Timeout.add_seconds(2, () => {
+				dbus = new Dbus();
+				return false;
+			});
+		}
 		
 		// FIRST START? FILL DB!
 		if(is_first_start)

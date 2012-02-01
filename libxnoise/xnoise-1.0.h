@@ -246,6 +246,28 @@ typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
 typedef struct _XnoiseWorkerJob XnoiseWorkerJob;
 typedef struct _XnoiseWorkerJobClass XnoiseWorkerJobClass;
 
+#define XNOISE_TYPE_DBUS (xnoise_dbus_get_type ())
+#define XNOISE_DBUS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DBUS, XnoiseDbus))
+#define XNOISE_DBUS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DBUS, XnoiseDbusClass))
+#define XNOISE_IS_DBUS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DBUS))
+#define XNOISE_IS_DBUS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DBUS))
+#define XNOISE_DBUS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DBUS, XnoiseDbusClass))
+
+typedef struct _XnoiseDbus XnoiseDbus;
+typedef struct _XnoiseDbusClass XnoiseDbusClass;
+typedef struct _XnoiseDbusPrivate XnoiseDbusPrivate;
+
+#define TYPE_PLAYER_DBUS_SERVICE (player_dbus_service_get_type ())
+#define PLAYER_DBUS_SERVICE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PLAYER_DBUS_SERVICE, PlayerDbusService))
+#define PLAYER_DBUS_SERVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_PLAYER_DBUS_SERVICE, PlayerDbusServiceClass))
+#define IS_PLAYER_DBUS_SERVICE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_PLAYER_DBUS_SERVICE))
+#define IS_PLAYER_DBUS_SERVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_PLAYER_DBUS_SERVICE))
+#define PLAYER_DBUS_SERVICE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_PLAYER_DBUS_SERVICE, PlayerDbusServiceClass))
+
+typedef struct _PlayerDbusService PlayerDbusService;
+typedef struct _PlayerDbusServiceClass PlayerDbusServiceClass;
+typedef struct _PlayerDbusServicePrivate PlayerDbusServicePrivate;
+
 #define XNOISE_TYPE_GLOBAL_ACCESS (xnoise_global_access_get_type ())
 #define XNOISE_GLOBAL_ACCESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccess))
 #define XNOISE_GLOBAL_ACCESS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccessClass))
@@ -1080,6 +1102,25 @@ typedef enum  {
 
 typedef void (*XnoiseDatabaseDbWriterChangeNotificationCallback) (XnoiseDatabaseDbWriterChangeType changetype, XnoiseItem* item, void* user_data);
 typedef void (*XnoiseDatabaseDbWriterWriterCallback) (sqlite3* database, void* user_data);
+struct _XnoiseDbus {
+	GObject parent_instance;
+	XnoiseDbusPrivate * priv;
+	PlayerDbusService* service;
+};
+
+struct _XnoiseDbusClass {
+	GObjectClass parent_class;
+};
+
+struct _PlayerDbusService {
+	GObject parent_instance;
+	PlayerDbusServicePrivate * priv;
+};
+
+struct _PlayerDbusServiceClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoiseGlobalAccess {
 	GObject parent_instance;
 	XnoiseGlobalAccessPrivate * priv;
@@ -1984,6 +2025,33 @@ gboolean xnoise_database_db_writer_delete_local_media_data (XnoiseDatabaseDbWrit
 void xnoise_database_db_writer_begin_transaction (XnoiseDatabaseDbWriter* self);
 void xnoise_database_db_writer_commit_transaction (XnoiseDatabaseDbWriter* self);
 gboolean xnoise_database_db_writer_get_in_transaction (XnoiseDatabaseDbWriter* self);
+GType xnoise_dbus_get_type (void) G_GNUC_CONST;
+GType player_dbus_service_get_type (void) G_GNUC_CONST;
+guint player_dbus_service_register_object (void* object, GDBusConnection* connection, const gchar* path, GError** error);
+XnoiseDbus* xnoise_dbus_new (void);
+XnoiseDbus* xnoise_dbus_construct (GType object_type);
+PlayerDbusService* player_dbus_service_new (GDBusConnection* conn);
+PlayerDbusService* player_dbus_service_construct (GType object_type, GDBusConnection* conn);
+void player_dbus_service_Quit (PlayerDbusService* self);
+void player_dbus_service_Raise (PlayerDbusService* self);
+void player_dbus_service_Next (PlayerDbusService* self);
+void player_dbus_service_Previous (PlayerDbusService* self);
+void player_dbus_service_Pause (PlayerDbusService* self);
+void player_dbus_service_TogglePlaying (PlayerDbusService* self);
+void player_dbus_service_Stop (PlayerDbusService* self);
+void player_dbus_service_Play (PlayerDbusService* self);
+void player_dbus_service_OpenUri (PlayerDbusService* self, const gchar* Uri);
+gchar* player_dbus_service_get_PlaybackStatus (PlayerDbusService* self);
+gchar* player_dbus_service_get_RepeatStatus (PlayerDbusService* self);
+void player_dbus_service_set_RepeatStatus (PlayerDbusService* self, const gchar* value);
+gboolean player_dbus_service_get_Shuffle (PlayerDbusService* self);
+void player_dbus_service_set_Shuffle (PlayerDbusService* self, gboolean value);
+GHashTable* player_dbus_service_get_Metadata (PlayerDbusService* self);
+gdouble player_dbus_service_get_Volume (PlayerDbusService* self);
+void player_dbus_service_set_Volume (PlayerDbusService* self, gdouble value);
+gint64 player_dbus_service_get_Length (PlayerDbusService* self);
+gint64 player_dbus_service_get_Position (PlayerDbusService* self);
+void player_dbus_service_set_Position (PlayerDbusService* self, gint64 value);
 GType xnoise_global_access_get_type (void) G_GNUC_CONST;
 void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
 void xnoise_global_access_do_restart_of_current_track (XnoiseGlobalAccess* self);
@@ -2050,6 +2118,7 @@ void xnoise_lyrics_view_lyrics_provider_unregister (XnoiseLyricsView* self, Xnoi
 XnoiseLyricsLoader* xnoise_lyrics_view_get_loader (XnoiseLyricsView* self);
 extern gboolean xnoise_main_show_plugin_state;
 extern gboolean xnoise_main_no_plugins;
+extern gboolean xnoise_main_no_dbus;
 extern XnoiseApplication* xnoise_main_app;
 XnoiseMain* xnoise_main_new (void);
 XnoiseMain* xnoise_main_construct (GType object_type);

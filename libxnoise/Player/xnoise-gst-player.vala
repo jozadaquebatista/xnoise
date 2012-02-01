@@ -767,7 +767,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 			}
 			if(seeking == false) {
 				playbin.query_duration(ref fmt, out len);
-				length_time = (this._uri == EMPTYSTRING || this._uri == null ? (int64)0 : (int64)len);
+				length_time = (this._uri == null || this._uri == EMPTYSTRING ? (int64)0 : (int64)len);
 				if(playing == false) return true;
 				if(!playbin.query_position(ref fmt, out pos))
 					return true;

@@ -33,6 +33,7 @@ namespace Xnoise {
 
 	private static bool _plugininfo;
 	private static bool _noplugins;
+	private static bool _nodbus;
 	private static bool _reset;
 	private static bool _version;
 
@@ -43,6 +44,7 @@ namespace Xnoise {
 		{ "version",     'V', 0, OptionArg.NONE, ref _version,    "Show the application's version.",                 null },
 		{ "plugin-info", 'p', 0, OptionArg.NONE, ref _plugininfo, "Show loaded and activated plugins on app start.", null },
 		{ "no-plugins",  'N', 0, OptionArg.NONE, ref _noplugins,  "Start without loding any plugins.",               null },
+		{ "no-dbus",     'D', 0, OptionArg.NONE, ref _nodbus,     "Start without using the onboard dbus interface.", null },
 		{ "reset",       'R', 0, OptionArg.NONE, ref _reset,      "Reset all settings.",                             null },
 		{ "", 0, 0, OptionArg.FILENAME_ARRAY,    ref _fileargs,   null,                                      "[FILE ...]" },
 		{null}
@@ -79,7 +81,7 @@ namespace Xnoise {
 		if(_plugininfo) sa_args += "-p";
 		if(_reset)      sa_args += "-R";
 		if(_noplugins)  sa_args += "-N";
-		string[] uris = {};
+		if(_nodbus)     sa_args += "-D";
 		string mime;
 		var psVideo = new PatternSpec("video*");
 		var psAudio = new PatternSpec("audio*");

@@ -34,6 +34,7 @@ public class Xnoise.Application : GLib.Application {
 	
 	private static bool _plugininfo;
 	private static bool _noplugins;
+	private static bool _nodbus;
 	private static bool _reset;
 	private static bool _version;
 
@@ -44,6 +45,7 @@ public class Xnoise.Application : GLib.Application {
 		{ "version",     'V', 0, OptionArg.NONE, ref _version,    "Show the application's version.",                 null },
 		{ "plugin-info", 'p', 0, OptionArg.NONE, ref _plugininfo, "Show loaded and activated plugins on app start.", null },
 		{ "no-plugins",  'N', 0, OptionArg.NONE, ref _noplugins,  "Start without loding any plugins.",               null },
+		{ "no-dbus",     'D', 0, OptionArg.NONE, ref _nodbus,     "Start without using the onboard dbus interface.", null },
 		{ "reset",       'R', 0, OptionArg.NONE, ref _reset,      "Reset all settings.",                             null },
 		{ "", 0, 0, OptionArg.FILENAME_ARRAY,    ref _fileargs,      null,                                   "[FILE ...]" },
 		{null}
@@ -103,6 +105,7 @@ public class Xnoise.Application : GLib.Application {
 		if(_reset)      print("Reset not implemented, yet.\n");
 		if(_plugininfo) Main.show_plugin_state = true;
 		if(_noplugins)  Main.no_plugins = true;
+		if(_nodbus)  Main.no_dbus = true;
 		string[] uris = {};
 		File f = null;
 		string mime;

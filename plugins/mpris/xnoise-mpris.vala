@@ -396,7 +396,7 @@ public class MprisPlayer : GLib.Object {
 		changed_properties.insert(property, val);
 		
 		if(send_property_source == 0) {
-			send_property_source = Idle.add(send_property_change);
+			send_property_source = Timeout.add(100, send_property_change);
 		}
 	}
 	
