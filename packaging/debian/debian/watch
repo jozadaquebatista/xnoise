@@ -1,2 +1,2 @@
 version=3
-https://github.com/shuerhaaken/xnoise-media-player/tags .*/tarball/(\d[\d\.]+)
+https://github.com/shuerhaaken/xnoise/tags .*/tarball/(\d[\d\.]+)
