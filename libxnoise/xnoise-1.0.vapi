@@ -524,6 +524,11 @@ namespace Xnoise {
 		public Dbus ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class FullscreenProgressBar : Gtk.EventBox {
+		public FullscreenProgressBar (Xnoise.GstPlayer _player);
+		public void set_value (uint pos, uint len);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class FullscreenToolbar {
 		public class LeaveVideoFSButton : Gtk.Button {
 			public LeaveVideoFSButton ();
@@ -963,11 +968,6 @@ namespace Xnoise {
 		public bool reset_state ();
 		public void set_reference_to_last ();
 		public signal void sign_active_path_changed (Xnoise.PlayerState ts);
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class TrackProgressBar : Gtk.EventBox {
-		public TrackProgressBar (Xnoise.GstPlayer _player);
-		public void set_value (uint pos, uint len);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrayIcon : Gtk.StatusIcon {

@@ -37,7 +37,7 @@ public class Xnoise.FullscreenToolbar {
 	private const uint hide_delay = 4;
 	private Gtk.Window window;
 	private Gtk.Window fullscreenwindow;
-	private TrackProgressBar bar;
+	private FullscreenProgressBar bar;
 	private uint hide_event_id;
 	private bool hide_lock;
 	private Gdk.Cursor invisible_cursor;
@@ -67,7 +67,7 @@ public class Xnoise.FullscreenToolbar {
 		var leavefullscreen = new LeaveVideoFSButton();
 		var volume          = new VolumeSliderButton();
 
-		bar = new TrackProgressBar(gst_player);
+		bar = new FullscreenProgressBar(gst_player);
 		
 		var vp = new Gtk.Alignment(0,0.5f,0,0);
 		vp.add (bar);

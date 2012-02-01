@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-28 10:48+0100\n"
+"POT-Creation-Date: 2012-02-01 16:34+0100\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-"
@@ -45,6 +45,129 @@ msgstr ""
 #: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:171
+msgid "Add local folder"
+msgstr "Helyi mappa hozzáadása"
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:172
+msgid "Add media stream"
+msgstr "Média folyam hozzáadása"
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:173
+msgid "Remove"
+msgstr "Eltávolítás"
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:174
+msgid "do a full rescan of the library"
+msgstr "do a full rescan of the library"
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:175
+#, fuzzy
+msgid ""
+"Select local media folders or remote media streams. \n"
+"All library media will be available in the library."
+msgstr ""
+"Select the local folders or files or media streams to add to the library. \n"
+"All library media will be available in the media browser."
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:185
+msgid "xnoise - Add media to library"
+msgstr "xnoise- Média hozzáadása a könyvtárhoz"
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:244
+#: ../libxnoise/Utils/xnoise-media-importer.vala:72
+msgid "Importing media data. This may take some time..."
+msgstr "Importing media data. This may take some time..."
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:271
+msgid "Select media folder"
+msgstr "Média mappa kiválasztása"
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:341
+msgid "Add internet radio link"
+msgstr "Internetes rádió link hozzáadása"
+
+#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:194
+msgid "Leave fullscreen"
+msgstr "Teljesképernyős mód elhagyása"
+
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:242
+msgid "General"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:244
+msgid "Plugins"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:249
+msgid "Enable grid lines in media browser"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:254
+msgid "Don't show video screen while hovering album image"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:259
+msgid "Compact layout"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:264
+msgid "Use stop button"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:269
+msgid "Quit application if window is closed"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:280
+msgid "Media browser fontsize:"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:37
+#, fuzzy
+msgid "Select external subtitle file"
+msgstr "Média fájl kiválasztása"
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:78
+msgid "No Subtitle"
+msgstr "No Subtitle"
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:136
+#, fuzzy
+msgid "Leave Fullscreen"
+msgstr "Teljesképernyős mód elhagyása"
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:136
+#, fuzzy
+msgid "Fullscreen"
+msgstr "Teljesképernyős mód elhagyása"
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:370
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1119
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1142
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1184
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1209
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
+#: ../plugins/notifications2/xnoise-notifications.vala:192
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:132
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
+#, c-format
+msgid "by"
+msgstr "by"
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:372
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1121
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1144
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1186
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1211
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
+#: ../plugins/notifications2/xnoise-notifications.vala:194
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
+#, c-format
+msgid "on"
+msgstr "on"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
 #, fuzzy
@@ -191,6 +314,180 @@ msgstr ""
 "\n"
 "Using %s ..."
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:45
+#, fuzzy
+msgid "Now Playing"
+msgstr "playing"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:46
+msgid "Tracklist"
+msgstr "Track lista"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:47
+#, fuzzy
+msgid "Lyrics"
+msgstr "_Dalszöveg"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:48
+msgid "Show Media"
+msgstr "Média mutatása"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:49
+msgid "Hide Media"
+msgstr "Média elrejtése"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:113
+#, fuzzy
+msgid "Hide Library"
+msgstr "Média elrejtése"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:114
+#, fuzzy
+msgid "Show Library"
+msgstr "Média mutatása"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:184
+msgid "_File"
+msgstr "_Fájl"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:185
+msgid "open file"
+msgstr "fájl megnyitása"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:186
+msgid "Open _Location"
+msgstr "Open _Location"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:187
+msgid "open remote location"
+msgstr "open remote location"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:188
+msgid "_Add or Remove media"
+msgstr "Média hozzáadása vagy eltávolítása"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:189
+msgid "manage the content of the xnoise media library"
+msgstr "xnoise média könyvtár tartalmának szerkesztése"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:191
+msgid "_Edit"
+msgstr "_Szerkesztés"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:192
+msgid "C_lear tracklist"
+msgstr "_Track lista törlése"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:193
+msgid "Clear the tracklist"
+msgstr "Track lista törlése"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:194
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:195
+msgid "R_escan collection"
+msgstr "R_escan collection"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:197
+msgid "_View"
+msgstr "_Nézet"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:198
+msgid "_Tracklist"
+msgstr "_Track lista"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:199
+msgid "Go to the tracklist."
+msgstr "Track listára ugrás."
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:200
+#, fuzzy
+msgid "_Now Playing"
+msgstr "playing"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:201
+#, fuzzy
+msgid "Go to the now playing screen in the main window."
+msgstr "A fő ablakban a videó kép mutatása"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:202
+msgid "_Lyrics"
+msgstr "_Dalszöveg"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:203
+msgid "Go to the lyrics view."
+msgstr "Dalszöveg nézet módba váltás"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:204
+msgid "_Help"
+msgstr "_Súgó"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:206
+msgid "_Config"
+msgstr "_Beállítások"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:370
+#, c-format
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:436
+msgid "Add media"
+msgstr "Média hozzáadása"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:439
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
+msgstr ""
+"Ön először indította el az xnoise-t. Szeretne importálni médiákat a "
+"könyvtárba?"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:535
+msgid "no repeat"
+msgstr "nincs ismétlés"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:541
+msgid "repeat single"
+msgstr "egyszeri ismétlés"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:547
+msgid "repeat all"
+msgstr "összes ismétlése"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:553
+msgid "random play"
+msgstr "véletlenszerű lejátszás"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1040
+msgid "Enter the URL of the file to open"
+msgstr "Enter the URL of the file to open"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1055
+msgid "Select media file"
+msgstr "Média fájl kiválasztása"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1292
+msgid "Remove all"
+msgstr "Összes eltávolítása"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1297
+msgid "Remove selected titles"
+msgstr "Kiválasztott címek eltávolítása"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1302
+msgid "Jump to current position"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1458
+msgid "Collapse all"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1564
+msgid "Show application main menu"
+msgstr ""
+
 #: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:706
 msgid "Loading ..."
 msgstr ""
@@ -247,38 +544,6 @@ msgstr "Subtitle #"
 msgid "Audio Track #"
 msgstr "Audio Track #"
 
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:242
-msgid "General"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:244
-msgid "Plugins"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:249
-msgid "Enable grid lines in media browser"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:254
-msgid "Don't show video screen while hovering album image"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:259
-msgid "Compact layout"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:264
-msgid "Use stop button"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:269
-msgid "Quit application if window is closed"
-msgstr ""
-
-#: ../libxnoise/Settings/xnoise-settings-dialog.vala:280
-msgid "Media browser fontsize:"
-msgstr ""
-
 #: ../libxnoise/Services/xnoise-services.vala:42
 msgid "unknown artist"
 msgstr "ismeretlen előadó"
@@ -331,37 +596,6 @@ msgstr "paused"
 msgid "ready to rock"
 msgstr "Viktor Orbán is stupid"
 
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1119
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1142
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1184
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1209
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:370
-#: ../plugins/notifications2/xnoise-notifications.vala:192
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:132
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:155
-#, c-format
-msgid "by"
-msgstr "by"
-
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1121
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1144
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1186
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1211
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:372
-#: ../plugins/notifications2/xnoise-notifications.vala:194
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
-#, c-format
-msgid "on"
-msgstr "on"
-
-#: ../libxnoise/Utils/xnoise-media-importer.vala:72
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:244
-msgid "Importing media data. This may take some time..."
-msgstr "Importing media data. This may take some time..."
-
 #: ../libxnoise/Utils/xnoise-media-importer.vala:154
 #, c-format
 msgid "Found %u tracks. Updating library ..."
@@ -372,240 +606,6 @@ msgstr ""
 #, c-format
 msgid "%u tracks found"
 msgstr ""
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:171
-msgid "Add local folder"
-msgstr "Helyi mappa hozzáadása"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:172
-msgid "Add media stream"
-msgstr "Média folyam hozzáadása"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:173
-msgid "Remove"
-msgstr "Eltávolítás"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:174
-msgid "do a full rescan of the library"
-msgstr "do a full rescan of the library"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:175
-#, fuzzy
-msgid ""
-"Select local media folders or remote media streams. \n"
-"All library media will be available in the library."
-msgstr ""
-"Select the local folders or files or media streams to add to the library. \n"
-"All library media will be available in the media browser."
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:185
-msgid "xnoise - Add media to library"
-msgstr "xnoise- Média hozzáadása a könyvtárhoz"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:271
-msgid "Select media folder"
-msgstr "Média mappa kiválasztása"
-
-#: ../libxnoise/Widgets/xnoise-add-media-dialog.vala:341
-msgid "Add internet radio link"
-msgstr "Internetes rádió link hozzáadása"
-
-#: ../libxnoise/Widgets/xnoise-fullscreen-toolbar.vala:193
-msgid "Leave fullscreen"
-msgstr "Teljesképernyős mód elhagyása"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:45
-#, fuzzy
-msgid "Now Playing"
-msgstr "playing"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:46
-msgid "Tracklist"
-msgstr "Track lista"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:47
-#, fuzzy
-msgid "Lyrics"
-msgstr "_Dalszöveg"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:48
-msgid "Show Media"
-msgstr "Média mutatása"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:49
-msgid "Hide Media"
-msgstr "Média elrejtése"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:113
-#, fuzzy
-msgid "Hide Library"
-msgstr "Média elrejtése"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:114
-#, fuzzy
-msgid "Show Library"
-msgstr "Média mutatása"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:184
-msgid "_File"
-msgstr "_Fájl"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:185
-msgid "open file"
-msgstr "fájl megnyitása"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:186
-msgid "Open _Location"
-msgstr "Open _Location"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:187
-msgid "open remote location"
-msgstr "open remote location"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:188
-msgid "_Add or Remove media"
-msgstr "Média hozzáadása vagy eltávolítása"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:189
-msgid "manage the content of the xnoise media library"
-msgstr "xnoise média könyvtár tartalmának szerkesztése"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:191
-msgid "_Edit"
-msgstr "_Szerkesztés"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:192
-msgid "C_lear tracklist"
-msgstr "_Track lista törlése"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:193
-msgid "Clear the tracklist"
-msgstr "Track lista törlése"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:194
-#: ../libxnoise/Widgets/xnoise-main-window.vala:195
-msgid "R_escan collection"
-msgstr "R_escan collection"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:197
-msgid "_View"
-msgstr "_Nézet"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:198
-msgid "_Tracklist"
-msgstr "_Track lista"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:199
-msgid "Go to the tracklist."
-msgstr "Track listára ugrás."
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:200
-#, fuzzy
-msgid "_Now Playing"
-msgstr "playing"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:201
-#, fuzzy
-msgid "Go to the now playing screen in the main window."
-msgstr "A fő ablakban a videó kép mutatása"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:202
-msgid "_Lyrics"
-msgstr "_Dalszöveg"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:203
-msgid "Go to the lyrics view."
-msgstr "Dalszöveg nézet módba váltás"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:204
-msgid "_Help"
-msgstr "_Súgó"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:206
-msgid "_Config"
-msgstr "_Beállítások"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:370
-#, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:436
-msgid "Add media"
-msgstr "Média hozzáadása"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:439
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Ön először indította el az xnoise-t. Szeretne importálni médiákat a "
-"könyvtárba?"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:535
-msgid "no repeat"
-msgstr "nincs ismétlés"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:541
-msgid "repeat single"
-msgstr "egyszeri ismétlés"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:547
-msgid "repeat all"
-msgstr "összes ismétlése"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:553
-msgid "random play"
-msgstr "véletlenszerű lejátszás"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1040
-msgid "Enter the URL of the file to open"
-msgstr "Enter the URL of the file to open"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1055
-msgid "Select media file"
-msgstr "Média fájl kiválasztása"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1292
-msgid "Remove all"
-msgstr "Összes eltávolítása"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1297
-msgid "Remove selected titles"
-msgstr "Kiválasztott címek eltávolítása"
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1302
-msgid "Jump to current position"
-msgstr ""
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1458
-msgid "Collapse all"
-msgstr ""
-
-#: ../libxnoise/Widgets/xnoise-main-window.vala:1564
-msgid "Show application main menu"
-msgstr ""
-
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:37
-#, fuzzy
-msgid "Select external subtitle file"
-msgstr "Média fájl kiválasztása"
-
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:78
-msgid "No Subtitle"
-msgstr "No Subtitle"
-
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:136
-#, fuzzy
-msgid "Leave Fullscreen"
-msgstr "Teljesképernyős mód elhagyása"
-
-#: ../libxnoise/Widgets/xnoise-videoscreen.vala:136
-#, fuzzy
-msgid "Fullscreen"
-msgstr "Teljesképernyős mód elhagyása"
 
 #: ../src/xnoise.vala:74
 msgid ""

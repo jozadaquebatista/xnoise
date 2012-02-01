@@ -33,6 +33,22 @@ libxnoise_la_SOURCES = \
     AlbumImages/xnoise-i-album-cover-image.vala \
     AlbumImages/xnoise-i-album-cover-image-provider.vala \
     Application/xnoise-application.vala \
+    BackgroundWorker/xnoise-worker.vala \
+    ExtraWidgets/AboutDialog/xnoise-about.vala \
+    ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala \
+    ExtraWidgets/Fullscreen/xnoise-fullscreen-progressbar.vala \
+    ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala \
+    ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala \
+    ExtraWidgets/VideoScreen/xnoise-videoscreen.vala \
+    ExtraWidgets/xnoise-control-button.vala \
+    ExtraWidgets/xnoise-play-pause-button.vala \
+    ExtraWidgets/xnoise-trackinfo-bar.vala \
+    ExtraWidgets/xnoise-volume-slider-button.vala \
+    Database/xnoise-db-browser.vala \
+    Database/xnoise-db-creator.vala \
+    Database/xnoise-db-writer.vala \
+    DBus/xnoise-dbus.vala \
+    GlobalAccess/xnoise-global-access.vala \
     ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala \
     ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala \
     ItemHandlers/EditTags/xnoise-handler-edit-tags.vala \
@@ -44,16 +60,12 @@ libxnoise_la_SOURCES = \
     ItemHandlers/xnoise-item-converter.vala \
     ItemHandlers/xnoise-item-handler.vala \
     ItemHandlers/xnoise-item-handler-manager.vala \
-    Database/xnoise-db-browser.vala \
-    Database/xnoise-db-creator.vala \
-    Database/xnoise-db-writer.vala \
-    DBus/xnoise-dbus.vala \
-    GlobalAccess/xnoise-global-access.vala \
     Lyrics/xnoise-i-lyrics.vala \
     Lyrics/xnoise-i-lyrics-provider.vala \
     Lyrics/xnoise-lyrics-loader.vala \
     Lyrics/xnoise-lyrics-view.vala \
     Main/xnoise-main.vala \
+    MainWindow/xnoise-main-window.vala \
     MediaBrowser/xnoise-media-browser.vala \
     MediaBrowser/xnoise-media-browser-model.vala \
     Parameter/xnoise-i-params.vala \
@@ -70,13 +82,12 @@ libxnoise_la_SOURCES = \
     PlaylistReader/PLS/xnoise-playlist-pls-file-reader.vala \
     PlaylistReader/XSPF/xnoise-playlist-xspf-file-reader.vala \
     PluginModule/xnoise-plugin.vala \
-    PluginModule/xnoise-plugin-loader.vala \
     PluginModule/xnoise-plugin-information.vala \
     PluginModule/xnoise-plugin-interface.vala \
+    PluginModule/xnoise-plugin-loader.vala \
+    PluginModule/xnoise-plugin-manager-tree.vala \
     ScreensaverManager/xnoise-screensaver-manager.vala \
     Services/xnoise-services.vala \
-    Settings/xnoise-plugin-manager-tree.vala \
-    Settings/xnoise-settings-dialog.vala \
     SimpleMarkup/xnoise-markup-node.vala \
     SimpleMarkup/xnoise-markup-reader.vala \
     SimpleMarkup/xnoise-markup-writer.vala \
@@ -87,25 +98,14 @@ libxnoise_la_SOURCES = \
     TrackList/xnoise-tracklist-column.vala \
     TrackList/xnoise-tracklist-model.vala \
     TrayIcon/xnoise-tray-icon.vala \
+    UserInfoSystem/xnoise-info-bar.vala \
+    UserInfoSystem/xnoise-user-info.vala \
     Utils/xnoise-local-schemes.vala \
     Utils/xnoise-media-extensions.vala \
     Utils/xnoise-media-importer.vala \
     Utils/xnoise-misc.vala \
     Utils/xnoise-remote-schemes.vala \
     Utils/xnoise-track-data.vala \
-    Utils/xnoise-user-info.vala \
-    Widgets/xnoise-about.vala \
-    Widgets/xnoise-add-media-dialog.vala \
-    Widgets/xnoise-control-button.vala \
-    Widgets/xnoise-fullscreen-toolbar.vala \
-    Widgets/xnoise-info-bar.vala \
-    Widgets/xnoise-main-window.vala \
-    Widgets/xnoise-play-pause-button.vala \
-    Widgets/xnoise-trackinfo-bar.vala \
-    Widgets/xnoise-track-progressbar.vala \
-    Widgets/xnoise-videoscreen.vala \
-    Widgets/xnoise-volume-slider-button.vala \
-    Worker/xnoise-worker.vala \
     $(NULL)
 
 libxnoise_la_VALAFLAGS = \
@@ -149,7 +149,15 @@ DISTCLEANFILES = \
     Makefile.in \
     AlbumImages/*.c \
     Application/*.c \
+    BackgroundWorker/*.c \
     Database/*.c \
+    DBus/*.c \
+    ExtraWidgets/*.c \
+    ExtraWidgets/AboutDialog/*.c \
+    ExtraWidgets/AddMediaDialog/*.c \
+    ExtraWidgets/Fullscreen/*.c \
+    ExtraWidgets/SettingsDialog/*.c \
+    ExtraWidgets/VideoScreen/*.c \
     GlobalAccess/*.c \
     ItemHandlers/*.c \
     ItemHandlers/AddAllToTracklist/*.c \
@@ -159,20 +167,24 @@ DISTCLEANFILES = \
     ItemHandlers/RemoveTrack/*.c \
     Lyrics/*.c \
     Main/*.c \
+    MainWindow/*.c \
     MediaBrowser/*.c \
     Parameter/*.c \
     Player/*.c \
     PlaylistReader/*.c \
+    PlaylistReader/ASX/*.c \
+    PlaylistReader/M3U/*.c \
+    PlaylistReader/PLS/*.c \
+    PlaylistReader/WPL/*.c \
+    PlaylistReader/XSPF/*.c \
     PluginModule/*.c \
     ScreensaverManager/*.c \
     Services/*.c \
-    Settings/*.c \
     SimpleMarkup/*.c \
     TagAccess/*.c \
     TrackList/*.c \
     TrayIcon/*.c \
+    UserInfoSystem/*.c \
     Utils/*.c \
-    Widgets/*.c \
-    Worker/*.c \
     $(NULL)
 

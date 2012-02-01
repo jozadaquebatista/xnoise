@@ -1,4 +1,4 @@
-/* xnoise-track-progressbar.vala
+/* xnoise-fullscreen-progressbar.vala
  *
  * Copyright (C) 2009-2012  Jörn Magens
  *
@@ -35,12 +35,12 @@ using Gtk;
 * A SongProgressBar is a Gtk.ProgressBar that shows the playback position in the
 * currently played item and changes it upon user input
 */
-public class Xnoise.TrackProgressBar : Gtk.EventBox {
+public class Xnoise.FullscreenProgressBar : Gtk.EventBox {
 	private const double SCROLL_POS_CHANGE = 0.02;
 	private unowned GstPlayer player;
 	private ProgressBar bar;
 	
-	public TrackProgressBar(Xnoise.GstPlayer _player) {
+	public FullscreenProgressBar(Xnoise.GstPlayer _player) {
 		assert(_player != null);
 		this.player = _player;
 		bar = new Gtk.ProgressBar();
