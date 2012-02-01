@@ -249,7 +249,7 @@ relative_size_album_column=0.32904148783977111
 relative_size_artist_column=0.32761087267525035
 
 [settings_string]
-activated_plugins=soundmenu2;DatabaseLyrics;mpris;notifications;Lyricwiki;chartlyrics;CyclicSaveState;mediakeys;LastfmCovers
+activated_plugins=DatabaseLyrics;notifications;Lyricwiki;chartlyrics;CyclicSaveState;mediakeys;LastfmCovers
 """;
 }
 
