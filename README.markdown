@@ -91,6 +91,8 @@ The license of xnoise is GNU GPL v2 or later. There is a license exeption for th
  
 **[xnoise home page](http://www.xnoise-media-player.com/)**
 
+**[xnoise wiki home](https://github.com/shuerhaaken/xnoise/wiki/Home)**
+
 **[xnoise mailing list](http://groups.google.com/group/xnoise)**
 
 **[xnoise on Ubuntu via PPA](https://launchpad.net/~shkn/+archive/xnoise)**
