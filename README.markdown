@@ -5,9 +5,7 @@ This gives you the possibility to queue any track in any order, regardless if th
 
 
 The **media browser contains all available media** as a **hierarchical tree structure of the available metadata**. This makes it is easy to find single tracks, artists or albums. Just use it's tree structure or enter a search term to get the desired track.
-
-From the here, single or multiple tracks, streams, albums, artists or videos can be dragged into the tracklist to every position.
-
+From here, single or multiple tracks, streams, albums, artists or videos can be dragged to every position in the tracklist. From where they can be played.
 
 Xnoise can play **every kind of audio/video file or stream that gstreamer can handle** and it's designed to always restore it's last state on the next run (window position, window size, content of the tracklist, activated plugins, ...).
 Metadata of tracks can be edited and by that the appeatance of the tracks in xnoise's mediabrowser can be improved.
