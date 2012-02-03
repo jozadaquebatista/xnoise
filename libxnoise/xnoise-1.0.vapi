@@ -16,8 +16,6 @@ namespace Xnoise {
 			public delegate void ReaderCallback (Sqlite.Database database);
 			public DbBrowser () throws Xnoise.Database.DbError;
 			public void cancel ();
-			public int count_artists ();
-			public int count_artists_with_search (ref string searchtext);
 			public uint count_lastused_items ();
 			public int32 count_videos (ref string searchtext);
 			public void do_callback_transaction (Xnoise.Database.DbBrowser.ReaderCallback cb);
@@ -25,32 +23,19 @@ namespace Xnoise {
 			public Xnoise.TrackData[]? get_all_tracks (ref string searchtext);
 			public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);
 			public Xnoise.Item[] get_artists_with_search (ref string searchtext);
-			public Xnoise.Item[] get_lastused_items ();
 			public string[] get_media_files ();
 			public string[] get_media_folders ();
-			public string? get_single_stream_uri (string name);
-			public Xnoise.Item[] get_some_artists (int limit, int offset);
 			public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
 			public Xnoise.TrackData[] get_stream_data (ref string searchtext);
 			public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 			public Xnoise.StreamData[] get_streams ();
-			public Xnoise.TrackData[] get_titles_with_mediatypes_and_ids (string artist, string album);
-			public int get_track_id_for_path (string uri);
 			public Xnoise.TrackData[]? get_trackdata_by_albumid (ref string searchtext, int32 id);
 			public Xnoise.TrackData[]? get_trackdata_by_artistid (ref string searchtext, int32 id);
 			public Xnoise.TrackData? get_trackdata_by_titleid (ref string searchtext, int32 id);
-			public bool get_trackdata_for_id (int id, out Xnoise.TrackData val);
-			public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 			public Xnoise.TrackData[] get_trackdata_for_streams (ref string searchtext);
 			public bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 			public Xnoise.TrackData[] get_trackdata_for_video (ref string searchtext);
-			public bool get_uri_for_id (int id, out string val);
-			public string[] get_uris (ref string search_string);
 			public Xnoise.TrackData[] get_video_data (ref string searchtext);
-			public bool stream_in_db (string uri);
-			public bool streams_available ();
-			public bool track_in_db (string uri);
-			public bool videos_available ();
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class DbWriter : GLib.Object {
@@ -69,25 +54,20 @@ namespace Xnoise {
 			public delegate void ChangeNotificationCallback (Xnoise.Database.DbWriter.ChangeType changetype, Xnoise.Item? item);
 			public delegate void WriterCallback (Sqlite.Database database);
 			public DbWriter () throws Xnoise.Database.DbError;
-			public void add_single_file_to_collection (string uri);
 			public void add_single_folder_to_collection (string mfolder);
 			public void add_single_stream_to_collection (string uri, string name = "");
 			public void begin_transaction ();
 			public void commit_transaction ();
-			public void del_all_files ();
 			public void del_all_folders ();
 			public void del_all_streams ();
 			public bool delete_local_media_data ();
-			public void delete_uri (string uri);
 			public void do_callback_transaction (Xnoise.Database.DbWriter.WriterCallback cb);
 			public string[] get_media_folders ();
-			public int get_track_id_for_uri (string uri);
 			public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 			public string? get_uri_for_item_id (int32 id);
 			public bool insert_title (ref Xnoise.TrackData td);
 			public void register_change_callback (Xnoise.MediaBrowserModel mbm, Xnoise.Database.DbWriter.ChangeNotificationCallback cb);
 			public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
-			public int uri_entry_exists (string uri);
 			public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
 			public bool in_transaction { get; }
 		}

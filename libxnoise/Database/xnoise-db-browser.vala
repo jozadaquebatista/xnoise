@@ -43,30 +43,10 @@ public class Xnoise.Database.DbBrowser {
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private string DATABASE;
 
-	private static const string STMT_COUNT_FOR_STREAMS =
-		"SELECT COUNT (id) FROM streams st WHERE st.uri = ?";
-	private static const string STMT_TRACKDATA_FOR_STREAM =
-		"SELECT st.name FROM streams st WHERE st.name = ?";
-	private static const string STMT_COUNT_STREAMS =
-		"SELECT COUNT (id) FROM streams";
-	private static const string STMT_COUNT_FOR_MEDIATYPE =
-		"SELECT COUNT (title) FROM items WHERE mediatype = ?";
-	private static const string STMT_COUNT_FOR_URI =
-		"SELECT COUNT (i.title) FROM items i, uris u WHERE i.uri = u.id AND u.name = ?";
-	private static const string STMT_TRACKDATA_FOR_ID =
-		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.id = ?";
-	private static const string STMT_URI_FOR_ID =
-		"SELECT u.name FROM items t, uris u WHERE t.uri = u.id AND t.id = ?";
-	private static const string STMT_TRACK_ID_FOR_URI =
-		"SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
 	private static const string STMT_GET_LASTUSED =
 		"SELECT uri FROM lastused";
-	private static const string STMT_GET_URIS = 
-		"SELECT name FROM uris WHERE name LIKE ? ESCAPE \'\\\'";
 	private static const string STMT_GET_RADIOS =
 		"SELECT name, uri FROM streams";
-	private static const string STMT_GET_SINGLE_RADIO_URI =
-		"SELECT uri FROM streams WHERE name = ?";
 	private static const string STMT_GET_MEDIA_FOLDERS =
 		"SELECT * FROM media_folders";
 	private static const string STMT_GET_MEDIA_FILES =
@@ -127,28 +107,6 @@ public class Xnoise.Database.DbBrowser {
 			cb(db);
 	}
 
-	private static const string STMT_GET_ARTIST_COUNT_WITH_SEARCH =
-		"SELECT COUNT (ar.name) FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND u.id = t.uri AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?)";
-	public int count_artists_with_search(ref string searchtext) {
-		Statement stmt;
-		int count = 0;
-		string st = "%%%s%%".printf(searchtext);
-		this.db.prepare_v2(STMT_GET_ARTIST_COUNT_WITH_SEARCH, -1, out stmt);
-			
-		stmt.reset();
-
-		if((stmt.bind_text(1, st) != Sqlite.OK)||
-		   (stmt.bind_text(2, st) != Sqlite.OK)||
-		   (stmt.bind_text(3, st) != Sqlite.OK)) {
-			this.db_error();
-			return 0;
-		}
-		if(stmt.step() == Sqlite.ROW) {
-			count = stmt.column_int(0);
-		}
-		return count;
-	}
-
 	private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (t.id) FROM items t, uris u WHERE t.mediatype=? AND u.id = t.uri AND (utf8_lower(t.title) LIKE ?)";
 	public int32 count_videos(ref string searchtext) {
 		Statement stmt;
@@ -166,104 +124,6 @@ public class Xnoise.Database.DbBrowser {
 			count = stmt.column_int(0);
 		}
 		return count;
-	}
-
-	private static const string STMT_GET_ARTIST_COUNT = "SELECT COUNT (name) FROM artists";
-	public int count_artists() {
-		Statement stmt;
-		int count = 0;
-		
-		this.db.prepare_v2(STMT_GET_ARTIST_COUNT, -1, out stmt);
-		
-		stmt.reset();
-		
-		if(stmt.step() == Sqlite.ROW) {
-			count = stmt.column_int(0);
-		}
-		return count;
-	}
-
-	public bool videos_available() {
-		Statement stmt;
-		int count = 0;
-		
-		this.db.prepare_v2(STMT_COUNT_FOR_MEDIATYPE, -1, out stmt);
-			
-		stmt.reset();
-
-		if(stmt.bind_int(1, ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK) {
-			this.db_error();
-		}
-		if(stmt.step() == Sqlite.ROW) {
-			count = stmt.column_int(0);
-		}
-		if(count>0) return true;
-		return false;
-	}
-
-	public bool streams_available() {
-		Statement stmt;
-		int count = 0;
-		this.db.prepare_v2(STMT_COUNT_STREAMS, -1, out stmt);
-			
-		stmt.reset();
-
-		if(stmt.step() == Sqlite.ROW) {
-			count = stmt.column_int(0);
-			if(count > 0) return true;
-		}
-		return false;
-	}
-
-	public bool stream_in_db(string uri) {
-		Statement stmt;
-		int count = 0;
-		
-		this.db.prepare_v2(STMT_COUNT_FOR_STREAMS, -1, out stmt);
-			
-		stmt.reset();
-
-		if(stmt.bind_text(1, uri) != Sqlite.OK) {
-			this.db_error();
-		}
-		if(stmt.step() == Sqlite.ROW) {
-			count = stmt.column_int(0);
-			if(count > 0) return true;
-		}
-		return false;
-	}
-
-	public bool track_in_db(string uri) {
-		Statement stmt;
-		int count = 0;
-		
-		this.db.prepare_v2(STMT_COUNT_FOR_URI, -1, out stmt);
-			
-		stmt.reset();
-
-		if(stmt.bind_text(1, uri) != Sqlite.OK) {
-			this.db_error();
-		}
-		if(stmt.step() == Sqlite.ROW) {
-			count = stmt.column_int(0);
-		}
-		if(count>0) return true;
-		return false;
-	}
-
-	public bool get_uri_for_id(int id, out string val) {
-		Statement stmt;
-		val = EMPTYSTRING;
-		this.db.prepare_v2(STMT_URI_FOR_ID, -1, out stmt);
-		stmt.reset();
-		if(stmt.bind_int(1, id) != Sqlite.OK) {
-			this.db_error();
-		}
-		if(stmt.step() == Sqlite.ROW) {
-			val = stmt.column_text(0);
-			return true;
-		}
-		return false;
 	}
 
 	private static const string STMT_ALL_TRACKDATA =
@@ -315,51 +175,8 @@ public class Xnoise.Database.DbBrowser {
 		return (owned)retv;
 	}
 
-	public bool get_trackdata_for_id(int id, out TrackData val) {
-		Statement stmt;
-		val = new TrackData();
-		
-		this.db.prepare_v2(STMT_TRACKDATA_FOR_ID , -1, out stmt);
-		
-		stmt.reset();
-		if(stmt.bind_int(1, id) != Sqlite.OK) {
-			this.db_error();
-		}
-		if(stmt.step() == Sqlite.ROW) {
-			val.artist      = stmt.column_text(0);
-			val.album       = stmt.column_text(1);
-			val.title       = stmt.column_text(2);
-			val.tracknumber = stmt.column_int(3);
-			val.length      = stmt.column_int(6);
-			val.item        = Item((ItemType)stmt.column_int(4), stmt.column_text(5), id);
-		}
-		else {
-			print("get_trackdata_for_id: track is not in db. ID: %d\n", id);
-			return false;
-		}
-		if((val.artist==EMPTYSTRING) | (val.artist==null)) {
-			val.artist = UNKNOWN_ARTIST;
-		}
-		if((val.album== EMPTYSTRING) | (val.album== null)) {
-			val.album = UNKNOWN_ALBUM;
-		}
-		if((val.title== EMPTYSTRING) | (val.title== null)) {
-			val.title = UNKNOWN_TITLE;
-			File file = File.new_for_uri(val.item.uri);
-			string fileBasename;
-			if(file != null)
-				fileBasename = GLib.Filename.display_basename(file.get_path());
-			else
-				fileBasename = val.item.uri;
-			val.title = fileBasename;
-		}
-		return true;
-	}
-
 	private static const string STMT_STREAM_TD_FOR_ID =
 		"SELECT name, uri FROM streams WHERE id = ?";
-	//	private static const string STMT_STREAM_TD_FOR_ID_WITH_SEARCH =
-	//		"SELECT name, uri FROM streams WHERE id = ? AND uri LIKE ?";
 
 	public bool get_stream_td_for_id(int id, out TrackData val) {
 		Statement stmt;
@@ -382,23 +199,6 @@ public class Xnoise.Database.DbBrowser {
 			return false;
 		}
 		return true;
-	}
-
-	public bool get_trackdata_for_stream(string uri, out TrackData val) {
-		Statement stmt;
-		bool retval = false;
-		val = new TrackData();
-		this.db.prepare_v2(STMT_TRACKDATA_FOR_STREAM, -1, out stmt);
-			
-		stmt.reset();
-		if(stmt.bind_text(1, uri) != Sqlite.OK) {
-			this.db_error();
-		}
-		if(stmt.step() == Sqlite.ROW) {
-			val.title = stmt.column_text(0);
-			retval = true;
-		}
-		return retval;
 	}
 
 	private static const string STMT_TRACKDATA_FOR_URI =
@@ -486,29 +286,6 @@ public class Xnoise.Database.DbBrowser {
 		return (owned)sData;
 	}
 
-	public string? get_single_stream_uri(string name) {
-		Statement stmt;
-		this.db.prepare_v2(STMT_GET_SINGLE_RADIO_URI, -1, out stmt);
-		stmt.bind_text(1, name);
-		if(stmt.step() == Sqlite.ROW) {
-			return stmt.column_text(0);
-		}
-		return null;
-	}
-
-	public int get_track_id_for_path(string uri) {
-		int val = -1;
-		Statement stmt;
-		
-		this.db.prepare_v2(STMT_TRACK_ID_FOR_URI, -1, out stmt);
-		stmt.reset();
-		stmt.bind_text(1, uri);
-		if(stmt.step() == Sqlite.ROW) {
-			val = stmt.column_int(0);
-		}
-		return val;
-	}
-
 	private static const string STMT_GET_SOME_LASTUSED_ITEMS =
 		"SELECT mediatype, uri, id FROM lastused LIMIT ? OFFSET ?";
 	public Item[] get_some_lastused_items(int limit, int offset) {
@@ -543,35 +320,6 @@ public class Xnoise.Database.DbBrowser {
 			return stmt.column_int(0);
 		}
 		return val;
-	}
-	
-	private static const string STMT_GET_LASTUSED_ITEMS =
-		"SELECT mediatype, uri, id FROM lastused";
-	public Item[] get_lastused_items() {
-		Item[] val = {};
-		Statement stmt;
-		
-		this.db.prepare_v2(STMT_GET_LASTUSED_ITEMS, -1, out stmt);
-		
-		while(stmt.step() == Sqlite.ROW) {
-			Item? item = Item((ItemType)stmt.column_int(0), stmt.column_text(1), stmt.column_int(2));
-			val += item;
-		}
-		return (owned)val;
-	}
-	
-	public string[] get_uris(ref string search_string) {
-		string[] results = {};
-		Statement stmt;
-		
-		this.db.prepare_v2(STMT_GET_URIS, -1, out stmt);
-		
-		stmt.bind_text(1, search_string);
-		while(stmt.step() == Sqlite.ROW) {
-			//print("found %s", stmt.column_text(0));
-			results += stmt.column_text(0);
-		}
-		return (owned)results;
 	}
 
 	private static const string STMT_GET_STREAM_DATA =
@@ -678,27 +426,6 @@ public class Xnoise.Database.DbBrowser {
 			td.item        = Item(ItemType.STREAM, stmt.column_text(1), stmt.column_int(0));
 			td.item.text   = stmt.column_text(2);
 			val += td;
-		}
-		return (owned)val;
-	}
-
-	private static const string STMT_GET_SOME_ARTISTS = 
-		"SELECT DISTINCT ar.name , ar.id FROM artists ar ORDER BY LOWER(ar.name) ASC limit ? offset ?";
-	public Item[] get_some_artists(int limit, int offset) {
-		Item[] val = {};
-		Statement stmt;
-		
-		this.db.prepare_v2(STMT_GET_SOME_ARTISTS, -1, out stmt);
-		
-		
-		if((stmt.bind_int(1, limit ) != Sqlite.OK)|
-		   (stmt.bind_int(2, offset) != Sqlite.OK)) {
-			this.db_error();
-		}
-		while(stmt.step() == Sqlite.ROW) {
-			Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, stmt.column_int(1));
-			i.text = stmt.column_text(0);
-			val += i;
 		}
 		return (owned)val;
 	}
@@ -918,29 +645,6 @@ public class Xnoise.Database.DbBrowser {
 			Item i = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, stmt.column_int(1));
 			i.text = stmt.column_text(0);
 			val += i;
-		}
-		return (owned)val;
-	}
-
-	private static const string STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS =
-		"SELECT DISTINCT t.title, t.mediatype, t.id FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.name = ? AND al.name = ? ORDER BY t.tracknumber DESC, t.title DESC";
-
-	public TrackData[] get_titles_with_mediatypes_and_ids(string artist, string album) {
-		TrackData[] val = {};
-		Statement stmt;
-		
-		this.db.prepare_v2(STMT_GET_ITEMS_WITH_MEDIATYPES_AND_IDS, -1, out stmt);
-
-		if((stmt.bind_text(1, artist)!=Sqlite.OK)|
-		   (stmt.bind_text(2, album )!=Sqlite.OK)) {
-			this.db_error();
-		}
-
-		while(stmt.step() == Sqlite.ROW) {
-			TrackData twt = new TrackData();
-			twt.name = stmt.column_text(0);
-			twt.item = Item((ItemType)stmt.column_int(1), null , stmt.column_int(2)) ;
-			val += twt;
 		}
 		return (owned)val;
 	}

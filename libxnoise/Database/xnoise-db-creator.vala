@@ -62,7 +62,6 @@ private class Xnoise.Database.DbCreator {
 		"CREATE TABLE genres (id integer primary key, name TEXT);";
 	private static const string STMT_CREATE_ITEMS =
 		"CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTime DATETIME, CONSTRAINT link_uri FOREIGN KEY (uri) REFERENCES uris(id) ON DELETE CASCADE);";
-	//TODO: Is genre not used?
 //CREATE TABLE test1 (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER REFERENCES uris(id) ON DELETE CASCADE, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTime DATETIME);
 	private static const string STMT_CREATE_VERSION =
 		"CREATE TABLE version (major INTEGER, minor INTEGER);";

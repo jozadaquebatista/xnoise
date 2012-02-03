@@ -37,10 +37,8 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	private const string DATABASE_NAME = "db.sqlite";
 	private const string SETTINGS_FOLDER = ".xnoise";
 	private Sqlite.Database db = null;
-	private Statement update_album_image_statement;
 	private Statement insert_lastused_entry_statement;
 	private Statement add_radio_statement;
-	private Statement check_track_exists_statement;
 	private Statement begin_statement;
 	private Statement commit_statement;
 	private Statement write_media_folder_statement;
@@ -62,8 +60,6 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	private Statement delete_items_statement;
 	private Statement delete_uris_statement;
 	private Statement delete_genres_statement;
-	private Statement delete_media_files_statement;
-	private Statement add_mfile_statement;
 	private static Statement delete_uri_statement;
 	private static Statement delete_item_statement;
 
@@ -166,8 +162,6 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		"SELECT COUNT(id) FROM items WHERE artist = ?";
 	private static const string STMT_DEL_ARTIST = 
 		"DELETE FROM ARTISTS WHERE id = ?";
-	private static const string STMT_TRACK_ID_FOR_URI =
-		"SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
 	private static const string STMT_GET_ALBUM_FOR_URI_ID =
 		"SELECT album FROM items WHERE uri = ?";
 	private static const string STMT_COUNT_ALBUM_IN_ITEMS =
@@ -240,9 +234,6 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	}
 
 	private void prepare_statements() {
-//		this.db.prepare_v2(STMT_UPDATE_ALBUM_IMAGE, -1,
-//			out this.update_album_image_statement);
-		this.db.prepare_v2(STMT_CHECK_TRACK_EXISTS, -1, out this.check_track_exists_statement);
 		this.db.prepare_v2(STMT_INSERT_LASTUSED, -1, out this.insert_lastused_entry_statement);
 		this.db.prepare_v2(STMT_BEGIN, -1, out this.begin_statement);
 		this.db.prepare_v2(STMT_COMMIT, -1, out this.commit_statement);
@@ -266,8 +257,6 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		this.db.prepare_v2(STMT_DEL_ITEMS, -1, out this.delete_items_statement);
 		this.db.prepare_v2(STMT_DEL_URIS, -1, out this.delete_uris_statement);
 		this.db.prepare_v2(STMT_DEL_GENRES, -1, out this.delete_genres_statement);
-		this.db.prepare_v2(STMT_DEL_MEDIAFILES, -1, out this.delete_media_files_statement);
-		this.db.prepare_v2(STMT_ADD_MFILE, -1, out this.add_mfile_statement);
 		this.db.prepare_v2(STMT_GET_ARTIST_FOR_URI_ID , -1, out this.get_artist_for_uri_id_statement);
 		this.db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1, out this.count_artist_in_items_statement);
 		this.db.prepare_v2(STMT_DEL_ARTIST , -1, out this.delete_artist_statement);
@@ -523,19 +512,6 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		return retval;
 	}
 
-	public int get_track_id_for_uri(string uri) {
-		int val = -1;
-		Statement stmt;
-		
-		this.db.prepare_v2(STMT_TRACK_ID_FOR_URI, -1, out stmt);
-		stmt.reset();
-		stmt.bind_text(1, uri);
-		if(stmt.step() == Sqlite.ROW) {
-			val = stmt.column_int(0);
-		}
-		return val;
-	}
-
 	private static const string STMT_UPDATE_TITLE = "UPDATE items SET artist=?, album=?, title=?, genre=?, year=?, tracknumber=? WHERE id=?";
 	private static const string STMT_UPDATE_ARTISTALBUM = "UPDATE items SET artist=?, album=? WHERE id=?";
 	public bool update_title(ref Item? item, ref TrackData td) {
@@ -718,7 +694,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		}
 		int uri_id = handle_uri(td.item.uri);
 		if(uri_id == -1) {
-//			print("Error importing uri for %s : '%s' ! \n", uri, uri);
+			//print("Error importing uri for %s : '%s' ! \n", uri, uri);
 			return false;
 		}
 		int genre_id = handle_genre(ref td.genre);
@@ -726,7 +702,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 			print("Error importing genre for %s : '%s' ! \n", td.item.uri, td.genre);
 			return false;
 		}
-//		print("insert_title td.item.type %s\n", td.item.type.to_string());
+		//print("insert_title td.item.type %s\n", td.item.type.to_string());
 		if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
 			if(change_cb != null) {
 				Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
@@ -755,108 +731,6 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		return true;
 	}
 
-	/*
-	* Delete a row from the uri table and delete every item that references it and
-	* before that delete every album, artist or genre entry that would thus end up
-	* with no item referencing it.	
-	*/
-	public void delete_uri(string uri) {
-		// get uri id
-		int uri_id = -1;
-		
-
-		get_uri_id_statement.reset();
-		if(get_uri_id_statement.bind_text(1, uri) != Sqlite.OK) {
-			this.db_error();
-			return;
-		}
-		if(get_uri_id_statement.step() == Sqlite.ROW)
-			uri_id = get_uri_id_statement.column_int(0);
-		if (uri_id == -1) return;
-		print("%s is %s\n", uri, uri_id.to_string()); 
-		//delete the according album/artist/genre entries if not referenced by any other item
-		//granted, there might be more intelligent ways to do this but I guess this is the fastest one
-		//after all we can use foreign keys and cascading deletion when the distros ship sqlite >=3.6.19
-		
-		begin_transaction();
-				
-		//album
-		get_album_for_uri_id_statement.reset();
-		get_album_for_uri_id_statement.bind_int(1, uri_id);
-		get_album_for_uri_id_statement.step();
-		var album_id = get_album_for_uri_id_statement.column_int(0);
-
-		count_album_in_items_statement.reset();
-		count_album_in_items_statement.bind_int(1, album_id);
-		count_album_in_items_statement.step();
-		var album_count = count_album_in_items_statement.column_int(0);
-
-		if(album_count < 2) {
-			delete_album_statement.reset();
-			delete_album_statement.bind_int(1, album_id);
-			delete_album_statement.step();
-		}
-		
-		//artist
-		get_artist_for_uri_id_statement.reset();
-		get_artist_for_uri_id_statement.bind_int(1, uri_id);
-		get_artist_for_uri_id_statement.step();
-		var artist_id = get_artist_for_uri_id_statement.column_int(0);
-		
-		count_artist_in_items_statement.reset();
-		count_artist_in_items_statement.bind_int(1, artist_id);
-		count_artist_in_items_statement.step();
-		var artist_count = count_artist_in_items_statement.column_int(0);
-
-		if(artist_count < 2) {
-			delete_artist_statement.reset();
-			delete_artist_statement.bind_int(1, artist_id);
-			delete_artist_statement.step();
-		}
-
-		//genre
-		get_genre_for_uri_id_statement.reset();
-		get_genre_for_uri_id_statement.bind_int(1, uri_id);
-		get_genre_for_uri_id_statement.step();
-		var genre_id = get_genre_for_uri_id_statement.column_int(0);
-
-		count_genre_in_items_statement.reset();
-		count_genre_in_items_statement.bind_int(1, genre_id);
-		count_genre_in_items_statement.step();
-		var genre_count = count_genre_in_items_statement.column_int(0);
-
-		if(genre_count < 2) {
-			delete_genre_statement.reset();
-			delete_genre_statement.bind_int(1, genre_id);
-			delete_genre_statement.step();
-		}
-
-		//delete item
-		delete_item_statement.reset();          
-		delete_item_statement.bind_int(1, uri_id);
-		delete_item_statement.step();
-		print("deleted uri_id %s", uri_id.to_string());
-
-		//delete uri
-		delete_uri_statement.reset();
-		delete_uri_statement.bind_int(1, uri_id);
-		delete_uri_statement.step();
-		
-		commit_transaction();
-	}
-
-	public int uri_entry_exists(string uri) {
-		int id = -1;
-		check_track_exists_statement.reset();
-		if(check_track_exists_statement.bind_text(1, uri)!=Sqlite.OK) {
-			this.db_error();
-		}
-		while(check_track_exists_statement.step() == Sqlite.ROW) {
-			id = check_track_exists_statement.column_int(0);
-		}
-		return id;
-	}
-	
 	private static const string STMT_GET_STREAM_ID_BY_URI =
 		"SELECT id FROM streams WHERE uri=?";
 		
@@ -890,19 +764,6 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 			Item? item = Item(ItemType.STREAM, null, stream_id);
 			item.text = name;
 			change_cb(ChangeType.ADD_STREAM, item);
-		}
-	}
-
-	// Single file for collection
-	public void add_single_file_to_collection(string uri) {
-		if(db == null) return;
-		if((uri == null) || (uri == EMPTYSTRING)) return;
-		add_mfile_statement.reset();
-		if(add_mfile_statement.bind_text(1, uri) != Sqlite.OK) {
-			this.db_error();
-		}
-		if(add_mfile_statement.step() != Sqlite.DONE) {
-			this.db_error();
 		}
 	}
 
@@ -963,11 +824,6 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	public void del_all_folders() {
 		if(!exec_prepared_stmt(del_media_folder_statement))
 			print("error deleting folders from db\n");
-	}
-
-	public void del_all_files() {
-		if(!exec_prepared_stmt(delete_media_files_statement))
-			print("error deleting files from db\n");
 	}
 
 	public void del_all_streams() {
