@@ -52,7 +52,7 @@ public class Xnoise.Database.DbBrowser {
 	private static const string STMT_GET_MEDIA_FILES =
 		"SELECT * FROM media_files";
 	private static const string STMT_GET_RADIO_DATA	=
-		"SELECT DISTINCT id, name, uri FROM streams WHERE utf8_lower(name) LIKE ? ORDER BY name DESC";
+		"SELECT DISTINCT id, name, uri FROM streams WHERE utf8_lower(name) LIKE ? ORDER BY name COLLATE CUSTOM01 DESC";
 
 	public DbBrowser() throws DbError {
 		DATABASE = dbFileName();
@@ -64,12 +64,19 @@ public class Xnoise.Database.DbBrowser {
 		if(this.db == null) {
 			throw new DbError.FAILED("failed messge");
 		}
+		//register my own db function
 		db.create_function_v2("utf8_lower", 1, Sqlite.ANY, null, utf8_lower, null, null, null);
+		//create custom utf8 collation
+		db.create_collation("CUSTOM01", Sqlite.UTF8, compare_func);
 		db.progress_handler(5, progress_handler);
 	}
 
 	private static void utf8_lower(Sqlite.Context context, [CCode (array_length_pos = 1.1)] Sqlite.Value[] values) {
 		context.result_text(values[0].to_text().down());
+	}
+	
+	private static int compare_func(int alen, void* a, int blen, void* b) {
+		return GLib.strcmp(((string)a).collate_key(alen), ((string)b).collate_key(blen));
 	}
 	
 	public void cancel() {
@@ -127,7 +134,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_ALL_TRACKDATA =
-		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY LOWER(ar.name) ASC, LOWER(al.name) ASC, t.tracknumber ASC";
+		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY LOWER(ar.name) COLLATE CUSTOM01 ASC, LOWER(al.name) COLLATE CUSTOM01 ASC, t.tracknumber ASC";
 
 	public TrackData[]? get_all_tracks(ref string searchtext) {
 		Statement stmt;
@@ -323,7 +330,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_STREAM_DATA =
-		"SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE utf8_lower(s.name) LIKE ? ORDER BY LOWER(s.name) DESC";
+		"SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE utf8_lower(s.name) LIKE ? ORDER BY LOWER(s.name) COLLATE CUSTOM01 DESC";
 
 	public TrackData[] get_stream_data(ref string searchtext) {
 		TrackData[] val = {};
@@ -347,7 +354,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_VIDEO_DATA =
-		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, t.genre FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) DESC";
+		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, t.genre FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) COLLATE CUSTOM01 DESC";
 
 	public TrackData[] get_video_data(ref string searchtext) {
 		TrackData[] val = {};
@@ -376,7 +383,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_TRACKDATA_FOR_VIDEO =
-		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) ASC";
+		"SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY LOWER(t.title) ORDER BY LOWER(t.title) COLLATE CUSTOM01 ASC";
 
 	public TrackData[] get_trackdata_for_video(ref string searchtext) {
 		TrackData[] val = {};
@@ -406,7 +413,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_TRACKDATA_FOR_STREAMS =
-		"SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE utf8_lower(s.name) LIKE ? OR utf8_lower(s.uri) LIKE ? ORDER BY LOWER(s.name) ASC";
+		"SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE utf8_lower(s.name) LIKE ? OR utf8_lower(s.uri) LIKE ? ORDER BY LOWER(s.name) COLLATE CUSTOM01 ASC";
 
 	public TrackData[] get_trackdata_for_streams(ref string searchtext) {
 		TrackData[] val = {};
@@ -431,10 +438,10 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_ARTISTS_WITH_SEARCH =
-		"SELECT DISTINCT ar.name, ar.id FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND u.id = t.uri AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY LOWER(ar.name) ASC";
+		"SELECT DISTINCT ar.name, ar.id FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND u.id = t.uri AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY LOWER(ar.name) COLLATE CUSTOM01 ASC";
 
 	private static const string STMT_GET_ARTISTS =
-		"SELECT DISTINCT ar.name, ar.id  FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id ORDER BY LOWER(ar.name) ASC"; //LOWER(ar.name)
+		"SELECT DISTINCT ar.name, ar.id  FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id ORDER BY LOWER(ar.name) COLLATE CUSTOM01 ASC"; //LOWER(ar.name)
 	
 	public Item[] get_artists_with_search(ref string searchtext) {
 		
@@ -464,10 +471,10 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =
-		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY LOWER(t.title) ORDER BY t.tracknumber ASC, t.title ASC";
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY LOWER(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01  ASC";
 	
 	private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
-		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY LOWER(t.title) ORDER BY t.tracknumber ASC, t.title ASC";
+		"SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY LOWER(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
 	
 	public TrackData[]? get_trackdata_by_albumid(ref string searchtext, int32 id) {
 		TrackData[] val = {};
@@ -508,10 +515,10 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH =
-		"SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY LOWER(t.title), al.id ORDER BY al.name ASC, t.tracknumber ASC, t.title ASC";
+		"SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY LOWER(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
 	
 	private static const string STMT_GET_TRACKDATA_BY_ARTISTID =
-		"SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY LOWER(t.title), al.id ORDER BY al.name ASC, t.tracknumber ASC, t.title ASC";
+		"SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY LOWER(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
 	
 	public TrackData[]? get_trackdata_by_artistid(ref string searchtext, int32 id) {
 		TrackData[] val = {};
@@ -615,10 +622,10 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_ALBUMS_WITH_SEARCH =
-		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t, uris u WHERE ar.id = t.artist AND al.id = t.album AND u.id = t.uri AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY LOWER(al.name) ASC";
+		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t, uris u WHERE ar.id = t.artist AND al.id = t.album AND u.id = t.uri AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY LOWER(al.name) COLLATE CUSTOM01 ASC";
 
 	private static const string STMT_GET_ALBUMS =
-		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY LOWER(al.name) ASC";
+		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY LOWER(al.name) COLLATE CUSTOM01 ASC";
 
 	public Item[] get_albums_with_search(ref string searchtext, int32 id) {
 		Item[] val = {};
