@@ -112,8 +112,6 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		"BEGIN";
 	private static const string STMT_COMMIT =
 		"COMMIT";
-	private static const string STMT_UPDATE_ALBUM_IMAGE =
-		"UPDATE albums SET image = ? WHERE id = (SELECT al.id FROM albums al, artists ar WHERE al.artist = ar.id AND LOWER(ar.name) = LOWER(?) AND LOWER(al.name) = LOWER(?))";
 	private static const string STMT_CHECK_TRACK_EXISTS =
 		"SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
 	private static const string STMT_INSERT_LASTUSED =
@@ -141,11 +139,11 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	private static const string STMT_INSERT_URI =
 		"INSERT INTO uris (name) VALUES (?)";
 	private static const string STMT_GET_GENRE_ID =
-		"SELECT id FROM genres WHERE LOWER(name) = ?";
+		"SELECT id FROM genres WHERE utf8_lower(name) = ?";
 	private static const string STMT_INSERT_GENRE =
 		"INSERT INTO genres (name) VALUES (?)";
 	private static const string STMT_GET_TITLE_ID =
-		"SELECT id FROM items WHERE artist = ? AND album = ? AND LOWER(title) = ?";
+		"SELECT id FROM items WHERE artist = ? AND album = ? AND utf8_lower(title) = ?";
 	private static const string STMT_DEL_ARTISTS =
 		"DELETE FROM artists";
 	private static const string STMT_DEL_ALBUMS =
@@ -190,8 +188,12 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		
 		if(this.db == null) 
 			throw new DbError.FAILED("Cannot open database for writing.");
-
+		
+		//register my own db function
+		db.create_function_v2("utf8_lower", 1, Sqlite.ANY, null, utf8_lower, null, null, null);
+		
 		this.begin_stmt_used = false; // initialize begin commit compare
+		
 		this.prepare_statements();
 		
 		setup_db();
@@ -229,91 +231,54 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		return database;
 	}
 
+	private static void utf8_lower(Sqlite.Context context, [CCode (array_length_pos = 1.1)] Sqlite.Value[] values) {
+		context.result_text(values[0].to_text().down());
+	}
+	
 	private void db_error() {
 		print("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
 	}
 
 	private void prepare_statements() {
-		this.db.prepare_v2(STMT_UPDATE_ALBUM_IMAGE, -1,
-			out this.update_album_image_statement);
-		this.db.prepare_v2(STMT_CHECK_TRACK_EXISTS, -1,
-			out this.check_track_exists_statement);
-		this.db.prepare_v2(STMT_INSERT_LASTUSED, -1,
-			out this.insert_lastused_entry_statement);
-		this.db.prepare_v2(STMT_BEGIN, -1,
-			out this.begin_statement);
-		this.db.prepare_v2(STMT_COMMIT, -1,
-			out this.commit_statement);
-		this.db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1,
-			out this.get_media_folder_statement);
-		this.db.prepare_v2(STMT_WRITE_MEDIA_FOLDERS, -1,
-			out this.write_media_folder_statement);
-		this.db.prepare_v2(STMT_DEL_MEDIA_FOLDERS, -1,
-			out this.del_media_folder_statement);
-		this.db.prepare_v2(STMT_ADD_RADIO, -1,
-			out this.add_radio_statement);
-		this.db.prepare_v2(STMT_DEL_RADIO_STREAM, -1,
-			out this.del_streams_statement);
-		this.db.prepare_v2(STMT_GET_ARTIST_ID, -1,
-			out this.get_artist_id_statement);
-		this.db.prepare_v2(STMT_INSERT_ARTIST, -1,
-			out this.insert_artist_statement);
-		this.db.prepare_v2(STMT_GET_ALBUM_ID, -1,
-			out this.get_album_id_statement);
-		this.db.prepare_v2(STMT_INSERT_ALBUM, -1,
-			out this.insert_album_statement);
-		this.db.prepare_v2(STMT_GET_URI_ID, -1,
-			out this.get_uri_id_statement);
-		this.db.prepare_v2(STMT_INSERT_URI, -1,
-			out this.insert_uri_statement);
-		this.db.prepare_v2(STMT_GET_GENRE_ID, -1,
-			out this.get_genre_id_statement);
-		this.db.prepare_v2(STMT_INSERT_GENRE, -1,
-			out this.insert_genre_statement);
-		this.db.prepare_v2(STMT_INSERT_TITLE, -1,
-        	out this.insert_title_statement);
-		this.db.prepare_v2(STMT_GET_TITLE_ID, -1,
-			out this.get_title_id_statement);
-		this.db.prepare_v2(STMT_DEL_ARTISTS, -1,
-			out this.delete_artists_statement);
-		this.db.prepare_v2(STMT_DEL_ALBUMS, -1,
-			out this.delete_albums_statement);
-		this.db.prepare_v2(STMT_DEL_ITEMS, -1,
-			out this.delete_items_statement);
-		this.db.prepare_v2(STMT_DEL_URIS, -1,
-			out this.delete_uris_statement);
-		this.db.prepare_v2(STMT_DEL_GENRES, -1,
-			out this.delete_genres_statement);
-		this.db.prepare_v2(STMT_DEL_MEDIAFILES, -1,
-			out this.delete_media_files_statement);
-		this.db.prepare_v2(STMT_ADD_MFILE, -1,
-			out this.add_mfile_statement);
-                        
-		this.db.prepare_v2(STMT_GET_ARTIST_FOR_URI_ID , -1,
-			out this.get_artist_for_uri_id_statement);
-		this.db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1,
-			out this.count_artist_in_items_statement);
-		this.db.prepare_v2(STMT_DEL_ARTIST , -1,
-			out this.delete_artist_statement);
-		this.db.prepare_v2(STMT_DEL_URI , -1,
-			out this.delete_uri_statement);
-		this.db.prepare_v2(STMT_DEL_ITEM , -1,
-			out this.delete_item_statement);
-		        
-		this.db.prepare_v2(STMT_GET_ALBUM_FOR_URI_ID , -1,
-			out this.get_album_for_uri_id_statement);
-		this.db.prepare_v2(STMT_COUNT_ALBUM_IN_ITEMS , -1,
-			out this.count_album_in_items_statement);
-		this.db.prepare_v2(STMT_DEL_ALBUM , -1,
-			out this.delete_album_statement);
-
-		this.db.prepare_v2(STMT_GET_GENRE_FOR_URI_ID , -1,
-			out this.get_genre_for_uri_id_statement);
-		this.db.prepare_v2(STMT_COUNT_GENRE_IN_ITEMS , -1,
-			out this.count_genre_in_items_statement);
-		this.db.prepare_v2(STMT_DEL_GENRE , -1,
-			out this.delete_genre_statement);
-		        
+//		this.db.prepare_v2(STMT_UPDATE_ALBUM_IMAGE, -1,
+//			out this.update_album_image_statement);
+		this.db.prepare_v2(STMT_CHECK_TRACK_EXISTS, -1, out this.check_track_exists_statement);
+		this.db.prepare_v2(STMT_INSERT_LASTUSED, -1, out this.insert_lastused_entry_statement);
+		this.db.prepare_v2(STMT_BEGIN, -1, out this.begin_statement);
+		this.db.prepare_v2(STMT_COMMIT, -1, out this.commit_statement);
+		this.db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1, out this.get_media_folder_statement);
+		this.db.prepare_v2(STMT_WRITE_MEDIA_FOLDERS, -1, out this.write_media_folder_statement);
+		this.db.prepare_v2(STMT_DEL_MEDIA_FOLDERS, -1, out this.del_media_folder_statement);
+		this.db.prepare_v2(STMT_ADD_RADIO, -1, out this.add_radio_statement);
+		this.db.prepare_v2(STMT_DEL_RADIO_STREAM, -1, out this.del_streams_statement);
+		this.db.prepare_v2(STMT_GET_ARTIST_ID, -1, out this.get_artist_id_statement);
+		this.db.prepare_v2(STMT_INSERT_ARTIST, -1, out this.insert_artist_statement);
+		this.db.prepare_v2(STMT_GET_ALBUM_ID, -1, out this.get_album_id_statement);
+		this.db.prepare_v2(STMT_INSERT_ALBUM, -1, out this.insert_album_statement);
+		this.db.prepare_v2(STMT_GET_URI_ID, -1, out this.get_uri_id_statement);
+		this.db.prepare_v2(STMT_INSERT_URI, -1, out this.insert_uri_statement);
+		this.db.prepare_v2(STMT_GET_GENRE_ID, -1, out this.get_genre_id_statement);
+		this.db.prepare_v2(STMT_INSERT_GENRE, -1, out this.insert_genre_statement);
+		this.db.prepare_v2(STMT_INSERT_TITLE, -1, out this.insert_title_statement);
+		this.db.prepare_v2(STMT_GET_TITLE_ID, -1, out this.get_title_id_statement);
+		this.db.prepare_v2(STMT_DEL_ARTISTS, -1, out this.delete_artists_statement);
+		this.db.prepare_v2(STMT_DEL_ALBUMS, -1, out this.delete_albums_statement);
+		this.db.prepare_v2(STMT_DEL_ITEMS, -1, out this.delete_items_statement);
+		this.db.prepare_v2(STMT_DEL_URIS, -1, out this.delete_uris_statement);
+		this.db.prepare_v2(STMT_DEL_GENRES, -1, out this.delete_genres_statement);
+		this.db.prepare_v2(STMT_DEL_MEDIAFILES, -1, out this.delete_media_files_statement);
+		this.db.prepare_v2(STMT_ADD_MFILE, -1, out this.add_mfile_statement);
+		this.db.prepare_v2(STMT_GET_ARTIST_FOR_URI_ID , -1, out this.get_artist_for_uri_id_statement);
+		this.db.prepare_v2(STMT_COUNT_ARTIST_IN_ITEMS , -1, out this.count_artist_in_items_statement);
+		this.db.prepare_v2(STMT_DEL_ARTIST , -1, out this.delete_artist_statement);
+		this.db.prepare_v2(STMT_DEL_URI , -1, out this.delete_uri_statement);
+		this.db.prepare_v2(STMT_DEL_ITEM , -1, out this.delete_item_statement);
+		this.db.prepare_v2(STMT_GET_ALBUM_FOR_URI_ID , -1, out this.get_album_for_uri_id_statement);
+		this.db.prepare_v2(STMT_COUNT_ALBUM_IN_ITEMS , -1, out this.count_album_in_items_statement);
+		this.db.prepare_v2(STMT_DEL_ALBUM , -1, out this.delete_album_statement);
+		this.db.prepare_v2(STMT_GET_GENRE_FOR_URI_ID , -1, out this.get_genre_for_uri_id_statement);
+		this.db.prepare_v2(STMT_COUNT_GENRE_IN_ITEMS , -1, out this.count_genre_in_items_statement);
+		this.db.prepare_v2(STMT_DEL_GENRE , -1, out this.delete_genre_statement);
 	}
 
 	private unowned ChangeNotificationCallback change_cb = null;
@@ -349,14 +314,13 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	}
 	
 	private static const string STMT_GET_ARTIST_ID =
-		"SELECT id FROM artists WHERE LOWER(name) = ?";
+		"SELECT id FROM artists WHERE utf8_lower(name) = ?";
 	private static const string STMT_UPDATE_ARTIST_NAME = 
 		"UPDATE artists SET name=? WHERE id=?";
 	private int handle_artist(ref string artist, bool update_artist = false) {
 		// find artist, if available or create entry_album
 		// return id for artist
 		int artist_id = -1;
-
 		get_artist_id_statement.reset();
 		if(get_artist_id_statement.bind_text(1, (artist != null ? artist.down().strip() : EMPTYSTRING)) != Sqlite.OK) {
 			this.db_error();
@@ -409,7 +373,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	}
 	
 	private static const string STMT_GET_ALBUM_ID =
-		"SELECT id FROM albums WHERE artist = ? AND LOWER(name) = ?";
+		"SELECT id FROM albums WHERE artist = ? AND utf8_lower(name) = ?";
 	private static const string STMT_UPDATE_ALBUM_NAME = 
 		"UPDATE albums SET name=? WHERE id=?";
 	private int handle_album(ref int artist_id, ref string album, bool update_album = false) {

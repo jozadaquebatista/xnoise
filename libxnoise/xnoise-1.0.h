@@ -2020,7 +2020,6 @@ XnoiseTrackData** xnoise_database_db_browser_get_stream_data (XnoiseDatabaseDbBr
 XnoiseTrackData** xnoise_database_db_browser_get_video_data (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_db_browser_get_trackdata_for_video (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_db_browser_get_trackdata_for_streams (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
-gchar** xnoise_database_db_browser_get_videos (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseItem* xnoise_database_db_browser_get_some_artists (XnoiseDatabaseDbBrowser* self, gint limit, gint offset, int* result_length1);
 XnoiseItem* xnoise_database_db_browser_get_artists_with_search (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_db_browser_get_trackdata_by_albumid (XnoiseDatabaseDbBrowser* self, gchar** searchtext, gint32 id, int* result_length1);

@@ -56,6 +56,7 @@ public class Xnoise.TagAccess.TagReader {
 				try {
 					// from class Tag
 					if(tag != null) {
+						if(tag.artist.validate())
 						td.artist      = tag.artist;
 						td.title       = tag.title;
 						td.album       = tag.album;
