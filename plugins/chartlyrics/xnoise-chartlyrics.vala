@@ -72,7 +72,7 @@ public class Xnoise.ChartlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
 	public int priority { get; set; default = 1; }
 	
 	public bool init() {
-		priority = 2;
+		priority = 3;
 		p = plugin_loader.plugin_htable.lookup("DatabaseLyrics");
 		if(p == null) {
 			if(this.owner != null)
@@ -155,7 +155,7 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 	private bool? availability;
 	private unowned PluginModule.Container owner;
 	private unowned LyricsLoader loader;
-	private LyricsFetchedCallback cb = null;
+	private unowned LyricsFetchedCallback cb = null;
 	private uint timeout = 0;
 	
 	public Chartlyrics(LyricsLoader _loader, PluginModule.Container _owner, string artist, string title, LyricsFetchedCallback _cb) {
@@ -180,7 +180,6 @@ public class Xnoise.Chartlyrics : GLib.Object, ILyrics {
 		var gethid_str = new StringBuilder();
 		gethid_str.printf(check_url, Soup.URI.encode(artist, null), Soup.URI.encode(title, null));
 		
-		session = new Soup.SessionAsync();
 		hid_msg = new Soup.Message("GET", gethid_str.str);
 	}
 	

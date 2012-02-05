@@ -75,6 +75,7 @@ plugins/chartlyrics/chartlyrics.xnplugin.desktop.in
 plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in
 plugins/lastfm/lastfm.xnplugin.desktop.in
 plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in
+plugins/azlyrics/azlyrics.xnplugin.desktop.in
 plugins/mediakeys/mediakeys.xnplugin.desktop.in
 plugins/mpris/mpris.xnplugin.desktop.in
 plugins/mpris_one/mpris_one.xnplugin.desktop.in

@@ -183,45 +183,7 @@ dnl ================================================================
 
 
 
-dnl ================================================================
-dnl dependency check for optional build of leoslyrics plugin 
 
-AC_ARG_ENABLE([leoslyrics],
-    AS_HELP_STRING([--disable-leoslyrics],
-    [Disable lyric plugin (default: enabled)]),
-    [enable_leoslyrics=$enableval],
-    [enable_leoslyrics=yes])
-
-if test "x$enable_leoslyrics" = "xyes"; then
-    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
-        enable_leoslyrics=yes
-    else
-        enable_leoslyrics=no
-        AC_MSG_NOTICE([leoslyrics plugin will not be included in the build.])
-    fi
-fi
-AM_CONDITIONAL(ENABLE_LEOSLYRICS, test x"$enable_leoslyrics" = "xyes")
-dnl ================================================================
-
-dnl ================================================================
-dnl dependency check for optional build of lyricsfly plugin 
-
-AC_ARG_ENABLE([lyricsfly],
-    AS_HELP_STRING([--disable-lyricsfly],
-    [Disable lyric plugin (default: enabled)]),
-    [enable_lyricsfly=$enableval],
-    [enable_lyricsfly=yes])
-
-if test "x$enable_lyricsfly" = "xyes"; then
-    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
-        enable_lyricsfly=yes
-    else
-        enable_lyricsfly=no
-        AC_MSG_NOTICE([lyricsfly plugin will not be included in the build.])
-    fi
-fi
-AM_CONDITIONAL(ENABLE_LYRICSFLY, test x"$enable_lyricsfly" = "xyes")
-dnl ================================================================
 
 dnl ================================================================
 dnl dependency check for optional build of lyricwiki plugin 
@@ -368,6 +330,26 @@ fi
 AM_CONDITIONAL(ENABLE_CHARTLYRICS, test x"$enable_chartlyrics" = "xyes")
 dnl ================================================================
 
+dnl ================================================================
+dnl dependency check for optional build of azlyrics plugin 
+
+AC_ARG_ENABLE([azlyrics],
+    AS_HELP_STRING([--disable-azlyrics],
+    [Disable azlyrics plugin (default: enabled)]),
+    [enable_azlyrics=$enableval],
+    [enable_azlyrics=yes])
+
+if test "x$enable_azlyrics" = "xyes"; then
+    if test "x$have_libxml" = "xyes" && test "x$have_libsoup" = "xyes"; then
+        enable_azlyrics=yes
+    else
+        enable_azlyrics=no
+        AC_MSG_NOTICE([azlyrics plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_AZLYRICS, test x"$enable_azlyrics" = "xyes")
+dnl ================================================================
+
 
 
 XNOISE_PACKAGES="\
@@ -439,6 +421,7 @@ AC_CONFIG_FILES([
     plugins/soundmenu2/Makefile
     plugins/databaseLyrics/Makefile
     plugins/lastfm/Makefile
+    plugins/azlyrics/Makefile
     po/Makefile.in
     doc/Makefile
     vapi/Makefile
@@ -461,9 +444,8 @@ echo "
     test plugin:                   yes (always)
     titleToDecoration:             yes (always)
     cyclic-save-state:             yes (always)
-    leoslyrics:                    ${enable_leoslyrics}
-    lyricsfly:                     ${enable_lyricsfly}
     chartlyrics:                   ${enable_chartlyrics}
+    azlyrics:                      ${enable_chartlyrics}
     lyricwiki:                     ${enable_lyricwiki}
     lastfm webservices:            ${enable_lastfm}
     notifications:                 ${enable_notifications}

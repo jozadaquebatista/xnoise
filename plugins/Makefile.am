@@ -1,6 +1,6 @@
 SUBDIRS = testplugin titleToDecoration cyclic-save-state databaseLyrics
 
-DIST_SUBDIRS = testplugin titleToDecoration cyclic-save-state notifications2 mediakeys mpris mpris_one chartlyrics lyricwiki soundmenu2 databaseLyrics lastfm
+DIST_SUBDIRS = testplugin titleToDecoration cyclic-save-state notifications2 mediakeys mpris mpris_one chartlyrics lyricwiki soundmenu2 databaseLyrics lastfm azlyrics
 
 if ENABLE_CHARTLYRICS
   SUBDIRS += chartlyrics
@@ -31,9 +31,12 @@ if ENABLE_SOUNDMENU
   SUBDIRS += soundmenu2
 endif
 
+if ENABLE_AZLYRICS
+  SUBDIRS += azlyrics
+endif
 
 DISTCLEANFILES = \
-	Makefile.in \
-	$(NULL)
+    Makefile.in \
+    $(NULL)
 
 

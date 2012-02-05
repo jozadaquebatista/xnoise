@@ -1,0 +1,9 @@
+[XnoisePlugin]
+name=Azlyrics
+module=azlyrics
+_description=Load lyrics from azlyrics.com
+website=https://github.com/shuerhaaken/xnoise
+icon=/path/to/icon
+copyright=Copyright © 2012 Jörn Magens
+license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
+author=shuerhaaken <shuerhaaken@googlemail.com>
