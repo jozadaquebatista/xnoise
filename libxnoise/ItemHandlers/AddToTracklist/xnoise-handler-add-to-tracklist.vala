@@ -77,7 +77,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	}
 
 	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-		if(context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED)
+		if(context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED || context == ActionContext.REQUESTED)
 			return add;
 		
 		if(context == ActionContext.MEDIABROWSER_MENU_QUERY)

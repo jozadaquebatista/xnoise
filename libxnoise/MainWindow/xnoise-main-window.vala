@@ -990,11 +990,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	}
 
 	private void on_location_add() {
-		//TODO: Update Tag info presented in tracklist
 		var radiodialog = new Gtk.Dialog();
 		radiodialog.set_modal(true);
 		radiodialog.set_keep_above(true);
-
+		
 		var radioentry = new Gtk.Entry();
 		radioentry.set_width_chars(50);
 		radioentry.secondary_icon_stock = Gtk.Stock.CLEAR;
@@ -1003,35 +1002,33 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = EMPTYSTRING;
 		});
 		((Gtk.Box)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
-
+		
 		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.CANCEL, 0);
 		radiocancelbutton.clicked.connect( () => {
 			radiodialog.close();
 			radiodialog = null;
 		});
-
+		
 		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.OK, 1);
 		radiookbutton.clicked.connect( () => {
-
-			if((radioentry.text!=null) && (radioentry.text.strip() != EMPTYSTRING)) {
-				var uri = radioentry.text.strip();
-				File f = File.new_for_uri(uri);
-				var td = new TrackData();
-				td.tracknumber = 0;
-				td.title       = prepare_name_from_filename(f.get_basename());
-				td.album       = EMPTYSTRING;
-				td.artist      = EMPTYSTRING;
-				td.genre       = EMPTYSTRING;
-				td.length      = 0;
-				td.item        = ItemHandlerManager.create_item(uri);
-				this.trackList.tracklistmodel.insert_title(null,
-				                                           ref td,
-				                                           false);
+			if(radioentry.text != null && radioentry.text.strip() != EMPTYSTRING) {
+				Item? item = ItemHandlerManager.create_item(radioentry.text);
+				if(item.type == ItemType.UNKNOWN)
+					return;
+				ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
+				if(tmp == null)
+					return;
+				unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
+				
+				if(action != null)
+					action.action(item, null);
+				else
+					print("action was null\n");
 			}
 			radiodialog.close();
 			radiodialog = null;
 		});
-
+		
 		radiodialog.destroy_event.connect( () => {
 			radiodialog = null;
 			return true;
@@ -1042,11 +1039,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 		var display = radiodialog.get_display();
 		Gdk.Atom atom = Gdk.SELECTION_CLIPBOARD;
-		Clipboard clipboard = Clipboard.get_for_display(display,atom);
+		Clipboard clipboard = Clipboard.get_for_display(display, atom);
 		string text = clipboard.wait_for_text();
 		if(text != null && "://" in text) {
 			//it's url, then paste in text input
-			radioentry.text = text;
+			radioentry.text = text.strip();
 		}
 	}
 	
