@@ -46,6 +46,10 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	private const string ainfo = _("Add to tracklist");
 	private const string aname = "HandlerAddToTracklistAction2";
 	
+	private Action request_add;
+	private const string cinfo = _("Add to tracklist");
+	private const string cname = "HandlerAddToTracklistAction3";
+	
 	private const string name = "HandlerAddToTracklist";
 	private unowned Main xn;
 	
@@ -66,6 +70,13 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		menu_add.stock_item = Gtk.Stock.ADD;
 		menu_add.context = ActionContext.MEDIABROWSER_MENU_QUERY;
 		//print("constructed HandlerAddToTracklist\n");
+		
+		request_add = new Action(); 
+		request_add.action = on_request;
+		request_add.info = this.cinfo;
+		request_add.name = this.cname;
+		request_add.context = ActionContext.REQUESTED;
+
 	}
 
 	public override ItemHandlerType handler_type() {
@@ -77,11 +88,14 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 	}
 
 	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-		if(context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED || context == ActionContext.REQUESTED)
+		if(context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED)
 			return add;
 		
 		if(context == ActionContext.MEDIABROWSER_MENU_QUERY)
 			return menu_add;
+		
+		if(context == ActionContext.REQUESTED)
+			return request_add;
 		
 		return null;
 	}
@@ -126,12 +140,33 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		return false;
 	}
 	
+	private void on_request(Item item, GLib.Value? data) {
+		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_requested_job);
+		job.item = item;
+		db_worker.push_job(job);
+	}
+	
+	private bool add_requested_job(Worker.Job job) {
+		Item? item = job.item;
+		string st = EMPTYSTRING;
+		job.track_dat = item_converter.to_trackdata(item, ref st);
+		
+		if(job.track_dat != null) {
+			bool b = (job.counter[0] == 0);
+			Idle.add( () => {
+				append_tracks(ref job.track_dat, true);
+				return false;
+			});
+		}
+		return false;
+	}
+	
 	private void on_mediabrowser_activated(Item item, GLib.Value? data) {
 		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.add_item_job);
 		job.item = item;
 		db_worker.push_job(job);
 	}
-	
+
 	private bool add_item_job(Worker.Job job) {
 		Item? item = job.item;//(Item?)job.get_arg("item");
 		//print("item.type is %s\n", item.type.to_string());

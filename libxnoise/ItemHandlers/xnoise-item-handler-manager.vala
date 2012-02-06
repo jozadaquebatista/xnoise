@@ -112,10 +112,14 @@ namespace Xnoise {
 			
 			File f = File.new_for_uri(uri);
 			string scheme = f.get_uri_scheme();
-			
 			if(scheme in get_remote_schemes()) {
-				if(get_suffix_from_filename(f.get_uri()) in get_media_extensions())
+				// no general chack for media extension because often streams are lacking these
+				if(Playlist.is_playlist_extension(get_suffix_from_filename(f.get_uri()))) {
+					item.type = Xnoise.ItemType.PLAYLIST;
+				}
+				else {
 					item.type = Xnoise.ItemType.STREAM;
+				}
 				return item;
 			}
 			FileInfo info = null;
@@ -140,7 +144,7 @@ namespace Xnoise {
 					item.type = Xnoise.ItemType.PLAYLIST;
 				}
 				else {
-					if(scheme in get_local_schemes()) { //== "file" || scheme == "cdda") {
+					if(scheme in get_local_schemes()) {
 						item.type = Xnoise.ItemType.LOCAL_AUDIO_TRACK;
 					}
 					else {

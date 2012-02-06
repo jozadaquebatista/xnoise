@@ -269,20 +269,23 @@ namespace Xnoise.Services {
 	public static string prepare_name_from_filename(string? val) {
 		if(val == null)
 			return EMPTYSTRING;
-		unowned string name = val;
-		string prep;
-		if(name.last_index_of(".") != -1) 
-			prep = name.substring(0, name.last_index_of("."));
-		else
-			prep = name;
+		string prep = val;
 		
-		try {
-			GLib.Regex r = new GLib.Regex("_");
-			prep = r.replace(prep, -1, 0, " ");
-		}
-		catch(GLib.RegexError e) {
-			print("%s\n", e.message);
-		}
+		int start_idx = -1;
+		int end_idx   = -1;
+		
+		if((start_idx = prep.last_index_of("/", 0)) == -1)
+			start_idx = 0;
+		else
+			start_idx = start_idx + 1;
+		
+		if((end_idx = prep.last_index_of(".", start_idx)) == -1) 
+			end_idx = prep.length;
+		
+		if(end_idx < start_idx)
+			end_idx = prep.length;
+		
+		prep = prep.substring(start_idx, end_idx - start_idx).replace("_", " ").replace("%20", " ");
 		return (owned)prep;
 	}
 

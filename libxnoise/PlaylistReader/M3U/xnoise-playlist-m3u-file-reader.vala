@@ -61,9 +61,11 @@ namespace Xnoise.Playlist {
 							lines_buf += line._strip();
 						}
 						Entry d = null;
+						string title;
+						string adress;
 						for(int i = 0; i < lines_buf.length && lines_buf[i] != null;i++) {
-							string title = EMPTYSTRING;
-							string adress = EMPTYSTRING;
+							title = EMPTYSTRING;
+							adress = EMPTYSTRING;
 							if(line_is_comment(ref lines_buf[i])) {
 								if(!line_is_extinf(ref lines_buf[i], ref title)) {
 									continue;
@@ -108,6 +110,37 @@ namespace Xnoise.Playlist {
 								if(title != EMPTYSTRING) {
 									d.add_field(Entry.Field.TITLE, title);
 								}
+								data_collection.append(d);
+							}
+						}
+					}
+					else {
+						lines_buf += line._strip();
+						while((line = in_stream.read_line(null, null)) != null) {
+							if(line._strip().length == 0)
+								continue;
+								
+							lines_buf += line._strip();
+						}
+						Entry d = null;
+						string adress;
+						for(int i = 0; i < lines_buf.length && lines_buf[i] != null;i++) {
+							adress = EMPTYSTRING;
+							if(!lines_buf[i].contains("://")) // here we only accept urls
+								continue;
+							adress = lines_buf[i];
+							if(adress != EMPTYSTRING) {
+								d = new Entry();
+								TargetType tt;
+								File tmp = get_file_for_location(adress, ref base_path, out tt);
+								d.add_field(Entry.Field.URI, tmp.get_uri());
+								d.target_type = tt;
+								string? ext = get_extension(tmp);
+								if(ext != null) {
+									if(is_known_playlist_extension(ref ext))
+										d.add_field(Entry.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+								}
+								d.add_field(Entry.Field.TITLE, prepare_name_from_filename(tmp.get_uri()));
 								data_collection.append(d);
 							}
 						}
@@ -219,6 +252,45 @@ namespace Xnoise.Playlist {
 								d = new Entry();
 							}
 							if(adress != EMPTYSTRING) {
+								TargetType tt;
+								File tmp = get_file_for_location(adress, ref base_path, out tt);
+								d.add_field(Entry.Field.URI, tmp.get_uri());
+								d.target_type = tt;
+								string? ext = get_extension(tmp);
+								if(ext != null) {
+									if(is_known_playlist_extension(ref ext))
+										d.add_field(Entry.Field.IS_PLAYLIST, "1"); //TODO: handle recursion !?!?
+								}
+								if(title != EMPTYSTRING) {
+									d.add_field(Entry.Field.TITLE, title);
+								}
+								data_collection.append(d);
+							}
+						}
+					}
+					else {
+						lines_buf += line._strip();
+						while(true) {
+							line = yield in_stream.read_line_async(Priority.DEFAULT, null, out len);
+							if(line == null)
+								break;
+							
+							if(line._strip().length == 0)
+								continue;
+							
+							lines_buf += line._strip();
+						}
+						Entry d = null;
+						string title;
+						string adress;
+						for(int i = 0; i < lines_buf.length && lines_buf[i] != null;i++) {
+							title = EMPTYSTRING;
+							adress = EMPTYSTRING;
+							if(!lines_buf[i].contains("://"))
+								continue;
+							adress = lines_buf[i];
+							if(adress != EMPTYSTRING) {
+								d = new Entry();
 								TargetType tt;
 								File tmp = get_file_for_location(adress, ref base_path, out tt);
 								d.add_field(Entry.Field.URI, tmp.get_uri());

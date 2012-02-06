@@ -243,14 +243,9 @@ position_length_column=6
 
 [settings_double]
 volume=0.33594936708860756
-relative_size_genre_column=0
-relative_size_year_column=0
-relative_size_title_column=0.30472103004291845
-relative_size_album_column=0.32904148783977111
-relative_size_artist_column=0.32761087267525035
 
 [settings_string]
-activated_plugins=DatabaseLyrics;notifications;Lyricwiki;chartlyrics;CyclicSaveState;mediakeys;LastfmCovers
+activated_plugins=DatabaseLyrics;notifications;Lyricwiki;chartlyrics;CyclicSaveState;mediakeys;LastfmCovers;azlyrics
 """;
 }
 

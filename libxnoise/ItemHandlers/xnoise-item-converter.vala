@@ -149,7 +149,7 @@ public class Xnoise.ItemConverter : Object {
 						tmp.album  = (e.get_album()  != null ? e.get_album()  : UNKNOWN_ALBUM);
 						tmp.artist = (e.get_author() != null ? e.get_author() : UNKNOWN_ARTIST);
 						tmp.genre  = (e.get_genre()  != null ? e.get_genre()  : UNKNOWN_GENRE);
-						tmp.item = ItemHandlerManager.create_item(e.get_uri());
+						tmp.item   = ItemHandlerManager.create_item(e.get_uri());
 						result += tmp;
 					}
 					break;

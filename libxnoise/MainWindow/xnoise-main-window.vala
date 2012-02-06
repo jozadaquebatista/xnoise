@@ -1012,18 +1012,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.OK, 1);
 		radiookbutton.clicked.connect( () => {
 			if(radioentry.text != null && radioentry.text.strip() != EMPTYSTRING) {
-				Item? item = ItemHandlerManager.create_item(radioentry.text);
-				if(item.type == ItemType.UNKNOWN)
+				Item? item = ItemHandlerManager.create_item(radioentry.text.strip());
+				if(item.type == ItemType.UNKNOWN) {
+					print("itemtype unknown\n");
+					radiodialog.close();
+					radiodialog = null;
 					return;
+				}
 				ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
 				if(tmp == null)
 					return;
 				unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
 				
-				if(action != null)
+				if(action != null) {
 					action.action(item, null);
-				else
+				}
+				else {
 					print("action was null\n");
+				}
 			}
 			radiodialog.close();
 			radiodialog = null;
@@ -1033,10 +1039,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			radiodialog = null;
 			return true;
 		});
-
+		
 		radiodialog.set_title(_("Enter the URL of the file to open"));
 		radiodialog.show_all();
-
+		
 		var display = radiodialog.get_display();
 		Gdk.Atom atom = Gdk.SELECTION_CLIPBOARD;
 		Clipboard clipboard = Clipboard.get_for_display(display, atom);
@@ -1062,12 +1068,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
 			GLib.SList<string> res = fcdialog.get_uris();
 			if(!(res == null || res.data == EMPTYSTRING)) {
-				string[] media_files = {};
 				foreach(string s in res) {
-					media_files += s;
+					Item? item = ItemHandlerManager.create_item(s);
+					if(item.type == ItemType.UNKNOWN) {
+						print("itemtype unknown\n");
+						continue;
+					}
+					ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
+					if(tmp == null)
+						return;
+					unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
+					
+					if(action != null) {
+						action.action(item, null);
+					}
+					else {
+						print("action was null\n");
+					}
 				}
-				media_files += null; 
-				this.trackList.tracklistmodel.add_uris(media_files);
 			}
 		}
 		fcdialog.destroy();

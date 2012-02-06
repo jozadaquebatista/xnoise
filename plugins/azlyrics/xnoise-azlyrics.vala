@@ -234,11 +234,13 @@ public class Xnoise.Azlyrics : GLib.Object, ILyrics {
 		string text = EMPTYSTRING;
 		unowned string cont = (string)mesg.response_body.data;
 		
-		int start_idx = cont.index_of(START_LYRICS, 0) + START_LYRICS.length;
+		int start_idx = cont.index_of(START_LYRICS, 0);
 		int end_idx   = cont.index_of(END_LYRICS, start_idx);
 		
-		if(start_idx != -1 && end_idx != -1 && end_idx > start_idx)
+		if(start_idx != -1 && end_idx != -1 && end_idx > start_idx) {
+			start_idx = start_idx + START_LYRICS.length;
 			text = cont.substring(start_idx, end_idx - start_idx).replace("<br>","").replace("<i>","").replace("</i>","");
+		}
 		
 		//print("Azlyrics: %s\n", text);
 		Idle.add( () => {
