@@ -799,8 +799,6 @@ namespace Xnoise {
 		public void insert_stream_sorted (Xnoise.TrackData[] tda);
 		public void insert_video_sorted (Xnoise.TrackData[] tda);
 		public void load_children (ref Gtk.TreeIter iter);
-		public void move_album_iter_sorted (ref Gtk.TreeIter org_iter, string name);
-		public void move_artist_iter_sorted (ref Gtk.TreeIter org_iter, string name);
 		public bool populate_model ();
 		public void remove_all ();
 		public void unload_children (ref Gtk.TreeIter iter);
