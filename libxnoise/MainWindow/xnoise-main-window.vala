@@ -992,8 +992,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void on_location_add() {
 		var radiodialog = new Gtk.Dialog();
 		radiodialog.set_modal(true);
-		radiodialog.set_keep_above(true);
-		
+//		radiodialog.set_keep_above(true);
+		radiodialog.set_transient_for(main_window);
+
 		var radioentry = new Gtk.Entry();
 		radioentry.set_width_chars(50);
 		radioentry.secondary_icon_stock = Gtk.Stock.CLEAR;
@@ -1040,7 +1041,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return true;
 		});
 		
-		radiodialog.set_title(_("Enter the URL of the file to open"));
+		radiodialog.set_title(_("Enter the URL for playing"));
+		radiodialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
 		radiodialog.show_all();
 		
 		var display = radiodialog.get_display();
