@@ -63,7 +63,9 @@ public class Xnoise.MediaExtensions {
 	}
 	
 	// syntax support for 'in'
-	public bool contains(string extension) {
+	public bool contains(string? extension) {
+		if(extension == null)
+			return false;
 		foreach(unowned string s in _list) {
 			if(extension == s) return true;
 		}

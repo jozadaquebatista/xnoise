@@ -2399,6 +2399,7 @@ XnoisePlaylistReader* xnoise_playlist_reader_construct (GType object_type);
 XnoisePlaylistResult xnoise_playlist_reader_read (XnoisePlaylistReader* self, const gchar* list_uri, GCancellable* cancellable, GError** error);
 void xnoise_playlist_reader_read_asyn (XnoisePlaylistReader* self, const gchar* list_uri, GCancellable* cancellable, GAsyncReadyCallback _callback_, gpointer _user_data_);
 XnoisePlaylistResult xnoise_playlist_reader_read_asyn_finish (XnoisePlaylistReader* self, GAsyncResult* _res_, GError** error);
+gboolean xnoise_playlist_reader_is_playlist (gchar** uri_);
 gboolean xnoise_playlist_reader_data_available (XnoisePlaylistReader* self);
 gint xnoise_playlist_reader_get_number_of_entries (XnoisePlaylistReader* self);
 gchar** xnoise_playlist_reader_get_found_uris (XnoisePlaylistReader* self, int* result_length1);

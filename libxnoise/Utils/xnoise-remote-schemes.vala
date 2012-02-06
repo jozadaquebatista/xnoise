@@ -46,7 +46,9 @@ public class Xnoise.RemoteSchemes {
 	}
 	
 	// syntax support for 'in'
-	public bool contains(string location) {
+	public bool contains(string? location) {
+		if(location == null)
+			return false;
 		foreach(unowned string s in _list) {
 			if(location == s) return true;
 		}

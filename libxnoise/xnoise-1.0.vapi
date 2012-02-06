@@ -187,6 +187,7 @@ namespace Xnoise {
 			public bool get_is_remote_for_uri (ref string uri_needle);
 			public int get_number_of_entries ();
 			public string? get_title_for_uri (ref string uri_needle);
+			public static bool is_playlist (ref string uri_);
 			public Xnoise.Playlist.Result read (string list_uri, GLib.Cancellable? cancellable = null) throws Xnoise.Playlist.ReaderError;
 			public async Xnoise.Playlist.Result read_asyn (string list_uri, GLib.Cancellable? cancellable = null) throws Xnoise.Playlist.ReaderError;
 			public Xnoise.Playlist.EntryCollection data_collection { get; }
@@ -673,7 +674,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class LocalSchemes {
 		public LocalSchemes ();
-		public bool contains (string location);
+		public bool contains (string? location);
 		public string[] list { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -808,7 +809,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaExtensions {
 		public MediaExtensions ();
-		public bool contains (string extension);
+		public bool contains (string? extension);
 		public string[] list { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -852,7 +853,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class RemoteSchemes {
 		public RemoteSchemes ();
-		public bool contains (string location);
+		public bool contains (string? location);
 		public string[] list { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

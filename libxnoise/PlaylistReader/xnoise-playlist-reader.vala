@@ -2,23 +2,32 @@
  *
  * Copyright (C) 2010-2012  Jörn Magens
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
-
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
-
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The Xnoise authors hereby grant permission for non-GPL compatible
+ *  GStreamer plugins to be used and distributed together with GStreamer
+ *  and Xnoise. This permission is above and beyond the permissions granted
+ *  by the GPL license by which Xnoise is covered. If you modify this code
+ *  you may extend this exception to your version of the code, but you are not
+ *  obligated to do so. If you do not wish to do so, delete this exception
+ *  statement from your version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens <shuerhaaken@googlemail.com>
- */
+ * 	Jörn Magens
+*/
+
 
 using Xnoise;
 using Xnoise.Services;
@@ -137,7 +146,10 @@ namespace Xnoise.Playlist {
 				return Result.SUCCESS;
 		}
 
-
+		public static bool is_playlist(ref string uri_) {
+			return (get_playlist_type_for_uri(ref uri_) != ListType.UNKNOWN);
+		}
+		
 		//static factory function to setup reader, also sets up ListType
 		private static AbstractFileReader? get_playlist_file_reader_for_uri(ref string uri_ , ref ListType current_type) {
 			current_type = get_playlist_type_for_uri(ref uri_);
@@ -258,7 +270,7 @@ namespace Xnoise.Playlist {
 		string content_type = EMPTYSTRING;
 		File f = File.new_for_uri(uri_);
 		try {
-			var file_info = f.query_info("*", FileQueryInfoFlags.NONE, null);
+			var file_info = f.query_info(FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NONE, null);
 			//print("File size: %lld bytes\n", file_info.get_size());
 			content_type = file_info.get_content_type();
 			//string mime = GLib.ContentType.get_mime_type(content_type);
@@ -294,7 +306,7 @@ namespace Xnoise.Playlist {
 			}
 		}
 		catch(Error e) {
-			print("Error: %s\n", e.message);
+			print("Error PLR: %s\n", e.message);
 			return ListType.UNKNOWN;
 		}
 	}

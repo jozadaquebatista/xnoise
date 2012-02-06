@@ -118,7 +118,13 @@ namespace Xnoise {
 					item.type = Xnoise.ItemType.PLAYLIST;
 				}
 				else {
-					item.type = Xnoise.ItemType.STREAM;
+					string u = f.get_uri();
+					if(Playlist.Reader.is_playlist(ref u)) {
+						item.type = Xnoise.ItemType.PLAYLIST;
+					}
+					else {
+						item.type = Xnoise.ItemType.STREAM;
+					}
 				}
 				return item;
 			}

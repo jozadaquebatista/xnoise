@@ -992,9 +992,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private void on_location_add() {
 		var radiodialog = new Gtk.Dialog();
 		radiodialog.set_modal(true);
-//		radiodialog.set_keep_above(true);
 		radiodialog.set_transient_for(main_window);
-
+		
 		var radioentry = new Gtk.Entry();
 		radioentry.set_width_chars(50);
 		radioentry.secondary_icon_stock = Gtk.Stock.CLEAR;
@@ -1066,6 +1065,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			Gtk.ResponseType.ACCEPT,
 			null);
 		fcdialog.select_multiple = true;
+		fcdialog.set_modal(true);
+		fcdialog.set_transient_for(main_window);
 		fcdialog.set_current_folder(Environment.get_home_dir());
 		if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
 			GLib.SList<string> res = fcdialog.get_uris();

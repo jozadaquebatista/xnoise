@@ -152,7 +152,6 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
 		job.track_dat = item_converter.to_trackdata(item, ref st);
 		
 		if(job.track_dat != null) {
-			bool b = (job.counter[0] == 0);
 			Idle.add( () => {
 				append_tracks(ref job.track_dat, true);
 				return false;
