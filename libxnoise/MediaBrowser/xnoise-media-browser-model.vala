@@ -449,49 +449,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         );
 		}
 	}
-
-//	// used to move an artist iter after editing the tag
-//	public void move_artist_iter_sorted(ref TreeIter org_iter, string name) {
-//		TreeIter artist_iter;
-//		string text = null;
-//		for(int i = 0; i < this.iter_n_children(null); i++) {
-//			this.iter_nth_child(out artist_iter, null, i);
-//			this.get(artist_iter, Column.VIS_TEXT, out text);
-//			text = text != null ? text.down().strip() : EMPTYSTRING;
-//			if(strcmp(text, name != null ? name.down().strip() : EMPTYSTRING) == 0 && org_iter != artist_iter) {
-//				//found artist TODO: recoursive move org_iter content to artist_iter
-//				return;
-//			}
-//			if(strcmp(text, name != null ? name.down().strip() : EMPTYSTRING) > 0) {
-//				this.move_before(ref org_iter, artist_iter);
-//				return;
-//			}
-//			if(i == this.iter_n_children(artist_iter) - 1)
-//				this.move_after(ref org_iter, artist_iter);
-//		}
-//	}
-
-//	// used to move an artist iter after editing the tag
-//	public void move_album_iter_sorted(ref TreeIter org_iter, string name) {
-//		TreeIter artist_iter, album_iter;
-//		string text = null;
-//		this.iter_parent(out artist_iter, org_iter);
-//		for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
-//			this.iter_nth_child(out album_iter, artist_iter, i);
-//			this.get(album_iter, Column.VIS_TEXT, out text);
-//			text = text != null ? text.down().strip() : EMPTYSTRING;
-//			if(strcmp(text, name != null ? name.down().strip() : EMPTYSTRING) == 0 && org_iter != album_iter) {
-//				//found album TODO: recoursive move org_iter content to album_iter
-//				return;
-//			}
-//			if(strcmp(text, name != null ? name.down().strip() : EMPTYSTRING) > 0) {
-//				this.move_before(ref org_iter, album_iter);
-//				return;
-//			}
-//			if(i == this.iter_n_children(artist_iter) - 1)
-//				this.move_after(ref org_iter, album_iter);
-//		}
-//	}
 	
 	public void cancel_fill_model() {
 		if(populate_model_cancellable == null)
