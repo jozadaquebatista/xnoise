@@ -1,6 +1,6 @@
 /* xnoise-testplugin.vala
  *
- * Copyright (C) 2009  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
  */
 
 using Gtk;
+
 using Xnoise;
 using Xnoise.PluginModule;
 
@@ -36,6 +37,7 @@ public class TestPlugin : GLib.Object, IPlugin {
 	private Gtk.Button b;
 	private unowned PluginModule.Container _owner;
 	
+	// the PluginModule holds this class
 	public PluginModule.Container owner {
 		get {
 			return _owner;
@@ -44,19 +46,18 @@ public class TestPlugin : GLib.Object, IPlugin {
 			_owner = value;
 		}
 	}
-
+	
+	// a reference to Main Object of xnoise
 	public Xnoise.Main xn { get; set; }
 	
+	//name of your plugin
 	public string name { 
 		get {
 			return "Test";
 		} 
 	}
 
-	private void on_b_clicked(Gtk.Button sender) {
-		sender.label = sender.label + "_1";
-	}
-
+	// you can use this function to initialize you plugin stuff, instantiate classes, etc.
 	public bool init() {
 		return true;
 	}
@@ -64,12 +65,18 @@ public class TestPlugin : GLib.Object, IPlugin {
 	public void uninit() {
 	}
 
+	//here you can provide a settings widget for your plugin
+	//it would be embedded into the settings dialog. Otherwise just return null
 	public Gtk.Widget? get_settings_widget() {
 		b = new Gtk.Button.with_label("bingo");
-		b.clicked.connect(on_b_clicked);
+		b.clicked.connect( (s) => {
+			//some dummy code
+			s.label = s.label + "_1";
+		});
 		return b;
 	}
 
+	//tell wether a settings widget will be provided
 	public bool has_settings_widget() {
 		return true;
 	}

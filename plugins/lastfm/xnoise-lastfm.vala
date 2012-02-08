@@ -208,9 +208,6 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
  * The download folder is returned via a signal together with
  * the artist name and the album name for identification.
  * 
- * This class should be called from a closure to work with full
- * mainloop integration. No threads needed!
- * Copying is also done asynchonously.
  */
 public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
 	private const int SECONDS_FOR_TIMEOUT = 12;
