@@ -510,6 +510,18 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		font_description.set_size((int)(fontsizeMB * Pango.SCALE));
 		
 		renderer = new FlowingTextRenderer(this.ow, font_description);
+//Timeout.add_seconds(2, () => {
+//	Value val = Value(typeof(int));
+//	this.get_style_context().get_style_property("expander-size", val);
+//	print("expander-size : %d\n", (int)val);
+//	print("level-indentation : %d\n", this.level_indentation);
+//	this.get_style_context().get_style_property("horizontal-separator", val);
+//	print("horizontal-separator : %d\n", (int)val);
+//	Value va = Value(typeof(bool));
+//	this.get_style_context().get_style_property("indent-expanders", va);
+//	print("indent-expanders : %s\n", ((bool)va).to_string());  
+//	return true;
+//});
 		Idle.add( () => {
 			this.ow.size_allocate.connect_after( (s, a) => {
 				unowned TreeViewColumn tvc = this.get_column(0);
@@ -521,7 +533,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				
 				tvc.max_width = current_width - 25;
 				tvc.min_width = current_width - 25;
-				
 				TreeModel? xm = this.get_model();
 				if(xm != null && !in_update_view)
 					xm.foreach(owforeach);

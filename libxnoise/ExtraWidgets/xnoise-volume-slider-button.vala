@@ -42,21 +42,26 @@ public class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
 		this.size = Gtk.IconSize.LARGE_TOOLBAR;
 		this.can_focus = false;
 		this.relief = Gtk.ReliefStyle.NONE;
-		this.set_value(0.3); //Default value
 		this.value_changed.connect(on_change);
-		gst_player.sign_volume_changed.connect(on_volume_change);
+		Idle.add( () => {
+			this.set_value(Params.get_double_value("volume"));
+			return false;
+		});
+		
 	}
-
+	
+	private uint src = 0;
+	
 	private void on_change() {
 		gst_player.volume = get_value();
-	}
-
-	private void on_volume_change(double val) {
-		this.set_sensitive(false);
-		this.value_changed.disconnect(on_change);
-		this.set_value(val);
-		this.value_changed.connect(on_change);
-		this.set_sensitive(true);
+		
+		if(src != 0)
+			Source.remove(src);
+		src = Idle.add( () => {
+			Params.set_double_value("volume", this.get_value());
+			src = 0;
+			return false;
+		});
 	}
 }
 

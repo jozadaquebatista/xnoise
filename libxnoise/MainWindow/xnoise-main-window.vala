@@ -604,7 +604,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					if(e.state != 0x0014) // Ctrl Modifier
 						return false;
 					searchEntryMB.text = EMPTYSTRING;
-					searchEntryMB.modify_base(StateType.NORMAL, null);
+					searchEntryMB.override_background_color(StateFlags.NORMAL, null);
 					this.mediaBr.on_searchtext_changed();
 				}
 				return true;
@@ -745,18 +745,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.move(posX, posY);
 		int wi = Params.get_int_value("width");
 		int he = Params.get_int_value("height");
-		if (wi > 0 && he > 0) {
+		if(wi > 0 && he > 0) {
 			this.resize(wi, he);
 		}
 		this.repeatState = (PlayerRepeatMode)Params.get_int_value("repeatstate");
-		double volSlider = Params.get_double_value("volume");
-		if((volSlider < 0.0)||
-		   (volSlider > 1.0)) {
-			gst_player.volume = 0.5;
-		}
-		else {
-			gst_player.volume = volSlider;
-		}
 		this.quit_if_closed = Params.get_int_value("quit_if_closed") == 1;
 		int hp_position = Params.get_int_value("hp_position");
 		if (hp_position > 0) {
@@ -1511,12 +1503,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					return false;
 				});
 				if(entry.text != EMPTYSTRING) {
-					Gdk.Color color;
-					Gdk.Color.parse("DarkSalmon", out color);
-					entry.modify_base(StateType.NORMAL, color);
+					Gdk.RGBA color = Gdk.RGBA();
+					if(!color.parse("rgba(233,150,122,1.0)")) //"DarkSalmon"#E18B6B11
+						print("error parsing color\n");
+					searchEntryMB.override_background_color(StateFlags.NORMAL, color);
 				}
 				else {
-					entry.modify_base(StateType.NORMAL, null);
+					searchEntryMB.override_background_color(StateFlags.NORMAL, null);
 				}
 				return false;
 			});
@@ -1529,7 +1522,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 				if(p0 == Gtk.EntryIconPosition.SECONDARY) {
 					s.text = EMPTYSTRING;
-					entry.modify_base(StateType.NORMAL, null);
+					entry.override_background_color(StateFlags.NORMAL, null);
 					this.mediaBr.on_searchtext_changed();
 				}
 			});
