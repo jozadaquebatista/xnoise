@@ -233,8 +233,8 @@ public class FirstMprisPlayer : GLib.Object {
 			retv.insert("genre", global.current_genre);
 		if(global.current_organization != null && global.current_organization != EMPTYSTRING)
 			retv.insert("organization", global.current_organization);
-		uint32 len_ms = (uint32)(gst_player.length_time / Gst.MSECOND);
-		uint32 len_s  = (uint32)(gst_player.length_time / Gst.SECOND);
+		uint32 len_ms = (uint32)(gst_player.length_nsecs / Gst.MSECOND);
+		uint32 len_s  = (uint32)(gst_player.length_nsecs / Gst.SECOND);
 		retv.insert("mtime", len_ms);
 		retv.insert("time",  len_s );
 		if(global.current_uri != null && global.current_uri != EMPTYSTRING)
@@ -310,14 +310,14 @@ public class FirstMprisPlayer : GLib.Object {
 	}
 	
 	public void PositionSet(int Position) {
-		if(gst_player.length_time == 0) return; 
-		gst_player.gst_position = (double)Position / (double)(gst_player.length_time / 1000000);
+		if(gst_player.length_nsecs == 0) return; 
+		gst_player.position = (double)Position / (double)(gst_player.length_nsecs / 1000000);
 	}
 	
 	public int PositionGet() {
-		if(gst_player.length_time == 0) return -1;
-		double pos = gst_player.gst_position;
-		double rel_pos = pos * gst_player.length_time / 1000000;
+		if(gst_player.length_nsecs == 0) return -1;
+		double pos = gst_player.position;
+		double rel_pos = pos * gst_player.length_nsecs / 1000000;
 		return (int)rel_pos;//buf.to_int();
 	}
 }

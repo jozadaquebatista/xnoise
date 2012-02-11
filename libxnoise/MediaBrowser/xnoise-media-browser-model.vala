@@ -510,7 +510,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				foreach(TrackData td in job.track_dat) {
 					if(job.cancellable.is_cancelled())
 						break;
-					bool visible = false;
 					this.prepend(out iter_singleradios, iter_radios);
 					this.set(iter_singleradios,
 					         Column.ICON,        radios_pixb,

@@ -158,7 +158,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		if(fcdialog.run() == Gtk.ResponseType.ACCEPT) {
 			File f = File.new_for_path(fcdialog.get_filename());
 			//print("got suburi xxx : %s\n", f.get_uri());
-			player.set_subtitles_for_current_video(f.get_uri());
+			player.set_subtitle_uri(f.get_uri());
 		}
 		fcdialog.destroy();
 		fcdialog = null;

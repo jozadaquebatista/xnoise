@@ -286,14 +286,14 @@ public class MprisPlayer : GLib.Object {
 		});
 		
 		gst_player.notify["length-time"].connect( () => {
-			//print("length-time: %lld\n", (int64)(gst_player.length_time / (int64)1000));
+			//print("length-time: %lld\n", (int64)(gst_player.length_nsecs / (int64)1000));
 			if(_metadata.lookup("mpris:length") == null) {
 				_metadata.insert("mpris:length", ((int64)0));
 				trigger_metadata_update();
 				return;
 			}
 			
-			int64 length_val = (int64)(gst_player.length_time / (int64)1000);
+			int64 length_val = (int64)(gst_player.length_nsecs / (int64)1000);
 			if(((int64)_metadata.lookup("mpris:length")) != length_val) { 
 				_metadata.insert("mpris:length", length_val);
 				trigger_metadata_update();
@@ -498,10 +498,10 @@ public class MprisPlayer : GLib.Object {
 	public int64 Position {
 		get {
 			//print("get position\n");
-			if(gst_player.length_time == 0)
+			if(gst_player.length_nsecs == 0)
 				return -1;
-			double pos = gst_player.gst_position;
-			return (int64)(pos * gst_player.length_time / 1000.0);
+			double pos = gst_player.position;
+			return (int64)(pos * gst_player.length_nsecs / 1000.0);
 		}
 	}
 	
@@ -559,8 +559,8 @@ public class MprisPlayer : GLib.Object {
 	}
 	
 	public void SetPosition(string dobj, int64 Position) {
-		print(" set position %lf\n", ((double)Position/(gst_player.length_time / 1000.0)));
-		gst_player.gst_position = ((double)Position/(gst_player.length_time / 1000.0));
+		print(" set position %lf\n", ((double)Position/(gst_player.length_nsecs / 1000.0)));
+		gst_player.position = ((double)Position/(gst_player.length_nsecs / 1000.0));
 	}
 	
 	public void OpenUri(string Uri) {

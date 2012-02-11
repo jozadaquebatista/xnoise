@@ -55,7 +55,7 @@ public class Xnoise.FullscreenProgressBar : Gtk.EventBox {
 		this.button_release_event.connect(this.on_release);
 		this.scroll_event.connect(this.on_scroll);
 		
-		this.player.sign_song_position_changed.connect(set_value);
+		this.player.sign_position_changed.connect(set_value);
 		global.caught_eos_from_player.connect(on_eos);
 		this.player.sign_stopped.connect(on_stopped);
 		
@@ -91,16 +91,17 @@ public class Xnoise.FullscreenProgressBar : Gtk.EventBox {
 			if(thisFraction > 1.0) thisFraction = 1.0;
 			bar.set_fraction(thisFraction);
 			if(this.player != null)
-				this.player.gst_position = thisFraction;
+				this.player.position = thisFraction;
 			
-			set_value((uint)((thisFraction * this.player.length_time) / Gst.MSECOND), (uint)(this.player.length_time / Gst.MSECOND));
+			set_value((uint)((thisFraction * this.player.length_nsecs) / Gst.MSECOND), (uint)(this.player.length_nsecs / Gst.MSECOND));
 		}
 		return false;
 	}
 	
 	private bool on_scroll(Gdk.EventScroll event) {
 		if(global.player_state != PlayerState.STOPPED) {
-			this.player.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
+			//offset in seconds
+			this.player.request_time_offset((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
 		}
 		return false;
 	}
@@ -125,7 +126,7 @@ public class Xnoise.FullscreenProgressBar : Gtk.EventBox {
 		if(thisFraction > 1.0) thisFraction = 1.0;
 		bar.set_fraction(thisFraction);
 		if(this.player != null)
-			this.player.gst_position = thisFraction;
+			this.player.position = thisFraction;
 		return false;
 	}
 

@@ -32,9 +32,9 @@ using Gtk;
 
 
 public class Xnoise.TrackListColumn : TreeViewColumn {
-	public string tracklist_col_name;
-	public TrackListColumn(string _tracklist_col_name = "") {
-		tracklist_col_name = _tracklist_col_name;
+	public string name;
+	public TrackListColumn(string _name = "") {
+		name = _name;
 	}
 }
 

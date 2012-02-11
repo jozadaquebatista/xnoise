@@ -56,7 +56,7 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		this.ebox.button_release_event.connect(this.on_release);
 		this.ebox.scroll_event.connect(this.on_scroll);
 		
-		this.player.sign_song_position_changed.connect(set_value);
+		this.player.sign_position_changed.connect(set_value);
 		global.caught_eos_from_player.connect(on_eos);
 		this.player.sign_stopped.connect(on_stopped);
 	}
@@ -115,9 +115,9 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 			if(thisFraction > 1.0) thisFraction = 1.0;
 			this.progress.set_fraction(thisFraction);
 			if(this.player != null)
-				this.player.gst_position = thisFraction;
+				this.player.position = thisFraction;
 			
-			set_value((uint)((thisFraction * this.player.length_time) / 1000000), (uint)(this.player.length_time / 1000000));
+			set_value((uint)((thisFraction * this.player.length_nsecs) / 1000000), (uint)(this.player.length_nsecs / 1000000));
 		}
 		press_was_valid = false;
 		return true;
@@ -140,7 +140,7 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		if(thisFraction > 1.0) thisFraction = 1.0;
 		this.progress.set_fraction(thisFraction);
 		if(this.player != null)
-			this.player.gst_position = thisFraction;
+			this.player.position = thisFraction;
 		return true;
 	}
 
@@ -150,7 +150,8 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 			Source.remove(scroll_source);
 		scroll_source = Idle.add( () => {
 			if(global.player_state != PlayerState.STOPPED)
-				this.player.request_time_offset_seconds((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
+				//offset in seconds
+				this.player.request_time_offset((event.direction == Gdk.ScrollDirection.DOWN) ? -10 : 10);
 			return false;
 		});
 		return true;

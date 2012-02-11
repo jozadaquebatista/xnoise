@@ -571,8 +571,8 @@ namespace Xnoise {
 		public void pause ();
 		public void play ();
 		public void playSong (bool force_play = false);
-		public void request_time_offset_seconds (int seconds);
-		public void set_subtitles_for_current_video (string s_uri);
+		public void request_time_offset (int seconds);
+		public void set_subtitle_uri (string s_uri);
 		public void stop ();
 		public string[]? available_audiotracks { get; private set; }
 		public string[]? available_subtitles { get; private set; }
@@ -581,12 +581,15 @@ namespace Xnoise {
 		public bool current_has_subtitles { get; }
 		public bool current_has_video_track { get; }
 		public int current_text { get; set; }
-		public double gst_position { get; set; }
+		public int current_video { get; set; }
 		public bool is_stream { get; private set; }
-		public int64 length_time { get; set; }
+		public int64 length_nsecs { get; set; }
+		public int n_audio { get; }
 		public int n_text { get; }
+		public int n_video { get; }
 		public bool paused { get; set; }
 		public bool playing { get; set; }
+		public double position { get; set; }
 		public bool seeking { get; set; }
 		public string? suburi { get; set; }
 		public string? uri { get; set; }
@@ -595,11 +598,10 @@ namespace Xnoise {
 		public signal void sign_buffering (int percent);
 		public signal void sign_paused ();
 		public signal void sign_playing ();
-		public signal void sign_song_position_changed (uint msecs, uint ms_total);
+		public signal void sign_position_changed (uint msecs, uint ms_total);
 		public signal void sign_stopped ();
 		public signal void sign_subtitles_available ();
 		public signal void sign_video_playing ();
-		public signal void sign_volume_changed (double volume);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class HandlerAddAllToTracklist : Xnoise.ItemHandler {
@@ -817,17 +819,19 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Params : GLib.Object {
 		public Params ();
+		public static bool get_bool_value (string key);
 		public static double get_double_value (string key);
 		public static int get_int_value (string key);
 		public static string[]? get_string_list_value (string key);
 		public static string get_string_value (string key);
 		public static void init ();
 		public static void iparams_register (Xnoise.IParams iparam);
-		public static void set_double_value (string key, double value);
-		public static void set_int_value (string key, int value);
+		public static void set_bool_value (string key, bool val);
+		public static void set_double_value (string key, double val);
+		public static void set_int_value (string key, int val);
 		public static void set_start_parameters_in_implementors ();
-		public static void set_string_list_value (string key, string[]? value);
-		public static void set_string_value (string key, string value);
+		public static void set_string_list_value (string key, string[]? val);
+		public static void set_string_value (string key, string val);
 		public static void write_all_parameters_to_file ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -867,7 +871,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TextColumn : Xnoise.TrackListColumn {
 		public TextColumn (string title, Gtk.CellRendererText renderer, Xnoise.TrackListModel.Column col_id);
-		public Xnoise.TrackListModel.Column id { get; }
+		public Xnoise.TrackListModel.Column get_id ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackData {
@@ -906,8 +910,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackListColumn : Gtk.TreeViewColumn {
-		public string tracklist_col_name;
-		public TrackListColumn (string _tracklist_col_name = "");
+		public string name;
+		public TrackListColumn (string _name = "");
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackListModel : Gtk.ListStore, Gtk.TreeModel {

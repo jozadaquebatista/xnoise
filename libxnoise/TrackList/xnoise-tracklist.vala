@@ -1002,11 +1002,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 	// from the config file before actually inserting it
 	private new void insert_column(Gtk.TreeViewColumn column, int position) {
 		string col_name;
-		col_name = ((TrackListColumn)column).tracklist_col_name;
+		col_name = ((TrackListColumn)column).name;
 		if(position < 0) {
 			position = Params.get_int_value("position_" + col_name + "_column");
 		}
-		col_name = ((TrackListColumn)column).tracklist_col_name;
+		col_name = ((TrackListColumn)column).name;
 		//double? rel_size = Params.get_double_value("relative_size_" + col_name + "_column"); //relative_column_sizes.lookup(col_name);
 		position--;
 		base.insert_column(column, position);
@@ -1026,7 +1026,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnPixb.set_fixed_width(30);
 		columnPixb.min_width = 30;
 		columnPixb.reorderable = false;
-		((TrackListColumn)columnPixb).tracklist_col_name = "status-icon";
+		((TrackListColumn)columnPixb).name = "status-icon";
 		this.insert_column(columnPixb, -1);
 
 		// TRACKNUMBER
@@ -1039,7 +1039,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnTracknumber.min_width = 32;
 		columnTracknumber.resizable = false;
 		columnTracknumber.reorderable = true;
-		columnTracknumber.tracklist_col_name = "tracknumber";
+		columnTracknumber.name = "tracknumber";
 		this.insert_column(columnTracknumber, -1);
 		columnTracknumber.visible = (Params.get_int_value(USE_TR_NO_COL) == 1);
 
@@ -1057,7 +1057,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnTitle.resizable = true;
 		columnTitle.reorderable = true;
 		columnTitle.expand = true;
-		columnTitle.tracklist_col_name = "title";
+		columnTitle.name = "title";
 		this.insert_column(columnTitle, -1);
 		variable_col_count++;
 
@@ -1075,7 +1075,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnAlbum.resizable = true;
 		columnAlbum.reorderable = true;
 		columnAlbum.expand = true;
-		columnAlbum.tracklist_col_name = "album";
+		columnAlbum.name = "album";
 		this.insert_column(columnAlbum, -1);
 		variable_col_count++;
 		columnAlbum.visible = (Params.get_int_value(USE_ALBUM_COL) == 1);
@@ -1093,7 +1093,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnArtist.resizable = true; // This is the case for the current column order
 		columnArtist.reorderable = true;
 		columnArtist.expand = true;
-		columnArtist.tracklist_col_name = "artist";
+		columnArtist.name = "artist";
 		this.insert_column(columnArtist, -1);
 		variable_col_count++;
 		columnArtist.visible = (Params.get_int_value(USE_ARTIST_COL) == 1);
@@ -1110,7 +1110,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnLength.max_width = 75;
 		columnLength.resizable = false;
 		columnLength.reorderable = true;
-		columnLength.tracklist_col_name = "length";
+		columnLength.name = "length";
 		this.insert_column(columnLength, -1);
 
 		columnLength.visible = (Params.get_int_value(USE_LEN_COL) == 1);
@@ -1128,7 +1128,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnGenre.resizable = true;
 		columnGenre.reorderable = true;
 		columnGenre.expand = true;
-		columnGenre.tracklist_col_name = "genre";
+		columnGenre.name = "genre";
 		this.insert_column(columnGenre, -1);
 		variable_col_count++;
 		
@@ -1147,7 +1147,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnYear.max_width = 80;
 		columnYear.resizable = false;
 		columnYear.reorderable = true;
-		columnYear.tracklist_col_name = "year";
+		columnYear.name = "year";
 		this.insert_column(columnYear, -1);
 		variable_col_count++;
 		
@@ -1246,7 +1246,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 			// write column position, counting from 1 onwards
 			counter++;
 			string col_name;
-			col_name = ((TrackListColumn)c).tracklist_col_name;
+			col_name = ((TrackListColumn)c).name;
 			Params.set_int_value("position_" + col_name + "_column", counter);
 		}
 	}

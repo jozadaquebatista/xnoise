@@ -32,6 +32,8 @@
 
 using Gtk;
 
+using Xnoise;
+
 /**
 * A VolumeSliderButton is a Gtk.VolumeButton used to change the volume
 */

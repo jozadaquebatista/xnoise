@@ -127,6 +127,14 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 
 
 	//  GETTERS FOR THE HASH TABLE
+	//Type bool
+	public static bool get_bool_value(string key) {
+		int val = ht_int.lookup(key);
+		if(val!=0)
+			return true;
+		else
+			return false;
+	}
 	//Type int
 	public static int get_int_value(string key) {
 		int val = ht_int.lookup(key);
@@ -161,18 +169,22 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 
 	//  SETTERS FOR THE HASH TABLE
 	//Type int
-	public static void set_int_value(string key, int value) {
-		ht_int.insert(key,value);
+	public static void set_bool_value(string key, bool val) {
+		ht_int.insert(key, (val ? 1 : 0));
+	}
+	//Type int
+	public static void set_int_value(string key, int val) {
+		ht_int.insert(key, val);
 	}
 	//Type double
-	public static void set_double_value(string key, double value) {
-		ht_double.insert(key,value);
+	public static void set_double_value(string key, double val) {
+		ht_double.insert(key, val);
 	}
 	//Type string list
-	public static void set_string_list_value(string key, string[]? value) {
+	public static void set_string_list_value(string key, string[]? val) {
 		string? buffer = null;
-		if(value!=null) {
-			foreach(string s in value) {
+		if(val!=null) {
+			foreach(string s in val) {
 				if(buffer==null) {
 					buffer = s;
 					continue;
@@ -183,12 +195,11 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		else {
 			buffer = "#00";
 		}
-
 		if(buffer!=null) ht_string.insert(key,buffer);
 	}
 	//Type string
-	public static void set_string_value(string key, string value) {
-		ht_string.insert(key,value);
+	public static void set_string_value(string key, string val) {
+		ht_string.insert(key, val);
 	}
 
 	private static string? build_file_name() {
@@ -242,10 +253,10 @@ position_year_column=7
 position_length_column=6
 
 [settings_double]
-volume=0.33594936708860756
+volume=0.8
 
 [settings_string]
-activated_plugins=DatabaseLyrics;notifications;Lyricwiki;chartlyrics;CyclicSaveState;mediakeys;LastfmCovers;azlyrics
+activated_plugins=azlyrics;chartlyrics;Lyricwiki;DatabaseLyrics;notifications;CyclicSaveState;mediakeys;lastfm
 """;
 }
 

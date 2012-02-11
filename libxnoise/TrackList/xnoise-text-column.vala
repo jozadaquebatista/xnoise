@@ -31,13 +31,11 @@
 using Gtk;
 
 public class Xnoise.TextColumn : Xnoise.TrackListColumn {
-	private int last_size = 0;
+	//private int last_size = 0;
 	private TrackListModel.Column _id;
 	
-	public TrackListModel.Column id { 
-		get {
-			return _id;
-		}
+	public TrackListModel.Column get_id() {
+		return _id;
 	}
 	
 	public TextColumn(string title, CellRendererText renderer, TrackListModel.Column col_id) {

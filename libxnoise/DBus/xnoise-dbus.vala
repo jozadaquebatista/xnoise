@@ -141,14 +141,14 @@ public class PlayerDbusService : GLib.Object {
 		});
 		
 		gst_player.notify["length-time"].connect( () => {
-			//print("length-time: %lld\n", (int64)(gst_player.length_time / (int64)1000));
+			//print("length-time: %lld\n", (int64)(gst_player.length_nsecs / (int64)1000));
 			if(_metadata.lookup("length") == null) {
 				_metadata.insert("length", ((int64)0));
 				trigger_metadata_update();
 				return;
 			}
 			
-			int64 length_val = (int64)(gst_player.length_time / (int64)1000);
+			int64 length_val = (int64)(gst_player.length_nsecs / (int64)1000);
 			if(((int64)_metadata.lookup("length")) != length_val) { 
 				_metadata.insert("length", length_val);
 				trigger_metadata_update();
@@ -360,25 +360,25 @@ public class PlayerDbusService : GLib.Object {
 
 	public int64 Length {
 		get {
-			if(gst_player.length_time == 0)
+			if(gst_player.length_nsecs == 0)
 				return -1;
 			else
-				return (int64)(gst_player.length_time / Gst.SECOND);
+				return (int64)(gst_player.length_nsecs / Gst.SECOND);
 		}
 	}
 	
 	public int64 Position {
 		get {
-			if(gst_player.length_time == 0)
+			if(gst_player.length_nsecs == 0)
 				return -1;
-			return (int64)(gst_player.gst_position * gst_player.length_time / Gst.SECOND);
+			return (int64)(gst_player.position * gst_player.length_nsecs / Gst.SECOND);
 		}
 		set {
-			if(gst_player.length_time == 0)
+			if(gst_player.length_nsecs == 0)
 				return;
 			if(value < 0)
 				value = 0;
-			gst_player.gst_position = (double)((double)value / (double)(gst_player.length_time / Gst.SECOND));
+			gst_player.position = (double)((double)value / (double)(gst_player.length_nsecs / Gst.SECOND));
 		}
 	}
 	
