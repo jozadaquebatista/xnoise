@@ -1975,8 +1975,8 @@ void xnoise_track_infobar_set_value (XnoiseTrackInfobar* self, guint pos, guint 
 const gchar* xnoise_track_infobar_get_title_text (XnoiseTrackInfobar* self);
 void xnoise_track_infobar_set_title_text (XnoiseTrackInfobar* self, const gchar* value);
 GType xnoise_volume_slider_button_get_type (void) G_GNUC_CONST;
-XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (void);
-XnoiseVolumeSliderButton* xnoise_volume_slider_button_construct (GType object_type);
+XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (XnoiseGstPlayer* player);
+XnoiseVolumeSliderButton* xnoise_volume_slider_button_construct (GType object_type, XnoiseGstPlayer* player);
 GQuark xnoise_database_db_error_quark (void);
 gpointer xnoise_database_db_browser_ref (gpointer instance);
 void xnoise_database_db_browser_unref (gpointer instance);

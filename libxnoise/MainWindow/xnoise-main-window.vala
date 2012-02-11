@@ -79,7 +79,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private ImageMenuItem config_button_menu_root;
 	private Gtk.Menu config_button_menu;
 	private bool _media_browser_visible = true;
-	private double current_volume; //keep it global for saving to params
 	private ulong active_notifier = 0;
 	private ScreenSaverManager ssm = null;
 	private List<Gtk.Action> actions_list = null;
@@ -170,7 +169,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public PlayerRepeatMode repeatState { get; set; }
 	public bool fullscreenwindowvisible { get; set; }
 
-	public signal void sign_volume_changed(double fraction);
 	public signal void sign_drag_over_content_area();
 
 	public enum PlayerRepeatMode {
@@ -263,9 +261,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public MainWindow() {
 		this.xn = Main.instance;
 		Params.iparams_register(this);
-		gst_player.sign_volume_changed.connect(
-			(val) => { this.current_volume = val; }
-		);
 		create_widgets();
 		
 		//initialization of videoscreen
@@ -768,8 +763,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		Params.set_int_value("hp_position", this.hpaned.get_position());
 		
 		Params.set_int_value("repeatstate", repeatState);
-		
-		Params.set_double_value("volume", current_volume);
 		
 		Params.set_int_value("not_show_art_on_hover_image", (not_show_art_on_hover_image == true ? 1 : 0));
 	}
@@ -1416,7 +1409,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//----------------
 
 			//VOLUME SLIDE BUTTON
-			this.volumeSliderButton = new VolumeSliderButton();
+			this.volumeSliderButton = new VolumeSliderButton(gst_player);
 			var afVol = gb.get_object("aFrameVolumeButton") as Gtk.AspectFrame;
 			afVol.add(volumeSliderButton);
 

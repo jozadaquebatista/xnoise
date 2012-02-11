@@ -1,6 +1,6 @@
 /* xnoise-volume-slider-button.vala
  *
- * Copyright (C) 2009-2010  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,12 +36,16 @@ using Gtk;
 * A VolumeSliderButton is a Gtk.VolumeButton used to change the volume
 */
 public class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
-	private Main xn;
-	public VolumeSliderButton() {
-		this.xn = Main.instance;
+	
+	private unowned GstPlayer player;
+	private uint src = 0;
+	
+	public VolumeSliderButton(GstPlayer player) {
+		this.player = player;
 		this.size = Gtk.IconSize.LARGE_TOOLBAR;
 		this.can_focus = false;
 		this.relief = Gtk.ReliefStyle.NONE;
+		this.set_value(0.1);
 		this.value_changed.connect(on_change);
 		Idle.add( () => {
 			this.set_value(Params.get_double_value("volume"));
@@ -50,11 +54,10 @@ public class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
 		
 	}
 	
-	private uint src = 0;
-	
 	private void on_change() {
-		gst_player.volume = get_value();
+		player.volume = this.get_value();
 		
+		// store
 		if(src != 0)
 			Source.remove(src);
 		src = Idle.add( () => {

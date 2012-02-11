@@ -56,17 +56,17 @@ public class Xnoise.FullscreenToolbar {
 		this.hide_lock = false;
 		this.fullscreenwindow = fullscreenwindow;
 		window = new Gtk.Window (Gtk.WindowType.POPUP);
-
+		
 		var mainbox = new Gtk.Box(Orientation.HORIZONTAL, 8);
-
+		
 		var nextbutton      = new ControlButton(ControlButton.Direction.NEXT);
 		nextbutton.sign_clicked.connect(handle_control_button_click);
 		var previousbutton  = new ControlButton(ControlButton.Direction.PREVIOUS);
 		previousbutton.sign_clicked.connect(handle_control_button_click);
 		var plpabutton      = new PlayPauseButton();
 		var leavefullscreen = new LeaveVideoFSButton();
-		var volume          = new VolumeSliderButton();
-
+		var volume          = new VolumeSliderButton(gst_player);
+		
 		bar = new FullscreenProgressBar(gst_player);
 		
 		var vp = new Gtk.Alignment(0,0.5f,0,0);
@@ -79,8 +79,7 @@ public class Xnoise.FullscreenToolbar {
 		//mainbox.pack_start(ai_frame,false,false,0);
 		mainbox.pack_start(leavefullscreen,false,false,0);
 		mainbox.pack_start(volume,false,false,0);
-
-
+		
 		window.add(mainbox);
 		fullscreenwindow.motion_notify_event.connect(on_pointer_motion);
 		window.enter_notify_event.connect(on_pointer_enter_toolbar);

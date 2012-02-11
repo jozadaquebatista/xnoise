@@ -757,7 +757,6 @@ namespace Xnoise {
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public bool usestop { get; set; }
 		public signal void sign_drag_over_content_area ();
-		public signal void sign_volume_changed (double fraction);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
@@ -988,7 +987,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class VolumeSliderButton : Gtk.VolumeButton {
-		public VolumeSliderButton ();
+		public VolumeSliderButton (Xnoise.GstPlayer player);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Worker : GLib.Object {
