@@ -126,7 +126,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 								 Column.ITEM, i
 								 );
 						Item? loader_item = Item(ItemType.LOADER);
-						this.append(out iter_loader, iter_videos);
+						this.prepend(out iter_loader, iter_videos);
 						this.set(iter_loader,
 								 Column.ICON, loading_pixb,
 								 Column.VIS_TEXT, LOADING,
@@ -152,7 +152,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 								 Column.ITEM, i
 								 );
 						Item? loader_item = Item(ItemType.LOADER);
-						this.append(out iter_loader, iter_videos);
+						this.prepend(out iter_loader, iter_videos);
 						this.set(iter_loader,
 								 Column.ICON, loading_pixb,
 								 Column.VIS_TEXT, LOADING,
@@ -177,7 +177,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 								 Column.ITEM, i
 								 );
 						Item? loader_item = Item(ItemType.LOADER);
-						this.append(out iter_loader, iter_streams);
+						this.prepend(out iter_loader, iter_streams);
 						this.set(iter_loader,
 								 Column.ICON, loading_pixb,
 								 Column.VIS_TEXT, LOADING,
@@ -203,7 +203,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 								 Column.ITEM, i
 								 );
 						Item? loader_item = Item(ItemType.LOADER);
-						this.append(out iter_loader, iter_streams);
+						this.prepend(out iter_loader, iter_streams);
 						this.set(iter_loader,
 								 Column.ICON, loading_pixb,
 								 Column.VIS_TEXT, LOADING,
@@ -226,16 +226,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			if(populating_model) // don't try to put an artist to the model in case we are filling anyway
 				return false;
 			string text = null;
-			TreeIter iter_search, artist_iter;
+			TreeIter iter_search, artist_iter = TreeIter();
 			if(this.iter_n_children(null) == 0) {
-				this.append(out artist_iter, null);
+				this.prepend(out artist_iter, null);
 				this.set(artist_iter,
 					     Column.ICON, artist_pixb,
 					     Column.VIS_TEXT, job.item.text,
 					     Column.ITEM, job.item
 					     );
 				Item? loader_item = Item(ItemType.LOADER);
-				this.append(out iter_search, artist_iter);
+				this.prepend(out iter_search, artist_iter);
 				this.set(iter_search,
 					     Column.ICON, loading_pixb,
 					     Column.VIS_TEXT, LOADING,
@@ -244,8 +244,15 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				return false;
 			}
 			string itemtext_prep = job.item.text.down().strip();
+			
 			for(int i = 0; i < this.iter_n_children(null); i++) {
-				this.iter_nth_child(out artist_iter, null, i);
+				if(i == 0) {
+					this.iter_nth_child(out artist_iter, null, i);
+				}
+				else {
+					if(!iter_next(ref artist_iter))
+						break;
+				}
 				Item? current_item;
 				this.get(artist_iter, Column.VIS_TEXT, out text, Column.ITEM, out current_item);
 				if(current_item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
@@ -265,7 +272,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 						     );
 					artist_iter = new_artist_iter;
 					Item? loader_item = Item(ItemType.LOADER);
-					this.append(out iter_search, artist_iter);
+					this.prepend(out iter_search, artist_iter);
 					this.set(iter_search,
 							 Column.ICON, loading_pixb,
 							 Column.VIS_TEXT, LOADING,
@@ -274,7 +281,10 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					return false;
 				}
 			}
-			this.append(out artist_iter, null);
+			TreeIter x_artist_iter;
+			this.insert_after(out x_artist_iter, null, artist_iter);
+			artist_iter = x_artist_iter;
+//			this.append(out artist_iter, null);
 			this.set(artist_iter,
 				     Column.ICON, artist_pixb,
 				     Column.VIS_TEXT, job.item.text,
@@ -309,6 +319,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	
 	public void filter() {
 		//print("filter\n");
+		main_window.mediaBr.set_model(null);
 		this.clear();
 		this.populate_model();
 	}
@@ -465,16 +476,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		stream_in_tree = false;
 		//print("populate_model\n");
 		main_window.mediaBr.set_model(null);
-		var v_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
-		v_job.cancellable = populate_model_cancellable;
-		db_worker.push_job(v_job);
-		
 		var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
 		a_job.cancellable = populate_model_cancellable;
-		a_job.finished.connect( (j) => { 
+		db_worker.push_job(a_job);
+		
+		var v_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
+		v_job.cancellable = populate_model_cancellable;
+		v_job.finished.connect( (j) => { 
 			populating_model = false;
 		});
-		db_worker.push_job(a_job);
+		db_worker.push_job(v_job);
 		
 		return false;
 	}
@@ -540,13 +551,14 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.ITEM, item
 			         );
 			Item? loader_item = Item(ItemType.LOADER);
-			this.append(out iter_loader, iter_videos);
+			this.prepend(out iter_loader, iter_videos);
 			this.set(iter_loader,
 			         Column.ICON, loading_pixb,
 			         Column.VIS_TEXT, LOADING,
 			         Column.ITEM, loader_item
 			         );
 			video_in_tree = true;
+			main_window.mediaBr.set_model(this);
 			return false;
 		});
 		return false;
@@ -629,7 +641,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private bool populate_artists_job(Worker.Job job) {
 		if(job.cancellable.is_cancelled())
 			return false;
-		
 		job.items = db_browser.get_artists_with_search(ref this.searchtext);
 		//print("job.items.length = %d\n", job.items.length);
 		Idle.add( () => { // TODO Maybe in packages of 1000
@@ -639,21 +650,20 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			foreach(Item? artist in job.items) {
 				if(job.cancellable.is_cancelled())
 					break;
-				this.append(out iter_artist, null);
+				this.prepend(out iter_artist, null);
 				this.set(iter_artist,
 				         Column.ICON, artist_pixb,
 				         Column.VIS_TEXT, artist.text,
 				         Column.ITEM, artist
 				         );
 				Item? loader_item = Item(ItemType.LOADER);
-				this.append(out iter_search, iter_artist);
+				this.prepend(out iter_search, iter_artist);
 				this.set(iter_search,
 				         Column.ICON, loading_pixb,
 				         Column.VIS_TEXT, LOADING,
 				         Column.ITEM, loader_item
 				         );
 			}
-			main_window.mediaBr.set_model(this);
 			return false;
 		});
 		return false;

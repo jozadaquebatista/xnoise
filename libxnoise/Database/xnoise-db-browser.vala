@@ -69,6 +69,10 @@ public class Xnoise.Database.DbBrowser {
 		//create custom utf8 collation
 		db.create_collation("CUSTOM01", Sqlite.UTF8, compare_func);
 		db.progress_handler(5, progress_handler);
+		
+		this.db.prepare_v2(STMT_GET_ARTISTS_WITH_SEARCH, -1, out get_artists_with_search_stmt);
+		this.db.prepare_v2(STMT_GET_ARTISTS, -1, out get_artists_with_search2_stmt);
+
 	}
 
 	private static void utf8_lower(Sqlite.Context context, [CCode (array_length_pos = 1.1)] Sqlite.Value[] values) {
@@ -114,7 +118,7 @@ public class Xnoise.Database.DbBrowser {
 			cb(db);
 	}
 
-	private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (t.id) FROM items t, uris u WHERE t.mediatype=? AND u.id = t.uri AND (utf8_lower(t.title) LIKE ?)";
+	private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (t.id) FROM items t WHERE t.mediatype=? AND (utf8_lower(t.title) LIKE ?)";
 	public int32 count_videos(ref string searchtext) {
 		Statement stmt;
 		int count = 0;
@@ -438,35 +442,39 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_ARTISTS_WITH_SEARCH =
-		"SELECT DISTINCT ar.name, ar.id FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND u.id = t.uri AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY LOWER(ar.name) COLLATE CUSTOM01 ASC";
+		"SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
 
 	private static const string STMT_GET_ARTISTS =
-		"SELECT DISTINCT ar.name, ar.id  FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id ORDER BY LOWER(ar.name) COLLATE CUSTOM01 ASC"; //LOWER(ar.name)
+		"SELECT ar.id, ar.name FROM artists ar ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC"; //LOWER(ar.name)
+	
+	private Statement get_artists_with_search_stmt;
+	private Statement get_artists_with_search2_stmt;
 	
 	public Item[] get_artists_with_search(ref string searchtext) {
-		
 		Item[] val = {};
-		Statement stmt;
 		if(searchtext != EMPTYSTRING) {
 			string st = "%%%s%%".printf(searchtext);
-			this.db.prepare_v2(STMT_GET_ARTISTS_WITH_SEARCH, -1, out stmt);
-			if((stmt.bind_text(1, st) != Sqlite.OK) ||
-			   (stmt.bind_text(2, st) != Sqlite.OK) ||
-			   (stmt.bind_text(3, st) != Sqlite.OK)) {
+			get_artists_with_search_stmt.reset();
+			if((get_artists_with_search_stmt.bind_text(1, st) != Sqlite.OK) ||
+			   (get_artists_with_search_stmt.bind_text(2, st) != Sqlite.OK) ||
+			   (get_artists_with_search_stmt.bind_text(3, st) != Sqlite.OK)) {
 				this.db_error();
 				return (owned)val;
 			}
+			while(get_artists_with_search_stmt.step() == Sqlite.ROW) {
+				Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search_stmt.column_int(0));
+				i.text = get_artists_with_search_stmt.column_text(1);
+				val += i;
+			}
 		}
 		else {
-			this.db.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
+			get_artists_with_search2_stmt.reset();
+			while(get_artists_with_search2_stmt.step() == Sqlite.ROW) {
+				Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search2_stmt.column_int(0));
+				i.text = get_artists_with_search2_stmt.column_text(1);
+				val += i;
+			}
 		}
-		
-		while(stmt.step() == Sqlite.ROW) {
-			Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, stmt.column_int(1));
-			i.text = stmt.column_text(0);
-			val += i;
-		}
-		
 		return (owned)val;
 	}
 
@@ -559,7 +567,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH =
-		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND u.id = t.uri AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?)";
+		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?)";
 	
 	private static const string STMT_GET_ARTISTITEM_BY_ARTISTID =
 		"SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ?";
@@ -622,7 +630,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_ALBUMS_WITH_SEARCH =
-		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t, uris u WHERE ar.id = t.artist AND al.id = t.album AND u.id = t.uri AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY LOWER(al.name) COLLATE CUSTOM01 ASC";
+		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t WHERE ar.id = t.artist AND al.id = t.album AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY LOWER(al.name) COLLATE CUSTOM01 ASC";
 
 	private static const string STMT_GET_ALBUMS =
 		"SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY LOWER(al.name) COLLATE CUSTOM01 ASC";
