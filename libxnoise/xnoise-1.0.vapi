@@ -705,6 +705,7 @@ namespace Xnoise {
 		public void save_activated_plugins ();
 		public void save_tracklist ();
 		public static Xnoise.Main instance { get; }
+		public int thread_id { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {
@@ -800,7 +801,6 @@ namespace Xnoise {
 		public void insert_stream_sorted (Xnoise.TrackData[] tda);
 		public void insert_video_sorted (Xnoise.TrackData[] tda);
 		public void load_children (ref Gtk.TreeIter iter);
-		public bool populate_model ();
 		public void remove_all ();
 		public void unload_children (ref Gtk.TreeIter iter);
 		public bool populating_model { get; private set; }
@@ -1022,6 +1022,7 @@ namespace Xnoise {
 		public delegate bool WorkFunc (Xnoise.Worker.Job jb);
 		public Worker (GLib.MainContext mc);
 		public void push_job (Xnoise.Worker.Job j);
+		public int thread_id { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	[DBus (name = "org.gnome.SettingsDaemon.MediaKeys")]

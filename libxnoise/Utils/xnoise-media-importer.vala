@@ -44,7 +44,12 @@ public class Xnoise.MediaImporter : GLib.Object {
 		db_worker.push_job(job);
 	}
 	
+	private Timer t;
+	
 	private bool reimport_media_groups_job(Worker.Job job) {
+		//this function uses the database so use it in the database thread
+		return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
+		
 		main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
 		
 		//add folders
@@ -84,12 +89,19 @@ public class Xnoise.MediaImporter : GLib.Object {
 	}
 
 	internal void update_item_tag(ref Item? item, ref TrackData td) {
+		
+		//this function uses the database so use it in the database thread
+		return_if_fail((int)Linux.gettid() == db_worker.thread_id);
+		
 		if(global.media_import_in_progress == true)
 			return;
 		db_writer.update_title(ref item, ref td);
 	}
 	
 	public string? get_uri_for_item_id(int32 id) {
+		//this function uses the database so use it in the database thread
+		return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, null);
+		
 		return db_writer.get_uri_for_item_id(id);
 	}
 
@@ -97,6 +109,10 @@ public class Xnoise.MediaImporter : GLib.Object {
 	private uint current_import_track_count = 0;
 	
 	internal void import_media_groups(string[] list_of_streams, string[] list_of_files, string[] list_of_folders, uint msg_id, bool full_rescan = true, bool interrupted_populate_model = false) {
+		return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
+		print("create timer\n");
+		t = new Timer();
+		t.start();
 		// global.media_import_in_progress has to be reset in the last job !
 		io_import_job_running = true;
 		
@@ -127,6 +143,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 	private bool io_import_job_running = false;
 
 	internal bool write_final_tracks_to_db_job(Worker.Job job) {
+		//this function uses the database so use it in the database thread
+		return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
 		try {
 			db_writer.write_final_tracks_to_db(job);
 		}
@@ -163,8 +181,21 @@ public class Xnoise.MediaImporter : GLib.Object {
 	
 	// running in db thread
 	private bool finish_import_job(Worker.Job job) {
+		//this function uses the database so use it in the database thread
+		return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
+		
 		Idle.add( () => {
-			print("finish import\n");
+			if(t != null) {
+				t.stop();
+				ulong usec;
+				double sec = t.elapsed(out usec);
+				int b = (int)(Math.floor(sec));
+				uint xcnt = 0;
+				lock(current_import_track_count) {
+					xcnt = current_import_track_count;
+				}
+				print("finish import after %d s for %u tracks\n", b, xcnt);
+			}
 			global.media_import_in_progress = false;
 			if(current_import_msg_id != 0) {
 				userinfo.popdown(current_import_msg_id);
@@ -180,6 +211,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 
 	// running in db thread
 	private bool reset_local_data_library_job(Worker.Job job) {
+		//this function uses the database so use it in the database thread
+		return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
 		db_writer.begin_transaction();
 		if(!db_writer.delete_local_media_data())
 			return false;
@@ -193,17 +226,20 @@ public class Xnoise.MediaImporter : GLib.Object {
 	// add folders to the media path and store them in the db
 	// only for Worker.Job usage
 	private bool store_folders_job(Worker.Job job){
+		//this function uses the database so use it in the database thread
+		return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
+		
 		//print("store_folders_job \n");
 		var mfolders_ht = new HashTable<string,int>(str_hash, str_equal);
 		if(((bool)job.get_arg("full_rescan"))) {
 			db_writer.del_all_folders();
-		
+			
 			foreach(unowned string folder in (string[])job.get_arg("mfolders"))
 				mfolders_ht.insert(folder, 1); // this removes double entries
-		
+			
 			foreach(unowned string folder in mfolders_ht.get_keys())
 				db_writer.add_single_folder_to_collection(folder);
-		
+			
 			if(mfolders_ht.get_keys().length() == 0) {
 				db_writer.commit_transaction();
 				end_import(job);
@@ -279,6 +315,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 	
 	// running in io thread
 	private bool read_media_folder_job(Worker.Job job) {
+		//this function shall run in the io thread
+		return_if_fail((int)Linux.gettid() == io_worker.thread_id);
 		//count_media_files((File)job.get_arg("dir"), job);
 		read_recoursive((File)job.get_arg("dir"), job);
 		return false;
@@ -286,6 +324,9 @@ public class Xnoise.MediaImporter : GLib.Object {
 	
 	// running in io thread
 	private void read_recoursive(File dir, Worker.Job job) {
+		//this function shall run in the io thread
+		return_if_fail((int)Linux.gettid() == io_worker.thread_id);
+		
 		job.counter[0]++;
 		FileEnumerator enumerator;
 		string attr = FileAttribute.STANDARD_NAME + "," +
@@ -339,22 +380,47 @@ public class Xnoise.MediaImporter : GLib.Object {
 						}
 						if(tda.length > FILE_COUNT) {
 							var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-							db_job.track_dat = tda;
+							db_job.track_dat = (owned)tda;
 							db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
 							tda = {};
 							db_worker.push_job(db_job);
 						}
 					}
 					else {
-						//TODO use Item converter
 						print("found playlist file\n");
 						Item item = ItemHandlerManager.create_item(file.get_uri());
-						string? searcht = null;
-						TrackData[]? playlist_content = item_converter.to_trackdata(item, ref searcht);
+						TrackData[]? playlist_content = null;
+						var pr = new Playlist.Reader();
+						Playlist.Result rslt;
+						try {
+							rslt = pr.read(item.uri , null);
+						}
+						catch(Playlist.ReaderError e) {
+							print("%s\n", e.message);
+							continue;
+						}
+						if(rslt != Playlist.Result.SUCCESS)
+							continue;
+						Playlist.EntryCollection ec = pr.data_collection;
+						if(ec != null) {
+							playlist_content = {};
+							foreach(Playlist.Entry e in ec) {
+								var tmp = new TrackData();
+								tmp.title  = (e.get_title()  != null ? e.get_title()  : UNKNOWN_TITLE);
+								tmp.album  = (e.get_album()  != null ? e.get_album()  : UNKNOWN_ALBUM);
+								tmp.artist = (e.get_author() != null ? e.get_author() : UNKNOWN_ARTIST);
+								tmp.genre  = (e.get_genre()  != null ? e.get_genre()  : UNKNOWN_GENRE);
+								tmp.item   = ItemHandlerManager.create_item(e.get_uri());
+								playlist_content += (owned)tmp;
+							}
+						}
+						else {
+							continue;
+						}
 						if(playlist_content != null) {
-							foreach(unowned TrackData tdat in playlist_content) {
+							foreach(TrackData tdat in playlist_content) {
 								//print("fnd playlist_content : %s - %s\n", tdat.item.uri, tdat.title);
-								tda += tdat;
+								tda += (owned)tdat;
 								job.big_counter[1]++;
 								lock(current_import_track_count) {
 									current_import_track_count++;
@@ -376,7 +442,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 							}
 							if(tda.length > FILE_COUNT) {
 								var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-								db_job.track_dat = tda;
+								db_job.track_dat = (owned)tda;
 								db_job.set_arg("msg_id", (uint)job.get_arg("msg_id"));
 								tda = {};
 								db_worker.push_job(db_job);
@@ -393,7 +459,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 		if(job.counter[0] == 0) {
 			if(tda.length > 0) {
 				var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
-				db_job.track_dat = tda;
+				db_job.track_dat = (owned)tda;
 				tda = {};
 				db_worker.push_job(db_job);
 			}
@@ -403,6 +469,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 	}
 	
 	private bool insert_trackdata_job(Worker.Job job) {
+		//this function uses the database so use it in the database thread
+		return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
 		db_writer.begin_transaction();
 		foreach(TrackData td in job.track_dat) {
 			db_writer.insert_title(ref td);
@@ -413,6 +481,8 @@ public class Xnoise.MediaImporter : GLib.Object {
 
 	// add streams to the media path and store them in the db
 	private bool store_streams_job(Worker.Job job) {
+		//this function uses the database so use it in the database thread
+		return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
 		var streams_ht = new HashTable<string,int>(str_hash, str_equal);
 		db_writer.begin_transaction();
 		

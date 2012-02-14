@@ -395,9 +395,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			else {
 				tda += tmp[0];
 			}
-//			foreach(TrackData td in tmp) {
-//				tda += td;
-//			}
 		}
 		var xjob = new Worker.Job(Worker.ExecutionType.ONCE, this.add_some_lastused_job);
 		xjob.track_dat = tda;

@@ -140,8 +140,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	// This function is intended for the usage
 	// with GLib.Idle
 	private bool populate_model() {
-		bool res = mediabrowsermodel.populate_model();
-		return res;
+		mediabrowsermodel.filter();
+		return false;
 	}
 
 	// IParams functions
@@ -197,11 +197,11 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 	}
 	
 	public void on_searchtext_changed() {
-		string txt = main_window.searchEntryMB.text.down();
+		string txt = main_window.searchEntryMB.text.strip().down();
 		if(txt != null) {
 			if(txt == mediabrowsermodel.searchtext)
 				return;
-			mediabrowsermodel.searchtext = txt.strip();
+			mediabrowsermodel.searchtext = txt;
 		}
 		else {
 			mediabrowsermodel.searchtext = EMPTYSTRING;
@@ -422,7 +422,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		
 	
 	public void on_row_expanded(TreeIter iter, TreePath path) {
-		print("FIXME: xnoise-media-browser.vala - on_row_expanded\n");
+//		print("FIXME: xnoise-media-browser.vala - on_row_expanded\n");
 		mediabrowsermodel.load_children(ref iter);
 	}
 	

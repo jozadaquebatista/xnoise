@@ -33,13 +33,19 @@
 public class Xnoise.Main : GLib.Object {
 	private static Main _instance;
 	private static Xnoise.Dbus dbus;
+	private int _thread_id = 0;
 	public static bool show_plugin_state;
 	public static bool no_plugins;
 	public static bool no_dbus;
 	public static unowned Xnoise.Application app;
 	
+	public int thread_id { get { return _thread_id; } }
+	
 	public Main() {
 		_instance = this;
+		
+		_thread_id = (int)Linux.gettid();
+		//message( "background worker thread %d", (int)Linux.gettid() );
 		
 		bool is_first_start;
 		Xnoise.initialize(out is_first_start);

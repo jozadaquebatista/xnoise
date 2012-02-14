@@ -35,11 +35,14 @@ using Xnoise.TagAccess;
 
 public class Xnoise.ItemConverter : Object {
 
-	//this function uses the database so use it in the database thread
 	public TrackData[]? to_trackdata(Item? item, ref string? searchtext) {
-		// Take input and convert to tracks
+		
+		//this function uses the database so use it in the database thread
+		return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, null);
+		
 		if(item == null)
 			return null;
+		
 		if(searchtext == null)
 			searchtext = EMPTYSTRING;
 		
@@ -76,7 +79,7 @@ public class Xnoise.ItemConverter : Object {
 						var tr = new TagReader();
 						var tags = tr.read_tag(file.get_path());
 						if(tags == null) {
-							title          = prepare_name_from_filename(file.get_basename());
+							title = prepare_name_from_filename(file.get_basename());
 						}
 						else {
 							artist         = tags.artist;
@@ -124,6 +127,9 @@ public class Xnoise.ItemConverter : Object {
 						return result;
 					}
 				}
+				//else {
+				//	print("itemtype.stream\n");
+				//}
 				tmp.item = item;
 				File ft = File.new_for_uri(item.uri);
 				tmp.title = prepare_name_from_filename(ft.get_basename());

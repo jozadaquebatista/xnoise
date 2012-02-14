@@ -40,6 +40,9 @@ public class Xnoise.Worker : Object {
 	private unowned Thread<int> thread;
 	private MainContext local_context;
 	private unowned MainContext main_context;
+	private int _thread_id = 0;
+	
+	public int thread_id { get { return _thread_id; } }
 	
 	public Worker(MainContext mc) {
 		if (!Thread.supported ())
@@ -120,10 +123,11 @@ public class Xnoise.Worker : Object {
 	
 	//thread function is used to setup a local mainloop/maincontext
 	private int thread_func() {
+		_thread_id = (int)Linux.gettid();
+		//message( "background worker thread %d", (int)Linux.gettid() );
 		local_context = new MainContext();
 		local_context.push_thread_default();
 		var loop = new MainLoop(local_context);
-		//message( "worker thread %d", (int)Linux.gettid() );
 		loop.run();
 		return 0;
 	}

@@ -468,7 +468,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 	
 	private Cancellable populate_model_cancellable = null;
-	public bool populate_model() {
+	private bool populate_model() {
 		if(populating_model)
 			return false;
 		populating_model = true;
@@ -482,22 +482,24 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		
 		var v_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
 		v_job.cancellable = populate_model_cancellable;
-		v_job.finished.connect( (j) => { 
-			populating_model = false;
-		});
 		db_worker.push_job(v_job);
 		
 		return false;
 	}
 	
 	private bool handle_listed_data_job(Worker.Job job) {
-		var stream_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_streams);
-		stream_job.cancellable = populate_model_cancellable;
-		db_worker.push_job(stream_job);
-		
 		var video_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_videos);
 		video_job.cancellable = populate_model_cancellable;
 		db_worker.push_job(video_job);
+		
+		var stream_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_streams);
+		stream_job.cancellable = populate_model_cancellable;
+		stream_job.finished.connect( (j) => {
+			return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
+			main_window.mediaBr.set_model(this);
+			populating_model = false;
+		});
+		db_worker.push_job(stream_job);
 		return false;
 	}
 	
@@ -558,7 +560,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 			         Column.ITEM, loader_item
 			         );
 			video_in_tree = true;
-			main_window.mediaBr.set_model(this);
 			return false;
 		});
 		return false;
@@ -641,9 +642,10 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private bool populate_artists_job(Worker.Job job) {
 		if(job.cancellable.is_cancelled())
 			return false;
+		
 		job.items = db_browser.get_artists_with_search(ref this.searchtext);
 		//print("job.items.length = %d\n", job.items.length);
-		Idle.add( () => { // TODO Maybe in packages of 1000
+		Idle.add( () => {
 			if(job.cancellable.is_cancelled())
 				return false;
 			TreeIter iter_artist, iter_search;
@@ -657,17 +659,50 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.ITEM, artist
 				         );
 				Item? loader_item = Item(ItemType.LOADER);
-				this.prepend(out iter_search, iter_artist);
+				this.append(out iter_search, iter_artist);
 				this.set(iter_search,
 				         Column.ICON, loading_pixb,
 				         Column.VIS_TEXT, LOADING,
 				         Column.ITEM, loader_item
 				         );
 			}
+//			main_window.mediaBr.set_model(this);
 			return false;
 		});
 		return false;
 	}
+//	// used for populating the data model
+//	private bool populate_artists_job(Worker.Job job) {
+//		if(job.cancellable.is_cancelled())
+//			return false;
+//		job.items = db_browser.get_artists_with_search(ref this.searchtext);
+//		//print("job.items.length = %d\n", job.items.length);
+//		Idle.add( () => {
+//			if(job.cancellable.is_cancelled())
+//				return false;
+//			TreeIter iter_artist, iter_search;
+//			foreach(unowned Item? artist in job.items) {
+//				//print("artist.text : %s\n", artist.text);
+//				if(job.cancellable.is_cancelled())
+//					break;
+//				this.prepend(out iter_artist, null);
+//				this.set(iter_artist,
+//				         Column.ICON, artist_pixb,
+//				         Column.VIS_TEXT, artist.text,
+//				         Column.ITEM, artist
+//				         );
+//				Item? loader_item = Item(ItemType.LOADER);
+//				this.prepend(out iter_search, iter_artist);
+//				this.set(iter_search,
+//				         Column.ICON, loading_pixb,
+//				         Column.VIS_TEXT, LOADING,
+//				         Column.ITEM, loader_item
+//				         );
+//			}
+//			return false;
+//		});
+//		return false;
+//	}
 
 	private static const string LOADING = _("Loading ...");
 	
