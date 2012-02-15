@@ -195,18 +195,30 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 		
 		infolabel.label = EMPTYSTRING;
 		TrackData td_new = copy_trackdata(td_old);
-		if(entry_artist.text != null && entry_artist.text._strip() != EMPTYSTRING)
-			td_new.artist = entry_artist.text;
-		if(entry_album.text != null && entry_album.text._strip() != EMPTYSTRING)
-			td_new.album  = entry_album.text;
-		if(entry_title.text != null && entry_title.text._strip() != EMPTYSTRING)
-			td_new.title  = entry_title.text;
-		if(entry_genre.text != null && entry_genre.text._strip() != EMPTYSTRING)
-			td_new.genre  = entry_genre.text;
+		if(entry_artist.text != null)
+			td_new.artist = entry_artist.text.strip();
+		if(entry_album.text != null)
+			td_new.album  = entry_album.text.strip();
+		if(entry_title.text != null)
+			td_new.title  = entry_title.text.strip();
+		if(entry_genre.text != null)
+			td_new.genre  = entry_genre.text.strip();
 		td_new.year         = spinbutton_year.get_value_as_int();
 		td_new.tracknumber  = (uint)spinbutton_tracknumber.get_value_as_int(); //TODO: add check
-		// TODO: UTF-8 validation
+		
 		do_track_rename(td_old, td_new);
+		HashTable<TrackListModel.Column,string?> ntags = new HashTable<TrackListModel.Column,string?>(direct_hash, direct_equal);
+		ntags.insert(TrackListModel.Column.ITEM, this.item.uri); // cheating - the uri is not an item
+		ntags.insert(TrackListModel.Column.ARTIST, td_new.artist);
+		ntags.insert(TrackListModel.Column.ALBUM, td_new.album);
+		ntags.insert(TrackListModel.Column.TITLE, td_new.title);
+		ntags.insert(TrackListModel.Column.GENRE, td_new.genre);
+		if(td_new.year > 0)
+			ntags.insert(TrackListModel.Column.YEAR, "%u".printf(td_new.year));
+		if(td_new.tracknumber > 0)
+			ntags.insert(TrackListModel.Column.TRACKNUMBER, "%u".printf(td_new.tracknumber));
+		tlm.update_tracklist_data(ntags);
+		
 		Idle.add( () => {
 			this.dialog.destroy();
 			return false;

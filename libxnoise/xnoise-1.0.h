@@ -801,17 +801,6 @@ typedef struct _XnoiseTrackListModel XnoiseTrackListModel;
 typedef struct _XnoiseTrackListModelClass XnoiseTrackListModelClass;
 typedef struct _XnoiseTrackListModelPrivate XnoiseTrackListModelPrivate;
 
-#define XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR (xnoise_track_list_model_iterator_get_type ())
-#define XNOISE_TRACK_LIST_MODEL_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR, XnoiseTrackListModelIterator))
-#define XNOISE_TRACK_LIST_MODEL_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR, XnoiseTrackListModelIteratorClass))
-#define XNOISE_TRACK_LIST_MODEL_IS_ITERATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR))
-#define XNOISE_TRACK_LIST_MODEL_IS_ITERATOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR))
-#define XNOISE_TRACK_LIST_MODEL_ITERATOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TRACK_LIST_MODEL_TYPE_ITERATOR, XnoiseTrackListModelIteratorClass))
-
-typedef struct _XnoiseTrackListModelIterator XnoiseTrackListModelIterator;
-typedef struct _XnoiseTrackListModelIteratorClass XnoiseTrackListModelIteratorClass;
-typedef struct _XnoiseTrackListModelIteratorPrivate XnoiseTrackListModelIteratorPrivate;
-
 #define XNOISE_TYPE_TRAY_ICON (xnoise_tray_icon_get_type ())
 #define XNOISE_TRAY_ICON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIcon))
 #define XNOISE_TRAY_ICON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRAY_ICON, XnoiseTrayIconClass))
@@ -1730,17 +1719,6 @@ struct _XnoiseTrackListModel {
 
 struct _XnoiseTrackListModelClass {
 	GtkListStoreClass parent_class;
-};
-
-struct _XnoiseTrackListModelIterator {
-	GTypeInstance parent_instance;
-	volatile int ref_count;
-	XnoiseTrackListModelIteratorPrivate * priv;
-};
-
-struct _XnoiseTrackListModelIteratorClass {
-	GTypeClass parent_class;
-	void (*finalize) (XnoiseTrackListModelIterator *self);
 };
 
 struct _XnoiseTrayIcon {
@@ -2665,14 +2643,7 @@ XnoiseTrackListColumn* xnoise_track_list_column_new (const gchar* _name);
 XnoiseTrackListColumn* xnoise_track_list_column_construct (GType object_type, const gchar* _name);
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
 XnoiseTrackListModel* xnoise_track_list_model_construct (GType object_type);
-gpointer xnoise_track_list_model_iterator_ref (gpointer instance);
-void xnoise_track_list_model_iterator_unref (gpointer instance);
-GParamSpec* xnoise_track_list_model_param_spec_iterator (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void xnoise_track_list_model_value_set_iterator (GValue* value, gpointer v_object);
-void xnoise_track_list_model_value_take_iterator (GValue* value, gpointer v_object);
-gpointer xnoise_track_list_model_value_get_iterator (const GValue* value);
-GType xnoise_track_list_model_iterator_get_type (void) G_GNUC_CONST;
-XnoiseTrackListModelIterator* xnoise_track_list_model_iterator (XnoiseTrackListModel* self);
+void xnoise_track_list_model_update_tracklist_data (XnoiseTrackListModel* self, GHashTable* ntags);
 void xnoise_track_list_model_on_before_position_reference_changed (XnoiseTrackListModel* self);
 gboolean xnoise_track_list_model_get_first_row (XnoiseTrackListModel* self, GtkTreePath** treepath);
 gboolean xnoise_track_list_model_get_random_row (XnoiseTrackListModel* self, GtkTreePath** treepath);
@@ -2687,10 +2658,6 @@ XnoiseItem* xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, 
 gchar* xnoise_track_list_model_get_uri_for_current_position (XnoiseTrackListModel* self);
 gboolean xnoise_track_list_model_reset_state (XnoiseTrackListModel* self);
 void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, gchar** uris, int uris_length1);
-XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_new (XnoiseTrackListModel* tlm);
-XnoiseTrackListModelIterator* xnoise_track_list_model_iterator_construct (GType object_type, XnoiseTrackListModel* tlm);
-gboolean xnoise_track_list_model_iterator_next (XnoiseTrackListModelIterator* self);
-void xnoise_track_list_model_iterator_get (XnoiseTrackListModelIterator* self, GtkTreeIter* result);
 GType xnoise_tray_icon_get_type (void) G_GNUC_CONST;
 XnoiseTrayIcon* xnoise_tray_icon_new (void);
 XnoiseTrayIcon* xnoise_tray_icon_construct (GType object_type);

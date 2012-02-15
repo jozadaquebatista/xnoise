@@ -915,11 +915,6 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackListModel : Gtk.ListStore, Gtk.TreeModel {
-		public class Iterator {
-			public Iterator (Xnoise.TrackListModel tlm);
-			public Gtk.TreeIter @get ();
-			public bool next ();
-		}
 		public enum Column {
 			ICON,
 			TRACKNUMBER,
@@ -941,13 +936,13 @@ namespace Xnoise {
 		public bool get_random_row (ref Gtk.TreePath treepath);
 		public string get_uri_for_current_position ();
 		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, ref Xnoise.TrackData td, bool bold = false);
-		public Xnoise.TrackListModel.Iterator iterator ();
 		public bool not_empty ();
 		public void on_before_position_reference_changed ();
 		public void on_position_reference_changed ();
 		public bool path_is_last_row (ref Gtk.TreePath path, out bool trackList_is_empty);
 		public bool reset_state ();
 		public void set_reference_to_last ();
+		public void update_tracklist_data (GLib.HashTable<Xnoise.TrackListModel.Column,string?> ntags);
 		public signal void sign_active_path_changed (Xnoise.PlayerState ts);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

@@ -94,7 +94,72 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				default: break;
 			}
 		});
+		global.tag_changed.connect( () => {
+			if(upd_tl_data_src != 0)
+				Source.remove(upd_tl_data_src);
+			upd_tl_data_src = Timeout.add_seconds(2, () => {
+				HashTable<TrackListModel.Column,string?> ntags = new HashTable<TrackListModel.Column,string?>(direct_hash, direct_equal);
+				if(global.current_uri != null)
+					ntags.insert(Column.ITEM,   global.current_uri); // cheating - the uri is not an item
+				else
+					return false;
+				if(global.current_artist != null)
+					ntags.insert(Column.ARTIST, global.current_artist);
+				if(global.current_album != null)
+					ntags.insert(Column.ALBUM,  global.current_album);
+				if(global.current_title != null)
+					ntags.insert(Column.TITLE, global.current_title);
+				if(global.current_genre != null)
+					ntags.insert(Column.GENRE,  global.current_genre);
+				// TODO: Add year, tracknumber
+				upd_tl_data_src = 0;
+				update_tracklist_data(ntags);
+				return false;
+			});
+		});
 		icon_theme.changed.connect(update_icons); //TODO update icon
+	}
+	
+	private uint upd_tl_data_src = 0;
+	
+	// update rows with data from tag edit or delayed receival from gstreamer
+	// uri is in the Column.ITEM field of the hashtable
+	public void update_tracklist_data(HashTable<TrackListModel.Column,string?> ntags) {
+		this.@foreach( (m,p,i) => {
+			if(ntags == null)
+				return true;
+			string? u = null;
+			if((u = ntags.lookup(Column.ITEM)) == null)
+				return true;
+			Item? item;
+			this.get(i, Column.ITEM, out item);
+			if(item.uri == u) {
+				string? title = ntags.lookup(Column.TITLE);
+				if(title != null)
+					this.set(i, Column.TITLE, title);
+				
+				string? album = ntags.lookup(Column.ALBUM);
+				if(album != null)
+					this.set(i, Column.ALBUM, album);
+				
+				string? artist = ntags.lookup(Column.ARTIST);
+				if(artist != null)
+					this.set(i, Column.ARTIST, artist);
+				
+				string? genre = ntags.lookup(Column.GENRE);
+				if(genre != null)
+					this.set(i, Column.GENRE, genre);
+				
+				string? tracknumber = ntags.lookup(Column.TRACKNUMBER);
+				if(tracknumber != null && tracknumber.strip() != "0")
+					this.set(i, Column.TRACKNUMBER, tracknumber);
+				
+				string? year = ntags.lookup(Column.YEAR);
+				if(year != null && year.strip() != "0")
+					this.set(i, Column.YEAR, year);
+			}
+			return false;
+		});
 	}
 	
 	private void update_icons() {
@@ -102,28 +167,28 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		//TODO
 	}
 	
-	public Iterator iterator() {
-		return new Iterator(this);
-	}
+//	public Iterator iterator() {
+//		return new Iterator(this);
+//	}
 
-	public class Iterator {
-		private int index;
-		private unowned TrackListModel tlm;
+//	public class Iterator {
+//		private int index;
+//		private unowned TrackListModel tlm;
 
-		public Iterator(TrackListModel tlm) {
-			this.tlm = tlm;
-		}
+//		public Iterator(TrackListModel tlm) {
+//			this.tlm = tlm;
+//		}
 
-		public bool next() {
-			return true;
-		}
+//		public bool next() {
+//			return true;
+//		}
 
-		public TreeIter get() {
-			TreeIter iter;
-			tlm.iter_nth_child(out iter, null, index);
-			return iter;
-		}
-	}
+//		public TreeIter get() {
+//			TreeIter iter;
+//			tlm.iter_nth_child(out iter, null, index);
+//			return iter;
+//		}
+//	}
 
 	public void on_before_position_reference_changed() {
 		unbolden_row();

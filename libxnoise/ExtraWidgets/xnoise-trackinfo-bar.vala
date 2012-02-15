@@ -1,6 +1,6 @@
 /* xnoise-trackinfo-bar.vala
  *
- * Copyright (C) 2011 - 2012  Jörn Magens
+ * Copyright (C) 2011-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -59,6 +59,16 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		this.player.sign_position_changed.connect(set_value);
 		global.caught_eos_from_player.connect(on_eos);
 		this.player.sign_stopped.connect(on_stopped);
+		this.player.notify["is-stream"].connect( () => {
+			if(this.player.is_stream) {
+				progress.hide();
+				time_label.hide();
+			}
+			else {
+				progress.show_all();
+				time_label.show_all();
+			}
+		});
 	}
 
 	private bool press_was_valid = false;
@@ -146,6 +156,8 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 
 	private uint scroll_source = 0;
 	private bool on_scroll(Gdk.EventScroll event) {
+		if(!progress.get_visible())
+			return true;
 		if(scroll_source != 0)
 			Source.remove(scroll_source);
 		scroll_source = Idle.add( () => {
@@ -175,6 +187,8 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 
 	public void set_value(uint pos, uint len) {
 		// pos and len are ms
+		if(!progress.get_visible())
+			return;
 		if(len > 0) {
 			int dur_min, dur_sec, pos_min, pos_sec;
 			double fraction = (double)pos/(double)len;
