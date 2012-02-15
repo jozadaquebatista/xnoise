@@ -107,15 +107,16 @@ namespace Xnoise {
 		public static Item? create_item(string? uri) {
 			if(uri == null)
 				return Item(ItemType.UNKNOWN);
-			
 			Item? item = Item(ItemType.UNKNOWN, uri);
-			
 			File f = File.new_for_uri(uri);
 			string scheme = f.get_uri_scheme();
 			if(scheme in get_remote_schemes()) {
-				// no general chack for media extension because often streams are lacking these
+				// no general check for media extension because often streams are lacking these
 				if(Playlist.is_playlist_extension(get_suffix_from_filename(f.get_uri()))) {
 					item.type = Xnoise.ItemType.PLAYLIST;
+				}
+				else if(scheme in get_media_stream_schemes()) {
+					item.type = Xnoise.ItemType.STREAM;
 				}
 				else {
 					string u = f.get_uri();

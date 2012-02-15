@@ -110,8 +110,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 	
 	internal void import_media_groups(string[] list_of_streams, string[] list_of_files, string[] list_of_folders, uint msg_id, bool full_rescan = true, bool interrupted_populate_model = false) {
 		return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
-		print("create timer\n");
-		t = new Timer();
+		t = new Timer(); // timer for measuring import time
 		t.start();
 		// global.media_import_in_progress has to be reset in the last job !
 		io_import_job_running = true;
@@ -491,24 +490,31 @@ public class Xnoise.MediaImporter : GLib.Object {
 		foreach(unowned string strm in (string[])job.get_arg("list_of_streams")) {
 			streams_ht.insert(strm, 1); // remove duplicates
 		}
-		
 		foreach(unowned string strm in streams_ht.get_keys()) {
-			db_writer.add_single_stream_to_collection(strm, strm); //TODO: Use name different from uri
-			lock(current_import_track_count) {
-				current_import_track_count++;
+			string streamuri = "%s".printf(strm.strip());
+			Item? item = ItemHandlerManager.create_item(streamuri);
+			if(item.type == ItemType.UNKNOWN) {
+				continue;
+			}
+			string st = EMPTYSTRING;
+			
+			TrackData[]? track_dat = item_converter.to_trackdata(item, ref st);
+			
+			if(track_dat != null) {
+				foreach(TrackData td in track_dat) {
+					if(td.item.uri == null) {
+						print("red alert!!!\n");
+						continue;
+					}
+					string name = (td.title != null && td.title != UNKNOWN_TITLE ? td.title : (td.item.text != null ? td.item.text : EMPTYSTRING));
+					db_writer.add_single_stream_to_collection(td.item.uri, name); 
+					lock(current_import_track_count) {
+						current_import_track_count++;
+					}
+				}
 			}
 		}
-		
 		db_writer.commit_transaction();
-		
-		TrackData val;
-		TrackData[] tdax = {};
-		foreach(unowned string strm in streams_ht.get_keys()) {
-			db_writer.get_trackdata_for_stream(strm, out val);
-			print("stream: %s\n", strm);
-			tdax += val;
-		}
-		job.track_dat = tdax;
 		
 		streams_ht.remove_all();
 		return false;

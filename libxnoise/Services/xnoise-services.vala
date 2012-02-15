@@ -55,6 +55,10 @@ namespace Xnoise.Services {
 		return _media_extensions;
 	}
 	
+	public static MediaStreamSchemes get_media_stream_schemes() { 
+		return _media_stream_schemes;
+	}
+	
 	//http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 	private static string _settings_folder = null; 
 	public static string settings_folder() {

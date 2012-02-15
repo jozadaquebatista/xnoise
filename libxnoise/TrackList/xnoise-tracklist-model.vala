@@ -342,15 +342,16 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	}
 
 	public TreeIter insert_title(Gdk.Pixbuf? pixbuf,
-	                             ref TrackData td,
+	                             ref TrackData? td,
 	                             bool bold = false) {
-		TreeIter iter;
+		TreeIter iter = TreeIter();
 		int int_bold = Pango.Weight.NORMAL;
 		string? tracknumberString = null;
 		string? lengthString = null;
 		string? yearString = null;
+		if(td == null)
+			return iter;
 		this.append(out iter);
-		
 		if(!(td.tracknumber==0))
 			tracknumberString = "%u".printf(td.tracknumber);
 		

@@ -349,6 +349,7 @@ public class Xnoise.Database.DbBrowser {
 		while(stmt.step() == Sqlite.ROW) {
 			TrackData td = new TrackData();
 			td.title       = stmt.column_text(2);
+			td.name        = stmt.column_text(2);
 			td.name        = stmt.column_text(1);
 			td.item        = Item(ItemType.STREAM, stmt.column_text(1), stmt.column_int(0));
 			td.item.text   = stmt.column_text(2);

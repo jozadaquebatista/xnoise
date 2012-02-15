@@ -736,8 +736,9 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		
 	// Single stream for collection
 	public void add_single_stream_to_collection(string uri, string name = "") {
-		if(db == null) return;
-		print("add stream : %s \n", uri);
+		if(db == null)
+			return;
+		//print("add stream : %s \n", uri);
 		if((uri == null) || (uri == EMPTYSTRING)) return;
 		if(name == EMPTYSTRING) name = uri;
 		add_radio_statement.reset();

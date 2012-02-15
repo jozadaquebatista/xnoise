@@ -103,6 +103,7 @@ libxnoise_la_SOURCES = \
     Utils/xnoise-local-schemes.vala \
     Utils/xnoise-media-extensions.vala \
     Utils/xnoise-media-importer.vala \
+    Utils/xnoise-media-stream-schemes.vala \
     Utils/xnoise-misc.vala \
     Utils/xnoise-remote-schemes.vala \
     Utils/xnoise-track-data.vala \

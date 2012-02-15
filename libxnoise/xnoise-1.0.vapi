@@ -332,6 +332,8 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static Xnoise.MediaExtensions get_media_extensions ();
 		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public static Xnoise.MediaStreamSchemes get_media_stream_schemes ();
+		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static Xnoise.RemoteSchemes get_remote_schemes ();
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static string get_suffix_from_filename (string? val);
@@ -817,6 +819,12 @@ namespace Xnoise {
 		public string? get_uri_for_item_id (int32 id);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class MediaStreamSchemes {
+		public MediaStreamSchemes ();
+		public bool contains (string? location);
+		public string[] list { get; }
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Params : GLib.Object {
 		public Params ();
 		public static bool get_bool_value (string key);
@@ -935,7 +943,7 @@ namespace Xnoise {
 		public bool get_first_row (ref Gtk.TreePath treepath);
 		public bool get_random_row (ref Gtk.TreePath treepath);
 		public string get_uri_for_current_position ();
-		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, ref Xnoise.TrackData td, bool bold = false);
+		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, ref Xnoise.TrackData? td, bool bold = false);
 		public bool not_empty ();
 		public void on_before_position_reference_changed ();
 		public void on_position_reference_changed ();

@@ -504,7 +504,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	}
 	
 	private bool handle_streams(Worker.Job job) {
-			
+		
 		job.track_dat = db_browser.get_stream_data(ref searchtext);
 		
 		if(job.track_dat.length == 0)
@@ -526,7 +526,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 					this.prepend(out iter_singleradios, iter_radios);
 					this.set(iter_singleradios,
 					         Column.ICON,        radios_pixb,
-					         Column.VIS_TEXT,    td.name,
+					         Column.VIS_TEXT,    td.title,
 					         Column.ITEM, td.item
 					         );
 					stream_in_tree = true;

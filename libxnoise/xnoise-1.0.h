@@ -666,6 +666,16 @@ typedef struct _XnoiseLocalSchemesClass XnoiseLocalSchemesClass;
 typedef struct _XnoiseMediaExtensions XnoiseMediaExtensions;
 typedef struct _XnoiseMediaExtensionsClass XnoiseMediaExtensionsClass;
 
+#define XNOISE_TYPE_MEDIA_STREAM_SCHEMES (xnoise_media_stream_schemes_get_type ())
+#define XNOISE_MEDIA_STREAM_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_STREAM_SCHEMES, XnoiseMediaStreamSchemes))
+#define XNOISE_MEDIA_STREAM_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_STREAM_SCHEMES, XnoiseMediaStreamSchemesClass))
+#define XNOISE_IS_MEDIA_STREAM_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_STREAM_SCHEMES))
+#define XNOISE_IS_MEDIA_STREAM_SCHEMES_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_STREAM_SCHEMES))
+#define XNOISE_MEDIA_STREAM_SCHEMES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_STREAM_SCHEMES, XnoiseMediaStreamSchemesClass))
+
+typedef struct _XnoiseMediaStreamSchemes XnoiseMediaStreamSchemes;
+typedef struct _XnoiseMediaStreamSchemesClass XnoiseMediaStreamSchemesClass;
+
 #define XNOISE_SIMPLE_MARKUP_TYPE_NODE (xnoise_simple_markup_node_get_type ())
 #define XNOISE_SIMPLE_MARKUP_NODE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_SIMPLE_MARKUP_TYPE_NODE, XnoiseSimpleMarkupNode))
 #define XNOISE_SIMPLE_MARKUP_NODE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_SIMPLE_MARKUP_TYPE_NODE, XnoiseSimpleMarkupNodeClass))
@@ -840,6 +850,7 @@ typedef struct _XnoiseMediaExtensionsPrivate XnoiseMediaExtensionsPrivate;
 typedef struct _XnoiseMediaImporter XnoiseMediaImporter;
 typedef struct _XnoiseMediaImporterClass XnoiseMediaImporterClass;
 typedef struct _XnoiseMediaImporterPrivate XnoiseMediaImporterPrivate;
+typedef struct _XnoiseMediaStreamSchemesPrivate XnoiseMediaStreamSchemesPrivate;
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
 
@@ -1795,6 +1806,17 @@ struct _XnoiseMediaImporterClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseMediaStreamSchemes {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseMediaStreamSchemesPrivate * priv;
+};
+
+struct _XnoiseMediaStreamSchemesClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseMediaStreamSchemes *self);
+};
+
 typedef enum  {
 	GST_STREAM_TYPE_UNKNOWN = 0,
 	GST_STREAM_TYPE_AUDIO = 1,
@@ -2483,6 +2505,14 @@ void xnoise_value_take_media_extensions (GValue* value, gpointer v_object);
 gpointer xnoise_value_get_media_extensions (const GValue* value);
 GType xnoise_media_extensions_get_type (void) G_GNUC_CONST;
 XnoiseMediaExtensions* xnoise_services_get_media_extensions (void);
+gpointer xnoise_media_stream_schemes_ref (gpointer instance);
+void xnoise_media_stream_schemes_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_media_stream_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_media_stream_schemes (GValue* value, gpointer v_object);
+void xnoise_value_take_media_stream_schemes (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_media_stream_schemes (const GValue* value);
+GType xnoise_media_stream_schemes_get_type (void) G_GNUC_CONST;
+XnoiseMediaStreamSchemes* xnoise_services_get_media_stream_schemes (void);
 gchar* xnoise_services_settings_folder (void);
 gchar* xnoise_services_data_folder (void);
 gboolean xnoise_services_verify_xnoise_directories (void);
@@ -2692,6 +2722,10 @@ GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
 gchar* xnoise_media_importer_get_uri_for_item_id (XnoiseMediaImporter* self, gint32 id);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
+gboolean xnoise_media_stream_schemes_contains (XnoiseMediaStreamSchemes* self, const gchar* location);
+XnoiseMediaStreamSchemes* xnoise_media_stream_schemes_new (void);
+XnoiseMediaStreamSchemes* xnoise_media_stream_schemes_construct (GType object_type);
+gchar** xnoise_media_stream_schemes_get_list (XnoiseMediaStreamSchemes* self, int* result_length1);
 extern XnoiseParams* xnoise_par;
 extern XnoiseGlobalAccess* xnoise_global;
 extern XnoiseUserInfo* xnoise_userinfo;

@@ -138,11 +138,15 @@ public class Xnoise.ItemConverter : Object {
 			case ItemType.PLAYLIST:
 				var pr = new Playlist.Reader();
 				Playlist.Result rslt;
+				if(item.uri == null) {
+					print("no uri for playlist!\n");
+					return null;
+				}
 				try {
 					rslt = pr.read(item.uri , null);
 				}
 				catch(Playlist.ReaderError e) {
-					print("%s\n", e.message);
+					print("Item Converter: %s\n", e.message);
 					return null;
 				}
 				if(rslt != Playlist.Result.SUCCESS)
@@ -156,6 +160,7 @@ public class Xnoise.ItemConverter : Object {
 						tmp.artist = (e.get_author() != null ? e.get_author() : UNKNOWN_ARTIST);
 						tmp.genre  = (e.get_genre()  != null ? e.get_genre()  : UNKNOWN_GENRE);
 						tmp.item   = ItemHandlerManager.create_item(e.get_uri());
+						//print("conv :%s\n", tmp.item.uri);
 						result += tmp;
 					}
 					break;
