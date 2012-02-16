@@ -2,7 +2,7 @@
 # Copyright (C) 2008-2011
 # This file is distributed under the same license as the xnoise package.
 # Alexey Morsov <swi@altlinux.ru>, 2011
-# Victor Ananjevsky <ananasik@gmail.com>, 2011
+# Victor Ananjevsky <ananasik@gmail.com>, 2012
 #
 msgid ""
 msgstr ""
@@ -127,9 +127,8 @@ msgid "Select external subtitle file"
 msgstr "Выбрать внешний файл с субтитрами"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:78
-#, fuzzy
 msgid "No Subtitle"
-msgstr "Субтитр #"
+msgstr "Нет субтитров"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:136
 msgid "Leave Fullscreen"
@@ -307,7 +306,7 @@ msgid ""
 "Using %s ..."
 msgstr ""
 "\n"
-"Пытаемся найти текст для \"%s\" от \"%s\"...\n"
+"Попытка найти текст для \"%s\" от \"%s\"...\n"
 "\n"
 "Используется %s ..."
 
@@ -453,9 +452,8 @@ msgid "random play"
 msgstr "случайный порядок"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1025
-#, fuzzy
 msgid "Enter the URL for playing"
-msgstr "Введите URL файла для открытия"
+msgstr "Введите URL для проигрывания"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1041
 msgid "Select media file"
@@ -471,7 +469,7 @@ msgstr "Удалить выбранные"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1302
 msgid "Jump to current position"
-msgstr ""
+msgstr "Перейти к текущей позиции"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1458
 msgid "Collapse all"
@@ -580,7 +578,7 @@ msgstr "остановлен"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:169
 msgid "playing"
-msgstr "проигрывает"
+msgstr "проигрывается"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:173
 msgid "paused"
@@ -644,7 +642,7 @@ msgstr "Пароль:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:461
 msgid "Scrobble played tracks on lastfm"
-msgstr ""
+msgstr "Скробблинг проигрываемых дорожек на lastfm"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:479
 msgid "Apply"
@@ -671,9 +669,8 @@ msgid "Load lyrics from http://www.lyricwiki.com"
 msgstr "Загрузка текстов с http://www.lyricwiki.com"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Load lyrics from azlyrics.com"
-msgstr "Загрузка текстов с chartlyrics.com"
+msgstr "Загрузка текстов с azlyrics.com"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
 msgid "Control xnoise using mediakeys"
