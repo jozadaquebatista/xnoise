@@ -642,8 +642,13 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 	private bool populate_artists_job(Worker.Job job) {
 		if(job.cancellable.is_cancelled())
 			return false;
-		
+		Timer t = new Timer();
+		ulong x;
+		t.start();
 		job.items = db_browser.get_artists_with_search(ref this.searchtext);
+		t.stop();
+		t.elapsed(out x);
+		print("%lu µs\n", x);
 		//print("job.items.length = %d\n", job.items.length);
 		Idle.add( () => {
 			if(job.cancellable.is_cancelled())
@@ -666,43 +671,10 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				         Column.ITEM, loader_item
 				         );
 			}
-//			main_window.mediaBr.set_model(this);
 			return false;
 		});
 		return false;
 	}
-//	// used for populating the data model
-//	private bool populate_artists_job(Worker.Job job) {
-//		if(job.cancellable.is_cancelled())
-//			return false;
-//		job.items = db_browser.get_artists_with_search(ref this.searchtext);
-//		//print("job.items.length = %d\n", job.items.length);
-//		Idle.add( () => {
-//			if(job.cancellable.is_cancelled())
-//				return false;
-//			TreeIter iter_artist, iter_search;
-//			foreach(unowned Item? artist in job.items) {
-//				//print("artist.text : %s\n", artist.text);
-//				if(job.cancellable.is_cancelled())
-//					break;
-//				this.prepend(out iter_artist, null);
-//				this.set(iter_artist,
-//				         Column.ICON, artist_pixb,
-//				         Column.VIS_TEXT, artist.text,
-//				         Column.ITEM, artist
-//				         );
-//				Item? loader_item = Item(ItemType.LOADER);
-//				this.prepend(out iter_search, iter_artist);
-//				this.set(iter_search,
-//				         Column.ICON, loading_pixb,
-//				         Column.VIS_TEXT, LOADING,
-//				         Column.ITEM, loader_item
-//				         );
-//			}
-//			return false;
-//		});
-//		return false;
-//	}
 
 	private static const string LOADING = _("Loading ...");
 	

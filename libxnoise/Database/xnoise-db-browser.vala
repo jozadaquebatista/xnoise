@@ -72,7 +72,12 @@ public class Xnoise.Database.DbBrowser {
 		
 		this.db.prepare_v2(STMT_GET_ARTISTS_WITH_SEARCH, -1, out get_artists_with_search_stmt);
 		this.db.prepare_v2(STMT_GET_ARTISTS, -1, out get_artists_with_search2_stmt);
-
+		
+		string errormsg;
+		if(db.exec("PRAGMA synchronous=OFF", null, out errormsg)!= Sqlite.OK) {
+			stderr.printf("exec_stmnt_string error: %s", errormsg);
+			return;
+		}
 	}
 
 	private static void utf8_lower(Sqlite.Context context, [CCode (array_length_pos = 1.1)] Sqlite.Value[] values) {
@@ -443,7 +448,7 @@ public class Xnoise.Database.DbBrowser {
 	}
 
 	private static const string STMT_GET_ARTISTS_WITH_SEARCH =
-		"SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY utf8_lower(ar.name) DESC";
+		"SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (utf8_lower(t.title) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(ar.name) LIKE ?) ORDER BY utf8_lower(ar.name) DESC";
 
 	private static const string STMT_GET_ARTISTS =
 		"SELECT ar.id, ar.name FROM artists ar ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC"; //LOWER(ar.name)

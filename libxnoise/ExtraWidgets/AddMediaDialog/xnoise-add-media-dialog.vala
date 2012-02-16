@@ -297,8 +297,8 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 	private void on_add_radio_button_clicked() {
 		radiodialog = new Gtk.Dialog();
 		radiodialog.set_modal(true);
-		radiodialog.set_keep_above(true);
-
+		radiodialog.set_transient_for(dialog);
+		
 		radioentry = new Gtk.Entry();
 		radioentry.set_width_chars(50);
 		radioentry.secondary_icon_stock = Gtk.Stock.CLEAR;
@@ -307,13 +307,13 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			if(p0 == Gtk.EntryIconPosition.SECONDARY) s.text = EMPTYSTRING;
 		});
 		((Gtk.Box)radiodialog.get_content_area()).pack_start(radioentry, true, true, 0);
-
+		
 		var radiocancelbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.CANCEL, 0);
 		radiocancelbutton.clicked.connect( () => {
 			radiodialog.close();
 			radiodialog = null;
 		});
-
+		
 		var radiookbutton = (Gtk.Button)radiodialog.add_button(Gtk.Stock.OK, 1);
 		radiookbutton.clicked.connect( () => {
 			if((radioentry.text!=null)&&
@@ -326,16 +326,16 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 					          -1
 					          );
 			}
-
+			
 			radiodialog.close();
 			radiodialog = null;
 		});
-
+		
 		radiodialog.destroy_event.connect( () => {
 			radiodialog = null;
 			return true;
 		});
-
+		
 		try {
 			radiodialog.set_icon_from_file(XNOISEICON);
 			radiodialog.set_title(_("Add internet radio link"));
@@ -349,6 +349,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 			                                );
 			msg.run();
 		}
+		radiodialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
 		radiodialog.show_all();
 	}
 
