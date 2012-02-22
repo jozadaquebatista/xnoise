@@ -34,7 +34,7 @@ using Gtk;
 public class Xnoise.TrackInfobar : Gtk.Box {
 	private Label title_label;
 	private Label time_label;
-	private ProgressBar progress;
+	private CustomProgress progress;
 	private EventBox ebox;
 	private unowned GstPlayer player;
 	
@@ -43,6 +43,16 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		set { 
 			title_label.label = value;
 			title_label.set_use_markup(true);
+		}
+	}
+	
+	private class CustomProgress : ProgressBar {
+		public CustomProgress () {
+			set_size_request(-1, 10);
+		}
+		
+		public override void get_preferred_height(out int minimum_height, out int natural_height) {
+			minimum_height = natural_height = 10;
 		}
 	}
 	
@@ -233,7 +243,7 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 2);
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox.set_border_width(VBOX_BORDER_WIDTH);
-		progress = new ProgressBar();
+		progress = new CustomProgress();
 		progress.set_size_request(-1, 10);
 		vbox.pack_start(progress, false, true, 0);
 		
