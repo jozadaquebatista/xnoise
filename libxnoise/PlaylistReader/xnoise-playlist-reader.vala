@@ -43,7 +43,7 @@ namespace Xnoise.Playlist {
 		private string? _playlist_uri = null;
 		//use this to protect running reading process
 		//it shall not be possible to run async and sync reading in parallel'
-		private Mutex read_in_progress_mutex;
+		private bool read_in_progress;
 		
 		//Public Properties
 		public ListType ptype {
@@ -73,31 +73,41 @@ namespace Xnoise.Playlist {
 		//Constructor
 		public Reader() {
 			_data_collection = new EntryCollection();
-			read_in_progress_mutex = new Mutex();
+			lock(read_in_progress) {
+				read_in_progress = false;
+			}
 		}
 		
 		public Result read(string list_uri, Cancellable? cancellable = null) throws ReaderError {
 			Result ret = Result.UNHANDLED;
-			read_in_progress_mutex.lock();
+			lock(read_in_progress) {
+				read_in_progress = true;
+			}
 			_playlist_uri = list_uri;
 			file = File.new_for_uri(_playlist_uri);
 			
 			plfile_reader = get_playlist_file_reader_for_uri(ref _playlist_uri, ref _ptype);
 			
 			if(plfile_reader == null) {
-				read_in_progress_mutex.unlock();
+				lock(read_in_progress) {
+					read_in_progress = false;
+				}
 				return Result.ERROR;
 			}
 			
 			ret = this.read_internal();
-			read_in_progress_mutex.unlock();
+			lock(read_in_progress) {
+				read_in_progress = false;
+			}
 			return ret;
 		}
 
 
 		public async Result read_asyn(string list_uri, Cancellable? cancellable = null) throws ReaderError {
 			Result ret = Result.UNHANDLED;
-			read_in_progress_mutex.lock();
+			lock(read_in_progress) {
+				read_in_progress = true;
+			}
 			_playlist_uri = list_uri;
 			this.file = File.new_for_commandline_arg(_playlist_uri);
 
@@ -107,13 +117,17 @@ namespace Xnoise.Playlist {
 			});
 			
 			if(plfile_reader == null) {
-				read_in_progress_mutex.unlock();
+				lock(read_in_progress) {
+					read_in_progress = false;
+				}
 				return Result.ERROR;
 			}
 
 //			ret = yield this.read_async_internal();
 			this.read_async_internal.begin();
-			read_in_progress_mutex.unlock();
+			lock(read_in_progress) {
+				read_in_progress = false;
+			}
 			return ret;
 		}
 
