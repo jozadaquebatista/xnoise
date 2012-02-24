@@ -150,14 +150,17 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		uint progress_width = allocation.width;
 		if(is_rtl()) {
 			this.time_label.get_allocation(out allocation);
-			
 			thisFraction = 1 - (e.x - (allocation.width + this.get_spacing() +  VBOX_BORDER_WIDTH)) / progress_width;
 		}
 		else
 			thisFraction = (e.x - this.get_spacing()) / progress_width;
 		
-		if(thisFraction < 0.0) thisFraction = 0.0;
-		if(thisFraction > 1.0) thisFraction = 1.0;
+		if(thisFraction < 0.0)
+			thisFraction = 0.0;
+		
+		if(thisFraction > 1.0)
+			thisFraction = 1.0;
+		
 		this.progress.set_fraction(thisFraction);
 		if(this.player != null)
 			this.player.position = thisFraction;
@@ -202,8 +205,12 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		if(len > 0) {
 			int dur_min, dur_sec, pos_min, pos_sec;
 			double fraction = (double)pos/(double)len;
-			if(fraction<0.0) fraction = 0.0;
-			if(fraction>1.0) fraction = 1.0;
+			
+			if(fraction<0.0)
+				fraction = 0.0;
+			if(fraction>1.0)
+				fraction = 1.0;
+			
 			this.progress.set_fraction(fraction);
 			
 			this.progress.set_sensitive(true);
@@ -229,6 +236,7 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		title_label.set_alignment(0.0f, 0.5f);
 		title_label.set_ellipsize(Pango.EllipsizeMode.END);
 		title_label.xpad = 10;
+		title_label.ypad = 1;
 		
 		ebox = new EventBox(); 
 		ebox.set_events(Gdk.EventMask.SCROLL_MASK |
