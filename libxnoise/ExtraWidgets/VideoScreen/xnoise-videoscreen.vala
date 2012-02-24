@@ -46,7 +46,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 		this.player = _player;
 		this.xn = Main.instance;
 		rect = Gdk.Rectangle();
-		Gdk.Color.parse("black", out black);
 		init_video_screen();
 		cover_image_available = false;
 		global.notify["image-path-large"].connect(on_image_path_changed);
@@ -205,8 +204,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 	
 	private Gdk.Rectangle rect;
 	
-	private Gdk.Color black;
-	
 	public override bool draw(Cairo.Context cr) {
 		rect.x = 0;
 		rect.y = 0;
@@ -220,9 +217,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 //		region = Gdk.Region.rectangle(rect);
 		
 //		this.get_window().begin_paint_region(region);
-//		Cairo.Context cr = Gdk.cairo_create(e.window);
-		
-		Gdk.cairo_set_source_color(cr, black);
+		cr.set_source_rgb(0.0f, 0.0f, 0.0f);
 		cr.rectangle(rect.x, rect.y,
 		             rect.width, rect.height);
 //		cr.rectangle(e.area.x, e.area.y,
