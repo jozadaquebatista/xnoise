@@ -42,6 +42,7 @@ public class Xnoise.Main : GLib.Object {
 	public int thread_id { get { return _thread_id; } }
 	
 	public Main() {
+		//Gtk.Widget.set_default_direction(Gtk.TextDirection.RTL);
 		_instance = this;
 		
 		_thread_id = (int)Linux.gettid();
@@ -122,12 +123,23 @@ public class Xnoise.Main : GLib.Object {
 		Posix.signal(Posix.SIGINT,  on_posix_finish); // clean up on posix sigint signal
 	}
 
-	public void add_track_to_gst_player(string uri) {
-		print("xnoise-main.vala - FIXME: Implement playlist support");
-		print("add_track_to_gst_player %s\n",uri);
+	public void immediate_play(string uri) {
+		Item? item = ItemHandlerManager.create_item(uri);
+		if(item.type == ItemType.UNKNOWN) {
+			print("itemtype unknown\n");
+			return;
+		}
+		ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
+		if(tmp == null)
+			return;
+		unowned Action? action = tmp.get_action(item.type, ActionContext.REQUESTED, ItemSelectionType.SINGLE);
 		
-		global.current_uri = uri;
-		global.player_state = PlayerState.PLAYING;
+		if(action != null) {
+			action.action(item, null);
+		}
+		else {
+			print("action was null\n");
+		}
 	}
 
 	public static Main instance {

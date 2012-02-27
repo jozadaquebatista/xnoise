@@ -2177,7 +2177,7 @@ extern gboolean xnoise_main_no_dbus;
 extern XnoiseApplication* xnoise_main_app;
 XnoiseMain* xnoise_main_new (void);
 XnoiseMain* xnoise_main_construct (GType object_type);
-void xnoise_main_add_track_to_gst_player (XnoiseMain* self, const gchar* uri);
+void xnoise_main_immediate_play (XnoiseMain* self, const gchar* uri);
 void xnoise_main_save_activated_plugins (XnoiseMain* self);
 void xnoise_main_save_tracklist (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);

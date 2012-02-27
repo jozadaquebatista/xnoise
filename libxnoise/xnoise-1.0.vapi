@@ -702,7 +702,7 @@ namespace Xnoise {
 		public static bool no_plugins;
 		public static bool show_plugin_state;
 		public Main ();
-		public void add_track_to_gst_player (string uri);
+		public void immediate_play (string uri);
 		public void quit ();
 		public void save_activated_plugins ();
 		public void save_tracklist ();

@@ -408,7 +408,7 @@ public class PlayerDbusService : GLib.Object {
 	}
 	
 	public void OpenUri(string Uri) {
-		xn.add_track_to_gst_player(Uri);
+		xn.immediate_play(Uri);
 	}
 }
 

@@ -565,7 +565,7 @@ public class MprisPlayer : GLib.Object {
 	
 	public void OpenUri(string Uri) {
 		print("OpenUri %s\n",Uri);
-		xn.add_track_to_gst_player(Uri);
+		xn.immediate_play(Uri);
 	}
 }
 
