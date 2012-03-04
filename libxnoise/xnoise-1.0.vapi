@@ -1186,7 +1186,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.UserInfo userinfo;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public static Xnoise.TrackData copy_trackdata (Xnoise.TrackData td);
+	public static Xnoise.TrackData copy_trackdata (Xnoise.TrackData? td);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static string escape_album_for_local_folder_search (string _artist, string? album_name);
 	[CCode (cheader_filename = "xnoise-1.0.h")]

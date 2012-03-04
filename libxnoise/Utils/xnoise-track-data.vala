@@ -51,7 +51,9 @@ namespace Xnoise {
 		public int32 dat2 = -1;
 	}
 	
-	public static TrackData copy_trackdata(TrackData td) {
+	public static TrackData copy_trackdata(TrackData? td) {
+		if(td == null)
+			return new TrackData();
 		TrackData td_new = new TrackData();
 		td_new.artist      = td.artist;
 		td_new.album       = td.album;
