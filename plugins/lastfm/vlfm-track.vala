@@ -194,7 +194,7 @@ namespace Lastfm {
 				print("not logged in!\n");
 				return false;
 			}
-			print("scrobbble  artist_name:%s  album_name:%s  title_name:%s\n", this.artist_name, this.album_name, this.title_name);
+			//print("scrobbble  artist_name:%s  album_name:%s  title_name:%s\n", this.artist_name, this.album_name, this.title_name);
 			var ub = new Lastfm.UrlBuilder();
 			ub.add_param(UrlParamType.ALBUM, this.album_name);
 			ub.add_param(UrlParamType.API_KEY, this.api_key);
