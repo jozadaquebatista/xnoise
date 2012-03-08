@@ -156,9 +156,10 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
 					return false;
 				// Use session's 'factory method to get Track
 				scrobble_track = session.factory_make_track(sd_last.artist, sd_last.album, sd_last.title);
-				
 				// SCROBBLE TRACK
 				scrobble_track.scrobble(sd_last.playtime);
+				sd_last.artist = sd_last.album = sd_last.title = sd_last.uri = null;
+				sd_last.playtime = 0;
 				scrobble_source = 0;
 				return false;
 			});

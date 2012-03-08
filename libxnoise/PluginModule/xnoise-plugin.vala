@@ -86,7 +86,7 @@ public class Xnoise.PluginModule.Container : TypeModule {
 		string path = Module.build_path(Config.PLUGINSDIR, info.module);
 		module = Module.open(path, ModuleFlags.BIND_LAZY);
 		if(module == null) {
-			print("cannot find module\n");
+			print("cannot find module: %s\n", _info.name);
 			return false;
 		}
 		void* func;

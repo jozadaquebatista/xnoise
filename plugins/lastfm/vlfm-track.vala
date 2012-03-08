@@ -194,7 +194,7 @@ namespace Lastfm {
 				print("not logged in!\n");
 				return false;
 			}
-			
+			print("scrobbble  artist_name:%s  album_name:%s  title_name:%s\n", this.artist_name, this.album_name, this.title_name);
 			var ub = new Lastfm.UrlBuilder();
 			ub.add_param(UrlParamType.ALBUM, this.album_name);
 			ub.add_param(UrlParamType.API_KEY, this.api_key);
@@ -208,7 +208,7 @@ namespace Lastfm {
 			ub.add_param(UrlParamType.SECRET, this.secret);
 			string? turl = ub.get_url(ROOT_URL, true);
 			if(turl == null) {
-				print("Error building scrobbble url\n");
+				print("Error building scrobble url\n");
 				return false;
 			}
 			int id = parent_session.web.post_data(turl);
