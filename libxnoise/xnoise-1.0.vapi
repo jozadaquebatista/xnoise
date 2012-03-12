@@ -491,7 +491,7 @@ namespace Xnoise {
 		public void on_startup ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class ControlButton : Gtk.Button {
+	public class ControlButton : Gtk.ToolButton {
 		public enum Direction {
 			NEXT,
 			PREVIOUS,
@@ -843,12 +843,10 @@ namespace Xnoise {
 		public static void write_all_parameters_to_file ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class PlayPauseButton : Gtk.Button {
+	public class PlayPauseButton : Gtk.ToolButton {
 		public PlayPauseButton ();
 		public void on_clicked (Gtk.Widget sender);
 		public void on_menu_clicked (Gtk.MenuItem sender);
-		public void set_pause_picture ();
-		public void set_play_picture ();
 		public void update_picture ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -898,8 +896,8 @@ namespace Xnoise {
 		public TrackData ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class TrackInfobar : Gtk.Box {
-		public TrackInfobar (Xnoise.GstPlayer _player);
+	public class TrackInfobar : Gtk.ToolItem {
+		public TrackInfobar (Xnoise.GstPlayer player, Gtk.EventBox ebox);
 		public void set_value (uint pos, uint len);
 		public string title_text { get; set; }
 	}

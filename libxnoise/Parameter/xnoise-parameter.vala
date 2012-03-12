@@ -49,7 +49,7 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
 		ht_int    = new GLib.HashTable<string,int>(str_hash, str_equal);
 		ht_double = new GLib.HashTable<string,double?>(str_hash, str_equal);
 		ht_string = new GLib.HashTable<string,string>(str_hash, str_equal);
-		read_all_parameters_from_file(); //Fill hash tables on construction time
+		read_all_parameters_from_file();
 		inited = true;
 	}
 

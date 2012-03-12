@@ -34,7 +34,7 @@ using Gtk;
 /**
  * A ControlButton is a Gtk.Button that initiates playback of the previous or next item or stop
  */
-public class Xnoise.ControlButton : Gtk.Button {
+public class Xnoise.ControlButton : Gtk.ToolButton {
 	
 	public enum Direction {
 		NEXT = 0,
@@ -52,24 +52,26 @@ public class Xnoise.ControlButton : Gtk.Button {
 		else
 			direction = _direction;
 			
-		string stockid;
+//		string stockid;
 		switch(direction) {
 			case Direction.NEXT:
-				stockid = Gtk.Stock.MEDIA_NEXT;
+//				stockid = Gtk.Stock.MEDIA_NEXT;
+				this.set_stock_id(Gtk.Stock.MEDIA_NEXT);
 				break;
 			case Direction.PREVIOUS:
-				stockid = Gtk.Stock.MEDIA_PREVIOUS;
+//				stockid = Gtk.Stock.MEDIA_PREVIOUS;
+				this.set_stock_id(Gtk.Stock.MEDIA_PREVIOUS);
 				break;
 			case Direction.STOP:
-				stockid = Gtk.Stock.MEDIA_STOP;
-				break;
 			default:
-				stockid = Gtk.Stock.MEDIA_STOP;
+//				stockid = Gtk.Stock.MEDIA_STOP;
+				this.set_stock_id(Gtk.Stock.MEDIA_STOP);
 				break;
 		}
-		var img = new Gtk.Image.from_stock(stockid, Gtk.IconSize.LARGE_TOOLBAR);
-		this.set_image(img);
-		this.relief = Gtk.ReliefStyle.NONE;
+//		var img = new Gtk.Image.from_stock(stockid, Gtk.IconSize.LARGE_TOOLBAR);
+//		this.set_image(img);
+//		this.set_stock_id(stockid);
+//		this.relief = Gtk.ReliefStyle.NONE;
 		this.can_focus = false;
 		this.clicked.connect(this.on_clicked);
 	}

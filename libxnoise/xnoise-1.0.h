@@ -1040,12 +1040,12 @@ struct _XnoiseVideoScreenClass {
 };
 
 struct _XnoiseControlButton {
-	GtkButton parent_instance;
+	GtkToolButton parent_instance;
 	XnoiseControlButtonPrivate * priv;
 };
 
 struct _XnoiseControlButtonClass {
-	GtkButtonClass parent_class;
+	GtkToolButtonClass parent_class;
 };
 
 typedef enum  {
@@ -1055,21 +1055,21 @@ typedef enum  {
 } XnoiseControlButtonDirection;
 
 struct _XnoisePlayPauseButton {
-	GtkButton parent_instance;
+	GtkToolButton parent_instance;
 	XnoisePlayPauseButtonPrivate * priv;
 };
 
 struct _XnoisePlayPauseButtonClass {
-	GtkButtonClass parent_class;
+	GtkToolButtonClass parent_class;
 };
 
 struct _XnoiseTrackInfobar {
-	GtkBox parent_instance;
+	GtkToolItem parent_instance;
 	XnoiseTrackInfobarPrivate * priv;
 };
 
 struct _XnoiseTrackInfobarClass {
-	GtkBoxClass parent_class;
+	GtkToolItemClass parent_class;
 };
 
 struct _XnoiseVolumeSliderButton {
@@ -1967,11 +1967,9 @@ XnoisePlayPauseButton* xnoise_play_pause_button_construct (GType object_type);
 void xnoise_play_pause_button_on_menu_clicked (XnoisePlayPauseButton* self, GtkMenuItem* sender);
 void xnoise_play_pause_button_on_clicked (XnoisePlayPauseButton* self, GtkWidget* sender);
 void xnoise_play_pause_button_update_picture (XnoisePlayPauseButton* self);
-void xnoise_play_pause_button_set_play_picture (XnoisePlayPauseButton* self);
-void xnoise_play_pause_button_set_pause_picture (XnoisePlayPauseButton* self);
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
-XnoiseTrackInfobar* xnoise_track_infobar_new (XnoiseGstPlayer* _player);
-XnoiseTrackInfobar* xnoise_track_infobar_construct (GType object_type, XnoiseGstPlayer* _player);
+XnoiseTrackInfobar* xnoise_track_infobar_new (XnoiseGstPlayer* player, GtkEventBox* ebox);
+XnoiseTrackInfobar* xnoise_track_infobar_construct (GType object_type, XnoiseGstPlayer* player, GtkEventBox* ebox);
 void xnoise_track_infobar_set_value (XnoiseTrackInfobar* self, guint pos, guint len);
 const gchar* xnoise_track_infobar_get_title_text (XnoiseTrackInfobar* self);
 void xnoise_track_infobar_set_title_text (XnoiseTrackInfobar* self, const gchar* value);

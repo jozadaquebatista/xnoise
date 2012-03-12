@@ -39,20 +39,15 @@ using Xnoise.Services;
 /**
 * A PlayPauseButton is a Gtk.Button that accordingly pauses, unpauses or starts playback
 */
-public class Xnoise.PlayPauseButton: Gtk.Button {
+public class Xnoise.PlayPauseButton: Gtk.ToolButton {
 	private unowned Main xn;
-	private Gtk.Image playImage;
-	private Gtk.Image pauseImage;
 
 	public PlayPauseButton() {
 		xn = Main.instance;
 		this.can_focus = false;
-		this.relief = Gtk.ReliefStyle.NONE;
-
-		this.playImage = new Image.from_stock(Gtk.Stock.MEDIA_PLAY, IconSize.LARGE_TOOLBAR);
-		this.pauseImage = new Image.from_stock(Gtk.Stock.MEDIA_PAUSE, IconSize.LARGE_TOOLBAR);
+		
 		this.update_picture();
-
+		
 		this.clicked.connect(this.on_clicked);
 		gst_player.sign_paused.connect(this.update_picture);
 		gst_player.sign_stopped.connect(this.update_picture);
@@ -96,17 +91,9 @@ public class Xnoise.PlayPauseButton: Gtk.Button {
 
 	public void update_picture() {
 		if(gst_player.playing == true)
-			this.set_play_picture();
+			this.set_stock_id(Gtk.Stock.MEDIA_PAUSE);
 		else
-			this.set_pause_picture();
-	}
-
-	public void set_play_picture() {
-		this.set_image(pauseImage);
-	}
-
-	public void set_pause_picture() {
-		this.set_image(playImage);
+			this.set_stock_id(Gtk.Stock.MEDIA_PLAY);
 	}
 }
 

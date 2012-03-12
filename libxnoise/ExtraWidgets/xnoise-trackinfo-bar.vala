@@ -31,11 +31,12 @@
 
 using Gtk;
 
-public class Xnoise.TrackInfobar : Gtk.Box {
+public class Xnoise.TrackInfobar : Gtk.ToolItem {
+	private Gtk.Box mainbox;
 	private Label title_label;
 	private Label time_label;
 	private CustomProgress progress;
-	private EventBox ebox;
+	private unowned EventBox ebox;
 	private unowned GstPlayer player;
 	
 	public string title_text {
@@ -56,10 +57,12 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		}
 	}
 	
-	public TrackInfobar(Xnoise.GstPlayer _player) {
-		GLib.Object(orientation:Orientation.VERTICAL, spacing:4);
-		assert(_player != null);
-		this.player = _player;
+	public TrackInfobar(Xnoise.GstPlayer player, EventBox ebox) {
+		mainbox = new Gtk.Box(Orientation.VERTICAL, 4);
+		
+		this.player = player;
+		this.ebox   = ebox;
+		
 		setup_widgets();
 		
 		this.ebox.button_press_event.connect(this.on_press);
@@ -79,6 +82,7 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 				time_label.show_all();
 			}
 		});
+		this.add(mainbox);
 	}
 
 	private bool press_was_valid = false;
@@ -110,7 +114,7 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 	private bool on_release(Gdk.EventButton e) {
 		if(press_was_valid == false)
 			return true;
-		double mouse_x = e.x - this.get_spacing();
+		double mouse_x = e.x - mainbox.get_spacing();
 		Allocation allocation;
 		this.progress.get_allocation(out allocation);
 		uint progress_width = allocation.width;
@@ -150,10 +154,10 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		uint progress_width = allocation.width;
 		if(is_rtl()) {
 			this.time_label.get_allocation(out allocation);
-			thisFraction = 1 - (e.x - (allocation.width + this.get_spacing() +  VBOX_BORDER_WIDTH)) / progress_width;
+			thisFraction = 1 - (e.x - (allocation.width + mainbox.get_spacing() +  VBOX_BORDER_WIDTH)) / progress_width;
 		}
 		else
-			thisFraction = (e.x - this.get_spacing()) / progress_width;
+			thisFraction = (e.x - mainbox.get_spacing()) / progress_width;
 		
 		if(thisFraction < 0.0)
 			thisFraction = 0.0;
@@ -238,15 +242,14 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		title_label.xpad = 10;
 		title_label.ypad = 1;
 		
-		ebox = new EventBox(); 
-		ebox.set_events(Gdk.EventMask.SCROLL_MASK |
-		                Gdk.EventMask.BUTTON1_MOTION_MASK |
-		                Gdk.EventMask.BUTTON_PRESS_MASK |
-		                Gdk.EventMask.BUTTON_RELEASE_MASK
-		                );
-		
-		var eventbox = new Gtk.Box(Orientation.VERTICAL, 0);
-		eventbox.pack_start(title_label, false, true, 0);
+//		ebox = new EventBox(); 
+//		ebox.set_events(Gdk.EventMask.SCROLL_MASK |
+//		                Gdk.EventMask.BUTTON1_MOTION_MASK |
+//		                Gdk.EventMask.BUTTON_PRESS_MASK |
+//		                Gdk.EventMask.BUTTON_RELEASE_MASK
+//		                );
+		var topbox = new Gtk.Box(Orientation.VERTICAL, 0);
+		topbox.pack_start(title_label, false, true, 0);
 		
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 2);
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
@@ -261,8 +264,8 @@ public class Xnoise.TrackInfobar : Gtk.Box {
 		time_label.set_single_line_mode(true);
 		time_label.width_chars = 12;
 		hbox.pack_start(time_label, false, false, 0);
-		eventbox.pack_start(hbox, false, false, 0);
-		ebox.add(eventbox);
-		this.pack_start(ebox, true, true, 0);
+		topbox.pack_start(hbox, false, false, 0);
+//		ebox.add(topbox);
+		mainbox.pack_start(topbox, true, true, 0);
 	}
 }

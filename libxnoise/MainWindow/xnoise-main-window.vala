@@ -55,7 +55,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private int _posY;
 	private uint aimage_timeout;
 	private Gtk.Image config_button_image;
-	private Gtk.AspectFrame a_frame_config_button = null;
+	private Gtk.Toolbar main_toolbar;
 	private Button collapsebutton;
 	private Button hide_button;
 	private Button hide_button_1;
@@ -109,6 +109,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public TrackList trackList;
 	public Gtk.Window fullscreenwindow;
 	public Gtk.Button config_button;
+	private Gtk.ToolItem config_buttonTI;
 	private static const string HIDE_LIBRARY = _("Hide Library");
 	private static const string SHOW_LIBRARY = _("Show Library");
 	
@@ -220,7 +221,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 		set {
 			if(value == true)
-				stopButton.show_all();
+				stopButton.show();
 			else
 				stopButton.hide();
 			_usestop = value;
@@ -233,28 +234,25 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return _compact_layout;
 		}
 		set {
+//			if(_compact_layout == value)
+//				return;
 			if(value) {
-				if(_compact_layout) return;
-				if(menubar.get_parent() != null) {
+				if(menubar.get_parent() != null)
 					menuvbox.remove(menubar);
-				}
-				if(a_frame_config_button != null && config_button.get_parent() == null) 
-					a_frame_config_button.add(config_button);
+				
+				print("config_buttonTI.show()\n");
+				config_buttonTI.show();
 				config_button.show_all();
-				if(_usestop == false)
-					stopButton.hide();
 			}
 			else {
-				if(a_frame_config_button != null && config_button.get_realized()) 
-					a_frame_config_button.remove(config_button);
-				config_button.unrealize();
-				if(menubar.get_parent() == null) {
+				if(menubar.get_parent() == null)
 					menuvbox.add(menubar);
 					menubar.show();
-				}
-				if(_usestop == true)
-					stopButton.show_all();
+				
+				print("config_buttonTI.show()\n");
+				config_buttonTI.hide();
 			}
+			_compact_layout = value;
 		}
 	}
 
@@ -457,8 +455,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.get_window().get_position(out o_x, out o_y);
 		Requisition req; 
 		config_button.get_child_requisition(out req);
-		/* get_allocation is broken in vapi - we should remove this direct field access as soon as it is fixed */
-		//Did you file a bug for this?
 		Allocation alloc;
 		config_button.get_allocation(out alloc);
 		x = o_x + alloc.x + req.width;
@@ -737,16 +733,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.move(posX, posY);
 		int wi = Params.get_int_value("width");
 		int he = Params.get_int_value("height");
-		if(wi > 0 && he > 0) {
+		if(wi > 0 && he > 0)
 			this.resize(wi, he);
-		}
+		
 		this.repeatState = (PlayerRepeatMode)Params.get_int_value("repeatstate");
-		this.quit_if_closed = Params.get_int_value("quit_if_closed") == 1;
 		int hp_position = Params.get_int_value("hp_position");
 		if (hp_position > 0) {
 			this.hpaned.set_position(hp_position);
 		}
-		not_show_art_on_hover_image = Params.get_int_value("not_show_art_on_hover_image") == 1;
+		
+		quit_if_closed              = Params.get_bool_value("quit_if_closed");
+		not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
+		usestop                     = Params.get_bool_value("usestop");
+		compact_layout              = Params.get_bool_value("compact_layout");
+		
+		print("Params.get_bool_value(\"compact_layout\") : %s\n", Params.get_bool_value("compact_layout").to_string());
 	}
 
 	public void write_params_data() {
@@ -760,7 +761,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		Params.set_int_value("hp_position", this.hpaned.get_position());
 		
 		Params.set_int_value("repeatstate", repeatState);
-		
+		Params.set_bool_value("usestop", this.usestop);
+		Params.set_bool_value("compact_layout", this.compact_layout);
 		Params.set_int_value("not_show_art_on_hover_image", (not_show_art_on_hover_image == true ? 1 : 0));
 	}
 
@@ -1268,7 +1270,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //		}
 //		return false;
 //	}
-	
+
 	private void create_widgets() {
 		try {
 			Builder gb = new Gtk.Builder();
@@ -1365,38 +1367,49 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			buttons_sizegroup.add_widget(showlyricsbuttonTL);
 			buttons_sizegroup.add_widget(showlyricsbuttonVid);
 			
+			var toolbarbox = gb.get_object("toolbarbox") as Gtk.Box;
+			main_toolbar = new Gtk.Toolbar();
+			
+			assert(main_toolbar != null);
+			EventBox xb = new EventBox();
+			xb.set_events(Gdk.EventMask.SCROLL_MASK |
+			              Gdk.EventMask.BUTTON1_MOTION_MASK |
+			              Gdk.EventMask.BUTTON_PRESS_MASK |
+			              Gdk.EventMask.BUTTON_RELEASE_MASK |
+			              Gdk.EventMask.ENTER_NOTIFY_MASK |
+			              Gdk.EventMask.LEAVE_NOTIFY_MASK
+			              );
+			xb.add(main_toolbar);
+			toolbarbox.pack_start(xb, true, true, 0);
+			main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
 			//REPEAT MODE SELECTOR
-			repeatButton                = gb.get_object("repeatButton") as Gtk.Button;
+			repeatButton                = new Gtk.Button();
 			repeatButton.can_focus      = false;
 			repeatButton.clicked.connect(this.on_repeat_button_clicked);
-			repeatimage                 = gb.get_object("repeatimage") as Gtk.Image;
+			repeatimage                 = new Gtk.Image();
+			repeatButton.add(repeatimage);
+			var repeatButtonTI = new ToolItem();
+			repeatButtonTI.add(repeatButton);
 			//--------------------
-
+			
 			//PLAYING TITLE IMAGE
-			var aibox                     = gb.get_object("aibox") as Gtk.Box;
-			
 			this.albumimage = new AlbumImage();
-			EventBox ebox = new EventBox(); 
-			ebox.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK|Gdk.EventMask.LEAVE_NOTIFY_MASK);
-			
-			ebox.add(albumimage);
-			aibox.add(ebox);
-			
+			ToolItem viewSelectorBin = new ToolItem();
+			viewSelectorBin.add(albumimage);
 			aimage_timeout = 0;
-			
-			ebox.enter_notify_event.connect(ai_ebox_enter);
-			
-			ebox.leave_notify_event.connect( (s, e) => {
-				if(not_show_art_on_hover_image)
-					return false;
-				if(aimage_timeout != 0) {
-					Source.remove(aimage_timeout);
-					aimage_timeout = 0;
-					return false;
-				}
-				this.tracklistnotebook.set_current_page(buffer_last_page);
-				return false;
-			});
+//			xb.enter_notify_event.connect(ai_ebox_enter);
+//			
+//			xb.leave_notify_event.connect( (s, e) => {
+//				if(not_show_art_on_hover_image)
+//					return false;
+//				if(aimage_timeout != 0) {
+//					Source.remove(aimage_timeout);
+//					aimage_timeout = 0;
+//					return false;
+//				}
+//				this.tracklistnotebook.set_current_page(buffer_last_page);
+//				return false;
+//			});
 			//--------------------
 			this.hpaned = gb.get_object("paned1") as Gtk.Paned;
 			mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
@@ -1407,32 +1420,53 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//VOLUME SLIDE BUTTON
 			this.volumeSliderButton = new VolumeSliderButton(gst_player);
-			var afVol = gb.get_object("aFrameVolumeButton") as Gtk.AspectFrame;
+			var afVol = new ToolItem();
 			afVol.add(volumeSliderButton);
 
 			//PLAYBACK CONTROLLS
-			var playback_hbox = gb.get_object("playback_hbox") as Gtk.Box;
 			this.previousButton = new ControlButton(ControlButton.Direction.PREVIOUS);
 			this.previousButton.sign_clicked.connect(handle_control_button_click);
-			playback_hbox.pack_start(previousButton, false, false, 0);
-			previousButton.show();
+			this.previousButton.set_can_focus(false);
 			this.playPauseButton = new PlayPauseButton();
-			playback_hbox.pack_start(playPauseButton, false, false, 0);
-			this.playPauseButton.show();
 			this.stopButton = new ControlButton(ControlButton.Direction.STOP);
+			this.stopButton.set_no_show_all(true);
 			this.stopButton.sign_clicked.connect(handle_control_button_click);
-			playback_hbox.pack_start(stopButton, false, false, 0);
 			this.nextButton = new ControlButton(ControlButton.Direction.NEXT);
 			this.nextButton.sign_clicked.connect(handle_control_button_click);
-			playback_hbox.pack_start(nextButton, false, false, 0);
-			nextButton.show();
 			
 			//PROGRESS BAR
-			var progbox = gb.get_object("vbox1") as Gtk.Box;
-			this.songProgressBar = new TrackInfobar(gst_player);
-			progbox.pack_start(songProgressBar, true, true, 0);
+			this.songProgressBar = new TrackInfobar(gst_player, xb);
+			this.songProgressBar.set_expand(true);
+			
+			//Config button for compact layout
+			//render the preferences icon with a down arrow next to it
+			config_button_image = new Gtk.Image.from_stock(Gtk.Stock.EXECUTE, Gtk.IconSize.LARGE_TOOLBAR);
+			config_button = new Button();
+			var config_hbox = new Box(Orientation.HORIZONTAL, 0);
+			config_hbox.pack_start(config_button_image, false, false, 0);
+			var config_arrow = new Arrow(ArrowType.DOWN, ShadowType.NONE);
+			config_hbox.pack_start(config_arrow, false, false, 0);
+			config_button.add(config_hbox);
+			
+			config_button.can_focus = false;
+			config_button.set_tooltip_text(_("Show application main menu"));
+			config_button.set_relief(Gtk.ReliefStyle.HALF);
+			config_buttonTI = new ToolItem();
+			config_buttonTI.add(config_button);
+			config_buttonTI.set_no_show_all(true);
+			
 			//---------------------
-
+			main_toolbar.insert(previousButton, -1);
+			main_toolbar.insert(playPauseButton, -1);
+			main_toolbar.insert(stopButton, -1);
+			main_toolbar.insert(nextButton, -1);
+			main_toolbar.insert(viewSelectorBin, -1);
+			main_toolbar.insert(this.songProgressBar, -1);
+			main_toolbar.insert(repeatButtonTI, -1);
+			main_toolbar.insert(afVol, -1);
+			main_toolbar.insert(config_buttonTI, -1);
+			main_toolbar.can_focus = false;
+			
 			///BOX FOR MAIN MENU
 			menuvbox                     = gb.get_object("menuvbox") as Gtk.Box;
 
@@ -1469,12 +1503,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			mbbx.pack_start(sbx, false, false, 0);
 			mbbx.pack_start(mediaBrScrollWin, true, true, 0);
 			
-//			browsernotebook    = new Gtk.Notebook(); //gb.get_object("notebook1") as Gtk.Notebook;
-//			browsernotebook.append_page(mbbx, new Label("bla"));
-//			browsernotebook.set_show_tabs(false);
-//			w1 = new Window(WindowType.TOPLEVEL);
-//			w1.add(mbbx);//browsernotebook);
-//			w1.show_all();#
 			mbbox01.pack_start(mbbx, true, true, 0);
 			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
 			tracklistnotebook.switch_page.connect( (s,np,p) => {
@@ -1503,7 +1531,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 				return false;
 			});
-
+			
 			this.searchEntryMB.icon_press.connect( (s, p0, p1) => { 
 				// s:Entry, p0:Position, p1:Gdk.Event
 				var entry = (Gtk.Entry)s;
@@ -1517,8 +1545,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 			});
 			
-//			var sexyentryBox = gb.get_object("sexyentryBox") as Gtk.Box;
-//			sexyentryBox.add(searchEntryMB);
 			
 			hide_button = gb.get_object("hide_button") as Gtk.Button;
 			hide_button.can_focus = false;
@@ -1550,21 +1576,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//Toolbar shown in the fullscreen window
 			this.fullscreentoolbar = new FullscreenToolbar(fullscreenwindow);
-			
-			//Config button for compact layout		
-			//render the preferences icon with a down arrow next to it
-			config_button_image = new Gtk.Image.from_stock(Gtk.Stock.EXECUTE, Gtk.IconSize.LARGE_TOOLBAR);
-			config_button = new Button();
-			var config_hbox = new Box(Orientation.HORIZONTAL, 0);
-			config_hbox.pack_start(config_button_image, false, false, 0);
-			var config_arrow = new Arrow(ArrowType.DOWN, ShadowType.NONE);
-			config_hbox.pack_start(config_arrow, false, false, 0);
-			config_button.add(config_hbox);
-			
-			config_button.can_focus = false;
-			config_button.set_tooltip_text(_("Show application main menu"));
-			config_button.set_relief(Gtk.ReliefStyle.HALF);
-			a_frame_config_button = gb.get_object("aFrameConfigButton") as Gtk.AspectFrame;
 			
 			// GTk3 resize grip
 			this.set_has_resize_grip(true);
@@ -1602,12 +1613,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			config_button_menu.popup(null, null, position_config_menu, 0, Gtk.get_current_event_time());
 		});
 		
-		if(Params.get_int_value("usestop") > 0) usestop = true;
-		else usestop = false;
-
-		if(Params.get_int_value("compact_layout") > 0) compact_layout = true;
-		else compact_layout = false;
-
 		this.delete_event.connect(this.on_close); //only send to tray
 		this.key_release_event.connect(this.on_key_released);
 		this.key_press_event.connect(this.on_key_pressed);
