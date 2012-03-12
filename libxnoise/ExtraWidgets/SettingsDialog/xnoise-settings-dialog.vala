@@ -189,13 +189,8 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		}
 	}
 	
-	private void on_ok_button_clicked() {
+	private void on_close_button_clicked() {
 		Params.write_all_parameters_to_file();
-		this.dialog.destroy();
-		sign_finish();
-	}
-
-	private void on_cancel_button_clicked() {
 		this.dialog.destroy();
 		sign_finish();
 	}
@@ -205,8 +200,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 		foreach(string name in plugin_loader.plugin_htable.get_keys()) {
 			unowned PluginModule.Container p = plugin_loader.plugin_htable.lookup(name);
 			if((p.activated) && (p.configurable)) {
-			   Widget? w = p.settingwidget();
-				if(w!=null) notebook.append_page(w, new Gtk.Label(name));
+				Widget? w = p.settingwidget();
+				
+				if(w!=null)
+					notebook.append_page(w, new Gtk.Label(name));
+				
 				count++;
 			}
 		}
@@ -268,13 +266,9 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
 			checkB_quitifclosed.clicked.connect(this.on_checkbutton_quitifclosed_clicked);
 			checkB_quitifclosed.label = _("Quit application if window is closed");
 			
-			var okButton = this.get_object("buttonOK") as Gtk.Button;
-			okButton.can_focus = false;
-			okButton.clicked.connect(this.on_ok_button_clicked);
-			
-			var cancelButton = this.get_object("button1") as Gtk.Button;
-			cancelButton.can_focus = false;
-			cancelButton.clicked.connect(this.on_cancel_button_clicked);
+			var closeButton = this.get_object("buttonclose") as Gtk.Button;
+			closeButton.can_focus = false;
+			closeButton.clicked.connect(this.on_close_button_clicked);
 			
 			var fontsize_label = this.get_object("fontsize_label") as Gtk.Label;
 			fontsize_label.label = _("Media browser fontsize:");

@@ -1374,6 +1374,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			var toolbarbox = gb.get_object("toolbarbox") as Gtk.Box;
 			main_toolbar = new Gtk.Toolbar();
 			main_toolbar.set_style(ToolbarStyle.ICONS);
+			main_toolbar.set_icon_size(IconSize.LARGE_TOOLBAR);
+			main_toolbar.set_show_arrow(false);
 			toolbarbox.pack_start(main_toolbar, true, true, 0);
 			main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
 			

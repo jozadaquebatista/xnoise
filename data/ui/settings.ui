@@ -22,23 +22,8 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button1">
-                <property name="label">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
-                <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="buttonOK">
-                <property name="label">gtk-ok</property>
+              <object class="GtkButton" id="buttonclose">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -99,12 +84,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="checkB_usestop">
-                            <property name="label" translatable="yes">Use stop button</property>
+                          <object class="GtkCheckButton" id="checkB_showlines">
+                            <property name="label" translatable="yes">Use helper lines in media browser</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_action_appearance">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -115,13 +101,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="checkB_showlines">
-                            <property name="label" translatable="yes">Use helper lines in media browser</property>
+                          <object class="GtkCheckButton" id="checkB_usestop">
+                            <property name="label" translatable="yes">Use stop button</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_action_appearance">False</property>
-                            <property name="focus_on_click">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -274,8 +259,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">button1</action-widget>
-      <action-widget response="0">buttonOK</action-widget>
+      <action-widget response="0">buttonclose</action-widget>
     </action-widgets>
   </object>
 </interface>
