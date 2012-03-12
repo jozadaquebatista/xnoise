@@ -1163,7 +1163,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		columnYear.sizing        = Gtk.TreeViewColumnSizing.FIXED;
 		
 		this.set_enable_search(false);
-		this.rules_hint = true;
+		this.rules_hint = false;
 	}
 	
 	private bool on_press_header(Gtk.Widget sender, Gdk.EventButton e) {

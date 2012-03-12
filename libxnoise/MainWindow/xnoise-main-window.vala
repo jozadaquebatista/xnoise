@@ -47,6 +47,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string SHOWLYRICS       = _("Lyrics");
 	private const string SHOWMEDIABROWSER = _("Show Media");
 	private const string HIDEMEDIABROWSER = _("Hide Media");
+	private const string HIDE_LIBRARY     = _("Hide Library");
+	private const string SHOW_LIBRARY     = _("Show Library");
+	
 	private unowned Main xn;
 	private uint search_idlesource = 0;
 	private UIManager ui_manager = new UIManager();
@@ -54,7 +57,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private int _posX;
 	private int _posY;
 	private uint aimage_timeout;
-	private Gtk.Image config_button_image;
 	private Gtk.Toolbar main_toolbar;
 	private Button collapsebutton;
 	private Button hide_button;
@@ -83,6 +85,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private ScreenSaverManager ssm = null;
 	private List<Gtk.Action> actions_list = null;
 	private Box mbbox01;
+	private Xnoise.AppMenuButton config_buttonTI;
+	
 	public bool quit_if_closed;
 	public ScrolledWindow mediaBrScrollWin = null;
 	public ScrolledWindow trackListScrollWin = null;
@@ -108,10 +112,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public MediaBrowser mediaBr = null;
 	public TrackList trackList;
 	public Gtk.Window fullscreenwindow;
-	public Gtk.Button config_button;
-	private Gtk.ToolItem config_buttonTI;
-	private static const string HIDE_LIBRARY = _("Hide Library");
-	private static const string SHOW_LIBRARY = _("Show Library");
 	
 	private bool _not_show_art_on_hover_image;
 	public bool not_show_art_on_hover_image {
@@ -239,7 +239,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					menuvbox.remove(menubar);
 				
 				config_buttonTI.show();
-				config_button.show_all();
 			}
 			else {
 				if(menubar.get_parent() == null) {
@@ -442,24 +441,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			mfd = null;
 //			Idle.add(mediaBr.change_model_data);
 		});
-	}
-	
-	public void position_config_menu(Gtk.Menu menu, out int x, out int y, out bool push) {
-		//the upper right corner of the popup menu should be just beneath the lower right corner of the button
-		
-		int o_x = 0, o_y = 0;
-		this.get_window().get_position(out o_x, out o_y);
-		Requisition req; 
-		config_button.get_child_requisition(out req);
-		Allocation alloc;
-		config_button.get_allocation(out alloc);
-		x = o_x + alloc.x + req.width;
-		y = o_y + alloc.y + req.height;
-		
-		Requisition menu_req;
-		menu.get_child_requisition(out menu_req);
-		x -= menu_req.width;
-		push= true;
 	}
 
 	public void toggle_fullscreen() {
@@ -1266,16 +1247,39 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //	}
 
 	private void create_widgets() {
+		
 		try {
 			Builder gb = new Gtk.Builder();
 			gb.add_from_file(MAIN_UI_FILE);
-
+			
+			///BOX FOR MAIN MENU
+			menuvbox                     = gb.get_object("menuvbox") as Gtk.Box;
+			//UIMANAGER FOR MENUS, THIS ALLOWS INJECTION OF ENTRIES BY PLUGINS
+			action_group = new Gtk.ActionGroup("XnoiseActions");
+			action_group.set_translation_domain(Config.GETTEXT_PACKAGE);
+			action_group.add_actions(action_entries, this);
+		
+			ui_manager.insert_action_group(action_group, 0);
+			try {
+				ui_manager.add_ui_from_file(MENU_UI_FILE);
+			}
+			catch(GLib.Error e) {
+				print("%s\n", e.message);
+			}
+		
+		
+			menubar = (MenuBar)ui_manager.get_widget("/MainMenu");
+			menuvbox.pack_start(menubar, false, false, 0);
+		
+			config_button_menu_root = (ImageMenuItem)ui_manager.get_widget("/ConfigButtonMenu/ConfigMenu");
+			config_button_menu = (Gtk.Menu)config_button_menu_root.get_submenu();
+			
 			this.mainvbox = gb.get_object("mainvbox") as Gtk.Box;
 			this.title = "xnoise media player";
 			this.set_default_icon_name("xnoise");
 			
 			this.infobox = gb.get_object("infobox") as Gtk.Box;
-
+			
 			//DRAWINGAREA FOR VIDEO
 			videoscreen = gst_player.videoscreen;
 			videovbox = gb.get_object("videovbox") as Gtk.Box;
@@ -1364,12 +1368,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			var toolbarbox = gb.get_object("toolbarbox") as Gtk.Box;
 			main_toolbar = new Gtk.Toolbar();
-			assert(main_toolbar != null);
+			main_toolbar.set_style(ToolbarStyle.ICONS);
 			toolbarbox.pack_start(main_toolbar, true, true, 0);
 			main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
 			
 			//REPEAT MODE SELECTOR
 			repeatButton                = new Gtk.Button();
+			repeatButton.set_relief(Gtk.ReliefStyle.NONE);
 			repeatButton.can_focus      = false;
 			repeatButton.clicked.connect(this.on_repeat_button_clicked);
 			repeatimage                 = new Gtk.Image();
@@ -1382,10 +1387,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.albumimage = new AlbumImage();
 			EventBox xb = new EventBox();
 			xb.set_visible_window(false);
+			xb.border_width = 1;
 			xb.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
 			xb.add(albumimage);
-			ToolItem viewSelectorBin = new ToolItem();
-			viewSelectorBin.add(xb);
+			ToolItem albumimageTI = new ToolItem();
+			albumimageTI.add(xb);
 			aimage_timeout = 0;
 			xb.enter_notify_event.connect(ai_ebox_enter);
 			
@@ -1402,6 +1408,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			});
 			//--------------------
 			this.hpaned = gb.get_object("paned1") as Gtk.Paned;
+			
 			mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
 			hpaned.remove(mbbox01);
 			this.hpaned.pack1(mbbox01, false, false);
@@ -1410,8 +1417,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
 			//VOLUME SLIDE BUTTON
 			this.volumeSliderButton = new VolumeSliderButton(gst_player);
-			var afVol = new ToolItem();
-			afVol.add(volumeSliderButton);
+			var volumeSliderButtonTI = new ToolItem();
+			volumeSliderButtonTI.add(volumeSliderButton);
 
 			//PLAYBACK CONTROLLS
 			this.previousButton = new ControlButton(ControlButton.Direction.PREVIOUS);
@@ -1428,38 +1435,26 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.songProgressBar = new TrackInfobar(gst_player);
 			this.songProgressBar.set_expand(true);
 			
-			//Config button for compact layout
-			//render the preferences icon with a down arrow next to it
-			config_button_image = new Gtk.Image.from_stock(Gtk.Stock.EXECUTE, Gtk.IconSize.LARGE_TOOLBAR);
-			config_button = new Button();
-			var config_hbox = new Box(Orientation.HORIZONTAL, 0);
-			config_hbox.pack_start(config_button_image, false, false, 0);
-			var config_arrow = new Arrow(ArrowType.DOWN, ShadowType.NONE);
-			config_hbox.pack_start(config_arrow, false, false, 0);
-			config_button.add(config_hbox);
-			
-			config_button.can_focus = false;
-			config_button.set_tooltip_text(_("Show application main menu"));
-			config_button.set_relief(Gtk.ReliefStyle.HALF);
-			config_buttonTI = new ToolItem();
-			config_buttonTI.add(config_button);
+			//AppMenuButton for compact layout
+			config_buttonTI = new AppMenuButton(Gtk.Stock.PROPERTIES, config_button_menu, _("Show application main menu"));
 			config_buttonTI.set_no_show_all(true);
+			
+			var si = new SeparatorToolItem();
+			si.set_draw(false);
 			
 			//---------------------
 			main_toolbar.insert(previousButton, -1);
 			main_toolbar.insert(playPauseButton, -1);
 			main_toolbar.insert(stopButton, -1);
 			main_toolbar.insert(nextButton, -1);
-			main_toolbar.insert(viewSelectorBin, -1);
+			main_toolbar.insert(si, -1);
+			main_toolbar.insert(albumimageTI, -1);
 			main_toolbar.insert(this.songProgressBar, -1);
 			main_toolbar.insert(repeatButtonTI, -1);
-			main_toolbar.insert(afVol, -1);
+			main_toolbar.insert(volumeSliderButtonTI, -1);
 			main_toolbar.insert(config_buttonTI, -1);
 			main_toolbar.can_focus = false;
 			
-			///BOX FOR MAIN MENU
-			menuvbox                     = gb.get_object("menuvbox") as Gtk.Box;
-
 			///Tracklist (right)
 			this.trackList = tl; //new TrackList();
 			this.trackList.set_size_request(100,100);
@@ -1568,6 +1563,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//Toolbar shown in the fullscreen window
 			this.fullscreentoolbar = new FullscreenToolbar(fullscreenwindow);
 			
+			this.add(mainvbox);
+			
 			// GTk3 resize grip
 			this.set_has_resize_grip(true);
 		}
@@ -1579,31 +1576,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return;
 		}
 
-
-		//UIMANAGER FOR MENUS, THIS ALLOWS INJECTION OF ENTRIES BY PLUGINS
-		action_group = new Gtk.ActionGroup("XnoiseActions");
-		action_group.set_translation_domain(Config.GETTEXT_PACKAGE);
-		action_group.add_actions(action_entries, this);
-
-		ui_manager.insert_action_group(action_group, 0);
-		try {
-			ui_manager.add_ui_from_file(MENU_UI_FILE);
-		}
-		catch(GLib.Error e) {
-			print("%s\n", e.message);
-		}
-		
-		
-		menubar = (MenuBar)ui_manager.get_widget("/MainMenu");
-		menuvbox.pack_start(menubar, false, false, 0);
-		this.add(mainvbox);
-		
-		config_button_menu_root = (ImageMenuItem)ui_manager.get_widget("/ConfigButtonMenu/ConfigMenu");
-		config_button_menu = (Gtk.Menu)config_button_menu_root.get_submenu();
-		config_button.clicked.connect(() => {
-			config_button_menu.popup(null, null, position_config_menu, 0, Gtk.get_current_event_time());
-		});
-		
 		this.delete_event.connect(this.on_close); //only send to tray
 		this.key_release_event.connect(this.on_key_released);
 		this.key_press_event.connect(this.on_key_pressed);
@@ -1627,5 +1599,4 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		return false;
 	}
 }
-
 

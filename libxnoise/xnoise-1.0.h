@@ -196,6 +196,17 @@ typedef struct _XnoiseVideoScreen XnoiseVideoScreen;
 typedef struct _XnoiseVideoScreenClass XnoiseVideoScreenClass;
 typedef struct _XnoiseVideoScreenPrivate XnoiseVideoScreenPrivate;
 
+#define XNOISE_TYPE_APP_MENU_BUTTON (xnoise_app_menu_button_get_type ())
+#define XNOISE_APP_MENU_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_APP_MENU_BUTTON, XnoiseAppMenuButton))
+#define XNOISE_APP_MENU_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_APP_MENU_BUTTON, XnoiseAppMenuButtonClass))
+#define XNOISE_IS_APP_MENU_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_APP_MENU_BUTTON))
+#define XNOISE_IS_APP_MENU_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_APP_MENU_BUTTON))
+#define XNOISE_APP_MENU_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_APP_MENU_BUTTON, XnoiseAppMenuButtonClass))
+
+typedef struct _XnoiseAppMenuButton XnoiseAppMenuButton;
+typedef struct _XnoiseAppMenuButtonClass XnoiseAppMenuButtonClass;
+typedef struct _XnoiseAppMenuButtonPrivate XnoiseAppMenuButtonPrivate;
+
 #define XNOISE_TYPE_CONTROL_BUTTON (xnoise_control_button_get_type ())
 #define XNOISE_CONTROL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_CONTROL_BUTTON, XnoiseControlButton))
 #define XNOISE_CONTROL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_CONTROL_BUTTON, XnoiseControlButtonClass))
@@ -1039,6 +1050,15 @@ struct _XnoiseVideoScreenClass {
 	GtkDrawingAreaClass parent_class;
 };
 
+struct _XnoiseAppMenuButton {
+	GtkToggleToolButton parent_instance;
+	XnoiseAppMenuButtonPrivate * priv;
+};
+
+struct _XnoiseAppMenuButtonClass {
+	GtkToggleToolButtonClass parent_class;
+};
+
 struct _XnoiseControlButton {
 	GtkToolButton parent_instance;
 	XnoiseControlButtonPrivate * priv;
@@ -1384,7 +1404,6 @@ struct _XnoiseMainWindow {
 	XnoiseMediaBrowser* mediaBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* fullscreenwindow;
-	GtkButton* config_button;
 };
 
 struct _XnoiseMainWindowClass {
@@ -1957,6 +1976,9 @@ gdouble xnoise_video_screen_get_font_size (XnoiseVideoScreen* self);
 void xnoise_video_screen_set_font_size (XnoiseVideoScreen* self, gdouble value);
 const gchar* xnoise_video_screen_get_text (XnoiseVideoScreen* self);
 void xnoise_video_screen_set_text (XnoiseVideoScreen* self, const gchar* value);
+GType xnoise_app_menu_button_get_type (void) G_GNUC_CONST;
+XnoiseAppMenuButton* xnoise_app_menu_button_new (const gchar* stock_id, GtkMenu* menu, const gchar* tooltip_text);
+XnoiseAppMenuButton* xnoise_app_menu_button_construct (GType object_type, const gchar* stock_id, GtkMenu* menu, const gchar* tooltip_text);
 GType xnoise_control_button_get_type (void) G_GNUC_CONST;
 GType xnoise_control_button_direction_get_type (void) G_GNUC_CONST;
 XnoiseControlButton* xnoise_control_button_new (XnoiseControlButtonDirection _direction);
@@ -2193,7 +2215,6 @@ GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 XnoiseMainWindow* xnoise_main_window_new (void);
 XnoiseMainWindow* xnoise_main_window_construct (GType object_type);
 void xnoise_main_window_ask_for_initial_media_import (XnoiseMainWindow* self);
-void xnoise_main_window_position_config_menu (XnoiseMainWindow* self, GtkMenu* menu, gint* x, gint* y, gboolean* push);
 void xnoise_main_window_toggle_fullscreen (XnoiseMainWindow* self);
 void xnoise_main_window_toggle_window_visbility (XnoiseMainWindow* self);
 void xnoise_main_window_show_window (XnoiseMainWindow* self);

@@ -52,26 +52,18 @@ public class Xnoise.ControlButton : Gtk.ToolButton {
 		else
 			direction = _direction;
 			
-//		string stockid;
 		switch(direction) {
 			case Direction.NEXT:
-//				stockid = Gtk.Stock.MEDIA_NEXT;
 				this.set_stock_id(Gtk.Stock.MEDIA_NEXT);
 				break;
 			case Direction.PREVIOUS:
-//				stockid = Gtk.Stock.MEDIA_PREVIOUS;
 				this.set_stock_id(Gtk.Stock.MEDIA_PREVIOUS);
 				break;
 			case Direction.STOP:
 			default:
-//				stockid = Gtk.Stock.MEDIA_STOP;
 				this.set_stock_id(Gtk.Stock.MEDIA_STOP);
 				break;
 		}
-//		var img = new Gtk.Image.from_stock(stockid, Gtk.IconSize.LARGE_TOOLBAR);
-//		this.set_image(img);
-//		this.set_stock_id(stockid);
-//		this.relief = Gtk.ReliefStyle.NONE;
 		this.can_focus = false;
 		this.clicked.connect(this.on_clicked);
 	}

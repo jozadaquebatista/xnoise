@@ -483,6 +483,11 @@ namespace Xnoise {
 		public signal void sign_fetched (string artist, string album, string image_path);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class AppMenuButton : Gtk.ToggleToolButton {
+		public AppMenuButton (string stock_id, Gtk.Menu menu, string? tooltip_text = null);
+		public override void show_all ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Application : GLib.Application {
 		public static Xnoise.Main xn;
 		public Application ();
@@ -721,7 +726,6 @@ namespace Xnoise {
 		public Gtk.ActionGroup action_group;
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
-		public Gtk.Button config_button;
 		public bool drag_on_content_area;
 		public Xnoise.FullscreenToolbar fullscreentoolbar;
 		public Gtk.Window fullscreenwindow;
@@ -748,7 +752,6 @@ namespace Xnoise {
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
 		public void handle_control_button_click (Xnoise.ControlButton sender, Xnoise.ControlButton.Direction dir);
-		public void position_config_menu (Gtk.Menu menu, out int x, out int y, out bool push);
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
 		public void show_status_info (Xnoise.InfoBar bar);
 		public void show_window ();
