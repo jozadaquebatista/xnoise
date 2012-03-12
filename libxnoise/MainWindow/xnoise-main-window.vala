@@ -53,7 +53,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private unowned Main xn;
 	private uint search_idlesource = 0;
 	private UIManager ui_manager = new UIManager();
-	private VolumeSliderButton volumeSliderButton;
+//	private VolumeSliderButton volumeSliderButton;
 	private int _posX;
 	private int _posY;
 	private uint aimage_timeout;
@@ -280,6 +280,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			if(!this.fullscreenwindowvisible)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 		});
+		Idle.add( () => {
+			searchEntryMB.grab_focus();
+			return false;
+		});
+		
 	}
 	
 	private void buffer_position() {
@@ -1416,9 +1421,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			//----------------
 
 			//VOLUME SLIDE BUTTON
-			this.volumeSliderButton = new VolumeSliderButton(gst_player);
+//			this.volumeSliderButton = new VolumeSliderButton(gst_player);
 			var volumeSliderButtonTI = new ToolItem();
-			volumeSliderButtonTI.add(volumeSliderButton);
+			volumeSliderButtonTI.add(new VolumeSliderButton(gst_player));
 
 			//PLAYBACK CONTROLLS
 			this.previousButton = new ControlButton(ControlButton.Direction.PREVIOUS);

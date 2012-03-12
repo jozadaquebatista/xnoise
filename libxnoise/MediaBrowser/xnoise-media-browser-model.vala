@@ -332,35 +332,37 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
 	private void set_pixbufs() {
 		try {
-			
 			Gtk.Invisible w = new Gtk.Invisible();
 			
-			radios_pixb  = w.render_icon(Gtk.Stock.CONNECT, IconSize.BUTTON, null);
-			video_pixb  = w.render_icon(Gtk.Stock.FILE, IconSize.BUTTON, null);
+			video_pixb  = w.render_icon_pixbuf(Gtk.Stock.FILE, IconSize.BUTTON);
 			int iconheight = video_pixb.height;
+			if(theme.has_icon("xn-stream"))
+				radios_pixb = theme.load_icon("xn-stream", iconheight, IconLookupFlags.FORCE_SIZE);
+			else
+				radios_pixb = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.BUTTON);
 			
 			if(theme.has_icon("system-users")) 
 				artist_pixb = theme.load_icon("system-users", iconheight, IconLookupFlags.FORCE_SIZE);
 			else if(theme.has_icon("stock_person")) 
 				artist_pixb = theme.load_icon("stock_person", iconheight, IconLookupFlags.FORCE_SIZE);
 			else 
-				artist_pixb = w.render_icon(Gtk.Stock.ORIENTATION_PORTRAIT, IconSize.BUTTON, null);
+				artist_pixb = w.render_icon_pixbuf(Gtk.Stock.ORIENTATION_PORTRAIT, IconSize.BUTTON);
 			
-			album_pixb = w.render_icon(Gtk.Stock.CDROM, IconSize.BUTTON, null);
+			album_pixb = w.render_icon_pixbuf(Gtk.Stock.CDROM, IconSize.BUTTON);
 			
 			if(theme.has_icon("media-audio")) 
 				title_pixb = theme.load_icon("media-audio", iconheight, IconLookupFlags.FORCE_SIZE);
 			else if(theme.has_icon("audio-x-generic")) 
 				title_pixb = theme.load_icon("audio-x-generic", iconheight, IconLookupFlags.FORCE_SIZE);
 			else 
-				title_pixb = w.render_icon(Gtk.Stock.OPEN, IconSize.BUTTON, null);
+				title_pixb = w.render_icon_pixbuf(Gtk.Stock.OPEN, IconSize.BUTTON);
 			
 			if(theme.has_icon("video-x-generic")) 
 				videos_pixb = theme.load_icon("video-x-generic", iconheight, IconLookupFlags.FORCE_SIZE);
 			else 
-				videos_pixb = w.render_icon(Gtk.Stock.MEDIA_RECORD, IconSize.BUTTON, null);
+				videos_pixb = w.render_icon_pixbuf(Gtk.Stock.MEDIA_RECORD, IconSize.BUTTON);
 			
-			loading_pixb = w.render_icon(Gtk.Stock.REFRESH , IconSize.BUTTON, null);
+			loading_pixb = w.render_icon_pixbuf(Gtk.Stock.REFRESH , IconSize.BUTTON);
 		}
 		catch(GLib.Error e) {
 			print("Error: %s\n",e.message);
