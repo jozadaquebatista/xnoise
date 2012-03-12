@@ -12,9 +12,13 @@ panel_DATA = xnoise-panel.svg
 greydir = $(datadir)/icons/hicolor/scalable/apps
 grey_DATA = xnoise-grey.svg
 
+appdir = $(datadir)/icons/hicolor/scalable/apps
+app_DATA = xn-app-menu.svg
+
 EXTRA_DIST = \
     $(icon_DATA) \
     $(panel_DATA) \
     $(status_DATA) \
     $(grey_DATA) \
+    $(app_DATA) \
     $(NULL)

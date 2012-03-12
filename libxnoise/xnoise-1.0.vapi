@@ -484,7 +484,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class AppMenuButton : Gtk.ToggleToolButton {
-		public AppMenuButton (string stock_id, Gtk.Menu menu, string? tooltip_text = null);
+		public AppMenuButton (Gtk.Menu menu, string? tooltip_text = null);
 		public override void show_all ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

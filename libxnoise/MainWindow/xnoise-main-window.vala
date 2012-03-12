@@ -85,7 +85,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private ScreenSaverManager ssm = null;
 	private List<Gtk.Action> actions_list = null;
 	private Box mbbox01;
-	private Xnoise.AppMenuButton config_buttonTI;
+	private Xnoise.AppMenuButton app_menu_button;
 	
 	public bool quit_if_closed;
 	public ScrolledWindow mediaBrScrollWin = null;
@@ -238,14 +238,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				if(menubar.get_parent() != null)
 					menuvbox.remove(menubar);
 				
-				config_buttonTI.show();
+				app_menu_button.show();
 			}
 			else {
 				if(menubar.get_parent() == null) {
 					menuvbox.add(menubar);
 					menubar.show();
 				}
-				config_buttonTI.hide();
+				app_menu_button.hide();
 			}
 			_compact_layout = value;
 		}
@@ -1436,8 +1436,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.songProgressBar.set_expand(true);
 			
 			//AppMenuButton for compact layout
-			config_buttonTI = new AppMenuButton(Gtk.Stock.PROPERTIES, config_button_menu, _("Show application main menu"));
-			config_buttonTI.set_no_show_all(true);
+			app_menu_button = new AppMenuButton(config_button_menu, _("Show application main menu"));
+			app_menu_button.set_no_show_all(true);
 			
 			var si = new SeparatorToolItem();
 			si.set_draw(false);
@@ -1452,7 +1452,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			main_toolbar.insert(this.songProgressBar, -1);
 			main_toolbar.insert(repeatButtonTI, -1);
 			main_toolbar.insert(volumeSliderButtonTI, -1);
-			main_toolbar.insert(config_buttonTI, -1);
+			main_toolbar.insert(app_menu_button, -1);
 			main_toolbar.can_focus = false;
 			
 			///Tracklist (right)
