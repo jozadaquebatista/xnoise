@@ -1968,8 +1968,8 @@ void xnoise_play_pause_button_on_menu_clicked (XnoisePlayPauseButton* self, GtkM
 void xnoise_play_pause_button_on_clicked (XnoisePlayPauseButton* self, GtkWidget* sender);
 void xnoise_play_pause_button_update_picture (XnoisePlayPauseButton* self);
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
-XnoiseTrackInfobar* xnoise_track_infobar_new (XnoiseGstPlayer* player, GtkEventBox* ebox);
-XnoiseTrackInfobar* xnoise_track_infobar_construct (GType object_type, XnoiseGstPlayer* player, GtkEventBox* ebox);
+XnoiseTrackInfobar* xnoise_track_infobar_new (XnoiseGstPlayer* player);
+XnoiseTrackInfobar* xnoise_track_infobar_construct (GType object_type, XnoiseGstPlayer* player);
 void xnoise_track_infobar_set_value (XnoiseTrackInfobar* self, guint pos, guint len);
 const gchar* xnoise_track_infobar_get_title_text (XnoiseTrackInfobar* self);
 void xnoise_track_infobar_set_title_text (XnoiseTrackInfobar* self, const gchar* value);

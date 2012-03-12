@@ -164,7 +164,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				hide_button_2.set_tooltip_text(SHOW_LIBRARY);
 			}
 			_media_browser_visible = value;
-		} 
+		}
 	}
 	
 	public PlayerRepeatMode repeatState { get; set; }
@@ -234,22 +234,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			return _compact_layout;
 		}
 		set {
-//			if(_compact_layout == value)
-//				return;
 			if(value) {
 				if(menubar.get_parent() != null)
 					menuvbox.remove(menubar);
 				
-				print("config_buttonTI.show()\n");
 				config_buttonTI.show();
 				config_button.show_all();
 			}
 			else {
-				if(menubar.get_parent() == null)
+				if(menubar.get_parent() == null) {
 					menuvbox.add(menubar);
 					menubar.show();
-				
-				print("config_buttonTI.show()\n");
+				}
 				config_buttonTI.hide();
 			}
 			_compact_layout = value;
@@ -746,8 +742,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
 		usestop                     = Params.get_bool_value("usestop");
 		compact_layout              = Params.get_bool_value("compact_layout");
-		
-		print("Params.get_bool_value(\"compact_layout\") : %s\n", Params.get_bool_value("compact_layout").to_string());
 	}
 
 	public void write_params_data() {
@@ -1359,6 +1353,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			showlyricsbuttonVid.clicked.connect(this.on_show_lyrics_button_clicked);
 			showlyricsbuttonVid.hide();
 			//--------------------
+			
 			var buttons_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 			buttons_sizegroup.add_widget(showvideobuttonTL);
 			buttons_sizegroup.add_widget(showvideobuttonLY);
@@ -1369,19 +1364,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			var toolbarbox = gb.get_object("toolbarbox") as Gtk.Box;
 			main_toolbar = new Gtk.Toolbar();
-			
 			assert(main_toolbar != null);
-			EventBox xb = new EventBox();
-			xb.set_events(Gdk.EventMask.SCROLL_MASK |
-			              Gdk.EventMask.BUTTON1_MOTION_MASK |
-			              Gdk.EventMask.BUTTON_PRESS_MASK |
-			              Gdk.EventMask.BUTTON_RELEASE_MASK |
-			              Gdk.EventMask.ENTER_NOTIFY_MASK |
-			              Gdk.EventMask.LEAVE_NOTIFY_MASK
-			              );
-			xb.add(main_toolbar);
-			toolbarbox.pack_start(xb, true, true, 0);
+			toolbarbox.pack_start(main_toolbar, true, true, 0);
 			main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
+			
 			//REPEAT MODE SELECTOR
 			repeatButton                = new Gtk.Button();
 			repeatButton.can_focus      = false;
@@ -1394,22 +1380,26 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			//PLAYING TITLE IMAGE
 			this.albumimage = new AlbumImage();
+			EventBox xb = new EventBox();
+			xb.set_visible_window(false);
+			xb.set_events(Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
+			xb.add(albumimage);
 			ToolItem viewSelectorBin = new ToolItem();
-			viewSelectorBin.add(albumimage);
+			viewSelectorBin.add(xb);
 			aimage_timeout = 0;
-//			xb.enter_notify_event.connect(ai_ebox_enter);
-//			
-//			xb.leave_notify_event.connect( (s, e) => {
-//				if(not_show_art_on_hover_image)
-//					return false;
-//				if(aimage_timeout != 0) {
-//					Source.remove(aimage_timeout);
-//					aimage_timeout = 0;
-//					return false;
-//				}
-//				this.tracklistnotebook.set_current_page(buffer_last_page);
-//				return false;
-//			});
+			xb.enter_notify_event.connect(ai_ebox_enter);
+			
+			xb.leave_notify_event.connect( (s, e) => {
+				if(not_show_art_on_hover_image)
+					return false;
+				if(aimage_timeout != 0) {
+					Source.remove(aimage_timeout);
+					aimage_timeout = 0;
+					return false;
+				}
+				this.tracklistnotebook.set_current_page(buffer_last_page);
+				return false;
+			});
 			//--------------------
 			this.hpaned = gb.get_object("paned1") as Gtk.Paned;
 			mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
@@ -1435,7 +1425,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.nextButton.sign_clicked.connect(handle_control_button_click);
 			
 			//PROGRESS BAR
-			this.songProgressBar = new TrackInfobar(gst_player, xb);
+			this.songProgressBar = new TrackInfobar(gst_player);
 			this.songProgressBar.set_expand(true);
 			
 			//Config button for compact layout
@@ -1482,6 +1472,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			mediaBrScrollWin = new ScrolledWindow(null, null);//gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
 //			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
 			this.mediaBr = new MediaBrowser(mediaBrScrollWin);
+			this.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 //			this.mediaBr.set_size_request(100,100);
 			mediaBrScrollWin.add(this.mediaBr);
 			var mbbx = new Gtk.Box(Orientation.VERTICAL, 0);

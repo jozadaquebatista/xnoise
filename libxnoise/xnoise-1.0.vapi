@@ -897,7 +897,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackInfobar : Gtk.ToolItem {
-		public TrackInfobar (Xnoise.GstPlayer player, Gtk.EventBox ebox);
+		public TrackInfobar (Xnoise.GstPlayer player);
 		public void set_value (uint pos, uint len);
 		public string title_text { get; set; }
 	}

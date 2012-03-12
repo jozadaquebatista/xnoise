@@ -36,7 +36,7 @@ public class Xnoise.TrackInfobar : Gtk.ToolItem {
 	private Label title_label;
 	private Label time_label;
 	private CustomProgress progress;
-	private unowned EventBox ebox;
+	private EventBox ebox;
 	private unowned GstPlayer player;
 	
 	public string title_text {
@@ -49,19 +49,18 @@ public class Xnoise.TrackInfobar : Gtk.ToolItem {
 	
 	private class CustomProgress : ProgressBar {
 		public CustomProgress () {
-			set_size_request(-1, 10);
+			set_size_request(-1, 8);
 		}
 		
 		public override void get_preferred_height(out int minimum_height, out int natural_height) {
-			minimum_height = natural_height = 10;
+			minimum_height = natural_height = 8;
 		}
 	}
 	
-	public TrackInfobar(Xnoise.GstPlayer player, EventBox ebox) {
+	public TrackInfobar(Xnoise.GstPlayer player) {
 		mainbox = new Gtk.Box(Orientation.VERTICAL, 4);
 		
 		this.player = player;
-		this.ebox   = ebox;
 		
 		setup_widgets();
 		
@@ -242,12 +241,13 @@ public class Xnoise.TrackInfobar : Gtk.ToolItem {
 		title_label.xpad = 10;
 		title_label.ypad = 1;
 		
-//		ebox = new EventBox(); 
-//		ebox.set_events(Gdk.EventMask.SCROLL_MASK |
-//		                Gdk.EventMask.BUTTON1_MOTION_MASK |
-//		                Gdk.EventMask.BUTTON_PRESS_MASK |
-//		                Gdk.EventMask.BUTTON_RELEASE_MASK
-//		                );
+		ebox = new EventBox(); 
+		ebox.set_events(Gdk.EventMask.SCROLL_MASK |
+		                Gdk.EventMask.BUTTON1_MOTION_MASK |
+		                Gdk.EventMask.BUTTON_PRESS_MASK |
+		                Gdk.EventMask.BUTTON_RELEASE_MASK
+		                );
+		ebox.set_visible_window(false);
 		var topbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		topbox.pack_start(title_label, false, true, 0);
 		
@@ -255,7 +255,7 @@ public class Xnoise.TrackInfobar : Gtk.ToolItem {
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox.set_border_width(VBOX_BORDER_WIDTH);
 		progress = new CustomProgress();
-		progress.set_size_request(-1, 10);
+		progress.set_size_request(-1, 8);
 		vbox.pack_start(progress, false, true, 0);
 		
 		hbox.pack_start(vbox, true, true, 0);
@@ -265,7 +265,7 @@ public class Xnoise.TrackInfobar : Gtk.ToolItem {
 		time_label.width_chars = 12;
 		hbox.pack_start(time_label, false, false, 0);
 		topbox.pack_start(hbox, false, false, 0);
-//		ebox.add(topbox);
-		mainbox.pack_start(topbox, true, true, 0);
+		ebox.add(topbox);
+		mainbox.pack_start(ebox, true, true, 0);
 	}
 }
