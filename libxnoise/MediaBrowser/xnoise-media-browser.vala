@@ -479,9 +479,8 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			                        Gdk.Rectangle cell_area,
 			                        CellRendererState flags) {
 			StyleContext context;
-			var pango_layout = widget.create_pango_layout(text);//Pango.cairo_create_layout(cr);
+			var pango_layout = widget.create_pango_layout(text);
 			pango_layout.set_font_description(this.font_description);
-//			pango_layout.set_text(text , -1);
 			pango_layout.set_alignment(Pango.Alignment.LEFT);
 			pango_layout.set_width( (int)((ow.get_allocated_width() - BORDER_DIST) * Pango.SCALE));
 			pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
