@@ -40,20 +40,21 @@ public extern bool ensure_native(Gdk.Window window);
 public extern void widget_style_get_property(Gtk.Widget widget, string property_name, GLib.Value val);
 
 public class Xnoise.MainWindow : Gtk.Window, IParams {
-	private const string MAIN_UI_FILE     = Config.UIDIR + "main_window.ui";
-	private const string MENU_UI_FILE     = Config.UIDIR + "main_ui.xml";
-	private const string SHOWVIDEO        = _("Now Playing");
-	private const string SHOWTRACKLIST    = _("Tracklist");
-	private const string SHOWLYRICS       = _("Lyrics");
+	private const string MAIN_UI_FILE	 = Config.UIDIR + "main_window.ui";
+	private const string MENU_UI_FILE	 = Config.UIDIR + "main_ui.xml";
+	private const string SHOWVIDEO		= _("Now Playing");
+	private const string SHOWTRACKLIST	= _("Tracklist");
+	private const string SHOWLYRICS	   = _("Lyrics");
 	private const string SHOWMEDIABROWSER = _("Show Media");
 	private const string HIDEMEDIABROWSER = _("Hide Media");
-	private const string HIDE_LIBRARY     = _("Hide Library");
-	private const string SHOW_LIBRARY     = _("Show Library");
-	
+	private const string HIDE_LIBRARY	 = _("Hide Library");
+	private const string SHOW_LIBRARY	 = _("Show Library");
+	private int idx_tracklist;
+	private int idx_video;
+	private int idx_lyrics;
 	private unowned Main xn;
 	private uint search_idlesource = 0;
 	private UIManager ui_manager = new UIManager();
-//	private VolumeSliderButton volumeSliderButton;
 	private int _posX;
 	private int _posY;
 	private uint aimage_timeout;
@@ -65,12 +66,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Image hide_button_image;
 	private Image hide_button_image_1;
 	private Image hide_button_image_2;
-	private Button showlyricsbuttonVid;
-	private Button showlyricsbuttonTL;
-	private Button showtracklistbuttonVid;
-	private Button showtracklistbuttonLY;
-	private Button showvideobuttonTL;
-	private Button showvideobuttonLY;
+	private SerialButton sbuttonTL;
+	private SerialButton sbuttonLY;
+	private SerialButton sbuttonVI;
 	private Button repeatButton;
 	private int buffer_last_page;
 	private Image repeatimage; 
@@ -126,12 +124,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 		set {
 			if(value == true) {
-				showlyricsbuttonVid.show();
-				showlyricsbuttonTL.show();
+				if(sbuttonTL.item_count < 3) {
+					idx_lyrics = sbuttonTL.insert(SHOWLYRICS);
+					sbuttonLY.insert(SHOWLYRICS);
+					sbuttonVI.insert(SHOWLYRICS);
+				}
 			}
 			else {
-				showlyricsbuttonVid.hide();
-				showlyricsbuttonTL.hide();
+				sbuttonTL.del(idx_lyrics);
+				sbuttonLY.del(idx_lyrics);
+				sbuttonVI.del(idx_lyrics);
 			}
 			Idle.add( () => {
 				foreach(Gtk.Action a in action_group.list_actions())
@@ -148,18 +150,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		} 
 		set {
 			if((value == true) && (_media_browser_visible != value)) {
-				hide_button_image.set_from_stock(Gtk.Stock.GO_BACK, Gtk.IconSize.MENU);
-				hide_button_image_1.set_from_stock(Gtk.Stock.GO_BACK, Gtk.IconSize.MENU);
-				hide_button_image_2.set_from_stock(Gtk.Stock.GO_BACK, Gtk.IconSize.MENU);
-				hide_button.set_tooltip_text(HIDE_LIBRARY);
+				hide_button_image.set_from_stock(  Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
+				hide_button_image_1.set_from_stock(Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
+				hide_button_image_2.set_from_stock(Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
+				hide_button.set_tooltip_text(  HIDE_LIBRARY);
 				hide_button_1.set_tooltip_text(HIDE_LIBRARY);
 				hide_button_2.set_tooltip_text(HIDE_LIBRARY);
 			}
 			else if((value == false) && (_media_browser_visible != value)) {
-				hide_button_image.set_from_stock(Gtk.Stock.GO_FORWARD, Gtk.IconSize.MENU);
-				hide_button_image_1.set_from_stock(Gtk.Stock.GO_FORWARD, Gtk.IconSize.MENU);
-				hide_button_image_2.set_from_stock(Gtk.Stock.GO_FORWARD, Gtk.IconSize.MENU);
-				hide_button.set_tooltip_text(SHOW_LIBRARY);
+				hide_button_image.set_from_stock(  Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
+				hide_button_image_1.set_from_stock(Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
+				hide_button_image_2.set_from_stock(Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
+				hide_button.set_tooltip_text(  SHOW_LIBRARY);
 				hide_button_1.set_tooltip_text(SHOW_LIBRARY);
 				hide_button_2.set_tooltip_text(SHOW_LIBRARY);
 			}
@@ -338,8 +340,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if(fullscreenwindowvisible)
 			global.player_state_changed.connect(handle_screensaver);
 		
-		this.showvideobuttonTL.set_sensitive(!fullscreenwindowvisible);
-		this.showvideobuttonLY.set_sensitive(!fullscreenwindowvisible);
+		sbuttonVI.set_sensitive(idx_video, !fullscreenwindowvisible);
+		sbuttonTL.set_sensitive(idx_video, !fullscreenwindowvisible);
+		sbuttonLY.set_sensitive(idx_video, !fullscreenwindowvisible);
 	}
 	
 	private void handle_screensaver() {
@@ -359,11 +362,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if((lastused_cnt = db_browser.count_lastused_items()) > 1500) {
 			Timeout.add(200, () => {
 				msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
-				                        UserInfo.ContentClass.INFO,
-				                        _("Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower.".printf(lastused_cnt)),
-				                        false,
-				                        4,
-				                        null);
+										UserInfo.ContentClass.INFO,
+										_("Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower.".printf(lastused_cnt)),
+										false,
+										4,
+										null);
 				return false;
 			});
 		}
@@ -413,8 +416,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		Idle.add( () => {
 			foreach(TrackData td in job.track_dat) {
 				this.trackList.tracklistmodel.insert_title(null,
-				                                           ref td,
-				                                           false);
+														   ref td,
+														   false);
 			}
 			return false;
 		});
@@ -425,11 +428,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		uint msg_id = 0;
 		var add_media_button = new Gtk.Button.with_label(_("Add media"));
 		msg_id = userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
-		                        UserInfo.ContentClass.QUESTION,
-		                        _("You started xnoise for the first time. Do you want to import media into the library?"),
-		                        false,
-		                        5,
-		                        add_media_button);
+								UserInfo.ContentClass.QUESTION,
+								_("You started xnoise for the first time. Do you want to import media into the library?"),
+								false,
+								5,
+								add_media_button);
 		add_media_button.clicked.connect( () => {
 			on_media_add_on_first_start(msg_id);
 		});
@@ -462,7 +465,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.videoscreen.reparent(fullscreenwindow);
 			this.videoscreen.get_window().process_updates(true);
 			
-			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
+			sbuttonVI.select(idx_tracklist);
+			
 			fullscreenwindowvisible = true;
 			fullscreentoolbar.show();
 			Idle.add( () => {
@@ -476,7 +480,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			fullscreenwindow.hide();
 			videoscreen.set_vexpand(true);
 			videoscreen.set_hexpand(true);
-			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+			
+			sbuttonTL.select(idx_video);
+			
 			fullscreenwindowvisible = false;
 			this.videovbox.show_all();
 			fullscreentoolbar.hide();
@@ -724,10 +730,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.hpaned.set_position(hp_position);
 		}
 		
-		quit_if_closed              = Params.get_bool_value("quit_if_closed");
+		quit_if_closed			  = Params.get_bool_value("quit_if_closed");
 		not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
-		usestop                     = Params.get_bool_value("usestop");
-		compact_layout              = Params.get_bool_value("compact_layout");
+		usestop					 = Params.get_bool_value("usestop");
+		compact_layout			  = Params.get_bool_value("compact_layout");
 	}
 
 	public void write_params_data() {
@@ -793,7 +799,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					if(path == null) 
 						return;
 					if(!this.trackList.tracklistmodel.path_is_last_row(ref path,
-					                                                   out trackList_is_empty)) {
+																	   out trackList_is_empty)) {
 						//print(" ! path_is_last_row\n");
 						if(direction == ControlButton.Direction.NEXT) {
 							path.next();
@@ -885,14 +891,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		trackList.remove_selected_rows();
 	}
 
-	private void on_show_tracklist_button_clicked() {
-		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
-	}
-
-	private void on_show_video_button_clicked() {
-		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
-	}
-	
 	//hide or show button
 	private int hpaned_position_buffer = 0;
 	private void toggle_media_browser_visibility() {
@@ -912,10 +910,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			}
 			media_browser_visible = true;
 		}
-	}
-
-	private void on_show_lyrics_button_clicked() {
-		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
 	}
 
 	private bool on_close() {
@@ -1250,7 +1244,51 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //		}
 //		return false;
 //	}
-
+	private void on_serial_button_clicked(SerialButton sender, int idx) {
+		if(sender == this.sbuttonTL) {
+			sbuttonVI.sign_selected.disconnect(on_serial_button_clicked);
+			sbuttonLY.sign_selected.disconnect(on_serial_button_clicked);
+			
+			sbuttonVI.select(idx);
+			sbuttonLY.select(idx);
+			if(idx == idx_video)
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+			else if(idx == idx_lyrics)
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
+			
+			sbuttonVI.sign_selected.connect(on_serial_button_clicked);
+			sbuttonLY.sign_selected.connect(on_serial_button_clicked);
+		}
+		if(sender == this.sbuttonVI) {
+			sbuttonTL.sign_selected.disconnect(on_serial_button_clicked);
+			sbuttonLY.sign_selected.disconnect(on_serial_button_clicked);
+			
+			sbuttonTL.select(idx);
+			sbuttonLY.select(idx);
+			if(idx == idx_tracklist)
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
+			else if(idx == idx_lyrics)
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
+			
+			sbuttonTL.sign_selected.connect(on_serial_button_clicked);
+			sbuttonLY.sign_selected.connect(on_serial_button_clicked);
+		}
+		if(sender == this.sbuttonLY) {
+			sbuttonVI.sign_selected.disconnect(on_serial_button_clicked);
+			sbuttonTL.sign_selected.disconnect(on_serial_button_clicked);
+			
+			sbuttonVI.select(idx);
+			sbuttonTL.select(idx);
+			if(idx == idx_tracklist)
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
+			else if(idx == idx_video)
+				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+			
+			sbuttonVI.sign_selected.connect(on_serial_button_clicked);
+			sbuttonTL.sign_selected.connect(on_serial_button_clicked);
+		}
+	}
+	
 	private void create_widgets() {
 		
 		try {
@@ -1258,7 +1296,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			gb.add_from_file(MAIN_UI_FILE);
 			
 			///BOX FOR MAIN MENU
-			menuvbox                     = gb.get_object("menuvbox") as Gtk.Box;
+			menuvbox					 = gb.get_object("menuvbox") as Gtk.Box;
 			//UIMANAGER FOR MENUS, THIS ALLOWS INJECTION OF ENTRIES BY PLUGINS
 			action_group = new Gtk.ActionGroup("XnoiseActions");
 			action_group.set_translation_domain(Config.GETTEXT_PACKAGE);
@@ -1291,86 +1329,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			videovbox.pack_start(videoscreen,true ,true ,0);
 			
 			//REMOVE TITLE OR ALL TITLES BUTTONS
-			var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;
-			removeAllButton.can_focus      = false;
+			var removeAllButton			= gb.get_object("removeAllButton") as Gtk.Button;
+			removeAllButton.can_focus	  = false;
 			removeAllButton.clicked.connect(this.on_remove_all_button_clicked);
 			removeAllButton.set_tooltip_text(_("Remove all"));
-
-			var removeSelectedButton       = gb.get_object("removeSelectedButton") as Gtk.Button;
+			
+			var removeSelectedButton	   = gb.get_object("removeSelectedButton") as Gtk.Button;
 			//removeSelectedButton.can_focus = false;
 			removeSelectedButton.clicked.connect(this.on_remove_selected_button_clicked);
 			removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
 			
-			var posjumper                  = gb.get_object("posjumper") as Gtk.Button;
-			posjumper.can_focus      = false;
+			var posjumper				  = gb.get_object("posjumper") as Gtk.Button;
+			posjumper.can_focus	  = false;
 			posjumper.clicked.connect(this.on_posjumper_button_clicked);
 			posjumper.set_tooltip_text(_("Jump to current position"));
-
-			//--------------------
-
-			//SHOW VIDEO BUTTONS
-			showvideobuttonTL                = gb.get_object("showvideobuttonTL") as Gtk.Button;
-			showvideobuttonTL.can_focus      = false;
-			showvideobuttonTL.set_relief(ReliefStyle.HALF);
-			showvideobuttonTL.clicked.connect(this.on_show_video_button_clicked);
-			showvideobuttonLY                = gb.get_object("showVideobuttonLY") as Gtk.Button;
-			var vidlabel1                    = gb.get_object("showvideolabel") as Gtk.Label;
-			vidlabel1.xalign                 = 0.1f;
-			vidlabel1.label                  = SHOWVIDEO;
-			var vidlabel2                    = gb.get_object("showvideolabelLY") as Gtk.Label;
-			vidlabel2.xalign                 = 0.1f;
-			vidlabel2.label                  = SHOWVIDEO;
-			showvideobuttonLY.can_focus      = false;
-			showvideobuttonLY.set_relief(ReliefStyle.HALF);
-			showvideobuttonLY.clicked.connect(this.on_show_video_button_clicked);
-			//--------------------
-
-			//SHOW TRACKLIST BUTTONS
-			showtracklistbuttonLY            = gb.get_object("showTLbuttonLY") as Gtk.Button;
-			showtracklistbuttonLY.can_focus  = false;
-			showtracklistbuttonLY.set_relief(ReliefStyle.HALF);
-			showtracklistbuttonLY.clicked.connect(this.on_show_tracklist_button_clicked);
-			showtracklistbuttonVid           = gb.get_object("showTLbuttonv") as Gtk.Button;
-			var tllabel1                     = gb.get_object("showtracklistlabel") as Gtk.Label;
-			tllabel1.xalign                  = 0.1f;
-			tllabel1.label                   = SHOWTRACKLIST;
-			var tllabel2                     = gb.get_object("label12") as Gtk.Label;
-			tllabel2.xalign                  = 0.1f;
-			tllabel2.label                   = SHOWTRACKLIST;
-			showtracklistbuttonVid.can_focus = false;
-			showtracklistbuttonVid.set_relief(ReliefStyle.HALF);
-			showtracklistbuttonVid.clicked.connect(this.on_show_tracklist_button_clicked);
-			//--------------------
-
-			//SHOW LYRICS BUTTONS
-			showlyricsbuttonTL               = gb.get_object("showLyricsbuttonTL") as Gtk.Button;
-			showlyricsbuttonTL.can_focus     = false;
-			showlyricsbuttonTL.set_relief(ReliefStyle.HALF);
-			showlyricsbuttonTL.clicked.connect(this.on_show_lyrics_button_clicked);
-			showlyricsbuttonTL.set_no_show_all(true);
-			showlyricsbuttonTL.hide();
-			showlyricsbuttonVid              = gb.get_object("showLyricsbuttonv") as Gtk.Button;
-			showlyricsbuttonVid.set_no_show_all(true);
-			var lylabel1                     = gb.get_object("label9") as Gtk.Label;
-			lylabel1.xalign                  = 0.1f;
-			lylabel1.label                   = SHOWLYRICS;
-			var lylabel2                     = gb.get_object("label10") as Gtk.Label;
-			lylabel2.xalign                  = 0.1f;
-			lylabel2.label                   = SHOWLYRICS;
-			showlyricsbuttonVid.can_focus    = false;
-			showlyricsbuttonVid.set_relief(ReliefStyle.HALF);
-			showlyricsbuttonVid.clicked.connect(this.on_show_lyrics_button_clicked);
-			showlyricsbuttonVid.hide();
-			//--------------------
 			
-			var buttons_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-			buttons_sizegroup.add_widget(showvideobuttonTL);
-			buttons_sizegroup.add_widget(showvideobuttonLY);
-			buttons_sizegroup.add_widget(showtracklistbuttonLY);
-			buttons_sizegroup.add_widget(showtracklistbuttonVid);
-			buttons_sizegroup.add_widget(showlyricsbuttonTL);
-			buttons_sizegroup.add_widget(showlyricsbuttonVid);
-			
+			//--------------------
 			var toolbarbox = gb.get_object("toolbarbox") as Gtk.Box;
 			main_toolbar = new Gtk.Toolbar();
 			main_toolbar.set_style(ToolbarStyle.ICONS);
@@ -1378,13 +1352,43 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			main_toolbar.set_show_arrow(false);
 			toolbarbox.pack_start(main_toolbar, true, true, 0);
 			main_toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
+			//-----------------
+			
+			//choose displayed view
+			var bottomboxTL = gb.get_object("hbox3") as Gtk.Box; //TRACKLIST
+			var bottomboxVI = gb.get_object("hbox2v") as Gtk.Box;  //VIDEO
+			var bottomboxLY = gb.get_object("box5")   as Gtk.Box;  //LYRICS
+			
+			sbuttonTL = new SerialButton();
+			idx_tracklist = sbuttonTL.insert(SHOWTRACKLIST);
+			idx_video     = sbuttonTL.insert(SHOWVIDEO);
+			idx_lyrics    = sbuttonTL.insert(SHOWLYRICS);
+			bottomboxTL.pack_start(sbuttonTL, false, false, 0);
+			
+			sbuttonVI = new SerialButton();
+			sbuttonVI.insert(SHOWTRACKLIST);
+			sbuttonVI.insert(SHOWVIDEO);
+			sbuttonVI.insert(SHOWLYRICS);
+			bottomboxVI.pack_start(sbuttonVI, false, false, 0);
+			
+			sbuttonLY = new SerialButton();
+			sbuttonLY.insert(SHOWTRACKLIST);
+			sbuttonLY.insert(SHOWVIDEO);
+			sbuttonLY.insert(SHOWLYRICS);
+			bottomboxLY.pack_start(sbuttonLY, false, false, 0);
+			
+			sbuttonTL.sign_selected.connect(on_serial_button_clicked);
+			sbuttonVI.sign_selected.connect(on_serial_button_clicked);
+			sbuttonLY.sign_selected.connect(on_serial_button_clicked);
+			//---------------------
+			
 			
 			//REPEAT MODE SELECTOR
-			repeatButton                = new Gtk.Button();
+			repeatButton = new Gtk.Button();
 			repeatButton.set_relief(Gtk.ReliefStyle.NONE);
-			repeatButton.can_focus      = false;
+			repeatButton.can_focus = false;
 			repeatButton.clicked.connect(this.on_repeat_button_clicked);
-			repeatimage                 = new Gtk.Image();
+			repeatimage = new Gtk.Image();
 			repeatButton.add(repeatimage);
 			var repeatButtonTI = new ToolItem();
 			repeatButtonTI.add(repeatButton);
@@ -1421,12 +1425,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			this.hpaned.pack1(mbbox01, false, false);
 			//this.hpaned.notify["position"].connect(on_hpaned_position_changed);
 			//----------------
-
+			
 			//VOLUME SLIDE BUTTON
-//			this.volumeSliderButton = new VolumeSliderButton(gst_player);
 			var volumeSliderButtonTI = new ToolItem();
 			volumeSliderButtonTI.add(new VolumeSliderButton(gst_player));
-
+			
 			//PLAYBACK CONTROLLS
 			this.previousButton = new ControlButton(ControlButton.Direction.PREVIOUS);
 			this.previousButton.sign_clicked.connect(handle_control_button_click);
@@ -1577,8 +1580,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 		catch(GLib.Error e) {
 			var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
-			                                Gtk.ButtonsType.OK,
-			                                "Failed to build main window! \n" + e.message);
+											Gtk.ButtonsType.OK,
+											"Failed to build main window! \n" + e.message);
 			msg.run();
 			return;
 		}
@@ -1606,4 +1609,5 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		return false;
 	}
 }
+
 

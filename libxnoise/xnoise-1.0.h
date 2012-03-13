@@ -231,6 +231,17 @@ typedef struct _XnoisePlayPauseButton XnoisePlayPauseButton;
 typedef struct _XnoisePlayPauseButtonClass XnoisePlayPauseButtonClass;
 typedef struct _XnoisePlayPauseButtonPrivate XnoisePlayPauseButtonPrivate;
 
+#define XNOISE_TYPE_SERIAL_BUTTON (xnoise_serial_button_get_type ())
+#define XNOISE_SERIAL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButton))
+#define XNOISE_SERIAL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButtonClass))
+#define XNOISE_IS_SERIAL_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_SERIAL_BUTTON))
+#define XNOISE_IS_SERIAL_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_SERIAL_BUTTON))
+#define XNOISE_SERIAL_BUTTON_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_SERIAL_BUTTON, XnoiseSerialButtonClass))
+
+typedef struct _XnoiseSerialButton XnoiseSerialButton;
+typedef struct _XnoiseSerialButtonClass XnoiseSerialButtonClass;
+typedef struct _XnoiseSerialButtonPrivate XnoiseSerialButtonPrivate;
+
 #define XNOISE_TYPE_TRACK_INFOBAR (xnoise_track_infobar_get_type ())
 #define XNOISE_TRACK_INFOBAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_INFOBAR, XnoiseTrackInfobar))
 #define XNOISE_TRACK_INFOBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_INFOBAR, XnoiseTrackInfobarClass))
@@ -1081,6 +1092,15 @@ struct _XnoisePlayPauseButton {
 
 struct _XnoisePlayPauseButtonClass {
 	GtkToolButtonClass parent_class;
+};
+
+struct _XnoiseSerialButton {
+	GtkBox parent_instance;
+	XnoiseSerialButtonPrivate * priv;
+};
+
+struct _XnoiseSerialButtonClass {
+	GtkBoxClass parent_class;
 };
 
 struct _XnoiseTrackInfobar {
@@ -1989,6 +2009,16 @@ XnoisePlayPauseButton* xnoise_play_pause_button_construct (GType object_type);
 void xnoise_play_pause_button_on_menu_clicked (XnoisePlayPauseButton* self, GtkMenuItem* sender);
 void xnoise_play_pause_button_on_clicked (XnoisePlayPauseButton* self, GtkWidget* sender);
 void xnoise_play_pause_button_update_picture (XnoisePlayPauseButton* self);
+GType xnoise_serial_button_get_type (void) G_GNUC_CONST;
+XnoiseSerialButton* xnoise_serial_button_new (void);
+XnoiseSerialButton* xnoise_serial_button_construct (GType object_type);
+gint xnoise_serial_button_insert (XnoiseSerialButton* self, const gchar* txt);
+void xnoise_serial_button_select (XnoiseSerialButton* self, gint idx);
+void xnoise_serial_button_set_sensitive (XnoiseSerialButton* self, gint idx, gboolean sensitive_status);
+void xnoise_serial_button_del (XnoiseSerialButton* self, gint idx);
+gint xnoise_serial_button_get_selected_idx (XnoiseSerialButton* self);
+void xnoise_serial_button_set_selected_idx (XnoiseSerialButton* self, gint value);
+gint xnoise_serial_button_get_item_count (XnoiseSerialButton* self);
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
 XnoiseTrackInfobar* xnoise_track_infobar_new (XnoiseGstPlayer* player);
 XnoiseTrackInfobar* xnoise_track_infobar_construct (GType object_type, XnoiseGstPlayer* player);

@@ -867,6 +867,18 @@ namespace Xnoise {
 		public string[] list { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class SerialButton : Gtk.Box {
+		public SerialButton ();
+		public void del (int idx);
+		public int insert (string? txt);
+		public override bool scroll_event (Gdk.EventScroll e);
+		public void select (int idx);
+		public void set_sensitive (int idx, bool sensitive_status);
+		public int item_count { get; }
+		public int selected_idx { get; set; }
+		public signal void sign_selected (int idx);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class SettingsDialog : Gtk.Builder {
 		public Gtk.Dialog dialog;
 		public SettingsDialog ();

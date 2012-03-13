@@ -43,6 +43,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/xnoise-app-menu-button.vala \
     ExtraWidgets/xnoise-control-button.vala \
     ExtraWidgets/xnoise-play-pause-button.vala \
+    ExtraWidgets/xnoise-serial-button.vala \
     ExtraWidgets/xnoise-trackinfo-bar.vala \
     ExtraWidgets/xnoise-volume-slider-button.vala \
     Database/xnoise-db-browser.vala \

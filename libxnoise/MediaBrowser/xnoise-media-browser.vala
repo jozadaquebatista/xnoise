@@ -209,7 +209,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 		mediabrowsermodel.filter();
 	}
 
-	private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
+	private bool on_button_press(Gdk.EventButton e) {
 		Gtk.TreePath treepath = null;
 		Gtk.TreeViewColumn column;
 		Gtk.TreeSelection selection = this.get_selection();
@@ -258,6 +258,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			selection.select_path(treepath);
 		return false;
 	}
+	
 	private void rightclick_menu_popup(uint activateTime) {
 		menu = create_rightclick_menu();
 		if(menu != null)
@@ -478,9 +479,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 			                        Gdk.Rectangle cell_area,
 			                        CellRendererState flags) {
 			StyleContext context;
-			var pango_layout = Pango.cairo_create_layout(cr);
+			var pango_layout = widget.create_pango_layout(text);//Pango.cairo_create_layout(cr);
 			pango_layout.set_font_description(this.font_description);
-			pango_layout.set_text(text , -1);
+//			pango_layout.set_text(text , -1);
 			pango_layout.set_alignment(Pango.Alignment.LEFT);
 			pango_layout.set_width( (int)((ow.get_allocated_width() - BORDER_DIST) * Pango.SCALE));
 			pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
