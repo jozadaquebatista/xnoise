@@ -741,7 +741,6 @@ namespace Xnoise {
 		public Gtk.Entry searchEntryMB;
 		public Xnoise.TrackInfobar songProgressBar;
 		public Xnoise.ControlButton stopButton;
-		public Xnoise.TrackListNoteBookTab temporary_tab;
 		public Xnoise.TrackList trackList;
 		public Gtk.ScrolledWindow trackListScrollWin;
 		public Gtk.Notebook tracklistnotebook;
@@ -764,7 +763,6 @@ namespace Xnoise {
 		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public bool usestop { get; set; }
-		public signal void sign_drag_over_content_area ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
@@ -872,8 +870,8 @@ namespace Xnoise {
 		public void del (int idx);
 		public int insert (string? txt);
 		public override bool scroll_event (Gdk.EventScroll e);
-		public void select (int idx);
-		public void set_sensitive (int idx, bool sensitive_status);
+		public void select (int idx, bool emit_signal = true);
+		public new void set_sensitive (int idx, bool sensitive_status);
 		public int item_count { get; }
 		public int selected_idx { get; set; }
 		public signal void sign_selected (int idx);

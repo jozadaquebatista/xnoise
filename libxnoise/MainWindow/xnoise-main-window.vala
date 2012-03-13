@@ -84,6 +84,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private List<Gtk.Action> actions_list = null;
 	private Box mbbox01;
 	private Xnoise.AppMenuButton app_menu_button;
+	private TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
 	
 	public bool quit_if_closed;
 	public ScrolledWindow mediaBrScrollWin = null;
@@ -92,7 +93,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public bool _seek;
 	public bool is_fullscreen = false;
 	public bool drag_on_content_area = false;
-	public TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
 	public FullscreenToolbar fullscreentoolbar;
 	public Box videovbox;
 	public LyricsView lyricsView;
@@ -172,7 +172,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public PlayerRepeatMode repeatState { get; set; }
 	public bool fullscreenwindowvisible { get; set; }
 
-	public signal void sign_drag_over_content_area();
+	private signal void sign_drag_over_content_area();
 
 	public enum PlayerRepeatMode {
 		NOT_AT_ALL = 0,
@@ -314,8 +314,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		videoscreen.button_press_event.connect(on_video_da_button_press);
 		sign_drag_over_content_area.connect(() => {
 			//switch to tracklist for dropping
-			if(!fullscreenwindowvisible)
-				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
+			if(!fullscreenwindowvisible) {
+				sbuttonVI.select(idx_tracklist, true);
+			}
 		});
 		videoscreen.drag_motion.connect((sender,context,x,y,t) => {
 			temporary_tab = TrackListNoteBookTab.VIDEO;
@@ -331,6 +332,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		
 	}
 
+	internal void restore_tab() {
+		if(temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+			tracklistnotebook.set_current_page(temporary_tab);
+			if(temporary_tab == TrackListNoteBookTab.VIDEO)
+				sbuttonVI.select(idx_video, false);
+			else if(temporary_tab == TrackListNoteBookTab.LYRICS)
+				sbuttonVI.select(idx_lyrics, false);
+			
+			temporary_tab = TrackListNoteBookTab.TRACKLIST;
+		}
+	}
+	
 	private void on_caught_eos_from_player() {
 		this.change_track(ControlButton.Direction.NEXT, true);
 	}
@@ -1246,46 +1259,28 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //	}
 	private void on_serial_button_clicked(SerialButton sender, int idx) {
 		if(sender == this.sbuttonTL) {
-			sbuttonVI.sign_selected.disconnect(on_serial_button_clicked);
-			sbuttonLY.sign_selected.disconnect(on_serial_button_clicked);
-			
-			sbuttonVI.select(idx);
-			sbuttonLY.select(idx);
+			sbuttonVI.select(idx, false);
+			sbuttonLY.select(idx, false);
 			if(idx == idx_video)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
 			else if(idx == idx_lyrics)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
-			
-			sbuttonVI.sign_selected.connect(on_serial_button_clicked);
-			sbuttonLY.sign_selected.connect(on_serial_button_clicked);
 		}
 		if(sender == this.sbuttonVI) {
-			sbuttonTL.sign_selected.disconnect(on_serial_button_clicked);
-			sbuttonLY.sign_selected.disconnect(on_serial_button_clicked);
-			
-			sbuttonTL.select(idx);
-			sbuttonLY.select(idx);
+			sbuttonTL.select(idx, false);
+			sbuttonLY.select(idx, false);
 			if(idx == idx_tracklist)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 			else if(idx == idx_lyrics)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
-			
-			sbuttonTL.sign_selected.connect(on_serial_button_clicked);
-			sbuttonLY.sign_selected.connect(on_serial_button_clicked);
 		}
 		if(sender == this.sbuttonLY) {
-			sbuttonVI.sign_selected.disconnect(on_serial_button_clicked);
-			sbuttonTL.sign_selected.disconnect(on_serial_button_clicked);
-			
-			sbuttonVI.select(idx);
-			sbuttonTL.select(idx);
+			sbuttonVI.select(idx, false);
+			sbuttonTL.select(idx, false);
 			if(idx == idx_tracklist)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
 			else if(idx == idx_video)
 				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
-			
-			sbuttonVI.sign_selected.connect(on_serial_button_clicked);
-			sbuttonTL.sign_selected.connect(on_serial_button_clicked);
 		}
 	}
 	

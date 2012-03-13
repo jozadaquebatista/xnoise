@@ -79,7 +79,10 @@ public class Xnoise.SerialButton : Gtk.Box {
 		si.add(new Gtk.Label(txt));
 		this.add(si);
 		
-		si.clicked.connect(on_clicked);
+		si.button_press_event.connect( () => {
+			this.select(get_children().index((Gtk.Widget)si));
+			return true;
+		});
 		si.show_all();
 		
 		int cnt = this.item_count;
@@ -102,7 +105,7 @@ public class Xnoise.SerialButton : Gtk.Box {
 		return false;
 	}
 
-	public void select(int idx) {
+	public void select(int idx, bool emit_signal = true) {
 		if(idx < 0 || idx >= this.item_count || _selected_idx == idx )
 			return;
 		
@@ -118,10 +121,11 @@ public class Xnoise.SerialButton : Gtk.Box {
 		if(si != null)
 			si.set_active(true);
 		
-		this.sign_selected(idx);
+		if(emit_signal)
+			this.sign_selected(idx);
 	}
 
-	public void set_sensitive(int idx, bool sensitive_status) {
+	public new void set_sensitive(int idx, bool sensitive_status) {
 		if(idx < 0 || idx >= this.item_count)
 			return;
 		
@@ -146,10 +150,6 @@ public class Xnoise.SerialButton : Gtk.Box {
 	
 	private Gtk.Widget? get_at_index(int idx) {
 		return this.get_children().nth_data(idx);
-	}
-	
-	private void on_clicked(Button sender) {
-		this.select(get_children().index(sender));
 	}
 	
 	private static const string CSS = """

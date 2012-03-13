@@ -73,7 +73,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 	private uint autoscroll_source = 0;
 	private bool reorder_dragging = false;
 	private uint hide_timer = 0;
-	private const uint HIDE_TIMEOUT = 1000;
+	private const uint HIDE_TIMEOUT = 1;
 //	private HashTable<string,double?> relative_column_sizes;
 //	private int n_columns = 0;
 	
@@ -433,10 +433,11 @@ public class Xnoise.TrackList : TreeView, IParams {
 		this.get_pointer(out px, out py); //using widget pointer instead of widget.window pointer
 		
 		if(px < 0 || py < 0) {
-			if(main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
-				main_window.tracklistnotebook.set_current_page(main_window.temporary_tab);
-				main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
-			}
+//			if(main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+//				main_window.tracklistnotebook.set_current_page(main_window.temporary_tab);
+//				main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
+//			}
+			main_window.restore_tab();
 		}
 	}
 
@@ -587,20 +588,28 @@ public class Xnoise.TrackList : TreeView, IParams {
 		
 		//After dropping an item hide the tracklist with a delay of HIDE_TIMEOUT ms 
 		//if it was only shown temporarily
+//		if(hide_timer != 0) 
+//			GLib.Source.remove(hide_timer);
+//		
+//		hide_timer = Timeout.add_seconds(HIDE_TIMEOUT, () => {
+			main_window.restore_tab();
+//			hide_timer = 0;
+//			return false;
+//		});
 		
-		if(main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
-			if(hide_timer != 0) 
-				GLib.Source.remove(hide_timer);
-			
-			hide_timer = Timeout.add(HIDE_TIMEOUT, () => {
-				if(main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
-					main_window.tracklistnotebook.set_current_page(main_window.temporary_tab);
-					main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
-				}
-				hide_timer = 0;
-				return false;
-			});
-		}
+//		if(main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+//			if(hide_timer != 0) 
+//				GLib.Source.remove(hide_timer);
+//			
+//			hide_timer = Timeout.add(HIDE_TIMEOUT, () => {
+//				if(main_window.temporary_tab != TrackListNoteBookTab.TRACKLIST) {
+//					main_window.tracklistnotebook.set_current_page(main_window.temporary_tab);
+//					main_window.temporary_tab = TrackListNoteBookTab.TRACKLIST;
+//				}
+//				hide_timer = 0;
+//				return false;
+//			});
+//		}
 	}
 
 	private bool insert_dnd_data_job(Worker.Job job) {

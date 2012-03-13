@@ -518,8 +518,6 @@ typedef struct _XnoiseMainWindow XnoiseMainWindow;
 typedef struct _XnoiseMainWindowClass XnoiseMainWindowClass;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
-#define XNOISE_TYPE_TRACK_LIST_NOTE_BOOK_TAB (xnoise_track_list_note_book_tab_get_type ())
-
 #define XNOISE_TYPE_MEDIA_BROWSER (xnoise_media_browser_get_type ())
 #define XNOISE_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowser))
 #define XNOISE_MEDIA_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowserClass))
@@ -873,6 +871,8 @@ typedef struct _XnoiseMediaImporter XnoiseMediaImporter;
 typedef struct _XnoiseMediaImporterClass XnoiseMediaImporterClass;
 typedef struct _XnoiseMediaImporterPrivate XnoiseMediaImporterPrivate;
 typedef struct _XnoiseMediaStreamSchemesPrivate XnoiseMediaStreamSchemesPrivate;
+
+#define XNOISE_TYPE_TRACK_LIST_NOTE_BOOK_TAB (xnoise_track_list_note_book_tab_get_type ())
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
 
@@ -1390,12 +1390,6 @@ struct _XnoiseIParamsIface {
 	void (*write_params_data) (XnoiseIParams* self);
 };
 
-typedef enum  {
-	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_TRACKLIST = 0,
-	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_VIDEO,
-	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_LYRICS
-} XnoiseTrackListNoteBookTab;
-
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
@@ -1406,7 +1400,6 @@ struct _XnoiseMainWindow {
 	gboolean _seek;
 	gboolean is_fullscreen;
 	gboolean drag_on_content_area;
-	XnoiseTrackListNoteBookTab temporary_tab;
 	XnoiseFullscreenToolbar* fullscreentoolbar;
 	GtkBox* videovbox;
 	XnoiseLyricsView* lyricsView;
@@ -1857,6 +1850,12 @@ struct _XnoiseMediaStreamSchemesClass {
 };
 
 typedef enum  {
+	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_TRACKLIST = 0,
+	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_VIDEO,
+	XNOISE_TRACK_LIST_NOTE_BOOK_TAB_LYRICS
+} XnoiseTrackListNoteBookTab;
+
+typedef enum  {
 	GST_STREAM_TYPE_UNKNOWN = 0,
 	GST_STREAM_TYPE_AUDIO = 1,
 	GST_STREAM_TYPE_VIDEO = 2
@@ -2013,7 +2012,7 @@ GType xnoise_serial_button_get_type (void) G_GNUC_CONST;
 XnoiseSerialButton* xnoise_serial_button_new (void);
 XnoiseSerialButton* xnoise_serial_button_construct (GType object_type);
 gint xnoise_serial_button_insert (XnoiseSerialButton* self, const gchar* txt);
-void xnoise_serial_button_select (XnoiseSerialButton* self, gint idx);
+void xnoise_serial_button_select (XnoiseSerialButton* self, gint idx, gboolean emit_signal);
 void xnoise_serial_button_set_sensitive (XnoiseSerialButton* self, gint idx, gboolean sensitive_status);
 void xnoise_serial_button_del (XnoiseSerialButton* self, gint idx);
 gint xnoise_serial_button_get_selected_idx (XnoiseSerialButton* self);
@@ -2237,7 +2236,6 @@ gboolean gdk_window_ensure_native (GdkWindow* window);
 void gtk_widget_style_get_property (GtkWidget* widget, const gchar* property_name, GValue* val);
 GType xnoise_iparams_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_get_type (void) G_GNUC_CONST;
-GType xnoise_track_list_note_book_tab_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
 GType xnoise_track_list_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_player_repeat_mode_get_type (void) G_GNUC_CONST;
@@ -2793,6 +2791,7 @@ extern XnoiseMainWindow* xnoise_main_window;
 extern XnoiseTrackList* xnoise_tl;
 extern XnoiseTrackListModel* xnoise_tlm;
 void xnoise_initialize (gboolean* is_first_start);
+GType xnoise_track_list_note_book_tab_get_type (void) G_GNUC_CONST;
 GType gst_stream_type_get_type (void) G_GNUC_CONST;
 GType xnoise_gnome_media_keys_proxy_get_type (void) G_GNUC_CONST;
 guint xnoise_gnome_media_keys_register_object (void* object, GDBusConnection* connection, const gchar* path, GError** error);

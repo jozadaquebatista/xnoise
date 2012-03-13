@@ -29,15 +29,37 @@
      inkscape:window-height="1146"
      id="namedview24"
      showgrid="false"
-     inkscape:zoom="18.1875"
-     inkscape:cx="-12.810997"
-     inkscape:cy="8.2199313"
+     inkscape:zoom="36.375"
+     inkscape:cx="10.289667"
+     inkscape:cy="4.610936"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       orientation="0,1"
+       position="9.676976,16.934708"
+       id="guide6023" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="-0.41237113,17.457045"
+       id="guide6025" />
+  </sodipodi:namedview>
   <svg:defs
      id="defs3836">
+    <svg:linearGradient
+       id="linearGradient5981">
+      <svg:stop
+         offset="0"
+         style="stop-color:#d9d9d9;stop-opacity:1;"
+         id="stop5983" />
+      <svg:stop
+         offset="1"
+         style="stop-color:#cccccc;stop-opacity:1;"
+         id="stop5987" />
+    </svg:linearGradient>
     <svg:linearGradient
        id="linearGradient3816">
       <svg:stop
@@ -166,6 +188,49 @@
        y1="26.424389"
        x2="211.11362"
        y2="13.544036" />
+    <svg:linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5981"
+       id="linearGradient5978"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0,0.35687143,0.50895504,0,-2.3213779,-68.907797)"
+       x1="211.11362"
+       y1="26.424389"
+       x2="211.11362"
+       y2="13.544036" />
+    <svg:radialGradient
+       r="7.228416"
+       fy="73.615715"
+       fx="6.702713"
+       cy="73.615715"
+       cx="6.702713"
+       gradientTransform="matrix(0.74114926,0,0,0.28652284,7.0586244,-6.714478)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient4611"
+       xlink:href="#linearGradient10691-6"
+       inkscape:collect="always" />
+    <svg:linearGradient
+       id="linearGradient10691-6">
+      <svg:stop
+         id="stop10693-8"
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0" />
+      <svg:stop
+         id="stop10695-7"
+         style="stop-color:#000000;stop-opacity:0"
+         offset="1" />
+    </svg:linearGradient>
+    <svg:radialGradient
+       r="7.228416"
+       fy="73.615715"
+       fx="6.702713"
+       cy="73.615715"
+       cx="6.702713"
+       gradientTransform="matrix(0.88377082,0,0,0.28652284,1.6227303,-6.9892792)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient6004"
+       xlink:href="#linearGradient10691-6"
+       inkscape:collect="always" />
   </svg:defs>
   <namedview
      id="base"
@@ -203,19 +268,19 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
     <svg:g
-       id="g6025">
+       id="g6027">
       <svg:path
-         style="opacity:0.5;color:#000000;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         d="m 3.7475247,4.1143594 2,0 0,5.8373098 c 0,2.6948918 -0.021281,-0.086529 -0.00495,5.7848128 8.264e-4,0.297107 0.6534291,-0.01149 1.5811881,0.05725 l 1.4866339,0.0044 C 8.7385347,10.012809 8.7475247,11.029599 8.7475247,9.9516424 l 0,-5.8373097 2.0000003,0 -3.5000003,-3.89153966 z"
-         id="path2999"
-         inkscape:connector-curvature="0"
-         nodetypes="ccssccscccc" />
+         d="m 13.934655,14.103304 c -3.65e-4,1.143758 -2.860375,2.070895 -6.3882635,2.070895 -3.5278857,0 -6.387904,-0.927137 -6.3882617,-2.070895 -3.649e-4,-1.143923 2.8598692,-2.071317 6.3882617,-2.071317 3.5283925,0 6.3886225,0.927394 6.3882635,2.071317 l 0,0 z"
+         id="path10689-9"
+         style="opacity:0.3;fill:url(#radialGradient6004);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.80000001;marker:none;visibility:visible;display:inline;overflow:visible"
+         inkscape:connector-curvature="0" />
       <svg:path
          nodetypes="ccssccscccc"
          inkscape:connector-curvature="0"
          id="path3941"
-         d="m 4.329897,4.0142063 2,0 0,5.9388352 c 0,2.7417625 -0.02128,-0.088031 -0.005,5.8854255 8.26e-4,0.302275 0.653429,-0.01169 1.581188,0.05825 l 1.486634,0.0045 C 9.320859,10.015272 9.329849,11.049746 9.329849,9.9530415 l 0,-5.9388352 2,0 -3.5,-3.95922348 z"
-         style="color:#000000;fill:url(#linearGradient6022);fill-opacity:1;fill-rule:nonzero;stroke:#777777;stroke-width:0.19897798;stroke-miterlimit:4;stroke-opacity:0.50196078;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         d="m 4.4604028,3.8165968 1.8687032,0 0,5.222217 c 0,2.4109242 -0.019883,-0.077409 -0.00468,5.1752522 7.72e-4,0.265801 0.661906,0.07057 1.4773857,0.05122 l 1.3890387,0.0039 C 9.123716,9.0935352 9.1321158,10.003183 9.1321158,9.0388138 l 0,-5.222217 1.6888962,-0.02695 -3.0904236,-3.45452833 z"
+         style="color:#000000;fill:url(#linearGradient5978);fill-opacity:1;fill-rule:nonzero;stroke:#888888;stroke-width:0.39813116;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         sodipodi:nodetypes="ccssccscccc" />
     </svg:g>
   </svg:g>
 </svg:svg>
