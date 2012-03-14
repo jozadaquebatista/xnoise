@@ -34,6 +34,12 @@ libxnoise_la_SOURCES = \
     AlbumImages/xnoise-i-album-cover-image-provider.vala \
     Application/xnoise-application.vala \
     BackgroundWorker/xnoise-worker.vala \
+    Database/xnoise-db-browser.vala \
+    Database/xnoise-db-creator.vala \
+    Database/xnoise-db-writer.vala \
+    DBus/xnoise-dbus.vala \
+    DockableMedia/xnoise-dockable-media.vala \
+    DockableMedia/xnoise-dockable-dynamic-playlist.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
     ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala \
     ExtraWidgets/Fullscreen/xnoise-fullscreen-progressbar.vala \
@@ -46,10 +52,6 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/xnoise-serial-button.vala \
     ExtraWidgets/xnoise-trackinfo-bar.vala \
     ExtraWidgets/xnoise-volume-slider-button.vala \
-    Database/xnoise-db-browser.vala \
-    Database/xnoise-db-creator.vala \
-    Database/xnoise-db-writer.vala \
-    DBus/xnoise-dbus.vala \
     GlobalAccess/xnoise-global-access.vala \
     ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala \
     ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala \
@@ -68,6 +70,7 @@ libxnoise_la_SOURCES = \
     Lyrics/xnoise-lyrics-view.vala \
     Main/xnoise-main.vala \
     MainWindow/xnoise-main-window.vala \
+    MediaBrowser/xnoise-media-browser-dockable.vala \
     MediaBrowser/xnoise-media-browser.vala \
     MediaBrowser/xnoise-media-browser-model.vala \
     Parameter/xnoise-i-params.vala \

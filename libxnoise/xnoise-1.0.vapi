@@ -511,6 +511,20 @@ namespace Xnoise {
 		public Dbus ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class DockableDynamicPlaylists : Xnoise.DockableMedia {
+		public DockableDynamicPlaylists ();
+		public override Gtk.Widget? get_widget ();
+		public override string headline ();
+		public override string name ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public abstract class DockableMedia : GLib.Object {
+		public DockableMedia ();
+		public abstract Gtk.Widget? get_widget ();
+		public abstract string headline ();
+		public abstract string name ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class FullscreenProgressBar : Gtk.EventBox {
 		public FullscreenProgressBar (Xnoise.GstPlayer _player);
 		public void set_value (uint pos, uint len);
@@ -775,6 +789,13 @@ namespace Xnoise {
 		public bool update_view ();
 		public bool use_treelines { get; set; }
 		public signal void sign_activated ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class MediaBrowserDockable : Xnoise.DockableMedia {
+		public MediaBrowserDockable (Xnoise.MainWindow win);
+		public override Gtk.Widget? get_widget ();
+		public override string headline ();
+		public override string name ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
@@ -1167,6 +1188,8 @@ namespace Xnoise {
 	public static Xnoise.Worker db_worker;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.Database.DbWriter db_writer;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static GLib.HashTable<string,Xnoise.DockableMedia> dockable_media_sources;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.GlobalAccess global;
 	[CCode (cheader_filename = "xnoise-1.0.h")]

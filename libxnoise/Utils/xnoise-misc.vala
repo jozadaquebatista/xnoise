@@ -46,6 +46,8 @@ namespace Xnoise {
 	public static ItemConverter item_converter = null;
 	public static MainContext mc;
 	
+	public HashTable<string,DockableMedia> dockable_media_sources;
+
 	public static Database.DbBrowser db_browser;
 	public static Database.DbWriter  db_writer;
 	
@@ -72,6 +74,8 @@ namespace Xnoise {
 			Main.instance.quit();
 			return;
 		}
+		
+		dockable_media_sources = new HashTable<string,DockableMedia>(str_hash, str_equal);
 		
 		// ITEM STUFF
 		itemhandler_manager = new ItemHandlerManager();

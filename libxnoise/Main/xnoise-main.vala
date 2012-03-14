@@ -60,6 +60,11 @@ public class Xnoise.Main : GLib.Object {
 		itemhandler_manager.add_handler(new HandlerEditTags());
 		itemhandler_manager.add_handler(new HandlerAddAllToTracklist());
 		
+		// DOCKABLE MEDIA
+		DockableMedia d;
+		d = new DockableDynamicPlaylists();
+		dockable_media_sources.insert(d.name(), d);
+		
 		// LOAD PLUGINS
 		if(!no_plugins) {
 			plugin_loader.load_all();

@@ -10,10 +10,10 @@
 #include <string.h>
 #include <gio/gio.h>
 #include <glib-object.h>
-#include <gdk/gdk.h>
+#include <sqlite3.h>
 #include <float.h>
 #include <math.h>
-#include <sqlite3.h>
+#include <gdk/gdk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 G_BEGIN_DECLS
@@ -119,6 +119,87 @@ typedef struct _XnoiseTrackDataClass XnoiseTrackDataClass;
 
 #define XNOISE_TYPE_DND_DATA (xnoise_dnd_data_get_type ())
 typedef struct _XnoiseDndData XnoiseDndData;
+
+#define XNOISE_DATABASE_TYPE_DB_BROWSER (xnoise_database_db_browser_get_type ())
+#define XNOISE_DATABASE_DB_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_DB_BROWSER, XnoiseDatabaseDbBrowser))
+#define XNOISE_DATABASE_DB_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_DB_BROWSER, XnoiseDatabaseDbBrowserClass))
+#define XNOISE_DATABASE_IS_DB_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_DATABASE_TYPE_DB_BROWSER))
+#define XNOISE_DATABASE_IS_DB_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_DATABASE_TYPE_DB_BROWSER))
+#define XNOISE_DATABASE_DB_BROWSER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_DATABASE_TYPE_DB_BROWSER, XnoiseDatabaseDbBrowserClass))
+
+typedef struct _XnoiseDatabaseDbBrowser XnoiseDatabaseDbBrowser;
+typedef struct _XnoiseDatabaseDbBrowserClass XnoiseDatabaseDbBrowserClass;
+typedef struct _XnoiseDatabaseDbBrowserPrivate XnoiseDatabaseDbBrowserPrivate;
+
+#define XNOISE_TYPE_STREAM_DATA (xnoise_stream_data_get_type ())
+typedef struct _XnoiseStreamData XnoiseStreamData;
+
+#define XNOISE_DATABASE_TYPE_DB_WRITER (xnoise_database_db_writer_get_type ())
+#define XNOISE_DATABASE_DB_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_DB_WRITER, XnoiseDatabaseDbWriter))
+#define XNOISE_DATABASE_DB_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_DB_WRITER, XnoiseDatabaseDbWriterClass))
+#define XNOISE_DATABASE_IS_DB_WRITER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_DATABASE_TYPE_DB_WRITER))
+#define XNOISE_DATABASE_IS_DB_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_DATABASE_TYPE_DB_WRITER))
+#define XNOISE_DATABASE_DB_WRITER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_DATABASE_TYPE_DB_WRITER, XnoiseDatabaseDbWriterClass))
+
+typedef struct _XnoiseDatabaseDbWriter XnoiseDatabaseDbWriter;
+typedef struct _XnoiseDatabaseDbWriterClass XnoiseDatabaseDbWriterClass;
+typedef struct _XnoiseDatabaseDbWriterPrivate XnoiseDatabaseDbWriterPrivate;
+
+#define XNOISE_DATABASE_DB_WRITER_TYPE_CHANGE_TYPE (xnoise_database_db_writer_change_type_get_type ())
+
+#define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
+#define XNOISE_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModel))
+#define XNOISE_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
+#define XNOISE_IS_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
+#define XNOISE_IS_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
+#define XNOISE_MEDIA_BROWSER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
+
+typedef struct _XnoiseMediaBrowserModel XnoiseMediaBrowserModel;
+typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
+
+#define XNOISE_TYPE_DBUS (xnoise_dbus_get_type ())
+#define XNOISE_DBUS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DBUS, XnoiseDbus))
+#define XNOISE_DBUS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DBUS, XnoiseDbusClass))
+#define XNOISE_IS_DBUS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DBUS))
+#define XNOISE_IS_DBUS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DBUS))
+#define XNOISE_DBUS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DBUS, XnoiseDbusClass))
+
+typedef struct _XnoiseDbus XnoiseDbus;
+typedef struct _XnoiseDbusClass XnoiseDbusClass;
+typedef struct _XnoiseDbusPrivate XnoiseDbusPrivate;
+
+#define TYPE_PLAYER_DBUS_SERVICE (player_dbus_service_get_type ())
+#define PLAYER_DBUS_SERVICE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PLAYER_DBUS_SERVICE, PlayerDbusService))
+#define PLAYER_DBUS_SERVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_PLAYER_DBUS_SERVICE, PlayerDbusServiceClass))
+#define IS_PLAYER_DBUS_SERVICE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_PLAYER_DBUS_SERVICE))
+#define IS_PLAYER_DBUS_SERVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_PLAYER_DBUS_SERVICE))
+#define PLAYER_DBUS_SERVICE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_PLAYER_DBUS_SERVICE, PlayerDbusServiceClass))
+
+typedef struct _PlayerDbusService PlayerDbusService;
+typedef struct _PlayerDbusServiceClass PlayerDbusServiceClass;
+typedef struct _PlayerDbusServicePrivate PlayerDbusServicePrivate;
+
+#define XNOISE_TYPE_DOCKABLE_MEDIA (xnoise_dockable_media_get_type ())
+#define XNOISE_DOCKABLE_MEDIA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMedia))
+#define XNOISE_DOCKABLE_MEDIA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMediaClass))
+#define XNOISE_IS_DOCKABLE_MEDIA(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DOCKABLE_MEDIA))
+#define XNOISE_IS_DOCKABLE_MEDIA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DOCKABLE_MEDIA))
+#define XNOISE_DOCKABLE_MEDIA_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMediaClass))
+
+typedef struct _XnoiseDockableMedia XnoiseDockableMedia;
+typedef struct _XnoiseDockableMediaClass XnoiseDockableMediaClass;
+typedef struct _XnoiseDockableMediaPrivate XnoiseDockableMediaPrivate;
+
+#define XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS (xnoise_dockable_dynamic_playlists_get_type ())
+#define XNOISE_DOCKABLE_DYNAMIC_PLAYLISTS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS, XnoiseDockableDynamicPlaylists))
+#define XNOISE_DOCKABLE_DYNAMIC_PLAYLISTS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS, XnoiseDockableDynamicPlaylistsClass))
+#define XNOISE_IS_DOCKABLE_DYNAMIC_PLAYLISTS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS))
+#define XNOISE_IS_DOCKABLE_DYNAMIC_PLAYLISTS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS))
+#define XNOISE_DOCKABLE_DYNAMIC_PLAYLISTS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS, XnoiseDockableDynamicPlaylistsClass))
+
+typedef struct _XnoiseDockableDynamicPlaylists XnoiseDockableDynamicPlaylists;
+typedef struct _XnoiseDockableDynamicPlaylistsClass XnoiseDockableDynamicPlaylistsClass;
+typedef struct _XnoiseDockableDynamicPlaylistsPrivate XnoiseDockableDynamicPlaylistsPrivate;
 
 #define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
 #define XNOISE_ADD_MEDIA_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialog))
@@ -263,65 +344,6 @@ typedef struct _XnoiseTrackInfobarPrivate XnoiseTrackInfobarPrivate;
 typedef struct _XnoiseVolumeSliderButton XnoiseVolumeSliderButton;
 typedef struct _XnoiseVolumeSliderButtonClass XnoiseVolumeSliderButtonClass;
 typedef struct _XnoiseVolumeSliderButtonPrivate XnoiseVolumeSliderButtonPrivate;
-
-#define XNOISE_DATABASE_TYPE_DB_BROWSER (xnoise_database_db_browser_get_type ())
-#define XNOISE_DATABASE_DB_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_DB_BROWSER, XnoiseDatabaseDbBrowser))
-#define XNOISE_DATABASE_DB_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_DB_BROWSER, XnoiseDatabaseDbBrowserClass))
-#define XNOISE_DATABASE_IS_DB_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_DATABASE_TYPE_DB_BROWSER))
-#define XNOISE_DATABASE_IS_DB_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_DATABASE_TYPE_DB_BROWSER))
-#define XNOISE_DATABASE_DB_BROWSER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_DATABASE_TYPE_DB_BROWSER, XnoiseDatabaseDbBrowserClass))
-
-typedef struct _XnoiseDatabaseDbBrowser XnoiseDatabaseDbBrowser;
-typedef struct _XnoiseDatabaseDbBrowserClass XnoiseDatabaseDbBrowserClass;
-typedef struct _XnoiseDatabaseDbBrowserPrivate XnoiseDatabaseDbBrowserPrivate;
-
-#define XNOISE_TYPE_STREAM_DATA (xnoise_stream_data_get_type ())
-typedef struct _XnoiseStreamData XnoiseStreamData;
-
-#define XNOISE_DATABASE_TYPE_DB_WRITER (xnoise_database_db_writer_get_type ())
-#define XNOISE_DATABASE_DB_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_DB_WRITER, XnoiseDatabaseDbWriter))
-#define XNOISE_DATABASE_DB_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_DB_WRITER, XnoiseDatabaseDbWriterClass))
-#define XNOISE_DATABASE_IS_DB_WRITER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_DATABASE_TYPE_DB_WRITER))
-#define XNOISE_DATABASE_IS_DB_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_DATABASE_TYPE_DB_WRITER))
-#define XNOISE_DATABASE_DB_WRITER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_DATABASE_TYPE_DB_WRITER, XnoiseDatabaseDbWriterClass))
-
-typedef struct _XnoiseDatabaseDbWriter XnoiseDatabaseDbWriter;
-typedef struct _XnoiseDatabaseDbWriterClass XnoiseDatabaseDbWriterClass;
-typedef struct _XnoiseDatabaseDbWriterPrivate XnoiseDatabaseDbWriterPrivate;
-
-#define XNOISE_DATABASE_DB_WRITER_TYPE_CHANGE_TYPE (xnoise_database_db_writer_change_type_get_type ())
-
-#define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
-#define XNOISE_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModel))
-#define XNOISE_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
-#define XNOISE_IS_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
-#define XNOISE_IS_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
-#define XNOISE_MEDIA_BROWSER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
-
-typedef struct _XnoiseMediaBrowserModel XnoiseMediaBrowserModel;
-typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
-
-#define XNOISE_TYPE_DBUS (xnoise_dbus_get_type ())
-#define XNOISE_DBUS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DBUS, XnoiseDbus))
-#define XNOISE_DBUS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DBUS, XnoiseDbusClass))
-#define XNOISE_IS_DBUS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DBUS))
-#define XNOISE_IS_DBUS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DBUS))
-#define XNOISE_DBUS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DBUS, XnoiseDbusClass))
-
-typedef struct _XnoiseDbus XnoiseDbus;
-typedef struct _XnoiseDbusClass XnoiseDbusClass;
-typedef struct _XnoiseDbusPrivate XnoiseDbusPrivate;
-
-#define TYPE_PLAYER_DBUS_SERVICE (player_dbus_service_get_type ())
-#define PLAYER_DBUS_SERVICE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PLAYER_DBUS_SERVICE, PlayerDbusService))
-#define PLAYER_DBUS_SERVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_PLAYER_DBUS_SERVICE, PlayerDbusServiceClass))
-#define IS_PLAYER_DBUS_SERVICE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_PLAYER_DBUS_SERVICE))
-#define IS_PLAYER_DBUS_SERVICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_PLAYER_DBUS_SERVICE))
-#define PLAYER_DBUS_SERVICE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_PLAYER_DBUS_SERVICE, PlayerDbusServiceClass))
-
-typedef struct _PlayerDbusService PlayerDbusService;
-typedef struct _PlayerDbusServiceClass PlayerDbusServiceClass;
-typedef struct _PlayerDbusServicePrivate PlayerDbusServicePrivate;
 
 #define XNOISE_TYPE_GLOBAL_ACCESS (xnoise_global_access_get_type ())
 #define XNOISE_GLOBAL_ACCESS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GLOBAL_ACCESS, XnoiseGlobalAccess))
@@ -549,6 +571,17 @@ typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 
 typedef struct _XnoiseInfoBar XnoiseInfoBar;
 typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
+
+#define XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE (xnoise_media_browser_dockable_get_type ())
+#define XNOISE_MEDIA_BROWSER_DOCKABLE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE, XnoiseMediaBrowserDockable))
+#define XNOISE_MEDIA_BROWSER_DOCKABLE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE, XnoiseMediaBrowserDockableClass))
+#define XNOISE_IS_MEDIA_BROWSER_DOCKABLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE))
+#define XNOISE_IS_MEDIA_BROWSER_DOCKABLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE))
+#define XNOISE_MEDIA_BROWSER_DOCKABLE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE, XnoiseMediaBrowserDockableClass))
+
+typedef struct _XnoiseMediaBrowserDockable XnoiseMediaBrowserDockable;
+typedef struct _XnoiseMediaBrowserDockableClass XnoiseMediaBrowserDockableClass;
+typedef struct _XnoiseMediaBrowserDockablePrivate XnoiseMediaBrowserDockablePrivate;
 typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
 
@@ -998,6 +1031,91 @@ struct _XnoiseWorkerJobClass {
 	GObjectClass parent_class;
 };
 
+typedef enum  {
+	XNOISE_DATABASE_DB_ERROR_FAILED
+} XnoiseDatabaseDbError;
+#define XNOISE_DATABASE_DB_ERROR xnoise_database_db_error_quark ()
+struct _XnoiseDatabaseDbBrowser {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseDatabaseDbBrowserPrivate * priv;
+};
+
+struct _XnoiseDatabaseDbBrowserClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseDatabaseDbBrowser *self);
+};
+
+typedef void (*XnoiseDatabaseDbBrowserReaderCallback) (sqlite3* database, void* user_data);
+struct _XnoiseStreamData {
+	gchar* name;
+	gchar* uri;
+};
+
+struct _XnoiseDatabaseDbWriter {
+	GObject parent_instance;
+	XnoiseDatabaseDbWriterPrivate * priv;
+};
+
+struct _XnoiseDatabaseDbWriterClass {
+	GObjectClass parent_class;
+};
+
+typedef enum  {
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_ARTIST,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_ALBUM,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_TITLE,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_VIDEO,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_STREAM,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_ARTIST,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_ALBUM,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_TITLE,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_URI,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_CLEAR_DB
+} XnoiseDatabaseDbWriterChangeType;
+
+typedef void (*XnoiseDatabaseDbWriterChangeNotificationCallback) (XnoiseDatabaseDbWriterChangeType changetype, XnoiseItem* item, void* user_data);
+typedef void (*XnoiseDatabaseDbWriterWriterCallback) (sqlite3* database, void* user_data);
+struct _XnoiseDbus {
+	GObject parent_instance;
+	XnoiseDbusPrivate * priv;
+	PlayerDbusService* service;
+};
+
+struct _XnoiseDbusClass {
+	GObjectClass parent_class;
+};
+
+struct _PlayerDbusService {
+	GObject parent_instance;
+	PlayerDbusServicePrivate * priv;
+};
+
+struct _PlayerDbusServiceClass {
+	GObjectClass parent_class;
+};
+
+struct _XnoiseDockableMedia {
+	GObject parent_instance;
+	XnoiseDockableMediaPrivate * priv;
+};
+
+struct _XnoiseDockableMediaClass {
+	GObjectClass parent_class;
+	gchar* (*name) (XnoiseDockableMedia* self);
+	gchar* (*headline) (XnoiseDockableMedia* self);
+	GtkWidget* (*get_widget) (XnoiseDockableMedia* self);
+};
+
+struct _XnoiseDockableDynamicPlaylists {
+	XnoiseDockableMedia parent_instance;
+	XnoiseDockableDynamicPlaylistsPrivate * priv;
+};
+
+struct _XnoiseDockableDynamicPlaylistsClass {
+	XnoiseDockableMediaClass parent_class;
+};
+
 struct _XnoiseAddMediaDialog {
 	GObject parent_instance;
 	XnoiseAddMediaDialogPrivate * priv;
@@ -1119,70 +1237,6 @@ struct _XnoiseVolumeSliderButton {
 
 struct _XnoiseVolumeSliderButtonClass {
 	GtkVolumeButtonClass parent_class;
-};
-
-typedef enum  {
-	XNOISE_DATABASE_DB_ERROR_FAILED
-} XnoiseDatabaseDbError;
-#define XNOISE_DATABASE_DB_ERROR xnoise_database_db_error_quark ()
-struct _XnoiseDatabaseDbBrowser {
-	GTypeInstance parent_instance;
-	volatile int ref_count;
-	XnoiseDatabaseDbBrowserPrivate * priv;
-};
-
-struct _XnoiseDatabaseDbBrowserClass {
-	GTypeClass parent_class;
-	void (*finalize) (XnoiseDatabaseDbBrowser *self);
-};
-
-typedef void (*XnoiseDatabaseDbBrowserReaderCallback) (sqlite3* database, void* user_data);
-struct _XnoiseStreamData {
-	gchar* name;
-	gchar* uri;
-};
-
-struct _XnoiseDatabaseDbWriter {
-	GObject parent_instance;
-	XnoiseDatabaseDbWriterPrivate * priv;
-};
-
-struct _XnoiseDatabaseDbWriterClass {
-	GObjectClass parent_class;
-};
-
-typedef enum  {
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_ARTIST,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_ALBUM,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_TITLE,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_VIDEO,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_STREAM,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_ARTIST,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_ALBUM,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_TITLE,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_URI,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_CLEAR_DB
-} XnoiseDatabaseDbWriterChangeType;
-
-typedef void (*XnoiseDatabaseDbWriterChangeNotificationCallback) (XnoiseDatabaseDbWriterChangeType changetype, XnoiseItem* item, void* user_data);
-typedef void (*XnoiseDatabaseDbWriterWriterCallback) (sqlite3* database, void* user_data);
-struct _XnoiseDbus {
-	GObject parent_instance;
-	XnoiseDbusPrivate * priv;
-	PlayerDbusService* service;
-};
-
-struct _XnoiseDbusClass {
-	GObjectClass parent_class;
-};
-
-struct _PlayerDbusService {
-	GObject parent_instance;
-	PlayerDbusServicePrivate * priv;
-};
-
-struct _PlayerDbusServiceClass {
-	GObjectClass parent_class;
 };
 
 struct _XnoiseGlobalAccess {
@@ -1429,6 +1483,15 @@ typedef enum  {
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_ALL,
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_RANDOM
 } XnoiseMainWindowPlayerRepeatMode;
+
+struct _XnoiseMediaBrowserDockable {
+	XnoiseDockableMedia parent_instance;
+	XnoiseMediaBrowserDockablePrivate * priv;
+};
+
+struct _XnoiseMediaBrowserDockableClass {
+	XnoiseDockableMediaClass parent_class;
+};
 
 struct _XnoiseMediaBrowser {
 	GtkTreeView parent_instance;
@@ -1955,78 +2018,6 @@ void xnoise_worker_job_set_arg (XnoiseWorkerJob* self, const gchar* name, GValue
 GValue* xnoise_worker_job_get_arg (XnoiseWorkerJob* self, const gchar* name);
 guint xnoise_worker_job_get_timer_seconds (XnoiseWorkerJob* self);
 XnoiseWorkerExecutionType xnoise_worker_job_get_execution_type (XnoiseWorkerJob* self);
-GType xnoise_add_media_dialog_get_type (void) G_GNUC_CONST;
-XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
-XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
-GType xnoise_fullscreen_progress_bar_get_type (void) G_GNUC_CONST;
-GType xnoise_gst_player_get_type (void) G_GNUC_CONST;
-XnoiseFullscreenProgressBar* xnoise_fullscreen_progress_bar_new (XnoiseGstPlayer* _player);
-XnoiseFullscreenProgressBar* xnoise_fullscreen_progress_bar_construct (GType object_type, XnoiseGstPlayer* _player);
-void xnoise_fullscreen_progress_bar_set_value (XnoiseFullscreenProgressBar* self, guint pos, guint len);
-gpointer xnoise_fullscreen_toolbar_ref (gpointer instance);
-void xnoise_fullscreen_toolbar_unref (gpointer instance);
-GParamSpec* xnoise_param_spec_fullscreen_toolbar (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void xnoise_value_set_fullscreen_toolbar (GValue* value, gpointer v_object);
-void xnoise_value_take_fullscreen_toolbar (GValue* value, gpointer v_object);
-gpointer xnoise_value_get_fullscreen_toolbar (const GValue* value);
-GType xnoise_fullscreen_toolbar_get_type (void) G_GNUC_CONST;
-XnoiseFullscreenToolbar* xnoise_fullscreen_toolbar_new (GtkWindow* fullscreenwindow);
-XnoiseFullscreenToolbar* xnoise_fullscreen_toolbar_construct (GType object_type, GtkWindow* fullscreenwindow);
-void xnoise_fullscreen_toolbar_resize (XnoiseFullscreenToolbar* self);
-void xnoise_fullscreen_toolbar_launch_hide_timer (XnoiseFullscreenToolbar* self);
-gboolean xnoise_fullscreen_toolbar_on_pointer_motion (XnoiseFullscreenToolbar* self, GdkEventMotion* ev);
-void xnoise_fullscreen_toolbar_show (XnoiseFullscreenToolbar* self);
-void xnoise_fullscreen_toolbar_hide (XnoiseFullscreenToolbar* self);
-GType xnoise_fullscreen_toolbar_leave_video_fs_button_get_type (void) G_GNUC_CONST;
-XnoiseFullscreenToolbarLeaveVideoFSButton* xnoise_fullscreen_toolbar_leave_video_fs_button_new (void);
-XnoiseFullscreenToolbarLeaveVideoFSButton* xnoise_fullscreen_toolbar_leave_video_fs_button_construct (GType object_type);
-void xnoise_fullscreen_toolbar_leave_video_fs_button_on_clicked (XnoiseFullscreenToolbarLeaveVideoFSButton* self);
-GQuark xnoise_settings_dialog_error_quark (void);
-GType xnoise_settings_dialog_get_type (void) G_GNUC_CONST;
-XnoiseSettingsDialog* xnoise_settings_dialog_new (void);
-XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type);
-GType xnoise_video_screen_get_type (void) G_GNUC_CONST;
-XnoiseVideoScreen* xnoise_video_screen_new (XnoiseGstPlayer* _player);
-XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type, XnoiseGstPlayer* _player);
-void xnoise_video_screen_trigger_expose (XnoiseVideoScreen* self);
-const gchar* xnoise_video_screen_get_font_family (XnoiseVideoScreen* self);
-void xnoise_video_screen_set_font_family (XnoiseVideoScreen* self, const gchar* value);
-gdouble xnoise_video_screen_get_font_size (XnoiseVideoScreen* self);
-void xnoise_video_screen_set_font_size (XnoiseVideoScreen* self, gdouble value);
-const gchar* xnoise_video_screen_get_text (XnoiseVideoScreen* self);
-void xnoise_video_screen_set_text (XnoiseVideoScreen* self, const gchar* value);
-GType xnoise_app_menu_button_get_type (void) G_GNUC_CONST;
-XnoiseAppMenuButton* xnoise_app_menu_button_new (GtkMenu* menu, const gchar* tooltip_text);
-XnoiseAppMenuButton* xnoise_app_menu_button_construct (GType object_type, GtkMenu* menu, const gchar* tooltip_text);
-GType xnoise_control_button_get_type (void) G_GNUC_CONST;
-GType xnoise_control_button_direction_get_type (void) G_GNUC_CONST;
-XnoiseControlButton* xnoise_control_button_new (XnoiseControlButtonDirection _direction);
-XnoiseControlButton* xnoise_control_button_construct (GType object_type, XnoiseControlButtonDirection _direction);
-GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
-XnoisePlayPauseButton* xnoise_play_pause_button_new (void);
-XnoisePlayPauseButton* xnoise_play_pause_button_construct (GType object_type);
-void xnoise_play_pause_button_on_menu_clicked (XnoisePlayPauseButton* self, GtkMenuItem* sender);
-void xnoise_play_pause_button_on_clicked (XnoisePlayPauseButton* self, GtkWidget* sender);
-void xnoise_play_pause_button_update_picture (XnoisePlayPauseButton* self);
-GType xnoise_serial_button_get_type (void) G_GNUC_CONST;
-XnoiseSerialButton* xnoise_serial_button_new (void);
-XnoiseSerialButton* xnoise_serial_button_construct (GType object_type);
-gint xnoise_serial_button_insert (XnoiseSerialButton* self, const gchar* txt);
-void xnoise_serial_button_select (XnoiseSerialButton* self, gint idx, gboolean emit_signal);
-void xnoise_serial_button_set_sensitive (XnoiseSerialButton* self, gint idx, gboolean sensitive_status);
-void xnoise_serial_button_del (XnoiseSerialButton* self, gint idx);
-gint xnoise_serial_button_get_selected_idx (XnoiseSerialButton* self);
-void xnoise_serial_button_set_selected_idx (XnoiseSerialButton* self, gint value);
-gint xnoise_serial_button_get_item_count (XnoiseSerialButton* self);
-GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
-XnoiseTrackInfobar* xnoise_track_infobar_new (XnoiseGstPlayer* player);
-XnoiseTrackInfobar* xnoise_track_infobar_construct (GType object_type, XnoiseGstPlayer* player);
-void xnoise_track_infobar_set_value (XnoiseTrackInfobar* self, guint pos, guint len);
-const gchar* xnoise_track_infobar_get_title_text (XnoiseTrackInfobar* self);
-void xnoise_track_infobar_set_title_text (XnoiseTrackInfobar* self, const gchar* value);
-GType xnoise_volume_slider_button_get_type (void) G_GNUC_CONST;
-XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (XnoiseGstPlayer* player);
-XnoiseVolumeSliderButton* xnoise_volume_slider_button_construct (GType object_type, XnoiseGstPlayer* player);
 GQuark xnoise_database_db_error_quark (void);
 gpointer xnoise_database_db_browser_ref (gpointer instance);
 void xnoise_database_db_browser_unref (gpointer instance);
@@ -2111,6 +2102,86 @@ void player_dbus_service_set_Volume (PlayerDbusService* self, gdouble value);
 gint64 player_dbus_service_get_Length (PlayerDbusService* self);
 gint64 player_dbus_service_get_Position (PlayerDbusService* self);
 void player_dbus_service_set_Position (PlayerDbusService* self, gint64 value);
+GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
+gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);
+gchar* xnoise_dockable_media_headline (XnoiseDockableMedia* self);
+GtkWidget* xnoise_dockable_media_get_widget (XnoiseDockableMedia* self);
+XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);
+GType xnoise_dockable_dynamic_playlists_get_type (void) G_GNUC_CONST;
+XnoiseDockableDynamicPlaylists* xnoise_dockable_dynamic_playlists_new (void);
+XnoiseDockableDynamicPlaylists* xnoise_dockable_dynamic_playlists_construct (GType object_type);
+GType xnoise_add_media_dialog_get_type (void) G_GNUC_CONST;
+XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
+XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
+GType xnoise_fullscreen_progress_bar_get_type (void) G_GNUC_CONST;
+GType xnoise_gst_player_get_type (void) G_GNUC_CONST;
+XnoiseFullscreenProgressBar* xnoise_fullscreen_progress_bar_new (XnoiseGstPlayer* _player);
+XnoiseFullscreenProgressBar* xnoise_fullscreen_progress_bar_construct (GType object_type, XnoiseGstPlayer* _player);
+void xnoise_fullscreen_progress_bar_set_value (XnoiseFullscreenProgressBar* self, guint pos, guint len);
+gpointer xnoise_fullscreen_toolbar_ref (gpointer instance);
+void xnoise_fullscreen_toolbar_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_fullscreen_toolbar (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_fullscreen_toolbar (GValue* value, gpointer v_object);
+void xnoise_value_take_fullscreen_toolbar (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_fullscreen_toolbar (const GValue* value);
+GType xnoise_fullscreen_toolbar_get_type (void) G_GNUC_CONST;
+XnoiseFullscreenToolbar* xnoise_fullscreen_toolbar_new (GtkWindow* fullscreenwindow);
+XnoiseFullscreenToolbar* xnoise_fullscreen_toolbar_construct (GType object_type, GtkWindow* fullscreenwindow);
+void xnoise_fullscreen_toolbar_resize (XnoiseFullscreenToolbar* self);
+void xnoise_fullscreen_toolbar_launch_hide_timer (XnoiseFullscreenToolbar* self);
+gboolean xnoise_fullscreen_toolbar_on_pointer_motion (XnoiseFullscreenToolbar* self, GdkEventMotion* ev);
+void xnoise_fullscreen_toolbar_show (XnoiseFullscreenToolbar* self);
+void xnoise_fullscreen_toolbar_hide (XnoiseFullscreenToolbar* self);
+GType xnoise_fullscreen_toolbar_leave_video_fs_button_get_type (void) G_GNUC_CONST;
+XnoiseFullscreenToolbarLeaveVideoFSButton* xnoise_fullscreen_toolbar_leave_video_fs_button_new (void);
+XnoiseFullscreenToolbarLeaveVideoFSButton* xnoise_fullscreen_toolbar_leave_video_fs_button_construct (GType object_type);
+void xnoise_fullscreen_toolbar_leave_video_fs_button_on_clicked (XnoiseFullscreenToolbarLeaveVideoFSButton* self);
+GQuark xnoise_settings_dialog_error_quark (void);
+GType xnoise_settings_dialog_get_type (void) G_GNUC_CONST;
+XnoiseSettingsDialog* xnoise_settings_dialog_new (void);
+XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type);
+GType xnoise_video_screen_get_type (void) G_GNUC_CONST;
+XnoiseVideoScreen* xnoise_video_screen_new (XnoiseGstPlayer* _player);
+XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type, XnoiseGstPlayer* _player);
+void xnoise_video_screen_trigger_expose (XnoiseVideoScreen* self);
+const gchar* xnoise_video_screen_get_font_family (XnoiseVideoScreen* self);
+void xnoise_video_screen_set_font_family (XnoiseVideoScreen* self, const gchar* value);
+gdouble xnoise_video_screen_get_font_size (XnoiseVideoScreen* self);
+void xnoise_video_screen_set_font_size (XnoiseVideoScreen* self, gdouble value);
+const gchar* xnoise_video_screen_get_text (XnoiseVideoScreen* self);
+void xnoise_video_screen_set_text (XnoiseVideoScreen* self, const gchar* value);
+GType xnoise_app_menu_button_get_type (void) G_GNUC_CONST;
+XnoiseAppMenuButton* xnoise_app_menu_button_new (GtkMenu* menu, const gchar* tooltip_text);
+XnoiseAppMenuButton* xnoise_app_menu_button_construct (GType object_type, GtkMenu* menu, const gchar* tooltip_text);
+GType xnoise_control_button_get_type (void) G_GNUC_CONST;
+GType xnoise_control_button_direction_get_type (void) G_GNUC_CONST;
+XnoiseControlButton* xnoise_control_button_new (XnoiseControlButtonDirection _direction);
+XnoiseControlButton* xnoise_control_button_construct (GType object_type, XnoiseControlButtonDirection _direction);
+GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
+XnoisePlayPauseButton* xnoise_play_pause_button_new (void);
+XnoisePlayPauseButton* xnoise_play_pause_button_construct (GType object_type);
+void xnoise_play_pause_button_on_menu_clicked (XnoisePlayPauseButton* self, GtkMenuItem* sender);
+void xnoise_play_pause_button_on_clicked (XnoisePlayPauseButton* self, GtkWidget* sender);
+void xnoise_play_pause_button_update_picture (XnoisePlayPauseButton* self);
+GType xnoise_serial_button_get_type (void) G_GNUC_CONST;
+XnoiseSerialButton* xnoise_serial_button_new (void);
+XnoiseSerialButton* xnoise_serial_button_construct (GType object_type);
+gint xnoise_serial_button_insert (XnoiseSerialButton* self, const gchar* txt);
+void xnoise_serial_button_select (XnoiseSerialButton* self, gint idx, gboolean emit_signal);
+void xnoise_serial_button_set_sensitive (XnoiseSerialButton* self, gint idx, gboolean sensitive_status);
+void xnoise_serial_button_del (XnoiseSerialButton* self, gint idx);
+gint xnoise_serial_button_get_selected_idx (XnoiseSerialButton* self);
+void xnoise_serial_button_set_selected_idx (XnoiseSerialButton* self, gint value);
+gint xnoise_serial_button_get_item_count (XnoiseSerialButton* self);
+GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
+XnoiseTrackInfobar* xnoise_track_infobar_new (XnoiseGstPlayer* player);
+XnoiseTrackInfobar* xnoise_track_infobar_construct (GType object_type, XnoiseGstPlayer* player);
+void xnoise_track_infobar_set_value (XnoiseTrackInfobar* self, guint pos, guint len);
+const gchar* xnoise_track_infobar_get_title_text (XnoiseTrackInfobar* self);
+void xnoise_track_infobar_set_title_text (XnoiseTrackInfobar* self, const gchar* value);
+GType xnoise_volume_slider_button_get_type (void) G_GNUC_CONST;
+XnoiseVolumeSliderButton* xnoise_volume_slider_button_new (XnoiseGstPlayer* player);
+XnoiseVolumeSliderButton* xnoise_volume_slider_button_construct (GType object_type, XnoiseGstPlayer* player);
 GType xnoise_global_access_get_type (void) G_GNUC_CONST;
 void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
 void xnoise_global_access_do_restart_of_current_track (XnoiseGlobalAccess* self);
@@ -2264,6 +2335,9 @@ gboolean xnoise_main_window_get_usestop (XnoiseMainWindow* self);
 void xnoise_main_window_set_usestop (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
+GType xnoise_media_browser_dockable_get_type (void) G_GNUC_CONST;
+XnoiseMediaBrowserDockable* xnoise_media_browser_dockable_new (XnoiseMainWindow* win);
+XnoiseMediaBrowserDockable* xnoise_media_browser_dockable_construct (GType object_type, XnoiseMainWindow* win);
 XnoiseMediaBrowser* xnoise_media_browser_new (GtkWidget* ow);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, GtkWidget* ow);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self);
@@ -2782,6 +2856,7 @@ extern XnoiseMediaImporter* xnoise_media_importer;
 extern XnoiseItemHandlerManager* xnoise_itemhandler_manager;
 extern XnoiseItemConverter* xnoise_item_converter;
 extern GMainContext* xnoise_mc;
+extern GHashTable* xnoise_dockable_media_sources;
 extern XnoiseDatabaseDbBrowser* xnoise_db_browser;
 extern XnoiseDatabaseDbWriter* xnoise_db_writer;
 extern XnoiseGstPlayer* xnoise_gst_player;

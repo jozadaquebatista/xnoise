@@ -49,7 +49,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private const string HIDEMEDIABROWSER  = _("Hide Media");
 	private const string HIDE_LIBRARY      = _("Hide Library");
 	private const string SHOW_LIBRARY      = _("Show Library");
-	
 	private unowned Main xn;
 	private int idx_tracklist;
 	private int idx_video;
@@ -86,7 +85,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Box mbbox01;
 	private Xnoise.AppMenuButton app_menu_button;
 	private TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
-	
 	public bool quit_if_closed;
 	public ScrolledWindow mediaBrScrollWin = null;
 	public ScrolledWindow trackListScrollWin = null;
@@ -257,6 +255,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	public MainWindow() {
 		this.xn = Main.instance;
 		Params.iparams_register(this);
+		
 		create_widgets();
 		
 		//initialization of videoscreen
@@ -1285,6 +1284,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
+//	private MediaBrowserDockable mdb;
 	private void create_widgets() {
 		
 		try {
@@ -1477,12 +1477,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			trackListScrollWin.add(this.trackList);
 			
 			///MediaBrowser (left)
-			mediaBrScrollWin = new ScrolledWindow(null, null);//gb.get_object("scroll_music_br") as Gtk.ScrolledWindow;
-//			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
-			this.mediaBr = new MediaBrowser(mediaBrScrollWin);
-			this.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
-//			this.mediaBr.set_size_request(100,100);
-			mediaBrScrollWin.add(this.mediaBr);
+//			mediaBrScrollWin = new ScrolledWindow(null, null);
+////			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
+//			this.mediaBr = new MediaBrowser(mediaBrScrollWin);
+//			this.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+//			mediaBrScrollWin.add(this.mediaBr);
 			var mbbx = new Gtk.Box(Orientation.VERTICAL, 0);
 			var sbx  = new Gtk.Box(Orientation.HORIZONTAL, 0);
 			collapsebutton = new Gtk.Button();//gb.get_object("collapsebutton") as Gtk.Button;
@@ -1500,7 +1499,33 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			sbx.pack_start(searchEntryMB, true, true, 0);
 			mbbx.pack_start(sbx, false, false, 0);
-			mbbx.pack_start(mediaBrScrollWin, true, true, 0);
+
+			var mdb = new MediaBrowserDockable(this);
+			var headlineTV = new TreeView();
+			headlineTV.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+			headlineTV.headers_visible = false;
+			headlineTV.get_selection().set_mode(SelectionMode.NONE);
+			ListStore mod = new ListStore(2, typeof(int), typeof(string));
+			TreeIter iter;
+			mod.append(out iter);
+			mod.set(iter,
+			        0, Pango.Weight.BOLD,
+			        1 , mdb.headline()
+			);
+			var column = new TreeViewColumn();
+			var renderer = new CellRendererText();
+			column.pack_start(renderer, true);
+			column.add_attribute(renderer, "weight", 0);
+			column.add_attribute(renderer, "text", 1);
+			headlineTV.insert_column(column, -1);
+			headlineTV.model = mod;
+			mbbx.pack_start(headlineTV, false, false, 0);
+			Gtk.Widget? widg = mdb.get_widget();
+			if(widg == null)
+				print("widg is null\n");
+			else
+				print("widg is not null\n");
+			mbbx.pack_start(widg, true, true, 0);
 			
 			mbbox01.pack_start(mbbx, true, true, 0);
 			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
@@ -1530,7 +1555,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			this.searchEntryMB.icon_press.connect( (s, p0, p1) => { 
 				// s:Entry, p0:Position, p1:Gdk.Event
-				var entry = (Gtk.Entry)s;
 				if(p0 == Gtk.EntryIconPosition.PRIMARY) {
 					this.mediaBr.on_searchtext_changed();
 				}
