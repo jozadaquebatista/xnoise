@@ -869,7 +869,6 @@ namespace Xnoise {
 		public SerialButton ();
 		public void del (int idx);
 		public int insert (string? txt);
-		public override bool scroll_event (Gdk.EventScroll e);
 		public void select (int idx, bool emit_signal = true);
 		public new void set_sensitive (int idx, bool sensitive_status);
 		public int item_count { get; }

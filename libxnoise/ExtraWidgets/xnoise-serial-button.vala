@@ -92,19 +92,6 @@ public class Xnoise.SerialButton : Gtk.Box {
 		return cnt - 1;
 	}
 
-	public override bool scroll_event(Gdk.EventScroll e) {
-		if(e.direction == Gdk.ScrollDirection.UP) {
-			selected_idx--;
-			return true;
-		}
-		
-		if(e.direction == Gdk.ScrollDirection.DOWN) {
-			selected_idx++;
-			return true;
-		}
-		return false;
-	}
-
 	public void select(int idx, bool emit_signal = true) {
 		if(idx < 0 || idx >= this.item_count || _selected_idx == idx )
 			return;
