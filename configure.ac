@@ -445,7 +445,7 @@ echo "
     titleToDecoration:             yes (always)
     cyclic-save-state:             yes (always)
     chartlyrics:                   ${enable_chartlyrics}
-    azlyrics:                      ${enable_chartlyrics}
+    azlyrics:                      ${enable_azlyrics}
     lyricwiki:                     ${enable_lyricwiki}
     lastfm webservices:            ${enable_lastfm}
     notifications:                 ${enable_notifications}

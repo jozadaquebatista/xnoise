@@ -18,7 +18,7 @@ DIST_SUBDIRS = \
     po \
     doc \
     vapi \
-    tests
+    tests \
     $(NULL)
 
 
