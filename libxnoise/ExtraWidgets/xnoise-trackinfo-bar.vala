@@ -33,7 +33,7 @@ using Gtk;
 
 public class Xnoise.TrackInfobar : Gtk.ToolItem {
 	private Gtk.Box topbox;
-	private Label title_label;
+	private CustomLabel title_label;
 	private Label time_label;
 	private CustomProgress progress;
 	private EventBox ebox;
@@ -44,6 +44,23 @@ public class Xnoise.TrackInfobar : Gtk.ToolItem {
 		set { 
 			title_label.label = value;
 			title_label.set_use_markup(true);
+		}
+	}
+	
+	private class CustomLabel : Label {
+		public CustomLabel(string txt) {
+			GLib.Object(label:txt);
+			this.set_single_line_mode(true);
+			this.set_alignment(0.35f, 1.0f);
+			this.set_ellipsize(Pango.EllipsizeMode.END);
+			this.xpad = 10;
+		}
+		
+		public override void get_preferred_height(out int minimum_height, out int natural_height) {
+			base.get_preferred_height(out minimum_height, out natural_height);
+			minimum_height = 20;
+			if(natural_height < minimum_height)
+				natural_height = minimum_height;
 		}
 	}
 	
@@ -231,12 +248,8 @@ public class Xnoise.TrackInfobar : Gtk.ToolItem {
 	}
 	private static const int VBOX_BORDER_WIDTH = 4;
 	private void setup_widgets() {
-		title_label = new Label("<b>XNOISE</b> - ready to rock! ;-)");
+		title_label = new CustomLabel("<b>XNOISE</b> - ready to rock! ;-)");
 		title_label.set_use_markup(true);
-		title_label.set_single_line_mode(true);
-		title_label.set_alignment(0.0f, 0.8f);
-		title_label.set_ellipsize(Pango.EllipsizeMode.END);
-		title_label.xpad = 10;
 		
 		ebox = new EventBox(); 
 		ebox.set_events(Gdk.EventMask.SCROLL_MASK |
