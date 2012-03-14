@@ -40,19 +40,20 @@ public extern bool ensure_native(Gdk.Window window);
 public extern void widget_style_get_property(Gtk.Widget widget, string property_name, GLib.Value val);
 
 public class Xnoise.MainWindow : Gtk.Window, IParams {
-	private const string MAIN_UI_FILE	 = Config.UIDIR + "main_window.ui";
-	private const string MENU_UI_FILE	 = Config.UIDIR + "main_ui.xml";
-	private const string SHOWVIDEO		= _("Now Playing");
-	private const string SHOWTRACKLIST	= _("Tracklist");
-	private const string SHOWLYRICS	   = _("Lyrics");
-	private const string SHOWMEDIABROWSER = _("Show Media");
-	private const string HIDEMEDIABROWSER = _("Hide Media");
-	private const string HIDE_LIBRARY	 = _("Hide Library");
-	private const string SHOW_LIBRARY	 = _("Show Library");
+	private const string MAIN_UI_FILE      = Config.UIDIR + "main_window.ui";
+	private const string MENU_UI_FILE      = Config.UIDIR + "main_ui.xml";
+	private const string SHOWVIDEO         = _("Now Playing");
+	private const string SHOWTRACKLIST     = _("Tracklist");
+	private const string SHOWLYRICS        = _("Lyrics");
+	private const string SHOWMEDIABROWSER  = _("Show Media");
+	private const string HIDEMEDIABROWSER  = _("Hide Media");
+	private const string HIDE_LIBRARY      = _("Hide Library");
+	private const string SHOW_LIBRARY      = _("Show Library");
+	
+	private unowned Main xn;
 	private int idx_tracklist;
 	private int idx_video;
 	private int idx_lyrics;
-	private unowned Main xn;
 	private uint search_idlesource = 0;
 	private UIManager ui_manager = new UIManager();
 	private int _posX;
@@ -70,7 +71,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private SerialButton sbuttonLY;
 	private SerialButton sbuttonVI;
 	private Button repeatButton;
-	private int buffer_last_page;
+	private TrackListNoteBookTab buffer_last_page = TrackListNoteBookTab.TRACKLIST;
 	private Image repeatimage; 
 	private Box menuvbox;
 	private Box mainvbox;
@@ -273,7 +274,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		this.notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
 		global.notify["media-import-in-progress"].connect(on_media_import_notify);
 		
-		buffer_last_page = 0;
+		buffer_last_page = TrackListNoteBookTab.TRACKLIST;
 		
 		global.caught_eos_from_player.connect(on_caught_eos_from_player);
 		global.tag_changed.connect(this.set_displayed_title);
@@ -1409,7 +1410,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					aimage_timeout = 0;
 					return false;
 				}
-				this.tracklistnotebook.set_current_page(buffer_last_page);
+				int idx = 0;
+				if(buffer_last_page == TrackListNoteBookTab.TRACKLIST)
+					idx = idx_tracklist;
+				else if(buffer_last_page == TrackListNoteBookTab.VIDEO)
+					idx = idx_video;
+				else if(buffer_last_page == TrackListNoteBookTab.LYRICS)
+					idx = idx_lyrics;
+				sbuttonVI.select(idx, true);
 				return false;
 			});
 			//--------------------
@@ -1596,8 +1604,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if(not_show_art_on_hover_image)
 			return false;
 		aimage_timeout = Timeout.add(300, () => {
-			buffer_last_page = this.tracklistnotebook.get_current_page();
-			this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+			buffer_last_page = (TrackListNoteBookTab)this.tracklistnotebook.get_current_page();
+			sbuttonTL.select(idx_video, true);
 			this.aimage_timeout = 0;
 			return false;
 		});
