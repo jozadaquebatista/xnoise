@@ -594,7 +594,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					if(e.state != 0x0014) // Ctrl Modifier
 						return false;
 					searchEntryMB.text = EMPTYSTRING;
-					searchEntryMB.override_background_color(StateFlags.NORMAL, null);
+					searchEntryMB.get_style_context().remove_class("not-found");
 					this.mediaBr.on_searchtext_changed();
 				}
 				return true;
@@ -1520,13 +1520,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					return false;
 				});
 				if(entry.text != EMPTYSTRING) {
-					Gdk.RGBA color = Gdk.RGBA();
-					if(!color.parse("rgba(233,150,122,1.0)")) //"DarkSalmon"#E18B6B11
-						print("error parsing color\n");
-					searchEntryMB.override_background_color(StateFlags.NORMAL, color);
+					searchEntryMB.get_style_context().add_class("not-found");
 				}
 				else {
-					searchEntryMB.override_background_color(StateFlags.NORMAL, null);
+					searchEntryMB.get_style_context().remove_class("not-found");
 				}
 				return false;
 			});
@@ -1539,7 +1536,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 				if(p0 == Gtk.EntryIconPosition.SECONDARY) {
 					s.text = EMPTYSTRING;
-					entry.override_background_color(StateFlags.NORMAL, null);
+					searchEntryMB.get_style_context().remove_class("not-found");
 					this.mediaBr.on_searchtext_changed();
 				}
 			});
