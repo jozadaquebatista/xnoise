@@ -318,7 +318,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				sbuttonVI.select(idx_tracklist, true);
 			}
 		});
-		videoscreen.drag_motion.connect((sender,context,x,y,t) => {
+		videoscreen.drag_motion.connect( (sender,context,x,y,t) => {
 			temporary_tab = TrackListNoteBookTab.VIDEO;
 			sign_drag_over_content_area();
 			return true;
@@ -336,9 +336,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if(temporary_tab != TrackListNoteBookTab.TRACKLIST) {
 			tracklistnotebook.set_current_page(temporary_tab);
 			if(temporary_tab == TrackListNoteBookTab.VIDEO)
-				sbuttonVI.select(idx_video, false);
+				sbuttonTL.select(idx_video, true);
 			else if(temporary_tab == TrackListNoteBookTab.LYRICS)
-				sbuttonVI.select(idx_lyrics, false);
+				sbuttonTL.select(idx_lyrics, true);
 			
 			temporary_tab = TrackListNoteBookTab.TRACKLIST;
 		}
