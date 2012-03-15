@@ -588,7 +588,7 @@ public class Xnoise.TrackList : TreeView, IParams {
 		if(hide_timer != 0) 
 			GLib.Source.remove(hide_timer);
 		
-		hide_timer = Timeout.add_seconds(1, () => {
+		hide_timer = Timeout.add(200, () => {
 			main_window.restore_tab();
 			hide_timer = 0;
 			return false;

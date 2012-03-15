@@ -40,11 +40,6 @@ public class Xnoise.MediaBrowserDockable : DockableMedia {
 	private static const string name_txt = "MediaBrowserDockable";
 	private unowned MainWindow win;
 	
-	public MediaBrowserDockable(MainWindow win) {
-		this.win = win; // use this ref because static main_window
-		                //is not yet set up at this point
-	}
-	
 	public override string name() {
 		return name_txt;
 	}
@@ -53,8 +48,9 @@ public class Xnoise.MediaBrowserDockable : DockableMedia {
 		return _("Media Collection");
 	}
 	
-	public override Gtk.Widget? get_widget() {
-		///MediaBrowser (left)
+	public override Gtk.Widget? get_widget(MainWindow window) {
+		this.win = window; // use this ref because static main_window
+		                   //is not yet set up at construction time
 		win.mediaBrScrollWin = new ScrolledWindow(null, null);
 		win.mediaBr = new MediaBrowser(win.mediaBrScrollWin);
 		win.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);

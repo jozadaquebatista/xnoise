@@ -32,6 +32,6 @@
 public abstract class Xnoise.DockableMedia : GLib.Object {
 	public abstract string name();
 	public abstract string headline();
-	public abstract Gtk.Widget? get_widget();
+	public abstract Gtk.Widget? get_widget(Xnoise.MainWindow window);
 }
 

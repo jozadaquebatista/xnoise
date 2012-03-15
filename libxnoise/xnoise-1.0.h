@@ -190,6 +190,16 @@ typedef struct _XnoiseDockableMedia XnoiseDockableMedia;
 typedef struct _XnoiseDockableMediaClass XnoiseDockableMediaClass;
 typedef struct _XnoiseDockableMediaPrivate XnoiseDockableMediaPrivate;
 
+#define XNOISE_TYPE_MAIN_WINDOW (xnoise_main_window_get_type ())
+#define XNOISE_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindow))
+#define XNOISE_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
+#define XNOISE_IS_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MAIN_WINDOW))
+#define XNOISE_IS_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MAIN_WINDOW))
+#define XNOISE_MAIN_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
+
+typedef struct _XnoiseMainWindow XnoiseMainWindow;
+typedef struct _XnoiseMainWindowClass XnoiseMainWindowClass;
+
 #define XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS (xnoise_dockable_dynamic_playlists_get_type ())
 #define XNOISE_DOCKABLE_DYNAMIC_PLAYLISTS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS, XnoiseDockableDynamicPlaylists))
 #define XNOISE_DOCKABLE_DYNAMIC_PLAYLISTS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS, XnoiseDockableDynamicPlaylistsClass))
@@ -528,16 +538,6 @@ typedef struct _XnoiseMainPrivate XnoiseMainPrivate;
 
 typedef struct _XnoiseIParams XnoiseIParams;
 typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
-
-#define XNOISE_TYPE_MAIN_WINDOW (xnoise_main_window_get_type ())
-#define XNOISE_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindow))
-#define XNOISE_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
-#define XNOISE_IS_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MAIN_WINDOW))
-#define XNOISE_IS_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MAIN_WINDOW))
-#define XNOISE_MAIN_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
-
-typedef struct _XnoiseMainWindow XnoiseMainWindow;
-typedef struct _XnoiseMainWindowClass XnoiseMainWindowClass;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
 #define XNOISE_TYPE_MEDIA_BROWSER (xnoise_media_browser_get_type ())
@@ -1104,7 +1104,7 @@ struct _XnoiseDockableMediaClass {
 	GObjectClass parent_class;
 	gchar* (*name) (XnoiseDockableMedia* self);
 	gchar* (*headline) (XnoiseDockableMedia* self);
-	GtkWidget* (*get_widget) (XnoiseDockableMedia* self);
+	GtkWidget* (*get_widget) (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 };
 
 struct _XnoiseDockableDynamicPlaylists {
@@ -2103,9 +2103,10 @@ gint64 player_dbus_service_get_Length (PlayerDbusService* self);
 gint64 player_dbus_service_get_Position (PlayerDbusService* self);
 void player_dbus_service_set_Position (PlayerDbusService* self, gint64 value);
 GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
+GType xnoise_main_window_get_type (void) G_GNUC_CONST;
 gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);
 gchar* xnoise_dockable_media_headline (XnoiseDockableMedia* self);
-GtkWidget* xnoise_dockable_media_get_widget (XnoiseDockableMedia* self);
+GtkWidget* xnoise_dockable_media_get_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);
 GType xnoise_dockable_dynamic_playlists_get_type (void) G_GNUC_CONST;
 XnoiseDockableDynamicPlaylists* xnoise_dockable_dynamic_playlists_new (void);
@@ -2306,7 +2307,6 @@ XnoiseMain* xnoise_main_get_instance (void);
 gboolean gdk_window_ensure_native (GdkWindow* window);
 void gtk_widget_style_get_property (GtkWidget* widget, const gchar* property_name, GValue* val);
 GType xnoise_iparams_get_type (void) G_GNUC_CONST;
-GType xnoise_main_window_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
 GType xnoise_track_list_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_player_repeat_mode_get_type (void) G_GNUC_CONST;
@@ -2336,8 +2336,8 @@ void xnoise_main_window_set_usestop (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
 GType xnoise_media_browser_dockable_get_type (void) G_GNUC_CONST;
-XnoiseMediaBrowserDockable* xnoise_media_browser_dockable_new (XnoiseMainWindow* win);
-XnoiseMediaBrowserDockable* xnoise_media_browser_dockable_construct (GType object_type, XnoiseMainWindow* win);
+XnoiseMediaBrowserDockable* xnoise_media_browser_dockable_new (void);
+XnoiseMediaBrowserDockable* xnoise_media_browser_dockable_construct (GType object_type);
 XnoiseMediaBrowser* xnoise_media_browser_new (GtkWidget* ow);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, GtkWidget* ow);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self);

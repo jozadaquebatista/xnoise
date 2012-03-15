@@ -124,6 +124,13 @@ namespace Xnoise {
 		// PLUGINS
 		plugin_loader = new PluginModule.Loader();
 		
+		// DOCKABLE MEDIA
+		DockableMedia d;
+		d = new MediaBrowserDockable(); // Media Browser
+		dockable_media_sources.insert(d.name(), d);
+		d = new DockableDynamicPlaylists(); // Dynamic Playlists
+		dockable_media_sources.insert(d.name(), d);
+		
 		
 		// STATIC WIDGETS
 		tlm = new TrackListModel();

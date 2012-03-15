@@ -513,14 +513,14 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class DockableDynamicPlaylists : Xnoise.DockableMedia {
 		public DockableDynamicPlaylists ();
-		public override Gtk.Widget? get_widget ();
+		public override Gtk.Widget? get_widget (Xnoise.MainWindow window);
 		public override string headline ();
 		public override string name ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DockableMedia : GLib.Object {
 		public DockableMedia ();
-		public abstract Gtk.Widget? get_widget ();
+		public abstract Gtk.Widget? get_widget (Xnoise.MainWindow window);
 		public abstract string headline ();
 		public abstract string name ();
 	}
@@ -792,8 +792,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaBrowserDockable : Xnoise.DockableMedia {
-		public MediaBrowserDockable (Xnoise.MainWindow win);
-		public override Gtk.Widget? get_widget ();
+		public MediaBrowserDockable ();
+		public override Gtk.Widget? get_widget (Xnoise.MainWindow window);
 		public override string headline ();
 		public override string name ();
 	}

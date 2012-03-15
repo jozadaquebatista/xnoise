@@ -85,6 +85,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private Box mbbox01;
 	private Xnoise.AppMenuButton app_menu_button;
 	private TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
+	private Box mbbx;
 	public bool quit_if_closed;
 	public ScrolledWindow mediaBrScrollWin = null;
 	public ScrolledWindow trackListScrollWin = null;
@@ -319,6 +320,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			}
 		});
 		videoscreen.drag_motion.connect( (sender,context,x,y,t) => {
+			print("videoscreen d m\n");
 			temporary_tab = TrackListNoteBookTab.VIDEO;
 			sign_drag_over_content_area();
 			return true;
@@ -656,7 +658,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			}
 			return false;
 		});
-		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+		sbuttonTL.select(idx_video, true);
 	}
 
 	private void on_show_tracklist_menu_clicked() {
@@ -668,7 +670,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			}
 			return false;
 		});
-		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
+		sbuttonTL.select(idx_tracklist, true);
 	}
 
 	private void on_show_lyrics_menu_clicked() {
@@ -680,7 +682,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			}
 			return false;
 		});
-		this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
+		sbuttonTL.select(idx_lyrics, true);
 	}
 
 	// This is used for the main window
@@ -1284,6 +1286,44 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
+	private List<unowned TreeView> dockable_treeviews = new List<unowned TreeView>();
+	private void insert_dockable(DockableMedia d, bool expand = false) {
+		assert(mbbx != null);
+		var headlineTV = new TreeView();
+		headlineTV.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+		headlineTV.headers_visible = false;
+		headlineTV.get_selection().set_mode(SelectionMode.NONE);
+		ListStore mod = new ListStore(2, typeof(int), typeof(string));
+		TreeIter iter;
+		mod.append(out iter);
+		mod.set(iter,
+			    0, Pango.Weight.BOLD,
+			    1 , d.headline()
+		);
+		var column = new TreeViewColumn();
+		var renderer = new CellRendererText();
+		column.pack_start(renderer, true);
+		column.add_attribute(renderer, "weight", 0);
+		column.add_attribute(renderer, "text", 1);
+		headlineTV.insert_column(column, -1);
+		headlineTV.model = mod;
+		mbbx.pack_start(headlineTV, false, false, 0);
+		Gtk.Widget? widg = d.get_widget(this);
+		if(widg == null)
+			return;
+		if(widg is Gtk.TreeView) {
+			((TreeView)widg).button_press_event.connect(this.on_dockable_button_press);
+			dockable_treeviews.prepend(((TreeView)widg));
+		}
+		widg.show_all();
+		mbbx.pack_start(widg, expand, expand, 0);
+	}
+	
+	private bool on_dockable_button_press(Gdk.EventButton e) {
+		mediaBr.get_selection().unselect_all();
+		return false;
+	}
+	
 //	private MediaBrowserDockable mdb;
 	private void create_widgets() {
 		
@@ -1476,13 +1516,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 //			tl.set_container(hpaned);
 			trackListScrollWin.add(this.trackList);
 			
-			///MediaBrowser (left)
-//			mediaBrScrollWin = new ScrolledWindow(null, null);
-////			mediaBrScrollWin.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC);
-//			this.mediaBr = new MediaBrowser(mediaBrScrollWin);
-//			this.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
-//			mediaBrScrollWin.add(this.mediaBr);
-			var mbbx = new Gtk.Box(Orientation.VERTICAL, 0);
+			mbbx = new Gtk.Box(Orientation.VERTICAL, 0);
 			var sbx  = new Gtk.Box(Orientation.HORIZONTAL, 0);
 			collapsebutton = new Gtk.Button();//gb.get_object("collapsebutton") as Gtk.Button;
 			var coll_img   = new Gtk.Image.from_stock(Gtk.Stock.UNINDENT, Gtk.IconSize.MENU);//gb.get_object("imagecollapse") as Gtk.Image;
@@ -1499,34 +1533,30 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			
 			sbx.pack_start(searchEntryMB, true, true, 0);
 			mbbx.pack_start(sbx, false, false, 0);
-
-			var mdb = new MediaBrowserDockable(this);
-			var headlineTV = new TreeView();
-			headlineTV.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
-			headlineTV.headers_visible = false;
-			headlineTV.get_selection().set_mode(SelectionMode.NONE);
-			ListStore mod = new ListStore(2, typeof(int), typeof(string));
-			TreeIter iter;
-			mod.append(out iter);
-			mod.set(iter,
-			        0, Pango.Weight.BOLD,
-			        1 , mdb.headline()
-			);
-			var column = new TreeViewColumn();
-			var renderer = new CellRendererText();
-			column.pack_start(renderer, true);
-			column.add_attribute(renderer, "weight", 0);
-			column.add_attribute(renderer, "text", 1);
-			headlineTV.insert_column(column, -1);
-			headlineTV.model = mod;
-			mbbx.pack_start(headlineTV, false, false, 0);
-			Gtk.Widget? widg = mdb.get_widget();
-			if(widg == null)
-				print("widg is null\n");
-			else
-				print("widg is not null\n");
-			mbbx.pack_start(widg, true, true, 0);
 			
+			// DOCKABLE MEDIA
+			unowned DockableMedia? dm_mb = null;
+			assert((dm_mb = dockable_media_sources.lookup("MediaBrowserDockable")) != null);
+			foreach(unowned string n in dockable_media_sources.get_keys()) {
+				if(n == "MediaBrowserDockable")
+					continue;
+				
+				unowned DockableMedia? d = null;
+				d = dockable_media_sources.lookup(n);
+				if(d == null)
+					continue;
+				
+				insert_dockable(d, false);
+			}
+			
+			insert_dockable(dm_mb, true);
+			assert(mediaBr != null);
+			mediaBr.button_press_event.connect( () => {
+				foreach(unowned TreeView tx in dockable_treeviews) {
+					tx.get_selection().unselect_all();
+				}
+				return false;
+			});
 			mbbox01.pack_start(mbbx, true, true, 0);
 			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
 			tracklistnotebook.switch_page.connect( (s,np,p) => {
