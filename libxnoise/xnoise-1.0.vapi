@@ -511,13 +511,6 @@ namespace Xnoise {
 		public Dbus ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class DockableDynamicPlaylists : Xnoise.DockableMedia {
-		public DockableDynamicPlaylists ();
-		public override Gtk.Widget? get_widget (Xnoise.MainWindow window);
-		public override string headline ();
-		public override string name ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DockableMedia : GLib.Object {
 		public DockableMedia ();
 		public abstract Gtk.Widget? get_widget (Xnoise.MainWindow window);

@@ -30,12 +30,8 @@
 
 using Gtk;
 
-public class Xnoise.DockableDynamicPlaylists : DockableMedia {
-	private unowned MainWindow win;
-	
-	public DockableDynamicPlaylists() {
-		
-	}
+
+private class Xnoise.DockableDynamicPlaylists : DockableMedia {
 	
 	public override string name() {
 		return "DockableDynamicPlaylists";
@@ -45,41 +41,10 @@ public class Xnoise.DockableDynamicPlaylists : DockableMedia {
 		return _("Dynamic Playlists");
 	}
 	
-	// TODO use custom TreeView
 	public override Gtk.Widget? get_widget(MainWindow window) {
-		this.win = window; // use this ref because static main_window
-		                   //is not yet set up at construction time
-		var tv = new TreeView();
-		tv.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
-		tv.headers_visible = false;
-		tv.get_selection().set_mode(SelectionMode.MULTIPLE);
-		TreeStore mod = new TreeStore(2, typeof(Gdk.Pixbuf), typeof(string));
-		TreeIter iter;
-		Gdk.Pixbuf pixb = null;
-		Gtk.Invisible i = new Gtk.Invisible();
-		try {
-			if(IconTheme.get_default().has_icon("xn-playlist"))
-				pixb = IconTheme.get_default().load_icon("xn-playlist", 16, IconLookupFlags.FORCE_SIZE);
-			else
-				pixb = i.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
-		}
-		catch(Error e) {
-		}
-		mod.append(out iter, null);
-		mod.set(iter, 0, pixb, 1 , _("Most popular"));
-		mod.append(out iter, null);
-		mod.set(iter, 0, pixb, 1 , _("Recently added"));
-		var column = new TreeViewColumn();
-		var renderer = new CellRendererText();
-		var rendererPb = new CellRendererPixbuf();
-		column.pack_start(rendererPb, false);
-		column.pack_start(renderer, true);
-		column.add_attribute(rendererPb, "pixbuf", 0);
-		column.add_attribute(renderer, "text", 1);
-		tv.insert_column(column, -1);
-		tv.model = mod;
+		var tv = new PlaylistTreeView(window);
 		return tv;
 	}
-	
 }
+
 

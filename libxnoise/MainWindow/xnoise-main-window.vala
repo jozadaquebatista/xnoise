@@ -1312,6 +1312,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		if(widg == null)
 			return;
 		if(widg is Gtk.TreeView) {
+			((TreeView)widg).get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 			((TreeView)widg).button_press_event.connect(this.on_dockable_button_press);
 			dockable_treeviews.prepend(((TreeView)widg));
 		}

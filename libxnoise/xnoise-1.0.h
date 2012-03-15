@@ -200,17 +200,6 @@ typedef struct _XnoiseDockableMediaPrivate XnoiseDockableMediaPrivate;
 typedef struct _XnoiseMainWindow XnoiseMainWindow;
 typedef struct _XnoiseMainWindowClass XnoiseMainWindowClass;
 
-#define XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS (xnoise_dockable_dynamic_playlists_get_type ())
-#define XNOISE_DOCKABLE_DYNAMIC_PLAYLISTS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS, XnoiseDockableDynamicPlaylists))
-#define XNOISE_DOCKABLE_DYNAMIC_PLAYLISTS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS, XnoiseDockableDynamicPlaylistsClass))
-#define XNOISE_IS_DOCKABLE_DYNAMIC_PLAYLISTS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS))
-#define XNOISE_IS_DOCKABLE_DYNAMIC_PLAYLISTS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS))
-#define XNOISE_DOCKABLE_DYNAMIC_PLAYLISTS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DOCKABLE_DYNAMIC_PLAYLISTS, XnoiseDockableDynamicPlaylistsClass))
-
-typedef struct _XnoiseDockableDynamicPlaylists XnoiseDockableDynamicPlaylists;
-typedef struct _XnoiseDockableDynamicPlaylistsClass XnoiseDockableDynamicPlaylistsClass;
-typedef struct _XnoiseDockableDynamicPlaylistsPrivate XnoiseDockableDynamicPlaylistsPrivate;
-
 #define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
 #define XNOISE_ADD_MEDIA_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialog))
 #define XNOISE_ADD_MEDIA_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialogClass))
@@ -1105,15 +1094,6 @@ struct _XnoiseDockableMediaClass {
 	gchar* (*name) (XnoiseDockableMedia* self);
 	gchar* (*headline) (XnoiseDockableMedia* self);
 	GtkWidget* (*get_widget) (XnoiseDockableMedia* self, XnoiseMainWindow* window);
-};
-
-struct _XnoiseDockableDynamicPlaylists {
-	XnoiseDockableMedia parent_instance;
-	XnoiseDockableDynamicPlaylistsPrivate * priv;
-};
-
-struct _XnoiseDockableDynamicPlaylistsClass {
-	XnoiseDockableMediaClass parent_class;
 };
 
 struct _XnoiseAddMediaDialog {
@@ -2108,9 +2088,6 @@ gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);
 gchar* xnoise_dockable_media_headline (XnoiseDockableMedia* self);
 GtkWidget* xnoise_dockable_media_get_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);
-GType xnoise_dockable_dynamic_playlists_get_type (void) G_GNUC_CONST;
-XnoiseDockableDynamicPlaylists* xnoise_dockable_dynamic_playlists_new (void);
-XnoiseDockableDynamicPlaylists* xnoise_dockable_dynamic_playlists_construct (GType object_type);
 GType xnoise_add_media_dialog_get_type (void) G_GNUC_CONST;
 XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
 XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);

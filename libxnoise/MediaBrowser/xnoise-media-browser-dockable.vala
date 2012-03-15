@@ -36,7 +36,7 @@ using Xnoise;
 
 // Media Browser is a special case of the DockableMedia,
 // because it's the main source of media.
-public class Xnoise.MediaBrowserDockable : DockableMedia {
+private class Xnoise.MediaBrowserDockable : DockableMedia {
 	private static const string name_txt = "MediaBrowserDockable";
 	private unowned MainWindow win;
 	
