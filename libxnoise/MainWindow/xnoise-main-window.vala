@@ -1315,6 +1315,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			((TreeView)widg).get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 			((TreeView)widg).button_press_event.connect(this.on_dockable_button_press);
 			dockable_treeviews.prepend(((TreeView)widg));
+			collapsebutton.clicked.connect( () => {
+				((TreeView)widg).collapse_all();
+			});
 		}
 		widg.show_all();
 		mbbx.pack_start(widg, expand, expand, 0);

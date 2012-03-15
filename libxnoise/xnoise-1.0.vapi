@@ -784,13 +784,6 @@ namespace Xnoise {
 		public signal void sign_activated ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class MediaBrowserDockable : Xnoise.DockableMedia {
-		public MediaBrowserDockable ();
-		public override Gtk.Widget? get_widget (Xnoise.MainWindow window);
-		public override string headline ();
-		public override string name ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		public enum CollectionType {
 			UNKNOWN,

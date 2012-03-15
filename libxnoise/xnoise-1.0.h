@@ -560,17 +560,6 @@ typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 
 typedef struct _XnoiseInfoBar XnoiseInfoBar;
 typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
-
-#define XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE (xnoise_media_browser_dockable_get_type ())
-#define XNOISE_MEDIA_BROWSER_DOCKABLE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE, XnoiseMediaBrowserDockable))
-#define XNOISE_MEDIA_BROWSER_DOCKABLE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE, XnoiseMediaBrowserDockableClass))
-#define XNOISE_IS_MEDIA_BROWSER_DOCKABLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE))
-#define XNOISE_IS_MEDIA_BROWSER_DOCKABLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE))
-#define XNOISE_MEDIA_BROWSER_DOCKABLE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER_DOCKABLE, XnoiseMediaBrowserDockableClass))
-
-typedef struct _XnoiseMediaBrowserDockable XnoiseMediaBrowserDockable;
-typedef struct _XnoiseMediaBrowserDockableClass XnoiseMediaBrowserDockableClass;
-typedef struct _XnoiseMediaBrowserDockablePrivate XnoiseMediaBrowserDockablePrivate;
 typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
 
@@ -1464,15 +1453,6 @@ typedef enum  {
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_RANDOM
 } XnoiseMainWindowPlayerRepeatMode;
 
-struct _XnoiseMediaBrowserDockable {
-	XnoiseDockableMedia parent_instance;
-	XnoiseMediaBrowserDockablePrivate * priv;
-};
-
-struct _XnoiseMediaBrowserDockableClass {
-	XnoiseDockableMediaClass parent_class;
-};
-
 struct _XnoiseMediaBrowser {
 	GtkTreeView parent_instance;
 	XnoiseMediaBrowserPrivate * priv;
@@ -2312,9 +2292,6 @@ gboolean xnoise_main_window_get_usestop (XnoiseMainWindow* self);
 void xnoise_main_window_set_usestop (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
-GType xnoise_media_browser_dockable_get_type (void) G_GNUC_CONST;
-XnoiseMediaBrowserDockable* xnoise_media_browser_dockable_new (void);
-XnoiseMediaBrowserDockable* xnoise_media_browser_dockable_construct (GType object_type);
 XnoiseMediaBrowser* xnoise_media_browser_new (GtkWidget* ow);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, GtkWidget* ow);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self);
