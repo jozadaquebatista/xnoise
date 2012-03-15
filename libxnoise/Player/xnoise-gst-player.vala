@@ -291,8 +291,8 @@ public class Xnoise.GstPlayer : GLib.Object {
 		update_tags_source = 0;
 		automatic_subtitles_source = 0;
 
-		global.uri_changed.connect( () => {
-			this.request_location(global.current_uri);
+		global.uri_changed.connect( (s,u) => {
+			this.request_location(u);
 		});
 
 		global.player_state_changed.connect( () => {

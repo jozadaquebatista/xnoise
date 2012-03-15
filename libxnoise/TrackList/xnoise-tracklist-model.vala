@@ -262,19 +262,20 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 				global.do_restart_of_current_track();
 				global.uri_repeated(item.uri);
 			}
-			
-			if(item.uri != EMPTYSTRING)
+			if(item.uri != null && item.uri != EMPTYSTRING)
 				global.current_uri = item.uri;
+			else
+				print("Warning: Could not retrieve URI!\n");
 			
 		}
 		else {
 			return;
 		}
-
+		
 		// Set visual feedback for tracklist
 		if(((int)global.player_state) > 0) { //playing or paused
 			bolden_row();
-
+			
 			if(global.player_state == PlayerState.PLAYING)
 				set_play_state();
 			else if(global.player_state== PlayerState.PAUSED)
@@ -289,10 +290,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 	// gets path global-position_reference is pointing to
 	public bool get_current_path(out TreePath treepath) {
 		treepath = null;
-		if((global.position_reference.valid()&&
-		  (global.position_reference != null))) {
+		if(global.position_reference != null && global.position_reference.valid()) {
 			treepath = global.position_reference.get_path();
-			if(treepath!=null) {
+			if(treepath != null) {
 				// print("active path: " + treepath.to_string() + "\n");
 				return true;
 			}
@@ -330,10 +330,10 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
 		else if(this.get_iter_first(out iter)) {
 			treepath = this.get_path(iter);
 			used_next_pos = true;
-
+			
 			if(treepath != null)
 				global.position_reference_next = new TreeRowReference(this, treepath);
-
+			
 			return true;
 		}
 		global.position_reference = null;

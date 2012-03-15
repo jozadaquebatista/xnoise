@@ -784,9 +784,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		TreePath path = null;
 		int rowcount = 0;
 		bool used_next_pos = false;
-
+		
 		rowcount = (int)trackList.tracklistmodel.iter_n_children(null);
-
+		
 		// if no track is in the list, it does not make sense to go any further
 		if(rowcount == 0) {
 			stop();
@@ -815,7 +815,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 						return;
 					if(!this.trackList.tracklistmodel.path_is_last_row(ref path,
 																	   out trackList_is_empty)) {
-						//print(" ! path_is_last_row\n");
+						// print(" ! path_is_last_row\n");
 						if(direction == ControlButton.Direction.NEXT) {
 							path.next();
 						}
@@ -827,7 +827,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 						}
 					}
 					else {
-						//print("path_is_last_row\n");
+						// print("path_is_last_row\n");
 						if(direction == ControlButton.Direction.NEXT) {
 							if(repeatState == PlayerRepeatMode.ALL) {
 								// only jump to first is repeat all is set
@@ -850,27 +850,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				}
 			}
 		}
-
+		
 		if(path == null) {
 			stop();
 			return;
 		}
 		if(!trackList.tracklistmodel.get_iter(out iter, path))
 			return;
-
 		global.position_reference = new TreeRowReference(trackList.tracklistmodel, path);
-
-		if(global.player_state == PlayerState.PLAYING)
+		if(global.player_state == PlayerState.PLAYING) {
 			trackList.set_focus_on_iter(ref iter);
-
+		}
 		if(path.to_string() == tmp_path.to_string()) {
 			if((repeatState == PlayerRepeatMode.SINGLE)||((repeatState == PlayerRepeatMode.ALL && rowcount == 1))) {
 				// Explicit restart
 				global.do_restart_of_current_track();
-			}
-			else{
-				// Explicit stop, because there is no more 
-				stop();
 			}
 		}
 	}
