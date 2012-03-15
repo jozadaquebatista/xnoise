@@ -280,8 +280,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		global.tag_changed.connect(this.set_displayed_title);
 		gst_player.sign_video_playing.connect( () => { 
 			//handle stop signal from gst player
-			if(!this.fullscreenwindowvisible)
-				this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+			if(!this.fullscreenwindowvisible) {
+				Idle.add( () => {
+					buffer_last_page = TrackListNoteBookTab.VIDEO;
+					if(aimage_timeout != 0) {
+						Source.remove(aimage_timeout);
+						aimage_timeout = 0;
+					}
+					return false;
+				});
+				sbuttonTL.select(idx_video, true);
+			}
 		});
 		Idle.add( () => {
 			searchEntryMB.grab_focus();
