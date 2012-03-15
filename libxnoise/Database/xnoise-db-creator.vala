@@ -37,8 +37,8 @@ using Xnoise.Services;
 private class Xnoise.Database.DbCreator {
 	private static const string DATABASE_NAME = "db.sqlite";
 	private static const string SETTINGS_FOLDER = ".xnoise";
-	public static const int DB_VERSION_MAJOR = 4;
-	public static const int DB_VERSION_MINOR = 1;
+	public static const int DB_VERSION_MAJOR = 5;
+	public static const int DB_VERSION_MINOR = 0;
 
 	private static Sqlite.Database? db;
 	private static File? xnoisedb;
@@ -58,6 +58,12 @@ private class Xnoise.Database.DbCreator {
 		"CREATE TABLE albums (id INTEGER PRIMARY KEY, artist INTEGER, name TEXT, image TEXT);";
 	private static const string STMT_CREATE_URIS =
 		"CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER);";
+	private static const string STMT_CREATE_STATISTICS =
+		"CREATE TABLE statistics (id INTEGER PRIMARY KEY, uri TEXT UNIQUE, uris_id INTEGER, playcount INTEGER, rating INTEGER, lastplayTime INTEGER);";
+	private static const string STMT_CREATE_USER_LISTS =
+		"CREATE TABLE user_lists (id INTEGER PRIMARY KEY, name TEXT);";
+	private static const string STMT_CREATE_USER_LIST_ITEMS =
+		"CREATE TABLE user_list_items (id INTEGER PRIMARY KEY, position INTEGER, uri TEXT, uris_id INTEGER, list INTEGER);";
 	private static const string STMT_CREATE_GENRES =
 		"CREATE TABLE genres (id integer primary key, name TEXT);";
 	private static const string STMT_CREATE_ITEMS =
@@ -131,34 +137,48 @@ private class Xnoise.Database.DbCreator {
 				stmt.reset();
 				while(stmt.step() == Sqlite.ROW) {
 					if(stmt.column_int(0) != DB_VERSION_MAJOR) {
-						print("Wrong major db version\n");
-						//newly create db if major version is devating
-						db = null;
-						is_first_start = true;
-						try { 
-							xnoisedb.delete(null);
+						if(DB_VERSION_MAJOR == 5 && stmt.column_int(0) == 4) {
+							if(!exec_stmnt_string(STMT_CREATE_STATISTICS)     ) { reset(); return; }
+							if(!exec_stmnt_string(STMT_CREATE_USER_LISTS)     ) { reset(); return; }
+							if(!exec_stmnt_string(STMT_CREATE_USER_LIST_ITEMS)) { reset(); return; }
+							exec_stmnt_string("DELETE FROM version;");
+							exec_stmnt_string("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR));
 						}
-						catch(Error e) {
-							print("%s\n", e.message);
+						else {
+							print("Wrong major db version\n");
+							//newly create db if major version is devating
+							db = null;
+							is_first_start = true;
+							try { 
+								xnoisedb.delete(null);
+							}
+							catch(Error e) {
+								print("%s\n", e.message);
+							}
+							check_tables(ref is_first_start);
+							reset();
+							return;
 						}
-						check_tables(ref is_first_start);
-						reset();
-						return;
 					}
 				}
 			}
 			else {
 			//create Tables if not existant
-				if(!exec_stmnt_string(STMT_CREATE_LASTUSED)     ) { reset(); return; }
-				if(!exec_stmnt_string(STMT_CREATE_MEDIAFOLDERS) ) { reset(); return; }
-				if(!exec_stmnt_string(STMT_CREATE_MEDIAFILES)   ) { reset(); return; }
-				if(!exec_stmnt_string(STMT_CREATE_RADIO)        ) { reset(); return; }
-				if(!exec_stmnt_string(STMT_CREATE_ARTISTS)      ) { reset(); return; }
-				if(!exec_stmnt_string(STMT_CREATE_ALBUMS)       ) { reset(); return; }
-				if(!exec_stmnt_string(STMT_CREATE_URIS)         ) { reset(); return; }
-				if(!exec_stmnt_string(STMT_CREATE_ITEMS)        ) { reset(); return; }
-				if(!exec_stmnt_string(STMT_CREATE_GENRES)       ) { reset(); return; }
-				if(!exec_stmnt_string(STMT_CREATE_VERSION)      ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_LASTUSED)       ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_MEDIAFOLDERS)   ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_MEDIAFILES)     ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_RADIO)          ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_ARTISTS)        ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_ALBUMS)         ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_URIS)           ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_ITEMS)          ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_GENRES)         ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_VERSION)        ) { reset(); return; }
+				
+				// new with db version 4 -> 5 update
+				if(!exec_stmnt_string(STMT_CREATE_STATISTICS)     ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_USER_LISTS)     ) { reset(); return; }
+				if(!exec_stmnt_string(STMT_CREATE_USER_LIST_ITEMS)) { reset(); return; }
 				//Set database version
 				exec_stmnt_string("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR));
 			}

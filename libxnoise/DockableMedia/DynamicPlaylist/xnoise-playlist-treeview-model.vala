@@ -55,19 +55,14 @@ private class Xnoise.PlaylistStore : Gtk.TreeStore {
 		}
 		catch(Error e) {
 		}
-		this.append(out iter, null);
-		this.set(iter, 0, pixb, 1 , _("Best rated"));
-		this.append(out child, iter);
-		this.set(child, 1 , "Not implemented yet");
+//		this.append(out iter, null);
+//		this.set(iter, 0, pixb, 1 , _("Best rated"));
+//		this.append(out child, iter);
+//		this.set(child, 1 , "Not implemented yet");
 		
 		this.append(out iter, null);
 		this.set(iter, 0, pixb, 1 , _("Most played"));
 		this.append(out child, iter);
 		this.set(child,  1 , "Not implemented yet");
-		
-		this.append(out iter, null);
-		this.set(iter, 0, pixb, 1 , _("Recently added"));
-		this.append(out child, iter);
-		this.set(child, 1 , "Not implemented yet");
 	}
 }
