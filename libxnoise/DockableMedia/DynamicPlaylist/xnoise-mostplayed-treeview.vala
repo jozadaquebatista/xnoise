@@ -41,7 +41,6 @@ private class Xnoise.PlaylistTreeView : Gtk.TreeView {
 		this.headers_visible = false;
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);
 		
-		PlaylistStore mod = new PlaylistStore();
 		
 		var column = new TreeViewColumn();
 		
@@ -58,7 +57,7 @@ private class Xnoise.PlaylistTreeView : Gtk.TreeView {
 		
 		this.insert_column(column, -1);
 		
-		this.model = mod;
+		this.model = new PlaylistStore();
 	}
 }
 

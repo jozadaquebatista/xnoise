@@ -45,7 +45,7 @@ private class Xnoise.MediaBrowserDockable : DockableMedia {
 	}
 	
 	public override string headline() {
-		return _("Media Collection");
+		return _("Media Browser");
 	}
 	
 	public override Gtk.Widget? get_widget(MainWindow window) {
@@ -58,5 +58,9 @@ private class Xnoise.MediaBrowserDockable : DockableMedia {
 		return (Gtk.Widget)win.mediaBrScrollWin;
 	}
 	
+	public override Gdk.Pixbuf get_icon() {
+		var ic = new Image.from_stock(Gtk.Stock.YES, Gtk.IconSize.MENU);
+		return ic.get_pixbuf();
+	}
 }
 

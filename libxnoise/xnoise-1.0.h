@@ -13,8 +13,8 @@
 #include <sqlite3.h>
 #include <float.h>
 #include <math.h>
-#include <gdk/gdk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -1108,6 +1108,7 @@ struct _XnoiseDockableMediaClass {
 	GObjectClass parent_class;
 	gchar* (*name) (XnoiseDockableMedia* self);
 	gchar* (*headline) (XnoiseDockableMedia* self);
+	GdkPixbuf* (*get_icon) (XnoiseDockableMedia* self);
 	GtkWidget* (*get_widget) (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 };
 
@@ -1466,6 +1467,7 @@ struct _XnoiseMainWindow {
 	XnoiseMediaBrowser* mediaBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* fullscreenwindow;
+	GtkTreeView* media_source_selector;
 };
 
 struct _XnoiseMainWindowClass {
@@ -2106,6 +2108,7 @@ GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_get_type (void) G_GNUC_CONST;
 gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);
 gchar* xnoise_dockable_media_headline (XnoiseDockableMedia* self);
+GdkPixbuf* xnoise_dockable_media_get_icon (XnoiseDockableMedia* self);
 GtkWidget* xnoise_dockable_media_get_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);
 GType xnoise_add_media_dialog_get_type (void) G_GNUC_CONST;

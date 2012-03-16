@@ -522,6 +522,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DockableMedia : GLib.Object {
 		public DockableMedia ();
+		public abstract Gdk.Pixbuf get_icon ();
 		public abstract Gtk.Widget? get_widget (Xnoise.MainWindow window);
 		public abstract string headline ();
 		public abstract string name ();
@@ -750,6 +751,7 @@ namespace Xnoise {
 		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;
 		public Gtk.ScrolledWindow mediaBrScrollWin;
+		public Gtk.TreeView media_source_selector;
 		public Xnoise.ControlButton nextButton;
 		public Xnoise.PlayPauseButton playPauseButton;
 		public Xnoise.ControlButton previousButton;

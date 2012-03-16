@@ -34,16 +34,21 @@ using Gtk;
 private class Xnoise.DockableDynamicPlaylists : DockableMedia {
 	
 	public override string name() {
-		return "DockableDynamicPlaylists";
+		return "MostPlayedPlaylist";
 	}
 	
 	public override string headline() {
-		return _("Dynamic Playlists");
+		return _("Most Played");
 	}
 	
 	public override Gtk.Widget? get_widget(MainWindow window) {
 		var tv = new PlaylistTreeView(window);
 		return tv;
+	}
+
+	public override Gdk.Pixbuf get_icon() {
+		var ic = new Image.from_stock(Gtk.Stock.YES, Gtk.IconSize.MENU);
+		return ic.get_pixbuf();
 	}
 }
 

@@ -38,9 +38,9 @@ libxnoise_la_SOURCES = \
     Database/xnoise-db-creator.vala \
     Database/xnoise-db-writer.vala \
     DBus/xnoise-dbus.vala \
-    DockableMedia/DynamicPlaylist/xnoise-dockable-dynamic-playlist.vala \
-    DockableMedia/DynamicPlaylist/xnoise-playlist-treeview.vala \
-    DockableMedia/DynamicPlaylist/xnoise-playlist-treeview-model.vala \
+    DockableMedia/DynamicPlaylist/xnoise-dockable-playlist-mostplayed.vala \
+    DockableMedia/DynamicPlaylist/xnoise-mostplayed-treeview.vala \
+    DockableMedia/DynamicPlaylist/xnoise-mostplayed-treeview-model.vala \
     DockableMedia/xnoise-dockable-media.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
     ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala \

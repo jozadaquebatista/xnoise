@@ -32,7 +32,7 @@
 using Gtk;
 
 
-private class Xnoise.PlaylistStore : Gtk.TreeStore {
+private class Xnoise.PlaylistStore : Gtk.ListStore {
 	
 	private GLib.Type[] col_types = new GLib.Type[] {
 		typeof(Gdk.Pixbuf), //ICON
@@ -66,6 +66,15 @@ private class Xnoise.PlaylistStore : Gtk.TreeStore {
 		}
 		catch(Error e) {
 		}
+//		TreeIter iter, child;
+//		Item? item = Item(ItemType.COLLECTION_CONTAINER_MOST_PLAYED);
+//		this.append(out iter, null);
+//		this.set(iter, 
+//		        Column.ICON, pixb_playlist, 
+//		        Column.VIS_TEXT, _("Most played"),
+//		        Column.ITEM, item
+//		);
+
 		Worker.Job job;
 		job = new Worker.Job(Worker.ExecutionType.ONCE, insert_most_played_job);
 		db_worker.push_job(job);
@@ -75,23 +84,23 @@ private class Xnoise.PlaylistStore : Gtk.TreeStore {
 		string searchtext = "";
 		job.items = db_browser.get_most_played(ref searchtext);
 		Idle.add( () => {
-			if(job.items.length > 0) {
-				TreeIter iter, child;
-				Item? item = Item(ItemType.COLLECTION_CONTAINER_MOST_PLAYED);
-				this.append(out iter, null);
-				this.set(iter, 
-				        Column.ICON, pixb_playlist, 
-				        Column.VIS_TEXT, _("Most played"),
-				        Column.ITEM, item
-				);
+//			if(job.items.length > 0) {
+				TreeIter iter;
+//				Item? item = Item(ItemType.COLLECTION_CONTAINER_MOST_PLAYED);
+//				this.append(out iter, null);
+//				this.set(iter, 
+//				        Column.ICON, pixb_playlist, 
+//				        Column.VIS_TEXT, _("Most played"),
+//				        Column.ITEM, item
+//				);
 				foreach(Item? i in job.items) {
-					this.append(out child, iter);
-					this.set(child,
+					this.append(out iter);
+					this.set(iter,
 					         Column.VIS_TEXT, i.text,
 					         Column.ITEM, i
 					);
 				}
-			}
+//			}
 			return false;
 		});
 		return false;
