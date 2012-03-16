@@ -47,8 +47,6 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
 		N_COLUMNS
 	}
 
-	private Gdk.Pixbuf pixb_playlist;
-	
 	construct {
 		this.set_column_types(col_types);
 		this.populate();
@@ -56,17 +54,6 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
 
 	private void populate() {
 		
-		pixb_playlist = null;
-		Gtk.Invisible i = new Gtk.Invisible();
-		try {
-			if(IconTheme.get_default().has_icon("xn-playlist"))
-				pixb_playlist = IconTheme.get_default().load_icon("xn-playlist", 16, IconLookupFlags.FORCE_SIZE);
-			else
-				pixb_playlist = i.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
-		}
-		catch(Error e) {
-		}
-
 		Worker.Job job;
 		job = new Worker.Job(Worker.ExecutionType.ONCE, insert_most_played_job);
 		db_worker.push_job(job);

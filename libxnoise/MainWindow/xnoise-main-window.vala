@@ -1303,9 +1303,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		TreeIter iter;
 		m.append(out iter);
 		m.set(iter,
-//		      0, d.get_icon(),
+		      0, d.get_icon(),
 		      1, d.headline(),
-		      2, dockable_number
+		      2, dockable_number,
+		      3, 0
 		);
 		dockable_number++;
 	}
@@ -1546,7 +1547,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			media_source_selector.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 			media_source_selector.headers_visible = false;
 			media_source_selector.get_selection().set_mode(SelectionMode.SINGLE);
-			ListStore media_source_selector_model = new ListStore(3, typeof(Gdk.Pixbuf), typeof(string), typeof(int));
+			ListStore media_source_selector_model = new ListStore(4, typeof(Gdk.Pixbuf), typeof(string), typeof(int), typeof(int));
 			column = new TreeViewColumn();
 			renderer = new CellRendererText();
 			var rendererPb = new CellRendererPixbuf();
@@ -1554,6 +1555,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			column.pack_start(renderer, true);
 			column.add_attribute(rendererPb, "pixbuf", 0);
 			column.add_attribute(renderer, "text", 1);
+			column.add_attribute(renderer, "weight", 3);
 			media_source_selector.insert_column(column, -1);
 			media_source_selector.model = media_source_selector_model;
 			mbbx.pack_start(media_source_selector, false, false, 0);
@@ -1586,13 +1588,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 					return true;
 				TreeIter it;
 				ListStore m = (ListStore)media_source_selector.get_model();
+				m.foreach( (mo,p,ixi) => {
+					m.set(ixi,
+					       3, Pango.Weight.NORMAL
+					);
+					return false;
+				});
 				int tab = 0;
 				m.get_iter(out it, treepath);
 				m.get(it,
 				      2, out tab
 				);
+				m.set(it,
+				      3, Pango.Weight.BOLD
+				);
 				media_sources_nb.set_current_page(tab);
-				return false;
+				return true;
 			});
 			
 			mbbox01.pack_start(mbbx, true, true, 0);

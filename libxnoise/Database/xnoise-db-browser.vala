@@ -142,7 +142,7 @@ public class Xnoise.Database.DbBrowser {
 		return count;
 	}
 	private static const string STMT_GET_MOST_PLAYED =
-		"SELECT ar.name, t.title, t.mediatype, t.id, u.name FROM artists ar, items t, albums al, uris u, statistics st WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name ORDER BY st.playcount DESC LIMIT 20";
+		"SELECT ar.name, t.title, t.mediatype, t.id, u.name FROM artists ar, items t, albums al, uris u, statistics st WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name ORDER BY st.playcount DESC";
 
 	public Item[]? get_most_played(ref string searchtext) {
 		Statement stmt;
