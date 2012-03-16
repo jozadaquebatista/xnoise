@@ -57,7 +57,23 @@ private class Xnoise.PlaylistTreeView : Gtk.TreeView {
 		
 		this.insert_column(column, -1);
 		
-		this.model = new PlaylistStore();
+		this.model = new MostplayedTreeviewModel();
+		
+		this.row_activated.connect( (s,tp,c) => {
+			Item? item = Item(ItemType.UNKNOWN);
+			TreeIter iter;
+			this.model.get_iter(out iter, tp);
+			this.model.get(iter, MostplayedTreeviewModel.Column.ITEM, out item);
+			ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
+			if(tmp == null)
+				return;
+			unowned Action? action = tmp.get_action(item.type, ActionContext.MEDIABROWSER_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
+		
+			if(action != null)
+				action.action(item, null);
+			else
+				print("action was null\n");
+		});
 	}
 }
 
