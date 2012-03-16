@@ -91,7 +91,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 				return false;
 			});
 		});
-		db_writer.register_change_callback(this, database_change_cb);
+		DbWriter.NotificationData cbd = DbWriter.NotificationData();
+		cbd.cb = database_change_cb;
+		db_writer.register_change_callback(cbd);
 	}
 	
 	private bool video_in_tree = false;

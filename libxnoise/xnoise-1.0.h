@@ -147,15 +147,8 @@ typedef struct _XnoiseDatabaseDbWriterPrivate XnoiseDatabaseDbWriterPrivate;
 
 #define XNOISE_DATABASE_DB_WRITER_TYPE_CHANGE_TYPE (xnoise_database_db_writer_change_type_get_type ())
 
-#define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
-#define XNOISE_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModel))
-#define XNOISE_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
-#define XNOISE_IS_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
-#define XNOISE_IS_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
-#define XNOISE_MEDIA_BROWSER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
-
-typedef struct _XnoiseMediaBrowserModel XnoiseMediaBrowserModel;
-typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
+#define XNOISE_DATABASE_DB_WRITER_TYPE_NOTIFICATION_DATA (xnoise_database_db_writer_notification_data_get_type ())
+typedef struct _XnoiseDatabaseDbWriterNotificationData XnoiseDatabaseDbWriterNotificationData;
 
 #define XNOISE_TYPE_DBUS (xnoise_dbus_get_type ())
 #define XNOISE_DBUS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DBUS, XnoiseDbus))
@@ -561,6 +554,16 @@ typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 typedef struct _XnoiseInfoBar XnoiseInfoBar;
 typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
 typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
+
+#define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
+#define XNOISE_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModel))
+#define XNOISE_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
+#define XNOISE_IS_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
+#define XNOISE_IS_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
+#define XNOISE_MEDIA_BROWSER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
+
+typedef struct _XnoiseMediaBrowserModel XnoiseMediaBrowserModel;
+typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
 typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
 
 #define XNOISE_MEDIA_BROWSER_MODEL_TYPE_TRACK_SORTING (xnoise_media_browser_model_track_sorting_get_type ())
@@ -1064,10 +1067,18 @@ typedef enum  {
 	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_ALBUM,
 	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_TITLE,
 	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_URI,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_CLEAR_DB
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_CLEAR_DB,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_UPDATE_PLAYCOUNT,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_UPDATE_LASTPLAYED,
+	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_UPDATE_RATING
 } XnoiseDatabaseDbWriterChangeType;
 
 typedef void (*XnoiseDatabaseDbWriterChangeNotificationCallback) (XnoiseDatabaseDbWriterChangeType changetype, XnoiseItem* item, void* user_data);
+struct _XnoiseDatabaseDbWriterNotificationData {
+	XnoiseDatabaseDbWriterChangeNotificationCallback cb;
+	gpointer cb_target;
+};
+
 typedef void (*XnoiseDatabaseDbWriterWriterCallback) (sqlite3* database, void* user_data);
 struct _XnoiseDbus {
 	GObject parent_instance;
@@ -2043,8 +2054,10 @@ GType xnoise_database_db_writer_get_type (void) G_GNUC_CONST;
 GType xnoise_database_db_writer_change_type_get_type (void) G_GNUC_CONST;
 XnoiseDatabaseDbWriter* xnoise_database_db_writer_new (GError** error);
 XnoiseDatabaseDbWriter* xnoise_database_db_writer_construct (GType object_type, GError** error);
-GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
-void xnoise_database_db_writer_register_change_callback (XnoiseDatabaseDbWriter* self, XnoiseMediaBrowserModel* mbm, XnoiseDatabaseDbWriterChangeNotificationCallback cb, void* cb_target);
+GType xnoise_database_db_writer_notification_data_get_type (void) G_GNUC_CONST;
+XnoiseDatabaseDbWriterNotificationData* xnoise_database_db_writer_notification_data_dup (const XnoiseDatabaseDbWriterNotificationData* self);
+void xnoise_database_db_writer_notification_data_free (XnoiseDatabaseDbWriterNotificationData* self);
+void xnoise_database_db_writer_register_change_callback (XnoiseDatabaseDbWriter* self, XnoiseDatabaseDbWriterNotificationData* cbd);
 gchar* xnoise_database_db_writer_get_uri_for_item_id (XnoiseDatabaseDbWriter* self, gint32 id);
 void xnoise_database_db_writer_inc_playcount (XnoiseDatabaseDbWriter* self, const gchar* uri);
 void xnoise_database_db_writer_update_lastplay_time (XnoiseDatabaseDbWriter* self, const gchar* uri, gint64 playtime);
@@ -2319,6 +2332,7 @@ gboolean xnoise_main_window_get_usestop (XnoiseMainWindow* self);
 void xnoise_main_window_set_usestop (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
+GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
 XnoiseMediaBrowser* xnoise_media_browser_new (GtkWidget* ow);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, GtkWidget* ow);
 void xnoise_media_browser_on_searchtext_changed (XnoiseMediaBrowser* self);

@@ -91,7 +91,10 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		REMOVE_ALBUM,
 		REMOVE_TITLE,
 		REMOVE_URI,
-		CLEAR_DB
+		CLEAR_DB,
+		UPDATE_PLAYCOUNT,
+		UPDATE_LASTPLAYED,
+		UPDATE_RATING
 	}
 	
 	private bool begin_stmt_used;
@@ -282,11 +285,14 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		this.db.prepare_v2(STMT_UPDATE_PLAYTIME , -1, out this.update_playtime_statement);
 	}
 
-	private unowned ChangeNotificationCallback change_cb = null;
+	public struct NotificationData {
+		public unowned ChangeNotificationCallback cb;
+	}
 	
-	public void register_change_callback(MediaBrowserModel mbm, ChangeNotificationCallback cb) {
-		assert(Type.from_instance(mbm).is_a(typeof(MediaBrowserModel)));
-		change_cb = cb;
+	private List<NotificationData?> change_callbacks = new List<NotificationData?>();
+	
+	public void register_change_callback(NotificationData cbd) {
+		change_callbacks.prepend(cbd);
 	}
 	
 	private void setup_pragmas() {
@@ -350,10 +356,12 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 			if(get_artist_id_statement.step() == Sqlite.ROW)
 				artist_id = get_artist_id_statement.column_int(0);
 			// change notification
-			if(change_cb != null) {
+//			if(change_cb != null) {
+			foreach(NotificationData cxd in change_callbacks) {
 				Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
 				item.text = artist.strip();
-				change_cb(ChangeType.ADD_ARTIST, item);
+				if(cxd.cb != null)
+					cxd.cb(ChangeType.ADD_ARTIST, item);
 			}
 		}
 		if(update_artist) {
@@ -786,9 +794,11 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		}
 		//print("insert_title td.item.type %s\n", td.item.type.to_string());
 		if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
-			if(change_cb != null) {
+			foreach(NotificationData cxd in change_callbacks) {
+//			if(change_cb != null) {
 				Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-				change_cb(ChangeType.ADD_VIDEO, item);
+				if(cxd.cb != null)
+					cxd.cb(ChangeType.ADD_VIDEO, item);
 			}
 		}
 		insert_title_statement.reset();
@@ -843,10 +853,13 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		if(stmt.step() == Sqlite.ROW)
 			stream_id = stmt.column_int(0);
 		// change notification
-		if(change_cb != null && stream_id > -1) {
-			Item? item = Item(ItemType.STREAM, null, stream_id);
-			item.text = name;
-			change_cb(ChangeType.ADD_STREAM, item);
+		foreach(NotificationData cxd in change_callbacks) {
+			if(stream_id > -1) {
+				Item? item = Item(ItemType.STREAM, null, stream_id);
+				item.text = name;
+				if(cxd.cb != null)
+					cxd.cb(ChangeType.ADD_STREAM, item);
+			}
 		}
 	}
 

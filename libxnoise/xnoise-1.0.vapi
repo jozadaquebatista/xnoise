@@ -40,6 +40,9 @@ namespace Xnoise {
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class DbWriter : GLib.Object {
+			public struct NotificationData {
+				public weak Xnoise.Database.DbWriter.ChangeNotificationCallback cb;
+			}
 			public enum ChangeType {
 				ADD_ARTIST,
 				ADD_ALBUM,
@@ -50,7 +53,10 @@ namespace Xnoise {
 				REMOVE_ALBUM,
 				REMOVE_TITLE,
 				REMOVE_URI,
-				CLEAR_DB
+				CLEAR_DB,
+				UPDATE_PLAYCOUNT,
+				UPDATE_LASTPLAYED,
+				UPDATE_RATING
 			}
 			public delegate void ChangeNotificationCallback (Xnoise.Database.DbWriter.ChangeType changetype, Xnoise.Item? item);
 			public delegate void WriterCallback (Sqlite.Database database);
@@ -68,7 +74,7 @@ namespace Xnoise {
 			public string? get_uri_for_item_id (int32 id);
 			public void inc_playcount (string uri);
 			public bool insert_title (ref Xnoise.TrackData td);
-			public void register_change_callback (Xnoise.MediaBrowserModel mbm, Xnoise.Database.DbWriter.ChangeNotificationCallback cb);
+			public void register_change_callback (Xnoise.Database.DbWriter.NotificationData cbd);
 			public void update_lastplay_time (string uri, int64 playtime);
 			public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
 			public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
