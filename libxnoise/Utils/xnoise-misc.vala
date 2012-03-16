@@ -51,6 +51,8 @@ namespace Xnoise {
 	public static Database.DbBrowser db_browser;
 	public static Database.DbWriter  db_writer;
 	
+	public static Statistics statistics;
+	
 	public static GstPlayer gst_player;
 	
 	public static PluginModule.Loader plugin_loader;
@@ -116,6 +118,8 @@ namespace Xnoise {
 			print("%s", e.message);
 			return;
 		}
+		
+		statistics = new Statistics();
 		
 		// PLAYER
 		gst_player = new GstPlayer();

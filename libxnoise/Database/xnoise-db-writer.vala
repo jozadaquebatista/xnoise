@@ -74,6 +74,10 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	private Statement get_genre_for_uri_id_statement;
 	private Statement count_genre_in_items_statement;
 	private Statement delete_genre_statement;
+
+	private Statement get_statistics_id_statement;
+	private Statement add_statistic_statement;
+	private Statement update_playtime_statement;
 	
 	public delegate void ChangeNotificationCallback(ChangeType changetype, Item? item);
 	
@@ -176,6 +180,11 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 	private static const string STMT_DEL_GENRE = 
 		"DELETE FROM genre WHERE id = ?";
 
+	private static const string STMT_GET_STATISTICS_ID =
+		"SELECT id FROM statistics WHERE uri = ?";
+	private static const string STMT_ADD_STATISTIC =
+		"INSERT INTO statistics (uri, playcount) VALUES (?,0)";
+	
 	public DbWriter() throws DbError {
 		this.db = null;
 		this.db = get_db();
@@ -268,6 +277,9 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 		this.db.prepare_v2(STMT_GET_GENRE_FOR_URI_ID , -1, out this.get_genre_for_uri_id_statement);
 		this.db.prepare_v2(STMT_COUNT_GENRE_IN_ITEMS , -1, out this.count_genre_in_items_statement);
 		this.db.prepare_v2(STMT_DEL_GENRE , -1, out this.delete_genre_statement);
+		this.db.prepare_v2(STMT_GET_STATISTICS_ID , -1, out this.get_statistics_id_statement);
+		this.db.prepare_v2(STMT_ADD_STATISTIC , -1, out this.add_statistic_statement);
+		this.db.prepare_v2(STMT_UPDATE_PLAYTIME , -1, out this.update_playtime_statement);
 	}
 
 	private unowned ChangeNotificationCallback change_cb = null;
@@ -359,6 +371,76 @@ public class Xnoise.Database.DbWriter : GLib.Object {
 			}
 		}
 		return artist_id;
+	}
+	
+	private static const string STMT_INC_PLAYCOUNT = 
+		"UPDATE statistics SET playcount = playcount + 1 WHERE id=?";
+	public void inc_playcount(string uri) {
+		
+		int32 id = this.get_statistics_id_for_uri(uri);
+		
+		Statement stmt;
+		
+		this.db.prepare_v2(STMT_INC_PLAYCOUNT, -1, out stmt);
+		
+		stmt.reset();
+		if(stmt.bind_int(1, id) != Sqlite.OK) {
+			this.db_error();
+			return;
+		}
+		if(stmt.step() != Sqlite.DONE) {
+			this.db_error();
+			return;
+		}
+	}
+	
+	private static const string STMT_UPDATE_PLAYTIME = 
+		"UPDATE statistics SET lastplayTime=? WHERE id=?";
+	public void update_lastplay_time(string uri, int64 playtime) {
+		int32 id = this.get_statistics_id_for_uri(uri);
+		update_playtime_statement.reset();
+		if(update_playtime_statement.bind_int64(1, playtime) != Sqlite.OK ||
+		   update_playtime_statement.bind_int(2, id) != Sqlite.OK) {
+			this.db_error();
+			return;
+		}
+		if(update_playtime_statement.step() != Sqlite.DONE) {
+			this.db_error();
+			return;
+		}
+	}
+	
+	private int32 get_statistics_id_for_uri(string uri) {
+		int uri_id = -1;
+		get_statistics_id_statement.reset();
+		if(get_statistics_id_statement.bind_text(1, uri) != Sqlite.OK) {
+			this.db_error();
+			return -1;
+		}
+		if(get_statistics_id_statement.step() == Sqlite.ROW)
+			uri_id = get_statistics_id_statement.column_int(0);
+		
+		if(uri_id == -1) { // uri not in table, yet
+			// Insert uri
+			add_statistic_statement.reset();
+			if(add_statistic_statement.bind_text(1, uri) != Sqlite.OK) {
+				this.db_error();
+				return -1;
+			}
+			if(add_statistic_statement.step() != Sqlite.DONE) {
+				this.db_error();
+				return -1;
+			}
+			// Get unique uri id key
+			get_statistics_id_statement.reset();
+			if(get_statistics_id_statement.bind_text(1, uri) != Sqlite.OK) {
+				this.db_error();
+				return -1;
+			}
+			if(get_statistics_id_statement.step() == Sqlite.ROW)
+				uri_id = get_statistics_id_statement.column_int(0);
+		}
+		return uri_id;
 	}
 	
 	private static const string STMT_GET_ALBUM_ID =

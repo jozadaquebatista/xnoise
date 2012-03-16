@@ -784,6 +784,17 @@ typedef struct _XnoiseSimpleMarkupWriter XnoiseSimpleMarkupWriter;
 typedef struct _XnoiseSimpleMarkupWriterClass XnoiseSimpleMarkupWriterClass;
 typedef struct _XnoiseSimpleMarkupWriterPrivate XnoiseSimpleMarkupWriterPrivate;
 
+#define XNOISE_TYPE_STATISTICS (xnoise_statistics_get_type ())
+#define XNOISE_STATISTICS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_STATISTICS, XnoiseStatistics))
+#define XNOISE_STATISTICS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_STATISTICS, XnoiseStatisticsClass))
+#define XNOISE_IS_STATISTICS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_STATISTICS))
+#define XNOISE_IS_STATISTICS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_STATISTICS))
+#define XNOISE_STATISTICS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_STATISTICS, XnoiseStatisticsClass))
+
+typedef struct _XnoiseStatistics XnoiseStatistics;
+typedef struct _XnoiseStatisticsClass XnoiseStatisticsClass;
+typedef struct _XnoiseStatisticsPrivate XnoiseStatisticsPrivate;
+
 #define XNOISE_TAG_ACCESS_TYPE_TAG_READER (xnoise_tag_access_tag_reader_get_type ())
 #define XNOISE_TAG_ACCESS_TAG_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TAG_ACCESS_TYPE_TAG_READER, XnoiseTagAccessTagReader))
 #define XNOISE_TAG_ACCESS_TAG_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TAG_ACCESS_TYPE_TAG_READER, XnoiseTagAccessTagReaderClass))
@@ -970,6 +981,10 @@ typedef enum  {
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_GENRE,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_YEAR,
 	XNOISE_ITEM_TYPE_LOADER,
+	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_MOST_PLAYED,
+	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_FAVORITES,
+	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_LAST_PLAYED,
+	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_RECENTLY_ADDED,
 	XNOISE_ITEM_TYPE_MAXCOUNT
 } XnoiseItemType;
 
@@ -1714,6 +1729,15 @@ struct _XnoiseSimpleMarkupWriterClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseStatistics {
+	GObject parent_instance;
+	XnoiseStatisticsPrivate * priv;
+};
+
+struct _XnoiseStatisticsClass {
+	GObjectClass parent_class;
+};
+
 struct _XnoiseTagAccessTagReader {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -1991,6 +2015,7 @@ XnoiseDatabaseDbBrowser* xnoise_database_db_browser_construct (GType object_type
 void xnoise_database_db_browser_cancel (XnoiseDatabaseDbBrowser* self);
 void xnoise_database_db_browser_do_callback_transaction (XnoiseDatabaseDbBrowser* self, XnoiseDatabaseDbBrowserReaderCallback cb, void* cb_target);
 gint32 xnoise_database_db_browser_count_videos (XnoiseDatabaseDbBrowser* self, gchar** searchtext);
+XnoiseItem* xnoise_database_db_browser_get_most_played (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_db_browser_get_all_tracks (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
 gboolean xnoise_database_db_browser_get_stream_td_for_id (XnoiseDatabaseDbBrowser* self, gint id, XnoiseTrackData** val);
 gboolean xnoise_database_db_browser_get_trackdata_for_uri (XnoiseDatabaseDbBrowser* self, gchar** uri, XnoiseTrackData** val);
@@ -2021,6 +2046,8 @@ XnoiseDatabaseDbWriter* xnoise_database_db_writer_construct (GType object_type, 
 GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
 void xnoise_database_db_writer_register_change_callback (XnoiseDatabaseDbWriter* self, XnoiseMediaBrowserModel* mbm, XnoiseDatabaseDbWriterChangeNotificationCallback cb, void* cb_target);
 gchar* xnoise_database_db_writer_get_uri_for_item_id (XnoiseDatabaseDbWriter* self, gint32 id);
+void xnoise_database_db_writer_inc_playcount (XnoiseDatabaseDbWriter* self, const gchar* uri);
+void xnoise_database_db_writer_update_lastplay_time (XnoiseDatabaseDbWriter* self, const gchar* uri, gint64 playtime);
 gchar** xnoise_database_db_writer_get_media_folders (XnoiseDatabaseDbWriter* self, int* result_length1);
 gboolean xnoise_database_db_writer_get_trackdata_for_stream (XnoiseDatabaseDbWriter* self, const gchar* uri, XnoiseTrackData** val);
 gboolean xnoise_database_db_writer_update_title (XnoiseDatabaseDbWriter* self, XnoiseItem** item, XnoiseTrackData** td);
@@ -2699,6 +2726,9 @@ GType xnoise_simple_markup_writer_get_type (void) G_GNUC_CONST;
 XnoiseSimpleMarkupWriter* xnoise_simple_markup_writer_new (XnoiseSimpleMarkupNode* root, const gchar* header_string);
 XnoiseSimpleMarkupWriter* xnoise_simple_markup_writer_construct (GType object_type, XnoiseSimpleMarkupNode* root, const gchar* header_string);
 void xnoise_simple_markup_writer_write (XnoiseSimpleMarkupWriter* self, const gchar* filename);
+GType xnoise_statistics_get_type (void) G_GNUC_CONST;
+XnoiseStatistics* xnoise_statistics_new (void);
+XnoiseStatistics* xnoise_statistics_construct (GType object_type);
 gpointer xnoise_tag_access_tag_reader_ref (gpointer instance);
 void xnoise_tag_access_tag_reader_unref (gpointer instance);
 GParamSpec* xnoise_tag_access_param_spec_tag_reader (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -2813,6 +2843,7 @@ extern GMainContext* xnoise_mc;
 extern GHashTable* xnoise_dockable_media_sources;
 extern XnoiseDatabaseDbBrowser* xnoise_db_browser;
 extern XnoiseDatabaseDbWriter* xnoise_db_writer;
+extern XnoiseStatistics* xnoise_statistics;
 extern XnoiseGstPlayer* xnoise_gst_player;
 extern XnoisePluginModuleLoader* xnoise_plugin_loader;
 extern XnoiseTrayIcon* xnoise_tray_icon;

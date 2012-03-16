@@ -47,16 +47,20 @@ namespace Xnoise {
 		LOCAL_AUDIO_TRACK,
 		LOCAL_VIDEO_TRACK,
 		STREAM,
-		CDROM_TRACK,                 // not possible, yet
-		PLAYLIST,                    // item can be converted
-		LOCAL_FOLDER,                // item can be converted
-		COLLECTION_CONTAINER_ARTIST, // item can be converted
-		COLLECTION_CONTAINER_ALBUM,  // item can be converted
-		COLLECTION_CONTAINER_VIDEO,  // item can be converted
-		COLLECTION_CONTAINER_STREAM, // item can be converted
-		COLLECTION_CONTAINER_GENRE,  // item can be converted
-		COLLECTION_CONTAINER_YEAR,   // item can be converted
+		CDROM_TRACK,                         // not possible, yet
+		PLAYLIST,                            // item can be converted
+		LOCAL_FOLDER,                        // item can be converted
+		COLLECTION_CONTAINER_ARTIST,         // item can be converted
+		COLLECTION_CONTAINER_ALBUM,          // item can be converted
+		COLLECTION_CONTAINER_VIDEO,          // item can be converted
+		COLLECTION_CONTAINER_STREAM,         // item can be converted
+		COLLECTION_CONTAINER_GENRE,          // item can be converted
+		COLLECTION_CONTAINER_YEAR,           // item can be converted
 		LOADER,
+		COLLECTION_CONTAINER_MOST_PLAYED,    // item can be converted
+		COLLECTION_CONTAINER_FAVORITES,      // item can be converted
+		COLLECTION_CONTAINER_LAST_PLAYED,    // item can be converted
+		COLLECTION_CONTAINER_RECENTLY_ADDED, // item can be converted
 		MAXCOUNT
 		//to be extended
 	}

@@ -98,6 +98,7 @@ libxnoise_la_SOURCES = \
     SimpleMarkup/xnoise-markup-node.vala \
     SimpleMarkup/xnoise-markup-reader.vala \
     SimpleMarkup/xnoise-markup-writer.vala \
+    Statistics/xnoise-statistics.vala \
     TagAccess/xnoise-tag-reader.vala \
     TagAccess/xnoise-tag-writer.vala \
     TrackList/xnoise-text-column.vala \

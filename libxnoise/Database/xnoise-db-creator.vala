@@ -59,7 +59,7 @@ private class Xnoise.Database.DbCreator {
 	private static const string STMT_CREATE_URIS =
 		"CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER);";
 	private static const string STMT_CREATE_STATISTICS =
-		"CREATE TABLE statistics (id INTEGER PRIMARY KEY, uri TEXT UNIQUE, uris_id INTEGER, playcount INTEGER, rating INTEGER, lastplayTime INTEGER);";
+		"CREATE TABLE statistics (id INTEGER PRIMARY KEY, uri TEXT UNIQUE, uris_id INTEGER, playcount INTEGER, rating INTEGER, lastplayTime INTEGER, addTime INTEGER);";
 	private static const string STMT_CREATE_USER_LISTS =
 		"CREATE TABLE user_lists (id INTEGER PRIMARY KEY, name TEXT);";
 	private static const string STMT_CREATE_USER_LIST_ITEMS =
@@ -67,8 +67,9 @@ private class Xnoise.Database.DbCreator {
 	private static const string STMT_CREATE_GENRES =
 		"CREATE TABLE genres (id integer primary key, name TEXT);";
 	private static const string STMT_CREATE_ITEMS =
-		"CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTime DATETIME, CONSTRAINT link_uri FOREIGN KEY (uri) REFERENCES uris(id) ON DELETE CASCADE);";
-//CREATE TABLE test1 (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER REFERENCES uris(id) ON DELETE CASCADE, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTime DATETIME);
+		"CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTimeUnix INTEGER, CONSTRAINT link_uri FOREIGN KEY (uri) REFERENCES uris(id) ON DELETE CASCADE);";
+	private static const string STMT_ADD_INT_ADDTIME_TO_ITEMS =
+		"ALTER TABLE items ADD addTimeUnix INTEGER;";
 	private static const string STMT_CREATE_VERSION =
 		"CREATE TABLE version (major INTEGER, minor INTEGER);";
 	private static const string STMT_GET_VERSION =
@@ -138,9 +139,10 @@ private class Xnoise.Database.DbCreator {
 				while(stmt.step() == Sqlite.ROW) {
 					if(stmt.column_int(0) != DB_VERSION_MAJOR) {
 						if(DB_VERSION_MAJOR == 5 && stmt.column_int(0) == 4) {
-							if(!exec_stmnt_string(STMT_CREATE_STATISTICS)     ) { reset(); return; }
-							if(!exec_stmnt_string(STMT_CREATE_USER_LISTS)     ) { reset(); return; }
-							if(!exec_stmnt_string(STMT_CREATE_USER_LIST_ITEMS)) { reset(); return; }
+							if(!exec_stmnt_string(STMT_CREATE_STATISTICS)     )   { reset(); return; }
+							if(!exec_stmnt_string(STMT_CREATE_USER_LISTS)     )   { reset(); return; }
+							if(!exec_stmnt_string(STMT_CREATE_USER_LIST_ITEMS))   { reset(); return; }
+							if(!exec_stmnt_string(STMT_ADD_INT_ADDTIME_TO_ITEMS)) { reset(); return; }
 							exec_stmnt_string("DELETE FROM version;");
 							exec_stmnt_string("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR));
 						}

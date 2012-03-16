@@ -25,6 +25,7 @@ namespace Xnoise {
 			public Xnoise.Item[] get_artists_with_search (ref string searchtext);
 			public string[] get_media_files ();
 			public string[] get_media_folders ();
+			public Xnoise.Item[]? get_most_played (ref string searchtext);
 			public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
 			public Xnoise.TrackData[] get_stream_data (ref string searchtext);
 			public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
@@ -65,8 +66,10 @@ namespace Xnoise {
 			public string[] get_media_folders ();
 			public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 			public string? get_uri_for_item_id (int32 id);
+			public void inc_playcount (string uri);
 			public bool insert_title (ref Xnoise.TrackData td);
 			public void register_change_callback (Xnoise.MediaBrowserModel mbm, Xnoise.Database.DbWriter.ChangeNotificationCallback cb);
+			public void update_lastplay_time (string uri, int64 playtime);
 			public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
 			public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
 			public bool in_transaction { get; }
@@ -889,6 +892,10 @@ namespace Xnoise {
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class Statistics : GLib.Object {
+		public Statistics ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TagTitleEditor : GLib.Object {
 		public TagTitleEditor (Xnoise.Item _item);
 		public signal void sign_finish ();
@@ -1147,6 +1154,10 @@ namespace Xnoise {
 		COLLECTION_CONTAINER_GENRE,
 		COLLECTION_CONTAINER_YEAR,
 		LOADER,
+		COLLECTION_CONTAINER_MOST_PLAYED,
+		COLLECTION_CONTAINER_FAVORITES,
+		COLLECTION_CONTAINER_LAST_PLAYED,
+		COLLECTION_CONTAINER_RECENTLY_ADDED,
 		MAXCOUNT
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -1196,6 +1207,8 @@ namespace Xnoise {
 	public static Xnoise.Params par;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.PluginModule.Loader plugin_loader;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static Xnoise.Statistics statistics;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.TrackList tl;
 	[CCode (cheader_filename = "xnoise-1.0.h")]

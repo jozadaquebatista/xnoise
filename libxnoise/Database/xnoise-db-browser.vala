@@ -141,7 +141,62 @@ public class Xnoise.Database.DbBrowser {
 		}
 		return count;
 	}
+	private static const string STMT_GET_MOST_PLAYED =
+		"SELECT ar.name, t.title, t.mediatype, t.id, u.name FROM artists ar, items t, albums al, uris u, statistics st WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name ORDER BY st.playcount DESC LIMIT 20";
 
+	public Item[]? get_most_played(ref string searchtext) {
+		Statement stmt;
+		Item[] retv = {};
+		string st = "%%%s%%".printf(searchtext);
+		this.db.prepare_v2(STMT_GET_MOST_PLAYED , -1, out stmt);
+		
+//		if((stmt.bind_text(1, st) != Sqlite.OK) ||
+//		   (stmt.bind_text(2, st) != Sqlite.OK) ||
+//		   (stmt.bind_text(3, st) != Sqlite.OK)) {
+//			this.db_error();
+//			return null;
+//		}
+		while(stmt.step() == Sqlite.ROW) {
+			Item i = Item((ItemType)stmt.column_int(2), stmt.column_text(4), stmt.column_int(3));
+			i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
+			retv += i;
+		}
+		if(retv.length == 0)
+			return null;
+//		while(stmt.step() == Sqlite.ROW) {
+//			TrackData val = new TrackData();
+//			val.artist      = stmt.column_text(0);
+//			val.album       = stmt.column_text(1);
+//			val.title       = stmt.column_text(2);
+//			val.tracknumber = stmt.column_int(3);
+//			val.length      = stmt.column_int(6);
+//			val.item        = Item((ItemType)stmt.column_int(4), stmt.column_text(5), stmt.column_int(7));
+//			val.genre       = stmt.column_text(8);
+//			val.year        = stmt.column_int(9);
+//			if((val.artist==EMPTYSTRING) || (val.artist==null)) {
+//				val.artist = UNKNOWN_ARTIST;
+//			}
+//			if((val.album== EMPTYSTRING) || (val.album== null)) {
+//				val.album = UNKNOWN_ALBUM;
+//			}
+//			if((val.genre== EMPTYSTRING) || (val.genre== null)) {
+//				val.genre = UNKNOWN_GENRE;
+//			}
+//			if((val.title== EMPTYSTRING) || (val.title== null)) {
+//				val.title = UNKNOWN_TITLE;
+//				File file = File.new_for_uri(val.item.uri);
+//				string fileBasename;
+//				if(file != null)
+//					fileBasename = GLib.Filename.display_basename(file.get_path());
+//				else
+//					fileBasename = val.item.uri;
+//				val.title = fileBasename;
+//			}
+//			retv += val;
+//		}
+		return (owned)retv;
+	}
+	
 	private static const string STMT_ALL_TRACKDATA =
 		"SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC, t.tracknumber ASC";
 

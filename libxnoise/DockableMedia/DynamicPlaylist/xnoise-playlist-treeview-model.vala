@@ -33,10 +33,21 @@ using Gtk;
 
 
 private class Xnoise.PlaylistStore : Gtk.TreeStore {
+	
 	private GLib.Type[] col_types = new GLib.Type[] {
-		typeof(Gdk.Pixbuf),
-		typeof(string)
+		typeof(Gdk.Pixbuf), //ICON
+		typeof(string),     //VIS_TEXT
+		typeof(Xnoise.Item?)//ITEM
 	};
+	
+	public enum Column {
+		ICON = 0,
+		VIS_TEXT,
+		ITEM,
+		N_COLUMNS
+	}
+
+	private Gdk.Pixbuf pixb_playlist;
 	
 	construct {
 		this.set_column_types(col_types);
@@ -44,25 +55,45 @@ private class Xnoise.PlaylistStore : Gtk.TreeStore {
 	}
 
 	private void populate() {
-		TreeIter iter, child;
-		Gdk.Pixbuf pixb = null;
+		
+		pixb_playlist = null;
 		Gtk.Invisible i = new Gtk.Invisible();
 		try {
 			if(IconTheme.get_default().has_icon("xn-playlist"))
-				pixb = IconTheme.get_default().load_icon("xn-playlist", 16, IconLookupFlags.FORCE_SIZE);
+				pixb_playlist = IconTheme.get_default().load_icon("xn-playlist", 16, IconLookupFlags.FORCE_SIZE);
 			else
-				pixb = i.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
+				pixb_playlist = i.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
 		}
 		catch(Error e) {
 		}
-//		this.append(out iter, null);
-//		this.set(iter, 0, pixb, 1 , _("Best rated"));
-//		this.append(out child, iter);
-//		this.set(child, 1 , "Not implemented yet");
-		
-		this.append(out iter, null);
-		this.set(iter, 0, pixb, 1 , _("Most played"));
-		this.append(out child, iter);
-		this.set(child,  1 , "Not implemented yet");
+		Worker.Job job;
+		job = new Worker.Job(Worker.ExecutionType.ONCE, insert_most_played_job);
+		db_worker.push_job(job);
+	}
+	
+	private bool insert_most_played_job(Worker.Job job) {
+		string searchtext = "";
+		job.items = db_browser.get_most_played(ref searchtext);
+		Idle.add( () => {
+			if(job.items.length > 0) {
+				TreeIter iter, child;
+				Item? item = Item(ItemType.COLLECTION_CONTAINER_MOST_PLAYED);
+				this.append(out iter, null);
+				this.set(iter, 
+				        Column.ICON, pixb_playlist, 
+				        Column.VIS_TEXT, _("Most played"),
+				        Column.ITEM, item
+				);
+				foreach(Item? i in job.items) {
+					this.append(out child, iter);
+					this.set(child,
+					         Column.VIS_TEXT, i.text,
+					         Column.ITEM, i
+					);
+				}
+			}
+			return false;
+		});
+		return false;
 	}
 }
