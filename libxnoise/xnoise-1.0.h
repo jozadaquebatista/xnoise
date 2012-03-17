@@ -183,6 +183,8 @@ typedef struct _XnoiseDockableMedia XnoiseDockableMedia;
 typedef struct _XnoiseDockableMediaClass XnoiseDockableMediaClass;
 typedef struct _XnoiseDockableMediaPrivate XnoiseDockableMediaPrivate;
 
+#define XNOISE_DOCKABLE_MEDIA_TYPE_CATEGORY (xnoise_dockable_media_category_get_type ())
+
 #define XNOISE_TYPE_MAIN_WINDOW (xnoise_main_window_get_type ())
 #define XNOISE_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindow))
 #define XNOISE_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN_WINDOW, XnoiseMainWindowClass))
@@ -1099,6 +1101,13 @@ struct _PlayerDbusServiceClass {
 	GObjectClass parent_class;
 };
 
+typedef enum  {
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_UNKNOWN = 0,
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_MEDIA_COLLECTION,
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_PLAYLIST,
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_STORE
+} XnoiseDockableMediaCategory;
+
 struct _XnoiseDockableMedia {
 	GObject parent_instance;
 	XnoiseDockableMediaPrivate * priv;
@@ -1108,6 +1117,7 @@ struct _XnoiseDockableMediaClass {
 	GObjectClass parent_class;
 	gchar* (*name) (XnoiseDockableMedia* self);
 	gchar* (*headline) (XnoiseDockableMedia* self);
+	XnoiseDockableMediaCategory (*category) (XnoiseDockableMedia* self);
 	GdkPixbuf* (*get_icon) (XnoiseDockableMedia* self);
 	GtkWidget* (*get_widget) (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 };
@@ -2105,9 +2115,11 @@ gint64 player_dbus_service_get_Length (PlayerDbusService* self);
 gint64 player_dbus_service_get_Position (PlayerDbusService* self);
 void player_dbus_service_set_Position (PlayerDbusService* self, gint64 value);
 GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
+GType xnoise_dockable_media_category_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_get_type (void) G_GNUC_CONST;
 gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);
 gchar* xnoise_dockable_media_headline (XnoiseDockableMedia* self);
+XnoiseDockableMediaCategory xnoise_dockable_media_category (XnoiseDockableMedia* self);
 GdkPixbuf* xnoise_dockable_media_get_icon (XnoiseDockableMedia* self);
 GtkWidget* xnoise_dockable_media_get_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);

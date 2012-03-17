@@ -521,7 +521,14 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DockableMedia : GLib.Object {
+		public enum Category {
+			UNKNOWN,
+			MEDIA_COLLECTION,
+			PLAYLIST,
+			STORE
+		}
 		public DockableMedia ();
+		public abstract Xnoise.DockableMedia.Category category ();
 		public abstract Gdk.Pixbuf get_icon ();
 		public abstract Gtk.Widget? get_widget (Xnoise.MainWindow window);
 		public abstract string headline ();

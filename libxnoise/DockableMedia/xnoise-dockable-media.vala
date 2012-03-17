@@ -30,8 +30,16 @@
 
 
 public abstract class Xnoise.DockableMedia : GLib.Object {
+	public enum Category {
+		UNKNOWN = 0,
+		MEDIA_COLLECTION,
+		PLAYLIST,
+		STORE
+	}
+	
 	public abstract string name();
 	public abstract string headline();
+	public abstract DockableMedia.Category category();
 	public abstract Gdk.Pixbuf  get_icon();
 	public abstract Gtk.Widget? get_widget(Xnoise.MainWindow window);
 }

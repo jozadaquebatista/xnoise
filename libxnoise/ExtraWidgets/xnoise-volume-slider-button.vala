@@ -44,7 +44,6 @@ public class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
 	
 	public VolumeSliderButton(GstPlayer player) {
 		this.player = player;
-		this.use_symbolic = true;
 		this.size = Gtk.IconSize.LARGE_TOOLBAR;
 		this.can_focus = false;
 		this.relief = Gtk.ReliefStyle.NONE;

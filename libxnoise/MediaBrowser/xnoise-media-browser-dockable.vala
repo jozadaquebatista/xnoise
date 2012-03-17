@@ -48,6 +48,10 @@ private class Xnoise.MediaBrowserDockable : DockableMedia {
 		return _("Local Collection");
 	}
 	
+	public override DockableMedia.Category category() {
+		return DockableMedia.Category.MEDIA_COLLECTION;
+	}
+	
 	public override Gtk.Widget? get_widget(MainWindow window) {
 		this.win = window; // use this ref because static main_window
 		                   //is not yet set up at construction time

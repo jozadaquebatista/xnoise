@@ -41,6 +41,10 @@ private class Xnoise.DockableDynamicPlaylists : DockableMedia {
 		return _("Most Played");
 	}
 	
+	public override DockableMedia.Category category() {
+		return DockableMedia.Category.PLAYLIST;
+	}
+
 	public override Gtk.Widget? get_widget(MainWindow window) {
 		var tv = new PlaylistTreeView(window);
 		var sw = new ScrolledWindow(null, null);

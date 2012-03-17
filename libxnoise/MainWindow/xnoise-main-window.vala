@@ -1289,26 +1289,70 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		}
 	}
 	
+	private string? get_category_name(DockableMedia.Category category) {
+		switch(category) {
+			case DockableMedia.Category.MEDIA_COLLECTION:
+				return _("Media Collections");
+			case DockableMedia.Category.PLAYLIST:
+				return _("Playlists");
+			case DockableMedia.Category.STORE:
+				return _("Store");
+			case DockableMedia.Category.UNKNOWN:
+			default:
+				return null;
+		}
+	}
+	
 	private Gtk.Notebook media_sources_nb;
 	private int dockable_number = 0;
 	public TreeView media_source_selector;
 //	private List<unowned TreeView> dockable_treeviews = new List<unowned TreeView>();
-	private void insert_dockable(DockableMedia d, bool bold = false) {
+	private void insert_dockable(DockableMedia d, bool bold = false, ref TreeIter? xiter) {
 		Gtk.Widget? widg = d.get_widget(this);
-		if(widg == null)
+		if(widg == null) {
+			xiter = null;
 			return;
+		}
 		widg.show_all();
 		media_sources_nb.append_page(widg, null);
-		ListStore m = (ListStore)media_source_selector.get_model();
-		TreeIter iter;
-		m.append(out iter);
-		m.set(iter,
+		var category = d.category();
+		TreeStore m = (TreeStore)media_source_selector.get_model();
+		TreeIter iter = TreeIter(), child;
+		
+		bool found_category = false;
+		m.foreach( (m,p,i) => {
+			if(p.get_depth() == 1) {
+				DockableMedia.Category cat;
+				m.get(i, 4, out cat);
+				if(cat == category) {
+					found_category = true;
+					iter = i;
+					return true;
+				}
+			}
+			return false;
+		});
+		if(!found_category) {
+			print("add new category %s\n", get_category_name(category));
+			m.append(out iter, null);
+			m.set(iter,
+			      0, null,
+			      1, get_category_name(category),
+			      2, -1,
+			      3, Pango.Weight.BOLD,
+			      4, category
+			);
+		}
+		m.append(out child, iter);
+		m.set(child,
 		      0, d.get_icon(),
 		      1, d.headline(),
 		      2, dockable_number,
-		      3, (bold ? Pango.Weight.BOLD : Pango.Weight.NORMAL)
+		      3, Pango.Weight.NORMAL,
+		      4, category
 		);
 		dockable_number++;
+		xiter = child;
 	}
 	
 	private void create_widgets() {
@@ -1521,25 +1565,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			mbbx.pack_start(sbx, false, false, 0);
 			
 			// DOCKABLE MEDIA
-			var headlineTV = new TreeView();
-			headlineTV.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
-			headlineTV.headers_visible = false;
-			headlineTV.get_selection().set_mode(SelectionMode.NONE);
-			ListStore mod = new ListStore(2, typeof(int), typeof(string));
-			TreeIter iter;
-			mod.append(out iter);
-			mod.set(iter,
-					0, Pango.Weight.BOLD,
-					1 , _("Media Sources")
-			);
-			var column = new TreeViewColumn();
-			var renderer = new CellRendererText();
-			column.pack_start(renderer, true);
-			column.add_attribute(renderer, "weight", 0);
-			column.add_attribute(renderer, "text", 1);
-			headlineTV.insert_column(column, -1);
-			headlineTV.model = mod;
-			mbbx.pack_start(headlineTV, false, false, 0);
+			
 			media_sources_nb = new Gtk.Notebook();
 			media_sources_nb.set_show_tabs(false);
 			
@@ -1547,9 +1573,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			media_source_selector.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 			media_source_selector.headers_visible = false;
 			media_source_selector.get_selection().set_mode(SelectionMode.SINGLE);
-			ListStore media_source_selector_model = new ListStore(4, typeof(Gdk.Pixbuf), typeof(string), typeof(int), typeof(int));
-			column = new TreeViewColumn();
-			renderer = new CellRendererText();
+			TreeStore media_source_selector_model = new TreeStore(5, 
+			                                                      typeof(Gdk.Pixbuf), //icon
+			                                                      typeof(string),     //vis_text
+			                                                      typeof(int),        //tab no.
+			                                                      typeof(int),        //weight
+			                                                      typeof(DockableMedia.Category)
+			                                                      );
+			var column = new TreeViewColumn();
+			var renderer = new CellRendererText();
 			var rendererPb = new CellRendererPixbuf();
 			column.pack_start(rendererPb, false);
 			column.pack_start(renderer, true);
@@ -1559,13 +1591,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			media_source_selector.insert_column(column, -1);
 			media_source_selector.model = media_source_selector_model;
 			mbbx.pack_start(media_source_selector, false, false, 0);
+			mbbx.pack_start(new Separator(Orientation.HORIZONTAL), false, false, 0);
 			
 			unowned DockableMedia? dm_mb = null;
 			assert((dm_mb = dockable_media_sources.lookup("MediaBrowserDockable")) != null);
 			mbbx.pack_start(media_sources_nb, true, true, 0);
 			
 			//Insert Media Browser first
-			this.insert_dockable(dm_mb, true);
+			TreeIter? media_browser_iter = null;
+			this.insert_dockable(dm_mb, true, ref media_browser_iter);
 			
 			foreach(unowned string n in dockable_media_sources.get_keys()) {
 				if(n == "MediaBrowserDockable")
@@ -1575,8 +1609,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				d = dockable_media_sources.lookup(n);
 				if(d == null)
 					continue;
-				
-				insert_dockable(d, false);
+				TreeIter? ix = null;
+				insert_dockable(d, false, ref ix);
 			}
 			media_source_selector.button_press_event.connect( (e)  => {
 				int x = (int)e.x;
@@ -1586,21 +1620,29 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				TreeViewColumn co;
 				if(!media_source_selector.get_path_at_pos(x, y, out treepath, out co, out cell_x, out cell_y))
 					return true;
+				if(treepath.get_depth() == 1 || treepath.get_depth() > 2) {
+					if(!media_source_selector.is_row_expanded(treepath))
+						media_source_selector.expand_row(treepath, false);
+					else
+						media_source_selector.collapse_row(treepath);
+					return true;
+				}
 				TreeIter it;
-				ListStore m = (ListStore)media_source_selector.get_model();
-				m.foreach( (mo,p,ixi) => {
-					// reset font
-					m.set(ixi, 3, Pango.Weight.NORMAL);
-					return false;
-				});
+				TreeStore m = (TreeStore)media_source_selector.get_model();
+//				m.foreach( (mo,p,ixi) => {
+//					// reset font
+//					m.set(ixi, 3, Pango.Weight.NORMAL);
+//					return false;
+//				});
 				int tab = 0;
 				m.get_iter(out it, treepath);
 				m.get(it, 2, out tab);
-				m.set(it, 3, Pango.Weight.BOLD);
+//				m.set(it, 3, Pango.Weight.BOLD);
 				media_sources_nb.set_current_page(tab);
-				return true;
+				return false;
 			});
-			
+			media_source_selector.expand_all();
+			media_source_selector.get_selection().select_iter(media_browser_iter);
 			mbbox01.pack_start(mbbx, true, true, 0);
 			tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
 			tracklistnotebook.switch_page.connect( (s,np,p) => {
