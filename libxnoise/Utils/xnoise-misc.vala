@@ -53,6 +53,8 @@ namespace Xnoise {
 	
 	public static Statistics statistics;
 	
+	internal static IconRepo icon_repo;
+	
 	public static GstPlayer gst_player;
 	
 	public static PluginModule.Loader plugin_loader;
@@ -78,6 +80,8 @@ namespace Xnoise {
 		}
 		
 		dockable_media_sources = new HashTable<string,DockableMedia>(str_hash, str_equal);
+		
+		icon_repo = new IconRepo();
 		
 		// ITEM STUFF
 		itemhandler_manager = new ItemHandlerManager();

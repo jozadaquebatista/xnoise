@@ -67,6 +67,7 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
 			foreach(Item? i in job.items) {
 				this.append(out iter);
 				this.set(iter,
+				         Column.ICON, icon_repo.title_icon,
 				         Column.VIS_TEXT, i.text,
 				         Column.ITEM, i
 				);

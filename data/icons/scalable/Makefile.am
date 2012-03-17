@@ -13,7 +13,7 @@ greydir = $(datadir)/icons/hicolor/scalable/apps
 grey_DATA = xnoise-grey.svg
 
 appdir = $(datadir)/icons/hicolor/scalable/apps
-app_DATA = xn-app-menu.svg xn-stream.svg xn-playlist.svg
+app_DATA = xn-app-menu.svg xn-stream.svg xn-playlist.svg xn-local-collection.svg
 
 EXTRA_DIST = \
     $(icon_DATA) \

@@ -1293,7 +1293,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 	private int dockable_number = 0;
 	public TreeView media_source_selector;
 //	private List<unowned TreeView> dockable_treeviews = new List<unowned TreeView>();
-	private void insert_dockable(DockableMedia d) {
+	private void insert_dockable(DockableMedia d, bool bold = false) {
 		Gtk.Widget? widg = d.get_widget(this);
 		if(widg == null)
 			return;
@@ -1306,7 +1306,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 		      0, d.get_icon(),
 		      1, d.headline(),
 		      2, dockable_number,
-		      3, 0
+		      3, (bold ? Pango.Weight.BOLD : Pango.Weight.NORMAL)
 		);
 		dockable_number++;
 	}
@@ -1565,7 +1565,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			mbbx.pack_start(media_sources_nb, true, true, 0);
 			
 			//Insert Media Browser first
-			this.insert_dockable(dm_mb);
+			this.insert_dockable(dm_mb, true);
 			
 			foreach(unowned string n in dockable_media_sources.get_keys()) {
 				if(n == "MediaBrowserDockable")
@@ -1576,7 +1576,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				if(d == null)
 					continue;
 				
-				insert_dockable(d);
+				insert_dockable(d, false);
 			}
 			media_source_selector.button_press_event.connect( (e)  => {
 				int x = (int)e.x;
@@ -1589,19 +1589,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 				TreeIter it;
 				ListStore m = (ListStore)media_source_selector.get_model();
 				m.foreach( (mo,p,ixi) => {
-					m.set(ixi,
-					       3, Pango.Weight.NORMAL
-					);
+					// reset font
+					m.set(ixi, 3, Pango.Weight.NORMAL);
 					return false;
 				});
 				int tab = 0;
 				m.get_iter(out it, treepath);
-				m.get(it,
-				      2, out tab
-				);
-				m.set(it,
-				      3, Pango.Weight.BOLD
-				);
+				m.get(it, 2, out tab);
+				m.set(it, 3, Pango.Weight.BOLD);
 				media_sources_nb.set_current_page(tab);
 				return true;
 			});

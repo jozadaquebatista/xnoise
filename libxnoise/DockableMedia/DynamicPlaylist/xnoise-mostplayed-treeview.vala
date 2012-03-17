@@ -37,7 +37,7 @@ private class Xnoise.PlaylistTreeView : Gtk.TreeView {
 	public PlaylistTreeView(MainWindow window) {
 		this.win = window; // use this ref because static main_window
 		                   //is not yet set up at construction time
-		
+		this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
 		this.headers_visible = false;
 		this.get_selection().set_mode(SelectionMode.MULTIPLE);
 		
