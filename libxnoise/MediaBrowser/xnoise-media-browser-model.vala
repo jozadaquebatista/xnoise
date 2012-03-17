@@ -851,7 +851,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 		return false;
 	}
 
-	//TODO: How to do this for videos/streams?
 	public DndData[] get_dnd_data_for_path(ref TreePath treepath) {
 		TreeIter iter;//, iterChild, iterChildChild;
 		DndData[] dnd_data_array = {};

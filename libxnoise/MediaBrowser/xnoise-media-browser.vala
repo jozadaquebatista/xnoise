@@ -340,7 +340,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 				Gtk.drag_source_set_icon_stock(this, Gtk.Stock.DND);
 			}
 		}
-		return;
 	}
 
 	private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context, Gtk.SelectionData selection_data, uint info, uint etime) {
@@ -367,7 +366,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
 
 	private void on_drag_end(Gtk.Widget sender, Gdk.DragContext context) {
 		this.dragging = false;
-		//this.drag_from_mediabrowser = false;
 		
 		this.unset_rows_drag_dest();
 		Gtk.drag_dest_set(this,

@@ -76,4 +76,17 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
 		});
 		return false;
 	}
+	
+	public DndData[] get_dnd_data_for_path(ref TreePath treepath) {
+		TreeIter iter;//, iterChild, iterChildChild;
+		DndData[] dnd_data_array = {};
+		Item? item = null;
+		this.get_iter(out iter, treepath);
+		this.get(iter, Column.ITEM, out item);
+		if(item != null && item.type != ItemType.UNKNOWN) {
+			DndData dnd_data = { item.db_id, item.type };
+			dnd_data_array += dnd_data;
+		}
+		return dnd_data_array;
+	}
 }
