@@ -78,7 +78,7 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
 	}
 	
 	public DndData[] get_dnd_data_for_path(ref TreePath treepath) {
-		TreeIter iter;//, iterChild, iterChildChild;
+		TreeIter iter;
 		DndData[] dnd_data_array = {};
 		Item? item = null;
 		this.get_iter(out iter, treepath);

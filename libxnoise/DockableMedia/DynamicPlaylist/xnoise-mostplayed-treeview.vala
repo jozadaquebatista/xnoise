@@ -173,13 +173,6 @@ private class Xnoise.PlaylistTreeView : Gtk.TreeView {
 				}
 			}
 			case 3: {
-//				TreeIter iter;
-//				this.mediabrowsermodel.get_iter(out iter, treepath);
-//				if(!selection.path_is_selected(treepath)) {
-//					selection.unselect_all();
-//					selection.select_path(treepath);
-//				}
-//				rightclick_menu_popup(e.time);
 				return true;
 			}
 			default: {
@@ -208,7 +201,8 @@ private class Xnoise.PlaylistTreeView : Gtk.TreeView {
 		Gtk.TreeSelection selection = this.get_selection();
 		int x = (int)e.x;
 		int y = (int)e.y;
-		if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y)) return false;
+		if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y))
+			return false;
 		selection.unselect_all();
 		selection.select_path(treepath);
 		
