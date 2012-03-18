@@ -49,6 +49,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         VIS_TEXT,
         DRAW_SEPTR,
         ITEM,
+        LEVEL,
         N_COLUMNS
     }
 
@@ -59,10 +60,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
 
     private GLib.Type[] col_types = new GLib.Type[] {
-        typeof(Gdk.Pixbuf), //ICON
-        typeof(string),     //VIS_TEXT
-        typeof(int),        //DRAW SEPARATOR
-        typeof(Xnoise.Item?)//ITEM
+        typeof(Gdk.Pixbuf),  //ICON
+        typeof(string),      //VIS_TEXT
+        typeof(int),         //DRAW SEPARATOR
+        typeof(Xnoise.Item?),//ITEM
+        typeof(int)          //LEVEL
     };
 
     private static const int VIDEOTHUMBNAILSIZE = 40;
@@ -115,14 +117,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         this.set(iter_videos,
                                  Column.ICON, icon_repo.videos_icon,
                                  Column.VIS_TEXT, "Videos",
-                                 Column.ITEM, i
+                                 Column.ITEM, i,
+                                 Column.LEVEL, 0
                                  );
                         Item? loader_item = Item(ItemType.LOADER);
                         this.prepend(out iter_loader, iter_videos);
                         this.set(iter_loader,
                                  Column.ICON, icon_repo.loading_icon,
                                  Column.VIS_TEXT, LOADING,
-                                 Column.ITEM, loader_item
+                                 Column.ITEM, loader_item,
+                                 Column.LEVEL, 1
                                  );
                         return false;
                     }
@@ -141,14 +145,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         this.set(iter_videos,
                                  Column.ICON, icon_repo.videos_icon,
                                  Column.VIS_TEXT, "Videos",
-                                 Column.ITEM, i
+                                 Column.ITEM, i,
+                                 Column.LEVEL, 0
                                  );
                         Item? loader_item = Item(ItemType.LOADER);
                         this.prepend(out iter_loader, iter_videos);
                         this.set(iter_loader,
                                  Column.ICON, icon_repo.loading_icon,
                                  Column.VIS_TEXT, LOADING,
-                                 Column.ITEM, loader_item
+                                 Column.ITEM, loader_item,
+                                 Column.LEVEL, 1
                                  );
                     }
                     return false;
@@ -166,14 +172,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         this.set(iter_streams,
                                  Column.ICON, icon_repo.radios_icon,
                                  Column.VIS_TEXT, "Streams",
-                                 Column.ITEM, i
+                                 Column.ITEM, i,
+                                 Column.LEVEL, 0
                                  );
                         Item? loader_item = Item(ItemType.LOADER);
                         this.prepend(out iter_loader, iter_streams);
                         this.set(iter_loader,
                                  Column.ICON, icon_repo.loading_icon,
                                  Column.VIS_TEXT, LOADING,
-                                 Column.ITEM, loader_item
+                                 Column.ITEM, loader_item,
+                                 Column.LEVEL, 1
                                  );
                         return false;
                     }
@@ -192,14 +200,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         this.set(iter_streams,
                                  Column.ICON, icon_repo.radios_icon,
                                  Column.VIS_TEXT, "Streams",
-                                 Column.ITEM, i
+                                 Column.ITEM, i,
+                                 Column.LEVEL, 0
                                  );
                         Item? loader_item = Item(ItemType.LOADER);
                         this.prepend(out iter_loader, iter_streams);
                         this.set(iter_loader,
                                  Column.ICON, icon_repo.loading_icon,
                                  Column.VIS_TEXT, LOADING,
-                                 Column.ITEM, loader_item
+                                 Column.ITEM, loader_item,
+                                 Column.LEVEL, 1
                                  );
                     }
                     return false;
@@ -224,14 +234,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.set(artist_iter,
                          Column.ICON, icon_repo.artist_icon,
                          Column.VIS_TEXT, job.item.text,
-                         Column.ITEM, job.item
+                         Column.ITEM, job.item,
+                         Column.LEVEL, 0
                          );
                 Item? loader_item = Item(ItemType.LOADER);
                 this.prepend(out iter_search, artist_iter);
                 this.set(iter_search,
                          Column.ICON, icon_repo.loading_icon,
                          Column.VIS_TEXT, LOADING,
-                         Column.ITEM, loader_item
+                         Column.ITEM, loader_item,
+                         Column.LEVEL, 1
                          );
                 return false;
             }
@@ -260,7 +272,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     this.set(new_artist_iter,
                              Column.ICON, icon_repo.artist_icon,
                              Column.VIS_TEXT, job.item.text,
-                             Column.ITEM, job.item
+                             Column.ITEM, job.item,
+                             Column.LEVEL, 0
                              );
                     artist_iter = new_artist_iter;
                     Item? loader_item = Item(ItemType.LOADER);
@@ -268,7 +281,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     this.set(iter_search,
                              Column.ICON, icon_repo.loading_icon,
                              Column.VIS_TEXT, LOADING,
-                             Column.ITEM, loader_item
+                             Column.ITEM, loader_item,
+                             Column.LEVEL, 1
                              );
                     return false;
                 }
@@ -280,14 +294,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             this.set(artist_iter,
                      Column.ICON, icon_repo.artist_icon,
                      Column.VIS_TEXT, job.item.text,
-                     Column.ITEM, job.item
+                     Column.ITEM, job.item,
+                     Column.LEVEL, 0
                      );
             Item? loader_item = Item(ItemType.LOADER);
             this.append(out iter_search, artist_iter);
             this.set(iter_search,
                      Column.ICON, icon_repo.loading_icon,
                      Column.VIS_TEXT, LOADING,
-                     Column.ITEM, loader_item
+                     Column.ITEM, loader_item,
+                     Column.LEVEL, 1
                      );
             return false;
         });
@@ -331,7 +347,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             this.set(iter_videos,
                      Column.ICON, icon_repo.videos_icon,
                      Column.VIS_TEXT, "Videos",
-                     Column.ITEM, item
+                     Column.ITEM, item,
+                     Column.LEVEL, 0
                      );
         }
         else {
@@ -351,7 +368,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.set(iter_videos,
                          Column.ICON, icon_repo.videos_icon,
                          Column.VIS_TEXT, "Videos",
-                         Column.ITEM, item
+                         Column.ITEM, item,
+                         Column.LEVEL, 0
                          );
             }
         }
@@ -368,7 +386,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                      Column.ICON,        icon_repo.video_icon,
                      Column.VIS_TEXT,    td.title,
                      Column.DRAW_SEPTR,  0,
-                     Column.ITEM, td.item
+                     Column.ITEM, td.item,
+                     Column.LEVEL, 1
                      );
         }
     }
@@ -382,7 +401,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             this.set(iter_radios,
                  Column.ICON, icon_repo.radios_icon,
                  Column.VIS_TEXT, "Streams",
-                 Column.ITEM, item
+                 Column.ITEM, item,
+                 Column.LEVEL, 0
                  );
         }
         else {
@@ -402,7 +422,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.set(iter_radios,
                      Column.ICON, icon_repo.radios_icon,
                      Column.VIS_TEXT, "Streams",
-                     Column.ITEM, item
+                     Column.ITEM, item,
+                     Column.LEVEL, 0
                      );
             }
         }
@@ -411,7 +432,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             this.set(iter_singleradios,
                      Column.ICON,        icon_repo.radios_icon,
                      Column.VIS_TEXT,    td.title,
-                     Column.ITEM, td.item
+                     Column.ITEM, td.item,
+                     Column.LEVEL, 1
                      );
         }
     }
@@ -473,7 +495,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.set(iter_radios,
                          Column.ICON, icon_repo.radios_icon,
                          Column.VIS_TEXT, "Streams",
-                         Column.ITEM, item
+                         Column.ITEM, item,
+                         Column.LEVEL, 0
                          );
                 foreach(TrackData td in job.track_dat) {
                     if(job.cancellable.is_cancelled())
@@ -482,7 +505,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     this.set(iter_singleradios,
                              Column.ICON,        icon_repo.radios_icon,
                              Column.VIS_TEXT,    td.title,
-                             Column.ITEM, td.item
+                             Column.ITEM, td.item,
+                             Column.LEVEL, 1
                              );
                     stream_in_tree = true;
                 }
@@ -505,14 +529,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             this.set(iter_videos,
                      Column.ICON, icon_repo.videos_icon,
                      Column.VIS_TEXT, "Videos",
-                     Column.ITEM, item
+                     Column.ITEM, item,
+                     Column.LEVEL, 0
                      );
             Item? loader_item = Item(ItemType.LOADER);
             this.prepend(out iter_loader, iter_videos);
             this.set(iter_loader,
                      Column.ICON, icon_repo.loading_icon,
                      Column.VIS_TEXT, LOADING,
-                     Column.ITEM, loader_item
+                     Column.ITEM, loader_item,
+                     Column.LEVEL, 1
                      );
             video_in_tree = true;
             return false;
@@ -555,7 +581,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.set(iter_singlevideo,
                          Column.ICON, (has_thumbnail == true ? thumbnail : icon_repo.video_icon),
                          Column.VIS_TEXT, td.name,
-                         Column.ITEM, td.item
+                         Column.ITEM, td.item,
+                         Column.LEVEL, 1
                          );
             }
             remove_loader_child(ref iter_videos);
@@ -584,7 +611,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.set(iter_singlestream,
                          Column.ICON, icon_repo.radios_icon,
                          Column.VIS_TEXT, td.name,
-                         Column.ITEM, td.item
+                         Column.ITEM, td.item,
+                         Column.LEVEL, 1
                          );
             }
             remove_loader_child(ref iter_streams);
@@ -616,14 +644,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.set(iter_artist,
                          Column.ICON, icon_repo.artist_icon,
                          Column.VIS_TEXT, artist.text,
-                         Column.ITEM, artist
+                         Column.ITEM, artist,
+                         Column.LEVEL, 0
                          );
                 Item? loader_item = Item(ItemType.LOADER);
                 this.append(out iter_search, iter_artist);
                 this.set(iter_search,
                          Column.ICON, icon_repo.loading_icon,
                          Column.VIS_TEXT, LOADING,
-                         Column.ITEM, loader_item
+                         Column.ITEM, loader_item,
+                         Column.LEVEL, 1
                          );
             }
             return false;
@@ -645,7 +675,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         this.set(iter_loader,
                  Column.ICON, icon_repo.loading_icon,
                  Column.VIS_TEXT, LOADING,
-                 Column.ITEM, loader_item
+                 Column.ITEM, loader_item,
+                 Column.LEVEL, 1
                  );
         TreeIter child;
         for(int i = (this.iter_n_children(iter) -2); i >= 0 ; i--) {
@@ -723,7 +754,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.set(iter_album,
                          Column.ICON, (albumimage != null ? albumimage : icon_repo.album_icon),
                          Column.VIS_TEXT, album.text,
-                         Column.ITEM, album
+                         Column.ITEM, album,
+                         Column.LEVEL, 1
                          );
                 Gtk.TreePath p1 = this.get_path(iter_album);
                 TreeRowReference treerowref = new TreeRowReference(this, p1);
@@ -799,7 +831,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 if(strcmp(text, album != null ? album.down().strip() : EMPTYSTRING) == 0) {
                     //found album
                     this.set(album_iter,
-                             Column.ICON, (albumimage != null ? albumimage : icon_repo.album_icon)
+                             Column.ICON, (albumimage != null ? albumimage : icon_repo.album_icon),
+                             Column.LEVEL, 1
                              );
                     break;
                 }
@@ -843,7 +876,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 this.set(iter_title,
                          Column.ICON, (td.item.type == ItemType.LOCAL_AUDIO_TRACK ? icon_repo.title_icon : (has_thumbnail == true ? thumbnail : icon_repo.video_icon)),
                          Column.VIS_TEXT, td.title,
-                         Column.ITEM, td.item
+                         Column.ITEM, td.item,
+                         Column.LEVEL, 2
                          );
             }
             return false;

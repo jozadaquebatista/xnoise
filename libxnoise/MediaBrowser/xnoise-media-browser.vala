@@ -433,10 +433,19 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
         
         private unowned Widget ow;
         private unowned Pango.FontDescription font_description;
-    
-        public FlowingTextRenderer(Widget ow, Pango.FontDescription font_description) {
+        private unowned TreeViewColumn col;
+        private int expander;
+        private int hsepar;
+        
+        public int level    { get; set; }
+        public unowned Gdk.Pixbuf pix { get; set; }
+        
+        public FlowingTextRenderer(Widget ow, Pango.FontDescription font_description, TreeViewColumn col, int expander, int hsepar) {
             GLib.Object();
             this.ow = ow;
+            this.col = col;
+            this.expander = expander;
+            this.hsepar = hsepar;
             this.font_description = font_description;
         }
     
@@ -452,10 +461,15 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
                 natural_height = minimum_height = 30;
                 return;
             }
+            int column_width = col.get_width();
+            int sum = 0;
+            int iconwidth = (pix == null) ? 16 : pix.get_width();
+            sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + iconwidth + 2;
+            //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
             var pango_layout = widget.create_pango_layout(text);
             pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
-            pango_layout.set_width( (int)((ow.get_allocated_width() - BORDER_DIST) * Pango.SCALE));
+            pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
             int wi = 0, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
@@ -477,10 +491,11 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
                                     Gdk.Rectangle cell_area,
                                     CellRendererState flags) {
             StyleContext context;
+            //print("cell_area.width: %d level: %d\n", cell_area.width, level);
             var pango_layout = widget.create_pango_layout(text);
             pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
-            pango_layout.set_width( (int)((ow.get_allocated_width() - BORDER_DIST) * Pango.SCALE));
+            pango_layout.set_width( (int)(cell_area.width * Pango.SCALE));
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
             context = widget.get_style_context();
             int wi = 0, he = 0;
@@ -507,19 +522,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
         font_description = context.get_font(StateFlags.NORMAL).copy();
         font_description.set_size((int)(fontsizeMB * Pango.SCALE));
         
-        renderer = new FlowingTextRenderer(this.ow, font_description);
-//Timeout.add_seconds(2, () => {
-//    Value val = Value(typeof(int));
-//    this.get_style_context().get_style_property("expander-size", val);
-//    print("expander-size : %d\n", (int)val);
-//    print("level-indentation : %d\n", this.level_indentation);
-//    this.get_style_context().get_style_property("horizontal-separator", val);
-//    print("horizontal-separator : %d\n", (int)val);
-//    Value va = Value(typeof(bool));
-//    this.get_style_context().get_style_property("indent-expanders", va);
-//    print("indent-expanders : %s\n", ((bool)va).to_string());  
-//    return true;
-//});
+        var column = new TreeViewColumn();
+        
+        int expander = 0;
+        this.style_get("expander-size", out expander);
+        int hsepar = 0;
+        this.style_get("horizontal-separator", out hsepar);
+        renderer = new FlowingTextRenderer(this.ow, font_description, column, expander, hsepar);
+        
         Idle.add( () => {
             this.ow.size_allocate.connect_after( (s, a) => {
                 unowned TreeViewColumn tvc = this.get_column(0);
@@ -529,8 +539,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
                 
                 last_width = current_width;
                 
-                tvc.max_width = current_width - 25;
-                tvc.min_width = current_width - 25;
+                tvc.max_width = tvc.min_width = current_width - 20;
                 TreeModel? xm = this.get_model();
                 if(xm != null && !in_update_view)
                     xm.foreach(owforeach);
@@ -541,12 +550,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
         var pixbufRenderer = new CellRendererPixbuf();
         pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
         
-        var column = new TreeViewColumn();
-        
         column.pack_start(pixbufRenderer, false);
         column.add_attribute(pixbufRenderer, "pixbuf", MediaBrowserModel.Column.ICON);
         column.pack_start(renderer, false);
         column.add_attribute(renderer, "text", MediaBrowserModel.Column.VIS_TEXT); // no markup!!
+        column.add_attribute(renderer, "level", MediaBrowserModel.Column.LEVEL);
+        column.add_attribute(renderer, "pix", MediaBrowserModel.Column.ICON);
         this.insert_column(column, -1);
         
         this.headers_visible = false;

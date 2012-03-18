@@ -813,6 +813,7 @@ namespace Xnoise {
 			VIS_TEXT,
 			DRAW_SEPTR,
 			ITEM,
+			LEVEL,
 			N_COLUMNS
 		}
 		public enum TrackSorting {
