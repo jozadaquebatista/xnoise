@@ -430,7 +430,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
     }
 
     private class FlowingTextRenderer : CellRendererText {
-        
+        private int maxiconwidth;
         private unowned Widget ow;
         private unowned Pango.FontDescription font_description;
         private unowned TreeViewColumn col;
@@ -447,6 +447,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
             this.expander = expander;
             this.hsepar = hsepar;
             this.font_description = font_description;
+            maxiconwidth = 0;
         }
     
         private static const int  BORDER_DIST = 35; //TODO: make it dynamic
@@ -464,14 +465,16 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
             int column_width = col.get_width();
             int sum = 0;
             int iconwidth = (pix == null) ? 16 : pix.get_width();
-            sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + iconwidth + 2;
+            if(maxiconwidth < iconwidth)
+                maxiconwidth = iconwidth;
+            sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + maxiconwidth + 2; 
             //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
             var pango_layout = widget.create_pango_layout(text);
             pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
             pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
-            int wi = 0, he = 0;
+            int wi, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
             natural_height = minimum_height = he;
         }
