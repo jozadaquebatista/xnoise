@@ -1591,7 +1591,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 			media_source_selector.insert_column(column, -1);
 			media_source_selector.model = media_source_selector_model;
 			mbbx.pack_start(media_source_selector, false, false, 0);
-			mbbx.pack_start(new Separator(Orientation.HORIZONTAL), false, false, 0);
+			mbbx.pack_start(new Separator(Orientation.HORIZONTAL), false, false, 1);
 			
 			unowned DockableMedia? dm_mb = null;
 			assert((dm_mb = dockable_media_sources.lookup("MediaBrowserDockable")) != null);
