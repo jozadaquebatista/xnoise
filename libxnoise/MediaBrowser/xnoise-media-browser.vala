@@ -436,6 +436,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
         private unowned TreeViewColumn col;
         private int expander;
         private int hsepar;
+        private int calculated_widh[3];
         
         public int level    { get; set; }
         public unowned Gdk.Pixbuf pix { get; set; }
@@ -448,6 +449,9 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
             this.hsepar = hsepar;
             this.font_description = font_description;
             maxiconwidth = 0;
+            calculated_widh[0] = 0;
+            calculated_widh[1] = 0;
+            calculated_widh[2] = 0;
         }
     
         private static const int  BORDER_DIST = 35; //TODO: make it dynamic
@@ -467,6 +471,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
             int iconwidth = (pix == null) ? 16 : pix.get_width();
             if(maxiconwidth < iconwidth)
                 maxiconwidth = iconwidth;
+            calculated_widh[level] = maxiconwidth;
             sum = (level + 1) * (expander + 2 * hsepar) + (2 * (int)xpad) + maxiconwidth + 2; 
             //print("column_width - sum :%d  level: %d\n", column_width - sum, level);
             var pango_layout = widget.create_pango_layout(text);
@@ -498,7 +503,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
             var pango_layout = widget.create_pango_layout(text);
             pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
-            pango_layout.set_width( (int)(cell_area.width * Pango.SCALE));
+            pango_layout.set_width( (int)((calculated_widh[level] > cell_area.width ? calculated_widh[level] : cell_area.width) * Pango.SCALE));
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
             context = widget.get_style_context();
             int wi = 0, he = 0;
