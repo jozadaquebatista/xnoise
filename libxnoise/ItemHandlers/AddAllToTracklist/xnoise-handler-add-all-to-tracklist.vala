@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 using Gtk;
@@ -33,70 +33,70 @@ using Gtk;
 using Xnoise;
 
 public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
-	
-	private Action menu_add;
-	private const string ainfo = _("Add all visible tracks to tracklist");
-	private const string aname = "HandlerAddAllToTracklistAction";
-	
-	private const string name = "HandlerAddAllToTracklist";
-	private unowned Main xn;
-	
-	public HandlerAddAllToTracklist() {
-		//action for adding item(s)
-		xn = Main.instance;
-		
-		menu_add = new Action(); 
-		menu_add.action = on_menu_add;
-		menu_add.info = this.ainfo;
-		menu_add.name = this.aname;
-		menu_add.stock_item = Gtk.Stock.DND_MULTIPLE;
-		menu_add.context = ActionContext.MEDIABROWSER_MENU_QUERY;
-		//print("constructed HandlerAddToTracklist\n");
-	}
+    
+    private Action menu_add;
+    private const string ainfo = _("Add all visible tracks to tracklist");
+    private const string aname = "HandlerAddAllToTracklistAction";
+    
+    private const string name = "HandlerAddAllToTracklist";
+    private unowned Main xn;
+    
+    public HandlerAddAllToTracklist() {
+        //action for adding item(s)
+        xn = Main.instance;
+        
+        menu_add = new Action(); 
+        menu_add.action = on_menu_add;
+        menu_add.info = this.ainfo;
+        menu_add.name = this.aname;
+        menu_add.stock_item = Gtk.Stock.DND_MULTIPLE;
+        menu_add.context = ActionContext.MEDIABROWSER_MENU_QUERY;
+        //print("constructed HandlerAddToTracklist\n");
+    }
 
-	public override ItemHandlerType handler_type() {
-		return ItemHandlerType.OTHER;
-	}
-	
-	public override unowned string handler_name() {
-		return name;
-	}
+    public override ItemHandlerType handler_type() {
+        return ItemHandlerType.OTHER;
+    }
+    
+    public override unowned string handler_name() {
+        return name;
+    }
 
-	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-		if(context == ActionContext.MEDIABROWSER_MENU_QUERY)
-			return menu_add;
-		
-		return null;
-	}
+    public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
+        if(context == ActionContext.MEDIABROWSER_MENU_QUERY)
+            return menu_add;
+        
+        return null;
+    }
 
-	private void on_menu_add(Item item, GLib.Value? data) {
-		var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_job);
-		db_worker.push_job(job);
-	}
+    private void on_menu_add(Item item, GLib.Value? data) {
+        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_job);
+        db_worker.push_job(job);
+    }
 
-	private bool menu_add_job(Worker.Job job) {
-		job.track_dat = db_browser.get_all_tracks(ref main_window.mediaBr.mediabrowsermodel.searchtext);
-		//print("track_dat len %d\n", (int)job.track_dat.length);
-		if(job.track_dat != null) {
-			Idle.add( () => {
-				append_tracks(ref job.track_dat);
-				return false;
-			});
-		}
-		return false;
-	}
-	
-	private void append_tracks(ref TrackData[]? tda) {
-		if(tda == null || tda[0] == null) 
-			return;
-		int k = 0;
-		TreeIter iter;
-		while(tda[k] != null) {
-			iter = tlm.insert_title(null,
-			                        ref tda[k],
-			                        false);
-			k++;
-		}
-	}
+    private bool menu_add_job(Worker.Job job) {
+        job.track_dat = db_browser.get_all_tracks(ref main_window.mediaBr.mediabrowsermodel.searchtext);
+        //print("track_dat len %d\n", (int)job.track_dat.length);
+        if(job.track_dat != null) {
+            Idle.add( () => {
+                append_tracks(ref job.track_dat);
+                return false;
+            });
+        }
+        return false;
+    }
+    
+    private void append_tracks(ref TrackData[]? tda) {
+        if(tda == null || tda[0] == null) 
+            return;
+        int k = 0;
+        TreeIter iter;
+        while(tda[k] != null) {
+            iter = tlm.insert_title(null,
+                                    ref tda[k],
+                                    false);
+            k++;
+        }
+    }
 }
 

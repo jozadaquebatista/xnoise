@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 using Xnoise;
@@ -33,132 +33,132 @@ using Xnoise.SimpleMarkup;
 
 namespace Lastfm {
 
-	public class Album : GLib.Object {
-		//ht of size - image uri
-		public HashTable<string, string> image_uris = null;
-		public string[] toptags;            // album toptags
-		public string artist_name;
-		public string album_name;
-		private string api_key;
-		public unowned Session parent_session;
-		private string? username;
-		private string? session_key;
-		private string? lang;
-		public string? releasedate;
-		public string reply_artist;
-		public string reply_album;
-		
-		public signal void received_info(string albumname);
-		
-		public Album(Session session, string _artist_name, string _album_name,
-		             string api_key, string? username = null, string? session_key = null,
-		             string? lang = null) {
-			this.artist_name = _artist_name;
-			this.album_name = _album_name;
-			this.api_key = api_key;
-			this.parent_session = session;
-			this.username = username;
-			this.session_key = session_key;
-			this.lang = lang;
-			this.parent_session.login_successful.connect( (sender, un) => {
-				assert(sender == this.parent_session);
-				this.username = un;
-			});
-		}
-		
-		public void get_info() {
-			var ub = new Lastfm.UrlBuilder();
-			ub.add_param(UrlParamType.METHOD, "album.getinfo");
-			ub.add_param(UrlParamType.API_KEY, this.api_key);
-			ub.add_param(UrlParamType.ALBUM,  this.album_name);
-			ub.add_param(UrlParamType.ARTIST, this.artist_name);
-			ub.add_param(UrlParamType.AUTOCORRECT, 1);
-			if(this.username != null)
-				ub.add_param(UrlParamType.USERNAME, this.username);
-			
-			if(this.lang != null)
-				ub.add_param(UrlParamType.LANGUAGE, "&lang=%s".printf(lang));
-			
-			string? turl = ub.get_url(ROOT_URL, false);
-			if(turl == null) {
-				print("Error building album.getInfo url\n");
-				return;
-			}
-			int id = parent_session.web.request_data(turl);
-			var rhc = new ResponseHandlerContainer(this.get_info_cb, id);
-			parent_session.handlers.insert(id, rhc);
-		}
-		
-		private void get_info_cb(int id, string response) {
-			var mr = new Xnoise.SimpleMarkup.Reader.from_string(response);
-			mr.read();
-			
-			if(!check_response_status_ok(ref mr.root))
-				return;
-			
-			SimpleMarkup.Node album = mr.root.get_child_by_name("lfm").get_child_by_name("album");
-			if(album == null) {
-				print("could not find album node\n");
-				return;
-			}
-			
-			//album name
-			SimpleMarkup.Node album_name  = album.get_child_by_name("name");
-			if(album_name == null) {
-				print("could not find album name node\n");
-				return;
-			}
-			reply_album = album_name.text;
-			
-			//artist name
-			SimpleMarkup.Node artist_name  = album.get_child_by_name("artist");
-			if(artist_name == null) {
-				print("could not find artist name node\n");
-				return;
-			}
-			reply_artist = artist_name.text;
-			
-			//album release date
-			SimpleMarkup.Node releasedate_node  = album.get_child_by_name("releasedate");
-			if(releasedate_node == null) {
-				print("could not get album release date\n");
-				return;
-			}
-			releasedate = releasedate_node.text;
-			//images
-			SimpleMarkup.Node[]? images = album.get_children_by_name("image");
-			if(images == null) {
-				print("could not find album images\n");
-			}
-			else {
-				image_uris = new HashTable<string, string>(str_hash, str_equal);
-				foreach(SimpleMarkup.Node n in images) {
-					string a = n.attributes["size"];
-					string s = n.text;
-					image_uris.insert(a, s);
-				}
-			}
-			
-			//toptags
-			SimpleMarkup.Node? tptgs = album.get_child_by_name("toptags");
-			if(tptgs!= null) {
-				SimpleMarkup.Node[]? tag_nodes = tptgs.get_children_by_name("tag");
-				string[] s = {};
-				foreach(SimpleMarkup.Node a in tag_nodes) {
-					SimpleMarkup.Node name_node = a.get_child_by_name("name");
-					string name_string = name_node.text;
-					s += name_string;
-				}
-				if(s.length == 0)
-					s = null;
-				this.toptags = s;
-			}
-			//send result
-			Idle.add( () => {
-				received_info(album_name.text);
-				return false;
-			});
-		}
-	}
+    public class Album : GLib.Object {
+        //ht of size - image uri
+        public HashTable<string, string> image_uris = null;
+        public string[] toptags;            // album toptags
+        public string artist_name;
+        public string album_name;
+        private string api_key;
+        public unowned Session parent_session;
+        private string? username;
+        private string? session_key;
+        private string? lang;
+        public string? releasedate;
+        public string reply_artist;
+        public string reply_album;
+        
+        public signal void received_info(string albumname);
+        
+        public Album(Session session, string _artist_name, string _album_name,
+                     string api_key, string? username = null, string? session_key = null,
+                     string? lang = null) {
+            this.artist_name = _artist_name;
+            this.album_name = _album_name;
+            this.api_key = api_key;
+            this.parent_session = session;
+            this.username = username;
+            this.session_key = session_key;
+            this.lang = lang;
+            this.parent_session.login_successful.connect( (sender, un) => {
+                assert(sender == this.parent_session);
+                this.username = un;
+            });
+        }
+        
+        public void get_info() {
+            var ub = new Lastfm.UrlBuilder();
+            ub.add_param(UrlParamType.METHOD, "album.getinfo");
+            ub.add_param(UrlParamType.API_KEY, this.api_key);
+            ub.add_param(UrlParamType.ALBUM,  this.album_name);
+            ub.add_param(UrlParamType.ARTIST, this.artist_name);
+            ub.add_param(UrlParamType.AUTOCORRECT, 1);
+            if(this.username != null)
+                ub.add_param(UrlParamType.USERNAME, this.username);
+            
+            if(this.lang != null)
+                ub.add_param(UrlParamType.LANGUAGE, "&lang=%s".printf(lang));
+            
+            string? turl = ub.get_url(ROOT_URL, false);
+            if(turl == null) {
+                print("Error building album.getInfo url\n");
+                return;
+            }
+            int id = parent_session.web.request_data(turl);
+            var rhc = new ResponseHandlerContainer(this.get_info_cb, id);
+            parent_session.handlers.insert(id, rhc);
+        }
+        
+        private void get_info_cb(int id, string response) {
+            var mr = new Xnoise.SimpleMarkup.Reader.from_string(response);
+            mr.read();
+            
+            if(!check_response_status_ok(ref mr.root))
+                return;
+            
+            SimpleMarkup.Node album = mr.root.get_child_by_name("lfm").get_child_by_name("album");
+            if(album == null) {
+                print("could not find album node\n");
+                return;
+            }
+            
+            //album name
+            SimpleMarkup.Node album_name  = album.get_child_by_name("name");
+            if(album_name == null) {
+                print("could not find album name node\n");
+                return;
+            }
+            reply_album = album_name.text;
+            
+            //artist name
+            SimpleMarkup.Node artist_name  = album.get_child_by_name("artist");
+            if(artist_name == null) {
+                print("could not find artist name node\n");
+                return;
+            }
+            reply_artist = artist_name.text;
+            
+            //album release date
+            SimpleMarkup.Node releasedate_node  = album.get_child_by_name("releasedate");
+            if(releasedate_node == null) {
+                print("could not get album release date\n");
+                return;
+            }
+            releasedate = releasedate_node.text;
+            //images
+            SimpleMarkup.Node[]? images = album.get_children_by_name("image");
+            if(images == null) {
+                print("could not find album images\n");
+            }
+            else {
+                image_uris = new HashTable<string, string>(str_hash, str_equal);
+                foreach(SimpleMarkup.Node n in images) {
+                    string a = n.attributes["size"];
+                    string s = n.text;
+                    image_uris.insert(a, s);
+                }
+            }
+            
+            //toptags
+            SimpleMarkup.Node? tptgs = album.get_child_by_name("toptags");
+            if(tptgs!= null) {
+                SimpleMarkup.Node[]? tag_nodes = tptgs.get_children_by_name("tag");
+                string[] s = {};
+                foreach(SimpleMarkup.Node a in tag_nodes) {
+                    SimpleMarkup.Node name_node = a.get_child_by_name("name");
+                    string name_string = name_node.text;
+                    s += name_string;
+                }
+                if(s.length == 0)
+                    s = null;
+                this.toptags = s;
+            }
+            //send result
+            Idle.add( () => {
+                received_info(album_name.text);
+                return false;
+            });
+        }
+    }
 }
 

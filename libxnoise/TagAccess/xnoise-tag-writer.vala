@@ -25,114 +25,114 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 using Xnoise;
 using Xnoise.Services;
 
 public class Xnoise.TagAccess.TagWriter {
-	public bool write_tag(File? file, TrackData? td) {
-		// does writes for values that are different from default values
-		if(file == null)
-			return false;
-		if(td == null)
-			return false;
-		bool retval = false;
+    public bool write_tag(File? file, TrackData? td) {
+        // does writes for values that are different from default values
+        if(file == null)
+            return false;
+        if(td == null)
+            return false;
+        bool retval = false;
 
-		string path = null;
-		path = file.get_path();
-		if(path == null)
-			return false;
+        string path = null;
+        path = file.get_path();
+        if(path == null)
+            return false;
 
-		TagLib.File taglib_file = null;
-		taglib_file = new TagLib.File(path);
-		if(taglib_file != null && taglib_file.is_valid()) {
-			unowned TagLib.Tag tag = taglib_file.tag;
-			if(tag != null) {
-				if(td.artist != null && td.artist != EMPTYSTRING)
-					tag.artist = td.artist;
-					
-				if(td.title != null && td.title != EMPTYSTRING)
-					tag.title = td.title;
-				
-				if(td.album != null && td.album != EMPTYSTRING)
-					tag.album = td.album;
-				
-				if(td.genre != null && td.genre != EMPTYSTRING)
-					tag.genre = td.genre;
-				
-				if(td.year != 0)
-					tag.year = td.year;
-				
-				if(td.tracknumber != 0)
-					tag.track = td.tracknumber;
-				
-				retval = taglib_file.save();
-			}
-		}
-		taglib_file = null;
-		return retval;
-	}
+        TagLib.File taglib_file = null;
+        taglib_file = new TagLib.File(path);
+        if(taglib_file != null && taglib_file.is_valid()) {
+            unowned TagLib.Tag tag = taglib_file.tag;
+            if(tag != null) {
+                if(td.artist != null && td.artist != EMPTYSTRING)
+                    tag.artist = td.artist;
+                    
+                if(td.title != null && td.title != EMPTYSTRING)
+                    tag.title = td.title;
+                
+                if(td.album != null && td.album != EMPTYSTRING)
+                    tag.album = td.album;
+                
+                if(td.genre != null && td.genre != EMPTYSTRING)
+                    tag.genre = td.genre;
+                
+                if(td.year != 0)
+                    tag.year = td.year;
+                
+                if(td.tracknumber != 0)
+                    tag.track = td.tracknumber;
+                
+                retval = taglib_file.save();
+            }
+        }
+        taglib_file = null;
+        return retval;
+    }
 
-	public bool write_artist(File? file, string? artist) {
-		// does writes for values that are different from default values
-		if(file == null)
-			return false;
-		if(artist == null)
-			return false;
-		bool retval = false;
+    public bool write_artist(File? file, string? artist) {
+        // does writes for values that are different from default values
+        if(file == null)
+            return false;
+        if(artist == null)
+            return false;
+        bool retval = false;
 
-		string path = null;
-		path = file.get_path();
-		if(path == null)
-			return false;
-		
-		TagLib.File taglib_file = null;
-		taglib_file = new TagLib.File(path);
-		if(taglib_file!=null) {
-			unowned TagLib.Tag tag = taglib_file.tag;
-			if(tag != null) {
-				if(artist != EMPTYSTRING)
-					tag.artist = artist;
-				else
-					return false;
-								
-				retval = taglib_file.save();
-			}
-		}
-		taglib_file = null;
-		return retval;
-	}
+        string path = null;
+        path = file.get_path();
+        if(path == null)
+            return false;
+        
+        TagLib.File taglib_file = null;
+        taglib_file = new TagLib.File(path);
+        if(taglib_file!=null) {
+            unowned TagLib.Tag tag = taglib_file.tag;
+            if(tag != null) {
+                if(artist != EMPTYSTRING)
+                    tag.artist = artist;
+                else
+                    return false;
+                                
+                retval = taglib_file.save();
+            }
+        }
+        taglib_file = null;
+        return retval;
+    }
 
-	public bool write_album(File? file, string? album) {
-		// does writes for values that are different from default values
-		if(file == null)
-			return false;
-		if(album == null)
-			return false;
-		bool retval = false;
+    public bool write_album(File? file, string? album) {
+        // does writes for values that are different from default values
+        if(file == null)
+            return false;
+        if(album == null)
+            return false;
+        bool retval = false;
 
-		string path = null;
-		path = file.get_path();
-		if(path == null)
-			return false;
-		
-		TagLib.File taglib_file = null;
-		taglib_file = new TagLib.File(path);
-		if(taglib_file!=null) {
-			unowned TagLib.Tag tag = taglib_file.tag;
-			if(tag != null) {
-				if(album != EMPTYSTRING)
-					tag.album = album;
-				else
-					return false;
-								
-				retval = taglib_file.save();
-			}
-		}
-		taglib_file = null;
-		return retval;
-	}
+        string path = null;
+        path = file.get_path();
+        if(path == null)
+            return false;
+        
+        TagLib.File taglib_file = null;
+        taglib_file = new TagLib.File(path);
+        if(taglib_file!=null) {
+            unowned TagLib.Tag tag = taglib_file.tag;
+            if(tag != null) {
+                if(album != EMPTYSTRING)
+                    tag.album = album;
+                else
+                    return false;
+                                
+                retval = taglib_file.save();
+            }
+        }
+        taglib_file = null;
+        return retval;
+    }
 }
 

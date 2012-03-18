@@ -25,51 +25,51 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
 */
 
 
 public class Xnoise.MediaExtensions {
-	// known media extensions. for a basic file check from uri/path
-	private string[] _list = {
-		"mp3", 
-		"ogg", 
-		"wma",
-		"avi",
-		"oga",
-		"ogv",
-		"mpeg",
-		"mpg",
-		"mov",
-		"flac",
-		"wav",
-		"aiff",
-		"m4a",
-		"mp4",
-		"mp4v",
-		"wmv",
-		"ts",
-		"asx",
-		"m3u",
-		"xspf",
-		"pls",
-		"wpl"
-	};
+    // known media extensions. for a basic file check from uri/path
+    private string[] _list = {
+        "mp3", 
+        "ogg", 
+        "wma",
+        "avi",
+        "oga",
+        "ogv",
+        "mpeg",
+        "mpg",
+        "mov",
+        "flac",
+        "wav",
+        "aiff",
+        "m4a",
+        "mp4",
+        "mp4v",
+        "wmv",
+        "ts",
+        "asx",
+        "m3u",
+        "xspf",
+        "pls",
+        "wpl"
+    };
 
-	public string[] list {
-		get {
-			return _list;
-		}
-	}
-	
-	// syntax support for 'in'
-	public bool contains(string? extension) {
-		if(extension == null)
-			return false;
-		foreach(unowned string s in _list) {
-			if(extension == s) return true;
-		}
-		return false;
-	}
+    public string[] list {
+        get {
+            return _list;
+        }
+    }
+    
+    // syntax support for 'in'
+    public bool contains(string? extension) {
+        if(extension == null)
+            return false;
+        foreach(unowned string s in _list) {
+            if(extension == s) return true;
+        }
+        return false;
+    }
 }
 

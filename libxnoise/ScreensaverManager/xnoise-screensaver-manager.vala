@@ -26,119 +26,119 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Andreas Obergrusberger
+ *     Andreas Obergrusberger
  */
 
 
 using GLib;
 
 namespace Xnoise {
-	class ScreenSaverManager {
-		private SSMBackend backend = null;
-		public ScreenSaverManager() {
-			var xdgssm = new XdgSSM();
-			if(xdgssm.is_available()) backend = xdgssm;
-			if(backend == null) return;
-			if (!backend.init()) backend = null;
-		}
-			
-		public bool inhibit() {
-			message("calling Inhibit");
-			if (backend == null) {
-				print("cannot suspend screensaver, install xdg-utils");
-				return false;
-			}
-			return backend.inhibit();
-		}
-	
-		public bool uninhibit() {
-			message("calling UnInhibit");
-			if (backend == null) return false;
-			return backend.uninhibit();
-		}
-	}
+    class ScreenSaverManager {
+        private SSMBackend backend = null;
+        public ScreenSaverManager() {
+            var xdgssm = new XdgSSM();
+            if(xdgssm.is_available()) backend = xdgssm;
+            if(backend == null) return;
+            if (!backend.init()) backend = null;
+        }
+            
+        public bool inhibit() {
+            message("calling Inhibit");
+            if (backend == null) {
+                print("cannot suspend screensaver, install xdg-utils");
+                return false;
+            }
+            return backend.inhibit();
+        }
+    
+        public bool uninhibit() {
+            message("calling UnInhibit");
+            if (backend == null) return false;
+            return backend.uninhibit();
+        }
+    }
 
-	interface SSMBackend : GLib.Object {
-		public abstract bool is_available();
-		public abstract bool init();
-		public abstract bool inhibit();
-		public abstract bool uninhibit();
-	}
+    interface SSMBackend : GLib.Object {
+        public abstract bool is_available();
+        public abstract bool init();
+        public abstract bool inhibit();
+        public abstract bool uninhibit();
+    }
 
 
 
-	class XdgSSM : GLib.Object, SSMBackend {
-		private string path = null;
-	
-		private const string binary_name = "xdg-screensaver";
-		private const string inhibit_param = "suspend";
-		private const string uninhibit_param = "resume";
+    class XdgSSM : GLib.Object, SSMBackend {
+        private string path = null;
+    
+        private const string binary_name = "xdg-screensaver";
+        private const string inhibit_param = "suspend";
+        private const string uninhibit_param = "resume";
 
-		private int exit_status;
+        private int exit_status;
 
-		private int get_window_id() {
-			var win = main_window.get_window();
-			if(win == null) return -1;
-			X.ID id = Gdk.X11Window.get_xid(win);
-			return (int)id;
-		}
-		
-		private bool get_path() {
-			string ret = null;
-			ret = Environment.find_program_in_path(binary_name);
-			if (ret != null) {
-				path = ret;
-				return true;
-			}
-			return false;
-		}
-	
-		public bool is_available() {
-			return get_path();
-		}
+        private int get_window_id() {
+            var win = main_window.get_window();
+            if(win == null) return -1;
+            X.ID id = Gdk.X11Window.get_xid(win);
+            return (int)id;
+        }
+        
+        private bool get_path() {
+            string ret = null;
+            ret = Environment.find_program_in_path(binary_name);
+            if (ret != null) {
+                path = ret;
+                return true;
+            }
+            return false;
+        }
+    
+        public bool is_available() {
+            return get_path();
+        }
 
-		public bool init() {
-			if (path == null) return get_path();
-			return true;
-		}
+        public bool init() {
+            if (path == null) return get_path();
+            return true;
+        }
 
-		public bool inhibit() {
-			//int id = get_window_id();
-			//print ("%i", id);
-			try {
-				Process.spawn_sync (null, {path, inhibit_param, get_window_id().to_string()}, null, 
-				                    SpawnFlags.STDOUT_TO_DEV_NULL, 
-				                    null, 
-				                    null, 
-				                    null, 
-				                    out exit_status);
-			}
-			catch(GLib.Error e) {
-				print("Failed to inhibit screensaver using xdg-screensaver: %s\n", e.message);
-				return false;
-			}
-		
-			if(exit_status == 0) return true;
-			return true;
-		}
+        public bool inhibit() {
+            //int id = get_window_id();
+            //print ("%i", id);
+            try {
+                Process.spawn_sync (null, {path, inhibit_param, get_window_id().to_string()}, null, 
+                                    SpawnFlags.STDOUT_TO_DEV_NULL, 
+                                    null, 
+                                    null, 
+                                    null, 
+                                    out exit_status);
+            }
+            catch(GLib.Error e) {
+                print("Failed to inhibit screensaver using xdg-screensaver: %s\n", e.message);
+                return false;
+            }
+        
+            if(exit_status == 0) return true;
+            return true;
+        }
 
-		public bool uninhibit() {
-			try {
-				Process.spawn_sync (null, {path, uninhibit_param, get_window_id().to_string()}, null, 
-				                    SpawnFlags.STDOUT_TO_DEV_NULL, 
-				                    null, 
-				                    null, 
-				                    null, 
-				                    out exit_status);
-			}
-			catch(GLib.Error e) {
-				print("Failed to uninhibit screensaver using xdg-screensaver: %s", e.message);
-				return false;
-			}
-		
-			if(exit_status == 0) return true;
-			return false;
-		}
-	}
+        public bool uninhibit() {
+            try {
+                Process.spawn_sync (null, {path, uninhibit_param, get_window_id().to_string()}, null, 
+                                    SpawnFlags.STDOUT_TO_DEV_NULL, 
+                                    null, 
+                                    null, 
+                                    null, 
+                                    out exit_status);
+            }
+            catch(GLib.Error e) {
+                print("Failed to uninhibit screensaver using xdg-screensaver: %s", e.message);
+                return false;
+            }
+        
+            if(exit_status == 0) return true;
+            return false;
+        }
+    }
 }
 

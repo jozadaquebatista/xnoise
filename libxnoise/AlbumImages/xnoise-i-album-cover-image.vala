@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 
@@ -35,10 +35,10 @@
  * The reply is checked for matching artist/album
  */
 public interface Xnoise.IAlbumCoverImage : GLib.Object {
-	//delivers local image path on success, EMPTYSTRING otherwise
-	public signal void sign_image_fetched(string artist, string album, string image_path);
-	//start image search
-	public abstract void find_image();
+    //delivers local image path on success, EMPTYSTRING otherwise
+    public signal void sign_image_fetched(string artist, string album, string image_path);
+    //start image search
+    public abstract void find_image();
 }
 
 

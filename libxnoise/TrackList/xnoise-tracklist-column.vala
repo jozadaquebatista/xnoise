@@ -25,16 +25,16 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
 */
 
 using Gtk;
 
 
 public class Xnoise.TrackListColumn : TreeViewColumn {
-	public string name;
-	public TrackListColumn(string _name = "") {
-		name = _name;
-	}
+    public string name;
+    public TrackListColumn(string _name = "") {
+        name = _name;
+    }
 }
 

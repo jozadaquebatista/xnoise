@@ -25,48 +25,48 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext/ItemType
 public class Xnoise.HandlerPlayItem : ItemHandler {
-	private Action a;
-	private const string ainfo = _("Play");
-	private const string aname = "A HandlerPlayItemname";
-	
-	private const string name = "HandlerPlayItem";
-	
-	public HandlerPlayItem() {
-		a = new Action();
-		a.action = play_uri;
-		a.info = this.ainfo;
-		a.name = this.aname;
-		a.context = ActionContext.NONE;
-		
-		//print("constructed HandlerPlayItem\n");
-	}
+    private Action a;
+    private const string ainfo = _("Play");
+    private const string aname = "A HandlerPlayItemname";
+    
+    private const string name = "HandlerPlayItem";
+    
+    public HandlerPlayItem() {
+        a = new Action();
+        a.action = play_uri;
+        a.info = this.ainfo;
+        a.name = this.aname;
+        a.context = ActionContext.NONE;
+        
+        //print("constructed HandlerPlayItem\n");
+    }
 
-	public override ItemHandlerType handler_type() {
-		return ItemHandlerType.PLAY_NOW;
-	}
-	
-	public override unowned string handler_name() {
-		return name;
-	}
+    public override ItemHandlerType handler_type() {
+        return ItemHandlerType.PLAY_NOW;
+    }
+    
+    public override unowned string handler_name() {
+        return name;
+    }
 
-	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-		if(context == ActionContext.REQUESTED)
-			return a;
-		return null;
-	}
+    public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
+        if(context == ActionContext.REQUESTED)
+            return a;
+        return null;
+    }
 
-	private void play_uri(Item item, GLib.Value? data) { // forward playlists to parser
-		//print(":: play_uri .. %s  uri: %s\n", item.type.to_string(), item.uri);
-		if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK && item.type != ItemType.STREAM) 
-			return;
-		global.current_uri = item.uri;
-		global.player_state = PlayerState.PLAYING;
-	}
+    private void play_uri(Item item, GLib.Value? data) { // forward playlists to parser
+        //print(":: play_uri .. %s  uri: %s\n", item.type.to_string(), item.uri);
+        if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK && item.type != ItemType.STREAM) 
+            return;
+        global.current_uri = item.uri;
+        global.player_state = PlayerState.PLAYING;
+    }
 }
 

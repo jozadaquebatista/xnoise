@@ -25,26 +25,26 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
 */
 
 using Gtk;
 
 public class Xnoise.TextColumn : Xnoise.TrackListColumn {
-	//private int last_size = 0;
-	private TrackListModel.Column _id;
-	
-	public TrackListModel.Column get_id() {
-		return _id;
-	}
-	
-	public TextColumn(string title, CellRendererText renderer, TrackListModel.Column col_id) {
-		this.set_title(title);
-		this._id = col_id;
-		this.pack_start(renderer, true);
-		//this.last_size = this.width;
-		//this.notify["visible"].connect(on_visibility_changed);
-		//if(this.visible)
-		//	this.notify["width"].connect(on_width_changed);
-	}
+    //private int last_size = 0;
+    private TrackListModel.Column _id;
+    
+    public TrackListModel.Column get_id() {
+        return _id;
+    }
+    
+    public TextColumn(string title, CellRendererText renderer, TrackListModel.Column col_id) {
+        this.set_title(title);
+        this._id = col_id;
+        this.pack_start(renderer, true);
+        //this.last_size = this.width;
+        //this.notify["visible"].connect(on_visibility_changed);
+        //if(this.visible)
+        //    this.notify["width"].connect(on_width_changed);
+    }
 }

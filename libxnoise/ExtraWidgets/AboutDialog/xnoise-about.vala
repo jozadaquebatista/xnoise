@@ -25,29 +25,29 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 using GLib;
 
 private class Xnoise.AboutDialog : Gtk.AboutDialog {
-	const string COPYRIGHT    = "Copyright \xc2\xa9 2008-2012 Jörn Magens";
-	const string PROGRAM_NAME = "xnoise";
-	const string WEBSITE      = "http://www.xnoise-media-player.com/";
+    const string COPYRIGHT    = "Copyright \xc2\xa9 2008-2012 Jörn Magens";
+    const string PROGRAM_NAME = "xnoise";
+    const string WEBSITE      = "http://www.xnoise-media-player.com/";
 
-	public AboutDialog() {
-		this.set_modal(true);
-		this.set_transient_for(main_window);
-		this.logo_icon_name = PROGRAM_NAME;
-		
-		this.set_default_icon_name(PROGRAM_NAME);
-		this.set_logo_icon_name(PROGRAM_NAME);
+    public AboutDialog() {
+        this.set_modal(true);
+        this.set_transient_for(main_window);
+        this.logo_icon_name = PROGRAM_NAME;
+        
+        this.set_default_icon_name(PROGRAM_NAME);
+        this.set_logo_icon_name(PROGRAM_NAME);
 
-		this.program_name     = PROGRAM_NAME;
-		this.version          = Config.PACKAGE_VERSION;
-		this.website          = WEBSITE;
-		this.website_label    = "Xnoise media player - Home";
-		this.copyright        = COPYRIGHT;
-	}
+        this.program_name     = PROGRAM_NAME;
+        this.version          = Config.PACKAGE_VERSION;
+        this.website          = WEBSITE;
+        this.website_label    = "Xnoise media player - Home";
+        this.copyright        = COPYRIGHT;
+    }
 }
 

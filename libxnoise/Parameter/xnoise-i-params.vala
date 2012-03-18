@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 
@@ -39,8 +39,8 @@
  */
  
 public interface Xnoise.IParams : GLib.Object {
-	public abstract void read_params_data();
-	public abstract void write_params_data();
+    public abstract void read_params_data();
+    public abstract void write_params_data();
 }
 
 

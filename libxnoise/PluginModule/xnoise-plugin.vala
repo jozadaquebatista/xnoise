@@ -25,141 +25,141 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
  
 
 public class Xnoise.PluginModule.Container : TypeModule {
-	//THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT FROM MODULE
-	private unowned Main xn;
-	private bool _loaded = false;
-	private Module module;
-	private Type _type;
-	private Information _info;
-	private bool _activated;
+    //THIS CLASS IS A WRAPPER FOR THE PLUGIN OBJECT FROM MODULE
+    private unowned Main xn;
+    private bool _loaded = false;
+    private Module module;
+    private Type _type;
+    private Information _info;
+    private bool _activated;
 
-	public Object loaded_plugin;
-	
-	public Information info {
-		get {
-			return _info;
-		}
-	}
-	public bool loaded {
-		get {
-			return _loaded;
-		}
-	}
+    public Object loaded_plugin;
+    
+    public Information info {
+        get {
+            return _info;
+        }
+    }
+    public bool loaded {
+        get {
+            return _loaded;
+        }
+    }
 
-	public bool activated { 
-		get {
-			return _activated;
-		}
-	}
-	public bool configurable { get; private set; }
-	public bool is_lyrics_plugin { get; private set; default = false;}
-	public bool is_album_image_plugin { get; private set; default = false;}
+    public bool activated { 
+        get {
+            return _activated;
+        }
+    }
+    public bool configurable { get; private set; }
+    public bool is_lyrics_plugin { get; private set; default = false;}
+    public bool is_album_image_plugin { get; private set; default = false;}
 
-	public signal void sign_activated();
-	public signal void sign_deactivated();
+    public signal void sign_activated();
+    public signal void sign_deactivated();
 
-	private delegate Type InitModuleFunction(TypeModule module);
+    private delegate Type InitModuleFunction(TypeModule module);
 
-	public Container(Information info) {
-		Object();
-		base.set_name(info.name);
-		this._info = info;
-		this.xn = Main.instance;
-		this.notify["activated"].connect( (s, p) => {
-			if(((Container)s).activated)
-				activate();
-			else
-				deactivate();
-		});
-	}
+    public Container(Information info) {
+        Object();
+        base.set_name(info.name);
+        this._info = info;
+        this.xn = Main.instance;
+        this.notify["activated"].connect( (s, p) => {
+            if(((Container)s).activated)
+                activate();
+            else
+                deactivate();
+        });
+    }
 
-	public override bool load() {
-		//print("load_plugin_module %s\n", _info.name);
-		if(this.loaded) 
-			return true;
-		
-		string path = Module.build_path(Config.PLUGINSDIR, info.module);
-		module = Module.open(path, ModuleFlags.BIND_LAZY);
-		if(module == null) {
-			print("cannot find module: %s\n", _info.name);
-			return false;
-		}
-		void* func;
-		module.symbol("init_module", out func);
-		unowned InitModuleFunction init_module = (InitModuleFunction)func;
-		if(init_module == null) 
-			return false;
-			
-		_type = init_module(this);
-		_loaded = true;
-		this.configurable = false;
-		
-		if(!_type.is_a(typeof(IPlugin)))
-			return false;
-		
-		if(_type.is_a(typeof(ILyricsProvider)))
-			this.is_lyrics_plugin = true;
-		
-		if(_type.is_a(typeof(IAlbumCoverImageProvider)))
-			this.is_album_image_plugin = true;
-		
-		return true;
-	}
+    public override bool load() {
+        //print("load_plugin_module %s\n", _info.name);
+        if(this.loaded) 
+            return true;
+        
+        string path = Module.build_path(Config.PLUGINSDIR, info.module);
+        module = Module.open(path, ModuleFlags.BIND_LAZY);
+        if(module == null) {
+            print("cannot find module: %s\n", _info.name);
+            return false;
+        }
+        void* func;
+        module.symbol("init_module", out func);
+        unowned InitModuleFunction init_module = (InitModuleFunction)func;
+        if(init_module == null) 
+            return false;
+            
+        _type = init_module(this);
+        _loaded = true;
+        this.configurable = false;
+        
+        if(!_type.is_a(typeof(IPlugin)))
+            return false;
+        
+        if(_type.is_a(typeof(ILyricsProvider)))
+            this.is_lyrics_plugin = true;
+        
+        if(_type.is_a(typeof(IAlbumCoverImageProvider)))
+            this.is_album_image_plugin = true;
+        
+        return true;
+    }
 
-	public override void unload() {
-		//print("unload %s\n", _info.name);
-		_loaded = false;
-		_activated = false;
-		sign_deactivated();
-	}
+    public override void unload() {
+        //print("unload %s\n", _info.name);
+        _loaded = false;
+        _activated = false;
+        sign_deactivated();
+    }
 
-	public void activate() {
-		if(activated)
-			return;
-		
-		if(module == null)
-			return;
-		
-		unowned Container ow = this;
-		loaded_plugin = Object.new(_type,
-		                           "xn", this.xn,
-		                           "owner", ow,      //set properties via this, because
-		                           null);            //parameters are not allowed
-		                                             //for this kind of Object construction
-		if(loaded_plugin == null) {
-			message("Failed to load plugin %s. Cannot get type.\n", _info.name);
-			_activated = false;
-		}
-		//if(loaded_plugin is IPlugin) print("sucess\n");
-		if(!((IPlugin)loaded_plugin).init()) {
-			message("Failed to load plugin %s. Cannot initialize.\n", _info.name);
-			_activated = false;
-			return;
-		}
-		this.configurable = ((IPlugin)this.loaded_plugin).has_settings_widget();
-		_activated = true;
-		sign_activated();
-	}
+    public void activate() {
+        if(activated)
+            return;
+        
+        if(module == null)
+            return;
+        
+        unowned Container ow = this;
+        loaded_plugin = Object.new(_type,
+                                   "xn", this.xn,
+                                   "owner", ow,      //set properties via this, because
+                                   null);            //parameters are not allowed
+                                                     //for this kind of Object construction
+        if(loaded_plugin == null) {
+            message("Failed to load plugin %s. Cannot get type.\n", _info.name);
+            _activated = false;
+        }
+        //if(loaded_plugin is IPlugin) print("sucess\n");
+        if(!((IPlugin)loaded_plugin).init()) {
+            message("Failed to load plugin %s. Cannot initialize.\n", _info.name);
+            _activated = false;
+            return;
+        }
+        this.configurable = ((IPlugin)this.loaded_plugin).has_settings_widget();
+        _activated = true;
+        sign_activated();
+    }
 
-	public void deactivate() {
-		//print("deactivate\n");
-		((IPlugin)loaded_plugin).uninit();
-		_activated = false;
-		loaded_plugin = null;
-		sign_deactivated();
-	}
+    public void deactivate() {
+        //print("deactivate\n");
+        ((IPlugin)loaded_plugin).uninit();
+        _activated = false;
+        loaded_plugin = null;
+        sign_deactivated();
+    }
 
-	public Gtk.Widget? settingwidget() {
-		if(this.loaded) { // && this.activated
-			return ((IPlugin)this.loaded_plugin).get_settings_widget();
-		}
-		else {
-			return null;
-		}
-	}
+    public Gtk.Widget? settingwidget() {
+        if(this.loaded) { // && this.activated
+            return ((IPlugin)this.loaded_plugin).get_settings_widget();
+        }
+        else {
+            return null;
+        }
+    }
 }

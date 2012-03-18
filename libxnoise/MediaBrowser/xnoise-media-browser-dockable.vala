@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 using Gtk;
@@ -37,33 +37,33 @@ using Xnoise;
 // Media Browser is a special case of the DockableMedia,
 // because it's the main source of media.
 private class Xnoise.MediaBrowserDockable : DockableMedia {
-	private static const string name_txt = "MediaBrowserDockable";
-	private unowned MainWindow win;
-	
-	public override string name() {
-		return name_txt;
-	}
-	
-	public override string headline() {
-		return _("Local Collection");
-	}
-	
-	public override DockableMedia.Category category() {
-		return DockableMedia.Category.MEDIA_COLLECTION;
-	}
-	
-	public override Gtk.Widget? get_widget(MainWindow window) {
-		this.win = window; // use this ref because static main_window
-		                   //is not yet set up at construction time
-		win.mediaBrScrollWin = new ScrolledWindow(null, null);
-		win.mediaBr = new MediaBrowser(win.mediaBrScrollWin);
-		win.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
-		win.mediaBrScrollWin.add(win.mediaBr);
-		return (Gtk.Widget)win.mediaBrScrollWin;
-	}
-	
-	public override Gdk.Pixbuf get_icon() {
-		return icon_repo.local_collection_icon;
-	}
+    private static const string name_txt = "MediaBrowserDockable";
+    private unowned MainWindow win;
+    
+    public override string name() {
+        return name_txt;
+    }
+    
+    public override string headline() {
+        return _("Local Collection");
+    }
+    
+    public override DockableMedia.Category category() {
+        return DockableMedia.Category.MEDIA_COLLECTION;
+    }
+    
+    public override Gtk.Widget? get_widget(MainWindow window) {
+        this.win = window; // use this ref because static main_window
+                           //is not yet set up at construction time
+        win.mediaBrScrollWin = new ScrolledWindow(null, null);
+        win.mediaBr = new MediaBrowser(win.mediaBrScrollWin);
+        win.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+        win.mediaBrScrollWin.add(win.mediaBr);
+        return (Gtk.Widget)win.mediaBrScrollWin;
+    }
+    
+    public override Gdk.Pixbuf get_icon() {
+        return icon_repo.local_collection_icon;
+    }
 }
 

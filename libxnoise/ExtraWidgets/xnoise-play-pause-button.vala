@@ -25,8 +25,8 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
- * 	softshaker
+ *     Jörn Magens
+ *     softshaker
  */
 
 
@@ -40,61 +40,61 @@ using Xnoise.Services;
 * A PlayPauseButton is a Gtk.Button that accordingly pauses, unpauses or starts playback
 */
 public class Xnoise.PlayPauseButton: Gtk.ToolButton {
-	private unowned Main xn;
+    private unowned Main xn;
 
-	public PlayPauseButton() {
-		xn = Main.instance;
-		this.can_focus = false;
-		
-		this.update_picture();
-		
-		this.clicked.connect(this.on_clicked);
-		gst_player.sign_paused.connect(this.update_picture);
-		gst_player.sign_stopped.connect(this.update_picture);
-		gst_player.sign_playing.connect(this.update_picture);
-	}
+    public PlayPauseButton() {
+        xn = Main.instance;
+        this.can_focus = false;
+        
+        this.update_picture();
+        
+        this.clicked.connect(this.on_clicked);
+        gst_player.sign_paused.connect(this.update_picture);
+        gst_player.sign_stopped.connect(this.update_picture);
+        gst_player.sign_playing.connect(this.update_picture);
+    }
 
-	public void on_menu_clicked(Gtk.MenuItem sender) {
-		handle_click();
-	}
+    public void on_menu_clicked(Gtk.MenuItem sender) {
+        handle_click();
+    }
 
-	public void on_clicked(Gtk.Widget sender) {
-		handle_click();
-	}
+    public void on_clicked(Gtk.Widget sender) {
+        handle_click();
+    }
 
-	/**
-	 * This method is used to handle play/pause commands from different signal handler sources
-	 */
-	private void handle_click() {
-		Idle.add(
-			handle_click_async
-		);
-	}
-	
-	private bool handle_click_async() {
-		if(global.current_uri == null) {
-			string uri = tl.tracklistmodel.get_uri_for_current_position();
-			
-			if((uri != null) && (uri != EMPTYSTRING)) 
-				global.current_uri = uri;
-			else
-				return false;
-		}
-		if(global.player_state == PlayerState.PLAYING) {
-			global.player_state = PlayerState.PAUSED;
-		}
-		else {
-			global.player_state = PlayerState.PLAYING;
-		}
-		return false;
-	}
+    /**
+     * This method is used to handle play/pause commands from different signal handler sources
+     */
+    private void handle_click() {
+        Idle.add(
+            handle_click_async
+        );
+    }
+    
+    private bool handle_click_async() {
+        if(global.current_uri == null) {
+            string uri = tl.tracklistmodel.get_uri_for_current_position();
+            
+            if((uri != null) && (uri != EMPTYSTRING)) 
+                global.current_uri = uri;
+            else
+                return false;
+        }
+        if(global.player_state == PlayerState.PLAYING) {
+            global.player_state = PlayerState.PAUSED;
+        }
+        else {
+            global.player_state = PlayerState.PLAYING;
+        }
+        return false;
+    }
 
-	public void update_picture() {
-		if(gst_player.playing == true)
-			this.set_stock_id(Gtk.Stock.MEDIA_PAUSE);
-		else
-			this.set_stock_id(Gtk.Stock.MEDIA_PLAY);
-	}
+    public void update_picture() {
+        if(gst_player.playing == true)
+            this.set_stock_id(Gtk.Stock.MEDIA_PAUSE);
+        else
+            this.set_stock_id(Gtk.Stock.MEDIA_PLAY);
+    }
 }
 
 

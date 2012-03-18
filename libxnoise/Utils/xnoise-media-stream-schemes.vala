@@ -25,31 +25,31 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
 */
 
 
 public class Xnoise.MediaStreamSchemes {
-	// remote types for data
-	private string[] _list = {
-		"mms",
-		"rtsp"
-	};
+    // remote types for data
+    private string[] _list = {
+        "mms",
+        "rtsp"
+    };
 
-	public string[] list {
-		get {
-			return _list;
-		}
-	}
-	
-	// syntax support for 'in'
-	public bool contains(string? location) {
-		if(location == null)
-			return false;
-		foreach(unowned string s in _list) {
-			if(location == s) return true;
-		}
-		return false;
-	}
+    public string[] list {
+        get {
+            return _list;
+        }
+    }
+    
+    // syntax support for 'in'
+    public bool contains(string? location) {
+        if(location == null)
+            return false;
+        foreach(unowned string s in _list) {
+            if(location == s) return true;
+        }
+        return false;
+    }
 }
 

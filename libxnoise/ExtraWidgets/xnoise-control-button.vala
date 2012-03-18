@@ -25,8 +25,8 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
- * 	softshaker
+ *     Jörn Magens
+ *     softshaker
  */
 
 using Gtk;
@@ -35,42 +35,42 @@ using Gtk;
  * A ControlButton is a Gtk.Button that initiates playback of the previous or next item or stop
  */
 public class Xnoise.ControlButton : Gtk.ToolButton {
-	
-	public enum Direction {
-		NEXT = 0,
-		PREVIOUS,
-		STOP
-	}
-	
-	public signal void sign_clicked(Direction dir);
-	
-	private Direction direction;
-	
-	public ControlButton(Direction _direction = Direction.STOP) {
-		if(_direction != Direction.NEXT && _direction != Direction.PREVIOUS && _direction != Direction.STOP)
-			direction = Direction.STOP;
-		else
-			direction = _direction;
-			
-		switch(direction) {
-			case Direction.NEXT:
-				this.set_stock_id(Gtk.Stock.MEDIA_NEXT);
-				break;
-			case Direction.PREVIOUS:
-				this.set_stock_id(Gtk.Stock.MEDIA_PREVIOUS);
-				break;
-			case Direction.STOP:
-			default:
-				this.set_stock_id(Gtk.Stock.MEDIA_STOP);
-				break;
-		}
-		this.can_focus = false;
-		this.clicked.connect(this.on_clicked);
-	}
+    
+    public enum Direction {
+        NEXT = 0,
+        PREVIOUS,
+        STOP
+    }
+    
+    public signal void sign_clicked(Direction dir);
+    
+    private Direction direction;
+    
+    public ControlButton(Direction _direction = Direction.STOP) {
+        if(_direction != Direction.NEXT && _direction != Direction.PREVIOUS && _direction != Direction.STOP)
+            direction = Direction.STOP;
+        else
+            direction = _direction;
+            
+        switch(direction) {
+            case Direction.NEXT:
+                this.set_stock_id(Gtk.Stock.MEDIA_NEXT);
+                break;
+            case Direction.PREVIOUS:
+                this.set_stock_id(Gtk.Stock.MEDIA_PREVIOUS);
+                break;
+            case Direction.STOP:
+            default:
+                this.set_stock_id(Gtk.Stock.MEDIA_STOP);
+                break;
+        }
+        this.can_focus = false;
+        this.clicked.connect(this.on_clicked);
+    }
 
-	private void on_clicked() {
-		this.sign_clicked(direction);
-	}
+    private void on_clicked() {
+        this.sign_clicked(direction);
+    }
 }
 
 

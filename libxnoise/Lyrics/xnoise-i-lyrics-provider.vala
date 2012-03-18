@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 
@@ -33,20 +33,20 @@ using Xnoise;
 using Xnoise.PluginModule;
 
 public interface Xnoise.ILyricsProvider : GLib.Object, IPlugin {
-	public abstract ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb);
-	public abstract int priority { get; set; default = 1;}
-	public abstract string provider_name { get; }
-	
-	
-	// DEFAULT IMPLEMENTATIONS
-	
-	public bool equals(ILyricsProvider other) { // default implementation of comparation
-		ILyricsProvider t = (ILyricsProvider)this;
-		if(direct_equal((void*)t, (void*)other)) {
-			return true;
-		}
-		return false;
-	}
+    public abstract ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb);
+    public abstract int priority { get; set; default = 1;}
+    public abstract string provider_name { get; }
+    
+    
+    // DEFAULT IMPLEMENTATIONS
+    
+    public bool equals(ILyricsProvider other) { // default implementation of comparation
+        ILyricsProvider t = (ILyricsProvider)this;
+        if(direct_equal((void*)t, (void*)other)) {
+            return true;
+        }
+        return false;
+    }
 }
 
 

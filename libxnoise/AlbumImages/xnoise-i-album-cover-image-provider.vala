@@ -25,11 +25,11 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 
 
 public interface Xnoise.IAlbumCoverImageProvider : GLib.Object {
-	public abstract IAlbumCoverImage from_tags(string artist, string album);
+    public abstract IAlbumCoverImage from_tags(string artist, string album);
 }

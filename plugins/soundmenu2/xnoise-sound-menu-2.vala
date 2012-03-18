@@ -33,146 +33,146 @@ using Xnoise.PluginModule;
 
 
 public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
-	private unowned PluginModule.Container p;
-	private unowned PluginModule.Container _owner;
-	
-	public Main xn { get; set; }
-	
-	public string name { 
-		get {
-			return "soundmenu2";
-		}
-	}
-	
-	public PluginModule.Container owner {
-		get {
-			return _owner;
-		}
-		set {
-			_owner = value;
-		}
-	}
+    private unowned PluginModule.Container p;
+    private unowned PluginModule.Container _owner;
+    
+    public Main xn { get; set; }
+    
+    public string name { 
+        get {
+            return "soundmenu2";
+        }
+    }
+    
+    public PluginModule.Container owner {
+        get {
+            return _owner;
+        }
+        set {
+            _owner = value;
+        }
+    }
 
-	private void on_name_appeared(DBusConnection conn, string name) {
-		if(watch != 0) {
-			Bus.unwatch_name(watch);
-			watch = 0;
-		}
-		//stdout.printf("%s appeared\n", name);
-		if(name != "com.canonical.indicators.sound")
-			return;
-		//TODO check for mpris plugin being active
-		p = plugin_loader.plugin_htable.lookup("mpris");
-		if(p == null) {
-			if(this.owner != null)
-				Idle.add( () => {
-					owner.deactivate();
-					return false;
-				}); 
-			return;
-		}
-		if(!p.activated)
-			plugin_loader.activate_single_plugin(p.info.name);
-		
-		if(!p.activated) {
-			print("cannot start mpris plugin\n");
-			if(this.owner != null)
-				Idle.add( () => {
-					owner.deactivate();
-					return false;
-				}); 
-			return;
-		}
-		p.sign_deactivated.connect(mpris_deactivated);
-		tray_icon.visible = false;
-	}
-	
-	private void on_name_vanished(DBusConnection conn, string name) {
-		//stdout.printf("%s vanished\n", name);
-		tray_icon.visible = true;
-	}
+    private void on_name_appeared(DBusConnection conn, string name) {
+        if(watch != 0) {
+            Bus.unwatch_name(watch);
+            watch = 0;
+        }
+        //stdout.printf("%s appeared\n", name);
+        if(name != "com.canonical.indicators.sound")
+            return;
+        //TODO check for mpris plugin being active
+        p = plugin_loader.plugin_htable.lookup("mpris");
+        if(p == null) {
+            if(this.owner != null)
+                Idle.add( () => {
+                    owner.deactivate();
+                    return false;
+                }); 
+            return;
+        }
+        if(!p.activated)
+            plugin_loader.activate_single_plugin(p.info.name);
+        
+        if(!p.activated) {
+            print("cannot start mpris plugin\n");
+            if(this.owner != null)
+                Idle.add( () => {
+                    owner.deactivate();
+                    return false;
+                }); 
+            return;
+        }
+        p.sign_deactivated.connect(mpris_deactivated);
+        tray_icon.visible = false;
+    }
+    
+    private void on_name_vanished(DBusConnection conn, string name) {
+        //stdout.printf("%s vanished\n", name);
+        tray_icon.visible = true;
+    }
 
-	private uint watch;
+    private uint watch;
 
-	private void intitialize() {
-		//print("initialize sm2\n");
-		watch = Bus.watch_name(BusType.SESSION,
-		                       "com.canonical.indicators.sound",
-		                       BusNameWatcherFlags.NONE,
-		                       on_name_appeared,
-		                       on_name_vanished);
-		addremove_xnoise_player_to_blacklist(false);
-	}
-	
-	public bool init() {
-		Idle.add( () => {
-			intitialize();
-			return false;
-		});
-		return true;
-	}
-	
-	public void uninit() {
-		//print("try remove xnoise from soundmenu\n");
-		addremove_xnoise_player_to_blacklist(true);
-		tray_icon.visible = true;
-		if(watch != 0) {
-			Bus.unwatch_name(watch);
-			watch = 0;
-		}
-	}
+    private void intitialize() {
+        //print("initialize sm2\n");
+        watch = Bus.watch_name(BusType.SESSION,
+                               "com.canonical.indicators.sound",
+                               BusNameWatcherFlags.NONE,
+                               on_name_appeared,
+                               on_name_vanished);
+        addremove_xnoise_player_to_blacklist(false);
+    }
+    
+    public bool init() {
+        Idle.add( () => {
+            intitialize();
+            return false;
+        });
+        return true;
+    }
+    
+    public void uninit() {
+        //print("try remove xnoise from soundmenu\n");
+        addremove_xnoise_player_to_blacklist(true);
+        tray_icon.visible = true;
+        if(watch != 0) {
+            Bus.unwatch_name(watch);
+            watch = 0;
+        }
+    }
 
-	private bool soundmenu_gsettings_available() {
-		foreach(unowned string s in Settings.list_schemas()) {
-			if(s == "com.canonical.indicators.sound") 
-				return true;
-		}
-		return false;
-	}
+    private bool soundmenu_gsettings_available() {
+        foreach(unowned string s in Settings.list_schemas()) {
+            if(s == "com.canonical.indicators.sound") 
+                return true;
+        }
+        return false;
+    }
 
-	private void addremove_xnoise_player_to_blacklist(bool add_xnoise) {
-		//print("addremove %s\n", add_xnoise.to_string());
-		if(soundmenu_gsettings_available()) {
-			string[] sa;
-			string[] res = {};
-			var settings = new Settings("com.canonical.indicators.sound");
-			sa = settings.get_strv("blacklisted-media-players");
-			foreach(string s in sa) {
-				if(s != "xnoise")
-					res += s;
-			}
-			
-			if(add_xnoise)
-				res += "xnoise";
-			
-			//foreach(string s in res) {
-			//      print("zz: %s\n", s);
-			//}
-			
-			settings.set_strv("blacklisted-media-players", res);
-		}
-		else {
-			print("soundmenu gsetting unavailable\n");
-		}
-	}
+    private void addremove_xnoise_player_to_blacklist(bool add_xnoise) {
+        //print("addremove %s\n", add_xnoise.to_string());
+        if(soundmenu_gsettings_available()) {
+            string[] sa;
+            string[] res = {};
+            var settings = new Settings("com.canonical.indicators.sound");
+            sa = settings.get_strv("blacklisted-media-players");
+            foreach(string s in sa) {
+                if(s != "xnoise")
+                    res += s;
+            }
+            
+            if(add_xnoise)
+                res += "xnoise";
+            
+            //foreach(string s in res) {
+            //      print("zz: %s\n", s);
+            //}
+            
+            settings.set_strv("blacklisted-media-players", res);
+        }
+        else {
+            print("soundmenu gsetting unavailable\n");
+        }
+    }
 
-	~SoundMenu2() {
-	}
-	
-	public Gtk.Widget? get_settings_widget() {
-		return null;
-	}
-	
-	public bool has_settings_widget() {
-		return false;
-	}
-	
-	private void mpris_deactivated() {
-		//this plugin depends on mpris2 plugin
-		if(this.owner != null)
-			Idle.add( () => {
-				owner.deactivate();
-				return false;
-			}); 
-	}
+    ~SoundMenu2() {
+    }
+    
+    public Gtk.Widget? get_settings_widget() {
+        return null;
+    }
+    
+    public bool has_settings_widget() {
+        return false;
+    }
+    
+    private void mpris_deactivated() {
+        //this plugin depends on mpris2 plugin
+        if(this.owner != null)
+            Idle.add( () => {
+                owner.deactivate();
+                return false;
+            }); 
+    }
 }

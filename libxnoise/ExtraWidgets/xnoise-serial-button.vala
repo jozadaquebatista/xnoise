@@ -25,146 +25,146 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 using Gtk;
 
 public class Xnoise.SerialButton : Gtk.Box {
-	private CssProvider provider;
-	private int _selected_idx = -1;
-	
-	public signal void sign_selected(int idx);
-	
-	private class SerialItem : Gtk.ToggleButton {
-		private unowned SerialButton sb;
-		
-		public SerialItem(SerialButton sb) {
-			
-			this.sb = sb;
-			
-			this.set_can_focus(false);
-			this.get_style_context().add_provider(sb.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-		}
-	}
-	
-	public SerialButton() {
-		GLib.Object(orientation:Orientation.HORIZONTAL, spacing:0);
-		this.set_homogeneous(true);
-		
-		try {
-			this.provider = new CssProvider();
-			this.provider.load_from_data(CSS, -1);
-			this.get_style_context().add_class("XnoiseSerialButton");
-		}
-		catch(Error e) {
-			print("Xnoise CSS Error: %s\n", e.message);
-		}
-	}
+    private CssProvider provider;
+    private int _selected_idx = -1;
+    
+    public signal void sign_selected(int idx);
+    
+    private class SerialItem : Gtk.ToggleButton {
+        private unowned SerialButton sb;
+        
+        public SerialItem(SerialButton sb) {
+            
+            this.sb = sb;
+            
+            this.set_can_focus(false);
+            this.get_style_context().add_provider(sb.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        }
+    }
+    
+    public SerialButton() {
+        GLib.Object(orientation:Orientation.HORIZONTAL, spacing:0);
+        this.set_homogeneous(true);
+        
+        try {
+            this.provider = new CssProvider();
+            this.provider.load_from_data(CSS, -1);
+            this.get_style_context().add_class("XnoiseSerialButton");
+        }
+        catch(Error e) {
+            print("Xnoise CSS Error: %s\n", e.message);
+        }
+    }
 
-	public int selected_idx {
-		get { return _selected_idx; }
-		set { select(value); }
-	}
+    public int selected_idx {
+        get { return _selected_idx; }
+        set { select(value); }
+    }
 
-	public int item_count {
-		get { return (int)this.get_children().length(); }
-	}
+    public int item_count {
+        get { return (int)this.get_children().length(); }
+    }
 
-	public int insert(string? txt) {
-		if(txt == null)
-			return -1;
-		
-		var si = new SerialItem(this);
-		si.add(new Gtk.Label(txt));
-		this.add(si);
-		
-		si.button_press_event.connect( () => {
-			this.select(get_children().index((Gtk.Widget)si));
-			return true;
-		});
-		si.show_all();
-		
-		int cnt = this.item_count;
-		if(cnt == 1)
-			this.select(0);
-		
-		return cnt - 1;
-	}
+    public int insert(string? txt) {
+        if(txt == null)
+            return -1;
+        
+        var si = new SerialItem(this);
+        si.add(new Gtk.Label(txt));
+        this.add(si);
+        
+        si.button_press_event.connect( () => {
+            this.select(get_children().index((Gtk.Widget)si));
+            return true;
+        });
+        si.show_all();
+        
+        int cnt = this.item_count;
+        if(cnt == 1)
+            this.select(0);
+        
+        return cnt - 1;
+    }
 
-	public void select(int idx, bool emit_signal = true) {
-		if(idx < 0 || idx >= this.item_count || _selected_idx == idx )
-			return;
-		
-		SerialItem? si;
-		
-		if(_selected_idx >= 0) {
-			si = (SerialItem) get_at_index(_selected_idx);
-			if(si != null)
-				si.set_active(false);
-		}
-		_selected_idx = idx;
-		si = (SerialItem) get_at_index(idx);
-		if(si != null)
-			si.set_active(true);
-		
-		if(emit_signal)
-			this.sign_selected(idx);
-	}
+    public void select(int idx, bool emit_signal = true) {
+        if(idx < 0 || idx >= this.item_count || _selected_idx == idx )
+            return;
+        
+        SerialItem? si;
+        
+        if(_selected_idx >= 0) {
+            si = (SerialItem) get_at_index(_selected_idx);
+            if(si != null)
+                si.set_active(false);
+        }
+        _selected_idx = idx;
+        si = (SerialItem) get_at_index(idx);
+        if(si != null)
+            si.set_active(true);
+        
+        if(emit_signal)
+            this.sign_selected(idx);
+    }
 
-	public new void set_sensitive(int idx, bool sensitive_status) {
-		if(idx < 0 || idx >= this.item_count)
-			return;
-		
-		SerialItem? si = (SerialItem) get_at_index(idx);
-		
-		if(si != null)
-			si.set_sensitive(sensitive_status);
-	}
+    public new void set_sensitive(int idx, bool sensitive_status) {
+        if(idx < 0 || idx >= this.item_count)
+            return;
+        
+        SerialItem? si = (SerialItem) get_at_index(idx);
+        
+        if(si != null)
+            si.set_sensitive(sensitive_status);
+    }
 
-	public void del(int idx) {
-		Gtk.Widget? w = get_at_index(idx);
-		if(w != null) {
-			this.remove(w);
-			w.destroy();
-			if(_selected_idx >= 0 && idx == _selected_idx)
-				this.select(0);
-		}
-		else {
-			print("Widget not found for index!\n");
-		}
-	}
-	
-	private Gtk.Widget? get_at_index(int idx) {
-		return this.get_children().nth_data(idx);
-	}
-	
-	private static const string CSS = """
-		.XnoiseSerialButton .button {
-			-GtkToolbar-button-relief: normal;
-			border-radius: 0 0 0 0;
-			border-style:  solid;
-			border-width:  1 0 1 1;
-			-unico-outer-stroke-width: 1px 0 1px 0;
-			-unico-outer-stroke-radius: 0 0 0 0;
-		}
-		
-		.XnoiseSerialButton .button:active,
-		.XnoiseSerialButton .button:insensitive {
-			-unico-outer-stroke-width: 1px 0 1px 0;
-		}
+    public void del(int idx) {
+        Gtk.Widget? w = get_at_index(idx);
+        if(w != null) {
+            this.remove(w);
+            w.destroy();
+            if(_selected_idx >= 0 && idx == _selected_idx)
+                this.select(0);
+        }
+        else {
+            print("Widget not found for index!\n");
+        }
+    }
+    
+    private Gtk.Widget? get_at_index(int idx) {
+        return this.get_children().nth_data(idx);
+    }
+    
+    private static const string CSS = """
+        .XnoiseSerialButton .button {
+            -GtkToolbar-button-relief: normal;
+            border-radius: 0 0 0 0;
+            border-style:  solid;
+            border-width:  1 0 1 1;
+            -unico-outer-stroke-width: 1px 0 1px 0;
+            -unico-outer-stroke-radius: 0 0 0 0;
+        }
+        
+        .XnoiseSerialButton .button:active,
+        .XnoiseSerialButton .button:insensitive {
+            -unico-outer-stroke-width: 1px 0 1px 0;
+        }
 
-		.XnoiseSerialButton .button:first-child {
-			border-radius: 3 0 0 3;
-			border-width:  1 0 1 1;
-			-unico-outer-stroke-width: 1px 0 1px 1px;
-		}
+        .XnoiseSerialButton .button:first-child {
+            border-radius: 3 0 0 3;
+            border-width:  1 0 1 1;
+            -unico-outer-stroke-width: 1px 0 1px 1px;
+        }
 
-		.XnoiseSerialButton .button:last-child {
-			border-radius: 0 3 3 0;
-			border-width:  1;
-			-unico-outer-stroke-width: 1px 1px 1px 0;
-		}
-	""";
+        .XnoiseSerialButton .button:last-child {
+            border-radius: 0 3 3 0;
+            border-width:  1;
+            -unico-outer-stroke-width: 1px 1px 1px 0;
+        }
+    """;
 }
 

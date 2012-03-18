@@ -25,23 +25,23 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens <shuerhaaken@googlemail.com>
+ *     Jörn Magens <shuerhaaken@googlemail.com>
  */
 
 
 namespace Xnoise.Playlist {
-	// abstract base class for all playlist filereader implementations
-	private abstract class AbstractFileReader : GLib.Object {
-		// relative paths from playlists are turnedinto absolute paths, by using base path
-		protected string base_path;
-		 
-		public signal void started(string playlist_uri);
-		public signal void finished(string playlist_uri);
+    // abstract base class for all playlist filereader implementations
+    private abstract class AbstractFileReader : GLib.Object {
+        // relative paths from playlists are turnedinto absolute paths, by using base path
+        protected string base_path;
+         
+        public signal void started(string playlist_uri);
+        public signal void finished(string playlist_uri);
 
-		public abstract EntryCollection read(File file, Cancellable? cancellable = null) throws InternalReaderError;
-		public abstract async EntryCollection read_asyn(File file, Cancellable? cancellable = null) throws InternalReaderError;
+        public abstract EntryCollection read(File file, Cancellable? cancellable = null) throws InternalReaderError;
+        public abstract async EntryCollection read_asyn(File file, Cancellable? cancellable = null) throws InternalReaderError;
 
-		protected abstract void set_base_path();
-	}
+        protected abstract void set_base_path();
+    }
 }
 

@@ -25,10 +25,10 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
  
 [ModuleInit]
 public Type init_module(TypeModule module) { 
-	return typeof(Xnoise.SoundMenu2);
+    return typeof(Xnoise.SoundMenu2);
 }

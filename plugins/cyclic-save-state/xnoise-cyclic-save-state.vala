@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
  
 
@@ -33,51 +33,51 @@ using Xnoise;
 using Xnoise.PluginModule;
 
 public class Xnoise.CyclicSaveState : GLib.Object, IPlugin {
-	private unowned PluginModule.Container _owner; // the unowned owner
+    private unowned PluginModule.Container _owner; // the unowned owner
 
-	public Main xn { get; set; }
-	
-	public PluginModule.Container owner { 
-		get { return _owner; }
-		set { _owner = value; }
-	}
+    public Main xn { get; set; }
+    
+    public PluginModule.Container owner { 
+        get { return _owner; }
+        set { _owner = value; }
+    }
 
-	public string name { get { return "CyclicSaveState"; }}
-	
-	private uint source = 0;
+    public string name { get { return "CyclicSaveState"; }}
+    
+    private uint source = 0;
 
-	public bool init() {
-		source = Timeout.add_seconds(60, () => {
-			if(MainContext.current_source().is_destroyed())
-				return false;
-			if(!global.media_import_in_progress && 
-			   !main_window.mediaBr.mediabrowsermodel.populating_model) {
-				
-				Main.instance.save_tracklist();
-				Main.instance.save_activated_plugins();
-				Params.write_all_parameters_to_file();
-			}
-			return true;
-		});
-		return true;
-	}
+    public bool init() {
+        source = Timeout.add_seconds(60, () => {
+            if(MainContext.current_source().is_destroyed())
+                return false;
+            if(!global.media_import_in_progress && 
+               !main_window.mediaBr.mediabrowsermodel.populating_model) {
+                
+                Main.instance.save_tracklist();
+                Main.instance.save_activated_plugins();
+                Params.write_all_parameters_to_file();
+            }
+            return true;
+        });
+        return true;
+    }
 
-	public void uninit() {
-		//print("remove CyclicSaveState source\n");
-		if(source != 0)
-			Source.remove(source);
-	}
+    public void uninit() {
+        //print("remove CyclicSaveState source\n");
+        if(source != 0)
+            Source.remove(source);
+    }
 
-	~CyclicSaveState() {
-		//print("dtor of CyclicSaveState\n");
-	}
+    ~CyclicSaveState() {
+        //print("dtor of CyclicSaveState\n");
+    }
 
-	public Gtk.Widget? get_settings_widget() {
-		return null;
-	}
+    public Gtk.Widget? get_settings_widget() {
+        return null;
+    }
 
-	public bool has_settings_widget() {
-		return true;
-	}
+    public bool has_settings_widget() {
+        return true;
+    }
 }
 

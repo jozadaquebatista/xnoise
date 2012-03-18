@@ -1,5 +1,5 @@
 noinst_DATA = \
-	config.vapi
+    config.vapi
 
 EXTRA_DIST = \
-	$(noinst_DATA)
+    $(noinst_DATA)

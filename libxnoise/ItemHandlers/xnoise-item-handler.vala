@@ -25,72 +25,72 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 namespace Xnoise {
-	public enum ActionContext {
-		NONE,
-		REQUESTED,
-		TRACKLIST_ITEM_ACTIVATED,
-		TRACKLIST_MENU_QUERY,
-		TRACKLIST_DROP,
-		MEDIABROWSER_ITEM_ACTIVATED,
-		MEDIABROWSER_MENU_QUERY,
-		MEDIABROWSER_LOAD,
-		VIDEOSCREEN_ACTIVATED,
-		VIDEOSCREEN_MENU_QUERY,
-		TRACKLIST_COLUMN_HEADER_MENU_QUERY
-	}
-	
-	[Flags]
-	public enum ItemSelectionType {
-		NOT_SET = 0,
-		SINGLE = 1 << 0,
-		MULTIPLE = 1 << 1
-	}
-	
-	public enum ItemHandlerType {
-		UNKNOWN,
-		OTHER,
-		TRACKLIST_ADDER,
-		PLAYLIST_PARSER,
-		VIDEO_THUMBNAILER,
-		TAG_EDITOR,
-		MENU_PROVIDER,
-		PLAY_NOW
-	}
+    public enum ActionContext {
+        NONE,
+        REQUESTED,
+        TRACKLIST_ITEM_ACTIVATED,
+        TRACKLIST_MENU_QUERY,
+        TRACKLIST_DROP,
+        MEDIABROWSER_ITEM_ACTIVATED,
+        MEDIABROWSER_MENU_QUERY,
+        MEDIABROWSER_LOAD,
+        VIDEOSCREEN_ACTIVATED,
+        VIDEOSCREEN_MENU_QUERY,
+        TRACKLIST_COLUMN_HEADER_MENU_QUERY
+    }
+    
+    [Flags]
+    public enum ItemSelectionType {
+        NOT_SET = 0,
+        SINGLE = 1 << 0,
+        MULTIPLE = 1 << 1
+    }
+    
+    public enum ItemHandlerType {
+        UNKNOWN,
+        OTHER,
+        TRACKLIST_ADDER,
+        PLAYLIST_PARSER,
+        VIDEO_THUMBNAILER,
+        TAG_EDITOR,
+        MENU_PROVIDER,
+        PLAY_NOW
+    }
 
 
-	[Compact]
-	public class Action {
-		public unowned ItemHandler.ActionType? action = null;
-		public unowned string name;
-		public unowned string info;
-		public unowned string text;    // text used in the context of the Action, e.g. a menu entry text
-		public unowned string stock_item = Gtk.Stock.MISSING_IMAGE;
-		public ActionContext context;  // ActionContext the Action was created for
-	}
+    [Compact]
+    public class Action {
+        public unowned ItemHandler.ActionType? action = null;
+        public unowned string name;
+        public unowned string info;
+        public unowned string text;    // text used in the context of the Action, e.g. a menu entry text
+        public unowned string stock_item = Gtk.Stock.MISSING_IMAGE;
+        public ActionContext context;  // ActionContext the Action was created for
+    }
 
 
 
-	// base class
-	// ItemHandler provides the right Action for the given ActionContext
-	public abstract class ItemHandler : Object {
-		public delegate void ActionType(Item item, GLib.Value? data);
-		
-		protected unowned ItemHandlerManager uhm = null;
-		
-		public bool set_manager(ItemHandlerManager _uhm) {
-			if(this.uhm != null && this.uhm != _uhm)
-				return false;
-			this.uhm = _uhm;
-			return true;
-		}
-		
-		public abstract ItemHandlerType handler_type(); 
-		public abstract unowned string handler_name();
-		// TODO: Maybe return more than one Action
-		public abstract unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection); 
-	}
+    // base class
+    // ItemHandler provides the right Action for the given ActionContext
+    public abstract class ItemHandler : Object {
+        public delegate void ActionType(Item item, GLib.Value? data);
+        
+        protected unowned ItemHandlerManager uhm = null;
+        
+        public bool set_manager(ItemHandlerManager _uhm) {
+            if(this.uhm != null && this.uhm != _uhm)
+                return false;
+            this.uhm = _uhm;
+            return true;
+        }
+        
+        public abstract ItemHandlerType handler_type(); 
+        public abstract unowned string handler_name();
+        // TODO: Maybe return more than one Action
+        public abstract unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection); 
+    }
 }

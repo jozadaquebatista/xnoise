@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 
@@ -35,36 +35,36 @@
  * This class is used to move around media information
  */
 namespace Xnoise {
-	
-	public class TrackData {
-		public string? artist = null;
-		public string? album = null;
-		public string? title = null;
-		public string? genre = null;
-		public string? name = null;
-		public uint year = 0;
-		public uint tracknumber = 0;
-		public int32 length = 0;
-		public int bitrate = 0;
-		public Item? item = Item(ItemType.UNKNOWN);
-		public int32 dat1 = -1;
-		public int32 dat2 = -1;
-	}
-	
-	public static TrackData copy_trackdata(TrackData? td) {
-		if(td == null)
-			return new TrackData();
-		TrackData td_new = new TrackData();
-		td_new.artist      = td.artist;
-		td_new.album       = td.album;
-		td_new.title       = td.title;
-		td_new.genre       = td.genre;
-		td_new.year        = td.year;
-		td_new.tracknumber = td.tracknumber;
-		td_new.length      = td.length;
-		td_new.bitrate     = td.bitrate;
-		td_new.item        = td.item;
-		return td_new;
-	}
+    
+    public class TrackData {
+        public string? artist = null;
+        public string? album = null;
+        public string? title = null;
+        public string? genre = null;
+        public string? name = null;
+        public uint year = 0;
+        public uint tracknumber = 0;
+        public int32 length = 0;
+        public int bitrate = 0;
+        public Item? item = Item(ItemType.UNKNOWN);
+        public int32 dat1 = -1;
+        public int32 dat2 = -1;
+    }
+    
+    public static TrackData copy_trackdata(TrackData? td) {
+        if(td == null)
+            return new TrackData();
+        TrackData td_new = new TrackData();
+        td_new.artist      = td.artist;
+        td_new.album       = td.album;
+        td_new.title       = td.title;
+        td_new.genre       = td.genre;
+        td_new.year        = td.year;
+        td_new.tracknumber = td.tracknumber;
+        td_new.length      = td.length;
+        td_new.bitrate     = td.bitrate;
+        td_new.item        = td.item;
+        return td_new;
+    }
 }
 

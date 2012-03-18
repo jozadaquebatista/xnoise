@@ -25,49 +25,49 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 using Xnoise;
 using Xnoise.Database;
 
 public class Xnoise.Statistics : GLib.Object {
-	private uint update_play_src = 0;
-	public Statistics() {
-		global.uri_changed.connect(on_track_played);
-	}
-	
-	private void on_track_played(string? uri) {
-		if(uri == null)
-			return;
-		if(update_play_src != 0)
-			Source.remove(update_play_src);
-		
-		update_play_src = Timeout.add_seconds(3, () => {
-			update_play(uri);
-			update_play_src = 0;
-			return false;
-		});
-	}
-	
-	// add statistical data for lastplay; update playcount
-	private void update_play(string uri) {
-		Worker.Job job;
-		var dt = new DateTime.now_utc();
-		job = new Worker.Job(Worker.ExecutionType.ONCE, update_play_job);
-		int64 playtime = dt.to_unix();
-		job.set_arg("playtime", playtime);
-		job.set_arg("uri", uri);
-		db_worker.push_job(job);
-	}
-	
-	private bool update_play_job(Worker.Job job) {
-		int64 playtime = (int64)job.get_arg("playtime");
-		string uri = (string)job.get_arg("uri");
-		db_writer.update_lastplay_time(uri, playtime);
-		db_writer.inc_playcount(uri);
-		return false;
-	}
+    private uint update_play_src = 0;
+    public Statistics() {
+        global.uri_changed.connect(on_track_played);
+    }
+    
+    private void on_track_played(string? uri) {
+        if(uri == null)
+            return;
+        if(update_play_src != 0)
+            Source.remove(update_play_src);
+        
+        update_play_src = Timeout.add_seconds(3, () => {
+            update_play(uri);
+            update_play_src = 0;
+            return false;
+        });
+    }
+    
+    // add statistical data for lastplay; update playcount
+    private void update_play(string uri) {
+        Worker.Job job;
+        var dt = new DateTime.now_utc();
+        job = new Worker.Job(Worker.ExecutionType.ONCE, update_play_job);
+        int64 playtime = dt.to_unix();
+        job.set_arg("playtime", playtime);
+        job.set_arg("uri", uri);
+        db_worker.push_job(job);
+    }
+    
+    private bool update_play_job(Worker.Job job) {
+        int64 playtime = (int64)job.get_arg("playtime");
+        string uri = (string)job.get_arg("uri");
+        db_writer.update_lastplay_time(uri, playtime);
+        db_writer.inc_playcount(uri);
+        return false;
+    }
 }
 
 

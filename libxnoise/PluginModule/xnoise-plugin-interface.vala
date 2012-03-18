@@ -25,16 +25,16 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 public interface Xnoise.PluginModule.IPlugin : GLib.Object {
-	public abstract Xnoise.PluginModule.Container owner { get; set; }
-	public abstract string name { get; }
-	public abstract Main xn { get; set; }
-	public abstract bool init();
-	public abstract void uninit();
-	public abstract bool has_settings_widget();
-	public abstract Gtk.Widget? get_settings_widget();
+    public abstract Xnoise.PluginModule.Container owner { get; set; }
+    public abstract string name { get; }
+    public abstract Main xn { get; set; }
+    public abstract bool init();
+    public abstract void uninit();
+    public abstract bool has_settings_widget();
+    public abstract Gtk.Widget? get_settings_widget();
 }
 

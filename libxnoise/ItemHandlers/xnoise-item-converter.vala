@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 using Xnoise;
@@ -35,144 +35,144 @@ using Xnoise.TagAccess;
 
 public class Xnoise.ItemConverter : Object {
 
-	public TrackData[]? to_trackdata(Item? item, ref string? searchtext) {
-		
-		//this function uses the database so use it in the database thread
-		return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, null);
-		
-		if(item == null)
-			return null;
-		
-		if(searchtext == null)
-			searchtext = EMPTYSTRING;
-		
-		TrackData[] result = {};
-		
-		switch(item.type) {
-			case ItemType.LOCAL_AUDIO_TRACK:
-			case ItemType.LOCAL_VIDEO_TRACK:
-				if(item.db_id > -1) {
-					TrackData? tmp = db_browser.get_trackdata_by_titleid(ref searchtext, item.db_id);
-					if(tmp == null)
-						break;
-					result += tmp;
-				}
-				else if(item.uri != null) {
-					TrackData? tmp;
-					if(db_browser.get_trackdata_for_uri(ref item.uri, out tmp)) {
-						if(tmp != null) {
-							if(tmp.item.type == ItemType.UNKNOWN)
-								tmp.item.type = ItemHandlerManager.create_item(item.uri).type;
-							if(tmp.item.type != ItemType.UNKNOWN)
-								result += tmp;
-						}
-						else {
-							return null;
-						}
-					}
-					else {
-						print("Using tag reader in item converter.\n");
-						string artist=EMPTYSTRING, album = EMPTYSTRING, title = EMPTYSTRING, lengthString = EMPTYSTRING, genre = UNKNOWN_GENRE;
-						string? yearString = null;
-						uint tracknumb = 0;
-						File file = File.new_for_uri(item.uri);
-						var tr = new TagReader();
-						var tags = tr.read_tag(file.get_path());
-						if(tags == null) {
-							title = prepare_name_from_filename(file.get_basename());
-						}
-						else {
-							artist         = tags.artist;
-							album          = tags.album;
-							title          = tags.title;
-							tracknumb      = tags.tracknumber;
-							genre          = tags.genre;
-							lengthString = make_time_display_from_seconds(tags.length);
-							if(tags.year > 0) 
-								yearString = "%u".printf(tags.year);
-						}
-						tags.item = item;
-						result += tags;
-					}
-				}
-				else {
-					return null;
-				}
-				break;
-			case ItemType.COLLECTION_CONTAINER_ALBUM:
-				if(item.db_id > -1) {
-					result = db_browser.get_trackdata_by_albumid(ref searchtext, item.db_id);
-					break;
-				}
-				break;
-			case ItemType.COLLECTION_CONTAINER_ARTIST:
-				if(item.db_id > -1) {
-					result = db_browser.get_trackdata_by_artistid(ref searchtext, item.db_id);
-					break;
-				}
-				break;
-			case ItemType.COLLECTION_CONTAINER_VIDEO:
-				result = db_browser.get_trackdata_for_video(ref searchtext);
-				//print("result len %d\n", result.length);
-				break;
-			case ItemType.COLLECTION_CONTAINER_STREAM:
-				result = db_browser.get_trackdata_for_streams(ref searchtext);
-				//print("result len %d\n", result.length);
-				break;
-			case ItemType.STREAM:
-				var tmp = new TrackData();
-				if(item.db_id > -1) {
-					if(db_browser.get_stream_td_for_id(item.db_id, out tmp)) {
-						result += tmp;
-						return result;
-					}
-				}
-				//else {
-				//	print("itemtype.stream\n");
-				//}
-				tmp.item = item;
-				File ft = File.new_for_uri(item.uri);
-				tmp.title = prepare_name_from_filename(ft.get_basename());
-				result += tmp;
-				return result;
-			case ItemType.PLAYLIST:
-				var pr = new Playlist.Reader();
-				Playlist.Result rslt;
-				if(item.uri == null) {
-					print("no uri for playlist!\n");
-					return null;
-				}
-				try {
-					rslt = pr.read(item.uri , null);
-				}
-				catch(Playlist.ReaderError e) {
-					print("Item Converter: %s\n", e.message);
-					return null;
-				}
-				if(rslt != Playlist.Result.SUCCESS)
-					return null;
-				EntryCollection ec = pr.data_collection;
-				if(ec != null) {
-					foreach(Entry e in ec) {
-						var tmp = new TrackData();
-						tmp.title  = (e.get_title()  != null ? e.get_title()  : UNKNOWN_TITLE);
-						tmp.album  = (e.get_album()  != null ? e.get_album()  : UNKNOWN_ALBUM);
-						tmp.artist = (e.get_author() != null ? e.get_author() : UNKNOWN_ARTIST);
-						tmp.genre  = (e.get_genre()  != null ? e.get_genre()  : UNKNOWN_GENRE);
-						tmp.item   = ItemHandlerManager.create_item(e.get_uri());
-						//print("conv :%s\n", tmp.item.uri);
-						result += tmp;
-					}
-					break;
-				}
-				else {
-					return null;
-				}
-			case ItemType.LOCAL_FOLDER:
-				break;
-			default:
-				break;
-		}
-		return result;
-	}
+    public TrackData[]? to_trackdata(Item? item, ref string? searchtext) {
+        
+        //this function uses the database so use it in the database thread
+        return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, null);
+        
+        if(item == null)
+            return null;
+        
+        if(searchtext == null)
+            searchtext = EMPTYSTRING;
+        
+        TrackData[] result = {};
+        
+        switch(item.type) {
+            case ItemType.LOCAL_AUDIO_TRACK:
+            case ItemType.LOCAL_VIDEO_TRACK:
+                if(item.db_id > -1) {
+                    TrackData? tmp = db_browser.get_trackdata_by_titleid(ref searchtext, item.db_id);
+                    if(tmp == null)
+                        break;
+                    result += tmp;
+                }
+                else if(item.uri != null) {
+                    TrackData? tmp;
+                    if(db_browser.get_trackdata_for_uri(ref item.uri, out tmp)) {
+                        if(tmp != null) {
+                            if(tmp.item.type == ItemType.UNKNOWN)
+                                tmp.item.type = ItemHandlerManager.create_item(item.uri).type;
+                            if(tmp.item.type != ItemType.UNKNOWN)
+                                result += tmp;
+                        }
+                        else {
+                            return null;
+                        }
+                    }
+                    else {
+                        print("Using tag reader in item converter.\n");
+                        string artist=EMPTYSTRING, album = EMPTYSTRING, title = EMPTYSTRING, lengthString = EMPTYSTRING, genre = UNKNOWN_GENRE;
+                        string? yearString = null;
+                        uint tracknumb = 0;
+                        File file = File.new_for_uri(item.uri);
+                        var tr = new TagReader();
+                        var tags = tr.read_tag(file.get_path());
+                        if(tags == null) {
+                            title = prepare_name_from_filename(file.get_basename());
+                        }
+                        else {
+                            artist         = tags.artist;
+                            album          = tags.album;
+                            title          = tags.title;
+                            tracknumb      = tags.tracknumber;
+                            genre          = tags.genre;
+                            lengthString = make_time_display_from_seconds(tags.length);
+                            if(tags.year > 0) 
+                                yearString = "%u".printf(tags.year);
+                        }
+                        tags.item = item;
+                        result += tags;
+                    }
+                }
+                else {
+                    return null;
+                }
+                break;
+            case ItemType.COLLECTION_CONTAINER_ALBUM:
+                if(item.db_id > -1) {
+                    result = db_browser.get_trackdata_by_albumid(ref searchtext, item.db_id);
+                    break;
+                }
+                break;
+            case ItemType.COLLECTION_CONTAINER_ARTIST:
+                if(item.db_id > -1) {
+                    result = db_browser.get_trackdata_by_artistid(ref searchtext, item.db_id);
+                    break;
+                }
+                break;
+            case ItemType.COLLECTION_CONTAINER_VIDEO:
+                result = db_browser.get_trackdata_for_video(ref searchtext);
+                //print("result len %d\n", result.length);
+                break;
+            case ItemType.COLLECTION_CONTAINER_STREAM:
+                result = db_browser.get_trackdata_for_streams(ref searchtext);
+                //print("result len %d\n", result.length);
+                break;
+            case ItemType.STREAM:
+                var tmp = new TrackData();
+                if(item.db_id > -1) {
+                    if(db_browser.get_stream_td_for_id(item.db_id, out tmp)) {
+                        result += tmp;
+                        return result;
+                    }
+                }
+                //else {
+                //    print("itemtype.stream\n");
+                //}
+                tmp.item = item;
+                File ft = File.new_for_uri(item.uri);
+                tmp.title = prepare_name_from_filename(ft.get_basename());
+                result += tmp;
+                return result;
+            case ItemType.PLAYLIST:
+                var pr = new Playlist.Reader();
+                Playlist.Result rslt;
+                if(item.uri == null) {
+                    print("no uri for playlist!\n");
+                    return null;
+                }
+                try {
+                    rslt = pr.read(item.uri , null);
+                }
+                catch(Playlist.ReaderError e) {
+                    print("Item Converter: %s\n", e.message);
+                    return null;
+                }
+                if(rslt != Playlist.Result.SUCCESS)
+                    return null;
+                EntryCollection ec = pr.data_collection;
+                if(ec != null) {
+                    foreach(Entry e in ec) {
+                        var tmp = new TrackData();
+                        tmp.title  = (e.get_title()  != null ? e.get_title()  : UNKNOWN_TITLE);
+                        tmp.album  = (e.get_album()  != null ? e.get_album()  : UNKNOWN_ALBUM);
+                        tmp.artist = (e.get_author() != null ? e.get_author() : UNKNOWN_ARTIST);
+                        tmp.genre  = (e.get_genre()  != null ? e.get_genre()  : UNKNOWN_GENRE);
+                        tmp.item   = ItemHandlerManager.create_item(e.get_uri());
+                        //print("conv :%s\n", tmp.item.uri);
+                        result += tmp;
+                    }
+                    break;
+                }
+                else {
+                    return null;
+                }
+            case ItemType.LOCAL_FOLDER:
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
 }

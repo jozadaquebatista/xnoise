@@ -25,8 +25,8 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
- * 	fsistemas
+ *     Jörn Magens
+ *     fsistemas
  */
  
 using Gtk;
@@ -38,225 +38,225 @@ using Xnoise.PluginModule;
 
 
 public class Xnoise.Notifications : GLib.Object, IPlugin {
-	public Main xn { get; set; }
-	private unowned PluginModule.Container _owner;
-	
-	public PluginModule.Container owner {
-		get {
-			return _owner;
-		}
-		set {
-			_owner = value;
-		}
-	}
-	
-	public string name { 
-		get {
-			return "notifications";
-		} 
-	}
-	
-	private const int IMAGE_SIZE = 64;
-	private Notification notification = null;
-	private uint timeout;
+    public Main xn { get; set; }
+    private unowned PluginModule.Container _owner;
+    
+    public PluginModule.Container owner {
+        get {
+            return _owner;
+        }
+        set {
+            _owner = value;
+        }
+    }
+    
+    public string name { 
+        get {
+            return "notifications";
+        } 
+    }
+    
+    private const int IMAGE_SIZE = 64;
+    private Notification notification = null;
+    private uint timeout;
 
-	construct {
-		timeout = 0;
-	}
+    construct {
+        timeout = 0;
+    }
 
-	public bool init() {
-		if(!Notify.init("Xnoise media player")) {
-			print("libnotify initialization failed\n");
-			return false;
-		}
-		global.uri_changed.connect(on_uri_changed);
-		global.sign_restart_song.connect(on_restart);
-		global.sign_song_info_required.connect(on_song_info_required);
-		global.sign_image_path_small_changed.connect(update_image);
-		return true;
-	}
+    public bool init() {
+        if(!Notify.init("Xnoise media player")) {
+            print("libnotify initialization failed\n");
+            return false;
+        }
+        global.uri_changed.connect(on_uri_changed);
+        global.sign_restart_song.connect(on_restart);
+        global.sign_song_info_required.connect(on_song_info_required);
+        global.sign_image_path_small_changed.connect(update_image);
+        return true;
+    }
 
-	public void uninit() {
-		cleanup();
-	}
+    public void uninit() {
+        cleanup();
+    }
 
-	private void update_image() {
-		Gdk.Pixbuf image_pixb = null;
-		if(notification == null)
-			return;
-		if(global.image_path_small != null) { // f.query_exists()) {
-			try {
-				image_pixb = new Gdk.Pixbuf.from_file(global.image_path_small);//f.get_path());
-				if(image_pixb != null) {
-					image_pixb = image_pixb.scale_simple(IMAGE_SIZE, IMAGE_SIZE, Gdk.InterpType.BILINEAR);
-				}
-			}
-			catch(GLib.Error e) {
-				print("%s\n", e.message);
-			}
-		}
-		else {
-			try {
-				image_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
-			}
-			catch(GLib.Error e) {
-				print("%s\n", e.message);
-			}
-		}
-		if(image_pixb != null)
-			notification.set_icon_from_pixbuf(image_pixb);
-	}
-	
-	private void on_song_info_required() {
-		if(global.current_uri == EMPTYSTRING || global.current_uri == null) {
-			try {
-				if(notification != null) {
-					notification.clear_hints();
-					notification.close();
-				}
-				return;
-			}
-			catch(GLib.Error e) {
-				print("%s\n", e.message);
-			}
-		}
-		show_notification(global.current_uri);
-	}
-	
-	private void on_restart() {
-		Idle.add( () => {
-			on_uri_changed(global.current_uri);
-			return false;
-		});
-	}
-	
-	private void on_uri_changed(string? uri) {
-		if(timeout != 0) {
-			Source.remove(timeout);
-			timeout = 0;
-		}
+    private void update_image() {
+        Gdk.Pixbuf image_pixb = null;
+        if(notification == null)
+            return;
+        if(global.image_path_small != null) { // f.query_exists()) {
+            try {
+                image_pixb = new Gdk.Pixbuf.from_file(global.image_path_small);//f.get_path());
+                if(image_pixb != null) {
+                    image_pixb = image_pixb.scale_simple(IMAGE_SIZE, IMAGE_SIZE, Gdk.InterpType.BILINEAR);
+                }
+            }
+            catch(GLib.Error e) {
+                print("%s\n", e.message);
+            }
+        }
+        else {
+            try {
+                image_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
+            }
+            catch(GLib.Error e) {
+                print("%s\n", e.message);
+            }
+        }
+        if(image_pixb != null)
+            notification.set_icon_from_pixbuf(image_pixb);
+    }
+    
+    private void on_song_info_required() {
+        if(global.current_uri == EMPTYSTRING || global.current_uri == null) {
+            try {
+                if(notification != null) {
+                    notification.clear_hints();
+                    notification.close();
+                }
+                return;
+            }
+            catch(GLib.Error e) {
+                print("%s\n", e.message);
+            }
+        }
+        show_notification(global.current_uri);
+    }
+    
+    private void on_restart() {
+        Idle.add( () => {
+            on_uri_changed(global.current_uri);
+            return false;
+        });
+    }
+    
+    private void on_uri_changed(string? uri) {
+        if(timeout != 0) {
+            Source.remove(timeout);
+            timeout = 0;
+        }
 
-		if(uri == EMPTYSTRING || uri == null) {
-			try {
-				if(notification != null) {
-					notification.clear_hints();
-					notification.close();
-				}
-				return;
-			}
-			catch(GLib.Error e) {
-				print("%s\n", e.message);
-			}
-		}
+        if(uri == EMPTYSTRING || uri == null) {
+            try {
+                if(notification != null) {
+                    notification.clear_hints();
+                    notification.close();
+                }
+                return;
+            }
+            catch(GLib.Error e) {
+                print("%s\n", e.message);
+            }
+        }
 
-		timeout = Timeout.add_seconds(1, () => {
-			show_notification(uri);
-			return false;
-		});
-	}
-	
-	private void show_notification(string newuri) {
-		//string uri = newuri;
-		string album, artist, title;
-		Gdk.Pixbuf image_pixb = null;
-		string basename = null;
-		File file = File.new_for_uri(newuri);
+        timeout = Timeout.add_seconds(1, () => {
+            show_notification(uri);
+            return false;
+        });
+    }
+    
+    private void show_notification(string newuri) {
+        //string uri = newuri;
+        string album, artist, title;
+        Gdk.Pixbuf image_pixb = null;
+        string basename = null;
+        File file = File.new_for_uri(newuri);
 
-		if(!gst_player.is_stream)
-			basename = file.get_basename();
+        if(!gst_player.is_stream)
+            basename = file.get_basename();
 
-		if(global.current_artist != null && global.current_artist != EMPTYSTRING)
-			artist = remove_linebreaks(global.current_artist);
-		else
-			artist = UNKNOWN_ARTIST_LOCALIZED;
+        if(global.current_artist != null && global.current_artist != EMPTYSTRING)
+            artist = remove_linebreaks(global.current_artist);
+        else
+            artist = UNKNOWN_ARTIST_LOCALIZED;
 
-		if(global.current_title != null && global.current_title != EMPTYSTRING)
-			title = remove_linebreaks(global.current_title);
-		else
-			title = UNKNOWN_TITLE_LOCALIZED;
+        if(global.current_title != null && global.current_title != EMPTYSTRING)
+            title = remove_linebreaks(global.current_title);
+        else
+            title = UNKNOWN_TITLE_LOCALIZED;
 
-		if(global.current_album != null && global.current_album != EMPTYSTRING)
-			album = remove_linebreaks(global.current_album);
-		else
-			album = UNKNOWN_ALBUM_LOCALIZED;
+        if(global.current_album != null && global.current_album != EMPTYSTRING)
+            album = remove_linebreaks(global.current_album);
+        else
+            album = UNKNOWN_ALBUM_LOCALIZED;
 
-		if(album == UNKNOWN_ALBUM)
-			album = UNKNOWN_ALBUM_LOCALIZED;
-		if(artist == UNKNOWN_ARTIST)
-			artist = UNKNOWN_ARTIST_LOCALIZED;
-		if(title == UNKNOWN_TITLE)
-			title = UNKNOWN_TITLE_LOCALIZED;
-		
-		//File f = get_albumimage_for_artistalbum(artist, album, "medium");
-		string summary = title;
-		string body = _("by") +
-		              " " + Markup.printf_escaped("%s", artist) + " \n" +
-		              _("on") + 
-		              " " + Markup.printf_escaped("%s", album);
-		if(notification == null) {
-			notification = new Notification(summary, body, null);
-		}
-		else {
-			notification.clear_hints();
-			notification.update(summary, body, EMPTYSTRING);
-		}
-		if(global.image_path_small != null) { // f.query_exists()) {
-			try {
-				image_pixb = new Gdk.Pixbuf.from_file(global.image_path_small);//f.get_path());
-				if(image_pixb != null) {
-					image_pixb = image_pixb.scale_simple(IMAGE_SIZE, IMAGE_SIZE, Gdk.InterpType.BILINEAR);
-				}
-			}
-			catch(GLib.Error e) {
-				print("%s\n", e.message);
-			}
-		}
-		else {
-			try {
-				image_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
-			}
-			catch(GLib.Error e) {
-				print("%s\n", e.message);
-			}
-		}
-		if(image_pixb != null)
-			notification.set_icon_from_pixbuf(image_pixb);
-		
-		notification.set_urgency(Notify.Urgency.NORMAL);
-		notification.set_timeout(2000);
-		this.show();
-	}
+        if(album == UNKNOWN_ALBUM)
+            album = UNKNOWN_ALBUM_LOCALIZED;
+        if(artist == UNKNOWN_ARTIST)
+            artist = UNKNOWN_ARTIST_LOCALIZED;
+        if(title == UNKNOWN_TITLE)
+            title = UNKNOWN_TITLE_LOCALIZED;
+        
+        //File f = get_albumimage_for_artistalbum(artist, album, "medium");
+        string summary = title;
+        string body = _("by") +
+                      " " + Markup.printf_escaped("%s", artist) + " \n" +
+                      _("on") + 
+                      " " + Markup.printf_escaped("%s", album);
+        if(notification == null) {
+            notification = new Notification(summary, body, null);
+        }
+        else {
+            notification.clear_hints();
+            notification.update(summary, body, EMPTYSTRING);
+        }
+        if(global.image_path_small != null) { // f.query_exists()) {
+            try {
+                image_pixb = new Gdk.Pixbuf.from_file(global.image_path_small);//f.get_path());
+                if(image_pixb != null) {
+                    image_pixb = image_pixb.scale_simple(IMAGE_SIZE, IMAGE_SIZE, Gdk.InterpType.BILINEAR);
+                }
+            }
+            catch(GLib.Error e) {
+                print("%s\n", e.message);
+            }
+        }
+        else {
+            try {
+                image_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
+            }
+            catch(GLib.Error e) {
+                print("%s\n", e.message);
+            }
+        }
+        if(image_pixb != null)
+            notification.set_icon_from_pixbuf(image_pixb);
+        
+        notification.set_urgency(Notify.Urgency.NORMAL);
+        notification.set_timeout(2000);
+        this.show();
+    }
 
-	public void show() {
-		try {	
-			notification.show();
-		}
-		catch(GLib.Error e) {
-			 print("%s\n", e.message); 
-		}
-	}
+    public void show() {
+        try {    
+            notification.show();
+        }
+        catch(GLib.Error e) {
+             print("%s\n", e.message); 
+        }
+    }
 
-	private void cleanup() {
-		if(notification != null) {
-			try {
-				notification.close();
-				notification = null;
-			}
-			catch(GLib.Error e) {
-				print("%s\n", e.message);
-			}
-		}
-	}
+    private void cleanup() {
+        if(notification != null) {
+            try {
+                notification.close();
+                notification = null;
+            }
+            catch(GLib.Error e) {
+                print("%s\n", e.message);
+            }
+        }
+    }
 
-	~Notifications() {
-	}
+    ~Notifications() {
+    }
 
-	public Gtk.Widget? get_settings_widget() {
-		return null;
-	}
+    public Gtk.Widget? get_settings_widget() {
+        return null;
+    }
 
-	public bool has_settings_widget() {
-		return false;
-	}
+    public bool has_settings_widget() {
+        return false;
+    }
 }
 

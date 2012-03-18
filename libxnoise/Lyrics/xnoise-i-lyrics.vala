@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 
@@ -34,32 +34,32 @@
  * The reply is checked for matching artist/title
  */
 public interface Xnoise.ILyrics : GLib.Object {
-	public abstract void find_lyrics();
-	public abstract string get_identifier();
-	public abstract string get_credits();
-	public abstract uint get_timeout(); // id of the GLib.Source of the timeout for the search
-	
-	
-	// DEFAULT IMPLEMENTATIONS
-	
-	protected bool timeout_elapsed() { 
-		Timeout.add_seconds(1, () => {
-			this.destruct();
-			return false;
-		});
-		return false;
-	}
-	
-	// ILyrics implementor have to call destruct after signalling the arrival of a new lyrics text
-	public void destruct() { // default implementation of explizit destructor
-		Idle.add( () => {
-			if(get_timeout() != 0)
-				Source.remove(get_timeout());
-			ILyrics* p = this;
-			delete p;
-			return false;
-		});
-	}
+    public abstract void find_lyrics();
+    public abstract string get_identifier();
+    public abstract string get_credits();
+    public abstract uint get_timeout(); // id of the GLib.Source of the timeout for the search
+    
+    
+    // DEFAULT IMPLEMENTATIONS
+    
+    protected bool timeout_elapsed() { 
+        Timeout.add_seconds(1, () => {
+            this.destruct();
+            return false;
+        });
+        return false;
+    }
+    
+    // ILyrics implementor have to call destruct after signalling the arrival of a new lyrics text
+    public void destruct() { // default implementation of explizit destructor
+        Idle.add( () => {
+            if(get_timeout() != 0)
+                Source.remove(get_timeout());
+            ILyrics* p = this;
+            delete p;
+            return false;
+        });
+    }
 }
 
 

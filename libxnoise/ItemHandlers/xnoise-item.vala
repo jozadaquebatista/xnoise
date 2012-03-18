@@ -25,43 +25,43 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 
 namespace Xnoise {
-	public struct Item { // TODO: use db id for artist album track
-		public Item(ItemType _type = ItemType.UNKNOWN, string? _uri = null, int32 _db_id = -1) {
-			this.type  = _type;
-			this.db_id = _db_id;
-			this.uri   = _uri;
-		}
-		public ItemType  type;
-		public int32     db_id;      // the id in the database or -1; to be verified, if coming from tracklist
-		public string?   uri;        // uri of item
-		public string?   text;       // some text
-	}
+    public struct Item { // TODO: use db id for artist album track
+        public Item(ItemType _type = ItemType.UNKNOWN, string? _uri = null, int32 _db_id = -1) {
+            this.type  = _type;
+            this.db_id = _db_id;
+            this.uri   = _uri;
+        }
+        public ItemType  type;
+        public int32     db_id;      // the id in the database or -1; to be verified, if coming from tracklist
+        public string?   uri;        // uri of item
+        public string?   text;       // some text
+    }
 
-	public enum ItemType {
-		UNKNOWN = 0,
-		LOCAL_AUDIO_TRACK,
-		LOCAL_VIDEO_TRACK,
-		STREAM,
-		CDROM_TRACK,                         // not possible, yet
-		PLAYLIST,                            // item can be converted
-		LOCAL_FOLDER,                        // item can be converted
-		COLLECTION_CONTAINER_ARTIST,         // item can be converted
-		COLLECTION_CONTAINER_ALBUM,          // item can be converted
-		COLLECTION_CONTAINER_VIDEO,          // item can be converted
-		COLLECTION_CONTAINER_STREAM,         // item can be converted
-		COLLECTION_CONTAINER_GENRE,          // item can be converted
-		COLLECTION_CONTAINER_YEAR,           // item can be converted
-		LOADER,
-		COLLECTION_CONTAINER_MOST_PLAYED,    // item can be converted
-		COLLECTION_CONTAINER_FAVORITES,      // item can be converted
-		COLLECTION_CONTAINER_LAST_PLAYED,    // item can be converted
-		COLLECTION_CONTAINER_RECENTLY_ADDED, // item can be converted
-		MAXCOUNT
-		//to be extended
-	}
+    public enum ItemType {
+        UNKNOWN = 0,
+        LOCAL_AUDIO_TRACK,
+        LOCAL_VIDEO_TRACK,
+        STREAM,
+        CDROM_TRACK,                         // not possible, yet
+        PLAYLIST,                            // item can be converted
+        LOCAL_FOLDER,                        // item can be converted
+        COLLECTION_CONTAINER_ARTIST,         // item can be converted
+        COLLECTION_CONTAINER_ALBUM,          // item can be converted
+        COLLECTION_CONTAINER_VIDEO,          // item can be converted
+        COLLECTION_CONTAINER_STREAM,         // item can be converted
+        COLLECTION_CONTAINER_GENRE,          // item can be converted
+        COLLECTION_CONTAINER_YEAR,           // item can be converted
+        LOADER,
+        COLLECTION_CONTAINER_MOST_PLAYED,    // item can be converted
+        COLLECTION_CONTAINER_FAVORITES,      // item can be converted
+        COLLECTION_CONTAINER_LAST_PLAYED,    // item can be converted
+        COLLECTION_CONTAINER_RECENTLY_ADDED, // item can be converted
+        MAXCOUNT
+        //to be extended
+    }
 }

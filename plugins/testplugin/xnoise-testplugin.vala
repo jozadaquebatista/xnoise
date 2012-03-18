@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 using Gtk;
@@ -34,51 +34,51 @@ using Xnoise;
 using Xnoise.PluginModule;
 
 public class TestPlugin : GLib.Object, IPlugin {
-	private Gtk.Button b;
-	private unowned PluginModule.Container _owner;
-	
-	// the PluginModule holds this class
-	public PluginModule.Container owner {
-		get {
-			return _owner;
-		}
-		set {
-			_owner = value;
-		}
-	}
-	
-	// a reference to Main Object of xnoise
-	public Xnoise.Main xn { get; set; }
-	
-	//name of your plugin
-	public string name { 
-		get {
-			return "Test";
-		} 
-	}
+    private Gtk.Button b;
+    private unowned PluginModule.Container _owner;
+    
+    // the PluginModule holds this class
+    public PluginModule.Container owner {
+        get {
+            return _owner;
+        }
+        set {
+            _owner = value;
+        }
+    }
+    
+    // a reference to Main Object of xnoise
+    public Xnoise.Main xn { get; set; }
+    
+    //name of your plugin
+    public string name { 
+        get {
+            return "Test";
+        } 
+    }
 
-	// you can use this function to initialize you plugin stuff, instantiate classes, etc.
-	public bool init() {
-		return true;
-	}
+    // you can use this function to initialize you plugin stuff, instantiate classes, etc.
+    public bool init() {
+        return true;
+    }
 
-	public void uninit() {
-	}
+    public void uninit() {
+    }
 
-	//here you can provide a settings widget for your plugin
-	//it would be embedded into the settings dialog. Otherwise just return null
-	public Gtk.Widget? get_settings_widget() {
-		b = new Gtk.Button.with_label("bingo");
-		b.clicked.connect( (s) => {
-			//some dummy code
-			s.label = s.label + "_1";
-		});
-		return b;
-	}
+    //here you can provide a settings widget for your plugin
+    //it would be embedded into the settings dialog. Otherwise just return null
+    public Gtk.Widget? get_settings_widget() {
+        b = new Gtk.Button.with_label("bingo");
+        b.clicked.connect( (s) => {
+            //some dummy code
+            s.label = s.label + "_1";
+        });
+        return b;
+    }
 
-	//tell wether a settings widget will be provided
-	public bool has_settings_widget() {
-		return true;
-	}
+    //tell wether a settings widget will be provided
+    public bool has_settings_widget() {
+        return true;
+    }
 }
 

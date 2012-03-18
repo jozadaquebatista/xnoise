@@ -25,46 +25,46 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 using Gtk;
 
 
 private class Xnoise.DockableDynamicPlaylists : DockableMedia {
-	
-	public override string name() {
-		return "MostPlayedPlaylist";
-	}
-	
-	public override string headline() {
-		return _("Most Played");
-	}
-	
-	public override DockableMedia.Category category() {
-		return DockableMedia.Category.PLAYLIST;
-	}
+    
+    public override string name() {
+        return "MostPlayedPlaylist";
+    }
+    
+    public override string headline() {
+        return _("Most Played");
+    }
+    
+    public override DockableMedia.Category category() {
+        return DockableMedia.Category.PLAYLIST;
+    }
 
-	public override Gtk.Widget? get_widget(MainWindow window) {
-		var tv = new PlaylistTreeView(window);
-		var sw = new ScrolledWindow(null, null);
-		sw.add(tv);
-		return sw;
-	}
+    public override Gtk.Widget? get_widget(MainWindow window) {
+        var tv = new PlaylistTreeView(window);
+        var sw = new ScrolledWindow(null, null);
+        sw.add(tv);
+        return sw;
+    }
 
-	public override Gdk.Pixbuf get_icon() {
-		Gdk. Pixbuf pixb_playlist = null;
-		Gtk.Invisible i = new Gtk.Invisible();
-		try {
-			if(IconTheme.get_default().has_icon("xn-playlist"))
-				pixb_playlist = IconTheme.get_default().load_icon("xn-playlist", 16, IconLookupFlags.FORCE_SIZE);
-			else
-				pixb_playlist = i.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
-		}
-		catch(Error e) {
-		}
-		return pixb_playlist;
-	}
+    public override Gdk.Pixbuf get_icon() {
+        Gdk. Pixbuf pixb_playlist = null;
+        Gtk.Invisible i = new Gtk.Invisible();
+        try {
+            if(IconTheme.get_default().has_icon("xn-playlist"))
+                pixb_playlist = IconTheme.get_default().load_icon("xn-playlist", 16, IconLookupFlags.FORCE_SIZE);
+            else
+                pixb_playlist = i.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
+        }
+        catch(Error e) {
+        }
+        return pixb_playlist;
+    }
 }
 
 

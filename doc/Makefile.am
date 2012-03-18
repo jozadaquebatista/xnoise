@@ -1,13 +1,13 @@
 NULL =
 
 SUBDIRS = \
-	$(NULL)
+    $(NULL)
 
 man_MANS = \
-	xnoise.1 \
-	$(NULL)
+    xnoise.1 \
+    $(NULL)
 
 EXTRA_DIST = \
-	$(man_MANS) \
-	$(NULL)
+    $(man_MANS) \
+    $(NULL)
 

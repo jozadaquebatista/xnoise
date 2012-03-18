@@ -25,47 +25,47 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- * 	Jörn Magens
+ *     Jörn Magens
  */
 
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext/ItemType
 public class Xnoise.HandlerRemoveTrack : ItemHandler {
-	private Action a;
-	private const string ainfo = _("Remove selected track");
-	private const string aname = "HandlerRemoveTrack";
-	
-	private const string name = "HandlerRemoveTrack";
-	
-	public HandlerRemoveTrack() {
-		a = new Action();
-		a.action     = remove_track_from_tracklist;
-		a.info       = this.ainfo;
-		a.name       = this.aname;
-		a.stock_item = Gtk.Stock.DELETE;
-		a.context    = ActionContext.TRACKLIST_MENU_QUERY;
-		
-		//print("constructed HandlerRemoveTrack\n");
-	}
+    private Action a;
+    private const string ainfo = _("Remove selected track");
+    private const string aname = "HandlerRemoveTrack";
+    
+    private const string name = "HandlerRemoveTrack";
+    
+    public HandlerRemoveTrack() {
+        a = new Action();
+        a.action     = remove_track_from_tracklist;
+        a.info       = this.ainfo;
+        a.name       = this.aname;
+        a.stock_item = Gtk.Stock.DELETE;
+        a.context    = ActionContext.TRACKLIST_MENU_QUERY;
+        
+        //print("constructed HandlerRemoveTrack\n");
+    }
 
-	public override ItemHandlerType handler_type() {
-		return ItemHandlerType.OTHER;
-	}
-	
-	public override unowned string handler_name() {
-		return name;
-	}
+    public override ItemHandlerType handler_type() {
+        return ItemHandlerType.OTHER;
+    }
+    
+    public override unowned string handler_name() {
+        return name;
+    }
 
-	public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-		if(context == ActionContext.TRACKLIST_MENU_QUERY)
-			return a;
-		else
-			return null;
-	}
+    public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
+        if(context == ActionContext.TRACKLIST_MENU_QUERY)
+            return a;
+        else
+            return null;
+    }
 
-	private void remove_track_from_tracklist(Item item, GLib.Value? data) { // forward playlists to parser
-		print("remove_track    %s\n", item.type.to_string());
-		tl.remove_selected_rows();
-	}
+    private void remove_track_from_tracklist(Item item, GLib.Value? data) { // forward playlists to parser
+        print("remove_track    %s\n", item.type.to_string());
+        tl.remove_selected_rows();
+    }
 }
 
