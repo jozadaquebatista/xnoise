@@ -46,7 +46,7 @@ private class Xnoise.DockablePlaylistMostplayed : DockableMedia {
     }
 
     public override Gtk.Widget? get_widget(MainWindow window) {
-        var tv = new PlaylistTreeView(window);
+        var tv = new PlaylistTreeViewMostplayed(window);
         var sw = new ScrolledWindow(null, null);
         sw.set_shadow_type(ShadowType.IN);
         sw.add(tv);
@@ -54,17 +54,7 @@ private class Xnoise.DockablePlaylistMostplayed : DockableMedia {
     }
 
     public override Gdk.Pixbuf get_icon() {
-        Gdk. Pixbuf pixb_playlist = null;
-        Gtk.Invisible i = new Gtk.Invisible();
-        try {
-            if(IconTheme.get_default().has_icon("xn-playlist"))
-                pixb_playlist = IconTheme.get_default().load_icon("xn-playlist", 16, IconLookupFlags.FORCE_SIZE);
-            else
-                pixb_playlist = i.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
-        }
-        catch(Error e) {
-        }
-        return pixb_playlist;
+        return icon_repo.playlist_icon;
     }
 }
 

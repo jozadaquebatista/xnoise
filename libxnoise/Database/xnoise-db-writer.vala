@@ -420,6 +420,10 @@ public class Xnoise.Database.Writer : GLib.Object {
             this.db_error();
             return;
         }
+        foreach(NotificationData cxd in change_callbacks) {
+            if(cxd.cb != null)
+                cxd.cb(ChangeType.UPDATE_LASTPLAYED, null);
+        }
     }
     
     private int32 get_statistics_id_for_uri(string uri) {

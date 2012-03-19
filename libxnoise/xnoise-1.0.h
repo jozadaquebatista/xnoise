@@ -2039,6 +2039,7 @@ XnoiseDatabaseReader* xnoise_database_reader_construct (GType object_type, GErro
 void xnoise_database_reader_cancel (XnoiseDatabaseReader* self);
 void xnoise_database_reader_do_callback_transaction (XnoiseDatabaseReader* self, XnoiseDatabaseReaderReaderCallback cb, void* cb_target);
 gint32 xnoise_database_reader_count_videos (XnoiseDatabaseReader* self, gchar** searchtext);
+XnoiseItem* xnoise_database_reader_get_last_played (XnoiseDatabaseReader* self, gchar** searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_most_played (XnoiseDatabaseReader* self, gchar** searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_all_tracks (XnoiseDatabaseReader* self, gchar** searchtext, int* result_length1);
 gboolean xnoise_database_reader_get_stream_td_for_id (XnoiseDatabaseReader* self, gint id, XnoiseTrackData** val);

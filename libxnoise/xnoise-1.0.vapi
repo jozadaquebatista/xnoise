@@ -23,6 +23,7 @@ namespace Xnoise {
 			public Xnoise.TrackData[]? get_all_tracks (ref string searchtext);
 			public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);
 			public Xnoise.Item[] get_artists_with_search (ref string searchtext);
+			public Xnoise.Item[]? get_last_played (ref string searchtext);
 			public string[] get_media_files ();
 			public string[] get_media_folders ();
 			public Xnoise.Item[]? get_most_played (ref string searchtext);

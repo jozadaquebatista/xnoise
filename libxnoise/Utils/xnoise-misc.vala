@@ -136,7 +136,9 @@ namespace Xnoise {
         DockableMedia d;
         d = new MediaBrowserDockable(); // Media Browser
         dockable_media_sources.insert(d.name(), d);
-        d = new DockablePlaylistMostplayed(); // Dynamic Playlists
+        d = new DockablePlaylistMostplayed(); // Dynamic Playlist Most played
+        dockable_media_sources.insert(d.name(), d);
+        d = new DockablePlaylistLastplayed(); // Dynamic Playlist Last played
         dockable_media_sources.insert(d.name(), d);
         
         

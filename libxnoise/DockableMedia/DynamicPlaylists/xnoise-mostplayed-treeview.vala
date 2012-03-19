@@ -36,14 +36,14 @@ using Xnoise;
 using Xnoise.Database;
 
 
-private class Xnoise.PlaylistTreeView : Gtk.TreeView {
+private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView {
     private unowned MainWindow win;
     private bool dragging = false;
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
     };
     
-    public PlaylistTreeView(MainWindow window) {
+    public PlaylistTreeViewMostplayed(MainWindow window) {
         this.win = window; // use this ref because static main_window
                            //is not yet set up at construction time
         this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);

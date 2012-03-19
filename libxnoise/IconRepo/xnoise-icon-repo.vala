@@ -99,9 +99,9 @@ internal class Xnoise.IconRepo : GLib.Object {
             loading_icon = w.render_icon_pixbuf(Gtk.Stock.REFRESH , IconSize.BUTTON);
             
             if(theme.has_icon("xn-local-collection"))
-                local_collection_icon = IconTheme.get_default().load_icon("xn-local-collection", iconheight, IconLookupFlags.FORCE_SIZE);
+                local_collection_icon = w.render_icon_pixbuf(Gtk.Stock.HOME, IconSize.BUTTON);
             else
-                local_collection_icon = w.render_icon_pixbuf(Gtk.Stock.JUSTIFY_CENTER, IconSize.BUTTON);
+                local_collection_icon = IconTheme.get_default().load_icon("xn-local-collection", iconheight, IconLookupFlags.FORCE_SIZE);
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);
