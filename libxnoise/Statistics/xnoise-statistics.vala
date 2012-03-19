@@ -35,6 +35,7 @@ public class Xnoise.Statistics : GLib.Object {
     private uint update_play_src = 0;
     public Statistics() {
         global.uri_changed.connect(on_track_played);
+        global.uri_repeated.connect(on_track_played);
     }
     
     private void on_track_played(string? uri) {

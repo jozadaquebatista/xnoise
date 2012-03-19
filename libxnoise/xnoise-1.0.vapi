@@ -12,13 +12,13 @@ namespace Gst {
 namespace Xnoise {
 	namespace Database {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
-		public class DbBrowser {
+		public class Reader {
 			public delegate void ReaderCallback (Sqlite.Database database);
-			public DbBrowser () throws Xnoise.Database.DbError;
+			public Reader () throws Xnoise.Database.DbError;
 			public void cancel ();
 			public uint count_lastused_items ();
 			public int32 count_videos (ref string searchtext);
-			public void do_callback_transaction (Xnoise.Database.DbBrowser.ReaderCallback cb);
+			public void do_callback_transaction (Xnoise.Database.Reader.ReaderCallback cb);
 			public Xnoise.Item[] get_albums_with_search (ref string searchtext, int32 id);
 			public Xnoise.TrackData[]? get_all_tracks (ref string searchtext);
 			public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);
@@ -39,9 +39,9 @@ namespace Xnoise {
 			public Xnoise.TrackData[] get_video_data (ref string searchtext);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
-		public class DbWriter : GLib.Object {
+		public class Writer : GLib.Object {
 			public struct NotificationData {
-				public weak Xnoise.Database.DbWriter.ChangeNotificationCallback cb;
+				public weak Xnoise.Database.Writer.ChangeNotificationCallback cb;
 			}
 			public enum ChangeType {
 				ADD_ARTIST,
@@ -58,9 +58,9 @@ namespace Xnoise {
 				UPDATE_LASTPLAYED,
 				UPDATE_RATING
 			}
-			public delegate void ChangeNotificationCallback (Xnoise.Database.DbWriter.ChangeType changetype, Xnoise.Item? item);
+			public delegate void ChangeNotificationCallback (Xnoise.Database.Writer.ChangeType changetype, Xnoise.Item? item);
 			public delegate void WriterCallback (Sqlite.Database database);
-			public DbWriter () throws Xnoise.Database.DbError;
+			public Writer () throws Xnoise.Database.DbError;
 			public void add_single_folder_to_collection (string mfolder);
 			public void add_single_stream_to_collection (string uri, string name = "");
 			public void begin_transaction ();
@@ -68,13 +68,13 @@ namespace Xnoise {
 			public void del_all_folders ();
 			public void del_all_streams ();
 			public bool delete_local_media_data ();
-			public void do_callback_transaction (Xnoise.Database.DbWriter.WriterCallback cb);
+			public void do_callback_transaction (Xnoise.Database.Writer.WriterCallback cb);
 			public string[] get_media_folders ();
 			public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
 			public string? get_uri_for_item_id (int32 id);
 			public void inc_playcount (string uri);
 			public bool insert_title (ref Xnoise.TrackData td);
-			public void register_change_callback (Xnoise.Database.DbWriter.NotificationData cbd);
+			public void register_change_callback (Xnoise.Database.Writer.NotificationData cbd);
 			public void update_lastplay_time (string uri, int64 playtime);
 			public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
 			public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
@@ -1196,11 +1196,11 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text, string providername);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public static Xnoise.Database.DbBrowser db_browser;
+	public static Xnoise.Database.Reader db_reader;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.Worker db_worker;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public static Xnoise.Database.DbWriter db_writer;
+	public static Xnoise.Database.Writer db_writer;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static GLib.HashTable<string,Xnoise.DockableMedia> dockable_media_sources;
 	[CCode (cheader_filename = "xnoise-1.0.h")]

@@ -34,13 +34,13 @@ libxnoise_la_SOURCES = \
     AlbumImages/xnoise-i-album-cover-image-provider.vala \
     Application/xnoise-application.vala \
     BackgroundWorker/xnoise-worker.vala \
-    Database/xnoise-db-browser.vala \
+    Database/xnoise-db-reader.vala \
     Database/xnoise-db-creator.vala \
     Database/xnoise-db-writer.vala \
     DBus/xnoise-dbus.vala \
-    DockableMedia/DynamicPlaylist/xnoise-dockable-playlist-mostplayed.vala \
-    DockableMedia/DynamicPlaylist/xnoise-mostplayed-treeview.vala \
-    DockableMedia/DynamicPlaylist/xnoise-mostplayed-treeview-model.vala \
+    DockableMedia/DynamicPlaylists/xnoise-dockable-playlist-mostplayed.vala \
+    DockableMedia/DynamicPlaylists/xnoise-mostplayed-treeview.vala \
+    DockableMedia/DynamicPlaylists/xnoise-mostplayed-treeview-model.vala \
     DockableMedia/xnoise-dockable-media.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
     ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala \

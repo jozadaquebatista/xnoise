@@ -56,6 +56,8 @@ private class Xnoise.MediaBrowserDockable : DockableMedia {
         this.win = window; // use this ref because static main_window
                            //is not yet set up at construction time
         win.mediaBrScrollWin = new ScrolledWindow(null, null);
+        win.mediaBrScrollWin.border_width = 0;
+        win.mediaBrScrollWin.set_shadow_type(ShadowType.IN);
         win.mediaBr = new MediaBrowser(win.mediaBrScrollWin);
         win.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         win.mediaBrScrollWin.add(win.mediaBr);

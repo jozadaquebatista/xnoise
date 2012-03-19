@@ -52,14 +52,14 @@ public class Xnoise.ItemConverter : Object {
             case ItemType.LOCAL_AUDIO_TRACK:
             case ItemType.LOCAL_VIDEO_TRACK:
                 if(item.db_id > -1) {
-                    TrackData? tmp = db_browser.get_trackdata_by_titleid(ref searchtext, item.db_id);
+                    TrackData? tmp = db_reader.get_trackdata_by_titleid(ref searchtext, item.db_id);
                     if(tmp == null)
                         break;
                     result += tmp;
                 }
                 else if(item.uri != null) {
                     TrackData? tmp;
-                    if(db_browser.get_trackdata_for_uri(ref item.uri, out tmp)) {
+                    if(db_reader.get_trackdata_for_uri(ref item.uri, out tmp)) {
                         if(tmp != null) {
                             if(tmp.item.type == ItemType.UNKNOWN)
                                 tmp.item.type = ItemHandlerManager.create_item(item.uri).type;
@@ -101,28 +101,28 @@ public class Xnoise.ItemConverter : Object {
                 break;
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 if(item.db_id > -1) {
-                    result = db_browser.get_trackdata_by_albumid(ref searchtext, item.db_id);
+                    result = db_reader.get_trackdata_by_albumid(ref searchtext, item.db_id);
                     break;
                 }
                 break;
             case ItemType.COLLECTION_CONTAINER_ARTIST:
                 if(item.db_id > -1) {
-                    result = db_browser.get_trackdata_by_artistid(ref searchtext, item.db_id);
+                    result = db_reader.get_trackdata_by_artistid(ref searchtext, item.db_id);
                     break;
                 }
                 break;
             case ItemType.COLLECTION_CONTAINER_VIDEO:
-                result = db_browser.get_trackdata_for_video(ref searchtext);
+                result = db_reader.get_trackdata_for_video(ref searchtext);
                 //print("result len %d\n", result.length);
                 break;
             case ItemType.COLLECTION_CONTAINER_STREAM:
-                result = db_browser.get_trackdata_for_streams(ref searchtext);
+                result = db_reader.get_trackdata_for_streams(ref searchtext);
                 //print("result len %d\n", result.length);
                 break;
             case ItemType.STREAM:
                 var tmp = new TrackData();
                 if(item.db_id > -1) {
-                    if(db_browser.get_stream_td_for_id(item.db_id, out tmp)) {
+                    if(db_reader.get_stream_td_for_id(item.db_id, out tmp)) {
                         result += tmp;
                         return result;
                     }

@@ -32,6 +32,10 @@
 using Gtk;
 using Gdk;
 
+using Xnoise;
+using Xnoise.Database;
+
+
 private class Xnoise.PlaylistTreeView : Gtk.TreeView {
     private unowned MainWindow win;
     private bool dragging = false;
@@ -73,7 +77,7 @@ private class Xnoise.PlaylistTreeView : Gtk.TreeView {
             if(tmp == null)
                 return;
             unowned Action? action = tmp.get_action(item.type, ActionContext.MEDIABROWSER_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
-        
+            
             if(action != null)
                 action.action(item, null);
             else
@@ -83,12 +87,31 @@ private class Xnoise.PlaylistTreeView : Gtk.TreeView {
                             Gdk.ModifierType.BUTTON1_MASK,
                             this.src_target_entries,
                             Gdk.DragAction.COPY
-                            );
+        );
         this.drag_begin.connect(this.on_drag_begin);
         this.drag_data_get.connect(this.on_drag_data_get);
         this.drag_end.connect(this.on_drag_end);
         this.button_release_event.connect(this.on_button_release);
         this.button_press_event.connect(this.on_button_press);
+        
+        Writer.NotificationData nd = Writer.NotificationData();
+        nd.cb = database_change_cb;
+        db_writer.register_change_callback(nd);
+    }
+    
+    private uint src = 0;
+    
+    private void database_change_cb(Writer.ChangeType changetype, Item? item) {
+        if(changetype == Writer.ChangeType.UPDATE_PLAYCOUNT) {
+            if(src != 0)
+                Source.remove(src);
+            src = Timeout.add_seconds(2, () => {
+                var mm = new MostplayedTreeviewModel();
+                this.model = mm;
+                src = 0;
+                return false;
+            });
+        }
     }
     
     private void on_drag_begin(Gtk.Widget sender, DragContext context) {

@@ -116,7 +116,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
     private void setup_monitors_job(Worker.Job job) {
         monitor_list = new List<DataPair>();
         
-        var mfolders = db_browser.get_media_folders();
+        var mfolders = db_reader.get_media_folders();
         
         foreach(string mfolder in mfolders)
             setup_monitor_for_path(mfolder);
@@ -209,7 +209,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
             search_string = search_string.replace("%", "\\%");
             search_string = search_string.replace("_", "\\_");
             search_string += "/%";
-            var results = db_browser.get_uris(search_string);
+            var results = db_reader.get_uris(search_string);
             foreach (string a in results) {
                 print("deleting %s from db\n", a);
                 dbw.delete_uri(a);
@@ -236,7 +236,7 @@ public class Xnoise.Mediawatcher : GLib.Object {
             starter_method_async.begin(job);
     }
     
-//    private DbWriter dbw = null;
+//    private Writer dbw = null;
     
     private async void starter_method_async(Worker.Job job) {
         if(async_running == true)
@@ -269,9 +269,9 @@ public class Xnoise.Mediawatcher : GLib.Object {
         File file = File.new_for_path(path);
         queue.pop_head();
 //        if(dbw == null) {
-//         DbWriter dbw;
+//         Writer dbw;
 //        try {
-//            dbw = new DbWriter();
+//            dbw = new Writer();
 //        }
 //        catch(Error e1) {
 //            print("%s\n", e1.message);
@@ -296,7 +296,7 @@ print("++1\n");
         }
     }
 
-    private async void add_local_tags(File dir) { //DbWriter dbw,
+    private async void add_local_tags(File dir) { //Writer dbw,
         
         FileEnumerator enumerator;
         string attr = FileAttribute.STANDARD_NAME + "," +
@@ -354,9 +354,9 @@ print("++1\n");
     
     private bool low_prio_import_job(Worker.Job job) {
         print("low prio job!\n");
-        DbWriter dbw = null;
+        Writer dbw = null;
         try {
-            dbw = new DbWriter();
+            dbw = new Writer();
         }
         catch(Error e) {
             print("%s\n", e.message);
@@ -386,9 +386,9 @@ print("++1\n");
 //        print("\nHANDLE QUEUE for %s\n", path);
 //        File file = File.new_for_path(path);
 //        queue.pop_head();
-//        DbWriter dbw = null;
+//        Writer dbw = null;
 //        try {
-//            dbw = new DbWriter();
+//            dbw = new Writer();
 //        }
 //        catch(Error e) {
 //            print("%s\n", e.message);
@@ -595,7 +595,7 @@ private class Xnoise.ImportInfoBar : GLib.Object {
         else {
             
             TrackData data;
-            db_browser.get_trackdata_for_uri(last_uri, out data);
+            db_reader.get_trackdata_for_uri(last_uri, out data);
             if(bar_label.get_realized())
                 bar_label.set_markup("<b>" + data.artist + " - "+ data.title + "</b> has been added to your media library");
             last_uri = null;

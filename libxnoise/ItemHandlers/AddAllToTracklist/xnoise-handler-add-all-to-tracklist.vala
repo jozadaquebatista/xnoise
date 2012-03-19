@@ -75,7 +75,7 @@ public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
     }
 
     private bool menu_add_job(Worker.Job job) {
-        job.track_dat = db_browser.get_all_tracks(ref main_window.mediaBr.mediabrowsermodel.searchtext);
+        job.track_dat = db_reader.get_all_tracks(ref main_window.mediaBr.mediabrowsermodel.searchtext);
         //print("track_dat len %d\n", (int)job.track_dat.length);
         if(job.track_dat != null) {
             Idle.add( () => {

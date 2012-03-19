@@ -31,7 +31,7 @@
 using Gtk;
 
 
-private class Xnoise.DockableDynamicPlaylists : DockableMedia {
+private class Xnoise.DockablePlaylistMostplayed : DockableMedia {
     
     public override string name() {
         return "MostPlayedPlaylist";
@@ -48,6 +48,7 @@ private class Xnoise.DockableDynamicPlaylists : DockableMedia {
     public override Gtk.Widget? get_widget(MainWindow window) {
         var tv = new PlaylistTreeView(window);
         var sw = new ScrolledWindow(null, null);
+        sw.set_shadow_type(ShadowType.IN);
         sw.add(tv);
         return sw;
     }

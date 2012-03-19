@@ -383,7 +383,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private uint msg_id = 0;
     private bool restore_lastused_job(Worker.Job xjob) {
         uint lastused_cnt = 0;
-        if((lastused_cnt = db_browser.count_lastused_items()) > 1500) {
+        if((lastused_cnt = db_reader.count_lastused_items()) > 1500) {
             Timeout.add(200, () => {
                 msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
                                         UserInfo.ContentClass.INFO,
@@ -403,7 +403,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private int LIMIT = 300;
     private bool add_lastused_titles_to_tracklist_job(Worker.Job job) {
         tl.set_model(null);
-        job.items = db_browser.get_some_lastused_items(LIMIT, job.big_counter[0]);
+        job.items = db_reader.get_some_lastused_items(LIMIT, job.big_counter[0]);
         job.big_counter[0] += job.items.length;
         TrackData[] tda = {};
         TrackData[] tmp;
@@ -1224,18 +1224,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
     
-    //    private void on_hpaned_position_changed() {
-    //        hpaned_resized = true;
-    //        if(this.hpaned.position == 0)
-    //            media_browser_visible = false;
-    //        else
-    //            media_browser_visible = true;
-            
-    //        if(this.get_window() != null) {
-    //            this.trackList.handle_resize();
-    //        }
-    //    }
-    
     /* disables (or enables) the AddRemoveAction and the RescanLibraryAction in the menus if
        music is (not anymore) being imported */ 
     private void on_media_import_notify(GLib.Object sender, ParamSpec spec) {
@@ -1248,20 +1236,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
     
-//    private bool hpaned_button_one;
-//    private bool hpaned_resized = false;
-//    private bool on_hpaned_button_event(Gdk.EventButton e) {
-//        if(e.button == 1 && e.type == Gdk.EventType.BUTTON_PRESS)
-//            hpaned_button_one = true;
-//        else if(e.button == 1 && e.type == Gdk.EventType.BUTTON_RELEASE) {
-//            if(hpaned_resized && hpaned_button_one)  {
-//                hpaned_resized = false;
-//                this.mediaBr.resize_line_width(this.hpaned.position);
-//            }
-//            hpaned_button_one = false;
-//        }
-//        return false;
-//    }
     private void on_serial_button_clicked(SerialButton sender, int idx) {
         if(sender == this.sbuttonTL) {
             sbuttonVI.select(idx, false);
@@ -1543,6 +1517,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.trackList.set_size_request(100,100);
             trackListScrollWin = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
             trackListScrollWin.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
+            trackListScrollWin.set_shadow_type(Gtk.ShadowType.IN);
 //            tl.set_container(hpaned);
             trackListScrollWin.add(this.trackList);
             
@@ -1568,6 +1543,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             media_sources_nb = new Gtk.Notebook();
             media_sources_nb.set_show_tabs(false);
+            media_sources_nb.set_border_width(0);
+            media_sources_nb.show_border = false;
             
             media_source_selector = new TreeView();
             media_source_selector.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
@@ -1590,8 +1567,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             column.add_attribute(renderer, "weight", 3);
             media_source_selector.insert_column(column, -1);
             media_source_selector.model = media_source_selector_model;
-            mbbx.pack_start(media_source_selector, false, false, 0);
-            mbbx.pack_start(new Separator(Orientation.HORIZONTAL), false, false, 1);
+            var mss_sw = new ScrolledWindow(null, null);
+            mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);
+            mss_sw.add(media_source_selector);
+            mss_sw.set_shadow_type(ShadowType.IN);
+            mbbx.pack_start(mss_sw, false, false, 0);
+            Gtk.DrawingArea da = new Gtk.DrawingArea();
+            da.height_request = 6;
+            mbbx.pack_start(da, false, false, 0);
             
             unowned DockableMedia? dm_mb = null;
             assert((dm_mb = dockable_media_sources.lookup("MediaBrowserDockable")) != null);
@@ -1629,15 +1612,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
                 TreeIter it;
                 TreeStore m = (TreeStore)media_source_selector.get_model();
-//                m.foreach( (mo,p,ixi) => {
-//                    // reset font
-//                    m.set(ixi, 3, Pango.Weight.NORMAL);
-//                    return false;
-//                });
                 int tab = 0;
                 m.get_iter(out it, treepath);
                 m.get(it, 2, out tab);
-//                m.set(it, 3, Pango.Weight.BOLD);
                 media_sources_nb.set_current_page(tab);
                 return false;
             });
@@ -1645,6 +1622,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             media_source_selector.get_selection().select_iter(media_browser_iter);
             mbbox01.pack_start(mbbx, true, true, 0);
             tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
+            tracklistnotebook.set_border_width(0);
+            tracklistnotebook.show_border = false;
             tracklistnotebook.switch_page.connect( (s,np,p) => {
                 global.sign_notify_tracklistnotebook_switched(p);
             });

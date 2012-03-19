@@ -61,7 +61,7 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
     
     private bool insert_most_played_job(Worker.Job job) {
         string searchtext = "";
-        job.items = db_browser.get_most_played(ref searchtext);
+        job.items = db_reader.get_most_played(ref searchtext);
         Idle.add( () => {
             TreeIter iter;
             foreach(Item? i in job.items) {

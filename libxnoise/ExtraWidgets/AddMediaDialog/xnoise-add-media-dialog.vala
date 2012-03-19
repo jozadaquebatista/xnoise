@@ -83,15 +83,15 @@ public class Xnoise.AddMediaDialog : GLib.Object {
     
     private bool put_media_data_to_model(Worker.Job job) {
         //add folders
-        string[] mfolders = db_browser.get_media_folders();
+        string[] mfolders = db_reader.get_media_folders();
         job.set_arg("mfolders", mfolders);
         
         //add files
-        string[] mfiles = db_browser.get_media_files();
+        string[] mfiles = db_reader.get_media_files();
         job.set_arg("mfiles", mfiles);
         
         //add streams to list
-        streams = db_browser.get_streams();
+        streams = db_reader.get_streams();
         
         Idle.add( () => {
             foreach(string mfolder in ((string[])job.get_arg("mfolders"))) {

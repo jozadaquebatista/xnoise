@@ -4,11 +4,11 @@ data/misc/xnoise.desktop.in.in
 libxnoise/AlbumImages/xnoise-album-image.vala
 libxnoise/AlbumImages/xnoise-album-image-loader.vala
 libxnoise/Application/xnoise-application.vala
-libxnoise/Database/xnoise-db-browser.vala
+libxnoise/Database/xnoise-db-reader.vala
 libxnoise/Database/xnoise-db-creator.vala
 libxnoise/Database/xnoise-db-writer.vala
 libxnoise/DBus/xnoise-dbus.vala
-libxnoise/DockableMedia/DynamicPlaylist/xnoise-dockable-playlist-mostplayed.vala
+libxnoise/DockableMedia/DynamicPlaylists/xnoise-dockable-playlist-mostplayed.vala
 libxnoise/ExtraWidgets/AboutDialog/xnoise-about.vala
 libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala
 libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-progressbar.vala

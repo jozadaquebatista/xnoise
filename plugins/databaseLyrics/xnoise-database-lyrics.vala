@@ -338,7 +338,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
     }
 
     private bool get_lyrics_from_db(Worker.Job job) {
-        db_browser.do_callback_transaction(dbcb);
+        db_reader.do_callback_transaction(dbcb);
         return false;
     }
 }

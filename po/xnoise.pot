@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-18 16:39+0100\n"
+"POT-Creation-Date: 2012-03-19 21:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,10 @@ msgstr ""
 
 #: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
 msgid "More information on the project website:"
+msgstr ""
+
+#: ../libxnoise/DockableMedia/DynamicPlaylists/xnoise-dockable-playlist-mostplayed.vala:41
+msgid "Most Played"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:171
@@ -443,40 +447,44 @@ msgstr ""
 msgid "Select media file"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1295
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1269
 msgid "Media Collections"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1297
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1271
 msgid "Playlists"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1299
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1273
 msgid "Store"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1401
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1375
 msgid "Remove all"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1380
 msgid "Remove selected titles"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1411
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1385
 msgid "Jump to current position"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1522
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1496
 msgid "Show application main menu"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1554
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1529
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:634
+#: ../libxnoise/MediaBrowser/xnoise-media-browser-dockable.vala:48
+msgid "Local Collection"
+msgstr ""
+
+#: ../libxnoise/MediaBrowser/xnoise-media-browser-model.vala:664
 msgid "Loading ..."
 msgstr ""
 

@@ -538,21 +538,23 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
         this.style_get("horizontal-separator", out hsepar);
         renderer = new FlowingTextRenderer(this.ow, font_description, column, expander, hsepar);
         
-        Idle.add( () => {
-            this.ow.size_allocate.connect_after( (s, a) => {
-                unowned TreeViewColumn tvc = this.get_column(0);
-                int current_width = this.ow.get_allocated_width();
-                if(last_width == current_width)
-                    return;
-                
-                last_width = current_width;
-                
-                tvc.max_width = tvc.min_width = current_width - 20;
-                TreeModel? xm = this.get_model();
-                if(xm != null && !in_update_view)
-                    xm.foreach(owforeach);
-            });
-            return false;
+        this.ow.size_allocate.connect_after( (s, a) => {
+            unowned TreeViewColumn tvc = this.get_column(0);
+            int current_width = this.ow.get_allocated_width();
+            if(last_width == current_width)
+                return;
+            
+            last_width = current_width;
+            
+            tvc.max_width = tvc.min_width = current_width - 20;
+            TreeModel? xm = this.get_model();
+            if(xm != null && !in_update_view)
+                xm.foreach( (mo, pt, it) => {
+                    if(mo == null)
+                        return true;
+                    mo.row_changed(pt, it);
+                    return false;
+                });
         });
         
         var pixbufRenderer = new CellRendererPixbuf();
@@ -568,13 +570,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
         
         this.headers_visible = false;
         this.enable_search = false;
-    }
-    
-    private bool owforeach(TreeModel? mo, TreePath pt, TreeIter it) {
-        if(mo == null)
-            return true;
-        mo.row_changed(pt, it);
-        return false;
     }
 }
 

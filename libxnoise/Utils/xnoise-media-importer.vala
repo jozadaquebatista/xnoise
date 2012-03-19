@@ -53,15 +53,15 @@ public class Xnoise.MediaImporter : GLib.Object {
         main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
         
         //add folders
-        string[] mfolders = db_browser.get_media_folders();
+        string[] mfolders = db_reader.get_media_folders();
         job.set_arg("mfolders", mfolders);
         
         //add files
-        string[] mfiles = db_browser.get_media_files();
+        string[] mfiles = db_reader.get_media_files();
         job.set_arg("mfiles", mfiles);
         
         //add streams to list
-        StreamData[] streams = db_browser.get_streams();
+        StreamData[] streams = db_reader.get_streams();
         
         string[] strms = {};
         

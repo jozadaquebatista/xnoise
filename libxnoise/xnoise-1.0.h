@@ -120,35 +120,35 @@ typedef struct _XnoiseTrackDataClass XnoiseTrackDataClass;
 #define XNOISE_TYPE_DND_DATA (xnoise_dnd_data_get_type ())
 typedef struct _XnoiseDndData XnoiseDndData;
 
-#define XNOISE_DATABASE_TYPE_DB_BROWSER (xnoise_database_db_browser_get_type ())
-#define XNOISE_DATABASE_DB_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_DB_BROWSER, XnoiseDatabaseDbBrowser))
-#define XNOISE_DATABASE_DB_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_DB_BROWSER, XnoiseDatabaseDbBrowserClass))
-#define XNOISE_DATABASE_IS_DB_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_DATABASE_TYPE_DB_BROWSER))
-#define XNOISE_DATABASE_IS_DB_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_DATABASE_TYPE_DB_BROWSER))
-#define XNOISE_DATABASE_DB_BROWSER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_DATABASE_TYPE_DB_BROWSER, XnoiseDatabaseDbBrowserClass))
+#define XNOISE_DATABASE_TYPE_READER (xnoise_database_reader_get_type ())
+#define XNOISE_DATABASE_READER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_READER, XnoiseDatabaseReader))
+#define XNOISE_DATABASE_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_READER, XnoiseDatabaseReaderClass))
+#define XNOISE_DATABASE_IS_READER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_DATABASE_TYPE_READER))
+#define XNOISE_DATABASE_IS_READER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_DATABASE_TYPE_READER))
+#define XNOISE_DATABASE_READER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_DATABASE_TYPE_READER, XnoiseDatabaseReaderClass))
 
-typedef struct _XnoiseDatabaseDbBrowser XnoiseDatabaseDbBrowser;
-typedef struct _XnoiseDatabaseDbBrowserClass XnoiseDatabaseDbBrowserClass;
-typedef struct _XnoiseDatabaseDbBrowserPrivate XnoiseDatabaseDbBrowserPrivate;
+typedef struct _XnoiseDatabaseReader XnoiseDatabaseReader;
+typedef struct _XnoiseDatabaseReaderClass XnoiseDatabaseReaderClass;
+typedef struct _XnoiseDatabaseReaderPrivate XnoiseDatabaseReaderPrivate;
 
 #define XNOISE_TYPE_STREAM_DATA (xnoise_stream_data_get_type ())
 typedef struct _XnoiseStreamData XnoiseStreamData;
 
-#define XNOISE_DATABASE_TYPE_DB_WRITER (xnoise_database_db_writer_get_type ())
-#define XNOISE_DATABASE_DB_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_DB_WRITER, XnoiseDatabaseDbWriter))
-#define XNOISE_DATABASE_DB_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_DB_WRITER, XnoiseDatabaseDbWriterClass))
-#define XNOISE_DATABASE_IS_DB_WRITER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_DATABASE_TYPE_DB_WRITER))
-#define XNOISE_DATABASE_IS_DB_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_DATABASE_TYPE_DB_WRITER))
-#define XNOISE_DATABASE_DB_WRITER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_DATABASE_TYPE_DB_WRITER, XnoiseDatabaseDbWriterClass))
+#define XNOISE_DATABASE_TYPE_WRITER (xnoise_database_writer_get_type ())
+#define XNOISE_DATABASE_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_WRITER, XnoiseDatabaseWriter))
+#define XNOISE_DATABASE_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_WRITER, XnoiseDatabaseWriterClass))
+#define XNOISE_DATABASE_IS_WRITER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_DATABASE_TYPE_WRITER))
+#define XNOISE_DATABASE_IS_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_DATABASE_TYPE_WRITER))
+#define XNOISE_DATABASE_WRITER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_DATABASE_TYPE_WRITER, XnoiseDatabaseWriterClass))
 
-typedef struct _XnoiseDatabaseDbWriter XnoiseDatabaseDbWriter;
-typedef struct _XnoiseDatabaseDbWriterClass XnoiseDatabaseDbWriterClass;
-typedef struct _XnoiseDatabaseDbWriterPrivate XnoiseDatabaseDbWriterPrivate;
+typedef struct _XnoiseDatabaseWriter XnoiseDatabaseWriter;
+typedef struct _XnoiseDatabaseWriterClass XnoiseDatabaseWriterClass;
+typedef struct _XnoiseDatabaseWriterPrivate XnoiseDatabaseWriterPrivate;
 
-#define XNOISE_DATABASE_DB_WRITER_TYPE_CHANGE_TYPE (xnoise_database_db_writer_change_type_get_type ())
+#define XNOISE_DATABASE_WRITER_TYPE_CHANGE_TYPE (xnoise_database_writer_change_type_get_type ())
 
-#define XNOISE_DATABASE_DB_WRITER_TYPE_NOTIFICATION_DATA (xnoise_database_db_writer_notification_data_get_type ())
-typedef struct _XnoiseDatabaseDbWriterNotificationData XnoiseDatabaseDbWriterNotificationData;
+#define XNOISE_DATABASE_WRITER_TYPE_NOTIFICATION_DATA (xnoise_database_writer_notification_data_get_type ())
+typedef struct _XnoiseDatabaseWriterNotificationData XnoiseDatabaseWriterNotificationData;
 
 #define XNOISE_TYPE_DBUS (xnoise_dbus_get_type ())
 #define XNOISE_DBUS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DBUS, XnoiseDbus))
@@ -1033,55 +1033,55 @@ typedef enum  {
 	XNOISE_DATABASE_DB_ERROR_FAILED
 } XnoiseDatabaseDbError;
 #define XNOISE_DATABASE_DB_ERROR xnoise_database_db_error_quark ()
-struct _XnoiseDatabaseDbBrowser {
+struct _XnoiseDatabaseReader {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
-	XnoiseDatabaseDbBrowserPrivate * priv;
+	XnoiseDatabaseReaderPrivate * priv;
 };
 
-struct _XnoiseDatabaseDbBrowserClass {
+struct _XnoiseDatabaseReaderClass {
 	GTypeClass parent_class;
-	void (*finalize) (XnoiseDatabaseDbBrowser *self);
+	void (*finalize) (XnoiseDatabaseReader *self);
 };
 
-typedef void (*XnoiseDatabaseDbBrowserReaderCallback) (sqlite3* database, void* user_data);
+typedef void (*XnoiseDatabaseReaderReaderCallback) (sqlite3* database, void* user_data);
 struct _XnoiseStreamData {
 	gchar* name;
 	gchar* uri;
 };
 
-struct _XnoiseDatabaseDbWriter {
+struct _XnoiseDatabaseWriter {
 	GObject parent_instance;
-	XnoiseDatabaseDbWriterPrivate * priv;
+	XnoiseDatabaseWriterPrivate * priv;
 };
 
-struct _XnoiseDatabaseDbWriterClass {
+struct _XnoiseDatabaseWriterClass {
 	GObjectClass parent_class;
 };
 
 typedef enum  {
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_ARTIST,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_ALBUM,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_TITLE,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_VIDEO,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_ADD_STREAM,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_ARTIST,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_ALBUM,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_TITLE,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_REMOVE_URI,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_CLEAR_DB,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_UPDATE_PLAYCOUNT,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_UPDATE_LASTPLAYED,
-	XNOISE_DATABASE_DB_WRITER_CHANGE_TYPE_UPDATE_RATING
-} XnoiseDatabaseDbWriterChangeType;
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_ARTIST,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_ALBUM,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_TITLE,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_VIDEO,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_ADD_STREAM,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_REMOVE_ARTIST,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_REMOVE_ALBUM,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_REMOVE_TITLE,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_REMOVE_URI,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_CLEAR_DB,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_UPDATE_PLAYCOUNT,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_UPDATE_LASTPLAYED,
+	XNOISE_DATABASE_WRITER_CHANGE_TYPE_UPDATE_RATING
+} XnoiseDatabaseWriterChangeType;
 
-typedef void (*XnoiseDatabaseDbWriterChangeNotificationCallback) (XnoiseDatabaseDbWriterChangeType changetype, XnoiseItem* item, void* user_data);
-struct _XnoiseDatabaseDbWriterNotificationData {
-	XnoiseDatabaseDbWriterChangeNotificationCallback cb;
+typedef void (*XnoiseDatabaseWriterChangeNotificationCallback) (XnoiseDatabaseWriterChangeType changetype, XnoiseItem* item, void* user_data);
+struct _XnoiseDatabaseWriterNotificationData {
+	XnoiseDatabaseWriterChangeNotificationCallback cb;
 	gpointer cb_target;
 };
 
-typedef void (*XnoiseDatabaseDbWriterWriterCallback) (sqlite3* database, void* user_data);
+typedef void (*XnoiseDatabaseWriterWriterCallback) (sqlite3* database, void* user_data);
 struct _XnoiseDbus {
 	GObject parent_instance;
 	XnoiseDbusPrivate * priv;
@@ -2027,67 +2027,67 @@ GValue* xnoise_worker_job_get_arg (XnoiseWorkerJob* self, const gchar* name);
 guint xnoise_worker_job_get_timer_seconds (XnoiseWorkerJob* self);
 XnoiseWorkerExecutionType xnoise_worker_job_get_execution_type (XnoiseWorkerJob* self);
 GQuark xnoise_database_db_error_quark (void);
-gpointer xnoise_database_db_browser_ref (gpointer instance);
-void xnoise_database_db_browser_unref (gpointer instance);
-GParamSpec* xnoise_database_param_spec_db_browser (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void xnoise_database_value_set_db_browser (GValue* value, gpointer v_object);
-void xnoise_database_value_take_db_browser (GValue* value, gpointer v_object);
-gpointer xnoise_database_value_get_db_browser (const GValue* value);
-GType xnoise_database_db_browser_get_type (void) G_GNUC_CONST;
-XnoiseDatabaseDbBrowser* xnoise_database_db_browser_new (GError** error);
-XnoiseDatabaseDbBrowser* xnoise_database_db_browser_construct (GType object_type, GError** error);
-void xnoise_database_db_browser_cancel (XnoiseDatabaseDbBrowser* self);
-void xnoise_database_db_browser_do_callback_transaction (XnoiseDatabaseDbBrowser* self, XnoiseDatabaseDbBrowserReaderCallback cb, void* cb_target);
-gint32 xnoise_database_db_browser_count_videos (XnoiseDatabaseDbBrowser* self, gchar** searchtext);
-XnoiseItem* xnoise_database_db_browser_get_most_played (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
-XnoiseTrackData** xnoise_database_db_browser_get_all_tracks (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
-gboolean xnoise_database_db_browser_get_stream_td_for_id (XnoiseDatabaseDbBrowser* self, gint id, XnoiseTrackData** val);
-gboolean xnoise_database_db_browser_get_trackdata_for_uri (XnoiseDatabaseDbBrowser* self, gchar** uri, XnoiseTrackData** val);
-gchar** xnoise_database_db_browser_get_media_files (XnoiseDatabaseDbBrowser* self, int* result_length1);
-gchar** xnoise_database_db_browser_get_media_folders (XnoiseDatabaseDbBrowser* self, int* result_length1);
+gpointer xnoise_database_reader_ref (gpointer instance);
+void xnoise_database_reader_unref (gpointer instance);
+GParamSpec* xnoise_database_param_spec_reader (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_database_value_set_reader (GValue* value, gpointer v_object);
+void xnoise_database_value_take_reader (GValue* value, gpointer v_object);
+gpointer xnoise_database_value_get_reader (const GValue* value);
+GType xnoise_database_reader_get_type (void) G_GNUC_CONST;
+XnoiseDatabaseReader* xnoise_database_reader_new (GError** error);
+XnoiseDatabaseReader* xnoise_database_reader_construct (GType object_type, GError** error);
+void xnoise_database_reader_cancel (XnoiseDatabaseReader* self);
+void xnoise_database_reader_do_callback_transaction (XnoiseDatabaseReader* self, XnoiseDatabaseReaderReaderCallback cb, void* cb_target);
+gint32 xnoise_database_reader_count_videos (XnoiseDatabaseReader* self, gchar** searchtext);
+XnoiseItem* xnoise_database_reader_get_most_played (XnoiseDatabaseReader* self, gchar** searchtext, int* result_length1);
+XnoiseTrackData** xnoise_database_reader_get_all_tracks (XnoiseDatabaseReader* self, gchar** searchtext, int* result_length1);
+gboolean xnoise_database_reader_get_stream_td_for_id (XnoiseDatabaseReader* self, gint id, XnoiseTrackData** val);
+gboolean xnoise_database_reader_get_trackdata_for_uri (XnoiseDatabaseReader* self, gchar** uri, XnoiseTrackData** val);
+gchar** xnoise_database_reader_get_media_files (XnoiseDatabaseReader* self, int* result_length1);
+gchar** xnoise_database_reader_get_media_folders (XnoiseDatabaseReader* self, int* result_length1);
 GType xnoise_stream_data_get_type (void) G_GNUC_CONST;
 XnoiseStreamData* xnoise_stream_data_dup (const XnoiseStreamData* self);
 void xnoise_stream_data_free (XnoiseStreamData* self);
 void xnoise_stream_data_copy (const XnoiseStreamData* self, XnoiseStreamData* dest);
 void xnoise_stream_data_destroy (XnoiseStreamData* self);
-XnoiseStreamData* xnoise_database_db_browser_get_streams (XnoiseDatabaseDbBrowser* self, int* result_length1);
-XnoiseItem* xnoise_database_db_browser_get_some_lastused_items (XnoiseDatabaseDbBrowser* self, gint limit, gint offset, int* result_length1);
-guint xnoise_database_db_browser_count_lastused_items (XnoiseDatabaseDbBrowser* self);
-XnoiseTrackData** xnoise_database_db_browser_get_stream_data (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
-XnoiseTrackData** xnoise_database_db_browser_get_video_data (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
-XnoiseTrackData** xnoise_database_db_browser_get_trackdata_for_video (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
-XnoiseTrackData** xnoise_database_db_browser_get_trackdata_for_streams (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
-XnoiseItem* xnoise_database_db_browser_get_artists_with_search (XnoiseDatabaseDbBrowser* self, gchar** searchtext, int* result_length1);
-XnoiseTrackData** xnoise_database_db_browser_get_trackdata_by_albumid (XnoiseDatabaseDbBrowser* self, gchar** searchtext, gint32 id, int* result_length1);
-XnoiseTrackData** xnoise_database_db_browser_get_trackdata_by_artistid (XnoiseDatabaseDbBrowser* self, gchar** searchtext, gint32 id, int* result_length1);
-XnoiseItem* xnoise_database_db_browser_get_artistitem_by_artistid (XnoiseDatabaseDbBrowser* self, gchar** searchtext, gint32 id);
-XnoiseTrackData* xnoise_database_db_browser_get_trackdata_by_titleid (XnoiseDatabaseDbBrowser* self, gchar** searchtext, gint32 id);
-XnoiseItem* xnoise_database_db_browser_get_albums_with_search (XnoiseDatabaseDbBrowser* self, gchar** searchtext, gint32 id, int* result_length1);
-GType xnoise_database_db_writer_get_type (void) G_GNUC_CONST;
-GType xnoise_database_db_writer_change_type_get_type (void) G_GNUC_CONST;
-XnoiseDatabaseDbWriter* xnoise_database_db_writer_new (GError** error);
-XnoiseDatabaseDbWriter* xnoise_database_db_writer_construct (GType object_type, GError** error);
-GType xnoise_database_db_writer_notification_data_get_type (void) G_GNUC_CONST;
-XnoiseDatabaseDbWriterNotificationData* xnoise_database_db_writer_notification_data_dup (const XnoiseDatabaseDbWriterNotificationData* self);
-void xnoise_database_db_writer_notification_data_free (XnoiseDatabaseDbWriterNotificationData* self);
-void xnoise_database_db_writer_register_change_callback (XnoiseDatabaseDbWriter* self, XnoiseDatabaseDbWriterNotificationData* cbd);
-gchar* xnoise_database_db_writer_get_uri_for_item_id (XnoiseDatabaseDbWriter* self, gint32 id);
-void xnoise_database_db_writer_inc_playcount (XnoiseDatabaseDbWriter* self, const gchar* uri);
-void xnoise_database_db_writer_update_lastplay_time (XnoiseDatabaseDbWriter* self, const gchar* uri, gint64 playtime);
-gchar** xnoise_database_db_writer_get_media_folders (XnoiseDatabaseDbWriter* self, int* result_length1);
-gboolean xnoise_database_db_writer_get_trackdata_for_stream (XnoiseDatabaseDbWriter* self, const gchar* uri, XnoiseTrackData** val);
-gboolean xnoise_database_db_writer_update_title (XnoiseDatabaseDbWriter* self, XnoiseItem** item, XnoiseTrackData** td);
-gboolean xnoise_database_db_writer_insert_title (XnoiseDatabaseDbWriter* self, XnoiseTrackData** td);
-void xnoise_database_db_writer_add_single_stream_to_collection (XnoiseDatabaseDbWriter* self, const gchar* uri, const gchar* name);
-void xnoise_database_db_writer_add_single_folder_to_collection (XnoiseDatabaseDbWriter* self, const gchar* mfolder);
-void xnoise_database_db_writer_write_final_tracks_to_db (XnoiseDatabaseDbWriter* self, XnoiseWorkerJob* job, GError** error);
-void xnoise_database_db_writer_do_callback_transaction (XnoiseDatabaseDbWriter* self, XnoiseDatabaseDbWriterWriterCallback cb, void* cb_target);
-void xnoise_database_db_writer_del_all_folders (XnoiseDatabaseDbWriter* self);
-void xnoise_database_db_writer_del_all_streams (XnoiseDatabaseDbWriter* self);
-gboolean xnoise_database_db_writer_delete_local_media_data (XnoiseDatabaseDbWriter* self);
-void xnoise_database_db_writer_begin_transaction (XnoiseDatabaseDbWriter* self);
-void xnoise_database_db_writer_commit_transaction (XnoiseDatabaseDbWriter* self);
-gboolean xnoise_database_db_writer_get_in_transaction (XnoiseDatabaseDbWriter* self);
+XnoiseStreamData* xnoise_database_reader_get_streams (XnoiseDatabaseReader* self, int* result_length1);
+XnoiseItem* xnoise_database_reader_get_some_lastused_items (XnoiseDatabaseReader* self, gint limit, gint offset, int* result_length1);
+guint xnoise_database_reader_count_lastused_items (XnoiseDatabaseReader* self);
+XnoiseTrackData** xnoise_database_reader_get_stream_data (XnoiseDatabaseReader* self, gchar** searchtext, int* result_length1);
+XnoiseTrackData** xnoise_database_reader_get_video_data (XnoiseDatabaseReader* self, gchar** searchtext, int* result_length1);
+XnoiseTrackData** xnoise_database_reader_get_trackdata_for_video (XnoiseDatabaseReader* self, gchar** searchtext, int* result_length1);
+XnoiseTrackData** xnoise_database_reader_get_trackdata_for_streams (XnoiseDatabaseReader* self, gchar** searchtext, int* result_length1);
+XnoiseItem* xnoise_database_reader_get_artists_with_search (XnoiseDatabaseReader* self, gchar** searchtext, int* result_length1);
+XnoiseTrackData** xnoise_database_reader_get_trackdata_by_albumid (XnoiseDatabaseReader* self, gchar** searchtext, gint32 id, int* result_length1);
+XnoiseTrackData** xnoise_database_reader_get_trackdata_by_artistid (XnoiseDatabaseReader* self, gchar** searchtext, gint32 id, int* result_length1);
+XnoiseItem* xnoise_database_reader_get_artistitem_by_artistid (XnoiseDatabaseReader* self, gchar** searchtext, gint32 id);
+XnoiseTrackData* xnoise_database_reader_get_trackdata_by_titleid (XnoiseDatabaseReader* self, gchar** searchtext, gint32 id);
+XnoiseItem* xnoise_database_reader_get_albums_with_search (XnoiseDatabaseReader* self, gchar** searchtext, gint32 id, int* result_length1);
+GType xnoise_database_writer_get_type (void) G_GNUC_CONST;
+GType xnoise_database_writer_change_type_get_type (void) G_GNUC_CONST;
+XnoiseDatabaseWriter* xnoise_database_writer_new (GError** error);
+XnoiseDatabaseWriter* xnoise_database_writer_construct (GType object_type, GError** error);
+GType xnoise_database_writer_notification_data_get_type (void) G_GNUC_CONST;
+XnoiseDatabaseWriterNotificationData* xnoise_database_writer_notification_data_dup (const XnoiseDatabaseWriterNotificationData* self);
+void xnoise_database_writer_notification_data_free (XnoiseDatabaseWriterNotificationData* self);
+void xnoise_database_writer_register_change_callback (XnoiseDatabaseWriter* self, XnoiseDatabaseWriterNotificationData* cbd);
+gchar* xnoise_database_writer_get_uri_for_item_id (XnoiseDatabaseWriter* self, gint32 id);
+void xnoise_database_writer_inc_playcount (XnoiseDatabaseWriter* self, const gchar* uri);
+void xnoise_database_writer_update_lastplay_time (XnoiseDatabaseWriter* self, const gchar* uri, gint64 playtime);
+gchar** xnoise_database_writer_get_media_folders (XnoiseDatabaseWriter* self, int* result_length1);
+gboolean xnoise_database_writer_get_trackdata_for_stream (XnoiseDatabaseWriter* self, const gchar* uri, XnoiseTrackData** val);
+gboolean xnoise_database_writer_update_title (XnoiseDatabaseWriter* self, XnoiseItem** item, XnoiseTrackData** td);
+gboolean xnoise_database_writer_insert_title (XnoiseDatabaseWriter* self, XnoiseTrackData** td);
+void xnoise_database_writer_add_single_stream_to_collection (XnoiseDatabaseWriter* self, const gchar* uri, const gchar* name);
+void xnoise_database_writer_add_single_folder_to_collection (XnoiseDatabaseWriter* self, const gchar* mfolder);
+void xnoise_database_writer_write_final_tracks_to_db (XnoiseDatabaseWriter* self, XnoiseWorkerJob* job, GError** error);
+void xnoise_database_writer_do_callback_transaction (XnoiseDatabaseWriter* self, XnoiseDatabaseWriterWriterCallback cb, void* cb_target);
+void xnoise_database_writer_del_all_folders (XnoiseDatabaseWriter* self);
+void xnoise_database_writer_del_all_streams (XnoiseDatabaseWriter* self);
+gboolean xnoise_database_writer_delete_local_media_data (XnoiseDatabaseWriter* self);
+void xnoise_database_writer_begin_transaction (XnoiseDatabaseWriter* self);
+void xnoise_database_writer_commit_transaction (XnoiseDatabaseWriter* self);
+gboolean xnoise_database_writer_get_in_transaction (XnoiseDatabaseWriter* self);
 GType xnoise_dbus_get_type (void) G_GNUC_CONST;
 GType player_dbus_service_get_type (void) G_GNUC_CONST;
 guint player_dbus_service_register_object (void* object, GDBusConnection* connection, const gchar* path, GError** error);
@@ -2871,8 +2871,8 @@ extern XnoiseItemHandlerManager* xnoise_itemhandler_manager;
 extern XnoiseItemConverter* xnoise_item_converter;
 extern GMainContext* xnoise_mc;
 extern GHashTable* xnoise_dockable_media_sources;
-extern XnoiseDatabaseDbBrowser* xnoise_db_browser;
-extern XnoiseDatabaseDbWriter* xnoise_db_writer;
+extern XnoiseDatabaseReader* xnoise_db_reader;
+extern XnoiseDatabaseWriter* xnoise_db_writer;
 extern XnoiseStatistics* xnoise_statistics;
 extern XnoiseGstPlayer* xnoise_gst_player;
 extern XnoisePluginModuleLoader* xnoise_plugin_loader;

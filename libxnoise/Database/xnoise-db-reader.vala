@@ -1,4 +1,4 @@
-/* xnoise-db-browser.vala
+/* xnoise-db-reader.vala
  *
  * Copyright (C) 2009-2012  Jörn Magens
  *
@@ -38,7 +38,7 @@ public errordomain Xnoise.Database.DbError {
     FAILED;
 }
 
-public class Xnoise.Database.DbBrowser {
+public class Xnoise.Database.Reader {
     private const string DATABASE_NAME = "db.sqlite";
     private const string SETTINGS_FOLDER = ".xnoise";
     private string DATABASE;
@@ -54,7 +54,7 @@ public class Xnoise.Database.DbBrowser {
     private static const string STMT_GET_RADIO_DATA    =
         "SELECT DISTINCT id, name, uri FROM streams WHERE utf8_lower(name) LIKE ? ORDER BY name COLLATE CUSTOM01 DESC";
 
-    public DbBrowser() throws DbError {
+    public Reader() throws DbError {
         DATABASE = dbFileName();
         db = null;
         if(Sqlite.Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) {
@@ -100,7 +100,7 @@ public class Xnoise.Database.DbBrowser {
         }
         return 0;
     }
-    //~DbBrowser() {
+    //~Reader() {
     //    print("dtor db browser\n");
     //}
 

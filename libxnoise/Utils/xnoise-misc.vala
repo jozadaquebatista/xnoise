@@ -48,8 +48,8 @@ namespace Xnoise {
     
     public HashTable<string,DockableMedia> dockable_media_sources;
 
-    public static Database.DbBrowser db_browser;
-    public static Database.DbWriter  db_writer;
+    public static Database.Reader db_reader;
+    public static Database.Writer  db_writer;
     
     public static Statistics statistics;
     
@@ -115,8 +115,8 @@ namespace Xnoise {
         Database.DbCreator.check_tables(ref is_first_start);
         
         try {
-            db_browser = new DbBrowser();
-            db_writer  = new DbWriter();
+            db_reader = new Database.Reader();
+            db_writer  = new Database.Writer();
         }
         catch(DbError e) {
             print("%s", e.message);
@@ -136,7 +136,7 @@ namespace Xnoise {
         DockableMedia d;
         d = new MediaBrowserDockable(); // Media Browser
         dockable_media_sources.insert(d.name(), d);
-        d = new DockableDynamicPlaylists(); // Dynamic Playlists
+        d = new DockablePlaylistMostplayed(); // Dynamic Playlists
         dockable_media_sources.insert(d.name(), d);
         
         

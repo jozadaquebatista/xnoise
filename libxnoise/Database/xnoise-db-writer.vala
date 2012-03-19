@@ -33,7 +33,7 @@ using Sqlite;
 using Xnoise;
 using Xnoise.Services;
 
-public class Xnoise.Database.DbWriter : GLib.Object {
+public class Xnoise.Database.Writer : GLib.Object {
     private const string DATABASE_NAME = "db.sqlite";
     private const string SETTINGS_FOLDER = ".xnoise";
     private Sqlite.Database db = null;
@@ -188,7 +188,7 @@ public class Xnoise.Database.DbWriter : GLib.Object {
     private static const string STMT_ADD_STATISTIC =
         "INSERT INTO statistics (uri, playcount) VALUES (?,0)";
     
-    public DbWriter() throws DbError {
+    public Writer() throws DbError {
         this.db = null;
         this.db = get_db();
         
@@ -399,6 +399,10 @@ public class Xnoise.Database.DbWriter : GLib.Object {
         if(stmt.step() != Sqlite.DONE) {
             this.db_error();
             return;
+        }
+        foreach(NotificationData cxd in change_callbacks) {
+            if(cxd.cb != null)
+                cxd.cb(ChangeType.UPDATE_PLAYCOUNT, null);
         }
     }
     

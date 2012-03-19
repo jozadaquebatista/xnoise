@@ -83,7 +83,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 return false;
             });
         });
-        DbWriter.NotificationData cbd = DbWriter.NotificationData();
+        Writer.NotificationData cbd = Writer.NotificationData();
         cbd.cb = database_change_cb;
         db_writer.register_change_callback(cbd);
     }
@@ -92,9 +92,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private bool stream_in_tree = false;
     
     // this function is running in db thread so use idle
-    private void database_change_cb(DbWriter.ChangeType changetype, Item? item) {
+    private void database_change_cb(Writer.ChangeType changetype, Item? item) {
         switch(changetype) {
-            case DbWriter.ChangeType.ADD_ARTIST:
+            case Writer.ChangeType.ADD_ARTIST:
                 //print("got new artist\n");
                 if(item.db_id == -1){
                     print("GOT -1\n");
@@ -105,7 +105,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 job.item = item;
                 db_worker.push_job(job);
                 break;
-            case DbWriter.ChangeType.ADD_VIDEO:
+            case Writer.ChangeType.ADD_VIDEO:
                 if(video_in_tree)
                     break;
                 video_in_tree = true;
@@ -160,7 +160,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     return false;
                 });
                 break;
-            case DbWriter.ChangeType.ADD_STREAM:
+            case Writer.ChangeType.ADD_STREAM:
                 if(stream_in_tree)
                     break;
                 stream_in_tree = true;
@@ -221,7 +221,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     
     private bool add_imported_artist_job(Worker.Job job) {
 //        int32 _id = job.item.db_id;
-        job.item = db_browser.get_artistitem_by_artistid(ref searchtext, job.item.db_id); // necessary because of search
+        job.item = db_reader.get_artistitem_by_artistid(ref searchtext, job.item.db_id); // necessary because of search
         if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
             return false;
         Idle.add( () => {
@@ -482,7 +482,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     
     private bool handle_streams(Worker.Job job) {
         
-        job.track_dat = db_browser.get_stream_data(ref searchtext);
+        job.track_dat = db_reader.get_stream_data(ref searchtext);
         
         if(job.track_dat.length == 0)
             return false;
@@ -517,7 +517,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
     
     private bool handle_videos(Worker.Job job) {
-        int32 cnt = db_browser.count_videos(ref searchtext);
+        int32 cnt = db_reader.count_videos(ref searchtext);
         if(cnt == 0)
             return false;
         Idle.add( () => {
@@ -547,7 +547,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
     
     private bool load_videos_job(Worker.Job job) {
-        job.track_dat = db_browser.get_video_data(ref searchtext);
+        job.track_dat = db_reader.get_video_data(ref searchtext);
         
         if(job.track_dat.length == 0)
             return false;
@@ -592,7 +592,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
 
     private bool load_streams_job(Worker.Job job) {
-        job.track_dat = db_browser.get_stream_data(ref searchtext);
+        job.track_dat = db_reader.get_stream_data(ref searchtext);
         
         if(job.track_dat.length == 0)
             return false;
@@ -628,7 +628,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         Timer t = new Timer();
         ulong x;
         t.start();
-        job.items = db_browser.get_artists_with_search(ref this.searchtext);
+        job.items = db_reader.get_artists_with_search(ref this.searchtext);
         t.stop();
         t.elapsed(out x);
         print("%lu µs\n", x);
@@ -725,7 +725,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private bool load_artists_job(Worker.Job job) {
         if(this.populating_model)
             return false;
-        job.items = db_browser.get_albums_with_search(ref searchtext, (int32)job.get_arg("id"));
+        job.items = db_reader.get_albums_with_search(ref searchtext, (int32)job.get_arg("id"));
         //print("job.items cnt = %d\n", job.items.length);
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
@@ -846,7 +846,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         if(this.populating_model)
             return false;
         int32 al = (int32)job.get_arg("album");
-        job.track_dat = db_browser.get_trackdata_by_albumid(ref searchtext, al);
+        job.track_dat = db_reader.get_trackdata_by_albumid(ref searchtext, al);
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if((row_ref == null) || (!row_ref.valid()))
