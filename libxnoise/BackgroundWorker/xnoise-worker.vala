@@ -71,7 +71,7 @@ public class Xnoise.Worker : Object {
         REPEATED                // repeat until worker function returns false
     }
     
-    public class Job : Object {
+    public class Job {
         private HashTable<string,Value?> ht = new HashTable<string,Value?> (str_hash, str_equal);
         private ExecutionType _execution_type;
         

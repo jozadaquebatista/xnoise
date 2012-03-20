@@ -958,7 +958,8 @@ struct _XnoiseDndData {
 
 typedef gboolean (*XnoiseWorkerWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
 struct _XnoiseWorkerJob {
-	GObject parent_instance;
+	GTypeInstance parent_instance;
+	volatile int ref_count;
 	XnoiseWorkerJobPrivate * priv;
 	XnoiseItem* item;
 	XnoiseItem* items;
@@ -977,7 +978,8 @@ struct _XnoiseWorkerJob {
 };
 
 struct _XnoiseWorkerJobClass {
-	GObjectClass parent_class;
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseWorkerJob *self);
 };
 
 typedef enum  {
@@ -1909,6 +1911,12 @@ GType xnoise_worker_get_type (void) G_GNUC_CONST;
 GType xnoise_worker_execution_type_get_type (void) G_GNUC_CONST;
 XnoiseWorker* xnoise_worker_new (GMainContext* mc);
 XnoiseWorker* xnoise_worker_construct (GType object_type, GMainContext* mc);
+gpointer xnoise_worker_job_ref (gpointer instance);
+void xnoise_worker_job_unref (gpointer instance);
+GParamSpec* xnoise_worker_param_spec_job (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_worker_value_set_job (GValue* value, gpointer v_object);
+void xnoise_worker_value_take_job (GValue* value, gpointer v_object);
+gpointer xnoise_worker_value_get_job (const GValue* value);
 GType xnoise_worker_job_get_type (void) G_GNUC_CONST;
 void xnoise_worker_push_job (XnoiseWorker* self, XnoiseWorkerJob* j);
 gint xnoise_worker_get_thread_id (XnoiseWorker* self);
@@ -2210,6 +2218,8 @@ XnoiseLyricsLoader* xnoise_lyrics_view_get_loader (XnoiseLyricsView* self);
 XnoiseMain* xnoise_main_new (void);
 XnoiseMain* xnoise_main_construct (GType object_type);
 void xnoise_main_immediate_play (XnoiseMain* self, const gchar* uri);
+void xnoise_main_save_activated_plugins (XnoiseMain* self);
+void xnoise_main_save_tracklist (XnoiseMain* self);
 void xnoise_main_quit (XnoiseMain* self);
 gint xnoise_main_get_thread_id (XnoiseMain* self);
 XnoiseMain* xnoise_main_get_instance (void);

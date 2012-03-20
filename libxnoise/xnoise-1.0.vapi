@@ -724,6 +724,8 @@ namespace Xnoise {
 		public Main ();
 		public void immediate_play (string uri);
 		public void quit ();
+		public void save_activated_plugins ();
+		public void save_tracklist ();
 		public static Xnoise.Main instance { get; }
 		public int thread_id { get; }
 	}
@@ -1002,7 +1004,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Worker : GLib.Object {
-		public class Job : GLib.Object {
+		public class Job {
 			public int32[] big_counter;
 			public GLib.Cancellable? cancellable;
 			public int[] counter;

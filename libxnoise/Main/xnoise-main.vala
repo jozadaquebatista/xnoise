@@ -155,7 +155,7 @@ public class Xnoise.Main : GLib.Object {
         instance.quit();
     }
 
-    internal void save_activated_plugins() {
+    public void save_activated_plugins() {
         //print("\nsaving activated plugins...\n");
         string[]? activatedplugins = {};
         foreach(string name in plugin_loader.plugin_htable.get_keys()) {
@@ -167,8 +167,7 @@ public class Xnoise.Main : GLib.Object {
         Params.set_string_list_value("activated_plugins", activatedplugins);
     }
 
-    
-    internal void save_tracklist() {
+    public void save_tracklist() {
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_final_tracks_to_db_job);
         job.items = main_window.trackList.tracklistmodel.get_all_tracks();
         job.finished.connect( () => {
