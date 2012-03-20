@@ -402,6 +402,30 @@ public class Xnoise.Database.Reader {
         return (owned)val;
     }
 
+    private static const string STMT_GET_VIDEO_ITEMS =
+        "SELECT DISTINCT t.title, t.id, u.name FROM items t, uris u WHERE t.uri = u.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY utf8_lower(t.title) COLLATE CUSTOM01 DESC";
+
+    public Item[]? get_video_items(ref string searchtext) {
+        Item[] val = {};
+        Statement stmt;
+        
+        this.db.prepare_v2(STMT_GET_VIDEO_ITEMS, -1, out stmt);
+        
+        if((stmt.bind_int (1, (int)ItemType.LOCAL_VIDEO_TRACK) != Sqlite.OK)||
+           (stmt.bind_text(2, "%%%s%%".printf(searchtext))     != Sqlite.OK)) {
+            this.db_error();
+            return (owned)val;
+        }
+        while(stmt.step() == Sqlite.ROW) {
+            Item i = Item(ItemType.LOCAL_VIDEO_TRACK, stmt.column_text(2), stmt.column_int(1));
+            i.text = stmt.column_text(0);
+            val += i;
+        }
+        if(val.length == 0)
+            return null;
+        return (owned)val;
+    }
+
     private static const string STMT_GET_VIDEO_DATA =
         "SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, t.genre FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY utf8_lower(t.title) COLLATE CUSTOM01 DESC";
 

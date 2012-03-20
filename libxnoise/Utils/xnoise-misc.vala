@@ -140,7 +140,8 @@ namespace Xnoise {
         dockable_media_sources.insert(d.name(), d);
         d = new DockablePlaylistLastplayed(); // Dynamic Playlist Last played
         dockable_media_sources.insert(d.name(), d);
-        
+        d = new DockableVideos(); // Dynamic Playlist Last played
+        dockable_media_sources.insert(d.name(), d);
         
         // STATIC WIDGETS
         tlm = new TrackListModel();

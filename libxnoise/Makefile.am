@@ -44,6 +44,9 @@ libxnoise_la_SOURCES = \
     DockableMedia/DynamicPlaylists/xnoise-dockable-playlist-lastplayed.vala \
     DockableMedia/DynamicPlaylists/xnoise-lastplayed-treeview.vala \
     DockableMedia/DynamicPlaylists/xnoise-lastplayed-treeview-model.vala \
+    DockableMedia/DynamicPlaylists/xnoise-dockable-videos.vala \
+    DockableMedia/DynamicPlaylists/xnoise-treeview-videos.vala \
+    DockableMedia/DynamicPlaylists/xnoise-treeview-videos-model.vala \
     DockableMedia/xnoise-dockable-media.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
     ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala \

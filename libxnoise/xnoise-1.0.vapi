@@ -38,6 +38,7 @@ namespace Xnoise {
 			public bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
 			public Xnoise.TrackData[] get_trackdata_for_video (ref string searchtext);
 			public Xnoise.TrackData[] get_video_data (ref string searchtext);
+			public Xnoise.Item[]? get_video_items (ref string searchtext);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class Writer : GLib.Object {
