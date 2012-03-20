@@ -53,7 +53,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private int idx_tracklist;
     private int idx_video;
     private int idx_lyrics;
-    private uint search_idlesource = 0;
     private UIManager ui_manager = new UIManager();
     private int _posX;
     private int _posY;
@@ -407,9 +406,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         job.big_counter[0] += job.items.length;
         TrackData[] tda = {};
         TrackData[] tmp;
-        string searchtext = EMPTYSTRING;
         foreach(Item? item in job.items) {
-            tmp = item_converter.to_trackdata(item, ref searchtext);
+            tmp = item_converter.to_trackdata(item, EMPTYSTRING);
             if(tmp == null) {
                 var ttd = new TrackData();
                 ttd.item = item;
@@ -604,8 +602,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     if(e.state != 0x0014) // Ctrl Modifier
                         return false;
                     searchEntryMB.text = EMPTYSTRING;
+                    global.searchtext = EMPTYSTRING;
                     searchEntryMB.get_style_context().remove_class("not-found");
-                    this.mediaBr.on_searchtext_changed();
+//                    this.mediaBr.on_searchtext_changed();
                 }
                 return true;
             case 1_KEY: {
@@ -1632,13 +1631,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             });
             this.searchEntryMB.key_release_event.connect( (s, e) => {
                 var entry = (Entry)s;
-                if(search_idlesource != 0)
-                    Source.remove(search_idlesource);
-                search_idlesource = Idle.add( () => {
-                    this.mediaBr.on_searchtext_changed();
-                    this.search_idlesource = 0;
-                    return false;
-                });
+                global.searchtext = entry.text;
                 if(entry.text != EMPTYSTRING) {
                     searchEntryMB.get_style_context().add_class("not-found");
                 }
@@ -1651,12 +1644,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.searchEntryMB.icon_press.connect( (s, p0, p1) => { 
                 // s:Entry, p0:Position, p1:Gdk.Event
                 if(p0 == Gtk.EntryIconPosition.PRIMARY) {
-                    this.mediaBr.on_searchtext_changed();
+                    global.sign_searchtext_changed(global.searchtext);
                 }
                 if(p0 == Gtk.EntryIconPosition.SECONDARY) {
-                    s.text = EMPTYSTRING;
+                    ((Entry)s).text = EMPTYSTRING;
+                    global.searchtext = EMPTYSTRING;
                     searchEntryMB.get_style_context().remove_class("not-found");
-                    this.mediaBr.on_searchtext_changed();
+//                    this.mediaBr.on_searchtext_changed();
                 }
             });
             

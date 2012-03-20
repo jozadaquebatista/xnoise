@@ -83,7 +83,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
             });
             return false;
         }
-        tmp = item_converter.to_trackdata(item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
+        tmp = item_converter.to_trackdata(item, global.searchtext);
         if(tmp == null && tmp[0] != null)
             return false;
         

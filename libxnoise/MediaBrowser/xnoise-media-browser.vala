@@ -195,19 +195,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
         return false;
     }
-    
-    public void on_searchtext_changed() {
-        string txt = main_window.searchEntryMB.text.strip().down();
-        if(txt != null) {
-            if(txt == mediabrowsermodel.searchtext)
-                return;
-            mediabrowsermodel.searchtext = txt;
-        }
-        else {
-            mediabrowsermodel.searchtext = EMPTYSTRING;
-        }
-        mediabrowsermodel.filter();
-    }
 
     private bool on_button_press(Gdk.EventButton e) {
         Gtk.TreePath treepath = null;

@@ -67,8 +67,7 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
     }
     
     private bool insert_job(Worker.Job job) {
-        string searchtext = "";
-        job.items = db_reader.get_video_items(ref searchtext);
+        job.items = db_reader.get_video_items(EMPTYSTRING);
         Idle.add( () => {
             TreeIter iter;
             foreach(Item? i in job.items) {

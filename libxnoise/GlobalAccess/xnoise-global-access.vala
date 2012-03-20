@@ -101,6 +101,8 @@ public class Xnoise.GlobalAccess : GLib.Object {
     public signal void uri_repeated(string? uri);
     public signal void tag_changed(ref string? newuri, string? tagname, string? tagvalue);
     
+    public signal void sign_searchtext_changed(string text);
+    
     public signal void caught_eos_from_player();
     //signal to be triggered after a change of the media folders
     public signal void sig_media_path_changed();
@@ -121,11 +123,27 @@ public class Xnoise.GlobalAccess : GLib.Object {
     private string? _current_uri = null;
     private Gtk.TreeRowReference? _position_reference = null;
     private Gtk.TreeRowReference? _position_reference_next = null;
-    
+    private string _searchtext = "";
     private uint check_image_for_current_track_source = 0;
     
     // PROPERTIES
-
+    
+    //searchtext shall be changed by searchentry, only!
+    //searchtext is without trailing or leading white space
+    //serachtext is always lower case
+    internal string searchtext { 
+        get {
+            return _searchtext;
+        }
+        set {
+            string stval = value.strip().down();
+            if(_searchtext == stval)
+                return;
+            _searchtext = stval;
+            sign_searchtext_changed(_searchtext);
+        }
+    }
+    
     public PlayerState player_state {
         get {
             return _player_state;

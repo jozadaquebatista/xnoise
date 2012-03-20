@@ -496,9 +496,7 @@ public class Xnoise.MediaImporter : GLib.Object {
             if(item.type == ItemType.UNKNOWN) {
                 continue;
             }
-            string st = EMPTYSTRING;
-            
-            TrackData[]? track_dat = item_converter.to_trackdata(item, ref st);
+            TrackData[]? track_dat = item_converter.to_trackdata(item, EMPTYSTRING);
             
             if(track_dat != null) {
                 foreach(TrackData td in track_dat) {

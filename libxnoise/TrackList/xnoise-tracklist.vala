@@ -608,7 +608,7 @@ public class Xnoise.TrackList : TreeView, IParams {
         foreach(DndData ix in ids) {
             Item i = Item(ix.mediatype, null, ix.db_id);
             print("insert type %s\n", i.type.to_string());
-            TrackData[]? tmp = item_converter.to_trackdata(i, ref main_window.mediaBr.mediabrowsermodel.searchtext);
+            TrackData[]? tmp = item_converter.to_trackdata(i, global.searchtext);
             if(tmp != null) {
                 foreach(TrackData tmpdata in tmp) {
                     if(tmpdata == null) {
@@ -728,9 +728,8 @@ public class Xnoise.TrackList : TreeView, IParams {
             else
                 item.type = Xnoise.ItemType.STREAM; //When it is call from playlist then acept STREAM
         
-        string sstr = EMPTYSTRING;
         TrackData td = new TrackData();
-        TrackData[]? tmp = item_converter.to_trackdata(item, ref sstr);
+        TrackData[]? tmp = item_converter.to_trackdata(item, EMPTYSTRING);
         if(tmp != null && tmp[0] != null) {
             td = tmp[0];
             artist         = td.artist;

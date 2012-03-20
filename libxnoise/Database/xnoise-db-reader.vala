@@ -124,7 +124,7 @@ public class Xnoise.Database.Reader {
     }
 
     private static const string STMT_GET_VIDEO_COUNT = "SELECT COUNT (t.id) FROM items t WHERE t.mediatype=? AND (utf8_lower(t.title) LIKE ?)";
-    public int32 count_videos(ref string searchtext) {
+    public int32 count_videos(string searchtext) {
         Statement stmt;
         int count = 0;
         
@@ -145,7 +145,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_LAST_PLAYED =
         "SELECT ar.name, t.title, t.mediatype, t.id, u.name, st.lastplayTime FROM artists ar, items t, albums al, uris u, statistics st WHERE st.lastplayTime > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name ORDER BY st.lastplayTime DESC LIMIT 100";
 
-    public Item[]? get_last_played(ref string searchtext) {
+    public Item[]? get_last_played(string searchtext) {
         Statement stmt;
         Item[] retv = {};
         string st = "%%%s%%".printf(searchtext);
@@ -168,7 +168,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_MOST_PLAYED =
         "SELECT ar.name, t.title, t.mediatype, t.id, u.name, st.playcount FROM artists ar, items t, albums al, uris u, statistics st WHERE st.playcount > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name ORDER BY st.playcount DESC LIMIT 100";
 
-    public Item[]? get_most_played(ref string searchtext) {
+    public Item[]? get_most_played(string searchtext) {
         Statement stmt;
         Item[] retv = {};
         string st = "%%%s%%".printf(searchtext);
@@ -190,7 +190,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_ALL_TRACKDATA =
         "SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC, t.tracknumber ASC";
 
-    public TrackData[]? get_all_tracks(ref string searchtext) {
+    public TrackData[]? get_all_tracks(string searchtext) {
         Statement stmt;
         TrackData[] retv = {};
         string st = "%%%s%%".printf(searchtext);
@@ -386,7 +386,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_STREAM_DATA =
         "SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE utf8_lower(s.name) LIKE ? ORDER BY utf8_lower(s.name) COLLATE CUSTOM01 DESC";
 
-    public TrackData[] get_stream_data(ref string searchtext) {
+    public TrackData[] get_stream_data(string searchtext) {
         TrackData[] val = {};
         Statement stmt;
         
@@ -411,7 +411,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_VIDEO_ITEMS =
         "SELECT DISTINCT t.title, t.id, u.name FROM items t, uris u WHERE t.uri = u.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY utf8_lower(t.title) COLLATE CUSTOM01 DESC";
 
-    public Item[]? get_video_items(ref string searchtext) {
+    public Item[]? get_video_items(string searchtext) {
         Item[] val = {};
         Statement stmt;
         
@@ -435,7 +435,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_VIDEO_DATA =
         "SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, t.genre FROM artists ar, items t, albums al, uris u WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY utf8_lower(t.title) COLLATE CUSTOM01 DESC";
 
-    public TrackData[] get_video_data(ref string searchtext) {
+    public TrackData[] get_video_data(string searchtext) {
         TrackData[] val = {};
         Statement stmt;
         
@@ -464,7 +464,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_TRACKDATA_FOR_VIDEO =
         "SELECT DISTINCT t.title, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.mediatype = ? AND (utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY utf8_lower(t.title) COLLATE CUSTOM01 ASC";
 
-    public TrackData[] get_trackdata_for_video(ref string searchtext) {
+    public TrackData[] get_trackdata_for_video(string searchtext) {
         TrackData[] val = {};
         Statement stmt;
         
@@ -494,7 +494,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_TRACKDATA_FOR_STREAMS =
         "SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE utf8_lower(s.name) LIKE ? OR utf8_lower(s.uri) LIKE ? ORDER BY utf8_lower(s.name) COLLATE CUSTOM01 ASC";
 
-    public TrackData[] get_trackdata_for_streams(ref string searchtext) {
+    public TrackData[] get_trackdata_for_streams(string searchtext) {
         TrackData[] val = {};
         Statement stmt;
         string st = "%%%s%%".printf(searchtext);
@@ -525,7 +525,7 @@ public class Xnoise.Database.Reader {
     private Statement get_artists_with_search_stmt;
     private Statement get_artists_with_search2_stmt;
     
-    public Item[] get_artists_with_search(ref string searchtext) {
+    public Item[] get_artists_with_search(string searchtext) {
         Item[] val = {};
         if(searchtext != EMPTYSTRING) {
             string st = "%%%s%%".printf(searchtext);
@@ -559,7 +559,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
         "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
-    public TrackData[]? get_trackdata_by_albumid(ref string searchtext, int32 id) {
+    public TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id) {
         TrackData[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {
@@ -603,7 +603,7 @@ public class Xnoise.Database.Reader {
 //    private static const string STMT_GET_TRACKDATA_BY_VIDEOID =
 //        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
 //    
-//    public TrackData[]? get_trackdata_by_videoid(ref string searchtext, int32 id) {
+//    public TrackData[]? get_trackdata_by_videoid(string searchtext, int32 id) {
 //        TrackData[] val = {};
 //        Statement stmt;
 //        if(searchtext != EMPTYSTRING) {
@@ -647,7 +647,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID =
         "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
-    public TrackData[]? get_trackdata_by_artistid(ref string searchtext, int32 id) {
+    public TrackData[]? get_trackdata_by_artistid(string searchtext, int32 id) {
         TrackData[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {
@@ -709,7 +709,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_ARTISTITEM_BY_ARTISTID =
         "SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ?";
     
-    public Item? get_artistitem_by_artistid(ref string searchtext, int32 id) {
+    public Item? get_artistitem_by_artistid(string searchtext, int32 id) {
         Statement stmt;
         Item? i = Item(ItemType.UNKNOWN);
         if(searchtext != EMPTYSTRING) {
@@ -740,7 +740,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_TRACKDATA_BY_TITLEID =
         "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.id = ?";
         
-    public TrackData? get_trackdata_by_titleid(ref string searchtext, int32 id) {
+    public TrackData? get_trackdata_by_titleid(string searchtext, int32 id) {
         Statement stmt;
         
         this.db.prepare_v2(STMT_GET_TRACKDATA_BY_TITLEID, -1, out stmt);
@@ -772,7 +772,7 @@ public class Xnoise.Database.Reader {
     private static const string STMT_GET_ALBUMS =
         "SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY utf8_lower(al.name) COLLATE CUSTOM01 ASC";
 
-    public Item[] get_albums_with_search(ref string searchtext, int32 id) {
+    public Item[] get_albums_with_search(string searchtext, int32 id) {
         Item[] val = {};
         Statement stmt;
         if(searchtext != EMPTYSTRING) {

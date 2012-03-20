@@ -31,6 +31,8 @@
 
 using Gtk;
 
+using Xnoise;
+using Xnoise.Services;
 
 private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
     
@@ -60,8 +62,7 @@ private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
     }
     
     private bool insert_last_played_job(Worker.Job job) {
-        string searchtext = "";
-        job.items = db_reader.get_last_played(ref searchtext);
+        job.items = db_reader.get_last_played(EMPTYSTRING);
         Idle.add( () => {
             TreeIter iter;
             foreach(Item? i in job.items) {

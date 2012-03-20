@@ -17,28 +17,28 @@ namespace Xnoise {
 			public Reader () throws Xnoise.Database.DbError;
 			public void cancel ();
 			public uint count_lastused_items ();
-			public int32 count_videos (ref string searchtext);
+			public int32 count_videos (string searchtext);
 			public void do_callback_transaction (Xnoise.Database.Reader.ReaderCallback cb);
-			public Xnoise.Item[] get_albums_with_search (ref string searchtext, int32 id);
-			public Xnoise.TrackData[]? get_all_tracks (ref string searchtext);
-			public Xnoise.Item? get_artistitem_by_artistid (ref string searchtext, int32 id);
-			public Xnoise.Item[] get_artists_with_search (ref string searchtext);
-			public Xnoise.Item[]? get_last_played (ref string searchtext);
+			public Xnoise.Item[] get_albums_with_search (string searchtext, int32 id);
+			public Xnoise.TrackData[]? get_all_tracks (string searchtext);
+			public Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id);
+			public Xnoise.Item[] get_artists_with_search (string searchtext);
+			public Xnoise.Item[]? get_last_played (string searchtext);
 			public string[] get_media_files ();
 			public string[] get_media_folders ();
-			public Xnoise.Item[]? get_most_played (ref string searchtext);
+			public Xnoise.Item[]? get_most_played (string searchtext);
 			public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
-			public Xnoise.TrackData[] get_stream_data (ref string searchtext);
+			public Xnoise.TrackData[] get_stream_data (string searchtext);
 			public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 			public Xnoise.StreamData[] get_streams ();
-			public Xnoise.TrackData[]? get_trackdata_by_albumid (ref string searchtext, int32 id);
-			public Xnoise.TrackData[]? get_trackdata_by_artistid (ref string searchtext, int32 id);
-			public Xnoise.TrackData? get_trackdata_by_titleid (ref string searchtext, int32 id);
-			public Xnoise.TrackData[] get_trackdata_for_streams (ref string searchtext);
+			public Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id);
+			public Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id);
+			public Xnoise.TrackData? get_trackdata_by_titleid (string searchtext, int32 id);
+			public Xnoise.TrackData[] get_trackdata_for_streams (string searchtext);
 			public bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
-			public Xnoise.TrackData[] get_trackdata_for_video (ref string searchtext);
-			public Xnoise.TrackData[] get_video_data (ref string searchtext);
-			public Xnoise.Item[]? get_video_items (ref string searchtext);
+			public Xnoise.TrackData[] get_trackdata_for_video (string searchtext);
+			public Xnoise.TrackData[] get_video_data (string searchtext);
+			public Xnoise.Item[]? get_video_items (string searchtext);
 			public Xnoise.Item? get_videoitem_by_id (int32 id);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -585,6 +585,7 @@ namespace Xnoise {
 		public signal void sign_image_path_small_changed ();
 		public signal void sign_notify_tracklistnotebook_switched (uint new_page_number);
 		public signal void sign_restart_song ();
+		public signal void sign_searchtext_changed (string text);
 		public signal void sign_song_info_required ();
 		public signal void tag_changed (ref string? newuri, string? tagname, string? tagvalue);
 		public signal void uri_changed (string? uri);
@@ -676,7 +677,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class ItemConverter : GLib.Object {
 		public ItemConverter ();
-		public Xnoise.TrackData[]? to_trackdata (Xnoise.Item? item, ref string? searchtext);
+		public Xnoise.TrackData[]? to_trackdata (Xnoise.Item? item, string? searchtext);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class ItemHandler : GLib.Object {
@@ -786,7 +787,6 @@ namespace Xnoise {
 		public bool change_model_data ();
 		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
-		public void on_searchtext_changed ();
 		public bool update_view ();
 		public bool use_treelines { get; set; }
 		public signal void sign_activated ();
@@ -806,7 +806,6 @@ namespace Xnoise {
 			LEVEL,
 			N_COLUMNS
 		}
-		public string searchtext;
 		public MediaBrowserModel ();
 		public void cancel_fill_model ();
 		public void filter ();

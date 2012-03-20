@@ -122,7 +122,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
         TrackData[] tmp = {};
         TrackData[] tda = {};
         foreach(Item item in job.items) {
-            tmp = item_converter.to_trackdata(item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
+            tmp = item_converter.to_trackdata(item, global.searchtext);
             if(tmp == null)
                 continue;
             foreach(TrackData td in tmp) {
@@ -148,8 +148,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
     
     private bool add_requested_job(Worker.Job job) {
         Item? item = job.item;
-        string st = EMPTYSTRING;
-        job.track_dat = item_converter.to_trackdata(item, ref st);
+        job.track_dat = item_converter.to_trackdata(item, EMPTYSTRING);
         
         if(job.track_dat != null) {
             Idle.add( () => {
@@ -170,7 +169,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
         Item? item = job.item;//(Item?)job.get_arg("item");
         //print("item.type is %s\n", item.type.to_string());
         
-        job.track_dat = item_converter.to_trackdata(item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
+        job.track_dat = item_converter.to_trackdata(item, global.searchtext);
         
         if(job.track_dat != null) {
             Idle.add( () => {

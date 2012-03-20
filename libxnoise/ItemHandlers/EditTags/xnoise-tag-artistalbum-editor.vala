@@ -81,7 +81,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
     
     private bool query_trackdata_job(Worker.Job job) {
         // callback for query in other thread
-        td_old = item_converter.to_trackdata(this.item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
+        td_old = item_converter.to_trackdata(this.item, global.searchtext);
         
         TrackData td = td_old[0];
         switch(item.type) {
@@ -301,7 +301,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
         if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
             var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
             //print("%s %d\n", tag_job.item.type.to_string(), tag_job.item.db_id);
-            job.track_dat = item_converter.to_trackdata(tag_job.item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
+            job.track_dat = item_converter.to_trackdata(tag_job.item, global.searchtext);
             if(job.track_dat == null)
                 return false;
             job.item = tag_job.item;
@@ -312,7 +312,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
         }
         else if(tag_job.item.type == ItemType.COLLECTION_CONTAINER_ALBUM) {
             var job = new Worker.Job(Worker.ExecutionType.ONCE, this.update_filetags_job);
-            job.track_dat = item_converter.to_trackdata(tag_job.item, ref main_window.mediaBr.mediabrowsermodel.searchtext);
+            job.track_dat = item_converter.to_trackdata(tag_job.item, global.searchtext);
             if(job.track_dat == null)
                 return false;
             job.item = tag_job.item;

@@ -35,7 +35,7 @@ using Xnoise.TagAccess;
 
 public class Xnoise.ItemConverter : Object {
 
-    public TrackData[]? to_trackdata(Item? item, ref string? searchtext) {
+    public TrackData[]? to_trackdata(Item? item, string? searchtext) {
         
         //this function uses the database so use it in the database thread
         return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, null);
@@ -52,7 +52,7 @@ public class Xnoise.ItemConverter : Object {
             case ItemType.LOCAL_AUDIO_TRACK:
             case ItemType.LOCAL_VIDEO_TRACK:
                 if(item.db_id > -1) {
-                    TrackData? tmp = db_reader.get_trackdata_by_titleid(ref searchtext, item.db_id);
+                    TrackData? tmp = db_reader.get_trackdata_by_titleid(global.searchtext, item.db_id);
                     if(tmp == null)
                         break;
                     result += tmp;
@@ -101,22 +101,22 @@ public class Xnoise.ItemConverter : Object {
                 break;
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 if(item.db_id > -1) {
-                    result = db_reader.get_trackdata_by_albumid(ref searchtext, item.db_id);
+                    result = db_reader.get_trackdata_by_albumid(global.searchtext, item.db_id);
                     break;
                 }
                 break;
             case ItemType.COLLECTION_CONTAINER_ARTIST:
                 if(item.db_id > -1) {
-                    result = db_reader.get_trackdata_by_artistid(ref searchtext, item.db_id);
+                    result = db_reader.get_trackdata_by_artistid(global.searchtext, item.db_id);
                     break;
                 }
                 break;
             case ItemType.COLLECTION_CONTAINER_VIDEO:
-                result = db_reader.get_trackdata_for_video(ref searchtext);
+                result = db_reader.get_trackdata_for_video(global.searchtext);
                 //print("result len %d\n", result.length);
                 break;
             case ItemType.COLLECTION_CONTAINER_STREAM:
-                result = db_reader.get_trackdata_for_streams(ref searchtext);
+                result = db_reader.get_trackdata_for_streams(global.searchtext);
                 //print("result len %d\n", result.length);
                 break;
             case ItemType.STREAM:

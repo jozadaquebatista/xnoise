@@ -68,8 +68,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     };
 
 //    private static const int VIDEOTHUMBNAILSIZE = 40;
-    public string searchtext = EMPTYSTRING;
+//    public string searchtext = EMPTYSTRING;
     private unowned Main xn;
+    private uint search_idlesource = 0;
     
     public bool populating_model { get; private set; default = false; }
     
@@ -86,6 +87,16 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         Writer.NotificationData cbd = Writer.NotificationData();
         cbd.cb = database_change_cb;
         db_writer.register_change_callback(cbd);
+        
+        global.sign_searchtext_changed.connect( (s,t) => {
+            if(search_idlesource != 0)
+                Source.remove(search_idlesource);
+            search_idlesource = Timeout.add(200, () => {
+                this.filter();
+                this.search_idlesource = 0;
+                return false;
+            });
+        });
     }
     
 //    private bool video_in_tree = false;
@@ -221,7 +232,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     
     private bool add_imported_artist_job(Worker.Job job) {
 //        int32 _id = job.item.db_id;
-        job.item = db_reader.get_artistitem_by_artistid(ref searchtext, job.item.db_id); // necessary because of search
+        job.item = db_reader.get_artistitem_by_artistid(global.searchtext, job.item.db_id); // necessary because of search
         if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
             return false;
         Idle.add( () => {
@@ -482,7 +493,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     
     private bool handle_streams(Worker.Job job) {
         
-        job.track_dat = db_reader.get_stream_data(ref searchtext);
+        job.track_dat = db_reader.get_stream_data(global.searchtext);
         
         if(job.track_dat.length == 0)
             return false;
@@ -592,7 +603,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 //    }
 
     private bool load_streams_job(Worker.Job job) {
-        job.track_dat = db_reader.get_stream_data(ref searchtext);
+        job.track_dat = db_reader.get_stream_data(global.searchtext);
         
         if(job.track_dat.length == 0)
             return false;
@@ -625,13 +636,13 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private bool populate_artists_job(Worker.Job job) {
         if(job.cancellable.is_cancelled())
             return false;
-        Timer t = new Timer();
-        ulong x;
-        t.start();
-        job.items = db_reader.get_artists_with_search(ref this.searchtext);
-        t.stop();
-        t.elapsed(out x);
-        print("%lu µs\n", x);
+        //Timer t = new Timer();
+        //ulong x;
+        //t.start();
+        job.items = db_reader.get_artists_with_search(global.searchtext);
+        //t.stop();
+        //t.elapsed(out x);
+        //print("%lu µs\n", x);
         //print("job.items.length = %d\n", job.items.length);
         Idle.add( () => {
             if(job.cancellable.is_cancelled())
@@ -724,7 +735,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private bool load_artists_job(Worker.Job job) {
         if(this.populating_model)
             return false;
-        job.items = db_reader.get_albums_with_search(ref searchtext, (int32)job.get_arg("id"));
+        job.items = db_reader.get_albums_with_search(global.searchtext, (int32)job.get_arg("id"));
         //print("job.items cnt = %d\n", job.items.length);
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
@@ -845,7 +856,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         if(this.populating_model)
             return false;
         int32 al = (int32)job.get_arg("album");
-        job.track_dat = db_reader.get_trackdata_by_albumid(ref searchtext, al);
+        job.track_dat = db_reader.get_trackdata_by_albumid(global.searchtext, al);
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if((row_ref == null) || (!row_ref.valid()))
