@@ -108,7 +108,12 @@ public class Xnoise.MediaImporter : GLib.Object {
     private uint current_import_msg_id = 0;
     private uint current_import_track_count = 0;
     
-    internal void import_media_groups(string[] list_of_streams, string[] list_of_files, string[] list_of_folders, uint msg_id, bool full_rescan = true, bool interrupted_populate_model = false) {
+    internal void import_media_groups(string[] list_of_streams,
+                                      string[] list_of_files,
+                                      string[] list_of_folders,
+                                      uint msg_id,
+                                      bool full_rescan = true,
+                                      bool interrupted_populate_model = false) {
         return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
         t = new Timer(); // timer for measuring import time
         t.start();

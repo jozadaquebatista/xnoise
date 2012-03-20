@@ -281,6 +281,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
             scrollWinPlugins.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
             
             notebook = this.get_object("notebook1") as Gtk.Notebook;
+            notebook.scrollable = false;
             
             this.dialog.set_default_icon_name("xnoise");
             this.dialog.set_position(Gtk.WindowPosition.CENTER);
