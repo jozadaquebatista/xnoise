@@ -37,7 +37,7 @@ using Xnoise;
 /**
 * A VolumeSliderButton is a Gtk.VolumeButton used to change the volume
 */
-public class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
+internal class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
     
     private unowned GstPlayer player;
     private uint src = 0;

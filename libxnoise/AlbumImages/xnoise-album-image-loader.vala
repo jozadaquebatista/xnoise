@@ -158,7 +158,7 @@ namespace Xnoise {
         return (owned)_albumname;
     }
 
-    public class AlbumImageLoader : GLib.Object {
+    internal class AlbumImageLoader : GLib.Object {
         private static IAlbumCoverImageProvider provider;
         private static Main xn;
         private uint backend_iter;

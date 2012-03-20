@@ -32,7 +32,7 @@ using Gtk;
 using Xnoise;
 
 
-public class Xnoise.PluginManagerTree: Gtk.TreeView {
+private class Xnoise.PluginManagerTree: Gtk.TreeView {
     private const string group = "XnoisePlugin";
     private ListStore listmodel;
     private enum Column {

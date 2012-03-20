@@ -38,11 +38,11 @@ using Xnoise.Database;
 
 public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
-    public enum TrackSorting {
-        ARTIST_ALBUM_TITLE = 0,
-        GENRE_ARTIST_TITLE,
-        ARTIST_YEAR_TITLE
-    }
+//    public enum TrackSorting {
+//        ARTIST_ALBUM_TITLE = 0,
+//        GENRE_ARTIST_TITLE,
+//        ARTIST_YEAR_TITLE
+//    }
 
     public enum Column {
         ICON = 0,
@@ -67,7 +67,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         typeof(int)          //LEVEL
     };
 
-    private static const int VIDEOTHUMBNAILSIZE = 40;
+//    private static const int VIDEOTHUMBNAILSIZE = 40;
     public string searchtext = EMPTYSTRING;
     private unowned Main xn;
     
@@ -88,7 +88,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         db_writer.register_change_callback(cbd);
     }
     
-    private bool video_in_tree = false;
+//    private bool video_in_tree = false;
     private bool stream_in_tree = false;
     
     // this function is running in db thread so use idle
@@ -97,7 +97,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             case Writer.ChangeType.ADD_ARTIST:
                 //print("got new artist\n");
                 if(item.db_id == -1){
-                    print("GOT -1\n");
+                    print("ADD_ARTIST:GOT -1\n");
                     return;
                 }
                 Worker.Job job;
@@ -105,61 +105,61 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 job.item = item;
                 db_worker.push_job(job);
                 break;
-            case Writer.ChangeType.ADD_VIDEO:
-                if(video_in_tree)
-                    break;
-                video_in_tree = true;
-                Idle.add( () => {
-                    TreeIter iter_videos = TreeIter(), iter_loader;
-                    if(this.iter_n_children(null) == 0) {
-                        Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-                        this.prepend(out iter_videos, null);
-                        this.set(iter_videos,
-                                 Column.ICON, icon_repo.videos_icon,
-                                 Column.VIS_TEXT, "Videos",
-                                 Column.ITEM, i,
-                                 Column.LEVEL, 0
-                                 );
-                        Item? loader_item = Item(ItemType.LOADER);
-                        this.prepend(out iter_loader, iter_videos);
-                        this.set(iter_loader,
-                                 Column.ICON, icon_repo.loading_icon,
-                                 Column.VIS_TEXT, LOADING,
-                                 Column.ITEM, loader_item,
-                                 Column.LEVEL, 1
-                                 );
-                        return false;
-                    }
-                    else {
-                        for(int i = 0; i < this.iter_n_children(null); i++) {
-                            this.iter_nth_child(out iter_videos, null, i);
-                            Item? ix;
-                            this.get(iter_videos, Column.ITEM, out ix);
-                            if(ix.type == ItemType.COLLECTION_CONTAINER_VIDEO) {
-                                video_in_tree = true;
-                                return false;
-                            }
-                        }
-                        Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-                        this.prepend(out iter_videos, null);
-                        this.set(iter_videos,
-                                 Column.ICON, icon_repo.videos_icon,
-                                 Column.VIS_TEXT, "Videos",
-                                 Column.ITEM, i,
-                                 Column.LEVEL, 0
-                                 );
-                        Item? loader_item = Item(ItemType.LOADER);
-                        this.prepend(out iter_loader, iter_videos);
-                        this.set(iter_loader,
-                                 Column.ICON, icon_repo.loading_icon,
-                                 Column.VIS_TEXT, LOADING,
-                                 Column.ITEM, loader_item,
-                                 Column.LEVEL, 1
-                                 );
-                    }
-                    return false;
-                });
-                break;
+//            case Writer.ChangeType.ADD_VIDEO:
+//                if(video_in_tree)
+//                    break;
+//                video_in_tree = true;
+//                Idle.add( () => {
+//                    TreeIter iter_videos = TreeIter(), iter_loader;
+//                    if(this.iter_n_children(null) == 0) {
+//                        Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+//                        this.prepend(out iter_videos, null);
+//                        this.set(iter_videos,
+//                                 Column.ICON, icon_repo.videos_icon,
+//                                 Column.VIS_TEXT, "Videos",
+//                                 Column.ITEM, i,
+//                                 Column.LEVEL, 0
+//                                 );
+//                        Item? loader_item = Item(ItemType.LOADER);
+//                        this.prepend(out iter_loader, iter_videos);
+//                        this.set(iter_loader,
+//                                 Column.ICON, icon_repo.loading_icon,
+//                                 Column.VIS_TEXT, LOADING,
+//                                 Column.ITEM, loader_item,
+//                                 Column.LEVEL, 1
+//                                 );
+//                        return false;
+//                    }
+//                    else {
+//                        for(int i = 0; i < this.iter_n_children(null); i++) {
+//                            this.iter_nth_child(out iter_videos, null, i);
+//                            Item? ix;
+//                            this.get(iter_videos, Column.ITEM, out ix);
+//                            if(ix.type == ItemType.COLLECTION_CONTAINER_VIDEO) {
+//                                video_in_tree = true;
+//                                return false;
+//                            }
+//                        }
+//                        Item? i = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+//                        this.prepend(out iter_videos, null);
+//                        this.set(iter_videos,
+//                                 Column.ICON, icon_repo.videos_icon,
+//                                 Column.VIS_TEXT, "Videos",
+//                                 Column.ITEM, i,
+//                                 Column.LEVEL, 0
+//                                 );
+//                        Item? loader_item = Item(ItemType.LOADER);
+//                        this.prepend(out iter_loader, iter_videos);
+//                        this.set(iter_loader,
+//                                 Column.ICON, icon_repo.loading_icon,
+//                                 Column.VIS_TEXT, LOADING,
+//                                 Column.ITEM, loader_item,
+//                                 Column.LEVEL, 1
+//                                 );
+//                    }
+//                    return false;
+//                });
+//                break;
             case Writer.ChangeType.ADD_STREAM:
                 if(stream_in_tree)
                     break;
@@ -333,64 +333,64 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
     
     public void remove_all() {
-        this.video_in_tree = false;
+//        this.video_in_tree = false;
         this.stream_in_tree = false;
         this.clear();
     }
 
-    public void insert_video_sorted(TrackData[] tda) {
-        string text = null;
-        TreeIter iter_videos = TreeIter(), iter_singlevideos;
-        if(this.iter_n_children(null) == 0) {
-            Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-            this.prepend(out iter_videos, null);
-            this.set(iter_videos,
-                     Column.ICON, icon_repo.videos_icon,
-                     Column.VIS_TEXT, "Videos",
-                     Column.ITEM, item,
-                     Column.LEVEL, 0
-                     );
-        }
-        else {
-            bool found = false;
-            for(int i = 0; i < this.iter_n_children(null); i++) {
-                this.iter_nth_child(out iter_videos, null, i);
-                this.get(iter_videos, Column.VIS_TEXT, out text); //, Column.COLL_TYPE, out ct
-                if(strcmp(text, "Videos") == 0) {// && ct == CollectionType.LISTED) {
-                    //found streams
-                    found = true;
-                    break;
-                }
-            }
-            if(found == false) {
-                Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-                this.prepend(out iter_videos, null);
-                this.set(iter_videos,
-                         Column.ICON, icon_repo.videos_icon,
-                         Column.VIS_TEXT, "Videos",
-                         Column.ITEM, item,
-                         Column.LEVEL, 0
-                         );
-            }
-        }
-        foreach(TrackData td in tda) {
-            bool visible = false;
-            if(this.searchtext == EMPTYSTRING ||
-               td.artist.down().contains(this.searchtext) ||
-               td.album.down().contains(this.searchtext)  ||
-               td.title.down().contains(this.searchtext))   {
-                visible = true;
-            }
-            this.prepend(out iter_singlevideos, iter_videos);
-            this.set(iter_singlevideos,
-                     Column.ICON,        icon_repo.video_icon,
-                     Column.VIS_TEXT,    td.title,
-                     Column.DRAW_SEPTR,  0,
-                     Column.ITEM, td.item,
-                     Column.LEVEL, 1
-                     );
-        }
-    }
+//    public void insert_video_sorted(TrackData[] tda) {
+//        string text = null;
+//        TreeIter iter_videos = TreeIter(), iter_singlevideos;
+//        if(this.iter_n_children(null) == 0) {
+//            Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+//            this.prepend(out iter_videos, null);
+//            this.set(iter_videos,
+//                     Column.ICON, icon_repo.videos_icon,
+//                     Column.VIS_TEXT, "Videos",
+//                     Column.ITEM, item,
+//                     Column.LEVEL, 0
+//                     );
+//        }
+//        else {
+//            bool found = false;
+//            for(int i = 0; i < this.iter_n_children(null); i++) {
+//                this.iter_nth_child(out iter_videos, null, i);
+//                this.get(iter_videos, Column.VIS_TEXT, out text); //, Column.COLL_TYPE, out ct
+//                if(strcmp(text, "Videos") == 0) {// && ct == CollectionType.LISTED) {
+//                    //found streams
+//                    found = true;
+//                    break;
+//                }
+//            }
+//            if(found == false) {
+//                Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+//                this.prepend(out iter_videos, null);
+//                this.set(iter_videos,
+//                         Column.ICON, icon_repo.videos_icon,
+//                         Column.VIS_TEXT, "Videos",
+//                         Column.ITEM, item,
+//                         Column.LEVEL, 0
+//                         );
+//            }
+//        }
+//        foreach(TrackData td in tda) {
+//            bool visible = false;
+//            if(this.searchtext == EMPTYSTRING ||
+//               td.artist.down().contains(this.searchtext) ||
+//               td.album.down().contains(this.searchtext)  ||
+//               td.title.down().contains(this.searchtext))   {
+//                visible = true;
+//            }
+//            this.prepend(out iter_singlevideos, iter_videos);
+//            this.set(iter_singlevideos,
+//                     Column.ICON,        icon_repo.video_icon,
+//                     Column.VIS_TEXT,    td.title,
+//                     Column.DRAW_SEPTR,  0,
+//                     Column.ITEM, td.item,
+//                     Column.LEVEL, 1
+//                     );
+//        }
+//    }
 
     public void insert_stream_sorted(TrackData[] tda) {
         string text = null;
@@ -449,7 +449,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         if(populating_model)
             return false;
         populating_model = true;
-        video_in_tree = false;
+//        video_in_tree = false;
         stream_in_tree = false;
         //print("populate_model\n");
         main_window.mediaBr.set_model(null);
@@ -465,9 +465,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
     
     private bool handle_listed_data_job(Worker.Job job) {
-        var video_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_videos);
-        video_job.cancellable = populate_model_cancellable;
-        db_worker.push_job(video_job);
+//        var video_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_videos);
+//        video_job.cancellable = populate_model_cancellable;
+//        db_worker.push_job(video_job);
         
         var stream_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_streams);
         stream_job.cancellable = populate_model_cancellable;
@@ -516,80 +516,80 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         return false;
     }
     
-    private bool handle_videos(Worker.Job job) {
-        int32 cnt = db_reader.count_videos(ref searchtext);
-        if(cnt == 0)
-            return false;
-        Idle.add( () => {
-            if(job.cancellable.is_cancelled())
-                return false;
-            TreeIter iter_videos, iter_loader;
-            Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-            this.prepend(out iter_videos, null);
-            this.set(iter_videos,
-                     Column.ICON, icon_repo.videos_icon,
-                     Column.VIS_TEXT, "Videos",
-                     Column.ITEM, item,
-                     Column.LEVEL, 0
-                     );
-            Item? loader_item = Item(ItemType.LOADER);
-            this.prepend(out iter_loader, iter_videos);
-            this.set(iter_loader,
-                     Column.ICON, icon_repo.loading_icon,
-                     Column.VIS_TEXT, LOADING,
-                     Column.ITEM, loader_item,
-                     Column.LEVEL, 1
-                     );
-            video_in_tree = true;
-            return false;
-        });
-        return false;
-    }
+//    private bool handle_videos(Worker.Job job) {
+//        int32 cnt = db_reader.count_videos(ref searchtext);
+//        if(cnt == 0)
+//            return false;
+//        Idle.add( () => {
+//            if(job.cancellable.is_cancelled())
+//                return false;
+//            TreeIter iter_videos, iter_loader;
+//            Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+//            this.prepend(out iter_videos, null);
+//            this.set(iter_videos,
+//                     Column.ICON, icon_repo.videos_icon,
+//                     Column.VIS_TEXT, "Videos",
+//                     Column.ITEM, item,
+//                     Column.LEVEL, 0
+//                     );
+//            Item? loader_item = Item(ItemType.LOADER);
+//            this.prepend(out iter_loader, iter_videos);
+//            this.set(iter_loader,
+//                     Column.ICON, icon_repo.loading_icon,
+//                     Column.VIS_TEXT, LOADING,
+//                     Column.ITEM, loader_item,
+//                     Column.LEVEL, 1
+//                     );
+//            video_in_tree = true;
+//            return false;
+//        });
+//        return false;
+//    }
     
-    private bool load_videos_job(Worker.Job job) {
-        job.track_dat = db_reader.get_video_data(ref searchtext);
-        
-        if(job.track_dat.length == 0)
-            return false;
-        
-        Idle.add( () => {
-            TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
-            if(row_ref == null || !row_ref.valid())
-                return false;
-            TreePath p = row_ref.get_path();
-            TreeIter iter_videos, iter_singlevideo;
-            this.get_iter(out iter_videos, p);
-            foreach(unowned TrackData td in job.track_dat) {
-                if(job.cancellable.is_cancelled())
-                    break;
-                Gdk.Pixbuf thumbnail = null;
-                File thumb = null;
-                bool has_thumbnail = false;
-                if(thumbnail_available(td.item.uri, out thumb)) {
-                    try {
-                        if(thumb != null) {
-                            thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), VIDEOTHUMBNAILSIZE, VIDEOTHUMBNAILSIZE, true);
-                            has_thumbnail = true;
-                        }
-                    }
-                    catch(Error e) {
-                        thumbnail = null;
-                        has_thumbnail = false;
-                    }
-                }
-                this.prepend(out iter_singlevideo, iter_videos);
-                this.set(iter_singlevideo,
-                         Column.ICON, (has_thumbnail == true ? thumbnail : icon_repo.video_icon),
-                         Column.VIS_TEXT, td.name,
-                         Column.ITEM, td.item,
-                         Column.LEVEL, 1
-                         );
-            }
-            remove_loader_child(ref iter_videos);
-            return false;
-        });
-        return false;
-    }
+//    private bool load_videos_job(Worker.Job job) {
+//        job.track_dat = db_reader.get_video_data(ref searchtext);
+//        
+//        if(job.track_dat.length == 0)
+//            return false;
+//        
+//        Idle.add( () => {
+//            TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
+//            if(row_ref == null || !row_ref.valid())
+//                return false;
+//            TreePath p = row_ref.get_path();
+//            TreeIter iter_videos, iter_singlevideo;
+//            this.get_iter(out iter_videos, p);
+//            foreach(unowned TrackData td in job.track_dat) {
+//                if(job.cancellable.is_cancelled())
+//                    break;
+//                Gdk.Pixbuf thumbnail = null;
+//                File thumb = null;
+//                bool has_thumbnail = false;
+//                if(thumbnail_available(td.item.uri, out thumb)) {
+//                    try {
+//                        if(thumb != null) {
+//                            thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), VIDEOTHUMBNAILSIZE, VIDEOTHUMBNAILSIZE, true);
+//                            has_thumbnail = true;
+//                        }
+//                    }
+//                    catch(Error e) {
+//                        thumbnail = null;
+//                        has_thumbnail = false;
+//                    }
+//                }
+//                this.prepend(out iter_singlevideo, iter_videos);
+//                this.set(iter_singlevideo,
+//                         Column.ICON, (has_thumbnail == true ? thumbnail : icon_repo.video_icon),
+//                         Column.VIS_TEXT, td.name,
+//                         Column.ITEM, td.item,
+//                         Column.LEVEL, 1
+//                         );
+//            }
+//            remove_loader_child(ref iter_videos);
+//            return false;
+//        });
+//        return false;
+//    }
 
     private bool load_streams_job(Worker.Job job) {
         job.track_dat = db_reader.get_stream_data(ref searchtext);
@@ -667,8 +667,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         TreeIter iter_loader;
         Item? item = Item(ItemType.UNKNOWN);
         this.get(iter, Column.ITEM, out item);
-        if(item.type != ItemType.COLLECTION_CONTAINER_ARTIST && 
-           item.type != ItemType.COLLECTION_CONTAINER_VIDEO)
+        if(item.type != ItemType.COLLECTION_CONTAINER_ARTIST)
             return;
         Item? loader_item = Item(ItemType.LOADER);
         this.append(out iter_loader, iter);
@@ -701,12 +700,12 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         TreeRowReference treerowref = new TreeRowReference(this, path);
         this.get(iter, Column.ITEM, out item);
         //print("item.type: %s\n", item.type.to_string());
-        if(item.type == ItemType.COLLECTION_CONTAINER_VIDEO) {
-            job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_videos_job);
-            //job.cancellable = populate_model_cancellable;
-            job.set_arg("treerowref", treerowref);
-            db_worker.push_job(job);
-        }
+//        if(item.type == ItemType.COLLECTION_CONTAINER_VIDEO) {
+//            job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_videos_job);
+//            //job.cancellable = populate_model_cancellable;
+//            job.set_arg("treerowref", treerowref);
+//            db_worker.push_job(job);
+//        }
         if(item.type == ItemType.COLLECTION_CONTAINER_STREAM) {
             job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_streams_job);
             //job.cancellable = populate_model_cancellable;
@@ -857,24 +856,24 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             foreach(unowned TrackData td in job.track_dat) {
                 Gdk.Pixbuf thumbnail = null;
                 bool has_thumbnail = false;
-                if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
-                    File thumb = null;
-                    if(thumbnail_available(td.item.uri, out thumb)) {
-                        try {
-                            if(thumb != null) {
-                                thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), VIDEOTHUMBNAILSIZE, VIDEOTHUMBNAILSIZE, true);
-                                has_thumbnail = true;
-                            }
-                        }
-                        catch(Error e) {
-                            thumbnail = null;
-                            has_thumbnail = false;
-                        }
-                    }
-                }
+//                if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
+//                    File thumb = null;
+//                    if(thumbnail_available(td.item.uri, out thumb)) {
+//                        try {
+//                            if(thumb != null) {
+//                                thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), VIDEOTHUMBNAILSIZE, VIDEOTHUMBNAILSIZE, true);
+//                                has_thumbnail = true;
+//                            }
+//                        }
+//                        catch(Error e) {
+//                            thumbnail = null;
+//                            has_thumbnail = false;
+//                        }
+//                    }
+//                }
                 this.append(out iter_title, iter_album);
                 this.set(iter_title,
-                         Column.ICON, (td.item.type == ItemType.LOCAL_AUDIO_TRACK ? icon_repo.title_icon : (has_thumbnail == true ? thumbnail : icon_repo.video_icon)),
+                         Column.ICON, icon_repo.title_icon,
                          Column.VIS_TEXT, td.title,
                          Column.ITEM, td.item,
                          Column.LEVEL, 2

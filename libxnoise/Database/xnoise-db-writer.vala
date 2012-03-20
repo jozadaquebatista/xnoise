@@ -804,9 +804,9 @@ public class Xnoise.Database.Writer : GLib.Object {
         if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
             foreach(NotificationData cxd in change_callbacks) {
 //            if(change_cb != null) {
-                Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
+//                Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
                 if(cxd.cb != null)
-                    cxd.cb(ChangeType.ADD_VIDEO, item);
+                    cxd.cb(ChangeType.ADD_VIDEO, td.item);
             }
         }
         insert_title_statement.reset();

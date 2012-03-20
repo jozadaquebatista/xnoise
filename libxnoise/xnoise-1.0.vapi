@@ -39,6 +39,7 @@ namespace Xnoise {
 			public Xnoise.TrackData[] get_trackdata_for_video (ref string searchtext);
 			public Xnoise.TrackData[] get_video_data (ref string searchtext);
 			public Xnoise.Item[]? get_video_items (ref string searchtext);
+			public Xnoise.Item? get_videoitem_by_id (int32 id);
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public class Writer : GLib.Object {
@@ -486,14 +487,6 @@ namespace Xnoise {
 		public void load_default_image ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class AlbumImageLoader : GLib.Object {
-		public string album;
-		public string artist;
-		public AlbumImageLoader ();
-		public bool fetch_image ();
-		public signal void sign_fetched (string artist, string album, string image_path);
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class AppMenuButton : Gtk.ToggleToolButton {
 		public AppMenuButton (Gtk.Menu menu, string? tooltip_text = null);
 		public override void show_all ();
@@ -728,15 +721,9 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Main : GLib.Object {
-		public static weak Xnoise.Application app;
-		public static bool no_dbus;
-		public static bool no_plugins;
-		public static bool show_plugin_state;
 		public Main ();
 		public void immediate_play (string uri);
 		public void quit ();
-		public void save_activated_plugins ();
-		public void save_tracklist ();
 		public static Xnoise.Main instance { get; }
 		public int thread_id { get; }
 	}
@@ -766,7 +753,6 @@ namespace Xnoise {
 		public Xnoise.ControlButton previousButton;
 		public bool quit_if_closed;
 		public Gtk.Entry searchEntryMB;
-		public Xnoise.TrackInfobar songProgressBar;
 		public Xnoise.ControlButton stopButton;
 		public Xnoise.TrackList trackList;
 		public Gtk.ScrolledWindow trackListScrollWin;
@@ -818,11 +804,6 @@ namespace Xnoise {
 			LEVEL,
 			N_COLUMNS
 		}
-		public enum TrackSorting {
-			ARTIST_ALBUM_TITLE,
-			GENRE_ARTIST_TITLE,
-			ARTIST_YEAR_TITLE
-		}
 		public string searchtext;
 		public MediaBrowserModel ();
 		public void cancel_fill_model ();
@@ -830,7 +811,6 @@ namespace Xnoise {
 		public Xnoise.DndData[] get_dnd_data_for_path (ref Gtk.TreePath treepath);
 		public int get_max_icon_width ();
 		public void insert_stream_sorted (Xnoise.TrackData[] tda);
-		public void insert_video_sorted (Xnoise.TrackData[] tda);
 		public void load_children (ref Gtk.TreeIter iter);
 		public void remove_all ();
 		public void unload_children (ref Gtk.TreeIter iter);
@@ -877,14 +857,6 @@ namespace Xnoise {
 		public void on_clicked (Gtk.Widget sender);
 		public void on_menu_clicked (Gtk.MenuItem sender);
 		public void update_picture ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class PluginManagerTree : Gtk.TreeView {
-		public PluginManagerTree ();
-		public void create_view ();
-		public void set_width (int w);
-		public static void text_cell_cb (Gtk.CellLayout cell_layout, Gtk.CellRenderer cell, Gtk.TreeModel tree_model, Gtk.TreeIter iter);
-		public signal void sign_plugin_activestate_changed (string name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class RemoteSchemes {
@@ -938,12 +910,6 @@ namespace Xnoise {
 		public uint tracknumber;
 		public uint year;
 		public TrackData ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class TrackInfobar : Gtk.ToolItem {
-		public TrackInfobar (Xnoise.GstPlayer player);
-		public void set_value (uint pos, uint len);
-		public string title_text { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackList : Gtk.TreeView, Xnoise.IParams {
@@ -1033,10 +999,6 @@ namespace Xnoise {
 		public string font_family { get; set; }
 		public double font_size { get; set; }
 		public string text { get; set; }
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class VolumeSliderButton : Gtk.VolumeButton {
-		public VolumeSliderButton (Xnoise.GstPlayer player);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Worker : GLib.Object {
@@ -1185,12 +1147,6 @@ namespace Xnoise {
 		PAUSED
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public enum TrackListNoteBookTab {
-		TRACKLIST,
-		VIDEO,
-		LYRICS
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public errordomain SettingsDialogError {
 		FILE_NOT_FOUND,
 		GENERAL_ERROR
@@ -1217,8 +1173,6 @@ namespace Xnoise {
 	public static Xnoise.ItemHandlerManager itemhandler_manager;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.MainWindow main_window;
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public static GLib.MainContext mc;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.MediaImporter media_importer;
 	[CCode (cheader_filename = "xnoise-1.0.h")]

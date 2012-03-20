@@ -153,7 +153,10 @@ public class Xnoise.Database.Reader {
         
         while(stmt.step() == Sqlite.ROW) {
             Item i = Item((ItemType)stmt.column_int(2), stmt.column_text(4), stmt.column_int(3));
-            i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
+            if(i.type == ItemType.LOCAL_AUDIO_TRACK)
+                i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
+            else
+                i.text = stmt.column_text(1);
             retv += i;
         }
         if(retv.length == 0)
@@ -173,7 +176,10 @@ public class Xnoise.Database.Reader {
         
         while(stmt.step() == Sqlite.ROW) {
             Item i = Item((ItemType)stmt.column_int(2), stmt.column_text(4), stmt.column_int(3));
-            i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
+            if(i.type == ItemType.LOCAL_AUDIO_TRACK)
+                i.text = stmt.column_text(0) + " - " + stmt.column_text(1);
+            else
+                i.text = stmt.column_text(1);
             retv += i;
         }
         if(retv.length == 0)
@@ -591,6 +597,50 @@ public class Xnoise.Database.Reader {
         return (owned)val;
     }
 
+//    private static const string STMT_GET_TRACKDATA_BY_VIDEOID_WITH_SEARCH =
+//        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+//    
+//    private static const string STMT_GET_TRACKDATA_BY_VIDEOID =
+//        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+//    
+//    public TrackData[]? get_trackdata_by_videoid(ref string searchtext, int32 id) {
+//        TrackData[] val = {};
+//        Statement stmt;
+//        if(searchtext != EMPTYSTRING) {
+//            string st = "%%%s%%".printf(searchtext);
+//            this.db.prepare_v2(STMT_GET_TRACKDATA_BY_VIDEOID_WITH_SEARCH, -1, out stmt);
+//            if((stmt.bind_int (1, id) != Sqlite.OK) ||
+//               (stmt.bind_text(2, st) != Sqlite.OK) ||
+//               (stmt.bind_text(3, st) != Sqlite.OK) ||
+//               (stmt.bind_text(4, st) != Sqlite.OK)) {
+//                this.db_error();
+//                return (owned)val;
+//            }
+//        }
+//        else {
+//            this.db.prepare_v2(STMT_GET_TRACKDATA_BY_VIDEOID, -1, out stmt);
+//            if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+//                this.db_error();
+//                return null;
+//            }
+//        }        
+//        while(stmt.step() == Sqlite.ROW) {
+//            TrackData td = new TrackData();
+//            Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+//            i.text = stmt.column_text(0);
+//            td.artist      = stmt.column_text(5);
+//            td.album       = stmt.column_text(6);
+//            td.title       = stmt.column_text(0);
+//            td.item        = i;
+//            td.tracknumber = stmt.column_int(3);
+//            td.length      = stmt.column_int(7);
+//            td.genre       = stmt.column_text(8);
+//            td.year        = stmt.column_int(9);
+//            val += td;
+//        }
+//        return (owned)val;
+//    }
+    
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH =
         "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
@@ -633,6 +683,24 @@ public class Xnoise.Database.Reader {
             val += td;
         }
         return (owned)val;
+    }
+
+    private static const string STMT_GET_VIDEOITEM_BY_ID =
+        "SELECT DISTINCT t.id, t.title, u.name, t.mediatype FROM items t, uris u WHERE t.uri = u.id AND t.id = ?";
+    
+    public Item? get_videoitem_by_id(int32 id) {
+        Statement stmt;
+        Item? i = Item(ItemType.UNKNOWN);
+        this.db.prepare_v2(STMT_GET_VIDEOITEM_BY_ID, -1, out stmt);
+        if((stmt.bind_int(1, id)!=Sqlite.OK)) {
+            this.db_error();
+            return (owned)i;
+        }
+        if(stmt.step() == Sqlite.ROW) {
+            i = Item((ItemType) stmt.column_int(3), stmt.column_text(2), stmt.column_int(0));
+            i.text = stmt.column_text(1);
+        }
+        return (owned)i;
     }
 
     private static const string STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH =

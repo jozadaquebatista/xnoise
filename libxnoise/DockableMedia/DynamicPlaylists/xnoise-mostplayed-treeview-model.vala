@@ -65,12 +65,45 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
         Idle.add( () => {
             TreeIter iter;
             foreach(Item? i in job.items) {
-                this.append(out iter);
-                this.set(iter,
-                         Column.ICON, icon_repo.title_icon,
-                         Column.VIS_TEXT, i.text,
-                         Column.ITEM, i
-                );
+                if(i.type == ItemType.LOCAL_VIDEO_TRACK) {
+                    Gdk.Pixbuf thumbnail = null;
+                    File thumb = null;
+                    bool has_thumbnail = false;
+                    if(thumbnail_available(i.uri, out thumb)) {
+                        try {
+                            if(thumb != null) {
+                                thumbnail = new Gdk.Pixbuf.from_file_at_scale(thumb.get_path(), VIDEOTHUMBNAILSIZE, VIDEOTHUMBNAILSIZE, true);
+                                has_thumbnail = true;
+                            }
+                        }
+                        catch(Error e) {
+                            thumbnail = null;
+                            has_thumbnail = false;
+                        }
+                    }
+                    this.append(out iter);
+                    this.set(iter,
+                             Column.ICON, (has_thumbnail == true ? thumbnail : icon_repo.video_icon),
+                             Column.VIS_TEXT, i.text,
+                             Column.ITEM, i
+                    );
+                }
+                else if(i.type == ItemType.STREAM) {
+                    this.append(out iter);
+                    this.set(iter,
+                             Column.ICON, icon_repo.radios_icon,
+                             Column.VIS_TEXT, i.text,
+                             Column.ITEM, i
+                    );
+                }
+                else {
+                    this.append(out iter);
+                    this.set(iter,
+                             Column.ICON, icon_repo.title_icon,
+                             Column.VIS_TEXT, i.text,
+                             Column.ITEM, i
+                    );
+                }
             }
             return false;
         });

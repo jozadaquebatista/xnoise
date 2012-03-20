@@ -38,12 +38,6 @@ using Xnoise.PluginModule;
 
 public delegate void Xnoise.LyricsFetchedCallback(string artist, string title, string credits, string identifier, string text, string providername);
 
-/* TODO: * try different sources in order of their priority if backends fail to find lyrics
-     * ensure everything's radio-stream-proof
-     * make preferences options
-     * lyrics loader should use top prio provider and if it doesn't find lyrics try the next one
-*/
-//TODO: use priorities
 public class Xnoise.LyricsLoader : GLib.Object {
     
     private Providers providers;

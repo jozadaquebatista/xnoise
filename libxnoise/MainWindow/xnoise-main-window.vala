@@ -106,7 +106,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     public Notebook browsernotebook;
     public Notebook tracklistnotebook;
     public AlbumImage albumimage;
-    public TrackInfobar songProgressBar;
+    internal TrackInfobar track_infobar;
     public MediaBrowser mediaBr = null;
     public TrackList trackList;
     public Gtk.Window fullscreenwindow;
@@ -1083,7 +1083,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         string basename = null;
         if((newuri == EMPTYSTRING)|(newuri == null)) {
             text = "<b>XNOISE</b> - ready to rock! ;-)";
-            songProgressBar.title_text = text; //song_title_label.set_text(text);
+            track_infobar.title_text = text; //song_title_label.set_text(text);
             return;
         }
         File file = File.new_for_uri(newuri);
@@ -1208,7 +1208,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
             }
         }
-        songProgressBar.title_text = text; //song_title_label.set_text(text);
+        track_infobar.title_text = text; //song_title_label.set_text(text);
         //song_title_label.use_markup = true;
     }
 
@@ -1489,8 +1489,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.nextButton.sign_clicked.connect(handle_control_button_click);
             
             //PROGRESS BAR
-            this.songProgressBar = new TrackInfobar(gst_player);
-            this.songProgressBar.set_expand(true);
+            this.track_infobar = new TrackInfobar(gst_player);
+            this.track_infobar.set_expand(true);
             
             //AppMenuButton for compact layout
             app_menu_button = new AppMenuButton(config_button_menu, _("Show application main menu"));
@@ -1506,7 +1506,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             main_toolbar.insert(nextButton, -1);
             main_toolbar.insert(si, -1);
             main_toolbar.insert(albumimageTI, -1);
-            main_toolbar.insert(this.songProgressBar, -1);
+            main_toolbar.insert(this.track_infobar, -1);
             main_toolbar.insert(repeatButtonTI, -1);
             main_toolbar.insert(volumeSliderButtonTI, -1);
             main_toolbar.insert(app_menu_button, -1);

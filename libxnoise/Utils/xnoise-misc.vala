@@ -36,6 +36,7 @@ using Xnoise.PluginModule;
 
 
 namespace Xnoise {
+    internal static const int VIDEOTHUMBNAILSIZE = 40;
     public static Params par = null;
     public static GlobalAccess global = null;
     public static UserInfo userinfo = null;
@@ -44,8 +45,6 @@ namespace Xnoise {
     public static MediaImporter media_importer = null;
     public static ItemHandlerManager itemhandler_manager = null;
     public static ItemConverter item_converter = null;
-    public static MainContext mc;
-    
     public HashTable<string,DockableMedia> dockable_media_sources;
 
     public static Database.Reader db_reader;
@@ -63,10 +62,11 @@ namespace Xnoise {
     public static MainWindow main_window;
     public static TrackList tl;
     public static TrackListModel tlm;
-    private static RemoteSchemes   _remote_schemes;
-    private static LocalSchemes    _local_schemes;
-    private static MediaExtensions _media_extensions;
-    private static MediaStreamSchemes _media_stream_schemes;
+    
+    private static RemoteSchemes        _remote_schemes;
+    private static LocalSchemes         _local_schemes;
+    private static MediaExtensions      _media_extensions;
+    private static MediaStreamSchemes   _media_stream_schemes;
     /*
      * This function is used to create static instances of Params
      * and GlobalInfo in the xnoise namespace.
@@ -134,13 +134,13 @@ namespace Xnoise {
         
         // DOCKABLE MEDIA
         DockableMedia d;
-        d = new MediaBrowserDockable(); // Media Browser
+        d = new MediaBrowserDockable();         // LOCAL COLLECTION
         dockable_media_sources.insert(d.name(), d);
-        d = new DockablePlaylistMostplayed(); // Dynamic Playlist Most played
+        d = new DockablePlaylistMostplayed();   // Dynamic Playlist Most played
         dockable_media_sources.insert(d.name(), d);
-        d = new DockablePlaylistLastplayed(); // Dynamic Playlist Last played
+        d = new DockablePlaylistLastplayed();   // Dynamic Playlist Last played
         dockable_media_sources.insert(d.name(), d);
-        d = new DockableVideos(); // Dynamic Playlist Last played
+        d = new DockableVideos();               // VIDEOS
         dockable_media_sources.insert(d.name(), d);
         
         // STATIC WIDGETS
@@ -155,7 +155,7 @@ namespace Xnoise {
 
 // PROJECT WIDE USED STRUCTS, INTERFACES AND ENUMS
 
-public enum Xnoise.TrackListNoteBookTab { // used in various places
+internal enum Xnoise.TrackListNoteBookTab { // used in various places
     TRACKLIST = 0,
     VIDEO,
     LYRICS

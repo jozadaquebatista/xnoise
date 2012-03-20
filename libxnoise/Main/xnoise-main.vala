@@ -32,12 +32,12 @@
 
 public class Xnoise.Main : GLib.Object {
     private static Main _instance;
-    private static Xnoise.Dbus dbus;
+    internal static Xnoise.Dbus dbus;
     private int _thread_id = 0;
-    public static bool show_plugin_state;
-    public static bool no_plugins;
-    public static bool no_dbus;
-    public static unowned Xnoise.Application app;
+    internal static bool show_plugin_state;
+    internal static bool no_plugins;
+    internal static bool no_dbus;
+    internal static unowned Xnoise.Application app;
     
     public int thread_id { get { return _thread_id; } }
     
@@ -155,7 +155,7 @@ public class Xnoise.Main : GLib.Object {
         instance.quit();
     }
 
-    public void save_activated_plugins() {
+    internal void save_activated_plugins() {
         //print("\nsaving activated plugins...\n");
         string[]? activatedplugins = {};
         foreach(string name in plugin_loader.plugin_htable.get_keys()) {
@@ -168,7 +168,7 @@ public class Xnoise.Main : GLib.Object {
     }
 
     
-    public void save_tracklist() {
+    internal void save_tracklist() {
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_final_tracks_to_db_job);
         job.items = main_window.trackList.tracklistmodel.get_all_tracks();
         job.finished.connect( () => {
