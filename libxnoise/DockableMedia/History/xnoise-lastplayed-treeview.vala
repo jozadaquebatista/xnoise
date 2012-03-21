@@ -54,6 +54,7 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
         this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
+        this.set_enable_search(false);
         
         this.ow = ow;
        

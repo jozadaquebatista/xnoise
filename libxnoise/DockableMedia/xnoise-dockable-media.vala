@@ -34,7 +34,8 @@ public abstract class Xnoise.DockableMedia : GLib.Object {
         UNKNOWN = 0,
         MEDIA_COLLECTION,
         PLAYLIST,
-        STORE
+        STORES,
+        DEVICES
     }
     
     public abstract string name();

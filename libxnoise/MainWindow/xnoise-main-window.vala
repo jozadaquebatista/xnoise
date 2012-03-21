@@ -1268,8 +1268,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 return _("Media Collections");
             case DockableMedia.Category.PLAYLIST:
                 return _("Playlists");
-            case DockableMedia.Category.STORE:
-                return _("Store");
+            case DockableMedia.Category.STORES:
+                return _("Stores");
+            case DockableMedia.Category.DEVICES:
+                return _("Devices");
             case DockableMedia.Category.UNKNOWN:
             default:
                 return null;
@@ -1548,6 +1550,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             media_source_selector = new TreeView();
             media_source_selector.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
             media_source_selector.headers_visible = false;
+            media_source_selector.set_enable_search(false);
             media_source_selector.get_selection().set_mode(SelectionMode.SINGLE);
             TreeStore media_source_selector_model = new TreeStore(5, 
                                                                   typeof(Gdk.Pixbuf), //icon

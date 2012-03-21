@@ -81,7 +81,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         global.sign_searchtext_changed.connect( (s,t) => {
             if(search_idlesource != 0)
                 Source.remove(search_idlesource);
-            search_idlesource = Timeout.add(200, () => {
+            search_idlesource = Timeout.add(180, () => {
                 this.filter();
                 this.search_idlesource = 0;
                 return false;

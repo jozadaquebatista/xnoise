@@ -56,6 +56,7 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
         this.headers_visible = false;
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
         this.ow = ow;
+        this.set_enable_search(false);
         
         var column = new TreeViewColumn();
         

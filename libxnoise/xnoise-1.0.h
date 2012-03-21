@@ -161,6 +161,17 @@ typedef struct _PlayerDbusService PlayerDbusService;
 typedef struct _PlayerDbusServiceClass PlayerDbusServiceClass;
 typedef struct _PlayerDbusServicePrivate PlayerDbusServicePrivate;
 
+#define XNOISE_TYPE_DBUS_THUMBNAILER (xnoise_dbus_thumbnailer_get_type ())
+#define XNOISE_DBUS_THUMBNAILER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DBUS_THUMBNAILER, XnoiseDbusThumbnailer))
+#define XNOISE_DBUS_THUMBNAILER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DBUS_THUMBNAILER, XnoiseDbusThumbnailerClass))
+#define XNOISE_IS_DBUS_THUMBNAILER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_DBUS_THUMBNAILER))
+#define XNOISE_IS_DBUS_THUMBNAILER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_DBUS_THUMBNAILER))
+#define XNOISE_DBUS_THUMBNAILER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_DBUS_THUMBNAILER, XnoiseDbusThumbnailerClass))
+
+typedef struct _XnoiseDbusThumbnailer XnoiseDbusThumbnailer;
+typedef struct _XnoiseDbusThumbnailerClass XnoiseDbusThumbnailerClass;
+typedef struct _XnoiseDbusThumbnailerPrivate XnoiseDbusThumbnailerPrivate;
+
 #define XNOISE_TYPE_DOCKABLE_MEDIA (xnoise_dockable_media_get_type ())
 #define XNOISE_DOCKABLE_MEDIA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMedia))
 #define XNOISE_DOCKABLE_MEDIA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMediaClass))
@@ -1054,11 +1065,21 @@ struct _PlayerDbusServiceClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseDbusThumbnailer {
+	GObject parent_instance;
+	XnoiseDbusThumbnailerPrivate * priv;
+};
+
+struct _XnoiseDbusThumbnailerClass {
+	GObjectClass parent_class;
+};
+
 typedef enum  {
 	XNOISE_DOCKABLE_MEDIA_CATEGORY_UNKNOWN = 0,
 	XNOISE_DOCKABLE_MEDIA_CATEGORY_MEDIA_COLLECTION,
 	XNOISE_DOCKABLE_MEDIA_CATEGORY_PLAYLIST,
-	XNOISE_DOCKABLE_MEDIA_CATEGORY_STORE
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_STORES,
+	XNOISE_DOCKABLE_MEDIA_CATEGORY_DEVICES
 } XnoiseDockableMediaCategory;
 
 struct _XnoiseDockableMedia {
@@ -2032,6 +2053,10 @@ void player_dbus_service_set_Volume (PlayerDbusService* self, gdouble value);
 gint64 player_dbus_service_get_Length (PlayerDbusService* self);
 gint64 player_dbus_service_get_Position (PlayerDbusService* self);
 void player_dbus_service_set_Position (PlayerDbusService* self, gint64 value);
+GType xnoise_dbus_thumbnailer_get_type (void) G_GNUC_CONST;
+void xnoise_dbus_thumbnailer_queue_uris (XnoiseDbusThumbnailer* self, gchar** uris, int uris_length1);
+XnoiseDbusThumbnailer* xnoise_dbus_thumbnailer_new (void);
+XnoiseDbusThumbnailer* xnoise_dbus_thumbnailer_construct (GType object_type);
 GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
 GType xnoise_dockable_media_category_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_get_type (void) G_GNUC_CONST;

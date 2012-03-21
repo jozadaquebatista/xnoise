@@ -37,8 +37,8 @@ using Xnoise.Database;
 
 
 private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
-    
-    private uint search_idlesource = 0;
+    private uint update_thumbnails_src  = 0;
+    private uint search_idlesource      = 0;
     
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf), //ICON
@@ -69,6 +69,16 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                 return false;
             });
         });
+        thumbnailer.sign_got_thumbnail.connect( (u,t) => {
+            //print("it worked : %s - %s\n", u, t);
+            if(update_thumbnails_src != 0)
+                Source.remove(update_thumbnails_src);
+            update_thumbnails_src = Timeout.add_seconds(1, () => {
+                filter(); // TODO: replace this with a less invasive method
+                update_thumbnails_src = 0;
+                return false;
+            });
+        });
     }
 
     public void filter() {
@@ -82,6 +92,9 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
         job = new Worker.Job(Worker.ExecutionType.ONCE, insert_job);
         db_worker.push_job(job);
     }
+    
+    private List<string> uri_list;
+    private uint thumbnailer_src = 0;
     
     private bool insert_job(Worker.Job job) {
         
@@ -111,6 +124,23 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                          Column.VIS_TEXT, i.text,
                          Column.ITEM, i
                 );
+                if(!has_thumbnail) {
+                    if(uri_list == null)
+                        uri_list = new List<string>();
+                    uri_list.prepend(i.uri);
+                    if(thumbnailer_src != 0)
+                        Source.remove(thumbnailer_src);
+                    thumbnailer_src = Timeout.add_seconds(1, () => {
+                        print("queue uris for thumbnailing\n");
+                        string[] uri_array = {};
+                        foreach(string s in uri_list)
+                            uri_array += s;
+                        thumbnailer.queue_uris(uri_array);
+                        uri_list = null;
+                        thumbnailer_src = 0;
+                        return false;
+                    });
+                }
             }
             return false;
         });
@@ -158,6 +188,23 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                     thumbnail = null;
                     has_thumbnail = false;
                 }
+            }
+            if(!has_thumbnail) {
+                if(uri_list == null)
+                    uri_list = new List<string>();
+                uri_list.prepend(job.item.uri);
+                if(thumbnailer_src != 0)
+                    Source.remove(thumbnailer_src);
+                thumbnailer_src = Timeout.add_seconds(1, () => {
+                    print("queue uris for thumbnailing\n");
+                    string[] uri_array = {};
+                    foreach(string s in uri_list)
+                        uri_array += s;
+                    thumbnailer.queue_uris(uri_array);
+                    uri_list = null;
+                    thumbnailer_src = 0;
+                    return false;
+                });
             }
             if(this.iter_n_children(null) == 0) {
                 this.prepend(out iter);

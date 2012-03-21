@@ -515,12 +515,19 @@ namespace Xnoise {
 		public Dbus ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class DbusThumbnailer : GLib.Object {
+		public DbusThumbnailer ();
+		public void queue_uris (string[] uris);
+		public signal void sign_got_thumbnail (string uri, string thumb_uri);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DockableMedia : GLib.Object {
 		public enum Category {
 			UNKNOWN,
 			MEDIA_COLLECTION,
 			PLAYLIST,
-			STORE
+			STORES,
+			DEVICES
 		}
 		public DockableMedia ();
 		public abstract Xnoise.DockableMedia.Category category ();

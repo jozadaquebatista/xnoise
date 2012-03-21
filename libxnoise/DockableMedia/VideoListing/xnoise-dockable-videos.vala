@@ -58,4 +58,3 @@ private class Xnoise.DockableVideos : DockableMedia {
     }
 }
 
-

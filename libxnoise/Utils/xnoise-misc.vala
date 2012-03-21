@@ -53,6 +53,7 @@ namespace Xnoise {
     public static Statistics statistics;
     
     internal static IconRepo icon_repo;
+    internal static DbusThumbnailer thumbnailer = null;
     
     public static GstPlayer gst_player;
     
@@ -91,6 +92,9 @@ namespace Xnoise {
         // WORKERS
         db_worker = new Worker(MainContext.default());
         io_worker = new Worker(MainContext.default());
+        
+        // THUMBNAILER DBUS PROXY
+        thumbnailer = new DbusThumbnailer();
         
         _remote_schemes       = new RemoteSchemes();
         _local_schemes        = new LocalSchemes();

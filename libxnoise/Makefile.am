@@ -38,6 +38,7 @@ libxnoise_la_SOURCES = \
     Database/xnoise-db-creator.vala \
     Database/xnoise-db-writer.vala \
     DBus/xnoise-dbus.vala \
+    DBus/xnoise-dbus-thumbnailer.vala \
     DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala \
     DockableMedia/History/xnoise-lastplayed-treeview.vala \
     DockableMedia/History/xnoise-lastplayed-treeview-model.vala \
