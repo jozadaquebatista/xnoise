@@ -440,8 +440,6 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
             calculated_widh[1] = 0;
             calculated_widh[2] = 0;
         }
-    
-        private static const int  BORDER_DIST = 35; //TODO: make it dynamic
         
         public override void get_preferred_height_for_width(Gtk.Widget widget,
                                                             int width,

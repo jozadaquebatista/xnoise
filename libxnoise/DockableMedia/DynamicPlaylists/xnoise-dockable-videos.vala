@@ -46,8 +46,8 @@ private class Xnoise.DockableVideos : DockableMedia {
     }
 
     public override Gtk.Widget? get_widget(MainWindow window) {
-        var tv = new TreeViewVideos(window);
         var sw = new ScrolledWindow(null, null);
+        var tv = new TreeViewVideos(window, (Widget)sw);
         sw.set_shadow_type(ShadowType.IN);
         sw.add(tv);
         return sw;
