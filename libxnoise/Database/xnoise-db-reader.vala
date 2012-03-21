@@ -517,7 +517,7 @@ public class Xnoise.Database.Reader {
     }
 
     private static const string STMT_GET_ARTISTS_WITH_SEARCH =
-        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (utf8_lower(t.title) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(ar.name) LIKE ?) ORDER BY utf8_lower(ar.name) DESC";
+        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (utf8_lower(t.title) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(ar.name) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
 
     private static const string STMT_GET_ARTISTS =
         "SELECT ar.id, ar.name FROM artists ar ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC"; //LOWER(ar.name)
