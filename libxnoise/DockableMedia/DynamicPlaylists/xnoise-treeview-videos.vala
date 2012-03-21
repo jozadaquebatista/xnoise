@@ -64,7 +64,9 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
         font_description = context.get_font(StateFlags.NORMAL).copy();
         font_description.set_size((int)(fontsizeMB * Pango.SCALE));
         
-        var renderer = new ListFlowingTextRenderer(font_description, column);
+        int hsepar = 0;
+        this.style_get("horizontal-separator", out hsepar);
+        var renderer = new ListFlowingTextRenderer(font_description, column, hsepar);
         renderer.ellipsize = Pango.EllipsizeMode.END;
         renderer.ellipsize_set = true;
         
@@ -74,6 +76,7 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
         column.pack_start(renderer, true);
         column.add_attribute(rendererPb, "pixbuf", 0);
         column.add_attribute(renderer, "text", 1);
+        column.add_attribute(renderer, "pix", 0);
         
         this.insert_column(column, -1);
         
@@ -147,28 +150,21 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
     }
     
     private class ListFlowingTextRenderer : CellRendererText {
-//        private int maxiconwidth;
-//        private unowned Widget ow;
+        private int maxiconwidth;
         private unowned Pango.FontDescription font_description;
         private unowned TreeViewColumn col;
         private int expander;
         private int hsepar;
-//        private int calculated_widh[3];
         
         public int level                { get; set; }
         public unowned Gdk.Pixbuf pix   { get; set; }
         
-        public ListFlowingTextRenderer(Pango.FontDescription font_description, TreeViewColumn col) {
+        public ListFlowingTextRenderer(Pango.FontDescription font_description, TreeViewColumn col, int hsepar) {
             GLib.Object();
-//            this.ow = ow;
             this.col = col;
-//            this.expander = expander;
-//            this.hsepar = hsepar;
+            this.hsepar = hsepar;
             this.font_description = font_description;
-//            maxiconwidth = 0;
-//            calculated_widh[0] = 0;
-//            calculated_widh[1] = 0;
-//            calculated_widh[2] = 0;
+            maxiconwidth = 0;
         }
         
         public override void get_preferred_height_for_width(Gtk.Widget widget,
@@ -177,7 +173,10 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
                                                             out int natural_height) {
             int column_width = col.get_width();
             int sum = 0;
-            sum = 42; 
+            int iconwidth = (pix == null) ? 16 : pix.get_width();
+            if(maxiconwidth < iconwidth)
+                maxiconwidth = iconwidth;
+            sum = hsepar + (2 * (int)xpad) + maxiconwidth;
             var pango_layout = widget.create_pango_layout(text);
             pango_layout.set_font_description(this.font_description);
             pango_layout.set_alignment(Pango.Alignment.LEFT);
@@ -186,7 +185,6 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
             int wi, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
             natural_height = minimum_height = he;
-//            print("column_width - sum: %d   he: %d\n", column_width - sum, he);
         }
     
         public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
