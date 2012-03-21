@@ -39,6 +39,8 @@ using Xnoise.Database;
 private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
     private uint update_thumbnails_src  = 0;
     private uint search_idlesource      = 0;
+    private unowned TreeViewVideos view;
+    private bool populating_model = false;
     
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf), //ICON
@@ -53,7 +55,8 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
         N_COLUMNS
     }
 
-    construct {
+    public TreeViewVideosModel(TreeViewVideos view) {
+        this.view = view;
         this.set_column_types(col_types);
         this.populate();
         Writer.NotificationData cbd = Writer.NotificationData();
@@ -83,11 +86,15 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
 
     public void filter() {
         //print("filter\n");
+        view.model = null;
         this.clear();
         this.populate();
     }
     
     private void populate() {
+        if(populating_model)
+            return;
+        populating_model = true;
         Worker.Job job;
         job = new Worker.Job(Worker.ExecutionType.ONCE, insert_job);
         db_worker.push_job(job);
@@ -142,6 +149,8 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                     });
                 }
             }
+            view.model = this;
+            populating_model = false;
             return false;
         });
         return false;

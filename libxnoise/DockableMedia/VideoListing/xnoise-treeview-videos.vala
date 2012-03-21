@@ -48,6 +48,7 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
     private int last_width;
     //parent container of this widget (most likely scrolled window)
     private unowned Widget ow;
+    private TreeViewVideosModel tvm;
     
     public TreeViewVideos(MainWindow window, Widget ow) {
         this.win = window; // use this ref because static main_window
@@ -78,8 +79,8 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
         column.add_attribute(renderer, "pix", 0);
         
         this.insert_column(column, -1);
-        
-        this.model = new TreeViewVideosModel();
+        tvm = new TreeViewVideosModel(this);
+        this.model = tvm;
         
         this.row_activated.connect( (s,tp,c) => {
             Item? item = Item(ItemType.UNKNOWN);
@@ -223,8 +224,7 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
             if(src != 0)
                 Source.remove(src);
             src = Timeout.add_seconds(2, () => {
-                var mm = new TreeViewVideosModel();
-                this.model = mm;
+                tvm.filter();
                 src = 0;
                 return false;
             });
