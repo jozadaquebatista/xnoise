@@ -8,7 +8,9 @@ libxnoise/Database/xnoise-db-reader.vala
 libxnoise/Database/xnoise-db-creator.vala
 libxnoise/Database/xnoise-db-writer.vala
 libxnoise/DBus/xnoise-dbus.vala
-libxnoise/DockableMedia/DynamicPlaylists/xnoise-dockable-playlist-mostplayed.vala
+libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala
+libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala
+libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala
 libxnoise/ExtraWidgets/AboutDialog/xnoise-about.vala
 libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala
 libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-progressbar.vala

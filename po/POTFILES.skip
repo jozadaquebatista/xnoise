@@ -3,7 +3,9 @@ plugins/notifications2/xnoise-notifications.c
 plugins/titleToDecoration/xnoise-title-to-decoration.c
 plugins/lastfm/xnoise-lastfm.c
 libxnoise/Application/xnoise-application.c
-libxnoise/DockableMedia/DynamicPlaylists/xnoise-dockable-playlist-mostplayed.c
+libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.c
+libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.c
+libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.c
 libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.c
 libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.c
 libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.c

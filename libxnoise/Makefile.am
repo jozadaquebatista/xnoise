@@ -38,15 +38,15 @@ libxnoise_la_SOURCES = \
     Database/xnoise-db-creator.vala \
     Database/xnoise-db-writer.vala \
     DBus/xnoise-dbus.vala \
-    DockableMedia/DynamicPlaylists/xnoise-dockable-playlist-mostplayed.vala \
-    DockableMedia/DynamicPlaylists/xnoise-mostplayed-treeview.vala \
-    DockableMedia/DynamicPlaylists/xnoise-mostplayed-treeview-model.vala \
-    DockableMedia/DynamicPlaylists/xnoise-dockable-playlist-lastplayed.vala \
-    DockableMedia/DynamicPlaylists/xnoise-lastplayed-treeview.vala \
-    DockableMedia/DynamicPlaylists/xnoise-lastplayed-treeview-model.vala \
-    DockableMedia/DynamicPlaylists/xnoise-dockable-videos.vala \
-    DockableMedia/DynamicPlaylists/xnoise-treeview-videos.vala \
-    DockableMedia/DynamicPlaylists/xnoise-treeview-videos-model.vala \
+    DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala \
+    DockableMedia/History/xnoise-lastplayed-treeview.vala \
+    DockableMedia/History/xnoise-lastplayed-treeview-model.vala \
+    DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala \
+    DockableMedia/MostPlayed/xnoise-mostplayed-treeview.vala \
+    DockableMedia/MostPlayed/xnoise-mostplayed-treeview-model.vala \
+    DockableMedia/VideoListing/xnoise-dockable-videos.vala \
+    DockableMedia/VideoListing/xnoise-treeview-videos.vala \
+    DockableMedia/VideoListing/xnoise-treeview-videos-model.vala \
     DockableMedia/xnoise-dockable-media.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
     ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala \
@@ -166,6 +166,11 @@ DISTCLEANFILES = \
     AlbumImages/*.c \
     Application/*.c \
     BackgroundWorker/*.c \
+    DockableMedia/*.c \
+    DockableMedia/History/*.c \
+    DockableMedia/MostPlayed/*.c \
+    DockableMedia/StreamListing/*.c \
+    DockableMedia/VideoListing/*.c \
     Database/*.c \
     DBus/*.c \
     ExtraWidgets/*.c \
