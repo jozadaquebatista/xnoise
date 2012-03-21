@@ -678,7 +678,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             return false;
         });
-        sbuttonTL.select(idx_tracklist, true);
+        sbuttonVI.select(idx_tracklist, true);
     }
 
     private void on_show_lyrics_menu_clicked() {
