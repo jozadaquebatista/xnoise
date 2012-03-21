@@ -801,7 +801,6 @@ namespace Xnoise {
 		public enum Column {
 			ICON,
 			VIS_TEXT,
-			DRAW_SEPTR,
 			ITEM,
 			LEVEL,
 			N_COLUMNS

@@ -37,7 +37,8 @@ using Xnoise.Database;
 
 
 private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
-//    private static const int VIDEOTHUMBNAILSIZE = 40;
+    
+    private uint search_idlesource = 0;
     
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf), //ICON
@@ -58,8 +59,24 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
         Writer.NotificationData cbd = Writer.NotificationData();
         cbd.cb = database_change_cb;
         db_writer.register_change_callback(cbd);
+        
+        global.sign_searchtext_changed.connect( (s,t) => {
+            if(search_idlesource != 0)
+                Source.remove(search_idlesource);
+            search_idlesource = Timeout.add(200, () => {
+                this.filter();
+                this.search_idlesource = 0;
+                return false;
+            });
+        });
     }
 
+    public void filter() {
+        //print("filter\n");
+        this.clear();
+        this.populate();
+    }
+    
     private void populate() {
         Worker.Job job;
         job = new Worker.Job(Worker.ExecutionType.ONCE, insert_job);
@@ -67,7 +84,9 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
     }
     
     private bool insert_job(Worker.Job job) {
-        job.items = db_reader.get_video_items(EMPTYSTRING);
+        
+        job.items = db_reader.get_video_items(global.searchtext);
+        
         Idle.add( () => {
             TreeIter iter;
             foreach(Item? i in job.items) {
