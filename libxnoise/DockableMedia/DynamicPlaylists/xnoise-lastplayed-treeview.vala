@@ -42,20 +42,31 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
     };
-    
-    public PlaylistTreeViewLastplayed(MainWindow window) {
+    private int fontsizeMB = 10;
+    private Pango.FontDescription font_description;
+    private int last_width;
+    //parent container of this widget (most likely scrolled window)
+    private unowned Widget ow;
+
+    public PlaylistTreeViewLastplayed(MainWindow window, Widget ow) {
         this.win = window; // use this ref because static main_window
                            //is not yet set up at construction time
         this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
         
-        
+        this.ow = ow;
+       
         var column = new TreeViewColumn();
         
-        var renderer = new CellRendererText();
-        renderer.ellipsize = Pango.EllipsizeMode.END;
-        renderer.ellipsize_set = true;
+        fontsizeMB = Params.get_int_value("fontsizeMB");
+        Gtk.StyleContext context = this.get_style_context();
+        font_description = context.get_font(StateFlags.NORMAL).copy();
+        font_description.set_size((int)(fontsizeMB * Pango.SCALE));
+        
+        int hsepar = 0;
+        this.style_get("horizontal-separator", out hsepar);
+        var renderer = new ListFlowingTextRenderer(font_description, column, hsepar);
         
         var rendererPb = new CellRendererPixbuf();
         
@@ -63,6 +74,7 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
         column.pack_start(renderer, true);
         column.add_attribute(rendererPb, "pixbuf", 0);
         column.add_attribute(renderer, "text", 1);
+        column.add_attribute(renderer, "pix", 0);
         
         this.insert_column(column, -1);
         
@@ -97,6 +109,110 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
         Writer.NotificationData nd = Writer.NotificationData();
         nd.cb = database_change_cb;
         db_writer.register_change_callback(nd);
+        this.ow.size_allocate.connect_after( (s, a) => {
+            unowned TreeViewColumn tvc = this.get_column(0);
+            int current_width = this.ow.get_allocated_width();
+            if(last_width == current_width)
+                return;
+            
+            last_width = current_width;
+            
+            tvc.max_width = tvc.min_width = current_width - 20;
+            TreeModel? xm = this.get_model();
+            if(xm != null)
+                xm.foreach( (mo, pt, it) => {
+                    if(mo == null)
+                        return true;
+                    mo.row_changed(pt, it);
+                    return false;
+                });
+        });
+        this.realize.connect_after( () => {
+            Idle.add( () => {
+                print("realized\n");
+                unowned TreeViewColumn tvc = this.get_column(0);
+                int current_width = this.ow.get_allocated_width();
+                
+                tvc.max_width = tvc.min_width = current_width - 20;
+                TreeModel? xm = this.get_model();
+                if(xm != null)
+                    xm.foreach( (mo, pt, it) => {
+                        if(mo == null)
+                            return true;
+                        mo.row_changed(pt, it);
+                        return false;
+                    });
+                return false;
+            });
+        });
+    }
+    
+    private class ListFlowingTextRenderer : CellRendererText {
+        private int maxiconwidth;
+        private unowned Pango.FontDescription font_description;
+        private unowned TreeViewColumn col;
+        private int expander;
+        private int hsepar;
+        
+        public int level                { get; set; }
+        public unowned Gdk.Pixbuf pix   { get; set; }
+        
+        public ListFlowingTextRenderer(Pango.FontDescription font_description, TreeViewColumn col, int hsepar) {
+            GLib.Object();
+            this.col = col;
+            this.hsepar = hsepar;
+            this.font_description = font_description;
+            maxiconwidth = 0;
+        }
+        
+        public override void get_preferred_height_for_width(Gtk.Widget widget,
+                                                            int width,
+                                                            out int minimum_height,
+                                                            out int natural_height) {
+            int column_width = col.get_width();
+            int sum = 0;
+            int iconwidth = (pix == null) ? 16 : pix.get_width();
+            if(maxiconwidth < iconwidth)
+                maxiconwidth = iconwidth;
+            sum = hsepar + (2 * (int)xpad) + maxiconwidth;
+            var pango_layout = widget.create_pango_layout(text);
+            pango_layout.set_font_description(this.font_description);
+            pango_layout.set_alignment(Pango.Alignment.LEFT);
+            pango_layout.set_width( (int)((column_width - sum) * Pango.SCALE));
+            pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
+            int wi, he = 0;
+            pango_layout.get_pixel_size(out wi, out he);
+            natural_height = minimum_height = he;
+        }
+    
+        public override void get_size(Widget widget, Gdk.Rectangle? cell_area,
+                                      out int x_offset, out int y_offset,
+                                      out int width, out int height) {
+            // function not used for gtk+-3.0 !
+            x_offset = 0;
+            y_offset = 0;
+            width = 0;
+            height = 0;
+        }
+    
+        public override void render(Cairo.Context cr, Widget widget,
+                                    Gdk.Rectangle background_area,
+                                    Gdk.Rectangle cell_area,
+                                    CellRendererState flags) {
+            StyleContext context;
+            var pango_layout = widget.create_pango_layout(text);
+            pango_layout.set_font_description(this.font_description);
+            pango_layout.set_alignment(Pango.Alignment.LEFT);
+            pango_layout.set_width( (int)(cell_area.width * Pango.SCALE));
+            pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
+            context = widget.get_style_context();
+            int wi = 0, he = 0;
+            pango_layout.get_pixel_size(out wi, out he);
+            if(cell_area.height > he)
+                context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
+            else
+                context.render_layout(cr, cell_area.x, cell_area.y, pango_layout);
+        }
     }
     
     private uint src = 0;

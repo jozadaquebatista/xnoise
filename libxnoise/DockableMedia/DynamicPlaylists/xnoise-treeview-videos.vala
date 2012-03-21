@@ -67,8 +67,6 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
         int hsepar = 0;
         this.style_get("horizontal-separator", out hsepar);
         var renderer = new ListFlowingTextRenderer(font_description, column, hsepar);
-        renderer.ellipsize = Pango.EllipsizeMode.END;
-        renderer.ellipsize_set = true;
         
         var rendererPb = new CellRendererPixbuf();
         
