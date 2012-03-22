@@ -57,6 +57,26 @@ public class Xnoise.AlbumImage : Gtk.Image {
             set_image_via_idle(global.image_path_large);
             using_thumbnail = false;
         });
+        gst_player.sign_found_embedded_image.connect(load_embedded);
+    }
+
+    private uint embedded_src = 0;
+    private void load_embedded(Object sender, string uri, string _artist, string _album) {
+        if(uri != global.current_uri)
+            return;
+        
+        if((prepare_for_comparison(artist) != prepare_for_comparison(_artist))||
+           (prepare_for_comparison(check_album_name(artist, album))  != prepare_for_comparison(check_album_name(_artist, _album)))) 
+            return;
+        
+        File? pf = get_albumimage_for_artistalbum(_artist, _album, "embedded");
+        
+        if(!pf.query_exists(null)) 
+            return;
+        
+        global.check_image_for_current_track();
+        set_image_via_idle(pf.get_path());
+        using_thumbnail = false;
     }
 
     private void on_uri_changed(string? uri) {
@@ -64,9 +84,15 @@ public class Xnoise.AlbumImage : Gtk.Image {
         Timeout.add(200, () => {
             global.check_image_for_current_track();
             if(global.image_path_small == null) {
-                File f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");
+                File f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "embedded");
                 if(f != null && f.query_exists(null)) {
                     return false;
+                }
+                else {
+                    f = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");
+                    if(f != null && f.query_exists(null)) {
+                        return false;
+                    }
                 }
                 string current_uri1 = current_uri;
                 load_default_image();
@@ -146,12 +172,16 @@ public class Xnoise.AlbumImage : Gtk.Image {
            (jalbum ==EMPTYSTRING)||(jalbum ==null)||(jalbum ==UNKNOWN_ALBUM )) {
             return false;
         }
-        var fileout = get_albumimage_for_artistalbum(jartist, jalbum, default_size);
+        var fileout = get_albumimage_for_artistalbum(jartist, jalbum, "embedded");
         
         if(fileout.query_exists(null)) {
             global.check_image_for_current_track();
         }
         else {
+            fileout = get_albumimage_for_artistalbum(jartist, jalbum, default_size);
+            if(fileout.query_exists(null)) {
+                global.check_image_for_current_track();
+            }
             Idle.add( () => {
                 loader.artist = jartist;
                 loader.album  = check_album_name(jartist, jalbum);
@@ -163,11 +193,19 @@ public class Xnoise.AlbumImage : Gtk.Image {
     }
 
     private bool set_local_image_if_available(ref string _artist, ref string _album) {
-        var fileout = get_albumimage_for_artistalbum(_artist, _album, default_size);
+        var fileout = get_albumimage_for_artistalbum(_artist, _album, "embedded");
         if(fileout.query_exists(null)) {
             set_image_via_idle(fileout.get_path());
             using_thumbnail = false;
             return true;
+        }
+        else {
+            fileout = get_albumimage_for_artistalbum(_artist, _album, default_size);
+            if(fileout.query_exists(null)) {
+                set_image_via_idle(fileout.get_path());
+                using_thumbnail = false;
+                return true;
+            }
         }
         return false;
     }
@@ -198,15 +236,16 @@ public class Xnoise.AlbumImage : Gtk.Image {
         current_path = image_path;
         if(!using_thumbnail) {
             Timeout.add_seconds(2, () => {
-                var fileout = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");
-                if(fileout == null) {
+                var fileout  = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");
+                var fileout2 = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "embedded");
+                if(fileout == null && fileout2 == null) {
                     //print("image not fitting. set default\n");
                     if(current_path != "default")
                         load_default_image();
                     return false;
                 }
-                if(fileout.get_path() != current_path) {
-                    //print("this.file not fitting curren album im age (%s). redoing search\n", current_path);
+                if(fileout.get_path() != current_path && fileout2.get_path() != current_path) {
+                    //print("this.file not fitting curren album image (%s). redoing search\n", current_path);
                     string _artist_raw = global.current_artist;
                     string _album_raw  = global.current_album;
                     if(!set_local_image_if_available(ref _artist_raw, ref _album_raw)) {

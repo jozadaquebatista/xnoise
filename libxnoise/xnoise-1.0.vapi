@@ -573,6 +573,7 @@ namespace Xnoise {
 		public string current_organization { get; set; }
 		public string current_title { get; set; }
 		public string? current_uri { get; set; }
+		public string? image_path_embedded { get; set; }
 		public string? image_path_large { get; set; }
 		public string? image_path_small { get; set; }
 		public bool media_import_in_progress { get; set; }
@@ -588,6 +589,7 @@ namespace Xnoise {
 		public signal void position_reference_next_changed ();
 		public signal void sig_item_imported (string uri);
 		public signal void sig_media_path_changed ();
+		public signal void sign_image_path_embedded_changed ();
 		public signal void sign_image_path_large_changed ();
 		public signal void sign_image_path_small_changed ();
 		public signal void sign_notify_tracklistnotebook_switched (uint new_page_number);
@@ -630,6 +632,7 @@ namespace Xnoise {
 		public double volume { get; set; }
 		public signal void sign_audiotracks_available ();
 		public signal void sign_buffering (int percent);
+		public signal void sign_found_embedded_image (string track_uri, string artist, string album);
 		public signal void sign_paused ();
 		public signal void sign_playing ();
 		public signal void sign_position_changed (uint msecs, uint ms_total);

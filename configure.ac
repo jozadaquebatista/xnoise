@@ -362,6 +362,7 @@ XNOISE_PACKAGES="\
     --pkg gstreamer-0.10 \
     --pkg gstreamer-pbutils-0.10 \
     --pkg gstreamer-interfaces-0.10 \
+    --pkg gstreamer-tag-0.10 \
     --pkg gtk+-3.0 \
     --pkg posix \
     --pkg sqlite3 \

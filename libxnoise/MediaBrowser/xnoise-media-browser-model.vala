@@ -542,7 +542,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             string artist_name;
             this.get(iter_artist, Column.ITEM, out artist, Column.VIS_TEXT, out artist_name);
             foreach(Item? album in job.items) {     //ALBUMS
-                File? albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, null);
+                File? albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, "embedded");
                 Gdk.Pixbuf albumimage = null;
                 if(albumimage_file != null) {
                     if(albumimage_file.query_exists(null)) {
@@ -551,6 +551,17 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                         }
                         catch(Error e) {
                             albumimage = null;
+                        }
+                    }
+                    else {
+                        albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, null);
+                       if(albumimage_file.query_exists(null)) {
+                            try {
+                                albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                            }
+                            catch(Error e) {
+                                albumimage = null;
+                            }
                         }
                     }
                 }
@@ -605,7 +616,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             //print("--%s\n", td.title);
             string artist = global.current_artist;
             string album = global.current_album;
-            File? albumimage_file = get_albumimage_for_artistalbum(artist, album, null);
+            File? albumimage_file = get_albumimage_for_artistalbum(artist, album, "embedded");
             Gdk.Pixbuf albumimage = null;
             if(albumimage_file != null) {
                 if(albumimage_file.query_exists(null)) {
@@ -614,6 +625,17 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                     }
                     catch(Error e) {
                         albumimage = null;
+                    }
+                }
+                else {
+                    albumimage_file = get_albumimage_for_artistalbum(artist, album, null);
+                    if(albumimage_file.query_exists(null)) {
+                        try {
+                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                        }
+                        catch(Error e) {
+                            albumimage = null;
+                        }
                     }
                 }
             }

@@ -279,7 +279,7 @@ public class Xnoise.GstPlayer : GLib.Object {
     public signal void sign_video_playing();
     public signal void sign_subtitles_available();
     public signal void sign_audiotracks_available();
-    
+    public signal void sign_found_embedded_image(string track_uri, string artist, string album);
     public signal void sign_buffering(int percent);
 
 
@@ -312,6 +312,60 @@ public class Xnoise.GstPlayer : GLib.Object {
         });
     }
 
+    private Gdk.Pixbuf? extract_embedded_image(Gst.TagList taglist) {
+        Gst.Buffer gst_buffer;
+        Gdk.PixbufLoader pbloader;
+        Gdk.Pixbuf? pixbuf;
+        Gst.Value? val = null;
+        uint i = 0;
+        
+        for(;;i++) {
+            Gst.Value? gstvalue;
+            string media_type;
+            Gst.Structure cstruct;
+            int imgtype;
+            gstvalue = taglist.get_value_index(Gst.TAG_IMAGE, i);
+            if(gstvalue == null)
+                break;
+            
+            gst_buffer = gstvalue.get_buffer();
+            if(gst_buffer == null) 
+                continue;
+            
+            cstruct = gst_buffer.caps.get_structure(0);
+            media_type = cstruct.get_name();
+            
+            if(media_type == "text/uri-list")
+                continue;
+            
+            cstruct.get_int("image-type", out imgtype); // get_enum doesn't work with vala
+            //cstruct.get_enum("image-type", typeof(Gst.TagImageType), out imgtype);
+            if(imgtype == 0) {      // UNDEFINED
+                val = gstvalue;
+            }
+            else if(imgtype == 1) { //FRONT_COVER
+                print("FRONT_COVER\n");
+                val = gstvalue;
+            }
+        }
+        if(val == null)
+            return null;
+        
+        pbloader = new Gdk.PixbufLoader();
+        gst_buffer = val.get_buffer();
+        try {
+            if(pbloader.write(gst_buffer.data) == false);
+        }
+        catch(Error e) {
+            try { pbloader.close(); } catch(Error e) {}
+            return null;
+        }
+        pixbuf = pbloader.get_pixbuf();
+        try { pbloader.close(); } catch(Error e) {}
+        
+        return pixbuf;
+    }
+    
     private void request_location(string? xuri) {
         bool playing_buf = playing;
         playbin.set_state(State.READY);
@@ -718,7 +772,7 @@ public class Xnoise.GstPlayer : GLib.Object {
     }
 
     private void foreachtag(TagList list, string tag) {
-        string val = null;
+        string? val = null;
         //print("tag: %s\n", tag);
         switch(tag) {
             case Gst.TAG_ARTIST:
@@ -746,13 +800,45 @@ public class Xnoise.GstPlayer : GLib.Object {
                     if(val != global.current_organization) global.current_organization = val;
                 break;
             case Gst.TAG_IMAGE:
-                print("found embedded image\n");
-                // TODO: Handle Image extraction and usage
+                if(imarge_src != 0)
+                    Source.remove(imarge_src);
+                imarge_src = Timeout.add(500, () => {
+                    string ar = null;
+                    string al = null;
+                    if(taglist_buffer == null)
+                        return false;
+                    taglist_buffer.get_string(Gst.TAG_ARTIST, out ar);
+                    taglist_buffer.get_string(Gst.TAG_ALBUM, out al);
+                    Gdk.Pixbuf pix = extract_embedded_image(taglist_buffer);
+                    if(pix != null) {
+                        File? pf = get_albumimage_for_artistalbum(ar, al, "embedded");
+                        if(pf == null) {
+                            print("could not save\n");
+                            imarge_src = 0;
+                            return false;
+                        }
+                        if(!pf.query_exists(null)) {
+                            try {
+                                pix.save(pf.get_path(), "jpeg");
+                            }
+                            catch(Error e) {
+                                print("%s\n", e.message);
+                                imarge_src = 0;
+                                return false;
+                            }
+                        }
+                        sign_found_embedded_image(this.uri, ar, al);
+                    }
+                    imarge_src = 0;
+                    return false;
+                });
                 break;
             default: break;
         }
     }
 
+    private uint imarge_src = 0;
+    
     private bool on_cyclic_send_song_position() {
         //print("current:%s \n",playbin.current_state.to_string());
         if(global.player_state == PlayerState.PLAYING && playbin.current_state != State.PLAYING)

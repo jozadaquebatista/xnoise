@@ -81,6 +81,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
                 if(MainContext.current_source().is_destroyed())
                     return false;
                 check_image_for_current_track();
+                check_image_for_current_track_source = 0;
                 return false;
             });
         });
@@ -113,6 +114,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
     
     public signal void sign_image_path_large_changed();
     public signal void sign_image_path_small_changed();
+    public signal void sign_image_path_embedded_changed();
     
     public signal void sign_notify_tracklistnotebook_switched(uint new_page_number);
 
@@ -245,6 +247,19 @@ public class Xnoise.GlobalAccess : GLib.Object {
             sign_image_path_large_changed();
         }
     }
+
+    private string? _image_path_embedded = null;
+    public string? image_path_embedded { 
+        get {
+            return _image_path_embedded;
+        }
+        set {
+            if(_image_path_embedded == value)
+                return;
+            _image_path_embedded = value;
+            sign_image_path_embedded_changed();
+        }
+    }
     
     // PUBLIC GLOBAL FUNCTIONS
     public void reset_position_reference() {
@@ -263,24 +278,36 @@ public class Xnoise.GlobalAccess : GLib.Object {
     public void check_image_for_current_track() {
         string? small_name = null;
         string? large_name = null; 
+        string? embedded_name = null; 
         File f = get_albumimage_for_artistalbum(current_artist, current_album, "medium");
         small_name = f != null ? f.get_path() : EMPTYSTRING;
         if((small_name == EMPTYSTRING) || (small_name == null)) {
             image_path_small = null;
             image_path_large = null;
+            image_path_embedded = null;
             return;
         }
+        
+        File f2 = get_albumimage_for_artistalbum(current_artist, current_album, "embedded");
+        embedded_name = f2 != null ? f2.get_path() : EMPTYSTRING;
         
         large_name = small_name.substring(0, small_name.length - "medium".length);
         large_name = large_name + "extralarge";
         File small = File.new_for_path(small_name);
         File large = File.new_for_path(large_name);
+        File embedded = File.new_for_path(embedded_name);
         if(!small.query_exists(null))
             small_name = null;
         if(!large.query_exists(null))
             image_path_large = small_name;
         else
             image_path_large = large_name;
+        
+        if(!embedded.query_exists(null))
+            image_path_embedded = null;
+        else
+            image_path_embedded = embedded_name;
+        
         image_path_small = small_name;
     }
     

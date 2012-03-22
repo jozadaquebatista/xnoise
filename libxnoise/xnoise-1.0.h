@@ -2168,6 +2168,8 @@ const gchar* xnoise_global_access_get_image_path_small (XnoiseGlobalAccess* self
 void xnoise_global_access_set_image_path_small (XnoiseGlobalAccess* self, const gchar* value);
 const gchar* xnoise_global_access_get_image_path_large (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_image_path_large (XnoiseGlobalAccess* self, const gchar* value);
+const gchar* xnoise_global_access_get_image_path_embedded (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_image_path_embedded (XnoiseGlobalAccess* self, const gchar* value);
 GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
 GType xnoise_item_handler_type_get_type (void) G_GNUC_CONST;
 GType xnoise_action_context_get_type (void) G_GNUC_CONST;

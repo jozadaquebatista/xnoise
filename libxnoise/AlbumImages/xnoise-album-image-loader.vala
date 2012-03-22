@@ -36,11 +36,11 @@ using Xnoise.PluginModule;
 
 namespace Xnoise {
     public static File? get_albumimage_for_artistalbum(string? artist, string? album, string? size) {
-        if(artist == null)
+        if(artist == null || artist == UNKNOWN_ARTIST)
             return null;
-        if(album == null)
+        if(album == null  || album == UNKNOWN_ALBUM)
             return null;
-        if(size == null)
+        if(size == null   || size == EMPTYSTRING)
             size = "medium";
         File f = File.new_for_path(GLib.Path.build_filename(GLib.Path.build_filename(data_folder(),
                                                                                      "album_images",

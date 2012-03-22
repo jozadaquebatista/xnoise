@@ -49,6 +49,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         init_video_screen();
         cover_image_available = false;
         global.notify["image-path-large"].connect(on_image_path_changed);
+        global.notify["image-path-embedded"].connect(on_image_path_changed);
         this.button_release_event.connect(on_button_released);
     }
     
@@ -164,8 +165,23 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     }
 
     private void on_image_path_changed() {
-        //print("on_image_path_changed %s\n", global.image_path_large);
-        if(global.image_path_large != null) {
+        //print("on_image_path_changed %s\n", global.image_path_embedded);
+        if(global.image_path_embedded != null) {
+            try {
+                cover_image_pixb = new Gdk.Pixbuf.from_file(global.image_path_embedded);
+            }
+            catch(GLib.Error e) {
+                print("%s\n", e.message);
+                return;
+            }
+            cover_image_available = true;
+            if(this.visible) {
+                Gdk.Window w = this.get_window();
+                if(w != null) 
+                    w.invalidate_rect(null, false);
+            }
+        }
+        else if(global.image_path_large != null) {
             try {
                 cover_image_pixb = new Gdk.Pixbuf.from_file(global.image_path_large);
             }
@@ -179,7 +195,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 if(w != null) 
                     w.invalidate_rect(null, false);
             }
-                
         }
         else {
             cover_image_pixb = null;
