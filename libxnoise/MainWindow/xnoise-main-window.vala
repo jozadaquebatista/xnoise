@@ -50,6 +50,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string HIDE_LIBRARY      = _("Hide Library");
     private const string SHOW_LIBRARY      = _("Show Library");
     private unowned Main xn;
+    private CssProvider css_provider_search;
     private int idx_tracklist;
     private int idx_video;
     private int idx_lyrics;
@@ -291,11 +292,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 sbuttonTL.select(idx_video, true);
             }
         });
+        css_provider_search = new CssProvider();
+        try {
+            css_provider_search.load_from_data(error_css, error_css.length);
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
         Idle.add( () => {
             searchEntryMB.grab_focus();
             return false;
         });
-        
     }
     
     private void buffer_position() {
@@ -581,46 +588,55 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         return false;
     }
     
-    private const int 1_KEY = 0x0031;
-    private const int 2_KEY = 0x0032;
-    private const int 3_KEY = 0x0033;
-    private const int F_KEY = 0x0066;
-    private const int D_KEY = 0x0064;
-    private const int M_KEY = 0x006D;
-    private const int Q_KEY = 0x0071;
+    private void colorize_search_background(bool colored = false) {
+        if(colored)
+            searchEntryMB.get_style_context().add_provider(css_provider_search, STYLE_PROVIDER_PRIORITY_APPLICATION);
+        else
+            searchEntryMB.get_style_context().remove_provider(css_provider_search);
+    }
+    
+    private const int 1_KEY     = 0x0031;
+    private const int 2_KEY     = 0x0032;
+    private const int 3_KEY     = 0x0033;
+    private const int F_KEY     = 0x0066;
+    private const int D_KEY     = 0x0064;
+    private const int M_KEY     = 0x006D;
+    private const int Q_KEY     = 0x0071;
     private const int SPACE_KEY = 0x0020;
+    private const int ALT_KEY   = 0x0018;
+    private const int CTRL_KEY  = 0x0014;
+    
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%d : %d\n",(int)e.keyval, (int)e.state);
         switch(e.keyval) {
             case F_KEY: {
-                    if(e.state != 0x0014) // Ctrl Modifier
+                    if(e.state != CTRL_KEY) // Ctrl Modifier
                         return false;
                     searchEntryMB.grab_focus();
                 }
                 return true;
             case D_KEY: {
-                    if(e.state != 0x0014) // Ctrl Modifier
+                    if(e.state != CTRL_KEY) // Ctrl Modifier
                         return false;
                     searchEntryMB.text = EMPTYSTRING;
                     global.searchtext = EMPTYSTRING;
-                    searchEntryMB.get_style_context().remove_class("not-found");
-//                    this.mediaBr.on_searchtext_changed();
+                    colorize_search_background(false);
                 }
                 return true;
             case 1_KEY: {
-                    if(e.state != 0x0018) // ALT Modifier
+                    if(e.state != ALT_KEY) // ALT Modifier
                         return false;
                     this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
                 }
                 return true;
             case 2_KEY: {
-                    if(e.state != 0x0018) // ALT Modifier
+                    if(e.state != ALT_KEY) // ALT Modifier
                         return false;
                     this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
                 }
                 return true;
             case 3_KEY: {
-                    if(e.state != 0x0018) // ALT Modifier
+                    if(e.state != ALT_KEY) // ALT Modifier
                         return false;
                     if(active_lyrics == false)
                         return false;
@@ -634,13 +650,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
                 return true;
             case M_KEY: {
-                    if(e.state != 0x0014) // Ctrl Modifier
+                    if(e.state != CTRL_KEY) // Ctrl Modifier
                         return false;
                     toggle_media_browser_visibility();
                     break;
                 }
             case Q_KEY: {
-                    if(e.state != 0x0014) // Ctrl Modifier
+                    if(e.state != CTRL_KEY) // Ctrl Modifier
                         return false;
                     quit_now();
                     break;
@@ -1660,10 +1676,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 var entry = (Entry)s;
                 global.searchtext = entry.text;
                 if(entry.text != EMPTYSTRING) {
-                    searchEntryMB.get_style_context().add_class("not-found");
+                    colorize_search_background(true);
                 }
                 else {
-                    searchEntryMB.get_style_context().remove_class("not-found");
+                    colorize_search_background(false);
                 }
                 return false;
             });
@@ -1676,8 +1692,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 if(p0 == Gtk.EntryIconPosition.SECONDARY) {
                     ((Entry)s).text = EMPTYSTRING;
                     global.searchtext = EMPTYSTRING;
-                    searchEntryMB.get_style_context().remove_class("not-found");
-//                    this.mediaBr.on_searchtext_changed();
+                    colorize_search_background(false);
                 }
             });
             
@@ -1748,6 +1763,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         });
         return false;
     }
+    
+    private const string error_css = """
+        @define-color text_color #FFFFFF;
+        @define-color base_color #E9967A;
+    """; // DarkSalmon BG w white font
 }
 
 
