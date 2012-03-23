@@ -82,11 +82,24 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
                 return false;
             });
         });
+        MediaImporter.ResetNotificationData? cbr = MediaImporter.ResetNotificationData();
+        cbr.cb = reset_cb;
+        media_importer.register_reset_callback(cbr);
+    }
+    
+    private void reset_cb() {
+        this.remove_all();
+    }
+
+    public void remove_all() {
+        view.set_model(null);
+        this.clear();
+        view.set_model(this);
     }
 
     public void filter() {
         //print("filter\n");
-        view.model = null;
+        view.set_model(null);
         this.clear();
         this.populate();
     }

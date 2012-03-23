@@ -872,6 +872,9 @@ typedef struct _XnoiseMediaExtensionsPrivate XnoiseMediaExtensionsPrivate;
 typedef struct _XnoiseMediaImporter XnoiseMediaImporter;
 typedef struct _XnoiseMediaImporterClass XnoiseMediaImporterClass;
 typedef struct _XnoiseMediaImporterPrivate XnoiseMediaImporterPrivate;
+
+#define XNOISE_MEDIA_IMPORTER_TYPE_RESET_NOTIFICATION_DATA (xnoise_media_importer_reset_notification_data_get_type ())
+typedef struct _XnoiseMediaImporterResetNotificationData XnoiseMediaImporterResetNotificationData;
 typedef struct _XnoiseMediaStreamSchemesPrivate XnoiseMediaStreamSchemesPrivate;
 
 #define GST_TYPE_STREAM_TYPE (gst_stream_type_get_type ())
@@ -1848,6 +1851,12 @@ struct _XnoiseMediaImporterClass {
 	GObjectClass parent_class;
 };
 
+typedef void (*XnoiseMediaImporterDatabaseResetCallback) (void* user_data);
+struct _XnoiseMediaImporterResetNotificationData {
+	XnoiseMediaImporterDatabaseResetCallback cb;
+	gpointer cb_target;
+};
+
 struct _XnoiseMediaStreamSchemes {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -2777,6 +2786,10 @@ XnoiseMediaExtensions* xnoise_media_extensions_new (void);
 XnoiseMediaExtensions* xnoise_media_extensions_construct (GType object_type);
 gchar** xnoise_media_extensions_get_list (XnoiseMediaExtensions* self, int* result_length1);
 GType xnoise_media_importer_get_type (void) G_GNUC_CONST;
+GType xnoise_media_importer_reset_notification_data_get_type (void) G_GNUC_CONST;
+XnoiseMediaImporterResetNotificationData* xnoise_media_importer_reset_notification_data_dup (const XnoiseMediaImporterResetNotificationData* self);
+void xnoise_media_importer_reset_notification_data_free (XnoiseMediaImporterResetNotificationData* self);
+void xnoise_media_importer_register_reset_callback (XnoiseMediaImporter* self, XnoiseMediaImporterResetNotificationData* cbd);
 gchar* xnoise_media_importer_get_uri_for_item_id (XnoiseMediaImporter* self, gint32 id);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);

@@ -87,6 +87,8 @@ namespace Xnoise {
         // ITEM STUFF
         itemhandler_manager = new ItemHandlerManager();
         item_converter = new ItemConverter();
+        
+        // MEDIA IMPORTER
         media_importer = new MediaImporter();
         
         // WORKERS

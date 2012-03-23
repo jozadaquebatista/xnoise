@@ -291,7 +291,9 @@ public class Xnoise.Database.Writer : GLib.Object {
     
     private List<NotificationData?> change_callbacks = new List<NotificationData?>();
     
-    public void register_change_callback(NotificationData cbd) {
+    public void register_change_callback(NotificationData? cbd) {
+        if(cbd == null)
+            return;
         change_callbacks.prepend(cbd);
     }
     
@@ -400,7 +402,7 @@ public class Xnoise.Database.Writer : GLib.Object {
             this.db_error();
             return;
         }
-        foreach(NotificationData cxd in change_callbacks) {
+        foreach(NotificationData? cxd in change_callbacks) {
             if(cxd.cb != null)
                 cxd.cb(ChangeType.UPDATE_PLAYCOUNT, null);
         }
@@ -420,7 +422,7 @@ public class Xnoise.Database.Writer : GLib.Object {
             this.db_error();
             return;
         }
-        foreach(NotificationData cxd in change_callbacks) {
+        foreach(NotificationData? cxd in change_callbacks) {
             if(cxd.cb != null)
                 cxd.cb(ChangeType.UPDATE_LASTPLAYED, null);
         }

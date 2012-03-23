@@ -87,6 +87,13 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 return false;
             });
         });
+        MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
+        cbr.cb = reset_change_cb;
+        media_importer.register_reset_callback(cbr);
+    }
+    
+    private void reset_change_cb() {
+        this.remove_all();
     }
     
     private bool stream_in_tree = false;
@@ -279,7 +286,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     
     public void remove_all() {
         this.stream_in_tree = false;
+        main_window.mediaBr.set_model(null);
         this.clear();
+        main_window.mediaBr.set_model(this);
     }
 
     public void insert_stream_sorted(TrackData[] tda) {

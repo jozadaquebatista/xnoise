@@ -312,14 +312,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.target_list,
             Gdk.DragAction.COPY|
             Gdk.DragAction.DEFAULT
-            );
+        );
         Gtk.drag_dest_set(
             lyricsView,
             Gtk.DestDefaults.MOTION,
             this.target_list,
             Gdk.DragAction.COPY|
             Gdk.DragAction.DEFAULT
-            );
+        );
         videoscreen.button_press_event.connect(on_video_da_button_press);
         sign_drag_over_content_area.connect(() => {
             //switch to tracklist for dropping

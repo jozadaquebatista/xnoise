@@ -35,8 +35,22 @@ using Xnoise.Services;
 using Xnoise.TagAccess;
 
 public class Xnoise.MediaImporter : GLib.Object {
-
+    
     private static int FILE_COUNT = 150;
+    
+    public delegate void DatabaseResetCallback();
+    
+    public struct ResetNotificationData {
+        public unowned DatabaseResetCallback cb;
+    }
+    
+    private List<ResetNotificationData?> reset_callbacks = new List<ResetNotificationData?>();
+    
+    public void register_reset_callback(ResetNotificationData? cbd) {
+        if(cbd == null)
+            return;
+        reset_callbacks.prepend(cbd);
+    }
     
     internal void reimport_media_groups() {
         Worker.Job job;
@@ -50,7 +64,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         //this function uses the database so use it in the database thread
         return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
         
-        main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
+        main_window.mediaBr.mediabrowsermodel.cancel_fill_model(); // TODO
         
         //add folders
         string[] mfolders = db_reader.get_media_folders();
@@ -79,7 +93,6 @@ public class Xnoise.MediaImporter : GLib.Object {
                                          5,
                                          prg_bar);
             global.media_import_in_progress = true;
-            main_window.mediaBr.mediabrowsermodel.remove_all();
             
             import_media_groups(strms, mfiles, mfolders, msg_id, true, false);
             
@@ -119,6 +132,13 @@ public class Xnoise.MediaImporter : GLib.Object {
         t.start();
         // global.media_import_in_progress has to be reset in the last job !
         io_import_job_running = true;
+        
+        //Reset subscribed Dockable Media
+        foreach(ResetNotificationData? cxd in reset_callbacks) {
+            if(cxd.cb != null) {
+                cxd.cb();
+            }
+        }
         
         Worker.Job job;
         if(full_rescan) {

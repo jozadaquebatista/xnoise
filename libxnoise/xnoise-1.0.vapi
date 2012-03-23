@@ -77,7 +77,7 @@ namespace Xnoise {
 			public string? get_uri_for_item_id (int32 id);
 			public void inc_playcount (string uri);
 			public bool insert_title (ref Xnoise.TrackData td);
-			public void register_change_callback (Xnoise.Database.Writer.NotificationData cbd);
+			public void register_change_callback (Xnoise.Database.Writer.NotificationData? cbd);
 			public void update_lastplay_time (string uri, int64 playtime);
 			public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
 			public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
@@ -834,8 +834,13 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaImporter : GLib.Object {
+		public struct ResetNotificationData {
+			public weak Xnoise.MediaImporter.DatabaseResetCallback cb;
+		}
+		public delegate void DatabaseResetCallback ();
 		public MediaImporter ();
 		public string? get_uri_for_item_id (int32 id);
+		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaStreamSchemes {
