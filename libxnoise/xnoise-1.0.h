@@ -532,6 +532,16 @@ typedef struct _XnoiseMediaBrowserClass XnoiseMediaBrowserClass;
 typedef struct _XnoiseTrackList XnoiseTrackList;
 typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 
+#define XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR (xnoise_main_window_media_selector_get_type ())
+#define XNOISE_MAIN_WINDOW_MEDIA_SELECTOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR, XnoiseMainWindowMediaSelector))
+#define XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR, XnoiseMainWindowMediaSelectorClass))
+#define XNOISE_MAIN_WINDOW_IS_MEDIA_SELECTOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR))
+#define XNOISE_MAIN_WINDOW_IS_MEDIA_SELECTOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR))
+#define XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR, XnoiseMainWindowMediaSelectorClass))
+
+typedef struct _XnoiseMainWindowMediaSelector XnoiseMainWindowMediaSelector;
+typedef struct _XnoiseMainWindowMediaSelectorClass XnoiseMainWindowMediaSelectorClass;
+
 #define XNOISE_MAIN_WINDOW_TYPE_PLAYER_REPEAT_MODE (xnoise_main_window_player_repeat_mode_get_type ())
 
 #define XNOISE_TYPE_INFO_BAR (xnoise_info_bar_get_type ())
@@ -543,6 +553,9 @@ typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 
 typedef struct _XnoiseInfoBar XnoiseInfoBar;
 typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
+typedef struct _XnoiseMainWindowMediaSelectorPrivate XnoiseMainWindowMediaSelectorPrivate;
+
+#define XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_TYPE_COLUMN (xnoise_main_window_media_selector_column_get_type ())
 typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 
 #define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
@@ -1436,7 +1449,7 @@ struct _XnoiseMainWindow {
 	XnoiseMediaBrowser* mediaBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* fullscreenwindow;
-	GtkTreeView* media_source_selector;
+	XnoiseMainWindowMediaSelector* media_source_selector;
 };
 
 struct _XnoiseMainWindowClass {
@@ -1449,6 +1462,26 @@ typedef enum  {
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_ALL,
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_RANDOM
 } XnoiseMainWindowPlayerRepeatMode;
+
+struct _XnoiseMainWindowMediaSelector {
+	GtkTreeView parent_instance;
+	XnoiseMainWindowMediaSelectorPrivate * priv;
+};
+
+struct _XnoiseMainWindowMediaSelectorClass {
+	GtkTreeViewClass parent_class;
+};
+
+typedef enum  {
+	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_ICON,
+	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_VIS_TEXT,
+	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_TAB_NO,
+	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_WEIGHT,
+	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_CATEGORY,
+	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_SELECTION_STATE,
+	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_SELECTION_ICON,
+	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_N_COLUMNS
+} XnoiseMainWindowMediaSelectorColumn;
 
 struct _XnoiseMediaBrowser {
 	GtkTreeView parent_instance;
@@ -2263,6 +2296,7 @@ GType xnoise_iparams_get_type (void) G_GNUC_CONST;
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
 GType xnoise_track_list_get_type (void) G_GNUC_CONST;
+GType xnoise_main_window_media_selector_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_player_repeat_mode_get_type (void) G_GNUC_CONST;
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 XnoiseMainWindow* xnoise_main_window_new (void);
@@ -2289,6 +2323,9 @@ gboolean xnoise_main_window_get_usestop (XnoiseMainWindow* self);
 void xnoise_main_window_set_usestop (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
+GType xnoise_main_window_media_selector_column_get_type (void) G_GNUC_CONST;
+XnoiseMainWindowMediaSelector* xnoise_main_window_media_selector_new (void);
+XnoiseMainWindowMediaSelector* xnoise_main_window_media_selector_construct (GType object_type);
 GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
 XnoiseMediaBrowser* xnoise_media_browser_new (GtkWidget* ow);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, GtkWidget* ow);

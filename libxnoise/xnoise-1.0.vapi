@@ -742,6 +742,20 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {
+		public class MediaSelector : Gtk.TreeView {
+			public enum Column {
+				ICON,
+				VIS_TEXT,
+				TAB_NO,
+				WEIGHT,
+				CATEGORY,
+				SELECTION_STATE,
+				SELECTION_ICON,
+				N_COLUMNS
+			}
+			public MediaSelector ();
+			public signal void selection_changed (int selection_number);
+		}
 		public enum PlayerRepeatMode {
 			NOT_AT_ALL,
 			SINGLE,
@@ -760,7 +774,7 @@ namespace Xnoise {
 		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;
 		public Gtk.ScrolledWindow mediaBrScrollWin;
-		public Gtk.TreeView media_source_selector;
+		public Xnoise.MainWindow.MediaSelector media_source_selector;
 		public Xnoise.ControlButton nextButton;
 		public Xnoise.PlayPauseButton playPauseButton;
 		public Xnoise.ControlButton previousButton;

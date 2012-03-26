@@ -1296,7 +1296,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     
     private Gtk.Notebook media_sources_nb;
     private int dockable_number = 0;
-    public TreeView media_source_selector;
+    public MediaSelector media_source_selector;
 //    private List<unowned TreeView> dockable_treeviews = new List<unowned TreeView>();
     private void insert_dockable(DockableMedia d, bool bold = false, ref TreeIter? xiter, bool initial_selection = false) {
         Gtk.Widget? widg = d.get_widget(this);
@@ -1314,7 +1314,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         m.foreach( (m,p,i) => {
             if(p.get_depth() == 1) {
                 DockableMedia.Category cat;
-                m.get(i, 4, out cat);
+                m.get(i, MediaSelector.Column.CATEGORY , out cat);
                 if(cat == category) {
                     found_category = true;
                     iter = i;
@@ -1327,22 +1327,24 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             print("add new category %s\n", get_category_name(category));
             m.append(out iter, null);
             m.set(iter,
-                  0, null,
-                  1, get_category_name(category),
-                  2, -1,
-                  3, Pango.Weight.BOLD,
-                  4, category,
-                  5, false
+                  MediaSelector.Column.ICON, null,
+                  MediaSelector.Column.VIS_TEXT, get_category_name(category),
+                  MediaSelector.Column.TAB_NO, -1,
+                  MediaSelector.Column.WEIGHT, Pango.Weight.BOLD,
+                  MediaSelector.Column.CATEGORY, category,
+                  MediaSelector.Column.SELECTION_STATE, false,
+                  MediaSelector.Column.SELECTION_ICON, null
             );
         }
         m.append(out child, iter);
         m.set(child,
-              0, d.get_icon(),
-              1, d.headline(),
-              2, dockable_number,
-              3, Pango.Weight.NORMAL,
-              4, category,
-              5, initial_selection
+              MediaSelector.Column.ICON, d.get_icon(),
+              MediaSelector.Column.VIS_TEXT, d.headline(),
+              MediaSelector.Column.TAB_NO, dockable_number,
+              MediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
+              MediaSelector.Column.CATEGORY, category,
+              MediaSelector.Column.SELECTION_STATE, initial_selection,
+              MediaSelector.Column.SELECTION_ICON, (initial_selection ? icon_repo.selected_collection_icon : null)
         );
         dockable_number++;
         xiter = child;
@@ -1565,29 +1567,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             media_sources_nb.set_border_width(0);
             media_sources_nb.show_border = false;
             
-            media_source_selector = new TreeView();
-            media_source_selector.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
-            media_source_selector.headers_visible = false;
-            media_source_selector.set_enable_search(false);
-            media_source_selector.get_selection().set_mode(SelectionMode.SINGLE);
-            TreeStore media_source_selector_model = new TreeStore(6, 
-                                                                  typeof(Gdk.Pixbuf),   //icon
-                                                                  typeof(string),       //vis_text
-                                                                  typeof(int),          //tab no.
-                                                                  typeof(int),          //weight
-                                                                  typeof(DockableMedia.Category),
-                                                                  typeof(bool)          //selection state
-                                                                  );
-            var column = new TreeViewColumn();
-            var renderer = new CellRendererText();
-            var rendererPb = new CellRendererPixbuf();
-            column.pack_start(rendererPb, false);
-            column.pack_start(renderer, true);
-            column.add_attribute(rendererPb, "pixbuf", 0);
-            column.add_attribute(renderer, "text", 1);
-            column.add_attribute(renderer, "weight", 3);
-            media_source_selector.insert_column(column, -1);
-            media_source_selector.model = media_source_selector_model;
+            media_source_selector = new MediaSelector();
+            media_source_selector.selection_changed.connect( (s,t) => {
+                media_sources_nb.set_current_page(t);
+            });
             var mss_sw = new ScrolledWindow(null, null);
             mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);
             mss_sw.add(media_source_selector);
@@ -1616,50 +1599,50 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 TreeIter? ix = null;
                 insert_dockable(d, false, ref ix, false);
             }
-            media_source_selector.button_press_event.connect( (e)  => {
-                int x = (int)e.x;
-                int y = (int)e.y;
-                int cell_x, cell_y;
-                TreePath treepath;
-                TreeViewColumn co;
-                if(!media_source_selector.get_path_at_pos(x, y, out treepath, out co, out cell_x, out cell_y))
-                    return true;
-                
-                TreeIter it;
-                TreeStore m = (TreeStore)media_source_selector.get_model();
-                int tab = 0;
-                
-                if(treepath.get_depth() == 1 || treepath.get_depth() > 2) {
-                    if(!media_source_selector.is_row_expanded(treepath)) {
-                        media_source_selector.expand_row(treepath, false);
-                        TreeIter parent, ix;
-                        m.get_iter(out parent, treepath);
-                        for(int i = 0; i < m.iter_n_children(parent); i++) {
-                            m.iter_nth_child(out ix, parent, i);
-                            bool row_selected = false;
-                            m.get(ix, 5, out row_selected);
-                            if(row_selected) {
-                                media_source_selector.get_selection().select_iter(ix);
-                                break;
-                            }
-                        }
-                    }
-                    else {
-                        media_source_selector.collapse_row(treepath);
-                    }
-                    return true;
-                }
-                m.foreach( (mo,p,iy) => {
-                    TreeStore mx = (TreeStore)mo;
-                    mx.set(iy, 5, false);
-                    return false;
-                });
-                m.get_iter(out it, treepath);
-                m.get(it, 2, out tab);
-                m.set(it, 5, true);
-                media_sources_nb.set_current_page(tab);
-                return false;
-            });
+//            media_source_selector.button_press_event.connect( (e)  => {
+//                int x = (int)e.x;
+//                int y = (int)e.y;
+//                int cell_x, cell_y;
+//                TreePath treepath;
+//                TreeViewColumn co;
+//                if(!media_source_selector.get_path_at_pos(x, y, out treepath, out co, out cell_x, out cell_y))
+//                    return true;
+//                
+//                TreeIter it;
+//                TreeStore m = (TreeStore)media_source_selector.get_model();
+//                int tab = 0;
+//                
+//                if(treepath.get_depth() == 1 || treepath.get_depth() > 2) {
+//                    if(!media_source_selector.is_row_expanded(treepath)) {
+//                        media_source_selector.expand_row(treepath, false);
+//                        TreeIter parent, ix;
+//                        m.get_iter(out parent, treepath);
+//                        for(int i = 0; i < m.iter_n_children(parent); i++) {
+//                            m.iter_nth_child(out ix, parent, i);
+//                            bool row_selected = false;
+//                            m.get(ix, 5, out row_selected);
+//                            if(row_selected) {
+//                                media_source_selector.get_selection().select_iter(ix);
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    else {
+//                        media_source_selector.collapse_row(treepath);
+//                    }
+//                    return true;
+//                }
+//                m.foreach( (mo,p,iy) => {
+//                    TreeStore mx = (TreeStore)mo;
+//                    mx.set(iy, 5, false);
+//                    return false;
+//                });
+//                m.get_iter(out it, treepath);
+//                m.get(it, 2, out tab);
+//                m.set(it, 5, true);
+//                media_sources_nb.set_current_page(tab);
+//                return false;
+//            });
             media_source_selector.expand_all();
             media_source_selector.get_selection().select_iter(media_browser_iter);
             mbbox01.pack_start(mbbx, true, true, 0);
@@ -1745,6 +1728,168 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.key_release_event.connect(this.on_key_released);
         this.key_press_event.connect(this.on_key_pressed);
         this.window_state_event.connect(this.on_window_state_change);
+    }
+    
+    public class MediaSelector : TreeView {
+        
+        public enum Column {
+            ICON,
+            VIS_TEXT,
+            TAB_NO,
+            WEIGHT,
+            CATEGORY,
+            SELECTION_STATE,
+            SELECTION_ICON,
+            N_COLUMNS
+        }
+        
+        public signal void selection_changed(int selection_number);
+        
+        public MediaSelector() {
+            this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+            this.headers_visible = false;
+            this.set_enable_search(false);
+            this.get_selection().set_mode(SelectionMode.SINGLE);
+            TreeStore media_source_selector_model = new TreeStore(7, 
+                                                                  typeof(Gdk.Pixbuf),           //icon
+                                                                  typeof(string),               //vis_text
+                                                                  typeof(int),                  //tab no.
+                                                                  typeof(int),                  //weight
+                                                                  typeof(DockableMedia.Category),
+                                                                  typeof(bool),                 //selection state
+                                                                  typeof(Gdk.Pixbuf)            //selection icon
+                                                                  );
+            var column = new TreeViewColumn();
+            var renderer = new CellRendererText();
+            var rendererPb = new CellRendererPixbuf();
+            column.pack_start(rendererPb, false);
+            column.pack_start(renderer, true);
+            column.add_attribute(rendererPb, "pixbuf", 0);
+            column.add_attribute(renderer, "text", 1);
+            column.add_attribute(renderer, "weight", 3);
+            this.insert_column(column, -1);
+            
+            column = new TreeViewColumn();
+            rendererPb = new CellRendererPixbuf();
+            column.pack_start(rendererPb, false);
+            this.insert_column(column, -1);
+            column.add_attribute(rendererPb, "pixbuf", 6);
+            
+            this.model = media_source_selector_model;
+            
+            this.key_release_event.connect(this.on_key_released);
+            
+            this.button_press_event.connect( (e)  => {
+                int x = (int)e.x;
+                int y = (int)e.y;
+                int cell_x, cell_y;
+                TreePath treepath;
+                TreeViewColumn co;
+                if(!this.get_path_at_pos(x, y, out treepath, out co, out cell_x, out cell_y))
+                    return true;
+                
+                TreeIter it;
+                TreeStore m = (TreeStore)this.get_model();
+                int tab = 0;
+                if(treepath.get_depth() == 1) {
+                    if(!this.is_row_expanded(treepath)) {
+                        this.expand_row(treepath, false);
+                    }
+                    else {
+                        this.collapse_row(treepath);
+                    }
+                    return true;
+                }
+                if(treepath.get_depth() == 2) {
+                    m.foreach( (mo,p,iy) => {
+                        TreeStore mx = (TreeStore)mo;
+                        mx.set(iy, 
+                               Column.SELECTION_STATE, false,
+                               Column.SELECTION_ICON, null
+                        );
+                        return false;
+                    });
+                    m.get_iter(out it, treepath);
+                    m.get(it, Column.TAB_NO, out tab);
+                    m.set(it,
+                          Column.SELECTION_STATE, true,
+                          Column.SELECTION_ICON, icon_repo.selected_collection_icon
+                    );
+                    selection_changed(tab);
+                }
+                //media_sources_nb.set_current_page(tab);
+                return false;
+            });
+        }
+        
+        private const int KEY_CURSOR_DOWN  = 0xFF54;
+        private const int KEY_CURSOR_UP    = 0xFF52;
+        
+        private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
+            //print("%d\n",(int)e.keyval);
+            Gtk.TreeModel m;
+            switch(e.keyval) {
+                case KEY_CURSOR_UP:
+                case KEY_CURSOR_DOWN:
+                    Gtk.TreeSelection selection = this.get_selection();
+                    if(selection.count_selected_rows() < 1) break;
+                    GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
+                    TreePath? treepath = selected_rows.nth_data(0);
+                    if(treepath!=null) {
+                        if(treepath.get_depth() == 1) {
+                            this.expand_row(treepath, false);
+//                            selection.unselect_all();
+//                            TreeIter iter, child;
+//                            this.model.get_iter(out iter, treepath);
+//                            if(e.keyval == KEY_CURSOR_UP) {
+//                                this.model.iter_nth_child(out child, iter, 0);
+//                            }
+//                            else {
+//                                int childrencount = this.model.iter_n_children(iter);
+//                                this.model.iter_nth_child(out child, iter, childrencount -1);
+//                            }
+//                            selection.select_iter(child);
+//                            TreePath child_path = this.model.get_path(child);
+//                            this.set_cursor(child_path, null,false);
+//                            m.foreach( (mo,p,iy) => {
+//                                TreeStore mx = (TreeStore)mo;
+//                                mx.set(iy, 5, false);
+//                                return false;
+//                            });
+//                            int tab = 0;
+//                            TreeStore mx = (TreeStore)this.model;
+//                            mx.get(child, 2, out tab);
+//                            mx.set(child, 5, true);
+//                            selection_changed(tab);
+                        }
+                        else if(treepath.get_depth() == 2) {
+                            TreeIter iter;
+                            this.model.get_iter(out iter, treepath);
+                            m.foreach( (mo,p,iy) => {
+                                TreeStore mx = (TreeStore)mo;
+                                mx.set(iy, 
+                                       Column.SELECTION_STATE, false,
+                                       Column.SELECTION_ICON, null
+                                );
+                                return false;
+                            });
+                            this.set_cursor(treepath, null,false);
+                            int tab = 0;
+                            TreeStore mx = (TreeStore)this.model;
+                            mx.get(iter, Column.TAB_NO, out tab);
+                            mx.set(iter, 
+                                  Column.SELECTION_STATE, true,
+                                  Column.SELECTION_ICON, icon_repo.selected_collection_icon
+                            );
+                            selection_changed(tab);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
     }
     
     public void show_status_info(Xnoise.InfoBar bar) {

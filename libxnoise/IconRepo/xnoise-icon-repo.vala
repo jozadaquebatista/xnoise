@@ -35,15 +35,16 @@ using Gtk;
 internal class Xnoise.IconRepo : GLib.Object {
     private unowned IconTheme theme = null;
 
-    internal Gdk.Pixbuf artist_icon           { get; private set; }
-    internal Gdk.Pixbuf album_icon            { get; private set; }
-    internal Gdk.Pixbuf title_icon            { get; private set; }
-    internal Gdk.Pixbuf video_icon            { get; private set; }
-    internal Gdk.Pixbuf videos_icon           { get; private set; }
-    internal Gdk.Pixbuf radios_icon           { get; private set; }
-    internal Gdk.Pixbuf loading_icon          { get; private set; }
-    internal Gdk.Pixbuf playlist_icon         { get; private set; }
-    internal Gdk.Pixbuf local_collection_icon { get; private set; }
+    internal Gdk.Pixbuf artist_icon                 { get; private set; }
+    internal Gdk.Pixbuf album_icon                  { get; private set; }
+    internal Gdk.Pixbuf title_icon                  { get; private set; }
+    internal Gdk.Pixbuf video_icon                  { get; private set; }
+    internal Gdk.Pixbuf videos_icon                 { get; private set; }
+    internal Gdk.Pixbuf radios_icon                 { get; private set; }
+    internal Gdk.Pixbuf loading_icon                { get; private set; }
+    internal Gdk.Pixbuf playlist_icon               { get; private set; }
+    internal Gdk.Pixbuf local_collection_icon       { get; private set; }
+    internal Gdk.Pixbuf selected_collection_icon    { get; private set; }
 
     internal signal void icon_theme_changed();
     
@@ -102,6 +103,8 @@ internal class Xnoise.IconRepo : GLib.Object {
                 local_collection_icon = w.render_icon_pixbuf(Gtk.Stock.HOME, IconSize.BUTTON);
             else
                 local_collection_icon = IconTheme.get_default().load_icon("xn-local-collection", iconheight, IconLookupFlags.FORCE_SIZE);
+            
+            selected_collection_icon = w.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);
