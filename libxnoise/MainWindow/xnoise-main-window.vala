@@ -1798,6 +1798,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     else {
                         this.collapse_row(treepath);
                     }
+                    this.get_selection().unselect_all();
+                    this.get_selection().select_path(treepath);
                     return true;
                 }
                 if(treepath.get_depth() == 2) {
@@ -1838,29 +1840,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     if(treepath!=null) {
                         if(treepath.get_depth() == 1) {
                             this.expand_row(treepath, false);
-//                            selection.unselect_all();
-//                            TreeIter iter, child;
-//                            this.model.get_iter(out iter, treepath);
-//                            if(e.keyval == KEY_CURSOR_UP) {
-//                                this.model.iter_nth_child(out child, iter, 0);
-//                            }
-//                            else {
-//                                int childrencount = this.model.iter_n_children(iter);
-//                                this.model.iter_nth_child(out child, iter, childrencount -1);
-//                            }
-//                            selection.select_iter(child);
-//                            TreePath child_path = this.model.get_path(child);
-//                            this.set_cursor(child_path, null,false);
-//                            m.foreach( (mo,p,iy) => {
-//                                TreeStore mx = (TreeStore)mo;
-//                                mx.set(iy, 5, false);
-//                                return false;
-//                            });
-//                            int tab = 0;
-//                            TreeStore mx = (TreeStore)this.model;
-//                            mx.get(child, 2, out tab);
-//                            mx.set(child, 5, true);
-//                            selection_changed(tab);
                         }
                         else if(treepath.get_depth() == 2) {
                             TreeIter iter;
