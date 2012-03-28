@@ -437,6 +437,17 @@ typedef struct _XnoiseHandlerRemoveTrack XnoiseHandlerRemoveTrack;
 typedef struct _XnoiseHandlerRemoveTrackClass XnoiseHandlerRemoveTrackClass;
 typedef struct _XnoiseHandlerRemoveTrackPrivate XnoiseHandlerRemoveTrackPrivate;
 
+#define XNOISE_TYPE_HANDLER_SHOW_IN_FILE_MANAGER (xnoise_handler_show_in_file_manager_get_type ())
+#define XNOISE_HANDLER_SHOW_IN_FILE_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_SHOW_IN_FILE_MANAGER, XnoiseHandlerShowInFileManager))
+#define XNOISE_HANDLER_SHOW_IN_FILE_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_SHOW_IN_FILE_MANAGER, XnoiseHandlerShowInFileManagerClass))
+#define XNOISE_IS_HANDLER_SHOW_IN_FILE_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_SHOW_IN_FILE_MANAGER))
+#define XNOISE_IS_HANDLER_SHOW_IN_FILE_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_SHOW_IN_FILE_MANAGER))
+#define XNOISE_HANDLER_SHOW_IN_FILE_MANAGER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_SHOW_IN_FILE_MANAGER, XnoiseHandlerShowInFileManagerClass))
+
+typedef struct _XnoiseHandlerShowInFileManager XnoiseHandlerShowInFileManager;
+typedef struct _XnoiseHandlerShowInFileManagerClass XnoiseHandlerShowInFileManagerClass;
+typedef struct _XnoiseHandlerShowInFileManagerPrivate XnoiseHandlerShowInFileManagerPrivate;
+
 #define XNOISE_TYPE_ITEM_CONVERTER (xnoise_item_converter_get_type ())
 #define XNOISE_ITEM_CONVERTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_CONVERTER, XnoiseItemConverter))
 #define XNOISE_ITEM_CONVERTER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_CONVERTER, XnoiseItemConverterClass))
@@ -1350,6 +1361,15 @@ struct _XnoiseHandlerRemoveTrackClass {
 	XnoiseItemHandlerClass parent_class;
 };
 
+struct _XnoiseHandlerShowInFileManager {
+	XnoiseItemHandler parent_instance;
+	XnoiseHandlerShowInFileManagerPrivate * priv;
+};
+
+struct _XnoiseHandlerShowInFileManagerClass {
+	XnoiseItemHandlerClass parent_class;
+};
+
 struct _XnoiseItemConverter {
 	GObject parent_instance;
 	XnoiseItemConverterPrivate * priv;
@@ -2242,6 +2262,9 @@ XnoiseHandlerPlayItem* xnoise_handler_play_item_construct (GType object_type);
 GType xnoise_handler_remove_track_get_type (void) G_GNUC_CONST;
 XnoiseHandlerRemoveTrack* xnoise_handler_remove_track_new (void);
 XnoiseHandlerRemoveTrack* xnoise_handler_remove_track_construct (GType object_type);
+GType xnoise_handler_show_in_file_manager_get_type (void) G_GNUC_CONST;
+XnoiseHandlerShowInFileManager* xnoise_handler_show_in_file_manager_new (void);
+XnoiseHandlerShowInFileManager* xnoise_handler_show_in_file_manager_construct (GType object_type);
 void xnoise_item_init (XnoiseItem *self, XnoiseItemType _type, const gchar* _uri, gint32 _db_id);
 GType xnoise_item_converter_get_type (void) G_GNUC_CONST;
 XnoiseTrackData** xnoise_item_converter_to_trackdata (XnoiseItemConverter* self, XnoiseItem* item, const gchar* searchtext, int* result_length1);

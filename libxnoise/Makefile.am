@@ -74,6 +74,7 @@ libxnoise_la_SOURCES = \
     ItemHandlers/EditTags/xnoise-tag-title-editor.vala \
     ItemHandlers/PlayItem/xnoise-handler-play-item.vala \
     ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala \
+    ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala \
     ItemHandlers/xnoise-item.vala \
     ItemHandlers/xnoise-item-converter.vala \
     ItemHandlers/xnoise-item-handler.vala \
@@ -191,6 +192,7 @@ DISTCLEANFILES = \
     ItemHandlers/EditTags/*.c \
     ItemHandlers/PlayItem/*.c \
     ItemHandlers/RemoveTrack/*.c \
+    ItemHandlers/ShowInFilemanager/*.c \
     Lyrics/*.c \
     Main/*.c \
     MainWindow/*.c \
