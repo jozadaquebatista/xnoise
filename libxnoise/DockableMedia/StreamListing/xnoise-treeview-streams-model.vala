@@ -108,10 +108,13 @@ private class Xnoise.TreeViewStreamsModel : Gtk.ListStore {
     private bool insert_job(Worker.Job job) {
         
         job.items = db_reader.get_stream_items(global.searchtext);
-        if(job.items == null)
-            return false;
         
         Idle.add( () => {
+            if(job.items == null) {
+                view.set_model(this);
+                populating_model = false;
+                return false;
+            }
             TreeIter iter;
             foreach(Item? i in job.items) {
                 this.prepend(out iter);
@@ -121,7 +124,7 @@ private class Xnoise.TreeViewStreamsModel : Gtk.ListStore {
                          Column.ITEM, i
                 );
             }
-            view.model = this;
+            view.set_model(this);
             populating_model = false;
             return false;
         });

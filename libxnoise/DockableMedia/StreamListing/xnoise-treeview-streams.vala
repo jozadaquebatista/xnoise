@@ -131,7 +131,7 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView {
         });
         this.realize.connect_after( () => {
             Idle.add( () => {
-                print("realized\n");
+                //print("realized\n");
                 unowned TreeViewColumn tvc = this.get_column(0);
                 int current_width = this.ow.get_allocated_width();
                 
