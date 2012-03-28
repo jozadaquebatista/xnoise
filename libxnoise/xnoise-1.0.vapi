@@ -29,7 +29,9 @@ namespace Xnoise {
 			public Xnoise.Item[]? get_most_played (string searchtext);
 			public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
 			public Xnoise.TrackData[] get_stream_data (string searchtext);
+			public Xnoise.Item[]? get_stream_items (string searchtext);
 			public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
+			public Xnoise.Item? get_streamitem_by_id (int32 id, string searchtext);
 			public Xnoise.StreamData[] get_streams ();
 			public Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id);
 			public Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id);
@@ -742,20 +744,6 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {
-		public class MediaSelector : Gtk.TreeView {
-			public enum Column {
-				ICON,
-				VIS_TEXT,
-				TAB_NO,
-				WEIGHT,
-				CATEGORY,
-				SELECTION_STATE,
-				SELECTION_ICON,
-				N_COLUMNS
-			}
-			public MediaSelector ();
-			public signal void selection_changed (int selection_number);
-		}
 		public enum PlayerRepeatMode {
 			NOT_AT_ALL,
 			SINGLE,
@@ -774,7 +762,7 @@ namespace Xnoise {
 		public Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaBrowser mediaBr;
 		public Gtk.ScrolledWindow mediaBrScrollWin;
-		public Xnoise.MainWindow.MediaSelector media_source_selector;
+		public Xnoise.MediaSelector media_source_selector;
 		public Xnoise.ControlButton nextButton;
 		public Xnoise.PlayPauseButton playPauseButton;
 		public Xnoise.ControlButton previousButton;
@@ -834,7 +822,6 @@ namespace Xnoise {
 		public void filter ();
 		public Xnoise.DndData[] get_dnd_data_for_path (ref Gtk.TreePath treepath);
 		public int get_max_icon_width ();
-		public void insert_stream_sorted (Xnoise.TrackData[] tda);
 		public void load_children (ref Gtk.TreeIter iter);
 		public void remove_all ();
 		public void unload_children (ref Gtk.TreeIter iter);
@@ -855,6 +842,21 @@ namespace Xnoise {
 		public MediaImporter ();
 		public string? get_uri_for_item_id (int32 id);
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class MediaSelector : Gtk.TreeView {
+		public enum Column {
+			ICON,
+			VIS_TEXT,
+			TAB_NO,
+			WEIGHT,
+			CATEGORY,
+			SELECTION_STATE,
+			SELECTION_ICON,
+			N_COLUMNS
+		}
+		public MediaSelector ();
+		public signal void selection_changed (int selection_number);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaStreamSchemes {

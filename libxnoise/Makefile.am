@@ -45,6 +45,9 @@ libxnoise_la_SOURCES = \
     DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala \
     DockableMedia/MostPlayed/xnoise-mostplayed-treeview.vala \
     DockableMedia/MostPlayed/xnoise-mostplayed-treeview-model.vala \
+    DockableMedia/StreamListing/xnoise-dockable-streams.vala \
+    DockableMedia/StreamListing/xnoise-treeview-streams.vala \
+    DockableMedia/StreamListing/xnoise-treeview-streams-model.vala \
     DockableMedia/VideoListing/xnoise-dockable-videos.vala \
     DockableMedia/VideoListing/xnoise-treeview-videos.vala \
     DockableMedia/VideoListing/xnoise-treeview-videos-model.vala \
@@ -57,6 +60,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/VideoScreen/xnoise-videoscreen.vala \
     ExtraWidgets/xnoise-app-menu-button.vala \
     ExtraWidgets/xnoise-control-button.vala \
+    ExtraWidgets/xnoise-media-selector.vala \
     ExtraWidgets/xnoise-play-pause-button.vala \
     ExtraWidgets/xnoise-serial-button.vala \
     ExtraWidgets/xnoise-trackinfo-bar.vala \

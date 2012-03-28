@@ -236,6 +236,27 @@ public class Xnoise.Database.Reader {
         return (owned)retv;
     }
 
+    private static const string STMT_GET_STREAMITEM_BY_ID =
+        "SELECT DISTINCT st.id, st.uri, st.name FROM streams st WHERE t.id = ? AND (utf8_lower(st.name) LIKE ? OR utf8_lower(st.uri) LIKE ?) ORDER BY utf8_lower(st.name) COLLATE CUSTOM01 DESC";
+    
+    public Item? get_streamitem_by_id(int32 id, string searchtext) {
+        Statement stmt;
+        string st = "%%%s%%".printf(searchtext);
+        Item? i = Item(ItemType.UNKNOWN);
+        this.db.prepare_v2(STMT_GET_STREAMITEM_BY_ID, -1, out stmt);
+        if(stmt.bind_int (1, id)!=Sqlite.OK ||
+           stmt.bind_text(2, st)!=Sqlite.OK ||
+           stmt.bind_text(3, st)!=Sqlite.OK) {
+            this.db_error();
+            return (owned)i;
+        }
+        if(stmt.step() == Sqlite.ROW) {
+            i = Item((ItemType) stmt.column_int(3), stmt.column_text(2), stmt.column_int(0));
+            i.text = stmt.column_text(1);
+        }
+        return (owned)i;
+    }
+
     private static const string STMT_STREAM_TD_FOR_ID =
         "SELECT name, uri FROM streams WHERE id = ?";
 
@@ -254,6 +275,7 @@ public class Xnoise.Database.Reader {
             val.album       = EMPTYSTRING;
             val.title       = stmt.column_text(0);
             val.item        = Item(ItemType.STREAM, stmt.column_text(1), id);
+            val.item.text   = stmt.column_text(0);
         }
         else {
             print("get_stream_td_for_id: track is not in db. ID: %d\n", id);
@@ -330,6 +352,29 @@ public class Xnoise.Database.Reader {
             mfolders += stmt.column_text(0);
         }
         return (owned)mfolders;
+    }
+
+    private static const string STMT_GET_STREAM_ITEMS_WITH_SEARCH =
+        "SELECT DISTINCT s.id, s.uri, s.name FROM streams s WHERE utf8_lower(s.name) LIKE ? ORDER BY utf8_lower(s.name) COLLATE CUSTOM01 DESC";
+
+    public Item[]? get_stream_items(string searchtext) {
+        Item[] vals = {};
+        Statement stmt;
+        
+        this.db.prepare_v2(STMT_GET_STREAM_ITEMS_WITH_SEARCH, -1, out stmt);
+        
+        if(stmt.bind_text(1, "%%%s%%".printf(searchtext))     != Sqlite.OK) {
+            this.db_error();
+            return null;
+        }
+        while(stmt.step() == Sqlite.ROW) {
+            Item? item = Item(ItemType.STREAM, stmt.column_text(1), stmt.column_int(0));
+            item.text = stmt.column_text(2);
+            vals += item;
+        }
+        if(vals.length == 0)
+            return null;
+        return (owned)vals;
     }
 
     public StreamData[] get_streams() {

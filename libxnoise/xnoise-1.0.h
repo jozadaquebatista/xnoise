@@ -295,6 +295,19 @@ typedef struct _XnoiseControlButtonPrivate XnoiseControlButtonPrivate;
 
 #define XNOISE_CONTROL_BUTTON_TYPE_DIRECTION (xnoise_control_button_direction_get_type ())
 
+#define XNOISE_TYPE_MEDIA_SELECTOR (xnoise_media_selector_get_type ())
+#define XNOISE_MEDIA_SELECTOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_SELECTOR, XnoiseMediaSelector))
+#define XNOISE_MEDIA_SELECTOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_SELECTOR, XnoiseMediaSelectorClass))
+#define XNOISE_IS_MEDIA_SELECTOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_SELECTOR))
+#define XNOISE_IS_MEDIA_SELECTOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_SELECTOR))
+#define XNOISE_MEDIA_SELECTOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_SELECTOR, XnoiseMediaSelectorClass))
+
+typedef struct _XnoiseMediaSelector XnoiseMediaSelector;
+typedef struct _XnoiseMediaSelectorClass XnoiseMediaSelectorClass;
+typedef struct _XnoiseMediaSelectorPrivate XnoiseMediaSelectorPrivate;
+
+#define XNOISE_MEDIA_SELECTOR_TYPE_COLUMN (xnoise_media_selector_column_get_type ())
+
 #define XNOISE_TYPE_PLAY_PAUSE_BUTTON (xnoise_play_pause_button_get_type ())
 #define XNOISE_PLAY_PAUSE_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLAY_PAUSE_BUTTON, XnoisePlayPauseButton))
 #define XNOISE_PLAY_PAUSE_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLAY_PAUSE_BUTTON, XnoisePlayPauseButtonClass))
@@ -532,16 +545,6 @@ typedef struct _XnoiseMediaBrowserClass XnoiseMediaBrowserClass;
 typedef struct _XnoiseTrackList XnoiseTrackList;
 typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 
-#define XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR (xnoise_main_window_media_selector_get_type ())
-#define XNOISE_MAIN_WINDOW_MEDIA_SELECTOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR, XnoiseMainWindowMediaSelector))
-#define XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR, XnoiseMainWindowMediaSelectorClass))
-#define XNOISE_MAIN_WINDOW_IS_MEDIA_SELECTOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR))
-#define XNOISE_MAIN_WINDOW_IS_MEDIA_SELECTOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR))
-#define XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_MAIN_WINDOW_TYPE_MEDIA_SELECTOR, XnoiseMainWindowMediaSelectorClass))
-
-typedef struct _XnoiseMainWindowMediaSelector XnoiseMainWindowMediaSelector;
-typedef struct _XnoiseMainWindowMediaSelectorClass XnoiseMainWindowMediaSelectorClass;
-
 #define XNOISE_MAIN_WINDOW_TYPE_PLAYER_REPEAT_MODE (xnoise_main_window_player_repeat_mode_get_type ())
 
 #define XNOISE_TYPE_INFO_BAR (xnoise_info_bar_get_type ())
@@ -553,9 +556,6 @@ typedef struct _XnoiseMainWindowMediaSelectorClass XnoiseMainWindowMediaSelector
 
 typedef struct _XnoiseInfoBar XnoiseInfoBar;
 typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
-typedef struct _XnoiseMainWindowMediaSelectorPrivate XnoiseMainWindowMediaSelectorPrivate;
-
-#define XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_TYPE_COLUMN (xnoise_main_window_media_selector_column_get_type ())
 typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 
 #define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
@@ -1199,6 +1199,26 @@ typedef enum  {
 	XNOISE_CONTROL_BUTTON_DIRECTION_STOP
 } XnoiseControlButtonDirection;
 
+struct _XnoiseMediaSelector {
+	GtkTreeView parent_instance;
+	XnoiseMediaSelectorPrivate * priv;
+};
+
+struct _XnoiseMediaSelectorClass {
+	GtkTreeViewClass parent_class;
+};
+
+typedef enum  {
+	XNOISE_MEDIA_SELECTOR_COLUMN_ICON,
+	XNOISE_MEDIA_SELECTOR_COLUMN_VIS_TEXT,
+	XNOISE_MEDIA_SELECTOR_COLUMN_TAB_NO,
+	XNOISE_MEDIA_SELECTOR_COLUMN_WEIGHT,
+	XNOISE_MEDIA_SELECTOR_COLUMN_CATEGORY,
+	XNOISE_MEDIA_SELECTOR_COLUMN_SELECTION_STATE,
+	XNOISE_MEDIA_SELECTOR_COLUMN_SELECTION_ICON,
+	XNOISE_MEDIA_SELECTOR_COLUMN_N_COLUMNS
+} XnoiseMediaSelectorColumn;
+
 struct _XnoisePlayPauseButton {
 	GtkToolButton parent_instance;
 	XnoisePlayPauseButtonPrivate * priv;
@@ -1449,7 +1469,7 @@ struct _XnoiseMainWindow {
 	XnoiseMediaBrowser* mediaBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* fullscreenwindow;
-	XnoiseMainWindowMediaSelector* media_source_selector;
+	XnoiseMediaSelector* media_source_selector;
 };
 
 struct _XnoiseMainWindowClass {
@@ -1462,26 +1482,6 @@ typedef enum  {
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_ALL,
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_RANDOM
 } XnoiseMainWindowPlayerRepeatMode;
-
-struct _XnoiseMainWindowMediaSelector {
-	GtkTreeView parent_instance;
-	XnoiseMainWindowMediaSelectorPrivate * priv;
-};
-
-struct _XnoiseMainWindowMediaSelectorClass {
-	GtkTreeViewClass parent_class;
-};
-
-typedef enum  {
-	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_ICON,
-	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_VIS_TEXT,
-	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_TAB_NO,
-	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_WEIGHT,
-	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_CATEGORY,
-	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_SELECTION_STATE,
-	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_SELECTION_ICON,
-	XNOISE_MAIN_WINDOW_MEDIA_SELECTOR_COLUMN_N_COLUMNS
-} XnoiseMainWindowMediaSelectorColumn;
 
 struct _XnoiseMediaBrowser {
 	GtkTreeView parent_instance;
@@ -2019,10 +2019,12 @@ gint32 xnoise_database_reader_count_videos (XnoiseDatabaseReader* self, const gc
 XnoiseItem* xnoise_database_reader_get_last_played (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_most_played (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_all_tracks (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
+XnoiseItem* xnoise_database_reader_get_streamitem_by_id (XnoiseDatabaseReader* self, gint32 id, const gchar* searchtext);
 gboolean xnoise_database_reader_get_stream_td_for_id (XnoiseDatabaseReader* self, gint id, XnoiseTrackData** val);
 gboolean xnoise_database_reader_get_trackdata_for_uri (XnoiseDatabaseReader* self, gchar** uri, XnoiseTrackData** val);
 gchar** xnoise_database_reader_get_media_files (XnoiseDatabaseReader* self, int* result_length1);
 gchar** xnoise_database_reader_get_media_folders (XnoiseDatabaseReader* self, int* result_length1);
+XnoiseItem* xnoise_database_reader_get_stream_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 GType xnoise_stream_data_get_type (void) G_GNUC_CONST;
 XnoiseStreamData* xnoise_stream_data_dup (const XnoiseStreamData* self);
 void xnoise_stream_data_free (XnoiseStreamData* self);
@@ -2155,6 +2157,10 @@ GType xnoise_control_button_get_type (void) G_GNUC_CONST;
 GType xnoise_control_button_direction_get_type (void) G_GNUC_CONST;
 XnoiseControlButton* xnoise_control_button_new (XnoiseControlButtonDirection _direction);
 XnoiseControlButton* xnoise_control_button_construct (GType object_type, XnoiseControlButtonDirection _direction);
+GType xnoise_media_selector_get_type (void) G_GNUC_CONST;
+GType xnoise_media_selector_column_get_type (void) G_GNUC_CONST;
+XnoiseMediaSelector* xnoise_media_selector_new (void);
+XnoiseMediaSelector* xnoise_media_selector_construct (GType object_type);
 GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
 XnoisePlayPauseButton* xnoise_play_pause_button_new (void);
 XnoisePlayPauseButton* xnoise_play_pause_button_construct (GType object_type);
@@ -2296,7 +2302,6 @@ GType xnoise_iparams_get_type (void) G_GNUC_CONST;
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
 GType xnoise_track_list_get_type (void) G_GNUC_CONST;
-GType xnoise_main_window_media_selector_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_player_repeat_mode_get_type (void) G_GNUC_CONST;
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 XnoiseMainWindow* xnoise_main_window_new (void);
@@ -2323,9 +2328,6 @@ gboolean xnoise_main_window_get_usestop (XnoiseMainWindow* self);
 void xnoise_main_window_set_usestop (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
-GType xnoise_main_window_media_selector_column_get_type (void) G_GNUC_CONST;
-XnoiseMainWindowMediaSelector* xnoise_main_window_media_selector_new (void);
-XnoiseMainWindowMediaSelector* xnoise_main_window_media_selector_construct (GType object_type);
 GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
 XnoiseMediaBrowser* xnoise_media_browser_new (GtkWidget* ow);
 XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, GtkWidget* ow);
@@ -2340,7 +2342,6 @@ GType xnoise_media_browser_model_collection_type_get_type (void) G_GNUC_CONST;
 gint xnoise_media_browser_model_get_max_icon_width (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_filter (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_remove_all (XnoiseMediaBrowserModel* self);
-void xnoise_media_browser_model_insert_stream_sorted (XnoiseMediaBrowserModel* self, XnoiseTrackData** tda, int tda_length1);
 void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_unload_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
 void xnoise_media_browser_model_load_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
