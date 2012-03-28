@@ -80,6 +80,7 @@ namespace Xnoise {
 			public void inc_playcount (string uri);
 			public bool insert_title (ref Xnoise.TrackData td);
 			public void register_change_callback (Xnoise.Database.Writer.NotificationData? cbd);
+			public void remove_uri (string uri);
 			public void update_lastplay_time (string uri, int64 playtime);
 			public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
 			public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
@@ -660,6 +661,13 @@ namespace Xnoise {
 	public class HandlerEditTags : Xnoise.ItemHandler {
 		public HandlerEditTags ();
 		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
+		public override unowned string handler_name ();
+		public override Xnoise.ItemHandlerType handler_type ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class HandlerMoveToTrash : Xnoise.ItemHandler {
+		public HandlerMoveToTrash ();
+		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
 		public override unowned string handler_name ();
 		public override Xnoise.ItemHandlerType handler_type ();
 	}

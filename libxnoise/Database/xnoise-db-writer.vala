@@ -773,7 +773,93 @@ public class Xnoise.Database.Writer : GLib.Object {
             old_album_id       = stmt.column_int(1);
         }
     }
+
+    private static const string STMT_GET_ITEM_DAT = 
+       "SELECT id,artist,album FROM items WHERE uri=?";
     
+    private static const string STMT_GET_TRACK_CNT_FOR_ARTIST = 
+       "SELECT COUNT(id) FROM items WHERE artist=(SELECT artist FROM items WHERE items.id=?)";
+
+    private static const string STMT_GET_TRACK_CNT_FOR_ALBUM = 
+       "SELECT COUNT(id) FROM items WHERE album=(SELECT album FROM items WHERE items.id=?)";
+    
+    public void remove_uri(string uri) {
+        
+        Statement stmt;
+        string errormsg;
+        
+        this.get_uri_id_statement.reset();
+        if(this.get_uri_id_statement.bind_text(1, uri)!= Sqlite.OK ) {
+            return;
+        }
+        int32 uri_id = -1;
+        if(this.get_uri_id_statement.step() == Sqlite.ROW) {
+            uri_id = this.get_uri_id_statement.column_int(0);
+        }
+        else {
+            return;
+        }
+        
+        db.prepare_v2(STMT_GET_ITEM_DAT, -1, out stmt);
+        if(stmt.bind_int(1, uri_id)!= Sqlite.OK ) {
+            return;
+        }
+        
+        int32 item_id   = -1;
+        int32 artist_id = -1;
+        int32 album_id  = -1;
+        
+        if(stmt.step() == Sqlite.ROW) {
+            item_id     = stmt.column_int(0);
+            artist_id   = stmt.column_int(1);
+            album_id    = stmt.column_int(2);
+        }
+        else {
+            return;
+        }
+        
+        db.prepare_v2(STMT_GET_TRACK_CNT_FOR_ARTIST, -1, out stmt);
+        if(stmt.bind_int(1, uri_id)!= Sqlite.OK ) {
+            return;
+        }
+        bool more_tracks_from_same_artist = true;
+        if(stmt.step() == Sqlite.ROW) {
+            more_tracks_from_same_artist = stmt.column_int(0) > 1;
+        }
+        else {
+            return;
+        }
+        
+        db.prepare_v2(STMT_GET_TRACK_CNT_FOR_ALBUM, -1, out stmt);
+        if(stmt.bind_int(1, uri_id)!= Sqlite.OK ) {
+            return;
+        }
+        bool more_tracks_from_same_album = true;
+        if(stmt.step() == Sqlite.ROW) {
+            more_tracks_from_same_album = stmt.column_int(0) > 1;
+        }
+        else {
+            return;
+        }
+        
+        if(!more_tracks_from_same_artist) {
+            if(db.exec("DELETE FROM artists WHERE id=%d;".printf(artist_id), null, out errormsg)!= Sqlite.OK) {
+                stderr.printf("exec_stmnt_string error: %s\n", errormsg);
+            }
+        }
+        if(!more_tracks_from_same_album) {
+            if(db.exec("DELETE FROM albums WHERE id=%d;".printf(album_id), null, out errormsg)!= Sqlite.OK) {
+                stderr.printf("exec_stmnt_string error: %s\n", errormsg);
+            }
+        }
+        if(db.exec("DELETE FROM items WHERE id=%d;".printf(item_id), null, out errormsg)!= Sqlite.OK) {
+            stderr.printf("exec_stmnt_string error: %s\n", errormsg);
+        }
+        if(db.exec("DELETE FROM uris WHERE id=%d;".printf(uri_id), null, out errormsg)!= Sqlite.OK) {
+            stderr.printf("exec_stmnt_string error: %s\n", errormsg);
+        }
+    }
+
     private static const string STMT_GET_GET_ITEM_ID = 
         "SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
     

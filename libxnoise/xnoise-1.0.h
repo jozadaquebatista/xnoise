@@ -415,6 +415,17 @@ typedef struct _XnoiseTagTitleEditor XnoiseTagTitleEditor;
 typedef struct _XnoiseTagTitleEditorClass XnoiseTagTitleEditorClass;
 typedef struct _XnoiseTagTitleEditorPrivate XnoiseTagTitleEditorPrivate;
 
+#define XNOISE_TYPE_HANDLER_MOVE_TO_TRASH (xnoise_handler_move_to_trash_get_type ())
+#define XNOISE_HANDLER_MOVE_TO_TRASH(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_MOVE_TO_TRASH, XnoiseHandlerMoveToTrash))
+#define XNOISE_HANDLER_MOVE_TO_TRASH_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_MOVE_TO_TRASH, XnoiseHandlerMoveToTrashClass))
+#define XNOISE_IS_HANDLER_MOVE_TO_TRASH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_MOVE_TO_TRASH))
+#define XNOISE_IS_HANDLER_MOVE_TO_TRASH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_MOVE_TO_TRASH))
+#define XNOISE_HANDLER_MOVE_TO_TRASH_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_MOVE_TO_TRASH, XnoiseHandlerMoveToTrashClass))
+
+typedef struct _XnoiseHandlerMoveToTrash XnoiseHandlerMoveToTrash;
+typedef struct _XnoiseHandlerMoveToTrashClass XnoiseHandlerMoveToTrashClass;
+typedef struct _XnoiseHandlerMoveToTrashPrivate XnoiseHandlerMoveToTrashPrivate;
+
 #define XNOISE_TYPE_HANDLER_PLAY_ITEM (xnoise_handler_play_item_get_type ())
 #define XNOISE_HANDLER_PLAY_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_PLAY_ITEM, XnoiseHandlerPlayItem))
 #define XNOISE_HANDLER_PLAY_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_PLAY_ITEM, XnoiseHandlerPlayItemClass))
@@ -1343,6 +1354,15 @@ struct _XnoiseTagTitleEditorClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseHandlerMoveToTrash {
+	XnoiseItemHandler parent_instance;
+	XnoiseHandlerMoveToTrashPrivate * priv;
+};
+
+struct _XnoiseHandlerMoveToTrashClass {
+	XnoiseItemHandlerClass parent_class;
+};
+
 struct _XnoiseHandlerPlayItem {
 	XnoiseItemHandler parent_instance;
 	XnoiseHandlerPlayItemPrivate * priv;
@@ -2079,6 +2099,7 @@ void xnoise_database_writer_update_lastplay_time (XnoiseDatabaseWriter* self, co
 gchar** xnoise_database_writer_get_media_folders (XnoiseDatabaseWriter* self, int* result_length1);
 gboolean xnoise_database_writer_get_trackdata_for_stream (XnoiseDatabaseWriter* self, const gchar* uri, XnoiseTrackData** val);
 gboolean xnoise_database_writer_update_title (XnoiseDatabaseWriter* self, XnoiseItem** item, XnoiseTrackData** td);
+void xnoise_database_writer_remove_uri (XnoiseDatabaseWriter* self, const gchar* uri);
 gboolean xnoise_database_writer_insert_title (XnoiseDatabaseWriter* self, XnoiseTrackData** td);
 void xnoise_database_writer_add_single_stream_to_collection (XnoiseDatabaseWriter* self, const gchar* uri, const gchar* name);
 void xnoise_database_writer_add_single_folder_to_collection (XnoiseDatabaseWriter* self, const gchar* mfolder);
@@ -2256,6 +2277,9 @@ XnoiseHandlerEditTags* xnoise_handler_edit_tags_construct (GType object_type);
 GType xnoise_tag_title_editor_get_type (void) G_GNUC_CONST;
 XnoiseTagTitleEditor* xnoise_tag_title_editor_new (XnoiseItem* _item);
 XnoiseTagTitleEditor* xnoise_tag_title_editor_construct (GType object_type, XnoiseItem* _item);
+GType xnoise_handler_move_to_trash_get_type (void) G_GNUC_CONST;
+XnoiseHandlerMoveToTrash* xnoise_handler_move_to_trash_new (void);
+XnoiseHandlerMoveToTrash* xnoise_handler_move_to_trash_construct (GType object_type);
 GType xnoise_handler_play_item_get_type (void) G_GNUC_CONST;
 XnoiseHandlerPlayItem* xnoise_handler_play_item_new (void);
 XnoiseHandlerPlayItem* xnoise_handler_play_item_construct (GType object_type);

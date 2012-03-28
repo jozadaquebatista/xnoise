@@ -1,4 +1,4 @@
-/* xnoise-handler-show-in-file-manager.vala
+/* xnoise-handler-move-to-trash.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -28,34 +28,27 @@
  *     Jörn Magens
  */
 
+
+using Sqlite;
+
+
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext/ItemType
-public class Xnoise.HandlerShowInFileManager : ItemHandler {
+public class Xnoise.HandlerMoveToTrash : ItemHandler {
     private Action a;
-    private const string ainfo = _("Show in parent folder");
-    private const string aname = "A HandlerShowInFileManagername";
-
-    private Action b;
-    private const string binfo = _("Show in parent folder");
-    private const string bname = "B HandlerShowInFileManagername";
+    private const string ainfo = _("Move to trash");
+    private const string aname = "A HandlerMoveToTrash";
+    private string errormsg;
     
-    private const string name = "HandlerShowInFileManager";
+    private const string name = "HandlerMoveToTrash";
     
-    public HandlerShowInFileManager() {
+    public HandlerMoveToTrash() {
         a = new Action();
-        a.action = show_uri;
+        a.action = trash_item;
         a.info = this.ainfo;
         a.name = this.aname;
-        a.stock_item = Gtk.Stock.OPEN;
+        a.stock_item = Gtk.Stock.DELETE;
         a.context = ActionContext.TRACKLIST_MENU_QUERY;
-
-        b = new Action();
-        b.action = show_uri;
-        b.info = this.binfo;
-        b.name = this.bname;
-        b.stock_item = Gtk.Stock.OPEN;
-        b.context = ActionContext.MEDIABROWSER_MENU_QUERY;
-        
     }
 
     public override ItemHandlerType handler_type() {
@@ -67,26 +60,55 @@ public class Xnoise.HandlerShowInFileManager : ItemHandler {
     }
 
     public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
+        if(selection != ItemSelectionType.SINGLE)
+            return null;
         if((context == ActionContext.TRACKLIST_MENU_QUERY) &&
            (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK))
             return a;
-        if((context == ActionContext.MEDIABROWSER_MENU_QUERY) &&
-           (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK))
-            return b;
         return null;
     }
-
-    private void show_uri(Item item, GLib.Value? data) { 
+    
+    private string? uri = null;
+    
+    private void trash_item(Item item, GLib.Value? data) { 
         if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK) 
             return;
-        
-        try {
-            File f = File.new_for_uri(item.uri);
-            Gtk.show_uri(null, f.get_parent().get_uri(), Gdk.CURRENT_TIME);
-        }
-        catch(GLib.Error e) {
-            print("%s\n", e.message);
-        }
+        this.uri = item.uri;
+        var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+                                        Gtk.ButtonsType.OK_CANCEL,
+                                        _("Do you want to move the selected file to trash?"));
+        msg.response.connect( (s, response_id) => {
+            //print("response id %d\n", response_id);
+            if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {
+                try {
+                    tl.remove_selected_rows();
+                    File f = File.new_for_uri(item.uri);
+                    f.trash(null);
+                    delete_from_database();
+                }
+                catch(GLib.Error e) {
+                    print("%s\n", e.message);
+                }
+            }
+            s.destroy();
+        });
+        msg.run();
+    }
+    
+    private void delete_from_database() {
+        Worker.Job job;
+        job = new Worker.Job(Worker.ExecutionType.ONCE, this.delete_from_database_cb);
+        job.finished.connect( () => {
+            string buf = global.searchtext;
+            global.searchtext = Random.next_int().to_string();
+            global.searchtext = buf;
+        });
+        db_worker.push_job(job);
+    }
+    
+    private bool delete_from_database_cb(Worker.Job job) {
+        db_writer.remove_uri(this.uri);
+        return false;
     }
 }
 
