@@ -81,7 +81,7 @@ public class Xnoise.HandlerMoveToTrash : ItemHandler {
             //print("response id %d\n", response_id);
             if((Gtk.ResponseType)response_id == Gtk.ResponseType.OK) {
                 try {
-                    tl.remove_selected_rows();
+                    tl.remove_uri_rows(item.uri);
                     File f = File.new_for_uri(item.uri);
                     f.trash(null);
                     delete_from_database();

@@ -939,6 +939,46 @@ public class Xnoise.TrackList : TreeView, IParams {
             this.scroll_to_cell(current_path, null, true, (float)0.3, (float)0.0);
     }
 
+    public void remove_uri_rows(string uri) {
+        bool removed_playing_title = false;
+        TreePath path_2 = new TreePath();
+        List<TreePath> pths = new List<TreePath>();
+        tracklistmodel.foreach( (m,pa,i) => {
+            Item? item = null;
+//            TreeIter i;
+//            tracklistmodel.get_iter(out i, p);
+            this.tracklistmodel.get(i, TrackListModel.Column.ITEM, out item);
+            if(item.uri == uri)
+                pths.prepend(pa);
+            return false;
+        });
+        foreach(unowned TreePath p in pths) {
+//            ListStore st = (ListStore)m;
+//            Item? item = null;
+            TreeIter it;
+            tracklistmodel.get_iter(out it, p);
+//            this.tracklistmodel.get(i, TrackListModel.Column.ITEM, out item);
+//            if(item.uri == uri) {
+                path_2 = p;
+                if((global.position_reference!=null)&&
+                   (!removed_playing_title)&&
+                   (p.compare(global.position_reference.get_path()) == 0)) {
+                    removed_playing_title = true;
+                    global.position_reference = null;
+                }
+                this.tracklistmodel.remove(it);
+//            }
+        }
+        TreeIter iter;
+        if(path_2.prev() && removed_playing_title) {
+            tracklistmodel.get_iter(out iter, path_2);
+            global.position_reference_next = new TreeRowReference(tracklistmodel, path_2);
+            return;
+        }
+        if(removed_playing_title)
+            tracklistmodel.set_reference_to_last();
+    }
+    
     public void remove_selected_rows() {
         bool removed_playing_title = false;
         TreeIter iter;
@@ -964,7 +1004,8 @@ public class Xnoise.TrackList : TreeView, IParams {
             global.position_reference_next = new TreeRowReference(tracklistmodel, path_2);
             return;
         }
-        if(removed_playing_title) tracklistmodel.set_reference_to_last();
+        if(removed_playing_title)
+            tracklistmodel.set_reference_to_last();
     }
 
     private void on_activated(Item item, TreePath path) {//(string uri, TreePath path) {

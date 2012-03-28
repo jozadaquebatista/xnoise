@@ -962,6 +962,7 @@ namespace Xnoise {
 		public Xnoise.TrackListModel tracklistmodel;
 		public TrackList ();
 		public void remove_selected_rows ();
+		public void remove_uri_rows (string uri);
 		public void set_focus_on_iter (ref Gtk.TreeIter iter);
 		public bool column_album_visible { get; set; }
 		public bool column_artist_visible { get; set; }
