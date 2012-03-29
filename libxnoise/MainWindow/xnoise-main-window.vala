@@ -59,7 +59,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private int _posY;
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
-    private Button collapsebutton;
     private Button hide_button;
     private Button hide_button_1;
     private Button hide_button_2;
@@ -300,7 +299,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             print("%s\n", e.message);
         }
         Idle.add( () => {
-            searchEntryMB.grab_focus();
+            media_source_selector.grab_focus();
             return false;
         });
     }
@@ -1543,12 +1542,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             trackListScrollWin.add(this.trackList);
             
             mbbx = new Gtk.Box(Orientation.VERTICAL, 0);
-            var sbx  = new Gtk.Box(Orientation.HORIZONTAL, 0);
-            collapsebutton = new Gtk.Button();//gb.get_object("collapsebutton") as Gtk.Button;
-            var coll_img   = new Gtk.Image.from_stock(Gtk.Stock.UNINDENT, Gtk.IconSize.MENU);//gb.get_object("imagecollapse") as Gtk.Image;
-            collapsebutton.set_image(coll_img);
-            coll_img.set_tooltip_text(_("Collapse all"));
-            sbx.pack_start(collapsebutton, false, false, 0);
             
             this.searchEntryMB = new Gtk.Entry();
             this.searchEntryMB.primary_icon_stock = Gtk.Stock.FIND;
@@ -1558,8 +1551,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.searchEntryMB.set_sensitive(true);
             this.searchEntryMB.set_placeholder_text (_("Search..."));
             
-            sbx.pack_start(searchEntryMB, true, true, 0);
-            mbbx.pack_start(sbx, false, false, 0);
+            mbbx.pack_start(searchEntryMB, false, false, 0);
             
             // DOCKABLE MEDIA
             
@@ -1600,50 +1592,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 TreeIter? ix = null;
                 insert_dockable(d, false, ref ix, false);
             }
-//            media_source_selector.button_press_event.connect( (e)  => {
-//                int x = (int)e.x;
-//                int y = (int)e.y;
-//                int cell_x, cell_y;
-//                TreePath treepath;
-//                TreeViewColumn co;
-//                if(!media_source_selector.get_path_at_pos(x, y, out treepath, out co, out cell_x, out cell_y))
-//                    return true;
-//                
-//                TreeIter it;
-//                TreeStore m = (TreeStore)media_source_selector.get_model();
-//                int tab = 0;
-//                
-//                if(treepath.get_depth() == 1 || treepath.get_depth() > 2) {
-//                    if(!media_source_selector.is_row_expanded(treepath)) {
-//                        media_source_selector.expand_row(treepath, false);
-//                        TreeIter parent, ix;
-//                        m.get_iter(out parent, treepath);
-//                        for(int i = 0; i < m.iter_n_children(parent); i++) {
-//                            m.iter_nth_child(out ix, parent, i);
-//                            bool row_selected = false;
-//                            m.get(ix, 5, out row_selected);
-//                            if(row_selected) {
-//                                media_source_selector.get_selection().select_iter(ix);
-//                                break;
-//                            }
-//                        }
-//                    }
-//                    else {
-//                        media_source_selector.collapse_row(treepath);
-//                    }
-//                    return true;
-//                }
-//                m.foreach( (mo,p,iy) => {
-//                    TreeStore mx = (TreeStore)mo;
-//                    mx.set(iy, 5, false);
-//                    return false;
-//                });
-//                m.get_iter(out it, treepath);
-//                m.get(it, 2, out tab);
-//                m.set(it, 5, true);
-//                media_sources_nb.set_current_page(tab);
-//                return false;
-//            });
             media_source_selector.expand_all();
             media_source_selector.get_selection().select_iter(media_browser_iter);
             mbbox01.pack_start(mbbx, true, true, 0);
@@ -1652,9 +1600,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             tracklistnotebook.show_border = false;
             tracklistnotebook.switch_page.connect( (s,np,p) => {
                 global.sign_notify_tracklistnotebook_switched(p);
-            });
-            collapsebutton.clicked.connect( () => {
-                mediaBr.collapse_all();
             });
             this.searchEntryMB.key_release_event.connect( (s, e) => {
                 var entry = (Entry)s;
