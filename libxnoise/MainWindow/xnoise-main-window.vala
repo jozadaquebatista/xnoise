@@ -1551,11 +1551,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.searchEntryMB.set_sensitive(true);
             this.searchEntryMB.set_placeholder_text (_("Search..."));
             
-            mbbx.pack_start(searchEntryMB, false, false, 0);
+            mbbx.pack_start(searchEntryMB, false, false, 2);
             
             //Separator
             Gtk.DrawingArea da = new Gtk.DrawingArea();
-            da.height_request = 4;
+            da.height_request = 2;
             mbbx.pack_start(da, false, false, 0);
             
             // DOCKABLE MEDIA
