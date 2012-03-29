@@ -1,10 +1,12 @@
 data/misc/xnoise.desktop.in
+plugins/databaseLyrics/xnoise-database-lyrics.c
 plugins/notifications2/xnoise-notifications.c
 plugins/titleToDecoration/xnoise-title-to-decoration.c
 plugins/lastfm/xnoise-lastfm.c
 libxnoise/Application/xnoise-application.c
 libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.c
 libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.c
+libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.c
 libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.c
 libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.c
 libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.c
@@ -12,9 +14,11 @@ libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.c
 libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.c
 libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.c
 libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.c
+libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.c
 libxnoise/Lyrics/xnoise-lyrics-loader.c
 libxnoise/Lyrics/xnoise-lyrics-view.c
 libxnoise/MainWindow/xnoise-main-window.c
+libxnoise/MediaBrowser/xnoise-media-browser.c
 libxnoise/MediaBrowser/xnoise-media-browser-dockable.c
 libxnoise/Player/xnoise-gst-player.c
 libxnoise/TrackList/xnoise-tracklist.c
@@ -23,5 +27,4 @@ libxnoise/Utils/xnoise-media-importer.c
 src/xnoise.c
 data/ui/metadat_artist_album.ui
 data/ui/metadat_title.ui
-plugins/databaseLyrics/xnoise-database-lyrics.c
 
