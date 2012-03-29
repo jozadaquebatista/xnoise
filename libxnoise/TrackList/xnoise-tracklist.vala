@@ -113,9 +113,12 @@ public class Xnoise.TrackList : TreeView, IParams {
             print("tracklist model instance not available\n");
         
         Params.iparams_register(this);
+        
+        this.setup_view();
+        
         tracklistmodel = tlm;
         this.set_model(tracklistmodel);
-        this.setup_view();
+        
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
         
         Gtk.drag_source_set(this,

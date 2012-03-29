@@ -74,7 +74,7 @@ public class Xnoise.HandlerMoveToTrash : ItemHandler {
         if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK) 
             return;
         this.uri = item.uri;
-        var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+        var msg = new Gtk.MessageDialog(main_window, Gtk.DialogFlags.MODAL, Gtk.MessageType.QUESTION,
                                         Gtk.ButtonsType.OK_CANCEL,
                                         _("Do you want to move the selected file to trash?"));
         msg.response.connect( (s, response_id) => {
