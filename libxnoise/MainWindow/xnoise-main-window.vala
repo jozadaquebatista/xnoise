@@ -1553,6 +1553,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             mbbx.pack_start(searchEntryMB, false, false, 0);
             
+            //Separator
+            Gtk.DrawingArea da = new Gtk.DrawingArea();
+            da.height_request = 4;
+            mbbx.pack_start(da, false, false, 0);
+            
             // DOCKABLE MEDIA
             
             media_sources_nb = new Gtk.Notebook();
@@ -1569,8 +1574,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             mss_sw.add(media_source_selector);
             mss_sw.set_shadow_type(ShadowType.IN);
             mbbx.pack_start(mss_sw, false, false, 0);
-            Gtk.DrawingArea da = new Gtk.DrawingArea();
-            da.height_request = 6;
+            //Separator
+            da = new Gtk.DrawingArea();
+            da.height_request = 4;
             mbbx.pack_start(da, false, false, 0);
             
             unowned DockableMedia? dm_mb = null;
