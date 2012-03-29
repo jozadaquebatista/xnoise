@@ -153,7 +153,6 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView {
         private int maxiconwidth;
         private unowned Pango.FontDescription font_description;
         private unowned TreeViewColumn col;
-        private int expander;
         private int hsepar;
         
         public int level                { get; set; }

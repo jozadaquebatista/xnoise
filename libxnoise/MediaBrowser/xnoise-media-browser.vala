@@ -270,7 +270,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
         array = itemhandler_manager.get_actions(item.type, ActionContext.MEDIABROWSER_MENU_QUERY, itemselection);
         for(int i =0; i < array.length; i++) {
             unowned Action x = array.index(i);
-            print("%s\n", x.name);
+            //print("%s\n", x.name);
             var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
             menu_item.set_label(x.info);
             menu_item.activate.connect( () => {
@@ -278,6 +278,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
             });
             rightmenu.append(menu_item);
         }
+        var sptr_item = new SeparatorMenuItem();
+        rightmenu.append(sptr_item);
+        var collapse_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
+        collapse_item.set_label(_("Collapse all"));
+        collapse_item.activate.connect( () => {
+            this.collapse_all();
+        });
+        rightmenu.append(collapse_item);
         rightmenu.show_all();
         return rightmenu;
     }

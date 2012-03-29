@@ -192,10 +192,10 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
         if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
             return false;
         Idle.add( () => {
-//            if(populating_model) // don't try to put an artist to the model in case we are filling anyway
-//                return false;
+            if(populating_model)
+                return false;
             string text = null;
-            TreeIter iter_search, iter = TreeIter();
+            TreeIter iter = TreeIter();
             Gdk.Pixbuf thumbnail = null;
             File thumb = null;
             bool has_thumbnail = false;

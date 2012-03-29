@@ -782,7 +782,7 @@ namespace Xnoise {
 		public Xnoise.PlayPauseButton playPauseButton;
 		public Xnoise.ControlButton previousButton;
 		public bool quit_if_closed;
-		public Gtk.Entry searchEntryMB;
+		public Gtk.Entry search_entry;
 		public Xnoise.ControlButton stopButton;
 		public Xnoise.TrackList trackList;
 		public Gtk.ScrolledWindow trackListScrollWin;

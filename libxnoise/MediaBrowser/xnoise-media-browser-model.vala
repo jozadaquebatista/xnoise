@@ -694,8 +694,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             TreeIter iter_title, iter_album;
             this.get_iter(out iter_album, p);
             foreach(unowned TrackData td in job.track_dat) {
-                Gdk.Pixbuf thumbnail = null;
-                bool has_thumbnail = false;
                 this.append(out iter_title, iter_album);
                 this.set(iter_title,
                          Column.ICON, icon_repo.title_icon,

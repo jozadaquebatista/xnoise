@@ -38,7 +38,6 @@ public class Xnoise.HandlerMoveToTrash : ItemHandler {
     private Action a;
     private const string ainfo = _("Move to trash");
     private const string aname = "A HandlerMoveToTrash";
-    private string errormsg;
     
     private const string name = "HandlerMoveToTrash";
     

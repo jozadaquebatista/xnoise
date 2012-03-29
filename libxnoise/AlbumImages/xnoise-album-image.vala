@@ -60,7 +60,6 @@ public class Xnoise.AlbumImage : Gtk.Image {
         gst_player.sign_found_embedded_image.connect(load_embedded);
     }
 
-    private uint embedded_src = 0;
     private void load_embedded(Object sender, string uri, string _artist, string _album) {
         if(uri != global.current_uri)
             return;

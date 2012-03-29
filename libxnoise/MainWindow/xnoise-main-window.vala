@@ -97,7 +97,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     public LyricsView lyricsView;
     public VideoScreen videoscreen;
     public Paned hpaned;
-    public Entry searchEntryMB;
+    public Entry search_entry;
     public PlayPauseButton playPauseButton;
     public ControlButton previousButton;
     public ControlButton nextButton;
@@ -589,9 +589,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     
     private void colorize_search_background(bool colored = false) {
         if(colored)
-            searchEntryMB.get_style_context().add_provider(css_provider_search, STYLE_PROVIDER_PRIORITY_APPLICATION);
+            search_entry.get_style_context().add_provider(css_provider_search, STYLE_PROVIDER_PRIORITY_APPLICATION);
         else
-            searchEntryMB.get_style_context().remove_provider(css_provider_search);
+            search_entry.get_style_context().remove_provider(css_provider_search);
     }
     
     private const int 1_KEY     = 0x0031;
@@ -611,13 +611,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             case F_KEY: {
                     if(e.state != CTRL_KEY) // Ctrl Modifier
                         return false;
-                    searchEntryMB.grab_focus();
+                    search_entry.grab_focus();
                 }
                 return true;
             case D_KEY: {
                     if(e.state != CTRL_KEY) // Ctrl Modifier
                         return false;
-                    searchEntryMB.text = EMPTYSTRING;
+                    search_entry.text = EMPTYSTRING;
                     global.searchtext = EMPTYSTRING;
                     colorize_search_background(false);
                 }
@@ -643,7 +643,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
                 return true;
             case SPACE_KEY: {
-                    if(searchEntryMB.has_focus)
+                    if(search_entry.has_focus)
                         return false;
                     playPauseButton.clicked();
                 }
@@ -1533,29 +1533,28 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             main_toolbar.can_focus = false;
             
             ///Tracklist (right)
-            this.trackList = tl; //new TrackList();
+            this.trackList = tl;
             this.trackList.set_size_request(100,100);
             trackListScrollWin = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
             trackListScrollWin.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
             trackListScrollWin.set_shadow_type(Gtk.ShadowType.IN);
-//            tl.set_container(hpaned);
+            //tl.set_container(hpaned);
             trackListScrollWin.add(this.trackList);
             
             mbbx = new Gtk.Box(Orientation.VERTICAL, 0);
             
-            this.searchEntryMB = new Gtk.Entry();
-            this.searchEntryMB.primary_icon_stock = Gtk.Stock.FIND;
-            this.searchEntryMB.secondary_icon_stock = Gtk.Stock.CLEAR;
-            this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, true);
-            this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
-            this.searchEntryMB.set_sensitive(true);
-            this.searchEntryMB.set_placeholder_text (_("Search..."));
+            this.search_entry = new Gtk.Entry();
+            this.search_entry.secondary_icon_stock = Gtk.Stock.CLEAR;
+            this.search_entry.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, false);
+            this.search_entry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
+            this.search_entry.set_sensitive(true);
+            this.search_entry.set_placeholder_text (_("Search..."));
             
-            mbbx.pack_start(searchEntryMB, false, false, 2);
+            mbbx.pack_start(search_entry, false, false, 2);
             
             //Separator
             Gtk.DrawingArea da = new Gtk.DrawingArea();
-            da.height_request = 2;
+            da.height_request = 1;
             mbbx.pack_start(da, false, false, 0);
             
             // DOCKABLE MEDIA
@@ -1607,7 +1606,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             tracklistnotebook.switch_page.connect( (s,np,p) => {
                 global.sign_notify_tracklistnotebook_switched(p);
             });
-            this.searchEntryMB.key_release_event.connect( (s, e) => {
+            this.search_entry.key_release_event.connect( (s, e) => {
                 var entry = (Entry)s;
                 global.searchtext = entry.text;
                 if(entry.text != EMPTYSTRING) {
@@ -1619,11 +1618,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 return false;
             });
             
-            this.searchEntryMB.icon_press.connect( (s, p0, p1) => { 
+            this.search_entry.icon_press.connect( (s, p0, p1) => { 
                 // s:Entry, p0:Position, p1:Gdk.Event
-                if(p0 == Gtk.EntryIconPosition.PRIMARY) {
-                    global.sign_searchtext_changed(global.searchtext);
-                }
                 if(p0 == Gtk.EntryIconPosition.SECONDARY) {
                     ((Entry)s).text = EMPTYSTRING;
                     global.searchtext = EMPTYSTRING;

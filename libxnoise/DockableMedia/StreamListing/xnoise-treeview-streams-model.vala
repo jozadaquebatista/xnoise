@@ -37,8 +37,7 @@ using Xnoise.Database;
 
 
 private class Xnoise.TreeViewStreamsModel : Gtk.ListStore {
-    private uint update_thumbnails_src  = 0;
-    private uint search_idlesource      = 0;
+    private uint search_idlesource = 0;
     private unowned TreeViewStreams view;
     private bool populating_model = false;
     
@@ -103,8 +102,6 @@ private class Xnoise.TreeViewStreamsModel : Gtk.ListStore {
         db_worker.push_job(job);
     }
     
-    private List<string> uri_list;
-    
     private bool insert_job(Worker.Job job) {
         
         job.items = db_reader.get_stream_items(global.searchtext);
@@ -149,13 +146,14 @@ private class Xnoise.TreeViewStreamsModel : Gtk.ListStore {
     }
     
     private bool add_imported_job(Worker.Job job) {
-        TrackData td = null;
         job.item = db_reader.get_streamitem_by_id(job.item.db_id, global.searchtext); 
         if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
             return false;
         Idle.add( () => {
+            if(populating_model) 
+                return false;
             string text = null;
-            TreeIter iter_search, iter = TreeIter();
+            TreeIter iter = TreeIter();
             if(this.iter_n_children(null) == 0) {
                 this.prepend(out iter);
                 this.set(iter,

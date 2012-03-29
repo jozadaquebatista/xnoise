@@ -1497,7 +1497,7 @@ struct _XnoiseMainWindow {
 	XnoiseLyricsView* lyricsView;
 	XnoiseVideoScreen* videoscreen;
 	GtkPaned* hpaned;
-	GtkEntry* searchEntryMB;
+	GtkEntry* search_entry;
 	XnoisePlayPauseButton* playPauseButton;
 	XnoiseControlButton* previousButton;
 	XnoiseControlButton* nextButton;
