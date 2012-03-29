@@ -35,6 +35,7 @@ public class Xnoise.TrackListColumn : TreeViewColumn {
     public string name;
     public TrackListColumn(string _name = "") {
         name = _name;
+        this.set_sizing(TreeViewColumnSizing.FIXED);
     }
 }
 

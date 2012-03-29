@@ -112,6 +112,8 @@ public class Xnoise.TrackList : TreeView, IParams {
         if(tlm == null)
             print("tracklist model instance not available\n");
         
+        this.set_fixed_height_mode(true);
+        
         Params.iparams_register(this);
         
         this.setup_view();
@@ -1033,25 +1035,11 @@ public class Xnoise.TrackList : TreeView, IParams {
         this.tracklistmodel.get_iter(out iter, path);
         this.set_focus_on_iter(ref iter);
     }
-    
-    // i hide the default insert_colum, so we can load the column's position
-    // from the config file before actually inserting it
-    private new void insert_column(Gtk.TreeViewColumn column, int position) {
-        string col_name;
-        col_name = ((TrackListColumn)column).name;
-        if(position < 0) {
-            position = Params.get_int_value("position_" + col_name + "_column");
-        }
-        col_name = ((TrackListColumn)column).name;
-        //double? rel_size = Params.get_double_value("relative_size_" + col_name + "_column"); //relative_column_sizes.lookup(col_name);
-        position--;
-        base.insert_column(column, position);
-    }
-
-    
 
     private void setup_view() {
         CellRendererText renderer;
+        HashTable<int, TreeViewColumn?> cols_postions = new HashTable<int, TreeViewColumn?>(direct_hash, direct_equal);
+        int position = -1;
         
         // STATUS ICON
         var pixbufRenderer = new CellRendererPixbuf();
@@ -1063,7 +1051,9 @@ public class Xnoise.TrackList : TreeView, IParams {
         columnPixb.min_width = 30;
         columnPixb.reorderable = false;
         ((TrackListColumn)columnPixb).name = "status-icon";
-        this.insert_column(columnPixb, -1);
+        
+        position = Params.get_int_value("position_" + ((TrackListColumn)columnPixb).name + "_column");
+        cols_postions.insert(position, columnPixb);
 
         // TRACKNUMBER
         renderer = new CellRendererText();
@@ -1076,8 +1066,16 @@ public class Xnoise.TrackList : TreeView, IParams {
         columnTracknumber.resizable = false;
         columnTracknumber.reorderable = true;
         columnTracknumber.name = "tracknumber";
-        this.insert_column(columnTracknumber, -1);
         columnTracknumber.visible = (Params.get_int_value(USE_TR_NO_COL) == 1);
+        
+        position = Params.get_int_value("position_" + ((TrackListColumn)columnTracknumber).name + "_column");
+        if(cols_postions.lookup(position) == null)
+            cols_postions.insert(position, columnTracknumber);
+        else {
+            int r = (int)Random.next_int();
+            cols_postions.insert(r, columnTracknumber);
+        }
+
 
 
         // TITLE
@@ -1094,8 +1092,14 @@ public class Xnoise.TrackList : TreeView, IParams {
         columnTitle.reorderable = true;
         columnTitle.expand = true;
         columnTitle.name = "title";
-        this.insert_column(columnTitle, -1);
         variable_col_count++;
+        position = Params.get_int_value("position_" + ((TrackListColumn)columnTitle).name + "_column");
+        if(cols_postions.lookup(position) == null)
+            cols_postions.insert(position, columnTitle);
+        else {
+            int r = (int)Random.next_int();
+            cols_postions.insert(r, columnTitle);
+        }
 
 
         // ALBUM
@@ -1112,9 +1116,15 @@ public class Xnoise.TrackList : TreeView, IParams {
         columnAlbum.reorderable = true;
         columnAlbum.expand = true;
         columnAlbum.name = "album";
-        this.insert_column(columnAlbum, -1);
         variable_col_count++;
         columnAlbum.visible = (Params.get_int_value(USE_ALBUM_COL) == 1);
+        position = Params.get_int_value("position_" + ((TrackListColumn)columnAlbum).name + "_column");
+        if(cols_postions.lookup(position) == null)
+            cols_postions.insert(position, columnAlbum);
+        else {
+            int r = (int)Random.next_int();
+            cols_postions.insert(r, columnAlbum);
+        }
         
         // ARTIST
         renderer = new CellRendererText();
@@ -1130,9 +1140,15 @@ public class Xnoise.TrackList : TreeView, IParams {
         columnArtist.reorderable = true;
         columnArtist.expand = true;
         columnArtist.name = "artist";
-        this.insert_column(columnArtist, -1);
         variable_col_count++;
         columnArtist.visible = (Params.get_int_value(USE_ARTIST_COL) == 1);
+        position = Params.get_int_value("position_" + ((TrackListColumn)columnArtist).name + "_column");
+        if(cols_postions.lookup(position) == null)
+            cols_postions.insert(position, columnArtist);
+        else {
+            int r = (int)Random.next_int();
+            cols_postions.insert(r, columnArtist);
+        }
 
         // LENGTH
         renderer = new CellRendererText();
@@ -1147,9 +1163,14 @@ public class Xnoise.TrackList : TreeView, IParams {
         columnLength.resizable = false;
         columnLength.reorderable = true;
         columnLength.name = "length";
-        this.insert_column(columnLength, -1);
-
         columnLength.visible = (Params.get_int_value(USE_LEN_COL) == 1);
+        position = Params.get_int_value("position_" + ((TrackListColumn)columnLength).name + "_column");
+        if(cols_postions.lookup(position) == null)
+            cols_postions.insert(position, columnLength);
+        else {
+            int r = (int)Random.next_int();
+            cols_postions.insert(r, columnLength);
+        }
 
         // Genre
         renderer = new CellRendererText();
@@ -1165,10 +1186,15 @@ public class Xnoise.TrackList : TreeView, IParams {
         columnGenre.reorderable = true;
         columnGenre.expand = true;
         columnGenre.name = "genre";
-        this.insert_column(columnGenre, -1);
         variable_col_count++;
-        
         columnGenre.visible = (Params.get_int_value(USE_GENRE_COL) == 1);
+        position = Params.get_int_value("position_" + ((TrackListColumn)columnGenre).name + "_column");
+        if(cols_postions.lookup(position) == null)
+            cols_postions.insert(position, columnGenre);
+        else {
+            int r = (int)Random.next_int();
+            cols_postions.insert(r, columnGenre);
+        }
 
         // year
         renderer = new CellRendererText();
@@ -1184,22 +1210,31 @@ public class Xnoise.TrackList : TreeView, IParams {
         columnYear.resizable = false;
         columnYear.reorderable = true;
         columnYear.name = "year";
-        this.insert_column(columnYear, -1);
         variable_col_count++;
-        
         columnYear.visible = (Params.get_int_value(USE_YEAR_COL) == 1);
-        
-        columnPixb.sizing        = Gtk.TreeViewColumnSizing.FIXED;
-        columnTracknumber.sizing = Gtk.TreeViewColumnSizing.FIXED;
-        columnTitle.sizing       = Gtk.TreeViewColumnSizing.FIXED;
-        columnAlbum.sizing       = Gtk.TreeViewColumnSizing.FIXED;
-        columnArtist.sizing      = Gtk.TreeViewColumnSizing.FIXED;
-        columnLength.sizing      = Gtk.TreeViewColumnSizing.FIXED;
-        columnGenre.sizing       = Gtk.TreeViewColumnSizing.FIXED;
-        columnYear.sizing        = Gtk.TreeViewColumnSizing.FIXED;
-        
+        position = Params.get_int_value("position_" + ((TrackListColumn)columnYear).name + "_column");
+        if(cols_postions.lookup(position) == null)
+            cols_postions.insert(position, columnYear);
+        else {
+            int r = (int)Random.next_int();
+            cols_postions.insert(r, columnYear);
+        }
+        List<int> col_pos_list = cols_postions.get_keys().copy();
+        col_pos_list.sort(int_cmp_func);
+        foreach(int cp in col_pos_list) {
+            TreeViewColumn c = cols_postions.lookup(cp);
+            this.insert_column(c, -1);
+        }
         this.set_enable_search(false);
         this.rules_hint = false;
+    }
+    
+    private static int int_cmp_func(int a, int b) {
+        if(a < b)
+            return -1;
+        if(a > b)
+            return 1;
+        return 0;
     }
     
     private bool on_press_header(Gtk.Widget sender, Gdk.EventButton e) {
@@ -1280,10 +1315,10 @@ public class Xnoise.TrackList : TreeView, IParams {
             if(c == null) continue;
             
             // write column position, counting from 1 onwards
-            counter++;
-            string col_name;
-            col_name = ((TrackListColumn)c).name;
+            string col_name = ((TrackListColumn)c).name;
+            //print("col_name:%s : %d\n", col_name, counter);
             Params.set_int_value("position_" + col_name + "_column", counter);
+            counter++;
         }
     }
     
