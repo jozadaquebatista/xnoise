@@ -1556,6 +1556,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, true);
             this.searchEntryMB.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
             this.searchEntryMB.set_sensitive(true);
+            this.searchEntryMB.set_placeholder_text (_("Search..."));
             
             sbx.pack_start(searchEntryMB, true, true, 0);
             mbbx.pack_start(sbx, false, false, 0);
