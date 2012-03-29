@@ -290,7 +290,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         });
         css_provider_search = new CssProvider();
         try {
-            css_provider_search.load_from_data(error_css, error_css.length);
+            css_provider_search.load_from_data(search_used_css, search_used_css.length);
         }
         catch(Error e) {
             print("%s\n", e.message);
@@ -1737,10 +1737,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         return false;
     }
     
-    private const string error_css = """
-        @define-color text_color #FFFFFF;
+    //@define-color text_color #FFFFFF;
+    private const string search_used_css = """
         @define-color base_color #E9967A;
-    """; // DarkSalmon BG w white font
+    """; // DarkSalmon BG
 }
 
 
