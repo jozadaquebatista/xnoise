@@ -108,9 +108,6 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView {
         this.button_release_event.connect(this.on_button_release);
         this.button_press_event.connect(this.on_button_press);
         
-        Writer.NotificationData nd = Writer.NotificationData();
-        nd.cb = database_change_cb;
-        db_writer.register_change_callback(nd);
         this.ow.size_allocate.connect_after( (s, a) => {
             unowned TreeViewColumn tvc = this.get_column(0);
             int current_width = this.ow.get_allocated_width();
@@ -213,20 +210,6 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView {
                 context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
             else
                 context.render_layout(cr, cell_area.x, cell_area.y, pango_layout);
-        }
-    }
-    
-    private uint src = 0;
-    
-    private void database_change_cb(Writer.ChangeType changetype, Item? item) {
-        if(changetype == Writer.ChangeType.ADD_STREAM) {
-            if(src != 0)
-                Source.remove(src);
-            src = Timeout.add_seconds(2, () => {
-                tvm.filter();
-                src = 0;
-                return false;
-            });
         }
     }
     

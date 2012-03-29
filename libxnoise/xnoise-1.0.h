@@ -172,6 +172,40 @@ typedef struct _XnoiseDbusThumbnailer XnoiseDbusThumbnailer;
 typedef struct _XnoiseDbusThumbnailerClass XnoiseDbusThumbnailerClass;
 typedef struct _XnoiseDbusThumbnailerPrivate XnoiseDbusThumbnailerPrivate;
 
+#define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
+#define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
+#define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
+#define XNOISE_IPARAMS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParamsIface))
+
+typedef struct _XnoiseIParams XnoiseIParams;
+typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
+
+#define XNOISE_TYPE_MEDIA_BROWSER (xnoise_media_browser_get_type ())
+#define XNOISE_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowser))
+#define XNOISE_MEDIA_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowserClass))
+#define XNOISE_IS_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER))
+#define XNOISE_IS_MEDIA_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER))
+#define XNOISE_MEDIA_BROWSER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowserClass))
+
+typedef struct _XnoiseMediaBrowser XnoiseMediaBrowser;
+typedef struct _XnoiseMediaBrowserClass XnoiseMediaBrowserClass;
+typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
+
+#define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
+#define XNOISE_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModel))
+#define XNOISE_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
+#define XNOISE_IS_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
+#define XNOISE_IS_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
+#define XNOISE_MEDIA_BROWSER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
+
+typedef struct _XnoiseMediaBrowserModel XnoiseMediaBrowserModel;
+typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
+typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
+
+#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLUMN (xnoise_media_browser_model_column_get_type ())
+
+#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_media_browser_model_collection_type_get_type ())
+
 #define XNOISE_TYPE_DOCKABLE_MEDIA (xnoise_dockable_media_get_type ())
 #define XNOISE_DOCKABLE_MEDIA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMedia))
 #define XNOISE_DOCKABLE_MEDIA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMediaClass))
@@ -527,14 +561,6 @@ typedef struct _XnoiseLyricsView XnoiseLyricsView;
 typedef struct _XnoiseLyricsViewClass XnoiseLyricsViewClass;
 typedef struct _XnoiseLyricsViewPrivate XnoiseLyricsViewPrivate;
 typedef struct _XnoiseMainPrivate XnoiseMainPrivate;
-
-#define XNOISE_TYPE_IPARAMS (xnoise_iparams_get_type ())
-#define XNOISE_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParams))
-#define XNOISE_IS_IPARAMS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IPARAMS))
-#define XNOISE_IPARAMS_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IPARAMS, XnoiseIParamsIface))
-
-typedef struct _XnoiseIParams XnoiseIParams;
-typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
 #define XNOISE_TYPE_TRACK_INFOBAR (xnoise_track_infobar_get_type ())
@@ -546,16 +572,6 @@ typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 
 typedef struct _XnoiseTrackInfobar XnoiseTrackInfobar;
 typedef struct _XnoiseTrackInfobarClass XnoiseTrackInfobarClass;
-
-#define XNOISE_TYPE_MEDIA_BROWSER (xnoise_media_browser_get_type ())
-#define XNOISE_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowser))
-#define XNOISE_MEDIA_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowserClass))
-#define XNOISE_IS_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER))
-#define XNOISE_IS_MEDIA_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER))
-#define XNOISE_MEDIA_BROWSER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowserClass))
-
-typedef struct _XnoiseMediaBrowser XnoiseMediaBrowser;
-typedef struct _XnoiseMediaBrowserClass XnoiseMediaBrowserClass;
 
 #define XNOISE_TYPE_TRACK_LIST (xnoise_track_list_get_type ())
 #define XNOISE_TRACK_LIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_LIST, XnoiseTrackList))
@@ -578,22 +594,6 @@ typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 
 typedef struct _XnoiseInfoBar XnoiseInfoBar;
 typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
-typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
-
-#define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
-#define XNOISE_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModel))
-#define XNOISE_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
-#define XNOISE_IS_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
-#define XNOISE_IS_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
-#define XNOISE_MEDIA_BROWSER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
-
-typedef struct _XnoiseMediaBrowserModel XnoiseMediaBrowserModel;
-typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
-typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
-
-#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLUMN (xnoise_media_browser_model_column_get_type ())
-
-#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_media_browser_model_collection_type_get_type ())
 
 #define XNOISE_TYPE_PARAMS (xnoise_params_get_type ())
 #define XNOISE_PARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PARAMS, XnoiseParams))
@@ -1112,6 +1112,45 @@ struct _XnoiseDbusThumbnailerClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseIParamsIface {
+	GTypeInterface parent_iface;
+	void (*read_params_data) (XnoiseIParams* self);
+	void (*write_params_data) (XnoiseIParams* self);
+};
+
+struct _XnoiseMediaBrowser {
+	GtkTreeView parent_instance;
+	XnoiseMediaBrowserPrivate * priv;
+	XnoiseMediaBrowserModel* mediabrowsermodel;
+};
+
+struct _XnoiseMediaBrowserClass {
+	GtkTreeViewClass parent_class;
+};
+
+struct _XnoiseMediaBrowserModel {
+	GtkTreeStore parent_instance;
+	XnoiseMediaBrowserModelPrivate * priv;
+};
+
+struct _XnoiseMediaBrowserModelClass {
+	GtkTreeStoreClass parent_class;
+};
+
+typedef enum  {
+	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_ICON = 0,
+	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_VIS_TEXT,
+	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_ITEM,
+	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_LEVEL,
+	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_N_COLUMNS
+} XnoiseMediaBrowserModelColumn;
+
+typedef enum  {
+	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_UNKNOWN = 0,
+	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_HIERARCHICAL = 1,
+	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_LISTED = 2
+} XnoiseMediaBrowserModelCollectionType;
+
 typedef enum  {
 	XNOISE_DOCKABLE_MEDIA_CATEGORY_UNKNOWN = 0,
 	XNOISE_DOCKABLE_MEDIA_CATEGORY_MEDIA_COLLECTION,
@@ -1476,12 +1515,6 @@ struct _XnoiseMainClass {
 	GObjectClass parent_class;
 };
 
-struct _XnoiseIParamsIface {
-	GTypeInterface parent_iface;
-	void (*read_params_data) (XnoiseIParams* self);
-	void (*write_params_data) (XnoiseIParams* self);
-};
-
 struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
@@ -1522,39 +1555,6 @@ typedef enum  {
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_ALL,
 	XNOISE_MAIN_WINDOW_PLAYER_REPEAT_MODE_RANDOM
 } XnoiseMainWindowPlayerRepeatMode;
-
-struct _XnoiseMediaBrowser {
-	GtkTreeView parent_instance;
-	XnoiseMediaBrowserPrivate * priv;
-	XnoiseMediaBrowserModel* mediabrowsermodel;
-};
-
-struct _XnoiseMediaBrowserClass {
-	GtkTreeViewClass parent_class;
-};
-
-struct _XnoiseMediaBrowserModel {
-	GtkTreeStore parent_instance;
-	XnoiseMediaBrowserModelPrivate * priv;
-};
-
-struct _XnoiseMediaBrowserModelClass {
-	GtkTreeStoreClass parent_class;
-};
-
-typedef enum  {
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_ICON = 0,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_VIS_TEXT,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_ITEM,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_LEVEL,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_N_COLUMNS
-} XnoiseMediaBrowserModelColumn;
-
-typedef enum  {
-	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_UNKNOWN = 0,
-	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_HIERARCHICAL = 1,
-	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_LISTED = 2
-} XnoiseMediaBrowserModelCollectionType;
 
 struct _XnoiseParams {
 	GObject parent_instance;
@@ -2142,6 +2142,29 @@ GType xnoise_dbus_thumbnailer_get_type (void) G_GNUC_CONST;
 void xnoise_dbus_thumbnailer_queue_uris (XnoiseDbusThumbnailer* self, gchar** uris, int uris_length1);
 XnoiseDbusThumbnailer* xnoise_dbus_thumbnailer_new (void);
 XnoiseDbusThumbnailer* xnoise_dbus_thumbnailer_construct (GType object_type);
+GType xnoise_iparams_get_type (void) G_GNUC_CONST;
+GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
+GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
+XnoiseMediaBrowser* xnoise_media_browser_new (GtkWidget* ow);
+XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, GtkWidget* ow);
+gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
+gboolean xnoise_media_browser_update_view (XnoiseMediaBrowser* self);
+void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
+void xnoise_media_browser_on_row_collapsed (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
+gboolean xnoise_media_browser_get_use_treelines (XnoiseMediaBrowser* self);
+void xnoise_media_browser_set_use_treelines (XnoiseMediaBrowser* self, gboolean value);
+GType xnoise_media_browser_model_column_get_type (void) G_GNUC_CONST;
+GType xnoise_media_browser_model_collection_type_get_type (void) G_GNUC_CONST;
+gint xnoise_media_browser_model_get_max_icon_width (XnoiseMediaBrowserModel* self);
+void xnoise_media_browser_model_filter (XnoiseMediaBrowserModel* self);
+void xnoise_media_browser_model_remove_all (XnoiseMediaBrowserModel* self);
+void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
+void xnoise_media_browser_model_unload_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
+void xnoise_media_browser_model_load_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
+XnoiseDndData* xnoise_media_browser_model_get_dnd_data_for_path (XnoiseMediaBrowserModel* self, GtkTreePath** treepath, int* result_length1);
+XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
+XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
+gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserModel* self);
 GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
 GType xnoise_dockable_media_category_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_get_type (void) G_GNUC_CONST;
@@ -2345,9 +2368,7 @@ gint xnoise_main_get_thread_id (XnoiseMain* self);
 XnoiseMain* xnoise_main_get_instance (void);
 gboolean gdk_window_ensure_native (GdkWindow* window);
 void gtk_widget_style_get_property (GtkWidget* widget, const gchar* property_name, GValue* val);
-GType xnoise_iparams_get_type (void) G_GNUC_CONST;
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
-GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
 GType xnoise_track_list_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_player_repeat_mode_get_type (void) G_GNUC_CONST;
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
@@ -2375,27 +2396,6 @@ gboolean xnoise_main_window_get_usestop (XnoiseMainWindow* self);
 void xnoise_main_window_set_usestop (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
-GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
-XnoiseMediaBrowser* xnoise_media_browser_new (GtkWidget* ow);
-XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, GtkWidget* ow);
-gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
-gboolean xnoise_media_browser_update_view (XnoiseMediaBrowser* self);
-void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
-void xnoise_media_browser_on_row_collapsed (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
-gboolean xnoise_media_browser_get_use_treelines (XnoiseMediaBrowser* self);
-void xnoise_media_browser_set_use_treelines (XnoiseMediaBrowser* self, gboolean value);
-GType xnoise_media_browser_model_column_get_type (void) G_GNUC_CONST;
-GType xnoise_media_browser_model_collection_type_get_type (void) G_GNUC_CONST;
-gint xnoise_media_browser_model_get_max_icon_width (XnoiseMediaBrowserModel* self);
-void xnoise_media_browser_model_filter (XnoiseMediaBrowserModel* self);
-void xnoise_media_browser_model_remove_all (XnoiseMediaBrowserModel* self);
-void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
-void xnoise_media_browser_model_unload_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
-void xnoise_media_browser_model_load_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
-XnoiseDndData* xnoise_media_browser_model_get_dnd_data_for_path (XnoiseMediaBrowserModel* self, GtkTreePath** treepath, int* result_length1);
-XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
-XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
-gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserModel* self);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_params_get_type (void) G_GNUC_CONST;

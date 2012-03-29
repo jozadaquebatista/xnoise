@@ -183,25 +183,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     private const Gtk.ActionEntry[] action_entries = {
         { "FileMenuAction", null, N_("_File") },
-            { "OpenAction", Gtk.Stock.OPEN, null, null, N_("open file"), on_file_add},
-            { "OpenLocationAction", Gtk.Stock.NETWORK, N_("Open _Location"), null,
-               N_("open remote location"), on_location_add },
-            { "AddRemoveAction", Gtk.Stock.ADD, N_("_Add or Remove media"), null,
-               N_("manage the content of the xnoise media library"), on_menu_add},
+            { "OpenAction", Gtk.Stock.OPEN, null, "<Control>o", N_("open file"), on_file_add },
+            { "OpenLocationAction", Gtk.Stock.NETWORK, N_("Open _Location"), null, N_("open remote location"), on_location_add },
+            { "AddRemoveAction", Gtk.Stock.ADD, N_("_Add or Remove media"), null, N_("manage the content of the xnoise media library"), on_menu_add},
             { "QuitAction", Gtk.Stock.QUIT, null, null, null, quit_now},
         { "EditMenuAction", null, N_("_Edit") },
-            { "ClearTrackListAction", Gtk.Stock.CLEAR, N_("C_lear tracklist"), null,
-               N_("Clear the tracklist"), on_remove_all_button_clicked},
-            { "RescanLibraryAction", Gtk.Stock.REFRESH, N_("R_escan collection"), null,
-               N_("R_escan collection"), on_reload_collection_button_clicked},
+            { "ClearTrackListAction", Gtk.Stock.CLEAR, N_("C_lear tracklist"), null, N_("Clear the tracklist"), on_remove_all_button_clicked},
+            { "RescanLibraryAction", Gtk.Stock.REFRESH, N_("_Rescan collection"), null, N_("_Rescan collection"), on_reload_collection_button_clicked},
+            { "IncreaseVolumeAction", null, N_("_Increase volume"), "<Control>plus", N_("_Increase playback volume"), increase_volume },
+            { "DecreaseVolumeAction", null, N_("_Decrease volume"), "<Control>minus", N_("_Decrease playback volume"), decrease_volume },
             { "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit},
         { "ViewMenuAction", null, N_("_View") },
-            { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), null,
-               N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
-            { "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), null,
+            { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), "<Alt>1", N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
+            { "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), "<Alt>2",
                N_("Go to the now playing screen in the main window."), on_show_video_menu_clicked},
-            { "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), null,
-               N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
+            { "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), "<Alt>3", N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
         { "HelpMenuAction", null, N_("_Help") },
             { "AboutAction", Gtk.Stock.ABOUT, null, null, null, on_help_about},
         { "ConfigMenuAction", null, N_("_Config") }
@@ -595,46 +591,55 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             search_entry.get_style_context().remove_provider(css_provider_search);
     }
     
+    private void increase_volume() {
+        change_volume(0.1);
+    }
+    
+    private void decrease_volume() {
+        change_volume(-0.1);
+    }
+    
     private void change_volume(double delta_fraction) {
         volume_slider.value += delta_fraction;
     }
     
-    private const int PLUS_KEY  = 0x002b;
-    private const int MINUS_KEY = 0x002d;
+    private const int PLUS_KEY  = 0x002B;
+    private const int MINUS_KEY = 0x002D;
     private const int 1_KEY     = 0x0031;
     private const int 2_KEY     = 0x0032;
     private const int 3_KEY     = 0x0033;
     private const int F_KEY     = 0x0066;
     private const int D_KEY     = 0x0064;
     private const int M_KEY     = 0x006D;
+    private const int O_KEY     = 0x006F;
     private const int Q_KEY     = 0x0071;
     private const int SPACE_KEY = 0x0020;
-    private const int ALT_KEY   = 0x0018;
-    private const int CTRL_KEY  = 0x0014;
+    private const int ALT_MOD   = 0x0018;
+    private const int CTRL_MOD  = 0x0014;
     
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%d : %d\n",(int)e.keyval, (int)e.state);
         switch(e.keyval) {
             case PLUS_KEY: {
-                    if(e.state != CTRL_KEY) // Ctrl Modifier
+                    if(e.state != CTRL_MOD) // Ctrl Modifier
                         return false;
                     change_volume(0.1);
                 }
                 return true;
             case MINUS_KEY: {
-                    if(e.state != CTRL_KEY) // Ctrl Modifier
+                    if(e.state != CTRL_MOD) // Ctrl Modifier
                         return false;
                     change_volume(-0.1);
                 }
                 return true;
             case F_KEY: {
-                    if(e.state != CTRL_KEY) // Ctrl Modifier
+                    if(e.state != CTRL_MOD) // Ctrl Modifier
                         return false;
                     search_entry.grab_focus();
                 }
                 return true;
             case D_KEY: {
-                    if(e.state != CTRL_KEY) // Ctrl Modifier
+                    if(e.state != CTRL_MOD) // Ctrl Modifier
                         return false;
                     search_entry.text = EMPTYSTRING;
                     global.searchtext = EMPTYSTRING;
@@ -642,19 +647,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
                 return true;
             case 1_KEY: {
-                    if(e.state != ALT_KEY) // ALT Modifier
+                    if(e.state != ALT_MOD) // ALT Modifier
                         return false;
                     this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
                 }
                 return true;
             case 2_KEY: {
-                    if(e.state != ALT_KEY) // ALT Modifier
+                    if(e.state != ALT_MOD) // ALT Modifier
                         return false;
                     this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
                 }
                 return true;
             case 3_KEY: {
-                    if(e.state != ALT_KEY) // ALT Modifier
+                    if(e.state != ALT_MOD) // ALT Modifier
                         return false;
                     if(active_lyrics == false)
                         return false;
@@ -668,13 +673,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
                 return true;
             case M_KEY: {
-                    if(e.state != CTRL_KEY) // Ctrl Modifier
+                    if(e.state != CTRL_MOD) // Ctrl Modifier
                         return false;
                     toggle_media_browser_visibility();
                     break;
                 }
+            case O_KEY: {
+                    if(e.state != CTRL_MOD) // Ctrl Modifier
+                        return false;
+                    on_file_add();
+                    break;
+                }
             case Q_KEY: {
-                    if(e.state != CTRL_KEY) // Ctrl Modifier
+                    if(e.state != CTRL_MOD) // Ctrl Modifier
                         return false;
                     quit_now();
                     break;
@@ -1074,6 +1085,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             Gtk.ResponseType.ACCEPT,
             null);
         fcdialog.select_multiple = true;
+        fcdialog.set_local_only(true);
         fcdialog.set_modal(true);
         fcdialog.set_transient_for(main_window);
         fcdialog.set_current_folder(Environment.get_home_dir());

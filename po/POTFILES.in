@@ -9,6 +9,9 @@ libxnoise/Database/xnoise-db-creator.vala
 libxnoise/Database/xnoise-db-writer.vala
 libxnoise/DBus/xnoise-dbus.vala
 libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala
+libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala
+libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala
+libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala
 libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala
 libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala
 libxnoise/ExtraWidgets/AboutDialog/xnoise-about.vala
@@ -36,9 +39,6 @@ libxnoise/Lyrics/xnoise-lyrics-loader.vala
 libxnoise/Lyrics/xnoise-lyrics-view.vala
 libxnoise/Main/xnoise-main.vala
 libxnoise/MainWindow/xnoise-main-window.vala
-libxnoise/MediaBrowser/xnoise-media-browser-dockable.vala
-libxnoise/MediaBrowser/xnoise-media-browser.vala
-libxnoise/MediaBrowser/xnoise-media-browser-model.vala
 libxnoise/Parameter/xnoise-parameter.vala
 libxnoise/Player/xnoise-gst-player.vala
 libxnoise/PluginModule/xnoise-plugin.vala

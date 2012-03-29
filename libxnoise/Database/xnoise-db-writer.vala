@@ -866,6 +866,9 @@ public class Xnoise.Database.Writer : GLib.Object {
     private static const string STMT_INSERT_TITLE =
         "INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length, bitrate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
+    private static const string STMT_GET_ITEM_ID =
+        "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.id = ?";
+    
     public bool insert_title(ref TrackData td) { // , string uri
         // make entries in other tables and get references from there
         td.dat1 = handle_artist(ref td.artist);
@@ -889,14 +892,6 @@ public class Xnoise.Database.Writer : GLib.Object {
             return false;
         }
         //print("insert_title td.item.type %s\n", td.item.type.to_string());
-        if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
-            foreach(NotificationData cxd in change_callbacks) {
-//            if(change_cb != null) {
-//                Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO);
-                if(cxd.cb != null)
-                    cxd.cb(ChangeType.ADD_VIDEO, td.item);
-            }
-        }
         insert_title_statement.reset();
         if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
            insert_title_statement.bind_int (2,  td.dat1)             != Sqlite.OK ||
@@ -915,6 +910,27 @@ public class Xnoise.Database.Writer : GLib.Object {
         if(insert_title_statement.step()!=Sqlite.DONE) {
             this.db_error();
             return false;
+        }
+        if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
+            Statement stmt;
+            this.db.prepare_v2(STMT_GET_ITEM_ID , -1, out stmt);
+            if(stmt.bind_int (1,uri_id) != Sqlite.OK) {
+                this.db_error();
+                return false;
+            }
+            int32 idv = -1;
+            if(stmt.step() == Sqlite.ROW) {
+                idv = (int32)stmt.column_int(0);
+            }
+            else {
+                this.db_error();
+                return false;
+            }
+            Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO, td.item.uri, idv);
+            foreach(NotificationData cxd in change_callbacks) {
+                if(cxd.cb != null)
+                    cxd.cb(ChangeType.ADD_VIDEO, item);
+            }
         }
         return true;
     }

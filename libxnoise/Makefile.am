@@ -42,6 +42,9 @@ libxnoise_la_SOURCES = \
     DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala \
     DockableMedia/History/xnoise-lastplayed-treeview.vala \
     DockableMedia/History/xnoise-lastplayed-treeview-model.vala \
+    DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala \
+    DockableMedia/MediaBrowser/xnoise-media-browser.vala \
+    DockableMedia/MediaBrowser/xnoise-media-browser-model.vala \
     DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala \
     DockableMedia/MostPlayed/xnoise-mostplayed-treeview.vala \
     DockableMedia/MostPlayed/xnoise-mostplayed-treeview-model.vala \
@@ -86,9 +89,6 @@ libxnoise_la_SOURCES = \
     Lyrics/xnoise-lyrics-view.vala \
     Main/xnoise-main.vala \
     MainWindow/xnoise-main-window.vala \
-    MediaBrowser/xnoise-media-browser-dockable.vala \
-    MediaBrowser/xnoise-media-browser.vala \
-    MediaBrowser/xnoise-media-browser-model.vala \
     Parameter/xnoise-i-params.vala \
     Parameter/xnoise-parameter.vala \
     Player/xnoise-gst-player.vala \
@@ -175,6 +175,7 @@ DISTCLEANFILES = \
     BackgroundWorker/*.c \
     DockableMedia/*.c \
     DockableMedia/History/*.c \
+    DockableMedia/MediaBrowser/*.c \
     DockableMedia/MostPlayed/*.c \
     DockableMedia/StreamListing/*.c \
     DockableMedia/VideoListing/*.c \
@@ -198,7 +199,6 @@ DISTCLEANFILES = \
     Lyrics/*.c \
     Main/*.c \
     MainWindow/*.c \
-    MediaBrowser/*.c \
     Parameter/*.c \
     Player/*.c \
     PlaylistReader/*.c \

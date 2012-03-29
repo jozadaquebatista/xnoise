@@ -5,6 +5,8 @@ plugins/titleToDecoration/xnoise-title-to-decoration.c
 plugins/lastfm/xnoise-lastfm.c
 libxnoise/Application/xnoise-application.c
 libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.c
+libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.c
+libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.c
 libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.c
 libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.c
 libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.c
@@ -18,8 +20,6 @@ libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.c
 libxnoise/Lyrics/xnoise-lyrics-loader.c
 libxnoise/Lyrics/xnoise-lyrics-view.c
 libxnoise/MainWindow/xnoise-main-window.c
-libxnoise/MediaBrowser/xnoise-media-browser.c
-libxnoise/MediaBrowser/xnoise-media-browser-dockable.c
 libxnoise/Player/xnoise-gst-player.c
 libxnoise/TrackList/xnoise-tracklist.c
 libxnoise/TrayIcon/xnoise-tray-icon.c
