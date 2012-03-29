@@ -133,7 +133,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
                 return true;
             Item? item;
             this.get(i, Column.ITEM, out item);
-            if(item.uri == u) {
+            if(item.uri == u && item.type != ItemType.STREAM) {
                 string? title = ntags.lookup(Column.TITLE);
                 if(title != null)
                     this.set(i, Column.TITLE, title);

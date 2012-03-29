@@ -50,6 +50,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string HIDE_LIBRARY      = _("Hide Library");
     private const string SHOW_LIBRARY      = _("Show Library");
     private unowned Main xn;
+    private VolumeSliderButton volume_slider;
     private CssProvider css_provider_search;
     private int idx_tracklist;
     private int idx_video;
@@ -594,6 +595,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             search_entry.get_style_context().remove_provider(css_provider_search);
     }
     
+    private void change_volume(double delta_fraction) {
+        volume_slider.value += delta_fraction;
+    }
+    
+    private const int PLUS_KEY  = 0x002b;
+    private const int MINUS_KEY = 0x002d;
     private const int 1_KEY     = 0x0031;
     private const int 2_KEY     = 0x0032;
     private const int 3_KEY     = 0x0033;
@@ -608,6 +615,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%d : %d\n",(int)e.keyval, (int)e.state);
         switch(e.keyval) {
+            case PLUS_KEY: {
+                    if(e.state != CTRL_KEY) // Ctrl Modifier
+                        return false;
+                    change_volume(0.1);
+                }
+                return true;
+            case MINUS_KEY: {
+                    if(e.state != CTRL_KEY) // Ctrl Modifier
+                        return false;
+                    change_volume(-0.1);
+                }
+                return true;
             case F_KEY: {
                     if(e.state != CTRL_KEY) // Ctrl Modifier
                         return false;
@@ -1097,7 +1116,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         string basename = null;
         if((newuri == EMPTYSTRING)|(newuri == null)) {
             text = "<b>XNOISE</b> - ready to rock! ;-)";
-            track_infobar.title_text = text; //song_title_label.set_text(text);
+            track_infobar.title_text = text;
             return;
         }
         File file = File.new_for_uri(newuri);
@@ -1131,13 +1150,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     );
                 if(album==UNKNOWN_ALBUM &&
                    artist==UNKNOWN_ARTIST &&
-                   title==UNKNOWN_TITLE)
+                   title==UNKNOWN_TITLE) {
                     if((basename == null)||(basename == EMPTYSTRING)) {
                         text = Markup.printf_escaped("<b>...</b>");
                     }
                     else {
                         text = Markup.printf_escaped("<b>%s</b>", prepare_name_from_filename(basename));
                     }
+                }
+                else if(album==UNKNOWN_ALBUM &&
+                        artist==UNKNOWN_ARTIST) {
+                    text = Markup.printf_escaped("<b>%s</b>", title.replace("\\", " "));
+                }
             }
             else {
                 if((!gst_player.playing)&&
@@ -1205,6 +1229,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     else
                         text = Markup.printf_escaped("<b>%s</b>", file.get_uri());
                 }
+                else if(album==UNKNOWN_ALBUM &&
+                        artist==UNKNOWN_ARTIST) {
+                    text = Markup.printf_escaped("<b>%s</b>", title.replace("\\", " "));
+                }
+
             }
             else {
                 if((!gst_player.playing) &&
@@ -1495,7 +1524,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             //VOLUME SLIDE BUTTON
             var volumeSliderButtonTI = new ToolItem();
-            volumeSliderButtonTI.add(new VolumeSliderButton(gst_player));
+            volume_slider = new VolumeSliderButton(gst_player);
+            volumeSliderButtonTI.add(volume_slider);
             
             //PLAYBACK CONTROLLS
             this.previousButton = new ControlButton(ControlButton.Direction.PREVIOUS);
