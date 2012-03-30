@@ -256,7 +256,7 @@ position_length_column=6
 volume=0.8
 
 [settings_string]
-activated_plugins=azlyrics;chartlyrics;Lyricwiki;DatabaseLyrics;notifications;CyclicSaveState;mediakeys;lastfm
+activated_plugins=azlyrics;chartlyrics;Lyricwiki;DatabaseLyrics;notifications;mediakeys;lastfm
 """;
 }
 

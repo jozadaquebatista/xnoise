@@ -412,7 +412,6 @@ AC_CONFIG_FILES([
     plugins/Makefile
     plugins/testplugin/Makefile
     plugins/titleToDecoration/Makefile
-    plugins/cyclic-save-state/Makefile
     plugins/notifications2/Makefile
     plugins/mpris/Makefile
     plugins/mpris_one/Makefile
@@ -444,7 +443,6 @@ echo "
   Plugins included in this build: 
     test plugin:                   yes (always)
     titleToDecoration:             yes (always)
-    cyclic-save-state:             yes (always)
     chartlyrics:                   ${enable_chartlyrics}
     azlyrics:                      ${enable_azlyrics}
     lyricwiki:                     ${enable_lyricwiki}

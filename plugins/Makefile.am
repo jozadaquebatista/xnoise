@@ -1,38 +1,55 @@
-SUBDIRS = testplugin titleToDecoration cyclic-save-state databaseLyrics
+NULL =
 
-DIST_SUBDIRS = testplugin titleToDecoration cyclic-save-state notifications2 mediakeys mpris mpris_one chartlyrics lyricwiki soundmenu2 databaseLyrics lastfm azlyrics
+SUBDIRS =       testplugin \
+                titleToDecoration \
+                databaseLyrics \
+                $(NULL)
+
+DIST_SUBDIRS =  testplugin \
+                titleToDecoration \
+                notifications2 \
+                mediakeys \
+                mpris \
+                mpris_one \
+                chartlyrics \
+                lyricwiki \
+                soundmenu2 \
+                databaseLyrics \
+                lastfm \
+                azlyrics \
+                $(NULL)
 
 if ENABLE_CHARTLYRICS
-  SUBDIRS += chartlyrics
+    SUBDIRS += chartlyrics
 endif
 
 if ENABLE_LASTFM
-  SUBDIRS += lastfm
+    SUBDIRS += lastfm
 endif
 
 if ENABLE_NOTIFICATIONS
-  SUBDIRS += notifications2
+    SUBDIRS += notifications2
 endif
 
 if ENABLE_MPRIS
-  SUBDIRS += mpris
-  SUBDIRS += mpris_one
+    SUBDIRS += mpris
+    SUBDIRS += mpris_one
 endif
 
 if ENABLE_MEDIAKEYS
-  SUBDIRS += mediakeys
+    SUBDIRS += mediakeys
 endif
 
 if ENABLE_LYRICWIKI
-  SUBDIRS += lyricwiki
+    SUBDIRS += lyricwiki
 endif
 
 if ENABLE_SOUNDMENU
-  SUBDIRS += soundmenu2
+    SUBDIRS += soundmenu2
 endif
 
 if ENABLE_AZLYRICS
-  SUBDIRS += azlyrics
+    SUBDIRS += azlyrics
 endif
 
 DISTCLEANFILES = \

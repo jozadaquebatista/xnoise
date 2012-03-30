@@ -750,6 +750,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Main : GLib.Object {
 		public Main ();
+		public void add_cyclic_save_timeout ();
 		public void immediate_play (string uri);
 		public void quit ();
 		public void save_activated_plugins ();

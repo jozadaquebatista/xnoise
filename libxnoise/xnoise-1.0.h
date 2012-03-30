@@ -2360,6 +2360,7 @@ void xnoise_lyrics_view_lyrics_provider_unregister (XnoiseLyricsView* self, Xnoi
 XnoiseLyricsLoader* xnoise_lyrics_view_get_loader (XnoiseLyricsView* self);
 XnoiseMain* xnoise_main_new (void);
 XnoiseMain* xnoise_main_construct (GType object_type);
+void xnoise_main_add_cyclic_save_timeout (XnoiseMain* self);
 void xnoise_main_immediate_play (XnoiseMain* self, const gchar* uri);
 void xnoise_main_save_activated_plugins (XnoiseMain* self);
 void xnoise_main_save_tracklist (XnoiseMain* self);

@@ -114,9 +114,28 @@ public class Xnoise.Main : GLib.Object {
             });
         }
         
-        // FIRST START? FILL DB!
+        // FIRST START? Ask to FILL DB!
         if(is_first_start)
             main_window.ask_for_initial_media_import();
+        
+        // periodically save state and tracklist content
+        add_cyclic_save_timeout();
+    }
+    
+    private uint cyclic_save_source = 0;
+    public void add_cyclic_save_timeout() {
+        cyclic_save_source = Timeout.add_seconds(60, () => {
+            if(MainContext.current_source().is_destroyed())
+                return false;
+            if(!global.media_import_in_progress && 
+               !main_window.mediaBr.mediabrowsermodel.populating_model) {
+                
+                save_tracklist();
+                save_activated_plugins();
+                Params.write_all_parameters_to_file();
+            }
+            return true;
+        });
     }
 
     private void connect_signals() {
@@ -173,7 +192,7 @@ public class Xnoise.Main : GLib.Object {
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_final_tracks_to_db_job);
         job.items = main_window.trackList.tracklistmodel.get_all_tracks();
         job.finished.connect( () => {
-            print("finished db saving\n");
+            //print("finished db saving\n");
             preparing_quit = false;
         });
         db_worker.push_job(job);
@@ -189,6 +208,7 @@ public class Xnoise.Main : GLib.Object {
     public void quit() {
         global.player_in_shutdown();
         global.player_state = PlayerState.STOPPED;
+        Source.remove(cyclic_save_source);
         preparing_quit = true;
         var jx = new Worker.Job(Worker.ExecutionType.TIMED, quit_job, 4);
         io_worker.push_job(jx);
