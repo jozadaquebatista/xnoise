@@ -63,6 +63,26 @@ public class Xnoise.LyricsView : Gtk.TextView {
         font_description.set_family("Sans");
         font_description.set_size((int)(12 * Pango.SCALE)); // TODO: make this configurable
         this.modify_font(font_description);
+        
+        global.sign_notify_tracklistnotebook_switched.connect( (s,p) => {
+            if(p != TrackListNoteBookTab.LYRICS)
+                return;
+            if(prepare_for_comparison(artist) == prepare_for_comparison(global.current_artist) &&
+               prepare_for_comparison(title)  == prepare_for_comparison(global.current_title)) {
+                if((global.current_artist == null)||(artist == EMPTYSTRING)||(global.current_artist == UNKNOWN_ARTIST)||
+                   (global.current_title == null) ||(title  == EMPTYSTRING) ||(global.current_title == UNKNOWN_TITLE)) {
+                    set_text_via_idle(_("Insufficient track information. Not searching for lyrics."));
+                    return;
+                }
+                return; // Do not search if we already have lyrics
+            }
+            set_text("LYRICS VIEWER\n\nwaiting...");
+            if(timeout!=0) {
+                GLib.Source.remove(timeout);
+                timeout = 0;
+            }
+            timeout = GLib.Timeout.add_seconds(1, on_timout_elapsed);
+        });
     }
     
     public void lyrics_provider_unregister(ILyricsProvider lp) {
@@ -75,24 +95,6 @@ public class Xnoise.LyricsView : Gtk.TextView {
 
     private bool initialized = false;
     private void on_uri_changed(string? uri) {
-        if(!initialized) {
-            //if switching to Lyrics View ...
-            global.sign_notify_tracklistnotebook_switched.connect( (s,p) => {
-                if(p != TrackListNoteBookTab.LYRICS)
-                    return;
-                if(prepare_for_comparison(artist) == prepare_for_comparison(global.current_artist) &&
-                   prepare_for_comparison(title)  == prepare_for_comparison(global.current_title)) {
-                    return; // Do not search if we already have lyrics
-                }
-                set_text("LYRICS VIEWER\n\nwaiting...");
-                if(timeout!=0) {
-                    GLib.Source.remove(timeout);
-                    timeout = 0;
-                }
-                timeout = GLib.Timeout.add_seconds(1, on_timout_elapsed);
-            });
-            initialized = true;
-        }
         if(uri == null || uri.strip() == EMPTYSTRING) {
             if(timeout!=0) {
                 GLib.Source.remove(timeout);
@@ -102,40 +104,41 @@ public class Xnoise.LyricsView : Gtk.TextView {
             return;
         }
         set_text("LYRICS VIEWER\n\nwaiting...");
-        if(timeout!=0) {
+        if(timeout != 0) {
             GLib.Source.remove(timeout);
             timeout = 0;
         }
-        
         // Lyrics View is already visible...
-        if(main_window.tracklistnotebook.get_current_page() == TrackListNoteBookTab.LYRICS)
+        if(main_window.tracklistnotebook.get_current_page() == TrackListNoteBookTab.LYRICS) {
             timeout = GLib.Timeout.add_seconds(1, on_timout_elapsed);
+        }
     }
 
-    //FIXME: This must be used wtih Worker.Job, so that there are no race conditions!
-    // Use the timeout because gst_player is sending the tag_changed signals
-    // sometimes very often at the beginning of a track.
     private bool on_timout_elapsed() {
         if(global.player_state == PlayerState.STOPPED) {
             set_text_via_idle(_("Player stopped. Not searching for lyrics."));
+            timeout = 0;
             return false;
         }
         
         artist = prepare_for_comparison(global.current_artist);
         title  = prepare_for_comparison(global.current_title );
         
-
         //print("2. %s - %s\n", artist, title);
-        if((artist == null)||(artist == EMPTYSTRING)||(artist == UNKNOWN_ARTIST)||
-           (title == null)||(title == EMPTYSTRING)||(title == UNKNOWN_TITLE)) {
+        if((global.current_artist == null)||(artist == EMPTYSTRING)||(global.current_artist == UNKNOWN_ARTIST)||
+           (global.current_title == null) ||(title  == EMPTYSTRING) ||(global.current_title == UNKNOWN_TITLE)) {
             set_text_via_idle(_("Insufficient track information. Not searching for lyrics."));
+            timeout = 0;
             return false;
         }
 
         // Do not execute if source has been removed in the meantime
-        if(MainContext.current_source().is_destroyed())
+        if(MainContext.current_source().is_destroyed()) {
+            timeout = 0;
             return false;
+        }
         loader.fetch(remove_linebreaks(global.current_artist), remove_linebreaks(global.current_title));
+        timeout = 0;
         return false;
     }
 
