@@ -48,7 +48,7 @@ msgstr "Zuletzt gepielt"
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
 msgid "Local Collection"
-msgstr "Locale Sammlung"
+msgstr "Lokale Sammlung"
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:285
 msgid "Collapse all"
