@@ -42,12 +42,13 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView {
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
     };
-    private int fontsizeMB = 10;
+//    private int fontsizeMB = 10;
     private Pango.FontDescription font_description;
     private int last_width;
     //parent container of this widget (most likely scrolled window)
     private unowned Widget ow;
-
+    private MostplayedTreeviewModel tvm;
+    
     public PlaylistTreeViewMostplayed(MainWindow window, Widget ow) {
         this.win = window; // use this ref because static main_window
                            //is not yet set up at construction time
@@ -59,10 +60,10 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView {
         
         var column = new TreeViewColumn();
         
-        fontsizeMB = Params.get_int_value("fontsizeMB");
+//        fontsizeMB = Params.get_int_value("fontsizeMB");
         Gtk.StyleContext context = this.get_style_context();
         font_description = context.get_font(StateFlags.NORMAL).copy();
-        font_description.set_size((int)(fontsizeMB * Pango.SCALE));
+        font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
         
         int hsepar = 0;
         this.style_get("horizontal-separator", out hsepar);
@@ -78,7 +79,8 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView {
         
         this.insert_column(column, -1);
         
-        this.model = new MostplayedTreeviewModel();
+        tvm = new MostplayedTreeviewModel();
+        this.model = tvm;
         
         this.row_activated.connect( (s,tp,c) => {
             Item? item = Item(ItemType.UNKNOWN);
@@ -145,6 +147,19 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView {
                 return false;
             });
         });
+        global.notify["fontsize-dockable"].connect( () => {
+            if(global.fontsize_dockable == 0) { //default
+                font_description.set_size((int)(10 * Pango.SCALE));
+            }
+            else {
+                font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
+                Idle.add(()  => {
+                    this.set_model(null);
+                    this.set_model(tvm);
+                    return false;
+                });
+            }
+        });
     }
     
     private class ListFlowingTextRenderer : CellRendererText {
@@ -181,7 +196,7 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView {
             pango_layout.set_wrap(Pango.WrapMode.WORD_CHAR);
             int wi, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
-            natural_height = minimum_height = he;
+            natural_height = minimum_height = he + 2;
         }
     
         public override void get_size(Widget widget, Gdk.Rectangle? cell_area,

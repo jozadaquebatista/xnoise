@@ -2253,6 +2253,8 @@ void xnoise_global_access_next (XnoiseGlobalAccess* self);
 void xnoise_global_access_stop (XnoiseGlobalAccess* self);
 XnoiseGlobalAccess* xnoise_global_access_new (void);
 XnoiseGlobalAccess* xnoise_global_access_construct (GType object_type);
+gint xnoise_global_access_get_fontsize_dockable (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_fontsize_dockable (XnoiseGlobalAccess* self, gint value);
 GType xnoise_player_state_get_type (void) G_GNUC_CONST;
 XnoisePlayerState xnoise_global_access_get_player_state (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_player_state (XnoiseGlobalAccess* self, XnoisePlayerState value);

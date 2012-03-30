@@ -576,6 +576,7 @@ namespace Xnoise {
 		public string current_organization { get; set; }
 		public string current_title { get; set; }
 		public string? current_uri { get; set; }
+		public int fontsize_dockable { get; set; }
 		public string? image_path_embedded { get; set; }
 		public string? image_path_large { get; set; }
 		public string? image_path_small { get; set; }

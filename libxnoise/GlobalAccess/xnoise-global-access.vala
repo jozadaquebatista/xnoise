@@ -146,6 +146,8 @@ public class Xnoise.GlobalAccess : GLib.Object {
         }
     }
     
+    public int fontsize_dockable { get; set; default = 10; }
+    
     public PlayerState player_state {
         get {
             return _player_state;

@@ -107,15 +107,16 @@ namespace Xnoise {
         if(global == null)
             global = new GlobalAccess();
         
-        // PARAMS
         File xnoise_data_home = File.new_for_path(data_folder());
-        
         File xnoiseini = null;
         xnoiseini = xnoise_data_home.get_child("db.sqlite");
         if(!xnoiseini.query_exists(null))
             is_first_start = true;
         
+        // PARAMS
         Params.init();
+        int v = Params.get_int_value("fontsizeMB");
+        global.fontsize_dockable = ((v >= 7 && v < 18) ? v : 10);
         
         // DATABASE
         Database.DbCreator.check_tables(ref is_first_start);

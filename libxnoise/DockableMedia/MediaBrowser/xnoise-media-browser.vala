@@ -521,7 +521,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
         fontsizeMB = Params.get_int_value("fontsizeMB");
         Gtk.StyleContext context = this.get_style_context();
         font_description = context.get_font(StateFlags.NORMAL).copy();
-        font_description.set_size((int)(fontsizeMB * Pango.SCALE));
+        font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
         
         var column = new TreeViewColumn();
         
