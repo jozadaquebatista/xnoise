@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-29 17:29+0200\n"
+"POT-Creation-Date: 2012-03-31 00:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,15 +46,15 @@ msgstr ""
 msgid "Last Played"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:48
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
 msgid "Local Collection"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:284
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:285
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:488
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:342
 msgid "Loading ..."
 msgstr ""
 
@@ -109,35 +109,35 @@ msgstr ""
 msgid "Leave fullscreen"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:240
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:242
 msgid "General"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:242
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:244
 msgid "Plugins"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:247
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:249
 msgid "Enable grid lines in media browser"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:252
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:254
 msgid "Don't show video screen while hovering album image"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:257
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:259
 msgid "Compact layout"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:262
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:264
 msgid "Use stop button"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:267
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:269
 msgid "Quit application if window is closed"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:274
+#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:276
 msgid "Media browser fontsize:"
 msgstr ""
 
@@ -297,13 +297,14 @@ msgstr ""
 msgid "no lyrics found..."
 msgstr ""
 
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:101
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:120
-msgid "Player stopped. Not searching for lyrics."
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:68
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:123
+msgid "Insufficient track information. Not searching for lyrics."
 msgstr ""
 
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:131
-msgid "Insufficient track information. Not searching for lyrics."
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:96
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:112
+msgid "Player stopped. Not searching for lyrics."
 msgstr ""
 
 #. Gtk.TextIter start_iter;
@@ -312,7 +313,7 @@ msgstr ""
 #. textbuffer.get_start_iter (out end_iter);
 #. string txt = textbuffer.get_text(start_iter, end_iter, true);
 #. TODO: Howto append text ?
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:152
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:148
 #, c-format
 msgid ""
 "\n"
@@ -498,24 +499,24 @@ msgstr ""
 msgid "Devices"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1436
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1441
 msgid "Remove all"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1441
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1446
 msgid "Remove selected titles"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1446
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1451
 msgid "Jump to current position"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1558
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1563
 msgid "Show application main menu"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1593
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1598
 msgid "Search..."
 msgstr ""
 
@@ -643,40 +644,40 @@ msgstr ""
 msgid "Buffer lyrics in database"
 msgstr ""
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:390
-#: ../plugins/lastfm/xnoise-lastfm.vala:468
+#: ../plugins/lastfm/xnoise-lastfm.vala:391
+#: ../plugins/lastfm/xnoise-lastfm.vala:469
 #, c-format
 msgid "User logged in!"
 msgstr ""
 
 #. feedback
-#: ../plugins/lastfm/xnoise-lastfm.vala:394
-#: ../plugins/lastfm/xnoise-lastfm.vala:466
-#: ../plugins/lastfm/xnoise-lastfm.vala:471
+#: ../plugins/lastfm/xnoise-lastfm.vala:395
+#: ../plugins/lastfm/xnoise-lastfm.vala:467
+#: ../plugins/lastfm/xnoise-lastfm.vala:472
 #, c-format
 msgid "User not logged in!"
 msgstr ""
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:431
+#: ../plugins/lastfm/xnoise-lastfm.vala:432
 #, c-format
 msgid "Please enter your lastfm username and password."
 msgstr ""
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:440
+#: ../plugins/lastfm/xnoise-lastfm.vala:441
 #, c-format
 msgid "Username:"
 msgstr ""
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:447
+#: ../plugins/lastfm/xnoise-lastfm.vala:448
 #, c-format
 msgid "Password:"
 msgstr ""
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:462
+#: ../plugins/lastfm/xnoise-lastfm.vala:463
 msgid "Scrobble played tracks on lastfm"
 msgstr ""
 
-#: ../plugins/lastfm/xnoise-lastfm.vala:480
+#: ../plugins/lastfm/xnoise-lastfm.vala:481
 msgid "Apply"
 msgstr ""
 
