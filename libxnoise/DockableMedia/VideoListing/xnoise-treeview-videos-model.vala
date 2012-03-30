@@ -117,7 +117,6 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
     private uint thumbnailer_src = 0;
     
     private bool insert_job(Worker.Job job) {
-        
         job.items = db_reader.get_video_items(global.searchtext);
         
         Idle.add( () => {

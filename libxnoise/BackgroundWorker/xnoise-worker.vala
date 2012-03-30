@@ -54,13 +54,12 @@ public class Xnoise.Worker : Object {
         print("Using new glib thread api\n");
         if (!Thread.supported ()) {
             error("Cannot work without multithreading support.");
-            return;
         }
         
         this.main_context = mc;
         
         try {
-            thread = new Thread<int>("xn_" + ((int)Random.next_int()).to_string(), thread_func);
+            thread = new Thread.try("xn_" + ((int)Random.next_int()).to_string(), thread_func);
         }
         catch(ThreadError e) {
             print("Error creating thread: %s\n", e.message);
@@ -69,7 +68,6 @@ public class Xnoise.Worker : Object {
         print("Using old glib thread api\n");
         if (!Thread.supported ()) {
             error("Cannot work without multithreading support.");
-            return;
         }
         
         this.main_context = mc;

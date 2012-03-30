@@ -33,8 +33,13 @@ using Gtk;
 
 using Xnoise;
 using Xnoise.Services;
+using Xnoise.Database;
+
 
 private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
+    private bool populating_model = false;
+    private uint search_idlesource = 0;
+    private PlaylistTreeViewLastplayed view;
     
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf), //ICON
@@ -49,20 +54,55 @@ private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
         N_COLUMNS
     }
 
-    construct {
+    public LastplayedTreeviewModel(PlaylistTreeViewLastplayed view) {
         this.set_column_types(col_types);
+        this.view = view;
         this.populate();
+        global.sign_searchtext_changed.connect( (s,t) => {
+            if(search_idlesource != 0)
+                Source.remove(search_idlesource);
+            search_idlesource = Timeout.add(200, () => {
+                this.filter();
+                this.search_idlesource = 0;
+                return false;
+            });
+        });
+        Writer.NotificationData nd = Writer.NotificationData();
+        nd.cb = database_change_cb;
+        db_writer.register_change_callback(nd);
     }
 
+    private uint src = 0;
+    private void database_change_cb(Writer.ChangeType changetype, Item? item) {
+        if(changetype == Writer.ChangeType.UPDATE_LASTPLAYED) {
+            if(src != 0)
+                Source.remove(src);
+            src = Timeout.add_seconds(2, () => {
+                filter();
+                src = 0;
+                return false;
+            });
+        }
+    }
+    
+    public void filter() {
+        //print("filter\n");
+        if(populating_model)
+            return;
+        populating_model = true;
+        view.set_model(null);
+        this.clear();
+        this.populate();
+    }
+    
     private void populate() {
-        
         Worker.Job job;
         job = new Worker.Job(Worker.ExecutionType.ONCE, insert_last_played_job);
         db_worker.push_job(job);
     }
     
     private bool insert_last_played_job(Worker.Job job) {
-        job.items = db_reader.get_last_played(EMPTYSTRING);
+        job.items = db_reader.get_last_played(global.searchtext);
         Idle.add( () => {
             TreeIter iter;
             foreach(Item? i in job.items) {
@@ -106,6 +146,8 @@ private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
                     );
                 }
             }
+            view.model = this;
+            populating_model = false;
             return false;
         });
         return false;
