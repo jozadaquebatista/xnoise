@@ -104,7 +104,10 @@ internal class Xnoise.IconRepo : GLib.Object {
             else
                 local_collection_icon = IconTheme.get_default().load_icon("xn-local-collection", iconheight, IconLookupFlags.FORCE_SIZE);
             
-            selected_collection_icon = w.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
+            if(theme.has_icon("xn-current-position"))
+                selected_collection_icon = IconTheme.get_default().load_icon("xn-current-position", iconheight, IconLookupFlags.FORCE_SIZE);
+            else
+                selected_collection_icon = w.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);
