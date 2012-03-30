@@ -25,7 +25,7 @@
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA.
  *
  * Author:
- *     Jörn Magens
+ *     Jörn Magens <shuerhaaken@googlemail.com>
  */
 
 
@@ -75,10 +75,9 @@ public class Xnoise.Worker : Object {
         private HashTable<string,Value?> ht = new HashTable<string,Value?> (str_hash, str_equal);
         private ExecutionType _execution_type;
         
-        public Job(ExecutionType execution_type = ExecutionType.UNKNOWN, 
+        public Job(ExecutionType execution_type = ExecutionType.UNKNOWN,
                    WorkFunc? func = null,
-                   uint _timer_seconds = 0
-                   ) {
+                   uint _timer_seconds = 0) {
             this._execution_type = execution_type;
             this.func = func;
             this._timer_seconds = _timer_seconds;

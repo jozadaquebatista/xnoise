@@ -212,11 +212,8 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
  */
 public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
     private const int SECONDS_FOR_TIMEOUT = 12;
-    // Maybe add this key as a construct only property. Then it can be an individual key for each user
-//    private const string lastfmKey = "b25b959554ed76058ac220b7b2e0a026";
     
     private const string INIFOLDER = ".xnoise";
-//    private SessionAsync session;
     private string artist;
     private string album;
     private File f = null;
@@ -274,7 +271,10 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
                     continue; //Local file exists
                 }
             }
-            this.copy_covers_async(sender.reply_artist.down(), sender.reply_album.down());
+            Worker.Job job = new Worker.Job(Worker.ExecutionType.ONCE, copy_covers_job);
+            job.set_arg("reply_artist", sender.reply_artist.down());
+            job.set_arg("reply_album",  sender.reply_album.down());
+            io_worker.push_job(job);
         });
     }
     
@@ -309,7 +309,9 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
     }
     
 
-    private async void copy_covers_async(string _reply_artist, string _reply_album) {
+    private bool copy_covers_job(Worker.Job job) {
+        string? _reply_artist = job.get_arg("reply_artist") as string;
+        string? _reply_album  = job.get_arg("reply_album")  as string;
         File destination;
         bool buf = false;
         string default_path = EMPTYSTRING;
@@ -323,16 +325,13 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
             try {
                 if(f.query_exists(null)) { //remote file exist
                     
-                    buf = yield f.copy_async(destination,
-                                             FileCopyFlags.OVERWRITE,
-                                             Priority.DEFAULT,
-                                             null,
-                                             null);
+                    buf = f.copy(destination, FileCopyFlags.OVERWRITE, null, null);
                 }
                 else {
                     continue;
                 }
-                if(sizes[i] == "medium") default_path = destination.get_path();
+                if(sizes[i] == "medium")
+                    default_path = destination.get_path();
                 i++;
             }
             catch(GLib.Error e) {
@@ -341,15 +340,17 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
                 continue;
             }
         }
-        // signal finish with artist, album in order to identify the sent image
-        sign_image_fetched(reply_artist, reply_album, default_path);
-        
-        remove_timeout();
-        
-        if(!this.timeout_done) {
-            this.unref(); // After this point LastFmCovers downloader can safely be removed
-        }
-        return;
+        Idle.add( () => {
+            // signal finish with artist, album in order to identify the sent image
+            sign_image_fetched(reply_artist, reply_album, default_path);
+            remove_timeout();
+            
+            if(!this.timeout_done) {
+                this.unref(); // After this point LastFmCovers downloader can safely be removed
+            }
+            return false;
+        });
+        return false;
     }
 }
 
