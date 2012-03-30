@@ -38,6 +38,7 @@ using Xnoise.Database;
 
 private class Xnoise.TreeViewStreams : Gtk.TreeView {
     private unowned MainWindow win;
+    private unowned DockableMedia dock;
     private bool dragging = false;
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
@@ -50,13 +51,13 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView {
     private unowned Widget ow;
     private TreeViewStreamsModel tvm;
     
-    public TreeViewStreams(MainWindow window, Widget ow) {
-        this.win = window; // use this ref because static main_window
-                           //is not yet set up at construction time
+    public TreeViewStreams(DockableMedia dock, MainWindow window, Widget ow) {
+        this.win = window;
+        this.dock = dock;
+        this.ow = ow;
         this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
-        this.ow = ow;
         this.set_enable_search(false);
         
         var column = new TreeViewColumn();
@@ -79,7 +80,7 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView {
         column.add_attribute(renderer, "pix", 0);
         
         this.insert_column(column, -1);
-        tvm = new TreeViewStreamsModel(this);
+        tvm = new TreeViewStreamsModel(dock, this);
         this.model = tvm;
         
         this.row_activated.connect( (s,tp,c) => {

@@ -200,11 +200,6 @@ typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
 
 typedef struct _XnoiseMediaBrowserModel XnoiseMediaBrowserModel;
 typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
-typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
-
-#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLUMN (xnoise_media_browser_model_column_get_type ())
-
-#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_media_browser_model_collection_type_get_type ())
 
 #define XNOISE_TYPE_DOCKABLE_MEDIA (xnoise_dockable_media_get_type ())
 #define XNOISE_DOCKABLE_MEDIA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMedia))
@@ -215,6 +210,11 @@ typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
 
 typedef struct _XnoiseDockableMedia XnoiseDockableMedia;
 typedef struct _XnoiseDockableMediaClass XnoiseDockableMediaClass;
+typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
+
+#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLUMN (xnoise_media_browser_model_column_get_type ())
+
+#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_media_browser_model_collection_type_get_type ())
 typedef struct _XnoiseDockableMediaPrivate XnoiseDockableMediaPrivate;
 
 #define XNOISE_DOCKABLE_MEDIA_TYPE_CATEGORY (xnoise_dockable_media_category_get_type ())
@@ -1277,6 +1277,7 @@ typedef enum  {
 	XNOISE_MEDIA_SELECTOR_COLUMN_CATEGORY,
 	XNOISE_MEDIA_SELECTOR_COLUMN_SELECTION_STATE,
 	XNOISE_MEDIA_SELECTOR_COLUMN_SELECTION_ICON,
+	XNOISE_MEDIA_SELECTOR_COLUMN_NAME,
 	XNOISE_MEDIA_SELECTOR_COLUMN_N_COLUMNS
 } XnoiseMediaSelectorColumn;
 
@@ -2145,8 +2146,9 @@ XnoiseDbusThumbnailer* xnoise_dbus_thumbnailer_construct (GType object_type);
 GType xnoise_iparams_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
-XnoiseMediaBrowser* xnoise_media_browser_new (GtkWidget* ow);
-XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, GtkWidget* ow);
+GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
+XnoiseMediaBrowser* xnoise_media_browser_new (XnoiseDockableMedia* dock, GtkWidget* ow);
+XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, XnoiseDockableMedia* dock, GtkWidget* ow);
 gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
 gboolean xnoise_media_browser_update_view (XnoiseMediaBrowser* self);
 void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
@@ -2155,6 +2157,8 @@ gboolean xnoise_media_browser_get_use_treelines (XnoiseMediaBrowser* self);
 void xnoise_media_browser_set_use_treelines (XnoiseMediaBrowser* self, gboolean value);
 GType xnoise_media_browser_model_column_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_model_collection_type_get_type (void) G_GNUC_CONST;
+XnoiseMediaBrowserModel* xnoise_media_browser_model_new (XnoiseDockableMedia* dock);
+XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type, XnoiseDockableMedia* dock);
 gint xnoise_media_browser_model_get_max_icon_width (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_filter (XnoiseMediaBrowserModel* self);
 void xnoise_media_browser_model_remove_all (XnoiseMediaBrowserModel* self);
@@ -2162,10 +2166,7 @@ void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self
 void xnoise_media_browser_model_unload_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
 void xnoise_media_browser_model_load_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
 XnoiseDndData* xnoise_media_browser_model_get_dnd_data_for_path (XnoiseMediaBrowserModel* self, GtkTreePath** treepath, int* result_length1);
-XnoiseMediaBrowserModel* xnoise_media_browser_model_new (void);
-XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type);
 gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserModel* self);
-GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
 GType xnoise_dockable_media_category_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_get_type (void) G_GNUC_CONST;
 gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);
@@ -2225,6 +2226,8 @@ GType xnoise_media_selector_get_type (void) G_GNUC_CONST;
 GType xnoise_media_selector_column_get_type (void) G_GNUC_CONST;
 XnoiseMediaSelector* xnoise_media_selector_new (void);
 XnoiseMediaSelector* xnoise_media_selector_construct (GType object_type);
+const gchar* xnoise_media_selector_get_selected_dockable_media (XnoiseMediaSelector* self);
+void xnoise_media_selector_set_selected_dockable_media (XnoiseMediaSelector* self, const gchar* value);
 GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
 XnoisePlayPauseButton* xnoise_play_pause_button_new (void);
 XnoisePlayPauseButton* xnoise_play_pause_button_construct (GType object_type);
@@ -2253,6 +2256,8 @@ void xnoise_global_access_next (XnoiseGlobalAccess* self);
 void xnoise_global_access_stop (XnoiseGlobalAccess* self);
 XnoiseGlobalAccess* xnoise_global_access_new (void);
 XnoiseGlobalAccess* xnoise_global_access_construct (GType object_type);
+const gchar* xnoise_global_access_get_active_dockable_media_name (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_active_dockable_media_name (XnoiseGlobalAccess* self, const gchar* value);
 gint xnoise_global_access_get_fontsize_dockable (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_fontsize_dockable (XnoiseGlobalAccess* self, gint value);
 GType xnoise_player_state_get_type (void) G_GNUC_CONST;

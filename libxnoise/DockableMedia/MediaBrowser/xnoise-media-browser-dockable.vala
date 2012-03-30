@@ -37,11 +37,10 @@ using Xnoise;
 // Media Browser is a special case of the DockableMedia,
 // because it's the main source of media.
 private class Xnoise.MediaBrowserDockable : DockableMedia {
-    private static const string name_txt = "MediaBrowserDockable";
     private unowned MainWindow win;
     
     public override string name() {
-        return name_txt;
+        return "MediaBrowserDockable";
     }
     
     public override string headline() {
@@ -58,7 +57,7 @@ private class Xnoise.MediaBrowserDockable : DockableMedia {
         win.mediaBrScrollWin = new ScrolledWindow(null, null);
         win.mediaBrScrollWin.border_width = 0;
         win.mediaBrScrollWin.set_shadow_type(ShadowType.IN);
-        win.mediaBr = new MediaBrowser(win.mediaBrScrollWin);
+        win.mediaBr = new MediaBrowser(this, win.mediaBrScrollWin);
         win.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         win.mediaBrScrollWin.add(win.mediaBr);
         return (Gtk.Widget)win.mediaBrScrollWin;

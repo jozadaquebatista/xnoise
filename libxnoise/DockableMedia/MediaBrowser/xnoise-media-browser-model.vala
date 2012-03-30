@@ -38,6 +38,9 @@ using Xnoise.Database;
 
 public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
+    private uint search_idlesource = 0;
+    private unowned DockableMedia dock;
+    
     public enum Column {
         ICON = 0,
         VIS_TEXT,
@@ -59,13 +62,10 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         typeof(int)          //LEVEL
     };
 
-    private unowned Main xn;
-    private uint search_idlesource = 0;
-    
     public bool populating_model { get; private set; default = false; }
     
-    construct {
-        xn = Main.instance;
+    public MediaBrowserModel(DockableMedia dock) {
+        this.dock = dock;
         icon_repo.icon_theme_changed.connect(update_pixbufs);
         set_column_types(col_types);
         global.notify["image-path-small"].connect( () => {
@@ -79,9 +79,21 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         db_writer.register_change_callback(cbd);
         
         global.sign_searchtext_changed.connect( (s,t) => {
+            //print("stc this.dock.name():%s global.active_dockable_media_name: %s\n", this.dock.name(), global.active_dockable_media_name);
+            if(this.dock.name() != global.active_dockable_media_name) {
+                if(delayed_search_src != 0)
+                    Source.remove(delayed_search_src);
+                delayed_search_src = Timeout.add_seconds(2, () => {
+                    print("timeout search started\n");
+                    filter();
+                    delayed_search_src = 0;
+                    return false;
+                });
+                return;
+            }
             if(search_idlesource != 0)
                 Source.remove(search_idlesource);
-            search_idlesource = Timeout.add(180, () => {
+            search_idlesource = Timeout.add(200, () => {
                 this.filter();
                 this.search_idlesource = 0;
                 return false;
@@ -90,13 +102,39 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
         cbr.cb = reset_change_cb;
         media_importer.register_reset_callback(cbr);
+        global.notify["active-dockable-media-name"].connect(on_dockable_changed);
+    }
+    
+    private uint delayed_search_src = 0;
+    private string searchtext_buffer;
+    private void on_dockable_changed() {
+        //print("odc this.dock.name():%s global.active_dockable_media_name: %s\n", this.dock.name(), global.active_dockable_media_name);
+        assert(this.dock != null);
+        if(this.dock.name() != global.active_dockable_media_name) {
+            if(delayed_search_src != 0)
+                return;
+            delayed_search_src = Timeout.add_seconds(2, () => {
+                print("timeout search started\n");
+                filter();
+                delayed_search_src = 0;
+                return false;
+            });
+        }
+        else if(searchtext_buffer != global.searchtext) {
+            if(delayed_search_src != 0)
+                Source.remove(delayed_search_src);
+            delayed_search_src = Idle.add( () => {
+                print("active idle search started\n");
+                filter();
+                delayed_search_src = 0;
+                return false;
+            });
+        }
     }
     
     private void reset_change_cb() {
         this.remove_all();
     }
-    
-//    private bool stream_in_tree = false;
     
     // this function is running in db thread so use idle
     private void database_change_cb(Writer.ChangeType changetype, Item? item) {
@@ -112,67 +150,11 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
                 job.item = item;
                 db_worker.push_job(job);
                 break;
-//            case Writer.ChangeType.ADD_STREAM:
-//                if(stream_in_tree)
-//                    break;
-//                stream_in_tree = true;
-//                Idle.add( () => {
-//                    TreeIter iter_streams = TreeIter(), iter_loader;
-//                    if(this.iter_n_children(null) == 0) {
-//                        Item? i = Item(ItemType.COLLECTION_CONTAINER_STREAM);
-//                        this.prepend(out iter_streams, null);
-//                        this.set(iter_streams,
-//                                 Column.ICON, icon_repo.radios_icon,
-//                                 Column.VIS_TEXT, "Streams",
-//                                 Column.ITEM, i,
-//                                 Column.LEVEL, 0
-//                                 );
-//                        Item? loader_item = Item(ItemType.LOADER);
-//                        this.prepend(out iter_loader, iter_streams);
-//                        this.set(iter_loader,
-//                                 Column.ICON, icon_repo.loading_icon,
-//                                 Column.VIS_TEXT, LOADING,
-//                                 Column.ITEM, loader_item,
-//                                 Column.LEVEL, 1
-//                                 );
-//                        return false;
-//                    }
-//                    else {
-//                        for(int i = 0; i < this.iter_n_children(null); i++) {
-//                            this.iter_nth_child(out iter_streams, null, i);
-//                            Item? ix;
-//                            this.get(iter_streams, Column.ITEM, out ix);
-//                            if(ix.type == ItemType.COLLECTION_CONTAINER_STREAM) {
-//                                stream_in_tree = true;
-//                                return false;
-//                            }
-//                        }
-//                        Item? i = Item(ItemType.COLLECTION_CONTAINER_STREAM);
-//                        this.prepend(out iter_streams, null);
-//                        this.set(iter_streams,
-//                                 Column.ICON, icon_repo.radios_icon,
-//                                 Column.VIS_TEXT, "Streams",
-//                                 Column.ITEM, i,
-//                                 Column.LEVEL, 0
-//                                 );
-//                        Item? loader_item = Item(ItemType.LOADER);
-//                        this.prepend(out iter_loader, iter_streams);
-//                        this.set(iter_loader,
-//                                 Column.ICON, icon_repo.loading_icon,
-//                                 Column.VIS_TEXT, LOADING,
-//                                 Column.ITEM, loader_item,
-//                                 Column.LEVEL, 1
-//                                 );
-//                    }
-//                    return false;
-//                });
-//                break;
             default: break;
         }
     }
     
     private bool add_imported_artist_job(Worker.Job job) {
-//        int32 _id = job.item.db_id;
         job.item = db_reader.get_artistitem_by_artistid(global.searchtext, job.item.db_id); // necessary because of search
         if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
             return false;
@@ -291,52 +273,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         main_window.mediaBr.set_model(this);
     }
 
-//    public void insert_stream_sorted(TrackData[] tda) {
-//        string text = null;
-//        TreeIter iter_radios = TreeIter(), iter_singleradios;
-//        if(this.iter_n_children(null) == 0) {
-//            Item? item = Item(ItemType.COLLECTION_CONTAINER_STREAM);
-//            this.prepend(out iter_radios, null);
-//            this.set(iter_radios,
-//                 Column.ICON, icon_repo.radios_icon,
-//                 Column.VIS_TEXT, "Streams",
-//                 Column.ITEM, item,
-//                 Column.LEVEL, 0
-//                 );
-//        }
-//        else {
-//            bool found = false;
-//            for(int i = 0; i < this.iter_n_children(null); i++) {
-//                this.iter_nth_child(out iter_radios, null, i);
-//                this.get(iter_radios, Column.VIS_TEXT, out text);
-//                if(strcmp(text, "Streams") == 0) { 
-//                    //found streams
-//                    found = true;
-//                    break;
-//                }
-//            }
-//            if(found == false) {
-//                Item? item = Item(ItemType.COLLECTION_CONTAINER_STREAM);
-//                this.prepend(out iter_radios, null);
-//                this.set(iter_radios,
-//                     Column.ICON, icon_repo.radios_icon,
-//                     Column.VIS_TEXT, "Streams",
-//                     Column.ITEM, item,
-//                     Column.LEVEL, 0
-//                     );
-//            }
-//        }
-//        foreach(TrackData td in tda) {
-//            this.prepend(out iter_singleradios, iter_radios);
-//            this.set(iter_singleradios,
-//                     Column.ICON,        icon_repo.radios_icon,
-//                     Column.VIS_TEXT,    td.title,
-//                     Column.ITEM, td.item,
-//                     Column.LEVEL, 1
-//                     );
-//        }
-//    }
-    
     public void cancel_fill_model() {
         if(populate_model_cancellable == null)
             return;
@@ -347,8 +283,8 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private bool populate_model() {
         if(populating_model)
             return false;
+        searchtext_buffer = global.searchtext;
         populating_model = true;
-//        stream_in_tree = false;
         //print("populate_model\n");
         main_window.mediaBr.set_model(null);
         var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
@@ -359,91 +295,9 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             main_window.mediaBr.set_model(this);
             populating_model = false;
         });
-//        var v_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_listed_data_job);
-//        v_job.cancellable = populate_model_cancellable;
-//        db_worker.push_job(v_job);
         
         return false;
     }
-    
-//    private bool handle_listed_data_job(Worker.Job job) {
-//        
-//        var stream_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.handle_streams);
-//        stream_job.cancellable = populate_model_cancellable;
-//        stream_job.finished.connect( (j) => {
-//            return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
-//            main_window.mediaBr.set_model(this);
-//            populating_model = false;
-//        });
-//        db_worker.push_job(stream_job);
-//        return false;
-//    }
-//    
-//    private bool handle_streams(Worker.Job job) {
-//        
-//        job.track_dat = db_reader.get_stream_data(global.searchtext);
-//        
-//        if(job.track_dat.length == 0)
-//            return false;
-//        
-//        Idle.add( () => {
-//            if(!job.cancellable.is_cancelled()) {
-//                TreeIter iter_radios, iter_singleradios;
-//                Item? item = Item(ItemType.COLLECTION_CONTAINER_STREAM);
-//                this.prepend(out iter_radios, null);
-//                this.set(iter_radios,
-//                         Column.ICON, icon_repo.radios_icon,
-//                         Column.VIS_TEXT, "Streams",
-//                         Column.ITEM, item,
-//                         Column.LEVEL, 0
-//                         );
-//                foreach(TrackData td in job.track_dat) {
-//                    if(job.cancellable.is_cancelled())
-//                        break;
-//                    this.prepend(out iter_singleradios, iter_radios);
-//                    this.set(iter_singleradios,
-//                             Column.ICON,        icon_repo.radios_icon,
-//                             Column.VIS_TEXT,    td.title,
-//                             Column.ITEM, td.item,
-//                             Column.LEVEL, 1
-//                             );
-//                    stream_in_tree = true;
-//                }
-//            }
-//            return false;
-//        });
-//        return false;
-//    }
-
-//    private bool load_streams_job(Worker.Job job) {
-//        job.track_dat = db_reader.get_stream_data(global.searchtext);
-//        
-//        if(job.track_dat.length == 0)
-//            return false;
-//        
-//        Idle.add( () => {
-//            TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
-//            if(row_ref == null || !row_ref.valid())
-//                return false;
-//            TreePath p = row_ref.get_path();
-//            TreeIter iter_streams, iter_singlestream;
-//            this.get_iter(out iter_streams, p);
-//            foreach(unowned TrackData td in job.track_dat) {
-//                if(job.cancellable.is_cancelled())
-//                    break;
-//                this.prepend(out iter_singlestream, iter_streams);
-//                this.set(iter_singlestream,
-//                         Column.ICON, icon_repo.radios_icon,
-//                         Column.VIS_TEXT, td.name,
-//                         Column.ITEM, td.item,
-//                         Column.LEVEL, 1
-//                         );
-//            }
-//            remove_loader_child(ref iter_streams);
-//            return false;
-//        });
-//        return false;
-//    }
 
     // used for populating the data model
     private bool populate_artists_job(Worker.Job job) {
@@ -524,12 +378,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         TreeRowReference treerowref = new TreeRowReference(this, path);
         this.get(iter, Column.ITEM, out item);
         //print("item.type: %s\n", item.type.to_string());
-//        if(item.type == ItemType.COLLECTION_CONTAINER_STREAM) {
-//            job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_streams_job);
-//            //job.cancellable = populate_model_cancellable;
-//            job.set_arg("treerowref", treerowref);
-//            db_worker.push_job(job);
-//        }
         if(item.type == ItemType.COLLECTION_CONTAINER_ARTIST) {
             job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_artists_job);
             //job.cancellable = populate_model_cancellable;

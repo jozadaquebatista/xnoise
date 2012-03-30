@@ -36,7 +36,6 @@ using Xnoise.Services;
 
 
 public class Xnoise.MediaBrowser : TreeView, IParams {
-    private unowned Main xn;
     private bool dragging;
     private bool _use_treelines = false;
     private CellRendererText renderer = null;
@@ -95,12 +94,14 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
     
     //parent container of this widget (most likely scrolled window)
     private unowned Widget ow;
+    private unowned DockableMedia dock;
     
-    public MediaBrowser(Widget ow) {
-        this.xn = Main.instance;
+    public MediaBrowser(DockableMedia dock, Widget ow) {
         this.ow = ow;
+        this.dock = dock;
+        
         Params.iparams_register(this);
-        mediabrowsermodel = new MediaBrowserModel();
+        mediabrowsermodel = new MediaBrowserModel(dock);
         setup_view();
         Idle.add(this.populate_model);
         this.get_selection().set_mode(SelectionMode.MULTIPLE);

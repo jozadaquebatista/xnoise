@@ -146,6 +146,8 @@ public class Xnoise.GlobalAccess : GLib.Object {
         }
     }
     
+    public string active_dockable_media_name { get; set; default = ""; }
+    
     public int fontsize_dockable { get; set; default = 10; }
     
     public PlayerState player_state {

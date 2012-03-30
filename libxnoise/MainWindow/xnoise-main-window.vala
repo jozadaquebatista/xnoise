@@ -1350,6 +1350,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         TreeStore m = (TreeStore)media_source_selector.get_model();
         TreeIter iter = TreeIter(), child;
         
+        // Add Category, if necessary
         bool found_category = false;
         m.foreach( (m,p,i) => {
             if(p.get_depth() == 1) {
@@ -1373,9 +1374,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                   MediaSelector.Column.WEIGHT, Pango.Weight.BOLD,
                   MediaSelector.Column.CATEGORY, category,
                   MediaSelector.Column.SELECTION_STATE, false,
-                  MediaSelector.Column.SELECTION_ICON, null
+                  MediaSelector.Column.SELECTION_ICON, null,
+                  MediaSelector.Column.NAME, ""
             );
         }
+        
+        //insert dockable info
         m.append(out child, iter);
         m.set(child,
               MediaSelector.Column.ICON, d.get_icon(),
@@ -1384,7 +1388,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
               MediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
               MediaSelector.Column.CATEGORY, category,
               MediaSelector.Column.SELECTION_STATE, initial_selection,
-              MediaSelector.Column.SELECTION_ICON, (initial_selection ? icon_repo.selected_collection_icon : null)
+              MediaSelector.Column.SELECTION_ICON, (initial_selection ? icon_repo.selected_collection_icon : null),
+              MediaSelector.Column.NAME, d.name()
         );
         dockable_number++;
         xiter = child;
@@ -1623,10 +1628,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             unowned DockableMedia? dm_mb = null;
             assert((dm_mb = dockable_media_sources.lookup("MediaBrowserDockable")) != null);
             mbbx.pack_start(media_sources_nb, true, true, 0);
-            
             //Insert Media Browser first
             TreeIter? media_browser_iter = null;
             this.insert_dockable(dm_mb, true, ref media_browser_iter, true);
+            string dname = dm_mb.name();
+            global.active_dockable_media_name = dname;
+            media_source_selector.selected_dockable_media = dname;
             
             foreach(unowned string n in dockable_media_sources.get_keys()) {
                 if(n == "MediaBrowserDockable")

@@ -35,6 +35,7 @@ using Gdk;
 
 private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
     private unowned MainWindow win;
+    private unowned DockableMedia dock;
     private bool dragging = false;
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
@@ -46,9 +47,10 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
     private unowned Widget ow;
     private LastplayedTreeviewModel tvm;
 
-    public PlaylistTreeViewLastplayed(MainWindow window, Widget ow) {
+    public PlaylistTreeViewLastplayed(DockableMedia dock, MainWindow window, Widget ow) {
         this.win = window; // use this ref because static main_window
                            //is not yet set up at construction time
+        this.dock = dock;
         this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
@@ -77,7 +79,7 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
         
         this.insert_column(column, -1);
         
-        tvm = new LastplayedTreeviewModel(this);
+        tvm = new LastplayedTreeviewModel(this, dock);
         this.model = tvm;
         
         this.row_activated.connect( (s,tp,c) => {

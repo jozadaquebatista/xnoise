@@ -40,6 +40,7 @@ private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
     private bool populating_model = false;
     private uint search_idlesource = 0;
     private PlaylistTreeViewLastplayed view;
+    private unowned DockableMedia dock;
     
     private GLib.Type[] col_types = new GLib.Type[] {
         typeof(Gdk.Pixbuf), //ICON
@@ -54,11 +55,14 @@ private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
         N_COLUMNS
     }
 
-    public LastplayedTreeviewModel(PlaylistTreeViewLastplayed view) {
+    public LastplayedTreeviewModel(PlaylistTreeViewLastplayed view, DockableMedia dock) {
         this.set_column_types(col_types);
         this.view = view;
+        this.dock = dock;
         this.populate();
         global.sign_searchtext_changed.connect( (s,t) => {
+            if(this.dock.name() != global.active_dockable_media_name)
+                return;
             if(search_idlesource != 0)
                 Source.remove(search_idlesource);
             search_idlesource = Timeout.add(200, () => {
@@ -67,11 +71,23 @@ private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
                 return false;
             });
         });
+        global.notify["active-dockable-media-name"].connect(on_dockable_changed);
         Writer.NotificationData nd = Writer.NotificationData();
         nd.cb = database_change_cb;
         db_writer.register_change_callback(nd);
     }
 
+    private string searchtext_buffer;
+    private void on_dockable_changed() {
+        if(this.dock.name() != global.active_dockable_media_name)
+            return;
+        if(searchtext_buffer !=  global.searchtext)
+            Idle.add( () => {
+                filter();
+                return false;
+            });
+    }
+    
     private uint src = 0;
     private void database_change_cb(Writer.ChangeType changetype, Item? item) {
         if(changetype == Writer.ChangeType.UPDATE_LASTPLAYED) {
@@ -96,6 +112,7 @@ private class Xnoise.LastplayedTreeviewModel : Gtk.ListStore {
     }
     
     private void populate() {
+        searchtext_buffer = global.searchtext;
         Worker.Job job;
         job = new Worker.Job(Worker.ExecutionType.ONCE, insert_last_played_job);
         db_worker.push_job(job);

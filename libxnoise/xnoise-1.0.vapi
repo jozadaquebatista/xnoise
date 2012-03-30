@@ -569,6 +569,7 @@ namespace Xnoise {
 		public void prev ();
 		public void reset_position_reference ();
 		public void stop ();
+		public string active_dockable_media_name { get; set; }
 		public string current_album { get; set; }
 		public string current_artist { get; set; }
 		public string current_genre { get; set; }
@@ -812,7 +813,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
-		public MediaBrowser (Gtk.Widget ow);
+		public MediaBrowser (Xnoise.DockableMedia dock, Gtk.Widget ow);
 		public bool change_model_data ();
 		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
@@ -834,7 +835,7 @@ namespace Xnoise {
 			LEVEL,
 			N_COLUMNS
 		}
-		public MediaBrowserModel ();
+		public MediaBrowserModel (Xnoise.DockableMedia dock);
 		public void cancel_fill_model ();
 		public void filter ();
 		public Xnoise.DndData[] get_dnd_data_for_path (ref Gtk.TreePath treepath);
@@ -870,9 +871,11 @@ namespace Xnoise {
 			CATEGORY,
 			SELECTION_STATE,
 			SELECTION_ICON,
+			NAME,
 			N_COLUMNS
 		}
 		public MediaSelector ();
+		public string selected_dockable_media { get; set; }
 		public signal void selection_changed (int selection_number);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

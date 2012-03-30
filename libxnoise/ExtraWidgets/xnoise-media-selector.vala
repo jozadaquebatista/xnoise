@@ -42,24 +42,29 @@ public class Xnoise.MediaSelector : TreeView {
         CATEGORY,
         SELECTION_STATE,
         SELECTION_ICON,
+        NAME,
         N_COLUMNS
     }
+    
+    public string selected_dockable_media { get; set; }
     
     public signal void selection_changed(int selection_number);
     
     public MediaSelector() {
+        selected_dockable_media = "";
         this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
         this.set_enable_search(false);
         this.get_selection().set_mode(SelectionMode.SINGLE);
-        TreeStore media_source_selector_model = new TreeStore(7, 
+        TreeStore media_source_selector_model = new TreeStore(8, 
                                                               typeof(Gdk.Pixbuf),           //icon
                                                               typeof(string),               //vis_text
                                                               typeof(int),                  //tab no.
                                                               typeof(int),                  //weight
                                                               typeof(DockableMedia.Category),
                                                               typeof(bool),                 //selection state
-                                                              typeof(Gdk.Pixbuf)            //selection icon
+                                                              typeof(Gdk.Pixbuf),           //selection icon
+                                                              typeof(string)                //name
                                                               );
         var column = new TreeViewColumn();
         var renderer = new CellRendererText();
@@ -81,53 +86,66 @@ public class Xnoise.MediaSelector : TreeView {
         
         this.key_release_event.connect(this.on_key_released);
         
-        this.button_press_event.connect( (e)  => {
-            int x = (int)e.x;
-            int y = (int)e.y;
-            int cell_x, cell_y;
-            TreePath treepath;
-            TreeViewColumn co;
-            if(!this.get_path_at_pos(x, y, out treepath, out co, out cell_x, out cell_y))
-                return true;
-            
-            TreeIter it;
-            TreeStore m = (TreeStore)this.get_model();
-            int tab = 0;
-            if(treepath.get_depth() == 1) {
-                if(!this.is_row_expanded(treepath)) {
-                    this.expand_row(treepath, false);
-                }
-                else {
-                    this.collapse_row(treepath);
-                }
-                this.get_selection().unselect_all();
-                this.get_selection().select_path(treepath);
-                return true;
-            }
-            if(treepath.get_depth() == 2) {
-                m.foreach( (mo,p,iy) => {
-                    TreeStore mx = (TreeStore)mo;
-                    mx.set(iy, 
-                           Column.SELECTION_STATE, false,
-                           Column.SELECTION_ICON, null
-                    );
-                    return false;
-                });
-                m.get_iter(out it, treepath);
-                m.get(it, Column.TAB_NO, out tab);
-                m.set(it,
-                      Column.SELECTION_STATE, true,
-                      Column.SELECTION_ICON, icon_repo.selected_collection_icon
-                );
-                selection_changed(tab);
-            }
-            //media_sources_nb.set_current_page(tab);
-            return false;
+        this.button_press_event.connect(this.on_button_pressed);
+        
+        this.notify["selected-dockable-media"].connect( () => {
+            global.active_dockable_media_name = selected_dockable_media;
         });
     }
     
     private const int KEY_CURSOR_DOWN  = 0xFF54;
     private const int KEY_CURSOR_UP    = 0xFF52;
+    
+    private bool on_button_pressed(Gdk.EventButton e) {
+        int x = (int)e.x;
+        int y = (int)e.y;
+        int cell_x, cell_y;
+        TreePath treepath;
+        TreeViewColumn co;
+        if(!this.get_path_at_pos(x, y, out treepath, out co, out cell_x, out cell_y))
+            return true;
+        
+        TreeIter it;
+        TreeStore m = (TreeStore)this.get_model();
+        int tab = 0;
+        if(treepath.get_depth() == 1) {
+            if(!this.is_row_expanded(treepath)) {
+                this.expand_row(treepath, false);
+            }
+            else {
+                this.collapse_row(treepath);
+            }
+            this.get_selection().unselect_all();
+            this.get_selection().select_path(treepath);
+            return true;
+        }
+        if(treepath.get_depth() == 2) {
+            m.foreach( (mo,p,iy) => {
+                TreeStore mx = (TreeStore)mo;
+                mx.set(iy, 
+                       Column.SELECTION_STATE, false,
+                       Column.SELECTION_ICON, null
+                );
+                return false;
+            });
+            m.get_iter(out it, treepath);
+            string? name;
+            m.get(it, 
+                  Column.TAB_NO, out tab,
+                  Column.NAME, out name
+            );
+            m.set(it,
+                  Column.SELECTION_STATE, true,
+                  Column.SELECTION_ICON, icon_repo.selected_collection_icon
+            );
+            if(name == null)
+                name = "";
+            selected_dockable_media = name;
+            selection_changed(tab);
+        }
+        //media_sources_nb.set_current_page(tab);
+        return false;
+    }
     
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%d\n",(int)e.keyval);
@@ -157,11 +175,18 @@ public class Xnoise.MediaSelector : TreeView {
                         this.set_cursor(treepath, null,false);
                         int tab = 0;
                         TreeStore mx = (TreeStore)this.model;
-                        mx.get(iter, Column.TAB_NO, out tab);
+                        string? name;
+                        mx.get(iter, 
+                               Column.TAB_NO, out tab,
+                               Column.NAME, out name
+                        );
                         mx.set(iter, 
                               Column.SELECTION_STATE, true,
                               Column.SELECTION_ICON, icon_repo.selected_collection_icon
                         );
+                        if(name == null)
+                            name = "";
+                        selected_dockable_media = name;
                         selection_changed(tab);
                     }
                 }
