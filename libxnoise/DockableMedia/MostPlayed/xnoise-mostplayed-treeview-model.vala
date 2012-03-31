@@ -61,35 +61,31 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
         this.dock = dock;
         this.populate();
         global.sign_searchtext_changed.connect( (s,t) => {
-            if(this.dock.name() != global.active_dockable_media_name)
-                return;
-            if(search_idlesource != 0)
-                Source.remove(search_idlesource);
-            search_idlesource = Timeout.add(200, () => {
-                this.filter();
-                this.search_idlesource = 0;
-                return false;
-            });
+            if(this.dock.name() != global.active_dockable_media_name) {
+                if(search_idlesource != 0)
+                    Source.remove(search_idlesource);
+                search_idlesource = Timeout.add_seconds(2, () => {
+                    this.filter();
+                    this.search_idlesource = 0;
+                    return false;
+                });
+            }
+            else {
+                if(search_idlesource != 0)
+                    Source.remove(search_idlesource);
+                search_idlesource = Timeout.add(200, () => {
+                    this.filter();
+                    this.search_idlesource = 0;
+                    return false;
+                });
+            }
         });
         Writer.NotificationData nd = Writer.NotificationData();
         nd.cb = database_change_cb;
         db_writer.register_change_callback(nd);
-        global.notify["active-dockable-media-name"].connect(on_dockable_changed);
-    }
-
-    private string searchtext_buffer;
-    private void on_dockable_changed() {
-        if(this.dock.name() != global.active_dockable_media_name)
-            return;
-        if(searchtext_buffer !=  global.searchtext)
-            Idle.add( () => {
-                filter();
-                return false;
-            });
     }
     
     private uint src = 0;
-    
     private void database_change_cb(Writer.ChangeType changetype, Item? item) {
         if(changetype == Writer.ChangeType.UPDATE_PLAYCOUNT) {
             if(src != 0)
@@ -113,7 +109,6 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
     }
     
     private void populate() {
-        searchtext_buffer = global.searchtext;
         Worker.Job job;
         job = new Worker.Job(Worker.ExecutionType.ONCE, insert_most_played_job);
         db_worker.push_job(job);

@@ -64,24 +64,32 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
         Writer.NotificationData cbd = Writer.NotificationData();
         cbd.cb = database_change_cb;
         db_writer.register_change_callback(cbd);
-        
         global.sign_searchtext_changed.connect( (s,t) => {
-            if(this.dock.name() != global.active_dockable_media_name)
-                return;
-            if(search_idlesource != 0)
-                Source.remove(search_idlesource);
-            search_idlesource = Timeout.add(200, () => {
-                this.filter();
-                this.search_idlesource = 0;
-                return false;
-            });
+            if(this.dock.name() != global.active_dockable_media_name) {
+                if(search_idlesource != 0)
+                    Source.remove(search_idlesource);
+                search_idlesource = Timeout.add_seconds(2, () => {
+                    this.filter();
+                    this.search_idlesource = 0;
+                    return false;
+                });
+            }
+            else {
+                if(search_idlesource != 0)
+                    Source.remove(search_idlesource);
+                search_idlesource = Timeout.add(200, () => {
+                    this.filter();
+                    this.search_idlesource = 0;
+                    return false;
+                });
+            }
         });
         thumbnailer.sign_got_thumbnail.connect( (u,t) => {
             //print("it worked : %s - %s\n", u, t);
             if(update_thumbnails_src != 0)
                 Source.remove(update_thumbnails_src);
             update_thumbnails_src = Timeout.add_seconds(1, () => {
-                filter(); // TODO: replace this with a less invasive method
+                filter();
                 update_thumbnails_src = 0;
                 return false;
             });
@@ -89,18 +97,6 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
         MediaImporter.ResetNotificationData? cbr = MediaImporter.ResetNotificationData();
         cbr.cb = reset_cb;
         media_importer.register_reset_callback(cbr);
-        global.notify["active-dockable-media-name"].connect(on_dockable_changed);
-    }
-    
-    private string searchtext_buffer;
-    private void on_dockable_changed() {
-        if(this.dock.name() != global.active_dockable_media_name)
-            return;
-        if(searchtext_buffer !=  global.searchtext)
-            Idle.add( () => {
-                filter();
-                return false;
-            });
     }
     
     private void reset_cb() {
@@ -123,7 +119,6 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
     private void populate() {
         if(populating_model)
             return;
-        searchtext_buffer = global.searchtext;
         populating_model = true;
         Worker.Job job;
         job = new Worker.Job(Worker.ExecutionType.ONCE, insert_job);

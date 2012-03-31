@@ -81,55 +81,28 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         global.sign_searchtext_changed.connect( (s,t) => {
             //print("stc this.dock.name():%s global.active_dockable_media_name: %s\n", this.dock.name(), global.active_dockable_media_name);
             if(this.dock.name() != global.active_dockable_media_name) {
-                if(delayed_search_src != 0)
-                    Source.remove(delayed_search_src);
-                delayed_search_src = Timeout.add_seconds(2, () => {
-                    print("timeout search started\n");
+                if(search_idlesource != 0)
+                    Source.remove(search_idlesource);
+                search_idlesource = Timeout.add_seconds(2, () => { //late search, if widget is not visible
+                    //print("timeout search started\n");
                     filter();
-                    delayed_search_src = 0;
+                    search_idlesource = 0;
                     return false;
                 });
-                return;
             }
-            if(search_idlesource != 0)
-                Source.remove(search_idlesource);
-            search_idlesource = Timeout.add(200, () => {
-                this.filter();
-                this.search_idlesource = 0;
-                return false;
-            });
+            else {
+                if(search_idlesource != 0)
+                    Source.remove(search_idlesource);
+                search_idlesource = Timeout.add(200, () => {
+                    this.filter();
+                    search_idlesource = 0;
+                    return false;
+                });
+            }
         });
         MediaImporter.ResetNotificationData cbr = MediaImporter.ResetNotificationData();
         cbr.cb = reset_change_cb;
         media_importer.register_reset_callback(cbr);
-        global.notify["active-dockable-media-name"].connect(on_dockable_changed);
-    }
-    
-    private uint delayed_search_src = 0;
-    private string searchtext_buffer;
-    private void on_dockable_changed() {
-        //print("odc this.dock.name():%s global.active_dockable_media_name: %s\n", this.dock.name(), global.active_dockable_media_name);
-        assert(this.dock != null);
-        if(this.dock.name() != global.active_dockable_media_name) {
-            if(delayed_search_src != 0)
-                return;
-            delayed_search_src = Timeout.add_seconds(2, () => {
-                print("timeout search started\n");
-                filter();
-                delayed_search_src = 0;
-                return false;
-            });
-        }
-        else if(searchtext_buffer != global.searchtext) {
-            if(delayed_search_src != 0)
-                Source.remove(delayed_search_src);
-            delayed_search_src = Idle.add( () => {
-                print("active idle search started\n");
-                filter();
-                delayed_search_src = 0;
-                return false;
-            });
-        }
     }
     
     private void reset_change_cb() {
@@ -283,7 +256,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private bool populate_model() {
         if(populating_model)
             return false;
-        searchtext_buffer = global.searchtext;
         populating_model = true;
         //print("populate_model\n");
         main_window.mediaBr.set_model(null);
