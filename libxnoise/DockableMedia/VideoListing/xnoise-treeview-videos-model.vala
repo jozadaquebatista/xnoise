@@ -68,7 +68,7 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
             if(this.dock.name() != global.active_dockable_media_name) {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
-                search_idlesource = Timeout.add_seconds(2, () => {
+                search_idlesource = Timeout.add_seconds(1, () => {
                     this.filter();
                     this.search_idlesource = 0;
                     return false;

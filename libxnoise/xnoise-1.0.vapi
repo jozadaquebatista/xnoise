@@ -811,7 +811,7 @@ namespace Xnoise {
 		public bool usestop { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams {
+	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams, Xnoise.TreeQueryable {
 		public Xnoise.MediaBrowserModel mediabrowsermodel;
 		public MediaBrowser (Xnoise.DockableMedia dock, Gtk.Widget ow);
 		public bool change_model_data ();
@@ -1121,6 +1121,10 @@ namespace Xnoise {
 		public abstract void write_params_data ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public interface TreeQueryable : Gtk.TreeView {
+		public abstract int get_model_item_column ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public struct DndData {
 		public int32 db_id;
 		public Xnoise.ItemType mediatype;
@@ -1145,9 +1149,9 @@ namespace Xnoise {
 		TRACKLIST_ITEM_ACTIVATED,
 		TRACKLIST_MENU_QUERY,
 		TRACKLIST_DROP,
-		MEDIABROWSER_ITEM_ACTIVATED,
-		MEDIABROWSER_MENU_QUERY,
-		MEDIABROWSER_LOAD,
+		QUERYABLE_TREE_ITEM_ACTIVATED,
+		QUERYABLE_TREE_MENU_QUERY,
+		QUERYABLE_TREE_LOAD,
 		VIDEOSCREEN_ACTIVATED,
 		VIDEOSCREEN_MENU_QUERY,
 		TRACKLIST_COLUMN_HEADER_MENU_QUERY
@@ -1181,15 +1185,10 @@ namespace Xnoise {
 		LOCAL_FOLDER,
 		COLLECTION_CONTAINER_ARTIST,
 		COLLECTION_CONTAINER_ALBUM,
-		COLLECTION_CONTAINER_VIDEO,
-		COLLECTION_CONTAINER_STREAM,
 		COLLECTION_CONTAINER_GENRE,
 		COLLECTION_CONTAINER_YEAR,
 		LOADER,
-		COLLECTION_CONTAINER_MOST_PLAYED,
-		COLLECTION_CONTAINER_FAVORITES,
-		COLLECTION_CONTAINER_LAST_PLAYED,
-		COLLECTION_CONTAINER_RECENTLY_ADDED,
+		CUSTOM_DATA_COL_ID,
 		MAXCOUNT
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

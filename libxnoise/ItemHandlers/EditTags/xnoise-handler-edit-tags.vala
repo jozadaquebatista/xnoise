@@ -57,21 +57,21 @@ public class Xnoise.HandlerEditTags : ItemHandler {
         edit_title_mediabrowser.info = this.titleinfo;
         edit_title_mediabrowser.name = this.titlename;
         edit_title_mediabrowser.stock_item = Gtk.Stock.EDIT;
-        edit_title_mediabrowser.context = ActionContext.MEDIABROWSER_MENU_QUERY;
+        edit_title_mediabrowser.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
 
         edit_album_mediabrowser = new Action(); 
         edit_album_mediabrowser.action = on_edit_album_mediabrowser;
         edit_album_mediabrowser.info = this.albuminfo;
         edit_album_mediabrowser.name = this.albumname;
         edit_album_mediabrowser.stock_item = Gtk.Stock.EDIT;
-        edit_album_mediabrowser.context = ActionContext.MEDIABROWSER_MENU_QUERY;
+        edit_album_mediabrowser.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
 
         edit_artist_mediabrowser = new Action(); 
         edit_artist_mediabrowser.action = on_edit_artist_mediabrowser;
         edit_artist_mediabrowser.info = this.artistinfo;
         edit_artist_mediabrowser.name = this.artistname;
         edit_artist_mediabrowser.stock_item = Gtk.Stock.EDIT;
-        edit_artist_mediabrowser.context = ActionContext.MEDIABROWSER_MENU_QUERY;
+        edit_artist_mediabrowser.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
 
         edit_title_tracklist = new Action(); 
         edit_title_tracklist.action = on_edit_title_tracklist;
@@ -96,7 +96,7 @@ public class Xnoise.HandlerEditTags : ItemHandler {
             return null;
         if(selection != ItemSelectionType.SINGLE)
             return null;
-        if(context == ActionContext.MEDIABROWSER_MENU_QUERY) {
+        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY) {
             switch(type) {
                 case ItemType.COLLECTION_CONTAINER_ARTIST:
                     return edit_artist_mediabrowser;

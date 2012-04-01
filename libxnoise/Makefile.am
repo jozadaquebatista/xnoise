@@ -83,6 +83,7 @@ libxnoise_la_SOURCES = \
     ItemHandlers/xnoise-item-converter.vala \
     ItemHandlers/xnoise-item-handler.vala \
     ItemHandlers/xnoise-item-handler-manager.vala \
+    ItemHandlers/xnoise-tree-queryable.vala \
     Lyrics/xnoise-i-lyrics.vala \
     Lyrics/xnoise-i-lyrics-provider.vala \
     Lyrics/xnoise-lyrics-loader.vala \

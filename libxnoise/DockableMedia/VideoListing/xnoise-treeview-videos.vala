@@ -36,10 +36,12 @@ using Xnoise;
 using Xnoise.Database;
 
 
-private class Xnoise.TreeViewVideos : Gtk.TreeView {
+private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
     private unowned MainWindow win;
     private unowned DockableMedia dock;
     private bool dragging = false;
+    private Gtk.Menu menu;
+
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
     };
@@ -92,7 +94,7 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
             if(tmp == null)
                 return;
-            unowned Action? action = tmp.get_action(item.type, ActionContext.MEDIABROWSER_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
+            unowned Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
             
             if(action != null)
                 action.action(item, null);
@@ -310,6 +312,13 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
                 }
             }
             case 3: {
+                TreeIter iter;
+                this.tvm.get_iter(out iter, treepath);
+                if(!selection.path_is_selected(treepath)) {
+                    selection.unselect_all();
+                    selection.select_path(treepath);
+                }
+                rightclick_menu_popup(e.time);
                 return true;
             }
             default: {
@@ -319,6 +328,44 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView {
         if(!(selection.count_selected_rows()>0 ))
             selection.select_path(treepath);
         return false;
+    }
+
+    public int get_model_item_column() {
+        return (int)TreeViewVideosModel.Column.ITEM;
+    }
+    
+    private void rightclick_menu_popup(uint activateTime) {
+        menu = create_rightclick_menu();
+        if(menu != null)
+            menu.popup(null, null, null, 0, activateTime);
+    }
+
+    private Gtk.Menu create_rightclick_menu() {
+        TreeIter iter;
+        var rightmenu = new Gtk.Menu();
+        GLib.List<TreePath> list;
+        list = this.get_selection().get_selected_rows(null);
+        ItemSelectionType itemselection = ItemSelectionType.SINGLE;
+        if(list.length() > 1)
+            itemselection = ItemSelectionType.MULTIPLE;
+        Item? item = null;
+        Array<unowned Action?> array = null;
+        TreePath path = (TreePath)list.data;
+        tvm.get_iter(out iter, path);
+        tvm.get(iter, TreeViewVideosModel.Column.ITEM, out item);
+        array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
+        for(int i =0; i < array.length; i++) {
+            unowned Action x = array.index(i);
+            //print("%s\n", x.name);
+            var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
+            menu_item.set_label(x.info);
+            menu_item.activate.connect( () => {
+                x.action(item, this);
+            });
+            rightmenu.append(menu_item);
+        }
+        rightmenu.show_all();
+        return rightmenu;
     }
     
     private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {

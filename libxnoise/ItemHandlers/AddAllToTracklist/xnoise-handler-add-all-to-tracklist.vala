@@ -50,7 +50,7 @@ public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         menu_add.info = this.ainfo;
         menu_add.name = this.aname;
         menu_add.stock_item = Gtk.Stock.DND_MULTIPLE;
-        menu_add.context = ActionContext.MEDIABROWSER_MENU_QUERY;
+        menu_add.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
         //print("constructed HandlerAddToTracklist\n");
     }
 
@@ -63,7 +63,7 @@ public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
     }
 
     public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-        if(context == ActionContext.MEDIABROWSER_MENU_QUERY)
+        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY)
             return menu_add;
         
         return null;
@@ -71,11 +71,26 @@ public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
 
     private void on_menu_add(Item item, GLib.Value? data) {
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_job);
+        job.item = item;
         db_worker.push_job(job);
     }
 
     private bool menu_add_job(Worker.Job job) {
-        job.track_dat = db_reader.get_all_tracks(global.searchtext);
+        switch(job.item.type) {
+            case ItemType.LOCAL_AUDIO_TRACK:
+            case ItemType.COLLECTION_CONTAINER_ARTIST:
+            case ItemType.COLLECTION_CONTAINER_ALBUM:
+                job.track_dat = db_reader.get_all_tracks(global.searchtext);
+                break;
+            case ItemType.LOCAL_VIDEO_TRACK:
+                job.track_dat = db_reader.get_video_data(global.searchtext);
+                break;
+            case ItemType.STREAM:
+                job.track_dat = db_reader.get_trackdata_for_streams(global.searchtext);
+                break;
+            default:
+                return false;
+        }
         //print("track_dat len %d\n", (int)job.track_dat.length);
         if(job.track_dat != null) {
             Idle.add( () => {

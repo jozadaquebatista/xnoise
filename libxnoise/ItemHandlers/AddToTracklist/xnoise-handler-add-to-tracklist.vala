@@ -61,14 +61,14 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
         add.action = on_mediabrowser_activated;
         add.info = this.binfo;
         add.name = this.bname;
-        add.context = ActionContext.MEDIABROWSER_ITEM_ACTIVATED;
+        add.context = ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED;
         
         menu_add = new Action(); 
         menu_add.action = on_menu_add;
         menu_add.info = this.ainfo;
         menu_add.name = this.aname;
         menu_add.stock_item = Gtk.Stock.ADD;
-        menu_add.context = ActionContext.MEDIABROWSER_MENU_QUERY;
+        menu_add.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
         //print("constructed HandlerAddToTracklist\n");
         
         request_add = new Action(); 
@@ -88,10 +88,10 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
     }
 
     public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-        if(context == ActionContext.MEDIABROWSER_ITEM_ACTIVATED)
+        if(context == ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED)
             return add;
         
-        if(context == ActionContext.MEDIABROWSER_MENU_QUERY)
+        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY)
             return menu_add;
         
         if(context == ActionContext.REQUESTED)
@@ -101,17 +101,29 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
     }
 
     private void on_menu_add(Item item, GLib.Value? data) {
+        TreeView tv = (TreeView)data;
+        TreeQueryable tq = tv as TreeQueryable;
+        if(tv == null || tq == null)
+            return;
+        if(!(tv is TreeView))
+            return;
+        if(!(tq is TreeQueryable))
+            return;
+        print("okokok\n");
         GLib.List<TreePath> list;
-        list = main_window.mediaBr.get_selection().get_selected_rows(null);
-        if(list.length() == 0) return;
+        list = tv.get_selection().get_selected_rows(null);
+        if(list.length() == 0)
+            return;
+        
+        var mod = tv.get_model();
         Item? ix = Item(ItemType.UNKNOWN);
         TreeIter iter;
 //        list.reverse();
         Item[] items = {};
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_job);
         foreach(TreePath path in list) {
-            main_window.mediaBr.mediabrowsermodel.get_iter(out iter, path);
-            main_window.mediaBr.mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out ix);
+            mod.get_iter(out iter, path);
+            mod.get(iter, tq.get_model_item_column(), out ix);
             items += ix;
         }
         job.items = items;

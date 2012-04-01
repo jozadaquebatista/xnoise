@@ -90,7 +90,7 @@ private class Xnoise.MostplayedTreeviewModel : Gtk.ListStore {
         if(changetype == Writer.ChangeType.UPDATE_PLAYCOUNT) {
             if(src != 0)
                 Source.remove(src);
-            src = Timeout.add_seconds(2, () => {
+            src = Timeout.add_seconds(1, () => {
                 filter();
                 src = 0;
                 return false;

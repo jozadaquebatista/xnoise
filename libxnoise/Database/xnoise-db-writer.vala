@@ -926,7 +926,7 @@ public class Xnoise.Database.Writer : GLib.Object {
                 this.db_error();
                 return false;
             }
-            Item? item = Item(ItemType.COLLECTION_CONTAINER_VIDEO, td.item.uri, idv);
+            Item? item = Item(ItemType.LOCAL_VIDEO_TRACK, td.item.uri, idv);
             foreach(NotificationData cxd in change_callbacks) {
                 if(cxd.cb != null)
                     cxd.cb(ChangeType.ADD_VIDEO, item);

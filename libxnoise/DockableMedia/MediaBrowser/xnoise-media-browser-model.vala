@@ -83,7 +83,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             if(this.dock.name() != global.active_dockable_media_name) {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
-                search_idlesource = Timeout.add_seconds(2, () => { //late search, if widget is not visible
+                search_idlesource = Timeout.add_seconds(1, () => { //late search, if widget is not visible
                     //print("timeout search started\n");
                     filter();
                     search_idlesource = 0;
@@ -93,7 +93,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             else {
                 if(search_idlesource != 0)
                     Source.remove(search_idlesource);
-                search_idlesource = Timeout.add(200, () => {
+                search_idlesource = Timeout.add(180, () => {
                     this.filter();
                     search_idlesource = 0;
                     return false;

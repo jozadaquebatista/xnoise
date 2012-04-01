@@ -111,14 +111,14 @@ public class Xnoise.ItemConverter : Object {
                     break;
                 }
                 break;
-            case ItemType.COLLECTION_CONTAINER_VIDEO:
-                result = db_reader.get_trackdata_for_video(global.searchtext);
-                //print("result len %d\n", result.length);
-                break;
-            case ItemType.COLLECTION_CONTAINER_STREAM:
-                result = db_reader.get_trackdata_for_streams(global.searchtext);
-                //print("result len %d\n", result.length);
-                break;
+//            case ItemType.COLLECTION_CONTAINER_VIDEO:
+//                result = db_reader.get_trackdata_for_video(global.searchtext);
+//                //print("result len %d\n", result.length);
+//                break;
+//            case ItemType.COLLECTION_CONTAINER_STREAM:
+//                result = db_reader.get_trackdata_for_streams(global.searchtext);
+//                //print("result len %d\n", result.length);
+//                break;
             case ItemType.STREAM:
                 var tmp = new TrackData();
                 if(item.db_id > -1) {

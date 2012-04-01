@@ -54,7 +54,7 @@ public class Xnoise.HandlerShowInFileManager : ItemHandler {
         b.info = this.binfo;
         b.name = this.bname;
         b.stock_item = Gtk.Stock.OPEN;
-        b.context = ActionContext.MEDIABROWSER_MENU_QUERY;
+        b.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
         
     }
 
@@ -70,7 +70,7 @@ public class Xnoise.HandlerShowInFileManager : ItemHandler {
         if((context == ActionContext.TRACKLIST_MENU_QUERY) &&
            (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK))
             return a;
-        if((context == ActionContext.MEDIABROWSER_MENU_QUERY) &&
+        if((context == ActionContext.QUERYABLE_TREE_MENU_QUERY) &&
            (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK))
             return b;
         return null;

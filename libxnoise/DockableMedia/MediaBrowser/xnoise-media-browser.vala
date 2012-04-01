@@ -35,7 +35,7 @@ using Xnoise;
 using Xnoise.Services;
 
 
-public class Xnoise.MediaBrowser : TreeView, IParams {
+public class Xnoise.MediaBrowser : TreeView, IParams, TreeQueryable {
     private bool dragging;
     private bool _use_treelines = false;
     private CellRendererText renderer = null;
@@ -253,6 +253,10 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
             menu.popup(null, null, null, 0, activateTime);
     }
 
+    public int get_model_item_column() {
+        return (int)MediaBrowserModel.Column.ITEM;
+    }
+    
     private Gtk.Menu create_rightclick_menu() {
         TreeIter iter;
         var rightmenu = new Gtk.Menu();
@@ -263,19 +267,17 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
             itemselection = ItemSelectionType.MULTIPLE;
         Item? item = null;
         Array<unowned Action?> array = null;
-//        foreach(Gtk.TreePath path in list) { //TODO
-//        }
         TreePath path = (TreePath)list.data;
         mediabrowsermodel.get_iter(out iter, path);
         mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out item);
-        array = itemhandler_manager.get_actions(item.type, ActionContext.MEDIABROWSER_MENU_QUERY, itemselection);
+        array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
         for(int i =0; i < array.length; i++) {
             unowned Action x = array.index(i);
             //print("%s\n", x.name);
             var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
             menu_item.set_label(x.info);
             menu_item.activate.connect( () => {
-                x.action(item, null);
+                x.action(item, this);
             });
             rightmenu.append(menu_item);
         }
@@ -381,7 +383,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams {
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
             if(tmp == null)
                 return;
-            unowned Action? action = tmp.get_action(item.type, ActionContext.MEDIABROWSER_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
+            unowned Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
             
             if(action != null)
                 action.action(item, null);

@@ -180,6 +180,14 @@ typedef struct _XnoiseDbusThumbnailerPrivate XnoiseDbusThumbnailerPrivate;
 typedef struct _XnoiseIParams XnoiseIParams;
 typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 
+#define XNOISE_TYPE_TREE_QUERYABLE (xnoise_tree_queryable_get_type ())
+#define XNOISE_TREE_QUERYABLE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TREE_QUERYABLE, XnoiseTreeQueryable))
+#define XNOISE_IS_TREE_QUERYABLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TREE_QUERYABLE))
+#define XNOISE_TREE_QUERYABLE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_TREE_QUERYABLE, XnoiseTreeQueryableIface))
+
+typedef struct _XnoiseTreeQueryable XnoiseTreeQueryable;
+typedef struct _XnoiseTreeQueryableIface XnoiseTreeQueryableIface;
+
 #define XNOISE_TYPE_MEDIA_BROWSER (xnoise_media_browser_get_type ())
 #define XNOISE_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowser))
 #define XNOISE_MEDIA_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowserClass))
@@ -981,15 +989,10 @@ typedef enum  {
 	XNOISE_ITEM_TYPE_LOCAL_FOLDER,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ARTIST,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_ALBUM,
-	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_VIDEO,
-	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_STREAM,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_GENRE,
 	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_YEAR,
 	XNOISE_ITEM_TYPE_LOADER,
-	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_MOST_PLAYED,
-	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_FAVORITES,
-	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_LAST_PLAYED,
-	XNOISE_ITEM_TYPE_COLLECTION_CONTAINER_RECENTLY_ADDED,
+	XNOISE_ITEM_TYPE_CUSTOM_DATA_COL_ID,
 	XNOISE_ITEM_TYPE_MAXCOUNT
 } XnoiseItemType;
 
@@ -1116,6 +1119,11 @@ struct _XnoiseIParamsIface {
 	GTypeInterface parent_iface;
 	void (*read_params_data) (XnoiseIParams* self);
 	void (*write_params_data) (XnoiseIParams* self);
+};
+
+struct _XnoiseTreeQueryableIface {
+	GTypeInterface parent_iface;
+	gint (*get_model_item_column) (XnoiseTreeQueryable* self);
 };
 
 struct _XnoiseMediaBrowser {
@@ -1331,9 +1339,9 @@ typedef enum  {
 	XNOISE_ACTION_CONTEXT_TRACKLIST_ITEM_ACTIVATED,
 	XNOISE_ACTION_CONTEXT_TRACKLIST_MENU_QUERY,
 	XNOISE_ACTION_CONTEXT_TRACKLIST_DROP,
-	XNOISE_ACTION_CONTEXT_MEDIABROWSER_ITEM_ACTIVATED,
-	XNOISE_ACTION_CONTEXT_MEDIABROWSER_MENU_QUERY,
-	XNOISE_ACTION_CONTEXT_MEDIABROWSER_LOAD,
+	XNOISE_ACTION_CONTEXT_QUERYABLE_TREE_ITEM_ACTIVATED,
+	XNOISE_ACTION_CONTEXT_QUERYABLE_TREE_MENU_QUERY,
+	XNOISE_ACTION_CONTEXT_QUERYABLE_TREE_LOAD,
 	XNOISE_ACTION_CONTEXT_VIDEOSCREEN_ACTIVATED,
 	XNOISE_ACTION_CONTEXT_VIDEOSCREEN_MENU_QUERY,
 	XNOISE_ACTION_CONTEXT_TRACKLIST_COLUMN_HEADER_MENU_QUERY
@@ -2144,6 +2152,7 @@ void xnoise_dbus_thumbnailer_queue_uris (XnoiseDbusThumbnailer* self, gchar** ur
 XnoiseDbusThumbnailer* xnoise_dbus_thumbnailer_new (void);
 XnoiseDbusThumbnailer* xnoise_dbus_thumbnailer_construct (GType object_type);
 GType xnoise_iparams_get_type (void) G_GNUC_CONST;
+GType xnoise_tree_queryable_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
 GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
 GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
@@ -2340,6 +2349,7 @@ XnoiseItem* xnoise_item_handler_manager_create_item (const gchar* uri);
 void xnoise_item_handler_manager_execute_actions_for_item (XnoiseItemHandlerManager* self, XnoiseItem* item, XnoiseActionContext context, GValue* data, XnoiseItemSelectionType selection);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_new (void);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_construct (GType object_type);
+gint xnoise_tree_queryable_get_model_item_column (XnoiseTreeQueryable* self);
 GType xnoise_ilyrics_get_type (void) G_GNUC_CONST;
 void xnoise_ilyrics_find_lyrics (XnoiseILyrics* self);
 gchar* xnoise_ilyrics_get_identifier (XnoiseILyrics* self);
