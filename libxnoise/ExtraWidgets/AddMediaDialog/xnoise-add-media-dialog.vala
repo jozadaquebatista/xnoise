@@ -36,23 +36,21 @@ using Xnoise.Services;
 
 public class Xnoise.AddMediaDialog : GLib.Object {
 
+    private enum Column {
+        NAME,
+        ITEMTYPE,
+        LOCATION,
+        COL_COUNT
+    }
+    
     private const string XNOISEICON = Config.UIDIR + "xnoise_16x16.png";
     private Gtk.Dialog dialog;
     private ListStore listmodel;
     private TreeView tv;
     private CheckButton fullrescancheckb;
-    private string[] list_of_folders;
-    private string[] list_of_files;
-    private string[] list_of_streams;
     private unowned Main xn;
     
     public Gtk.Builder builder;
-
-    private enum MediaStorageType {
-        FILE = 0,
-        FOLDER,
-        STREAM
-    }
 
     public signal void sign_finish();
 
@@ -75,86 +73,91 @@ public class Xnoise.AddMediaDialog : GLib.Object {
         return_if_fail(listmodel != null);
         
         Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE, put_media_data_to_model);
+        job = new Worker.Job(Worker.ExecutionType.ONCE, fill_media_list_job);
         db_worker.push_job(job);
     }
     
-    private StreamData[] streams = null;
-    
-    private bool put_media_data_to_model(Worker.Job job) {
+    private bool fill_media_list_job(Worker.Job job) {
         //add folders
-        string[] mfolders = db_reader.get_media_folders();
-        job.set_arg("mfolders", mfolders);
-        
-        //add files
-        string[] mfiles = db_reader.get_media_files();
-        job.set_arg("mfiles", mfiles);
+        Item[] mfolders = db_reader.get_media_folders();
         
         //add streams to list
-        streams = db_reader.get_streams();
+        Item[] tmp = db_reader.get_stream_items("");
+        Item[] streams = {};
+        
+        for(int j = tmp.length -1; j >= 0; j--) // reverse
+            streams += tmp[j];
         
         Idle.add( () => {
-            foreach(string mfolder in ((string[])job.get_arg("mfolders"))) {
+            foreach(Item? i in mfolders) {
+                File f = File.new_for_uri(i.uri);
                 TreeIter iter;
                 listmodel.append(out iter);
                 listmodel.set(iter,
-                              0, mfolder,
-                              1, MediaStorageType.FOLDER,
-                              -1
-                              );
+                              Column.LOCATION,  f.get_path(), // path
+                              Column.ITEMTYPE,  i.type,
+                              Column.NAME,      i.text        // name
+                );
             }
-            return false;
-        });
-        
-        Idle.add( () => {
-            //print("mfiles length: %d\n", mfiles.length);
-            foreach(string uri in ((string[])job.get_arg("mfiles"))) {
-                File file = File.new_for_uri(uri);
+            foreach(Item? i in streams) {
                 TreeIter iter;
                 listmodel.append(out iter);
                 listmodel.set(iter,
-                              0, file.get_path(),
-                              1, MediaStorageType.FILE,
-                              -1
-                              );
+                              Column.LOCATION,  i.uri, // uri
+                              Column.ITEMTYPE,  i.type,
+                              Column.NAME,      i.text // name
+                );
             }
-            return false;
-        });
-        
-        Idle.add( () => {
-            foreach(StreamData sd in streams) {
-                TreeIter iter;
-                listmodel.append(out iter);
-                listmodel.set(iter,
-                              0, sd.uri,
-                              1, MediaStorageType.STREAM,
-                              -1
-                              );
-            }
-            streams = null;
             return false;
         });
         return false;
     }
 
-    private void harvest_media_locations() {
-        list_of_streams = {};
-        list_of_files = {};
-        list_of_folders = {};
-        listmodel.foreach(list_foreach);
+    private Item[] harvest_media_locations() {
+        Item[] media_items = {};
+        listmodel.foreach( (sender, mypath, myiter) => {
+            string d_uri;
+            string d_name;
+            ItemType tp;
+            sender.get(myiter,
+                       Column.LOCATION, out d_uri,
+                       Column.ITEMTYPE, out tp,
+                       Column.NAME, out d_name
+            );
+            switch(tp) {
+                case ItemType.LOCAL_FOLDER:
+                    File f = File.new_for_path(d_uri);
+                    Item? item = Item(ItemType.LOCAL_FOLDER, f.get_uri(), -1);
+                    item.text = d_name; //TODO
+                    media_items += item;
+                    break;
+                case ItemType.STREAM:
+                case ItemType.PLAYLIST:
+                    Item? item = Item(tp, d_uri, -1);
+                    item.text = d_name; //TODO
+                    media_items += item;
+                    break;
+                default:
+                    print("Error: unhandled media storage type: %s\n", tp.to_string());
+                    break;
+            }
+            return false;
+        });
+        return media_items;
     }
 
     private void create_widgets() {
+        ScrolledWindow tvscrolledwindow = null;
         try {
             dialog = new Dialog();
-            
+            dialog.set_default_size(800, 600);
             dialog.set_modal(true);
             dialog.set_transient_for(main_window);
             
             builder.add_from_file(Config.UIDIR + "add_media.ui");
             
             var mainvbox           = builder.get_object("mainvbox") as Gtk.Box;
-            tv                     = builder.get_object("tv") as TreeView;
+            tvscrolledwindow       = builder.get_object("tvscrolledwindow") as ScrolledWindow;
             var baddfolder         = builder.get_object("addfolderbutton") as Button;
             var baddradio          = builder.get_object("addradiobutton") as Button;
             var brem               = builder.get_object("removeButton") as Button;
@@ -171,8 +174,8 @@ public class Xnoise.AddMediaDialog : GLib.Object {
             labeladdfolder.label   = _("Add local folder");
             labeladdstream.label   = _("Add media stream");
             labelremove.label      = _("Remove");
-            fullrescancheckb.label = _("do a full rescan of the library");
-            descriptionlabel.label = _("Select local media folders or remote media streams. \nAll library media will be available in the library.");
+            fullrescancheckb.label = _("do full rescan");
+            descriptionlabel.label = _("Select local media folders or internet media streams. \nAll media sources will be available via xnoise's library.");
             
             bok.clicked.connect(on_ok_button_clicked);
             bcancel.clicked.connect(on_cancel_button_clicked);
@@ -182,7 +185,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
             
             ((Gtk.Box)this.dialog.get_content_area()).add(mainvbox);
             this.dialog.set_icon_from_file(XNOISEICON);
-            this.dialog.set_title(_("xnoise - Add media to library"));
+            this.dialog.set_title(_("xnoise - Add media sources to the library"));
         }
         catch (GLib.Error e) {
             var msg = new Gtk.MessageDialog(null,
@@ -194,36 +197,42 @@ public class Xnoise.AddMediaDialog : GLib.Object {
             return;
         }
         
-        listmodel = new ListStore(2, typeof(string), typeof(int));
+        tv = new TreeView();
+        listmodel = new ListStore(Column.COL_COUNT, typeof(string), typeof(ItemType), typeof(string));
+        
+        //NAME
+        var column2 = new TreeViewColumn();
+        var renderername = new CellRendererText();
+        renderername.mode = CellRendererMode.EDITABLE;
+        renderername.editable = true;
+        renderername.editable_set = true;
+        column2.pack_start(renderername, false);
+        column2.add_attribute(renderername, "text", Column.NAME);
+        column2.title = _("Name");
+        tv.insert_column(column2, -1);
+        renderername.edited.connect( (s,ps,t) => {
+            TreePath p = new TreePath.from_string(ps);
+            TreeIter iter;
+            listmodel.get_iter(out iter, p);
+            listmodel.set(iter,
+                          Column.NAME, t
+            );
+        });
+        
+        // LOCATION
+        var column = new TreeViewColumn();
+        var renderer = new CellRendererText();
+        column.pack_start(renderer, false);
+        column.add_attribute(renderer, "text", Column.LOCATION);
+        column.title = _("Location");
+        tv.insert_column(column, -1);
+        
+        tvscrolledwindow.add(tv);
+        tvscrolledwindow.set_vexpand(true);
+        tvscrolledwindow.set_vexpand_set(true);
+        
         tv.set_model(listmodel);
-        CellRendererText cell = new Gtk.CellRendererText ();
-        cell.set("foreground_set", true, null);
-        tv.insert_column_with_attributes(-1, "Path", cell, "text", 0);
-    }
-
-    private bool list_foreach(TreeModel sender, TreePath mypath, TreeIter myiter) {
-        string gv;
-        MediaStorageType mst;
-        sender.get(myiter,
-                   0, out gv,
-                   1, out mst
-                   );
-        switch(mst) {
-            case MediaStorageType.FOLDER:
-                list_of_folders += gv;
-                break;
-            case MediaStorageType.FILE:
-                var file = File.new_for_path(gv);
-                list_of_files += file.get_uri();
-                break;
-            case MediaStorageType.STREAM:
-                list_of_streams += gv;
-                break;
-            default:
-                print("Error: unknown media storage type\n");
-                break;
-        }
-        return false;
+        //TODO add icons
     }
 
     private void on_ok_button_clicked() {
@@ -233,7 +242,6 @@ public class Xnoise.AddMediaDialog : GLib.Object {
             //print("was still populating model\n");
         }
         
-        main_window.mediaBr.mediabrowsermodel.cancel_fill_model();
         var prg_bar = new Gtk.ProgressBar();
         prg_bar.set_fraction(0.0);
         prg_bar.set_text("0 / 0");
@@ -246,14 +254,11 @@ public class Xnoise.AddMediaDialog : GLib.Object {
                                 5,
                                 prg_bar);
             
-            harvest_media_locations();
+            Item[] media_items = harvest_media_locations();
             
             global.media_import_in_progress = true;
             
-            if(fullrescancheckb.get_active())
-                main_window.mediaBr.mediabrowsermodel.remove_all(); // when doing a full import db_ids may change
-            
-            media_importer.import_media_groups(list_of_streams, list_of_files, list_of_folders, msg_id, fullrescancheckb.get_active(), interrupted_populate_model);
+            media_importer.import_media_groups(media_items, msg_id, fullrescancheckb.get_active(), interrupted_populate_model);
             
             this.dialog.destroy();
             this.sign_finish();
@@ -278,12 +283,13 @@ public class Xnoise.AddMediaDialog : GLib.Object {
             null);
         fcdialog.set_current_folder(Environment.get_home_dir());
         if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
+            File f = File.new_for_path(fcdialog.get_filename());
             TreeIter iter;
             listmodel.append(out iter);
             listmodel.set(iter,
-                          0, fcdialog.get_filename(),
-                          1, MediaStorageType.FOLDER,
-                          -1
+                          Column.LOCATION,  f.get_path(),
+                          Column.ITEMTYPE,  ItemType.LOCAL_FOLDER,
+                          Column.NAME,      f.get_basename()
                           );
         }
         fcdialog.destroy();
@@ -321,12 +327,11 @@ public class Xnoise.AddMediaDialog : GLib.Object {
                 TreeIter iter;
                 listmodel.append(out iter);
                 listmodel.set(iter,
-                              0, radioentry.text.strip(),
-                              1, MediaStorageType.STREAM,
-                              -1
+                              Column.LOCATION,  radioentry.text.strip(),
+                              Column.ITEMTYPE,  ItemType.STREAM,
+                              Column.NAME,      radioentry.text.strip()
                               );
             }
-            
             radiodialog.close();
             radiodialog = null;
         });
@@ -335,7 +340,6 @@ public class Xnoise.AddMediaDialog : GLib.Object {
             radiodialog = null;
             return true;
         });
-        
         try {
             radiodialog.set_icon_from_file(XNOISEICON);
             radiodialog.set_title(_("Add internet radio link"));

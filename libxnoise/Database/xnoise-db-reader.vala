@@ -352,14 +352,19 @@ public class Xnoise.Database.Reader {
         return (owned)mfiles;
     }
 
-    public string[] get_media_folders() {
+    public Item[] get_media_folders() {
         Statement stmt;
-        string[] mfolders = {};
+        Item[] mfolders = {};
         
         this.db.prepare_v2(STMT_GET_MEDIA_FOLDERS, -1, out stmt);
         
         while(stmt.step() == Sqlite.ROW) {
-            mfolders += stmt.column_text(0);
+            File f = File.new_for_path(stmt.column_text(0));
+            if(f == null)
+                continue;
+            Item? i = Item(ItemType.LOCAL_FOLDER, f.get_uri(), -1);
+            i.text = stmt.column_text(0);
+            mfolders += i;
         }
         return (owned)mfolders;
     }
@@ -385,21 +390,6 @@ public class Xnoise.Database.Reader {
         if(vals.length == 0)
             return null;
         return (owned)vals;
-    }
-
-    public StreamData[] get_streams() {
-        Statement stmt;
-        StreamData[] sData = {};
-        
-        this.db.prepare_v2(STMT_GET_RADIOS, -1, out stmt);
-            
-        while(stmt.step() == Sqlite.ROW) {
-            StreamData sd = StreamData();
-            sd.name = stmt.column_text(0);
-            sd.uri  = stmt.column_text(1);
-            sData += sd;
-        }
-        return (owned)sData;
     }
 
     private static const string STMT_GET_SOME_LASTUSED_ITEMS =

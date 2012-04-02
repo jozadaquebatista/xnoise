@@ -939,27 +939,32 @@ public class Xnoise.Database.Writer : GLib.Object {
         "SELECT id FROM streams WHERE uri=?";
         
     // Single stream for collection
-    public void add_single_stream_to_collection(string uri, string name = "") {
+    public bool add_single_stream_to_collection(Item? i) {
         if(db == null)
-            return;
-        //print("add stream : %s \n", uri);
-        if((uri == null) || (uri == EMPTYSTRING)) return;
-        if(name == EMPTYSTRING) name = uri;
+            return false;
+        if(i == null)
+            return false;
+        //print("add stream : %s \n", i.uri);
+        if(i.uri == null || i.uri == EMPTYSTRING)
+            return false;
+        if(i.text == null || i.text == EMPTYSTRING)
+            i.text = i.uri;
+        
         add_radio_statement.reset();
-        if(add_radio_statement.bind_text(1, name) != Sqlite.OK||
-           add_radio_statement.bind_text(2, uri)  != Sqlite.OK) {
+        if(add_radio_statement.bind_text(1, i.text) != Sqlite.OK||
+           add_radio_statement.bind_text(2, i.uri)  != Sqlite.OK) {
             this.db_error();
-            return;
+            return false;
         }
         if(add_radio_statement.step() != Sqlite.DONE) {
             this.db_error();
-            return;
+            return false;
         }
         Statement stmt;
         this.db.prepare_v2(STMT_GET_STREAM_ID_BY_URI, -1, out stmt);
-        if(stmt.bind_text(1, uri) != Sqlite.OK) {
+        if(stmt.bind_text(1, i.uri) != Sqlite.OK) {
             this.db_error();
-            return;
+            return false;
         }
         int stream_id = -1;
         if(stmt.step() == Sqlite.ROW)
@@ -967,20 +972,26 @@ public class Xnoise.Database.Writer : GLib.Object {
         // change notification
         foreach(NotificationData cxd in change_callbacks) {
             if(stream_id > -1) {
-                Item? item = Item(ItemType.STREAM, uri, stream_id);
-                item.text = name;
+                Item? item = Item(ItemType.STREAM, i.uri, stream_id);
+                item.text = i.text;
                 if(cxd.cb != null)
                     cxd.cb(ChangeType.ADD_STREAM, item);
             }
         }
+        return true;
     }
 
-    public void add_single_folder_to_collection(string mfolder) {
+    public bool add_single_folder_to_collection(Item? mfolder) {
+        if(mfolder == null)
+            return false;
         this.write_media_folder_statement.reset();
-        this.write_media_folder_statement.bind_text(1, mfolder);
+        File f = File.new_for_uri(mfolder.uri);
+        this.write_media_folder_statement.bind_text(1, f.get_path());
         if(write_media_folder_statement.step() != Sqlite.DONE) {
             this.db_error();
+            return false;
         }
+        return true;
     }
 
     public void write_final_tracks_to_db(Worker.Job job) throws Error {

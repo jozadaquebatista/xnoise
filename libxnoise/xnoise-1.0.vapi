@@ -25,14 +25,13 @@ namespace Xnoise {
 			public Xnoise.Item[] get_artists_with_search (string searchtext);
 			public Xnoise.Item[]? get_last_played (string searchtext);
 			public string[] get_media_files ();
-			public string[] get_media_folders ();
+			public Xnoise.Item[] get_media_folders ();
 			public Xnoise.Item[]? get_most_played (string searchtext);
 			public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
 			public Xnoise.TrackData[] get_stream_data (string searchtext);
 			public Xnoise.Item[]? get_stream_items (string searchtext);
 			public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
 			public Xnoise.Item? get_streamitem_by_id (int32 id, string searchtext);
-			public Xnoise.StreamData[] get_streams ();
 			public Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id);
 			public Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id);
 			public Xnoise.TrackData? get_trackdata_by_titleid (string searchtext, int32 id);
@@ -66,8 +65,8 @@ namespace Xnoise {
 			public delegate void ChangeNotificationCallback (Xnoise.Database.Writer.ChangeType changetype, Xnoise.Item? item);
 			public delegate void WriterCallback (Sqlite.Database database);
 			public Writer () throws Xnoise.Database.DbError;
-			public void add_single_folder_to_collection (string mfolder);
-			public void add_single_stream_to_collection (string uri, string name = "");
+			public bool add_single_folder_to_collection (Xnoise.Item? mfolder);
+			public bool add_single_stream_to_collection (Xnoise.Item? i);
 			public void begin_transaction ();
 			public void commit_transaction ();
 			public void del_all_folders ();
@@ -1136,11 +1135,6 @@ namespace Xnoise {
 		public string? uri;
 		public string? text;
 		public Item (Xnoise.ItemType _type = ItemType.UNKNOWN, string? _uri = null, int32 _db_id = -1);
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public struct StreamData {
-		public string name;
-		public string uri;
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum ActionContext {

@@ -120,9 +120,6 @@ typedef struct _XnoiseDatabaseReader XnoiseDatabaseReader;
 typedef struct _XnoiseDatabaseReaderClass XnoiseDatabaseReaderClass;
 typedef struct _XnoiseDatabaseReaderPrivate XnoiseDatabaseReaderPrivate;
 
-#define XNOISE_TYPE_STREAM_DATA (xnoise_stream_data_get_type ())
-typedef struct _XnoiseStreamData XnoiseStreamData;
-
 #define XNOISE_DATABASE_TYPE_WRITER (xnoise_database_writer_get_type ())
 #define XNOISE_DATABASE_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_WRITER, XnoiseDatabaseWriter))
 #define XNOISE_DATABASE_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_WRITER, XnoiseDatabaseWriterClass))
@@ -1050,11 +1047,6 @@ struct _XnoiseDatabaseReaderClass {
 };
 
 typedef void (*XnoiseDatabaseReaderReaderCallback) (sqlite3* database, void* user_data);
-struct _XnoiseStreamData {
-	gchar* name;
-	gchar* uri;
-};
-
 struct _XnoiseDatabaseWriter {
 	GObject parent_instance;
 	XnoiseDatabaseWriterPrivate * priv;
@@ -2072,14 +2064,8 @@ XnoiseItem* xnoise_database_reader_get_streamitem_by_id (XnoiseDatabaseReader* s
 gboolean xnoise_database_reader_get_stream_td_for_id (XnoiseDatabaseReader* self, gint id, XnoiseTrackData** val);
 gboolean xnoise_database_reader_get_trackdata_for_uri (XnoiseDatabaseReader* self, gchar** uri, XnoiseTrackData** val);
 gchar** xnoise_database_reader_get_media_files (XnoiseDatabaseReader* self, int* result_length1);
-gchar** xnoise_database_reader_get_media_folders (XnoiseDatabaseReader* self, int* result_length1);
+XnoiseItem* xnoise_database_reader_get_media_folders (XnoiseDatabaseReader* self, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_stream_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
-GType xnoise_stream_data_get_type (void) G_GNUC_CONST;
-XnoiseStreamData* xnoise_stream_data_dup (const XnoiseStreamData* self);
-void xnoise_stream_data_free (XnoiseStreamData* self);
-void xnoise_stream_data_copy (const XnoiseStreamData* self, XnoiseStreamData* dest);
-void xnoise_stream_data_destroy (XnoiseStreamData* self);
-XnoiseStreamData* xnoise_database_reader_get_streams (XnoiseDatabaseReader* self, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_some_lastused_items (XnoiseDatabaseReader* self, gint limit, gint offset, int* result_length1);
 guint xnoise_database_reader_count_lastused_items (XnoiseDatabaseReader* self);
 XnoiseTrackData** xnoise_database_reader_get_stream_data (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
@@ -2110,8 +2096,8 @@ gboolean xnoise_database_writer_get_trackdata_for_stream (XnoiseDatabaseWriter* 
 gboolean xnoise_database_writer_update_title (XnoiseDatabaseWriter* self, XnoiseItem** item, XnoiseTrackData** td);
 void xnoise_database_writer_remove_uri (XnoiseDatabaseWriter* self, const gchar* uri);
 gboolean xnoise_database_writer_insert_title (XnoiseDatabaseWriter* self, XnoiseTrackData** td);
-void xnoise_database_writer_add_single_stream_to_collection (XnoiseDatabaseWriter* self, const gchar* uri, const gchar* name);
-void xnoise_database_writer_add_single_folder_to_collection (XnoiseDatabaseWriter* self, const gchar* mfolder);
+gboolean xnoise_database_writer_add_single_stream_to_collection (XnoiseDatabaseWriter* self, XnoiseItem* i);
+gboolean xnoise_database_writer_add_single_folder_to_collection (XnoiseDatabaseWriter* self, XnoiseItem* mfolder);
 void xnoise_database_writer_write_final_tracks_to_db (XnoiseDatabaseWriter* self, XnoiseWorkerJob* job, GError** error);
 void xnoise_database_writer_do_callback_transaction (XnoiseDatabaseWriter* self, XnoiseDatabaseWriterWriterCallback cb, void* cb_target);
 void xnoise_database_writer_del_all_folders (XnoiseDatabaseWriter* self);

@@ -187,11 +187,6 @@ public enum Xnoise.PlayerState {
 
 // STRUCTS
 
-public struct Xnoise.StreamData { // meta information structure
-    public string name;
-    public string uri;
-}
-
 public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
     public int32 db_id;
     public ItemType mediatype;
