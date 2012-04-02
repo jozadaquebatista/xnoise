@@ -32,15 +32,15 @@ namespace Xnoise {
     public enum ActionContext {
         NONE,
         REQUESTED,
-        TRACKLIST_ITEM_ACTIVATED,
-        TRACKLIST_MENU_QUERY,
-        TRACKLIST_DROP,
-        QUERYABLE_TREE_ITEM_ACTIVATED,
-        QUERYABLE_TREE_MENU_QUERY,
-        QUERYABLE_TREE_LOAD,
-        VIDEOSCREEN_ACTIVATED,
-        VIDEOSCREEN_MENU_QUERY,
-        TRACKLIST_COLUMN_HEADER_MENU_QUERY
+        TRACKLIST_ITEM_ACTIVATED,           // used by TrackList
+        TRACKLIST_MENU_QUERY,               // used by TrackList
+        TRACKLIST_DROP,                     // used by TrackList
+        QUERYABLE_TREE_ITEM_ACTIVATED,      // used by implementors of TreeQueryable interface
+        QUERYABLE_TREE_MENU_QUERY,          // used by implementors of TreeQueryable interface
+        QUERYABLE_TREE_LOAD,                // used by implementors of TreeQueryable interface
+        VIDEOSCREEN_ACTIVATED,              // used by Screen
+        VIDEOSCREEN_MENU_QUERY,             // used by Screen
+        TRACKLIST_COLUMN_HEADER_MENU_QUERY  // used by Tracklist column headers
     }
     
     [Flags]

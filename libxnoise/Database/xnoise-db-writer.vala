@@ -967,7 +967,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         // change notification
         foreach(NotificationData cxd in change_callbacks) {
             if(stream_id > -1) {
-                Item? item = Item(ItemType.STREAM, null, stream_id);
+                Item? item = Item(ItemType.STREAM, uri, stream_id);
                 item.text = name;
                 if(cxd.cb != null)
                     cxd.cb(ChangeType.ADD_STREAM, item);

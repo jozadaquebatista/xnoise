@@ -247,7 +247,7 @@ public class Xnoise.Database.Reader {
     }
 
     private static const string STMT_GET_STREAMITEM_BY_ID =
-        "SELECT DISTINCT st.id, st.uri, st.name FROM streams st WHERE t.id = ? AND (utf8_lower(st.name) LIKE ? OR utf8_lower(st.uri) LIKE ?) ORDER BY utf8_lower(st.name) COLLATE CUSTOM01 DESC";
+        "SELECT DISTINCT st.id, st.uri, st.name FROM streams st WHERE st.id = ? AND (utf8_lower(st.name) LIKE ? OR utf8_lower(st.uri) LIKE ?) ORDER BY utf8_lower(st.name) COLLATE CUSTOM01 DESC";
     
     public Item? get_streamitem_by_id(int32 id, string searchtext) {
         Statement stmt;
@@ -261,8 +261,8 @@ public class Xnoise.Database.Reader {
             return (owned)i;
         }
         if(stmt.step() == Sqlite.ROW) {
-            i = Item((ItemType) stmt.column_int(3), stmt.column_text(2), stmt.column_int(0));
-            i.text = stmt.column_text(1);
+            i = Item(ItemType.STREAM, stmt.column_text(1), stmt.column_int(0));
+            i.text = stmt.column_text(2);
         }
         return (owned)i;
     }

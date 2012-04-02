@@ -198,7 +198,7 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
     }
     
     private bool add_imported_job(Worker.Job job) {
-    print("found video\n");
+        //print("found video\n");
         job.item = db_reader.get_videoitem_by_id(job.item.db_id); // necessary because of search
         if(job.item.type == ItemType.UNKNOWN) // not matching searchtext
             return false;
