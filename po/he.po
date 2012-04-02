@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-31 00:10+0200\n"
+"POT-Creation-Date: 2012-04-02 18:17+0200\n"
 "PO-Revision-Date: 2012-02-16 15:51+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -55,11 +55,11 @@ msgstr "נגן המדיה"
 msgid "Local Collection"
 msgstr "_סרוק אוסף שוב"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:285
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
 msgid "Collapse all"
 msgstr "כווץ הכל"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:342
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:314
 msgid "Loading ..."
 msgstr "טוען ..."
 
@@ -73,44 +73,56 @@ msgstr "נגן המדיה"
 msgid "Videos"
 msgstr "וידאו"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:171
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:174
 msgid "Add local folder"
 msgstr "הוספת תיקיית מקומית"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:172
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:175
 msgid "Add media stream"
 msgstr "הוספת תזרים מדיה"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:173
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:176
 msgid "Remove"
 msgstr "הסרה"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:174
-msgid "do a full rescan of the library"
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:177
+#, fuzzy
+msgid "do full rescan"
 msgstr "בצע סקירה חוזרת מלאה של הספרייה"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:175
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:178
+#, fuzzy
 msgid ""
-"Select local media folders or remote media streams. \n"
-"All library media will be available in the library."
+"Select local media folders or internet media streams. \n"
+"All media sources will be available via xnoise's library."
 msgstr ""
 "בחר את תיקיות המדיה הנוכחיות או תזרימי המדיה מרוחקים. \n"
 "כל ספריות המדיה יהיו זמינות בספרייה."
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:185
-msgid "xnoise - Add media to library"
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:188
+#, fuzzy
+msgid "xnoise - Add media sources to the library"
 msgstr "xnoise - הוספת מדיה לספריה"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:244
-#: ../libxnoise/Utils/xnoise-media-importer.vala:91
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:211
+msgid "Name"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:227
+#, fuzzy
+msgid "Location"
+msgstr "פתח _מיקום"
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:252
+#: ../libxnoise/Utils/xnoise-media-importer.vala:86
 msgid "Importing media data. This may take some time..."
 msgstr "מייבא מידע מדיה. זה עלול לקחת קצת זמן..."
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:271
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:276
 msgid "Select media folder"
 msgstr "בחירת תיקיית מדיה"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:341
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:345
 msgid "Add internet radio link"
 msgstr "הוספת קישור לרדיו אינטרנט"
 
@@ -642,13 +654,13 @@ msgstr "השהה"
 msgid "ready to rock"
 msgstr "ready to rock"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:196
+#: ../libxnoise/Utils/xnoise-media-importer.vala:207
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr "מצא %u רצועות. מעדכן ספרייה ..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:400
-#: ../libxnoise/Utils/xnoise-media-importer.vala:462
+#: ../libxnoise/Utils/xnoise-media-importer.vala:415
+#: ../libxnoise/Utils/xnoise-media-importer.vala:477
 #, c-format
 msgid "%u tracks found"
 msgstr "נמצאו %u רצועות"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-31 00:10+0200\n"
+"POT-Creation-Date: 2012-04-02 18:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,11 +50,11 @@ msgstr ""
 msgid "Local Collection"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:285
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:342
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:314
 msgid "Loading ..."
 msgstr ""
 
@@ -66,42 +66,50 @@ msgstr ""
 msgid "Videos"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:171
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:174
 msgid "Add local folder"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:172
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:175
 msgid "Add media stream"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:173
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:176
 msgid "Remove"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:174
-msgid "do a full rescan of the library"
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:177
+msgid "do full rescan"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:175
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:178
 msgid ""
-"Select local media folders or remote media streams. \n"
-"All library media will be available in the library."
+"Select local media folders or internet media streams. \n"
+"All media sources will be available via xnoise's library."
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:185
-msgid "xnoise - Add media to library"
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:188
+msgid "xnoise - Add media sources to the library"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:244
-#: ../libxnoise/Utils/xnoise-media-importer.vala:91
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:211
+msgid "Name"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:227
+msgid "Location"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:252
+#: ../libxnoise/Utils/xnoise-media-importer.vala:86
 msgid "Importing media data. This may take some time..."
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:271
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:276
 msgid "Select media folder"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:341
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:345
 msgid "Add internet radio link"
 msgstr ""
 
@@ -624,13 +632,13 @@ msgstr ""
 msgid "ready to rock"
 msgstr ""
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:196
+#: ../libxnoise/Utils/xnoise-media-importer.vala:207
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr ""
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:400
-#: ../libxnoise/Utils/xnoise-media-importer.vala:462
+#: ../libxnoise/Utils/xnoise-media-importer.vala:415
+#: ../libxnoise/Utils/xnoise-media-importer.vala:477
 #, c-format
 msgid "%u tracks found"
 msgstr ""
