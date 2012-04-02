@@ -265,6 +265,8 @@ public class Xnoise.GlobalAccess : GLib.Object {
         }
     }
     
+    public bool cellrenderer_in_edit = false;
+    
     // PUBLIC GLOBAL FUNCTIONS
     public void reset_position_reference() {
         this._position_reference = null;

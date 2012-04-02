@@ -980,7 +980,23 @@ public class Xnoise.Database.Writer : GLib.Object {
         }
         return true;
     }
-
+    
+    private static const string STMT_UPDATE_STREAM_NAME = 
+        "UPDATE streams SET name=? WHERE uri=?";
+    public void update_stream_name(Item? item) {
+        if(item == null)
+            return;
+        Statement stmt;
+        this.db.prepare_v2(STMT_UPDATE_STREAM_NAME, -1, out stmt);
+        if(stmt.bind_text(1, item.text) != Sqlite.OK ||
+           stmt.bind_text(2, item.uri ) != Sqlite.OK) {
+            this.db_error();
+            return;
+        }
+        if(stmt.step() != Sqlite.DONE)
+            this.db_error();
+    }
+    
     public bool add_single_folder_to_collection(Item? mfolder) {
         if(mfolder == null)
             return false;

@@ -81,6 +81,7 @@ namespace Xnoise {
 			public void register_change_callback (Xnoise.Database.Writer.NotificationData? cbd);
 			public void remove_uri (string uri);
 			public void update_lastplay_time (string uri, int64 playtime);
+			public void update_stream_name (Xnoise.Item? item);
 			public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
 			public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
 			public bool in_transaction { get; }
@@ -558,6 +559,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class GlobalAccess : GLib.Object {
+		public bool cellrenderer_in_edit;
 		public GlobalAccess ();
 		public void check_image_for_current_track ();
 		public void do_restart_of_current_track ();

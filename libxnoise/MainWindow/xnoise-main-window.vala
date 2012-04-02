@@ -667,7 +667,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
                 return true;
             case SPACE_KEY: {
-                    if(search_entry.has_focus)
+                    if(search_entry.has_focus || global.cellrenderer_in_edit)
                         return false;
                     playPauseButton.clicked();
                 }

@@ -1302,6 +1302,7 @@ struct _XnoiseSerialButtonClass {
 struct _XnoiseGlobalAccess {
 	GObject parent_instance;
 	XnoiseGlobalAccessPrivate * priv;
+	gboolean cellrenderer_in_edit;
 };
 
 struct _XnoiseGlobalAccessClass {
@@ -2097,6 +2098,7 @@ gboolean xnoise_database_writer_update_title (XnoiseDatabaseWriter* self, Xnoise
 void xnoise_database_writer_remove_uri (XnoiseDatabaseWriter* self, const gchar* uri);
 gboolean xnoise_database_writer_insert_title (XnoiseDatabaseWriter* self, XnoiseTrackData** td);
 gboolean xnoise_database_writer_add_single_stream_to_collection (XnoiseDatabaseWriter* self, XnoiseItem* i);
+void xnoise_database_writer_update_stream_name (XnoiseDatabaseWriter* self, XnoiseItem* item);
 gboolean xnoise_database_writer_add_single_folder_to_collection (XnoiseDatabaseWriter* self, XnoiseItem* mfolder);
 void xnoise_database_writer_write_final_tracks_to_db (XnoiseDatabaseWriter* self, XnoiseWorkerJob* job, GError** error);
 void xnoise_database_writer_do_callback_transaction (XnoiseDatabaseWriter* self, XnoiseDatabaseWriterWriterCallback cb, void* cb_target);

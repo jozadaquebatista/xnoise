@@ -33,6 +33,7 @@ using Gtk;
 using Gdk;
 
 using Xnoise;
+using Xnoise.Services;
 using Xnoise.Database;
 
 
@@ -72,7 +73,34 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView, TreeQueryable {
         int hsepar = 0;
         this.style_get("horizontal-separator", out hsepar);
         var renderer = new ListFlowingTextRenderer(font_description, column, hsepar);
-        
+        renderer.editable = true;
+        renderer.editable_set = true;
+        renderer.editing_started.connect( () => {
+            global.cellrenderer_in_edit = true;
+        });
+        renderer.editing_canceled.connect( () => {
+            global.cellrenderer_in_edit = false;
+        });
+        renderer.edited.connect( (s,ps,t) => {
+            if(t == EMPTYSTRING)
+                return;
+            TreePath p = new TreePath.from_string(ps);
+            TreeIter iter;
+            tvm.get_iter(out iter, p);
+            Item? item;
+            tvm.get(iter, TreeViewStreamsModel.Column.ITEM, out item);
+            if(item.text == t)
+                return;
+            item.text = t;
+            tvm.set(iter, 
+                    TreeViewStreamsModel.Column.VIS_TEXT,   t,
+                    TreeViewStreamsModel.Column.ITEM,       item
+            );
+            global.cellrenderer_in_edit = false;
+            Worker.Job job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, update_stream_name_job);
+            job.item = item;
+            db_worker.push_job(job);
+        });
         var rendererPb = new CellRendererPixbuf();
         
         column.pack_start(rendererPb, false);
@@ -160,6 +188,11 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView, TreeQueryable {
                 });
             }
         });
+    }
+    
+    private bool update_stream_name_job(Worker.Job job) {
+        db_writer.update_stream_name(job.item);
+        return false;
     }
     
     private class ListFlowingTextRenderer : CellRendererText {
