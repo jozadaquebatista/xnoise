@@ -1,7 +1,6 @@
 usr/bin
 usr/lib/xnoise/libazlyrics.so
 usr/lib/xnoise/libchartlyrics.so
-usr/lib/xnoise/libCyclicSaveState.so
 usr/lib/xnoise/libDatabaseLyrics.so
 usr/lib/xnoise/liblastfm.so
 usr/lib/xnoise/libLyricwiki.so
