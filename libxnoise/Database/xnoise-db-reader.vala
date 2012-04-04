@@ -142,6 +142,37 @@ public class Xnoise.Database.Reader {
         return count;
     }
     
+    public bool get_lyrics(string artist, string title, out string txt, out string cred, out string ident) {
+        Statement stmt;
+        db.prepare_v2("SELECT txt, credits, identifier FROM lyrics WHERE LOWER(artist) = ? AND LOWER(title) = ?", -1, out stmt);
+        
+        stmt.reset();
+        
+        txt   = EMPTYSTRING;
+        cred  = EMPTYSTRING;
+        ident = EMPTYSTRING;
+        
+        if((stmt.bind_text(1, "%s".printf(prepare_for_comparison(artist))) != Sqlite.OK)|
+           (stmt.bind_text(2, "%s".printf(prepare_for_comparison(title))) != Sqlite.OK)) {
+            print("Error in database lyrics\n");
+            return false;
+        }
+        if(stmt.step() == Sqlite.ROW) {
+            txt   = stmt.column_text(0);
+            cred  = stmt.column_text(1);
+            ident = stmt.column_text(2);
+            
+            if(txt.strip() == "no lyrics found..." || txt.strip() == _("no lyrics found...")) {
+                txt = cred = ident = EMPTYSTRING;
+                return false;
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
     private static const string STMT_GET_LAST_PLAYED =
         "SELECT ar.name, t.title, t.mediatype, t.id, u.name, st.lastplayTime FROM artists ar, items t, albums al, uris u, statistics st WHERE st.lastplayTime > 0 AND t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND st.uri = u.name AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY st.lastplayTime DESC LIMIT 100";
     

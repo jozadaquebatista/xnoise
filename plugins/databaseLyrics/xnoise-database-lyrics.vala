@@ -279,7 +279,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
         });
         
         timeout = 0;
-        Timeout.add_seconds(1, () => {
+        Timeout.add_seconds(6, () => {
             destruct();
             return false;
         });
@@ -292,53 +292,27 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
         
         Worker.Job job;
         job = new Worker.Job(Worker.ExecutionType.ONCE, this.get_lyrics_from_db);
-        job.cancellable = this.cancellable;
+        job.set_arg("artist", this.artist);
+        job.set_arg("title", this.title);
         db_worker.push_job(job);
     }
     
-    private void dbcb(Sqlite.Database db) {
-        Statement stmt;
-        if(!cancellable.is_cancelled()) {
-            db.prepare_v2("SELECT txt, credits, identifier FROM lyrics WHERE LOWER(artist) = ? AND LOWER(title) = ?", -1, out stmt);
-            
-            stmt.reset();
-            
-            string txt   = EMPTYSTRING;
-            string cred  = EMPTYSTRING;
-            string ident = EMPTYSTRING;
-            
-            if((stmt.bind_text(1, "%s".printf(prepare_for_comparison(this.artist))) != Sqlite.OK)|
-               (stmt.bind_text(2, "%s".printf(prepare_for_comparison(this.title))) != Sqlite.OK)) {
-                print("Error in database lyrics\n");;
-            }
-            if(stmt.step() == Sqlite.ROW) {
-                txt   = stmt.column_text(0);
-                cred  = stmt.column_text(1);
-                ident = stmt.column_text(2);
-                
-                if(txt.strip() == "no lyrics found..." || txt.strip() == _("no lyrics found..."))
-                    txt = EMPTYSTRING;
-                
-                Idle.add( () => {
-                    if(this.cb != null)
-                        this.cb(artist, title, cred, ident, txt, DATABASELYRICS);
-                    this.destruct();
-                    return false;
-                });
-            }
-            else {
-                Idle.add( () => {
-                    if(this.cb != null)
-                        this.cb(artist, title, cred, ident, EMPTYSTRING, DATABASELYRICS);
-                    this.destruct();
-                    return false;
-                });
-            }
-        }
-    }
-
     private bool get_lyrics_from_db(Worker.Job job) {
-        db_reader.do_callback_transaction(dbcb);
+        if(cancellable.is_cancelled())
+            return false;
+        string ar = (string)job.get_arg("artist");
+        string ti = (string)job.get_arg("title");
+        string txt;
+        string cred;
+        string ident;
+        
+        db_reader.get_lyrics(ar, ti, out txt, out cred, out ident);
+        Idle.add( () => {
+            if(this.cb != null)
+                this.cb(artist, title, cred, ident, txt, DATABASELYRICS);
+            this.destruct();
+            return false;
+        });
         return false;
     }
 }
