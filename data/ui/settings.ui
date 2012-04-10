@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAction" id="action1"/>
   <object class="GtkDialog" id="settingsDialog">
     <property name="can_focus">False</property>
@@ -24,6 +24,7 @@
             <child>
               <object class="GtkButton" id="buttonclose">
                 <property name="label">gtk-close</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -69,6 +70,7 @@
                         <child>
                           <object class="GtkCheckButton" id="checkB_compact">
                             <property name="label" translatable="yes">Compact layout</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -86,6 +88,7 @@
                         <child>
                           <object class="GtkCheckButton" id="checkB_showlines">
                             <property name="label" translatable="yes">Use helper lines in media browser</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -103,6 +106,7 @@
                         <child>
                           <object class="GtkCheckButton" id="checkB_usestop">
                             <property name="label" translatable="yes">Use stop button</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -119,6 +123,7 @@
                         <child>
                           <object class="GtkCheckButton" id="checkB_hoverimage">
                             <property name="label" translatable="yes">Don't show video screen while hovering album image</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -135,6 +140,7 @@
                         <child>
                           <object class="GtkCheckButton" id="checkB_quitifclosed">
                             <property name="label" translatable="yes">Quit application if window is closed</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -170,12 +176,13 @@
                               <object class="GtkSpinButton" id="spinbutton1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="editable">False</property>
                                 <property name="invisible_char">●</property>
                                 <property name="width_chars">2</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
+                                <property name="snap_to_ticks">True</property>
                                 <property name="numeric">True</property>
+                                <property name="wrap">True</property>
                                 <property name="update_policy">if-valid</property>
                               </object>
                               <packing>

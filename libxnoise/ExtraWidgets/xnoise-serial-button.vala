@@ -141,29 +141,29 @@ public class Xnoise.SerialButton : Gtk.Box {
     
     private static const string CSS = """
         .XnoiseSerialButton .button {
-            -GtkToolbar-button-relief: normal;
-            border-radius: 0 0 0 0;
-            border-style:  solid;
-            border-width:  1 0 1 1;
-            -unico-outer-stroke-width: 1px 0 1px 0;
-            -unico-outer-stroke-radius: 0 0 0 0;
+            -GtkToolbar-button-relief:  normal;
+            border-radius:              0px 0px 0px 0px;
+            border-style:               solid;
+            border-width:               1px 0px 1px 1px;
+            -unico-outer-stroke-width:  1px 0px 1px 0px;
+            -unico-outer-stroke-radius: 0px 0px 0px 0px;
         }
         
         .XnoiseSerialButton .button:active,
         .XnoiseSerialButton .button:insensitive {
-            -unico-outer-stroke-width: 1px 0 1px 0;
+            -unico-outer-stroke-width:  1px 0px 1px 0px;
         }
 
         .XnoiseSerialButton .button:first-child {
-            border-radius: 3 0 0 3;
-            border-width:  1 0 1 1;
-            -unico-outer-stroke-width: 1px 0 1px 1px;
+            border-radius:              3px 0px 0px 3px;
+            border-width:               1px 0px 1px 1px;
+            -unico-outer-stroke-width:  1px 0px 1px 1px;
         }
 
         .XnoiseSerialButton .button:last-child {
-            border-radius: 0 3 3 0;
-            border-width:  1;
-            -unico-outer-stroke-width: 1px 1px 1px 0;
+            border-radius:              0px 3px 3px 0px;
+            border-width:               1px;
+            -unico-outer-stroke-width:  1px 1px 1px 0px;
         }
     """;
 }

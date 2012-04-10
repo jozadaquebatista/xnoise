@@ -1,6 +1,6 @@
 /* xnoise-sound-menu-2.vala
  *
- * Copyright (C) 2010-2011  Jörn Magens
+ * Copyright (C) 2010-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
             watch = 0;
         }
         //stdout.printf("%s appeared\n", name);
-        if(name != "com.canonical.indicators.sound")
+        if(name != (new_sid_version ? NEW_SID : OLD_SID))
             return;
         //TODO check for mpris plugin being active
         p = plugin_loader.plugin_htable.lookup("mpris");
@@ -93,11 +93,14 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
     }
 
     private uint watch;
-
+    private bool new_sid_version = false;
+    
     private void intitialize() {
         //print("initialize sm2\n");
+        new_sid_version = !using_old_gsettings_scheme();
+        print("new_sid_version: %s\n", new_sid_version.to_string());
         watch = Bus.watch_name(BusType.SESSION,
-                               "com.canonical.indicators.sound",
+                               (new_sid_version ? NEW_SID : OLD_SID),//"com.canonical.indicator.sound",
                                BusNameWatcherFlags.NONE,
                                on_name_appeared,
                                on_name_vanished);
@@ -122,9 +125,31 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
         }
     }
 
+    private const string OLD_SID = "com.canonical.indicators.sound";
+    private const string NEW_SID = "com.canonical.indicator.sound";
+    
+    private bool using_old_gsettings_scheme() {
+        bool old = false;
+        bool nw  = false;
+        foreach(unowned string s in Settings.list_schemas()) {
+            if(s == OLD_SID) {
+                old = true;
+                break;
+            }
+        }
+        foreach(unowned string s in Settings.list_schemas()) {
+            if(s == NEW_SID) {
+                nw = true;
+                break;
+            }
+        }
+        assert(old != nw);
+        return old;
+    }
+
     private bool soundmenu_gsettings_available() {
         foreach(unowned string s in Settings.list_schemas()) {
-            if(s == "com.canonical.indicators.sound") 
+            if(s == (new_sid_version ? NEW_SID : OLD_SID)) 
                 return true;
         }
         return false;
@@ -135,7 +160,7 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
         if(soundmenu_gsettings_available()) {
             string[] sa;
             string[] res = {};
-            var settings = new Settings("com.canonical.indicators.sound");
+            var settings = new Settings((new_sid_version ? NEW_SID : OLD_SID));
             sa = settings.get_strv("blacklisted-media-players");
             foreach(string s in sa) {
                 if(s != "xnoise")

@@ -37,11 +37,11 @@ public class Xnoise.Worker : Object {
     private AsyncQueue<Job> sync_job_queue           = new AsyncQueue<Job>();
     private AsyncQueue<Job> sync_high_prio_job_queue = new AsyncQueue<Job>();
     
-#if GLIB_2_32
-    private Thread<int> thread;
-#else
+//#if GLIB_2_32
+//    private Thread<int> thread;
+//#else
     private unowned Thread<int> thread;
-#endif
+//#endif
     
     private MainContext local_context;
     private unowned MainContext main_context;
@@ -50,21 +50,21 @@ public class Xnoise.Worker : Object {
     public int thread_id { get { return _thread_id; } }
     
     public Worker(MainContext mc) {
-#if GLIB_2_32
-        print("Using new glib thread api\n");
-        if (!Thread.supported ()) {
-            error("Cannot work without multithreading support.");
-        }
-        
-        this.main_context = mc;
-        
-        try {
-            thread = new Thread.try("xn_" + ((int)Random.next_int()).to_string(), thread_func);
-        }
-        catch(ThreadError e) {
-            print("Error creating thread: %s\n", e.message);
-        }
-#else
+//#if GLIB_2_32
+//        print("Using new glib thread api\n");
+//        if (!Thread.supported ()) {
+//            error("Cannot work without multithreading support.");
+//        }
+//        
+//        this.main_context = mc;
+//        
+//        try {
+//            thread = new Thread.try("xn_" + ((int)Random.next_int()).to_string(), thread_func);
+//        }
+//        catch(ThreadError e) {
+//            print("Error creating thread: %s\n", e.message);
+//        }
+//#else
         print("Using old glib thread api\n");
         if (!Thread.supported ()) {
             error("Cannot work without multithreading support.");
@@ -78,7 +78,7 @@ public class Xnoise.Worker : Object {
         catch(ThreadError e) {
             print("Error creating thread: %s\n", e.message);
         }
-#endif
+//#endif
     }
     
     //TODO: Maybe use only one working function type
