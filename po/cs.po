@@ -1,10 +1,10 @@
-# Pavel Fric <pavelfric@seznam.cz>, 2011.
+# Pavel Fric <pavelfric@seznam.cz>, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-02 18:17+0200\n"
-"PO-Revision-Date: 2011-10-19 15:33+0200\n"
+"PO-Revision-Date: 2012-04-05 11:30+0200\n"
 "Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -41,14 +41,12 @@ msgid "More information on the project website:"
 msgstr "Více informací na projektových stránkách:"
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
-#, fuzzy
 msgid "Last Played"
-msgstr "Přehrávač"
+msgstr "Naposledy přehráno"
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
-#, fuzzy
 msgid "Local Collection"
-msgstr "Prohledat knihovnu znovu"
+msgstr "Místní sbírka"
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
 msgid "Collapse all"
@@ -59,14 +57,12 @@ msgid "Loading ..."
 msgstr "Nahrává se..."
 
 #: ../libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala:41
-#, fuzzy
 msgid "Most Played"
-msgstr "Přehrávač"
+msgstr "Nejvíce hráno"
 
 #: ../libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala:41
-#, fuzzy
 msgid "Videos"
-msgstr "Video"
+msgstr "Videa"
 
 #: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:174
 msgid "Add local folder"
@@ -81,33 +77,28 @@ msgid "Remove"
 msgstr "Odstranit"
 
 #: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:177
-#, fuzzy
 msgid "do full rescan"
-msgstr "Provést úplné znovuprohledání celé knihovny"
+msgstr "Provést znovu úplné prohledání"
 
 #: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:178
-#, fuzzy
 msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
 msgstr ""
-"Vybrat místní složky se skladbami nebo adresy internetových rádií pro jejich "
-"přidání do knihovny. \n"
-"Všechny skladby v knihovně budou dostupné v prohlížeči skladeb."
+"Vyberte místní složky se skladbami nebo proudy internetových médií. \n"
+"Všechny zdroje budou dostupné přes knihovnu Xnoise."
 
 #: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:188
-#, fuzzy
 msgid "xnoise - Add media sources to the library"
-msgstr "xnoise - Přidat skladby do knihovny"
+msgstr "xnoise - Přidat zdroje médii do knihovny"
 
 #: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:211
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:227
-#, fuzzy
 msgid "Location"
-msgstr "Otevřít _umístění"
+msgstr "Umístění"
 
 #: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:252
 #: ../libxnoise/Utils/xnoise-media-importer.vala:86
@@ -409,28 +400,27 @@ msgstr "V_prázdnit seznam skladeb"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:191
 msgid "Clear the tracklist"
-msgstr "_Vprázdnit seznam skladeb"
+msgstr "_Vyprázdnit seznam skladeb"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:192
-#, fuzzy
 msgid "_Rescan collection"
-msgstr "Prohledat knihovnu znovu"
+msgstr "_Prohledat sbírku znovu"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:193
 msgid "_Increase volume"
-msgstr ""
+msgstr "_Zvýšit hlasitost"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:193
 msgid "_Increase playback volume"
-msgstr ""
+msgstr "_Zvýšit hlasitost přehrávání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:194
 msgid "_Decrease volume"
-msgstr ""
+msgstr "_Snížit hlasitost"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:194
 msgid "_Decrease playback volume"
-msgstr ""
+msgstr "_Snížit hlasitost přehrávání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:196
 msgid "_View"
@@ -506,31 +496,28 @@ msgid "random play"
 msgstr "Náhodné přehrávání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1063
-#, fuzzy
 msgid "Enter the URL for playing"
-msgstr "Zadejte adresu (URL) souboru, který se má otevřít"
+msgstr "Zadejte adresu (URL) k přehrání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1079
 msgid "Select media file"
 msgstr "Vyberte soubor se skladbou"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1324
-#, fuzzy
 msgid "Media Collections"
-msgstr "Prohledat knihovnu znovu"
+msgstr "Sbírky multimédií"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1326
-#, fuzzy
 msgid "Playlists"
-msgstr "Přehrát"
+msgstr "Seznamy skladeb"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1328
 msgid "Stores"
-msgstr ""
+msgstr "Úložiště"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1330
 msgid "Devices"
-msgstr ""
+msgstr "Zařízení"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1441
 msgid "Remove all"
@@ -542,7 +529,7 @@ msgstr "Odstranit vybrané skladby"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1451
 msgid "Jump to current position"
-msgstr ""
+msgstr "Skočit na nynější polohu"
 
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1563
@@ -551,7 +538,7 @@ msgstr "Ukázat hlavní nabídku programu"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1598
 msgid "Search..."
-msgstr ""
+msgstr "Hledat..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:192
 msgid ""
@@ -684,13 +671,13 @@ msgstr ""
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Buffer lyrics in database"
-msgstr "Uložit texty v databázi"
+msgstr "Uložit slova písní v databázi"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:391
 #: ../plugins/lastfm/xnoise-lastfm.vala:469
 #, c-format
 msgid "User logged in!"
-msgstr ""
+msgstr "Uživatel je přihlášen!"
 
 #. feedback
 #: ../plugins/lastfm/xnoise-lastfm.vala:395
@@ -698,30 +685,30 @@ msgstr ""
 #: ../plugins/lastfm/xnoise-lastfm.vala:472
 #, c-format
 msgid "User not logged in!"
-msgstr ""
+msgstr "Uživatel není přihlášen!"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:432
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr ""
+msgstr "Zadejte, prosím, své uživatelské jméno pro Last.fm a heslo."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:441
 #, c-format
 msgid "Username:"
-msgstr ""
+msgstr "Uživatelské jméno:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:448
 #, c-format
 msgid "Password:"
-msgstr ""
+msgstr "Heslo:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:463
 msgid "Scrobble played tracks on lastfm"
-msgstr ""
+msgstr "Posílat přehrávané skladby nazpět Last.fm"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:481
 msgid "Apply"
-msgstr ""
+msgstr "Použít"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
@@ -729,7 +716,7 @@ msgstr "Ukázkový přídavný modul pro xnoise"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
 msgid "Load lyrics from chartlyrics.com"
-msgstr "Texty stáhnout z chartlyrics.com"
+msgstr "Slova písně stáhnout z chartlyrics.com"
 
 #: ../plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in.h:1
 msgid "Always keep the current state of xnoise"
@@ -737,16 +724,15 @@ msgstr "Vždy obdržet současný stav xnoise"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "Use lastfm's web services"
-msgstr ""
+msgstr "Použít služby Last.fm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
 msgid "Load lyrics from http://www.lyricwiki.com"
-msgstr "Texty stáhnout z lyricwiki.com"
+msgstr "Slova písně stáhnout z lyricwiki.com"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Load lyrics from azlyrics.com"
-msgstr "Texty stáhnout z chartlyrics.com"
+msgstr "Slova písně stáhnout z azlyrics.com"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
 msgid "Control xnoise using mediakeys"
