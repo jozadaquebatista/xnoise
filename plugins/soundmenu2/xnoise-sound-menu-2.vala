@@ -98,9 +98,9 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
     private void intitialize() {
         //print("initialize sm2\n");
         new_sid_version = !using_old_gsettings_scheme();
-        print("new_sid_version: %s\n", new_sid_version.to_string());
+        //print("new_sid_version: %s\n", new_sid_version.to_string());
         watch = Bus.watch_name(BusType.SESSION,
-                               (new_sid_version ? NEW_SID : OLD_SID),//"com.canonical.indicator.sound",
+                               (new_sid_version ? NEW_SID : OLD_SID),
                                BusNameWatcherFlags.NONE,
                                on_name_appeared,
                                on_name_vanished);
@@ -143,7 +143,14 @@ public class Xnoise.SoundMenu2 : GLib.Object, IPlugin {
                 break;
             }
         }
-        assert(old != nw);
+        if(old == false && nw == false) {
+            if(this.owner != null)
+                Idle.add( () => {
+                    tray_icon.visible = true;
+                    owner.deactivate();
+                    return false;
+                }); 
+        }
         return old;
     }
 
