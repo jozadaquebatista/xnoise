@@ -251,7 +251,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
     }
     
     ~DatabaseLyrics() {
-        //print("remove DatabaseLyrics IL\n");
+        print("remove DatabaseLyrics IL\n");
     }
 
     public uint get_timeout() {
@@ -269,7 +269,7 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
     protected bool timeout_elapsed() {
         if(MainContext.current_source().is_destroyed())
             return false;
-            
+        
         this.cancellable.cancel();
         
         Idle.add( () => {
@@ -279,10 +279,10 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
         });
         
         timeout = 0;
-        Timeout.add_seconds(6, () => {
-            destruct();
-            return false;
-        });
+//        Timeout.add_seconds(6, () => {
+//            destruct();
+//            return false;
+//        });
         return false;
     }
     
@@ -291,15 +291,20 @@ public class Xnoise.DatabaseLyrics : GLib.Object, ILyrics {
         timeout = Timeout.add_seconds(SECONDS_FOR_TIMEOUT, timeout_elapsed);
         
         Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE, this.get_lyrics_from_db);
+        job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.get_lyrics_from_db);
         job.set_arg("artist", this.artist);
         job.set_arg("title", this.title);
         db_worker.push_job(job);
     }
     
     private bool get_lyrics_from_db(Worker.Job job) {
-        if(cancellable.is_cancelled())
+        if(cancellable.is_cancelled()) {
+            Idle.add( () => {
+                destruct();
+                return false;
+            });
             return false;
+        }
         string ar = (string)job.get_arg("artist");
         string ti = (string)job.get_arg("title");
         string txt;

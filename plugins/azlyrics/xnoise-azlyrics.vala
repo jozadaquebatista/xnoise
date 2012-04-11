@@ -163,7 +163,7 @@ public class Xnoise.Azlyrics : GLib.Object, ILyrics {
     }
     
     ~Azlyrics() {
-        print("remove Azlyrics IL\n");
+        //print("remove Azlyrics IL\n");
     }
 
     public uint get_timeout() {
@@ -212,7 +212,7 @@ public class Xnoise.Azlyrics : GLib.Object, ILyrics {
     
     private void find_lyrics() {
         search_str = search_url.printf(prepare_string(ref artist), prepare_string(ref title));
-        print("Azlyrics: search_str is %s\n", search_str);
+        //print("Azlyrics: search_str is %s\n", search_str);
         var search_msg = new Soup.Message("GET", search_str);
         session.queue_message(search_msg, search_cb);
         timeout = Timeout.add_seconds(SECONDS_FOR_TIMEOUT, timeout_elapsed);
