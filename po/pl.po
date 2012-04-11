@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-02 18:17+0200\n"
+"POT-Creation-Date: 2012-04-11 10:48+0200\n"
 "PO-Revision-Date: 2012-02-17 00:49+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -22,16 +22,16 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: ../data/misc/xnoise.desktop.in.in.h:1
+msgid "Xnoise"
+msgstr "Xnoise"
+
+#: ../data/misc/xnoise.desktop.in.in.h:2
 msgid "Media Player"
 msgstr "Odtwarzacz multimedialny"
 
-#: ../data/misc/xnoise.desktop.in.in.h:2
+#: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Organize and play your music and video collections"
 msgstr "Organizuj i odtwarzaj swoją kolekcję muzyki i filmów"
-
-#: ../data/misc/xnoise.desktop.in.in.h:3
-msgid "Xnoise"
-msgstr "Xnoise"
 
 #: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
 #, c-format
@@ -45,6 +45,13 @@ msgstr "Używa gstreamera."
 #: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "Więcej informacji na stronie projektu:"
+
+#. the 'no lyrics found...' also appears in the db provider !!
+#: ../libxnoise/Database/xnoise-db-reader.vala:165
+#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
+#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
+msgid "no lyrics found..."
+msgstr "nie odnaleziono tekstu..."
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
 #, fuzzy
@@ -311,13 +318,6 @@ msgstr "Odtwórz"
 #: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
 msgid "Remove selected track"
 msgstr "Usuń zaznaczone"
-
-#. the 'no lyrics found...' also appears in the db provider !!
-#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
-#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
-#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:319
-msgid "no lyrics found..."
-msgstr "nie odnaleziono tekstu..."
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:68
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:123
@@ -720,10 +720,6 @@ msgstr "Plugin demonstracyjny dla xnoise"
 msgid "Load lyrics from chartlyrics.com"
 msgstr "Wczytuj teksty z chartlyrics.com"
 
-#: ../plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in.h:1
-msgid "Always keep the current state of xnoise"
-msgstr "Zawsze pamiętaj aktualny stan xnoise"
-
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "Use lastfm's web services"
 msgstr "Używaj usługi lastfm"
@@ -759,6 +755,9 @@ msgstr "Używaj ayatana soundmenu"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "Ustaw nazwę okna na odtwarzany tytuł"
+
+#~ msgid "Always keep the current state of xnoise"
+#~ msgstr "Zawsze pamiętaj aktualny stan xnoise"
 
 #~ msgid "unknown organization"
 #~ msgstr "nieznana organizacja"

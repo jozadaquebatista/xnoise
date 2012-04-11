@@ -1,41 +1,47 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-04-11 10:48+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../data/misc/xnoise.desktop.in.in.h:1
-msgid "Media Player"
-msgstr "媒体播放器"
-
-#: ../data/misc/xnoise.desktop.in.in.h:2
-msgid "Organize and play your music and video collections"
-msgstr "组织和播放您的音乐和视频合集"
-
-#: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Xnoise"
 msgstr "Xnoise"
 
-#: ../libxnoise/Application/xnoise-application.vala:93
-#: ../src/xnoise.vala:63
+#: ../data/misc/xnoise.desktop.in.in.h:2
+msgid "Media Player"
+msgstr "媒体播放器"
+
+#: ../data/misc/xnoise.desktop.in.in.h:3
+msgid "Organize and play your music and video collections"
+msgstr "组织和播放您的音乐和视频合集"
+
+#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise 是一款 GTK+ 媒体播放器。"
 
-#: ../libxnoise/Application/xnoise-application.vala:94
-#: ../src/xnoise.vala:64
+#: ../libxnoise/Application/xnoise-application.vala:94 ../src/xnoise.vala:64
 msgid "It uses the gstreamer framework."
 msgstr "它使用了 gstreamer 架构。"
 
-#: ../libxnoise/Application/xnoise-application.vala:95
-#: ../src/xnoise.vala:65
+#: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "可在项目网站上获取更多信息："
+
+#. the 'no lyrics found...' also appears in the db provider !!
+#: ../libxnoise/Database/xnoise-db-reader.vala:165
+#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
+#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
+msgid "no lyrics found..."
+msgstr "未发现歌词..."
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
 msgid "Last Played"
@@ -215,12 +221,15 @@ msgstr "专辑："
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:185
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
 msgstr "当填充媒体浏览器时请等待。或者如果不想等待，直接取消。"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:189
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "当导入媒体时请等待。或者如果不想等待，直接取消。"
 
 #. ARTIST
@@ -291,13 +300,6 @@ msgstr "播放"
 #: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
 msgid "Remove selected track"
 msgstr "移除所选歌曲"
-
-#. the 'no lyrics found...' also appears in the db provider !!
-#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
-#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
-#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:319
-msgid "no lyrics found..."
-msgstr "未发现歌词..."
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:68
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:123
@@ -450,7 +452,9 @@ msgstr "配置(_C)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:392
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
 msgstr "恢复播放列表中的 %u 音轨。数量巨大，xnoise 启动时速度会变慢。"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:454
@@ -458,7 +462,9 @@ msgid "Add media"
 msgstr "添加媒体"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:457
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
 msgstr "这是您第一次启动 xnoise。您希望将媒体导入到库中吗？"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:536
@@ -523,7 +529,8 @@ msgid "Search..."
 msgstr "搜索..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:192
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "字幕名称与视频名称不搭配！不使用字幕文件。"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:551
@@ -637,7 +644,8 @@ msgid "%u tracks found"
 msgstr "未发现 %u 歌曲"
 
 #: ../src/xnoise.vala:74
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr "运行 'xnoise --help' 查看命令行可用选项列表。\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
@@ -689,10 +697,6 @@ msgstr "xnoise 演示插件"
 msgid "Load lyrics from chartlyrics.com"
 msgstr "从 chartlyrics.com 加载歌词"
 
-#: ../plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in.h:1
-msgid "Always keep the current state of xnoise"
-msgstr "总是保持 xnoise 当前状态"
-
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "Use lastfm's web services"
 msgstr "使用 lastfm 网络服务"
@@ -729,3 +733,5 @@ msgstr "使用 ayatana 声音菜单"
 msgid "Set the window name to the current title"
 msgstr "设置窗口名称为当前标题"
 
+#~ msgid "Always keep the current state of xnoise"
+#~ msgstr "总是保持 xnoise 当前状态"

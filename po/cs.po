@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-02 18:17+0200\n"
+"POT-Creation-Date: 2012-04-11 10:48+0200\n"
 "PO-Revision-Date: 2012-04-05 11:30+0200\n"
 "Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -16,16 +16,16 @@ msgstr ""
 "X-Language: cs_CZ\n"
 
 #: ../data/misc/xnoise.desktop.in.in.h:1
+msgid "Xnoise"
+msgstr "Xnoise"
+
+#: ../data/misc/xnoise.desktop.in.in.h:2
 msgid "Media Player"
 msgstr "Přehrávač"
 
-#: ../data/misc/xnoise.desktop.in.in.h:2
+#: ../data/misc/xnoise.desktop.in.in.h:3
 msgid "Organize and play your music and video collections"
 msgstr "Spravujte a přehrávejte své hudební a filmové sbírky"
-
-#: ../data/misc/xnoise.desktop.in.in.h:3
-msgid "Xnoise"
-msgstr "Xnoise"
 
 #: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
 #, c-format
@@ -39,6 +39,13 @@ msgstr "Používá  soustavu GStreamer"
 #: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "Více informací na projektových stránkách:"
+
+#. the 'no lyrics found...' also appears in the db provider !!
+#: ../libxnoise/Database/xnoise-db-reader.vala:165
+#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
+#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
+msgid "no lyrics found..."
+msgstr "Nenalezen žádný písňový text..."
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
 msgid "Last Played"
@@ -301,13 +308,6 @@ msgstr "Přehrát"
 #: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
 msgid "Remove selected track"
 msgstr "Odstranit vybranou skladbu"
-
-#. the 'no lyrics found...' also appears in the db provider !!
-#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
-#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
-#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:319
-msgid "no lyrics found..."
-msgstr "Nenalezen žádný písňový text..."
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:68
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:123
@@ -718,10 +718,6 @@ msgstr "Ukázkový přídavný modul pro xnoise"
 msgid "Load lyrics from chartlyrics.com"
 msgstr "Slova písně stáhnout z chartlyrics.com"
 
-#: ../plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in.h:1
-msgid "Always keep the current state of xnoise"
-msgstr "Vždy obdržet současný stav xnoise"
-
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "Use lastfm's web services"
 msgstr "Použít služby Last.fm"
@@ -757,6 +753,9 @@ msgstr "Používat Ayatana SoundMenu"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "Název okna pojmenovat po současné skladbě"
+
+#~ msgid "Always keep the current state of xnoise"
+#~ msgstr "Vždy obdržet současný stav xnoise"
 
 #~ msgid "unknown organization"
 #~ msgstr "Neznámá organizace"

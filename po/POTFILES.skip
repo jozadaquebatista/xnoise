@@ -4,6 +4,7 @@ plugins/notifications2/xnoise-notifications.c
 plugins/titleToDecoration/xnoise-title-to-decoration.c
 plugins/lastfm/xnoise-lastfm.c
 libxnoise/Application/xnoise-application.c
+libxnoise/Database/xnoise-db-reader.c
 libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.c
 libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.c
 libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.c

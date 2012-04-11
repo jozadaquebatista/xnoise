@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-02 18:17+0200\n"
+"POT-Creation-Date: 2012-04-11 10:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../data/misc/xnoise.desktop.in.in.h:1
-msgid "Media Player"
+msgid "Xnoise"
 msgstr ""
 
 #: ../data/misc/xnoise.desktop.in.in.h:2
-msgid "Organize and play your music and video collections"
+msgid "Media Player"
 msgstr ""
 
 #: ../data/misc/xnoise.desktop.in.in.h:3
-msgid "Xnoise"
+msgid "Organize and play your music and video collections"
 msgstr ""
 
 #: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
@@ -40,6 +40,13 @@ msgstr ""
 
 #: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
 msgid "More information on the project website:"
+msgstr ""
+
+#. the 'no lyrics found...' also appears in the db provider !!
+#: ../libxnoise/Database/xnoise-db-reader.vala:165
+#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
+#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
+msgid "no lyrics found..."
 msgstr ""
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
@@ -296,13 +303,6 @@ msgstr ""
 
 #: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
 msgid "Remove selected track"
-msgstr ""
-
-#. the 'no lyrics found...' also appears in the db provider !!
-#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
-#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
-#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:319
-msgid "no lyrics found..."
 msgstr ""
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:68
@@ -695,10 +695,6 @@ msgstr ""
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
 msgid "Load lyrics from chartlyrics.com"
-msgstr ""
-
-#: ../plugins/cyclic-save-state/CyclicSaveState.xnplugin.desktop.in.h:1
-msgid "Always keep the current state of xnoise"
 msgstr ""
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
