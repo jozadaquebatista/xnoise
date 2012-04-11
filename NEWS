@@ -1,3 +1,14 @@
+xnoise (0.2.1) unstable; urgency=low
+  * update spanish, portugese and czech translations
+  * add simple chinese localization
+  * workaround issues created by Canonical's ignorance
+  * more stability for database lyrics plugin
+  * fix lyrics issue on Debian
+  * some small bugfixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 11 Apr 2012 13:33:45 +0200
+
+
 xnoise (0.2.0) unstable; urgency=low
   * add support for dockable media sources (Categories: Playlists, Media Collection, Stores)
   * add onboard dbus service (not bound to mpris)
