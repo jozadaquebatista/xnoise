@@ -66,12 +66,14 @@ public class Xnoise.MediaImporter : GLib.Object {
         
         main_window.mediaBr.mediabrowsermodel.cancel_fill_model(); // TODO
         
+        Item[] tmp = {};
         //add folders
-        job.items = db_reader.get_media_folders();
+         Item[] fldrs = db_reader.get_media_folders();
+        foreach(Item? i in fldrs) //append
+            tmp += i;
         
         //add streams to list
         Item[] strms = db_reader.get_stream_items("");
-        Item[] tmp = {};
         foreach(Item? i in strms) //append
             tmp += i;
             
@@ -140,9 +142,10 @@ public class Xnoise.MediaImporter : GLib.Object {
         }
         
         int stream_cnt = 0;
-        foreach(Item? i in media_items)
+        foreach(Item? i in media_items) {
             if(i.type == ItemType.STREAM || i.type == ItemType.PLAYLIST)
                 stream_cnt++;
+        }
         if(stream_cnt > 0) {
             job = new Worker.Job(Worker.ExecutionType.ONCE, store_streams_job);
             job.items = {};
@@ -165,7 +168,6 @@ public class Xnoise.MediaImporter : GLib.Object {
         foreach(Item? i in media_items)
             if(i.type == ItemType.LOCAL_FOLDER)
                 tmpx += i;
-        print("lll: %s\n", tmpx[0].uri);
         job.items = (owned)tmpx;
         
         job.set_arg("msg_id", msg_id);
