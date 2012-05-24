@@ -129,6 +129,8 @@ namespace Xnoise {
                 }
                 return item;
             }
+            if(!f.query_exists(null))
+                return Item(ItemType.UNKNOWN);
             FileInfo info = null;
             try {
                 info = f.query_info(attr, FileQueryInfoFlags.NONE , null);

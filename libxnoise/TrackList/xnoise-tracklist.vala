@@ -707,7 +707,7 @@ public class Xnoise.TrackList : TreeView, IParams {
                 }
                 else {
                     string buffer = file.get_uri();
-                    print("2. on_drag_data_received - Aqui se llama a handle_dropped_file");
+                    //print("2. on_drag_data_received - Aqui se llama a handle_dropped_file");
                     handle_dropped_file(ref buffer, ref path, ref is_first);
                 }
             }

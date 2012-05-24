@@ -412,10 +412,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         foreach(Item? item in job.items) {
             tmp = item_converter.to_trackdata(item, EMPTYSTRING);
             if(tmp == null) {
-                var ttd = new TrackData();
-                ttd.item = item;
-                ttd.title = (item.text == null ? item.uri : item.text);
-                tda += ttd;
+                //var ttd = new TrackData();
+                //ttd.item = item;
+                //ttd.title = (item.text == null ? item.uri : item.text);
+                //tda += ttd;
                 continue;
             }
             else {
