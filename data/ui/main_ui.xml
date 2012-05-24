@@ -4,14 +4,15 @@
 		<menu name="FileMenu" action="FileMenuAction">
 			<menuitem action="OpenAction"/>
 			<menuitem action="OpenLocationAction"/>
+			<separator/>
 			<menuitem action="AddRemoveAction"/>
+			<menuitem action="RescanLibraryAction"/>
 			<separator/>
 			<menuitem action="QuitAction" />
 		</menu>
 
 		<menu name="EditMenu" action="EditMenuAction">
 			<menuitem action="ClearTrackListAction"/>
-			<menuitem action="RescanLibraryAction"/>
 			<separator />
 			<menuitem action="IncreaseVolumeAction"/>
 			<menuitem action="DecreaseVolumeAction"/>
