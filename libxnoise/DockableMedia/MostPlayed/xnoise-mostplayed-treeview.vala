@@ -52,7 +52,7 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView {
         this.win = window; // use this ref because static main_window
                            //is not yet set up at construction time
         this.dock = dock;
-        this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+        //this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
         this.set_enable_search(false);
         this.get_selection().set_mode(SelectionMode.MULTIPLE);

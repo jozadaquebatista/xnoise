@@ -58,7 +58,7 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView, TreeQueryable {
         this.win = window;
         this.dock = dock;
         this.ow = ow;
-        this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+        //this.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         this.headers_visible = false;
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
         this.set_enable_search(false);
