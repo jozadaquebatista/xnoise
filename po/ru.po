@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-11 10:48+0200\n"
+"POT-Creation-Date: 2012-05-24 15:13+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -75,6 +75,10 @@ msgstr "Загрузка ..."
 msgid "Most Played"
 msgstr "Медиапроигрыватель"
 
+#: ../libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.vala:41
+msgid "Streams"
+msgstr ""
+
 #: ../libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala:41
 msgid "Videos"
 msgstr ""
@@ -120,7 +124,7 @@ msgid "Location"
 msgstr "Открыть _местоположение"
 
 #: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:252
-#: ../libxnoise/Utils/xnoise-media-importer.vala:86
+#: ../libxnoise/Utils/xnoise-media-importer.vala:88
 msgid "Importing media data. This may take some time..."
 msgstr "Идет импортирование медиафайлов. Это может занять некоторое время..."
 
@@ -313,6 +317,14 @@ msgstr "Изменить исполнителя"
 msgid "Add to tracklist"
 msgstr "Добавить к списко воспроизведения"
 
+#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:39
+msgid "Move to trash"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:78
+msgid "Do you want to move the selected file to trash?"
+msgstr ""
+
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
 msgstr "Играть"
@@ -320,6 +332,11 @@ msgstr "Играть"
 #: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
 msgid "Remove selected track"
 msgstr "Удалить выбранные треки"
+
+#: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:35
+#: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:39
+msgid "Show in parent folder"
+msgstr ""
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:68
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:123
@@ -660,13 +677,13 @@ msgstr "приостановлен"
 msgid "ready to rock"
 msgstr "ready to rock"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:207
+#: ../libxnoise/Utils/xnoise-media-importer.vala:209
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr "Найдено %u дорожек. Обновление библиотеки ..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:415
-#: ../libxnoise/Utils/xnoise-media-importer.vala:477
+#: ../libxnoise/Utils/xnoise-media-importer.vala:417
+#: ../libxnoise/Utils/xnoise-media-importer.vala:479
 #, c-format
 msgid "%u tracks found"
 msgstr "Найдено %u дорожек"

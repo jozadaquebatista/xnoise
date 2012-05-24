@@ -13,6 +13,7 @@ libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala
 libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala
 libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala
 libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala
+libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.vala
 libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala
 libxnoise/ExtraWidgets/AboutDialog/xnoise-about.vala
 libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala
@@ -29,8 +30,10 @@ libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala
 libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala
 libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala
 libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala
+libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala
 libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala
 libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala
+libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala
 libxnoise/ItemHandlers/xnoise-item-converter.vala
 libxnoise/ItemHandlers/xnoise-item-handler-manager.vala
 libxnoise/ItemHandlers/xnoise-item-handler.vala
