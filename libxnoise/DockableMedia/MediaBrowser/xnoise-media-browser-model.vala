@@ -218,8 +218,6 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
     
     private void update_pixbufs() {
-    print("update_pixbufs mbm\n");
-//        this.set_pixbufs();
         if(main_window != null)
             if(main_window.mediaBr != null) {
                 this.ref();

@@ -1,6 +1,6 @@
 /* xnoise-db-creator.vala
  *
- * Copyright (C) 2009-2011  Jörn Magens
+ * Copyright (C) 2009-2012  Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ using Xnoise.Services;
 private class Xnoise.Database.DbCreator {
     private static const string DATABASE_NAME = "db.sqlite";
     private static const string SETTINGS_FOLDER = ".xnoise";
-    public static const int DB_VERSION_MAJOR = 5;
+    public static const int DB_VERSION_MAJOR = 6;
     public static const int DB_VERSION_MINOR = 0;
 
     private static Sqlite.Database? db;
@@ -94,7 +94,8 @@ private class Xnoise.Database.DbCreator {
         Sqlite.Database.open_v2(xnoisedb.get_path(),
                                 out db,
                                 Sqlite.OPEN_CREATE|Sqlite.OPEN_READWRITE,
-                                null) ;
+                                null
+                                );
     }
 
     private static bool exec_stmnt_string(string statement) {
@@ -138,29 +139,29 @@ private class Xnoise.Database.DbCreator {
                 stmt.reset();
                 while(stmt.step() == Sqlite.ROW) {
                     if(stmt.column_int(0) != DB_VERSION_MAJOR) {
-                        if(DB_VERSION_MAJOR == 5 && stmt.column_int(0) == 4) {
-                            if(!exec_stmnt_string(STMT_CREATE_STATISTICS)     )   { reset(); return; }
-                            if(!exec_stmnt_string(STMT_CREATE_USER_LISTS)     )   { reset(); return; }
-                            if(!exec_stmnt_string(STMT_CREATE_USER_LIST_ITEMS))   { reset(); return; }
-                            if(!exec_stmnt_string(STMT_ADD_INT_ADDTIME_TO_ITEMS)) { reset(); return; }
-                            exec_stmnt_string("DELETE FROM version;");
-                            exec_stmnt_string("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR));
+                        //if(DB_VERSION_MAJOR == 5 && stmt.column_int(0) == 4) {
+                        //    if(!exec_stmnt_string(STMT_CREATE_STATISTICS)     )   { reset(); return; }
+                        //    if(!exec_stmnt_string(STMT_CREATE_USER_LISTS)     )   { reset(); return; }
+                        //    if(!exec_stmnt_string(STMT_CREATE_USER_LIST_ITEMS))   { reset(); return; }
+                        //    if(!exec_stmnt_string(STMT_ADD_INT_ADDTIME_TO_ITEMS)) { reset(); return; }
+                        //    exec_stmnt_string("DELETE FROM version;");
+                        //    exec_stmnt_string("INSERT INTO version (major, minor) VALUES (%d, %d);".printf(DB_VERSION_MAJOR, DB_VERSION_MINOR));
+                        //}
+                        //else {
+                        print("Wrong major db version. Updating...\n");
+                        //newly create db if major version is devating
+                        db = null;
+                        is_first_start = true;
+                        try { 
+                            xnoisedb.delete(null);
                         }
-                        else {
-                            print("Wrong major db version\n");
-                            //newly create db if major version is devating
-                            db = null;
-                            is_first_start = true;
-                            try { 
-                                xnoisedb.delete(null);
-                            }
-                            catch(Error e) {
-                                print("%s\n", e.message);
-                            }
-                            check_tables(ref is_first_start);
-                            reset();
-                            return;
+                        catch(Error e) {
+                            print("%s\n", e.message);
                         }
+                        check_tables(ref is_first_start);
+                        reset();
+                        return;
+                         //}
                     }
                 }
             }

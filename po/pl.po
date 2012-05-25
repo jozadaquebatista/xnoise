@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-24 15:13+0200\n"
+"POT-Creation-Date: 2012-05-25 12:56+0200\n"
 "PO-Revision-Date: 2012-02-17 00:49+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -59,15 +59,14 @@ msgid "Last Played"
 msgstr "Odtwarzacz multimedialny"
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
-#, fuzzy
-msgid "Local Collection"
-msgstr "Prz_eskanuj ponownie kolekcję"
+msgid "Music"
+msgstr ""
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
 msgid "Collapse all"
 msgstr "Zwiń wszystko"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:314
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:312
 msgid "Loading ..."
 msgstr "Wczytywanie ..."
 
@@ -772,6 +771,10 @@ msgstr "Używaj ayatana soundmenu"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "Ustaw nazwę okna na odtwarzany tytuł"
+
+#, fuzzy
+#~ msgid "Local Collection"
+#~ msgstr "Prz_eskanuj ponownie kolekcję"
 
 #~ msgid "Always keep the current state of xnoise"
 #~ msgstr "Zawsze pamiętaj aktualny stan xnoise"

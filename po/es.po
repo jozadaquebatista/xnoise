@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-24 15:13+0200\n"
+"POT-Creation-Date: 2012-05-25 12:56+0200\n"
 "PO-Revision-Date: 2012-04-03 22:05-0500\n"
 "Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
@@ -55,15 +55,14 @@ msgid "Last Played"
 msgstr "Reproductor Multimedia"
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
-#, fuzzy
-msgid "Local Collection"
-msgstr "Volver a _escanear la collección"
+msgid "Music"
+msgstr ""
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
 msgid "Collapse all"
 msgstr "Contraer todo"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:314
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:312
 msgid "Loading ..."
 msgstr "Cargando..."
 
@@ -785,6 +784,10 @@ msgstr "Integrar xnoise en el menú del sonido del sistema"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "Establecer el nombre de la ventana con el título actual"
+
+#, fuzzy
+#~ msgid "Local Collection"
+#~ msgstr "Volver a _escanear la collección"
 
 #~ msgid "Always keep the current state of xnoise"
 #~ msgstr "Siempre mantener el estado actual de xnoise"

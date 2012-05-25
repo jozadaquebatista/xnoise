@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-24 15:13+0200\n"
+"POT-Creation-Date: 2012-05-25 12:56+0200\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-"
@@ -59,15 +59,14 @@ msgid "Last Played"
 msgstr "Media lejátszó"
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
-#, fuzzy
-msgid "Local Collection"
-msgstr "R_escan collection"
+msgid "Music"
+msgstr ""
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:314
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:312
 msgid "Loading ..."
 msgstr ""
 
@@ -787,6 +786,10 @@ msgstr ""
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Local Collection"
+#~ msgstr "R_escan collection"
 
 #~ msgid "unknown organization"
 #~ msgstr "ismeretlen szervezet"

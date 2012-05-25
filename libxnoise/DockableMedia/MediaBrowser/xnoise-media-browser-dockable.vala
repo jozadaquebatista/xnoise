@@ -44,7 +44,7 @@ private class Xnoise.MediaBrowserDockable : DockableMedia {
     }
     
     public override string headline() {
-        return _("Local Collection");
+        return _("Music");
     }
     
     public override DockableMedia.Category category() {

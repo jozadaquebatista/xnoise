@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-24 15:13+0200\n"
+"POT-Creation-Date: 2012-05-25 12:56+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shuerhaaken <shuerhaaken@googlemail.com>\n"
@@ -54,14 +54,14 @@ msgid "Last Played"
 msgstr "Zuletzt gepielt"
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
-msgid "Local Collection"
-msgstr "Lokale Sammlung"
+msgid "Music"
+msgstr "Musik"
 
 #: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
 msgid "Collapse all"
 msgstr "Alle einklappen"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:314
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:312
 msgid "Loading ..."
 msgstr "Lade ..."
 
@@ -746,6 +746,9 @@ msgstr "Ayatana SoundMenu benutzen"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "Das Fenster nach dem aktuellen Titel benennen"
+
+#~ msgid "Local Collection"
+#~ msgstr "Lokale Sammlung"
 
 #~ msgid "Always keep the current state of xnoise"
 #~ msgstr "Den aktuellen Zustand von xnoise immer erhalten"
