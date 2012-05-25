@@ -64,7 +64,7 @@ private class Xnoise.MediaBrowserDockable : DockableMedia {
     }
     
     public override Gdk.Pixbuf get_icon() {
-        return icon_repo.local_collection_icon;
+        return icon_repo.title_icon;
     }
 }
 

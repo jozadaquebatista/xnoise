@@ -1,3 +1,13 @@
+xnoise (0.2.2) unstable; urgency=low
+  * fix issue with library rescan
+  * fix issue with removal of last played files
+  * fix issue with update from old db versions
+  * some small bugfixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 25 May 2012 19:23:52 +0200
+
+
+
 xnoise (0.2.1) unstable; urgency=low
   * update spanish, portugese and czech translations
   * add simple chinese localization
