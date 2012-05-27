@@ -30,7 +30,7 @@ AC_DISABLE_STATIC
 
 dnl required versions for xnoise
 GSTREAMER_REQUIRED=0.10.23
-GLIB_REQUIRED=2.28.0
+GLIB_REQUIRED=2.30.0
 LIBXML_REQUIRED=2.6.32
 GIO_REQUIRED=2.16
 GTK_REQUIRED=3.0.0
@@ -368,7 +368,7 @@ XNOISE_PACKAGES="\
     --pkg sqlite3 \
     --pkg taglib_c \
     --pkg linux \
-    --target-glib=`pkg-config --modversion glib-2.0` \
+    --target-glib=2.30 \
 "
 
 
@@ -392,7 +392,6 @@ AM_GLIB_GNU_GETTEXT
 
 IT_PROG_INTLTOOL([0.35.0])
 
-dnl Shave the output
 AM_SILENT_RULES([yes])
 
 AC_CONFIG_FILES([
