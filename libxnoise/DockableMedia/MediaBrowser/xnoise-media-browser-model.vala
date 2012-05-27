@@ -260,15 +260,17 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
         a_job.cancellable = populate_model_cancellable;
         db_worker.push_job(a_job);
-        a_job.finished.connect( (j) => {
-            return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
-            main_window.mediaBr.set_model(this);
-            populating_model = false;
-        });
-        
+        a_job.finished.connect(on_populate_finished);
         return false;
     }
 
+    private void on_populate_finished(Worker.Job sender) {
+        return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
+        sender.finished.disconnect(on_populate_finished);
+        main_window.mediaBr.set_model(this);
+        populating_model = false;
+    }
+    
     // used for populating the data model
     private bool populate_artists_job(Worker.Job job) {
         if(job.cancellable.is_cancelled())

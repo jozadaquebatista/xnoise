@@ -31,6 +31,8 @@
 
 using Sqlite;
 
+using Xnoise;
+using Xnoise.Services;
 
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext/ItemType
@@ -95,19 +97,21 @@ public class Xnoise.HandlerMoveToTrash : ItemHandler {
     }
     
     private void delete_from_database() {
-        Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE, this.delete_from_database_cb);
-        job.finished.connect( () => {
-            string buf = global.searchtext;
-            global.searchtext = Random.next_int().to_string();
-            global.searchtext = buf;
-        });
+        Worker.Job job = new Worker.Job(Worker.ExecutionType.ONCE, this.delete_from_database_cb);
+        job.finished.connect(on_delete_finished);
         db_worker.push_job(job);
     }
     
     private bool delete_from_database_cb(Worker.Job job) {
         db_writer.remove_uri(this.uri);
         return false;
+    }
+    
+    private void on_delete_finished(Worker.Job sender) {
+        sender.finished.disconnect(on_delete_finished);
+        string buf = global.searchtext;
+        global.searchtext = Random.next_int().to_string();
+        global.searchtext = buf;
     }
 }
 
