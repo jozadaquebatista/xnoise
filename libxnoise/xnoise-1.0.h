@@ -2065,7 +2065,6 @@ XnoiseTrackData** xnoise_database_reader_get_all_tracks (XnoiseDatabaseReader* s
 XnoiseItem* xnoise_database_reader_get_streamitem_by_id (XnoiseDatabaseReader* self, gint32 id, const gchar* searchtext);
 gboolean xnoise_database_reader_get_stream_td_for_id (XnoiseDatabaseReader* self, gint id, XnoiseTrackData** val);
 gboolean xnoise_database_reader_get_trackdata_for_uri (XnoiseDatabaseReader* self, gchar** uri, XnoiseTrackData** val);
-gchar** xnoise_database_reader_get_media_files (XnoiseDatabaseReader* self, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_media_folders (XnoiseDatabaseReader* self, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_stream_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_some_lastused_items (XnoiseDatabaseReader* self, gint limit, gint offset, int* result_length1);

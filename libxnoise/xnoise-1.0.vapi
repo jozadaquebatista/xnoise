@@ -25,7 +25,6 @@ namespace Xnoise {
 			public Xnoise.Item[] get_artists_with_search (string searchtext);
 			public Xnoise.Item[]? get_last_played (string searchtext);
 			public bool get_lyrics (string artist, string title, out string txt, out string cred, out string ident);
-			public string[] get_media_files ();
 			public Xnoise.Item[] get_media_folders ();
 			public Xnoise.Item[]? get_most_played (string searchtext);
 			public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
