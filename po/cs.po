@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-25 12:56+0200\n"
+"POT-Creation-Date: 2012-05-29 14:45+0200\n"
 "PO-Revision-Date: 2012-04-05 11:30+0200\n"
 "Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -59,7 +59,7 @@ msgstr "Hudba"
 msgid "Collapse all"
 msgstr "Sbalit vše"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:312
+#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:314
 msgid "Loading ..."
 msgstr "Nahrává se..."
 
@@ -111,16 +111,16 @@ msgstr "Název"
 msgid "Location"
 msgstr "Umístění"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:252
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:253
 #: ../libxnoise/Utils/xnoise-media-importer.vala:88
 msgid "Importing media data. This may take some time..."
 msgstr "Import mediálních dat. Může to chvíli trvat..."
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:276
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:277
 msgid "Select media folder"
 msgstr "Vybrat složku se skladbami"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:345
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:346
 msgid "Add internet radio link"
 msgstr "Přidat odkaz na internetové rádio"
 
@@ -233,16 +233,16 @@ msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
 "wait."
 msgstr ""
-"Počkejte, prosím, dokud se prohlížeč nezaplní skladbami. Nebo akci zrušte, pokud nechcete
-"čekat."
+"Počkejte, prosím, dokud se prohlížeč nezaplní skladbami. Nebo akci zrušte, "
+"pokud nechcetečekat."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:189
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
-"Počkejte, prosím, na dokončení importu dat. Nebo akci zrušte, pokud nechcete
-"čekat."
+"Počkejte, prosím, na dokončení importu dat. Nebo akci zrušte, pokud "
+"nechcetečekat."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
@@ -305,11 +305,11 @@ msgstr "Změnit jméno umělce"
 msgid "Add to tracklist"
 msgstr "Přidat do seznamu skladeb"
 
-#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:39
+#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:41
 msgid "Move to trash"
 msgstr "Vyhodit do koše"
 
-#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:78
+#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:80
 msgid "Do you want to move the selected file to trash?"
 msgstr "Chcete vyhodit vybraný soubor do koše?"
 
@@ -493,8 +493,8 @@ msgid ""
 "You started xnoise for the first time. Do you want to import media into the "
 "library?"
 msgstr ""
-"Poprvé byl spuštěn xnoise. Chcete do knihovny se skladbami vložit "
-"hudbu nebo film? "
+"Poprvé byl spuštěn xnoise. Chcete do knihovny se skladbami vložit hudbu nebo "
+"film? "
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:536
 msgid "no repeat"
@@ -561,8 +561,7 @@ msgstr "Hledat..."
 msgid ""
 "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr ""
-"Název souboru s titulky neodpovídá názvu videa! Soubor s titulky se
-"nepoužívá."
+"Název souboru s titulky neodpovídá názvu videa! Soubor s titulky senepoužívá."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:551
 #, c-format
@@ -584,7 +583,8 @@ msgstr "Přídavný modul pro Gstreamer se v repozitářích nepodařilo najít"
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
 msgstr ""
-"Vyskytla se vážná chyba při instalaci chybějícího přídavného modulu GStreameru"
+"Vyskytla se vážná chyba při instalaci chybějícího přídavného modulu "
+"GStreameru"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:610
 #: ../libxnoise/Player/xnoise-gst-player.vala:621
@@ -681,8 +681,7 @@ msgstr "Nalezeno %u skladeb"
 #: ../src/xnoise.vala:74
 msgid ""
 "Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Zadejte 'xnoise --help', pro celý seznam dostupných příkazů.\n"
+msgstr "Zadejte 'xnoise --help', pro celý seznam dostupných příkazů.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Buffer lyrics in database"
