@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-27 15:48+0200\n"
+"POT-Creation-Date: 2012-05-29 15:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,15 +53,15 @@ msgstr ""
 msgid "Last Played"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-dockable.vala:47
 msgid "Music"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:287
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:314
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:314
 msgid "Loading ..."
 msgstr ""
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-25 12:56+0200\n"
+"POT-Creation-Date: 2012-05-29 14:45+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -47,15 +47,15 @@ msgstr "未发现歌词..."
 msgid "Last Played"
 msgstr "上次播放的"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-dockable.vala:47
 msgid "Music"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:287
 msgid "Collapse all"
 msgstr "折叠全部"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:312
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:314
 msgid "Loading ..."
 msgstr "加载中..."
 
@@ -107,16 +107,16 @@ msgstr "名称"
 msgid "Location"
 msgstr "位置"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:252
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:253
 #: ../libxnoise/Utils/xnoise-media-importer.vala:88
 msgid "Importing media data. This may take some time..."
 msgstr "导入媒体数据。这将花费一段时间..."
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:276
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:277
 msgid "Select media folder"
 msgstr "选择媒体文件夹"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:345
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:346
 msgid "Add internet radio link"
 msgstr "添加网络电台链接"
 
@@ -297,11 +297,11 @@ msgstr "更改艺术家名称"
 msgid "Add to tracklist"
 msgstr "添加到播放列表"
 
-#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:39
+#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:41
 msgid "Move to trash"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:78
+#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:80
 msgid "Do you want to move the selected file to trash?"
 msgstr ""
 

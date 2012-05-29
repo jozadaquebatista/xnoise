@@ -51,15 +51,15 @@ msgstr "Nenalezen žádný text písně..."
 msgid "Last Played"
 msgstr "Naposledy přehráno"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-dockable.vala:47
 msgid "Music"
 msgstr "Hudba"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:287
 msgid "Collapse all"
 msgstr "Sbalit vše"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:314
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:314
 msgid "Loading ..."
 msgstr "Nahrává se..."
 

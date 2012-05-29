@@ -107,7 +107,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     public Notebook tracklistnotebook;
     public AlbumImage albumimage;
     internal TrackInfobar track_infobar;
-    public MediaBrowser mediaBr = null;
+    public MusicBrowser mediaBr = null;
     public TrackList trackList;
     public Gtk.Window fullscreenwindow;
     
@@ -1626,7 +1626,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             mbbx.pack_start(da, false, false, 0);
             
             unowned DockableMedia? dm_mb = null;
-            assert((dm_mb = dockable_media_sources.lookup("MediaBrowserDockable")) != null);
+            assert((dm_mb = dockable_media_sources.lookup("MusicBrowserDockable")) != null);
             mbbx.pack_start(media_sources_nb, true, true, 0);
             //Insert Media Browser first
             TreeIter? media_browser_iter = null;
@@ -1636,7 +1636,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             media_source_selector.selected_dockable_media = dname;
             
             foreach(unowned string n in dockable_media_sources.get_keys()) {
-                if(n == "MediaBrowserDockable")
+                if(n == "MusicBrowserDockable")
                     continue;
                 
                 unowned DockableMedia? d = null;

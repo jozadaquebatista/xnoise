@@ -779,7 +779,7 @@ namespace Xnoise {
 		public Gtk.Paned hpaned;
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
-		public Xnoise.MediaBrowser mediaBr;
+		public Xnoise.MusicBrowser mediaBr;
 		public Gtk.ScrolledWindow mediaBrScrollWin;
 		public Xnoise.MediaSelector media_source_selector;
 		public Xnoise.ControlButton nextButton;
@@ -810,41 +810,6 @@ namespace Xnoise {
 		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public bool usestop { get; set; }
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class MediaBrowser : Gtk.TreeView, Xnoise.IParams, Xnoise.TreeQueryable {
-		public Xnoise.MediaBrowserModel mediabrowsermodel;
-		public MediaBrowser (Xnoise.DockableMedia dock, Gtk.Widget ow);
-		public bool change_model_data ();
-		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
-		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
-		public bool update_view ();
-		public bool use_treelines { get; set; }
-		public signal void sign_activated ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
-		public enum CollectionType {
-			UNKNOWN,
-			HIERARCHICAL,
-			LISTED
-		}
-		public enum Column {
-			ICON,
-			VIS_TEXT,
-			ITEM,
-			LEVEL,
-			N_COLUMNS
-		}
-		public MediaBrowserModel (Xnoise.DockableMedia dock);
-		public void cancel_fill_model ();
-		public void filter ();
-		public Xnoise.DndData[] get_dnd_data_for_path (ref Gtk.TreePath treepath);
-		public int get_max_icon_width ();
-		public void load_children (ref Gtk.TreeIter iter);
-		public void remove_all ();
-		public void unload_children (ref Gtk.TreeIter iter);
-		public bool populating_model { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaExtensions {
@@ -884,6 +849,41 @@ namespace Xnoise {
 		public MediaStreamSchemes ();
 		public bool contains (string? location);
 		public string[] list { get; }
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class MusicBrowser : Gtk.TreeView, Xnoise.IParams, Xnoise.TreeQueryable {
+		public Xnoise.MusicBrowserModel mediabrowsermodel;
+		public MusicBrowser (Xnoise.DockableMedia dock, Gtk.Widget ow);
+		public bool change_model_data ();
+		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
+		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
+		public bool update_view ();
+		public bool use_treelines { get; set; }
+		public signal void sign_activated ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
+		public enum CollectionType {
+			UNKNOWN,
+			HIERARCHICAL,
+			LISTED
+		}
+		public enum Column {
+			ICON,
+			VIS_TEXT,
+			ITEM,
+			LEVEL,
+			N_COLUMNS
+		}
+		public MusicBrowserModel (Xnoise.DockableMedia dock);
+		public void cancel_fill_model ();
+		public void filter ();
+		public Xnoise.DndData[] get_dnd_data_for_path (ref Gtk.TreePath treepath);
+		public int get_max_icon_width ();
+		public void load_children (ref Gtk.TreeIter iter);
+		public void remove_all ();
+		public void unload_children (ref Gtk.TreeIter iter);
+		public bool populating_model { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Params : GLib.Object {

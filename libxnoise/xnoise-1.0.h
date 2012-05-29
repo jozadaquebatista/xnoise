@@ -185,26 +185,26 @@ typedef struct _XnoiseIParamsIface XnoiseIParamsIface;
 typedef struct _XnoiseTreeQueryable XnoiseTreeQueryable;
 typedef struct _XnoiseTreeQueryableIface XnoiseTreeQueryableIface;
 
-#define XNOISE_TYPE_MEDIA_BROWSER (xnoise_media_browser_get_type ())
-#define XNOISE_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowser))
-#define XNOISE_MEDIA_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowserClass))
-#define XNOISE_IS_MEDIA_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER))
-#define XNOISE_IS_MEDIA_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER))
-#define XNOISE_MEDIA_BROWSER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER, XnoiseMediaBrowserClass))
+#define XNOISE_TYPE_MUSIC_BROWSER (xnoise_music_browser_get_type ())
+#define XNOISE_MUSIC_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MUSIC_BROWSER, XnoiseMusicBrowser))
+#define XNOISE_MUSIC_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MUSIC_BROWSER, XnoiseMusicBrowserClass))
+#define XNOISE_IS_MUSIC_BROWSER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MUSIC_BROWSER))
+#define XNOISE_IS_MUSIC_BROWSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MUSIC_BROWSER))
+#define XNOISE_MUSIC_BROWSER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MUSIC_BROWSER, XnoiseMusicBrowserClass))
 
-typedef struct _XnoiseMediaBrowser XnoiseMediaBrowser;
-typedef struct _XnoiseMediaBrowserClass XnoiseMediaBrowserClass;
-typedef struct _XnoiseMediaBrowserPrivate XnoiseMediaBrowserPrivate;
+typedef struct _XnoiseMusicBrowser XnoiseMusicBrowser;
+typedef struct _XnoiseMusicBrowserClass XnoiseMusicBrowserClass;
+typedef struct _XnoiseMusicBrowserPrivate XnoiseMusicBrowserPrivate;
 
-#define XNOISE_TYPE_MEDIA_BROWSER_MODEL (xnoise_media_browser_model_get_type ())
-#define XNOISE_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModel))
-#define XNOISE_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
-#define XNOISE_IS_MEDIA_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
-#define XNOISE_IS_MEDIA_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_BROWSER_MODEL))
-#define XNOISE_MEDIA_BROWSER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_BROWSER_MODEL, XnoiseMediaBrowserModelClass))
+#define XNOISE_TYPE_MUSIC_BROWSER_MODEL (xnoise_music_browser_model_get_type ())
+#define XNOISE_MUSIC_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModel))
+#define XNOISE_MUSIC_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModelClass))
+#define XNOISE_IS_MUSIC_BROWSER_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MUSIC_BROWSER_MODEL))
+#define XNOISE_IS_MUSIC_BROWSER_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MUSIC_BROWSER_MODEL))
+#define XNOISE_MUSIC_BROWSER_MODEL_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MUSIC_BROWSER_MODEL, XnoiseMusicBrowserModelClass))
 
-typedef struct _XnoiseMediaBrowserModel XnoiseMediaBrowserModel;
-typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
+typedef struct _XnoiseMusicBrowserModel XnoiseMusicBrowserModel;
+typedef struct _XnoiseMusicBrowserModelClass XnoiseMusicBrowserModelClass;
 
 #define XNOISE_TYPE_DOCKABLE_MEDIA (xnoise_dockable_media_get_type ())
 #define XNOISE_DOCKABLE_MEDIA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_DOCKABLE_MEDIA, XnoiseDockableMedia))
@@ -215,11 +215,11 @@ typedef struct _XnoiseMediaBrowserModelClass XnoiseMediaBrowserModelClass;
 
 typedef struct _XnoiseDockableMedia XnoiseDockableMedia;
 typedef struct _XnoiseDockableMediaClass XnoiseDockableMediaClass;
-typedef struct _XnoiseMediaBrowserModelPrivate XnoiseMediaBrowserModelPrivate;
+typedef struct _XnoiseMusicBrowserModelPrivate XnoiseMusicBrowserModelPrivate;
 
-#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLUMN (xnoise_media_browser_model_column_get_type ())
+#define XNOISE_MUSIC_BROWSER_MODEL_TYPE_COLUMN (xnoise_music_browser_model_column_get_type ())
 
-#define XNOISE_MEDIA_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_media_browser_model_collection_type_get_type ())
+#define XNOISE_MUSIC_BROWSER_MODEL_TYPE_COLLECTION_TYPE (xnoise_music_browser_model_collection_type_get_type ())
 typedef struct _XnoiseDockableMediaPrivate XnoiseDockableMediaPrivate;
 
 #define XNOISE_DOCKABLE_MEDIA_TYPE_CATEGORY (xnoise_dockable_media_category_get_type ())
@@ -1118,38 +1118,38 @@ struct _XnoiseTreeQueryableIface {
 	gint (*get_model_item_column) (XnoiseTreeQueryable* self);
 };
 
-struct _XnoiseMediaBrowser {
+struct _XnoiseMusicBrowser {
 	GtkTreeView parent_instance;
-	XnoiseMediaBrowserPrivate * priv;
-	XnoiseMediaBrowserModel* mediabrowsermodel;
+	XnoiseMusicBrowserPrivate * priv;
+	XnoiseMusicBrowserModel* mediabrowsermodel;
 };
 
-struct _XnoiseMediaBrowserClass {
+struct _XnoiseMusicBrowserClass {
 	GtkTreeViewClass parent_class;
 };
 
-struct _XnoiseMediaBrowserModel {
+struct _XnoiseMusicBrowserModel {
 	GtkTreeStore parent_instance;
-	XnoiseMediaBrowserModelPrivate * priv;
+	XnoiseMusicBrowserModelPrivate * priv;
 };
 
-struct _XnoiseMediaBrowserModelClass {
+struct _XnoiseMusicBrowserModelClass {
 	GtkTreeStoreClass parent_class;
 };
 
 typedef enum  {
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_ICON = 0,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_VIS_TEXT,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_ITEM,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_LEVEL,
-	XNOISE_MEDIA_BROWSER_MODEL_COLUMN_N_COLUMNS
-} XnoiseMediaBrowserModelColumn;
+	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_ICON = 0,
+	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_VIS_TEXT,
+	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_ITEM,
+	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_LEVEL,
+	XNOISE_MUSIC_BROWSER_MODEL_COLUMN_N_COLUMNS
+} XnoiseMusicBrowserModelColumn;
 
 typedef enum  {
-	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_UNKNOWN = 0,
-	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_HIERARCHICAL = 1,
-	XNOISE_MEDIA_BROWSER_MODEL_COLLECTION_TYPE_LISTED = 2
-} XnoiseMediaBrowserModelCollectionType;
+	XNOISE_MUSIC_BROWSER_MODEL_COLLECTION_TYPE_UNKNOWN = 0,
+	XNOISE_MUSIC_BROWSER_MODEL_COLLECTION_TYPE_HIERARCHICAL = 1,
+	XNOISE_MUSIC_BROWSER_MODEL_COLLECTION_TYPE_LISTED = 2
+} XnoiseMusicBrowserModelCollectionType;
 
 typedef enum  {
 	XNOISE_DOCKABLE_MEDIA_CATEGORY_UNKNOWN = 0,
@@ -1541,7 +1541,7 @@ struct _XnoiseMainWindow {
 	GtkNotebook* tracklistnotebook;
 	XnoiseAlbumImage* albumimage;
 	XnoiseTrackInfobar* track_infobar;
-	XnoiseMediaBrowser* mediaBr;
+	XnoiseMusicBrowser* mediaBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* fullscreenwindow;
 	XnoiseMediaSelector* media_source_selector;
@@ -2141,29 +2141,29 @@ XnoiseDbusThumbnailer* xnoise_dbus_thumbnailer_new (void);
 XnoiseDbusThumbnailer* xnoise_dbus_thumbnailer_construct (GType object_type);
 GType xnoise_iparams_get_type (void) G_GNUC_CONST;
 GType xnoise_tree_queryable_get_type (void) G_GNUC_CONST;
-GType xnoise_media_browser_get_type (void) G_GNUC_CONST;
-GType xnoise_media_browser_model_get_type (void) G_GNUC_CONST;
+GType xnoise_music_browser_get_type (void) G_GNUC_CONST;
+GType xnoise_music_browser_model_get_type (void) G_GNUC_CONST;
 GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
-XnoiseMediaBrowser* xnoise_media_browser_new (XnoiseDockableMedia* dock, GtkWidget* ow);
-XnoiseMediaBrowser* xnoise_media_browser_construct (GType object_type, XnoiseDockableMedia* dock, GtkWidget* ow);
-gboolean xnoise_media_browser_change_model_data (XnoiseMediaBrowser* self);
-gboolean xnoise_media_browser_update_view (XnoiseMediaBrowser* self);
-void xnoise_media_browser_on_row_expanded (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
-void xnoise_media_browser_on_row_collapsed (XnoiseMediaBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
-gboolean xnoise_media_browser_get_use_treelines (XnoiseMediaBrowser* self);
-void xnoise_media_browser_set_use_treelines (XnoiseMediaBrowser* self, gboolean value);
-GType xnoise_media_browser_model_column_get_type (void) G_GNUC_CONST;
-GType xnoise_media_browser_model_collection_type_get_type (void) G_GNUC_CONST;
-XnoiseMediaBrowserModel* xnoise_media_browser_model_new (XnoiseDockableMedia* dock);
-XnoiseMediaBrowserModel* xnoise_media_browser_model_construct (GType object_type, XnoiseDockableMedia* dock);
-gint xnoise_media_browser_model_get_max_icon_width (XnoiseMediaBrowserModel* self);
-void xnoise_media_browser_model_filter (XnoiseMediaBrowserModel* self);
-void xnoise_media_browser_model_remove_all (XnoiseMediaBrowserModel* self);
-void xnoise_media_browser_model_cancel_fill_model (XnoiseMediaBrowserModel* self);
-void xnoise_media_browser_model_unload_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
-void xnoise_media_browser_model_load_children (XnoiseMediaBrowserModel* self, GtkTreeIter* iter);
-XnoiseDndData* xnoise_media_browser_model_get_dnd_data_for_path (XnoiseMediaBrowserModel* self, GtkTreePath** treepath, int* result_length1);
-gboolean xnoise_media_browser_model_get_populating_model (XnoiseMediaBrowserModel* self);
+XnoiseMusicBrowser* xnoise_music_browser_new (XnoiseDockableMedia* dock, GtkWidget* ow);
+XnoiseMusicBrowser* xnoise_music_browser_construct (GType object_type, XnoiseDockableMedia* dock, GtkWidget* ow);
+gboolean xnoise_music_browser_change_model_data (XnoiseMusicBrowser* self);
+gboolean xnoise_music_browser_update_view (XnoiseMusicBrowser* self);
+void xnoise_music_browser_on_row_expanded (XnoiseMusicBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
+void xnoise_music_browser_on_row_collapsed (XnoiseMusicBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
+gboolean xnoise_music_browser_get_use_treelines (XnoiseMusicBrowser* self);
+void xnoise_music_browser_set_use_treelines (XnoiseMusicBrowser* self, gboolean value);
+GType xnoise_music_browser_model_column_get_type (void) G_GNUC_CONST;
+GType xnoise_music_browser_model_collection_type_get_type (void) G_GNUC_CONST;
+XnoiseMusicBrowserModel* xnoise_music_browser_model_new (XnoiseDockableMedia* dock);
+XnoiseMusicBrowserModel* xnoise_music_browser_model_construct (GType object_type, XnoiseDockableMedia* dock);
+gint xnoise_music_browser_model_get_max_icon_width (XnoiseMusicBrowserModel* self);
+void xnoise_music_browser_model_filter (XnoiseMusicBrowserModel* self);
+void xnoise_music_browser_model_remove_all (XnoiseMusicBrowserModel* self);
+void xnoise_music_browser_model_cancel_fill_model (XnoiseMusicBrowserModel* self);
+void xnoise_music_browser_model_unload_children (XnoiseMusicBrowserModel* self, GtkTreeIter* iter);
+void xnoise_music_browser_model_load_children (XnoiseMusicBrowserModel* self, GtkTreeIter* iter);
+XnoiseDndData* xnoise_music_browser_model_get_dnd_data_for_path (XnoiseMusicBrowserModel* self, GtkTreePath** treepath, int* result_length1);
+gboolean xnoise_music_browser_model_get_populating_model (XnoiseMusicBrowserModel* self);
 GType xnoise_dockable_media_category_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_get_type (void) G_GNUC_CONST;
 gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);

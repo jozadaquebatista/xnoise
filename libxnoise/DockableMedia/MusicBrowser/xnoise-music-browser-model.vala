@@ -1,4 +1,4 @@
-/* xnoise-media-browser-model.vala
+/* xnoise-music-browser-model.vala
  *
  * Copyright (C) 2009-2012  Jörn Magens
  *
@@ -36,7 +36,7 @@ using Xnoise.Services;
 using Xnoise.Database;
 
 
-public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
+public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
     private uint search_idlesource = 0;
     private unowned DockableMedia dock;
@@ -64,7 +64,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
     public bool populating_model { get; private set; default = false; }
     
-    public MediaBrowserModel(DockableMedia dock) {
+    public MusicBrowserModel(DockableMedia dock) {
         this.dock = dock;
         icon_repo.icon_theme_changed.connect(update_pixbufs);
         set_column_types(col_types);
@@ -438,7 +438,7 @@ public class Xnoise.MediaBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         TreeIter child;
         Item? item = Item(ItemType.UNKNOWN);
         this.iter_nth_child(out child, iter, 0);
-        this.get(child, MediaBrowserModel.Column.ITEM, out item);
+        this.get(child, MusicBrowserModel.Column.ITEM, out item);
         return (item.type != ItemType.LOADER);
     }
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-25 12:56+0200\n"
+"POT-Creation-Date: 2012-05-29 14:45+0200\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-"
@@ -58,15 +58,15 @@ msgstr ""
 msgid "Last Played"
 msgstr "Media lejátszó"
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala:47
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-dockable.vala:47
 msgid "Music"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.vala:287
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:287
 msgid "Collapse all"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-model.vala:312
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:314
 msgid "Loading ..."
 msgstr ""
 
@@ -124,16 +124,16 @@ msgstr ""
 msgid "Location"
 msgstr "Open _Location"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:252
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:253
 #: ../libxnoise/Utils/xnoise-media-importer.vala:88
 msgid "Importing media data. This may take some time..."
 msgstr "Importing media data. This may take some time..."
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:276
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:277
 msgid "Select media folder"
 msgstr "Média mappa kiválasztása"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:345
+#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:346
 msgid "Add internet radio link"
 msgstr "Internetes rádió link hozzáadása"
 
@@ -322,11 +322,11 @@ msgstr "Change artist name"
 msgid "Add to tracklist"
 msgstr "Track listára ugrás."
 
-#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:39
+#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:41
 msgid "Move to trash"
 msgstr ""
 
-#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:78
+#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:80
 msgid "Do you want to move the selected file to trash?"
 msgstr ""
 

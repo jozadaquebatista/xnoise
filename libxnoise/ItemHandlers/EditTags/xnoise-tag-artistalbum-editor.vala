@@ -40,7 +40,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
     private Dialog dialog;
     private Gtk.Builder builder;
     private string new_content_name = null;
-    private unowned MediaBrowserModel mbm = null;
+    private unowned MusicBrowserModel mbm = null;
     
     private Entry entry;
     
@@ -211,9 +211,9 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //            TreeRowReference tf = (TreeRowReference)job.get_arg("treerowref");
 //            TreeIter iter;
 //            TreePath path  = tf.get_path();
-//            MediaBrowserModel mtmp = (MediaBrowserModel)tf.get_model();
+//            MusicBrowserModel mtmp = (MusicBrowserModel)tf.get_model();
 //            mtmp.get_iter(out iter, path);
-//            mtmp.set(iter, MediaBrowserModel.Column.VIS_TEXT, newname);    
+//            mtmp.set(iter, MusicBrowserModel.Column.VIS_TEXT, newname);    
 //            return false;
 //        });
 //    }
@@ -224,7 +224,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //        TreePath path  = treerowref.get_path();
 //        mbm.get_iter(out album_iter, path);
 //        mbm.iter_parent(out artist_iter, album_iter);
-//        mbm.get(artist_iter, MediaBrowserModel.Column.VIS_TEXT, ref artist);
+//        mbm.get(artist_iter, MusicBrowserModel.Column.VIS_TEXT, ref artist);
 
 //        var job = new Worker.Job(1, Worker.ExecutionType.ONCE, null, this.do_album_case_correction_job);
 //        job.set_arg("artist", artist);
@@ -253,9 +253,9 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
 //            TreeRowReference tf = (TreeRowReference)job.get_arg("treerowref");
 //            TreeIter iter;
 //            TreePath path  = tf.get_path();
-//            MediaBrowserModel mtmp = (MediaBrowserModel)tf.get_model();
+//            MusicBrowserModel mtmp = (MusicBrowserModel)tf.get_model();
 //            mtmp.get_iter(out iter, path);
-//            mtmp.set(iter, MediaBrowserModel.Column.VIS_TEXT, newname);    
+//            mtmp.set(iter, MusicBrowserModel.Column.VIS_TEXT, newname);    
 //            return false;
 //        });
 //    }

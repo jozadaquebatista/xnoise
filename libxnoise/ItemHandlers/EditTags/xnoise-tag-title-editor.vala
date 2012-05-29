@@ -39,7 +39,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
     private unowned Xnoise.Main xn;
     private Dialog dialog;
     private Gtk.Builder builder;
-    private unowned MediaBrowserModel mbm = null;
+    private unowned MusicBrowserModel mbm = null;
     
     private Entry entry_artist;
     private Entry entry_album;

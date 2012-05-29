@@ -42,9 +42,9 @@ libxnoise_la_SOURCES = \
     DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala \
     DockableMedia/History/xnoise-lastplayed-treeview.vala \
     DockableMedia/History/xnoise-lastplayed-treeview-model.vala \
-    DockableMedia/MediaBrowser/xnoise-media-browser-dockable.vala \
-    DockableMedia/MediaBrowser/xnoise-media-browser.vala \
-    DockableMedia/MediaBrowser/xnoise-media-browser-model.vala \
+    DockableMedia/MusicBrowser/xnoise-music-browser-dockable.vala \
+    DockableMedia/MusicBrowser/xnoise-music-browser.vala \
+    DockableMedia/MusicBrowser/xnoise-music-browser-model.vala \
     DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala \
     DockableMedia/MostPlayed/xnoise-mostplayed-treeview.vala \
     DockableMedia/MostPlayed/xnoise-mostplayed-treeview-model.vala \
@@ -176,7 +176,7 @@ DISTCLEANFILES = \
     BackgroundWorker/*.c \
     DockableMedia/*.c \
     DockableMedia/History/*.c \
-    DockableMedia/MediaBrowser/*.c \
+    DockableMedia/MusicBrowser/*.c \
     DockableMedia/MostPlayed/*.c \
     DockableMedia/StreamListing/*.c \
     DockableMedia/VideoListing/*.c \

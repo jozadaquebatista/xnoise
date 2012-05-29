@@ -1,4 +1,4 @@
-/* xnoise-media-browser-dockable.vala
+/* xnoise-music-browser-dockable.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -36,11 +36,11 @@ using Xnoise;
 
 // Media Browser is a special case of the DockableMedia,
 // because it's the main source of media.
-private class Xnoise.MediaBrowserDockable : DockableMedia {
+private class Xnoise.MusicBrowserDockable : DockableMedia {
     private unowned MainWindow win;
     
     public override string name() {
-        return "MediaBrowserDockable";
+        return "MusicBrowserDockable";
     }
     
     public override string headline() {
@@ -57,7 +57,7 @@ private class Xnoise.MediaBrowserDockable : DockableMedia {
         win.mediaBrScrollWin = new ScrolledWindow(null, null);
         win.mediaBrScrollWin.border_width = 0;
         win.mediaBrScrollWin.set_shadow_type(ShadowType.IN);
-        win.mediaBr = new MediaBrowser(this, win.mediaBrScrollWin);
+        win.mediaBr = new MusicBrowser(this, win.mediaBrScrollWin);
         //win.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
         win.mediaBrScrollWin.add(win.mediaBr);
         return (Gtk.Widget)win.mediaBrScrollWin;

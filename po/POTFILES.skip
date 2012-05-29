@@ -6,8 +6,8 @@ plugins/lastfm/xnoise-lastfm.c
 libxnoise/Application/xnoise-application.c
 libxnoise/Database/xnoise-db-reader.c
 libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.c
-libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser.c
-libxnoise/DockableMedia/MediaBrowser/xnoise-media-browser-dockable.c
+libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.c
+libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-dockable.c
 libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.c
 libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.c
 libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.c

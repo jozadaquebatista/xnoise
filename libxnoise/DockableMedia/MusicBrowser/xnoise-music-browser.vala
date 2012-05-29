@@ -1,4 +1,4 @@
-/* xnoise-media-browser.vala
+/* xnoise-music-browser.vala
  *
  * Copyright (C) 2009-2012  Jörn Magens
  *
@@ -35,13 +35,13 @@ using Xnoise;
 using Xnoise.Services;
 
 
-public class Xnoise.MediaBrowser : TreeView, IParams, TreeQueryable {
+public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     private bool dragging;
     private bool _use_treelines = false;
     private CellRendererText renderer = null;
     private Gtk.Menu menu;
     
-    public MediaBrowserModel mediabrowsermodel;
+    public MusicBrowserModel mediabrowsermodel;
     
     public bool use_treelines {
         get {
@@ -96,12 +96,12 @@ public class Xnoise.MediaBrowser : TreeView, IParams, TreeQueryable {
     private unowned Widget ow;
     private unowned DockableMedia dock;
     
-    public MediaBrowser(DockableMedia dock, Widget ow) {
+    public MusicBrowser(DockableMedia dock, Widget ow) {
         this.ow = ow;
         this.dock = dock;
         
         Params.iparams_register(this);
-        mediabrowsermodel = new MediaBrowserModel(dock);
+        mediabrowsermodel = new MusicBrowserModel(dock);
         setup_view();
         Idle.add(this.populate_model);
         this.get_selection().set_mode(SelectionMode.MULTIPLE);
@@ -254,7 +254,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams, TreeQueryable {
     }
 
     public int get_model_item_column() {
-        return (int)MediaBrowserModel.Column.ITEM;
+        return (int)MusicBrowserModel.Column.ITEM;
     }
     
     private Gtk.Menu create_rightclick_menu() {
@@ -269,7 +269,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams, TreeQueryable {
         Array<unowned Action?> array = null;
         TreePath path = (TreePath)list.data;
         mediabrowsermodel.get_iter(out iter, path);
-        mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out item);
+        mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out item);
         array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
         for(int i =0; i < array.length; i++) {
             unowned Action x = array.index(i);
@@ -327,7 +327,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams, TreeQueryable {
             TreeIter iter;
             Pixbuf p;
             this.mediabrowsermodel.get_iter(out iter, treepaths.nth_data(0));
-            this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.ICON, out p);
+            this.mediabrowsermodel.get(iter, MusicBrowserModel.Column.ICON, out p);
             Gtk.drag_source_set_icon_pixbuf(this, p);
         }
         else {
@@ -379,7 +379,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams, TreeQueryable {
             Item? item = Item(ItemType.UNKNOWN);
             TreeIter iter;
             this.mediabrowsermodel.get_iter(out iter, treepath);
-            this.mediabrowsermodel.get(iter, MediaBrowserModel.Column.ITEM, out item);
+            this.mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out item);
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
             if(tmp == null)
                 return;
@@ -419,7 +419,7 @@ public class Xnoise.MediaBrowser : TreeView, IParams, TreeQueryable {
         
     
     public void on_row_expanded(TreeIter iter, TreePath path) {
-//        print("FIXME: xnoise-media-browser.vala - on_row_expanded\n");
+//        print("FIXME: xnoise-music-browser.vala - on_row_expanded\n");
         mediabrowsermodel.load_children(ref iter);
     }
     
@@ -557,11 +557,11 @@ public class Xnoise.MediaBrowser : TreeView, IParams, TreeQueryable {
         pixbufRenderer.stock_id = Gtk.Stock.GO_FORWARD;
         
         column.pack_start(pixbufRenderer, false);
-        column.add_attribute(pixbufRenderer, "pixbuf", MediaBrowserModel.Column.ICON);
+        column.add_attribute(pixbufRenderer, "pixbuf", MusicBrowserModel.Column.ICON);
         column.pack_start(renderer, false);
-        column.add_attribute(renderer, "text", MediaBrowserModel.Column.VIS_TEXT); // no markup!!
-        column.add_attribute(renderer, "level", MediaBrowserModel.Column.LEVEL);
-        column.add_attribute(renderer, "pix", MediaBrowserModel.Column.ICON);
+        column.add_attribute(renderer, "text", MusicBrowserModel.Column.VIS_TEXT); // no markup!!
+        column.add_attribute(renderer, "level", MusicBrowserModel.Column.LEVEL);
+        column.add_attribute(renderer, "pix", MusicBrowserModel.Column.ICON);
         this.insert_column(column, -1);
         
         this.headers_visible = false;
