@@ -404,7 +404,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     /* updates the view, leaves the original model untouched.
        expanded rows are kept as well as the scrollbar position */
     public bool update_view() {
-        double scroll_position = main_window.mediaBrScrollWin.vadjustment.value;
+        double scroll_position = main_window.musicBrScrollWin.vadjustment.value;
         in_update_view = true;
         this.set_model(null);
         this.set_model(mediabrowsermodel);
@@ -412,8 +412,8 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             in_update_view = false;
             return false;
         });
-        main_window.mediaBrScrollWin.vadjustment.set_value(scroll_position);
-        main_window.mediaBrScrollWin.vadjustment.value_changed();
+        main_window.musicBrScrollWin.vadjustment.set_value(scroll_position);
+        main_window.musicBrScrollWin.vadjustment.value_changed();
         return false;
     }
         

@@ -238,7 +238,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
     private void on_ok_button_clicked(Gtk.Button sender) {
         sender.clicked.disconnect(on_ok_button_clicked);
         bool interrupted_populate_model = false;
-        if(main_window.mediaBr.mediabrowsermodel.populating_model) {
+        if(main_window.musicBr.mediabrowsermodel.populating_model) {
             interrupted_populate_model = true; // that means we have to complete filling of the model after import
             //print("was still populating model\n");
         }

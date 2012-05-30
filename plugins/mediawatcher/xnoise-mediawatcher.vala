@@ -219,8 +219,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
         dbw.delete_uri(file.get_uri());
         remove_dir_monitors(file.get_path());
     
-//        if(main_window.mediaBr != null)
-//            main_window.mediaBr.change_model_data();
+//        if(main_window.musicBr != null)
+//            main_window.musicBr.change_model_data();
 //        Idle.add( () => {
         dbw = null;
 //            return false;
@@ -250,8 +250,8 @@ public class Xnoise.Mediawatcher : GLib.Object {
 //            return false;
 //        });
 //        Idle.add( () => {
-//            if(main_window.mediaBr != null)
-//                main_window.mediaBr.change_model_data(); // where is this used
+//            if(main_window.musicBr != null)
+//                main_window.musicBr.change_model_data(); // where is this used
 //            return false;
 //        });
         async_running = false;
@@ -369,7 +369,7 @@ print("++1\n");
             td.db_id = dbw.insert_title(td, f.get_uri());
             TrackData[] tdy = { td };
             Idle.add( () => {
-                main_window.mediaBr.mediabrowsermodel.insert_trackdata_sorted(tdy); 
+                main_window.musicBr.mediabrowsermodel.insert_trackdata_sorted(tdy); 
                 return false; 
             });
         }
@@ -404,8 +404,8 @@ print("++1\n");
 //                setup_monitor_for_path(file.get_path());
 //            }
 //            Idle.add( () => {
-//                if(main_window.mediaBr != null)
-//                    main_window.mediaBr.change_model_data();
+//                if(main_window.musicBr != null)
+//                    main_window.musicBr.change_model_data();
 //                return false;
 //            });
 //        } 

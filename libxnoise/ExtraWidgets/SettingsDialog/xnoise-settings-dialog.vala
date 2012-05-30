@@ -131,7 +131,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
         if((int)(((Gtk.SpinButton)sender).value) < 7 ) ((Gtk.SpinButton)sender).value = 7;
         if((int)(((Gtk.SpinButton)sender).value) > 15) ((Gtk.SpinButton)sender).value = 15;
         fontsizeMB = (int)((Gtk.SpinButton)sender).value;
-        main_window.mediaBr.fontsizeMB = fontsizeMB;
+        main_window.musicBr.fontsizeMB = fontsizeMB;
         global.fontsize_dockable = fontsizeMB;
         Params.set_int_value("fontsizeMB", fontsizeMB);
     }
@@ -139,11 +139,11 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
     private void on_checkbutton_show_lines_clicked(Gtk.Button sender) {
         if(this.checkB_showL.active) {
             Params.set_int_value("use_treelines", 1);
-            main_window.mediaBr.use_treelines = true;
+            main_window.musicBr.use_treelines = true;
         }
         else {
             Params.set_int_value("use_treelines", 0);
-            main_window.mediaBr.use_treelines = false;
+            main_window.musicBr.use_treelines = false;
         }
     }
     

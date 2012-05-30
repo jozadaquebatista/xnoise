@@ -87,7 +87,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
     private Box mbbx;
     public bool quit_if_closed;
-    public ScrolledWindow mediaBrScrollWin = null;
+    public ScrolledWindow musicBrScrollWin = null;
     public ScrolledWindow trackListScrollWin = null;
     public Gtk.ActionGroup action_group;
     public bool _seek;
@@ -107,7 +107,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     public Notebook tracklistnotebook;
     public AlbumImage albumimage;
     internal TrackInfobar track_infobar;
-    public MusicBrowser mediaBr = null;
+    public MusicBrowser musicBr = null;
     public TrackList trackList;
     public Gtk.Window fullscreenwindow;
     
@@ -279,6 +279,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             if(!this.fullscreenwindowvisible) {
                 Idle.add( () => {
                     buffer_last_page = TrackListNoteBookTab.VIDEO;
+                    Params.set_int_value("TrackListNoteBookTab", (int) TrackListNoteBookTab.VIDEO);
                     if(aimage_timeout != 0) {
                         Source.remove(aimage_timeout);
                         aimage_timeout = 0;
@@ -472,7 +473,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         mfd = new AddMediaDialog();
         mfd.sign_finish.connect( () => {
             mfd = null;
-//            Idle.add(mediaBr.change_model_data);
+//            Idle.add(musicBr.change_model_data);
         });
     }
 
@@ -794,9 +795,35 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         
         this.repeatState = (PlayerRepeatMode)Params.get_int_value("repeatstate");
         int hp_position = Params.get_int_value("hp_position");
-        if (hp_position > 0) {
+        if (hp_position > 0)
             this.hpaned.set_position(hp_position);
-        }
+        
+        Idle.add( () => {
+            int x = Params.get_int_value("TrackListNoteBookTab");
+            this.tracklistnotebook.set_current_page(x);
+            switch(x) {
+                case 0: {
+                    sbuttonTL.select(idx_tracklist, false);
+                    sbuttonVI.select(idx_tracklist, false);
+                    sbuttonLY.select(idx_tracklist, false);
+                    break;
+                }
+                case 1: {
+                    sbuttonTL.select(idx_video, false);
+                    sbuttonVI.select(idx_video, false);
+                    sbuttonLY.select(idx_video, false);
+                    break;
+                }
+                case 2: {
+                    sbuttonVI.select(idx_lyrics, false);
+                    sbuttonTL.select(idx_lyrics, false);
+                    sbuttonLY.select(idx_lyrics, false);
+                    break;
+                }
+                default: break;
+            }
+            return false;
+        });
         
         quit_if_closed              = Params.get_bool_value("quit_if_closed");
         not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
@@ -1005,7 +1032,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         mfd = new AddMediaDialog();
         mfd.sign_finish.connect( () => {
             mfd = null;
-//            Idle.add(mediaBr.change_model_data);
+//            Idle.add(musicBr.change_model_data);
         });
     }
 
@@ -1654,6 +1681,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             tracklistnotebook.show_border = false;
             tracklistnotebook.switch_page.connect( (s,np,p) => {
                 global.sign_notify_tracklistnotebook_switched(p);
+                Params.set_int_value("TrackListNoteBookTab", (int)p);
             });
             this.search_entry.key_release_event.connect( (s, e) => {
                 var entry = (Entry)s;

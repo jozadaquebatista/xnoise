@@ -54,13 +54,13 @@ private class Xnoise.MusicBrowserDockable : DockableMedia {
     public override Gtk.Widget? get_widget(MainWindow window) {
         this.win = window; // use this ref because static main_window
                            //is not yet set up at construction time
-        win.mediaBrScrollWin = new ScrolledWindow(null, null);
-        win.mediaBrScrollWin.border_width = 0;
-        win.mediaBrScrollWin.set_shadow_type(ShadowType.IN);
-        win.mediaBr = new MusicBrowser(this, win.mediaBrScrollWin);
-        //win.mediaBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
-        win.mediaBrScrollWin.add(win.mediaBr);
-        return (Gtk.Widget)win.mediaBrScrollWin;
+        win.musicBrScrollWin = new ScrolledWindow(null, null);
+        win.musicBrScrollWin.border_width = 0;
+        win.musicBrScrollWin.set_shadow_type(ShadowType.IN);
+        win.musicBr = new MusicBrowser(this, win.musicBrScrollWin);
+        //win.musicBr.get_style_context().add_class(Gtk.STYLE_CLASS_SIDEBAR);
+        win.musicBrScrollWin.add(win.musicBr);
+        return (Gtk.Widget)win.musicBrScrollWin;
     }
     
     public override Gdk.Pixbuf get_icon() {

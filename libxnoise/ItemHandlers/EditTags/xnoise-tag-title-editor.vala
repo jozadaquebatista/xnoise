@@ -57,7 +57,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
         xn = Main.instance;
         builder = new Gtk.Builder();
         create_widgets();
-        mbm = main_window.mediaBr.mediabrowsermodel;
+        mbm = main_window.musicBr.mediabrowsermodel;
         fill_entries();
         dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
         dialog.show_all();
@@ -285,7 +285,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
 
     private bool finish_job(Worker.Job job) {
         Timeout.add(200, () => {
-            main_window.mediaBr.mediabrowsermodel.filter();
+            main_window.musicBr.mediabrowsermodel.filter();
             return false;
         });
         Timeout.add(300, () => {

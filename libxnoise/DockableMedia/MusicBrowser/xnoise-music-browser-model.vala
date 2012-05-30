@@ -219,9 +219,9 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     
     private void update_pixbufs() {
         if(main_window != null)
-            if(main_window.mediaBr != null) {
+            if(main_window.musicBr != null) {
                 this.ref();
-                main_window.mediaBr.change_model_data();
+                main_window.musicBr.change_model_data();
                 this.unref();
             }
     }
@@ -232,16 +232,16 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     
     public void filter() {
         //print("filter\n");
-        main_window.mediaBr.set_model(null);
+        main_window.musicBr.set_model(null);
         this.clear();
         this.populate_model();
     }
     
     public void remove_all() {
 //        this.stream_in_tree = false;
-        main_window.mediaBr.set_model(null);
+        main_window.musicBr.set_model(null);
         this.clear();
-        main_window.mediaBr.set_model(this);
+        main_window.musicBr.set_model(this);
     }
 
     public void cancel_fill_model() {
@@ -256,7 +256,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             return false;
         populating_model = true;
         //print("populate_model\n");
-        main_window.mediaBr.set_model(null);
+        main_window.musicBr.set_model(null);
         var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
         a_job.cancellable = populate_model_cancellable;
         db_worker.push_job(a_job);
@@ -267,7 +267,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     private void on_populate_finished(Worker.Job sender) {
         return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
         sender.finished.disconnect(on_populate_finished);
-        main_window.mediaBr.set_model(this);
+        main_window.musicBr.set_model(this);
         populating_model = false;
     }
     

@@ -128,7 +128,7 @@ public class Xnoise.Main : GLib.Object {
             if(MainContext.current_source().is_destroyed())
                 return false;
             if(!global.media_import_in_progress && 
-               !main_window.mediaBr.mediabrowsermodel.populating_model) {
+               !main_window.musicBr.mediabrowsermodel.populating_model) {
                 
                 save_tracklist();
                 save_activated_plugins();

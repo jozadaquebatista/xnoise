@@ -1521,7 +1521,7 @@ struct _XnoiseMainWindow {
 	GtkWindow parent_instance;
 	XnoiseMainWindowPrivate * priv;
 	gboolean quit_if_closed;
-	GtkScrolledWindow* mediaBrScrollWin;
+	GtkScrolledWindow* musicBrScrollWin;
 	GtkScrolledWindow* trackListScrollWin;
 	GtkActionGroup* action_group;
 	gboolean _seek;
@@ -1541,7 +1541,7 @@ struct _XnoiseMainWindow {
 	GtkNotebook* tracklistnotebook;
 	XnoiseAlbumImage* albumimage;
 	XnoiseTrackInfobar* track_infobar;
-	XnoiseMusicBrowser* mediaBr;
+	XnoiseMusicBrowser* musicBr;
 	XnoiseTrackList* trackList;
 	GtkWindow* fullscreenwindow;
 	XnoiseMediaSelector* media_source_selector;

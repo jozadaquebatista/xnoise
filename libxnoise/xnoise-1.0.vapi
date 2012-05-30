@@ -779,9 +779,9 @@ namespace Xnoise {
 		public Gtk.Paned hpaned;
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
-		public Xnoise.MusicBrowser mediaBr;
-		public Gtk.ScrolledWindow mediaBrScrollWin;
 		public Xnoise.MediaSelector media_source_selector;
+		public Xnoise.MusicBrowser musicBr;
+		public Gtk.ScrolledWindow musicBrScrollWin;
 		public Xnoise.ControlButton nextButton;
 		public Xnoise.PlayPauseButton playPauseButton;
 		public Xnoise.ControlButton previousButton;

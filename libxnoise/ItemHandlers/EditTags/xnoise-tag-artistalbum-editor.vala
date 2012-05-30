@@ -55,7 +55,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
         td_old = {};
         builder = new Gtk.Builder();
         create_widgets();
-        mbm = main_window.mediaBr.mediabrowsermodel;
+        mbm = main_window.musicBr.mediabrowsermodel;
         mbm.notify["populating-model"].connect( () => {
             if(!global.media_import_in_progress && !mbm.populating_model)
                 infolabel.label = EMPTYSTRING;
@@ -360,7 +360,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
     private bool finish_job(Worker.Job job) {
         db_writer.commit_transaction();
         Timeout.add(200, () => {
-            main_window.mediaBr.mediabrowsermodel.filter();
+            main_window.musicBr.mediabrowsermodel.filter();
             return false;
         });
         Timeout.add(300, () => {
