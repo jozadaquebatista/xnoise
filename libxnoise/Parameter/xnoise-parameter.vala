@@ -231,6 +231,7 @@ not_show_art_on_hover_image=1
 position_album_column=4
 position_artist_column=5
 use_tracknumber_column=1
+TrackListNoteBookTab=0
 repeatstate=2
 posY=129
 quit_if_closed=0

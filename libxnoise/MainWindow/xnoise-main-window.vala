@@ -166,6 +166,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 hide_button_2.set_tooltip_text(SHOW_LIBRARY);
             }
             _media_browser_visible = value;
+            Params.set_bool_value("media_browser_visible", value);
         }
     }
     
@@ -800,31 +801,34 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         
         Idle.add( () => {
             int x = Params.get_int_value("TrackListNoteBookTab");
-            this.tracklistnotebook.set_current_page(x);
             switch(x) {
                 case 0: {
                     sbuttonTL.select(idx_tracklist, false);
                     sbuttonVI.select(idx_tracklist, false);
                     sbuttonLY.select(idx_tracklist, false);
+                    this.tracklistnotebook.set_current_page(0);
                     break;
                 }
                 case 1: {
                     sbuttonTL.select(idx_video, false);
                     sbuttonVI.select(idx_video, false);
                     sbuttonLY.select(idx_video, false);
+                    this.tracklistnotebook.set_current_page(1);
                     break;
                 }
-                case 2: {
-                    sbuttonVI.select(idx_lyrics, false);
-                    sbuttonTL.select(idx_lyrics, false);
-                    sbuttonLY.select(idx_lyrics, false);
+                default: {
+                    sbuttonTL.select(idx_tracklist, false);
+                    sbuttonVI.select(idx_tracklist, false);
+                    sbuttonLY.select(idx_tracklist, false);
+                    this.tracklistnotebook.set_current_page(0);
                     break;
                 }
-                default: break;
             }
+//            bool tmp_media_browser_visible = Params.get_bool_value("media_browser_visible");
+//            if(tmp_media_browser_visible != media_browser_visible)
+//                toggle_media_browser_visibility();
             return false;
         });
-        
         quit_if_closed              = Params.get_bool_value("quit_if_closed");
         not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
         usestop                     = Params.get_bool_value("usestop");
@@ -1562,8 +1566,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             mbbox01 = gb.get_object("mbbox01") as Gtk.Box;
             hpaned.remove(mbbox01);
+//            mbbox01.set_no_show_all(true);
             this.hpaned.pack1(mbbox01, false, false);
-            //this.hpaned.notify["position"].connect(on_hpaned_position_changed);
             //----------------
             
             //VOLUME SLIDE BUTTON
@@ -1612,7 +1616,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             trackListScrollWin = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
             trackListScrollWin.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
             trackListScrollWin.set_shadow_type(Gtk.ShadowType.IN);
-            //tl.set_container(hpaned);
             trackListScrollWin.add(this.trackList);
             
             mbbx = new Gtk.Box(Orientation.VERTICAL, 0);
@@ -1737,6 +1740,21 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.fullscreentoolbar = new FullscreenToolbar(fullscreenwindow);
             
             this.add(mainvbox);
+
+            bool tmp_media_browser_visible = Params.get_bool_value("media_browser_visible");
+            if(!tmp_media_browser_visible) {
+                hpaned_position_buffer = Params.get_int_value("hp_position");
+                hpaned.set_position(0);
+                Idle.add( () => {
+                    mbbox01.hide();
+                    hpaned.set_position(0);
+                    media_browser_visible = false;
+                    return false;
+                });
+            }
+            else {
+                media_browser_visible = true;
+            }
             
             // GTk3 resize grip
             this.set_has_resize_grip(true);
