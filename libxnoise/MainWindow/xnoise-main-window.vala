@@ -190,9 +190,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             { "QuitAction", Gtk.Stock.QUIT, null, null, null, quit_now},
         { "EditMenuAction", null, N_("_Edit") },
             { "ClearTrackListAction", Gtk.Stock.CLEAR, N_("C_lear tracklist"), null, N_("Clear the tracklist"), on_remove_all_button_clicked},
-            { "RescanLibraryAction", Gtk.Stock.REFRESH, N_("_Rescan collection"), null, N_("_Rescan collection"), on_reload_collection_button_clicked},
-            { "IncreaseVolumeAction", null, N_("_Increase volume"), "<Control>plus", N_("_Increase playback volume"), increase_volume },
-            { "DecreaseVolumeAction", null, N_("_Decrease volume"), "<Control>minus", N_("_Decrease playback volume"), decrease_volume },
+            { "RescanLibraryAction", Gtk.Stock.REFRESH, N_("_Rescan collection"), null, N_("Rescan collection"), on_reload_collection_button_clicked},
+            { "IncreaseVolumeAction", null, N_("_Increase volume"), "<Control>plus", N_("Increase playback volume"), increase_volume },
+            { "DecreaseVolumeAction", null, N_("_Decrease volume"), "<Control>minus", N_("Decrease playback volume"), decrease_volume },
+            { "PreviousTrackAction", Gtk.Stock.MEDIA_PREVIOUS, N_("_Previous track"), null, N_("Go to previous track"), menu_prev },
+            { "PlayPauseAction", Gtk.Stock.MEDIA_PLAY, N_("_Toggle play"), null, N_("Toggle playback status"), menutoggle_playpause },
+            { "NextTrackAction", Gtk.Stock.MEDIA_NEXT, N_("_Next track"), null, N_("Go to next track"), menu_next },
             { "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit},
         { "ViewMenuAction", null, N_("_View") },
             { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), "<Alt>1", N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
@@ -591,6 +594,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             search_entry.get_style_context().add_provider(css_provider_search, STYLE_PROVIDER_PRIORITY_APPLICATION);
         else
             search_entry.get_style_context().remove_provider(css_provider_search);
+    }
+    
+    private void menutoggle_playpause() {
+        playPauseButton.clicked();
+    }
+
+    private void menu_next() {
+        if(global.player_state == PlayerState.STOPPED)
+            return;
+        this.change_track(ControlButton.Direction.NEXT);
+    }
+    
+    private void menu_prev() {
+        if(global.player_state == PlayerState.STOPPED)
+            return;
+        this.change_track(ControlButton.Direction.PREVIOUS);
     }
     
     private void increase_volume() {

@@ -17,6 +17,10 @@
 			<menuitem action="IncreaseVolumeAction"/>
 			<menuitem action="DecreaseVolumeAction"/>
 			<separator />
+			<menuitem action="PreviousTrackAction"/>
+			<menuitem action="PlayPauseAction"/>
+			<menuitem action="NextTrackAction"/>
+			<separator />
 			<menuitem action="SettingsAction"/>
 		</menu>
 
