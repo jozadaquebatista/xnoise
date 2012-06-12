@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-29 14:45+0200\n"
+"POT-Creation-Date: 2012-06-12 12:09+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -173,10 +173,10 @@ msgid "Fullscreen"
 msgstr "全屏"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:380
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1158
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1186
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1228
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1258
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1208
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1236
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1278
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1308
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:227
 #: ../plugins/notifications2/xnoise-notifications.vala:192
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:132
@@ -186,10 +186,10 @@ msgid "by"
 msgstr "艺术家"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:382
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1160
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1188
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1230
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1260
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1210
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1238
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1280
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1310
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:229
 #: ../plugins/notifications2/xnoise-notifications.vala:194
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
@@ -375,173 +375,207 @@ msgstr "隐藏库"
 msgid "Show Library"
 msgstr "显示库"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:185
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:186
 msgid "_File"
 msgstr "文件(_F)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:186
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:187
 msgid "open file"
 msgstr "打开文件"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:187
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:188
 msgid "Open _Location"
 msgstr "打开位置(_L)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:187
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:188
 msgid "open remote location"
 msgstr "打开远程地址"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:188
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:189
 msgid "_Add or Remove media"
 msgstr "添加或删除媒体(_A)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:188
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:189
 msgid "manage the content of the xnoise media library"
 msgstr "管理 xnoise 媒体库内容"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:190
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:191
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:191
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:192
 msgid "C_lear tracklist"
 msgstr "清理播放列表(_L)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:191
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:192
 msgid "Clear the tracklist"
 msgstr "清理播放列表"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:192
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:193
 msgid "_Rescan collection"
 msgstr "重新扫描合集(_R)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:193
+#, fuzzy
+msgid "Rescan collection"
+msgstr "重新扫描合集(_R)"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:194
 msgid "_Increase volume"
 msgstr "增大音量(_I)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:193
-msgid "_Increase playback volume"
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:194
+#, fuzzy
+msgid "Increase playback volume"
 msgstr "增大播放音量(_I)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:194
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:195
 msgid "_Decrease volume"
 msgstr "减小音量(_D)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:194
-msgid "_Decrease playback volume"
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:195
+#, fuzzy
+msgid "Decrease playback volume"
 msgstr "减小播放音量(_D)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:196
+#, fuzzy
+msgid "_Previous track"
+msgstr "上一曲"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:196
+#, fuzzy
+msgid "Go to previous track"
+msgstr "前往播放列表。"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:197
+msgid "_Toggle play"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:197
+msgid "Toggle playback status"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:198
+msgid "_Next track"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:198
+#, fuzzy
+msgid "Go to next track"
+msgstr "前往播放列表。"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:200
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:197
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:201
 msgid "_Tracklist"
 msgstr "播放列表(_T)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:197
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:201
 msgid "Go to the tracklist."
 msgstr "前往播放列表。"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:198
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:202
 msgid "_Now Playing"
 msgstr "正在播放(_N)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:199
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:203
 msgid "Go to the now playing screen in the main window."
 msgstr "前往主窗口中的正在播放界面。"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:200
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:204
 msgid "_Lyrics"
 msgstr "歌词(_L)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:200
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:204
 msgid "Go to the lyrics view."
 msgstr "前往歌词视图。"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:201
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:205
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:203
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:207
 msgid "_Config"
 msgstr "配置(_C)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:392
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:397
 #, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
 "startup of xnoise slower."
 msgstr "恢复播放列表中的 %u 音轨。数量巨大，xnoise 启动时速度会变慢。"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:454
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:459
 msgid "Add media"
 msgstr "添加媒体"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:457
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:462
 msgid ""
 "You started xnoise for the first time. Do you want to import media into the "
 "library?"
 msgstr "这是您第一次启动 xnoise。您希望将媒体导入到库中吗？"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:536
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:541
 msgid "no repeat"
 msgstr "不重复"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:542
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:547
 msgid "repeat single"
 msgstr "单曲循环"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:548
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:553
 msgid "repeat all"
 msgstr "重复全部"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:554
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:559
 msgid "random play"
 msgstr "随机播放"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1063
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1113
 msgid "Enter the URL for playing"
 msgstr "输入要播放的 URL"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1079
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1129
 msgid "Select media file"
 msgstr "选择媒体文件"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1324
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1374
 msgid "Media Collections"
 msgstr "媒体合集"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1326
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1376
 msgid "Playlists"
 msgstr "播放列表"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1328
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1378
 msgid "Stores"
 msgstr "商店"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1330
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1380
 msgid "Devices"
 msgstr "设备"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1441
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1491
 msgid "Remove all"
 msgstr "移除全部"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1446
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1496
 msgid "Remove selected titles"
 msgstr "移除所选标题"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1451
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1501
 msgid "Jump to current position"
 msgstr "跳至当前位置"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1563
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1613
 msgid "Show application main menu"
 msgstr "显示应用程序主菜单"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1598
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1647
 msgid "Search..."
 msgstr "搜索..."
 
