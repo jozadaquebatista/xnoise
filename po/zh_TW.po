@@ -7,10 +7,9 @@ msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-29 14:45+0200\n"
-"PO-Revision-Date: 2012-04-06 22:56+0800\n"
+"PO-Revision-Date: 2012-06-07 13:17+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
-"Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
-"net>\n"
+"Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad.net>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -29,16 +28,19 @@ msgstr "媒體播放器"
 msgid "Organize and play your music and video collections"
 msgstr "Xnoise 組織和播放您收藏的音樂和影片"
 
-#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
+#: ../libxnoise/Application/xnoise-application.vala:93
+#: ../src/xnoise.vala:63
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise 是一個用 Gtk+ 寫成的媒體播放器"
 
-#: ../libxnoise/Application/xnoise-application.vala:94 ../src/xnoise.vala:64
+#: ../libxnoise/Application/xnoise-application.vala:94
+#: ../src/xnoise.vala:64
 msgid "It uses the gstreamer framework."
 msgstr "它使用 GStreamer 框架。"
 
-#: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
+#: ../libxnoise/Application/xnoise-application.vala:95
+#: ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "更多資訊在項目網站上："
 
@@ -55,7 +57,7 @@ msgstr "最後播放的"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-dockable.vala:47
 msgid "Music"
-msgstr ""
+msgstr "音樂"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:287
 msgid "Collapse all"
@@ -71,7 +73,7 @@ msgstr "最常播放的"
 
 #: ../libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.vala:41
 msgid "Streams"
-msgstr ""
+msgstr "串流"
 
 #: ../libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala:41
 msgid "Videos"
@@ -148,7 +150,7 @@ msgstr "當停留在專輯圖片時，不顯示影片畫面"
 
 #: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:259
 msgid "Compact layout"
-msgstr ""
+msgstr "緊湊佈局"
 
 #: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:264
 msgid "Use stop button"
@@ -206,12 +208,12 @@ msgstr "於"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
 msgid "Add all visible tracks to tracklist"
-msgstr "所有可見的歌曲添加到曲目清單"
+msgstr "加入所有看得見的歌曲到曲目清單"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:135
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:170
 msgid "xnoise - Edit metadata"
-msgstr "xnoise - 編輯元數據"
+msgstr "xnoise - 編輯詮釋資料"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:138
 msgid "Type new artist name."
@@ -231,15 +233,12 @@ msgstr "專輯："
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:185
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
 msgstr "請稍候，在填補媒體瀏覽器。或取消，如果您不想 等待。"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:189
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "當匯入媒體時，請等待。或取消，如果您不想等待。"
 
 #. ARTIST
@@ -266,11 +265,11 @@ msgstr "標題"
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1179
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1281
 msgid "Genre"
-msgstr "類型"
+msgstr "風格"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:145
 msgid "Uri"
-msgstr ""
+msgstr "網址"
 
 #. YEAR
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:148
@@ -283,12 +282,12 @@ msgstr "年度"
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:151
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:1254
 msgid "Tracknumber"
-msgstr "音軌順序"
+msgstr "曲目順序"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
 msgid "Edit metadata for track"
-msgstr "編輯歌曲元數據"
+msgstr "編輯曲目詮釋資料"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
 msgid "Change album name"
@@ -305,11 +304,11 @@ msgstr "加入曲目清單。"
 
 #: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:41
 msgid "Move to trash"
-msgstr ""
+msgstr "移至回收筒"
 
 #: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:80
 msgid "Do you want to move the selected file to trash?"
-msgstr ""
+msgstr "您想要移動所選檔案到回收筒嗎？"
 
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
@@ -322,7 +321,7 @@ msgstr "刪除選擇的歌曲"
 #: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:35
 #: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:39
 msgid "Show in parent folder"
-msgstr ""
+msgstr "在父資料夾顯示"
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:68
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:123
@@ -375,11 +374,11 @@ msgstr "隱藏媒體"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:50
 msgid "Hide Library"
-msgstr "隱藏媒體庫"
+msgstr "隱藏收藏庫"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:51
 msgid "Show Library"
-msgstr "顯示媒體庫"
+msgstr "顯示收藏庫"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:185
 msgid "_File"
@@ -467,7 +466,7 @@ msgstr "前往歌詞檢視。"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:201
 msgid "_Help"
-msgstr "求助(_H)"
+msgstr "幫助(_H)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:203
 msgid "_Config"
@@ -475,19 +474,15 @@ msgstr "配置(_C)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:392
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "正在復原 %u 個曲目在曲目清單。 這是很大的數量，可能會使 xnoise 啟動較慢。"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:454
 msgid "Add media"
 msgstr "加入媒體"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:457
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
 msgstr "您是首次啟動 xnoise，要將媒體匯入媒體庫嗎？"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:536
@@ -552,8 +547,7 @@ msgid "Search..."
 msgstr "搜尋..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:192
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "字幕名稱和影片名稱不不相符！不使用字幕檔。"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:551
@@ -564,7 +558,7 @@ msgstr "成功安裝缺少的GStreamer插件"
 #: ../libxnoise/Player/xnoise-gst-player.vala:555
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
-msgstr "用戶中止有缺失的 GStreamer 插件安裝"
+msgstr "使用者中止有缺失的 GStreamer 插件安裝"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:559
 #, c-format
@@ -658,18 +652,17 @@ msgstr "準備開始搖滾"
 #: ../libxnoise/Utils/xnoise-media-importer.vala:209
 #, c-format
 msgid "Found %u tracks. Updating library ..."
-msgstr ""
+msgstr "找到 %u 個曲目。正在更新收藏庫..."
 
 #: ../libxnoise/Utils/xnoise-media-importer.vala:417
 #: ../libxnoise/Utils/xnoise-media-importer.vala:479
 #, c-format
 msgid "%u tracks found"
-msgstr ""
+msgstr "%u 曲目找到"
 
 #: ../src/xnoise.vala:74
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "運行 ' xnoise --help ' 以查看可用命令列選項的完整清單。\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Buffer lyrics in database"
@@ -679,7 +672,7 @@ msgstr "在資料庫緩衝歌詞"
 #: ../plugins/lastfm/xnoise-lastfm.vala:469
 #, c-format
 msgid "User logged in!"
-msgstr "用戶登錄！"
+msgstr "使用者登錄！"
 
 #. feedback
 #: ../plugins/lastfm/xnoise-lastfm.vala:395
@@ -687,17 +680,17 @@ msgstr "用戶登錄！"
 #: ../plugins/lastfm/xnoise-lastfm.vala:472
 #, c-format
 msgid "User not logged in!"
-msgstr "用戶沒有登錄！"
+msgstr "使用者沒有登錄！"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:432
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr "請輸入您的 lastfm 用戶名稱和密碼。"
+msgstr "請輸入您的 lastfm 使用者名稱和密碼。"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:441
 #, c-format
 msgid "Username:"
-msgstr "用戶名："
+msgstr "使用者名稱："
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:448
 #, c-format
@@ -738,11 +731,11 @@ msgstr "使用mediakeys，控制 xnoise"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
-msgstr ""
+msgstr "控制 xnoise 用一 MPRIS v2 dbus 介面"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v1 dbus interface"
-msgstr ""
+msgstr "控制 xnoise 用一 MPRIS v1 dbus 介面"
 
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
 msgid "Show notifications one track change"
