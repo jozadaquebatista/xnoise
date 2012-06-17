@@ -819,6 +819,9 @@ public class Xnoise.GstPlayer : GLib.Object {
                         }
                         if(!pf.query_exists(null)) {
                             try {
+                                File parentpath = pf.get_parent();
+                                if(!parentpath.query_exists(null))
+                                    parentpath.make_directory_with_parents(null);
                                 pix.save(pf.get_path(), "jpeg");
                             }
                             catch(Error e) {
