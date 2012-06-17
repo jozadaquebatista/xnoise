@@ -1,7 +1,7 @@
 [XnoisePlugin]
 name=soundmenu2
 module=soundmenu2
-_description=Use ayatana soundmenu
+_description=Use ubuntu/ayatana soundmenu integration
 website=http://code.google.com/p/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 Jörn Magens
