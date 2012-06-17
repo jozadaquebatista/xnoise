@@ -28,7 +28,9 @@ endif
 
 noinst_DATA =  \
     COPYING \
+    MAINTAINERS \
     AUTHORS \
+    xnoise.doap \
     $(NULL)
 
 
