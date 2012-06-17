@@ -1,4 +1,4 @@
-/* xnoise-add-media-dialog.vala
+/* xnoise-add-media-widget.vala
  *
  * Copyright (C) 2009-2012  Jörn Magens
  *
@@ -34,7 +34,7 @@ using Xnoise;
 using Xnoise.Services;
 
 
-public class Xnoise.AddMediaDialog : GLib.Object {
+public class Xnoise.AddMediaWidget : Gtk.Box {
 
     private enum Column {
         NAME,
@@ -44,7 +44,6 @@ public class Xnoise.AddMediaDialog : GLib.Object {
     }
     
     private const string XNOISEICON = Config.UIDIR + "xnoise_16x16.png";
-    private Gtk.Dialog dialog;
     private ListStore listmodel;
     private TreeView tv;
     private CheckButton fullrescancheckb;
@@ -54,15 +53,15 @@ public class Xnoise.AddMediaDialog : GLib.Object {
 
     public signal void sign_finish();
 
-    public AddMediaDialog() {
+    public AddMediaWidget() {
+        GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         xn = Main.instance;
         builder = new Gtk.Builder();
         create_widgets();
         
         fill_media_list();
         
-        dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
-        dialog.show_all();
+        this.show_all();
     }
 
     //    ~AddMediaDialog() {
@@ -149,11 +148,6 @@ public class Xnoise.AddMediaDialog : GLib.Object {
     private void create_widgets() {
         ScrolledWindow tvscrolledwindow = null;
         try {
-            dialog = new Dialog();
-            dialog.set_default_size(800, 600);
-            dialog.set_modal(true);
-            dialog.set_transient_for(main_window);
-            
             builder.add_from_file(Config.UIDIR + "add_media.ui");
             
             var mainvbox           = builder.get_object("mainvbox") as Gtk.Box;
@@ -168,24 +162,32 @@ public class Xnoise.AddMediaDialog : GLib.Object {
             var descriptionlabel   = builder.get_object("descriptionlabel") as Label;
             
             fullrescancheckb       = builder.get_object("fullrescancheckb") as CheckButton;
-            var bcancel            = (Button)this.dialog.add_button(Gtk.Stock.CANCEL, 0);
-            var bok                = (Button)this.dialog.add_button(Gtk.Stock.OK, 1);
             
             labeladdfolder.label   = _("Add local folder");
             labeladdstream.label   = _("Add media stream");
             labelremove.label      = _("Remove");
             fullrescancheckb.label = _("do full rescan");
             descriptionlabel.label = _("Select local media folders or internet media streams. \nAll media sources will be available via xnoise's library.");
+            this.pack_start(mainvbox, true, true, 0);
             
+            var bok = new Gtk.Button.from_stock(Gtk.Stock.OK);
+            bok.can_focus = false;
+            this.pack_start(bok, false, false, 0);
             bok.clicked.connect(on_ok_button_clicked);
-            bcancel.clicked.connect(on_cancel_button_clicked);
-            baddfolder.clicked.connect(on_add_folder_button_clicked);
-            baddradio.clicked.connect(on_add_radio_button_clicked);
-            brem.clicked.connect(on_remove_button_clicked);
             
-            ((Gtk.Box)this.dialog.get_content_area()).add(mainvbox);
-            this.dialog.set_icon_from_file(XNOISEICON);
-            this.dialog.set_title(_("xnoise - Add media sources to the library"));
+            var bcancel = new Gtk.Button.from_stock(Gtk.Stock.GO_BACK);
+            bcancel.can_focus = false;
+            this.pack_start(bcancel, false, false, 0);
+            bcancel.clicked.connect(on_cancel_button_clicked);
+            
+            Idle.add( () => {
+//                bok.clicked.connect(on_ok_button_clicked);
+//                bcancel.clicked.connect(on_cancel_button_clicked);
+                baddfolder.clicked.connect(on_add_folder_button_clicked);
+                baddradio.clicked.connect(on_add_radio_button_clicked);
+                brem.clicked.connect(on_remove_button_clicked);
+                return false;
+            });
         }
         catch (GLib.Error e) {
             var msg = new Gtk.MessageDialog(null,
@@ -236,13 +238,12 @@ public class Xnoise.AddMediaDialog : GLib.Object {
     }
 
     private void on_ok_button_clicked(Gtk.Button sender) {
-        sender.clicked.disconnect(on_ok_button_clicked);
+        main_window.dialognotebook.set_current_page(0);
         bool interrupted_populate_model = false;
         if(main_window.musicBr.mediabrowsermodel.populating_model) {
             interrupted_populate_model = true; // that means we have to complete filling of the model after import
             //print("was still populating model\n");
         }
-        
         var prg_bar = new Gtk.ProgressBar();
         prg_bar.set_fraction(0.0);
         prg_bar.set_text("0 / 0");
@@ -254,28 +255,26 @@ public class Xnoise.AddMediaDialog : GLib.Object {
                                 true,
                                 5,
                                 prg_bar);
-            
             Item[] media_items = harvest_media_locations();
-            
             global.media_import_in_progress = true;
-            
             media_importer.import_media_groups(media_items, msg_id, fullrescancheckb.get_active(), interrupted_populate_model);
-            
-            this.dialog.destroy();
+            main_window.dialognotebook.set_current_page(0);
             this.sign_finish();
             return false;
         });
     }
 
     private void on_cancel_button_clicked() {
-        this.dialog.destroy();
+        main_window.dialognotebook.set_current_page(0);
+        listmodel.clear();
+        fill_media_list();
         this.sign_finish();
     }
 
     private void on_add_folder_button_clicked() {
         Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
             _("Select media folder"),
-            this.dialog,
+            main_window,
             Gtk.FileChooserAction.SELECT_FOLDER,
             Gtk.Stock.CANCEL,
             Gtk.ResponseType.CANCEL,
@@ -304,7 +303,7 @@ public class Xnoise.AddMediaDialog : GLib.Object {
     private void on_add_radio_button_clicked() {
         radiodialog = new Gtk.Dialog();
         radiodialog.set_modal(true);
-        radiodialog.set_transient_for(dialog);
+        radiodialog.set_transient_for(main_window);
         
         radioentry = new Gtk.Entry();
         radioentry.set_width_chars(50);

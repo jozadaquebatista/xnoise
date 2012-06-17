@@ -477,9 +477,8 @@ public class Xnoise.LfmWidget: Gtk.Box {
         feedback_label.ypad = 20;
         this.pack_start(feedback_label, false, false, 0);
         
-        b = new Button();
-        b.set_label(_("Apply"));
-        this.pack_start(b, true, true, 0);
+        b = new Button.from_stock(Gtk.Stock.APPLY);
+        this.pack_start(b, false, false, 0);
         this.border_width = 4;
     }
 }

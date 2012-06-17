@@ -105,6 +105,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     public ControlButton stopButton;
     public Notebook browsernotebook;
     public Notebook tracklistnotebook;
+    public Notebook dialognotebook;
     public AlbumImage albumimage;
     internal TrackInfobar track_infobar;
     public MusicBrowser musicBr = null;
@@ -474,11 +475,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             userinfo.popdown(msg_id);
             return false;
         });
-        mfd = new AddMediaDialog();
-        mfd.sign_finish.connect( () => {
-            mfd = null;
-//            Idle.add(musicBr.change_model_data);
-        });
+        dialognotebook.set_current_page(2);
+//        mfd = new AddMediaDialog();
+//        mfd.sign_finish.connect( () => {
+//            mfd = null;
+////            Idle.add(musicBr.change_model_data);
+//        });
     }
 
     public void toggle_fullscreen() {
@@ -1050,13 +1052,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         dialog.destroy();
     }
 
-    private AddMediaDialog mfd;
+//    private AddMediaDialog mfd;
     private void on_menu_add() {
-        mfd = new AddMediaDialog();
-        mfd.sign_finish.connect( () => {
-            mfd = null;
-//            Idle.add(musicBr.change_model_data);
-        });
+        dialognotebook.set_current_page(2);
+//        mfd = new AddMediaDialog();
+//        mfd.sign_finish.connect( () => {
+//            mfd = null;
+////            Idle.add(musicBr.change_model_data);
+//        });
     }
 
     private void on_location_add() {
@@ -1167,10 +1170,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     private void on_settings_edit() {
-        var settingsD = new SettingsDialog();
-        settingsD.sign_finish.connect( () => {
-            settingsD = null;
-        });
+        dialognotebook.set_current_page(1);
     }
 
     public void set_displayed_title(ref string? newuri, string? tagname, string? tagvalue) {
@@ -1705,6 +1705,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 global.sign_notify_tracklistnotebook_switched(p);
                 Params.set_int_value("TrackListNoteBookTab", (int)p);
             });
+            dialognotebook = gb.get_object("mainNB") as Gtk.Notebook;
             this.search_entry.key_release_event.connect( (s, e) => {
                 var entry = (Entry)s;
                 global.searchtext = entry.text;
@@ -1775,6 +1776,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 media_browser_visible = true;
             }
             
+            dialognotebook.append_page(new SettingsWidget(), null);
+            dialognotebook.append_page(new AddMediaWidget(), null);
             // GTk3 resize grip
             this.set_has_resize_grip(true);
         }

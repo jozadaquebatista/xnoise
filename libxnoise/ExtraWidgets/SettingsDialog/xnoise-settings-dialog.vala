@@ -1,4 +1,4 @@
-/* xnoise-settings-dialog.vala
+/* xnoise-settings-widget.vala
  *
  * Copyright (C) 2009-2012  Jörn Magens
  *
@@ -32,13 +32,8 @@ using Gtk;
 using Xnoise;
 using Xnoise.PluginModule;
 
-public errordomain Xnoise.SettingsDialogError {
-    FILE_NOT_FOUND,
-    GENERAL_ERROR
-}
 
-
-public class Xnoise.SettingsDialog : Gtk.Builder {
+public class Xnoise.SettingsWidget : Gtk.Box {
     private unowned Main xn;
     private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
     private PluginManagerTree plugin_manager_tree;
@@ -64,11 +59,10 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
         N_COLUMNS
     }
     
-    public Gtk.Dialog dialog;
-
     public signal void sign_finish();
 
-    public SettingsDialog() {
+    public SettingsWidget() {
+        GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         this.xn = Main.instance;
         try {
             this.setup_widgets();
@@ -78,9 +72,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
                 return;
         }
         initialize_members();
-        
-        dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
-        dialog.show_all();
+        this.show_all();
     }
 
     private void initialize_members() {
@@ -193,7 +185,7 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
     
     private void on_close_button_clicked() {
         Params.write_all_parameters_to_file();
-        this.dialog.destroy();
+        main_window.dialognotebook.set_current_page(0);
         sign_finish();
     }
 
@@ -226,88 +218,94 @@ public class Xnoise.SettingsDialog : Gtk.Builder {
         //just remove all tabs and rebuild them
         remove_plugin_tabs();
         add_plugin_tabs();
-        this.dialog.show_all();
+        this.show_all();
     }
 
-    private bool setup_widgets() throws Error {
+    private Builder builder;
+    private bool setup_widgets() {
+        builder = new Builder();
         try {
-            File f = File.new_for_path(SETTINGS_UI_FILE);
-            if(!f.query_exists(null)) throw new SettingsDialogError.FILE_NOT_FOUND("Ui file not found!");
-            this.add_from_file(SETTINGS_UI_FILE);
-            this.dialog = this.get_object("settingsDialog") as Gtk.Dialog;
-            dialog.set_transient_for(main_window);
-            this.dialog.set_modal(true);
+            this.builder.add_from_file(SETTINGS_UI_FILE);
             
-            Label general_label = this.get_object("label1") as Gtk.Label;
+            Label general_label = this.builder.get_object("label1") as Gtk.Label;
             general_label.set_text(_("General"));
-            Label plugins_label = this.get_object("label6") as Gtk.Label;
+            Label plugins_label = this.builder.get_object("label6") as Gtk.Label;
             plugins_label.set_text(_("Plugins"));
             
-            checkB_showL = this.get_object("checkB_showlines") as Gtk.CheckButton;
+            checkB_showL = this.builder.get_object("checkB_showlines") as Gtk.CheckButton;
             checkB_showL.can_focus = false;
-            checkB_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
+            Idle.add( () => {
+                checkB_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
+                return false;
+            });
             checkB_showL.label = _("Enable grid lines in media browser");
             
-            checkB_hoverimage = this.get_object("checkB_hoverimage") as Gtk.CheckButton;
+            checkB_hoverimage = this.builder.get_object("checkB_hoverimage") as Gtk.CheckButton;
             checkB_hoverimage.can_focus = false;
-            checkB_hoverimage.clicked.connect(this.on_checkbutton_mediabr_hoverimage_clicked);
+            Idle.add( () => {
+                checkB_hoverimage.clicked.connect(this.on_checkbutton_mediabr_hoverimage_clicked);
+                return false;
+            });
             checkB_hoverimage.label = _("Don't show video screen while hovering album image");
             
-            checkB_compact = this.get_object("checkB_compact") as Gtk.CheckButton;
+            checkB_compact = this.builder.get_object("checkB_compact") as Gtk.CheckButton;
             checkB_compact.can_focus = false;
-            checkB_compact.clicked.connect(this.on_checkbutton_compact_clicked);
+            Idle.add( () => {
+                checkB_compact.clicked.connect(this.on_checkbutton_compact_clicked);
+                return false;
+            });
             checkB_compact.label = _("Compact layout");
             
-            checkB_usestop = this.get_object("checkB_usestop") as Gtk.CheckButton;
+            checkB_usestop = this.builder.get_object("checkB_usestop") as Gtk.CheckButton;
             checkB_usestop.can_focus = false;
-            checkB_usestop.clicked.connect(this.on_checkbutton_usestop_clicked);
+            Idle.add( () => {
+                checkB_usestop.clicked.connect(this.on_checkbutton_usestop_clicked);
+                return false;
+            });
             checkB_usestop.label = _("Use stop button");
             
-            checkB_quitifclosed = this.get_object("checkB_quitifclosed") as Gtk.CheckButton;
+            checkB_quitifclosed = this.builder.get_object("checkB_quitifclosed") as Gtk.CheckButton;
             checkB_quitifclosed.can_focus = false;
-            checkB_quitifclosed.clicked.connect(this.on_checkbutton_quitifclosed_clicked);
+            Idle.add( () => {
+                checkB_quitifclosed.clicked.connect(this.on_checkbutton_quitifclosed_clicked);
+                return false;
+            });
             checkB_quitifclosed.label = _("Quit application if window is closed");
             
-            var closeButton = this.get_object("buttonclose") as Gtk.Button;
+            notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
+            notebook.scrollable = false;
+            this.pack_start(notebook, true, true, 0);
+
+            var closeButton = new Gtk.Button.from_stock(Gtk.Stock.GO_BACK);
             closeButton.can_focus = false;
+            this.pack_start(closeButton, false, false, 0);
             closeButton.clicked.connect(this.on_close_button_clicked);
             
-            var fontsize_label = this.get_object("fontsize_label") as Gtk.Label;
+            var fontsize_label = this.builder.get_object("fontsize_label") as Gtk.Label;
             fontsize_label.label = _("Media browser fontsize:");
             
-            sb = this.get_object("spinbutton1") as Gtk.SpinButton;
+            sb = this.builder.get_object("spinbutton1") as Gtk.SpinButton;
             sb.set_value(8.0);
             sb.changed.connect(this.on_mb_font_changed);
             
-            scrollWinPlugins = this.get_object("scrollWinPlugins") as Gtk.ScrolledWindow;
+            scrollWinPlugins = this.builder.get_object("scrollWinPlugins") as Gtk.ScrolledWindow;
             scrollWinPlugins.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
             
-            notebook = this.get_object("notebook1") as Gtk.Notebook;
-            notebook.scrollable = false;
-            
-            this.dialog.set_default_icon_name("xnoise");
-            this.dialog.set_position(Gtk.WindowPosition.CENTER);
-            
-            add_plugin_tabs();
-            
-            plugin_manager_tree = new PluginManagerTree();
-            this.dialog.realize.connect(on_dialog_realized);
-            scrollWinPlugins.add(plugin_manager_tree);
-            
-            plugin_manager_tree.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
+            Timeout.add_seconds(2, () => {
+                add_plugin_tabs();
+                plugin_manager_tree = new PluginManagerTree();
+                scrollWinPlugins.add(plugin_manager_tree);
+                
+                plugin_manager_tree.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
+                this.show_all();
+                return false;
+            });
         }
         catch (GLib.Error e) {
             var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
                 Gtk.ButtonsType.OK, "Failed to build settings window! \n" + e.message);
             msg.run();
-            throw new SettingsDialogError.GENERAL_ERROR("Error creating Settings Dialog.\n");
         }
         return true;
-    }
-    
-    private void on_dialog_realized() {
-        Requisition req;
-        dialog.get_child_requisition(out req);
-        plugin_manager_tree.set_width(req.width);
     }
 }

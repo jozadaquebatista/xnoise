@@ -133,13 +133,6 @@ private class Xnoise.PluginManagerTree: Gtk.TreeView {
         this.button_press_event.connect(this.on_button_press);
     }
 
-    public void set_width(int w) {
-        text.wrap_mode = Pango.WrapMode.WORD_CHAR;
-        text.wrap_width = w - checkColumn.width - iconColumn.width;
-        this.set_model(null);
-        this.set_model(listmodel);
-    }
-
     private void setup_entries() {
         foreach(string s in plugin_loader.get_info_files()) {
             string name, description, icon, author, website, license, copyright, module;

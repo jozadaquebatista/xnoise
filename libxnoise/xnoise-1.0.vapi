@@ -479,9 +479,9 @@ namespace Xnoise {
 		public Action ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class AddMediaDialog : GLib.Object {
+	public class AddMediaWidget : Gtk.Box {
 		public Gtk.Builder builder;
-		public AddMediaDialog ();
+		public AddMediaWidget ();
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -773,6 +773,7 @@ namespace Xnoise {
 		public Gtk.ActionGroup action_group;
 		public Xnoise.AlbumImage albumimage;
 		public Gtk.Notebook browsernotebook;
+		public Gtk.Notebook dialognotebook;
 		public bool drag_on_content_area;
 		public Xnoise.FullscreenToolbar fullscreentoolbar;
 		public Gtk.Window fullscreenwindow;
@@ -928,9 +929,8 @@ namespace Xnoise {
 		public signal void sign_selected (int idx);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class SettingsDialog : Gtk.Builder {
-		public Gtk.Dialog dialog;
-		public SettingsDialog ();
+	public class SettingsWidget : Gtk.Box {
+		public SettingsWidget ();
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -1192,11 +1192,6 @@ namespace Xnoise {
 		STOPPED,
 		PLAYING,
 		PAUSED
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public errordomain SettingsDialogError {
-		FILE_NOT_FOUND,
-		GENERAL_ERROR
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text, string providername);

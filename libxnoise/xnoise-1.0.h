@@ -234,16 +234,16 @@ typedef struct _XnoiseDockableMediaPrivate XnoiseDockableMediaPrivate;
 typedef struct _XnoiseMainWindow XnoiseMainWindow;
 typedef struct _XnoiseMainWindowClass XnoiseMainWindowClass;
 
-#define XNOISE_TYPE_ADD_MEDIA_DIALOG (xnoise_add_media_dialog_get_type ())
-#define XNOISE_ADD_MEDIA_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialog))
-#define XNOISE_ADD_MEDIA_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialogClass))
-#define XNOISE_IS_ADD_MEDIA_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG))
-#define XNOISE_IS_ADD_MEDIA_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ADD_MEDIA_DIALOG))
-#define XNOISE_ADD_MEDIA_DIALOG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ADD_MEDIA_DIALOG, XnoiseAddMediaDialogClass))
+#define XNOISE_TYPE_ADD_MEDIA_WIDGET (xnoise_add_media_widget_get_type ())
+#define XNOISE_ADD_MEDIA_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ADD_MEDIA_WIDGET, XnoiseAddMediaWidget))
+#define XNOISE_ADD_MEDIA_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ADD_MEDIA_WIDGET, XnoiseAddMediaWidgetClass))
+#define XNOISE_IS_ADD_MEDIA_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ADD_MEDIA_WIDGET))
+#define XNOISE_IS_ADD_MEDIA_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ADD_MEDIA_WIDGET))
+#define XNOISE_ADD_MEDIA_WIDGET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ADD_MEDIA_WIDGET, XnoiseAddMediaWidgetClass))
 
-typedef struct _XnoiseAddMediaDialog XnoiseAddMediaDialog;
-typedef struct _XnoiseAddMediaDialogClass XnoiseAddMediaDialogClass;
-typedef struct _XnoiseAddMediaDialogPrivate XnoiseAddMediaDialogPrivate;
+typedef struct _XnoiseAddMediaWidget XnoiseAddMediaWidget;
+typedef struct _XnoiseAddMediaWidgetClass XnoiseAddMediaWidgetClass;
+typedef struct _XnoiseAddMediaWidgetPrivate XnoiseAddMediaWidgetPrivate;
 
 #define XNOISE_TYPE_FULLSCREEN_PROGRESS_BAR (xnoise_fullscreen_progress_bar_get_type ())
 #define XNOISE_FULLSCREEN_PROGRESS_BAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_FULLSCREEN_PROGRESS_BAR, XnoiseFullscreenProgressBar))
@@ -288,16 +288,16 @@ typedef struct _XnoiseFullscreenToolbarLeaveVideoFSButton XnoiseFullscreenToolba
 typedef struct _XnoiseFullscreenToolbarLeaveVideoFSButtonClass XnoiseFullscreenToolbarLeaveVideoFSButtonClass;
 typedef struct _XnoiseFullscreenToolbarLeaveVideoFSButtonPrivate XnoiseFullscreenToolbarLeaveVideoFSButtonPrivate;
 
-#define XNOISE_TYPE_SETTINGS_DIALOG (xnoise_settings_dialog_get_type ())
-#define XNOISE_SETTINGS_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_SETTINGS_DIALOG, XnoiseSettingsDialog))
-#define XNOISE_SETTINGS_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_SETTINGS_DIALOG, XnoiseSettingsDialogClass))
-#define XNOISE_IS_SETTINGS_DIALOG(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_SETTINGS_DIALOG))
-#define XNOISE_IS_SETTINGS_DIALOG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_SETTINGS_DIALOG))
-#define XNOISE_SETTINGS_DIALOG_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_SETTINGS_DIALOG, XnoiseSettingsDialogClass))
+#define XNOISE_TYPE_SETTINGS_WIDGET (xnoise_settings_widget_get_type ())
+#define XNOISE_SETTINGS_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_SETTINGS_WIDGET, XnoiseSettingsWidget))
+#define XNOISE_SETTINGS_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_SETTINGS_WIDGET, XnoiseSettingsWidgetClass))
+#define XNOISE_IS_SETTINGS_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_SETTINGS_WIDGET))
+#define XNOISE_IS_SETTINGS_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_SETTINGS_WIDGET))
+#define XNOISE_SETTINGS_WIDGET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_SETTINGS_WIDGET, XnoiseSettingsWidgetClass))
 
-typedef struct _XnoiseSettingsDialog XnoiseSettingsDialog;
-typedef struct _XnoiseSettingsDialogClass XnoiseSettingsDialogClass;
-typedef struct _XnoiseSettingsDialogPrivate XnoiseSettingsDialogPrivate;
+typedef struct _XnoiseSettingsWidget XnoiseSettingsWidget;
+typedef struct _XnoiseSettingsWidgetClass XnoiseSettingsWidgetClass;
+typedef struct _XnoiseSettingsWidgetPrivate XnoiseSettingsWidgetPrivate;
 
 #define XNOISE_TYPE_VIDEO_SCREEN (xnoise_video_screen_get_type ())
 #define XNOISE_VIDEO_SCREEN(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_VIDEO_SCREEN, XnoiseVideoScreen))
@@ -1173,14 +1173,14 @@ struct _XnoiseDockableMediaClass {
 	GtkWidget* (*get_widget) (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 };
 
-struct _XnoiseAddMediaDialog {
-	GObject parent_instance;
-	XnoiseAddMediaDialogPrivate * priv;
+struct _XnoiseAddMediaWidget {
+	GtkBox parent_instance;
+	XnoiseAddMediaWidgetPrivate * priv;
 	GtkBuilder* builder;
 };
 
-struct _XnoiseAddMediaDialogClass {
-	GObjectClass parent_class;
+struct _XnoiseAddMediaWidgetClass {
+	GtkBoxClass parent_class;
 };
 
 struct _XnoiseFullscreenProgressBar {
@@ -1212,19 +1212,13 @@ struct _XnoiseFullscreenToolbarLeaveVideoFSButtonClass {
 	GtkButtonClass parent_class;
 };
 
-typedef enum  {
-	XNOISE_SETTINGS_DIALOG_ERROR_FILE_NOT_FOUND,
-	XNOISE_SETTINGS_DIALOG_ERROR_GENERAL_ERROR
-} XnoiseSettingsDialogError;
-#define XNOISE_SETTINGS_DIALOG_ERROR xnoise_settings_dialog_error_quark ()
-struct _XnoiseSettingsDialog {
-	GtkBuilder parent_instance;
-	XnoiseSettingsDialogPrivate * priv;
-	GtkDialog* dialog;
+struct _XnoiseSettingsWidget {
+	GtkBox parent_instance;
+	XnoiseSettingsWidgetPrivate * priv;
 };
 
-struct _XnoiseSettingsDialogClass {
-	GtkBuilderClass parent_class;
+struct _XnoiseSettingsWidgetClass {
+	GtkBoxClass parent_class;
 };
 
 struct _XnoiseVideoScreen {
@@ -1539,6 +1533,7 @@ struct _XnoiseMainWindow {
 	XnoiseControlButton* stopButton;
 	GtkNotebook* browsernotebook;
 	GtkNotebook* tracklistnotebook;
+	GtkNotebook* dialognotebook;
 	XnoiseAlbumImage* albumimage;
 	XnoiseTrackInfobar* track_infobar;
 	XnoiseMusicBrowser* musicBr;
@@ -2172,9 +2167,9 @@ XnoiseDockableMediaCategory xnoise_dockable_media_category (XnoiseDockableMedia*
 GdkPixbuf* xnoise_dockable_media_get_icon (XnoiseDockableMedia* self);
 GtkWidget* xnoise_dockable_media_get_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);
-GType xnoise_add_media_dialog_get_type (void) G_GNUC_CONST;
-XnoiseAddMediaDialog* xnoise_add_media_dialog_new (void);
-XnoiseAddMediaDialog* xnoise_add_media_dialog_construct (GType object_type);
+GType xnoise_add_media_widget_get_type (void) G_GNUC_CONST;
+XnoiseAddMediaWidget* xnoise_add_media_widget_new (void);
+XnoiseAddMediaWidget* xnoise_add_media_widget_construct (GType object_type);
 GType xnoise_fullscreen_progress_bar_get_type (void) G_GNUC_CONST;
 GType xnoise_gst_player_get_type (void) G_GNUC_CONST;
 XnoiseFullscreenProgressBar* xnoise_fullscreen_progress_bar_new (XnoiseGstPlayer* _player);
@@ -2198,10 +2193,9 @@ GType xnoise_fullscreen_toolbar_leave_video_fs_button_get_type (void) G_GNUC_CON
 XnoiseFullscreenToolbarLeaveVideoFSButton* xnoise_fullscreen_toolbar_leave_video_fs_button_new (void);
 XnoiseFullscreenToolbarLeaveVideoFSButton* xnoise_fullscreen_toolbar_leave_video_fs_button_construct (GType object_type);
 void xnoise_fullscreen_toolbar_leave_video_fs_button_on_clicked (XnoiseFullscreenToolbarLeaveVideoFSButton* self);
-GQuark xnoise_settings_dialog_error_quark (void);
-GType xnoise_settings_dialog_get_type (void) G_GNUC_CONST;
-XnoiseSettingsDialog* xnoise_settings_dialog_new (void);
-XnoiseSettingsDialog* xnoise_settings_dialog_construct (GType object_type);
+GType xnoise_settings_widget_get_type (void) G_GNUC_CONST;
+XnoiseSettingsWidget* xnoise_settings_widget_new (void);
+XnoiseSettingsWidget* xnoise_settings_widget_construct (GType object_type);
 GType xnoise_video_screen_get_type (void) G_GNUC_CONST;
 XnoiseVideoScreen* xnoise_video_screen_new (XnoiseGstPlayer* _player);
 XnoiseVideoScreen* xnoise_video_screen_construct (GType object_type, XnoiseGstPlayer* _player);
