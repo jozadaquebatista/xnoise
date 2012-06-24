@@ -77,23 +77,23 @@ msgstr "串流"
 msgid "Videos"
 msgstr "影片"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:174
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add local folder"
 msgstr "加入本機資料夾"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:175
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
 msgid "Add media stream"
 msgstr "加入媒體串流"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:176
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 msgid "Remove"
 msgstr "移除"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:177
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
 msgid "do full rescan"
 msgstr "執行完整的重新掃描"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:178
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:178
 msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
@@ -101,28 +101,28 @@ msgstr ""
 "選取本機媒體資料夾或網路媒體串流。\n"
 "所有媒體來源都可以通過 xnoise 的收藏庫來使用。"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:188
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:188
 msgid "xnoise - Add media sources to the library"
 msgstr "xnoise - 加入媒體來源到收藏庫"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:211
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:211
 msgid "Name"
 msgstr "名稱"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:227
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:227
 msgid "Location"
 msgstr "位置"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:253
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:253
 #: ../libxnoise/Utils/xnoise-media-importer.vala:88
 msgid "Importing media data. This may take some time..."
 msgstr "匯入媒體資料。這也許會花一點時間…"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:277
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:277
 msgid "Select media folder"
 msgstr "選取媒體資料夾"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:346
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:346
 msgid "Add internet radio link"
 msgstr "加入網路電臺鏈結"
 
@@ -130,35 +130,35 @@ msgstr "加入網路電臺鏈結"
 msgid "Leave fullscreen"
 msgstr "離開全螢幕"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:242
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:242
 msgid "General"
 msgstr "一般"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:244
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:244
 msgid "Plugins"
 msgstr "插件"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:249
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:249
 msgid "Enable grid lines in media browser"
 msgstr "啟用媒體瀏覽器中的格線"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:254
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:254
 msgid "Don't show video screen while hovering album image"
 msgstr "當停留在專輯圖片時，不顯示影片畫面"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:259
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:259
 msgid "Compact layout"
 msgstr "緊湊佈局"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:264
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:264
 msgid "Use stop button"
 msgstr "使用停止按鈕"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:269
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:269
 msgid "Quit application if window is closed"
 msgstr "如果視窗是關閉的，退出應用程式"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:276
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:276
 msgid "Media browser fontsize:"
 msgstr "媒體瀏覽器字型大小："
 

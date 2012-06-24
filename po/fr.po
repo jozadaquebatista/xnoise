@@ -77,24 +77,24 @@ msgstr ""
 msgid "Videos"
 msgstr "Video"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:174
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add local folder"
 msgstr "Ajouter un répertoire local"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:175
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
 msgid "Add media stream"
 msgstr "Ajouter un média en streaming"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:176
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 msgid "Remove"
 msgstr "Supprimer"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:177
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
 #, fuzzy
 msgid "do full rescan"
 msgstr "Rescanner totalement la bibliothèque"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:178
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:178
 #, fuzzy
 msgid ""
 "Select local media folders or internet media streams. \n"
@@ -103,30 +103,30 @@ msgstr ""
 "Sélectionnez les répertoires locaux ou les flux de médias à distance. \n"
 "Toute la bibliothèque sera disponible dans le navigateur de médias."
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:188
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:188
 #, fuzzy
 msgid "xnoise - Add media sources to the library"
 msgstr "xnoise - Ajout de médias à la bibliothèque"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:211
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:211
 msgid "Name"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:227
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:227
 #, fuzzy
 msgid "Location"
 msgstr "Ouvrir emp_lacement"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:253
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:253
 #: ../libxnoise/Utils/xnoise-media-importer.vala:88
 msgid "Importing media data. This may take some time..."
 msgstr "Importation des données médias. Cela peut prendre un certain temps..."
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:277
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:277
 msgid "Select media folder"
 msgstr "Sélectionner un répertoire média"
 
-#: ../libxnoise/ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala:346
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:346
 msgid "Add internet radio link"
 msgstr "Ajouter un lien vers une radio internet"
 
@@ -134,36 +134,36 @@ msgstr "Ajouter un lien vers une radio internet"
 msgid "Leave fullscreen"
 msgstr "Quitter le plein écran"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:242
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:242
 msgid "General"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:244
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:244
 msgid "Plugins"
 msgstr "Greffons"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:249
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:249
 #, fuzzy
 msgid "Enable grid lines in media browser"
 msgstr "Utiliser les guides d'indentation dans le navigateur de médias"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:254
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:254
 msgid "Don't show video screen while hovering album image"
 msgstr "Ne pas afficher l'écran vidéo lors du survol de l'image de l'album"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:259
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:259
 msgid "Compact layout"
 msgstr "Visualisation compacte"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:264
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:264
 msgid "Use stop button"
 msgstr "Utiliser le bouton Stop"
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:269
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:269
 msgid "Quit application if window is closed"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala:276
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:276
 msgid "Media browser fontsize:"
 msgstr "Grandeur des caratères dans le navigateur de médias:"
 

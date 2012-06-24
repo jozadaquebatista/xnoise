@@ -28,9 +28,12 @@ AM_MAINTAINER_MODE([enable])
 # Disable generation of static libraries
 AC_DISABLE_STATIC
 
+# Vala generated C source targets GLIB Version
+TARGET_GLIB_VERSION=2.30
+
 dnl required versions for xnoise
 GSTREAMER_REQUIRED=0.10.23
-GLIB_REQUIRED=2.30.0
+GLIB_REQUIRED=TARGET_GLIB_VERSION
 LIBXML_REQUIRED=2.6.32
 GIO_REQUIRED=2.16
 GTK_REQUIRED=3.0.0
@@ -368,7 +371,7 @@ XNOISE_PACKAGES="\
     --pkg sqlite3 \
     --pkg taglib_c \
     --pkg linux \
-    --target-glib=2.30 \
+    --target-glib=`echo $TARGET_GLIB_VERSION` \
 "
 
 
@@ -434,24 +437,25 @@ echo "
   ~~~~~~~~~~~~~
   
   Configuration Info:
-    prefix:                        ${prefix}
-    gettext_package:               ${GETTEXT_PACKAGE}
+    Prefix:                        ${prefix}
+    Gettext package:               ${GETTEXT_PACKAGE}
     CFLAGS:                        ${CFLAGS}
-    VALAC:                         ${VALAC}
+    Vala compiler (if applicable): ${VALAC}
+    Vala's glib target version:    ${TARGET_GLIB_VERSION}
 
   Plugins included in this build: 
-    test plugin:                   yes (always)
-    titleToDecoration:             yes (always)
-    chartlyrics:                   ${enable_chartlyrics}
-    azlyrics:                      ${enable_azlyrics}
-    lyricwiki:                     ${enable_lyricwiki}
-    lastfm webservices:            ${enable_lastfm}
-    notifications:                 ${enable_notifications}
-    mpris v1/v2 interface:         ${enable_mpris}
-    mediakeys control:             ${enable_mediakeys}
-    ayatana soundmenu:             ${enable_soundmenu2}
+    Lastfm webservices:            ${enable_lastfm}
+    Media key control:             ${enable_mediakeys}
+    Desktop notifications:         ${enable_notifications}
+    Mpris v1/v2 interface:         ${enable_mpris}
+    Test plugin (Demo):            yes (always)
+    TitleToDecoration:             yes (always)
+    Ubuntu soundmenu:              ${enable_soundmenu2}
+    Chartlyrics:                   ${enable_chartlyrics}
+    Azlyrics:                      ${enable_azlyrics}
+    Lyricwiki:                     ${enable_lyricwiki}
 
   Note: Single plugin builds can be deactivated
-        manually by user option or automatically
-        if the dependencies are not available.
+        manually by user option or automatically,
+        in case the dependencies are not available.
 "

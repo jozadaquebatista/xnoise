@@ -56,10 +56,10 @@ libxnoise_la_SOURCES = \
     DockableMedia/VideoListing/xnoise-treeview-videos-model.vala \
     DockableMedia/xnoise-dockable-media.vala \
     ExtraWidgets/AboutDialog/xnoise-about.vala \
-    ExtraWidgets/AddMediaDialog/xnoise-add-media-dialog.vala \
+    ExtraWidgets/AddMedia/xnoise-add-media-widget.vala \
     ExtraWidgets/Fullscreen/xnoise-fullscreen-progressbar.vala \
     ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala \
-    ExtraWidgets/SettingsDialog/xnoise-settings-dialog.vala \
+    ExtraWidgets/Settings/xnoise-settings-widget.vala \
     ExtraWidgets/VideoScreen/xnoise-videoscreen.vala \
     ExtraWidgets/xnoise-app-menu-button.vala \
     ExtraWidgets/xnoise-control-button.vala \
@@ -184,9 +184,9 @@ DISTCLEANFILES = \
     DBus/*.c \
     ExtraWidgets/*.c \
     ExtraWidgets/AboutDialog/*.c \
-    ExtraWidgets/AddMediaDialog/*.c \
+    ExtraWidgets/AddMedia/*.c \
     ExtraWidgets/Fullscreen/*.c \
-    ExtraWidgets/SettingsDialog/*.c \
+    ExtraWidgets/Settings/*.c \
     ExtraWidgets/VideoScreen/*.c \
     GlobalAccess/*.c \
     ItemHandlers/*.c \

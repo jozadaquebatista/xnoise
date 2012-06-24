@@ -64,7 +64,7 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
         this.show_all();
     }
 
-    //    ~AddMediaDialog() {
+    //    ~AddMediaWidget() {
     //        print("destruct amd\n");
     //    }
 
