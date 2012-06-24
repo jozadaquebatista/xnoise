@@ -904,7 +904,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
         TreePath tmp_path = null;
         tmp_path = path;
-        if((repeatState == PlayerRepeatMode.RANDOM)) {
+        if(repeatState == PlayerRepeatMode.RANDOM) {
             // handle RANDOM
             if(!this.trackList.tracklistmodel.get_random_row(ref path) || 
                (path.to_string() == tmp_path.to_string())) {
@@ -940,6 +940,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                             }
                             else {
                                 stop();
+                                return;
                             }
                         }
                         else if(direction == ControlButton.Direction.PREVIOUS) {
