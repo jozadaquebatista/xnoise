@@ -432,9 +432,9 @@ public class Xnoise.LfmWidget: Gtk.Box {
         var title_label = new Label("<b>%s</b>".printf(_("Please enter your lastfm username and password.")));
         title_label.set_use_markup(true);
         title_label.set_single_line_mode(true);
-        title_label.set_alignment(0.5f, 0.5f);
+        title_label.set_alignment(0.0f, 0.5f);
         title_label.set_ellipsize(Pango.EllipsizeMode.END);
-        title_label.ypad = 10;
+        title_label.ypad = 8;
         this.pack_start(title_label, false, false, 0);
         
         var hbox1 = new Box(Orientation.HORIZONTAL, 2);
@@ -442,16 +442,20 @@ public class Xnoise.LfmWidget: Gtk.Box {
         user_label.xalign = 0.0f;
         hbox1.pack_start(user_label, false, false, 0);
         user_entry = new Entry();
-        hbox1.pack_start(user_entry, true, true, 0);
+        user_entry.set_width_chars(25);
+        hbox1.pack_start(user_entry, false, false, 0);
+        hbox1.pack_start(new Label(""), false, false, 0);
         
         var hbox2 = new Box(Orientation.HORIZONTAL, 2);
         var pass_label = new Label("%s".printf(_("Password:")));
         pass_label.xalign = 0.0f;
         hbox2.pack_start(pass_label, false, false, 0);
         pass_entry = new Entry();
+        pass_entry.set_width_chars(25);
         pass_entry.set_visibility(false);
         
-        hbox2.pack_start(pass_entry, true, true, 0);
+        hbox2.pack_start(pass_entry, false, false, 0);
+        hbox2.pack_start(new Label(""), false, false, 0);
         
         var sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
         sizegroup.add_widget(user_label);
@@ -463,6 +467,13 @@ public class Xnoise.LfmWidget: Gtk.Box {
         use_scrobble_check = new CheckButton.with_label(_("Scrobble played tracks on lastfm"));
         this.pack_start(use_scrobble_check, false, false, 0);
         
+        var hbox3 = new Box(Orientation.HORIZONTAL, 2);
+        b = new Button.from_stock(Gtk.Stock.APPLY);
+        hbox3.pack_start(b, false, false, 0);
+        hbox3.pack_start(new Label(""), true, true, 0);
+        this.pack_start(hbox3, false, false, 0);
+        this.border_width = 4;
+        
         //feedback
         feedback_label = new Label("<b><i>%s</i></b>".printf(_("User not logged in!")));
         if(this.lfm.logged_in()) {
@@ -473,13 +484,9 @@ public class Xnoise.LfmWidget: Gtk.Box {
         }
         feedback_label.set_use_markup(true);
         feedback_label.set_single_line_mode(true);
-        feedback_label.set_alignment(0.5f, 0.5f);
+        feedback_label.set_alignment(0.1f, 0.5f);
         feedback_label.ypad = 20;
         this.pack_start(feedback_label, false, false, 0);
-        
-        b = new Button.from_stock(Gtk.Stock.APPLY);
-        this.pack_start(b, false, false, 0);
-        this.border_width = 4;
     }
 }
 
