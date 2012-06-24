@@ -4,6 +4,9 @@
   <object class="GtkBox" id="mainvbox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="margin_left">6</property>
+    <property name="margin_right">6</property>
+    <property name="margin_top">4</property>
     <property name="margin_bottom">8</property>
     <property name="orientation">vertical</property>
     <property name="spacing">1</property>
@@ -256,11 +259,54 @@ All library media will be available in the media browser.</property>
         <property name="position">3</property>
       </packing>
     </child>
+    <child>
+      <object class="GtkBox" id="box7">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">4</property>
+        <property name="margin_bottom">8</property>
+        <child>
+          <object class="GtkButton" id="okbutton">
+            <property name="label">gtk-apply</property>
+            <property name="use_action_appearance">False</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_action_appearance">False</property>
+            <property name="use_stock">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">
+</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
+      </packing>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
       <widget name="box2"/>
       <widget name="fullrescancheckb"/>
+      <widget name="okbutton"/>
     </widgets>
   </object>
 </interface>

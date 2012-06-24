@@ -160,6 +160,7 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
             var labeladdstream     = builder.get_object("labeladdstream") as Label;
             var labelremove        = builder.get_object("labelremove") as Label;
             var descriptionlabel   = builder.get_object("descriptionlabel") as Label;
+            var bok                = builder.get_object("okbutton") as Button;
             
             fullrescancheckb       = builder.get_object("fullrescancheckb") as CheckButton;
             
@@ -170,9 +171,7 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
             descriptionlabel.label = _("Select local media folders or internet media streams. \nAll media sources will be available via xnoise's library.");
             this.pack_start(mainvbox, true, true, 0);
             
-            var bok = new Gtk.Button.from_stock(Gtk.Stock.OK);
             bok.can_focus = false;
-            this.pack_start(bok, false, false, 0);
             bok.clicked.connect(on_ok_button_clicked);
             
             var bcancel = new Gtk.Button.from_stock(Gtk.Stock.GO_BACK);
