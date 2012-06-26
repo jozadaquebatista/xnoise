@@ -1,4 +1,48 @@
-xnoise (0.2.0-1ubuntu0) unstable; urgency=low
+xnoise (0.2.3.1-1ubuntu1) precise; urgency=low
+  * embed settings and media selection into main window
+  * add main menu entry for previous/play/next (for better HUD integration)
+  * store / restore visibility of media browser
+  * store / restore last used view
+  * update settings widget for lastfm
+  * seperate music and video in media browser
+  * workaround issue with finished signal of Worker.Job
+  * update translatable strings
+  * update chinese zh_TW translation
+  * update german translation
+  * Update po/cs.po (psimacek)
+  * remove sidebar theming
+  * use glib-2.30 api version for C code
+  * some autotools updates
+  * various bug fixes
+
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 25 Jun 2012 17:31:28 +0200
+
+
+
+xnoise (0.2.2.1-1ubuntu1) precise; urgency=low
+  * fix issue with library rescan
+  * fix issue with removal of last played files
+  * fix issue with update from old db versions
+  * some small bugfixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 25 May 2012 19:23:52 +0200
+
+
+
+xnoise (0.2.1.1-1ubuntu1) precise; urgency=low
+  * update spanish, portugese and czech translations
+  * add simple chinese localization
+  * workaround issues created by Canonical's ignorance
+  * more stability for database lyrics plugin
+  * fix lyrics issue on Debian
+  * some small bugfixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 11 Apr 2012 13:33:45 +0200
+
+
+
+xnoise (0.2.0.1-1ubuntu1) precise; urgency=low
   * add support for dockable media sources (Categories: Playlists, Media Collection, Stores)
   * add onboard dbus service (not bound to mpris)
   * add new azlyrics plugin

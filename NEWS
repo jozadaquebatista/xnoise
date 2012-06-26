@@ -1,3 +1,26 @@
+xnoise (0.2.3)
+
+New Features and Fixes
+======================
+  * embed settings and media selection into main window
+  * add main menu entry for previous/play/next (for better HUD integration)
+  * store / restore visibility of media browser
+  * store / restore last used view
+  * update settings widget for lastfm
+  * seperate music and video in media browser
+  * workaround issue with finished signal of Worker.Job
+  * update translatable strings
+  * update chinese zh_TW translation
+  * update german translation
+  * Update po/cs.po (psimacek)
+  * remove sidebar theming
+  * use glib-2.30 api version for C code
+  * some autotools updates
+  * various bug fixes
+
+
+
+
 xnoise (0.2.2)
 
 New Features and Fixes

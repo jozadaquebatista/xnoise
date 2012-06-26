@@ -447,7 +447,7 @@ echo "
     Lastfm webservices:            ${enable_lastfm}
     Media key control:             ${enable_mediakeys}
     Desktop notifications:         ${enable_notifications}
-    Mpris v1/v2 interface:         ${enable_mpris}
+    Mpris v1/v2 interfaces:        ${enable_mpris}
     Test plugin (Demo):            yes (always)
     TitleToDecoration:             yes (always)
     Ubuntu soundmenu:              ${enable_soundmenu2}

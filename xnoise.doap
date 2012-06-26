@@ -9,9 +9,9 @@
   <shortdesc xml:lang="en">Media player for Gtk+</shortdesc>
 
   <homepage rdf:resource="http://www.xnoise-media-player.com/" />
-  <mailing-list rdf:resource="http://groups.google.com/group/xnoise" />
-  <download-page rdf:resource="http://code.google.com/p/xnoise/downloads/list" />
-  <bug-database rdf:resource="http://code.google.com/p/xnoise/issues/list" />
+  <mailing-list rdf:resource="https://groups.google.com/forum/?fromgroups#!forum/xnoise" />
+  <download-page rdf:resource="https://github.com/shuerhaaken/xnoise/downloads" />
+  <bug-database rdf:resource="https://github.com/shuerhaaken/xnoise/issues" />
 
   <maintainer>
     <foaf:Person>
