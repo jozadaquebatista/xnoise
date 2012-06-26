@@ -20,10 +20,12 @@ To extend the features even more there are quite some plugins. For example one t
 ***
 
 
-**[xnoise home page](http://www.xnoise-media-player.com/)**
+**[home page](http://www.xnoise-media-player.com/)**
 
-**[xnoise wiki home](https://github.com/shuerhaaken/xnoise/wiki/Home)**
+**[wiki home](https://github.com/shuerhaaken/xnoise/wiki/Home)**
 
-**[xnoise mailing list](http://groups.google.com/group/xnoise)**
+**[mailing list](http://groups.google.com/group/xnoise)**
+
+**[ubuntu ppa](https://launchpad.net/~shkn/+archive/xnoise)**
 
 ***
