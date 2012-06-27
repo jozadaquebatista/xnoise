@@ -252,6 +252,7 @@ position_status-icon_column=1
 use_artist_column=1
 position_year_column=7
 position_length_column=6
+media_browser_visible=1
 
 [settings_double]
 volume=0.8
