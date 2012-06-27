@@ -45,7 +45,7 @@ msgstr "Více informací na stránkách projektu:"
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
 #: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
 msgid "no lyrics found..."
-msgstr "Nenalezen žádný text písně..."
+msgstr "Nenalezen žádný text..."
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
 msgid "Last Played"
@@ -69,7 +69,7 @@ msgstr "Nejhranější"
 
 #: ../libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.vala:41
 msgid "Streams"
-msgstr "Streamy"
+msgstr "Proudy"
 
 #: ../libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala:41
 msgid "Videos"
@@ -81,7 +81,7 @@ msgstr "Přidat místní složku"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:167
 msgid "Add media stream"
-msgstr "Přidat stream"
+msgstr "Přidat proud"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
 msgid "Remove"
@@ -110,7 +110,7 @@ msgstr "Umístění"
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:254
 #: ../libxnoise/Utils/xnoise-media-importer.vala:88
 msgid "Importing media data. This may take some time..."
-msgstr "Import mediálních dat. Může to chvíli trvat..."
+msgstr "Import dat. Může to chvíli trvat..."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:276
 msgid "Select media folder"
@@ -138,7 +138,7 @@ msgstr "Povolit mřížku v prohlížeči médií"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:249
 msgid "Don't show video screen while hovering album image"
-msgstr "Neukazovat pohled s videem, když je ukazovátko myši nad obrázkem alba."
+msgstr "Neukazovat pohled Nyní hraje, když je myš nad obrázkem alba."
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:257
 msgid "Compact layout"
@@ -196,7 +196,7 @@ msgstr "Od"
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 #, c-format
 msgid "on"
-msgstr "Na"
+msgstr "z"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
 msgid "Add all visible tracks to tracklist"
@@ -230,7 +230,7 @@ msgid ""
 "wait."
 msgstr ""
 "Počkejte, prosím, dokud se prohlížeč nezaplní skladbami. Nebo akci zrušte, "
-"pokud nechcetečekat."
+"pokud nechcete čekat."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:189
@@ -238,7 +238,7 @@ msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
 "Počkejte, prosím, na dokončení importu dat. Nebo akci zrušte, pokud "
-"nechcetečekat."
+"nechcete čekat."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
@@ -454,15 +454,15 @@ msgstr "Přejít na seznam skladeb"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:198
 msgid "_Toggle play"
-msgstr ""
+msgstr "Přepnout přehrávání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:198
 msgid "Toggle playback status"
-msgstr ""
+msgstr "Přepnout stav přehrávání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:199
 msgid "_Next track"
-msgstr ""
+msgstr "_Další stopa"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:199
 #, fuzzy
@@ -516,7 +516,7 @@ msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:460
 msgid "Add media"
-msgstr "Přidat skladby"
+msgstr "Přidat multimedia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:463
 msgid ""
@@ -789,7 +789,7 @@ msgstr "Oznámení ukázat při změně skladby"
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 #, fuzzy
 msgid "Use ubuntu/ayatana soundmenu integration"
-msgstr "Používat Ayatana SoundMenu"
+msgstr "Používat ubuntu/ayatana zvukové menu"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
@@ -835,7 +835,7 @@ msgstr "Název okna pojmenovat po současné skladbě"
 #~ msgstr "Chartlyrics"
 
 #~ msgid "CyclicSaveState"
-#~ msgstr "Zyklisches Speichern"
+#~ msgstr "Cyklické ukládání stavu"
 
 #~ msgid "LastfmCovers"
 #~ msgstr "Lastfm Obaly"
