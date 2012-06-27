@@ -445,7 +445,7 @@ msgstr "_Snížit hlasitost přehrávání"
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:197
 #, fuzzy
 msgid "_Previous track"
-msgstr "Předchozí"
+msgstr "_Předchozí stopa"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:197
 #, fuzzy
@@ -454,7 +454,7 @@ msgstr "Přejít na seznam skladeb"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:198
 msgid "_Toggle play"
-msgstr "Přepnout přehrávání"
+msgstr "_Přehrávání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:198
 msgid "Toggle playback status"
