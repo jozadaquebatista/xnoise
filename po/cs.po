@@ -4,14 +4,14 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-24 14:39+0200\n"
-"PO-Revision-Date: 2012-04-05 11:30+0200\n"
-"Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
+"PO-Revision-Date: 2012-07-02 23:01+0200\n"
+"Last-Translator: Pavel <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 1.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Language: cs_CZ\n"
 
@@ -45,7 +45,7 @@ msgstr "Více informací na stránkách projektu:"
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
 #: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
 msgid "no lyrics found..."
-msgstr "Nenalezen žádný text..."
+msgstr "Nenalezen žádný text písně..."
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
 msgid "Last Played"
@@ -69,7 +69,7 @@ msgstr "Nejhranější"
 
 #: ../libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.vala:41
 msgid "Streams"
-msgstr "Proudy"
+msgstr "Streamy"
 
 #: ../libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala:41
 msgid "Videos"
@@ -81,7 +81,7 @@ msgstr "Přidat místní složku"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:167
 msgid "Add media stream"
-msgstr "Přidat proud"
+msgstr "Přidat stream"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
 msgid "Remove"
@@ -110,7 +110,7 @@ msgstr "Umístění"
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:254
 #: ../libxnoise/Utils/xnoise-media-importer.vala:88
 msgid "Importing media data. This may take some time..."
-msgstr "Import dat. Může to chvíli trvat..."
+msgstr "Import mediálních dat. Může to chvíli trvat..."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:276
 msgid "Select media folder"
@@ -138,7 +138,7 @@ msgstr "Povolit mřížku v prohlížeči médií"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:249
 msgid "Don't show video screen while hovering album image"
-msgstr "Neukazovat pohled Nyní hraje, když je myš nad obrázkem alba."
+msgstr "Neukazovat pohled s videem, když je ukazovátko myši nad obrázkem alba."
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:257
 msgid "Compact layout"
@@ -196,7 +196,7 @@ msgstr "Od"
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 #, c-format
 msgid "on"
-msgstr "z"
+msgstr "Na"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
 msgid "Add all visible tracks to tracklist"
@@ -230,7 +230,7 @@ msgid ""
 "wait."
 msgstr ""
 "Počkejte, prosím, dokud se prohlížeč nezaplní skladbami. Nebo akci zrušte, "
-"pokud nechcete čekat."
+"pokud nechcetečekat."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:189
@@ -238,7 +238,7 @@ msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
 "Počkejte, prosím, na dokončení importu dat. Nebo akci zrušte, pokud "
-"nechcete čekat."
+"nechcetečekat."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
@@ -420,41 +420,36 @@ msgid "_Rescan collection"
 msgstr "_Prohledat sbírku znovu"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:194
-#, fuzzy
 msgid "Rescan collection"
-msgstr "_Prohledat sbírku znovu"
+msgstr "Prohledat sbírku znovu"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:195
 msgid "_Increase volume"
 msgstr "_Zvýšit hlasitost"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:195
-#, fuzzy
 msgid "Increase playback volume"
-msgstr "_Zvýšit hlasitost přehrávání"
+msgstr "Zvýšit hlasitost přehrávání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:196
 msgid "_Decrease volume"
 msgstr "_Snížit hlasitost"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:196
-#, fuzzy
 msgid "Decrease playback volume"
-msgstr "_Snížit hlasitost přehrávání"
+msgstr "Snížit hlasitost přehrávání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:197
-#, fuzzy
 msgid "_Previous track"
-msgstr "_Předchozí stopa"
+msgstr "_Předchozí skladba"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:197
-#, fuzzy
 msgid "Go to previous track"
-msgstr "Přejít na seznam skladeb"
+msgstr "Jít na předchozí skladbu"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:198
 msgid "_Toggle play"
-msgstr "_Přehrávání"
+msgstr "_Přepnout přehrávání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:198
 msgid "Toggle playback status"
@@ -462,12 +457,11 @@ msgstr "Přepnout stav přehrávání"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:199
 msgid "_Next track"
-msgstr "_Další stopa"
+msgstr "_Další skladba"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:199
-#, fuzzy
 msgid "Go to next track"
-msgstr "Přejít na seznam skladeb"
+msgstr "Jít na další skladbu"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:201
 msgid "_View"
@@ -516,7 +510,7 @@ msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:460
 msgid "Add media"
-msgstr "Přidat multimedia"
+msgstr "Přidat skladby"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:463
 msgid ""
@@ -695,7 +689,7 @@ msgstr "Pozastaveno"
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:185
 #, c-format
 msgid "ready to rock"
-msgstr ""
+msgstr "Připraven"
 
 #: ../libxnoise/Utils/xnoise-media-importer.vala:209
 #, c-format
@@ -787,9 +781,8 @@ msgid "Show notifications one track change"
 msgstr "Oznámení ukázat při změně skladby"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Use ubuntu/ayatana soundmenu integration"
-msgstr "Používat ubuntu/ayatana zvukové menu"
+msgstr "Používat začlenění do zvukové nabídky Ubuntu/Ayatana"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
@@ -835,7 +828,7 @@ msgstr "Název okna pojmenovat po současné skladbě"
 #~ msgstr "Chartlyrics"
 
 #~ msgid "CyclicSaveState"
-#~ msgstr "Cyklické ukládání stavu"
+#~ msgstr "Zyklisches Speichern"
 
 #~ msgid "LastfmCovers"
 #~ msgstr "Lastfm Obaly"
