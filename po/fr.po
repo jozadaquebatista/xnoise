@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 10:41+0200\n"
-"PO-Revision-Date: 2012-07-03 15:47+0100\n"
+"PO-Revision-Date: 2012-07-05 14:17+0100\n"
 "Last-Translator: Aurélien Rivière <aurelien.riv@gmail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
 "Language: French\n"
@@ -26,16 +26,19 @@ msgstr "Lecteur Média"
 msgid "Organize and play your music and video collections"
 msgstr "Organise et joue vos collections musicales et vidéos"
 
-#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
+#: ../libxnoise/Application/xnoise-application.vala:93
+#: ../src/xnoise.vala:63
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise est un lecteur média pour GTK+"
 
-#: ../libxnoise/Application/xnoise-application.vala:94 ../src/xnoise.vala:64
+#: ../libxnoise/Application/xnoise-application.vala:94
+#: ../src/xnoise.vala:64
 msgid "It uses the gstreamer framework."
 msgstr "Il utilise le framework gstreamer."
 
-#: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
+#: ../libxnoise/Application/xnoise-application.vala:95
+#: ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "Plus d'informations sur site internet du projet:"
 
@@ -226,20 +229,13 @@ msgstr "Album:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:185
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Veuillez patienter pendant la mise à jour du navigateur de médias, ou "
-"annulez si vous ne voulez pas attendre."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Veuillez patienter pendant la mise à jour du navigateur de médias, ou annulez si vous ne voulez pas attendre."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:189
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Veuillez patienter pendant l'importation des médias, ou annulez si vous ne "
-"voulez pas attendre."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Veuillez patienter pendant l'importation des médias, ou annulez si vous ne voulez pas attendre."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
@@ -505,24 +501,16 @@ msgstr "_Configuration"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:398
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"Restitution de %u pistes dans la liste de lecture. Ce nombre est important "
-"et peut ralentir le démarrage de xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "Restitution de %u pistes dans la liste de lecture. Ce nombre est important et peut ralentir le démarrage de xnoise."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:460
 msgid "Add media"
 msgstr "Ajout de médias"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:463
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Vous exécutez xnoise pour la première fois. Désirez-vous importer des médias "
-"dans la bibliothèque?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Vous exécutez xnoise pour la première fois. Désirez-vous importer des médias dans la bibliothèque?"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:543
 msgid "no repeat"
@@ -587,11 +575,8 @@ msgid "Search..."
 msgstr "Rechercher..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:192
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"Le nom du fichier de sous-titres ne correspond pas à celui du fichier vidéo ! "
-"Aucun fichier de sous-titres ne sera utilisé."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "Le nom du fichier de sous-titres ne correspond pas à celui du fichier vidéo ! Aucun fichier de sous-titres ne sera utilisé."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:551
 #, c-format
@@ -599,10 +584,6 @@ msgid "Success on installing missing gstreamer plugin"
 msgstr "Installation réussie du greffon gstreamer manquant"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:555
-#, c-format
-msgid "User aborted installation of missing gstreamer plugin"
-msgid "Installation du greddon gstreamer manquant interrompue par l'utilisateur"
-
 #: ../libxnoise/Player/xnoise-gst-player.vala:559
 #, c-format
 msgid "Gstreamer plugin not found in repositories"
@@ -689,7 +670,6 @@ msgstr "en pause"
 
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:185
 #, c-format
-#, fuzzy
 msgid "ready to rock"
 msgstr "prêt pour secouer"
 
@@ -705,11 +685,8 @@ msgid "%u tracks found"
 msgstr "%u pistes trouvées"
 
 #: ../src/xnoise.vala:74
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Exécuter 'xnoise --help' pour visualiser la liste complète des options "
-"disponibles en ligne de commande.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Exécuter 'xnoise --help' pour visualiser la liste complète des options disponibles en ligne de commande.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Buffer lyrics in database"
