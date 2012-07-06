@@ -305,6 +305,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             media_source_selector.grab_focus();
             return false;
         });
+        this.window_state_event.connect(on_window_state_event);
+    }
+    
+    private bool window_maximized;
+    private bool on_window_state_event (Gdk.EventWindowState e) {
+        if((e.new_window_state & Gdk.WindowState.MAXIMIZED) == Gdk.WindowState.MAXIMIZED) {
+            window_maximized = true;
+        }
+        else {
+            window_maximized = false;
+        }
+        return false;
     }
     
     private void buffer_position() {
@@ -815,6 +827,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         if(wi > 0 && he > 0)
             this.resize(wi, he);
         
+        if(Params.get_bool_value("window_maximized")) {
+            this.maximize();
+        }
+        else {
+            this.unmaximize();
+        }
+        
         this.repeatState = (PlayerRepeatMode)Params.get_int_value("repeatstate");
         int hp_position = Params.get_int_value("hp_position");
         if (hp_position > 0)
@@ -863,6 +882,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.get_size(out wi, out he);
         Params.set_int_value("width", wi);
         Params.set_int_value("height", he);
+        
+        Params.set_bool_value("window_maximized", window_maximized);
         
         Params.set_int_value("hp_position", this.hpaned.get_position());
         

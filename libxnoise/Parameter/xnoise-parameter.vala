@@ -253,6 +253,7 @@ use_artist_column=1
 position_year_column=7
 position_length_column=6
 media_browser_visible=1
+window_maximized=0
 
 [settings_double]
 volume=0.8
