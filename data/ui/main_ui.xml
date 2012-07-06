@@ -28,6 +28,8 @@
 			<menuitem action="ShowTracklistAction"/>
 			<menuitem action="ShowVideoAction"/>
 			<menuitem action="ShowLyricsAction"/>
+			<separator />
+			<menuitem action="ShowMediaBrowserAction"/>
 		</menu>
 	
 		<placeholder name="MenuBarOps"/>

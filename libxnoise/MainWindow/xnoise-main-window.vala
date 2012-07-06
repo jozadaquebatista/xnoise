@@ -203,6 +203,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             { "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), "<Alt>2",
                N_("Go to the now playing screen in the main window."), on_show_video_menu_clicked},
             { "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), "<Alt>3", N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
+            { "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), "<Alt>2",
+               N_("Go to the now playing screen in the main window."), on_show_video_menu_clicked},
+            { "ShowMediaBrowserAction", Gtk.Stock.EDIT, N_("_Media Browser"), "<Ctrl>M", N_("Toggle media browser visibility."), toggle_media_browser_visibility},
+
         { "HelpMenuAction", null, N_("_Help") },
             { "AboutAction", Gtk.Stock.ABOUT, null, null, null, on_help_about},
         { "ConfigMenuAction", null, N_("_Config") }
