@@ -626,43 +626,43 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         volume_slider.value += delta_fraction;
     }
     
-    private const int PLUS_KEY  = 0x002B;
-    private const int MINUS_KEY = 0x002D;
-    private const int 1_KEY     = 0x0031;
-    private const int 2_KEY     = 0x0032;
-    private const int 3_KEY     = 0x0033;
-    private const int F_KEY     = 0x0066;
-    private const int D_KEY     = 0x0064;
-    private const int M_KEY     = 0x006D;
-    private const int O_KEY     = 0x006F;
-    private const int Q_KEY     = 0x0071;
-    private const int SPACE_KEY = 0x0020;
-    private const int ALT_MOD   = 0x0018;
-    private const int CTRL_MOD  = 0x0014;
+    private const uint PLUS_KEY  = 0x002B;
+    private const uint MINUS_KEY = 0x002D;
+    private const uint 1_KEY     = 0x0031;
+    private const uint 2_KEY     = 0x0032;
+    private const uint 3_KEY     = 0x0033;
+    private const uint F_KEY     = 0x0066;
+    private const uint D_KEY     = 0x0064;
+    private const uint M_KEY     = 0x006D;
+    private const uint O_KEY     = 0x006F;
+    private const uint Q_KEY     = 0x0071;
+    private const uint SPACE_KEY = 0x0020;
+    private const uint ALT_MOD   = Gdk.ModifierType.MOD1_MASK;
+    private const uint CTRL_MOD  = Gdk.ModifierType.CONTROL_MASK;
     
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
-        //print("%d : %d\n",(int)e.keyval, (int)e.state);
+        //print("%u : %u\n", e.keyval, e.state);
         switch(e.keyval) {
             case PLUS_KEY: {
-                    if(e.state != CTRL_MOD) // Ctrl Modifier
+                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
                         return false;
                     change_volume(0.1);
                 }
                 return true;
             case MINUS_KEY: {
-                    if(e.state != CTRL_MOD) // Ctrl Modifier
+                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
                         return false;
                     change_volume(-0.1);
                 }
                 return true;
             case F_KEY: {
-                    if(e.state != CTRL_MOD) // Ctrl Modifier
+                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
                         return false;
                     search_entry.grab_focus();
                 }
                 return true;
             case D_KEY: {
-                    if(e.state != CTRL_MOD) // Ctrl Modifier
+                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
                         return false;
                     search_entry.text = EMPTYSTRING;
                     global.searchtext = EMPTYSTRING;
@@ -670,19 +670,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
                 return true;
             case 1_KEY: {
-                    if(e.state != ALT_MOD) // ALT Modifier
+                    if((e.state & ALT_MOD) != ALT_MOD) // ALT Modifier
                         return false;
                     this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
                 }
                 return true;
             case 2_KEY: {
-                    if(e.state != ALT_MOD) // ALT Modifier
+                    if((e.state & ALT_MOD) != ALT_MOD) // ALT Modifier
                         return false;
                     this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
                 }
                 return true;
             case 3_KEY: {
-                    if(e.state != ALT_MOD) // ALT Modifier
+                    if((e.state & ALT_MOD) != ALT_MOD) // ALT Modifier
                         return false;
                     if(active_lyrics == false)
                         return false;
@@ -696,19 +696,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
                 return true;
             case M_KEY: {
-                    if(e.state != CTRL_MOD) // Ctrl Modifier
+                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
                         return false;
                     toggle_media_browser_visibility();
                     break;
                 }
             case O_KEY: {
-                    if(e.state != CTRL_MOD) // Ctrl Modifier
+                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
                         return false;
                     on_file_add();
                     break;
                 }
             case Q_KEY: {
-                    if(e.state != CTRL_MOD) // Ctrl Modifier
+                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
                         return false;
                     quit_now();
                     break;
