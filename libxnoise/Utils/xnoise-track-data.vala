@@ -42,6 +42,7 @@ namespace Xnoise {
         public string? title = null;
         public string? genre = null;
         public string? name = null;
+        public string? mimetype = null;
         public uint year = 0;
         public uint tracknumber = 0;
         public int32 length = 0;

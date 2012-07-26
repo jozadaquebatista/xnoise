@@ -371,7 +371,8 @@ public class Xnoise.MediaImporter : GLib.Object {
         job.counter[0]++;
         FileEnumerator enumerator;
         string attr = FileAttribute.STANDARD_NAME + "," +
-                      FileAttribute.STANDARD_TYPE;
+                      FileAttribute.STANDARD_TYPE + "," +
+                      FileAttribute.STANDARD_CONTENT_TYPE;
         try {
             enumerator = dir.enumerate_children(attr, FileQueryInfoFlags.NONE);
         } 
@@ -399,6 +400,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                         var tr = new TagReader();
                         td = tr.read_tag(filepath);
                         if(td != null) {
+                            td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
                             tda += td;
                             job.big_counter[1]++;
                             lock(current_import_track_count) {
@@ -452,6 +454,16 @@ public class Xnoise.MediaImporter : GLib.Object {
                                 tmp.artist = (e.get_author() != null ? e.get_author() : UNKNOWN_ARTIST);
                                 tmp.genre  = (e.get_genre()  != null ? e.get_genre()  : UNKNOWN_GENRE);
                                 tmp.item   = ItemHandlerManager.create_item(e.get_uri());
+                                File fe = File.new_for_uri(e.get_uri());
+                                FileInfo einfo = null;
+                                try {
+                                    einfo = fe.query_info(FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NONE , null);
+                                }
+                                catch(Error err) {
+                                    print("mimeinfo error for playlist content: %s\n", err.message);
+                                    continue;
+                                }
+                                tmp.mimetype = GLib.ContentType.get_mime_type(einfo.get_content_type());
                                 playlist_content += (owned)tmp;
                             }
                         }

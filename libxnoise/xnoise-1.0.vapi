@@ -957,6 +957,7 @@ namespace Xnoise {
 		public string? genre;
 		public Xnoise.Item? item;
 		public int32 length;
+		public string? mimetype;
 		public string? name;
 		public string? title;
 		public uint tracknumber;

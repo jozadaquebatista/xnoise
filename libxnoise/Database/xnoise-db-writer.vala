@@ -864,7 +864,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         "SELECT id FROM items WHERE artist = ? AND album = ? AND title = ?";
     
     private static const string STMT_INSERT_TITLE =
-        "INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length, bitrate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO items (tracknumber, artist, album, title, genre, year, uri, mediatype, length, bitrate, mimetype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     private static const string STMT_GET_ITEM_ID =
         "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.id = ?";
@@ -902,7 +902,8 @@ public class Xnoise.Database.Writer : GLib.Object {
            insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
            insert_title_statement.bind_int (8,  td.item.type)        != Sqlite.OK ||
            insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK ||
-           insert_title_statement.bind_int (10, td.bitrate)          != Sqlite.OK) {
+           insert_title_statement.bind_int (10, td.bitrate)          != Sqlite.OK ||
+           insert_title_statement.bind_text(11, td.mimetype)         != Sqlite.OK) {
             this.db_error();
             return false;
         }

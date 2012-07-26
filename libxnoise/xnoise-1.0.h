@@ -1970,6 +1970,7 @@ struct _XnoiseTrackData {
 	gchar* title;
 	gchar* genre;
 	gchar* name;
+	gchar* mimetype;
 	guint year;
 	guint tracknumber;
 	gint32 length;

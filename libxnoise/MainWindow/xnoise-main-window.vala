@@ -200,8 +200,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             { "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit},
         { "ViewMenuAction", null, N_("_View") },
             { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), "<Alt>1", N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
-            { "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), "<Alt>2",
-               N_("Go to the now playing screen in the main window."), on_show_video_menu_clicked},
             { "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), "<Alt>3", N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
             { "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), "<Alt>2",
                N_("Go to the now playing screen in the main window."), on_show_video_menu_clicked},
