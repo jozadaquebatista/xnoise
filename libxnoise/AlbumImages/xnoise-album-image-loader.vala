@@ -66,7 +66,38 @@ namespace Xnoise {
         _thumb = null;
         return false;
     }
-    
+
+    private static string escape_for_local_folder_search(string? _val) {
+        // transform the name to match the naming scheme
+
+        // transform the name to match the naming scheme
+        string val = _val;
+        string tmp = EMPTYSTRING;
+        if(val == null)
+            return (owned)tmp;
+        
+        tmp = val.strip().down(); //check_album_name(artist, album_name);
+        
+        try {
+            var r = new GLib.Regex("\n");
+            tmp = r.replace(tmp, -1, 0, "_");
+            r = new GLib.Regex(" ");
+            tmp = r.replace(tmp, -1, 0, "_");
+        }
+        catch(RegexError e) {
+            print("%s\n", e.message);
+            return EMPTYSTRING;
+        }
+        if(tmp.contains("/")) {
+            string[] a = tmp.split("/", 20);
+            tmp = EMPTYSTRING;
+            foreach(string s in a) {
+              tmp = tmp + s;
+            }
+        }
+        return (owned)tmp;
+    }
+
     public static string escape_album_for_local_folder_search(string _artist, string? album_name) {
         // transform the name to match the naming scheme
         string artist = _artist;
@@ -87,32 +118,6 @@ namespace Xnoise {
         catch(RegexError e) {
             print("%s\n", e.message);
             return album_name;
-        }
-        if(tmp.contains("/")) {
-            string[] a = tmp.split("/", 20);
-            tmp = EMPTYSTRING;
-            foreach(string s in a) {
-                tmp = tmp + s;
-            }
-        }
-        return (owned)tmp;
-    }
-    
-    public static string escape_for_local_folder_search(string? value) {
-        // transform the name to match the naming scheme
-        string tmp = EMPTYSTRING;
-        if(value == null)
-            return (owned)tmp;
-        
-        try {
-            var r = new GLib.Regex("\n");
-            tmp = r.replace(value, -1, 0, "_");
-            r = new GLib.Regex(" ");
-            tmp = r.replace(tmp, -1, 0, "_");
-        }
-        catch(RegexError e) {
-            print("%s\n", e.message);
-            return value;
         }
         if(tmp.contains("/")) {
             string[] a = tmp.split("/", 20);

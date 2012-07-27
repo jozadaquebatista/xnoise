@@ -1993,7 +1993,6 @@ void xnoise_album_image_load_default_image (XnoiseAlbumImage* self);
 GFile* xnoise_get_albumimage_for_artistalbum (const gchar* artist, const gchar* album, const gchar* size);
 gboolean xnoise_thumbnail_available (const gchar* uri, GFile** _thumb);
 gchar* xnoise_escape_album_for_local_folder_search (const gchar* _artist, const gchar* album_name);
-gchar* xnoise_escape_for_local_folder_search (const gchar* value);
 GType xnoise_ialbum_cover_image_get_type (void) G_GNUC_CONST;
 void xnoise_ialbum_cover_image_find_image (XnoiseIAlbumCoverImage* self);
 GType xnoise_ialbum_cover_image_provider_get_type (void) G_GNUC_CONST;

@@ -1237,8 +1237,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static string escape_album_for_local_folder_search (string _artist, string? album_name);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public static string escape_for_local_folder_search (string? value);
-	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static GLib.File? get_albumimage_for_artistalbum (string? artist, string? album, string? size);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static void initialize (out bool is_first_start);
