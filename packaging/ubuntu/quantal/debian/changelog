@@ -1,4 +1,4 @@
-xnoise (0.2.4.1-1ubuntu1) precise; urgency=low
+xnoise (0.2.4.2-1ubuntu1) quantal; urgency=low
   * update translations
   * extend db for future unity support
   * various bug fixes
@@ -7,7 +7,7 @@ xnoise (0.2.4.1-1ubuntu1) precise; urgency=low
  -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 27 Jul 2012 17:32:10 +0200
 
 
-xnoise (0.2.3.1-1ubuntu1) precise; urgency=low
+xnoise (0.2.3.1-1ubuntu1) quantal; urgency=low
   * embed settings and media selection into main window
   * add main menu entry for previous/play/next (for better HUD integration)
   * store / restore visibility of media browser
@@ -29,7 +29,7 @@ xnoise (0.2.3.1-1ubuntu1) precise; urgency=low
 
 
 
-xnoise (0.2.2.1-1ubuntu1) precise; urgency=low
+xnoise (0.2.2.1-1ubuntu1) quantal; urgency=low
   * fix issue with library rescan
   * fix issue with removal of last played files
   * fix issue with update from old db versions
@@ -39,7 +39,7 @@ xnoise (0.2.2.1-1ubuntu1) precise; urgency=low
 
 
 
-xnoise (0.2.1.1-1ubuntu1) precise; urgency=low
+xnoise (0.2.1.1-1ubuntu1) quantal; urgency=low
   * update spanish, portugese and czech translations
   * add simple chinese localization
   * workaround issues created by Canonical's ignorance
@@ -51,7 +51,7 @@ xnoise (0.2.1.1-1ubuntu1) precise; urgency=low
 
 
 
-xnoise (0.2.0.1-1ubuntu1) precise; urgency=low
+xnoise (0.2.0.1-1ubuntu1) quantal; urgency=low
   * add support for dockable media sources (Categories: Playlists, Media Collection, Stores)
   * add onboard dbus service (not bound to mpris)
   * add new azlyrics plugin
@@ -77,7 +77,7 @@ xnoise (0.2.0.1-1ubuntu1) precise; urgency=low
 
 
 
-xnoise (0.1.31-1) precise; urgency=low
+xnoise (0.1.31-1) quantal; urgency=low
   * port xnoise to gtk+-3.0
   * add option for disabling video subtitles
   * stop using uris for the title search
@@ -95,7 +95,7 @@ xnoise (0.1.31-1) precise; urgency=low
 
 
 
-xnoise (0.1.30-1) precise; urgency=low
+xnoise (0.1.30-1) quantal; urgency=low
   * add new lastfm plugin (scrobble, replace lastfmcovers plugin)
   * add more support for importing playlist files (Francisco Pérez Cuadrado)
   * add new jump to position button
@@ -110,7 +110,7 @@ xnoise (0.1.30-1) precise; urgency=low
 
 
 
-xnoise (0.1.29) precise; urgency=low
+xnoise (0.1.29) quantal; urgency=low
   * redo import and use of streams
   * add mpris v1 plugin
   * update translations for german, hebrew, italian, polish, portugese, russian
@@ -121,7 +121,7 @@ xnoise (0.1.29) precise; urgency=low
 
 
 
-xnoise (0.1.28) precise; urgency=low
+xnoise (0.1.28) quantal; urgency=low
   * add collapse button tooltip text to translatable strings
   * fix the errors that dpkg-buildpackage gives because of Xnoise icons change
   * add forgotten string binding
@@ -151,7 +151,7 @@ xnoise (0.1.28) precise; urgency=low
  -- Jörn Magens <shuerhaaken@googlemail.com>  Sat, 17 Sep 2011 21:01:53 +0200
 
 
-xnoise (0.1.27.4) precise; urgency=low
+xnoise (0.1.27.4) quantal; urgency=low
   * present the currently played track data together with the album cover in the 'now playing' view
   * check missing gstreamer plugins (codecs) and inform the user
   * new handler for adding all visible tracks to tracklist

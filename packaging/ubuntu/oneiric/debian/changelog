@@ -1,3 +1,13 @@
+xnoise (0.2.4.3-1ubuntu1) oneiric; urgency=low
+  * update translations
+  * extend db for future unity support
+  * various bug fixes
+
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 27 Jul 2012 17:32:10 +0200
+
+
+
 xnoise (0.2.3.2-2ubuntu2) oneiric; urgency=low
   * embed settings and media selection into main window
   * add main menu entry for previous/play/next (for better HUD integration)
