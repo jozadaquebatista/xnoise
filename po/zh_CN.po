@@ -49,7 +49,7 @@ msgstr "上次播放的"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-dockable.vala:47
 msgid "Music"
-msgstr ""
+msgstr "音乐"
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:287
 msgid "Collapse all"
@@ -65,7 +65,7 @@ msgstr "播放最多的"
 
 #: ../libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.vala:41
 msgid "Streams"
-msgstr ""
+msgstr "流"
 
 #: ../libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala:41
 msgid "Videos"
@@ -295,11 +295,11 @@ msgstr "添加到播放列表"
 
 #: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:41
 msgid "Move to trash"
-msgstr ""
+msgstr "移动到回收站"
 
 #: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:80
 msgid "Do you want to move the selected file to trash?"
-msgstr ""
+msgstr "您要将选中的文件移动到回收站吗？"
 
 #: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
 msgid "Play"
@@ -312,7 +312,7 @@ msgstr "移除所选歌曲"
 #: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:35
 #: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:39
 msgid "Show in parent folder"
-msgstr ""
+msgstr "在子文件夹中显示"
 
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:68
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:123
@@ -322,7 +322,7 @@ msgstr "音轨信息不足。未搜索歌词。"
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:96
 #: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:112
 msgid "Player stopped. Not searching for lyrics."
-msgstr "播放器停止。未搜索歌词。"
+msgstr "播放器停止。未搜索到歌词。"
 
 #. Gtk.TextIter start_iter;
 #. Gtk.TextIter end_iter;
@@ -412,54 +412,48 @@ msgid "_Rescan collection"
 msgstr "重新扫描合集(_R)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:194
-#, fuzzy
 msgid "Rescan collection"
-msgstr "重新扫描合集(_R)"
+msgstr "重新扫描合集"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:195
 msgid "_Increase volume"
 msgstr "增大音量(_I)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:195
-#, fuzzy
 msgid "Increase playback volume"
-msgstr "增大播放音量(_I)"
+msgstr "增大播放音量"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:196
 msgid "_Decrease volume"
 msgstr "减小音量(_D)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:196
-#, fuzzy
 msgid "Decrease playback volume"
-msgstr "减小播放音量(_D)"
+msgstr "减小播放音量"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:197
-#, fuzzy
 msgid "_Previous track"
-msgstr "上一曲"
+msgstr "上一首(_P)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:197
-#, fuzzy
 msgid "Go to previous track"
-msgstr "前往播放列表。"
+msgstr "转到上一首"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:198
 msgid "_Toggle play"
-msgstr ""
+msgstr "切换播放(_T)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:198
 msgid "Toggle playback status"
-msgstr ""
+msgstr "切换播放状态"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:199
 msgid "_Next track"
-msgstr ""
+msgstr "下一首(_N)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:199
-#, fuzzy
 msgid "Go to next track"
-msgstr "前往播放列表。"
+msgstr "转到下一首"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:201
 msgid "_View"
@@ -471,7 +465,7 @@ msgstr "播放列表(_T)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:202
 msgid "Go to the tracklist."
-msgstr "前往播放列表。"
+msgstr "转到播放列表。"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:203
 msgid "_Now Playing"
@@ -479,7 +473,7 @@ msgstr "正在播放(_N)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:204
 msgid "Go to the now playing screen in the main window."
-msgstr "前往主窗口中的正在播放界面。"
+msgstr "转到主窗口中正在播放的界面。"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:205
 msgid "_Lyrics"
@@ -769,9 +763,8 @@ msgid "Show notifications one track change"
 msgstr "歌曲改变时显示通知"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Use ubuntu/ayatana soundmenu integration"
-msgstr "使用 ayatana 声音菜单"
+msgstr "使用 ubuntu/ayatana 声音菜单集成"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
