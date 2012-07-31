@@ -75,6 +75,8 @@ public class UbuntuOnePlugin : GLib.Object, IPlugin {
     }
 
     private void clean_up() {
+        print("clean up\n");
+        owner.sign_deactivated.disconnect(clean_up);
 //        music_store_widget.deactivate(this);
     }
 
