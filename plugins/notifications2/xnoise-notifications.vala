@@ -187,12 +187,17 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
         if(title == UNKNOWN_TITLE)
             title = UNKNOWN_TITLE_LOCALIZED;
         
+        if(title  == UNKNOWN_TITLE_LOCALIZED)
+            return; // Don't show notifications, if information is unsufficient
+        
         //File f = get_albumimage_for_artistalbum(artist, album, "medium");
         string summary = title;
-        string body = _("by") +
-                      " " + Markup.printf_escaped("%s", artist) + " \n" +
-                      _("on") + 
-                      " " + Markup.printf_escaped("%s", album);
+        string body = (artist != UNKNOWN_ARTIST_LOCALIZED ? 
+                            (_("by") + " " + Markup.printf_escaped("%s", artist) + " \n") : 
+                            "") +
+                      (album != UNKNOWN_ALBUM_LOCALIZED ? 
+                            (_("on") + " " + Markup.printf_escaped("%s", album)) : 
+                            "");
         if(notification == null) {
             notification = new Notification(summary, body, null);
         }
