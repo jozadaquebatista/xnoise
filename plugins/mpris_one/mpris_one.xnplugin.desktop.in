@@ -2,7 +2,7 @@
 name=mprisone
 module=mprisone
 _description=Control xnoise with a MPRIS v1 dbus interface
-website=http://code.google.com/p/xnoise/
+website=https://github.com/shuerhaaken/xnoise/
 icon=/path/to/icon
 copyright=Jörn Magens <shuerhaaken@googlemail.com>
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins

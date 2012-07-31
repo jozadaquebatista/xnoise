@@ -2,7 +2,7 @@
 name=mediakeys
 module=mediakeys
 _description=Control xnoise using mediakeys
-website=http://code.google.com/p/xnoise/
+website=https://github.com/shuerhaaken/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 Jörn Magens
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins

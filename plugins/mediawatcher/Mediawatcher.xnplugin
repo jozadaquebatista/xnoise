@@ -2,7 +2,7 @@
 name=Mediawatcher
 module=Mediawatcher
 description=Watch for file changes in your media directories
-website=http://code.google.com/p/xnoise/
+website=https://github.com/shuerhaaken/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 softshaker 
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins

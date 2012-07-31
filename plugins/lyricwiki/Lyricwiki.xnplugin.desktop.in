@@ -2,7 +2,7 @@
 name=Lyricwiki
 module=Lyricwiki
 _description=Load lyrics from http://www.lyricwiki.com
-website=http://code.google.com/p/xnoise/
+website=https://github.com/shuerhaaken/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 softshaker 
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins

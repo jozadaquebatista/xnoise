@@ -2,7 +2,7 @@
 name=soundmenu2
 module=soundmenu2
 _description=Use ubuntu/ayatana soundmenu integration
-website=http://code.google.com/p/xnoise/
+website=https://github.com/shuerhaaken/xnoise/
 icon=/path/to/icon
 copyright=Copyright © 2010 Jörn Magens
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins

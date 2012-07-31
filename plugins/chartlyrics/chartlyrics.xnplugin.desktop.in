@@ -2,7 +2,7 @@
 name=Chartlyrics
 module=chartlyrics
 _description=Load lyrics from chartlyrics.com
-website=http://code.google.com/p/xnoise/
+website=https://github.com/shuerhaaken/xnoise
 icon=/path/to/icon
 copyright=Copyright © 2010 Andreas Obergrusberger 
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
