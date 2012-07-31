@@ -39,13 +39,13 @@ using U1;
 public class UbuntuOnePlugin : GLib.Object, IPlugin {
     public Main xn { get; set; }
     
-    private uint owner_id;
+//    private uint owner_id;
     private unowned PluginModule.Container _owner;
-    private U1MusicStoreWidget music_store_widget;
+//    private U1MusicStoreWidget music_store_widget;
 
     construct {
         print("construct UbuntuOne plugin\n");
-        this.music_store_widget = new U1MusicStoreWidget(this);
+//        this.music_store_widget = new U1MusicStoreWidget(this);
     }
 
     public PluginModule.Container owner {
