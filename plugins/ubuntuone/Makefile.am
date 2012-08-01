@@ -14,6 +14,9 @@ INCLUDES = \
     -I$(top_srcdir)/libxnoise \
     $(UBUNTUONEUI_CFLAGS) \
     $(NULL)
+    
+noinst_DATA = \
+    u1ms.vapi
 
 libUbuntuOnedir = $(libdir)/xnoise
 
@@ -26,11 +29,12 @@ libUbuntuOne_la_SOURCES = \
 
 libUbuntuOne_la_VALAFLAGS = \
     --thread \
+    --vapidir ./ \
+    --pkg u1ms \
     --vapidir $(top_srcdir)/vapi \
     --basedir $(top_srcdir)/plugins/ubuntuone \
     --vapidir $(top_srcdir)/libxnoise \
     --pkg xnoise-1.0 \
-    --pkg UbuntuOneUI-3.0 \
     @XNOISE_PACKAGES@ \
     $(NULL)
 
@@ -51,6 +55,7 @@ plugin_in_files = UbuntuOne.xnplugin.desktop.in
 plugin_DATA = $(plugin_in_files:.xnplugin.desktop.in=.xnplugin)
 
 EXTRA_DIST = \
+    $(noinst_DATA) \
     $(plugin_in_files) \
     $(libUbuntuOne_DATA) \
     $(libUbuntuOne_la_SOURCES) \

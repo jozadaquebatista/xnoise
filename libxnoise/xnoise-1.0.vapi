@@ -799,6 +799,8 @@ namespace Xnoise {
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
 		public void handle_control_button_click (Xnoise.ControlButton sender, Xnoise.ControlButton.Direction dir);
+		public void insert_dockable (Xnoise.DockableMedia d);
+		public void remove_dockable (string name);
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
 		public void show_status_info (Xnoise.InfoBar bar);
 		public void show_window ();

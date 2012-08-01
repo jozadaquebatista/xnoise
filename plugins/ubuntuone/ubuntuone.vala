@@ -28,24 +28,24 @@
  *     Jörn Magens <shuerhaaken@googlemail.com>
  */
 
+using Gtk;
+using U1; // Gir short name of UbuntuOneUi
 
 using Xnoise;
+using Xnoise.Services;
 using Xnoise.PluginModule;
 
-using U1;
 
 
-//Ubuntu One integration for Xnoise.
 public class UbuntuOnePlugin : GLib.Object, IPlugin {
     public Main xn { get; set; }
     
-//    private uint owner_id;
     private unowned PluginModule.Container _owner;
-//    private U1MusicStoreWidget music_store_widget;
+    private MusicStore music_store;
 
     construct {
         print("construct UbuntuOne plugin\n");
-//        this.music_store_widget = new U1MusicStoreWidget(this);
+        this.music_store = new MusicStore(this);
     }
 
     public PluginModule.Container owner {
@@ -57,15 +57,10 @@ public class UbuntuOnePlugin : GLib.Object, IPlugin {
         }
     }
     
-    public string name { 
-        get {
-            return "ubuntuone_music_store";
-        } 
-    }
+    public string name { get { return "ubuntuone_music_store"; } }
 
     public bool init() {
-//        this.music_store_widget.activate(this.object);
-        
+//        this.music_store.activate(this.object);
         owner.sign_deactivated.connect(clean_up);
         return true;
     }
@@ -77,7 +72,7 @@ public class UbuntuOnePlugin : GLib.Object, IPlugin {
     private void clean_up() {
         print("clean up\n");
         owner.sign_deactivated.disconnect(clean_up);
-//        music_store_widget.deactivate(this);
+//        music_store.deactivate(this);
     }
 
     public Gtk.Widget? get_settings_widget() {
@@ -90,72 +85,137 @@ public class UbuntuOnePlugin : GLib.Object, IPlugin {
 //    private void _locations_changed(*args, **kwargs) {
 //        //Handle the locations setting being changed.
 //        libraries = this.rdbconf.get_strv('locations')
-//        library_uri = Gio.File.new_for_path(UbuntuOneUI.MusicStore.get_library_location()).get_uri()
+//        library_uri = Gio.File.new_for_path(U1.MusicStore.get_library_location()).get_uri()
 //        if library_uri not in libraries:
 //            libraries.append(library_uri)
 //            this.rdbconf.set_strv('locations', libraries)
 //        # Remove the non-uri path if it exists
-//        if UbuntuOneUI.MusicStore.get_library_location() in libraries:
-//            libraries.remove(UbuntuOneUI.MusicStore.get_library_location())
+//        if U1.MusicStore.get_library_location() in libraries:
+//            libraries.remove(U1.MusicStore.get_library_location())
 //            this.rdbconf.set_strv('locations', libraries)
 //        # Remove the unescaped uri path if it exists
-//        unescaped_path = u'file://{0}'.format(UbuntuOneUI.MusicStore.get_library_location())
+//        unescaped_path = u'file://{0}'.format(U1.MusicStore.get_library_location())
 //        if unescaped_path in libraries:
 //            libraries.remove(unescaped_path)
 //            this.rdbconf.set_strv('locations', libraries)
 //    }
 }
+private static const string UBUNTUONE_MUSIC_STORE_NAME = "UbuntuOneMusicStore";
 
-
-/*
-public class U1EntryType(RB.RhythmDBEntryType) {
-    //Entry type for the Ubuntu One Music Store source.
-
-    public U1EntryType() {
-//        RB.RhythmDBEntryType.__init__(name='ubuntuone')
+private class DockableUbuntuOneMS : DockableMedia {
+    
+    public override string name() {
+        return UBUNTUONE_MUSIC_STORE_NAME;
+    }
+    
+    private U1.MusicStore ms;
+    
+    ~DockableUbuntuOneMS() {
+        ms = null;
+    }
+    
+    public override string headline() {
+        return _("UbuntuOne Music Store");
+    }
+    
+    public override DockableMedia.Category category() {
+        return DockableMedia.Category.STORES;
     }
 
-    public void do_can_sync_metadata(entry) {
-        //Not a real source, so we can't sync metadata.
-        return false;
+    public override Gtk.Widget? get_widget(MainWindow window) {
+        var l = new Label("Ubuntu One Music Store");
+        l.show.connect( (s) => {
+            print("realized\n");
+            ms = new U1.MusicStore();
+            
+            //Signals
+            //ms.preview_mp3.connect(on_preview_mp3); // doesn't work for a strange reason
+            Signal.connect((void*)ms, "preview-mp3", (GLib.Callback)on_preview_mp3, (void*)this);
+            ms.play_library.connect(on_play_library);
+            ms.download_finished.connect(on_download_finished);
+            ms.url_loaded.connect(on_url_loaded);
+            
+            int idx = main_window.tracklistnotebook.append_page(ms, null);
+            ms.show_all();
+            main_window.tracklistnotebook.set_current_page(idx);
+            main_window.tracklistnotebook.show_all();
+            Timeout.add_seconds(2, () => {
+                main_window.tracklistnotebook.set_current_page(idx);
+                ms.visible = true;
+                print("ms.get_library_location(): %s\n", ms.get_library_location());
+                return false;
+            });
+            
+        });
+        return l;
+    }
+    
+    private void on_preview_mp3(string url, string title) {
+        Main.instance.immediate_play(url);
+        Timeout.add_seconds(2, () => {
+            global.current_title = title;
+            return false;
+        });
     }
 
-    public void do_sync_metadata(entry, changes) {
-        //Do nothing.
-        return;
+    private void on_play_library(string path) {
+        print("on_play_library::%s\n", path);
+    }
+    
+    private void on_url_loaded(string url) {
+        print("on_url_loaded::%s\n", url);
+    }
+    
+    private void on_download_finished(string path) {
+        print("on_download_finished::%s\n", path);
+    }
+    
+    public override Gdk.Pixbuf get_icon() {
+        Gdk.Pixbuf? icon = null;
+        try {
+            icon = Gtk.IconTheme.get_default().load_icon("ubuntuone", 24, IconLookupFlags.FORCE_SIZE);
+        }
+        catch(Error e) {
+            print("Ubuntu one icon error: %s\n", e.message);
+        }
+        return icon;
     }
 }
 
-
 //The Ubuntu One Music Store.
-public class U1MusicStoreWidget : GLib.Object {
-    private UbuntuOnePlugin plugin;
-    private U1EntryType entry_type;
-    private U1Source source;
+public class MusicStore : GLib.Object {
+    private unowned UbuntuOnePlugin plugin;
+//    private U1EntryType entry_type;
+//    private U1Source source;
     
-    public U1MusicStoreWidget(UbuntuOnePlugin plugin) {
-        this.plugin = plugin
-//        this.db = null;
-//        this.shell = null;
-        this.source = null;
-        this.entry_type = new U1EntryType();
+    public MusicStore(UbuntuOnePlugin plugin) {
+        this.plugin = plugin;
+//        var win = new Gtk.Window(Gtk.WindowType.TOPLEVEL);
+//        win.add(new U1.MusicStore());
+//        win.show_all();
+        DockableMedia d = new DockableUbuntuOneMS();
+        main_window.insert_dockable(d);
+    }
+    
+    ~MusicStore() {
+        main_window.remove_dockable(UBUNTUONE_MUSIC_STORE_NAME);
     }
 
-    public void activate(shell) {
-            //Plugin startup.
-        this.db = shell.get_property("db");
-        group = RB.DisplayPageGroup.get_by_id("stores");
+//    public void activate(shell) {
+//        //Plugin startup.
+//        this.db = shell.get_property("db");
+//        group = RB.DisplayPageGroup.get_by_id("stores");
 
-        icon = Gtk.IconTheme.get_default().load_icon("ubuntuone", 24, 0);
+//        icon = Gtk.IconTheme.get_default().load_icon("ubuntuone", 24, 0);
 
-        this.db.register_entry_type(this.entry_type);
+//        this.db.register_entry_type(this.entry_type);
 
-        this.source = new U1Source(shell=shell,
-                                  entry_type=this.entry_type,
-                                  pixbuf=icon,
-                                  plugin=this.plugin);
-        shell.register_entry_type_for_source(this.source, this.entry_type);
-        shell.append_display_page(this.source, group);
+//        this.source = new U1Source(shell=shell,
+//                                  entry_type=this.entry_type,
+//                                  pixbuf=icon,
+//                                  plugin=this.plugin);
+//        shell.register_entry_type_for_source(this.source, this.entry_type);
+//        shell.append_display_page(this.source, group);
 
 //        this.shell = shell;
 //        this.source.connect("preview-mp3", this.play_preview_mp3)
@@ -165,80 +225,81 @@ public class U1MusicStoreWidget : GLib.Object {
 
 //        this.source.props.query_model = RB.RhythmDBQueryModel.new_empty(
 //            this.db)
-    }
+//    }
 
-    public void deactivate(shell) {
-        //Plugin shutdown.
-        // remove source
-        this.source.delete_thyself()
-        // delete held references
-        del this.db
-        del this.source
-        del this.shell
-    }
+//    public void deactivate(shell) {
+//        //Plugin shutdown.
+//        // remove source
+//        this.source.delete_thyself()
+//        // delete held references
+//        del this.db
+//        del this.source
+//        del this.shell
+//    }
 
-    public void url_loaded(source, url) {
-        //A URL is loaded in the plugin
-        if urlparse.urlparse(url)[2] == "https":
-            pass
-        else:
-            pass
-    }
+//    public void url_loaded(source, url) {
+//        //A URL is loaded in the plugin
+//        if urlparse.urlparse(url)[2] == "https":
+//            pass
+//        else:
+//            pass
+//    }
 
-    private void _udf_path_to_library_uri(path) {
-        //Build a URI from the path for the song in the library.
-        if path.startswith(UbuntuOneUI.MusicStore.get_library_location()):
-            library_path = path
-        else:
-            subpath = path
-            if subpath.startswith("/"):
-                subpath = subpath[1:]
-            library_path = os.path.join(UbuntuOneUI.MusicStore.get_library_location(), subpath)
-        // convert path to URI. Don't use urllib for this; Python and
-        // glib escape URLs differently. gio does it the glib way.
-        return Gio.File.new_for_path(library_path).get_uri()
-    }
+//    private void _udf_path_to_library_uri(path) {
+//        //Build a URI from the path for the song in the library.
+//        if path.startswith(U1.MusicStore.get_library_location()):
+//            library_path = path
+//        else:
+//            subpath = path
+//            if subpath.startswith("/"):
+//                subpath = subpath[1:]
+//            library_path = os.path.join(U1.MusicStore.get_library_location(), subpath)
+//        // convert path to URI. Don't use urllib for this; Python and
+//        // glib escape URLs differently. gio does it the glib way.
+//        return Gio.File.new_for_path(library_path).get_uri()
+//    }
 
-    public void download_finished(source, path) {
-        //A file is finished downloading
-        library_uri = this._udf_path_to_library_uri(path)
-        // Import the URI
-        if not this.db.entry_lookup_by_location(library_uri):
-            this.db.add_uri(library_uri)
-    }
+//    public void download_finished(source, path) {
+//        //A file is finished downloading
+//        library_uri = this._udf_path_to_library_uri(path)
+//        // Import the URI
+//        if not this.db.entry_lookup_by_location(library_uri):
+//            this.db.add_uri(library_uri)
+//    }
 
-    public void play_library(source, path) {
-        //Switch to and start playing a song from the library
-        uri = this._udf_path_to_library_uri(path)
-        entry = this.db.entry_lookup_by_location(uri)
-        if not entry:
-            print "couldn't find entry", uri
-            return
-        libsrc = this.shell.props.library_source
-        artist_view, album_view = libsrc.get_property_views()[0:2]
-        song_view = libsrc.get_entry_view()
-        artist = entry.get_string(RB.RhythmDBPropType.ARTIST)
-        album = entry.get_string(RB.RhythmDBPropType.ALBUM)
-        this.shell.props.display_page_tree.select(libsrc)
-        artist_view.set_selection([artist])
-        album_view.set_selection([album])
-        song_view.scroll_to_entry(entry)
-        player = this.shell.get_property('shell-player')
-        player.stop()
-        player.play_entry(entry, libsrc)
-    }
+//    public void play_library(source, path) {
+//        //Switch to and start playing a song from the library
+//        uri = this._udf_path_to_library_uri(path)
+//        entry = this.db.entry_lookup_by_location(uri)
+//        if not entry:
+//            print "couldn't find entry", uri
+//            return
+//        libsrc = this.shell.props.library_source
+//        artist_view, album_view = libsrc.get_property_views()[0:2]
+//        song_view = libsrc.get_entry_view()
+//        artist = entry.get_string(RB.RhythmDBPropType.ARTIST)
+//        album = entry.get_string(RB.RhythmDBPropType.ALBUM)
+//        this.shell.props.display_page_tree.select(libsrc)
+//        artist_view.set_selection([artist])
+//        album_view.set_selection([album])
+//        song_view.scroll_to_entry(entry)
+//        player = this.shell.get_property('shell-player')
+//        player.stop()
+//        player.play_entry(entry, libsrc)
+//    }
 
-    public void play_preview_mp3(source, url, title) {
-        //Play a passed mp3; signal handler for preview-mp3 signal.
-        // create an entry, don't save it, and play it
-        entry = RB.RhythmDBEntry.new(this.db, this.entry_type, url)
-        this.db.entry_set(entry, RB.RhythmDBPropType.TITLE, title)
-        player = this.shell.get_property('shell-player')
-        player.stop()
-        player.play_entry(entry, this.source)
-    }
+//    public void play_preview_mp3(source, url, title) {
+//        //Play a passed mp3; signal handler for preview-mp3 signal.
+//        // create an entry, don't save it, and play it
+//        entry = RB.RhythmDBEntry.new(this.db, this.entry_type, url)
+//        this.db.entry_set(entry, RB.RhythmDBPropType.TITLE, title)
+//        player = this.shell.get_property('shell-player')
+//        player.stop()
+//        player.play_entry(entry, this.source)
+//    }
 }
 
+/*
 
 //A Rhythmbox source widget for the U1 Music Store.
 public class U1Source() : RB.Source {
@@ -255,10 +316,10 @@ public class U1Source() : RB.Source {
     
     public U1Source() {
         RB.Source.__init__(name=_("Ubuntu One"))
-        this.browser = UbuntuOneUI.MusicStore(); //MUSIC_STORE_WIDGET
+        this.browser = U1.MusicStore(); //MUSIC_STORE_WIDGET
         this.__activated = false
         this.__plugin = null
-        this.add_music_store_widget()
+        this.add_music_store()
     }
 
     public void do_impl_activate() {
@@ -296,7 +357,7 @@ public class U1Source() : RB.Source {
                 destroy_data(callback_data)
     }
 
-    public void add_music_store_widget() {
+    public void add_music_store() {
         //Display the music store widget in Rhythmbox.
         if this.browser.get_property('parent') is null:
             this.add(this.browser)
@@ -340,4 +401,25 @@ public class U1Source() : RB.Source {
 //        this.url_loaded(url);
 //    }
 }
+
+public class U1EntryType(RB.RhythmDBEntryType) {
+    //Entry type for the Ubuntu One Music Store source.
+
+    public U1EntryType() {
+//        RB.RhythmDBEntryType.__init__(name='ubuntuone')
+    }
+
+    public void do_can_sync_metadata(entry) {
+        //Not a real source, so we can't sync metadata.
+        return false;
+    }
+
+    public void do_sync_metadata(entry, changes) {
+        //Do nothing.
+        return;
+    }
+}
+
+
+
 */
