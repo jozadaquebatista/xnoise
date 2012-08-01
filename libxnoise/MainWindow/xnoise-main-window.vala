@@ -1446,6 +1446,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                         ((TreeStore)m).remove(i);
                     //TODO: remove d widget
                     media_sources_nb.remove_page(num);
+                    dockable_media_sources.remove(name);
                     dockable_number--;
                     return true;
                 }

@@ -93,7 +93,13 @@ private class DockableUbuntuOneMS : DockableMedia {
     private U1.MusicStore ms;
     
     ~DockableUbuntuOneMS() {
+        int ms_num = main_window.tracklistnotebook.page_num(ms);
+        main_window.tracklistnotebook.remove_page(ms_num);
         ms = null;
+        Idle.add( () => {
+            main_window.tracklistnotebook.set_current_page(0);
+            return false;
+        });
     }
     
     public override string headline() {
