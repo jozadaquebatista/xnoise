@@ -8,11 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2012-07-31 15:41+0200\n"
-=======
-"POT-Creation-Date: 2012-08-01 12:05+0200\n"
->>>>>>> ubuntuone
+"POT-Creation-Date: 2012-08-02 00:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -544,60 +540,40 @@ msgstr ""
 msgid "Select media file"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1398
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
 msgid "Media Collections"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
 msgid "Playlists"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
 msgid "Stores"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
 msgid "Devices"
 msgstr ""
 
-<<<<<<< HEAD
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1515
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
 msgid "Remove all"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1520
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1567
 msgid "Remove selected titles"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1525
-=======
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1544
-msgid "Remove all"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1549
-msgid "Remove selected titles"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1554
->>>>>>> ubuntuone
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1572
 msgid "Jump to current position"
 msgstr ""
 
 #. AppMenuButton for compact layout
-<<<<<<< HEAD
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1637
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1684
 msgid "Show application main menu"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1671
-=======
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1666
-msgid "Show application main menu"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1700
->>>>>>> ubuntuone
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1718
 msgid "Search..."
 msgstr ""
 
@@ -800,4 +776,12 @@ msgstr ""
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
+msgstr ""
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+msgid "Ubuntu One Music Store"
+msgstr ""
+
+#: ../plugins/ubuntuone/ubuntuone.vala:106
+msgid "UbuntuOne Music Store"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-31 15:29+0200\n"
+"POT-Creation-Date: 2012-08-02 00:15+0200\n"
 "PO-Revision-Date: 2012-06-29 12:50+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -552,40 +552,40 @@ msgstr "הכנס את כתובת ה-URL של הקובץ שברצונך לנגן"
 msgid "Select media file"
 msgstr "בחירת קובץ מדיה"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1398
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
 msgid "Media Collections"
 msgstr "אוספי המדיה"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
 msgid "Playlists"
 msgstr "רשימת ניגון"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
 msgid "Stores"
 msgstr "מלאיים"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
 msgid "Devices"
 msgstr "התקנים"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1515
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
 msgid "Remove all"
 msgstr "הסרת הכול"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1520
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1567
 msgid "Remove selected titles"
 msgstr "הסרת כל הכותרות הנבחרות"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1525
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1572
 msgid "Jump to current position"
 msgstr "קפוץ למיקום הנוכחי"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1637
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1684
 msgid "Show application main menu"
 msgstr "הצג את התפריט הראשי"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1671
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1718
 msgid "Search..."
 msgstr "חפש..."
 
@@ -789,6 +789,14 @@ msgstr "השתמש ב-soundmenu של Ubuntu/Ayatana"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "קבע את שם החלון לשם הכותרת הנוכחית"
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+msgid "Ubuntu One Music Store"
+msgstr ""
+
+#: ../plugins/ubuntuone/ubuntuone.vala:106
+msgid "UbuntuOne Music Store"
+msgstr ""
 
 #, fuzzy
 #~ msgid "xnoise - Add media sources to the library"

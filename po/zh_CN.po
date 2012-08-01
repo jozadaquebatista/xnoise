@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-31 15:29+0200\n"
+"POT-Creation-Date: 2012-08-02 00:15+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -541,40 +541,40 @@ msgstr "输入要播放的 URL"
 msgid "Select media file"
 msgstr "选择媒体文件"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1398
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
 msgid "Media Collections"
 msgstr "媒体合集"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
 msgid "Playlists"
 msgstr "播放列表"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
 msgid "Stores"
 msgstr "商店"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
 msgid "Devices"
 msgstr "设备"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1515
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
 msgid "Remove all"
 msgstr "移除全部"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1520
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1567
 msgid "Remove selected titles"
 msgstr "移除所选标题"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1525
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1572
 msgid "Jump to current position"
 msgstr "跳至当前位置"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1637
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1684
 msgid "Show application main menu"
 msgstr "显示应用程序主菜单"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1671
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1718
 msgid "Search..."
 msgstr "搜索..."
 
@@ -778,6 +778,14 @@ msgstr "使用 ubuntu/ayatana 声音菜单集成"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "设置窗口名称为当前标题"
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+msgid "Ubuntu One Music Store"
+msgstr ""
+
+#: ../plugins/ubuntuone/ubuntuone.vala:106
+msgid "UbuntuOne Music Store"
+msgstr ""
 
 #~ msgid "xnoise - Add media sources to the library"
 #~ msgstr "xnoise - 添加媒体源到库"

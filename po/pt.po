@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-31 15:29+0200\n"
+"POT-Creation-Date: 2012-08-02 00:15+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn &lt;shuerhaaken@googlemail.com&gt;\n"
@@ -554,40 +554,40 @@ msgstr "Indique o URL a reproduzir"
 msgid "Select media file"
 msgstr "Selecione o ficheiro"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1398
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
 msgid "Media Collections"
 msgstr "Coleções multimédia"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
 msgid "Playlists"
 msgstr "Listas de reprodução"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
 msgid "Stores"
 msgstr "Lojas digitais"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
 msgid "Devices"
 msgstr "Dispositivos"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1515
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
 msgid "Remove all"
 msgstr "Remover tudo"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1520
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1567
 msgid "Remove selected titles"
 msgstr "Remover títulos selecionados"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1525
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1572
 msgid "Jump to current position"
 msgstr "Ir para a posição atual"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1637
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1684
 msgid "Show application main menu"
 msgstr "Mostrar menu principal"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1671
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1718
 msgid "Search..."
 msgstr "Procurar..."
 
@@ -793,6 +793,14 @@ msgstr "Utilizar menu de som ubuntu/ayatana"
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
 msgstr "Utilizar o título da faixa como título da janela"
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+msgid "Ubuntu One Music Store"
+msgstr ""
+
+#: ../plugins/ubuntuone/ubuntuone.vala:106
+msgid "UbuntuOne Music Store"
+msgstr ""
 
 #~ msgid "xnoise - Add media sources to the library"
 #~ msgstr "xnoise - Adicionar fontes multimédia à coleção"

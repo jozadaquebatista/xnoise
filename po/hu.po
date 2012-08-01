@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-31 15:29+0200\n"
+"POT-Creation-Date: 2012-08-02 00:15+0200\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-"
@@ -580,41 +580,41 @@ msgstr "Enter the URL of the file to open"
 msgid "Select media file"
 msgstr "Média fájl kiválasztása"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1398
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
 #, fuzzy
 msgid "Media Collections"
 msgstr "R_escan collection"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
 msgid "Playlists"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
 msgid "Stores"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
 msgid "Devices"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1515
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
 msgid "Remove all"
 msgstr "Összes eltávolítása"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1520
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1567
 msgid "Remove selected titles"
 msgstr "Kiválasztott címek eltávolítása"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1525
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1572
 msgid "Jump to current position"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1637
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1684
 msgid "Show application main menu"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1671
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1718
 msgid "Search..."
 msgstr ""
 
@@ -817,6 +817,14 @@ msgstr ""
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
+msgstr ""
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+msgid "Ubuntu One Music Store"
+msgstr ""
+
+#: ../plugins/ubuntuone/ubuntuone.vala:106
+msgid "UbuntuOne Music Store"
 msgstr ""
 
 #, fuzzy
