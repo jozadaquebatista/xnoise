@@ -48,7 +48,7 @@ public class Xnoise.MediaSelector : TreeView {
     
     public string selected_dockable_media { get; set; }
     
-    public signal void selection_changed(int selection_number);
+    public signal void selection_changed(string dockable_name); //int selection_number
     
     public MediaSelector() {
         selected_dockable_media = "";
@@ -107,7 +107,6 @@ public class Xnoise.MediaSelector : TreeView {
         
         TreeIter it;
         TreeStore m = (TreeStore)this.get_model();
-        int tab = 0;
         if(treepath.get_depth() == 1) {
             if(!this.is_row_expanded(treepath)) {
                 this.expand_row(treepath, false);
@@ -131,7 +130,6 @@ public class Xnoise.MediaSelector : TreeView {
             m.get_iter(out it, treepath);
             string? name;
             m.get(it, 
-                  Column.TAB_NO, out tab,
                   Column.NAME, out name
             );
             m.set(it,
@@ -141,9 +139,8 @@ public class Xnoise.MediaSelector : TreeView {
             if(name == null)
                 name = "";
             selected_dockable_media = name;
-            selection_changed(tab);
+            selection_changed(name);
         }
-        //media_sources_nb.set_current_page(tab);
         return false;
     }
     
@@ -187,7 +184,7 @@ public class Xnoise.MediaSelector : TreeView {
                         if(name == null)
                             name = "";
                         selected_dockable_media = name;
-                        selection_changed(tab);
+                        selection_changed(name);
                     }
                 }
                 break;

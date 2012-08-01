@@ -704,7 +704,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 }
                 return true;
             case SPACE_KEY: {
-                    if(search_entry.has_focus || global.cellrenderer_in_edit)
+                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
                         return false;
                     playPauseButton.clicked();
                 }
@@ -1344,11 +1344,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     public void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
         if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS) {
-            if(global.player_state == PlayerState.STOPPED)
+            if(global.player_state == PlayerState.STOPPED) {
                 return;
+            }
             this.change_track(dir);
         }
         else if(dir == ControlButton.Direction.STOP) {
+            gst_player.stop();
             this.stop();
         }
     }
@@ -1408,17 +1410,31 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
     
+    public void select_dockable_by_name(string name) {
+        DockableMedia? d = dockable_media_sources.lookup(name);
+        if(d == null) {
+            print("dockable %s does not exist\n", name);
+            return;
+        }
+        media_sources_nb.set_current_page(media_sources_nb.page_num(d.get_widget(this)));
+    }
+    
     public void insert_dockable(DockableMedia d) {
         TreeIter? ix = null;
+        if(dockable_media_sources.lookup(d.name()) != null)
+            return; // already inside
+        dockable_media_sources.insert(d.name(), d);
         _insert_dockable(d, false, ref ix, false);
+        media_source_selector.expand_all();
     }
     
     public void remove_dockable(string name) {
         TreeStore m = (TreeStore)media_source_selector.get_model();
         string? iname = null;
+        int num = -1;
         m.foreach( (m,p,i) => {
             if(p.get_depth() == 2) {
-                m.get(i, MediaSelector.Column.NAME, out iname);
+                m.get(i, MediaSelector.Column.NAME, out iname, MediaSelector.Column.TAB_NO, out num);
                 if(name == iname) {
                     TreePath pc = m.get_path(i);
                     pc.up();
@@ -1429,6 +1445,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     else
                         ((TreeStore)m).remove(i);
                     //TODO: remove d widget
+                    media_sources_nb.remove_page(num);
                     dockable_number--;
                     return true;
                 }
@@ -1715,7 +1732,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             media_source_selector = new MediaSelector();
             media_source_selector.selection_changed.connect( (s,t) => {
-                media_sources_nb.set_current_page(t);
+                select_dockable_by_name(t);
+                //media_sources_nb.set_current_page(t);
             });
             var mss_sw = new ScrolledWindow(null, null);
             mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);

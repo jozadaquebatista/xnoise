@@ -45,12 +45,17 @@ private class Xnoise.DockablePlaylistLastplayed : DockableMedia {
         return DockableMedia.Category.PLAYLIST;
     }
 
-    public override Gtk.Widget? get_widget(MainWindow window) {
+    private Widget? w = null;
+    
+    public override unowned Gtk.Widget? get_widget(Xnoise.MainWindow window) {
+        if(w != null)
+            return w;
         var sw = new ScrolledWindow(null, null);
         var tv = new PlaylistTreeViewLastplayed(this, window, (Widget)sw);
         sw.set_shadow_type(ShadowType.IN);
         sw.add(tv);
-        return sw;
+        w = sw;
+        return w;
     }
 
     public override Gdk.Pixbuf get_icon() {

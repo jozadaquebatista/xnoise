@@ -101,6 +101,8 @@ internal class Xnoise.TrackInfobar : Gtk.ToolItem {
 
     private bool press_was_valid = false;
     private bool on_press(Gdk.EventButton e) {
+        if(this.player.is_stream)
+            return true;
         Allocation allocation;
         this.progress.get_allocation(out allocation);
         uint progress_width = allocation.width;
@@ -126,6 +128,8 @@ internal class Xnoise.TrackInfobar : Gtk.ToolItem {
     }
 
     private bool on_release(Gdk.EventButton e) {
+        if(this.player.is_stream)
+            return true;
         if(press_was_valid == false)
             return true;
         double mouse_x = e.x - topbox.get_spacing();
@@ -162,6 +166,8 @@ internal class Xnoise.TrackInfobar : Gtk.ToolItem {
     }
     
     private bool on_motion_notify(Gdk.EventMotion e) {
+        if(this.player.is_stream)
+            return true;
         double thisFraction;
         Allocation allocation;
         this.progress.get_allocation(out allocation);
@@ -187,6 +193,8 @@ internal class Xnoise.TrackInfobar : Gtk.ToolItem {
 
     private uint scroll_source = 0;
     private bool on_scroll(Gdk.EventScroll event) {
+        if(this.player.is_stream)
+            return true;
         if(!progress.get_visible())
             return true;
         if(scroll_source != 0)
