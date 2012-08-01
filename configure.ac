@@ -44,6 +44,7 @@ dnl required versions for plugins
 LIBNOTIFY_REQUIRED=0.7.0
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
+UBUNTUONEUI_REQUIRED=3.0
 
 VALA_REQUIRED=0.15.0
 
@@ -183,6 +184,25 @@ fi
 AC_SUBST(GDKX11_CFLAGS)
 AC_SUBST(GDKX11_LIBS)
 dnl ================================================================
+
+
+
+
+dnl ================================================================
+dnl plugin check for plugins dependent on libnotify
+
+PKG_CHECK_MODULES(UBUNTUONEUI, \
+                  libubuntuoneui-3.0 >= $UBUNTUONEUI_REQUIRED, \
+                  have_libubuntuoneui=yes, \
+                  have_libubuntuoneui=no)
+
+if test "x$have_libubuntuoneui" != "xyes"; then
+    AC_MSG_NOTICE([libubuntuoneui $UBUNTUONEUI_REQUIRED or greater not found.])
+fi
+AC_SUBST(UBUNTUONEUI_CFLAGS)
+AC_SUBST(UBUNTUONEUI_LIBS)
+dnl ================================================================
+
 
 
 dnl ================================================================
@@ -354,6 +374,27 @@ AM_CONDITIONAL(ENABLE_AZLYRICS, test x"$enable_azlyrics" = "xyes")
 dnl ================================================================
 
 
+dnl ================================================================
+dnl dependency check for optional build of azlyrics plugin 
+
+AC_ARG_ENABLE([ubuntuone],
+    AS_HELP_STRING([--disable-ubuntuone],
+    [Disable ubuntuone music store plugin (default: enabled)]),
+    [enable_ubuntuone=$enableval],
+    [enable_ubuntuone=yes])
+
+if test "x$enable_ubuntuone" = "xyes"; then
+    if test "x$have_libubuntuoneui" = "xyes"; then
+        enable_ubuntuone=yes
+    else
+        enable_ubuntuone=no
+        AC_MSG_NOTICE([ubuntuone music store plugin will not be included in the build.])
+    fi
+fi
+AM_CONDITIONAL(ENABLE_UBUNTUONE_MUSICSTORE, test x"$enable_ubuntuone" = "xyes")
+dnl ================================================================
+
+
 
 XNOISE_PACKAGES="\
     --pkg config \
@@ -424,6 +465,7 @@ AC_CONFIG_FILES([
     plugins/databaseLyrics/Makefile
     plugins/lastfm/Makefile
     plugins/azlyrics/Makefile
+    plugins/ubuntuone/Makefile
     po/Makefile.in
     doc/Makefile
     vapi/Makefile
@@ -451,6 +493,7 @@ echo "
     Test plugin (Demo):            yes (always)
     TitleToDecoration:             yes (always)
     Ubuntu soundmenu:              ${enable_soundmenu2}
+    Ubuntu One Music Store:        ${enable_ubuntuone}
     Chartlyrics:                   ${enable_chartlyrics}
     Azlyrics:                      ${enable_azlyrics}
     Lyricwiki:                     ${enable_lyricwiki}

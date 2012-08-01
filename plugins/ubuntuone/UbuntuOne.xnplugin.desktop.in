@@ -1,0 +1,9 @@
+[XnoisePlugin]
+name=UbuntuOne
+module=UbuntuOne
+_description=Ubuntu One Music Store
+website=https://one.ubuntu.com/
+icon=/path/to/icon
+copyright=Copyright © 2012 Jörn Magens 
+license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
+author=Jörn Magens <shuerhaaken@googlemail.com>

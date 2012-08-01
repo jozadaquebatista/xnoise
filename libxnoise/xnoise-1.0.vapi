@@ -535,7 +535,7 @@ namespace Xnoise {
 		public DockableMedia ();
 		public abstract Xnoise.DockableMedia.Category category ();
 		public abstract Gdk.Pixbuf get_icon ();
-		public abstract Gtk.Widget? get_widget (Xnoise.MainWindow window);
+		public abstract unowned Gtk.Widget? get_widget (Xnoise.MainWindow window);
 		public abstract string headline ();
 		public abstract string name ();
 	}
@@ -799,6 +799,9 @@ namespace Xnoise {
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
 		public void handle_control_button_click (Xnoise.ControlButton sender, Xnoise.ControlButton.Direction dir);
+		public void insert_dockable (Xnoise.DockableMedia d);
+		public void remove_dockable (string name);
+		public void select_dockable_by_name (string name);
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
 		public void show_status_info (Xnoise.InfoBar bar);
 		public void show_window ();
@@ -843,7 +846,7 @@ namespace Xnoise {
 		}
 		public MediaSelector ();
 		public string selected_dockable_media { get; set; }
-		public signal void selection_changed (int selection_number);
+		public signal void selection_changed (string dockable_name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaStreamSchemes {

@@ -87,4 +87,6 @@ plugins/mpris_one/mpris_one.xnplugin.desktop.in
 plugins/notifications2/notifications.xnplugin.desktop.in
 plugins/soundmenu2/soundmenu2.xnplugin.desktop.in
 plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in
+plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in
+plugins/ubuntuone/ubuntuone.vala
 

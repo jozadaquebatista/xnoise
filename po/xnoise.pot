@@ -8,7 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2012-07-31 15:41+0200\n"
+=======
+"POT-Creation-Date: 2012-08-01 12:05+0200\n"
+>>>>>>> ubuntuone
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -556,6 +560,7 @@ msgstr ""
 msgid "Devices"
 msgstr ""
 
+<<<<<<< HEAD
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1515
 msgid "Remove all"
 msgstr ""
@@ -565,15 +570,34 @@ msgid "Remove selected titles"
 msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1525
+=======
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1544
+msgid "Remove all"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1549
+msgid "Remove selected titles"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1554
+>>>>>>> ubuntuone
 msgid "Jump to current position"
 msgstr ""
 
 #. AppMenuButton for compact layout
+<<<<<<< HEAD
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1637
 msgid "Show application main menu"
 msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1671
+=======
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1666
+msgid "Show application main menu"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1700
+>>>>>>> ubuntuone
 msgid "Search..."
 msgstr ""
 

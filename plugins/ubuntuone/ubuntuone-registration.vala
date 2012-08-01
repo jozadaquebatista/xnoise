@@ -1,4 +1,4 @@
-/* xnoise-dockable-streams.vala
+/* xnoise-title-to-decoration-registration.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -27,39 +27,8 @@
  * Author:
  *     Jörn Magens
  */
-
-using Gtk;
-
-
-private class Xnoise.DockableStreams : DockableMedia {
-    
-    public override string name() {
-        return "DockableStreams";
-    }
-    
-    public override string headline() {
-        return _("Streams");
-    }
-    
-    public override DockableMedia.Category category() {
-        return DockableMedia.Category.MEDIA_COLLECTION;
-    }
-
-    private Widget? w = null;
-    
-    public override unowned Gtk.Widget? get_widget(Xnoise.MainWindow window) {
-        if(w != null)
-            return w;
-        var sw = new ScrolledWindow(null, null);
-        var tv = new TreeViewStreams(this, window, (Widget)sw);
-        sw.set_shadow_type(ShadowType.IN);
-        sw.add(tv);
-        w = sw;
-        return w;
-    }
-
-    public override Gdk.Pixbuf get_icon() {
-        return icon_repo.radios_icon;
-    }
+ 
+[ModuleInit]
+public Type init_module(TypeModule module) { 
+    return typeof(UbuntuOnePlugin);
 }
-

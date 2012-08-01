@@ -3,6 +3,7 @@ plugins/databaseLyrics/xnoise-database-lyrics.c
 plugins/notifications2/xnoise-notifications.c
 plugins/titleToDecoration/xnoise-title-to-decoration.c
 plugins/lastfm/xnoise-lastfm.c
+plugins/ubuntuone/ubuntuone.c
 libxnoise/Application/xnoise-application.c
 libxnoise/Database/xnoise-db-reader.c
 libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.c
