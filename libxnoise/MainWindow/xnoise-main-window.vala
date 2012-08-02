@@ -85,7 +85,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private Box mbbox01;
     private Xnoise.AppMenuButton app_menu_button;
     private TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
-    private Box mbbx;
     public bool quit_if_closed;
     public ScrolledWindow musicBrScrollWin = null;
     public ScrolledWindow trackListScrollWin = null;
@@ -107,6 +106,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     public Notebook tracklistnotebook;
     public Notebook dialognotebook;
     public AlbumImage albumimage;
+    public MediaSoureWidget msw;
     internal TrackInfobar track_infobar;
     public MusicBrowser musicBr = null;
     public TrackList trackList;
@@ -304,7 +304,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             print("%s\n", e.message);
         }
         Idle.add( () => {
-            media_source_selector.grab_focus();
+            msw.media_source_selector.grab_focus();
             return false;
         });
         this.window_state_event.connect(on_window_state_event);
@@ -1394,128 +1394,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
     
-    private string? get_category_name(DockableMedia.Category category) {
-        switch(category) {
-            case DockableMedia.Category.MEDIA_COLLECTION:
-                return _("Media Collections");
-            case DockableMedia.Category.PLAYLIST:
-                return _("Playlists");
-            case DockableMedia.Category.STORES:
-                return _("Stores");
-            case DockableMedia.Category.DEVICES:
-                return _("Devices");
-            case DockableMedia.Category.UNKNOWN:
-            default:
-                return null;
-        }
-    }
-    
-    public void select_dockable_by_name(string name) {
-        DockableMedia? d = dockable_media_sources.lookup(name);
-        if(d == null) {
-            print("dockable %s does not exist\n", name);
-            return;
-        }
-        media_sources_nb.set_current_page(media_sources_nb.page_num(d.get_widget(this)));
-    }
-    
-    public void insert_dockable(DockableMedia d) {
-        TreeIter? ix = null;
-        if(dockable_media_sources.lookup(d.name()) != null)
-            return; // already inside
-        dockable_media_sources.insert(d.name(), d);
-        _insert_dockable(d, false, ref ix, false);
-        media_source_selector.expand_all();
-    }
-    
-    public void remove_dockable(string name) {
-        TreeStore m = (TreeStore)media_source_selector.get_model();
-        string? iname = null;
-        int num = -1;
-        m.foreach( (m,p,i) => {
-            if(p.get_depth() == 2) {
-                m.get(i, MediaSelector.Column.NAME, out iname, MediaSelector.Column.TAB_NO, out num);
-                if(name == iname) {
-                    TreePath pc = m.get_path(i);
-                    pc.up();
-                    TreeIter parent_iter;
-                    m.get_iter(out parent_iter, pc);
-                    if(m.iter_n_children(parent_iter) == 1)
-                        ((TreeStore)m).remove(parent_iter);
-                    else
-                        ((TreeStore)m).remove(i);
-                    //TODO: remove d widget
-                    media_sources_nb.remove_page(num);
-                    dockable_media_sources.remove(name);
-                    dockable_number--;
-                    return true;
-                }
-            }
-            return false;
-        });
-    }
-
-    private Gtk.Notebook media_sources_nb;
-    private int dockable_number = 0;
-    public MediaSelector media_source_selector;
-//    private List<unowned TreeView> dockable_treeviews = new List<unowned TreeView>();
-    private void _insert_dockable(DockableMedia d, bool bold = false, ref TreeIter? xiter, bool initial_selection = false) {
-        Gtk.Widget? widg = d.get_widget(this);
-        if(widg == null) {
-            xiter = null;
-            return;
-        }
-        widg.show_all();
-        media_sources_nb.append_page(widg, null);
-        var category = d.category();
-        TreeStore m = (TreeStore)media_source_selector.get_model();
-        TreeIter iter = TreeIter(), child;
-        
-        // Add Category, if necessary
-        bool found_category = false;
-        m.foreach( (m,p,i) => {
-            if(p.get_depth() == 1) {
-                DockableMedia.Category cat;
-                m.get(i, MediaSelector.Column.CATEGORY , out cat);
-                if(cat == category) {
-                    found_category = true;
-                    iter = i;
-                    return true;
-                }
-            }
-            return false;
-        });
-        if(!found_category) {
-            print("add new category %s\n", get_category_name(category));
-            m.append(out iter, null);
-            m.set(iter,
-                  MediaSelector.Column.ICON, null,
-                  MediaSelector.Column.VIS_TEXT, get_category_name(category),
-                  MediaSelector.Column.TAB_NO, -1,
-                  MediaSelector.Column.WEIGHT, Pango.Weight.BOLD,
-                  MediaSelector.Column.CATEGORY, category,
-                  MediaSelector.Column.SELECTION_STATE, false,
-                  MediaSelector.Column.SELECTION_ICON, null,
-                  MediaSelector.Column.NAME, ""
-            );
-        }
-        
-        //insert dockable info
-        m.append(out child, iter);
-        m.set(child,
-              MediaSelector.Column.ICON, d.get_icon(),
-              MediaSelector.Column.VIS_TEXT, d.headline(),
-              MediaSelector.Column.TAB_NO, dockable_number,
-              MediaSelector.Column.WEIGHT, Pango.Weight.NORMAL,
-              MediaSelector.Column.CATEGORY, category,
-              MediaSelector.Column.SELECTION_STATE, initial_selection,
-              MediaSelector.Column.SELECTION_ICON, (initial_selection ? icon_repo.selected_collection_icon : null),
-              MediaSelector.Column.NAME, d.name()
-        );
-        dockable_number++;
-        xiter = child;
-    }
-    
     private void create_widgets() {
         
         try {
@@ -1708,68 +1586,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             trackListScrollWin.set_shadow_type(Gtk.ShadowType.IN);
             trackListScrollWin.add(this.trackList);
             
-            mbbx = new Gtk.Box(Orientation.VERTICAL, 0);
+            msw = new MediaSoureWidget(this, dockable_media_sources);
             
-            this.search_entry = new Gtk.Entry();
-            this.search_entry.secondary_icon_stock = Gtk.Stock.CLEAR;
-            this.search_entry.set_icon_activatable(Gtk.EntryIconPosition.PRIMARY, false);
-            this.search_entry.set_icon_activatable(Gtk.EntryIconPosition.SECONDARY, true);
-            this.search_entry.set_sensitive(true);
-            this.search_entry.set_placeholder_text (_("Search..."));
+            this.search_entry = msw.search_entry;
             
-            mbbx.pack_start(search_entry, false, false, 2);
-            
-            //Separator
-            Gtk.DrawingArea da = new Gtk.DrawingArea();
-            da.height_request = 1;
-            mbbx.pack_start(da, false, false, 0);
-            
-            // DOCKABLE MEDIA
-            
-            media_sources_nb = new Gtk.Notebook();
-            media_sources_nb.set_show_tabs(false);
-            media_sources_nb.set_border_width(0);
-            media_sources_nb.show_border = false;
-            
-            media_source_selector = new MediaSelector();
-            media_source_selector.selection_changed.connect( (s,t) => {
-                select_dockable_by_name(t);
-                //media_sources_nb.set_current_page(t);
-            });
-            var mss_sw = new ScrolledWindow(null, null);
-            mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);
-            mss_sw.add(media_source_selector);
-            mss_sw.set_shadow_type(ShadowType.IN);
-            mbbx.pack_start(mss_sw, false, false, 0);
-            //Separator
-            da = new Gtk.DrawingArea();
-            da.height_request = 4;
-            mbbx.pack_start(da, false, false, 0);
-            
-            unowned DockableMedia? dm_mb = null;
-            assert((dm_mb = dockable_media_sources.lookup("MusicBrowserDockable")) != null);
-            mbbx.pack_start(media_sources_nb, true, true, 0);
-            //Insert Media Browser first
-            TreeIter? media_browser_iter = null;
-            this._insert_dockable(dm_mb, true, ref media_browser_iter, true);
-            string dname = dm_mb.name();
-            global.active_dockable_media_name = dname;
-            media_source_selector.selected_dockable_media = dname;
-            
-            foreach(unowned string n in dockable_media_sources.get_keys()) {
-                if(n == "MusicBrowserDockable")
-                    continue;
-                
-                unowned DockableMedia? d = null;
-                d = dockable_media_sources.lookup(n);
-                if(d == null)
-                    continue;
-                TreeIter? ix = null;
-                _insert_dockable(d, false, ref ix, false);
-            }
-            media_source_selector.expand_all();
-            media_source_selector.get_selection().select_iter(media_browser_iter);
-            mbbox01.pack_start(mbbx, true, true, 0);
+            mbbox01.pack_start(msw, true, true, 0);
             tracklistnotebook  = gb.get_object("tracklistnotebook") as Gtk.Notebook;
             tracklistnotebook.set_border_width(0);
             tracklistnotebook.show_border = false;

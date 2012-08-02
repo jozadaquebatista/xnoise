@@ -91,6 +91,7 @@ private class DockableUbuntuOneMS : DockableMedia {
     }
     
     private U1.MusicStore ms;
+    private Xnoise.MainWindow win;
     
     ~DockableUbuntuOneMS() {
         int ms_num = main_window.tracklistnotebook.page_num(ms);
@@ -112,11 +113,14 @@ private class DockableUbuntuOneMS : DockableMedia {
 
     private Widget? w = null;
     
-    public override unowned Gtk.Widget? get_widget(MainWindow window) {
+    public override unowned Gtk.Widget? get_widget(MainWindow win) {
+        this.win = win;
         if(w != null)
             return w;
+        
         w = new Label("Ubuntu One Music Store");
-        main_window.media_source_selector.selection_changed.connect( (s,t) => {
+        
+        win.msw.media_source_selector.selection_changed.connect( (s,t) => {
             if(t == UBUNTUONE_MUSIC_STORE_NAME) {
                 if(ms == null) {
                     ms = new U1.MusicStore();
@@ -128,11 +132,11 @@ private class DockableUbuntuOneMS : DockableMedia {
                     ms.url_loaded.connect(on_url_loaded); // working
                     
                     if(ms.parent == null)
-                        main_window.tracklistnotebook.append_page(ms, null);
+                        win.tracklistnotebook.append_page(ms, null);
                     ms.show();
                 }
                 Idle.add( () => {
-                    int ms_num = main_window.tracklistnotebook.page_num(ms);
+                    int ms_num = win.tracklistnotebook.page_num(ms);
                     //print("ms_num: %d\n", ms_num);
                     ms.visible = true;
                     main_window.tracklistnotebook.set_current_page(ms_num);
@@ -142,7 +146,7 @@ private class DockableUbuntuOneMS : DockableMedia {
             }
             else {
                 Idle.add( () => {
-                    main_window.tracklistnotebook.set_current_page(0);
+                    win.tracklistnotebook.set_current_page(0);
                     ms.visible = false;
                     return false;
                 });
@@ -200,11 +204,11 @@ public class MusicStore : GLib.Object {
     public MusicStore(UbuntuOnePlugin plugin) {
         this.plugin = plugin;
         DockableMedia d = new DockableUbuntuOneMS();
-        main_window.insert_dockable(d);
+        main_window.msw.insert_dockable(d);
     }
     
     ~MusicStore() {
-        main_window.remove_dockable(UBUNTUONE_MUSIC_STORE_NAME);
+        main_window.msw.remove_dockable(UBUNTUONE_MUSIC_STORE_NAME);
     }
 }
 

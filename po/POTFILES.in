@@ -22,6 +22,7 @@ libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala
 libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala
 libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala
 libxnoise/ExtraWidgets/xnoise-control-button.vala
+libxnoise/ExtraWidgets/xnoise-media-source-widget.vala
 libxnoise/ExtraWidgets/xnoise-play-pause-button.vala
 libxnoise/ExtraWidgets/xnoise-volume-slider-button.vala
 libxnoise/GlobalAccess/xnoise-global-access.vala

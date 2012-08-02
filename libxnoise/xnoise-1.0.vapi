@@ -780,7 +780,7 @@ namespace Xnoise {
 		public Gtk.Paned hpaned;
 		public bool is_fullscreen;
 		public Xnoise.LyricsView lyricsView;
-		public Xnoise.MediaSelector media_source_selector;
+		public Xnoise.MediaSoureWidget msw;
 		public Xnoise.MusicBrowser musicBr;
 		public Gtk.ScrolledWindow musicBrScrollWin;
 		public Xnoise.ControlButton nextButton;
@@ -799,9 +799,6 @@ namespace Xnoise {
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public Gtk.UIManager get_ui_manager ();
 		public void handle_control_button_click (Xnoise.ControlButton sender, Xnoise.ControlButton.Direction dir);
-		public void insert_dockable (Xnoise.DockableMedia d);
-		public void remove_dockable (string name);
-		public void select_dockable_by_name (string name);
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
 		public void show_status_info (Xnoise.InfoBar bar);
 		public void show_window ();
@@ -836,7 +833,6 @@ namespace Xnoise {
 		public enum Column {
 			ICON,
 			VIS_TEXT,
-			TAB_NO,
 			WEIGHT,
 			CATEGORY,
 			SELECTION_STATE,
@@ -847,6 +843,15 @@ namespace Xnoise {
 		public MediaSelector ();
 		public string selected_dockable_media { get; set; }
 		public signal void selection_changed (string dockable_name);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class MediaSoureWidget : Gtk.Box {
+		public MediaSoureWidget (Xnoise.MainWindow mwindow, GLib.HashTable<string,Xnoise.DockableMedia>? media_sources);
+		public void insert_dockable (Xnoise.DockableMedia d);
+		public void remove_dockable (string name);
+		public void select_dockable_by_name (string name);
+		public Xnoise.MediaSelector media_source_selector { get; private set; }
+		public Gtk.Entry search_entry { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaStreamSchemes {

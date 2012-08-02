@@ -16,6 +16,7 @@ libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.c
 libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.c
 libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.c
 libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.c
+libxnoise/ExtraWidgets/xnoise-media-source-widget.c
 libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.c
 libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.c
 libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.c

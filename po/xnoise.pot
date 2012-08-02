@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-02 12:14+0200\n"
+"POT-Creation-Date: 2012-08-02 15:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,6 +196,26 @@ msgstr ""
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 #, c-format
 msgid "on"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:55
+msgid "Media Collections"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:57
+msgid "Playlists"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:59
+msgid "Stores"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:61
+msgid "Devices"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:171
+msgid "Search..."
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
@@ -540,41 +560,21 @@ msgstr ""
 msgid "Select media file"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
-msgid "Media Collections"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
-msgid "Playlists"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
-msgid "Stores"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
-msgid "Devices"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1440
 msgid "Remove all"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1567
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1445
 msgid "Remove selected titles"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1572
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1450
 msgid "Jump to current position"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1684
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
 msgid "Show application main menu"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1718
-msgid "Search..."
 msgstr ""
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:192
@@ -782,6 +782,6 @@ msgstr ""
 msgid "Ubuntu One Music Store"
 msgstr ""
 
-#: ../plugins/ubuntuone/ubuntuone.vala:106
+#: ../plugins/ubuntuone/ubuntuone.vala:107
 msgid "UbuntuOne Music Store"
 msgstr ""

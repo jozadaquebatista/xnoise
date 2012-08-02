@@ -63,7 +63,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/VideoScreen/xnoise-videoscreen.vala \
     ExtraWidgets/xnoise-app-menu-button.vala \
     ExtraWidgets/xnoise-control-button.vala \
-    ExtraWidgets/xnoise-media-selector.vala \
+    ExtraWidgets/xnoise-media-source-widget.vala \
     ExtraWidgets/xnoise-play-pause-button.vala \
     ExtraWidgets/xnoise-serial-button.vala \
     ExtraWidgets/xnoise-trackinfo-bar.vala \
