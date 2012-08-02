@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-02 00:15+0200\n"
+"POT-Creation-Date: 2012-08-02 15:37+0200\n"
 "PO-Revision-Date: 2012-06-29 12:50+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -202,6 +202,26 @@ msgstr "של"
 #, c-format
 msgid "on"
 msgstr "מהאלבום"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:55
+msgid "Media Collections"
+msgstr "אוספי המדיה"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:57
+msgid "Playlists"
+msgstr "רשימת ניגון"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:59
+msgid "Stores"
+msgstr "מלאיים"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:61
+msgid "Devices"
+msgstr "התקנים"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:171
+msgid "Search..."
+msgstr "חפש..."
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
 msgid "Add all visible tracks to tracklist"
@@ -552,42 +572,22 @@ msgstr "הכנס את כתובת ה-URL של הקובץ שברצונך לנגן"
 msgid "Select media file"
 msgstr "בחירת קובץ מדיה"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
-msgid "Media Collections"
-msgstr "אוספי המדיה"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
-msgid "Playlists"
-msgstr "רשימת ניגון"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
-msgid "Stores"
-msgstr "מלאיים"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
-msgid "Devices"
-msgstr "התקנים"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1440
 msgid "Remove all"
 msgstr "הסרת הכול"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1567
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1445
 msgid "Remove selected titles"
 msgstr "הסרת כל הכותרות הנבחרות"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1572
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1450
 msgid "Jump to current position"
 msgstr "קפוץ למיקום הנוכחי"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1684
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
 msgid "Show application main menu"
 msgstr "הצג את התפריט הראשי"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1718
-msgid "Search..."
-msgstr "חפש..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:192
 msgid ""
@@ -794,7 +794,7 @@ msgstr "קבע את שם החלון לשם הכותרת הנוכחית"
 msgid "Ubuntu One Music Store"
 msgstr ""
 
-#: ../plugins/ubuntuone/ubuntuone.vala:106
+#: ../plugins/ubuntuone/ubuntuone.vala:107
 msgid "UbuntuOne Music Store"
 msgstr ""
 

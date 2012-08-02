@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-02 00:15+0200\n"
+"POT-Creation-Date: 2012-08-02 15:37+0200\n"
 "PO-Revision-Date: 2012-02-17 00:49+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -208,6 +208,28 @@ msgstr "przez"
 #, c-format
 msgid "on"
 msgstr "na"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:55
+#, fuzzy
+msgid "Media Collections"
+msgstr "Prz_eskanuj ponownie kolekcję"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:57
+#, fuzzy
+msgid "Playlists"
+msgstr "Odtwórz"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:59
+msgid "Stores"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:61
+msgid "Devices"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:171
+msgid "Search..."
+msgstr ""
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
 msgid "Add all visible tracks to tracklist"
@@ -564,44 +586,22 @@ msgstr "Wstaw URL aby odtworzyć"
 msgid "Select media file"
 msgstr "Wybierz plik"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
-#, fuzzy
-msgid "Media Collections"
-msgstr "Prz_eskanuj ponownie kolekcję"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
-#, fuzzy
-msgid "Playlists"
-msgstr "Odtwórz"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
-msgid "Stores"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
-msgid "Devices"
-msgstr ""
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1440
 msgid "Remove all"
 msgstr "Usuń wszystko"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1567
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1445
 msgid "Remove selected titles"
 msgstr "Usuń zaznaczone"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1572
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1450
 msgid "Jump to current position"
 msgstr "Przeskok listy do obecnie odtwarzanego utworu"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1684
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
 msgid "Show application main menu"
 msgstr "Pokaż główne menu aplikacji"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1718
-msgid "Search..."
-msgstr ""
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:192
 msgid ""
@@ -809,7 +809,7 @@ msgstr "Ustaw nazwę okna na odtwarzany tytuł"
 msgid "Ubuntu One Music Store"
 msgstr ""
 
-#: ../plugins/ubuntuone/ubuntuone.vala:106
+#: ../plugins/ubuntuone/ubuntuone.vala:107
 msgid "UbuntuOne Music Store"
 msgstr ""
 

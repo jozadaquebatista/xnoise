@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-02 00:15+0200\n"
+"POT-Creation-Date: 2012-08-02 15:37+0200\n"
 "PO-Revision-Date: 2012-06-07 13:17+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
 "Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
@@ -199,6 +199,26 @@ msgstr "由"
 #, c-format
 msgid "on"
 msgstr "於"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:55
+msgid "Media Collections"
+msgstr "媒體收藏"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:57
+msgid "Playlists"
+msgstr "播放清單"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:59
+msgid "Stores"
+msgstr "商店"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:61
+msgid "Devices"
+msgstr "裝置"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:171
+msgid "Search..."
+msgstr "搜尋..."
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:38
 msgid "Add all visible tracks to tracklist"
@@ -554,42 +574,22 @@ msgstr "輸入用於播放的網址"
 msgid "Select media file"
 msgstr "選取媒體檔案"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
-msgid "Media Collections"
-msgstr "媒體收藏"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
-msgid "Playlists"
-msgstr "播放清單"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
-msgid "Stores"
-msgstr "商店"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
-msgid "Devices"
-msgstr "裝置"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1440
 msgid "Remove all"
 msgstr "全部移除"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1567
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1445
 msgid "Remove selected titles"
 msgstr "移除選取的標題"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1572
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1450
 msgid "Jump to current position"
 msgstr "跳轉到目前的位置"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1684
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1562
 msgid "Show application main menu"
 msgstr "顯示應用的主選單"
-
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1718
-msgid "Search..."
-msgstr "搜尋..."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:192
 msgid ""
@@ -797,7 +797,7 @@ msgstr "針對目前的標題，設定視窗的名稱"
 msgid "Ubuntu One Music Store"
 msgstr ""
 
-#: ../plugins/ubuntuone/ubuntuone.vala:106
+#: ../plugins/ubuntuone/ubuntuone.vala:107
 msgid "UbuntuOne Music Store"
 msgstr ""
 
