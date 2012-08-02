@@ -151,15 +151,18 @@ private class DockableUbuntuOneMS : DockableMedia {
         return w;
     }
     
-    private void on_preview_mp3(string url, string title) {
+    private void on_preview_mp3(string uri, string title) {
         //Main.instance.immediate_play(url);
         global.stop(); // if playing from tracklist
         gst_player.stop(); // for tracklist-less playing
         Timeout.add_seconds(1, () => {
-            gst_player.uri = url;
+            gst_player.uri = uri;
             gst_player.play();
             Timeout.add_seconds(1, () => {
+                print("set title %s\n", title);
                 global.current_title = title;
+                string _uri = uri;
+                main_window.set_displayed_title(ref _uri, "title", title);
                 return false;
             });
             return false;

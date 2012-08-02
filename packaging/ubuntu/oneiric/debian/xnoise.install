@@ -10,7 +10,8 @@ usr/lib/xnoise/libmprisone.so
 usr/lib/xnoise/libnotifications.so
 usr/lib/xnoise/libTitleToDecoration.so
 usr/lib/xnoise/libxnoisetest.so
-usr/lib/xnoise/libsoundmen*.so
+usr/lib/xnoise/libsoundmenu2.so
+usr/lib/xnoise/libUbuntuOne.so
 usr/lib/xnoise/*.xnplugin
 usr/lib/xnoise/libxnoise.so
 usr/lib/xnoise/libxnoise.so.0
