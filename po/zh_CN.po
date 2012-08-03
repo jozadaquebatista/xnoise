@@ -504,13 +504,12 @@ msgid "Go to the now playing screen in the main window."
 msgstr "转到主窗口中正在播放的界面。"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:206
-#, fuzzy
 msgid "_Media Browser"
-msgstr "媒体浏览器字体大小："
+msgstr "媒体浏览器(_M)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:206
 msgid "Toggle media browser visibility."
-msgstr ""
+msgstr "切换媒体浏览器可见性"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:208
 msgid "_Help"
@@ -781,11 +780,11 @@ msgstr "设置窗口名称为当前标题"
 
 #: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
 msgid "Ubuntu One Music Store"
-msgstr ""
+msgstr "Ubuntu One 音乐商店"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:107
 msgid "UbuntuOne Music Store"
-msgstr ""
+msgstr "UbuntuOne 音乐商店"
 
 #~ msgid "xnoise - Add media sources to the library"
 #~ msgstr "xnoise - 添加媒体源到库"
