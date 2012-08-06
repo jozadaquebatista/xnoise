@@ -98,7 +98,8 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
                         ((TreeStore)m).remove(parent_iter);
                     else
                         ((TreeStore)m).remove(i);
-                    DockableMedia? d = media_sources.lookup(iname);
+                    DockableMedia? d = media_sources.lookup(name);
+                    d.remove_main_view();
                     notebook.remove_page(notebook.page_num(d.get_widget(mwindow)));
                     media_sources.remove(name);
                     return true;

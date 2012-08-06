@@ -30,8 +30,77 @@
  *     Jörn Magens
  */
 
+using Gtk;
+
 using Xnoise;
 using Xnoise.Services;
+
+
+
+public class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
+    
+    private const string UI_FILE = Config.UIDIR + "lyrics.ui";
+    private unowned MainWindow win;
+    
+    public LyricsView lyricsView;
+    public SerialButton sbutton;
+    
+    public LyricsViewWidget(MainWindow win) {
+        GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
+        this.win = win;
+        create_widgets();
+    }
+    
+    public string get_view_name() {
+        return LYRICS_VIEW_NAME;
+    }
+    
+    private void create_widgets() {
+        try {
+            Builder gb = new Gtk.Builder();
+            gb.add_from_file(UI_FILE);
+            Gtk.Box inner_box = gb.get_object("vbox5") as Gtk.Box;
+            var scrolledlyricsview = gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;
+            this.lyricsView = new LyricsView();
+            scrolledlyricsview.add(lyricsView);
+            scrolledlyricsview.show_all();
+            
+            this.pack_start(inner_box, true, true, 0);
+            
+            var bottombox = gb.get_object("box5") as Gtk.Box;  //LYRICS
+            
+            sbutton = new SerialButton();
+            sbutton.insert(SHOWTRACKLIST);
+            sbutton.insert(SHOWVIDEO);
+            sbutton.insert(SHOWLYRICS);
+            bottombox.pack_start(sbutton, false, false, 0);
+            
+            var hide_button_2 = gb.get_object("hide_button_2") as Gtk.Button;
+            hide_button_2.can_focus = false;
+            hide_button_2.clicked.connect(win.toggle_media_browser_visibility);
+            var hide_button_image = gb.get_object("hide_button_image_2") as Gtk.Image;
+            
+            win.notify["media-browser-visible"].connect( (s, val) => {
+                if(win.media_browser_visible == true) {
+                    hide_button_image.set_from_stock(  Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
+                    hide_button_2.set_tooltip_text(  HIDE_LIBRARY);
+                }
+                else {
+                    hide_button_image.set_from_stock(  Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
+                    hide_button_2.set_tooltip_text(  SHOW_LIBRARY);
+                }
+            });
+
+        }
+        catch(GLib.Error e) {
+            var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+                                            Gtk.ButtonsType.OK,
+                                            "Failed to build tracklist widget! \n" + e.message);
+            msg.run();
+            return;
+        }
+    }
+}
 
 public class Xnoise.LyricsView : Gtk.TextView {
     private LyricsLoader loader = null;

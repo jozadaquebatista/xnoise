@@ -37,6 +37,102 @@ using Xnoise.Services;
 using Xnoise.TagAccess;
 
 
+public class Xnoise.TrackListViewWidget : Gtk.Box, IMainView {
+    
+    private const string UI_FILE = Config.UIDIR + "tracklist.ui";
+    
+    private unowned MainWindow win;
+    public ScrolledWindow scrolled_window;
+    public SerialButton sbutton;
+    public int idx_tracklist;
+    public int idx_lyrics;
+    public int idx_video;
+    
+    public TrackListViewWidget(MainWindow win) {
+        GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
+        this.win = win;
+        create_widgets();
+    }
+    
+    public string get_view_name() {
+        return TRACKLIST_VIEW_NAME;
+    }
+    
+    private void create_widgets() {
+        try {
+            Builder gb = new Gtk.Builder();
+            gb.add_from_file(UI_FILE);
+            Gtk.Box inner_box = gb.get_object("vbox3") as Gtk.Box;
+            scrolled_window = gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
+            scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
+            scrolled_window.set_shadow_type(Gtk.ShadowType.IN);
+            scrolled_window.add(tl);
+            this.pack_start(inner_box, true, true, 0);
+            
+            var bottombox = gb.get_object("hbox3") as Gtk.Box; //TRACKLIST
+            
+            sbutton = new SerialButton();
+            idx_tracklist = sbutton.insert(SHOWTRACKLIST);
+            idx_video     = sbutton.insert(SHOWVIDEO);
+            idx_lyrics    = sbutton.insert(SHOWLYRICS);
+            bottombox.pack_start(sbutton, false, false, 0);
+            
+            //REMOVE TITLE OR ALL TITLES BUTTONS
+            var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;
+            removeAllButton.can_focus      = false;
+            removeAllButton.clicked.connect( () => {
+                global.position_reference = null;
+                var store = (ListStore)tlm;
+                store.clear();
+            });
+            removeAllButton.set_tooltip_text(_("Remove all"));
+            
+            var removeSelectedButton       = gb.get_object("removeSelectedButton") as Gtk.Button;
+            removeSelectedButton.can_focus = false;
+            removeSelectedButton.clicked.connect( () => {
+                tl.remove_selected_rows();
+            });
+            removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
+            
+            var posjumper                  = gb.get_object("posjumper") as Gtk.Button;
+            posjumper.can_focus      = false;
+            posjumper.clicked.connect( () => {
+                if(global.position_reference == null || !global.position_reference.valid())
+                    return;
+                TreePath path = global.position_reference.get_path();
+                var store = (ListStore)tlm;
+                TreeIter iter;
+                store.get_iter(out iter, path);
+                tl.set_focus_on_iter(ref iter);
+            });
+            posjumper.set_tooltip_text(_("Jump to current position"));
+            
+            var hide_button = gb.get_object("hide_button") as Gtk.Button;
+            hide_button.can_focus = false;
+            hide_button.clicked.connect(win.toggle_media_browser_visibility);
+            var hide_button_image = gb.get_object("hide_button_image") as Gtk.Image;
+            win.notify["media-browser-visible"].connect( (s, val) => {
+                if(win.media_browser_visible == true) {
+                    hide_button_image.set_from_stock(Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
+                    hide_button.set_tooltip_text(HIDE_LIBRARY);
+                }
+                else {
+                    hide_button_image.set_from_stock(Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
+                    hide_button.set_tooltip_text(SHOW_LIBRARY);
+                }
+            });
+        }
+        catch(GLib.Error e) {
+            var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+                                            Gtk.ButtonsType.OK,
+                                            "Failed to build tracklist widget! \n" + e.message);
+            msg.run();
+            return;
+        }
+    }
+}
+
+
 public class Xnoise.TrackList : TreeView, IParams {
     private Main xn;
     private unowned IconTheme theme = null;
@@ -159,6 +255,7 @@ public class Xnoise.TrackList : TreeView, IParams {
             }
             return false;
         });
+        this.set_size_request(100, 100);
     }
     
     private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {

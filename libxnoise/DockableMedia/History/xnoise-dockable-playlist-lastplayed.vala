@@ -61,6 +61,9 @@ private class Xnoise.DockablePlaylistLastplayed : DockableMedia {
     public override Gdk.Pixbuf get_icon() {
         return icon_repo.playlist_icon;
     }
+
+    public override void remove_main_view() {
+    }
 }
 
 

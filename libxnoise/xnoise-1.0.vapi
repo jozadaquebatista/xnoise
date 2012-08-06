@@ -538,6 +538,7 @@ namespace Xnoise {
 		public abstract unowned Gtk.Widget? get_widget (Xnoise.MainWindow window);
 		public abstract string headline ();
 		public abstract string name ();
+		public abstract void remove_main_view ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class FullscreenProgressBar : Gtk.EventBox {
@@ -751,6 +752,12 @@ namespace Xnoise {
 		public void lyrics_provider_unregister (Xnoise.ILyricsProvider lp);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class LyricsViewWidget : Gtk.Box, Xnoise.IMainView {
+		public Xnoise.LyricsView lyricsView;
+		public Xnoise.SerialButton sbutton;
+		public LyricsViewWidget (Xnoise.MainWindow win);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Main : GLib.Object {
 		public Main ();
 		public void add_cyclic_save_timeout ();
@@ -779,7 +786,7 @@ namespace Xnoise {
 		public Gtk.Window fullscreenwindow;
 		public Gtk.Paned hpaned;
 		public bool is_fullscreen;
-		public Xnoise.LyricsView lyricsView;
+		public weak Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaSoureWidget msw;
 		public Xnoise.MusicBrowser musicBr;
 		public Gtk.ScrolledWindow musicBrScrollWin;
@@ -789,16 +796,17 @@ namespace Xnoise {
 		public bool quit_if_closed;
 		public Gtk.Entry search_entry;
 		public Xnoise.ControlButton stopButton;
-		public Xnoise.TrackList trackList;
+		public weak Xnoise.TrackList trackList;
 		public Gtk.ScrolledWindow trackListScrollWin;
 		public Gtk.Notebook tracklistnotebook;
-		public Xnoise.VideoScreen videoscreen;
+		public weak Xnoise.VideoScreen videoscreen;
 		public Gtk.Box videovbox;
 		public MainWindow ();
+		public void add_main_view (Xnoise.IMainView view);
 		public void ask_for_initial_media_import ();
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
-		public Gtk.UIManager get_ui_manager ();
 		public void handle_control_button_click (Xnoise.ControlButton sender, Xnoise.ControlButton.Direction dir);
+		public void select_view_by_name (string name);
 		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
 		public void show_status_info (Xnoise.InfoBar bar);
 		public void show_window ();
@@ -808,8 +816,10 @@ namespace Xnoise {
 		public bool active_lyrics { get; set; }
 		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
+		public bool media_browser_visible { get; set; }
 		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
+		public Gtk.UIManager ui_manager { get; set; }
 		public bool usestop { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -1024,6 +1034,15 @@ namespace Xnoise {
 		public signal void sign_active_path_changed (Xnoise.PlayerState ts);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
+		public int idx_lyrics;
+		public int idx_tracklist;
+		public int idx_video;
+		public Xnoise.SerialButton sbutton;
+		public Gtk.ScrolledWindow scrolled_window;
+		public TrackListViewWidget (Xnoise.MainWindow win);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrayIcon : Gtk.StatusIcon {
 		public TrayIcon ();
 	}
@@ -1061,6 +1080,13 @@ namespace Xnoise {
 		public string font_family { get; set; }
 		public double font_size { get; set; }
 		public string text { get; set; }
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class VideoViewWidget : Gtk.Box, Xnoise.IMainView {
+		public Xnoise.SerialButton sbutton;
+		public weak Xnoise.VideoScreen videoscreen;
+		public Gtk.Box videovbox;
+		public VideoViewWidget (Xnoise.MainWindow win);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Worker : GLib.Object {
@@ -1124,6 +1150,10 @@ namespace Xnoise {
 		public abstract Xnoise.ILyrics* from_tags (Xnoise.LyricsLoader loader, string artist, string title, Xnoise.LyricsFetchedCallback cb);
 		public abstract int priority { get; set; }
 		public abstract string provider_name { get; }
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public interface IMainView : Gtk.Widget {
+		public abstract string get_view_name ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public interface IParams : GLib.Object {

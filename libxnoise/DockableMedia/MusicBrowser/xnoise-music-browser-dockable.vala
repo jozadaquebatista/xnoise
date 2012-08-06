@@ -71,5 +71,8 @@ private class Xnoise.MusicBrowserDockable : DockableMedia {
     public override Gdk.Pixbuf get_icon() {
         return icon_repo.title_icon;
     }
+
+    public override void remove_main_view() {
+    }
 }
 

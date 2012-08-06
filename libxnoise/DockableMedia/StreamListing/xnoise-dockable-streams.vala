@@ -61,5 +61,8 @@ private class Xnoise.DockableStreams : DockableMedia {
     public override Gdk.Pixbuf get_icon() {
         return icon_repo.radios_icon;
     }
+    
+    public override void remove_main_view() {
+    }
 }
 

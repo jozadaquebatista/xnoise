@@ -61,5 +61,8 @@ private class Xnoise.DockableVideos : DockableMedia {
     public override Gdk.Pixbuf get_icon() {
         return icon_repo.videos_icon;
     }
+    
+    public override void remove_main_view() {
+    }
 }
 

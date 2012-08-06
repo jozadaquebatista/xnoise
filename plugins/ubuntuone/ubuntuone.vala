@@ -45,7 +45,6 @@ public class UbuntuOnePlugin : GLib.Object, IPlugin {
     private MusicStore music_store;
 
     construct {
-        print("construct UbuntuOne plugin\n");
         this.music_store = new MusicStore(this);
     }
 
@@ -91,14 +90,17 @@ private class DockableUbuntuOneMS : DockableMedia {
     }
     
     private U1.MusicStore ms;
-    private Xnoise.MainWindow win;
+    private unowned Xnoise.MainWindow win;
     
     ~DockableUbuntuOneMS() {
-        int ms_num = main_window.tracklistnotebook.page_num(ms);
-        main_window.tracklistnotebook.remove_page(ms_num);
+        int ms_num = win.tracklistnotebook.page_num(ms);
+        if(ms_num > -1)
+            win.tracklistnotebook.remove_page(ms_num);
         ms = null;
+        if(ui_merge_id != 0)
+            win.ui_manager.remove_ui(ui_merge_id);
         Idle.add( () => {
-            main_window.tracklistnotebook.set_current_page(0);
+            win.tracklistnotebook.set_current_page(0);
             return false;
         });
     }
@@ -112,11 +114,12 @@ private class DockableUbuntuOneMS : DockableMedia {
     }
 
     private Widget? w = null;
-    
+    private uint ui_merge_id;
     public override unowned Gtk.Widget? get_widget(MainWindow win) {
         this.win = win;
+        unowned Widget wu = w;
         if(w != null)
-            return w;
+            return wu;
         
         w = new Label("Ubuntu One Music Store");
         
@@ -134,13 +137,12 @@ private class DockableUbuntuOneMS : DockableMedia {
                     if(ms.parent == null)
                         win.tracklistnotebook.append_page(ms, null);
                     ms.show();
+                    ui_merge_id = add_main_window_menu_entry();
                 }
                 Idle.add( () => {
                     int ms_num = win.tracklistnotebook.page_num(ms);
-                    //print("ms_num: %d\n", ms_num);
                     ms.visible = true;
-                    main_window.tracklistnotebook.set_current_page(ms_num);
-                    //print("ms.get_library_location(): %s\n", ms.get_library_location());
+                    win.tracklistnotebook.set_current_page(ms_num);
                     return false;
                 });
             }
@@ -152,11 +154,55 @@ private class DockableUbuntuOneMS : DockableMedia {
                 });
             }
         });
-        return w;
+        wu = w;
+        return wu;
     }
     
+    public override void remove_main_view() {
+        int ms_num = win.tracklistnotebook.page_num(ms);
+        if(ms_num > -1)
+            win.tracklistnotebook.remove_page(ms_num);
+    }
+    
+    private Gtk.ActionGroup action_group;
+    
+    private uint add_main_window_menu_entry() {
+        action_group = new Gtk.ActionGroup("UbuntuOneActions");
+        action_group.set_translation_domain(Config.GETTEXT_PACKAGE);
+        action_group.add_actions(action_entries, this);
+        uint reply = 0;
+        win.ui_manager.insert_action_group(action_group, 1);
+        try {
+            reply = win.ui_manager.add_ui_from_string(MENU_UI_STRING, MENU_UI_STRING.length);
+        }
+        catch(GLib.Error e) {
+            print("%s\n", e.message);
+        }
+        return reply;
+    }
+    
+    private static const string MENU_UI_STRING = """
+        <ui>
+            <menubar name="MainMenu">
+                <menu name="ViewMenu" action="ViewMenuAction">
+                    <separator />
+                    <menuitem action="ShowUbuntuOneStore"/>
+                </menu>
+            </menubar>
+        </ui>
+    """;
+    
+    private const Gtk.ActionEntry[] action_entries = {
+        { "ViewMenuAction", null, N_("_View") },
+            { "ShowUbuntuOneStore", "ubuntuone", N_("Show _UbuntuOne Store"), null, N_("Show UbuntuOne Store"), on_show_store_menu_clicked}
+    };
+    
+    private void on_show_store_menu_clicked() {
+        print("ubu show\n");
+//        win.select_view_by_name(UBUNTUONE_MUSIC_STORE_NAME);
+    }
+
     private void on_preview_mp3(string uri, string title) {
-        //Main.instance.immediate_play(url);
         global.stop(); // if playing from tracklist
         gst_player.stop(); // for tracklist-less playing
         Timeout.add_seconds(1, () => {
@@ -166,7 +212,7 @@ private class DockableUbuntuOneMS : DockableMedia {
                 print("set title %s\n", title);
                 global.current_title = title;
                 string _uri = uri;
-                main_window.set_displayed_title(ref _uri, "title", title);
+                win.set_displayed_title(ref _uri, "title", title);
                 return false;
             });
             return false;

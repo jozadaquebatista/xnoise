@@ -33,6 +33,71 @@ using Gtk;
 using Xnoise;
 using Xnoise.Services;
 
+
+public class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
+    
+    private const string UI_FILE = Config.UIDIR + "video.ui";
+    
+    private unowned MainWindow win;
+    public Gtk.Box videovbox;
+    public unowned VideoScreen videoscreen;
+    public SerialButton sbutton;
+    
+    public VideoViewWidget(MainWindow win) {
+        GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
+        this.win = win;
+        create_widgets();
+    }
+    
+    public string get_view_name() {
+        return VIDEOVIEW_NAME;
+    }
+    
+    private void create_widgets() {
+        try {
+            Builder gb = new Gtk.Builder();
+            gb.add_from_file(UI_FILE);
+            Gtk.Box inner_box = gb.get_object("vbox4") as Gtk.Box;
+            this.videovbox = gb.get_object("videovbox") as Gtk.Box;
+            this.videoscreen = gst_player.videoscreen;
+            this.videovbox.pack_start(videoscreen,true ,true ,0);
+            this.pack_start(inner_box, true, true, 0);
+            
+            var bottombox = gb.get_object("hbox2v") as Gtk.Box;  //VIDEO
+            
+            sbutton = new SerialButton();
+            sbutton.insert(SHOWTRACKLIST);
+            sbutton.insert(SHOWVIDEO);
+            sbutton.insert(SHOWLYRICS);
+            bottombox.pack_start(sbutton, false, false, 0);
+
+            var hide_button_1 = gb.get_object("hide_button_1") as Gtk.Button;
+            hide_button_1.can_focus = false;
+            hide_button_1.clicked.connect(win.toggle_media_browser_visibility);
+            var hide_button_image = gb.get_object("hide_button_image_1") as Gtk.Image;
+            
+            win.notify["media-browser-visible"].connect( (s, val) => {
+                if(win.media_browser_visible == true) {
+                    hide_button_image.set_from_stock(  Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
+                    hide_button_1.set_tooltip_text(  HIDE_LIBRARY);
+                }
+                else {
+                    hide_button_image.set_from_stock(  Gtk.Stock.GOTO_LAST, Gtk.IconSize.MENU);
+                    hide_button_1.set_tooltip_text(  SHOW_LIBRARY);
+                }
+            });
+
+        }
+        catch(GLib.Error e) {
+            var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+                                            Gtk.ButtonsType.OK,
+                                            "Failed to build tracklist widget! \n" + e.message);
+            msg.run();
+            return;
+        }
+    }
+}
+
 public class Xnoise.VideoScreen : Gtk.DrawingArea {
     private static const string SELECT_EXT_SUBTITLE_FILE = _("Select external subtitle file");
     private Gdk.Pixbuf logo_pixb;
