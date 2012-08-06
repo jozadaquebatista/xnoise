@@ -45,7 +45,7 @@ msgstr "Více informací na stránkách projektu:"
 #: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:176
 #: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:125
 msgid "no lyrics found..."
-msgstr "Nenalezen žádný text písně..."
+msgstr "Nenalezen žádný text ..."
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
 msgid "Last Played"
@@ -110,7 +110,7 @@ msgstr "Umístění"
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:253
 #: ../libxnoise/Utils/xnoise-media-importer.vala:88
 msgid "Importing media data. This may take some time..."
-msgstr "Import mediálních dat. Může to chvíli trvat..."
+msgstr "Import dat. Může to chvíli trvat..."
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:275
 msgid "Select media folder"
@@ -250,7 +250,7 @@ msgid ""
 "wait."
 msgstr ""
 "Počkejte, prosím, dokud se prohlížeč nezaplní skladbami. Nebo akci zrušte, "
-"pokud nechcetečekat."
+"pokud nechcete čekat."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:189
@@ -258,7 +258,7 @@ msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
 "Počkejte, prosím, na dokončení importu dat. Nebo akci zrušte, pokud "
-"nechcetečekat."
+"nechcete čekat."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
@@ -365,7 +365,7 @@ msgid ""
 "Trying to find lyrics for \"%s\" by \"%s\"\n"
 "\n"
 "Using %s ..."
-msgstr ""
+msgstr "Používá se %s ..."
 "\n"
 "Pokus o nalezení textu písně pro \"%s\" od \"%s\"\n"
 "\n"
@@ -397,7 +397,7 @@ msgstr "Skrýt knihovnu"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:51
 msgid "Show Library"
-msgstr "Ukázat knihovnu"
+msgstr "Zobrazit knihovnu"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:187
 msgid "_File"
@@ -509,7 +509,7 @@ msgstr "_Nyní hraje"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:205
 msgid "Go to the now playing screen in the main window."
-msgstr "Jít na pohled Nyní hraje v hlavním okně."
+msgstr "Přejít na: Nyní hraje v hlavním okně."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:206
 #, fuzzy
@@ -518,7 +518,7 @@ msgstr "Velikost písma v prohlížeči skladeb:"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:206
 msgid "Toggle media browser visibility."
-msgstr ""
+msgstr "Změnit zobrazení prohlížeče multimédií."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:208
 msgid "_Help"
@@ -799,11 +799,11 @@ msgstr "Název okna pojmenovat po současné skladbě"
 
 #: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
 msgid "Ubuntu One Music Store"
-msgstr ""
+msgstr "Ubuntu One Music Store"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:107
 msgid "UbuntuOne Music Store"
-msgstr ""
+msgstr "Hudební obchod Ubuntu"
 
 #~ msgid "xnoise - Add media sources to the library"
 #~ msgstr "xnoise - Přidat zdroje médii do knihovny"
@@ -878,13 +878,13 @@ msgstr ""
 #~ msgstr "Import byl ukončen."
 
 #~ msgid "Found %d media files"
-#~ msgstr "Byly nalezeny %d multimediální soubory."
+#~ msgstr "Nalezeny %d multimediální soubory."
 
 #~ msgid "Updated library for new media folders. "
 #~ msgstr "Obnovit knihovnu pro nové multimediální složky"
 
 #~ msgid "Found %d new media files"
-#~ msgstr "Nelezeno %d nových multimediálních souborů."
+#~ msgstr "Nalezeno %d nových multimediálních souborů."
 
 #~ msgid "Enable a lyrics provider plugin for lyrics fetching to work"
 #~ msgstr ""
@@ -894,7 +894,7 @@ msgstr ""
 #~ "\n"
 #~ "Lyrics provider %s cannot find lyrics for \n"
 #~ "\"%s\" by \"%s\".\n"
-#~ msgstr ""
+#~ msgstr "Služba %s nenalezla slova pro \n \"%s\" od \"%s\".\n  "
 #~ "\n"
 #~ "Lyrics provider %s cannot find lyrics for \n"
 #~ "\"%s\" by \"%s\".\n"
