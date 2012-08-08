@@ -143,7 +143,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         } 
         set {
             _media_browser_visible = value;
-            Params.set_bool_value("media_browser_visible", value);
+            Params.set_bool_value("media_browser_hidden", !value);
         }
     }
     
@@ -833,7 +833,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     break;
                 }
             }
-//            bool tmp_media_browser_visible = Params.get_bool_value("media_browser_visible");
+//            bool tmp_media_browser_visible = !Params.get_bool_value("media_browser_hidden");
 //            if(tmp_media_browser_visible != media_browser_visible)
 //                toggle_media_browser_visibility();
             return false;
@@ -1560,7 +1560,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             this.add(mainvbox);
 
-            bool tmp_media_browser_visible = Params.get_bool_value("media_browser_visible");
+            bool tmp_media_browser_visible = !Params.get_bool_value("media_browser_hidden");
             if(!tmp_media_browser_visible) {
                 hpaned_position_buffer = Params.get_int_value("hp_position");
                 hpaned.set_position(0);

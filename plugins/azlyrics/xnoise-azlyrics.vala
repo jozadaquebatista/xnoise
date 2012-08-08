@@ -239,7 +239,7 @@ public class Xnoise.Azlyrics : GLib.Object, ILyrics {
         
         if(start_idx != -1 && end_idx != -1 && end_idx > start_idx) {
             start_idx = start_idx + START_LYRICS.length;
-            text = cont.substring(start_idx, end_idx - start_idx).replace("<br>","").replace("<i>","").replace("</i>","");
+            text = cont.substring(start_idx, end_idx - start_idx).replace("<br>","").replace("<i>","").replace("</i>","").replace("</br>","").replace("<br />","");
         }
         
         //print("Azlyrics: %s\n", text);
