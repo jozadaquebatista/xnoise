@@ -45,17 +45,13 @@ private class Xnoise.DockableStreams : DockableMedia {
         return DockableMedia.Category.MEDIA_COLLECTION;
     }
 
-    private Widget? w = null;
-    
-    public override unowned Gtk.Widget? get_widget(Xnoise.MainWindow window) {
-        if(w != null)
-            return w;
+    public override Gtk.Widget? create_widget(Xnoise.MainWindow window) {
         var sw = new ScrolledWindow(null, null);
         var tv = new TreeViewStreams(this, window, (Widget)sw);
         sw.set_shadow_type(ShadowType.IN);
         sw.add(tv);
-        w = sw;
-        return w;
+        widget = sw;
+        return sw;
     }
 
     public override Gdk.Pixbuf get_icon() {

@@ -142,7 +142,7 @@ namespace Xnoise {
         
         // PLAYER
         gst_player = new GstPlayer();
-        
+        global.player = gst_player;
         
         // PLUGINS
         plugin_loader = new PluginModule.Loader();

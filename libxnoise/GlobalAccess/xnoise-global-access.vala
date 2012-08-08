@@ -54,22 +54,22 @@ public class Xnoise.GlobalAccess : GLib.Object {
             //print("p.name: %s\n", p.name);
             switch(p.name) {
                 case "current-artist":
-                    this.tag_changed(ref this._current_uri, "artist", this._current_artist);
+                    this.tag_changed(this._current_uri, "artist", this._current_artist);
                     break;
                 case "current-album":
-                    this.tag_changed(ref this._current_uri, "album", this._current_album);
+                    this.tag_changed(this._current_uri, "album", this._current_album);
                     break;
                 case "current-title":
-                    this.tag_changed(ref this._current_uri, "title", this._current_title);
+                    this.tag_changed(this._current_uri, "title", this._current_title);
                     break;
                 case "current-location":
-                    this.tag_changed(ref this._current_uri, "location", this._current_location);
+                    this.tag_changed(this._current_uri, "location", this._current_location);
                     break;
                 case "current-genre":
-                    this.tag_changed(ref this._current_uri, "genre", this._current_genre);
+                    this.tag_changed(this._current_uri, "genre", this._current_genre);
                     break;
                 case "current-org":
-                    this.tag_changed(ref this._current_uri, "organization", this._current_organization);
+                    this.tag_changed(this._current_uri, "organization", this._current_organization);
                     break;
             }
             
@@ -100,7 +100,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
     public signal void player_state_changed();
     public signal void uri_changed(string? uri);
     public signal void uri_repeated(string? uri);
-    public signal void tag_changed(ref string? newuri, string? tagname, string? tagvalue);
+    public signal void tag_changed(string? newuri, string? tagname, string? tagvalue);
     
     public signal void sign_searchtext_changed(string text);
     
@@ -276,9 +276,27 @@ public class Xnoise.GlobalAccess : GLib.Object {
         sign_restart_song();
     }
     
+    public unowned GstPlayer player;
+    public bool in_preview { get; set; }
+    
     public void handle_eos() {
-        //emmit signal
-        caught_eos_from_player();
+        if(in_preview) {
+            in_preview = false;
+            stop();
+            player.stop();
+        }
+        else {
+            //emmit signal
+            caught_eos_from_player();
+        }
+    }
+    
+    public void preview_uri(string uri) {
+        stop();         // if playing from tracklist
+        player.stop();  // for tracklist-less playing
+        in_preview = true;
+        global.current_uri = uri;
+        gst_player.play();
     }
     
     public void check_image_for_current_track() {

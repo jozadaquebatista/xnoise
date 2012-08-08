@@ -42,24 +42,20 @@ public class UbuntuOnePlugin : GLib.Object, IPlugin {
     public Main xn { get; set; }
     
     private unowned PluginModule.Container _owner;
-    private MusicStore music_store;
+    private UbuMusicStore music_store;
 
     construct {
-        this.music_store = new MusicStore(this);
     }
 
     public PluginModule.Container owner {
-        get {
-            return _owner;
-        }
-        set {
-            _owner = value;
-        }
+        get { return _owner;  }
+        set { _owner = value; }
     }
     
     public string name { get { return "ubuntuone_music_store"; } }
-
+    
     public bool init() {
+        this.music_store = new UbuMusicStore(this);
         owner.sign_deactivated.connect(clean_up);
         return true;
     }
@@ -83,26 +79,45 @@ public class UbuntuOnePlugin : GLib.Object, IPlugin {
 }
 
 
-private class DockableUbuntuOneMS : DockableMedia {
+
+private class UStore : U1.MusicStore {
+    
+    public UStore() {
+        GLib.Object();
+    }
+    
+    ~UStore() {
+        print("DTOR USTORE\n");
+    }
+}
+
+
+
+private class Xnoise.DockableUbuntuOneMS : DockableMedia {
     
     public override string name() {
         return UBUNTUONE_MUSIC_STORE_NAME;
     }
     
-    private U1.MusicStore ms;
+    private UStore ms;
     private unowned Xnoise.MainWindow win;
     
+    public DockableUbuntuOneMS() {
+        //print("construt ubu dokable\n");
+    }
+
+    private void disconnect_signals() {
+        if(ms == null)
+            return;
+        ms.preview_mp3.disconnect(on_preview_mp3);
+        ms.play_library.disconnect(on_play_library);
+        ms.download_finished.disconnect(on_download_finished); 
+        ms.url_loaded.disconnect(on_url_loaded);
+    }
+    
     ~DockableUbuntuOneMS() {
-        int ms_num = win.tracklistnotebook.page_num(ms);
-        if(ms_num > -1)
-            win.tracklistnotebook.remove_page(ms_num);
-        ms = null;
-        if(ui_merge_id != 0)
-            win.ui_manager.remove_ui(ui_merge_id);
-        Idle.add( () => {
-            win.tracklistnotebook.set_current_page(0);
-            return false;
-        });
+        //print("dtor UBUNTUONE_MUSIC_STORE dockable\n");
+        widget = null;
     }
     
     public override string headline() {
@@ -113,58 +128,61 @@ private class DockableUbuntuOneMS : DockableMedia {
         return DockableMedia.Category.STORES;
     }
 
-    private Widget? w = null;
-    private uint ui_merge_id;
-    public override unowned Gtk.Widget? get_widget(MainWindow win) {
+    public uint ui_merge_id;
+    public override Gtk.Widget? create_widget(MainWindow win) {
         this.win = win;
-        unowned Widget wu = w;
-        if(w != null)
-            return wu;
         
-        w = new Label("Ubuntu One Music Store");
+        assert(this.win != null);
+        var wu = new Label("Ubuntu One Music Store");
         
-        win.msw.media_source_selector.selection_changed.connect( (s,t) => {
-            if(t == UBUNTUONE_MUSIC_STORE_NAME) {
-                if(ms == null) {
-                    ms = new U1.MusicStore();
-                    //Signals
-                    //ms.preview_mp3.connect(on_preview_mp3); // doesn't work for a strange reason
-                    Signal.connect((void*)ms, "preview-mp3", (GLib.Callback)on_preview_mp3, (void*)this);
-                    ms.play_library.connect(on_play_library);
-                    ms.download_finished.connect(on_download_finished); 
-                    ms.url_loaded.connect(on_url_loaded); // working
-                    
-                    if(ms.parent == null)
-                        win.tracklistnotebook.append_page(ms, null);
-                    ms.show();
-                    ui_merge_id = add_main_window_menu_entry();
-                }
-                Idle.add( () => {
-                    int ms_num = win.tracklistnotebook.page_num(ms);
-                    ms.visible = true;
-                    win.tracklistnotebook.set_current_page(ms_num);
-                    return false;
-                });
-            }
-            else {
-                Idle.add( () => {
-                    win.tracklistnotebook.set_current_page(0);
-                    ms.visible = false;
-                    return false;
-                });
-            }
-        });
-        wu = w;
+        win.msw.selection_changed.connect(on_selection_changed);
+        widget = wu;
         return wu;
     }
     
+    private void on_selection_changed(MediaSoureWidget sender, string dname) {
+        if(dname == UBUNTUONE_MUSIC_STORE_NAME) {
+            if(ms == null) {
+                ms = new UStore();
+                //Signals
+                ms.preview_mp3.connect(on_preview_mp3);// working
+                ms.play_library.connect(on_play_library);
+                ms.download_finished.connect(on_download_finished); 
+                ms.url_loaded.connect(on_url_loaded); // working
+                assert(win != null);
+                assert(win.tracklistnotebook != null);
+                if(ms.parent == null)
+                    win.tracklistnotebook.append_page(ms, null);
+                ms.show();
+                ui_merge_id = add_main_window_menu_entry();
+                print("ui_merge_id:%u\n", ui_merge_id);
+            }
+            Idle.add( () => {
+                assert(win != null);
+                assert(win.tracklistnotebook != null);
+                int ms_num = win.tracklistnotebook.page_num(ms);
+                win.tracklistnotebook.set_current_page(ms_num);
+                return false;
+            });
+        }
+        else {
+            win.tracklistnotebook.set_current_page(0);
+        }
+    }
+    
     public override void remove_main_view() {
+        disconnect_signals();
+        assert(win != null);
+        if(ms == null)
+            return;
+        win.msw.selection_changed.disconnect(this.on_selection_changed);
         int ms_num = win.tracklistnotebook.page_num(ms);
         if(ms_num > -1)
             win.tracklistnotebook.remove_page(ms_num);
+        ms = null;
     }
     
-    private Gtk.ActionGroup action_group;
+    public Gtk.ActionGroup action_group;
     
     private uint add_main_window_menu_entry() {
         action_group = new Gtk.ActionGroup("UbuntuOneActions");
@@ -198,23 +216,18 @@ private class DockableUbuntuOneMS : DockableMedia {
     };
     
     private void on_show_store_menu_clicked() {
-        print("ubu show\n");
-//        win.select_view_by_name(UBUNTUONE_MUSIC_STORE_NAME);
+        assert(win != null);
+        win.msw.select_dockable_by_name(UBUNTUONE_MUSIC_STORE_NAME, true);
     }
 
     private void on_preview_mp3(string uri, string title) {
-        global.stop(); // if playing from tracklist
-        gst_player.stop(); // for tracklist-less playing
+        global.preview_uri(uri);
+        string ti = title;
+        global.current_album  = null;
+        global.current_artist = null;
+        global.current_title  = null;
         Timeout.add_seconds(1, () => {
-            gst_player.uri = uri;
-            gst_player.play();
-            Timeout.add_seconds(1, () => {
-                print("set title %s\n", title);
-                global.current_title = title;
-                string _uri = uri;
-                win.set_displayed_title(ref _uri, "title", title);
-                return false;
-            });
+            global.current_title  = ti;
             return false;
         });
     }
@@ -243,18 +256,35 @@ private class DockableUbuntuOneMS : DockableMedia {
     }
 }
 
+
+
 //The Ubuntu One Music Store.
-public class MusicStore : GLib.Object {
+private class Xnoise.UbuMusicStore : GLib.Object {
     private unowned UbuntuOnePlugin plugin;
     
-    public MusicStore(UbuntuOnePlugin plugin) {
+    public UbuMusicStore(UbuntuOnePlugin plugin) {
         this.plugin = plugin;
-        DockableMedia d = new DockableUbuntuOneMS();
-        main_window.msw.insert_dockable(d);
+        main_window.msw.insert_dockable(new DockableUbuntuOneMS());
     }
     
-    ~MusicStore() {
-        main_window.msw.remove_dockable(UBUNTUONE_MUSIC_STORE_NAME);
+    ~UbuMusicStore() {
+        main_window.tracklistnotebook.set_current_page(0);
+        main_window.msw.select_dockable_by_name("MusicBrowserDockable");
+        Idle.add( () => {
+            unowned DockableUbuntuOneMS msd = 
+                (DockableUbuntuOneMS)dockable_media_sources.lookup(UBUNTUONE_MUSIC_STORE_NAME);
+            if(msd == null)
+                return false;
+            if(msd.action_group != null) {
+                main_window.ui_manager.remove_action_group(msd.action_group);
+                msd.action_group = null;
+            }
+            if(msd.ui_merge_id != 0)
+                main_window.ui_manager.remove_ui(msd.ui_merge_id);
+            main_window.msw.remove_dockable(UBUNTUONE_MUSIC_STORE_NAME);
+            msd = null;
+            return false;
+        });
     }
 }
 

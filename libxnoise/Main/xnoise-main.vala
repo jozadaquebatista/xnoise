@@ -105,7 +105,7 @@ public class Xnoise.Main : GLib.Object {
         
         // RESTORE PARAMS IN SUBSCRIBERS
         Params.set_start_parameters_in_implementors();
-
+        
         // LOAD DBUS
         if(!no_dbus) {
             Timeout.add_seconds(2, () => {

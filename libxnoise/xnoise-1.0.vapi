@@ -532,10 +532,11 @@ namespace Xnoise {
 			STORES,
 			DEVICES
 		}
+		public weak Gtk.Widget? widget;
 		public DockableMedia ();
 		public abstract Xnoise.DockableMedia.Category category ();
+		public abstract Gtk.Widget? create_widget (Xnoise.MainWindow window);
 		public abstract Gdk.Pixbuf get_icon ();
-		public abstract unowned Gtk.Widget? get_widget (Xnoise.MainWindow window);
 		public abstract string headline ();
 		public abstract string name ();
 		public abstract void remove_main_view ();
@@ -561,6 +562,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class GlobalAccess : GLib.Object {
 		public bool cellrenderer_in_edit;
+		public weak Xnoise.GstPlayer player;
 		public GlobalAccess ();
 		public void check_image_for_current_track ();
 		public void do_restart_of_current_track ();
@@ -569,6 +571,7 @@ namespace Xnoise {
 		public void pause ();
 		public void play (bool pause_if_playing);
 		public void prev ();
+		public void preview_uri (string uri);
 		public void reset_position_reference ();
 		public void stop ();
 		public string active_dockable_media_name { get; set; }
@@ -583,6 +586,7 @@ namespace Xnoise {
 		public string? image_path_embedded { get; set; }
 		public string? image_path_large { get; set; }
 		public string? image_path_small { get; set; }
+		public bool in_preview { get; set; }
 		public bool media_import_in_progress { get; set; }
 		public Xnoise.PlayerState player_state { get; set; }
 		public Gtk.TreeRowReference position_reference { get; set; }
@@ -603,7 +607,7 @@ namespace Xnoise {
 		public signal void sign_restart_song ();
 		public signal void sign_searchtext_changed (string text);
 		public signal void sign_song_info_required ();
-		public signal void tag_changed (ref string? newuri, string? tagname, string? tagvalue);
+		public signal void tag_changed (string? newuri, string? tagname, string? tagvalue);
 		public signal void uri_changed (string? uri);
 		public signal void uri_repeated (string? uri);
 	}
@@ -807,7 +811,7 @@ namespace Xnoise {
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public void handle_control_button_click (Xnoise.ControlButton sender, Xnoise.ControlButton.Direction dir);
 		public void select_view_by_name (string name);
-		public void set_displayed_title (ref string? newuri, string? tagname, string? tagvalue);
+		public void set_displayed_title (string? newuri, string? tagname, string? tagvalue);
 		public void show_status_info (Xnoise.InfoBar bar);
 		public void show_window ();
 		public void stop ();
@@ -839,29 +843,14 @@ namespace Xnoise {
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class MediaSelector : Gtk.TreeView {
-		public enum Column {
-			ICON,
-			VIS_TEXT,
-			WEIGHT,
-			CATEGORY,
-			SELECTION_STATE,
-			SELECTION_ICON,
-			NAME,
-			N_COLUMNS
-		}
-		public MediaSelector ();
-		public string selected_dockable_media { get; set; }
-		public signal void selection_changed (string dockable_name);
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaSoureWidget : Gtk.Box {
-		public MediaSoureWidget (Xnoise.MainWindow mwindow, GLib.HashTable<string,Xnoise.DockableMedia>? media_sources);
+		public MediaSoureWidget (Xnoise.MainWindow mwindow);
 		public void insert_dockable (Xnoise.DockableMedia d);
 		public void remove_dockable (string name);
-		public void select_dockable_by_name (string name);
-		public Xnoise.MediaSelector media_source_selector { get; private set; }
+		public void select_dockable_by_name (string name, bool emmit_signal = false);
+		public void set_focus_on_selector ();
 		public Gtk.Entry search_entry { get; private set; }
+		public signal void selection_changed (string dockable_name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaStreamSchemes {

@@ -374,19 +374,6 @@ typedef struct _XnoiseMediaSoureWidget XnoiseMediaSoureWidget;
 typedef struct _XnoiseMediaSoureWidgetClass XnoiseMediaSoureWidgetClass;
 typedef struct _XnoiseMediaSoureWidgetPrivate XnoiseMediaSoureWidgetPrivate;
 
-#define XNOISE_TYPE_MEDIA_SELECTOR (xnoise_media_selector_get_type ())
-#define XNOISE_MEDIA_SELECTOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_SELECTOR, XnoiseMediaSelector))
-#define XNOISE_MEDIA_SELECTOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_SELECTOR, XnoiseMediaSelectorClass))
-#define XNOISE_IS_MEDIA_SELECTOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MEDIA_SELECTOR))
-#define XNOISE_IS_MEDIA_SELECTOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MEDIA_SELECTOR))
-#define XNOISE_MEDIA_SELECTOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MEDIA_SELECTOR, XnoiseMediaSelectorClass))
-
-typedef struct _XnoiseMediaSelector XnoiseMediaSelector;
-typedef struct _XnoiseMediaSelectorClass XnoiseMediaSelectorClass;
-typedef struct _XnoiseMediaSelectorPrivate XnoiseMediaSelectorPrivate;
-
-#define XNOISE_MEDIA_SELECTOR_TYPE_COLUMN (xnoise_media_selector_column_get_type ())
-
 #define XNOISE_TYPE_PLAY_PAUSE_BUTTON (xnoise_play_pause_button_get_type ())
 #define XNOISE_PLAY_PAUSE_BUTTON(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLAY_PAUSE_BUTTON, XnoisePlayPauseButton))
 #define XNOISE_PLAY_PAUSE_BUTTON_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_PLAY_PAUSE_BUTTON, XnoisePlayPauseButtonClass))
@@ -1214,6 +1201,7 @@ typedef enum  {
 struct _XnoiseDockableMedia {
 	GObject parent_instance;
 	XnoiseDockableMediaPrivate * priv;
+	GtkWidget* widget;
 };
 
 struct _XnoiseDockableMediaClass {
@@ -1222,7 +1210,7 @@ struct _XnoiseDockableMediaClass {
 	gchar* (*headline) (XnoiseDockableMedia* self);
 	XnoiseDockableMediaCategory (*category) (XnoiseDockableMedia* self);
 	GdkPixbuf* (*get_icon) (XnoiseDockableMedia* self);
-	GtkWidget* (*get_widget) (XnoiseDockableMedia* self, XnoiseMainWindow* window);
+	GtkWidget* (*create_widget) (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 	void (*remove_main_view) (XnoiseDockableMedia* self);
 };
 
@@ -1333,26 +1321,6 @@ struct _XnoiseMediaSoureWidgetClass {
 	GtkBoxClass parent_class;
 };
 
-struct _XnoiseMediaSelector {
-	GtkTreeView parent_instance;
-	XnoiseMediaSelectorPrivate * priv;
-};
-
-struct _XnoiseMediaSelectorClass {
-	GtkTreeViewClass parent_class;
-};
-
-typedef enum  {
-	XNOISE_MEDIA_SELECTOR_COLUMN_ICON = 0,
-	XNOISE_MEDIA_SELECTOR_COLUMN_VIS_TEXT,
-	XNOISE_MEDIA_SELECTOR_COLUMN_WEIGHT,
-	XNOISE_MEDIA_SELECTOR_COLUMN_CATEGORY,
-	XNOISE_MEDIA_SELECTOR_COLUMN_SELECTION_STATE,
-	XNOISE_MEDIA_SELECTOR_COLUMN_SELECTION_ICON,
-	XNOISE_MEDIA_SELECTOR_COLUMN_NAME,
-	XNOISE_MEDIA_SELECTOR_COLUMN_N_COLUMNS
-} XnoiseMediaSelectorColumn;
-
 struct _XnoisePlayPauseButton {
 	GtkToolButton parent_instance;
 	XnoisePlayPauseButtonPrivate * priv;
@@ -1375,6 +1343,7 @@ struct _XnoiseGlobalAccess {
 	GObject parent_instance;
 	XnoiseGlobalAccessPrivate * priv;
 	gboolean cellrenderer_in_edit;
+	XnoiseGstPlayer* player;
 };
 
 struct _XnoiseGlobalAccessClass {
@@ -2268,7 +2237,7 @@ gchar* xnoise_dockable_media_name (XnoiseDockableMedia* self);
 gchar* xnoise_dockable_media_headline (XnoiseDockableMedia* self);
 XnoiseDockableMediaCategory xnoise_dockable_media_category (XnoiseDockableMedia* self);
 GdkPixbuf* xnoise_dockable_media_get_icon (XnoiseDockableMedia* self);
-GtkWidget* xnoise_dockable_media_get_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
+GtkWidget* xnoise_dockable_media_create_widget (XnoiseDockableMedia* self, XnoiseMainWindow* window);
 void xnoise_dockable_media_remove_main_view (XnoiseDockableMedia* self);
 XnoiseDockableMedia* xnoise_dockable_media_construct (GType object_type);
 GType xnoise_add_media_widget_get_type (void) G_GNUC_CONST;
@@ -2323,19 +2292,13 @@ GType xnoise_control_button_direction_get_type (void) G_GNUC_CONST;
 XnoiseControlButton* xnoise_control_button_new (XnoiseControlButtonDirection _direction);
 XnoiseControlButton* xnoise_control_button_construct (GType object_type, XnoiseControlButtonDirection _direction);
 GType xnoise_media_soure_widget_get_type (void) G_GNUC_CONST;
-XnoiseMediaSoureWidget* xnoise_media_soure_widget_new (XnoiseMainWindow* mwindow, GHashTable* media_sources);
-XnoiseMediaSoureWidget* xnoise_media_soure_widget_construct (GType object_type, XnoiseMainWindow* mwindow, GHashTable* media_sources);
-void xnoise_media_soure_widget_select_dockable_by_name (XnoiseMediaSoureWidget* self, const gchar* name);
+XnoiseMediaSoureWidget* xnoise_media_soure_widget_new (XnoiseMainWindow* mwindow);
+XnoiseMediaSoureWidget* xnoise_media_soure_widget_construct (GType object_type, XnoiseMainWindow* mwindow);
+void xnoise_media_soure_widget_set_focus_on_selector (XnoiseMediaSoureWidget* self);
+void xnoise_media_soure_widget_select_dockable_by_name (XnoiseMediaSoureWidget* self, const gchar* name, gboolean emmit_signal);
 void xnoise_media_soure_widget_insert_dockable (XnoiseMediaSoureWidget* self, XnoiseDockableMedia* d);
 void xnoise_media_soure_widget_remove_dockable (XnoiseMediaSoureWidget* self, const gchar* name);
 GtkEntry* xnoise_media_soure_widget_get_search_entry (XnoiseMediaSoureWidget* self);
-GType xnoise_media_selector_get_type (void) G_GNUC_CONST;
-XnoiseMediaSelector* xnoise_media_soure_widget_get_media_source_selector (XnoiseMediaSoureWidget* self);
-GType xnoise_media_selector_column_get_type (void) G_GNUC_CONST;
-XnoiseMediaSelector* xnoise_media_selector_new (void);
-XnoiseMediaSelector* xnoise_media_selector_construct (GType object_type);
-const gchar* xnoise_media_selector_get_selected_dockable_media (XnoiseMediaSelector* self);
-void xnoise_media_selector_set_selected_dockable_media (XnoiseMediaSelector* self, const gchar* value);
 GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
 XnoisePlayPauseButton* xnoise_play_pause_button_new (void);
 XnoisePlayPauseButton* xnoise_play_pause_button_construct (GType object_type);
@@ -2355,6 +2318,7 @@ GType xnoise_global_access_get_type (void) G_GNUC_CONST;
 void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
 void xnoise_global_access_do_restart_of_current_track (XnoiseGlobalAccess* self);
 void xnoise_global_access_handle_eos (XnoiseGlobalAccess* self);
+void xnoise_global_access_preview_uri (XnoiseGlobalAccess* self, const gchar* uri);
 void xnoise_global_access_check_image_for_current_track (XnoiseGlobalAccess* self);
 void xnoise_global_access_prev (XnoiseGlobalAccess* self);
 void xnoise_global_access_play (XnoiseGlobalAccess* self, gboolean pause_if_playing);
@@ -2396,6 +2360,8 @@ const gchar* xnoise_global_access_get_image_path_large (XnoiseGlobalAccess* self
 void xnoise_global_access_set_image_path_large (XnoiseGlobalAccess* self, const gchar* value);
 const gchar* xnoise_global_access_get_image_path_embedded (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_image_path_embedded (XnoiseGlobalAccess* self, const gchar* value);
+gboolean xnoise_global_access_get_in_preview (XnoiseGlobalAccess* self);
+void xnoise_global_access_set_in_preview (XnoiseGlobalAccess* self, gboolean value);
 GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
 GType xnoise_item_handler_type_get_type (void) G_GNUC_CONST;
 GType xnoise_action_context_get_type (void) G_GNUC_CONST;
@@ -2498,7 +2464,7 @@ void xnoise_main_window_toggle_window_visbility (XnoiseMainWindow* self);
 void xnoise_main_window_show_window (XnoiseMainWindow* self);
 void xnoise_main_window_stop (XnoiseMainWindow* self);
 void xnoise_main_window_change_track (XnoiseMainWindow* self, XnoiseControlButtonDirection direction, gboolean handle_repeat_state);
-void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, gchar** newuri, const gchar* tagname, const gchar* tagvalue);
+void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, const gchar* newuri, const gchar* tagname, const gchar* tagvalue);
 void xnoise_main_window_handle_control_button_click (XnoiseMainWindow* self, XnoiseControlButton* sender, XnoiseControlButtonDirection dir);
 void xnoise_main_window_add_main_view (XnoiseMainWindow* self, XnoiseIMainView* view);
 GType xnoise_info_bar_get_type (void) G_GNUC_CONST;

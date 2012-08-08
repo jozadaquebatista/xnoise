@@ -93,7 +93,7 @@ public class Xnoise.SerialButton : Gtk.Box {
     }
 
     public void select(int idx, bool emit_signal = true) {
-        if(idx < 0 || idx >= this.item_count || _selected_idx == idx )
+        if(idx < 0 ) //|| idx >= this.item_count || _selected_idx == idx 
             return;
         
         SerialItem? si;

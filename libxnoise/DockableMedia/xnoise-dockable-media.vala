@@ -38,11 +38,13 @@ public abstract class Xnoise.DockableMedia : GLib.Object {
         DEVICES
     }
     
+    public unowned Gtk.Widget? widget = null;
+    
     public abstract string name();
     public abstract string headline();
     public abstract DockableMedia.Category category();
     public abstract Gdk.Pixbuf  get_icon();
-    public abstract unowned Gtk.Widget? get_widget(Xnoise.MainWindow window);
+    public abstract Gtk.Widget? create_widget(Xnoise.MainWindow window);
     public abstract void remove_main_view();
 }
 

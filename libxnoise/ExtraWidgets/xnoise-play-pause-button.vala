@@ -75,10 +75,22 @@ public class Xnoise.PlayPauseButton: Gtk.ToolButton {
         if(global.current_uri == null) {
             string uri = tl.tracklistmodel.get_uri_for_current_position();
             
-            if((uri != null) && (uri != EMPTYSTRING)) 
+            if((uri != null) && (uri != EMPTYSTRING)) {
+                global.in_preview = false;
                 global.current_uri = uri;
-            else
+            }
+            else {
                 return false;
+            }
+        }
+        if(global.in_preview) {
+            if(gst_player.playing) {
+                gst_player.pause();
+            }
+            else {
+                gst_player.play();
+            }
+            return false;
         }
         if(global.player_state == PlayerState.PLAYING) {
             global.player_state = PlayerState.PAUSED;
