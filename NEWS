@@ -1,3 +1,37 @@
+xnoise (0.2.5)
+
+New Features and Fixes
+======================
+  * UbuntuOne Music Store integration
+  * code cleanup
+  * preview mode for stores
+  * Update zh_CN translation (tuhaihe)
+  * Update cs translation ( psimacek )
+  * update portugese translation (Sérgio Marques)
+  * update hebrew translation (Tal Hadad)
+  * update czech translation
+  * create new media-source-widget for dockable media
+  * azlyrics plugin: replace invalid linebreak char
+  * notifications plugin: do not show notifications on 
+    insufficient song information
+  * add packaging data for quantal
+  * add main menu entry for media browser visibility
+  * small fixes and improvements
+
+
+
+
+xnoise (0.2.4)
+
+New Features and Fixes
+======================
+  * update translations
+  * extend db for future unity support
+  * various bug fixes
+
+
+
+
 xnoise (0.2.3)
 
 New Features and Fixes
