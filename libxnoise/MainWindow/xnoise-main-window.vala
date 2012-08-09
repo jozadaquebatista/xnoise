@@ -1628,8 +1628,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     
     //@define-color text_color #FFFFFF;
     private const string search_used_css = """
-        @define-color base_color #E9967A;
-    """; // DarkSalmon BG
+        @define-color base_color #85B0BE;
+    """; // blue
 }
 
 
