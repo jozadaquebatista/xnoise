@@ -166,7 +166,15 @@ private class Xnoise.DockableUbuntuOneMS : DockableMedia {
             });
         }
         else {
-            win.tracklistnotebook.set_current_page(0);
+            if(ms == null)
+                return;
+            assert(win != null);
+            assert(win.tracklistnotebook != null);
+            int ms_num = win.tracklistnotebook.page_num(ms);
+            if(ms_num == -1)
+                return;
+            if(ms_num == win.tracklistnotebook.get_current_page())
+                win.restore_last_view();
         }
     }
     

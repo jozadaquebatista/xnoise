@@ -810,6 +810,7 @@ namespace Xnoise {
 		public void ask_for_initial_media_import ();
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public void handle_control_button_click (Xnoise.ControlButton sender, Xnoise.ControlButton.Direction dir);
+		public void restore_last_view ();
 		public void select_view_by_name (string name);
 		public void set_displayed_title (string? newuri, string? tagname, string? tagvalue);
 		public void show_status_info (Xnoise.InfoBar bar);

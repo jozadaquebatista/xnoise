@@ -2458,6 +2458,7 @@ GType xnoise_track_list_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_player_repeat_mode_get_type (void) G_GNUC_CONST;
 XnoiseMainWindow* xnoise_main_window_new (void);
 XnoiseMainWindow* xnoise_main_window_construct (GType object_type);
+void xnoise_main_window_restore_last_view (XnoiseMainWindow* self);
 void xnoise_main_window_ask_for_initial_media_import (XnoiseMainWindow* self);
 void xnoise_main_window_toggle_fullscreen (XnoiseMainWindow* self);
 void xnoise_main_window_toggle_window_visbility (XnoiseMainWindow* self);

@@ -337,6 +337,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         
     }
 
+    public void restore_last_view() {
+        tracklistnotebook.set_current_page(buffer_last_page);
+        sbuttonTL.select(buffer_last_page, false);
+    }
+    
     internal void restore_tab() {
         if(temporary_tab != TrackListNoteBookTab.TRACKLIST) {
             tracklistnotebook.set_current_page(temporary_tab);
