@@ -224,6 +224,9 @@ if test "x$enable_lyricwiki" = "xyes"; then
         enable_lyricwiki=no
         AC_MSG_NOTICE([lyricwiki plugin will not be included in the build.])
     fi
+else
+    enable_lyricwiki=no
+    AC_MSG_NOTICE([lyricwiki plugin will not be included in the build.])
 fi
 AM_CONDITIONAL(ENABLE_LYRICWIKI, test x"$enable_lyricwiki" = "xyes")
 dnl ================================================================
@@ -247,6 +250,9 @@ if test "x$enable_lastfm" = "xyes"; then
         enable_lastfm=no
         AC_MSG_NOTICE([lastfm plugin will not be included in the build.])
     fi
+else
+    enable_lastfm=no
+    AC_MSG_NOTICE([lastfm plugin will not be included in the build.])
 fi
 AM_CONDITIONAL(ENABLE_LASTFM, test x"$enable_lastfm" = "xyes")
 dnl ================================================================
@@ -267,6 +273,9 @@ if test "x$enable_notifications" = "xyes"; then
         enable_notifications=no
         AC_MSG_NOTICE([notifications plugin will not be included in the build.])
     fi
+else
+    enable_notifications=no
+    AC_MSG_NOTICE([notifications plugin will not be included in the build.])
 fi
 AM_CONDITIONAL(ENABLE_NOTIFICATIONS, test x"$enable_notifications" = "xyes")
 dnl ================================================================
@@ -287,6 +296,9 @@ if test "x$enable_mpris" = "xyes"; then
         enable_mpris=no
         AC_MSG_NOTICE([mpris plugins will not be included in the build.])
     fi
+else
+    enable_mpris=no
+    AC_MSG_NOTICE([mpris plugins will not be included in the build.])
 fi
 AM_CONDITIONAL(ENABLE_MPRIS, test x"$enable_mpris" = "xyes")
 dnl ================================================================
@@ -301,7 +313,9 @@ AC_ARG_ENABLE([soundmenu2],
     [enable_soundmenu2=$enableval],
     [enable_soundmenu2=yes])
 
-if test "x$enable_soundmenu2" != "xyes"; then
+if test "x$enable_soundmenu2" = "xyes"; then
+    enable_soundmenu2=yes
+else
     enable_soundmenu2=no
     AC_MSG_NOTICE([soundmenu2 plugin will not be included in the build.])
 fi
@@ -329,6 +343,9 @@ if test "x$enable_mediakeys" = "xyes"; then
         enable_mediakeys=no
         AC_MSG_NOTICE([mediakeys plugin will not be included in the build.])
     fi
+else
+    enable_mediakeys=no
+    AC_MSG_NOTICE([mediakeys plugin will not be included in the build.])
 fi
 AM_CONDITIONAL(ENABLE_MEDIAKEYS, test x"$enable_mediakeys" = "xyes")
 dnl ================================================================
@@ -349,6 +366,9 @@ if test "x$enable_chartlyrics" = "xyes"; then
         enable_chartlyrics=no
         AC_MSG_NOTICE([chartlyrics plugin will not be included in the build.])
     fi
+else
+    enable_chartlyrics=no
+    AC_MSG_NOTICE([chartlyrics plugin will not be included in the build.])
 fi
 AM_CONDITIONAL(ENABLE_CHARTLYRICS, test x"$enable_chartlyrics" = "xyes")
 dnl ================================================================
@@ -369,13 +389,16 @@ if test "x$enable_azlyrics" = "xyes"; then
         enable_azlyrics=no
         AC_MSG_NOTICE([azlyrics plugin will not be included in the build.])
     fi
+else
+    enable_azlyrics=no
+    AC_MSG_NOTICE([azlyrics plugin will not be included in the build.])
 fi
 AM_CONDITIONAL(ENABLE_AZLYRICS, test x"$enable_azlyrics" = "xyes")
 dnl ================================================================
 
 
 dnl ================================================================
-dnl dependency check for optional build of azlyrics plugin 
+dnl dependency check for optional build of ubuntuone plugin 
 
 AC_ARG_ENABLE([ubuntuone],
     AS_HELP_STRING([--disable-ubuntuone],
@@ -390,8 +413,30 @@ if test "x$enable_ubuntuone" = "xyes"; then
         enable_ubuntuone=no
         AC_MSG_NOTICE([ubuntuone music store plugin will not be included in the build.])
     fi
+else
+    enable_ubuntuone=no
+    AC_MSG_NOTICE([ubuntuone music store plugin will not be included in the build.])
 fi
 AM_CONDITIONAL(ENABLE_UBUNTUONE_MUSICSTORE, test x"$enable_ubuntuone" = "xyes")
+dnl ================================================================
+
+
+dnl ================================================================
+dnl dependency check for optional build of magnatune plugin 
+
+AC_ARG_ENABLE([magnatune],
+    AS_HELP_STRING([--disable-magnatune],
+    [Disable magnatune music store plugin (default: enabled)]),
+    [enable_magnatune=$enableval],
+    [enable_magnatune=yes])
+
+if test "x$enable_magnatune" = "xyes"; then
+    enable_magnatune=yes
+else
+    enable_magnatune=no
+    AC_MSG_NOTICE([magnatune music store plugin will not be included in the build.])
+fi
+AM_CONDITIONAL(ENABLE_MAGNATUNE_MUSICSTORE, test x"$enable_magnatune" = "xyes")
 dnl ================================================================
 
 
@@ -453,18 +498,19 @@ AC_CONFIG_FILES([
     libxnoise/Makefile
     src/Makefile
     plugins/Makefile
+    plugins/azlyrics/Makefile
+    plugins/chartlyrics/Makefile
+    plugins/databaseLyrics/Makefile
     plugins/testplugin/Makefile
     plugins/titleToDecoration/Makefile
-    plugins/notifications2/Makefile
+    plugins/lastfm/Makefile
+    plugins/lyricwiki/Makefile
+    plugins/magnatune/Makefile
+    plugins/mediakeys/Makefile
     plugins/mpris/Makefile
     plugins/mpris_one/Makefile
-    plugins/mediakeys/Makefile
-    plugins/chartlyrics/Makefile
-    plugins/lyricwiki/Makefile
+    plugins/notifications2/Makefile
     plugins/soundmenu2/Makefile
-    plugins/databaseLyrics/Makefile
-    plugins/lastfm/Makefile
-    plugins/azlyrics/Makefile
     plugins/ubuntuone/Makefile
     po/Makefile.in
     doc/Makefile
@@ -494,6 +540,7 @@ echo "
     TitleToDecoration:             yes (always)
     Ubuntu soundmenu:              ${enable_soundmenu2}
     Ubuntu One Music Store:        ${enable_ubuntuone}
+    Magntune Music Store:          ${enable_magnatune}
     Chartlyrics:                   ${enable_chartlyrics}
     Azlyrics:                      ${enable_azlyrics}
     Lyricwiki:                     ${enable_lyricwiki}

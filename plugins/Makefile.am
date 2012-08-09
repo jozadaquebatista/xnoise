@@ -17,6 +17,7 @@ DIST_SUBDIRS =  testplugin \
                 databaseLyrics \
                 lastfm \
                 azlyrics \
+                magnatune \
                 ubuntuone \
                 $(NULL)
 
@@ -55,6 +56,10 @@ endif
 
 if ENABLE_UBUNTUONE_MUSICSTORE
     SUBDIRS += ubuntuone
+endif
+
+if ENABLE_MAGNATUNE_MUSICSTORE
+    SUBDIRS += magnatune
 endif
 
 DISTCLEANFILES = \
