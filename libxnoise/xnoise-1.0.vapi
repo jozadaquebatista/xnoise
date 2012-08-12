@@ -1158,6 +1158,7 @@ namespace Xnoise {
 	public struct DndData {
 		public int32 db_id;
 		public Xnoise.ItemType mediatype;
+		public string txt;
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public struct Item {

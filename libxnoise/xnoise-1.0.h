@@ -1042,6 +1042,7 @@ struct _XnoiseItem {
 struct _XnoiseDndData {
 	gint32 db_id;
 	XnoiseItemType mediatype;
+	gchar* txt;
 };
 
 typedef gboolean (*XnoiseWorkerWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
@@ -2106,6 +2107,8 @@ GType xnoise_track_data_get_type (void) G_GNUC_CONST;
 GType xnoise_dnd_data_get_type (void) G_GNUC_CONST;
 XnoiseDndData* xnoise_dnd_data_dup (const XnoiseDndData* self);
 void xnoise_dnd_data_free (XnoiseDndData* self);
+void xnoise_dnd_data_copy (const XnoiseDndData* self, XnoiseDndData* dest);
+void xnoise_dnd_data_destroy (XnoiseDndData* self);
 XnoiseWorkerJob* xnoise_worker_job_new (XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, guint _timer_seconds);
 XnoiseWorkerJob* xnoise_worker_job_construct (GType object_type, XnoiseWorkerExecutionType execution_type, XnoiseWorkerWorkFunc func, void* func_target, guint _timer_seconds);
 void xnoise_worker_job_set_arg (XnoiseWorkerJob* self, const gchar* name, GValue* val);

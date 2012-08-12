@@ -600,11 +600,13 @@ public class Xnoise.TrackList : TreeView, IParams {
                     break;
                 case 1: // uri list from outside
                     uris = selection.get_uris();
+                    print("receive get_uris\n");
                     drop_rowref = null;
                     bool is_first = true;
                     string attr = FileAttribute.STANDARD_TYPE + "," +
                                   FileAttribute.STANDARD_CONTENT_TYPE;
                     foreach(string uri in uris) {
+                    print("uri:%s\n", uri);
                         bool is_stream = false;
                         file = File.new_for_uri(uri);
                         if(file.get_uri_scheme() in get_remote_schemes()) 
@@ -627,6 +629,9 @@ public class Xnoise.TrackList : TreeView, IParams {
                             else {
                                 handle_dropped_files_for_folders(file, ref path, ref is_first); //DIRECTORIES
                             }
+                        }
+                        else {
+                            handle_dropped_stream_uri(ref uri, ref path, ref is_first);
                         }
                     }
                     break;
@@ -700,6 +705,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 
     private bool insert_dnd_data_job(Worker.Job job) {
         DndData[] ids = job.dnd_data; //TODO !!!
+//        foreach(DndData ddd in ids)
+//            print("hhhhh: %s\n", ddd.txt);
+//        return false; //TEST
         bool is_first = true;
         TreeViewDropPosition drop_pos_1 = (TreeViewDropPosition)job.get_arg("drop_pos");
         TreeRowReference row_ref = (TreeRowReference)job.get_arg("row_ref");
@@ -902,6 +910,54 @@ public class Xnoise.TrackList : TreeView, IParams {
         path = this.tracklistmodel.get_path(new_iter);
     }
 
+    private void handle_dropped_stream_uri(ref string fileuri, ref TreePath? path, ref bool is_first) {
+        File file;
+        try {
+            file = File.new_for_uri(fileuri);
+        }
+        catch(GLib.Error e) {
+            print("%s\n", e.message);
+            return;
+        }
+        TreeIter iter, new_iter;
+        string artist=EMPTYSTRING, album = EMPTYSTRING, title = EMPTYSTRING, lengthString = EMPTYSTRING, genre = UNKNOWN_GENRE;
+        string? yearString = null;
+        uint tracknumb = 0;
+        
+        Item? item = Item(ItemType.STREAM, file.get_uri());
+        title          = prepare_name_from_filename(file.get_basename());
+        TreeIter first_iter;
+        if(path == null || !this.tracklistmodel.get_iter_first(out first_iter)) {
+            tracklistmodel.append(out new_iter);
+            drop_pos = Gtk.TreeViewDropPosition.AFTER;
+        }
+        else {
+            this.tracklistmodel.get_iter(out iter, path);
+            
+            if(is_first) {
+                if((drop_pos == Gtk.TreeViewDropPosition.BEFORE)||
+                   (drop_pos == Gtk.TreeViewDropPosition.INTO_OR_BEFORE)) {
+                       //Determine drop position for first, insert all others after first
+                    this.tracklistmodel.insert_before(out new_iter, iter);
+                }
+                else {
+                    this.tracklistmodel.insert_after(out new_iter, iter);
+                }
+                is_first = false;
+            }
+            else {
+                this.tracklistmodel.insert_after(out new_iter, iter);
+            }
+        }
+        
+        tracklistmodel.set(new_iter,
+                       TrackListModel.Column.TITLE, title,
+                       TrackListModel.Column.WEIGHT, Pango.Weight.NORMAL,
+                       TrackListModel.Column.ITEM, item
+                       );
+        path = this.tracklistmodel.get_path(new_iter);
+    }
+    
     private void handle_dropped_file(ref string fileuri, ref TreePath? path, ref bool is_first) {
         //print ("1. xnoise-tracklist.vala => Ingresando a handle_dropped_file\n");
         //Function to import music FILES in drag'n'drop
