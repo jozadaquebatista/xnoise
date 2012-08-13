@@ -1,4 +1,4 @@
-xnoise (0.2.5.1-1ubuntu1) precise; urgency=low
+xnoise (0.2.5.6-precise) precise; urgency=low
   * add ubuntuone music store plugin
   * code cleanup
   * preview mode for stores
@@ -9,13 +9,14 @@ xnoise (0.2.5.1-1ubuntu1) precise; urgency=low
   * update czech translation
   * create new media-source-widget for dockable media
   * azlyrics plugin: replace invalid linebreak char
-  * notifications plugin: do not show notifications on insufficient song information
+  * notifications plugin: do not show notifications on insufficient song info
   * add packaging data for quantal
   * add main menu entry for media browser visibility
   * small fixes and improvements
 
 
  -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 08 Aug 2012 19:30:17 +0200
+
 
 
 
@@ -73,7 +74,7 @@ xnoise (0.2.1.1-1ubuntu1) precise; urgency=low
 
 
 xnoise (0.2.0.1-1ubuntu1) precise; urgency=low
-  * add support for dockable media sources (Categories: Playlists, Media Collection, Stores)
+  * add support for dockable media sources
   * add onboard dbus service (not bound to mpris)
   * add new azlyrics plugin
   * add automatic thumbnail generation for videos
@@ -104,7 +105,8 @@ xnoise (0.1.31-1) precise; urgency=low
   * stop using uris for the title search
   * mediabrowser: gtk3 compatible font rendering with linebreaks
   * update some translation
-  * lastfm plugin: make scrobbling optional (cover fetching can be used without logging an user into lastfm)
+  * lastfm plugin: make scrobbling optional (cover fetching can be used without
+    logging an user into lastfm)
   * remove deprecated HBox/VBox widgets
   * use icons for drag'n'drop
   * drop dependency to libunique (now gio's application class)
@@ -173,7 +175,8 @@ xnoise (0.1.28) precise; urgency=low
 
 
 xnoise (0.1.27.4) precise; urgency=low
-  * present the currently played track data together with the album cover in the 'now playing' view
+  * present the currently played track data together with the album cover in 
+    the 'now playing' view
   * check missing gstreamer plugins (codecs) and inform the user
   * new handler for adding all visible tracks to tracklist
   * new option for quitting application on closing window (not default option)
@@ -189,5 +192,6 @@ xnoise (0.1.27.4) precise; urgency=low
   * bug fixes
 
  -- Jörn Magens <shuerhaaken@googlemail.com>  Tue, 16 Aug 2011 14:50:10 +0200
+
 
 
