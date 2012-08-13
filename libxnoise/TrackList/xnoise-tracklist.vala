@@ -705,9 +705,6 @@ public class Xnoise.TrackList : TreeView, IParams {
 
     private bool insert_dnd_data_job(Worker.Job job) {
         DndData[] ids = job.dnd_data; //TODO !!!
-//        foreach(DndData ddd in ids)
-//            print("hhhhh: %s\n", ddd.txt);
-//        return false; //TEST
         bool is_first = true;
         TreeViewDropPosition drop_pos_1 = (TreeViewDropPosition)job.get_arg("drop_pos");
         TreeRowReference row_ref = (TreeRowReference)job.get_arg("row_ref");

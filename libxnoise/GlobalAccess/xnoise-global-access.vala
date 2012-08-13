@@ -130,10 +130,10 @@ public class Xnoise.GlobalAccess : GLib.Object {
     
     // PROPERTIES
     
-    //searchtext shall be changed by searchentry, only!
+    //searchtext shall be changed by the searchentry, only!
     //searchtext is without trailing or leading white space
     //serachtext is always lower case
-    internal string searchtext { 
+    public string searchtext { 
         get {
             return _searchtext;
         }

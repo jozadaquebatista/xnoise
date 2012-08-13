@@ -37,6 +37,7 @@ libxnoise_la_SOURCES = \
     Database/xnoise-db-reader.vala \
     Database/xnoise-db-creator.vala \
     Database/xnoise-db-writer.vala \
+    DataSource/xnoise-data-source.vala \
     DBus/xnoise-dbus.vala \
     DBus/xnoise-dbus-thumbnailer.vala \
     DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala \
@@ -181,6 +182,7 @@ DISTCLEANFILES = \
     DockableMedia/StreamListing/*.c \
     DockableMedia/VideoListing/*.c \
     Database/*.c \
+    DataSource/*.c \
     DBus/*.c \
     ExtraWidgets/*.c \
     ExtraWidgets/AboutDialog/*.c \

@@ -198,7 +198,7 @@ public enum Xnoise.PlayerState {
 public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
     public int32 db_id;
     public ItemType mediatype;
-    public string txt;
+    public uint source_id; // use for registered data sources
 }
 
 

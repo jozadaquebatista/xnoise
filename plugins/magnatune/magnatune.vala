@@ -238,13 +238,14 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         if(path.get_depth() == 1) {
             job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_album_and_tracks_job);
             job.set_arg("treerowref", treerowref);
-            job.set_arg("artist", artist);
+            int artist_id = 0; //TODO
+            job.set_arg("artist_id", artist_id);
             db_worker.push_job(job);
         }
     }
 
     private bool load_album_and_tracks_job(Worker.Job job) {
-        job.items = dbreader.get_albums_with_search("", (string)job.get_arg("artist")); //global.searchtext
+        job.items = dbreader.get_albums_with_search(global.searchtext, (int32)job.get_arg("artist_id")); 
         //print("job.items cnt = %d\n", job.items.length);
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
@@ -283,7 +284,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     private bool populate_title_job(Worker.Job job) {
         string ar = (string)job.get_arg("artist");
         string al = (string)job.get_arg("album");
-        job.track_dat = dbreader.get_tracks_for_album("", ar, al);//global.searchtext
+        job.track_dat = dbreader.get_tracks_for_album(global.searchtext, ar, al);
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if((row_ref == null) || (!row_ref.valid()))
@@ -323,7 +324,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             dbreader = new MagnatuneDatabaseReader();
         if(dbreader == null)
             assert_not_reached();
-        job.items = dbreader.get_artists_with_search(""); //global.searchtext
+        job.items = dbreader.get_artists_with_search(global.searchtext);
         Idle.add(() => {
             if(this == null)
                 return false;
@@ -574,7 +575,7 @@ print("drag data get\n");
             string[] suris = mag_model.get_dnd_data_for_path(ref treepath); 
             foreach(string u in suris) {
                 //print("dnd data get %d  %s\n", u.db_id, u.mediatype.to_string());
-                uris += u; // this is necessary, if more than one path can be selected
+                uris += u;
             }
         }
         uris += null;
