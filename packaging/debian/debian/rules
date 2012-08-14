@@ -4,7 +4,7 @@
 	dh $@
 
 override_dh_auto_configure:
-	dh_auto_configure -- --disable-soundmenu2
+	dh_auto_configure -- --disable-soundmenu2 --disable-ubuntuone
 
 override_dh_makeshlibs:
 	dh_makeshlibs -X/usr/lib/xnoise/*
