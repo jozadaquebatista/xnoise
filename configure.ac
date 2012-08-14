@@ -497,6 +497,7 @@ AC_CONFIG_FILES([
     data/icons/scalable/Makefile
     libxnoise/Makefile
     src/Makefile
+    packaging/Makefile
     plugins/Makefile
     plugins/azlyrics/Makefile
     plugins/chartlyrics/Makefile

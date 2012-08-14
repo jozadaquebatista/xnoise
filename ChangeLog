@@ -1,3 +1,109 @@
+commit bb9619d4c7bd8ae15ed025ac9593e657896ed920
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Tue Aug 14 17:47:24 2012 +0200
+
+    update debian packaging data for xnoise-0.2.5
+
+commit cc2066753695fcb642b147e39fcc3250117225a3
+Merge: 162595c 473a8b9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 14 17:28:33 2012 +0200
+
+    Merge branch 'master' of github.com:shuerhaaken/xnoise
+
+commit 162595c58c983024db4f62d895ecc59792dc0bf4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 14 17:27:59 2012 +0200
+
+    magnatune: some cleanup
+
+commit f97d0c7f15d928591894cb8971ed105e6615d7bc
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 14 17:15:30 2012 +0200
+
+    magnatune: Conversion progress indication
+
+commit 75c7cc207f43043c64adb3f35e0d4acf2259b5ec
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 14 15:55:22 2012 +0200
+
+    magnatune: more dnd
+
+commit 2ea39dad92bae1767d466daf9a27fddb1c80931c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 14 13:24:49 2012 +0200
+
+    magnatune: add common datasource mechanism and database converter
+
+commit 133b70b643268d3ffdc213506722aad7de5cd675
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 14 09:08:09 2012 +0200
+
+    fix potential bug in signal handler of mpris plugin
+
+commit 3d6989c71f2c54de9a188b1158b12976304195b6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 14 09:03:08 2012 +0200
+
+    fix crasher with title-to-decoration plugin
+
+commit d77fad694b580a9a35a72fa13cf3678dcbfac449
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Aug 13 15:36:17 2012 +0200
+
+    move packaging of ubuntuone-music-store to a seperate package to avoid unnecessary dependencies in xnoise
+
+commit e1a933b5cd12867f7dc0b51c617b2f6ed6cc5a29
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Aug 13 15:30:07 2012 +0200
+
+    magnatune: some infrastructural work for loadable media sources
+
+commit 9f3a3fd781e2c4d04ddb064cf7f783e1f74898b8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Aug 12 23:51:27 2012 +0200
+
+    magnatune: basic functionality + drag'n'drop
+
+commit 473a8b9d7ffa2ec72d64c5738413991ed0f770db
+Merge: bcc777e e80ef23
+Author: shuerhaaken <shuerhaaken@googlemail.com>
+Date:   Fri Aug 10 00:39:58 2012 -0700
+
+    Merge pull request #28 from psimacek/patch-4
+    
+    Update po/cs.po
+
+commit e80ef23b235e05cab010236101c76f7bf992c5b7
+Author: psimacek <petr.simacek@gmail.com>
+Date:   Fri Aug 10 09:15:19 2012 +0300
+
+    Update po/cs.po
+
+commit e04dd390a27a5b6130de8a9767e3c98a1418e557
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 9 15:32:30 2012 +0200
+
+    add sceleton for magnatune plugin
+
+commit ca38b27330b00c249d2a9e01f460d71b576816b6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 9 14:52:14 2012 +0200
+
+    use blue color to indicate active searches because red looks like nothing was found
+
+commit 4c8e01824072d183396a32e6c024a1ee6db49b59
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 9 14:50:43 2012 +0200
+
+    update version
+
+commit 22b6adfb45974106aa59df11891fc77ccf2fd0f6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 9 14:50:20 2012 +0200
+
+    add changelog on dist
+
 commit bcc777e5fd534a7bd2f219a9c48a277a462ce69f
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Thu Aug 9 11:33:53 2012 +0200
