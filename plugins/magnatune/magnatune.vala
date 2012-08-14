@@ -316,6 +316,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             dbreader = new MagnatuneDatabaseReader();
         if(dbreader == null)
             assert_not_reached();
+        int data_source_id = register_data_source(dbreader);
         job.items = dbreader.get_artists_with_search(global.searchtext);
         print("job.items.length : %d\n", job.items.length);
         Idle.add(() => {
@@ -352,7 +353,10 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         this.get_iter(out iter, treepath);
         this.get(iter, Column.ITEM, out item);
         if(item != null && item.type != ItemType.UNKNOWN) {
-            DndData dnd_data = { item.db_id, item.type, 1 };
+            int id = -1;
+            id = dbreader.get_source_id();
+            print("EEID1 : %d\n", id);
+            DndData dnd_data = { item.db_id, item.type, id };
             dnd_data_array += dnd_data;
         }
         return dnd_data_array;
@@ -430,7 +434,8 @@ private class MagnatuneTreeView : Gtk.TreeView {
     private bool dragging;
 
     private const TargetEntry[] src_target_entries = {
-        {"text/uri-list", TargetFlags.SAME_APP, 0} // "application/custom_dnd_data"
+        {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
+//        {"text/uri-list", TargetFlags.SAME_APP, 0} // "application/custom_dnd_data"
     };
     
     public MagnatuneTreeView(DockableMedia dock, MagnatuneWidget widg, Widget ow) {
@@ -595,12 +600,9 @@ private class MagnatuneTreeView : Gtk.TreeView {
             this.mag_model.get_iter(out iter, treepath);
             this.mag_model.get(iter, MagnatuneTreeStore.Column.ITEM, out item);
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
-            if(tmp == null) 
+            if(tmp == null)
                 return;
-            unowned Xnoise.Action? action = tmp.get_action(item.type, 
-                                                           ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED,
-                                                           ItemSelectionType.SINGLE
-                                                           );
+            unowned Xnoise.Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
             
             if(action != null)
                 action.action(item, null);
@@ -611,6 +613,31 @@ private class MagnatuneTreeView : Gtk.TreeView {
             this.expand_row(treepath, false);
         }
     }
+
+
+//    private void on_row_activated(Gtk.Widget sender, TreePath treepath, TreeViewColumn column) {
+//        if(treepath.get_depth() > 1) {
+//            Item? item = Item(ItemType.UNKNOWN);
+//            TreeIter iter;
+//            this.mag_model.get_iter(out iter, treepath);
+//            this.mag_model.get(iter, MagnatuneTreeStore.Column.ITEM, out item);
+//            ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
+//            if(tmp == null) 
+//                return;
+//            unowned Xnoise.Action? action = tmp.get_action(item.type, 
+//                                                           ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED,
+//                                                           ItemSelectionType.SINGLE
+//                                                           );
+//            
+//            if(action != null)
+//                action.action(item, null);
+//            else
+//                print("action was null\n");
+//        }
+//        else {
+//            this.expand_row(treepath, false);
+//        }
+//    }
 
     private MagnatuneTreeStore create_model() {
         return new MagnatuneTreeStore(this.dock, this);
@@ -950,6 +977,7 @@ private class MagnatuneWidget : Gtk.Box {
         pb = null;
         label = null;
         sw = new ScrolledWindow(null, null);
+        sw.set_shadow_type(ShadowType.IN);
         tv = new MagnatuneTreeView(this.dock, this, sw);
         sw.add(tv);
         this.pack_start(sw, true, true , 0);
@@ -1012,6 +1040,7 @@ private class Xnoise.DockableMagnatuneMS : DockableMedia {
         assert(this.win != null);
         var wu = new MagnatuneWidget(this);
         widget = wu;
+        wu.show_all();
         return (owned)wu;
     }
     

@@ -224,6 +224,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
     private bool timeout_done;
     private unowned Lastfm.Session session;
     private Lastfm.Album alb;
+    private ulong sign_no;
     
     public LastFmCovers(string _artist, string _album, Lastfm.Session session) {
         this.artist = _artist;
@@ -239,7 +240,7 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
         timeout = 0;
         timeout_done = false;
         alb = this.session.factory_make_album(artist, album);
-        alb.received_info.connect( (sender, al) => {
+        sign_no = alb.received_info.connect( (sender, al) => {
             print("got album info: %s , %s\n", sender.artist_name, al);
             //print("image extralarge: %s\n", sender.image_uris.lookup("extralarge"));
             string default_size = "medium";
@@ -281,6 +282,8 @@ public class Xnoise.LastFmCovers : GLib.Object, IAlbumCoverImage {
     ~LastFmCovers() {
         if(timeout != 0)
             Source.remove(timeout);
+        alb.disconnect(sign_no);
+        alb = null;
     }
 
     private void remove_timeout() {

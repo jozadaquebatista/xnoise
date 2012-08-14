@@ -704,7 +704,7 @@ public class Xnoise.TrackList : TreeView, IParams {
     }
 
     private bool insert_dnd_data_job(Worker.Job job) {
-        DndData[] ids = job.dnd_data; //TODO !!!
+        DndData[] ids = job.dnd_data;
         bool is_first = true;
         TreeViewDropPosition drop_pos_1 = (TreeViewDropPosition)job.get_arg("drop_pos");
         TreeRowReference row_ref = (TreeRowReference)job.get_arg("row_ref");
@@ -714,6 +714,8 @@ public class Xnoise.TrackList : TreeView, IParams {
         TrackData[] localarray = {};
         foreach(DndData ix in ids) {
             Item i = Item(ix.mediatype, null, ix.db_id);
+            i.source_id = ix.source_id;
+            print("EEE ID: %d\n", i.source_id);
             print("insert type %s\n", i.type.to_string());
             TrackData[]? tmp = item_converter.to_trackdata(i, global.searchtext);
             if(tmp != null) {

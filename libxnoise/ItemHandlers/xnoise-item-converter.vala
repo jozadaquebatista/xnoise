@@ -52,14 +52,18 @@ public class Xnoise.ItemConverter : Object {
             case ItemType.LOCAL_AUDIO_TRACK:
             case ItemType.LOCAL_VIDEO_TRACK:
                 if(item.db_id > -1 && (int)Linux.gettid() == db_worker.thread_id) {
-                    TrackData? tmp = db_reader.get_trackdata_by_titleid(global.searchtext, item.db_id);
+                    DataSource ds = get_data_source(item.source_id);
+                    assert(ds != null);
+                    TrackData? tmp = ds.get_trackdata_by_titleid(global.searchtext, item.db_id);
                     if(tmp == null)
                         break;
                     result += tmp;
                 }
                 else if(item.uri != null) {
                     TrackData? tmp = null;
-                    if((int)Linux.gettid() == db_worker.thread_id && db_reader.get_trackdata_for_uri(ref item.uri, out tmp)) {
+                    DataSource ds = get_data_source(item.source_id);
+                    assert(ds != null);
+                    if((int)Linux.gettid() == db_worker.thread_id && ds.get_trackdata_for_uri(ref item.uri, out tmp)) {
                         if(tmp != null) {
                             if(tmp.item.type == ItemType.UNKNOWN)
                                 tmp.item.type = ItemHandlerManager.create_item(item.uri).type;
@@ -103,27 +107,34 @@ public class Xnoise.ItemConverter : Object {
                 break;
             case ItemType.COLLECTION_CONTAINER_ALBUM:
                 if(item.db_id > -1 && (int)Linux.gettid() == db_worker.thread_id) {
-                    result = db_reader.get_trackdata_by_albumid(global.searchtext, item.db_id);
+                    DataSource ds = get_data_source(item.source_id);
+                    assert(ds != null);
+                    result = ds.get_trackdata_by_albumid(global.searchtext, item.db_id);
                     break;
                 }
                 break;
             case ItemType.COLLECTION_CONTAINER_ARTIST:
                 if(item.db_id > -1 && (int)Linux.gettid() == db_worker.thread_id) {
-                    result = db_reader.get_trackdata_by_artistid(global.searchtext, item.db_id);
+                    DataSource ds = get_data_source(item.source_id);
+                    assert(ds != null);
+                    result = ds.get_trackdata_by_artistid(global.searchtext, item.db_id);
                     break;
                 }
                 break;
             case ItemType.STREAM:
                 var tmp = new TrackData();
+                print("CONV STREAM %d\n", item.source_id);
+                DataSource ds = get_data_source(item.source_id);
+                assert(ds != null);
                 if(item.db_id > -1) {
-                    if((int)Linux.gettid() == db_worker.thread_id && db_reader.get_stream_td_for_id(item.db_id, out tmp)) {
+                    if((int)Linux.gettid() == db_worker.thread_id && ds.get_stream_td_for_id(item.db_id, out tmp)) {
                         result += tmp;
                         return result;
                     }
                 }
-                //else {
-                //    print("itemtype.stream\n");
-                //}
+                else {
+                    print("DBID is -1\n");
+                }
                 tmp.item = item;
                 File ft = File.new_for_uri(item.uri);
                 tmp.title = prepare_name_from_filename(ft.get_basename());

@@ -32,6 +32,14 @@
 
 
 public abstract class Xnoise.DataSource : GLib.Object {
+    protected int source_id;
+    public void set_source_id(int id) {
+        source_id = id;
+    }
+    
+    public int get_source_id() {
+        return source_id;
+    }
     
     public abstract bool get_trackdata_for_uri(ref string? uri, out TrackData val);
     
@@ -44,5 +52,6 @@ public abstract class Xnoise.DataSource : GLib.Object {
     
     public abstract TrackData? get_trackdata_by_titleid(string searchtext, int32 id);
     
+    public abstract bool get_stream_td_for_id(int32 id, out TrackData tmp);
 }
 

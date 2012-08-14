@@ -648,8 +648,10 @@ public class Xnoise.GstPlayer : GLib.Object {
                 print("GstError parsed: %s\n", err.message);
                 //print("Debug: %s\n", debug);
                 if(!is_missing_plugins_error(msg)) {
-                    send_user_error_message("GstError parsed: %s".printf(err.message));
-                    stop();
+                    if(err.message != "Cancelled") {
+                        send_user_error_message("GstError parsed: %s".printf(err.message));
+                        stop();
+                    }
                 }
                 break;
             }

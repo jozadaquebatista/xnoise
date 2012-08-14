@@ -534,7 +534,9 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         this.get_iter(out iter, treepath);
         this.get(iter, Column.ITEM, out item);
         if(item != null && item.type != ItemType.UNKNOWN) {
-            DndData dnd_data = { item.db_id, item.type };
+            int id = -1;
+            id = db_reader.get_source_id();
+            DndData dnd_data = { item.db_id, item.type, id };
             dnd_data_array += dnd_data;
         }
         return dnd_data_array;

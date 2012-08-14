@@ -53,7 +53,9 @@ namespace Xnoise {
     public static MediaImporter media_importer = null;
     public static ItemHandlerManager itemhandler_manager = null;
     public static ItemConverter item_converter = null;
-    public HashTable<string,DockableMedia> dockable_media_sources;
+    
+    public static HashTable<string,Xnoise.DockableMedia>  dockable_media_sources;
+    public static HashTable<int, Xnoise.DataSource>       data_source_registry;
 
     public static Database.Reader db_reader;
     public static Database.Writer  db_writer;
@@ -88,7 +90,8 @@ namespace Xnoise {
             return;
         }
         
-        dockable_media_sources = new HashTable<string,DockableMedia>(str_hash, str_equal);
+        dockable_media_sources = new HashTable<string, DockableMedia> (str_hash, str_equal);
+        data_source_registry   = new HashTable<int, Xnoise.DataSource>(direct_hash, direct_equal);
         
         icon_repo = new IconRepo();
         
@@ -137,6 +140,8 @@ namespace Xnoise {
             print("%s", e.message);
             return;
         }
+        int dbid = register_data_source(db_reader);
+        print("source id: %d\n", dbid);
         
         statistics = new Statistics();
         
@@ -165,6 +170,42 @@ namespace Xnoise {
         tl = new TrackList();
         main_window = new MainWindow();
         tray_icon = new TrayIcon();
+    }
+    
+    public static DataSource? get_data_source(int source_number) {
+        assert(data_source_registry != null);
+        DataSource? ret = data_source_registry.lookup(source_number);
+        return ret;
+    }
+
+    public static int register_data_source(DataSource source) {
+        assert(data_source_registry != null);
+        if(source == null)
+            return -1;
+        int idx = -1;
+        for(int i = 0; i < int.MAX; i++) {
+            DataSource? ret = data_source_registry.lookup(i);
+            if(ret == null) {
+                idx = i;
+                break;
+            }
+        }
+        source.set_source_id(idx);
+        data_source_registry.insert(idx, source);
+        return idx;
+    }
+    
+    public static void remove_data_source(DataSource source) {
+        assert(data_source_registry != null);
+        if(source == null)
+            return;
+        for(int i = 0; i < int.MAX; i++) {
+            DataSource? ret = data_source_registry.lookup(i);
+            if(ret == source) {
+                data_source_registry.remove(i);
+                break;
+            }
+        }
     }
 }
 
@@ -198,7 +239,7 @@ public enum Xnoise.PlayerState {
 public struct Xnoise.DndData { // drag data (mediabrowser -> tracklist)
     public int32 db_id;
     public ItemType mediatype;
-    public uint source_id; // use for registered data sources
+    public int source_id; // use for registered data sources
 }
 
 

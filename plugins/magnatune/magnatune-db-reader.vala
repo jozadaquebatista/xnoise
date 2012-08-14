@@ -96,6 +96,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             val.tracknumber = (uint)stmt.column_int(3);
             val.length      = stmt.column_int(4);
             val.item        = Item((ItemType)stmt.column_int(5), uri, stmt.column_int(6));
+            val.item.source_id = get_source_id();
             val.genre       = stmt.column_text(7);
             val.year        = stmt.column_int(8);
             retval = true;
@@ -146,6 +147,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             while(get_artists_with_search_stmt.step() == Sqlite.ROW) {
                 Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search_stmt.column_int(0));
                 i.text = get_artists_with_search_stmt.column_text(1);
+                i.source_id = get_source_id();
                 val += i;
             }
         }
@@ -157,6 +159,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
                               get_artists_with_search2_stmt.column_int(0)
                 );
                 i.text = get_artists_with_search2_stmt.column_text(1);
+                i.source_id = get_source_id();
                 val += i;
             }
         }
@@ -196,6 +199,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         while(stmt.step() == Sqlite.ROW) {
             TrackData td = new TrackData();
             Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+            i.source_id = get_source_id();
             
             td.artist      = stmt.column_text(5);
             td.album       = stmt.column_text(6);
@@ -221,6 +225,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     public override Item? get_artistitem_by_artistid(string searchtext, int32 id) {
         Statement stmt;
         Item? i = Item(ItemType.UNKNOWN);
+        i.source_id = get_source_id();
         if(searchtext != EMPTYSTRING) {
             string st = "%%%s%%".printf(searchtext);
             this.db.prepare_v2(STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH, -1, out stmt);
@@ -242,6 +247,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         if(stmt.step() == Sqlite.ROW) {
             i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, id);
             i.text = stmt.column_text(0);
+            i.source_id = get_source_id();
         }
         return (owned)i;
     }
@@ -279,6 +285,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         while(stmt.step() == Sqlite.ROW) {
             TrackData td = new TrackData();
             Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+            i.source_id = get_source_id();
             
             td.artist      = stmt.column_text(5);
             td.album       = stmt.column_text(6);
@@ -329,6 +336,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         while(stmt.step() == Sqlite.ROW) {
             Item i = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, stmt.column_int(1));
             i.text = stmt.column_text(0);
+            i.source_id = get_source_id();
             val += i;
         }
         return (owned)val;
@@ -352,6 +360,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         if(stmt.step() == Sqlite.ROW) {
             td = new TrackData();
             Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+            i.source_id = get_source_id();
             
             td.artist      = stmt.column_text(5);
             td.album       = stmt.column_text(6);
@@ -365,320 +374,16 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         return (owned)td;
     }
 
+    private static const string STMT_STREAM_TD_FOR_ID =
+        "SELECT name, uri FROM streams WHERE id = ?";
 
+    public override bool get_stream_td_for_id(int32 id, out TrackData val) {
+        val = get_trackdata_by_titleid("", id);
 
-
-
-
-
-//    private static const string STMT_GET_ARTISTS_WITH_SEARCH =
-//        "SELECT DISTINCT ar.artist FROM artists ar, albums al, genres g, songs s WHERE s.albumname = al.albumname AND al.artist = ar.artist AND g.albumname = al.albumname AND (utf8_lower(s.desc) LIKE ? OR utf8_lower(al.albumname) LIKE ? OR utf8_lower(ar.artist) LIKE ? OR utf8_lower(g.genre) LIKE ?) ORDER BY utf8_lower(ar.artist) COLLATE CUSTOM01 DESC";
-
-//    private static const string STMT_GET_ARTISTS =
-//        "SELECT DISTINCT ar.artist FROM artists ar ORDER BY utf8_lower(ar.artist) COLLATE CUSTOM01 DESC";
-//    
-//    private Statement get_artists_with_search_stmt;
-//    private Statement get_artists_with_search2_stmt;
-//    
-//    public override Item[] get_artists_with_search(string searchtext) {
-//        Item[] val = {};
-//        if(searchtext != EMPTYSTRING) {
-//            string st = "%%%s%%".printf(searchtext);
-//            get_artists_with_search_stmt.reset();
-//            if(get_artists_with_search_stmt.bind_text(1, st) != Sqlite.OK ||
-//               get_artists_with_search_stmt.bind_text(2, st) != Sqlite.OK ||
-//               get_artists_with_search_stmt.bind_text(3, st) != Sqlite.OK ||
-//               get_artists_with_search_stmt.bind_text(4, st) != Sqlite.OK) {
-//                this.db_error();
-//                return (owned)val;
-//            }
-//            Item? i;
-//            while(get_artists_with_search_stmt.step() == Sqlite.ROW) {
-//                i = Item();
-//                i.text = get_artists_with_search_stmt.column_text(0);
-//                val += i;
-//            }
-//        }
-//        else {
-//            get_artists_with_search2_stmt.reset();
-//            Item? i;
-//            while(get_artists_with_search2_stmt.step() == Sqlite.ROW) {
-//                i = Item();
-//                i.text = get_artists_with_search2_stmt.column_text(0);
-//                val += i;
-//            }
-//        }
-//        return (owned)val;
-//    }
-
-//    private static const string STMT_GET_TRACKS_WITH_SEARCH =
-//        "SELECT DISTINCT s.desc, s.mp3, s.number FROM artists ar, albums al, genres g, songs s WHERE s.albumname = al.albumname AND al.artist = ar.artist AND g.albumname = al.albumname AND utf8_lower(ar.artist) = ? AND utf8_lower(al.albumname) = ? AND (utf8_lower(s.desc) LIKE ? OR utf8_lower(al.albumname) LIKE ? OR utf8_lower(ar.artist) LIKE ? OR utf8_lower(g.genre) LIKE ?) ORDER BY s.number DESC";
-//    private static const string STMT_GET_TRACKS =
-//        "SELECT DISTINCT s.desc, s.mp3, s.number FROM artists ar, albums al, songs s WHERE s.albumname = al.albumname AND al.artist = ar.artist AND utf8_lower(ar.artist) = ? AND utf8_lower(al.albumname) = ? ORDER BY s.number DESC";
-
-//    public TrackData[] get_tracks_for_album(string searchtext, string artist, string album) {
-//        TrackData[] val = {};
-//        Statement stmt;
-//        if(searchtext != "") {
-//            string st = "%%%s%%".printf(searchtext);
-//            this.db.prepare_v2(STMT_GET_TRACKS_WITH_SEARCH, -1, out stmt);
-//            if(stmt.bind_text(1, artist.down()) != Sqlite.OK ||
-//               stmt.bind_text(2, album.down()) != Sqlite.OK ||
-//               stmt.bind_text(3, st)     != Sqlite.OK ||
-//               stmt.bind_text(4, st)     != Sqlite.OK ||
-//               stmt.bind_text(5, st)     != Sqlite.OK ||
-//               stmt.bind_text(6, st)     != Sqlite.OK) {
-//                this.db_error();
-//                return (owned)val;
-//            }
-//        }
-//        else {
-//            this.db.prepare_v2(STMT_GET_TRACKS, -1, out stmt);
-//            if(stmt.bind_text(1, artist.down()) != Sqlite.OK ||
-//               stmt.bind_text(2, album.down()) != Sqlite.OK) {
-//                this.db_error();
-//                return (owned)val;
-//            }
-//        }
-//        while(stmt.step() == Sqlite.ROW) {
-//            TrackData td = new TrackData();
-//            Item? i = Item();
-//            td.item = i;
-//            td.title = td.item.text = stmt.column_text(0);
-//            td.album = album;
-//            td.artist = artist;
-//            td.tracknumber = stmt.column_int(2);
-//            td.item.uri  = "http://he3.magnatune.com/all/" + Uri.escape_string(stmt.column_text(1), null, true);
-//            print("td.item.uri: %s\n", td.item.uri);
-//            val += td;
-//        }
-//        return (owned)val;
-//    }
-
-//    public override TrackData[]? get_trackdata_by_artistid(string searchtext, int32 id) {
-//        print("not implemented\n");
-//        return null;
-//    }
-
-//    public override Item? get_artistitem_by_artistid(string searchtext, int32 id) {
-//        print("not implemented\n");
-//        return null;
-//    }
-
-
-//    public override TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id) {
-//        print("not implemented\n");
-//        return null;
-//    }
-
-
-//    private static const string STMT_GET_ALBUMS_WITH_SEARCH =
-//        "SELECT DISTINCT al.albumname FROM artists ar, albums al, genres g, songs s WHERE s.albumname = al.albumname AND al.artist = ar.artist AND g.albumname = al.albumname AND utf8_lower(ar.artist) = ? AND (utf8_lower(s.desc) LIKE ? OR utf8_lower(al.albumname) LIKE ? OR utf8_lower(ar.artist) LIKE ? OR utf8_lower(g.genre) LIKE ?) ORDER BY utf8_lower(al.albumname) COLLATE CUSTOM01 ASC";
-//    private static const string STMT_GET_ALBUMS =
-//        "SELECT DISTINCT al.albumname FROM artists ar, albums al WHERE al.artist = ar.artist AND utf8_lower(ar.artist) = ? ORDER BY utf8_lower(al.albumname) COLLATE CUSTOM01 ASC";
-
-//    public override Item[] get_albums_with_search(string searchtext, int32 id) { //(string)artist
-//        Item[] val = {};
-//        Statement stmt;
-//        if(searchtext != "") {
-//            string st = "%%%s%%".printf(searchtext);
-//            this.db.prepare_v2(STMT_GET_ALBUMS_WITH_SEARCH, -1, out stmt);
-//            if(stmt.bind_int (1, id) != Sqlite.OK || //artist.down()
-//               stmt.bind_text(2, st) != Sqlite.OK ||
-//               stmt.bind_text(3, st) != Sqlite.OK ||
-//               stmt.bind_text(4, st) != Sqlite.OK ||
-//               stmt.bind_text(5, st) != Sqlite.OK) {
-//                this.db_error();
-//                return (owned)val;
-//            }
-//        }
-//        else {
-//            this.db.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
-//            if(stmt.bind_int(1, id) != Sqlite.OK) { //artist.down()
-//                this.db_error();
-//                return (owned)val;
-//            }
-//        }
-//        while(stmt.step() == Sqlite.ROW) {
-//            Item i = Item();
-//            i.text = stmt.column_text(0);
-//            val += i;
-//        }
-//        return (owned)val;
-//    }
-////    private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =
-////        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01  ASC";
-////    
-////    private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
-////        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
-////    
-////    public TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id) {
-////        TrackData[] val = {};
-////        Statement stmt;
-////        if(searchtext != EMPTYSTRING) {
-////            string st = "%%%s%%".printf(searchtext);
-////            this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH, -1, out stmt);
-////            if((stmt.bind_int (1, id) != Sqlite.OK) ||
-////               (stmt.bind_text(2, st) != Sqlite.OK) ||
-////               (stmt.bind_text(3, st) != Sqlite.OK) ||
-////               (stmt.bind_text(4, st) != Sqlite.OK)) {
-////                this.db_error();
-////                return (owned)val;
-////            }
-////        }
-////        else {
-////            this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ALBUMID, -1, out stmt);
-////            if((stmt.bind_int(1, id) != Sqlite.OK)) {
-////                this.db_error();
-////                return null;
-////            }
-////        }
-////        while(stmt.step() == Sqlite.ROW) {
-////            TrackData td = new TrackData();
-////            Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
-////            
-////            td.artist      = stmt.column_text(5);
-////            td.album       = stmt.column_text(6);
-////            td.title       = stmt.column_text(0);
-////            td.item        = i;
-////            td.tracknumber = stmt.column_int(3);
-////            td.length      = stmt.column_int(7);
-////            td.genre       = stmt.column_text(8);
-////            td.year        = stmt.column_int(9);
-////            val += td;
-////        }
-////        return (owned)val;
-////    }
-////    
-////    private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH =
-////        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
-////    
-////    private static const string STMT_GET_TRACKDATA_BY_ARTISTID =
-////        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
-////    
-////    public TrackData[]? get_trackdata_by_artistid(string searchtext, int32 id) {
-////        TrackData[] val = {};
-////        Statement stmt;
-////        if(searchtext != EMPTYSTRING) {
-////            string st = "%%%s%%".printf(searchtext);
-////            this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH, -1, out stmt);
-////            if((stmt.bind_int (1, id) != Sqlite.OK) ||
-////               (stmt.bind_text(2, st) != Sqlite.OK) ||
-////               (stmt.bind_text(3, st) != Sqlite.OK) ||
-////               (stmt.bind_text(4, st) != Sqlite.OK)) {
-////                this.db_error();
-////                return (owned)val;
-////            }
-////        }
-////        else {
-////            this.db.prepare_v2(STMT_GET_TRACKDATA_BY_ARTISTID, -1, out stmt);
-////            if((stmt.bind_int(1, id)!=Sqlite.OK)) {
-////                this.db_error();
-////                return null;
-////            }
-////        }        
-////        while(stmt.step() == Sqlite.ROW) {
-////            TrackData td = new TrackData();
-////            Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
-////            
-////            td.artist      = stmt.column_text(5);
-////            td.album       = stmt.column_text(6);
-////            td.title       = stmt.column_text(0);
-////            td.item        = i;
-////            td.tracknumber = stmt.column_int(3);
-////            td.length      = stmt.column_int(7);
-////            td.genre       = stmt.column_text(8);
-////            td.year        = stmt.column_int(9);
-////            val += td;
-////        }
-////        return (owned)val;
-////    }
-
-////    private static const string STMT_GET_VIDEOITEM_BY_ID =
-////        "SELECT DISTINCT t.id, t.title, u.name, t.mediatype FROM items t, uris u WHERE t.uri = u.id AND t.id = ?";
-////    
-////    public Item? get_videoitem_by_id(int32 id) {
-////        Statement stmt;
-////        Item? i = Item(ItemType.UNKNOWN);
-////        this.db.prepare_v2(STMT_GET_VIDEOITEM_BY_ID, -1, out stmt);
-////        if((stmt.bind_int(1, id)!=Sqlite.OK)) {
-////            this.db_error();
-////            return (owned)i;
-////        }
-////        if(stmt.step() == Sqlite.ROW) {
-////            i = Item((ItemType) stmt.column_int(3), stmt.column_text(2), stmt.column_int(0));
-////            i.text = stmt.column_text(1);
-////        }
-////        return (owned)i;
-////    }
-
-////    private static const string STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH =
-////        "SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?)";
-////    
-////    private static const string STMT_GET_ARTISTITEM_BY_ARTISTID =
-////        "SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ?";
-////    
-////    public Item? get_artistitem_by_artistid(string searchtext, int32 id) {
-////        Statement stmt;
-////        Item? i = Item(ItemType.UNKNOWN);
-////        if(searchtext != EMPTYSTRING) {
-////            string st = "%%%s%%".printf(searchtext);
-////            this.db.prepare_v2(STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH, -1, out stmt);
-////            if((stmt.bind_int (1, id) != Sqlite.OK) ||
-////               (stmt.bind_text(2, st) != Sqlite.OK) ||
-////               (stmt.bind_text(3, st) != Sqlite.OK) ||
-////               (stmt.bind_text(4, st) != Sqlite.OK)) {
-////                this.db_error();
-////                return (owned)i;
-////            }
-////        }
-////        else {
-////            this.db.prepare_v2(STMT_GET_ARTISTITEM_BY_ARTISTID, -1, out stmt);
-////            if((stmt.bind_int(1, id)!=Sqlite.OK)) {
-////                this.db_error();
-////                return (owned)i;
-////            }
-////        }
-////        if(stmt.step() == Sqlite.ROW) {
-////            i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, id);
-////            i.text = stmt.column_text(0);
-////        }
-////        return (owned)i;
-////    }
-//    public override bool get_trackdata_for_uri(ref string? uri, out TrackData val) {
-//    val = new TrackData();
-//        print("not implemented\n");
-//        return false;
-//    }
-////    private static const string STMT_GET_TRACKDATA_BY_TITLEID =
-////        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND t.id = ?";
-////        
-//    public override TrackData? get_trackdata_by_titleid(string searchtext, int32 id) {
-//        print("not implemented\n");
-//        return null;
-////        Statement stmt;
-////        
-////        this.db.prepare_v2(STMT_GET_TRACKDATA_BY_TITLEID, -1, out stmt);
-////        
-////        if((stmt.bind_int(1, id)!=Sqlite.OK)) {
-////            this.db_error();
-////            return null;
-////        }
-////        TrackData td = null; 
-////        if(stmt.step() == Sqlite.ROW) {
-////            td = new TrackData();
-////            Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
-////            
-////            td.artist      = stmt.column_text(5);
-////            td.album       = stmt.column_text(6);
-////            td.title       = stmt.column_text(0);
-////            td.item        = i;
-////            td.tracknumber = stmt.column_int(3);
-////            td.length      = stmt.column_int(7);
-////            td.genre       = stmt.column_text(8);
-////            td.year        = stmt.column_int(9);
-////        }
-////        return (owned)td;
-//    }
+        if(val == null)
+            return false;
+        
+        return true;
+    }
 }
 

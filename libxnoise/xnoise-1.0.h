@@ -1048,12 +1048,13 @@ struct _XnoiseItem {
 	gint32 db_id;
 	gchar* uri;
 	gchar* text;
+	gint source_id;
 };
 
 struct _XnoiseDndData {
 	gint32 db_id;
 	XnoiseItemType mediatype;
-	guint source_id;
+	gint source_id;
 };
 
 typedef gboolean (*XnoiseWorkerWorkFunc) (XnoiseWorkerJob* jb, void* user_data);
@@ -1089,6 +1090,7 @@ typedef enum  {
 struct _XnoiseDataSource {
 	GObject parent_instance;
 	XnoiseDataSourcePrivate * priv;
+	gint source_id;
 };
 
 struct _XnoiseDataSourceClass {
@@ -1100,6 +1102,7 @@ struct _XnoiseDataSourceClass {
 	XnoiseTrackData** (*get_trackdata_by_albumid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
 	XnoiseItem* (*get_albums_with_search) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
 	XnoiseTrackData* (*get_trackdata_by_titleid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id);
+	gboolean (*get_stream_td_for_id) (XnoiseDataSource* self, gint32 id, XnoiseTrackData** tmp);
 };
 
 struct _XnoiseDatabaseReader {
@@ -2151,7 +2154,6 @@ XnoiseItem* xnoise_database_reader_get_last_played (XnoiseDatabaseReader* self, 
 XnoiseItem* xnoise_database_reader_get_most_played (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_all_tracks (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_streamitem_by_id (XnoiseDatabaseReader* self, gint32 id, const gchar* searchtext);
-gboolean xnoise_database_reader_get_stream_td_for_id (XnoiseDatabaseReader* self, gint id, XnoiseTrackData** val);
 XnoiseItem* xnoise_database_reader_get_media_folders (XnoiseDatabaseReader* self, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_stream_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_some_lastused_items (XnoiseDatabaseReader* self, gint limit, gint offset, int* result_length1);
@@ -2189,6 +2191,8 @@ gboolean xnoise_database_writer_delete_local_media_data (XnoiseDatabaseWriter* s
 void xnoise_database_writer_begin_transaction (XnoiseDatabaseWriter* self);
 void xnoise_database_writer_commit_transaction (XnoiseDatabaseWriter* self);
 gboolean xnoise_database_writer_get_in_transaction (XnoiseDatabaseWriter* self);
+void xnoise_data_source_set_source_id (XnoiseDataSource* self, gint id);
+gint xnoise_data_source_get_source_id (XnoiseDataSource* self);
 gboolean xnoise_data_source_get_trackdata_for_uri (XnoiseDataSource* self, gchar** uri, XnoiseTrackData** val);
 XnoiseItem* xnoise_data_source_get_artists_with_search (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_data_source_get_trackdata_by_artistid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
@@ -2196,6 +2200,7 @@ XnoiseItem* xnoise_data_source_get_artistitem_by_artistid (XnoiseDataSource* sel
 XnoiseTrackData** xnoise_data_source_get_trackdata_by_albumid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
 XnoiseItem* xnoise_data_source_get_albums_with_search (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
 XnoiseTrackData* xnoise_data_source_get_trackdata_by_titleid (XnoiseDataSource* self, const gchar* searchtext, gint32 id);
+gboolean xnoise_data_source_get_stream_td_for_id (XnoiseDataSource* self, gint32 id, XnoiseTrackData** tmp);
 XnoiseDataSource* xnoise_data_source_construct (GType object_type);
 GType xnoise_dbus_get_type (void) G_GNUC_CONST;
 GType player_dbus_service_get_type (void) G_GNUC_CONST;
@@ -3010,6 +3015,7 @@ extern XnoiseMediaImporter* xnoise_media_importer;
 extern XnoiseItemHandlerManager* xnoise_itemhandler_manager;
 extern XnoiseItemConverter* xnoise_item_converter;
 extern GHashTable* xnoise_dockable_media_sources;
+extern GHashTable* xnoise_data_source_registry;
 extern XnoiseDatabaseReader* xnoise_db_reader;
 extern XnoiseDatabaseWriter* xnoise_db_writer;
 extern XnoiseStatistics* xnoise_statistics;
@@ -3020,6 +3026,9 @@ extern XnoiseMainWindow* xnoise_main_window;
 extern XnoiseTrackList* xnoise_tl;
 extern XnoiseTrackListModel* xnoise_tlm;
 void xnoise_initialize (gboolean* is_first_start);
+XnoiseDataSource* xnoise_get_data_source (gint source_number);
+gint xnoise_register_data_source (XnoiseDataSource* source);
+void xnoise_remove_data_source (XnoiseDataSource* source);
 GType gst_stream_type_get_type (void) G_GNUC_CONST;
 gchar* xnoise_imain_view_get_view_name (XnoiseIMainView* self);
 GType xnoise_gnome_media_keys_proxy_get_type (void) G_GNUC_CONST;

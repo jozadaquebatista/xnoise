@@ -30,7 +30,7 @@ namespace Xnoise {
 			public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
 			public Xnoise.TrackData[] get_stream_data (string searchtext);
 			public Xnoise.Item[]? get_stream_items (string searchtext);
-			public bool get_stream_td_for_id (int id, out Xnoise.TrackData val);
+			public override bool get_stream_td_for_id (int32 id, out Xnoise.TrackData val);
 			public Xnoise.Item? get_streamitem_by_id (int32 id, string searchtext);
 			public override Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id);
 			public override Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id);
@@ -514,14 +514,18 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public abstract class DataSource : GLib.Object {
+		protected int source_id;
 		public DataSource ();
 		public abstract Xnoise.Item[] get_albums_with_search (string searchtext, int32 id);
 		public abstract Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id);
 		public abstract Xnoise.Item[] get_artists_with_search (string searchtext);
+		public int get_source_id ();
+		public abstract bool get_stream_td_for_id (int32 id, out Xnoise.TrackData tmp);
 		public abstract Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id);
 		public abstract Xnoise.TrackData[]? get_trackdata_by_artistid (string searchtext, int32 id);
 		public abstract Xnoise.TrackData? get_trackdata_by_titleid (string searchtext, int32 id);
 		public abstract bool get_trackdata_for_uri (ref string? uri, out Xnoise.TrackData val);
+		public void set_source_id (int id);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Dbus : GLib.Object {
@@ -1170,7 +1174,7 @@ namespace Xnoise {
 	public struct DndData {
 		public int32 db_id;
 		public Xnoise.ItemType mediatype;
-		public uint source_id;
+		public int source_id;
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public struct Item {
@@ -1178,6 +1182,7 @@ namespace Xnoise {
 		public int32 db_id;
 		public string? uri;
 		public string? text;
+		public int source_id;
 		public Item (Xnoise.ItemType _type = ItemType.UNKNOWN, string? _uri = null, int32 _db_id = -1);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -1238,6 +1243,8 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public delegate void LyricsFetchedCallback (string artist, string title, string credits, string identifier, string text, string providername);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static GLib.HashTable<int,Xnoise.DataSource> data_source_registry;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.Database.Reader db_reader;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.Worker db_worker;
@@ -1280,7 +1287,13 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static GLib.File? get_albumimage_for_artistalbum (string? artist, string? album, string? size);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static Xnoise.DataSource? get_data_source (int source_number);
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static void initialize (out bool is_first_start);
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static int register_data_source (Xnoise.DataSource source);
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static void remove_data_source (Xnoise.DataSource source);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static bool thumbnail_available (string uri, out GLib.File? _thumb);
 }
