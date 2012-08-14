@@ -952,8 +952,14 @@ private class MagnatuneWidget : Gtk.Box {
     }
 
     private bool convert_db_job(Worker.Job job) {
+        Idle.add(() => {
+            label.label = "Please wait while\nconverting database.";
+            return false;
+        });
         var conv = new MagnatuneDatabaseConverter();
+        conv.progress.connect(on_db_conversion_progress);
         conv.move_data();
+        conv.progress.disconnect(on_db_conversion_progress);
         conv = null;
         File fx = File.new_for_path(CONVERTED_DB);
         if(fx.query_exists(null)) {
@@ -967,6 +973,13 @@ private class MagnatuneWidget : Gtk.Box {
             printerr("ERROR CONVERTING DATABASE!!\n");
         }
         return false;
+    }
+    
+    private void on_db_conversion_progress(MagnatuneDatabaseConverter sender, int c) {
+        Idle.add(() => {
+            label.label = "Please wait while\nconverting database.\nDone for %d tracks.".printf(c);
+            return false;
+        });
     }
     
     private void add_tree() {

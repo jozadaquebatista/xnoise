@@ -125,17 +125,48 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     }
 
     public void move_data() {
+        this.begin_transaction();
         get_source_tracks();
+        this.commit_transaction();
         return;
     }
     
+    private bool begin_stmt_used = false;
+    
+    public void begin_transaction() {
+        exec_prepared_stmt(begin_statement);
+        begin_stmt_used = true;
+    }
+
+    public void commit_transaction() {
+        if(begin_stmt_used != true)
+            return;
+            
+        exec_prepared_stmt(commit_statement);
+        begin_stmt_used = false;
+    }
+
+    // Execution of prepared statements of that the return values are not
+    // used (delete, drop, ...) and that do not need to bind data.
+    // Function returns true if ok
+    private bool exec_prepared_stmt(Statement stmt) {
+        stmt.reset();
+        if(stmt.step() != Sqlite.DONE) {
+            this.db_error(ref target);
+            return false;
+        }
+        return true;
+    }
 
     private static const string STMT_GET_TRACKS =
         "SELECT DISTINCT s.desc, s.mp3, s.number, ar.artist, s.albumname, g.genre, al.launchdate, s.duration FROM artists ar, albums al, songs s, genres g WHERE s.albumname = al.albumname AND al.artist = ar.artist AND g.albumname = al.albumname";
 
+    private int count = 0;
+    
     private void get_source_tracks() {
         Statement stmt;
         this.source.prepare_v2(STMT_GET_TRACKS, -1, out stmt);
+        count = 0;
         while(stmt.step() == Sqlite.ROW) {
             TrackData td = new TrackData();
             Item? i = Item(ItemType.STREAM);
@@ -153,12 +184,25 @@ public class MagnatuneDatabaseConverter : GLib.Object {
             if(stmt.column_int(7) > 0) {
                 td.length = stmt.column_int(7);
             }
-            
             // INSERT
             insert_title(ref td);
+            count++;
+            if(count % 200 == 0) {
+                int cz = count;
+                Idle.add(() => {
+                    print("z: %d\n", cz);
+                    progress(cz);
+                    return false;
+                });
+            }
         }
+        Idle.add(() => {
+            progress(count);
+            return false;
+        });
     }
 
+    public signal void progress(int cnt);
 
     private bool create_target_db() {
         setup_target_handle();
