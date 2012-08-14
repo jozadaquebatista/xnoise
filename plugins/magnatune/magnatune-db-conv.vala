@@ -190,7 +190,6 @@ public class MagnatuneDatabaseConverter : GLib.Object {
             if(count % 200 == 0) {
                 int cz = count;
                 Idle.add(() => {
-                    print("z: %d\n", cz);
                     progress(cz);
                     return false;
                 });
@@ -311,22 +310,6 @@ public class MagnatuneDatabaseConverter : GLib.Object {
             this.db_error(ref target);
             return false;
         }
-//        if(td.item.type == ItemType.LOCAL_VIDEO_TRACK) {
-//            Statement stmt;
-//            this.target.prepare_v2(STMT_GET_ITEM_ID , -1, out stmt);
-//            if(stmt.bind_int (1,uri_id) != Sqlite.OK) {
-//                this.db_error(ref target);
-//                return false;
-//            }
-//            int32 idv = -1;
-//            if(stmt.step() == Sqlite.ROW) {
-//                idv = (int32)stmt.column_int(0);
-//            }
-//            else {
-//                this.db_error(ref target);
-//                return false;
-//            }
-//        }
         return true;
     }
 

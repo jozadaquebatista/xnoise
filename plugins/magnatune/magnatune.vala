@@ -95,10 +95,6 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         typeof(string),      //VIS_TEXT
         typeof(Xnoise.Item?),//ITEM
         typeof(int)         //LEVEL
-//        typeof(string),      //ARTIST
-//        typeof(string),      //ALBUM
-//        typeof(string),      //TITLE
-//        typeof(string)       //GENRE
     };
 
     public enum Column {
@@ -106,10 +102,6 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         VIS_TEXT,
         ITEM,
         LEVEL,
-//        ARTIST,
-//        ALBUM,
-//        TITLE,
-//        GENRE,
         N_COLUMNS
     }
     
@@ -355,74 +347,11 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         if(item != null && item.type != ItemType.UNKNOWN) {
             int id = -1;
             id = dbreader.get_source_id();
-            print("EEID1 : %d\n", id);
             DndData dnd_data = { item.db_id, item.type, id };
             dnd_data_array += dnd_data;
         }
         return dnd_data_array;
     }
-
-//    public string[] get_dnd_data_for_path(ref TreePath treepath) {
-//        TreeIter iter, child, childchild;
-//        string[] dnd_data_array = {};
-//        Item? item = null;
-//        this.get_iter(out iter, treepath);
-//        switch(treepath.get_depth()) {
-//            case 1: {
-//                for(int i =0; i < this.iter_n_children(iter); i++) {
-//                    this.iter_nth_child(out child, iter, i);
-//                    for(int j =0; j < this.iter_n_children(child); j++) {
-//                        this.iter_nth_child(out childchild, child, j);
-//                        string artist;
-//                        this.get(childchild, Column.ITEM, out item);
-////                        this.get(childchild, Column.ARTIST, out artist);
-//                        if(item != null) {
-//                            if(item.uri != null) {
-////                                DndData dnd_data = DndData(); //item.uri;
-////                                dnd_data.txt = item.uri;
-//                                dnd_data_array += item.uri;
-//                            }
-//                        }
-//                    }
-//                }
-//                break;
-//            }
-//            case 2: {
-//                for(int i =0; i < this.iter_n_children(iter); i++) {
-//                    this.iter_nth_child(out child, iter, i);
-//                    string album;
-//                    this.get(child, Column.ALBUM, out album);
-//                    if(item != null) {
-//                        if(item.uri != null) {
-////                                DndData dnd_data = DndData(); //item.uri;
-////                                dnd_data.txt = item.uri;
-//                                dnd_data_array += item.uri;
-
-////                            string dnd_data = item.uri;
-////                            dnd_data_array += item.uri;
-//                        }
-//                    }
-//                }
-//                break;
-//            }
-//            case 3: {
-//                this.get(iter, Column.ITEM, out item);
-//                if(item != null) {
-//                    if(item.uri != null) {
-////                        DndData dnd_data = DndData(); //item.uri;
-////                        dnd_data.txt = item.uri;
-////                        dnd_data_array += dnd_data; //item.uri;
-//                        string dnd_data = item.uri;
-//                        dnd_data_array += dnd_data;
-//                    }
-//                }
-//                break;
-//            }
-//            default: break;
-//        
-//        }
-//        return dnd_data_array;
-//    }
 }
 
 private class MagnatuneTreeView : Gtk.TreeView {
@@ -435,7 +364,6 @@ private class MagnatuneTreeView : Gtk.TreeView {
 
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
-//        {"text/uri-list", TargetFlags.SAME_APP, 0} // "application/custom_dnd_data"
     };
     
     public MagnatuneTreeView(DockableMedia dock, MagnatuneWidget widg, Widget ow) {
@@ -463,7 +391,6 @@ private class MagnatuneTreeView : Gtk.TreeView {
         this.button_release_event.connect(this.on_button_release);
         this.button_press_event.connect(this.on_button_press);
 
-    //        this.drag_data_received.connect(this.on_drag_data_received);
     //        this.key_press_event.connect(this.on_key_pressed);
     //        this.key_release_event.connect(this.on_key_released);
     }
@@ -613,31 +540,6 @@ private class MagnatuneTreeView : Gtk.TreeView {
             this.expand_row(treepath, false);
         }
     }
-
-
-//    private void on_row_activated(Gtk.Widget sender, TreePath treepath, TreeViewColumn column) {
-//        if(treepath.get_depth() > 1) {
-//            Item? item = Item(ItemType.UNKNOWN);
-//            TreeIter iter;
-//            this.mag_model.get_iter(out iter, treepath);
-//            this.mag_model.get(iter, MagnatuneTreeStore.Column.ITEM, out item);
-//            ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
-//            if(tmp == null) 
-//                return;
-//            unowned Xnoise.Action? action = tmp.get_action(item.type, 
-//                                                           ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED,
-//                                                           ItemSelectionType.SINGLE
-//                                                           );
-//            
-//            if(action != null)
-//                action.action(item, null);
-//            else
-//                print("action was null\n");
-//        }
-//        else {
-//            this.expand_row(treepath, false);
-//        }
-//    }
 
     private MagnatuneTreeStore create_model() {
         return new MagnatuneTreeStore(this.dock, this);
@@ -977,6 +879,7 @@ private class MagnatuneWidget : Gtk.Box {
     
     private void on_db_conversion_progress(MagnatuneDatabaseConverter sender, int c) {
         Idle.add(() => {
+            pb.hide();
             label.label = "Please wait while\nconverting database.\nDone for %d tracks.".printf(c);
             return false;
         });
@@ -1097,30 +1000,6 @@ private class Xnoise.DockableMagnatuneMS : DockableMedia {
         assert(win != null);
         win.msw.select_dockable_by_name(MAGNATUNE_MUSIC_STORE_NAME, true);
     }
-
-//    private void on_preview_mp3(string uri, string title) {
-//        global.current_album  = null;
-//        global.current_artist = null;
-//        global.current_title  = null;
-//        global.preview_uri(uri);
-////        string ti = title;
-////        Timeout.add_seconds(1, () => {
-////            global.current_title  = ti;
-////            return false;
-////        });
-//    }
-
-//    private void on_play_library(string path) {
-//        print("on_play_library::%s\n", path);
-//    }
-//    
-//    private void on_url_loaded(string url) {
-//        print("on_url_loaded::%s\n", url);
-//    }
-//    
-//    private void on_download_finished(string path) {
-//        print("on_download_finished::%s\n", path);
-//    }
     
     public override Gdk.Pixbuf get_icon() {
         Gdk.Pixbuf? icon = null;
@@ -1131,7 +1010,6 @@ private class Xnoise.DockableMagnatuneMS : DockableMedia {
             print("Magnatune icon error: %s\n", e.message);
         }
         return icon;
-//        return null;
     }
 }
 
