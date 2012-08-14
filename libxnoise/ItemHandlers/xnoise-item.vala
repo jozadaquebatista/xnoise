@@ -40,6 +40,7 @@ namespace Xnoise {
         public int32     db_id;      // the id in the database or -1; to be verified, if coming from tracklist
         public string?   uri;        // uri of item
         public string?   text;       // some text
+        public int source_id;        // data source id
     }
 
     public enum ItemType {

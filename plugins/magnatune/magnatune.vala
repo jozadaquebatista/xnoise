@@ -94,11 +94,11 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         typeof(Gdk.Pixbuf),  //ICON
         typeof(string),      //VIS_TEXT
         typeof(Xnoise.Item?),//ITEM
-        typeof(int),         //LEVEL
-        typeof(string),      //ARTIST
-        typeof(string),      //ALBUM
-        typeof(string),      //TITLE
-        typeof(string)       //GENRE
+        typeof(int)         //LEVEL
+//        typeof(string),      //ARTIST
+//        typeof(string),      //ALBUM
+//        typeof(string),      //TITLE
+//        typeof(string)       //GENRE
     };
 
     public enum Column {
@@ -106,10 +106,10 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         VIS_TEXT,
         ITEM,
         LEVEL,
-        ARTIST,
-        ALBUM,
-        TITLE,
-        GENRE,
+//        ARTIST,
+//        ALBUM,
+//        TITLE,
+//        GENRE,
         N_COLUMNS
     }
     
@@ -228,9 +228,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     private void load_content(ref TreeIter iter) {
         //print("load_content\n");
         Worker.Job job;
-//        Item? item = Item(ItemType.UNKNOWN);
-        string artist;
-        this.get(iter, Column.VIS_TEXT, out artist);
+        Item? item = Item(ItemType.UNKNOWN);
+        this.get(iter, Column.ITEM, out item);
         TreePath path = this.get_path(iter);
         if(path == null)
             return;
@@ -238,8 +237,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         if(path.get_depth() == 1) {
             job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.load_album_and_tracks_job);
             job.set_arg("treerowref", treerowref);
-            int artist_id = 0; //TODO
-            job.set_arg("artist_id", artist_id);
+            job.set_arg("artist_id", item.db_id);
             db_worker.push_job(job);
         }
     }
@@ -263,16 +261,14 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                               Column.ICON, album_icon,
                               Column.VIS_TEXT, album.text,
                               Column.ITEM, album,
-                              Column.LEVEL, 1,
-                              Column.ARTIST, (string)job.get_arg("artist"),
-                              Column.ALBUM, album.text
+                              Column.LEVEL, 1
                 );
                 Gtk.TreePath p1 = this.get_path(iter_album);
                 TreeRowReference treerowref = new TreeRowReference(this, p1);
                 var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_title_job);
                 job_title.set_arg("treerowref", treerowref);
-                job_title.set_arg("artist", artist_name);
-                job_title.set_arg("album",  album.text);
+                job_title.set_arg("artist", (int32)job.get_arg("artist_id"));
+                job_title.set_arg("albumid",  album.db_id);
                 db_worker.push_job(job_title);
             }
             remove_loader_child(ref iter_artist);
@@ -282,9 +278,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     }
 
     private bool populate_title_job(Worker.Job job) {
-        string ar = (string)job.get_arg("artist");
-        string al = (string)job.get_arg("album");
-        job.track_dat = dbreader.get_tracks_for_album(global.searchtext, ar, al);
+        job.track_dat = dbreader.get_trackdata_by_albumid(global.searchtext, (int32)job.get_arg("albumid"));
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
             if((row_ref == null) || (!row_ref.valid()))
@@ -298,10 +292,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                               Column.ICON, title_icon,
                               Column.VIS_TEXT, td.title,
                               Column.ITEM, (Item?)td.item,
-                              Column.LEVEL, 2,
-                              Column.ARTIST, ar,
-                              Column.ALBUM, al,
-                              Column.TITLE, td.title
+                              Column.LEVEL, 2
                          );
             }
             return false;
@@ -320,11 +311,13 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     }
     
     private bool populate_artists_job(Worker.Job job) {
+    print("pop artists\n");
         if(dbreader == null)
             dbreader = new MagnatuneDatabaseReader();
         if(dbreader == null)
             assert_not_reached();
         job.items = dbreader.get_artists_with_search(global.searchtext);
+        print("job.items.length : %d\n", job.items.length);
         Idle.add(() => {
             if(this == null)
                 return false;
@@ -335,8 +328,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                               Column.ICON, artist_icon,
                               Column.VIS_TEXT, i.text,
                               Column.ITEM, i,
-                              Column.LEVEL, 0,
-                              Column.ARTIST, i.text
+                              Column.LEVEL, 0
                 );
                 Item? loader_item = Item(ItemType.LOADER);
                 this.append(out iter_loader, iter);
@@ -353,67 +345,80 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         return false;
     }
 
-    public string[] get_dnd_data_for_path(ref TreePath treepath) {
-        TreeIter iter, child, childchild;
-        string[] dnd_data_array = {};
+    public DndData[] get_dnd_data_for_path(ref TreePath treepath) {
+        TreeIter iter;
+        DndData[] dnd_data_array = {};
         Item? item = null;
         this.get_iter(out iter, treepath);
-        switch(treepath.get_depth()) {
-            case 1: {
-                for(int i =0; i < this.iter_n_children(iter); i++) {
-                    this.iter_nth_child(out child, iter, i);
-                    for(int j =0; j < this.iter_n_children(child); j++) {
-                        this.iter_nth_child(out childchild, child, j);
-                        string artist;
-//                        this.get(childchild, Column.ITEM, out item);
-                        this.get(childchild, Column.ARTIST, out artist);
-                        if(item != null) {
-                            if(item.uri != null) {
-//                                DndData dnd_data = DndData(); //item.uri;
-//                                dnd_data.txt = item.uri;
-                                dnd_data_array += item.uri;
-                            }
-                        }
-                    }
-                }
-                break;
-            }
-            case 2: {
-                for(int i =0; i < this.iter_n_children(iter); i++) {
-                    this.iter_nth_child(out child, iter, i);
-                    string album;
-                    this.get(child, Column.ALBUM, out album);
-                    if(item != null) {
-                        if(item.uri != null) {
-//                                DndData dnd_data = DndData(); //item.uri;
-//                                dnd_data.txt = item.uri;
-                                dnd_data_array += item.uri;
-
-//                            string dnd_data = item.uri;
-//                            dnd_data_array += item.uri;
-                        }
-                    }
-                }
-                break;
-            }
-            case 3: {
-                this.get(iter, Column.ITEM, out item);
-                if(item != null) {
-                    if(item.uri != null) {
-//                        DndData dnd_data = DndData(); //item.uri;
-//                        dnd_data.txt = item.uri;
-//                        dnd_data_array += dnd_data; //item.uri;
-                        string dnd_data = item.uri;
-                        dnd_data_array += dnd_data;
-                    }
-                }
-                break;
-            }
-            default: break;
-        
+        this.get(iter, Column.ITEM, out item);
+        if(item != null && item.type != ItemType.UNKNOWN) {
+            DndData dnd_data = { item.db_id, item.type, 1 };
+            dnd_data_array += dnd_data;
         }
         return dnd_data_array;
     }
+
+//    public string[] get_dnd_data_for_path(ref TreePath treepath) {
+//        TreeIter iter, child, childchild;
+//        string[] dnd_data_array = {};
+//        Item? item = null;
+//        this.get_iter(out iter, treepath);
+//        switch(treepath.get_depth()) {
+//            case 1: {
+//                for(int i =0; i < this.iter_n_children(iter); i++) {
+//                    this.iter_nth_child(out child, iter, i);
+//                    for(int j =0; j < this.iter_n_children(child); j++) {
+//                        this.iter_nth_child(out childchild, child, j);
+//                        string artist;
+//                        this.get(childchild, Column.ITEM, out item);
+////                        this.get(childchild, Column.ARTIST, out artist);
+//                        if(item != null) {
+//                            if(item.uri != null) {
+////                                DndData dnd_data = DndData(); //item.uri;
+////                                dnd_data.txt = item.uri;
+//                                dnd_data_array += item.uri;
+//                            }
+//                        }
+//                    }
+//                }
+//                break;
+//            }
+//            case 2: {
+//                for(int i =0; i < this.iter_n_children(iter); i++) {
+//                    this.iter_nth_child(out child, iter, i);
+//                    string album;
+//                    this.get(child, Column.ALBUM, out album);
+//                    if(item != null) {
+//                        if(item.uri != null) {
+////                                DndData dnd_data = DndData(); //item.uri;
+////                                dnd_data.txt = item.uri;
+//                                dnd_data_array += item.uri;
+
+////                            string dnd_data = item.uri;
+////                            dnd_data_array += item.uri;
+//                        }
+//                    }
+//                }
+//                break;
+//            }
+//            case 3: {
+//                this.get(iter, Column.ITEM, out item);
+//                if(item != null) {
+//                    if(item.uri != null) {
+////                        DndData dnd_data = DndData(); //item.uri;
+////                        dnd_data.txt = item.uri;
+////                        dnd_data_array += dnd_data; //item.uri;
+//                        string dnd_data = item.uri;
+//                        dnd_data_array += dnd_data;
+//                    }
+//                }
+//                break;
+//            }
+//            default: break;
+//        
+//        }
+//        return dnd_data_array;
+//    }
 }
 
 private class MagnatuneTreeView : Gtk.TreeView {
@@ -442,12 +447,6 @@ private class MagnatuneTreeView : Gtk.TreeView {
                             this.src_target_entries,
                             Gdk.DragAction.COPY
                             );
-
-//        Gtk.drag_dest_set(this,
-//                          Gtk.DestDefaults.ALL,
-//                          this.dest_target_entries,
-//                          Gdk.DragAction.COPY
-//                          );
         
         this.dragging = false;
         
@@ -456,11 +455,12 @@ private class MagnatuneTreeView : Gtk.TreeView {
         this.drag_begin.connect(this.on_drag_begin);
         this.drag_data_get.connect(this.on_drag_data_get);
         this.drag_end.connect(this.on_drag_end);
-//        this.drag_data_received.connect(this.on_drag_data_received);
         this.button_release_event.connect(this.on_button_release);
         this.button_press_event.connect(this.on_button_press);
-//        this.key_press_event.connect(this.on_key_pressed);
-//        this.key_release_event.connect(this.on_key_released);
+
+    //        this.drag_data_received.connect(this.on_drag_data_received);
+    //        this.key_press_event.connect(this.on_key_pressed);
+    //        this.key_release_event.connect(this.on_key_released);
     }
     
     private bool on_button_press(Gdk.EventButton e) {
@@ -560,43 +560,32 @@ private class MagnatuneTreeView : Gtk.TreeView {
         }
     }
 
-    private void on_drag_data_get(Gtk.Widget sender, Gdk.DragContext context, Gtk.SelectionData selection_data, uint info, uint etime) {
+    private void on_drag_data_get(Gtk.Widget sender, 
+                                  Gdk.DragContext context, 
+                                  Gtk.SelectionData selection_data, 
+                                  uint info, 
+                                  uint etime) {
         List<unowned TreePath> treepaths;
         unowned Gtk.TreeSelection selection;
         selection = this.get_selection();
         treepaths = selection.get_selected_rows(null);
-//        [CCode (array_length = false, array_null_terminated = true)]
-print("drag data get\n");
-        string[] uris = {};
+        DndData[] dat = {};
         if(treepaths.length() < 1)
             return;
         foreach(TreePath treepath in treepaths) { 
-            //TreePath tp = filtermodel.convert_path_to_child_path(treepath);
-            string[] suris = mag_model.get_dnd_data_for_path(ref treepath); 
-            foreach(string u in suris) {
-                //print("dnd data get %d  %s\n", u.db_id, u.mediatype.to_string());
-                uris += u;
+            DndData[] ddat = mag_model.get_dnd_data_for_path(ref treepath); 
+            foreach(DndData u in ddat) {
+                dat += u;
             }
         }
-        uris += null;
-//        Gdk.Atom dnd_atom = Gdk.Atom.intern(src_target_entries[0].target, true);
-//        unowned uchar[] data = (uchar[])ids;
-//        data.length = (int)(ids.length * sizeof(DndData));
-//        selection_data.set(dnd_atom, 8, data);
-        selection_data.set_uris(uris);
+        Gdk.Atom dnd_atom = Gdk.Atom.intern(src_target_entries[0].target, true);
+        unowned uchar[] data = (uchar[])dat;
+        data.length = (int)(dat.length * sizeof(DndData));
+        selection_data.set(dnd_atom, 8, data);
     }
 
     private void on_drag_end(Gtk.Widget sender, Gdk.DragContext context) {
-    print("drag end\n");
         this.dragging = false;
-//        
-//        this.unset_rows_drag_dest();
-//        Gtk.drag_dest_set(this,
-//                          Gtk.DestDefaults.ALL,
-//                          this.dest_target_entries,
-//                          Gdk.DragAction.COPY|
-//                          Gdk.DragAction.MOVE
-//                          );
     }
 
     private void on_row_activated(Gtk.Widget sender, TreePath treepath, TreeViewColumn column) {
@@ -608,7 +597,10 @@ print("drag data get\n");
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
             if(tmp == null) 
                 return;
-            unowned Xnoise.Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
+            unowned Xnoise.Action? action = tmp.get_action(item.type, 
+                                                           ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED,
+                                                           ItemSelectionType.SINGLE
+                                                           );
             
             if(action != null)
                 action.action(item, null);
@@ -844,9 +836,9 @@ private class MagnatuneWidget : Gtk.Box {
         
         load_db();
     }
-    
+    private static const string CONVERTED_DB = "/tmp/xnoise_magnatune.sqlite";
     private void load_db() {
-        File dbf   = File.new_for_path("/tmp/xnoise_magnatune_db");
+        File dbf   = File.new_for_path(CONVERTED_DB);
         if(dbf.query_exists()) {
             database_available = true;
             Timeout.add_seconds(1, () => {
@@ -860,6 +852,7 @@ private class MagnatuneWidget : Gtk.Box {
     }
 
     private bool copy_db_job(Worker.Job job) {
+        
         bool res = false;
         try {
             File mag_db = File.new_for_uri("http://he3.magnatune.com/info/sqlite_magnatune.db.gz");
@@ -924,16 +917,31 @@ private class MagnatuneWidget : Gtk.Box {
         }
         Idle.add(() => {
             label.label = "decompressing finished...";
-            Idle.add( () => {
-                database_available = true;
-                add_tree();
-                return false;
-            });
+            var conv_job = new Worker.Job(Worker.ExecutionType.ONCE, convert_db_job);
+            io_worker.push_job(conv_job);
             return false;
         });
         return false;
     }
 
+    private bool convert_db_job(Worker.Job job) {
+        var conv = new MagnatuneDatabaseConverter();
+        conv.move_data();
+        conv = null;
+        File fx = File.new_for_path(CONVERTED_DB);
+        if(fx.query_exists(null)) {
+            Idle.add( () => {
+                database_available = true;
+                add_tree();
+                return false;
+            });
+        }
+        else {
+            printerr("ERROR CONVERTING DATABASE!!\n");
+        }
+        return false;
+    }
+    
     private void add_tree() {
         if(!database_available)
             return;

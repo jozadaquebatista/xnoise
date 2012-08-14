@@ -21,6 +21,7 @@ libMagnatune_LTLIBRARIES = libMagnatune.la
 libMagnatune_la_SOURCES = \
     magnatune.vala \
     magnatune-db-reader.vala \
+    magnatune-db-conv.vala \
     magnatune-registration.vala \
     $(NULL)
 
