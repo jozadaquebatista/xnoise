@@ -314,7 +314,7 @@ public class MprisPlayer : GLib.Object {
         });
     }
     
-    private void on_tag_changed(Xnoise.GlobalAccess sender, ref string? newuri, string? tagname, string? tagvalue) {
+    private void on_tag_changed(Xnoise.GlobalAccess sender, string? newuri, string? tagname, string? tagvalue) {
         //print("on_tag_changed newusi: %s,tagname: %s,tagvalue: %s \n",newuri,tagname, tagvalue);
         switch(tagname){
             case "artist":
