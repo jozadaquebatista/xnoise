@@ -121,7 +121,7 @@ private class Xnoise.DockableUbuntuOneMS : DockableMedia {
     }
     
     public override string headline() {
-        return _("UbuntuOne Music Store");
+        return _("UbuntuOne Music");
     }
     
     public override DockableMedia.Category category() {
@@ -133,7 +133,7 @@ private class Xnoise.DockableUbuntuOneMS : DockableMedia {
         this.win = win;
         
         assert(this.win != null);
-        var wu = new Label("Ubuntu One Music Store");
+        var wu = new Label("UbuntuOne Music");
         
         win.msw.selection_changed.connect(on_selection_changed);
         widget = wu;

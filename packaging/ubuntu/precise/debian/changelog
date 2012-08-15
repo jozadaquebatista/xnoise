@@ -1,3 +1,13 @@
+xnoise (0.2.6-precise) precise; urgency=low
+  * add magnatune music store plugin
+  * code cleanup
+  * fixes
+
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 15 Aug 2012 20:30:15 +0200
+
+
+
 xnoise (0.2.5.6-precise) precise; urgency=low
   * add ubuntuone music store plugin
   * code cleanup

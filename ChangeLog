@@ -1,3 +1,21 @@
+commit eb85af203d3dba5369a2aaf0469157b645e871a4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Aug 15 23:37:38 2012 +0200
+
+    trigger recalculation of dockables on source view change
+
+commit c55403bfce44f5f311a9d1ba9a266eca077b434b
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Wed Aug 15 23:25:06 2012 +0200
+
+    add window visibility toggle patch
+
+commit 0a308442605506213bb503b0cdd6cef40d832bed
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Aug 15 23:08:48 2012 +0200
+
+    db optimization
+
 commit b3770cdf8b4abea08be3b0199c53df055b6f0542
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Wed Aug 15 16:57:59 2012 +0200

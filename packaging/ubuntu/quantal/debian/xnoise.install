@@ -11,6 +11,8 @@ usr/lib/xnoise/libLyricwiki.so
 usr/lib/xnoise/Lyricwiki.xnplugin
 usr/lib/xnoise/libmediakeys.so
 usr/lib/xnoise/mediakeys.xnplugin
+usr/lib/xnoise/libMagnatune.so
+usr/lib/xnoise/Magnatune.xnplugin
 usr/lib/xnoise/libmpris.so
 usr/lib/xnoise/mpris.xnplugin
 usr/lib/xnoise/libmprisone.so

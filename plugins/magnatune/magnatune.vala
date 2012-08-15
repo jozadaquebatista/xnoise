@@ -942,7 +942,7 @@ private class Xnoise.DockableMagnatuneMS : DockableMedia {
     }
     
     public override string headline() {
-        return _("Magnatune Music Store");
+        return _("Magnatune");
     }
     
     public override DockableMedia.Category category() {
