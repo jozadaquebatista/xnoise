@@ -1527,7 +1527,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             
             
             msw = new MediaSoureWidget(this);
-            
+            msw.selection_changed.connect( () => {
+                Idle.add(() => {
+                    hpaned.position = hpaned.position + 1;
+                    Idle.add(() => {
+                        hpaned.position = hpaned.position - 1;
+                        return false;
+                    });
+                    return false;
+                });
+            });
             this.search_entry = msw.search_entry;
             
             mbbox01.pack_start(msw, true, true, 0);
