@@ -30,4 +30,5 @@ libxnoise/Utils/xnoise-media-importer.c
 src/xnoise.c
 data/ui/metadat_artist_album.ui
 data/ui/metadat_title.ui
+plugins/magnatune/magnatune.c
 

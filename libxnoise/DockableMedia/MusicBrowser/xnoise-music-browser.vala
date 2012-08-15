@@ -519,8 +519,6 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         this.row_collapsed.connect(on_row_collapsed);
         this.row_expanded.connect(on_row_expanded);
         
-        this.set_size_request(300, 500);
-        
         fontsizeMB = Params.get_int_value("fontsizeMB");
         Gtk.StyleContext context = this.get_style_context();
         font_description = context.get_font(StateFlags.NORMAL).copy();

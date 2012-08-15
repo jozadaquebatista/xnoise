@@ -1557,7 +1557,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.fullscreenwindow = new Gtk.Window(Gtk.WindowType.TOPLEVEL);
             this.fullscreenwindow.set_title("Xnoise media player - Fullscreen");
             this.fullscreenwindow.set_default_icon_name("xnoise");
-            this.fullscreenwindow.set_events (Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
+            this.fullscreenwindow.set_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK);
             this.fullscreenwindow.realize();
 
             //Toolbar shown in the fullscreen window

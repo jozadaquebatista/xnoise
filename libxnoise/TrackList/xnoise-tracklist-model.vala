@@ -512,7 +512,9 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         
         TreeIter citer;
         this.get_iter(out citer, tpath);
-        
+        TreeIter* pi = &citer;
+        if(&pi == null || pi == null)
+            return;
         this.set(citer,
                  Column.WEIGHT, Pango.Weight.BOLD,
                  -1);

@@ -1,3 +1,21 @@
+commit b3770cdf8b4abea08be3b0199c53df055b6f0542
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Aug 15 16:57:59 2012 +0200
+
+    magnatune: more speedup
+
+commit e406e03cf6872ecb2c4833bb6789d071c3f20a29
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Aug 15 15:34:09 2012 +0200
+
+    magnatune: a little speedup
+
+commit 20e6b80abe2eec0bb368fa1d2dd7d98616b06422
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 14 18:09:00 2012 +0200
+
+    add packaging folder to source distrubution
+
 commit bb9619d4c7bd8ae15ed025ac9593e657896ed920
 Author: Tal Hadad <tal_hd@hotmail.com>
 Date:   Tue Aug 14 17:47:24 2012 +0200

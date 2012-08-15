@@ -78,6 +78,11 @@ public class Xnoise.Database.Writer : GLib.Object {
     private Statement get_statistics_id_statement;
     private Statement add_statistic_statement;
     private Statement update_playtime_statement;
+
+    private Statement get_artist_max_id_statement;
+    private Statement get_uri_max_id_statement;
+    private Statement get_genre_max_id_statement;
+    private Statement get_albums_max_id_statement;
     
     public delegate void ChangeNotificationCallback(ChangeType changetype, Item? item);
     
@@ -283,6 +288,10 @@ public class Xnoise.Database.Writer : GLib.Object {
         this.db.prepare_v2(STMT_GET_STATISTICS_ID , -1, out this.get_statistics_id_statement);
         this.db.prepare_v2(STMT_ADD_STATISTIC , -1, out this.add_statistic_statement);
         this.db.prepare_v2(STMT_UPDATE_PLAYTIME , -1, out this.update_playtime_statement);
+        this.db.prepare_v2(STMT_GET_ARTIST_MAX_ID, -1, out get_artist_max_id_statement);
+        this.db.prepare_v2(STMT_GET_URI_MAX_ID, -1, out get_uri_max_id_statement);
+        this.db.prepare_v2(STMT_GET_GENRE_MAX_ID, -1, out get_genre_max_id_statement);
+        this.db.prepare_v2(STMT_GET_ALBUMS_MAX_ID, -1, out get_albums_max_id_statement);
     }
 
     public struct NotificationData {
@@ -322,6 +331,8 @@ public class Xnoise.Database.Writer : GLib.Object {
         return (owned)val;
     }
     
+    private static const string STMT_GET_ARTIST_MAX_ID =
+        "SELECT MAX(id) FROM artists";
     private static const string STMT_GET_ARTIST_ID =
         "SELECT id FROM artists WHERE utf8_lower(name) = ?";
     private static const string STMT_UPDATE_ARTIST_NAME = 
@@ -337,11 +348,10 @@ public class Xnoise.Database.Writer : GLib.Object {
         }
         if(get_artist_id_statement.step() == Sqlite.ROW)
             artist_id = get_artist_id_statement.column_int(0);
-
+        
         if(artist_id == -1) { // artist not in table, yet
-            // Insert artist
             insert_artist_statement.reset();
-            if(insert_artist_statement.bind_text(1, artist.strip()) != Sqlite.OK) {
+            if(insert_artist_statement.bind_text(1, artist) != Sqlite.OK) {
                 this.db_error();
                 return -1;
             }
@@ -349,18 +359,13 @@ public class Xnoise.Database.Writer : GLib.Object {
                 this.db_error();
                 return -1;
             }
-            // Get unique artist id key
-            get_artist_id_statement.reset();
-            if(get_artist_id_statement.bind_text(1, artist != null ? artist.down().strip() : EMPTYSTRING) != Sqlite.OK) {
-                this.db_error();
-                return -1;
-            }
-            if(get_artist_id_statement.step() == Sqlite.ROW)
-                artist_id = get_artist_id_statement.column_int(0);
+            get_artist_max_id_statement.reset();
+            if(get_artist_max_id_statement.step() == Sqlite.ROW)
+                artist_id = get_artist_max_id_statement.column_int(0);
             // change notification
-//            if(change_cb != null) {
             foreach(NotificationData cxd in change_callbacks) {
                 Item? item = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, artist_id);
+//                item.source_id = db_browser.get_source_id();
                 item.text = artist.strip();
                 if(cxd.cb != null)
                     cxd.cb(ChangeType.ADD_ARTIST, item);
@@ -461,13 +466,13 @@ public class Xnoise.Database.Writer : GLib.Object {
         return uri_id;
     }
     
+    private static const string STMT_GET_ALBUMS_MAX_ID =
+        "SELECT MAX(id) FROM albums";
     private static const string STMT_GET_ALBUM_ID =
         "SELECT id FROM albums WHERE artist = ? AND utf8_lower(name) = ?";
     private static const string STMT_UPDATE_ALBUM_NAME = 
         "UPDATE albums SET name=? WHERE id=?";
     private int handle_album(ref int artist_id, ref string album, bool update_album = false) {
-        int album_id = -1;
-        
         get_album_id_statement.reset();
         if(get_album_id_statement.bind_int (1, artist_id) != Sqlite.OK ||
            get_album_id_statement.bind_text(2, album != null ? album.down().strip() : EMPTYSTRING) != Sqlite.OK ) {
@@ -475,80 +480,46 @@ public class Xnoise.Database.Writer : GLib.Object {
             return -1;
            }
         if(get_album_id_statement.step() == Sqlite.ROW)
-            album_id = get_album_id_statement.column_int(0);
+            return get_album_id_statement.column_int(0);
         
-        if(album_id == -1) { // album not in table, yet
-            // Insert album
-            insert_album_statement.reset();
-            if(insert_album_statement.bind_int (1, artist_id)     != Sqlite.OK ||
-               insert_album_statement.bind_text(2, album.strip()) != Sqlite.OK ) {
-                this.db_error();
-                return -1;
-            }
-            if(insert_album_statement.step() != Sqlite.DONE) {
-                this.db_error();
-                return -1;
-            }
-            // Get unique album id key
-            get_album_id_statement.reset();
-            if(get_album_id_statement.bind_int (1, artist_id           ) != Sqlite.OK ||
-               get_album_id_statement.bind_text(2, album.down().strip()) != Sqlite.OK ) {
-                this.db_error();
-                return -1;
-            }
-            if(get_album_id_statement.step() == Sqlite.ROW)
-                album_id = get_album_id_statement.column_int(0);
-        }
-        if(update_album) {
-            Statement stmt;
-            this.db.prepare_v2(STMT_UPDATE_ALBUM_NAME, -1, out stmt);
-            stmt.reset();
-            if(stmt.bind_text(1, album)    != Sqlite.OK ||
-               stmt.bind_int (2, album_id) != Sqlite.OK ) {
-                this.db_error();
-                return -1;
-            }
-            if(stmt.step() != Sqlite.DONE) {
-                this.db_error();
-                return -1;
-            }
-
-        }
-        return album_id;
-    }
-
-    private int handle_uri(string uri) {
-        int uri_id = -1;
-
-        get_uri_id_statement.reset();
-        if(get_uri_id_statement.bind_text(1, uri) != Sqlite.OK) {
+        // Insert album
+        insert_album_statement.reset();
+        if(insert_album_statement.bind_int (1, artist_id)     != Sqlite.OK ||
+           insert_album_statement.bind_text(2, album) != Sqlite.OK ) {
             this.db_error();
             return -1;
         }
-        if(get_uri_id_statement.step() == Sqlite.ROW)
-            uri_id = get_uri_id_statement.column_int(0);
-
-        if(uri_id == -1) { // uri not in table, yet
-            // Insert uri
-            insert_uri_statement.reset();
-            if(insert_uri_statement.bind_text(1, uri) != Sqlite.OK) {
-                this.db_error();
-                return -1;
-            }
-            if(insert_uri_statement.step() != Sqlite.DONE) {
-                this.db_error();
-                return -1;
-            }
-            // Get unique uri id key
-            get_uri_id_statement.reset();
-            if(get_uri_id_statement.bind_text(1, uri) != Sqlite.OK) {
-                this.db_error();
-                return -1;
-            }
-            if(get_uri_id_statement.step() == Sqlite.ROW)
-                uri_id = get_uri_id_statement.column_int(0);
+        if(insert_album_statement.step() != Sqlite.DONE) {
+            this.db_error();
+            return -1;
         }
-        return uri_id;
+        
+        //Return id
+        get_albums_max_id_statement.reset();
+        if(get_albums_max_id_statement.step() == Sqlite.ROW)
+            return get_albums_max_id_statement.column_int(0);
+        else
+            return -1;
+    }
+
+    private static const string STMT_GET_URI_MAX_ID =
+        "SELECT MAX(id) FROM uris";
+
+    private int handle_uri(string uri) {
+        insert_uri_statement.reset();
+        if(insert_uri_statement.bind_text(1, uri) != Sqlite.OK) {
+            this.db_error();
+            return -1;
+        }
+        if(insert_uri_statement.step() != Sqlite.DONE) {
+            this.db_error();
+            return -1;
+        }
+        get_uri_max_id_statement.reset();
+        if(get_uri_max_id_statement.step() == Sqlite.ROW)
+            return get_uri_max_id_statement.column_int(0);
+        else
+            return -1;
     }
 
     public string[] get_media_folders() {
@@ -559,9 +530,11 @@ public class Xnoise.Database.Writer : GLib.Object {
         return (owned)sa;
     }
 
+    private static const string STMT_GET_GENRE_MAX_ID =
+        "SELECT MAX(id) FROM genres";
+
     private int handle_genre(ref string genre) {
-        int genre_id = -1;
-        if((genre.strip() == EMPTYSTRING)||(genre == null)) return -2; //NO GENRE
+        if((genre == null)||(genre.strip() == EMPTYSTRING)) return -2; //NO GENRE
 
         get_genre_id_statement.reset();
         if(get_genre_id_statement.bind_text(1, genre != null ? genre.down().strip() : EMPTYSTRING) != Sqlite.OK) {
@@ -569,29 +542,24 @@ public class Xnoise.Database.Writer : GLib.Object {
             return -1;
         }
         if(get_genre_id_statement.step() == Sqlite.ROW)
-            genre_id = get_genre_id_statement.column_int(0);
-
-        if(genre_id == -1) { // genre not in table, yet
-            // Insert genre
-            insert_genre_statement.reset();
-            if(insert_genre_statement.bind_text(1, genre.strip()) != Sqlite.OK) {
-                this.db_error();
-                return -1;
-            }
-            if(insert_genre_statement.step() != Sqlite.DONE) {
-                this.db_error();
-                return -1;
-            }
-            // Get unique genre id key
-            get_genre_id_statement.reset();
-            if(get_genre_id_statement.bind_text(1, genre != null ? genre.down().strip() : EMPTYSTRING) != Sqlite.OK) {
-                this.db_error();
-                return -1;
-            }
-            if(get_genre_id_statement.step() == Sqlite.ROW)
-                genre_id = get_genre_id_statement.column_int(0);
+            return get_genre_id_statement.column_int(0);
+//        if(genre_id == -1) { // genre not in table, yet
+        // Insert genre
+        insert_genre_statement.reset();
+        if(insert_genre_statement.bind_text(1, genre.strip()) != Sqlite.OK) {
+            this.db_error();
+            return -1;
         }
-        return genre_id;
+        if(insert_genre_statement.step() != Sqlite.DONE) {
+            this.db_error();
+            return -1;
+        }
+        // Return id key
+        get_genre_max_id_statement.reset();
+        if(get_genre_max_id_statement.step() == Sqlite.ROW)
+            return get_genre_max_id_statement.column_int(0);
+        else
+            return -1;
     }
 
     public bool get_trackdata_for_stream(string uri, out TrackData val) {

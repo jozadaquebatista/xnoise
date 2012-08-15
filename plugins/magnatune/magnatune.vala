@@ -593,7 +593,7 @@ private class MagnatuneTreeView : Gtk.TreeView {
                                                             out int natural_height) {
             Gdk.Window? w = ow.get_window();
             if(w == null) {
-                print("no window\n");
+                print("no window (magnatune)\n");
                 natural_height = minimum_height = 30;
                 return;
             }
