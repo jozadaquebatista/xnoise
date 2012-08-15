@@ -125,12 +125,12 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     }
 
     public void move_data() {
-        this.begin_transaction();
-        get_artists();
-        get_albums();
-        get_genres();
-        get_uris();
-        this.commit_transaction();
+//        this.begin_transaction();
+//        get_artists();
+//        get_albums();
+//        get_genres();
+//        get_uris();
+//        this.commit_transaction();
         print("done with albums\n");
         this.begin_transaction();
         get_source_tracks();
@@ -139,90 +139,26 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     }
 
 
-    private static const string STMT_GET_ALBUMS =
-        "SELECT al.artist, al.albumname FROM albums al";
-    private static const string STMT_INS_ALBUM =
-        "INSERT INTO albums (artist, name) VALUES ((SELECT id FROM artists ar WHERE utf8_lower(ar.name) = ?), ?)";
-
-    private void get_albums() {
-        Statement stmt, insert_album_v2_statement;
-        source.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
-        target.prepare_v2(STMT_INS_ALBUM, -1, out insert_album_v2_statement);
-        while(stmt.step() == Sqlite.ROW) {
-            insert_album_v2_statement.reset();
-            if(insert_album_v2_statement.bind_text(1, stmt.column_text(0).down()) != Sqlite.OK ||
-               insert_album_v2_statement.bind_text(2, stmt.column_text(1)) != Sqlite.OK
-              ) {
-                this.db_error(ref target);
-                return;
-            }
-            if(insert_album_v2_statement.step() != Sqlite.DONE) {
-                this.db_error(ref target);
-                return;
-            }
-        }
-    }
-
-
-    private static const string STMT_GET_URIS =
-        "SELECT s.mp3 FROM songs s";
-
-    private void get_uris() {
-        Statement stmt;
-        string uri = "";
-        source.prepare_v2(STMT_GET_URIS, -1, out stmt);
-        while(stmt.step() == Sqlite.ROW) {
-            uri = "http://he3.magnatune.com/all/" + Uri.escape_string(stmt.column_text(0), null, true);
-            insert_uri_statement.reset();
-            if(insert_uri_statement.bind_text(1, uri) != Sqlite.OK) {
-                this.db_error(ref target);
-                return;
-            }
-            if(insert_uri_statement.step() != Sqlite.DONE) {
-                this.db_error(ref target);
-                return;
-            }
-        }
-    }
-
-    private static const string STMT_GET_GENRES =
-        "SELECT g.genre FROM genres g";
-
-    private void get_genres() {
-        Statement stmt;
-        source.prepare_v2(STMT_GET_GENRES, -1, out stmt);
-        while(stmt.step() == Sqlite.ROW) {
-            insert_genre_statement.reset();
-            if(insert_genre_statement.bind_text(1, stmt.column_text(0)) != Sqlite.OK) {
-                this.db_error(ref target);
-                return;
-            }
-            if(insert_genre_statement.step() != Sqlite.DONE) {
-                this.db_error(ref target);
-                return;
-            }
-        }
-    }
 
     
-    private static const string STMT_GET_ARTISTS =
-        "SELECT ar.artist FROM artists ar";
+//    private static const string STMT_GET_ARTISTS =
+//        "SELECT ar.artist FROM artists ar";
 
-    private void get_artists() {
-        Statement stmt;
-        source.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
-        while(stmt.step() == Sqlite.ROW) {
-            insert_artist_statement.reset();
-            if(insert_artist_statement.bind_text(1, stmt.column_text(0)) != Sqlite.OK) {
-                this.db_error(ref target);
-                return;
-            }
-            if(insert_artist_statement.step() != Sqlite.DONE) {
-                this.db_error(ref target);
-                return;
-            }
-        }
-    }
+//    private void get_artists() {
+//        Statement stmt;
+//        source.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
+//        while(stmt.step() == Sqlite.ROW) {
+//            insert_artist_statement.reset();
+//            if(insert_artist_statement.bind_text(1, stmt.column_text(0)) != Sqlite.OK) {
+//                this.db_error(ref target);
+//                return;
+//            }
+//            if(insert_artist_statement.step() != Sqlite.DONE) {
+//                this.db_error(ref target);
+//                return;
+//            }
+//        }
+//    }
 
     private bool begin_stmt_used = false;
     
@@ -260,7 +196,12 @@ public class MagnatuneDatabaseConverter : GLib.Object {
         Statement stmt;
         this.source.prepare_v2(STMT_GET_TRACKS, -1, out stmt);
         count = 0;
+        Timer t = new Timer();
+        ulong x;
+        bool flg = false;
+        
         while(stmt.step() == Sqlite.ROW) {
+
             Item? i = Item(ItemType.STREAM);
             i.uri  = "http://he3.magnatune.com/all/" + Uri.escape_string(stmt.column_text(1), null, true);
             i.text = stmt.column_text(0);
@@ -278,20 +219,49 @@ public class MagnatuneDatabaseConverter : GLib.Object {
             }
             // INSERT
 //            insert_title(ref td);
+            if(flg) {
+                t.reset();
+                t.start();
+            }
             int32 artist_id = handle_artist(ref artist);
             if(artist_id == -1) {
                 print("Error importing artist for %s : '%s' ! \n", i.uri, artist);
                 return;
+            }
+            if(flg) {
+                t.stop();
+                t.elapsed(out x);
+                print("artist: %lu µs\t", x);
+            }
+
+            if(flg) {
+                t.reset();
+                t.start();
             }
             int32 album_id = handle_album(ref artist_id, ref album);
             if(album_id == -1) {
                 print("Error importing album for %s : '%s' ! \n", i.uri, album);
                 return;
             }
+            if(flg) {
+                t.stop();
+                t.elapsed(out x);
+                print("album: %lu µs\t", x);
+            }
+
+            if(flg) {
+                t.reset();
+                t.start();
+            }
             int uri_id = handle_uri(i.uri);
             if(uri_id == -1) {
                 //print("Error importing uri for %s : '%s' ! \n", uri, uri);
                 return;
+            }
+            if(flg) {
+                t.stop();
+                t.elapsed(out x);
+                print("uri: %lu µs\t", x);
             }
             int genre_id = handle_genre(ref genre);
             if(genre_id == -1) {
@@ -299,6 +269,10 @@ public class MagnatuneDatabaseConverter : GLib.Object {
                 return;
             }
             //print("insert_title td.item.type %s\n", td.item.type.to_string());
+            if(flg) {
+                t.reset();
+                t.start();
+            }
             insert_title_statement.reset();
             if(insert_title_statement.bind_int (1,  stmt.column_int(2)) != Sqlite.OK ||
                insert_title_statement.bind_int (2,  artist_id)             != Sqlite.OK ||
@@ -317,6 +291,11 @@ public class MagnatuneDatabaseConverter : GLib.Object {
                 this.db_error(ref target);
                 return;
             }
+            if(flg) {
+                t.stop();
+                t.elapsed(out x);
+                print("title: %lu µs\n", x);
+            }
 
             count++;
             if(count % 200 == 0) {
@@ -326,10 +305,13 @@ public class MagnatuneDatabaseConverter : GLib.Object {
                     return false;
                 });
             }
-            if(count % 4000 == 0) {
-                this.commit_transaction();
-                this.begin_transaction();
+            if(count % 1000 == 0) {
+//                this.commit_transaction();
+//                this.begin_transaction();
+                flg = true;
             }
+            else
+                flg = false;
         }
         Idle.add(() => {
             progress(count);
@@ -450,6 +432,29 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     }
 
 
+
+//    private static const string STMT_GET_ARTISTS =
+//        "SELECT ar.artist FROM artists ar";
+
+//    private void get_artists() {
+//        Statement stmt;
+//        source.prepare_v2(STMT_GET_ARTISTS, -1, out stmt);
+//        while(stmt.step() == Sqlite.ROW) {
+//            insert_artist_statement.reset();
+//            if(insert_artist_statement.bind_text(1, stmt.column_text(0)) != Sqlite.OK) {
+//                this.db_error(ref target);
+//                return;
+//            }
+//            if(insert_artist_statement.step() != Sqlite.DONE) {
+//                this.db_error(ref target);
+//                return;
+//            }
+//        }
+//    }
+
+
+    private static const string STMT_GET_ARTIST_MAX_ID =
+        "SELECT MAX(id) FROM artists";
     private static const string STMT_GET_ARTIST_ID =
         "SELECT id FROM artists WHERE utf8_lower(name) = ?";
     private static const string STMT_UPDATE_ARTIST_NAME = 
@@ -463,19 +468,64 @@ public class MagnatuneDatabaseConverter : GLib.Object {
         }
         if(get_artist_id_statement.step() == Sqlite.ROW)
             return get_artist_id_statement.column_int(0);
+        
+        insert_artist_statement.reset();
+        if(insert_artist_statement.bind_text(1, artist) != Sqlite.OK) {
+            this.db_error(ref target);
+            return -1;
+        }
+        if(insert_artist_statement.step() != Sqlite.DONE) {
+            this.db_error(ref target);
+            return -1;
+        }
+        Statement stmt;
+        target.prepare_v2(STMT_GET_ARTIST_MAX_ID, -1, out stmt);
+        if(stmt.step() == Sqlite.ROW)
+            return stmt.column_int(0);
         else
             return -1;
+
     }
 
 
 
 
+//    private static const string STMT_GET_ALBUMS =
+//        "SELECT al.artist, al.albumname FROM albums al";
+
+//    private void get_albums() {
+//        Statement stmt, insert_album_v2_statement;
+//        source.prepare_v2(STMT_GET_ALBUMS, -1, out stmt);
+//        target.prepare_v2(STMT_INS_ALBUM, -1, out insert_album_v2_statement);
+//        while(stmt.step() == Sqlite.ROW) {
+//            insert_album_v2_statement.reset();
+//            if(insert_album_v2_statement.bind_text(1, stmt.column_text(0).down()) != Sqlite.OK ||
+//               insert_album_v2_statement.bind_text(2, stmt.column_text(1)) != Sqlite.OK
+//              ) {
+//                this.db_error(ref target);
+//                return;
+//            }
+//            if(insert_album_v2_statement.step() != Sqlite.DONE) {
+//                this.db_error(ref target);
+//                return;
+//            }
+//        }
+//    }
+
+
+    private static const string STMT_INS_ALBUM =
+        "INSERT INTO albums (artist, name) VALUES ((SELECT id FROM artists ar WHERE utf8_lower(ar.name) = ?), ?)";
     private static const string STMT_GET_ALBUM_ID =
         "SELECT id FROM albums WHERE artist = ? AND utf8_lower(name) = ?";
     private static const string STMT_UPDATE_ALBUM_NAME = 
         "UPDATE albums SET name=? WHERE id=?";
+    private static const string STMT_GET_ALBUMS_MAX_ID =
+        "SELECT MAX(id) FROM albums";
+
     private int handle_album(ref int artist_id, ref string album, bool update_album = false) {
 //        int album_id = -1;
+//        Statement stmt, insert_album_v2_statement;
+//        target.prepare_v2(STMT_INS_ALBUM, -1, out insert_album_v2_statement);
         
         get_album_id_statement.reset();
         if(get_album_id_statement.bind_int (1, artist_id) != Sqlite.OK ||
@@ -485,21 +535,27 @@ public class MagnatuneDatabaseConverter : GLib.Object {
            }
         if(get_album_id_statement.step() == Sqlite.ROW)
             return get_album_id_statement.column_int(0);
+        
+        // Insert album
+        insert_album_statement.reset();
+        if(insert_album_statement.bind_int (1, artist_id)     != Sqlite.OK ||
+           insert_album_statement.bind_text(2, album) != Sqlite.OK ) {
+            this.db_error(ref target);
+            return -1;
+        }
+        if(insert_album_statement.step() != Sqlite.DONE) {
+            this.db_error(ref target);
+            return -1;
+        }
+        
+        //Return id
+        Statement stmt;
+        target.prepare_v2(STMT_GET_ALBUMS_MAX_ID, -1, out stmt);
+        if(stmt.step() == Sqlite.ROW)
+            return stmt.column_int(0);
         else
             return -1;
-        
-//        if(album_id == -1) { // album not in table, yet
-//            // Insert album
-//            insert_album_statement.reset();
-//            if(insert_album_statement.bind_int (1, artist_id)     != Sqlite.OK ||
-//               insert_album_statement.bind_text(2, album.strip()) != Sqlite.OK ) {
-//                this.db_error(ref target);
-//                return -1;
-//            }
-//            if(insert_album_statement.step() != Sqlite.DONE) {
-//                this.db_error(ref target);
-//                return -1;
-//            }
+
 //            // Get unique album id key
 //            get_album_id_statement.reset();
 //            if(get_album_id_statement.bind_int (1, artist_id           ) != Sqlite.OK ||
@@ -528,28 +584,63 @@ public class MagnatuneDatabaseConverter : GLib.Object {
 //        return album_id;
     }
 
-    private int handle_uri(string uri) {
-//        int uri_id = -1;
-        get_uri_id_statement.reset();
-        if(get_uri_id_statement.bind_text(1, uri) != Sqlite.OK) {
-            this.db_error(ref target);
-            return -1;
-        }
-        if(get_uri_id_statement.step() == Sqlite.ROW)
-            return get_uri_id_statement.column_int(0);
-        else
-            return -1;
-//        if(uri_id == -1) { // uri not in table, yet
-//            // Insert uri
+
+
+
+//    private static const string STMT_GET_URIS =
+//        "SELECT s.mp3 FROM songs s";
+
+//    private void get_uris() {
+//        Statement stmt;
+////        string uri = "";
+//        source.prepare_v2(STMT_GET_URIS, -1, out stmt);
+//        while(stmt.step() == Sqlite.ROW) {
+////            uri = "http://he3.magnatune.com/all/" + Uri.escape_string(stmt.column_text(0), null, true);
 //            insert_uri_statement.reset();
-//            if(insert_uri_statement.bind_text(1, uri) != Sqlite.OK) {
+//            if(insert_uri_statement.bind_text(1, "http://he3.magnatune.com/all/" + Uri.escape_string(stmt.column_text(0), null, true)) != Sqlite.OK) {
 //                this.db_error(ref target);
-//                return -1;
+//                return;
 //            }
 //            if(insert_uri_statement.step() != Sqlite.DONE) {
 //                this.db_error(ref target);
-//                return -1;
+//                return;
 //            }
+//        }
+//    }
+
+    private static const string STMT_GET_URI_MAX_ID =
+        "SELECT MAX(id) FROM uris";
+    
+    private int handle_uri(string uri) {
+//        int uri_id = -1;
+//        get_uri_id_statement.reset();
+//        if(get_uri_id_statement.bind_text(1, uri) != Sqlite.OK) {
+//            this.db_error(ref target);
+//            return -1;
+//        }
+//        if(get_uri_id_statement.step() == Sqlite.ROW)
+//            return get_uri_id_statement.column_int(0);
+//        else
+//            return -1;
+
+//        if(uri_id == -1) { // uri not in table, yet
+//            // Insert uri
+        insert_uri_statement.reset();
+        if(insert_uri_statement.bind_text(1, uri) != Sqlite.OK) {
+            this.db_error(ref target);
+            return -1;
+        }
+        if(insert_uri_statement.step() != Sqlite.DONE) {
+            this.db_error(ref target);
+            return -1;
+        }
+        Statement stmt;
+        target.prepare_v2(STMT_GET_URI_MAX_ID, -1, out stmt);
+        if(stmt.step() == Sqlite.ROW)
+            return stmt.column_int(0);
+        else
+            return -1;
+        
 //            // Get unique uri id key
 //            get_uri_id_statement.reset();
 //            if(get_uri_id_statement.bind_text(1, uri) != Sqlite.OK) {
@@ -564,6 +655,27 @@ public class MagnatuneDatabaseConverter : GLib.Object {
 
 
 
+//   private static const string STMT_GET_GENRES =
+//        "SELECT g.genre FROM genres g";
+
+//    private void get_genres() {
+//        Statement stmt;
+//        source.prepare_v2(STMT_GET_GENRES, -1, out stmt);
+//        while(stmt.step() == Sqlite.ROW) {
+//            insert_genre_statement.reset();
+//            if(insert_genre_statement.bind_text(1, stmt.column_text(0)) != Sqlite.OK) {
+//                this.db_error(ref target);
+//                return;
+//            }
+//            if(insert_genre_statement.step() != Sqlite.DONE) {
+//                this.db_error(ref target);
+//                return;
+//            }
+//        }
+//    }
+    private static const string STMT_GET_GENRE_MAX_ID =
+        "SELECT MAX(id) FROM genres";
+
 
     private int handle_genre(ref string genre) {
 //        int genre_id = -1;
@@ -576,20 +688,25 @@ public class MagnatuneDatabaseConverter : GLib.Object {
         }
         if(get_genre_id_statement.step() == Sqlite.ROW)
             return get_genre_id_statement.column_int(0);
+//        if(genre_id == -1) { // genre not in table, yet
+        // Insert genre
+        insert_genre_statement.reset();
+        if(insert_genre_statement.bind_text(1, genre.strip()) != Sqlite.OK) {
+            this.db_error(ref target);
+            return -1;
+        }
+        if(insert_genre_statement.step() != Sqlite.DONE) {
+            this.db_error(ref target);
+            return -1;
+        }
+        // Return id key
+        Statement stmt;
+        target.prepare_v2(STMT_GET_GENRE_MAX_ID, -1, out stmt);
+        if(stmt.step() == Sqlite.ROW)
+            return stmt.column_int(0);
         else
             return -1;
-//        if(genre_id == -1) { // genre not in table, yet
-//            // Insert genre
-//            insert_genre_statement.reset();
-//            if(insert_genre_statement.bind_text(1, genre.strip()) != Sqlite.OK) {
-//                this.db_error(ref target);
-//                return -1;
-//            }
-//            if(insert_genre_statement.step() != Sqlite.DONE) {
-//                this.db_error(ref target);
-//                return -1;
-//            }
-//            // Get unique genre id key
+
 //            get_genre_id_statement.reset();
 //            if(get_genre_id_statement.bind_text(1, genre != null ? genre.down().strip() : EMPTYSTRING) != Sqlite.OK) {
 //                this.db_error(ref target);
