@@ -763,7 +763,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.disconnect(active_notifier);
             active_notifier = 0;
         }
-        if(this.is_active) {
+        if(this.has_toplevel_focus) {
             this.get_position(out _posX, out _posY);
             this.hide();
         }
