@@ -9,4 +9,5 @@ usr/lib/xnoise/libmprisone.so
 usr/lib/xnoise/libnotifications.so
 usr/lib/xnoise/libTitleToDecoration.so
 usr/lib/xnoise/libxnoisetest.so
+usr/lib/xnoise/libMagnatune.so
 usr/lib/xnoise/*.xnplugin
