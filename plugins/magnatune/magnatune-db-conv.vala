@@ -188,7 +188,7 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     }
 
     private static const string STMT_GET_TRACKS =
-        "SELECT DISTINCT s.desc, s.mp3, s.number, ar.artist, s.albumname, g.genre, al.launchdate, s.duration FROM artists ar, albums al, songs s, genres g WHERE s.albumname = al.albumname AND al.artist = ar.artist AND g.albumname = al.albumname";
+        "SELECT DISTINCT s.desc, s.mp3, s.number, al.artist, s.albumname, g.genre, al.launchdate, s.duration FROM albums al, songs s, genres g WHERE s.albumname = al.albumname AND g.albumname = al.albumname";
 
     private int count = 0;
     
