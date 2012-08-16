@@ -33,6 +33,7 @@ noinst_DATA =  \
     MAINTAINERS \
     AUTHORS \
     xnoise.doap \
+    package_chef.sh \
     $(NULL)
 
 
