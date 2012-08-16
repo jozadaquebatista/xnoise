@@ -80,8 +80,7 @@ Options:
 Xnoise EXAMPLE:
   Source package tar.gz is in the same folder as this script.
   
-  ./package_chef.sh --distro=ubuntu/precise --name=xnoise --version=0.2.6 
-    --src-tar=xnoise-0.2.6.tar.gz
+  ./package_chef.sh --distro=ubuntu/precise --name=xnoise --version=0.2.6 --src-tar=xnoise-0.2.6.tar.gz
   
   
 Bugs:

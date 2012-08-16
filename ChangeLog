@@ -1,3 +1,21 @@
+commit 8ee7e3d65682e912cea8a0e3f5f0f1bb5e9ed6a7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 16 10:18:50 2012 +0200
+
+    magnatune: improve database query
+
+commit 73b6f5d66848eae179bc16a5f9ee2d1a45331aa4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 16 00:15:26 2012 +0200
+
+    add magnatune plugin to packaged plugins for debian, too
+
+commit 0d01cc5f59955ecf60cb09dc1916c3388e1d9083
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 16 00:13:45 2012 +0200
+
+    add magnatune plugin to packaged plugins
+
 commit eb85af203d3dba5369a2aaf0469157b645e871a4
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Wed Aug 15 23:37:38 2012 +0200
