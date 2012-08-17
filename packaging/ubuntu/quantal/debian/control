@@ -32,7 +32,7 @@ Description: Media player for Gtk+ (player + core plugins)
 Package: xnoise-ubuntuone-music-store-plugin
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}, xnoise (= ${binary:Version})
-Description: media player for Gtk+ (factory plugins collection)
+Description: Media player for Gtk+ (UbuntuOne Music Store plugin)
  Unlike Rhythmbox, Banshee or itunes, Xnoise uses a tracklist centric design. 
  The tracklist is a list of video or music tracks that are played one by one 
  without being removed. This gives you the possibility to enqueue any track 

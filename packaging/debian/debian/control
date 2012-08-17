@@ -11,7 +11,7 @@ Package: xnoise
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Recommends: xnoise-plugins
-Description: media player for Gtk+
+Description: Media player for Gtk+
  Unlike Rhythmbox, Banshee or itunes, Xnoise uses a tracklist centric design. 
  The tracklist is a list of video or music tracks that are played one by one 
  without being removed. This gives you the possibility to enqueue any track 
@@ -33,7 +33,7 @@ Description: media player for Gtk+
 Package: xnoise-dev
 Architecture: any
 Depends: ${misc:Depends}, xnoise (= ${binary:Version})
-Description: media player for Gtk+ (development files)
+Description: Media player for Gtk+ (development files)
  Unlike Rhythmbox, Banshee or itunes, Xnoise uses a tracklist centric design. 
  The tracklist is a list of video or music tracks that are played one by one 
  without being removed. This gives you the possibility to enqueue any track 
@@ -55,7 +55,7 @@ Description: media player for Gtk+ (development files)
 Package: xnoise-plugins
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}, xnoise (= ${binary:Version})
-Description: media player for Gtk+ (factory plugins collection)
+Description: Media player for Gtk+ (factory plugins collection)
  Unlike Rhythmbox, Banshee or itunes, Xnoise uses a tracklist centric design. 
  The tracklist is a list of video or music tracks that are played one by one 
  without being removed. This gives you the possibility to enqueue any track 

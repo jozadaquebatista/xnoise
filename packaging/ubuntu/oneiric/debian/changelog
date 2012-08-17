@@ -1,4 +1,4 @@
-xnoise (0.2.6-oneiric) oneiric; urgency=low
+xnoise (0.2.7-1ppa1~oneiric1) oneiric; urgency=low
   * Add Magnatune plugin
   * Put the UbuntuOne plugin into a seperate deb, so that dependeny to libubuntuoneui is avoided
   * Add script that autoamtically creates *.deb pakages on dabian and debian based distros (Tal Hadad)
@@ -11,7 +11,7 @@ xnoise (0.2.6-oneiric) oneiric; urgency=low
   * Fix potential crasher in signal handler of mpris plugin
   * Bug fixes
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 17 Aug 2012 18:30:46 +0200
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 17 Aug 2012 17:00:46 +0200
 
 
 
