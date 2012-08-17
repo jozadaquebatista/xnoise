@@ -932,7 +932,7 @@ private class MagnatuneWidget : Gtk.Box {
 
 
 
-private class Xnoise.DockableMagnatuneMS : DockableMedia {
+private class DockableMagnatuneMS : DockableMedia {
     
     private unowned Xnoise.MainWindow win;
     
@@ -1025,7 +1025,7 @@ private class Xnoise.DockableMagnatuneMS : DockableMedia {
 
 
 //The Magnatune Music Store.
-private class Xnoise.MagMusicStore : GLib.Object {
+private class MagMusicStore : GLib.Object {
     private DockableMagnatuneMS msd;
     
     public MagMusicStore() {

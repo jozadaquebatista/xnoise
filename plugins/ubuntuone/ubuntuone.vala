@@ -55,7 +55,7 @@ public class UbuntuOnePlugin : GLib.Object, IPlugin {
     public string name { get { return "ubuntuone_music_store"; } }
     
     public bool init() {
-        this.music_store = new UbuMusicStore(this);
+        this.music_store = new UbuMusicStore();
         owner.sign_deactivated.connect(clean_up);
         return true;
     }
@@ -93,7 +93,7 @@ private class UStore : U1.MusicStore {
 
 
 
-private class Xnoise.DockableUbuntuOneMS : DockableMedia {
+private class DockableUbuntuOneMS : DockableMedia {
     
     public override string name() {
         return UBUNTUONE_MUSIC_STORE_NAME;
@@ -271,11 +271,9 @@ private class Xnoise.DockableUbuntuOneMS : DockableMedia {
 
 
 //The Ubuntu One Music Store.
-private class Xnoise.UbuMusicStore : GLib.Object {
-    private unowned UbuntuOnePlugin plugin;
+private class UbuMusicStore : GLib.Object {
     
-    public UbuMusicStore(UbuntuOnePlugin plugin) {
-        this.plugin = plugin;
+    public UbuMusicStore()  {
         main_window.msw.insert_dockable(new DockableUbuntuOneMS());
     }
     
