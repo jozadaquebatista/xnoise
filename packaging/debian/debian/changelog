@@ -1,22 +1,16 @@
-xnoise (0.2.5) unstable; urgency=low
-  * UbuntuOne Music Store integration
-  * code cleanup
-  * preview mode for stores
-  * Update zh_CN translation (tuhaihe)
-  * Update cs translation ( psimacek )
-  * update portugese translation (Sérgio Marques)
-  * update hebrew translation (Tal Hadad)
-  * update czech translation
-  * create new media-source-widget for dockable media
-  * azlyrics plugin: replace invalid linebreak char
-  * notifications plugin: do not show notifications on insufficient song information
-  * add packaging data for quantal
-  * add main menu entry for media browser visibility
-  * small fixes and improvements
-
- -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 13 Aug 2012 10:55:10 +0200
-
-xnoise (0.2.3-1) unstable; urgency=low
+xnoise (0.2.6) unstable; urgency=low
+  * Add Magnatune plugin
+  * Put the UbuntuOne plugin into a seperate deb, so that dependeny to libubuntuoneui is avoided
+  * Add script that autoamtically creates *.deb pakages on dabian and debian based distros (Tal Hadad)
+  * Add packaging folder to source distrubution
+  * Update packaging data
+  * Update po/cs.po (psimacek)
+  * Use blue color to indicate active searches because red looks like nothing was found
+  * Automatically distribute changelog
+  * Fix crasher with title-to-decoration plugin
+  * Fix potential crasher in signal handler of mpris plugin
+  * Bug fixes
   * Closes: #632932
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 25 Jun 2012 17:31:28 +0200
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 17 Aug 2012 18:30:46 +0200
+

@@ -1,3 +1,33 @@
+commit d351d9b2d84a587f80bcd7c6a880f1a485fa0788
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 17 14:11:52 2012 +0200
+
+    update translatios
+
+commit 687872e399dad324b3d365f183622b4f45a05ac0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 17 14:11:23 2012 +0200
+
+    remove old code
+
+commit 53cf6257fe2bbbe824060fc3c15e396eded22706
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 17 12:41:43 2012 +0200
+
+    fix some memory management issues
+
+commit d58dfe4d5bd3dad2a641507671be22bc8de3941d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 16 13:58:59 2012 +0200
+
+    fix permissions; make sure a package_result folder is ignored by git
+
+commit e49dde6150c855db38755dbb457126fec2e13f1d
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Thu Aug 16 13:51:54 2012 +0200
+
+    Add script that autoamtically creates *.deb pakages on dabian and debian based distros
+
 commit 8ee7e3d65682e912cea8a0e3f5f0f1bb5e9ed6a7
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Thu Aug 16 10:18:50 2012 +0200

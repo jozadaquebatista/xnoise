@@ -1,3 +1,21 @@
+xnoise (0.2.6)
+
+New Features and Fixes
+======================
+  * Add Magnatune plugin
+  * Put the UbuntuOne plugin into a seperate deb, so that dependeny to libubuntuoneui is avoided
+  * Add script that autoamtically creates *.deb pakages on dabian and debian based distros (Tal Hadad)
+  * Add packaging folder to source distrubution
+  * Update packaging data
+  * Update po/cs.po (psimacek)
+  * Use blue color to indicate active searches because red looks like nothing was found
+  * Automatically distribute changelog
+  * Fix crasher with title-to-decoration plugin
+  * Fix potential crasher in signal handler of mpris plugin
+  * Bug fixes
+
+
+
 xnoise (0.2.5)
 
 New Features and Fixes

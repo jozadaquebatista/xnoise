@@ -1,10 +1,17 @@
 xnoise (0.2.6-precise) precise; urgency=low
-  * add magnatune music store plugin
-  * code cleanup
-  * fixes
+  * Add Magnatune plugin
+  * Put the UbuntuOne plugin into a seperate deb, so that dependeny to libubuntuoneui is avoided
+  * Add script that autoamtically creates *.deb pakages on dabian and debian based distros (Tal Hadad)
+  * Add packaging folder to source distrubution
+  * Update packaging data
+  * Update po/cs.po (psimacek)
+  * Use blue color to indicate active searches because red looks like nothing was found
+  * Automatically distribute changelog
+  * Fix crasher with title-to-decoration plugin
+  * Fix potential crasher in signal handler of mpris plugin
+  * Bug fixes
 
-
- -- Jörn Magens <shuerhaaken@googlemail.com>  Wed, 15 Aug 2012 20:30:15 +0200
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 17 Aug 2012 18:30:46 +0200
 
 
 
