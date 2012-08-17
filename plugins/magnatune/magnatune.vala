@@ -43,9 +43,6 @@ public class MagnatunePlugin : GLib.Object, IPlugin {
     private unowned PluginModule.Container _owner;
     private MagMusicStore music_store;
 
-    construct {
-    }
-
     public PluginModule.Container owner {
         get { return _owner;  }
         set { _owner = value; }
@@ -54,7 +51,7 @@ public class MagnatunePlugin : GLib.Object, IPlugin {
     public string name { get { return "magnatune_music_store"; } }
     
     public bool init() {
-        this.music_store = new MagMusicStore(this);
+        this.music_store = new MagMusicStore();//this);
         owner.sign_deactivated.connect(clean_up);
         return true;
     }
@@ -94,7 +91,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         typeof(Gdk.Pixbuf),  //ICON
         typeof(string),      //VIS_TEXT
         typeof(Xnoise.Item?),//ITEM
-        typeof(int)         //LEVEL
+        typeof(int)          //LEVEL
     };
 
     public enum Column {
@@ -105,11 +102,21 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         N_COLUMNS
     }
     
+    private int data_source_id = -1;
+    
     public MagnatuneTreeStore(DockableMedia dock, MagnatuneTreeView view) {
         this.dock = dock;
         this.view = view;
         set_column_types(col_types);
         create_icons();
+        
+        if(dbreader == null)
+            dbreader = new MagnatuneDatabaseReader();
+        if(dbreader == null)
+            assert_not_reached();
+        
+        data_source_id = register_data_source(dbreader);
+        
         global.sign_searchtext_changed.connect( (s,t) => {
             if(this.dock.name() != global.active_dockable_media_name) {
                 if(search_idlesource != 0)
@@ -131,6 +138,11 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                 });
             }
         });
+    }
+    
+    ~MagnatuneTreeStore() {
+        print("remove mag data source\n");
+        remove_data_source_by_id(data_source_id);
     }
     
     private void create_icons() {
@@ -303,12 +315,6 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     }
     
     private bool populate_artists_job(Worker.Job job) {
-    print("pop artists\n");
-        if(dbreader == null)
-            dbreader = new MagnatuneDatabaseReader();
-        if(dbreader == null)
-            assert_not_reached();
-        int data_source_id = register_data_source(dbreader);
         job.items = dbreader.get_artists_with_search(global.searchtext);
         print("job.items.length : %d\n", job.items.length);
         Idle.add(() => {
@@ -593,7 +599,7 @@ private class MagnatuneTreeView : Gtk.TreeView {
                                                             out int natural_height) {
             Gdk.Window? w = ow.get_window();
             if(w == null) {
-                print("no window (magnatune)\n");
+                //print("no window (magnatune)\n");
                 natural_height = minimum_height = 30;
                 return;
             }
@@ -939,6 +945,7 @@ private class Xnoise.DockableMagnatuneMS : DockableMedia {
     }
 
     ~DockableMagnatuneMS() {
+        print("dtor DockableMagnatuneMS\n");
     }
     
     public override string headline() {
@@ -1004,12 +1011,14 @@ private class Xnoise.DockableMagnatuneMS : DockableMedia {
     public override Gdk.Pixbuf get_icon() {
         Gdk.Pixbuf? icon = null;
         try {
-            icon = Gtk.IconTheme.get_default().load_icon(Gtk.Stock.EXECUTE, 24, IconLookupFlags.FORCE_SIZE);
+            unowned Gtk.IconTheme thm = Gtk.IconTheme.get_default();
+            icon = thm.load_icon(Gtk.Stock.EXECUTE, 24, IconLookupFlags.FORCE_SIZE);
         }
         catch(Error e) {
+            icon = null;
             print("Magnatune icon error: %s\n", e.message);
         }
-        return icon;
+        return (owned)icon;
     }
 }
 
@@ -1017,31 +1026,24 @@ private class Xnoise.DockableMagnatuneMS : DockableMedia {
 
 //The Magnatune Music Store.
 private class Xnoise.MagMusicStore : GLib.Object {
-    private unowned MagnatunePlugin plugin;
+    private DockableMagnatuneMS msd;
     
-    public MagMusicStore(MagnatunePlugin plugin) {
-        this.plugin = plugin;
-        main_window.msw.insert_dockable(new DockableMagnatuneMS());
+    public MagMusicStore() {
+        msd = new DockableMagnatuneMS();
+        main_window.msw.insert_dockable(msd);
     }
     
     ~MagMusicStore() {
         main_window.tracklistnotebook.set_current_page(0);
         main_window.msw.select_dockable_by_name("MusicBrowserDockable");
-        Idle.add( () => {
-            unowned DockableMagnatuneMS msd = 
-                (DockableMagnatuneMS)dockable_media_sources.lookup(MAGNATUNE_MUSIC_STORE_NAME);
-            if(msd == null)
-                return false;
-            if(msd.action_group != null) {
-                main_window.ui_manager.remove_action_group(msd.action_group);
-                msd.action_group = null;
-            }
-            if(msd.ui_merge_id != 0)
-                main_window.ui_manager.remove_ui(msd.ui_merge_id);
-            main_window.msw.remove_dockable(MAGNATUNE_MUSIC_STORE_NAME);
-            msd = null;
-            return false;
-        });
+        if(msd == null)
+            return;
+        if(msd.action_group != null) {
+            main_window.ui_manager.remove_action_group(msd.action_group);
+        }
+        if(msd.ui_merge_id != 0)
+            main_window.ui_manager.remove_ui(msd.ui_merge_id);
+        main_window.msw.remove_dockable_in_idle(MAGNATUNE_MUSIC_STORE_NAME);
     }
 }
 

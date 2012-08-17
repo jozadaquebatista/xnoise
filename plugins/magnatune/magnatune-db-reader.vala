@@ -73,7 +73,9 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         print("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
     }
 
-
+    public override string get_datasource_name() {
+        return "MagnatuneDatabase";
+    }
 
     private static const string STMT_TRACKDATA_FOR_URI =
         "SELECT ar.name, al.name, t.title, t.tracknumber, t.length, t.mediatype, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND u.name = ?";

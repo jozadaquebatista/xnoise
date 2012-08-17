@@ -1095,6 +1095,7 @@ struct _XnoiseDataSource {
 
 struct _XnoiseDataSourceClass {
 	GObjectClass parent_class;
+	gchar* (*get_datasource_name) (XnoiseDataSource* self);
 	gboolean (*get_trackdata_for_uri) (XnoiseDataSource* self, gchar** uri, XnoiseTrackData** val);
 	XnoiseItem* (*get_artists_with_search) (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 	XnoiseTrackData** (*get_trackdata_by_artistid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
@@ -2193,6 +2194,7 @@ void xnoise_database_writer_commit_transaction (XnoiseDatabaseWriter* self);
 gboolean xnoise_database_writer_get_in_transaction (XnoiseDatabaseWriter* self);
 void xnoise_data_source_set_source_id (XnoiseDataSource* self, gint id);
 gint xnoise_data_source_get_source_id (XnoiseDataSource* self);
+gchar* xnoise_data_source_get_datasource_name (XnoiseDataSource* self);
 gboolean xnoise_data_source_get_trackdata_for_uri (XnoiseDataSource* self, gchar** uri, XnoiseTrackData** val);
 XnoiseItem* xnoise_data_source_get_artists_with_search (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_data_source_get_trackdata_by_artistid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
@@ -2324,6 +2326,7 @@ XnoiseMediaSoureWidget* xnoise_media_soure_widget_construct (GType object_type, 
 void xnoise_media_soure_widget_set_focus_on_selector (XnoiseMediaSoureWidget* self);
 void xnoise_media_soure_widget_select_dockable_by_name (XnoiseMediaSoureWidget* self, const gchar* name, gboolean emmit_signal);
 void xnoise_media_soure_widget_insert_dockable (XnoiseMediaSoureWidget* self, XnoiseDockableMedia* d);
+void xnoise_media_soure_widget_remove_dockable_in_idle (XnoiseMediaSoureWidget* self, const gchar* name);
 void xnoise_media_soure_widget_remove_dockable (XnoiseMediaSoureWidget* self, const gchar* name);
 GtkEntry* xnoise_media_soure_widget_get_search_entry (XnoiseMediaSoureWidget* self);
 GType xnoise_play_pause_button_get_type (void) G_GNUC_CONST;
@@ -3029,6 +3032,7 @@ void xnoise_initialize (gboolean* is_first_start);
 XnoiseDataSource* xnoise_get_data_source (gint source_number);
 gint xnoise_register_data_source (XnoiseDataSource* source);
 void xnoise_remove_data_source (XnoiseDataSource* source);
+void xnoise_remove_data_source_by_id (gint id);
 GType gst_stream_type_get_type (void) G_GNUC_CONST;
 gchar* xnoise_imain_view_get_view_name (XnoiseIMainView* self);
 GType xnoise_gnome_media_keys_proxy_get_type (void) G_GNUC_CONST;

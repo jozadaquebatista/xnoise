@@ -40,6 +40,8 @@ public abstract class Xnoise.DataSource : GLib.Object {
     public int get_source_id() {
         return source_id;
     }
+
+    public abstract string get_datasource_name();
     
     public abstract bool get_trackdata_for_uri(ref string? uri, out TrackData val);
     

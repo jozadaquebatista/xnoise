@@ -42,6 +42,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     private const string DATABASE_NAME = "db.sqlite";
     private const string SETTINGS_FOLDER = ".xnoise";
     private string DATABASE;
+    private Sqlite.Database db;
 
     private static const string STMT_GET_LASTUSED =
         "SELECT uri FROM lastused";
@@ -100,11 +101,10 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         }
         return 0;
     }
-    //~Reader() {
-    //    print("dtor db browser\n");
-    //}
 
-    private Sqlite.Database db;
+    public override string get_datasource_name() {
+        return "XnoiseMainDatabase";
+    }
 
     private string dbFileName() {
         return GLib.Path.build_filename(data_folder(), DATABASE_NAME, null);

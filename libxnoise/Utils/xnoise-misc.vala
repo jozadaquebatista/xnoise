@@ -207,6 +207,13 @@ namespace Xnoise {
             }
         }
     }
+
+    public static void remove_data_source_by_id(int id) {
+        assert(data_source_registry != null);
+        if(id < 0)
+            return;
+        data_source_registry.remove(id);
+    }
 }
 
 

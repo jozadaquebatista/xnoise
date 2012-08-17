@@ -285,7 +285,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
                 selection_changed(name);
             return false;
         });
-        assert(notebook != null);
+        assert(notebook != null && notebook is Gtk.Container);
         int i = notebook.page_num(d.widget);
         if(i > -1)
             notebook.set_current_page(i);
@@ -299,6 +299,14 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
         dockable_media_sources.insert(dl.name(), dl);
         _insert_dockable(dl, false, ref ix, false);
         media_source_selector.expand_all();
+    }
+    
+    public void remove_dockable_in_idle(string name) {
+        string s = name;
+        Idle.add(() => {
+            remove_dockable(s);
+            return false;
+        });
     }
     
     public void remove_dockable(string name) {
@@ -320,6 +328,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
                     DockableMedia? d = dockable_media_sources.lookup(name);
                     if(d != null) {
                         d.remove_main_view();
+                        assert(notebook != null && notebook is Gtk.Container);
                         notebook.remove_page(notebook.page_num(d.widget));
                         dockable_media_sources.remove(name);
                     }
@@ -344,7 +353,9 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
             return;
         }
         widg.show_all();
-        notebook.append_page(widg, null);
+        notebook.show_all();
+        assert(notebook != null && notebook is Gtk.Container);
+        notebook.append_page(widg, new Label("x"));
         var category = d.category();
         TreeStore m = (TreeStore)media_source_selector.get_model();
         TreeIter iter = TreeIter(), child;

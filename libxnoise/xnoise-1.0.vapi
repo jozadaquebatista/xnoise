@@ -23,6 +23,7 @@ namespace Xnoise {
 			public Xnoise.TrackData[]? get_all_tracks (string searchtext);
 			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id);
 			public override Xnoise.Item[] get_artists_with_search (string searchtext);
+			public override string get_datasource_name ();
 			public Xnoise.Item[]? get_last_played (string searchtext);
 			public bool get_lyrics (string artist, string title, out string txt, out string cred, out string ident);
 			public Xnoise.Item[] get_media_folders ();
@@ -519,6 +520,7 @@ namespace Xnoise {
 		public abstract Xnoise.Item[] get_albums_with_search (string searchtext, int32 id);
 		public abstract Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id);
 		public abstract Xnoise.Item[] get_artists_with_search (string searchtext);
+		public abstract string get_datasource_name ();
 		public int get_source_id ();
 		public abstract bool get_stream_td_for_id (int32 id, out Xnoise.TrackData tmp);
 		public abstract Xnoise.TrackData[]? get_trackdata_by_albumid (string searchtext, int32 id);
@@ -864,6 +866,7 @@ namespace Xnoise {
 		public MediaSoureWidget (Xnoise.MainWindow mwindow);
 		public void insert_dockable (Xnoise.DockableMedia d);
 		public void remove_dockable (string name);
+		public void remove_dockable_in_idle (string name);
 		public void select_dockable_by_name (string name, bool emmit_signal = false);
 		public void set_focus_on_selector ();
 		public Gtk.Entry search_entry { get; private set; }
@@ -1294,6 +1297,8 @@ namespace Xnoise {
 	public static int register_data_source (Xnoise.DataSource source);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static void remove_data_source (Xnoise.DataSource source);
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static void remove_data_source_by_id (int id);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static bool thumbnail_available (string uri, out GLib.File? _thumb);
 }

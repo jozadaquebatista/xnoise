@@ -137,6 +137,7 @@ private class Xnoise.DockableUbuntuOneMS : DockableMedia {
         
         win.msw.selection_changed.connect(on_selection_changed);
         widget = wu;
+        wu.show_all();
         return wu;
     }
     
@@ -150,16 +151,16 @@ private class Xnoise.DockableUbuntuOneMS : DockableMedia {
                 ms.download_finished.connect(on_download_finished); 
                 ms.url_loaded.connect(on_url_loaded); // working
                 assert(win != null);
-                assert(win.tracklistnotebook != null);
+                assert(win.tracklistnotebook != null && win.tracklistnotebook is Gtk.Container);
                 if(ms.parent == null)
                     win.tracklistnotebook.append_page(ms, null);
                 ms.show();
                 ui_merge_id = add_main_window_menu_entry();
-                print("ui_merge_id:%u\n", ui_merge_id);
+                //print("ui_merge_id:%u\n", ui_merge_id);
             }
             Idle.add( () => {
                 assert(win != null);
-                assert(win.tracklistnotebook != null);
+                assert(win.tracklistnotebook != null && win.tracklistnotebook is Gtk.Container);
                 int ms_num = win.tracklistnotebook.page_num(ms);
                 win.tracklistnotebook.set_current_page(ms_num);
                 return false;
@@ -169,7 +170,7 @@ private class Xnoise.DockableUbuntuOneMS : DockableMedia {
             if(ms == null)
                 return;
             assert(win != null);
-            assert(win.tracklistnotebook != null);
+                assert(win.tracklistnotebook != null && win.tracklistnotebook is Gtk.Container);
             int ms_num = win.tracklistnotebook.page_num(ms);
             if(ms_num == -1)
                 return;
@@ -184,9 +185,12 @@ private class Xnoise.DockableUbuntuOneMS : DockableMedia {
         if(ms == null)
             return;
         win.msw.selection_changed.disconnect(this.on_selection_changed);
+                print("ubu++7\n");
         int ms_num = win.tracklistnotebook.page_num(ms);
+                print("ubu++8\n");
         if(ms_num > -1)
             win.tracklistnotebook.remove_page(ms_num);
+                print("ubu++9\n");
         ms = null;
     }
     
@@ -278,21 +282,17 @@ private class Xnoise.UbuMusicStore : GLib.Object {
     ~UbuMusicStore() {
         main_window.tracklistnotebook.set_current_page(0);
         main_window.msw.select_dockable_by_name("MusicBrowserDockable");
-        Idle.add( () => {
-            unowned DockableUbuntuOneMS msd = 
-                (DockableUbuntuOneMS)dockable_media_sources.lookup(UBUNTUONE_MUSIC_STORE_NAME);
-            if(msd == null)
-                return false;
-            if(msd.action_group != null) {
-                main_window.ui_manager.remove_action_group(msd.action_group);
-                msd.action_group = null;
-            }
-            if(msd.ui_merge_id != 0)
-                main_window.ui_manager.remove_ui(msd.ui_merge_id);
-            main_window.msw.remove_dockable(UBUNTUONE_MUSIC_STORE_NAME);
-            msd = null;
-            return false;
-        });
+        unowned DockableUbuntuOneMS msd = 
+            (DockableUbuntuOneMS)dockable_media_sources.lookup(UBUNTUONE_MUSIC_STORE_NAME);
+        if(msd == null)
+            return;
+        if(msd.action_group != null) {
+            main_window.ui_manager.remove_action_group(msd.action_group);
+            msd.action_group = null;
+        }
+        if(msd.ui_merge_id != 0)
+            main_window.ui_manager.remove_ui(msd.ui_merge_id);
+        main_window.msw.remove_dockable_in_idle(UBUNTUONE_MUSIC_STORE_NAME);
     }
 }
 
