@@ -29,16 +29,19 @@ msgstr "Reprodutor multimédia"
 msgid "Organize and play your music and video collections"
 msgstr "Organização e reprodução das suas músicas e vídeos"
 
-#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
+#: ../libxnoise/Application/xnoise-application.vala:93
+#: ../src/xnoise.vala:63
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise é um reprodutor multimédia para GTK+"
 
-#: ../libxnoise/Application/xnoise-application.vala:94 ../src/xnoise.vala:64
+#: ../libxnoise/Application/xnoise-application.vala:94
+#: ../src/xnoise.vala:64
 msgid "It uses the gstreamer framework."
 msgstr "Utiliza a infraestrutura gstreamer"
 
-#: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
+#: ../libxnoise/Application/xnoise-application.vala:95
+#: ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "Mais informações na página web:"
 
@@ -247,19 +250,13 @@ msgstr "Álbum:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:162
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:185
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Por favor, aguarde o preenchimento da coleção. Cancele se não quiser "
-"aguardar."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Por favor, aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:166
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:189
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:133
@@ -486,13 +483,12 @@ msgid "Go to the now playing screen in the main window."
 msgstr "Ir para o ecrã de reprodução na janela principal"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:182
-#, fuzzy
 msgid "_Media Browser"
-msgstr "Tamanho da letra no navegador:"
+msgstr "Explorador _multimédia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:182
 msgid "Toggle media browser visibility."
-msgstr ""
+msgstr "Trocar visibilidade do eplorador multimédia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:184
 msgid "_Help"
@@ -504,24 +500,16 @@ msgstr "_Configurar"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:389
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar "
-"o arranque do xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar o arranque do xnoise."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:451
 msgid "Add media"
 msgstr "Adicionar multimédia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:454
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
-"a coleção?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para a coleção?"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:529
 msgid "no repeat"
@@ -553,10 +541,8 @@ msgid "Show application main menu"
 msgstr "Mostrar menu principal"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:192
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:551
 #, c-format
@@ -701,10 +687,8 @@ msgid "Show Library"
 msgstr "Mostrar coleção"
 
 #: ../src/xnoise.vala:74
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Buffer lyrics in database"
@@ -770,7 +754,7 @@ msgstr "Controlar xnoise através de teclas multimédia"
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
 #: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
 msgid "Ubuntu One Music Store"
-msgstr ""
+msgstr "Loja de música UbuntuOne"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
@@ -794,15 +778,15 @@ msgstr "Utilizar o título da faixa como título da janela"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:124
 msgid "UbuntuOne Music"
-msgstr ""
+msgstr "Música UbuntuOne"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:227
 msgid "Show _UbuntuOne Store"
-msgstr ""
+msgstr "Mostrar loja _UbuntuOne"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:227
 msgid "Show UbuntuOne Store"
-msgstr ""
+msgstr "Mostrar loja UbuntuOne"
 
 #~ msgid "Show Media"
 #~ msgstr "Mostrar multimédia"
