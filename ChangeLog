@@ -1,3 +1,21 @@
+commit 731703f1d547a9ef781d8067bcb117a896c2b46c
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Sat Aug 18 08:27:37 2012 +0200
+
+    update hebrew translation
+
+commit 6c678253560086019c7b2f8057cfbf6feae3de56
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Sat Aug 18 08:26:20 2012 +0200
+
+    update portugese translation
+
+commit 6e760e54eba0b29d7841f6071fc6082400bb8039
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 17 21:59:51 2012 +0200
+
+    skip version
+
 commit e5466e378492950553fa06845ba5f428c0efbc02
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Fri Aug 17 14:47:47 2012 +0200
