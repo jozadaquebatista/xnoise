@@ -42,6 +42,7 @@ public extern void widget_style_get_property(Gtk.Widget widget, string property_
 public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string MAIN_UI_FILE      = Config.UIDIR + "main_window.ui";
     private const string MENU_UI_FILE      = Config.UIDIR + "main_ui.xml";
+    private const string WEB_FAQ = "https://github.com/shuerhaaken/xnoise/wiki/FAQ";
     private unowned Main xn;
     private VolumeSliderButton volume_slider;
     private CssProvider css_provider_search;
@@ -183,6 +184,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
         { "HelpMenuAction", null, N_("_Help") },
             { "AboutAction", Gtk.Stock.ABOUT, null, null, null, on_help_about},
+            { "HelpFAQ", Gtk.Stock.DIALOG_QUESTION, N_("_Frequently Asked Questions"), null, N_("_Open Frequently Asked Questions in web browser"), on_help_faq },
         { "ConfigMenuAction", null, N_("_Config") }
     };
 
@@ -356,6 +358,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     
     private void on_caught_eos_from_player() {
         this.change_track(ControlButton.Direction.NEXT, true);
+    }
+
+    private void on_help_faq() {
+        try {
+            Gtk.show_uri(get_window().get_screen(), WEB_FAQ, Gdk.CURRENT_TIME);
+        } 
+        catch(Error e) {
+            print("Unable to display xnoise FAQ: %s\n", e.message);
+        }
     }
 
     private void on_fullscreenwindowvisible(GLib.ParamSpec pspec) {

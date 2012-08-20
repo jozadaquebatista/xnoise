@@ -35,6 +35,7 @@
 		<placeholder name="MenuBarOps"/>
 		
 		<menu name="HelpMenu" action="HelpMenuAction">
+			<menuitem action="HelpFAQ"/>
 			<placeholder name="HelpOps"/>
 			<separator/>
 			<menuitem action="AboutAction"/>

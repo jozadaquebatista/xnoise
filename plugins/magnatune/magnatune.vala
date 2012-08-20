@@ -305,19 +305,16 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     }
     
     private bool populate_model() {
-//        Idle.add(() => {
         view.model = null;
         this.clear();
         var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
         db_worker.push_job(a_job);
-//            return false;
-//        });
         return false;
     }
     
     private bool populate_artists_job(Worker.Job job) {
         job.items = dbreader.get_artists_with_search(global.searchtext);
-        print("job.items.length : %d\n", job.items.length);
+        //print("job.items.length : %d\n", job.items.length);
         Idle.add(() => {
             if(this == null)
                 return false;
