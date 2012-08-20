@@ -79,13 +79,31 @@ public class Xnoise.HandlerShowInFileManager : ItemHandler {
     private void show_uri(Item item, GLib.Value? data) { 
         if(item.type != ItemType.LOCAL_AUDIO_TRACK && item.type != ItemType.LOCAL_VIDEO_TRACK) 
             return;
-        
-        try {
-            File f = File.new_for_uri(item.uri);
-            Gtk.show_uri(null, f.get_parent().get_uri(), Gdk.CURRENT_TIME);
+        string? nautilus_install_path = Environment.find_program_in_path("nautilus");
+        File f = File.new_for_uri(item.uri);
+        bool nautilus_failed = false;
+        if(nautilus_install_path != null) {
+            // if nautilus
+            try {
+                GLib.Process.spawn_command_line_async(
+                   nautilus_install_path + 
+                   " " + 
+                   f.get_uri().replace("'", "\\\'")
+                );
+                return;
+            }
+            catch(Error e) {
+                nautilus_failed = true;
+                print("%s\n", e.message);
+            }
         }
-        catch(GLib.Error e) {
-            print("%s\n", e.message);
+        if((nautilus_install_path == null) || nautilus_failed) {
+            try {
+                Gtk.show_uri(null, f.get_parent().get_uri(), Gdk.CURRENT_TIME);
+            }
+            catch(GLib.Error e) {
+                print("%s\n", e.message);
+            }
         }
     }
 }
