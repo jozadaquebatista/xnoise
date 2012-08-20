@@ -127,7 +127,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         this.drag_end.connect(this.on_drag_end);
         this.button_release_event.connect(this.on_button_release);
         this.button_press_event.connect(this.on_button_press);
-        this.key_press_event.connect(this.on_key_pressed);
+//        this.key_press_event.connect(this.on_key_pressed);
         this.key_release_event.connect(this.on_key_released);
         this.drag_data_received.connect(this.on_drag_data_received);
     }
@@ -163,39 +163,46 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     }
     // end IParams functions
 
-    private const int KEY_CURSOR_RIGHT = 0xFF53;
-    private const int KEY_CURSOR_LEFT  = 0xFF51;
+    private static const int KEY_CURSOR_RIGHT = 0xFF53;
+    private static const int KEY_CURSOR_LEFT  = 0xFF51;
+    private static const int KEY_CONTEXT_MENU = 0xFF67;
 
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
 //        print("%d\n",(int)e.keyval);
         Gtk.TreeModel m;
         switch(e.keyval) {
-            case KEY_CURSOR_RIGHT:
+            case KEY_CURSOR_RIGHT: {
                 Gtk.TreeSelection selection = this.get_selection();
                 if(selection.count_selected_rows()<1) break;
                 GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
                 TreePath? treepath = selected_rows.nth_data(0);
                 if(treepath.get_depth()>2) break;
                 if(treepath!=null) this.expand_row(treepath, false);
-                break;
-            case KEY_CURSOR_LEFT:
+                return true;
+            }
+            case KEY_CURSOR_LEFT: {
                 Gtk.TreeSelection selection = this.get_selection();
                 if(selection.count_selected_rows()<1) break;
                 GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
                 TreePath? treepath = selected_rows.nth_data(0);
                 if(treepath.get_depth()>2) break;
                 if(treepath!=null) this.collapse_row(treepath);
-                break;
+                return true;
+            }
+            case KEY_CONTEXT_MENU: {
+                rightclick_menu_popup(e.time);
+                return true;
+            }
             default:
                 break;
         }
         return false;
     }
 
-    private const int F_KEY = 0x0066;
-    private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
-        return false;
-    }
+//    private const int F_KEY = 0x0066;
+//    private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
+//        return false;
+//    }
 
     private bool on_button_press(Gdk.EventButton e) {
         Gtk.TreePath treepath = null;

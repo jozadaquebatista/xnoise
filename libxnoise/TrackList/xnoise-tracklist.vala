@@ -1061,11 +1061,23 @@ public class Xnoise.TrackList : TreeView, IParams {
         }
     }
 
+    private static const int KEY_DELETE       = 0xFFFF;
+    private static const int KEY_CONTEXT_MENU = 0xFF67;
+    
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey ek) {
-        int KEY_DELETE = 0xFFFF;
-        if(ek.keyval==KEY_DELETE)
-            this.remove_selected_rows();
-        return true;
+        switch(ek.keyval) {
+            case KEY_DELETE: {
+                this.remove_selected_rows();
+                return true;
+            }
+            case KEY_CONTEXT_MENU: {
+                rightclick_menu_popup(ek.time);
+                return true;
+            }
+            default:
+                break;
+        }
+        return false;
     }
 
     private const int F_KEY = 0x0066;
