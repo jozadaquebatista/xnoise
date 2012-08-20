@@ -127,7 +127,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
 
 
     private static const string STMT_GET_ARTISTS_WITH_SEARCH =
-        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND (utf8_lower(t.title) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(ar.name) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
+        "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t, albums al, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND (utf8_lower(t.title) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(ar.name) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
 
     private static const string STMT_GET_ARTISTS =
         "SELECT DISTINCT ar.id, ar.name FROM artists ar, items t WHERE t.artist = ar.id ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 DESC";
@@ -142,7 +142,8 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             get_artists_with_search_stmt.reset();
             if(get_artists_with_search_stmt.bind_text(1, st) != Sqlite.OK ||
                get_artists_with_search_stmt.bind_text(2, st) != Sqlite.OK ||
-               get_artists_with_search_stmt.bind_text(3, st) != Sqlite.OK) {
+               get_artists_with_search_stmt.bind_text(3, st) != Sqlite.OK ||
+               get_artists_with_search_stmt.bind_text(4, st) != Sqlite.OK) {
                 this.db_error();
                 return (owned)val;
             }
@@ -172,7 +173,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
 
 
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID_WITH_SEARCH =
-        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g  WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     private static const string STMT_GET_TRACKDATA_BY_ARTISTID =
         "SELECT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND ar.id = ? GROUP BY utf8_lower(t.title), al.id ORDER BY al.name COLLATE CUSTOM01 ASC, t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
@@ -186,7 +187,8 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             if((stmt.bind_int (1, id) != Sqlite.OK) ||
                (stmt.bind_text(2, st) != Sqlite.OK) ||
                (stmt.bind_text(3, st) != Sqlite.OK) ||
-               (stmt.bind_text(4, st) != Sqlite.OK)) {
+               (stmt.bind_text(4, st) != Sqlite.OK) ||
+               (stmt.bind_text(5, st) != Sqlite.OK)) {
                 this.db_error();
                 return (owned)val;
             }
@@ -219,7 +221,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
 
 
     private static const string STMT_GET_ARTISTITEM_BY_ARTISTID_WITH_SEARCH =
-        "SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?)";
+        "SELECT DISTINCT ar.name FROM artists ar, items t, albums al, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?)";
     
     private static const string STMT_GET_ARTISTITEM_BY_ARTISTID =
         "SELECT DISTINCT ar.name FROM artists ar, items t, albums al WHERE t.artist = ar.id AND t.album = al.id AND ar.id = ?";
@@ -258,8 +260,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
 
 
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =
-        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01  ASC";
-    
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = 8 AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
         "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
@@ -309,7 +310,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
 
 
     private static const string STMT_GET_ALBUMS_WITH_SEARCH =
-        "SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t WHERE ar.id = t.artist AND al.id = t.album AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY utf8_lower(al.name) COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT al.name, al.id FROM artists ar, albums al, items t, genres g WHERE ar.id = t.artist AND al.id = t.album AND t.genre = g.id AND ar.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY utf8_lower(al.name) COLLATE CUSTOM01 ASC";
 
     private static const string STMT_GET_ALBUMS =
         "SELECT DISTINCT al.name, al.id FROM artists ar, albums al WHERE ar.id = al.artist AND ar.id = ? ORDER BY utf8_lower(al.name) COLLATE CUSTOM01 ASC";
@@ -323,7 +324,8 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             if((stmt.bind_int (1, id) != Sqlite.OK) ||
                (stmt.bind_text(2, st) != Sqlite.OK) ||
                (stmt.bind_text(3, st) != Sqlite.OK) ||
-               (stmt.bind_text(4, st) != Sqlite.OK)) {
+               (stmt.bind_text(4, st) != Sqlite.OK) ||
+               (stmt.bind_text(5, st) != Sqlite.OK)) {
                 this.db_error();
                 return (owned)val;
             }

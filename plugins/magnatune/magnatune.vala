@@ -271,7 +271,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                 TreeRowReference treerowref = new TreeRowReference(this, p1);
                 var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_title_job);
                 job_title.set_arg("treerowref", treerowref);
-                job_title.set_arg("artist", (int32)job.get_arg("artist_id"));
+//                job_title.set_arg("artist", (int32)job.get_arg("artist_id"));
                 job_title.set_arg("albumid",  album.db_id);
                 db_worker.push_job(job_title);
             }
@@ -303,6 +303,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         });
         return false;
     }
+    
     private bool populate_model() {
 //        Idle.add(() => {
         view.model = null;
