@@ -887,7 +887,6 @@ namespace Xnoise {
 		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
 		public bool update_view ();
 		public bool use_treelines { get; set; }
-		public signal void sign_activated ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {

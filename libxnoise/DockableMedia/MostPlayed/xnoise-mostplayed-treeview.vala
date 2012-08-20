@@ -33,9 +33,10 @@ using Gtk;
 using Gdk;
 
 
-private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView {
+private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.TreeQueryable {
     private unowned MainWindow win;
     private unowned DockableMedia dock;
+    private Gtk.Menu menu;
     
     private bool dragging = false;
     private const TargetEntry[] src_target_entries = {
@@ -107,6 +108,7 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView {
         this.drag_end.connect(this.on_drag_end);
         this.button_release_event.connect(this.on_button_release);
         this.button_press_event.connect(this.on_button_press);
+        this.key_release_event.connect(this.on_key_released);
         
         this.ow.size_allocate.connect_after( (s, a) => {
             unowned TreeViewColumn tvc = this.get_column(0);
@@ -157,6 +159,59 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView {
                 });
             }
         });
+    }
+
+    private static const int KEY_CONTEXT_MENU = 0xFF67;
+    
+    private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
+        //print("%d\n",(int)e.keyval);
+        switch(e.keyval) {
+            case KEY_CONTEXT_MENU: {
+                rightclick_menu_popup(e.time);
+                return true;
+            }
+            default:
+                break;
+        }
+        return false;
+    }
+
+    private void rightclick_menu_popup(uint activateTime) {
+        menu = create_rightclick_menu();
+        if(menu != null)
+            menu.popup(null, null, null, 0, activateTime);
+    }
+
+    private Gtk.Menu create_rightclick_menu() {
+        TreeIter iter;
+        var rightmenu = new Gtk.Menu();
+        GLib.List<TreePath> list;
+        list = this.get_selection().get_selected_rows(null);
+        ItemSelectionType itemselection = ItemSelectionType.SINGLE;
+        if(list.length() > 1)
+            itemselection = ItemSelectionType.MULTIPLE;
+        Item? item = null;
+        Array<unowned Action?> array = null;
+        TreePath path = (TreePath)list.data;
+        tvm.get_iter(out iter, path);
+        tvm.get(iter, MostplayedTreeviewModel.Column.ITEM, out item);
+        array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
+        for(int i =0; i < array.length; i++) {
+            unowned Action x = array.index(i);
+            //print("%s\n", x.name);
+            var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
+            menu_item.set_label(x.info);
+            menu_item.activate.connect( () => {
+                x.action(item, this);
+            });
+            rightmenu.append(menu_item);
+        }
+        rightmenu.show_all();
+        return rightmenu;
+    }
+    
+    public int get_model_item_column() {
+        return (int)MostplayedTreeviewModel.Column.ITEM;
     }
     
     private class ListFlowingTextRenderer : CellRendererText {

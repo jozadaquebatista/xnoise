@@ -111,6 +111,7 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
         this.drag_end.connect(this.on_drag_end);
         this.button_release_event.connect(this.on_button_release);
         this.button_press_event.connect(this.on_button_press);
+        this.key_release_event.connect(this.on_key_released);
         
         this.ow.size_allocate.connect_after( (s, a) => {
             unowned TreeViewColumn tvc = this.get_column(0);
@@ -161,6 +162,21 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
                 });
             }
         });
+    }
+
+    private static const int KEY_CONTEXT_MENU = 0xFF67;
+    
+    private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
+        //print("%d\n",(int)e.keyval);
+        switch(e.keyval) {
+            case KEY_CONTEXT_MENU: {
+                rightclick_menu_popup(e.time);
+                return true;
+            }
+            default:
+                break;
+        }
+        return false;
     }
 
     private class ListFlowingTextRenderer : CellRendererText {

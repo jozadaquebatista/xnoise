@@ -81,7 +81,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         }
     }
         
-    public signal void sign_activated();
+//    public signal void sign_activated();
     // targets used with this as a source
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
@@ -127,7 +127,6 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         this.drag_end.connect(this.on_drag_end);
         this.button_release_event.connect(this.on_button_release);
         this.button_press_event.connect(this.on_button_press);
-//        this.key_press_event.connect(this.on_key_pressed);
         this.key_release_event.connect(this.on_key_released);
         this.drag_data_received.connect(this.on_drag_data_received);
     }
@@ -198,11 +197,6 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         }
         return false;
     }
-
-//    private const int F_KEY = 0x0066;
-//    private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
-//        return false;
-//    }
 
     private bool on_button_press(Gdk.EventButton e) {
         Gtk.TreePath treepath = null;
