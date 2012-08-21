@@ -91,8 +91,11 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
         if(context == ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED)
             return add;
         
-        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY)
+        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY ||
+           context == ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY) {
+            menu_add.context = context;
             return menu_add;
+       }
         
         if(context == ActionContext.REQUESTED)
             return request_add;
@@ -109,7 +112,7 @@ public class Xnoise.HandlerAddToTracklist : ItemHandler {
             return;
         if(!(tq is TreeQueryable))
             return;
-        print("okokok\n");
+        //print("okokok\n");
         GLib.List<TreePath> list;
         list = tv.get_selection().get_selected_rows(null);
         if(list.length() == 0)

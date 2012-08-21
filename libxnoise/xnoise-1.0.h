@@ -538,6 +538,14 @@ typedef struct _XnoiseItemConverterClass XnoiseItemConverterClass;
 typedef struct _XnoiseItemConverterPrivate XnoiseItemConverterPrivate;
 typedef struct _XnoiseItemHandlerManagerPrivate XnoiseItemHandlerManagerPrivate;
 
+#define XNOISE_TYPE_PLAYLIST_QUERYABLE (xnoise_playlist_queryable_get_type ())
+#define XNOISE_PLAYLIST_QUERYABLE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PLAYLIST_QUERYABLE, XnoisePlaylistQueryable))
+#define XNOISE_IS_PLAYLIST_QUERYABLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_PLAYLIST_QUERYABLE))
+#define XNOISE_PLAYLIST_QUERYABLE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_PLAYLIST_QUERYABLE, XnoisePlaylistQueryableIface))
+
+typedef struct _XnoisePlaylistQueryable XnoisePlaylistQueryable;
+typedef struct _XnoisePlaylistQueryableIface XnoisePlaylistQueryableIface;
+
 #define XNOISE_TYPE_ILYRICS (xnoise_ilyrics_get_type ())
 #define XNOISE_ILYRICS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ILYRICS, XnoiseILyrics))
 #define XNOISE_IS_ILYRICS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ILYRICS))
@@ -1408,7 +1416,9 @@ typedef enum  {
 	XNOISE_ACTION_CONTEXT_QUERYABLE_TREE_LOAD,
 	XNOISE_ACTION_CONTEXT_VIDEOSCREEN_ACTIVATED,
 	XNOISE_ACTION_CONTEXT_VIDEOSCREEN_MENU_QUERY,
-	XNOISE_ACTION_CONTEXT_TRACKLIST_COLUMN_HEADER_MENU_QUERY
+	XNOISE_ACTION_CONTEXT_TRACKLIST_COLUMN_HEADER_MENU_QUERY,
+	XNOISE_ACTION_CONTEXT_QUERYABLE_PLAYLIST_ITEM_ACTIVATED,
+	XNOISE_ACTION_CONTEXT_QUERYABLE_PLAYLIST_MENU_QUERY
 } XnoiseActionContext;
 
 typedef enum  {
@@ -1529,6 +1539,12 @@ struct _XnoiseItemHandlerManager {
 
 struct _XnoiseItemHandlerManagerClass {
 	GObjectClass parent_class;
+};
+
+struct _XnoisePlaylistQueryableIface {
+	GTypeInterface parent_iface;
+	gint (*get_model_item_column) (XnoisePlaylistQueryable* self);
+	gchar* (*get_playlist_type_name) (XnoisePlaylistQueryable* self);
 };
 
 struct _XnoiseILyricsIface {
@@ -2445,6 +2461,9 @@ XnoiseItem* xnoise_item_handler_manager_create_item (const gchar* uri);
 void xnoise_item_handler_manager_execute_actions_for_item (XnoiseItemHandlerManager* self, XnoiseItem* item, XnoiseActionContext context, GValue* data, XnoiseItemSelectionType selection);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_new (void);
 XnoiseItemHandlerManager* xnoise_item_handler_manager_construct (GType object_type);
+GType xnoise_playlist_queryable_get_type (void) G_GNUC_CONST;
+gint xnoise_playlist_queryable_get_model_item_column (XnoisePlaylistQueryable* self);
+gchar* xnoise_playlist_queryable_get_playlist_type_name (XnoisePlaylistQueryable* self);
 gint xnoise_tree_queryable_get_model_item_column (XnoiseTreeQueryable* self);
 GType xnoise_ilyrics_get_type (void) G_GNUC_CONST;
 void xnoise_ilyrics_find_lyrics (XnoiseILyrics* self);

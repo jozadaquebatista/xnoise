@@ -161,12 +161,12 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
         });
     }
     
-    private static const int KEY_CONTEXT_MENU = 0xFF67;
+//    private static const int KEY_CONTEXT_MENU = 0xFF67;
     
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%d\n",(int)e.keyval);
         switch(e.keyval) {
-            case KEY_CONTEXT_MENU: {
+            case Gdk.Key.Menu: {
                 rightclick_menu_popup(e.time);
                 return true;
             }

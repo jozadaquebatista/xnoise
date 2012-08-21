@@ -162,15 +162,11 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     }
     // end IParams functions
 
-    private static const int KEY_CURSOR_RIGHT = 0xFF53;
-    private static const int KEY_CURSOR_LEFT  = 0xFF51;
-    private static const int KEY_CONTEXT_MENU = 0xFF67;
-
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
 //        print("%d\n",(int)e.keyval);
         Gtk.TreeModel m;
         switch(e.keyval) {
-            case KEY_CURSOR_RIGHT: {
+            case Gdk.Key.Right: {
                 Gtk.TreeSelection selection = this.get_selection();
                 if(selection.count_selected_rows()<1) break;
                 GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
@@ -179,7 +175,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 if(treepath!=null) this.expand_row(treepath, false);
                 return true;
             }
-            case KEY_CURSOR_LEFT: {
+            case Gdk.Key.Left: {
                 Gtk.TreeSelection selection = this.get_selection();
                 if(selection.count_selected_rows()<1) break;
                 GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
@@ -188,7 +184,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
                 if(treepath!=null) this.collapse_row(treepath);
                 return true;
             }
-            case KEY_CONTEXT_MENU: {
+            case Gdk.Key.Menu: {
                 rightclick_menu_popup(e.time);
                 return true;
             }

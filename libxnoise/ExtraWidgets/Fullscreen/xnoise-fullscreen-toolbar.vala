@@ -90,15 +90,13 @@ public class Xnoise.FullscreenToolbar {
         invisible_cursor = new Gdk.Cursor(Gdk.CursorType.BLANK_CURSOR);
     }
 
-    private const int SPACE_KEY = 0x0020;
-    private const int KEY_ESC   = 0xFF1B;
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
         switch(e.keyval) {
-            case KEY_ESC: {
+            case Gdk.Key.Escape: {
                 main_window.toggle_fullscreen();
                 return true;
             }
-            case SPACE_KEY: {
+            case Gdk.Key.space: {
                 main_window.playPauseButton.clicked();
                 return true;
             }

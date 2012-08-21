@@ -33,7 +33,7 @@ using Gtk;
 using Gdk;
 
 
-private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.TreeQueryable {
+private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQueryable {
     private unowned MainWindow win;
     private unowned DockableMedia dock;
     private Gtk.Menu menu;
@@ -91,7 +91,7 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.TreeQuery
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
             if(tmp == null)
                 return;
-            unowned Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
+            unowned Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_PLAYLIST_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
             
             if(action != null)
                 action.action(item, null);
@@ -161,12 +161,12 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.TreeQuery
         });
     }
 
-    private static const int KEY_CONTEXT_MENU = 0xFF67;
+//    private static const int KEY_CONTEXT_MENU = 0xFF67;
     
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%d\n",(int)e.keyval);
         switch(e.keyval) {
-            case KEY_CONTEXT_MENU: {
+            case Gdk.Key.Menu: {
                 rightclick_menu_popup(e.time);
                 return true;
             }
@@ -195,7 +195,7 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.TreeQuery
         TreePath path = (TreePath)list.data;
         tvm.get_iter(out iter, path);
         tvm.get(iter, MostplayedTreeviewModel.Column.ITEM, out item);
-        array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
+        array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY, itemselection);
         for(int i =0; i < array.length; i++) {
             unowned Action x = array.index(i);
             //print("%s\n", x.name);
@@ -212,6 +212,10 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.TreeQuery
     
     public int get_model_item_column() {
         return (int)MostplayedTreeviewModel.Column.ITEM;
+    }
+    
+    public string get_playlist_type_name() {
+        return "mostplayed";
     }
     
     private class ListFlowingTextRenderer : CellRendererText {

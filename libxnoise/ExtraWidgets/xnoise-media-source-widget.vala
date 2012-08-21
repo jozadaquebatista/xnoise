@@ -150,8 +150,8 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
             }
         }
         
-        private const int KEY_CURSOR_DOWN  = 0xFF54;
-        private const int KEY_CURSOR_UP    = 0xFF52;
+//        private const int KEY_CURSOR_DOWN  = 0xFF54;
+//        private const int KEY_CURSOR_UP    = 0xFF52;
         
         private bool on_button_pressed(Gdk.EventButton e) {
             int x = (int)e.x;
@@ -205,8 +205,8 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
             //print("%d\n",(int)e.keyval);
             Gtk.TreeModel m;
             switch(e.keyval) {
-                case KEY_CURSOR_UP:
-                case KEY_CURSOR_DOWN:
+                case Gdk.Key.Up:
+                case Gdk.Key.Down:
                     Gtk.TreeSelection selection = this.get_selection();
                     if(selection.count_selected_rows() < 1) break;
                     GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);

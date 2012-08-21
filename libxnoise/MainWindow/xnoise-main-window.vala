@@ -29,6 +29,7 @@
  */
 
 using Gtk;
+using Gdk;
 
 using Xnoise;
 using Xnoise.Services;
@@ -72,6 +73,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private Box mbbox01;
     private Xnoise.AppMenuButton app_menu_button;
     private TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
+    private bool window_maximized;
     public bool quit_if_closed;
     public ScrolledWindow musicBrScrollWin = null;
     public ScrolledWindow trackListScrollWin = null;
@@ -284,13 +286,22 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.window_state_event.connect(on_window_state_event);
     }
     
-    private bool window_maximized;
     private bool on_window_state_event (Gdk.EventWindowState e) {
         if((e.new_window_state & Gdk.WindowState.MAXIMIZED) == Gdk.WindowState.MAXIMIZED) {
             window_maximized = true;
         }
         else {
             window_maximized = false;
+        }
+        if((e.new_window_state & Gdk.WindowState.FULLSCREEN) == Gdk.WindowState.FULLSCREEN) {
+            is_fullscreen = true;
+        }
+        else if((e.new_window_state & Gdk.WindowState.ICONIFIED) == Gdk.WindowState.ICONIFIED) {
+            this.get_position(out _posX, out _posY);
+            is_fullscreen = false;
+        }
+        else {
+            is_fullscreen = false;
         }
         return false;
     }
@@ -561,27 +572,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
 
-    private bool on_window_state_change(Gtk.Widget sender, Gdk.EventWindowState e) {
-        if(e.new_window_state==Gdk.WindowState.FULLSCREEN) {
-            is_fullscreen = true;
-        }
-        else if(e.new_window_state==Gdk.WindowState.ICONIFIED) {
-            this.get_position(out _posX, out _posY);
-            is_fullscreen = false;
-        }
-        else {
-            is_fullscreen = false;
-        }
-        return false;
-    }
-
-    private const int KEY_F11 = 0xFFC8;
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%d : %d\n",(int)e.keyval, (int)e.state);
         switch(e.keyval) {
-            case KEY_F11:
-                this.toggle_mainwindow_fullscreen();
-                break;
+            case Gdk.Key.F11:
+//                this.toggle_mainwindow_fullscreen();
+                return true;
             default:
                 break;
         }
@@ -623,93 +619,97 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         volume_slider.value += delta_fraction;
     }
     
-    private const uint PLUS_KEY  = 0x002B;
-    private const uint MINUS_KEY = 0x002D;
-    private const uint 1_KEY     = 0x0031;
-    private const uint 2_KEY     = 0x0032;
-    private const uint 3_KEY     = 0x0033;
-    private const uint F_KEY     = 0x0066;
-    private const uint D_KEY     = 0x0064;
-    private const uint M_KEY     = 0x006D;
-    private const uint O_KEY     = 0x006F;
-    private const uint Q_KEY     = 0x0071;
-    private const uint SPACE_KEY = 0x0020;
-    private const uint ALT_MOD   = Gdk.ModifierType.MOD1_MASK;
-    private const uint CTRL_MOD  = Gdk.ModifierType.CONTROL_MASK;
+//    private const uint PLUS_KEY  = Gdk.Key.plus;  //0x002B;
+//    private const uint MINUS_KEY = Gdk.Key.minus; //0x002D;
+//    private const uint 1_KEY     = Gdk.Key.@1;    //0x0031;
+//    private const uint 2_KEY     = Gdk.Key.@2;    //0x0032;
+//    private const uint 3_KEY     = Gdk.Key.@3;    //0x0033;
+//    private const uint F_KEY     = Gdk.Key.f;     //0x0066;
+//    private const uint D_KEY     = Gdk.Key.d;     //0x0064;
+//    private const uint M_KEY     = Gdk.Key.m;     //0x006D;
+//    private const uint O_KEY     = Gdk.Key.o;     //0x006F;
+//    private const uint Q_KEY     = Gdk.Key.q;     //0x0071;
+//    private const uint SPACE_KEY = Gdk.Key.space; //0x0020;
+//    private const uint ModifierType.MOD1_MASK   = ModifierType.MOD1_MASK;
+//    private const uint ModifierType.CONTROL_MASK  = Gdk.ModifierType.CONTROL_MASK;
     
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%u : %u\n", e.keyval, e.state);
         switch(e.keyval) {
-            case PLUS_KEY: {
-                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
+            case Gdk.Key.plus: {
+                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                         return false;
                     change_volume(0.1);
                 }
                 return true;
-            case MINUS_KEY: {
-                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
+            case Gdk.Key.minus: {
+                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                         return false;
                     change_volume(-0.1);
                 }
                 return true;
-            case F_KEY: {
-                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
+            case Gdk.Key.f: {
+                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                         return false;
                     search_entry.grab_focus();
                 }
                 return true;
-            case D_KEY: {
-                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
+            case Gdk.Key.d: {
+                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                         return false;
                     search_entry.text = EMPTYSTRING;
                     global.searchtext = EMPTYSTRING;
                     colorize_search_background(false);
                 }
                 return true;
-            case 1_KEY: {
-                    if((e.state & ALT_MOD) != ALT_MOD) // ALT Modifier
+            case Gdk.Key.@1: {
+                    if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
                         return false;
                     this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
                 }
                 return true;
-            case 2_KEY: {
-                    if((e.state & ALT_MOD) != ALT_MOD) // ALT Modifier
+            case Gdk.Key.@2: {
+                    if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
                         return false;
                     this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
                 }
                 return true;
-            case 3_KEY: {
-                    if((e.state & ALT_MOD) != ALT_MOD) // ALT Modifier
+            case Gdk.Key.@3: {
+                    if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
                         return false;
                     if(active_lyrics == false)
                         return false;
                     this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
                 }
                 return true;
-            case SPACE_KEY: {
-                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
+            case Gdk.Key.space: {
+                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                         return false;
                     playPauseButton.clicked();
                 }
                 return true;
-            case M_KEY: {
-                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
+            case Gdk.Key.m: {
+                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                         return false;
                     toggle_media_browser_visibility();
                     break;
                 }
-            case O_KEY: {
-                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
+            case Gdk.Key.o: {
+                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                         return false;
                     on_file_add();
                     break;
                 }
-            case Q_KEY: {
-                    if((e.state & CTRL_MOD) != CTRL_MOD) // Ctrl Modifier
+            case Gdk.Key.q: {
+                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
                         return false;
                     quit_now();
                     break;
                 }
+            case Gdk.Key.F11: {
+                this.toggle_mainwindow_fullscreen();
+                return true;
+            }
             default:
                 break;
         }
@@ -760,11 +760,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     // This is used for the main window
     private void toggle_mainwindow_fullscreen() {
+    print("toggle_mainwindow_fullscreen\n");
         if(is_fullscreen) {
+print("++1\n");
             print("was fullscreen before\n");
             this.unfullscreen();
         }
         else {
+print("++2\n");
             this.fullscreen();
         }
     }
@@ -1622,7 +1625,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.delete_event.connect(this.on_close); //only send to tray
         this.key_release_event.connect(this.on_key_released);
         this.key_press_event.connect(this.on_key_pressed);
-        this.window_state_event.connect(this.on_window_state_change);
     }
     
     public void show_status_info(Xnoise.InfoBar bar) {

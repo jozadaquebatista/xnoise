@@ -34,7 +34,9 @@ using Xnoise;
 
 public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
     
-    private Action menu_add;
+    private Xnoise.Action menu_add;
+    private Xnoise.Action menu_add_from_playlist;
+    
     private const string ainfo = _("Add all visible tracks to tracklist");
     private const string aname = "HandlerAddAllToTracklistAction";
     
@@ -51,6 +53,13 @@ public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         menu_add.name = this.aname;
         menu_add.stock_item = Gtk.Stock.DND_MULTIPLE;
         menu_add.context = ActionContext.QUERYABLE_TREE_MENU_QUERY;
+
+        menu_add_from_playlist = new Action(); 
+        menu_add_from_playlist.action = on_menu_add_from_playlist;
+        menu_add_from_playlist.info = this.ainfo;
+        menu_add_from_playlist.name = this.aname;
+        menu_add_from_playlist.stock_item = Gtk.Stock.DND_MULTIPLE;
+        menu_add_from_playlist.context = ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY;
         //print("constructed HandlerAddToTracklist\n");
     }
 
@@ -63,18 +72,80 @@ public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
     }
 
     public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY)
-            return menu_add;
         
+        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY) {
+            return menu_add;
+       }
+        if(context == ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY) {
+            return menu_add_from_playlist;
+       }
         return null;
     }
 
+    private void on_menu_add_from_playlist(Item item, GLib.Value? data) {
+        TreeView tv = (TreeView)data;
+        if(tv == null)
+            return;
+        PlaylistQueryable pq = tv as PlaylistQueryable;
+        if(pq == null)
+            return;
+        if(!(tv is TreeView))
+            return;
+        if(!(pq is PlaylistQueryable))
+            return;
+        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_from_playlist_job);
+        job.item = item;
+//        job.set_arg("", );
+        db_worker.push_job(job);
+    }
+
     private void on_menu_add(Item item, GLib.Value? data) {
+        TreeView tv = (TreeView)data;
+        if(tv == null)
+            return;
+        TreeQueryable tq = tv as TreeQueryable;
+        if(tv == null)
+            return;
+        if(!(tv is TreeView))
+            return;
+        if(!(tq is TreeQueryable))
+            return;
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_job);
         job.item = item;
         db_worker.push_job(job);
     }
 
+    private bool menu_add_from_playlist_job(Worker.Job job) {
+        switch(job.item.type) {
+            case ItemType.LOCAL_AUDIO_TRACK:
+            case ItemType.LOCAL_VIDEO_TRACK:
+            case ItemType.STREAM:
+                break;
+            default:
+                return false;
+        }
+        job.items = {};
+        job.items = db_reader.get_most_played(global.searchtext);
+        TrackData[] tmp = {};
+        TrackData[] tda = {};
+        foreach(Item item in job.items) {
+            tmp = item_converter.to_trackdata(item, global.searchtext);
+            if(tmp == null)
+                continue;
+            foreach(TrackData td in tmp) {
+                tda += td;
+            }
+        }
+        job.track_dat = tda;
+        if(job.track_dat != null) {
+            Idle.add( () => {
+                append_tracks(ref job.track_dat);
+                return false;
+            });
+        }
+        return false;
+    }
+    
     private bool menu_add_job(Worker.Job job) {
         switch(job.item.type) {
             case ItemType.LOCAL_AUDIO_TRACK:

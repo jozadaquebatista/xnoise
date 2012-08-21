@@ -1169,6 +1169,11 @@ namespace Xnoise {
 		public abstract void write_params_data ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public interface PlaylistQueryable : Gtk.TreeView {
+		public abstract int get_model_item_column ();
+		public abstract string get_playlist_type_name ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public interface TreeQueryable : Gtk.TreeView {
 		public abstract int get_model_item_column ();
 	}
@@ -1199,7 +1204,9 @@ namespace Xnoise {
 		QUERYABLE_TREE_LOAD,
 		VIDEOSCREEN_ACTIVATED,
 		VIDEOSCREEN_MENU_QUERY,
-		TRACKLIST_COLUMN_HEADER_MENU_QUERY
+		TRACKLIST_COLUMN_HEADER_MENU_QUERY,
+		QUERYABLE_PLAYLIST_ITEM_ACTIVATED,
+		QUERYABLE_PLAYLIST_MENU_QUERY
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum ItemHandlerType {

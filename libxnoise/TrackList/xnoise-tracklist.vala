@@ -236,7 +236,6 @@ public class Xnoise.TrackList : TreeView, IParams {
         // Signals
         this.row_activated.connect(this.on_row_activated);
         this.key_release_event.connect(this.on_key_released);
-        this.key_press_event.connect(this.on_key_pressed);
         this.drag_begin.connect(this.on_drag_begin);
         this.drag_data_get.connect(this.on_drag_data_get);
         this.drag_end.connect(this.on_drag_end);
@@ -1061,16 +1060,13 @@ public class Xnoise.TrackList : TreeView, IParams {
         }
     }
 
-    private static const int KEY_DELETE       = 0xFFFF;
-    private static const int KEY_CONTEXT_MENU = 0xFF67;
-    
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey ek) {
         switch(ek.keyval) {
-            case KEY_DELETE: {
+            case Gdk.Key.Delete: {
                 this.remove_selected_rows();
                 return true;
             }
-            case KEY_CONTEXT_MENU: {
+            case Gdk.Key.Menu: {
                 rightclick_menu_popup(ek.time);
                 return true;
             }
@@ -1080,17 +1076,6 @@ public class Xnoise.TrackList : TreeView, IParams {
         return false;
     }
 
-    private const int F_KEY = 0x0066;
-    private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
-        switch(e.keyval) {
-            case F_KEY: 
-                return false;
-            default:
-                break;
-        }
-        return false;
-    }
-    
     public void set_focus_on_iter(ref TreeIter iter) {
         TreePath start_path, end_path;
         TreePath current_path = tracklistmodel.get_path(iter);
