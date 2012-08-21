@@ -10,7 +10,7 @@ Homepage: http://www.xnoise-media-player.com/
 Package: xnoise
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Recommends: xnoise-plugins
+Recommends: xnoise-plugins, tumbler
 Description: Media player for Gtk+
  Unlike Rhythmbox, Banshee or itunes, Xnoise uses a tracklist centric design. 
  The tracklist is a list of video or music tracks that are played one by one 
