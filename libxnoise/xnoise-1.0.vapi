@@ -1170,8 +1170,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public interface PlaylistQueryable : Gtk.TreeView {
+		public abstract Xnoise.DynPlaylistType get_dynamic_playlist_type ();
 		public abstract int get_model_item_column ();
-		public abstract string get_playlist_type_name ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public interface TreeQueryable : Gtk.TreeView {
@@ -1207,6 +1207,12 @@ namespace Xnoise {
 		TRACKLIST_COLUMN_HEADER_MENU_QUERY,
 		QUERYABLE_PLAYLIST_ITEM_ACTIVATED,
 		QUERYABLE_PLAYLIST_MENU_QUERY
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public enum DynPlaylistType {
+		UNKNOWN,
+		MOSTPLAYED,
+		LASTPLAYED
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum ItemHandlerType {

@@ -1,4 +1,4 @@
-/* xnoise-tree-queryable.vala
+/* xnoise-playlist-queryable.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -28,7 +28,14 @@
  *     Jörn Magens
  */
 
+public enum Xnoise.DynPlaylistType {
+    UNKNOWN = 0,
+    MOSTPLAYED,
+    LASTPLAYED
+}
+
 public interface Xnoise.PlaylistQueryable : Gtk.TreeView {
     public abstract int get_model_item_column();
-    public abstract string get_playlist_type_name();
+    public abstract DynPlaylistType get_dynamic_playlist_type();
 }
+

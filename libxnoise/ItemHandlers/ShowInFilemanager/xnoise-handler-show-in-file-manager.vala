@@ -70,9 +70,13 @@ public class Xnoise.HandlerShowInFileManager : ItemHandler {
         if((context == ActionContext.TRACKLIST_MENU_QUERY) &&
            (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK))
             return a;
-        if((context == ActionContext.QUERYABLE_TREE_MENU_QUERY) &&
-           (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK))
+        if((context == ActionContext.QUERYABLE_TREE_MENU_QUERY ||
+            context == ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY) &&
+           (type == ItemType.LOCAL_AUDIO_TRACK ||
+            type == ItemType.LOCAL_VIDEO_TRACK)) {
+            
             return b;
+        }
         return null;
     }
 

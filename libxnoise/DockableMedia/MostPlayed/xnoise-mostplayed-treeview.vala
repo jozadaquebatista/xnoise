@@ -161,8 +161,6 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
         });
     }
 
-//    private static const int KEY_CONTEXT_MENU = 0xFF67;
-    
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%d\n",(int)e.keyval);
         switch(e.keyval) {
@@ -211,13 +209,13 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
     }
     
     public int get_model_item_column() {
-        return (int)MostplayedTreeviewModel.Column.ITEM;
+        return MostplayedTreeviewModel.Column.ITEM;
     }
-    
-    public string get_playlist_type_name() {
-        return "mostplayed";
+
+    public DynPlaylistType get_dynamic_playlist_type() {
+        return DynPlaylistType.MOSTPLAYED;
     }
-    
+
     private class ListFlowingTextRenderer : CellRendererText {
         private int maxiconwidth;
         private unowned Pango.FontDescription font_description;
@@ -367,6 +365,13 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
                 }
             }
             case 3: {
+                TreeIter iter;
+                this.model.get_iter(out iter, treepath);
+                if(!selection.path_is_selected(treepath)) {
+                    selection.unselect_all();
+                    selection.select_path(treepath);
+                }
+                rightclick_menu_popup(e.time);
                 return true;
             }
             default: {
@@ -377,18 +382,18 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
             selection.select_path(treepath);
         return false;
     }
-    
+
     private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
         Gtk.TreePath treepath;
         Gtk.TreeViewColumn column;
         int cell_x, cell_y;
         
-        if((e.button != 1)|(this.dragging)) {
+        if(e.button != 1 || this.dragging == true) {
             this.dragging = false;
             return true;
         }
-        if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
-            ((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
+        if((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK ||
+           (e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK) {
             return true;
         }
         

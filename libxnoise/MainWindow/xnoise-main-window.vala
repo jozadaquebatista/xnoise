@@ -619,20 +619,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         volume_slider.value += delta_fraction;
     }
     
-//    private const uint PLUS_KEY  = Gdk.Key.plus;  //0x002B;
-//    private const uint MINUS_KEY = Gdk.Key.minus; //0x002D;
-//    private const uint 1_KEY     = Gdk.Key.@1;    //0x0031;
-//    private const uint 2_KEY     = Gdk.Key.@2;    //0x0032;
-//    private const uint 3_KEY     = Gdk.Key.@3;    //0x0033;
-//    private const uint F_KEY     = Gdk.Key.f;     //0x0066;
-//    private const uint D_KEY     = Gdk.Key.d;     //0x0064;
-//    private const uint M_KEY     = Gdk.Key.m;     //0x006D;
-//    private const uint O_KEY     = Gdk.Key.o;     //0x006F;
-//    private const uint Q_KEY     = Gdk.Key.q;     //0x0071;
-//    private const uint SPACE_KEY = Gdk.Key.space; //0x0020;
-//    private const uint ModifierType.MOD1_MASK   = ModifierType.MOD1_MASK;
-//    private const uint ModifierType.CONTROL_MASK  = Gdk.ModifierType.CONTROL_MASK;
-    
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%u : %u\n", e.keyval, e.state);
         switch(e.keyval) {

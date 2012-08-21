@@ -93,9 +93,24 @@ public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
             return;
         if(!(pq is PlaylistQueryable))
             return;
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_from_playlist_job);
-        job.item = item;
-//        job.set_arg("", );
+        Worker.Job job;
+        switch(pq.get_dynamic_playlist_type()) {
+            case DynPlaylistType.MOSTPLAYED: {
+                job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, 
+                                     this.menu_add_from_mostplayed_job);
+                job.item = item;
+                break;
+            }
+            case DynPlaylistType.LASTPLAYED: {
+                job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, 
+                                     this.menu_add_from_lastplayed_job);
+                job.item = item;
+                break;
+            }
+            default:
+                job = null;
+                break;
+        }
         db_worker.push_job(job);
     }
 
@@ -115,17 +130,32 @@ public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         db_worker.push_job(job);
     }
 
-    private bool menu_add_from_playlist_job(Worker.Job job) {
-        switch(job.item.type) {
-            case ItemType.LOCAL_AUDIO_TRACK:
-            case ItemType.LOCAL_VIDEO_TRACK:
-            case ItemType.STREAM:
-                break;
-            default:
-                return false;
-        }
+    private bool menu_add_from_mostplayed_job(Worker.Job job) {
         job.items = {};
         job.items = db_reader.get_most_played(global.searchtext);
+        TrackData[] tmp = {};
+        TrackData[] tda = {};
+        foreach(Item item in job.items) {
+            tmp = item_converter.to_trackdata(item, global.searchtext);
+            if(tmp == null)
+                continue;
+            foreach(TrackData td in tmp) {
+                tda += td;
+            }
+        }
+        job.track_dat = tda;
+        if(job.track_dat != null) {
+            Idle.add( () => {
+                append_tracks(ref job.track_dat);
+                return false;
+            });
+        }
+        return false;
+    }
+    
+    private bool menu_add_from_lastplayed_job(Worker.Job job) {
+        job.items = {};
+        job.items = db_reader.get_last_played(global.searchtext);
         TrackData[] tmp = {};
         TrackData[] tda = {};
         foreach(Item item in job.items) {

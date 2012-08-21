@@ -96,7 +96,8 @@ public class Xnoise.HandlerEditTags : ItemHandler {
             return null;
         if(selection != ItemSelectionType.SINGLE)
             return null;
-        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY) {
+        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY ||
+           context == ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY) {
             switch(type) {
                 case ItemType.COLLECTION_CONTAINER_ARTIST:
                     return edit_artist_mediabrowser;

@@ -243,7 +243,31 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
             selection.select_path(treepath);
         return false;
     }
-    
+
+    private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
+        Gtk.TreePath treepath;
+        Gtk.TreeViewColumn column;
+        int cell_x, cell_y;
+        
+        if((e.button != 1)|(this.dragging)) {
+            this.dragging = false;
+            return true;
+        }
+        if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
+            ((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
+            return true;
+        }
+        
+        Gtk.TreeSelection selection = this.get_selection();
+        int x = (int)e.x;
+        int y = (int)e.y;
+        if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y)) return false;
+        selection.unselect_all();
+        selection.select_path(treepath);
+        
+        return false;
+    }
+
     private void rightclick_menu_popup(uint activateTime) {
         menu = create_rightclick_menu();
         if(menu != null)
@@ -288,30 +312,6 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         rightmenu.append(collapse_item);
         rightmenu.show_all();
         return rightmenu;
-    }
-
-    private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
-        Gtk.TreePath treepath;
-        Gtk.TreeViewColumn column;
-        int cell_x, cell_y;
-
-        if((e.button != 1)|(this.dragging)) {
-            this.dragging = false;
-            return true;
-        }
-        if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
-            ((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
-            return true;
-        }
-
-        Gtk.TreeSelection selection = this.get_selection();
-        int x = (int)e.x;
-        int y = (int)e.y;
-        if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y)) return false;
-        selection.unselect_all();
-        selection.select_path(treepath);
-
-        return false;
     }
 
     private void on_drag_begin(Gtk.Widget sender, DragContext context) {

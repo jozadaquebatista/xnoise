@@ -344,6 +344,31 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
         return false;
     }
 
+    private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
+        Gtk.TreePath treepath;
+        Gtk.TreeViewColumn column;
+        int cell_x, cell_y;
+        
+        if((e.button != 1)|(this.dragging)) {
+            this.dragging = false;
+            return true;
+        }
+        if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
+            ((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
+            return true;
+        }
+        
+        Gtk.TreeSelection selection = this.get_selection();
+        int x = (int)e.x;
+        int y = (int)e.y;
+        if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y))
+            return false;
+        selection.unselect_all();
+        selection.select_path(treepath);
+        
+        return false;
+    }
+
     public int get_model_item_column() {
         return (int)TreeViewVideosModel.Column.ITEM;
     }
@@ -380,31 +405,6 @@ private class Xnoise.TreeViewVideos : Gtk.TreeView, TreeQueryable {
         }
         rightmenu.show_all();
         return rightmenu;
-    }
-    
-    private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
-        Gtk.TreePath treepath;
-        Gtk.TreeViewColumn column;
-        int cell_x, cell_y;
-        
-        if((e.button != 1)|(this.dragging)) {
-            this.dragging = false;
-            return true;
-        }
-        if(((e.state & Gdk.ModifierType.SHIFT_MASK) == Gdk.ModifierType.SHIFT_MASK)|
-            ((e.state & Gdk.ModifierType.CONTROL_MASK) == Gdk.ModifierType.CONTROL_MASK)) {
-            return true;
-        }
-        
-        Gtk.TreeSelection selection = this.get_selection();
-        int x = (int)e.x;
-        int y = (int)e.y;
-        if(!this.get_path_at_pos(x, y, out treepath, out column, out cell_x, out cell_y))
-            return false;
-        selection.unselect_all();
-        selection.select_path(treepath);
-        
-        return false;
     }
 }
 

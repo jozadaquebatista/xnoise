@@ -33,7 +33,7 @@ using Gtk;
 using Gdk;
 
 
-private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
+private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, PlaylistQueryable {
     private unowned MainWindow win;
     private unowned DockableMedia dock;
     private Gtk.Menu menu;
@@ -161,8 +161,6 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
         });
     }
     
-//    private static const int KEY_CONTEXT_MENU = 0xFF67;
-    
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%d\n",(int)e.keyval);
         switch(e.keyval) {
@@ -176,45 +174,50 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
         return false;
     }
 
+    public int get_model_item_column() {
+        return LastplayedTreeviewModel.Column.ITEM;
+    }
+
+    public DynPlaylistType get_dynamic_playlist_type() {
+        return DynPlaylistType.LASTPLAYED;
+    }
+
     private void rightclick_menu_popup(uint activateTime) {
-//        menu = create_rightclick_menu();
-//        if(menu != null)
-//            menu.popup(null, null, null, 0, activateTime);
+        menu = create_rightclick_menu();
+        if(menu != null)
+            menu.popup(null, null, null, 0, activateTime);
     }
 
     private Gtk.Menu create_rightclick_menu() {
-//        TreeIter iter;
+        TreeIter iter;
         var rightmenu = new Gtk.Menu();
-//        GLib.List<TreePath> list;
-//        list = this.get_selection().get_selected_rows(null);
-//        ItemSelectionType itemselection = ItemSelectionType.SINGLE;
-//        if(list.length() > 1)
-//            itemselection = ItemSelectionType.MULTIPLE;
-//        Item? item = null;
-//        Array<unowned Action?> array = null;
-//        TreePath path = (TreePath)list.data;
-//        mediabrowsermodel.get_iter(out iter, path);
-//        mediabrowsermodel.get(iter, MusicBrowserModel.Column.ITEM, out item);
-//        array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_TREE_MENU_QUERY, itemselection);
-//        for(int i =0; i < array.length; i++) {
-//            unowned Action x = array.index(i);
-//            //print("%s\n", x.name);
-//            var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
-//            menu_item.set_label(x.info);
-//            menu_item.activate.connect( () => {
-//                x.action(item, this);
-//            });
-//            rightmenu.append(menu_item);
-//        }
-//        var sptr_item = new SeparatorMenuItem();
-//        rightmenu.append(sptr_item);
-//        var collapse_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
-//        collapse_item.set_label(_("Collapse all"));
-//        collapse_item.activate.connect( () => {
-//            this.collapse_all();
-//        });
-//        rightmenu.append(collapse_item);
-//        rightmenu.show_all();
+        GLib.List<TreePath> list;
+        list = this.get_selection().get_selected_rows(null);
+        ItemSelectionType itemselection = ItemSelectionType.SINGLE;
+        if(list.length() > 1)
+            itemselection = ItemSelectionType.MULTIPLE;
+        Item? item = null;
+        Array<unowned Action?> array = null;
+        TreePath path = (TreePath)list.data;
+        tvm.get_iter(out iter, path);
+        tvm.get(iter, LastplayedTreeviewModel.Column.ITEM, out item);
+        array = itemhandler_manager.get_actions(item.type, 
+                                                ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY,
+                                                itemselection);
+        for(int i =0; i < array.length; i++) {
+            unowned Action x = array.index(i);
+            //print("%s\n", x.name);
+            var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ?
+                                                          x.stock_item :
+                                                          Gtk.Stock.INFO), 
+                                                         null);
+            menu_item.set_label(x.info);
+            menu_item.activate.connect( () => {
+                x.action(item, this);
+            });
+            rightmenu.append(menu_item);
+        }
+        rightmenu.show_all();
         return rightmenu;
     }
 
@@ -227,7 +230,9 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
         public int level                { get; set; }
         public unowned Gdk.Pixbuf pix   { get; set; }
         
-        public ListFlowingTextRenderer(Pango.FontDescription font_description, TreeViewColumn col, int hsepar) {
+        public ListFlowingTextRenderer(Pango.FontDescription font_description,
+                                       TreeViewColumn col,
+                                       int hsepar) {
             GLib.Object();
             this.col = col;
             this.hsepar = hsepar;
@@ -278,10 +283,18 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
             context = widget.get_style_context();
             int wi = 0, he = 0;
             pango_layout.get_pixel_size(out wi, out he);
-            if(cell_area.height > he)
-                context.render_layout(cr, cell_area.x, cell_area.y + (cell_area.height -he)/2, pango_layout);
-            else
-                context.render_layout(cr, cell_area.x, cell_area.y, pango_layout);
+            if(cell_area.height > he) {
+                context.render_layout(cr, 
+                                      cell_area.x,
+                                      cell_area.y + (cell_area.height -he)/2,
+                                      pango_layout);
+            }
+            else {
+                context.render_layout(cr,
+                                      cell_area.x,
+                                      cell_area.y,
+                                      pango_layout);
+            }
         }
     }
     
@@ -353,13 +366,13 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
                 }
                 else {
                     if(selection.path_is_selected(treepath)) {
-                        if(((e.state & Gdk.ModifierType.SHIFT_MASK)==Gdk.ModifierType.SHIFT_MASK)|
+                        if(((e.state & Gdk.ModifierType.SHIFT_MASK)==Gdk.ModifierType.SHIFT_MASK) ||
                            ((e.state & Gdk.ModifierType.CONTROL_MASK)==Gdk.ModifierType.CONTROL_MASK)) {
                             selection.unselect_path(treepath);
                         }
                         return true;
                     }
-                    else if(!(((e.state & Gdk.ModifierType.SHIFT_MASK)==Gdk.ModifierType.SHIFT_MASK)|
+                    else if(!(((e.state & Gdk.ModifierType.SHIFT_MASK)==Gdk.ModifierType.SHIFT_MASK) ||
                             ((e.state & Gdk.ModifierType.CONTROL_MASK)==Gdk.ModifierType.CONTROL_MASK))) {
                         return true;
                     }
@@ -367,6 +380,13 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView {
                 }
             }
             case 3: {
+                TreeIter iter;
+                this.model.get_iter(out iter, treepath);
+                if(!selection.path_is_selected(treepath)) {
+                    selection.unselect_all();
+                    selection.select_path(treepath);
+                }
+                rightclick_menu_popup(e.time);
                 return true;
             }
             default: {

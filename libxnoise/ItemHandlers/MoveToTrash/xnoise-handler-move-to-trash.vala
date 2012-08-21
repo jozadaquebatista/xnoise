@@ -60,12 +60,19 @@ public class Xnoise.HandlerMoveToTrash : ItemHandler {
         return name;
     }
 
-    public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
+    public override unowned Action? get_action(ItemType type,
+                                               ActionContext context,
+                                               ItemSelectionType selection = ItemSelectionType.NOT_SET) {
         if(selection != ItemSelectionType.SINGLE)
             return null;
-        if((context == ActionContext.TRACKLIST_MENU_QUERY) &&
-           (type == ItemType.LOCAL_AUDIO_TRACK || type == ItemType.LOCAL_VIDEO_TRACK))
+        if((context == ActionContext.TRACKLIST_MENU_QUERY ||
+            context == ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY) &&
+           (type == ItemType.LOCAL_AUDIO_TRACK || 
+            type == ItemType.LOCAL_VIDEO_TRACK)) {
+            
             return a;
+        }
+        
         return null;
     }
     
