@@ -31,6 +31,7 @@
 using Gtk;
 
 using Xnoise;
+using Xnoise.Database;
 using Xnoise.Services;
 using Xnoise.TagAccess;
 
@@ -108,13 +109,6 @@ public class Xnoise.MediaImporter : GLib.Object {
         db_writer.update_title(ref item, ref td);
     }
     
-    public string? get_uri_for_item_id(int32 id) {
-        //this function uses the database so use it in the database thread
-        return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, null);
-        
-        return db_writer.get_uri_for_item_id(id);
-    }
-
     private uint current_import_msg_id = 0;
     private uint current_import_track_count = 0;
     
@@ -179,14 +173,14 @@ public class Xnoise.MediaImporter : GLib.Object {
     
     private bool io_import_job_running = false;
 
-    internal bool write_final_tracks_to_db_job(Worker.Job job) {
+    internal bool write_lastused_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
         return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
         try {
-            db_writer.write_final_tracks_to_db(job);
+            db_writer.write_lastused(ref job.items);
         }
-        catch(Error err) {
-            print("%s\n", err.message);
+        catch(DbError e) {
+            print("%s\n", e.message);
         }
         return false;
     }

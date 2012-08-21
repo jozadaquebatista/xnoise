@@ -30,7 +30,7 @@
 
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext/ItemType
-public class Xnoise.HandlerPlayItem : ItemHandler {
+internal class Xnoise.HandlerPlayItem : ItemHandler {
     private Action a;
     private const string ainfo = _("Play");
     private const string aname = "A HandlerPlayItemname";

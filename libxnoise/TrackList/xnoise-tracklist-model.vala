@@ -124,7 +124,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
     
     // update rows with data from tag edit or delayed receival from gstreamer
     // uri is in the Column.ITEM field of the hashtable
-    public void update_tracklist_data(HashTable<TrackListModel.Column,string?> ntags) {
+    internal void update_tracklist_data(HashTable<TrackListModel.Column,string?> ntags) {
         this.@foreach( (m,p,i) => {
             if(ntags == null)
                 return true;
@@ -167,30 +167,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         //TODO
     }
     
-//    public Iterator iterator() {
-//        return new Iterator(this);
-//    }
-
-//    public class Iterator {
-//        private int index;
-//        private unowned TrackListModel tlm;
-
-//        public Iterator(TrackListModel tlm) {
-//            this.tlm = tlm;
-//        }
-
-//        public bool next() {
-//            return true;
-//        }
-
-//        public TreeIter get() {
-//            TreeIter iter;
-//            tlm.iter_nth_child(out iter, null, index);
-//            return iter;
-//        }
-//    }
-
-    public void on_before_position_reference_changed() {
+    internal void on_before_position_reference_changed() {
         unbolden_row();
         reset_state();
     }
@@ -248,11 +225,11 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         return false;
     }
 
-    public void on_position_reference_changed() {
+    internal void on_position_reference_changed() {
         TreePath treepath;
         TreeIter iter;
 //        string uri = EMPTYSTRING;
-
+        
         // Handle uri stuff
         if(get_current_path(out treepath)) {
             Item? item;
@@ -392,7 +369,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
             return false;
     }
 
-    public void set_reference_to_last() {
+    internal void set_reference_to_last() {
         TreeIter iter;
         int numberOfRows = 0;
         numberOfRows = this.iter_n_children(null);
@@ -490,7 +467,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         return true;
     }
 
-    public bool reset_state() {
+    internal bool reset_state() {
         return set_player_state(PlayerState.STOPPED);
     }
 
@@ -573,7 +550,7 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         return item;
     }
 
-    public void add_uris(string[]? uris) {
+    internal void add_uris(string[]? uris) {
         //print("FIME: xnoise-tracklist-model.vala add_uris\n"); 
         //FIXME: When open xnoise first time(restore last playlist) or when open a playlist using double click or open with Xnoise.
         //Try stop and play, then error, FIXME

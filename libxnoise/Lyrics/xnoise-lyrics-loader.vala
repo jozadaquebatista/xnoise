@@ -54,13 +54,13 @@ public class Xnoise.LyricsLoader : GLib.Object {
         public Providers() {
         }
         
-        public int count {
+        internal int count {
             get {
                 return (int)(this.list.length());
             }
         }
         
-        public bool empty {
+        internal bool empty {
             get {
                 if(this.list.length() > 0)
                     return false;
@@ -79,25 +79,25 @@ public class Xnoise.LyricsLoader : GLib.Object {
             return 0;
         }
         
-        public unowned ILyricsProvider? get_nth(uint n) {
+        internal unowned ILyricsProvider? get_nth(uint n) {
             list.sort(compare);
             return list.nth_data(n);
         }
         
-        public void add(ILyricsProvider provider) {
+        internal void add(ILyricsProvider provider) {
             list.remove(provider);
             list.prepend(provider);
             list.sort(compare);
         }
         
-        public void remove(ILyricsProvider provider) {
+        internal void remove(ILyricsProvider provider) {
             list.remove(provider);
             list.sort(compare);
         }
     }
     
     public signal void sign_fetched(string _artist, string _title, string _credits, string _identifier, string _text, string _provider);
-    public signal void sign_using_provider(string _provider, string _artist, string _title);
+    internal signal void sign_using_provider(string _provider, string _artist, string _title);
 
     public LyricsLoader() {
         xn = Main.instance;
@@ -118,7 +118,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
         providers.add(prov);
     }
 
-    public void remove_lyrics_provider(ILyricsProvider lp) {
+    internal void remove_lyrics_provider(ILyricsProvider lp) {
         providers.remove(lp);
         Idle.add( () => {
             bool tmp = false;
@@ -134,7 +134,7 @@ public class Xnoise.LyricsLoader : GLib.Object {
         });
     }
 
-    public bool fetch(string _artist, string _title) {
+    internal bool fetch(string _artist, string _title) {
         this.artist = prepare_for_search(_artist);
         this.title  = prepare_for_search(_title);
         

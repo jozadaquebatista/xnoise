@@ -410,6 +410,17 @@ typedef struct _XnoiseGlobalAccessPrivate XnoiseGlobalAccessPrivate;
 
 #define XNOISE_TYPE_PLAYER_STATE (xnoise_player_state_get_type ())
 
+#define XNOISE_TYPE_TAG_TITLE_EDITOR (xnoise_tag_title_editor_get_type ())
+#define XNOISE_TAG_TITLE_EDITOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditor))
+#define XNOISE_TAG_TITLE_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditorClass))
+#define XNOISE_IS_TAG_TITLE_EDITOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR))
+#define XNOISE_IS_TAG_TITLE_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TAG_TITLE_EDITOR))
+#define XNOISE_TAG_TITLE_EDITOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditorClass))
+
+typedef struct _XnoiseTagTitleEditor XnoiseTagTitleEditor;
+typedef struct _XnoiseTagTitleEditorClass XnoiseTagTitleEditorClass;
+typedef struct _XnoiseTagTitleEditorPrivate XnoiseTagTitleEditorPrivate;
+
 #define XNOISE_TYPE_ITEM_HANDLER (xnoise_item_handler_get_type ())
 #define XNOISE_ITEM_HANDLER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandler))
 #define XNOISE_ITEM_HANDLER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_HANDLER, XnoiseItemHandlerClass))
@@ -437,83 +448,6 @@ typedef struct _XnoiseAction XnoiseAction;
 
 typedef struct _XnoiseItemHandlerManager XnoiseItemHandlerManager;
 typedef struct _XnoiseItemHandlerManagerClass XnoiseItemHandlerManagerClass;
-
-#define XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST (xnoise_handler_add_all_to_tracklist_get_type ())
-#define XNOISE_HANDLER_ADD_ALL_TO_TRACKLIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST, XnoiseHandlerAddAllToTracklist))
-#define XNOISE_HANDLER_ADD_ALL_TO_TRACKLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST, XnoiseHandlerAddAllToTracklistClass))
-#define XNOISE_IS_HANDLER_ADD_ALL_TO_TRACKLIST(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST))
-#define XNOISE_IS_HANDLER_ADD_ALL_TO_TRACKLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST))
-#define XNOISE_HANDLER_ADD_ALL_TO_TRACKLIST_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_ADD_ALL_TO_TRACKLIST, XnoiseHandlerAddAllToTracklistClass))
-
-typedef struct _XnoiseHandlerAddAllToTracklist XnoiseHandlerAddAllToTracklist;
-typedef struct _XnoiseHandlerAddAllToTracklistClass XnoiseHandlerAddAllToTracklistClass;
-typedef struct _XnoiseHandlerAddAllToTracklistPrivate XnoiseHandlerAddAllToTracklistPrivate;
-
-#define XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST (xnoise_handler_add_to_tracklist_get_type ())
-#define XNOISE_HANDLER_ADD_TO_TRACKLIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST, XnoiseHandlerAddToTracklist))
-#define XNOISE_HANDLER_ADD_TO_TRACKLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST, XnoiseHandlerAddToTracklistClass))
-#define XNOISE_IS_HANDLER_ADD_TO_TRACKLIST(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST))
-#define XNOISE_IS_HANDLER_ADD_TO_TRACKLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST))
-#define XNOISE_HANDLER_ADD_TO_TRACKLIST_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_ADD_TO_TRACKLIST, XnoiseHandlerAddToTracklistClass))
-
-typedef struct _XnoiseHandlerAddToTracklist XnoiseHandlerAddToTracklist;
-typedef struct _XnoiseHandlerAddToTracklistClass XnoiseHandlerAddToTracklistClass;
-typedef struct _XnoiseHandlerAddToTracklistPrivate XnoiseHandlerAddToTracklistPrivate;
-
-#define XNOISE_TYPE_HANDLER_EDIT_TAGS (xnoise_handler_edit_tags_get_type ())
-#define XNOISE_HANDLER_EDIT_TAGS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_EDIT_TAGS, XnoiseHandlerEditTags))
-#define XNOISE_HANDLER_EDIT_TAGS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_EDIT_TAGS, XnoiseHandlerEditTagsClass))
-#define XNOISE_IS_HANDLER_EDIT_TAGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_EDIT_TAGS))
-#define XNOISE_IS_HANDLER_EDIT_TAGS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_EDIT_TAGS))
-#define XNOISE_HANDLER_EDIT_TAGS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_EDIT_TAGS, XnoiseHandlerEditTagsClass))
-
-typedef struct _XnoiseHandlerEditTags XnoiseHandlerEditTags;
-typedef struct _XnoiseHandlerEditTagsClass XnoiseHandlerEditTagsClass;
-typedef struct _XnoiseHandlerEditTagsPrivate XnoiseHandlerEditTagsPrivate;
-
-#define XNOISE_TYPE_TAG_TITLE_EDITOR (xnoise_tag_title_editor_get_type ())
-#define XNOISE_TAG_TITLE_EDITOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditor))
-#define XNOISE_TAG_TITLE_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditorClass))
-#define XNOISE_IS_TAG_TITLE_EDITOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR))
-#define XNOISE_IS_TAG_TITLE_EDITOR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TAG_TITLE_EDITOR))
-#define XNOISE_TAG_TITLE_EDITOR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TAG_TITLE_EDITOR, XnoiseTagTitleEditorClass))
-
-typedef struct _XnoiseTagTitleEditor XnoiseTagTitleEditor;
-typedef struct _XnoiseTagTitleEditorClass XnoiseTagTitleEditorClass;
-typedef struct _XnoiseTagTitleEditorPrivate XnoiseTagTitleEditorPrivate;
-
-#define XNOISE_TYPE_HANDLER_MOVE_TO_TRASH (xnoise_handler_move_to_trash_get_type ())
-#define XNOISE_HANDLER_MOVE_TO_TRASH(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_MOVE_TO_TRASH, XnoiseHandlerMoveToTrash))
-#define XNOISE_HANDLER_MOVE_TO_TRASH_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_MOVE_TO_TRASH, XnoiseHandlerMoveToTrashClass))
-#define XNOISE_IS_HANDLER_MOVE_TO_TRASH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_MOVE_TO_TRASH))
-#define XNOISE_IS_HANDLER_MOVE_TO_TRASH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_MOVE_TO_TRASH))
-#define XNOISE_HANDLER_MOVE_TO_TRASH_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_MOVE_TO_TRASH, XnoiseHandlerMoveToTrashClass))
-
-typedef struct _XnoiseHandlerMoveToTrash XnoiseHandlerMoveToTrash;
-typedef struct _XnoiseHandlerMoveToTrashClass XnoiseHandlerMoveToTrashClass;
-typedef struct _XnoiseHandlerMoveToTrashPrivate XnoiseHandlerMoveToTrashPrivate;
-
-#define XNOISE_TYPE_HANDLER_PLAY_ITEM (xnoise_handler_play_item_get_type ())
-#define XNOISE_HANDLER_PLAY_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_PLAY_ITEM, XnoiseHandlerPlayItem))
-#define XNOISE_HANDLER_PLAY_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_PLAY_ITEM, XnoiseHandlerPlayItemClass))
-#define XNOISE_IS_HANDLER_PLAY_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_PLAY_ITEM))
-#define XNOISE_IS_HANDLER_PLAY_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_PLAY_ITEM))
-#define XNOISE_HANDLER_PLAY_ITEM_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_PLAY_ITEM, XnoiseHandlerPlayItemClass))
-
-typedef struct _XnoiseHandlerPlayItem XnoiseHandlerPlayItem;
-typedef struct _XnoiseHandlerPlayItemClass XnoiseHandlerPlayItemClass;
-typedef struct _XnoiseHandlerPlayItemPrivate XnoiseHandlerPlayItemPrivate;
-
-#define XNOISE_TYPE_HANDLER_REMOVE_TRACK (xnoise_handler_remove_track_get_type ())
-#define XNOISE_HANDLER_REMOVE_TRACK(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_REMOVE_TRACK, XnoiseHandlerRemoveTrack))
-#define XNOISE_HANDLER_REMOVE_TRACK_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_HANDLER_REMOVE_TRACK, XnoiseHandlerRemoveTrackClass))
-#define XNOISE_IS_HANDLER_REMOVE_TRACK(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_HANDLER_REMOVE_TRACK))
-#define XNOISE_IS_HANDLER_REMOVE_TRACK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_HANDLER_REMOVE_TRACK))
-#define XNOISE_HANDLER_REMOVE_TRACK_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_HANDLER_REMOVE_TRACK, XnoiseHandlerRemoveTrackClass))
-
-typedef struct _XnoiseHandlerRemoveTrack XnoiseHandlerRemoveTrack;
-typedef struct _XnoiseHandlerRemoveTrackClass XnoiseHandlerRemoveTrackClass;
-typedef struct _XnoiseHandlerRemoveTrackPrivate XnoiseHandlerRemoveTrackPrivate;
 
 #define XNOISE_TYPE_HANDLER_SHOW_IN_FILE_MANAGER (xnoise_handler_show_in_file_manager_get_type ())
 #define XNOISE_HANDLER_SHOW_IN_FILE_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_HANDLER_SHOW_IN_FILE_MANAGER, XnoiseHandlerShowInFileManager))
@@ -627,27 +561,7 @@ typedef struct _XnoiseMainWindowPrivate XnoiseMainWindowPrivate;
 typedef struct _XnoiseTrackInfobar XnoiseTrackInfobar;
 typedef struct _XnoiseTrackInfobarClass XnoiseTrackInfobarClass;
 
-#define XNOISE_TYPE_TRACK_LIST (xnoise_track_list_get_type ())
-#define XNOISE_TRACK_LIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_LIST, XnoiseTrackList))
-#define XNOISE_TRACK_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_LIST, XnoiseTrackListClass))
-#define XNOISE_IS_TRACK_LIST(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_LIST))
-#define XNOISE_IS_TRACK_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_LIST))
-#define XNOISE_TRACK_LIST_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_LIST, XnoiseTrackListClass))
-
-typedef struct _XnoiseTrackList XnoiseTrackList;
-typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
-
 #define XNOISE_MAIN_WINDOW_TYPE_PLAYER_REPEAT_MODE (xnoise_main_window_player_repeat_mode_get_type ())
-
-#define XNOISE_TYPE_INFO_BAR (xnoise_info_bar_get_type ())
-#define XNOISE_INFO_BAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_INFO_BAR, XnoiseInfoBar))
-#define XNOISE_INFO_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_INFO_BAR, XnoiseInfoBarClass))
-#define XNOISE_IS_INFO_BAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_INFO_BAR))
-#define XNOISE_IS_INFO_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_INFO_BAR))
-#define XNOISE_INFO_BAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_INFO_BAR, XnoiseInfoBarClass))
-
-typedef struct _XnoiseInfoBar XnoiseInfoBar;
-typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
 
 #define XNOISE_TYPE_PARAMS (xnoise_params_get_type ())
 #define XNOISE_PARAMS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_PARAMS, XnoiseParams))
@@ -920,6 +834,16 @@ typedef struct _XnoiseTextColumnPrivate XnoiseTextColumnPrivate;
 typedef struct _XnoiseTrackListViewWidget XnoiseTrackListViewWidget;
 typedef struct _XnoiseTrackListViewWidgetClass XnoiseTrackListViewWidgetClass;
 typedef struct _XnoiseTrackListViewWidgetPrivate XnoiseTrackListViewWidgetPrivate;
+
+#define XNOISE_TYPE_TRACK_LIST (xnoise_track_list_get_type ())
+#define XNOISE_TRACK_LIST(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_TRACK_LIST, XnoiseTrackList))
+#define XNOISE_TRACK_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_TRACK_LIST, XnoiseTrackListClass))
+#define XNOISE_IS_TRACK_LIST(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_TRACK_LIST))
+#define XNOISE_IS_TRACK_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_TRACK_LIST))
+#define XNOISE_TRACK_LIST_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_TRACK_LIST, XnoiseTrackListClass))
+
+typedef struct _XnoiseTrackList XnoiseTrackList;
+typedef struct _XnoiseTrackListClass XnoiseTrackListClass;
 typedef struct _XnoiseTrackListPrivate XnoiseTrackListPrivate;
 
 #define XNOISE_TYPE_TRACK_LIST_MODEL (xnoise_track_list_model_get_type ())
@@ -943,6 +867,16 @@ typedef struct _XnoiseTrackListModelPrivate XnoiseTrackListModelPrivate;
 typedef struct _XnoiseTrayIcon XnoiseTrayIcon;
 typedef struct _XnoiseTrayIconClass XnoiseTrayIconClass;
 typedef struct _XnoiseTrayIconPrivate XnoiseTrayIconPrivate;
+
+#define XNOISE_TYPE_INFO_BAR (xnoise_info_bar_get_type ())
+#define XNOISE_INFO_BAR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_INFO_BAR, XnoiseInfoBar))
+#define XNOISE_INFO_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_INFO_BAR, XnoiseInfoBarClass))
+#define XNOISE_IS_INFO_BAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_INFO_BAR))
+#define XNOISE_IS_INFO_BAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_INFO_BAR))
+#define XNOISE_INFO_BAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_INFO_BAR, XnoiseInfoBarClass))
+
+typedef struct _XnoiseInfoBar XnoiseInfoBar;
+typedef struct _XnoiseInfoBarClass XnoiseInfoBarClass;
 typedef struct _XnoiseInfoBarPrivate XnoiseInfoBarPrivate;
 
 #define XNOISE_TYPE_USER_INFO (xnoise_user_info_get_type ())
@@ -1396,6 +1330,15 @@ typedef enum  {
 	XNOISE_PLAYER_STATE_PAUSED
 } XnoisePlayerState;
 
+struct _XnoiseTagTitleEditor {
+	GObject parent_instance;
+	XnoiseTagTitleEditorPrivate * priv;
+};
+
+struct _XnoiseTagTitleEditorClass {
+	GObjectClass parent_class;
+};
+
 typedef enum  {
 	XNOISE_ITEM_HANDLER_TYPE_UNKNOWN,
 	XNOISE_ITEM_HANDLER_TYPE_OTHER,
@@ -1440,69 +1383,6 @@ struct _XnoiseItemHandlerClass {
 	XnoiseItemHandlerType (*handler_type) (XnoiseItemHandler* self);
 	const gchar* (*handler_name) (XnoiseItemHandler* self);
 	XnoiseAction* (*get_action) (XnoiseItemHandler* self, XnoiseItemType type, XnoiseActionContext context, XnoiseItemSelectionType selection);
-};
-
-struct _XnoiseHandlerAddAllToTracklist {
-	XnoiseItemHandler parent_instance;
-	XnoiseHandlerAddAllToTracklistPrivate * priv;
-};
-
-struct _XnoiseHandlerAddAllToTracklistClass {
-	XnoiseItemHandlerClass parent_class;
-};
-
-struct _XnoiseHandlerAddToTracklist {
-	XnoiseItemHandler parent_instance;
-	XnoiseHandlerAddToTracklistPrivate * priv;
-};
-
-struct _XnoiseHandlerAddToTracklistClass {
-	XnoiseItemHandlerClass parent_class;
-};
-
-struct _XnoiseHandlerEditTags {
-	XnoiseItemHandler parent_instance;
-	XnoiseHandlerEditTagsPrivate * priv;
-};
-
-struct _XnoiseHandlerEditTagsClass {
-	XnoiseItemHandlerClass parent_class;
-};
-
-struct _XnoiseTagTitleEditor {
-	GObject parent_instance;
-	XnoiseTagTitleEditorPrivate * priv;
-};
-
-struct _XnoiseTagTitleEditorClass {
-	GObjectClass parent_class;
-};
-
-struct _XnoiseHandlerMoveToTrash {
-	XnoiseItemHandler parent_instance;
-	XnoiseHandlerMoveToTrashPrivate * priv;
-};
-
-struct _XnoiseHandlerMoveToTrashClass {
-	XnoiseItemHandlerClass parent_class;
-};
-
-struct _XnoiseHandlerPlayItem {
-	XnoiseItemHandler parent_instance;
-	XnoiseHandlerPlayItemPrivate * priv;
-};
-
-struct _XnoiseHandlerPlayItemClass {
-	XnoiseItemHandlerClass parent_class;
-};
-
-struct _XnoiseHandlerRemoveTrack {
-	XnoiseItemHandler parent_instance;
-	XnoiseHandlerRemoveTrackPrivate * priv;
-};
-
-struct _XnoiseHandlerRemoveTrackClass {
-	XnoiseItemHandlerClass parent_class;
 };
 
 struct _XnoiseHandlerShowInFileManager {
@@ -1630,12 +1510,9 @@ struct _XnoiseMainWindow {
 	GtkScrolledWindow* musicBrScrollWin;
 	GtkScrolledWindow* trackListScrollWin;
 	GtkActionGroup* action_group;
-	gboolean _seek;
 	gboolean is_fullscreen;
-	gboolean drag_on_content_area;
 	XnoiseFullscreenToolbar* fullscreentoolbar;
 	GtkBox* videovbox;
-	XnoiseLyricsView* lyricsView;
 	XnoiseVideoScreen* videoscreen;
 	GtkPaned* hpaned;
 	GtkEntry* search_entry;
@@ -1643,14 +1520,11 @@ struct _XnoiseMainWindow {
 	XnoiseControlButton* previousButton;
 	XnoiseControlButton* nextButton;
 	XnoiseControlButton* stopButton;
-	GtkNotebook* browsernotebook;
-	GtkNotebook* tracklistnotebook;
 	GtkNotebook* dialognotebook;
 	XnoiseAlbumImage* albumimage;
 	XnoiseMediaSoureWidget* msw;
 	XnoiseTrackInfobar* track_infobar;
 	XnoiseMusicBrowser* musicBr;
-	XnoiseTrackList* trackList;
 	GtkWindow* fullscreenwindow;
 };
 
@@ -1957,7 +1831,6 @@ struct _XnoiseTrackListViewWidgetClass {
 struct _XnoiseTrackList {
 	GtkTreeView parent_instance;
 	XnoiseTrackListPrivate * priv;
-	XnoiseTrackListModel* tracklistmodel;
 };
 
 struct _XnoiseTrackListClass {
@@ -2115,7 +1988,6 @@ struct _XnoiseTrackDataClass {
 GType xnoise_album_image_get_type (void) G_GNUC_CONST;
 XnoiseAlbumImage* xnoise_album_image_new (void);
 XnoiseAlbumImage* xnoise_album_image_construct (GType object_type);
-void xnoise_album_image_load_default_image (XnoiseAlbumImage* self);
 GFile* xnoise_get_albumimage_for_artistalbum (const gchar* artist, const gchar* album, const gchar* size);
 gboolean xnoise_thumbnail_available (const gchar* uri, GFile** _thumb);
 gchar* xnoise_escape_album_for_local_folder_search (const gchar* _artist, const gchar* album_name);
@@ -2208,11 +2080,7 @@ gboolean xnoise_database_writer_insert_title (XnoiseDatabaseWriter* self, Xnoise
 gboolean xnoise_database_writer_add_single_stream_to_collection (XnoiseDatabaseWriter* self, XnoiseItem* i);
 void xnoise_database_writer_update_stream_name (XnoiseDatabaseWriter* self, XnoiseItem* item);
 gboolean xnoise_database_writer_add_single_folder_to_collection (XnoiseDatabaseWriter* self, XnoiseItem* mfolder);
-void xnoise_database_writer_write_final_tracks_to_db (XnoiseDatabaseWriter* self, XnoiseWorkerJob* job, GError** error);
 void xnoise_database_writer_do_callback_transaction (XnoiseDatabaseWriter* self, XnoiseDatabaseWriterWriterCallback cb, void* cb_target);
-void xnoise_database_writer_del_all_folders (XnoiseDatabaseWriter* self);
-void xnoise_database_writer_del_all_streams (XnoiseDatabaseWriter* self);
-gboolean xnoise_database_writer_delete_local_media_data (XnoiseDatabaseWriter* self);
 void xnoise_database_writer_begin_transaction (XnoiseDatabaseWriter* self);
 void xnoise_database_writer_commit_transaction (XnoiseDatabaseWriter* self);
 gboolean xnoise_database_writer_get_in_transaction (XnoiseDatabaseWriter* self);
@@ -2267,21 +2135,14 @@ GType xnoise_dockable_media_get_type (void) G_GNUC_CONST;
 XnoiseMusicBrowser* xnoise_music_browser_new (XnoiseDockableMedia* dock, GtkWidget* ow);
 XnoiseMusicBrowser* xnoise_music_browser_construct (GType object_type, XnoiseDockableMedia* dock, GtkWidget* ow);
 gboolean xnoise_music_browser_change_model_data (XnoiseMusicBrowser* self);
-gboolean xnoise_music_browser_update_view (XnoiseMusicBrowser* self);
-void xnoise_music_browser_on_row_expanded (XnoiseMusicBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
-void xnoise_music_browser_on_row_collapsed (XnoiseMusicBrowser* self, GtkTreeIter* iter, GtkTreePath* path);
 gboolean xnoise_music_browser_get_use_treelines (XnoiseMusicBrowser* self);
 void xnoise_music_browser_set_use_treelines (XnoiseMusicBrowser* self, gboolean value);
 GType xnoise_music_browser_model_column_get_type (void) G_GNUC_CONST;
 GType xnoise_music_browser_model_collection_type_get_type (void) G_GNUC_CONST;
 XnoiseMusicBrowserModel* xnoise_music_browser_model_new (XnoiseDockableMedia* dock);
 XnoiseMusicBrowserModel* xnoise_music_browser_model_construct (GType object_type, XnoiseDockableMedia* dock);
-gint xnoise_music_browser_model_get_max_icon_width (XnoiseMusicBrowserModel* self);
 void xnoise_music_browser_model_filter (XnoiseMusicBrowserModel* self);
 void xnoise_music_browser_model_remove_all (XnoiseMusicBrowserModel* self);
-void xnoise_music_browser_model_cancel_fill_model (XnoiseMusicBrowserModel* self);
-void xnoise_music_browser_model_unload_children (XnoiseMusicBrowserModel* self, GtkTreeIter* iter);
-void xnoise_music_browser_model_load_children (XnoiseMusicBrowserModel* self, GtkTreeIter* iter);
 XnoiseDndData* xnoise_music_browser_model_get_dnd_data_for_path (XnoiseMusicBrowserModel* self, GtkTreePath** treepath, int* result_length1);
 gboolean xnoise_music_browser_model_get_populating_model (XnoiseMusicBrowserModel* self);
 GType xnoise_dockable_media_category_get_type (void) G_GNUC_CONST;
@@ -2418,33 +2279,15 @@ const gchar* xnoise_global_access_get_image_path_embedded (XnoiseGlobalAccess* s
 void xnoise_global_access_set_image_path_embedded (XnoiseGlobalAccess* self, const gchar* value);
 gboolean xnoise_global_access_get_in_preview (XnoiseGlobalAccess* self);
 void xnoise_global_access_set_in_preview (XnoiseGlobalAccess* self, gboolean value);
+GType xnoise_tag_title_editor_get_type (void) G_GNUC_CONST;
+XnoiseTagTitleEditor* xnoise_tag_title_editor_new (XnoiseItem* _item);
+XnoiseTagTitleEditor* xnoise_tag_title_editor_construct (GType object_type, XnoiseItem* _item);
 GType xnoise_item_handler_get_type (void) G_GNUC_CONST;
 GType xnoise_item_handler_type_get_type (void) G_GNUC_CONST;
 GType xnoise_action_context_get_type (void) G_GNUC_CONST;
 GType xnoise_item_selection_type_get_type (void) G_GNUC_CONST;
 void xnoise_action_free (XnoiseAction* self);
 GType xnoise_item_handler_manager_get_type (void) G_GNUC_CONST;
-GType xnoise_handler_add_all_to_tracklist_get_type (void) G_GNUC_CONST;
-XnoiseHandlerAddAllToTracklist* xnoise_handler_add_all_to_tracklist_new (void);
-XnoiseHandlerAddAllToTracklist* xnoise_handler_add_all_to_tracklist_construct (GType object_type);
-GType xnoise_handler_add_to_tracklist_get_type (void) G_GNUC_CONST;
-XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_new (void);
-XnoiseHandlerAddToTracklist* xnoise_handler_add_to_tracklist_construct (GType object_type);
-GType xnoise_handler_edit_tags_get_type (void) G_GNUC_CONST;
-XnoiseHandlerEditTags* xnoise_handler_edit_tags_new (void);
-XnoiseHandlerEditTags* xnoise_handler_edit_tags_construct (GType object_type);
-GType xnoise_tag_title_editor_get_type (void) G_GNUC_CONST;
-XnoiseTagTitleEditor* xnoise_tag_title_editor_new (XnoiseItem* _item);
-XnoiseTagTitleEditor* xnoise_tag_title_editor_construct (GType object_type, XnoiseItem* _item);
-GType xnoise_handler_move_to_trash_get_type (void) G_GNUC_CONST;
-XnoiseHandlerMoveToTrash* xnoise_handler_move_to_trash_new (void);
-XnoiseHandlerMoveToTrash* xnoise_handler_move_to_trash_construct (GType object_type);
-GType xnoise_handler_play_item_get_type (void) G_GNUC_CONST;
-XnoiseHandlerPlayItem* xnoise_handler_play_item_new (void);
-XnoiseHandlerPlayItem* xnoise_handler_play_item_construct (GType object_type);
-GType xnoise_handler_remove_track_get_type (void) G_GNUC_CONST;
-XnoiseHandlerRemoveTrack* xnoise_handler_remove_track_new (void);
-XnoiseHandlerRemoveTrack* xnoise_handler_remove_track_construct (GType object_type);
 GType xnoise_handler_show_in_file_manager_get_type (void) G_GNUC_CONST;
 XnoiseHandlerShowInFileManager* xnoise_handler_show_in_file_manager_new (void);
 XnoiseHandlerShowInFileManager* xnoise_handler_show_in_file_manager_construct (GType object_type);
@@ -2492,8 +2335,6 @@ void xnoise_ilyrics_provider_set_priority (XnoiseILyricsProvider* self, gint val
 const gchar* xnoise_ilyrics_provider_get_provider_name (XnoiseILyricsProvider* self);
 XnoiseLyricsLoader* xnoise_lyrics_loader_new (void);
 XnoiseLyricsLoader* xnoise_lyrics_loader_construct (GType object_type);
-void xnoise_lyrics_loader_remove_lyrics_provider (XnoiseLyricsLoader* self, XnoiseILyricsProvider* lp);
-gboolean xnoise_lyrics_loader_fetch (XnoiseLyricsLoader* self, const gchar* _artist, const gchar* _title);
 GType xnoise_lyrics_view_widget_get_type (void) G_GNUC_CONST;
 GType xnoise_lyrics_view_get_type (void) G_GNUC_CONST;
 XnoiseLyricsViewWidget* xnoise_lyrics_view_widget_new (XnoiseMainWindow* win);
@@ -2504,7 +2345,6 @@ void xnoise_lyrics_view_lyrics_provider_unregister (XnoiseLyricsView* self, Xnoi
 XnoiseLyricsLoader* xnoise_lyrics_view_get_loader (XnoiseLyricsView* self);
 XnoiseMain* xnoise_main_new (void);
 XnoiseMain* xnoise_main_construct (GType object_type);
-void xnoise_main_add_cyclic_save_timeout (XnoiseMain* self);
 void xnoise_main_immediate_play (XnoiseMain* self, const gchar* uri);
 void xnoise_main_save_activated_plugins (XnoiseMain* self);
 void xnoise_main_save_tracklist (XnoiseMain* self);
@@ -2514,23 +2354,18 @@ XnoiseMain* xnoise_main_get_instance (void);
 gboolean gdk_window_ensure_native (GdkWindow* window);
 void gtk_widget_style_get_property (GtkWidget* widget, const gchar* property_name, GValue* val);
 GType xnoise_track_infobar_get_type (void) G_GNUC_CONST;
-GType xnoise_track_list_get_type (void) G_GNUC_CONST;
 GType xnoise_main_window_player_repeat_mode_get_type (void) G_GNUC_CONST;
 XnoiseMainWindow* xnoise_main_window_new (void);
 XnoiseMainWindow* xnoise_main_window_construct (GType object_type);
 void xnoise_main_window_restore_last_view (XnoiseMainWindow* self);
-void xnoise_main_window_ask_for_initial_media_import (XnoiseMainWindow* self);
 void xnoise_main_window_toggle_fullscreen (XnoiseMainWindow* self);
 void xnoise_main_window_toggle_window_visbility (XnoiseMainWindow* self);
 void xnoise_main_window_show_window (XnoiseMainWindow* self);
-void xnoise_main_window_stop (XnoiseMainWindow* self);
 void xnoise_main_window_change_track (XnoiseMainWindow* self, XnoiseControlButtonDirection direction, gboolean handle_repeat_state);
-void xnoise_main_window_set_displayed_title (XnoiseMainWindow* self, const gchar* newuri, const gchar* tagname, const gchar* tagvalue);
-void xnoise_main_window_handle_control_button_click (XnoiseMainWindow* self, XnoiseControlButton* sender, XnoiseControlButtonDirection dir);
 void xnoise_main_window_add_main_view (XnoiseMainWindow* self, XnoiseIMainView* view);
-GType xnoise_info_bar_get_type (void) G_GNUC_CONST;
-void xnoise_main_window_show_status_info (XnoiseMainWindow* self, XnoiseInfoBar* bar);
 void xnoise_main_window_select_view_by_name (XnoiseMainWindow* self, const gchar* name);
+XnoiseLyricsView* xnoise_main_window_get_lyricsView (XnoiseMainWindow* self);
+GtkNotebook* xnoise_main_window_get_tracklistnotebook (XnoiseMainWindow* self);
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 void xnoise_main_window_set_ui_manager (XnoiseMainWindow* self, GtkUIManager* value);
 gboolean xnoise_main_window_get_not_show_art_on_hover_image (XnoiseMainWindow* self);
@@ -2767,8 +2602,6 @@ void xnoise_plugin_module_iplugin_set_xn (XnoisePluginModuleIPlugin* self, Xnois
 GType xnoise_plugin_module_loader_get_type (void) G_GNUC_CONST;
 XnoisePluginModuleLoader* xnoise_plugin_module_loader_new (void);
 XnoisePluginModuleLoader* xnoise_plugin_module_loader_construct (GType object_type);
-GList* xnoise_plugin_module_loader_get_info_files (XnoisePluginModuleLoader* self);
-gboolean xnoise_plugin_module_loader_load_all (XnoisePluginModuleLoader* self);
 gboolean xnoise_plugin_module_loader_activate_single_plugin (XnoisePluginModuleLoader* self, const gchar* module);
 void xnoise_plugin_module_loader_deactivate_single_plugin (XnoisePluginModuleLoader* self, const gchar* module);
 #define XNOISE_SERVICES_UNKNOWN_ARTIST "unknown artist"
@@ -2958,10 +2791,9 @@ XnoiseTextColumn* xnoise_text_column_construct (GType object_type, const gchar* 
 GType xnoise_track_list_view_widget_get_type (void) G_GNUC_CONST;
 XnoiseTrackListViewWidget* xnoise_track_list_view_widget_new (XnoiseMainWindow* win);
 XnoiseTrackListViewWidget* xnoise_track_list_view_widget_construct (GType object_type, XnoiseMainWindow* win);
-GType xnoise_track_list_model_get_type (void) G_GNUC_CONST;
+GType xnoise_track_list_get_type (void) G_GNUC_CONST;
 XnoiseTrackList* xnoise_track_list_new (void);
 XnoiseTrackList* xnoise_track_list_construct (GType object_type);
-void xnoise_track_list_set_focus_on_iter (XnoiseTrackList* self, GtkTreeIter* iter);
 void xnoise_track_list_remove_uri_rows (XnoiseTrackList* self, const gchar* uri);
 void xnoise_track_list_remove_selected_rows (XnoiseTrackList* self);
 gboolean xnoise_track_list_get_column_length_visible (XnoiseTrackList* self);
@@ -2976,28 +2808,25 @@ gboolean xnoise_track_list_get_column_genre_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_genre_visible (XnoiseTrackList* self, gboolean value);
 gboolean xnoise_track_list_get_column_year_visible (XnoiseTrackList* self);
 void xnoise_track_list_set_column_year_visible (XnoiseTrackList* self, gboolean value);
+GType xnoise_track_list_model_get_type (void) G_GNUC_CONST;
+XnoiseTrackListModel* xnoise_track_list_get_tracklistmodel (XnoiseTrackList* self);
 XnoiseTrackListColumn* xnoise_track_list_column_new (const gchar* _name);
 XnoiseTrackListColumn* xnoise_track_list_column_construct (GType object_type, const gchar* _name);
 XnoiseTrackListModel* xnoise_track_list_model_new (void);
 XnoiseTrackListModel* xnoise_track_list_model_construct (GType object_type);
-void xnoise_track_list_model_update_tracklist_data (XnoiseTrackListModel* self, GHashTable* ntags);
-void xnoise_track_list_model_on_before_position_reference_changed (XnoiseTrackListModel* self);
 gboolean xnoise_track_list_model_get_first_row (XnoiseTrackListModel* self, GtkTreePath** treepath);
 gboolean xnoise_track_list_model_get_random_row (XnoiseTrackListModel* self, GtkTreePath** treepath);
 gboolean xnoise_track_list_model_path_is_last_row (XnoiseTrackListModel* self, GtkTreePath** path, gboolean* trackList_is_empty);
-void xnoise_track_list_model_on_position_reference_changed (XnoiseTrackListModel* self);
 gboolean xnoise_track_list_model_get_current_path (XnoiseTrackListModel* self, GtkTreePath** treepath);
 gboolean xnoise_track_list_model_get_active_path (XnoiseTrackListModel* self, GtkTreePath** treepath, gboolean* used_next_pos);
 void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, GdkPixbuf* pixbuf, XnoiseTrackData** td, gboolean bold, GtkTreeIter* result);
 gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
-void xnoise_track_list_model_set_reference_to_last (XnoiseTrackListModel* self);
 XnoiseItem* xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
 gchar* xnoise_track_list_model_get_uri_for_current_position (XnoiseTrackListModel* self);
-gboolean xnoise_track_list_model_reset_state (XnoiseTrackListModel* self);
-void xnoise_track_list_model_add_uris (XnoiseTrackListModel* self, gchar** uris, int uris_length1);
 GType xnoise_tray_icon_get_type (void) G_GNUC_CONST;
 XnoiseTrayIcon* xnoise_tray_icon_new (void);
 XnoiseTrayIcon* xnoise_tray_icon_construct (GType object_type);
+GType xnoise_info_bar_get_type (void) G_GNUC_CONST;
 GType xnoise_user_info_get_type (void) G_GNUC_CONST;
 GType xnoise_user_info_content_class_get_type (void) G_GNUC_CONST;
 GType xnoise_user_info_removal_type_get_type (void) G_GNUC_CONST;
@@ -3030,7 +2859,6 @@ GType xnoise_media_importer_reset_notification_data_get_type (void) G_GNUC_CONST
 XnoiseMediaImporterResetNotificationData* xnoise_media_importer_reset_notification_data_dup (const XnoiseMediaImporterResetNotificationData* self);
 void xnoise_media_importer_reset_notification_data_free (XnoiseMediaImporterResetNotificationData* self);
 void xnoise_media_importer_register_reset_callback (XnoiseMediaImporter* self, XnoiseMediaImporterResetNotificationData* cbd);
-gchar* xnoise_media_importer_get_uri_for_item_id (XnoiseMediaImporter* self, gint32 id);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
 gboolean xnoise_media_stream_schemes_contains (XnoiseMediaStreamSchemes* self, const gchar* location);
@@ -3056,7 +2884,6 @@ extern XnoiseTrayIcon* xnoise_tray_icon;
 extern XnoiseMainWindow* xnoise_main_window;
 extern XnoiseTrackList* xnoise_tl;
 extern XnoiseTrackListModel* xnoise_tlm;
-void xnoise_initialize (gboolean* is_first_start);
 XnoiseDataSource* xnoise_get_data_source (gint source_number);
 gint xnoise_register_data_source (XnoiseDataSource* source);
 void xnoise_remove_data_source (XnoiseDataSource* source);

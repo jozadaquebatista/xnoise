@@ -42,8 +42,8 @@ public class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
     private const string UI_FILE = Config.UIDIR + "lyrics.ui";
     private unowned MainWindow win;
     
-    public LyricsView lyricsView;
-    public SerialButton sbutton;
+    internal LyricsView lyricsView;
+    internal SerialButton sbutton;
     
     public LyricsViewWidget(MainWindow win) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);

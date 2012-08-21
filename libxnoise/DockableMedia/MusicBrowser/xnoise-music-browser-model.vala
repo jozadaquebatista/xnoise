@@ -226,10 +226,6 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
             }
     }
     
-    public int get_max_icon_width() {
-        return icon_repo.artist_icon.width + icon_repo.title_icon.width + icon_repo.album_icon.width;
-    }
-    
     public void filter() {
         //print("filter\n");
         main_window.musicBr.set_model(null);
@@ -238,13 +234,12 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
     
     public void remove_all() {
-//        this.stream_in_tree = false;
         main_window.musicBr.set_model(null);
         this.clear();
         main_window.musicBr.set_model(this);
     }
 
-    public void cancel_fill_model() {
+    internal void cancel_fill_model() {
         if(populate_model_cancellable == null)
             return;
         populate_model_cancellable.cancel();
@@ -313,7 +308,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
 
     private static const string LOADING = _("Loading ...");
     
-    public void unload_children(ref TreeIter iter) {
+    internal void unload_children(ref TreeIter iter) {
         TreeIter iter_loader;
         Item? item = Item(ItemType.UNKNOWN);
         this.get(iter, Column.ITEM, out item);
@@ -334,7 +329,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         }
     }
     
-    public void load_children(ref TreeIter iter) {
+    internal void load_children(ref TreeIter iter) {
         if(!row_is_resolved(ref iter))
             load_content(ref iter);
     }

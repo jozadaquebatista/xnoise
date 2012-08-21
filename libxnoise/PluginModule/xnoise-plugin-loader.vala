@@ -54,7 +54,7 @@ public class Xnoise.PluginModule.Loader : Object {
         image_provider_htable   = new HashTable<string, unowned Container>(str_hash, str_equal);
     }
 
-    public unowned GLib.List<string> get_info_files() {
+    internal unowned GLib.List<string> get_info_files() {
         return info_files;
     }
     
@@ -66,7 +66,7 @@ public class Xnoise.PluginModule.Loader : Object {
         return false;
     }
 
-    public bool load_all() {
+    internal bool load_all() {
         Container plugin;
         File dir = File.new_for_path(Config.PLUGINSDIR);
         this.get_plugin_information_files(dir);

@@ -30,7 +30,7 @@
 
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext/ItemType
-public class Xnoise.HandlerRemoveTrack : ItemHandler {
+internal class Xnoise.HandlerRemoveTrack : ItemHandler {
     private Action a;
     private const string ainfo = _("Remove selected track");
     private const string aname = "HandlerRemoveTrack";

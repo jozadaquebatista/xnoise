@@ -82,7 +82,7 @@ namespace Xnoise {
      * This function is used to create static instances of Params
      * and GlobalInfo in the xnoise namespace.
      */
-    public static void initialize(out bool is_first_start) {
+    internal static void initialize(out bool is_first_start) {
         is_first_start = false;
         
         if(!verify_xnoise_directories()) {

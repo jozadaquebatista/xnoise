@@ -58,7 +58,7 @@ namespace Xnoise {
         }
     }
 
-    interface SSMBackend : GLib.Object {
+    private interface SSMBackend : GLib.Object {
         public abstract bool is_available();
         public abstract bool init();
         public abstract bool inhibit();
@@ -67,15 +67,15 @@ namespace Xnoise {
 
 
 
-    class XdgSSM : GLib.Object, SSMBackend {
+    private class XdgSSM : GLib.Object, SSMBackend {
         private string path = null;
-    
+        
         private const string binary_name = "xdg-screensaver";
         private const string inhibit_param = "suspend";
         private const string uninhibit_param = "resume";
-
+        
         private int exit_status;
-
+        
         private int get_window_id() {
             var win = main_window.get_window();
             if(win == null) return -1;

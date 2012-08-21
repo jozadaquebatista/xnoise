@@ -32,7 +32,7 @@ using Gtk;
 
 using Xnoise;
 
-public class Xnoise.HandlerAddAllToTracklist : ItemHandler {
+internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
     
     private Xnoise.Action menu_add;
     private Xnoise.Action menu_add_from_playlist;

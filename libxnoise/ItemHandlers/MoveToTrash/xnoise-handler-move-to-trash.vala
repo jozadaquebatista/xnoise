@@ -36,7 +36,7 @@ using Xnoise.Services;
 
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext/ItemType
-public class Xnoise.HandlerMoveToTrash : ItemHandler {
+internal class Xnoise.HandlerMoveToTrash : ItemHandler {
     private Action a;
     private const string ainfo = _("Move to trash");
     private const string aname = "A HandlerMoveToTrash";

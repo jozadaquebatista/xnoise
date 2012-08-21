@@ -74,32 +74,30 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private Xnoise.AppMenuButton app_menu_button;
     private TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
     private bool window_maximized;
-    public bool quit_if_closed;
-    public ScrolledWindow musicBrScrollWin = null;
-    public ScrolledWindow trackListScrollWin = null;
-    public Gtk.ActionGroup action_group;
-    public bool _seek;
+    internal bool quit_if_closed;
+    internal ScrolledWindow musicBrScrollWin = null;
+    internal ScrolledWindow trackListScrollWin = null;
+    internal Gtk.ActionGroup action_group;
     public bool is_fullscreen = false;
-    public bool drag_on_content_area = false;
-    public FullscreenToolbar fullscreentoolbar;
-    public Box videovbox;
-    public unowned LyricsView lyricsView;
-    public unowned VideoScreen videoscreen;
-    public Paned hpaned;
-    public Entry search_entry;
-    public PlayPauseButton playPauseButton;
-    public ControlButton previousButton;
-    public ControlButton nextButton;
-    public ControlButton stopButton;
-    public Notebook browsernotebook;
-    public Notebook tracklistnotebook;
-    public Notebook dialognotebook;
+//    internal bool drag_on_content_area = false;
+    internal FullscreenToolbar fullscreentoolbar;
+    internal Box videovbox;
+    public unowned LyricsView lyricsView { get; private set; }
+    internal unowned VideoScreen videoscreen;
+    internal Paned hpaned;
+    internal Entry search_entry;
+    internal PlayPauseButton playPauseButton;
+    internal ControlButton previousButton;
+    internal ControlButton nextButton;
+    internal ControlButton stopButton;
+    public Notebook tracklistnotebook { get; private set; }
+    internal Notebook dialognotebook;
     public AlbumImage albumimage;
     public MediaSoureWidget msw;
     internal TrackInfobar track_infobar;
-    public MusicBrowser musicBr = null;
-    public unowned TrackList trackList;
-    public Gtk.Window fullscreenwindow;
+    internal MusicBrowser musicBr = null;
+    private unowned TrackList trackList;
+    internal Gtk.Window fullscreenwindow;
     
     private Gtk.UIManager _ui_manager = new Gtk.UIManager();
     public Gtk.UIManager ui_manager {
@@ -244,10 +242,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         //initialize screen saver management
         ssm = new ScreenSaverManager();
         
-        //restore last state
-        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.restore_lastused_job);
-        db_worker.push_job(job);
-    
         active_notifier = this.notify["is-active"].connect(buffer_position);
         this.notify["repeatState"].connect(on_repeatState_changed);
         this.notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
@@ -401,6 +395,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
     
+    internal void restore_tracks() {
+        //restore last state
+        var job = new Worker.Job(Worker.ExecutionType.ONCE, this.restore_lastused_job);
+        db_worker.push_job(job);
+    }
+
     private uint msg_id = 0;
     private bool restore_lastused_job(Worker.Job xjob) {
         uint lastused_cnt = 0;
@@ -468,7 +468,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         return false;
     }
     
-    public void ask_for_initial_media_import() {
+    internal void ask_for_initial_media_import() {
         uint msg_id = 0;
         var add_media_button = new Gtk.Button.with_label(_("Add media"));
         msg_id = userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
@@ -870,7 +870,7 @@ print("++2\n");
     //END REGION IParameter
 
 
-    public void stop() {
+    internal void stop() {
         global.player_state = PlayerState.STOPPED;
         global.current_uri = null;
     }
@@ -1149,7 +1149,7 @@ print("++2\n");
         dialognotebook.set_current_page(1);
     }
 
-    public void set_displayed_title(string? newuri, string? tagname, string? tagvalue) {
+    internal void set_displayed_title(string? newuri, string? tagname, string? tagvalue) {
         string text, album, artist, title, organization, location, genre;
         string basename = null;
         if((newuri == EMPTYSTRING)|(newuri == null)) {
@@ -1293,7 +1293,7 @@ print("++2\n");
     }
 
 
-    public void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
+    internal void handle_control_button_click(ControlButton sender, ControlButton.Direction dir) {
         if(dir == ControlButton.Direction.NEXT || dir == ControlButton.Direction.PREVIOUS) {
             if(global.in_preview)
                 return;
@@ -1613,13 +1613,13 @@ print("++2\n");
         this.key_press_event.connect(this.on_key_pressed);
     }
     
-    public void show_status_info(Xnoise.InfoBar bar) {
+    internal void show_status_info(Xnoise.InfoBar bar) {
         infobox.pack_start(bar, false, false, 0);
         bar.show_all();
     }
     
     public void select_view_by_name(string name) {
-//        tracklistnotebook
+//        TODO
     }
     
     private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {

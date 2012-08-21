@@ -199,7 +199,7 @@ namespace Xnoise {
             AlbumImageLoader.provider = null;
         }
 
-        public bool fetch_image() {
+        internal bool fetch_image() {
             if(this.provider == null) {
                 sign_fetched(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING);
                 return false;

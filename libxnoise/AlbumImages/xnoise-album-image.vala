@@ -209,7 +209,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
         return false;
     }
     
-    public void load_default_image() {
+    internal void load_default_image() {
         this.set_size_request(SIZE, SIZE);
         this.set_from_icon_name("xnoise-grey", Gtk.IconSize.DIALOG);
         current_path = "default";
@@ -235,8 +235,12 @@ public class Xnoise.AlbumImage : Gtk.Image {
         current_path = image_path;
         if(!using_thumbnail) {
             Timeout.add_seconds(2, () => {
-                var fileout  = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "medium");
-                var fileout2 = get_albumimage_for_artistalbum(global.current_artist, global.current_album, "embedded");
+                var fileout  = get_albumimage_for_artistalbum(global.current_artist,
+                                                              global.current_album,
+                                                              "medium");
+                var fileout2 = get_albumimage_for_artistalbum(global.current_artist,
+                                                              global.current_album,
+                                                              "embedded");
                 if(fileout == null && fileout2 == null) {
                     //print("image not fitting. set default\n");
                     if(current_path != "default")

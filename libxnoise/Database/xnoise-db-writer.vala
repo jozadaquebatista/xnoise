@@ -979,7 +979,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         return true;
     }
 
-    public void write_final_tracks_to_db(Worker.Job job) throws Error {
+    internal void write_lastused(ref Item[] items) throws DbError {
         if(db == null)
             return;
         
@@ -987,7 +987,7 @@ public class Xnoise.Database.Writer : GLib.Object {
             throw new DbError.FAILED("Error while removing old music folders");
         }
         this.begin_transaction();
-        foreach(Item? i in job.items)
+        foreach(Item? i in items)
             this.insert_lastused_track(ref i);
         this.commit_transaction();
     }
@@ -1025,17 +1025,17 @@ public class Xnoise.Database.Writer : GLib.Object {
         return true;
     }
 
-    public void del_all_folders() {
+    internal void del_all_folders() {
         if(!exec_prepared_stmt(del_media_folder_statement))
             print("error deleting folders from db\n");
     }
 
-    public void del_all_streams() {
+    internal void del_all_streams() {
         if(!exec_prepared_stmt(del_streams_statement))
             print("error deleting streams from db\n");
     }
 
-    public bool delete_local_media_data() {
+    internal bool delete_local_media_data() {
         if(!exec_prepared_stmt(this.delete_artists_statement)) return false;
         if(!exec_prepared_stmt(this.delete_albums_statement )) return false;
         if(!exec_prepared_stmt(this.delete_items_statement  )) return false;

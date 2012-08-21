@@ -30,7 +30,7 @@
 
 using Gtk;
 
-public class Xnoise.HandlerEditTags : ItemHandler {
+internal class Xnoise.HandlerEditTags : ItemHandler {
     private Action edit_title_tracklist;
     private const string tltitleinfo = _("Edit metadata for track");
     private const string tltitlename = "HandlerEditTagsActionTitleTL";

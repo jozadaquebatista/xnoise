@@ -37,7 +37,7 @@ using Xnoise.Services;
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext
 // has one or more Actions
-public class Xnoise.HandlerAddToTracklist : ItemHandler {
+internal class Xnoise.HandlerAddToTracklist : ItemHandler {
     private Action add;
     private const string binfo = EMPTYSTRING;
     private const string bname = "HandlerAddToTracklistAction1";

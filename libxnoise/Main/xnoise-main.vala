@@ -120,10 +120,15 @@ public class Xnoise.Main : GLib.Object {
         
         // periodically save state and tracklist content
         add_cyclic_save_timeout();
+        
+        Idle.add(() => {
+            main_window.restore_tracks();
+            return false;
+        });
     }
     
     private uint cyclic_save_source = 0;
-    public void add_cyclic_save_timeout() {
+    private void add_cyclic_save_timeout() {
         cyclic_save_source = Timeout.add_seconds(60, () => {
             if(MainContext.current_source().is_destroyed())
                 return false;
@@ -189,8 +194,8 @@ public class Xnoise.Main : GLib.Object {
     }
 
     public void save_tracklist() {
-        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_final_tracks_to_db_job);
-        job.items = main_window.trackList.tracklistmodel.get_all_tracks();
+        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_lastused_job);
+        job.items = tlm.get_all_tracks();
         job.finished.connect( () => {
             //print("finished db saving\n");
             preparing_quit = false;

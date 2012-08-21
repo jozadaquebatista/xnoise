@@ -42,11 +42,11 @@ public class Xnoise.TrackListViewWidget : Gtk.Box, IMainView {
     private const string UI_FILE = Config.UIDIR + "tracklist.ui";
     
     private unowned MainWindow win;
-    public ScrolledWindow scrolled_window;
-    public SerialButton sbutton;
-    public int idx_tracklist;
-    public int idx_lyrics;
-    public int idx_video;
+    internal ScrolledWindow scrolled_window;
+    internal SerialButton sbutton;
+    internal int idx_tracklist;
+    internal int idx_lyrics;
+    internal int idx_video;
     
     public TrackListViewWidget(MainWindow win) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
@@ -200,7 +200,7 @@ public class Xnoise.TrackList : TreeView, IParams {
         set { this.columnYear.visible = value; }
     }
 
-    public TrackListModel tracklistmodel;
+    public TrackListModel tracklistmodel { get; private set; }
 
     public TrackList() {
         this.xn = Main.instance;
@@ -909,18 +909,9 @@ public class Xnoise.TrackList : TreeView, IParams {
 
     private void handle_dropped_stream_uri(ref string fileuri, ref TreePath? path, ref bool is_first) {
         File file;
-        try {
-            file = File.new_for_uri(fileuri);
-        }
-        catch(GLib.Error e) {
-            print("%s\n", e.message);
-            return;
-        }
+        file = File.new_for_uri(fileuri);
         TreeIter iter, new_iter;
-        string artist=EMPTYSTRING, album = EMPTYSTRING, title = EMPTYSTRING, lengthString = EMPTYSTRING, genre = UNKNOWN_GENRE;
-        string? yearString = null;
-        uint tracknumb = 0;
-        
+        string title = EMPTYSTRING;
         Item? item = Item(ItemType.STREAM, file.get_uri());
         title          = prepare_name_from_filename(file.get_basename());
         TreeIter first_iter;
@@ -1076,7 +1067,7 @@ public class Xnoise.TrackList : TreeView, IParams {
         return false;
     }
 
-    public void set_focus_on_iter(ref TreeIter iter) {
+    internal void set_focus_on_iter(ref TreeIter iter) {
         TreePath start_path, end_path;
         TreePath current_path = tracklistmodel.get_path(iter);
 

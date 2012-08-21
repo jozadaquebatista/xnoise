@@ -70,9 +70,6 @@ namespace Xnoise {
 			public bool add_single_stream_to_collection (Xnoise.Item? i);
 			public void begin_transaction ();
 			public void commit_transaction ();
-			public void del_all_folders ();
-			public void del_all_streams ();
-			public bool delete_local_media_data ();
 			public void do_callback_transaction (Xnoise.Database.Writer.WriterCallback cb);
 			public string[] get_media_folders ();
 			public bool get_trackdata_for_stream (string uri, out Xnoise.TrackData val);
@@ -84,7 +81,6 @@ namespace Xnoise {
 			public void update_lastplay_time (string uri, int64 playtime);
 			public void update_stream_name (Xnoise.Item? item);
 			public bool update_title (ref Xnoise.Item? item, ref Xnoise.TrackData td);
-			public void write_final_tracks_to_db (Xnoise.Worker.Job job) throws GLib.Error;
 			public bool in_transaction { get; }
 		}
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -304,8 +300,6 @@ namespace Xnoise {
 			public Loader ();
 			public bool activate_single_plugin (string module);
 			public void deactivate_single_plugin (string module);
-			public unowned GLib.List<string> get_info_files ();
-			public bool load_all ();
 			public signal void sign_plugin_activated (Xnoise.PluginModule.Container p);
 			public signal void sign_plugin_deactivated (Xnoise.PluginModule.Container p);
 		}
@@ -488,7 +482,6 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class AlbumImage : Gtk.Image {
 		public AlbumImage ();
-		public void load_default_image ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class AppMenuButton : Gtk.ToggleToolButton {
@@ -670,48 +663,6 @@ namespace Xnoise {
 		public signal void sign_video_playing ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class HandlerAddAllToTracklist : Xnoise.ItemHandler {
-		public HandlerAddAllToTracklist ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
-		public override unowned string handler_name ();
-		public override Xnoise.ItemHandlerType handler_type ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class HandlerAddToTracklist : Xnoise.ItemHandler {
-		public HandlerAddToTracklist ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
-		public override unowned string handler_name ();
-		public override Xnoise.ItemHandlerType handler_type ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class HandlerEditTags : Xnoise.ItemHandler {
-		public HandlerEditTags ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection);
-		public override unowned string handler_name ();
-		public override Xnoise.ItemHandlerType handler_type ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class HandlerMoveToTrash : Xnoise.ItemHandler {
-		public HandlerMoveToTrash ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
-		public override unowned string handler_name ();
-		public override Xnoise.ItemHandlerType handler_type ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class HandlerPlayItem : Xnoise.ItemHandler {
-		public HandlerPlayItem ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
-		public override unowned string handler_name ();
-		public override Xnoise.ItemHandlerType handler_type ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class HandlerRemoveTrack : Xnoise.ItemHandler {
-		public HandlerRemoveTrack ();
-		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
-		public override unowned string handler_name ();
-		public override Xnoise.ItemHandlerType handler_type ();
-	}
-	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class HandlerShowInFileManager : Xnoise.ItemHandler {
 		public HandlerShowInFileManager ();
 		public override unowned Xnoise.Action? get_action (Xnoise.ItemType type, Xnoise.ActionContext context, Xnoise.ItemSelectionType selection = ItemSelectionType.NOT_SET);
@@ -762,10 +713,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class LyricsLoader : GLib.Object {
 		public LyricsLoader ();
-		public bool fetch (string _artist, string _title);
-		public void remove_lyrics_provider (Xnoise.ILyricsProvider lp);
 		public signal void sign_fetched (string _artist, string _title, string _credits, string _identifier, string _text, string _provider);
-		public signal void sign_using_provider (string _provider, string _artist, string _title);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class LyricsView : Gtk.TextView {
@@ -775,14 +723,11 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class LyricsViewWidget : Gtk.Box, Xnoise.IMainView {
-		public Xnoise.LyricsView lyricsView;
-		public Xnoise.SerialButton sbutton;
 		public LyricsViewWidget (Xnoise.MainWindow win);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Main : GLib.Object {
 		public Main ();
-		public void add_cyclic_save_timeout ();
 		public void immediate_play (string uri);
 		public void quit ();
 		public void save_activated_plugins ();
@@ -798,50 +743,25 @@ namespace Xnoise {
 			ALL,
 			RANDOM
 		}
-		public bool _seek;
-		public Gtk.ActionGroup action_group;
 		public Xnoise.AlbumImage albumimage;
-		public Gtk.Notebook browsernotebook;
-		public Gtk.Notebook dialognotebook;
-		public bool drag_on_content_area;
-		public Xnoise.FullscreenToolbar fullscreentoolbar;
-		public Gtk.Window fullscreenwindow;
-		public Gtk.Paned hpaned;
 		public bool is_fullscreen;
-		public weak Xnoise.LyricsView lyricsView;
 		public Xnoise.MediaSoureWidget msw;
-		public Xnoise.MusicBrowser musicBr;
-		public Gtk.ScrolledWindow musicBrScrollWin;
-		public Xnoise.ControlButton nextButton;
-		public Xnoise.PlayPauseButton playPauseButton;
-		public Xnoise.ControlButton previousButton;
-		public bool quit_if_closed;
-		public Gtk.Entry search_entry;
-		public Xnoise.ControlButton stopButton;
-		public weak Xnoise.TrackList trackList;
-		public Gtk.ScrolledWindow trackListScrollWin;
-		public Gtk.Notebook tracklistnotebook;
-		public weak Xnoise.VideoScreen videoscreen;
-		public Gtk.Box videovbox;
 		public MainWindow ();
 		public void add_main_view (Xnoise.IMainView view);
-		public void ask_for_initial_media_import ();
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
-		public void handle_control_button_click (Xnoise.ControlButton sender, Xnoise.ControlButton.Direction dir);
 		public void restore_last_view ();
 		public void select_view_by_name (string name);
-		public void set_displayed_title (string? newuri, string? tagname, string? tagvalue);
-		public void show_status_info (Xnoise.InfoBar bar);
 		public void show_window ();
-		public void stop ();
 		public void toggle_fullscreen ();
 		public void toggle_window_visbility ();
 		public bool active_lyrics { get; set; }
 		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
+		public Xnoise.LyricsView lyricsView { get; private set; }
 		public bool media_browser_visible { get; set; }
 		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
+		public Gtk.Notebook tracklistnotebook { get; private set; }
 		public Gtk.UIManager ui_manager { get; set; }
 		public bool usestop { get; set; }
 	}
@@ -858,7 +778,6 @@ namespace Xnoise {
 		}
 		public delegate void DatabaseResetCallback ();
 		public MediaImporter ();
-		public string? get_uri_for_item_id (int32 id);
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -883,9 +802,6 @@ namespace Xnoise {
 		public Xnoise.MusicBrowserModel mediabrowsermodel;
 		public MusicBrowser (Xnoise.DockableMedia dock, Gtk.Widget ow);
 		public bool change_model_data ();
-		public void on_row_collapsed (Gtk.TreeIter iter, Gtk.TreePath path);
-		public void on_row_expanded (Gtk.TreeIter iter, Gtk.TreePath path);
-		public bool update_view ();
 		public bool use_treelines { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -903,13 +819,9 @@ namespace Xnoise {
 			N_COLUMNS
 		}
 		public MusicBrowserModel (Xnoise.DockableMedia dock);
-		public void cancel_fill_model ();
 		public void filter ();
 		public Xnoise.DndData[] get_dnd_data_for_path (ref Gtk.TreePath treepath);
-		public int get_max_icon_width ();
-		public void load_children (ref Gtk.TreeIter iter);
 		public void remove_all ();
-		public void unload_children (ref Gtk.TreeIter iter);
 		public bool populating_model { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -992,17 +904,16 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackList : Gtk.TreeView, Xnoise.IParams {
-		public Xnoise.TrackListModel tracklistmodel;
 		public TrackList ();
 		public void remove_selected_rows ();
 		public void remove_uri_rows (string uri);
-		public void set_focus_on_iter (ref Gtk.TreeIter iter);
 		public bool column_album_visible { get; set; }
 		public bool column_artist_visible { get; set; }
 		public bool column_genre_visible { get; set; }
 		public bool column_length_visible { get; set; }
 		public bool column_tracknumber_visible { get; set; }
 		public bool column_year_visible { get; set; }
+		public Xnoise.TrackListModel tracklistmodel { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackListColumn : Gtk.TreeViewColumn {
@@ -1024,7 +935,6 @@ namespace Xnoise {
 			ITEM
 		}
 		public TrackListModel ();
-		public void add_uris (string[]? uris);
 		public bool get_active_path (out Gtk.TreePath treepath, out bool used_next_pos);
 		public Xnoise.Item[] get_all_tracks ();
 		public bool get_current_path (out Gtk.TreePath treepath);
@@ -1033,21 +943,11 @@ namespace Xnoise {
 		public string get_uri_for_current_position ();
 		public Gtk.TreeIter insert_title (Gdk.Pixbuf? pixbuf, ref Xnoise.TrackData? td, bool bold = false);
 		public bool not_empty ();
-		public void on_before_position_reference_changed ();
-		public void on_position_reference_changed ();
 		public bool path_is_last_row (ref Gtk.TreePath path, out bool trackList_is_empty);
-		public bool reset_state ();
-		public void set_reference_to_last ();
-		public void update_tracklist_data (GLib.HashTable<Xnoise.TrackListModel.Column,string?> ntags);
 		public signal void sign_active_path_changed (Xnoise.PlayerState ts);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
-		public int idx_lyrics;
-		public int idx_tracklist;
-		public int idx_video;
-		public Xnoise.SerialButton sbutton;
-		public Gtk.ScrolledWindow scrolled_window;
 		public TrackListViewWidget (Xnoise.MainWindow win);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -1303,8 +1203,6 @@ namespace Xnoise {
 	public static GLib.File? get_albumimage_for_artistalbum (string? artist, string? album, string? size);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.DataSource? get_data_source (int source_number);
-	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public static void initialize (out bool is_first_start);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static int register_data_source (Xnoise.DataSource source);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
