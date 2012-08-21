@@ -3,6 +3,9 @@
 %:
 	dh $@
 
+override_dh_auto_configure:
+	dh_auto_configure -- --disable-ubuntuone
+
 override_dh_makeshlibs:
 	dh_makeshlibs -X/usr/lib/xnoise/*
 
