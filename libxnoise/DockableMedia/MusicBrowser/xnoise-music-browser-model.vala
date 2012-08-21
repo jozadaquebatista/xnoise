@@ -32,7 +32,8 @@
 using Gtk;
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Resources;
+
 using Xnoise.Database;
 
 
@@ -306,7 +307,7 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         return false;
     }
 
-    private static const string LOADING = _("Loading ...");
+    private const string LOADING = _("Loading ...");
     
     internal void unload_children(ref TreeIter iter) {
         TreeIter iter_loader;

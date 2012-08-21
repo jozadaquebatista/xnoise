@@ -31,6 +31,7 @@
 using Gtk;
 
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Database;
 using Xnoise.Services;
 using Xnoise.TagAccess;

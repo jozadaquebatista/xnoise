@@ -314,7 +314,7 @@ namespace Xnoise {
 			public abstract Xnoise.Main xn { get; set; }
 		}
 	}
-	namespace Services {
+	namespace Resources {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string EMPTYSTRING;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -335,6 +335,8 @@ namespace Xnoise {
 		public const string UNKNOWN_TITLE;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string UNKNOWN_TITLE_LOCALIZED;
+	}
+	namespace Services {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static string data_folder ();
 		[CCode (cheader_filename = "xnoise-1.0.h")]

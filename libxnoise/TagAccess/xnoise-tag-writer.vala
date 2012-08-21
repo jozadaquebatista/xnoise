@@ -29,7 +29,8 @@
  */
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Resources;
+
 
 public class Xnoise.TagAccess.TagWriter {
     public bool write_tag(File? file, TrackData? td) {

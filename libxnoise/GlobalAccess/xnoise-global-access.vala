@@ -35,7 +35,8 @@
  */
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Resources;
+
 
 public class Xnoise.GlobalAccess : GLib.Object {
     

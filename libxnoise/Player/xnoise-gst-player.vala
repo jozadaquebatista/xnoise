@@ -31,6 +31,7 @@
 using Gst;
 
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Services;
 
 // GstPlayFlags flags of playbin2

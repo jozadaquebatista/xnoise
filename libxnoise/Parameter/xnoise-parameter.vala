@@ -29,6 +29,7 @@
  */
 
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Services;
 
 public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class

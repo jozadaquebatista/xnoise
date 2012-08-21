@@ -29,6 +29,7 @@
  */
 
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Services;
 
 public class Xnoise.TagAccess.TagReader {

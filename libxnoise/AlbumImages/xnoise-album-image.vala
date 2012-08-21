@@ -31,7 +31,9 @@
  */
 
 using Gtk;
+
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Services;
 
 public class Xnoise.AlbumImage : Gtk.Image {

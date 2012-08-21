@@ -30,7 +30,7 @@
 
 using X;
 using Xnoise;
-using Xnoise.Services;
+
 using Xnoise.PluginModule;
 
 

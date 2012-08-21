@@ -32,6 +32,7 @@ using Gtk;
 using Gdk;
 
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Playlist;
 using Xnoise.Services;
 using Xnoise.TagAccess;

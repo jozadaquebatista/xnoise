@@ -32,7 +32,8 @@
 using Gtk;
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Resources;
+
 using Xnoise.Database;
 
 

@@ -110,6 +110,7 @@ libxnoise_la_SOURCES = \
     PluginModule/xnoise-plugin-interface.vala \
     PluginModule/xnoise-plugin-loader.vala \
     PluginModule/xnoise-plugin-manager-tree.vala \
+    Resources/xnoise-resources.vala \
     ScreensaverManager/xnoise-screensaver-manager.vala \
     Services/xnoise-services.vala \
     SimpleMarkup/xnoise-markup-node.vala \
@@ -212,6 +213,7 @@ DISTCLEANFILES = \
     PlaylistReader/WPL/*.c \
     PlaylistReader/XSPF/*.c \
     PluginModule/*.c \
+    Resources/*.c \
     ScreensaverManager/*.c \
     Services/*.c \
     SimpleMarkup/*.c \

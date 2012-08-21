@@ -32,7 +32,8 @@
 using Soup;
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Resources;
+
 
 
 namespace Lastfm {

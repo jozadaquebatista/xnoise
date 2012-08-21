@@ -36,7 +36,8 @@ using Soup;
 using Xml;
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Resources;
+
 using Xnoise.PluginModule;
 
 

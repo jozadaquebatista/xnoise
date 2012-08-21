@@ -31,7 +31,8 @@
 using Soup;
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Resources;
+
 using Xnoise.PluginModule;
 
 public class Xnoise.AzlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {

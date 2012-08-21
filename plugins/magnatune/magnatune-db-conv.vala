@@ -32,7 +32,8 @@
 using Sqlite;
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Resources;
+
 
 public class MagnatuneDatabaseConverter : GLib.Object {
     private const string DATABASE_NAME = "/tmp/xnoise_magnatune_db";

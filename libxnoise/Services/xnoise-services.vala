@@ -29,20 +29,12 @@
  */
 
 
+using Xnoise;
+using Xnoise.Resources;
+
 
 namespace Xnoise.Services {
-    public const string UNKNOWN_ARTIST       = "unknown artist";
-    public const string UNKNOWN_TITLE        = "unknown title";
-    public const string UNKNOWN_ALBUM        = "unknown album";
-    public const string UNKNOWN_GENRE        = "unknown genre";
-    public const string UNKNOWN_ORGANIZATION = "unknown organization";
-    public const string UNKNOWN_LOCATION     = "unknown location";
-    public const string EMPTYSTRING          = "";
-    
-    public const string UNKNOWN_ARTIST_LOCALIZED = _("unknown artist");
-    public const string UNKNOWN_TITLE_LOCALIZED  = _("unknown title");
-    public const string UNKNOWN_ALBUM_LOCALIZED  = _("unknown album");
-    
+
     public static RemoteSchemes get_remote_schemes() { 
         return _remote_schemes;
     }

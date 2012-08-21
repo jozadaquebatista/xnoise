@@ -31,7 +31,9 @@
  */
 
 using Soup;
+
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Services;
 using Xnoise.PluginModule;
 

@@ -32,7 +32,7 @@
 using Sqlite;
 
 using Xnoise;
-using Xnoise.Services;
+
 
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext/ItemType

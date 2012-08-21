@@ -30,7 +30,8 @@
 
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Resources;
+
 
 namespace Xnoise.Playlist {
     public class Reader : GLib.Object {

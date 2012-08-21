@@ -32,7 +32,7 @@ using Gtk;
 using U1;
 
 using Xnoise;
-using Xnoise.Services;
+
 using Xnoise.PluginModule;
 
 

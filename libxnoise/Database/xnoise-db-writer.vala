@@ -31,6 +31,7 @@
 using Sqlite;
 
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Services;
 
 public class Xnoise.Database.Writer : GLib.Object {

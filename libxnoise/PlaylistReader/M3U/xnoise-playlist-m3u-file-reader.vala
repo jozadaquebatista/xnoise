@@ -31,6 +31,7 @@
 
 
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Services;
 
 namespace Xnoise.Playlist {

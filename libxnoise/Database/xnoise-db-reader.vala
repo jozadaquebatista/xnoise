@@ -32,6 +32,7 @@
 using Sqlite;
 
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Services;
 
 public errordomain Xnoise.Database.DbError {

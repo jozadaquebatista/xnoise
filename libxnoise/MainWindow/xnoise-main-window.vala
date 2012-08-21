@@ -32,6 +32,7 @@ using Gtk;
 using Gdk;
 
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.Services;
 
 [CCode (cname = "gdk_window_ensure_native")]

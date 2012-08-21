@@ -32,7 +32,7 @@ using Gtk;
 using Gdk;
 
 using Xnoise;
-using Xnoise.Services;
+
 
 
 public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {

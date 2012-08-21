@@ -29,7 +29,8 @@
  */
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Resources;
+
 using Xnoise.SimpleMarkup;
 
 namespace Lastfm {
