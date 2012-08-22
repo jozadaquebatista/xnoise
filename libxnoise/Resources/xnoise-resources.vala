@@ -39,8 +39,18 @@ namespace Xnoise.Resources {
     public const string UNKNOWN_ORGANIZATION     = "unknown organization";
     public const string UNKNOWN_LOCATION         = "unknown location";
     public const string EMPTYSTRING              = "";
-    public const int    VIDEOTHUMBNAILSIZE       = 40;
     
+    public const string MAIN_DATABASE_NAME       = "db.sqlite";
+    public const string INIFILE                  = "xnoise.ini";
+    
+    public const string VIDEOVIEW_NAME           = "VideoView"; 
+    public const string TRACKLIST_VIEW_NAME      = "TrackListView";
+    public const string LYRICS_VIEW_NAME         = "LyricsView";  
+
+    public static const int VIDEOTHUMBNAILSIZE   = 40;
+    internal static const int DB_VERSION_MAJOR   = 7;
+    internal static const int DB_VERSION_MINOR   = 0;
+
     public const string UNKNOWN_ARTIST_LOCALIZED = _("unknown artist");
     public const string UNKNOWN_TITLE_LOCALIZED  = _("unknown title");
     public const string UNKNOWN_ALBUM_LOCALIZED  = _("unknown album");

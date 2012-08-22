@@ -374,6 +374,17 @@ typedef struct _XnoiseControlButtonPrivate XnoiseControlButtonPrivate;
 
 #define XNOISE_CONTROL_BUTTON_TYPE_DIRECTION (xnoise_control_button_direction_get_type ())
 
+#define XNOISE_TYPE_MAIN_VIEW_NOTEBOOK (xnoise_main_view_notebook_get_type ())
+#define XNOISE_MAIN_VIEW_NOTEBOOK(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MAIN_VIEW_NOTEBOOK, XnoiseMainViewNotebook))
+#define XNOISE_MAIN_VIEW_NOTEBOOK_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MAIN_VIEW_NOTEBOOK, XnoiseMainViewNotebookClass))
+#define XNOISE_IS_MAIN_VIEW_NOTEBOOK(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_MAIN_VIEW_NOTEBOOK))
+#define XNOISE_IS_MAIN_VIEW_NOTEBOOK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_MAIN_VIEW_NOTEBOOK))
+#define XNOISE_MAIN_VIEW_NOTEBOOK_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_MAIN_VIEW_NOTEBOOK, XnoiseMainViewNotebookClass))
+
+typedef struct _XnoiseMainViewNotebook XnoiseMainViewNotebook;
+typedef struct _XnoiseMainViewNotebookClass XnoiseMainViewNotebookClass;
+typedef struct _XnoiseMainViewNotebookPrivate XnoiseMainViewNotebookPrivate;
+
 #define XNOISE_TYPE_MEDIA_SOURE_WIDGET (xnoise_media_soure_widget_get_type ())
 #define XNOISE_MEDIA_SOURE_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_MEDIA_SOURE_WIDGET, XnoiseMediaSoureWidget))
 #define XNOISE_MEDIA_SOURE_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_MEDIA_SOURE_WIDGET, XnoiseMediaSoureWidgetClass))
@@ -1285,6 +1296,15 @@ typedef enum  {
 	XNOISE_CONTROL_BUTTON_DIRECTION_PREVIOUS,
 	XNOISE_CONTROL_BUTTON_DIRECTION_STOP
 } XnoiseControlButtonDirection;
+
+struct _XnoiseMainViewNotebook {
+	GtkNotebook parent_instance;
+	XnoiseMainViewNotebookPrivate * priv;
+};
+
+struct _XnoiseMainViewNotebookClass {
+	GtkNotebookClass parent_class;
+};
 
 struct _XnoiseMediaSoureWidget {
 	GtkBox parent_instance;
@@ -2205,6 +2225,13 @@ GType xnoise_control_button_get_type (void) G_GNUC_CONST;
 GType xnoise_control_button_direction_get_type (void) G_GNUC_CONST;
 XnoiseControlButton* xnoise_control_button_new (XnoiseControlButtonDirection _direction);
 XnoiseControlButton* xnoise_control_button_construct (GType object_type, XnoiseControlButtonDirection _direction);
+GType xnoise_main_view_notebook_get_type (void) G_GNUC_CONST;
+XnoiseMainViewNotebook* xnoise_main_view_notebook_new (void);
+XnoiseMainViewNotebook* xnoise_main_view_notebook_construct (GType object_type);
+void xnoise_main_view_notebook_add_main_view (XnoiseMainViewNotebook* self, XnoiseIMainView* view);
+void xnoise_main_view_notebook_remove_main_view (XnoiseMainViewNotebook* self, XnoiseIMainView* view);
+gboolean xnoise_main_view_notebook_select_main_view (XnoiseMainViewNotebook* self, const gchar* name);
+gchar* xnoise_main_view_notebook_get_current_main_view_name (XnoiseMainViewNotebook* self);
 GType xnoise_media_soure_widget_get_type (void) G_GNUC_CONST;
 XnoiseMediaSoureWidget* xnoise_media_soure_widget_new (XnoiseMainWindow* mwindow);
 XnoiseMediaSoureWidget* xnoise_media_soure_widget_construct (GType object_type, XnoiseMainWindow* mwindow);
@@ -2222,12 +2249,13 @@ void xnoise_play_pause_button_on_clicked (XnoisePlayPauseButton* self, GtkWidget
 void xnoise_play_pause_button_update_picture (XnoisePlayPauseButton* self);
 XnoiseSerialButton* xnoise_serial_button_new (void);
 XnoiseSerialButton* xnoise_serial_button_construct (GType object_type);
-gint xnoise_serial_button_insert (XnoiseSerialButton* self, const gchar* txt);
-void xnoise_serial_button_select (XnoiseSerialButton* self, gint idx, gboolean emit_signal);
-void xnoise_serial_button_set_sensitive (XnoiseSerialButton* self, gint idx, gboolean sensitive_status);
-void xnoise_serial_button_del (XnoiseSerialButton* self, gint idx);
-gint xnoise_serial_button_get_selected_idx (XnoiseSerialButton* self);
-void xnoise_serial_button_set_selected_idx (XnoiseSerialButton* self, gint value);
+gboolean xnoise_serial_button_has_item (XnoiseSerialButton* self, const gchar* name);
+gchar* xnoise_serial_button_get_active_name (XnoiseSerialButton* self);
+gboolean xnoise_serial_button_insert (XnoiseSerialButton* self, const gchar* name, const gchar* txt);
+void xnoise_serial_button_select_first (XnoiseSerialButton* self);
+void xnoise_serial_button_select (XnoiseSerialButton* self, const gchar* name, gboolean emit_signal);
+void xnoise_serial_button_set_sensitive (XnoiseSerialButton* self, const gchar* name, gboolean sensitive_status);
+void xnoise_serial_button_del (XnoiseSerialButton* self, const gchar* name);
 gint xnoise_serial_button_get_item_count (XnoiseSerialButton* self);
 GType xnoise_global_access_get_type (void) G_GNUC_CONST;
 void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
@@ -2362,10 +2390,8 @@ void xnoise_main_window_toggle_fullscreen (XnoiseMainWindow* self);
 void xnoise_main_window_toggle_window_visbility (XnoiseMainWindow* self);
 void xnoise_main_window_show_window (XnoiseMainWindow* self);
 void xnoise_main_window_change_track (XnoiseMainWindow* self, XnoiseControlButtonDirection direction, gboolean handle_repeat_state);
-void xnoise_main_window_add_main_view (XnoiseMainWindow* self, XnoiseIMainView* view);
-void xnoise_main_window_select_view_by_name (XnoiseMainWindow* self, const gchar* name);
 XnoiseLyricsView* xnoise_main_window_get_lyricsView (XnoiseMainWindow* self);
-GtkNotebook* xnoise_main_window_get_tracklistnotebook (XnoiseMainWindow* self);
+XnoiseMainViewNotebook* xnoise_main_window_get_mainview_box (XnoiseMainWindow* self);
 GtkUIManager* xnoise_main_window_get_ui_manager (XnoiseMainWindow* self);
 void xnoise_main_window_set_ui_manager (XnoiseMainWindow* self, GtkUIManager* value);
 gboolean xnoise_main_window_get_not_show_art_on_hover_image (XnoiseMainWindow* self);
@@ -2611,6 +2637,11 @@ void xnoise_plugin_module_loader_deactivate_single_plugin (XnoisePluginModuleLoa
 #define XNOISE_RESOURCES_UNKNOWN_ORGANIZATION "unknown organization"
 #define XNOISE_RESOURCES_UNKNOWN_LOCATION "unknown location"
 #define XNOISE_RESOURCES_EMPTYSTRING ""
+#define XNOISE_RESOURCES_MAIN_DATABASE_NAME "db.sqlite"
+#define XNOISE_RESOURCES_INIFILE "xnoise.ini"
+#define XNOISE_RESOURCES_VIDEOVIEW_NAME "VideoView"
+#define XNOISE_RESOURCES_TRACKLIST_VIEW_NAME "TrackListView"
+#define XNOISE_RESOURCES_LYRICS_VIEW_NAME "LyricsView"
 #define XNOISE_RESOURCES_VIDEOTHUMBNAILSIZE 40
 #define XNOISE_RESOURCES_UNKNOWN_ARTIST_LOCALIZED _ ("unknown artist")
 #define XNOISE_RESOURCES_UNKNOWN_TITLE_LOCALIZED _ ("unknown title")

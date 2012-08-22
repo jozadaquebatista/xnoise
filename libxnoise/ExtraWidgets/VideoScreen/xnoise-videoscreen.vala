@@ -36,7 +36,6 @@ using Xnoise.Services;
 
 
 public class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
-    private const string VIDEOVIEW_NAME         = "VideoView"; 
     private const string UI_FILE = Config.UIDIR + "video.ui";
     
     private unowned MainWindow win;
@@ -67,9 +66,9 @@ public class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
             var bottombox = gb.get_object("hbox2v") as Gtk.Box;  //VIDEO
             
             sbutton = new SerialButton();
-            sbutton.insert(SHOWTRACKLIST);
-            sbutton.insert(SHOWVIDEO);
-            sbutton.insert(SHOWLYRICS);
+            sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
+            sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
+            sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
             bottombox.pack_start(sbutton, false, false, 0);
 
             var hide_button_1 = gb.get_object("hide_button_1") as Gtk.Button;

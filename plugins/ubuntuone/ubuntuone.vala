@@ -32,7 +32,7 @@ using Gtk;
 using U1;
 
 using Xnoise;
-
+using Xnoise.Resources;
 using Xnoise.PluginModule;
 
 
@@ -80,10 +80,14 @@ public class UbuntuOnePlugin : GLib.Object, IPlugin {
 
 
 
-private class UStore : U1.MusicStore {
+private class UStore : U1.MusicStore, Xnoise.IMainView {
     
     public UStore() {
         GLib.Object();
+    }
+    
+    public string get_view_name() {
+        return UBUNTUONE_MUSIC_STORE_NAME;
     }
     
     ~UStore() {
@@ -151,18 +155,17 @@ private class DockableUbuntuOneMS : DockableMedia {
                 ms.download_finished.connect(on_download_finished); 
                 ms.url_loaded.connect(on_url_loaded); // working
                 assert(win != null);
-                assert(win.tracklistnotebook != null && win.tracklistnotebook is Gtk.Container);
+                assert(win.mainview_box != null);
                 if(ms.parent == null)
-                    win.tracklistnotebook.append_page(ms, null);
+                    win.mainview_box.add_main_view(ms);
                 ms.show();
                 ui_merge_id = add_main_window_menu_entry();
                 //print("ui_merge_id:%u\n", ui_merge_id);
             }
             Idle.add( () => {
                 assert(win != null);
-                assert(win.tracklistnotebook != null && win.tracklistnotebook is Gtk.Container);
-                int ms_num = win.tracklistnotebook.page_num(ms);
-                win.tracklistnotebook.set_current_page(ms_num);
+                assert(win.mainview_box != null);
+                win.mainview_box.select_main_view(ms.get_view_name());
                 return false;
             });
         }
@@ -170,12 +173,16 @@ private class DockableUbuntuOneMS : DockableMedia {
             if(ms == null)
                 return;
             assert(win != null);
-                assert(win.tracklistnotebook != null && win.tracklistnotebook is Gtk.Container);
-            int ms_num = win.tracklistnotebook.page_num(ms);
-            if(ms_num == -1)
-                return;
-            if(ms_num == win.tracklistnotebook.get_current_page())
-                win.restore_last_view();
+            assert(win.mainview_box != null);
+//            win.mainview_box.select_main_view(ms.get_view_name());
+            if(win.mainview_box.get_current_main_view_name() == UBUNTUONE_MUSIC_STORE_NAME)
+                win.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
+//                win.restore_last_view();
+//            int ms_num = win.tracklistnotebook.page_num(ms);
+//            if(ms_num == -1)
+//                return;
+//            if(ms_num == win.tracklistnotebook.get_current_page())
+//TODO ???
         }
     }
     
@@ -185,12 +192,7 @@ private class DockableUbuntuOneMS : DockableMedia {
         if(ms == null)
             return;
         win.msw.selection_changed.disconnect(this.on_selection_changed);
-                print("ubu++7\n");
-        int ms_num = win.tracklistnotebook.page_num(ms);
-                print("ubu++8\n");
-        if(ms_num > -1)
-            win.tracklistnotebook.remove_page(ms_num);
-                print("ubu++9\n");
+        win.mainview_box.remove_main_view(ms);
         ms = null;
     }
     
@@ -278,7 +280,7 @@ private class UbuMusicStore : GLib.Object {
     }
     
     ~UbuMusicStore() {
-        main_window.tracklistnotebook.set_current_page(0);
+        main_window.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
         main_window.msw.select_dockable_by_name("MusicBrowserDockable");
         unowned DockableUbuntuOneMS msd = 
             (DockableUbuntuOneMS)dockable_media_sources.lookup(UBUNTUONE_MUSIC_STORE_NAME);

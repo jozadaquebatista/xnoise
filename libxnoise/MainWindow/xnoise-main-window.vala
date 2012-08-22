@@ -58,7 +58,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private SerialButton sbuttonLY;
     private SerialButton sbuttonVI;
     private Button repeatButton;
-    private int buffer_last_page;
+    private TrackListViewWidget tracklistview_widget;
+    private VideoViewWidget videoview_widget;
+    private LyricsViewWidget lyricsview_widget;
+    private string mainview_page_buffer;
     private Image repeatimage; 
     private Box menuvbox;
     private Box mainvbox;
@@ -72,14 +75,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private List<Gtk.Action> actions_list = null;
     private Box mbbox01;
     private Xnoise.AppMenuButton app_menu_button;
-    private TrackListNoteBookTab temporary_tab = TrackListNoteBookTab.TRACKLIST;
+    private string temporary_mainview_name;
     private bool window_maximized;
     internal bool quit_if_closed;
     internal ScrolledWindow musicBrScrollWin = null;
     internal ScrolledWindow trackListScrollWin = null;
     internal Gtk.ActionGroup action_group;
     public bool is_fullscreen = false;
-//    internal bool drag_on_content_area = false;
     internal FullscreenToolbar fullscreentoolbar;
     internal Box videovbox;
     public unowned LyricsView lyricsView { get; private set; }
@@ -90,7 +92,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal ControlButton previousButton;
     internal ControlButton nextButton;
     internal ControlButton stopButton;
-    public Notebook tracklistnotebook { get; private set; }
+    public MainViewNotebook mainview_box { get; private set; }
     internal Notebook dialognotebook;
     public AlbumImage albumimage;
     public MediaSoureWidget msw;
@@ -119,15 +121,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         set {
             if(value == true) {
                 if(sbuttonTL.item_count < 3) {
-                    idx_lyrics = sbuttonTL.insert(SHOWLYRICS);
-                    sbuttonLY.insert(SHOWLYRICS);
-                    sbuttonVI.insert(SHOWLYRICS);
+                    sbuttonTL.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
+                    sbuttonLY.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
+                    sbuttonVI.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
                 }
             }
             else {
-                sbuttonTL.del(idx_lyrics);
-                sbuttonLY.del(idx_lyrics);
-                sbuttonVI.del(idx_lyrics);
+                sbuttonTL.del(LYRICS_VIEW_NAME);
+                sbuttonLY.del(LYRICS_VIEW_NAME);
+                sbuttonVI.del(LYRICS_VIEW_NAME);
             }
             Idle.add( () => {
                 foreach(Gtk.Action a in action_group.list_actions())
@@ -247,7 +249,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.notify["fullscreenwindowvisible"].connect(on_fullscreenwindowvisible);
         global.notify["media-import-in-progress"].connect(on_media_import_notify);
         
-        buffer_last_page = (int)TrackListNoteBookTab.TRACKLIST;
+//        buffer_last_page = (int)TrackListNoteBookTab.TRACKLIST;
+        mainview_page_buffer = TRACKLIST_VIEW_NAME;
         
         global.caught_eos_from_player.connect(on_caught_eos_from_player);
         global.tag_changed.connect(this.set_displayed_title);
@@ -255,15 +258,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             //handle stop signal from gst player
             if(!this.fullscreenwindowvisible) {
                 Idle.add( () => {
-                    buffer_last_page = (int)TrackListNoteBookTab.VIDEO;
-                    Params.set_int_value("TrackListNoteBookTab", (int) TrackListNoteBookTab.VIDEO);
+                    mainview_page_buffer = VIDEOVIEW_NAME;
+//                    buffer_last_page = (int)TrackListNoteBookTab.VIDEO;
+                    Params.set_string_value("MainViewName", VIDEOVIEW_NAME);
                     if(aimage_timeout != 0) {
                         Source.remove(aimage_timeout);
                         aimage_timeout = 0;
                     }
                     return false;
                 });
-                sbuttonTL.select(idx_video, true);
+                sbuttonTL.select(VIDEOVIEW_NAME, true);
             }
         });
         css_provider_search = new CssProvider();
@@ -326,18 +330,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         sign_drag_over_content_area.connect(() => {
             //switch to tracklist for dropping
             if(!fullscreenwindowvisible) {
-                sbuttonVI.select(idx_tracklist, true);
+                sbuttonVI.select(TRACKLIST_VIEW_NAME, true);
             }
         });
         videoscreen.drag_motion.connect( (sender,context,x,y,t) => {
             print("videoscreen d m\n");
-            temporary_tab = TrackListNoteBookTab.VIDEO;
+            temporary_mainview_name = VIDEOVIEW_NAME;
+//            temporary_tab = TrackListNoteBookTab.VIDEO;
             sign_drag_over_content_area();
             return true;
         });
         
         lyricsView.drag_motion.connect((sender,context,x,y,t) => {
-            temporary_tab = TrackListNoteBookTab.LYRICS;
+//            temporary_tab = TrackListNoteBookTab.LYRICS;
+            temporary_mainview_name = LYRICS_VIEW_NAME;
             sign_drag_over_content_area();
             return true;
         });
@@ -345,19 +351,19 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 
     public void restore_last_view() {
-        tracklistnotebook.set_current_page(buffer_last_page);
-        sbuttonTL.select(buffer_last_page, false);
+        mainview_box.select_main_view(mainview_page_buffer);
+        sbuttonTL.select(mainview_page_buffer, false);
     }
     
     internal void restore_tab() {
-        if(temporary_tab != TrackListNoteBookTab.TRACKLIST) {
-            tracklistnotebook.set_current_page(temporary_tab);
-            if(temporary_tab == TrackListNoteBookTab.VIDEO)
-                sbuttonTL.select(idx_video, true);
-            else if(temporary_tab == TrackListNoteBookTab.LYRICS)
-                sbuttonTL.select(idx_lyrics, true);
+        if(temporary_mainview_name != TRACKLIST_VIEW_NAME) {
+            mainview_box.select_main_view(temporary_mainview_name);
+            if(temporary_mainview_name == VIDEOVIEW_NAME)
+                sbuttonTL.select(temporary_mainview_name, true);
+            else if(temporary_mainview_name == LYRICS_VIEW_NAME)
+                sbuttonTL.select(temporary_mainview_name, true);
             
-            temporary_tab = TrackListNoteBookTab.TRACKLIST;
+            temporary_mainview_name = TRACKLIST_VIEW_NAME;
         }
     }
     
@@ -379,9 +385,9 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         if(fullscreenwindowvisible)
             global.player_state_changed.connect(handle_screensaver);
         
-        sbuttonVI.set_sensitive(idx_video, !fullscreenwindowvisible);
-        sbuttonTL.set_sensitive(idx_video, !fullscreenwindowvisible);
-        sbuttonLY.set_sensitive(idx_video, !fullscreenwindowvisible);
+        sbuttonVI.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
+        sbuttonTL.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
+        sbuttonLY.set_sensitive(VIDEOVIEW_NAME, !fullscreenwindowvisible);
     }
     
     private void handle_screensaver() {
@@ -505,7 +511,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.videoscreen.reparent(fullscreenwindow);
             this.videoscreen.get_window().process_updates(true);
             
-            sbuttonVI.select(idx_tracklist);
+            sbuttonVI.select(TRACKLIST_VIEW_NAME);
             
             fullscreenwindowvisible = true;
             fullscreentoolbar.show();
@@ -521,7 +527,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             videoscreen.set_vexpand(true);
             videoscreen.set_hexpand(true);
             
-            sbuttonTL.select(idx_video);
+            sbuttonTL.select(VIDEOVIEW_NAME);
             
             fullscreenwindowvisible = false;
             this.videovbox.show_all();
@@ -651,13 +657,14 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             case Gdk.Key.@1: {
                     if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
                         return false;
-                    this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
+                    this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
                 }
                 return true;
             case Gdk.Key.@2: {
                     if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
                         return false;
-                    this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+                    if(!fullscreenwindowvisible)
+                        this.mainview_box.select_main_view(VIDEOVIEW_NAME);
                 }
                 return true;
             case Gdk.Key.@3: {
@@ -665,7 +672,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                         return false;
                     if(active_lyrics == false)
                         return false;
-                    this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
+                    this.mainview_box.select_main_view(LYRICS_VIEW_NAME);
                 }
                 return true;
             case Gdk.Key.space: {
@@ -710,38 +717,41 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     private void on_show_video_menu_clicked() {
         Idle.add( () => {
-            buffer_last_page = (int)TrackListNoteBookTab.VIDEO;
+            mainview_page_buffer = VIDEOVIEW_NAME;
+//            buffer_last_page = (int)TrackListNoteBookTab.VIDEO;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
                 aimage_timeout = 0;
             }
             return false;
         });
-        sbuttonTL.select(idx_video, true);
+        sbuttonTL.select(VIDEOVIEW_NAME, true);
     }
 
     private void on_show_tracklist_menu_clicked() {
         Idle.add( () => {
-            buffer_last_page = (int)TrackListNoteBookTab.TRACKLIST;
+            mainview_page_buffer = TRACKLIST_VIEW_NAME;
+//            buffer_last_page = (int)TrackListNoteBookTab.TRACKLIST;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
                 aimage_timeout = 0;
             }
             return false;
         });
-        sbuttonVI.select(idx_tracklist, true);
+        sbuttonVI.select(TRACKLIST_VIEW_NAME, true);
     }
 
     private void on_show_lyrics_menu_clicked() {
         Idle.add( () => {
-            buffer_last_page = (int)TrackListNoteBookTab.LYRICS;
+            mainview_page_buffer = LYRICS_VIEW_NAME;
+//            buffer_last_page = (int)TrackListNoteBookTab.LYRICS;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
                 aimage_timeout = 0;
             }
             return false;
         });
-        sbuttonTL.select(idx_lyrics, true);
+        sbuttonTL.select(LYRICS_VIEW_NAME, true);
     }
 
     // This is used for the main window
@@ -814,27 +824,30 @@ print("++2\n");
             this.hpaned.set_position(hp_position);
         
         Idle.add( () => {
-            int x = Params.get_int_value("TrackListNoteBookTab");
+            string x = Params.get_string_value("MainViewName");
             switch(x) {
-                case 0: {
-                    sbuttonTL.select(idx_tracklist, false);
-                    sbuttonVI.select(idx_tracklist, false);
-                    sbuttonLY.select(idx_tracklist, false);
-                    this.tracklistnotebook.set_current_page(0);
+                case TRACKLIST_VIEW_NAME: {
+                    sbuttonTL.select(TRACKLIST_VIEW_NAME, false);
+                    sbuttonVI.select(TRACKLIST_VIEW_NAME, false);
+                    sbuttonLY.select(TRACKLIST_VIEW_NAME, false);
+//                    this.mainview_box.set_current_page(0);
+                    this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
                     break;
                 }
-                case 1: {
-                    sbuttonTL.select(idx_video, false);
-                    sbuttonVI.select(idx_video, false);
-                    sbuttonLY.select(idx_video, false);
-                    this.tracklistnotebook.set_current_page(1);
+                case VIDEOVIEW_NAME: {
+                    sbuttonTL.select(VIDEOVIEW_NAME, false);
+                    sbuttonVI.select(VIDEOVIEW_NAME, false);
+                    sbuttonLY.select(VIDEOVIEW_NAME, false);
+                    this.mainview_box.select_main_view(VIDEOVIEW_NAME);
+//                    this.mainview_box.set_current_page(1);
                     break;
                 }
                 default: {
-                    sbuttonTL.select(idx_tracklist, false);
-                    sbuttonVI.select(idx_tracklist, false);
-                    sbuttonLY.select(idx_tracklist, false);
-                    this.tracklistnotebook.set_current_page(0);
+                    sbuttonTL.select(TRACKLIST_VIEW_NAME, false);
+                    sbuttonVI.select(TRACKLIST_VIEW_NAME, false);
+                    sbuttonLY.select(TRACKLIST_VIEW_NAME, false);
+                    this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
+//                    this.mainview_box.set_current_page(0);
                     break;
                 }
             }
@@ -1321,36 +1334,22 @@ print("++2\n");
         }
     }
     
-    private void on_serial_button_clicked(SerialButton sender, int idx) {
+    private void on_serial_button_clicked(SerialButton sender, string name) {
         if(sender == this.sbuttonTL) {
-            sbuttonVI.select(idx, false);
-            sbuttonLY.select(idx, false);
-            if(idx == idx_video)
-                this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
-            else if(idx == idx_lyrics)
-                this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
+            sbuttonVI.select(name, false);
+            sbuttonLY.select(name, false);
+            this.mainview_box.select_main_view(name);
         }
         if(sender == this.sbuttonVI) {
-            sbuttonTL.select(idx, false);
-            sbuttonLY.select(idx, false);
-            if(idx == idx_tracklist)
-                this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
-            else if(idx == idx_lyrics)
-                this.tracklistnotebook.set_current_page(TrackListNoteBookTab.LYRICS);
+            sbuttonTL.select(name, false);
+            sbuttonLY.select(name, false);
+            this.mainview_box.select_main_view(name);
         }
         if(sender == this.sbuttonLY) {
-            sbuttonVI.select(idx, false);
-            sbuttonTL.select(idx, false);
-            if(idx == idx_tracklist)
-                this.tracklistnotebook.set_current_page(TrackListNoteBookTab.TRACKLIST);
-            else if(idx == idx_video)
-                this.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+            sbuttonVI.select(name, false);
+            sbuttonTL.select(name, false);
+            this.mainview_box.select_main_view(name);
         }
-    }
-    
-    public void add_main_view(IMainView view) {
-        if(tracklistnotebook != null)
-            tracklistnotebook.append_page(view);
     }
     
     private void create_widgets() {
@@ -1386,27 +1385,24 @@ print("++2\n");
             this.infobox = gb.get_object("infobox") as Gtk.Box;
             
             var contentvbox = gb.get_object("contentvbox") as Gtk.Box;
-            tracklistnotebook = new Gtk.Notebook();
-            contentvbox.pack_start(tracklistnotebook, true, true, 0);
-            tracklistnotebook.set_border_width(0);
-            tracklistnotebook.show_border = false;
-            tracklistnotebook.show_tabs   = false;
+            mainview_box = new MainViewNotebook();
+            contentvbox.pack_start(mainview_box, true, true, 0);
             
             ///Tracklist (right)
             this.trackList = tl;
-            var tracklistview_widget = new TrackListViewWidget(this);
+            tracklistview_widget = new TrackListViewWidget(this);
             trackListScrollWin = tracklistview_widget.scrolled_window;
-            add_main_view(tracklistview_widget);
+            mainview_box.add_main_view(tracklistview_widget);
             
-            var videoview_widget = new VideoViewWidget(this);
+            videoview_widget = new VideoViewWidget(this);
             videoscreen = gst_player.videoscreen;
             videovbox = videoview_widget.videovbox;
-            add_main_view(videoview_widget);
+            mainview_box.add_main_view(videoview_widget);
             
             //lyrics
-            var lyrisview_widget = new LyricsViewWidget(this);
-            this.lyricsView = lyrisview_widget.lyricsView;
-            add_main_view(lyrisview_widget);
+            lyricsview_widget = new LyricsViewWidget(this);
+            this.lyricsView = lyricsview_widget.lyricsView;
+            mainview_box.add_main_view(lyricsview_widget);
 
             //--------------------
             var toolbarbox = gb.get_object("toolbarbox") as Gtk.Box;
@@ -1423,7 +1419,7 @@ print("++2\n");
             idx_video  = tracklistview_widget.idx_video;
             idx_lyrics  = tracklistview_widget.idx_lyrics;
             sbuttonVI = videoview_widget.sbutton;
-            sbuttonLY = lyrisview_widget.sbutton;
+            sbuttonLY = lyricsview_widget.sbutton;
             
             sbuttonTL.sign_selected.connect(on_serial_button_clicked);
             sbuttonVI.sign_selected.connect(on_serial_button_clicked);
@@ -1461,20 +1457,20 @@ print("++2\n");
                     aimage_timeout = 0;
                     return false;
                 }
-                int idx = 0;
-                if(buffer_last_page == (int)TrackListNoteBookTab.TRACKLIST)
-                    idx = idx_tracklist;
-                else if(buffer_last_page == (int)TrackListNoteBookTab.VIDEO)
-                    idx = idx_video;
-                else if(buffer_last_page == (int)TrackListNoteBookTab.LYRICS)
-                    idx = idx_lyrics;
-                else {
-                    tracklistnotebook.set_current_page(buffer_last_page);
-                    idx = buffer_last_page;
+//                int idx = 0;
+//                if(mainview_page_buffer == TRACKLIST_VIEW_NAME)
+//                    idx = idx_tracklist;
+//                else if(mainview_page_buffer == videoview_widget.get_view_name())
+//                    idx = idx_video;
+//                else if(mainview_page_buffer == lyricsview_widget.get_view_name())
+//                    idx = idx_lyrics;
+//                else {
+                    mainview_box.select_main_view(mainview_page_buffer);
+//                    idx = buffer_last_page;
 //                    sbuttonVI.select((int)TrackListNoteBookTab.TRACKLIST, true);
 //                    return false;
-                }
-                sbuttonVI.select(idx, true);
+//                }
+                sbuttonVI.select(mainview_page_buffer, true);
                 return false;
             });
             //--------------------
@@ -1601,11 +1597,14 @@ print("++2\n");
             msg.run();
             return;
         }
-        
-        tracklistnotebook.switch_page.connect( (s,np,p) => {
-            global.sign_notify_tracklistnotebook_switched(p);
-            sbuttonTL.select((int)p, false);
-            Params.set_int_value("TrackListNoteBookTab", (int)p);
+        mainview_box.switch_page.connect( (s,np,p) => {
+            IMainView? mv = (IMainView)np;
+            string? nme = null;
+            if(np == null || (nme = mv.get_view_name()) == null)
+                return;
+            sbuttonTL.select(nme, false);
+            global.sign_main_view_changed(nme);
+            Params.set_string_value("MainViewName", nme);
         });
         
         this.delete_event.connect(this.on_close); //only send to tray
@@ -1618,16 +1617,12 @@ print("++2\n");
         bar.show_all();
     }
     
-    public void select_view_by_name(string name) {
-//        TODO
-    }
-    
     private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {
         if(not_show_art_on_hover_image)
             return false;
         aimage_timeout = Timeout.add(300, () => {
-            buffer_last_page = this.tracklistnotebook.get_current_page();
-            sbuttonTL.select(idx_video, true);
+            mainview_page_buffer = this.mainview_box.get_current_main_view_name();
+            sbuttonTL.select(VIDEOVIEW_NAME, true);
             this.aimage_timeout = 0;
             return false;
         });

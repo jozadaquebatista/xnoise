@@ -1032,7 +1032,6 @@ private class MagMusicStore : GLib.Object {
     }
     
     ~MagMusicStore() {
-        main_window.tracklistnotebook.set_current_page(0);
         main_window.msw.select_dockable_by_name("MusicBrowserDockable");
         if(msd == null)
             return;

@@ -318,6 +318,14 @@ namespace Xnoise {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string EMPTYSTRING;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string INIFILE;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string LYRICS_VIEW_NAME;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string MAIN_DATABASE_NAME;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string TRACKLIST_VIEW_NAME;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string UNKNOWN_ALBUM;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string UNKNOWN_ALBUM_LOCALIZED;
@@ -337,6 +345,8 @@ namespace Xnoise {
 		public const string UNKNOWN_TITLE_LOCALIZED;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const int VIDEOTHUMBNAILSIZE;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const string VIDEOVIEW_NAME;
 	}
 	namespace Services {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -618,7 +628,7 @@ namespace Xnoise {
 		public signal void sign_image_path_embedded_changed ();
 		public signal void sign_image_path_large_changed ();
 		public signal void sign_image_path_small_changed ();
-		public signal void sign_notify_tracklistnotebook_switched (uint new_page_number);
+		public signal void sign_main_view_changed (string new_view_name);
 		public signal void sign_restart_song ();
 		public signal void sign_searchtext_changed (string text);
 		public signal void sign_song_info_required ();
@@ -740,6 +750,14 @@ namespace Xnoise {
 		public int thread_id { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class MainViewNotebook : Gtk.Notebook {
+		public MainViewNotebook ();
+		public void add_main_view (Xnoise.IMainView view);
+		public string? get_current_main_view_name ();
+		public void remove_main_view (Xnoise.IMainView view);
+		public bool select_main_view (string name);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {
 		public enum PlayerRepeatMode {
 			NOT_AT_ALL,
@@ -751,10 +769,8 @@ namespace Xnoise {
 		public bool is_fullscreen;
 		public Xnoise.MediaSoureWidget msw;
 		public MainWindow ();
-		public void add_main_view (Xnoise.IMainView view);
 		public void change_track (Xnoise.ControlButton.Direction direction, bool handle_repeat_state = false);
 		public void restore_last_view ();
-		public void select_view_by_name (string name);
 		public void show_window ();
 		public void toggle_fullscreen ();
 		public void toggle_window_visbility ();
@@ -762,10 +778,10 @@ namespace Xnoise {
 		public bool compact_layout { get; set; }
 		public bool fullscreenwindowvisible { get; set; }
 		public Xnoise.LyricsView lyricsView { get; private set; }
+		public Xnoise.MainViewNotebook mainview_box { get; private set; }
 		public bool media_browser_visible { get; set; }
 		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
-		public Gtk.Notebook tracklistnotebook { get; private set; }
 		public Gtk.UIManager ui_manager { get; set; }
 		public bool usestop { get; set; }
 	}
@@ -862,13 +878,15 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class SerialButton : Gtk.Box {
 		public SerialButton ();
-		public void del (int idx);
-		public int insert (string? txt);
-		public void select (int idx, bool emit_signal = true);
-		public new void set_sensitive (int idx, bool sensitive_status);
+		public void del (string name);
+		public string? get_active_name ();
+		public bool has_item (string? name);
+		public bool insert (string? name, string? txt);
+		public void select (string name, bool emit_signal = true);
+		public void select_first ();
+		public new void set_sensitive (string name, bool sensitive_status);
 		public int item_count { get; }
-		public int selected_idx { get; set; }
-		public signal void sign_selected (int idx);
+		public signal void sign_selected (string name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class SettingsWidget : Gtk.Box {

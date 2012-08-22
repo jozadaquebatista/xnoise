@@ -117,7 +117,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
     public signal void sign_image_path_small_changed();
     public signal void sign_image_path_embedded_changed();
     
-    public signal void sign_notify_tracklistnotebook_switched(uint new_page_number);
+    public signal void sign_main_view_changed(string new_view_name);
 
     public signal void player_in_shutdown();
 

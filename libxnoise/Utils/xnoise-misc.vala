@@ -30,6 +30,7 @@
 
 using Xnoise;
 using Xnoise.Services;
+using Xnoise.Resources;
 using Xnoise.Database;
 using Xnoise.PluginModule;
 
@@ -111,7 +112,7 @@ namespace Xnoise {
         
         File xnoise_data_home = File.new_for_path(data_folder());
         File xnoiseini = null;
-        xnoiseini = xnoise_data_home.get_child("db.sqlite");
+        xnoiseini = xnoise_data_home.get_child(MAIN_DATABASE_NAME);
         if(!xnoiseini.query_exists(null))
             is_first_start = true;
         
@@ -163,7 +164,8 @@ namespace Xnoise {
         tray_icon = new TrayIcon();
     }
     
-    // A data source is an implementor of DataSoure interface (e.g the Database.Reader)
+    // A data source is an implementor of DataSoure abstr.class
+    // (e.g the Database.Reader)
     public static DataSource? get_data_source(int source_number) {
         assert(data_source_registry != null);
         DataSource? ret = data_source_registry.lookup(source_number);
@@ -212,11 +214,11 @@ namespace Xnoise {
 
 // PROJECT WIDE USED STRUCTS, INTERFACES AND ENUMS
 
-internal enum Xnoise.TrackListNoteBookTab { // used in various places
-    TRACKLIST = 0,
-    VIDEO,
-    LYRICS
-}
+//internal enum Xnoise.TrackListNoteBookTab { // used in various places
+//    TRACKLIST = 0,
+//    VIDEO,
+//    LYRICS
+//}
 
 public enum Gst.StreamType {
     UNKNOWN = 0,

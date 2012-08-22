@@ -39,7 +39,6 @@ using Xnoise.Services;
 
 
 public class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
-    private const string LYRICS_VIEW_NAME       = "LyricsView";  
     private const string UI_FILE = Config.UIDIR + "lyrics.ui";
     private unowned MainWindow win;
     
@@ -71,9 +70,9 @@ public class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
             var bottombox = gb.get_object("box5") as Gtk.Box;  //LYRICS
             
             sbutton = new SerialButton();
-            sbutton.insert(SHOWTRACKLIST);
-            sbutton.insert(SHOWVIDEO);
-            sbutton.insert(SHOWLYRICS);
+            sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
+            sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
+            sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
             bottombox.pack_start(sbutton, false, false, 0);
             
             var hide_button_2 = gb.get_object("hide_button_2") as Gtk.Button;
@@ -128,8 +127,8 @@ public class Xnoise.LyricsView : Gtk.TextView {
         font_description.set_size((int)(12 * Pango.SCALE)); // TODO: make this configurable
         this.modify_font(font_description);
         
-        global.sign_notify_tracklistnotebook_switched.connect( (s,p) => {
-            if(p != TrackListNoteBookTab.LYRICS)
+        global.sign_main_view_changed.connect( (s,n) => {
+            if(n != LYRICS_VIEW_NAME)
                 return;
             if(prepare_for_comparison(artist) == prepare_for_comparison(global.current_artist) &&
                prepare_for_comparison(title)  == prepare_for_comparison(global.current_title)) {
@@ -172,7 +171,7 @@ public class Xnoise.LyricsView : Gtk.TextView {
             timeout = 0;
         }
         // Lyrics View is already visible...
-        if(main_window.tracklistnotebook.get_current_page() == TrackListNoteBookTab.LYRICS) {
+        if(main_window.mainview_box.get_current_main_view_name() == LYRICS_VIEW_NAME) {
             timeout = GLib.Timeout.add_seconds(1, on_timout_elapsed);
         }
     }

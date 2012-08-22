@@ -32,6 +32,10 @@
 
 using Gtk;
 
+using Xnoise;
+using Xnoise.Resources;
+
+
 public class Xnoise.FullscreenToolbar {
     private unowned Main xn;
     private const uint hide_delay = 4;
@@ -197,7 +201,7 @@ public class Xnoise.FullscreenToolbar {
             main_window.fullscreenwindow.hide();
             main_window.videoscreen.set_vexpand(true);
             main_window.videoscreen.set_hexpand(true);
-            main_window.tracklistnotebook.set_current_page(TrackListNoteBookTab.VIDEO);
+            main_window.mainview_box.select_main_view(VIDEOVIEW_NAME);
             main_window.fullscreenwindowvisible = false;
             main_window.videovbox.show_all();
             main_window.fullscreentoolbar.hide();

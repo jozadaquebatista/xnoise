@@ -32,16 +32,19 @@ using Gtk;
 
 public class Xnoise.SerialButton : Gtk.Box {
     private CssProvider provider;
-    private int _selected_idx = -1;
     
-    public signal void sign_selected(int idx);
+    private HashTable<string,SerialItem> sitems = new HashTable<string,SerialItem>(str_hash, str_equal);
+    
+    public signal void sign_selected(string name);
     
     private class SerialItem : Gtk.ToggleButton {
         private unowned SerialButton sb;
+        public string item_name;
         
-        public SerialItem(SerialButton sb) {
+        public SerialItem(SerialButton sb, string item_name) {
             
             this.sb = sb;
+            this.item_name = item_name;
             
             this.set_can_focus(false);
             this.get_style_context().add_provider(sb.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -62,82 +65,127 @@ public class Xnoise.SerialButton : Gtk.Box {
         }
     }
 
-    public int selected_idx {
-        get { return _selected_idx; }
-        set { select(value); }
-    }
-
     public int item_count {
         get { return (int)this.get_children().length(); }
     }
 
-    public int insert(string? txt) {
-        if(txt == null)
-            return -1;
+    public bool has_item(string? name) {
+        if(name == null)
+            return false;
         
-        var si = new SerialItem(this);
+        if(sitems.lookup(name) == null)
+            return false;
+        return true;
+    }
+
+    public string? get_active_name() {
+        if(active_item == null)
+            return null;
+        else
+            return active_item.item_name;
+    }
+
+    public bool insert(string? name, string? txt) {
+        if(txt == null || name == null)
+            return false;
+        
+        if(sitems.lookup(name) != null)
+            return false;
+        
+        var si = new SerialItem(this, name);
+        
         si.add(new Gtk.Label(txt));
         this.add(si);
         
-        si.button_press_event.connect( () => {
-            this.select(get_children().index((Gtk.Widget)si));
+        sitems.insert(name, si);
+        
+        si.button_press_event.connect( (s,e) => {
+            this.select(((SerialItem)s).item_name, true);
             return true;
         });
+        
         si.show_all();
-        
-        int cnt = this.item_count;
-        if(cnt == 1)
-            this.select(0);
-        
-        return cnt - 1;
+        if(item_count == 1) {
+            this.select(name, true);
+        }
+        return true;
     }
 
-    public void select(int idx, bool emit_signal = true) {
-        if(idx < 0 ) //|| idx >= this.item_count || _selected_idx == idx 
+    private unowned SerialItem? active_item = null;
+
+    public void select_first() {
+        GLib.List<Widget> l = this.get_children();
+        if(l.length() == 0)
+            return;
+        
+        Widget? w = (Widget)l.data;
+        if(w == null)
+            return;
+        
+        select(((SerialItem)w).item_name, true);
+    }
+    
+    public void select(string name, bool emit_signal = true) {
+        if(name == null)
             return;
         
         SerialItem? si;
         
-        if(_selected_idx >= 0) {
-            si = (SerialItem) get_at_index(_selected_idx);
-            if(si != null)
-                si.set_active(false);
+        if((si = sitems.lookup(name)) == null) {
+            print("SerialItem %s not available\n", name);
+            return;
         }
-        _selected_idx = idx;
-        si = (SerialItem) get_at_index(idx);
-        if(si != null)
-            si.set_active(true);
+        
+        if(active_item != null)
+            active_item.set_active(false);
+        
+        si.set_active(true);
+        active_item = si;
         
         if(emit_signal)
-            this.sign_selected(idx);
+            this.sign_selected(name);
     }
 
-    public new void set_sensitive(int idx, bool sensitive_status) {
-        if(idx < 0 || idx >= this.item_count)
+    public new void set_sensitive(string name, bool sensitive_status) {
+        if(name == null)
             return;
         
-        SerialItem? si = (SerialItem) get_at_index(idx);
+        SerialItem? si;
         
-        if(si != null)
-            si.set_sensitive(sensitive_status);
+        if((si = sitems.lookup(name)) == null) {
+            print("SerialItem %s not available.\n", name);
+            return;
+        }
+        
+        si.set_sensitive(sensitive_status);
     }
 
-    public void del(int idx) {
-        Gtk.Widget? w = get_at_index(idx);
-        if(w != null) {
-            this.remove(w);
-            w.destroy();
-            if(_selected_idx >= 0 && idx == _selected_idx)
-                this.select(0);
+    public void del(string name) {
+        if(name == null)
+            return;
+        
+        Widget? si;
+        
+        if((si = sitems.lookup(name)) == null) {
+            print("SerialItem %s not available. Cannot delete\n", name);
+            return;
         }
-        else {
-            print("Widget not found for index!\n");
+        bool removed_active = false;
+        if(active_item == (SerialItem)si) {
+            active_item.set_active(false);
+            removed_active = true;
+            active_item = null;
         }
+        this.remove(si);
+        sitems.remove(name);
+        si.destroy();
+        if(removed_active)
+            select_first();
     }
     
-    private Gtk.Widget? get_at_index(int idx) {
-        return this.get_children().nth_data(idx);
-    }
+//    private Gtk.Widget? get_at_index(int idx) {
+//        return this.get_children().nth_data(idx);
+//    }
     
     private static const string CSS = """
         .XnoiseSerialButton .button {

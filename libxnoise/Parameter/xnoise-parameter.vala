@@ -33,7 +33,6 @@ using Xnoise.Resources;
 using Xnoise.Services;
 
 public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
-    private static const string INIFILE   = "xnoise.ini";
     private static List<IParams> IParams_implementers;// = new GLib.List<IParams>();
     private static const string settings_int    = "settings_int";
     private static const string settings_double = "settings_double";

@@ -38,8 +38,7 @@ using Xnoise.Services;
 using Xnoise.TagAccess;
 
 
-public class Xnoise.TrackListViewWidget : Gtk.Box, IMainView {
-    private const string TRACKLIST_VIEW_NAME    = "TrackListView";
+public class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
     private const string UI_FILE = Config.UIDIR + "tracklist.ui";
     
     private unowned MainWindow win;
@@ -73,9 +72,12 @@ public class Xnoise.TrackListViewWidget : Gtk.Box, IMainView {
             var bottombox = gb.get_object("hbox3") as Gtk.Box; //TRACKLIST
             
             sbutton = new SerialButton();
-            idx_tracklist = sbutton.insert(SHOWTRACKLIST);
-            idx_video     = sbutton.insert(SHOWVIDEO);
-            idx_lyrics    = sbutton.insert(SHOWLYRICS);
+            sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
+            sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
+            sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
+//            idx_tracklist = sbutton.insert(SHOWTRACKLIST);
+//            idx_video     = sbutton.insert(SHOWVIDEO);
+//            idx_lyrics    = sbutton.insert(SHOWLYRICS);
             bottombox.pack_start(sbutton, false, false, 0);
             
             //REMOVE TITLE OR ALL TITLES BUTTONS

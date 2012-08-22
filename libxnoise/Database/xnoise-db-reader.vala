@@ -40,8 +40,6 @@ public errordomain Xnoise.Database.DbError {
 }
 
 public class Xnoise.Database.Reader : Xnoise.DataSource {
-    private const string DATABASE_NAME = "db.sqlite";
-    private const string SETTINGS_FOLDER = ".xnoise";
     private string DATABASE;
     private Sqlite.Database db;
 
@@ -108,7 +106,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private string dbFileName() {
-        return GLib.Path.build_filename(data_folder(), DATABASE_NAME, null);
+        return GLib.Path.build_filename(data_folder(), MAIN_DATABASE_NAME, null);
     }
 
     private void db_error() {
