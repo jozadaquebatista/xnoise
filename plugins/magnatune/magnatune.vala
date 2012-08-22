@@ -654,27 +654,27 @@ private class MagnatuneTreeView : Gtk.TreeView {
     private Pango.FontDescription font_description;
     private int last_width;
     
-    private int _fontsizeMB = 0;
-    internal int fontsizeMB {
+    private int _fontsize = 0;
+    internal int fontsize {
         get {
-            return _fontsizeMB;
+            return _fontsize;
         }
         set {
-            if (_fontsizeMB == 0) { //intialization
-                if((value < 7)||(value > 14)) _fontsizeMB = 7;
-                else _fontsizeMB = value;
+            if (_fontsize == 0) { //intialization
+                if((value < 7)||(value > 14)) _fontsize = 7;
+                else _fontsize = value;
                 Idle.add( () => {
-                    font_description.set_size((int)(_fontsizeMB * Pango.SCALE));
-                    renderer.size_points = fontsizeMB;
+                    font_description.set_size((int)(_fontsize * Pango.SCALE));
+                    renderer.size_points = fontsize;
                     return false;
                 });
             }
             else {
-                if((value < 7)||(value > 14)) _fontsizeMB = 7;
-                else _fontsizeMB = value;
+                if((value < 7)||(value > 14)) _fontsize = 7;
+                else _fontsize = value;
                 Idle.add( () => {
-                    font_description.set_size((int)(_fontsizeMB * Pango.SCALE));
-                    renderer.size_points = fontsizeMB;
+                    font_description.set_size((int)(_fontsize * Pango.SCALE));
+                    renderer.size_points = fontsize;
                     return false;
                 });
                 Idle.add(update_view);
@@ -689,7 +689,7 @@ private class MagnatuneTreeView : Gtk.TreeView {
         
         this.set_size_request(300, 500);
         
-        fontsizeMB = Params.get_int_value("fontsizeMB");
+        fontsize = Params.get_int_value("fontsizeMB");
         Gtk.StyleContext context = this.get_style_context();
         font_description = context.get_font(StateFlags.NORMAL).copy();
         font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
@@ -701,6 +701,14 @@ private class MagnatuneTreeView : Gtk.TreeView {
         int hsepar = 0;
         this.style_get("horizontal-separator", out hsepar);
         renderer = new FlowingTextRenderer(this.ow, font_description, column, expander, hsepar);
+        
+        main_window.msw.selection_changed.connect( (s,n) => {
+            if(n == name_buffer)
+                return;
+            if(n == this.dock.name())
+                last_width++;
+            name_buffer = n;
+        });
         
         this.ow.size_allocate.connect_after( (s, a) => {
             unowned TreeViewColumn tvc = this.get_column(0);
@@ -734,8 +742,14 @@ private class MagnatuneTreeView : Gtk.TreeView {
         
         this.headers_visible = false;
         this.enable_search = false;
+        
+        global.notify["fontsize-dockable"].connect( () => {
+            this.fontsize = global.fontsize_dockable;
+        });
     }
 
+    private string name_buffer;
+    
     private void on_row_expanded(TreeIter iter, TreePath path) {
         mag_model.load_children(ref iter);
     }
@@ -960,6 +974,7 @@ private class DockableMagnatuneMS : DockableMedia {
         
         assert(this.win != null);
         var wu = new MagnatuneWidget(this);
+
         widget = wu;
         wu.show_all();
         return (owned)wu;

@@ -755,7 +755,7 @@ namespace Xnoise {
 		public void add_main_view (Xnoise.IMainView view);
 		public string? get_current_main_view_name ();
 		public void remove_main_view (Xnoise.IMainView view);
-		public bool select_main_view (string name);
+		public bool select_main_view (string? name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MainWindow : Gtk.Window, Xnoise.IParams {

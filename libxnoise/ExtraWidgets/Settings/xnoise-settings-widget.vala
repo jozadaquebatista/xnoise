@@ -123,7 +123,7 @@ public class Xnoise.SettingsWidget : Gtk.Box {
         if((int)(((Gtk.SpinButton)sender).value) < 7 ) ((Gtk.SpinButton)sender).value = 7;
         if((int)(((Gtk.SpinButton)sender).value) > 15) ((Gtk.SpinButton)sender).value = 15;
         fontsizeMB = (int)((Gtk.SpinButton)sender).value;
-        main_window.musicBr.fontsizeMB = fontsizeMB;
+//        main_window.musicBr.fontsizeMB = fontsizeMB;
         global.fontsize_dockable = fontsizeMB;
         Params.set_int_value("fontsizeMB", fontsizeMB);
     }

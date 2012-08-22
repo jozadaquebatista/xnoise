@@ -53,27 +53,27 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         }
     }
     
-    private int _fontsizeMB = 0;
-    internal int fontsizeMB {
+    private int _fontsize = 0;
+    internal int fontsize {
         get {
-            return _fontsizeMB;
+            return _fontsize;
         }
         set {
-            if (_fontsizeMB == 0) { //intialization
-                if((value < 7)||(value > 14)) _fontsizeMB = 7;
-                else _fontsizeMB = value;
+            if (_fontsize == 0) { //intialization
+                if((value < 7)||(value > 14)) _fontsize = 7;
+                else _fontsize = value;
                 Idle.add( () => {
-                    font_description.set_size((int)(_fontsizeMB * Pango.SCALE));
-                    renderer.size_points = fontsizeMB;
+                    font_description.set_size((int)(_fontsize * Pango.SCALE));
+                    renderer.size_points = fontsize;
                     return false;
                 });
             }
             else {
-                if((value < 7)||(value > 14)) _fontsizeMB = 7;
-                else _fontsizeMB = value;
+                if((value < 7)||(value > 14)) _fontsize = 7;
+                else _fontsize = value;
                 Idle.add( () => {
-                    font_description.set_size((int)(_fontsizeMB * Pango.SCALE));
-                    renderer.size_points = fontsizeMB;
+                    font_description.set_size((int)(_fontsize * Pango.SCALE));
+                    renderer.size_points = fontsize;
                     return false;
                 });
                 Idle.add(update_view);
@@ -158,7 +158,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         else
             Params.set_int_value("use_treelines", 0);
             
-        Params.set_int_value("fontsizeMB", fontsizeMB);
+//        Params.set_int_value("fontsize", fontsize);
     }
     // end IParams functions
 
@@ -516,7 +516,7 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         this.row_collapsed.connect(on_row_collapsed);
         this.row_expanded.connect(on_row_expanded);
         
-        fontsizeMB = Params.get_int_value("fontsizeMB");
+        fontsize = Params.get_int_value("fontsizeMB");
         Gtk.StyleContext context = this.get_style_context();
         font_description = context.get_font(StateFlags.NORMAL).copy();
         font_description.set_size((int)(global.fontsize_dockable * Pango.SCALE));
@@ -561,6 +561,9 @@ public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         
         this.headers_visible = false;
         this.enable_search = false;
+        global.notify["fontsize-dockable"].connect( () => {
+            this.fontsize = global.fontsize_dockable;
+        });
     }
 }
 

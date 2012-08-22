@@ -124,7 +124,7 @@ public class Xnoise.ItemConverter : Object {
                 break;
             case ItemType.STREAM:
                 var tmp = new TrackData();
-                print("CONV STREAM %d\n", item.source_id);
+                //print("CONV STREAM %d\n", item.source_id);
                 DataSource ds = get_data_source(item.source_id);
                 assert(ds != null);
                 if(item.db_id > -1) {
