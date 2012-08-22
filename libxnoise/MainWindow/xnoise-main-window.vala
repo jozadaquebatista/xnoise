@@ -44,7 +44,6 @@ public extern void widget_style_get_property(Gtk.Widget widget, string property_
 public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string MAIN_UI_FILE      = Config.UIDIR + "main_window.ui";
     private const string MENU_UI_FILE      = Config.UIDIR + "main_ui.xml";
-    private const string WEB_FAQ = "https://github.com/shuerhaaken/xnoise/wiki/FAQ";
     private unowned Main xn;
     private VolumeSliderButton volume_slider;
     private CssProvider css_provider_search;

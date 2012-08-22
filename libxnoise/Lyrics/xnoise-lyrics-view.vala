@@ -39,7 +39,7 @@ using Xnoise.Services;
 
 
 public class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
-    
+    private const string LYRICS_VIEW_NAME       = "LyricsView";  
     private const string UI_FILE = Config.UIDIR + "lyrics.ui";
     private unowned MainWindow win;
     

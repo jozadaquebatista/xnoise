@@ -36,7 +36,7 @@ using Xnoise.Services;
 
 
 public class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
-    
+    private const string VIDEOVIEW_NAME         = "VideoView"; 
     private const string UI_FILE = Config.UIDIR + "video.ui";
     
     private unowned MainWindow win;

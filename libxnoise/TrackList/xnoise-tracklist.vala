@@ -39,7 +39,7 @@ using Xnoise.TagAccess;
 
 
 public class Xnoise.TrackListViewWidget : Gtk.Box, IMainView {
-    
+    private const string TRACKLIST_VIEW_NAME    = "TrackListView";
     private const string UI_FILE = Config.UIDIR + "tracklist.ui";
     
     private unowned MainWindow win;

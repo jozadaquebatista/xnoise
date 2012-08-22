@@ -36,15 +36,6 @@ using Xnoise.PluginModule;
 
 
 namespace Xnoise {
-    internal static const string SHOWVIDEO              = _("Now Playing");
-    internal static const string SHOWTRACKLIST          = _("Tracklist");
-    internal static const string SHOWLYRICS             = _("Lyrics");
-    internal static const string VIDEOVIEW_NAME         = "VideoView";
-    internal static const string TRACKLIST_VIEW_NAME    = "TrackListView";
-    internal static const string LYRICS_VIEW_NAME       = "LyricsView";
-    internal static const string HIDE_LIBRARY           = _("Hide Library");
-    internal static const string SHOW_LIBRARY           = _("Show Library");
-    internal static const int VIDEOTHUMBNAILSIZE = 40;
     public static Params par = null;
     public static GlobalAccess global = null;
     public static UserInfo userinfo = null;
@@ -172,6 +163,7 @@ namespace Xnoise {
         tray_icon = new TrayIcon();
     }
     
+    // A data source is an implementor of DataSoure interface (e.g the Database.Reader)
     public static DataSource? get_data_source(int source_number) {
         assert(data_source_registry != null);
         DataSource? ret = data_source_registry.lookup(source_number);

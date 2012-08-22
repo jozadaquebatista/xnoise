@@ -2611,6 +2611,7 @@ void xnoise_plugin_module_loader_deactivate_single_plugin (XnoisePluginModuleLoa
 #define XNOISE_RESOURCES_UNKNOWN_ORGANIZATION "unknown organization"
 #define XNOISE_RESOURCES_UNKNOWN_LOCATION "unknown location"
 #define XNOISE_RESOURCES_EMPTYSTRING ""
+#define XNOISE_RESOURCES_VIDEOTHUMBNAILSIZE 40
 #define XNOISE_RESOURCES_UNKNOWN_ARTIST_LOCALIZED _ ("unknown artist")
 #define XNOISE_RESOURCES_UNKNOWN_TITLE_LOCALIZED _ ("unknown title")
 #define XNOISE_RESOURCES_UNKNOWN_ALBUM_LOCALIZED _ ("unknown album")

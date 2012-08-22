@@ -32,6 +32,9 @@
 using Gtk;
 using Gdk;
 
+using Xnoise;
+using Xnoise.Resources;
+
 
 private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, PlaylistQueryable {
     private unowned MainWindow win;

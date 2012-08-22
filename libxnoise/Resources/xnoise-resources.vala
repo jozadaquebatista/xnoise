@@ -39,6 +39,7 @@ namespace Xnoise.Resources {
     public const string UNKNOWN_ORGANIZATION     = "unknown organization";
     public const string UNKNOWN_LOCATION         = "unknown location";
     public const string EMPTYSTRING              = "";
+    public const int    VIDEOTHUMBNAILSIZE       = 40;
     
     public const string UNKNOWN_ARTIST_LOCALIZED = _("unknown artist");
     public const string UNKNOWN_TITLE_LOCALIZED  = _("unknown title");
@@ -47,10 +48,11 @@ namespace Xnoise.Resources {
     internal const string SHOWVIDEO              = _("Now Playing");
     internal const string SHOWTRACKLIST          = _("Tracklist");
     internal const string SHOWLYRICS             = _("Lyrics");
-    internal const string VIDEOVIEW_NAME         = "VideoView";
-    internal const string TRACKLIST_VIEW_NAME    = "TrackListView";
-    internal const string LYRICS_VIEW_NAME       = "LyricsView";
     internal const string HIDE_LIBRARY           = _("Hide Library");
     internal const string SHOW_LIBRARY           = _("Show Library");
-    internal const int VIDEOTHUMBNAILSIZE        = 40;
+
+    internal const string COPYRIGHT    = "Copyright \xc2\xa9 2008-2012 Jörn Magens";
+    internal const string PROGRAM_NAME = "xnoise";
+    internal const string WEBSITE      = "http://www.xnoise-media-player.com/";
+    internal const string WEB_FAQ      = "https://github.com/shuerhaaken/xnoise/wiki/FAQ";
 }

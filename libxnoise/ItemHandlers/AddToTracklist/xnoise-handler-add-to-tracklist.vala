@@ -40,7 +40,6 @@ using Xnoise.Resources;
 // has one or more Actions
 internal class Xnoise.HandlerAddToTracklist : ItemHandler {
     private Action add;
-    private const string binfo = EMPTYSTRING;
     private const string bname = "HandlerAddToTracklistAction1";
     
     private Xnoise.Action menu_add_from_playlist;
@@ -62,7 +61,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         
         add = new Action(); 
         add.action = on_mediabrowser_activated;
-        add.info = this.binfo;
+        add.info = EMPTYSTRING;
         add.name = this.bname;
         add.context = ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED;
         

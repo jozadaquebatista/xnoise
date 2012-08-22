@@ -335,6 +335,8 @@ namespace Xnoise {
 		public const string UNKNOWN_TITLE;
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public const string UNKNOWN_TITLE_LOCALIZED;
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public const int VIDEOTHUMBNAILSIZE;
 	}
 	namespace Services {
 		[CCode (cheader_filename = "xnoise-1.0.h")]
