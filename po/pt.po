@@ -252,15 +252,14 @@ msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
 "wait."
 msgstr ""
-"Por favor, aguarde o preenchimento da coleção. Cancele se não quiser "
-"aguardar."
+"Por favor aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:167
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:190
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
-"Por favor, aguarde pelo fim da importação. Cancele se não quiser aguardar."
+"Por favor aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
@@ -492,7 +491,7 @@ msgstr "Explorador _multimédia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:185
 msgid "Toggle media browser visibility."
-msgstr "Trocar visibilidade do eplorador multimédia"
+msgstr "Alternar visibilidade do explorador multimédia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:187
 msgid "_Help"
@@ -500,11 +499,11 @@ msgstr "Aj_uda"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:189
 msgid "_Frequently Asked Questions"
-msgstr ""
+msgstr "Perguntas _frequentes"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:189
 msgid "_Open Frequently Asked Questions in web browser"
-msgstr ""
+msgstr "Abrir perguntas frequentes n_o navegador web"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:190
 msgid "_Config"
@@ -703,7 +702,7 @@ msgstr "Sessão não iniciada"
 #: ../plugins/lastfm/xnoise-lastfm.vala:436
 #, c-format
 msgid "Please enter your lastfm username and password."
-msgstr "Por favor, indique o utilizador e a senha last.fm"
+msgstr "Por favor indique o utilizador e a senha last.fm"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:445
 #, c-format
