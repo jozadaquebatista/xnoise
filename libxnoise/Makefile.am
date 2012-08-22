@@ -81,6 +81,7 @@ libxnoise_la_SOURCES = \
     ItemHandlers/PlayItem/xnoise-handler-play-item.vala \
     ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala \
     ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala \
+    ItemHandlers/xnoise-external-queryable.vala \
     ItemHandlers/xnoise-item.vala \
     ItemHandlers/xnoise-item-converter.vala \
     ItemHandlers/xnoise-item-handler.vala \

@@ -1,4 +1,4 @@
-/* xnoise-data-source.vala
+/* xnoise-external-queryable.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -29,33 +29,8 @@
  */
 
 
-
-
-public abstract class Xnoise.DataSource : GLib.Object {
-    protected int source_id;
-    public void set_source_id(int id) {
-        source_id = id;
-    }
-    
-    public int get_source_id() {
-        return source_id;
-    }
-
-    public abstract string get_datasource_name();
-    
-    public abstract bool get_trackdata_for_uri(ref string? uri, out TrackData val);
-    
-    public abstract Item[] get_artists_with_search(string searchtext);
-    public abstract TrackData[]? get_trackdata_by_artistid(string searchtext, int32 id);
-    public abstract Item? get_artistitem_by_artistid(string searchtext, int32 id);
-    
-    public abstract TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id);
-    public abstract Item[] get_albums_with_search(string searchtext, int32 id);
-    
-    public abstract TrackData? get_trackdata_by_titleid(string searchtext, int32 id);
-    
-    public abstract bool get_stream_td_for_id(int32 id, out TrackData tmp);
-    
-    public abstract TrackData[]? get_all_tracks(string searchtext);
+public interface Xnoise.ExternQueryable : Gtk.TreeView {
+    public abstract int get_model_item_column();
+    public abstract DataSource? get_data_source();
 }
 

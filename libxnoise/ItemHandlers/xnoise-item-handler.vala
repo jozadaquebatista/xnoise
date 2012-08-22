@@ -42,7 +42,9 @@ namespace Xnoise {
         VIDEOSCREEN_MENU_QUERY,             // used by Screen
         TRACKLIST_COLUMN_HEADER_MENU_QUERY, // used by Tracklist column headers
         QUERYABLE_PLAYLIST_ITEM_ACTIVATED,  // used by implementors of PlaylistQueryable interface
-        QUERYABLE_PLAYLIST_MENU_QUERY       // used by implementors of PlaylistQueryable interface
+        QUERYABLE_PLAYLIST_MENU_QUERY,      // used by implementors of PlaylistQueryable interface
+        QUERYABLE_EXTERNAL_ITEM_ACTIVATED,  // not editable
+        QUERYABLE_EXTERNAL_MENU_QUERY       // not editable
     }
     
     [Flags]

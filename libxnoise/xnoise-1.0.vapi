@@ -20,7 +20,7 @@ namespace Xnoise {
 			public int32 count_videos (string searchtext);
 			public void do_callback_transaction (Xnoise.Database.Reader.ReaderCallback cb);
 			public override Xnoise.Item[] get_albums_with_search (string searchtext, int32 id);
-			public Xnoise.TrackData[]? get_all_tracks (string searchtext);
+			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
 			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id);
 			public override Xnoise.Item[] get_artists_with_search (string searchtext);
 			public override string get_datasource_name ();
@@ -525,6 +525,7 @@ namespace Xnoise {
 		protected int source_id;
 		public DataSource ();
 		public abstract Xnoise.Item[] get_albums_with_search (string searchtext, int32 id);
+		public abstract Xnoise.TrackData[]? get_all_tracks (string searchtext);
 		public abstract Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id);
 		public abstract Xnoise.Item[] get_artists_with_search (string searchtext);
 		public abstract string get_datasource_name ();
@@ -1050,6 +1051,11 @@ namespace Xnoise {
 		public int thread_id { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public interface ExternQueryable : Gtk.TreeView {
+		public abstract Xnoise.DataSource? get_data_source ();
+		public abstract int get_model_item_column ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	[DBus (name = "org.gnome.SettingsDaemon.MediaKeys")]
 	public interface GnomeMediaKeys : GLib.Object {
 		public abstract void GrabMediaPlayerKeys (string application, uint32 time) throws GLib.IOError;
@@ -1128,7 +1134,9 @@ namespace Xnoise {
 		VIDEOSCREEN_MENU_QUERY,
 		TRACKLIST_COLUMN_HEADER_MENU_QUERY,
 		QUERYABLE_PLAYLIST_ITEM_ACTIVATED,
-		QUERYABLE_PLAYLIST_MENU_QUERY
+		QUERYABLE_PLAYLIST_MENU_QUERY,
+		QUERYABLE_EXTERNAL_ITEM_ACTIVATED,
+		QUERYABLE_EXTERNAL_MENU_QUERY
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public enum DynPlaylistType {

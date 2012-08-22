@@ -358,13 +358,14 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     }
 }
 
-private class MagnatuneTreeView : Gtk.TreeView {
+private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
     public MagnatuneTreeStore mag_model = null;
     private unowned DockableMedia dock;
     private unowned MagnatuneWidget widg;
     //parent container of this widget (most likely scrolled window)
     private unowned Widget ow;
     private bool dragging;
+    private Gtk.Menu menu;
 
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
@@ -394,11 +395,41 @@ private class MagnatuneTreeView : Gtk.TreeView {
         this.drag_end.connect(this.on_drag_end);
         this.button_release_event.connect(this.on_button_release);
         this.button_press_event.connect(this.on_button_press);
-
-    //        this.key_press_event.connect(this.on_key_pressed);
-    //        this.key_release_event.connect(this.on_key_released);
+        this.key_release_event.connect(this.on_key_released);
     }
     
+    private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
+//        print("%d\n",(int)e.keyval);
+        Gtk.TreeModel m;
+        switch(e.keyval) {
+            case Gdk.Key.Right: {
+                Gtk.TreeSelection selection = this.get_selection();
+                if(selection.count_selected_rows()<1) break;
+                GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
+                TreePath? treepath = selected_rows.nth_data(0);
+                if(treepath.get_depth()>2) break;
+                if(treepath!=null) this.expand_row(treepath, false);
+                return true;
+            }
+            case Gdk.Key.Left: {
+                Gtk.TreeSelection selection = this.get_selection();
+                if(selection.count_selected_rows()<1) break;
+                GLib.List<TreePath> selected_rows = selection.get_selected_rows(out m);
+                TreePath? treepath = selected_rows.nth_data(0);
+                if(treepath.get_depth()>2) break;
+                if(treepath!=null) this.collapse_row(treepath);
+                return true;
+            }
+            case Gdk.Key.Menu: {
+                rightclick_menu_popup(e.time);
+                return true;
+            }
+            default:
+                break;
+        }
+        return false;
+    }
+
     private bool on_button_press(Gdk.EventButton e) {
         Gtk.TreePath treepath = null;
         Gtk.TreeViewColumn column;
@@ -437,7 +468,7 @@ private class MagnatuneTreeView : Gtk.TreeView {
                     selection.unselect_all();
                     selection.select_path(treepath);
                 }
-//                rightclick_menu_popup(e.time);
+                rightclick_menu_popup(e.time);
                 return true;
             }
             default: {
@@ -448,7 +479,57 @@ private class MagnatuneTreeView : Gtk.TreeView {
             selection.select_path(treepath);
         return false;
     }
+
+    private void rightclick_menu_popup(uint activateTime) {
+        menu = create_rightclick_menu();
+        if(menu != null)
+            menu.popup(null, null, null, 0, activateTime);
+    }
+
+    public int get_model_item_column() {
+        return (int)MagnatuneTreeStore.Column.ITEM;
+    }
     
+    public DataSource? get_data_source() {
+        return (DataSource)mag_model.dbreader;
+    }
+    
+    private Gtk.Menu create_rightclick_menu() {
+        TreeIter iter;
+        var rightmenu = new Gtk.Menu();
+        GLib.List<TreePath> list;
+        list = this.get_selection().get_selected_rows(null);
+        ItemSelectionType itemselection = ItemSelectionType.SINGLE;
+        if(list.length() > 1)
+            itemselection = ItemSelectionType.MULTIPLE;
+        Item? item = null;
+        Array<unowned Xnoise.Action?> array = null;
+        TreePath path = (TreePath)list.data;
+        this.model.get_iter(out iter, path);
+        this.model.get(iter, MagnatuneTreeStore.Column.ITEM, out item);
+        array = itemhandler_manager.get_actions(item.type, ActionContext.QUERYABLE_EXTERNAL_MENU_QUERY, itemselection);
+        for(int i =0; i < array.length; i++) {
+            unowned Xnoise.Action x = array.index(i);
+            //print("%s\n", x.name);
+            var menu_item = new ImageMenuItem.from_stock((x.stock_item != null ? x.stock_item : Gtk.Stock.INFO), null);
+            menu_item.set_label(x.info);
+            menu_item.activate.connect( () => {
+                x.action(item, this);
+            });
+            rightmenu.append(menu_item);
+        }
+        var sptr_item = new SeparatorMenuItem();
+        rightmenu.append(sptr_item);
+        var collapse_item = new ImageMenuItem.from_stock(Gtk.Stock.UNINDENT, null);
+        collapse_item.set_label(_("Collapse all"));
+        collapse_item.activate.connect( () => {
+            this.collapse_all();
+        });
+        rightmenu.append(collapse_item);
+        rightmenu.show_all();
+        return rightmenu;
+    }
+
     private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
         Gtk.TreePath treepath;
         Gtk.TreeViewColumn column;

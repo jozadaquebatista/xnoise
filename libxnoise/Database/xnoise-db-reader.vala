@@ -232,7 +232,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     private static const string STMT_ALL_TRACKDATA =
         "SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) and t.mediatype = ? ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC, t.tracknumber ASC";
     
-    public TrackData[]? get_all_tracks(string searchtext) {
+    public override TrackData[]? get_all_tracks(string searchtext) {
         Statement stmt;
         TrackData[] retv = {};
         string st = "%%%s%%".printf(searchtext);

@@ -36,6 +36,7 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
     
     private Xnoise.Action menu_add;
     private Xnoise.Action menu_add_from_playlist;
+    private Xnoise.Action menu_add_from_extern;
     
     private const string ainfo = _("Add all visible tracks to tracklist");
     private const string aname = "HandlerAddAllToTracklistAction";
@@ -60,6 +61,13 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         menu_add_from_playlist.name = this.aname;
         menu_add_from_playlist.stock_item = Gtk.Stock.DND_MULTIPLE;
         menu_add_from_playlist.context = ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY;
+
+        menu_add_from_extern = new Action(); 
+        menu_add_from_extern.action = on_menu_add_from_extern;
+        menu_add_from_extern.info = this.ainfo;
+        menu_add_from_extern.name = this.aname;
+        menu_add_from_extern.stock_item = Gtk.Stock.DND_MULTIPLE;
+        menu_add_from_extern.context = ActionContext.QUERYABLE_EXTERNAL_MENU_QUERY;
         //print("constructed HandlerAddToTracklist\n");
     }
 
@@ -79,7 +87,49 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
         if(context == ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY) {
             return menu_add_from_playlist;
        }
+        if(context == ActionContext.QUERYABLE_EXTERNAL_MENU_QUERY) {
+            return menu_add_from_extern;
+       }
         return null;
+    }
+
+    private void on_menu_add_from_extern(Item item, GLib.Value? data) {
+        TreeView tv = (TreeView)data;
+        if(tv == null)
+            return;
+        ExternQueryable pq = tv as ExternQueryable;
+        if(pq == null)
+            return;
+        if(!(tv is TreeView))
+            return;
+        if(!(pq is ExternQueryable))
+            return;
+        Worker.Job job;
+        DataSource? ds = pq.get_data_source();
+        if(ds == null)
+            return;
+        job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, 
+                             this.menu_add_from_extern_job);
+        job.item = item;
+        job.set_arg("datasource", ds.get_source_id());
+        db_worker.push_job(job);
+    }
+
+    private bool menu_add_from_extern_job(Worker.Job job) {
+        job.items = {};
+        DataSource? ds = get_data_source((int)job.get_arg("datasource"));
+        if(ds == null) {
+            print("datasource not available\n");
+            return false;
+        }
+        job.track_dat = ds.get_all_tracks(global.searchtext);
+        if(job.track_dat != null) {
+            Idle.add( () => {
+                append_tracks(ref job.track_dat);
+                return false;
+            });
+        }
+        return false;
     }
 
     private void on_menu_add_from_playlist(Item item, GLib.Value? data) {

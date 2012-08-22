@@ -36,7 +36,7 @@ using Xnoise;
 using Xnoise.Resources;
 
 
-private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, PlaylistQueryable {
+private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, Xnoise.PlaylistQueryable {
     private unowned MainWindow win;
     private unowned DockableMedia dock;
     private Gtk.Menu menu;

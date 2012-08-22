@@ -257,13 +257,11 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         return (owned)i;
     }
 
-
-
-
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =
-        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = 8 AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+    
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID =
-        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year  FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
+        "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     
     public override TrackData[]? get_trackdata_by_albumid(string searchtext, int32 id) {
         TrackData[] val = {};
@@ -384,11 +382,61 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
 
     public override bool get_stream_td_for_id(int32 id, out TrackData val) {
         val = get_trackdata_by_titleid("", id);
-
+        
         if(val == null)
             return false;
         
         return true;
+    }
+    
+    private static const string STMT_ALL_TRACKDATA =
+        "SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC, t.tracknumber ASC";
+    
+    public override TrackData[]? get_all_tracks(string searchtext) {
+        Statement stmt;
+        TrackData[] retv = {};
+        string st = "%%%s%%".printf(searchtext);
+        this.db.prepare_v2(STMT_ALL_TRACKDATA , -1, out stmt);
+        
+        if(stmt.bind_text(1, st) != Sqlite.OK ||
+           stmt.bind_text(2, st) != Sqlite.OK ||
+           stmt.bind_text(3, st) != Sqlite.OK) {
+            this.db_error();
+            return null;
+        }
+        while(stmt.step() == Sqlite.ROW) {
+            TrackData val = new TrackData();
+            val.artist      = stmt.column_text(0);
+            val.album       = stmt.column_text(1);
+            val.title       = stmt.column_text(2);
+            val.tracknumber = stmt.column_int(3);
+            val.length      = stmt.column_int(6);
+            val.item        = Item((ItemType)stmt.column_int(4), stmt.column_text(5), stmt.column_int(7));
+            val.item.source_id = get_source_id();
+            val.genre       = stmt.column_text(8);
+            val.year        = stmt.column_int(9);
+            if((val.artist==EMPTYSTRING) || (val.artist==null)) {
+                val.artist = UNKNOWN_ARTIST;
+            }
+            if((val.album== EMPTYSTRING) || (val.album== null)) {
+                val.album = UNKNOWN_ALBUM;
+            }
+            if((val.genre== EMPTYSTRING) || (val.genre== null)) {
+                val.genre = UNKNOWN_GENRE;
+            }
+            if((val.title== EMPTYSTRING) || (val.title== null)) {
+                val.title = UNKNOWN_TITLE;
+                File file = File.new_for_uri(val.item.uri);
+                string fileBasename;
+                if(file != null)
+                    fileBasename = GLib.Filename.display_basename(file.get_path());
+                else
+                    fileBasename = val.item.uri;
+                val.title = fileBasename;
+            }
+            retv += val;
+        }
+        return (owned)retv;
     }
 }
 

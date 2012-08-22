@@ -471,6 +471,14 @@ typedef struct _XnoiseHandlerShowInFileManager XnoiseHandlerShowInFileManager;
 typedef struct _XnoiseHandlerShowInFileManagerClass XnoiseHandlerShowInFileManagerClass;
 typedef struct _XnoiseHandlerShowInFileManagerPrivate XnoiseHandlerShowInFileManagerPrivate;
 
+#define XNOISE_TYPE_EXTERN_QUERYABLE (xnoise_extern_queryable_get_type ())
+#define XNOISE_EXTERN_QUERYABLE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_EXTERN_QUERYABLE, XnoiseExternQueryable))
+#define XNOISE_IS_EXTERN_QUERYABLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_EXTERN_QUERYABLE))
+#define XNOISE_EXTERN_QUERYABLE_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_EXTERN_QUERYABLE, XnoiseExternQueryableIface))
+
+typedef struct _XnoiseExternQueryable XnoiseExternQueryable;
+typedef struct _XnoiseExternQueryableIface XnoiseExternQueryableIface;
+
 #define XNOISE_TYPE_ITEM_CONVERTER (xnoise_item_converter_get_type ())
 #define XNOISE_ITEM_CONVERTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ITEM_CONVERTER, XnoiseItemConverter))
 #define XNOISE_ITEM_CONVERTER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ITEM_CONVERTER, XnoiseItemConverterClass))
@@ -1059,6 +1067,7 @@ struct _XnoiseDataSourceClass {
 	XnoiseItem* (*get_albums_with_search) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
 	XnoiseTrackData* (*get_trackdata_by_titleid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id);
 	gboolean (*get_stream_td_for_id) (XnoiseDataSource* self, gint32 id, XnoiseTrackData** tmp);
+	XnoiseTrackData** (*get_all_tracks) (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 };
 
 struct _XnoiseDatabaseReader {
@@ -1383,7 +1392,9 @@ typedef enum  {
 	XNOISE_ACTION_CONTEXT_VIDEOSCREEN_MENU_QUERY,
 	XNOISE_ACTION_CONTEXT_TRACKLIST_COLUMN_HEADER_MENU_QUERY,
 	XNOISE_ACTION_CONTEXT_QUERYABLE_PLAYLIST_ITEM_ACTIVATED,
-	XNOISE_ACTION_CONTEXT_QUERYABLE_PLAYLIST_MENU_QUERY
+	XNOISE_ACTION_CONTEXT_QUERYABLE_PLAYLIST_MENU_QUERY,
+	XNOISE_ACTION_CONTEXT_QUERYABLE_EXTERNAL_ITEM_ACTIVATED,
+	XNOISE_ACTION_CONTEXT_QUERYABLE_EXTERNAL_MENU_QUERY
 } XnoiseActionContext;
 
 typedef enum  {
@@ -1412,6 +1423,12 @@ struct _XnoiseHandlerShowInFileManager {
 
 struct _XnoiseHandlerShowInFileManagerClass {
 	XnoiseItemHandlerClass parent_class;
+};
+
+struct _XnoiseExternQueryableIface {
+	GTypeInterface parent_iface;
+	gint (*get_model_item_column) (XnoiseExternQueryable* self);
+	XnoiseDataSource* (*get_data_source) (XnoiseExternQueryable* self);
 };
 
 struct _XnoiseItemConverter {
@@ -2069,7 +2086,6 @@ gint32 xnoise_database_reader_count_videos (XnoiseDatabaseReader* self, const gc
 gboolean xnoise_database_reader_get_lyrics (XnoiseDatabaseReader* self, const gchar* artist, const gchar* title, gchar** txt, gchar** cred, gchar** ident);
 XnoiseItem* xnoise_database_reader_get_last_played (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_most_played (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
-XnoiseTrackData** xnoise_database_reader_get_all_tracks (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_streamitem_by_id (XnoiseDatabaseReader* self, gint32 id, const gchar* searchtext);
 XnoiseItem* xnoise_database_reader_get_media_folders (XnoiseDatabaseReader* self, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_stream_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
@@ -2115,6 +2131,7 @@ XnoiseTrackData** xnoise_data_source_get_trackdata_by_albumid (XnoiseDataSource*
 XnoiseItem* xnoise_data_source_get_albums_with_search (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
 XnoiseTrackData* xnoise_data_source_get_trackdata_by_titleid (XnoiseDataSource* self, const gchar* searchtext, gint32 id);
 gboolean xnoise_data_source_get_stream_td_for_id (XnoiseDataSource* self, gint32 id, XnoiseTrackData** tmp);
+XnoiseTrackData** xnoise_data_source_get_all_tracks (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 XnoiseDataSource* xnoise_data_source_construct (GType object_type);
 GType xnoise_dbus_get_type (void) G_GNUC_CONST;
 GType player_dbus_service_get_type (void) G_GNUC_CONST;
@@ -2319,6 +2336,9 @@ GType xnoise_item_handler_manager_get_type (void) G_GNUC_CONST;
 GType xnoise_handler_show_in_file_manager_get_type (void) G_GNUC_CONST;
 XnoiseHandlerShowInFileManager* xnoise_handler_show_in_file_manager_new (void);
 XnoiseHandlerShowInFileManager* xnoise_handler_show_in_file_manager_construct (GType object_type);
+GType xnoise_extern_queryable_get_type (void) G_GNUC_CONST;
+gint xnoise_extern_queryable_get_model_item_column (XnoiseExternQueryable* self);
+XnoiseDataSource* xnoise_extern_queryable_get_data_source (XnoiseExternQueryable* self);
 void xnoise_item_init (XnoiseItem *self, XnoiseItemType _type, const gchar* _uri, gint32 _db_id);
 GType xnoise_item_converter_get_type (void) G_GNUC_CONST;
 XnoiseTrackData** xnoise_item_converter_to_trackdata (XnoiseItemConverter* self, XnoiseItem* item, const gchar* searchtext, int* result_length1);
