@@ -38,7 +38,7 @@ internal class Xnoise.HandlerAddAllToTracklist : ItemHandler {
     private Xnoise.Action menu_add_from_playlist;
     private Xnoise.Action menu_add_from_extern;
     
-    private const string ainfo = _("Add all visible tracks to tracklist");
+    private const string ainfo = _("Add all tracks to tracklist");
     private const string aname = "HandlerAddAllToTracklistAction";
     
     private const string name = "HandlerAddAllToTracklist";
