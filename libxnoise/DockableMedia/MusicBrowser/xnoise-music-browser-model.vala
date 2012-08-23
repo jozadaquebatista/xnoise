@@ -495,7 +495,6 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
         }
     }
     
-
     //Used for populating model
     private bool populate_title_job(Worker.Job job) {
         if(this.populating_model)

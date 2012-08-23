@@ -3,7 +3,7 @@ AC_PREREQ([2.68])
 #xnoise version
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 2)
-m4_define(xnoise_micro_version, 8)
+m4_define(xnoise_micro_version, 9)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 m4_define([xnoise_name], [xnoise])
 
@@ -507,6 +507,8 @@ AC_CONFIG_FILES([
     plugins/lastfm/Makefile
     plugins/lyricwiki/Makefile
     plugins/magnatune/Makefile
+    plugins/magnatune/icons/Makefile
+    plugins/magnatune/icons/scalable/Makefile
     plugins/mediakeys/Makefile
     plugins/mpris/Makefile
     plugins/mpris_one/Makefile

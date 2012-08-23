@@ -32,6 +32,7 @@ using Gtk;
 using Gdk;
 
 using Xnoise;
+using Xnoise.Resources;
 using Xnoise.PluginModule;
 
 
@@ -138,6 +139,12 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                 });
             }
         });
+        global.notify["image-path-small"].connect( () => {
+            Timeout.add_seconds(1, () => {
+                update_album_image();
+                return false;
+            });
+        });
     }
     
     ~MagnatuneTreeStore() {
@@ -145,6 +152,63 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
         remove_data_source_by_id(data_source_id);
     }
     
+    private void update_album_image() {
+        TreeIter artist_iter = TreeIter(), album_iter;
+        if(!global.media_import_in_progress) {
+            string text = null;
+            //print("--%s\n", td.title);
+            string artist = global.current_artist;
+            string album = global.current_album;
+            File? albumimage_file = get_albumimage_for_artistalbum(artist, album, "embedded");
+            Gdk.Pixbuf albumimage = null;
+            if(albumimage_file != null) {
+                if(albumimage_file.query_exists(null)) {
+                    try {
+                        albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                    }
+                    catch(Error e) {
+                        albumimage = null;
+                    }
+                }
+                else {
+                    albumimage_file = get_albumimage_for_artistalbum(artist, album, null);
+                    if(albumimage_file.query_exists(null)) {
+                        try {
+                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                        }
+                        catch(Error e) {
+                            albumimage = null;
+                        }
+                    }
+                }
+            }
+            for(int i = 0; i < this.iter_n_children(null); i++) {
+                this.iter_nth_child(out artist_iter, null, i);
+                this.get(artist_iter, Column.VIS_TEXT, out text);
+                text = text != null ? text.down().strip() : EMPTYSTRING;
+                if(strcmp(text, artist != null ? artist.down().strip() : EMPTYSTRING) == 0) {
+                    //found artist
+                    break;
+                }
+                if(i == (this.iter_n_children(null) - 1))
+                    return;
+            }
+            for(int i = 0; i < this.iter_n_children(artist_iter); i++) {
+                this.iter_nth_child(out album_iter, artist_iter, i);
+                this.get(album_iter, Column.VIS_TEXT, out text);
+                text = text != null ? text.down().strip() : EMPTYSTRING;
+                if(strcmp(text, album != null ? album.down().strip() : EMPTYSTRING) == 0) {
+                    //found album
+                    this.set(album_iter,
+                             Column.ICON, (albumimage != null ? albumimage : album_icon),
+                             Column.LEVEL, 1
+                             );
+                    break;
+                }
+            }
+        }
+    }
+
     private void create_icons() {
         try {
             unowned IconTheme theme = IconTheme.get_default();
@@ -260,12 +324,35 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             string artist_name;
             this.get(iter_artist, Column.ITEM, out artist, Column.VIS_TEXT, out artist_name);
             foreach(Item? album in job.items) {     //ALBUMS
+                File? albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, "embedded");
+                Gdk.Pixbuf albumimage = null;
+                if(albumimage_file != null) {
+                    if(albumimage_file.query_exists(null)) {
+                        try {
+                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                        }
+                        catch(Error e) {
+                            albumimage = null;
+                        }
+                    }
+                    else {
+                        albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, null);
+                       if(albumimage_file.query_exists(null)) {
+                            try {
+                                albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                            }
+                            catch(Error e) {
+                                albumimage = null;
+                            }
+                        }
+                    }
+                }
                 this.append(out iter_album, iter_artist);
                 this.set(iter_album,
-                              Column.ICON, album_icon,
-                              Column.VIS_TEXT, album.text,
-                              Column.ITEM, album,
-                              Column.LEVEL, 1
+                         Column.ICON, (albumimage != null ? albumimage : album_icon),
+                         Column.VIS_TEXT, album.text,
+                         Column.ITEM, album,
+                         Column.LEVEL, 1
                 );
                 Gtk.TreePath p1 = this.get_path(iter_album);
                 TreeRowReference treerowref = new TreeRowReference(this, p1);
@@ -1106,7 +1193,7 @@ private class DockableMagnatuneMS : DockableMedia {
         Gdk.Pixbuf? icon = null;
         try {
             unowned Gtk.IconTheme thm = Gtk.IconTheme.get_default();
-            icon = thm.load_icon(Gtk.Stock.EXECUTE, 24, IconLookupFlags.FORCE_SIZE);
+            icon = thm.load_icon("xn-magnatune", 24, IconLookupFlags.FORCE_SIZE);
         }
         catch(Error e) {
             icon = null;

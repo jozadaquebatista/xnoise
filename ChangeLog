@@ -1,3 +1,129 @@
+commit ea1033b56e87196f126da9c1fd3d2a5334e4a027
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 23 00:07:44 2012 +0200
+
+    fix for window hiding/howing from Tal
+
+commit 38bbc7e6c3039cd887d12b1c26c49b7fb496ffe6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 23 00:06:39 2012 +0200
+
+    update portugse translation (Sergio Marques)
+
+commit b5a951b320eb5117f5d43860e88c65f108276a52
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Aug 22 23:58:40 2012 +0200
+
+    update translatable strings
+
+commit 91c52dd565c44c27a12834148da3e7e288e9b6f3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Aug 22 23:50:14 2012 +0200
+
+    extend item handlers for external sources
+
+commit 83f62f499313f58d14a09dad62870eef40d67c11
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Aug 22 16:09:45 2012 +0200
+
+    fix font handling in magnatune dockable
+
+commit c4d87c288bbbb51857ea09f7963ae6c82d64fac5
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Aug 22 14:07:01 2012 +0200
+
+    box main view area to a seperate widget
+
+commit db1d2d94ed18ab1f11caed15ad84398112a35428
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Aug 22 09:31:12 2012 +0200
+
+    more cleanups
+
+commit fb20b3dbe2b6c3fba6629f3ae6aa86602ae9ac63
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Aug 22 00:38:52 2012 +0200
+
+    cleanups
+
+commit 4a06e41ddbb9816884f4dbd4c7f5aebf837c8d36
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 21 23:29:13 2012 +0200
+
+    make many functions internal
+
+commit e79eacf084bcda395de74b5e8fe054fcb2bcf578
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 21 15:50:19 2012 +0200
+
+    recommend tumbler thumbnailing dbus service for freedesktop standard conform thumbnail generation
+
+commit 86e24534671d043c9acd1d6909658e10970c5137
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 21 15:44:45 2012 +0200
+
+    activate standard item handlers for dynamic playlists, too
+
+commit a3f06f9defb1c987fe1f553b50757af57505a2e7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 21 12:35:37 2012 +0200
+
+    update packaging data of ubuntu/oneiric
+
+commit 43722f1dd2cf1ca08aeaa4e9940e44b81d999d7a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 21 12:13:05 2012 +0200
+
+    replace hard coded keycodes with the (now available) Gdk.Key.* constants
+
+commit b1b076e713c27bac53b3c4bf1a341c1e4513d78b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 21 12:11:27 2012 +0200
+
+    add query interface for dynamic playlists
+
+commit 344d7e7556c11607590d6ce5a0cd5cd70452aac0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Aug 20 16:44:58 2012 +0200
+
+    start doing context menus for dynami playlists, etc.
+
+commit 432f0219f0d5713e8808c1e5c3b9929f4c0a64b8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Aug 20 16:09:13 2012 +0200
+
+    fix keyboard opened menus for tracklist and musicbrowser
+
+commit 8ce916d8b29383ba6b69fb26e45643fcf8cc4707
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Aug 20 16:08:17 2012 +0200
+
+    use nautilus feature (if available) for file indication
+
+commit 19f5be9aab3a180f61fafd0f0a1d7cb233c95a3f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Aug 20 15:10:11 2012 +0200
+
+    Add FAQ entry to help menu
+
+commit de56bfebb485244f932a210dc98cfed29063c7bf
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Mon Aug 20 13:12:23 2012 +0200
+
+    update debian package creation script
+
+commit 34d66e4a320abe1a0dbee06107035d477b66bf51
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Aug 20 12:58:52 2012 +0200
+
+    magnatune: use genre in search/filtering
+
+commit 8aee62a9d4f62c1aaf07f8b3b1219175152bf239
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Aug 18 10:50:43 2012 +0200
+
+    make ready for distribution
+
 commit 731703f1d547a9ef781d8067bcb117a896c2b46c
 Author: Tal Hadad <tal_hd@hotmail.com>
 Date:   Sat Aug 18 08:27:37 2012 +0200
