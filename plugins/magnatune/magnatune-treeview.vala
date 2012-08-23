@@ -292,7 +292,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
             if(tmp == null)
                 return;
-            unowned Xnoise.Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
+            unowned Xnoise.Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_EXTERNAL_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
             
             if(action != null)
                 action.action(item, null);

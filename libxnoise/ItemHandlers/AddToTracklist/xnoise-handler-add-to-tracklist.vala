@@ -105,24 +105,22 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
     }
 
     public override unowned Action? get_action(ItemType type, ActionContext context, ItemSelectionType selection = ItemSelectionType.NOT_SET) {
-        if(context == ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED)
-            return add;
-        
-        if(context == ActionContext.QUERYABLE_TREE_MENU_QUERY) {
-            return menu_add;
-       }
-
-        if(context == ActionContext.QUERYABLE_EXTERNAL_MENU_QUERY) {
-            return menu_add_from_extern;
-       }
-
-        if(context == ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY) {
-            return menu_add_from_playlist;
-       }
-        
-        if(context == ActionContext.REQUESTED)
-            return request_add;
-        
+        print("%s\n", context.to_string());
+        switch(context) {
+            case ActionContext.QUERYABLE_EXTERNAL_ITEM_ACTIVATED:
+            case ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED:
+                return add;
+            case ActionContext.QUERYABLE_TREE_MENU_QUERY:
+                return menu_add;
+            case ActionContext.QUERYABLE_EXTERNAL_MENU_QUERY:
+                return menu_add_from_extern;
+            case ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY:
+                return menu_add_from_playlist;
+            case ActionContext.REQUESTED:
+                return request_add;
+            default:
+                break;
+        }
         return null;
     }
 
