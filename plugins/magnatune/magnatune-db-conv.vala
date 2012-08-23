@@ -44,13 +44,17 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     private static const string STMT_CREATE_ARTISTS =
         "CREATE TABLE artists (id INTEGER PRIMARY KEY, name TEXT);";
     private static const string STMT_CREATE_ALBUMS =
-        "CREATE TABLE albums (id INTEGER PRIMARY KEY, artist INTEGER, name TEXT, image TEXT);";
+        "CREATE TABLE albums (id INTEGER PRIMARY KEY, artist INTEGER, name TEXT, image TEXT, sku TEXT);";
     private static const string STMT_CREATE_URIS =
-        "CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER);";
+        "CREATE TABLE uris (id INTEGER PRIMARY KEY, name TEXT, type INTEGER, transformed TEXT);";
     private static const string STMT_CREATE_GENRES =
         "CREATE TABLE genres (id integer primary key, name TEXT);";
     private static const string STMT_CREATE_ITEMS =
         "CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTimeUnix INTEGER, mimetype TEXT);";
+    private static const string STMT_CREATE_HASH =
+        "CREATE TABLE hash (name TEXT);";
+    private static const string STMT_CREATE_MEMBERSHIP_TYPE =
+        "CREATE TABLE membership (name TEXT, info1 TEXT, info2 TEXT, user TEXT, pass TEXT, id TEXT);";
     private static const string STMT_BEGIN =
         "BEGIN";
     private static const string STMT_COMMIT =
@@ -60,7 +64,7 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     private static const string STMT_INSERT_ARTIST =
         "INSERT INTO artists (name) VALUES (?)";
     private static const string STMT_INSERT_ALBUM =
-        "INSERT INTO albums (artist, name) VALUES (?, ?)";
+        "INSERT INTO albums (artist, name, sku) VALUES (?, ?, ?)";
     private static const string STMT_GET_URI_ID =
         "SELECT id FROM uris WHERE name = ?";
     private static const string STMT_INSERT_URI =
@@ -160,7 +164,7 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     }
 
     private static const string STMT_GET_TRACKS =
-        "SELECT DISTINCT s.desc, s.mp3, s.number, al.artist, s.albumname, g.genre, al.launchdate, s.duration FROM albums al, songs s, genres g WHERE s.albumname = al.albumname AND g.albumname = al.albumname";
+        "SELECT DISTINCT s.desc, s.mp3, s.number, al.artist, s.albumname, g.genre, al.launchdate, s.duration, al.sku FROM albums al, songs s, genres g WHERE s.albumname = al.albumname AND g.albumname = al.albumname";
 
     private int count = 0;
     
@@ -177,6 +181,7 @@ public class MagnatuneDatabaseConverter : GLib.Object {
             string artist = stmt.column_text(3);
             string album = stmt.column_text(4);
             string genre = stmt.column_text(5);
+            string sku   = stmt.column_text(8);
             int year = 0;
             if(stmt.column_int(6) != 0) {
                 DateTime dt = new DateTime.from_unix_utc(stmt.column_int(6));
@@ -192,7 +197,7 @@ public class MagnatuneDatabaseConverter : GLib.Object {
                 print("Error importing artist for %s : '%s' ! \n", i.uri, artist);
                 return;
             }
-            int32 album_id = handle_album(ref artist_id, ref album);
+            int32 album_id = handle_album(ref artist_id, ref album, ref sku);
             if(album_id == -1) {
                 print("Error importing album for %s : '%s' ! \n", i.uri, album);
                 return;
@@ -308,50 +313,50 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     private static const string STMT_GET_ITEM_ID =
         "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.id = ?";
     
-    public bool insert_title(ref TrackData td) { // , string uri
-        // make entries in other tables and get references from there
-        td.dat1 = handle_artist(ref td.artist);
-        if(td.dat1 == -1) {
-            print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.artist);
-            return false;
-        }
-        td.dat2 = handle_album(ref td.dat1, ref td.album);
-        if(td.dat2 == -1) {
-            print("Error importing album for %s : '%s' ! \n", td.item.uri, td.album);
-            return false;
-        }
-        int uri_id = handle_uri(td.item.uri);
-        if(uri_id == -1) {
-            //print("Error importing uri for %s : '%s' ! \n", uri, uri);
-            return false;
-        }
-        int genre_id = handle_genre(ref td.genre);
-        if(genre_id == -1) {
-            print("Error importing genre for %s : '%s' ! \n", td.item.uri, td.genre);
-            return false;
-        }
-        //print("insert_title td.item.type %s\n", td.item.type.to_string());
-        insert_title_statement.reset();
-        if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
-           insert_title_statement.bind_int (2,  td.dat1)             != Sqlite.OK ||
-           insert_title_statement.bind_int (3,  td.dat2)             != Sqlite.OK ||
-           insert_title_statement.bind_text(4,  td.title)            != Sqlite.OK ||
-           insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
-           insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
-           insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
-           insert_title_statement.bind_int (8,  td.item.type)        != Sqlite.OK ||
-           insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK
-           ) {
-            this.db_error(ref target);
-            return false;
-        }
-        
-        if(insert_title_statement.step()!=Sqlite.DONE) {
-            this.db_error(ref target);
-            return false;
-        }
-        return true;
-    }
+//    public bool insert_title(ref TrackData td) { // , string uri
+//        // make entries in other tables and get references from there
+//        td.dat1 = handle_artist(ref td.artist);
+//        if(td.dat1 == -1) {
+//            print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.artist);
+//            return false;
+//        }
+//        td.dat2 = handle_album(ref td.dat1, ref td.album);
+//        if(td.dat2 == -1) {
+//            print("Error importing album for %s : '%s' ! \n", td.item.uri, td.album);
+//            return false;
+//        }
+//        int uri_id = handle_uri(td.item.uri);
+//        if(uri_id == -1) {
+//            //print("Error importing uri for %s : '%s' ! \n", uri, uri);
+//            return false;
+//        }
+//        int genre_id = handle_genre(ref td.genre);
+//        if(genre_id == -1) {
+//            print("Error importing genre for %s : '%s' ! \n", td.item.uri, td.genre);
+//            return false;
+//        }
+//        //print("insert_title td.item.type %s\n", td.item.type.to_string());
+//        insert_title_statement.reset();
+//        if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
+//           insert_title_statement.bind_int (2,  td.dat1)             != Sqlite.OK ||
+//           insert_title_statement.bind_int (3,  td.dat2)             != Sqlite.OK ||
+//           insert_title_statement.bind_text(4,  td.title)            != Sqlite.OK ||
+//           insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
+//           insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
+//           insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
+//           insert_title_statement.bind_int (8,  td.item.type)        != Sqlite.OK ||
+//           insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK
+//           ) {
+//            this.db_error(ref target);
+//            return false;
+//        }
+//        
+//        if(insert_title_statement.step()!=Sqlite.DONE) {
+//            this.db_error(ref target);
+//            return false;
+//        }
+//        return true;
+//    }
 
     private static const string STMT_GET_ARTIST_MAX_ID =
         "SELECT MAX(id) FROM artists";
@@ -387,15 +392,15 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     }
 
     private static const string STMT_INS_ALBUM =
-        "INSERT INTO albums (artist, name) VALUES ((SELECT id FROM artists ar WHERE utf8_lower(ar.name) = ?), ?)";
+        "INSERT INTO albums (artist, name, sku) VALUES ((SELECT id FROM artists ar WHERE utf8_lower(ar.name) = ?), ?)";
     private static const string STMT_GET_ALBUM_ID =
         "SELECT id FROM albums WHERE artist = ? AND utf8_lower(name) = ?";
-    private static const string STMT_UPDATE_ALBUM_NAME = 
-        "UPDATE albums SET name=? WHERE id=?";
+//    private static const string STMT_UPDATE_ALBUM_NAME = 
+//        "UPDATE albums SET name=? WHERE id=?";
     private static const string STMT_GET_ALBUMS_MAX_ID =
         "SELECT MAX(id) FROM albums";
 
-    private int handle_album(ref int artist_id, ref string album, bool update_album = false) {
+    private int handle_album(ref int artist_id, ref string album, ref string sku) {
         get_album_id_statement.reset();
         if(get_album_id_statement.bind_int (1, artist_id) != Sqlite.OK ||
            get_album_id_statement.bind_text(2, album != null ? album.down().strip() : EMPTYSTRING) != Sqlite.OK ) {
@@ -407,8 +412,9 @@ public class MagnatuneDatabaseConverter : GLib.Object {
         
         // Insert album
         insert_album_statement.reset();
-        if(insert_album_statement.bind_int (1, artist_id)     != Sqlite.OK ||
-           insert_album_statement.bind_text(2, album) != Sqlite.OK ) {
+        if(insert_album_statement.bind_int (1, artist_id) != Sqlite.OK ||
+           insert_album_statement.bind_text(2, album) != Sqlite.OK ||
+           insert_album_statement.bind_text(3, sku) != Sqlite.OK) {
             this.db_error(ref target);
             return -1;
         }

@@ -951,10 +951,13 @@ private class MagnatuneWidget : Gtk.Box {
         
         load_db();
     }
-    private static const string CONVERTED_DB = "/tmp/xnoise_magnatune.sqlite";
+    
+    private static const string CONVERTED_DB = "/tmp/xnoise_magnatune.sqlite"; //TODO
+    
     private void load_db() {
         File dbf   = File.new_for_path(CONVERTED_DB);
         if(dbf.query_exists()) {
+            // TODO check hash
             database_available = true;
             Timeout.add_seconds(1, () => {
                 add_tree();
