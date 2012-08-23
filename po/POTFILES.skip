@@ -31,5 +31,7 @@ src/xnoise.c
 data/ui/metadat_artist_album.ui
 data/ui/metadat_title.ui
 plugins/magnatune/magnatune.c
+plugins/magnatune/magnatune-dockable.c
+plugins/magnatune/magnatune-treeview.c
 package_result
 

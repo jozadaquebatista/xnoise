@@ -20,6 +20,10 @@ libMagnatune_LTLIBRARIES = libMagnatune.la
 
 libMagnatune_la_SOURCES = \
     magnatune.vala \
+    magnatune-widget.vala \
+    magnatune-treestore.vala \
+    magnatune-treeview.vala \
+    magnatune-dockable.vala \
     magnatune-db-reader.vala \
     magnatune-db-conv.vala \
     magnatune-registration.vala \
