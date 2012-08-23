@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-23 15:52+0200\n"
+"POT-Creation-Date: 2012-08-23 16:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,10 +58,12 @@ msgid "Music"
 msgstr ""
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:308
+#: ../plugins/magnatune/magnatune-treeview.vala:202
 msgid "Collapse all"
 msgstr ""
 
 #: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:310
+#: ../plugins/magnatune/magnatune-treestore.vala:43
 msgid "Loading ..."
 msgstr ""
 
@@ -448,6 +450,7 @@ msgid "Go to next track"
 msgstr ""
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:180
+#: ../plugins/magnatune/magnatune-dockable.vala:105
 #: ../plugins/ubuntuone/ubuntuone.vala:228
 msgid "_View"
 msgstr ""
@@ -730,6 +733,14 @@ msgstr ""
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
 #: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
 msgid "Ubuntu One Music Store"
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-dockable.vala:54
+msgid "Magnatune"
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-dockable.vala:106
+msgid "Show Magnatune Store"
 msgstr ""
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1

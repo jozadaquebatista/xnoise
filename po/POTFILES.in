@@ -84,6 +84,9 @@ plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in
 plugins/azlyrics/azlyrics.xnplugin.desktop.in
 plugins/mediakeys/mediakeys.xnplugin.desktop.in
 plugins/magnatune/Magnatune.xnplugin.desktop.in
+plugins/magnatune/magnatune-dockable.vala
+plugins/magnatune/magnatune-treeview.vala
+plugins/magnatune/magnatune-treestore.vala
 plugins/mpris/mpris.xnplugin.desktop.in
 plugins/mpris_one/mpris_one.xnplugin.desktop.in
 plugins/notifications2/notifications.xnplugin.desktop.in
