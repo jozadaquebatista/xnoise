@@ -2,7 +2,7 @@ NULL =
 
 AUTOMAKE_OPTIONS = subdir-objects
 
-SUBDIRS = \
+SUBDIRS = icons \
     $(NULL)
 
 INCLUDES = \

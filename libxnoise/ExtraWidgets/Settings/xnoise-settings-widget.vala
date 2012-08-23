@@ -274,6 +274,7 @@ public class Xnoise.SettingsWidget : Gtk.Box {
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
             notebook.scrollable = false;
+            notebook.tab_pos = Gtk.PositionType.LEFT;
             this.pack_start(notebook, true, true, 0);
 
             var closeButton = new Gtk.Button.from_stock(Gtk.Stock.GO_BACK);

@@ -505,6 +505,8 @@ AC_CONFIG_FILES([
     plugins/testplugin/Makefile
     plugins/titleToDecoration/Makefile
     plugins/lastfm/Makefile
+    plugins/lastfm/icons/Makefile
+    plugins/lastfm/icons/scalable/Makefile
     plugins/lyricwiki/Makefile
     plugins/magnatune/Makefile
     plugins/magnatune/icons/Makefile

@@ -433,6 +433,21 @@ public class Xnoise.LfmWidget: Gtk.Box {
     }
     
     private void setup_widgets() {
+        Gdk.Pixbuf image;
+        unowned IconTheme theme = IconTheme.get_default();
+        try {
+            if(theme.has_icon("xn-lastfm")) {
+                image = theme.load_icon("xn-lastfm", 80, IconLookupFlags.FORCE_SIZE);
+                var b = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+                b.pack_start(new Gtk.Image.from_pixbuf(image), false, false, 0);
+                b.pack_start(new Gtk.Label(""), true, true, 0);
+                this.pack_start(b, false, false, 5);
+            }
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+            image = null;
+        }
         var title_label = new Label("<b>%s</b>".printf(_("Please enter your lastfm username and password.")));
         title_label.set_use_markup(true);
         title_label.set_single_line_mode(true);
