@@ -44,7 +44,7 @@ private class Xnoise.PluginManagerTree: Gtk.TreeView {
         N_COLUMNS
     }
     private CellRendererText text;
-    private TreeViewColumn iconColumn;
+//    private TreeViewColumn iconColumn;
     private TreeViewColumn checkColumn;
 
     private unowned Main xn;
@@ -71,66 +71,74 @@ private class Xnoise.PluginManagerTree: Gtk.TreeView {
         ((CellRendererText)cell).markup = markup_string;
     }
 
-    private bool on_button_press(Gtk.Widget sender, Gdk.EventButton e) {
-        Gtk.TreePath path = null;
-        Gtk.TreeViewColumn column;
-        int x = (int)e.x;
-        int y = (int)e.y;
-        int cell_x, cell_y;
-        
-        if(!this.get_path_at_pos(x, y, out path, out column, out cell_x, out cell_y))
-            return true;
-        
-        TreeIter iter;
-        listmodel.get_iter(out iter, path);
-        string module;
-        listmodel.get(iter, Column.MODULE, out module);
-        
-        if(plugin_loader.plugin_htable.lookup(module).activated) 
-            plugin_loader.deactivate_single_plugin(module);
-        else 
-            plugin_loader.activate_single_plugin(module);
-            
-        unowned PluginModule.Container p = plugin_loader.plugin_htable.lookup(module);
-        
-        listmodel.set(iter,
-                      Column.TOGGLE, p.activated
-                      );
-        
-        sign_plugin_activestate_changed(module);
-        return false;
-    }
-
     public void create_view() {
         this.set_size_request(-1, 250);
-        
+        this.get_selection().set_mode(SelectionMode.SINGLE);
         var toggle = new CellRendererToggle();
         checkColumn = new TreeViewColumn();
         checkColumn.pack_start(toggle, false);
         checkColumn.add_attribute(toggle, "active", Column.TOGGLE);
+        
+        toggle.toggled.connect( (c,ps) => {
+            print("toggled\n");
+            Gtk.TreePath path = new Gtk.TreePath.from_string(ps);
+            
+            TreeIter iter;
+            listmodel.get_iter(out iter, path);
+            string module;
+            listmodel.get(iter, Column.MODULE, out module);
+            
+            if(plugin_loader.plugin_htable.lookup(module).activated) 
+                plugin_loader.deactivate_single_plugin(module);
+            else 
+                plugin_loader.activate_single_plugin(module);
+                
+            unowned PluginModule.Container p = plugin_loader.plugin_htable.lookup(module);
+            listmodel.set(iter,
+                          Column.TOGGLE, p.activated
+                          );
+            sign_plugin_activestate_changed(module);
+        });
+        
         this.append_column(checkColumn);
         
-        iconColumn = new TreeViewColumn();
         var pixbufRenderer = new CellRendererPixbuf();
-        iconColumn.pack_start(pixbufRenderer, false);
-        iconColumn.add_attribute(pixbufRenderer, "pixbuf", Column.ICON);
-        iconColumn.set_fixed_width(50);
-        this.append_column(iconColumn);
+        checkColumn.pack_start(pixbufRenderer, false);
+        checkColumn.add_attribute(pixbufRenderer, "pixbuf", Column.ICON);
         
         text = new CellRendererText();
         
-        var column = new TreeViewColumn();
-        column.pack_start(text, true);
-        column.add_attribute(text, "text", Column.NAME);
-        column.set_cell_data_func(text, text_cell_cb);
-        this.append_column(column);
+        checkColumn.pack_start(text, true);
+        checkColumn.add_attribute(text, "text", Column.NAME);
+        checkColumn.set_cell_data_func(text, text_cell_cb);
         
         this.set_headers_visible(false);
         setup_entries();
         this.set_model(listmodel);
         
         this.get_selection().set_mode(SelectionMode.NONE);
-        this.button_press_event.connect(this.on_button_press);
+        this.row_activated.connect( (vi,pat,co) => {
+            TreeIter iter;
+            listmodel.get_iter(out iter, pat);
+            string module;
+            bool state;
+            if(pat != null) {
+                this.get_selection().unselect_all();
+                this.get_selection().select_path(pat);
+            }
+            listmodel.get(iter, Column.MODULE, out module, Column.TOGGLE, out state);
+            listmodel.set(iter, Column.TOGGLE, !state);
+            if(plugin_loader.plugin_htable.lookup(module).activated) 
+                plugin_loader.deactivate_single_plugin(module);
+            else 
+                plugin_loader.activate_single_plugin(module);
+                
+            unowned PluginModule.Container p = plugin_loader.plugin_htable.lookup(module);
+            listmodel.set(iter,
+                          Column.TOGGLE, p.activated
+                          );
+            sign_plugin_activestate_changed(module);
+        });
     }
 
     private void setup_entries() {
