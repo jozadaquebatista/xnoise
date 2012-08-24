@@ -33,9 +33,11 @@ using Gdk;
 
 using Xnoise;
 using Xnoise.Resources;
+using Xnoise.Services;
 using Xnoise.PluginModule;
 
-
+internal static string CONVERTED_DB; //data_folder() + "/xnoise/magnatune.sqlite";
+//    GLib.Path.build_filename(data_folder(), "magnatune.sqlite", null);
 private static const string MAGNATUNE_MUSIC_STORE_NAME = "MagnatuneMusicStore";
 
 public class MagnatunePlugin : GLib.Object, IPlugin {
@@ -52,6 +54,7 @@ public class MagnatunePlugin : GLib.Object, IPlugin {
     public string name { get { return "magnatune_music_store"; } }
     
     public bool init() {
+        CONVERTED_DB = GLib.Path.build_filename(data_folder(), "magnatune.sqlite", null);
         this.music_store = new MagMusicStore(this);
         owner.sign_deactivated.connect(clean_up);
         return true;
@@ -290,11 +293,11 @@ private class MagMusicStore : GLib.Object {
         main_window.msw.select_dockable_by_name("MusicBrowserDockable");
         if(msd == null)
             return;
-        if(msd.action_group != null) {
-            main_window.ui_manager.remove_action_group(msd.action_group);
-        }
-        if(msd.ui_merge_id != 0)
-            main_window.ui_manager.remove_ui(msd.ui_merge_id);
+//        if(msd.action_group != null) {
+//            main_window.ui_manager.remove_action_group(msd.action_group);
+//        }
+//        if(msd.ui_merge_id != 0)
+//            main_window.ui_manager.remove_ui(msd.ui_merge_id);
         main_window.msw.remove_dockable_in_idle(MAGNATUNE_MUSIC_STORE_NAME);
     }
 }

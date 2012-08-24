@@ -54,7 +54,7 @@ private class MagnatuneWidget : Gtk.Box {
         load_db();
     }
     
-    private static const string CONVERTED_DB = "/tmp/xnoise_magnatune.sqlite"; //TODO
+//    private static const string CONVERTED_DB = "/tmp/xnoise_magnatune.sqlite"; //TODO
     
     
     private class MagnatuneChangeDetector : GLib.Object {

@@ -36,7 +36,7 @@ using Xnoise.Resources;
 
 
 public class MagnatuneDatabaseReader : Xnoise.DataSource {
-    private const string DATABASE_NAME = "/tmp/xnoise_magnatune.sqlite";
+//    private const string DATABASE_NAME = "/tmp/xnoise_magnatune.sqlite";
     private string DATABASE;
     
     private string _username;
@@ -130,7 +130,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     private Sqlite.Database db;
 
     private string dbFileName() {
-        return DATABASE_NAME;//GLib.Path.build_filename("tmp", "xnoise_magnatune_db", null);
+        return CONVERTED_DB;//GLib.Path.build_filename("tmp", "xnoise_magnatune_db", null);
     }
 
     private void db_error() {

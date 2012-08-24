@@ -37,7 +37,7 @@ using Xnoise.Resources;
 
 public class MagnatuneDatabaseConverter : GLib.Object {
     private const string DATABASE_NAME = "/tmp/xnoise_magnatune_db";
-    private const string TARGET_DB     = "/tmp/xnoise_magnatune.sqlite";
+//    private const string TARGET_DB     = "/tmp/xnoise_magnatune.sqlite";
     private string DATABASE;
 
     // SQL
@@ -91,7 +91,7 @@ public class MagnatuneDatabaseConverter : GLib.Object {
 
 
     public MagnatuneDatabaseConverter() {
-        var ft = File.new_for_path(TARGET_DB);
+        var ft = File.new_for_path(CONVERTED_DB);
         if(ft.query_exists(null))
             ft.delete();
 
@@ -272,7 +272,7 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     }
     
     private void setup_target_handle() {
-        File tf = File.new_for_path(TARGET_DB);
+        File tf = File.new_for_path(CONVERTED_DB);
         if(!tf.query_exists(null)) {
             try {
                 tf.delete();
