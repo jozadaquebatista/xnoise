@@ -892,6 +892,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class SettingsWidget : Gtk.Box {
 		public SettingsWidget ();
+		public void select_general_tab ();
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

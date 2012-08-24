@@ -433,6 +433,14 @@ public class Xnoise.LfmWidget: Gtk.Box {
     }
     
     private void setup_widgets() {
+        var headline_label = new Gtk.Label("");
+        headline_label.margin_top    = 5;
+        headline_label.margin_bottom = 5;
+        headline_label.set_alignment(0.0f, 0.5f);
+        headline_label.set_markup("<span size=\"xx-large\"><b> LastFM </b></span>");
+        headline_label.use_markup= true;
+        this.pack_start(headline_label, false, false, 0);
+        
         Gdk.Pixbuf image;
         unowned IconTheme theme = IconTheme.get_default();
         try {

@@ -60,7 +60,12 @@ public class Xnoise.SettingsWidget : Gtk.Box {
     }
     
     public signal void sign_finish();
-
+    public void select_general_tab() {
+        if(this.notebook == null)
+            return;
+        this.notebook.set_current_page(0);
+    }
+    
     public SettingsWidget() {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         this.xn = Main.instance;
@@ -226,6 +231,9 @@ public class Xnoise.SettingsWidget : Gtk.Box {
         builder = new Builder();
         try {
             this.builder.add_from_file(SETTINGS_UI_FILE);
+            var headline_general = this.builder.get_object("headline_general") as Gtk.Label;
+            headline_general.set_markup("<span size=\"xx-large\"><b> " + Markup.printf_escaped(_("General")) + "</b></span>");
+            headline_general.use_markup= true;
             
             Label general_label = this.builder.get_object("label1") as Gtk.Label;
             general_label.set_text(_("General"));
@@ -292,6 +300,9 @@ public class Xnoise.SettingsWidget : Gtk.Box {
             scrollWinPlugins = this.builder.get_object("scrollWinPlugins") as Gtk.ScrolledWindow;
             scrollWinPlugins.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
             
+            var headline_plugin = this.builder.get_object("headline_plugin") as Gtk.Label;
+            headline_plugin.set_markup("<span size=\"xx-large\"><b> " + Markup.printf_escaped(_("Plugins")) + "</b></span>");
+            headline_plugin.use_markup= true;
             Timeout.add_seconds(2, () => {
                 add_plugin_tabs();
                 plugin_manager_tree = new PluginManagerTree();

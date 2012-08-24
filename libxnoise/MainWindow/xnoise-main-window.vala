@@ -77,6 +77,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private Xnoise.AppMenuButton app_menu_button;
     private string temporary_mainview_name;
     private bool window_maximized;
+    private SettingsWidget settings_widget;
     internal bool quit_if_closed;
     internal ScrolledWindow musicBrScrollWin = null;
     internal ScrolledWindow trackListScrollWin = null;
@@ -1159,6 +1160,7 @@ print("++2\n");
     }
     
     private void on_settings_edit() {
+        settings_widget.select_general_tab();
         dialognotebook.set_current_page(1);
     }
 
@@ -1574,8 +1576,8 @@ print("++2\n");
             else {
                 media_browser_visible = true;
             }
-            
-            dialognotebook.append_page(new SettingsWidget(), null);
+            settings_widget = new SettingsWidget();
+            dialognotebook.append_page(settings_widget, null);
             dialognotebook.append_page(new AddMediaWidget(), null);
             // GTk3 resize grip
             this.set_has_resize_grip(true);
