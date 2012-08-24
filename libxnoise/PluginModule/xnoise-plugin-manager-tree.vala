@@ -44,8 +44,7 @@ private class Xnoise.PluginManagerTree: Gtk.TreeView {
         N_COLUMNS
     }
     private CellRendererText text;
-//    private TreeViewColumn iconColumn;
-    private TreeViewColumn checkColumn;
+    private TreeViewColumn column;
 
     private unowned Main xn;
 
@@ -75,9 +74,9 @@ private class Xnoise.PluginManagerTree: Gtk.TreeView {
         this.set_size_request(-1, 250);
         this.get_selection().set_mode(SelectionMode.SINGLE);
         var toggle = new CellRendererToggle();
-        checkColumn = new TreeViewColumn();
-        checkColumn.pack_start(toggle, false);
-        checkColumn.add_attribute(toggle, "active", Column.TOGGLE);
+        column = new TreeViewColumn();
+        column.pack_start(toggle, false);
+        column.add_attribute(toggle, "active", Column.TOGGLE);
         
         toggle.toggled.connect( (c,ps) => {
             print("toggled\n");
@@ -100,17 +99,17 @@ private class Xnoise.PluginManagerTree: Gtk.TreeView {
             sign_plugin_activestate_changed(module);
         });
         
-        this.append_column(checkColumn);
+        this.append_column(column);
         
         var pixbufRenderer = new CellRendererPixbuf();
-        checkColumn.pack_start(pixbufRenderer, false);
-        checkColumn.add_attribute(pixbufRenderer, "pixbuf", Column.ICON);
+        column.pack_start(pixbufRenderer, false);
+        column.add_attribute(pixbufRenderer, "pixbuf", Column.ICON);
         
         text = new CellRendererText();
         
-        checkColumn.pack_start(text, true);
-        checkColumn.add_attribute(text, "text", Column.NAME);
-        checkColumn.set_cell_data_func(text, text_cell_cb);
+        column.pack_start(text, true);
+        column.add_attribute(text, "text", Column.NAME);
+        column.set_cell_data_func(text, text_cell_cb);
         
         this.set_headers_visible(false);
         setup_entries();
