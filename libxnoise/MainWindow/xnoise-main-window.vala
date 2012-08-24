@@ -1280,7 +1280,7 @@ print("++2\n");
                     else if(location!=UNKNOWN_LOCATION)
                         text = Markup.printf_escaped("<b>%s</b>", _(UNKNOWN_LOCATION));
                     else
-                        text = Markup.printf_escaped("<b>%s</b>", file.get_uri());
+                        text = "<b>XNOISE</b> - ready to rock! ;-)";//Markup.printf_escaped("<b>%s</b>", "...loading...");//file.get_uri()
                 }
                 else if(album==UNKNOWN_ALBUM &&
                         artist==UNKNOWN_ARTIST) {
