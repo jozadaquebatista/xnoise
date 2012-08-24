@@ -456,6 +456,16 @@ public class Xnoise.LfmWidget: Gtk.Box {
             print("%s\n", e.message);
             image = null;
         }
+        
+        var lb = new LinkButton.with_label("http://www.lastfm.com", _("Visit LastFm for an account."));
+        lb.margin_top    = 5;
+        lb.margin_bottom = 5;
+        lb.set_alignment(0.0f, 0.5f);
+        var bx2 = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        bx2.pack_start(lb, false, false, 0);
+        bx2.pack_start(new Gtk.Label(""), true, true, 0);
+        this.pack_start(bx2, false, false, 5);
+
         var title_label = new Label("<b>%s</b>".printf(_("Please enter your lastfm username and password.")));
         title_label.set_use_markup(true);
         title_label.set_single_line_mode(true);
@@ -491,7 +501,7 @@ public class Xnoise.LfmWidget: Gtk.Box {
         this.pack_start(hbox1, false, false, 4);
         this.pack_start(hbox2, false, false, 4);
         
-        use_scrobble_check = new CheckButton.with_label(_("Scrobble played tracks on lastfm"));
+        use_scrobble_check = new CheckButton.with_label(_("Scrobble played tracks on lastfm (Send song data to create statistis)"));
         this.pack_start(use_scrobble_check, false, false, 0);
         
         var hbox3 = new Box(Orientation.HORIZONTAL, 2);

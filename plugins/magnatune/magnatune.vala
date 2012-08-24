@@ -193,17 +193,28 @@ public class MagnatuneSettings : Gtk.Box {
         try {
             if(theme.has_icon("xn-magnatune")) {
                 image = theme.load_icon("xn-magnatune", 80, IconLookupFlags.FORCE_SIZE);
-                var b = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-                b.pack_start(new Gtk.Image.from_pixbuf(image), false, false, 0);
-                b.pack_start(new Gtk.Label(""), true, true, 0);
-                this.pack_start(b, false, false, 5);
+                var bx1 = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+                bx1.pack_start(new Gtk.Image.from_pixbuf(image), false, false, 0);
+                bx1.pack_start(new Gtk.Label(""), true, true, 0);
+                this.pack_start(bx1, false, false, 5);
             }
         }
         catch(Error e) {
             image = null;
         }
         
-        var title_label = new Label("<b>%s</b>".printf(_("Please enter your Magnatune username and password.")));
+        var lb = new LinkButton.with_label("http://magnatune.com", _("Visit Magnatune for an account."));
+        lb.margin_top    = 5;
+        lb.margin_bottom = 5;
+        lb.set_alignment(0.0f, 0.5f);
+        var bx2 = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        bx2.pack_start(lb, false, false, 0);
+        bx2.pack_start(new Gtk.Label(""), true, true, 0);
+        this.pack_start(bx2, false, false, 5);
+        
+        var title_label = new Label("<b>%s</b>".printf(
+           _("Please enter your Magnatune username and password."))
+        );
         title_label.set_use_markup(true);
         title_label.set_single_line_mode(true);
         title_label.set_alignment(0.0f, 0.5f);
