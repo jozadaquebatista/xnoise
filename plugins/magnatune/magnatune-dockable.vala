@@ -42,7 +42,10 @@ private class DockableMagnatuneMS : DockableMedia {
         return MAGNATUNE_MUSIC_STORE_NAME;
     }
     
-    public DockableMagnatuneMS() {
+    private unowned MagnatunePlugin plugin;
+    
+    public DockableMagnatuneMS(MagnatunePlugin plugin) {
+        this.plugin = plugin;
         widget = null;
     }
 
@@ -63,7 +66,7 @@ private class DockableMagnatuneMS : DockableMedia {
         this.win = win;
         
         assert(this.win != null);
-        var wu = new MagnatuneWidget(this);
+        var wu = new MagnatuneWidget(this, this.plugin);
 
         widget = wu;
         wu.show_all();

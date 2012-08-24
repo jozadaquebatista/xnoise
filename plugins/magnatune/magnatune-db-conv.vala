@@ -51,10 +51,10 @@ public class MagnatuneDatabaseConverter : GLib.Object {
         "CREATE TABLE genres (id integer primary key, name TEXT);";
     private static const string STMT_CREATE_ITEMS =
         "CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTimeUnix INTEGER, mimetype TEXT);";
-    private static const string STMT_CREATE_HASH =
-        "CREATE TABLE hash (name TEXT);";
-    private static const string STMT_CREATE_MEMBERSHIP_TYPE =
-        "CREATE TABLE membership (name TEXT, info1 TEXT, info2 TEXT, user TEXT, pass TEXT, id TEXT);";
+//    private static const string STMT_CREATE_HASH =
+//        "CREATE TABLE hash (name TEXT);";
+//    private static const string STMT_CREATE_MEMBERSHIP_TYPE =
+//        "CREATE TABLE membership (name TEXT, info1 TEXT, info2 TEXT, user TEXT, pass TEXT, id TEXT);";
     private static const string STMT_BEGIN =
         "BEGIN";
     private static const string STMT_COMMIT =

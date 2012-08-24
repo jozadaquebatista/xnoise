@@ -42,9 +42,11 @@ private class MagnatuneWidget : Gtk.Box {
     private unowned DockableMedia dock;
     public ScrolledWindow sw;
     public MagnatuneTreeView tv = null;
+    private unowned MagnatunePlugin plugin;
 
-    public MagnatuneWidget(DockableMedia dock) {
+    public MagnatuneWidget(DockableMedia dock, MagnatunePlugin plugin) {
         Object(orientation:Orientation.VERTICAL,spacing:0);
+        this.plugin = plugin;
         this.dock = dock;
         create_widgets();
         this.show_all();
@@ -246,7 +248,7 @@ private class MagnatuneWidget : Gtk.Box {
         label = null;
         sw = new ScrolledWindow(null, null);
         sw.set_shadow_type(ShadowType.IN);
-        tv = new MagnatuneTreeView(this.dock, this, sw);
+        tv = new MagnatuneTreeView(this.dock, this, sw, this.plugin);
         sw.add(tv);
         this.pack_start(sw, true, true , 0);
         this.show_all();

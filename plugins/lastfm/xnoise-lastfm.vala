@@ -461,7 +461,7 @@ public class Xnoise.LfmWidget: Gtk.Box {
         user_label.xalign = 0.0f;
         hbox1.pack_start(user_label, false, false, 0);
         user_entry = new Entry();
-        user_entry.set_width_chars(25);
+        user_entry.set_width_chars(35);
         hbox1.pack_start(user_entry, false, false, 0);
         hbox1.pack_start(new Label(""), false, false, 0);
         
@@ -470,7 +470,7 @@ public class Xnoise.LfmWidget: Gtk.Box {
         pass_label.xalign = 0.0f;
         hbox2.pack_start(pass_label, false, false, 0);
         pass_entry = new Entry();
-        pass_entry.set_width_chars(25);
+        pass_entry.set_width_chars(35);
         pass_entry.set_visibility(false);
         
         hbox2.pack_start(pass_entry, false, false, 0);

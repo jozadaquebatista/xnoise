@@ -52,7 +52,7 @@ public class MagnatunePlugin : GLib.Object, IPlugin {
     public string name { get { return "magnatune_music_store"; } }
     
     public bool init() {
-        this.music_store = new MagMusicStore();//this);
+        this.music_store = new MagMusicStore(this);
         owner.sign_deactivated.connect(clean_up);
         return true;
     }
@@ -73,58 +73,76 @@ public class MagnatunePlugin : GLib.Object, IPlugin {
     public bool has_settings_widget() {
         return true;
     }
+    
+
+    public signal void login_state_change();
+    
+    internal string username;
+    internal string password;
+    
+    public void login(string username, string password) {
+        if(username == null || username == EMPTYSTRING ||
+           password == null || password == EMPTYSTRING)
+            return;
+        this.username = username;
+        this.password = password;
+        
+        Idle.add( () => {
+            login_state_change();
+            return false;
+        });
+    }
 }
 
 
 
 public class MagnatuneSettings : Gtk.Box {
     private unowned Main xn;
-    private unowned MagnatunePlugin lfm;
+    private unowned MagnatunePlugin magn_plugin;
     private Entry user_entry;
     private Entry pass_entry;
-//    private CheckButton use_scrobble_check;
     private Label feedback_label;
     private Button b;
     private string username_last;
     private string password_last;
     
     
-    public MagnatuneSettings(MagnatunePlugin lfm) {
+    public MagnatuneSettings(MagnatunePlugin magn_plugin) {
         GLib.Object(orientation:Gtk.Orientation.VERTICAL, spacing:10);
-        this.lfm = lfm;
+        this.magn_plugin = magn_plugin;
         this.xn = Main.instance;
         setup_widgets();
         
-//        this.lfm.login_state_change.connect(do_user_feedback);
+        this.magn_plugin.login_state_change.connect(do_user_feedback);
         this.set_vexpand(true);
         this.set_hexpand(true);
         user_entry.text = Xnoise.Params.get_string_value("magnatune_user");
         pass_entry.text = Xnoise.Params.get_string_value("magnatune_pass");
-//        use_scrobble_check.set_active(Xnoise.Params.get_int_value("lfm_use_scrobble") != 0);
         
-//        use_scrobble_check.toggled.connect(on_use_scrobble_toggled);
+        if(user_entry.text != EMPTYSTRING && pass_entry.text != EMPTYSTRING) {
+            feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_AVAILABLE));
+        }
+        else {
+            feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_NOT_AVAILABLE));
+        }
         b.clicked.connect(on_entry_changed);
     }
 
     //show if user is logged in
     private void do_user_feedback() {
-        //print("do_user_feedback\n");
-//        if(this.lfm.logged_in()) {
-//            feedback_label.set_markup("<b><i>%s</i></b>".printf(_("User logged in!")));
-//            feedback_label.set_use_markup(true);
-//        }
-//        else {
-//            feedback_label.set_markup("<b><i>%s</i></b>".printf(_("User not logged in!")));
-//            feedback_label.set_use_markup(true);
-//        }
+        print("do_user_feedback\n");
+        if(user_entry.text != EMPTYSTRING && pass_entry.text != EMPTYSTRING) {
+            feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_AVAILABLE));
+            feedback_label.set_use_markup(true);
+        }
+        else {
+            feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_NOT_AVAILABLE));
+            feedback_label.set_use_markup(true);
+        }
     }
     
-//    private void on_use_scrobble_toggled(ToggleButton sender) {
-//        if(sender.get_active())
-//            Xnoise.Params.set_int_value("lfm_use_scrobble", 1);
-//        else
-//            Xnoise.Params.set_int_value("lfm_use_scrobble", 0);
-//    }
+    private const string USER_PASSWORD_AVAILABLE     = _("Username/Password available!");
+    private const string USER_PASSWORD_NOT_AVAILABLE = _("Username/Password not available!");
     
     private void on_entry_changed() {
         //print("take over entry\n");
@@ -146,7 +164,7 @@ public class MagnatuneSettings : Gtk.Box {
                 return false;
             });
             do_user_feedback();
-//            lfm.login(username, password);
+            magn_plugin.login(username, password);
         }
     }
     
@@ -179,7 +197,7 @@ public class MagnatuneSettings : Gtk.Box {
         user_label.xalign = 0.0f;
         hbox1.pack_start(user_label, false, false, 0);
         user_entry = new Entry();
-        user_entry.set_width_chars(25);
+        user_entry.set_width_chars(35);
         hbox1.pack_start(user_entry, false, false, 0);
         hbox1.pack_start(new Label(""), false, false, 0);
         
@@ -188,7 +206,7 @@ public class MagnatuneSettings : Gtk.Box {
         pass_label.xalign = 0.0f;
         hbox2.pack_start(pass_label, false, false, 0);
         pass_entry = new Entry();
-        pass_entry.set_width_chars(25);
+        pass_entry.set_width_chars(35);
         pass_entry.set_visibility(false);
         
         hbox2.pack_start(pass_entry, false, false, 0);
@@ -201,9 +219,6 @@ public class MagnatuneSettings : Gtk.Box {
         this.pack_start(hbox1, false, false, 4);
         this.pack_start(hbox2, false, false, 4);
         
-//        use_scrobble_check = new CheckButton.with_label(_("Scrobble played tracks on lastfm"));
-//        this.pack_start(use_scrobble_check, false, false, 0);
-        
         var hbox3 = new Box(Orientation.HORIZONTAL, 2);
         b = new Button.from_stock(Gtk.Stock.APPLY);
         hbox3.pack_start(b, false, false, 0);
@@ -212,18 +227,18 @@ public class MagnatuneSettings : Gtk.Box {
         this.border_width = 4;
         
         //feedback
-//        feedback_label = new Label("<b><i>%s</i></b>".printf(_("User not logged in!")));
-//        if(this.lfm.logged_in()) {
-//            feedback_label.set_markup("<b><i>%s</i></b>".printf(_("User logged in!")));
-//        }
-//        else {
-//            feedback_label.set_markup("<b><i>%s</i></b>".printf(_("User not logged in!")));
-//        }
-//        feedback_label.set_use_markup(true);
-//        feedback_label.set_single_line_mode(true);
-//        feedback_label.set_alignment(0.1f, 0.5f);
-//        feedback_label.ypad = 20;
-//        this.pack_start(feedback_label, false, false, 0);
+        feedback_label = new Label("<b><i>%s</i></b>".printf(USER_PASSWORD_NOT_AVAILABLE));
+        if(user_entry.text != EMPTYSTRING && pass_entry.text != EMPTYSTRING) {
+            feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_AVAILABLE));
+        }
+        else {
+            feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_NOT_AVAILABLE));
+        }
+        feedback_label.set_use_markup(true);
+        feedback_label.set_single_line_mode(true);
+        feedback_label.set_alignment(0.1f, 0.5f);
+        feedback_label.ypad = 20;
+        this.pack_start(feedback_label, false, false, 0);
     }
 }
 
@@ -233,9 +248,11 @@ public class MagnatuneSettings : Gtk.Box {
 //The Magnatune Music Store.
 private class MagMusicStore : GLib.Object {
     private DockableMagnatuneMS msd;
+    private unowned MagnatunePlugin plugin;
     
-    public MagMusicStore() {
-        msd = new DockableMagnatuneMS();
+    public MagMusicStore(MagnatunePlugin plugin) {
+        this.plugin = plugin;
+        msd = new DockableMagnatuneMS(this.plugin);
         main_window.msw.insert_dockable(msd);
     }
     

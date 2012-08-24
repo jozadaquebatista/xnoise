@@ -38,8 +38,67 @@ using Xnoise.Resources;
 public class MagnatuneDatabaseReader : Xnoise.DataSource {
     private const string DATABASE_NAME = "/tmp/xnoise_magnatune.sqlite";
     private string DATABASE;
-
-
+    
+    private string _username;
+    internal string username { 
+        get {
+            return _username;
+        }
+        set {
+            _username = value;
+            if(_username != null &&
+               _username != EMPTYSTRING &&
+               _password != null &&
+               _password != EMPTYSTRING)
+                login_data_available = true;
+            else
+                login_data_available = false;
+        }
+    }
+    
+    private string _password;
+    internal string password {
+        get {
+            return _password;
+        }
+        set {
+            _password = value;
+            if(_username != null &&
+               _username != EMPTYSTRING &&
+               _password != null &&
+               _password != EMPTYSTRING) {
+                login_data_available = true;
+                http_replacement = "http://%s:%s@download.magnatune.com".printf(
+                                                                           Uri.escape_string(_username, null, true),
+                                                                           Uri.escape_string(_password, null, true)
+                                                                           );
+            }
+            else {
+                login_data_available = false;
+            }
+        }
+    }
+    private string http_replacement;
+    internal bool login_data_available { get; set; }
+    
+    private string transform_mag_url(string original_url) {
+        if(!_login_data_available)
+            return original_url;
+        if(original_url == null)
+            return EMPTYSTRING;
+        string url;
+        url = original_url.replace("http://he3.magnatune.com", http_replacement);
+        string suff;
+        int inx;
+        if((inx = url.last_index_of(".")) != -1) {
+            suff = url.substring(inx + 1, url.length - inx -1);
+            return url.substring(0, inx) + "_nospeech." + suff;
+        }
+        else {
+            return url;
+        }
+    }
+    
     public MagnatuneDatabaseReader() {
         DATABASE = dbFileName();
         db = null;
@@ -54,9 +113,13 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         
         this.db.prepare_v2(STMT_GET_ARTISTS_WITH_SEARCH, -1, out get_artists_with_search_stmt);
         this.db.prepare_v2(STMT_GET_ARTISTS, -1, out get_artists_with_search2_stmt);
+        
+        username = Xnoise.Params.get_string_value("magnatune_user");
+        password = Xnoise.Params.get_string_value("magnatune_pass");
     }
 
-    private static void utf8_lower(Sqlite.Context context, [CCode (array_length_pos = 1.1)] Sqlite.Value[] values) {
+    private static void utf8_lower(Sqlite.Context context,
+                                   [CCode (array_length_pos = 1.1)] Sqlite.Value[] values) {
         context.result_text(values[0].to_text().down());
     }
     
@@ -89,7 +152,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         
         Statement stmt;
         this.db.prepare_v2(STMT_TRACKDATA_FOR_URI, -1, out stmt);
-            
+        bool found = false;
         stmt.reset();
         stmt.bind_text(1, uri);
         if(stmt.step() == Sqlite.ROW) {
@@ -103,6 +166,24 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             val.genre       = stmt.column_text(7);
             val.year        = stmt.column_int(8);
             retval = true;
+            found = true;
+        }
+        if(found == false) {
+            stmt.reset();
+            string turi = transform_mag_url(uri);
+            stmt.bind_text(1, turi);
+            if(stmt.step() == Sqlite.ROW) {
+                val.artist      = stmt.column_text(0);
+                val.album       = stmt.column_text(1);
+                val.title       = stmt.column_text(2);
+                val.tracknumber = (uint)stmt.column_int(3);
+                val.length      = stmt.column_int(4);
+                val.item        = Item((ItemType)stmt.column_int(5), turi, stmt.column_int(6));
+                val.item.source_id = get_source_id();
+                val.genre       = stmt.column_text(7);
+                val.year        = stmt.column_int(8);
+                retval = true;
+            }
         }
         if((val.artist==EMPTYSTRING) | (val.artist==null)) {
             val.artist = UNKNOWN_ARTIST;
@@ -203,7 +284,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         }        
         while(stmt.step() == Sqlite.ROW) {
             TrackData td = new TrackData();
-            Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+            Item? i = Item((ItemType)stmt.column_int(1), transform_mag_url(stmt.column_text(4)), stmt.column_int(2));
             i.source_id = get_source_id();
             
             td.artist      = stmt.column_text(5);
@@ -272,7 +353,8 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             if((stmt.bind_int (1, id) != Sqlite.OK) ||
                (stmt.bind_text(2, st) != Sqlite.OK) ||
                (stmt.bind_text(3, st) != Sqlite.OK) ||
-               (stmt.bind_text(4, st) != Sqlite.OK)) {
+               (stmt.bind_text(4, st) != Sqlite.OK) ||
+               (stmt.bind_text(5, st) != Sqlite.OK)) {
                 this.db_error();
                 return (owned)val;
             }
@@ -286,7 +368,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         }
         while(stmt.step() == Sqlite.ROW) {
             TrackData td = new TrackData();
-            Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+            Item? i = Item((ItemType)stmt.column_int(1), transform_mag_url(stmt.column_text(4)), stmt.column_int(2));
             i.source_id = get_source_id();
             
             td.artist      = stmt.column_text(5);
@@ -302,10 +384,6 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         return (owned)val;
     }
     
-
-
-
-
 
 
     private static const string STMT_GET_ALBUMS_WITH_SEARCH =
@@ -362,7 +440,8 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         TrackData td = null; 
         if(stmt.step() == Sqlite.ROW) {
             td = new TrackData();
-            Item? i = Item((ItemType)stmt.column_int(1), stmt.column_text(4), stmt.column_int(2));
+            //print("transform_mag_url(stmt.column_text(4)) : %s\n", transform_mag_url(stmt.column_text(4)));
+            Item? i = Item((ItemType)stmt.column_int(1), transform_mag_url(stmt.column_text(4)), stmt.column_int(2));
             i.source_id = get_source_id();
             
             td.artist      = stmt.column_text(5);
@@ -377,8 +456,8 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         return (owned)td;
     }
 
-    private static const string STMT_STREAM_TD_FOR_ID =
-        "SELECT name, uri FROM streams WHERE id = ?";
+//    private static const string STMT_STREAM_TD_FOR_ID =
+//        "SELECT name, uri FROM streams WHERE id = ?";
 
     public override bool get_stream_td_for_id(int32 id, out TrackData val) {
         val = get_trackdata_by_titleid("", id);
@@ -390,7 +469,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     }
     
     private static const string STMT_ALL_TRACKDATA =
-        "SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC, t.tracknumber ASC";
+        "SELECT ar.name, al.name, t.title, t.tracknumber, t.mediatype, u.name, t.length, t.id, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ?) GROUP BY u.name ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC, t.tracknumber ASC";
     
     public override TrackData[]? get_all_tracks(string searchtext) {
         Statement stmt;
@@ -411,7 +490,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
             val.title       = stmt.column_text(2);
             val.tracknumber = stmt.column_int(3);
             val.length      = stmt.column_int(6);
-            val.item        = Item((ItemType)stmt.column_int(4), stmt.column_text(5), stmt.column_int(7));
+            val.item        = Item((ItemType)stmt.column_int(4), transform_mag_url(stmt.column_text(5)), stmt.column_int(7));
             val.item.source_id = get_source_id();
             val.genre       = stmt.column_text(8);
             val.year        = stmt.column_int(9);

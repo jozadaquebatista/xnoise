@@ -122,7 +122,12 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             if(albumimage_file != null) {
                 if(albumimage_file.query_exists(null)) {
                     try {
-                        albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                        albumimage = new Gdk.Pixbuf.from_file_at_scale(
+                                                         albumimage_file.get_path(),
+                                                         30,
+                                                         30,
+                                                         true
+                                                         );
                     }
                     catch(Error e) {
                         albumimage = null;
@@ -132,7 +137,12 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                     albumimage_file = get_albumimage_for_artistalbum(artist, album, null);
                     if(albumimage_file.query_exists(null)) {
                         try {
-                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                            albumimage = new Gdk.Pixbuf.from_file_at_scale(
+                                                             albumimage_file.get_path(),
+                                                             30,
+                                                             30,
+                                                             true
+                                                             );
                         }
                         catch(Error e) {
                             albumimage = null;
@@ -282,12 +292,19 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             string artist_name;
             this.get(iter_artist, Column.ITEM, out artist, Column.VIS_TEXT, out artist_name);
             foreach(Item? album in job.items) {     //ALBUMS
-                File? albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, "embedded");
+                File? albumimage_file = get_albumimage_for_artistalbum(artist_name,
+                                                                       album.text,
+                                                                       "embedded");
                 Gdk.Pixbuf albumimage = null;
                 if(albumimage_file != null) {
                     if(albumimage_file.query_exists(null)) {
                         try {
-                            albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                            albumimage = new Gdk.Pixbuf.from_file_at_scale(
+                                                             albumimage_file.get_path(),
+                                                             30,
+                                                             30,
+                                                             true
+                                                             );
                         }
                         catch(Error e) {
                             albumimage = null;
@@ -297,7 +314,12 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                         albumimage_file = get_albumimage_for_artistalbum(artist_name, album.text, null);
                        if(albumimage_file.query_exists(null)) {
                             try {
-                                albumimage = new Gdk.Pixbuf.from_file_at_scale(albumimage_file.get_path(), 30, 30, true);
+                                albumimage = new Gdk.Pixbuf.from_file_at_scale(
+                                                                 albumimage_file.get_path(),
+                                                                 30,
+                                                                 30,
+                                                                 true
+                                                                 );
                             }
                             catch(Error e) {
                                 albumimage = null;
@@ -314,9 +336,9 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                 );
                 Gtk.TreePath p1 = this.get_path(iter_album);
                 TreeRowReference treerowref = new TreeRowReference(this, p1);
-                var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_title_job);
+                var job_title = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY,
+                                               this.populate_title_job);
                 job_title.set_arg("treerowref", treerowref);
-//                job_title.set_arg("artist", (int32)job.get_arg("artist_id"));
                 job_title.set_arg("albumid",  album.db_id);
                 db_worker.push_job(job_title);
             }

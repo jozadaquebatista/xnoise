@@ -44,12 +44,17 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
     private unowned Widget ow;
     private bool dragging;
     private Gtk.Menu menu;
-
+    private unowned MagnatunePlugin plugin;
+    
     private const TargetEntry[] src_target_entries = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0}
     };
     
-    public MagnatuneTreeView(DockableMedia dock, MagnatuneWidget widg, Widget ow) {
+    public MagnatuneTreeView(DockableMedia dock, 
+                             MagnatuneWidget widg, 
+                             Widget ow, 
+                             MagnatunePlugin plugin) {
+        this.plugin = plugin;
         this.dock = dock;
         this.widg = widg;
         this.ow = ow;
@@ -74,6 +79,12 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         this.button_release_event.connect(this.on_button_release);
         this.button_press_event.connect(this.on_button_press);
         this.key_release_event.connect(this.on_key_released);
+        
+        this.plugin.login_state_change.connect( () => {
+            print("login_state_change\n");
+            mag_model.dbreader.username = this.plugin.username;
+            mag_model.dbreader.password = this.plugin.password;
+        });
     }
     
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
