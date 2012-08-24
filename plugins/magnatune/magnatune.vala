@@ -80,6 +80,16 @@ public class MagnatunePlugin : GLib.Object, IPlugin {
     internal string username;
     internal string password;
     
+    public void logout() {
+        this.username = "";
+        this.password = "";
+        
+        Idle.add( () => {
+            login_state_change();
+            return false;
+        });
+    }
+
     public void login(string username, string password) {
         if(username == null || username == EMPTYSTRING ||
            password == null || password == EMPTYSTRING)
@@ -141,20 +151,18 @@ public class MagnatuneSettings : Gtk.Box {
         }
     }
     
-    private const string USER_PASSWORD_AVAILABLE     = _("Username/Password available!");
-    private const string USER_PASSWORD_NOT_AVAILABLE = _("Username/Password not available!");
+    private const string USER_PASSWORD_AVAILABLE     = _("Username and Password available");
+    private const string USER_PASSWORD_NOT_AVAILABLE = _("Username or Password not available");
     
     private void on_entry_changed() {
-        //print("take over entry\n");
+        print("take over entry\n");
         string username = EMPTYSTRING, password = EMPTYSTRING;
         if(user_entry.text != null)
             username = user_entry.text.strip();
         if(pass_entry.text != null)
             password = pass_entry.text.strip();
-        if(username_last == user_entry.text.strip() && password_last == pass_entry.text.strip())
-            return; // no need to spam!
         if(username != EMPTYSTRING && password != EMPTYSTRING) {
-            //print("got login data\n");
+            print("got login data\n");
             Xnoise.Params.set_string_value("magnatune_user", username);
             Xnoise.Params.set_string_value("magnatune_pass", password);
             username_last = username;
@@ -163,9 +171,12 @@ public class MagnatuneSettings : Gtk.Box {
                 Xnoise.Params.write_all_parameters_to_file();
                 return false;
             });
-            do_user_feedback();
             magn_plugin.login(username, password);
         }
+        else {
+            magn_plugin.logout();
+        }
+        do_user_feedback();
     }
     
     private void setup_widgets() {
