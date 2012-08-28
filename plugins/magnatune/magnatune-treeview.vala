@@ -390,7 +390,7 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                                             Environment.get_user_special_dir(UserDirectory.MUSIC),
                                             (string)job.get_arg("artist"),
                                             (string)job.get_arg("album"));
-                    media_importer.import_media_path(folder_path);
+                    media_importer.import_media_folder(folder_path);
                     return false;
                 });
             }

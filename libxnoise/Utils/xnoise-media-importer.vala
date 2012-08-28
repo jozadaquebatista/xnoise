@@ -60,20 +60,20 @@ public class Xnoise.MediaImporter : GLib.Object {
         db_worker.push_job(job);
     }
     
-    public void import_media_path(string folder_path, bool create_user_info = false) {
+    public void import_media_folder(string folder_path, bool create_user_info = false) {
         var dir = File.new_for_path(folder_path);
         if(dir.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.DIRECTORY)
             return;
         if(global.media_import_in_progress == true)
             return;
         Worker.Job job;
-        job = new Worker.Job(Worker.ExecutionType.ONCE, import_media_path_job);
+        job = new Worker.Job(Worker.ExecutionType.ONCE, import_media_folder_job);
         job.set_arg("path", dir.get_path());
         job.set_arg("create_user_info", create_user_info);
         io_worker.push_job(job);
     }
 
-    private bool import_media_path_job(Worker.Job job) {
+    private bool import_media_folder_job(Worker.Job job) {
         return_val_if_fail((int)Linux.gettid() == io_worker.thread_id, false);
         uint msg_id = 0;
         Idle.add( () => {
@@ -105,6 +105,40 @@ public class Xnoise.MediaImporter : GLib.Object {
         return false;
     }
     
+    public void import_media_file(string file_path) {
+        var f = File.new_for_path(file_path);
+        if(f.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.REGULAR)
+            return;
+        if(global.media_import_in_progress == true)
+            return;
+        Worker.Job job;
+        job = new Worker.Job(Worker.ExecutionType.ONCE, import_media_file_job);
+        job.set_arg("path", f.get_path());
+        io_worker.push_job(job);
+    }
+
+    private bool import_media_file_job(Worker.Job job) {
+        return_val_if_fail((int)Linux.gettid() == io_worker.thread_id, false);
+        var tr = new TagReader();
+        File f = File.new_for_path((string)job.get_arg("path"));
+        TrackData? td = tr.read_tag(f.get_path());
+        if(td != null) {
+            FileInfo info = f.query_info(FileAttribute.STANDARD_TYPE + "," + 
+                                         FileAttribute.STANDARD_CONTENT_TYPE,
+                                         FileQueryInfoFlags.NONE ,
+                                         null);
+            td.mimetype = GLib.ContentType.get_mime_type(info.get_content_type());
+            TrackData[]? tda = {};
+            tda += td;
+            var db_job = new Worker.Job(Worker.ExecutionType.ONCE, insert_trackdata_job);
+            db_job.track_dat = (owned)tda;
+            uint msg_id = 0;
+            db_job.set_arg("msg_id", msg_id);
+            db_worker.push_job(db_job);
+        }
+        return false;
+    }
+
     private Timer t;
     
     private bool reimport_media_groups_job(Worker.Job job) {

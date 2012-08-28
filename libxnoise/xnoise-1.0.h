@@ -2910,7 +2910,8 @@ GType xnoise_media_importer_reset_notification_data_get_type (void) G_GNUC_CONST
 XnoiseMediaImporterResetNotificationData* xnoise_media_importer_reset_notification_data_dup (const XnoiseMediaImporterResetNotificationData* self);
 void xnoise_media_importer_reset_notification_data_free (XnoiseMediaImporterResetNotificationData* self);
 void xnoise_media_importer_register_reset_callback (XnoiseMediaImporter* self, XnoiseMediaImporterResetNotificationData* cbd);
-void xnoise_media_importer_import_media_path (XnoiseMediaImporter* self, const gchar* folder_path, gboolean create_user_info);
+void xnoise_media_importer_import_media_folder (XnoiseMediaImporter* self, const gchar* folder_path, gboolean create_user_info);
+void xnoise_media_importer_import_media_file (XnoiseMediaImporter* self, const gchar* file_path);
 XnoiseMediaImporter* xnoise_media_importer_new (void);
 XnoiseMediaImporter* xnoise_media_importer_construct (GType object_type);
 gboolean xnoise_media_stream_schemes_contains (XnoiseMediaStreamSchemes* self, const gchar* location);
