@@ -176,7 +176,6 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         var mod = tv.get_model();
         Item? ix = Item(ItemType.UNKNOWN);
         TreeIter iter;
-//        list.reverse();
         Item[] items = {};
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_from_playlist_job);
         foreach(TreePath path in list) {

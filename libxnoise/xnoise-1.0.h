@@ -1058,7 +1058,7 @@ struct _XnoiseDataSource {
 
 struct _XnoiseDataSourceClass {
 	GObjectClass parent_class;
-	gchar* (*get_datasource_name) (XnoiseDataSource* self);
+	const gchar* (*get_datasource_name) (XnoiseDataSource* self);
 	gboolean (*get_trackdata_for_uri) (XnoiseDataSource* self, gchar** uri, XnoiseTrackData** val);
 	XnoiseItem* (*get_artists_with_search) (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 	XnoiseTrackData** (*get_trackdata_by_artistid) (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
@@ -1848,7 +1848,8 @@ typedef enum  {
 	XNOISE_TRACK_LIST_MODEL_COLUMN_WEIGHT,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_GENRE,
 	XNOISE_TRACK_LIST_MODEL_COLUMN_YEAR,
-	XNOISE_TRACK_LIST_MODEL_COLUMN_ITEM
+	XNOISE_TRACK_LIST_MODEL_COLUMN_ITEM,
+	XNOISE_TRACK_LIST_MODEL_COLUMN_SOURCE_NAME
 } XnoiseTrackListModelColumn;
 
 struct _XnoiseTrackListViewWidget {
@@ -1856,9 +1857,6 @@ struct _XnoiseTrackListViewWidget {
 	XnoiseTrackListViewWidgetPrivate * priv;
 	GtkScrolledWindow* scrolled_window;
 	XnoiseSerialButton* sbutton;
-	gint idx_tracklist;
-	gint idx_lyrics;
-	gint idx_video;
 };
 
 struct _XnoiseTrackListViewWidgetClass {
@@ -2122,7 +2120,7 @@ void xnoise_database_writer_commit_transaction (XnoiseDatabaseWriter* self);
 gboolean xnoise_database_writer_get_in_transaction (XnoiseDatabaseWriter* self);
 void xnoise_data_source_set_source_id (XnoiseDataSource* self, gint id);
 gint xnoise_data_source_get_source_id (XnoiseDataSource* self);
-gchar* xnoise_data_source_get_datasource_name (XnoiseDataSource* self);
+const gchar* xnoise_data_source_get_datasource_name (XnoiseDataSource* self);
 gboolean xnoise_data_source_get_trackdata_for_uri (XnoiseDataSource* self, gchar** uri, XnoiseTrackData** val);
 XnoiseItem* xnoise_data_source_get_artists_with_search (XnoiseDataSource* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_data_source_get_trackdata_by_artistid (XnoiseDataSource* self, const gchar* searchtext, gint32 id, int* result_length1);
@@ -2938,6 +2936,8 @@ extern XnoiseMainWindow* xnoise_main_window;
 extern XnoiseTrackList* xnoise_tl;
 extern XnoiseTrackListModel* xnoise_tlm;
 XnoiseDataSource* xnoise_get_data_source (gint source_number);
+XnoiseDataSource* xnoise_get_data_source_by_name (const gchar* name);
+gchar* xnoise_get_data_source_name (gint source_number);
 gint xnoise_register_data_source (XnoiseDataSource* source);
 void xnoise_remove_data_source (XnoiseDataSource* source);
 void xnoise_remove_data_source_by_id (gint id);

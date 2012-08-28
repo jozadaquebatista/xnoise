@@ -52,7 +52,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         WEIGHT,
         GENRE,
         YEAR,
-        ITEM
+        ITEM,
+        SOURCE_NAME
     }
 
     private GLib.Type[] col_types = new GLib.Type[] {
@@ -65,7 +66,8 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
         typeof(int),         // WEIGHT
         typeof(string),      // GENRE
         typeof(string),      // YEAR
-        typeof(Xnoise.Item?) // Item
+        typeof(Xnoise.Item?),// Item
+        typeof(string)       // SOURCE_NAME
     };
 
     public signal void sign_active_path_changed(PlayerState ts);

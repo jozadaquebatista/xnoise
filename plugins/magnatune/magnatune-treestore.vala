@@ -63,6 +63,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     
     private int data_source_id = -1;
     
+    
     public MagnatuneTreeStore(DockableMedia dock, MagnatuneTreeView view) {
         this.dock = dock;
         this.view = view;
@@ -108,6 +109,24 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     ~MagnatuneTreeStore() {
         print("remove mag data source\n");
         remove_data_source_by_id(data_source_id);
+    }
+    
+    public string? get_download_url(string? sku) {
+        if(sku == null)
+            return null;
+        if(dbreader.username == null || dbreader.password == null)
+            return null;
+        string url = null;
+        url = "http://" +
+              Uri.escape_string(dbreader.username, null, true) +
+              ":" +
+              Uri.escape_string(dbreader.password, null, true) +
+              "@" +
+              "download" + //membershipType
+              ".magnatune.com/buy/membership_free_dl_xml?sku=" +
+              sku +
+              "&id=xnoise";
+        return url;
     }
     
     private void update_album_image() {

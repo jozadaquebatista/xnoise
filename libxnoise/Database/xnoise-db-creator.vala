@@ -42,7 +42,7 @@ private class Xnoise.Database.DbCreator {
 
     //CREATE TABLE STATEMENTS
     private static const string STMT_CREATE_LASTUSED =
-        "CREATE TABLE lastused(uri TEXT, mediatype INTEGER, id INTEGER);";
+        "CREATE TABLE lastused(uri TEXT, mediatype INTEGER, id INTEGER, source TEXT);";
     private static const string STMT_CREATE_MEDIAFOLDERS =
         "CREATE TABLE media_folders(name TEXT PRIMARY KEY);";
     private static const string STMT_CREATE_MEDIAFILES =

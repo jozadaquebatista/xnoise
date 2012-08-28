@@ -101,8 +101,9 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         return 0;
     }
 
-    public override string get_datasource_name() {
-        return "XnoiseMainDatabase";
+    private const string data_source_name = "XnoiseMainDatabase";
+    public override unowned string get_datasource_name() {
+        return data_source_name;
     }
 
     private string dbFileName() {

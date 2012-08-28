@@ -33,7 +33,8 @@ using Gtk;
 using Gdk;
 
 using Xnoise;
-
+using Xnoise.Resources;
+using Xnoise.SimpleMarkup;
 
 
 private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
@@ -215,10 +216,192 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             this.collapse_all();
         });
         rightmenu.append(collapse_item);
+        if(this.plugin != null && this.plugin.username != ""
+           && this.plugin.password != "" && item.type != ItemType.COLLECTION_CONTAINER_ARTIST) {
+            rightmenu.append(new SeparatorMenuItem());
+            var downloaditem = new ImageMenuItem.from_stock(Gtk.Stock.SAVE, null);
+            downloaditem.set_label(_("Download whole album to disk"));
+            downloaditem.activate.connect( () => {
+                var job = new Worker.Job(Worker.ExecutionType.ONCE, download_album_xml_job);
+                job.item = item;
+                io_worker.push_job(job);
+            });
+            rightmenu.append(downloaditem);
+        }
+        
         rightmenu.show_all();
         return rightmenu;
     }
+    
+    private bool download_album_xml_job(Worker.Job job) {
+        string? sku = null;
+        string artist = EMPTYSTRING, album = EMPTYSTRING;
+        switch(job.item.type) {
+            case ItemType.COLLECTION_CONTAINER_ARTIST:
+                break;
+            case ItemType.COLLECTION_CONTAINER_ALBUM:
+                sku = this.mag_model.dbreader.get_sku_for_album(job.item.db_id);
+                TrackData[]? tda = null;
+                tda = this.mag_model.dbreader.get_trackdata_by_albumid(EMPTYSTRING, job.item.db_id);
+                if(tda != null && tda.length > 0) {
+                    artist = tda[0].artist;
+                    album  = tda[0].album;
+                }
+                break;
+            case ItemType.STREAM:
+                sku = this.mag_model.dbreader.get_sku_for_title(job.item.db_id);
+                TrackData? td = null;
+                td = this.mag_model.dbreader.get_trackdata_by_titleid(EMPTYSTRING, job.item.db_id);
+                artist = td.artist;
+                album  = td.album;
+                break;
+            default: break;
+        }
+        string download_url = this.mag_model.get_download_url(sku);
+        //print("xml download_url: %s\n", download_url);
+        var job2 = new Worker.Job(Worker.ExecutionType.ONCE, download_xml_job);
+        job2.set_arg("download_url", download_url);
+        job2.set_arg("artist", artist);
+        job2.set_arg("album",  album );
+        io_worker.push_job(job2);
+        Idle.add(() => {
+            uint msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+                                         UserInfo.ContentClass.INFO,
+                                         _("Start download for " + "%s - %s".printf(artist, album)),
+                                         true,
+                                         10,
+                                         null);
+            return false;
+        });
+        return false;
+    }
+    
+    private bool download_xml_job(Worker.Job job) {
+        string download_url = (string)job.get_arg("download_url");
+        var f = File.new_for_uri(download_url);
+        var d = File.new_for_path("/tmp/magnatune" + Random.next_int().to_string() + ".xml");
+        bool res = false;
+        try {
+            res = f.copy(d, FileCopyFlags.OVERWRITE,null, null);
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
+        if(res) {
+            string s = "";
+            uint8[] uaa = {};
+            try {
+                d.load_contents(null, out uaa, null);
+                s = (string)uaa;
+            }
+            catch(Error e) {
+                print("load contents%s\n", e.message);
+            }
+            var reader = new Xnoise.SimpleMarkup.Reader.from_string(s.replace("<br>", "").replace("</br>", "").replace("& ", "&amp; "));
+            reader.read();
+            var root = reader.root;
+            if(root != null && root.has_children()) {
+                var RESULT = root[0];
+                if(RESULT != null && RESULT.has_children() && "result"== RESULT.name.down()) {
+                    var mp3node = RESULT.get_child_by_name("URL_128KMP3ZIP");
+                    //Playlist title
+                    if(mp3node != null && mp3node.text != "") {
+                        var mp3s = File.new_for_uri(process_download_url(mp3node.text));
+                        var mp3d = File.new_for_path("/tmp/ARCH_"+ Random.next_int().to_string() + "_mp3.zip");
+                        try {
+                            bool cres = mp3s.copy(mp3d, FileCopyFlags.OVERWRITE,null, null);
+                            if(cres) {
+                                var job2 = new Worker.Job(Worker.ExecutionType.ONCE, decompress_db_job);
+                                job2.set_arg("source_url", mp3d.get_path());
+                                job2.set_arg("artist", job.get_arg("artist"));
+                                job2.set_arg("album",  job.get_arg("album"));
+                                io_worker.push_job(job2);
+                                return false;
+                            }
+                        }
+                        catch(Error e) {
+                            print("%s\n", e.message);
+                        }
+                    }
+                }
+            }
+            else {
+                print("problem with memory map\n%s\n", s);
+            }
+        }
+        print("finished!\n");
+        try {
+            d.delete();
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
+        return false;
+    }
 
+    private bool decompress_db_job(Worker.Job job) {
+        var source = File.new_for_path((string)job.get_arg("source_url"));
+        if(!source.query_exists())
+            return false;
+        string unzip;
+        int exit_status;
+        if((unzip = Environment.find_program_in_path("unzip")) != null) {
+            print("unzip found: %s\n", unzip);
+            if(Environment.get_user_special_dir(UserDirectory.MUSIC) == null ||
+               Environment.get_user_special_dir(UserDirectory.MUSIC) == "") {
+                print("User special dir MUSIC is not available!\nAborting...\n");
+                try {
+                    source.delete();
+                }
+                catch(Error e) {
+                    print("%s\n", e.message);
+                    return false;
+                }
+            }
+            try {
+                Process.spawn_sync (Environment.get_user_special_dir(UserDirectory.MUSIC),
+                                    { unzip, "-n", source.get_path() },
+                                    null, 
+                                    SpawnFlags.STDOUT_TO_DEV_NULL, 
+                                    null, 
+                                    null, 
+                                    null, 
+                                    out exit_status);
+                Idle.add(() => {
+                    uint msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+                                                 UserInfo.ContentClass.INFO,
+                                                 _("Download finished for " + "%s - %s".printf((string)job.get_arg("artist"),
+                                                                             (string)job.get_arg("album"))),
+                                                 true,
+                                                 10,
+                                                 null);
+                    return false;
+                });
+            }
+            catch(GLib.Error e) {
+                print("Failed unzipping magnatune album: %s\n", e.message);
+            }
+        }
+        else {
+            print("unzip not found in path!\n");
+        }
+        //print("DONE DECOMPRESSING\n");
+        try {
+            source.delete();
+        }
+        catch(Error e) {
+            print("%s\n", e.message);
+        }
+        return false;
+    }
+
+    private string process_download_url(string url) {
+        return url.replace("http://download.magnatune.com", "http://%s:%s@download.magnatune.com".printf(
+           Uri.escape_string(mag_model.dbreader.username, null, true),
+           Uri.escape_string(mag_model.dbreader.password, null, true)
+        ));
+    }
+    
     private bool on_button_release(Gtk.Widget sender, Gdk.EventButton e) {
         Gtk.TreePath treepath;
         Gtk.TreeViewColumn column;

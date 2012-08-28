@@ -36,8 +36,7 @@ using Xnoise.Resources;
 using Xnoise.Services;
 using Xnoise.PluginModule;
 
-internal static string CONVERTED_DB; //data_folder() + "/xnoise/magnatune.sqlite";
-//    GLib.Path.build_filename(data_folder(), "magnatune.sqlite", null);
+internal static string CONVERTED_DB;
 private static const string MAGNATUNE_MUSIC_STORE_NAME = "MagnatuneMusicStore";
 
 public class MagnatunePlugin : GLib.Object, IPlugin {

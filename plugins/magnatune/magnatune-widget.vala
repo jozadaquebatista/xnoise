@@ -54,8 +54,6 @@ private class MagnatuneWidget : Gtk.Box {
         load_db();
     }
     
-//    private static const string CONVERTED_DB = "/tmp/xnoise_magnatune.sqlite"; //TODO
-    
     
     private class MagnatuneChangeDetector : GLib.Object {
         private File file;
@@ -185,7 +183,10 @@ private class MagnatuneWidget : Gtk.Box {
         }
         catch(Error e) {
             print("Error decompressing! %s\n", e.message);
-            label.label = "Magnatune Error 1";
+            Idle.add(() => {
+                label.label = "Magnatune Error 1";
+                return false;
+            });
             return false;
         }
         var zlc = new ZlibDecompressor(ZlibCompressorFormat.GZIP);
@@ -195,7 +196,10 @@ private class MagnatuneWidget : Gtk.Box {
         }
         catch(IOError e) {
             print("Converter Error! %s\n", e.message);
-            label.label = "Magnatune Error 2";
+            Idle.add(() => {
+                label.label = "Magnatune Error 2";
+                return false;
+            });
             return false;
         }
         Idle.add(() => {

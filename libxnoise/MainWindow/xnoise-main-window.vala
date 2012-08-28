@@ -47,9 +47,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private unowned Main xn;
     private VolumeSliderButton volume_slider;
     private CssProvider css_provider_search;
-    private int idx_tracklist;
-    private int idx_video;
-    private int idx_lyrics;
     private int _posX;
     private int _posY;
     private uint aimage_timeout;
@@ -1280,7 +1277,7 @@ print("++2\n");
                     else if(location!=UNKNOWN_LOCATION)
                         text = Markup.printf_escaped("<b>%s</b>", _(UNKNOWN_LOCATION));
                     else
-                        text = "<b>XNOISE</b> - ready to rock! ;-)";//Markup.printf_escaped("<b>%s</b>", "...loading...");//file.get_uri()
+                        text = "<b>XNOISE</b> - ready to rock! ;-)";
                 }
                 else if(album==UNKNOWN_ALBUM &&
                         artist==UNKNOWN_ARTIST) {
@@ -1417,9 +1414,6 @@ print("++2\n");
             //-----------------
             
             sbuttonTL = tracklistview_widget.sbutton;
-            idx_tracklist = tracklistview_widget.idx_tracklist;
-            idx_video  = tracklistview_widget.idx_video;
-            idx_lyrics  = tracklistview_widget.idx_lyrics;
             sbuttonVI = videoview_widget.sbutton;
             sbuttonLY = lyricsview_widget.sbutton;
             
@@ -1459,19 +1453,7 @@ print("++2\n");
                     aimage_timeout = 0;
                     return false;
                 }
-//                int idx = 0;
-//                if(mainview_page_buffer == TRACKLIST_VIEW_NAME)
-//                    idx = idx_tracklist;
-//                else if(mainview_page_buffer == videoview_widget.get_view_name())
-//                    idx = idx_video;
-//                else if(mainview_page_buffer == lyricsview_widget.get_view_name())
-//                    idx = idx_lyrics;
-//                else {
-                    mainview_box.select_main_view(mainview_page_buffer);
-//                    idx = buffer_last_page;
-//                    sbuttonVI.select((int)TrackListNoteBookTab.TRACKLIST, true);
-//                    return false;
-//                }
+                mainview_box.select_main_view(mainview_page_buffer);
                 sbuttonVI.select(mainview_page_buffer, true);
                 return false;
             });

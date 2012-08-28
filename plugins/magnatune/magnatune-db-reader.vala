@@ -137,8 +137,9 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         print("Database error %d: %s \n\n", this.db.errcode(), this.db.errmsg());
     }
 
-    public override string get_datasource_name() {
-        return "MagnatuneDatabase";
+    private const string data_source_name = "MagnatuneDatabase";
+    public override unowned string get_datasource_name() {
+        return data_source_name;
     }
 
     private static const string STMT_TRACKDATA_FOR_URI =
@@ -338,6 +339,40 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         return (owned)i;
     }
 
+    private static const string STMT_GET_SKU_BY_ALBUMID =
+        "SELECT DISTINCT al.sku FROM albums al WHERE al.id = ?";
+    
+    internal string? get_sku_for_album(int32 id) {
+        string? val = null;
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_SKU_BY_ALBUMID, -1, out stmt);
+        if((stmt.bind_int(1, id) != Sqlite.OK)) {
+            this.db_error();
+            return null;
+        }
+        if(stmt.step() == Sqlite.ROW) {
+            return stmt.column_text(0);
+        }
+        return val;
+    }
+    
+    private static const string STMT_GET_SKU_BY_TITLEID =
+        "SELECT DISTINCT al.sku FROM items t, albums al WHERE t.album = al.id AND t.id = ?";
+    
+    internal string? get_sku_for_title(int32 id) {
+        string? val = null;
+        Statement stmt;
+        this.db.prepare_v2(STMT_GET_SKU_BY_TITLEID, -1, out stmt);
+        if((stmt.bind_int(1, id) != Sqlite.OK)) {
+            this.db_error();
+            return null;
+        }
+        if(stmt.step() == Sqlite.ROW) {
+            return stmt.column_text(0);
+        }
+        return val;
+    }
+    
     private static const string STMT_GET_TRACKDATA_BY_ALBUMID_WITH_SEARCH =
         "SELECT DISTINCT t.title, t.mediatype, t.id, t.tracknumber, u.name, ar.name, al.name, t.length, g.name, t.year FROM artists ar, items t, albums al, uris u, genres g WHERE t.artist = ar.id AND t.album = al.id AND t.uri = u.id AND t.genre = g.id AND al.id = ? AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) GROUP BY utf8_lower(t.title) ORDER BY t.tracknumber ASC, t.title COLLATE CUSTOM01 ASC";
     

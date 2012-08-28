@@ -172,9 +172,36 @@ namespace Xnoise {
         return ret;
     }
 
-    public static int register_data_source(DataSource source) {
+    // A data source is an implementor of DataSoure abstr.class
+    // (e.g the Database.Reader)
+    // try not to use this function too often, because it is slow
+    public static DataSource? get_data_source_by_name(string? name) {
+        if(name == null || name == EMPTYSTRING)
+            return null;
         assert(data_source_registry != null);
+        foreach(int i in data_source_registry.get_keys()) {
+            DataSource? ret = data_source_registry.lookup(i);
+            if(ret != null && ret.get_datasource_name() == name)
+                return ret;
+        }
+        return null;
+    }
+
+    // A data source is an implementor of DataSoure abstr.class
+    // (e.g the Database.Reader)
+    public static string? get_data_source_name(int source_number) {
+        assert(data_source_registry != null);
+        DataSource? ret = data_source_registry.lookup(source_number);
+        if(ret != null)
+            return ret.get_datasource_name();
+        else
+            return EMPTYSTRING;
+    }
+
+    public static int register_data_source(DataSource? source) {
         if(source == null)
+            return -1;
+        if(source.get_datasource_name() == null || source.get_datasource_name() == EMPTYSTRING)
             return -1;
         int idx = -1;
         for(int i = 0; i < int.MAX; i++) {

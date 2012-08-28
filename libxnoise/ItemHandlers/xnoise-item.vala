@@ -39,8 +39,8 @@ namespace Xnoise {
         public ItemType  type;
         public int32     db_id;      // the id in the database or -1; to be verified, if coming from tracklist
         public string?   uri;        // uri of item
-        public string?   text;       // some text
-        public int source_id;        // data source id
+        public string?   text;       // some text for any purpose
+        public int source_id;        // data source id refering to Xnoise.DataSource
     }
 
     public enum ItemType {
@@ -53,16 +53,10 @@ namespace Xnoise {
         LOCAL_FOLDER,                        // item can be converted
         COLLECTION_CONTAINER_ARTIST,         // item can be converted
         COLLECTION_CONTAINER_ALBUM,          // item can be converted
-//        COLLECTION_CONTAINER_VIDEO,          // item can be converted
-//        COLLECTION_CONTAINER_STREAM,         // item can be converted
         COLLECTION_CONTAINER_GENRE,          // item can be converted
         COLLECTION_CONTAINER_YEAR,           // item can be converted
         LOADER,
         CUSTOM_DATA_COL_ID,
-//        COLLECTION_CONTAINER_MOST_PLAYED,    // item can be converted
-//        COLLECTION_CONTAINER_FAVORITES,      // item can be converted
-//        COLLECTION_CONTAINER_LAST_PLAYED,    // item can be converted
-//        COLLECTION_CONTAINER_RECENTLY_ADDED, // item can be converted
         MAXCOUNT
         //to be extended
     }

@@ -57,7 +57,7 @@ private class Xnoise.PluginManagerTree: Gtk.TreeView {
         this.create_view();
     }
 
-    public static void text_cell_cb(CellLayout cell_layout, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
+    private static void text_cell_cb(CellLayout cell_layout, CellRenderer cell, TreeModel tree_model, TreeIter iter) {
         string val;
         string markup_string;
         
@@ -70,7 +70,7 @@ private class Xnoise.PluginManagerTree: Gtk.TreeView {
         ((CellRendererText)cell).markup = markup_string;
     }
 
-    public void create_view() {
+    private void create_view() {
         this.set_size_request(-1, 250);
         this.get_selection().set_mode(SelectionMode.SINGLE);
         var toggle = new CellRendererToggle();
