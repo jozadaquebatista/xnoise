@@ -799,6 +799,7 @@ namespace Xnoise {
 		}
 		public delegate void DatabaseResetCallback ();
 		public MediaImporter ();
+		public void import_media_path (string folder_path, bool create_user_info = false);
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

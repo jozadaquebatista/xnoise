@@ -60,6 +60,51 @@ public class Xnoise.MediaImporter : GLib.Object {
         db_worker.push_job(job);
     }
     
+    public void import_media_path(string folder_path, bool create_user_info = false) {
+        var dir = File.new_for_path(folder_path);
+        if(dir.query_file_type(FileQueryInfoFlags.NONE, null) != FileType.DIRECTORY)
+            return;
+        if(global.media_import_in_progress == true)
+            return;
+        Worker.Job job;
+        job = new Worker.Job(Worker.ExecutionType.ONCE, import_media_path_job);
+        job.set_arg("path", dir.get_path());
+        job.set_arg("create_user_info", create_user_info);
+        io_worker.push_job(job);
+    }
+
+    private bool import_media_path_job(Worker.Job job) {
+        return_val_if_fail((int)Linux.gettid() == io_worker.thread_id, false);
+        uint msg_id = 0;
+        Idle.add( () => {
+            if((bool)job.get_arg("create_user_info") == true) {
+                var prg_bar = new Gtk.ProgressBar();
+                prg_bar.set_fraction(0.0);
+                prg_bar.set_text("0 / 0");
+                msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
+                                        UserInfo.ContentClass.WAIT,
+                                        _("Importing media data. This may take some time..."),
+                                        true,
+                                        5,
+                                        prg_bar);
+            }
+            File dir = File.new_for_path((string)job.get_arg("path"));
+            
+            global.media_import_in_progress = true;
+            
+            print("++%s\n", dir.get_path());
+            assert(dir != null);
+            var reader_job = new Worker.Job(Worker.ExecutionType.ONCE, read_media_folder_job);
+            reader_job.set_arg("dir", dir);
+            reader_job.set_arg("msg_id", msg_id);
+            reader_job.set_arg("full_rescan", true);
+            io_worker.push_job(reader_job);
+            
+            return false;
+        });
+        return false;
+    }
+    
     private Timer t;
     
     private bool reimport_media_groups_job(Worker.Job job) {
@@ -110,7 +155,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         db_writer.update_title(ref item, ref td);
     }
     
-    private uint current_import_msg_id = 0;
+//    private uint current_import_msg_id = 0;
     private uint current_import_track_count = 0;
     
     internal void import_media_groups(Item[] media_items,
@@ -166,7 +211,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         job.items = (owned)tmpx;
         
         job.set_arg("msg_id", msg_id);
-        current_import_msg_id = msg_id;
+//        current_import_msg_id = msg_id;
         job.set_arg("interrupted_populate_model", interrupted_populate_model);
         job.set_arg("full_rescan", full_rescan);
         db_worker.push_job(job);
@@ -208,6 +253,7 @@ public class Xnoise.MediaImporter : GLib.Object {
             return false;
         });
         var finisher_job = new Worker.Job(Worker.ExecutionType.ONCE, finish_import_job);
+        finisher_job.set_arg("msg_id", job.get_arg("msg_id"));
         db_worker.push_job(finisher_job);
     }
     
@@ -229,13 +275,13 @@ public class Xnoise.MediaImporter : GLib.Object {
                 print("finish import after %d s for %u tracks\n", b, xcnt);
             }
             global.media_import_in_progress = false;
-            if(current_import_msg_id != 0) {
-                userinfo.popdown(current_import_msg_id);
-                current_import_msg_id = 0;
+//            if(current_import_msg_id != 0) {
+                userinfo.popdown((uint)job.get_arg("msg_id"));//current_import_msg_id);
+//                current_import_msg_id = 0;
                 lock(current_import_track_count) {
                     current_import_track_count = 0;
                 }
-            }
+//            }
             return false;
         });
         return false;

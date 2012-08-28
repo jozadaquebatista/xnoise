@@ -262,9 +262,9 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         Idle.add(() => {
             uint msg_id = userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
                                          UserInfo.ContentClass.WAIT,
-                                         _("Start download for ") + 
-                                         "\"%s - %s. \" ".printf(artist, album) +
-                                         _("Please be patient ..."),
+                                         _("Downloading album ") + 
+                                         "\"%s - %s\". ".printf(artist, album) +
+                                         _("This may take some time..."),
                                          true,
                                          120,
                                          null);
@@ -382,10 +382,15 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                                       (string)job.get_arg("artist"),
                                       (string)job.get_arg("album")) + "\"";
                     userinfo.update_text_by_id((uint)job.get_arg("msg_id"), txt, true);
-                    Timeout.add_seconds(10, () => {
+                    Timeout.add_seconds(5, () => {
                         userinfo.popdown((uint)job.get_arg("msg_id"));
                         return false;
                     });
+                    string folder_path = GLib.Path.build_filename(
+                                            Environment.get_user_special_dir(UserDirectory.MUSIC),
+                                            (string)job.get_arg("artist"),
+                                            (string)job.get_arg("album"));
+                    media_importer.import_media_path(folder_path);
                     return false;
                 });
             }
