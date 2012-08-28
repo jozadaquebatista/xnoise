@@ -259,18 +259,21 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         }
         string download_url = this.mag_model.get_download_url(sku);
         //print("xml download_url: %s\n", download_url);
-        var job2 = new Worker.Job(Worker.ExecutionType.ONCE, download_xml_job);
-        job2.set_arg("download_url", download_url);
-        job2.set_arg("artist", artist);
-        job2.set_arg("album",  album );
-        io_worker.push_job(job2);
         Idle.add(() => {
-            uint msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
-                                         UserInfo.ContentClass.INFO,
-                                         _("Start download for " + "%s - %s".printf(artist, album)),
+            uint msg_id = userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
+                                         UserInfo.ContentClass.WAIT,
+                                         _("Start download for ") + 
+                                         "\"%s - %s. \" ".printf(artist, album) +
+                                         _("Please be patient ..."),
                                          true,
-                                         10,
+                                         120,
                                          null);
+            var job2 = new Worker.Job(Worker.ExecutionType.ONCE, download_xml_job);
+            job2.set_arg("download_url", download_url);
+            job2.set_arg("msg_id", msg_id);
+            job2.set_arg("artist", artist);
+            job2.set_arg("album",  album );
+            io_worker.push_job(job2);
             return false;
         });
         return false;
@@ -307,15 +310,20 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                     //Playlist title
                     if(mp3node != null && mp3node.text != "") {
                         var mp3s = File.new_for_uri(process_download_url(mp3node.text));
-                        var mp3d = File.new_for_path("/tmp/ARCH_"+ Random.next_int().to_string() + "_mp3.zip");
+                        var mp3d = File.new_for_path("/tmp/ARCH_"+
+                                                     Random.next_int().to_string() +
+                                                     "_mp3.zip");
                         try {
                             bool cres = mp3s.copy(mp3d, FileCopyFlags.OVERWRITE,null, null);
                             if(cres) {
-                                var job2 = new Worker.Job(Worker.ExecutionType.ONCE, decompress_db_job);
+                                var job2 = new Worker.Job(Worker.ExecutionType.ONCE, decompress_album_job);
                                 job2.set_arg("source_url", mp3d.get_path());
                                 job2.set_arg("artist", job.get_arg("artist"));
                                 job2.set_arg("album",  job.get_arg("album"));
+                                job2.set_arg("msg_id",  job.get_arg("msg_id"));
                                 io_worker.push_job(job2);
+                                try {d.delete(); }
+                                catch(Error e) { print("%s\n", e.message); }
                                 return false;
                             }
                         }
@@ -339,14 +347,14 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
         return false;
     }
 
-    private bool decompress_db_job(Worker.Job job) {
+    private bool decompress_album_job(Worker.Job job) {
         var source = File.new_for_path((string)job.get_arg("source_url"));
         if(!source.query_exists())
             return false;
         string unzip;
         int exit_status;
         if((unzip = Environment.find_program_in_path("unzip")) != null) {
-            print("unzip found: %s\n", unzip);
+            //print("unzip found: %s\n", unzip);
             if(Environment.get_user_special_dir(UserDirectory.MUSIC) == null ||
                Environment.get_user_special_dir(UserDirectory.MUSIC) == "") {
                 print("User special dir MUSIC is not available!\nAborting...\n");
@@ -368,13 +376,16 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
                                     null, 
                                     out exit_status);
                 Idle.add(() => {
-                    uint msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
-                                                 UserInfo.ContentClass.INFO,
-                                                 _("Download finished for " + "%s - %s".printf((string)job.get_arg("artist"),
-                                                                             (string)job.get_arg("album"))),
-                                                 true,
-                                                 10,
-                                                 null);
+                    userinfo.update_symbol_widget_by_id((uint)job.get_arg("msg_id"),
+                                                        UserInfo.ContentClass.INFO);
+                    string txt = _("Download finished for \"") + "%s - %s".printf(
+                                      (string)job.get_arg("artist"),
+                                      (string)job.get_arg("album")) + "\"";
+                    userinfo.update_text_by_id((uint)job.get_arg("msg_id"), txt, true);
+                    Timeout.add_seconds(10, () => {
+                        userinfo.popdown((uint)job.get_arg("msg_id"));
+                        return false;
+                    });
                     return false;
                 });
             }
