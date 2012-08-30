@@ -350,7 +350,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         
         if(artist_id == -1) { // artist not in table, yet
             insert_artist_statement.reset();
-            if(insert_artist_statement.bind_text(1, artist) != Sqlite.OK) {
+            if(insert_artist_statement.bind_text(1, artist.strip()) != Sqlite.OK) {
                 this.db_error();
                 return -1;
             }
@@ -484,7 +484,7 @@ public class Xnoise.Database.Writer : GLib.Object {
         // Insert album
         insert_album_statement.reset();
         if(insert_album_statement.bind_int (1, artist_id)     != Sqlite.OK ||
-           insert_album_statement.bind_text(2, album) != Sqlite.OK ) {
+           insert_album_statement.bind_text(2, album.strip()) != Sqlite.OK ) {
             this.db_error();
             return -1;
         }
