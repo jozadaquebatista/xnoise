@@ -1,3 +1,129 @@
+commit 323c3c21b6635f16b23eefdec9ce2d1f5aeb2850
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 30 11:19:24 2012 +0200
+
+    use strip function on artist and album imports
+
+commit 3695acc87cc18ed0d0d1a939140dcb6bb1db08b4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 28 16:57:04 2012 +0200
+
+    add import method for single files
+
+commit 5015ad1c368c854d430f05ed8041a775172282db
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 28 16:21:39 2012 +0200
+
+    magnatune: automatic import of downloaded albums into local database
+
+commit 14caee76389f76e9d45f9ae13d1bdb5cfd8b5f68
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 28 12:14:20 2012 +0200
+
+    magnatune: improve user info handling for downloads
+
+commit 698e1e15fdea49a5a722eac170df34eddce8c0a7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Aug 28 11:14:10 2012 +0200
+
+    add magnatune downloads for logged in users
+
+commit 238a9d57bfbb24c1e5f7d10d7a35f801d5b4af9e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 24 23:24:21 2012 +0200
+
+    do not display full uris
+
+commit 1eeeaf082b05f035bb241240b13ca946ae2b8c74
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 24 23:23:24 2012 +0200
+
+    magnatune: change store location of db
+
+commit 475b6aa436a0f17398cfa9b126095cae868c84e8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 24 17:07:55 2012 +0200
+
+    cleanup in plugin manager tree
+
+commit af479153d9c6054aacc38ef294c1ee3c5ed9422b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 24 15:43:51 2012 +0200
+
+    selection handling of plugin manager tree
+
+commit 40ce00ddfecd6f579d695514bcfecfdf1a250ffd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 24 14:57:20 2012 +0200
+
+    magnatune/lastfm: add link buttons to settings widgets
+
+commit 6f535aad6f3de3c25e34b07d334b85b0f14ed450
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 24 14:28:15 2012 +0200
+
+    magnatune: fix user feedback in settings widget
+
+commit 36b2e729ab7368e813b2a70de7f3a342c4628bbf
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 24 14:16:45 2012 +0200
+
+    adjust settings dialog
+
+commit 5c533e6ae089514e57794c34e670ed6f9b5814f9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 24 13:07:36 2012 +0200
+
+    magnatune: add support for 'speechless' streaming with user login
+
+commit 8f5354a3a3d7c912e962656bb21c0380993284a7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 23 21:00:25 2012 +0200
+
+    cleanup item handler
+
+commit e0d23c63a9c9307e1b81ccca4a21b7196ddeac6d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 23 20:43:42 2012 +0200
+
+    adjust icon
+
+commit 58ebc41a4aa525e5f19b7898f2916df3b53bc9d0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 23 17:59:13 2012 +0200
+
+    use some icons for plugin settings
+
+commit d82a15808825724a797c0526b0733dc1b0e9bc5a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 23 16:02:22 2012 +0200
+
+    magnatune: update translatable strings
+
+commit ae026cbaa72feb874fe664b2be81c5607b82754b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 23 15:58:57 2012 +0200
+
+    magnatune: add license headers
+
+commit c4684a1cf28ffe315f0e1b2cded9497b27e45b18
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 23 15:55:35 2012 +0200
+
+    magnatune: add online change monitoring
+
+commit ffcc0aa591f24483748b432100979d381ea27062
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 23 11:29:13 2012 +0200
+
+    magnatune: extend database
+
+commit a0008d81b90fdb98cfdb0b0bf36ba2cb0aba1f29
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Aug 23 10:25:25 2012 +0200
+
+    use album images in magnatune plugin
+
 commit ea1033b56e87196f126da9c1fd3d2a5334e4a027
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Thu Aug 23 00:07:44 2012 +0200

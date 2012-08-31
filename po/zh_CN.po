@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-28 11:13+0200\n"
+"POT-Creation-Date: 2012-08-31 08:36+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -106,7 +106,8 @@ msgid "Location"
 msgstr "位置"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:254
-#: ../libxnoise/Utils/xnoise-media-importer.vala:90
+#: ../libxnoise/Utils/xnoise-media-importer.vala:86
+#: ../libxnoise/Utils/xnoise-media-importer.vala:169
 msgid "Importing media data. This may take some time..."
 msgstr "导入媒体数据。这将花费一段时间..."
 
@@ -655,13 +656,13 @@ msgstr "已暂停"
 msgid "ready to rock"
 msgstr "准备播放"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:204
+#: ../libxnoise/Utils/xnoise-media-importer.vala:283
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr "已发现 %u 首歌曲。正在更新库..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:414
-#: ../libxnoise/Utils/xnoise-media-importer.vala:486
+#: ../libxnoise/Utils/xnoise-media-importer.vala:494
+#: ../libxnoise/Utils/xnoise-media-importer.vala:566
 #, c-format
 msgid "%u tracks found"
 msgstr "未发现 %u 歌曲"
@@ -750,12 +751,17 @@ msgstr ""
 msgid "Download whole album to disk"
 msgstr ""
 
-#: ../plugins/magnatune/magnatune-treeview.vala:270
-msgid "Start download for "
+#: ../plugins/magnatune/magnatune-treeview.vala:265
+msgid "Downloading album "
 msgstr ""
 
-#: ../plugins/magnatune/magnatune-treeview.vala:373
-msgid "Download finished for "
+#: ../plugins/magnatune/magnatune-treeview.vala:267
+#, fuzzy
+msgid "This may take some time..."
+msgstr "导入媒体数据。这将花费一段时间..."
+
+#: ../plugins/magnatune/magnatune-treeview.vala:381
+msgid "Download finished for \""
 msgstr ""
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1

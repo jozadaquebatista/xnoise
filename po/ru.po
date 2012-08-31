@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-28 11:13+0200\n"
+"POT-Creation-Date: 2012-08-31 08:36+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -120,7 +120,8 @@ msgid "Location"
 msgstr "Открыть _местоположение"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:254
-#: ../libxnoise/Utils/xnoise-media-importer.vala:90
+#: ../libxnoise/Utils/xnoise-media-importer.vala:86
+#: ../libxnoise/Utils/xnoise-media-importer.vala:169
 msgid "Importing media data. This may take some time..."
 msgstr "Идет импортирование медиафайлов. Это может занять некоторое время..."
 
@@ -686,13 +687,13 @@ msgstr "приостановлен"
 msgid "ready to rock"
 msgstr "ready to rock"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:204
+#: ../libxnoise/Utils/xnoise-media-importer.vala:283
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr "Найдено %u дорожек. Обновление библиотеки ..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:414
-#: ../libxnoise/Utils/xnoise-media-importer.vala:486
+#: ../libxnoise/Utils/xnoise-media-importer.vala:494
+#: ../libxnoise/Utils/xnoise-media-importer.vala:566
 #, c-format
 msgid "%u tracks found"
 msgstr "Найдено %u дорожек"
@@ -783,12 +784,17 @@ msgstr ""
 msgid "Download whole album to disk"
 msgstr ""
 
-#: ../plugins/magnatune/magnatune-treeview.vala:270
-msgid "Start download for "
+#: ../plugins/magnatune/magnatune-treeview.vala:265
+msgid "Downloading album "
 msgstr ""
 
-#: ../plugins/magnatune/magnatune-treeview.vala:373
-msgid "Download finished for "
+#: ../plugins/magnatune/magnatune-treeview.vala:267
+#, fuzzy
+msgid "This may take some time..."
+msgstr "Идет импортирование медиафайлов. Это может занять некоторое время..."
+
+#: ../plugins/magnatune/magnatune-treeview.vala:381
+msgid "Download finished for \""
 msgstr ""
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
