@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 08:36+0200\n"
+"POT-Creation-Date: 2012-08-31 09:34+0200\n"
 "PO-Revision-Date: 2012-04-03 22:05-0500\n"
 "Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
@@ -82,24 +82,29 @@ msgstr ""
 msgid "Videos"
 msgstr "Video"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:156
+#, fuzzy
+msgid "Add or Remove media"
+msgstr "Agregar o quitar _medios de reproducción"
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:173
 msgid "Add local folder"
 msgstr "Agregar carpeta local"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:169
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add media stream"
 msgstr "Agregar flujo multimedia"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:170
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
 msgid "Remove"
 msgstr "Eliminar"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:171
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 #, fuzzy
 msgid "do full rescan"
 msgstr "hacer un escaneo completo de la biblioteca multimedia"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:172
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
 #, fuzzy
 msgid ""
 "Select local media folders or internet media streams. \n"
@@ -108,26 +113,26 @@ msgstr ""
 "Seleccione carpetas multimedia locales o volcados de red.\n"
 "Toda la biblioteca multimedia estará disponible en el explorador de medios."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:213
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
 msgid "Name"
 msgstr "Nombre"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:229
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:234
 #, fuzzy
 msgid "Location"
 msgstr "_Abrir Ubicación"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:254
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:259
 #: ../libxnoise/Utils/xnoise-media-importer.vala:86
 #: ../libxnoise/Utils/xnoise-media-importer.vala:169
 msgid "Importing media data. This may take some time..."
 msgstr "Importación en proceso. Esto puede tomar algún tiempo..."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:276
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:281
 msgid "Select media folder"
 msgstr "Seleccione una carpeta multimedia"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:345
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:350
 msgid "Add internet radio link"
 msgstr "Agregar url a emisora de radio por internet"
 

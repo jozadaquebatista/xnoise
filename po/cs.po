@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 08:36+0200\n"
+"POT-Creation-Date: 2012-08-31 09:34+0200\n"
 "PO-Revision-Date: 2012-07-02 23:01+0200\n"
 "Last-Translator: Pavel <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -77,23 +77,28 @@ msgstr "Streamy"
 msgid "Videos"
 msgstr "Videa"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:156
+#, fuzzy
+msgid "Add or Remove media"
+msgstr "Přidat nebo odebrat média"
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:173
 msgid "Add local folder"
 msgstr "Přidat místní složku"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:169
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add media stream"
 msgstr "Přidat stream"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:170
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
 msgid "Remove"
 msgstr "Odstranit"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:171
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 msgid "do full rescan"
 msgstr "Znovu prohledat"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:172
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
 msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
@@ -101,25 +106,25 @@ msgstr ""
 "Vyberte místní složky se skladbami nebo proudy internetových médií. \n"
 "Vše bude dostupné v knihovně Xnoise."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:213
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
 msgid "Name"
 msgstr "Název"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:229
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:234
 msgid "Location"
 msgstr "Umístění"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:254
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:259
 #: ../libxnoise/Utils/xnoise-media-importer.vala:86
 #: ../libxnoise/Utils/xnoise-media-importer.vala:169
 msgid "Importing media data. This may take some time..."
 msgstr "Import dat. Může to chvíli trvat..."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:276
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:281
 msgid "Select media folder"
 msgstr "Vybrat složku se skladbami"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:345
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:350
 msgid "Add internet radio link"
 msgstr "Přidat odkaz na internetové rádio"
 

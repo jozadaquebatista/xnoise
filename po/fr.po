@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 08:36+0200\n"
+"POT-Creation-Date: 2012-08-31 09:34+0200\n"
 "PO-Revision-Date: 2012-07-05 14:17+0100\n"
 "Last-Translator: Aurélien Rivière <aurelien.riv@gmail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -76,23 +76,28 @@ msgstr "Flux"
 msgid "Videos"
 msgstr "Vidéos"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:156
+#, fuzzy
+msgid "Add or Remove media"
+msgstr "_Ajouter/Retirer un média"
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:173
 msgid "Add local folder"
 msgstr "Ajouter un répertoire local"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:169
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add media stream"
 msgstr "Ajouter un média en streaming"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:170
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
 msgid "Remove"
 msgstr "Retirer"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:171
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 msgid "do full rescan"
 msgstr "Rescanner l'intégralité de la bibliothèque"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:172
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
 msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
@@ -100,25 +105,25 @@ msgstr ""
 "Sélectionnez les répertoires locaux ou les flux de médias distants. \n"
 "Toute la bibliothèque sera disponible dans la médiathèque de xnoise."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:213
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
 msgid "Name"
 msgstr "Nom"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:229
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:234
 msgid "Location"
 msgstr "Emplacement"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:254
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:259
 #: ../libxnoise/Utils/xnoise-media-importer.vala:86
 #: ../libxnoise/Utils/xnoise-media-importer.vala:169
 msgid "Importing media data. This may take some time..."
 msgstr "Importation des données. Cela peut prendre un certain temps..."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:276
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:281
 msgid "Select media folder"
 msgstr "Sélectionner un répertoire média"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:345
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:350
 msgid "Add internet radio link"
 msgstr "Ajouter un lien vers une radio internet"
 

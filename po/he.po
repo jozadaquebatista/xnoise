@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 08:36+0200\n"
+"POT-Creation-Date: 2012-08-31 09:34+0200\n"
 "PO-Revision-Date: 2012-08-17 18:42+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -82,23 +82,28 @@ msgstr "תזרימים"
 msgid "Videos"
 msgstr "וידאו"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:156
+#, fuzzy
+msgid "Add or Remove media"
+msgstr "הו_ספה או הסרה של מדיה"
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:173
 msgid "Add local folder"
 msgstr "הוספת תיקיית מקומית"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:169
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add media stream"
 msgstr "הוספת תזרים מדיה"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:170
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
 msgid "Remove"
 msgstr "הסרה"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:171
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 msgid "do full rescan"
 msgstr "בצע סקירה חוזרת מלאה"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:172
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
 msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
@@ -106,25 +111,25 @@ msgstr ""
 "בחר את תיקיות המדיה הנוכחיות או תזרימי מדיה אינטרנטיים. \n"
 "כל מקורות המדיה יהיו זמינים בספריית Xnoise."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:213
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
 msgid "Name"
 msgstr "שם"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:229
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:234
 msgid "Location"
 msgstr "מיקום"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:254
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:259
 #: ../libxnoise/Utils/xnoise-media-importer.vala:86
 #: ../libxnoise/Utils/xnoise-media-importer.vala:169
 msgid "Importing media data. This may take some time..."
 msgstr "מייבא מידע מדיה. זה עלול לקחת קצת זמן..."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:276
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:281
 msgid "Select media folder"
 msgstr "בחירת תיקיית מדיה"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:345
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:350
 msgid "Add internet radio link"
 msgstr "הוספת קישור לרדיו אינטרנט"
 

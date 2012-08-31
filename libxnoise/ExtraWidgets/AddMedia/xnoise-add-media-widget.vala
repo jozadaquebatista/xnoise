@@ -151,6 +151,11 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
         try {
             builder.add_from_file(Config.UIDIR + "add_media.ui");
             
+            var headline           = builder.get_object("addremove_headline") as Label;
+            headline.set_alignment(0.0f, 0.5f);
+            headline.set_markup("<span size=\"xx-large\"><b> %s </b></span>".printf(Markup.escape_text(_("Add or Remove media"))));
+            headline.use_markup= true;
+
             var mainvbox           = builder.get_object("mainvbox") as Gtk.Box;
             tvscrolledwindow       = builder.get_object("tvscrolledwindow") as ScrolledWindow;
             var baddfolder         = builder.get_object("addfolderbutton") as Button;
