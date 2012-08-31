@@ -160,6 +160,8 @@ private class DockableUbuntuOneMS : DockableMedia {
                     win.mainview_box.add_main_view(ms);
                 ms.show();
                 ui_merge_id = add_main_window_menu_entry();
+                
+                Xnoise.media_importer.import_media_folder(ms.get_library_location());
                 //print("ui_merge_id:%u\n", ui_merge_id);
             }
             Idle.add( () => {
@@ -256,6 +258,7 @@ private class DockableUbuntuOneMS : DockableMedia {
     
     private void on_download_finished(string path) {
         print("on_download_finished::%s\n", path);
+        Xnoise.media_importer.import_media_folder(ms.get_library_location());
     }
     
     public override Gdk.Pixbuf get_icon() {
