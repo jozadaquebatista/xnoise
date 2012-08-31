@@ -1,3 +1,39 @@
+commit e64881fe0ad26d7e01d7b15cb8af3cd8ce4fd56a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 31 10:49:55 2012 +0200
+
+    ubuntuone: automatically add newly downloaded media to local library
+
+commit 84b31262eaff2935beba2f58dc36bc3e9f674c59
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 31 10:10:25 2012 +0200
+
+    update packaging data
+
+commit 0e2a4b3f2c3b00e229b9ed3d3d979d55e89ab8a6
+Author: Petr Simacek <psimacek@radiobeat.cz>
+Date:   Fri Aug 31 10:09:42 2012 +0200
+
+    update cs.po
+
+commit 7a42467dfd4a0e10d3b74ecac5a0a8a1b09ca23c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 31 09:36:33 2012 +0200
+
+    update translatable strings
+
+commit 4b6dc8a7412caedb4c916311c866214e1ed5834d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 31 08:41:26 2012 +0200
+
+    update german translation
+
+commit 23c1a67860c19945c033c9a6cd49b68502ec1981
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 31 08:37:37 2012 +0200
+
+    update translatable strings
+
 commit 323c3c21b6635f16b23eefdec9ce2d1f5aeb2850
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Thu Aug 30 11:19:24 2012 +0200
