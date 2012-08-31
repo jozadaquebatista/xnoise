@@ -1,3 +1,34 @@
+xnoise (0.2.9)
+
+New Features and Fixes
+======================
+  * Redesign GUI for Settings-Dialog and for Add-Media-Dialog
+  * use strip function on artist and album imports
+  * Extend media import API
+  * Extend item handler API
+  * Add fix for window hiding/howing (Tal)
+  * Update portugse translation (Sergio Marques)
+  * Activate standard item handlers for dynamic playlists, too
+  * Context menus for dynamic playlists
+  * Add query interface for dynamic playlists
+  * Fix keyboard opened menus for tracklist and musicbrowser
+  * Use nautilus feature (if available) for file indication
+  * Add FAQ entry to help menu
+  * Magnatune: add support for 'speechless' streaming with user login
+  * Magnatune: album downloads for registered users
+  * Magnatune: add online change monitoring
+  * Magnatune: use album images in Magnatune plugin
+  * Magnatune: use genre in search/filtering
+  * Magnatune: change store location of db
+  * Update packaging data
+  * Replace hard coded keycodes with the (now available) Gdk.Key.* constants
+  * Recommend tumbler thumbnailing in packaging
+  * Update debian package creation script (Tal)
+  * Code cleanups
+  * Various bug fixes
+
+
+
 xnoise (0.2.8)
 
 New Features and Fixes

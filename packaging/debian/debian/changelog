@@ -1,16 +1,28 @@
-xnoise (0.2.8) unstable; urgency=low
-  * Add Magnatune plugin
-  * Put the UbuntuOne plugin into a seperate deb, so that dependeny to libubuntuoneui is avoided
-  * Add script that autoamtically creates *.deb pakages on dabian and debian based distros (Tal Hadad)
-  * Add packaging folder to source distrubution
+xnoise (0.2.9) unstable; urgency=low
+  * Redesign GUI for Settings-Dialog and for Add-Media-Dialog
+  * use strip function on artist and album imports
+  * Extend media import API
+  * Extend item handler API
+  * Add fix for window hiding/howing (Tal)
+  * Update portugse translation (Sergio Marques)
+  * Activate standard item handlers for dynamic playlists, too
+  * Context menus for dynamic playlists
+  * Add query interface for dynamic playlists
+  * Fix keyboard opened menus for tracklist and musicbrowser
+  * Use nautilus feature (if available) for file indication
+  * Add FAQ entry to help menu
+  * Magnatune: add support for 'speechless' streaming with user login
+  * Magnatune: album downloads for registered users
+  * Magnatune: add online change monitoring
+  * Magnatune: use album images in Magnatune plugin
+  * Magnatune: use genre in search/filtering
+  * Magnatune: change store location of db
   * Update packaging data
-  * Update po/cs.po (psimacek)
-  * Use blue color to indicate active searches because red looks like nothing was found
-  * Automatically distribute changelog
-  * Fix crasher with title-to-decoration plugin
-  * Fix potential crasher in signal handler of mpris plugin
-  * Bug fixes
+  * Replace hard coded keycodes with the (now available) Gdk.Key.* constants
+  * Recommend tumbler thumbnailing in packaging
+  * Update debian package creation script (Tal)
+  * Code cleanups
+  * Various bug fixes
   * Closes: #632932
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 18 Aug 2012 10:00:46 +0200
-
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 31 Aug 2012 17:05:49 +0200
