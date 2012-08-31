@@ -29,16 +29,19 @@ msgstr "Reprodutor multimédia"
 msgid "Organize and play your music and video collections"
 msgstr "Organização e reprodução das suas músicas e vídeos"
 
-#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
+#: ../libxnoise/Application/xnoise-application.vala:93
+#: ../src/xnoise.vala:63
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise é um reprodutor multimédia para GTK+"
 
-#: ../libxnoise/Application/xnoise-application.vala:94 ../src/xnoise.vala:64
+#: ../libxnoise/Application/xnoise-application.vala:94
+#: ../src/xnoise.vala:64
 msgid "It uses the gstreamer framework."
 msgstr "Utiliza a infraestrutura gstreamer"
 
-#: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
+#: ../libxnoise/Application/xnoise-application.vala:95
+#: ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "Mais informações na página web:"
 
@@ -80,9 +83,8 @@ msgid "Videos"
 msgstr "Vídeos"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:156
-#, fuzzy
 msgid "Add or Remove media"
-msgstr "A_dicionar ou remover multimédia"
+msgstr "Adicionar ou remover multimédia"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:173
 msgid "Add local folder"
@@ -231,9 +233,8 @@ msgid "Search..."
 msgstr "Procurar..."
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
-#, fuzzy
 msgid "Add all tracks to tracklist"
-msgstr "Adicionar faixas visíveis à lista de faixas"
+msgstr "Adicionar todas as faixas à lista de faixas"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:136
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:171
@@ -258,18 +259,13 @@ msgstr "Álbum:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:163
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:186
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
-msgstr ""
-"Por favor aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgstr "Por favor aguarde o preenchimento da coleção. Cancele se não quiser aguardar."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:167
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:190
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
-msgstr ""
-"Por favor aguarde pelo fim da importação. Cancele se não quiser aguardar."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr "Por favor aguarde pelo fim da importação. Cancele se não quiser aguardar."
 
 #. ARTIST
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
@@ -521,24 +517,16 @@ msgstr "_Configurar"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:415
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar "
-"o arranque do xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "A restaurar %u faixas na lista de faixas. O número é elevado e pode atrasar o arranque do xnoise."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:477
 msgid "Add media"
 msgstr "Adicionar multimédia"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:480
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
-msgstr ""
-"Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para "
-"a coleção?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
+msgstr "Esta é a primeira vez que utiliza o xnoise. Pretende importar ficheiros para a coleção?"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:555
 msgid "no repeat"
@@ -570,10 +558,8 @@ msgid "Show application main menu"
 msgstr "Mostrar menu principal"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:193
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
-msgstr ""
-"O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgstr "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:552
 #, c-format
@@ -686,10 +672,8 @@ msgid "%u tracks found"
 msgstr "%u faixas encontradas"
 
 #: ../src/xnoise.vala:74
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
-msgstr ""
-"Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr "Execute \"xnoise --help\" para ver todas as opções de linha de comandos.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Buffer lyrics in database"
@@ -711,7 +695,7 @@ msgstr "Sessão não iniciada"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:460
 msgid "Visit LastFm for an account."
-msgstr ""
+msgstr "Viste a last.fm para obter uma conta"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:469
 #, c-format
@@ -729,9 +713,8 @@ msgid "Password:"
 msgstr "Senha:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:504
-#, fuzzy
 msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
-msgstr "Enviar faixas para a last.fm"
+msgstr "Enviar faixas para a last.fm (enviar dados para criar estatísticas)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
@@ -764,24 +747,23 @@ msgstr "Loja de música UbuntuOne"
 
 #: ../plugins/magnatune/magnatune-dockable.vala:57
 msgid "Magnatune"
-msgstr ""
+msgstr "Magnatune"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:223
 msgid "Download whole album to disk"
-msgstr ""
+msgstr "Transferir álbum para o disco"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:265
 msgid "Downloading album "
-msgstr ""
+msgstr "A transferir álbum"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:267
-#, fuzzy
 msgid "This may take some time..."
-msgstr "A importar dados. Pode levar algum tempo..."
+msgstr "Isto pode levar algum tempo..."
 
 #: ../plugins/magnatune/magnatune-treeview.vala:381
 msgid "Download finished for \""
-msgstr ""
+msgstr "Terminou a transferência de \""
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
@@ -815,59 +797,3 @@ msgstr "Mostrar loja _UbuntuOne"
 msgid "Show UbuntuOne Store"
 msgstr "Mostrar loja UbuntuOne"
 
-#~ msgid "unknown artist"
-#~ msgstr "artista desconhecido"
-
-#~ msgid "unknown title"
-#~ msgstr "título desconhecido"
-
-#~ msgid "unknown album"
-#~ msgstr "álbum desconhecido"
-
-#~ msgid "Now Playing"
-#~ msgstr "A reproduzir"
-
-#~ msgid "Tracklist"
-#~ msgstr "Lista de faixas"
-
-#~ msgid "Lyrics"
-#~ msgstr "Letras musicais"
-
-#~ msgid "Hide Library"
-#~ msgstr "Ocultar coleção"
-
-#~ msgid "Show Library"
-#~ msgstr "Mostrar coleção"
-
-#~ msgid "Show Media"
-#~ msgstr "Mostrar multimédia"
-
-#~ msgid "Hide Media"
-#~ msgstr "Ocultar multimédia"
-
-#~ msgid "xnoise - Add media sources to the library"
-#~ msgstr "xnoise - Adicionar fontes multimédia à coleção"
-
-#~ msgid "Apply"
-#~ msgstr "Aplicar"
-
-#~ msgid "Local Collection"
-#~ msgstr "Coleção local"
-
-#~ msgid "Always keep the current state of xnoise"
-#~ msgstr "Guardar sempre o estado do xnoise"
-
-#~ msgid "unknown organization"
-#~ msgstr "organização desconhecida"
-
-#~ msgid "unknown location"
-#~ msgstr "local desconhecido"
-
-#~ msgid "Use linebreaks in media browser"
-#~ msgstr "Utilizar quebras de linha no navegador"
-
-#~ msgid "Using the running instance of xnoise!\n"
-#~ msgstr "A utilizar a instância atual do xnoise!\n"
-
-#~ msgid "Showing the running instance of xnoise.\n"
-#~ msgstr "A exibir a instância atual do xnoise!\n"
