@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-31 09:34+0200\n"
-"PO-Revision-Date: 2012-08-17 18:42+0200\n"
+"PO-Revision-Date: 2012-09-06 22:17+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
 "Language: he\n"
@@ -32,16 +32,19 @@ msgstr "נגן המדיה"
 msgid "Organize and play your music and video collections"
 msgstr "ארגון ונגינת אוספי המוזיקה והווידאו שלך"
 
-#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
+#: ../libxnoise/Application/xnoise-application.vala:93
+#: ../src/xnoise.vala:63
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise הוא נגן המדיה עבור Gtk+."
 
-#: ../libxnoise/Application/xnoise-application.vala:94 ../src/xnoise.vala:64
+#: ../libxnoise/Application/xnoise-application.vala:94
+#: ../src/xnoise.vala:64
 msgid "It uses the gstreamer framework."
 msgstr "הנגן משתמש בסביבת העבודה של gstreamer."
 
-#: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
+#: ../libxnoise/Application/xnoise-application.vala:95
+#: ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "מידע נוסף ניתן למצוא באתר הפרויקט:"
 
@@ -83,9 +86,8 @@ msgid "Videos"
 msgstr "וידאו"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:156
-#, fuzzy
 msgid "Add or Remove media"
-msgstr "הו_ספה או הסרה של מדיה"
+msgstr "הוספת או הסרת מדיה"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:173
 msgid "Add local folder"
@@ -234,9 +236,8 @@ msgid "Search..."
 msgstr "חפש..."
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
-#, fuzzy
 msgid "Add all tracks to tracklist"
-msgstr "הוספת הרצועות המוצגות לרשימה"
+msgstr "הוספת כל הרצועות לרשימה"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:136
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:171
@@ -261,15 +262,12 @@ msgstr "אלבום:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:163
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:186
-msgid ""
-"Please wait while filling media browser. Or cancel, if you do not want to "
-"wait."
+msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
 msgstr "אנא המתן בעת מילוי דפדפן המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:167
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:190
-msgid ""
-"Please wait while importing media. Or cancel, if you do not want to wait."
+msgid "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "אנא המתן בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #. ARTIST
@@ -510,11 +508,11 @@ msgstr "ע_זרה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:187
 msgid "_Frequently Asked Questions"
-msgstr ""
+msgstr "_שאלות נפוצות"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:187
 msgid "_Open Frequently Asked Questions in web browser"
-msgstr ""
+msgstr "_שאלות נפוצות פתוחות בדפדפן האינטרנט"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:188
 msgid "_Config"
@@ -522,21 +520,15 @@ msgstr "ה_גדרה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:415
 #, c-format
-msgid ""
-"Restoring %u tracks in the tracklist. This is a large number and can make "
-"startup of xnoise slower."
-msgstr ""
-"משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של "
-"xnoise."
+msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
+msgstr "משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של xnoise."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:477
 msgid "Add media"
 msgstr "הוספת מדיה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:480
-msgid ""
-"You started xnoise for the first time. Do you want to import media into the "
-"library?"
+msgid "You started xnoise for the first time. Do you want to import media into the library?"
 msgstr "הפעלת את xnoise לראשונה. האם ברצונך לייבא מדיה לספריה?"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:555
@@ -569,8 +561,7 @@ msgid "Show application main menu"
 msgstr "הצג את התפריט הראשי"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:193
-msgid ""
-"The subtitle name is not matching the video name! Not using subtitle file."
+msgid "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "שם הכתוביות אינו מתאים לשם הוידאו! לא משתמש בקובץ כתוביות."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:552
@@ -684,8 +675,7 @@ msgid "%u tracks found"
 msgstr "נמצאו %u רצועות"
 
 #: ../src/xnoise.vala:74
-msgid ""
-"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr "הרץ 'xnoise --help' על מנת לראות רשימה מלאה של אפשרויות שורת הפקודה.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
@@ -708,7 +698,7 @@ msgstr "משתמש אינו מחובר!"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:460
 msgid "Visit LastFm for an account."
-msgstr ""
+msgstr "מבקר באתר LastFm עבור חשבון."
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:469
 #, c-format
@@ -726,9 +716,8 @@ msgid "Password:"
 msgstr "ססמה:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:504
-#, fuzzy
 msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
-msgstr "שלח מידע אודות רצועות מנוגנות לאתר Last.fm"
+msgstr "שלח מידע אודות רצועות מנוגנות לאתר Last.fm(שלח סטטיסטיקה)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
 msgid "Demo plugin for xnoise"
@@ -761,24 +750,23 @@ msgstr "חנות המוסיקה של Ubuntu One"
 
 #: ../plugins/magnatune/magnatune-dockable.vala:57
 msgid "Magnatune"
-msgstr ""
+msgstr "Magnatune"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:223
 msgid "Download whole album to disk"
-msgstr ""
+msgstr "הורד את האלבום כולו אל הדיסק"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:265
 msgid "Downloading album "
-msgstr ""
+msgstr "מוריד אלבום"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:267
-#, fuzzy
 msgid "This may take some time..."
-msgstr "מייבא מידע מדיה. זה עלול לקחת קצת זמן..."
+msgstr "זה עלול לקחת קצת זמן..."
 
 #: ../plugins/magnatune/magnatune-treeview.vala:381
 msgid "Download finished for \""
-msgstr ""
+msgstr "הורדה הושלמה עבור \""
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
