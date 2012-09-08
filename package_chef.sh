@@ -170,7 +170,7 @@ else if [ "$build_source" != "yes" ] && [ "$build_binary" == "yes" ]; then
   echo "build binary only"
   debuild_args=$(echo "$debuild_args-B ")
 else
-  echo "build binary and source"
+  echo "build binary only"
 fi
 fi
 
