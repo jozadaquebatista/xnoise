@@ -2087,7 +2087,7 @@ XnoiseItem* xnoise_database_reader_get_most_played (XnoiseDatabaseReader* self, 
 XnoiseItem* xnoise_database_reader_get_streamitem_by_id (XnoiseDatabaseReader* self, gint32 id, const gchar* searchtext);
 XnoiseItem* xnoise_database_reader_get_media_folders (XnoiseDatabaseReader* self, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_stream_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
-XnoiseItem* xnoise_database_reader_get_some_lastused_items (XnoiseDatabaseReader* self, gint limit, gint offset, int* result_length1);
+XnoiseTrackData** xnoise_database_reader_get_some_lastused_items (XnoiseDatabaseReader* self, gint limit, gint offset, int* result_length1);
 guint xnoise_database_reader_count_lastused_items (XnoiseDatabaseReader* self);
 XnoiseTrackData** xnoise_database_reader_get_stream_data (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_video_items (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
@@ -2708,6 +2708,7 @@ gchar* xnoise_services_get_suffix_from_filename (const gchar* val);
 gchar* xnoise_services_prepare_name_from_filename (const gchar* val);
 gchar* xnoise_services_replace_underline_with_blank_encoded (const gchar* value);
 gchar* xnoise_services_make_time_display_from_seconds (gint length);
+gint32 xnoise_services_length_string_to_int (const gchar* s);
 gpointer xnoise_simple_markup_node_ref (gpointer instance);
 void xnoise_simple_markup_node_unref (gpointer instance);
 GParamSpec* xnoise_simple_markup_param_spec_node (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -2872,7 +2873,7 @@ gboolean xnoise_track_list_model_get_current_path (XnoiseTrackListModel* self, G
 gboolean xnoise_track_list_model_get_active_path (XnoiseTrackListModel* self, GtkTreePath** treepath, gboolean* used_next_pos);
 void xnoise_track_list_model_insert_title (XnoiseTrackListModel* self, GdkPixbuf* pixbuf, XnoiseTrackData** td, gboolean bold, GtkTreeIter* result);
 gboolean xnoise_track_list_model_not_empty (XnoiseTrackListModel* self);
-XnoiseItem* xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
+XnoiseTrackData** xnoise_track_list_model_get_all_tracks (XnoiseTrackListModel* self, int* result_length1);
 gchar* xnoise_track_list_model_get_uri_for_current_position (XnoiseTrackListModel* self);
 GType xnoise_tray_icon_get_type (void) G_GNUC_CONST;
 XnoiseTrayIcon* xnoise_tray_icon_new (void);

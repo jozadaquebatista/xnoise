@@ -297,7 +297,7 @@ namespace Xnoise.Services {
     }
 
     public static string make_time_display_from_seconds(int length) {
-        string lengthString = "";
+        string lengthString = EMPTYSTRING;
         if(length > 0) {
             // convert seconds to a user convenient mm:ss display
             int dur_min, dur_sec;
@@ -306,5 +306,23 @@ namespace Xnoise.Services {
             lengthString = "%02d:%02d".printf(dur_min, dur_sec);
         }
         return (owned)lengthString;
+    }
+    
+    public static int32 length_string_to_int(string s) {
+        int32 j = 0;
+        if(s == null || s == EMPTYSTRING)
+            return j;
+        
+        string[] sa = s.split(":");
+        
+        if(sa.length == 1)
+            return int.parse(s);
+        
+        int c = 0;
+        for(int i = sa.length - 1; i >= 0; i--) {
+            j = j + (int)(int.parse(sa[i]) * Math.pow(60.0, (double)c));
+            c++;
+        }
+        return j;
     }
 }

@@ -257,7 +257,7 @@ public class Xnoise.MediaImporter : GLib.Object {
         //this function uses the database so use it in the database thread
         return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
         try {
-            db_writer.write_lastused(ref job.items);
+            db_writer.write_lastused(ref job.track_dat);
         }
         catch(DbError e) {
             print("%s\n", e.message);

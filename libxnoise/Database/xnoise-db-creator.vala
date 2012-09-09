@@ -40,9 +40,10 @@ private class Xnoise.Database.DbCreator {
     private static Sqlite.Database? db;
     private static File? xnoisedb;
 
+
     //CREATE TABLE STATEMENTS
-    private static const string STMT_CREATE_LASTUSED =
-        "CREATE TABLE lastused(uri TEXT, mediatype INTEGER, id INTEGER, source TEXT);";
+    private static const string STMT_CREATE_LASTUSED_2 =
+        "CREATE TABLE lastused(tracknumber TEXT, mediatype INTEGER, title TEXT, album TEXT, artist TEXT, length TEXT, genre TEXT, year TEXT, id INTEGER, uri TEXT, source TEXT);";
     private static const string STMT_CREATE_MEDIAFOLDERS =
         "CREATE TABLE media_folders(name TEXT PRIMARY KEY);";
     private static const string STMT_CREATE_MEDIAFILES =
@@ -164,7 +165,7 @@ private class Xnoise.Database.DbCreator {
             }
             else {
             //create Tables if not existant
-                if(!exec_stmnt_string(STMT_CREATE_LASTUSED)       ) { reset(); return; }
+                if(!exec_stmnt_string(STMT_CREATE_LASTUSED_2)       ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_MEDIAFOLDERS)   ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_MEDIAFILES)     ) { reset(); return; }
                 if(!exec_stmnt_string(STMT_CREATE_RADIO)          ) { reset(); return; }

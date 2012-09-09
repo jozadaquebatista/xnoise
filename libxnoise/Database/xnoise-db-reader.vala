@@ -43,8 +43,8 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     private string DATABASE;
     private Sqlite.Database db;
 
-    private static const string STMT_GET_LASTUSED =
-        "SELECT uri FROM lastused";
+//    private static const string STMT_GET_LASTUSED =
+//        "SELECT uri FROM lastused";
     private static const string STMT_GET_RADIOS =
         "SELECT name, uri FROM streams";
     private static const string STMT_GET_MEDIA_FOLDERS =
@@ -420,9 +420,10 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_SOME_LASTUSED_ITEMS =
-        "SELECT mediatype, uri, id FROM lastused LIMIT ? OFFSET ?";
-    public Item[] get_some_lastused_items(int limit, int offset) {
-        Item[] val = {};
+        "SELECT mediatype, uri, id, source, artist, album, title, length, genre, year, tracknumber FROM lastused LIMIT ? OFFSET ?";
+//        "SELECT mediatype, uri, id FROM lastused LIMIT ? OFFSET ?";
+    public TrackData[] get_some_lastused_items(int limit, int offset) {
+        TrackData[] val = {};
         Statement stmt;
         
         this.db.prepare_v2(STMT_GET_SOME_LASTUSED_ITEMS, -1, out stmt);
@@ -434,9 +435,19 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         }
         
         while(stmt.step() == Sqlite.ROW) {
-            Item? item = Item((ItemType)stmt.column_int(0), stmt.column_text(1), stmt.column_int(2));
-            item.source_id = get_source_id();
-            val += item;
+            var td = new TrackData();
+            td.item = Item((ItemType)stmt.column_int(0), stmt.column_text(1), stmt.column_int(2));
+            td.item.text   = stmt.column_text(3);
+            td.artist      = stmt.column_text(4);
+            td.album       = stmt.column_text(5);
+            td.title       = stmt.column_text(6);
+            td.length      = length_string_to_int(stmt.column_text(7));
+            td.genre       = stmt.column_text(8);
+            if(stmt.column_text(9) != null && stmt.column_text(9) != EMPTYSTRING)
+                td.year        = int.parse(stmt.column_text(9));
+            if(stmt.column_text(10) != null && stmt.column_text(10) != EMPTYSTRING)
+                td.tracknumber = int.parse(stmt.column_text(10));
+            val += td;
         }
         return (owned)val;
     }

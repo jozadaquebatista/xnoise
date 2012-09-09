@@ -195,7 +195,7 @@ public class Xnoise.Main : GLib.Object {
 
     public void save_tracklist() {
         var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, media_importer.write_lastused_job);
-        job.items = tlm.get_all_tracks();
+        job.track_dat = tlm.get_all_tracks();
         job.finished.connect( () => {
             //print("finished db saving\n");
             preparing_quit = false;

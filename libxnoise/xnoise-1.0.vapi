@@ -28,7 +28,7 @@ namespace Xnoise {
 			public bool get_lyrics (string artist, string title, out string txt, out string cred, out string ident);
 			public Xnoise.Item[] get_media_folders ();
 			public Xnoise.Item[]? get_most_played (string searchtext);
-			public Xnoise.Item[] get_some_lastused_items (int limit, int offset);
+			public Xnoise.TrackData[] get_some_lastused_items (int limit, int offset);
 			public Xnoise.TrackData[] get_stream_data (string searchtext);
 			public Xnoise.Item[]? get_stream_items (string searchtext);
 			public override bool get_stream_td_for_id (int32 id, out Xnoise.TrackData val);
@@ -361,6 +361,8 @@ namespace Xnoise {
 		public static Xnoise.RemoteSchemes get_remote_schemes ();
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static string get_suffix_from_filename (string? val);
+		[CCode (cheader_filename = "xnoise-1.0.h")]
+		public static int32 length_string_to_int (string s);
 		[CCode (cheader_filename = "xnoise-1.0.h")]
 		public static string make_time_display_from_seconds (int length);
 		[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -963,7 +965,7 @@ namespace Xnoise {
 		}
 		public TrackListModel ();
 		public bool get_active_path (out Gtk.TreePath treepath, out bool used_next_pos);
-		public Xnoise.Item[] get_all_tracks ();
+		public Xnoise.TrackData[] get_all_tracks ();
 		public bool get_current_path (out Gtk.TreePath treepath);
 		public bool get_first_row (ref Gtk.TreePath treepath);
 		public bool get_random_row (ref Gtk.TreePath treepath);

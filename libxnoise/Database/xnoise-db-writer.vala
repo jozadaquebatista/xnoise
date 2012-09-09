@@ -121,8 +121,6 @@ public class Xnoise.Database.Writer : GLib.Object {
         "COMMIT";
     private static const string STMT_CHECK_TRACK_EXISTS =
         "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
-    private static const string STMT_INSERT_LASTUSED =
-        "INSERT INTO lastused (uri, mediatype, id) VALUES (?,?,?)";
     private static const string STMT_WRITE_MEDIA_FOLDERS =
         "INSERT INTO media_folders (name) VALUES (?)";
     private static const string STMT_DEL_MEDIA_FOLDERS =
@@ -978,19 +976,6 @@ public class Xnoise.Database.Writer : GLib.Object {
         return true;
     }
 
-    internal void write_lastused(ref Item[] items) throws DbError {
-        if(db == null)
-            return;
-        
-        if(db.exec("DELETE FROM lastused;", null, null)!= Sqlite.OK) {
-            throw new DbError.FAILED("Error while removing old music folders");
-        }
-        this.begin_transaction();
-        foreach(Item? i in items)
-            this.insert_lastused_track(ref i);
-        this.commit_transaction();
-    }
-    
     public delegate void WriterCallback(Sqlite.Database database);
     
     public void do_callback_transaction(WriterCallback cb) {
@@ -1000,13 +985,43 @@ public class Xnoise.Database.Writer : GLib.Object {
             cb(db);
     }
     
-    private void insert_lastused_track(ref Item? item) {
-        if(item.type == ItemType.UNKNOWN)
+    internal void write_lastused(ref TrackData[] tda) throws DbError {
+        if(db == null)
             return;
+        
+        if(db.exec("DELETE FROM lastused;", null, null)!= Sqlite.OK) {
+            throw new DbError.FAILED("Error while removing old music folders");
+        }
+        this.begin_transaction();
+        foreach(TrackData? td in tda)
+            this.insert_lastused_track(ref td);
+        this.commit_transaction();
+    }
+    
+    private static const string STMT_INSERT_LASTUSED =
+        "INSERT INTO lastused (uri, mediatype, tracknumber, title, album, artist, length, genre, year, id, source) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    
+    private void insert_lastused_track(ref TrackData td) {
         this.insert_lastused_entry_statement.reset();
-        this.insert_lastused_entry_statement.bind_text(1, item.uri);
-        this.insert_lastused_entry_statement.bind_int (2, item.type);
-        this.insert_lastused_entry_statement.bind_int (3, item.db_id);
+        this.insert_lastused_entry_statement.bind_text(1, td.item.uri);
+        this.insert_lastused_entry_statement.bind_int (2, td.item.type);
+        if(td.tracknumber > 0)
+            this.insert_lastused_entry_statement.bind_text(3, td.tracknumber.to_string());
+        if(td.title != null)
+            this.insert_lastused_entry_statement.bind_text(4, td.title);
+        if(td.album != null)
+            this.insert_lastused_entry_statement.bind_text(5, td.album);
+        if(td.artist != null)
+            this.insert_lastused_entry_statement.bind_text(6, td.artist);
+        if(td.length > 0)
+            this.insert_lastused_entry_statement.bind_text(7, make_time_display_from_seconds(td.length));
+        if(td.genre != null)
+            this.insert_lastused_entry_statement.bind_text(8, td.genre);
+        if(td.year > 0)
+            this.insert_lastused_entry_statement.bind_text(9, td.year.to_string());
+        this.insert_lastused_entry_statement.bind_int (10, td.item.db_id);
+        this.insert_lastused_entry_statement.bind_text(11, td.item.text);
+        
         if(insert_lastused_entry_statement.step() != Sqlite.DONE) {
             this.db_error();
         }

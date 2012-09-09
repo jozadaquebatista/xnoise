@@ -391,20 +391,44 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
     }
 
     // used for saving current tracks in list before quit
-    public Item[] get_all_tracks() {
-        list_of_items = {};
-        this.foreach(list_foreach);
-        return list_of_items;
-    }
-
-    private Item[] list_of_items;
-    private bool list_foreach(TreeModel sender, TreePath path, TreeIter iter) {
-        Item? item = null;
-        sender.get(iter, Column.ITEM, out item);
-        if(item == null)
+    public TrackData[] get_all_tracks() {
+        TrackData[] tda = {};
+        
+        this.foreach( (sender, path, iter) => {
+            string tracknumberString = EMPTYSTRING;
+            string lengthString = EMPTYSTRING;
+            string yearString = EMPTYSTRING;
+            TrackData td = new TrackData();
+            sender.get(iter, 
+                       Column.TRACKNUMBER, out tracknumberString,
+                       Column.TITLE, out td.title,
+                       Column.ALBUM, out td.album,
+                       Column.ARTIST, out td.artist,
+                       Column.LENGTH, out lengthString,
+                       Column.GENRE, out td.genre,
+                       Column.YEAR, out yearString,
+                       Column.ITEM, out td.item,
+                       Column.SOURCE_NAME, out td.item.text
+            );
+            if(tracknumberString != null && tracknumberString != EMPTYSTRING)
+                td.tracknumber = int.parse(tracknumberString);
+            else
+                td.tracknumber = 0;
+            
+            if(lengthString != null && lengthString != EMPTYSTRING)
+                td.length = length_string_to_int(lengthString);
+            else
+                td.length = 0;
+            if(yearString != null && yearString != EMPTYSTRING)
+                td.year = int.parse(yearString);
+            else
+                td.year = 0;
+            
+            tda += td;
             return false;
-        list_of_items += item;
-        return false;
+        });
+        
+        return (owned)tda;
     }
 
     public string get_uri_for_current_position() {

@@ -428,48 +428,32 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private int LIMIT = 300;
     private bool add_lastused_titles_to_tracklist_job(Worker.Job job) {
         tl.set_model(null);
-        job.items = db_reader.get_some_lastused_items(LIMIT, job.big_counter[0]);
-        job.big_counter[0] += job.items.length;
-        TrackData[] tda = {};
-        TrackData[] tmp;
-        foreach(Item? item in job.items) {
-            tmp = item_converter.to_trackdata(item, EMPTYSTRING);
-            if(tmp == null) {
-                //var ttd = new TrackData();
-                //ttd.item = item;
-                //ttd.title = (item.text == null ? item.uri : item.text);
-                //tda += ttd;
-                continue;
+        job.track_dat = db_reader.get_some_lastused_items(LIMIT, job.big_counter[0]);
+        job.big_counter[0] += job.track_dat.length;
+        TrackData[] track_dat = job.track_dat;
+        Idle.add( () => {
+            if(track_dat == null || track_dat[0] == null)
+                return false;
+            foreach(TrackData? td in track_dat) {
+                if(td == null)
+                    continue;
+                tlm.insert_title(null, ref td, false);
             }
-            else {
-                tda += tmp[0];
-            }
-        }
-        var xjob = new Worker.Job(Worker.ExecutionType.ONCE, this.add_some_lastused_job);
-        xjob.track_dat = tda;
-        db_worker.push_job(xjob);
-        if(job.items.length < LIMIT) {
-            tl.set_model(tlm);
+            return false;
+        });
+        if(job.track_dat.length < LIMIT) {
             print("got %d tracks for tracklist\n", job.big_counter[0]);
-            if(userinfo != null)
-                userinfo.popdown(msg_id);
+            Idle.add(() => {
+                tl.set_model(tlm);
+                if(userinfo != null)
+                    userinfo.popdown(msg_id);
+                return false;
+            });
             return false;
         }
         else {
             return true;
         }
-    }
-    
-    private bool add_some_lastused_job(Worker.Job job) {
-        Idle.add( () => {
-            foreach(TrackData td in job.track_dat) {
-                this.trackList.tracklistmodel.insert_title(null,
-                                                           ref td,
-                                                           false);
-            }
-            return false;
-        });
-        return false;
     }
     
     internal void ask_for_initial_media_import() {
