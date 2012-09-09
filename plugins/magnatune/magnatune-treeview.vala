@@ -216,8 +216,8 @@ private class MagnatuneTreeView : Gtk.TreeView, ExternQueryable {
             this.collapse_all();
         });
         rightmenu.append(collapse_item);
-        if(this.plugin != null && this.plugin.username != ""
-           && this.plugin.password != "" && item.type != ItemType.COLLECTION_CONTAINER_ARTIST) {
+        if(this.plugin != null && this.plugin.username != "" && this.plugin.username != null
+           && this.plugin.password != "" && this.plugin.password != null && item.type != ItemType.COLLECTION_CONTAINER_ARTIST) {
             rightmenu.append(new SeparatorMenuItem());
             var downloaditem = new ImageMenuItem.from_stock(Gtk.Stock.SAVE, null);
             downloaditem.set_label(_("Download whole album to disk"));
