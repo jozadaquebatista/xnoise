@@ -1007,6 +1007,9 @@ public class Xnoise.Database.Writer : GLib.Object {
         this.insert_lastused_entry_statement.bind_int (2, td.item.type);
         if(td.tracknumber > 0)
             this.insert_lastused_entry_statement.bind_text(3, td.tracknumber.to_string());
+        else
+            this.insert_lastused_entry_statement.bind_text(3, "0");
+        
         if(td.title != null)
             this.insert_lastused_entry_statement.bind_text(4, td.title);
         if(td.album != null)
@@ -1015,10 +1018,14 @@ public class Xnoise.Database.Writer : GLib.Object {
             this.insert_lastused_entry_statement.bind_text(6, td.artist);
         if(td.length > 0)
             this.insert_lastused_entry_statement.bind_text(7, make_time_display_from_seconds(td.length));
+        else
+            this.insert_lastused_entry_statement.bind_text(7, "0");
         if(td.genre != null)
             this.insert_lastused_entry_statement.bind_text(8, td.genre);
         if(td.year > 0)
             this.insert_lastused_entry_statement.bind_text(9, td.year.to_string());
+        else
+            this.insert_lastused_entry_statement.bind_text(9, "0");
         this.insert_lastused_entry_statement.bind_int (10, td.item.db_id);
         this.insert_lastused_entry_statement.bind_text(11, td.item.text);
         
