@@ -33,5 +33,6 @@ data/ui/metadat_title.ui
 plugins/magnatune/magnatune.c
 plugins/magnatune/magnatune-dockable.c
 plugins/magnatune/magnatune-treeview.c
+plugins/magnatune/magnatune-widget.c
 package_result
 

@@ -67,19 +67,44 @@ private class MagnatuneWidget : Gtk.Box {
         }
         
         public bool is_uptodate() {
-            try {
-                var dis = new DataInputStream(file.read());
-                new_hash = dis.read_line(null);
-            } 
-            catch(Error e) {
-                print("%s\n", e.message);
+            string? wget_install_path = Environment.find_program_in_path("wget");
+            if(wget_install_path != null) {
+                File d = File.new_for_path("/tmp/magnatune" + Random.next_int().to_string() + ".txt");
+                try {
+                    GLib.Process.spawn_command_line_sync(
+                       wget_install_path + 
+                       " --output-document=%s".printf(d.get_path())  +
+                       " " +
+                       file.get_uri()
+                    );
+                }
+                catch(Error e) {
+                    print("%s\n", e.message);
+                    return false;
+                }
+                
+                try {
+                    var dis = new DataInputStream(d.read());
+                    new_hash = dis.read_line(null);
+                } 
+                catch(Error e) {
+                    print("%s\n", e.message);
+                    return false;
+                }
+                
+                try {
+                    d.delete();
+                } 
+                catch(Error e) {
+                    print("%s\n", e.message);
+                }
+            }
+            else {
                 return false;
             }
-            
             return (new_hash == old_hash);
         }
     }
-    
     
     private void load_db() {
         File dbf = File.new_for_path(CONVERTED_DB);
@@ -111,7 +136,7 @@ private class MagnatuneWidget : Gtk.Box {
             return false;
         }
         else {
-            print("magnatune database is not up to date\n");
+            print("magnatune database is NOT up to date.\n");
             File fx = File.new_for_path(CONVERTED_DB);
             try {
                 if(fx.query_exists(null))
@@ -147,9 +172,9 @@ private class MagnatuneWidget : Gtk.Box {
         }
         if(res) {
             Idle.add(() => {
-                label.label = "download finished...";
+                label.label = _("download finished...");
                 Idle.add( () => {
-                    label.label = "decompressing...";
+                    label.label = _("decompressing...");
                     var decomp_job = new Worker.Job(Worker.ExecutionType.ONCE, decompress_db_job);
                     io_worker.push_job(decomp_job);
                     return false;
@@ -203,7 +228,7 @@ private class MagnatuneWidget : Gtk.Box {
             return false;
         }
         Idle.add(() => {
-            label.label = "decompressing finished...";
+            label.label = _("decompressing finished...");
             var conv_job = new Worker.Job(Worker.ExecutionType.ONCE, convert_db_job);
             io_worker.push_job(conv_job);
             return false;
@@ -213,7 +238,7 @@ private class MagnatuneWidget : Gtk.Box {
 
     private bool convert_db_job(Worker.Job job) {
         Idle.add(() => {
-            label.label = "Please wait while\nconverting database.";
+            label.label = _("Please wait while\nconverting database.");
             return false;
         });
         var conv = new MagnatuneDatabaseConverter();
@@ -238,7 +263,7 @@ private class MagnatuneWidget : Gtk.Box {
     private void on_db_conversion_progress(MagnatuneDatabaseConverter sender, int c) {
         Idle.add(() => {
             pb.hide();
-            label.label = "Please wait while\nconverting database.\nDone for %d tracks.".printf(c);
+            label.label = _("Please wait while\nconverting database.\nDone for %d tracks.").printf(c);
             return false;
         });
     }
@@ -274,7 +299,7 @@ private class MagnatuneWidget : Gtk.Box {
     }
     
     private void create_widgets() {
-        label = new Label("loading...");
+        label = new Label(_("loading..."));
         this.pack_start(label, true, true, 0);
         pb = new ProgressBar();
         this.pack_start(pb, false, false, 0);
