@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 09:34+0200\n"
+"POT-Creation-Date: 2012-09-10 00:08+0200\n"
 "PO-Revision-Date: 2012-09-06 22:17+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -32,19 +32,16 @@ msgstr "נגן המדיה"
 msgid "Organize and play your music and video collections"
 msgstr "ארגון ונגינת אוספי המוזיקה והווידאו שלך"
 
-#: ../libxnoise/Application/xnoise-application.vala:93
-#: ../src/xnoise.vala:63
+#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
 #, c-format
 msgid "Xnoise is a media player for Gtk+."
 msgstr "Xnoise הוא נגן המדיה עבור Gtk+."
 
-#: ../libxnoise/Application/xnoise-application.vala:94
-#: ../src/xnoise.vala:64
+#: ../libxnoise/Application/xnoise-application.vala:94 ../src/xnoise.vala:64
 msgid "It uses the gstreamer framework."
 msgstr "הנגן משתמש בסביבת העבודה של gstreamer."
 
-#: ../libxnoise/Application/xnoise-application.vala:95
-#: ../src/xnoise.vala:65
+#: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
 msgid "More information on the project website:"
 msgstr "מידע נוסף ניתן למצוא באתר הפרויקט:"
 
@@ -190,10 +187,10 @@ msgid "Fullscreen"
 msgstr "מסך מלא"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:445
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1196
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1224
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1266
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1296
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1190
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1218
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1260
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1290
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
 #: ../plugins/notifications2/xnoise-notifications.vala:197
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
@@ -203,10 +200,10 @@ msgid "by"
 msgstr "של"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:447
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1198
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1226
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1268
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1298
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1192
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1220
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1262
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1292
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
 #: ../plugins/notifications2/xnoise-notifications.vala:200
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
@@ -262,12 +259,15 @@ msgstr "אלבום:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:163
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:186
-msgid "Please wait while filling media browser. Or cancel, if you do not want to wait."
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
 msgstr "אנא המתן בעת מילוי דפדפן המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:167
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:190
-msgid "Please wait while importing media. Or cancel, if you do not want to wait."
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr "אנא המתן בעת ייבוא המדיה. ביכולתך לבטל, אם אין ברצונך לחכות."
 
 #. ARTIST
@@ -466,7 +466,7 @@ msgid "Go to next track"
 msgstr "קפוץ לרצועה הבאה"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:178
-#: ../plugins/ubuntuone/ubuntuone.vala:228
+#: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr "_תצוגה"
 
@@ -518,50 +518,57 @@ msgstr "_שאלות נפוצות פתוחות בדפדפן האינטרנט"
 msgid "_Config"
 msgstr "ה_גדרה"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:415
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:417
 #, c-format
-msgid "Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower."
-msgstr "משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של xnoise."
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+"משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של "
+"xnoise."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:477
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:471
 msgid "Add media"
 msgstr "הוספת מדיה"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:480
-msgid "You started xnoise for the first time. Do you want to import media into the library?"
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:474
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
 msgstr "הפעלת את xnoise לראשונה. האם ברצונך לייבא מדיה לספריה?"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:555
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:549
 msgid "no repeat"
 msgstr "ללא חזרה"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:561
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:555
 msgid "repeat single"
 msgstr "חזרה על יחיד"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:567
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:561
 msgid "repeat all"
 msgstr "חזרה על הכול"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:573
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:567
 msgid "random play"
 msgstr "נגינה אקראית"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1103
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1097
 msgid "Enter the URL for playing"
 msgstr "הכנס את כתובת ה-URL של הקובץ שברצונך לנגן"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1119
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1113
 msgid "Select media file"
 msgstr "בחירת קובץ מדיה"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1489
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1483
 msgid "Show application main menu"
 msgstr "הצג את התפריט הראשי"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:193
-msgid "The subtitle name is not matching the video name! Not using subtitle file."
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "שם הכתוביות אינו מתאים לשם הוידאו! לא משתמש בקובץ כתוביות."
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:552
@@ -675,7 +682,8 @@ msgid "%u tracks found"
 msgstr "נמצאו %u רצועות"
 
 #: ../src/xnoise.vala:74
-msgid "Run 'xnoise --help' to see a full list of available command line options.\n"
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
 msgstr "הרץ 'xnoise --help' על מנת לראות רשימה מלאה של אפשרויות שורת הפקודה.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
@@ -768,6 +776,38 @@ msgstr "זה עלול לקחת קצת זמן..."
 msgid "Download finished for \""
 msgstr "הורדה הושלמה עבור \""
 
+#: ../plugins/magnatune/magnatune-widget.vala:174
+#, fuzzy
+msgid "download finished..."
+msgstr "הורדה הושלמה עבור \""
+
+#: ../plugins/magnatune/magnatune-widget.vala:176
+msgid "decompressing..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:230
+msgid "decompressing finished..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:240
+msgid ""
+"Please wait while\n"
+"converting database."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:265
+#, c-format
+msgid ""
+"Please wait while\n"
+"converting database.\n"
+"Done for %d tracks."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:301
+#, fuzzy
+msgid "loading..."
+msgstr "טוען ..."
+
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
 msgstr "שלוט על xnoise עם ממשק ה-dbus של MPRIS v2"
@@ -792,11 +832,11 @@ msgstr "קבע את שם החלון לשם הכותרת הנוכחית"
 msgid "UbuntuOne Music"
 msgstr "UbuntuOne מוסיקה"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:229
+#: ../plugins/ubuntuone/ubuntuone.vala:231
 msgid "Show _UbuntuOne Store"
 msgstr "הצג את החנות _UbuntuOne"
 
-#: ../plugins/ubuntuone/ubuntuone.vala:229
+#: ../plugins/ubuntuone/ubuntuone.vala:231
 msgid "Show UbuntuOne Store"
 msgstr "הצג את החנות UbuntuOne"
 

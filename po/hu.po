@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 09:34+0200\n"
+"POT-Creation-Date: 2012-09-10 00:08+0200\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-"
@@ -198,10 +198,10 @@ msgid "Fullscreen"
 msgstr "Teljesképernyős mód elhagyása"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:445
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1196
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1224
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1266
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1296
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1190
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1218
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1260
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1290
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
 #: ../plugins/notifications2/xnoise-notifications.vala:197
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
@@ -211,10 +211,10 @@ msgid "by"
 msgstr "by"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:447
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1198
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1226
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1268
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1298
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1192
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1220
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1262
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1292
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
 #: ../plugins/notifications2/xnoise-notifications.vala:200
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
@@ -489,7 +489,7 @@ msgid "Go to next track"
 msgstr "Track listára ugrás."
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:178
-#: ../plugins/ubuntuone/ubuntuone.vala:228
+#: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr "_Nézet"
 
@@ -544,18 +544,18 @@ msgstr ""
 msgid "_Config"
 msgstr "_Beállítások"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:415
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:417
 #, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
 "startup of xnoise slower."
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:477
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:471
 msgid "Add media"
 msgstr "Média hozzáadása"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:480
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:474
 msgid ""
 "You started xnoise for the first time. Do you want to import media into the "
 "library?"
@@ -563,33 +563,33 @@ msgstr ""
 "Ön először indította el az xnoise-t. Szeretne importálni médiákat a "
 "könyvtárba?"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:555
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:549
 msgid "no repeat"
 msgstr "nincs ismétlés"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:561
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:555
 msgid "repeat single"
 msgstr "egyszeri ismétlés"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:567
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:561
 msgid "repeat all"
 msgstr "összes ismétlése"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:573
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:567
 msgid "random play"
 msgstr "véletlenszerű lejátszás"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1103
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1097
 #, fuzzy
 msgid "Enter the URL for playing"
 msgstr "Enter the URL of the file to open"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1119
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1113
 msgid "Select media file"
 msgstr "Média fájl kiválasztása"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1489
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1483
 msgid "Show application main menu"
 msgstr ""
 
@@ -804,6 +804,36 @@ msgstr "Importing media data. This may take some time..."
 msgid "Download finished for \""
 msgstr ""
 
+#: ../plugins/magnatune/magnatune-widget.vala:174
+msgid "download finished..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:176
+msgid "decompressing..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:230
+msgid "decompressing finished..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:240
+msgid ""
+"Please wait while\n"
+"converting database."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:265
+#, c-format
+msgid ""
+"Please wait while\n"
+"converting database.\n"
+"Done for %d tracks."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:301
+msgid "loading..."
+msgstr ""
+
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
 msgstr ""
@@ -828,11 +858,11 @@ msgstr ""
 msgid "UbuntuOne Music"
 msgstr ""
 
-#: ../plugins/ubuntuone/ubuntuone.vala:229
+#: ../plugins/ubuntuone/ubuntuone.vala:231
 msgid "Show _UbuntuOne Store"
 msgstr ""
 
-#: ../plugins/ubuntuone/ubuntuone.vala:229
+#: ../plugins/ubuntuone/ubuntuone.vala:231
 msgid "Show UbuntuOne Store"
 msgstr ""
 

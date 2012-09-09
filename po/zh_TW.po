@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 09:34+0200\n"
+"POT-Creation-Date: 2012-09-10 00:08+0200\n"
 "PO-Revision-Date: 2012-06-07 13:17+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
 "Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
@@ -185,10 +185,10 @@ msgid "Fullscreen"
 msgstr "全螢幕"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:445
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1196
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1224
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1266
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1296
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1190
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1218
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1260
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1290
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
 #: ../plugins/notifications2/xnoise-notifications.vala:197
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
@@ -198,10 +198,10 @@ msgid "by"
 msgstr "由"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:447
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1198
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1226
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1268
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1298
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1192
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1220
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1262
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1292
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
 #: ../plugins/notifications2/xnoise-notifications.vala:200
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
@@ -471,7 +471,7 @@ msgid "Go to next track"
 msgstr "前往曲目清單。"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:178
-#: ../plugins/ubuntuone/ubuntuone.vala:228
+#: ../plugins/ubuntuone/ubuntuone.vala:230
 msgid "_View"
 msgstr "檢視(_V)"
 
@@ -524,7 +524,7 @@ msgstr ""
 msgid "_Config"
 msgstr "配置(_C)"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:415
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:417
 #, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
@@ -532,42 +532,42 @@ msgid ""
 msgstr ""
 "正在復原 %u 個曲目在曲目清單。 這是很大的數量，可能會使 xnoise 啟動較慢。"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:477
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:471
 msgid "Add media"
 msgstr "加入媒體"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:480
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:474
 msgid ""
 "You started xnoise for the first time. Do you want to import media into the "
 "library?"
 msgstr "您是首次啟動 xnoise，要將媒體匯入媒體庫嗎？"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:555
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:549
 msgid "no repeat"
 msgstr "不要重複"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:561
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:555
 msgid "repeat single"
 msgstr "重複單曲"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:567
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:561
 msgid "repeat all"
 msgstr "重複所有"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:573
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:567
 msgid "random play"
 msgstr "隨機播放"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1103
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1097
 msgid "Enter the URL for playing"
 msgstr "輸入用於播放的網址"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1119
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1113
 msgid "Select media file"
 msgstr "選取媒體檔案"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1489
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1483
 msgid "Show application main menu"
 msgstr "顯示應用的主選單"
 
@@ -783,6 +783,37 @@ msgstr "匯入媒體資料。這也許會花一點時間…"
 msgid "Download finished for \""
 msgstr ""
 
+#: ../plugins/magnatune/magnatune-widget.vala:174
+msgid "download finished..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:176
+msgid "decompressing..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:230
+msgid "decompressing finished..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:240
+msgid ""
+"Please wait while\n"
+"converting database."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:265
+#, c-format
+msgid ""
+"Please wait while\n"
+"converting database.\n"
+"Done for %d tracks."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:301
+#, fuzzy
+msgid "loading..."
+msgstr "載入中..."
+
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Control xnoise with a MPRIS v2 dbus interface"
 msgstr "控制 xnoise 用一 MPRIS v2 dbus 介面"
@@ -808,11 +839,11 @@ msgstr "針對目前的標題，設定視窗的名稱"
 msgid "UbuntuOne Music"
 msgstr ""
 
-#: ../plugins/ubuntuone/ubuntuone.vala:229
+#: ../plugins/ubuntuone/ubuntuone.vala:231
 msgid "Show _UbuntuOne Store"
 msgstr ""
 
-#: ../plugins/ubuntuone/ubuntuone.vala:229
+#: ../plugins/ubuntuone/ubuntuone.vala:231
 msgid "Show UbuntuOne Store"
 msgstr ""
 

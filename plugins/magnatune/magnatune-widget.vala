@@ -54,7 +54,6 @@ private class MagnatuneWidget : Gtk.Box {
         load_db();
     }
     
-    
     private class MagnatuneChangeDetector : GLib.Object {
         private File file;
         private const string HASH_FILE = "http://magnatune.com/info/changed.txt";

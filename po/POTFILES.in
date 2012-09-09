@@ -87,6 +87,7 @@ plugins/magnatune/Magnatune.xnplugin.desktop.in
 plugins/magnatune/magnatune-dockable.vala
 plugins/magnatune/magnatune-treeview.vala
 plugins/magnatune/magnatune-treestore.vala
+plugins/magnatune/magnatune-widget.vala
 plugins/mpris/mpris.xnplugin.desktop.in
 plugins/mpris_one/mpris_one.xnplugin.desktop.in
 plugins/notifications2/notifications.xnplugin.desktop.in
