@@ -405,21 +405,31 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         db_worker.push_job(job);
     }
 
-    private uint msg_id = 0;
+    private bool cancel = false;
     private bool restore_lastused_job(Worker.Job xjob) {
         uint lastused_cnt = 0;
+        var job = new Worker.Job(Worker.ExecutionType.REPEATED, this.add_lastused_titles_to_tracklist_job);
         if((lastused_cnt = db_reader.count_lastused_items()) > 1500) {
             Timeout.add(200, () => {
-                msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
+                var button = new Gtk.Button.from_stock(Gtk.Stock.CANCEL);
+                uint msg_id = userinfo.popup(UserInfo.RemovalType.EXTERNAL,
                                         UserInfo.ContentClass.INFO,
                                         _("Restoring %u tracks in the tracklist. This is a large number and can make startup of xnoise slower.".printf(lastused_cnt)),
                                         false,
                                         4,
-                                        null);
+                                        button);
+                button.clicked.connect( () => {
+                    Idle.add(() => {
+                        userinfo.popdown(msg_id);
+                        return false;
+                    });
+                    cancel = true;
+                    print("cancelled initial track restore\n");
+                });
+                job.set_arg("msg_id", msg_id);
                 return false;
             });
         }
-        var job = new Worker.Job(Worker.ExecutionType.REPEATED, this.add_lastused_titles_to_tracklist_job);
         job.big_counter[0] = 0;
         db_worker.push_job(job);
         return false;
@@ -441,12 +451,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             return false;
         });
-        if(job.track_dat.length < LIMIT) {
+        if(job.track_dat.length < LIMIT || cancel) {
             print("got %d tracks for tracklist\n", job.big_counter[0]);
             Idle.add(() => {
                 tl.set_model(tlm);
                 if(userinfo != null)
-                    userinfo.popdown(msg_id);
+                    userinfo.popdown((uint)job.get_arg("msg_id"));
                 return false;
             });
             return false;
