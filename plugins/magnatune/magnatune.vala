@@ -39,6 +39,10 @@ using Xnoise.PluginModule;
 internal static string CONVERTED_DB;
 private static const string MAGNATUNE_MUSIC_STORE_NAME = "MagnatuneMusicStore";
 
+internal static const string ZIPPED_DB = "/tmp/xnoise_magnatune_db_zipped";
+internal static const string UNZIPPED_DB = "/tmp/xnoise_magnatune_db";
+
+
 public class MagnatunePlugin : GLib.Object, IPlugin {
     public Main xn { get; set; }
     

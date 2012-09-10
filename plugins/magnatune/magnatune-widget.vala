@@ -197,8 +197,8 @@ private class MagnatuneWidget : Gtk.Box {
     }
 
     private bool decompress_db_job(Worker.Job job) {
-        File source = File.new_for_path("/tmp/xnoise_magnatune_db_zipped");
-        File dest   = File.new_for_path("/tmp/xnoise_magnatune_db");
+        File source = File.new_for_path(ZIPPED_DB);
+        File dest   = File.new_for_path(UNZIPPED_DB);
         if(!source.query_exists())
             return false;
         FileInputStream src_stream  = null;
@@ -241,6 +241,11 @@ private class MagnatuneWidget : Gtk.Box {
             io_worker.push_job(conv_job);
             return false;
         });
+        try {
+            source.delete();
+        }
+        catch(Error e) {
+        }
         return false;
     }
 
@@ -264,6 +269,12 @@ private class MagnatuneWidget : Gtk.Box {
         }
         else {
             printerr("ERROR CONVERTING DATABASE!!\n");
+        }
+        try {
+            var source = File.new_for_path(UNZIPPED_DB);
+            source.delete();
+        }
+        catch(Error e) {
         }
         return false;
     }

@@ -130,7 +130,7 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     private Sqlite.Database db;
 
     private string dbFileName() {
-        return CONVERTED_DB;//GLib.Path.build_filename("tmp", "xnoise_magnatune_db", null);
+        return CONVERTED_DB;
     }
 
     private void db_error() {

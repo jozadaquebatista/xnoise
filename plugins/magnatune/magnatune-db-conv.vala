@@ -36,8 +36,6 @@ using Xnoise.Resources;
 
 
 public class MagnatuneDatabaseConverter : GLib.Object {
-    private const string DATABASE_NAME = "/tmp/xnoise_magnatune_db";
-//    private const string TARGET_DB     = "/tmp/xnoise_magnatune.sqlite";
     private string DATABASE;
 
     // SQL
@@ -51,10 +49,6 @@ public class MagnatuneDatabaseConverter : GLib.Object {
         "CREATE TABLE genres (id integer primary key, name TEXT);";
     private static const string STMT_CREATE_ITEMS =
         "CREATE TABLE items (id INTEGER PRIMARY KEY, tracknumber INTEGER, artist INTEGER, album INTEGER, title TEXT, genre INTEGER, year INTEGER, uri INTEGER, mediatype INTEGER, length INTEGER, bitrate INTEGER, usertags TEXT, playcount INTEGER, rating INTEGER, lastplayTime DATETIME, addTimeUnix INTEGER, mimetype TEXT);";
-//    private static const string STMT_CREATE_HASH =
-//        "CREATE TABLE hash (name TEXT);";
-//    private static const string STMT_CREATE_MEMBERSHIP_TYPE =
-//        "CREATE TABLE membership (name TEXT, info1 TEXT, info2 TEXT, user TEXT, pass TEXT, id TEXT);";
     private static const string STMT_BEGIN =
         "BEGIN";
     private static const string STMT_COMMIT =
@@ -156,9 +150,6 @@ public class MagnatuneDatabaseConverter : GLib.Object {
         begin_stmt_used = false;
     }
 
-    // Execution of prepared statements of that the return values are not
-    // used (delete, drop, ...) and that do not need to bind data.
-    // Function returns true if ok
     private bool exec_prepared_stmt(Statement stmt) {
         stmt.reset();
         if(stmt.step() != Sqlite.DONE) {
@@ -301,7 +292,7 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     private Sqlite.Database target;
 
     private string dbFileName() {
-        return DATABASE_NAME;//GLib.Path.build_filename("tmp", "xnoise_magnatune_db", null);
+        return UNZIPPED_DB;//GLib.Path.build_filename("tmp", "xnoise_magnatune_db", null);
     }
 
     private void db_error(ref Sqlite.Database x) {
@@ -317,51 +308,6 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     private static const string STMT_GET_ITEM_ID =
         "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.id = ?";
     
-//    public bool insert_title(ref TrackData td) { // , string uri
-//        // make entries in other tables and get references from there
-//        td.dat1 = handle_artist(ref td.artist);
-//        if(td.dat1 == -1) {
-//            print("Error importing artist for %s : '%s' ! \n", td.item.uri, td.artist);
-//            return false;
-//        }
-//        td.dat2 = handle_album(ref td.dat1, ref td.album);
-//        if(td.dat2 == -1) {
-//            print("Error importing album for %s : '%s' ! \n", td.item.uri, td.album);
-//            return false;
-//        }
-//        int uri_id = handle_uri(td.item.uri);
-//        if(uri_id == -1) {
-//            //print("Error importing uri for %s : '%s' ! \n", uri, uri);
-//            return false;
-//        }
-//        int genre_id = handle_genre(ref td.genre);
-//        if(genre_id == -1) {
-//            print("Error importing genre for %s : '%s' ! \n", td.item.uri, td.genre);
-//            return false;
-//        }
-//        //print("insert_title td.item.type %s\n", td.item.type.to_string());
-//        insert_title_statement.reset();
-//        if(insert_title_statement.bind_int (1,  (int)td.tracknumber) != Sqlite.OK ||
-//           insert_title_statement.bind_int (2,  td.dat1)             != Sqlite.OK ||
-//           insert_title_statement.bind_int (3,  td.dat2)             != Sqlite.OK ||
-//           insert_title_statement.bind_text(4,  td.title)            != Sqlite.OK ||
-//           insert_title_statement.bind_int (5,  genre_id)            != Sqlite.OK ||
-//           insert_title_statement.bind_int (6,  (int)td.year)        != Sqlite.OK ||
-//           insert_title_statement.bind_int (7,  uri_id)              != Sqlite.OK ||
-//           insert_title_statement.bind_int (8,  td.item.type)        != Sqlite.OK ||
-//           insert_title_statement.bind_int (9,  td.length)           != Sqlite.OK
-//           ) {
-//            this.db_error(ref target);
-//            return false;
-//        }
-//        
-//        if(insert_title_statement.step()!=Sqlite.DONE) {
-//            this.db_error(ref target);
-//            return false;
-//        }
-//        return true;
-//    }
-
     private static const string STMT_GET_ARTIST_MAX_ID =
         "SELECT MAX(id) FROM artists";
     private static const string STMT_GET_ARTIST_ID =
