@@ -133,7 +133,7 @@ namespace Xnoise {
             return;
         }
         int dbid = register_data_source(db_reader);
-        print("source id: %d\n", dbid);
+        //print("source id: %d\n", dbid);
         
         statistics = new Statistics();
         

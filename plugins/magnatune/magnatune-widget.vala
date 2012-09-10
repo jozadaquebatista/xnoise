@@ -70,14 +70,23 @@ private class MagnatuneWidget : Gtk.Box {
             if(wget_install_path != null) {
                 File d = File.new_for_path("/tmp/magnatune" + Random.next_int().to_string() + ".txt");
                 try {
-                    GLib.Process.spawn_command_line_sync(
-                       wget_install_path + 
-                       " --output-document=%s".printf(d.get_path())  +
-                       " " +
-                       file.get_uri()
-                    );
+                    string[] argv = {
+                       wget_install_path,
+                       "-O",
+                       "%s".printf(d.get_path()),
+                       file.get_uri(),
+                       null
+                    };
+                    GLib.Process.spawn_sync(null, 
+                                            argv,
+                                            null,
+                                            SpawnFlags.STDOUT_TO_DEV_NULL|SpawnFlags.STDERR_TO_DEV_NULL,
+                                            null,
+                                            null,
+                                            null,
+                                            null);
                 }
-                catch(Error e) {
+                catch(SpawnError e) {
                     print("%s\n", e.message);
                     return false;
                 }
@@ -95,7 +104,7 @@ private class MagnatuneWidget : Gtk.Box {
                     d.delete();
                 } 
                 catch(Error e) {
-                    print("%s\n", e.message);
+                    print("##4%s\n", e.message);
                 }
             }
             else {
@@ -142,7 +151,7 @@ private class MagnatuneWidget : Gtk.Box {
                     fx.delete();
             }
             catch(Error e) {
-                print("%s\n", e.message);
+                print("##5%s\n", e.message);
             }
             Idle.add(() => {
                 Params.set_string_value("magnatune_collection_hash", cd.new_hash);
@@ -165,7 +174,7 @@ private class MagnatuneWidget : Gtk.Box {
             res = mag_db.copy(dest, FileCopyFlags.OVERWRITE, null, progress_cb);
         }
         catch(Error e) {
-            print("%s\n", e.message);
+            print("##6%s\n", e.message);
             label.label = "Magnatune Error 3";
             return false;
         }

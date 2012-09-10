@@ -92,9 +92,14 @@ public class MagnatuneDatabaseConverter : GLib.Object {
 
     public MagnatuneDatabaseConverter() {
         var ft = File.new_for_path(CONVERTED_DB);
-        if(ft.query_exists(null))
-            ft.delete();
-
+        if(ft.query_exists(null)) {
+            try {
+                ft.delete();
+            }
+            catch(Error e) {
+                print("##1%s\n", e.message);
+            }
+        }
         if(ft.query_exists(null))
             printerr("target file is still there\n");
         DATABASE = dbFileName();
@@ -273,13 +278,12 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     
     private void setup_target_handle() {
         File tf = File.new_for_path(CONVERTED_DB);
-        if(!tf.query_exists(null)) {
+        if(tf.query_exists(null)) {
             try {
                 tf.delete();
-                //xnoise_home.make_directory_with_parents(null);
             }
             catch(Error e) {
-                print("%s\n", e.message);
+                print("##2%s\n", e.message);
             }
         }
         Sqlite.Database.open_v2(tf.get_path(),
