@@ -409,6 +409,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private bool restore_lastused_job(Worker.Job xjob) {
         uint lastused_cnt = 0;
         var job = new Worker.Job(Worker.ExecutionType.REPEATED, this.add_lastused_titles_to_tracklist_job);
+        job.set_arg("msg_id", (uint)0);
         if((lastused_cnt = db_reader.count_lastused_items()) > 1500) {
             Timeout.add(200, () => {
                 var button = new Gtk.Button.from_stock(Gtk.Stock.CANCEL);
