@@ -1,7 +1,7 @@
 [XnoisePlugin]
 name=Magnatune
 module=Magnatune
-_description=Ubuntu One Music Store
+_description=Magnatune Music Store
 website=http://magnatune.com/
 icon=/path/to/icon
 copyright=Copyright © 2012 Jörn Magens 
