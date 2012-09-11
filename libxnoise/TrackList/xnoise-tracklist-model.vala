@@ -32,10 +32,10 @@ using Gtk;
 using Gdk;
 
 using Xnoise;
+using Xnoise.Playlist;
 using Xnoise.Resources;
 using Xnoise.Services;
 using Xnoise.TagAccess;
-using Xnoise.Playlist;
 
 public class Xnoise.TrackListModel : ListStore, TreeModel {
 
@@ -460,24 +460,19 @@ public class Xnoise.TrackListModel : ListStore, TreeModel {
     // find active row, set state picture, bolden and set uri for gpl
     private bool set_player_state(PlayerState ts) {
         Gdk.Pixbuf? pixbuf = null;
-        Gtk.Invisible w = new Gtk.Invisible();
         if((global.position_reference == null)||
           (!global.position_reference.valid())) {
-/*
-            print("current position not found, use _next\n");
-            global.position_reference = global.position_reference_next;
-*/
             return false;
         }
         TreeIter citer;
         this.get_iter(out citer, global.position_reference.get_path());
         if(ts==PlayerState.PLAYING) {
             bolden_row();
-            pixbuf = w.render_icon(Gtk.Stock.MEDIA_PLAY, IconSize.BUTTON, null);
+            pixbuf = icon_repo.symbolic_play_icon;
         }
         else if(ts==PlayerState.PAUSED) {
             bolden_row();
-            pixbuf = w.render_icon(Gtk.Stock.MEDIA_PAUSE, IconSize.BUTTON, null);
+            pixbuf = icon_repo.symbolic_pause_icon;
         }
         else if(ts==PlayerState.STOPPED) {
             unbolden_row();

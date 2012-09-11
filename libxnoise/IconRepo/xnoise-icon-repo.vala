@@ -45,7 +45,9 @@ internal class Xnoise.IconRepo : GLib.Object {
     internal Gdk.Pixbuf playlist_icon               { get; private set; }
     internal Gdk.Pixbuf local_collection_icon       { get; private set; }
     internal Gdk.Pixbuf selected_collection_icon    { get; private set; }
-
+    internal Gdk.Pixbuf symbolic_play_icon          { get; private set; }
+    internal Gdk.Pixbuf symbolic_pause_icon         { get; private set; }
+    
     internal signal void icon_theme_changed();
     
     construct {
@@ -56,6 +58,7 @@ internal class Xnoise.IconRepo : GLib.Object {
     
     private void update_pixbufs() {
         print("update_pixbufs\n");
+        theme = IconTheme.get_default();
         this.set_pixbufs();
         this.icon_theme_changed();
     }
@@ -93,7 +96,7 @@ internal class Xnoise.IconRepo : GLib.Object {
                 videos_icon = w.render_icon_pixbuf(Gtk.Stock.MEDIA_RECORD, IconSize.BUTTON);
             
             if(theme.has_icon("xn-playlist"))
-                playlist_icon = IconTheme.get_default().load_icon("xn-playlist", iconheight, IconLookupFlags.FORCE_SIZE);
+                playlist_icon = theme.load_icon("xn-playlist", iconheight, IconLookupFlags.FORCE_SIZE);
             else
                 playlist_icon = w.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
             
@@ -102,12 +105,22 @@ internal class Xnoise.IconRepo : GLib.Object {
             if(theme.has_icon("xn-local-collection"))
                 local_collection_icon = w.render_icon_pixbuf(Gtk.Stock.HOME, IconSize.BUTTON);
             else
-                local_collection_icon = IconTheme.get_default().load_icon("xn-local-collection", iconheight, IconLookupFlags.FORCE_SIZE);
+                local_collection_icon = theme.load_icon("xn-local-collection", iconheight, IconLookupFlags.FORCE_SIZE);
             
             if(theme.has_icon("xn-current-position"))
-                selected_collection_icon = IconTheme.get_default().load_icon("xn-current-position", iconheight, IconLookupFlags.FORCE_SIZE);
+                selected_collection_icon = theme.load_icon("xn-current-position", iconheight, IconLookupFlags.FORCE_SIZE);
             else
                 selected_collection_icon = w.render_icon_pixbuf(Gtk.Stock.YES, IconSize.BUTTON);
+            
+            if(theme.has_icon("media-playback-start-symbolic"))
+                symbolic_play_icon = theme.load_icon("media-playback-start-symbolic", iconheight, IconLookupFlags.FORCE_SIZE);
+            else
+                symbolic_play_icon = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PLAY, IconSize.BUTTON);
+            
+            if(theme.has_icon("media-playback-pause-symbolic"))
+                symbolic_pause_icon = theme.load_icon("media-playback-pause-symbolic", iconheight, IconLookupFlags.FORCE_SIZE);
+            else
+                symbolic_pause_icon = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PAUSE, IconSize.BUTTON);
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);
