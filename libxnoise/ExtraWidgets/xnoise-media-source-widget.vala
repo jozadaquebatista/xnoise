@@ -422,8 +422,8 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
         
         notebook = new Gtk.Notebook();
         notebook.set_show_tabs(false);
-        notebook.set_border_width(0);
-        notebook.show_border = false;
+        notebook.set_border_width(1);
+        notebook.show_border = true;
             
         media_source_selector = new MediaSelector(this);
         selection_changed.connect( (s,t) => {
@@ -432,6 +432,7 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
         });
         var mss_sw = new ScrolledWindow(null, null);
         mss_sw.set_policy(PolicyType.NEVER, PolicyType.NEVER);
+        mss_sw.set_border_width(1);
         mss_sw.add(media_source_selector);
         mss_sw.set_shadow_type(ShadowType.IN);
         this.pack_start(mss_sw, false, false, 0);
