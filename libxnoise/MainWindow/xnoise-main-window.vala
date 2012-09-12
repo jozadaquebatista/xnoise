@@ -180,13 +180,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             { "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), "<Alt>3", N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
             { "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), "<Alt>2",
                N_("Go to the now playing screen in the main window."), on_show_video_menu_clicked},
-            { "ShowMediaBrowserAction", Gtk.Stock.EDIT, N_("_Media Browser"), "<Ctrl>M", N_("Toggle media browser visibility."), toggle_media_browser_visibility},
-
         { "HelpMenuAction", null, N_("_Help") },
             { "AboutAction", Gtk.Stock.ABOUT, null, null, null, on_help_about},
             { "HelpFAQ", Gtk.Stock.DIALOG_QUESTION, N_("_Frequently Asked Questions"), null, N_("_Open Frequently Asked Questions in web browser"), on_help_faq },
         { "ConfigMenuAction", null, N_("_Config") }
     };
+
+    private Gtk.ToggleActionEntry[] toggle_action_entries;// = {
+//            { "ShowMediaBrowserAction", Gtk.Stock.EDIT, N_("_Media Browser"), "<Ctrl>M", N_("Toggle media browser visibility."), toggle_media_browser_visibility, media_browser_visible }
+//    };
 
     private const Gtk.TargetEntry[] target_list = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0},
@@ -233,6 +235,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     public MainWindow() {
         this.xn = Main.instance;
         Params.iparams_register(this);
+        
+        toggle_action_entries = {};
+        ToggleActionEntry ta = ToggleActionEntry();
+        ta.name = "ShowMediaBrowserAction";
+        ta.stock_id = Gtk.Stock.EDIT;
+        ta.label =  N_("_Show Media Browser");
+        ta.accelerator = "<Ctrl>M";
+        ta.callback = toggle_media_browser_visibility;
+        ta.is_active = !Params.get_bool_value("media_browser_hidden");
+        toggle_action_entries += ta;
         
         create_widgets();
         
@@ -651,7 +663,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
                         return false;
                     on_show_tracklist_menu_clicked();
-//                    this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
                 }
                 return true;
             case Gdk.Key.@2: {
@@ -659,7 +670,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                         return false;
                     if(!fullscreenwindowvisible)
                         on_show_video_menu_clicked();
-//                        this.mainview_box.select_main_view(VIDEOVIEW_NAME);
                 }
                 return true;
             case Gdk.Key.@3: {
@@ -668,7 +678,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     if(active_lyrics == false)
                         return false;
                     on_show_lyrics_menu_clicked();
-//                    this.mainview_box.select_main_view(LYRICS_VIEW_NAME);
                 }
                 return true;
             case Gdk.Key.space: {
@@ -1360,7 +1369,8 @@ print("++2\n");
             action_group = new Gtk.ActionGroup("XnoiseActions");
             action_group.set_translation_domain(Config.GETTEXT_PACKAGE);
             action_group.add_actions(action_entries, this);
-        
+            action_group.add_toggle_actions(toggle_action_entries, this);
+            
             _ui_manager.insert_action_group(action_group, 0);
             try {
                 _ui_manager.add_ui_from_file(MENU_UI_FILE);
