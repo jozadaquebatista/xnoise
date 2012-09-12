@@ -650,14 +650,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             case Gdk.Key.@1: {
                     if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
                         return false;
-                    this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
+                    on_show_tracklist_menu_clicked();
+//                    this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
                 }
                 return true;
             case Gdk.Key.@2: {
                     if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
                         return false;
                     if(!fullscreenwindowvisible)
-                        this.mainview_box.select_main_view(VIDEOVIEW_NAME);
+                        on_show_video_menu_clicked();
+//                        this.mainview_box.select_main_view(VIDEOVIEW_NAME);
                 }
                 return true;
             case Gdk.Key.@3: {
@@ -665,7 +667,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                         return false;
                     if(active_lyrics == false)
                         return false;
-                    this.mainview_box.select_main_view(LYRICS_VIEW_NAME);
+                    on_show_lyrics_menu_clicked();
+//                    this.mainview_box.select_main_view(LYRICS_VIEW_NAME);
                 }
                 return true;
             case Gdk.Key.space: {
