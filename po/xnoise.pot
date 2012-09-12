@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-10 00:08+0200\n"
+"POT-Creation-Date: 2012-09-12 13:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,10 +182,10 @@ msgid "Fullscreen"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:445
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1190
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1218
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1260
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1290
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1191
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1219
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1261
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1291
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
 #: ../plugins/notifications2/xnoise-notifications.vala:197
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
@@ -195,10 +195,10 @@ msgid "by"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:447
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1192
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1220
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1262
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1292
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1193
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1221
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1263
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1293
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
 #: ../plugins/notifications2/xnoise-notifications.vala:200
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
@@ -509,49 +509,49 @@ msgstr ""
 msgid "_Config"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:417
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:418
 #, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
 "startup of xnoise slower."
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:471
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:472
 msgid "Add media"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:474
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:475
 msgid ""
 "You started xnoise for the first time. Do you want to import media into the "
 "library?"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:549
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:550
 msgid "no repeat"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:555
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:556
 msgid "repeat single"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:561
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:562
 msgid "repeat all"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:567
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:568
 msgid "random play"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1097
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1098
 msgid "Enter the URL for playing"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1113
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1114
 msgid "Select media file"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1483
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1484
 msgid "Show application main menu"
 msgstr ""
 
@@ -741,8 +741,7 @@ msgid "Control xnoise using mediakeys"
 msgstr ""
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
-#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
-msgid "Ubuntu One Music Store"
+msgid "Magnatune Music Store"
 msgstr ""
 
 #: ../plugins/magnatune/magnatune-dockable.vala:57
@@ -765,25 +764,25 @@ msgstr ""
 msgid "Download finished for \""
 msgstr ""
 
-#: ../plugins/magnatune/magnatune-widget.vala:174
+#: ../plugins/magnatune/magnatune-widget.vala:183
 msgid "download finished..."
 msgstr ""
 
-#: ../plugins/magnatune/magnatune-widget.vala:176
+#: ../plugins/magnatune/magnatune-widget.vala:185
 msgid "decompressing..."
 msgstr ""
 
-#: ../plugins/magnatune/magnatune-widget.vala:230
+#: ../plugins/magnatune/magnatune-widget.vala:239
 msgid "decompressing finished..."
 msgstr ""
 
-#: ../plugins/magnatune/magnatune-widget.vala:240
+#: ../plugins/magnatune/magnatune-widget.vala:254
 msgid ""
 "Please wait while\n"
 "converting database."
 msgstr ""
 
-#: ../plugins/magnatune/magnatune-widget.vala:265
+#: ../plugins/magnatune/magnatune-widget.vala:285
 #, c-format
 msgid ""
 "Please wait while\n"
@@ -791,7 +790,7 @@ msgid ""
 "Done for %d tracks."
 msgstr ""
 
-#: ../plugins/magnatune/magnatune-widget.vala:301
+#: ../plugins/magnatune/magnatune-widget.vala:321
 msgid "loading..."
 msgstr ""
 
@@ -813,6 +812,10 @@ msgstr ""
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Set the window name to the current title"
+msgstr ""
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+msgid "Ubuntu One Music Store"
 msgstr ""
 
 #: ../plugins/ubuntuone/ubuntuone.vala:128

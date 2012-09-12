@@ -41,10 +41,12 @@ public class Xnoise.SerialButton : Gtk.Box {
         private unowned SerialButton sb;
         public string item_name;
         
-        public SerialItem(SerialButton sb, string item_name) {
-            
+        public SerialItem(SerialButton sb, string item_name, string txt) {
+
             this.sb = sb;
             this.item_name = item_name;
+            
+            this.add(new Gtk.Label(txt));
             
             this.set_can_focus(false);
             this.get_style_context().add_provider(sb.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -92,9 +94,8 @@ public class Xnoise.SerialButton : Gtk.Box {
         if(sitems.lookup(name) != null)
             return false;
         
-        var si = new SerialItem(this, name);
+        var si = new SerialItem(this, name, txt);
         
-        si.add(new Gtk.Label(txt));
         this.add(si);
         
         sitems.insert(name, si);

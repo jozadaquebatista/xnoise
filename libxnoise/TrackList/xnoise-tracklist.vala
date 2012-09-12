@@ -71,14 +71,22 @@ public class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
             
             var bottombox = gb.get_object("hbox3") as Gtk.Box; //TRACKLIST
             
+            var toolbar = new Gtk.Toolbar();
+            toolbar.get_style_context().add_class("inline-toolbar");
+            var separator = new Gtk.SeparatorToolItem();
+            toolbar.insert(separator, -1);
+            GLib.Value val = true;
+            toolbar.child_set_property (separator, "expand", val);
+            separator.draw = false;
+            var toolbutton = new Gtk.ToolItem();
+            
             sbutton = new SerialButton();
             sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
             sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
             sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-//            idx_tracklist = sbutton.insert(SHOWTRACKLIST);
-//            idx_video     = sbutton.insert(SHOWVIDEO);
-//            idx_lyrics    = sbutton.insert(SHOWLYRICS);
-            bottombox.pack_start(sbutton, false, false, 0);
+            toolbutton.add(sbutton);
+            toolbar.insert(toolbutton, -1);
+            bottombox.pack_start(toolbar, true, true, 0);
             
             //REMOVE TITLE OR ALL TITLES BUTTONS
             var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;

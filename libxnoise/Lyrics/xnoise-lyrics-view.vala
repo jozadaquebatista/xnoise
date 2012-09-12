@@ -69,11 +69,22 @@ public class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
             
             var bottombox = gb.get_object("box5") as Gtk.Box;  //LYRICS
             
+            var toolbar = new Gtk.Toolbar();
+            toolbar.get_style_context().add_class("inline-toolbar");
+            var separator = new Gtk.SeparatorToolItem();
+            toolbar.insert(separator, -1);
+            GLib.Value val = true;
+            toolbar.child_set_property (separator, "expand", val);
+            separator.draw = false;
+            var toolbutton = new Gtk.ToolItem();
+            
             sbutton = new SerialButton();
             sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
             sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
             sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-            bottombox.pack_start(sbutton, false, false, 0);
+            toolbutton.add(sbutton);
+            toolbar.insert(toolbutton, -1);
+            bottombox.pack_start(toolbar, true, true, 0);
             
             var hide_button_2 = gb.get_object("hide_button_2") as Gtk.Button;
             hide_button_2.can_focus = false;
