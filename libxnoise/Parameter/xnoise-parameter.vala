@@ -260,7 +260,7 @@ not_show_art_on_hover_image=0
 volume=0.8
 
 [settings_string]
-activated_plugins=soundmenu2;DatabaseLyrics;Lyricwiki;azlyrics;mpris;notifications;lastfm;UbuntuOne;mediakeys
+activated_plugins=soundmenu2;mpris;notifications;lastfm;mediakeys
 """;
 }
 
