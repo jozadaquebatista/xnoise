@@ -201,8 +201,11 @@ public class Xnoise.SettingsWidget : Gtk.Box {
             if((p.activated) && (p.configurable)) {
                 Widget? w = p.settingwidget();
                 
-                if(w!=null)
-                    notebook.append_page(w, new Gtk.Label(name));
+                if(w!=null) {
+                    var l = new Gtk.Label(name);
+                    sizegroup.add_widget(l);
+                    notebook.append_page(w, l);
+                }
                 
                 count++;
             }
@@ -226,6 +229,8 @@ public class Xnoise.SettingsWidget : Gtk.Box {
         this.show_all();
     }
 
+    private Gtk.SizeGroup sizegroup;
+    
     private Builder builder;
     private bool setup_widgets() {
         builder = new Builder();
@@ -236,9 +241,13 @@ public class Xnoise.SettingsWidget : Gtk.Box {
             headline_general.use_markup= true;
             
             Label general_label = this.builder.get_object("label1") as Gtk.Label;
-            general_label.set_text(_("General"));
+            general_label.set_text(" " + _("General"));
             Label plugins_label = this.builder.get_object("label6") as Gtk.Label;
-            plugins_label.set_text(_("Plugins"));
+            plugins_label.set_text(" " + _("Plugins"));
+            
+            sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+            sizegroup.add_widget(general_label);
+            sizegroup.add_widget(plugins_label);
             
             checkB_showL = this.builder.get_object("checkB_showlines") as Gtk.CheckButton;
             checkB_showL.can_focus = false;
