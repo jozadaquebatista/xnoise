@@ -138,6 +138,26 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
     
+    internal void update_toggle_action_state(string name, bool state) {
+        in_update_toggle_action = true;
+        Idle.add( () => {
+            unowned Gtk.ToggleAction? tax = null;
+            foreach(Gtk.Action a in action_group.list_actions()) {
+                tax = a as Gtk.ToggleAction;
+                
+                if(tax != null && tax.name == name) {
+                    tax.set_active(state);
+                    break;
+                }
+            }
+            Idle.add( () => {
+                in_update_toggle_action = false;
+                return false;
+            });
+            return false;
+        });
+    }
+    
     public bool media_browser_visible { 
         get {
             return _media_browser_visible;
@@ -186,9 +206,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         { "ConfigMenuAction", null, N_("_Config") }
     };
 
-    private Gtk.ToggleActionEntry[] toggle_action_entries;// = {
-//            { "ShowMediaBrowserAction", Gtk.Stock.EDIT, N_("_Media Browser"), "<Ctrl>M", N_("Toggle media browser visibility."), toggle_media_browser_visibility, media_browser_visible }
-//    };
+    private Gtk.ToggleActionEntry[] toggle_action_entries;
 
     private const Gtk.TargetEntry[] target_list = {
         {"application/custom_dnd_data", TargetFlags.SAME_APP, 0},
@@ -1007,7 +1025,10 @@ print("++2\n");
 
     //hide or show button
     private int hpaned_position_buffer = 0;
+    private bool in_update_toggle_action = false;
     internal void toggle_media_browser_visibility() {
+        if(in_update_toggle_action)
+            return;
         if(media_browser_visible) {
             hpaned_position_buffer = hpaned.get_position(); // buffer last position
             mbbox01.hide();
@@ -1024,6 +1045,7 @@ print("++2\n");
             }
             media_browser_visible = true;
         }
+        update_toggle_action_state("ShowMediaBrowserAction", _media_browser_visible);
     }
 
     private bool on_close() {
