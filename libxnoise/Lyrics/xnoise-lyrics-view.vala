@@ -71,12 +71,23 @@ public class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
             
             var toolbar = new Gtk.Toolbar();
             toolbar.get_style_context().add_class("inline-toolbar");
+            
+            var hide_button_2 = new Gtk.Button();
+            var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
+            hide_button_2.add(hide_button_image);
+            hide_button_2.can_focus = false;
+            hide_button_2.clicked.connect(win.toggle_media_browser_visibility);
+            var toolbutton = new Gtk.ToolItem();
+            hide_button_2.set_relief(ReliefStyle.NONE);
+            toolbutton.add(hide_button_2);
+            toolbar.insert(toolbutton, -1);
+            
             var separator = new Gtk.SeparatorToolItem();
             toolbar.insert(separator, -1);
             GLib.Value val = true;
             toolbar.child_set_property (separator, "expand", val);
             separator.draw = false;
-            var toolbutton = new Gtk.ToolItem();
+            toolbutton = new Gtk.ToolItem();
             
             sbutton = new SerialButton();
             sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
@@ -85,11 +96,6 @@ public class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
             toolbutton.add(sbutton);
             toolbar.insert(toolbutton, -1);
             bottombox.pack_start(toolbar, true, true, 0);
-            
-            var hide_button_2 = gb.get_object("hide_button_2") as Gtk.Button;
-            hide_button_2.can_focus = false;
-            hide_button_2.clicked.connect(win.toggle_media_browser_visibility);
-            var hide_button_image = gb.get_object("hide_button_image_2") as Gtk.Image;
             
             win.notify["media-browser-visible"].connect( (s, val) => {
                 if(win.media_browser_visible == true) {

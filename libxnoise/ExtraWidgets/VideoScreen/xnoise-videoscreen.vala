@@ -65,15 +65,25 @@ public class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
             
             var bottombox = gb.get_object("hbox2v") as Gtk.Box;  //VIDEO
             
-            
             var toolbar = new Gtk.Toolbar();
+            
             toolbar.get_style_context().add_class("inline-toolbar");
+            var hide_button_1 = new Gtk.Button();
+            hide_button_1.can_focus = false;
+            hide_button_1.clicked.connect(win.toggle_media_browser_visibility);
+            var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
+            hide_button_1.add(hide_button_image);
+            var toolbutton = new Gtk.ToolItem();
+            hide_button_1.set_relief(ReliefStyle.NONE);
+            toolbutton.add(hide_button_1);
+            toolbar.insert(toolbutton, -1);
+            
             var separator = new Gtk.SeparatorToolItem();
             toolbar.insert(separator, -1);
             GLib.Value val = true;
             toolbar.child_set_property (separator, "expand", val);
             separator.draw = false;
-            var toolbutton = new Gtk.ToolItem();
+            toolbutton = new Gtk.ToolItem();
             
             sbutton = new SerialButton();
             sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
@@ -83,10 +93,6 @@ public class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
             toolbar.insert(toolbutton, -1);
             bottombox.pack_start(toolbar, true, true, 0);
             
-            var hide_button_1 = gb.get_object("hide_button_1") as Gtk.Button;
-            hide_button_1.can_focus = false;
-            hide_button_1.clicked.connect(win.toggle_media_browser_visibility);
-            var hide_button_image = gb.get_object("hide_button_image_1") as Gtk.Image;
             
             win.notify["media-browser-visible"].connect( (s, val) => {
                 if(win.media_browser_visible == true) {

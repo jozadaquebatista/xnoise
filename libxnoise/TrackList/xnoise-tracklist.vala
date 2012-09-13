@@ -73,24 +73,42 @@ public class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
             
             var toolbar = new Gtk.Toolbar();
             toolbar.get_style_context().add_class("inline-toolbar");
+            
+            var hide_button = new Gtk.Button();
+            var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
+            hide_button.add(hide_button_image);
+            hide_button.can_focus = false;
+            hide_button.clicked.connect(win.toggle_media_browser_visibility);
+            var toolbutton = new Gtk.ToolItem();
+            hide_button.set_relief(ReliefStyle.NONE);
+            toolbutton.add(hide_button);
+            toolbar.insert(toolbutton, -1);
+            
             var separator = new Gtk.SeparatorToolItem();
             toolbar.insert(separator, -1);
-            GLib.Value val = true;
-            toolbar.child_set_property (separator, "expand", val);
-            separator.draw = false;
-            var toolbutton = new Gtk.ToolItem();
             
-            sbutton = new SerialButton();
-            sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
-            sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
-            sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-            toolbutton.add(sbutton);
+            var removeSelectedButton = new Gtk.Button();
+            var remsel_button_image = new Gtk.Image.from_stock(Stock.DELETE, IconSize.MENU);
+            removeSelectedButton.add(remsel_button_image);
+            removeSelectedButton.can_focus = false;
+            toolbutton = new Gtk.ToolItem();
+            removeSelectedButton.set_relief(ReliefStyle.NONE);
+            toolbutton.add(removeSelectedButton);
             toolbar.insert(toolbutton, -1);
-            bottombox.pack_start(toolbar, true, true, 0);
+            removeSelectedButton.clicked.connect( () => {
+                tl.remove_selected_rows();
+            });
+            removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
             
             //REMOVE TITLE OR ALL TITLES BUTTONS
-            var removeAllButton            = gb.get_object("removeAllButton") as Gtk.Button;
+            var removeAllButton = new Gtk.Button();
+            var remove_button_image = new Gtk.Image.from_stock(Stock.CLEAR, IconSize.MENU);
+            removeAllButton.add(remove_button_image);
             removeAllButton.can_focus      = false;
+            toolbutton = new Gtk.ToolItem();
+            removeAllButton.set_relief(ReliefStyle.NONE);
+            toolbutton.add(removeAllButton);
+            toolbar.insert(toolbutton, -1);
             removeAllButton.clicked.connect( () => {
                 global.position_reference = null;
                 var store = (ListStore)tlm;
@@ -98,15 +116,14 @@ public class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
             });
             removeAllButton.set_tooltip_text(_("Remove all"));
             
-            var removeSelectedButton       = gb.get_object("removeSelectedButton") as Gtk.Button;
-            removeSelectedButton.can_focus = false;
-            removeSelectedButton.clicked.connect( () => {
-                tl.remove_selected_rows();
-            });
-            removeSelectedButton.set_tooltip_text(_("Remove selected titles"));
-            
-            var posjumper                  = gb.get_object("posjumper") as Gtk.Button;
+            var posjumper = new Gtk.Button();
+            var posjumper_image = new Gtk.Image.from_stock(Stock.JUSTIFY_FILL, IconSize.MENU);
+            posjumper.add(posjumper_image);
             posjumper.can_focus      = false;
+            toolbutton = new Gtk.ToolItem();
+            posjumper.set_relief(ReliefStyle.NONE);
+            toolbutton.add(posjumper);
+            toolbar.insert(toolbutton, -1);
             posjumper.clicked.connect( () => {
                 if(global.position_reference == null || !global.position_reference.valid())
                     return;
@@ -118,10 +135,21 @@ public class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
             });
             posjumper.set_tooltip_text(_("Jump to current position"));
             
-            var hide_button = gb.get_object("hide_button") as Gtk.Button;
-            hide_button.can_focus = false;
-            hide_button.clicked.connect(win.toggle_media_browser_visibility);
-            var hide_button_image = gb.get_object("hide_button_image") as Gtk.Image;
+            separator = new Gtk.SeparatorToolItem();
+            toolbar.insert(separator, -1);
+            GLib.Value val = true;
+            toolbar.child_set_property (separator, "expand", val);
+            separator.draw = false;
+            toolbutton = new Gtk.ToolItem();
+            
+            sbutton = new SerialButton();
+            sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
+            sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
+            sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
+            toolbutton.add(sbutton);
+            toolbar.insert(toolbutton, -1);
+            bottombox.pack_start(toolbar, true, true, 0);
+            
             win.notify["media-browser-visible"].connect( (s, val) => {
                 if(win.media_browser_visible == true) {
                     hide_button_image.set_from_stock(Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
