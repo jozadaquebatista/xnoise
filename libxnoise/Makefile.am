@@ -64,6 +64,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/VideoScreen/xnoise-videoscreen.vala \
     ExtraWidgets/xnoise-app-menu-button.vala \
     ExtraWidgets/xnoise-control-button.vala \
+    ExtraWidgets/xnoise-equalizer-widget.vala \
     ExtraWidgets/xnoise-main-view-notebook.vala \
     ExtraWidgets/xnoise-media-source-widget.vala \
     ExtraWidgets/xnoise-play-pause-button.vala \
@@ -96,6 +97,7 @@ libxnoise_la_SOURCES = \
     MainWindow/xnoise-main-window.vala \
     Parameter/xnoise-i-params.vala \
     Parameter/xnoise-parameter.vala \
+    Player/xnoise-gst-equalizer.vala \
     Player/xnoise-gst-player.vala \
     PlaylistReader/xnoise-playlist-abstract-file-reader.vala \
     PlaylistReader/xnoise-playlist-general.vala \

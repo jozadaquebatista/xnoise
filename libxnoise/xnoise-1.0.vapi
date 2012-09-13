@@ -640,9 +640,28 @@ namespace Xnoise {
 		public signal void uri_repeated (string? uri);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class GstEqualizer : GLib.Object, Xnoise.IParams {
+		public class TenBandPreset {
+			public double[] freq_band_gains;
+			public TenBandPreset (string name = "", double[] band_gains);
+			public double @get (int index);
+			public void @set (int index, double val);
+			public string name { get; set; }
+		}
+		public Gst.Element eq;
+		public GstEqualizer ();
+		public new double @get (int idx);
+		public void get_frequencies (out int[] freqs);
+		public Xnoise.GstEqualizer.TenBandPreset? get_preset (int idx);
+		public int preset_count ();
+		public new void @set (int idx, double gain);
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class GstPlayer : GLib.Object {
 		public Xnoise.VideoScreen videoscreen;
 		public GstPlayer ();
+		public void activate_equalizer ();
+		public void deactivate_equalizer ();
 		public void pause ();
 		public void play ();
 		public void playSong (bool force_play = false);

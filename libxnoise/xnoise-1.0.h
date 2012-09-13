@@ -15,6 +15,7 @@
 #include <math.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
+#include <gst/gst.h>
 
 G_BEGIN_DECLS
 
@@ -592,6 +593,28 @@ typedef struct _XnoiseTrackInfobarClass XnoiseTrackInfobarClass;
 typedef struct _XnoiseParams XnoiseParams;
 typedef struct _XnoiseParamsClass XnoiseParamsClass;
 typedef struct _XnoiseParamsPrivate XnoiseParamsPrivate;
+
+#define XNOISE_TYPE_GST_EQUALIZER (xnoise_gst_equalizer_get_type ())
+#define XNOISE_GST_EQUALIZER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_GST_EQUALIZER, XnoiseGstEqualizer))
+#define XNOISE_GST_EQUALIZER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_GST_EQUALIZER, XnoiseGstEqualizerClass))
+#define XNOISE_IS_GST_EQUALIZER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_GST_EQUALIZER))
+#define XNOISE_IS_GST_EQUALIZER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_GST_EQUALIZER))
+#define XNOISE_GST_EQUALIZER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_GST_EQUALIZER, XnoiseGstEqualizerClass))
+
+typedef struct _XnoiseGstEqualizer XnoiseGstEqualizer;
+typedef struct _XnoiseGstEqualizerClass XnoiseGstEqualizerClass;
+typedef struct _XnoiseGstEqualizerPrivate XnoiseGstEqualizerPrivate;
+
+#define XNOISE_GST_EQUALIZER_TYPE_TEN_BAND_PRESET (xnoise_gst_equalizer_ten_band_preset_get_type ())
+#define XNOISE_GST_EQUALIZER_TEN_BAND_PRESET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_GST_EQUALIZER_TYPE_TEN_BAND_PRESET, XnoiseGstEqualizerTenBandPreset))
+#define XNOISE_GST_EQUALIZER_TEN_BAND_PRESET_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_GST_EQUALIZER_TYPE_TEN_BAND_PRESET, XnoiseGstEqualizerTenBandPresetClass))
+#define XNOISE_GST_EQUALIZER_IS_TEN_BAND_PRESET(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_GST_EQUALIZER_TYPE_TEN_BAND_PRESET))
+#define XNOISE_GST_EQUALIZER_IS_TEN_BAND_PRESET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_GST_EQUALIZER_TYPE_TEN_BAND_PRESET))
+#define XNOISE_GST_EQUALIZER_TEN_BAND_PRESET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_GST_EQUALIZER_TYPE_TEN_BAND_PRESET, XnoiseGstEqualizerTenBandPresetClass))
+
+typedef struct _XnoiseGstEqualizerTenBandPreset XnoiseGstEqualizerTenBandPreset;
+typedef struct _XnoiseGstEqualizerTenBandPresetClass XnoiseGstEqualizerTenBandPresetClass;
+typedef struct _XnoiseGstEqualizerTenBandPresetPrivate XnoiseGstEqualizerTenBandPresetPrivate;
 typedef struct _XnoiseGstPlayerPrivate XnoiseGstPlayerPrivate;
 
 #define XNOISE_PLAYLIST_TYPE_LIST_TYPE (xnoise_playlist_list_type_get_type ())
@@ -1585,9 +1608,33 @@ struct _XnoiseParamsClass {
 	GObjectClass parent_class;
 };
 
+struct _XnoiseGstEqualizer {
+	GObject parent_instance;
+	XnoiseGstEqualizerPrivate * priv;
+	GstElement* eq;
+};
+
+struct _XnoiseGstEqualizerClass {
+	GObjectClass parent_class;
+};
+
+struct _XnoiseGstEqualizerTenBandPreset {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseGstEqualizerTenBandPresetPrivate * priv;
+	gdouble* freq_band_gains;
+	gint freq_band_gains_length1;
+};
+
+struct _XnoiseGstEqualizerTenBandPresetClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseGstEqualizerTenBandPreset *self);
+};
+
 struct _XnoiseGstPlayer {
 	GObject parent_instance;
 	XnoiseGstPlayerPrivate * priv;
+	XnoiseGstEqualizer* equalizer;
 	XnoiseVideoScreen* videoscreen;
 };
 
@@ -2446,8 +2493,31 @@ void xnoise_params_set_string_list_value (const gchar* key, gchar** val, int val
 void xnoise_params_set_string_value (const gchar* key, const gchar* val);
 XnoiseParams* xnoise_params_new (void);
 XnoiseParams* xnoise_params_construct (GType object_type);
+GType xnoise_gst_equalizer_get_type (void) G_GNUC_CONST;
+XnoiseGstEqualizer* xnoise_gst_equalizer_new (void);
+XnoiseGstEqualizer* xnoise_gst_equalizer_construct (GType object_type);
+gdouble xnoise_gst_equalizer_get (XnoiseGstEqualizer* self, gint idx);
+void xnoise_gst_equalizer_set (XnoiseGstEqualizer* self, gint idx, gdouble gain);
+void xnoise_gst_equalizer_get_frequencies (XnoiseGstEqualizer* self, gint** freqs, int* freqs_length1);
+gint xnoise_gst_equalizer_preset_count (XnoiseGstEqualizer* self);
+gpointer xnoise_gst_equalizer_ten_band_preset_ref (gpointer instance);
+void xnoise_gst_equalizer_ten_band_preset_unref (gpointer instance);
+GParamSpec* xnoise_gst_equalizer_param_spec_ten_band_preset (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_gst_equalizer_value_set_ten_band_preset (GValue* value, gpointer v_object);
+void xnoise_gst_equalizer_value_take_ten_band_preset (GValue* value, gpointer v_object);
+gpointer xnoise_gst_equalizer_value_get_ten_band_preset (const GValue* value);
+GType xnoise_gst_equalizer_ten_band_preset_get_type (void) G_GNUC_CONST;
+XnoiseGstEqualizerTenBandPreset* xnoise_gst_equalizer_get_preset (XnoiseGstEqualizer* self, gint idx);
+XnoiseGstEqualizerTenBandPreset* xnoise_gst_equalizer_ten_band_preset_new (const gchar* name, gdouble* band_gains, int band_gains_length1);
+XnoiseGstEqualizerTenBandPreset* xnoise_gst_equalizer_ten_band_preset_construct (GType object_type, const gchar* name, gdouble* band_gains, int band_gains_length1);
+gdouble xnoise_gst_equalizer_ten_band_preset_get (XnoiseGstEqualizerTenBandPreset* self, gint index);
+void xnoise_gst_equalizer_ten_band_preset_set (XnoiseGstEqualizerTenBandPreset* self, gint index, gdouble val);
+const gchar* xnoise_gst_equalizer_ten_band_preset_get_name (XnoiseGstEqualizerTenBandPreset* self);
+void xnoise_gst_equalizer_ten_band_preset_set_name (XnoiseGstEqualizerTenBandPreset* self, const gchar* value);
 XnoiseGstPlayer* xnoise_gst_player_new (void);
 XnoiseGstPlayer* xnoise_gst_player_construct (GType object_type);
+void xnoise_gst_player_activate_equalizer (XnoiseGstPlayer* self);
+void xnoise_gst_player_deactivate_equalizer (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_subtitle_uri (XnoiseGstPlayer* self, const gchar* s_uri);
 void xnoise_gst_player_play (XnoiseGstPlayer* self);
 void xnoise_gst_player_pause (XnoiseGstPlayer* self);

@@ -1495,11 +1495,44 @@ print("++2\n");
             this.hpaned.pack1(mbbox01, false, false);
             //----------------
             
+            var eqButtonTI = new ToolItem();
+            var eqButton = new Button();
+            var eqi = new Image.from_stock(Stock.CONVERT, IconSize.BUTTON);
+            eqButton.add(eqi);
+            eqButton.set_relief(Gtk.ReliefStyle.NONE);
+            eqButton.can_focus = false;
+            eqButton.clicked.connect( () => {
+                var eq_widget = new EqualizerWidget(gst_player.equalizer);
+                var eqdialog = new Gtk.Window();
+                eqdialog.add(eq_widget);
+                eqdialog.type_hint = Gdk.WindowTypeHint.DIALOG;
+                eqdialog.window_position = WindowPosition.CENTER_ON_PARENT;
+                eq_widget.closebutton.clicked.connect( () => { eqdialog.destroy(); });
+                eqdialog.set_title("xnoise - " + _("Equalizer"));
+                eqdialog.key_press_event.connect( (s,e) => {
+                    switch(e.keyval) {
+                        case Gdk.Key.q: {
+                            if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
+                                return false;
+                            main_window.quit_now();
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    return false;
+                });
+                eqdialog.show_all();
+                eqdialog.destroy.connect(  () => { eq_widget.destroy(); });
+            });
+            eqButtonTI.add(eqButton);
+            
+
             //VOLUME SLIDE BUTTON
             var volumeSliderButtonTI = new ToolItem();
             volume_slider = new VolumeSliderButton(gst_player);
             volumeSliderButtonTI.add(volume_slider);
-            
+
             //PLAYBACK CONTROLLS
             this.previousButton = new ControlButton(ControlButton.Direction.PREVIOUS);
             this.previousButton.sign_clicked.connect(handle_control_button_click);
@@ -1531,6 +1564,7 @@ print("++2\n");
             main_toolbar.insert(albumimageTI, -1);
             main_toolbar.insert(this.track_infobar, -1);
             main_toolbar.insert(repeatButtonTI, -1);
+            main_toolbar.insert(eqButtonTI, -1);
             main_toolbar.insert(volumeSliderButtonTI, -1);
             main_toolbar.insert(app_menu_button, -1);
             main_toolbar.can_focus = false;

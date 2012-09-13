@@ -1,11 +1,11 @@
 /* xnoise-gst-player.vala
  *
- * Copyright (C) 2009 - 2012 Jörn Magens
+ * Copyright(C) 2009 - 2012 Jörn Magens
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
+ * (at your option) any later version.
  *
  *  The Xnoise authors hereby grant permission for non-GPL compatible
  *  GStreamer plugins to be used and distributed together with GStreamer
@@ -34,19 +34,20 @@ using Xnoise;
 using Xnoise.Resources;
 using Xnoise.Services;
 
+
 // GstPlayFlags flags of playbin2
 [Flags]
 private enum Gst.PlayFlag {
-    VIDEO         = (1 << 0),
-    AUDIO         = (1 << 1),
-    TEXT          = (1 << 2),
-    VIS           = (1 << 3),
-    SOFT_VOLUME   = (1 << 4),
-    NATIVE_AUDIO  = (1 << 5),
-    NATIVE_VIDEO  = (1 << 6),
-    DOWNLOAD      = (1 << 7),
-    BUFFERING     = (1 << 8),
-    DEINTERLACE   = (1 << 9)
+    VIDEO         =(1 << 0),
+    AUDIO         =(1 << 1),
+    TEXT          =(1 << 2),
+    VIS           =(1 << 3),
+    SOFT_VOLUME   =(1 << 4),
+    NATIVE_AUDIO  =(1 << 5),
+    NATIVE_VIDEO  =(1 << 6),
+    DOWNLOAD      =(1 << 7),
+    BUFFERING     =(1 << 8),
+    DEINTERLACE   =(1 << 9)
 }
 
 public class Xnoise.GstPlayer : GLib.Object {
@@ -61,6 +62,7 @@ public class Xnoise.GstPlayer : GLib.Object {
     private uint suburi_msg_id = 0;
 
     private TagList taglist_buffer = null;
+    internal GstEqualizer equalizer;
     
     private enum PlaybinStreamType {
         NONE = 0,
@@ -84,6 +86,18 @@ public class Xnoise.GstPlayer : GLib.Object {
     private AsyncQueue<TaglistWithStreamType?> new_tag_queue = new AsyncQueue<TaglistWithStreamType?>();
     private GLib.List<Gst.Message> missing_plugins = new GLib.List<Gst.Message>();
     private dynamic Element playbin;
+    private Gst.Pipeline pipe;
+    
+    private dynamic Gst.Bus bus;
+    private dynamic Element asink;
+    private dynamic Element queue;
+    private dynamic Element ac1;
+    private dynamic Element ac2; 
+    private Pad pad;
+     
+    private dynamic Gst.Element tee;
+    private dynamic Gst.Element abin;
+
 
     // Localized strings for display
     public string[]? available_subtitles   { get; private set; default = null; }
@@ -145,7 +159,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                 paused = false;
             }
             this._current_has_video_track = false;
-            Idle.add( () => {
+            Idle.add(() => {
                 videoscreen.trigger_expose();
                 return false;
             }); 
@@ -156,15 +170,15 @@ public class Xnoise.GstPlayer : GLib.Object {
             available_subtitles = null;
             available_audiotracks = null;
             this.playbin.suburi = null;
-            length_nsecs = (int64)0;
-            this.playbin.uri = (value == null ? EMPTYSTRING : value);
+            length_nsecs =(int64)0;
+            this.playbin.uri =(value == null ? EMPTYSTRING : value);
             // set_automatic_subtitles();
             if(value != null) {
                 File file = File.new_for_commandline_arg(value);
                 if(file.get_uri_scheme() in get_remote_schemes())
                     is_stream = true;
             }
-            sign_position_changed((uint)0, (uint)0); //immediately reset song progressbar
+            sign_position_changed((uint)0,(uint)0); //immediately reset song progressbar
         }
     }
     
@@ -187,7 +201,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                     userinfo.popdown(suburi_msg_id);
                     suburi_msg_id = 0;
                 }
-                Timeout.add_seconds(1, () => {
+                Timeout.add_seconds(1,() => {
                     this.suburi_msg_id = userinfo.popup(UserInfo.RemovalType.TIMER_OR_CLOSE_BUTTON,
                                          UserInfo.ContentClass.WARNING,
                                          _("The subtitle name is not matching the video name! Not using subtitle file."),
@@ -208,9 +222,9 @@ public class Xnoise.GstPlayer : GLib.Object {
     public int current_text { 
         get { return playbin.current_text; }
         set {
-            Gst.PlayFlag flags = (Gst.PlayFlag)0;
+            Gst.PlayFlag flags =(Gst.PlayFlag)0;
             playbin.get("flags", out flags);
-            if (value == -2) {
+            if(value == -2) {
                 flags &= ~Gst.PlayFlag.TEXT;
                 playbin.set("flags", flags,
                             "current-text", -1
@@ -255,7 +269,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                     return 0.0;
             if(_length_nsecs == 0.0)
                 return 0.0;
-            return (double)pos/(double)_length_nsecs;
+            return(double)pos/(double)_length_nsecs;
         }
         set {
             if(seeking == false) {
@@ -264,10 +278,10 @@ public class Xnoise.GstPlayer : GLib.Object {
                 int64 len;
                 Gst.Format fmt = Gst.Format.TIME;
                 playbin.query_duration(ref fmt, out len);
-                _length_nsecs = (this._uri == null || this._uri == EMPTYSTRING ? (int64)0 : (int64)len);
+                _length_nsecs =(this._uri == null || this._uri == EMPTYSTRING ?(int64)0 :(int64)len);
                 playbin.seek_simple(Gst.Format.TIME,
                                     Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-                                    (int64)(value * _length_nsecs));
+                                   (int64)(value * _length_nsecs));
             }
         }
     }
@@ -292,11 +306,11 @@ public class Xnoise.GstPlayer : GLib.Object {
         update_tags_source = 0;
         automatic_subtitles_source = 0;
 
-        global.uri_changed.connect( (s,u) => {
+        global.uri_changed.connect((s,u) => {
             this.request_location(u);
         });
 
-        global.player_state_changed.connect( () => {
+        global.player_state_changed.connect(() => {
             if(global.player_state == PlayerState.PLAYING)
                 this.play();
             else if(global.player_state == PlayerState.PAUSED)
@@ -305,12 +319,22 @@ public class Xnoise.GstPlayer : GLib.Object {
                 this.stop();
         });
         
-        global.sign_restart_song.connect( () => {
+        global.sign_restart_song.connect(() => {
             playbin.seek_simple(Gst.Format.TIME,
                                 Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-                                (int64)0);
+                               (int64)0);
             this.playSong();
         });
+        activate_equalizer();
+//        Timeout.add_seconds(15, () => {
+//            for(int i = 0; i < 10; i++) {
+//                GstEqualizer.TenBandPreset? pres = equalizer.get_preset(5);
+//                assert(pres != null);
+//                double val = pres.freq_band_gains[i];
+//                this.equalizer[i] = val;
+//            }
+//            return false;
+//        });
     }
 
     private Gdk.Pixbuf? extract_embedded_image(Gst.TagList taglist) {
@@ -366,7 +390,21 @@ public class Xnoise.GstPlayer : GLib.Object {
         
         return pixbuf;
     }
+
+    public void activate_equalizer() {
+        if(equalizer.eq != null) {
+            queue.unlink_many(asink);
+            queue.link_many(ac1, equalizer.eq, ac2, asink);
+        }
+    }
     
+    public void deactivate_equalizer() {
+        if(equalizer.eq != null) {
+            queue.unlink_many(ac1, equalizer.eq, ac2, asink);
+            queue.link_many(asink);
+        }
+    }
+
     private void request_location(string? xuri) {
         bool playing_buf = playing;
         playbin.set_state(State.READY);
@@ -378,7 +416,7 @@ public class Xnoise.GstPlayer : GLib.Object {
     }
     
     private void handle_eos_via_idle() {
-        Idle.add ( () => { 
+        Idle.add(() => { 
             global.handle_eos();
             return false;
         });
@@ -395,16 +433,57 @@ public class Xnoise.GstPlayer : GLib.Object {
 
     private void create_elements() {
         taglist_buffer = null;
-        playbin = ElementFactory.make("playbin2", "playbin");
+        pipe = new Gst.Pipeline("pipeline");
         
-        playbin.text_changed.connect( () => {
+        playbin   = ElementFactory.make("playbin2", null);
+        asink     = ElementFactory.make("autoaudiosink", null);
+        ac1       = ElementFactory.make("audioconvert", null);
+        ac2       = ElementFactory.make("audioconvert", null);
+        tee       = ElementFactory.make("tee", null);
+        queue     = ElementFactory.make("queue", null);
+        
+        abin = new Gst.Bin("audiobin");
+        
+        this.equalizer = new GstEqualizer();
+        
+        if(equalizer.eq != null)
+            ((Gst.Bin)abin).add_many(
+                equalizer.eq,
+                ac1,
+                ac2
+            );
+        
+        ((Gst.Bin)abin).add_many(
+            tee,
+            queue,
+            asink
+        );
+        
+        abin.add_pad(new GhostPad("sink", tee.get_pad("sink")));
+        
+        if(equalizer.eq == null) {
+            queue.link_many(asink);
+        }
+        else {
+            queue.link_many(ac1, equalizer.eq, ac2, asink);
+        }
+        
+        playbin.set("audio-sink", abin); 
+        bus = playbin.get_bus();
+        
+        Gst.Pad sinkpad = queue.get_pad("sink");
+        pad = tee.get_request_pad("src%d");
+        tee.set("alloc-pad", pad);
+        pad.link(sinkpad);
+        
+        playbin.text_changed.connect(() => {
             //print("text_changed\n");
-            Timeout.add_seconds(1, () => {
+            Timeout.add_seconds(1,() => {
                 //print("playbin2 got text-changed signal. number of texts = %d\n", playbin.n_text);
                 available_subtitles = get_available_languages(PlaybinStreamType.TEXT);
                 return false;
             });
-            Idle.add( () => {
+            Idle.add(() => {
                 int n_text = 0;
                 n_text = playbin.n_text;
                 if(n_text > 0) {
@@ -418,14 +497,14 @@ public class Xnoise.GstPlayer : GLib.Object {
             });
         });
         
-        playbin.audio_changed.connect( () => {
+        playbin.audio_changed.connect(() => {
             //print("audio_changed\n");
-            Timeout.add_seconds(1, () => {
+            Timeout.add_seconds(1,() => {
                 //print("playbin2 got audio-changed signal. number of audio = %d\n", playbin.n_audio);
                 available_audiotracks = get_available_languages(PlaybinStreamType.AUDIO);
                 return false;
             });
-            Idle.add( () => {
+            Idle.add(() => {
                 int n_audio = 0;
                 n_audio = playbin.n_audio;
                 if(n_audio > 0) { // TODO maybe more than 1 ?
@@ -439,8 +518,8 @@ public class Xnoise.GstPlayer : GLib.Object {
             });
         });
         
-        playbin.video_changed.connect( () => {
-            Idle.add( () => {
+        playbin.video_changed.connect(() => {
+            Idle.add(() => {
                 int n_video = 0;
                 n_video = playbin.n_video;
                 if(n_video > 0) {
@@ -542,7 +621,7 @@ public class Xnoise.GstPlayer : GLib.Object {
     }
     
     private void install_plugins_res_func(Gst.InstallPluginsReturn result) {
-        //print("InstallPluginsReturn: %d\n", (int)result);
+        //print("InstallPluginsReturn: %d\n",(int)result);
         if(missing_plugins_user_message.id != 0) {
             userinfo.popdown(missing_plugins_user_message.id);
         }
@@ -659,7 +738,7 @@ public class Xnoise.GstPlayer : GLib.Object {
             case Gst.MessageType.STREAM_STATUS: {
                 //Gst.StreamStatusType sst;
                 //unowned Gst.Element owner;
-                //msg.parse_stream_status (out sst, out owner);
+                //msg.parse_stream_status(out sst, out owner);
                 //print("GstStreamStatus parsed: %s from %s\n", sst.to_string(), msg.src.get_name());
                 break;
             }
@@ -684,11 +763,11 @@ public class Xnoise.GstPlayer : GLib.Object {
         }
         msg.parse_error(out err, out debug);
         
-        //print("err.code: %d\n", (int)err.code);
+        //print("err.code: %d\n",(int)err.code);
         
-        if(err is Gst.CoreError && ((int)(err.code) == (int)(Gst.StreamError.CODEC_NOT_FOUND))) {
+        if(err is Gst.CoreError &&((int)(err.code) ==(int)(Gst.StreamError.CODEC_NOT_FOUND))) {
             //print("is missing plgins error \n");
-            Idle.add( () => {
+            Idle.add(() => {
                 userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
                                UserInfo.ContentClass.WARNING,
                                "Missing plugins error",
@@ -719,11 +798,11 @@ public class Xnoise.GstPlayer : GLib.Object {
         else {
             result = null; // "%s%d".printf(substitute_prefix, stream_number);
         }
-        return (owned)result;
+        return(owned)result;
     }
     
     private string[]? get_available_languages(PlaybinStreamType selected) {
-        //print("playbin.n_audio: %d    playbin.n_text: %d\n", (int)playbin.n_audio, (int)playbin.n_text);
+        //print("playbin.n_audio: %d    playbin.n_text: %d\n",(int)playbin.n_audio,(int)playbin.n_text);
         string[]? result = null;
         TagList? tags = null;
         switch(selected) {
@@ -731,7 +810,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                 if(((int)playbin.n_text) == 0)
                     return null;
                 
-                for(int i = 0; i < ((int)playbin.n_text); i++) {
+                for(int i = 0; i <((int)playbin.n_text); i++) {
                     Signal.emit_by_name(playbin, "get-text-tags", i, ref tags);
                     string? buf = extract_language(ref tags, _("Subtitle #"), i + 1);
                     if(buf != null)
@@ -743,7 +822,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                 if(((int)playbin.n_audio) == 0)
                     return null;
                 
-                for(int i = 0; i < ((int)playbin.n_audio); i++) {
+                for(int i = 0; i <((int)playbin.n_audio); i++) {
                     Signal.emit_by_name(playbin, "get-audio-tags", i, ref tags);
                     string? buf = extract_language(ref tags, _("Audio Track #"), i + 1);
                     if(buf != null)
@@ -768,7 +847,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         string message_name = msg.get_structure().get_name();
         //print("%s\n", message_name);
         if(message_name=="prepare-xwindow-id") {
-            var imagesink = (XOverlay)(msg.src);
+            var imagesink =(XOverlay)(msg.src);
             imagesink.set_property("force-aspect-ratio", true);
             imagesink.set_window_handle((uint)(Gdk.X11Window.get_xid(videoscreen.get_window())));
         }
@@ -805,7 +884,7 @@ public class Xnoise.GstPlayer : GLib.Object {
             case Gst.TAG_IMAGE:
                 if(imarge_src != 0)
                     Source.remove(imarge_src);
-                imarge_src = Timeout.add(500, () => { // TODO: move to io worker
+                imarge_src = Timeout.add(500,() => { // TODO: move to io worker
                     string ar = null;
                     string al = null;
                     if(taglist_buffer == null)
@@ -862,14 +941,14 @@ public class Xnoise.GstPlayer : GLib.Object {
             }
             if(seeking == false) {
                 playbin.query_duration(ref fmt, out len);
-                length_nsecs = (this._uri == null || this._uri == EMPTYSTRING ? (int64)0 : (int64)len);
+                length_nsecs =(this._uri == null || this._uri == EMPTYSTRING ?(int64)0 :(int64)len);
                 if(playing == false) return true;
                 if(!playbin.query_position(ref fmt, out pos))
                     return true;
-                sign_position_changed((uint)(pos/Gst.MSECOND), (uint)(len/Gst.MSECOND));
+                sign_position_changed((uint)(pos/Gst.MSECOND),(uint)(len/Gst.MSECOND));
             }
         }
-        //print("flags: %d\n", (int)playbin.flags);
+        //print("flags: %d\n",(int)playbin.flags);
         return true;
     }
 
@@ -899,10 +978,10 @@ public class Xnoise.GstPlayer : GLib.Object {
     // This is a pause-play action to take over the new uri for the playbin
     // It recovers the original state or can be forced to play
     public void playSong(bool force_play = false) {
-        bool buf_playing = ((global.player_state == PlayerState.PLAYING)||force_play);
+        bool buf_playing =((global.player_state == PlayerState.PLAYING)||force_play);
         playbin.set_state(State.READY);
         if(buf_playing == true) {
-            Idle.add( () => {
+            Idle.add(() => {
                 play();
                 return false;
             });
@@ -922,8 +1001,8 @@ public class Xnoise.GstPlayer : GLib.Object {
                 int64 pos, new_pos;
                 if(!playbin.query_position(ref fmt, out pos))
                     return;
-                new_pos = pos + (int64)((int64)seconds * Gst.SECOND);
-                //print("%lli %lli %lli %lli\n", pos, new_pos, _length_nsecs, (int64)((int64)seconds * (int64)1000000000));
+                new_pos = pos +(int64)((int64)seconds * Gst.SECOND);
+                //print("%lli %lli %lli %lli\n", pos, new_pos, _length_nsecs,(int64)((int64)seconds *(int64)1000000000));
             
                 if(new_pos > _length_nsecs) new_pos = _length_nsecs;
                 if(new_pos < 0)            new_pos = 0;
@@ -931,7 +1010,7 @@ public class Xnoise.GstPlayer : GLib.Object {
                 playbin.seek_simple(Gst.Format.TIME,
                                     Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
                                     new_pos);
-                sign_position_changed((uint)(new_pos/Gst.MSECOND), (uint)(_length_nsecs/Gst.MSECOND));
+                sign_position_changed((uint)(new_pos/Gst.MSECOND),(uint)(_length_nsecs/Gst.MSECOND));
             }
         }
     }
