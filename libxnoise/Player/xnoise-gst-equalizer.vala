@@ -36,10 +36,10 @@ using Xnoise;
 public class Xnoise.GstEqualizer : GLib.Object, IParams {
     
     private const int[] frequencies  = 
-        { 50,     200,   350,   500,   750,   1000,  3400,   5000,   10000,  15000 };
+        { 50,     80,    120,   250,   500,   1000,  2000,   4500,   7600,  15000 };
     
     private const double[] bw_ranges = 
-        { 120.0,  150.0, 150.0, 250.0, 300.0, 500.0, 2000.0, 3000.0, 3500.0, 5000.0 };
+        { 100.0,  100.0, 100.0, 200.0, 300.0, 500.0, 2000.0, 3000.0, 3500.0, 5000.0 };
     
     private GLib.List<TenBandPreset> presets;
     public dynamic Gst.Element eq;
@@ -144,42 +144,42 @@ public class Xnoise.GstEqualizer : GLib.Object, IParams {
 
         presets.prepend(
             new TenBandPreset("Dance", 
-                              { 50.0, 35.0, 10.0, 0.0, 0.0, -30.0, -40.0, -40.0, 0.0, 0.0 }
+                              { 20.0, 20.0, 12.0, 0.0, 0.0, -10.0, -20.0, -10.0, 10.0, 0.0 }
         ));
         presets.prepend(
             new TenBandPreset("Pop", 
-                              { -10.0, 25.0, 35.0, 40.0, 25.0, -5.0, -15.0, -15.0, -10.0, -10.0 }
+                              { -10.0, 20.0, 25.0, 28.0, 20.0, -5.0, -10.0, -10.0, -5.0, -5.0 }
         ));
         presets.prepend(
             new TenBandPreset("Club", 
-                              { 0.0, 0.0, 20.0, 30.0, 30.0, 30.0, 20.0, 0.0, 0.0, 0.0 }
+                              { 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 10.0, 0.0, 0.0, 0.0 }
         ));
         presets.prepend(
             new TenBandPreset("Jazz", 
-                              { -10.0, 0.0, 0.0, 10.0, 30.0, 40.0, 40.0, 10.0, 0.0, 0.0 }
+                              { -5.0, 0.0, 0.0, 5.0, 20.0, 30.0, 30.0, 10.0, 5.0, 0.0 }
         ));
         presets.prepend(
             new TenBandPreset("Rock", 
-                              { 40.0, 25.0, -30.0, -40.0, -20.0, 20.0, 45.0, 55.0, 55.0, 55.0 }
+                              { 20.0, 5.0, -10.0, -20.0, -5.0, 5.0, 20.0, 35.0, 35.0, 40.0 }
         ));
         presets.prepend(
             new TenBandPreset("Techno", 
-                              { 40.0, 30.0, 0.0, -30.0, -25.0, 0.0, 40.0, 50.0, 50.0, 45.0 }
+                              { 30.0, 20.0, 0.0, -10.0, -5.0, 0.0, 25.0, 30.0, 30.0, 22.0 }
         ));
         presets.prepend(
-            new TenBandPreset("Full Treble", 
-                              { -50.0, -50.0, -50.0, -25.0, 15.0, 55.0, 80.0, 80.0, 80.0, 80.0 }
+            new TenBandPreset(_("Maximum Treble"), 
+                              { -30.0, -30.0, -30.0, -15.0, 10.0, 45.0, 80.0, 80.0, 80.0, 80.0 }
         ));
         presets.prepend(
-            new TenBandPreset("Full Bass", 
-                              { 70.0, 70.0, 70.0, 40.0, 20.0, -45.0, -50.0, -55.0, -55.0, -55.0 }
+            new TenBandPreset(_("Maximum Bass"), 
+                              { 60.0, 60.0, 60.0, 40.0, 20.0, -25.0, -30.0, -30.0, -30.0, -30.0 }
         ));
         presets.prepend(
             new TenBandPreset("Classic", 
-                              { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -40.0, -40.0, -40.0, -50.0 }
+                              { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -30.0, -30.0, -30.0, -35.0 }
         ));
         presets.prepend(
-            new TenBandPreset("Default", 
+            new TenBandPreset(_("Default"), 
                               { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }
         ));
     }

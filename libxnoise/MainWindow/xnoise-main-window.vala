@@ -1497,7 +1497,7 @@ print("++2\n");
             
             var eqButtonTI = new ToolItem();
             var eqButton = new Button();
-            var eqi = new Image.from_stock(Stock.CONVERT, IconSize.BUTTON);
+            var eqi = new Image.from_icon_name("xn-equalizer", IconSize.LARGE_TOOLBAR);
             eqButton.add(eqi);
             eqButton.set_relief(Gtk.ReliefStyle.NONE);
             eqButton.can_focus = false;

@@ -4,7 +4,7 @@ icondir = $(datadir)/icons/hicolor/scalable/apps
 icon_DATA = xnoise.svg
 
 statusdir = $(datadir)/icons/hicolor/scalable/status
-status_DATA = xn-no-repeat.svg xn-repeat-all.svg xn-repeat-single.svg xn-shuffle.svg
+status_DATA = xn-no-repeat.svg xn-repeat-all.svg xn-repeat-single.svg xn-shuffle.svg xn-equalizer.svg
 
 paneldir = $(datadir)/icons/hicolor/scalable/apps
 panel_DATA = xnoise-panel.svg

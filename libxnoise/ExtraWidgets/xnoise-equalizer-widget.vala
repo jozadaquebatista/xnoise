@@ -62,7 +62,7 @@ internal class Xnoise.EqualizerWidget : Gtk.Box {
         
         private void setup_widgets() {
             // allow +/- 90%
-            scale = new Scale.with_range(Orientation.VERTICAL, -90, 90, 1);
+            scale = new Scale.with_range(Orientation.VERTICAL, -85, 85, 1);
             scale.inverted = true;
             scale.draw_value = false;
             scale.add_mark(0, PositionType.LEFT, null);
