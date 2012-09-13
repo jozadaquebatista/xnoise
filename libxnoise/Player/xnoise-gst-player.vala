@@ -325,16 +325,11 @@ public class Xnoise.GstPlayer : GLib.Object {
                                (int64)0);
             this.playSong();
         });
-        activate_equalizer();
-//        Timeout.add_seconds(15, () => {
-//            for(int i = 0; i < 10; i++) {
-//                GstEqualizer.TenBandPreset? pres = equalizer.get_preset(5);
-//                assert(pres != null);
-//                double val = pres.freq_band_gains[i];
-//                this.equalizer[i] = val;
-//            }
-//            return false;
-//        });
+        print("+++1\n");
+        if(Params.get_bool_value("not_use_eq"))
+            deactivate_equalizer();
+        else
+            activate_equalizer();
     }
 
     private Gdk.Pixbuf? extract_embedded_image(Gst.TagList taglist) {
@@ -392,14 +387,18 @@ public class Xnoise.GstPlayer : GLib.Object {
     }
 
     public void activate_equalizer() {
+        //print("activate_equalizer\n");
         if(equalizer.eq != null) {
+            playbin.set_state(State.NULL);
             queue.unlink_many(asink);
             queue.link_many(ac1, equalizer.eq, ac2, asink);
         }
     }
     
     public void deactivate_equalizer() {
+        //print("deactivate_equalizer\n");
         if(equalizer.eq != null) {
+            playbin.set_state(State.NULL);
             queue.unlink_many(ac1, equalizer.eq, ac2, asink);
             queue.link_many(asink);
         }

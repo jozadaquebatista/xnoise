@@ -805,6 +805,7 @@ namespace Xnoise {
 		public bool not_show_art_on_hover_image { get; set; }
 		public Xnoise.MainWindow.PlayerRepeatMode repeatState { get; set; }
 		public Gtk.UIManager ui_manager { get; set; }
+		public bool use_eq { get; set; }
 		public bool usestop { get; set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

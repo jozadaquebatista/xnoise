@@ -46,6 +46,7 @@ public class Xnoise.SettingsWidget : Gtk.Box {
     private CheckButton checkB_usestop;
     private CheckButton checkB_hoverimage;
     private CheckButton checkB_quitifclosed;
+    private CheckButton checkB_use_equalizer;
     
     private enum NotebookTabs {
         GENERAL = 0,
@@ -101,6 +102,11 @@ public class Xnoise.SettingsWidget : Gtk.Box {
         else
             checkB_quitifclosed.active = false;
         
+        if(Params.get_bool_value("not_use_eq"))
+            checkB_use_equalizer.active = false;
+        else
+            checkB_use_equalizer.active = true;
+        
         if(Params.get_int_value("usestop") > 0)
             checkB_usestop.active = true;
         else
@@ -152,6 +158,19 @@ public class Xnoise.SettingsWidget : Gtk.Box {
         else {
             Params.set_int_value("compact_layout", 0);
             main_window.compact_layout = false;
+        }
+    }
+    
+    private void on_checkB_use_equalizer_clicked(Gtk.Button sender) {
+        if(this.checkB_use_equalizer.active) {
+            Params.set_bool_value("not_use_eq", false);
+            main_window.use_eq = true;
+            gst_player.activate_equalizer();
+        }
+        else {
+            Params.set_bool_value("not_use_eq", true);
+            main_window.use_eq = false;
+            gst_player.deactivate_equalizer();
         }
     }
     
@@ -288,6 +307,14 @@ public class Xnoise.SettingsWidget : Gtk.Box {
                 return false;
             });
             checkB_quitifclosed.label = _("Quit application if window is closed");
+            
+            checkB_use_equalizer = this.builder.get_object("checkB_use_equalizer") as Gtk.CheckButton;
+            checkB_use_equalizer.can_focus = false;
+            Idle.add( () => {
+                checkB_use_equalizer.clicked.connect(this.on_checkB_use_equalizer_clicked);
+                return false;
+            });
+            checkB_use_equalizer.label = _("Use equalizer");
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
             notebook.scrollable = false;

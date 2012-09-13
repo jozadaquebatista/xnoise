@@ -51,6 +51,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private int _posY;
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
+    private ToolItem eqButtonTI;
     private SerialButton sbuttonTL;
     private SerialButton sbuttonLY;
     private SerialButton sbuttonVI;
@@ -247,6 +248,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 app_menu_button.hide();
             }
             _compact_layout = value;
+        }
+    }
+
+    private bool _use_eq;
+    public bool use_eq {
+        get {
+            return _use_eq;
+        }
+        set {
+            _use_eq = value;
+            set_use_equalizer(value);
         }
     }
 
@@ -791,6 +803,20 @@ print("++2\n");
         }
     }
 
+    private void set_use_equalizer(bool use) {
+    print("set_use_equalizer %s\n", use.to_string());
+        if(use) {
+            print("eqButtonTI.show_all\n");
+            eqButtonTI.set_no_show_all(false);
+            eqButtonTI.show_all();
+        }
+        else {
+        print("eqButtonTI.hide\n");
+            eqButtonTI.set_no_show_all(true);
+            eqButtonTI.hide();
+        }
+    }
+    
     public void toggle_window_visbility() {
         if(active_notifier != 0) {
             this.disconnect(active_notifier);
@@ -883,6 +909,7 @@ print("++2\n");
         not_show_art_on_hover_image = Params.get_bool_value("not_show_art_on_hover_image");
         usestop                     = Params.get_bool_value("usestop");
         compact_layout              = Params.get_bool_value("compact_layout");
+        use_eq                      = !Params.get_bool_value("not_use_eq");
     }
 
     public void write_params_data() {
@@ -900,6 +927,7 @@ print("++2\n");
         Params.set_int_value("repeatstate", repeatState);
         Params.set_bool_value("usestop", this.usestop);
         Params.set_bool_value("compact_layout", this.compact_layout);
+        Params.set_bool_value("not_use_eq", !use_eq);
         Params.set_int_value("not_show_art_on_hover_image", (not_show_art_on_hover_image == true ? 1 : 0));
     }
 
@@ -1495,9 +1523,10 @@ print("++2\n");
             this.hpaned.pack1(mbbox01, false, false);
             //----------------
             
-            var eqButtonTI = new ToolItem();
+            eqButtonTI = new ToolItem();
             var eqButton = new Button();
             var eqi = new Image.from_icon_name("xn-equalizer", IconSize.LARGE_TOOLBAR);
+            eqi.show();
             eqButton.add(eqi);
             eqButton.set_relief(Gtk.ReliefStyle.NONE);
             eqButton.can_focus = false;
@@ -1525,6 +1554,7 @@ print("++2\n");
                 eqdialog.show_all();
                 eqdialog.destroy.connect(  () => { eq_widget.destroy(); });
             });
+            eqButtonTI.set_no_show_all(true);
             eqButtonTI.add(eqButton);
             
 
