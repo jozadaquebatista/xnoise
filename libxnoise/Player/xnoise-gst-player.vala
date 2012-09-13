@@ -325,7 +325,6 @@ public class Xnoise.GstPlayer : GLib.Object {
                                (int64)0);
             this.playSong();
         });
-        print("+++1\n");
         if(Params.get_bool_value("not_use_eq"))
             deactivate_equalizer();
         else

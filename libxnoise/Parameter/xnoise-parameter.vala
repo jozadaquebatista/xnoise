@@ -255,6 +255,7 @@ use_tracknumber_column=1
 fontsizeMB=11
 position_year_column=5
 not_show_art_on_hover_image=0
+not_use_eq=0
 
 [settings_double]
 volume=0.8
