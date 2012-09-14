@@ -1,3 +1,23 @@
+xnoise (0.2.10-1ppa1~precise) precise; urgency=low
+  * Add equalizer
+  * Add eq presets and store/restore eq setups
+  * Settings: option to de/activate equalizer
+  * Several small GUI updates
+  * Restore last used tracks of external sources
+  * Allow cancelling initial tracklist restore
+  * Use less default plugins
+  * Improve visual presentation on Ubuntu Quantal
+  * Update po/es.po (faidoc)
+  * Update debian package generation script (Tal)
+  * Magnatune: remove temporary files
+  * Magnatune: fix database update check
+  * Magnatune: remove album download option, if usern./pasword is not available
+  * Bug fixes
+
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 14 Sep 2012 22:42:55 +0200
+
+
+
 xnoise (0.2.9-1ppa1~precise) precise; urgency=low
   * Redesign GUI for Settings-Dialog and for Add-Media-Dialog
   * use strip function on artist and album imports

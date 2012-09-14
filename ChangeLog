@@ -1,3 +1,189 @@
+commit 49113ec1d2b0fe596b558471abe079dde0ee1c54
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 09:55:42 2012 +0200
+
+    store/restore equalizer setups
+
+commit daa99d2d1554d0b0fe959e809ab13541cad4ff9f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 08:17:59 2012 +0200
+
+    update translatable strings
+
+commit 3750677b2178338aa0929518a3cfc7282fea9ded
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 01:54:34 2012 +0200
+
+    add default setting for eq
+
+commit 6b944fe28ed8c0a55c959fb0e7f98ea9c95aa7cc
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 01:51:01 2012 +0200
+
+    restore settings for equalizer
+
+commit 692db70b237c419c4ebcdaa2fe35552fbdbb6ffd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 00:23:23 2012 +0200
+
+    add equalizer icon
+
+commit 3592be2c5392bb68fb5bfe6ac63c8bc7353b1754
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 13 17:58:37 2012 +0200
+
+    add equalizer
+
+commit 5a97cb641be287fc63712c1bd81141767ea89cf9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 13 10:31:03 2012 +0200
+
+    use inline-toolbars on all main views
+
+commit d736a77b4f2d2aa10a5e778ea70e0f8f48bec5ab
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 13 09:16:07 2012 +0200
+
+    fix state indication for toggle action after external state changes
+
+commit 162d10faf0bb82dbe234c2a3cdc3c102b22d62e8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 12 23:19:03 2012 +0200
+
+    use less default plugins
+
+commit 78d45f1f19301c942582bdc0ac45032eaae89819
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 12 17:52:10 2012 +0200
+
+    make ToggleActionEntry for 'Show Media Browser'
+
+commit 2a60a5955e1ed5263a95ce8b37314108ed013185
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 12 17:19:40 2012 +0200
+
+    fix keybinding handling for switching between tracklist/videoview/lyricsview
+
+commit e6493dfa242ee5d2f6d41ac4d163faae0c4eb2e0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 12 17:15:06 2012 +0200
+
+    fix presentation of settings dialog
+
+commit 1a2e720bd5ffd1a47ca2cf568a037ee9a984674c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 12 15:54:54 2012 +0200
+
+    fix visual presentation on Ubuntu Quantal
+
+commit dc70443364fd2cb28115c870a81771a62c843a57
+Author: faidoc <faidoc@gmail.com>
+Date:   Wed Sep 12 13:17:06 2012 +0200
+
+    Update po/es.po
+
+commit 6221fe9c66e6b38c71fc46d00beb7a151cbc8da8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 11 13:55:41 2012 +0200
+
+    insert small border for media browser area
+
+commit 527d6e412ef32d95d5e9154d8f3e77f9f54c8aa3
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 11 13:46:31 2012 +0200
+
+    fix description text
+
+commit dde7498e8824135d5f86c9b9fd66f9a7c663166a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 11 12:57:38 2012 +0200
+
+    use symbolic play icon in tracklist
+
+commit 5d24a4d7e17a55710ee2b646503ae45654c51f92
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 10 16:43:02 2012 +0200
+
+    delete unused temporary files
+
+commit edaaf475859ca66b093b9202e5d0577f11473a82
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 10 16:19:16 2012 +0200
+
+    fix warning
+
+commit 51654908dabca7127fd7b0df948e8bb23d9bffe2
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 10 16:18:47 2012 +0200
+
+    don't display external command line messages
+
+commit 6193bd16fc1d047a1e209bb62c40bccee9b1deca
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 10 00:20:40 2012 +0200
+
+    update translatable strings
+
+commit bbfeebfff650016072f9ca80d9a858015ba3061c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 10 00:05:19 2012 +0200
+
+    fix restore of tracknumbers
+
+commit 4abd0b6b111a429584fa1f3e492857f11b326293
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 9 23:48:28 2012 +0200
+
+    make initial tracklist restore cancellable
+
+commit 78c3c7b0c63bf9b34c8f2b0213eede3a99fc949c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 9 23:28:38 2012 +0200
+
+    magnatune: fix database update check
+
+commit 71328e9a6ccb53bbc01e1ecbd5ac2412aeecf9ee
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 9 22:47:05 2012 +0200
+
+    restore last used tracks from trackdata
+
+commit 36f80618017ee990a7c1b13e033e8bd5cddeab7d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 9 09:51:20 2012 +0200
+
+    post release version update
+
+commit 2f546d00948cce75622ebe6a67180dc79aab6684
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 9 09:43:46 2012 +0200
+
+    magnatune: remove album download option, if username/pasword is not available
+
+commit 6a02a721c37ab53a82c3d5051ff5e94a96547fc8
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Sat Sep 8 15:45:54 2012 +0200
+
+    update debian package generation script
+
+commit bea17287ee478275887606541a86ecc51308cc81
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Sat Sep 8 15:44:08 2012 +0200
+
+    update hebrew translation
+
+commit 61b8d1f17dec152479d9b9d04dbd05940cfd3987
+Author: 3ED <krzysztof1987@gmail.com>
+Date:   Sat Sep 1 13:30:33 2012 +0200
+
+    update polish translation
+
+commit afea0fc2fbd9b0d5617a97c667c0a32cd78bfb59
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Aug 31 17:23:34 2012 +0200
+
+    update portugese translation
+
 commit f5e9b8595769bd732d0e8423f17cf7ee859ae6ee
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Fri Aug 31 10:51:32 2012 +0200

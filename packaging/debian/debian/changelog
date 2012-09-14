@@ -1,28 +1,18 @@
-xnoise (0.2.9) unstable; urgency=low
-  * Redesign GUI for Settings-Dialog and for Add-Media-Dialog
-  * use strip function on artist and album imports
-  * Extend media import API
-  * Extend item handler API
-  * Add fix for window hiding/howing (Tal)
-  * Update portugse translation (Sergio Marques)
-  * Activate standard item handlers for dynamic playlists, too
-  * Context menus for dynamic playlists
-  * Add query interface for dynamic playlists
-  * Fix keyboard opened menus for tracklist and musicbrowser
-  * Use nautilus feature (if available) for file indication
-  * Add FAQ entry to help menu
-  * Magnatune: add support for 'speechless' streaming with user login
-  * Magnatune: album downloads for registered users
-  * Magnatune: add online change monitoring
-  * Magnatune: use album images in Magnatune plugin
-  * Magnatune: use genre in search/filtering
-  * Magnatune: change store location of db
-  * Update packaging data
-  * Replace hard coded keycodes with the (now available) Gdk.Key.* constants
-  * Recommend tumbler thumbnailing in packaging
-  * Update debian package creation script (Tal)
-  * Code cleanups
-  * Various bug fixes
+xnoise (0.2.10) unstable; urgency=low
+  * Add equalizer
+  * Add eq presets and store/restore eq setups
+  * Settings: option to de/activate equalizer
+  * Several small GUI updates
+  * Restore last used tracks of external sources
+  * Allow cancelling initial tracklist restore
+  * Use less default plugins
+  * Improve visual presentation on Ubuntu Quantal
+  * Update po/es.po (faidoc)
+  * Update debian package generation script (Tal)
+  * Magnatune: remove temporary files
+  * Magnatune: fix database update check
+  * Magnatune: remove album download option, if usern./pasword is not available
+  * Bug fixes
   * Closes: #632932
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 31 Aug 2012 17:05:49 +0200
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 14 Sep 2012 22:42:55 +0200

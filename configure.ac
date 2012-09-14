@@ -82,7 +82,6 @@ PKG_CHECK_MODULES(XNOISE, \
     gstreamer-0.10 >= $GSTREAMER_REQUIRED \
     gstreamer-interfaces-0.10 \
     gstreamer-plugins-base-0.10 \
-    gstreamer-plugins-good-0.10 \
     gtk+-3.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
     taglib_c >= $TAGLIB_C_REQUIRED \
@@ -526,30 +525,38 @@ AC_CONFIG_FILES([
 
 AC_OUTPUT
 
+bold=`tput bold`
+normal=`tput sgr0`
+
 echo "
-  ${PACKAGE} ${VERSION}
+  ${bold}${PACKAGE} ${VERSION}${normal}
   ~~~~~~~~~~~~~
   
-  Configuration Info:
+  ${bold}CONFIGURATION INFO${normal}
     Prefix:                        ${prefix}
     Gettext package:               ${GETTEXT_PACKAGE}
     CFLAGS:                        ${CFLAGS}
     Vala compiler (if applicable): ${VALAC}
     Vala's glib target version:    ${TARGET_GLIB_VERSION}
 
-  Plugins included in this build: 
-    Lastfm webservices:            ${enable_lastfm}
-    Media key control:             ${enable_mediakeys}
-    Desktop notifications:         ${enable_notifications}
-    Mpris v1/v2 interfaces:        ${enable_mpris}
-    Test plugin (Demo):            yes (always)
-    TitleToDecoration:             yes (always)
-    Ubuntu soundmenu:              ${enable_soundmenu2}
-    Ubuntu One Music Store:        ${enable_ubuntuone}
-    Magntune Music Store:          ${enable_magnatune}
-    Chartlyrics:                   ${enable_chartlyrics}
-    Azlyrics:                      ${enable_azlyrics}
-    Lyricwiki:                     ${enable_lyricwiki}
+  ${bold}PLUGINS included in this build:${normal}
+    Lastfm (Album images 
+            and 'scrobbling')      ${enable_lastfm}
+    Keyboard Media Key control     ${enable_mediakeys}
+    Desktop notifications          ${enable_notifications}
+    Mpris v1/v2 dbus interfaces    ${enable_mpris}
+    Test plugin (Demo Plugin)      yes (always)
+    Title-To-Decoration            yes (always)
+    Ubuntu soundmenu               ${enable_soundmenu2}
+    
+    ${bold}Music Store Plugins:${normal}
+    Ubuntu One Music Store         ${enable_ubuntuone}
+    Magntune Music Store           ${enable_magnatune}
+    
+    ${bold}Lyrics Provider Plugins:${normal}
+    Chartlyrics                    ${enable_chartlyrics}
+    Azlyrics                       ${enable_azlyrics}
+    Lyricwiki                      ${enable_lyricwiki}
 
   Note: Single plugin builds can be deactivated
         manually by user option or automatically,
