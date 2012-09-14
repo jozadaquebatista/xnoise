@@ -25,6 +25,7 @@ libxnoise/ExtraWidgets/xnoise-control-button.vala
 libxnoise/ExtraWidgets/xnoise-media-source-widget.vala
 libxnoise/ExtraWidgets/xnoise-play-pause-button.vala
 libxnoise/ExtraWidgets/xnoise-volume-slider-button.vala
+libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala
 libxnoise/GlobalAccess/xnoise-global-access.vala
 libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala
 libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala
@@ -44,6 +45,7 @@ libxnoise/Lyrics/xnoise-lyrics-view.vala
 libxnoise/Main/xnoise-main.vala
 libxnoise/MainWindow/xnoise-main-window.vala
 libxnoise/Parameter/xnoise-parameter.vala
+libxnoise/Player/xnoise-gst-equalizer.vala
 libxnoise/Player/xnoise-gst-player.vala
 libxnoise/PluginModule/xnoise-plugin.vala
 libxnoise/PluginModule/xnoise-plugin-information.vala

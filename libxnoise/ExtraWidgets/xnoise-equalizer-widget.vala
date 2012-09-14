@@ -36,6 +36,7 @@ using Xnoise;
 
 internal class Xnoise.EqualizerWidget : Gtk.Box {
     private unowned GstEqualizer equalizer;
+    
     private EqualizerScale[] scale_indies = new EqualizerScale[10];
     
     public Button closebutton; 

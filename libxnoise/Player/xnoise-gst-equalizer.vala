@@ -36,7 +36,7 @@ using Xnoise;
 public class Xnoise.GstEqualizer : GLib.Object, IParams {
     
     private const int[] frequencies  = 
-        { 50,     80,    120,   250,   500,   1000,  2000,   4500,   7600,  15000 };
+        { 50,     80,    120,   250,   500,   1000,  2000,   4500,   7600,   15000 };
     
     private const double[] bw_ranges = 
         { 100.0,  100.0, 100.0, 200.0, 300.0, 500.0, 2000.0, 3000.0, 3500.0, 5000.0 };

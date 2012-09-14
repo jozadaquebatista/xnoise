@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-14 10:23+0200\n"
+"POT-Creation-Date: 2012-09-14 11:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -229,6 +229,10 @@ msgstr ""
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:412
 msgid "Search..."
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:150
+msgid "Preset:"
 msgstr ""
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
@@ -557,6 +561,22 @@ msgstr ""
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1588
 msgid "Show application main menu"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:171
+msgid "Maximum Treble"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:175
+msgid "Maximum Bass"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:184
+msgid "Custom"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:189
+msgid "Default"
 msgstr ""
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:207
