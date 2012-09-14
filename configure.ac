@@ -3,7 +3,7 @@ AC_PREREQ([2.68])
 #xnoise version
 m4_define(xnoise_major_version, 0)
 m4_define(xnoise_minor_version, 2)
-m4_define(xnoise_micro_version, 10)
+m4_define(xnoise_micro_version, 11)
 m4_define(xnoise_version, xnoise_major_version.xnoise_minor_version.xnoise_micro_version)
 m4_define([xnoise_name], [xnoise])
 
