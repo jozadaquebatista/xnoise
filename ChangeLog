@@ -1,3 +1,15 @@
+commit 53d7b55e2fa47a1ff185ef6c4da44f636f71dc46
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 11:13:22 2012 +0200
+
+    update translatable strings
+
+commit fa0dce08c8f7557c7fcfee803e2142b86650908d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 11:06:46 2012 +0200
+
+    update packaging data
+
 commit 49113ec1d2b0fe596b558471abe079dde0ee1c54
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Fri Sep 14 09:55:42 2012 +0200
