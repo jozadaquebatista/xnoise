@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-14 11:11+0200\n"
+"POT-Creation-Date: 2012-09-14 21:15+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -585,12 +585,12 @@ msgstr "Введите URL для проигрывания"
 msgid "Select media file"
 msgstr "Выберите медиа файл"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1546
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1548
 msgid "Equalizer"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1588
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1594
 msgid "Show application main menu"
 msgstr "Показывать главное меню"
 

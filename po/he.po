@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-14 11:11+0200\n"
+"POT-Creation-Date: 2012-09-14 21:15+0200\n"
 "PO-Revision-Date: 2012-09-06 22:17+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -566,12 +566,12 @@ msgstr "הכנס את כתובת ה-URL של הקובץ שברצונך לנגן"
 msgid "Select media file"
 msgstr "בחירת קובץ מדיה"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1546
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1548
 msgid "Equalizer"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1588
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1594
 msgid "Show application main menu"
 msgstr "הצג את התפריט הראשי"
 

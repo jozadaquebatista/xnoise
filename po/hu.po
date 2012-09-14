@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-14 11:11+0200\n"
+"POT-Creation-Date: 2012-09-14 21:15+0200\n"
 "PO-Revision-Date: 2011-04-29 20:40+0100\n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: Ubuntu Hungarian Translators <https://launchpad.net/~ubuntu-"
@@ -592,12 +592,12 @@ msgstr "Enter the URL of the file to open"
 msgid "Select media file"
 msgstr "Média fájl kiválasztása"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1546
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1548
 msgid "Equalizer"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1588
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1594
 msgid "Show application main menu"
 msgstr ""
 

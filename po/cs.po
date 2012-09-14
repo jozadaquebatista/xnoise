@@ -3,9 +3,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-14 11:11+0200\n"
-"PO-Revision-Date: 2012-08-31 09:51+0100\n"
-"Last-Translator: Petr Šimáček <petr.simacek@gmail.com>\n"
+"POT-Creation-Date: 2012-09-14 21:15+0200\n"
+"PO-Revision-Date: 2012-09-14 15:26+0200\n"
+"Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -163,7 +163,7 @@ msgstr "Ukončit program při zavření okna"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:317
 msgid "Use equalizer"
-msgstr ""
+msgstr "Použít ekvalizér"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:330
 msgid "Media browser fontsize:"
@@ -233,7 +233,7 @@ msgstr "Hledat..."
 
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:150
 msgid "Preset:"
-msgstr ""
+msgstr "Přednastavení:"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
@@ -519,9 +519,8 @@ msgid "_Config"
 msgstr "_Nastavení"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:274
-#, fuzzy
 msgid "_Show Media Browser"
-msgstr "_Prohlížeč médií"
+msgstr "_Ukázat prohlížeč médií"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:465
 #, c-format
@@ -568,30 +567,30 @@ msgstr "Zadejte adresu (URL) k přehrání"
 msgid "Select media file"
 msgstr "Vyberte multimediální soubor"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1546
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1548
 msgid "Equalizer"
-msgstr ""
+msgstr "Ekvalizér"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1588
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1594
 msgid "Show application main menu"
 msgstr "Ukázat hlavní nabídku programu"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:171
 msgid "Maximum Treble"
-msgstr ""
+msgstr "Největší výšky"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:175
 msgid "Maximum Bass"
-msgstr ""
+msgstr "Největší hloubky"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:184
 msgid "Custom"
-msgstr ""
+msgstr "Vlastní"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:189
 msgid "Default"
-msgstr ""
+msgstr "Výchozí"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:207
 msgid ""
@@ -788,9 +787,8 @@ msgid "Control xnoise using mediakeys"
 msgstr "Ovládat Xnoise pomocí multimediálních kláves"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Magnatune Music Store"
-msgstr "Hudební obchod Ubuntu One"
+msgstr "Hudební obchod Magnatune"
 
 #: ../plugins/magnatune/magnatune-dockable.vala:57
 msgid "Magnatune"
@@ -813,23 +811,24 @@ msgid "Download finished for \""
 msgstr "Stahování skončilo pro \""
 
 #: ../plugins/magnatune/magnatune-widget.vala:183
-#, fuzzy
 msgid "download finished..."
-msgstr "Stahování skončilo pro \""
+msgstr "Stahování dokončeno..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:185
 msgid "decompressing..."
-msgstr ""
+msgstr "Rozbaluje se..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:239
 msgid "decompressing finished..."
-msgstr ""
+msgstr "Rozbalení dokončeno..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:254
 msgid ""
 "Please wait while\n"
 "converting database."
 msgstr ""
+"Počkejte, prosím, zatímco\n"
+"se převádí databáze."
 
 #: ../plugins/magnatune/magnatune-widget.vala:285
 #, c-format
@@ -838,9 +837,11 @@ msgid ""
 "converting database.\n"
 "Done for %d tracks."
 msgstr ""
+"Počkejte, prosím, zatímco\n"
+"se převádí databáze.\n"
+"Hotovo %d skladeb."
 
 #: ../plugins/magnatune/magnatune-widget.vala:321
-#, fuzzy
 msgid "loading..."
 msgstr "Nahrává se..."
 
