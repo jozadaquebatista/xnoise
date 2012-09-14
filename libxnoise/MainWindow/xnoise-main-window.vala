@@ -1537,6 +1537,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             eqButton.set_relief(Gtk.ReliefStyle.NONE);
             eqButton.can_focus = false;
             eqButton.clicked.connect( () => {
+                if(eqdialog != null)
+                    return;
                 var eq_widget = new EqualizerWidget(gst_player.equalizer);
                 eqdialog = new Gtk.Window();
                 eqdialog.add(eq_widget);
@@ -1558,7 +1560,11 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     return false;
                 });
                 eqdialog.show_all();
-                eqdialog.destroy.connect(  () => { eq_widget.destroy(); });
+                eqdialog.delete_event.connect(  () => {
+                    //print("remove equalizer window\n");
+                    eqdialog = null;
+                    return false;
+                });
             });
             eqButtonTI.set_no_show_all(true);
             eqButtonTI.add(eqButton);
