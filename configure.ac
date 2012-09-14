@@ -82,6 +82,7 @@ PKG_CHECK_MODULES(XNOISE, \
     gstreamer-0.10 >= $GSTREAMER_REQUIRED \
     gstreamer-interfaces-0.10 \
     gstreamer-plugins-base-0.10 \
+    gstreamer-plugins-good-0.10 \
     gtk+-3.0 >= $GTK_REQUIRED \
     sqlite3 >= $SQLITE_REQUIRED \
     taglib_c >= $TAGLIB_C_REQUIRED \

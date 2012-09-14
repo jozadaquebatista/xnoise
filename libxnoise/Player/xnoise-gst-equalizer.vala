@@ -45,11 +45,13 @@ public class Xnoise.GstEqualizer : GLib.Object, IParams {
     public dynamic Gst.Element eq;
     
     public void read_params_data() {
-        //TODO
+        for(int i = 0; i < 10; ++i)
+            this[i] = Params.get_double_value("eq_band%d".printf(i));
     }
 
     public void write_params_data() {
-        //TODO
+        for(int i = 0; i < 10; ++i)
+            Params.set_double_value("eq_band%d".printf(i), this[i]);
     }
 
     public class TenBandPreset {
@@ -112,7 +114,6 @@ public class Xnoise.GstEqualizer : GLib.Object, IParams {
         else {
             gain *= 0.24;
         }
-        
         bandgain.set("gain", gain);
     }
     
@@ -144,11 +145,15 @@ public class Xnoise.GstEqualizer : GLib.Object, IParams {
 
         presets.prepend(
             new TenBandPreset("Dance", 
-                              { 20.0, 20.0, 12.0, 0.0, 0.0, -10.0, -20.0, -10.0, 10.0, 0.0 }
+                              { 20.0, 20.0, 12.0, 0.0, 0.0, -10.0, -20.0, 0.0, 10.0, 10.0 }
         ));
         presets.prepend(
             new TenBandPreset("Pop", 
-                              { -10.0, 20.0, 25.0, 28.0, 20.0, -5.0, -10.0, -10.0, -5.0, -5.0 }
+                              { -10.0, 10.0, 15.0, 28.0, 20.0, -5.0, -10.0, -10.0, 0.0, 0.0 }
+        ));
+        presets.prepend(
+            new TenBandPreset("Techno", 
+                              { 30.0, 20.0, 0.0, -10.0, -5.0, 0.0, 25.0, 30.0, 30.0, 22.0 }
         ));
         presets.prepend(
             new TenBandPreset("Club", 
@@ -156,28 +161,30 @@ public class Xnoise.GstEqualizer : GLib.Object, IParams {
         ));
         presets.prepend(
             new TenBandPreset("Jazz", 
-                              { -5.0, 0.0, 0.0, 5.0, 20.0, 30.0, 30.0, 10.0, 5.0, 0.0 }
+                              { -5.0, 0.0, 0.0, 10.0, 30.0, 30.0, 15.0, 5.0, 5.0, 0.0 }
         ));
         presets.prepend(
             new TenBandPreset("Rock", 
                               { 20.0, 5.0, -10.0, -20.0, -5.0, 5.0, 20.0, 35.0, 35.0, 40.0 }
         ));
         presets.prepend(
-            new TenBandPreset("Techno", 
-                              { 30.0, 20.0, 0.0, -10.0, -5.0, 0.0, 25.0, 30.0, 30.0, 22.0 }
-        ));
-        presets.prepend(
             new TenBandPreset(_("Maximum Treble"), 
-                              { -30.0, -30.0, -30.0, -15.0, 10.0, 45.0, 80.0, 80.0, 80.0, 80.0 }
+                              { -30.0, -30.0, -20.0, -15.0, 0.0, 15.0, 50.0, 70.0, 70.0, 70.0 }
         ));
         presets.prepend(
             new TenBandPreset(_("Maximum Bass"), 
-                              { 60.0, 60.0, 60.0, 40.0, 20.0, -25.0, -30.0, -30.0, -30.0, -30.0 }
+                              { 60.0, 60.0, 60.0, 10.0, 0.0, -25.0, -30.0, -30.0, -30.0, -30.0 }
         ));
         presets.prepend(
             new TenBandPreset("Classic", 
                               { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -30.0, -30.0, -30.0, -35.0 }
         ));
+        // "Custom" always has to be in this position
+        presets.prepend(
+            new TenBandPreset(_("Custom"), 
+                              { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }
+        ));
+        // "Default" always has to be in this position
         presets.prepend(
             new TenBandPreset(_("Default"), 
                               { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }
@@ -188,18 +195,15 @@ public class Xnoise.GstEqualizer : GLib.Object, IParams {
         if(eq == null)
             eq = ElementFactory.make("equalizer-10bands", null);
         
-        double last = 0.0;
         for(int i = 0; i < 10; i++) {
             double range = bw_ranges[i];
             double f = frequencies[i];
             Gst.Object? bandgain = ((Gst.ChildProxy)eq).get_child_by_name("band%d".printf(i));
             assert(bandgain != null);
-            bandgain.set(
-               "freq", f,
-               "gain", 0.0,
-               "bandwidth", range
+            bandgain.set("freq", f,
+                         "gain", 0.0,
+                         "bandwidth", range
             );
-            last = frequencies[i];
         }
     }
 }

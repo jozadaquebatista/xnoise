@@ -36,12 +36,17 @@ using Xnoise;
 
 internal class Xnoise.EqualizerWidget : Gtk.Box {
     private unowned GstEqualizer equalizer;
+    private EqualizerScale[] scale_indies = new EqualizerScale[10];
+    
+    public Button closebutton; 
     
     private class EqualizerScale : Gtk.Box {
         private Gtk.Scale scale;
         private int idx;
         private int frequency;
         private unowned GstEqualizer equalizer;
+        
+        public signal void value_changed(int index, double new_val);
         
         public EqualizerScale(GstEqualizer equalizer, int idx, int frequency) {
             GLib.Object(orientation:Orientation.VERTICAL,spacing:5);
@@ -54,6 +59,7 @@ internal class Xnoise.EqualizerWidget : Gtk.Box {
         
         private void on_value_changed(Gtk.Range sender) {
             this.equalizer[idx] = (double)scale.get_value();
+            this.value_changed(idx, (double)scale.get_value());
         }
         
         public void set_gain(double gain) {
@@ -84,8 +90,6 @@ internal class Xnoise.EqualizerWidget : Gtk.Box {
         }
     }
     
-    public Button closebutton; 
-    
     public EqualizerWidget(GstEqualizer equalizer) {
         GLib.Object(orientation:Orientation.VERTICAL,spacing:5);
         this.equalizer = equalizer;
@@ -96,30 +100,49 @@ internal class Xnoise.EqualizerWidget : Gtk.Box {
         //print("dtor EqualizerWidget\n");
     }
 
+    private bool in_load_preset = false;
     private void on_preset_changed(ComboBox sender) {
         string s = sender.get_active_id();
         if(s == "")
             return;
+        Params.set_string_value("eq_combo", s);
+        if(s == "1") //custom
+            return;
         int i = int.parse(s);
         //print("seleted preset %d\n", i);
         GstEqualizer.TenBandPreset pres = equalizer.get_preset(i);
+        in_load_preset = true;
         for(int j = 0; j < 10; j++) {
             EqualizerScale sc = scale_indies[j];
             sc.set_gain(pres.freq_band_gains[j]);
             equalizer[j] = pres.freq_band_gains[j];
         }
+        Idle.add(() => {
+            in_load_preset = false;
+            return false;
+        });
     }
     
-    private EqualizerScale[] scale_indies = new EqualizerScale[10];
+    private void on_eq_scale_value_changed(EqualizerScale sender, int idx, double val) {
+        if(in_load_preset)
+            return;
+        c.set_active_id("1"); // set to custom
+    }
+    
+    private ComboBoxText c;
     
     private void setup_widgets() {
         var combox = new Gtk.Box(Orientation.HORIZONTAL, 0);
-        var c = new ComboBoxText();
+        c = new ComboBoxText();
         for(int i = 0; i < equalizer.preset_count(); i++) {
             GstEqualizer.TenBandPreset pres = equalizer.get_preset(i);
             c.append(i.to_string(), pres.name);
         }
-        c.set_active_id("0");
+        if(Params.get_string_value("eq_combo") != "")
+            c.set_active_id(Params.get_string_value("eq_combo"));
+        else
+            c.set_active_id("0");
+        
         c.changed.connect(on_preset_changed);
         var l = new Label("");
         combox.pack_start(l, true, true, 0);
@@ -135,6 +158,7 @@ internal class Xnoise.EqualizerWidget : Gtk.Box {
             var esc = new EqualizerScale(equalizer, i, fa[i]);
             freq_gains_box.pack_start(esc, true, true, 0);
             scale_indies[i] = esc;
+            esc.value_changed.connect(on_eq_scale_value_changed);
         }
         this.pack_start(freq_gains_box, true, true, 0);
         closebutton = new Button.from_stock(Stock.CLOSE);

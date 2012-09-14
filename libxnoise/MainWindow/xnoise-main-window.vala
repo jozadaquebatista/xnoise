@@ -76,6 +76,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private string temporary_mainview_name;
     private bool window_maximized;
     private SettingsWidget settings_widget;
+    private Gtk.Window eqdialog;
     internal bool quit_if_closed;
     internal ScrolledWindow musicBrScrollWin = null;
     internal ScrolledWindow trackListScrollWin = null;
@@ -337,6 +338,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         else if((e.new_window_state & Gdk.WindowState.ICONIFIED) == Gdk.WindowState.ICONIFIED) {
             this.get_position(out _posX, out _posY);
             is_fullscreen = false;
+            if(eqdialog != null) {
+                eqdialog.destroy();
+                eqdialog = null;
+            }
         }
         else {
             is_fullscreen = false;
@@ -791,27 +796,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     // This is used for the main window
     private void toggle_mainwindow_fullscreen() {
-    print("toggle_mainwindow_fullscreen\n");
+        //print("toggle_mainwindow_fullscreen\n");
         if(is_fullscreen) {
-print("++1\n");
-            print("was fullscreen before\n");
+            //print("was fullscreen before\n");
             this.unfullscreen();
         }
         else {
-print("++2\n");
             this.fullscreen();
         }
     }
 
     private void set_use_equalizer(bool use) {
-    print("set_use_equalizer %s\n", use.to_string());
+        //print("set_use_equalizer %s\n", use.to_string());
         if(use) {
-            print("eqButtonTI.show_all\n");
             eqButtonTI.set_no_show_all(false);
             eqButtonTI.show_all();
         }
         else {
-        print("eqButtonTI.hide\n");
             eqButtonTI.set_no_show_all(true);
             eqButtonTI.hide();
         }
@@ -1077,6 +1078,11 @@ print("++2\n");
     }
 
     private bool on_close() {
+        if(eqdialog != null) {
+            eqdialog.destroy();
+            eqdialog = null;
+        }
+        
         if(active_notifier != 0) {
             this.disconnect(active_notifier);
             active_notifier = 0;
@@ -1532,11 +1538,11 @@ print("++2\n");
             eqButton.can_focus = false;
             eqButton.clicked.connect( () => {
                 var eq_widget = new EqualizerWidget(gst_player.equalizer);
-                var eqdialog = new Gtk.Window();
+                eqdialog = new Gtk.Window();
                 eqdialog.add(eq_widget);
                 eqdialog.type_hint = Gdk.WindowTypeHint.DIALOG;
                 eqdialog.window_position = WindowPosition.CENTER_ON_PARENT;
-                eq_widget.closebutton.clicked.connect( () => { eqdialog.destroy(); });
+                eq_widget.closebutton.clicked.connect( () => { eqdialog.destroy(); eqdialog = null; });
                 eqdialog.set_title("xnoise - " + _("Equalizer"));
                 eqdialog.key_press_event.connect( (s,e) => {
                     switch(e.keyval) {
