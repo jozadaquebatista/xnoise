@@ -299,11 +299,6 @@ private class MagMusicStore : GLib.Object {
         main_window.msw.select_dockable_by_name("MusicBrowserDockable");
         if(msd == null)
             return;
-//        if(msd.action_group != null) {
-//            main_window.ui_manager.remove_action_group(msd.action_group);
-//        }
-//        if(msd.ui_merge_id != 0)
-//            main_window.ui_manager.remove_ui(msd.ui_merge_id);
         main_window.msw.remove_dockable_in_idle(MAGNATUNE_MUSIC_STORE_NAME);
     }
 }
