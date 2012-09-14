@@ -142,6 +142,7 @@ public class MagnatuneSettings : Gtk.Box {
             feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_NOT_AVAILABLE));
         }
         b.clicked.connect(on_entry_changed);
+        on_entry_changed();
     }
 
     //show if user is logged in
@@ -180,6 +181,8 @@ public class MagnatuneSettings : Gtk.Box {
             magn_plugin.login(username, password);
         }
         else {
+            Xnoise.Params.set_string_value("magnatune_user", username);
+            Xnoise.Params.set_string_value("magnatune_pass", password);
             magn_plugin.logout();
         }
         do_user_feedback();
