@@ -1,3 +1,24 @@
+xnoise (0.2.10)
+
+New Features and Fixes
+======================
+  * Add equalizer
+  * Add eq presets and store/restore eq setups
+  * Settings: option to de/activate equalizer
+  * Several small GUI updates
+  * Restore last used tracks of external sources
+  * Allow cancelling initial tracklist restore
+  * Use less default plugins
+  * Improve visual presentation on Ubuntu Quantal
+  * Update po/es.po (faidoc)
+  * Update debian package generation script (Tal)
+  * Magnatune: remove temporary files
+  * Magnatune: fix database update check
+  * Magnatune: remove album download option, if usern./pasword is not available
+  * Bug fixes
+
+
+
 xnoise (0.2.9)
 
 New Features and Fixes
