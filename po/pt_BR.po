@@ -1,0 +1,3901 @@
+# Brazilian Portuguese translation of glib.
+# Copyright (C) 2001-2008 Free Software Foundation, Inc.
+# This file is distributed under the same license as the glib package.
+# Gustavo Noronha Silva <kov@debian.org>, 2001-2005
+# Leonardo Ferreira Fontenelle <leonardof@gnome.org>, 2006-2009.
+# Vladimir Melo <vmelo@gnome.org>, 2007, 2009.
+# Luiz Armesto <luiz.armesto@gmail.com>, 2008.
+# Og Maciel <ogmaciel@gnome.org>, 2008-2009, 2011.
+# Henrique P Machado <zehrique@gmail.com>, 2008-2009.
+# Fábio Nogueira <fnogueira@gnome.org>, 2009.
+# Fabrício Godoy <skarllot@gmail.com>, 2010.
+# Djavan Fagundes <djavan@comum.org>, 2011.
+# Adorilson Bezerra <adorilson@gmail.com>, 2011.
+# Jonh Wendell <jwendell@gnome.org>, 2009, 2010, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: glib\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-14 21:15+0200\n"
+"PO-Revision-Date: 2012-04-28 10:10-0300\n"
+"Last-Translator: Jonh Wendell <jwendell@gnome.org>\n"
+"Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Virtaal 0.6.1\n"
+"X-Poedit-Language: Portuguese\n"
+"X-Poedit-Country: BRAZIL\n"
+
+#: ../data/misc/xnoise.desktop.in.in.h:1
+msgid "Xnoise"
+msgstr ""
+
+#: ../data/misc/xnoise.desktop.in.in.h:2
+msgid "Media Player"
+msgstr ""
+
+#: ../data/misc/xnoise.desktop.in.in.h:3
+msgid "Organize and play your music and video collections"
+msgstr ""
+
+#: ../libxnoise/Application/xnoise-application.vala:93 ../src/xnoise.vala:63
+#, c-format
+msgid "Xnoise is a media player for Gtk+."
+msgstr ""
+
+#: ../libxnoise/Application/xnoise-application.vala:94 ../src/xnoise.vala:64
+msgid "It uses the gstreamer framework."
+msgstr ""
+
+#: ../libxnoise/Application/xnoise-application.vala:95 ../src/xnoise.vala:65
+msgid "More information on the project website:"
+msgstr ""
+
+#. the 'no lyrics found...' also appears in the db provider !!
+#: ../libxnoise/Database/xnoise-db-reader.vala:165
+#: ../libxnoise/Lyrics/xnoise-lyrics-loader.vala:177
+#: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:127
+msgid "no lyrics found..."
+msgstr ""
+
+#: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
+msgid "Last Played"
+msgstr ""
+
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-dockable.vala:47
+msgid "Music"
+msgstr ""
+
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:308
+#: ../plugins/magnatune/magnatune-treeview.vala:214
+msgid "Collapse all"
+msgstr ""
+
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:310
+#: ../plugins/magnatune/magnatune-treestore.vala:43
+msgid "Loading ..."
+msgstr ""
+
+#: ../libxnoise/DockableMedia/MostPlayed/xnoise-dockable-playlist-mostplayed.vala:41
+msgid "Most Played"
+msgstr ""
+
+#: ../libxnoise/DockableMedia/StreamListing/xnoise-dockable-streams.vala:41
+msgid "Streams"
+msgstr ""
+
+#: ../libxnoise/DockableMedia/VideoListing/xnoise-dockable-videos.vala:41
+msgid "Videos"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:156
+msgid "Add or Remove media"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:173
+msgid "Add local folder"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
+msgid "Add media stream"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
+msgid "Remove"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
+msgid "do full rescan"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
+msgid ""
+"Select local media folders or internet media streams. \n"
+"All media sources will be available via xnoise's library."
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
+msgid "Name"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:234
+msgid "Location"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:259
+#: ../libxnoise/Utils/xnoise-media-importer.vala:86
+#: ../libxnoise/Utils/xnoise-media-importer.vala:169
+msgid "Importing media data. This may take some time..."
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:281
+msgid "Select media folder"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:350
+msgid "Add internet radio link"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:195
+msgid "Leave fullscreen"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:259
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:263
+msgid "General"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:265
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
+msgid "Plugins"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:277
+msgid "Enable grid lines in media browser"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:285
+msgid "Don't show video screen while hovering album image"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:293
+msgid "Compact layout"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:301
+msgid "Use stop button"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:309
+msgid "Quit application if window is closed"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:317
+msgid "Use equalizer"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:330
+msgid "Media browser fontsize:"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:120
+msgid "Select external subtitle file"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:161
+msgid "No Subtitle"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:219
+msgid "Leave Fullscreen"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:219
+msgid "Fullscreen"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1259
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1287
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1329
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1359
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
+#: ../plugins/notifications2/xnoise-notifications.vala:197
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
+#, c-format
+msgid "by"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1261
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1289
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1331
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1361
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
+#: ../plugins/notifications2/xnoise-notifications.vala:200
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
+#, fuzzy, c-format
+msgid "on"
+msgstr "seg"
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:258
+msgid "Media Collections"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:260
+msgid "Playlists"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:262
+msgid "Stores"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:264
+msgid "Devices"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:412
+msgid "Search..."
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:150
+msgid "Preset:"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
+msgid "Add all tracks to tracklist"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:136
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:171
+msgid "xnoise - Edit metadata"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:139
+msgid "Type new artist name."
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:140
+msgid "Artist:"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:143
+msgid "Type new album name."
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:144
+msgid "Album:"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:163
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:186
+msgid ""
+"Please wait while filling media browser. Or cancel, if you do not want to "
+"wait."
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:167
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:190
+msgid ""
+"Please wait while importing media. Or cancel, if you do not want to wait."
+msgstr ""
+
+#. ARTIST
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1311
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1441
+msgid "Artist"
+msgstr ""
+
+#. ALBUM
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:137
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1287
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1450
+msgid "Album"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:140
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1263
+msgid "Title"
+msgstr ""
+
+#. GENRE
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:143
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1357
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1459
+msgid "Genre"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
+#, fuzzy
+msgid "Uri"
+msgstr "sex"
+
+#. YEAR
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1381
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1468
+msgid "Year"
+msgstr ""
+
+#. TRACKNUMBER
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1432
+msgid "Tracknumber"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:35
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:39
+msgid "Edit metadata for track"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:43
+msgid "Change album name"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-handler-edit-tags.vala:47
+msgid "Change artist name"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:49
+#: ../libxnoise/ItemHandlers/AddToTracklist/xnoise-handler-add-to-tracklist.vala:53
+msgid "Add to tracklist"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:41
+msgid "Move to trash"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/MoveToTrash/xnoise-handler-move-to-trash.vala:87
+msgid "Do you want to move the selected file to trash?"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/PlayItem/xnoise-handler-play-item.vala:35
+msgid "Play"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/RemoveTrack/xnoise-handler-remove-track.vala:35
+msgid "Remove selected track"
+msgstr ""
+
+#: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:35
+#: ../libxnoise/ItemHandlers/ShowInFilemanager/xnoise-handler-show-in-file-manager.vala:39
+msgid "Show in parent folder"
+msgstr ""
+
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:154
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:209
+msgid "Insufficient track information. Not searching for lyrics."
+msgstr ""
+
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:182
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:198
+msgid "Player stopped. Not searching for lyrics."
+msgstr ""
+
+#. Gtk.TextIter start_iter;
+#. Gtk.TextIter end_iter;
+#. textbuffer.get_start_iter (out start_iter);
+#. textbuffer.get_start_iter (out end_iter);
+#. string txt = textbuffer.get_text(start_iter, end_iter, true);
+#. TODO: Howto append text ?
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:234
+#, c-format
+msgid ""
+"\n"
+"Trying to find lyrics for \"%s\" by \"%s\"\n"
+"\n"
+"Using %s ..."
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:186
+msgid "_File"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:187
+msgid "open file"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:188
+msgid "Open _Location"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:188
+msgid "open remote location"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:189
+msgid "_Add or Remove media"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:189
+msgid "manage the content of the xnoise media library"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:191
+msgid "_Edit"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:192
+msgid "C_lear tracklist"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:192
+msgid "Clear the tracklist"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:193
+msgid "_Rescan collection"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:193
+msgid "Rescan collection"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:194
+msgid "_Increase volume"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:194
+msgid "Increase playback volume"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:195
+msgid "_Decrease volume"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:195
+msgid "Decrease playback volume"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:196
+msgid "_Previous track"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:196
+msgid "Go to previous track"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:197
+msgid "_Toggle play"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:197
+msgid "Toggle playback status"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:198
+msgid "_Next track"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:198
+msgid "Go to next track"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:200
+#: ../plugins/ubuntuone/ubuntuone.vala:230
+msgid "_View"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:201
+msgid "_Tracklist"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:201
+msgid "Go to the tracklist."
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:202
+msgid "_Lyrics"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:202
+msgid "Go to the lyrics view."
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:203
+msgid "_Now Playing"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:204
+msgid "Go to the now playing screen in the main window."
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:205
+msgid "_Help"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:207
+msgid "_Frequently Asked Questions"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:207
+msgid "_Open Frequently Asked Questions in web browser"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:208
+msgid "_Config"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:274
+msgid "_Show Media Browser"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:465
+#, c-format
+msgid ""
+"Restoring %u tracks in the tracklist. This is a large number and can make "
+"startup of xnoise slower."
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:519
+msgid "Add media"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:522
+msgid ""
+"You started xnoise for the first time. Do you want to import media into the "
+"library?"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:597
+#, fuzzy
+msgid "no repeat"
+msgstr "nada a repetir"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:603
+msgid "repeat single"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:609
+msgid "repeat all"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:615
+msgid "random play"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1166
+msgid "Enter the URL for playing"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1182
+msgid "Select media file"
+msgstr ""
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1548
+msgid "Equalizer"
+msgstr ""
+
+#. AppMenuButton for compact layout
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1594
+msgid "Show application main menu"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:171
+msgid "Maximum Treble"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:175
+msgid "Maximum Bass"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:184
+msgid "Custom"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:189
+msgid "Default"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:207
+msgid ""
+"The subtitle name is not matching the video name! Not using subtitle file."
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:629
+#, c-format
+msgid "Success on installing missing gstreamer plugin"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:633
+#, c-format
+msgid "User aborted installation of missing gstreamer plugin"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:637
+#, c-format
+msgid "Gstreamer plugin not found in repositories"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:643
+#, c-format
+msgid "Critical error while installation of missing gstreamer plugin"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:688
+#: ../libxnoise/Player/xnoise-gst-player.vala:699
+#: ../libxnoise/Player/xnoise-gst-player.vala:712
+#, c-format
+msgid "Missing gstreamer plugin"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:690
+#, fuzzy
+msgid "Automatic missing codec installation not supported"
+msgstr "Sem suporte a inicialização cancelável"
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:701
+msgid "Failed to start automatic gstreamer plugin installation."
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:714
+msgid "Trying to install missing gstreamer plugin"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:813
+msgid "Subtitle #"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-player.vala:825
+msgid "Audio Track #"
+msgstr ""
+
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:101
+msgid "Remove selected titles"
+msgstr ""
+
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:117
+msgid "Remove all"
+msgstr ""
+
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:136
+msgid "Jump to current position"
+msgstr ""
+
+#. LENGTH
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1333
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1477
+msgid "Length"
+msgstr ""
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:72
+msgid "Play/Pause"
+msgstr ""
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:86
+msgid "Previous"
+msgstr ""
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:101
+msgid "Next"
+msgstr ""
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:119
+msgid "Exit"
+msgstr ""
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:168
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:180
+msgid "stopped"
+msgstr ""
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:172
+msgid "playing"
+msgstr ""
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:176
+msgid "paused"
+msgstr ""
+
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:188
+#, c-format
+msgid "ready to rock"
+msgstr ""
+
+#: ../libxnoise/Utils/xnoise-media-importer.vala:283
+#, c-format
+msgid "Found %u tracks. Updating library ..."
+msgstr ""
+
+#: ../libxnoise/Utils/xnoise-media-importer.vala:494
+#: ../libxnoise/Utils/xnoise-media-importer.vala:566
+#, c-format
+msgid "%u tracks found"
+msgstr ""
+
+#: ../src/xnoise.vala:74
+msgid ""
+"Run 'xnoise --help' to see a full list of available command line options.\n"
+msgstr ""
+
+#: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
+msgid "Buffer lyrics in database"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:395
+#: ../plugins/lastfm/xnoise-lastfm.vala:517
+#, c-format
+msgid "User logged in!"
+msgstr ""
+
+#. feedback
+#: ../plugins/lastfm/xnoise-lastfm.vala:399
+#: ../plugins/lastfm/xnoise-lastfm.vala:515
+#: ../plugins/lastfm/xnoise-lastfm.vala:520
+#, c-format
+msgid "User not logged in!"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:460
+msgid "Visit LastFm for an account."
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:469
+#, c-format
+msgid "Please enter your lastfm username and password."
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:478
+#, fuzzy, c-format
+msgid "Username:"
+msgstr "Sem nome"
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:487
+#, c-format
+msgid "Password:"
+msgstr ""
+
+#: ../plugins/lastfm/xnoise-lastfm.vala:504
+msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
+msgstr ""
+
+#: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
+msgid "Demo plugin for xnoise"
+msgstr ""
+
+#: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
+msgid "Load lyrics from chartlyrics.com"
+msgstr ""
+
+#: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
+msgid "Use lastfm's web services"
+msgstr ""
+
+#: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
+msgid "Load lyrics from http://www.lyricwiki.com"
+msgstr ""
+
+#: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
+msgid "Load lyrics from azlyrics.com"
+msgstr ""
+
+#: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
+msgid "Control xnoise using mediakeys"
+msgstr ""
+
+#: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
+msgid "Magnatune Music Store"
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-dockable.vala:57
+msgid "Magnatune"
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-treeview.vala:223
+msgid "Download whole album to disk"
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-treeview.vala:265
+msgid "Downloading album "
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-treeview.vala:267
+msgid "This may take some time..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-treeview.vala:381
+msgid "Download finished for \""
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:183
+msgid "download finished..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:185
+msgid "decompressing..."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:239
+#, fuzzy
+msgid "decompressing finished..."
+msgstr "Erro comprimindo o arquivo %s"
+
+#: ../plugins/magnatune/magnatune-widget.vala:254
+msgid ""
+"Please wait while\n"
+"converting database."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:285
+#, c-format
+msgid ""
+"Please wait while\n"
+"converting database.\n"
+"Done for %d tracks."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune-widget.vala:321
+msgid "loading..."
+msgstr ""
+
+#: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
+msgid "Control xnoise with a MPRIS v2 dbus interface"
+msgstr ""
+
+#: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
+msgid "Control xnoise with a MPRIS v1 dbus interface"
+msgstr ""
+
+#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
+msgid "Show notifications one track change"
+msgstr ""
+
+#: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
+msgid "Use ubuntu/ayatana soundmenu integration"
+msgstr ""
+
+#: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
+msgid "Set the window name to the current title"
+msgstr ""
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+msgid "Ubuntu One Music Store"
+msgstr ""
+
+#: ../plugins/ubuntuone/ubuntuone.vala:128
+msgid "UbuntuOne Music"
+msgstr ""
+
+#: ../plugins/ubuntuone/ubuntuone.vala:231
+msgid "Show _UbuntuOne Store"
+msgstr ""
+
+#: ../plugins/ubuntuone/ubuntuone.vala:231
+msgid "Show UbuntuOne Store"
+msgstr ""
+
+#~ msgid "Too large count value passed to %s"
+#~ msgstr "Valor muito alto passado para %s"
+
+#~ msgid "Stream is already closed"
+#~ msgstr "O fluxo já está fechado"
+
+#~ msgid "Operation was cancelled"
+#~ msgstr "A operação foi cancelada"
+
+#~ msgid "Invalid object, not initialized"
+#~ msgstr "Objeto inválido, não inicializado"
+
+#~ msgid "Incomplete multibyte sequence in input"
+#~ msgstr "Sequência de bytes incompleta na entrada"
+
+#~ msgid "Not enough space in destination"
+#~ msgstr "Sem espaço suficiente no destino"
+
+#~ msgid "Invalid byte sequence in conversion input"
+#~ msgstr "Sequência de bytes inválida na entrada de conversão"
+
+#~ msgid "Error during conversion: %s"
+#~ msgstr "Erro durante a conversão: %s"
+
+#~ msgid "Conversion from character set '%s' to '%s' is not supported"
+#~ msgstr ""
+#~ "Não há suporte à conversão do conjunto de caracteres \"%s\" para \"%s\""
+
+#~ msgid "Could not open converter from '%s' to '%s'"
+#~ msgstr "Não foi possível abrir conversor de \"%s\" para \"%s\""
+
+#~ msgid "Unknown type"
+#~ msgstr "Tipo desconhecido"
+
+#~ msgid "%s filetype"
+#~ msgstr "tipo de arquivo %s"
+
+#~ msgid "%s type"
+#~ msgstr "tipo %s"
+
+#~ msgid "GCredentials is not implemented on this OS"
+#~ msgstr "GCredentials não está implementado neste SO"
+
+#~ msgid "There is no GCredentials support for your platform"
+#~ msgstr "Não há suporte ao GCredentials para sua plataforma"
+
+#~ msgid "Unexpected early end-of-stream"
+#~ msgstr "Fim do fluxo antes do esperado"
+
+#~ msgid "Unsupported key `%s' in address entry `%s'"
+#~ msgstr "Não há suporte a chave \"%s\" na entrada de endereço \"%s\""
+
+#~ msgid ""
+#~ "Address `%s' is invalid (need exactly one of path, tmpdir or abstract "
+#~ "keys)"
+#~ msgstr ""
+#~ "O endereço \"%s\" não é válido (é necessário exatamente um dentre: "
+#~ "caminho, tmpdir e chaves abstratas)"
+
+#~ msgid "Meaningless key/value pair combination in address entry `%s'"
+#~ msgstr ""
+#~ "Combinação de pares chave/valor sem sentido na entrada de endereço \"%s\""
+
+#~ msgid "Error in address `%s' - the port attribute is malformed"
+#~ msgstr "Erro no endereço \"%s\" - o atributo porta é inválido"
+
+#~ msgid "Error in address `%s' - the family attribute is malformed"
+#~ msgstr "Erro no endereço \"%s\" - o atributo família é inválido"
+
+#~ msgid "Address element `%s', does not contain a colon (:)"
+#~ msgstr "O elemento endereço \"%s\", não contém um dois-pontos (:)"
+
+#~ msgid ""
+#~ "Key/Value pair %d, `%s', in address element `%s', does not contain an "
+#~ "equal sign"
+#~ msgstr ""
+#~ "O par chave/valor %d, \"%s\", no elemento endereço \"%s\", não contém um "
+#~ "sinal de igual"
+
+#~ msgid ""
+#~ "Error unescaping key or value in Key/Value pair %d, `%s', in address "
+#~ "element `%s'"
+#~ msgstr ""
+#~ "Erro ao distinguir a chave ou valor no par chave/valor %d, \"%s\", no "
+#~ "elemento endereço \"%s\""
+
+#~ msgid ""
+#~ "Error in address `%s' - the unix transport requires exactly one of the "
+#~ "keys `path' or `abstract' to be set"
+#~ msgstr ""
+#~ "Erro no endereço \"%s\" - o transporte Unix requer exatamente uma das "
+#~ "chaves \"path\" ou \"abstract\" sejam definidas"
+
+#~ msgid "Error in address `%s' - the host attribute is missing or malformed"
+#~ msgstr ""
+#~ "Erro no endereço \"%s\" - o atributo servidor está faltando ou é inválido"
+
+#~ msgid "Error in address `%s' - the port attribute is missing or malformed"
+#~ msgstr ""
+#~ "Erro no endereço \"%s\" - o atributo porta está faltando ou é inválido"
+
+#~ msgid ""
+#~ "Error in address `%s' - the noncefile attribute is missing or malformed"
+#~ msgstr ""
+#~ "Erro no endereço \"%s\" - o atributo noncefile está faltando ou é inválido"
+
+#~ msgid "Error auto-launching: "
+#~ msgstr "Erro ao lançar automaticamente: "
+
+#~ msgid "Unknown or unsupported transport `%s' for address `%s'"
+#~ msgstr ""
+#~ "O transporte \"%s\" para o endereço \"%s\" é desconhecido ou não há "
+#~ "suporte"
+
+#~ msgid "Error opening nonce file `%s': %s"
+#~ msgstr "Erro ao abrir arquivo nonce \"%s\": %s"
+
+#~ msgid "Error reading from nonce file `%s': %s"
+#~ msgstr "Erro ao ler arquivo nonce \"%s\": %s"
+
+#~ msgid "Error reading from nonce file `%s', expected 16 bytes, got %d"
+#~ msgstr ""
+#~ "Erro ao ler arquivo nonce \"%s\". É esperado 16 bytes, mas foi obtido %d"
+
+#~ msgid "Error writing contents of nonce file `%s' to stream:"
+#~ msgstr "Erro ao escrever do arquivo nonce \"%s\" no fluxo:"
+
+#~ msgid "The given address is empty"
+#~ msgstr "O endereço fornecido está vazio"
+
+#~ msgid "Cannot spawn a message bus without a machine-id: "
+#~ msgstr ""
+#~ "Não foi possível chamar um barramento de mensagens sem um ID de máquina: "
+
+#~ msgid "Error spawning command line `%s': "
+#~ msgstr "Erro ao chamar a linha de comandos \"%s\": "
+
+#~ msgid "Abnormal program termination spawning command line `%s': %s"
+#~ msgstr ""
+#~ "Término anormal de programa ao chamar a linha de comandos \"%s\": %s"
+
+#~ msgid "Command line `%s' exited with non-zero exit status %d: %s"
+#~ msgstr ""
+#~ "A linha de comandos \"%s\" saiu com status de saída não-zero, %d: %s"
+
+#~ msgid "(Type any character to close this window)\n"
+#~ msgstr "(Digite qualquer tecla para fechar esta janela)\n"
+
+#~ msgid "Session dbus not running, and autolaunch failed"
+#~ msgstr "A sessão dbus não está em execução, e o início automático falhou"
+
+#~ msgid "Cannot determine session bus address (not implemented for this OS)"
+#~ msgstr ""
+#~ "Não foi possível determinar o endereço de barramento da sessão (sem "
+#~ "implementação para este SO)"
+
+#~ msgid ""
+#~ "Cannot determine bus address from DBUS_STARTER_BUS_TYPE environment "
+#~ "variable - unknown value `%s'"
+#~ msgstr ""
+#~ "Não foi possível determinar o endereço de barramento da variável de "
+#~ "ambiente DBUS_STARTER_BUS_TYPE, o valor \"%s\" é desconhecido"
+
+#~ msgid ""
+#~ "Cannot determine bus address because the DBUS_STARTER_BUS_TYPE "
+#~ "environment variable is not set"
+#~ msgstr ""
+#~ "Não foi possível determinar o endereço de barramento porque a variável de "
+#~ "ambiente DBUS_STARTER_BUS_TYPE não está definida"
+
+#~ msgid "Unknown bus type %d"
+#~ msgstr "O tipo de barramento %d é desconhecido"
+
+#~ msgid "Unexpected lack of content trying to read a line"
+#~ msgstr "Falta de conteúdo inesperada ao tentar ler uma linha"
+
+#~ msgid "Unexpected lack of content trying to (safely) read a line"
+#~ msgstr "Falta de conteúdo inesperada ao tentar (seguramente) ler uma linha"
+
+#~ msgid ""
+#~ "Exhausted all available authentication mechanisms (tried: %s) (available: "
+#~ "%s)"
+#~ msgstr ""
+#~ "Foram esgotados todos mecanismos de autenticação disponíveis (tentado: "
+#~ "%s) (disponível: %s)"
+
+#~ msgid "Cancelled via GDBusAuthObserver::authorize-authenticated-peer"
+#~ msgstr "Cancelado via GDBusAuthObserver::authorize-authenticated-peer"
+
+#~ msgid "Error when getting information for directory `%s': %s"
+#~ msgstr "Erro ao obter informação para o diretório \"%s\": %s"
+
+#~ msgid ""
+#~ "Permissions on directory `%s' are malformed. Expected mode 0700, got 0%o"
+#~ msgstr ""
+#~ "As permissões no diretório \"%s\" são inválidas. É esperado 0700, mas foi "
+#~ "obtido 0%o"
+
+#~ msgid "Error creating directory `%s': %s"
+#~ msgstr "Erro ao criar o diretório \"%s\": %s"
+
+#~ msgid "Error opening keyring `%s' for reading: "
+#~ msgstr "Erro ao abrir o chaveiro \"%s\" para leitura: "
+
+#~ msgid "Line %d of the keyring at `%s' with content `%s' is malformed"
+#~ msgstr "A linha %d do chaveiro em \"%s\" com o conteúdo \"%s\" é inválida"
+
+#~ msgid ""
+#~ "First token of line %d of the keyring at `%s' with content `%s' is "
+#~ "malformed"
+#~ msgstr ""
+#~ "O primeiro símbolo da linha %d do chaveiro em \"%s\" com o conteúdo \"%s"
+#~ "\" é inválido"
+
+#~ msgid ""
+#~ "Second token of line %d of the keyring at `%s' with content `%s' is "
+#~ "malformed"
+#~ msgstr ""
+#~ "O segundo símbolo da linha %d do chaveiro em \"%s\" com o conteúdo \"%s\" "
+#~ "é inválido"
+
+#~ msgid "Didn't find cookie with id %d in the keyring at `%s'"
+#~ msgstr "Não foi encontrado um anexo com o ID %d no chaveiro em \"%s\""
+
+#~ msgid "Error deleting stale lock file `%s': %s"
+#~ msgstr "Erro ao excluir o arquivo de bloqueio anterior \"%s\": %s"
+
+#~ msgid "Error creating lock file `%s': %s"
+#~ msgstr "Erro ao criar o arquivo de bloqueio \"%s\": %s"
+
+#~ msgid "Error closing (unlinked) lock file `%s': %s"
+#~ msgstr "Erro ao fechar o arquivo de bloqueio (desvinculado) \"%s\": %s"
+
+#~ msgid "Error unlinking lock file `%s': %s"
+#~ msgstr "Erro ao desvincular o arquivo de bloqueio \"%s\": %s"
+
+#~ msgid "Error opening keyring `%s' for writing: "
+#~ msgstr "Erro ao abrir o chaveiro \"%s\" para escrita: "
+
+#~ msgid "(Additionally, releasing the lock for `%s' also failed: %s) "
+#~ msgstr "(Adicionalmente, liberar o bloqueio de \"%s\" também falhou: %s) "
+
+#~ msgid "The connection is closed"
+#~ msgstr "A conexão está fechada"
+
+#~ msgid "Timeout was reached"
+#~ msgstr "O tempo limite foi alcançado"
+
+#~ msgid ""
+#~ "Unsupported flags encountered when constructing a client-side connection"
+#~ msgstr ""
+#~ "Foram encontrados sinalizadores sem suporte ao construir uma conexão do "
+#~ "lado do cliente"
+
+#~ msgid ""
+#~ "No such interface `org.freedesktop.DBus.Properties' on object at path %s"
+#~ msgstr ""
+#~ "Nenhuma interface \"org.freedesktop.DBus.Properties\" no objeto no "
+#~ "caminho %s"
+
+#~ msgid "Error setting property `%s': Expected type `%s' but got `%s'"
+#~ msgstr ""
+#~ "Erro ao definir a propriedade \"%s\": o tipo esperado é \"%s\", mas "
+#~ "obteve \"%s\""
+
+#~ msgid "No such property `%s'"
+#~ msgstr "Nenhuma propriedade \"%s\""
+
+#~ msgid "Property `%s' is not readable"
+#~ msgstr "A propriedade \"%s\" está sem leitura"
+
+#~ msgid "Property `%s' is not writable"
+#~ msgstr "A propriedade \"%s\" está sem escrita"
+
+#~ msgid "No such interface `%s'"
+#~ msgstr "Nenhuma interface \"%s\""
+
+#~ msgid "No such interface"
+#~ msgstr "Nenhuma interface"
+
+#~ msgid "No such interface `%s' on object at path %s"
+#~ msgstr "Nenhuma interface \"%s\" no objeto no caminho %s"
+
+#~ msgid "No such method `%s'"
+#~ msgstr "Nenhum método \"%s\""
+
+#~ msgid "Type of message, `%s', does not match expected type `%s'"
+#~ msgstr "O tipo da mensagem, \"%s\", não equivale ao tipo esperado \"%s\""
+
+#~ msgid "An object is already exported for the interface %s at %s"
+#~ msgstr "Um objeto já foi exportado para a interface %s em %s"
+
+#~ msgid "Method `%s' returned type `%s', but expected `%s'"
+#~ msgstr "O método \"%s\" retornou o tipo \"%s\", mas é esperado \"%s\""
+
+#~ msgid "Method `%s' on interface `%s' with signature `%s' does not exist"
+#~ msgstr ""
+#~ "O método \"%s\" na interface \"%s\" com a assinatura \"%s\" não existe"
+
+#~ msgid "A subtree is already exported for %s"
+#~ msgstr "Uma subárvore já foi exportada para %s"
+
+#~ msgid "type is INVALID"
+#~ msgstr "o tipo é INVALID"
+
+#~ msgid "METHOD_CALL message: PATH or MEMBER header field is missing"
+#~ msgstr ""
+#~ "Mensagem de METHOD_CALL: O campo de cabeçalho PATH ou MEMBER está faltando"
+
+#~ msgid "METHOD_RETURN message: REPLY_SERIAL header field is missing"
+#~ msgstr ""
+#~ "Mensagem de METHOD_RETURN: O campo de cabeçalho REPLY_SERIAL está faltando"
+
+#~ msgid "ERROR message: REPLY_SERIAL or ERROR_NAME header field is missing"
+#~ msgstr ""
+#~ "Mensagem de ERROR: O campo de cabeçalho REPLY_SERIAL ou ERROR_NAME está "
+#~ "faltando"
+
+#~ msgid "SIGNAL message: PATH, INTERFACE or MEMBER header field is missing"
+#~ msgstr ""
+#~ "Mensagem de SIGNAL: O campo de cabeçalho PATH, INTERFACE ou MEMBER está "
+#~ "faltando"
+
+#~ msgid ""
+#~ "SIGNAL message: The PATH header field is using the reserved value /org/"
+#~ "freedesktop/DBus/Local"
+#~ msgstr ""
+#~ "Mensagem de SIGNAL: O campo de cabeçalho PATH está usando o valor "
+#~ "reservado /org/freedesktop/DBus/Local"
+
+#~ msgid ""
+#~ "SIGNAL message: The INTERFACE header field is using the reserved value "
+#~ "org.freedesktop.DBus.Local"
+#~ msgstr ""
+#~ "Mensagem de SIGNAL: O campo de cabeçalho INTERFACE está usando o valor "
+#~ "reservado org.freedesktop.DBus.Local"
+
+#~ msgid "Wanted to read %lu byte but got EOF"
+#~ msgid_plural "Wanted to read %lu bytes but got EOF"
+#~ msgstr[0] "Ao tentar ler %lu byte obteve-se EOF (fim de arquivo)"
+#~ msgstr[1] "Ao tentar ler %lu bytes obteve-se EOF (fim de arquivo)"
+
+#~ msgid ""
+#~ "Expected valid UTF-8 string but found invalid bytes at byte offset %d "
+#~ "(length of string is %d). The valid UTF-8 string up until that point was `"
+#~ "%s'"
+#~ msgstr ""
+#~ "Era esperado um texto UTF-8 válido, mas foi localizado bytes inválidos na "
+#~ "posição %d (tamanho do texto é %d). O texto UTF-8 válido até este ponto "
+#~ "era \"%s\""
+
+#~ msgid "Expected NUL byte after the string `%s' but found byte %d"
+#~ msgstr ""
+#~ "Era esperado um byte NUL (nulo) após o texto \"%s\", mas foi localizado o "
+#~ "byte %d"
+
+#~ msgid "Parsed value `%s' is not a valid D-Bus object path"
+#~ msgstr "O valor \"%s\" analisado não é um objeto de caminho D-Bus válido"
+
+#~ msgid "Parsed value `%s' is not a valid D-Bus signature"
+#~ msgstr "O valor \"%s\" analisado não é uma assinatura D-Bus válida"
+
+#~ msgid ""
+#~ "Encountered array of length %u byte. Maximum length is 2<<26 bytes (64 "
+#~ "MiB)."
+#~ msgid_plural ""
+#~ "Encountered array of length %u bytes. Maximum length is 2<<26 bytes (64 "
+#~ "MiB)."
+#~ msgstr[0] ""
+#~ "Foi encontrado um vetor com tamanho de %u byte. O tamanho máximo é de "
+#~ "2<<26 bytes (64 MiB)."
+#~ msgstr[1] ""
+#~ "Foi encontrado um vetor com tamanho de %u bytes. O tamanho máximo é de "
+#~ "2<<26 bytes (64 MiB)."
+
+#~ msgid "Parsed value `%s' for variant is not a valid D-Bus signature"
+#~ msgstr ""
+#~ "O valor \"%s\" analisado para variante não é uma assinatura D-Bus válida"
+
+#~ msgid ""
+#~ "Error deserializing GVariant with type string `%s' from the D-Bus wire "
+#~ "format"
+#~ msgstr ""
+#~ "Erro ao desserializar GVariant com o texto de tipo \"%s\" do formato "
+#~ "delimitado pelo D-Bus"
+
+#~ msgid ""
+#~ "Invalid endianness value. Expected 0x6c ('l') or 0x42 ('B') but found "
+#~ "value 0x%02x"
+#~ msgstr ""
+#~ "Valor identificador de endian inválido. Era esperado 0x6c ('l') ou 0x42 "
+#~ "('B'), mas foi localizado o valor 0x%02x"
+
+#~ msgid "Invalid major protocol version. Expected 1 but found %d"
+#~ msgstr ""
+#~ "Versão majoritária de protocolo inválida. Era esperado 1, mas foi "
+#~ "localizado %d"
+
+#~ msgid "Signature header with signature `%s' found but message body is empty"
+#~ msgstr ""
+#~ "O cabeçalho de assinatura foi localizado com a assinatura \"%s\", mas o "
+#~ "corpo da mensagem está vazio"
+
+#~ msgid "Parsed value `%s' is not a valid D-Bus signature (for body)"
+#~ msgstr ""
+#~ "O valor \"%s\" analisado não é uma assinatura D-Bus válida (para o corpo)"
+
+#~ msgid "No signature header in message but the message body is %u byte"
+#~ msgid_plural ""
+#~ "No signature header in message but the message body is %u bytes"
+#~ msgstr[0] ""
+#~ "Nenhum cabeçalho de assinatura na mensagem, mas o corpo da mensagem tem "
+#~ "%u byte"
+#~ msgstr[1] ""
+#~ "Nenhum cabeçalho de assinatura na mensagem, mas o corpo da mensagem tem "
+#~ "%u bytes"
+
+#~ msgid "Cannot deserialize message: "
+#~ msgstr "Não foi possível desserializar a mensagem: "
+
+#~ msgid ""
+#~ "Error serializing GVariant with type string `%s' to the D-Bus wire format"
+#~ msgstr ""
+#~ "Erro ao serializar GVariant com o texto de tipo \"%s\" para o formato "
+#~ "delimitado pelo D-Bus"
+
+#~ msgid ""
+#~ "Message has %d file descriptors but the header field indicates %d file "
+#~ "descriptors"
+#~ msgstr ""
+#~ "A mensagem possui %d descritores de arquivos, mas o campo de cabeçalho "
+#~ "indica %d descritores de arquivos"
+
+#~ msgid "Cannot serialize message: "
+#~ msgstr "Não foi possível serializar a mensagem: "
+
+#~ msgid "Message body has signature `%s' but there is no signature header"
+#~ msgstr ""
+#~ "O corpo da mensagem tem a assinatura \"%s\", mas não há um cabeçalho de "
+#~ "assinatura"
+
+#~ msgid ""
+#~ "Message body has type signature `%s' but signature in the header field is "
+#~ "`%s'"
+#~ msgstr ""
+#~ "O corpo da mensagem tem o tipo de assinatura \"%s\", mas a assinatura no "
+#~ "campo de cabeçalho é \"%s\""
+
+#~ msgid "Message body is empty but signature in the header field is `(%s)'"
+#~ msgstr ""
+#~ "O corpo da mensagem está vazio, mas a assinatura no campo de cabeçalho é "
+#~ "\"(%s)\""
+
+#~ msgid "Error return with body of type `%s'"
+#~ msgstr "Retorno de erro com o corpo de tipo \"%s\""
+
+#~ msgid "Error return with empty body"
+#~ msgstr "Retorno de erro com o corpo vazio"
+
+#~ msgid "Unable to get Hardware profile: %s"
+#~ msgstr "Não foi possível obter o perfil da máquina: %s"
+
+#~ msgid "Unable to load /var/lib/dbus/machine-id or /etc/machine-id: "
+#~ msgstr ""
+#~ "Não foi possível carregar /var/lib/dbus/machine-id ou /etc/machine-id: "
+
+#~ msgid "Error calling StartServiceByName for %s: "
+#~ msgstr "Erro ao chamar StartServiceByName para %s: "
+
+#~ msgid "Unexpected reply %d from StartServiceByName(\"%s\") method"
+#~ msgstr "Resposta %d inesperada do método StartServiceByName(\"%s\")"
+
+#~ msgid ""
+#~ "Cannot invoke method; proxy is for a well-known name without an owner and "
+#~ "proxy was constructed with the G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START flag"
+#~ msgstr ""
+#~ "Não foi possível chamar método; o proxy é para um nome conhecido sem um "
+#~ "dono e o proxy foi construído com o sinalizador "
+#~ "G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START"
+
+#~ msgid "Abstract name space not supported"
+#~ msgstr "Não há suporte a espaço de nome abstrato"
+
+#~ msgid "Cannot specify nonce file when creating a server"
+#~ msgstr "Não foi possível especificar um arquivo nonce ao criar um servidor"
+
+#~ msgid "Error writing nonce file at `%s': %s"
+#~ msgstr "Erro ao escrever no arquivo nonce em \"%s\": %s"
+
+#~ msgid "The string `%s' is not a valid D-Bus GUID"
+#~ msgstr "O texto \"%s\" não é válido para GUID D-Bus"
+
+#~ msgid "Cannot listen on unsupported transport `%s'"
+#~ msgstr "Não é possível escutar no transporte \"%s\" por falta de suporte"
+
+#~ msgid "COMMAND"
+#~ msgstr "COMANDO"
+
+#~ msgid ""
+#~ "Commands:\n"
+#~ "  help         Shows this information\n"
+#~ "  introspect   Introspect a remote object\n"
+#~ "  monitor      Monitor a remote object\n"
+#~ "  call         Invoke a method on a remote object\n"
+#~ "  emit         Emit a signal\n"
+#~ "\n"
+#~ "Use \"%s COMMAND --help\" to get help on each command.\n"
+#~ msgstr ""
+#~ "Comandos:\n"
+#~ "  help         Mostra esta informação\n"
+#~ "  introspect   Introspecção de um objeto remoto\n"
+#~ "  monitor      Monitora um objeto remoto\n"
+#~ "  call         Chama um método de um objeto remoto\n"
+#~ "  emit         Emite um sinal\n"
+#~ "\n"
+#~ "Use \"%s COMANDO --help\" para obter ajuda de cada comando.\n"
+
+#~ msgid "Error: %s\n"
+#~ msgstr "Erro: %s\n"
+
+#~ msgid "Error parsing introspection XML: %s\n"
+#~ msgstr "Erro ao analisar XML de introspecção: %s\n"
+
+#~ msgid "Connect to the system bus"
+#~ msgstr "Conectar ao barramento de sistema"
+
+#~ msgid "Connect to the session bus"
+#~ msgstr "Conectar ao barramento de sessão"
+
+#~ msgid "Connect to given D-Bus address"
+#~ msgstr "Conectar ao endereço D-Bus escolhido"
+
+#~ msgid "Connection Endpoint Options:"
+#~ msgstr "Opções de conexão de ponto final:"
+
+#~ msgid "Options specifying the connection endpoint"
+#~ msgstr "Opções especificando a conexão de ponto final"
+
+#~ msgid "No connection endpoint specified"
+#~ msgstr "Nenhuma conexão de ponto final especificada"
+
+#~ msgid "Multiple connection endpoints specified"
+#~ msgstr "Múltiplas conexões de ponto final especificadas"
+
+#~ msgid ""
+#~ "Warning: According to introspection data, interface `%s' does not exist\n"
+#~ msgstr ""
+#~ "Aviso: De acordo com os dados de introspecção a interface \"%s\" não "
+#~ "existe\n"
+
+#~ msgid ""
+#~ "Warning: According to introspection data, method `%s' does not exist on "
+#~ "interface `%s'\n"
+#~ msgstr ""
+#~ "Aviso: De acordo com os dados de introspecção o método \"%s\" não existe "
+#~ "na interface \"%s\"\n"
+
+#~ msgid "Optional destination for signal (unique name)"
+#~ msgstr "Destino opcional para o sinal (nome único)"
+
+#~ msgid "Object path to emit signal on"
+#~ msgstr "Caminho do objeto para emitir sinal"
+
+#~ msgid "Signal and interface name"
+#~ msgstr "Nome e nome da interface"
+
+#~ msgid "Emit a signal."
+#~ msgstr "Emitir um sinal."
+
+#~ msgid "Error connecting: %s\n"
+#~ msgstr "Erro ao conectar: %s\n"
+
+#~ msgid "Error: object path not specified.\n"
+#~ msgstr "Erro: caminho do objeto não especificado\n"
+
+#~ msgid "Error: %s is not a valid object path\n"
+#~ msgstr "Erro: %s não é um caminho de objeto válido\n"
+
+#~ msgid "Error: signal not specified.\n"
+#~ msgstr "Erro: sinal não especificado\n"
+
+#~ msgid "Error: %s is not a valid interface name\n"
+#~ msgstr "Erro: %s não é um nome de interface válido\n"
+
+#~ msgid "Error: %s is not a valid member name\n"
+#~ msgstr "Erro: %s não é um nome de membro válido\n"
+
+#~ msgid "Error: %s is not a valid unique bus name.\n"
+#~ msgstr "Erro: %s não é um nome válido de barramento exclusivo.\n"
+
+#~ msgid "Error parsing parameter %d: %s\n"
+#~ msgstr "Erro ao analisar o parâmetro %d: %s\n"
+
+#~ msgid "Error flushing connection: %s\n"
+#~ msgstr "Erro limpando conexão: %s\n"
+
+#~ msgid "Destination name to invoke method on"
+#~ msgstr "Nome do destino para chamar um método"
+
+#~ msgid "Object path to invoke method on"
+#~ msgstr "Caminho do objeto para chamar um método"
+
+#~ msgid "Method and interface name"
+#~ msgstr "Nome de método e de interface"
+
+#~ msgid "Timeout in seconds"
+#~ msgstr "Tempo limite em segundos"
+
+#~ msgid "Invoke a method on a remote object."
+#~ msgstr "Chamar um método no objeto remoto."
+
+#~ msgid "Error: Destination is not specified\n"
+#~ msgstr "Erro: O destino não foi especificado\n"
+
+#~ msgid "Error: Object path is not specified\n"
+#~ msgstr "Erro: O caminho do objeto não foi especificado\n"
+
+#~ msgid "Error: Method name is not specified\n"
+#~ msgstr "Erro: O nome do método não foi especificado\n"
+
+#~ msgid "Error: Method name `%s' is invalid\n"
+#~ msgstr "Erro: O nome do método \"%s\" é inválido\n"
+
+#~ msgid "Error parsing parameter %d of type `%s': %s\n"
+#~ msgstr "Erro ao analisar o parâmetro %d do tipo \"%s\": %s\n"
+
+#~ msgid "Destination name to introspect"
+#~ msgstr "Nome do destino para introspecção"
+
+#~ msgid "Object path to introspect"
+#~ msgstr "Caminho do objeto para introspecção"
+
+#~ msgid "Print XML"
+#~ msgstr "Exibir XML"
+
+#~ msgid "Introspect children"
+#~ msgstr "Auto-examinar crianças"
+
+#~ msgid "Only print properties"
+#~ msgstr "Apenas imprimir as propriedades"
+
+#~ msgid "Introspect a remote object."
+#~ msgstr "Introspecção em objeto remoto."
+
+#~ msgid "Destination name to monitor"
+#~ msgstr "Nome do destino para monitorar"
+
+#~ msgid "Object path to monitor"
+#~ msgstr "Caminho do objeto para monitorar"
+
+#~ msgid "Monitor a remote object."
+#~ msgstr "Monitorar um objeto remoto."
+
+#~ msgid "Desktop file didn't specify Exec field"
+#~ msgstr "O arquivo da área de trabalho não especifica o campo Exec"
+
+#~ msgid "Unable to find terminal required for application"
+#~ msgstr "Não é possível localizar o terminal requerido para o aplicativo"
+
+#~ msgid "Can't create user application configuration folder %s: %s"
+#~ msgstr ""
+#~ "Não é possível criar pasta de configuração do aplicativo do usuário %s: %s"
+
+#~ msgid "Can't create user MIME configuration folder %s: %s"
+#~ msgstr "Não é possível criar pasta de configuração MIME do usuário %s: %s"
+
+#~ msgid "Application information lacks an identifier"
+#~ msgstr "A informação do aplicativo não possui um identificador"
+
+#~ msgid "Can't create user desktop file %s"
+#~ msgstr "Não é possível criar arquivo %s da área de trabalho do usuário"
+
+#~ msgid "Custom definition for %s"
+#~ msgstr "Definição personalizada para %s"
+
+#~ msgid "drive doesn't implement eject"
+#~ msgstr "unidade não implementa ejetar"
+
+#~ msgid "drive doesn't implement eject or eject_with_operation"
+#~ msgstr "unidade não implementa ejetar ou eject_with_operation"
+
+#~ msgid "drive doesn't implement polling for media"
+#~ msgstr "unidade não implementa verificação por mídia"
+
+#~ msgid "drive doesn't implement start"
+#~ msgstr "unidade não implementa start"
+
+#~ msgid "drive doesn't implement stop"
+#~ msgstr "unidade não implementa stop"
+
+#~ msgid "TLS support is not available"
+#~ msgstr "Suporte TLS não disponível"
+
+#~ msgid "Can't handle version %d of GEmblem encoding"
+#~ msgstr "Não é possível lidar com a versão %d da codificação GEmblem"
+
+#~ msgid "Malformed number of tokens (%d) in GEmblem encoding"
+#~ msgstr "Número inválido de tokens (%d) na codificação GEmblem"
+
+#~ msgid "Can't handle version %d of GEmblemedIcon encoding"
+#~ msgstr "Não é possível lidar com a versão %d da codificação GEmblemedIcon"
+
+#~ msgid "Malformed number of tokens (%d) in GEmblemedIcon encoding"
+#~ msgstr "Número inválido de tokens (%d) na codificação GEmblemedIcon"
+
+#~ msgid "Expected a GEmblem for GEmblemedIcon"
+#~ msgstr "Esperado um GEmblem para o GEmblemedIcon"
+
+#~ msgid "Operation not supported"
+#~ msgstr "Operação sem suporte"
+
+#~ msgid "Containing mount does not exist"
+#~ msgstr "Ponto de montagem contido não existe"
+
+#~ msgid "Can't copy over directory"
+#~ msgstr "Não é possível copiar sobre diretório"
+
+#~ msgid "Can't copy directory over directory"
+#~ msgstr "Não é possível copiar diretório sobre diretório"
+
+#~ msgid "Target file exists"
+#~ msgstr "Arquivo alvo existe"
+
+#~ msgid "Can't recursively copy directory"
+#~ msgstr "Não é possível copiar o diretório recursivamente"
+
+#~ msgid "Splice not supported"
+#~ msgstr "Não há suporte a união de arquivos"
+
+#~ msgid "Error splicing file: %s"
+#~ msgstr "Erro ao unir o arquivo: %s"
+
+#~ msgid "Can't copy special file"
+#~ msgstr "Não é possível copiar o arquivo especial"
+
+#~ msgid "Invalid symlink value given"
+#~ msgstr "Fornecido valor inválido de link simbólico"
+
+#~ msgid "Trash not supported"
+#~ msgstr "Não há suporte para lixeira"
+
+#~ msgid "File names cannot contain '%c'"
+#~ msgstr "Nomes de arquivo não podem conter \"%c\""
+
+#~ msgid "volume doesn't implement mount"
+#~ msgstr "volume não implementa montagem"
+
+#~ msgid "No application is registered as handling this file"
+#~ msgstr "Nenhum aplicativo está registrado como manipulador deste arquivo"
+
+#~ msgid "Enumerator is closed"
+#~ msgstr "O enumerador está fechado"
+
+#~ msgid "File enumerator has outstanding operation"
+#~ msgstr "O enumerador do arquivo tem operação pendente"
+
+#~ msgid "File enumerator is already closed"
+#~ msgstr "O enumerador do arquivo já está fechado"
+
+#~ msgid "Can't handle version %d of GFileIcon encoding"
+#~ msgstr "Não é possível lidar com a versão %d da codificação GFileIcon"
+
+#~ msgid "Malformed input data for GFileIcon"
+#~ msgstr "Dados de entrada malformados para o GFileIcon"
+
+#~ msgid "Stream doesn't support query_info"
+#~ msgstr "Fluxo não tem suporte para query_info"
+
+#~ msgid "Seek not supported on stream"
+#~ msgstr "Não há suporte à busca no fluxo"
+
+#~ msgid "Truncate not allowed on input stream"
+#~ msgstr "Não é permitido truncar fluxo de entrada"
+
+#~ msgid "Truncate not supported on stream"
+#~ msgstr "Não há suporte para truncar fluxo"
+
+#~ msgid "Wrong number of tokens (%d)"
+#~ msgstr "Número errado de tokens (%d)"
+
+#~ msgid "No type for class name %s"
+#~ msgstr "Sem tipo para a classe chamada %s"
+
+#~ msgid "Type %s does not implement the GIcon interface"
+#~ msgstr "O tipo %s não implementa a interface GIcon"
+
+#~ msgid "Type %s is not classed"
+#~ msgstr "O tipo %s não tem classe"
+
+#~ msgid "Malformed version number: %s"
+#~ msgstr "Número de versão malformado: %s"
+
+#~ msgid "Type %s does not implement from_tokens() on the GIcon interface"
+#~ msgstr "O tipo %s não implementa from_tokens() na interface GIcon"
+
+#~ msgid "Can't handle the supplied version the icon encoding"
+#~ msgstr "Não é possível lidar com a versão fornecida da codificação do ícone"
+
+#~ msgid "No address specified"
+#~ msgstr "Nenhum endereço fornecido"
+
+#~ msgid "Length %u is too long for address"
+#~ msgstr "O tamanho %u é muito longo para o endereço"
+
+#~ msgid "Address has bits set beyond prefix length"
+#~ msgstr "O endereço contém bits ativos além do tamanho do prefixo (máscara)"
+
+#~ msgid "Could not parse '%s' as IP address mask"
+#~ msgstr "Não foi possível interpretar \"%s\" como uma máscara de endereço IP"
+
+#~ msgid "Not enough space for socket address"
+#~ msgstr "Sem espaço suficiente para o endereço do soquete"
+
+#~ msgid "Unsupported socket address"
+#~ msgstr "Endereço de soquete não suportado"
+
+#~ msgid "Input stream doesn't implement read"
+#~ msgstr "Fluxo de entrada não implementa leitura"
+
+#~ msgid "Stream has outstanding operation"
+#~ msgstr "O fluxo tem operação pendente"
+
+#~ msgid "Element <%s> not allowed inside <%s>"
+#~ msgstr "O elemento <%s> não é permitido dentro de <%s>"
+
+#~ msgid "Element <%s> not allowed at toplevel"
+#~ msgstr "O elemento <%s> não é permitido no nível mais alto"
+
+#~ msgid "File %s appears multiple times in the resource"
+#~ msgstr "O arquivo %s aparece várias vezes no recurso"
+
+#~ msgid "Failed to locate '%s' in any source directory"
+#~ msgstr "Falha ao localizar \"%s\" em todos os diretórios fontes"
+
+#~ msgid "Failed to locate '%s' in current directory"
+#~ msgstr "Falha ao localizar \"%s\" no diretório atual"
+
+#~ msgid "Unknown processing option \"%s\""
+#~ msgstr "Opção de processamento %s desconhecida"
+
+#~ msgid "Failed to create temp file: %s"
+#~ msgstr "Falha ao criar um arquivo temporário: %s"
+
+#~ msgid "Error processing input file with xmllint"
+#~ msgstr "Erro processando o arquivo de entrada com o xmllint"
+
+#~ msgid "Error processing input file with to-pixdata"
+#~ msgstr "Erro processando o arquivo de entrada com o to-pixdata"
+
+#~ msgid "Error reading file %s: %s"
+#~ msgstr "Erro ao ler arquivo %s: %s"
+
+#~ msgid "text may not appear inside <%s>"
+#~ msgstr "texto não pode aparecer dentro de <%s>"
+
+#~ msgid "name of the output file"
+#~ msgstr "nome do arquivo de saída"
+
+#~ msgid "FILE"
+#~ msgstr "ARQUIVO"
+
+#~ msgid ""
+#~ "The directories where files are to be read from (default to current "
+#~ "directory)"
+#~ msgstr ""
+#~ "Diretórios onde os arquivos serão lidos (o padrão é o diretório atual)"
+
+#~ msgid "DIRECTORY"
+#~ msgstr "DIRETÓRIO"
+
+#~ msgid ""
+#~ "Generate output in the format selected for by the target filename "
+#~ "extension"
+#~ msgstr "Gera a saída no formato definido pela extensão do arquivo alvo"
+
+#~ msgid "Generate source header"
+#~ msgstr "Gera um cabeçalho"
+
+#~ msgid "Generate sourcecode used to link in the resource file into your code"
+#~ msgstr "Gera código fonte que vincula o recurso ao seu programa"
+
+#~ msgid "Generate dependency list"
+#~ msgstr "Gera uma lista de dependência"
+
+#~ msgid "Don't automatically create and register resource"
+#~ msgstr "Não cria e registra o recurso automaticamente"
+
+#~ msgid "C identifier name used for the generated source code"
+#~ msgstr "Nome do identificador C usado no código fonte gerado"
+
+#~ msgid ""
+#~ "Compile a resource specification into a resource file.\n"
+#~ "Resource specification files have the extension .gresource.xml,\n"
+#~ "and the resource file have the extension called .gresource."
+#~ msgstr ""
+#~ "Compila uma especificação de recurso em um arquivo de recurso.\n"
+#~ "Arquivos de especificação de recurso têm a extensão .gresource.xml,\n"
+#~ "e um arquivo de recurso tem a extensão .gresource."
+
+#~ msgid "You should give exactly one file name\n"
+#~ msgstr "Você deve fornecer somente um arquivo\n"
+
+#~ msgid "empty names are not permitted"
+#~ msgstr "não é permitido nomes vazios"
+
+#~ msgid "invalid name '%s': names must begin with a lowercase letter"
+#~ msgstr ""
+#~ "nome \"%s\" inválido: nomes precisam começar com uma letra minúscula"
+
+#~ msgid ""
+#~ "invalid name '%s': invalid character '%c'; only lowercase letters, "
+#~ "numbers and dash ('-') are permitted."
+#~ msgstr ""
+#~ "nome \"%s\" inválido: caractere \"%c\" inválido, apenas é permitido "
+#~ "letras minúsculas, números e traços (\"-\")."
+
+#~ msgid "invalid name '%s': two successive dashes ('--') are not permitted."
+#~ msgstr ""
+#~ "nome \"%s\" inválido: dois traços (\"--\") consecutivos não são "
+#~ "permitidos."
+
+#~ msgid "invalid name '%s': the last character may not be a dash ('-')."
+#~ msgstr ""
+#~ "nome \"%s\" inválido: o último caractere não pode ser um traço (\"-\")."
+
+#~ msgid "invalid name '%s': maximum length is 1024"
+#~ msgstr "nome \"%s\" inválido: o tamanho máximo é 1024"
+
+#~ msgid "<child name='%s'> already specified"
+#~ msgstr "<child name='%s'> já especificado"
+
+#~ msgid "cannot add keys to a 'list-of' schema"
+#~ msgstr "não é possível adicionar chaves ao esquema \"list-of\""
+
+#~ msgid "<key name='%s'> already specified"
+#~ msgstr "<key name='%s'> já especificado"
+
+#~ msgid ""
+#~ "<key name='%s'> shadows <key name='%s'> in <schema id='%s'>; use "
+#~ "<override> to modify value"
+#~ msgstr ""
+#~ "<key name='%s'> oculta <key name='%s'> em <schema id='%s'>; use "
+#~ "<override> para modificar o valor"
+
+#~ msgid ""
+#~ "exactly one of 'type', 'enum' or 'flags' must be specified as an "
+#~ "attribute to <key>"
+#~ msgstr ""
+#~ "apenas um entre \"type\", \"enum\" ou \"flags\" deve ser especificado "
+#~ "como atributo para <key>"
+
+#~ msgid "<%s id='%s'> not (yet) defined."
+#~ msgstr "<%s id='%s'> não está (ainda) definido."
+
+#~ msgid "invalid GVariant type string '%s'"
+#~ msgstr "tipo de texto GVariant \"%s\" é inválido"
+
+#~ msgid "<override> given but schema isn't extending anything"
+#~ msgstr "<override> determinado, mas o esquema não está estendendo nada"
+
+#~ msgid "no <key name='%s'> to override"
+#~ msgstr "nenhum <key name='%s'> para sobrescrever"
+
+#~ msgid "<override name='%s'> already specified"
+#~ msgstr "<override name='%s'> já especificado"
+
+#~ msgid "<schema id='%s'> already specified"
+#~ msgstr "<schema id='%s'> já especificado"
+
+#~ msgid "<schema id='%s'> extends not yet existing schema '%s'"
+#~ msgstr "<schema id='%s'> estende um esquema ainda não existente \"%s\""
+
+#~ msgid "<schema id='%s'> is list of not yet existing schema '%s'"
+#~ msgstr "<schema id='%s'> é uma lista de esquema ainda não existente \"%s\""
+
+#~ msgid "Can not be a list of a schema with a path"
+#~ msgstr "Não pode ser uma lista de um esquema com um caminho"
+
+#~ msgid "Can not extend a schema with a path"
+#~ msgstr "Não é possível estender um esquema com um caminho"
+
+#~ msgid ""
+#~ "<schema id='%s'> is a list, extending <schema id='%s'> which is not a list"
+#~ msgstr ""
+#~ "<schema id='%s'> é uma lista, estendendo <schema id='%s'> que não é uma "
+#~ "lista"
+
+#~ msgid ""
+#~ "<schema id='%s' list-of='%s'> extends <schema id='%s' list-of='%s'> but "
+#~ "'%s' does not extend '%s'"
+#~ msgstr ""
+#~ "<schema id='%s' list-of='%s'> estende <schema id='%s' list-of='%s'>, mas "
+#~ "\"%s\" não estende \"%s\""
+
+#~ msgid "a path, if given, must begin and end with a slash"
+#~ msgstr ""
+#~ "um caminho, se determinado, precisa começar e terminar com uma barra"
+
+#~ msgid "the path of a list must end with ':/'"
+#~ msgstr "o caminho de uma lista precisa terminar com \":/\""
+
+#~ msgid "<%s id='%s'> already specified"
+#~ msgstr "<%s id='%s'> já especificado"
+
+#~ msgid "--strict was specified; exiting.\n"
+#~ msgstr "--strict foi especificado; saindo.\n"
+
+#~ msgid "This entire file has been ignored.\n"
+#~ msgstr "Este arquivo todo foi ignorado.\n"
+
+#~ msgid "Ignoring this file.\n"
+#~ msgstr "Ignorando este arquivo.\n"
+
+#~ msgid "No such key `%s' in schema `%s' as specified in override file `%s'"
+#~ msgstr ""
+#~ "Nenhuma chave \"%s\" no esquema \"%s\" como especificado no arquivo de "
+#~ "sobrescrita \"%s\""
+
+#~ msgid "; ignoring override for this key.\n"
+#~ msgstr "; ignorando sobrescrita para esta chave.\n"
+
+#~ msgid " and --strict was specified; exiting.\n"
+#~ msgstr " e --strict foi especificado; saindo.\n"
+
+#~ msgid ""
+#~ "error parsing key `%s' in schema `%s' as specified in override file `%s': "
+#~ "%s.  "
+#~ msgstr ""
+#~ "erro analisando chave \"%s\" no esquema \"%s\" como especificado no "
+#~ "arquivo de sobrescrita \"%s\": %s."
+
+#~ msgid "Ignoring override for this key.\n"
+#~ msgstr "Ignorando sobrescrita para esta chave.\n"
+
+#~ msgid ""
+#~ "override for key `%s' in schema `%s' in override file `%s' is out of the "
+#~ "range given in the schema"
+#~ msgstr ""
+#~ "sobrescrita para chave \"%s\" no esquema \"%s\" no arquivo de sobrescrita "
+#~ "\"%s\" está fora dos limites dado pelo esquema"
+
+#~ msgid ""
+#~ "override for key `%s' in schema `%s' in override file `%s' is not in the "
+#~ "list of valid choices"
+#~ msgstr ""
+#~ "sobrescrita para a chave \"%s\" no esquema \"%s\" no arquivo de "
+#~ "sobrescrita \"%s\" não está na lista de escolhas válidas"
+
+#~ msgid "where to store the gschemas.compiled file"
+#~ msgstr "onde armazenar o arquivo gschemas compilado"
+
+#~ msgid "Abort on any errors in schemas"
+#~ msgstr "Abortar em quaisquer erros nos esquemas"
+
+#~ msgid "Do not write the gschema.compiled file"
+#~ msgstr "Não gravar o arquivo gschema compilado"
+
+#~ msgid "Do not enforce key name restrictions"
+#~ msgstr "Não forçar restrições de nome de chave"
+
+#~ msgid ""
+#~ "Compile all GSettings schema files into a schema cache.\n"
+#~ "Schema files are required to have the extension .gschema.xml,\n"
+#~ "and the cache file is called gschemas.compiled."
+#~ msgstr ""
+#~ "Compila todos os arquivos schema GSettings em um cache schema.\n"
+#~ "É necessário que os arquivos schema tenham a extensão\n"
+#~ ".gschema.xml, e o arquivo de cache é chamado gschemas.compiled."
+
+#~ msgid "You should give exactly one directory name\n"
+#~ msgstr "Você deveria dar exatamente um nome de diretório\n"
+
+#~ msgid "No schema files found: "
+#~ msgstr "Nenhum arquivo schema localizado: "
+
+#~ msgid "doing nothing.\n"
+#~ msgstr "fazendo nada.\n"
+
+#~ msgid "removed existing output file.\n"
+#~ msgstr "arquivo de saída existente removido.\n"
+
+#~ msgid "Unable to find default local directory monitor type"
+#~ msgstr "Não é possível localizar o tipo de diretório monitor local padrão"
+
+#~ msgid "Invalid filename %s"
+#~ msgstr "Nome de arquivo inválido: %s"
+
+#~ msgid "Error getting filesystem info: %s"
+#~ msgstr "Erro ao obter informações do sistema de arquivos: %s"
+
+#~ msgid "Can't rename root directory"
+#~ msgstr "Não é possível renomear o diretório root"
+
+#~ msgid "Error renaming file: %s"
+#~ msgstr "Erro ao renomear arquivo: %s"
+
+#~ msgid "Can't rename file, filename already exists"
+#~ msgstr "Não é possível renomear o arquivo, o nome do arquivo já existe"
+
+#~ msgid "Invalid filename"
+#~ msgstr "Nome de arquivo inválido"
+
+#~ msgid "Can't open directory"
+#~ msgstr "Não é possível abrir diretório"
+
+#~ msgid "Error opening file: %s"
+#~ msgstr "Erro ao abrir arquivo: %s"
+
+#~ msgid "Error removing file: %s"
+#~ msgstr "Erro ao remover arquivo: %s"
+
+#~ msgid "Error trashing file: %s"
+#~ msgstr "Erro ao mover arquivo para a lixeira: %s"
+
+#~ msgid "Unable to create trash dir %s: %s"
+#~ msgstr "Não é possível criar o diretório da lixeira %s: %s"
+
+#~ msgid "Unable to find toplevel directory for trash"
+#~ msgstr "Não é possível localizar diretório de nível superior para a lixeira"
+
+#~ msgid "Unable to find or create trash directory"
+#~ msgstr "Não é possível localizar ou criar o diretório da lixeira"
+
+#~ msgid "Unable to create trashing info file: %s"
+#~ msgstr "Não é possível criar o arquivo de informações da lixeira: %s"
+
+#~ msgid "Unable to trash file: %s"
+#~ msgstr "Não é possível mover arquivo para a lixeira: %s"
+
+#~ msgid "internal error"
+#~ msgstr "erro interno"
+
+#~ msgid "Error creating directory: %s"
+#~ msgstr "Erro ao criar o diretório: %s"
+
+#~ msgid "Filesystem does not support symbolic links"
+#~ msgstr "O sistema de arquivos não tem suporte a links simbólicos"
+
+#~ msgid "Error making symbolic link: %s"
+#~ msgstr "Erro ao criar link simbólico: %s"
+
+#~ msgid "Error moving file: %s"
+#~ msgstr "Erro ao mover arquivo: %s"
+
+#~ msgid "Can't move directory over directory"
+#~ msgstr "Não é possível mover diretório sobre diretório"
+
+#~ msgid "Backup file creation failed"
+#~ msgstr "Falha ao criar arquivo de backup"
+
+#~ msgid "Error removing target file: %s"
+#~ msgstr "Erro ao remover arquivo alvo: %s"
+
+#~ msgid "Move between mounts not supported"
+#~ msgstr "Não há suporte a mover entre montagens"
+
+#~ msgid "Attribute value must be non-NULL"
+#~ msgstr "Valor de atributo deve ser não-NULO"
+
+#~ msgid "Invalid attribute type (string expected)"
+#~ msgstr "Tipo de atributo inválido (esperava-se expressão)"
+
+#~ msgid "Invalid extended attribute name"
+#~ msgstr "Nome de atributo estendido inválido"
+
+#~ msgid "Error setting extended attribute '%s': %s"
+#~ msgstr "Erro ao definir atributo estendido \"%s\": %s"
+
+#~ msgid " (invalid encoding)"
+#~ msgstr " (codificação inválida)"
+
+#~ msgid "Error when getting information for file '%s': %s"
+#~ msgstr "Erro ao obter informação para o arquivo \"%s\": %s"
+
+#~ msgid "Error when getting information for file descriptor: %s"
+#~ msgstr "Erro ao obter informação para o descritor de arquivo: %s"
+
+#~ msgid "Invalid attribute type (uint32 expected)"
+#~ msgstr "Tipo de atributo inválido (esperado uint32)"
+
+#~ msgid "Invalid attribute type (uint64 expected)"
+#~ msgstr "Tipo de atributo inválido (esperado uint64)"
+
+#~ msgid "Invalid attribute type (byte string expected)"
+#~ msgstr "Tipo de atributo inválido (expressão de byte esperada)"
+
+#~ msgid "Cannot set permissions on symlinks"
+#~ msgstr "Não foi possível definir permissões aos links simbólicos"
+
+#~ msgid "Error setting permissions: %s"
+#~ msgstr "Erro ao definir permissões: %s"
+
+#~ msgid "Error setting owner: %s"
+#~ msgstr "Erro ao definir proprietário: %s"
+
+#~ msgid "symlink must be non-NULL"
+#~ msgstr "o link simbólico deve ser não-NULO"
+
+#~ msgid "Error setting symlink: %s"
+#~ msgstr "Erro ao definir link simbólico: %s"
+
+#~ msgid "Error setting symlink: file is not a symlink"
+#~ msgstr "Erro ao definir link simbólico: o arquivo não é um link simbólico"
+
+#~ msgid "Error setting modification or access time: %s"
+#~ msgstr "Erro ao definir data/hora de modificação ou acesso: %s"
+
+#~ msgid "SELinux context must be non-NULL"
+#~ msgstr "O contexto SELinux deve ser não-NULO"
+
+#~ msgid "Error setting SELinux context: %s"
+#~ msgstr "Erro ao definir o contexto SELinux: %s"
+
+#~ msgid "SELinux is not enabled on this system"
+#~ msgstr "SELinux não está habilitado neste sistema"
+
+#~ msgid "Setting attribute %s not supported"
+#~ msgstr "Não há suporte à definição do atributo %s"
+
+#~ msgid "Error reading from file: %s"
+#~ msgstr "Erro ao ler do arquivo: %s"
+
+#~ msgid "Error seeking in file: %s"
+#~ msgstr "Erro ao buscar no arquivo: %s"
+
+#~ msgid "Error closing file: %s"
+#~ msgstr "Erro ao fechar arquivo: %s"
+
+#~ msgid "Unable to find default local file monitor type"
+#~ msgstr "Não é possível localizar o tipo de arquivo monitor local padrão"
+
+#~ msgid "Error writing to file: %s"
+#~ msgstr "Erro ao escrever no arquivo: %s"
+
+#~ msgid "Error removing old backup link: %s"
+#~ msgstr "Erro ao remover link antigo de backup: %s"
+
+#~ msgid "Error creating backup copy: %s"
+#~ msgstr "Erro ao criar cópia de backup: %s"
+
+#~ msgid "Error renaming temporary file: %s"
+#~ msgstr "Erro ao renomear arquivo temporário: %s"
+
+#~ msgid "Error truncating file: %s"
+#~ msgstr "Erro ao truncar arquivo: %s"
+
+#~ msgid "Error opening file '%s': %s"
+#~ msgstr "Erro ao abrir arquivo \"%s\": %s"
+
+#~ msgid "Target file is a directory"
+#~ msgstr "Arquivo alvo é um diretório"
+
+#~ msgid "Target file is not a regular file"
+#~ msgstr "Arquivo alvo não é um arquivo comum"
+
+#~ msgid "The file was externally modified"
+#~ msgstr "O arquivo foi modificado externamente"
+
+#~ msgid "Error removing old file: %s"
+#~ msgstr "Erro ao remover arquivo antigo: %s"
+
+#~ msgid "Invalid GSeekType supplied"
+#~ msgstr "GSeekType fornecido inválido"
+
+#~ msgid "Invalid seek request"
+#~ msgstr "Solicitação de busca inválida"
+
+#~ msgid "Cannot truncate GMemoryInputStream"
+#~ msgstr "Não é possível truncar GMemoryInputStream"
+
+#~ msgid "Memory output stream not resizable"
+#~ msgstr "Fluxo de saída da memória não redimensionável"
+
+#~ msgid "Failed to resize memory output stream"
+#~ msgstr "Falha ao redimensionar fluxo de saída da memória"
+
+#~ msgid ""
+#~ "Amount of memory required to process the write is larger than available "
+#~ "address space"
+#~ msgstr ""
+#~ "Quantidade de memória necessária para processar a escrita é maior que a "
+#~ "disponível"
+
+#~ msgid "Requested seek before the beginning of the stream"
+#~ msgstr "Solicitada uma busca antes do começo do fluxo"
+
+#~ msgid "Requested seek beyond the end of the stream"
+#~ msgstr "Solicitada uma busca além do fim do fluxo"
+
+#~ msgid "mount doesn't implement \"unmount\""
+#~ msgstr "objeto de montagem não implementa \"umount\""
+
+#~ msgid "mount doesn't implement \"eject\""
+#~ msgstr "objeto de montagem não implementa \"eject\""
+
+#~ msgid "mount doesn't implement \"unmount\" or \"unmount_with_operation\""
+#~ msgstr ""
+#~ "objeto de montagem não implementa \"unmount\" ou \"unmount_with_operation"
+#~ "\""
+
+#~ msgid "mount doesn't implement \"eject\" or \"eject_with_operation\""
+#~ msgstr ""
+#~ "objeto de montagem não implementa \"eject\" ou \"eject_with_operation\""
+
+#~ msgid "mount doesn't implement \"remount\""
+#~ msgstr "objeto de montagem não implementa \"remount\""
+
+#~ msgid "mount doesn't implement content type guessing"
+#~ msgstr "objeto de montagem não implementa estimativa de tipo de conteúdo"
+
+#~ msgid "mount doesn't implement synchronous content type guessing"
+#~ msgstr ""
+#~ "objeto de montagem não implementa estimativa de tipo de conteúdo síncrono"
+
+#~ msgid "Hostname '%s' contains '[' but not ']'"
+#~ msgstr "Nome da máquina \"%s\" contém \"[\" mas não \"]\""
+
+#~ msgid "Network unreachable"
+#~ msgstr "Rede inalcançável"
+
+#~ msgid "Host unreachable"
+#~ msgstr "Máquina inalcançável"
+
+#~ msgid "Could not create network monitor: %s"
+#~ msgstr "Não foi possível criar o monitor de rede: %s"
+
+#~ msgid "Could not create network monitor: "
+#~ msgstr "Não foi possível criar o monitor de rede: "
+
+#~ msgid "Could not get network status: "
+#~ msgstr "Não foi possível obter o estado da rede: "
+
+#~ msgid "Output stream doesn't implement write"
+#~ msgstr "Fluxo de saída não implementa escrita"
+
+#~ msgid "Source stream is already closed"
+#~ msgstr "A fonte do fluxo já está fechada"
+
+#~ msgid "Error resolving '%s': %s"
+#~ msgstr "Erro ao resolver \"%s\": %s"
+
+#~ msgid "Error reverse-resolving '%s': %s"
+#~ msgstr "Erro ao resolver reversamente \"%s\": %s"
+
+#~ msgid "No service record for '%s'"
+#~ msgstr "Nenhum serviço de registro para \"%s\""
+
+#~ msgid "Temporarily unable to resolve '%s'"
+#~ msgstr "Temporariamente sem condições de resolver \"%s\""
+
+#~ msgid "Error resolving '%s'"
+#~ msgstr "Erro ao resolver \"%s\""
+
+#~ msgid "The resource at '%s' does not exist"
+#~ msgstr "O recurso em \"%s\" não existe"
+
+#~ msgid "The resource at '%s' failed to decompress"
+#~ msgstr "Falha ao descompactar o recurso em \"%s\""
+
+#~ msgid "The resource at '%s' is not a directory"
+#~ msgstr "O recurso em \"%s\" não é um diretório"
+
+#~ msgid "Input stream doesn't implement seek"
+#~ msgstr "Fluxo de entrada não implementa busca"
+
+#~ msgid "Print help"
+#~ msgstr "Exibe a ajuda"
+
+#~ msgid "[COMMAND]"
+#~ msgstr "[COMANDO]"
+
+#~ msgid "List sections containing resources in an elf FILE"
+#~ msgstr "Lista as seções contendo recursos no arquivo elf ARQUIVO"
+
+#~ msgid ""
+#~ "List resources\n"
+#~ "If SECTION is given, only list resources in this section\n"
+#~ "If PATH is given, only list matching resources"
+#~ msgstr ""
+#~ "Lista recursos\n"
+#~ "Se SEÇÃO é fornecida, só lista os recursos dentro desta seção\n"
+#~ "Se CAMINHO é fornecido, só lista recursos que casam com o caminho"
+
+#~ msgid "FILE [PATH]"
+#~ msgstr "ARQUIVO [CAMINHO]"
+
+#~ msgid "SECTION"
+#~ msgstr "SEÇÃO"
+
+#~ msgid ""
+#~ "List resources with details\n"
+#~ "If SECTION is given, only list resources in this section\n"
+#~ "If PATH is given, only list matching resources\n"
+#~ "Details include the section, size and compression"
+#~ msgstr ""
+#~ "Lista recursos com detalhes\n"
+#~ "Se SEÇÃO é fornecida, só lista os recursos dentro desta seção\n"
+#~ "Se CAMINHO é fornecido, só lista recursos que casam com o caminho\n"
+#~ "Detalhes incluem a seção, tamanho e compactação"
+
+#~ msgid "Extract a resource file to stdout"
+#~ msgstr "Extrai um arquivo de recurso para a saída padrão"
+
+#~ msgid "FILE PATH"
+#~ msgstr "ARQUIVO CAMINHO"
+
+#~ msgid ""
+#~ "Unknown command %s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Comando \"%s\" desconhecido\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  gresource [--section SECTION] COMMAND [ARGS...]\n"
+#~ "\n"
+#~ "Commands:\n"
+#~ "  help                      Show this information\n"
+#~ "  sections                  List resource sections\n"
+#~ "  list                      List resources\n"
+#~ "  details                   List resources with details\n"
+#~ "  extract                   Extract a resource\n"
+#~ "\n"
+#~ "Use 'gresource help COMMAND' to get detailed help.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Uso:\n"
+#~ "  gresource [--section SEÇÃO] COMANDO [ARGUMENTOS...]\n"
+#~ "\n"
+#~ "Comandos:\n"
+#~ "  help                      Mostra esta ajuda\n"
+#~ "  sections                  Lista as seções do recurso\n"
+#~ "  list                      Lista os recursos\n"
+#~ "  details                   Lista os recursos com detalhes\n"
+#~ "  extract                   Extrai um recurso\n"
+#~ "\n"
+#~ "Use 'gresource help COMANDO' para obter uma ajuda detalhada.\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  gresource %s%s%s %s\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Uso:\n"
+#~ "  gresource %s%s%s %s\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+
+#~ msgid "Arguments:\n"
+#~ msgstr "Argumentos:\n"
+
+#~ msgid "  SECTION   An (optional) elf section name\n"
+#~ msgstr "  SEÇÃO     Um nome de seção elf (opcional) \n"
+
+#~ msgid "  COMMAND   The (optional) command to explain\n"
+#~ msgstr "  COMANDO   O comando a ser explicado (opcional)\n"
+
+#~ msgid "  FILE      An elf file (a binary or a shared library)\n"
+#~ msgstr "  ARQUIVO    Um arquivo elf (binário ou biblioteca compartilhada)\n"
+
+#~ msgid ""
+#~ "  FILE      An elf file (a binary or a shared library)\n"
+#~ "            or a compiled resource file\n"
+#~ msgstr ""
+#~ "  ARQUIVO   Um arquivo elf (binário ou biblioteca compartilhada)\n"
+#~ "            ou um arquivo de recurso compilado\n"
+
+#~ msgid "[PATH]"
+#~ msgstr "[CAMINHO]"
+
+#~ msgid "  PATH      An (optional) resource path (may be partial)\n"
+#~ msgstr "  CAMINHO   Um caminho do recurso (opcional, pode ser parcial)\n"
+
+#~ msgid "PATH"
+#~ msgstr "CAMINHO"
+
+#~ msgid "  PATH      A resource path\n"
+#~ msgstr "  CAMINHO   Um caminho do recurso\n"
+
+#~ msgid "No such schema '%s'\n"
+#~ msgstr "Nenhum esquema \"%s\"\n"
+
+#~ msgid "Schema '%s' is not relocatable (path must not be specified)\n"
+#~ msgstr ""
+#~ "Esquema \"%s\" não é recolocável (o caminho não deve ser especificado)\n"
+
+#~ msgid "Schema '%s' is relocatable (path must be specified)\n"
+#~ msgstr "Esquema \"%s\" é recolocável (o caminho deve ser especificado)\n"
+
+#~ msgid "Empty path given.\n"
+#~ msgstr "Caminho fornecido está vazio.\n"
+
+#~ msgid "Path must begin with a slash (/)\n"
+#~ msgstr "O caminho deve começar com uma barra (/)\n"
+
+#~ msgid "Path must end with a slash (/)\n"
+#~ msgstr "O caminho deve terminar com uma barra (/)\n"
+
+#~ msgid "Path must not contain two adjacent slashes (//)\n"
+#~ msgstr "O caminho não pode conter duas barras adjacentes (//)\n"
+
+#~ msgid "No such key '%s'\n"
+#~ msgstr "Nenhuma chave \"%s\"\n"
+
+#~ msgid "The provided value is outside of the valid range\n"
+#~ msgstr "O valor fornecido está fora do intervalo válido\n"
+
+#~ msgid "List the installed (non-relocatable) schemas"
+#~ msgstr "Lista os esquemas instalados (não-recolocáveis)"
+
+#~ msgid "List the installed relocatable schemas"
+#~ msgstr "Lista os esquemas recolocáveis instalados"
+
+#~ msgid "List the keys in SCHEMA"
+#~ msgstr "Lista as chaves no ESQUEMA"
+
+#~ msgid "SCHEMA[:PATH]"
+#~ msgstr "ESQUEMA[:CAMINHO]"
+
+#~ msgid "List the children of SCHEMA"
+#~ msgstr "Lista os filhos do ESQUEMA"
+
+#~ msgid ""
+#~ "List keys and values, recursively\n"
+#~ "If no SCHEMA is given, list all keys\n"
+#~ msgstr ""
+#~ "Lista as chaves e valores, recursivamente\n"
+#~ "Se nenhum esquema for fornecido, lista todas as chaves\n"
+
+#~ msgid "[SCHEMA[:PATH]]"
+#~ msgstr "[ESQUEMA[:CAMINHO]]"
+
+#~ msgid "Get the value of KEY"
+#~ msgstr "Obtém o valor de CHAVE"
+
+#~ msgid "SCHEMA[:PATH] KEY"
+#~ msgstr "ESQUEMA[:CAMINHO] CHAVE"
+
+#~ msgid "Query the range of valid values for KEY"
+#~ msgstr "Consulta o intervalo de valores válidos para CHAVE"
+
+#~ msgid "Set the value of KEY to VALUE"
+#~ msgstr "Define o valor de CHAVE para VALOR"
+
+#~ msgid "SCHEMA[:PATH] KEY VALUE"
+#~ msgstr "ESQUEMA[:CAMINHO] CHAVE VALOR"
+
+#~ msgid "Reset KEY to its default value"
+#~ msgstr "Restaurar CHAVE para seu valor padrão"
+
+#~ msgid "Reset all keys in SCHEMA to their defaults"
+#~ msgstr "Restaurar todas as chaves no ESQUEMA para seus padrões"
+
+#~ msgid "Check if KEY is writable"
+#~ msgstr "Verifica se CHAVE é gravável"
+
+#~ msgid ""
+#~ "Monitor KEY for changes.\n"
+#~ "If no KEY is specified, monitor all keys in SCHEMA.\n"
+#~ "Use ^C to stop monitoring.\n"
+#~ msgstr ""
+#~ "Monitora por alterações de CHAVE.\n"
+#~ "Se nenhuma CHAVE for especificada, monitora todas as chaves no ESQUEMA.\n"
+#~ "Use ^C para parar o monitoramento.\n"
+
+#~ msgid "SCHEMA[:PATH] [KEY]"
+#~ msgstr "ESQUEMA[:CAMINHO] [CHAVE]"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  gsettings [--schemadir SCHEMADIR] COMMAND [ARGS...]\n"
+#~ "\n"
+#~ "Commands:\n"
+#~ "  help                      Show this information\n"
+#~ "  list-schemas              List installed schemas\n"
+#~ "  list-relocatable-schemas  List relocatable schemas\n"
+#~ "  list-keys                 List keys in a schema\n"
+#~ "  list-children             List children of a schema\n"
+#~ "  list-recursively          List keys and values, recursively\n"
+#~ "  range                     Queries the range of a key\n"
+#~ "  get                       Get the value of a key\n"
+#~ "  set                       Set the value of a key\n"
+#~ "  reset                     Reset the value of a key\n"
+#~ "  reset-recursively         Reset all values in a given schema\n"
+#~ "  writable                  Check if a key is writable\n"
+#~ "  monitor                   Watch for changes\n"
+#~ "\n"
+#~ "Use 'gsettings help COMMAND' to get detailed help.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Uso:\n"
+#~ "  gsettings [--schemadir SCHEMADIR] COMANDO [ARGS...]\n"
+#~ "\n"
+#~ "Comandos:\n"
+#~ "  help                      Exibe esta informação\n"
+#~ "  list-schemas              Lista os esquemas instalados\n"
+#~ "  list-relocatable-schemas  Lista os esquemas recolocáveis\n"
+#~ "  list-keys                 Lista as chaves em um esquema\n"
+#~ "  list-children             Lista os filhos de um esquema\n"
+#~ "  list-recursively          Lista as chaves e valores, recursivamente\n"
+#~ "  range                     Consulta o intervalo de uma chave\n"
+#~ "  get                       Obtêm o valor de uma chave\n"
+#~ "  set                       Define o valor de uma chave\n"
+#~ "  reset                     Redefine o valor de uma chave\n"
+#~ "  reset-recursively         Restaura todas as chaves em um determinado\n"
+#~ "  writable                  Verifica se uma chave é gravável\n"
+#~ "  monitor                   Monitora alterações\n"
+#~ "\n"
+#~ "Use \"gsettings help COMANDO\" para obter ajuda detalhada.\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  gsettings [--schemadir SCHEMADIR] %s %s\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Uso:\n"
+#~ "  gsettings [--schemadir SCHEMADIR] %s %s\n"
+#~ "\n"
+#~ "%s\n"
+#~ "\n"
+
+#~ msgid "  SCHEMADIR A directory to search for additional schemas\n"
+#~ msgstr "  SCHEMADIR Um diretório para procurar por esquemas adicionais\n"
+
+#~ msgid ""
+#~ "  SCHEMA    The name of the schema\n"
+#~ "  PATH      The path, for relocatable schemas\n"
+#~ msgstr ""
+#~ "  ESQUEMA     O nome do esquema\n"
+#~ "  CAMINHO     O caminho, para esquemas recolocáveis\n"
+
+#~ msgid "  KEY       The (optional) key within the schema\n"
+#~ msgstr "  CHAVE     A chave (opcional) com o esquema\n"
+
+#~ msgid "  KEY       The key within the schema\n"
+#~ msgstr "  CHAVE     A chave com o esquema\n"
+
+#~ msgid "  VALUE     The value to set\n"
+#~ msgstr "  VALOR     O valor para definir\n"
+
+#~ msgid "Empty schema name given\n"
+#~ msgstr "Nome de esquema vazio\n"
+
+#~ msgid "Invalid socket, not initialized"
+#~ msgstr "Soquete inválido, não inicializado"
+
+#~ msgid "Invalid socket, initialization failed due to: %s"
+#~ msgstr "Soquete inválido, inicialização falhou devido a: %s"
+
+#~ msgid "Socket is already closed"
+#~ msgstr "O soquete já está fechado"
+
+#~ msgid "Socket I/O timed out"
+#~ msgstr "Tempo de I/O do soquete foi esgotado"
+
+#~ msgid "creating GSocket from fd: %s"
+#~ msgstr "criando GSocket a partir do fd: %s"
+
+#~ msgid "Unable to create socket: %s"
+#~ msgstr "Não é possível criar soquete: %s"
+
+#~ msgid "Unknown family was specified"
+#~ msgstr "Foi especificada uma família desconhecida"
+
+#~ msgid "Unknown protocol was specified"
+#~ msgstr "Foi especificado um protocolo desconhecido"
+
+#~ msgid "could not get local address: %s"
+#~ msgstr "não foi possível obter endereço local: %s"
+
+#~ msgid "could not get remote address: %s"
+#~ msgstr "não foi possível obter endereço remoto: %s"
+
+#~ msgid "could not listen: %s"
+#~ msgstr "não foi possível escutar: %s"
+
+#~ msgid "Error binding to address: %s"
+#~ msgstr "Erro ao vincular ao endereço: %s"
+
+#~ msgid "Error joining multicast group: %s"
+#~ msgstr "Erro ao entrar no grupo multicast: %s"
+
+#~ msgid "Error leaving multicast group: %s"
+#~ msgstr "Erro ao sair do grupo multicast: %s"
+
+#~ msgid "No support for source-specific multicast"
+#~ msgstr "Não há suporte para multicast com uma origem específica"
+
+#~ msgid "Error accepting connection: %s"
+#~ msgstr "Erro ao aceitar a conexão: %s"
+
+#~ msgid "Connection in progress"
+#~ msgstr "Conexão em progresso"
+
+#~ msgid "Unable to get pending error: %s"
+#~ msgstr "Não é possível obter erro pendente: %s"
+
+#~ msgid "Error receiving data: %s"
+#~ msgstr "Erro ao receber dados: %s"
+
+#~ msgid "Error sending data: %s"
+#~ msgstr "Erro ao enviar dados: %s"
+
+#~ msgid "Unable to shutdown socket: %s"
+#~ msgstr "Não é possível encerrar soquete: %s"
+
+#~ msgid "Error closing socket: %s"
+#~ msgstr "Erro ao fechar soquete: %s"
+
+#~ msgid "Waiting for socket condition: %s"
+#~ msgstr "Aguardando pela condição do soquete: %s"
+
+#~ msgid "Error sending message: %s"
+#~ msgstr "Erro ao enviar mensagem: %s"
+
+#~ msgid "GSocketControlMessage not supported on windows"
+#~ msgstr "Não há suporte a GSocketControlMessage no windows"
+
+#~ msgid "Error receiving message: %s"
+#~ msgstr "Erro ao receber mensagem: %s"
+
+#~ msgid "g_socket_get_credentials not implemented for this OS"
+#~ msgstr "g_socket_get_credentials não está implementado para este SO"
+
+#~ msgid "Could not connect to proxy server %s: "
+#~ msgstr "Não foi possível conectar-se ao servidor proxy %s: "
+
+#~ msgid "Could not connect to %s: "
+#~ msgstr "Não foi possível conectar-se a %s: "
+
+#~ msgid "Could not connect: "
+#~ msgstr "Não foi possível conectar: "
+
+#~ msgid "Unknown error on connect"
+#~ msgstr "erro desconhecido ao conectar"
+
+#~ msgid "Trying to proxy over non-TCP connection is not supported."
+#~ msgstr ""
+#~ "Não há suporte a tentativa ao uso de proxy sobre uma conexão não TCP."
+
+#~ msgid "Proxy protocol '%s' is not supported."
+#~ msgstr "Não há suporte ao protocolo de proxy \"%s\"."
+
+#~ msgid "Listener is already closed"
+#~ msgstr "O ouvinte já está fechado"
+
+#~ msgid "Added socket is closed"
+#~ msgstr "Soquete adicionado está fechado"
+
+#~ msgid "SOCKSv4 does not support IPv6 address '%s'"
+#~ msgstr "Não há suporte ao endereço IPv6 \"%s\" pelo SOCKSv4"
+
+#~ msgid "Username is too long for SOCKSv4 protocol"
+#~ msgstr "O nome de usuário é muito longo para o protocolo SOCKSv4"
+
+#~ msgid "Hostname '%s' is too long for SOCKSv4 protocol"
+#~ msgstr "O nome \"%s\" é muito longo para o protocolo SOCKSv4"
+
+#~ msgid "The server is not a SOCKSv4 proxy server."
+#~ msgstr "O servidor não é um servidor proxy SOCKSv4."
+
+#~ msgid "Connection through SOCKSv4 server was rejected"
+#~ msgstr "A conexão ao servidor por meio de SOCKSv4 foi rejeitada"
+
+#~ msgid "The server is not a SOCKSv5 proxy server."
+#~ msgstr "O servidor não é um servidor proxy SOCKSv5."
+
+#~ msgid "The SOCKSv5 proxy requires authentication."
+#~ msgstr "O proxy SOCKSv5 requer autenticação."
+
+#~ msgid ""
+#~ "The SOCKSv5 proxy requires an authentication method that is not supported "
+#~ "by GLib."
+#~ msgstr "O SOCKSv5 requer um método de autenticação sem suporte pelo GLib."
+
+#~ msgid "Username or password is too long for SOCKSv5 protocol."
+#~ msgstr ""
+#~ "O nome de usuário ou a senha são muito longos para o protocolo SOCKSv5."
+
+#~ msgid "SOCKSv5 authentication failed due to wrong username or password."
+#~ msgstr ""
+#~ "A autenticação SOCKSv5 falhou devido a um nome de usuário ou senha "
+#~ "errados."
+
+#~ msgid "Hostname '%s' is too long for SOCKSv5 protocol"
+#~ msgstr "O nome \"%s\" é muito longo para o protocolo SOCKSv5"
+
+#~ msgid "The SOCKSv5 proxy server uses unknown address type."
+#~ msgstr ""
+#~ "O servidor proxy SOCKSv5 está usando um tipo de endereço desconhecido."
+
+#~ msgid "Internal SOCKSv5 proxy server error."
+#~ msgstr "Erro interno de servidor proxy SOCKSv5."
+
+#~ msgid "SOCKSv5 connection not allowed by ruleset."
+#~ msgstr "A conexão SOCKSv5 não foi permitida pelo conjunto de regras."
+
+#~ msgid "Host unreachable through SOCKSv5 server."
+#~ msgstr "Servidor inalcançável por meio do servidor SOCKSv5."
+
+#~ msgid "Network unreachable through SOCKSv5 proxy."
+#~ msgstr "Rede inalcançável por meio do proxy SOCKSv5."
+
+#~ msgid "Connection refused through SOCKSv5 proxy."
+#~ msgstr "Conexão recusada por meio do proxy SOCKSv5."
+
+#~ msgid "SOCKSv5 proxy does not support 'connect' command."
+#~ msgstr "Proxy SOCKSv5 sem suporte ao comando \"connect\"."
+
+#~ msgid "SOCKSv5 proxy does not support provided address type."
+#~ msgstr "Proxy SOCKSv5 sem suporte ao tipo de endereço fornecido."
+
+#~ msgid "Unknown SOCKSv5 proxy error."
+#~ msgstr "Erro de proxy SOCKSv5 desconhecido."
+
+#~ msgid "Can't handle version %d of GThemedIcon encoding"
+#~ msgstr "Não é possível lidar com a versão %d da codificação GThemedIcon"
+
+#~ msgid "Cannot decrypt PEM-encoded private key"
+#~ msgstr "Não foi possível decodificar uma chave privada codificada com PEM"
+
+#~ msgid "No PEM-encoded private key found"
+#~ msgstr "Chave privada codificada com PEM não encontrada"
+
+#~ msgid "Could not parse PEM-encoded private key"
+#~ msgstr "Não foi possível analisar chave privada codificada com PEM"
+
+#~ msgid "No PEM-encoded certificate found"
+#~ msgstr "Certificado codificado com PEM não localizado"
+
+#~ msgid "Could not parse PEM-encoded certificate"
+#~ msgstr "Não foi possível analisar certificado codificado com PEM"
+
+#~ msgid ""
+#~ "This is the last chance to enter the password correctly before your "
+#~ "access is locked out."
+#~ msgstr ""
+#~ "Esta é a última chance para digitar a senha corretamente antes de seu "
+#~ "acesso ser bloqueado."
+
+#~ msgid ""
+#~ "Several password entered have been incorrect, and your access will be "
+#~ "locked out after further failures."
+#~ msgstr ""
+#~ "Várias das senhas digitadas estavam incorretas, e o seu acesso será "
+#~ "bloqueado se houverem mais falhas."
+
+#~ msgid "The password entered is incorrect."
+#~ msgstr "A senha digitada está incorreta."
+
+#~ msgid "Expecting 1 control message, got %d"
+#~ msgstr "Esperando 1 mensagem de controle, obtive %d"
+
+#~ msgid "Unexpected type of ancillary data"
+#~ msgstr "Tipo de dado auxiliar não esperado"
+
+#~ msgid "Expecting one fd, but got %d\n"
+#~ msgstr "Esperando um fd, mas obtive %d\n"
+
+#~ msgid "Received invalid fd"
+#~ msgstr "Recebido fd inválido"
+
+#~ msgid "Error sending credentials: "
+#~ msgstr "Erro ao enviar credenciais: "
+
+#~ msgid "Error checking if SO_PASSCRED is enabled for socket: %s"
+#~ msgstr "Erro ao verificar se SO_PASSCRED está habilitado pelo soquete: %s"
+
+#~ msgid ""
+#~ "Unexpected option length while checking if SO_PASSCRED is enabled for "
+#~ "socket. Expected %d bytes, got %d"
+#~ msgstr ""
+#~ "Tamanho inesperado de opção ao verificar se SO_PASSCRED está habilitado "
+#~ "pelo soquete. Esperado %d bytes, mas obteve %d"
+
+#~ msgid "Error enabling SO_PASSCRED: %s"
+#~ msgstr "Erro ao habilitar SO_PASSCRED: %s"
+
+#~ msgid ""
+#~ "Expecting to read a single byte for receiving credentials but read zero "
+#~ "bytes"
+#~ msgstr ""
+#~ "Era esperado ler apenas um byte para receber credenciais, mas foi lido "
+#~ "zero byte"
+
+#~ msgid "Not expecting control message, but got %d"
+#~ msgstr "Não esperava mensagem de controle, mas recebeu %d"
+
+#~ msgid "Error while disabling SO_PASSCRED: %s"
+#~ msgstr "Erro ao desabilitar SO_PASSCRED: %s"
+
+#~ msgid "Error reading from file descriptor: %s"
+#~ msgstr "Erro ao ler do descritor de arquivo: %s"
+
+#~ msgid "Error closing file descriptor: %s"
+#~ msgstr "Erro ao fechar o descritor de arquivo: %s"
+
+#~ msgid "Filesystem root"
+#~ msgstr "Sistema de arquivos root"
+
+#~ msgid "Error writing to file descriptor: %s"
+#~ msgstr "Erro ao escrever no descritor de arquivo: %s"
+
+#~ msgid "Abstract unix domain socket addresses not supported on this system"
+#~ msgstr ""
+#~ "Soquetes de endereços de domínio unix abstratos não suportados neste "
+#~ "sistema"
+
+#~ msgid "volume doesn't implement eject"
+#~ msgstr "volume não implementa ejetar"
+
+#~ msgid "volume doesn't implement eject or eject_with_operation"
+#~ msgstr "volume não implementa eject ou eject_with_operation"
+
+#~ msgid "Can't find application"
+#~ msgstr "Não é possível localizar o aplicativo"
+
+#~ msgid "Error launching application: %s"
+#~ msgstr "Erro ao lançar o aplicativo: %s"
+
+#~ msgid "URIs not supported"
+#~ msgstr "Não há suporte a URIs"
+
+#~ msgid "association changes not supported on win32"
+#~ msgstr "não há suporte às alterações de associação em win32"
+
+#~ msgid "Association creation not supported on win32"
+#~ msgstr "Não há suporte à criação de associação em win32"
+
+#~ msgid "Error reading from handle: %s"
+#~ msgstr "Erro ao ler do manipulador: %s"
+
+#~ msgid "Error closing handle: %s"
+#~ msgstr "Erro ao fechar manipulador: %s"
+
+#~ msgid "Error writing to handle: %s"
+#~ msgstr "Erro ao escrever no manipulador: %s"
+
+#~ msgid "Not enough memory"
+#~ msgstr "Memória insuficiente"
+
+#~ msgid "Internal error: %s"
+#~ msgstr "Erro interno: %s"
+
+#~ msgid "Need more input"
+#~ msgstr "Precisa de mais entrada"
+
+#~ msgid "Invalid compressed data"
+#~ msgstr "Dados comprimidos inválidos"
+
+#~ msgid "Unexpected attribute '%s' for element '%s'"
+#~ msgstr "Atributo \"%s\" inesperado para o elemento \"%s\""
+
+#~ msgid "Attribute '%s' of element '%s' not found"
+#~ msgstr "Não foi localizado atributo \"%s\" do elemento \"%s\""
+
+#~ msgid "Unexpected tag '%s', tag '%s' expected"
+#~ msgstr "Marca \"%s\" inesperada, esperava marca \"%s\""
+
+#~ msgid "Unexpected tag '%s' inside '%s'"
+#~ msgstr "Marca \"%s\" inesperada dentro de \"%s\""
+
+#~ msgid "No valid bookmark file found in data dirs"
+#~ msgstr ""
+#~ "Não foi localizado arquivo de marcadores válido nos diretórios de dados"
+
+#~ msgid "A bookmark for URI '%s' already exists"
+#~ msgstr "Já existe um marcador para o URI \"%s\""
+
+#~ msgid "No bookmark found for URI '%s'"
+#~ msgstr "Não foi localizado marcador para o URI \"%s\""
+
+#~ msgid "No MIME type defined in the bookmark for URI '%s'"
+#~ msgstr "Não foi definido tipo MIME no marcador para o URI \"%s\""
+
+#~ msgid "No private flag has been defined in bookmark for URI '%s'"
+#~ msgstr "Não foi definido sinal de particular no marcador para o URI \"%s\""
+
+#~ msgid "No groups set in bookmark for URI '%s'"
+#~ msgstr "Não há grupos definidos no marcador para o URI \"%s\""
+
+#~ msgid "No application with name '%s' registered a bookmark for '%s'"
+#~ msgstr "Nenhum aplicativo chamado \"%s\" registrou um marcador para \"%s\""
+
+#~ msgid "Failed to expand exec line '%s' with URI '%s'"
+#~ msgstr "Falha em expandir linha de execução \"%s\" com URI \"%s\""
+
+#~ msgid "Partial character sequence at end of input"
+#~ msgstr "Sequência de caracteres parcial no final da entrada"
+
+#~ msgid "Cannot convert fallback '%s' to codeset '%s'"
+#~ msgstr ""
+#~ "Não é possível converter a sequência \"%s\" para conjunto caracteres \"%s"
+#~ "\""
+
+#~ msgid "The URI '%s' is not an absolute URI using the \"file\" scheme"
+#~ msgstr "O URI \"%s\" não é um URI absoluto que utilize o esquema \"file\""
+
+#~ msgid "The local file URI '%s' may not include a '#'"
+#~ msgstr "O URI de arquivo local \"%s\" não pode incluir um \"#\""
+
+#~ msgid "The URI '%s' is invalid"
+#~ msgstr "O URI \"%s\" é inválido"
+
+#~ msgid "The hostname of the URI '%s' is invalid"
+#~ msgstr "O nome de servidor do URI \"%s\" é inválido"
+
+#~ msgid "The URI '%s' contains invalidly escaped characters"
+#~ msgstr "O URI \"%s\" contém caracteres com escape inválido"
+
+#~ msgid "The pathname '%s' is not an absolute path"
+#~ msgstr "O nome de caminho \"%s\" não é um caminho absoluto"
+
+#~ msgid "Invalid hostname"
+#~ msgstr "Nome de servidor inválido"
+
+#~ msgctxt "GDateTime"
+#~ msgid "AM"
+#~ msgstr "AM"
+
+#~ msgctxt "GDateTime"
+#~ msgid "PM"
+#~ msgstr "PM"
+
+#~ msgctxt "GDateTime"
+#~ msgid "%a %b %e %H:%M:%S %Y"
+#~ msgstr "%a %d de %b %H:%M:%S %Y"
+
+#~ msgctxt "GDateTime"
+#~ msgid "%m/%d/%y"
+#~ msgstr "%d/%m/%y"
+
+#~ msgctxt "GDateTime"
+#~ msgid "%H:%M:%S"
+#~ msgstr "%H:%M:%S"
+
+#~ msgctxt "GDateTime"
+#~ msgid "%I:%M:%S %p"
+#~ msgstr "%I:%M:%S %p"
+
+#~ msgctxt "full month name"
+#~ msgid "January"
+#~ msgstr "janeiro"
+
+#~ msgctxt "full month name"
+#~ msgid "February"
+#~ msgstr "fevereiro"
+
+#~ msgctxt "full month name"
+#~ msgid "March"
+#~ msgstr "março"
+
+#~ msgctxt "full month name"
+#~ msgid "April"
+#~ msgstr "abril"
+
+#~ msgctxt "full month name"
+#~ msgid "May"
+#~ msgstr "maio"
+
+#~ msgctxt "full month name"
+#~ msgid "June"
+#~ msgstr "junho"
+
+#~ msgctxt "full month name"
+#~ msgid "July"
+#~ msgstr "julho"
+
+#~ msgctxt "full month name"
+#~ msgid "August"
+#~ msgstr "agosto"
+
+#~ msgctxt "full month name"
+#~ msgid "September"
+#~ msgstr "setembro"
+
+#~ msgctxt "full month name"
+#~ msgid "October"
+#~ msgstr "outubro"
+
+#~ msgctxt "full month name"
+#~ msgid "November"
+#~ msgstr "novembro"
+
+#~ msgctxt "full month name"
+#~ msgid "December"
+#~ msgstr "dezembro"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Jan"
+#~ msgstr "jan"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Feb"
+#~ msgstr "fev"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Mar"
+#~ msgstr "mar"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Apr"
+#~ msgstr "abr"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "May"
+#~ msgstr "maio"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Jun"
+#~ msgstr "jun"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Jul"
+#~ msgstr "jul"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Aug"
+#~ msgstr "ago"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Sep"
+#~ msgstr "set"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Oct"
+#~ msgstr "out"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Nov"
+#~ msgstr "nov"
+
+#~ msgctxt "abbreviated month name"
+#~ msgid "Dec"
+#~ msgstr "dez"
+
+#~ msgctxt "full weekday name"
+#~ msgid "Monday"
+#~ msgstr "segunda-feira"
+
+#~ msgctxt "full weekday name"
+#~ msgid "Tuesday"
+#~ msgstr "terça-feira"
+
+#~ msgctxt "full weekday name"
+#~ msgid "Wednesday"
+#~ msgstr "quarta-feira"
+
+#~ msgctxt "full weekday name"
+#~ msgid "Thursday"
+#~ msgstr "quinta-feira"
+
+#~ msgctxt "full weekday name"
+#~ msgid "Friday"
+#~ msgstr "sexta-feira"
+
+#~ msgctxt "full weekday name"
+#~ msgid "Saturday"
+#~ msgstr "sábado"
+
+#~ msgctxt "full weekday name"
+#~ msgid "Sunday"
+#~ msgstr "domingo"
+
+#~ msgctxt "abbreviated weekday name"
+#~ msgid "Tue"
+#~ msgstr "ter"
+
+#~ msgctxt "abbreviated weekday name"
+#~ msgid "Wed"
+#~ msgstr "qua"
+
+#~ msgctxt "abbreviated weekday name"
+#~ msgid "Thu"
+#~ msgstr "qui"
+
+#~ msgctxt "abbreviated weekday name"
+#~ msgid "Sat"
+#~ msgstr "sab"
+
+#~ msgctxt "abbreviated weekday name"
+#~ msgid "Sun"
+#~ msgstr "dom"
+
+#~ msgid "Error opening directory '%s': %s"
+#~ msgstr "Erro ao abrir o diretório \"%s\": %s"
+
+#~ msgid "Could not allocate %lu bytes to read file \"%s\""
+#~ msgstr "Não foi possível alocar %lu bytes para ler arquivo \"%s\""
+
+#~ msgid "Error reading file '%s': %s"
+#~ msgstr "Erro ao ler arquivo \"%s\": %s"
+
+#~ msgid "File \"%s\" is too large"
+#~ msgstr "Arquivo \"%s\" é muito grande"
+
+#~ msgid "Failed to read from file '%s': %s"
+#~ msgstr "Falha ao ler do arquivo \"%s\": %s"
+
+#~ msgid "Failed to open file '%s': %s"
+#~ msgstr "Falha ao abrir arquivo \"%s\": %s"
+
+#~ msgid "Failed to get attributes of file '%s': fstat() failed: %s"
+#~ msgstr "Falha ao obter atributos do arquivo \"%s\": fstat() falhou: %s"
+
+#~ msgid "Failed to open file '%s': fdopen() failed: %s"
+#~ msgstr "Falha ao abrir arquivo \"%s\": fdopen() falhou: %s"
+
+#~ msgid "Failed to rename file '%s' to '%s': g_rename() failed: %s"
+#~ msgstr "Falha ao renomear arquivo \"%s\" para \"%s\": g_rename() falhou: %s"
+
+#~ msgid "Failed to create file '%s': %s"
+#~ msgstr "Falha ao criar arquivo \"%s\": %s"
+
+#~ msgid "Failed to open file '%s' for writing: fdopen() failed: %s"
+#~ msgstr "Falha ao abrir arquivo \"%s\" para escrita: fdopen() falhou: %s"
+
+#~ msgid "Failed to write file '%s': fwrite() failed: %s"
+#~ msgstr "Falha ao escrever no arquivo \"%s\": fwrite() falhou: %s"
+
+#~ msgid "Failed to write file '%s': fflush() failed: %s"
+#~ msgstr "Falha ao escrever no arquivo \"%s\": fflush() falhou: %s"
+
+#~ msgid "Failed to write file '%s': fsync() failed: %s"
+#~ msgstr "Falha ao escrever no arquivo \"%s\": fsync() falhou: %s"
+
+#~ msgid "Failed to close file '%s': fclose() failed: %s"
+#~ msgstr "Falha ao fechar arquivo \"%s\": fclose() falhou: %s"
+
+#~ msgid "Existing file '%s' could not be removed: g_unlink() failed: %s"
+#~ msgstr "O arquivo \"%s\" não pôde ser removido: g_unlink() falhou: %s"
+
+#~ msgid "Template '%s' invalid, should not contain a '%s'"
+#~ msgstr "Modelo \"%s\" inválido, não deveria conter um \"%s\""
+
+#~ msgid "Template '%s' doesn't contain XXXXXX"
+#~ msgstr "Modelo \"%s\" não contém XXXXXX"
+
+#~ msgid "Failed to read the symbolic link '%s': %s"
+#~ msgstr "Falha ao ler link simbólico \"%s\": %s"
+
+#~ msgid "Symbolic links not supported"
+#~ msgstr "Não há suporte a links simbólicos"
+
+#~ msgid "Could not open converter from '%s' to '%s': %s"
+#~ msgstr "Não foi possível abrir conversor de \"%s\" para \"%s\": %s"
+
+#~ msgid "Can't do a raw read in g_io_channel_read_line_string"
+#~ msgstr ""
+#~ "Não é possível fazer uma leitura em bruto em g_io_channel_read_line_string"
+
+#~ msgid "Leftover unconverted data in read buffer"
+#~ msgstr "Dados residuais não convertidos no buffer de leitura"
+
+#~ msgid "Channel terminates in a partial character"
+#~ msgstr "Canal termina em um caractere parcial"
+
+#~ msgid "Can't do a raw read in g_io_channel_read_to_end"
+#~ msgstr ""
+#~ "Não é possível fazer uma leitura em bruto de g_io_channel_read_to_end"
+
+#~ msgid "Valid key file could not be found in search dirs"
+#~ msgstr ""
+#~ "Não foi possível localizar arquivo de chave válido nos diretórios "
+#~ "pesquisados"
+
+#~ msgid "Not a regular file"
+#~ msgstr "Não é um arquivo comum"
+
+#~ msgid ""
+#~ "Key file contains line '%s' which is not a key-value pair, group, or "
+#~ "comment"
+#~ msgstr ""
+#~ "Arquivo de chave contém a linha \"%s\" que não é um par chave-valor, "
+#~ "grupo ou comentário"
+
+#~ msgid "Invalid group name: %s"
+#~ msgstr "Nome de grupo inválido: %s"
+
+#~ msgid "Key file does not start with a group"
+#~ msgstr "Arquivo de chave não começa com um grupo"
+
+#~ msgid "Invalid key name: %s"
+#~ msgstr "Nome de chave inválido: %s"
+
+#~ msgid "Key file contains unsupported encoding '%s'"
+#~ msgstr "Arquivo de chave contém codificação \"%s\" sem suporte"
+
+#~ msgid "Key file does not have group '%s'"
+#~ msgstr "Arquivo de chave não tem grupo \"%s\""
+
+#~ msgid "Key file does not have key '%s'"
+#~ msgstr "Arquivo de chave não tem chave \"%s\""
+
+#~ msgid "Key file contains key '%s' with value '%s' which is not UTF-8"
+#~ msgstr ""
+#~ "Arquivo de chave contém chave \"%s\" com valor \"%s\" que não é UTF-8"
+
+#~ msgid ""
+#~ "Key file contains key '%s' which has a value that cannot be interpreted."
+#~ msgstr ""
+#~ "Arquivo de chave contém chave \"%s\" cujo valor não pode ser interpretado."
+
+#~ msgid ""
+#~ "Key file contains key '%s' in group '%s' which has a value that cannot be "
+#~ "interpreted."
+#~ msgstr ""
+#~ "Arquivo de chave contém chave \"%s\" no grupo \"%s\" que tem um valor que "
+#~ "não pode ser interpretado."
+
+#~ msgid "Key '%s' in group '%s' has value '%s' where %s was expected"
+#~ msgstr ""
+#~ "Chave \"%s\" no grupo \"%s\" tem o valor \"%s\" onde %s era esperado"
+
+#~ msgid "Key file does not have key '%s' in group '%s'"
+#~ msgstr "Arquivo de chave não tem chave \"%s\" no grupo \"%s\""
+
+#~ msgid "Key file contains escape character at end of line"
+#~ msgstr "Arquivo de chave contém caractere de escape no fim da linha"
+
+#~ msgid "Key file contains invalid escape sequence '%s'"
+#~ msgstr "Arquivo de chave contém sequência de escape \"%s\" inválida"
+
+#~ msgid "Value '%s' cannot be interpreted as a number."
+#~ msgstr "O valor \"%s\" não pode ser interpretado como um número."
+
+#~ msgid "Integer value '%s' out of range"
+#~ msgstr "Valor inteiro \"%s\" fora dos limites"
+
+#~ msgid "Value '%s' cannot be interpreted as a float number."
+#~ msgstr "O valor \"%s\" não pode ser interpretado como ponto flutuante."
+
+#~ msgid "Value '%s' cannot be interpreted as a boolean."
+#~ msgstr "O valor \"%s\" não pode ser interpretado como um booleano."
+
+#~ msgid "Failed to get attributes of file '%s%s%s%s': fstat() failed: %s"
+#~ msgstr ""
+#~ "Falha ao obter atributos do arquivo \"%s%s%s%s\": fstat() falhou: %s"
+
+#~ msgid "Failed to map %s%s%s%s: mmap() failed: %s"
+#~ msgstr "Falha ao mapear arquivo \"%s%s%s%s\": mmap() falhou: %s"
+
+#~ msgid "Failed to open file '%s': open() failed: %s"
+#~ msgstr "Falha ao abrir arquivo \"%s\": open() falhou: %s"
+
+#~ msgid "Error on line %d char %d: "
+#~ msgstr "Erro na linha %d caractere %d: "
+
+#~ msgid "Invalid UTF-8 encoded text in name - not valid '%s'"
+#~ msgstr "Texto do nome codificado em UTF-8 inválido - \"%s\" não válido"
+
+#~ msgid "'%s' is not a valid name "
+#~ msgstr "\"%s\" não é um nome válido "
+
+#~ msgid "'%s' is not a valid name: '%c' "
+#~ msgstr "\"%s\" não é um nome válido: \"%c\" "
+
+#~ msgid "Error on line %d: %s"
+#~ msgstr "Erro na linha %d: %s"
+
+#~ msgid ""
+#~ "Failed to parse '%-.*s', which should have been a digit inside a "
+#~ "character reference (&#234; for example) - perhaps the digit is too large"
+#~ msgstr ""
+#~ "Falha ao analisar \"%-.*s\", que deveria ter sido um dígito dentro de uma "
+#~ "referência de caractere (&#234; por exemplo) - talvez o dígito seja "
+#~ "grande demais"
+
+#~ msgid ""
+#~ "Character reference did not end with a semicolon; most likely you used an "
+#~ "ampersand character without intending to start an entity - escape "
+#~ "ampersand as &amp;"
+#~ msgstr ""
+#~ "Referência de caractere não terminou com um ponto e vírgula; "
+#~ "provavelmente utilizou um caractere \"e comercial\" sem desejar iniciar "
+#~ "uma entidade - escape-o com &amp;"
+
+#~ msgid "Character reference '%-.*s' does not encode a permitted character"
+#~ msgstr ""
+#~ "Referência de caractere \"%-.*s\" não codifica um caractere permitido"
+
+#~ msgid ""
+#~ "Empty entity '&;' seen; valid entities are: &amp; &quot; &lt; &gt; &apos;"
+#~ msgstr ""
+#~ "Entidade \"&;\" vazia; as entidades válidas são: &amp; &quot; &lt; &gt; "
+#~ "&apos;"
+
+#~ msgid "Entity name '%-.*s' is not known"
+#~ msgstr "Nome de entidade \"%-.*s\" não é conhecido"
+
+#~ msgid ""
+#~ "Entity did not end with a semicolon; most likely you used an ampersand "
+#~ "character without intending to start an entity - escape ampersand as &amp;"
+#~ msgstr ""
+#~ "Entidade não termina com um ponto e vírgula; provavelmente você utilizou "
+#~ "um \"e comercial\" sem desejar iniciar uma entidade - escape-o com &amp;"
+
+#~ msgid "Document must begin with an element (e.g. <book>)"
+#~ msgstr "Documento tem de começar com um elemento (ex. <book>)"
+
+#~ msgid ""
+#~ "'%s' is not a valid character following a '<' character; it may not begin "
+#~ "an element name"
+#~ msgstr ""
+#~ "\"%s\" não é um caractere válido após um caractere \"<\"; não poderá "
+#~ "começar um nome de elemento"
+
+#~ msgid ""
+#~ "Odd character '%s', expected a '>' character to end the empty-element tag "
+#~ "'%s'"
+#~ msgstr ""
+#~ "Caractere estranho \"%s\", esperado um caractere \">\" para finalizar a "
+#~ "marca \"%s\" de elemento vazio"
+
+#~ msgid ""
+#~ "Odd character '%s', expected a '=' after attribute name '%s' of element "
+#~ "'%s'"
+#~ msgstr ""
+#~ "Caractere estranho \"%s\", esperava-se um \"=\" após o nome do atributo "
+#~ "\"%s\" do elemento \"%s\""
+
+#~ msgid ""
+#~ "Odd character '%s', expected a '>' or '/' character to end the start tag "
+#~ "of element '%s', or optionally an attribute; perhaps you used an invalid "
+#~ "character in an attribute name"
+#~ msgstr ""
+#~ "Caractere estranho \"%s\", esperava-se um caractere \">\" ou \"/\" para "
+#~ "terminar a marca inicial do elemento \"%s\", ou opcionalmente um "
+#~ "atributo; talvez tenha utilizado um caractere inválido no nome de atributo"
+
+#~ msgid ""
+#~ "Odd character '%s', expected an open quote mark after the equals sign "
+#~ "when giving value for attribute '%s' of element '%s'"
+#~ msgstr ""
+#~ "Caractere estranho \"%s\", esperava-se uma abertura de aspas após o sinal "
+#~ "de igual ao atribuir o valor ao atributo \"%s\" do elemento \"%s\""
+
+#~ msgid ""
+#~ "'%s' is not a valid character following the characters '</'; '%s' may not "
+#~ "begin an element name"
+#~ msgstr ""
+#~ "\"%s\" não é um caractere válido após os caracteres \"</\"; \"%s\" não "
+#~ "poderá começar o nome de um elemento"
+
+#~ msgid ""
+#~ "'%s' is not a valid character following the close element name '%s'; the "
+#~ "allowed character is '>'"
+#~ msgstr ""
+#~ "\"%s\" não é um caractere válido após o nome do elemento de fecho \"%s\"; "
+#~ "o caractere permitido é \">\""
+
+#~ msgid "Element '%s' was closed, no element is currently open"
+#~ msgstr "Elemento \"%s\" foi fechado, nenhum elemento está atualmente aberto"
+
+#~ msgid "Element '%s' was closed, but the currently open element is '%s'"
+#~ msgstr ""
+#~ "Elemento \"%s\" foi fechado, mas o elemento atualmente aberto é \"%s\""
+
+#~ msgid "Document was empty or contained only whitespace"
+#~ msgstr "Documento estava vazio ou apenas continha espaços"
+
+#~ msgid "Document ended unexpectedly just after an open angle bracket '<'"
+#~ msgstr "Documento terminou inesperadamente logo após um menor que \"<\""
+
+#~ msgid ""
+#~ "Document ended unexpectedly with elements still open - '%s' was the last "
+#~ "element opened"
+#~ msgstr ""
+#~ "Documento terminou inesperadamente com elementos ainda abertos - \"%s\" "
+#~ "foi o último elemento aberto"
+
+#~ msgid ""
+#~ "Document ended unexpectedly, expected to see a close angle bracket ending "
+#~ "the tag <%s/>"
+#~ msgstr ""
+#~ "Documento terminou inesperadamente, esperava-se ver um sinal de maior (\">"
+#~ "\") para terminar a marca <%s/>"
+
+#~ msgid "Document ended unexpectedly inside an element name"
+#~ msgstr "Documento terminou inesperadamente dentro de um nome de elemento"
+
+#~ msgid "Document ended unexpectedly inside an attribute name"
+#~ msgstr "Documento terminou inesperadamente dentro de um nome de atributo"
+
+#~ msgid "Document ended unexpectedly inside an element-opening tag."
+#~ msgstr ""
+#~ "Documento terminou inesperadamente dentro de uma marca de abertura de "
+#~ "elemento."
+
+#~ msgid ""
+#~ "Document ended unexpectedly after the equals sign following an attribute "
+#~ "name; no attribute value"
+#~ msgstr ""
+#~ "Documento terminou inesperadamente após o sinal de igual que se seguiu a "
+#~ "um nome de atributo; nenhum valor de atributo"
+
+#~ msgid "Document ended unexpectedly while inside an attribute value"
+#~ msgstr "Documento terminou inesperadamente dentro de um valor de atributo"
+
+#~ msgid "Document ended unexpectedly inside the close tag for element '%s'"
+#~ msgstr ""
+#~ "Documento terminou inesperadamente dentro da marca de fechamento do "
+#~ "elemento \"%s\""
+
+#~ msgid ""
+#~ "Document ended unexpectedly inside a comment or processing instruction"
+#~ msgstr ""
+#~ "Documento terminou inesperadamente dentro de um comentário ou instrução "
+#~ "de processamento"
+
+#~ msgid "Usage:"
+#~ msgstr "Uso:"
+
+#~ msgid "[OPTION...]"
+#~ msgstr "[OPÇÃO...]"
+
+#~ msgid "Help Options:"
+#~ msgstr "Opções de ajuda:"
+
+#~ msgid "Show help options"
+#~ msgstr "Exibe opções de ajuda"
+
+#~ msgid "Show all help options"
+#~ msgstr "Exibe todas as opções de ajuda"
+
+#~ msgid "Application Options:"
+#~ msgstr "Opções de aplicativo:"
+
+#~ msgid "Cannot parse integer value '%s' for %s"
+#~ msgstr "Não é possível converter o valor inteiro \"%s\" para %s"
+
+#~ msgid "Integer value '%s' for %s out of range"
+#~ msgstr "Valor inteiro \"%s\" para %s fora dos limites"
+
+#~ msgid "Cannot parse double value '%s' for %s"
+#~ msgstr ""
+#~ "Não é possível converter o ponto flutuante com dupla precisão \"%s\" para "
+#~ "%s"
+
+#~ msgid "Double value '%s' for %s out of range"
+#~ msgstr "Ponto flutuante com dupla precisão \"%s\" para %s fora dos limites"
+
+#~ msgid "Error parsing option %s"
+#~ msgstr "Erro ao ler a opção %s"
+
+#~ msgid "Missing argument for %s"
+#~ msgstr "Falta argumento para %s"
+
+#~ msgid "Unknown option %s"
+#~ msgstr "Opção %s desconhecida"
+
+#~ msgid "corrupted object"
+#~ msgstr "objeto corrompido"
+
+#~ msgid "internal error or corrupted object"
+#~ msgstr "erro interno ou objeto corrompido"
+
+#~ msgid "out of memory"
+#~ msgstr "memória insuficiente"
+
+#~ msgid "backtracking limit reached"
+#~ msgstr "limite de backtracking alcançado"
+
+#~ msgid "the pattern contains items not supported for partial matching"
+#~ msgstr "o padrão contém itens sem suporte para correspondência parcial"
+
+#~ msgid "back references as conditions are not supported for partial matching"
+#~ msgstr ""
+#~ "não há suporte à referência retroativa como condição para correspondência "
+#~ "parcial"
+
+#~ msgid "recursion limit reached"
+#~ msgstr "limite de recursão alcançado"
+
+#~ msgid "workspace limit for empty substrings reached"
+#~ msgstr "limite de espaço de trabalho para substrings vazias alcançado"
+
+#~ msgid "invalid combination of newline flags"
+#~ msgstr "combinação inválida de sinalizador de nova linha"
+
+#~ msgid "bad offset"
+#~ msgstr "deslocamento ruim"
+
+#~ msgid "short utf8"
+#~ msgstr "utf8 curto"
+
+#~ msgid "unknown error"
+#~ msgstr "erro desconhecido"
+
+#~ msgid "\\ at end of pattern"
+#~ msgstr "\\ no fim do padrão"
+
+#~ msgid "\\c at end of pattern"
+#~ msgstr "\\c no fim do padrão"
+
+#~ msgid "unrecognized character follows \\"
+#~ msgstr "caractere não reconhecido segue \\"
+
+#~ msgid "case-changing escapes (\\l, \\L, \\u, \\U) are not allowed here"
+#~ msgstr ""
+#~ "escapes de alteração de maiusculização (\\l, \\L, \\u, \\U) não são "
+#~ "permitidos aqui"
+
+#~ msgid "numbers out of order in {} quantifier"
+#~ msgstr "números fora de ordem no quantificador {}"
+
+#~ msgid "number too big in {} quantifier"
+#~ msgstr "número grande demais no quantificador {}"
+
+#~ msgid "missing terminating ] for character class"
+#~ msgstr "terminação ] em falta para classe de caracteres"
+
+#~ msgid "invalid escape sequence in character class"
+#~ msgstr "sequência de escape inválida na classe de caracteres"
+
+#~ msgid "range out of order in character class"
+#~ msgstr "intervalo fora de ordem na classe de caracteres"
+
+#~ msgid "unrecognized character after (?"
+#~ msgstr "caractere não reconhecido após (?"
+
+#~ msgid "unrecognized character after (?<"
+#~ msgstr "caractere não reconhecido após (?<"
+
+#~ msgid "unrecognized character after (?P"
+#~ msgstr "caractere não reconhecido após (?P"
+
+#~ msgid "POSIX named classes are supported only within a class"
+#~ msgstr "classes nomeadas POSIX têm suporte apenas dentro de uma classe"
+
+#~ msgid "missing terminating )"
+#~ msgstr "terminação ) em falta"
+
+#~ msgid ") without opening ("
+#~ msgstr ") sem abrir ("
+
+#~ msgid "(?R or (?[+-]digits must be followed by )"
+#~ msgstr "\"(?R\" ou \"(?[+-]digitos\" devem ser seguidos por )"
+
+#~ msgid "reference to non-existent subpattern"
+#~ msgstr "referência a subpadrão não existente"
+
+#~ msgid "missing ) after comment"
+#~ msgstr "\")\" em falta após o comentário"
+
+#~ msgid "regular expression too large"
+#~ msgstr "expressão regular grande demais"
+
+#~ msgid "failed to get memory"
+#~ msgstr "falha ao obter memória"
+
+#~ msgid "lookbehind assertion is not fixed length"
+#~ msgstr "declaração de verificação anterior não é de largura fixa"
+
+#~ msgid "malformed number or name after (?("
+#~ msgstr "número mal formado ou nome após (?("
+
+#~ msgid "conditional group contains more than two branches"
+#~ msgstr "grupo condicional contém mais que duas ramificações"
+
+#~ msgid "assertion expected after (?("
+#~ msgstr "esperava-se declaração após (?("
+
+#~ msgid "unknown POSIX class name"
+#~ msgstr "nome de classe POSIX desconhecido"
+
+#~ msgid "POSIX collating elements are not supported"
+#~ msgstr "elementos de arranjo POSIX sem suporte"
+
+#~ msgid "character value in \\x{...} sequence is too large"
+#~ msgstr "valor de caractere na sequência \\x{...} é grande demais"
+
+#~ msgid "invalid condition (?(0)"
+#~ msgstr "condição inválida (?(0)"
+
+#~ msgid "\\C not allowed in lookbehind assertion"
+#~ msgstr "\\C não permitido na declaração de verificação anterior"
+
+#~ msgid "recursive call could loop indefinitely"
+#~ msgstr "chamada recursiva pode causar uma repetição indefinidamente"
+
+#~ msgid "missing terminator in subpattern name"
+#~ msgstr "terminação em falta no nome do subpadrão"
+
+#~ msgid "two named subpatterns have the same name"
+#~ msgstr "dois subpadrões nomeados têm o mesmo nome"
+
+#~ msgid "malformed \\P or \\p sequence"
+#~ msgstr "sequência \\P ou \\p mal formada"
+
+#~ msgid "unknown property name after \\P or \\p"
+#~ msgstr "nome de propriedade desconhecido após \\P ou \\p"
+
+#~ msgid "subpattern name is too long (maximum 32 characters)"
+#~ msgstr "nome de subpadrão é grande demais (máximo 32 caracteres)"
+
+#~ msgid "too many named subpatterns (maximum 10,000)"
+#~ msgstr "excesso de subpadrões nomeados (máximo 10.000)"
+
+#~ msgid "octal value is greater than \\377"
+#~ msgstr "valor octal é maior que \\377"
+
+#~ msgid "DEFINE group contains more than one branch"
+#~ msgstr "O grupo DEFINE contém mais que uma ramificação"
+
+#~ msgid "repeating a DEFINE group is not allowed"
+#~ msgstr "repetição de um grupo DEFINE não é permitida"
+
+#~ msgid "inconsistent NEWLINE options"
+#~ msgstr "opções do NEWLINE inconsistentes"
+
+#~ msgid ""
+#~ "\\g is not followed by a braced name or an optionally braced non-zero "
+#~ "number"
+#~ msgstr ""
+#~ "\\g não é seguido por um nome entre chaves ou um número diferente de zero "
+#~ "opcionalmente entre chaves"
+
+#~ msgid "unexpected repeat"
+#~ msgstr "repetição inesperada"
+
+#~ msgid "code overflow"
+#~ msgstr "estouro de código"
+
+#~ msgid "overran compiling workspace"
+#~ msgstr "espaço de trabalho de compilação invadido"
+
+#~ msgid "previously-checked referenced subpattern not found"
+#~ msgstr "subpadrão de referência verificado anteriormente não localizado"
+
+#~ msgid "Error while matching regular expression %s: %s"
+#~ msgstr "Erro ao coincidir expressão regular %s: %s"
+
+#~ msgid "PCRE library is compiled without UTF8 support"
+#~ msgstr "Biblioteca PCRE compilada sem suporte a UTF-8"
+
+#~ msgid "PCRE library is compiled without UTF8 properties support"
+#~ msgstr "Biblioteca PCRE compilada sem suporte às propriedades UTF-8"
+
+#~ msgid "Error while compiling regular expression %s at char %d: %s"
+#~ msgstr "Erro ao compilar expressão regular %s no caractere %d: %s"
+
+#~ msgid "Error while optimizing regular expression %s: %s"
+#~ msgstr "Erro ao otimizar expressão regular %s: %s"
+
+#~ msgid "hexadecimal digit or '}' expected"
+#~ msgstr "esperava-se dígito hexadecimal ou \"}\""
+
+#~ msgid "hexadecimal digit expected"
+#~ msgstr "esperava-se dígito hexadecimal"
+
+#~ msgid "missing '<' in symbolic reference"
+#~ msgstr "\"<\" em falta na referência simbólica"
+
+#~ msgid "unfinished symbolic reference"
+#~ msgstr "referência simbólica inacabada"
+
+#~ msgid "zero-length symbolic reference"
+#~ msgstr "referência simbólica de comprimento zero"
+
+#~ msgid "digit expected"
+#~ msgstr "esperava-se dígito"
+
+#~ msgid "illegal symbolic reference"
+#~ msgstr "referência simbólica ilegal"
+
+#~ msgid "stray final '\\'"
+#~ msgstr "\"\\\" final errado"
+
+#~ msgid "unknown escape sequence"
+#~ msgstr "sequência de escape desconhecida"
+
+#~ msgid "Error while parsing replacement text \"%s\" at char %lu: %s"
+#~ msgstr "Erro ao analisar texto de substituição \"%s\" no caractere %lu: %s"
+
+#~ msgid "Quoted text doesn't begin with a quotation mark"
+#~ msgstr "Texto citado não começa com uma aspa"
+
+#~ msgid "Unmatched quotation mark in command line or other shell-quoted text"
+#~ msgstr "Aspa sem par na linha de comando ou outro texto de console"
+
+#~ msgid "Text ended just after a '\\' character. (The text was '%s')"
+#~ msgstr "Texto terminou logo após um caractere \"\\\". (O texto era \"%s\")"
+
+#~ msgid ""
+#~ "Text ended before matching quote was found for %c. (The text was '%s')"
+#~ msgstr ""
+#~ "Texto terminou antes da aspa equivalente ter sido localizada para %c. "
+#~ "(texto era \"%s\")"
+
+#~ msgid "Text was empty (or contained only whitespace)"
+#~ msgstr "Texto estava vazio (ou apenas continha espaços)"
+
+#~ msgid "Failed to read data from child process (%s)"
+#~ msgstr "Falha ao ler dados de processo filho (%s)"
+
+#~ msgid "Unexpected error in select() reading data from a child process (%s)"
+#~ msgstr "Erro inesperado no select() ao ler dados de processo filho (%s)"
+
+#~ msgid "Unexpected error in waitpid() (%s)"
+#~ msgstr "Erro inesperado em waitpid() (%s)"
+
+#~ msgid "Failed to read from child pipe (%s)"
+#~ msgstr "Falha ao ler de canal filho (%s)"
+
+#~ msgid "Failed to fork (%s)"
+#~ msgstr "Falha no fork (%s)"
+
+#~ msgid "Failed to change to directory '%s' (%s)"
+#~ msgstr "Falha ao ir para diretório \"%s\" (%s)"
+
+#~ msgid "Failed to execute child process \"%s\" (%s)"
+#~ msgstr "Falha ao executar processo filho \"%s\" (%s)"
+
+#~ msgid "Failed to redirect output or input of child process (%s)"
+#~ msgstr "Falha ao redirecionar saída ou entrada do processo filho (%s)"
+
+#~ msgid "Failed to fork child process (%s)"
+#~ msgstr "Falha no fork de processo filho (%s)"
+
+#~ msgid "Unknown error executing child process \"%s\""
+#~ msgstr "Erro desconhecido ao executar processo filho \"%s\""
+
+#~ msgid "Failed to read enough data from child pid pipe (%s)"
+#~ msgstr "Falha ao ler dados suficientes de canal pid do filho (%s)"
+
+#~ msgid "Failed to create pipe for communicating with child process (%s)"
+#~ msgstr "Falha ao criar canal para comunicar com processo filho (%s)"
+
+#~ msgid "Failed to read data from child process"
+#~ msgstr "Falha ao ler dados de processo filho"
+
+#~ msgid "Failed to execute child process (%s)"
+#~ msgstr "Falha ao executar processo filho (%s)"
+
+#~ msgid "Invalid program name: %s"
+#~ msgstr "Nome de programa inválido: %s"
+
+#~ msgid "Invalid string in argument vector at %d: %s"
+#~ msgstr "String inválida no vetor de argumentos em %d: %s"
+
+#~ msgid "Invalid string in environment: %s"
+#~ msgstr "String inválida no ambiente: %s"
+
+#~ msgid "Invalid working directory: %s"
+#~ msgstr "Diretório de trabalho inválido: %s"
+
+#~ msgid "Failed to execute helper program (%s)"
+#~ msgstr "Falha ao executar programa auxiliar (%s)"
+
+#~ msgid ""
+#~ "Unexpected error in g_io_channel_win32_poll() reading data from a child "
+#~ "process"
+#~ msgstr ""
+#~ "Erro inesperado no g_io_channel_win32_poll() ao ler dados de um processo "
+#~ "filho"
+
+#~ msgid "Character out of range for UTF-8"
+#~ msgstr "Caractere fora do limite para UTF-8"
+
+#~ msgid "Invalid sequence in conversion input"
+#~ msgstr "Sequência inválida na conversão da entrada"
+
+#~ msgid "Character out of range for UTF-16"
+#~ msgstr "Caractere fora do limite para UTF-16"
+
+#~ msgid "%u byte"
+#~ msgid_plural "%u bytes"
+#~ msgstr[0] "%u byte"
+#~ msgstr[1] "%u bytes"
+
+#~ msgid "%.1f KiB"
+#~ msgstr "%.1f KiB"
+
+#~ msgid "%.1f MiB"
+#~ msgstr "%.1f MiB"
+
+#~ msgid "%.1f GiB"
+#~ msgstr "%.1f GiB"
+
+#~ msgid "%.1f TiB"
+#~ msgstr "%.1f TiB"
+
+#~ msgid "%.1f PiB"
+#~ msgstr "%.1f PiB"
+
+#~ msgid "%.1f EiB"
+#~ msgstr "%.1f EiB"
+
+#~ msgid "%.1f kB"
+#~ msgstr "%.1f kB"
+
+#~ msgid "%.1f MB"
+#~ msgstr "%.1f MB"
+
+#~ msgid "%.1f GB"
+#~ msgstr "%.1f GB"
+
+#~ msgid "%.1f TB"
+#~ msgstr "%.1f TB"
+
+#~ msgid "%.1f PB"
+#~ msgstr "%.1f PB"
+
+#~ msgid "%.1f EB"
+#~ msgstr "%.1f EB"
+
+#~ msgid "%s byte"
+#~ msgid_plural "%s bytes"
+#~ msgstr[0] "%s byte"
+#~ msgstr[1] "%s bytes"
+
+#~ msgid "%.1f KB"
+#~ msgstr "%.1f KB"
+
+#~ msgid "File is empty"
+#~ msgstr "Arquivo vazio"
+
+#~ msgid "This option will be removed soon."
+#~ msgstr "Esta opção será removida logo."
+
+#~ msgid "Error connecting: "
+#~ msgstr "Erro ao conectar: "
+
+#~ msgid "Error connecting: %s"
+#~ msgstr "Erro ao conectar: %s"
+
+#~ msgid "SOCKSv4 implementation limits username to %i characters"
+#~ msgstr "A implementação SOCKSv4 limita o nome de usuário a %i caracteres"
+
+#~ msgid "SOCKSv4a implementation limits hostname to %i characters"
+#~ msgstr ""
+#~ "A implementação SOCKSv4a limita o nome de servidor para %i caracteres"
+
+#~ msgid "Error reading from unix: %s"
+#~ msgstr "Erro ao ler do unix: %s"
+
+#~ msgid "Error closing unix: %s"
+#~ msgstr "Erro ao fechar unix: %s"
+
+#~ msgid "Error writing to unix: %s"
+#~ msgstr "Erro ao escrever para unix: %s"
+
+#~ msgid ""
+#~ "Key file contains key '%s' which has value that cannot be interpreted."
+#~ msgstr ""
+#~ "Arquivo de chave contém chave \"%s\" que tem valor que não pode ser "
+#~ "interpretado."
+
+#~ msgid "Error stating file '%s': %s"
+#~ msgstr "Erro ao iniciar arquivo \"%s\": %s"
+
+#~ msgctxt "GDateTime"
+#~ msgid "am"
+#~ msgstr "am"
+
+#~ msgctxt "GDateTime"
+#~ msgid "pm"
+#~ msgstr "pm"
+
+#~ msgid "Type of return value is incorrect, got `%s', expected `%s'"
+#~ msgstr ""
+#~ "O tipo do valor de retorno está incorreto, obtido \"%s\", era esperado "
+#~ "\"%s\""
+
+#~ msgid ""
+#~ "Trying to set property %s of type %s but according to the expected "
+#~ "interface the type is %s"
+#~ msgstr ""
+#~ "Tentando definir a propriedade %s do tipo %s, mas de acordo com a "
+#~ "interface esperada o tipo é %s"
+
+#~ msgid "No such schema `%s' specified in override file `%s'"
+#~ msgstr "Nenhum esquema \"%s\" especificado no arquivo de sobrescrita \"%s\""
+
+#~ msgid ""
+#~ "Commands:\n"
+#~ "  help        Show this information\n"
+#~ "  get         Get the value of a key\n"
+#~ "  set         Set the value of a key\n"
+#~ "  reset       Reset the value of a key\n"
+#~ "  monitor     Monitor a key for changes\n"
+#~ "  writable    Check if a key is writable\n"
+#~ "\n"
+#~ "Use '%s COMMAND --help' to get help for individual commands.\n"
+#~ msgstr ""
+#~ "Comandos:\n"
+#~ "  help        Mostra esta informação\n"
+#~ "  get         Obtém o valor de uma chave\n"
+#~ "  set         Define o valor de uma chave\n"
+#~ "  reset       Restaura o valor de uma chave\n"
+#~ "  monitor     Monitora uma chave por alterações\n"
+#~ "  writable    Verifica se uma chave é gravável\n"
+#~ "\n"
+#~ "Use '%s COMANDO --help' para obter ajuda para comando individuais.\n"
+
+#~ msgid "Specify the path for the schema"
+#~ msgstr "Especificar o caminho para um esquema"
+
+#~ msgid ""
+#~ "Arguments:\n"
+#~ "  SCHEMA      The id of the schema\n"
+#~ "  KEY         The name of the key\n"
+#~ "  VALUE       The value to set key to, as a serialized GVariant\n"
+#~ msgstr ""
+#~ "Argumentos:\n"
+#~ "  ESQUEMA     A identificação do esquema\n"
+#~ "  CHAVE       O nome da chave\n"
+#~ "  VALOR       O valor para definir na chave, como um GVariant "
+#~ "serializado\n"
+
+#~ msgid "Key %s is not writable\n"
+#~ msgstr "A chave %s não é gravável\n"
+
+#~ msgid ""
+#~ "Monitor KEY for changes and print the changed values.\n"
+#~ "Monitoring will continue until the process is terminated."
+#~ msgstr ""
+#~ "Monitorar CHAVE por alterações e exibir os valores alterados.\n"
+#~ "O monitoramento continuará até que o processo seja terminado."
