@@ -99,7 +99,10 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         }
     }
     
-    public MagnatuneDatabaseReader() {
+    private Cancellable cancel;
+    
+    public MagnatuneDatabaseReader(Cancellable cancel) {
+        this.cancel = cancel;
         DATABASE = dbFileName();
         db = null;
         if(Sqlite.Database.open_v2(DATABASE, out db, Sqlite.OPEN_READONLY, null)!=Sqlite.OK) {
@@ -220,6 +223,8 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
     
     public override Item[] get_artists_with_search(string searchtext) {
         Item[] val = {};
+        if(cancel.is_cancelled())
+            return val;
         if(searchtext != EMPTYSTRING) {
             string st = "%%%s%%".printf(searchtext);
             get_artists_with_search_stmt.reset();
@@ -231,6 +236,8 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
                 return (owned)val;
             }
             while(get_artists_with_search_stmt.step() == Sqlite.ROW) {
+                if(cancel.is_cancelled())
+                    return val;
                 Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, null, get_artists_with_search_stmt.column_int(0));
                 i.text = get_artists_with_search_stmt.column_text(1);
                 i.source_id = get_source_id();
@@ -240,6 +247,8 @@ public class MagnatuneDatabaseReader : Xnoise.DataSource {
         else {
             get_artists_with_search2_stmt.reset();
             while(get_artists_with_search2_stmt.step() == Sqlite.ROW) {
+                if(cancel.is_cancelled())
+                    return val;
                 Item i = Item(ItemType.COLLECTION_CONTAINER_ARTIST, 
                               null, 
                               get_artists_with_search2_stmt.column_int(0)

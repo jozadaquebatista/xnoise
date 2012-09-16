@@ -57,6 +57,10 @@ public class MagnatunePlugin : GLib.Object, IPlugin {
     public string name { get { return "magnatune_music_store"; } }
     
     public bool init() {
+        if(cancel == null)
+            cancel = new Cancellable();
+        else
+            cancel.reset();
         CONVERTED_DB = GLib.Path.build_filename(data_folder(), "magnatune.sqlite", null);
         this.music_store = new MagMusicStore(this);
         owner.sign_deactivated.connect(clean_up);
@@ -64,9 +68,12 @@ public class MagnatunePlugin : GLib.Object, IPlugin {
     }
     
     public void uninit() {
+        cancel.cancel();
         clean_up();
     }
 
+    internal static Cancellable cancel;
+    
     private void clean_up() {
         owner.sign_deactivated.disconnect(clean_up);
         music_store = null;
@@ -141,12 +148,16 @@ public class MagnatuneSettings : Gtk.Box {
         else {
             feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_NOT_AVAILABLE));
         }
+        if(magn_plugin.cancel.is_cancelled())
+            return;
         b.clicked.connect(on_entry_changed);
         on_entry_changed();
     }
 
     //show if user is logged in
     private void do_user_feedback() {
+        if(magn_plugin.cancel.is_cancelled())
+            return;
         print("do_user_feedback\n");
         if(user_entry.text != EMPTYSTRING && pass_entry.text != EMPTYSTRING) {
             feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_AVAILABLE));
@@ -163,6 +174,8 @@ public class MagnatuneSettings : Gtk.Box {
     
     private void on_entry_changed() {
         print("take over entry\n");
+        if(magn_plugin.cancel.is_cancelled())
+            return;
         string username = EMPTYSTRING, password = EMPTYSTRING;
         if(user_entry.text != null)
             username = user_entry.text.strip();
@@ -175,6 +188,8 @@ public class MagnatuneSettings : Gtk.Box {
             username_last = username;
             password_last = password;
             Idle.add( () => {
+                if(magn_plugin.cancel.is_cancelled())
+                    return false;
                 Xnoise.Params.write_all_parameters_to_file();
                 return false;
             });
@@ -189,6 +204,8 @@ public class MagnatuneSettings : Gtk.Box {
     }
     
     private void setup_widgets() {
+        if(magn_plugin.cancel.is_cancelled())
+            return;
         var headline_label = new Gtk.Label("");
         headline_label.margin_top    = 5;
         headline_label.margin_bottom = 5;

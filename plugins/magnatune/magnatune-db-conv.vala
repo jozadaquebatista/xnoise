@@ -83,18 +83,20 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     private Statement insert_title_statement;
     private Statement get_title_id_statement;
 
-
-    public MagnatuneDatabaseConverter() {
+    private Cancellable cancel;
+    
+    public MagnatuneDatabaseConverter(Cancellable cancel) {
+        this.cancel = cancel;
         var ft = File.new_for_path(CONVERTED_DB);
-        if(ft.query_exists(null)) {
+        if(ft.query_exists(cancel)) {
             try {
-                ft.delete();
+                ft.delete(cancel);
             }
             catch(Error e) {
                 print("##1%s\n", e.message);
             }
         }
-        if(ft.query_exists(null))
+        if(ft.query_exists(cancel))
             printerr("target file is still there\n");
         DATABASE = dbFileName();
         source = null;
@@ -104,7 +106,8 @@ public class MagnatuneDatabaseConverter : GLib.Object {
         if(this.source == null) {
             error("magnatune db failed");
         }
-        
+        if(cancel.is_cancelled())
+            return;
         bool ret = create_target_db();
         assert(ret == true);
         
@@ -170,7 +173,8 @@ public class MagnatuneDatabaseConverter : GLib.Object {
         count = 0;
         
         while(stmt.step() == Sqlite.ROW) {
-            
+            if(cancel.is_cancelled())
+                return;
             Item? i = Item(ItemType.STREAM);
             i.uri  = "http://he3.magnatune.com/all/" + Uri.escape_string(stmt.column_text(1), null, true);
             i.text = stmt.column_text(0);
@@ -237,6 +241,8 @@ public class MagnatuneDatabaseConverter : GLib.Object {
             }
         }
         Idle.add(() => {
+            if(cancel.is_cancelled())
+                return false;
             progress(count);
             return false;
         });
@@ -245,6 +251,8 @@ public class MagnatuneDatabaseConverter : GLib.Object {
     public signal void progress(int cnt);
 
     private bool create_target_db() {
+        if(cancel.is_cancelled())
+            return false;
         setup_target_handle();
         if(target == null)
             return false;

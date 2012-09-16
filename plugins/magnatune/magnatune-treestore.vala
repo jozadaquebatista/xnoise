@@ -63,15 +63,17 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     
     private int data_source_id = -1;
     
+    private Cancellable cancel;
     
-    public MagnatuneTreeStore(DockableMedia dock, MagnatuneTreeView view) {
+    public MagnatuneTreeStore(DockableMedia dock, MagnatuneTreeView view, Cancellable cancel) {
         this.dock = dock;
         this.view = view;
+        this.cancel = cancel;
         set_column_types(col_types);
         create_icons();
         
         if(dbreader == null)
-            dbreader = new MagnatuneDatabaseReader();
+            dbreader = new MagnatuneDatabaseReader(cancel);
         if(dbreader == null)
             assert_not_reached();
         
@@ -130,6 +132,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     }
     
     private void update_album_image() {
+        if(this.cancel.is_cancelled())
+            return;
         TreeIter artist_iter = TreeIter(), album_iter;
         if(!global.media_import_in_progress) {
             string text = null;
@@ -298,6 +302,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     }
 
     private bool load_album_and_tracks_job(Worker.Job job) {
+        if(this.cancel.is_cancelled())
+            return false;
         job.items = dbreader.get_albums_with_search(global.searchtext, (int32)job.get_arg("artist_id")); 
         //print("job.items cnt = %d\n", job.items.length);
         Idle.add( () => {
@@ -311,6 +317,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             string artist_name;
             this.get(iter_artist, Column.ITEM, out artist, Column.VIS_TEXT, out artist_name);
             foreach(Item? album in job.items) {     //ALBUMS
+                if(this.cancel.is_cancelled())
+                    return false;
                 File? albumimage_file = get_albumimage_for_artistalbum(artist_name,
                                                                        album.text,
                                                                        "embedded");
@@ -368,6 +376,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     }
 
     private bool populate_title_job(Worker.Job job) {
+        if(this.cancel.is_cancelled())
+            return false;
         job.track_dat = dbreader.get_trackdata_by_albumid(global.searchtext, (int32)job.get_arg("albumid"));
         Idle.add( () => {
             TreeRowReference row_ref = (TreeRowReference)job.get_arg("treerowref");
@@ -377,6 +387,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
             TreeIter iter_title, iter_album;
             this.get_iter(out iter_album, p);
             foreach(TrackData td in job.track_dat) {
+                if(this.cancel.is_cancelled())
+                    return false;
                 this.prepend(out iter_title, iter_album);
                 this.set(iter_title,
                               Column.ICON, title_icon,
@@ -391,6 +403,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     }
     
     private bool populate_model() {
+        if(this.cancel.is_cancelled())
+            return false;
         view.model = null;
         this.clear();
         var a_job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.populate_artists_job);
@@ -399,6 +413,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     }
     
     private bool populate_artists_job(Worker.Job job) {
+        if(this.cancel.is_cancelled())
+            return false;
         job.items = dbreader.get_artists_with_search(global.searchtext);
         //print("job.items.length : %d\n", job.items.length);
         Idle.add(() => {
@@ -406,6 +422,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                 return false;
             TreeIter iter, iter_loader;
             foreach(Item? i in job.items) {
+                if(this.cancel.is_cancelled())
+                    return false;
                 this.prepend(out iter, null);
                 this.set(iter,
                               Column.ICON, artist_icon,
@@ -422,6 +440,8 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
                               Column.LEVEL, 1
                 );
             }
+            if(this.cancel.is_cancelled())
+                return false;
             view.set_model(this);
             return false;
         });
