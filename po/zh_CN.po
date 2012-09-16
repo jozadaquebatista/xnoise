@@ -160,7 +160,7 @@ msgstr "窗口关闭时退出应用程序"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:317
 msgid "Use equalizer"
-msgstr ""
+msgstr "使用均衡器"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:330
 msgid "Media browser fontsize:"
@@ -230,7 +230,7 @@ msgstr "搜索..."
 
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:150
 msgid "Preset:"
-msgstr ""
+msgstr "预设："
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 #, fuzzy
@@ -501,20 +501,19 @@ msgstr "帮助(_H)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:207
 msgid "_Frequently Asked Questions"
-msgstr ""
+msgstr "常见问题(_F)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:207
 msgid "_Open Frequently Asked Questions in web browser"
-msgstr ""
+msgstr "在网络浏览器中打开 FAQ(_O)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:208
 msgid "_Config"
 msgstr "配置(_C)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:274
-#, fuzzy
 msgid "_Show Media Browser"
-msgstr "媒体浏览器(_M)"
+msgstr "显示媒体浏览器(_S)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:465
 #, c-format
@@ -559,7 +558,7 @@ msgstr "选择媒体文件"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1548
 msgid "Equalizer"
-msgstr ""
+msgstr "均衡器"
 
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1594
@@ -568,19 +567,19 @@ msgstr "显示应用程序主菜单"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:171
 msgid "Maximum Treble"
-msgstr ""
+msgstr "最大高音"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:175
 msgid "Maximum Bass"
-msgstr ""
+msgstr "最大低音"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:184
 msgid "Custom"
-msgstr ""
+msgstr "自定义"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:189
 msgid "Default"
-msgstr ""
+msgstr "默认"
 
 #: ../libxnoise/Player/xnoise-gst-player.vala:207
 msgid ""
@@ -722,7 +721,7 @@ msgstr "用户未登陆！"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:460
 msgid "Visit LastFm for an account."
-msgstr ""
+msgstr "使用帐号登陆 LastFm。"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:469
 #, c-format
@@ -769,48 +768,48 @@ msgid "Control xnoise using mediakeys"
 msgstr "使用媒体键控制 xnoise"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Magnatune Music Store"
-msgstr "Ubuntu One 音乐商店"
+msgstr "Magnatune 音乐商店"
 
 #: ../plugins/magnatune/magnatune-dockable.vala:57
 msgid "Magnatune"
-msgstr ""
+msgstr "Magnatune"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:223
 msgid "Download whole album to disk"
-msgstr ""
+msgstr "下载整个专辑到磁盘"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:265
 msgid "Downloading album "
-msgstr ""
+msgstr "正在下载专辑"
 
 #: ../plugins/magnatune/magnatune-treeview.vala:267
-#, fuzzy
 msgid "This may take some time..."
-msgstr "导入媒体数据。这将花费一段时间..."
+msgstr "请稍等..."
 
 #: ../plugins/magnatune/magnatune-treeview.vala:381
 msgid "Download finished for \""
-msgstr ""
+msgstr "下载完成：\"
 
 #: ../plugins/magnatune/magnatune-widget.vala:183
 msgid "download finished..."
-msgstr ""
+msgstr "下载已完成..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:185
 msgid "decompressing..."
-msgstr ""
+msgstr "正在解压缩..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:239
 msgid "decompressing finished..."
-msgstr ""
+msgstr "解压缩已完成..."
 
 #: ../plugins/magnatune/magnatune-widget.vala:254
 msgid ""
 "Please wait while\n"
 "converting database."
 msgstr ""
+"转换数据库期间，\n"
+"请等待。"
 
 #: ../plugins/magnatune/magnatune-widget.vala:285
 #, c-format
@@ -819,9 +818,11 @@ msgid ""
 "converting database.\n"
 "Done for %d tracks."
 msgstr ""
+"转换数据库期间，\n"
+"请等待。\n"
+"已完成 %d 个轨道。"
 
 #: ../plugins/magnatune/magnatune-widget.vala:321
-#, fuzzy
 msgid "loading..."
 msgstr "加载中..."
 
@@ -850,19 +851,16 @@ msgid "Ubuntu One Music Store"
 msgstr "Ubuntu One 音乐商店"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:128
-#, fuzzy
 msgid "UbuntuOne Music"
-msgstr "UbuntuOne 音乐商店"
+msgstr "UbuntuOne 音乐"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:231
-#, fuzzy
 msgid "Show _UbuntuOne Store"
-msgstr "UbuntuOne 音乐商店"
+msgstr "显示 UbuntuOne 商店(_U)"
 
 #: ../plugins/ubuntuone/ubuntuone.vala:231
-#, fuzzy
 msgid "Show UbuntuOne Store"
-msgstr "UbuntuOne 音乐商店"
+msgstr "显示 UbuntuOne 商店"
 
 #~ msgid "Toggle media browser visibility."
 #~ msgstr "切换媒体浏览器可见性"
