@@ -36,18 +36,95 @@ namespace Xnoise {
     private static bool _nodbus;
     private static bool _reset;
     private static bool _version;
+    private static bool _play_pause;
+    private static bool _stop;
+    private static bool _prev;
+    private static bool _next;
 
     [CCode (array_length = false, array_null_terminated = true)]
     private static string[] _fileargs;
 
     private const OptionEntry[] options = {
-        { "version",     'V', 0, OptionArg.NONE, ref _version,    "Show the application's version.",                 null },
-        { "plugin-info", 'p', 0, OptionArg.NONE, ref _plugininfo, "Show loaded and activated plugins on app start.", null },
-        { "no-plugins",  'N', 0, OptionArg.NONE, ref _noplugins,  "Start without loding any plugins.",               null },
-        { "no-dbus",     'D', 0, OptionArg.NONE, ref _nodbus,     "Start without using the onboard dbus interface.", null },
-        { "reset",       'R', 0, OptionArg.NONE, ref _reset,      "Reset all settings.",                             null },
-        { "", 0, 0, OptionArg.FILENAME_ARRAY,    ref _fileargs,   null,                                      "[FILE ...]" },
-        {null}
+        { "version",
+          'V',
+          0,
+          OptionArg.NONE,
+          ref _version,
+          "Show the application's version.",
+          null 
+        },
+        { "plugin-info",
+          'p',
+          0,
+          OptionArg.NONE,
+          ref _plugininfo,
+          "Show loaded and activated plugins on app start.",
+          null
+        },
+        { "no-plugins",
+          'N',
+          0,
+          OptionArg.NONE,
+          ref _noplugins,
+          "Start without loding any plugins.",
+          null
+        },
+        { "no-dbus",
+          'D',
+          0,
+          OptionArg.NONE,
+          ref _nodbus,
+          "Start without using the onboard dbus interface.",
+          null
+        },
+        { "reset",
+          'R',
+          0,
+          OptionArg.NONE,
+          ref _reset,
+          "Reset all settings.",
+          null
+        },
+        { "play-pause",
+          't',
+          0,
+          OptionArg.NONE,
+          ref _play_pause,
+          "Toggle Playback.",
+          null
+        },
+        { "stop",
+          's',
+          0,
+          OptionArg.NONE,
+          ref _stop,
+          "Stop playback.",
+          null
+        },
+        { "next",
+          'n',
+          0,
+          OptionArg.NONE,
+          ref _next,
+          "Goto next track.",
+          null
+        },
+        { "previous",
+          'e',
+          0,
+          OptionArg.NONE,
+          ref _prev,
+          "Goto previous track.",
+          null
+        },
+        { "",
+          0,
+          0,
+          OptionArg.FILENAME_ARRAY, 
+          ref _fileargs,
+          null,
+          "[FILE ...]" },
+        { null }
     };
 
     public static int main(string[] args) {
@@ -78,10 +155,10 @@ namespace Xnoise {
             print("xnoise %s\n", Config.PACKAGE_VERSION);
             return 0;
         }
-        if(_plugininfo) sa_args += "-p";
-        if(_reset)      sa_args += "-R";
-        if(_noplugins)  sa_args += "-N";
-        if(_nodbus)     sa_args += "-D";
+        if(_play_pause) sa_args += "-t";
+        if(_stop)       sa_args += "-s";
+        if(_next)       sa_args += "-n";
+        if(_prev)       sa_args += "-e";
         string mime;
         var psVideo = new PatternSpec("video*");
         var psAudio = new PatternSpec("audio*");
@@ -126,9 +203,35 @@ namespace Xnoise {
             print("AppError: %s\n", e.message);
             return -1;
         }
-        if(app.get_is_remote() && _fileargs == null) {
-            app.activate();
-            return 0;
+        
+        if(_reset)      { print("Reset not implemented, yet.\n"); _reset = false; }
+        
+        if(_plugininfo) {
+            if(!app.get_is_remote()) {
+                sa_args += "-p";
+                _plugininfo = false;
+            }
+            else {
+                print("For the '--plugin-info' option, please restart xnoise. \n");
+            }
+        }
+        if(_noplugins) {
+            if(!app.get_is_remote()) {
+                sa_args += "-N";
+                _noplugins = false;
+            }
+            else {
+                print("For the '--no-plugins' option, please restart xnoise. \n");
+            }
+        }
+        if(_nodbus) {
+            if(!app.get_is_remote()) {
+                sa_args += "-D";
+                _nodbus = false;
+            }
+            else {
+                print("For the '--no-dbus' option, please restart xnoise. \n");
+            }
         }
         return app.run(sa_args);
     }

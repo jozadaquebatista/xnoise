@@ -37,26 +37,142 @@ public class Xnoise.Application : GLib.Application {
     private static bool _nodbus;
     private static bool _reset;
     private static bool _version;
+    private static bool _play_pause;
+    private static bool _stop;
+    private static bool _prev;
+    private static bool _next;
 
     [CCode (array_length = false, array_null_terminated = true)]
     private static string[] _fileargs;
 
     private const OptionEntry[] options = {
-        { "version",     'V', 0, OptionArg.NONE, ref _version,    "Show the application's version.",                 null },
-        { "plugin-info", 'p', 0, OptionArg.NONE, ref _plugininfo, "Show loaded and activated plugins on app start.", null },
-        { "no-plugins",  'N', 0, OptionArg.NONE, ref _noplugins,  "Start without loding any plugins.",               null },
-        { "no-dbus",     'D', 0, OptionArg.NONE, ref _nodbus,     "Start without using the onboard dbus interface.", null },
-        { "reset",       'R', 0, OptionArg.NONE, ref _reset,      "Reset all settings.",                             null },
-        { "", 0, 0, OptionArg.FILENAME_ARRAY,    ref _fileargs,      null,                                   "[FILE ...]" },
-        {null}
+        { "version",
+          'V',
+          0,
+          OptionArg.NONE,
+          ref _version,
+          "Show the application's version.",
+          null 
+        },
+        { "plugin-info",
+          'p',
+          0,
+          OptionArg.NONE,
+          ref _plugininfo,
+          "Show loaded and activated plugins on app start.",
+          null
+        },
+        { "no-plugins",
+          'N',
+          0,
+          OptionArg.NONE,
+          ref _noplugins,
+          "Start without loding any plugins.",
+          null
+        },
+        { "no-dbus",
+          'D',
+          0,
+          OptionArg.NONE,
+          ref _nodbus,
+          "Start without using the onboard dbus interface.",
+          null
+        },
+        { "reset",
+          'R',
+          0,
+          OptionArg.NONE,
+          ref _reset,
+          "Reset all settings.",
+          null
+        },
+        { "play-pause",
+          't',
+          0,
+          OptionArg.NONE,
+          ref _play_pause,
+          "Toggle Playback.",
+          null
+        },
+        { "stop",
+          's',
+          0,
+          OptionArg.NONE,
+          ref _stop,
+          "Stop playback.",
+          null
+        },
+        { "next",
+          'n',
+          0,
+          OptionArg.NONE,
+          ref _next,
+          "Goto next track.",
+          null
+        },
+        { "previous",
+          'e',
+          0,
+          OptionArg.NONE,
+          ref _prev,
+          "Goto previous track.",
+          null
+        },
+        { "",
+          0,
+          0,
+          OptionArg.FILENAME_ARRAY, 
+          ref _fileargs,
+          null,
+          "[FILE ...]" },
+        { null }
     };
 
 
     public Application() {
         Object(application_id:"org.gtk.xnoise", flags:(ApplicationFlags.HANDLES_COMMAND_LINE));
     }
-    
+
+    private void reset_control_options() {
+        _stop = false;
+        _play_pause = false;
+        _prev = false;
+        _next = false;
+    }
+
     public void on_activated() {
+        if(_stop) {
+            Idle.add( () => {
+                global.stop();
+                return false;
+            });
+            reset_control_options();
+            return;
+        }
+        if(_prev) {
+            Idle.add( () => {
+                global.prev();
+                return false;
+            });
+            reset_control_options();
+            return;
+        }
+        if(_next) {
+            Idle.add( () => {
+                global.next();
+                return false;
+            });
+            reset_control_options();
+            return;
+        }
+        if(_play_pause) {
+            Idle.add( () => {
+                global.play(true);
+                return false;
+            });
+            reset_control_options();
+            return;
+        }
         main_window.present();
     }
     
@@ -75,7 +191,7 @@ public class Xnoise.Application : GLib.Application {
     }
     
     public int on_command_line(ApplicationCommandLine command_line) {
-        if(!command_line.get_is_remote()) {
+        if(command_line.get_is_remote()) {
             print("MI on_command_line\n");
         }
         else {
@@ -102,10 +218,34 @@ public class Xnoise.Application : GLib.Application {
         catch(OptionError e) {
             print("%s\n", e.message);
         }
-        if(_reset)      print("Reset not implemented, yet.\n");
-        if(_plugininfo) Main.show_plugin_state = true;
-        if(_noplugins)  Main.no_plugins = true;
-        if(_nodbus)  Main.no_dbus = true;
+        if(_reset)      { print("Reset not implemented, yet.\n"); _reset = false; }
+        if(_plugininfo) {
+            if(command_line.get_is_remote()) {
+                print("For the '--plugin-info' option, please restart xnoise. \n");
+                _plugininfo = false;
+            }
+            else {
+                Main.show_plugin_state = true;
+            }
+        }
+        if(_noplugins) {
+            if(command_line.get_is_remote()) {
+                print("For the '--no-plugins' option, please restart xnoise. \n");
+                _noplugins = false;
+            }
+            else {
+                Main.no_plugins = true;
+            }
+        }
+        if(_nodbus) {
+            if(command_line.get_is_remote()) {
+                print("For the '--no-dbus' option, please restart xnoise. \n");
+                _nodbus = false;
+            }
+            else {
+                Main.no_dbus = true;
+            }
+        }
         string[] uris = {};
         File f = null;
         string mime;
@@ -139,6 +279,7 @@ public class Xnoise.Application : GLib.Application {
                 }
             }
         }
+        _fileargs = null;
         if(uris.length > 0) {
             Idle.add( () => {
                 tl.tracklistmodel.add_uris(uris);
@@ -146,7 +287,7 @@ public class Xnoise.Application : GLib.Application {
             });
             
         }
-        this.activate();
+       this.activate();
         if(!command_line.get_is_remote()) {
             this.hold();
         }

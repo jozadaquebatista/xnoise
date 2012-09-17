@@ -37,6 +37,7 @@ public class Xnoise.Main : GLib.Object {
     internal static bool show_plugin_state;
     internal static bool no_plugins;
     internal static bool no_dbus;
+    
     internal static unowned Xnoise.Application app;
     
     public int thread_id { get { return _thread_id; } }
