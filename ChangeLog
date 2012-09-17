@@ -1,3 +1,82 @@
+commit 2fddc7287718fe44216bce1e80d482e427f1fb17
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Sun Sep 16 19:28:19 2012 +0200
+
+    update hebrew translation
+
+commit de77d52f4544dd94cf6f6f1e90df463132d2afee
+Merge: f9220ad 8175af9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 16 19:23:36 2012 +0200
+
+    Merge branch 'patch-4' of https://github.com/tuhaihe/xnoise
+
+commit f9220adb4a80a644585963971f4b80a4c10faa21
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 16 19:01:27 2012 +0200
+
+    fix magnatune download issue and file copy issue
+
+commit 8175af97196a2ebcb37d8ec4615d5b06cd32c9df
+Author: tuhaihe <1132321739qq@gmail.com>
+Date:   Sun Sep 16 15:43:18 2012 +0800
+
+    Update po/zh_CN.po
+
+commit b25b7ef65ba8f16397124f40c7f1e945f60a9eae
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 15 16:42:24 2012 +0200
+
+    fix usage of genre in search
+
+commit 0845e4e81b72134a7476d8b902fa0eb27d6dbfbd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 15 16:40:09 2012 +0200
+
+    update NEWS file for 0.2.10 release
+
+commit 4cada9f487e50e1d53eb0ad25a515f8cf2ded28b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 15 15:10:39 2012 +0200
+
+    add some translation files and update strings
+
+commit 895103e285e1fcd4b2ddcf4a921115fe162b7ba0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 21:16:30 2012 +0200
+
+    update po/cs.po
+
+commit 2dc61baa759010656ab8d0ab56d2bc10090ec331
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 13:02:45 2012 +0200
+
+    avoid creation of multiple equalizer windows
+
+commit bb05dd3f91fc410dbe1e14436362f211b71b416d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 12:25:33 2012 +0200
+
+    remove old code
+
+commit 6567aa5bccb28f72761c886a3c59e6e30d628c6e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 12:24:48 2012 +0200
+
+    magnatune: fix login initialization
+
+commit 97d639931eee25ff373a0abcda3de2b2d8f33741
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 11:56:46 2012 +0200
+
+    post release version bump
+
+commit 510324f32824d65551be9d93bda1cc4dc5b02160
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 14 11:54:17 2012 +0200
+
+    update packaging data
+
 commit 53d7b55e2fa47a1ff185ef6c4da44f636f71dc46
 Author: Jörn Magens <shuerhaaken@googlemail.com>
 Date:   Fri Sep 14 11:13:22 2012 +0200

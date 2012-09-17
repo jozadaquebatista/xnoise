@@ -1,18 +1,8 @@
-xnoise (0.2.10) unstable; urgency=low
-  * Add equalizer
-  * Add eq presets and store/restore eq setups
-  * Settings: option to de/activate equalizer
-  * Several small GUI updates
-  * Restore last used tracks of external sources
-  * Allow cancelling initial tracklist restore
-  * Use less default plugins
-  * Improve visual presentation on Ubuntu Quantal
-  * Update po/es.po (faidoc)
-  * Update debian package generation script (Tal)
-  * Magnatune: remove temporary files
-  * Magnatune: fix database update check
-  * Magnatune: remove album download option, if usern./pasword is not available
-  * Bug fixes
+xnoise (0.2.11) unstable; urgency=low
+  * Avoid opening of more than one eq window
+  * Magnatune: fix initialization issue 
+  * Magnatune: workaround db update issue
+  * Magnatune: fix issue with random crashes on deativation
   * Closes: #632932
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 14 Sep 2012 11:18:55 +0200
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 16 Sep 2012 20:05:54 +0200

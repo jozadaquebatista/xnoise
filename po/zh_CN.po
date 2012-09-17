@@ -789,7 +789,7 @@ msgstr "请稍等..."
 
 #: ../plugins/magnatune/magnatune-treeview.vala:381
 msgid "Download finished for \""
-msgstr "下载完成：\"
+msgstr "下载完成：\""
 
 #: ../plugins/magnatune/magnatune-widget.vala:183
 msgid "download finished..."
