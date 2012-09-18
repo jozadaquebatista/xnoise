@@ -822,7 +822,7 @@ namespace Xnoise {
 		public delegate void DatabaseResetCallback ();
 		public MediaImporter ();
 		public void import_media_file (string file_path);
-		public void import_media_folder (string folder_path, bool create_user_info = false);
+		public void import_media_folder (string folder_path, bool create_user_info = false, bool add_folder_to_media_folders = false);
 		public void register_reset_callback (Xnoise.MediaImporter.ResetNotificationData? cbd);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

@@ -133,7 +133,7 @@ public class Xnoise.SerialButton : Gtk.Box {
         SerialItem? si;
         
         if((si = sitems.lookup(name)) == null) {
-            print("SerialItem %s not available\n", name);
+            print("Selected SerialItem %s not available\n", name);
             return;
         }
         

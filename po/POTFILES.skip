@@ -1,4 +1,5 @@
 data/misc/xnoise.desktop.in
+data/ui/first_start.ui
 plugins/databaseLyrics/xnoise-database-lyrics.c
 plugins/notifications2/xnoise-notifications.c
 plugins/titleToDecoration/xnoise-title-to-decoration.c
@@ -17,6 +18,7 @@ libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.c
 libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.c
 libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.c
 libxnoise/ExtraWidgets/xnoise-equalizer-widget.c
+libxnoise/ExtraWidgets/xnoise-first-start-widget.c
 libxnoise/ExtraWidgets/xnoise-media-source-widget.c
 libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.c
 libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.c

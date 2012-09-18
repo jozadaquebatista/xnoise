@@ -2,6 +2,7 @@ NULL =
 
 ui_DATA = \
         add_media.ui \
+        first_start.ui \
         main_window.ui \
         tracklist.ui \
         video.ui \

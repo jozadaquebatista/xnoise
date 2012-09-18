@@ -65,6 +65,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/xnoise-app-menu-button.vala \
     ExtraWidgets/xnoise-control-button.vala \
     ExtraWidgets/xnoise-equalizer-widget.vala \
+    ExtraWidgets/xnoise-first-start-widget.vala \
     ExtraWidgets/xnoise-main-view-notebook.vala \
     ExtraWidgets/xnoise-media-source-widget.vala \
     ExtraWidgets/xnoise-play-pause-button.vala \

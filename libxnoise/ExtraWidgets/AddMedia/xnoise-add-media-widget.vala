@@ -69,9 +69,13 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
     //        print("destruct amd\n");
     //    }
 
+    internal void update() {
+        fill_media_list();
+    }
+    
     private void fill_media_list() {
         return_if_fail(listmodel != null);
-        
+        listmodel.clear();
         Worker.Job job;
         job = new Worker.Job(Worker.ExecutionType.ONCE, fill_media_list_job);
         db_worker.push_job(job);

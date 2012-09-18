@@ -121,8 +121,6 @@ public class Xnoise.Database.Writer : GLib.Object {
         "COMMIT";
     private static const string STMT_CHECK_TRACK_EXISTS =
         "SELECT t.id FROM items t, uris u WHERE t.uri = u.id AND u.name = ?";
-    private static const string STMT_WRITE_MEDIA_FOLDERS =
-        "INSERT INTO media_folders (name) VALUES (?)";
     private static const string STMT_DEL_MEDIA_FOLDERS =
         "DELETE FROM media_folders";
     private static const string STMT_DEL_RADIO_STREAM =
@@ -963,9 +961,13 @@ public class Xnoise.Database.Writer : GLib.Object {
             this.db_error();
     }
     
+    private static const string STMT_WRITE_MEDIA_FOLDERS =
+        "INSERT INTO media_folders (name) VALUES (?)";
+
     public bool add_single_folder_to_collection(Item? mfolder) {
         if(mfolder == null)
             return false;
+        // TODO add check for existance
         this.write_media_folder_statement.reset();
         File f = File.new_for_uri(mfolder.uri);
         this.write_media_folder_statement.bind_text(1, f.get_path());

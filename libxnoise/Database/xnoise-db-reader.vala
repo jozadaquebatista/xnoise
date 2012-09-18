@@ -379,7 +379,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
     }
 
     private static const string STMT_GET_MEDIA_FOLDERS =
-        "SELECT * FROM media_folders";
+        "SELECT name FROM media_folders";
 
     public Item[] get_media_folders() {
         Statement stmt;

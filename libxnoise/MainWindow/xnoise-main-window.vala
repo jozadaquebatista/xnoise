@@ -56,6 +56,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private SerialButton sbuttonLY;
     private SerialButton sbuttonVI;
     private Button repeatButton;
+    private AddMediaWidget add_m_widg;
     private TrackListViewWidget tracklistview_widget;
     private VideoViewWidget videoview_widget;
     private LyricsViewWidget lyricsview_widget;
@@ -514,28 +515,90 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
     
+    private FirstStartWidget first_start_widget = null;
+    
     internal void ask_for_initial_media_import() {
-        uint msg_id = 0;
-        var add_media_button = new Gtk.Button.with_label(_("Add media"));
-        msg_id = userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
-                                UserInfo.ContentClass.QUESTION,
-                                _("You started xnoise for the first time. Do you want to import media into the library?"),
-                                false,
-                                5,
-                                add_media_button);
-        add_media_button.clicked.connect( () => {
-            on_media_add_on_first_start(msg_id);
+        first_start_widget = new FirstStartWidget();
+        if(first_start_widget.parent == null)
+            main_window.mainview_box.add_main_view(first_start_widget);
+        first_start_widget.show();
+        first_start_widget.finish_button.clicked.connect( () =>  {
+            Idle.add(() => {
+                sbuttonTL.select(TRACKLIST_VIEW_NAME);
+                mainview_box.remove_main_view(first_start_widget);
+                first_start_widget.destroy();
+                first_start_widget = null;
+                if(actions_list == null)
+                    actions_list = action_group.list_actions();
+                foreach(Gtk.Action a in actions_list) {
+                    if(a.name == "AddRemoveAction" ||
+                       a.name == "RescanLibraryAction"||
+                       a.name == "ShowTracklistAction"||
+                       a.name == "ShowLyricsAction"||
+                       a.name == "ShowVideoAction") {
+                        a.sensitive = true;
+                    }
+                }
+                return false;
+            });
         });
+        first_start_widget.closebutton.clicked.connect( () => {
+            Idle.add(() => {
+                sbuttonTL.select(TRACKLIST_VIEW_NAME);
+                mainview_box.remove_main_view(first_start_widget);
+                first_start_widget.destroy();
+                first_start_widget = null;
+                if(actions_list == null)
+                    actions_list = action_group.list_actions();
+                foreach(Gtk.Action a in actions_list) {
+                    if(a.name == "AddRemoveAction" ||
+                       a.name == "RescanLibraryAction"||
+                       a.name == "ShowTracklistAction"||
+                       a.name == "ShowLyricsAction"||
+                       a.name == "ShowVideoAction") {
+                        a.sensitive = true;
+                    }
+                }
+                return false;
+            });
+        });
+        Idle.add(() => {
+            mainview_box.select_main_view(first_start_widget.get_view_name());
+            if(actions_list == null)
+                actions_list = action_group.list_actions();
+            foreach(Gtk.Action a in actions_list) {
+                if(a.name == "AddRemoveAction" ||
+                   a.name == "RescanLibraryAction"||
+                   a.name == "ShowTracklistAction"||
+                   a.name == "ShowLyricsAction"||
+                   a.name == "ShowVideoAction") {
+                    a.sensitive = false;
+                }
+            }
+            return false;
+        });
+//        uint msg_id = 0;
+//        var add_media_button = new Gtk.Button.with_label(_("Add media"));
+//        msg_id = userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
+//                                UserInfo.ContentClass.QUESTION,
+//                                _("You started xnoise for the first time. Do you want to import media into the library?"),
+//                                false,
+//                                5,
+//                                add_media_button);
+//        add_media_button.clicked.connect( () => {
+//            on_media_add_on_first_start(msg_id);
+//        });
         
     }
     
-    private void on_media_add_on_first_start(uint msg_id) {
-        Idle.add( () => {
-            userinfo.popdown(msg_id);
-            return false;
-        });
-        dialognotebook.set_current_page(2);
-    }
+    
+//    private void on_media_add_on_first_start(uint msg_id) {
+//        Idle.add( () => {
+//            userinfo.popdown(msg_id);
+//            return false;
+//        });
+//        dialognotebook.set_current_page(2);
+//    }
 
     public void toggle_fullscreen() {
         if(!fullscreenwindowvisible) {
@@ -1109,6 +1172,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 
     private void on_menu_add() {
+        add_m_widg.update();
         dialognotebook.set_current_page(2);
     }
 
@@ -1387,6 +1451,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     /* disables (or enables) the AddRemoveAction and the RescanLibraryAction in the menus if
        music is (not anymore) being imported */ 
     private void on_media_import_notify(GLib.Object sender, ParamSpec spec) {
+        if(first_start_widget != null)
+            return;
         if(actions_list == null)
             actions_list = action_group.list_actions();
         foreach(Gtk.Action a in actions_list) {
@@ -1666,7 +1732,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             settings_widget = new SettingsWidget();
             dialognotebook.append_page(settings_widget, null);
-            dialognotebook.append_page(new AddMediaWidget(), null);
+            add_m_widg = new AddMediaWidget();
+            dialognotebook.append_page(add_m_widg, null);
             // GTk3 resize grip
             this.set_has_resize_grip(true);
         }
