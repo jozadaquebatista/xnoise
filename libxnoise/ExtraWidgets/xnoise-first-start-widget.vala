@@ -60,7 +60,6 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
     }
     
     ~FirstStartWidget() {
-        print("dtor first start widget\n");
     }
     
     public string get_view_name() {
@@ -69,7 +68,7 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
     
     private HashTable<string,string> ht = new HashTable<string,string>(str_hash, str_equal);
     
-    private void on_button_add_folder_clicked() {
+    private void on_add_folder_clicked() {
         Gtk.FileChooserDialog fcdialog = new Gtk.FileChooserDialog(
             _("Select media folder"),
             main_window,
@@ -86,7 +85,7 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
                 ht.insert(f.get_path(),f.get_path());
                 listmodel.append(out iter);
                 listmodel.set(iter,
-                              Column.ICON, icon_repo.selected_collection_icon,
+                              Column.ICON, icon_repo.folder_symbolic_icon,
                               Column.LOCATION,  f.get_path()
                               );
                 media_importer.import_media_folder(f.get_path(), false, true);
@@ -110,7 +109,7 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
             
             top_box = gb.get_object("topbox") as Gtk.Box;
             button_add_folder = gb.get_object("button_add_folder") as Button;
-            button_add_folder.clicked.connect(on_button_add_folder_clicked);
+            button_add_folder.clicked.connect(on_add_folder_clicked);
             closebutton = gb.get_object("button2") as Gtk.Button;
             infobox = gb.get_object("infobox") as Gtk.Box;
             bigbox = gb.get_object("box7") as Gtk.Box;
@@ -155,7 +154,7 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
                 "<span size=\"large\"><b>" + 
                 Markup.printf_escaped(_("Media Folders:")) +
                 "</b></span>";
-            addmore_button.clicked.connect(on_button_add_folder_clicked);
+            addmore_button.clicked.connect(on_add_folder_clicked);
             imported_box = gb.get_object("imported_box") as Gtk.Box;
             tv = new TreeView();
             try {

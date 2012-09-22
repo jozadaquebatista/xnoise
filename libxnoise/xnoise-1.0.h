@@ -2266,6 +2266,7 @@ GType xnoise_settings_widget_get_type (void) G_GNUC_CONST;
 void xnoise_settings_widget_select_general_tab (XnoiseSettingsWidget* self);
 XnoiseSettingsWidget* xnoise_settings_widget_new (void);
 XnoiseSettingsWidget* xnoise_settings_widget_construct (GType object_type);
+void xnoise_settings_widget_select_media_tab (XnoiseSettingsWidget* self);
 GType xnoise_imain_view_get_type (void) G_GNUC_CONST;
 GType xnoise_video_view_widget_get_type (void) G_GNUC_CONST;
 GType xnoise_video_screen_get_type (void) G_GNUC_CONST;

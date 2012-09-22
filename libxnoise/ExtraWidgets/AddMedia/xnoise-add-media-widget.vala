@@ -38,21 +38,20 @@ using Xnoise.Resources;
 public class Xnoise.AddMediaWidget : Gtk.Box {
 
     private enum Column {
-        NAME,
+        ICON,
         ITEMTYPE,
         LOCATION,
         COL_COUNT
     }
     
-    private const string XNOISEICON = Config.UIDIR + "xnoise_16x16.png";
+    private const string XNOISEICON = "xnoise";
     private ListStore listmodel;
     private TreeView tv;
-    private CheckButton fullrescancheckb;
+    private Button bok;
+    private bool fullrescan;
     private unowned Main xn;
     
     public Gtk.Builder builder;
-
-    public signal void sign_finish();
 
     public AddMediaWidget() {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
@@ -64,10 +63,6 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
         
         this.show_all();
     }
-
-    //    ~AddMediaWidget() {
-    //        print("destruct amd\n");
-    //    }
 
     internal void update() {
         fill_media_list();
@@ -98,18 +93,18 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
                 TreeIter iter;
                 listmodel.append(out iter);
                 listmodel.set(iter,
-                              Column.LOCATION,  f.get_path(), // path
-                              Column.ITEMTYPE,  i.type,
-                              Column.NAME,      i.text        // name
+                              Column.ICON,  icon_repo.folder_symbolic_icon,
+                              Column.LOCATION,  f.get_path(),
+                              Column.ITEMTYPE,  i.type
                 );
             }
             foreach(Item? i in streams) {
                 TreeIter iter;
                 listmodel.append(out iter);
                 listmodel.set(iter,
-                              Column.LOCATION,  i.uri, // uri
-                              Column.ITEMTYPE,  i.type,
-                              Column.NAME,      i.text // name
+                              Column.ICON,  icon_repo.network_symbolic_icon,
+                              Column.LOCATION,  i.uri,
+                              Column.ITEMTYPE,  i.type
                 );
             }
             return false;
@@ -121,28 +116,24 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
         Item[] media_items = {};
         listmodel.foreach( (sender, mypath, myiter) => {
             string d_uri;
-            string d_name;
             ItemType tp;
             sender.get(myiter,
                        Column.LOCATION, out d_uri,
-                       Column.ITEMTYPE, out tp,
-                       Column.NAME, out d_name
+                       Column.ITEMTYPE, out tp//,
             );
             switch(tp) {
                 case ItemType.LOCAL_FOLDER:
                     File f = File.new_for_path(d_uri);
                     Item? item = Item(ItemType.LOCAL_FOLDER, f.get_uri(), -1);
-                    item.text = d_name; //TODO
                     media_items += item;
                     break;
                 case ItemType.STREAM:
                 case ItemType.PLAYLIST:
                     Item? item = Item(tp, d_uri, -1);
-                    item.text = d_name; //TODO
                     media_items += item;
                     break;
                 default:
-                    print("Error: unhandled media storage type: %s\n", tp.to_string());
+                    print("Error: unhandled media storage type: %s\n", ((int)tp).to_string());
                     break;
             }
             return false;
@@ -157,46 +148,40 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
             
             var headline           = builder.get_object("addremove_headline") as Label;
             headline.set_alignment(0.0f, 0.5f);
-            headline.set_markup("<span size=\"xx-large\"><b> %s </b></span>".printf(Markup.escape_text(_("Add or Remove media"))));
             headline.use_markup= true;
+            headline.set_markup("<span size=\"xx-large\"><b> %s </b></span>".printf(Markup.escape_text(_("Add or Remove media"))));
 
             var mainvbox           = builder.get_object("mainvbox") as Gtk.Box;
             tvscrolledwindow       = builder.get_object("tvscrolledwindow") as ScrolledWindow;
-            var baddfolder         = builder.get_object("addfolderbutton") as Button;
-            var baddradio          = builder.get_object("addradiobutton") as Button;
-            var brem               = builder.get_object("removeButton") as Button;
-            
-            var labeladdfolder     = builder.get_object("labeladdfolder") as Label;
-            var labeladdstream     = builder.get_object("labeladdstream") as Label;
-            var labelremove        = builder.get_object("labelremove") as Label;
+            var baddfolder         = builder.get_object("addfolderbutton") as ToolButton;
+            var baddradio          = builder.get_object("streambutton") as ToolButton;
+            var brem               = builder.get_object("removebutton") as ToolButton;
             var descriptionlabel   = builder.get_object("descriptionlabel") as Label;
-            var bok                = builder.get_object("okbutton") as Button;
+            bok                    = builder.get_object("okbutton") as Button;
+            bok.sensitive          = !global.media_import_in_progress;
             
-            fullrescancheckb       = builder.get_object("fullrescancheckb") as CheckButton;
+            var fullrescan_switch  = builder.get_object("fullrescan_switch") as Gtk.Switch;
+            fullrescan_switch.tooltip_markup = 
+                Markup.printf_escaped(_("If selected, all media folders will be fully rescanned"));
+            fullrescan_switch.notify["active"].connect( (s,p) => {
+                //print("active toggled. New val = %s\n", ((Switch)s).active.to_string());
+                this.fullrescan = ((Switch)s).active;
+            });
             
-            labeladdfolder.label   = _("Add local folder");
-            labeladdstream.label   = _("Add media stream");
-            labelremove.label      = _("Remove");
-            fullrescancheckb.label = _("do full rescan");
+            baddfolder.tooltip_markup = Markup.printf_escaped(_("Add local folder"));
+            baddradio.tooltip_markup  = Markup.printf_escaped(_("Add media stream"));
+            brem.tooltip_markup       = Markup.printf_escaped(_("Remove"));
+            
+            var fullrescan_label   = builder.get_object("fullrescan_label") as Label; 
+            fullrescan_label.label = _("Do full rescan");
             descriptionlabel.label = _("Select local media folders or internet media streams. \nAll media sources will be available via xnoise's library.");
             this.pack_start(mainvbox, true, true, 0);
             
-            bok.can_focus = false;
             bok.clicked.connect(on_ok_button_clicked);
             
-            var bcancel = new Gtk.Button.from_stock(Gtk.Stock.GO_BACK);
-            bcancel.can_focus = false;
-            this.pack_start(bcancel, false, false, 0);
-            bcancel.clicked.connect(on_cancel_button_clicked);
-            
-            Idle.add( () => {
-//                bok.clicked.connect(on_ok_button_clicked);
-//                bcancel.clicked.connect(on_cancel_button_clicked);
-                baddfolder.clicked.connect(on_add_folder_button_clicked);
-                baddradio.clicked.connect(on_add_radio_button_clicked);
-                brem.clicked.connect(on_remove_button_clicked);
-                return false;
-            });
+            baddfolder.clicked.connect(on_add_folder_button_clicked);
+            baddradio.clicked.connect(on_add_radio_button_clicked);
+            brem.clicked.connect(on_remove_button_clicked);
         }
         catch (GLib.Error e) {
             var msg = new Gtk.MessageDialog(null,
@@ -209,29 +194,21 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
         }
         
         tv = new TreeView();
-        listmodel = new ListStore(Column.COL_COUNT, typeof(string), typeof(ItemType), typeof(string));
+        tv.headers_visible = false;
+        listmodel = new ListStore(Column.COL_COUNT, 
+                                  typeof(Gdk.Pixbuf), 
+                                  typeof(ItemType), 
+                                  typeof(string));
         
         //NAME
-        var column2 = new TreeViewColumn();
-        var renderername = new CellRendererText();
-        renderername.mode = CellRendererMode.EDITABLE;
-        renderername.editable = true;
-        renderername.editable_set = true;
-        column2.pack_start(renderername, false);
-        column2.add_attribute(renderername, "text", Column.NAME);
-        column2.title = _("Name");
-        tv.insert_column(column2, -1);
-        renderername.edited.connect( (s,ps,t) => {
-            TreePath p = new TreePath.from_string(ps);
-            TreeIter iter;
-            listmodel.get_iter(out iter, p);
-            listmodel.set(iter,
-                          Column.NAME, t
-            );
-        });
+        var column = new TreeViewColumn();
+        var rendererpb = new CellRendererPixbuf();
+        column.pack_start(rendererpb, false);
+        column.add_attribute(rendererpb, "pixbuf", Column.ICON);
+        tv.insert_column(column, -1);
         
         // LOCATION
-        var column = new TreeViewColumn();
+        column = new TreeViewColumn();
         var renderer = new CellRendererText();
         column.pack_start(renderer, false);
         column.add_attribute(renderer, "text", Column.LOCATION);
@@ -239,18 +216,27 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
         tv.insert_column(column, -1);
         
         tvscrolledwindow.add(tv);
-        tvscrolledwindow.set_vexpand(true);
-        tvscrolledwindow.set_vexpand_set(true);
         
         tv.set_model(listmodel);
-        //TODO add icons
+        tv.show();
+        
+        global.notify["media-import-in-progress"].connect( () => {
+            if(!global.media_import_in_progress) {
+                this.update();
+                bok.sensitive = true;
+            }
+            else {
+                bok.sensitive = false;
+            }
+        });
     }
 
     private void on_ok_button_clicked(Gtk.Button sender) {
         main_window.dialognotebook.set_current_page(0);
         bool interrupted_populate_model = false;
         if(main_window.musicBr.mediabrowsermodel.populating_model) {
-            interrupted_populate_model = true; // that means we have to complete filling of the model after import
+            interrupted_populate_model = true; 
+            // that means we have to complete filling of the model after import
             //print("was still populating model\n");
         }
         var prg_bar = new Gtk.ProgressBar();
@@ -266,18 +252,10 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
                                 prg_bar);
             Item[] media_items = harvest_media_locations();
             global.media_import_in_progress = true;
-            media_importer.import_media_groups(media_items, msg_id, fullrescancheckb.get_active(), interrupted_populate_model);
+            media_importer.import_media_groups(media_items, msg_id, fullrescan, interrupted_populate_model);
             main_window.dialognotebook.set_current_page(0);
-            this.sign_finish();
             return false;
         });
-    }
-
-    private void on_cancel_button_clicked() {
-        main_window.dialognotebook.set_current_page(0);
-        listmodel.clear();
-        fill_media_list();
-        this.sign_finish();
     }
 
     private void on_add_folder_button_clicked() {
@@ -296,9 +274,9 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
             TreeIter iter;
             listmodel.append(out iter);
             listmodel.set(iter,
+                          Column.ICON,  icon_repo.folder_symbolic_icon,
                           Column.LOCATION,  f.get_path(),
-                          Column.ITEMTYPE,  ItemType.LOCAL_FOLDER,
-                          Column.NAME,      f.get_basename()
+                          Column.ITEMTYPE,  ItemType.LOCAL_FOLDER
                           );
         }
         fcdialog.destroy();
@@ -336,9 +314,9 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
                 TreeIter iter;
                 listmodel.append(out iter);
                 listmodel.set(iter,
+                              Column.ICON,  icon_repo.network_symbolic_icon,
                               Column.LOCATION,  radioentry.text.strip(),
-                              Column.ITEMTYPE,  ItemType.STREAM,
-                              Column.NAME,      radioentry.text.strip()
+                              Column.ITEMTYPE,  ItemType.STREAM//,
                               );
             }
             radiodialog.close();
@@ -350,7 +328,7 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
             return true;
         });
         try {
-            radiodialog.set_icon_from_file(XNOISEICON);
+            radiodialog.set_icon_name(XNOISEICON);
             radiodialog.set_title(_("Add internet radio link"));
         }
         catch(GLib.Error e) {

@@ -493,7 +493,6 @@ namespace Xnoise {
 	public class AddMediaWidget : Gtk.Box {
 		public Gtk.Builder builder;
 		public AddMediaWidget ();
-		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class AlbumImage : Gtk.Image {
@@ -917,6 +916,7 @@ namespace Xnoise {
 	public class SettingsWidget : Gtk.Box {
 		public SettingsWidget ();
 		public void select_general_tab ();
+		public void select_media_tab ();
 		public signal void sign_finish ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]

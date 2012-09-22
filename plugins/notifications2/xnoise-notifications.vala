@@ -98,7 +98,12 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
         }
         else {
             try {
-                image_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
+                unowned IconTheme theme = IconTheme.get_default();
+                var w = new Gtk.Invisible();
+                if(theme.has_icon("xnoise"))
+                    image_pixb = theme.load_icon("xnoise", IMAGE_SIZE, IconLookupFlags.FORCE_SIZE);
+                else
+                    image_pixb = null;
             }
             catch(GLib.Error e) {
                 print("%s\n", e.message);
@@ -219,7 +224,12 @@ public class Xnoise.Notifications : GLib.Object, IPlugin {
         }
         else {
             try {
-                image_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_48x48.png");
+                unowned IconTheme theme = IconTheme.get_default();
+                var w = new Gtk.Invisible();
+                if(theme.has_icon("xnoise"))
+                    image_pixb = theme.load_icon("xnoise", IMAGE_SIZE, IconLookupFlags.FORCE_SIZE);
+                else
+                    image_pixb = null;
             }
             catch(GLib.Error e) {
                 print("%s\n", e.message);

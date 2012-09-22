@@ -56,7 +56,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private SerialButton sbuttonLY;
     private SerialButton sbuttonVI;
     private Button repeatButton;
-    private AddMediaWidget add_m_widg;
     private TrackListViewWidget tracklistview_widget;
     private VideoViewWidget videoview_widget;
     private LyricsViewWidget lyricsview_widget;
@@ -1172,8 +1171,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 
     private void on_menu_add() {
-        add_m_widg.update();
-        dialognotebook.set_current_page(2);
+        dialognotebook.set_current_page(1);
+        settings_widget.select_media_tab();
     }
 
     private void on_location_add() {
@@ -1732,8 +1731,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             settings_widget = new SettingsWidget();
             dialognotebook.append_page(settings_widget, null);
-            add_m_widg = new AddMediaWidget();
-            dialognotebook.append_page(add_m_widg, null);
             // GTk3 resize grip
             this.set_has_resize_grip(true);
         }

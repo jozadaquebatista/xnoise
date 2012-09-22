@@ -41,17 +41,19 @@ public class Xnoise.SettingsWidget : Gtk.Box {
     private SpinButton sb;
     private int fontsizeMB;
     private ScrolledWindow scrollWinPlugins;
-    private CheckButton checkB_showL;
-    private CheckButton checkB_compact;
-    private CheckButton checkB_usestop;
-    private CheckButton checkB_hoverimage;
-    private CheckButton checkB_quitifclosed;
-    private CheckButton checkB_use_equalizer;
+    private Switch switch_showL;
+    private Switch switch_compact;
+    private Switch switch_usestop;
+    private Switch switch_hoverimage;
+    private Switch switch_quitifclosed;
+    private Switch switch_equalizer;
+    private AddMediaWidget add_media_widget;
     
     private enum NotebookTabs {
         GENERAL = 0,
         PLUGINS,
-        N_COLUMNS
+        MEDIA,
+        N_FIXED_TABS
     }
 
     private enum DisplayColums {
@@ -64,7 +66,7 @@ public class Xnoise.SettingsWidget : Gtk.Box {
     public void select_general_tab() {
         if(this.notebook == null)
             return;
-        this.notebook.set_current_page(0);
+        this.notebook.set_current_page(NotebookTabs.GENERAL);
     }
     
     public SettingsWidget() {
@@ -78,56 +80,57 @@ public class Xnoise.SettingsWidget : Gtk.Box {
                 return;
         }
         initialize_members();
+        connect_signals();
         this.show_all();
+    }
+
+    private void connect_signals() {
+        assert(switch_usestop != null);
+        switch_usestop.notify["active"].connect(this.on_checkbutton_usestop_clicked);
+        
+        assert(switch_showL != null);
+        switch_showL.notify["active"].connect(this.on_checkbutton_show_lines_clicked);
+        
+        assert(switch_hoverimage != null);
+        switch_hoverimage.notify["active"].connect(this.on_checkbutton_mediabr_hoverimage_clicked);
+        
+        assert(switch_compact != null);
+        switch_compact.notify["active"].connect(this.on_checkbutton_compact_clicked);
+        
+        assert(switch_quitifclosed != null);
+        switch_quitifclosed.notify["active"].connect(this.on_checkbutton_quitifclosed_clicked);
+        
+        assert(switch_equalizer != null);
+        switch_equalizer.notify["active"].connect(this.on_switch_use_equalizer_clicked);
+        
+        sb.changed.connect(this.on_mb_font_changed);
     }
 
     private void initialize_members() {
         //Visible Cols
         
         //Treelines
-        if(Params.get_int_value("use_treelines") > 0)
-            checkB_showL.active = true;
-        else
-            checkB_showL.active = false;
+        switch_showL.active = Params.get_bool_value("use_treelines");
         
-        //compact layout
-        if(Params.get_int_value("compact_layout") > 0)
-            checkB_compact.active = true;
-        else
-            checkB_compact.active = false;
-            
+        //compact layout / Application menu
+        switch_compact.active = Params.get_bool_value("compact_layout");
+        
         //use stop button
-        if(Params.get_int_value("quit_if_closed") > 0)
-            checkB_quitifclosed.active = true;
-        else
-            checkB_quitifclosed.active = false;
+        switch_quitifclosed.active = Params.get_bool_value("quit_if_closed");
         
-        if(Params.get_bool_value("not_use_eq"))
-            checkB_use_equalizer.active = false;
-        else
-            checkB_use_equalizer.active = true;
+        switch_equalizer.active = !Params.get_bool_value("not_use_eq");
         
-        if(Params.get_int_value("usestop") > 0)
-            checkB_usestop.active = true;
-        else
-            checkB_usestop.active = false;
+        switch_usestop.active = Params.get_bool_value("usestop");
         
         //not_show_art_on_hover_image
-        if(Params.get_int_value("not_show_art_on_hover_image") > 0)
-            checkB_hoverimage.active = true;
-        else
-            checkB_hoverimage.active = false;
+        switch_hoverimage.active = !Params.get_bool_value("not_show_art_on_hover_image");
         
         // SpinButton
-        sb.changed.disconnect(this.on_mb_font_changed);
-        sb.configure(new Gtk.Adjustment(8.0, 7.0, 14.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
         if((Params.get_int_value("fontsizeMB") >= 7)&&
             (Params.get_int_value("fontsizeMB") <= 14))
             sb.set_value((double)Params.get_int_value("fontsizeMB"));
         else
             sb.set_value(9.0);
-        sb.set_numeric(true);
-        sb.changed.connect(this.on_mb_font_changed);
     }
 
     private void on_mb_font_changed(Gtk.Editable sender) {
@@ -139,75 +142,75 @@ public class Xnoise.SettingsWidget : Gtk.Box {
         Params.set_int_value("fontsizeMB", fontsizeMB);
     }
 
-    private void on_checkbutton_show_lines_clicked(Gtk.Button sender) {
-        if(this.checkB_showL.active) {
-            Params.set_int_value("use_treelines", 1);
+    private void on_checkbutton_show_lines_clicked() {
+        if(this.switch_showL.active) {
+            Params.set_bool_value("use_treelines", true);
             main_window.musicBr.use_treelines = true;
         }
         else {
-            Params.set_int_value("use_treelines", 0);
+            Params.set_bool_value("use_treelines", false);
             main_window.musicBr.use_treelines = false;
         }
     }
     
-    private void on_checkbutton_compact_clicked(Gtk.Button sender) {
-        if(this.checkB_compact.active) {
-            Params.set_int_value("compact_layout", 1);
+    private void on_checkbutton_compact_clicked() {
+        if(this.switch_compact.active) {
+            Params.set_bool_value("compact_layout", true);
             main_window.compact_layout = true;
         }
         else {
-            Params.set_int_value("compact_layout", 0);
+            Params.set_bool_value("compact_layout", false);
             main_window.compact_layout = false;
         }
     }
     
-    private void on_checkB_use_equalizer_clicked(Gtk.Button sender) {
-        if(this.checkB_use_equalizer.active) {
-            Params.set_bool_value("not_use_eq", false);
-            main_window.use_eq = true;
+    private void on_switch_use_equalizer_clicked() {
+        if(!this.switch_equalizer.active) {
+            Params.set_bool_value("not_use_eq", true);
+            main_window.use_eq = false;
             gst_player.activate_equalizer();
         }
         else {
-            Params.set_bool_value("not_use_eq", true);
-            main_window.use_eq = false;
+            Params.set_bool_value("not_use_eq", false);
+            main_window.use_eq = true;
             gst_player.deactivate_equalizer();
         }
     }
     
-    private void on_checkbutton_quitifclosed_clicked(Gtk.Button sender) {
-        if(this.checkB_quitifclosed.active) {
-            Params.set_int_value("quit_if_closed", 1);
+    private void on_checkbutton_quitifclosed_clicked() {
+        if(this.switch_quitifclosed.active) {
+            Params.set_bool_value("quit_if_closed", true);
             main_window.quit_if_closed = true;
         }
         else {
-            Params.set_int_value("quit_if_closed", 0);
+            Params.set_bool_value("quit_if_closed", false);
             main_window.quit_if_closed = false;
         }
     }
     
-    private void on_checkbutton_usestop_clicked(Gtk.Button sender) {
-        if(this.checkB_usestop.active) {
-            Params.set_int_value("usestop", 1);
+    private void on_checkbutton_usestop_clicked() {
+        if(this.switch_usestop.active) {
+            Params.set_bool_value("usestop", true);
             main_window.usestop = true;
         }
         else {
-            Params.set_int_value("usestop", 0);
+            Params.set_bool_value("usestop", false);
             main_window.usestop = false;
         }
     }
     
-    private void on_checkbutton_mediabr_hoverimage_clicked(Gtk.Button sender) {
-        if(this.checkB_hoverimage.active) {
-            Params.set_int_value("not_show_art_on_hover_image", 1);
+    private void on_checkbutton_mediabr_hoverimage_clicked() {
+        if(!this.switch_hoverimage.active) {
+            Params.set_bool_value("not_show_art_on_hover_image", true);
             main_window.not_show_art_on_hover_image = true;
         }
         else {
-            Params.set_int_value("not_show_art_on_hover_image", 0);
+            Params.set_bool_value("not_show_art_on_hover_image", false);
             main_window.not_show_art_on_hover_image = false;
         }
     }
     
-    private void on_close_button_clicked() {
+    private void on_back_button_clicked() {
         Params.write_all_parameters_to_file();
         main_window.dialognotebook.set_current_page(0);
         sign_finish();
@@ -229,20 +232,26 @@ public class Xnoise.SettingsWidget : Gtk.Box {
                 count++;
             }
         }
-        this.number_of_tabs = NotebookTabs.N_COLUMNS + count;
+        this.number_of_tabs = NotebookTabs.N_FIXED_TABS + count;
+    }
+    
+    public void select_media_tab() {
+        if(this.notebook == null)
+            return;
+        this.notebook.set_current_page(NotebookTabs.MEDIA);
     }
 
     private void remove_plugin_tabs() {
         //remove all plugin tabs, before re-adding them
         int number_of_plugin_tabs = notebook.get_n_pages();
-        for(int i = NotebookTabs.N_COLUMNS; i < number_of_plugin_tabs; i++) {
+        for(int i = NotebookTabs.N_FIXED_TABS; i < number_of_plugin_tabs; i++) {
             notebook.remove_page(-1); //remove last page
         }
     }
 
     private int number_of_tabs;
     private void reset_plugin_tabs(string name) {
-        //just remove all tabs and rebuild them
+        //just remove all dynamically added tabs and recreate them
         remove_plugin_tabs();
         add_plugin_tabs();
         this.show_all();
@@ -256,88 +265,81 @@ public class Xnoise.SettingsWidget : Gtk.Box {
         try {
             this.builder.add_from_file(SETTINGS_UI_FILE);
             var headline_general = this.builder.get_object("headline_general") as Gtk.Label;
-            headline_general.set_markup("<span size=\"xx-large\"><b> " + Markup.printf_escaped(_("General")) + "</b></span>");
+            headline_general.set_markup("<span size=\"xx-large\"><b> "
+                                        + Markup.printf_escaped(_("General")) +
+                                        "</b></span>");
             headline_general.use_markup= true;
             
-            Label general_label = this.builder.get_object("label1") as Gtk.Label;
-            general_label.set_text(" " + _("General"));
-            Label plugins_label = this.builder.get_object("label6") as Gtk.Label;
-            plugins_label.set_text(" " + _("Plugins"));
+            var general_label = this.builder.get_object("label1") as Gtk.Label;
+            general_label.set_text(_("Settings"));
+            var plugins_label = this.builder.get_object("label6") as Gtk.Label;
+            plugins_label.set_text(_("Plugins"));
+            var media_label = this.builder.get_object("media_label") as Gtk.Label;
+            media_label.set_text(_("Media"));
             
             sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
             sizegroup.add_widget(general_label);
             sizegroup.add_widget(plugins_label);
+            sizegroup.add_widget(media_label);
             
-            checkB_showL = this.builder.get_object("checkB_showlines") as Gtk.CheckButton;
-            checkB_showL.can_focus = false;
-            Idle.add( () => {
-                checkB_showL.clicked.connect(this.on_checkbutton_show_lines_clicked);
-                return false;
-            });
-            checkB_showL.label = _("Enable grid lines in media browser");
+            switch_showL = this.builder.get_object("switch_showlines") as Gtk.Switch;
+            switch_showL.can_focus = false;
+            var label_showL = this.builder.get_object("label_showlines") as Gtk.Label;
+            label_showL.label = _("Grid lines in media browser");
             
-            checkB_hoverimage = this.builder.get_object("checkB_hoverimage") as Gtk.CheckButton;
-            checkB_hoverimage.can_focus = false;
-            Idle.add( () => {
-                checkB_hoverimage.clicked.connect(this.on_checkbutton_mediabr_hoverimage_clicked);
-                return false;
-            });
-            checkB_hoverimage.label = _("Don't show video screen while hovering album image");
+            switch_hoverimage = this.builder.get_object("switch_hoverimage") as Gtk.Switch;
+            switch_hoverimage.can_focus = false;
+            var label_hoverimage = this.builder.get_object("label_hoverimage") as Gtk.Label;
+            label_hoverimage.label = _("Show picture on hover album image");
             
-            checkB_compact = this.builder.get_object("checkB_compact") as Gtk.CheckButton;
-            checkB_compact.can_focus = false;
-            Idle.add( () => {
-                checkB_compact.clicked.connect(this.on_checkbutton_compact_clicked);
-                return false;
-            });
-            checkB_compact.label = _("Compact layout");
+            switch_compact = this.builder.get_object("switch_compact") as Gtk.Switch;
+            switch_compact.can_focus = false;
+            var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
+            label_compact.label = _("Application Menu");
             
-            checkB_usestop = this.builder.get_object("checkB_usestop") as Gtk.CheckButton;
-            checkB_usestop.can_focus = false;
-            Idle.add( () => {
-                checkB_usestop.clicked.connect(this.on_checkbutton_usestop_clicked);
-                return false;
-            });
-            checkB_usestop.label = _("Use stop button");
+            switch_usestop = this.builder.get_object("switch_usestop") as Gtk.Switch;
+            switch_usestop.can_focus = false;
+            var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
+            label_usestop.label = _("Stop button");
             
-            checkB_quitifclosed = this.builder.get_object("checkB_quitifclosed") as Gtk.CheckButton;
-            checkB_quitifclosed.can_focus = false;
-            Idle.add( () => {
-                checkB_quitifclosed.clicked.connect(this.on_checkbutton_quitifclosed_clicked);
-                return false;
-            });
-            checkB_quitifclosed.label = _("Quit application if window is closed");
+            switch_quitifclosed = this.builder.get_object("switch_quitifclosed") as Gtk.Switch;
+            switch_quitifclosed.can_focus = false;
+            var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
+            label_quitifclosed.label = _("Quit on close");
             
-            checkB_use_equalizer = this.builder.get_object("checkB_use_equalizer") as Gtk.CheckButton;
-            checkB_use_equalizer.can_focus = false;
-            Idle.add( () => {
-                checkB_use_equalizer.clicked.connect(this.on_checkB_use_equalizer_clicked);
-                return false;
-            });
-            checkB_use_equalizer.label = _("Use equalizer");
+            switch_equalizer = this.builder.get_object("switch_equalizer") as Gtk.Switch;
+            switch_equalizer.can_focus = false;
+            var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
+            label_equalizer.label = _("Equalizer");
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
+            var back_action_box = new Box(Orientation.HORIZONTAL, 0);
+            var back_button = new Gtk.Button.from_stock(Gtk.Stock.GO_BACK);
+            back_action_box.pack_start(back_button, false, false, 0);
+            back_action_box.pack_start(new Label(""), true, true, 0);
+            back_button.clicked.connect(this.on_back_button_clicked);
+            notebook.set_action_widget(back_action_box, PackType.START);
+            back_action_box.show_all();
             notebook.scrollable = false;
-            notebook.tab_pos = Gtk.PositionType.LEFT;
             this.pack_start(notebook, true, true, 0);
 
-            var closeButton = new Gtk.Button.from_stock(Gtk.Stock.GO_BACK);
-            closeButton.can_focus = false;
-            this.pack_start(closeButton, false, false, 0);
-            closeButton.clicked.connect(this.on_close_button_clicked);
-            
             var fontsize_label = this.builder.get_object("fontsize_label") as Gtk.Label;
             fontsize_label.label = _("Media browser fontsize:");
             
             sb = this.builder.get_object("spinbutton1") as Gtk.SpinButton;
-            sb.set_value(8.0);
-            sb.changed.connect(this.on_mb_font_changed);
+            sb.configure(new Gtk.Adjustment(8.0, 7.0, 14.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
+            sb.set_numeric(true);
             
             scrollWinPlugins = this.builder.get_object("scrollWinPlugins") as Gtk.ScrolledWindow;
             scrollWinPlugins.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
             
             var headline_plugin = this.builder.get_object("headline_plugin") as Gtk.Label;
-            headline_plugin.set_markup("<span size=\"xx-large\"><b> " + Markup.printf_escaped(_("Plugins")) + "</b></span>");
+            headline_plugin.set_markup("<span size=\"xx-large\"><b> " +
+                                       Markup.printf_escaped(_("Plugins")) +
+                                       "</b></span>");
+            var mediabox = this.builder.get_object("mediabox") as Gtk.Box;
+            add_media_widget = new AddMediaWidget();
+            mediabox.pack_start(add_media_widget, true, true, 0);
             headline_plugin.use_markup= true;
             Timeout.add_seconds(2, () => {
                 add_plugin_tabs();

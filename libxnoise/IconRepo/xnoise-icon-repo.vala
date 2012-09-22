@@ -36,6 +36,7 @@ internal class Xnoise.IconRepo : GLib.Object {
     private unowned IconTheme theme = null;
 
     internal Gdk.Pixbuf artist_icon                 { get; private set; }
+    internal Gdk.Pixbuf folder_symbolic_icon        { get; private set; }
     internal Gdk.Pixbuf album_icon                  { get; private set; }
     internal Gdk.Pixbuf title_icon                  { get; private set; }
     internal Gdk.Pixbuf video_icon                  { get; private set; }
@@ -47,6 +48,7 @@ internal class Xnoise.IconRepo : GLib.Object {
     internal Gdk.Pixbuf selected_collection_icon    { get; private set; }
     internal Gdk.Pixbuf symbolic_play_icon          { get; private set; }
     internal Gdk.Pixbuf symbolic_pause_icon         { get; private set; }
+    internal Gdk.Pixbuf network_symbolic_icon       { get; private set; }
     
     internal signal void icon_theme_changed();
     
@@ -121,6 +123,14 @@ internal class Xnoise.IconRepo : GLib.Object {
                 symbolic_pause_icon = theme.load_icon("media-playback-pause-symbolic", iconheight, IconLookupFlags.FORCE_SIZE);
             else
                 symbolic_pause_icon = w.render_icon_pixbuf(Gtk.Stock.MEDIA_PAUSE, IconSize.BUTTON);
+            if(theme.has_icon("folder-symbolic"))
+                folder_symbolic_icon = theme.load_icon("folder-symbolic", iconheight, IconLookupFlags.FORCE_SIZE);
+            else
+                folder_symbolic_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.BUTTON);
+            if(theme.has_icon("network-transmit-symbolic"))
+                network_symbolic_icon = theme.load_icon("network-transmit-symbolic", iconheight, IconLookupFlags.FORCE_SIZE);
+            else
+                network_symbolic_icon = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.BUTTON);
         }
         catch(GLib.Error e) {
             print("Error: %s\n",e.message);
