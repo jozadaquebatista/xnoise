@@ -230,7 +230,10 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
                 if(w!=null) {
                     var l = new Gtk.Label(name);
                     sizegroup.add_widget(l);
-                    notebook.append_page(w, l);
+                    var scw = new ScrolledWindow(null, null);
+                    scw.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
+                    scw.add_with_viewport(w);
+                    notebook.append_page(scw, l);
                 }
                 
                 count++;
