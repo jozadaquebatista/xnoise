@@ -318,18 +318,13 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             label_equalizer.label = _("Equalizer");
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
-            var tb = new Toolbar();
-            tb.set_style(ToolbarStyle.ICONS);
-            tb.set_icon_size(IconSize.LARGE_TOOLBAR);
-            tb.set_show_arrow(false);
-            
-            var back_image = new Gtk.Image.from_stock(Stock.GO_BACK, IconSize.MENU);
-            var ti = new ToolButton(back_image, null);
-            ti.set_stock_id(Gtk.Stock.GO_BACK);
-            ti.clicked.connect(on_back_button_clicked);
-            tb.insert(ti, -1);
-            notebook.set_action_widget(tb, PackType.START);
-            tb.show_all();
+            var back_image = new Gtk.Image.from_stock(Stock.GO_BACK, IconSize.LARGE_TOOLBAR);
+            var back_button = new Button();
+            back_button.add(back_image);
+            back_button.tooltip_markup = Markup.printf_escaped(_("Go Back"));
+            back_button.clicked.connect(on_back_button_clicked);
+            notebook.set_action_widget(back_button, PackType.START);
+            back_button.show_all();
             notebook.scrollable = false;
             notebook.show_border = false;
             this.pack_start(notebook, true, true, 0);
