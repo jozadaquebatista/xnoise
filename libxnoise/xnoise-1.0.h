@@ -300,6 +300,14 @@ typedef struct _XnoiseFullscreenToolbarLeaveVideoFSButton XnoiseFullscreenToolba
 typedef struct _XnoiseFullscreenToolbarLeaveVideoFSButtonClass XnoiseFullscreenToolbarLeaveVideoFSButtonClass;
 typedef struct _XnoiseFullscreenToolbarLeaveVideoFSButtonPrivate XnoiseFullscreenToolbarLeaveVideoFSButtonPrivate;
 
+#define XNOISE_TYPE_IMAIN_VIEW (xnoise_imain_view_get_type ())
+#define XNOISE_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainView))
+#define XNOISE_IS_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IMAIN_VIEW))
+#define XNOISE_IMAIN_VIEW_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainViewIface))
+
+typedef struct _XnoiseIMainView XnoiseIMainView;
+typedef struct _XnoiseIMainViewIface XnoiseIMainViewIface;
+
 #define XNOISE_TYPE_SETTINGS_WIDGET (xnoise_settings_widget_get_type ())
 #define XNOISE_SETTINGS_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_SETTINGS_WIDGET, XnoiseSettingsWidget))
 #define XNOISE_SETTINGS_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_SETTINGS_WIDGET, XnoiseSettingsWidgetClass))
@@ -310,14 +318,6 @@ typedef struct _XnoiseFullscreenToolbarLeaveVideoFSButtonPrivate XnoiseFullscree
 typedef struct _XnoiseSettingsWidget XnoiseSettingsWidget;
 typedef struct _XnoiseSettingsWidgetClass XnoiseSettingsWidgetClass;
 typedef struct _XnoiseSettingsWidgetPrivate XnoiseSettingsWidgetPrivate;
-
-#define XNOISE_TYPE_IMAIN_VIEW (xnoise_imain_view_get_type ())
-#define XNOISE_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainView))
-#define XNOISE_IS_IMAIN_VIEW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_IMAIN_VIEW))
-#define XNOISE_IMAIN_VIEW_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), XNOISE_TYPE_IMAIN_VIEW, XnoiseIMainViewIface))
-
-typedef struct _XnoiseIMainView XnoiseIMainView;
-typedef struct _XnoiseIMainViewIface XnoiseIMainViewIface;
 
 #define XNOISE_TYPE_VIDEO_VIEW_WIDGET (xnoise_video_view_widget_get_type ())
 #define XNOISE_VIDEO_VIEW_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_VIDEO_VIEW_WIDGET, XnoiseVideoViewWidget))
@@ -1270,6 +1270,11 @@ struct _XnoiseFullscreenToolbarLeaveVideoFSButtonClass {
 	GtkButtonClass parent_class;
 };
 
+struct _XnoiseIMainViewIface {
+	GTypeInterface parent_iface;
+	gchar* (*get_view_name) (XnoiseIMainView* self);
+};
+
 struct _XnoiseSettingsWidget {
 	GtkBox parent_instance;
 	XnoiseSettingsWidgetPrivate * priv;
@@ -1277,11 +1282,6 @@ struct _XnoiseSettingsWidget {
 
 struct _XnoiseSettingsWidgetClass {
 	GtkBoxClass parent_class;
-};
-
-struct _XnoiseIMainViewIface {
-	GTypeInterface parent_iface;
-	gchar* (*get_view_name) (XnoiseIMainView* self);
 };
 
 struct _XnoiseVideoViewWidget {
@@ -1580,7 +1580,6 @@ struct _XnoiseMainWindow {
 	XnoiseControlButton* previousButton;
 	XnoiseControlButton* nextButton;
 	XnoiseControlButton* stopButton;
-	GtkNotebook* dialognotebook;
 	XnoiseAlbumImage* albumimage;
 	XnoiseMediaSoureWidget* msw;
 	XnoiseTrackInfobar* track_infobar;
@@ -2262,12 +2261,12 @@ GType xnoise_fullscreen_toolbar_leave_video_fs_button_get_type (void) G_GNUC_CON
 XnoiseFullscreenToolbarLeaveVideoFSButton* xnoise_fullscreen_toolbar_leave_video_fs_button_new (void);
 XnoiseFullscreenToolbarLeaveVideoFSButton* xnoise_fullscreen_toolbar_leave_video_fs_button_construct (GType object_type);
 void xnoise_fullscreen_toolbar_leave_video_fs_button_on_clicked (XnoiseFullscreenToolbarLeaveVideoFSButton* self);
+GType xnoise_imain_view_get_type (void) G_GNUC_CONST;
 GType xnoise_settings_widget_get_type (void) G_GNUC_CONST;
 void xnoise_settings_widget_select_general_tab (XnoiseSettingsWidget* self);
 XnoiseSettingsWidget* xnoise_settings_widget_new (void);
 XnoiseSettingsWidget* xnoise_settings_widget_construct (GType object_type);
 void xnoise_settings_widget_select_media_tab (XnoiseSettingsWidget* self);
-GType xnoise_imain_view_get_type (void) G_GNUC_CONST;
 GType xnoise_video_view_widget_get_type (void) G_GNUC_CONST;
 GType xnoise_video_screen_get_type (void) G_GNUC_CONST;
 GType xnoise_serial_button_get_type (void) G_GNUC_CONST;

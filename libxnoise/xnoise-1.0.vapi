@@ -913,7 +913,7 @@ namespace Xnoise {
 		public signal void sign_selected (string name);
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public class SettingsWidget : Gtk.Box {
+	public class SettingsWidget : Gtk.Box, Xnoise.IMainView {
 		public SettingsWidget ();
 		public void select_general_tab ();
 		public void select_media_tab ();

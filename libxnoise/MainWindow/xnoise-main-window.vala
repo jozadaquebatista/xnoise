@@ -93,7 +93,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal ControlButton nextButton;
     internal ControlButton stopButton;
     public MainViewNotebook mainview_box { get; private set; }
-    internal Notebook dialognotebook;
     public AlbumImage albumimage;
     public MediaSoureWidget msw;
     internal TrackInfobar track_infobar;
@@ -201,7 +200,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), "<Alt>1", N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
             { "ShowLyricsAction", Gtk.Stock.EDIT, N_("_Lyrics"), "<Alt>3", N_("Go to the lyrics view."), on_show_lyrics_menu_clicked},
             { "ShowVideoAction", Gtk.Stock.LEAVE_FULLSCREEN, N_("_Now Playing"), "<Alt>2",
-               N_("Go to the now playing screen in the main window."), on_show_video_menu_clicked},
+               N_("Go to the 'Now Playing' screen in the main window."), on_show_video_menu_clicked},
         { "HelpMenuAction", null, N_("_Help") },
             { "AboutAction", Gtk.Stock.ABOUT, null, null, null, on_help_about},
             { "HelpFAQ", Gtk.Stock.DIALOG_QUESTION, N_("_Frequently Asked Questions"), null, N_("_Open Frequently Asked Questions in web browser"), on_help_faq },
@@ -517,9 +516,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private FirstStartWidget first_start_widget = null;
     
     internal void ask_for_initial_media_import() {
+        toggle_media_browser_visibility();
         first_start_widget = new FirstStartWidget();
         if(first_start_widget.parent == null)
-            main_window.mainview_box.add_main_view(first_start_widget);
+            this.mainview_box.add_main_view(first_start_widget);
         first_start_widget.show();
         first_start_widget.finish_button.clicked.connect( () =>  {
             Idle.add(() => {
@@ -538,6 +538,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                         a.sensitive = true;
                     }
                 }
+                toggle_media_browser_visibility();
                 return false;
             });
         });
@@ -558,6 +559,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                         a.sensitive = true;
                     }
                 }
+                toggle_media_browser_visibility();
                 return false;
             });
         });
@@ -576,28 +578,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             }
             return false;
         });
-//        uint msg_id = 0;
-//        var add_media_button = new Gtk.Button.with_label(_("Add media"));
-//        msg_id = userinfo.popup(UserInfo.RemovalType.CLOSE_BUTTON,
-//                                UserInfo.ContentClass.QUESTION,
-//                                _("You started xnoise for the first time. Do you want to import media into the library?"),
-//                                false,
-//                                5,
-//                                add_media_button);
-//        add_media_button.clicked.connect( () => {
-//            on_media_add_on_first_start(msg_id);
-//        });
-        
     }
-    
-    
-//    private void on_media_add_on_first_start(uint msg_id) {
-//        Idle.add( () => {
-//            userinfo.popdown(msg_id);
-//            return false;
-//        });
-//        dialognotebook.set_current_page(2);
-//    }
 
     public void toggle_fullscreen() {
         if(!fullscreenwindowvisible) {
@@ -942,7 +923,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     sbuttonTL.select(TRACKLIST_VIEW_NAME, false);
                     sbuttonVI.select(TRACKLIST_VIEW_NAME, false);
                     sbuttonLY.select(TRACKLIST_VIEW_NAME, false);
-//                    this.mainview_box.set_current_page(0);
                     this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
                     break;
                 }
@@ -951,7 +931,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     sbuttonVI.select(VIDEOVIEW_NAME, false);
                     sbuttonLY.select(VIDEOVIEW_NAME, false);
                     this.mainview_box.select_main_view(VIDEOVIEW_NAME);
-//                    this.mainview_box.set_current_page(1);
                     break;
                 }
                 default: {
@@ -959,7 +938,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     sbuttonVI.select(TRACKLIST_VIEW_NAME, false);
                     sbuttonLY.select(TRACKLIST_VIEW_NAME, false);
                     this.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
-//                    this.mainview_box.set_current_page(0);
                     break;
                 }
             }
@@ -1171,7 +1149,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 
     private void on_menu_add() {
-        dialognotebook.set_current_page(1);
+        this.mainview_box.select_main_view(settings_widget.get_view_name());
         settings_widget.select_media_tab();
     }
 
@@ -1284,7 +1262,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     
     private void on_settings_edit() {
         settings_widget.select_general_tab();
-        dialognotebook.set_current_page(1);
+        mainview_box.select_main_view(settings_widget.get_view_name());
     }
 
     internal void set_displayed_title(string? newuri, string? tagname, string? tagvalue) {
@@ -1531,7 +1509,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             lyricsview_widget = new LyricsViewWidget(this);
             this.lyricsView = lyricsview_widget.lyricsView;
             mainview_box.add_main_view(lyricsview_widget);
-
+            
+            settings_widget = new SettingsWidget();
+            mainview_box.add_main_view(settings_widget);
+            
+            mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
+            
             //--------------------
             var toolbarbox = gb.get_object("toolbarbox") as Gtk.Box;
             main_toolbar = new Gtk.Toolbar();
@@ -1681,7 +1664,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             this.search_entry = msw.search_entry;
             
             mbbox01.pack_start(msw, true, true, 0);
-            dialognotebook = gb.get_object("mainNB") as Gtk.Notebook;
             this.search_entry.key_release_event.connect( (s, e) => {
                 var entry = (Entry)s;
                 global.searchtext = entry.text;
@@ -1729,8 +1711,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             else {
                 media_browser_visible = true;
             }
-            settings_widget = new SettingsWidget();
-            dialognotebook.append_page(settings_widget, null);
             // GTk3 resize grip
             this.set_has_resize_grip(true);
         }

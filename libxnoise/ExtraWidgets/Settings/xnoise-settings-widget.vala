@@ -31,9 +31,10 @@
 using Gtk;
 using Xnoise;
 using Xnoise.PluginModule;
+using Xnoise.Resources;
 
 
-public class Xnoise.SettingsWidget : Gtk.Box {
+public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     private unowned Main xn;
     private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
     private PluginManagerTree plugin_manager_tree;
@@ -81,9 +82,12 @@ public class Xnoise.SettingsWidget : Gtk.Box {
         }
         initialize_members();
         connect_signals();
-        this.show_all();
     }
 
+    public string get_view_name() {
+        return "Settings";
+    }
+    
     private void connect_signals() {
         assert(switch_usestop != null);
         switch_usestop.notify["active"].connect(this.on_checkbutton_usestop_clicked);
@@ -212,7 +216,7 @@ public class Xnoise.SettingsWidget : Gtk.Box {
     
     private void on_back_button_clicked() {
         Params.write_all_parameters_to_file();
-        main_window.dialognotebook.set_current_page(0);
+        main_window.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
         sign_finish();
     }
 
@@ -238,6 +242,7 @@ public class Xnoise.SettingsWidget : Gtk.Box {
     public void select_media_tab() {
         if(this.notebook == null)
             return;
+        print("select media tab\n");
         this.notebook.set_current_page(NotebookTabs.MEDIA);
     }
 
@@ -313,14 +318,20 @@ public class Xnoise.SettingsWidget : Gtk.Box {
             label_equalizer.label = _("Equalizer");
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
-            var back_action_box = new Box(Orientation.HORIZONTAL, 0);
-            var back_button = new Gtk.Button.from_stock(Gtk.Stock.GO_BACK);
-            back_action_box.pack_start(back_button, false, false, 0);
-            back_action_box.pack_start(new Label(""), true, true, 0);
-            back_button.clicked.connect(this.on_back_button_clicked);
-            notebook.set_action_widget(back_action_box, PackType.START);
-            back_action_box.show_all();
+            var tb = new Toolbar();
+            tb.set_style(ToolbarStyle.ICONS);
+            tb.set_icon_size(IconSize.LARGE_TOOLBAR);
+            tb.set_show_arrow(false);
+            
+            var back_image = new Gtk.Image.from_stock(Stock.GO_BACK, IconSize.MENU);
+            var ti = new ToolButton(back_image, null);
+            ti.set_stock_id(Gtk.Stock.GO_BACK);
+            ti.clicked.connect(on_back_button_clicked);
+            tb.insert(ti, -1);
+            notebook.set_action_widget(tb, PackType.START);
+            tb.show_all();
             notebook.scrollable = false;
+            notebook.show_border = false;
             this.pack_start(notebook, true, true, 0);
 
             var fontsize_label = this.builder.get_object("fontsize_label") as Gtk.Label;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-22 15:00+0200\n"
+"POT-Creation-Date: 2012-09-23 17:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,17 +113,17 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:249
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:250
 #: ../libxnoise/Utils/xnoise-media-importer.vala:101
 #: ../libxnoise/Utils/xnoise-media-importer.vala:184
 msgid "Importing media data. This may take some time..."
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:263
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:265
 msgid "Select media folder"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:332
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:334
 msgid "Add internet radio link"
 msgstr ""
 
@@ -131,49 +131,49 @@ msgstr ""
 msgid "Leave fullscreen"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:277
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:274
 msgid "General"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:282
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:279
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:284
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:347
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:281
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:354
 msgid "Plugins"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:286
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
 msgid "Media"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:296
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:293
 msgid "Grid lines in media browser"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:301
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:298
 msgid "Show picture on hover album image"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:306
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:303
 msgid "Application Menu"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:311
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:308
 msgid "Stop button"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:313
 msgid "Quit on close"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1613
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:318
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1616
 msgid "Equalizer"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:343
 msgid "Media browser fontsize:"
 msgstr ""
 
@@ -194,12 +194,12 @@ msgid "Fullscreen"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1322
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1350
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1392
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1422
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1320
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1390
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1420
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
-#: ../plugins/notifications2/xnoise-notifications.vala:203
+#: ../plugins/notifications2/xnoise-notifications.vala:202
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
 #, c-format
@@ -207,12 +207,12 @@ msgid "by"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1324
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1352
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1394
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1424
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1322
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1350
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1392
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1422
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
-#: ../plugins/notifications2/xnoise-notifications.vala:206
+#: ../plugins/notifications2/xnoise-notifications.vala:205
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
 #, c-format
@@ -544,16 +544,16 @@ msgstr ""
 msgid "random play"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1229
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1226
 msgid "Enter the URL for playing"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1245
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1242
 msgid "Select media file"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1659
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1662
 msgid "Show application main menu"
 msgstr ""
 

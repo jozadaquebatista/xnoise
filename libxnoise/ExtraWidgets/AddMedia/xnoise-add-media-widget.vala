@@ -232,7 +232,8 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
     }
 
     private void on_ok_button_clicked(Gtk.Button sender) {
-        main_window.dialognotebook.set_current_page(0);
+        main_window.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
+//        main_window.dialognotebook.set_current_page(0);
         bool interrupted_populate_model = false;
         if(main_window.musicBr.mediabrowsermodel.populating_model) {
             interrupted_populate_model = true; 
@@ -253,7 +254,8 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
             Item[] media_items = harvest_media_locations();
             global.media_import_in_progress = true;
             media_importer.import_media_groups(media_items, msg_id, fullrescan, interrupted_populate_model);
-            main_window.dialognotebook.set_current_page(0);
+//            main_window.dialognotebook.set_current_page(0);
+            main_window.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
             return false;
         });
     }

@@ -42,6 +42,7 @@ public class Xnoise.MainViewNotebook : Gtk.Notebook {
     }
     
     public void add_main_view(Xnoise.IMainView view) {
+        //print("##add view: %s\n", view.get_view_name());
         if(main_views.lookup(view.get_view_name()) != null) {
             print("Main view is already there\n");
             return;
@@ -60,12 +61,14 @@ public class Xnoise.MainViewNotebook : Gtk.Notebook {
     }
 
     public bool select_main_view(string? name) {
+        //print("##select main view: %s\n", name);
         if(name == null || name == "")
             return false;
         if(main_views.lookup(name) == null) {
             print("Selected main view is not available\n");
             return false;
         }
+        //print("select %s on page %d\n", name, this.page_num(main_views.lookup(name)));
         this.set_current_page(this.page_num(main_views.lookup(name)));
         return true;
     }
