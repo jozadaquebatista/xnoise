@@ -271,7 +271,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             this.builder.add_from_file(SETTINGS_UI_FILE);
             var headline_general = this.builder.get_object("headline_general") as Gtk.Label;
             headline_general.set_markup("<span size=\"xx-large\"><b> "
-                                        + Markup.printf_escaped(_("General")) +
+                                        + Markup.printf_escaped(_("Settings")) +
                                         "</b></span>");
             headline_general.use_markup= true;
             
@@ -343,7 +343,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             
             scrollWinPlugins = this.builder.get_object("scrollWinPlugins") as Gtk.ScrolledWindow;
             scrollWinPlugins.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
-            
+            scrollWinPlugins.shadow_type = ShadowType.IN;
             var headline_plugin = this.builder.get_object("headline_plugin") as Gtk.Label;
             headline_plugin.set_markup("<span size=\"xx-large\"><b> " +
                                        Markup.printf_escaped(_("Plugins")) +
