@@ -32,9 +32,8 @@
 using Gtk;
 
 using Xnoise;
-using Xnoise.Resources;
-
 using Xnoise.Database;
+using Xnoise.Resources;
 
 
 public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {

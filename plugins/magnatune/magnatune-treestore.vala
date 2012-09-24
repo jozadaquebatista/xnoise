@@ -134,7 +134,7 @@ private class MagnatuneTreeStore : Gtk.TreeStore {
     private void update_album_image() {
         if(this.cancel.is_cancelled())
             return;
-        TreeIter artist_iter = TreeIter(), album_iter;
+        TreeIter? artist_iter = TreeIter(), album_iter;
         if(!global.media_import_in_progress) {
             string text = null;
             //print("--%s\n", td.title);
