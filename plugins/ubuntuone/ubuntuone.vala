@@ -283,7 +283,6 @@ private class UbuMusicStore : GLib.Object {
     }
     
     ~UbuMusicStore() {
-        main_window.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
         main_window.msw.select_dockable_by_name("MusicBrowserDockable");
         unowned DockableUbuntuOneMS msd = 
             (DockableUbuntuOneMS)dockable_media_sources.lookup(UBUNTUONE_MUSIC_STORE_NAME);
