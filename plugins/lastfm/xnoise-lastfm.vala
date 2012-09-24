@@ -121,7 +121,8 @@ public class Xnoise.Lfm : GLib.Object, IPlugin, IAlbumCoverImageProvider {
     
     public void login(string username, string password) {
         Idle.add( () => {
-            session.login(username, password);
+            if(!global.main_cancellable.is_cancelled())
+                session.login(username, password);
             return false;
         });
     }

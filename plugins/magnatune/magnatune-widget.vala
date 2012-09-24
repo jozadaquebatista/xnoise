@@ -37,7 +37,6 @@ using Xnoise;
 private class MagnatuneWidget : Gtk.Box {
     
     private bool database_available = false;
-//    private ProgressBar pb = null;
     private Label label = null;
     private unowned DockableMedia dock;
     public ScrolledWindow sw;
@@ -67,6 +66,8 @@ private class MagnatuneWidget : Gtk.Box {
         
         public bool is_uptodate(Cancellable cancel) {
             if(cancel == null || cancel.is_cancelled())
+                return false;
+            if(global.main_cancellable.is_cancelled())
                 return false;
             string? wget_install_path = Environment.find_program_in_path("wget");
             if(wget_install_path != null) {
@@ -123,6 +124,8 @@ private class MagnatuneWidget : Gtk.Box {
     private void load_db() {
         if(this.plugin.cancel.is_cancelled())
             return;
+        if(global.main_cancellable.is_cancelled())
+            return;
         File dbf = File.new_for_path(CONVERTED_DB);
         if(!dbf.query_exists()) {
             print("magnatune database is not yet available\n");
@@ -142,6 +145,8 @@ private class MagnatuneWidget : Gtk.Box {
     private bool check_online_hash_job(Worker.Job job) {
         // check hash
         if(this.plugin.cancel.is_cancelled())
+            return false;
+        if(global.main_cancellable.is_cancelled())
             return false;
         string old_hash = (string)job.get_arg("old_hash");
         var cd = new MagnatuneChangeDetector(old_hash);
@@ -183,6 +188,8 @@ private class MagnatuneWidget : Gtk.Box {
     private bool copy_db_job(Worker.Job job) {
         if(this.plugin.cancel.is_cancelled())
             return false;
+        if(global.main_cancellable.is_cancelled())
+            return false;
         bool res = false;
         string? wget_install_path = Environment.find_program_in_path("wget");
         if(wget_install_path != null) {
@@ -212,6 +219,8 @@ private class MagnatuneWidget : Gtk.Box {
                 return false;
             }
             if(this.plugin.cancel.is_cancelled())
+                return false;
+            if(global.main_cancellable.is_cancelled())
                 return false;
             if(d.query_exists(this.plugin.cancel)) {
                 Idle.add(() => {
@@ -257,15 +266,11 @@ private class MagnatuneWidget : Gtk.Box {
         }
         catch(Error e) {
             print("Error decompressing! %s\n", e.message);
-//            Idle.add(() => {
-//                if(this.plugin.cancel.is_cancelled())
-//                    return false;
-////                label.label = "Magnatune Error 1";
-//                return false;
-//            });
             return false;
         }
         if(this.plugin.cancel.is_cancelled())
+            return false;
+        if(global.main_cancellable.is_cancelled())
             return false;
         var zlc = new ZlibDecompressor(ZlibCompressorFormat.GZIP);
         conv_stream = new ConverterOutputStream(dst_stream, zlc);
@@ -274,10 +279,6 @@ private class MagnatuneWidget : Gtk.Box {
         }
         catch(IOError e) {
             print("Converter Error! %s\n", e.message);
-//            Idle.add(() => {
-//                label.label = "Magnatune Error 2";
-//                return false;
-//            });
             return false;
         }
         Idle.add(() => {
@@ -298,6 +299,8 @@ private class MagnatuneWidget : Gtk.Box {
 
     private bool convert_db_job(Worker.Job job) {
         if(this.plugin.cancel.is_cancelled())
+            return false;
+        if(global.main_cancellable.is_cancelled())
             return false;
         Idle.add(() => {
             if(this.plugin.cancel.is_cancelled())
@@ -332,6 +335,8 @@ private class MagnatuneWidget : Gtk.Box {
         Idle.add(() => {
             if(this.plugin.cancel.is_cancelled())
                 return false;
+            if(global.main_cancellable.is_cancelled())
+                return false;
             if(new_hash != null)
                 Params.set_string_value("magnatune_collection_hash", new_hash);
             else
@@ -345,7 +350,8 @@ private class MagnatuneWidget : Gtk.Box {
         Idle.add(() => {
             if(this.plugin.cancel.is_cancelled())
                 return false;
-//            pb.hide();
+            if(global.main_cancellable.is_cancelled())
+                return false;
             label.label = _("Please wait while\nconverting database.\nDone for %d tracks.").printf(c);
             return false;
         });
@@ -354,9 +360,7 @@ private class MagnatuneWidget : Gtk.Box {
     private void add_tree() {
         if(!database_available)
             return;
-//        this.remove(pb);
         this.remove(label);
-//        pb = null;
         label = null;
         sw = new ScrolledWindow(null, null);
         sw.set_shadow_type(ShadowType.IN);
@@ -367,28 +371,9 @@ private class MagnatuneWidget : Gtk.Box {
         this.show_all();
     }
     
-//    private void progress_cb(int64 current_num_bytes, int64 total_num_bytes) {
-//        if(total_num_bytes <= 0)
-//            return;
-//        double fraction = (double)current_num_bytes / (double)total_num_bytes;
-//        if(fraction > 1.0)
-//            fraction = 1.0;
-//        if(fraction < 0.0)
-//            fraction = 0.0;
-//        
-//        Idle.add(() => {
-//            if(this.plugin.cancel.is_cancelled())
-//                return false;
-//            pb.set_fraction(fraction);
-//            return false;
-//        });
-//    }
-    
     private void create_widgets() {
         label = new Label(_("loading..."));
         this.pack_start(label, true, true, 0);
-//        pb = new ProgressBar();
-//        this.pack_start(pb, false, false, 0);
     }
 }
 

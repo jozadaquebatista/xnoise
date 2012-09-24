@@ -2321,6 +2321,7 @@ void xnoise_serial_button_set_sensitive (XnoiseSerialButton* self, const gchar* 
 void xnoise_serial_button_del (XnoiseSerialButton* self, const gchar* name);
 gint xnoise_serial_button_get_item_count (XnoiseSerialButton* self);
 GType xnoise_global_access_get_type (void) G_GNUC_CONST;
+extern GCancellable* xnoise_global_access_main_cancellable;
 void xnoise_global_access_reset_position_reference (XnoiseGlobalAccess* self);
 void xnoise_global_access_do_restart_of_current_track (XnoiseGlobalAccess* self);
 void xnoise_global_access_handle_eos (XnoiseGlobalAccess* self);

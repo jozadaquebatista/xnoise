@@ -176,15 +176,8 @@ private class DockableUbuntuOneMS : DockableMedia {
                 return;
             assert(win != null);
             assert(win.mainview_box != null);
-//            win.mainview_box.select_main_view(ms.get_view_name());
             if(win.mainview_box.get_current_main_view_name() == UBUNTUONE_MUSIC_STORE_NAME)
                 win.mainview_box.select_main_view(TRACKLIST_VIEW_NAME);
-//                win.restore_last_view();
-//            int ms_num = win.tracklistnotebook.page_num(ms);
-//            if(ms_num == -1)
-//                return;
-//            if(ms_num == win.tracklistnotebook.get_current_page())
-//TODO ???
         }
     }
     

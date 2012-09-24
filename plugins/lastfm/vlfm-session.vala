@@ -125,12 +125,13 @@ namespace Lastfm {
         }
         
         public void login(string user, string pass) {
+            if(global.main_cancellable.is_cancelled())
+                return;
             this.logged_in = false;
             string pass_hash = Checksum.compute_for_string(ChecksumType.MD5, pass);
             string buffer    = "%s%s".printf(user, pass_hash);
             this.auth_token  = Checksum.compute_for_string(ChecksumType.MD5, buffer);
             if(auth_type == AuthenticationType.MOBILE) {
-                
                 //Build an api_sig
                 buffer = "api_key%sauthToken%smethod%susername%s%s".printf(
                    this.api_key,
@@ -158,22 +159,13 @@ namespace Lastfm {
             else if(auth_type == AuthenticationType.DESKTOP) {
                 print("not fully implemented. User acknowledgment step in browser is missing\n");
                 return;
-                /*
-                //Build the login url
-                buffer = "%s?method=%s&api_key=%s".printf(
-                   ROOT_URL,
-                   "auth.gettoken",
-                   this.api_key
-                );
-                int id = web.request_data(buffer);
-                var rhc = new ResponseHandlerContainer(this.login_token_cb, id);
-                handlers.insert(id, rhc);
-                */
             }
         }
         
         private void login_token_cb(int id, string response) {
             //print("finish login response a: \n%s\n", response);
+            if(global.main_cancellable.is_cancelled())
+                return;
             var r = new SimpleMarkup.Reader.from_string(response);
             r.read();
             
@@ -230,6 +222,8 @@ namespace Lastfm {
         }
         
         private void login_cb(int id, string response) {
+            if(global.main_cancellable.is_cancelled())
+                return;
             //print("finish login response b: \n%s\n", response);
             var r = new SimpleMarkup.Reader.from_string(response);
             r.read();

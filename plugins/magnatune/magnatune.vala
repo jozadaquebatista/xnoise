@@ -158,6 +158,8 @@ public class MagnatuneSettings : Gtk.Box {
     private void do_user_feedback() {
         if(magn_plugin.cancel.is_cancelled())
             return;
+        if(global.main_cancellable.is_cancelled())
+            return;
         print("do_user_feedback\n");
         if(user_entry.text != EMPTYSTRING && pass_entry.text != EMPTYSTRING) {
             feedback_label.set_markup("<b><i>%s</i></b>".printf(USER_PASSWORD_AVAILABLE));
@@ -206,6 +208,8 @@ public class MagnatuneSettings : Gtk.Box {
     private void setup_widgets() {
         if(magn_plugin.cancel.is_cancelled())
             return;
+        if(global.main_cancellable.is_cancelled())
+            return;
         var headline_label = new Gtk.Label("");
         headline_label.margin_top    = 5;
         headline_label.margin_bottom = 5;
@@ -229,7 +233,10 @@ public class MagnatuneSettings : Gtk.Box {
             image = null;
         }
         
-        var lb = new LinkButton.with_label("http://magnatune.com", _("Visit Magnatune for an account."));
+        var lb = new LinkButton.with_label(
+            "http://magnatune.com", 
+            _("Visit Magnatune for an account.")
+        );
         lb.margin_top    = 5;
         lb.margin_bottom = 5;
         lb.set_alignment(0.0f, 0.5f);

@@ -588,6 +588,7 @@ namespace Xnoise {
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class GlobalAccess : GLib.Object {
 		public bool cellrenderer_in_edit;
+		public static GLib.Cancellable main_cancellable;
 		public weak Xnoise.GstPlayer player;
 		public GlobalAccess ();
 		public void check_image_for_current_track ();

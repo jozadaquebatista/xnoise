@@ -41,6 +41,8 @@ using Xnoise.Resources;
 public class Xnoise.GlobalAccess : GLib.Object {
     
     construct {
+        main_cancellable = new Cancellable();
+        
         uri_changed.connect( (s,v) => {
         //print("uri_changed\n");
             current_artist = null;
@@ -50,7 +52,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
             current_genre = null;
             current_organization = null;
         });
-    
+        
         this.notify.connect( (s, p) => {
             //print("p.name: %s\n", p.name);
             switch(p.name) {
@@ -276,6 +278,8 @@ public class Xnoise.GlobalAccess : GLib.Object {
     public void do_restart_of_current_track() {
         sign_restart_song();
     }
+    
+    public static Cancellable main_cancellable;
     
     public unowned GstPlayer player;
     public bool in_preview { get; set; }

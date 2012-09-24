@@ -212,6 +212,7 @@ public class Xnoise.Main : GLib.Object {
     }
     
     public void quit() {
+        global.main_cancellable.cancel();
         global.player_in_shutdown();
         global.player_state = PlayerState.STOPPED;
         Source.remove(cyclic_save_source);
