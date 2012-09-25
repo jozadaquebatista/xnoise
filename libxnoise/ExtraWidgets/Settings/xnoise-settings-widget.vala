@@ -49,6 +49,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     private Switch switch_quitifclosed;
     private Switch switch_equalizer;
     private AddMediaWidget add_media_widget;
+    private SizeGroup plugin_label_sizegroup;
     
     private enum NotebookTabs {
         GENERAL = 0,
@@ -229,7 +230,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
                 
                 if(w!=null) {
                     var l = new Gtk.Label(name);
-                    sizegroup.add_widget(l);
+                    tab_sizegroup.add_widget(l);
                     var scw = new ScrolledWindow(null, null);
                     scw.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
                     scw.add_with_viewport(w);
@@ -265,7 +266,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
         this.show_all();
     }
 
-    private Gtk.SizeGroup sizegroup;
+    private Gtk.SizeGroup tab_sizegroup;
     
     private Builder builder;
     private bool setup_widgets() {
@@ -285,40 +286,48 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             var media_label = this.builder.get_object("media_label") as Gtk.Label;
             media_label.set_text(_("Media"));
             
-            sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-            sizegroup.add_widget(general_label);
-            sizegroup.add_widget(plugins_label);
-            sizegroup.add_widget(media_label);
+            tab_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+            tab_sizegroup.add_widget(general_label);
+            tab_sizegroup.add_widget(plugins_label);
+            tab_sizegroup.add_widget(media_label);
+            
+            plugin_label_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
             
             switch_showL = this.builder.get_object("switch_showlines") as Gtk.Switch;
             switch_showL.can_focus = false;
             var label_showL = this.builder.get_object("label_showlines") as Gtk.Label;
             label_showL.label = _("Grid lines in media browser");
+            plugin_label_sizegroup.add_widget(label_showL);
             
             switch_hoverimage = this.builder.get_object("switch_hoverimage") as Gtk.Switch;
             switch_hoverimage.can_focus = false;
             var label_hoverimage = this.builder.get_object("label_hoverimage") as Gtk.Label;
             label_hoverimage.label = _("Show picture on hover album image");
+            plugin_label_sizegroup.add_widget(label_hoverimage);
             
             switch_compact = this.builder.get_object("switch_compact") as Gtk.Switch;
             switch_compact.can_focus = false;
             var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
             label_compact.label = _("Application Menu");
+            plugin_label_sizegroup.add_widget(label_compact);
             
             switch_usestop = this.builder.get_object("switch_usestop") as Gtk.Switch;
             switch_usestop.can_focus = false;
             var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
             label_usestop.label = _("Stop button");
+            plugin_label_sizegroup.add_widget(label_usestop);
             
             switch_quitifclosed = this.builder.get_object("switch_quitifclosed") as Gtk.Switch;
             switch_quitifclosed.can_focus = false;
             var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
             label_quitifclosed.label = _("Quit on close");
+            plugin_label_sizegroup.add_widget(label_quitifclosed);
             
             switch_equalizer = this.builder.get_object("switch_equalizer") as Gtk.Switch;
             switch_equalizer.can_focus = false;
             var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
             label_equalizer.label = _("Equalizer");
+            plugin_label_sizegroup.add_widget(label_equalizer);
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
             var back_image = new Gtk.Image.from_stock(Stock.GO_BACK, IconSize.LARGE_TOOLBAR);
@@ -359,6 +368,18 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
                 this.show_all();
                 return false;
             });
+            var music_store_box = this.builder.get_object("music_store_box") as Gtk.Box;
+            var lyric_provider_box = this.builder.get_object("lyric_provider_box") as Gtk.Box;
+            Timeout.add_seconds(1, () => {
+                if(plugin_loader.loaded == false) {
+                    print("plugin loader not ready - try agan in one second ...\n");
+                    return true;
+                }
+                
+                insert_plugin_switches(lyric_provider_box, PluginCategory.LYRICS_PROVIDER);
+                insert_plugin_switches(music_store_box, PluginCategory.MUSIC_STORE);
+                return false;
+            });
         }
         catch (GLib.Error e) {
             var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
@@ -367,4 +388,143 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
         }
         return true;
     }
+    
+    private void insert_plugin_switches(Box box, PluginCategory cat) {
+        bool has_member = false;
+        foreach(string info_file in plugin_loader.get_info_files()) {
+            //print("insert info_file: %s\n", info_file);
+            var plugin_switch = new PluginSwitch(info_file, this.plugin_label_sizegroup);
+            if(plugin_switch.plugin_category != PluginCategory.MUSIC_STORE)
+                continue;
+            box.pack_start(plugin_switch,
+                           false,
+                           false,
+                           2
+                           );
+            has_member = true;
+        }
+        if(has_member) {
+            box.set_no_show_all(false);
+            box.show_all();
+        }
+        else {
+            box.hide();
+            box.set_no_show_all(true);
+        }
+    }
 }
+
+
+
+private class Xnoise.PluginSwitch : Gtk.Box {
+    
+    private const string group = "XnoisePlugin";
+    
+    private string info_file_path;
+    private string plugin_name;
+    private string description;
+    private string icon;
+    private string author;
+    private string website;
+    private string license;
+    private string copyright;
+    private string module;
+    
+    private Gtk.Switch pswitch;
+    private weak PluginModule.Container pc = null;
+    private Gtk.SizeGroup label_sizegroup;
+    private PluginCategory _plugin_category;
+    
+    public PluginCategory plugin_category { 
+        get { return _plugin_category; }
+    }
+    
+    public PluginSwitch(string info_file_path, Gtk.SizeGroup label_sizegroup) {
+        this.info_file_path = info_file_path;
+        this.label_sizegroup = label_sizegroup;
+        
+        assert(load_info());
+        
+        _plugin_category = pc.info.category;
+        
+        create_widgets();
+        init_value();
+        connect_signals();
+        
+        this.show_all();
+    }
+    
+    
+    private void init_value() {
+        this.pswitch.freeze_notify();
+        this.pswitch.set_active(pc.activated);
+        this.pswitch.thaw_notify();
+    }
+    
+    private void connect_signals() {
+        if(pc == null)
+            return;
+        pc.sign_activated.connect( () => {
+            print("p sign act switch\n");
+            this.pswitch.freeze_notify();
+            this.pswitch.set_active(true);
+            this.pswitch.thaw_notify();
+        });
+        pc.sign_deactivated.connect( () => {
+            print("p sign deact switch\n");
+            this.pswitch.freeze_notify();
+            this.pswitch.set_active(false);
+            this.pswitch.thaw_notify();
+        });
+    }
+    
+    private bool load_info() { // TODO this should not be done here!
+        try {
+            var kf = new KeyFile();
+            kf.load_from_file(info_file_path, KeyFileFlags.NONE);
+            if(!kf.has_group(group))
+                return false;
+            plugin_name = kf.get_string(group, "name");
+            description = kf.get_locale_string(group, "description");
+            module      = kf.get_string(group, "module");
+            icon        = kf.get_string(group, "icon");
+            author      = kf.get_string(group, "author");
+            website     = kf.get_string(group, "website");
+            license     = kf.get_string(group, "license");
+            copyright   = kf.get_string(group, "copyright");
+        }
+        catch(Error e) {
+            print("Error plugin information: %s\n", e.message);
+            return false;
+        }
+        
+        pc = plugin_loader.plugin_htable.lookup(module);
+        
+        if(pc == null)
+            return false;
+            
+        return true;
+    }
+    
+    private void create_widgets() {
+        var label = new Gtk.Label(plugin_name);
+        label.set_alignment(0.0f, 0.5f);
+        label.justify = Justification.LEFT;
+        label.xpad = 3;
+        this.pack_start(label, false, false, 0);
+        pswitch = new Gtk.Switch();
+        pswitch.margin_left = 2;
+        this.pack_start(pswitch, false, false, 0);
+        label_sizegroup.add_widget(label);
+        pswitch.notify["active"].connect( () => {
+            if(pswitch.get_active()) {
+                plugin_loader.activate_single_plugin(module);
+            }
+            else {
+                plugin_loader.deactivate_single_plugin(module);
+            }
+        });
+        this.set_tooltip_markup(Markup.printf_escaped("%s", description));
+    }
+}
+

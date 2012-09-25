@@ -283,6 +283,7 @@ namespace Xnoise {
 			public Information (string xplug_file);
 			public bool load_info ();
 			public string author { get; }
+			public PluginCategory category { get; }
 			public string copyright { get; }
 			public string description { get; }
 			public string icon { get; }
@@ -300,6 +301,7 @@ namespace Xnoise {
 			public Loader ();
 			public bool activate_single_plugin (string module);
 			public void deactivate_single_plugin (string module);
+			public bool loaded { get; private set; }
 			public signal void sign_plugin_activated (Xnoise.PluginModule.Container p);
 			public signal void sign_plugin_deactivated (Xnoise.PluginModule.Container p);
 		}
@@ -1272,6 +1274,15 @@ namespace Xnoise {
 	public static void remove_data_source_by_id (int id);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static bool thumbnail_available (string uri, out GLib.File? _thumb);
+}
+[CCode (cheader_filename = "xnoise-1.0.h")]
+public enum PluginCategory {
+	UNSPECIFIED,
+	ALBUM_ART_PROVIDER,
+	LYRICS_PROVIDER,
+	GUI,
+	MUSIC_STORE,
+	ADDITIONAL
 }
 [CCode (cheader_filename = "xnoise-1.0.h")]
 [DBus (name = "org.gtk.xnoise.PlayerEngine")]

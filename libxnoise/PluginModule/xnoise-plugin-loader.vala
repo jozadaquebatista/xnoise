@@ -36,6 +36,8 @@ public class Xnoise.PluginModule.Loader : Object {
     private Information info;
     private GLib.List<string> info_files;
     private string[] banned_plugins;
+    
+    public bool loaded { get; private set; default = false; }
 
     public signal void sign_plugin_activated(Container p);
     public signal void sign_plugin_deactivated(Container p);
@@ -43,7 +45,6 @@ public class Xnoise.PluginModule.Loader : Object {
     public Loader() {
         assert(Module.supported());
         this.xn = Main.instance;
-        
         // setup banned 
         banned_plugins = {};
         banned_plugins += "LastfmCovers";       //was merged into lastfm plugin
@@ -95,6 +96,7 @@ public class Xnoise.PluginModule.Loader : Object {
         }
         if(info_files.length()==0) print("No plugin inforamtion found\n");
         //foreach(string s in lyrics_plugins_htable.get_keys()) print("%s in plugin ht\n", s);
+        loaded = true;
         return true;
     }
 

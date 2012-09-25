@@ -106,7 +106,7 @@ public class Xnoise.AzlyricsPlugin : GLib.Object, IPlugin, ILyricsProvider {
     public bool has_settings_widget() {
         return false;
     }
-    
+
     public Xnoise.ILyrics* from_tags(LyricsLoader loader, string artist, string title, LyricsFetchedCallback cb) {
         return (ILyrics*)new Azlyrics(loader, _owner, artist, title, cb);
     }

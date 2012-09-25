@@ -38,52 +38,18 @@ public class Xnoise.PluginModule.Information : GLib.Object {
     private string _name;
     private string _website;
     private string _xplug_file;
-
-    public string xplug_file { 
-        get {
-            return _xplug_file;
-        }
-    }
-    public string name { 
-        get {
-            return _name;
-        }
-    }
-    public string icon {
-        get {
-            return _icon;
-        }
-    }
-    public string module {
-        get {
-            return _module;
-        }
-    }
-    public string description {
-        get {
-            return _description;
-        }
-    }
-    public string website {
-        get {
-            return _website;
-        }
-    }
-    public string license {
-        get {
-            return _license;
-        }
-    }
-    public string copyright {
-        get {
-            return _copyright;
-        }
-    }
-    public string author {
-        get {
-            return _author;
-        }
-    }
+    private PluginCategory _category = PluginCategory.UNSPECIFIED;
+    
+    public string xplug_file        { get { return _xplug_file; } }
+    public string name              { get { return _name; } }
+    public string icon              { get { return _icon; } }
+    public string module            { get { return _module; } }
+    public string description       { get { return _description; } }
+    public string website           { get { return _website; } }
+    public string license           { get { return _license; } }
+    public string copyright         { get { return _copyright; } }
+    public string author            { get { return _author; } }
+    public PluginCategory category  { get { return _category; } }
 
     public Information(string xplug_file) {
         this._xplug_file = xplug_file;
@@ -104,6 +70,36 @@ public class Xnoise.PluginModule.Information : GLib.Object {
             _website     = kf.get_string(group, "website");
             _license     = kf.get_string(group, "license");
             _copyright   = kf.get_string(group, "copyright");
+            string cat   = kf.get_string(group, "category");
+            switch(cat.down()) {
+                case "music_store":
+                case "music-store":
+                case "musicstore":
+                case "music store":
+                    _category = PluginCategory.MUSIC_STORE;
+                    break;
+                case "album_art":
+                case "album_art_provider":
+                case "album-art":
+                case "album art":
+                    _category = PluginCategory.ALBUM_ART_PROVIDER;
+                    break;
+                case "lyrics_provider":
+                case "lyrics":
+                    _category = PluginCategory.LYRICS_PROVIDER;
+                    break;
+                case "user interface":
+                case "gui":
+                case "ui":
+                    _category = PluginCategory.GUI;
+                    break;
+                case "additional":
+                    _category = PluginCategory.ADDITIONAL;
+                    break;
+                default: // "unspecified"
+                    _category = PluginCategory.UNSPECIFIED;
+                    break;
+            }
         }
         catch(FileError e) {
             print("Error plugin information: %s\n", e.message);

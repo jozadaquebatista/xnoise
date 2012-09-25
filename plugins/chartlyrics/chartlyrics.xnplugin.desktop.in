@@ -4,6 +4,7 @@ module=chartlyrics
 _description=Load lyrics from chartlyrics.com
 website=https://github.com/shuerhaaken/xnoise
 icon=/path/to/icon
+category=lyrics_provider
 copyright=Copyright © 2010 Andreas Obergrusberger 
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
 author=Andreas Obergrusberger <softshaker@googlemail.com>

@@ -77,6 +77,10 @@ public class Xnoise.PluginModule.Container : TypeModule {
                 deactivate();
         });
     }
+    
+    ~Container() {
+        print("dtor container of %s\n", info.name);
+    }
 
     public override bool load() {
         //print("load_plugin_module %s\n", _info.name);

@@ -681,6 +681,8 @@ typedef struct _XnoisePluginModuleInformation XnoisePluginModuleInformation;
 typedef struct _XnoisePluginModuleInformationClass XnoisePluginModuleInformationClass;
 typedef struct _XnoisePluginModuleInformationPrivate XnoisePluginModuleInformationPrivate;
 
+#define TYPE_PLUGIN_CATEGORY (plugin_category_get_type ())
+
 #define XNOISE_PLUGIN_MODULE_TYPE_LOADER (xnoise_plugin_module_loader_get_type ())
 #define XNOISE_PLUGIN_MODULE_LOADER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_PLUGIN_MODULE_TYPE_LOADER, XnoisePluginModuleLoader))
 #define XNOISE_PLUGIN_MODULE_LOADER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_PLUGIN_MODULE_TYPE_LOADER, XnoisePluginModuleLoaderClass))
@@ -1746,6 +1748,15 @@ struct _XnoisePluginModuleInformationClass {
 	GObjectClass parent_class;
 };
 
+typedef enum  {
+	PLUGIN_CATEGORY_UNSPECIFIED,
+	PLUGIN_CATEGORY_ALBUM_ART_PROVIDER,
+	PLUGIN_CATEGORY_LYRICS_PROVIDER,
+	PLUGIN_CATEGORY_GUI,
+	PLUGIN_CATEGORY_MUSIC_STORE,
+	PLUGIN_CATEGORY_ADDITIONAL
+} PluginCategory;
+
 struct _XnoisePluginModuleLoader {
 	GObject parent_instance;
 	XnoisePluginModuleLoaderPrivate * priv;
@@ -2708,6 +2719,8 @@ const gchar* xnoise_plugin_module_information_get_website (XnoisePluginModuleInf
 const gchar* xnoise_plugin_module_information_get_license (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_copyright (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_author (XnoisePluginModuleInformation* self);
+GType plugin_category_get_type (void) G_GNUC_CONST;
+PluginCategory xnoise_plugin_module_information_get_category (XnoisePluginModuleInformation* self);
 gboolean xnoise_plugin_module_iplugin_init (XnoisePluginModuleIPlugin* self);
 void xnoise_plugin_module_iplugin_uninit (XnoisePluginModuleIPlugin* self);
 gboolean xnoise_plugin_module_iplugin_has_settings_widget (XnoisePluginModuleIPlugin* self);
@@ -2722,6 +2735,7 @@ XnoisePluginModuleLoader* xnoise_plugin_module_loader_new (void);
 XnoisePluginModuleLoader* xnoise_plugin_module_loader_construct (GType object_type);
 gboolean xnoise_plugin_module_loader_activate_single_plugin (XnoisePluginModuleLoader* self, const gchar* module);
 void xnoise_plugin_module_loader_deactivate_single_plugin (XnoisePluginModuleLoader* self, const gchar* module);
+gboolean xnoise_plugin_module_loader_get_loaded (XnoisePluginModuleLoader* self);
 #define XNOISE_RESOURCES_UNKNOWN_ARTIST "unknown artist"
 #define XNOISE_RESOURCES_UNKNOWN_TITLE "unknown title"
 #define XNOISE_RESOURCES_UNKNOWN_ALBUM "unknown album"

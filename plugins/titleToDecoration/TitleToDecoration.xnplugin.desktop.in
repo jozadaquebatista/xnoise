@@ -4,6 +4,7 @@ module=TitleToDecoration
 _description=Set the window name to the current title
 website=https://github.com/shuerhaaken/xnoise/
 icon=/path/to/icon
+category=gui
 copyright=Copyright © 2009 Jörn Magens 
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins
 author=Jörn Magens <shuerhaaken@googlemail.com>

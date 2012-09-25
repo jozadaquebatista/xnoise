@@ -87,7 +87,6 @@ public class MagnatunePlugin : GLib.Object, IPlugin {
         return true;
     }
     
-
     public signal void login_state_change();
     
     internal string username;
