@@ -5,12 +5,12 @@
   <object class="GtkNotebook" id="notebook1">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
+    <property name="show_border">False</property>
     <property name="scrollable">True</property>
     <child>
       <object class="GtkScrolledWindow" id="scrolledwindow1">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="shadow_type">in</property>
         <child>
           <object class="GtkViewport" id="viewport1">
             <property name="visible">True</property>

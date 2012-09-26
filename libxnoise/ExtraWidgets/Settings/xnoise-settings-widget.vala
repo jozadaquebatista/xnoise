@@ -325,7 +325,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             Gtk.Image back_image;
             
             if(IconTheme.get_default().has_icon("network-transmit-symbolic"))
-                back_image = new Gtk.Image.from_icon_name("user-home-symbolic", IconSize.SMALL_TOOLBAR);
+                back_image = new Gtk.Image.from_icon_name("user-home-symbolic", IconSize.LARGE_TOOLBAR);
             else
                 back_image = new Gtk.Image.from_stock(Stock.HOME, IconSize.SMALL_TOOLBAR);
             var back_button = new Button();
