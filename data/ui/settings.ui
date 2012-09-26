@@ -5,7 +5,6 @@
   <object class="GtkNotebook" id="notebook1">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
-    <property name="show_border">False</property>
     <property name="scrollable">True</property>
     <child>
       <object class="GtkScrolledWindow" id="scrolledwindow1">
@@ -21,22 +20,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="headline_general">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">8</property>
-                    <property name="margin_bottom">5</property>
-                    <property name="xalign">0</property>
-                    <property name="xpad">3</property>
-                    <property name="label" translatable="yes">headline</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkBox" id="box6">
                     <property name="visible">True</property>
@@ -212,6 +195,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="xalign">2.2351741291171123e-10</property>
+                            <property name="xpad">3</property>
                             <property name="label" translatable="yes">Media browser fontsize:</property>
                             <property name="wrap">True</property>
                           </object>
@@ -225,7 +209,7 @@
                         <child>
                           <object class="GtkSpinButton" id="spinbutton1">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="margin_left">2</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">2</property>
@@ -270,7 +254,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_top">4</property>
+                        <property name="margin_top">6</property>
                         <property name="margin_bottom">2</property>
                         <property name="xalign">0</property>
                         <property name="xpad">2</property>
@@ -332,7 +316,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -344,7 +328,7 @@
                       <object class="GtkLabel" id="lyric_provider_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_top">4</property>
+                        <property name="margin_top">6</property>
                         <property name="margin_bottom">2</property>
                         <property name="xalign">0</property>
                         <property name="xpad">2</property>
@@ -362,7 +346,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -375,7 +359,7 @@
                       <object class="GtkLabel" id="music_store_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_top">4</property>
+                        <property name="margin_top">6</property>
                         <property name="margin_bottom">2</property>
                         <property name="xalign">0</property>
                         <property name="xpad">2</property>
@@ -393,7 +377,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -437,82 +421,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkLabel" id="headline_plugin">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">8</property>
-            <property name="margin_bottom">5</property>
-            <property name="xalign">0</property>
-            <property name="xpad">3</property>
-            <property name="label" translatable="yes">label</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="scrollWinPlugins">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">never</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child type="tab">
-      <object class="GtkBox" id="box3">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkImage" id="image2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="stock">gtk-dnd-multiple</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label6">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Plugins</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="position">1</property>
-        <property name="tab_fill">False</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkBox" id="mediabox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -522,7 +430,7 @@
         </child>
       </object>
       <packing>
-        <property name="position">2</property>
+        <property name="position">1</property>
       </packing>
     </child>
     <child type="tab">
@@ -556,7 +464,7 @@
         </child>
       </object>
       <packing>
-        <property name="position">2</property>
+        <property name="position">1</property>
         <property name="tab_fill">False</property>
       </packing>
     </child>
@@ -578,7 +486,6 @@
     <property name="mode">both</property>
     <widgets>
       <widget name="box2"/>
-      <widget name="box3"/>
       <widget name="box4"/>
     </widgets>
   </object>

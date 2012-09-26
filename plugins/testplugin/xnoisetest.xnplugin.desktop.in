@@ -1,5 +1,6 @@
 [XnoisePlugin]
 name=Test
+_pretty-name=Basic Demo Plugin for Developers
 module=xnoisetest
 _description=Demo plugin for xnoise
 website=https://github.com/shuerhaaken/xnoise/

@@ -1,5 +1,6 @@
 [XnoisePlugin]
 name=Lyricwiki
+_pretty-name=Lyricwiki
 module=Lyricwiki
 _description=Load lyrics from http://www.lyricwiki.com
 website=https://github.com/shuerhaaken/xnoise/

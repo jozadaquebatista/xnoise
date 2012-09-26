@@ -1,5 +1,6 @@
 [XnoisePlugin]
 name=TitleToDecoration
+_pretty-name=Show song title in window bar
 module=TitleToDecoration
 _description=Set the window name to the current title
 website=https://github.com/shuerhaaken/xnoise/

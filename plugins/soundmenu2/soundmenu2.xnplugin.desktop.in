@@ -1,5 +1,6 @@
 [XnoisePlugin]
 name=soundmenu2
+_pretty-name=Ubuntu Soundmenu Integration
 module=soundmenu2
 _description=Use ubuntu/ayatana soundmenu integration
 website=https://github.com/shuerhaaken/xnoise/

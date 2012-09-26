@@ -1,9 +1,10 @@
 [XnoisePlugin]
 name=lastfm
+_pretty-name=LastFm web service integration
 module=lastfm
 _description=Use lastfm's web services
 website=https://github.com/shuerhaaken/xnoise
-icon=/path/to/icon
+icon=xn-lastfm
 category=additional
 copyright=Copyright © 2011 Jörn Magens
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins

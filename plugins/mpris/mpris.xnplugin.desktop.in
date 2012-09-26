@@ -1,5 +1,6 @@
 [XnoisePlugin]
 name=mpris
+_pretty-name=Mpris v2 Dbus Service
 module=mpris
 _description=Control xnoise with a MPRIS v2 dbus interface
 website=https://github.com/shuerhaaken/xnoise/

@@ -2712,6 +2712,7 @@ XnoisePluginModuleInformation* xnoise_plugin_module_information_construct (GType
 gboolean xnoise_plugin_module_information_load_info (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_xplug_file (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_name (XnoisePluginModuleInformation* self);
+const gchar* xnoise_plugin_module_information_get_pretty_name (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_icon (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_module (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_description (XnoisePluginModuleInformation* self);

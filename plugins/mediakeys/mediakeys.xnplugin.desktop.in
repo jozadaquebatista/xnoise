@@ -1,5 +1,6 @@
 [XnoisePlugin]
 name=mediakeys
+_pretty-name=Media Control Keys
 module=mediakeys
 _description=Control xnoise using mediakeys
 website=https://github.com/shuerhaaken/xnoise/

@@ -29,6 +29,8 @@
  */
 
 public class Xnoise.PluginModule.Information : GLib.Object {
+    private const string group = "XnoisePlugin";
+
     private string _author;
     private string _copyright;
     private string _description;
@@ -36,41 +38,50 @@ public class Xnoise.PluginModule.Information : GLib.Object {
     private string _license;
     private string _module;
     private string _name;
+    private string _pretty_name;
     private string _website;
     private string _xplug_file;
     private PluginCategory _category = PluginCategory.UNSPECIFIED;
     
-    public string xplug_file        { get { return _xplug_file; } }
-    public string name              { get { return _name; } }
-    public string icon              { get { return _icon; } }
-    public string module            { get { return _module; } }
-    public string description       { get { return _description; } }
-    public string website           { get { return _website; } }
-    public string license           { get { return _license; } }
-    public string copyright         { get { return _copyright; } }
-    public string author            { get { return _author; } }
-    public PluginCategory category  { get { return _category; } }
+    public string xplug_file        { get { return _xplug_file;     } }
+    public string name              { get { return _name;           } }
+    public string pretty_name       { get { return _pretty_name;    } }
+    public string icon              { get { return _icon;           } }
+    public string module            { get { return _module;         } }
+    public string description       { get { return _description;    } }
+    public string website           { get { return _website;        } }
+    public string license           { get { return _license;        } }
+    public string copyright         { get { return _copyright;      } }
+    public string author            { get { return _author;         } }
+    public PluginCategory category  { get { return _category;       } }
+
 
     public Information(string xplug_file) {
         this._xplug_file = xplug_file;
     }
 
-    private const string group = "XnoisePlugin";
 
     public bool load_info() {
         var kf = new KeyFile();
         try    {
             kf.load_from_file(xplug_file, KeyFileFlags.NONE);
-            if (!kf.has_group(group)) return false;
+            if (!kf.has_group(group))
+                return false;
             _name        = kf.get_locale_string(group, "name");
             _description = kf.get_locale_string(group, "description");
+            if(kf.has_key(group, "pretty-name"))
+                _pretty_name = kf.get_locale_string(group, "pretty-name");
+            else
+                _pretty_name = _name;
             _module      = kf.get_string(group, "module");
             _icon        = kf.get_string(group, "icon");
             _author      = kf.get_string(group, "author");
             _website     = kf.get_string(group, "website");
             _license     = kf.get_string(group, "license");
             _copyright   = kf.get_string(group, "copyright");
-            string cat   = kf.get_string(group, "category");
+            string cat = "";
+            if(kf.has_key(group, "category"))
+                cat = kf.get_string(group, "category");
             switch(cat.down()) {
                 case "music_store":
                 case "music-store":

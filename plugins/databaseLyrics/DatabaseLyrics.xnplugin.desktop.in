@@ -1,5 +1,6 @@
 [XnoisePlugin]
 name=DatabaseLyrics
+_pretty-name=Database buffer for lyrics
 module=DatabaseLyrics
 _description=Buffer lyrics in database
 website=https://github.com/shuerhaaken/xnoise

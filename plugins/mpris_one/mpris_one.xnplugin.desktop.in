@@ -1,5 +1,6 @@
 [XnoisePlugin]
 name=mprisone
+_pretty-name=Mpris v1 Dbus Service
 module=mprisone
 _description=Control xnoise with a MPRIS v1 dbus interface
 website=https://github.com/shuerhaaken/xnoise/

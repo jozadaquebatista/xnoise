@@ -1,5 +1,6 @@
 [XnoisePlugin]
 name=notifications
+_pretty-name=Desktop Notifications
 module=notifications
 _description=Show notifications one track change
 website=https://github.com/shuerhaaken/xnoise/

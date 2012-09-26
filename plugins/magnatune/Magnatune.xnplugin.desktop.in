@@ -1,9 +1,10 @@
 [XnoisePlugin]
 name=Magnatune
+_pretty-name=Magnatune Music Subscription
 module=Magnatune
 _description=Magnatune Music Store
 website=http://magnatune.com/
-icon=/path/to/icon
+icon=xn-magnatune
 category=music_store
 copyright=Copyright © 2012 Jörn Magens 
 license=GPLv2 + exception for distribution with non-GPL compatible gstreamer plugins

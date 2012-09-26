@@ -1,5 +1,6 @@
 [XnoisePlugin]
 name=Azlyrics
+_pretty-name=Azlyrics
 module=azlyrics
 _description=Load lyrics from azlyrics.com
 website=https://github.com/shuerhaaken/xnoise

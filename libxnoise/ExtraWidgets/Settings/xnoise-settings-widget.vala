@@ -35,13 +35,11 @@ using Xnoise.Resources;
 
 
 public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
-    private unowned Main xn;
+    private Builder builder;
     private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
-    private PluginManagerTree plugin_manager_tree;
     private Notebook notebook;
     private SpinButton sb;
     private int fontsizeMB;
-    private ScrolledWindow scrollWinPlugins;
     private Switch switch_showL;
     private Switch switch_compact;
     private Switch switch_usestop;
@@ -53,7 +51,6 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     
     private enum NotebookTabs {
         GENERAL = 0,
-        PLUGINS,
         MEDIA,
         N_FIXED_TABS
     }
@@ -73,7 +70,6 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     
     public SettingsWidget() {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
-        this.xn = Main.instance;
         try {
             this.setup_widgets();
         }
@@ -223,18 +219,26 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
 
     private void add_plugin_tabs() {
         int count = 0;
+        
         foreach(string name in plugin_loader.plugin_htable.get_keys()) {
             unowned PluginModule.Container p = plugin_loader.plugin_htable.lookup(name);
             if((p.activated) && (p.configurable)) {
                 Widget? w = p.settingwidget();
                 
                 if(w!=null) {
-                    var l = new Gtk.Label(name);
-                    tab_sizegroup.add_widget(l);
+                    var b = new Gtk.Box(Orientation.VERTICAL, 0);
+                    var i = new Gtk.Image.from_icon_name(p.info.icon, IconSize.BUTTON);
+                    string n = name.substring(0, 1).up() + name.substring(1, name.length - 1);
+                    var l = new Gtk.Label(n);
+                    l.max_width_chars = 10;
+                    b.pack_start(i, true, true, 0);
+                    b.pack_start(l, false, false, 0);
                     var scw = new ScrolledWindow(null, null);
                     scw.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
                     scw.add_with_viewport(w);
-                    notebook.append_page(scw, l);
+                    b.show_all();
+                    notebook.append_page(scw, b);
+                    scw.show_all();
                 }
                 
                 count++;
@@ -266,18 +270,10 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
         this.show_all();
     }
 
-    private Gtk.SizeGroup tab_sizegroup;
-    
-    private Builder builder;
     private bool setup_widgets() {
         builder = new Builder();
         try {
             this.builder.add_from_file(SETTINGS_UI_FILE);
-            var headline_general = this.builder.get_object("headline_general") as Gtk.Label;
-            headline_general.set_markup("<span size=\"xx-large\"><b> "
-                                        + Markup.printf_escaped(_("Settings")) +
-                                        "</b></span>");
-            headline_general.use_markup= true;
             
             var general_label = this.builder.get_object("label1") as Gtk.Label;
             general_label.set_text(_("Settings"));
@@ -285,11 +281,6 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             plugins_label.set_text(_("Plugins"));
             var media_label = this.builder.get_object("media_label") as Gtk.Label;
             media_label.set_text(_("Media"));
-            
-            tab_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-            tab_sizegroup.add_widget(general_label);
-            tab_sizegroup.add_widget(plugins_label);
-            tab_sizegroup.add_widget(media_label);
             
             plugin_label_sizegroup = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
             
@@ -348,26 +339,9 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             sb.configure(new Gtk.Adjustment(8.0, 7.0, 14.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
             sb.set_numeric(true);
             
-            scrollWinPlugins = this.builder.get_object("scrollWinPlugins") as Gtk.ScrolledWindow;
-            scrollWinPlugins.set_policy(PolicyType.AUTOMATIC, PolicyType.AUTOMATIC);
-            scrollWinPlugins.shadow_type = ShadowType.IN;
-            var headline_plugin = this.builder.get_object("headline_plugin") as Gtk.Label;
-            headline_plugin.set_markup("<span size=\"xx-large\"><b> " +
-                                       Markup.printf_escaped(_("Plugins")) +
-                                       "</b></span>");
             var mediabox = this.builder.get_object("mediabox") as Gtk.Box;
             add_media_widget = new AddMediaWidget();
             mediabox.pack_start(add_media_widget, true, true, 0);
-            headline_plugin.use_markup= true;
-            Timeout.add_seconds(2, () => {
-                add_plugin_tabs();
-                plugin_manager_tree = new PluginManagerTree();
-                scrollWinPlugins.add(plugin_manager_tree);
-                
-                plugin_manager_tree.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
-                this.show_all();
-                return false;
-            });
             var music_store_box = this.builder.get_object("music_store_box") as Gtk.Box;
             var lyric_provider_box = this.builder.get_object("lyric_provider_box") as Gtk.Box;
             Timeout.add_seconds(1, () => {
@@ -378,6 +352,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
                 
                 insert_plugin_switches(lyric_provider_box, PluginCategory.LYRICS_PROVIDER);
                 insert_plugin_switches(music_store_box, PluginCategory.MUSIC_STORE);
+                add_plugin_tabs();
                 return false;
             });
         }
@@ -391,16 +366,17 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     
     private void insert_plugin_switches(Box box, PluginCategory cat) {
         bool has_member = false;
-        foreach(string info_file in plugin_loader.get_info_files()) {
-            //print("insert info_file: %s\n", info_file);
-            var plugin_switch = new PluginSwitch(info_file, this.plugin_label_sizegroup);
-            if(plugin_switch.plugin_category != PluginCategory.MUSIC_STORE)
+        foreach(string plugin_name in plugin_loader.plugin_htable.get_keys()) {
+            if(plugin_loader.plugin_htable.lookup(plugin_name).info.category != cat)
                 continue;
+            //print("#name: %s  category: %s\n", plugin_loader.plugin_htable.lookup(plugin_name).info.name, plugin_loader.plugin_htable.lookup(plugin_name).info.category.to_string());
+            var plugin_switch = new PluginSwitch(plugin_name, this.plugin_label_sizegroup);
             box.pack_start(plugin_switch,
                            false,
                            false,
                            2
                            );
+            plugin_switch.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
             has_member = true;
         }
         if(has_member) {
@@ -417,35 +393,23 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
 
 
 private class Xnoise.PluginSwitch : Gtk.Box {
-    
-    private const string group = "XnoisePlugin";
-    
-    private string info_file_path;
     private string plugin_name;
-    private string description;
-    private string icon;
-    private string author;
-    private string website;
-    private string license;
-    private string copyright;
-    private string module;
-    
     private Gtk.Switch pswitch;
     private weak PluginModule.Container pc = null;
     private Gtk.SizeGroup label_sizegroup;
-    private PluginCategory _plugin_category;
     
     public PluginCategory plugin_category { 
-        get { return _plugin_category; }
+        get { return pc.info.category; }
     }
     
-    public PluginSwitch(string info_file_path, Gtk.SizeGroup label_sizegroup) {
-        this.info_file_path = info_file_path;
+    public signal void sign_plugin_activestate_changed(string name);
+    
+    
+    public PluginSwitch(string plugin_name, Gtk.SizeGroup label_sizegroup) {
+        this.plugin_name = plugin_name;
         this.label_sizegroup = label_sizegroup;
         
-        assert(load_info());
-        
-        _plugin_category = pc.info.category;
+        assert(get_plugin_reference());
         
         create_widgets();
         init_value();
@@ -456,9 +420,7 @@ private class Xnoise.PluginSwitch : Gtk.Box {
     
     
     private void init_value() {
-        this.pswitch.freeze_notify();
         this.pswitch.set_active(pc.activated);
-        this.pswitch.thaw_notify();
     }
     
     private void connect_signals() {
@@ -478,36 +440,15 @@ private class Xnoise.PluginSwitch : Gtk.Box {
         });
     }
     
-    private bool load_info() { // TODO this should not be done here!
-        try {
-            var kf = new KeyFile();
-            kf.load_from_file(info_file_path, KeyFileFlags.NONE);
-            if(!kf.has_group(group))
-                return false;
-            plugin_name = kf.get_string(group, "name");
-            description = kf.get_locale_string(group, "description");
-            module      = kf.get_string(group, "module");
-            icon        = kf.get_string(group, "icon");
-            author      = kf.get_string(group, "author");
-            website     = kf.get_string(group, "website");
-            license     = kf.get_string(group, "license");
-            copyright   = kf.get_string(group, "copyright");
-        }
-        catch(Error e) {
-            print("Error plugin information: %s\n", e.message);
-            return false;
-        }
-        
-        pc = plugin_loader.plugin_htable.lookup(module);
-        
+    private bool get_plugin_reference() {
+        pc = plugin_loader.plugin_htable.lookup(this.plugin_name);
         if(pc == null)
             return false;
-            
         return true;
     }
     
     private void create_widgets() {
-        var label = new Gtk.Label(plugin_name);
+        var label = new Gtk.Label(pc.info.pretty_name);
         label.set_alignment(0.0f, 0.5f);
         label.justify = Justification.LEFT;
         label.xpad = 3;
@@ -518,13 +459,15 @@ private class Xnoise.PluginSwitch : Gtk.Box {
         label_sizegroup.add_widget(label);
         pswitch.notify["active"].connect( () => {
             if(pswitch.get_active()) {
-                plugin_loader.activate_single_plugin(module);
+                plugin_loader.activate_single_plugin(plugin_name);
+                sign_plugin_activestate_changed(plugin_name);
             }
             else {
-                plugin_loader.deactivate_single_plugin(module);
+                plugin_loader.deactivate_single_plugin(plugin_name);
+                sign_plugin_activestate_changed(plugin_name);
             }
         });
-        this.set_tooltip_markup(Markup.printf_escaped("%s", description));
+        this.set_tooltip_markup(Markup.printf_escaped("%s", pc.info.description));
     }
 }
 

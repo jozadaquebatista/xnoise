@@ -290,6 +290,7 @@ namespace Xnoise {
 			public string license { get; }
 			public string module { get; }
 			public string name { get; }
+			public string pretty_name { get; }
 			public string website { get; }
 			public string xplug_file { get; }
 		}
