@@ -321,7 +321,13 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             plugin_label_sizegroup.add_widget(label_equalizer);
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;
-            var back_image = new Gtk.Image.from_icon_name("user-home-symbolic", IconSize.SMALL_TOOLBAR);
+            
+            Gtk.Image back_image;
+            
+            if(IconTheme.get_default().has_icon("network-transmit-symbolic"))
+                back_image = new Gtk.Image.from_icon_name("user-home-symbolic", IconSize.SMALL_TOOLBAR);
+            else
+                back_image = new Gtk.Image.from_stock(Stock.HOME, IconSize.SMALL_TOOLBAR);
             var back_button = new Button();
             back_button.add(back_image);
             back_button.tooltip_markup = Markup.printf_escaped(_("Go Back"));
