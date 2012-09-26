@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-25 21:33+0200\n"
+"POT-Creation-Date: 2012-09-26 12:01+0200\n"
 "PO-Revision-Date: 2012-04-03 22:06-0500\n"
 "Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
 "Language-Team: fsistemas <f.sistemas@gmail.com>\n"
@@ -142,57 +142,55 @@ msgstr "Agregar emisora de radio por internet"
 msgid "Leave fullscreen"
 msgstr "Salir de pantalla completa"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:278
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:279
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:285
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:356
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:281
 msgid "Plugins"
 msgstr "Complementos"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:287
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
 #, fuzzy
 msgid "Media"
 msgstr "Mostrar medios"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:299
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:290
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "Activar las líneas de cuadrícula en el explorador de medios"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:305
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:296
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr ""
 "No volver a mostrar la pantalla de vídeo mientras se cierne la imagen del "
 "álbum"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:311
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
 #, fuzzy
 msgid "Application Menu"
 msgstr "Mostrar el menú principal de la aplicación"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:317
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:308
 #, fuzzy
 msgid "Stop button"
 msgstr "Mostrar el botón detener"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:323
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:314
 msgid "Quit on close"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:329
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:320
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1596
 msgid "Equalizer"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 msgid "Go Back"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
 msgid "Media browser fontsize:"
 msgstr "Tamaño de fuente en el explorador de medios:"
 
@@ -747,6 +745,10 @@ msgstr ""
 "de línea de comandos. \n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
+msgid "Database buffer for lyrics"
+msgstr ""
+
+#: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Buffer lyrics in database"
 msgstr "Guardar las letras en la base de datos"
 
@@ -789,31 +791,63 @@ msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
 msgstr "Enviar las canciones que se reproducen a lastfm"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Basic Demo Plugin for Developers"
+msgstr "Complemento de prueba para xnoise"
+
+#: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:2
 msgid "Demo plugin for xnoise"
 msgstr "Complemento de prueba para xnoise"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
+msgid "Chartlyrics"
+msgstr ""
+
+#: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from chartlyrics.com"
 msgstr "Cargar letras desde chartlyrics.com"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
+msgid "LastFm web service integration"
+msgstr ""
+
+#: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:2
 msgid "Use lastfm's web services"
 msgstr "Usar los servicios web de last.fm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Lyricwiki"
+msgstr "_Letra"
+
+#: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:2
 msgid "Load lyrics from http://www.lyricwiki.com"
 msgstr "Cargar letras desde http://www.lyricwiki.com"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
 #, fuzzy
+msgid "Azlyrics"
+msgstr "Letra"
+
+#: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:2
+#, fuzzy
 msgid "Load lyrics from azlyrics.com"
 msgstr "Cargar letras desde chartlyrics.com"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Media Control Keys"
+msgstr "Volver a _escanear la collección"
+
+#: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:2
 msgid "Control xnoise using mediakeys"
 msgstr "Controlar xnoise usando teclas multimedia"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
+msgid "Magnatune Music Subscription"
+msgstr ""
+
+#: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:2
 msgid "Magnatune Music Store"
 msgstr ""
 
@@ -870,27 +904,52 @@ msgid "loading..."
 msgstr "Cargando..."
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
+msgid "Mpris v2 Dbus Service"
+msgstr ""
+
+#: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v2 dbus interface"
 msgstr "Controlar xnoise con la interfaz dbus MPRIS v2"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
+msgid "Mpris v1 Dbus Service"
+msgstr ""
+
+#: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "Controlar xnoise con la interfaz dbus MPRIS v1"
 
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
+msgid "Desktop Notifications"
+msgstr ""
+
+#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:2
 msgid "Show notifications one track change"
 msgstr "Mostrar notificaciones al cambio de pista en reproducción"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 #, fuzzy
+msgid "Ubuntu Soundmenu Integration"
+msgstr "Integrar xnoise en el menú del sonido del sistema"
+
+#: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:2
+#, fuzzy
 msgid "Use ubuntu/ayatana soundmenu integration"
 msgstr "Integrar xnoise en el menú del sonido del sistema"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
+msgid "Show song title in window bar"
+msgstr ""
+
+#: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
 msgstr "Establecer el nombre de la ventana con el título actual"
 
 #: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+msgid "UbuntuOne Music Store"
+msgstr ""
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
 msgid "Ubuntu One Music Store"
 msgstr ""
 
@@ -944,9 +1003,6 @@ msgstr ""
 #~ msgid "Tracklist"
 #~ msgstr "Lista de reproducción"
 
-#~ msgid "Lyrics"
-#~ msgstr "Letra"
-
 #, fuzzy
 #~ msgid "Hide Library"
 #~ msgstr "Ocultar medios"
@@ -992,10 +1048,6 @@ msgstr ""
 
 #~ msgid "Add local file"
 #~ msgstr "Agregar archivo local"
-
-#, fuzzy
-#~ msgid "Lyricwiki"
-#~ msgstr "_Letra"
 
 #~ msgid "_Video screen"
 #~ msgstr "_Video"

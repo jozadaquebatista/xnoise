@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-25 21:33+0200\n"
+"POT-Creation-Date: 2012-09-26 12:01+0200\n"
 "PO-Revision-Date: 2012-09-14 15:26+0200\n"
 "Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -132,55 +132,53 @@ msgstr "Přidat odkaz na internetové rádio"
 msgid "Leave fullscreen"
 msgstr "Opustit režim celé obrazovky"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:278
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:279
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:285
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:356
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:281
 msgid "Plugins"
 msgstr "Přídavné moduly"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:287
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
 #, fuzzy
 msgid "Media"
 msgstr "Zobrazit media"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:299
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:290
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "Povolit mřížku v prohlížeči médií"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:305
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:296
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr "Neukazovat pohled s videem, když je ukazovátko myši nad obrázkem alba."
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:311
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
 #, fuzzy
 msgid "Application Menu"
 msgstr "Ukázat hlavní nabídku programu"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:317
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:308
 #, fuzzy
 msgid "Stop button"
 msgstr "Používat tlačítko pro zastavení"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:323
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:314
 msgid "Quit on close"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:329
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:320
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1596
 msgid "Equalizer"
 msgstr "Ekvalizér"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 msgid "Go Back"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
 msgid "Media browser fontsize:"
 msgstr "Velikost písma v prohlížeči skladeb:"
 
@@ -720,6 +718,10 @@ msgid ""
 msgstr "Zadejte 'xnoise --help', pro celý seznam dostupných příkazů.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
+msgid "Database buffer for lyrics"
+msgstr ""
+
+#: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Buffer lyrics in database"
 msgstr "Uložit slova písní v databázi"
 
@@ -763,30 +765,62 @@ msgstr ""
 "statististik)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Basic Demo Plugin for Developers"
+msgstr "Ukázkový přídavný modul pro xnoise"
+
+#: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:2
 msgid "Demo plugin for xnoise"
 msgstr "Ukázkový přídavný modul pro xnoise"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
+msgid "Chartlyrics"
+msgstr "Chartlyrics"
+
+#: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from chartlyrics.com"
 msgstr "Slova písně stáhnout z chartlyrics.com"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
+msgid "LastFm web service integration"
+msgstr ""
+
+#: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:2
 msgid "Use lastfm's web services"
 msgstr "Použít služby Last.fm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
+msgid "Lyricwiki"
+msgstr "Lyricwiki"
+
+#: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:2
 msgid "Load lyrics from http://www.lyricwiki.com"
 msgstr "Slova písně stáhnout z lyricwiki.com"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Azlyrics"
+msgstr "Text písně"
+
+#: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from azlyrics.com"
 msgstr "Slova písně stáhnout z azlyrics.com"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Media Control Keys"
+msgstr "Sbírky multimédií"
+
+#: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:2
 msgid "Control xnoise using mediakeys"
 msgstr "Ovládat Xnoise pomocí multimediálních kláves"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Magnatune Music Subscription"
+msgstr "Hudební obchod Magnatune"
+
+#: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:2
 msgid "Magnatune Music Store"
 msgstr "Hudební obchod Magnatune"
 
@@ -846,26 +880,53 @@ msgid "loading..."
 msgstr "Nahrává se..."
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
+msgid "Mpris v2 Dbus Service"
+msgstr ""
+
+#: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v2 dbus interface"
 msgstr "Ovládat Xnoise přes rozhraní MPRIS v2"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
+msgid "Mpris v1 Dbus Service"
+msgstr ""
+
+#: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "Ovládat Xnoise přes rozhraní MPRIS v1"
 
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Desktop Notifications"
+msgstr "Upozornění"
+
+#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:2
 msgid "Show notifications one track change"
 msgstr "Oznámení ukázat při změně skladby"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Ubuntu Soundmenu Integration"
+msgstr "Používat začlenění do zvukové nabídky Ubuntu/Ayatana"
+
+#: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:2
 msgid "Use ubuntu/ayatana soundmenu integration"
 msgstr "Používat začlenění do zvukové nabídky Ubuntu/Ayatana"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
+msgid "Show song title in window bar"
+msgstr ""
+
+#: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
 msgstr "Název okna pojmenovat po současné skladbě"
 
 #: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "UbuntuOne Music Store"
+msgstr "Hudební obchod Ubuntu One"
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
 msgid "Ubuntu One Music Store"
 msgstr "Hudební obchod Ubuntu One"
 
@@ -924,9 +985,6 @@ msgstr "Zobrazit hudební obchod Ubuntu"
 #~ msgid "Tracklist"
 #~ msgstr "Seznam skladeb"
 
-#~ msgid "Lyrics"
-#~ msgstr "Text písně"
-
 #~ msgid "Hide Library"
 #~ msgstr "Skrýt knihovnu"
 
@@ -972,26 +1030,17 @@ msgstr "Zobrazit hudební obchod Ubuntu"
 #~ msgid "Test"
 #~ msgstr "Test"
 
-#~ msgid "Chartlyrics"
-#~ msgstr "Chartlyrics"
-
 #~ msgid "CyclicSaveState"
 #~ msgstr "Zyklisches Speichern"
 
 #~ msgid "LastfmCovers"
 #~ msgstr "Lastfm Obaly"
 
-#~ msgid "Lyricwiki"
-#~ msgstr "Lyricwiki"
-
 #~ msgid "mediakeys"
 #~ msgstr "Multimediální klávesy"
 
 #~ msgid "mpris"
 #~ msgstr "mpris"
-
-#~ msgid "notifications"
-#~ msgstr "Upozornění"
 
 #~ msgid "soundmenu"
 #~ msgstr "Zvukové menu"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-25 21:33+0200\n"
+"POT-Creation-Date: 2012-09-26 12:01+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -142,55 +142,53 @@ msgstr "Добавить ссылку на интернет-радио"
 msgid "Leave fullscreen"
 msgstr "Выйти из полноэкранного режима"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:278
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:279
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:285
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:356
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:281
 msgid "Plugins"
 msgstr "Дополнения"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:287
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
 #, fuzzy
 msgid "Media"
 msgstr "Показать панель медиа"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:299
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:290
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "Использовать затенение строк в списке воспроизведения"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:305
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:296
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr "Не показывать экран видео при наведении на иконку альбома"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:311
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
 #, fuzzy
 msgid "Application Menu"
 msgstr "Показывать главное меню"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:317
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:308
 #, fuzzy
 msgid "Stop button"
 msgstr "Использовать кнопку стоп"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:323
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:314
 msgid "Quit on close"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:329
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:320
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1596
 msgid "Equalizer"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 msgid "Go Back"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
 msgid "Media browser fontsize:"
 msgstr "Размер шрифта списка воспроизведения:"
 
@@ -735,6 +733,10 @@ msgstr ""
 "параметров.\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
+msgid "Database buffer for lyrics"
+msgstr ""
+
+#: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Buffer lyrics in database"
 msgstr "Сохранение текстов в базе данных"
 
@@ -777,30 +779,62 @@ msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
 msgstr "Скробблинг проигрываемых дорожек на lastfm"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Basic Demo Plugin for Developers"
+msgstr "Демонстрационный модуль для xnoise"
+
+#: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:2
 msgid "Demo plugin for xnoise"
 msgstr "Демонстрационный модуль для xnoise"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
+msgid "Chartlyrics"
+msgstr ""
+
+#: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from chartlyrics.com"
 msgstr "Загрузка текстов с chartlyrics.com"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
+msgid "LastFm web service integration"
+msgstr ""
+
+#: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:2
 msgid "Use lastfm's web services"
 msgstr "Использовать веб-сервисы lastfm"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Lyricwiki"
+msgstr "Тексты песен"
+
+#: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:2
 msgid "Load lyrics from http://www.lyricwiki.com"
 msgstr "Загрузка текстов с http://www.lyricwiki.com"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Azlyrics"
+msgstr "Тексты песен"
+
+#: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from azlyrics.com"
 msgstr "Загрузка текстов с azlyrics.com"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Media Control Keys"
+msgstr "П_ересканировать коллекцию"
+
+#: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:2
 msgid "Control xnoise using mediakeys"
 msgstr "Управление xnoise при помощи мультимедиа клавиш"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
+msgid "Magnatune Music Subscription"
+msgstr ""
+
+#: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:2
 msgid "Magnatune Music Store"
 msgstr ""
 
@@ -857,27 +891,52 @@ msgid "loading..."
 msgstr "Загрузка ..."
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
+msgid "Mpris v2 Dbus Service"
+msgstr ""
+
+#: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v2 dbus interface"
 msgstr "Управление xnoise при помощи интерфейса MPRIS2"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
+msgid "Mpris v1 Dbus Service"
+msgstr ""
+
+#: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "Управление xnoise при помощи интерфейса MPRIS"
 
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
+msgid "Desktop Notifications"
+msgstr ""
+
+#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:2
 msgid "Show notifications one track change"
 msgstr "Показ уведомлений при смене дорожки"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 #, fuzzy
+msgid "Ubuntu Soundmenu Integration"
+msgstr "Использование звукового меню ayatana"
+
+#: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:2
+#, fuzzy
 msgid "Use ubuntu/ayatana soundmenu integration"
 msgstr "Использование звукового меню ayatana"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
+msgid "Show song title in window bar"
+msgstr ""
+
+#: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
 msgstr "Установка заголовка окна в название текущей композиции"
 
 #: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+msgid "UbuntuOne Music Store"
+msgstr ""
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
 msgid "Ubuntu One Music Store"
 msgstr ""
 
@@ -926,9 +985,6 @@ msgstr ""
 
 #~ msgid "Tracklist"
 #~ msgstr "Список дорожек"
-
-#~ msgid "Lyrics"
-#~ msgstr "Тексты песен"
 
 #~ msgid "Hide Library"
 #~ msgstr "Скрыть библиотеку"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-25 21:33+0200\n"
+"POT-Creation-Date: 2012-09-26 12:01+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -129,55 +129,53 @@ msgstr "添加网络电台链接"
 msgid "Leave fullscreen"
 msgstr "离开全屏"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:278
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:279
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:285
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:356
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:281
 msgid "Plugins"
 msgstr "插件"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:287
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
 #, fuzzy
 msgid "Media"
 msgstr "显示媒体"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:299
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:290
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "在媒体浏览器中使用方格线"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:305
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:296
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr "当悬停在专辑封面上时不显示视频界面"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:311
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
 #, fuzzy
 msgid "Application Menu"
 msgstr "显示应用程序主菜单"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:317
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:308
 #, fuzzy
 msgid "Stop button"
 msgstr "使用停止按钮"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:323
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:314
 msgid "Quit on close"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:329
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:320
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1596
 msgid "Equalizer"
 msgstr "均衡器"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 msgid "Go Back"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
 msgid "Media browser fontsize:"
 msgstr "媒体浏览器字体大小："
 
@@ -704,6 +702,10 @@ msgid ""
 msgstr "运行 'xnoise --help' 查看命令行可用选项列表。\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
+msgid "Database buffer for lyrics"
+msgstr ""
+
+#: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Buffer lyrics in database"
 msgstr "在数据库缓存歌词"
 
@@ -746,30 +748,63 @@ msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
 msgstr "打乱 lastfm 已播放的歌曲"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Basic Demo Plugin for Developers"
+msgstr "xnoise 演示插件"
+
+#: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:2
 msgid "Demo plugin for xnoise"
 msgstr "xnoise 演示插件"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
+msgid "Chartlyrics"
+msgstr ""
+
+#: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from chartlyrics.com"
 msgstr "从 chartlyrics.com 加载歌词"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
+msgid "LastFm web service integration"
+msgstr ""
+
+#: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:2
 msgid "Use lastfm's web services"
 msgstr "使用 lastfm 网络服务"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Lyricwiki"
+msgstr "歌词"
+
+#: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:2
 msgid "Load lyrics from http://www.lyricwiki.com"
 msgstr "从 http://www.lyricwiki.com 加载歌词"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Azlyrics"
+msgstr "歌词"
+
+#: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from azlyrics.com"
 msgstr "从 azlyrics.com 加载歌词"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Media Control Keys"
+msgstr "媒体合集"
+
+#: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:2
 msgid "Control xnoise using mediakeys"
 msgstr "使用媒体键控制 xnoise"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Magnatune Music Subscription"
+msgstr "Magnatune 音乐商店"
+
+#: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:2
 msgid "Magnatune Music Store"
 msgstr "Magnatune 音乐商店"
 
@@ -829,26 +864,52 @@ msgid "loading..."
 msgstr "加载中..."
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
+msgid "Mpris v2 Dbus Service"
+msgstr ""
+
+#: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v2 dbus interface"
 msgstr "使用 MPRIS v2 dbus 界面控制 xnoise"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
+msgid "Mpris v1 Dbus Service"
+msgstr ""
+
+#: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "使用 MPRIS v1 dbus 界面控制 xnoise "
 
 #: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
+msgid "Desktop Notifications"
+msgstr ""
+
+#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:2
 msgid "Show notifications one track change"
 msgstr "歌曲改变时显示通知"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "Ubuntu Soundmenu Integration"
+msgstr "使用 ubuntu/ayatana 声音菜单集成"
+
+#: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:2
 msgid "Use ubuntu/ayatana soundmenu integration"
 msgstr "使用 ubuntu/ayatana 声音菜单集成"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
+msgid "Show song title in window bar"
+msgstr ""
+
+#: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
 msgstr "设置窗口名称为当前标题"
 
 #: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
+#, fuzzy
+msgid "UbuntuOne Music Store"
+msgstr "Ubuntu One 音乐商店"
+
+#: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
 msgid "Ubuntu One Music Store"
 msgstr "Ubuntu One 音乐商店"
 
@@ -904,9 +965,6 @@ msgstr "显示 UbuntuOne 商店"
 
 #~ msgid "Tracklist"
 #~ msgstr "播放列表"
-
-#~ msgid "Lyrics"
-#~ msgstr "歌词"
 
 #~ msgid "Hide Library"
 #~ msgstr "隐藏库"

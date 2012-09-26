@@ -51,7 +51,7 @@ libxnoise/PluginModule/xnoise-plugin.vala
 libxnoise/PluginModule/xnoise-plugin-information.vala
 libxnoise/PluginModule/xnoise-plugin-interface.vala
 libxnoise/PluginModule/xnoise-plugin-loader.vala
-libxnoise/PluginModule/xnoise-plugin-manager-tree.vala
+libxnoise/PluginModule/xnoise-plugin-switch-widget.vala
 libxnoise/ScreensaverManager/xnoise-screensaver-manager.vala
 libxnoise/Services/xnoise-services.vala
 libxnoise/TagAccess/xnoise-tag-reader.vala

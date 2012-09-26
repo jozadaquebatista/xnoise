@@ -114,7 +114,7 @@ libxnoise_la_SOURCES = \
     PluginModule/xnoise-plugin-information.vala \
     PluginModule/xnoise-plugin-interface.vala \
     PluginModule/xnoise-plugin-loader.vala \
-    PluginModule/xnoise-plugin-manager-tree.vala \
+    PluginModule/xnoise-plugin-switch-widget.vala \
     Resources/xnoise-resources.vala \
     ScreensaverManager/xnoise-screensaver-manager.vala \
     Services/xnoise-services.vala \
