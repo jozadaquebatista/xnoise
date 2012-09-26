@@ -679,9 +679,9 @@ typedef struct _XnoisePluginModuleContainerPrivate XnoisePluginModuleContainerPr
 
 typedef struct _XnoisePluginModuleInformation XnoisePluginModuleInformation;
 typedef struct _XnoisePluginModuleInformationClass XnoisePluginModuleInformationClass;
-typedef struct _XnoisePluginModuleInformationPrivate XnoisePluginModuleInformationPrivate;
 
 #define TYPE_PLUGIN_CATEGORY (plugin_category_get_type ())
+typedef struct _XnoisePluginModuleInformationPrivate XnoisePluginModuleInformationPrivate;
 
 #define XNOISE_PLUGIN_MODULE_TYPE_LOADER (xnoise_plugin_module_loader_get_type ())
 #define XNOISE_PLUGIN_MODULE_LOADER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_PLUGIN_MODULE_TYPE_LOADER, XnoisePluginModuleLoader))
@@ -1739,15 +1739,6 @@ struct _XnoisePluginModuleContainerClass {
 	GTypeModuleClass parent_class;
 };
 
-struct _XnoisePluginModuleInformation {
-	GObject parent_instance;
-	XnoisePluginModuleInformationPrivate * priv;
-};
-
-struct _XnoisePluginModuleInformationClass {
-	GObjectClass parent_class;
-};
-
 typedef enum  {
 	PLUGIN_CATEGORY_UNSPECIFIED,
 	PLUGIN_CATEGORY_ALBUM_ART_PROVIDER,
@@ -1756,6 +1747,15 @@ typedef enum  {
 	PLUGIN_CATEGORY_MUSIC_STORE,
 	PLUGIN_CATEGORY_ADDITIONAL
 } PluginCategory;
+
+struct _XnoisePluginModuleInformation {
+	GObject parent_instance;
+	XnoisePluginModuleInformationPrivate * priv;
+};
+
+struct _XnoisePluginModuleInformationClass {
+	GObjectClass parent_class;
+};
 
 struct _XnoisePluginModuleLoader {
 	GObject parent_instance;
@@ -2707,6 +2707,7 @@ gboolean xnoise_plugin_module_container_get_activated (XnoisePluginModuleContain
 gboolean xnoise_plugin_module_container_get_configurable (XnoisePluginModuleContainer* self);
 gboolean xnoise_plugin_module_container_get_is_lyrics_plugin (XnoisePluginModuleContainer* self);
 gboolean xnoise_plugin_module_container_get_is_album_image_plugin (XnoisePluginModuleContainer* self);
+GType plugin_category_get_type (void) G_GNUC_CONST;
 XnoisePluginModuleInformation* xnoise_plugin_module_information_new (const gchar* xplug_file);
 XnoisePluginModuleInformation* xnoise_plugin_module_information_construct (GType object_type, const gchar* xplug_file);
 gboolean xnoise_plugin_module_information_load_info (XnoisePluginModuleInformation* self);
@@ -2720,7 +2721,6 @@ const gchar* xnoise_plugin_module_information_get_website (XnoisePluginModuleInf
 const gchar* xnoise_plugin_module_information_get_license (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_copyright (XnoisePluginModuleInformation* self);
 const gchar* xnoise_plugin_module_information_get_author (XnoisePluginModuleInformation* self);
-GType plugin_category_get_type (void) G_GNUC_CONST;
 PluginCategory xnoise_plugin_module_information_get_category (XnoisePluginModuleInformation* self);
 gboolean xnoise_plugin_module_iplugin_init (XnoisePluginModuleIPlugin* self);
 void xnoise_plugin_module_iplugin_uninit (XnoisePluginModuleIPlugin* self);

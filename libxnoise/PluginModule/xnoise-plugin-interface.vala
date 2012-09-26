@@ -29,15 +29,6 @@
  */
 
 
-public enum PluginCategory {
-    UNSPECIFIED,
-    ALBUM_ART_PROVIDER,
-    LYRICS_PROVIDER,
-    GUI,
-    MUSIC_STORE,
-    ADDITIONAL
-}
-
 public interface Xnoise.PluginModule.IPlugin : GLib.Object {
     public abstract Xnoise.PluginModule.Container owner { get; set; }
     public abstract string name { get; }

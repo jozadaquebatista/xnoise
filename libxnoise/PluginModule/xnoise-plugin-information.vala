@@ -28,6 +28,17 @@
  *     Jörn Magens
  */
 
+
+
+public enum PluginCategory {
+    UNSPECIFIED,
+    ALBUM_ART_PROVIDER,
+    LYRICS_PROVIDER,
+    GUI,
+    MUSIC_STORE,
+    ADDITIONAL
+}
+
 public class Xnoise.PluginModule.Information : GLib.Object {
     private const string group = "XnoisePlugin";
 
