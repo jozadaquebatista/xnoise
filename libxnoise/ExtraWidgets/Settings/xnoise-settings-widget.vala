@@ -344,6 +344,8 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             mediabox.pack_start(add_media_widget, true, true, 0);
             var music_store_box = this.builder.get_object("music_store_box") as Gtk.Box;
             var lyric_provider_box = this.builder.get_object("lyric_provider_box") as Gtk.Box;
+            var additionals_box = this.builder.get_object("additionals_box") as Gtk.Box;
+            var gui_box = this.builder.get_object("box6") as Gtk.Box;
             Timeout.add_seconds(1, () => {
                 if(plugin_loader.loaded == false) {
                     print("plugin loader not ready - try agan in one second ...\n");
@@ -352,6 +354,9 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
                 
                 insert_plugin_switches(lyric_provider_box, PluginCategory.LYRICS_PROVIDER);
                 insert_plugin_switches(music_store_box, PluginCategory.MUSIC_STORE);
+                insert_plugin_switches(additionals_box, PluginCategory.ADDITIONAL);
+                insert_plugin_switches(gui_box, PluginCategory.GUI);
+                
                 add_plugin_tabs();
                 return false;
             });
@@ -365,11 +370,12 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     }
     
     private void insert_plugin_switches(Box box, PluginCategory cat) {
-        bool has_member = false;
-        foreach(string plugin_name in plugin_loader.plugin_htable.get_keys()) {
+        List<unowned string> list = plugin_loader.plugin_htable.get_keys();
+        list.sort(strcmp);
+        list.reverse();
+        foreach(string plugin_name in list) {
             if(plugin_loader.plugin_htable.lookup(plugin_name).info.category != cat)
                 continue;
-            //print("#name: %s  category: %s\n", plugin_loader.plugin_htable.lookup(plugin_name).info.name, plugin_loader.plugin_htable.lookup(plugin_name).info.category.to_string());
             var plugin_switch = new PluginSwitch(plugin_name, this.plugin_label_sizegroup);
             box.pack_start(plugin_switch,
                            false,
@@ -377,9 +383,8 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
                            2
                            );
             plugin_switch.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
-            has_member = true;
         }
-        if(has_member) {
+        if(box.get_children().length() > 1) {
             box.set_no_show_all(false);
             box.show_all();
         }
