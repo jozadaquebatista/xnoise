@@ -370,7 +370,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             
             var music_store_label = this.builder.get_object("music_store_label") as Gtk.Label;
             music_store_label.use_markup = true;
-            music_store_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Music Stores")));
+            music_store_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Music Stores").strip()));
             
             Timeout.add_seconds(1, () => {
                 if(plugin_loader.loaded == false) {
