@@ -665,8 +665,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         //print("%d : %d\n",(int)e.keyval, (int)e.state);
         switch(e.keyval) {
             case Gdk.Key.F11:
-//                this.toggle_mainwindow_fullscreen();
                 return true;
+            case Gdk.Key.f:
+                if((e.state & ModifierType.MOD1_MASK) == ModifierType.MOD1_MASK) {
+                    main_window.toggle_fullscreen();
+                    return true;
+                }
+                break;
             default:
                 break;
         }
@@ -712,76 +717,77 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         //print("%u : %u\n", e.keyval, e.state);
         switch(e.keyval) {
             case Gdk.Key.plus: {
-                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
-                        return false;
-                    change_volume(0.1);
-                }
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
+                    return false;
+                change_volume(0.1);
                 return true;
+            }
             case Gdk.Key.minus: {
-                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
-                        return false;
-                    change_volume(-0.1);
-                }
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
+                    return false;
+                change_volume(-0.1);
                 return true;
+            }
             case Gdk.Key.f: {
-                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
-                        return false;
+                if((e.state & ModifierType.CONTROL_MASK) == ModifierType.CONTROL_MASK) {
                     search_entry.grab_focus();
+                    return true;
                 }
-                return true;
+                return false;
+            }
             case Gdk.Key.d: {
-                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
-                        return false;
-                    search_entry.text = EMPTYSTRING;
-                    global.searchtext = EMPTYSTRING;
-                    colorize_search_background(false);
-                }
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
+                    return false;
+                search_entry.text = EMPTYSTRING;
+                global.searchtext = EMPTYSTRING;
+                colorize_search_background(false);
                 return true;
+            }
             case Gdk.Key.@1: {
-                    if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
-                        return false;
-                    on_show_tracklist_menu_clicked();
-                }
+                if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
+                    return false;
+                on_show_tracklist_menu_clicked();
                 return true;
+            }
             case Gdk.Key.@2: {
-                    if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
-                        return false;
-                    if(!fullscreenwindowvisible)
-                        on_show_video_menu_clicked();
-                }
+                if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
+                    return false;
+                if(!fullscreenwindowvisible)
+                    on_show_video_menu_clicked();
                 return true;
+            }
             case Gdk.Key.@3: {
-                    if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
-                        return false;
-                    if(active_lyrics == false)
-                        return false;
-                    on_show_lyrics_menu_clicked();
-                }
+                if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK) // ALT Modifier
+                    return false;
+                if(active_lyrics == false)
+                    return false;
+                on_show_lyrics_menu_clicked();
                 return true;
+            }
             case Gdk.Key.space: {
-                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
-                        return false;
-                    playPauseButton.clicked();
-                }
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
+                    return false;
+                playPauseButton.clicked();
                 return true;
+            }
             case Gdk.Key.m: {
-                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
-                        return false;
-                    toggle_media_browser_visibility();
-                    break;
-                }
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
+                    return false;
+                toggle_media_browser_visibility();
+                return true;
+            }
             case Gdk.Key.o: {
-                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
-                        return false;
-                    on_file_add();
-                    break;
-                }
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
+                    return false;
+                on_file_add();
+                return true;
+            }
             case Gdk.Key.q: {
-                    if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
-                        return false;
-                    quit_now();
-                    break;
-                }
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
+                    return false;
+                quit_now();
+                return true;
+            }
             case Gdk.Key.F11: {
                 this.toggle_mainwindow_fullscreen();
                 return true;

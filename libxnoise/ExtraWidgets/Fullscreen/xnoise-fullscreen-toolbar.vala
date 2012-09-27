@@ -100,6 +100,14 @@ public class Xnoise.FullscreenToolbar {
                 main_window.toggle_fullscreen();
                 return true;
             }
+            case Gdk.Key.f: {
+                if((e.state & Gdk.ModifierType.MOD1_MASK)
+                    == Gdk.ModifierType.MOD1_MASK) {
+                    main_window.toggle_fullscreen();
+                    return true;
+                }
+                return false;
+            }
             case Gdk.Key.space: {
                 main_window.playPauseButton.clicked();
                 return true;
