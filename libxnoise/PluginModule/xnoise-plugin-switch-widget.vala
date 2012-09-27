@@ -46,6 +46,7 @@ private class Xnoise.PluginSwitch : Gtk.Box {
     
     
     public PluginSwitch(string plugin_name, Gtk.SizeGroup label_sizegroup) {
+        GLib.Object(orientation:Orientation.HORIZONTAL,spacing:0);
         this.plugin_name = plugin_name;
         this.label_sizegroup = label_sizegroup;
         
@@ -92,10 +93,16 @@ private class Xnoise.PluginSwitch : Gtk.Box {
         label.set_alignment(0.0f, 0.5f);
         label.justify = Justification.LEFT;
         label.xpad = 6;
+        label.set_line_wrap_mode(Pango.WrapMode.WORD);
+        label.set_line_wrap(true);
         this.pack_start(label, false, false, 0);
         pswitch = new Gtk.Switch();
         pswitch.margin_left = 2;
-        this.pack_start(pswitch, false, false, 0);
+        var bx = new Box(Orientation.VERTICAL, 0);
+        bx.pack_start(new DrawingArea(), false, true, 0);
+        bx.pack_start(pswitch, false, false, 0);
+        bx.pack_start(new DrawingArea(), false, true, 0);
+        this.pack_start(bx, false, false, 0);
         label_sizegroup.add_widget(label);
         pswitch.notify["active"].connect( () => {
             if(pswitch.get_active()) {

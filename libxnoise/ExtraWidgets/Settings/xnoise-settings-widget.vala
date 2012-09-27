@@ -407,7 +407,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             box.pack_start(plugin_switch,
                            false,
                            false,
-                           2
+                           0
                            );
             plugin_switch.sign_plugin_activestate_changed.connect(reset_plugin_tabs);
         }

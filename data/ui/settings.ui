@@ -60,9 +60,7 @@
                                 <property name="xalign">0</property>
                                 <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Use stop button</property>
-                                <property name="ellipsize">end</property>
-                                <property name="single_line_mode">True</property>
-                                <property name="max_width_chars">30</property>
+                                <property name="wrap">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -71,12 +69,46 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="switch_usestop">
-                                <property name="use_action_appearance">False</property>
+                              <object class="GtkBox" id="box16">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="margin_left">2</property>
-                                <property name="use_action_appearance">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea7">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSwitch" id="switch_usestop">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="margin_left">2</property>
+                                    <property name="use_action_appearance">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea8">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -102,9 +134,7 @@
                                 <property name="xalign">0</property>
                                 <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Use Compact mode</property>
-                                <property name="ellipsize">end</property>
-                                <property name="single_line_mode">True</property>
-                                <property name="max_width_chars">30</property>
+                                <property name="wrap">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -113,12 +143,46 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="switch_compact">
-                                <property name="use_action_appearance">False</property>
+                              <object class="GtkBox" id="box15">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="margin_left">2</property>
-                                <property name="use_action_appearance">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea5">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSwitch" id="switch_compact">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="margin_left">2</property>
+                                    <property name="use_action_appearance">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea6">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -144,9 +208,7 @@
                                 <property name="xalign">0</property>
                                 <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Use helper lines in media browser</property>
-                                <property name="ellipsize">end</property>
-                                <property name="single_line_mode">True</property>
-                                <property name="max_width_chars">30</property>
+                                <property name="wrap">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -155,12 +217,46 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="switch_showlines">
-                                <property name="use_action_appearance">False</property>
+                              <object class="GtkBox" id="box14">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="margin_left">2</property>
-                                <property name="use_action_appearance">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea3">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSwitch" id="switch_showlines">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="margin_left">2</property>
+                                    <property name="use_action_appearance">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea4">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -186,9 +282,7 @@
                                 <property name="xalign">0</property>
                                 <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Do not show video screen while hovering album image</property>
-                                <property name="ellipsize">end</property>
-                                <property name="single_line_mode">True</property>
-                                <property name="max_width_chars">30</property>
+                                <property name="wrap">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -197,12 +291,46 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="switch_hoverimage">
-                                <property name="use_action_appearance">False</property>
+                              <object class="GtkBox" id="box13">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="margin_left">2</property>
-                                <property name="use_action_appearance">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea1">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSwitch" id="switch_hoverimage">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="margin_left">2</property>
+                                    <property name="use_action_appearance">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -275,9 +403,7 @@
                                 <property name="xalign">0</property>
                                 <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Quit application if window is closed</property>
-                                <property name="ellipsize">end</property>
-                                <property name="single_line_mode">True</property>
-                                <property name="max_width_chars">30</property>
+                                <property name="wrap">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -286,12 +412,46 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="switch_quitifclosed">
-                                <property name="use_action_appearance">False</property>
+                              <object class="GtkBox" id="box17">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="margin_left">2</property>
-                                <property name="use_action_appearance">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea9">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSwitch" id="switch_quitifclosed">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="margin_left">2</property>
+                                    <property name="use_action_appearance">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea10">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -404,9 +564,7 @@
                                 <property name="xalign">0</property>
                                 <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Use equalizer</property>
-                                <property name="ellipsize">end</property>
-                                <property name="single_line_mode">True</property>
-                                <property name="max_width_chars">30</property>
+                                <property name="wrap">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -415,12 +573,46 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="switch_equalizer">
-                                <property name="use_action_appearance">False</property>
+                              <object class="GtkBox" id="box18">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="margin_left">2</property>
-                                <property name="use_action_appearance">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea11">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSwitch" id="switch_equalizer">
+                                    <property name="use_action_appearance">False</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="margin_left">2</property>
+                                    <property name="use_action_appearance">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkDrawingArea" id="drawingarea12">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -431,7 +623,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="fill">True</property>
+                            <property name="fill">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -574,6 +766,10 @@
     <widgets>
       <widget name="label_equalizer"/>
       <widget name="fontsize_label"/>
+      <widget name="label_hoverimage"/>
+      <widget name="label_showlines"/>
+      <widget name="label_compact"/>
+      <widget name="label_usestop"/>
     </widgets>
   </object>
 </interface>
