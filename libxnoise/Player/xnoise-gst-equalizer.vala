@@ -144,27 +144,27 @@ public class Xnoise.GstEqualizer : GLib.Object, IParams {
         presets = new GLib.List<TenBandPreset>();
 
         presets.prepend(
-            new TenBandPreset("Dance", 
+            new TenBandPreset(_("Dance"), 
                               { 20.0, 20.0, 12.0, 0.0, 0.0, -10.0, -20.0, 0.0, 10.0, 10.0 }
         ));
         presets.prepend(
-            new TenBandPreset("Pop", 
+            new TenBandPreset(_("Pop"), 
                               { -10.0, 10.0, 15.0, 28.0, 20.0, -5.0, -10.0, -10.0, 0.0, 0.0 }
         ));
         presets.prepend(
-            new TenBandPreset("Techno", 
+            new TenBandPreset(_("Techno"), 
                               { 30.0, 20.0, 0.0, -10.0, -5.0, 0.0, 25.0, 30.0, 30.0, 22.0 }
         ));
         presets.prepend(
-            new TenBandPreset("Club", 
+            new TenBandPreset(_("Club"), 
                               { 0.0, 0.0, 10.0, 20.0, 20.0, 20.0, 10.0, 0.0, 0.0, 0.0 }
         ));
         presets.prepend(
-            new TenBandPreset("Jazz", 
+            new TenBandPreset(_("Jazz"), 
                               { -5.0, 0.0, 0.0, 10.0, 30.0, 30.0, 15.0, 5.0, 5.0, 0.0 }
         ));
         presets.prepend(
-            new TenBandPreset("Rock", 
+            new TenBandPreset(_("Rock"), 
                               { 20.0, 5.0, -10.0, -20.0, -5.0, 5.0, 20.0, 35.0, 35.0, 40.0 }
         ));
         presets.prepend(
@@ -176,7 +176,7 @@ public class Xnoise.GstEqualizer : GLib.Object, IParams {
                               { 60.0, 60.0, 60.0, 10.0, 0.0, -25.0, -30.0, -30.0, -30.0, -30.0 }
         ));
         presets.prepend(
-            new TenBandPreset("Classic", 
+            new TenBandPreset(_("Classic"), 
                               { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -30.0, -30.0, -30.0, -35.0 }
         ));
         // "Custom" always has to be in this position

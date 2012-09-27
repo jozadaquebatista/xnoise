@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 13:07+0200\n"
+"POT-Creation-Date: 2012-09-27 13:23+0200\n"
 "PO-Revision-Date: 2012-09-15 22:30+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -589,6 +589,30 @@ msgstr "בחירת קובץ מדיה"
 msgid "Show application main menu"
 msgstr "הצג את התפריט הראשי"
 
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:147
+msgid "Dance"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:151
+msgid "Pop"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:155
+msgid "Techno"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:159
+msgid "Club"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:163
+msgid "Jazz"
+msgstr ""
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:167
+msgid "Rock"
+msgstr ""
+
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:171
 msgid "Maximum Treble"
 msgstr "טרבל מרבי"
@@ -596,6 +620,10 @@ msgstr "טרבל מרבי"
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:175
 msgid "Maximum Bass"
 msgstr "באס מרבי"
+
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:179
+msgid "Classic"
+msgstr ""
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:184
 msgid "Custom"
