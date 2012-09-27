@@ -30,6 +30,7 @@
                         <property name="can_focus">False</property>
                         <property name="margin_top">2</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">2</property>
                         <child>
                           <object class="GtkLabel" id="label2">
                             <property name="visible">True</property>
@@ -49,27 +50,24 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkGrid" id="grid1">
+                          <object class="GtkBox" id="box5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">2</property>
-                            <property name="column_spacing">1</property>
                             <child>
                               <object class="GtkLabel" id="label_usestop">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="xpad">3</property>
+                                <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Use stop button</property>
                                 <property name="ellipsize">end</property>
                                 <property name="single_line_mode">True</property>
                                 <property name="max_width_chars">30</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -81,32 +79,41 @@
                                 <property name="use_action_appearance">False</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box8">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <child>
-                              <object class="GtkLabel" id="label_quitifclosed">
+                              <object class="GtkLabel" id="label_compact">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="xpad">3</property>
-                                <property name="label" translatable="yes">Quit application if window is closed</property>
+                                <property name="xpad">6</property>
+                                <property name="label" translatable="yes">Use Compact mode</property>
                                 <property name="ellipsize">end</property>
                                 <property name="single_line_mode">True</property>
                                 <property name="max_width_chars">30</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="switch_quitifclosed">
+                              <object class="GtkSwitch" id="switch_compact">
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -114,46 +121,37 @@
                                 <property name="use_action_appearance">False</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
-                            <child>
-                              <object class="GtkLabel" id="label_compact">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="xpad">3</property>
-                                <property name="label" translatable="yes">Use Compact mode</property>
-                                <property name="ellipsize">end</property>
-                                <property name="single_line_mode">True</property>
-                                <property name="max_width_chars">30</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box9">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <child>
                               <object class="GtkLabel" id="label_showlines">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="xpad">3</property>
+                                <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Use helper lines in media browser</property>
                                 <property name="ellipsize">end</property>
                                 <property name="single_line_mode">True</property>
                                 <property name="max_width_chars">30</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -165,28 +163,37 @@
                                 <property name="use_action_appearance">False</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">3</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box10">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <child>
                               <object class="GtkLabel" id="label_hoverimage">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="xpad">3</property>
+                                <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Do not show video screen while hovering album image</property>
                                 <property name="ellipsize">end</property>
                                 <property name="single_line_mode">True</property>
                                 <property name="max_width_chars">30</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">4</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -198,32 +205,41 @@
                                 <property name="use_action_appearance">False</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">4</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box11">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <child>
                               <object class="GtkLabel" id="fontsize_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">2.2351741291171123e-10</property>
-                                <property name="xpad">3</property>
+                                <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Media browser fontsize:</property>
                                 <property name="wrap">True</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">5</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkSpinButton" id="spinbutton1">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
                                 <property name="margin_left">2</property>
                                 <property name="invisible_char">●</property>
                                 <property name="width_chars">2</property>
@@ -236,14 +252,41 @@
                                 <property name="update_policy">if-valid</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">5</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box7">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkLabel" id="label_quitifclosed">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="xpad">6</property>
+                                <property name="label" translatable="yes">Quit application if window is closed</property>
+                                <property name="ellipsize">end</property>
+                                <property name="single_line_mode">True</property>
+                                <property name="max_width_chars">30</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="switch_compact">
+                              <object class="GtkSwitch" id="switch_quitifclosed">
                                 <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -251,17 +294,16 @@
                                 <property name="use_action_appearance">False</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                       </object>
@@ -276,6 +318,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">2</property>
                         <child>
                           <object class="GtkLabel" id="lyric_provider_label">
                             <property name="visible">True</property>
@@ -331,6 +374,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">2</property>
                         <child>
                           <object class="GtkLabel" id="additionals_label">
                             <property name="visible">True</property>
@@ -350,27 +394,24 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkGrid" id="grid2">
+                          <object class="GtkBox" id="box12">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">2</property>
-                            <property name="column_spacing">1</property>
                             <child>
                               <object class="GtkLabel" id="label_equalizer">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="xpad">3</property>
+                                <property name="xpad">6</property>
                                 <property name="label" translatable="yes">Use equalizer</property>
                                 <property name="ellipsize">end</property>
                                 <property name="single_line_mode">True</property>
                                 <property name="max_width_chars">30</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -382,10 +423,9 @@
                                 <property name="use_action_appearance">False</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
@@ -408,6 +448,7 @@
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
                         <property name="orientation">vertical</property>
+                        <property name="spacing">2</property>
                         <child>
                           <object class="GtkLabel" id="music_store_label">
                             <property name="visible">True</property>
@@ -529,21 +570,10 @@
       </packing>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup_gridA"/>
   <object class="GtkSizeGroup" id="sizegroup_setnames">
     <widgets>
-      <widget name="label_hoverimage"/>
       <widget name="label_equalizer"/>
-      <widget name="label_usestop"/>
-      <widget name="label_equalizer"/>
-      <widget name="label_equalizer"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroupglade">
-    <property name="mode">both</property>
-    <widgets>
-      <widget name="box2"/>
-      <widget name="box4"/>
+      <widget name="fontsize_label"/>
     </widgets>
   </object>
 </interface>

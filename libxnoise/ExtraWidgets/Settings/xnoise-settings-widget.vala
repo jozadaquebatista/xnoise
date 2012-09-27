@@ -227,7 +227,11 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
                 
                 if(w!=null) {
                     var b = new Gtk.Box(Orientation.VERTICAL, 0);
-                    var i = new Gtk.Image.from_icon_name(p.info.icon, IconSize.BUTTON);
+                    Gtk.Image i;
+                    if(IconTheme.get_default().has_icon(p.info.icon))
+                        i = new Gtk.Image.from_icon_name(p.info.icon, IconSize.BUTTON);
+                    else
+                        i = new Gtk.Image.from_stock(Stock.EXECUTE ,IconSize.BUTTON);
                     string n = name.substring(0, 1).up() + name.substring(1, name.length - 1);
                     var l = new Gtk.Label(n);
                     l.max_width_chars = 10;
@@ -277,8 +281,6 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             
             var general_label = this.builder.get_object("label1") as Gtk.Label;
             general_label.set_text(_("Settings"));
-            var plugins_label = this.builder.get_object("label6") as Gtk.Label;
-            plugins_label.set_text(_("Plugins"));
             var media_label = this.builder.get_object("media_label") as Gtk.Label;
             media_label.set_text(_("Media"));
             
@@ -339,7 +341,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             this.pack_start(notebook, true, true, 0);
 
             var fontsize_label = this.builder.get_object("fontsize_label") as Gtk.Label;
-            fontsize_label.label = _("Media browser fontsize:");
+            fontsize_label.label = _("Media browser fontsize");
             
             sb = this.builder.get_object("spinbutton1") as Gtk.SpinButton;
             sb.configure(new Gtk.Adjustment(8.0, 7.0, 14.0, 1.0, 1.0, 0.0), 1.0, (uint)0);
@@ -352,17 +354,35 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             var lyric_provider_box = this.builder.get_object("lyric_provider_box") as Gtk.Box;
             var additionals_box = this.builder.get_object("additionals_box") as Gtk.Box;
             var gui_box = this.builder.get_object("box6") as Gtk.Box;
+            
+            //Category headlines
+            var gui_label = this.builder.get_object("label2") as Gtk.Label;
+            gui_label.use_markup = true;
+            gui_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("User Interface")));
+            
+            var lyric_provider_label = this.builder.get_object("lyric_provider_label") as Gtk.Label;
+            lyric_provider_label.use_markup = true;
+            lyric_provider_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Lyric Providers")));
+            
+            var additionals_label = this.builder.get_object("additionals_label") as Gtk.Label;
+            additionals_label.use_markup = true;
+            additionals_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Additional")));
+            
+            var music_store_label = this.builder.get_object("music_store_label") as Gtk.Label;
+            music_store_label.use_markup = true;
+            music_store_label.set_markup(Markup.printf_escaped("<b>%s</b>", _("Music Stores")));
+            
             Timeout.add_seconds(1, () => {
                 if(plugin_loader.loaded == false) {
                     print("plugin loader not ready - try agan in one second ...\n");
                     return true;
                 }
-                
                 insert_plugin_switches(lyric_provider_box, PluginCategory.LYRICS_PROVIDER);
                 insert_plugin_switches(music_store_box, PluginCategory.MUSIC_STORE);
                 insert_plugin_switches(gui_box, PluginCategory.GUI);
                 insert_plugin_switches(additionals_box, PluginCategory.ADDITIONAL);
                 insert_plugin_switches(additionals_box, PluginCategory.UNSPECIFIED);
+                insert_plugin_switches(additionals_box, PluginCategory.ALBUM_ART_PROVIDER);
                 
                 add_plugin_tabs();
                 return false;

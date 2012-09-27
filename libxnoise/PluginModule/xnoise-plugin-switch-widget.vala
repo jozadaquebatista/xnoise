@@ -91,7 +91,7 @@ private class Xnoise.PluginSwitch : Gtk.Box {
         var label = new Gtk.Label(pc.info.pretty_name);
         label.set_alignment(0.0f, 0.5f);
         label.justify = Justification.LEFT;
-        label.xpad = 3;
+        label.xpad = 6;
         this.pack_start(label, false, false, 0);
         pswitch = new Gtk.Switch();
         pswitch.margin_left = 2;
