@@ -55,10 +55,6 @@ public class Xnoise.PluginModule.Loader : Object {
         image_provider_htable   = new HashTable<string, unowned Container>(str_hash, str_equal);
     }
 
-//    internal unowned GLib.List<string> get_info_files() {
-//        return info_files;
-//    }
-    
     private bool is_banned(string name) {
         foreach(string s in banned_plugins) {
             if(name == s)

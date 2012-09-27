@@ -284,6 +284,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 
     // running in io thread
     private void end_import(Worker.Job job) {
+//        return_val_if_fail((int)Linux.gettid() == io_worker.thread_id, false);
         //print("end import 1 %d %d\n", job.counter[1], job.counter[2]);
         if(job.counter[1] != job.counter[2])
             return;
@@ -310,8 +311,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     private bool finish_import_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
         return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
-        
-        Idle.add( () => {
+        Idle.add(() => {
             if(t != null) {
                 t.stop();
                 ulong usec;
@@ -323,14 +323,16 @@ public class Xnoise.MediaImporter : GLib.Object {
                 }
                 print("finish import after %d s for %u tracks\n", b, xcnt);
             }
+            return false;
+        });
+        Timeout.add_seconds(1, () => {
             global.media_import_in_progress = false;
-//            if(current_import_msg_id != 0) {
+            if((uint)job.get_arg("msg_id") != 0) {
                 userinfo.popdown((uint)job.get_arg("msg_id"));//current_import_msg_id);
-//                current_import_msg_id = 0;
-                lock(current_import_track_count) {
-                    current_import_track_count = 0;
-                }
-//            }
+            }
+            lock(current_import_track_count) {
+                current_import_track_count = 0;
+            }
             return false;
         });
         return false;
@@ -503,7 +505,10 @@ public class Xnoise.MediaImporter : GLib.Object {
                                 lock(current_import_track_count) {
                                     xcnt = current_import_track_count;
                                 }
-                                unowned Gtk.ProgressBar pb = (Gtk.ProgressBar) userinfo.get_extra_widget_by_id((uint)job.get_arg("msg_id"));
+                                unowned Gtk.ProgressBar pb = 
+                                    (Gtk.ProgressBar) userinfo.get_extra_widget_by_id(
+                                                                    (uint)job.get_arg("msg_id")
+                                );
                                 if(pb != null) {
                                     pb.pulse();
                                     pb.set_text(_("%u tracks found").printf(xcnt));
@@ -547,13 +552,16 @@ public class Xnoise.MediaImporter : GLib.Object {
                                 File fe = File.new_for_uri(e.get_uri());
                                 FileInfo einfo = null;
                                 try {
-                                    einfo = fe.query_info(FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_CONTENT_TYPE, FileQueryInfoFlags.NONE , null);
+                                    einfo = fe.query_info(FileAttribute.STANDARD_TYPE + "," + 
+                                                          FileAttribute.STANDARD_CONTENT_TYPE,
+                                                          FileQueryInfoFlags.NONE , null);
                                 }
                                 catch(Error err) {
                                     print("mimeinfo error for playlist content: %s\n", err.message);
                                     continue;
                                 }
-                                tmp.mimetype = GLib.ContentType.get_mime_type(einfo.get_content_type());
+                                tmp.mimetype = 
+                                    GLib.ContentType.get_mime_type(einfo.get_content_type());
                                 playlist_content += (owned)tmp;
                             }
                         }
