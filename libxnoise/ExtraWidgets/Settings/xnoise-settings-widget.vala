@@ -169,12 +169,12 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
         if(!this.switch_equalizer.active) {
             Params.set_bool_value("not_use_eq", true);
             main_window.use_eq = false;
-            gst_player.activate_equalizer();
+            gst_player.deactivate_equalizer();
         }
         else {
             Params.set_bool_value("not_use_eq", false);
             main_window.use_eq = true;
-            gst_player.deactivate_equalizer();
+            gst_player.activate_equalizer();
         }
     }
     
