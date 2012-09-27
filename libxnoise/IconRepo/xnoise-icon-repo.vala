@@ -49,6 +49,7 @@ internal class Xnoise.IconRepo : GLib.Object {
     internal Gdk.Pixbuf symbolic_play_icon          { get; private set; }
     internal Gdk.Pixbuf symbolic_pause_icon         { get; private set; }
     internal Gdk.Pixbuf network_symbolic_icon       { get; private set; }
+    internal Gdk.Pixbuf radios_icon_menu            { get; private set; }
     
     internal signal void icon_theme_changed();
     
@@ -71,10 +72,16 @@ internal class Xnoise.IconRepo : GLib.Object {
             
             video_icon  = w.render_icon_pixbuf(Gtk.Stock.FILE, IconSize.BUTTON);
             int iconheight = video_icon.height;
-            if(theme.has_icon("xn-stream"))
+            radios_icon_menu = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.MENU);
+            if(theme.has_icon("xn-stream")) {
                 radios_icon = theme.load_icon("xn-stream", iconheight, IconLookupFlags.FORCE_SIZE);
-            else
+                radios_icon_menu = theme.load_icon("xn-stream",
+                                                   radios_icon_menu.height,
+                                                   IconLookupFlags.FORCE_SIZE);
+            }
+            else {
                 radios_icon = w.render_icon_pixbuf(Gtk.Stock.CONNECT, IconSize.BUTTON);
+            }
             
             if(theme.has_icon("system-users")) 
                 artist_icon = theme.load_icon("system-users", iconheight, IconLookupFlags.FORCE_SIZE);

@@ -87,13 +87,16 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
         for(int j = tmp.length -1; j >= 0; j--) // reverse
             streams += tmp[j];
         
+        Gtk.Invisible w = new Gtk.Invisible();
+        Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
+        
         Idle.add( () => {
             foreach(Item? i in mfolders) {
                 File f = File.new_for_uri(i.uri);
                 TreeIter iter;
                 listmodel.append(out iter);
                 listmodel.set(iter,
-                              Column.ICON,  icon_repo.folder_symbolic_icon,
+                              Column.ICON,      folder_icon,
                               Column.LOCATION,  f.get_path(),
                               Column.ITEMTYPE,  i.type
                 );
@@ -102,7 +105,7 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
                 TreeIter iter;
                 listmodel.append(out iter);
                 listmodel.set(iter,
-                              Column.ICON,  icon_repo.network_symbolic_icon,
+                              Column.ICON,      icon_repo.radios_icon_menu,
                               Column.LOCATION,  i.uri,
                               Column.ITEMTYPE,  i.type
                 );
@@ -273,10 +276,12 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
         fcdialog.set_current_folder(Environment.get_home_dir());
         if (fcdialog.run() == Gtk.ResponseType.ACCEPT) {
             File f = File.new_for_path(fcdialog.get_filename());
+            Gtk.Invisible w = new Gtk.Invisible();
+            Gdk.Pixbuf folder_icon = w.render_icon_pixbuf(Gtk.Stock.DIRECTORY, IconSize.MENU);
             TreeIter iter;
             listmodel.append(out iter);
             listmodel.set(iter,
-                          Column.ICON,  icon_repo.folder_symbolic_icon,
+                          Column.ICON,      folder_icon,
                           Column.LOCATION,  f.get_path(),
                           Column.ITEMTYPE,  ItemType.LOCAL_FOLDER
                           );
@@ -316,7 +321,7 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
                 TreeIter iter;
                 listmodel.append(out iter);
                 listmodel.set(iter,
-                              Column.ICON,  icon_repo.network_symbolic_icon,
+                              Column.ICON,      icon_repo.radios_icon_menu,
                               Column.LOCATION,  radioentry.text.strip(),
                               Column.ITEMTYPE,  ItemType.STREAM//,
                               );
