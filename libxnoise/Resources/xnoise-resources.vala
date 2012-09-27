@@ -32,6 +32,7 @@
 
 
 namespace Xnoise.Resources {
+    
     public const string UNKNOWN_ARTIST           = "unknown artist";
     public const string UNKNOWN_TITLE            = "unknown title";
     public const string UNKNOWN_ALBUM            = "unknown album";

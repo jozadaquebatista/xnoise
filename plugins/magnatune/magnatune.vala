@@ -231,7 +231,6 @@ public class MagnatuneSettings : Gtk.Box {
         catch(Error e) {
             image = null;
         }
-        
         var lb = new LinkButton.with_label(
             "http://magnatune.com", 
             _("Visit Magnatune for an account.")

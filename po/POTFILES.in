@@ -52,6 +52,7 @@ libxnoise/PluginModule/xnoise-plugin-information.vala
 libxnoise/PluginModule/xnoise-plugin-interface.vala
 libxnoise/PluginModule/xnoise-plugin-loader.vala
 libxnoise/PluginModule/xnoise-plugin-switch-widget.vala
+libxnoise/Resources/xnoise-resources.vala
 libxnoise/ScreensaverManager/xnoise-screensaver-manager.vala
 libxnoise/Services/xnoise-services.vala
 libxnoise/TagAccess/xnoise-tag-reader.vala
@@ -90,6 +91,7 @@ plugins/magnatune/magnatune-dockable.vala
 plugins/magnatune/magnatune-treeview.vala
 plugins/magnatune/magnatune-treestore.vala
 plugins/magnatune/magnatune-widget.vala
+plugins/magnatune/magnatune.vala
 plugins/mpris/mpris.xnplugin.desktop.in
 plugins/mpris_one/mpris_one.xnplugin.desktop.in
 plugins/notifications2/notifications.xnplugin.desktop.in

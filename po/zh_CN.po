@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-26 12:01+0200\n"
+"POT-Creation-Date: 2012-09-27 13:07+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -73,33 +73,33 @@ msgstr "流"
 msgid "Videos"
 msgstr "视频"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:152
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:155
 #, fuzzy
 msgid "Add or Remove media"
 msgstr "添加或删除媒体(_A)"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:165
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
 msgid "If selected, all media folders will be fully rescanned"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:171
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add local folder"
 msgstr "添加本地文件夹"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:172
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
 msgid "Add media stream"
 msgstr "添加媒体流"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:173
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 msgid "Remove"
 msgstr "移除"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:179
 #, fuzzy
 msgid "Do full rescan"
 msgstr "全部重新扫描"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:180
 msgid ""
 "Select local media folders or internet media streams. \n"
 "All media sources will be available via xnoise's library."
@@ -107,21 +107,21 @@ msgstr ""
 "选择本地媒体文件夹或网络媒体流。\n"
 "所有的媒体源需 xnoise 库可访问。"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:215
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
 msgid "Location"
 msgstr "位置"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:250
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:258
 #: ../libxnoise/Utils/xnoise-media-importer.vala:101
 #: ../libxnoise/Utils/xnoise-media-importer.vala:184
 msgid "Importing media data. This may take some time..."
 msgstr "导入媒体数据。这将花费一段时间..."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:265
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:274
 msgid "Select media folder"
 msgstr "选择媒体文件夹"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:334
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:345
 msgid "Add internet radio link"
 msgstr "添加网络电台链接"
 
@@ -129,55 +129,70 @@ msgstr "添加网络电台链接"
 msgid "Leave fullscreen"
 msgstr "离开全屏"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:279
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:281
-msgid "Plugins"
-msgstr "插件"
-
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:285
 #, fuzzy
 msgid "Media"
 msgstr "显示媒体"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:290
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:292
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "在媒体浏览器中使用方格线"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:296
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:298
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr "当悬停在专辑封面上时不显示视频界面"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
 #, fuzzy
 msgid "Application Menu"
 msgstr "显示应用程序主菜单"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:308
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 #, fuzzy
 msgid "Stop button"
 msgstr "使用停止按钮"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:314
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 msgid "Quit on close"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:320
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1596
 msgid "Equalizer"
 msgstr "均衡器"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:335
 msgid "Go Back"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
-msgid "Media browser fontsize:"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:344
+#, fuzzy
+msgid "Media browser fontsize"
 msgstr "媒体浏览器字体大小："
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:361
+#, fuzzy
+msgid "User Interface"
+msgstr "用户名："
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:365
+msgid "Lyric Providers"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:369
+msgid "Additional"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:373
+#, fuzzy
+msgid "Music Stores"
+msgstr "Magnatune 音乐商店"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:120
 msgid "Select external subtitle file"
@@ -633,6 +648,39 @@ msgstr "字幕 #"
 msgid "Audio Track #"
 msgstr "音轨 #"
 
+#: ../libxnoise/Resources/xnoise-resources.vala:55
+msgid "unknown artist"
+msgstr "未知艺术家"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:56
+msgid "unknown title"
+msgstr "未知标题"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:57
+msgid "unknown album"
+msgstr "未知专辑"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:59
+msgid "Now Playing"
+msgstr "正在播放"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:60
+msgid "Tracklist"
+msgstr "播放列表"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:61
+#, fuzzy
+msgid "Lyrics"
+msgstr "歌词(_L)"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:62
+msgid "Hide Library"
+msgstr "隐藏库"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:63
+msgid "Show Library"
+msgstr "显示库"
+
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:101
 msgid "Remove selected titles"
 msgstr "移除所选标题"
@@ -685,13 +733,12 @@ msgstr "已暂停"
 msgid "ready to rock"
 msgstr "准备播放"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:298
+#: ../libxnoise/Utils/xnoise-media-importer.vala:299
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr "已发现 %u 首歌曲。正在更新库..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:509
-#: ../libxnoise/Utils/xnoise-media-importer.vala:581
+#: ../libxnoise/Utils/xnoise-media-importer.vala:514
 #, c-format
 msgid "%u tracks found"
 msgstr "未发现 %u 歌曲"
@@ -733,11 +780,13 @@ msgid "Please enter your lastfm username and password."
 msgstr "请输入您的 lastfm 用户名和密码。"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:479
+#: ../plugins/magnatune/magnatune.vala:257
 #, c-format
 msgid "Username:"
 msgstr "用户名："
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:488
+#: ../plugins/magnatune/magnatune.vala:266
 #, c-format
 msgid "Password:"
 msgstr "密码："
@@ -809,6 +858,7 @@ msgid "Magnatune Music Store"
 msgstr "Magnatune 音乐商店"
 
 #: ../plugins/magnatune/magnatune-dockable.vala:57
+#: ../plugins/magnatune/magnatune.vala:216
 msgid "Magnatune"
 msgstr "Magnatune"
 
@@ -862,6 +912,24 @@ msgstr ""
 #: ../plugins/magnatune/magnatune-widget.vala:375
 msgid "loading..."
 msgstr "加载中..."
+
+#: ../plugins/magnatune/magnatune.vala:173
+msgid "Username and Password available"
+msgstr ""
+
+#: ../plugins/magnatune/magnatune.vala:174
+msgid "Username or Password not available"
+msgstr ""
+
+#: ../plugins/magnatune/magnatune.vala:236
+#, fuzzy
+msgid "Visit Magnatune for an account."
+msgstr "使用帐号登陆 LastFm。"
+
+#: ../plugins/magnatune/magnatune.vala:247
+#, fuzzy, c-format
+msgid "Please enter your Magnatune username and password."
+msgstr "请输入您的 lastfm 用户名和密码。"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Mpris v2 Dbus Service"
@@ -925,6 +993,9 @@ msgstr "显示 UbuntuOne 商店(_U)"
 msgid "Show UbuntuOne Store"
 msgstr "显示 UbuntuOne 商店"
 
+#~ msgid "Plugins"
+#~ msgstr "插件"
+
 #~ msgid "Name"
 #~ msgstr "名称"
 
@@ -950,27 +1021,6 @@ msgstr "显示 UbuntuOne 商店"
 
 #~ msgid "Toggle media browser visibility."
 #~ msgstr "切换媒体浏览器可见性"
-
-#~ msgid "unknown artist"
-#~ msgstr "未知艺术家"
-
-#~ msgid "unknown title"
-#~ msgstr "未知标题"
-
-#~ msgid "unknown album"
-#~ msgstr "未知专辑"
-
-#~ msgid "Now Playing"
-#~ msgstr "正在播放"
-
-#~ msgid "Tracklist"
-#~ msgstr "播放列表"
-
-#~ msgid "Hide Library"
-#~ msgstr "隐藏库"
-
-#~ msgid "Show Library"
-#~ msgstr "显示库"
 
 #~ msgid "Hide Media"
 #~ msgstr "隐藏媒体"

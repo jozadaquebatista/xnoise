@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-26 12:01+0200\n"
+"POT-Creation-Date: 2012-09-27 13:07+0200\n"
 "PO-Revision-Date: 2012-04-03 22:06-0500\n"
 "Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
 "Language-Team: fsistemas <f.sistemas@gmail.com>\n"
@@ -83,33 +83,33 @@ msgstr ""
 msgid "Videos"
 msgstr "Video"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:152
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:155
 #, fuzzy
 msgid "Add or Remove media"
 msgstr "_Agregar o quitar medios de reproducción"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:165
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
 msgid "If selected, all media folders will be fully rescanned"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:171
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add local folder"
 msgstr "Agregar carpeta local"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:172
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:175
 msgid "Add media stream"
 msgstr "Agregar stream multimedia"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:173
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
 msgid "Remove"
 msgstr "Eliminar"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:176
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:179
 #, fuzzy
 msgid "Do full rescan"
 msgstr "Hacer un escaneo completo de la biblioteca multimedia"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:177
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:180
 #, fuzzy
 msgid ""
 "Select local media folders or internet media streams. \n"
@@ -119,22 +119,22 @@ msgstr ""
 "musical. \n"
 "Toda la biblioteca multimedia estará disponible en el explorador de medios."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:215
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:218
 #, fuzzy
 msgid "Location"
 msgstr "Abrir _Ubicación"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:250
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:258
 #: ../libxnoise/Utils/xnoise-media-importer.vala:101
 #: ../libxnoise/Utils/xnoise-media-importer.vala:184
 msgid "Importing media data. This may take some time..."
 msgstr "Importación en proceso. Esto puede tomar algún tiempo..."
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:265
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:274
 msgid "Select media folder"
 msgstr "Seleccione una carpeta con contenido multimedia"
 
-#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:334
+#: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:345
 msgid "Add internet radio link"
 msgstr "Agregar emisora de radio por internet"
 
@@ -142,57 +142,72 @@ msgstr "Agregar emisora de radio por internet"
 msgid "Leave fullscreen"
 msgstr "Salir de pantalla completa"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:279
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:281
-msgid "Plugins"
-msgstr "Complementos"
-
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:285
 #, fuzzy
 msgid "Media"
 msgstr "Mostrar medios"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:290
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:292
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "Activar las líneas de cuadrícula en el explorador de medios"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:296
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:298
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr ""
 "No volver a mostrar la pantalla de vídeo mientras se cierne la imagen del "
 "álbum"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
 #, fuzzy
 msgid "Application Menu"
 msgstr "Mostrar el menú principal de la aplicación"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:308
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 #, fuzzy
 msgid "Stop button"
 msgstr "Mostrar el botón detener"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:314
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 msgid "Quit on close"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:320
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1596
 msgid "Equalizer"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:335
 msgid "Go Back"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:336
-msgid "Media browser fontsize:"
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:344
+#, fuzzy
+msgid "Media browser fontsize"
 msgstr "Tamaño de fuente en el explorador de medios:"
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:361
+#, fuzzy
+msgid "User Interface"
+msgstr "Usuario:"
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:365
+msgid "Lyric Providers"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:369
+msgid "Additional"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:373
+#, fuzzy
+msgid "Music Stores"
+msgstr "Tiendas"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:120
 #, fuzzy
@@ -674,6 +689,42 @@ msgstr "Subtítulo #"
 msgid "Audio Track #"
 msgstr "Pista de audio #"
 
+#: ../libxnoise/Resources/xnoise-resources.vala:55
+msgid "unknown artist"
+msgstr "ártista desconocido"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:56
+msgid "unknown title"
+msgstr "título desconocido"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:57
+msgid "unknown album"
+msgstr "álbum desconocido"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:59
+#, fuzzy
+msgid "Now Playing"
+msgstr "Reproduciendo"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:60
+msgid "Tracklist"
+msgstr "Lista de reproducción"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:61
+#, fuzzy
+msgid "Lyrics"
+msgstr "_Letra"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:62
+#, fuzzy
+msgid "Hide Library"
+msgstr "Ocultar medios"
+
+#: ../libxnoise/Resources/xnoise-resources.vala:63
+#, fuzzy
+msgid "Show Library"
+msgstr "Mostrar medios"
+
 #: ../libxnoise/TrackList/xnoise-tracklist.vala:101
 msgid "Remove selected titles"
 msgstr "Eliminar títulos seleccionados"
@@ -726,13 +777,12 @@ msgstr "pausado"
 msgid "ready to rock"
 msgstr "ready to rock"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:298
+#: ../libxnoise/Utils/xnoise-media-importer.vala:299
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr "Se encontraron %u pistas. Actualizando la biblioteca ..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:509
-#: ../libxnoise/Utils/xnoise-media-importer.vala:581
+#: ../libxnoise/Utils/xnoise-media-importer.vala:514
 #, c-format
 msgid "%u tracks found"
 msgstr "Se encontraron %u pistas"
@@ -776,11 +826,13 @@ msgid "Please enter your lastfm username and password."
 msgstr "Por favor ingrese su usuario y contraseña de last.fm"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:479
+#: ../plugins/magnatune/magnatune.vala:257
 #, c-format
 msgid "Username:"
 msgstr "Usuario:"
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:488
+#: ../plugins/magnatune/magnatune.vala:266
 #, c-format
 msgid "Password:"
 msgstr "Password:"
@@ -852,6 +904,7 @@ msgid "Magnatune Music Store"
 msgstr ""
 
 #: ../plugins/magnatune/magnatune-dockable.vala:57
+#: ../plugins/magnatune/magnatune.vala:216
 msgid "Magnatune"
 msgstr ""
 
@@ -902,6 +955,23 @@ msgstr ""
 #, fuzzy
 msgid "loading..."
 msgstr "Cargando..."
+
+#: ../plugins/magnatune/magnatune.vala:173
+msgid "Username and Password available"
+msgstr ""
+
+#: ../plugins/magnatune/magnatune.vala:174
+msgid "Username or Password not available"
+msgstr ""
+
+#: ../plugins/magnatune/magnatune.vala:236
+msgid "Visit Magnatune for an account."
+msgstr ""
+
+#: ../plugins/magnatune/magnatune.vala:247
+#, fuzzy, c-format
+msgid "Please enter your Magnatune username and password."
+msgstr "Por favor ingrese su usuario y contraseña de last.fm"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Mpris v2 Dbus Service"
@@ -965,6 +1035,9 @@ msgstr ""
 msgid "Show UbuntuOne Store"
 msgstr ""
 
+#~ msgid "Plugins"
+#~ msgstr "Complementos"
+
 #~ msgid "Name"
 #~ msgstr "Nombre"
 
@@ -986,30 +1059,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Esta es la primer vez que inicia xnoise. Usted desea importar medios de "
 #~ "reproducción en su biblioteca de medios de reproducción?"
-
-#~ msgid "unknown artist"
-#~ msgstr "ártista desconocido"
-
-#~ msgid "unknown title"
-#~ msgstr "título desconocido"
-
-#~ msgid "unknown album"
-#~ msgstr "álbum desconocido"
-
-#, fuzzy
-#~ msgid "Now Playing"
-#~ msgstr "Reproduciendo"
-
-#~ msgid "Tracklist"
-#~ msgstr "Lista de reproducción"
-
-#, fuzzy
-#~ msgid "Hide Library"
-#~ msgstr "Ocultar medios"
-
-#, fuzzy
-#~ msgid "Show Library"
-#~ msgstr "Mostrar medios"
 
 #~ msgid "Hide Media"
 #~ msgstr "Ocultar medios"
