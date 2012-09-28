@@ -41,7 +41,9 @@ public class Xnoise.Main : GLib.Object {
     internal static unowned Xnoise.Application app;
     
     public int thread_id { get { return _thread_id; } }
-    
+
+    internal bool use_notifications { get; set; }
+
     public Main() {
         //Gtk.Widget.set_default_direction(Gtk.TextDirection.RTL);
         _instance = this;

@@ -45,6 +45,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     private Switch switch_usestop;
     private Switch switch_hoverimage;
     private Switch switch_quitifclosed;
+    private Switch switch_use_notifications;
     private Switch switch_equalizer;
     private AddMediaWidget add_media_widget;
     private SizeGroup plugin_label_sizegroup;
@@ -104,6 +105,9 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
         assert(switch_equalizer != null);
         switch_equalizer.notify["active"].connect(this.on_switch_use_equalizer_clicked);
         
+        assert(switch_use_notifications != null);
+        switch_use_notifications.notify["active"].connect(this.on_switch_use_notifications_clicked);
+        
         sb.changed.connect(this.on_mb_font_changed);
     }
 
@@ -125,6 +129,8 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
         
         //not_show_art_on_hover_image
         switch_hoverimage.active = !Params.get_bool_value("not_show_art_on_hover_image");
+        
+        switch_use_notifications.active = !Params.get_bool_value("not_use_notifications");
         
         // SpinButton
         if((Params.get_int_value("fontsizeMB") >= 7)&&
@@ -162,6 +168,17 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
         else {
             Params.set_bool_value("compact_layout", false);
             main_window.compact_layout = false;
+        }
+    }
+    
+    private void on_switch_use_notifications_clicked() {
+        if(this.switch_use_notifications.active) {
+            Params.set_bool_value("not_use_notifications", false);
+            Main.instance.use_notifications = true;
+        }
+        else {
+            Params.set_bool_value("not_use_notifications", true);
+            Main.instance.use_notifications = false;
         }
     }
     
@@ -315,6 +332,12 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
             label_quitifclosed.label = _("Quit on close");
             plugin_label_sizegroup.add_widget(label_quitifclosed);
+
+            switch_use_notifications = this.builder.get_object("switch_use_notifications") as Gtk.Switch;
+            switch_use_notifications.can_focus = false;
+            var label_use_notifications = this.builder.get_object("label_use_notifications") as Gtk.Label;
+            label_use_notifications.label = _("Use desktop notifications");
+            plugin_label_sizegroup.add_widget(label_use_notifications);
             
             switch_equalizer = this.builder.get_object("switch_equalizer") as Gtk.Switch;
             switch_equalizer.can_focus = false;

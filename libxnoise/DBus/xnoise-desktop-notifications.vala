@@ -35,12 +35,12 @@ using Xnoise.Services;
 
 [DBus(name = "org.freedesktop.Notifications")]
 private interface Xnoise.IDesktopNotifications : GLib.Object {
-    public abstract void close_notification(uint32 id) throws IOError;
-    public abstract string[] get_capabilities() throws IOError;
-    public abstract void get_server_information(out string name,
-                                                out string vendor,
-                                                out string version
-                                                ) throws IOError;
+    //public abstract void close_notification(uint32 id) throws IOError;
+    //public abstract string[] get_capabilities() throws IOError;
+    //public abstract void get_server_information(out string name,
+    //                                            out string vendor,
+    //                                            out string version
+    //                                            ) throws IOError;
     public abstract uint32 notify(string app_name,
                                   uint32 id,
                                   string icon,
@@ -66,14 +66,29 @@ private class Xnoise.DesktopNotifications : GLib.Object {
         
         get_dbus_proxy.begin();
         
-        global.tag_changed.connect(on_tag_changed);
-        global.sign_image_path_small_changed.connect(on_image_changed);
-        global.sign_image_path_embedded_changed.connect(on_image_changed);
+        Main.instance.notify["use-notifications"].connect( () => {
+            Idle.add(() => {
+                if(Main.instance.use_notifications) {
+                    global.tag_changed.connect(on_tag_changed);
+                    global.sign_image_path_small_changed.connect(on_image_changed);
+                    global.sign_image_path_embedded_changed.connect(on_image_changed);
+                }
+                else {
+                    global.tag_changed.disconnect(on_tag_changed);
+                    global.sign_image_path_small_changed.disconnect(on_image_changed);
+                    global.sign_image_path_embedded_changed.disconnect(on_image_changed);
+                }
+                return false;
+            });
+        });
+        Main.instance.use_notifications = !Params.get_bool_value("not_use_notifications");
     }
     
     private uint data_changed_source = 0;
     
     private void on_image_changed() {
+        if(!Main.instance.use_notifications)
+            return;
         if(global.current_uri == null)
             return;
         if(data_changed_source != 0)
@@ -86,6 +101,9 @@ private class Xnoise.DesktopNotifications : GLib.Object {
     }
     
     private void on_tag_changed() {
+        //print("use_notifications : %s\n", Main.instance.use_notifications.to_string());
+        if(!Main.instance.use_notifications)
+            return;
         if(data_changed_source != 0)
             Source.remove(data_changed_source);
         data_changed_source = Timeout.add(200, () => {
@@ -151,39 +169,41 @@ private class Xnoise.DesktopNotifications : GLib.Object {
         });
     }
 
-    public void print_capabilities() {
-        if(notifications_proxy == null)
-            return;
-        string[] sa = {};
-        try {
-            sa = notifications_proxy.get_capabilities();
-        }
-        catch(IOError e) {
-            print("%s\n", e.message);
-        }
-        foreach(string s in sa)
-            print("s=%s\n", s);
-    }
-    
-    public void print_server_information() {
-        if(notifications_proxy == null)
-            return;
-        string name = "", vendor = "", version = "";
-        try {
-            notifications_proxy.get_server_information(out name, out vendor, out version);
-        }
-        catch(IOError e) {
-            print("%s\n", e.message);
-        }
-        if(name != null && name != "")
-            print("%s, %s, %s\n", name, vendor, version);
-    }
+    //public void print_capabilities() {
+    //    if(notifications_proxy == null)
+    //        return;
+    //    string[] sa = {};
+    //    try {
+    //        sa = notifications_proxy.get_capabilities();
+    //    }
+    //    catch(IOError e) {
+    //        print("%s\n", e.message);
+    //    }
+    //    foreach(string s in sa)
+    //        print("s=%s\n", s);
+    //}
+
+    //public void print_server_information() {
+    //    if(notifications_proxy == null)
+    //        return;
+    //    string name = "", vendor = "", version = "";
+    //    try {
+    //        notifications_proxy.get_server_information(out name, out vendor, out version);
+    //    }
+    //    catch(IOError e) {
+    //        print("%s\n", e.message);
+    //    }
+    //    if(name != null && name != "")
+    //        print("%s, %s, %s\n", name, vendor, version);
+    //}
     
     public void send_notification(string icon,
                                   string summary,
                                   string body,
                                   int32 timeout) {
         if(notifications_proxy == null)
+            return;
+        if(!Main.instance.use_notifications)
             return;
         string[] actions = {};
         var hints = new HashTable<string,Variant>(str_hash, str_equal);
@@ -206,16 +226,16 @@ private class Xnoise.DesktopNotifications : GLib.Object {
         current_id = i;
     }
     
-    public void close_notification() {
-        if(notifications_proxy == null)
-            return;
-        print("Trying to close current notification...\n");
-        try {
-            notifications_proxy.close_notification(current_id);
-        }
-        catch(IOError e) {
-        }
-    }
+    //public void close_notification() {
+    //    if(notifications_proxy == null)
+    //        return;
+    //    print("Trying to close current notification...\n");
+    //    try {
+    //        notifications_proxy.close_notification(current_id);
+    //    }
+    //    catch(IOError e) {
+    //    }
+    //}
     
     private void on_name_appeared(DBusConnection conn, string name) {
         if(notifications_proxy == null) {

@@ -70,6 +70,7 @@ namespace Xnoise {
     private static MediaExtensions      _media_extensions;
     private static MediaStreamSchemes   _media_stream_schemes;
     private static DesktopNotifications _notifications;
+    
     /*
      * This function is used to create static instances of Params
      * and GlobalInfo in the xnoise namespace.
@@ -110,9 +111,6 @@ namespace Xnoise {
         if(global == null)
             global = new GlobalAccess();
         
-        // DESKTOP NOTIFICATIONS
-        _notifications = new DesktopNotifications();
-        
         File xnoise_data_home = File.new_for_path(data_folder());
         File xnoiseini = null;
         xnoiseini = xnoise_data_home.get_child(MAIN_DATABASE_NAME);
@@ -123,6 +121,9 @@ namespace Xnoise {
         Params.init();
         int v = Params.get_int_value("fontsizeMB");
         global.fontsize_dockable = ((v >= 7 && v < 18) ? v : 10);
+        
+        // DESKTOP NOTIFICATIONS
+        _notifications = new DesktopNotifications();
         
         // DATABASE
         Database.DbCreator.check_tables(ref is_first_start);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-28 16:14+0200\n"
+"POT-Creation-Date: 2012-09-28 17:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 msgid "no lyrics found..."
 msgstr ""
 
-#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:135
+#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:153
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1306
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1334
@@ -62,7 +62,7 @@ msgstr ""
 msgid "by"
 msgstr ""
 
-#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:138
+#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1308
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1336
@@ -157,60 +157,64 @@ msgstr ""
 msgid "Leave fullscreen"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:300
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:285
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
 msgid "Media"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:292
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:309
 msgid "Grid lines in media browser"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:298
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:315
 msgid "Show picture on hover album image"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 msgid "Application Menu"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 msgid "Stop button"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
 msgid "Quit on close"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
+msgid "Use desktop notifications"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1602
 msgid "Equalizer"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:335
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
 msgid "Go Back"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:344
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:367
 msgid "Media browser fontsize"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:361
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
 msgid "User Interface"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:365
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:388
 msgid "Lyric Providers"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:369
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:392
 msgid "Additional"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:373
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:396
 msgid "Music Stores"
 msgstr ""
 
