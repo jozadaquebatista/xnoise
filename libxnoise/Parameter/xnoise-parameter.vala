@@ -41,6 +41,10 @@ public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
     private static HashTable<string,double?> ht_double;
     private static HashTable<string,string>  ht_string;
     private static bool inited = false;
+
+    public static bool is_inited() {
+        return inited;
+    }
     
     public static void init() {
         if(inited == true)

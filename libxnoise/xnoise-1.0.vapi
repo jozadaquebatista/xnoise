@@ -882,6 +882,7 @@ namespace Xnoise {
 		public static string get_string_value (string key);
 		public static void init ();
 		public static void iparams_register (Xnoise.IParams iparam);
+		public static bool is_inited ();
 		public static void set_bool_value (string key, bool val);
 		public static void set_double_value (string key, double val);
 		public static void set_int_value (string key, int val);

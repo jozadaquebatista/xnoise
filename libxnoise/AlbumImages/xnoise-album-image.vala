@@ -295,7 +295,7 @@ public class Xnoise.AlbumImage : Gtk.Image {
             source = 0;
         }
             
-        source = Timeout.add_seconds(2, () => {
+        source = Timeout.add(200, () => {
             this.set_albumimage_from_path(image_path);
             return false;
         });

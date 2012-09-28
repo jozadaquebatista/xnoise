@@ -63,6 +63,7 @@ private class Xnoise.DesktopNotifications : GLib.Object {
     
     public DesktopNotifications() {
         assert(global != null);
+        assert(Params.is_inited());
         
         get_dbus_proxy.begin();
         

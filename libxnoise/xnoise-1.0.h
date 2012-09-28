@@ -2491,6 +2491,7 @@ void xnoise_main_window_set_use_eq (XnoiseMainWindow* self, gboolean value);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_params_get_type (void) G_GNUC_CONST;
+gboolean xnoise_params_is_inited (void);
 void xnoise_params_init (void);
 void xnoise_params_iparams_register (XnoiseIParams* iparam);
 void xnoise_params_set_start_parameters_in_implementors (void);
