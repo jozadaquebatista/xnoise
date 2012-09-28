@@ -8,6 +8,7 @@ libxnoise/Database/xnoise-db-reader.vala
 libxnoise/Database/xnoise-db-creator.vala
 libxnoise/Database/xnoise-db-writer.vala
 libxnoise/DBus/xnoise-dbus.vala
+libxnoise/DBus/xnoise-desktop-notifications.vala
 libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala
 libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-dockable.vala
 libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala
@@ -76,7 +77,6 @@ plugins/lastfm/xnoise-lastfm.vala
 plugins/lyricwiki/xnoise-lyricwiki.vala
 plugins/mediakeys/xnoise-mediakeys.vala
 plugins/mpris/xnoise-mpris.vala
-plugins/notifications2/xnoise-notifications.vala
 plugins/soundmenu2/xnoise-sound-menu-2.vala
 plugins/testplugin/xnoise-testplugin.vala
 plugins/titleToDecoration/xnoise-title-to-decoration.vala
@@ -94,7 +94,6 @@ plugins/magnatune/magnatune-widget.vala
 plugins/magnatune/magnatune.vala
 plugins/mpris/mpris.xnplugin.desktop.in
 plugins/mpris_one/mpris_one.xnplugin.desktop.in
-plugins/notifications2/notifications.xnplugin.desktop.in
 plugins/soundmenu2/soundmenu2.xnplugin.desktop.in
 plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in
 plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in

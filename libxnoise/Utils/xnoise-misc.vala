@@ -45,7 +45,6 @@ namespace Xnoise {
     public static MediaImporter media_importer = null;
     public static ItemHandlerManager itemhandler_manager = null;
     public static ItemConverter item_converter = null;
-    
     public static HashTable<string,Xnoise.DockableMedia>  dockable_media_sources;
     public static HashTable<int, Xnoise.DataSource>       data_source_registry;
 
@@ -70,6 +69,7 @@ namespace Xnoise {
     private static LocalSchemes         _local_schemes;
     private static MediaExtensions      _media_extensions;
     private static MediaStreamSchemes   _media_stream_schemes;
+    private static DesktopNotifications _notifications;
     /*
      * This function is used to create static instances of Params
      * and GlobalInfo in the xnoise namespace.
@@ -109,6 +109,9 @@ namespace Xnoise {
         //GLOBAL ACCESS
         if(global == null)
             global = new GlobalAccess();
+        
+        // DESKTOP NOTIFICATIONS
+        _notifications = new DesktopNotifications();
         
         File xnoise_data_home = File.new_for_path(data_folder());
         File xnoiseini = null;

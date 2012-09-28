@@ -41,7 +41,6 @@ SQLITE_REQUIRED=3.6
 TAGLIB_C_REQUIRED=1.6.0
 
 dnl required versions for plugins
-LIBNOTIFY_REQUIRED=0.7.0
 LIBXML_REQUIRED=2.6.32
 LIBSOUP_REQUIRED=2.26.0
 UBUNTUONEUI_REQUIRED=3.0
@@ -137,25 +136,6 @@ dnl ================================================================
 
 
 dnl ================================================================
-dnl plugin check for plugins dependent on libnotify
-
-PKG_CHECK_MODULES(LIBNOTIFY, \
-                  libnotify >= $LIBNOTIFY_REQUIRED, \
-                  have_libnotify=yes, \
-                  have_libnotify=no)
-
-if test "x$have_libnotify" != "xyes"; then
-    AC_MSG_NOTICE([libnotify $LIBNOTIFY_REQUIRED or greater not found.])
-fi
-AC_SUBST(LIBNOTIFY_CFLAGS)
-AC_SUBST(LIBNOTIFY_LIBS)
-dnl ================================================================
-
-
-
-
-
-dnl ================================================================
 dnl plugin check for plugins dependent on xlib
 X11_REQUIRED=1.3
 PKG_CHECK_MODULES(X11, \
@@ -189,7 +169,7 @@ dnl ================================================================
 
 
 dnl ================================================================
-dnl plugin check for plugins dependent on libnotify
+dnl plugin check for plugins dependent on libubuntuoneui
 
 PKG_CHECK_MODULES(UBUNTUONEUI, \
                   libubuntuoneui-3.0 >= $UBUNTUONEUI_REQUIRED, \
@@ -257,28 +237,6 @@ fi
 AM_CONDITIONAL(ENABLE_LASTFM, test x"$enable_lastfm" = "xyes")
 dnl ================================================================
 
-dnl ================================================================
-dnl dependency check for optional build of notifications plugin 
-
-AC_ARG_ENABLE([notifications],
-    AS_HELP_STRING([--disable-notifications],
-    [Disable notifications plugin (default: enabled)]),
-    [enable_notifications=$enableval],
-    [enable_notifications=yes])
-
-if test "x$enable_notifications" = "xyes"; then
-    if test "x$have_libnotify" = "xyes"; then
-        enable_notifications=yes
-    else
-        enable_notifications=no
-        AC_MSG_NOTICE([notifications plugin will not be included in the build.])
-    fi
-else
-    enable_notifications=no
-    AC_MSG_NOTICE([notifications plugin will not be included in the build.])
-fi
-AM_CONDITIONAL(ENABLE_NOTIFICATIONS, test x"$enable_notifications" = "xyes")
-dnl ================================================================
 
 dnl ================================================================
 dnl dependency check for optional build of mpris plugin 
@@ -514,7 +472,6 @@ AC_CONFIG_FILES([
     plugins/mediakeys/Makefile
     plugins/mpris/Makefile
     plugins/mpris_one/Makefile
-    plugins/notifications2/Makefile
     plugins/soundmenu2/Makefile
     plugins/ubuntuone/Makefile
     po/Makefile.in
@@ -543,7 +500,6 @@ echo "
     Lastfm (Album images 
             and 'scrobbling')      ${enable_lastfm}
     Keyboard Media Key control     ${enable_mediakeys}
-    Desktop notifications          ${enable_notifications}
     Mpris v1/v2 dbus interfaces    ${enable_mpris}
     Test plugin (Demo Plugin)      yes (always)
     Title-To-Decoration            yes (always)

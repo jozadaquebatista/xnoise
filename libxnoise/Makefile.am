@@ -40,6 +40,7 @@ libxnoise_la_SOURCES = \
     DataSource/xnoise-data-source.vala \
     DBus/xnoise-dbus.vala \
     DBus/xnoise-dbus-thumbnailer.vala \
+    DBus/xnoise-desktop-notifications.vala \
     DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala \
     DockableMedia/History/xnoise-lastplayed-treeview.vala \
     DockableMedia/History/xnoise-lastplayed-treeview-model.vala \

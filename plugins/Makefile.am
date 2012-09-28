@@ -7,7 +7,6 @@ SUBDIRS =       testplugin \
 
 DIST_SUBDIRS =  testplugin \
                 titleToDecoration \
-                notifications2 \
                 mediakeys \
                 mpris \
                 mpris_one \
@@ -27,10 +26,6 @@ endif
 
 if ENABLE_LASTFM
     SUBDIRS += lastfm
-endif
-
-if ENABLE_NOTIFICATIONS
-    SUBDIRS += notifications2
 endif
 
 if ENABLE_MPRIS
