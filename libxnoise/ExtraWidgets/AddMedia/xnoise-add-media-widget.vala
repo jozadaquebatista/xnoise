@@ -57,7 +57,7 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         xn = Main.instance;
         builder = new Gtk.Builder();
-        create_widgets();
+        setup_widgets();
         
         fill_media_list();
         
@@ -144,7 +144,7 @@ public class Xnoise.AddMediaWidget : Gtk.Box {
         return media_items;
     }
 
-    private void create_widgets() {
+    private void setup_widgets() {
         ScrolledWindow tvscrolledwindow = null;
         try {
             builder.add_from_file(Config.UIDIR + "add_media.ui");

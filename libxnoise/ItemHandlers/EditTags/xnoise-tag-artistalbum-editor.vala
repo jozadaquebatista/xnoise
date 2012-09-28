@@ -55,7 +55,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
         xn = Main.instance;
         td_old = {};
         builder = new Gtk.Builder();
-        create_widgets();
+        setup_widgets();
         mbm = main_window.musicBr.mediabrowsermodel;
         mbm.notify["populating-model"].connect( () => {
             if(!global.media_import_in_progress && !mbm.populating_model)
@@ -111,7 +111,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
     }
 
     private Label infolabel;
-    private void create_widgets() {
+    private void setup_widgets() {
         try {
             dialog = new Dialog();
             

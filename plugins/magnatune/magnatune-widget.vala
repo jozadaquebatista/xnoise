@@ -47,7 +47,7 @@ private class MagnatuneWidget : Gtk.Box {
         Object(orientation:Orientation.VERTICAL,spacing:0);
         this.plugin = plugin;
         this.dock = dock;
-        create_widgets();
+        setup_widgets();
         this.show_all();
         
         load_db();
@@ -371,7 +371,7 @@ private class MagnatuneWidget : Gtk.Box {
         this.show_all();
     }
     
-    private void create_widgets() {
+    private void setup_widgets() {
         label = new Label(_("loading..."));
         this.pack_start(label, true, true, 0);
     }

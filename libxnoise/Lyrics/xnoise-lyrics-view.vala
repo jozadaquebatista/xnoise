@@ -48,14 +48,14 @@ public class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
     public LyricsViewWidget(MainWindow win) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         this.win = win;
-        create_widgets();
+        setup_widgets();
     }
     
     public string get_view_name() {
         return LYRICS_VIEW_NAME;
     }
     
-    private void create_widgets() {
+    private void setup_widgets() {
         try {
             Builder gb = new Gtk.Builder();
             gb.add_from_file(UI_FILE);

@@ -51,14 +51,14 @@ public class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
     public TrackListViewWidget(MainWindow win) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
         this.win = win;
-        create_widgets();
+        setup_widgets();
     }
     
     public string get_view_name() {
         return TRACKLIST_VIEW_NAME;
     }
     
-    private void create_widgets() {
+    private void setup_widgets() {
         try {
             Builder gb = new Gtk.Builder();
             gb.add_from_file(UI_FILE);

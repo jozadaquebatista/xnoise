@@ -55,7 +55,7 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
     private Button button_add_folder;
     
     public FirstStartWidget(){
-        create_widgets();
+        setup_widgets();
         this.show_all();
     }
     
@@ -102,7 +102,7 @@ private class Xnoise.FirstStartWidget : Box, IMainView {
     private Box waitbox;
     private Box bigbox;
     
-    private void create_widgets() {
+    private void setup_widgets() {
         try {
             Builder gb = new Gtk.Builder();
             gb.add_from_file(WELCOME_UI_FILE);

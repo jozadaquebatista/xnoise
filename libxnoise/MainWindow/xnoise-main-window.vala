@@ -276,7 +276,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         ta.is_active = !Params.get_bool_value("media_browser_hidden");
         toggle_action_entries += ta;
         
-        create_widgets();
+        setup_widgets();
         
         //initialization of videoscreen
         initialize_video_screen();
@@ -1463,7 +1463,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         }
     }
     
-    private void create_widgets() {
+    private void setup_widgets() {
         try {
             Builder gb = new Gtk.Builder();
             gb.add_from_file(MAIN_UI_FILE);

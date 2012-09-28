@@ -57,7 +57,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
         item = _item;
         xn = Main.instance;
         builder = new Gtk.Builder();
-        create_widgets();
+        setup_widgets();
         mbm = main_window.musicBr.mediabrowsermodel;
         fill_entries();
         dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT);
@@ -109,7 +109,7 @@ public class Xnoise.TagTitleEditor : GLib.Object {
     }
     
     private Label infolabel;
-    private void create_widgets() {
+    private void setup_widgets() {
         try {
             dialog = new Dialog();
             

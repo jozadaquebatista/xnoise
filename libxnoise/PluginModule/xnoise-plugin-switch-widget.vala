@@ -52,7 +52,7 @@ private class Xnoise.PluginSwitch : Gtk.Box {
         
         assert(get_plugin_reference());
         
-        create_widgets();
+        setup_widgets();
         init_value();
         connect_signals();
         
@@ -88,7 +88,7 @@ private class Xnoise.PluginSwitch : Gtk.Box {
         return true;
     }
     
-    private void create_widgets() {
+    private void setup_widgets() {
         var label = new Gtk.Label(pc.info.pretty_name);
         label.set_alignment(0.0f, 0.5f);
         label.justify = Justification.LEFT;
