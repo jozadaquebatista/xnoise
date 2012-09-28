@@ -49,6 +49,7 @@ public class Xnoise.PluginModule.Loader : Object {
         banned_plugins = {};
         banned_plugins += "LastfmCovers";       //was merged into lastfm plugin
         banned_plugins += "CyclicSaveState";    //was merged into xnoise
+        banned_plugins += "notifications";      //was replaced by onboard notifications service
         
         plugin_htable = new HashTable<string, Container>(str_hash, str_equal);
         lyrics_plugins_htable   = new HashTable<string, unowned Container>(str_hash, str_equal);
