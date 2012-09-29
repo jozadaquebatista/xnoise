@@ -110,6 +110,24 @@ public class Xnoise.FullscreenToolbar {
                 quit_now();
                 return true;
             }
+            case Gdk.Key.p: {
+                if((e.state & Gdk.ModifierType.CONTROL_MASK) != Gdk.ModifierType.CONTROL_MASK)
+                    return false;
+                global.prev();
+                return true;
+            }
+            case Gdk.Key.n: {
+                if((e.state & Gdk.ModifierType.CONTROL_MASK) != Gdk.ModifierType.CONTROL_MASK)
+                    return false;
+                global.next();
+                return true;
+            }
+            case Gdk.Key.space: {
+                if((e.state & Gdk.ModifierType.CONTROL_MASK) != Gdk.ModifierType.CONTROL_MASK) // Ctrl Modifier
+                    return false;
+                global.play(true);
+                return true;
+            }
             default: 
                 break;
         }
@@ -126,10 +144,6 @@ public class Xnoise.FullscreenToolbar {
         switch(e.keyval) {
             case Gdk.Key.Escape: {
                 main_window.toggle_fullscreen();
-                return true;
-            }
-            case Gdk.Key.space: {
-                main_window.playPauseButton.clicked();
                 return true;
             }
             default: 

@@ -123,10 +123,12 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     private Gdk.Pixbuf logo;
     private unowned Main xn;
     private bool cover_image_available;
+    private Gtk.Menu? menu;
+    private uint refresh_source = 0;
     private unowned GstPlayer player;
     
-    public VideoScreen(GstPlayer _player) {
-        this.player = _player;
+    public VideoScreen(GstPlayer player) {
+        this.player = player;
         this.xn = Main.instance;
         rect = Gdk.Rectangle();
         init_video_screen();
@@ -134,9 +136,19 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         global.notify["image-path-large"].connect(on_image_path_changed);
         global.notify["image-path-embedded"].connect(on_image_path_changed);
         this.button_release_event.connect(on_button_released);
+        global.tag_changed.connect(on_tag_changed);
     }
     
-    private Gtk.Menu? menu;
+    private void on_tag_changed() {
+        if(refresh_source != 0)
+            Source.remove(refresh_source);
+        
+        refresh_source = Timeout.add(250, () => {
+            trigger_expose();
+            refresh_source = 0;
+            return false;
+        });
+    }
     
     private bool on_button_released(Gtk.Widget sender, Gdk.EventButton e) {
         if(!((e.button==3) && (e.type==Gdk.EventType.BUTTON_RELEASE))) {
@@ -309,17 +321,9 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         this.get_allocation(out alloc);
         rect.width  = get_allocated_width ();
         rect.height = get_allocated_height ();
-
-//        rect.width  = e.area.width;
-//        rect.height = e.area.height;
-//        region = Gdk.Region.rectangle(rect);
-        
-//        this.get_window().begin_paint_region(region);
         cr.set_source_rgb(0.0f, 0.0f, 0.0f);
         cr.rectangle(rect.x, rect.y,
                      rect.width, rect.height);
-//        cr.rectangle(e.area.x, e.area.y,
-//                     e.area.width, e.area.height);
         cr.fill();
         
         if(!gst_player.current_has_video_track) {
@@ -348,7 +352,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
 
                 if(logowidth<=1||logoheight<=1) {
                     // Do not paint for small pictures
-//                    this.get_window().end_paint();
                     return true;
                 }
                 if(!cover_image_available) {
@@ -416,7 +419,6 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                 Gdk.cairo_set_source_pixbuf(cr, logo, x_offset, y_offset);
                 cr.paint();
             }
-//            this.get_window().end_paint();
         }
         return true;
     }

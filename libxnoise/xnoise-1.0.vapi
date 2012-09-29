@@ -1036,7 +1036,7 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class VideoScreen : Gtk.DrawingArea {
-		public VideoScreen (Xnoise.GstPlayer _player);
+		public VideoScreen (Xnoise.GstPlayer player);
 		public override bool draw (Cairo.Context cr);
 		public void trigger_expose ();
 		public string font_family { get; set; }

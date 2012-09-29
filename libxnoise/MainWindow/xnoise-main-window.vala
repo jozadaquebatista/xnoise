@@ -183,18 +183,18 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
 
     private const Gtk.ActionEntry[] action_entries = {
         { "FileMenuAction", null, N_("_File") },
-            { "OpenAction", Gtk.Stock.OPEN, null, "<Control>o", N_("open file"), on_file_add },
-            { "OpenLocationAction", Gtk.Stock.NETWORK, N_("Open _Location"), null, N_("open remote location"), on_location_add },
+            { "OpenAction", Gtk.Stock.OPEN, null, "<Ctrl>o", N_("open file"), on_file_add },
+            { "OpenLocationAction", Gtk.Stock.NETWORK, N_("Open _Stream"), "<Control>l", N_("open remote location"), on_location_add },
             { "AddRemoveAction", Gtk.Stock.ADD, N_("_Add or Remove media"), null, N_("manage the content of the xnoise media library"), on_menu_add},
             { "QuitAction", Gtk.Stock.QUIT, null, null, null, quit_now},
         { "EditMenuAction", null, N_("_Edit") },
-            { "ClearTrackListAction", Gtk.Stock.CLEAR, N_("C_lear tracklist"), null, N_("Clear the tracklist"), on_remove_all_button_clicked},
+            { "ClearTrackListAction", Gtk.Stock.CLEAR, N_("C_lear tracklist"), "<Alt>c", N_("Clear the tracklist"), on_remove_all_button_clicked },
             { "RescanLibraryAction", Gtk.Stock.REFRESH, N_("_Rescan collection"), null, N_("Rescan collection"), on_reload_collection_button_clicked},
             { "IncreaseVolumeAction", null, N_("_Increase volume"), "<Control>plus", N_("Increase playback volume"), increase_volume },
             { "DecreaseVolumeAction", null, N_("_Decrease volume"), "<Control>minus", N_("Decrease playback volume"), decrease_volume },
-            { "PreviousTrackAction", Gtk.Stock.MEDIA_PREVIOUS, N_("_Previous track"), null, N_("Go to previous track"), menu_prev },
-            { "PlayPauseAction", Gtk.Stock.MEDIA_PLAY, N_("_Toggle play"), null, N_("Toggle playback status"), menutoggle_playpause },
-            { "NextTrackAction", Gtk.Stock.MEDIA_NEXT, N_("_Next track"), null, N_("Go to next track"), menu_next },
+            { "PreviousTrackAction", Gtk.Stock.MEDIA_PREVIOUS, N_("_Previous track"), "<Control>p", N_("Go to previous track"), menu_prev },
+            { "PlayPauseAction", Gtk.Stock.MEDIA_PLAY, N_("_Toggle play"), "<Control>KP_Space", N_("Toggle playback status"), menutoggle_playpause },
+            { "NextTrackAction", Gtk.Stock.MEDIA_NEXT, N_("_Next track"), "<Control>n", N_("Go to next track"), menu_next },
             { "SettingsAction", Gtk.Stock.PREFERENCES, null, null, null, on_settings_edit},
         { "ViewMenuAction", null, N_("_View") },
             { "ShowTracklistAction", Gtk.Stock.INDEX, N_("_Tracklist"), "<Alt>1", N_("Go to the tracklist."), on_show_tracklist_menu_clicked},
@@ -722,6 +722,30 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%u : %u\n", e.keyval, e.state);
         switch(e.keyval) {
+            case Gdk.Key.c: {
+                if((e.state & ModifierType.MOD1_MASK) != ModifierType.MOD1_MASK)
+                    return false;
+                on_remove_all_button_clicked();
+                return true;
+            }
+            case Gdk.Key.p: {
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
+                    return false;
+                menu_prev();
+                return true;
+            }
+            case Gdk.Key.n: {
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
+                    return false;
+                menu_next();
+                return true;
+            }
+            case Gdk.Key.space: {
+                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
+                    return false;
+                playPauseButton.clicked();
+                return true;
+            }
             case Gdk.Key.plus: {
                 if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK)
                     return false;
@@ -739,12 +763,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     search_entry.grab_focus();
                     return true;
                 }
-//            case Gdk.Key.f:
                 if((e.state & ModifierType.MOD1_MASK) == ModifierType.MOD1_MASK) {
                     main_window.toggle_fullscreen();
                     return true;
                 }
-//                break;
                 return false;
             }
             case Gdk.Key.d: {
@@ -774,12 +796,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 if(active_lyrics == false)
                     return false;
                 on_show_lyrics_menu_clicked();
-                return true;
-            }
-            case Gdk.Key.space: {
-                if((e.state & ModifierType.CONTROL_MASK) != ModifierType.CONTROL_MASK) // Ctrl Modifier
-                    return false;
-                playPauseButton.clicked();
                 return true;
             }
             case Gdk.Key.m: {

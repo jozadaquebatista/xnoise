@@ -309,7 +309,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
         string? large_name = null; 
         string? embedded_name = null; 
         File f = get_albumimage_for_artistalbum(current_artist, current_album, "medium");
-        small_name = f != null ? f.get_path() : EMPTYSTRING;
+        small_name = f != null && f.get_path() != null ? f.get_path() : EMPTYSTRING;
         if((small_name == EMPTYSTRING) || (small_name == null)) {
             image_path_small = null;
             image_path_large = null;
@@ -318,7 +318,7 @@ public class Xnoise.GlobalAccess : GLib.Object {
         }
         
         File f2 = get_albumimage_for_artistalbum(current_artist, current_album, "embedded");
-        embedded_name = f2 != null ? f2.get_path() : EMPTYSTRING;
+        embedded_name = f2 != null && f2.get_path() != null ? f2.get_path() : EMPTYSTRING;
         
         large_name = small_name.substring(0, small_name.length - "medium".length);
         large_name = large_name + "extralarge";
