@@ -318,19 +318,19 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             switch_compact = this.builder.get_object("switch_compact") as Gtk.Switch;
             switch_compact.can_focus = false;
             var label_compact = this.builder.get_object("label_compact") as Gtk.Label;
-            label_compact.label = _("Application Menu");
+            label_compact.label = _("Use Application Menu");
             plugin_label_sizegroup.add_widget(label_compact);
             
             switch_usestop = this.builder.get_object("switch_usestop") as Gtk.Switch;
             switch_usestop.can_focus = false;
             var label_usestop = this.builder.get_object("label_usestop") as Gtk.Label;
-            label_usestop.label = _("Stop button");
+            label_usestop.label = _("Show Stop button");
             plugin_label_sizegroup.add_widget(label_usestop);
             
             switch_quitifclosed = this.builder.get_object("switch_quitifclosed") as Gtk.Switch;
             switch_quitifclosed.can_focus = false;
             var label_quitifclosed = this.builder.get_object("label_quitifclosed") as Gtk.Label;
-            label_quitifclosed.label = _("Quit on close");
+            label_quitifclosed.label = _("Quit on window close");
             plugin_label_sizegroup.add_widget(label_quitifclosed);
 
             switch_use_notifications = this.builder.get_object("switch_use_notifications") as Gtk.Switch;
@@ -342,7 +342,7 @@ public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
             switch_equalizer = this.builder.get_object("switch_equalizer") as Gtk.Switch;
             switch_equalizer.can_focus = false;
             var label_equalizer = this.builder.get_object("label_equalizer") as Gtk.Label;
-            label_equalizer.label = _("Equalizer");
+            label_equalizer.label = _("Use Equalizer");
             plugin_label_sizegroup.add_widget(label_equalizer);
             
             notebook = this.builder.get_object("notebook1") as Gtk.Notebook;

@@ -89,7 +89,7 @@ private class Xnoise.PluginSwitch : Gtk.Box {
     }
     
     private void setup_widgets() {
-        var label = new Gtk.Label(pc.info.pretty_name);
+        var label = new Gtk.Label(pc.info.pretty_name + " " + _("(Plugin)"));
         label.set_alignment(0.0f, 0.5f);
         label.justify = Justification.LEFT;
         label.xpad = 6;
