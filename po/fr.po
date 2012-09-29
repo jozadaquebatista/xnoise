@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 22:55+0200\n"
+"POT-Creation-Date: 2012-09-29 23:21+0200\n"
 "PO-Revision-Date: 2012-07-05 14:17+0100\n"
 "Last-Translator: Aurélien Rivière <aurelien.riv@gmail.com>\n"
 "Language-Team: shkn <shuerhaaken@googlemail.com>\n"
@@ -179,17 +179,18 @@ msgstr "Ne pas afficher l'écran vidéo lors du survol de l'image de l'album"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 #, fuzzy
-msgid "Application Menu"
+msgid "Use Application Menu"
 msgstr "Afficher le menu principal"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 #, fuzzy
-msgid "Stop button"
+msgid "Show Stop button"
 msgstr "Utiliser le bouton Stop"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
-msgid "Quit on close"
-msgstr ""
+#, fuzzy
+msgid "Quit on window close"
+msgstr "Quitter l'application si la fenêtre est fermée"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
 #, fuzzy
@@ -197,8 +198,7 @@ msgid "Use desktop notifications"
 msgstr "notifications"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
-msgid "Equalizer"
+msgid "Use Equalizer"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
@@ -599,6 +599,10 @@ msgstr "Entrez l'URL du fichier à lire"
 msgid "Select media file"
 msgstr "Sélectionner un fichier média"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
+msgid "Equalizer"
+msgstr ""
+
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
@@ -701,6 +705,11 @@ msgstr "Sous-titres #"
 #: ../libxnoise/Player/xnoise-gst-player.vala:825
 msgid "Audio Track #"
 msgstr "Piste Audio #"
+
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#, fuzzy
+msgid "(Plugin)"
+msgstr "Greffons"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:55
 msgid "unknown artist"
@@ -1039,9 +1048,6 @@ msgstr ""
 #~ msgid "Show notifications one track change"
 #~ msgstr "Afficher les notifications au changement de piste"
 
-#~ msgid "Plugins"
-#~ msgstr "Greffons"
-
 #~ msgid "Name"
 #~ msgstr "Nom"
 
@@ -1050,9 +1056,6 @@ msgstr ""
 
 #~ msgid "Compact layout"
 #~ msgstr "Affichage compacte"
-
-#~ msgid "Quit application if window is closed"
-#~ msgstr "Quitter l'application si la fenêtre est fermée"
 
 #~ msgid "Add media"
 #~ msgstr "Ajout de médias"

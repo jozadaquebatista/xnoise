@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 22:55+0200\n"
+"POT-Creation-Date: 2012-09-29 23:21+0200\n"
 "PO-Revision-Date: 2012-09-24 19:11+0800\n"
 "Last-Translator: taijuin <taijuin@gmail.com>\n"
 "Language-Team: Chinese (traditional) <ubuntu-l10n-zh-tw@lists.launchpad."
@@ -177,26 +177,27 @@ msgstr "當停留在專輯圖片時，不顯示影片畫面"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 #, fuzzy
-msgid "Application Menu"
+msgid "Use Application Menu"
 msgstr "顯示應用的主選單"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 #, fuzzy
-msgid "Stop button"
+msgid "Show Stop button"
 msgstr "使用停止按鈕"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
-msgid "Quit on close"
-msgstr ""
+#, fuzzy
+msgid "Quit on window close"
+msgstr "如果視窗是關閉的，退出應用程式"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
 msgid "Use desktop notifications"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
-msgid "Equalizer"
-msgstr "等化器"
+#, fuzzy
+msgid "Use Equalizer"
+msgstr "使用等化器"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
 msgid "Go Back"
@@ -586,6 +587,10 @@ msgstr "輸入用於播放的網址"
 msgid "Select media file"
 msgstr "選取媒體檔案"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
+msgid "Equalizer"
+msgstr "等化器"
+
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
@@ -686,6 +691,11 @@ msgstr "字幕 #"
 #: ../libxnoise/Player/xnoise-gst-player.vala:825
 msgid "Audio Track #"
 msgstr "音軌＃"
+
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#, fuzzy
+msgid "(Plugin)"
+msgstr "插件"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:55
 msgid "unknown artist"
@@ -1029,9 +1039,6 @@ msgstr "顯示 UbuntuOne 商店"
 #~ msgid "Show notifications one track change"
 #~ msgstr "當曲目變化時，顯示通知，"
 
-#~ msgid "Plugins"
-#~ msgstr "插件"
-
 #~ msgid "Name"
 #~ msgstr "名稱"
 
@@ -1040,12 +1047,6 @@ msgstr "顯示 UbuntuOne 商店"
 
 #~ msgid "Compact layout"
 #~ msgstr "緊湊佈局"
-
-#~ msgid "Quit application if window is closed"
-#~ msgstr "如果視窗是關閉的，退出應用程式"
-
-#~ msgid "Use equalizer"
-#~ msgstr "使用等化器"
 
 #~ msgid "Add media"
 #~ msgstr "加入媒體"

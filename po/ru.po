@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 22:55+0200\n"
+"POT-Creation-Date: 2012-09-29 23:21+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -189,25 +189,25 @@ msgstr "Не показывать экран видео при наведени�
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 #, fuzzy
-msgid "Application Menu"
+msgid "Use Application Menu"
 msgstr "Показывать главное меню"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 #, fuzzy
-msgid "Stop button"
+msgid "Show Stop button"
 msgstr "Использовать кнопку стоп"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
-msgid "Quit on close"
-msgstr ""
+#, fuzzy
+msgid "Quit on window close"
+msgstr "Выйти из приложения, если окно закрывается"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
 msgid "Use desktop notifications"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
-msgid "Equalizer"
+msgid "Use Equalizer"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
@@ -610,6 +610,10 @@ msgstr "Введите URL для проигрывания"
 msgid "Select media file"
 msgstr "Выберите медиа файл"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
+msgid "Equalizer"
+msgstr ""
+
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
@@ -712,6 +716,11 @@ msgstr "Субтитр #"
 #: ../libxnoise/Player/xnoise-gst-player.vala:825
 msgid "Audio Track #"
 msgstr "Аудио трек #"
+
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#, fuzzy
+msgid "(Plugin)"
+msgstr "Дополнения"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:55
 msgid "unknown artist"
@@ -1053,17 +1062,11 @@ msgstr ""
 #~ msgid "Show notifications one track change"
 #~ msgstr "Показ уведомлений при смене дорожки"
 
-#~ msgid "Plugins"
-#~ msgstr "Дополнения"
-
 #~ msgid "General"
 #~ msgstr "Основные"
 
 #~ msgid "Compact layout"
 #~ msgstr "Компактный вид"
-
-#~ msgid "Quit application if window is closed"
-#~ msgstr "Выйти из приложения, если окно закрывается"
 
 #~ msgid "Add media"
 #~ msgstr "Добавить медиа"

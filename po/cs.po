@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 22:55+0200\n"
+"POT-Creation-Date: 2012-09-29 23:21+0200\n"
 "PO-Revision-Date: 2012-09-27 09:42+0100\n"
 "Last-Translator: Petr Šimáček <petr.simacek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -174,15 +174,18 @@ msgid "Show picture on hover album image"
 msgstr "Zobrazit obrázek při přejetí přebalu alba myší"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
-msgid "Application Menu"
+#, fuzzy
+msgid "Use Application Menu"
 msgstr "Menu aplikací"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
-msgid "Stop button"
+#, fuzzy
+msgid "Show Stop button"
 msgstr "Tlačítko pro zastavení"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
-msgid "Quit on close"
+#, fuzzy
+msgid "Quit on window close"
 msgstr "Ukončit při zavření"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
@@ -191,9 +194,9 @@ msgid "Use desktop notifications"
 msgstr "Oznámení na ploše"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
-msgid "Equalizer"
-msgstr "Ekvalizér"
+#, fuzzy
+msgid "Use Equalizer"
+msgstr "Použít ekvalizér"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
 msgid "Go Back"
@@ -588,6 +591,10 @@ msgstr "Zadejte adresu (URL) k přehrání"
 msgid "Select media file"
 msgstr "Vyberte multimediální soubor"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
+msgid "Equalizer"
+msgstr "Ekvalizér"
+
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
@@ -695,6 +702,11 @@ msgstr "Titulek #"
 #: ../libxnoise/Player/xnoise-gst-player.vala:825
 msgid "Audio Track #"
 msgstr "Zvuková stopa #"
+
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#, fuzzy
+msgid "(Plugin)"
+msgstr "Přídavné moduly"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:55
 msgid "unknown artist"
@@ -1033,9 +1045,6 @@ msgstr "Zobrazit hudební obchod Ubuntu"
 #~ msgid "Show notifications one track change"
 #~ msgstr "Oznámení ukázat při změně skladby"
 
-#~ msgid "Plugins"
-#~ msgstr "Přídavné moduly"
-
 #~ msgid "Name"
 #~ msgstr "Název"
 
@@ -1047,9 +1056,6 @@ msgstr "Zobrazit hudební obchod Ubuntu"
 
 #~ msgid "Quit application if window is closed"
 #~ msgstr "Ukončit program při zavření okna"
-
-#~ msgid "Use equalizer"
-#~ msgstr "Použít ekvalizér"
 
 #~ msgid "Add media"
 #~ msgstr "Přidat media"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 22:55+0200\n"
+"POT-Creation-Date: 2012-09-29 23:21+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: shuerhaaken <shuerhaaken@googlemail.com>\n"
 "Language-Team: shuerhaaken <shuerhaaken@googlemail.com>\n"
@@ -174,15 +174,18 @@ msgid "Show picture on hover album image"
 msgstr "Zeige Bild, wenn Mauszeiger über dem Albumbild ist"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
-msgid "Application Menu"
+#, fuzzy
+msgid "Use Application Menu"
 msgstr "Anwendungsmenü"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
-msgid "Stop button"
+#, fuzzy
+msgid "Show Stop button"
 msgstr "Stop Knopf"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
-msgid "Quit on close"
+#, fuzzy
+msgid "Quit on window close"
 msgstr "Schließen um zu Beenden"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
@@ -191,9 +194,9 @@ msgid "Use desktop notifications"
 msgstr "Benachrichtigungen"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
-msgid "Equalizer"
-msgstr "Equalizer"
+#, fuzzy
+msgid "Use Equalizer"
+msgstr "Verwende den Equalizer"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
 msgid "Go Back"
@@ -584,6 +587,10 @@ msgstr "URL Adresse zum Öffnen eingeben"
 msgid "Select media file"
 msgstr "Wähle Mediendatei"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
+msgid "Equalizer"
+msgstr "Equalizer"
+
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
@@ -688,6 +695,11 @@ msgstr "Untertitel #"
 #: ../libxnoise/Player/xnoise-gst-player.vala:825
 msgid "Audio Track #"
 msgstr "Audio-Track #"
+
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#, fuzzy
+msgid "(Plugin)"
+msgstr "Plugins"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:55
 msgid "unknown artist"
@@ -1025,9 +1037,6 @@ msgstr "UbuntuOne Musik zeigen"
 #~ msgid "Show notifications one track change"
 #~ msgstr "Benachrichtigungen beim Wechsel des Titels anzeigen"
 
-#~ msgid "Plugins"
-#~ msgstr "Plugins"
-
 #~ msgid "Name"
 #~ msgstr "Name"
 
@@ -1039,9 +1048,6 @@ msgstr "UbuntuOne Musik zeigen"
 
 #~ msgid "Quit application if window is closed"
 #~ msgstr "Beende beim schließen des Fensters"
-
-#~ msgid "Use equalizer"
-#~ msgstr "Verwende den Equalizer"
 
 #~ msgid "Add media"
 #~ msgstr "Medien hinzufügen"

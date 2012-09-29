@@ -28,6 +28,7 @@ libxnoise/Lyrics/xnoise-lyrics-view.c
 libxnoise/MainWindow/xnoise-main-window.c
 libxnoise/Player/xnoise-gst-equalizer.c
 libxnoise/Player/xnoise-gst-player.c
+libxnoise/PluginModule/xnoise-plugin-switch-widget.c
 libxnoise/TrackList/xnoise-tracklist.c
 libxnoise/TrayIcon/xnoise-tray-icon.c
 libxnoise/Utils/xnoise-media-importer.c

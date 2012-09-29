@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 22:55+0200\n"
+"POT-Creation-Date: 2012-09-29 23:21+0200\n"
 "PO-Revision-Date: 2012-09-12 14:13+0100\n"
 "Last-Translator: Francisco Perez <fsistemas@gmail.com>\n"
 "Language-Team: SPANISH <ES@li.org>\n"
@@ -187,25 +187,25 @@ msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 #, fuzzy
-msgid "Application Menu"
+msgid "Use Application Menu"
 msgstr "Mostrar el menú principal de la aplicación"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 #, fuzzy
-msgid "Stop button"
+msgid "Show Stop button"
 msgstr "Mostrar el botón detener"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
-msgid "Quit on close"
-msgstr ""
+#, fuzzy
+msgid "Quit on window close"
+msgstr "Salir de la aplicación cuando se cierre la ventana"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
 msgid "Use desktop notifications"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
-msgid "Equalizer"
+msgid "Use Equalizer"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
@@ -605,6 +605,10 @@ msgstr "Ingrese la dirección URL del archivo para abrir"
 msgid "Select media file"
 msgstr "Seleccione un archivo multimedia"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
+msgid "Equalizer"
+msgstr ""
+
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
@@ -709,6 +713,11 @@ msgstr "Subtítulo #"
 #: ../libxnoise/Player/xnoise-gst-player.vala:825
 msgid "Audio Track #"
 msgstr "Pista de audio #"
+
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#, fuzzy
+msgid "(Plugin)"
+msgstr "Complementos"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:55
 msgid "unknown artist"
@@ -1056,9 +1065,6 @@ msgstr "Mostrar UbuntuOne Store"
 #~ msgid "Show notifications one track change"
 #~ msgstr "Mostrar notificaciones al cambio de pista en reproducción"
 
-#~ msgid "Plugins"
-#~ msgstr "Complementos"
-
 #~ msgid "Name"
 #~ msgstr "Nombre"
 
@@ -1067,9 +1073,6 @@ msgstr "Mostrar UbuntuOne Store"
 
 #~ msgid "Compact layout"
 #~ msgstr "Diseño compacto"
-
-#~ msgid "Quit application if window is closed"
-#~ msgstr "Salir de la aplicación cuando se cierre la ventana"
 
 #~ msgid "Add media"
 #~ msgstr "Agregar medios de reproducción"

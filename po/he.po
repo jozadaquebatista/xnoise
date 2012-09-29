@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 22:55+0200\n"
+"POT-Creation-Date: 2012-09-29 23:21+0200\n"
 "PO-Revision-Date: 2012-09-15 22:30+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -184,26 +184,27 @@ msgstr "אל תציג את מסך הווידאו כשהסמן מרחף על תמ
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 #, fuzzy
-msgid "Application Menu"
+msgid "Use Application Menu"
 msgstr "הצג את התפריט הראשי"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 #, fuzzy
-msgid "Stop button"
+msgid "Show Stop button"
 msgstr "השתמש בכפתור עצירה"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
-msgid "Quit on close"
-msgstr ""
+#, fuzzy
+msgid "Quit on window close"
+msgstr "צא מהתכנה בסגירת החלון"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
 msgid "Use desktop notifications"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
-msgid "Equalizer"
-msgstr "איקולייזר"
+#, fuzzy
+msgid "Use Equalizer"
+msgstr "שימוש באיקולייזר"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
 msgid "Go Back"
@@ -594,6 +595,10 @@ msgstr "הכנס את כתובת ה-URL של הקובץ שברצונך לנגן"
 msgid "Select media file"
 msgstr "בחירת קובץ מדיה"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
+msgid "Equalizer"
+msgstr "איקולייזר"
+
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
@@ -694,6 +699,11 @@ msgstr "כתוביות #"
 #: ../libxnoise/Player/xnoise-gst-player.vala:825
 msgid "Audio Track #"
 msgstr "רצועת שמע #"
+
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#, fuzzy
+msgid "(Plugin)"
+msgstr "פלאגינים"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:55
 msgid "unknown artist"
@@ -1037,9 +1047,6 @@ msgstr "הצג את החנות UbuntuOne"
 #~ msgid "Show notifications one track change"
 #~ msgstr "הצג התראות ברגע שהרצועה משתנה"
 
-#~ msgid "Plugins"
-#~ msgstr "פלאגינים"
-
 #~ msgid "Name"
 #~ msgstr "שם"
 
@@ -1048,12 +1055,6 @@ msgstr "הצג את החנות UbuntuOne"
 
 #~ msgid "Compact layout"
 #~ msgstr "סידור קומפקטי"
-
-#~ msgid "Quit application if window is closed"
-#~ msgstr "צא מהתכנה בסגירת החלון"
-
-#~ msgid "Use equalizer"
-#~ msgstr "שימוש באיקולייזר"
 
 #~ msgid "Add media"
 #~ msgstr "הוספת מדיה"

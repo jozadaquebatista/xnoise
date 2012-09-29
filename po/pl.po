@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 22:55+0200\n"
+"POT-Creation-Date: 2012-09-29 23:21+0200\n"
 "PO-Revision-Date: 2012-09-01 13:00+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -183,25 +183,25 @@ msgstr "Nie pokazuj ekranu filmów gdy kursor zakrywa okładkę"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 #, fuzzy
-msgid "Application Menu"
+msgid "Use Application Menu"
 msgstr "Pokaż główne menu aplikacji"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 #, fuzzy
-msgid "Stop button"
+msgid "Show Stop button"
 msgstr "Pokaż przycisk stop"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
-msgid "Quit on close"
-msgstr ""
+#, fuzzy
+msgid "Quit on window close"
+msgstr "Zakończ po zamknięciu okna"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
 msgid "Use desktop notifications"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
-msgid "Equalizer"
+msgid "Use Equalizer"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
@@ -595,6 +595,10 @@ msgstr "Wstaw URL aby odtworzyć"
 msgid "Select media file"
 msgstr "Wybierz plik"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
+msgid "Equalizer"
+msgstr ""
+
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
@@ -695,6 +699,11 @@ msgstr "Napisy #"
 #: ../libxnoise/Player/xnoise-gst-player.vala:825
 msgid "Audio Track #"
 msgstr "Numer Utworu #"
+
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#, fuzzy
+msgid "(Plugin)"
+msgstr "Wtyczki"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:55
 msgid "unknown artist"
@@ -1037,9 +1046,6 @@ msgstr "Pokaż sklep UbuntuOne"
 #~ msgid "Show notifications one track change"
 #~ msgstr "Powiadamianie przy zmianie utworu"
 
-#~ msgid "Plugins"
-#~ msgstr "Wtyczki"
-
 #~ msgid "Name"
 #~ msgstr "Nazwa"
 
@@ -1048,9 +1054,6 @@ msgstr "Pokaż sklep UbuntuOne"
 
 #~ msgid "Compact layout"
 #~ msgstr "Minimalistyczny wygląd"
-
-#~ msgid "Quit application if window is closed"
-#~ msgstr "Zakończ po zamknięciu okna"
 
 #~ msgid "Add media"
 #~ msgstr "Dodaj media"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 22:55+0200\n"
+"POT-Creation-Date: 2012-09-29 23:21+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -176,26 +176,27 @@ msgstr "当悬停在专辑封面上时不显示视频界面"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 #, fuzzy
-msgid "Application Menu"
+msgid "Use Application Menu"
 msgstr "显示应用程序主菜单"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 #, fuzzy
-msgid "Stop button"
+msgid "Show Stop button"
 msgstr "使用停止按钮"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
-msgid "Quit on close"
-msgstr ""
+#, fuzzy
+msgid "Quit on window close"
+msgstr "窗口关闭时退出应用程序"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
 msgid "Use desktop notifications"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
-msgid "Equalizer"
-msgstr "均衡器"
+#, fuzzy
+msgid "Use Equalizer"
+msgstr "使用均衡器"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
 msgid "Go Back"
@@ -585,6 +586,10 @@ msgstr "输入要播放的 URL"
 msgid "Select media file"
 msgstr "选择媒体文件"
 
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
+msgid "Equalizer"
+msgstr "均衡器"
+
 #. AppMenuButton for compact layout
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
@@ -685,6 +690,11 @@ msgstr "字幕 #"
 #: ../libxnoise/Player/xnoise-gst-player.vala:825
 msgid "Audio Track #"
 msgstr "音轨 #"
+
+#: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
+#, fuzzy
+msgid "(Plugin)"
+msgstr "插件"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:55
 msgid "unknown artist"
@@ -1029,9 +1039,6 @@ msgstr "显示 UbuntuOne 商店"
 #~ msgid "Show notifications one track change"
 #~ msgstr "歌曲改变时显示通知"
 
-#~ msgid "Plugins"
-#~ msgstr "插件"
-
 #~ msgid "Name"
 #~ msgstr "名称"
 
@@ -1040,12 +1047,6 @@ msgstr "显示 UbuntuOne 商店"
 
 #~ msgid "Compact layout"
 #~ msgstr "紧凑布局"
-
-#~ msgid "Quit application if window is closed"
-#~ msgstr "窗口关闭时退出应用程序"
-
-#~ msgid "Use equalizer"
-#~ msgstr "使用均衡器"
 
 #~ msgid "Add media"
 #~ msgstr "添加媒体"
