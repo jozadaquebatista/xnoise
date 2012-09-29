@@ -163,7 +163,10 @@ internal class Xnoise.EqualizerWidget : Gtk.Box {
         }
         this.pack_start(freq_gains_box, true, true, 0);
         closebutton = new Button.from_stock(Stock.CLOSE);
-        this.pack_start(closebutton, false, false, 2);
+        var closebx = new Box(Orientation.HORIZONTAL, 0);
+        closebx.pack_start(new Label(""), true, true, 2);
+        closebx.pack_start(closebutton, false, false, 0);
+        this.pack_start(closebx, false, false, 2);
         this.set_size_request(450, 250);
         this.border_width = 5;
         this.show_all();
