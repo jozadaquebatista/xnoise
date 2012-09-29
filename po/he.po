@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 10:41+0200\n"
+"POT-Creation-Date: 2012-09-29 22:55+0200\n"
 "PO-Revision-Date: 2012-09-15 22:30+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -53,11 +53,11 @@ msgid "no lyrics found..."
 msgstr "לא נמצאו כתוביות..."
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:154
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1318
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1346
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1388
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1418
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1331
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1359
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1401
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1431
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
@@ -66,11 +66,11 @@ msgid "by"
 msgstr "של"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:157
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1320
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1390
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1420
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:467
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1333
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1361
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1403
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1433
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
@@ -159,7 +159,7 @@ msgstr "בחירת תיקיית מדיה"
 msgid "Add internet radio link"
 msgstr "הוספת קישור לרדיו אינטרנט"
 
-#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:211
+#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:247
 msgid "Leave fullscreen"
 msgstr "יציאה ממסך מלא"
 
@@ -201,7 +201,7 @@ msgid "Use desktop notifications"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1614
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
 msgid "Equalizer"
 msgstr "איקולייזר"
 
@@ -236,15 +236,15 @@ msgstr "חנות המוסיקה Magnatune"
 msgid "Select external subtitle file"
 msgstr "בחר קובץ כתוביות חיצוני"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:161
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:173
 msgid "No Subtitle"
 msgstr "ללא כתוביות"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:219
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:231
 msgid "Leave Fullscreen"
 msgstr "יציאה ממסך מלא"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:219
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:231
 msgid "Fullscreen"
 msgstr "מסך מלא"
 
@@ -430,8 +430,9 @@ msgid "open file"
 msgstr "פתיחת קובץ"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:187
-msgid "Open _Location"
-msgstr "פתח _מיקום"
+#, fuzzy
+msgid "Open _Stream"
+msgstr "תזרימים"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:187
 msgid "open remote location"
@@ -585,16 +586,16 @@ msgstr "חזרה על הכול"
 msgid "random play"
 msgstr "נגינה אקראית"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1225
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1238
 msgid "Enter the URL for playing"
 msgstr "הכנס את כתובת ה-URL של הקובץ שברצונך לנגן"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1241
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1254
 msgid "Select media file"
 msgstr "בחירת קובץ מדיה"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1660
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
 msgstr "הצג את התפריט הראשי"
 
@@ -1029,6 +1030,9 @@ msgstr "הצג את החנות _UbuntuOne"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "הצג את החנות UbuntuOne"
+
+#~ msgid "Open _Location"
+#~ msgstr "פתח _מיקום"
 
 #~ msgid "Show notifications one track change"
 #~ msgstr "הצג התראות ברגע שהרצועה משתנה"

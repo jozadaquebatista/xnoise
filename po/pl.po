@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise 0.1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 10:41+0200\n"
+"POT-Creation-Date: 2012-09-29 22:55+0200\n"
 "PO-Revision-Date: 2012-09-01 13:00+0100\n"
 "Last-Translator: Krzysztof AS <krzysztof1987@gmail.com>\n"
 "Language-Team: 3ED <krzysztof1987@gmail.com>\n"
@@ -52,11 +52,11 @@ msgid "no lyrics found..."
 msgstr "nie odnaleziono tekstu..."
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:154
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1318
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1346
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1388
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1418
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1331
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1359
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1401
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1431
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
@@ -65,11 +65,11 @@ msgid "by"
 msgstr "przez"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:157
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1320
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1390
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1420
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:467
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1333
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1361
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1403
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1433
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
@@ -158,7 +158,7 @@ msgstr "Wybierz folder"
 msgid "Add internet radio link"
 msgstr "Dodaj radio internetowe"
 
-#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:211
+#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:247
 msgid "Leave fullscreen"
 msgstr "Opuść tryb pełnoekranowy"
 
@@ -200,7 +200,7 @@ msgid "Use desktop notifications"
 msgstr ""
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1614
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1627
 msgid "Equalizer"
 msgstr ""
 
@@ -235,15 +235,15 @@ msgstr "Sklep muzyczny Ubuntu One"
 msgid "Select external subtitle file"
 msgstr "Wybierz zewnętrzny plik napisów"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:161
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:173
 msgid "No Subtitle"
 msgstr "Brak napisów"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:219
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:231
 msgid "Leave Fullscreen"
 msgstr "Opuść tryb pełnoekranowy"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:219
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:231
 msgid "Fullscreen"
 msgstr "Tryb pełnoekranowy"
 
@@ -430,8 +430,9 @@ msgid "open file"
 msgstr "otwórz plik"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:187
-msgid "Open _Location"
-msgstr "Otwórz _Lokalizację"
+#, fuzzy
+msgid "Open _Stream"
+msgstr "Strumienie"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:187
 msgid "open remote location"
@@ -586,16 +587,16 @@ msgstr "powtarzaj wszystko"
 msgid "random play"
 msgstr "losowe odtwarzanie"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1225
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1238
 msgid "Enter the URL for playing"
 msgstr "Wstaw URL aby odtworzyć"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1241
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1254
 msgid "Select media file"
 msgstr "Wybierz plik"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1660
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1673
 msgid "Show application main menu"
 msgstr "Pokaż główne menu aplikacji"
 
@@ -1029,6 +1030,9 @@ msgstr "Pokaż sklep _UbuntuOne"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "Pokaż sklep UbuntuOne"
+
+#~ msgid "Open _Location"
+#~ msgstr "Otwórz _Lokalizację"
 
 #~ msgid "Show notifications one track change"
 #~ msgstr "Powiadamianie przy zmianie utworu"
