@@ -104,10 +104,22 @@ public class Xnoise.FullscreenToolbar {
                     return true;
                 }
                 return false;
+            case Gdk.Key.q: {
+                if((e.state & Gdk.ModifierType.CONTROL_MASK) != Gdk.ModifierType.CONTROL_MASK)
+                    return false;
+                quit_now();
+                return true;
+            }
             default: 
                 break;
         }
         return false;
+    }
+
+    private void quit_now() {
+        main_window.hide();
+        main_window.toggle_fullscreen();
+        xn.quit();
     }
 
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
