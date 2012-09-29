@@ -93,6 +93,16 @@ public class Xnoise.FullscreenToolbar {
         resize ();
         
         invisible_cursor = new Gdk.Cursor(Gdk.CursorType.BLANK_CURSOR);
+        gst_player.notify["is-stream"].connect( () => {
+            if(gst_player.is_stream) {
+                bar.hide();
+                bar.set_no_show_all(true);
+            }
+            else {
+                bar.set_no_show_all(false);
+                bar.show();
+            }
+        });
     }
 
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
