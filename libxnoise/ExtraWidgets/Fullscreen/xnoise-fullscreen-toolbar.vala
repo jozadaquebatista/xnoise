@@ -248,15 +248,8 @@ public class Xnoise.FullscreenToolbar {
         }
 
         public void on_clicked() {
-            main_window.videoscreen.get_window().unfullscreen();
-            main_window.videoscreen.reparent(main_window.videovbox);
-            main_window.fullscreenwindow.hide();
-            main_window.videoscreen.set_vexpand(true);
-            main_window.videoscreen.set_hexpand(true);
-            main_window.mainview_box.select_main_view(VIDEOVIEW_NAME);
-            main_window.fullscreenwindowvisible = false;
-            main_window.videovbox.show_all();
-            main_window.fullscreentoolbar.hide();
+            main_window.toggle_fullscreen();
+            return;
         }
     }
 }

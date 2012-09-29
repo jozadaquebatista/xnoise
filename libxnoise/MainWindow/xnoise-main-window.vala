@@ -835,7 +835,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private void on_show_video_menu_clicked() {
         Idle.add( () => {
             mainview_page_buffer = VIDEOVIEW_NAME;
-//            buffer_last_page = (int)TrackListNoteBookTab.VIDEO;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
                 aimage_timeout = 0;
@@ -848,7 +847,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private void on_show_tracklist_menu_clicked() {
         Idle.add( () => {
             mainview_page_buffer = TRACKLIST_VIEW_NAME;
-//            buffer_last_page = (int)TrackListNoteBookTab.TRACKLIST;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
                 aimage_timeout = 0;
@@ -861,7 +859,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private void on_show_lyrics_menu_clicked() {
         Idle.add( () => {
             mainview_page_buffer = LYRICS_VIEW_NAME;
-//            buffer_last_page = (int)TrackListNoteBookTab.LYRICS;
             if(aimage_timeout != 0) {
                 Source.remove(aimage_timeout);
                 aimage_timeout = 0;
@@ -1589,9 +1586,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             ToolItem albumimageTI = new ToolItem();
             albumimageTI.add(xb);
             aimage_timeout = 0;
-            xb.enter_notify_event.connect(ai_ebox_enter);
-            xb.enter_notify_event.connect(ai_ebox_enter);
             xb.button_press_event.connect(ai_button_clicked);
+            xb.enter_notify_event.connect(ai_ebox_enter);
             xb.leave_notify_event.connect( (s, e) => {
                 if(not_show_art_on_hover_image)
                     return false;
