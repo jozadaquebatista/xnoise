@@ -1574,7 +1574,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             albumimageTI.add(xb);
             aimage_timeout = 0;
             xb.enter_notify_event.connect(ai_ebox_enter);
-            
+            xb.enter_notify_event.connect(ai_ebox_enter);
+            xb.button_press_event.connect(ai_button_clicked);
             xb.leave_notify_event.connect( (s, e) => {
                 if(not_show_art_on_hover_image)
                     return false;
@@ -1757,6 +1758,16 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal void show_status_info(Xnoise.InfoBar bar) {
         infobox.pack_start(bar, false, false, 0);
         bar.show_all();
+    }
+    
+    private bool ai_button_clicked(Gtk.Widget sender, Gdk.EventButton e) {
+        if(!((e.button==1)&&(e.type==Gdk.EventType.@2BUTTON_PRESS))) {
+            return false; //exit here, if it's no double-click
+        }
+        else {
+            toggle_fullscreen();
+        }
+        return true;
     }
     
     private bool ai_ebox_enter(Gtk.Widget sender, Gdk.EventCrossing e) {
