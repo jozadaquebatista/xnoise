@@ -88,10 +88,26 @@ public class Xnoise.FullscreenToolbar {
         fullscreenwindow.motion_notify_event.connect(on_pointer_motion);
         window.enter_notify_event.connect(on_pointer_enter_toolbar);
         fullscreenwindow.enter_notify_event.connect(on_pointer_enter_fswindow);
+        fullscreenwindow.key_press_event.connect(this.on_key_pressed);
         fullscreenwindow.key_release_event.connect(this.on_key_released);
         resize ();
         
         invisible_cursor = new Gdk.Cursor(Gdk.CursorType.BLANK_CURSOR);
+    }
+
+    private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
+        switch(e.keyval) {
+            case Gdk.Key.f:
+                if((e.state & Gdk.ModifierType.MOD1_MASK)
+                    == Gdk.ModifierType.MOD1_MASK) {
+                    main_window.toggle_fullscreen();
+                    return true;
+                }
+                return false;
+            default: 
+                break;
+        }
+        return false;
     }
 
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
@@ -99,14 +115,6 @@ public class Xnoise.FullscreenToolbar {
             case Gdk.Key.Escape: {
                 main_window.toggle_fullscreen();
                 return true;
-            }
-            case Gdk.Key.f: {
-                if((e.state & Gdk.ModifierType.MOD1_MASK)
-                    == Gdk.ModifierType.MOD1_MASK) {
-                    main_window.toggle_fullscreen();
-                    return true;
-                }
-                return false;
             }
             case Gdk.Key.space: {
                 main_window.playPauseButton.clicked();

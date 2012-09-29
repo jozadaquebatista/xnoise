@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 13:23+0200\n"
+"POT-Creation-Date: 2012-09-29 10:41+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -51,6 +51,32 @@ msgstr "Больше информации доступно на веб сайт�
 #: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:127
 msgid "no lyrics found..."
 msgstr "текст не найден..."
+
+#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:154
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1318
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1346
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1388
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1418
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
+#, c-format
+msgid "by"
+msgstr "от"
+
+#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:157
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1320
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1390
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1420
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
+#, c-format
+msgid "on"
+msgstr "из"
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
 #, fuzzy
@@ -138,71 +164,75 @@ msgstr "Выберите папку с медиа"
 msgid "Add internet radio link"
 msgstr "Добавить ссылку на интернет-радио"
 
-#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:195
+#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:211
 msgid "Leave fullscreen"
 msgstr "Выйти из полноэкранного режима"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:300
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:285
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
 #, fuzzy
 msgid "Media"
 msgstr "Показать панель медиа"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:292
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:309
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "Использовать затенение строк в списке воспроизведения"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:298
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:315
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr "Не показывать экран видео при наведении на иконку альбома"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 #, fuzzy
 msgid "Application Menu"
 msgstr "Показывать главное меню"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 #, fuzzy
 msgid "Stop button"
 msgstr "Использовать кнопку стоп"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
 msgid "Quit on close"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1596
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
+msgid "Use desktop notifications"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1614
 msgid "Equalizer"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:335
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
 msgid "Go Back"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:344
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:367
 #, fuzzy
 msgid "Media browser fontsize"
 msgstr "Размер шрифта списка воспроизведения:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:361
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
 #, fuzzy
 msgid "User Interface"
 msgstr "Имя:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:365
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:388
 msgid "Lyric Providers"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:369
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:392
 msgid "Additional"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:373
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:396
 msgid "Music Stores"
 msgstr ""
 
@@ -221,32 +251,6 @@ msgstr "Выйти из полноэкранного режима"
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:219
 msgid "Fullscreen"
 msgstr "Полноэкранный режим"
-
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1300
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1328
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1370
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
-#: ../plugins/notifications2/xnoise-notifications.vala:202
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
-#, c-format
-msgid "by"
-msgstr "от"
-
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1302
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1330
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1372
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
-#: ../plugins/notifications2/xnoise-notifications.vala:205
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
-#, c-format
-msgid "on"
-msgstr "из"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:258
 #, fuzzy
@@ -568,7 +572,12 @@ msgstr "_Настройка"
 msgid "_Show Media Browser"
 msgstr "Размер шрифта списка воспроизведения:"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:464
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:282
+#, fuzzy
+msgid "Show _Video Fullscreen"
+msgstr "Выйти из полноэкранного режима"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:473
 #, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
@@ -577,32 +586,32 @@ msgstr ""
 "Восстанавливается %u дорожек в списке проигрывания. Это большое количество и "
 "может увеличить время запуска xnoise"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:640
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:652
 msgid "no repeat"
 msgstr "без повтора"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:646
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:658
 msgid "repeat single"
 msgstr "повторять трек"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:652
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:664
 msgid "repeat all"
 msgstr "повторять все"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:658
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:670
 msgid "random play"
 msgstr "случайный порядок"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1207
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1225
 msgid "Enter the URL for playing"
 msgstr "Введите URL для проигрывания"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1223
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1241
 msgid "Select media file"
 msgstr "Выберите медиа файл"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1642
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1660
 msgid "Show application main menu"
 msgstr "Показывать главное меню"
 
@@ -1000,14 +1009,6 @@ msgstr ""
 msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "Управление xnoise при помощи интерфейса MPRIS"
 
-#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
-msgid "Desktop Notifications"
-msgstr ""
-
-#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:2
-msgid "Show notifications one track change"
-msgstr "Показ уведомлений при смене дорожки"
-
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 #, fuzzy
 msgid "Ubuntu Soundmenu Integration"
@@ -1045,6 +1046,9 @@ msgstr ""
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr ""
+
+#~ msgid "Show notifications one track change"
+#~ msgstr "Показ уведомлений при смене дорожки"
 
 #~ msgid "Plugins"
 #~ msgstr "Дополнения"

@@ -276,6 +276,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         ta.is_active = !Params.get_bool_value("media_browser_hidden");
         toggle_action_entries += ta;
         
+        ta = ToggleActionEntry();
+        ta.name = "VideoFullscreenAction";
+        ta.stock_id = Gtk.Stock.FULLSCREEN;
+        ta.label =  N_("Show _Video Fullscreen");
+        ta.accelerator = "<Alt>F";
+        ta.callback = toggle_fullscreen;
+        ta.is_active = fullscreenwindowvisible;
+        toggle_action_entries += ta;
+        
         setup_widgets();
         
         //initialization of videoscreen
@@ -581,6 +590,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
 
     public void toggle_fullscreen() {
+        if(in_update_toggle_action)
+            return;
         if(!fullscreenwindowvisible) {
             int monitor;
             Gdk.Rectangle rectangle;
@@ -620,6 +631,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 return false;
             });
         }
+        update_toggle_action_state("VideoFullscreenAction", _fullscreenwindowvisible);
     }
 
     private bool on_video_da_button_press(Gdk.EventButton e) {
@@ -659,19 +671,13 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                 break;
             }
         }
-    }
+    } 
 
     private bool on_key_released(Gtk.Widget sender, Gdk.EventKey e) {
         //print("%d : %d\n",(int)e.keyval, (int)e.state);
         switch(e.keyval) {
             case Gdk.Key.F11:
                 return true;
-            case Gdk.Key.f:
-                if((e.state & ModifierType.MOD1_MASK) == ModifierType.MOD1_MASK) {
-                    main_window.toggle_fullscreen();
-                    return true;
-                }
-                break;
             default:
                 break;
         }
@@ -733,6 +739,12 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
                     search_entry.grab_focus();
                     return true;
                 }
+//            case Gdk.Key.f:
+                if((e.state & ModifierType.MOD1_MASK) == ModifierType.MOD1_MASK) {
+                    main_window.toggle_fullscreen();
+                    return true;
+                }
+//                break;
                 return false;
             }
             case Gdk.Key.d: {

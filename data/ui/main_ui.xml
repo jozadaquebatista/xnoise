@@ -30,6 +30,8 @@
 			<menuitem action="ShowLyricsAction"/>
 			<separator />
 			<menuitem action="ShowMediaBrowserAction"/>
+			<separator />
+			<menuitem action="VideoFullscreenAction"/>
 		</menu>
 	
 		<placeholder name="MenuBarOps"/>

@@ -272,7 +272,8 @@ public class Xnoise.AlbumImage : Gtk.Image {
             return;
         
         if((prepare_for_comparison(artist) != prepare_for_comparison(_artist))||
-           (prepare_for_comparison(check_album_name(artist, album))  != prepare_for_comparison(check_album_name(_artist, _album)))) 
+           (prepare_for_comparison(check_album_name(artist, album))  != 
+                prepare_for_comparison(check_album_name(_artist, _album)))) 
             return;
         //print("  ..  comply\n");
         File f = File.new_for_path(image_path);

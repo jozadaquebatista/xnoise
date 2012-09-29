@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-27 13:23+0200\n"
+"POT-Creation-Date: 2012-09-29 10:41+0200\n"
 "PO-Revision-Date: 2012-09-15 22:30+0200\n"
 "Last-Translator: tal <tal_hd@hotmail.com>\n"
 "Language-Team: Gezer (Hebrew) <gezer@lists.launchpad.net>\n"
@@ -51,6 +51,32 @@ msgstr "מידע נוסף ניתן למצוא באתר הפרויקט:"
 #: ../plugins/databaseLyrics/xnoise-database-lyrics.vala:127
 msgid "no lyrics found..."
 msgstr "לא נמצאו כתוביות..."
+
+#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:154
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1318
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1346
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1388
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1418
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
+#, c-format
+msgid "by"
+msgstr "של"
+
+#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:157
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1320
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1348
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1390
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1420
+#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
+#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
+#, c-format
+msgid "on"
+msgstr "מהאלבום"
 
 #: ../libxnoise/DockableMedia/History/xnoise-dockable-playlist-lastplayed.vala:41
 msgid "Last Played"
@@ -133,71 +159,75 @@ msgstr "בחירת תיקיית מדיה"
 msgid "Add internet radio link"
 msgstr "הוספת קישור לרדיו אינטרנט"
 
-#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:195
+#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:211
 msgid "Leave fullscreen"
 msgstr "יציאה ממסך מלא"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:283
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:300
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:285
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
 #, fuzzy
 msgid "Media"
 msgstr "הצגת מדיה"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:292
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:309
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "הצג את שורות הרשת בדפדפן המדיה"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:298
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:315
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr "אל תציג את מסך הווידאו כשהסמן מרחף על תמונת האלבום"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:304
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
 #, fuzzy
 msgid "Application Menu"
 msgstr "הצג את התפריט הראשי"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
 #, fuzzy
 msgid "Stop button"
 msgstr "השתמש בכפתור עצירה"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
 msgid "Quit on close"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1596
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
+msgid "Use desktop notifications"
+msgstr ""
+
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1614
 msgid "Equalizer"
 msgstr "איקולייזר"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:335
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
 msgid "Go Back"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:344
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:367
 #, fuzzy
 msgid "Media browser fontsize"
 msgstr "גודל גופן דפדפן המדיה:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:361
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
 #, fuzzy
 msgid "User Interface"
 msgstr "שם משתמש:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:365
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:388
 msgid "Lyric Providers"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:369
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:392
 msgid "Additional"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:373
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:396
 #, fuzzy
 msgid "Music Stores"
 msgstr "חנות המוסיקה Magnatune"
@@ -217,32 +247,6 @@ msgstr "יציאה ממסך מלא"
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:219
 msgid "Fullscreen"
 msgstr "מסך מלא"
-
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:463
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1300
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1328
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1370
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1400
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
-#: ../plugins/notifications2/xnoise-notifications.vala:202
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
-#, c-format
-msgid "by"
-msgstr "של"
-
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1302
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1330
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1372
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1402
-#: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
-#: ../plugins/notifications2/xnoise-notifications.vala:205
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
-#: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
-#, c-format
-msgid "on"
-msgstr "מהאלבום"
 
 #: ../libxnoise/ExtraWidgets/xnoise-media-source-widget.vala:258
 msgid "Media Collections"
@@ -551,7 +555,12 @@ msgstr "ה_גדרה"
 msgid "_Show Media Browser"
 msgstr "ה_צג את דפדפן המדיה"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:464
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:282
+#, fuzzy
+msgid "Show _Video Fullscreen"
+msgstr "מסך _וידאו"
+
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:473
 #, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
@@ -560,32 +569,32 @@ msgstr ""
 "משחזר %u רצועות מהרשימה. זהו מספר עצום ויכול להאט את הטעינה ההתחלתית של "
 "xnoise."
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:640
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:652
 msgid "no repeat"
 msgstr "ללא חזרה"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:646
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:658
 msgid "repeat single"
 msgstr "חזרה על יחיד"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:652
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:664
 msgid "repeat all"
 msgstr "חזרה על הכול"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:658
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:670
 msgid "random play"
 msgstr "נגינה אקראית"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1207
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1225
 msgid "Enter the URL for playing"
 msgstr "הכנס את כתובת ה-URL של הקובץ שברצונך לנגן"
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1223
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1241
 msgid "Select media file"
 msgstr "בחירת קובץ מדיה"
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1642
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1660
 msgid "Show application main menu"
 msgstr "הצג את התפריט הראשי"
 
@@ -983,14 +992,6 @@ msgstr ""
 msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "שלוט על xnoise עם ממשק ה-dbus של MPRIS v1"
 
-#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:1
-msgid "Desktop Notifications"
-msgstr ""
-
-#: ../plugins/notifications2/notifications.xnplugin.desktop.in.h:2
-msgid "Show notifications one track change"
-msgstr "הצג התראות ברגע שהרצועה משתנה"
-
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
 #, fuzzy
 msgid "Ubuntu Soundmenu Integration"
@@ -1028,6 +1029,9 @@ msgstr "הצג את החנות _UbuntuOne"
 #: ../plugins/ubuntuone/ubuntuone.vala:224
 msgid "Show UbuntuOne Store"
 msgstr "הצג את החנות UbuntuOne"
+
+#~ msgid "Show notifications one track change"
+#~ msgstr "הצג התראות ברגע שהרצועה משתנה"
 
 #~ msgid "Plugins"
 #~ msgstr "פלאגינים"
@@ -1095,9 +1099,6 @@ msgstr "הצג את החנות UbuntuOne"
 
 #~ msgid "Add local file"
 #~ msgstr "הוספת קובץ מקומי"
-
-#~ msgid "_Video screen"
-#~ msgstr "מסך _וידאו"
 
 #~ msgid "Finished import. "
 #~ msgstr "סיים לייבא. "
