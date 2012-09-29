@@ -66,10 +66,6 @@ public class Xnoise.AlbumImage : Gtk.Image {
         if(uri != global.current_uri)
             return;
         
-        if((prepare_for_comparison(artist) != prepare_for_comparison(_artist))||
-           (prepare_for_comparison(check_album_name(artist, album))  != prepare_for_comparison(check_album_name(_artist, _album)))) 
-            return;
-        
         File? pf = get_albumimage_for_artistalbum(_artist, _album, "embedded");
         
         if(!pf.query_exists(null)) 
