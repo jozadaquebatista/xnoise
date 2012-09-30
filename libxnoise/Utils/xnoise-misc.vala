@@ -29,7 +29,7 @@
  */
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Utilities;
 using Xnoise.Resources;
 using Xnoise.Database;
 using Xnoise.PluginModule;
@@ -51,7 +51,7 @@ namespace Xnoise {
     public static Database.Reader db_reader;
     public static Database.Writer  db_writer;
     
-    public static Statistics statistics;
+    private static Statistics statistics;
     
     internal static IconRepo icon_repo;
     internal static DbusThumbnailer thumbnailer = null;
@@ -60,10 +60,11 @@ namespace Xnoise {
     
     public static PluginModule.Loader plugin_loader;
     
-    public static TrayIcon tray_icon;
     public static MainWindow main_window;
     public static TrackList tl;
     public static TrackListModel tlm;
+    
+    public static TrayIcon tray_icon;
     
     private static RemoteSchemes        _remote_schemes;
     private static LocalSchemes         _local_schemes;
@@ -251,11 +252,11 @@ namespace Xnoise {
 //    LYRICS
 //}
 
-public enum Gst.StreamType {
-    UNKNOWN = 0,
-    AUDIO   = 1,
-    VIDEO   = 2
-}
+//public enum Gst.StreamType {
+//    UNKNOWN = 0,
+//    AUDIO   = 1,
+//    VIDEO   = 2
+//}
 
 public enum Xnoise.PlayerState {
     STOPPED = 0,

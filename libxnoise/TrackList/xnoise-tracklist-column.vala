@@ -31,7 +31,7 @@
 using Gtk;
 
 
-public class Xnoise.TrackListColumn : TreeViewColumn {
+private class Xnoise.TrackListColumn : TreeViewColumn {
     public string name;
     public TrackListColumn(string _name = "") {
         name = _name;

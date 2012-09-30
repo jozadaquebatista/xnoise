@@ -118,7 +118,6 @@ libxnoise_la_SOURCES = \
     PluginModule/xnoise-plugin-switch-widget.vala \
     Resources/xnoise-resources.vala \
     ScreensaverManager/xnoise-screensaver-manager.vala \
-    Services/xnoise-services.vala \
     SimpleMarkup/xnoise-markup-node.vala \
     SimpleMarkup/xnoise-markup-reader.vala \
     SimpleMarkup/xnoise-markup-writer.vala \
@@ -139,6 +138,7 @@ libxnoise_la_SOURCES = \
     Utils/xnoise-misc.vala \
     Utils/xnoise-remote-schemes.vala \
     Utils/xnoise-track-data.vala \
+    Utils/xnoise-utilities.vala \
     $(NULL)
 
 libxnoise_la_VALAFLAGS = \

@@ -30,7 +30,7 @@
 
 using Gtk;
 
-public class Xnoise.SerialButton : Gtk.Box {
+internal class Xnoise.SerialButton : Gtk.Box {
     private CssProvider provider;
     
     private HashTable<string,SerialItem> sitems = new HashTable<string,SerialItem>(str_hash, str_equal);

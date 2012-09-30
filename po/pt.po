@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 23:21+0200\n"
+"POT-Creation-Date: 2012-09-30 12:09+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn &lt;shuerhaaken@googlemail.com&gt;\n"
@@ -155,72 +155,72 @@ msgstr "Selecione a pasta"
 msgid "Add internet radio link"
 msgstr "Adicionar rádio na internet"
 
-#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:247
+#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:259
 msgid "Leave fullscreen"
 msgstr "Sair de ecrã completo"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:300
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:301
 msgid "Settings"
 msgstr "Definições"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:303
 msgid "Media"
 msgstr "Multimédia"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:309
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 msgid "Grid lines in media browser"
 msgstr "Linhas de grelha no explorador"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:315
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 msgid "Show picture on hover album image"
 msgstr "Mostrar imagem ao passar na capa do album"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 #, fuzzy
 msgid "Use Application Menu"
 msgstr "Menu da aplicação"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 #, fuzzy
 msgid "Show Stop button"
 msgstr "Botão \"Parar\""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
 #, fuzzy
 msgid "Quit on window close"
 msgstr "Sair ao fechar"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
 #, fuzzy
 msgid "Use desktop notifications"
 msgstr "Notificações do ambiente de trabalho"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:346
 #, fuzzy
 msgid "Use Equalizer"
 msgstr "Equalizador"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:359
 msgid "Go Back"
 msgstr "Recuar"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:367
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:368
 msgid "Media browser fontsize"
 msgstr "Tamanho da letra do explorador"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:385
 msgid "User Interface"
 msgstr "Interface:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:388
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:389
 msgid "Lyric Providers"
 msgstr "Fornecedores das letras"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:392
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:393
 msgid "Additional"
 msgstr "Outros"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:396
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:397
 msgid "Music Stores"
 msgstr "Lojas de música"
 

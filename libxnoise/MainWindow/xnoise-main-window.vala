@@ -33,13 +33,13 @@ using Gdk;
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
 [CCode (cname = "gdk_window_ensure_native")]
-public extern bool ensure_native(Gdk.Window window);
+private extern bool ensure_native(Gdk.Window window);
 
-[CCode (cname = "gtk_widget_style_get_property")]
-public extern void widget_style_get_property(Gtk.Widget widget, string property_name, GLib.Value val);
+//[CCode (cname = "gtk_widget_style_get_property")]
+//private extern void widget_style_get_property(Gtk.Widget widget, string property_name, GLib.Value val);
 
 public class Xnoise.MainWindow : Gtk.Window, IParams {
     private const string MAIN_UI_FILE      = Config.UIDIR + "main_window.ui";
@@ -77,6 +77,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private bool window_maximized;
     private SettingsWidget settings_widget;
     private Gtk.Window eqdialog;
+    private AlbumImage albumimage;
     internal bool quit_if_closed;
     internal ScrolledWindow musicBrScrollWin = null;
     internal ScrolledWindow trackListScrollWin = null;
@@ -93,7 +94,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal ControlButton nextButton;
     internal ControlButton stopButton;
     public MainViewNotebook mainview_box { get; private set; }
-    public AlbumImage albumimage;
     public MediaSoureWidget msw;
     internal TrackInfobar track_infobar;
     internal MusicBrowser musicBr = null;
@@ -403,7 +403,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         
     }
 
-    public void restore_last_view() {
+    internal void restore_last_view() {
         mainview_box.select_main_view(mainview_page_buffer);
         sbuttonTL.select(mainview_page_buffer, false);
     }
@@ -715,7 +715,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         change_volume(-0.1);
     }
     
-    private void change_volume(double delta_fraction) {
+    internal void change_volume(double delta_fraction) {
         volume_slider.value += delta_fraction;
     }
     
@@ -1014,7 +1014,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     // This function changes the current song to the next or previous in the
     // tracklist. handle_repeat_state should be true if the calling is not
     // coming from a button, but, e.g. from a EOS signal handler
-    public void change_track(ControlButton.Direction direction, bool handle_repeat_state = false) {
+    internal void change_track(ControlButton.Direction direction, bool handle_repeat_state = false) {
         unowned TreeIter iter;
         bool trackList_is_empty;
         TreePath path = null;

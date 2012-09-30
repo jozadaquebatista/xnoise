@@ -486,6 +486,7 @@ bold=`tput bold`
 normal=`tput sgr0`
 
 echo "
+
   ${bold}${PACKAGE} ${VERSION}${normal}
   ~~~~~~~~~~~~~
   
@@ -495,8 +496,11 @@ echo "
     CFLAGS:                        ${CFLAGS}
     Vala compiler (if applicable): ${VALAC}
     Vala's glib target version:    ${TARGET_GLIB_VERSION}
-
-  ${bold}PLUGINS included in this build:${normal}
+  
+  
+  ${bold}PLUGINS included in this build${normal}
+  
+    ${bold}General Plugins${normal}
     Lastfm (Album images 
             and 'scrobbling')      ${enable_lastfm}
     Keyboard Media Key control     ${enable_mediakeys}
@@ -510,6 +514,7 @@ echo "
     Magntune Music Store           ${enable_magnatune}
     
     ${bold}Lyrics Provider Plugins:${normal}
+    DatabaseLyrics (Buffer)        yes (always)
     Chartlyrics                    ${enable_chartlyrics}
     Azlyrics                       ${enable_azlyrics}
     Lyricwiki                      ${enable_lyricwiki}

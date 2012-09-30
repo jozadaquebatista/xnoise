@@ -31,7 +31,7 @@
 using Xnoise;
 using Xnoise.Resources;
 using Xnoise.Playlist;
-using Xnoise.Services;
+using Xnoise.Utilities;
 using Xnoise.TagAccess;
 
 public class Xnoise.ItemConverter : Object {

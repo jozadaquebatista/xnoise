@@ -36,7 +36,7 @@ using Xnoise.Resources;
 using Xnoise.TagAccess;
 
 
-public class Xnoise.TagTitleEditor : GLib.Object {
+private class Xnoise.TagTitleEditor : GLib.Object {
     private unowned Xnoise.Main xn;
     private Dialog dialog;
     private Gtk.Builder builder;

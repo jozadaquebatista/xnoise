@@ -48,7 +48,7 @@ private interface Thumbnailer : Object {
     public signal void started(uint32 handle);
 }
 
-public class Xnoise.DbusThumbnailer : Object {
+private class Xnoise.DbusThumbnailer : Object {
     private uint32  current_handle  = 0;
     private uint    watch           = 0;
     private uint    handle_queue_timeout = 0;

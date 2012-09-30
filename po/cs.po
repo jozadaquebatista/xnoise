@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 23:21+0200\n"
+"POT-Creation-Date: 2012-09-30 12:09+0200\n"
 "PO-Revision-Date: 2012-09-27 09:42+0100\n"
 "Last-Translator: Petr Šimáček <petr.simacek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -153,74 +153,74 @@ msgstr "Vybrat složku se skladbami"
 msgid "Add internet radio link"
 msgstr "Přidat odkaz na internetové rádio"
 
-#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:247
+#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:259
 msgid "Leave fullscreen"
 msgstr "Opustit režim celé obrazovky"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:300
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:301
 msgid "Settings"
 msgstr "Nastavení"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:303
 msgid "Media"
 msgstr "Media"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:309
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 msgid "Grid lines in media browser"
 msgstr "Mřížka v prohlížeči médií"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:315
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 msgid "Show picture on hover album image"
 msgstr "Zobrazit obrázek při přejetí přebalu alba myší"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 #, fuzzy
 msgid "Use Application Menu"
 msgstr "Menu aplikací"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 #, fuzzy
 msgid "Show Stop button"
 msgstr "Tlačítko pro zastavení"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
 #, fuzzy
 msgid "Quit on window close"
 msgstr "Ukončit při zavření"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
 #, fuzzy
 msgid "Use desktop notifications"
 msgstr "Oznámení na ploše"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:346
 #, fuzzy
 msgid "Use Equalizer"
 msgstr "Použít ekvalizér"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:359
 msgid "Go Back"
 msgstr "Vrátit se"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:367
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:368
 #, fuzzy
 msgid "Media browser fontsize"
 msgstr "Velikost písma v prohlížeči skladeb:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:385
 #, fuzzy
 msgid "User Interface"
 msgstr "Uživatelské jméno:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:388
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:389
 msgid "Lyric Providers"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:392
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:393
 msgid "Additional"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:396
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:397
 #, fuzzy
 msgid "Music Stores"
 msgstr "Hudební obchod Magnatune"

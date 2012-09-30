@@ -32,7 +32,7 @@
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
 namespace Xnoise.Playlist {
     private class M3u.FileReader : AbstractFileReader {

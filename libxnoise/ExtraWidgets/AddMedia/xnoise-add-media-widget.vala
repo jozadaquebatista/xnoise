@@ -35,7 +35,7 @@ using Xnoise.Resources;
 
 
 
-public class Xnoise.AddMediaWidget : Gtk.Box {
+private class Xnoise.AddMediaWidget : Gtk.Box {
 
     private enum Column {
         ICON,

@@ -34,7 +34,7 @@ using Gtk;
 /**
  * A ControlButton is a Gtk.Button that initiates playback of the previous or next item or stop
  */
-public class Xnoise.ControlButton : Gtk.ToolButton {
+internal class Xnoise.ControlButton : Gtk.ToolButton {
     
     public enum Direction {
         NEXT = 0,

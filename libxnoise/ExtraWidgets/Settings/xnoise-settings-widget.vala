@@ -29,12 +29,13 @@
  */
 
 using Gtk;
+
 using Xnoise;
 using Xnoise.PluginModule;
 using Xnoise.Resources;
 
 
-public class Xnoise.SettingsWidget : Gtk.Box, IMainView {
+private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     private Builder builder;
     private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
     private Notebook notebook;

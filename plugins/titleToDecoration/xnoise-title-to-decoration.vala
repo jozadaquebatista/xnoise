@@ -32,7 +32,7 @@ using Gtk;
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 using Xnoise.PluginModule;
 
 public class Xnoise.TitleToDecoration : GLib.Object, IPlugin {

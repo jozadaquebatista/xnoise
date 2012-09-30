@@ -40,7 +40,7 @@ using Xnoise.Resources;
 /**
 * A PlayPauseButton is a Gtk.Button that accordingly pauses, unpauses or starts playback
 */
-public class Xnoise.PlayPauseButton: Gtk.ToolButton {
+private class Xnoise.PlayPauseButton: Gtk.ToolButton {
     private unowned Main xn;
 
     public PlayPauseButton() {

@@ -30,7 +30,7 @@
 
 // ItemHandler Implementation 
 // provides the right Action for the given ActionContext/ItemType
-public class Xnoise.HandlerShowInFileManager : ItemHandler {
+private class Xnoise.HandlerShowInFileManager : ItemHandler {
     private Action a;
     private const string ainfo = _("Show in parent folder");
     private const string aname = "A HandlerShowInFileManagername";

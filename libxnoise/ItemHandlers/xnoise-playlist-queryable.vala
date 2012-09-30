@@ -34,7 +34,7 @@ public enum Xnoise.DynPlaylistType {
     LASTPLAYED
 }
 
-public interface Xnoise.PlaylistQueryable : Gtk.TreeView {
+internal interface Xnoise.PlaylistQueryable : Gtk.TreeView {
     public abstract int get_model_item_column();
     public abstract DynPlaylistType get_dynamic_playlist_type();
 }

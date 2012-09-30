@@ -33,7 +33,7 @@ using Gdk;
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 using Xnoise.PluginModule;
 
 internal static string CONVERTED_DB;

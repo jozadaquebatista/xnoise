@@ -35,7 +35,7 @@ using Xnoise;
 
 
 
-public class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
+private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
     private bool dragging;
     private bool _use_treelines = false;
     private CellRendererText renderer = null;

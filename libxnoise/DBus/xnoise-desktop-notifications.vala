@@ -30,7 +30,7 @@
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
 
 [DBus(name = "org.freedesktop.Notifications")]

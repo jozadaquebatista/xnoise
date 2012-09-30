@@ -32,7 +32,7 @@ using Gst;
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
 
 // GstPlayFlags flags of playbin2
@@ -82,7 +82,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 
     private string? _uri = null;
     private int64 _length_nsecs;
-    public Xnoise.VideoScreen videoscreen;
+    internal Xnoise.VideoScreen videoscreen;
     private AsyncQueue<TaglistWithStreamType?> new_tag_queue = new AsyncQueue<TaglistWithStreamType?>();
     private GLib.List<Gst.Message> missing_plugins = new GLib.List<Gst.Message>();
     private dynamic Element playbin;

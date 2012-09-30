@@ -34,11 +34,11 @@ using Gdk;
 using Xnoise;
 using Xnoise.Resources;
 using Xnoise.Playlist;
-using Xnoise.Services;
+using Xnoise.Utilities;
 using Xnoise.TagAccess;
 
 
-public class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
+private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
     private const string UI_FILE = Config.UIDIR + "tracklist.ui";
     
     private unowned MainWindow win;
@@ -209,37 +209,37 @@ public class Xnoise.TrackList : TreeView, IParams {
     private bool reorder_dragging = false;
     private uint hide_timer = 0;
     
-    public bool column_length_visible {
+    private bool column_length_visible {
         get { return this.columnLength.visible; }
         set { this.columnLength.visible = value; }
     }
     
-    public bool column_tracknumber_visible {
+    private bool column_tracknumber_visible {
         get { return this.columnTracknumber.visible; }
         set { this.columnTracknumber.visible = value; }
     }
     
-    public bool column_artist_visible { 
+    private bool column_artist_visible { 
         get { return this.columnArtist.visible; }
         set { this.columnArtist.visible = value; }
     }
 
-    public bool column_album_visible { 
+    private bool column_album_visible { 
         get { return this.columnAlbum.visible; }
         set { this.columnAlbum.visible = value; }
     }
 
-    public bool column_genre_visible { 
+    private bool column_genre_visible { 
         get { return this.columnGenre.visible; }
         set { this.columnGenre.visible = value; }
     }
 
-    public bool column_year_visible { 
+    private bool column_year_visible { 
         get { return this.columnYear.visible; }
         set { this.columnYear.visible = value; }
     }
 
-    public TrackListModel tracklistmodel { get; private set; }
+    internal TrackListModel tracklistmodel { get; private set; }
 
     public TrackList() {
         this.xn = Main.instance;

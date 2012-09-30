@@ -36,7 +36,7 @@ using Xnoise;
 using Xnoise.Resources;
 
 
-public class Xnoise.FullscreenToolbar {
+private class Xnoise.FullscreenToolbar {
     private unowned Main xn;
     private const uint hide_delay = 4;
     private Gtk.Window window;
@@ -107,6 +107,18 @@ public class Xnoise.FullscreenToolbar {
 
     private bool on_key_pressed(Gtk.Widget sender, Gdk.EventKey e) {
         switch(e.keyval) {
+            case Gdk.Key.plus: {
+                if((e.state & Gdk.ModifierType.CONTROL_MASK) != Gdk.ModifierType.CONTROL_MASK)
+                    return false;
+                main_window.change_volume(0.1);
+                return true;
+            }
+            case Gdk.Key.minus: {
+                if((e.state & Gdk.ModifierType.CONTROL_MASK) != Gdk.ModifierType.CONTROL_MASK) // Ctrl Modifier
+                    return false;
+                main_window.change_volume(-0.1);
+                return true;
+            }
             case Gdk.Key.f:
                 if((e.state & Gdk.ModifierType.MOD1_MASK)
                     == Gdk.ModifierType.MOD1_MASK) {

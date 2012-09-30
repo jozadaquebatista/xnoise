@@ -32,7 +32,7 @@ using Sqlite;
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
 public class Xnoise.Database.Writer : GLib.Object {
     private Sqlite.Database db = null;

@@ -34,7 +34,7 @@ using Gdk;
 using Xnoise;
 using Xnoise.Playlist;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 using Xnoise.TagAccess;
 
 public class Xnoise.TrackListModel : ListStore, TreeModel {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-29 23:21+0200\n"
+"POT-Creation-Date: 2012-09-30 12:09+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -164,75 +164,75 @@ msgstr "Выберите папку с медиа"
 msgid "Add internet radio link"
 msgstr "Добавить ссылку на интернет-радио"
 
-#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:247
+#: ../libxnoise/ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala:259
 msgid "Leave fullscreen"
 msgstr "Выйти из полноэкранного режима"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:300
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:301
 msgid "Settings"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:302
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:303
 #, fuzzy
 msgid "Media"
 msgstr "Показать панель медиа"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:309
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
 #, fuzzy
 msgid "Grid lines in media browser"
 msgstr "Использовать затенение строк в списке воспроизведения"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:315
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
 #, fuzzy
 msgid "Show picture on hover album image"
 msgstr "Не показывать экран видео при наведении на иконку альбома"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:321
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
 #, fuzzy
 msgid "Use Application Menu"
 msgstr "Показывать главное меню"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:327
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
 #, fuzzy
 msgid "Show Stop button"
 msgstr "Использовать кнопку стоп"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:333
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
 #, fuzzy
 msgid "Quit on window close"
 msgstr "Выйти из приложения, если окно закрывается"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:339
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
 msgid "Use desktop notifications"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:345
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:346
 msgid "Use Equalizer"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:358
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:359
 msgid "Go Back"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:367
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:368
 #, fuzzy
 msgid "Media browser fontsize"
 msgstr "Размер шрифта списка воспроизведения:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:384
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:385
 #, fuzzy
 msgid "User Interface"
 msgstr "Имя:"
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:388
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:389
 msgid "Lyric Providers"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:392
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:393
 msgid "Additional"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:396
+#: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:397
 msgid "Music Stores"
 msgstr ""
 

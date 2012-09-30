@@ -31,7 +31,7 @@
 using Xnoise;
 using Xnoise.Database;
 
-public class Xnoise.Statistics : GLib.Object {
+private class Xnoise.Statistics : GLib.Object {
     private uint update_play_src = 0;
     public Statistics() {
         global.uri_changed.connect(on_track_played);

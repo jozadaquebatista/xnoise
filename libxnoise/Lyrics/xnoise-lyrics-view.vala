@@ -34,11 +34,11 @@ using Gtk;
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
 
 
-public class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
+private class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
     private const string UI_FILE = Config.UIDIR + "lyrics.ui";
     private unowned MainWindow win;
     

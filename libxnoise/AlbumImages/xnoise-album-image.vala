@@ -34,9 +34,9 @@ using Gtk;
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
-public class Xnoise.AlbumImage : Gtk.Image {
+private class Xnoise.AlbumImage : Gtk.Image {
     private const int SIZE = 48;
     private AlbumImageLoader loader = null;
     private Main xn;

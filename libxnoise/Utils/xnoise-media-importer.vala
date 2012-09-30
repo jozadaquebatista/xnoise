@@ -33,7 +33,7 @@ using Gtk;
 using Xnoise;
 using Xnoise.Resources;
 using Xnoise.Database;
-using Xnoise.Services;
+using Xnoise.Utilities;
 using Xnoise.TagAccess;
 
 public class Xnoise.MediaImporter : GLib.Object {

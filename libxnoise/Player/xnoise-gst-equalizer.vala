@@ -33,7 +33,7 @@ using Gst;
 using Xnoise;
 
 
-public class Xnoise.GstEqualizer : GLib.Object, IParams {
+private class Xnoise.GstEqualizer : GLib.Object, IParams {
     
     private const int[] frequencies  = 
         { 50,     80,    120,   250,   500,   1000,  2000,   4500,   7600,   15000 };

@@ -30,7 +30,7 @@
 
 using Gtk;
 
-public class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
+private class Xnoise.AppMenuButton : Gtk.ToggleToolButton {
     private uint button_press_src = 0;
     private uint deactivtion_src = 0;
     private Gtk.Button? content;

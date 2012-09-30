@@ -30,7 +30,7 @@
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
 public class Xnoise.TagAccess.TagReader {
     public TrackData? read_tag(string? filename) {

@@ -35,7 +35,7 @@ using Gtk;
 * A SongProgressBar is a Gtk.ProgressBar that shows the playback position in the
 * currently played item and changes it upon user input
 */
-public class Xnoise.FullscreenProgressBar : Gtk.EventBox {
+private class Xnoise.FullscreenProgressBar : Gtk.EventBox {
     private const double SCROLL_POS_CHANGE = 0.02;
     private unowned GstPlayer player;
     private ProgressBar bar;

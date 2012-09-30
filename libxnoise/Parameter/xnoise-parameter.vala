@@ -30,7 +30,7 @@
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
 public class Xnoise.Params : GLib.Object { //TODO: Rename Interface nd class
     private static List<IParams> IParams_implementers;// = new GLib.List<IParams>();

@@ -55,7 +55,6 @@ libxnoise/PluginModule/xnoise-plugin-loader.vala
 libxnoise/PluginModule/xnoise-plugin-switch-widget.vala
 libxnoise/Resources/xnoise-resources.vala
 libxnoise/ScreensaverManager/xnoise-screensaver-manager.vala
-libxnoise/Services/xnoise-services.vala
 libxnoise/TagAccess/xnoise-tag-reader.vala
 libxnoise/TagAccess/xnoise-tag-writer.vala
 libxnoise/TrackList/xnoise-text-column.vala
@@ -66,6 +65,7 @@ libxnoise/UserInfoSystem/xnoise-info-bar.vala
 libxnoise/UserInfoSystem/xnoise-user-info.vala
 libxnoise/Utils/xnoise-media-importer.vala
 libxnoise/Utils/xnoise-misc.vala
+libxnoise/Utils/xnoise-utilities.vala
 src/xnoise.vala
 data/ui/add_media.ui
 data/ui/main_window.ui

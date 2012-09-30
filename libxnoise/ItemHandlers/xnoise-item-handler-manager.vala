@@ -30,7 +30,7 @@
 
 
 using Xnoise;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
 namespace Xnoise {
 

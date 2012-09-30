@@ -145,7 +145,7 @@ private class DockableUbuntuOneMS : DockableMedia {
         return wu;
     }
     
-    private void on_selection_changed(MediaSoureWidget sender, string dname) {
+    private void on_selection_changed(string dname) {
         if(dname == UBUNTUONE_MUSIC_STORE_NAME) {
             if(ms == null) {
                 ms = new UStore();

@@ -36,7 +36,7 @@ using Xnoise.Resources;
 
 
 
-public class Xnoise.Dbus : GLib.Object {
+private class Xnoise.Dbus : GLib.Object {
     private uint owner_id;
     private uint object_id_service;
     public PlayerDbusService service = null;
@@ -92,7 +92,7 @@ public class Xnoise.Dbus : GLib.Object {
 
 
 [DBus(name = "org.gtk.xnoise.PlayerEngine")]
-public class PlayerDbusService : GLib.Object {
+private class PlayerDbusService : GLib.Object {
     private unowned Xnoise.Main xn;
     
     private unowned DBusConnection conn;

@@ -32,16 +32,16 @@ using Gtk;
 
 using Xnoise;
 using Xnoise.Resources;
-using Xnoise.Services;
+using Xnoise.Utilities;
 
 
-public class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
+private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
     private const string UI_FILE = Config.UIDIR + "video.ui";
     
     private unowned MainWindow win;
     public Gtk.Box videovbox;
     public unowned VideoScreen videoscreen;
-    public SerialButton sbutton;
+    internal SerialButton sbutton;
     
     public VideoViewWidget(MainWindow win) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
