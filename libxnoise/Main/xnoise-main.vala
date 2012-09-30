@@ -137,7 +137,7 @@ public class Xnoise.Main : GLib.Object {
                 return false;
             if(!global.media_import_in_progress && 
                !main_window.musicBr.mediabrowsermodel.populating_model) {
-                
+                print("..saving tracklist and plugins..\n");
                 save_tracklist();
                 save_activated_plugins();
                 Params.write_all_parameters_to_file();
