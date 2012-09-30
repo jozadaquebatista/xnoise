@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-30 12:09+0200\n"
+"POT-Creation-Date: 2012-09-30 20:39+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sérgio Marques <smarquespt@gmail.com>\n"
 "Language-Team: shkn &lt;shuerhaaken@googlemail.com&gt;\n"
@@ -260,9 +260,13 @@ msgstr "Dispositivos"
 msgid "Search..."
 msgstr "Procurar..."
 
-#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:150
+#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:157
 msgid "Preset:"
 msgstr "Pré-ajuste:"
+
+#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:175
+msgid "Volume"
+msgstr ""
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
@@ -640,56 +644,56 @@ msgstr "Personalizado"
 msgid "Default"
 msgstr "Pré-definido"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:207
+#: ../libxnoise/Player/xnoise-gst-player.vala:227
 msgid ""
 "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr ""
 "O nome das legendas não coincide com o do filme. As legendas serão ignoradas."
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:629
+#: ../libxnoise/Player/xnoise-gst-player.vala:663
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
 msgstr "Instalação do \"plugin\" gstreamer efetuada com sucesso"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:633
+#: ../libxnoise/Player/xnoise-gst-player.vala:667
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
 msgstr "O utilizador cancelou a instalação do \"plugin\""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:637
+#: ../libxnoise/Player/xnoise-gst-player.vala:671
 #, c-format
 msgid "Gstreamer plugin not found in repositories"
 msgstr "\"Plugin\" gstreamer não encontrado nos repositórios"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:643
+#: ../libxnoise/Player/xnoise-gst-player.vala:677
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
 msgstr "Erro crítico ao tentar instalar o \"plugin\" em falta"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:688
-#: ../libxnoise/Player/xnoise-gst-player.vala:699
-#: ../libxnoise/Player/xnoise-gst-player.vala:712
+#: ../libxnoise/Player/xnoise-gst-player.vala:722
+#: ../libxnoise/Player/xnoise-gst-player.vala:733
+#: ../libxnoise/Player/xnoise-gst-player.vala:746
 #, c-format
 msgid "Missing gstreamer plugin"
 msgstr "\"Plugin\" gstreamer em falta"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:690
+#: ../libxnoise/Player/xnoise-gst-player.vala:724
 msgid "Automatic missing codec installation not supported"
 msgstr "Não existe suporte à instalação automática de \"plugins\""
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:701
+#: ../libxnoise/Player/xnoise-gst-player.vala:735
 msgid "Failed to start automatic gstreamer plugin installation."
 msgstr "Falha ao tentar instalar o \"plugin\" gstreamer"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:714
+#: ../libxnoise/Player/xnoise-gst-player.vala:748
 msgid "Trying to install missing gstreamer plugin"
 msgstr "A tentar instalar o \"plugin\" gstreamer..."
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:813
+#: ../libxnoise/Player/xnoise-gst-player.vala:847
 msgid "Subtitle #"
 msgstr "Legenda #"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:825
+#: ../libxnoise/Player/xnoise-gst-player.vala:859
 msgid "Audio Track #"
 msgstr "Faixa áudio #"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-30 12:09+0200\n"
+"POT-Creation-Date: 2012-09-30 20:39+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: tuhaihe <1132321739qq@gmail.com>\n"
 "Language-Team: \n"
@@ -261,9 +261,13 @@ msgstr "设备"
 msgid "Search..."
 msgstr "搜索..."
 
-#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:150
+#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:157
 msgid "Preset:"
 msgstr "预设："
+
+#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:175
+msgid "Volume"
+msgstr ""
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 #, fuzzy
@@ -639,55 +643,55 @@ msgstr "自定义"
 msgid "Default"
 msgstr "默认"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:207
+#: ../libxnoise/Player/xnoise-gst-player.vala:227
 msgid ""
 "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr "字幕名称与视频名称不搭配！不使用字幕文件。"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:629
+#: ../libxnoise/Player/xnoise-gst-player.vala:663
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
 msgstr "成功安装缺失的 gstreamer 插件"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:633
+#: ../libxnoise/Player/xnoise-gst-player.vala:667
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
 msgstr "用户终止了缺失的 gstreamer 插件安装"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:637
+#: ../libxnoise/Player/xnoise-gst-player.vala:671
 #, c-format
 msgid "Gstreamer plugin not found in repositories"
 msgstr "在仓库中未发现 Gstreamer 插件"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:643
+#: ../libxnoise/Player/xnoise-gst-player.vala:677
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
 msgstr "当安装 gstreamer 插件时发生严重错误"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:688
-#: ../libxnoise/Player/xnoise-gst-player.vala:699
-#: ../libxnoise/Player/xnoise-gst-player.vala:712
+#: ../libxnoise/Player/xnoise-gst-player.vala:722
+#: ../libxnoise/Player/xnoise-gst-player.vala:733
+#: ../libxnoise/Player/xnoise-gst-player.vala:746
 #, c-format
 msgid "Missing gstreamer plugin"
 msgstr "缺少 gstreamer 插件"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:690
+#: ../libxnoise/Player/xnoise-gst-player.vala:724
 msgid "Automatic missing codec installation not supported"
 msgstr "不支持自动安装缺失的解码器"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:701
+#: ../libxnoise/Player/xnoise-gst-player.vala:735
 msgid "Failed to start automatic gstreamer plugin installation."
 msgstr "无法自动启动 gstreamer 插件安装过程。"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:714
+#: ../libxnoise/Player/xnoise-gst-player.vala:748
 msgid "Trying to install missing gstreamer plugin"
 msgstr "正在尝试安装缺失的 gstreamer 插件"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:813
+#: ../libxnoise/Player/xnoise-gst-player.vala:847
 msgid "Subtitle #"
 msgstr "字幕 #"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:825
+#: ../libxnoise/Player/xnoise-gst-player.vala:859
 msgid "Audio Track #"
 msgstr "音轨 #"
 

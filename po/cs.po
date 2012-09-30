@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-30 12:09+0200\n"
+"POT-Creation-Date: 2012-09-30 20:39+0200\n"
 "PO-Revision-Date: 2012-09-27 09:42+0100\n"
 "Last-Translator: Petr Šimáček <petr.simacek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -261,9 +261,13 @@ msgstr "Zařízení"
 msgid "Search..."
 msgstr "Hledat..."
 
-#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:150
+#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:157
 msgid "Preset:"
 msgstr "Přednastavení:"
+
+#: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:175
+msgid "Volume"
+msgstr ""
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
 msgid "Add all tracks to tracklist"
@@ -644,62 +648,62 @@ msgstr "Vlastní"
 msgid "Default"
 msgstr "Výchozí"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:207
+#: ../libxnoise/Player/xnoise-gst-player.vala:227
 msgid ""
 "The subtitle name is not matching the video name! Not using subtitle file."
 msgstr ""
 "Název souboru s titulky neodpovídá názvu videa! Soubor s titulky se "
 "nepoužívá."
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:629
+#: ../libxnoise/Player/xnoise-gst-player.vala:663
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
 msgstr "Chybějící přídavný modul pro GStreamer se nepodařilo nainstalovat"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:633
+#: ../libxnoise/Player/xnoise-gst-player.vala:667
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
 msgstr ""
 "Uživatelem přerušená instalace chybějícího přídavného modulu pro GStreamer"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:637
+#: ../libxnoise/Player/xnoise-gst-player.vala:671
 #, c-format
 msgid "Gstreamer plugin not found in repositories"
 msgstr "Přídavný modul pro Gstreamer se v repozitářích nepodařilo najít"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:643
+#: ../libxnoise/Player/xnoise-gst-player.vala:677
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
 msgstr ""
 "Vyskytla se vážná chyba při instalaci chybějícího přídavného modulu "
 "GStreameru"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:688
-#: ../libxnoise/Player/xnoise-gst-player.vala:699
-#: ../libxnoise/Player/xnoise-gst-player.vala:712
+#: ../libxnoise/Player/xnoise-gst-player.vala:722
+#: ../libxnoise/Player/xnoise-gst-player.vala:733
+#: ../libxnoise/Player/xnoise-gst-player.vala:746
 #, c-format
 msgid "Missing gstreamer plugin"
 msgstr "Chybí přídavný modul pro GStreamer"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:690
+#: ../libxnoise/Player/xnoise-gst-player.vala:724
 msgid "Automatic missing codec installation not supported"
 msgstr "Automatické hledání chybějícího kodeku není podporováno"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:701
+#: ../libxnoise/Player/xnoise-gst-player.vala:735
 msgid "Failed to start automatic gstreamer plugin installation."
 msgstr ""
 "Automatickou instalaci přídavného modulu pro GStreamer se nepodařilo spustit"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:714
+#: ../libxnoise/Player/xnoise-gst-player.vala:748
 msgid "Trying to install missing gstreamer plugin"
 msgstr ""
 "Proveden pokus o nainstalování chybějícího přídavného modulu pro GStreamer"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:813
+#: ../libxnoise/Player/xnoise-gst-player.vala:847
 msgid "Subtitle #"
 msgstr "Titulek #"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:825
+#: ../libxnoise/Player/xnoise-gst-player.vala:859
 msgid "Audio Track #"
 msgstr "Zvuková stopa #"
 
