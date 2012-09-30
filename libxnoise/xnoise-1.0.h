@@ -1939,6 +1939,8 @@ gboolean xnoise_gst_player_get_current_has_video_track (XnoiseGstPlayer* self);
 gboolean xnoise_gst_player_get_current_has_subtitles (XnoiseGstPlayer* self);
 gdouble xnoise_gst_player_get_volume (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_volume (XnoiseGstPlayer* self, gdouble value);
+gdouble xnoise_gst_player_get_preamplification (XnoiseGstPlayer* self);
+void xnoise_gst_player_set_preamplification (XnoiseGstPlayer* self, gdouble value);
 gboolean xnoise_gst_player_get_playing (XnoiseGstPlayer* self);
 void xnoise_gst_player_set_playing (XnoiseGstPlayer* self, gboolean value);
 gboolean xnoise_gst_player_get_paused (XnoiseGstPlayer* self);

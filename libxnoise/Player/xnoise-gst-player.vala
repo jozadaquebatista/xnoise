@@ -93,6 +93,7 @@ public class Xnoise.GstPlayer : GLib.Object {
     private dynamic Element queue;
     private dynamic Element ac1;
     private dynamic Element ac2; 
+    private dynamic Element preamp;
     private Pad pad;
      
     private dynamic Gst.Element tee;
@@ -126,6 +127,25 @@ public class Xnoise.GstPlayer : GLib.Object {
             val = this.playbin.volume;
             if(val!=value) {
                 this.playbin.volume = value;
+            }
+        }
+    }
+    
+    public double preamplification {
+        get {
+            double val = 0.0;
+            preamp.get("volume", out val);
+            return val;
+        }
+        set {
+            if(value < 0.0) {
+                preamp.set("volume", 0.0);
+            }
+            else if(value > 10.0) {
+                preamp.set("volume", 10.0);
+            }
+            else {
+                preamp.set("volume", value);
             }
         }
     }
@@ -390,7 +410,13 @@ public class Xnoise.GstPlayer : GLib.Object {
         if(equalizer.eq != null) {
             playbin.set_state(State.NULL);
             queue.unlink_many(asink);
-            queue.link_many(ac1, equalizer.eq, ac2, asink);
+            queue.link_many(
+                ac1,
+                preamp,
+                equalizer.eq,
+                ac2,
+                asink
+            );
         }
     }
     
@@ -398,7 +424,13 @@ public class Xnoise.GstPlayer : GLib.Object {
         //print("deactivate_equalizer\n");
         if(equalizer.eq != null) {
             playbin.set_state(State.NULL);
-            queue.unlink_many(ac1, equalizer.eq, ac2, asink);
+            queue.unlink_many(
+                ac1,
+                preamp,
+                equalizer.eq,
+                ac2,
+                asink
+            );
             queue.link_many(asink);
         }
     }
@@ -437,6 +469,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         asink     = ElementFactory.make("autoaudiosink", null);
         ac1       = ElementFactory.make("audioconvert", null);
         ac2       = ElementFactory.make("audioconvert", null);
+        preamp    = ElementFactory.make("volume", null);
         tee       = ElementFactory.make("tee", null);
         queue     = ElementFactory.make("queue", null);
         
@@ -446,6 +479,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         
         if(equalizer.eq != null)
             ((Gst.Bin)abin).add_many(
+                preamp,
                 equalizer.eq,
                 ac1,
                 ac2
@@ -463,7 +497,7 @@ public class Xnoise.GstPlayer : GLib.Object {
             queue.link_many(asink);
         }
         else {
-            queue.link_many(ac1, equalizer.eq, ac2, asink);
+            queue.link_many(ac1, preamp, equalizer.eq, ac2, asink);
         }
         
         playbin.set("audio-sink", abin); 

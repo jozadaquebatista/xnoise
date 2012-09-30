@@ -610,6 +610,7 @@ namespace Xnoise {
 		public bool paused { get; set; }
 		public bool playing { get; set; }
 		public double position { get; set; }
+		public double preamplification { get; set; }
 		public bool seeking { get; set; }
 		public string? suburi { get; set; }
 		public string? uri { get; set; }
