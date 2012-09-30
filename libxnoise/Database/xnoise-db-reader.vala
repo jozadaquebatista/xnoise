@@ -72,7 +72,7 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         this.db.prepare_v2(STMT_GET_ARTISTS, -1, out get_artists_with_search2_stmt);
         
         string errormsg;
-        if(db.exec("PRAGMA synchronous=OFF", null, out errormsg)!= Sqlite.OK) {
+        if(db.exec("PRAGMA synchronous=NORMAL", null, out errormsg)!= Sqlite.OK) {
             stderr.printf("exec_stmnt_string error: %s", errormsg);
             return;
         }
