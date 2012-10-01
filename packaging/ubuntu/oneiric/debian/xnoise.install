@@ -17,8 +17,6 @@ usr/lib/xnoise/libmpris.so
 usr/lib/xnoise/mpris.xnplugin
 usr/lib/xnoise/libmprisone.so
 usr/lib/xnoise/mpris_one.xnplugin
-usr/lib/xnoise/libnotifications.so
-usr/lib/xnoise/notifications.xnplugin
 usr/lib/xnoise/libTitleToDecoration.so
 usr/lib/xnoise/TitleToDecoration.xnplugin
 usr/lib/xnoise/libxnoisetest.so

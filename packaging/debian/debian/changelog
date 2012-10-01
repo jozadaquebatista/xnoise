@@ -1,8 +1,22 @@
-xnoise (0.2.11) unstable; urgency=low
-  * Avoid opening of more than one eq window
-  * Magnatune: fix initialization issue 
-  * Magnatune: workaround db update issue
-  * Magnatune: fix issue with random crashes on deativation
+xnoise (0.2.12) unstable; urgency=low
+  * Integrate Unity quicklists
+  * Add new application icon
+  * Add new first-start-widget for initial media import
+  * Redo Settings dialog with integration of plugins
+  * Redo Add-Media dialog
+  * Add preamp to equalizer
+  * Replace libotify based notifications with dbus based notifications
+  * Remove libnotify dependency
+  * Code cleanup
+  * Improve loading of embedded images
+  * Add keyboard shortcuts for various control actions
+  * Double-click on album image now toggles video fullscreen
+  * Add menu entry for fullscreen video and update translations
+  * Hide track progressbar in fullscreen window for streams
+  * Speed up album art update
+  * Do not import playlist files when scanning local folders
+  * Update translatations
+  * Bug fixes
   * Closes: #632932
 
- -- Jörn Magens <shuerhaaken@googlemail.com>  Fri, 16 Sep 2012 20:05:54 +0200
+ -- Jörn Magens <shuerhaaken@googlemail.com>  Mon, 01 Oct 2012 20:22:57 +0200

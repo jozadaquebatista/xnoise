@@ -1,3 +1,375 @@
+commit 77ce1edd0d0263f53173f73293ffa8100a445d71
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Mon Oct 1 09:26:00 2012 +0200
+
+    update /po/pt.po
+
+commit 578dae59ceb8876308825c214b9b9443f9d96700
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 30 20:40:06 2012 +0200
+
+    update translatable strings
+
+commit 786314c0d194bdea91287c486b0c581eb2e721d1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 30 20:38:45 2012 +0200
+
+    add preamp to equalizer
+
+commit 21f52b070c5c815956ffb030c54e200cb56d85de
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 30 16:19:51 2012 +0200
+
+    print message to the terminal on cyclic data backup
+
+commit 44ae114718d1670297e6d6a15449d830d96e3f6d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 30 16:19:04 2012 +0200
+
+    use database with 'PRAGMA synchronous=NORMAL'
+
+commit b973f8375892d231f395dfccc36bf5f0d89ffdea
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 30 13:44:22 2012 +0200
+
+    file and namespace rename
+
+commit db84af73c6b3f211aa2b54e76db30ffa517f7285
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 30 12:11:23 2012 +0200
+
+    code cleanup + hide some internals from public API
+
+commit a24bd49a11cf24d7226f3606b25c876147fee817
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 23:40:00 2012 +0200
+
+    not being strict with loading embedded images
+
+commit 5ba0dffd17befe23f74509256eff3c798baf4d9c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 23:26:23 2012 +0200
+
+    update german translation
+
+commit efdc3887182f6731e0f19bb8b62ebb6bc378d026
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 23:23:33 2012 +0200
+
+    addtranslatable srting
+
+commit af299df2971eddefb9e5435bd521a3512527eafb
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 23:21:35 2012 +0200
+
+    change some texts in settings
+
+commit 64b81f4128b34eb046db602426573948cb5d9ca6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 23:11:06 2012 +0200
+
+    small close button for equalizer
+
+commit 68225a539c55cacea5e97cec446adadf89211dfe
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 22:56:13 2012 +0200
+
+    update translatable strings
+
+commit abe604613fed1fb2432fab5ec529a211b38daef9
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 22:53:20 2012 +0200
+
+    fix handling of album image switch on double click
+
+commit 70831d4707528f724b1ed9e0256cb74c8e00748b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 22:22:36 2012 +0200
+
+    hide track progressbar in fullscreen window for streams
+
+commit 4e241f35921287d13dc4da055241a9722adda991
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 16:52:52 2012 +0200
+
+    add keyboard shortcuts for various control actions
+
+commit 0d93de00d3f55cda39dd27b2f0010bb79db2b5d1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 11:25:19 2012 +0200
+
+    add keyboard shortcut for application quit to video fullscreen window
+
+commit 35832d032216bfaf6b3c054a0e3b117eea13b06e
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 11:24:33 2012 +0200
+
+    double-click on album image toggles video fullscreen, fixes issue #36
+
+commit 1b269d61413bf78d5dc9248a440a97ef06f3d4b1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 29 10:42:45 2012 +0200
+
+    add menu entry for fullscreen video and update translations
+
+commit 3f758c2f0e0e5bde99e5ec77851daa72e40d556f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 28 20:04:16 2012 +0200
+
+    add init check for params and speed up album art update
+
+commit 5a30cdc180f4a50081c775e046a957e6633ec020
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 28 17:21:23 2012 +0200
+
+    add regular setting for onboard notifications
+
+commit 097acb60b037056f0eff66f10a1e1d651e9297b7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 28 16:18:03 2012 +0200
+
+    remove libnotify dependency from packaging data
+
+commit 3062b3f773cb24e43d4d4e25f099d9be07d4f0ed
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 28 16:15:47 2012 +0200
+
+    blacklist unneeded notifications plugin
+
+commit e21e01677fd610d4efadf8711c817037578f5bb0
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 28 16:10:43 2012 +0200
+
+    replace notifications plugin with onboard dbus interface for notification deamon
+
+commit dbee30a5928ff476b6197937c65adad3e54111af
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Fri Sep 28 09:17:23 2012 +0200
+
+    change some private function names
+
+commit ec0f18468df20d0a8c08ea2ac4019a717ef67fcc
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 21:03:44 2012 +0200
+
+    fix state toggle of equalizer
+
+commit 00d1eadee021ae635a4f722d383a302aed7a8457
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 20:40:35 2012 +0200
+
+    add video fullscreen keybinding
+
+commit 868043b106fe8f7f5acb336311c7386ab99a8a1b
+Author: Sérgio Marques <smarquespt@gmail.com>
+Date:   Thu Sep 27 15:23:15 2012 +0200
+
+    update po/pt.po
+
+commit e609142b5c97b5c8224177ec3f4e349c22555d97
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 15:21:59 2012 +0200
+
+    more adjustments for settings and add media widget
+
+commit 1338c2ba8803db07510128b267897bd28bc8d1e1
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 14:09:54 2012 +0200
+
+    more adjustments for settings
+
+commit e3af2546357cf54d77cd0172b5b13cf09acd125c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 13:26:03 2012 +0200
+
+    update translatable strings (equalizer presets)
+
+commit 373b49a7789648e002c95d3b58f709f7168b03af
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 13:21:06 2012 +0200
+
+    update translatable strings
+
+commit 8d19fdd1cfb063900485bab9d13cd4251e31ef6c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 12:52:10 2012 +0200
+
+    do not import playlists of local folders
+
+commit 9ad92b223427fdfb138479ef7e393ad7b9c1b180
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 12:33:13 2012 +0200
+
+    show import info for at least one second (valid for fast ssd equiped computers)
+
+commit 4fd0fb6af863bea673a87a7a15e4731c8e34e243
+Author: Petr Simacek <petr.simacek@gmail.com>
+Date:   Thu Sep 27 11:00:36 2012 +0200
+
+    update po/cs.po
+
+commit 1880a1fa48ec2a1236da2befb1226b963864d894
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 10:59:21 2012 +0200
+
+    remove unused method
+
+commit 184daf8b5a34454aabb95a4c9d7c8d615a5e5a9c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 10:50:03 2012 +0200
+
+    change icons in add media widget
+
+commit 893b4409776255aec3246c9c3543abb3269f2574
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Thu Sep 27 10:17:48 2012 +0200
+
+    fix some formattings in settings widget
+
+commit c43df3f1af44cd9f05610af047a739fc178d43d8
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 26 14:20:44 2012 +0200
+
+    remove shadow in scrolled window of settings
+
+commit 5f008c15550c013a883e4cb2437c8ec5d2e7cd4a
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 26 13:54:24 2012 +0200
+
+    add fallback icon
+
+commit d8f79c243f461bc3bba61d2cc7b1dade22f66215
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 26 13:46:06 2012 +0200
+
+    use more width of xnoise settings widget; change back icon
+
+commit 3cf84f3412f0899e623acd2bd33cee74f2680f69
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 26 12:36:46 2012 +0200
+
+    sort plugins before inserting
+
+commit 10ad05f5ee07fa8ea6de5049be84b56f679063b5
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 26 12:04:07 2012 +0200
+
+    move plugin switch to new file
+
+commit 65d57028c15b68460c51afd35f131495f8a6acab
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 26 11:53:50 2012 +0200
+
+    add pretty name for plugin; remove plugin manager tree
+
+commit 5155c2616033c17c5eaa376220666580122ef123
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Wed Sep 26 09:38:54 2012 +0200
+
+    update some translatable strings
+
+commit 74ed2e225b07359efe0b02007a7043ec94575af0
+Author: Taijuin Lee <taijuin@gmail.com>
+Date:   Wed Sep 26 09:38:10 2012 +0200
+
+    update po/zh_TW.po
+
+commit 8fd99ec08d0ebe299a85dcfebe98ea114a53437c
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 25 21:34:03 2012 +0200
+
+    integrate plugin activation with settings
+
+commit 5ca7466376fc757a5889fa02b4d4728eeb9dbf08
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 24 22:58:10 2012 +0200
+
+    fix warning
+
+commit 7d3f1812710eddd09da4258cd70dbf888230f329
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 24 20:35:51 2012 +0200
+
+    use global cancellable to stop other threads on shutdown
+
+commit d268e183f5ddfaf61e695505bc7c5cdafe048cd7
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 24 20:00:01 2012 +0200
+
+    do not switch main view, if ubuntuone music store plugin is deactivated
+
+commit a935228d04cfd1177d4bd59f7b91f85e877ad828
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 23 22:46:30 2012 +0200
+
+    insert plugin widgets with scrolled window
+
+commit 4ede58cfd97896db7c7e1f1bcb5030e0843015ec
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 23 22:45:50 2012 +0200
+
+    remove dialognotebook
+
+commit 5ecfd6226030f059adad1ae08721b5f84431e6e4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 23 22:35:52 2012 +0200
+
+    use regular button as ation widget
+
+commit b9cd1818f97b65897baaee18ea0339794aaf3948
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 23 18:00:45 2012 +0200
+
+    change settings headline
+
+commit 1fb7ce4536174cfb0ba1e822d51d72fe13483e37
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sun Sep 23 17:55:30 2012 +0200
+
+    change startup layout
+
+commit f0afbbe18dac52769d7632d9dc2ab6421734e88d
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Sat Sep 22 15:15:47 2012 +0200
+
+    start redoing settings dialog
+
+commit 86479106c87b55cd232b2f1bc71665b5b789f284
+Author: Georgi Karavasilev <motorslav@gmail.com>
+Date:   Sat Sep 22 15:14:44 2012 +0200
+
+    Add new application icon
+
+commit c0a67e4d4a6744fb6acd8c1135ffcb13fe294411
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 18 12:55:16 2012 +0200
+
+    adjust media listing position
+
+commit 118012a34adc0c5fd019228d464dc9b2930bcf98
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Sep 18 12:52:32 2012 +0200
+
+    add new first-start-widget for initial media import
+
+commit 9331369dc51e0d1350a2d4cee38b8e9ca3a6da33
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 17 17:15:06 2012 +0200
+
+    integrate unity quicklists and new control commandline options
+
+commit 892e7c07bd1dce03d4422ee94b427dc1b7cd57f6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 17 12:42:52 2012 +0200
+
+    post release version update
+
+commit d903c653a46e46ab194ba8e3375a9f3d68e4a0e4
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Sep 17 09:51:02 2012 +0200
+
+    update packaging data
+
 commit 2fddc7287718fe44216bce1e80d482e427f1fb17
 Author: Tal Hadad <tal_hd@hotmail.com>
 Date:   Sun Sep 16 19:28:19 2012 +0200

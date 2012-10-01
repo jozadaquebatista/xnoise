@@ -6,7 +6,6 @@ usr/lib/xnoise/libLyricwiki.so
 usr/lib/xnoise/libmediakeys.so
 usr/lib/xnoise/libmpris.so
 usr/lib/xnoise/libmprisone.so
-usr/lib/xnoise/libnotifications.so
 usr/lib/xnoise/libTitleToDecoration.so
 usr/lib/xnoise/libxnoisetest.so
 usr/lib/xnoise/libMagnatune.so
