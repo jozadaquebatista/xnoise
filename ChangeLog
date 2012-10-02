@@ -1,3 +1,40 @@
+commit 738c40860a9c8b0c26e00f9cfa302f3a014929ad
+Merge: a67c02f 2b1cac6
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 2 11:06:22 2012 +0200
+
+    Merge commit '2b1cac628c131d81dc3c0bc259ccd92e1ab6ed35'
+
+commit 2b1cac628c131d81dc3c0bc259ccd92e1ab6ed35
+Author: Francisco Pérez Cuadrado <fsistemas@gmail.com>
+Date:   Tue Oct 2 11:00:05 2012 +0200
+
+    update spanish translations
+
+commit f9c858d664798ec8cceacc0be648f659ec3dbef2
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Tue Oct 2 10:57:01 2012 +0200
+
+    update debian package script
+
+commit 349d71a0cc27941050d2f10f88560d092ee83175
+Author: Tal Hadad <tal_hd@hotmail.com>
+Date:   Tue Oct 2 10:54:39 2012 +0200
+
+    update po/ho.po
+
+commit 10fa919c0c2188d4d96ed05f7ae53335587f5298
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 2 10:15:54 2012 +0200
+
+    update translation
+
+commit a67c02f028cc013cfd3a1865712b36a1699dd03b
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Mon Oct 1 13:54:52 2012 +0200
+
+    update packaging data
+
 commit 77ce1edd0d0263f53173f73293ffa8100a445d71
 Author: Sérgio Marques <smarquespt@gmail.com>
 Date:   Mon Oct 1 09:26:00 2012 +0200
