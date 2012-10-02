@@ -5,7 +5,7 @@
 #The format is:
 #ARGS_INPUT_FORMAT="OPTION STRING 1|OPTION STRING 2(OPTIONAL)|OPTION STRING N(OPTIONAL):VARIABLE NAME WHICH HOLDS OPTION VALUE:DEFAULT OPTION VALUE(OPTIONAL):DEFAULT OPTION VALUE IF USED AS SWITCH(OPTIONAL)"
 
-ARGS_INPUT_FORMAT="-h|-?|--help:help:-1:0,--name:name:package,--version:version:1.0,--src-tar:src_tar:-1,--src-dir:src_dir:${PWD},--output-dir:output_dir:package_result,--distro:distro:debian,-S|--build-source:build_source:no:yes,-B|--build-binary:build_binary:no:yes,--maintainer:maintainer:-1,-us|--dont-sign:dont_sign:no:yes,-uc|--dont-sign-changes:dont_sign_changes:no:yes,-sa|--include-orig:include_orig:yes:yes,-sd:dont_include_orig:no:yes"
+ARGS_INPUT_FORMAT="-h|-?|--help:help:-1:0,--name:name:-1,--version:version:-1,--src-tar:src_tar:-1,--src-dir:src_dir:-1,--output-dir:output_dir:package_result,--distro:distro:debian,-S|--build-source:build_source:no:yes,-B|--build-binary:build_binary:no:yes,--maintainer:maintainer:-1,-us|--dont-sign:dont_sign:no:yes,-uc|--dont-sign-changes:dont_sign_changes:no:yes,-sa|--include-orig:include_orig:yes:yes,-sd:dont_include_orig:no:yes"
 
 # Parsing arguments script.
 # This script was taken from:
@@ -56,12 +56,15 @@ Builds a given package into a Debian package, source package, or both into an
 
 Options:
   -h, -?, --help               Show this help message.
-  --name=NAME                  The name of the package. (default: package)
-  --version=VERSION            The version of the package. (default: 1.0)
+  --name=NAME                  The name of the package. If -1, find it by
+                                 debian/changelog file. (default: -1)
+  --version=VERSION            The version of the package. If -1, use the
+                                 latest in debian/changelog file. (default: -1)
   --src-tar=TARBALL            The source tarball(.tar, .tar.gz or .tar.bz2) of
                                  the package. (default: empty string)
   --src-dir=DIR                The directory of the source package, if no
-                                 TARBALL was given. (default: $\{PWD\})
+                                 TARBALL was given. If -1, set it to current
+                                 directory(\$PWD) (default: -1)
   --output-dir=OUT_DIR         The output folder. (default: package_result)
   --distro=DISTRO              The targeted distro for the packge. e.g.:
                                  debian, ubuntu/precise, ubuntu/quantal
@@ -79,21 +82,21 @@ Options:
                                  in the .changes file. (default: no)
   
   
-Xnoise 0.2.5 EXAMPLE:
+Xnoise EXAMPLE:
   Source package tar.gz is in current working directory(\$PWD).
   
-  ./package_chef.sh --distro=debian --name=xnoise --version=0.2.5 --src-tar=xnoise-0.2.5.tar.gz
-  ./package_chef.sh --distro=ubuntu/precise --name=xnoise --version=0.2.5 --src-tar=xnoise-0.2.5.tar.gz
+  ./package_chef.sh --distro=debian --src-tar=xnoise-0.2.5.tar.gz
+  ./package_chef.sh --distro=ubuntu/precise --src-tar=xnoise-0.2.5.tar.gz
   
   Source package directory is current working directory(\$PWD).
   
-  ./package_chef.sh --distro=debian --name=xnoise --version=0.2.5
-  ./package_chef.sh --distro=ubuntu/precise --name=xnoise --version=0.2.5
+  ./package_chef.sh --distro=debian
+  ./package_chef.sh --distro=ubuntu/precise
   
   Source package directory is 'foo/xnoise-0.2.5'.
   
-  ./package_chef.sh --distro=debian --name=xnoise --version=0.2.5 --src-dir=foo/xnoise-0.2.5
-  ./package_chef.sh --distro=ubuntu/precise --name=xnoise --version=0.2.5 --src-dir=foo/xnoise-0.2.5
+  ./package_chef.sh --distro=debian --src-dir=foo/xnoise-0.2.5
+  ./package_chef.sh --distro=ubuntu/precise --src-dir=foo/xnoise-0.2.5
   
 Bugs:
   Please report bugs in this script on the xnoise bugtracker here:
@@ -102,14 +105,48 @@ Bugs:
   exit 0
 fi
 
-# Define convinient varibles.
-mkdir -p "$output_dir"
-formatted_version=$(echo "$version" | sed 's/-/./g')
-std_version=$(echo "$version" | cut -d'-' -f1)
-name_version=$name-$std_version
-package_dir=$output_dir/$name_version
-orig_tar_name=${name}_${formatted_version}.orig.tar.bz2
+if [ $src_dir == -1 ]; then
+	src_dir=${PWD}
+fi
 
+check_name_version () {
+if [ $name == -1 ] | [ $version == -1 ]; then
+	changelog_file=$1/packaging/$distro/debian/changelog
+	if [ ! -f $changelog_file ]; then
+		echo "Bad source directory(no changlog file found)." 1>&2
+		exit 1
+	fi
+	
+	name_version_parted=$(awk -F')' '{ print $1;exit }' $changelog_file)
+	
+	if [ $name == -1 ]; then
+		name=$(echo $name_version_parted | awk -F' ' '{ print $1;exit }')
+		echo $name;
+	fi
+	
+	if [ $version == -1 ]; then
+		version=$(echo $name_version_parted | awk -F'(' '{ print $2;exit }' | \
+		awk -F')' '{ print $1;exit }')
+		echo $version;
+	fi
+fi
+}
+
+# Define convinient varibles.
+define_convinient_varibles () {
+	formatted_version=$(echo "$version" | sed 's/-/./g')
+	std_version=$(echo "$version" | cut -d'-' -f1)
+	name_version=$name-$std_version
+	package_dir=$output_dir/$name_version
+	if [ $package_dir == $src_dir ] || \
+	( [ $package_dir == $PWD ] && [ $src_dir == -1 ] ); then
+		echo "Bad directory selection. Package directory is source directory!" 1>&2
+		exit 1
+	fi
+	orig_tar_name=${name}_${formatted_version}.orig.tar.bz2
+}
+
+mkdir -p "$output_dir"
 # Extract/copy source directory.
 case $src_tar in
   -1 )
@@ -120,11 +157,16 @@ case $src_tar in
       absolute_output_dir=$PWD/$output_dir
     fi
     echo "absolute dir is $absolute_output_dir"
-    if [ "$src_dir" == "$PWD" ]; then
+    
+    check_name_version $src_dir
+    define_convinient_varibles
+    
+    if [ $src_dir == $PWD ]; then
+      rm -R -f "$package_dir"
       mkdir -p "$package_dir"
       for i in `ls -a -1`
       do
-        echo $i;
+      	echo $i;
         if [ $i != . ] && [ $i != .. ] && \
           [ "$PWD/$i" != "$absolute_output_dir" ]; then
           echo "detected"
@@ -137,19 +179,31 @@ case $src_tar in
     ;;
   *tar )
     echo "tarball ends with tar."
-    tar -C $output_dir -xvf "$src_tar" "$name_version"
+    tar_ext_arg=f
     ;;
   *tar.gz )
     echo "tarball ends with tar.gz."
-    tar -C $output_dir -xvzf "$src_tar" "$name_version"
+    tar_ext_arg=zf
     ;;
   *tar.bz2 )
     echo "tarball ends with tar.bz2."
-    tar -C $output_dir -xvjf "$src_tar" "$name_version"
+    tar_ext_arg=jf
     ;;
   *)
-    echo "Error: unsupported tarball!" 1>&2;;
+    echo "Error: unsupported tarball!" 1>&2; exit 1;;
 esac
+
+if [ $src_tar != -1 ]; then
+	temp_dir=$(echo $output_dir/.temp_extracted)
+	rm -R -f "$temp_dir"
+	mkdir -p "$temp_dir"
+	tar -C "$temp_dir" -xv$tar_ext_arg "$src_tar" --strip-components 1
+	check_name_version $temp_dir
+	define_convinient_varibles
+    rm -R -f "$package_dir"
+	cp -R "$temp_dir" "$package_dir"
+	rm -R "$temp_dir"
+fi
 
 cp -R "$package_dir/packaging/$distro/debian" "$package_dir"
 
@@ -170,7 +224,7 @@ else if [ "$build_source" != "yes" ] && [ "$build_binary" == "yes" ]; then
   echo "build binary only"
   debuild_args=$(echo "$debuild_args-B ")
 else
-  echo "build binary only"
+  echo "build binary and source"
 fi
 fi
 
