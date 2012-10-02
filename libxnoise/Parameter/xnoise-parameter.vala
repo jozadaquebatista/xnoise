@@ -265,7 +265,7 @@ not_use_eq=0
 volume=0.8
 
 [settings_string]
-activated_plugins=soundmenu2;mpris;notifications;lastfm;mediakeys
+activated_plugins=soundmenu2;mpris;lastfm;mediakeys
 """;
 }
 
