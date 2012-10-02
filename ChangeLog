@@ -1,3 +1,15 @@
+commit 0302eed17936064410283818102fe0cdce5bebfd
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 2 12:14:16 2012 +0200
+
+    update packaging data
+
+commit 29b98112dc648c0fab32f0750ce10553bb08b86f
+Author: Jörn Magens <shuerhaaken@googlemail.com>
+Date:   Tue Oct 2 12:13:54 2012 +0200
+
+    update defaults
+
 commit 738c40860a9c8b0c26e00f9cfa302f3a014929ad
 Merge: a67c02f 2b1cac6
 Author: Jörn Magens <shuerhaaken@googlemail.com>

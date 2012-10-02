@@ -10,7 +10,6 @@ New Features and Fixes
   * Add preamp to equalizer
   * Replace libotify based notifications with dbus based notifications
   * Remove libnotify dependency
-  * Code cleanup
   * Improve loading of embedded images
   * Add keyboard shortcuts for various control actions
   * Double-click on album image now toggles video fullscreen
@@ -18,6 +17,7 @@ New Features and Fixes
   * Hide track progressbar in fullscreen window for streams
   * Speed up album art update
   * Do not import playlist files when scanning local folders
+  * Code cleanup
   * Update translatations
   * Bug fixes
 
