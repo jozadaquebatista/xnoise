@@ -44,9 +44,6 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
     private unowned MainWindow win;
     internal ScrolledWindow scrolled_window;
     internal SerialButton sbutton;
-//    internal int idx_tracklist;
-//    internal int idx_lyrics;
-//    internal int idx_video;
     
     public TrackListViewWidget(MainWindow win) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);

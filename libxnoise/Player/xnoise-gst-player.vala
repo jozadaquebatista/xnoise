@@ -281,6 +281,29 @@ public class Xnoise.GstPlayer : GLib.Object {
         get { return playbin.n_video; }
     }
 
+    public int64 abs_position_microseconds {
+        get {
+            int64 pos;
+            Gst.Format format = Gst.Format.TIME;
+            if(!playbin.query_position(ref format, out pos))
+                    return 0;
+            return pos / Gst.USECOND;
+        }
+//        set {
+//            if(seeking == false) {
+//                if(value > 1.0)
+//                    value = 1.0;
+//                int64 len;
+//                Gst.Format fmt = Gst.Format.TIME;
+//                playbin.query_duration(ref fmt, out len);
+//                _length_nsecs =(this._uri == null || this._uri == EMPTYSTRING ?(int64)0 :(int64)len);
+//                playbin.seek_simple(Gst.Format.TIME,
+//                                    Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
+//                                   (int64)(value * _length_nsecs));
+//            }
+//        }
+    }
+
     public double position {
         get {
             int64 pos;
@@ -1024,6 +1047,29 @@ public class Xnoise.GstPlayer : GLib.Object {
         playbin.volume = volume; // TODO: Volume should have a global representation
     }
     
+    public void request_micro_time_offset(int64 micro_seconds) {
+        if(playing == false && paused == false)
+            return;
+        if(!is_stream) {
+            if(seeking == false) {
+                Gst.Format fmt = Gst.Format.TIME;
+                int64 pos, new_pos;
+                if(!playbin.query_position(ref fmt, out pos))
+                    return;
+                new_pos = pos +(int64)((int64)micro_seconds * Gst.USECOND);
+                //print("%lli %lli %lli %lli\n", pos, new_pos, _length_nsecs,(int64)((int64)seconds *(int64)1000000000));
+            
+                if(new_pos > _length_nsecs) new_pos = _length_nsecs;
+                if(new_pos < 0)            new_pos = 0;
+                
+                playbin.seek_simple(Gst.Format.TIME,
+                                    Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
+                                    new_pos);
+                sign_position_changed((uint)(new_pos/Gst.MSECOND),(uint)(_length_nsecs/Gst.MSECOND));
+            }
+        }
+    }
+
     public void request_time_offset(int seconds) {
         if(playing == false && paused == false)
             return;

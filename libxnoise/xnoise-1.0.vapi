@@ -591,9 +591,11 @@ namespace Xnoise {
 		public void pause ();
 		public void play ();
 		public void playSong (bool force_play = false);
+		public void request_micro_time_offset (int64 micro_seconds);
 		public void request_time_offset (int seconds);
 		public void set_subtitle_uri (string s_uri);
 		public void stop ();
+		public int64 abs_position_microseconds { get; }
 		public string[]? available_audiotracks { get; private set; }
 		public string[]? available_subtitles { get; private set; }
 		public bool buffering { get; private set; }

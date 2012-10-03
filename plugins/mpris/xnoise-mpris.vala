@@ -554,8 +554,13 @@ public class MprisPlayer : GLib.Object {
         global.play(false);
     }
     
-    public void Seek(int64 Offset) {
-        //print("seek\n");
+    public void Seek(int64 offset) {
+        print("seek\n");
+        gst_player.request_micro_time_offset(offset);
+        Idle.add(() => {
+            Seeked(gst_player.abs_position_microseconds);
+            return false;
+        });
         return;
     }
     
