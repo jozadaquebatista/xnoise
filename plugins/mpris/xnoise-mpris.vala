@@ -286,17 +286,20 @@ public class MprisPlayer : GLib.Object {
             trigger_metadata_update();
         });
         
-        gst_player.notify["length-time"].connect( () => {
+        gst_player.notify["length-nsecs"].connect( () => {
             //print("length-time: %lld\n", (int64)(gst_player.length_nsecs / (int64)1000));
             if(_metadata.lookup("mpris:length") == null) {
-                _metadata.insert("mpris:length", ((int64)0));
+                int64 u_sec = gst_player.length_nsecs / 1000;
+                _metadata.insert("mpris:length", u_sec);
+//                _metadata.insert("mpris:length", ((int64)0));
                 trigger_metadata_update();
                 return;
             }
             
             int64 length_val = (int64)(gst_player.length_nsecs / (int64)1000);
             if(((int64)_metadata.lookup("mpris:length")) != length_val) { 
-                _metadata.insert("mpris:length", length_val);
+                int64 u_sec = gst_player.length_nsecs / 1000;
+                _metadata.insert("mpris:length", u_sec);
                 trigger_metadata_update();
             }
         });
@@ -308,6 +311,7 @@ public class MprisPlayer : GLib.Object {
 
         update_metadata_source = Timeout.add(300, () => {
             //print("trigger_metadata_update %s\n", global.current_artist);
+//            _metadata.insert("mpris:length", gst_player.length_time);
             Variant variant = _metadata;//this.PlaybackStatus;
             queue_property_for_notification("Metadata", variant);
             update_metadata_source = 0;
