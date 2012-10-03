@@ -498,11 +498,15 @@ public class MprisPlayer : GLib.Object {
     
     public int64 Position {
         get {
-            //print("get position\n");
+            print("get position property\n");
             if(gst_player.length_nsecs == 0)
                 return -1;
             double pos = gst_player.position;
             return (int64)(pos * gst_player.length_nsecs / 1000.0);
+        }
+        set {
+            print("set position property\n");
+            gst_player.request_micro_time_offset(value);
         }
     }
     
