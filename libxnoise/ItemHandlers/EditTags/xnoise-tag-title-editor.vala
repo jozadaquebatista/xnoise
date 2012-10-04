@@ -85,8 +85,13 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             return false;
         }
         tmp = item_converter.to_trackdata(item, global.searchtext);
-        if(tmp == null && tmp[0] != null)
+        if(tmp == null || tmp.length == 0 || tmp[0] == null) {
+            Idle.add( () => {
+                this.dialog.destroy();
+                return false;
+            });
             return false;
+        }
         
         TrackData td = tmp[0];
         

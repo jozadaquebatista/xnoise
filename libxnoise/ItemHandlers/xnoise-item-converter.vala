@@ -77,26 +77,16 @@ public class Xnoise.ItemConverter : Object {
                     }
                     else {
                         print("Using tag reader in item converter.\n");
-                        string artist=EMPTYSTRING, album = EMPTYSTRING, title = EMPTYSTRING, lengthString = EMPTYSTRING, genre = UNKNOWN_GENRE;
                         string? yearString = null;
                         uint tracknumb = 0;
                         File file = File.new_for_uri(item.uri);
                         if(!file.query_exists(null))
                             return null;
                         var tr = new TagReader();
-                        var tags = tr.read_tag(file.get_path());
+                        TrackData? tags = tr.read_tag(file.get_path());
                         if(tags == null) {
-                            title = prepare_name_from_filename(file.get_basename());
-                        }
-                        else {
-                            artist         = tags.artist;
-                            album          = tags.album;
-                            title          = tags.title;
-                            tracknumb      = tags.tracknumber;
-                            genre          = tags.genre;
-                            lengthString = make_time_display_from_seconds(tags.length);
-                            if(tags.year > 0) 
-                                yearString = "%u".printf(tags.year);
+                            tags = new TrackData();
+                            tags.title = prepare_name_from_filename(file.get_basename());
                         }
                         tags.item = item;
                         result += tags;
