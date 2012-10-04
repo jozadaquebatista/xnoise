@@ -310,8 +310,6 @@ public class MprisPlayer : GLib.Object {
             Source.remove(update_metadata_source);
 
         update_metadata_source = Timeout.add(300, () => {
-            //print("trigger_metadata_update %s\n", global.current_artist);
-//            _metadata.insert("mpris:length", gst_player.length_time);
             Variant variant = _metadata;//this.PlaybackStatus;
             queue_property_for_notification("Metadata", variant);
             update_metadata_source = 0;
@@ -575,6 +573,10 @@ public class MprisPlayer : GLib.Object {
     public void SetPosition(string dobj, int64 Position) {
         print(" set position %lf\n", ((double)Position/(gst_player.length_nsecs / 1000.0)));
         gst_player.position = ((double)Position/(gst_player.length_nsecs / 1000.0));
+        Idle.add(() => {
+            Seeked(gst_player.abs_position_microseconds);
+            return false;
+        });
     }
     
     public void OpenUri(string Uri) {
