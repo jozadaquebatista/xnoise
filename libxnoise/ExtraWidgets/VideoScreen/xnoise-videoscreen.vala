@@ -39,7 +39,7 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
     private const string UI_FILE = Config.UIDIR + "video.ui";
     
     private unowned MainWindow win;
-    public Gtk.Box videovbox;
+    public Gtk.Overlay videovbox;
     public unowned VideoScreen videoscreen;
     internal SerialButton sbutton;
     
@@ -53,47 +53,61 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
         return VIDEOVIEW_NAME;
     }
     
+//    private Overlay overlay;
+    
     private void setup_widgets() {
         try {
             Builder gb = new Gtk.Builder();
             gb.add_from_file(UI_FILE);
             Gtk.Box inner_box = gb.get_object("vbox4") as Gtk.Box;
-            this.videovbox = gb.get_object("videovbox") as Gtk.Box;
+            this.videovbox = new Overlay();//gb.get_object("videovbox") as Gtk.Box;
             this.videoscreen = gst_player.videoscreen;
-            this.videovbox.pack_start(videoscreen,true ,true ,0);
+//            overlay = new Overlay();
+            videovbox.add(videoscreen);
+            inner_box.pack_start(videovbox,true ,true ,0);
             this.pack_start(inner_box, true, true, 0);
             
             var bottombox = gb.get_object("hbox2v") as Gtk.Box;  //VIDEO
             
-            var toolbar = new Gtk.Toolbar();
+//            var toolbar = new Gtk.Toolbar();
             
-            toolbar.get_style_context().add_class("inline-toolbar");
+//            toolbar.get_style_context().add_class("inline-toolbar");
             var hide_button_1 = new Gtk.Button();
             hide_button_1.can_focus = false;
             hide_button_1.clicked.connect(win.toggle_media_browser_visibility);
             var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
             hide_button_1.add(hide_button_image);
-            var toolbutton = new Gtk.ToolItem();
+//            var toolbutton = new Gtk.ToolItem();
             hide_button_1.set_relief(ReliefStyle.NONE);
-            toolbutton.add(hide_button_1);
-            toolbar.insert(toolbutton, -1);
+//            toolbutton.add(hide_button_1);
+//            toolbar.insert(toolbutton, -1);
             
-            var separator = new Gtk.SeparatorToolItem();
-            toolbar.insert(separator, -1);
-            GLib.Value val = true;
-            toolbar.child_set_property (separator, "expand", val);
-            separator.draw = false;
-            toolbutton = new Gtk.ToolItem();
+//            var separator = new Gtk.SeparatorToolItem();
+//            toolbar.insert(separator, -1);
+//            GLib.Value val = true;
+//            toolbar.child_set_property (separator, "expand", val);
+//            separator.draw = false;
+//            toolbutton = new Gtk.ToolItem();
+            
+            videovbox.add_overlay(hide_button_1);
+            hide_button_1.set_halign(Align.START);
+            hide_button_1.set_valign(Align.END);
             
             sbutton = new SerialButton();
             sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
             sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
             sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-            toolbutton.add(sbutton);
-            toolbar.insert(toolbutton, -1);
-            bottombox.pack_start(toolbar, true, true, 0);
+//            toolbutton.add(sbutton);
+//            toolbar.insert(toolbutton, -1);
+//            bottombox.pack_start(toolbar, true, true, 0);
+            videovbox.add_overlay(sbutton);
+            sbutton.set_halign(Align.END);
+            sbutton.set_valign(Align.END);
             
-            
+//            Gdk.RGBA transparent = { 0, 0, 0, 0.8 };
+//            overlay.override_background_color(StateFlags.NORMAL, transparent);
+            videovbox.show_all();
+
             win.notify["media-browser-visible"].connect( (s, val) => {
                 if(win.media_browser_visible == true) {
                     hide_button_image.set_from_stock(  Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);

@@ -44,6 +44,7 @@ private class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
     
     internal LyricsView lyricsView;
     internal SerialButton sbutton;
+    private Overlay overlay;
     
     public LyricsViewWidget(MainWindow win) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
@@ -60,43 +61,55 @@ private class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
             Builder gb = new Gtk.Builder();
             gb.add_from_file(UI_FILE);
             Gtk.Box inner_box = gb.get_object("vbox5") as Gtk.Box;
-            var scrolledlyricsview = gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;
+            var scrolledlyricsview = new ScrolledWindow(null, null);//gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;
             this.lyricsView = new LyricsView();
             scrolledlyricsview.add(lyricsView);
             scrolledlyricsview.show_all();
-            
+            overlay = new Overlay();
+            overlay.add(scrolledlyricsview);
+            inner_box.pack_start(overlay, true, true, 0);
             this.pack_start(inner_box, true, true, 0);
             
-            var bottombox = gb.get_object("box5") as Gtk.Box;  //LYRICS
+//            var bottombox = gb.get_object("box5") as Gtk.Box;  //LYRICS
             
-            var toolbar = new Gtk.Toolbar();
-            toolbar.get_style_context().add_class("inline-toolbar");
+//            var toolbar = new Gtk.Toolbar();
+//            toolbar.get_style_context().add_class("inline-toolbar");
             
             var hide_button_2 = new Gtk.Button();
             var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
             hide_button_2.add(hide_button_image);
             hide_button_2.can_focus = false;
             hide_button_2.clicked.connect(win.toggle_media_browser_visibility);
-            var toolbutton = new Gtk.ToolItem();
+//            var toolbutton = new Gtk.ToolItem();
             hide_button_2.set_relief(ReliefStyle.NONE);
-            toolbutton.add(hide_button_2);
-            toolbar.insert(toolbutton, -1);
+//            toolbutton.add(hide_button_2);
+//            toolbar.insert(toolbutton, -1);
             
-            var separator = new Gtk.SeparatorToolItem();
-            toolbar.insert(separator, -1);
-            GLib.Value val = true;
-            toolbar.child_set_property (separator, "expand", val);
-            separator.draw = false;
-            toolbutton = new Gtk.ToolItem();
-            
+//            var separator = new Gtk.SeparatorToolItem();
+//            toolbar.insert(separator, -1);
+//            GLib.Value val = true;
+//            toolbar.child_set_property (separator, "expand", val);
+//            separator.draw = false;
+//            toolbutton = new Gtk.ToolItem();
+            overlay.add_overlay(hide_button_2);
+            hide_button_2.set_halign(Align.START);
+            hide_button_2.set_valign(Align.END);
+            hide_button_2.show_all();
+
             sbutton = new SerialButton();
             sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
             sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
             sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-            toolbutton.add(sbutton);
-            toolbar.insert(toolbutton, -1);
-            bottombox.pack_start(toolbar, true, true, 0);
-            
+//            toolbutton.add(sbutton);
+//            toolbar.insert(toolbutton, -1);
+//            bottombox.pack_start(toolbar, true, true, 0);
+            sbutton.show_all();
+            overlay.add_overlay(sbutton);
+            sbutton.set_halign(Align.END);
+            sbutton.set_valign(Align.END);
+            Gdk.RGBA transparent = { 255, 255, 255, 0.2 };
+            overlay.override_background_color(StateFlags.NORMAL, transparent);
+            overlay.show_all();
             win.notify["media-browser-visible"].connect( (s, val) => {
                 if(win.media_browser_visible == true) {
                     hide_button_image.set_from_stock(  Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
