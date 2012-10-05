@@ -57,10 +57,10 @@ private class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
     }
     
     private void setup_widgets() {
-        try {
-            Builder gb = new Gtk.Builder();
-            gb.add_from_file(UI_FILE);
-            Gtk.Box inner_box = gb.get_object("vbox5") as Gtk.Box;
+//        try {
+//            Builder gb = new Gtk.Builder();
+//            gb.add_from_file(UI_FILE);
+            Gtk.Box inner_box = new Box(Orientation.VERTICAL, 0);// gb.get_object("vbox5") as Gtk.Box;
             var scrolledlyricsview = new ScrolledWindow(null, null);//gb.get_object("scrolledlyricsview") as Gtk.ScrolledWindow;
             this.lyricsView = new LyricsView();
             scrolledlyricsview.add(lyricsView);
@@ -121,14 +121,14 @@ private class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
                 }
             });
 
-        }
-        catch(GLib.Error e) {
-            var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
-                                            Gtk.ButtonsType.OK,
-                                            "Failed to build tracklist widget! \n" + e.message);
-            msg.run();
-            return;
-        }
+//        }
+//        catch(GLib.Error e) {
+//            var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+//                                            Gtk.ButtonsType.OK,
+//                                            "Failed to build tracklist widget! \n" + e.message);
+//            msg.run();
+//            return;
+//        }
     }
 }
 

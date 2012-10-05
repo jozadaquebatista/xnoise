@@ -4,9 +4,6 @@ ui_DATA = \
     add_media.ui \
     first_start.ui \
     main_window.ui \
-    tracklist.ui \
-    video.ui \
-    lyrics.ui \
     settings.ui \
     metadat_title.ui \
     metadat_artist_album.ui \

@@ -56,10 +56,10 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
 //    private Overlay overlay;
     
     private void setup_widgets() {
-        try {
-            Builder gb = new Gtk.Builder();
-            gb.add_from_file(UI_FILE);
-            Gtk.Box inner_box = gb.get_object("vbox4") as Gtk.Box;
+//        try {
+//            Builder gb = new Gtk.Builder();
+//            gb.add_from_file(UI_FILE);
+            Gtk.Box inner_box = new Box(Orientation.VERTICAL, 0);//gb.get_object("vbox4") as Gtk.Box;
             this.videovbox = new Overlay();//gb.get_object("videovbox") as Gtk.Box;
             this.videoscreen = gst_player.videoscreen;
 //            overlay = new Overlay();
@@ -67,7 +67,7 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
             inner_box.pack_start(videovbox,true ,true ,0);
             this.pack_start(inner_box, true, true, 0);
             
-            var bottombox = gb.get_object("hbox2v") as Gtk.Box;  //VIDEO
+//            var bottombox = gb.get_object("hbox2v") as Gtk.Box;  //VIDEO
             
 //            var toolbar = new Gtk.Toolbar();
             
@@ -119,14 +119,14 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
                 }
             });
 
-        }
-        catch(GLib.Error e) {
-            var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
-                                            Gtk.ButtonsType.OK,
-                                            "Failed to build tracklist widget! \n" + e.message);
-            msg.run();
-            return;
-        }
+//        }
+//        catch(GLib.Error e) {
+//            var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+//                                            Gtk.ButtonsType.OK,
+//                                            "Failed to build tracklist widget! \n" + e.message);
+//            msg.run();
+//            return;
+//        }
     }
 }
 

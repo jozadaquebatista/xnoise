@@ -58,10 +58,10 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
     private Overlay overlay;
     
     private void setup_widgets() {
-        try {
-            Builder gb = new Gtk.Builder();
-            gb.add_from_file(UI_FILE);
-            Gtk.Box inner_box = gb.get_object("vbox3") as Gtk.Box;
+//        try {
+//            Builder gb = new Gtk.Builder();
+//            gb.add_from_file(UI_FILE);
+            Gtk.Box inner_box = new Box(Orientation.VERTICAL, 0);//gb.get_object("vbox3") as Gtk.Box;
             scrolled_window = new ScrolledWindow(null, null);
             //gb.get_object("scroll_tracklist") as Gtk.ScrolledWindow;
             scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
@@ -216,14 +216,14 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
                     hide_button.set_tooltip_text(SHOW_LIBRARY);
                 }
             });
-        }
-        catch(GLib.Error e) {
-            var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
-                                            Gtk.ButtonsType.OK,
-                                            "Failed to build tracklist widget! \n" + e.message);
-            msg.run();
-            return;
-        }
+//        }
+//        catch(GLib.Error e) {
+//            var msg = new Gtk.MessageDialog(null, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR,
+//                                            Gtk.ButtonsType.OK,
+//                                            "Failed to build tracklist widget! \n" + e.message);
+//            msg.run();
+//            return;
+//        }
     }
 
     private CssProvider provider;
