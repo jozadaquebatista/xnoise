@@ -117,6 +117,8 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
         });
         posjumper.set_tooltip_text(_("Jump to current position"));
         overlay.add_overlay(tbx);
+        tbx.set_margin_left(10);
+        tbx.set_margin_bottom(10);
         tbx.set_halign(Align.START);
         tbx.set_valign(Align.END);
         tbx.show_all();
@@ -130,8 +132,19 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
         sbutton.set_halign(Align.END);
         sbutton.set_valign(Align.END);
         
-        Gdk.RGBA transparent = { 255, 255, 255, 0.2 };
-        overlay.override_background_color(StateFlags.NORMAL, transparent);
+//        Gdk.RGBA transparent = { 0, 0, 0, 0 };
+//        overlay.override_background_color(StateFlags.NORMAL, transparent);
+//        Gdk.RGBA dark = { 0, 0, 0, 0.7 };
+//       try {
+//            this.provider = new CssProvider();
+//            this.provider.load_from_data(CSS, -1);
+//            removeAllButton.get_style_context().add_provider(this.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+//            tbx.get_style_context().add_provider(this.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+//        }
+//        catch(Error e) {
+//            print("Xnoise CSS Error: %s\n", e.message);
+//        }
+//        removeAllButton.override_background_color(StateFlags.NORMAL, dark);
         overlay.show_all();
         win.notify["media-browser-visible"].connect( (s, val) => {
             if(win.media_browser_visible == true) {
@@ -150,7 +163,8 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
     private static const string CSS = """
             * {
                 background-image: none;
-                background-color: rgba (255, 255, 255, 1.0);
+                background-color: rgba (0, 0, 0, 0.8);
+                color: rgba (0, 0, 0, 0.8);
             }
     """;
 }

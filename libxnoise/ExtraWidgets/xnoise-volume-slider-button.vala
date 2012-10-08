@@ -53,10 +53,17 @@ internal class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
             this.set_value(Params.get_double_value("volume"));
             return false;
         });
-        
+        player.notify["volume"].connect(on_player_volume_change);
+    }
+    
+    private void on_player_volume_change() {
+        this.freeze_notify();
+        this.set_value(player.volume);
+        this.thaw_notify();
     }
     
     private void on_change() {
+    print("vol on changed\n");
         player.volume = this.get_value();
         
         // store

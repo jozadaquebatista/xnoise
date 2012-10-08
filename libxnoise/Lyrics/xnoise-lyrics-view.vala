@@ -86,8 +86,8 @@ private class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
         overlay.add_overlay(sbutton);
         sbutton.set_halign(Align.END);
         sbutton.set_valign(Align.END);
-        Gdk.RGBA transparent = { 255, 255, 255, 0.2 };
-        overlay.override_background_color(StateFlags.NORMAL, transparent);
+//        Gdk.RGBA transparent = { 255, 255, 255, 0.2 };
+//        overlay.override_background_color(StateFlags.NORMAL, transparent);
         overlay.show_all();
         win.notify["media-browser-visible"].connect( (s, val) => {
             if(win.media_browser_visible == true) {

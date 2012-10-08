@@ -325,6 +325,10 @@ public class Xnoise.GstPlayer : GLib.Object {
                 playbin.seek_simple(Gst.Format.TIME,
                                     Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
                                    (int64)(value * _length_nsecs));
+                Idle.add( () => {
+                    on_cyclic_send_song_position();
+                    return false;
+                });
             }
         }
     }

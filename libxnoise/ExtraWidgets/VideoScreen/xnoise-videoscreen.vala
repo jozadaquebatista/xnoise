@@ -70,6 +70,7 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
         videovbox.add_overlay(hide_button_1);
         hide_button_1.set_halign(Align.START);
         hide_button_1.set_valign(Align.END);
+        hide_button_1.show_all();
         
         sbutton = new SerialButton();
         sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
@@ -78,9 +79,12 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
         videovbox.add_overlay(sbutton);
         sbutton.set_halign(Align.END);
         sbutton.set_valign(Align.END);
+        sbutton.show_all();
         
         videovbox.show_all();
         
+        Gdk.RGBA transparent = { 1.0, 1.0, 1.0, 0.2 };
+        videovbox.override_background_color(StateFlags.NORMAL, transparent);
         win.notify["media-browser-visible"].connect( (s, val) => {
             if(win.media_browser_visible == true) {
                 hide_button_image.set_from_stock(  Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
@@ -364,8 +368,8 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                         pango_layout.set_font_description(font_description);
                         pango_layout.set_markup(get_content_text() , -1);
                         
-                        cr.set_source_rgb(0.0, 0.0, 0.0);    // black background
-                        cr.paint();
+//                        cr.set_source_rgb(0.0, 0.0, 0.0);    // black background
+//                        cr.paint();
                         cr.set_source_rgb(0.9, 0.9, 0.9); // light gray font color
                         int pango_x_offset = 50;
                         cr.translate(pango_x_offset, (widgetheight/3));

@@ -50,7 +50,7 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
     private uint object_id_tracklist;
     public MprisPlayer player = null;
     public MprisRoot root = null;
-    public MprisTrackList tracklist = null;
+    //public MprisTrackList tracklist = null;
     private unowned PluginModule.Container _owner;
     private unowned DBusConnection conn;
     
@@ -77,8 +77,8 @@ public class Xnoise.Mpris : GLib.Object, IPlugin {
             object_id_root = connection.register_object("/org/mpris/MediaPlayer2", root);
             player = new MprisPlayer(connection);
             object_id_player = connection.register_object("/org/mpris/MediaPlayer2", player);
-            tracklist = new MprisTrackList(connection);
-            object_id_tracklist = connection.register_object("/org/mpris/MediaPlayer2", tracklist);
+            //tracklist = new MprisTrackList(connection);
+            //object_id_tracklist = connection.register_object("/org/mpris/MediaPlayer2", tracklist);
         } 
         catch(IOError e) {
             print("%s\n", e.message);
@@ -257,7 +257,6 @@ public class MprisPlayer : GLib.Object {
     public MprisPlayer(DBusConnection conn) {
         this.conn = conn;
         this.xn = Main.instance;
-        
         Xnoise.global.notify["player-state"].connect( (s, p) => {
             //print("player state queued for mpris: %s\n", this.PlaybackStatus);
             Variant variant = this.PlaybackStatus;
@@ -303,6 +302,7 @@ public class MprisPlayer : GLib.Object {
                 trigger_metadata_update();
             }
         });
+        this._CanSeek = true;
     }
     
     private void trigger_metadata_update() {
@@ -478,7 +478,7 @@ public class MprisPlayer : GLib.Object {
     private HashTable<string,Variant> _metadata = new HashTable<string,Variant>(str_hash, str_equal);
     public HashTable<string,Variant> Metadata { //a{sv}
         owned get {
-            Variant variant = "1";
+            Variant variant = "/";
             _metadata.insert("mpris:trackid", variant); //dummy
             return _metadata;
         }
@@ -502,7 +502,7 @@ public class MprisPlayer : GLib.Object {
         get {
             print("get position property\n");
             if(gst_player.length_nsecs == 0)
-                return -1;
+                return 0;
             double pos = gst_player.position;
             return (int64)(pos * gst_player.length_nsecs / 1000.0);
         }
@@ -524,7 +524,8 @@ public class MprisPlayer : GLib.Object {
     
     public bool CanPause      { get { return true; } }
     
-    public bool CanSeek       { get { return true; } }
+    private bool _CanSeek = true;
+    public bool CanSeek       { get { return _CanSeek; } }
     
     public bool CanControl    { get { return true; } }
     
@@ -570,8 +571,8 @@ public class MprisPlayer : GLib.Object {
         return;
     }
     
-    public void SetPosition(string dobj, int64 Position) {
-        print(" set position %lf\n", ((double)Position/(gst_player.length_nsecs / 1000.0)));
+    public void SetPosition(ObjectPath TrackId, int64 Position) {
+        //print("#%s set position %lf\n", (string)TrackId, ((double)Position/(gst_player.length_nsecs / 1000.0)));
         gst_player.position = ((double)Position/(gst_player.length_nsecs / 1000.0));
         Idle.add(() => {
             Seeked(gst_player.abs_position_microseconds);
