@@ -286,7 +286,8 @@ public class Xnoise.GstPlayer : GLib.Object {
             int64 pos;
             Gst.Format format = Gst.Format.TIME;
             if(!playbin.query_position(ref format, out pos))
-                    return 0;
+                if(!playbin.query_position(ref format, out pos))
+                    return -1;
             return pos / Gst.USECOND;
         }
 //        set {
@@ -306,9 +307,11 @@ public class Xnoise.GstPlayer : GLib.Object {
 
     public double position {
         get {
+            print("gst position get\n");
             int64 pos;
             Gst.Format format = Gst.Format.TIME;
             if(!playbin.query_position(ref format, out pos))
+                if(!playbin.query_position(ref format, out pos))
                     return 0.0;
             if(_length_nsecs == 0.0)
                 return 0.0;
@@ -320,15 +323,19 @@ public class Xnoise.GstPlayer : GLib.Object {
                     value = 1.0;
                 int64 len;
                 Gst.Format fmt = Gst.Format.TIME;
-                playbin.query_duration(ref fmt, out len);
+                if(!playbin.query_duration(ref fmt, out len))
+                    if(!playbin.query_duration(ref fmt, out len))
+                        return;
                 _length_nsecs =(this._uri == null || this._uri == EMPTYSTRING ?(int64)0 :(int64)len);
-                playbin.seek_simple(Gst.Format.TIME,
-                                    Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
-                                   (int64)(value * _length_nsecs));
-                Idle.add( () => {
-                    on_cyclic_send_song_position();
-                    return false;
-                });
+                if(_length_nsecs > 0) {
+                    playbin.seek_simple(Gst.Format.TIME,
+                                        Gst.SeekFlags.FLUSH|Gst.SeekFlags.ACCURATE,
+                                       (int64)(value * _length_nsecs));
+                }
+//                Idle.add( () => {
+//                    on_cyclic_send_song_position();
+//                    return false;
+//                });
             }
         }
     }
