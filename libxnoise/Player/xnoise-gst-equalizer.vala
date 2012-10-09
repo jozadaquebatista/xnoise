@@ -81,10 +81,11 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
         }
     }
     
+    public bool available { get; set; }
     
     public GstEqualizer() {
         Params.iparams_register(this);
-        make_gst_elements();
+        available = make_gst_elements();
         make_default_presets();
     }
     
@@ -191,10 +192,10 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
         ));
     }
     
-    private void make_gst_elements() {
+    private bool make_gst_elements() {
         if(eq == null)
             eq = ElementFactory.make("equalizer-10bands", null);
-        
+        return false;
         for(int i = 0; i < 10; i++) {
             double range = bw_ranges[i];
             double f = frequencies[i];
@@ -205,6 +206,7 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
                          "bandwidth", range
             );
         }
+        return true;
     }
 }
 

@@ -434,7 +434,7 @@ public class Xnoise.GstPlayer : GLib.Object {
 
     public void activate_equalizer() {
         //print("activate_equalizer\n");
-        if(equalizer.eq != null) {
+        if(equalizer.eq != null  && equalizer.available) {
             playbin.set_state(State.NULL);
             queue.unlink_many(asink);
             queue.link_many(
@@ -449,7 +449,7 @@ public class Xnoise.GstPlayer : GLib.Object {
     
     public void deactivate_equalizer() {
         //print("deactivate_equalizer\n");
-        if(equalizer.eq != null) {
+        if(equalizer.eq != null && equalizer.available) {
             playbin.set_state(State.NULL);
             queue.unlink_many(
                 ac1,
@@ -504,7 +504,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         
         this.equalizer = new GstEqualizer();
         
-        if(equalizer.eq != null)
+        if(equalizer.eq != null && equalizer.available)
             ((Gst.Bin)abin).add_many(
                 preamp,
                 equalizer.eq,
@@ -520,7 +520,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         
         abin.add_pad(new GhostPad("sink", tee.get_pad("sink")));
         
-        if(equalizer.eq == null) {
+        if(equalizer.eq == null  && !equalizer.available) {
             queue.link_many(asink);
         }
         else {
