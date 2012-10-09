@@ -289,18 +289,25 @@ public class MprisPlayer : GLib.Object {
             //print("length-time: %lld\n", (int64)(gst_player.length_nsecs / (int64)1000));
             if(_metadata.lookup("mpris:length") == null) {
                 int64 u_sec = gst_player.length_nsecs / 1000;
-                _metadata.insert("mpris:length", u_sec);
-//                _metadata.insert("mpris:length", ((int64)0));
-                trigger_metadata_update();
+                if(u_sec > 0) {
+                    _metadata.insert("mpris:length", u_sec);
+                    trigger_metadata_update();
+                }
                 return;
             }
             
             int64 length_val = (int64)(gst_player.length_nsecs / (int64)1000);
             if(((int64)_metadata.lookup("mpris:length")) != length_val) { 
                 int64 u_sec = gst_player.length_nsecs / 1000;
-                _metadata.insert("mpris:length", u_sec);
-                trigger_metadata_update();
+                if(u_sec > 0) {
+                    _metadata.insert("mpris:length", u_sec);
+                    trigger_metadata_update();
+                }
             }
+        });
+        gst_player.sign_position_changed.connect( (g,p,s) => {
+            int64 x = (int64)p * 1000;
+            Seeked(x);
         });
         this._CanSeek = true;
     }
@@ -506,10 +513,10 @@ public class MprisPlayer : GLib.Object {
             double pos = gst_player.position;
             return (int64)(pos * gst_player.length_nsecs / 1000.0);
         }
-        set {
-            print("set position property\n");
-            gst_player.request_micro_time_offset(value);
-        }
+//        set {
+//            print("set position property\n");
+//            gst_player.request_micro_time_offset(value);
+//        }
     }
     
     public double MinimumRate { get { return 1.0; } }
@@ -565,7 +572,11 @@ public class MprisPlayer : GLib.Object {
         print("seek\n");
         gst_player.request_micro_time_offset(offset);
         Idle.add(() => {
-            Seeked(gst_player.abs_position_microseconds);
+            int64 micro = 0;
+            if((micro = gst_player.abs_position_microseconds) == -1 && global.player_state == PlayerState.PLAYING)
+                return true;
+            print("SEEK gst_player.abs_position_microseconds : %lld\n", micro);
+            Seeked(micro);
             return false;
         });
         return;
@@ -575,7 +586,14 @@ public class MprisPlayer : GLib.Object {
         //print("#%s set position %lf\n", (string)TrackId, ((double)Position/(gst_player.length_nsecs / 1000.0)));
         gst_player.position = ((double)Position/(gst_player.length_nsecs / 1000.0));
         Idle.add(() => {
-            Seeked(gst_player.abs_position_microseconds);
+            int64 micro = 0;
+            if((micro = gst_player.abs_position_microseconds) == -1 && global.player_state == PlayerState.PLAYING)
+                return true;
+            print("SET POSITION gst_player.abs_position_microseconds : %lld\n", micro);
+            Idle.add(() => {
+                Seeked(Position);
+                return false;
+            });
             return false;
         });
     }
