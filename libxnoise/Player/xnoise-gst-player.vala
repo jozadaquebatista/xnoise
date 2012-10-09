@@ -520,7 +520,7 @@ public class Xnoise.GstPlayer : GLib.Object {
         
         abin.add_pad(new GhostPad("sink", tee.get_pad("sink")));
         
-        if(equalizer.eq == null  && !equalizer.available) {
+        if(equalizer.eq == null || !equalizer.available) {
             queue.link_many(asink);
         }
         else {

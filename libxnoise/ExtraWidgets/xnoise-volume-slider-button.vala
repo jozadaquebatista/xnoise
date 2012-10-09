@@ -63,7 +63,7 @@ internal class Xnoise.VolumeSliderButton : Gtk.VolumeButton {
     }
     
     private void on_change() {
-    print("vol on changed\n");
+        //print("vol on changed\n");
         player.volume = this.get_value();
         
         // store

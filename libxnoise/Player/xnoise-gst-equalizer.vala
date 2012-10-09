@@ -195,7 +195,8 @@ private class Xnoise.GstEqualizer : GLib.Object, IParams {
     private bool make_gst_elements() {
         if(eq == null)
             eq = ElementFactory.make("equalizer-10bands", null);
-        return false;
+        if(eq == null)
+            return false;
         for(int i = 0; i < 10; i++) {
             double range = bw_ranges[i];
             double f = frequencies[i];
