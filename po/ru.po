@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xnoise\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-30 20:39+0200\n"
+"POT-Creation-Date: 2012-10-09 14:56+0200\n"
 "PO-Revision-Date: 2011-05-27 23:47+0300\n"
 "Last-Translator: Victor Ananjevsky <ananasik@gmail.com>\n"
 "Language-Team: ru <alexey.ivanes@gmail.com>\n"
@@ -53,7 +53,7 @@ msgid "no lyrics found..."
 msgstr "текст не найден..."
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:154
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:465
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:447
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1331
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1359
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1401
@@ -66,7 +66,7 @@ msgid "by"
 msgstr "от"
 
 #: ../libxnoise/DBus/xnoise-desktop-notifications.vala:157
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:467
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:449
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1333
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1361
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:1403
@@ -92,7 +92,7 @@ msgstr ""
 msgid "Collapse all"
 msgstr "Свернуть все"
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:309
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser-model.vala:310
 #: ../plugins/magnatune/magnatune-treestore.vala:43
 msgid "Loading ..."
 msgstr "Загрузка ..."
@@ -236,19 +236,19 @@ msgstr ""
 msgid "Music Stores"
 msgstr ""
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:120
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:102
 msgid "Select external subtitle file"
 msgstr "Выбрать внешний файл с субтитрами"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:173
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:155
 msgid "No Subtitle"
 msgstr "Нет субтитров"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:231
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:213
 msgid "Leave Fullscreen"
 msgstr "Выйти из полноэкранного режима"
 
-#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:231
+#: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:213
 msgid "Fullscreen"
 msgstr "Полноэкранный режим"
 
@@ -288,7 +288,7 @@ msgid "Add all tracks to tracklist"
 msgstr "Добавить все видимые треки в список"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:136
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:171
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
 msgid "xnoise - Edit metadata"
 msgstr "xnoise - Правка метаданных"
 
@@ -309,7 +309,7 @@ msgid "Album:"
 msgstr "Альбом:"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:163
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:186
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:191
 msgid ""
 "Please wait while filling media browser. Or cancel, if you do not want to "
 "wait."
@@ -318,7 +318,7 @@ msgstr ""
 "хотите ждать."
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:167
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:190
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:195
 msgid ""
 "Please wait while importing media. Or cancel, if you do not want to wait."
 msgstr ""
@@ -326,45 +326,45 @@ msgstr ""
 "ждать."
 
 #. ARTIST
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:134
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1311
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1441
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:139
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1309
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1439
 msgid "Artist"
 msgstr "Исполнитель"
 
 #. ALBUM
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:137
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1287
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1450
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:142
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1285
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1448
 msgid "Album"
 msgstr "Альбом"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:140
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1263
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:145
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1261
 msgid "Title"
 msgstr "Название"
 
 #. GENRE
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:143
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1357
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1459
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:148
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1355
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1457
 msgid "Genre"
 msgstr "Жанр"
 
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:146
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:151
 msgid "Uri"
 msgstr "Адрес"
 
 #. YEAR
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:149
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1381
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1468
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:154
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1379
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1466
 msgid "Year"
 msgstr "Год"
 
 #. TRACKNUMBER
-#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:152
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1432
+#: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:157
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1430
 msgid "Tracknumber"
 msgstr "Номер трека"
 
@@ -407,13 +407,13 @@ msgstr "Удалить выбранные треки"
 msgid "Show in parent folder"
 msgstr ""
 
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:154
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:209
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:137
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:192
 msgid "Insufficient track information. Not searching for lyrics."
 msgstr "Недостаточно информации о треке. Поиск текста прекращеню"
 
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:182
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:198
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:165
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:181
 msgid "Player stopped. Not searching for lyrics."
 msgstr "Плеер остановлен. Поиск текста прекращен."
 
@@ -423,7 +423,7 @@ msgstr "Плеер остановлен. Поиск текста прекращ�
 #. textbuffer.get_start_iter (out end_iter);
 #. string txt = textbuffer.get_text(start_iter, end_iter, true);
 #. TODO: Howto append text ?
-#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:234
+#: ../libxnoise/Lyrics/xnoise-lyrics-view.vala:217
 #, c-format
 msgid ""
 "\n"
@@ -623,47 +623,47 @@ msgstr ""
 msgid "Show application main menu"
 msgstr "Показывать главное меню"
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:147
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:148
 msgid "Dance"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:151
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:152
 msgid "Pop"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:155
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:156
 msgid "Techno"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:159
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:160
 msgid "Club"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:163
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:164
 msgid "Jazz"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:167
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:168
 msgid "Rock"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:171
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:172
 msgid "Maximum Treble"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:175
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:176
 msgid "Maximum Bass"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:179
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:180
 msgid "Classic"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:184
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:185
 msgid "Custom"
 msgstr ""
 
-#: ../libxnoise/Player/xnoise-gst-equalizer.vala:189
+#: ../libxnoise/Player/xnoise-gst-equalizer.vala:190
 msgid "Default"
 msgstr ""
 
@@ -674,50 +674,50 @@ msgstr ""
 "Имя файла субтитров не совпадает с именем файла видео! Файл субтитров не "
 "используется."
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:663
+#: ../libxnoise/Player/xnoise-gst-player.vala:690
 #, c-format
 msgid "Success on installing missing gstreamer plugin"
 msgstr "Недостающий модуль gstreamer успешно установлен"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:667
+#: ../libxnoise/Player/xnoise-gst-player.vala:694
 #, c-format
 msgid "User aborted installation of missing gstreamer plugin"
 msgstr "Пользователь прервал установку недостающего модуля gstreamer"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:671
+#: ../libxnoise/Player/xnoise-gst-player.vala:698
 #, c-format
 msgid "Gstreamer plugin not found in repositories"
 msgstr "Модуль gstreamer не найден в репозитории"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:677
+#: ../libxnoise/Player/xnoise-gst-player.vala:704
 #, c-format
 msgid "Critical error while installation of missing gstreamer plugin"
 msgstr "Критическая ошибка при установке недостающего модуля gstreamer"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:722
-#: ../libxnoise/Player/xnoise-gst-player.vala:733
-#: ../libxnoise/Player/xnoise-gst-player.vala:746
+#: ../libxnoise/Player/xnoise-gst-player.vala:749
+#: ../libxnoise/Player/xnoise-gst-player.vala:760
+#: ../libxnoise/Player/xnoise-gst-player.vala:773
 #, c-format
 msgid "Missing gstreamer plugin"
 msgstr "Не хватает модуля gstreamer"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:724
+#: ../libxnoise/Player/xnoise-gst-player.vala:751
 msgid "Automatic missing codec installation not supported"
 msgstr "Автоматическая установка недостающих кодеков не поддерживается"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:735
+#: ../libxnoise/Player/xnoise-gst-player.vala:762
 msgid "Failed to start automatic gstreamer plugin installation."
 msgstr "Сбой при старте автоматьической установки модулей gstreamer."
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:748
+#: ../libxnoise/Player/xnoise-gst-player.vala:775
 msgid "Trying to install missing gstreamer plugin"
 msgstr "Попытка установить недостающий модуль gstreamer"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:847
+#: ../libxnoise/Player/xnoise-gst-player.vala:874
 msgid "Subtitle #"
 msgstr "Субтитр #"
 
-#: ../libxnoise/Player/xnoise-gst-player.vala:859
+#: ../libxnoise/Player/xnoise-gst-player.vala:886
 msgid "Audio Track #"
 msgstr "Аудио трек #"
 
@@ -759,21 +759,21 @@ msgstr "Скрыть библиотеку"
 msgid "Show Library"
 msgstr "Показать библиотеку"
 
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:101
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:88
 msgid "Remove selected titles"
 msgstr "Удалить выбранные"
 
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:117
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:102
 msgid "Remove all"
 msgstr "Удалить все"
 
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:136
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:118
 msgid "Jump to current position"
 msgstr "Перейти к текущей позиции"
 
 #. LENGTH
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1333
-#: ../libxnoise/TrackList/xnoise-tracklist.vala:1477
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1331
+#: ../libxnoise/TrackList/xnoise-tracklist.vala:1475
 msgid "Length"
 msgstr "Длина"
 
@@ -811,12 +811,12 @@ msgstr "приостановлен"
 msgid "ready to rock"
 msgstr "ready to rock"
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:299
+#: ../libxnoise/Utils/xnoise-media-importer.vala:298
 #, c-format
 msgid "Found %u tracks. Updating library ..."
 msgstr "Найдено %u дорожек. Обновление библиотеки ..."
 
-#: ../libxnoise/Utils/xnoise-media-importer.vala:514
+#: ../libxnoise/Utils/xnoise-media-importer.vala:513
 #, c-format
 msgid "%u tracks found"
 msgstr "Найдено %u дорожек"
