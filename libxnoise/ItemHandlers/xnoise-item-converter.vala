@@ -39,7 +39,6 @@ public class Xnoise.ItemConverter : Object {
     public TrackData[]? to_trackdata(Item? item, string? searchtext) {
         
         //this function uses the database so use it in the database thread
-//        return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, null);
         
         if(item == null)
             return null;
@@ -52,7 +51,7 @@ public class Xnoise.ItemConverter : Object {
         switch(item.type) {
             case ItemType.LOCAL_AUDIO_TRACK:
             case ItemType.LOCAL_VIDEO_TRACK:
-                if(item.db_id > -1 && (int)Linux.gettid() == db_worker.thread_id) {
+                if(item.db_id > -1 && db_worker.is_same_thread()) {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
                     TrackData? tmp = ds.get_trackdata_by_titleid(global.searchtext, item.db_id);
@@ -64,7 +63,7 @@ public class Xnoise.ItemConverter : Object {
                     TrackData? tmp = null;
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
-                    if((int)Linux.gettid() == db_worker.thread_id && ds.get_trackdata_for_uri(ref item.uri, out tmp)) {
+                    if(db_worker.is_same_thread() && ds.get_trackdata_for_uri(ref item.uri, out tmp)) {
                         if(tmp != null) {
                             if(tmp.item.type == ItemType.UNKNOWN)
                                 tmp.item.type = ItemHandlerManager.create_item(item.uri).type;
@@ -97,7 +96,7 @@ public class Xnoise.ItemConverter : Object {
                 }
                 break;
             case ItemType.COLLECTION_CONTAINER_ALBUM:
-                if(item.db_id > -1 && (int)Linux.gettid() == db_worker.thread_id) {
+                if(item.db_id > -1 && db_worker.is_same_thread()) {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
                     result = ds.get_trackdata_by_albumid(global.searchtext, item.db_id);
@@ -105,7 +104,7 @@ public class Xnoise.ItemConverter : Object {
                 }
                 break;
             case ItemType.COLLECTION_CONTAINER_ARTIST:
-                if(item.db_id > -1 && (int)Linux.gettid() == db_worker.thread_id) {
+                if(item.db_id > -1 && db_worker.is_same_thread()) {
                     DataSource ds = get_data_source(item.source_id);
                     assert(ds != null);
                     result = ds.get_trackdata_by_artistid(global.searchtext, item.db_id);
@@ -118,7 +117,7 @@ public class Xnoise.ItemConverter : Object {
                 DataSource ds = get_data_source(item.source_id);
                 assert(ds != null);
                 if(item.db_id > -1) {
-                    if((int)Linux.gettid() == db_worker.thread_id && ds.get_stream_td_for_id(item.db_id, out tmp)) {
+                    if(db_worker.is_same_thread() && ds.get_stream_td_for_id(item.db_id, out tmp)) {
                         result += tmp;
                         return result;
                     }

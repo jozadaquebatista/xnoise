@@ -683,9 +683,9 @@ namespace Xnoise {
 	public class Main : GLib.Object {
 		public Main ();
 		public void immediate_play (string uri);
+		public bool is_same_thread ();
 		public void quit ();
 		public static Xnoise.Main instance { get; }
-		public int thread_id { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MainViewNotebook : Gtk.Notebook {
@@ -917,8 +917,9 @@ namespace Xnoise {
 		}
 		public delegate bool WorkFunc (Xnoise.Worker.Job jb);
 		public Worker (GLib.MainContext mc);
+		public bool is_same_thread ();
 		public void push_job (Xnoise.Worker.Job j);
-		public int thread_id { get; }
+		public GLib.Thread<int> thread { get; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public interface ExternQueryable : Gtk.TreeView {

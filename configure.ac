@@ -414,7 +414,6 @@ XNOISE_PACKAGES="\
     --pkg posix \
     --pkg sqlite3 \
     --pkg taglib_c \
-    --pkg linux \
     --target-glib=`echo $TARGET_GLIB_VERSION` \
 "
 
@@ -425,7 +424,7 @@ AC_SUBST(XNOISE_PACKAGES)
 
 
 dnl       VAPIDIR is used to place the xnoise vapi file
-dnl       $DATADIR/vala/vapi is vala version independent
+dnl       $XN_DATADIR/vala/vapi is vala version independent
 VAPIDIR="${datadir}/vala/vapi"
 AC_SUBST(VAPIDIR)
 dnl ================================================================

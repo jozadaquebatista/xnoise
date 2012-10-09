@@ -32,15 +32,16 @@
 
 public class Xnoise.Main : GLib.Object {
     private static Main _instance;
+    private unowned Thread _thread;
     internal static Xnoise.Dbus dbus;
-    private int _thread_id = 0;
+//    private int _thread_id = 0;
     internal static bool show_plugin_state;
     internal static bool no_plugins;
     internal static bool no_dbus;
     
     internal static unowned Xnoise.Application app;
     
-    public int thread_id { get { return _thread_id; } }
+//    public int thread_id { get { return _thread_id; } }
 
     internal bool use_notifications { get; set; }
 
@@ -48,7 +49,8 @@ public class Xnoise.Main : GLib.Object {
         //Gtk.Widget.set_default_direction(Gtk.TextDirection.RTL);
         _instance = this;
         
-        _thread_id = (int)Linux.gettid();
+//        _thread_id = (int)Linux.gettid();
+        _thread = Thread.self<int>();
         //message( "background worker thread %d", (int)Linux.gettid() );
         
         bool is_first_start;
@@ -177,6 +179,10 @@ public class Xnoise.Main : GLib.Object {
                 _instance = new Main();
             return _instance;
         }
+    }
+
+    public bool is_same_thread() {
+        return (void*)Thread.self<int>() == (void*)_thread;
     }
 
     private static void on_posix_finish(int signal_number) {

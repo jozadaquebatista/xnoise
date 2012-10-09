@@ -11,7 +11,7 @@ INCLUDES = \
     -include $(CONFIG_HEADER) \
     -I$(top_srcdir)/libxnoise \
     $(XNOISE_CFLAGS) \
-    -DLOCALE_DIR=\"${datarootdir}/locale\" \
+    -DXN_LOCALE_DIR=\"${datarootdir}/locale\" \
     $(NULL)
 
 xnoise_SOURCES = \

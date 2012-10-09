@@ -7,9 +7,9 @@ SUBDIRS = \
 
 INCLUDES = \
     $(XNOISE_CFLAGS) \
-    -DPACKAGE_DATADIR=\""$(pkgdatadir)"\" \
-    -DDATADIR='"$(datadir)"' \
-    -DLOCALE_DIR=\"${datarootdir}/locale\" \
+    -DXN_PACKAGE_DATADIR=\""$(pkgdatadir)"\" \
+    -DXN_DATADIR='"$(datadir)"' \
+    -DXN_LOCALE_DIR=\"${datarootdir}/locale\" \
     -include $(CONFIG_HEADER) \
     $(LIBXML_CFLAGS) \
     $(LIBSOUP_CFLAGS) \

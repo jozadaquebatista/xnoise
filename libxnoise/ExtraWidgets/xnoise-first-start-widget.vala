@@ -34,7 +34,7 @@ using Xnoise;
 
 
 private class Xnoise.FirstStartWidget : Box, IMainView {
-    private const string WELCOME_UI_FILE = Config.UIDIR + "first_start.ui";
+    private const string WELCOME_UI_FILE = Config.XN_UIDIR + "first_start.ui";
     private CssProvider provider;
 
     private enum Column {

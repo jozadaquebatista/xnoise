@@ -260,7 +260,8 @@ public class Xnoise.MusicBrowserModel : Gtk.TreeStore, Gtk.TreeModel {
     }
 
     private void on_populate_finished(Worker.Job sender) {
-        return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
+        return_if_fail(Main.instance.is_same_thread());
+        //return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
         sender.finished.disconnect(on_populate_finished);
         main_window.musicBr.set_model(this);
         populating_model = false;

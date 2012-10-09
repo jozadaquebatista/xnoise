@@ -37,17 +37,17 @@ public class Xnoise.Worker : Object {
     private AsyncQueue<Job> sync_job_queue           = new AsyncQueue<Job>();
     private AsyncQueue<Job> sync_high_prio_job_queue = new AsyncQueue<Job>();
     
-//#if GLIB_2_32
-//    private Thread<int> thread;
-//#else
-    private unowned Thread<int> thread;
-//#endif
-    
     private MainContext local_context;
     private unowned MainContext main_context;
-    private int _thread_id = 0;
+    private unowned Thread<int> _thread;
     
-    public int thread_id { get { return _thread_id; } }
+    // WorkFunc will repeatedly be executed from an async function until it returns false
+    public delegate bool WorkFunc(Job jb);
+    
+    public unowned Thread<int> thread {
+        get { return _thread; }
+    }
+    
     
     public Worker(MainContext mc) {
         if (!Thread.supported ()) {
@@ -57,19 +57,17 @@ public class Xnoise.Worker : Object {
         this.main_context = mc;
         
         try {
-            thread = Thread.create<int>(thread_func, false);
+            _thread = Thread.create<int>(thread_func, false);
         }
         catch(ThreadError e) {
             print("Error creating thread: %s\n", e.message);
         }
     }
     
-    //TODO: Maybe use only one working function type
-    // WorkFunc will repeatedly be executed from an async function until it returns false
-    public delegate bool WorkFunc(Job jb);
     
-    // SyncWorkFunc will be executed in one shot as soon as the worker thread is idle
-    //    public delegate void SyncWorkFunc(Job jb);
+    public bool is_same_thread() {
+        return (void*)Thread.self<int>() == (void*)_thread;
+    }
     
     public enum ExecutionType {
         UNKNOWN = 0,
@@ -130,7 +128,6 @@ public class Xnoise.Worker : Object {
     
     //thread function is used to setup a local mainloop/maincontext
     private int thread_func() {
-        _thread_id = (int)Linux.gettid();
         //message( "background worker thread %d", (int)Linux.gettid() );
         local_context = new MainContext();
         local_context.push_thread_default();

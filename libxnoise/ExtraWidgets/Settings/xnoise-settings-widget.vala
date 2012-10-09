@@ -37,7 +37,7 @@ using Xnoise.Resources;
 
 private class Xnoise.SettingsWidget : Gtk.Box, IMainView {
     private Builder builder;
-    private const string SETTINGS_UI_FILE = Config.UIDIR + "settings.ui";
+    private const string SETTINGS_UI_FILE = Config.XN_UIDIR + "settings.ui";
     private Notebook notebook;
     private SpinButton sb;
     private int fontsizeMB;

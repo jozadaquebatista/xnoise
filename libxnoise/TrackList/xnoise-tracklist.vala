@@ -39,7 +39,7 @@ using Xnoise.TagAccess;
 
 
 private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
-    private const string UI_FILE = Config.UIDIR + "tracklist.ui";
+    private const string UI_FILE = Config.XN_UIDIR + "tracklist.ui";
     
     private unowned MainWindow win;
     internal ScrolledWindow scrolled_window;

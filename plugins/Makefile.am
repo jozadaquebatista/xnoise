@@ -1,6 +1,6 @@
 NULL =
 
-SUBDIRS =  \     
+SUBDIRS =  \
     $(NULL)
 
 DIST_SUBDIRS =  \

@@ -36,7 +36,7 @@ using Xnoise.Utilities;
 
 
 private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
-    private const string UI_FILE = Config.UIDIR + "video.ui";
+    private const string UI_FILE = Config.XN_UIDIR + "video.ui";
     
     private unowned MainWindow win;
     public Gtk.Overlay videovbox;
@@ -287,7 +287,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                         Gdk.EventMask.POINTER_MOTION_MASK |
                         Gdk.EventMask.ENTER_NOTIFY_MASK);
         try {
-            logo_pixb = new Gdk.Pixbuf.from_file(Config.UIDIR + "xnoise_bruit.svg");
+            logo_pixb = new Gdk.Pixbuf.from_file(Config.XN_UIDIR + "xnoise_bruit.svg");
         }
         catch(GLib.Error e) {
             print("%s\n", e.message);

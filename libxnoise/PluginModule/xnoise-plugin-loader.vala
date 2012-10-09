@@ -66,7 +66,7 @@ public class Xnoise.PluginModule.Loader : Object {
 
     internal bool load_all() {
         Container plugin;
-        File dir = File.new_for_path(Config.PLUGINSDIR);
+        File dir = File.new_for_path(Config.XN_PLUGINSDIR);
         this.get_plugin_information_files(dir);
         foreach(string pluginInfoFile in info_files) {
             info = new PluginModule.Information(pluginInfoFile);

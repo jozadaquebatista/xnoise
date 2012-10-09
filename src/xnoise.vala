@@ -130,7 +130,7 @@ namespace Xnoise {
     public static int main(string[] args) {
         //Environment.atexit(mem_profile); This can be used if xnoise is compiled with new memory statistic switch
         GLib.Intl.textdomain(Config.GETTEXT_PACKAGE);
-        GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.LOCALE_DIR);
+        GLib.Intl.bindtextdomain(Config.GETTEXT_PACKAGE, Config.XN_LOCALE_DIR);
         Environment.set_application_name(Config.GETTEXT_PACKAGE);
         string[] sa_args = {};
         sa_args += Config.GETTEXT_PACKAGE;

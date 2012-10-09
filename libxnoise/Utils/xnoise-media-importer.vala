@@ -89,7 +89,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     }
 
     private bool import_media_folder_job(Worker.Job job) {
-        return_val_if_fail((int)Linux.gettid() == io_worker.thread_id, false);
+        return_val_if_fail(io_worker.is_same_thread(), false);
         uint msg_id = 0;
         Idle.add( () => {
             if((bool)job.get_arg("create_user_info") == true) {
@@ -133,7 +133,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     }
 
     private bool import_media_file_job(Worker.Job job) {
-        return_val_if_fail((int)Linux.gettid() == io_worker.thread_id, false);
+        return_val_if_fail(io_worker.is_same_thread(), false);
         var tr = new TagReader();
         File f = File.new_for_path((string)job.get_arg("path"));
         TrackData? td = tr.read_tag(f.get_path());
@@ -158,7 +158,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     
     private bool reimport_media_groups_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
-        return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
+        return_val_if_fail(db_worker.is_same_thread(), false);
         
         main_window.musicBr.mediabrowsermodel.cancel_fill_model(); // TODO
         
@@ -197,7 +197,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     internal void update_item_tag(ref Item? item, ref TrackData td) {
         
         //this function uses the database so use it in the database thread
-        return_if_fail((int)Linux.gettid() == db_worker.thread_id);
+        return_val_if_fail(db_worker.is_same_thread(), false);
         
         if(global.media_import_in_progress == true)
             return;
@@ -211,7 +211,7 @@ public class Xnoise.MediaImporter : GLib.Object {
                                       uint msg_id,
                                       bool full_rescan = true,
                                       bool interrupted_populate_model = false) {
-        return_if_fail((int)Linux.gettid() == Main.instance.thread_id);
+        return_if_fail(Main.instance.is_same_thread());
         t = new Timer(); // timer for measuring import time
         t.start();
         // global.media_import_in_progress has to be reset in the last job !
@@ -270,7 +270,7 @@ public class Xnoise.MediaImporter : GLib.Object {
 
     internal bool write_lastused_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
-        return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
+        return_val_if_fail(db_worker.is_same_thread(), false);
         try {
             db_writer.write_lastused(ref job.track_dat);
         }
@@ -284,7 +284,6 @@ public class Xnoise.MediaImporter : GLib.Object {
 
     // running in io thread
     private void end_import(Worker.Job job) {
-//        return_val_if_fail((int)Linux.gettid() == io_worker.thread_id, false);
         //print("end import 1 %d %d\n", job.counter[1], job.counter[2]);
         if(job.counter[1] != job.counter[2])
             return;
@@ -310,7 +309,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     // running in db thread
     private bool finish_import_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
-        return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
+        return_val_if_fail(db_worker.is_same_thread(), false);
         Idle.add(() => {
             if(t != null) {
                 t.stop();
@@ -341,7 +340,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     // running in db thread
     private bool reset_local_data_library_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
-        return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
+        return_val_if_fail(db_worker.is_same_thread(), false);
         db_writer.begin_transaction();
         if(!db_writer.delete_local_media_data())
             return false;
@@ -356,7 +355,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     // only for Worker.Job usage
     private bool store_folders_job(Worker.Job job){
         //this function uses the database so use it in the database thread
-        return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
+        return_val_if_fail(db_worker.is_same_thread(), false);
         
         //print("store_folders_job \n");
         var mfolders_ht = new HashTable<string,Item?>(str_hash, str_equal);
@@ -449,7 +448,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     // running in io thread
     private bool read_media_folder_job(Worker.Job job) {
         //this function shall run in the io thread
-        return_if_fail((int)Linux.gettid() == io_worker.thread_id);
+        return_val_if_fail(io_worker.is_same_thread(), false);
         //count_media_files((File)job.get_arg("dir"), job);
         read_recoursive((File)job.get_arg("dir"), job);
         return false;
@@ -458,7 +457,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     // running in io thread
     private void read_recoursive(File dir, Worker.Job job) {
         //this function shall run in the io thread
-        return_if_fail((int)Linux.gettid() == io_worker.thread_id);
+        return_val_if_fail(io_worker.is_same_thread(), false);
         
         job.counter[0]++;
         FileEnumerator enumerator;
@@ -621,7 +620,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     
     private bool insert_trackdata_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
-        return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
+        return_val_if_fail(db_worker.is_same_thread(), false);
         db_writer.begin_transaction();
         foreach(TrackData td in job.track_dat) {
             db_writer.insert_title(ref td);
@@ -633,7 +632,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     // add streams to the media path and store them in the db
     private bool store_streams_job(Worker.Job job) {
         //this function uses the database so use it in the database thread
-        return_val_if_fail((int)Linux.gettid() == db_worker.thread_id, false);
+        return_val_if_fail(db_worker.is_same_thread(), false);
         var streams_ht = new HashTable<string,Item?>(str_hash, str_equal);
         db_writer.begin_transaction();
         

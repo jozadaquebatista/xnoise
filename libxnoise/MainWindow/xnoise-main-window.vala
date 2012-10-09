@@ -42,8 +42,8 @@ private extern bool ensure_native(Gdk.Window window);
 //private extern void widget_style_get_property(Gtk.Widget widget, string property_name, GLib.Value val);
 
 public class Xnoise.MainWindow : Gtk.Window, IParams {
-    private const string MAIN_UI_FILE      = Config.UIDIR + "main_window.ui";
-    private const string MENU_UI_FILE      = Config.UIDIR + "main_ui.xml";
+    private const string MAIN_UI_FILE      = Config.XN_UIDIR + "main_window.ui";
+    private const string MENU_UI_FILE      = Config.XN_UIDIR + "main_ui.xml";
     private unowned Main xn;
     private VolumeSliderButton volume_slider;
     private CssProvider css_provider_search;

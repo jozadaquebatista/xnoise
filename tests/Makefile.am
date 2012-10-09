@@ -5,7 +5,7 @@ NULL =
 AM_CPPFLAGS = \
     -include $(CONFIG_HEADER) \
 	-I$(top_srcdir)/libxnoise \
-    -DTESTDIR=\"$(top_srcdir)/tests/\" \
+    -DXN_TESTDIR=\"$(top_srcdir)/tests/\" \
 	$(XNOISE_CFLAGS) \
 	$(NULL)
 

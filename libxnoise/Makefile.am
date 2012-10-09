@@ -8,11 +8,11 @@ SUBDIRS = \
 INCLUDES = \
     -include $(CONFIG_HEADER) \
     $(XNOISE_CFLAGS) \
-    -DDATADIR=\"$(datadir)/xnoise/\" \
-    -DUIDIR=\"$(datadir)/xnoise/ui/\" \
-    -DPLUGINSDIR=\"$(libdir)/xnoise\" \
-    -DLICENSEDIR=\"$(datadir)/xnoise/license/\" \
-    -DLOCALE_DIR=\"${datarootdir}/locale\" \
+    -DXN_DATADIR=\"$(datadir)/xnoise/\" \
+    -DXN_UIDIR=\"$(datadir)/xnoise/ui/\" \
+    -DXN_PLUGINSDIR=\"$(libdir)/xnoise\" \
+    -DXN_LICENSEDIR=\"$(datadir)/xnoise/license/\" \
+    -DXN_LOCALE_DIR=\"${datarootdir}/locale\" \
     $(NULL)
 
 libxnoise_hdir = $(includedir)/xnoise

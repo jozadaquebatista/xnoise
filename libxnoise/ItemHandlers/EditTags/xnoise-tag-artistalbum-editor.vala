@@ -118,7 +118,7 @@ internal class Xnoise.TagArtistAlbumEditor : GLib.Object {
             dialog.set_modal(true);
             dialog.set_transient_for(main_window);
             
-            builder.add_from_file(Config.UIDIR + "metadat_artist_album.ui");
+            builder.add_from_file(Config.XN_UIDIR + "metadat_artist_album.ui");
             
             var mainvbox           = builder.get_object("vbox1")           as Gtk.Box;
             var okbutton           = builder.get_object("okbutton")        as Gtk.Button;

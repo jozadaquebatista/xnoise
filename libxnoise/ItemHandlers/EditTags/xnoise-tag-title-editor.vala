@@ -121,7 +121,7 @@ private class Xnoise.TagTitleEditor : GLib.Object {
             dialog.set_modal(true);
             dialog.set_transient_for(main_window);
             
-            builder.add_from_file(Config.UIDIR + "metadat_title.ui");
+            builder.add_from_file(Config.XN_UIDIR + "metadat_title.ui");
             
             var mainvbox           = builder.get_object("vbox1")             as Gtk.Box;
             var okbutton           = builder.get_object("okbutton")          as Gtk.Button;

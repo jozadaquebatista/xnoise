@@ -147,7 +147,7 @@ private class Xnoise.AddMediaWidget : Gtk.Box {
     private void setup_widgets() {
         ScrolledWindow tvscrolledwindow = null;
         try {
-            builder.add_from_file(Config.UIDIR + "add_media.ui");
+            builder.add_from_file(Config.XN_UIDIR + "add_media.ui");
             
             var headline           = builder.get_object("addremove_headline") as Label;
             headline.set_alignment(0.0f, 0.5f);
