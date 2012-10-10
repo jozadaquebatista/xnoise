@@ -106,7 +106,7 @@ msgstr "添加或删除媒体(_A)"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:168
 msgid "If selected, all media folders will be fully rescanned"
-msgstr ""
+msgstr "如果已选中，全部的媒体文件夹将完全重新扫描"
 
 #: ../libxnoise/ExtraWidgets/AddMedia/xnoise-add-media-widget.vala:174
 msgid "Add local folder"
@@ -157,73 +157,63 @@ msgstr "离开全屏"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:301
 msgid "Settings"
-msgstr ""
+msgstr "设置"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:303
-#, fuzzy
 msgid "Media"
-msgstr "显示媒体"
+msgstr "媒体"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:310
-#, fuzzy
 msgid "Grid lines in media browser"
 msgstr "在媒体浏览器中使用方格线"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:316
-#, fuzzy
 msgid "Show picture on hover album image"
-msgstr "当悬停在专辑封面上时不显示视频界面"
+msgstr "当悬停在专辑封面上时显示图片"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:322
-#, fuzzy
 msgid "Use Application Menu"
-msgstr "显示应用程序主菜单"
+msgstr "使用应用程序菜单"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:328
-#, fuzzy
 msgid "Show Stop button"
-msgstr "使用停止按钮"
+msgstr "显示停止按钮"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:334
-#, fuzzy
 msgid "Quit on window close"
-msgstr "窗口关闭时退出应用程序"
+msgstr "窗口关闭时退出"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:340
 msgid "Use desktop notifications"
-msgstr ""
+msgstr "使用桌面通知机制"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:346
-#, fuzzy
 msgid "Use Equalizer"
 msgstr "使用均衡器"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:359
 msgid "Go Back"
-msgstr ""
+msgstr "返回"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:368
-#, fuzzy
 msgid "Media browser fontsize"
-msgstr "媒体浏览器字体大小："
+msgstr "媒体浏览器字体大小"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:385
-#, fuzzy
 msgid "User Interface"
-msgstr "用户名："
+msgstr "用户界面"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:389
 msgid "Lyric Providers"
-msgstr ""
+msgstr "歌词提供"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:393
 msgid "Additional"
-msgstr ""
+msgstr "附加的"
 
 #: ../libxnoise/ExtraWidgets/Settings/xnoise-settings-widget.vala:397
-#, fuzzy
 msgid "Music Stores"
-msgstr "Magnatune 音乐商店"
+msgstr "音乐商店"
 
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:102
 msgid "Select external subtitle file"
@@ -267,12 +257,11 @@ msgstr "预设："
 
 #: ../libxnoise/ExtraWidgets/xnoise-equalizer-widget.vala:175
 msgid "Volume"
-msgstr ""
+msgstr "音量"
 
 #: ../libxnoise/ItemHandlers/AddAllToTracklist/xnoise-handler-add-all-to-tracklist.vala:41
-#, fuzzy
 msgid "Add all tracks to tracklist"
-msgstr "添加所有可见音轨到播放列表"
+msgstr "将全部歌曲添加到播放列表"
 
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-artistalbum-editor.vala:136
 #: ../libxnoise/ItemHandlers/EditTags/xnoise-tag-title-editor.vala:176
@@ -428,9 +417,8 @@ msgid "open file"
 msgstr "打开文件"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:187
-#, fuzzy
 msgid "Open _Stream"
-msgstr "流"
+msgstr "打开流(_S)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:187
 msgid "open remote location"
@@ -530,9 +518,8 @@ msgid "_Now Playing"
 msgstr "正在播放(_N)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:203
-#, fuzzy
 msgid "Go to the 'Now Playing' screen in the main window."
-msgstr "转到主窗口中正在播放的界面。"
+msgstr "转到主窗口中“正在播放”的界面。"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:204
 msgid "_Help"
@@ -555,9 +542,8 @@ msgid "_Show Media Browser"
 msgstr "显示媒体浏览器(_S)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:282
-#, fuzzy
 msgid "Show _Video Fullscreen"
-msgstr "离开全屏"
+msgstr "全屏显示视频(_V)"
 
 #: ../libxnoise/MainWindow/xnoise-main-window.vala:473
 #, c-format
@@ -601,11 +587,11 @@ msgstr "显示应用程序主菜单"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:148
 msgid "Dance"
-msgstr ""
+msgstr "舞曲"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:152
 msgid "Pop"
-msgstr ""
+msgstr "流行乐"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:156
 msgid "Techno"
@@ -617,11 +603,11 @@ msgstr ""
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:164
 msgid "Jazz"
-msgstr ""
+msgstr "爵士"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:168
 msgid "Rock"
-msgstr ""
+msgstr "摇滚"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:172
 msgid "Maximum Treble"
@@ -633,7 +619,7 @@ msgstr "最大低音"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:180
 msgid "Classic"
-msgstr ""
+msgstr "古典"
 
 #: ../libxnoise/Player/xnoise-gst-equalizer.vala:185
 msgid "Custom"
@@ -696,9 +682,8 @@ msgid "Audio Track #"
 msgstr "音轨 #"
 
 #: ../libxnoise/PluginModule/xnoise-plugin-switch-widget.vala:92
-#, fuzzy
 msgid "(Plugin)"
-msgstr "插件"
+msgstr "(插件)"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:55
 msgid "unknown artist"
@@ -721,9 +706,8 @@ msgid "Tracklist"
 msgstr "播放列表"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:61
-#, fuzzy
 msgid "Lyrics"
-msgstr "歌词(_L)"
+msgstr "歌词"
 
 #: ../libxnoise/Resources/xnoise-resources.vala:62
 msgid "Hide Library"
@@ -783,7 +767,7 @@ msgstr "已暂停"
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:188
 #, c-format
 msgid "ready to rock"
-msgstr "准备播放"
+msgstr "动起来！"
 
 #: ../libxnoise/Utils/xnoise-media-importer.vala:298
 #, c-format
@@ -802,7 +786,7 @@ msgstr "运行 'xnoise --help' 查看命令行可用选项列表。\n"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:1
 msgid "Database buffer for lyrics"
-msgstr ""
+msgstr "歌词数据库缓冲"
 
 #: ../plugins/databaseLyrics/DatabaseLyrics.xnplugin.desktop.in.h:2
 msgid "Buffer lyrics in database"
@@ -844,14 +828,12 @@ msgid "Password:"
 msgstr "密码："
 
 #: ../plugins/lastfm/xnoise-lastfm.vala:505
-#, fuzzy
 msgid "Scrobble played tracks on lastfm (Send song data to create statistis)"
-msgstr "打乱 lastfm 已播放的歌曲"
+msgstr "lastfm 歌曲记录播放的歌曲(发送歌曲数据以创建统计资料)"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Basic Demo Plugin for Developers"
-msgstr "xnoise 演示插件"
+msgstr "给开发者的基本演示插件"
 
 #: ../plugins/testplugin/xnoisetest.xnplugin.desktop.in.h:2
 msgid "Demo plugin for xnoise"
@@ -859,7 +841,7 @@ msgstr "xnoise 演示插件"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:1
 msgid "Chartlyrics"
-msgstr ""
+msgstr "Chartlyrics"
 
 #: ../plugins/chartlyrics/chartlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from chartlyrics.com"
@@ -867,43 +849,39 @@ msgstr "从 chartlyrics.com 加载歌词"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:1
 msgid "LastFm web service integration"
-msgstr ""
+msgstr "集成 LastFm 网络服务"
 
 #: ../plugins/lastfm/lastfm.xnplugin.desktop.in.h:2
 msgid "Use lastfm's web services"
 msgstr "使用 lastfm 网络服务"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Lyricwiki"
-msgstr "歌词"
+msgstr "Lyricwiki"
 
 #: ../plugins/lyricwiki/Lyricwiki.xnplugin.desktop.in.h:2
 msgid "Load lyrics from http://www.lyricwiki.com"
 msgstr "从 http://www.lyricwiki.com 加载歌词"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Azlyrics"
-msgstr "歌词"
+msgstr "Azlyrics"
 
 #: ../plugins/azlyrics/azlyrics.xnplugin.desktop.in.h:2
 msgid "Load lyrics from azlyrics.com"
 msgstr "从 azlyrics.com 加载歌词"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Media Control Keys"
-msgstr "媒体合集"
+msgstr "媒体控制按键"
 
 #: ../plugins/mediakeys/mediakeys.xnplugin.desktop.in.h:2
 msgid "Control xnoise using mediakeys"
 msgstr "使用媒体键控制 xnoise"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Magnatune Music Subscription"
-msgstr "Magnatune 音乐商店"
+msgstr "Magnatune 音乐订阅"
 
 #: ../plugins/magnatune/Magnatune.xnplugin.desktop.in.h:2
 msgid "Magnatune Music Store"
@@ -967,25 +945,24 @@ msgstr "加载中..."
 
 #: ../plugins/magnatune/magnatune.vala:173
 msgid "Username and Password available"
-msgstr ""
+msgstr "用户名和密码正确"
 
 #: ../plugins/magnatune/magnatune.vala:174
 msgid "Username or Password not available"
-msgstr ""
+msgstr "用户名或密码不正确"
 
 #: ../plugins/magnatune/magnatune.vala:236
-#, fuzzy
 msgid "Visit Magnatune for an account."
-msgstr "使用帐号登陆 LastFm。"
+msgstr "使用帐号登陆 Magnatune。"
 
 #: ../plugins/magnatune/magnatune.vala:247
-#, fuzzy, c-format
+#, c-format
 msgid "Please enter your Magnatune username and password."
-msgstr "请输入您的 lastfm 用户名和密码。"
+msgstr "请输入您的 Magnatune 用户名和密码。"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:1
 msgid "Mpris v2 Dbus Service"
-msgstr ""
+msgstr "Mpris v2 Dbus 服务"
 
 #: ../plugins/mpris/mpris.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v2 dbus interface"
@@ -993,16 +970,15 @@ msgstr "使用 MPRIS v2 dbus 界面控制 xnoise"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:1
 msgid "Mpris v1 Dbus Service"
-msgstr ""
+msgstr "Mpris v1 Dbus 服务"
 
 #: ../plugins/mpris_one/mpris_one.xnplugin.desktop.in.h:2
 msgid "Control xnoise with a MPRIS v1 dbus interface"
 msgstr "使用 MPRIS v1 dbus 界面控制 xnoise "
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "Ubuntu Soundmenu Integration"
-msgstr "使用 ubuntu/ayatana 声音菜单集成"
+msgstr "集成 ubuntu 声音菜单"
 
 #: ../plugins/soundmenu2/soundmenu2.xnplugin.desktop.in.h:2
 msgid "Use ubuntu/ayatana soundmenu integration"
@@ -1010,16 +986,15 @@ msgstr "使用 ubuntu/ayatana 声音菜单集成"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:1
 msgid "Show song title in window bar"
-msgstr ""
+msgstr "在窗口标题栏显示歌曲名称"
 
 #: ../plugins/titleToDecoration/TitleToDecoration.xnplugin.desktop.in.h:2
 msgid "Set the window name to the current title"
 msgstr "设置窗口名称为当前标题"
 
 #: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:1
-#, fuzzy
 msgid "UbuntuOne Music Store"
-msgstr "Ubuntu One 音乐商店"
+msgstr "UbuntuOne 音乐商店"
 
 #: ../plugins/ubuntuone/UbuntuOne.xnplugin.desktop.in.h:2
 msgid "Ubuntu One Music Store"
