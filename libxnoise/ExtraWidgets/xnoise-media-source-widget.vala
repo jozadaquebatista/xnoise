@@ -94,6 +94,8 @@ public class Xnoise.MediaSoureWidget : Gtk.Box {
             column = new TreeViewColumn();
             rendererPb = new CellRendererPixbuf();
             column.pack_start(rendererPb, false);
+            rendererPb.xalign = 1.0f;
+            
             this.insert_column(column, -1);
             column.add_attribute(rendererPb, "pixbuf", Column.SELECTION_ICON);
             
