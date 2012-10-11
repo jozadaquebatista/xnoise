@@ -31,7 +31,7 @@
 
 using Gtk;
 
-internal class Xnoise.TrackInfobar : Gtk.ToolItem {
+private class Xnoise.TrackInfobar : Gtk.ToolItem {
     private Gtk.Box topbox;
     private CustomLabel title_label;
     private Label time_label;
