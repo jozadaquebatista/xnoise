@@ -55,7 +55,6 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
         return TRACKLIST_VIEW_NAME;
     }
     
-    private Overlay overlay;
     
     private void setup_widgets() {
         Gtk.Box inner_box = new Box(Orientation.VERTICAL, 0);
@@ -63,9 +62,7 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
         scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS);
         scrolled_window.set_shadow_type(Gtk.ShadowType.IN);
         scrolled_window.add(tl);
-        overlay = new Overlay();
-        overlay.add(scrolled_window);
-        inner_box.pack_start(overlay, true, true, 0);
+        inner_box.pack_start(scrolled_window, true, true, 0);
         this.pack_start(inner_box, true, true, 0);
         var hide_button = new Gtk.Button();
         var hide_button_image = new Gtk.Image.from_stock(Stock.GOTO_FIRST, IconSize.MENU);
@@ -116,36 +113,16 @@ private class Xnoise.TrackListViewWidget : Gtk.Box, Xnoise.IMainView {
             tl.set_focus_on_iter(ref iter);
         });
         posjumper.set_tooltip_text(_("Jump to current position"));
-        overlay.add_overlay(tbx);
-        tbx.set_margin_left(10);
-        tbx.set_margin_bottom(10);
-        tbx.set_halign(Align.START);
-        tbx.set_valign(Align.END);
-        tbx.show_all();
+        var bottom_box = new Box(Orientation.HORIZONTAL, 0);
+        bottom_box.pack_start(tbx, false, false, 0);
         sbutton = new SerialButton();
         sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
         sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
         sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-        sbutton.show_all();
 
-        overlay.add_overlay(sbutton);
-        sbutton.set_halign(Align.END);
-        sbutton.set_valign(Align.END);
-        
-//        Gdk.RGBA transparent = { 0, 0, 0, 0 };
-//        overlay.override_background_color(StateFlags.NORMAL, transparent);
-//        Gdk.RGBA dark = { 0, 0, 0, 0.7 };
-//       try {
-//            this.provider = new CssProvider();
-//            this.provider.load_from_data(CSS, -1);
-//            removeAllButton.get_style_context().add_provider(this.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-//            tbx.get_style_context().add_provider(this.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-//        }
-//        catch(Error e) {
-//            print("Xnoise CSS Error: %s\n", e.message);
-//        }
-//        removeAllButton.override_background_color(StateFlags.NORMAL, dark);
-        overlay.show_all();
+        bottom_box.pack_start(new Label(""), true, true, 0);
+        bottom_box.pack_start(sbutton, false, false, 0);
+        inner_box.pack_start(bottom_box, false, false, 0);
         win.notify["media-browser-visible"].connect( (s, val) => {
             if(win.media_browser_visible == true) {
                 hide_button_image.set_from_stock(Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);

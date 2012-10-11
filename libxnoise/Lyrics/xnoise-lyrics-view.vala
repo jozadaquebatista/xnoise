@@ -44,7 +44,6 @@ private class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
     
     internal LyricsView lyricsView;
     internal SerialButton sbutton;
-    private Overlay overlay;
     
     public LyricsViewWidget(MainWindow win) {
         GLib.Object(orientation:Orientation.VERTICAL, spacing:0);
@@ -61,10 +60,8 @@ private class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
         var scrolledlyricsview = new ScrolledWindow(null, null);
         this.lyricsView = new LyricsView();
         scrolledlyricsview.add(lyricsView);
-        scrolledlyricsview.show_all();
-        overlay = new Overlay();
-        overlay.add(scrolledlyricsview);
-        inner_box.pack_start(overlay, true, true, 0);
+        scrolledlyricsview.set_shadow_type(Gtk.ShadowType.IN);
+        inner_box.pack_start(scrolledlyricsview, true, true, 0);
         this.pack_start(inner_box, true, true, 0);
         
         var hide_button_2 = new Gtk.Button();
@@ -73,22 +70,16 @@ private class Xnoise.LyricsViewWidget : Gtk.Box, IMainView {
         hide_button_2.can_focus = false;
         hide_button_2.clicked.connect(win.toggle_media_browser_visibility);
         hide_button_2.set_relief(ReliefStyle.NONE);
-        overlay.add_overlay(hide_button_2);
-        hide_button_2.set_halign(Align.START);
-        hide_button_2.set_valign(Align.END);
-        hide_button_2.show_all();
-
+        var bottom_box = new Box(Orientation.HORIZONTAL, 0);
+        bottom_box.pack_start(hide_button_2, false, false, 0);
+        bottom_box.pack_start(new Label(""), true, true, 0);
         sbutton = new SerialButton();
         sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
         sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
         sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-        sbutton.show_all();
-        overlay.add_overlay(sbutton);
-        sbutton.set_halign(Align.END);
-        sbutton.set_valign(Align.END);
-//        Gdk.RGBA transparent = { 255, 255, 255, 0.2 };
-//        overlay.override_background_color(StateFlags.NORMAL, transparent);
-        overlay.show_all();
+        bottom_box.pack_start(sbutton, false, false, 0);
+        inner_box.pack_start(bottom_box, false, false, 0);
+        
         win.notify["media-browser-visible"].connect( (s, val) => {
             if(win.media_browser_visible == true) {
                 hide_button_image.set_from_stock(  Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);

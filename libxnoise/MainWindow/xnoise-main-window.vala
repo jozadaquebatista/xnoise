@@ -84,7 +84,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal Gtk.ActionGroup action_group;
     public bool is_fullscreen = false;
     internal FullscreenToolbar fullscreentoolbar;
-    internal Overlay videovbox;
+    internal Box videovbox;
     public unowned LyricsView lyricsView { get; private set; }
     internal unowned VideoScreen videoscreen;
     internal Paned hpaned;

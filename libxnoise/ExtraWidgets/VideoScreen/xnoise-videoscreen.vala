@@ -39,8 +39,8 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
     private const string UI_FILE = Config.XN_UIDIR + "video.ui";
     
     private unowned MainWindow win;
-    public Gtk.Overlay videovbox;
-    public unowned VideoScreen videoscreen;
+    internal Gtk.Box videovbox;
+    internal unowned VideoScreen videoscreen;
     internal SerialButton sbutton;
     
     public VideoViewWidget(MainWindow win) {
@@ -55,10 +55,11 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
     
     private void setup_widgets() {
         Gtk.Box inner_box = new Box(Orientation.VERTICAL, 0);
-        this.videovbox = new Overlay();
+        Gtk.Box bottom_box = new Box(Orientation.HORIZONTAL, 0);
+        this.videovbox = new Box(Orientation.VERTICAL, 0);
         this.videoscreen = gst_player.videoscreen;
-        videovbox.add(videoscreen);
-        inner_box.pack_start(videovbox,true ,true ,0);
+        videovbox.pack_start(videoscreen, true ,true ,0);
+        inner_box.pack_start(videovbox, true ,true ,0);
         this.pack_start(inner_box, true, true, 0);
         var hide_button_1 = new Gtk.Button();
         hide_button_1.can_focus = false;
@@ -67,24 +68,20 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
         hide_button_1.add(hide_button_image);
         hide_button_1.set_relief(ReliefStyle.NONE);
         
-        videovbox.add_overlay(hide_button_1);
-        hide_button_1.set_halign(Align.START);
-        hide_button_1.set_valign(Align.END);
+        bottom_box.pack_start(hide_button_1, false, false, 0);
+        bottom_box.pack_start(new Label(""), true, true, 0);
         hide_button_1.show_all();
         
         sbutton = new SerialButton();
         sbutton.insert(TRACKLIST_VIEW_NAME, SHOWTRACKLIST);
         sbutton.insert(VIDEOVIEW_NAME, SHOWVIDEO);
         sbutton.insert(LYRICS_VIEW_NAME, SHOWLYRICS);
-        videovbox.add_overlay(sbutton);
-        sbutton.set_halign(Align.END);
-        sbutton.set_valign(Align.END);
+        bottom_box.pack_start(sbutton, false, false, 0);
         sbutton.show_all();
         
         videovbox.show_all();
+        inner_box.pack_start(bottom_box, false, false, 0);
         
-        Gdk.RGBA transparent = { 1.0, 1.0, 1.0, 0.2 };
-        videovbox.override_background_color(StateFlags.NORMAL, transparent);
         win.notify["media-browser-visible"].connect( (s, val) => {
             if(win.media_browser_visible == true) {
                 hide_button_image.set_from_stock(  Gtk.Stock.GOTO_FIRST, Gtk.IconSize.MENU);
@@ -314,7 +311,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
             int x_offset;
         
             //print("current has no video\n");
-            if(this.logo_pixb!=null) {
+            if(this.logo_pixb != null) {
                 logo = null;
                 int logowidth, logoheight, widgetwidth, widgetheight;
                 float ratio;
@@ -464,4 +461,5 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         this.queue_draw();
     }
 }
+
 

@@ -1162,7 +1162,7 @@ struct _XnoiseMainWindow {
 	GtkActionGroup* action_group;
 	gboolean is_fullscreen;
 	XnoiseFullscreenToolbar* fullscreentoolbar;
-	GtkOverlay* videovbox;
+	GtkBox* videovbox;
 	XnoiseVideoScreen* videoscreen;
 	GtkPaned* hpaned;
 	GtkEntry* search_entry;
