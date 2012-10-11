@@ -31,7 +31,6 @@
 using Gtk;
 
 internal class Xnoise.SerialButton : Gtk.Box {
-    private CssProvider provider;
     
     private HashTable<string,SerialItem> sitems = new HashTable<string,SerialItem>(str_hash, str_equal);
     
@@ -49,22 +48,13 @@ internal class Xnoise.SerialButton : Gtk.Box {
             this.add(new Gtk.Label(txt));
             
             this.set_can_focus(false);
-            this.get_style_context().add_provider(sb.provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         }
     }
     
     public SerialButton() {
         GLib.Object(orientation:Orientation.HORIZONTAL, spacing:0);
         this.set_homogeneous(true);
-        
-        try {
-            this.provider = new CssProvider();
-            this.provider.load_from_data(CSS, -1);
-            this.get_style_context().add_class("XnoiseSerialButton");
-        }
-        catch(Error e) {
-            print("Xnoise CSS Error: %s\n", e.message);
-        }
+        this.get_style_context().add_class(Gtk.STYLE_CLASS_LINKED);
     }
 
     public int item_count {
@@ -183,37 +173,5 @@ internal class Xnoise.SerialButton : Gtk.Box {
         if(removed_active)
             select_first();
     }
-    
-//    private Gtk.Widget? get_at_index(int idx) {
-//        return this.get_children().nth_data(idx);
-//    }
-    
-    private static const string CSS = """
-        .XnoiseSerialButton .button {
-            -GtkToolbar-button-relief:  normal;
-            border-radius:              0px 0px 0px 0px;
-            border-style:               solid;
-            border-width:               1px 0px 1px 1px;
-            -unico-outer-stroke-width:  1px 0px 1px 0px;
-            -unico-outer-stroke-radius: 0px 0px 0px 0px;
-        }
-        
-        .XnoiseSerialButton .button:active,
-        .XnoiseSerialButton .button:insensitive {
-            -unico-outer-stroke-width:  1px 0px 1px 0px;
-        }
-
-        .XnoiseSerialButton .button:first-child {
-            border-radius:              3px 0px 0px 3px;
-            border-width:               1px 0px 1px 1px;
-            -unico-outer-stroke-width:  1px 0px 1px 1px;
-        }
-
-        .XnoiseSerialButton .button:last-child {
-            border-radius:              0px 3px 3px 0px;
-            border-width:               1px;
-            -unico-outer-stroke-width:  1px 1px 1px 0px;
-        }
-    """;
 }
 
