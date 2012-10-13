@@ -29,6 +29,7 @@
  */
 
 using Gtk;
+using Cairo;
 
 using Xnoise;
 using Xnoise.Resources;
@@ -97,15 +98,25 @@ private class Xnoise.VideoViewWidget : Gtk.Box, IMainView {
 
 public class Xnoise.VideoScreen : Gtk.DrawingArea {
     private static const string SELECT_EXT_SUBTITLE_FILE = _("Select external subtitle file");
+    private const double MIN_BORDER_DIST = 10;
     private Gdk.Pixbuf logo_pixb;
     private Gdk.Pixbuf cover_image_pixb;
-    private Gdk.Pixbuf logo;
     private unowned Main xn;
     private bool cover_image_available;
     private Gtk.Menu? menu;
     private uint refresh_source = 0;
     private unowned GstPlayer player;
-    
+    private Gdk.Pixbuf? logo = null;
+    private int w = 0;
+    private int h = 0;
+    private int y_offset = 0;
+    private int x_offset = 0;
+    private double ratio = 1.0;
+    private int imageWidth;
+    private int imageHeight;
+
+    private Cairo.ImageSurface surface;
+
     public VideoScreen(GstPlayer player) {
         this.player = player;
         this.xn = Main.instance;
@@ -122,7 +133,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         if(refresh_source != 0)
             Source.remove(refresh_source);
         
-        refresh_source = Timeout.add(250, () => {
+        refresh_source = Timeout.add(300, () => {
             trigger_expose();
             refresh_source = 0;
             return false;
@@ -273,7 +284,10 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
         else {
             cover_image_pixb = null;
             cover_image_available = false;
-            trigger_expose();
+            Idle.add(() => {
+                trigger_expose();
+                return false;
+            });
         }
     }
     
@@ -294,109 +308,95 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     private Gdk.Rectangle rect;
     
     public override bool draw(Cairo.Context cr) {
-        rect.x = 0;
-        rect.y = 0;
-        Gtk.Allocation alloc;
-        this.get_allocation(out alloc);
-        rect.width  = get_allocated_width ();
-        rect.height = get_allocated_height ();
-        cr.set_source_rgb(0.0f, 0.0f, 0.0f);
-        cr.rectangle(rect.x, rect.y,
-                     rect.width, rect.height);
-        cr.fill();
-        
+        w = this.get_allocated_width();
+        h = this.get_allocated_height();
+            
         if(!gst_player.current_has_video_track) {
-        
-            int y_offset;
-            int x_offset;
-        
-            //print("current has no video\n");
-            if(this.logo_pixb != null) {
-                logo = null;
-                int logowidth, logoheight, widgetwidth, widgetheight;
-                float ratio;
+            if(!cover_image_available) {
+                cr.set_source_rgb(0.0f, 0.0f, 0.0f);
+                cr.rectangle(0, 0, get_allocated_width(), get_allocated_height());
+                cr.fill();
+                if(logo_pixb == null)
+                    logo_pixb = new Gdk.Pixbuf.from_file(Config.XN_UIDIR + "xnoise_bruit.svg");
+                logo = logo_pixb.scale_simple((int)(logo_pixb.get_width() * 0.8), (int)(logo_pixb.get_height() * 0.8), Gdk.InterpType.HYPER);
+                y_offset = (int)((h * 0.5) - (logo.get_height() * 0.4));
+                x_offset = (int)((w  * 0.5) - (logo.get_width()  * 0.4));
+                Gdk.cairo_set_source_pixbuf(cr, logo, x_offset, y_offset);
+                cr.paint();
+                return true;
+            }
+            else {
+                logo = cover_image_pixb;
+                if(logo == null)
+                    return true;
                 
-                logowidth  = logo_pixb.get_width();
-                logoheight = logo_pixb.get_height();
-                widgetwidth  = alloc.width;
-                widgetheight = alloc.height;
-
-                if((float)widgetwidth/logowidth>(float)widgetheight/logoheight)
-                    ratio = (float)widgetheight/logoheight;
+                this.imageWidth  = logo.get_width();
+                this.imageHeight = logo.get_height();
+                
+                if((double) w/((2 * imageWidth) + MIN_BORDER_DIST) > (double) h/((1.5 * imageHeight) + MIN_BORDER_DIST))
+                    ratio = (double) h/((1.5 * imageHeight) + MIN_BORDER_DIST);
                 else
-                    ratio = (float)widgetwidth/logowidth;
-
-                logowidth  = (int)(logowidth  *ratio);
-                logoheight = (int)(logoheight *ratio);
-
-                if(logowidth<=1||logoheight<=1) {
+                    ratio = (double) w/((2 * imageWidth) + MIN_BORDER_DIST);
+                
+                ratio = double.min(ratio, 1.2);
+                //print("ratio : %lf\n", ratio);
+                
+                imageWidth  = (int)(imageWidth  * ratio);
+                imageHeight = (int)(imageHeight * ratio);
+                
+                if(imageWidth <= 1 || imageHeight <= 1) {
                     // Do not paint for small pictures
                     return true;
                 }
-                if(!cover_image_available) {
-                    logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
-                    y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
-                    x_offset = (int)((widgetwidth  * 0.5) - (logowidth  * 0.4));
-                }
-                else {
-                    if(cover_image_pixb != null) {
-                        //Pango
-                        layout_width  = alloc.width/3; //300; //current_alloc.width - (x_offset + x_margin);
-                        layout_height = 300; //current_alloc.height - (y_offset + y_margin);
-                        //---
-                        
-                        int cover_image_width  = cover_image_pixb.get_width();
-                        int cover_image_height = cover_image_pixb.get_height();
-                        
-                        if((float)widgetwidth/cover_image_width>(float)widgetheight/cover_image_height)
-                            ratio = (float)widgetheight/cover_image_height;
-                        else
-                            ratio = (float)widgetwidth/cover_image_width;
-                        
-                        int ciwidth  = (int)(cover_image_width  * ratio * 0.7);
-                        int ciheight = (int)(cover_image_height * ratio * 0.7);
-                        
-                        //TODO: Set max scale for logo
-                        var font_description = new Pango.FontDescription();
-                        font_description.set_family(font_family);
-                        font_description.set_size((int)(font_size * Pango.SCALE));
-        
-                        var pango_layout = Pango.cairo_create_layout(cr);
-                        pango_layout.set_font_description(font_description);
-                        pango_layout.set_markup(get_content_text() , -1);
-                        
-//                        cr.set_source_rgb(0.0, 0.0, 0.0);    // black background
-//                        cr.paint();
-                        cr.set_source_rgb(0.9, 0.9, 0.9); // light gray font color
-                        int pango_x_offset = 50;
-                        cr.translate(pango_x_offset, (widgetheight/3));
-                        
-                        pango_layout.set_width( (int)(layout_width  * Pango.SCALE));
-                        pango_layout.set_height((int)(layout_height * Pango.SCALE));
-                        
-                        pango_layout.set_ellipsize(Pango.EllipsizeMode.END);
-                        pango_layout.set_alignment(Pango.Alignment.LEFT);
-                        
-                        cr.move_to(0, 0);
-                        Pango.cairo_show_layout(cr, pango_layout);
-                        cr.move_to(0, 0);
-                        cr.translate(-pango_x_offset, -(widgetheight/3));
-                        
-                        logo = cover_image_pixb.scale_simple(ciwidth, ciheight, Gdk.InterpType.HYPER);
-                        
-                        y_offset = (int)((widgetheight * 0.5)  - (ciheight * 0.5));
-                        x_offset = (int)((widgetwidth  * 0.65) - (ciwidth  * 0.5));
-                        if(x_offset < (layout_width + pango_x_offset))
-                            x_offset = layout_width + pango_x_offset;
-                    }
-                    else {
-                        logo = logo_pixb.scale_simple((int)(logowidth * 0.8), (int)(logoheight * 0.8), Gdk.InterpType.HYPER);
-                        y_offset = (int)((widgetheight * 0.5) - (logoheight * 0.4));
-                        x_offset = (int)((widgetwidth  * 0.5) - (logowidth  * 0.4));
-                    }
-                }
-                Gdk.cairo_set_source_pixbuf(cr, logo, x_offset, y_offset);
+                logo = logo.scale_simple(imageWidth, imageHeight, Gdk.InterpType.HYPER);
+                
+                this.surface = new ImageSurface(0, logo.get_width(), logo.get_height());
+                Cairo.Context ct = new Cairo.Context(surface);
+                Gdk.cairo_set_source_pixbuf(ct, logo, 0, 0);
+                ct.paint(); // paint on external context
+                
+                y_offset = (int)((h * 0.4)  - (imageHeight * 0.5));
+                x_offset = (int)((w  * 0.5));
+                
+                cr.translate(x_offset, y_offset);
+                
                 cr.paint();
+                
+                cr.set_source_surface(this.surface, 0, 0);
+                cr.paint();
+                cr.save();
+                
+                cr.move_to(-(x_offset), imageHeight/3.0);
+                var font_description = new Pango.FontDescription();
+                font_description.set_family(font_family);
+                font_description.set_size((int)(font_size * Pango.SCALE));
+
+                layout_width  = (int) (w/2 - (2 * MIN_BORDER_DIST));
+                var pango_layout = Pango.cairo_create_layout(cr);
+                pango_layout.set_font_description(font_description);
+                pango_layout.set_width( (int)(layout_width  * Pango.SCALE));
+                pango_layout.set_alignment(Pango.Alignment.RIGHT);
+                pango_layout.set_markup(get_content_text() , -1);
+                
+                cr.set_source_rgb(0.9, 0.9, 0.9); // light gray font color
+                Pango.cairo_show_layout(cr, pango_layout);
+                cr.restore();
+                
+                double alpha = 0.6;
+                double step = 1.0 / this.imageHeight;
+                
+                cr.translate(0.0, 2.0 * this.imageHeight);
+                cr.scale(1, -1);
+                
+                for(int i = 0; i < imageHeight; i++) {
+                    cr.rectangle(0, this.imageHeight - i, this.imageWidth, 1);
+                    cr.save();
+                    cr.clip();
+                    cr.set_source_surface(this.surface, 0, 0);
+                    alpha = alpha - 1.5 * step;
+                    cr.paint_with_alpha(alpha);
+                    cr.restore();
+                }
             }
         }
         return true;
@@ -439,11 +439,11 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
             artist = Markup.escape_text(artist);
             title = Markup.escape_text(title);
             
-            result = "<span weight=\"bold\">" + 
-                      title +   " </span>\n<span size=\"small\" rise=\"6000\" style=\"italic\"></span><span size=\"xx-small\">\n</span>" +
-                      "<span size=\"small\" weight=\"light\">%s </span>".printf(_("by")) + 
-                      artist + " \n" +
-                      "<span size=\"small\" weight=\"light\">%s </span> ".printf(_("on")) + 
+            result = "<span size=\"large\" rise=\"8000\" weight=\"bold\">" + 
+                      title +   "</span>\n" +
+                      "<span size=\"small\" weight=\"light\" style=\"italic\">%s  </span>".printf(_("by")) + 
+                      artist + "\n" +
+                      "<span size=\"small\" weight=\"light\" style=\"italic\">%s  </span> ".printf(_("on")) + 
                       album;
         }
         return (owned)result;
@@ -451,7 +451,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
     
 
     public string font_family    { get; set; default = "Sans"; }
-    public double font_size      { get; set; default = 18; }
+    public double font_size      { get; set; default = 15; }
     public string text           { get; set; }
     
     private int layout_width     = 100;
