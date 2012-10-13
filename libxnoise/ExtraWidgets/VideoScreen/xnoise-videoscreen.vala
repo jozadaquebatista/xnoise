@@ -393,7 +393,7 @@ public class Xnoise.VideoScreen : Gtk.DrawingArea {
                     cr.save();
                     cr.clip();
                     cr.set_source_surface(this.surface, 0, 0);
-                    alpha = alpha - 1.5 * step;
+                    alpha = alpha - 1.8 * step;
                     cr.paint_with_alpha(alpha);
                     cr.restore();
                 }
