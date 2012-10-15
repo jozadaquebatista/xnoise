@@ -63,6 +63,7 @@ libxnoise_la_SOURCES = \
     ExtraWidgets/Fullscreen/xnoise-fullscreen-toolbar.vala \
     ExtraWidgets/Settings/xnoise-settings-widget.vala \
     ExtraWidgets/VideoScreen/xnoise-videoscreen.vala \
+    ExtraWidgets/xnoise-albumart-view.vala \
     ExtraWidgets/xnoise-app-menu-button.vala \
     ExtraWidgets/xnoise-control-button.vala \
     ExtraWidgets/xnoise-equalizer-widget.vala \
@@ -131,6 +132,7 @@ libxnoise_la_SOURCES = \
     TrayIcon/xnoise-tray-icon.vala \
     UserInfoSystem/xnoise-info-bar.vala \
     UserInfoSystem/xnoise-user-info.vala \
+    Utils/xnoise-album-data.vala \
     Utils/xnoise-local-schemes.vala \
     Utils/xnoise-media-extensions.vala \
     Utils/xnoise-media-importer.vala \

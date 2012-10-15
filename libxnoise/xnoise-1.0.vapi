@@ -14,6 +14,7 @@ namespace Xnoise {
 			public int32 count_videos (string searchtext);
 			public void do_callback_transaction (Xnoise.Database.Reader.ReaderCallback cb);
 			public override Xnoise.Item[] get_albums_with_search (string searchtext, int32 id);
+			public Xnoise.AlbumData[] get_all_albums_with_search (string searchtext);
 			public override Xnoise.TrackData[]? get_all_tracks (string searchtext);
 			public override Xnoise.Item? get_artistitem_by_artistid (string searchtext, int32 id);
 			public override Xnoise.Item[] get_artists_with_search (string searchtext);
@@ -485,6 +486,18 @@ namespace Xnoise {
 		public weak string stock_item;
 		public weak string text;
 		public Action ();
+	}
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public class AlbumData {
+		public string? album;
+		public string? artist;
+		public string? comment;
+		public int32 dat1;
+		public int32 dat2;
+		public Xnoise.Item? item;
+		public uint trackcount;
+		public uint year;
+		public AlbumData ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class Application : GLib.Application {
@@ -968,7 +981,8 @@ namespace Xnoise {
 		public abstract void write_params_data ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
-	public interface TreeQueryable : Gtk.TreeView {
+	public interface TreeQueryable : Gtk.Widget {
+		public abstract Gtk.TreeModel get_model ();
 		public abstract int get_model_item_column ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
@@ -1089,6 +1103,8 @@ namespace Xnoise {
 	public static Xnoise.TrayIcon tray_icon;
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.UserInfo userinfo;
+	[CCode (cheader_filename = "xnoise-1.0.h")]
+	public static Xnoise.AlbumData copy_albumdata (Xnoise.AlbumData? ad);
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public static Xnoise.TrackData copy_trackdata (Xnoise.TrackData? td);
 	[CCode (cheader_filename = "xnoise-1.0.h")]

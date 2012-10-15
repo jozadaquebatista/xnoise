@@ -119,6 +119,16 @@ typedef struct _XnoiseDatabaseReader XnoiseDatabaseReader;
 typedef struct _XnoiseDatabaseReaderClass XnoiseDatabaseReaderClass;
 typedef struct _XnoiseDatabaseReaderPrivate XnoiseDatabaseReaderPrivate;
 
+#define XNOISE_TYPE_ALBUM_DATA (xnoise_album_data_get_type ())
+#define XNOISE_ALBUM_DATA(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_ALBUM_DATA, XnoiseAlbumData))
+#define XNOISE_ALBUM_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_TYPE_ALBUM_DATA, XnoiseAlbumDataClass))
+#define XNOISE_IS_ALBUM_DATA(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), XNOISE_TYPE_ALBUM_DATA))
+#define XNOISE_IS_ALBUM_DATA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), XNOISE_TYPE_ALBUM_DATA))
+#define XNOISE_ALBUM_DATA_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), XNOISE_TYPE_ALBUM_DATA, XnoiseAlbumDataClass))
+
+typedef struct _XnoiseAlbumData XnoiseAlbumData;
+typedef struct _XnoiseAlbumDataClass XnoiseAlbumDataClass;
+
 #define XNOISE_DATABASE_TYPE_WRITER (xnoise_database_writer_get_type ())
 #define XNOISE_DATABASE_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_DATABASE_TYPE_WRITER, XnoiseDatabaseWriter))
 #define XNOISE_DATABASE_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), XNOISE_DATABASE_TYPE_WRITER, XnoiseDatabaseWriterClass))
@@ -671,6 +681,7 @@ typedef struct _XnoiseUserInfoClass XnoiseUserInfoClass;
 
 #define XNOISE_USER_INFO_TYPE_REMOVAL_TYPE (xnoise_user_info_removal_type_get_type ())
 typedef struct _XnoiseUserInfoPrivate XnoiseUserInfoPrivate;
+typedef struct _XnoiseAlbumDataPrivate XnoiseAlbumDataPrivate;
 
 #define XNOISE_TYPE_LOCAL_SCHEMES (xnoise_local_schemes_get_type ())
 #define XNOISE_LOCAL_SCHEMES(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), XNOISE_TYPE_LOCAL_SCHEMES, XnoiseLocalSchemes))
@@ -1088,6 +1099,7 @@ typedef enum  {
 struct _XnoiseTreeQueryableIface {
 	GTypeInterface parent_iface;
 	gint (*get_model_item_column) (XnoiseTreeQueryable* self);
+	GtkTreeModel* (*get_model) (XnoiseTreeQueryable* self);
 };
 
 struct _XnoiseILyricsIface {
@@ -1506,6 +1518,25 @@ struct _XnoiseUserInfoClass {
 };
 
 typedef void (*XnoiseUserInfoAddInfoBarDelegateType) (XnoiseInfoBar* ibar, void* user_data);
+struct _XnoiseAlbumData {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	XnoiseAlbumDataPrivate * priv;
+	gchar* artist;
+	gchar* album;
+	gchar* comment;
+	guint year;
+	guint trackcount;
+	XnoiseItem* item;
+	gint32 dat1;
+	gint32 dat2;
+};
+
+struct _XnoiseAlbumDataClass {
+	GTypeClass parent_class;
+	void (*finalize) (XnoiseAlbumData *self);
+};
+
 struct _XnoiseLocalSchemes {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -1669,6 +1700,14 @@ XnoiseTrackData** xnoise_database_reader_get_video_data (XnoiseDatabaseReader* s
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_video (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseTrackData** xnoise_database_reader_get_trackdata_for_streams (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 XnoiseItem* xnoise_database_reader_get_videoitem_by_id (XnoiseDatabaseReader* self, gint32 id);
+gpointer xnoise_album_data_ref (gpointer instance);
+void xnoise_album_data_unref (gpointer instance);
+GParamSpec* xnoise_param_spec_album_data (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void xnoise_value_set_album_data (GValue* value, gpointer v_object);
+void xnoise_value_take_album_data (GValue* value, gpointer v_object);
+gpointer xnoise_value_get_album_data (const GValue* value);
+GType xnoise_album_data_get_type (void) G_GNUC_CONST;
+XnoiseAlbumData** xnoise_database_reader_get_all_albums_with_search (XnoiseDatabaseReader* self, const gchar* searchtext, int* result_length1);
 GType xnoise_database_writer_get_type (void) G_GNUC_CONST;
 GType xnoise_database_writer_change_type_get_type (void) G_GNUC_CONST;
 XnoiseDatabaseWriter* xnoise_database_writer_new (GError** error);
@@ -1836,6 +1875,7 @@ XnoiseItemHandlerManager* xnoise_item_handler_manager_construct (GType object_ty
 GType xnoise_dyn_playlist_type_get_type (void) G_GNUC_CONST;
 GType xnoise_tree_queryable_get_type (void) G_GNUC_CONST;
 gint xnoise_tree_queryable_get_model_item_column (XnoiseTreeQueryable* self);
+GtkTreeModel* xnoise_tree_queryable_get_model (XnoiseTreeQueryable* self);
 GType xnoise_ilyrics_get_type (void) G_GNUC_CONST;
 void xnoise_ilyrics_find_lyrics (XnoiseILyrics* self);
 gchar* xnoise_ilyrics_get_identifier (XnoiseILyrics* self);
@@ -2316,6 +2356,9 @@ void xnoise_user_info_update_extra_widget_by_id (XnoiseUserInfo* self, guint id,
 GtkWidget* xnoise_user_info_get_extra_widget_by_id (XnoiseUserInfo* self, guint id);
 void xnoise_user_info_popdown (XnoiseUserInfo* self, guint id);
 guint xnoise_user_info_popup (XnoiseUserInfo* self, XnoiseUserInfoRemovalType removal_type, XnoiseUserInfoContentClass content_class, const gchar* info_text, gboolean bold, gint appearance_time_seconds, GtkWidget* extra_widget);
+XnoiseAlbumData* xnoise_album_data_new (void);
+XnoiseAlbumData* xnoise_album_data_construct (GType object_type);
+XnoiseAlbumData* xnoise_copy_albumdata (XnoiseAlbumData* ad);
 gpointer xnoise_local_schemes_ref (gpointer instance);
 void xnoise_local_schemes_unref (gpointer instance);
 GParamSpec* xnoise_param_spec_local_schemes (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);

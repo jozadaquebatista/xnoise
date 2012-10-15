@@ -457,7 +457,7 @@ public class Xnoise.MediaImporter : GLib.Object {
     // running in io thread
     private void read_recoursive(File dir, Worker.Job job) {
         //this function shall run in the io thread
-        return_val_if_fail(io_worker.is_same_thread(), false);
+        return_if_fail(io_worker.is_same_thread());
         
         job.counter[0]++;
         FileEnumerator enumerator;

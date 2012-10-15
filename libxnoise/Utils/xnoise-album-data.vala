@@ -1,4 +1,4 @@
-/* xnoise-tree-queryable.vala
+/* xnoise-album-data.vala
  *
  * Copyright (C) 2012  Jörn Magens
  *
@@ -28,7 +28,39 @@
  *     Jörn Magens
  */
 
-public interface Xnoise.TreeQueryable : Gtk.Widget {
-    public abstract int get_model_item_column();
-    public abstract Gtk.TreeModel get_model();
+
+// DATA TRANSFER CLASS
+
+/**
+ * This class is used to move around media information
+ */
+namespace Xnoise {
+    
+    public class AlbumData {
+        public string? artist = null;
+        public string? album = null;
+        
+        public string? comment = null;
+        public uint year = 0;
+        public uint trackcount = 0;
+        public Item? item = Item(ItemType.UNKNOWN);
+        public int32 dat1 = -1;
+        public int32 dat2 = -1;
+    }
+    
+    public static AlbumData copy_albumdata(AlbumData? ad) {
+        if(ad == null)
+            return new AlbumData();
+        AlbumData ad_new = new AlbumData();
+        ad_new.artist      = ad.artist;
+        ad_new.album       = ad.album;
+        ad_new.comment     = ad.comment;
+        ad_new.year        = ad.year;
+        ad_new.trackcount  = ad.trackcount;
+        ad_new.item        = ad.item;
+        ad_new.dat1        = ad.dat1;
+        ad_new.dat2        = ad.dat2;
+        return ad_new;
+    }
 }
+

@@ -867,5 +867,39 @@ public class Xnoise.Database.Reader : Xnoise.DataSource {
         }
         return (owned)val;
     }
+
+    private static const string STMT_GET_ALL_ALBUMS_WITH_SEARCH =
+        "SELECT DISTINCT al.name, al.id, ar.name FROM artists ar, albums al, items t, genres g WHERE ar.id = t.artist AND al.id = t.album AND t.genre = g.id AND (utf8_lower(ar.name) LIKE ? OR utf8_lower(al.name) LIKE ? OR utf8_lower(t.title) LIKE ? OR utf8_lower(g.name) LIKE ?) ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
+
+    private static const string STMT_GET_ALL_ALBUMS =
+        "SELECT DISTINCT al.name, al.id, ar.name FROM artists ar, albums al WHERE ar.id = al.artist ORDER BY utf8_lower(ar.name) COLLATE CUSTOM01 ASC, utf8_lower(al.name) COLLATE CUSTOM01 ASC";
+
+    public AlbumData[] get_all_albums_with_search(string searchtext) {
+        AlbumData[] list = {};
+        Statement stmt;
+        if(searchtext != EMPTYSTRING) {
+            string st = "%%%s%%".printf(searchtext);
+            this.db.prepare_v2(STMT_GET_ALL_ALBUMS_WITH_SEARCH, -1, out stmt);
+            if((stmt.bind_text(1, st) != Sqlite.OK) ||
+               (stmt.bind_text(2, st) != Sqlite.OK) ||
+               (stmt.bind_text(3, st) != Sqlite.OK) ||
+               (stmt.bind_text(4, st) != Sqlite.OK)) {
+                this.db_error();
+                return (owned)list;
+            }
+        }
+        else {
+            this.db.prepare_v2(STMT_GET_ALL_ALBUMS, -1, out stmt);
+        }
+        while(stmt.step() == Sqlite.ROW) {
+            AlbumData ad = new AlbumData();
+            Item? it = Item(ItemType.COLLECTION_CONTAINER_ALBUM, null, stmt.column_int(1));
+            ad.item  = it;
+            ad.artist = stmt.column_text(2);
+            ad.album  = stmt.column_text(0);
+            list += ad;
+        }
+        return (owned)list;
+    }
 }
 

@@ -51,6 +51,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private int _posY;
     private uint aimage_timeout;
     private Gtk.Toolbar main_toolbar;
+    private ToggleButton tbx;
     private ToolItem eqButtonTI;
     private SerialButton sbuttonTL;
     private SerialButton sbuttonLY;
@@ -78,6 +79,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private SettingsWidget settings_widget;
     private Gtk.Window eqdialog;
     private AlbumImage albumimage;
+    private AlbumArtView album_cover_view;
+    private Gtk.Notebook bottom_notebook;
     internal bool quit_if_closed;
     internal ScrolledWindow musicBrScrollWin = null;
     internal ScrolledWindow trackListScrollWin = null;
@@ -1493,8 +1496,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             Builder gb = new Gtk.Builder();
             gb.add_from_file(MAIN_UI_FILE);
             
+            bottom_notebook = gb.get_object("bottom_notebook") as Gtk.Notebook;
+            
             ///BOX FOR MAIN MENU
-            menuvbox                     = gb.get_object("menuvbox") as Gtk.Box;
+            menuvbox = gb.get_object("menuvbox") as Gtk.Box;
             //UIMANAGER FOR MENUS, THIS ALLOWS INJECTION OF ENTRIES BY PLUGINS
             action_group = new Gtk.ActionGroup("XnoiseActions");
             action_group.set_translation_domain(Config.GETTEXT_PACKAGE);
@@ -1648,7 +1653,23 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             eqButtonTI.set_no_show_all(true);
             eqButtonTI.add(eqButton);
             
-
+            album_cover_view = new AlbumArtView();
+            var aasw = new ScrolledWindow(null, null);
+            aasw.add(album_cover_view);
+            bottom_notebook.append_page(aasw);
+            var albumart_toggleb = new ToolItem();
+            var aart_im = new Image.from_icon_name("xn-grid", IconSize.LARGE_TOOLBAR);
+            tbx = new ToggleButton();
+            tbx.add(aart_im);
+            albumart_toggleb.add(tbx);
+            tbx.notify["active"].connect( () => {
+                if(tbx.active) {
+                    bottom_notebook.set_current_page(1);
+                }
+                else {
+                    bottom_notebook.set_current_page(0);
+                }
+            });
             //VOLUME SLIDE BUTTON
             var volumeSliderButtonTI = new ToolItem();
             volume_slider = new VolumeSliderButton(gst_player);
@@ -1686,6 +1707,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             main_toolbar.insert(this.track_infobar, -1);
             main_toolbar.insert(repeatButtonTI, -1);
             main_toolbar.insert(eqButtonTI, -1);
+            main_toolbar.insert(albumart_toggleb, -1);
             main_toolbar.insert(volumeSliderButtonTI, -1);
             main_toolbar.insert(app_menu_button, -1);
             main_toolbar.can_focus = false;
@@ -1765,6 +1787,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.delete_event.connect(this.on_close); //only send to tray
         this.key_release_event.connect(this.on_key_released);
         this.key_press_event.connect(this.on_key_pressed);
+    }
+    
+    internal void set_bottom_view(int tab) {
+        tbx.set_active(tab == 0 ? false : true);
     }
     
     internal void show_status_info(Xnoise.InfoBar bar) {
