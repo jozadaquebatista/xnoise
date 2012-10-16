@@ -367,6 +367,11 @@ private class Xnoise.TreeViewStreams : Gtk.TreeView, TreeQueryable {
         return (int)TreeViewVideosModel.Column.ITEM;
     }
     
+    public TreeModel? get_queryable_model() {
+        TreeModel? tm = this.get_model();
+        return tm;
+    }
+    
     private void rightclick_menu_popup(uint activateTime) {
         menu = create_rightclick_menu();
         if(menu != null)

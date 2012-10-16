@@ -1099,7 +1099,7 @@ typedef enum  {
 struct _XnoiseTreeQueryableIface {
 	GTypeInterface parent_iface;
 	gint (*get_model_item_column) (XnoiseTreeQueryable* self);
-	GtkTreeModel* (*get_model) (XnoiseTreeQueryable* self);
+	GtkTreeModel* (*get_queryable_model) (XnoiseTreeQueryable* self);
 };
 
 struct _XnoiseILyricsIface {
@@ -1875,7 +1875,7 @@ XnoiseItemHandlerManager* xnoise_item_handler_manager_construct (GType object_ty
 GType xnoise_dyn_playlist_type_get_type (void) G_GNUC_CONST;
 GType xnoise_tree_queryable_get_type (void) G_GNUC_CONST;
 gint xnoise_tree_queryable_get_model_item_column (XnoiseTreeQueryable* self);
-GtkTreeModel* xnoise_tree_queryable_get_model (XnoiseTreeQueryable* self);
+GtkTreeModel* xnoise_tree_queryable_get_queryable_model (XnoiseTreeQueryable* self);
 GType xnoise_ilyrics_get_type (void) G_GNUC_CONST;
 void xnoise_ilyrics_find_lyrics (XnoiseILyrics* self);
 gchar* xnoise_ilyrics_get_identifier (XnoiseILyrics* self);
@@ -1943,6 +1943,7 @@ gboolean xnoise_main_window_get_compact_layout (XnoiseMainWindow* self);
 void xnoise_main_window_set_compact_layout (XnoiseMainWindow* self, gboolean value);
 gboolean xnoise_main_window_get_use_eq (XnoiseMainWindow* self);
 void xnoise_main_window_set_use_eq (XnoiseMainWindow* self, gboolean value);
+gboolean xnoise_main_window_get_window_in_foreground (XnoiseMainWindow* self);
 void xnoise_iparams_read_params_data (XnoiseIParams* self);
 void xnoise_iparams_write_params_data (XnoiseIParams* self);
 GType xnoise_params_get_type (void) G_GNUC_CONST;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-15 18:14+0200\n"
+"POT-Creation-Date: 2012-10-16 09:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,12 +49,12 @@ msgstr ""
 msgid "no lyrics found..."
 msgstr ""
 
-#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:154
+#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:156
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:444
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1334
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1362
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1404
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1434
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1357
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1385
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1427
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1457
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:230
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:134
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:157
@@ -62,12 +62,12 @@ msgstr ""
 msgid "by"
 msgstr ""
 
-#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:157
+#: ../libxnoise/DBus/xnoise-desktop-notifications.vala:159
 #: ../libxnoise/ExtraWidgets/VideoScreen/xnoise-videoscreen.vala:446
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1336
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1364
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1406
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1436
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1359
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1387
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1429
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1459
 #: ../libxnoise/TrayIcon/xnoise-tray-icon.vala:232
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:136
 #: ../plugins/titleToDecoration/xnoise-title-to-decoration.vala:159
@@ -83,7 +83,7 @@ msgstr ""
 msgid "Music"
 msgstr ""
 
-#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:308
+#: ../libxnoise/DockableMedia/MusicBrowser/xnoise-music-browser.vala:313
 #: ../plugins/magnatune/magnatune-treeview.vala:217
 msgid "Collapse all"
 msgstr ""
@@ -543,43 +543,43 @@ msgstr ""
 msgid "Show _Video Fullscreen"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:476
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:490
 #, c-format
 msgid ""
 "Restoring %u tracks in the tracklist. This is a large number and can make "
 "startup of xnoise slower."
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:655
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:669
 msgid "no repeat"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:661
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:675
 msgid "repeat single"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:667
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:681
 msgid "repeat all"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:673
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:687
 msgid "random play"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1241
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1264
 msgid "Enter the URL for playing"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1257
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1280
 msgid "Select media file"
 msgstr ""
 
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1632
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1655
 msgid "Equalizer"
 msgstr ""
 
 #. AppMenuButton for compact layout
-#: ../libxnoise/MainWindow/xnoise-main-window.vala:1690
+#: ../libxnoise/MainWindow/xnoise-main-window.vala:1717
 msgid "Show application main menu"
 msgstr ""
 

@@ -733,6 +733,7 @@ namespace Xnoise {
 		public Gtk.UIManager ui_manager { get; set; }
 		public bool use_eq { get; set; }
 		public bool usestop { get; set; }
+		public bool window_in_foreground { get; private set; }
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public class MediaExtensions {
@@ -982,8 +983,8 @@ namespace Xnoise {
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public interface TreeQueryable : Gtk.Widget {
-		public abstract Gtk.TreeModel get_model ();
 		public abstract int get_model_item_column ();
+		public abstract Gtk.TreeModel? get_queryable_model ();
 	}
 	[CCode (cheader_filename = "xnoise-1.0.h")]
 	public struct DndData {

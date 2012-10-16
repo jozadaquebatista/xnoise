@@ -49,6 +49,11 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         return (int)IconsModel.Column.ITEM;
     }
 
+    public TreeModel? get_queryable_model() {
+        TreeModel? tm = this.get_model();
+        return tm;
+    }
+    
     private class IconsModel : Gtk.ListStore, Gtk.TreeModel {
         public enum Column {
             ICON = 0,

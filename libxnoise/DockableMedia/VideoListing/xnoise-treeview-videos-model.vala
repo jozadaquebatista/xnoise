@@ -106,6 +106,7 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
 
     public void remove_all() {
         view.set_model(null);
+        assert(this is ListStore);
         this.clear();
         view.set_model(this);
     }
@@ -113,6 +114,7 @@ private class Xnoise.TreeViewVideosModel : Gtk.ListStore {
     public void filter() {
         //print("filter\n");
         view.set_model(null);
+        assert(this is ListStore);
         this.clear();
         this.populate();
     }

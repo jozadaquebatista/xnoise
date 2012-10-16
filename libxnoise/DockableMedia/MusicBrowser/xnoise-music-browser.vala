@@ -278,6 +278,11 @@ private class Xnoise.MusicBrowser : TreeView, IParams, TreeQueryable {
         return (int)MusicBrowserModel.Column.ITEM;
     }
     
+    public TreeModel? get_queryable_model() {
+        TreeModel? tm = this.get_model();
+        return tm;
+    }
+    
     private Gtk.Menu create_rightclick_menu() {
         TreeIter iter;
         var rightmenu = new Gtk.Menu();

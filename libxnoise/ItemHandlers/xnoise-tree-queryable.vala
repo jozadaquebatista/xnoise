@@ -30,5 +30,5 @@
 
 public interface Xnoise.TreeQueryable : Gtk.Widget {
     public abstract int get_model_item_column();
-    public abstract Gtk.TreeModel get_model();
+    public abstract Gtk.TreeModel? get_queryable_model();
 }

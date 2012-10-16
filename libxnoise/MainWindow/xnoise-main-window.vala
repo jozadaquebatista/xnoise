@@ -336,6 +336,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         this.window_state_event.connect(on_window_state_event);
     }
     
+    public bool window_in_foreground { get; private set; }
+    
     private bool on_window_state_event (Gdk.EventWindowState e) {
         if((e.new_window_state & Gdk.WindowState.MAXIMIZED) == Gdk.WindowState.MAXIMIZED) {
             window_maximized = true;
@@ -343,10 +345,17 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         else {
             window_maximized = false;
         }
+        if((e.new_window_state & Gdk.WindowState.FOCUSED) == Gdk.WindowState.FOCUSED) {
+            window_in_foreground = true;
+        }
+        else {
+            window_in_foreground = false;
+        }
         if((e.new_window_state & Gdk.WindowState.FULLSCREEN) == Gdk.WindowState.FULLSCREEN) {
             is_fullscreen = true;
         }
         else if((e.new_window_state & Gdk.WindowState.ICONIFIED) == Gdk.WindowState.ICONIFIED) {
+            window_in_foreground = false;
             this.get_position(out _posX, out _posY);
             is_fullscreen = false;
             if(eqdialog != null) {
@@ -832,6 +841,7 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private void quit_now() {
         this.get_position(out _posX, out _posY);
         this.hide();
+        window_in_foreground = false;
         xn.quit();
     }
 
@@ -896,13 +906,20 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     }
     
     public void toggle_window_visbility() {
-        if(active_notifier != 0) {
-            this.disconnect(active_notifier);
-            active_notifier = 0;
-        }
+print("on close 1\n");
         if(this.has_toplevel_focus && this.visible) {
             this.get_position(out _posX, out _posY);
             this.hide();
+print("on close 2\n");
+            window_in_foreground = false;
+        }
+        if(window_in_foreground) {
+            window_in_foreground = false;
+            print("window_in_foreground is now false\n");
+        }
+        if(active_notifier != 0) {
+            this.disconnect(active_notifier);
+            active_notifier = 0;
         }
         else if(this.get_window().is_visible() == true) {
             this.move(_posX, _posY);
@@ -1156,7 +1173,6 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
             eqdialog.destroy();
             eqdialog = null;
         }
-        
         if(active_notifier != 0) {
             this.disconnect(active_notifier);
             active_notifier = 0;
@@ -1165,6 +1181,10 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
         if(!quit_if_closed) {
             this.get_position(out _posX, out _posY);
             this.hide();
+            Timeout.add(500, () => {
+                window_in_foreground = false;
+                return false;
+            });
             return true;
         }
         else {

@@ -117,6 +117,8 @@ private class Xnoise.DesktopNotifications : GLib.Object {
     private void setup_notification_in_idle() {
         if(global.current_uri == null)
             return;
+        if(main_window.window_in_foreground)
+            return;
         string album, artist, title;
         string basename = null;
         File file = File.new_for_uri(global.current_uri);
