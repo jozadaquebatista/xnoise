@@ -187,12 +187,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_item_width(icons_model.ICONSIZE + 40);
         this.set_model(icons_model);
         icon_cache.loading_done.connect(() => {
-            Timeout.add(200, () => {
-                this.set_model(null);
-                icons_model.clear();
-                icons_model.populate_model();
-                return false;
-            });
+            this.queue_draw();
         });
         this.item_activated.connect(this.on_row_activated);
     }
@@ -274,7 +269,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                     if(art.get_width() != icons_model.ICONSIZE)
                         art = art.scale_simple(icons_model.ICONSIZE,
                                                icons_model.ICONSIZE,
-                                               Gdk.InterpType.HYPER);
+                                               Gdk.InterpType.BILINEAR);
                     this.icons_model.set(iter, 
                                          IconsModel.Column.ICON, art,
                                          IconsModel.Column.STATE, IconState.RESOLVED
@@ -384,7 +379,7 @@ private class Xnoise.IconCache : GLib.Object {
     private void on_loading_finished() {
         return_if_fail(Main.instance.is_same_thread());
         loading_done();
-        print("inital_import_done\n");
+//        print("inital_import_done\n");
     }
     
     private bool populate_cache(Worker.Job job) {
@@ -434,7 +429,7 @@ private class Xnoise.IconCache : GLib.Object {
         job.big_counter[0]--;
         if(job.big_counter[0] == 0) {
             Idle.add(() => {
-                inital_import_done = true;
+//                inital_import_done = true;
                 on_loading_finished();
                 return false;
             });
@@ -460,13 +455,14 @@ private class Xnoise.IconCache : GLib.Object {
             return false;
         }
         else {
-            px = add_shadow(px,icon_size);//px.scale_simple(icon_size, icon_size, Gdk.InterpType.HYPER);
+//            px = px.scale_simple(icon_size, icon_size, Gdk.InterpType.BILINEAR);
+            px = add_shadow(px, icon_size);//px.scale_simple(icon_size, icon_size, Gdk.InterpType.HYPER);
             insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
         }
         return false;
     }
     
-    private bool inital_import_done = false;
+//    private bool inital_import_done = false;
     
     public Gdk.Pixbuf? get_image(string path) {
         Gdk.Pixbuf? p = null;
@@ -488,12 +484,12 @@ private class Xnoise.IconCache : GLib.Object {
         lock(cache) {
             cache.insert(name, pix);
         }
-        if(!inital_import_done)
-            return;
-        Idle.add(() => {
-            sign_new_album_art_loaded(name);
-            return false;
-        });
+//        if(!inital_import_done)
+//            return;
+//        Idle.add(() => {
+//            sign_new_album_art_loaded(name);
+//            return false;
+//        });
     }
 
     private Gdk.Pixbuf? shadow = null;
