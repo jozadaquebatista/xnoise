@@ -1674,9 +1674,16 @@ print("on close 2\n");
             eqButtonTI.add(eqButton);
             
             album_cover_view = new AlbumArtView();
+            var aa_contr_bx = new Box(Orientation.HORIZONTAL, 0);
+            aa_contr_bx.pack_start(new Entry(), false, false, 0);
+            aa_contr_bx.pack_start(new Label(""), true, true, 0);
+            var aabx = new Box(Orientation.VERTICAL, 0);
+            aabx.pack_start(aa_contr_bx, false, false, 2);
             var aasw = new ScrolledWindow(null, null);
+            aasw.set_shadow_type(ShadowType.IN);
             aasw.add(album_cover_view);
-            bottom_notebook.append_page(aasw);
+            aabx.pack_start(aasw, true, true, 2);
+            bottom_notebook.append_page(aabx);
             var albumart_toggleb = new ToolItem();
             var aart_im = new Image.from_icon_name("xn-grid", IconSize.LARGE_TOOLBAR);
             tbx = new ToggleButton();
