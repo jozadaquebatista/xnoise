@@ -12,6 +12,7 @@ status_DATA = \
     xn-equalizer.svg \
     xn-grid.svg \
     xn-albumart.svg \
+    xn-shadow.svg \
     $(NULL)
 
 paneldir = $(datadir)/icons/hicolor/scalable/apps

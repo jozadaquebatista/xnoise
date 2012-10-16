@@ -30,6 +30,8 @@
 
 
 using Gtk;
+using Cairo;
+
 
 using Xnoise;
 using Xnoise.Resources;
@@ -178,7 +180,7 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         this.set_row_spacing(40);
         if(icon_cache == null) {
             File album_image_dir =
-                File.new_for_path(Path.build_filename(data_folder(), "album_images", null));
+                File.new_for_path(GLib.Path.build_filename(data_folder(), "album_images", null));
             icon_cache = new IconCache(album_image_dir, icons_model.ICONSIZE);
         }
         icons_model = new IconsModel(this);
@@ -413,7 +415,7 @@ private class Xnoise.IconCache : GLib.Object {
         try {
             while((info = enumerator.next_file()) != null) {
                 string filename = info.get_name();
-                string filepath = Path.build_filename(dir.get_path(), filename);
+                string filepath = GLib.Path.build_filename(dir.get_path(), filename);
                 File file = File.new_for_path(filepath);
                 FileType filetype = info.get_file_type();
                 if(filetype == FileType.DIRECTORY) {
@@ -451,7 +453,7 @@ private class Xnoise.IconCache : GLib.Object {
             return false;
         }
         else {
-            px = px.scale_simple(icon_size, icon_size, Gdk.InterpType.HYPER);
+            px = add_shadow(px,icon_size);//px.scale_simple(icon_size, icon_size, Gdk.InterpType.HYPER);
             insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
         }
         return false;
@@ -466,7 +468,7 @@ private class Xnoise.IconCache : GLib.Object {
     }
     
     private void insert_image(string name, Gdk.Pixbuf? pix) {
-        //print("insert image : %s\n", name);
+        print("insert image : %s\n", name);
         if(pix == null) {
             lock(cache) {
                 print("remove image %s\n", name);
@@ -481,5 +483,73 @@ private class Xnoise.IconCache : GLib.Object {
             sign_new_album_art_loaded(name);
             return false;
         });
+    }
+
+    private Gdk.Pixbuf? shadow = null;
+    
+    public Gdk.Pixbuf? add_shadow(Gdk.Pixbuf pixbuf, int size) {
+        assert(size > 1);
+        int shadow_size = 16;
+        Gdk.Pixbuf? pix = pixbuf;
+        var surface = new ImageSurface(Format.ARGB32, size, size);
+        var cr = new Cairo.Context(surface);
+        cr.rectangle(0, 0, size, size);
+        if(shadow == null) {
+            try {
+                if(IconTheme.get_default().has_icon("xn-shadow"))
+                    shadow = IconTheme.get_default().load_icon("xn-shadow",
+                                                               size,
+                                                               IconLookupFlags.FORCE_SIZE);
+            }
+            catch(Error e) {
+                print("%s\n", e.message);
+                return pixbuf;
+            }
+        }
+        Gdk.cairo_set_source_pixbuf(cr, shadow, 0, 0);
+        cr.paint();
+        
+        int imagesize = size -(2 * shadow_size);
+        if(pixbuf.get_width() != imagesize || pixbuf.get_height() != imagesize)
+            pix = pix.scale_simple(imagesize, imagesize, Gdk.InterpType.BILINEAR);
+        
+        Gdk.cairo_set_source_pixbuf(cr, pix, shadow_size, shadow_size);
+        cr.paint();
+        
+        var rendering_surface = new ImageSurface(Format.ARGB32, size, size);
+        var ct = new Cairo.Context(rendering_surface);
+        
+        ct.set_operator(Operator.SOURCE);
+        ct.set_source_surface(surface, 0, 0);
+        ct.paint();
+        pix = new Gdk.Pixbuf(Gdk.Colorspace.RGB, true, 8, size, size);
+        pix.fill(0);
+        
+        uint8 *surface_data   = rendering_surface.get_data();
+        uint8 *pixel = pix.get_pixels();
+        int length = size * size;
+        
+        if(rendering_surface.get_format() == Format.ARGB32) {
+            for(int i = 0; i < length; i++) {
+                if(surface_data[3] > 0) {
+                    pixel[0] =(uint8)(surface_data[2] * 255 / surface_data[3]);
+                    pixel[1] =(uint8)(surface_data[1] * 255 / surface_data[3]);
+                    pixel[2] =(uint8)(surface_data[0] * 255 / surface_data[3]);
+                    pixel[3] = surface_data[3];
+                }
+                pixel += 4;
+                surface_data += 4;
+            }
+        } else if(rendering_surface.get_format() == Format.RGB24) {
+            for(int i = 0; i < length; i++) {
+                pixel[0] = surface_data[2];
+                pixel[1] = surface_data[1];
+                pixel[2] = surface_data[0];
+                pixel[3] = surface_data[3];
+                pixel += 4;
+                surface_data += 4;
+            }
+        }
+        return pix;
     }
 }
