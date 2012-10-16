@@ -186,8 +186,8 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
         icons_model = new IconsModel(this);
         this.set_item_width(icons_model.ICONSIZE + 40);
         this.set_model(icons_model);
-        icon_cache.loading_started.connect(() => {
-            Timeout.add_seconds(1, () => {
+        icon_cache.loading_done.connect(() => {
+            Timeout.add(200, () => {
                 this.set_model(null);
                 icons_model.clear();
                 icons_model.populate_model();
@@ -336,7 +336,9 @@ private class Xnoise.IconCache : GLib.Object {
     public Cancellable cancellable;
     public signal void sign_new_album_art_loaded(string path);
     
-    public signal void loading_started();
+    public signal void loading_done();
+    
+    
     public IconCache(File dir, int icon_size) {
         assert(io_worker != null);
         lock(cache) {
@@ -350,7 +352,6 @@ private class Xnoise.IconCache : GLib.Object {
         Worker.Job job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_cache);
         job.cancellable = this.cancellable;
         io_worker.push_job(job);
-        job.finished.connect(on_loading_finished);
         global.sign_album_image_fetched.connect(on_album_image_fetched);
     }
     
@@ -380,13 +381,10 @@ private class Xnoise.IconCache : GLib.Object {
         io_worker.push_job(fjob);
     }
 
-    private void on_loading_finished(Worker.Job sender) {
+    private void on_loading_finished() {
         return_if_fail(Main.instance.is_same_thread());
-        sender.finished.disconnect(on_loading_finished);
-        Idle.add(() => {
-            loading_started();
-            return false;
-        });
+        loading_done();
+        print("inital_import_done\n");
     }
     
     private bool populate_cache(Worker.Job job) {
@@ -411,6 +409,7 @@ private class Xnoise.IconCache : GLib.Object {
         catch(Error e) {
             return;
         }
+        job.big_counter[0]++;
         GLib.FileInfo info;
         try {
             while((info = enumerator.next_file()) != null) {
@@ -431,6 +430,14 @@ private class Xnoise.IconCache : GLib.Object {
         }
         catch(Error e) {
             print("%s\n", e.message);
+        }
+        job.big_counter[0]--;
+        if(job.big_counter[0] == 0) {
+            Idle.add(() => {
+                inital_import_done = true;
+                on_loading_finished();
+                return false;
+            });
         }
     }
 
@@ -459,6 +466,8 @@ private class Xnoise.IconCache : GLib.Object {
         return false;
     }
     
+    private bool inital_import_done = false;
+    
     public Gdk.Pixbuf? get_image(string path) {
         Gdk.Pixbuf? p = null;
         lock(cache) {
@@ -479,6 +488,8 @@ private class Xnoise.IconCache : GLib.Object {
         lock(cache) {
             cache.insert(name, pix);
         }
+        if(!inital_import_done)
+            return;
         Idle.add(() => {
             sign_new_album_art_loaded(name);
             return false;
