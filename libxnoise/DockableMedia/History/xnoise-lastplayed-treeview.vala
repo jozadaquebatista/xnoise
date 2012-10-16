@@ -94,10 +94,10 @@ private class Xnoise.PlaylistTreeViewLastplayed : Gtk.TreeView, Xnoise.PlaylistQ
             ItemHandler? tmp = itemhandler_manager.get_handler_by_type(ItemHandlerType.TRACKLIST_ADDER);
             if(tmp == null)
                 return;
-            unowned Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_TREE_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
+            unowned Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_PLAYLIST_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
             
             if(action != null)
-                action.action(item, null);
+                action.action(item, this);
             else
                 print("action was null\n");
         });

@@ -466,7 +466,7 @@ private class Xnoise.IconCache : GLib.Object {
     }
     
     private void insert_image(string name, Gdk.Pixbuf? pix) {
-        print("insert image : %s\n", name);
+        //print("insert image : %s\n", name);
         if(pix == null) {
             lock(cache) {
                 print("remove image %s\n", name);

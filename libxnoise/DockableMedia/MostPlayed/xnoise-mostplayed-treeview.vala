@@ -97,7 +97,7 @@ private class Xnoise.PlaylistTreeViewMostplayed : Gtk.TreeView, Xnoise.PlaylistQ
             unowned Action? action = tmp.get_action(item.type, ActionContext.QUERYABLE_PLAYLIST_ITEM_ACTIVATED, ItemSelectionType.SINGLE);
             
             if(action != null)
-                action.action(item, null);
+                action.action(item, this);
             else
                 print("action was null\n");
         });

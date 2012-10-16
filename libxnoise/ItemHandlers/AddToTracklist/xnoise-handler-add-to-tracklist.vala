@@ -43,6 +43,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
     private const string bname = "HandlerAddToTracklistAction1";
     
     private Xnoise.Action menu_add_from_playlist;
+    private Xnoise.Action activated_from_playlist;
     private Xnoise.Action menu_add_from_extern;
 
     private Action menu_add;
@@ -81,6 +82,13 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         menu_add_from_playlist.stock_item = Gtk.Stock.ADD;
         menu_add_from_playlist.context = ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY;
         
+        activated_from_playlist = new Action(); 
+        activated_from_playlist.action = on_activated_from_playlist;
+        activated_from_playlist.info = this.ainfo;
+        activated_from_playlist.name = this.aname;
+        activated_from_playlist.stock_item = Gtk.Stock.MEDIA_PLAY;
+        activated_from_playlist.context = ActionContext.QUERYABLE_PLAYLIST_ITEM_ACTIVATED;
+
         menu_add_from_extern = new Action(); 
         menu_add_from_extern.action = on_menu_add_from_extern;
         menu_add_from_extern.info = this.ainfo;
@@ -116,6 +124,8 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
                 return menu_add_from_extern;
             case ActionContext.QUERYABLE_PLAYLIST_MENU_QUERY:
                 return menu_add_from_playlist;
+            case ActionContext.QUERYABLE_PLAYLIST_ITEM_ACTIVATED:
+                return activated_from_playlist;
             case ActionContext.REQUESTED:
                 return request_add;
             default:
@@ -158,6 +168,36 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         db_worker.push_job(job);
     }
 
+    private void on_activated_from_playlist(Item item, GLib.Value? data) {
+        TreeView tv = (TreeView)data;
+        PlaylistQueryable tq = tv as PlaylistQueryable;
+        if(tv == null || tq == null)
+            return;
+        if(!(tv is TreeView))
+            return;
+        if(!(tq is PlaylistQueryable))
+            return;
+        //print("okokok\n");
+        GLib.List<TreePath> list;
+        list = tv.get_selection().get_selected_rows(null);
+        if(list.length() == 0)
+            return;
+        
+        var mod = tv.get_model();
+        Item? ix = Item(ItemType.UNKNOWN);
+        TreeIter iter;
+        Item[] items = {};
+        var job = new Worker.Job(Worker.ExecutionType.ONCE_HIGH_PRIORITY, this.menu_add_from_playlist_job);
+        foreach(TreePath path in list) {
+            mod.get_iter(out iter, path);
+            mod.get(iter, tq.get_model_item_column(), out ix);
+            items += ix;
+        }
+        job.items = items;
+        job.set_arg("play", true);
+        db_worker.push_job(job);
+    }
+    
     private void on_menu_add_from_playlist(Item item, GLib.Value? data) {
         TreeView tv = (TreeView)data;
         PlaylistQueryable tq = tv as PlaylistQueryable;
@@ -184,6 +224,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
             items += ix;
         }
         job.items = items;
+        job.set_arg("play", false);
         db_worker.push_job(job);
     }
 
@@ -253,7 +294,7 @@ internal class Xnoise.HandlerAddToTracklist : ItemHandler {
         
         if(job.track_dat != null) {
             Idle.add( () => {
-                append_tracks(ref job.track_dat, false);
+                append_tracks(ref job.track_dat, (bool)job.get_arg("play"));
                 return false;
             });
         }
