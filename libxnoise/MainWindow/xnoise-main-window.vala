@@ -78,17 +78,15 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     private bool window_maximized;
     private SettingsWidget settings_widget;
     private Gtk.Window eqdialog;
-    private AlbumImage albumimage;
     private AlbumArtView album_cover_view;
     private Gtk.Notebook bottom_notebook;
+    private AlbumImage albumimage;
     internal bool quit_if_closed;
     internal ScrolledWindow musicBrScrollWin = null;
     internal ScrolledWindow trackListScrollWin = null;
     internal Gtk.ActionGroup action_group;
-    public bool is_fullscreen = false;
     internal FullscreenToolbar fullscreentoolbar;
     internal Box videovbox;
-    public unowned LyricsView lyricsView { get; private set; }
     internal unowned VideoScreen videoscreen;
     internal Paned hpaned;
     internal Entry search_entry;
@@ -96,6 +94,8 @@ public class Xnoise.MainWindow : Gtk.Window, IParams {
     internal ControlButton previousButton;
     internal ControlButton nextButton;
     internal ControlButton stopButton;
+    public unowned LyricsView lyricsView { get; private set; }
+    public bool is_fullscreen = false;
     public MainViewNotebook mainview_box { get; private set; }
     public MediaSoureWidget msw;
     internal TrackInfobar track_infobar;

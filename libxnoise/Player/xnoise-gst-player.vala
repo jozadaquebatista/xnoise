@@ -971,6 +971,11 @@ public class Xnoise.GstPlayer : GLib.Object {
                                 if(!parentpath.query_exists(null))
                                     parentpath.make_directory_with_parents(null);
                                 pix.save(pf.get_path(), "jpeg");
+                                File pf2 =
+                                    File.new_for_path(pf.get_path().replace("_embedded", "_extralarge"));
+                                if(!pf2.query_exists(null)) {
+                                    pix.save(pf2.get_path(), "jpeg");
+                                }
                             }
                             catch(Error e) {
                                 print("%s\n", e.message);
@@ -979,6 +984,10 @@ public class Xnoise.GstPlayer : GLib.Object {
                             }
                         }
                         sign_found_embedded_image(this.uri, ar, al);
+                        Idle.add( () => {
+                            global.sign_album_image_fetched(ar, al, pf.get_path());
+                            return false;
+                        });
                     }
                     imarge_src = 0;
                     return false;

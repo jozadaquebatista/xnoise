@@ -171,8 +171,6 @@ namespace Xnoise {
         public string artist;
         public string album;
     
-        public signal void sign_fetched(string artist, string album, string image_path);
-
         public AlbumImageLoader() {
             xn = Main.instance;
             plugin_loader.sign_plugin_activated.connect(AlbumImageLoader.on_plugin_activated);
@@ -193,7 +191,7 @@ namespace Xnoise {
     
         //forward signal from current provider
         private void on_image_fetched(string _artist, string _album, string _image_path) {
-            sign_fetched(_artist, _album, _image_path);
+            global.sign_album_image_fetched(_artist, _album, _image_path);
         }
 
         private static void on_backend_deactivated() {
@@ -202,7 +200,7 @@ namespace Xnoise {
 
         internal bool fetch_image() {
             if(this.provider == null) {
-                sign_fetched(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING);
+                global.sign_album_image_fetched(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING);
                 return false;
             }
             Idle.add( () => {

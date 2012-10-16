@@ -53,7 +53,7 @@ private class Xnoise.AlbumImage : Gtk.Image {
         current_path = "default";
         
         loader = new AlbumImageLoader();
-        loader.sign_fetched.connect(on_album_image_fetched);
+        global.sign_album_image_fetched.connect(on_album_image_fetched);
         global.uri_changed.connect(on_uri_changed);
         global.sign_image_path_large_changed.connect( () => {
             set_image_via_idle(global.image_path_large);

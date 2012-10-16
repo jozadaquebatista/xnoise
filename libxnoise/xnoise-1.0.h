@@ -1172,7 +1172,6 @@ struct _XnoiseMainWindow {
 	GtkScrolledWindow* musicBrScrollWin;
 	GtkScrolledWindow* trackListScrollWin;
 	GtkActionGroup* action_group;
-	gboolean is_fullscreen;
 	XnoiseFullscreenToolbar* fullscreentoolbar;
 	GtkBox* videovbox;
 	XnoiseVideoScreen* videoscreen;
@@ -1182,6 +1181,7 @@ struct _XnoiseMainWindow {
 	XnoiseControlButton* previousButton;
 	XnoiseControlButton* nextButton;
 	XnoiseControlButton* stopButton;
+	gboolean is_fullscreen;
 	XnoiseMediaSoureWidget* msw;
 	XnoiseTrackInfobar* track_infobar;
 	XnoiseMusicBrowser* musicBr;

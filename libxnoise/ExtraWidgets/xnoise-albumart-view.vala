@@ -94,6 +94,22 @@ class Xnoise.AlbumArtView : Gtk.IconView, TreeQueryable {
                 populate_model();
                 return false;
             });
+            icon_cache.sign_new_album_art_loaded.connect(on_new_album_art_loaded);
+        }
+        
+        private uint update_delay_source = 0;
+        private void on_new_album_art_loaded(string name) {
+            return_if_fail(Main.instance.is_same_thread());
+            if(populating_model)
+                return;
+            if(update_delay_source != 0)
+                Source.remove(update_delay_source);
+            update_delay_source = Timeout.add(500, () => {
+                this.clear();
+                populate_model();
+                update_delay_source = 0;
+                return false;
+            });
         }
         
         private bool populating_model = false;
@@ -315,7 +331,8 @@ private class Xnoise.IconCache : GLib.Object {
     private File dir;
     private int icon_size;
     
-    public Cancellable cancellable = new Cancellable();
+    public Cancellable cancellable;
+    public signal void sign_new_album_art_loaded(string path);
     
     public signal void loading_started();
     public IconCache(File dir, int icon_size) {
@@ -325,14 +342,42 @@ private class Xnoise.IconCache : GLib.Object {
                 cache = new HashTable<string,Gdk.Pixbuf>(str_hash, str_equal);
             }
         }
+        this.cancellable = global.main_cancellable;
         this.dir = dir;
         this.icon_size = icon_size;
         Worker.Job job = new Worker.Job(Worker.ExecutionType.ONCE, this.populate_cache);
         job.cancellable = this.cancellable;
         io_worker.push_job(job);
         job.finished.connect(on_loading_finished);
+        global.sign_album_image_fetched.connect(on_album_image_fetched);
     }
     
+    private void on_album_image_fetched(string _artist, string _album, string image_path) {
+//        print("on_image_fetched aav %s - %s : %s", _artist, _album, image_path);
+        if(image_path == EMPTYSTRING) 
+            return;
+        
+        if((prepare_for_comparison(global.current_artist) != prepare_for_comparison(_artist))||
+           (prepare_for_comparison(check_album_name(global.current_artist, global.current_album))  != 
+                prepare_for_comparison(check_album_name(_artist, _album)))) 
+            return;
+//        print("  ..  comply\n");
+        File f = File.new_for_path(image_path);
+        if(!f.query_exists(null)) 
+            return;
+        string p1 = f.get_path();
+        if(p1.has_suffix("_medium")) {
+            p1 = p1.replace("_medium", "_extralarge");
+        }
+//        if(p1.has_suffix("_embedded")) {
+//            p1 = p1.replace("_embedded", "_extralarge");
+//        }
+        Worker.Job fjob = new Worker.Job(Worker.ExecutionType.ONCE, this.read_file_job);
+        fjob.set_arg("file", p1);
+        fjob.cancellable = this.cancellable;
+        io_worker.push_job(fjob);
+    }
+
     private void on_loading_finished(Worker.Job sender) {
         return_if_fail(Main.instance.is_same_thread());
         sender.finished.disconnect(on_loading_finished);
@@ -390,7 +435,9 @@ private class Xnoise.IconCache : GLib.Object {
     private bool read_file_job(Worker.Job job) {
         return_val_if_fail(io_worker.is_same_thread(), false);
         File file = File.new_for_path((string)job.get_arg("file"));
-        if(!file.get_path().has_suffix("extralarge"))
+        if(!file.get_path().has_suffix("_extralarge") && !file.get_path().has_suffix("_embedded"))
+            return false;
+        if(!file.query_exists(null))
             return false;
         Gdk.Pixbuf? px = null;
         try {
@@ -405,7 +452,7 @@ private class Xnoise.IconCache : GLib.Object {
         }
         else {
             px = px.scale_simple(icon_size, icon_size, Gdk.InterpType.HYPER);
-            insert_image(file.get_path(), px);
+            insert_image(file.get_path().replace("_embedded", "_extralarge"), px);
         }
         return false;
     }
@@ -419,8 +466,10 @@ private class Xnoise.IconCache : GLib.Object {
     }
     
     private void insert_image(string name, Gdk.Pixbuf? pix) {
+        print("insert image : %s\n", name);
         if(pix == null) {
             lock(cache) {
+                print("remove image %s\n", name);
                 cache.remove(name);
             }
             return;
@@ -428,5 +477,9 @@ private class Xnoise.IconCache : GLib.Object {
         lock(cache) {
             cache.insert(name, pix);
         }
+        Idle.add(() => {
+            sign_new_album_art_loaded(name);
+            return false;
+        });
     }
 }
